@@ -12,10 +12,10 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
   - 논리 소비자: 할 일을 정한 소비자 클래스 인스턴스입니다.
   - 바인딩: 둘을 잇는 `__FilterToConsumerBinding` 인스턴스입니다.
 - 필터 하나를 여러 소비자에, 소비자 하나를 여러 필터에 묶을 수 있습니다.
-- WMI 는 영구 소비자를 필요할 때 메모리에 올립니다. 보통 시작할 때나 이벤트가 생길 때입니다. 등록한 프로그램이 계속 떠 있을 필요가 없습니다.
+- WMI 는 영구 소비자를 보통 시작할 때나 이벤트가 생길 때처럼 필요할 때 메모리에 올리며, 등록한 프로그램이 계속 떠 있을 필요는 없습니다.
 - 세 객체는 `CreatorSID` 속성의 SID 가 같아야 합니다.
 - 필터의 `EventNamespace` 속성으로 다른 네임스페이스의 이벤트를 받을 수 있습니다. 레지스트리 이벤트(`RegistryTreeChangeEvent` 등)는 `root\default` 에서만 발생합니다.
-- 소비자가 스크립트나 프로그램을 실행할 수 있으므로 자동실행 위치로 점검합니다. 이 문장은 아래 표준 소비자의 동작에서 끌어낸 해석입니다.
+- 소비자가 스크립트나 프로그램을 실행할 수 있으므로 자동실행 위치로 점검하는데, 이 문장은 아래 표준 소비자의 동작에서 끌어낸 해석입니다.
 
 ## 위치와 버전별 차이
 
@@ -23,9 +23,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 아래는 Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
 
-- 구독은 WMI 저장소 (repository) 에 저장됩니다.
-- 저장소 폴더는 `C:\Windows\System32\wbem\Repository` 였습니다.
-- 이 폴더는 `HKLM\SOFTWARE\Microsoft\Wbem\CIMOM` 의 `Repository Directory` 값(`C:\WINDOWS\system32\wbem\repository`)에 적혀 있었습니다.
+구독은 WMI 저장소 (repository) 에 저장되며, 저장소 폴더는 `C:\Windows\System32\wbem\Repository` 였습니다. 이 폴더는 `HKLM\SOFTWARE\Microsoft\Wbem\CIMOM` 의 `Repository Directory` 값(`C:\WINDOWS\system32\wbem\repository`)에 적혀 있었습니다.
 
 | 파일 | 크기 |
 |---|---|
@@ -35,9 +33,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 ### 표준 소비자의 네임스페이스
 
-- 표준 소비자 클래스가 컴파일되는 기본 네임스페이스는 OS 마다 다릅니다.
-- Microsoft 문서는 "Windows Server 2003 에서는 모두 `Root\Subscription`" 이라는 예만 듭니다.
-- Windows 11 PC 한 대에서는 `root\subscription` 에 표준 소비자 5개 클래스가 모두 있었습니다. `root\cimv2` 에는 `__EventConsumer` 파생 클래스가 없었습니다. (확인 범위: Win11 25H2 한 대)
+표준 소비자 클래스가 컴파일되는 기본 네임스페이스는 OS 마다 다르며, Microsoft 문서는 "Windows Server 2003 에서는 모두 `Root\Subscription`" 이라는 예만 듭니다. Windows 11 PC 한 대에서는 `root\subscription` 에 표준 소비자 5개 클래스가 모두 있었습니다. `root\cimv2` 에는 `__EventConsumer` 파생 클래스가 없었습니다. (확인 범위: Win11 25H2 한 대)
 
 ### 이벤트 로그
 
@@ -82,7 +78,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 | `__FilterToConsumerBinding` | 위 둘을 잇습니다 |
 
 - 필터의 `CreatorSID` 는 S-1-5-32-544(Administrators) 였습니다.
-- 이 한 벌이 Windows 기본 설치에 들어 있는 정상 구독인지는 확인하지 못했습니다. PC 한 대에서 본 것뿐입니다. 다른 검체에서 같은 구독을 보면 오탐일 수 있으니 이 표와 맞춰 봅니다.
+- 이 한 벌이 Windows 기본 설치에 들어 있는 정상 구독인지는 확인하지 못했고 PC 한 대에서 본 것뿐입니다. 다른 검체에서 같은 구독을 보면 오탐일 수 있으니 이 표와 맞춰 봅니다.
 
 ### 실패 기록
 
@@ -110,7 +106,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 
 ## 시각 해석
 
-- 객체별 시각을 확인하지 못했으므로 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있습니다. 이 문장은 해석입니다. 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
+- 객체별 시각을 확인하지 못했으므로 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있는데, 이 문장은 해석입니다. 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
 - Windows 11 PC 한 대에서 세 MAPPING 파일의 마지막 수정 시각이 서로 달랐습니다. 가장 최근 것이 INDEX.BTR·OBJECTS.DATA 와 같은 시각이었습니다. (확인 범위: Win11 25H2 한 대)
 - 파일 시각은 저장소 전체가 마지막으로 바뀐 때를 말할 뿐, 어느 객체가 바뀌었는지 말하지 않습니다.
 - WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 칸 이름은 Windows 11 PC 한 대의 공급자 메시지에서 읽었습니다. (확인 범위: Win11 25H2 한 대)
@@ -123,7 +119,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 | 5860 | Namespace, NotificationQuery, UserName, ClientProcessID, ClientMachine |
 | 5861 | "Namespace = %1; Eventfilter = %2 (refer to its activate eventid:5859); Consumer = %3; PossibleCause = %4" |
 
-- 5861 은 필터와 소비자를 함께 적습니다. 영구 구독이 등록될 때 남는 이벤트로 쓰입니다. "등록할 때 발생한다" 는 공식 설명은 확인하지 못했습니다.
+- 5861 은 필터와 소비자를 함께 적으며, 영구 구독이 등록될 때 남는 이벤트로 쓰입니다. 다만 "등록할 때 발생한다" 는 공식 설명은 확인하지 못했습니다.
 - 이 로그 전반은 [원격 명령 실행 이벤트](../event-logs/winrm-wmi-activity.md) 에서 다룹니다.
 - Sysmon 은 이벤트 19·20·21(WmiEvent) 로 필터·소비자·바인딩을 기록합니다. [Sysmon 로그](../event-logs/sysmon/index.md) 를 봅니다.
 
@@ -133,7 +129,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 - 그래서 구독이 오래전에 만들어졌다면 로그보다 저장소를 봅니다.
 - **레지스트리 자동실행 점검만으로는 찾지 못합니다.** 구독은 저장소 파일에 있습니다.
 - **정상 구독도 있습니다.** 위 "한 PC 에 있던 구독" 과 같은 한 벌을 악성으로 단정하지 않습니다.
-- **네임스페이스 한 곳만 보고 끝내지 않습니다.** 표준 소비자의 기본 네임스페이스가 OS 마다 다르고, 필터는 `EventNamespace` 로 다른 네임스페이스를 가리킬 수 있습니다. 이 문장은 위 사실에서 끌어낸 해석입니다.
+- **네임스페이스는 한 곳만 보지 않습니다.** 표준 소비자의 기본 네임스페이스가 OS 마다 다르고, 필터는 `EventNamespace` 로 다른 네임스페이스를 가리킬 수 있습니다. 이 문장은 위 사실에서 끌어낸 해석입니다.
 - **저장소 내부 구조는 이 글에서 다루지 않습니다.** OBJECTS.DATA 의 페이지 크기와 매핑 방식은 확인하지 못했습니다. 오프라인 분석 결과는 켜진 PC 에서 읽은 결과나 다른 도구와 맞춰 봅니다.
 - **호스트 프로세스로 잡는 탐지는 따로 확인합니다.** 소비자를 실행하는 프로세스와 계정을 이번 자료로 확인하지 못했습니다.
 

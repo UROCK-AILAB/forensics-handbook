@@ -4,22 +4,17 @@
 
 ## 한 줄 요약
 
-부트키 (Boot Key) 는 SAM 과 SECURITY 하이브의 비밀을 풀 때 맨 처음 필요한 16바이트 열쇠입니다. 이 열쇠는 SYSTEM 하이브 안에 조각나 숨어 있습니다. 부트키를 먼저 만들어야 [NTLM 비밀번호 해시](nt-hash.md) 와 [LSA 시크릿](lsa-secrets.md) 으로 넘어갑니다.
+부트키 (Boot Key) 는 SAM 과 SECURITY 하이브의 비밀을 풀 때 맨 처음 필요한 16바이트 열쇠로, SYSTEM 하이브 안에 조각나 숨어 있습니다. 부트키를 먼저 만들어야 [NTLM 비밀번호 해시](nt-hash.md) 와 [LSA 시크릿](lsa-secrets.md) 으로 넘어갑니다.
 
 ## 어디서 나오나 · 왜 이렇게 숨겨 두나
 
-- Windows 는 SAM·SECURITY 하이브의 비밀을 그대로 두지 않고 한 겹 더 감쌉니다.
-- 그 감싼 것을 풀 열쇠가 부트키입니다.
-- 부트키를 하이브 값에 그대로 적어 두면 하이브만 빼내도 다 풀립니다.
-- 그래서 부트키를 값이 아니라 네 키의 클래스 이름 (Class Name) 에 조각내어 흩어 둡니다.
+Windows 는 SAM·SECURITY 하이브의 비밀을 그대로 두지 않고 한 겹 더 감싸는데, 그 감싼 것을 풀 열쇠가 부트키입니다. 부트키를 하이브 값에 그대로 적어 두면 하이브만 빼내도 다 풀립니다. 그래서 부트키를 값이 아니라 네 키의 클래스 이름 (Class Name) 에 조각내어 흩어 둡니다.
 
 ## 어디에 있나
 
-- 부트키의 재료는 SYSTEM 하이브의 `CurrentControlSet\Control\Lsa` 아래 네 하위 키에 있습니다.
-- 네 하위 키는 `JD`, `Skew1`, `GBG`, `Data` 입니다.
-- 재료는 각 키의 값이 아닙니다. 각 키의 클래스 이름에 들어 있습니다.
-- 클래스 이름은 레지스트리 편집기에 잘 드러나지 않는 항목입니다. 하이브를 직접 읽는 도구로 꺼냅니다.
-- 오프라인 하이브에서는 `CurrentControlSet` 대신 `ControlSet001` 같은 실제 이름을 씁니다. 이 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
+부트키의 재료는 SYSTEM 하이브의 `CurrentControlSet\Control\Lsa` 아래 네 하위 키 `JD`, `Skew1`, `GBG`, `Data` 에 있습니다. 재료는 각 키의 값이 아니라 클래스 이름에 들어 있는데, 클래스 이름은 레지스트리 편집기에 잘 드러나지 않는 항목이라 하이브를 직접 읽는 도구로 꺼냅니다.
+
+오프라인 하이브에서는 `CurrentControlSet` 대신 `ControlSet001` 같은 실제 이름을 씁니다. 이 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
 
 ## 만드는 법
 

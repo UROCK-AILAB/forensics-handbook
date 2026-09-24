@@ -7,19 +7,17 @@
 라인은 LY Corporation 이 운영하는 메신저이고, Windows 용 데스크톱 판이 있습니다.
 PC 판의 저장 위치와 대화 DB 형식은 이번에 공개 자료로 확인하지 못했습니다.
 그래서 이 페이지는 확인한 배경 사실과, 검체에서 직접 확인할 항목을 나눠 적습니다.
-라인의 종단 간 암호화 Letter Sealing 은 전송 구간을 보호하는 기능입니다.
-PC 에 남은 파일이 평문인지 암호문인지는 따로 확인합니다.
+라인의 종단 간 암호화 Letter Sealing 은 전송 구간을 보호하는 기능이므로, PC 에 남은 파일이 평문인지 암호문인지는 따로 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 ### 배경
 
-- 운영사는 일본 회사 LY Corporation 입니다. SoftBank 와 Naver 가 함께 세운 지주 회사를 거쳐 소유합니다.
-- 라인은 2011년 6월 일본에서 처음 나왔습니다. 내놓은 회사는 Naver 의 자회사 NHN Japan 입니다.
-- NHN Japan 은 2013년 4월 1일 이름을 Line Corporation 으로 바꿨습니다.
-- 야후 재팬 운영사 Z Holdings 가 2021년 3월 1일 Line Corporation 과 합병을 마쳤습니다.
-- 데스크톱 판은 Windows 판과 macOS 판이 있습니다.
-- Windows 판은 버전이 자주 바뀝니다. 이 페이지는 버전 숫자를 적지 않습니다. 검체의 버전을 직접 확인합니다.
+운영사는 일본 회사 LY Corporation 이고, SoftBank 와 Naver 가 함께 세운 지주 회사를 거쳐 소유합니다.
+라인은 2011년 6월 일본에서 처음 나왔으며, 내놓은 회사는 Naver 의 자회사 NHN Japan 입니다.
+NHN Japan 은 2013년 4월 1일 이름을 Line Corporation 으로 바꿨고, 야후 재팬 운영사 Z Holdings 가 2021년 3월 1일 Line Corporation 과 합병을 마쳤습니다.
+데스크톱 판은 Windows 판과 macOS 판이 있습니다.
+Windows 판은 버전이 자주 바뀌므로 이 페이지는 버전 숫자를 적지 않고, 검체의 버전을 직접 확인합니다.
 
 ### PC 에서 찾을 흔적
 

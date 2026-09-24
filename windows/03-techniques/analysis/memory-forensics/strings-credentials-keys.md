@@ -4,9 +4,7 @@
 
 ## 한 줄 요약
 
-메모리 이미지에서 문자열, 계정 해시·비밀, 암호 키를 찾습니다.
-이런 값은 디스크에 남지 않고 메모리에만 잠시 있다가 사라지기도 합니다.
-다만 Credential Guard 가 켜진 PC 에서는 lsass 메모리에서 꺼낼 수 있는 값이 줄어듭니다.
+메모리 이미지에서 문자열, 계정 해시·비밀, 암호 키를 찾습니다. 이런 값은 디스크에 남지 않고 메모리에만 잠시 있다가 사라지기도 하지만, Credential Guard 가 켜진 PC 에서는 lsass 메모리에서 꺼낼 수 있는 값이 줄어듭니다.
 
 ## 언제 쓰나
 
@@ -19,20 +17,17 @@
 Volatility 3 에는 windows.strings 와 windows.vadyarascan 이 있습니다 [1].
 windows.vadyarascan 은 YARA 규칙으로 검색하는 플러그인입니다. 규칙을 쓰는 법은 [의심 실행 파일 선별](../code-signing-yara.md) 에 있습니다.
 
-- Windows 는 문자열을 UTF-16LE 로 담는 경우가 많습니다. 검색할 때 ASCII 와 UTF-16LE 를 둘 다 찾습니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
-- 메모리 이미지 전체를 그냥 검색하면 문자열이 어느 프로세스 것인지 모릅니다. 찾은 위치를 프로세스에 잇는 과정이 따로 필요합니다.
+- Windows 는 문자열을 UTF-16LE 로 담는 경우가 많아서 검색할 때 ASCII 와 UTF-16LE 를 둘 다 찾습니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
+- 메모리 이미지 전체를 그냥 검색하면 문자열이 어느 프로세스 것인지 모르므로, 찾은 위치를 프로세스에 잇는 과정이 따로 필요합니다.
 - windows.strings 문서는 이 플러그인이 strings 명령의 출력을 읽어, 문자열마다 어느 프로세스의 것인지 알려 준다고 적습니다 [4]. 그러니 먼저 이미지에서 문자열과 그 위치를 뽑아 둡니다. 입력 형식과 옵션 이름은 쓰는 버전의 도움말로 확인합니다.
-- 가상 주소로 이어진 내용도 물리 메모리에서는 떨어져 있을 수 있습니다. 그래서 이미지 전체를 그냥 검색하면 긴 문자열이 끊겨 나올 수 있습니다.
+- 가상 주소로 이어진 내용도 물리 메모리에서는 떨어져 있을 수 있어서, 이미지 전체를 그냥 검색하면 긴 문자열이 끊겨 나올 수 있습니다.
 - 키워드 목록을 만들고 검색 결과를 정리하는 방법은 [파일 내용 검색](../content-search/index.md) 과 같습니다.
 
 ## 자격증명과 Credential Guard
 
 아래는 Microsoft 문서 "How Credential Guard works"(2025-06-12) 에서 확인한 내용입니다 [2].
 
-- 예전 Windows 는 비밀 정보를 LSA 프로세스 lsass.exe 의 메모리에 두었습니다.
-- Credential Guard 를 켜면 lsass 는 격리된 LSA 프로세스 LSAIso.exe 와 RPC 로 통신합니다.
-- 이때 비밀은 LSAIso.exe 가 가상화 기반 보안 (VBS, Virtualization-based Security) 으로 보호해 둡니다. 나머지 운영체제는 이 자료에 접근할 수 없습니다.
-- NTLM 해시와 Kerberos TGT 는 보통 디스크에 남지 않습니다. 재부팅하면 사라지고, 로그온할 때 새로 만듭니다.
+예전 Windows 는 비밀 정보를 LSA 프로세스 lsass.exe 의 메모리에 두었습니다. Credential Guard 를 켜면 lsass 는 격리된 LSA 프로세스 LSAIso.exe 와 RPC 로 통신하고, 이때 비밀은 LSAIso.exe 가 가상화 기반 보안 (VBS, Virtualization-based Security) 으로 보호해 둡니다. 나머지 운영체제는 이 자료에 접근할 수 없습니다. NTLM 해시와 Kerberos TGT 는 보통 디스크에 남지 않으며, 재부팅하면 사라지고 로그온할 때 새로 만듭니다.
 
 Credential Guard 가 켜졌을 때 무엇을 보호하는지는 아래와 같습니다 [2].
 
@@ -50,7 +45,7 @@ Credential Guard 가 켜졌을 때 무엇을 보호하는지는 아래와 같습
 
 - Credential Guard 가 켜진 PC 의 메모리 이미지에서는 lsass 로부터 NTLM 해시와 TGT 를 꺼내기 어렵습니다. 위 문서에서 끌어낸 해석이며, 실제 검체로는 확인하지 못했습니다.
 - 보호하지 않는 항목은 lsass 메모리에 남아 있을 수 있습니다.
-- Credential Guard 가 켜져 있으면 lsass 가 LSAIso.exe 와 통신합니다 [2]. 그래서 프로세스 목록에서 LSAIso.exe 를 찾는 것이 첫 확인입니다. 목록을 만드는 법은 [프로세스와 DLL 분석](process-analysis.md) 에 있습니다.
+- Credential Guard 가 켜져 있으면 lsass 가 LSAIso.exe 와 통신합니다 [2]. 그래서 첫 확인은 프로세스 목록에서 LSAIso.exe 를 찾는 일입니다. 목록을 만드는 법은 [프로세스와 DLL 분석](process-analysis.md) 에 있습니다.
 - Windows 버전별로 Credential Guard 가 기본으로 켜지는지는 이 글의 참고 문헌으로 확인하지 못했습니다. 이미지마다 켜져 있었는지 직접 확인합니다.
 
 ## 레지스트리와 해시
@@ -79,8 +74,7 @@ Volatility 3 에는 메모리에 올라온 레지스트리를 보는 플러그�
 
 ## 디스크에 남은 프로세스 덤프
 
-- 작업 관리자나 ProcDump 로 만든 프로세스 덤프는 파일로 남습니다 [3].
-- 로컬 덤프 설정을 켜 둔 PC 에서는 사용자 모드 프로그램이 죽을 때도 덤프가 남습니다 [3]. 설정과 저장 위치는 [크래시 덤프](memory-dmp-minidump.md) 와 [윈도 오류 보고](../../../02-artifacts/execution/wer.md) 에 있습니다.
+- 작업 관리자나 ProcDump 로 만든 프로세스 덤프는 파일로 남고 [3], 로컬 덤프 설정을 켜 둔 PC 에서는 사용자 모드 프로그램이 죽을 때도 덤프가 남습니다 [3]. 설정과 저장 위치는 [크래시 덤프](memory-dmp-minidump.md) 와 [윈도 오류 보고](../../../02-artifacts/execution/wer.md) 에 있습니다.
 - 디스크에서 lsass 프로세스의 덤프 파일을 찾았다면 누가 언제 만들었는지 확인합니다. 파일 시각은 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 에서, 만든 프로그램의 실행은 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) 에서 봅니다.
 
 ## 절차

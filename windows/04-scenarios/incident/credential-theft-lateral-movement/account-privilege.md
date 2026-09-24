@@ -2,7 +2,7 @@
 
 > 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)
 
-이 페이지는 공격자가 계속 들어올 발판으로 계정을 새로 만들거나, 이미 있는 계정의 권한을 관리자급으로 올렸는지 확인하는 순서를 다룹니다. 계정·그룹 이벤트의 칸은 [계정 생성·변경](../../../02-artifacts/event-logs/account-management-events.md) 에서도 다룹니다. 이 페이지는 그 이벤트를 침해 판단에 쓰는 방법을 다룹니다.
+이 페이지는 공격자가 계속 들어올 발판으로 계정을 새로 만들거나, 이미 있는 계정의 권한을 관리자급으로 올렸는지 확인하는 순서를 다룹니다. 계정·그룹 이벤트의 칸은 [계정 생성·변경](../../../02-artifacts/event-logs/account-management-events.md) 에서도 다루지만, 이 페이지는 그 이벤트를 침해 판단에 쓰는 방법을 다룹니다.
 
 이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home(빌드 26200) 분석 PC 한 대에서 본 이벤트 템플릿입니다(확인 범위: Win11 Home 한 대). 다른 빌드에서는 다를 수 있습니다.
 
@@ -60,7 +60,7 @@
 
 이 PC 의 4720 템플릿(버전 0)에는 아래 칸이 있었습니다(관찰): TargetUserName, TargetDomainName, TargetSid, SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId, SamAccountName, DisplayName, UserPrincipalName, HomeDirectory, ScriptPath, PasswordLastSet, AccountExpires, UserAccountControl, SidHistory 등.
 
-- Target* 칸은 만들어진 계정입니다. Subject* 칸은 만든 계정입니다.
+- Target* 칸은 만들어진 계정이고, Subject* 칸은 만든 계정입니다.
 - SubjectLogonId 로 만든 사람의 4624 로그온 세션과 잇습니다. Logon ID 로 세션을 잇는 방법은 [로그온 세션 잇기](../../../02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) 에 있습니다.
 - 로컬 계정은 그 PC 에, 도메인 계정은 도메인 컨트롤러에 남는 것으로 보고 수집 대상을 정합니다. 어느 컴퓨터에 남는지 확실치 않으면 두 곳을 모두 봅니다.
 
@@ -74,19 +74,17 @@
 | 전역 그룹 (도메인) | 4727 | 4728 | 4729 | 4730 | 4737 |
 | 유니버설 그룹 (도메인) | 4754 | 4756 | 4757 | 4758 | 4755 |
 
-- 로컬 그룹 조회는 4799 로 남습니다[2].
-- 이 하위 범주에는 실패 이벤트가 없습니다. 권장은 성공 감사 Yes, 실패 No 입니다[2].
-- 전역·유니버설 판은 칸·권장 사항이 로컬 판과 같고 그룹 종류만 다릅니다[2].
+- 로컬 그룹 조회는 4799 로 남습니다[2]. 이 하위 범주에는 실패 이벤트가 없고, 권장은 성공 감사 Yes, 실패 No 입니다[2]. 전역·유니버설 판은 칸·권장 사항이 로컬 판과 같고 그룹 종류만 다릅니다[2].
 
 ### 4732 (로컬 그룹에 구성원 추가) 읽기
 
-관리자 그룹에 계정을 넣는 일은 4732 로 남습니다. 추가된 구성원마다 4732 가 하나씩 생깁니다[3].
+관리자 그룹에 계정을 넣는 일은 4732 로 남고, 추가된 구성원마다 4732 가 하나씩 생깁니다[3].
 
 - EventData 칸(예시 순서): MemberName, MemberSid, TargetUserName, TargetDomainName, TargetSid, SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId, PrivilegeList[3].
 - XML 의 TargetUserName·TargetSid 는 그룹입니다(화면의 Group 절)[3]. 이 칸을 추가된 계정으로 읽으면 안 됩니다.
 - Member\Account Name(MemberName)은 추가된 계정의 DN 입니다. 로컬 그룹이면 새 구성원이 도메인 계정이어도 보통 "-" 입니다[3]. 그래서 누가 추가됐는지는 MemberSid 로 봅니다.
 - Group Domain 칸은 로컬 그룹이면 그 컴퓨터 이름, 내장 그룹이면 "Builtin" 입니다[3].
-- 4732 바로 앞에 아무것도 안 바뀐 4735(로컬 그룹 변경)가 흔히 보입니다[3]. 4735 하나만으로 놀라지 않습니다.
+- 4732 바로 앞에 아무것도 안 바뀐 4735(로컬 그룹 변경)가 흔히 보이며, 4735 하나만으로는 놀라지 않습니다.
 - Microsoft 는 내장 로컬 Administrators·Domain Admins·Enterprise Admins 같은 중요 그룹을 Group Name 으로 모두 보라고 권합니다[3]. 계정 종류와 그룹 용도가 안 맞는 추가(예: 컴퓨터 계정을 사용자용 그룹에)도 보라고 합니다[3].
 
 ## 조회(정찰) 이벤트
@@ -95,7 +93,7 @@
 
 - 4798 "A user's local group membership was enumerated." 이 PC 템플릿의 칸에는 CallerProcessId, CallerProcessName 이 있습니다(관찰).
 - 4799 "A security-enabled local group membership was enumerated."[2].
-- 4798 에는 조회한 프로세스 이름 칸이 있습니다(관찰). 정상 프로그램도 조회하므로 프로세스 이름으로 가릅니다.
+- 4798 에는 조회한 프로세스 이름 칸이 있는데(관찰), 정상 프로그램도 조회하므로 프로세스 이름으로 가릅니다.
 
 ## 권한이 올라갔나
 
@@ -125,7 +123,7 @@
 2. **MemberName 이 "-" 라 계정을 못 찾는다고 봅니다.** 로컬 그룹이면 도메인 계정이어도 이 칸이 "-" 일 수 있습니다[3]. MemberSid 로 계정을 찾습니다.
 3. **4735 하나를 그룹 조작으로 봅니다.** 4732 앞에 아무것도 안 바뀐 4735 가 흔히 붙습니다[3].
 4. **감사가 꺼져 있었는데 이벤트가 없으니 계정 변경도 없었다고 봅니다.** SAM 하이브·프로필로 계정 목록을 직접 확인합니다.
-5. **NTUSER.DAT 생성 시각을 계정 생성 시각으로 단정합니다.** 이는 추정값입니다. 로그인한 적 없는 계정은 프로필이 없을 수 있습니다. 이벤트·SAM 과 맞춰 봅니다.
+5. **NTUSER.DAT 생성 시각을 계정 생성 시각으로 단정합니다.** 이는 추정값이고, 로그인한 적 없는 계정은 프로필이 없을 수 있습니다. 이벤트·SAM 과 맞춰 봅니다.
 6. **조회 이벤트를 곧 공격으로 봅니다.** 정상 프로그램도 계정·그룹을 조회합니다. CallerProcessName 으로 가립니다.
 
 ## 보고서 문장 예

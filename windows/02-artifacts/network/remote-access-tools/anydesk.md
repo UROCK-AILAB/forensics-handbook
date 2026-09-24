@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-애니데스크 (AnyDesk) 는 원격 지원 프로그램입니다. 받는 쪽 PC 의 `connection_trace.txt` 에 들어온 접속이 한 줄씩 남습니다. 줄마다 날짜·시각, 승인 방식, AnyDesk ID 가 적힙니다. trace 로그(`ad.trace`, `ad_svc.trace`)에는 상대 ID 와 외부 IP 주소가 남습니다.
+애니데스크 (AnyDesk) 는 원격 지원 프로그램입니다. 받는 쪽 PC 의 `connection_trace.txt` 에는 들어온 접속이 한 줄씩 남고, 줄마다 날짜·시각, 승인 방식, AnyDesk ID 가 적힙니다. trace 로그(`ad.trace`, `ad_svc.trace`)에는 상대 ID 와 외부 IP 주소가 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -64,10 +64,9 @@ Incoming 2022-08-23, 10:23 Passwd 547911884 547911884
 Incoming 2022-09-28, 12:39 User 442226597 442226597
 ```
 
-- 날짜는 년-월-일 순서입니다. 시각은 분까지만 있습니다(예시 기준).
-- 승인 방식 `Passwd` 는 비밀번호를 넣고 들어온 접속입니다.
-- 승인 방식 `User` 는 이 PC 의 사용자가 수락한 접속입니다.
-- 끝의 두 숫자를 Synacktiv 는 상대 ID 와 로컬 ID 로 적었습니다. 그런데 공개 예시에서는 두 값이 같습니다. 그래서 두 숫자의 뜻을 확정하지 못했습니다. trace 로그의 Client-ID 줄과 맞춰 보고 판단합니다.
+날짜는 년-월-일 순서이고 시각은 분까지만 있습니다(예시 기준). 승인 방식 `Passwd` 는 비밀번호를 넣고 들어온 접속이고, `User` 는 이 PC 의 사용자가 수락한 접속입니다.
+
+끝의 두 숫자를 Synacktiv 는 상대 ID 와 로컬 ID 로 적었습니다. 그런데 공개 예시에서는 두 값이 같아서 두 숫자의 뜻을 확정하지 못했습니다. trace 로그의 Client-ID 줄과 맞춰 보고 판단합니다.
 
 ### trace 로그 (ad.trace, ad_svc.trace)
 
@@ -93,10 +92,7 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 
 ### 설정 파일
 
-- `system.conf` 와 `user.conf` 에 설정 변수가 들어 있습니다.
-- 무인 접속 비밀번호를 정하면 솔트 (salt) 를 섞은 해시가 `ad.anynet.pwd_hash=…` 줄로 저장됩니다.
-- 인증서와 개인 키(PEM)도 들어 있습니다.
-- 거는 쪽 설정에는 원격 파일 창의 시작 경로가 남습니다. 예: `ad.session.remote_browser_start_path=294422414:C*\\Users\\john.doe\\Documents`
+`system.conf` 와 `user.conf` 에는 설정 변수와 함께 인증서와 개인 키(PEM)가 들어 있습니다. 무인 접속 비밀번호를 정하면 솔트 (salt) 를 섞은 해시가 `ad.anynet.pwd_hash=…` 줄로 저장됩니다. 거는 쪽 설정에는 원격 파일 창의 시작 경로가 남습니다. 예: `ad.session.remote_browser_start_path=294422414:C*\\Users\\john.doe\\Documents`
 
 ### 채팅 파일
 

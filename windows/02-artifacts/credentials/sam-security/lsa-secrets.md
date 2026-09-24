@@ -4,20 +4,15 @@
 
 ## 한 줄 요약
 
-LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 열쇠를 담아 두는 저장소입니다. 이 저장소는 SECURITY 하이브에 있습니다. 자동 로그온 비밀번호가 여기서 나오기도 합니다.
+LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 열쇠를 담아 두는 저장소로, SECURITY 하이브에 있으며 자동 로그온 비밀번호가 여기서 나오기도 합니다.
 
 ## 무엇을 담나 · 왜 생기나
 
-- Windows 는 사람이 다시 입력하지 않아도 되는 비밀을 어딘가 적어 두어야 합니다.
-- 서비스 계정 비밀번호, 시스템 DPAPI 열쇠, 도메인 캐시 복호 열쇠가 그렇습니다.
-- 그 자리가 LSA 시크릿입니다.
-- 각 시크릿은 SECURITY 하이브에 이름을 달고 들어갑니다.
+Windows 는 서비스 계정 비밀번호, 시스템 DPAPI 열쇠, 도메인 캐시 복호 열쇠처럼 사람이 다시 입력하지 않아도 되는 비밀을 어딘가 적어 두어야 하고, 그 자리가 LSA 시크릿입니다. 각 시크릿은 SECURITY 하이브에 이름을 달고 들어갑니다.
 
 ## 위치와 버전별 차이
 
-- LSA 시크릿은 SECURITY 하이브의 `Policy\Secrets\<이름>\CurrVal\default` 에 있습니다.
-- 이 값은 암호문입니다. 풀려면 LSA 키 (LSA Key) 가 먼저 필요합니다.
-- LSA 키도 암호화되어 하이브에 있습니다. 자리는 Windows 버전에 따라 다릅니다.
+LSA 시크릿은 SECURITY 하이브의 `Policy\Secrets\<이름>\CurrVal\default` 에 있으며 암호문이라서, 풀려면 LSA 키 (LSA Key) 가 먼저 필요합니다. LSA 키도 암호화되어 하이브에 있고, 자리는 Windows 버전에 따라 다릅니다.
 
 | Windows 버전 | LSA 키가 암호화되어 있는 곳 |
 |---|---|
@@ -35,23 +30,18 @@ LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 
 
 ## 구조
 
-- 시크릿 값은 `LSA_SECRET` 구조로 시작합니다. 이 안에 EncKeyID(16바이트), EncAlgorithm, Flags, EncryptedData 가 차례로 있습니다.
-- EncryptedData 를 풀면 `LSA_SECRET_BLOB` 구조가 나옵니다. 길이 칸과 용도를 모르는 12바이트 뒤의 Secret 칸에 실제 시크릿이 있습니다.
-- 이 구조 이름과 흐름은 공개 구현인 Impacket 에서 확인했습니다.
+시크릿 값은 `LSA_SECRET` 구조로 시작하고, 이 안에 EncKeyID(16바이트), EncAlgorithm, Flags, EncryptedData 가 차례로 있습니다. EncryptedData 를 풀면 `LSA_SECRET_BLOB` 구조가 나오는데, 길이 칸과 용도를 모르는 12바이트 뒤의 Secret 칸에 실제 시크릿이 있습니다. 이 구조 이름과 흐름은 공개 구현인 Impacket 에서 확인했습니다.
 
 ## 자동 로그온 비밀번호
 
-- 자동 로그온 (Automatic Logon) 을 켜면 비밀번호가 어딘가 저장됩니다.
-- 저장되는 자리는 켜는 방법에 따라 두 갈래입니다.
+자동 로그온 (Automatic Logon) 을 켜면 비밀번호가 어딘가 저장되며, 저장되는 자리는 켜는 방법에 따라 두 갈래입니다.
 
 | 켜는 방법 | 비밀번호가 저장되는 곳 | 형태 |
 |---|---|---|
 | 레지스트리 편집기로 값을 직접 넣음 | `Winlogon` 키의 `DefaultPassword` | 평문 문자열 |
 | Sysinternals 의 Autologon 도구로 켬 | LSA 시크릿 | 암호문 (LSA 키로 풂) |
 
-- 평문으로 들어간 `DefaultPassword` 는 Authenticated Users 그룹이 원격으로 읽을 수 있다고 Microsoft 문서가 밝힙니다.
-- 자동 로그온 설정 값은 SOFTWARE 하이브의 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon` 아래에 있습니다. SECURITY 하이브가 아니므로 따로 모읍니다.
-- `DefaultPassword` 문자열이 없으면 Windows 가 `AutoAdminLogon` 을 1 에서 0 으로 바꾼다고 Microsoft 문서가 밝힙니다.
+평문으로 들어간 `DefaultPassword` 는 Authenticated Users 그룹이 원격으로 읽을 수 있다고 Microsoft 문서가 밝힙니다. 자동 로그온 설정 값은 SOFTWARE 하이브의 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon` 아래에 있어 SECURITY 하이브가 아니므로 따로 모읍니다. `DefaultPassword` 문자열이 없으면 Windows 가 `AutoAdminLogon` 을 1 에서 0 으로 바꾼다고 Microsoft 문서가 밝힙니다.
 
 | 값 이름 | 뜻 |
 |---|---|
@@ -78,9 +68,9 @@ LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 
 ## 함정과 한계
 
 - SECURITY 하이브만으로는 못 풉니다. LSA 키를 푸는 데 SYSTEM 하이브의 부트키가 필요합니다.
-- 자동 로그온 비밀번호를 한 자리에서만 찾지 않습니다. `Winlogon\DefaultPassword` 와 LSA 시크릿 두 곳을 모두 봅니다.
+- 자동 로그온 비밀번호는 `Winlogon\DefaultPassword` 와 LSA 시크릿 두 곳을 모두 봅니다.
 - 하이브는 사본에서 작업합니다.
-- 작업그룹·도메인 이름은 같은 SECURITY 하이브의 `Policy\PolPrDmN` 에 있습니다. 이 값은 시크릿과 다른 항목입니다.
+- 작업그룹·도메인 이름은 같은 SECURITY 하이브의 `Policy\PolPrDmN` 에 있는데, 이 값은 시크릿과 다른 항목입니다.
 
 ## 직접 분석해 보기
 

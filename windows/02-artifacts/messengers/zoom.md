@@ -6,9 +6,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 줌은 화상 회의와 채팅을 하는 앱입니다.
-- 앱은 설정과 사용 기록을 사용자 프로필 안에 저장합니다. 그래서 사용자마다 흔적이 따로 생깁니다.
-- 사용자가 회의를 로컬 녹화하면 녹화 파일이 `문서\Zoom` 에 생깁니다[1][2].
+줌은 화상 회의와 채팅을 하는 앱이며, 설정과 사용 기록을 사용자 프로필 안에 저장합니다. 그래서 사용자마다 흔적이 따로 생깁니다. 사용자가 회의를 로컬 녹화하면 녹화 파일이 `문서\Zoom` 에 생깁니다[1][2].
 
 2021년에 나온 업체 블로그는 줌 아티팩트를 SQLite DB 로 설명합니다[2]. 이 블로그는 표마다 사용자 행동 정보가 있다고 적었고, 다음 항목을 들었습니다[2].
 
@@ -22,9 +20,7 @@
 
 (표는 [2])
 
-- 회의 기록에는 호스트 ID·회의 번호·주제·참가 시각·회의 길이·녹화 경로가 들어 있다고 적었습니다[2].
-- 회의 중 메시지, 사용자 계정, 로그인 기기의 비밀번호 칸은 "암호화됨" 으로 표시했습니다[2].
-- 이 블로그는 DB 파일 이름, 표 이름, 암호 방식, 대상 버전을 적지 않았습니다[2]. 그래서 아래 관찰 결과와 항목을 하나씩 맞춰 볼 수 없습니다.
+블로그는 회의 기록에 호스트 ID·회의 번호·주제·참가 시각·회의 길이·녹화 경로가 들어 있다고 적었고[2], 회의 중 메시지, 사용자 계정, 로그인 기기의 비밀번호 칸은 "암호화됨" 으로 표시했습니다[2]. 다만 DB 파일 이름, 표 이름, 암호 방식, 대상 버전은 적지 않았습니다[2]. 그래서 아래 관찰 결과와 항목을 하나씩 맞춰 볼 수 없습니다.
 
 ## 위치와 버전별 차이
 
@@ -46,8 +42,7 @@
 
 이 절은 Windows 11 PC 한 대에서 본 것입니다(확인 범위: Windows 11 PC 한 대, 줌 7.1.5.43453 사용자별 설치본).
 
-- 사용자별 설치였습니다. 실행 파일이 `%APPDATA%\Zoom\bin\Zoom.exe` 에 있었습니다.
-- `bin` 폴더에는 파일이 228개 있었습니다.
+- 사용자별 설치였고, 실행 파일이 `%APPDATA%\Zoom\bin\Zoom.exe` 에 있었습니다. `bin` 폴더에는 파일이 228개 있었습니다.
 - 사용자 하이브에 `HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\ZoomUMX` 키가 있었습니다.
 - 이 키의 `InstallLocation` 값은 `C:\Users\<사용자>\AppData\Roaming\Zoom\bin` 이었습니다.
 - `HKCU\Software\Zoom` 아래에는 `SystemInfo`, `WMI` 두 하위 키가 있었습니다. 값은 보지 않았습니다.
@@ -78,11 +73,9 @@
 | `zoomus.zmdb.default.noenc.rlock.db` | 163,840 | SQLite 머리 |
 
 - "SQLite 머리" 는 첫 16바이트가 `SQLite format 3\0` 인 파일입니다.
-- 나머지 DB 는 첫 바이트부터 규칙 없는 값이었습니다. 파일 전체를 암호화한 모양입니다.
-- 이름에 `enc` 가 없는 `telemetrydata.db`, `local_dns_cache.db` 도 암호화돼 있었습니다.
+- 나머지 DB 는 첫 바이트부터 규칙 없는 값이어서 파일 전체를 암호화한 모양입니다. 이름에 `enc` 가 없는 `telemetrydata.db`, `local_dns_cache.db` 도 암호화돼 있었습니다.
 - 암호 방식은 확인한 자료에 없습니다. SQLite 파일을 통째로 암호화하는 대표 방식은 [암호화된 SQLite (SQLCipher)](../../01-foundations/database-log-formats/sqlite/sqlcipher.md) 에서 다룹니다.
-- 모든 DB 옆에 크기가 0 인 `-journal` 파일이 있었습니다. `-wal`·`-shm` 은 없었습니다.
-- 그래서 롤백 저널 (rollback journal) 방식으로 봅니다. 저널 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
+- 모든 DB 옆에 크기가 0 인 `-journal` 파일이 있었고 `-wal`·`-shm` 은 없어서, 롤백 저널 (rollback journal) 방식으로 봅니다. 저널 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 - 설정 파일 `Zoom.us.ini`, `client.config`, `viper.ini`, `transcoding.ini`, `SSBAvatarCacheIndex.ini` 도 같은 폴더에 있었습니다.
 
 ### 평문 DB 세 개의 표
@@ -105,11 +98,7 @@
 
 `data\` 아래 계정 관련 폴더입니다(확인 범위: 위와 같음). 계정 식별자는 `<JID>`·`<ID>` 로 가렸습니다.
 
-- `data\<JID>@xmpp.zoom.us\` 폴더가 3개 있었습니다.
-- 그 가운데 하나에만 파일이 있었고, 나머지 둘은 비어 있었습니다. 빈 폴더가 예전에 로그인한 다른 계정인지는 확인하지 못했습니다.
-- `<JID>` 는 영문·숫자·밑줄로 된 22자 문자열이었습니다.
-- 폴더 이름에서는 이 문자열이 소문자로 바뀌어 있었습니다.
-- 이 값을 줌 계정 식별자로 보는 것은 이름 모양으로 한 추정입니다.
+`data\<JID>@xmpp.zoom.us\` 폴더가 3개 있었는데, 그 가운데 하나에만 파일이 있었고 나머지 둘은 비어 있었습니다. 빈 폴더가 예전에 로그인한 다른 계정인지는 확인하지 못했습니다. `<JID>` 는 영문·숫자·밑줄로 된 22자 문자열이었고, 폴더 이름에서는 소문자로 바뀌어 있었습니다. 이 값을 줌 계정 식별자로 보는 것은 이름 모양으로 한 추정입니다.
 
 파일이 있던 계정 폴더의 DB 입니다.
 
@@ -123,9 +112,7 @@
 | `<JID>@xmpp.zoom.us.msg_ext.encks.db` | 20,480 |
 | `<JID>@xmpp.zoom.us.sync.encks.db` | 0 |
 
-- 크기가 0 이 아닌 파일은 모두 첫 16바이트가 SQLite 머리가 아니었습니다. 모두 암호화돼 있었습니다.
-- 같은 폴더에 `client.config` 가 있었습니다.
-- 같은 폴더에 이름이 64자 16진수 + `_small` 인 파일이 20개 있었습니다. 프로필 사진 축소본인지는 확인하지 못했습니다.
+크기가 0 이 아닌 파일은 모두 첫 16바이트가 SQLite 머리가 아니어서 암호화돼 있었습니다. 같은 폴더에 `client.config` 가 있었고, 이름이 64자 16진수 + `_small` 인 파일도 20개 있었는데 프로필 사진 축소본인지는 확인하지 못했습니다.
 
 그 밖의 폴더입니다.
 
@@ -156,14 +143,13 @@
 
 이 절의 값도 관찰 PC 에서 본 것입니다(확인 범위: 위와 같음).
 
-- `Zoom.us.ini` `[ZoomChat]` 절의 `win_osencrypt_key` 값은 `ZWOSKEY` 로 시작했습니다.
-- `ZWOSKEY` 뒤는 Base64 였습니다. 값 전체 길이는 359자였습니다.
-- Base64 부분을 풀면 첫 20바이트가 `01 00 00 00 D0 8C 9D DF 01 15 D1 11 8C 7A 00 C0 4F C2 97 EB` 였습니다.
-- 이 20바이트는 DPAPI 블롭 머리(버전 1 + 제공자 GUID)와 모양이 같습니다. 머리 구조는 [DPAPI 블롭 구조](../../01-foundations/protection/data-protection-api/dpapi-blob.md) 에서 다룹니다.
-- 그래서 줌 로컬 DB 의 키 재료를 그 Windows 사용자의 데이터 보호 API (Data Protection API, DPAPI) 로 보호한다고 봅니다. 관찰한 값을 해석한 것입니다.
-- 디스크 이미지만으로 이 값을 풀려면 그 사용자의 DPAPI 마스터키를 풀 재료(사용자 암호 등)가 필요할 것으로 봅니다. DPAPI 일반 원리에서 추론한 것이고, 줌 쪽 자료로는 확인하지 않았습니다.
-- DPAPI 일반 원리는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
-- 이 값에서 DB 키를 만드는 방법과 암호 설정값은 확인하지 못했습니다. 이 페이지는 키를 꺼내 DB 를 여는 절차를 다루지 않습니다.
+`Zoom.us.ini` `[ZoomChat]` 절의 `win_osencrypt_key` 값은 `ZWOSKEY` 로 시작했고 그 뒤는 Base64 였으며, 값 전체 길이는 359자였습니다. Base64 부분을 풀면 첫 20바이트가 `01 00 00 00 D0 8C 9D DF 01 15 D1 11 8C 7A 00 C0 4F C2 97 EB` 였습니다.
+
+이 20바이트는 DPAPI 블롭 머리(버전 1 + 제공자 GUID)와 모양이 같습니다. 머리 구조는 [DPAPI 블롭 구조](../../01-foundations/protection/data-protection-api/dpapi-blob.md) 에서 다룹니다. 그래서 줌 로컬 DB 의 키 재료를 그 Windows 사용자의 데이터 보호 API (Data Protection API, DPAPI) 로 보호한다고 봅니다. 관찰한 값을 해석한 것입니다.
+
+디스크 이미지만으로 이 값을 풀려면 그 사용자의 DPAPI 마스터키를 풀 재료(사용자 암호 등)가 필요할 것으로 봅니다. DPAPI 일반 원리에서 추론한 것이고, 줌 쪽 자료로는 확인하지 않았습니다. DPAPI 일반 원리는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+
+이 값에서 DB 키를 만드는 방법과 암호 설정값은 확인하지 못했습니다. 이 페이지는 키를 꺼내 DB 를 여는 절차를 다루지 않습니다.
 
 ## 증거로서 의미
 
@@ -203,16 +189,14 @@
 | `zoomus.enc.db`, `Zoom.us.ini` | 마지막 실행 즈음 |
 | `telemetrydata.db`, `zoomus.zmdb.kvs.enc.db` | 조사 당일 (더 최근) |
 
-- 그래서 DB 파일 수정 시각을 "회의한 시각" 으로 읽지 않습니다.
-- 수정 시각은 "그 파일을 마지막으로 고친 시각" 까지만 말해 줍니다.
+그래서 DB 파일 수정 시각을 "회의한 시각" 으로 읽지 않습니다. 수정 시각은 "그 파일을 마지막으로 고친 시각" 까지만 말해 줍니다.
 
 ## 함정과 한계
 
 - 이름에 `enc` 가 없어도 암호화된 DB 가 있습니다. `telemetrydata.db`, `local_dns_cache.db`, `users\<ID>\data.db` 가 그랬습니다(관찰). 파일 이름이 아니라 첫 16바이트로 판단합니다.
 - 업체 블로그[2]의 표·칸 설명은 2021년 무렵 자료입니다. 이 블로그는 대상 버전을 밝히지 않았습니다. 요즘 버전과 다를 수 있습니다.
 - 계정 폴더 이름은 소문자였고, `data\<ID>\calendar`·`data\users\<ID>` 는 대소문자를 살린 이름이었습니다(관찰). 두 폴더를 짝지을 때는 대소문자를 무시하고 비교합니다.
-- 공개 수집 목록[1]은 Windows 7 이후 경로에서는 `%APPDATA%\Zoom\logs` 만 모읍니다. 줌 폴더를 통째로 모으는 항목은 Windows XP 경로뿐입니다. 그 밖에 녹화 폴더와 플러그인 json 을 모읍니다[1].
-- 그래서 이 목록만 쓰면 Windows 7 이후 PC 에서는 `data` 폴더와 설정 파일이 빠집니다. `%APPDATA%\Zoom` 을 따로 통째로 확보합니다.
+- 공개 수집 목록[1]은 Windows 7 이후 경로에서는 `%APPDATA%\Zoom\logs` 만 모으고, 줌 폴더를 통째로 모으는 항목은 Windows XP 경로뿐입니다. 그 밖에 녹화 폴더와 플러그인 json 을 모읍니다[1]. 그래서 이 목록만 쓰면 Windows 7 이후 PC 에서는 `data` 폴더와 설정 파일이 빠집니다. `%APPDATA%\Zoom` 을 따로 통째로 확보합니다.
 - 이 목록은 필요 없는 DLL·EXE 도 함께 모은다고 스스로 적었습니다[1].
 - 원본 말고 사본에서 작업합니다. SQLite 파일은 `-journal` 까지 함께 복사한 사본을 엽니다.
 

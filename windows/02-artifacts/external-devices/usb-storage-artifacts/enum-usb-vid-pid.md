@@ -6,25 +6,11 @@ SYSTEM 하이브의 `Enum\USB` 키에는 이 PC 에 연결된 USB 장치가 스�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-USB 장치를 꽂으면 PC 는 먼저 장치에서 장치 설명자 (Device Descriptor) 를 받습니다.
-장치 설명자에는 제조사 번호 (Vendor ID, VID) 가 들어 있습니다.
-제품 번호 (Product ID, PID) 와 장치 개정 번호 (bcdDevice) 도 들어 있습니다.
-일련번호 문자열이 있는지는 `iSerialNumber` 칸이 알려 줍니다.
-Windows 의 USB 허브 드라이버는 VID·PID·개정 번호로 장치 ID (Device ID) 를 만듭니다.
-플러그 앤 플레이 관리자 (PnP Manager) 는 장치 ID 에 인스턴스 ID (Instance ID) 를 이어 붙여 장치 인스턴스 ID (Device Instance ID) 를 만듭니다.
-장치 인스턴스 ID 는 재부팅해도 바뀌지 않습니다.
-Windows 는 이 장치 인스턴스 ID 를 경로로 삼아 `Enum` 아래에 장치 키를 만듭니다.
+USB 장치를 꽂으면 PC 는 먼저 장치에서 장치 설명자 (Device Descriptor) 를 받습니다. 장치 설명자에는 제조사 번호 (Vendor ID, VID), 제품 번호 (Product ID, PID), 장치 개정 번호 (bcdDevice) 가 들어 있고, 일련번호 문자열이 있는지는 `iSerialNumber` 칸이 알려 줍니다. Windows 의 USB 허브 드라이버는 VID·PID·개정 번호로 장치 ID (Device ID) 를 만들고, 플러그 앤 플레이 관리자 (PnP Manager) 는 장치 ID 에 인스턴스 ID (Instance ID) 를 이어 붙여 장치 인스턴스 ID (Device Instance ID) 를 만듭니다. 장치 인스턴스 ID 는 재부팅해도 바뀌지 않으며, Windows 는 이 값을 경로로 삼아 `Enum` 아래에 장치 키를 만듭니다.
 
-VID 는 USB 표준 단체 (USB-IF) 가 제조사에 나눠 줍니다.
-PID 는 제조사가 제품마다 정합니다.
+VID 는 USB 표준 단체 (USB-IF) 가 제조사에 나눠 주고, PID 는 제조사가 제품마다 정합니다.
 
-`Enum\USB` 는 USB 버스에 붙은 장치를 종류와 상관없이 기록합니다.
-저장장치 말고도 키보드·마우스, 스마트폰, 웹캠, 허브가 여기에 남습니다.
-USB 저장장치 하나는 두 곳에 나뉘어 남습니다.
-`Enum\USB` 키는 USB 장치 자체를 나타냅니다.
-[USBSTOR](usbstor.md) 키는 그 장치 안의 디스크를 나타냅니다.
-`Enum\USB` 쪽은 VID·PID 숫자로 장치를 가리킵니다.
-USBSTOR 쪽은 제조사·제품 이름 문자열로 장치를 가리킵니다.
+`Enum\USB` 는 USB 버스에 붙은 장치를 종류와 상관없이 기록하므로 저장장치 말고도 키보드·마우스, 스마트폰, 웹캠, 허브가 여기에 남습니다. USB 저장장치 하나는 두 곳에 나뉘어 남습니다. `Enum\USB` 키는 USB 장치 자체를 나타내고 [USBSTOR](usbstor.md) 키는 그 장치 안의 디스크를 나타내며, `Enum\USB` 쪽은 VID·PID 숫자로, USBSTOR 쪽은 제조사·제품 이름 문자열로 장치를 가리킵니다.
 
 ## 위치와 버전별 차이
 
@@ -40,8 +26,7 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 - `MI_zz` 의 `zz` 는 인터페이스 번호입니다.
 - 키 이름을 비교할 때는 대소문자를 가리지 않습니다.
 
-Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고, 구조가 바뀔 수 있다고 밝힙니다.
-그래서 값 이름과 하위 키는 검체의 Windows 버전에서 직접 확인합니다.
+Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고 구조가 바뀔 수 있다고 밝히므로 값 이름과 하위 키는 검체의 Windows 버전에서 직접 확인합니다.
 
 | 항목 | Windows 버전 | 비고 |
 |---|---|---|
@@ -54,31 +39,20 @@ Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고, 구조가 바�
 
 ### 키 이름 (장치 ID)
 
-키 이름의 VID·PID 는 장치 설명자의 `idVendor`·`idProduct` 에서 옵니다.
-Microsoft 문서는 USB 장치 ID 를 `USB\VID_v(4)&PID_d(4)&REV_r(4)` 형식으로 설명합니다.
-그런데 같은 문서 모음의 예시에서 장치 인스턴스 ID 는 `USB\VID_045E&PID_0840\0C33CG9212501N0` 처럼 개정 번호 (REV) 없이 쓰입니다.
-`Enum\USB` 아래 키 이름도 REV 가 빠진 `VID_vvvv&PID_pppp` 형태입니다.
-개정 번호는 인스턴스 키의 `HardwareID` 값에서 확인합니다.
+키 이름의 VID·PID 는 장치 설명자의 `idVendor`·`idProduct` 에서 옵니다. Microsoft 문서는 USB 장치 ID 를 `USB\VID_v(4)&PID_d(4)&REV_r(4)` 형식으로 설명하지만, 같은 문서 모음의 예시에서 장치 인스턴스 ID 는 `USB\VID_045E&PID_0840\0C33CG9212501N0` 처럼 개정 번호 (REV) 없이 쓰입니다. `Enum\USB` 아래 키 이름도 REV 가 빠진 `VID_vvvv&PID_pppp` 형태이며, 개정 번호는 인스턴스 키의 `HardwareID` 값에서 확인합니다.
 
 ### 인스턴스 ID — 일련번호인지 먼저 가린다
 
-인스턴스 ID 는 버스 드라이버가 알려 줍니다.
-Microsoft 는 버스가 지원하면 인스턴스 ID 에 일련번호가 들어가고, 아니면 위치 정보가 들어간다고 설명합니다.
-USB 에서는 두 가지 모양으로 나타납니다.
+인스턴스 ID 는 버스 드라이버가 알려 줍니다. Microsoft 는 버스가 지원하면 인스턴스 ID 에 일련번호가 들어가고 아니면 위치 정보가 들어간다고 설명하며, USB 에서는 두 가지 모양으로 나타납니다.
 
 | 모양 | 예 (Microsoft 문서의 예시) | 뜻 |
 |---|---|---|
 | 장치 일련번호 | `0C33CG9212501N0` | 장치가 보낸 일련번호 문자열입니다. 같은 장치는 어느 포트에 꽂아도 같은 키에 모입니다. |
 | 시스템이 만든 값 | `5&109d12e&0&1` | 장치가 일련번호를 주지 않았거나 Windows 가 일련번호를 쓰지 않았습니다. 부모 장치와 연결 위치에 따라 정해집니다. |
 
-두 번째 글자가 `&` 이면 시스템이 만든 값으로 봅니다.
-이 판별법은 포렌식 자료에서 널리 쓰입니다.
+두 번째 글자가 `&` 이면 시스템이 만든 값으로 보는데, 이 판별법은 포렌식 자료에서 널리 쓰입니다.
 
-`SYSTEM\CurrentControlSet\Control\usbflags\vvvvpppprrrr` 키에는 장치별 USB 설정이 들어갑니다.
-`rrrr` 는 개정 번호입니다.
-이 키의 `IgnoreHWSerNum` 값이 `0x01` 이면 USB 드라이버가 장치 일련번호를 무시합니다.
-이때 장치 인스턴스는 꽂은 포트에 묶입니다.
-그래서 "이 장치에는 일련번호가 없다" 고 쓰기 전에 이 값을 확인합니다.
+`SYSTEM\CurrentControlSet\Control\usbflags\vvvvpppprrrr` 키에는 장치별 USB 설정이 들어가고, `rrrr` 는 개정 번호입니다. 이 키의 `IgnoreHWSerNum` 값이 `0x01` 이면 USB 드라이버가 장치 일련번호를 무시하고 장치 인스턴스는 꽂은 포트에 묶입니다. 그래서 "이 장치에는 일련번호가 없다" 고 쓰기 전에 이 값을 확인합니다.
 
 ### 인스턴스 키 안의 값
 
@@ -97,13 +71,9 @@ USB 에서는 두 가지 모양으로 나타납니다.
 | 하위 키 `Properties` | — | 장치 속성이 들어 있습니다. 설치·연결·해제 시각도 여기 있습니다. |
 | 하위 키 `Device Parameters` | — | 드라이버별 설정이 들어갑니다. |
 
-`DeviceDesc`·`Mfg` 는 장치가 스스로 보낸 제품 이름과 다를 수 있습니다.
-공용 드라이버를 쓰는 장치에는 `USB Composite Device`, `(Standard USB Host Controller)` 같은 일반 문자열만 남습니다 (Microsoft 문서의 예시).
-상표 이름을 찾으려면 USBSTOR 쪽 문자열과 함께 봅니다.
+`DeviceDesc`·`Mfg` 는 장치가 스스로 보낸 제품 이름과 다를 수 있습니다. 공용 드라이버를 쓰는 장치에는 `USB Composite Device`, `(Standard USB Host Controller)` 같은 일반 문자열만 남으므로 (Microsoft 문서의 예시) 상표 이름을 찾으려면 USBSTOR 쪽 문자열과 함께 봅니다.
 
-`CompatibleIDs` 는 `USB\Class_cc&SubClass_ss&Prot_pp` 형태입니다.
-Windows 10 이후에는 `USB\DevClass_...`, `USB\COMPAT_VID_...` 형태도 함께 보입니다 (Microsoft 문서의 예시).
-자주 보는 클래스 코드는 아래와 같습니다. 코드 뜻은 USB-IF 의 클래스 코드표를 따릅니다.
+`CompatibleIDs` 는 `USB\Class_cc&SubClass_ss&Prot_pp` 형태이고, Windows 10 이후에는 `USB\DevClass_...`, `USB\COMPAT_VID_...` 형태도 함께 보입니다 (Microsoft 문서의 예시). 자주 보는 클래스 코드는 아래와 같으며, 코드 뜻은 USB-IF 의 클래스 코드표를 따릅니다.
 
 | 코드 | 뜻 |
 |---|---|
@@ -117,11 +87,7 @@ Windows 10 이후에는 `USB\DevClass_...`, `USB\COMPAT_VID_...` 형태도 함�
 
 ### 복합 장치 (Composite Device)
 
-인터페이스가 여러 개인 장치를 복합 장치라고 합니다.
-Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent driver) 를 붙입니다.
-공용 부모 드라이버는 인터페이스마다 `VID_vvvv&PID_pppp&MI_zz` 키를 따로 만듭니다.
-부모 키의 `Service` 는 보통 `usbccgp` 입니다.
-스마트폰, 웹캠, 무선 키보드·마우스 수신기가 흔히 복합 장치로 잡힙니다.
+인터페이스가 여러 개인 장치를 복합 장치라고 합니다. Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent driver) 를 붙이고, 이 드라이버는 인터페이스마다 `VID_vvvv&PID_pppp&MI_zz` 키를 따로 만듭니다. 부모 키의 `Service` 는 보통 `usbccgp` 이며, 스마트폰, 웹캠, 무선 키보드·마우스 수신기가 흔히 복합 장치로 잡힙니다.
 인터페이스 키의 인스턴스 ID 는 시스템이 만든 값인 경우가 많습니다. 관찰로 알게 된 것이고, 모든 장치에서 그런지는 확인하지 않았습니다.
 그래서 인터페이스 키와 부모 키는 일련번호가 아니라 `ContainerID` 로 잇습니다.
 
@@ -148,8 +114,7 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 ## 시각 해석
 
 - 인스턴스 키의 마지막 기록 시각 (Last Write Time) 은 UTC 기준 FILETIME 입니다. → [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md), [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
-- 이 시각은 그 키의 값이나 하위 키 목록이 바뀔 때 바뀝니다.
-- 그래서 이 시각을 첫 연결 시각이나 마지막 연결 시각으로 바로 쓰지 않습니다.
+- 이 시각은 그 키의 값이나 하위 키 목록이 바뀔 때 바뀌므로 첫 연결 시각이나 마지막 연결 시각으로 바로 쓰지 않습니다.
 - 옛 자료에는 USB 장치 키의 마지막 기록 시각을 마지막 연결 시각으로 설명한 것도 있습니다. 다른 기록과 맞춰 보기 전에는 따르지 않습니다.
 - 설치·연결·해제 시각은 인스턴스 키 아래 `Properties` 하위 키에 따로 남습니다. 읽는 법은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) 에서 다룹니다.
 - 저장장치라면 `Enum\USB` 쪽 시각과 USBSTOR 쪽 시각을 나란히 놓고 비교합니다.
@@ -171,10 +136,7 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 
 **1) 장치 설명자에서 키 이름으로**
 
-아래 18바이트는 명세의 구조로 만든 예시입니다.
-실제 검체에서 나온 값이 아닙니다.
-장치 설명자는 디스크에 저장되지 않습니다.
-레지스트리 값이 어디서 왔는지 보여 주려고 넣었습니다.
+아래 18바이트는 명세의 구조로 만든 예시이고 실제 검체에서 나온 값이 아닙니다. 장치 설명자는 디스크에 저장되지 않으며, 레지스트리 값이 어디서 왔는지 보여 주려고 넣었습니다.
 
 ```text
 12 01 00 02 00 00 00 40 34 12 78 56 00 01 01 02 03 01
@@ -197,17 +159,11 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 | 0x10 | 1 | iSerialNumber | 0x03 | 일련번호 문자열이 있다는 뜻입니다. 인스턴스 ID 가 됩니다. |
 | 0x11 | 1 | bNumConfigurations | 0x01 | — |
 
-2바이트 칸은 리틀 엔디언입니다.
-그래서 `34 12` 는 0x1234 로 읽습니다.
-`iSerialNumber` 가 0 이면 일련번호 문자열이 없습니다.
-이때 Windows 는 인스턴스 ID 를 스스로 만듭니다.
+2바이트 칸은 리틀 엔디언이라서 `34 12` 는 0x1234 로 읽습니다. `iSerialNumber` 가 0 이면 일련번호 문자열이 없고, 이때 Windows 는 인스턴스 ID 를 스스로 만듭니다.
 
 **2) `HardwareID` 값**
 
-`HardwareID` 는 문자열 여러 개를 담는 REG_MULTI_SZ (값 종류 7) 입니다.
-문자열은 UTF-16LE 로 저장됩니다. → [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)
-문자열마다 끝에 `00 00` 이 붙습니다.
-목록 끝에는 `00 00` 이 한 번 더 붙습니다.
+`HardwareID` 는 문자열 여러 개를 담는 REG_MULTI_SZ (값 종류 7) 입니다. 문자열은 UTF-16LE 로 저장되고 → [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md), 문자열마다 끝에 `00 00` 이 붙으며 목록 끝에는 `00 00` 이 한 번 더 붙습니다.
 값 셀 (vk) 에서 데이터 위치를 찾는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에 있습니다.
 
 아래는 위 예시 장치를 가정해 명세대로 만든 108바이트입니다.

@@ -62,8 +62,7 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 | `InstallDate` 에 적힌 마지막 서비스 때 | 앱 파일이 지금도 디스크에 있는지 |
 | | 목록에 없는 앱을 설치한 적이 없다는 것 |
 
-- 앱을 지우면 항목이 목록에서 빠질 수 있습니다. 설치 과정 없이 쓰는 프로그램은 처음부터 목록에 없을 수 있습니다.
-- 그래서 "목록에 없다" 는 "설치한 적이 없다" 가 아닙니다.
+앱을 지우면 항목이 목록에서 빠질 수 있고, 설치 과정 없이 쓰는 프로그램은 처음부터 목록에 없을 수 있습니다. 그래서 "목록에 없다" 는 "설치한 적이 없다" 가 아닙니다.
 
 ### 보고서 문장
 
@@ -81,9 +80,8 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 | `InstallDate` 값 | 마지막으로 서비스(패치·복구)한 때. 그런 일이 없었으면 처음 설치한 때 | 공식 문서의 뜻입니다. 바뀔 수 있는 값입니다 |
 | 앱 키의 LastWrite | 그 앱 항목을 마지막으로 손댄 때 | 레지스트리 키마다 있는 FILETIME 이라 UTC 로 해석합니다 |
 
-- 공개 도구(RegRipper 의 `uninstall`)는 앱 키마다 `DisplayName`·`DisplayVersion` 만 읽습니다. `InstallDate` 는 읽지 않습니다.
-- 대신 앱 키의 LastWrite 를 뽑아 최신순으로 늘어놓습니다. 이렇게 "언제 설치하거나 바꿨나" 를 봅니다.
-- 두 시각은 뜻이 달라서 서로 다를 수 있습니다. 다르다고 조작의 흔적은 아닙니다.
+- 공개 도구(RegRipper 의 `uninstall`)는 앱 키마다 `DisplayName`·`DisplayVersion` 만 읽고 `InstallDate` 는 읽지 않으며, 대신 앱 키의 LastWrite 를 뽑아 최신순으로 늘어놓습니다. 이렇게 "언제 설치하거나 바꿨나" 를 봅니다.
+- 두 시각은 뜻이 달라서 서로 다를 수 있으며, 다르다고 조작의 흔적은 아닙니다.
 - LastWrite 가 무엇이고 어디 있는지는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다. FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 - 현지 시각으로 바꿀 때는 [시간대 설정](time-zone.md)을 씁니다.
 

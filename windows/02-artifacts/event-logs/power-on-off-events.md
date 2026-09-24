@@ -26,17 +26,15 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 - Microsoft 는 1074 가 두 경우에 남는다고 적었습니다. 응용 프로그램이 종료·재시작을 일으켰을 때, 그리고 사용자가 시작 메뉴나 Ctrl+Alt+Del 로 종료·재시작했을 때입니다.
 - `shutdown.exe` 도 꺼지기 직전에 Source=User32, ID 1074 로 사용자 이름·날짜·시각·이유 코드·설명을 남깁니다.
-- 41 은 예기치 않게 꺼진 뒤 다음 부팅 때 남습니다.
-- Windows 는 꺼질 때 오류 코드를 기록할 수 있으면 기록합니다. 다음 시작의 커널 단계에서 그 코드를 41 의 데이터에 넣습니다.
-- 6006 은 제대로 꺼졌다는 뜻입니다. 6008 은 직전 종료가 예기치 않았다는 뜻입니다.
+- 41 은 예기치 않게 꺼진 뒤 다음 부팅 때 남습니다. Windows 는 꺼질 때 오류 코드를 기록할 수 있으면 기록하고, 다음 시작의 커널 단계에서 그 코드를 41 의 데이터에 넣습니다.
+- 6006 은 제대로 꺼졌다는 뜻이고, 6008 은 직전 종료가 예기치 않았다는 뜻입니다.
 - Winlogon 7001 은 로그온 알림입니다. 로그온 자체는 [로그온·로그오프](logon-events/index.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-- 대부분 System 로그에 남습니다. 4608·4609·1100 은 Security 로그에 남습니다.
-- 한 PC 의 Security 로그에는 4608·4609 가 없었습니다. 약 이틀 치만 남아 있어 마지막 부팅 기록이 이미 밀려났습니다. (확인 범위: Win11 빌드 26200 한 대)
-- 4608 이 어느 감사 하위 범주에 속하는지는 확인하지 못했습니다.
-- 부팅 상태 파일 `%SystemRoot%\Bootstat.dat` 에 부팅·종료·최대 절전/절전에서 돌아옴의 성공 여부가 기록됩니다. Microsoft 문서가 Windows Internals 6판을 인용해 적은 내용입니다. 내부 구조는 확인하지 못했습니다.
+대부분 System 로그에 남고, 4608·4609·1100 은 Security 로그에 남습니다. 한 PC 의 Security 로그에는 4608·4609 가 없었는데, 약 이틀 치만 남아 있어 마지막 부팅 기록이 이미 밀려났습니다. (확인 범위: Win11 빌드 26200 한 대) 4608 이 어느 감사 하위 범주에 속하는지는 확인하지 못했습니다.
+
+부팅 상태 파일 `%SystemRoot%\Bootstat.dat` 에는 부팅·종료·최대 절전/절전에서 돌아옴의 성공 여부가 기록됩니다. Microsoft 문서가 Windows Internals 6판을 인용해 적은 내용이며, 내부 구조는 확인하지 못했습니다.
 
 ### 이벤트 버전
 
@@ -149,8 +147,7 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 | 21:44:24 | Kernel-Power 41 (버전 10) | BugcheckCode 159 (0x9F), BugcheckParameter1 0x3, SleepInProgress 0, ConnectedStandbyInProgress true, Checkpoint 16, BugcheckInfoFromEFI true, PowerButtonTimestamp 0 아님 |
 | 21:44:36 | EventLog 6008 → 6009 → 6005 → 6013 | 6008 의 종료 시각은 20:57:17 UTC |
 
-- 같은 PC 의 41 은 세 건이었고 6008 도 세 건으로 날짜가 맞았습니다.
-- 다른 두 건의 41 은 BugcheckCode 0 이었습니다. 한 건은 PowerButtonTimestamp 0·SleepInProgress 6, 다른 한 건은 모든 값이 0 이었습니다.
+같은 PC 의 41 은 세 건이었고 6008 도 세 건으로 날짜가 맞았습니다. 다른 두 건의 41 은 BugcheckCode 0 이었는데, 한 건은 PowerButtonTimestamp 0·SleepInProgress 6, 다른 한 건은 모든 값이 0 이었습니다.
 
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
@@ -164,7 +161,7 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 - 쓸 수 있는 문장: "System 로그의 User32 1074 에 따르면 ○○(UTC) 에 `StartMenuExperienceHost.exe` 가 ○○\○○ 계정으로 재시작을 일으켰습니다. 이어서 Kernel-General 13 의 StopTime 은 ○○, 다음 Kernel-General 12 의 StartTime 은 ○○ 입니다."
 - 쓰면 안 되는 문장: "사용자가 ○○시에 PC 를 껐다."
 
-두 번째 문장은 계정을 사람으로 바꾸고, 어떤 기록인지도 밝히지 않습니다. 사용 시간 전체를 재구성하는 방법은 [PC 사용 시간 재구성](../../04-scenarios/activity/system-usage-time.md)에서 다룹니다.
+두 번째 문장은 계정을 사람으로 바꾸고 어떤 기록인지도 밝히지 않습니다. 사용 시간 전체를 재구성하는 방법은 [PC 사용 시간 재구성](../../04-scenarios/activity/system-usage-time.md)에서 다룹니다.
 
 ## 시각 해석
 

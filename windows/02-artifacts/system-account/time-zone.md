@@ -71,7 +71,7 @@ Bias 는 REG_DWORD 로 저장하지만 부호 있는 32비트로 읽어야 합�
 4. 현지 시각 = UTC − 적용할 차이(분) 로 계산합니다.
 5. 보고서에는 UTC 와 현지 시각을 함께 적습니다. 어느 차이를 썼는지도 적습니다.
 
-- 이미지에서 읽은 ActiveTimeBias 는 이 PC 가 마지막으로 이 값을 쓴 때의 상태입니다. 수집한 날이나 사건 날짜의 상태가 아닐 수 있습니다.
+- 이미지에서 읽은 ActiveTimeBias 는 이 PC 가 마지막으로 이 값을 쓴 때의 상태이며, 수집한 날이나 사건 날짜의 상태가 아닐 수 있습니다.
 - 키의 마지막 기록 시각(LastWrite)은 레지스트리 키마다 있는 값입니다([레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)). 무엇이 이 키의 LastWrite 를 바꾸는지는 이 페이지가 기댄 자료에 없습니다. 참고로만 봅니다.
 - 여러 기록을 하나의 시간 축에 놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 

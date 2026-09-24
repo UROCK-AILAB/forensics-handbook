@@ -2,15 +2,11 @@
 
 ## 한 줄 요약
 
-Windows 10 1903 이후 사용자 하이브(NTUSER.DAT)의 `FeatureUsage` 키에 작업 표시줄에서 앱을 띄우고, 누르고, 오른쪽 클릭한 횟수가 앱마다 쌓입니다. 값에는 시각이 없습니다. 키의 `KeyCreationTime` 값은 그 사용자가 처음 대화형 로그온한 무렵을 가리킵니다.
+Windows 10 1903 이후 사용자 하이브(NTUSER.DAT)의 `FeatureUsage` 키에 작업 표시줄에서 앱을 띄우고, 누르고, 오른쪽 클릭한 횟수가 앱마다 쌓이지만 값에는 시각이 없고, 키의 `KeyCreationTime` 값은 그 사용자가 처음 대화형 로그온한 무렵을 가리킵니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 작업 표시줄에서 일어난 동작을 종류별 하위 키에 나눠 셉니다.
-- 값 하나가 앱 하나입니다. 값 데이터는 횟수입니다.
-- 계정마다 따로 남습니다.
-- CrowdStrike 에 따르면 그 계정이 대화형으로 로그온한 적이 없으면 키가 없습니다.
-- 작업 표시줄로 다루지 않은 앱은 이 숫자에 잡히지 않습니다.
+작업 표시줄에서 일어난 동작을 종류별 하위 키에 나눠 세며, 값 하나가 앱 하나이고 값 데이터는 횟수입니다. 기록은 계정마다 따로 남습니다. CrowdStrike 에 따르면 그 계정이 대화형으로 로그온한 적이 없으면 키가 없고, 작업 표시줄로 다루지 않은 앱은 이 숫자에 잡히지 않습니다.
 
 ## 위치와 버전별 차이
 
@@ -18,8 +14,7 @@ Windows 10 1903 이후 사용자 하이브(NTUSER.DAT)의 `FeatureUsage` 키에 
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage
 ```
 
-- CrowdStrike 는 이 경로를 `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage` 로 적습니다.
-- CrowdStrike 는 Windows 10 1903 이후에서 이 키를 관찰했다고 적습니다. 그보다 앞선 버전에는 없을 수 있습니다.
+CrowdStrike 는 이 경로를 `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage` 로 적고, Windows 10 1903 이후에서 이 키를 관찰했다고 적습니다. 그보다 앞선 버전에는 없을 수 있습니다.
 
 | 하위 키 | Windows 10 1903 이후 (CrowdStrike) | Windows 11 25H2 한 대 |
 |---|---|---|
@@ -90,12 +85,12 @@ Windows 11 PC 한 대에서 본 값은 모두 REG_DWORD 횟수였습니다. 값 
 
 ## 시각 해석
 
-- `KeyCreationTime` 은 REG_QWORD 입니다. CrowdStrike 는 이 값을 64비트 FILETIME 숫자로 설명합니다. UTC 로 읽습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- CrowdStrike 는 이 값을 키가 처음 만들어진 때, 곧 그 사용자가 처음 대화형 로그온한 때로 봅니다.
-- Windows 11 PC 한 대에서 `KeyCreationTime` 은 같은 날 가장 오래된 UserAssist·BAM 항목보다 20여 분 늦었습니다. 첫 로그온 시각 그 자체로 쓰지 말고 "그 무렵" 으로 씁니다. 첫 로그온 시각은 [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트와 맞춰 봅니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 에서 하위 키의 마지막 기록 시각 (LastWrite) 은 사용할 때마다 바뀌었습니다. AppBadgeUpdated·AppSwitched 의 마지막 기록 시각은 조사 당일이었습니다. (확인 범위: Win11 25H2 한 대)
-- 하위 키의 마지막 기록 시각은 그 종류의 동작이 마지막으로 셈에 들어간 무렵을 말합니다. 어느 앱의 값이 바뀌었는지는 말하지 않습니다.
-- 같은 PC 에서 부모 키 `FeatureUsage` 의 마지막 기록 시각은 `KeyCreationTime` 과 같은 날이었습니다. 하위 키가 바뀌어도 부모 키의 시각은 따라 바뀌지 않았습니다. (확인 범위: Win11 25H2 한 대)
+`KeyCreationTime` 은 REG_QWORD 이며 CrowdStrike 는 이 값을 64비트 FILETIME 숫자로 설명합니다. UTC 로 읽고, 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. CrowdStrike 는 이 값을 키가 처음 만들어진 때, 곧 그 사용자가 처음 대화형 로그온한 때로 봅니다.
+
+Windows 11 PC 한 대에서 `KeyCreationTime` 은 같은 날 가장 오래된 UserAssist·BAM 항목보다 20여 분 늦었으므로 첫 로그온 시각 그 자체로 쓰지 말고 "그 무렵" 으로 씁니다. 첫 로그온 시각은 [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트와 맞춰 봅니다. (확인 범위: Win11 25H2 한 대)
+같은 PC 에서 하위 키의 마지막 기록 시각 (LastWrite) 은 사용할 때마다 바뀌었고, AppBadgeUpdated·AppSwitched 의 마지막 기록 시각은 조사 당일이었습니다. (확인 범위: Win11 25H2 한 대) 하위 키의 마지막 기록 시각은 그 종류의 동작이 마지막으로 셈에 들어간 무렵을 말하며, 어느 앱의 값이 바뀌었는지는 말하지 않습니다.
+
+같은 PC 에서 부모 키 `FeatureUsage` 의 마지막 기록 시각은 `KeyCreationTime` 과 같은 날이었습니다. 하위 키가 바뀌어도 부모 키의 시각은 따라 바뀌지 않았습니다. (확인 범위: Win11 25H2 한 대)
 
 ## 함정과 한계
 

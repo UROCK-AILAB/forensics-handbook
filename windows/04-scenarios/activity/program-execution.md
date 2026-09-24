@@ -1,6 +1,6 @@
 # 어떤 프로그램을 언제 실행했나 (Program Execution)
 
-실행 파일 하나를 두고 "이 PC 에서 실행됐나, 언제·몇 번·어느 계정의 세션에서 실행됐나" 를 묻는 조사를 다룹니다. Windows 에는 실행과 관계있는 기록이 여럿 있습니다. 기록마다 증명하는 범위가 다릅니다. 이 페이지는 기록마다 실행을 증명하는지 나눠 보고, 어떤 순서로 맞춰 보는지를 정리합니다.
+실행 파일 하나를 두고 "이 PC 에서 실행됐나, 언제·몇 번·어느 계정의 세션에서 실행됐나" 를 묻는 조사를 다룹니다. Windows 에는 실행과 관계있는 기록이 여럿 있고 기록마다 증명하는 범위가 다릅니다. 이 페이지는 기록마다 실행을 증명하는지 나눠 보고, 어떤 순서로 맞춰 보는지를 정리합니다.
 
 "(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) PC 한 대에서 직접 본 것입니다(확인 범위: Win11 25H2 한 대). 다른 빌드나 다른 PC 에서는 다를 수 있습니다.
 
@@ -33,9 +33,7 @@
 | 2 | 부팅만 |
 | 3 | 둘 다 |
 
-- 이 PC 는 `EnablePrefetcher` 가 3 이었고 `.pf` 파일이 294개 있었습니다(관찰).
-- 이 PC 에서는 프로세스 만들기 감사가 꺼져 있었습니다(관찰).
-- `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit` 에는 `ProcessCreationIncludeCmdLine_Enabled` 값이 없었습니다(관찰). 이 값이 아래 "명령줄 포함" 정책과 짝이라는 것은 확인하지 못했습니다.
+이 PC 는 `EnablePrefetcher` 가 3 이었고 `.pf` 파일이 294개 있었으며, 프로세스 만들기 감사는 꺼져 있었습니다(관찰). `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit` 에는 `ProcessCreationIncludeCmdLine_Enabled` 값이 없었습니다(관찰). 이 값이 아래 "명령줄 포함" 정책과 짝이라는 것은 확인하지 못했습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -76,9 +74,7 @@
 
 **항목의 시각은 실행 시각이 아닙니다.**
 
-- NTFS 에서 항목의 시각은 그 파일 $STANDARD_INFORMATION 의 마지막 수정 시각입니다[3].
-- 캐시를 갱신한 시각이 아닙니다[3].
-- 그래서 이 시각을 실행 시각으로 쓰지 않습니다.
+NTFS 에서 항목의 시각은 캐시를 갱신한 시각이 아니라 그 파일 $STANDARD_INFORMATION 의 마지막 수정 시각입니다[3]. 그래서 이 시각을 실행 시각으로 쓰지 않습니다.
 
 **삽입 플래그.** Windows 7~8.1 항목에는 삽입 플래그가 있습니다[3]. 값 0x00000002 는 "CSRSS.EXE 가 실행했다고 표시" 한 것입니다[3]. Windows 10 에서는 이 플래그가 항목 구조에서 빠졌습니다[3].
 
@@ -88,10 +84,7 @@
 
 **이 PC 에서 본 값.**
 
-- AppCompatCache 값은 214,066바이트였습니다(관찰).
-- 앞 4바이트 값은 0x34(52)였습니다(관찰).
-- 오프셋 0x34 에서 "10ts" 가 나왔습니다(관찰).
-- 값 안에 "10ts" 서명이 904개 있었습니다(관찰).
+AppCompatCache 값은 214,066바이트였고, 앞 4바이트 값은 0x34(52)였으며, 오프셋 0x34 에서 "10ts" 가 나왔습니다(관찰). 값 안에 "10ts" 서명은 904개 있었습니다(관찰).
 
 아래는 이 배치를 보여 주려고 명세와 관찰을 바탕으로 만든 예시입니다. 실제 검체에서 떼어 온 바이트가 아닙니다.
 
@@ -113,12 +106,12 @@ UserAssist 는 사용자 하이브의 탐색기(Explorer) 키 아래에 남는 �
 | {F4E57C4B-2036-45F0-A9AB-443BCFE33D9F} | 바로가기 실행 (추정) | 2008·7·8·10 |
 | {75048700-EF1F-11D0-9888-006097DEACF9} · {5E6AB780-7743-11CF-A12B-00AA004AE837} | — | 2000~Vista |
 
-- 문서도 GUID 의 뜻을 "Assumed" 로 적었습니다[4]. 보고서에도 알려진 해석이라고 씁니다.
+문서도 GUID 의 뜻을 "Assumed" 로 적었으므로 보고서에도 알려진 해석이라고 씁니다[4].
 
 **값 이름은 ROT-13 입니다.**
 
-- 값 이름은 ASCII 영문자 [A-Za-z] 만 ROT-13 으로 바꿔 적습니다[4].
-- 다른 글자는 그대로 둡니다[4].
+값 이름은 ASCII 영문자 [A-Za-z] 만 ROT-13 으로 바꿔 적고 다른 글자는 그대로 둡니다[4].
+
 - 예를 들어 `HRZR_PGYFRFFVBA` 를 풀면 `UEME_CTLSESSION` 이 됩니다.
 - 특수 값으로 UEME_CTLSESSION(세션 식별자)과 UEME_CTLCUACount:ctor 가 있습니다[4].
 
@@ -151,7 +144,7 @@ BAM (Background Activity Moderator) 키에는 SID 별로 실행 파일 경로가
 - 값 데이터는 24바이트였습니다(관찰). 앞 8바이트를 FILETIME 으로 읽으면 최근 날짜가 나왔습니다(관찰).
 - `dam\State\UserSettings` 키는 이 PC 에 없었습니다(관찰).
 
-값 이름이 드라이브 문자가 아니라 볼륨 장치 경로입니다. 그래서 `HarddiskVolumeN` 을 드라이브 문자와 맞추는 과정이 필요합니다. BAM 이 생긴 Windows 버전, 값이 뜻하는 시각, 오래된 항목을 지우는지는 확인하지 못했습니다. 이 값을 "마지막 실행 시각" 으로 단정하지 않고 프리페치·UserAssist 와 맞춰 씁니다.
+값 이름이 드라이브 문자가 아니라 볼륨 장치 경로라서 `HarddiskVolumeN` 을 드라이브 문자와 맞추는 과정이 필요합니다. BAM 이 생긴 Windows 버전, 값이 뜻하는 시각, 오래된 항목을 지우는지는 확인하지 못했습니다. 이 값을 "마지막 실행 시각" 으로 단정하지 않고 프리페치·UserAssist 와 맞춰 씁니다.
 
 ## 프로그램 호환성 도우미
 
@@ -204,10 +197,7 @@ SubjectLogonId 는 로그온 이벤트와 이어 봅니다([로그온·로그오
 
 ## Sysmon 이벤트 1
 
-- Sysmon 은 서비스와 드라이버를 설치해야 기록을 남깁니다[2].
-- Vista 이후에는 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 씁니다[2].
-- 이벤트 시각은 UTC 입니다[2].
-- 현재 판은 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상에서 돈다고 적혀 있습니다[2].
+Sysmon 은 서비스와 드라이버를 설치해야 기록을 남기고, Vista 이후에는 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 씁니다[2]. 이벤트 시각은 UTC 입니다[2]. 현재 판은 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상에서 돈다고 적혀 있습니다[2].
 
 | 이벤트 | 남는 것 |
 |---|---|

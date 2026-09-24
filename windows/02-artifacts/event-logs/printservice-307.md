@@ -2,9 +2,9 @@
 
 ## 한 줄 요약
 
-이벤트 307 은 문서 한 건을 프린터로 인쇄했다는 기록입니다. 작업 번호, 문서 이름, 사용자, 컴퓨터, 프린터, 포트, 바이트 수, 쪽수가 들어갑니다. 이 이벤트는 `Microsoft-Windows-PrintService/Operational` 채널에 남습니다. 이 채널이 켜져 있을 때만 기록됩니다. 문서 이름은 "Allow job name in event logs" 정책을 켜야 들어갑니다. 시각은 UTC 입니다.
+이벤트 307 은 문서 한 건을 프린터로 인쇄했다는 기록입니다. 작업 번호, 문서 이름, 사용자, 컴퓨터, 프린터, 포트, 바이트 수, 쪽수가 들어갑니다. 이 이벤트는 `Microsoft-Windows-PrintService/Operational` 채널에 남고, 이 채널이 켜져 있을 때만 기록됩니다. 문서 이름은 "Allow job name in event logs" 정책을 켜야 들어갑니다. 시각은 UTC 입니다.
 
-> 이 페이지에서 "관찰 PC" 는 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) PC 한 대를 말합니다. 이 페이지의 사실은 모두 관찰 PC 의 공급자 메타데이터, 레지스트리, 시스템 파일에서 확인했습니다. 범위는 "확인 범위: Win11 25H2 한 대" 입니다. 다른 PC 에서도 같다고 보장하지 못합니다.
+> 이 페이지에서 "관찰 PC" 는 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) PC 한 대를 말합니다. 이 페이지의 사실은 모두 관찰 PC 의 공급자 메타데이터, 레지스트리, 시스템 파일에서 확인했으며 범위는 "확인 범위: Win11 25H2 한 대" 입니다. 다른 PC 에서도 같다고 보장하지 못합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -14,9 +14,9 @@
 Document %1, %2 owned by %3 on %4 was printed on %5 through port %6.  Size in bytes: %7. Pages printed: %8. No user action is required.
 ```
 
-- 공급자 메타데이터에서 307 의 작업 분류 (Task) 는 "Printing a document" 입니다.
-- 키워드는 "Classic Spooler Event" 와 "Document Print Job" 입니다.
-- 인쇄 작업이 스풀 파일을 거쳐 프린터로 가는 흐름은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
+공급자 메타데이터에서 307 의 작업 분류 (Task) 는 "Printing a document" 이고 키워드는 "Classic Spooler Event" 와 "Document Print Job" 입니다.
+
+인쇄 작업이 스풀 파일을 거쳐 프린터로 가는 흐름은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
 
 307 이 쓸모 있으려면 두 가지 설정을 먼저 봐야 합니다.
 
@@ -45,7 +45,7 @@ Document %1, %2 owned by %3 on %4 was printed on %5 through port %6.  Size in by
 | `PrintService/Operational` | 꺼짐 | 1,052,672 바이트 | 오래된 기록부터 덮어씁니다 (retention false). 자동 백업도 하지 않습니다 (autoBackup false) | 꺼져 있어 기록이 없습니다 |
 | `PrintService/Admin` | 켜짐 | 1,052,672 바이트 | 오래된 기록부터 덮어씁니다 | 0건 |
 
-- 307 은 Operational 채널의 이벤트입니다. Admin 채널이 켜져 있어도 307 은 그쪽에 남지 않습니다.
+- 307 은 Operational 채널의 이벤트라서 Admin 채널이 켜져 있어도 그쪽에 남지 않습니다.
 - 이 채널이 모든 PC 에서 기본으로 꺼져 있는지는 확인하지 못했습니다.
 - 인쇄가 많을 때 약 1MB 로그에 며칠치가 남는지는 확인하지 못했습니다. 로그의 가장 오래된 레코드 시각을 먼저 적어 둡니다.
 
@@ -62,7 +62,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 - 같은 키의 `OwningPublisher` 값은 공급자 GUID `{747ef6fd-e535-4d16-b510-42c90f6873a1}` 였습니다.
 - 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
-라이브 시스템에서는 `wevtutil sl Microsoft-Windows-PrintService/Operational /e:true` 로 채널을 켤 수 있습니다. `wevtutil sl` 에 `/e`(`/enabled`) 옵션이 있는 것은 확인했습니다. 이 명령을 관찰 PC 에서 실행해 보지는 않았습니다. 앞으로의 인쇄를 기록하려고 미리 켜 두는 설정입니다. 조사 대상 PC 에서 켜면 증거 PC 의 설정을 바꾸게 됩니다.
+라이브 시스템에서는 `wevtutil sl Microsoft-Windows-PrintService/Operational /e:true` 로 채널을 켤 수 있습니다. `wevtutil sl` 에 `/e`(`/enabled`) 옵션이 있는 것은 확인했지만 이 명령을 관찰 PC 에서 실행해 보지는 않았습니다. 앞으로의 인쇄를 기록하려고 미리 켜 두는 설정이라서, 조사 대상 PC 에서 켜면 증거 PC 의 설정을 바꾸게 됩니다.
 
 ### 문서 이름 정책
 
@@ -78,12 +78,10 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 
 > This policy controls whether the print job name will be included in print event logs. If you disable or do not configure this policy setting, the print job name will not be included. If you enable this policy setting, the print job name will be included in new log entries. Note: This setting does not apply to Branch Office Direct Printing jobs.
 
-- 정책을 켜지 않으면 작업 이름 (job name) 이 인쇄 이벤트에 들어가지 않습니다.
-- "사용 안 함" 과 "구성되지 않음" 모두 이름을 뺍니다.
-- 정책을 켜면 그 뒤에 생기는 새 기록에만 이름이 들어갑니다.
-- 지점 직접 인쇄 (Branch Office Direct Printing) 작업에는 이 정책이 적용되지 않습니다.
+정책을 켜지 않으면 작업 이름 (job name) 이 인쇄 이벤트에 들어가지 않습니다. "사용 안 함" 과 "구성되지 않음" 모두 이름을 빼며, 정책을 켜면 그 뒤에 생기는 새 기록에만 이름이 들어갑니다. 지점 직접 인쇄 (Branch Office Direct Printing) 작업에는 이 정책이 적용되지 않습니다.
+
 - 스풀러 구성 요소 `C:\Windows\System32\localspl.dll` 안에는 UTF-16 문자열 `ShowJobTitleInEventLogs` 와 `Software\Policies\Microsoft\Windows NT\Printers` 가 있습니다.
-- 관찰 PC 에는 이 값이 없었습니다. `Printers` 정책 키 아래에는 `DriverRanking` 하위 키만 있었습니다.
+- 관찰 PC 에는 이 값이 없었고 `Printers` 정책 키 아래에는 `DriverRanking` 하위 키만 있었습니다.
 - 이름을 뺄 때 문서 이름 칸에 무엇이 들어가는지는 확인하지 못했습니다.
 
 ### 버전별 차이
@@ -93,9 +91,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 | 8 이후 | 정책 파일이 적은 지원 대상 (supportedOn) 이 `SUPPORTED_Windows8` 입니다 | 관찰 PC 의 ADMX |
 | 11 25H2 | Operational 꺼짐, Admin 켜짐, 이름 정책 값 없음 | 관찰 PC |
 
-- 지원 대상 값은 정책을 적용할 수 있는 Windows 판을 적습니다. 이름을 빼는 동작이 언제부터 기본값이 됐는지는 말하지 않습니다.
-- 어느 업데이트부터 기본으로 이름을 빼게 됐는지는 확인하지 못했습니다.
-- 이 밖의 버전별 차이는 확인하지 못했습니다.
+지원 대상 값은 정책을 적용할 수 있는 Windows 판을 적을 뿐, 이름을 빼는 동작이 언제부터 기본값이 됐는지는 말하지 않습니다. 어느 업데이트부터 기본으로 이름을 빼게 됐는지와 이 밖의 버전별 차이는 확인하지 못했습니다.
 
 ## 구조
 

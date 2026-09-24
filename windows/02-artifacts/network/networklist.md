@@ -6,11 +6,9 @@ SOFTWARE 하이브의 `NetworkList` 키에는 네트워크마다 이름·종류�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 네트워크 하나가 `Profiles` 아래 GUID 하위 키 하나입니다.
-- 프로필 키에는 네트워크 이름, 네트워크 종류, 범주 (Category), 처음 만든 시각, 마지막 연결 시각이 들어 있습니다.
-- `Signatures` 아래 하위 키는 `ProfileGuid` 값으로 프로필과 이어 봅니다. 여기에 기본 게이트웨이 MAC 주소가 남을 수 있습니다. 비어 있는 서명도 있습니다.
-- 공개 도구 RegRipper 의 networklist 플러그인은 `Profiles`, `Signatures\Managed`, `Signatures\Unmanaged`, `Nla\Cache\Intranet`, `Nla\Wireless` 를 읽습니다.
-- HKLM 에 있으므로 PC 전체에 하나입니다. 사용자별로 나뉘지 않습니다.
+네트워크 하나는 `Profiles` 아래 GUID 하위 키 하나이고, 프로필 키에는 네트워크 이름, 네트워크 종류, 범주 (Category), 처음 만든 시각, 마지막 연결 시각이 들어 있습니다. `Signatures` 아래 하위 키는 `ProfileGuid` 값으로 프로필과 이어 보며, 여기에 기본 게이트웨이 MAC 주소가 남을 수 있지만 비어 있는 서명도 있습니다.
+
+공개 도구 RegRipper 의 networklist 플러그인은 `Profiles`, `Signatures\Managed`, `Signatures\Unmanaged`, `Nla\Cache\Intranet`, `Nla\Wireless` 를 읽습니다. 이 키들은 HKLM 에 있으므로 PC 전체에 하나이며 사용자별로 나뉘지 않습니다.
 
 ## 위치와 버전별 차이
 
@@ -81,9 +79,7 @@ NLM_NETWORK_CATEGORY 열거의 값은 아래와 같습니다.
 
 ### Managed
 
-- Windows 11 PC 한 대에서 `Managed`=1 인 프로필은 3개였습니다. `Signatures\Managed` 아래 키도 3개였습니다. (확인 범위: Win11 25H2 한 대)
-- 그 3개는 모두 유선(NameType 6)이었고, 이름이 DNS 접미사 모양이었습니다. (확인 범위: Win11 25H2 한 대)
-- `Managed` 의 정확한 뜻은 확인하지 못했습니다.
+Windows 11 PC 한 대에서 `Managed`=1 인 프로필은 3개였고 `Signatures\Managed` 아래 키도 3개였습니다. 그 3개는 모두 유선(NameType 6)이었으며 이름이 DNS 접미사 모양이었습니다. (확인 범위: Win11 25H2 한 대) `Managed` 의 정확한 뜻은 확인하지 못했습니다.
 
 ### DateCreated · DateLastConnected
 
@@ -124,10 +120,7 @@ NLM_NETWORK_CATEGORY 열거의 값은 아래와 같습니다.
 
 Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
 
-- 하위 키가 4개 있었습니다.
-- 각 하위 키의 기본값(REG_SZ)은 SSID 바이트를 16진수로 쓴 문자열이었습니다.
-- 각 하위 키에는 4바이트 REG_BINARY 값들이 있었습니다. 값 이름은 SSID 의 16진수이거나 SSID 그대로였습니다.
-- 이 4바이트 값의 뜻은 확인하지 못했습니다.
+하위 키는 4개였고, 각 하위 키의 기본값(REG_SZ)은 SSID 바이트를 16진수로 쓴 문자열이었습니다. 각 하위 키에는 4바이트 REG_BINARY 값들이 있었는데 값 이름은 SSID 의 16진수이거나 SSID 그대로였으며, 이 4바이트 값의 뜻은 확인하지 못했습니다.
 
 이 16진 SSID 는 TCP/IP 인터페이스 키의 무선 하위 키 이름과 이어집니다. 잇는 방법은 [네트워크 인터페이스 설정](tcp-ip-interfaces.md) 에서 다룹니다.
 
@@ -151,8 +144,7 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위
 
 ## 시각 해석
 
-- RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그대로 출력합니다.
-- Windows 11 PC 한 대에서 두 값은 현지 시각으로 적혀 있었습니다. 근거는 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그대로 출력합니다. Windows 11 PC 한 대에서 두 값은 현지 시각으로 적혀 있었고, 근거는 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
 
 | DateLastConnected | 맞춰 본 기록 |
 |---|---|

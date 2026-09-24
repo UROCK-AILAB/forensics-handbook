@@ -8,7 +8,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션이 시작되면 서비스 프로세스(TeamViewer_Service.exe)가 TeamViewer_Desktop.exe 를 띄웁니다. 이때 인자는 `--IPCport 5939 --Module 1` 입니다. Sigma 규칙은 이 모양을 받는 쪽에서 세션이 시작된 신호로 봅니다.
+TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션이 시작되면 서비스 프로세스(TeamViewer_Service.exe)가 `--IPCport 5939 --Module 1` 인자로 TeamViewer_Desktop.exe 를 띄우는데, Sigma 규칙은 이 모양을 받는 쪽에서 세션이 시작된 신호로 봅니다.
 
 접속 기록은 두 파일에 따로 남습니다.
 
@@ -19,7 +19,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 
 ## 위치와 버전별 차이
 
-아래 경로는 Synacktiv 가 TeamViewer 15.32.3.0 으로 시험한 결과입니다. 로그 파일 이름의 숫자 15 는 주 버전과 같습니다. 주 버전이 다르면 이 숫자도 다르다고 보고, `TeamViewer*_Logfile.log` 꼴로 넓게 찾습니다.
+아래 경로는 Synacktiv 가 TeamViewer 15.32.3.0 으로 시험한 결과입니다. 로그 파일 이름의 숫자 15 는 주 버전과 같아서 주 버전이 다르면 이 숫자도 다르다고 보고, `TeamViewer*_Logfile.log` 꼴로 넓게 찾습니다.
 
 ### 파일
 
@@ -62,9 +62,7 @@ LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.tx
 2022/08/22 16:50:52.967  3476  1492 S0  CommandHandlerRouting[19]::CreatePassiveSession()
 ```
 
-- 줄 맨 앞에 날짜와 시각이 밀리초까지 옵니다. 날짜는 년/월/일 순서입니다.
-- 그 뒤의 숫자 두 칸과 `S0` 칸의 뜻은 이번 자료로 확인하지 못했습니다.
-- 줄 끝에 `CommandHandlerRouting[19]::CreatePassiveSession()` 같은 함수 이름이 옵니다.
+줄 맨 앞에는 날짜와 시각이 밀리초까지 오고 날짜는 년/월/일 순서이며, 줄 끝에는 `CommandHandlerRouting[19]::CreatePassiveSession()` 같은 함수 이름이 옵니다. 그 사이의 숫자 두 칸과 `S0` 칸의 뜻은 이번 자료로 확인하지 못했습니다.
 
 접속을 찾을 때는 아래 문자열을 검색합니다.
 
@@ -114,7 +112,7 @@ LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.tx
 - 받은 접속 목록에는 세션 중에 한 일이 없습니다. 칸 일곱 개 가운데 행동을 적는 칸이 없습니다.
 - 거는 쪽의 나간 접속 목록 파일은 이번 자료로 확인하지 못했습니다. 거는 쪽에서는 동작 로그와 레지스트리를 봅니다.
 - ConnectionHistory 16바이트의 구조는 공개 자료로 확인하지 못했습니다. 이 값만으로 상대 ID 나 시각을 읽어 내지 않습니다.
-- 파일이 없다고 접속이 없었다고 단정하지 않습니다. 휴대용으로 실행했으면 로그가 `%APPDATA%` 아래에 있습니다. 로그를 지웠을 수도 있습니다.
+- 파일이 없다고 접속이 없었다고 단정하지 않습니다. 휴대용으로 실행했으면 로그가 `%APPDATA%` 아래에 있고, 로그를 지웠을 수도 있습니다.
 
 보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "`Connections_incoming.txt` 에 TeamViewer ID 1025538549(호스트 이름 mechant_host)에서 로컬 사용자 lab 으로 들어온 RemoteControl 접속이 시작·끝 시각과 함께 적혀 있다. 이 기록만으로는 세션 중에 한 일과 조작한 사람을 알 수 없다." 처럼 씁니다. 예의 값은 Synacktiv 공개 예시입니다.
 

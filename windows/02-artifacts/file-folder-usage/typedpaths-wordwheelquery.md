@@ -11,11 +11,7 @@ TypedPaths 와 WordWheelQuery 는 사용자 하이브 NTUSER.DAT 의 `Explorer` 
 | TypedPaths | 탐색기 주소 표시줄에 입력한 경로 | 값 이름이 `url1`, `url2` … 인 문자열 목록입니다. plaso 는 인터넷 익스플로러의 TypedURLs 와 같은 틀로 읽습니다 |
 | WordWheelQuery | 탐색기 검색 상자에 입력한 검색어 | winreg-kb 는 형식을 "문자열 MRUList 값" 으로 적었습니다 |
 
-다음 설명은 널리 쓰이지만 확인한 자료로는 확정하지 못했습니다.
-
-- TypedPaths 에는 주소 표시줄에 직접 입력한 경로만 남고, 클릭으로 옮겨 간 폴더는 남지 않는다는 설명
-- `url1` 이 가장 최근 입력이라는 설명과 최대 개수
-- WordWheelQuery 가 탐색기 검색 상자의 검색어이고, 작업 표시줄 검색과 따로 남는다는 설명
+다음 설명은 널리 쓰이지만 확인한 자료로는 확정하지 못했습니다. TypedPaths 에는 주소 표시줄에 직접 입력한 경로만 남고 클릭으로 옮겨 간 폴더는 남지 않는다는 설명, `url1` 이 가장 최근 입력이라는 설명과 최대 개수, WordWheelQuery 가 탐색기 검색 상자의 검색어이고 작업 표시줄 검색과 따로 남는다는 설명입니다.
 
 이 설명에 기대 보고서를 쓸 때는 검체와 같은 Windows 버전에서 실험으로 먼저 확인합니다. 실험 방법은 아래 "실습" 에 있습니다.
 
@@ -40,8 +36,7 @@ Windows 11 25H2 PC 한 대에서 본 WordWheelQuery 는 winreg-kb 의 설명과 
 | 순서 값 | MRUList | MRUListEx (8바이트) |
 | 항목 값 | 문자열 | REG_BINARY, UTF-16LE 문자열과 `00 00` |
 
-- 이 GUID 하위 키가 무엇을 뜻하는지, 어느 버전부터 하위 키로 나뉘었는지는 확인하지 못했습니다.
-- 같은 PC 의 `HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings` 에 `IsDeviceSearchHistoryEnabled` 값이 0 으로 있었습니다. 이 값이 WordWheelQuery 기록과 관계있는지는 확인하지 못했습니다.
+이 GUID 하위 키가 무엇을 뜻하는지, 어느 버전부터 하위 키로 나뉘었는지는 확인하지 못했습니다. 같은 PC 의 `HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings` 에 `IsDeviceSearchHistoryEnabled` 값이 0 으로 있었습니다. 이 값이 WordWheelQuery 기록과 관계있는지는 확인하지 못했습니다.
 
 TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. MRUList 와 MRUListEx 값은 없었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 
@@ -56,9 +51,9 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 | 순서 값 | 없음 (관찰한 PC) |
 | 시각 | 키의 마지막 기록 시각 하나 |
 
-- plaso 는 이 키를 `windows_typed_urls` 플러그인으로 읽습니다. 인터넷 익스플로러의 `HKCU\Software\Microsoft\Internet Explorer\TypedURLs` 를 읽는 플러그인과 같습니다 ([인터넷 익스플로러·옛 엣지](../browsers/ie-edgehtml/index.md)).
-- 이 플러그인은 값 이름을 정규식 `^url[0-9]+$` (대소문자 무시) 로 고릅니다. 문자열이면서 비어 있지 않은 값만 씁니다.
-- 순서 값이 없으므로 순서는 값 이름의 번호에서 읽어야 합니다. 번호가 작을수록 최근인지는 확인하지 못했습니다.
+plaso 는 이 키를 `windows_typed_urls` 플러그인으로 읽는데, 인터넷 익스플로러의 `HKCU\Software\Microsoft\Internet Explorer\TypedURLs` 를 읽는 플러그인과 같습니다 ([인터넷 익스플로러·옛 엣지](../browsers/ie-edgehtml/index.md)). 이 플러그인은 값 이름을 정규식 `^url[0-9]+$` (대소문자 무시) 로 고르고, 문자열이면서 비어 있지 않은 값만 씁니다.
+
+순서 값이 없으므로 순서는 값 이름의 번호에서 읽어야 하는데, 번호가 작을수록 최근인지는 확인하지 못했습니다.
 
 ### WordWheelQuery
 
@@ -83,8 +78,7 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 | | 입력한 경로가 실제로 있었는지. 그 폴더가 열렸는지 |
 | | 검색 결과로 무엇이 나왔는지. 결과를 열었는지 |
 
-- 기록이 말하는 것은 목록에 이 문자열이 있다는 것까지입니다. "직접 입력했다" 는 해석은 위에서 본 대로 확인이 필요합니다.
-- 경로를 입력한 뒤 그 폴더를 실제로 열었는지는 [셸백](shellbags/index.md) 으로 확인합니다.
+기록이 말하는 것은 목록에 이 문자열이 있다는 데까지이고, "직접 입력했다" 는 해석은 위에서 본 대로 확인이 필요합니다. 경로를 입력한 뒤 그 폴더를 실제로 열었는지는 [셸백](shellbags/index.md) 으로 확인합니다.
 
 ### 보고서 문장
 
@@ -100,9 +94,9 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 | TypedPaths 키의 마지막 기록 시각 | `TypedPaths` 키 | 키가 마지막으로 바뀐 때 | FILETIME, UTC |
 | WordWheelQuery 키의 마지막 기록 시각 | `WordWheelQuery` 키와 GUID 하위 키마다 하나씩 | 그 키가 마지막으로 바뀐 때 | FILETIME, UTC |
 
-- 값마다 시각이 없습니다. plaso 도 TypedPaths 기록의 시각으로 키의 마지막 기록 시각 하나만 씁니다.
-- WordWheelQuery 는 상위 키와 GUID 하위 키의 시각을 따로 읽습니다. 항목 값이 들어 있는 쪽은 관찰한 PC 에서 GUID 하위 키였습니다.
-- TypedPaths 는 순서 값이 없습니다. 그래서 키 시각을 어느 값에 이어야 하는지도 정해지지 않습니다. 실험으로 가장 최근 값의 번호를 확인한 뒤에만 이어 읽습니다.
+값마다 시각이 없어서 plaso 도 TypedPaths 기록의 시각으로 키의 마지막 기록 시각 하나만 씁니다. WordWheelQuery 는 상위 키와 GUID 하위 키의 시각을 따로 읽으며, 항목 값이 들어 있는 쪽은 관찰한 PC 에서 GUID 하위 키였습니다.
+
+TypedPaths 는 순서 값이 없어서 키 시각을 어느 값에 이어야 하는지도 정해지지 않습니다. 실험으로 가장 최근 값의 번호를 확인한 뒤에만 이어 읽습니다.
 - 키 시각의 성질은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
@@ -116,9 +110,7 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 
 ### 지우기와 조작
 
-- 값이나 키를 지우면 하이브 안 빈 공간이나 트랜잭션 로그에 흔적이 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
-- 옛 하이브는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다. 지금 목록과 비교하면 사라진 항목이 드러납니다.
-- 이 키들을 끄는 정책이나 설정은 확인한 자료에 없습니다.
+값이나 키를 지우면 하이브 안 빈 공간이나 트랜잭션 로그에 흔적이 남을 수 있고, 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 옛 하이브는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾으며, 지금 목록과 비교하면 사라진 항목이 드러납니다. 이 키들을 끄는 정책이나 설정은 확인한 자료에 없습니다.
 
 ## 직접 분석해 보기
 

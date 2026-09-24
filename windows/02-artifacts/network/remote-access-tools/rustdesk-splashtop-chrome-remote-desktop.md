@@ -34,7 +34,7 @@
 - LOLRMM 은 443, 21115, 21116 을 적습니다.
 - RustDesk FAQ 는 ID(랑데부) 서버에 TCP 21116(UDP 21116 도 씀), 중계 서버에 TCP 21117, 웹 콘솔에 21114 를 적습니다.
 
-LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있습니다. 쓰는 사람이 중계 서버를 정할 수 있어서, 접속 도메인 목록으로 거르기 어렵습니다.
+LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있는데, 쓰는 사람이 중계 서버를 정할 수 있어서 접속 도메인 목록으로 거르기 어렵습니다.
 
 ### 증거로서 의미
 
@@ -100,11 +100,7 @@ LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있습니다. 쓰는 �
 <1>Sep  1 11:42:12 [SM_04020]:[FTC] UploadRequest, fileID[289614100], filePath[C:\Users\lab\Desktop\mechant.7z]
 ```
 
-- `[Auth-L]` 줄에 접속한 상대 호스트 이름이 나옵니다.
-- `[Banner]` 줄에 상대 공인 IP 가 나옵니다.
-- `[FTC]` 줄에 파일 전송 요청과 파일 경로가 나옵니다.
-
-위 예시는 모두 Synacktiv 공개 예시입니다.
+`[Auth-L]` 줄에는 접속한 상대 호스트 이름이, `[Banner]` 줄에는 상대 공인 IP 가, `[FTC]` 줄에는 파일 전송 요청과 파일 경로가 나옵니다. 위 예시는 모두 Synacktiv 공개 예시입니다.
 
 ### 증거로서 의미
 
@@ -132,7 +128,7 @@ LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있습니다. 쓰는 �
 | 이벤트 로그 이름 | 호스트는 시스템 이벤트 로그에 "chromoting" 이라는 이름으로 기록합니다(Chromium 소스의 kApplicationName) |
 | 접속 도메인·포트 | `remotedesktop.google.com`, `*.remotedesktop.google.com`, `remotedesktop-pa.googleapis.com`, `chromoting-host.talkgadget.google.com` 등. 포트 443, 3478 |
 
-Windows 에서는 호스트가 여러 프로세스로 돕니다. 이때는 호스트가 IPC 로 넘기고 다른 프로세스가 이벤트를 기록합니다. 그래서 실제 원본 이름과 로그 이름(Application 인지)은 이번 자료로 확인하지 못했습니다. 로그 전체에서 원본 이름에 "chromoting" 이 든 이벤트를 찾습니다.
+Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IPC 로 넘기면 다른 프로세스가 이벤트를 기록합니다. 그래서 실제 원본 이름과 로그 이름(Application 인지)은 이번 자료로 확인하지 못했습니다. 로그 전체에서 원본 이름에 "chromoting" 이 든 이벤트를 찾습니다.
 
 호스트 설정 파일의 위치는 이번 자료로 확인하지 못했습니다.
 

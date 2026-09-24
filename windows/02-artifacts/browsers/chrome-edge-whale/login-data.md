@@ -4,14 +4,14 @@
 
 ## 한 줄 요약
 
-크롬 계열 브라우저는 저장한 비밀번호를 프로필 폴더의 `Login Data` 파일에 둡니다. 이 파일은 SQLite 데이터베이스입니다. 암호화하는 칸은 비밀번호 값 하나뿐입니다. 사이트 주소·아이디·저장 시각·사용 횟수는 평문입니다. 그래서 비밀번호를 풀지 못해도 "이 프로필에 어느 사이트의 어느 아이디가 언제 저장됐나" 는 읽을 수 있습니다.
+크롬 계열 브라우저는 저장한 비밀번호를 프로필 폴더의 `Login Data` 파일에 둡니다. 이 파일은 SQLite 데이터베이스이고, 암호화하는 칸은 비밀번호 값 하나뿐이며 사이트 주소·아이디·저장 시각·사용 횟수는 평문입니다. 그래서 비밀번호를 풀지 못해도 "이 프로필에 어느 사이트의 어느 아이디가 언제 저장됐나" 는 읽을 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 브라우저의 비밀번호 관리자 (Password Manager) 가 이 파일을 씁니다. 한 행이 생기는 경우는 다음과 같습니다.
 
 - 로그인 폼을 제출한 뒤 저장 제안에서 "저장" 을 고르면 `logins` 표에 행이 하나 생깁니다.
-- 저장 제안에서 "저장 안 함" 을 고르면 그 사이트가 차단 목록에 들어갑니다. 이것도 `logins` 표의 한 행입니다. 이 행은 `blacklisted_by_user` 가 1 입니다.
+- 저장 제안에서 "저장 안 함" 을 고르면 그 사이트가 차단 목록에 들어가는데, 이것도 `logins` 표의 한 행이며 `blacklisted_by_user` 가 1 입니다.
 - 설정 화면에서 직접 추가하거나, 파일에서 가져오거나, 다른 사용자에게서 공유받아도 행이 생깁니다.
 - 동기화 (Sync) 를 켠 계정이면 다른 기기에서 저장한 항목도 이 파일에 들어옵니다.
 
@@ -21,7 +21,7 @@
 - `insecure_credentials` 표에는 비밀번호 점검 결과(유출·약함 등)가 들어갑니다. `logins` 의 `id` 를 가리킵니다.
 - `password_notes` 표에는 비밀번호마다 붙인 메모가 들어갑니다.
 
-암호화 방식과 키를 푸는 절차는 [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다룹니다. 이 페이지는 `Login Data` 에만 해당하는 내용을 다룹니다.
+암호화 방식과 키를 푸는 절차는 [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다루고, 이 페이지는 `Login Data` 에만 해당하는 내용을 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -40,7 +40,7 @@
 
 ### Windows 버전보다 브라우저 버전이 중요합니다
 
-이 파일의 모양은 Windows 버전이 아니라 브라우저 버전에 따라 바뀝니다. 가장 큰 차이는 `password_value` 칸의 암호화 방식입니다. 칸의 앞 몇 바이트를 보면 구분됩니다.
+이 파일의 모양은 Windows 버전이 아니라 브라우저 버전에 따라 바뀌며, 가장 큰 차이는 `password_value` 칸의 암호화 방식입니다. 칸의 앞 몇 바이트를 보면 구분됩니다.
 
 | 앞부분 | 방식 | 키가 있는 곳 | 근거 |
 |---|---|---|---|
@@ -53,7 +53,7 @@
 - Google 은 Chrome 127 에서 App-Bound 암호화를 쿠키부터 적용했습니다. 비밀번호와 결제 정보에는 뒤에 넓히겠다고 밝혔습니다. 비밀번호에 `v20` 이 붙기 시작한 버전은 이 글에서 확인하지 못했습니다.
 - 관찰한 PC 에서는 Chrome·Edge 모두 저장 비밀번호가 전부 `v20` 이었습니다. `Local State` 에는 `encrypted_key`(`DPAPI` 로 시작)와 `app_bound_encrypted_key`(`APPB` 로 시작)가 함께 있었습니다.
 
-새 브라우저라도 `v20` 을 쓰지 않는 경우가 있습니다. Chromium 소스는 아래 조건이면 App-Bound 암호화를 켜지 않습니다. 그러면 `v10` 으로 저장합니다.
+새 브라우저라도 `v20` 을 쓰지 않는 경우가 있습니다. Chromium 소스는 아래 조건이면 App-Bound 암호화를 켜지 않고 `v10` 으로 저장합니다.
 
 - 브라우저를 시스템 전체가 아니라 사용자 한 명에게만 설치했습니다.
 - 명령줄이나 정책으로 `User Data` 위치를 바꿨습니다.
@@ -64,7 +64,7 @@
 
 ### 스키마 버전
 
-`meta` 표의 `version` 이 스키마 버전입니다. 현재 Chromium 소스는 43 입니다. `last_compatible_version` 은 40 입니다. 관찰한 Chrome 153·Edge 151 도 같은 값이었습니다. 열이 추가된 주요 버전은 다음과 같습니다.
+`meta` 표의 `version` 이 스키마 버전입니다. 현재 Chromium 소스는 43 이고 `last_compatible_version` 은 40 이며, 관찰한 Chrome 153·Edge 151 도 같은 값이었습니다. 열이 추가된 주요 버전은 다음과 같습니다.
 
 | 스키마 버전 | 바뀐 점 |
 |---|---|
@@ -119,9 +119,9 @@
 
 ### 암호문 길이로 비밀번호 길이 알기
 
-`v10`·`v20` 값의 모양은 "접두사 3바이트 + 논스 12바이트 + 암호문 + 인증 태그 16바이트" 입니다 (Chromium 소스). GCM 방식은 암호문 길이가 평문 길이와 같습니다. 브라우저는 비밀번호를 UTF-8 로 바꿔서 암호화합니다. 그래서 `password_value` 길이에서 31 을 빼면 비밀번호의 UTF-8 바이트 수가 나옵니다. 복호화 없이 알 수 있는 값입니다. 관찰한 PC 의 `v20` 값 2,000여 개에서 이 계산이 0 이하로 나온 행은 없었습니다.
+`v10`·`v20` 값의 모양은 "접두사 3바이트 + 논스 12바이트 + 암호문 + 인증 태그 16바이트" 입니다 (Chromium 소스). GCM 방식은 암호문 길이가 평문 길이와 같고 브라우저는 비밀번호를 UTF-8 로 바꿔서 암호화하므로, `password_value` 길이에서 31 을 빼면 복호화 없이 비밀번호의 UTF-8 바이트 수를 알 수 있습니다. 관찰한 PC 의 `v20` 값 2,000여 개에서 이 계산이 0 이하로 나온 행은 없었습니다.
 
-옛 DPAPI 방식 값은 블롭 안에 여러 칸이 더 있습니다. 그래서 이 계산을 쓰지 않습니다.
+옛 DPAPI 방식 값은 블롭 안에 여러 칸이 더 있어서 이 계산을 쓰지 않습니다.
 
 ### 다른 표
 
@@ -200,14 +200,14 @@
 
 - 사용자가 항목을 지우면 `logins` 행이 삭제됩니다.
 - 기간을 정해 지우는 기능은 `date_created` 가 그 기간에 드는 행을 지웁니다 (소스의 `RemoveLoginsCreatedBetween`). 그래서 남은 행의 `date_created` 에 빈 구간이 생깁니다.
-- Chromium 은 SQLite 를 `secure_delete` 가 켜진 상태로 빌드합니다. 지운 내용을 0 으로 덮으므로, 파일 안 빈 공간에서 옛 행을 되살리기 어렵습니다. Chromium 코드를 그대로 쓰는 계열 브라우저라면 같다고 보지만, 브라우저마다 검체에서 확인합니다. 빈 공간 복구 방법은 [파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md)에 있습니다.
-- Chromium 은 롤백 저널을 TRUNCATE 방식으로 씁니다. 거래가 끝나면 저널 크기를 0 으로 줄입니다. 저널에 있던 옛 페이지는 파일시스템의 빈 공간에만 남을 수 있습니다 ([비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)).
+- Chromium 은 SQLite 를 `secure_delete` 가 켜진 상태로 빌드하며 지운 내용을 0 으로 덮으므로, 파일 안 빈 공간에서 옛 행을 되살리기 어렵습니다. Chromium 코드를 그대로 쓰는 계열 브라우저라면 같다고 보지만, 브라우저마다 검체에서 확인합니다. 빈 공간 복구 방법은 [파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md)에 있습니다.
+- Chromium 은 롤백 저널을 TRUNCATE 방식으로 씁니다. 거래가 끝나면 저널 크기를 0 으로 줄이므로 저널에 있던 옛 페이지는 파일시스템의 빈 공간에만 남을 수 있습니다 ([비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)).
 - `id` 는 다시 쓰지 않습니다. 중간에 빈 번호가 있으면 지운 행이 있었다는 단서입니다. `sqlite_sequence` 의 `seq` 가 `logins` 의 가장 큰 `id` 보다 크면 마지막 쪽 행이 지워진 것입니다.
 - 옛 판 파일은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다. 동기화를 켠 계정이면 다른 기기에도 남아 있을 수 있습니다.
 
 ### 이 파일을 노린 흔적
 
-정보 탈취 악성코드는 흔히 이 파일과 `Local State` 를 노립니다. Google 이 App-Bound 암호화를 만든 까닭도 이것입니다. 이 경우 `Login Data` 자체보다 둘레의 흔적을 봅니다.
+정보 탈취 악성코드는 흔히 이 파일과 `Local State` 를 노리고, Google 이 App-Bound 암호화를 만든 까닭도 여기에 있습니다. 이 경우 `Login Data` 자체보다 둘레의 흔적을 봅니다.
 
 - 다른 폴더에 `Login Data` 라는 이름의 파일이 생겼다가 지워진 기록을 [$UsnJrnl](../../filesystem/usnjrnl.md)에서 찾습니다.
 - 브라우저가 아닌 프로그램이 실행된 흔적과 탐지 기록을 봅니다. 흐름은 [자격 증명을 빼냈나](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md)를 따릅니다.

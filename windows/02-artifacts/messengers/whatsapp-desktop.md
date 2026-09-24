@@ -56,9 +56,7 @@ README 는 주 데이터 폴더를 패키지의 `LocalState` 폴더라고 적었
 %LOCALAPPDATA%\Packages\5319275A.WhatsAppDesktop_cv1g1gvanyjgm\LocalState
 ```
 
-- 이 경로는 README 의 설치 폴더 이름에서 버전과 아키텍처를 빼서 만든 것입니다.
-- 직접 확인한 경로가 아닙니다.
-- 실제 증거에서는 사용자마다 `%LOCALAPPDATA%\Packages` 아래에서 `WhatsApp` 이 들어간 폴더를 모두 찾습니다.
+이 경로는 README 의 설치 폴더 이름에서 버전과 아키텍처를 빼서 만든 것이고 직접 확인한 경로가 아닙니다. 실제 증거에서는 사용자마다 `%LOCALAPPDATA%\Packages` 아래에서 `WhatsApp` 이 들어간 폴더를 모두 찾습니다.
 - 패키지 폴더 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 
 ## 구조
@@ -82,18 +80,14 @@ SQLite 파일과 WAL 파일의 구조는 [SQLite 데이터베이스](../../01-fo
 - 고정 키들은 DPAPI-NG 로 보호합니다. (ZAPiXDESK README) DPAPI 는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 - 키는 오프라인 장치 고유 ID (OfflineDeviceUniqueID, ODUID) 에 따라 정해집니다. (ZAPiXDESK README)
 - ODUID 는 TPM·레지스트리 등에서 나옵니다. (ZAPiXDESK README)
-- README 는 대상 PC 가 켜져 있어야 이 장치 고유 ID 를 얻을 수 있고, 이 ID 없이는 풀 수 없다고 적었습니다.
-- README 는 이 ID 와 `LocalState` 폴더를 함께 모으면 다른 PC 에서 풀 수 있다고 적었습니다.
-- 암호 알고리즘 이름은 README 에 없습니다.
-- 사용자의 Windows 암호가 필요한지도 README 에 없습니다.
+- README 는 대상 PC 가 켜져 있어야 이 장치 고유 ID 를 얻을 수 있고, 이 ID 없이는 풀 수 없다고 적었습니다. 이 ID 와 `LocalState` 폴더를 함께 모으면 다른 PC 에서 풀 수 있다고도 적었습니다.
+- 암호 알고리즘 이름과 사용자의 Windows 암호가 필요한지는 README 에 없습니다.
 
 해석: 꺼진 PC 의 디스크 이미지만으로는 풀기 어려울 수 있습니다. 켜진 PC 를 현장에서 만났을 때가 중요한 기회입니다. 켜진 PC 를 다루는 순서는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서, 암호화된 증거를 다루는 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
 
 ### 지운 값과 WAL
 
-- DB 에는 secure-delete 설정(PRAGMA)이 켜져 있습니다. (ZAPiXDESK README)
-- 그래서 지운 값은 DB 본체에서 0 으로 덮입니다.
-- README 는 필요한 값을 WAL 파일에서 되찾는다고 적었습니다.
+DB 에는 secure-delete 설정(PRAGMA)이 켜져 있어서 지운 값은 DB 본체에서 0 으로 덮입니다. (ZAPiXDESK README) README 는 필요한 값을 WAL 파일에서 되찾는다고 적었습니다.
 
 해석: WAL 파일을 빼고 DB 본체만 모으면 지운 값과 최근 변경을 잃을 수 있습니다. `-wal` 로 끝나는 파일을 반드시 함께 모읍니다.
 
@@ -156,7 +150,7 @@ SQLite 파일과 WAL 파일의 구조는 [SQLite 데이터베이스](../../01-fo
 
 ### 공개 도구로 한 번
 
-공개 도구의 예로 ZAPiXDESK 가 있습니다. 켜진 PC 에서 쓰는 라이브 포렌식 도구입니다. 이 페이지의 저장 구조 설명은 그 README 에서 가져왔습니다. 도구 자체의 동작은 이 페이지에서 시험하지 않았습니다.
+공개 도구의 예로 켜진 PC 에서 쓰는 라이브 포렌식 도구 ZAPiXDESK 가 있습니다. 이 페이지의 저장 구조 설명은 그 README 에서 가져왔고, 도구 자체의 동작은 시험하지 않았습니다.
 
 어느 도구를 쓰든 도구가 읽은 DB 목록과 폴더의 `.db`·`-wal` 목록을 맞춰 봅니다. 빠진 파일이 있으면 이유를 적습니다.
 

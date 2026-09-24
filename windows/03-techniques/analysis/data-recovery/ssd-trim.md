@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-TRIM 은 OS 가 저장 장치에 어느 블록을 더는 쓰지 않는지 알려 주는 명령입니다. TRIM 을 받은 SSD 는 그 영역을 무효로 표시합니다. 그 뒤 드라이브 내부 정리 (Garbage Collection) 가 끝나면 지운 데이터는 되살리기 어렵거나 불가능할 수 있습니다. Windows 의 NTFS 는 기본 설정에서 이 알림을 보냅니다.
+TRIM 은 OS 가 저장 장치에 어느 블록을 더는 쓰지 않는지 알려 주는 명령이고, 이를 받은 SSD 는 그 영역을 무효로 표시합니다. 그 뒤 드라이브 내부 정리 (Garbage Collection) 가 끝나면 지운 데이터는 되살리기 어렵거나 불가능할 수 있습니다. Windows 의 NTFS 는 기본 설정에서 이 알림을 보냅니다.
 
 이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 다른 하위 페이지의 복구 방법이 SSD 에서 어디까지 통하는지 가늠할 때 봅니다.
 
@@ -14,11 +14,7 @@ TRIM 은 OS 가 저장 장치에 어느 블록을 더는 쓰지 않는지 알려
 
 ## TRIM 과 드라이브 내부 정리
 
-- NAND 플래시 셀은 비어 있을 때만 바로 쓸 수 있습니다. 데이터가 있으면 먼저 지워야 합니다.
-- TRIM 은 OS 가 드라이브에 어느 블록이 더는 쓰이지 않는지 알려 주는 명령입니다.
-- TRIM 을 받은 드라이브는 그 LBA 영역을 무효로 표시합니다.
-- 그 뒤 그 영역을 읽어도 의미 있는 데이터가 돌아오지 않습니다.
-- TRIM 이 내려가고 드라이브 내부 정리가 끝나면 지운 데이터 복구는 어렵거나 불가능할 수 있습니다.
+NAND 플래시 셀은 비어 있을 때만 바로 쓸 수 있고, 데이터가 있으면 먼저 지워야 합니다. TRIM 은 OS 가 드라이브에 어느 블록이 더는 쓰이지 않는지 알려 주는 명령이며, 이를 받은 드라이브는 그 LBA 영역을 무효로 표시하기 때문에 그 뒤 그 영역을 읽어도 의미 있는 데이터가 돌아오지 않습니다. TRIM 이 내려가고 드라이브 내부 정리가 끝나면 지운 데이터 복구는 어렵거나 불가능할 수 있습니다.
 
 > 그림 자리: 파일 삭제 → 파일시스템이 클러스터를 비할당으로 바꿈 → 삭제 알림(TRIM) → 드라이브가 LBA 를 무효로 표시 → 내부 정리 → 읽으면 의미 없는 값. 하드디스크는 덮어쓸 때까지 데이터가 남는 흐름을 나란히 놓은 그림
 
@@ -60,13 +56,7 @@ TRIM 한 자리를 읽을 때 무엇이 나오는지는 드라이브마다 다�
 fsutil behavior query DisableDeleteNotify
 ```
 
-- 삭제 알림(trim, unmap)은 파일 삭제로 풀린 클러스터를 저장 장치에 알리는 기능입니다.
-- 값 1 은 삭제 알림을 끈 상태입니다. 값 0 은 켠 상태입니다.
-- NTFS 는 관리자가 끄지 않는 한 기본으로 켜져 있습니다.
-- ReFS v2 는 기본으로 꺼져 있습니다. ReFS v1 은 기본으로 켜져 있습니다.
-- 하드디스크나 SAN 이 TRIM 을 지원하지 않는다고 알리면 알림을 받지 않습니다.
-- 켜고 끌 때 재부팅이 필요 없습니다. 다음 unmap 명령부터 바뀐 설정을 따릅니다.
-- 설정 명령 예는 `fsutil behavior set disabledeletenotify 1` (NTFS·ReFS v1) 과 `fsutil behavior set disabledeletenotify ReFS 0` (ReFS v2) 입니다.
+삭제 알림(trim, unmap)은 파일 삭제로 풀린 클러스터를 저장 장치에 알리는 기능입니다. 값 1 은 삭제 알림을 끈 상태이고 값 0 은 켠 상태입니다. NTFS 는 관리자가 끄지 않는 한 기본으로 켜져 있으며, ReFS 는 v2 가 기본으로 꺼져 있고 v1 은 기본으로 켜져 있습니다. 하드디스크나 SAN 이 TRIM 을 지원하지 않는다고 알리면 알림을 받지 않습니다. 켜고 끌 때 재부팅이 필요 없고, 다음 unmap 명령부터 바뀐 설정을 따릅니다. 설정 명령 예는 `fsutil behavior set disabledeletenotify 1` (NTFS·ReFS v1) 과 `fsutil behavior set disabledeletenotify ReFS 0` (ReFS v2) 입니다.
 
 한 PC 에서 본 결과는 이렇습니다(확인 범위: Windows 11 25H2 빌드 26200, NVMe SSD 한 대).
 
@@ -75,10 +65,7 @@ NTFS DisableDeleteNotify = 0  (Allows TRIM operations to be sent to the storage 
 ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 ```
 
-- 같은 PC 의 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem` 에서 `DisableDeleteNotification` 값은 0 이었습니다.
-- 같은 키에 `RefsDisableDeleteNotification` 값은 없었습니다.
-- fsutil 문서에는 "레지스트리를 바꾼다" 는 말만 있고 값 이름은 없습니다. 그래서 이 레지스트리 값이 fsutil 설정과 같은 것인지는 공식 문서로 확인하지 못했습니다.
-- 디스크 이미지에서 이 값을 근거로 쓰려면 이 관계부터 따로 확인합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+같은 PC 의 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem` 에서 `DisableDeleteNotification` 값은 0 이었고, 같은 키에 `RefsDisableDeleteNotification` 값은 없었습니다. fsutil 문서에는 "레지스트리를 바꾼다" 는 말만 있고 값 이름은 없어서, 이 레지스트리 값이 fsutil 설정과 같은 것인지는 공식 문서로 확인하지 못했습니다. 디스크 이미지에서 이 값을 근거로 쓰려면 이 관계부터 따로 확인합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ### 빈 섹터 전체에 다시 TRIM — Optimize-Volume·defrag
 
@@ -94,21 +81,15 @@ ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 | 씬 프로비저닝 Storage Space, SAN 가상 디스크, 동적 VHD, 차이 VHD | Analyze + SlabConsolidate + Retrim |
 | TRIM 을 지원하지 않는 SSD, 이동식 FAT, 알 수 없음 | 작업 안 함 |
 
-- 기본 우선순위는 낮음입니다. `-NormalPriority` 를 주면 보통 우선순위로 돕니다.
-- `defrag /?` 도움말은 `/L` (`/Retrim`) 을 이렇게 적습니다. 씬 프로비저닝 볼륨에서는 빈 slab 을 풉니다. SSD 에서는 쓰기 성능을 위해 retrim 합니다(확인 범위: 위와 같은 PC).
+기본 우선순위는 낮음이고 `-NormalPriority` 를 주면 보통 우선순위로 돕니다. `defrag /?` 도움말은 `/L` (`/Retrim`) 을 이렇게 적습니다. 씬 프로비저닝 볼륨에서는 빈 slab 을 풉니다. SSD 에서는 쓰기 성능을 위해 retrim 합니다(확인 범위: 위와 같은 PC).
 
 ### 예약된 retrim 과 그 기록
 
 아래는 한 PC 에서 본 것입니다(확인 범위: Windows 11 25H2 빌드 26200, NVMe SSD 한 대). 모든 PC 에 맞는다고 보장하지 못합니다.
 
-- 예약 작업 `\Microsoft\Windows\Defrag\ScheduledDefrag` 는 Ready 상태였습니다.
-- 이 작업은 `%windir%\system32\defrag.exe` 를 인수 `-c -h -o -$` 로 실행합니다.
-- defrag 도움말에서 `/C` 는 모든 볼륨, `/H` 는 보통 우선순위, `/O` 는 매체 종류에 알맞은 최적화입니다. `-$` 의 뜻은 확인하지 못했습니다.
-- Application 로그에 공급자 `Microsoft-Windows-Defrag` 의 이벤트 ID 258 이 16건 있었습니다.
-- 메시지 예는 "The storage optimizer successfully completed 다시 잘라내기 on OS (C:)" 와 "... 조각 모음 on OS (C:)" 입니다. 한국어 표시에서 retrim 은 "다시 잘라내기" 로 나왔습니다.
-- 258 이벤트는 2026-09-12, 2026-09-19 처럼 1주 간격으로 남았습니다. C: 와 RESTORE 볼륨의 이벤트가 나란히 남았습니다.
-- NVMe SSD 인데도 "다시 잘라내기" 와 "조각 모음" 이벤트가 둘 다 남았습니다.
-- 이 이벤트로 retrim 시각을 읽는 방법이 모든 Windows 버전에 맞는지는 확인하지 못했습니다. 로그를 얼마나 오래 두는지도 확인하지 못했습니다.
+예약 작업 `\Microsoft\Windows\Defrag\ScheduledDefrag` 는 Ready 상태였고, 이 작업은 `%windir%\system32\defrag.exe` 를 인수 `-c -h -o -$` 로 실행합니다. defrag 도움말에서 `/C` 는 모든 볼륨, `/H` 는 보통 우선순위, `/O` 는 매체 종류에 알맞은 최적화입니다. `-$` 의 뜻은 확인하지 못했습니다.
+
+Application 로그에는 공급자 `Microsoft-Windows-Defrag` 의 이벤트 ID 258 이 16건 있었습니다. 메시지 예는 "The storage optimizer successfully completed 다시 잘라내기 on OS (C:)" 와 "... 조각 모음 on OS (C:)" 이며, 한국어 표시에서 retrim 은 "다시 잘라내기" 로 나왔습니다. 258 이벤트는 2026-09-12, 2026-09-19 처럼 1주 간격으로 C: 와 RESTORE 볼륨에 나란히 남았고, NVMe SSD 인데도 "다시 잘라내기" 와 "조각 모음" 이벤트가 둘 다 남았습니다. 이 이벤트로 retrim 시각을 읽는 방법이 모든 Windows 버전에 맞는지는 확인하지 못했고, 로그를 얼마나 오래 두는지도 확인하지 못했습니다.
 
 작업 정의를 이미지에서 읽는 법은 [예약 작업](../../../02-artifacts/persistence/scheduled-tasks/index.md) 에 있습니다. 이벤트 로그 파일을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다.
 

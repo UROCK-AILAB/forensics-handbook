@@ -2,15 +2,15 @@
 
 ## 한 줄 요약
 
-`Amcache.hve` 의 `Root\InventoryDriverBinary` 키에는 드라이버 파일마다 하위 키가 하나씩 있습니다. 하위 키에는 드라이버 파일의 SHA-1, 서명 여부, 윈도 기본 포함 여부, 연결된 서비스·INF 이름, 빌드 시각, 파일 수정 시각이 적혀 있습니다. 이 목록은 실행 기록이 아닙니다. 윈도가 드라이버를 조사해 적은 목록 (Inventory) 입니다. 조사할 때 그 경로에 그 드라이버 파일이 있었다는 것을 보여 줍니다.
+`Amcache.hve` 의 `Root\InventoryDriverBinary` 키에는 드라이버 파일마다 하위 키가 하나씩 있습니다. 하위 키에는 드라이버 파일의 SHA-1, 서명 여부, 윈도 기본 포함 여부, 연결된 서비스·INF 이름, 빌드 시각, 파일 수정 시각이 적혀 있습니다. 이 목록은 실행 기록이 아니라 윈도가 드라이버를 조사해 적은 목록 (Inventory) 이고, 조사할 때 그 경로에 그 드라이버 파일이 있었다는 것을 보여 줍니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 AmCache 는 윈도의 프로그램 호환성 기능이 쓰는 레지스트리 하이브입니다. 전체 모습은 [AmCache](index.md) 허브에서 다룹니다.
 
-드라이버 항목은 호환성 조사 작업 (Microsoft Compatibility Appraiser) 이라는 예약 작업이 씁니다. ANSSI 연구는 Windows 10 1607·1709 의 기본 라이브러리에서 이 키를 이 작업만 갱신한다고 적습니다. 그래서 드라이버가 설치되거나 로드되는 순간에 항목이 생기지 않습니다. 작업이 다음에 돌 때 생깁니다.
+드라이버 항목은 호환성 조사 작업 (Microsoft Compatibility Appraiser) 이라는 예약 작업이 씁니다. ANSSI 연구는 Windows 10 1607·1709 의 기본 라이브러리에서 이 키를 이 작업만 갱신한다고 적습니다. 그래서 항목은 드라이버가 설치되거나 로드되는 순간이 아니라 작업이 다음에 돌 때 생깁니다.
 
-Microsoft 는 같은 이름의 필드를 진단 데이터 이벤트 `Microsoft.Windows.Inventory.Core.InventoryDriverBinaryAdd` 에서 설명합니다. 아래 값 설명은 이 공식 문서를 따릅니다. 이 이벤트의 필드 목록에는 `DriverId` 와 `DriverLastWriteTime` 이 없습니다. 이 두 값은 연구 자료와 공개 파서 소스로 설명합니다.
+Microsoft 는 같은 이름의 필드를 진단 데이터 이벤트 `Microsoft.Windows.Inventory.Core.InventoryDriverBinaryAdd` 에서 설명합니다. 아래 값 설명은 이 공식 문서를 따릅니다. 이 이벤트의 필드 목록에는 `DriverId` 와 `DriverLastWriteTime` 이 없고, 이 두 값은 연구 자료와 공개 파서 소스로 설명합니다.
 
 드라이버는 커널 권한으로 돕니다. 그래서 루트킷과 취약 드라이버 악용 (BYOVD, Bring Your Own Vulnerable Driver) 을 조사할 때 이 키를 봅니다. Kaspersky Securelist 는 이 키로 보안 프로그램을 끄는 악성코드(AV Killer)를 찾았다고 적습니다.
 
@@ -137,7 +137,7 @@ ANSSI 가 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에서 �
 
 ## 시각 해석
 
-이 항목에서 보이는 시각은 네 가지입니다. 뜻이 모두 다릅니다.
+이 항목에서 보이는 시각은 네 가지이고 뜻이 모두 다릅니다.
 
 | 시각 | 자리 | 무엇을 가리키나 | 시간대 |
 |---|---|---|---|
@@ -148,9 +148,9 @@ ANSSI 가 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에서 �
 
 ### 키 마지막 기록 시각
 
-이 시각은 조사 작업이 이 항목을 쓴 때입니다. 드라이버를 설치한 때보다 늦습니다. 둘 사이는 작업이 도는 간격만큼 벌어질 수 있습니다.
+이 시각은 조사 작업이 이 항목을 쓴 때라서 드라이버를 설치한 때보다 늦고, 둘 사이는 작업이 도는 간격만큼 벌어질 수 있습니다.
 
-ANSSI 는 1709 이후 조사 작업이 돌 때마다 `InventoryApplication` 의 항목을 모두 다시 쓴다고 적습니다. 드라이버 항목도 그런지는 따로 적지 않았습니다. 여러 드라이버 키의 시각이 몇 초 안에 몰려 있으면 한꺼번에 다시 쓴 것으로 봅니다. 이런 시각은 드라이버 하나하나의 시각으로 쓰지 않습니다. 키 시각의 성질은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
+ANSSI 는 1709 이후 조사 작업이 돌 때마다 `InventoryApplication` 의 항목을 모두 다시 쓴다고 적습니다. 드라이버 항목도 그런지는 따로 적지 않았습니다. 여러 드라이버 키의 시각이 몇 초 안에 몰려 있으면 한꺼번에 다시 쓴 것으로 보고, 이런 시각은 드라이버 하나하나의 시각으로 쓰지 않습니다. 키 시각의 성질은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
 ### DriverTimeStamp
 

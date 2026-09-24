@@ -6,18 +6,16 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 앱이 띄운 알림 (notification) 은 이 DB 에 들어갑니다. `ExpiryTime` 칸의 시각이 되면 DB 에서 지워집니다.
-- 알림 한 건은 `Notification` 표의 한 행입니다. 실제 내용은 `Payload` 칸에 있습니다.
-- 알림을 보낼 수 있는 앱의 목록은 `NotificationHandler` 표에 있습니다. `PrimaryId` 칸이 앱 이름을 보여 줍니다.
-- 알림 종류는 토스트 (toast), 타일 (tile), 배지 (badge) 가 나왔습니다. (확인 범위: Win11 25H2 한 대)
-- 알림에는 팝업 메시지나 앱의 글 일부가 들어 있을 수 있습니다. 원본이 지워진 뒤에도 알림에서 내용을 되찾을 수 있습니다.
+앱이 띄운 알림 (notification) 은 이 DB 에 들어가고, `ExpiryTime` 칸의 시각이 되면 지워집니다. 알림 한 건은 `Notification` 표의 한 행이며 실제 내용은 `Payload` 칸에 있습니다. 알림을 보낼 수 있는 앱의 목록은 `NotificationHandler` 표에 있고 `PrimaryId` 칸이 앱 이름을 보여 줍니다. 알림 종류는 토스트 (toast), 타일 (tile), 배지 (badge) 가 나왔습니다. (확인 범위: Win11 25H2 한 대)
+
+알림에는 팝업 메시지나 앱의 글 일부가 들어 있을 수 있어서, 원본이 지워진 뒤에도 알림에서 내용을 되찾을 수 있습니다.
 
 ## 위치와 버전별 차이
 
 ### 위치
 
 - 사용자마다 `%LOCALAPPDATA%\Microsoft\Windows\Notifications\wpndatabase.db` 가 있습니다.
-- 출처 글(inc0x0)은 이 경로를 `%APPDATA%\Local\Microsoft\Windows\Notifications\wpndatabase.db` 로 적었습니다. `%LOCALAPPDATA%` 와 같은 폴더를 가리킵니다.
+- 출처 글(inc0x0)은 이 경로를 `%APPDATA%\Local\Microsoft\Windows\Notifications\wpndatabase.db` 로 적었는데, `%LOCALAPPDATA%` 와 같은 폴더를 가리킵니다.
 - 관찰한 PC 에서는 같은 폴더에 `wpndatabase.db-wal`, `wpndatabase.db-shm`, `WPNPRMRY.tmp`(0바이트), 빈 `wpnidm` 폴더가 함께 있었습니다. (확인 범위: Win11 25H2 한 대)
 - 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 

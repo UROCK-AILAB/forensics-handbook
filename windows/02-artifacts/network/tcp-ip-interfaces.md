@@ -6,10 +6,7 @@ SYSTEM 하이브의 `Tcpip\Parameters\Interfaces` 키에는 네트워크 인터�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 인터페이스 하나가 인터페이스 GUID 이름의 하위 키 하나입니다.
-- DHCP 클라이언트 서비스가 임대 값(`LeaseObtainedTime` 등)을 만들고 관리합니다.
-- DHCP 를 쓰는 인터페이스에는 받은 IP 주소, DHCP 서버, 기본 게이트웨이, 임대 시각이 남습니다.
-- 무선 인터페이스 키 아래에는 SSID 별 하위 키가 있습니다. 하위 키마다 그 네트워크에서 받은 임대 값이 따로 들어 있습니다.
+인터페이스 하나가 인터페이스 GUID 이름의 하위 키 하나이고, DHCP 클라이언트 서비스가 임대 값(`LeaseObtainedTime` 등)을 만들고 관리합니다. DHCP 를 쓰는 인터페이스에는 받은 IP 주소, DHCP 서버, 기본 게이트웨이, 임대 시각이 남습니다. 무선 인터페이스 키 아래에는 SSID 별 하위 키가 있고, 하위 키마다 그 네트워크에서 받은 임대 값이 따로 들어 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -18,8 +15,7 @@ HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\<인터페이
 HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\<인터페이스 GUID>\<SSID 하위 키>
 ```
 
-- 오프라인 이미지에는 `CurrentControlSet` 이 없습니다. 공개 도구 RegRipper 의 nic2 플러그인은 SYSTEM 하이브의 `ControlSet00<현재 번호>\Services\Tcpip\Parameters\Interfaces` 를 읽습니다. 컨트롤 세트는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
-- 이 플러그인은 인터페이스 GUID 하위 키와 그 아래 하위 키(무선 SSID)까지 돕니다.
+오프라인 이미지에는 `CurrentControlSet` 이 없어서, 공개 도구 RegRipper 의 nic2 플러그인은 SYSTEM 하이브의 `ControlSet00<현재 번호>\Services\Tcpip\Parameters\Interfaces` 를 읽고 인터페이스 GUID 하위 키와 그 아래 하위 키(무선 SSID)까지 돕니다. 컨트롤 세트는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 **인터페이스 GUID 를 어댑터 이름으로 바꾸기**
 
@@ -67,11 +63,7 @@ Windows 11 PC 한 대에서 DHCP 를 쓰는 인터페이스에 있던 값입니�
 
 Microsoft 문서가 적는 내용은 아래와 같습니다.
 
-- `LeaseObtainedTime` 은 REG_DWORD 입니다.
-- 값은 1970-01-01 0시부터 흐른 초입니다.
-- 인터페이스가 IP 주소 임대를 받은 시각입니다.
-- 클라이언트는 T1 이 지나면 임대 갱신을 시도합니다. 필요하면 T2 에 다시 시도합니다.
-- 기본값은 T1 이 임대 기간의 1/2, T2 가 임대 기간의 7/8(87.5%) 입니다.
+`LeaseObtainedTime` 은 REG_DWORD 이고, 1970-01-01 0시부터 흐른 초로 인터페이스가 IP 주소 임대를 받은 시각을 나타냅니다. 클라이언트는 T1 이 지나면 임대 갱신을 시도하고 필요하면 T2 에 다시 시도하며, 기본값은 T1 이 임대 기간의 1/2, T2 가 임대 기간의 7/8(87.5%) 입니다.
 
 RegRipper nic2 플러그인은 `T1`, `T2`, 이름이 `Time` 으로 끝나는 값을 Unix 시각으로 바꿔 UTC(Z)로 표시합니다.
 
@@ -85,8 +77,7 @@ Windows 11 PC 한 대에서 본 관계는 아래와 같습니다. (확인 범위
 
 ### 무선 네트워크별 하위 키
 
-- 무선 인터페이스의 GUID 키 아래 하위 키는 무선 SSID 별로 있습니다.
-- 하위 키 이름과 `DhcpNetworkHint` 값은 SSID 를 16진수로 쓰되, 바이트마다 두 자리(니블) 순서를 바꾼 값입니다.
+무선 인터페이스의 GUID 키 아래 하위 키는 무선 SSID 별로 있고, 하위 키 이름과 `DhcpNetworkHint` 값은 SSID 를 16진수로 쓰되 바이트마다 두 자리(니블) 순서를 바꾼 값입니다.
 
 Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
 

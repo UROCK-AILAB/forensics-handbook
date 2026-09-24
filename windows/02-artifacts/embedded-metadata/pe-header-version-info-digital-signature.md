@@ -15,13 +15,11 @@ Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 �
 | 버전 정보 (VERSIONINFO) | 개발자가 리소스에 적습니다(참고 2) | 파일·제품 버전, 원래 파일 이름, 회사 이름, 설명 |
 | 디지털 서명 (Authenticode) | 서명한 쪽 | 서명자, 서명 뒤로 바뀌지 않았는지, 타임스탬프 |
 
-- 다른 기록이 이 값들을 옮겨 적습니다. Sysmon 이벤트의 FileVersion·Description·Product·Company·OriginalFileName 은 실행 파일 안의 정보에서 옵니다. 칸의 뜻은 [프로세스 생성 (이벤트 1)](../event-logs/sysmon/1.md) 에서 다룹니다.
-- Amcache 에 옮겨 적힌 값은 [실행 파일 항목 (InventoryApplicationFile)](../execution/amcache-hve/inventoryapplicationfile.md) 에서 다룹니다.
+다른 기록이 이 값들을 옮겨 적습니다. Sysmon 이벤트의 FileVersion·Description·Product·Company·OriginalFileName 은 실행 파일 안의 정보에서 오며, 칸의 뜻은 [프로세스 생성 (이벤트 1)](../event-logs/sysmon/1.md) 에서 다룹니다. Amcache 에 옮겨 적힌 값은 [실행 파일 항목 (InventoryApplicationFile)](../execution/amcache-hve/inventoryapplicationfile.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-- 세 가지 모두 실행 파일 안에 있습니다. 파일만 있으면 어느 Windows 에서 가져왔든 읽을 수 있습니다.
-- 파일 안 서명이 없는 파일도 카탈로그 서명으로 유효하다고 나올 수 있습니다(관찰). 카탈로그 파일이 어디에 저장되는지는 이 페이지에서 확인하지 못했습니다.
+세 가지 모두 실행 파일 안에 있어서, 파일만 있으면 어느 Windows 에서 가져왔든 읽을 수 있습니다. 파일 안 서명이 없는 파일도 카탈로그 서명으로 유효하다고 나올 수 있는데(관찰), 카탈로그 파일이 어디에 저장되는지는 이 페이지에서 확인하지 못했습니다.
 
 | 항목 | 범위 | 근거 |
 |---|---|---|
@@ -33,9 +31,7 @@ Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 �
 
 ### PE 헤더 (참고 1)
 
-- MS-DOS 스텁의 0x3C 위치에 PE 서명까지의 파일 오프셋이 있습니다.
-- 그 오프셋에 4바이트 서명 `PE\0\0`(P, E, 0, 0)이 있습니다.
-- 서명 바로 뒤에 COFF 파일 헤더가 옵니다.
+MS-DOS 스텁의 0x3C 위치에 PE 서명까지의 파일 오프셋이 있고, 그 오프셋에 4바이트 서명 `PE\0\0`(P, E, 0, 0)이 있습니다. 서명 바로 뒤에 COFF 파일 헤더가 옵니다.
 
 | COFF 헤더 안 위치 | 크기 | 칸 |
 |---|---|---|
@@ -82,8 +78,7 @@ pefile 이 붙이는 이름으로 본 디버그 항목 종류입니다.
 | 16 | REPRO |
 | 20 | EX_DLLCHARACTERISTICS |
 
-- 디버그 항목의 날짜·시각 도장은 대부분 C 런타임 시각 형식입니다. IMAGE_DEBUG_TYPE_REPRO 는 예외입니다(참고 1).
-- 값이 0 이나 0xFFFFFFFF 면 의미 있는 시각이 아닙니다(참고 1).
+디버그 항목의 날짜·시각 도장은 대부분 C 런타임 시각 형식이지만 IMAGE_DEBUG_TYPE_REPRO 는 예외이고, 값이 0 이나 0xFFFFFFFF 면 의미 있는 시각이 아닙니다(참고 1).
 
 CODEVIEW 항목에서 읽은 PDB 파일 경로입니다.
 
@@ -149,15 +144,11 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 
 서명이 있는 파일 네 개(`kernel32.dll`, `git-bash.exe`, `WINWORD.EXE`, `python.exe`)에서 본 모양입니다(관찰).
 
-- 인증서 표는 파일 맨 끝에 있었습니다. 표가 끝나는 곳이 파일 끝이었고, 시작 오프셋은 8의 배수였습니다.
-- dwLength 는 디렉터리 크기와 같았습니다. wRevision 은 0x0200, wCertificateType 은 0x0002 였습니다.
-- CheckSum 칸은 네 파일 모두 다시 계산한 값과 같았습니다.
+인증서 표는 파일 맨 끝에 있었습니다. 표가 끝나는 곳이 파일 끝이었고, 시작 오프셋은 8의 배수였습니다. dwLength 는 디렉터리 크기와 같았고 wRevision 은 0x0200, wCertificateType 은 0x0002 였습니다. CheckSum 칸은 네 파일 모두 다시 계산한 값과 같았습니다.
 
 ### 서명이 덮는 범위 (관찰)
 
-- CheckSum 4바이트, Certificate Table 디렉터리 항목 8바이트, 인증서 표 자체를 빼고 SHA-256 을 계산했습니다. 네 파일 모두 서명 안에 그 값이 들어 있었습니다.
-- 아무것도 빼지 않고 계산한 값은 서명 안에 없었습니다.
-- 이 범위를 적은 공식 문장은 참고 1 에서 확인하지 못했습니다.
+CheckSum 4바이트, Certificate Table 디렉터리 항목 8바이트, 인증서 표 자체를 빼고 SHA-256 을 계산했더니 네 파일 모두 서명 안에 그 값이 들어 있었습니다. 아무것도 빼지 않고 계산한 값은 서명 안에 없었습니다. 이 범위를 적은 공식 문장은 참고 1 에서 확인하지 못했습니다.
 
 `git-bash.exe` 사본을 바꿔 가며 `Get-AuthenticodeSignature` 결과를 봤습니다.
 
@@ -168,8 +159,7 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 | COFF 헤더 TimeDateStamp 한 바이트 | HashMismatch |
 | 첫 절 안의 한 바이트 | HashMismatch |
 
-- 서명이 유효하면 TimeDateStamp 와 버전 정보는 서명 뒤로 바뀌지 않은 것입니다.
-- 파일 이름과 CheckSum 은 서명 검증과 관계가 없습니다.
+서명이 유효하면 TimeDateStamp 와 버전 정보는 서명 뒤로 바뀌지 않은 것이고, 파일 이름과 CheckSum 은 서명 검증과 관계가 없습니다.
 
 > 그림 자리: PE 파일 한 개를 세로 막대로 그리고, 서명 해시에서 빠지는 세 곳(CheckSum 4바이트, Certificate Table 디렉터리 항목 8바이트, 파일 끝의 인증서 표)을 다른 색으로 표시
 
@@ -182,25 +172,19 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 | `git-bash.exe` | 있음 | Authenticode |
 | `python.exe` | 있음 | Authenticode |
 
-- "Catalog" 라는 결과는 파일 안에 서명이 없다는 뜻이 아닙니다.
-- 파일 안에 서명이 있는지는 Certificate Table 로 따로 봅니다.
-- 이미지를 오프라인으로 분석할 때 카탈로그 서명을 검증하는 방법은 이 페이지에서 확인하지 못했습니다.
+"Catalog" 라는 결과는 파일 안에 서명이 없다는 뜻이 아니므로, 파일 안에 서명이 있는지는 Certificate Table 로 따로 봅니다. 이미지를 오프라인으로 분석할 때 카탈로그 서명을 검증하는 방법은 이 페이지에서 확인하지 못했습니다.
 
 ### 서명 타임스탬프 (참고 4)
 
-- Authenticode 타임스탬프는 PKCS #7 연서명 (countersignature) 입니다. 서명 인증서가 만료된 뒤에도 서명을 검증할 수 있게 합니다.
-- 타임스탬프가 없으면 서명 인증서가 만료될 때 서명도 무효가 됩니다. 그러면 Windows 는 서명 없는 파일로 봅니다.
-- 연서명은 원래 서명을 붙인 뒤에 덧붙일 수 있는 비인증 속성 (unauthenticated attribute) 입니다. 연서명이 서명하는 대상은 원래 서명(EncryptedDigest)입니다.
+Authenticode 타임스탬프는 PKCS #7 연서명 (countersignature) 이며, 서명 인증서가 만료된 뒤에도 서명을 검증할 수 있게 합니다. 타임스탬프가 없으면 서명 인증서가 만료될 때 서명도 무효가 되고, 그러면 Windows 는 서명 없는 파일로 봅니다. 연서명은 원래 서명을 붙인 뒤에 덧붙일 수 있는 비인증 속성 (unauthenticated attribute) 이고, 서명하는 대상은 원래 서명(EncryptedDigest)입니다.
+
 - 타임스탬프 서버의 응답에는 서명 시각 (signing time) 인증 속성이 들어 있습니다. 객체 식별자 (OID) 는 1.2.840.113549.1.9.5 입니다.
 - 옛 방식 연서명의 OID 는 1.2.840.113549.1.9.6 입니다. 요청에 쓰는 countersignatureType OID 는 1.3.6.1.4.1.311.3.2.1 입니다.
 - 권장 방식은 SHA-256 해시(`/fd SHA256`)와 RFC 3161 타임스탬프(`/tr`, `/td SHA256`)입니다. 코드 서명에서 SHA-1 은 점점 믿지 않습니다.
 
 `git-bash.exe` 와 `python.exe` 의 서명에서 본 값입니다(관찰).
 
-- 두 파일 모두 서명 내용 형식 OID 는 1.3.6.1.4.1.311.2.1.4 였고, 해시는 sha256 이었습니다.
-- 두 파일 모두 타임스탬프가 비인증 속성 OID 1.3.6.1.4.1.311.3.3.1 에 들어 있었습니다. 옛 방식 OID 1.2.840.113549.1.9.6 이 아니었습니다.
-- 그 안의 내용 형식 OID 는 1.2.840.113549.1.9.16.1.4 였습니다.
-- 두 OID 의 공식 이름은 확인하지 못했습니다.
+두 파일 모두 서명 내용 형식 OID 는 1.3.6.1.4.1.311.2.1.4 였고 해시는 sha256 이었습니다. 타임스탬프는 옛 방식 OID 1.2.840.113549.1.9.6 이 아니라 비인증 속성 OID 1.3.6.1.4.1.311.3.3.1 에 들어 있었고, 그 안의 내용 형식 OID 는 1.2.840.113549.1.9.16.1.4 였습니다. 두 OID 의 공식 이름은 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -240,9 +224,7 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 | `notepad.exe` | 0x112F10A4 | 1979-02-19 18:32:04 | 10.0.26100.9278 |
 | `kernel32.dll` | 0x3ECCCF12 | 2003-05-22 13:22:26 | 10.0.26100.9444 |
 
-- 두 파일 모두 디버그 디렉터리에 IMAGE_DEBUG_TYPE_REPRO (16) 항목이 있었습니다.
-- 디버그 항목들의 TimeDateStamp 도 헤더 값과 같았습니다.
-- 파일 버전은 최근 판인데 시각 값은 맞지 않습니다. 참고 3 은 이 값을 재현 가능한 고유 ID 로 봐야 한다고 설명합니다. "시각 도장을 결과 바이너리의 해시로 두면 재현성이 지켜진다" 는 것이 까닭입니다(참고 3).
+두 파일 모두 디버그 디렉터리에 IMAGE_DEBUG_TYPE_REPRO (16) 항목이 있었고, 디버그 항목들의 TimeDateStamp 도 헤더 값과 같았습니다. 파일 버전은 최근 판인데 시각 값은 맞지 않습니다. 참고 3 은 이 값을 재현 가능한 고유 ID 로 봐야 한다고 설명합니다. "시각 도장을 결과 바이너리의 해시로 두면 재현성이 지켜진다" 는 것이 까닭입니다(참고 3).
 - REPRO 항목이 있는 파일은 헤더의 TimeDateStamp 도 시각이 아닐 수 있다고 보고 읽습니다.
 
 ### REPRO 항목이 없는 파일의 시각 비교 (관찰)
@@ -257,10 +239,8 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 | 파일 수정 시각 | 2026-04-20 08:51:22 | 2025-04-08 03:57:36 |
 | 파일 만든 시각 | 2026-06-26 03:20:51 (설치한 때) | 2025-04-08 03:57:36 |
 
-- 두 파일 모두 TimeDateStamp 가 타임스탬프 genTime 보다 앞섰습니다.
-- `git-bash.exe` 는 CODEVIEW 디버그 항목의 TimeDateStamp 가 0 이었습니다. 헤더 값은 위 시각이었습니다.
-- 두 파일 모두 수정 시각이 서명 시각보다 앞섭니다. 9시간(이 PC 의 시간대 차이)을 더하면 `git-bash.exe` 는 17:51:22, `python.exe` 는 12:57:36 이 됩니다.
-- 설치 프로그램이 넣은 값으로 보이지만, 원인은 확인하지 못했습니다.
+두 파일 모두 TimeDateStamp 가 타임스탬프 genTime 보다 앞섰습니다. `git-bash.exe` 는 CODEVIEW 디버그 항목의 TimeDateStamp 가 0 이었고 헤더 값은 위 시각이었습니다. 두 파일 모두 수정 시각이 서명 시각보다 앞서며, 9시간(이 PC 의 시간대 차이)을 더하면 `git-bash.exe` 는 17:51:22, `python.exe` 는 12:57:36 이 됩니다. 설치 프로그램이 넣은 값으로 보이지만 원인은 확인하지 못했습니다.
+
 - 설치된 파일의 수정 시각은 설치 시각도 빌드 시각도 아닐 수 있습니다. 파일 시스템 시각은 [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
 
 ## 함정과 한계
@@ -279,9 +259,7 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 
 ### 지우기와 조작
 
-- 서명이 덮는 바이트를 한 바이트라도 바꾸면 HashMismatch 가 나왔습니다(관찰). TimeDateStamp 를 고친 서명 파일은 이 결과로 드러납니다.
-- 파일 이름 바꾸기와 CheckSum 바꾸기는 서명 결과에 드러나지 않았습니다(관찰). 이름은 OriginalFilename·해시와 맞춰 봅니다. 알려진 파일 해시와 대조하는 법은 [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) 에서 다룹니다.
-- 서명이 없는 파일은 이런 보증이 없습니다. 버전 정보와 TimeDateStamp 를 다른 기록과 맞춰 봅니다.
+서명이 덮는 바이트를 한 바이트라도 바꾸면 HashMismatch 가 나왔으므로(관찰), TimeDateStamp 를 고친 서명 파일은 이 결과로 드러납니다. 반면 파일 이름 바꾸기와 CheckSum 바꾸기는 서명 결과에 드러나지 않았습니다(관찰). 이름은 OriginalFilename·해시와 맞춰 봅니다. 알려진 파일 해시와 대조하는 법은 [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) 에서 다룹니다. 서명이 없는 파일은 이런 보증이 없으므로 버전 정보와 TimeDateStamp 를 다른 기록과 맞춰 봅니다.
 
 ## 직접 분석해 보기
 

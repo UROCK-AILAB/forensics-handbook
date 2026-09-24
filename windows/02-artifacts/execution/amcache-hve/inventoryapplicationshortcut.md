@@ -8,10 +8,7 @@ Amcache.hve 의 `Root\InventoryApplicationShortcut` 키에는 호환성 인벤�
 
 윈도의 호환성 인벤토리는 설치된 프로그램과 실행 파일 목록을 모아 Amcache.hve 에 적습니다. 바로가기 목록은 예약 작업 Microsoft Compatibility Appraiser 가 채웁니다. ANSSI 는 10.0.16299 판 라이브러리(Windows 10 1709 에 처음 실림)부터 이 작업이 시작 메뉴 폴더를 훑는다고 확인했습니다. 이 작업은 시작 메뉴에서 LNK 파일만 골라 이 키에 넣습니다.
 
-그래서 이 키로 다음을 알 수 있습니다.
-
-- 검사한 때에 어떤 바로가기가 어느 폴더에 있었는지
-- 새 판이라면 그 바로가기가 가리킨 파일과, 연결된 설치 프로그램 식별자
+그래서 이 키로 검사한 때에 어떤 바로가기가 어느 폴더에 있었는지 알 수 있고, 새 판이라면 그 바로가기가 가리킨 파일과 연결된 설치 프로그램 식별자도 알 수 있습니다.
 
 시작 메뉴 바로가기는 대개 설치 프로그램이 만듭니다. 그래서 이 키는 설치 흔적을 보강하는 데 주로 씁니다. 다만 Zimmerman 은 MSI 나 설치 프로그램이 아닌 다른 프로그램이 직접 만든 바로가기도 들어온 것을 보고했습니다.
 
@@ -58,9 +55,7 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브�
 
 Windows 11 한 대에서 본 모습은 다음과 같습니다(확인 범위: Windows 11 빌드 26200 한 대).
 
-- 모든 하위 키에 값 다섯 개가 다 있었습니다.
-- `ShortcutTargetPath`·`ShortcutAumid` 는 몇 항목에서 비어 있었습니다.
-- `ShortcutProgramId` 는 절반이 넘는 항목에서 비어 있었습니다.
+모든 하위 키에 값 다섯 개가 다 있었는데, `ShortcutTargetPath`·`ShortcutAumid` 는 몇 항목에서 비어 있었고 `ShortcutProgramId` 는 절반이 넘는 항목에서 비어 있었습니다.
 
 LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/shell-document-formats/shell-link-lnk.md)에서 다룹니다. 이 키에는 LNK 안의 시각·볼륨 정보·셸 아이템이 없습니다.
 

@@ -6,18 +6,14 @@ PowerShell 의 PSReadLine 모듈은 대화형 콘솔에서 친 명령을 사용�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- PSReadLine 은 PowerShell 콘솔에서 명령 줄 입력을 맡는 모듈입니다. 위 화살표 같은 키로 예전 명령을 다시 불러오는 기능도 이 모듈이 맡습니다.
-- 불러오기에 쓰려고 모아 둔 명령을 파일에도 저장합니다. 이 파일이 명령 기록입니다.
-- 파일 이름은 `$($Host.Name)_history.txt` 입니다. 호스트 이름이 다르면 파일도 따로 생깁니다.
+PSReadLine 은 PowerShell 콘솔에서 명령 줄 입력을 맡는 모듈이고, 위 화살표 같은 키로 예전 명령을 다시 불러오는 기능도 맡습니다. 불러오기에 쓰려고 모아 둔 명령을 파일에도 저장하는데, 이 파일이 명령 기록입니다. 파일 이름은 `$($Host.Name)_history.txt` 라서 호스트 이름이 다르면 파일도 따로 생깁니다.
 
 | 호스트 | 파일 이름 |
 |---|---|
 | 일반 콘솔 | `ConsoleHost_history.txt` |
 | VS Code 의 PowerShell 확장 콘솔 | `Visual Studio Code Host_history.txt` |
 
-- PSReadLine 은 기본 콘솔 호스트, Windows Terminal, VS Code 에서 동작합니다.
-- Windows PowerShell ISE 에서는 PSReadLine 이 동작하지 않습니다. ISE 에서 친 명령은 이 파일에 남지 않습니다.
-- 이 기록은 PowerShell 자체의 세션 기록 (`Get-History`) 과 별개입니다.
+PSReadLine 은 기본 콘솔 호스트, Windows Terminal, VS Code 에서 동작합니다. Windows PowerShell ISE 에서는 동작하지 않아서 ISE 에서 친 명령은 이 파일에 남지 않습니다. 이 기록은 PowerShell 자체의 세션 기록 (`Get-History`) 과 별개입니다.
 
 ## 위치와 버전별 차이
 
@@ -28,7 +24,7 @@ PowerShell 의 PSReadLine 모듈은 대화형 콘솔에서 친 명령을 사용�
 | Windows | `%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\` |
 | Windows 가 아닌 OS | `$Env:XDG_DATA_HOME/powershell/PSReadLine/` 또는 `$HOME/.local/share/powershell/PSReadLine/` |
 
-- `%APPDATA%` 는 사용자 프로필 아래에 있습니다. 사용자마다 파일이 따로 생깁니다. 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
+- `%APPDATA%` 는 사용자 프로필 아래에 있어서 사용자마다 파일이 따로 생깁니다. 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 - `HistorySavePath` 옵션으로 경로를 바꿀 수 있습니다.
 - `Set-PSReadLineOption` 으로 바꾼 설정은 그 세션에만 적용됩니다. 계속 쓰려면 사용자가 프로필 스크립트에 넣어야 합니다. 경로가 바뀌었는지 알려면 사용자의 프로필 스크립트를 확인합니다.
 
@@ -54,10 +50,10 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 
 ## 구조
 
-- 글자 파일입니다. 한 줄에 명령 하나가 들어갑니다.
+- 글자 파일이고 한 줄에 명령 하나가 들어갑니다.
 - 여러 줄에 걸친 명령을 어떻게 저장하는지는 확인하지 못했습니다.
 - 시각 칸이 없습니다. 관찰한 파일 896줄 가운데 날짜로 시작하는 줄은 없었습니다. (확인 범위: Win11 25H2 한 대)
-- 관찰한 파일은 BOM 없는 UTF-8 이었고 한글도 올바른 UTF-8 로 들어 있었습니다. 줄 끝은 CRLF 였습니다. (확인 범위: Win11 25H2 한 대)
+- 관찰한 파일은 BOM 없는 UTF-8 이었고 한글도 올바른 UTF-8 로 들어 있었으며, 줄 끝은 CRLF 였습니다. (확인 범위: Win11 25H2 한 대)
 
 ### 저장 방식을 정하는 설정
 
@@ -100,7 +96,7 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 ### 증명하는 것
 
 - 한 줄은 이 사용자 프로필의 대화형 PowerShell 에서 그 명령 줄을 실행한 기록입니다.
-- 파일 안의 줄 순서는 저장된 순서입니다. 명령의 앞뒤 관계를 알려 줍니다.
+- 파일 안의 줄 순서는 저장된 순서이므로 명령의 앞뒤 관계를 알려 줍니다.
 - 파일이 든 프로필 폴더로 어느 사용자 계정의 기록인지 알 수 있습니다.
 - 파일 이름으로 어느 호스트의 기록인지 가를 수 있습니다. 예를 들어 VS Code 확장 콘솔의 명령은 따로 된 파일에 있습니다.
 
@@ -121,8 +117,7 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 
 ## 시각 해석
 
-- 줄마다 시각이 없습니다.
-- 파일의 마지막 수정 시각은 마지막으로 저장한 때입니다. 기본값 `SaveIncrementally` 이면 마지막 명령을 실행한 무렵입니다. `SaveAtExit` 이면 PowerShell 을 끝낸 무렵입니다.
+- 줄마다 시각이 없습니다. 파일의 마지막 수정 시각은 마지막으로 저장한 때입니다. 기본값 `SaveIncrementally` 이면 마지막 명령을 실행한 무렵입니다. `SaveAtExit` 이면 PowerShell 을 끝낸 무렵입니다.
 - 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 읽습니다.
 - 줄마다 시각을 붙이려면 다른 기록과 맞춥니다.
   - 스크립트 블록 기록 이벤트가 켜져 있으면 그 이벤트의 시각과 내용을 봅니다. [PowerShell 실행 기록](../event-logs/powershell-event-logs-4103-4104.md) 에서 다룹니다.

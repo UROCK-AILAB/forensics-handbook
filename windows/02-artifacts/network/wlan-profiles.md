@@ -6,13 +6,8 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 무선 프로필 (wireless profile) 은 WLAN_profile 스키마를 따르는 XML 입니다.
-- 프로필은 이 PC 에 저장해 둔 무선 네트워크 설정입니다. 연결 기록이 아닙니다.
-- 프로필에는 모든 사용자용 (all-user) 과 사용자별 (per-user) 이 있습니다.
-- 무선 LAN API 의 WlanGetProfile 결과에 `WLAN_PROFILE_USER` 플래그가 없으면 모든 사용자용 프로필입니다.
-- 그룹 정책으로 만든 프로필은 `WLAN_PROFILE_GROUP_POLICY` 플래그로 구분합니다.
-- 그룹 정책 프로필은 읽기 전용입니다. 내용도 우선순위도 바꿀 수 없습니다.
-- 프로필 이름은 대소문자를 가리고, 최대 255자입니다.
+무선 프로필 (wireless profile) 은 WLAN_profile 스키마를 따르는 XML 이고, 이 PC 에 저장해 둔 무선 네트워크 설정이며 연결 기록이 아닙니다. 프로필에는 모든 사용자용 (all-user) 과 사용자별 (per-user) 이 있는데, 무선 LAN API 의 WlanGetProfile 결과에 `WLAN_PROFILE_USER` 플래그가 없으면 모든 사용자용 프로필입니다. 그룹 정책으로 만든 프로필은 `WLAN_PROFILE_GROUP_POLICY` 플래그로 구분하고, 읽기 전용이라 내용도 우선순위도 바꿀 수 없습니다. 프로필 이름은 대소문자를 가리고, 최대 255자입니다.
+
 - Windows 11 PC 한 대에서 무선 프로필 9개는 모두 프로필 이름이 SSID 이름과 같았습니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 의 AP 프로필 (`WLANAPProfile`) 1개는 프로필 이름이 SSID 이름과 달랐습니다. 이 프로필이 모바일 핫스팟 설정인지는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -72,11 +67,8 @@ C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프
 
 WlanGetProfile 문서가 적는 내용은 아래와 같습니다.
 
-- WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있습니다.
-- 같은 컴퓨터에서 LocalSystem 계정으로 도는 프로세스는 CryptUnprotectData 로 이 키를 풀 수 있습니다.
-- Windows 7 이후에는 `WLAN_PROFILE_GET_PLAINTEXT_KEY` 플래그로 평문 키를 요청할 수 있습니다.
-- 이 요청은 기본으로 로컬 Administrators 그룹 구성원만 할 수 있습니다.
-- 권한이 없으면 오류를 내지 않고 암호화된 키를 돌려줍니다.
+WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있고, 같은 컴퓨터에서 LocalSystem 계정으로 도는 프로세스는 CryptUnprotectData 로 이 키를 풀 수 있습니다. Windows 7 이후에는 `WLAN_PROFILE_GET_PLAINTEXT_KEY` 플래그로 평문 키를 요청할 수 있는데, 이 요청은 기본으로 로컬 Administrators 그룹 구성원만 할 수 있고 권한이 없으면 오류를 내지 않고 암호화된 키를 돌려줍니다.
+
 - WEP 키는 ASCII 5자로 넣든 16진 10자로 넣든 16진 10자로 저장하고 돌려줍니다.
 
 디스크의 XML 파일에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)

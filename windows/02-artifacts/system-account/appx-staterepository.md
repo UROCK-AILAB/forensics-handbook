@@ -8,15 +8,11 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- Windows 는 스토어 앱을 패키지로 설치합니다.
-- 패키지 형식의 이름은 MSIX 입니다. MSIX 는 예전 APPX 의 새 이름입니다.
-- 패키지 하나에 앱 (application) 이 0개에서 100개까지 들어갑니다.
-- 프레임워크 패키지와 리소스 패키지에는 앱이 없습니다.
-- 앱 본체는 `C:\Program Files\WindowsApps\<패키지 전체 이름>\` 폴더에 설치됩니다. (확인 범위: 조사 PC)
-- 패키지는 사용자마다 따로 등록합니다. 같은 패키지라도 사용자마다 등록 기록이 따로 남습니다. (확인 범위: 조사 PC)
-- StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지를 등록한 사용자, 사용자별 등록 시각이 표로 남습니다. (확인 범위: 조사 PC)
-- 레지스트리에는 모든 사용자용 목록과 사용자별 목록이 따로 남습니다. (확인 범위: 조사 PC)
-- 설치·등록·제거 작업은 이벤트 로그에 작업마다 남습니다. (확인 범위: 조사 PC)
+Windows 는 스토어 앱을 패키지로 설치하며, 패키지 형식의 이름은 MSIX 입니다. MSIX 는 예전 APPX 의 새 이름입니다. 패키지 하나에는 앱 (application) 이 0개에서 100개까지 들어가고, 프레임워크 패키지와 리소스 패키지에는 앱이 없습니다.
+
+앱 본체는 `C:\Program Files\WindowsApps\<패키지 전체 이름>\` 폴더에 설치됩니다. 패키지는 사용자마다 따로 등록하므로 같은 패키지라도 사용자마다 등록 기록이 따로 남습니다. (확인 범위: 조사 PC)
+
+StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지를 등록한 사용자, 사용자별 등록 시각이 표로 남습니다. 레지스트리에는 모든 사용자용 목록과 사용자별 목록이 따로 남고, 설치·등록·제거 작업은 이벤트 로그에 작업마다 남습니다. (확인 범위: 조사 PC)
 
 이 기록으로 아래 질문에 답합니다.
 
@@ -44,10 +40,10 @@
 
 표의 위치는 모두 조사 PC 에서 확인했습니다. (확인 범위: 조사 PC)
 
-- 두 .srd 파일은 첫 16바이트가 `SQLite format 3\0` 입니다. 확장자는 .srd 이지만 SQLite DB 입니다.
-- 조사 PC 에서 `StateRepository-Machine.srd-wal` 은 103,032바이트였습니다. 비어 있지 않았습니다.
-- 조사 PC 의 `AppRepository` 폴더에는 `<패키지 전체 이름>.xml` 파일이 393개 있었습니다. Package 표의 행 수도 393개였습니다.
-- 이전 버전을 지울 때 `WindowsApps\Deleted\` 로 옮긴 뒤 지운다는 내용이 이벤트 471(삭제 실패 오류)에 남아 있었습니다. 이 폴더는 실제로 있었습니다.
+- 두 .srd 파일은 첫 16바이트가 `SQLite format 3\0` 이라서, 확장자는 .srd 이지만 SQLite DB 입니다.
+- 조사 PC 에서 `StateRepository-Machine.srd-wal` 은 103,032바이트로 비어 있지 않았습니다.
+- 조사 PC 의 `AppRepository` 폴더에는 `<패키지 전체 이름>.xml` 파일이 393개 있었고, Package 표의 행 수도 393개였습니다.
+- 이전 버전을 지울 때 `WindowsApps\Deleted\` 로 옮긴 뒤 지운다는 내용이 이벤트 471(삭제 실패 오류)에 남아 있었고, 이 폴더는 실제로 있었습니다.
 - 사용자별 앱 데이터 폴더 아래에는 AC, AppData, LocalCache, LocalState, RoamingState, Settings, SystemAppData, TempState 가 있었습니다. 앱 데이터의 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 - 일부 앱 폴더에는 `SystemAppData\Helium\UserClasses.dat` 라는 앱 전용 레지스트리 하이브가 따로 있습니다. 조사 PC 의 hivelist 에는 이 하이브가 `\REGISTRY\WC\Silo<GUID>user_classes` 로 올라와 있었습니다.
 - HKCU 쪽 키는 파일로는 `C:\Users\<사용자>\AppData\Local\Microsoft\Windows\UsrClass.dat` 에 있습니다. 조사 PC 의 `HKLM\SYSTEM\CurrentControlSet\Control\hivelist` 에서 `\REGISTRY\USER\<SID>_Classes` 가 이 파일을 가리켰습니다.
@@ -81,10 +77,8 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 | PublisherId | `8wekyb3d8bbwe` | 게시자에서 만든 13자 문자열입니다 |
 
 - 패키지 계열 이름 (Package Family Name) 은 `<Name>_<PublisherId>` 형식입니다. 예: `Microsoft.Windows.Photos_8wekyb3d8bbwe`
-- 계열 이름에는 버전과 아키텍처가 없습니다. 그래서 앱을 업데이트해도 계열 이름은 그대로입니다.
-- 앱 데이터와 보안 범위는 보통 계열 단위로 잡힙니다. 버전이 올라가도 설정이 이어지는 까닭입니다.
-- PublisherId 는 서명 인증서의 주체 이름(Publisher)으로 만든 13자 고정 길이 문자열입니다.
-- PublisherId 는 Crockford Base32 로 적습니다. 그래서 I·L·O·U 가 들어가지 않습니다.
+- 계열 이름에는 버전과 아키텍처가 없어서 앱을 업데이트해도 계열 이름은 그대로입니다. 앱 데이터와 보안 범위는 보통 계열 단위로 잡히므로 버전이 올라가도 설정이 이어집니다.
+- PublisherId 는 서명 인증서의 주체 이름(Publisher)으로 만든 13자 고정 길이 문자열이고, Crockford Base32 로 적기 때문에 I·L·O·U 가 들어가지 않습니다.
 - `8wekyb3d8bbwe` 는 Microsoft 의 PublisherId 입니다.
 - 대소문자는 Publisher 에서만 구분합니다. 이름·ResourceId·PublisherId·전체 이름·계열 이름은 대소문자를 가리지 않습니다.
 - 앱 식별자는 AUMID (ApplicationUserModelID) 입니다. 패키지 계열 이름과 매니페스트 Application 요소의 ID 로 만듭니다.
@@ -242,20 +236,18 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 | PackageUser.InstallTime | 01:47:24 |
 | 이벤트 400, Register 완료 | 01:47:25 |
 
-- InstallTime 은 Register 완료와 1초 차이였습니다.
-- InstallTime 은 Add 완료와 31분 차이였습니다.
-- 그래서 InstallTime 은 내려받은 시각이 아니라 그 사용자에게 등록한 시각으로 읽습니다.
+InstallTime 은 Register 완료와 1초 차이였고 Add 완료와는 31분 차이였습니다. 그래서 InstallTime 은 내려받은 시각이 아니라 그 사용자에게 등록한 시각으로 읽습니다.
 
 기본 탑재 앱의 시각은 OS 설치 시각과 다릅니다. (확인 범위: 조사 PC)
 
-- 기본 탑재 앱의 가장 이른 InstallTime 은 2026-06-26 02:15:10 UTC 였습니다.
-- 같은 PC 의 OS 설치 시각(`InstallDate`)은 2026-06-26 18:07:41 UTC 였습니다.
-- 기본 탑재 앱의 InstallTime 이 OS 설치 시각보다 16시간 일렀습니다.
+기본 탑재 앱의 가장 이른 InstallTime 은 2026-06-26 02:15:10 UTC 였고, 같은 PC 의 OS 설치 시각(`InstallDate`)은 2026-06-26 18:07:41 UTC 였습니다. 기본 탑재 앱의 InstallTime 이 OS 설치 시각보다 16시간 일렀습니다.
+
+
 - 그러므로 기본 탑재 앱의 InstallTime 을 OS 설치 시각으로 쓰지 않습니다. OS 설치 시각은 [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-1. **-wal·-shm 파일을 같이 떠야 합니다.** 조사 PC 에서 `-wal` 파일은 비어 있지 않았습니다. .srd 파일만 뜨면 최근 변경이 빠집니다.
+1. **-wal·-shm 파일을 같이 떠야 합니다.** 조사 PC 에서 `-wal` 파일은 비어 있지 않았으므로 .srd 파일만 뜨면 최근 변경이 빠집니다.
 2. **서비스가 돌아가도 복사는 됐습니다.** 조사 PC 에서는 켜진 상태에서도 .srd 파일을 복사할 수 있었습니다. (확인 범위: 조사 PC)
 3. **설치 시각은 Package 표가 아니라 PackageUser 표에 있습니다.** 같은 패키지에 SYSTEM 행과 사용자 행이 따로 있습니다. 어느 SID 의 행인지 늘 같이 적습니다.
 4. **숫자 칸의 뜻은 확인하지 못했습니다.** DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 는 값만 적고 뜻을 단정하지 않습니다.

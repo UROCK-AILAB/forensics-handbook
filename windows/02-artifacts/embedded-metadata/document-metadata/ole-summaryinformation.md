@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-.doc 같은 옛 오피스 문서는 OLE 복합 파일입니다. 그 안의 `\005SummaryInformation` 과 `\005DocumentSummaryInformation` 스트림에 문서 속성이 들어 있습니다. 값마다 속성 ID 와 값 형식이 붙어 있고, 시각은 FILETIME (UTC) 입니다.
+.doc 같은 옛 오피스 문서는 OLE 복합 파일이고, 그 안의 `\005SummaryInformation` 과 `\005DocumentSummaryInformation` 스트림에 문서 속성이 들어 있습니다. 값마다 속성 ID 와 값 형식이 붙고, 시각은 FILETIME (UTC) 입니다.
 
 > 이 페이지에서 "(관찰)" 을 붙인 내용은 PC 한 대에서 직접 만든 시험 파일을 보고 확인한 것입니다. 확인 범위: Windows 11 (빌드 26200), 시간대 KST (UTC+9), Word 16.0 빌드 16.0.20326 (Microsoft 365). 시험 .doc 는 새 문서를 docx 로 저장한 뒤, 같은 세션에서 .doc 로 다른 이름 저장을 해 만들었습니다. 한 대·한 판에서 본 결과라 다른 판에서도 같다고 장담하지 못합니다.
 
@@ -18,9 +18,7 @@
 | `\005DocumentSummaryInformation` 첫 섹션 | DocumentSummaryInformation | `D5CDD502-2E9C-101B-9397-08002B2CF9AE` |
 | `\005DocumentSummaryInformation` 둘째 섹션 | 사용자 정의 속성 (UserDefined) | `D5CDD505-2E9C-101B-9397-08002B2CF9AE` |
 
-- 스트림 이름 앞의 `\005` (0x05) 는 여러 프로그램이 함께 쓰는 속성 집합이라는 표시입니다.
-- 한 스트림에 속성 집합 두 개가 들어가는 경우는 DocumentSummaryInformation 과 UserDefined 뿐입니다.
-- 속성 이름은 보통 파일에 저장하지 않습니다. 속성 ID 로 무슨 속성인지 알아냅니다.
+스트림 이름 앞의 `\005` (0x05) 는 여러 프로그램이 함께 쓰는 속성 집합이라는 표시입니다. 한 스트림에 속성 집합 두 개가 들어가는 경우는 DocumentSummaryInformation 과 UserDefined 뿐이고, 속성 이름은 보통 파일에 저장하지 않아서 속성 ID 로 무슨 속성인지 알아냅니다.
 
 한글 HWP 5.0 문서도 같은 속성 집합 구조를 씁니다. 한글 쪽 속성은 [한글 문서 (HWP·HWPX)](hwp-hwpx.md) 에서 다룹니다.
 
@@ -124,8 +122,7 @@ Word 16 이 저장한 .doc 에서 본 값은 아래와 같습니다. (관찰)
 | 0x12 | `Microsoft Office Word` |
 | 0x13 | 0 |
 
-- 0x04 와 0x08 에는 Word 에 설정된 사용자 이름이 들어 있었습니다. (관찰)
-- 인쇄한 적 없는 이 문서에는 0x0B 가 아예 없었습니다. 0x11 도 없었습니다. (관찰)
+0x04 와 0x08 에는 Word 에 설정된 사용자 이름이 들어 있었습니다. 인쇄한 적 없는 이 문서에는 0x0B 와 0x11 이 아예 없었습니다. (관찰)
 
 ### DocumentSummaryInformation 속성
 
@@ -142,9 +139,7 @@ Microsoft Learn 의 DocumentSummaryInformation 문서에 실린 표입니다.
 | 0x08 | Notes | 0x10 | LinksUpToDate |
 | 0x09 | HiddenSlides | | |
 
-- Category 는 사용자가 넣은 분류입니다. 메모·제안서 같은 값입니다.
-- Manager 는 프로젝트 관리자, Company 는 회사 이름입니다.
-- HeadingPairs 는 이름 글자열과 개수 (VT_I4) 를 짝지은 목록입니다. TitlesofParts 는 문서 부분 이름 목록입니다.
+Category 는 사용자가 넣은 분류로 메모·제안서 같은 값입니다. Manager 는 프로젝트 관리자, Company 는 회사 이름입니다. HeadingPairs 는 이름 글자열과 개수 (VT_I4) 를 짝지은 목록이고, TitlesofParts 는 문서 부분 이름 목록입니다.
 
 관찰한 .doc 의 DocumentSummaryInformation 에는 이 표에 없는 ID 0x11·0x13·0x16·0x17 도 있었습니다. 형식은 VT_I4 나 VT_BOOL 이었습니다. (관찰) 이 ID 들의 이름은 확인하지 못했습니다.
 
@@ -176,7 +171,7 @@ docx 에도 같은 이름의 속성이 있습니다. [오피스 문서 속성 (O
 - 0x0B·0x0C·0x0D 는 FILETIME 이고 UTC 입니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 관찰한 .doc 의 0x0C·0x0D 는 11:27:00 UTC 였습니다. 같은 파일의 파일 시스템 생성 시각은 11:27:51 UTC 였습니다. (관찰) 초를 버린 값으로 보입니다.
 - Microsoft Learn 의 속성 표 주석은 파일을 옮기는 방식 (예: BBS 내려받기) 에 따라 파일 시스템 쪽 시각이 제대로 남지 않을 수 있다고 적었습니다. 파일 시스템 시각과 문서 속 시각이 다르면 둘 다 적어 둡니다.
-- 0x0A (총 편집 시간) 는 표에 VT_FILETIME 으로 적혀 있습니다. 그런데 이름으로 보면 시점이 아니라 길이입니다. 길이로 읽어야 한다는 원문 설명은 확인하지 못했습니다. 도구가 이 값을 날짜로 보여 주면 그대로 옮기지 않습니다.
+- 0x0A (총 편집 시간) 는 표에 VT_FILETIME 으로 적혀 있지만 이름으로 보면 시점이 아니라 길이입니다. 길이로 읽어야 한다는 원문 설명은 확인하지 못했습니다. 도구가 이 값을 날짜로 보여 주면 그대로 옮기지 않습니다.
 - 0x09 (개정 번호) 는 숫자가 아니라 글자열 (VT_LPSTR) 입니다. 관찰한 .doc 는 첫 세션에서 두 번째로 저장한 파일이었습니다. 값은 `2` 였습니다. (관찰) 무엇을 세는 값인지 확정하지 못했습니다.
 
 ## 함정과 한계

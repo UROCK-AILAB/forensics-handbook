@@ -8,11 +8,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 앱은 이 컴퓨터에 연결한 계정마다 동기화 폴더 위치를 `info.json` 에 적습니다.
-- 드롭박스 도움말은 다른 프로그램이 동기화 폴더를 찾을 때 이 파일을 읽으라고 안내합니다.
-- 앱은 자기 상태를 `.dbx` 파일에 둡니다.
-- `.dbx` 파일은 SQLite 암호화 확장 (SQLite Encryption Extension, SEE) 으로 암호화한 SQLite 파일입니다 (2017년 자료).
-- DB 키를 만드는 재료는 사용자 레지스트리의 `ks`, `ks1` 키에 있습니다.
+앱은 이 컴퓨터에 연결한 계정마다 동기화 폴더 위치를 `info.json` 에 적고, 드롭박스 도움말은 다른 프로그램이 동기화 폴더를 찾을 때 이 파일을 읽으라고 안내합니다. 앱은 자기 상태를 `.dbx` 파일에 두는데, 이 파일은 SQLite 암호화 확장 (SQLite Encryption Extension, SEE) 으로 암호화한 SQLite 파일입니다 (2017년 자료). DB 키를 만드는 재료는 사용자 레지스트리의 `ks`, `ks1` 키에 있습니다.
 
 포렌식에서 이 기록을 보는 이유는 아래와 같습니다.
 
@@ -51,9 +47,7 @@
 | `is_team` | 팀에 속했는지 여부 (참·거짓) |
 | `subscription_type` | 요금제. 예: `Basic`, `Business` |
 
-- `path`, `host`, `is_team`, `subscription_type` 네 키는 `personal` 과 `business` 아래에 각각 들어갑니다.
-- 이 컴퓨터에서 회사 계정과 개인 계정을 연결했으면 최상위 키가 두 개 보입니다.
-- 계정이 하나거나 두 계정을 연결하지 않았으면 하나만 보입니다.
+`path`, `host`, `is_team`, `subscription_type` 네 키는 `personal` 과 `business` 아래에 각각 들어갑니다. 이 컴퓨터에서 회사 계정과 개인 계정을 연결했으면 최상위 키가 두 개 보이고, 계정이 하나거나 두 계정을 연결하지 않았으면 하나만 보입니다.
 
 아래는 도움말의 키 설명으로 만든 예시입니다. 값은 자리만 표시했습니다.
 
@@ -76,14 +70,9 @@
 
 ### `.dbx` 파일과 키 (2017년 자료)
 
-- `.dbx` 파일은 SEE 로 암호화한 SQLite 파일입니다.
-- 모든 `.dbx` 가 암호화한 SQLite 는 아닙니다. 그냥 SQLite 인 것도, base64 파일인 것도 있습니다.
-- `Client` 값은 DPAPI blob 입니다. 앞에는 (버전, 길이) 데이터가, 뒤에는 HMAC 이 붙어 있습니다.
-- DPAPI 를 풀 때 고정 엔트로피 `d114a55212655f74bd772e37e64aee9b` 를 씁니다.
-- blob 을 풀면 사용자 키가 나옵니다. 그것만으로는 `.dbx` 를 풀지 못합니다.
-- 사용자 키에 PBKDF2(반복 1066회, 고정 솔트 `0D638C092E8B82FC452883F95F355B8E`)를 한 번 더 걸어 DB 키를 만듭니다.
-- DPAPI 를 풀려면 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 있어야 합니다.
-- 자료의 저자는 "DBX 보안은 전적으로 DPAPI 보안에 기대고 있다" 고 적었습니다.
+`.dbx` 파일은 SEE 로 암호화한 SQLite 파일이지만, 모든 `.dbx` 가 그런 것은 아니어서 그냥 SQLite 인 것도, base64 파일인 것도 있습니다.
+
+`Client` 값은 DPAPI blob 이고, 앞에는 (버전, 길이) 데이터가, 뒤에는 HMAC 이 붙어 있습니다. DPAPI 를 풀 때는 고정 엔트로피 `d114a55212655f74bd772e37e64aee9b` 를 씁니다. blob 을 풀면 사용자 키가 나오지만 그것만으로는 `.dbx` 를 풀지 못하고, 사용자 키에 PBKDF2(반복 1066회, 고정 솔트 `0D638C092E8B82FC452883F95F355B8E`)를 한 번 더 걸어 DB 키를 만듭니다. DPAPI 를 풀려면 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 있어야 합니다. 자료의 저자는 "DBX 보안은 전적으로 DPAPI 보안에 기대고 있다" 고 적었습니다.
 
 ```
 HKCU\SOFTWARE\Dropbox\ks1   값 Client
@@ -113,10 +102,8 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 
 ### 새 버전 파일 (구현)
 
-- `%LOCALAPPDATA%\Dropbox\instance<N>\sync_history.db` 는 암호화하지 않은 SQLite 라고 구현은 봅니다.
-- 이 파일에는 표 `sync_history` 가 있고, 칸 `local_path`, `file_event_type`, `direction`, `timestamp` 가 있습니다 (구현).
-- `direction` 은 올리기·내려받기 방향으로 짐작합니다. 값 목록은 확인하지 못했습니다.
-- 흔히 거론하는 `aggregation.dbx`, `home.db`, `nucleus.sqlite3` 같은 이름은 이번에 확인하지 못했습니다.
+구현은 `%LOCALAPPDATA%\Dropbox\instance<N>\sync_history.db` 를 암호화하지 않은 SQLite 로 봅니다. 이 파일에는 표 `sync_history` 가 있고, 칸 `local_path`, `file_event_type`, `direction`, `timestamp` 가 있습니다 (구현). `direction` 은 올리기·내려받기 방향으로 짐작하는데 값 목록은 확인하지 못했습니다. 흔히 거론하는 `aggregation.dbx`, `home.db`, `nucleus.sqlite3` 같은 이름도 이번에 확인하지 못했습니다.
+
 - SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ## 증거로서 의미

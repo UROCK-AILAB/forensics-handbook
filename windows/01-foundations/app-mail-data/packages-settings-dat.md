@@ -3,28 +3,22 @@
 ## 한 줄 요약
 
 스토어 앱처럼 패키지로 설치하는 앱을 패키지 앱 (Packaged App) 이라고 합니다.
-패키지 앱은 사용자마다 앱 데이터 저장소를 따로 받습니다.
-관찰한 PC 에서는 그 저장소가 `%LOCALAPPDATA%\Packages\<패키지 패밀리 이름>` 폴더였습니다.
+패키지 앱은 사용자마다 앱 데이터 저장소를 따로 받으며, 관찰한 PC 에서는 그 저장소가 `%LOCALAPPDATA%\Packages\<패키지 패밀리 이름>` 폴더였습니다.
 폴더 이름을 나눠 읽으면 앱 이름과 게시자를 가릴 수 있습니다.
-앱 설정은 그 안의 `Settings\settings.dat` 에 있습니다.
-이 파일은 레지스트리 하이브 형식이었고, 값마다 끝에 8바이트 시각이 붙어 있었습니다.
+앱 설정은 그 안의 `Settings\settings.dat` 에 있는데, 이 파일은 레지스트리 하이브 형식이었고 값마다 끝에 8바이트 시각이 붙어 있었습니다.
 앱을 지우면 시스템이 이 저장소를 모두 지웁니다.
 
 이 페이지에서 "관찰" 이라고 적은 내용은 Windows 11 25H2(빌드 26200) PC 한 대에서 본 것입니다.
-settings.dat 는 86개 가운데 복사가 된 75개의 사본을 읽었습니다.
-하이브 구조(regf·nk·vk 셀)를 직접 따라가며 키와 값을 뽑았습니다.
-LOG1·LOG2 로그는 적용하지 않았습니다.
-모든 PC 에 맞는다고 보장하지 못합니다.
+settings.dat 는 86개 가운데 복사가 된 75개의 사본을 읽었고, 하이브 구조(regf·nk·vk 셀)를 직접 따라가며 키와 값을 뽑았습니다.
+LOG1·LOG2 로그는 적용하지 않았으며, 모든 PC 에 맞는다고 보장하지 못합니다.
 
-Microsoft 문서는 저장 위치를 밝히지 않습니다.
-문서에는 "You don't need to know where or how this data exists" 라고 적혀 있습니다.
-그래서 이 페이지의 경로와 파일 형식은 모두 관찰입니다.
+Microsoft 문서는 저장 위치를 밝히지 않고 "You don't need to know where or how this data exists" 라고만 적고 있어서, 이 페이지의 경로와 파일 형식은 모두 관찰입니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-- 패키지 앱이 남기는 설정과 파일이 이 구조 위에 쌓입니다.
-- 패키지가 없는 앱은 이 저장소를 쓰지 못합니다. 그런 앱은 파일이나 레지스트리에 직접 씁니다 (Microsoft 문서).
-- 앱별 해석은 아래 페이지에서 다룹니다. 조사하는 PC 에서 그 앱이 패키지 앱으로 설치됐는지는 폴더 이름과 설치 기록으로 먼저 확인합니다.
+패키지 앱이 남기는 설정과 파일이 이 구조 위에 쌓입니다. 패키지가 없는 앱은 이 저장소를 쓰지 못하고 파일이나 레지스트리에 직접 씁니다 (Microsoft 문서).
+
+앱별 해석은 아래 페이지에서 다룹니다. 조사하는 PC 에서 그 앱이 패키지 앱으로 설치됐는지는 폴더 이름과 설치 기록으로 먼저 확인합니다.
   - [Windows 메일 앱](../../02-artifacts/mail/hxstore.md)
   - [스티커 메모](../../02-artifacts/cloud-notes/sticky-notes.md)
   - [휴대폰과 연결](../../02-artifacts/messengers/phone-link.md)
@@ -39,15 +33,11 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 
 아래는 Microsoft 문서가 밝힌 내용입니다.
 
-- 앱 데이터는 앱이 만들고 관리하는 데이터입니다. 내용이 계속 바뀝니다.
-- 실행 상태, 앱 설정, 사용자 선호, 참고 자료(사전 앱의 뜻풀이 등)가 앱 데이터에 들어갑니다.
-- 문서는 사용자 데이터를 앱 데이터와 나눕니다. 문서·미디어 파일, 메일이나 대화 기록, 사용자가 만든 DB 레코드가 사용자 데이터입니다.
-- 앱 데이터는 설정 (Settings) 과 파일 (Files) 두 가지입니다.
-- 앱을 설치하면 시스템이 사용자마다 설정 저장소와 파일 저장소를 줍니다.
-- 앱 데이터에는 버전을 매길 수 있습니다(`ApplicationData.Version`, `SetVersionAsync`).
+앱 데이터는 앱이 만들고 관리하는 데이터이며 내용이 계속 바뀝니다. 실행 상태, 앱 설정, 사용자 선호, 참고 자료(사전 앱의 뜻풀이 등)가 여기에 들어갑니다.
+문서는 사용자 데이터를 앱 데이터와 나누어, 문서·미디어 파일, 메일이나 대화 기록, 사용자가 만든 DB 레코드를 사용자 데이터로 봅니다.
+앱 데이터는 설정 (Settings) 과 파일 (Files) 두 가지이고, 앱을 설치하면 시스템이 사용자마다 설정 저장소와 파일 저장소를 줍니다. 앱 데이터에는 버전을 매길 수 있습니다(`ApplicationData.Version`, `SetVersionAsync`).
 
-문서가 나눈 것은 뜻입니다.
-앱이 사용자 데이터를 실제로 어느 폴더에 두는지는 앱마다 확인합니다.
+문서가 나눈 것은 뜻일 뿐이므로, 앱이 사용자 데이터를 실제로 어느 폴더에 두는지는 앱마다 확인합니다.
 
 ### 패키지 이름 읽는 법
 
@@ -68,16 +58,14 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 | 패키지 전체 이름 (Package Full Name) | `<Name>_<Version>_<Architecture>_<ResourceId>_<PublisherId>` | `Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe` |
 | 패키지 패밀리 이름 (Package Family Name) | `<Name>_<PublisherId>` | `Microsoft.Windows.Photos_8wekyb3d8bbwe` |
 
-- 전체 이름의 예에서는 ResourceId 가 비어 있습니다. 그래서 밑줄이 두 개 이어집니다.
-- 패밀리 이름에는 버전, 아키텍처, ResourceId 가 없습니다.
-- 게시자 ID (PublisherId) 는 Publisher 에서 만든 13자 문자열입니다.
-- 게시자 ID 는 Crockford 방식 Base32 글자를 씁니다. I·L·O·U 는 쓰지 않습니다.
-- 문서 예시에는 `8wekyb3d8bbwe` 가 Microsoft 의 게시자 ID 라고 적혀 있습니다.
-- Publisher 만 대소문자를 가립니다. 나머지(Name, ResourceId, 게시자 ID, 전체 이름, 패밀리 이름)는 가리지 않습니다.
-- 데이터와 보안은 보통 패키지 패밀리 단위로 묶입니다. 문서는 앱 버전이 올라가도 설정을 이어 쓰게 하려는 것이라고 설명합니다.
-- 앱 식별자 (AUMID) 는 패키지 패밀리 이름과 매니페스트의 앱 ID 로 만듭니다.
-- 패키지 하나에 앱이 0~100개 들어갈 수 있습니다.
-- 프레임워크 패키지와 리소스 패키지는 앱을 선언할 수 없습니다.
+전체 이름의 예에서는 ResourceId 가 비어 있어서 밑줄이 두 개 이어집니다. 패밀리 이름에는 버전, 아키텍처, ResourceId 가 없습니다.
+
+게시자 ID (PublisherId) 는 Publisher 에서 만든 13자 문자열이고, Crockford 방식 Base32 글자를 쓰며 I·L·O·U 는 쓰지 않습니다. 문서 예시에는 `8wekyb3d8bbwe` 가 Microsoft 의 게시자 ID 라고 적혀 있습니다.
+Publisher 만 대소문자를 가리고, 나머지(Name, ResourceId, 게시자 ID, 전체 이름, 패밀리 이름)는 가리지 않습니다.
+
+데이터와 보안은 보통 패키지 패밀리 단위로 묶이는데, 문서는 앱 버전이 올라가도 설정을 이어 쓰게 하려는 것이라고 설명합니다.
+앱 식별자 (AUMID) 는 패키지 패밀리 이름과 매니페스트의 앱 ID 로 만듭니다.
+패키지 하나에는 앱이 0~100개 들어갈 수 있으며, 프레임워크 패키지와 리소스 패키지는 앱을 선언할 수 없습니다.
 
 ### 관련 위치 (관찰)
 
@@ -88,9 +76,8 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 | `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages` | 패키지 전체 이름 | 하위 키 221개 |
 | `C:\ProgramData\Microsoft\Windows\AppRepository\` | `StateRepository-Machine.srd`, `StateRepository-Deployment.srd` | 앞 16바이트가 `SQLite format 3` 인 파일. `-wal`·`-shm` 파일이 함께 있었습니다 |
 
-- 번들 설치 폴더는 ResourceId 자리에 `~` 가 있었습니다. 꼴은 `<Name>_<Version>_neutral_~_<PublisherId>` 였습니다.
-- 리소스 패키지 설치 폴더는 그 자리에 `split.language-ko` 가 있었습니다.
-- Repository 키 아래 값의 예는 아래와 같습니다.
+번들 설치 폴더는 ResourceId 자리에 `~` 가 있었고 꼴은 `<Name>_<Version>_neutral_~_<PublisherId>` 였습니다. 리소스 패키지 설치 폴더는 그 자리에 `split.language-ko` 가 있었습니다.
+Repository 키 아래 값의 예는 아래와 같습니다.
 
 | 값 이름 | 형식 | 내용 |
 |---|---|---|
@@ -105,14 +92,11 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 
 ### 패키지 폴더 안 (관찰)
 
-- 폴더 138개 모두에 `AC` 폴더가 있었습니다.
-- 86개에는 여덟 폴더가 모두 있었습니다. `AC`, `AppData`, `LocalCache`, `LocalState`, `RoamingState`, `Settings`, `SystemAppData`, `TempState` 입니다.
-- 나머지 52개에는 `AC` 폴더만 있었습니다.
-- `AC` 만 있는 폴더는 `Microsoft.UI.Xaml.2.8`, `Microsoft.NET.Native.Framework.2.2`, `Microsoft.Ink.Handwriting.ko-KR.1.0` 처럼 프레임워크나 언어 팩으로 보이는 패키지였습니다.
+폴더 138개 모두에 `AC` 폴더가 있었습니다. 86개에는 여덟 폴더가 모두 있었고(`AC`, `AppData`, `LocalCache`, `LocalState`, `RoamingState`, `Settings`, `SystemAppData`, `TempState`), 나머지 52개에는 `AC` 폴더만 있었습니다.
+`AC` 만 있는 폴더는 `Microsoft.UI.Xaml.2.8`, `Microsoft.NET.Native.Framework.2.2`, `Microsoft.Ink.Handwriting.ko-KR.1.0` 처럼 프레임워크나 언어 팩으로 보이는 패키지였습니다.
 
 앱 데이터 API 는 저장소마다 시스템이 정한 루트 폴더를 줍니다 (Microsoft 문서).
-아래 표의 "비슷한 이름의 API 저장소" 는 이름이 닮아서 짝지은 것입니다.
-폴더와 API 저장소가 정말 짝인지는 문서로 확인하지 못했습니다.
+아래 표의 "비슷한 이름의 API 저장소" 는 이름이 닮아서 짝지은 것이며, 폴더와 API 저장소가 정말 짝인지는 문서로 확인하지 못했습니다.
 
 | 폴더 (관찰) | 비슷한 이름의 API 저장소 | 문서가 밝힌 성격 |
 |---|---|---|
@@ -133,13 +117,9 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 
 ### settings.dat 의 뼈대 (관찰)
 
-- settings.dat 는 일반 레지스트리 하이브 형식이었습니다.
-- 앞 4바이트는 `regf` 였습니다.
-- 형식 버전은 75개 모두 1.3 이었습니다.
-- 루트 셀 위치는 0x20 이었습니다.
-- 파일 크기는 8KB 에서 128KB 사이였습니다.
-- 기본 블록의 파일 이름 칸에는 경로 끝부분(`…\Settings\settings.dat`)이 UTF-16 으로 들어 있었습니다.
-- regf·hbin·셀의 배치는 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
+settings.dat 는 일반 레지스트리 하이브 형식이어서 앞 4바이트가 `regf` 였고, 형식 버전은 75개 모두 1.3, 루트 셀 위치는 0x20, 파일 크기는 8KB 에서 128KB 사이였습니다.
+기본 블록의 파일 이름 칸에는 경로 끝부분(`…\Settings\settings.dat`)이 UTF-16 으로 들어 있었습니다.
+regf·hbin·셀의 배치는 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 키 트리는 아래 꼴이었습니다.
 
@@ -150,16 +130,14 @@ Test                        ← 루트 키. 75개 모두 이 이름
 └─ RoamingState             ← 75개 모두 값이 없었음
 ```
 
-- 문서에 따르면 설정은 컨테이너 (ApplicationDataContainer) 로 묶을 수 있습니다. 컨테이너는 32단계까지 겹칠 수 있습니다.
-- `LocalState` 키는 LocalSettings 와, `RoamingState` 키는 RoamingSettings 와 짝으로 보입니다. 이름으로 한 짐작이고, 문서로 확인하지 못했습니다.
-- 두 파일의 루트 키에는 일반 레지스트리 형식 값도 있었습니다. 이름은 `Version`, 형식은 REG_DWORD(4) 였습니다.
+문서에 따르면 설정은 컨테이너 (ApplicationDataContainer) 로 묶을 수 있고, 컨테이너는 32단계까지 겹칠 수 있습니다.
+`LocalState` 키는 LocalSettings 와, `RoamingState` 키는 RoamingSettings 와 짝으로 보이는데, 이름으로 한 짐작이고 문서로 확인하지 못했습니다.
+두 파일의 루트 키에는 일반 레지스트리 형식 값도 있었습니다. 이름은 `Version`, 형식은 REG_DWORD(4) 였습니다.
 
 ### 값 형식 번호 (관찰)
 
-- 값 (vk) 의 형식 칸에는 REG_SZ 같은 일반 번호가 아니라 `0x05F5E1xx` 꼴 수가 있었습니다.
-- `0x05F5E100` 은 10진수로 100,000,000 입니다.
-- 형식 칸에서 `0x05F5E100` 을 빼면 `Windows.Foundation.PropertyType` 번호와 맞아떨어졌습니다.
-- 값 데이터는 실제 값 뒤에 8바이트가 더 붙은 꼴이었습니다.
+값 (vk) 의 형식 칸에는 REG_SZ 같은 일반 번호가 아니라 `0x05F5E1xx` 꼴 수가 있었습니다. `0x05F5E100` 은 10진수로 100,000,000 이고, 형식 칸에서 이 수를 빼면 `Windows.Foundation.PropertyType` 번호와 맞아떨어졌습니다.
+값 데이터는 실제 값 뒤에 8바이트가 더 붙은 꼴이었습니다.
 
 | 형식 칸 | 뺀 나머지 | PropertyType | 데이터 크기(바이트) | 본 개수 |
 |---|---|---|---|---|
@@ -175,27 +153,21 @@ Test                        ← 루트 키. 75개 모두 이 이름
 | `0x05F5E10E` | 14 | DateTime | 16 (8 + 8) | 8 |
 | `0x05F5E110` | 16 | Guid | 24 (16 + 8) | 3 |
 
-- PropertyType 문서에는 이 PC 에서 보지 못한 번호도 있습니다. Empty 0, UInt8 1, Int16 2, Single 8, Char16 10, TimeSpan 15, Point 17, Size 18, Rect 19, OtherType 20 입니다.
-- 배열 형식은 1025 (UInt8Array) 부터 1044 (OtherTypeArray) 까지입니다.
-- 이 번호들이 settings.dat 에 어떤 꼴로 들어가는지는 보지 못했습니다.
-- 설정 값에 쓸 수 있는 형식은 문서에 따로 적혀 있습니다. UInt8, Int16, UInt16, Int32, UInt32, Int64, UInt64, Single, Double, Boolean, Char16, String, DateTime, TimeSpan, GUID, Point, Size, Rect, 합성 값 (ApplicationDataCompositeValue) 입니다.
+PropertyType 문서에는 이 PC 에서 보지 못한 번호도 있습니다. Empty 0, UInt8 1, Int16 2, Single 8, Char16 10, TimeSpan 15, Point 17, Size 18, Rect 19, OtherType 20 입니다. 배열 형식은 1025 (UInt8Array) 부터 1044 (OtherTypeArray) 까지인데, 이 번호들이 settings.dat 에 어떤 꼴로 들어가는지는 보지 못했습니다.
+
+설정 값에 쓸 수 있는 형식은 문서에 따로 적혀 있습니다. UInt8, Int16, UInt16, Int32, UInt32, Int64, UInt64, Single, Double, Boolean, Char16, String, DateTime, TimeSpan, GUID, Point, Size, Rect, 합성 값 (ApplicationDataCompositeValue) 입니다.
 - 설정 이름 길이와 값 크기의 상한은 연 문서에 숫자가 없었습니다.
 
 ### 값 끝의 8바이트 시각 (관찰)
 
-- 끝 8바이트를 FILETIME(1601-01-01 부터 센 100ns 단위, UTC)으로 풀면 날짜가 맞게 나왔습니다.
-- 이 시각은 값마다 달랐습니다.
-- 값을 마지막으로 쓴 시각으로 보입니다. 이 뜻은 문서로 확인하지 못했습니다.
-- String 값은 UTF-16LE 글자와 끝 NUL 2바이트 뒤에 이 8바이트가 붙어 있었습니다.
-- DateTime 값 4건은 값 자체도 FILETIME 으로 풀렸습니다. 값과 끝 시각의 차이는 몇 밀리초 안이었습니다.
-- 값 1,239개 가운데 1,234개는 끝 시각이 그 키의 마지막 기록 시각보다 늦지 않았습니다.
-- 나머지 5개는 끝 시각이 키 시각보다 늦었습니다. 로그를 적용하지 않은 사본에서 본 결과입니다.
+끝 8바이트를 FILETIME(1601-01-01 부터 센 100ns 단위, UTC)으로 풀면 날짜가 맞게 나왔고, 이 시각은 값마다 달랐습니다. 값을 마지막으로 쓴 시각으로 보이지만 이 뜻은 문서로 확인하지 못했습니다.
+String 값은 UTF-16LE 글자와 끝 NUL 2바이트 뒤에 이 8바이트가 붙어 있었습니다.
+DateTime 값 4건은 값 자체도 FILETIME 으로 풀렸고, 값과 끝 시각의 차이는 몇 밀리초 안이었습니다.
+값 1,239개 가운데 1,234개는 끝 시각이 그 키의 마지막 기록 시각보다 늦지 않았지만, 나머지 5개는 키 시각보다 늦었습니다. 로그를 적용하지 않은 사본에서 본 결과입니다.
 
 ### 합성 값 (관찰, 한 예)
 
-104바이트짜리 합성 값 하나를 풀어 봤습니다.
-항목 이름은 A·R·G·B 넷이었습니다.
-항목마다 아래 칸이 차례로 이어졌습니다.
+104바이트짜리 합성 값 하나를 풀어 봤는데, 항목 이름은 A·R·G·B 넷이었고 항목마다 아래 칸이 차례로 이어졌습니다.
 
 | 칸 | 크기 | 이 예의 값 |
 |---|---|---|
@@ -205,12 +177,10 @@ Test                        ← 루트 키. 75개 모두 이 이름
 | 이름 | UTF-16 글자 + NUL | `A` |
 | 값 | 형식에 따른 크기 | 1바이트 |
 
-- 항목 크기 17 은 4 + 4 + 4 + 4 + 1 입니다. 크기 칸 자신도 셉니다.
-- 항목은 8바이트 경계에 맞춰 이어졌습니다. 그래서 17바이트 항목 하나가 24바이트 자리를 씁니다.
-- 맨 끝에 8바이트 시각이 있었습니다.
-- 4 × 24 + 8 = 104 로 전체 크기와 맞습니다.
-- 한 예만 풀어 본 결과입니다. 다른 형식이 섞인 합성 값도 같은 꼴인지는 확인하지 못했습니다.
-- 문서는 합성 값을 한꺼번에 저장하고 읽어야 하는 설정 묶음이라고 설명합니다. 적은 양에 맞춘 형식입니다.
+항목 크기 17 은 4 + 4 + 4 + 4 + 1 로, 크기 칸 자신도 셉니다.
+항목은 8바이트 경계에 맞춰 이어져서 17바이트 항목 하나가 24바이트 자리를 쓰고, 맨 끝에 8바이트 시각이 있었습니다. 4 × 24 + 8 = 104 로 전체 크기와 맞습니다.
+한 예만 풀어 본 결과라서 다른 형식이 섞인 합성 값도 같은 꼴인지는 확인하지 못했습니다.
+문서는 합성 값을 한꺼번에 저장하고 읽어야 하는 설정 묶음이라고 설명하며, 적은 양에 맞춘 형식입니다.
 
 ### 값 이름 (관찰)
 
@@ -222,8 +192,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 | 사진 | `LAST_CLOSED_VIEWER_WINDOW_PLACEMENT`, `LifetimeSessionNumber` |
 | 계산기 | `Mode` |
 
-값의 뜻은 이름으로만 짐작할 수 있습니다.
-앱마다 동작을 바꿔 가며 확인한 뒤에 보고서에 씁니다.
+값의 뜻은 이름으로만 짐작할 수 있으므로, 앱마다 동작을 바꿔 가며 확인한 뒤에 보고서에 씁니다.
 
 ## 읽는 법
 
@@ -238,9 +207,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 
 ### 헥스로 한 번 따라가기
 
-아래 바이트는 관찰한 규칙대로 만든 예시입니다.
-실제 파일에서 옮긴 바이트가 아닙니다.
-`vv` 는 값 자리, `tt` 는 끝 시각 8바이트 자리입니다.
+아래 바이트는 관찰한 규칙대로 만든 예시이며 실제 파일에서 옮긴 바이트가 아닙니다. `vv` 는 값 자리, `tt` 는 끝 시각 8바이트 자리입니다.
 
 **vk 셀의 형식 칸 (4바이트, 리틀 엔디언)**
 
@@ -278,12 +245,11 @@ Test                        ← 루트 키. 75개 모두 이 이름
 
 ### 앱을 지우면 저장소도 사라집니다
 
-- 문서 원문은 이렇습니다. "The system removes the contents of these data stores completely and cleanly when your app is uninstalled."
-- 그래서 앱을 지운 PC 에는 그 앱의 폴더가 없을 수 있습니다.
-- 지운 폴더와 파일은 파일 시스템 수준에서 찾습니다. [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
-- 앱을 업데이트할 때는 시스템이 대체로 내용을 남깁니다.
-- RoamingSettings 는 스토어 업데이트 때 남지 않을 수 있습니다. 문서는 Windows 10 에서도 그렇다고 적습니다.
-- 임시 저장소는 시스템이 언제든 지울 수 있습니다. 비어 있다고 앱을 쓰지 않았다고 단정하지 않습니다.
+문서 원문은 이렇습니다. "The system removes the contents of these data stores completely and cleanly when your app is uninstalled." 그래서 앱을 지운 PC 에는 그 앱의 폴더가 없을 수 있습니다.
+지운 폴더와 파일은 파일 시스템 수준에서 찾습니다. [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
+
+앱을 업데이트할 때는 시스템이 대체로 내용을 남기지만, RoamingSettings 는 스토어 업데이트 때 남지 않을 수 있습니다. 문서는 Windows 10 에서도 그렇다고 적습니다.
+임시 저장소는 시스템이 언제든 지울 수 있으므로, 비어 있다고 앱을 쓰지 않았다고 단정하지 않습니다.
 
 ### Windows 버전별 차이
 
@@ -294,16 +260,12 @@ Test                        ← 루트 키. 75개 모두 이 이름
 
 ### 비정상 종료와 LOG1·LOG2
 
-- 관찰한 PC 에서 settings.dat 86개 가운데 65개 옆에 LOG1·LOG2 가 있었습니다.
-- 로그를 적용하지 않은 사본에서 값 5개의 끝 시각이 키 시각보다 늦었습니다.
-- 그래서 로그를 함께 수집하고, 적용했는지 결과에 적습니다.
-- 로그를 다루는 법은 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
+관찰한 PC 에서 settings.dat 86개 가운데 65개 옆에 LOG1·LOG2 가 있었고, 로그를 적용하지 않은 사본에서 값 5개의 끝 시각이 키 시각보다 늦었습니다. 그래서 로그를 함께 수집하고, 적용했는지 결과에 적습니다.
+로그를 다루는 법은 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ### 지운 키와 값
 
-- settings.dat 는 일반 하이브 형식이었습니다.
-- 그래서 하이브에서 지운 키·값을 찾는 방법을 그대로 써 볼 수 있습니다.
-- settings.dat 에서 실제로 복구해 보지는 않았습니다. 결과는 따로 검증합니다.
+settings.dat 는 일반 하이브 형식이어서 하이브에서 지운 키·값을 찾는 방법을 그대로 써 볼 수 있습니다. 다만 settings.dat 에서 실제로 복구해 보지는 않았으므로 결과는 따로 검증합니다.
 
 ### 시각
 
@@ -311,22 +273,20 @@ Test                        ← 루트 키. 75개 모두 이 이름
   - 루트 키: 75개 가운데 73개
   - `RoamingState`: 75개 모두
   - `LocalState`: 75개 가운데 53개
-- 빈 틀 파일에 박힌 시각으로 보입니다. 앱을 설치하거나 쓴 시각이 아닙니다.
-- 값 끝 시각은 값마다 따로 있습니다. 뜻이 문서로 확인되지 않았으므로 보고서에는 "이 값의 끝 8바이트를 FILETIME 으로 풀면 이 시각이 나온다" 까지만 씁니다.
+- 빈 틀 파일에 박힌 시각으로 보이며, 앱을 설치하거나 쓴 시각이 아닙니다.
+- 값 끝 시각은 값마다 따로 있고 뜻이 문서로 확인되지 않았으므로, 보고서에는 "이 값의 끝 8바이트를 FILETIME 으로 풀면 이 시각이 나온다" 까지만 씁니다.
 - 키 시각을 값 시각의 상한으로 쓰지 않습니다. 관찰에서 키 시각보다 늦은 값이 5개 있었습니다.
 - 키 시각의 일반 해석은 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 를 봅니다.
 
 ### 설정 파일 속 비밀 값
 
-- 한 앱의 settings.dat 에 PEM 꼴 개인 키 문자열이 String 값으로 있었습니다 (관찰).
-- 그 값의 이름은 `CertificateHelper_PrivateKey` 였습니다.
-- 설정 파일에 비밀 값이 평문으로 있을 수 있습니다. 결과를 넘길 때 값 내용을 가립니다.
+한 앱의 settings.dat 에 PEM 꼴 개인 키 문자열이 String 값으로 있었고 (관찰), 그 값의 이름은 `CertificateHelper_PrivateKey` 였습니다.
+설정 파일에 비밀 값이 평문으로 있을 수 있으므로 결과를 넘길 때 값 내용을 가립니다.
 
 ### 라이브 수집
 
-- 실행 중인 앱의 settings.dat 는 잠겨서 복사되지 않았습니다 (관찰).
-- 86개 가운데 11개에서 "Device or resource busy" 가 났습니다.
-- 볼륨 섀도 복사본이나 원시 디스크 읽기로 가져옵니다. [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [볼륨 섀도 복사본 구조](../disk-volume/volume-shadow-copy.md) 를 봅니다.
+실행 중인 앱의 settings.dat 는 잠겨서 복사되지 않았고 (관찰), 86개 가운데 11개에서 "Device or resource busy" 가 났습니다.
+볼륨 섀도 복사본이나 원시 디스크 읽기로 가져옵니다. [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [볼륨 섀도 복사본 구조](../disk-volume/volume-shadow-copy.md) 를 봅니다.
 
 ## 함정
 

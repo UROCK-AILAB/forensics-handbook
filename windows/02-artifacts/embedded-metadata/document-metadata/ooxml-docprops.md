@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-docx 같은 OOXML 문서는 ZIP 파일입니다. ZIP 안의 `docProps/core.xml` 과 `docProps/app.xml` 에 문서 속성이 XML 로 들어 있습니다. 작성자, 마지막으로 저장한 사람, 개정 번호, 만든 시각, 수정 시각, 총 편집 시간 같은 값입니다.
+docx 같은 OOXML 문서는 ZIP 파일이고, ZIP 안의 `docProps/core.xml` 과 `docProps/app.xml` 에 문서 속성이 XML 로 들어 있습니다. 작성자, 마지막으로 저장한 사람, 개정 번호, 만든 시각, 수정 시각, 총 편집 시간 같은 값입니다.
 
 > 이 페이지에서 "(관찰)" 을 붙인 내용은 PC 한 대에서 직접 만든 시험 파일을 보고 확인한 것입니다. 확인 범위: Windows 11 (빌드 26200), 시간대 KST (UTC+9), Word 16.0 빌드 16.0.20326 (Microsoft 365). 한 대·한 판에서 본 결과라 다른 판에서도 같다고 장담하지 못합니다.
 >
@@ -21,7 +21,7 @@ Word 16 이 저장한 docx 에는 속성 파일이 두 개 있었습니다. (관
 
 사용자 정의 속성을 담는 `docProps/custom.xml` 은 시험 파일에 없었습니다. 이 파일이 어떤 조건에서 생기는지는 확인하지 못했습니다.
 
-작성자와 마지막으로 저장한 사람 칸에는 Word 에 설정된 사용자 이름이 들어갔습니다. (관찰) Windows 계정 이름이 아니라 프로그램 설정값이라는 점을 기억합니다.
+작성자와 마지막으로 저장한 사람 칸에는 Word 에 설정된 사용자 이름이 들어갔습니다. (관찰) 이 이름은 Windows 계정 이름이 아니라 프로그램 설정값입니다.
 
 ## 위치와 버전별 차이
 
@@ -99,7 +99,7 @@ Word 16 이 쓴 요소는 아래와 같습니다. (관찰)
 | `AppVersion` | `16.0000` |
 | `DocSecurity`, `ScaleCrop`, `Company`, `LinksUpToDate`, `SharedDoc`, `HyperlinksChanged` | 보안 설정·회사 이름 같은 값 |
 
-`TotalTime` 은 ISO/IEC 29500-1 에 "문서를 편집한 총 시간" 으로 정의돼 있습니다. 기본 단위는 분입니다. 값은 XML Schema 의 int 형식입니다.
+`TotalTime` 은 ISO/IEC 29500-1 에 "문서를 편집한 총 시간" 으로 정의돼 있고, 기본 단위는 분이며 값은 XML Schema 의 int 형식입니다.
 
 `HeadingPairs`, `TitlesOfParts`, `Company`, `LinksUpToDate`, `ScaleCrop` 은 옛 오피스 형식의 DocumentSummaryInformation 속성과 이름이 같습니다. 옛 형식의 속성 표는 [옛 오피스 문서 속성 (OLE SummaryInformation)](ole-summaryinformation.md) 에 있습니다.
 
@@ -138,8 +138,8 @@ Word 16 이 쓴 요소는 아래와 같습니다. (관찰)
 
 두 값 모두 초를 버린 분 단위 값이었습니다. 그래서 파일 시스템 시각과 1분 안쪽으로 어긋나는 것은 이 버림으로 설명할 수 있습니다. 1분 넘게 어긋나면 다른 까닭을 찾습니다.
 
-- `TotalTime` 은 시점이 아니라 길이입니다. 단위는 분입니다.
-- ZIP 항목에도 시각 칸이 있습니다. 그런데 Word 가 만든 docx 와 공개 템플릿 docx 의 ZIP 항목 시각은 모두 1980-01-01 00:00:00 이었습니다. (관찰) 이 칸으로는 언제 저장했는지 알 수 없습니다.
+- `TotalTime` 은 시점이 아니라 길이이고, 단위는 분입니다.
+- ZIP 항목에도 시각 칸이 있지만 Word 가 만든 docx 와 공개 템플릿 docx 의 ZIP 항목 시각은 모두 1980-01-01 00:00:00 이었습니다. (관찰) 이 칸으로는 언제 저장했는지 알 수 없습니다.
 - 현지 시각으로 적힌 다른 기록과 나란히 볼 때는 [시간대 설정](../../system-account/time-zone.md) 을 먼저 확인합니다.
 
 ## 함정과 한계

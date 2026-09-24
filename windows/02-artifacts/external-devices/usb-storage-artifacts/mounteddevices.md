@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-SYSTEM 하이브의 `MountedDevices` 키는 마운트 관리자 (Mount Manager) 가 볼륨 이름과 드라이브 문자를 적어 두는 곳입니다. USB 저장장치를 볼륨 GUID 와 드라이브 문자에 잇는 중간 고리입니다.
+SYSTEM 하이브의 `MountedDevices` 키는 마운트 관리자 (Mount Manager) 가 볼륨 이름과 드라이브 문자를 적어 두는 곳이며, USB 저장장치를 볼륨 GUID 와 드라이브 문자에 잇는 중간 고리입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -12,11 +12,11 @@ SYSTEM 하이브의 `MountedDevices` 키는 마운트 관리자 (Mount Manager) 
 - **드라이브 문자 (drive letter)**: `\DosDevices\E:` 꼴입니다. 재부팅해도 남습니다. 다만 볼륨이 붙고 떨어지면 다른 볼륨에 다시 줄 수 있습니다.
 - **폴더 마운트 지점 (mount point)**: `\DosDevices\C:\mymount` 처럼 폴더에 볼륨을 붙인 경우입니다.
 
-이 이름들은 커널의 심볼릭 링크입니다. 심볼릭 링크는 재부팅하면 사라집니다. 그래서 마운트 관리자는 링크의 *이름*을 레지스트리에 적어 둡니다. Microsoft 는 이것을 영구 이름 데이터베이스 (persistent name database) 라고 부릅니다.
+이 이름들은 커널의 심볼릭 링크이고 재부팅하면 사라지기 때문에, 마운트 관리자는 링크의 *이름*을 레지스트리에 적어 둡니다. Microsoft 는 이것을 영구 이름 데이터베이스 (persistent name database) 라고 부릅니다.
 
-값 하나가 이름 하나입니다. 값 이름이 영구 이름이고, 값 데이터가 그 볼륨의 고유 ID (unique ID) 입니다. 같은 볼륨을 가리키는 이름들은 고유 ID 가 모두 같습니다. 이 점 덕분에 드라이브 문자와 볼륨 GUID 를 서로 이을 수 있습니다.
+값 하나가 이름 하나이고, 값 이름이 영구 이름, 값 데이터가 그 볼륨의 고유 ID (unique ID) 입니다. 같은 볼륨을 가리키는 이름들은 고유 ID 가 모두 같아서 드라이브 문자와 볼륨 GUID 를 서로 이을 수 있습니다.
 
-볼륨이 오프라인이 되면 마운트 관리자는 심볼릭 링크만 지웁니다. 데이터베이스에 적힌 이름은 지우지 않습니다. 그래서 USB 를 뽑은 뒤에도 이 키에 흔적이 남습니다.
+볼륨이 오프라인이 되면 마운트 관리자는 심볼릭 링크만 지우고 데이터베이스에 적힌 이름은 지우지 않기 때문에, USB 를 뽑은 뒤에도 이 키에 흔적이 남습니다.
 
 ## 위치와 버전별 차이
 
@@ -36,7 +36,7 @@ SYSTEM 하이브의 `MountedDevices` 키는 마운트 관리자 (Mount Manager) 
 | Windows XP 자료 | `\??\STORAGE#RemovableMedia#7&2c9a320d&0&RM#{53f5630d-…}` | 가운데 `7&2c9a320d&0` 이 ParentIdPrefix 입니다. USBSTOR 쪽 ParentIdPrefix 값과 맞춥니다. |
 | 그 뒤 자료 | `_??_USBSTOR#Disk&Ven_Generic&Prod_Flash_Disk&Rev_8.07#01234567&0#{GUID}` | 문자열 안에 USBSTOR 장치 이름과 인스턴스 ID 가 그대로 있습니다. |
 
-위 두 줄은 참고 문헌에 실린 예시입니다. 두 번째 줄의 끝 GUID 는 원문에서 가린 값입니다. 어느 버전에서 모양이 바뀌었는지는 이 글에서 확인한 자료로 못 박지 않습니다. 검체에서 실제 모양을 보고 판단합니다.
+위 두 줄은 참고 문헌에 실린 예시이고, 두 번째 줄의 끝 GUID 는 원문에서 가린 값입니다. 어느 버전에서 모양이 바뀌었는지는 이 글에서 확인한 자료로 못 박지 않으며, 검체에서 실제 모양을 보고 판단합니다.
 
 USBSTOR 쪽 이름과 ParentIdPrefix 는 [USB 저장장치 목록 (USBSTOR)](usbstor.md)에서 다룹니다.
 
@@ -65,7 +65,7 @@ USBSTOR 쪽 이름과 ParentIdPrefix 는 [USB 저장장치 목록 (USBSTOR)](usb
 - GUID 의 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 - 장치 문자열은 `#{GUID}` 로 끝납니다. 이 GUID 는 장치 인터페이스 종류를 나타냅니다. 디스크 인터페이스 (GUID_DEVINTERFACE_DISK) 라면 `{53f56307-b6bf-11d0-94f2-00a0c91efb8b}` 입니다.
 
-MBR·GPT 모양에는 제조사·제품·일련번호가 없습니다. 이 모양만 보고는 USB 장치인지 알 수 없습니다. 고정 디스크로 인식되는 외장 디스크는 이 모양으로 남을 수 있습니다. 이때는 디스크 서명이나 파티션 GUID 를 다른 기록과 맞춰 봅니다.
+MBR·GPT 모양에는 제조사·제품·일련번호가 없고, 이 모양만 보고는 USB 장치인지 알 수 없습니다. 고정 디스크로 인식되는 외장 디스크는 이 모양으로 남을 수 있는데, 이때는 디스크 서명이나 파티션 GUID 를 다른 기록과 맞춰 봅니다.
 
 > 그림 자리: USBSTOR 인스턴스 ID → MountedDevices 장치 문자열 → 데이터가 같은 `\??\Volume{GUID}` 와 `\DosDevices\E:` → NTUSER.DAT MountPoints2 의 `{GUID}` 로 이어지는 사슬
 
@@ -93,16 +93,13 @@ MBR·GPT 모양에는 제조사·제품·일련번호가 없습니다. 이 모�
 
 레지스트리 값에는 시각이 따로 없습니다. 시각은 키 단위로만 남습니다 ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)).
 
-- `MountedDevices` 키의 마지막 기록 시각은 UTC FILETIME 입니다.
-- 이 시각은 키 안의 값 가운데 어느 하나가 바뀐 때를 가리킵니다.
-- 어느 값이 바뀌었는지는 알려 주지 않습니다.
-- 따라서 이 시각을 특정 USB 의 연결 시각으로 쓰면 안 됩니다.
+`MountedDevices` 키의 마지막 기록 시각은 UTC FILETIME 이며, 키 안의 값 가운데 어느 하나가 바뀐 때를 가리킬 뿐 어느 값이 바뀌었는지는 알려 주지 않습니다. 따라서 이 시각을 특정 USB 의 연결 시각으로 쓰면 안 됩니다.
 
 연결·해제 시각은 [연결·해제 시각 (DeviceClasses·Device Properties)](deviceclasses-device-properties-0064-0066-0067.md)에서 구합니다.
 
 ## 함정과 한계
 
-1. **드라이브 문자는 덮어씁니다.** 값 이름 `\DosDevices\E:` 에는 데이터가 하나만 들어갑니다. 나중에 다른 볼륨이 E: 를 받으면 데이터가 바뀝니다. 그래서 드라이브 문자로는 마지막 장치만 보입니다.
+1. **드라이브 문자는 덮어씁니다.** 값 이름 `\DosDevices\E:` 에는 데이터가 하나만 들어가서, 나중에 다른 볼륨이 E: 를 받으면 데이터가 바뀝니다. 그래서 드라이브 문자로는 마지막 장치만 보입니다.
 2. **볼륨 GUID 값은 남습니다.** `\??\Volume{GUID}` 값은 장치를 뽑아도 남습니다. 드라이브 문자가 없는 볼륨 GUID 값이 여럿 있는 것은 정상입니다.
 3. **접두어로 검색하지 않습니다.** 참고 문헌 예시에서 USB 장치 문자열은 `\??\` 가 아니라 `_??_` 로 시작합니다. `USBSTOR` 나 인스턴스 ID 로 검색해야 놓치지 않습니다.
 4. **헥스로만 보여 주는 도구가 있습니다.** 장치 문자열은 UTF-16LE 로 풀어야 읽힙니다 ([문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).

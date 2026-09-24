@@ -2,14 +2,11 @@
 
 ## 한 줄 요약
 
-MountPoints2 는 사용자 하이브(NTUSER.DAT)에 있는 키입니다. 그 사용자가 로그온해 있을 때 나타난 볼륨·네트워크 공유가 하위 키로 남습니다. SYSTEM 하이브에는 사용자 정보가 없으므로, USB 볼륨이 어느 사용자 세션에 나타났는지는 이 키로 좁힙니다.
+MountPoints2 는 사용자 하이브(NTUSER.DAT)에 있는 키이며, 그 사용자가 로그온해 있을 때 나타난 볼륨·네트워크 공유가 하위 키로 남습니다. SYSTEM 하이브에는 사용자 정보가 없으므로, USB 볼륨이 어느 사용자 세션에 나타났는지는 이 키로 좁힙니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 볼륨이 붙으면 마운트 관리자 (Mount Manager) 가 볼륨 GUID 를 붙이고 SYSTEM 하이브의 `MountedDevices` 에 적습니다([드라이브 문자 매핑 (MountedDevices)](mounteddevices.md)).
-- 같은 볼륨 GUID 가 사용자 하이브의 MountPoints2 아래에 `{GUID}` 이름의 하위 키로도 생깁니다.
-- 이 하위 키는 사용자마다 따로 생깁니다. 그래서 장치와 사용자를 잇는 몇 안 되는 레지스트리 기록입니다.
-- 볼륨만 남는 것이 아닙니다. 연결한 네트워크 공유도 `##서버#공유` 꼴의 하위 키로 남습니다.
+볼륨이 붙으면 마운트 관리자 (Mount Manager) 가 볼륨 GUID 를 붙이고 SYSTEM 하이브의 `MountedDevices` 에 적습니다([드라이브 문자 매핑 (MountedDevices)](mounteddevices.md)). 같은 볼륨 GUID 가 사용자 하이브의 MountPoints2 아래에도 `{GUID}` 이름의 하위 키로 생기는데, 이 하위 키는 사용자마다 따로 생기므로 장치와 사용자를 잇는 몇 안 되는 레지스트리 기록입니다. 볼륨만 남는 것이 아니라 연결한 네트워크 공유도 `##서버#공유` 꼴의 하위 키로 남습니다.
 
 Harlan Carvey 가 정리한 순서는 다음과 같습니다(2013).
 
@@ -71,7 +68,7 @@ Win11 25H2 한 대에서 본 모습은 이렇습니다(관찰).
 | 1·2·3번째 칸 (버전 글자 제외) | 1582-10-15 00:00 UTC 부터 100나노초 단위로 센 60비트 시각 |
 | 마지막 칸 (12자리) | 노드 값. 보통 네트워크 카드의 MAC 주소입니다 |
 
-Carvey 는 MountPoints2 와 `MountedDevices` 의 볼륨 GUID 일부가 버전 1 형식이라고 보고했습니다(2012). 노드 값에서 그 PC 의 MAC 주소가 나왔습니다. 모든 GUID 가 버전 1 은 아닙니다. Win11 25H2 한 대에서는 세 번째 칸이 `0…` 이나 `4…` 로 시작하는 GUID 가 대부분이었습니다(관찰). 이런 GUID 에는 시각도 MAC 주소도 없습니다.
+Carvey 는 MountPoints2 와 `MountedDevices` 의 볼륨 GUID 일부가 버전 1 형식이라고 보고했습니다(2012). 노드 값에서 그 PC 의 MAC 주소가 나왔습니다. 모든 GUID 가 버전 1 은 아니며, Win11 25H2 한 대에서는 세 번째 칸이 `0…` 이나 `4…` 로 시작하는 GUID 가 대부분이었습니다(관찰). 이런 GUID 에는 시각도 MAC 주소도 없습니다.
 
 GUID 문자열과 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 
@@ -94,7 +91,7 @@ Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙�
 
 ## 시각 해석
 
-값에는 시각이 없습니다. 시각은 키마다 하나씩 있는 마지막 기록 시각 (Last Write Time) 뿐입니다. 이 시각은 UTC FILETIME 입니다. 무엇이 이 시각을 바꾸는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
+값에는 시각이 없습니다. 시각은 키마다 하나씩 있는 마지막 기록 시각 (Last Write Time) 뿐이며 UTC FILETIME 입니다. 무엇이 이 시각을 바꾸는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
 | 시각 | 흔히 읽는 뜻 | 조심할 점 |
 |---|---|---|
@@ -110,8 +107,8 @@ Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙�
 ## 함정과 한계
 
 1. **여러 사용자에게 같은 GUID 가 남을 수 있습니다.** 로그온해 있던 사용자 모두에게 남는다는 연구가 있습니다. 한 하이브에서 GUID 를 찾았다고 그 사용자가 꽂았다고 단정하지 않습니다. 그 시각의 [로그온 세션](../../event-logs/logon-events/logon-id-4624-4634-4647.md)을 함께 봅니다.
-2. **GUID 는 장치가 아니라 볼륨 단위입니다.** 파티션이 여럿인 장치는 GUID 도 여럿입니다. Microsoft 문서에 따르면 볼륨을 포맷할 때도 볼륨 GUID 를 붙입니다. 같은 USB 라도 포맷한 뒤에는 다른 GUID 로 남을 수 있습니다.
-3. **볼륨 GUID 는 이 PC 가 붙인 이름입니다.** 장치 자체에 적힌 번호가 아닙니다. 다른 PC 의 GUID 와 맞춰 보는 용도로 쓰지 않습니다.
+2. **GUID 는 장치가 아니라 볼륨 단위이므로** 파티션이 여럿인 장치는 GUID 도 여럿입니다. Microsoft 문서에 따르면 볼륨을 포맷할 때도 볼륨 GUID 를 붙입니다. 같은 USB 라도 포맷한 뒤에는 다른 GUID 로 남을 수 있습니다.
+3. **볼륨 GUID 는 이 PC 가 붙인 이름이며** 장치 자체에 적힌 번호가 아닙니다. 다른 PC 의 GUID 와 맞춰 보는 용도로 쓰지 않습니다.
 4. **USB 만 남지 않습니다.** 내장 디스크와 광학 드라이브의 GUID 도 남습니다(Carvey 2012). `MountedDevices` 와 짝을 맞춰 USB 장치인지 먼저 가립니다.
 5. **짝이 없는 GUID 가 흔합니다.** Win11 25H2 한 대에서는 MountPoints2 의 볼륨 GUID 11개 가운데 1개만 지금의 `MountedDevices` 에 있었습니다(관찰, 원인은 확인하지 않음). 짝이 없으면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 안의 옛 SYSTEM 하이브에서 찾습니다.
 6. **도구가 보여 주는 MAC 주소를 그대로 믿지 않습니다.** RegRipper 의 mp2 플러그인(2020-05-26 판)은 `{` 로 시작하는 모든 하위 키에서 마지막 칸을 떼어 MAC 목록에 넣습니다. 버전 1 인지는 확인하지 않습니다. 버전 4 GUID 의 마지막 칸은 MAC 주소가 아닙니다.

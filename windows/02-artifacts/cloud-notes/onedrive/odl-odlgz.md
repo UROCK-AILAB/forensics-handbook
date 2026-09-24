@@ -8,11 +8,9 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- ODL 은 OneDrive 앱이 부른 주요 함수의 기록입니다.
-- 레코드마다 시각, 소스 코드 파일 이름, 함수 이름, 그 함수에 넘긴 값이 들어 있습니다.
-- 그래서 올리기·내려받기·동기화가 있었음을 보이거나, 지운 항목을 찾는 데 쓸 수 있습니다.
-- 넘긴 값 부분은 형식이 다 밝혀지지 않았습니다.
-- 파일·폴더 이름, URL, 사용자 이름은 가려서 적습니다. 가리는 방식은 앱 버전에 따라 다릅니다(아래 "가려진 이름 풀기").
+ODL 은 OneDrive 앱이 부른 주요 함수의 기록입니다. 레코드마다 시각, 소스 코드 파일 이름, 함수 이름, 그 함수에 넘긴 값이 들어 있어서 올리기·내려받기·동기화가 있었음을 보이거나 지운 항목을 찾는 데 쓸 수 있습니다. 다만 넘긴 값 부분은 형식이 다 밝혀지지 않았습니다.
+
+파일·폴더 이름, URL, 사용자 이름은 가려서 적습니다. 가리는 방식은 앱 버전에 따라 다릅니다(아래 "가려진 이름 풀기").
 
 ## 위치와 버전별 차이
 
@@ -23,10 +21,7 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 | Windows | `C:\Users\<USER>\AppData\Local\Microsoft\OneDrive\logs\` |
 | macOS | `/Users/<USER>/Library/Logs/OneDrive/` |
 
-- Windows 에서는 `logs\` 아래에 `Common`, `Business1`, `Personal` 하위 폴더가 흔히 있습니다.
-- 관찰한 PC 에는 `logs\ListSync\Business1` 과 `logs\ListSync\Consumer_<16자리 16진수>` 폴더도 있었습니다 (관찰).
-- 같은 폴더에는 `general.keystore`, `SyncDiagnostics.log`, `telemetryCache.otc`(와 `-wal`·`-shm`), `DeviceHealthSummaryConfiguration.ini` 도 있었습니다 (관찰).
-- 관찰한 PC 에는 `ObfuscationStringMap.txt` 가 없었습니다 (관찰).
+Windows 에서는 `logs\` 아래에 `Common`, `Business1`, `Personal` 하위 폴더가 흔히 있습니다. 관찰한 PC 에는 `logs\ListSync\Business1` 과 `logs\ListSync\Consumer_<16자리 16진수>` 폴더도 있었습니다 (관찰). 같은 폴더에는 `general.keystore`, `SyncDiagnostics.log`, `telemetryCache.otc`(와 `-wal`·`-shm`), `DeviceHealthSummaryConfiguration.ini` 도 있었지만 `ObfuscationStringMap.txt` 는 없었습니다 (관찰).
 
 ### 파일 종류
 
@@ -47,10 +42,9 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 | `logs\ListSync\Business1` | `Nucleus-….odlgz` |
 | `logs\ListSync\Consumer_<16자리>` | `NucleusPersonal-….odlgz` |
 
-- `.odlgz` 는 `ListSync` 아래에서만 보였고, 모두 23개였습니다 (관찰).
-- 파일 이름의 날짜·시각은 UTC 였습니다 (관찰). 이름이 `0714` 인 파일의 첫 레코드 시각이 07:14:51 UTC 였고, PC 시간대는 UTC+9 였습니다.
-- 파일 이름의 PID 자리는 실행 중이던 `OneDrive.exe` 의 프로세스 ID 와 같았습니다 (관찰).
-- 남아 있던 기간은 `Personal`·`Business1` 이 4~5일 치, `Common` 이 약 4주 치였습니다 (관찰). 지우는 규칙은 확인하지 못했습니다.
+`.odlgz` 는 `ListSync` 아래에서만 보였고, 모두 23개였습니다 (관찰). 파일 이름의 날짜·시각은 UTC 였는데 (관찰), 이름이 `0714` 인 파일의 첫 레코드 시각이 07:14:51 UTC 였고 PC 시간대는 UTC+9 였습니다. 파일 이름의 PID 자리는 실행 중이던 `OneDrive.exe` 의 프로세스 ID 와 같았습니다 (관찰).
+
+남아 있던 기간은 `Personal`·`Business1` 이 4~5일 치, `Common` 이 약 4주 치였습니다 (관찰). 지우는 규칙은 확인하지 못했습니다.
 
 ### 버전에 따른 차이
 
@@ -79,10 +73,7 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 
 ### 압축
 
-- `.odlgz` 는 파일 머리가 같고, 그 뒤에 gzip 덩어리 하나가 옵니다.
-- odl.py 는 `1F 8B 08 00` 을 gzip 머리로 보고 zlib 로 풉니다.
-- 관찰한 PC 에서는 `.odlsent` 도 0x100 자리에 `1F 8B 08 00` 이 있었습니다. 즉 압축돼 있었습니다 (관찰).
-- `.aodl`·`.odl` 은 0x100 자리에 바로 레코드 머리 `CC DD EE FF` 가 있었습니다. 즉 압축돼 있지 않았습니다 (관찰).
+`.odlgz` 는 파일 머리가 같고 그 뒤에 gzip 덩어리 하나가 오며, odl.py 는 `1F 8B 08 00` 을 gzip 머리로 보고 zlib 로 풉니다. 관찰한 PC 에서는 `.odlsent` 도 0x100 자리에 `1F 8B 08 00` 이 있어서 압축돼 있었고 (관찰), `.aodl`·`.odl` 은 0x100 자리에 바로 레코드 머리 `CC DD EE FF` 가 있어서 압축돼 있지 않았습니다 (관찰).
 
 확장자만 보고 압축 여부를 정하지 않습니다. 0x100 자리의 네 바이트를 먼저 봅니다.
 
@@ -134,9 +125,7 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 
 ### 옛 방식: ObfuscationStringMap.txt
 
-- 파일·폴더 이름, URL, 사용자 이름을 사전 방식으로 가립니다.
-- 짝이 되는 사전 파일이 `ObfuscationStringMap.txt` 입니다. 항목은 탭으로 나눕니다.
-- 사전 파일 인코딩은 Windows 에서 UTF-16LE, macOS 에서 UTF-8 입니다.
+파일·폴더 이름, URL, 사용자 이름을 사전 방식으로 가립니다. 짝이 되는 사전 파일은 `ObfuscationStringMap.txt` 이고, 항목은 탭으로 나눕니다. 인코딩은 Windows 에서 UTF-16LE, macOS 에서 UTF-8 입니다.
 
 이 사전을 쓸 때 조심할 점이 넷 있습니다.
 
@@ -147,12 +136,9 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 
 ### 새 방식: general.keystore 와 AES
 
-- 적어도 2022년 4월 이후 버전은 사전을 쓰지 않습니다. 가릴 값을 AES 로 암호화합니다.
-- 키는 `general.keystore` 에 있습니다. 이 파일은 JSON 이고, `"Key"`(base64)와 `"Version"` 칸이 있습니다.
-- 푸는 법은 AES-CBC 입니다. IV 는 0 으로 채운 16바이트이고, 푼 뒤 끝의 패딩을 떼어 냅니다.
-- 암호문 base64 는 `_` 를 `/` 로, `-` 를 `+` 로 바꾼 뒤 읽습니다.
-- OneDriveExplorer 는 `general.keystore` 말고 `vault.keystore` 도 받습니다.
-- 관찰한 PC 에서는 `logs\Personal`, `logs\Business1`, `logs\Common` 에 각각 `general.keystore` 가 있었습니다 (관찰). 내용은 보지 않았습니다.
+적어도 2022년 4월 이후 버전은 사전을 쓰지 않고 가릴 값을 AES 로 암호화합니다. 키는 `general.keystore` 에 있는데, 이 파일은 JSON 이고 `"Key"`(base64)와 `"Version"` 칸이 있습니다. 푸는 법은 AES-CBC 이며 IV 는 0 으로 채운 16바이트이고, 푼 뒤 끝의 패딩을 떼어 냅니다. 암호문 base64 는 `_` 를 `/` 로, `-` 를 `+` 로 바꾼 뒤 읽습니다. OneDriveExplorer 는 `general.keystore` 말고 `vault.keystore` 도 받습니다.
+
+관찰한 PC 에서는 `logs\Personal`, `logs\Business1`, `logs\Common` 에 각각 `general.keystore` 가 있었습니다 (관찰). 내용은 보지 않았습니다.
 
 키 파일이 없으면 이름과 경로를 풀 수 없습니다. 로그를 모을 때 같은 폴더의 `general.keystore`(있으면 `ObfuscationStringMap.txt`)를 반드시 함께 모읍니다.
 
@@ -182,9 +168,7 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 | 레코드 머리의 `timestamp` | uint64, Unix 밀리초 | 1970-01-01 00:00 UTC 부터 센 밀리초. 변환하면 UTC 입니다 |
 | 파일 이름의 날짜·시각 | `<YYYY-MM-DD>.<HHMM>` | UTC 였습니다 (관찰) |
 
-- OneDrive 레지스트리와 동기화 DB 의 시각은 Unix **초** 입니다. 로그 레코드만 Unix **밀리초** 입니다. 한 시간 축에 놓을 때 단위를 맞춥니다.
-- 파일 이름의 시각을 현지 시각으로 읽으면 시간대만큼 어긋납니다. 관찰한 PC 에서는 9시간 차이였습니다.
-- 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+OneDrive 레지스트리와 동기화 DB 의 시각은 Unix **초** 이고 로그 레코드만 Unix **밀리초** 이므로, 한 시간 축에 놓을 때 단위를 맞춥니다. 파일 이름의 시각을 현지 시각으로 읽으면 시간대만큼 어긋나며, 관찰한 PC 에서는 9시간 차이였습니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 

@@ -4,20 +4,15 @@
 
 ## 한 줄 요약
 
-슬랙 데스크톱 앱은 Electron 앱입니다.
-사용자 데이터는 `C:\Users\<사용자>\AppData\Roaming\Slack\` 에 있습니다.
-대화 기록은 이 폴더의 `IndexedDB\` 안 LevelDB 파일에 남습니다.
-캐시·앱 로그·내려받은 파일 기록도 같은 폴더에 있습니다.
+슬랙 데스크톱 앱은 Electron 앱이고, 사용자 데이터는 `C:\Users\<사용자>\AppData\Roaming\Slack\` 에 있습니다. 대화 기록은 이 폴더의 `IndexedDB\` 안 LevelDB 파일에 남으며, 캐시·앱 로그·내려받은 파일 기록도 같은 폴더에 있습니다.
+
 이 페이지의 폴더 설명은 한 공개 수집 정의 파일과 그 작성자의 관찰 메모를 따릅니다. 관찰 메모는 오래된 버전 기준일 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 지금의 슬랙 데스크톱 앱은 Electron 기반입니다.
-- Electron 앱은 Chromium 의 저장 방식을 그대로 씁니다. 그래서 앱 폴더 안에 브라우저와 같은 모양의 폴더(`Cache`, `Local Storage`, `IndexedDB` 등)가 생깁니다.
-- 이 공통 구조는 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 와 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다. 이 페이지는 슬랙에 고유한 내용만 적습니다.
-- 수집 정의 파일은 `IndexedDB\` 를 대화 기록(Chat Logs)으로 분류합니다.
-- 앱 로그는 `logs\` 에, 내려받은 파일 기록은 `storage\` 에 남습니다.
-- PC 에 남는 대화는 앱이 받아서 저장한 만큼이라고 보는 편이 안전합니다(해석).
+지금의 슬랙 데스크톱 앱은 Electron 기반이고, Electron 앱은 Chromium 의 저장 방식을 그대로 씁니다. 그래서 앱 폴더 안에 브라우저와 같은 모양의 폴더(`Cache`, `Local Storage`, `IndexedDB` 등)가 생깁니다. 이 공통 구조는 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 와 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다루고, 이 페이지는 슬랙에 고유한 내용만 적습니다.
+
+수집 정의 파일은 `IndexedDB\` 를 대화 기록(Chat Logs)으로 분류합니다. 앱 로그는 `logs\` 에, 내려받은 파일 기록은 `storage\` 에 남습니다. PC 에 남는 대화는 앱이 받아서 저장한 만큼이라고 보는 편이 안전합니다(해석).
 
 ## 위치와 버전별 차이
 
@@ -46,10 +41,7 @@
 
 ### 버전별 차이
 
-- 아래 "구조" 절의 관찰은 수집 정의 작성자가 주석으로 남긴 것입니다.
-- 작성 연도는 알 수 없습니다. 근거로 2017년 대학 보고서를 달아 두었습니다.
-- 요즘 버전에서 `IndexedDB\` 가 워크스페이스마다 나뉘는지, 앱을 꺼야 기록이 반영되는지는 확인하지 못했습니다.
-- 그래서 검체의 슬랙 버전을 먼저 적고, 관찰 내용이 그 버전에도 맞는지 폴더를 보고 확인합니다.
+아래 "구조" 절의 관찰은 수집 정의 작성자가 주석으로 남긴 것입니다. 작성 연도는 알 수 없고, 근거로 2017년 대학 보고서를 달아 두었습니다. 요즘 버전에서 `IndexedDB\` 가 워크스페이스마다 나뉘는지, 앱을 꺼야 기록이 반영되는지는 확인하지 못했습니다. 그래서 검체의 슬랙 버전을 먼저 적고, 관찰 내용이 그 버전에도 맞는지 폴더를 보고 확인합니다.
 
 ## 구조
 
@@ -69,41 +61,27 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 | 입력한 글자마다 시각이 찍히는 기록은 없었습니다 | 글을 쓰던 과정을 글자 단위로 되짚을 수 없습니다 |
 | 메시지 본문을 찾을 때 `subtype_` 를 검색어로 쓰라고 적었습니다 | 아래 "헥스로 한 번" 에서 따라갑니다 |
 
-`.ldb` 에 정보가 적어 "보인" 이유는 확인하지 못했습니다.
-`.ldb` 는 LevelDB 의 표 파일이고, 블록이 압축돼 있을 수 있습니다.
-압축된 블록은 풀기 전에는 문자열 검색에 걸리지 않습니다.
-압축 정리 뒤에는 지운 레코드와 옛 값이 빠질 수도 있습니다.
-두 가지 모두 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 확인합니다.
+`.ldb` 에 정보가 적어 "보인" 이유는 확인하지 못했습니다. `.ldb` 는 LevelDB 의 표 파일이고 블록이 압축돼 있을 수 있는데, 압축된 블록은 풀기 전에는 문자열 검색에 걸리지 않습니다. 압축 정리 뒤에는 지운 레코드와 옛 값이 빠질 수도 있습니다. 두 가지 모두 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 확인합니다.
 
 ### Local Storage
 
-- `Local Storage\leveldb` 는 크롬 계열 브라우저의 로컬 스토리지와 같은 LevelDB 폴더입니다.
-- 키와 값의 모양은 [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) 의 웹 저장소 설명을 따릅니다.
-- 슬랙이 여기에 무엇을 넣는지는 이번에 확인하지 못했습니다.
+`Local Storage\leveldb` 는 크롬 계열 브라우저의 로컬 스토리지와 같은 LevelDB 폴더이고, 키와 값의 모양은 [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) 의 웹 저장소 설명을 따릅니다. 슬랙이 여기에 무엇을 넣는지는 이번에 확인하지 못했습니다.
 
 ### Cache
 
-- 수집 정의 파일은 `Cache` 를 Chrome 브라우저 캐시처럼 해석할 수 있다고 적었습니다.
-- 캐시 형식은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
-- 대화에 올라온 이미지·파일 미리보기가 캐시에 남았는지 봅니다.
+수집 정의 파일은 `Cache` 를 Chrome 브라우저 캐시처럼 해석할 수 있다고 적었습니다. 캐시 형식은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다루며, 대화에 올라온 이미지·파일 미리보기가 캐시에 남았는지 봅니다.
 
 ### logs
 
-- `logs\` 에는 Electron 앱 로그가 있습니다.
-- 수집 정의 파일은 추가 기록이 여기 있다고만 적었습니다. 로그 줄의 모양과 시각 형식은 확인하지 못했습니다.
+`logs\` 에는 Electron 앱 로그가 있는데, 수집 정의 파일은 추가 기록이 여기 있다고만 적었습니다. 로그 줄의 모양과 시각 형식은 확인하지 못했습니다.
 
 ### storage
 
-- `storage\` 에는 사용자 활동 기록이 있을 수 있습니다.
-- 내려받은 파일 기록(slack-downloads)도 여기 들어 있습니다.
-- 내려받은 파일 기록은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 파일이 들어온 경로를 보여 줄 수 있습니다.
+`storage\` 에는 사용자 활동 기록이 있을 수 있고, 내려받은 파일 기록(slack-downloads)도 여기 들어 있습니다. 내려받은 파일 기록은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 파일이 들어온 경로를 보여 줄 수 있습니다.
 
 ### 암호화
 
-- 쿠키 같은 값을 Chromium 방식으로 암호화하는지는 슬랙에 대해 확인하지 못했습니다.
-- Chromium 방식은 `Local State` 파일에 둔 키를 DPAPI 로 보호합니다.
-- 슬랙 폴더의 `Local State` 에 암호화 키 칸이 있는지 직접 봅니다.
-- 키 칸이 있으면 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 암호화 설명과 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
+쿠키 같은 값을 Chromium 방식으로 암호화하는지는 슬랙에 대해 확인하지 못했습니다. Chromium 방식은 `Local State` 파일에 둔 키를 DPAPI 로 보호하므로, 슬랙 폴더의 `Local State` 에 암호화 키 칸이 있는지 직접 봅니다. 키 칸이 있으면 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 암호화 설명과 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
 
 ## 증거로서 의미
 
@@ -130,12 +108,12 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 | `.log`·`.ldb` 파일 시각 | 파일 시스템 | 앱이 파일을 쓰거나 새로 만들 때 | UTC |
 | 로그 줄의 시각 | `logs\` 파일 안 | 앱이 로그를 쓸 때 | 확인하지 못함 |
 
-- LevelDB 레코드 자체에는 시각이 없습니다. 순서 번호로 앞뒤만 알 수 있습니다. 그래서 메시지 시각은 레코드 값 안에서 찾습니다.
-- 슬랙 개발자 문서는 메시지 값 `ts` 가 유닉스 시각처럼 보이지만 실제로는 메시지 식별자라고 적습니다. 한 대화방 안에서 겹치지 않습니다.
-- 점 앞 부분은 유닉스 초로 만들어집니다. 점 뒤 숫자는 식별을 위한 값이어서 정확한 소수 초로 읽지 않습니다.
-- 점 앞 초는 UTC 기준입니다. 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
-- 앱이 PC 에 `ts` 를 그대로 저장하는지는 버전마다 확인합니다.
-- 관찰 메모대로 앱을 꺼야 기록이 반영되면, `.ldb` 파일의 시각은 앱을 끈 때에 가까울 수 있습니다(해석). 이 시각을 메시지 시각으로 쓰지 않습니다.
+LevelDB 레코드 자체에는 시각이 없고 순서 번호로 앞뒤만 알 수 있어서, 메시지 시각은 레코드 값 안에서 찾습니다.
+
+슬랙 개발자 문서는 메시지 값 `ts` 가 유닉스 시각처럼 보이지만 실제로는 한 대화방 안에서 겹치지 않는 메시지 식별자라고 적습니다. 점 앞 부분은 유닉스 초로 만들어지고 UTC 기준이며, 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다. 점 뒤 숫자는 식별을 위한 값이어서 정확한 소수 초로 읽지 않습니다. 앱이 PC 에 `ts` 를 그대로 저장하는지는 버전마다 확인합니다.
+
+관찰 메모대로 앱을 꺼야 기록이 반영되면, `.ldb` 파일의 시각은 앱을 끈 때에 가까울 수 있으므로(해석) 이 시각을 메시지 시각으로 쓰지 않습니다.
+
 - 로그 줄의 시각이 UTC 인지 현지 시각인지는 시험 환경에서 확인합니다.
 
 ## 함정과 한계
@@ -153,8 +131,7 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 
 ### 헥스로 한 번
 
-관찰 메모는 메시지 본문을 찾을 때 `subtype_` 를 검색어로 쓰라고 했습니다.
-아래 바이트는 이 문자열을 두 인코딩으로 바꿔 만든 예시입니다. 검체에서 나온 값이 아닙니다.
+관찰 메모는 메시지 본문을 찾을 때 `subtype_` 를 검색어로 쓰라고 했습니다. 아래 바이트는 이 문자열을 두 인코딩으로 바꿔 만든 예시이며, 검체에서 나온 값이 아닙니다.
 
 ```
 한 바이트 문자   73 75 62 74 79 70 65 5F                            subtype_
@@ -178,9 +155,7 @@ UTF-16LE         73 00 75 00 62 00 74 00 79 00 70 00 65 00 5F 00    s.u.b.t.y.p.
 | 크롬 캐시를 읽는 공개 도구 | `Cache` 폴더의 항목과 URL 을 뽑습니다 |
 | 텍스트 편집기, JSON 조회 도구 | `logs\`·`storage\` 의 파일과 `Local State` 를 봅니다 |
 
-도구가 낸 메시지 수와 헥스 검색으로 찾은 수를 맞춰 봅니다.
-차이가 나면 헥스로 돌아갑니다.
-방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+도구가 낸 메시지 수와 헥스 검색으로 찾은 수를 맞춰 보고, 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
@@ -199,9 +174,7 @@ UTF-16LE         73 00 75 00 62 00 74 00 79 00 70 00 65 00 5F 00    s.u.b.t.y.p.
 
 ## 실습
 
-슬랙이 든 공개 검체는 이번에 확인하지 못했습니다.
-Windows 가상 머신에 슬랙 데스크톱 앱을 설치해 직접 시험합니다.
-시험 전에 앱 버전과 Windows 버전을 적어 둡니다.
+슬랙이 든 공개 검체는 이번에 확인하지 못했습니다. Windows 가상 머신에 슬랙 데스크톱 앱을 설치해 직접 시험하고, 시험 전에 앱 버전과 Windows 버전을 적어 둡니다.
 
 1. 워크스페이스 두 곳에 로그인합니다. `IndexedDB\` 아래 폴더가 몇 개 생깁니까? `.log` 파일은 몇 개입니까?
 2. 메시지를 주고받은 뒤, 앱을 끄기 전과 끈 뒤에 `.log`·`.ldb` 파일이 어떻게 바뀝니까?

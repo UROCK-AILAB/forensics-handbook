@@ -19,25 +19,17 @@
 
 ### Partition/Diagnostic 1006
 
-- 공급자 GUID 는 `412bdff2-a8c4-470d-8f33-63fe0d8c20e2` 입니다 (확인 범위: Win11 25H2 한 대).
-- 공급자 메타데이터에 적힌 1006 의 설명은 "For internal use only." 한 줄입니다. 칸의 뜻은 칸 이름을 보고 다른 기록과 맞춰 확인합니다.
-- 공개 도구 EvtxECmd 의 맵은 1006 을 "USB/VHD Insertion/Removal" 로 설명합니다.
-- 같은 공급자에는 1001 "Operation started.", 1002 "Operation completed.", 1007 "Disk %1 has %2 hidden partitions." 도 있습니다. 1008·1009 는 파티션 오류이고, 5000~5006 은 작업 항목 이름입니다.
-- 조사한 PC 의 이 로그에는 1006 만 247건 있었습니다.
+공급자 GUID 는 `412bdff2-a8c4-470d-8f33-63fe0d8c20e2` 입니다 (확인 범위: Win11 25H2 한 대). 공급자 메타데이터에 적힌 1006 의 설명은 "For internal use only." 한 줄이라서, 칸의 뜻은 칸 이름을 보고 다른 기록과 맞춰 확인합니다. 공개 도구 EvtxECmd 의 맵은 1006 을 "USB/VHD Insertion/Removal" 로 설명합니다.
+
+같은 공급자에는 1001 "Operation started.", 1002 "Operation completed.", 1007 "Disk %1 has %2 hidden partitions." 도 있습니다. 1008·1009 는 파티션 오류이고, 5000~5006 은 작업 항목 이름입니다. 조사한 PC 의 이 로그에는 1006 만 247건 있었습니다.
 
 ### Kernel-PnP
 
-- 공급자 GUID 는 `9c205a39-1250-487d-abd7-e831c6290539` 입니다 (확인 범위: Win11 25H2 한 대).
-- 이 공급자는 System, Kernel-PnP/Configuration, Device Management 채널에 씁니다. Boot Diagnostic, Device Enumeration Diagnostic, Configuration Diagnostic, Driver Diagnostic, Driver Watchdog 채널에도 씁니다.
-- Configuration 로그에는 장치를 구성하고(400) 시작하고(410) 지운(420) 기록이 남습니다.
-- Device Management 로그에는 장치가 버스에서 사라진 기록(1010·1011)이 남습니다.
+공급자 GUID 는 `9c205a39-1250-487d-abd7-e831c6290539` 입니다 (확인 범위: Win11 25H2 한 대). 이 공급자는 System, Kernel-PnP/Configuration, Device Management 채널에 쓰고, Boot Diagnostic, Device Enumeration Diagnostic, Configuration Diagnostic, Driver Diagnostic, Driver Watchdog 채널에도 씁니다. Configuration 로그에는 장치를 구성하고(400) 시작하고(410) 지운(420) 기록이 남고, Device Management 로그에는 장치가 버스에서 사라진 기록(1010·1011)이 남습니다.
 
 ### DriverFrameworks-UserMode
 
-- 공급자 GUID 는 `2e35aaeb-857f-4beb-a418-2e6c0e54d988` 입니다 (확인 범위: Win11 25H2 한 대).
-- 이 공급자는 DriverFrameworks-UserMode/Operational, Kernel-Power/Diagnostic, System 채널에 씁니다.
-- Operational 로그는 UMDF 호스트가 장치의 드라이버를 올리는 과정과 PnP·전원 요청을 적습니다.
-- System 채널의 10000·10100 은 UMDF 드라이버 패키지 설치를 적습니다. 조사한 PC 에서는 Operational 로그가 꺼져 있었지만 처음 꽂을 때 System 채널에 10000·10100 이 남았습니다 (확인 범위: Win11 25H2 한 대).
+공급자 GUID 는 `2e35aaeb-857f-4beb-a418-2e6c0e54d988` 입니다 (확인 범위: Win11 25H2 한 대). 이 공급자는 DriverFrameworks-UserMode/Operational, Kernel-Power/Diagnostic, System 채널에 씁니다. Operational 로그는 UMDF 호스트가 장치의 드라이버를 올리는 과정과 PnP·전원 요청을 적고, System 채널의 10000·10100 은 UMDF 드라이버 패키지 설치를 적습니다. 조사한 PC 에서는 Operational 로그가 꺼져 있었지만 처음 꽂을 때 System 채널에 10000·10100 이 남았습니다 (확인 범위: Win11 25H2 한 대).
 
 ## 위치와 버전별 차이
 
@@ -100,8 +92,8 @@
 | USB 메모리 | `USBSTOR\…\<시리얼>` | 20자. USBSTOR 인스턴스 ID 안에 그대로 들어 있었습니다 |
 | 외장 SSD (UASP 연결) | `SCSI\DISK&VEN_…&PROD_…\…` | 15자. 장치 인스턴스 ID 와 달랐습니다 |
 
-- 외장 SSD 는 USBSTOR 아래에 없었습니다. 그런데도 1006 에는 BusType 7(USB)로 남았습니다.
-- 곧 USBSTOR 에 남지 않는 UASP 장치도 1006 에는 USB 연결로 잡힙니다.
+외장 SSD 는 USBSTOR 아래에 없었는데도 1006 에는 BusType 7(USB)로 남았습니다. 곧 USBSTOR 에 남지 않는 UASP 장치도 1006 에는 USB 연결로 잡힙니다.
+
 - UASP 장치의 레지스트리 흔적은 [USBSTOR 에 안 남는 장치](../external-devices/usb-storage-artifacts/uasp-scsi-sd.md)에서 다룹니다.
 
 ### 꽂을 때와 뺄 때가 번갈아 남는다
@@ -209,9 +201,10 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다 (확인 범�
 | 리눅스 USB 가젯 | 꽂음 | 2026-09-15T05:51:35.932Z | 05:51:35.947Z | Capacity 0, PartitionCount 1 |
 | 리눅스 USB 가젯 | 뺌 | 2026-09-15T05:51:55.578Z | 05:51:55.575Z | Capacity 0 |
 
-- 네 쌍 모두 1초 안팎으로 맞았습니다.
-- 이 PC 에서는 Capacity 0·PartitionCount 0 인 1006 이 장치를 뺀 시각과 맞았습니다. 모든 빌드에서 그런지는 확인하지 못했습니다.
-- 장치 속성은 마지막 한 번만 남깁니다. 1006 은 꽂고 뺄 때마다 쌓입니다. 외장 SSD 한 대에 1006 이 189건 있었습니다. 여러 번 꽂은 이력은 1006 이 더 자세합니다.
+네 쌍 모두 1초 안팎으로 맞았습니다. 이 PC 에서는 Capacity 0·PartitionCount 0 인 1006 이 장치를 뺀 시각과 맞았지만, 모든 빌드에서 그런지는 확인하지 못했습니다.
+
+장치 속성은 마지막 한 번만 남기는데 1006 은 꽂고 뺄 때마다 쌓입니다. 외장 SSD 한 대에 1006 이 189건 있었으므로, 여러 번 꽂은 이력은 1006 이 더 자세합니다.
+
 - 장치 속성 읽는 법은 [연결·해제 시각](../external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
 ### Kernel-PnP 시각이 뜻하는 것

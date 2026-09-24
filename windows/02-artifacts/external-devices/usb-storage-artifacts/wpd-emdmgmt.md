@@ -8,21 +8,15 @@ SOFTWARE 하이브의 `Windows Portable Devices\Devices` 키와 `EMDMgmt` 키에
 
 ### WPD
 
-- 휴대용 장치 (Windows Portable Devices, WPD) 는 PC 가 연결된 장치와 데이터를 주고받게 하는 Windows 구성 요소입니다.
-- Microsoft 는 WPD 가 다루는 장치로 음악 플레이어, 저장장치, 휴대전화, 카메라를 듭니다.
-- USB 저장장치를 꽂으면 그 볼륨이 WPD 장치로도 한 번 더 등록됩니다. Windows 10 관찰 사례에서 Amcache 에 WPD 클래스 항목이 따로 생긴 것이 그 흔적입니다([장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)).
-- 이때 SOFTWARE 하이브의 `Windows Portable Devices\Devices` 아래에 장치마다 하위 키가 생깁니다. 값 `FriendlyName` 에는 사람이 보는 이름이 들어갑니다.
-- SANS 가 2009년에 낸 Windows Vista 용 USB 분석 안내서는 이 키에서 일련번호로 장치를 찾아 드라이브 문자와 볼륨 이름을 확인하라고 적었습니다.
+휴대용 장치 (Windows Portable Devices, WPD) 는 PC 가 연결된 장치와 데이터를 주고받게 하는 Windows 구성 요소이고, Microsoft 는 WPD 가 다루는 장치로 음악 플레이어, 저장장치, 휴대전화, 카메라를 듭니다.
+
+USB 저장장치를 꽂으면 그 볼륨이 WPD 장치로도 한 번 더 등록됩니다. Windows 10 관찰 사례에서 Amcache 에 WPD 클래스 항목이 따로 생긴 것이 그 흔적입니다([장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)). 이때 SOFTWARE 하이브의 `Windows Portable Devices\Devices` 아래에 장치마다 하위 키가 생기고, 값 `FriendlyName` 에는 사람이 보는 이름이 들어갑니다. SANS 가 2009년에 낸 Windows Vista 용 USB 분석 안내서는 이 키에서 일련번호로 장치를 찾아 드라이브 문자와 볼륨 이름을 확인하라고 적었습니다.
 
 ### EMDMgmt
 
-- EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다.
-- 레디부스트는 USB 메모리 같은 플래시 장치를 디스크 캐시로 쓰는 기능입니다. Windows Vista 에서 처음 나왔습니다.
-- "EMD" 는 흔히 외부 메모리 장치 (External Memory Device) 의 줄임말로 풀이합니다. 이 풀이를 공식 문서로 확인하지는 못했습니다.
-- 플래시 장치를 꽂으면 레디부스트 서비스가 장치 성능을 검사합니다. 서비스는 검사 결과를 `EMDMgmt` 아래에 적습니다(Russinovich).
-- 사용자가 그 장치를 레디부스트용으로 쓰지 않아도 하위 키는 생깁니다(Cowen, 확인 범위: Vista·7).
-- USB 메모리만 남는 것이 아닙니다. eSATA·FireWire 장치와 시스템 디스크가 아닌 로컬 디스크도 남는다고 Cowen 이 적었습니다.
-- 그래서 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
+EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스트는 USB 메모리 같은 플래시 장치를 디스크 캐시로 쓰는 기능이고 Windows Vista 에서 처음 나왔습니다. "EMD" 는 흔히 외부 메모리 장치 (External Memory Device) 의 줄임말로 풀이하지만, 이 풀이를 공식 문서로 확인하지는 못했습니다.
+
+플래시 장치를 꽂으면 레디부스트 서비스가 장치 성능을 검사하고 검사 결과를 `EMDMgmt` 아래에 적습니다(Russinovich). 사용자가 그 장치를 레디부스트용으로 쓰지 않아도 하위 키는 생깁니다(Cowen, 확인 범위: Vista·7). USB 메모리뿐만 아니라 eSATA·FireWire 장치와 시스템 디스크가 아닌 로컬 디스크도 남는다고 Cowen 이 적었습니다. 그래서 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -48,12 +42,9 @@ SOFTWARE 하이브의 `Windows Portable Devices\Devices` 키와 `EMDMgmt` 키에
 
 ### Windows Portable Devices\Devices
 
-- 장치 하나가 하위 키 하나입니다.
-- 하위 키 이름에 제조사·모델·리비전·일련번호가 `#` 로 구분되어 들어 있습니다.
-- 한 공개 플러그인(RegRipper `portdev`)은 이름을 `##` 또는 `??` 뒤에서 자릅니다. 그다음 `#` 로 나눠 둘째 조각을 장치 이름으로, 셋째 조각을 일련번호로 읽습니다.
-- 값 `FriendlyName` 에 볼륨 이름이나 드라이브 문자가 들어갑니다.
-- SANS 안내서는 여기서 두 가지를 모두 찾으라고 적었습니다. 초기 플러그인은 이 값을 드라이브 문자로 출력합니다.
-- 어떤 경우에 둘 중 무엇이 들어가는지 정한 명세는 찾지 못했습니다.
+장치 하나가 하위 키 하나이고, 하위 키 이름에는 제조사·모델·리비전·일련번호가 `#` 로 구분되어 들어 있습니다. 한 공개 플러그인(RegRipper `portdev`)은 이름을 `##` 또는 `??` 뒤에서 자른 다음 `#` 로 나눠 둘째 조각을 장치 이름으로, 셋째 조각을 일련번호로 읽습니다.
+
+값 `FriendlyName` 에는 볼륨 이름이나 드라이브 문자가 들어갑니다. SANS 안내서는 여기서 두 가지를 모두 찾으라고 적었고 초기 플러그인은 이 값을 드라이브 문자로 출력하는데, 어떤 경우에 둘 중 무엇이 들어가는지 정한 명세는 찾지 못했습니다.
 - 이 키에는 볼륨 이름이 없는데 Amcache 의 WPD 항목에는 있던 사례가 있습니다. 이 키가 비어 있으면 [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다.
 
 ### Enum\SWD\WPDBUSENUM
@@ -82,10 +73,9 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 | `<볼륨 이름>` | 볼륨 이름(레이블)입니다. 비어 있을 수 있습니다. |
 | `<볼륨 일련번호>` | 마지막 밑줄 뒤의 10진 숫자입니다. |
 
-- 볼륨 일련번호 (Volume Serial Number, VSN) 는 파일시스템을 포맷할 때 정해지는 번호입니다. 볼륨 부트 섹터에 저장됩니다([FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md), [부트 섹터와 클러스터](../../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)).
-- Windows 가 보여 주는 VSN 은 32비트(4바이트) 값입니다.
-- 장치 펌웨어에 박힌 USB 일련번호와는 다른 번호입니다.
-- 10진 값을 16진 8자리로 바꾸고 4자리씩 끊으면 `XXXX-XXXX` 모양이 됩니다. Windows 가 볼륨 일련번호를 보여 줄 때 쓰는 모양입니다.
+볼륨 일련번호 (Volume Serial Number, VSN) 는 파일시스템을 포맷할 때 정해져 볼륨 부트 섹터에 저장되는 번호이고, 장치 펌웨어에 박힌 USB 일련번호와는 다릅니다([FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md), [부트 섹터와 클러스터](../../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)). Windows 가 보여 주는 VSN 은 32비트(4바이트) 값이며, 10진 값을 16진 8자리로 바꾸고 4자리씩 끊으면 Windows 가 볼륨 일련번호를 보여 줄 때 쓰는 `XXXX-XXXX` 모양이 됩니다.
+
+
 - `_??_USBSTOR` 로 시작하지 않는 하위 키도 있습니다. 공개 플러그인은 이 경우 이름을 밑줄로 나눈 마지막 두 조각을 볼륨 이름과 VSN 으로 읽습니다.
 - 값 `LastTestedTime` 은 8바이트입니다. 공개 플러그인은 이 값을 FILETIME 으로 풉니다.
 - 나머지 값은 레디부스트가 잰 검사 결과입니다. 값 이름별 뜻은 이 글에서 명세로 확인하지 못했습니다.

@@ -6,13 +6,13 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-브라우저가 스스로 적는 기록이 아닙니다. 사이트의 스크립트가 필요해서 저장한 값입니다. 그래서 무엇이 들어 있는지는 사이트마다 다릅니다.
+브라우저가 스스로 적는 기록이 아니라 사이트의 스크립트가 필요해서 저장한 값이라서, 무엇이 들어 있는지는 사이트마다 다릅니다.
 
-- **로컬 스토리지**는 출처 (Origin) 마다 문자열 키와 값을 저장합니다. 창을 닫아도 남습니다. 사이트 설정, 최근 본 항목, 방문자 식별자 같은 값이 흔히 들어 있습니다.
-- **세션 스토리지**는 탭 하나에 묶인 키와 값입니다. 이름과 달리 디스크의 `Session Storage` 폴더에도 저장됩니다.
-- **IndexedDB** 는 사이트가 쓰는 데이터베이스입니다. 객체, 배열, 파일(blob)까지 저장합니다. 웹 메일, 웹 메신저, 문서 편집기가 오프라인용 자료를 여기에 두는 경우가 많습니다.
+- **로컬 스토리지**는 출처 (Origin) 마다 문자열 키와 값을 저장하며 창을 닫아도 남습니다. 사이트 설정, 최근 본 항목, 방문자 식별자 같은 값이 흔히 들어 있습니다.
+- **세션 스토리지**는 탭 하나에 묶인 키와 값이지만, 이름과 달리 디스크의 `Session Storage` 폴더에도 저장됩니다.
+- **IndexedDB** 는 사이트가 쓰는 데이터베이스로 객체, 배열, 파일(blob)까지 저장합니다. 웹 메일, 웹 메신저, 문서 편집기가 오프라인용 자료를 여기에 두는 경우가 많습니다.
 
-Teams·Discord·Slack 같은 Electron 앱과 WebView2 앱도 같은 코드를 씁니다. 그래서 같은 구조의 폴더가 앱 데이터 폴더 안에 생깁니다. 위치는 [Electron·WebView2 앱 데이터 위치](../../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md)에서 다룹니다.
+Teams·Discord·Slack 같은 Electron 앱과 WebView2 앱도 같은 코드를 써서 같은 구조의 폴더가 앱 데이터 폴더 안에 생기며, 위치는 [Electron·WebView2 앱 데이터 위치](../../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -62,9 +62,7 @@ DB 하나에 모든 사이트의 값이 들어 있습니다. 키의 첫 글자�
 | `META:` + 저장 키 | `LocalStorageAreaWriteMetaData`: `last_modified`(필드 1), `size_bytes`(필드 2) |
 | `METAACCESS:` + 저장 키 | `LocalStorageAreaAccessMetaData`: `last_accessed`(필드 1) |
 
-- `META:` 와 `METAACCESS:` 의 값은 프로토콜 버퍼 (Protocol Buffers) 로 인코딩됩니다.
-- 스크립트 키와 값은 첫 1바이트가 문자 인코딩을 가리킵니다. `00` 은 UTF-16LE 입니다. `01` 은 한 바이트 문자(Latin-1 계열)입니다.
-- CCL 의 공개 파서 소스는 `META:` 만 설명합니다. `METAACCESS:` 는 그 뒤 Chromium 에 들어온 것으로 보입니다. 옛 버전 검체에는 없을 수 있습니다.
+`META:` 와 `METAACCESS:` 의 값은 프로토콜 버퍼 (Protocol Buffers) 로 인코딩됩니다. 스크립트 키와 값은 첫 1바이트가 문자 인코딩을 가리키는데, `00` 은 UTF-16LE 이고 `01` 은 한 바이트 문자(Latin-1 계열)입니다. CCL 의 공개 파서 소스는 `META:` 만 설명하므로 `METAACCESS:` 는 그 뒤 Chromium 에 들어온 것으로 보이며, 옛 버전 검체에는 없을 수 있습니다.
 
 저장 키의 모양은 맥락에 따라 다릅니다(Chromium `StorageKey` 소스).
 
@@ -115,7 +113,7 @@ Chromium 소스 주석에 따른 키 모양입니다.
 
 ## 시각 해석
 
-LevelDB 레코드에는 시각이 없습니다. 순서 번호로 앞뒤만 알 수 있습니다. 시각은 아래 자리에서 얻습니다.
+LevelDB 레코드에는 시각이 없어 순서 번호로 앞뒤만 알 수 있고, 시각은 아래 자리에서 얻습니다.
 
 | 시각 | 자리 | 무엇이 바뀔 때 바뀌나 | 형식 |
 |---|---|---|---|
@@ -126,10 +124,13 @@ LevelDB 레코드에는 시각이 없습니다. 순서 번호로 앞뒤만 알 �
 | 앱이 넣은 시각 | 값 안 | 사이트가 정합니다 | 사이트마다 다릅니다. JavaScript `Date` 는 1970-01-01 UTC 부터 센 밀리초입니다 |
 | 파일 시스템 시각 | `.log`·`.ldb` 파일 | 파일이 생기거나 쓰일 때 | NTFS 시각 |
 
-- `META:` 값의 시각은 `base::Time::ToInternalValue()` 로 저장합니다(Chromium 소스 주석). CCL 파서는 이 값을 1601년 기준 마이크로초로 풉니다. 이 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)의 WebKit 시각과 같습니다.
-- `last_modified` 는 저장 키 하나에 하나뿐입니다. 그 사이트의 마지막 쓰기만 남고 이전 시각은 덮어씁니다. 이전 `META:` 레코드가 지운 레코드로 남아 있으면 예전 시각도 볼 수 있습니다.
-- CCL 의 파서는 `META:` 레코드와 순서 번호가 이어지는 값 레코드를 한 번의 쓰기로 묶습니다. 이렇게 묶으면 값 레코드에 대략의 시각을 붙일 수 있습니다. 이 방법은 추정입니다. 보고서에는 추정이라고 밝힙니다.
-- 모든 시각은 UTC 입니다. 현지 시각 변환은 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+`META:` 값의 시각은 `base::Time::ToInternalValue()` 로 저장하고(Chromium 소스 주석), CCL 파서는 이 값을 1601년 기준 마이크로초로 풉니다. 이 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)의 WebKit 시각과 같습니다.
+
+`last_modified` 는 저장 키 하나에 하나뿐이라서 그 사이트의 마지막 쓰기만 남고 이전 시각은 덮어씁니다. 이전 `META:` 레코드가 지운 레코드로 남아 있으면 예전 시각도 볼 수 있습니다.
+
+CCL 의 파서는 `META:` 레코드와 순서 번호가 이어지는 값 레코드를 한 번의 쓰기로 묶어 값 레코드에 대략의 시각을 붙이는데, 이 방법은 추정이므로 보고서에는 추정이라고 밝힙니다.
+
+모든 시각은 UTC 입니다. 현지 시각 변환은 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ## 함정과 한계
 

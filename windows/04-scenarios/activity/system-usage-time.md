@@ -1,6 +1,6 @@
 # PC 사용 시간 재구성 (켜짐·꺼짐·로그온) (System Usage Time)
 
-PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언제 로그온하고 자리를 비웠나" 를 묻는 조사를 다룹니다. 전원 기록과 세션 기록은 서로 다른 로그와 레지스트리에 흩어져 있습니다. 이 페이지는 두 기록을 어떤 순서로 이어 붙이는지, 기록이 빈 구간을 어떻게 읽는지를 정리합니다.
+PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언제 로그온하고 자리를 비웠나" 를 묻는 조사를 다룹니다. 전원 기록과 세션 기록은 서로 다른 로그와 레지스트리에 흩어져 있는데, 이 페이지는 두 기록을 어떤 순서로 이어 붙이는지와 기록이 빈 구간을 어떻게 읽는지를 정리합니다.
 
 이벤트마다의 전체 칸과 다른 켜짐·꺼짐 이벤트는 [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) 과 [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) 에 있습니다. "(현장 관찰)" 을 붙인 내용은 분석 현장에서 겪은 일을 적어 둔 메모에서 가져왔습니다. 공식 문서로 확인한 내용이 아닙니다.
 
@@ -50,9 +50,7 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 
 **1074.**
 
-- `shutdown.exe` 는 꺼지기 직전 System 로그에 원본(Source) User32, ID 1074 를 남깁니다[1].
-- 사용자 지정 메시지와 이유 코드가 함께 들어갑니다[1].
-- 사용자 이름과 shutdown 명령을 낸 날짜·시각도 들어갑니다[1].
+`shutdown.exe` 는 꺼지기 직전 System 로그에 원본(Source) User32, ID 1074 를 남기고, 여기에는 사용자 지정 메시지와 이유 코드, 사용자 이름, shutdown 명령을 낸 날짜·시각이 함께 들어갑니다[1].
 
 **6008.**
 
@@ -63,8 +61,7 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 
 - 로그는 System, 공급자는 Microsoft-Windows-Kernel-Power, ID 는 41, 수준은 Critical(위험), 버전은 6.1 입니다[1].
 - 메시지는 "The system has rebooted without cleanly shutting down first. This error could be caused if the system stopped responding, crashed, or lost power unexpectedly." 입니다[1].
-- Windows 는 켜질 때 직전에 깨끗하게 꺼졌는지 확인합니다[1]. 아니면 41 을 만듭니다[1].
-- 그래서 41 의 기록 시각은 꺼진 시각이 아닙니다. 다시 켜진 뒤의 시각입니다.
+- Windows 는 켜질 때 직전에 깨끗하게 꺼졌는지 확인하고 아니면 41 을 만들기 때문에[1], 41 의 기록 시각은 꺼진 시각이 아니라 다시 켜진 뒤의 시각입니다.
 - EventData 칸은 BugcheckCode, BugcheckParameter1~4, SleepInProgress, PowerButtonTimestamp, BootAppStatus 입니다[1].
 
 **경우마다 칸 값.** 문서는 "이런 일이 있으면 칸 값이 이렇다" 는 방향으로 적었습니다. 칸 값 하나로 까닭을 단정하지 말고, 여러 칸과 앞뒤 이벤트를 함께 봅니다.
@@ -77,18 +74,16 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 | 응답 없는 PC 의 전원을 끊음. 또는 디스크 쓰기가 막힌 상태에서 전원 버튼을 4초 넘게 눌러 끔 | PowerButtonTimestamp 가 0 일 수 있습니다[1]. 그래서 이 값이 0 이라고 전원 버튼을 누르지 않았다고 보지 않습니다. |
 | 덤프 파일 설정이 없음 | 모든 값이 0 인 41 과 함께 volmgr 46 "Crash dump initialization failed!" 이 있습니다[1]. |
 
-- 문서의 PowerButtonTimestamp 예시 값은 131728546170882432 입니다[1].
-- 이 칸의 단위는 문서에 없습니다.
+- 문서의 PowerButtonTimestamp 예시 값은 131728546170882432 이고 이 칸의 단위는 문서에 없습니다[1].
 - 예시 값을 FILETIME 으로 풀면 2018-06-07 14:16:57 UTC 가 나옵니다(직접 계산). 이 칸을 FILETIME 이라고 단정하지는 않습니다. FILETIME 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 물리 서버의 자동 서버 복구 (Automatic Server Recovery, ASR) 소프트웨어나 Hyper-V·VMware 하트비트 기능이 응답 없는 컴퓨터·VM 을 다시 켰을 수도 있습니다[1]. 41 이 있다고 사람이 전원을 만졌다고 보지 않습니다.
 
 ## 부팅 상태 파일과 Reliability 키
 
-- `%SystemRoot%\Bootstat.dat` 는 부팅, 종료, 최대 절전·절전에서 재개가 성공했는지를 적는 이진 파일입니다[1]. 이 설명은 문서가 Windows Internals 6판을 인용한 것입니다[1].
-- 사용자는 이 파일을 편집할 수 없습니다[1].
-- `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` 에 DirtyShutdown, LastAliveStamp, TimeStampInterval 값이 있습니다[1].
-- 이 값들을 지우면 비정상 종료 뒤 종료 이벤트 추적기 창이 뜨지 않게 할 수 있습니다[1].
-- 세 값의 형식과 뜻은 이번 자료로 확인하지 못했습니다. [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) 에서 확인합니다.
+`%SystemRoot%\Bootstat.dat` 는 부팅, 종료, 최대 절전·절전에서 재개가 성공했는지를 적는 이진 파일이며, 문서가 Windows Internals 6판을 인용한 설명입니다[1]. 사용자는 이 파일을 편집할 수 없습니다[1].
+
+`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` 에는 DirtyShutdown, LastAliveStamp, TimeStampInterval 값이 있고, 이 값들을 지우면 비정상 종료 뒤 종료 이벤트 추적기 창이 뜨지 않게 할 수 있습니다[1]. 세 값의 형식과 뜻은 이번 자료로 확인하지 못했으므로 [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) 에서 확인합니다.
+
 - 레지스트리에 남는 마지막 종료 시각은 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 
 ## 로그온·잠금·원격 세션
@@ -106,11 +101,10 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 | 4778 | A session was reconnected to a Window Station |
 | 4779 | A session was disconnected from a Window Station |
 
-- 이 하위 범주는 원격 데스크톱 세션 연결·끊김, 워크스테이션 잠금·해제, 화면 보호기 켜짐·꺼짐을 다룹니다[2].
-- 재전송 공격 탐지와 무선·유선(802.1x) 네트워크 접근 허용도 같은 범주입니다[2].
-- Microsoft 는 워크스테이션·멤버 서버·도메인 컨트롤러 모두 Success 감사를 권합니다[2]. 이벤트 양은 적다고 적었습니다[2].
-- 4800 과 4801 사이에는 그 세션의 화면이 잠겨 있었습니다.
-- 4779 와 다음 4778 사이에는 그 원격 세션이 끊겨 있었습니다.
+이 하위 범주는 원격 데스크톱 세션 연결·끊김, 워크스테이션 잠금·해제, 화면 보호기 켜짐·꺼짐을 다루고, 재전송 공격 탐지와 무선·유선(802.1x) 네트워크 접근 허용도 같은 범주입니다[2]. Microsoft 는 워크스테이션·멤버 서버·도메인 컨트롤러 모두 Success 감사를 권하며 이벤트 양은 적다고 적었습니다[2].
+
+4800 과 4801 사이에는 그 세션의 화면이 잠겨 있었고, 4779 와 다음 4778 사이에는 그 원격 세션이 끊겨 있었습니다.
+
 - 원격 세션 전체의 흐름은 [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) 에서 봅니다.
 
 ## 로그가 빈 구간 채우기

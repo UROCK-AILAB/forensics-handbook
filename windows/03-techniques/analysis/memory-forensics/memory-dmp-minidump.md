@@ -5,8 +5,7 @@
 ## 한 줄 요약
 
 크래시 덤프 (Crash Dump) 는 시스템이나 프로그램이 멈춘 순간의 메모리를 담은 파일입니다.
-커널 크래시 덤프는 Windows 가 파란 화면, 곧 버그 체크 (Bug Check) 때 만듭니다 [1].
-사용자 모드 덤프는 프로그램이 죽을 때 WER 로컬 덤프 설정에 따라 남습니다 [2].
+커널 크래시 덤프는 Windows 가 파란 화면, 곧 버그 체크 (Bug Check) 때 만들고 [1], 사용자 모드 덤프는 프로그램이 죽을 때 WER 로컬 덤프 설정에 따라 남습니다 [2].
 
 ## 언제 쓰나
 
@@ -17,8 +16,7 @@
 
 ## 커널 크래시 덤프 종류
 
-Windows 는 버그 체크 때 덤프 파일을 만들 수 있습니다 [1].
-만들지 않게 설정할 수도 있습니다 [1].
+Windows 는 버그 체크 때 덤프 파일을 만들 수 있고, 만들지 않게 설정할 수도 있습니다 [1].
 아래 표는 Microsoft 문서 "Memory dump file options"(KB 254649) 에서 확인한 내용입니다 [1].
 
 | 종류 | 담는 것 | 필요한 페이지 파일 | 다음 크래시 때 |
@@ -43,8 +41,7 @@ Windows 는 버그 체크 때 덤프 파일을 만들 수 있습니다 [1].
 - 멈춘 스레드의 ETHREAD
 - 멈춘 스레드의 커널 모드 호출 스택
 
-작은 메모리 덤프는 크래시마다 새 파일을 만들어 폴더에 쌓습니다 [1].
-파일 이름에는 날짜가 들어갑니다 [1].
+작은 메모리 덤프는 크래시마다 새 파일을 만들어 폴더에 쌓고, 파일 이름에는 날짜가 들어갑니다 [1].
 문서의 예 `Mini022900-01.dmp` 는 2000년 2월 29일의 첫 덤프입니다 [1].
 요즘 Windows 가 쓰는 이름 형식은 이 글의 참고 문헌으로 확인하지 못했습니다.
 
@@ -71,9 +68,7 @@ Windows 는 버그 체크 때 덤프 파일을 만들 수 있습니다 [1].
 ## 사용자 모드 덤프 — WER 로컬 덤프
 
 Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) 로 로컬 덤프를 남길 수 있습니다 [2].
-사용자 모드 프로그램이 죽을 때 그 프로그램의 전체 덤프를 로컬에 남기는 기능입니다 [2].
-이 기능은 기본으로 꺼져 있습니다 [2].
-켜려면 관리자 권한이 필요합니다 [2].
+사용자 모드 프로그램이 죽을 때 그 프로그램의 전체 덤프를 로컬에 남기는 기능으로, 기본으로 꺼져 있고 켜려면 관리자 권한이 필요합니다 [2].
 
 설정 키는 `HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps` 입니다 [2].
 
@@ -102,8 +97,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 ## 구조 — 미니덤프 헤더
 
 미니덤프 파일의 헤더 구조체는 MINIDUMP_HEADER 입니다 [3].
-이 구조체는 헤더 파일 minidumpapiset.h 에 있고, DbgHelp.h 가 이 파일을 포함합니다 [3].
-칸은 아래 순서로 놓입니다 [3].
+이 구조체는 헤더 파일 minidumpapiset.h 에 있고, DbgHelp.h 가 이 파일을 포함하며, 칸은 아래 순서로 놓입니다 [3].
 
 | 순서 | 칸 | 형식 | 뜻 [3] |
 |---|---|---|---|
@@ -115,7 +109,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 | 6 | Reserved / TimeDateStamp | ULONG32 (공용체) | time_t 형식의 날짜·시각입니다 |
 | 7 | Flags | ULONG64 | MINIDUMP_TYPE 값의 조합입니다 |
 
-- 칸의 바이트 위치와 MINIDUMP_SIGNATURE 의 실제 값은 이 문서에 나오지 않습니다. 그래서 이 글에는 헥스 예시를 싣지 않습니다. 헤더 파일로 확인합니다.
+- 칸의 바이트 위치와 MINIDUMP_SIGNATURE 의 실제 값은 이 문서에 나오지 않아서 이 글에는 헥스 예시를 싣지 않습니다. 헤더 파일로 확인합니다.
 - Flags 는 LocalDumps 의 CustomDumpFlags 와 같은 MINIDUMP_TYPE 조합입니다 [2][3]. 덤프에 무엇을 담았는지 가늠하는 단서가 됩니다.
 - 커널 크래시 덤프의 파일 머리글 형식은 이 글의 참고 문헌으로 확인하지 못했습니다.
 

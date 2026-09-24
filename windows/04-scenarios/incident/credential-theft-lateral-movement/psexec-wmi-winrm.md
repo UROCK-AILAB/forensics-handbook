@@ -51,7 +51,7 @@
 - System 7036: PSEXESVC 가 Running·Stopped 로 바뀝니다[1].
 - Security 5140: Share Name `\\*\ADMIN$`, `\\*\IPC$`[1].
 - Security 5145: Share Path `\??\C:\Windows`, Relative Target Name `PSEXESVC.exe` 와 `PSEXESVC-[출발 PC 이름]-[출발 프로세스 ID]-stdin/stdout/stderr`[1].
-- 5145 의 Relative Target Name 에 출발 PC 이름이 들어갑니다[1]. 출발 PC 를 찾는 단서가 됩니다.
+- 5145 의 Relative Target Name 에 출발 PC 이름이 들어가므로[1] 출발 PC 를 찾는 단서가 됩니다.
 - Security 4624: 로그온 유형 3(Network), 인증 패키지 NTLM, 로그온 프로세스 NtLmSsp(시트 예시)[1].
 - Security 4672: SeSecurityPrivilege·SeBackupPrivilege·SeRestorePrivilege 같은 특수 권한이 붙습니다[1].
 - Security 4688: 부모가 `services.exe`, 사용자가 SYSTEM 입니다[1].
@@ -144,7 +144,7 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 ## 흔한 오판
 
 1. **로그온 유형 3 하나로 원격 실행이라고 봅니다.** 유형 3 은 파일 공유 접근에도 생깁니다. 같은 Logon ID 의 서비스 설치·프로세스 생성과 이어서 봅니다.
-2. **한쪽 PC 로그만 봅니다.** 흔적이 출발·도착에 나뉩니다. 한쪽만 보면 반쪽 그림이 됩니다.
+2. **한쪽 PC 로그만 봅니다.** 흔적이 출발·도착에 나뉘어 있어 한쪽만 보면 반쪽 그림이 됩니다.
 3. **PSEXESVC 파일이 없으니 PsExec 을 안 썼다고 봅니다.** 이 파일은 쓴 뒤 지워집니다[1]. 7045·프리페치·USN 을 봅니다.
 4. **인증 패키지로 도구를 가릅니다.** NTLM·Kerberos 는 도구가 아니라 인증 방식에 따라 달라집니다[1][2][3].
 5. **로그에 없으니 원격 실행도 없었다고 봅니다.** WMI-Activity·WinRM 운영 로그는 1MB 순환이었습니다(관찰). 오래된 기록은 밀려납니다.

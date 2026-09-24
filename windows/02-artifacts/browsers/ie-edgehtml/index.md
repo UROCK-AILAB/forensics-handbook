@@ -6,10 +6,10 @@
 
 ## 왜 중요한가
 
-- IE 는 Windows 의 구성 요소입니다. 그래서 설치된 Windows 의 지원 정책을 따릅니다.
+- IE 는 Windows 의 구성 요소라서 설치된 Windows 의 지원 정책을 따릅니다.
 - Windows 11 25H2 PC 한 대에서도 IE 의 기록 자리가 남아 있었습니다. `HKLM\SOFTWARE\Microsoft\Internet Explorer` 의 `svcVersion` 값은 `11.1882.26100.0` 이었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
 - 같은 PC 에 WebCache 폴더, `INetCache`·`INetCookies` 폴더, `TypedURLs` 키, `IntelliForms` 키, `%USERPROFILE%\Favorites` 폴더가 모두 있었습니다. 옛 엣지 패키지 폴더는 없었습니다. (확인 범위: 같은 PC)
-- IE 10 이후에는 방문 기록·캐시·쿠키·내려받기 기록이 사용자마다 파일 하나에 모입니다. 그 파일 하나로 웹 사용의 큰 줄기를 볼 수 있습니다.
+- IE 10 이후에는 방문 기록·캐시·쿠키·내려받기 기록이 사용자마다 파일 하나에 모이고, 그 파일 하나로 웹 사용의 큰 줄기를 볼 수 있습니다.
 - IE 4~9 를 쓰던 옛 검체에서는 `index.dat` 가 주된 기록입니다. 그래서 검체의 IE 버전부터 확인합니다.
 - 엣지 안의 IE 모드는 최소 2029년까지 지원합니다. IE 모드가 어느 파일에 기록을 남기는지는 이번에 연 자료로 확인하지 못했습니다.
 
@@ -17,8 +17,8 @@
 
 - 폴더와 키가 있다는 것만으로 사용자가 IE 를 썼다고 단정하지 않습니다. 위 Windows 11 PC 에도 폴더와 키가 모두 있었습니다.
 - IE 와 옛 엣지는 같은 `WebCacheV01.dat` 를 씁니다. 그래서 이 파일의 기록을 IE 사용 흔적이라고 바로 단정하지 않습니다.
-- 기록은 Windows 계정 단위로 남습니다. 그 시각에 누가 키보드 앞에 있었는지는 남지 않습니다. 사람을 좁히는 법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
-- 기록이 없다고 방문하지 않은 것은 아닙니다. 사용자가 지웠을 수 있습니다. 이전 시점의 파일은 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 꺼내 비교합니다.
+- 기록은 Windows 계정 단위로 남을 뿐, 그 시각에 누가 키보드 앞에 있었는지는 남지 않습니다. 사람을 좁히는 법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 기록이 없다고 방문하지 않은 것은 아니며, 사용자가 지웠을 수 있습니다. 이전 시점의 파일은 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 꺼내 비교합니다.
 
 ## 한눈에 보기
 
@@ -62,7 +62,7 @@ Microsoft 수명 주기 FAQ 의 표를 옮겼습니다. 검체의 Windows 판과
 | 받아 둔 웹 자원 파일·쿠키 폴더 | `%LOCALAPPDATA%\Microsoft\Windows\INetCache\IE` (IE 10 이후), `…\Temporary Internet Files\Content.IE5` (IE 4~9), `INetCookies` | IE 4 이후 | [쿠키·캐시 폴더](inetcookies-inetcache.md) |
 | 즐겨찾기 | `%USERPROFILE%\Favorites` 의 `.url` 파일(한 PC 에서 본 위치), 옛 엣지는 `spartan.edb` | IE, 옛 엣지 | [즐겨찾기](favorites-url.md) |
 
-하위 페이지에서 다루지 않는 자리도 하나 있습니다. Vista 이후 IE 는 탭 복구용 폴더 `C:\Users\<사용자>\AppData\Local\Microsoft\Internet Explorer\Recovery` 를 씁니다. 이 폴더 안 파일의 형식은 이 허브의 하위 페이지에서 다루지 않습니다. 수집할 때는 이 폴더도 함께 모읍니다.
+하위 페이지에서 다루지 않는 자리도 하나 있습니다. Vista 이후 IE 는 탭 복구용 폴더 `C:\Users\<사용자>\AppData\Local\Microsoft\Internet Explorer\Recovery` 를 쓰는데, 이 폴더 안 파일의 형식은 이 허브의 하위 페이지에서 다루지 않습니다. 수집할 때는 이 폴더도 함께 모읍니다.
 
 ## 읽는 순서
 

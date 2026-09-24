@@ -52,9 +52,7 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 
 ### 버전
 
-- 이 페이지의 칸 구성은 빌드 26200 한 대에서 읽었습니다.
-- 예전 Windows 버전에서 8001 의 칸 구성이 어떻게 달랐는지는 확인하지 못했습니다.
-- 검체의 Windows 버전이 다르면 레코드의 칸을 직접 봅니다.
+이 페이지의 칸 구성은 빌드 26200 한 대에서 읽었고, 예전 Windows 버전에서 8001 의 칸 구성이 어떻게 달랐는지는 확인하지 못했습니다. 검체의 Windows 버전이 다르면 레코드의 칸을 직접 봅니다.
 
 ## 구조
 
@@ -85,12 +83,7 @@ Operational 채널에 정의된 ID 는 8000~8012, 11000~11010, 12011~12014, 1300
 
 ### MAC 칸
 
-- 이 빌드의 Operational 이벤트에는 BSSID 라는 칸이 없습니다.
-- MAC 칸은 LocalMac 과 PeerMac 뿐입니다.
-- LocalMac 은 11000번대와 12011~12014 에 있습니다.
-- PeerMac 은 11006·11009·12013·20019·20020 에 있습니다.
-- 8001 에는 접속한 AP 의 MAC (BSSID) 이 없습니다.
-- PeerMac 이 AP 의 MAC 인지는 확인하지 못했습니다.
+이 빌드의 Operational 이벤트에는 BSSID 라는 칸이 없고 MAC 칸은 LocalMac 과 PeerMac 뿐입니다. LocalMac 은 11000번대와 12011~12014 에 있고, PeerMac 은 11006·11009·12013·20019·20020 에 있습니다. 8001 에는 접속한 AP 의 MAC (BSSID) 이 없으며, PeerMac 이 AP 의 MAC 인지는 확인하지 못했습니다.
 
 ### NetworkProfile/Operational
 
@@ -168,10 +161,7 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 | 20002 | 36 |
 | 4003 | 13 |
 
-- 10000 의 Type 은 모두 0 이었습니다. State 는 1 이 248건, 9 가 103건, 41 이 3건이었습니다.
-- 10001 의 Type 은 0, State 는 모두 2 였습니다.
-- Category 는 모두 0 이었습니다.
-- State·Type·Category 값의 뜻은 확인하지 못했습니다.
+10000 의 Type 은 모두 0 이었고 State 는 1 이 248건, 9 가 103건, 41 이 3건이었습니다. 10001 의 Type 은 0, State 는 모두 2 였으며 Category 는 모두 0 이었습니다. State·Type·Category 값의 뜻은 확인하지 못했습니다.
 
 이벤트를 레지스트리 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles` 와 맞춰 본 결과는 다음과 같습니다.
 
@@ -203,8 +193,8 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 ## 시각 해석
 
 - 8000 은 연결을 시작한 때, 8001 은 연결에 성공한 때, 8003 은 연결이 끊긴 때입니다.
-- 8000~8003 에는 모두 ConnectionId 칸이 있습니다. 같은 값끼리 묶으면 연결 하나의 시작부터 끝까지 볼 수 있을 것으로 보입니다. 이 방법은 칸 이름에서 나온 해석입니다.
-- 10000 은 Windows 가 연결을 판단한 때, 10001 은 끊김을 판단한 때입니다. 8001 과 10000 을 시각으로 맞추면 SSID 와 Windows 의 네트워크 이름을 이을 수 있습니다.
+- 8000~8003 에는 모두 ConnectionId 칸이 있어서, 같은 값끼리 묶으면 연결 하나의 시작부터 끝까지 볼 수 있을 것으로 보입니다. 이 방법은 칸 이름에서 나온 해석입니다.
+- 10000 은 Windows 가 연결을 판단한 때, 10001 은 끊김을 판단한 때이며, 8001 과 10000 을 시각으로 맞추면 SSID 와 Windows 의 네트워크 이름을 이을 수 있습니다.
 - 한 PC 에서 레지스트리 네트워크 프로필의 마지막 연결 시각과 10000 의 시각을 맞춰 본 결과는 [네트워크 목록](../network/networklist.md)의 시각 해석 절에 있습니다.
 - 이 로그들의 기록 시각이 다른 EVTX 레코드처럼 UTC 로 저장된다는 점은 EVTX 형식의 일반 사실입니다. 이번에 이 두 로그에서 따로 확인하지는 않았습니다. 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 두 로그 모두 1MB 남짓의 순환 로그라서, 한 PC 에서는 약 3개월치만 남아 있었습니다. (확인 범위: Win11 25H2 한 대) 더 오래된 연결은 레지스트리의 네트워크 목록·Wi-Fi 프로필이나 [SRUM](../execution/system-resource-usage-monitor/index.md)에서 찾습니다. 이 판단은 해석입니다.

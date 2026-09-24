@@ -2,13 +2,11 @@
 
 ## 한 줄 요약
 
-Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 개가 생깁니다. `PcaAppLaunchDic.txt` 에는 실행 파일 경로와 시각이 한 줄씩 남습니다. `PcaGeneralDb0.txt` 에는 프로그램의 비정상 종료·설치 실패·호환성 판정이 칸 여덟 개로 남습니다. 사용자 하이브와 SOFTWARE 하이브의 `AppCompatFlags` 키에도 관련 기록이 있습니다.
+Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 개가 생깁니다. `PcaAppLaunchDic.txt` 에는 실행 파일 경로와 시각이 한 줄씩 남고, `PcaGeneralDb0.txt` 에는 프로그램의 비정상 종료·설치 실패·호환성 판정이 칸 여덟 개로 남으며, 사용자 하이브와 SOFTWARE 하이브의 `AppCompatFlags` 키에도 관련 기록이 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 프로그램 호환성 도우미 (Program Compatibility Assistant, PCA) 는 프로그램 호환성 문제를 다루는 Windows 기능입니다.
-- 서비스 이름은 `PcaSvc` 이고, 표시 이름은 "Program Compatibility Assistant Service" 입니다. 시작 유형은 자동이었고 실행 중이었습니다. (확인 범위: Win11 25H2 한 대)
-- 세 파일을 어느 프로세스가 쓰는지는 이번 자료로 확인하지 못했습니다.
+프로그램 호환성 도우미 (Program Compatibility Assistant, PCA) 는 프로그램 호환성 문제를 다루는 Windows 기능입니다. 서비스 이름은 `PcaSvc` 이고 표시 이름은 "Program Compatibility Assistant Service" 이며, 시작 유형은 자동이었고 실행 중이었습니다. (확인 범위: Win11 25H2 한 대) 세 파일을 어느 프로세스가 쓰는지는 이번 자료로 확인하지 못했습니다.
 
 | 기록 | 담는 것 |
 |---|---|
@@ -17,8 +15,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 | `PcaGeneralDb1.txt` | 관찰한 PC 에서는 0바이트였습니다 (확인 범위: Win11 25H2 한 대) |
 | 레지스트리 `AppCompatFlags` | 호환 모드 설정 (`Layers`) 과, 값 이름이 실행 파일 경로인 목록 (`Compatibility Assistant\Store`) 등입니다 |
 
-- 실행 흔적 가운데 새로 생긴 기록입니다. 글자 파일이라 전용 도구 없이도 읽을 수 있습니다.
-- 관찰한 값으로 보면 `PcaGeneralDb0.txt` 는 정상 실행 목록이 아닙니다. 비정상 종료·설치 실패·호환성 판정 같은 사건 기록에 가깝습니다. (확인 범위: Win11 25H2 한 대)
+실행 흔적 가운데 새로 생긴 기록이고, 글자 파일이라 전용 도구 없이도 읽을 수 있습니다. 관찰한 값으로 보면 `PcaGeneralDb0.txt` 는 정상 실행 목록이 아니라 비정상 종료·설치 실패·호환성 판정 같은 사건 기록에 가깝습니다. (확인 범위: Win11 25H2 한 대)
 
 ## 위치와 버전별 차이
 
@@ -40,13 +37,11 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 | Windows 11 22H2 | 처음 보임. 글쓴이는 2022년 11월 빌드에서 처음 보았고, Pro 22H2 (빌드 22621.963) 가상 머신과 Process Monitor 로 조사했습니다 | AboutDFIR 글 |
 | Windows 11 25H2 Home (빌드 26200) | 세 파일 모두 있음 | 관찰 (확인 범위: Win11 25H2 한 대) |
 
-- 출처 글 제목에는 "Pro" 가 들어 있습니다. 관찰한 PC 는 Home 판이었는데도 세 파일이 있었습니다.
-- Windows 10 과 서버 판에 이 파일이 있는지는 확인하지 못했습니다.
+출처 글 제목에는 "Pro" 가 들어 있지만 관찰한 PC 는 Home 판이었는데도 세 파일이 있었습니다. Windows 10 과 서버 판에 이 파일이 있는지는 확인하지 못했습니다.
 
 ### 레지스트리
 
-- `AppCompatFlags` 키는 NTUSER.DAT 와 SOFTWARE 하이브 두 곳에서 봅니다. SOFTWARE 하이브는 `Wow6432Node` 아래도 봅니다.
-- NTUSER.DAT 안의 경로는 `Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags` 입니다.
+`AppCompatFlags` 키는 NTUSER.DAT 와 SOFTWARE 하이브 두 곳에서 보며, SOFTWARE 하이브는 `Wow6432Node` 아래도 봅니다. NTUSER.DAT 안의 경로는 `Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags` 입니다.
 
 | 하위 키 | 담는 것 |
 |---|---|
@@ -108,8 +103,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 ### PcaGeneralDb1.txt
 
-- 관찰한 PC 에서는 0바이트였습니다. (확인 범위: Win11 25H2 한 대)
-- `PcaGeneralDb0.txt` 와 번갈아 쓰이는지는 확인하지 못했습니다. 크기가 0 이 아니면 같은 방법으로 읽어 봅니다.
+관찰한 PC 에서는 0바이트였습니다. (확인 범위: Win11 25H2 한 대) `PcaGeneralDb0.txt` 와 번갈아 쓰이는지는 확인하지 못했으며, 크기가 0 이 아니면 같은 방법으로 읽어 봅니다.
 
 ### 레지스트리 `Compatibility Assistant\Store`
 
@@ -147,8 +141,8 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 ## 시각 해석
 
-- 두 파일의 시각은 `YYYY-MM-DD HH:MM:SS.mmm` 모양 글자입니다.
-- AboutDFIR 글은 이 시각이 UTC 인지 현지 시각인지 밝히지 않았습니다.
+두 파일의 시각은 `YYYY-MM-DD HH:MM:SS.mmm` 모양 글자인데, AboutDFIR 글은 이 시각이 UTC 인지 현지 시각인지 밝히지 않았습니다.
+
 - 관찰한 PC 에서는 두 파일 모두 가장 늦은 줄의 시각이 파일의 마지막 수정 시각 (UTC) 과 같았습니다. 시각은 UTC 로 보입니다. (확인 범위: Win11 25H2 한 대)
 - 검체마다 같은 방법으로 확인합니다. 가장 늦은 줄의 시각을 [마스터 파일 테이블](../filesystem/mft.md) 의 수정 시각과 견줍니다.
 - 줄 순서는 시각 순서가 아닙니다. 시각 칸으로 정렬한 뒤 읽습니다.

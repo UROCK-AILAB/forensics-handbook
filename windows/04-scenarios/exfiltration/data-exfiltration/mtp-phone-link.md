@@ -37,10 +37,9 @@
 
 ### 레지스트리
 
-- 관찰한 삼성 휴대폰(`VID_04E8&PID_6860`)은 `Enum\USBSTOR` 에 없었습니다(관찰).
-- 이 휴대폰은 SYSTEM 하이브 `Enum\USB\VID_04E8&PID_6860\<인스턴스>` 에 있었습니다(관찰).
-- 이 인스턴스 키에도 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 0064·0065·0066·0067 이 모두 있었습니다(관찰). 그래서 USB 메모리와 같은 방법으로 설치·연결·해제 시각을 읽습니다. 네 값의 뜻은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 에 있습니다.
-- 인스턴스 키의 `Service` 값은 제조사가 만든 드라이버 이름이었습니다(관찰). 관찰한 휴대폰은 `dg_ssudbus` 였습니다. 드라이버 이름은 휴대폰 제조사마다 다릅니다.
+관찰한 삼성 휴대폰(`VID_04E8&PID_6860`)은 `Enum\USBSTOR` 에 없었고, SYSTEM 하이브 `Enum\USB\VID_04E8&PID_6860\<인스턴스>` 에 있었습니다(관찰). 이 인스턴스 키에도 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 0064·0065·0066·0067 이 모두 있었습니다(관찰). 그래서 USB 메모리와 같은 방법으로 설치·연결·해제 시각을 읽습니다. 네 값의 뜻은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 에 있습니다.
+
+인스턴스 키의 `Service` 값은 제조사가 만든 드라이버 이름이었습니다(관찰). 관찰한 휴대폰은 `dg_ssudbus` 였고, 드라이버 이름은 휴대폰 제조사마다 다릅니다.
 
 SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마다 하위 키가 있었습니다(관찰). 이 PC 에는 11개가 있었습니다.
 
@@ -51,15 +50,13 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 
 (두 줄 모두 관찰)
 
-- 휴대폰 키 이름에는 VID·PID 와 `MS_COMP_MTP` 가 함께 들어 있습니다. 이 글자로 MTP 장치를 골라냅니다.
-- 키 이름 끝의 인스턴스 부분을 `Enum\USB` 의 인스턴스 키 이름과 맞춰 봅니다.
-- 기기 이름에 사람 이름이 들어 있을 수 있습니다. 사용자를 특정하는 재료가 됩니다.
-- 기기 이름은 사용자가 휴대폰에서 바꿀 수 있습니다. 이름만으로 휴대폰 주인을 단정하지 않습니다.
+휴대폰 키 이름에는 VID·PID 와 `MS_COMP_MTP` 가 함께 들어 있어서 이 글자로 MTP 장치를 골라냅니다. 키 이름 끝의 인스턴스 부분은 `Enum\USB` 의 인스턴스 키 이름과 맞춰 봅니다.
+
+기기 이름에 사람 이름이 들어 있을 수 있어 사용자를 특정하는 재료가 되지만, 사용자가 휴대폰에서 이름을 바꿀 수 있으므로 이름만으로 휴대폰 주인을 단정하지 않습니다.
 
 ### WPD-MTPClassDriver/Operational 로그
 
-- `Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그가 켜져 있었고, 1000~1006 이벤트가 있었습니다(관찰).
-- 이 로그가 기본으로 켜져 있는지, 어느 Windows 버전부터 있는지는 확인하지 못했습니다. 검체에서 로그가 있는지부터 봅니다.
+`Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그가 켜져 있었고, 1000~1006 이벤트가 있었습니다(관찰). 이 로그가 기본으로 켜져 있는지, 어느 Windows 버전부터 있는지는 확인하지 못했습니다. 검체에서 로그가 있는지부터 봅니다.
 
 | ID | 메시지 (관찰) |
 |---|---|
@@ -69,16 +66,11 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 | 1003 | 유휴 상태에서 돌아왔다는 기록 |
 | 1006 | "Driver has failed to start, HRESULT …" |
 
-- 1000 에는 EventData 칸이 없었습니다(관찰). 어느 휴대폰이 붙었는지 이 이벤트만으로는 알 수 없습니다.
-- 기록한 계정은 S-1-5-19 (LOCAL SERVICE) 였습니다(관찰). 이 계정은 사용자를 가리키지 않습니다.
-- 그래서 이 로그는 "그 시각에 MTP 장치가 붙었다" 까지만 말해 줍니다.
-- 어느 장치인지는 `Enum\USB` 의 장치 속성 시각, Kernel-PnP/Configuration 이벤트와 시각을 맞춰 정합니다.
+1000 에는 EventData 칸이 없어서(관찰) 어느 휴대폰이 붙었는지 이 이벤트만으로는 알 수 없습니다. 기록한 계정은 S-1-5-19 (LOCAL SERVICE) 였고(관찰), 이 계정은 사용자를 가리키지 않습니다. 그래서 이 로그는 "그 시각에 MTP 장치가 붙었다" 까지만 말해 주며, 어느 장치인지는 `Enum\USB` 의 장치 속성 시각, Kernel-PnP/Configuration 이벤트와 시각을 맞춰 정합니다.
 
 ### 파일을 옮겼나
 
-- MTP 로 복사한 파일 목록이 PC 쪽에 따로 남는지는 확인하지 못했습니다.
-- 휴대폰 안 폴더를 탐색기로 연 기록이 셸백에 어떤 모양으로 남는지도 이 글에서 확인하지 못했습니다. 셸백에서 휴대폰 기기 이름이 든 경로가 있는지 찾아봅니다.
-- 그래서 PC 쪽 흔적은 연결 구간과 그 구간에 연 원본 파일까지만 이을 수 있습니다.
+MTP 로 복사한 파일 목록이 PC 쪽에 따로 남는지는 확인하지 못했습니다. 휴대폰 안 폴더를 탐색기로 연 기록이 셸백에 어떤 모양으로 남는지도 이 글에서 확인하지 못했으므로, 셸백에서 휴대폰 기기 이름이 든 경로가 있는지 찾아봅니다. 그래서 PC 쪽 흔적은 연결 구간과 그 구간에 연 원본 파일까지만 이을 수 있습니다.
 
 ## Phone Link
 
@@ -108,12 +100,9 @@ Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일�
 
 ### 최신 판에서 본 것
 
-- 관찰한 PC 의 Phone Link 패키지 판은 1.26072.255.0 이었습니다(관찰).
-- 패키지 폴더에 `LocalCache\Indexed` 가 없었습니다(관찰).
-- `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json` 과 `Local`·`Roaming` 폴더만 있었습니다(관찰).
-- 이 PC 가 휴대폰과 연동한 적이 없어서인지, 판이 바뀌어 위치가 달라졌는지는 모릅니다.
-- 같은 PC 에 `MicrosoftWindows.CrossDevice` 패키지(1.26072.116.0)도 있었습니다(관찰). 이 패키지가 휴대폰 연동 기록을 어디에 남기는지는 확인하지 못했습니다.
-- 그래서 최신 판에 2019년 경로가 그대로 있다고 가정하지 않습니다. 두 패키지 폴더를 통째로 확보해 둡니다.
+관찰한 PC 의 Phone Link 패키지 판은 1.26072.255.0 이었고, 패키지 폴더에 `LocalCache\Indexed` 가 없었습니다(관찰). `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json` 과 `Local`·`Roaming` 폴더만 있었습니다(관찰). 이 PC 가 휴대폰과 연동한 적이 없어서인지, 판이 바뀌어 위치가 달라졌는지는 모릅니다.
+
+같은 PC 에 `MicrosoftWindows.CrossDevice` 패키지(1.26072.116.0)도 있었는데(관찰), 이 패키지가 휴대폰 연동 기록을 어디에 남기는지는 확인하지 못했습니다. 그래서 최신 판에 2019년 경로가 그대로 있다고 가정하지 않고, 두 패키지 폴더를 통째로 확보해 둡니다.
 
 ## 분석 흐름
 

@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-윈도 내장 VPN 의 흔적은 세 곳에 남습니다. 연결 프로필은 전화번호부 파일 (phonebook) `rasphone.pbk` 에 남습니다. 접속 시도와 결과는 Application 로그의 RasClient 이벤트에 남습니다. 프로필을 만들고 지운 기록은 `Microsoft-Windows-VPN-Client/Operational` 로그에 남습니다. 프로필을 지우면 파일에서는 사라지지만 삭제 이벤트는 남습니다.
+윈도 내장 VPN 의 흔적은 세 곳에 남습니다. 연결 프로필은 전화번호부 파일 (phonebook) `rasphone.pbk` 에, 접속 시도와 결과는 Application 로그의 RasClient 이벤트에, 프로필을 만들고 지운 기록은 `Microsoft-Windows-VPN-Client/Operational` 로그에 남습니다. 프로필을 지우면 파일에서는 사라지지만 삭제 이벤트는 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -39,14 +39,13 @@ PowerShell(`Add-VpnConnection`)로 VPN 프로필을 만들자 전화번호부 �
 | 그 밖의 채널 | `Microsoft-Windows-VPN/Operational`(켜짐), `Microsoft-Windows-RasAgileVpn/Operational`(꺼짐), `Windows Networking Vpn Plugin Platform/Operational`(꺼짐) | 내용은 확인하지 않았습니다 (확인 범위: 조사 PC) |
 | 추적 설정 | `HKLM\SOFTWARE\Microsoft\Tracing\RASMAN` | `EnableFileTracing=0`, `FileDirectory=C:\WINDOWS\tracing`, `MaxFileSize=1048576` (확인 범위: 조사 PC) |
 
-- `Tracing` 키 아래에는 RASMAN·RASAPI32·RasIpsec 같은 구성 요소별 키가 있습니다. "프로그램 이름_RASAPI32" 꼴의 키도 많습니다. (확인 범위: 조사 PC)
-- 추적이 꺼져 있으면 `C:\WINDOWS\tracing` 에 로그가 쌓이지 않습니다. 조사 PC 에서 이 폴더는 비어 있었습니다. (확인 범위: 조사 PC)
+`Tracing` 키 아래에는 RASMAN·RASAPI32·RasIpsec 같은 구성 요소별 키가 있고, "프로그램 이름_RASAPI32" 꼴의 키도 많습니다. 추적이 꺼져 있으면 `C:\WINDOWS\tracing` 에 로그가 쌓이지 않는데, 조사 PC 에서도 이 폴더는 비어 있었습니다. (확인 범위: 조사 PC)
 
 ## 구조
 
 ### 전화번호부 파일 (rasphone.pbk)
 
-파일은 INI 형식입니다. 프로필마다 `[연결 이름]` 절이 있습니다. 그 아래에 "이름=값" 줄이 이어집니다. (확인 범위: 조사 PC 시험)
+파일은 INI 형식이고, 프로필마다 `[연결 이름]` 절이 있으며 그 아래에 "이름=값" 줄이 이어집니다. (확인 범위: 조사 PC 시험)
 
 아래는 시험 프로필(`ZZTestVPN`)에서 메모한 줄만 골라 모은 것입니다. 실제 파일의 줄 순서·개수와 다릅니다.
 
@@ -162,7 +161,7 @@ HighDateTime=31279980
 - **VPN-Client/Operational 은 최대 1MB 입니다.** 오래 쓴 PC 에서는 앞선 기록이 밀려났을 수 있습니다.
 - **추적 로그는 기본값이 꺼져 있습니다.** `EnableFileTracing` 이 1 이 아니면 추적 로그를 기대하지 않습니다.
 - **네트워크 목록과의 관계가 확인되지 않았습니다.** RegRipper networklist 플러그인은 NameType 0x17 을 "broadband (3g)" 로 표시합니다. VPN 연결이 이 값으로 네트워크 목록에 남는다는 설명이 흔하지만 이번에 확인하지 못했습니다. 시험 접속은 실패해서 네트워크 목록에 새 프로필이 생기지 않았습니다. (확인 범위: 조사 PC 시험) 목록을 읽는 법은 [네트워크 목록](networklist.md)에서 다룹니다.
-- **메시지 문장은 분석 PC 에서 만듭니다.** RasClient 레코드에는 빈자리 값만 들어 있습니다. 문장 틀은 메시지 파일에서 읽습니다. 자세한 내용은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- **메시지 문장은 분석 PC 에서 만듭니다.** RasClient 레코드에는 빈자리 값만 들어 있고 문장 틀은 메시지 파일에서 읽습니다. 자세한 내용은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 

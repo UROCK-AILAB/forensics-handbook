@@ -6,11 +6,7 @@
 
 ## 왜 중요한가
 
-- 한 번의 접속이 단계마다 다른 로그에 남습니다. 여러 로그를 맞추면 연결, 인증, 세션 로그온, 끊김, 로그오프를 차례로 이을 수 있습니다.
-- 접속을 받은 컴퓨터 (대상) 의 기록에는 접속해 온 주소와 사용자 이름이 남습니다.
-- 접속을 건 컴퓨터 (출발) 의 기록에는 연결하려던 서버가 남습니다.
-- 두 쪽을 맞추면 한 번의 접속을 양 끝에서 확인할 수 있습니다.
-- 세션 ID 와 로그온 ID 로 한 세션의 시작과 끝을 따라갈 수 있습니다.
+한 번의 접속이 단계마다 다른 로그에 남기 때문에, 여러 로그를 맞추면 연결, 인증, 세션 로그온, 끊김, 로그오프를 차례로 이을 수 있습니다. 접속을 받은 컴퓨터 (대상) 의 기록에는 접속해 온 주소와 사용자 이름이 남고, 접속을 건 컴퓨터 (출발) 의 기록에는 연결하려던 서버가 남습니다. 두 쪽을 맞추면 한 번의 접속을 양 끝에서 확인할 수 있고, 세션 ID 와 로그온 ID 로 한 세션의 시작과 끝을 따라갈 수 있습니다.
 
 증명하지 못하는 것도 분명합니다.
 
@@ -48,16 +44,13 @@
 | Microsoft-Windows-TerminalServices-RDPClient/Operational | `Microsoft-Windows-TerminalServices-RDPClient%4Operational.evtx` |
 | Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational | `Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx` |
 
-- 파일 이름에서는 채널 이름의 `/` 자리에 `%4` 가 들어갑니다.
-- 채널 이름은 JPCERT/CC 자료와 같습니다.
-- 보안 로그 파일의 위치는 [로그온·로그오프](../logon-events/index.md) 에서 다룹니다.
+파일 이름에서는 채널 이름의 `/` 자리에 `%4` 가 들어가고, 채널 이름은 JPCERT/CC 자료와 같습니다. 보안 로그 파일의 위치는 [로그온·로그오프](../logon-events/index.md) 에서 다룹니다.
 
 아래는 원격 데스크톱 받기가 꺼진 PC 한 대에서 `wevtutil gl` 로 본 결과입니다 (확인 범위: Windows 11 Home 빌드 26200).
 
 - 네 채널 모두 켜져 (enabled: true) 있었습니다.
 - 네 채널 모두 최대 크기가 1052672 바이트 (약 1MB) 였고, retention 은 false 였습니다.
-- LocalSessionManager 파일만 폴더에 있었습니다.
-- RemoteConnectionManager·RDPClient·RdpCoreTS 파일은 폴더에 없었습니다.
+- LocalSessionManager 파일만 폴더에 있었고, RemoteConnectionManager·RDPClient·RdpCoreTS 파일은 폴더에 없었습니다.
 - 파일이 첫 이벤트를 쓸 때 만들어지는지는 확인하지 못했습니다. 그래서 파일이 없다고 곧바로 지운 흔적으로 보지 않습니다.
 - LocalSessionManager 파일 (약 1MB) 에는 이벤트 227건이 있었습니다. 기간은 2026-06-26 ~ 2026-09-20 (UTC) 였습니다.
 - 크기 한도가 이만큼 작으면 오래된 접속 기록은 밀려나 없을 수 있습니다.
@@ -85,9 +78,7 @@ Ponder The Bits 는 들어온 접속을 다섯 단계로 나눠 정리했습니�
 
 ### 시각
 
-- 이벤트 XML 의 `TimeCreated` 요소에 있는 `SystemTime` 값은 UTC 입니다.
-- 이 값의 끝에는 `Z` 가 붙습니다.
-- 보고서에는 어느 시간대로 적었는지 밝힙니다.
+- 이벤트 XML 의 `TimeCreated` 요소에 있는 `SystemTime` 값은 UTC 이고 끝에 `Z` 가 붙습니다. 보고서에는 어느 시간대로 적었는지 밝힙니다.
 - 출발 컴퓨터와 대상 컴퓨터의 기록을 합칠 때는 두 컴퓨터의 시계 차이를 먼저 확인합니다. 방법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 봅니다.
 - 시각 값의 저장 형식은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 과 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
 

@@ -45,7 +45,7 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 
 ### 보안 그룹 관리 (Audit Security Group Management)
 
-4732 "A member was added to a security-enabled local group." 은 보안 로컬 그룹에 구성원이 더해질 때마다 생깁니다. 4732 의 감사 하위 범주는 Audit Security Group Management 입니다.
+4732 "A member was added to a security-enabled local group." 은 보안 로컬 그룹에 구성원이 더해질 때마다 생기며, 감사 하위 범주는 Audit Security Group Management 입니다.
 
 같은 공급자 매니페스트에는 다음 그룹 이벤트도 있습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -59,7 +59,7 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 
 ### 이 기록이 필요한 까닭
 
-로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않습니다. 레지스트리만으로는 다른 흔적으로 추정해야 합니다. 추정 방법은 [사용자 계정](../system-account/sam.md)에서 다룹니다. 4720 이 남아 있으면 계정을 만든 때를 이벤트 기록 시각으로 바로 알 수 있습니다. 이 비교는 해석입니다.
+로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않아서 다른 흔적으로 추정해야 합니다. 추정 방법은 [사용자 계정](../system-account/sam.md)에서 다룹니다. 4720 이 남아 있으면 계정을 만든 때를 이벤트 기록 시각으로 바로 알 수 있습니다. 이 비교는 해석입니다.
 
 ## 위치와 버전별 차이
 
@@ -68,23 +68,19 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 | 4720 | Audit User Account Management | Windows Vista · Windows Server 2008 | 0. 한 PC 의 매니페스트에도 버전 0 하나뿐이었습니다 (확인 범위: Win11 25H2 한 대) |
 | 4732 | Audit Security Group Management | Windows Vista · Windows Server 2008 | 문서는 0. 매니페스트에는 버전 1 도 있습니다 (확인 범위: Win11 25H2 한 대) |
 
-- 4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다.
-- 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 칸을 더합니다. (확인 범위: Win11 25H2 한 대의 매니페스트)
-- 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 확인하지 못했습니다.
-- Windows XP · 2003 의 계정 이벤트는 이번에 확인하지 못했습니다. 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
+4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다. 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 칸을 더하는데 (확인 범위: Win11 25H2 한 대의 매니페스트), 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 확인하지 못했습니다.
+
+Windows XP · 2003 의 계정 이벤트는 이번에 확인하지 못했습니다. 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
 
 ### 권장 설정
 
-Microsoft 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 Audit User Account Management 의 성공과 실패를 켜라고 권합니다. 워크스테이션과 멤버 서버에서는 로컬 계정의 모든 변경을 살피라고 적었습니다. 특히 기본 제공 Administrator 계정의 변경을 살피라고 적었습니다.
+Microsoft 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 Audit User Account Management 의 성공과 실패를 켜라고 권합니다. 워크스테이션과 멤버 서버에서는 로컬 계정의 모든 변경을, 특히 기본 제공 Administrator 계정의 변경을 살피라고 적었습니다.
 
 ### 한 PC 의 설정
 
 한 PC 에서 읽은 결과는 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
 
-- User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 는 성공 (Success) 이었습니다.
-- Security Group Management `{0CCE9237-69AE-11D9-BED3-505054503030}` 도 성공이었습니다.
-- 이 값이 Windows 11 의 기본값인지는 확인하지 못했습니다.
-- 보안 로그에는 약 2일치만 남아 있었습니다. 그 안에 4720·4722·4724·4726·4732 는 0건이었고, 4738 은 4건이었습니다.
+User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Group Management `{0CCE9237-69AE-11D9-BED3-505054503030}` 는 둘 다 성공 (Success) 이었습니다. 이 값이 Windows 11 의 기본값인지는 확인하지 못했습니다. 보안 로그에는 약 2일치만 남아 있었고, 그 안에 4720·4722·4724·4726·4732 는 0건, 4738 은 4건이었습니다.
 
 감사 설정과 로그 크기를 확인하는 방법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
@@ -171,9 +167,7 @@ Microsoft 문서의 4720 예시 가운데 일부입니다. 문서가 보여 주�
 | SubjectUserSid · SubjectUserName · SubjectDomainName · SubjectLogonId | 구성원을 더한 계정 | |
 | PrivilegeList | 권한 | |
 
-- 구성원 하나마다 4732 가 따로 생깁니다.
-- 4732 앞에는 아무것도 바뀌지 않은 4735 "A security-enabled local group was changed." 가 보통 먼저 보입니다.
-- Microsoft 문서 예시의 4732 는 Version 0, Task 13826, Keywords `0x8020000000000000` 입니다.
+구성원 하나마다 4732 가 따로 생기고, 그 앞에는 아무것도 바뀌지 않은 4735 "A security-enabled local group was changed." 가 보통 먼저 보입니다. Microsoft 문서 예시의 4732 는 Version 0, Task 13826, Keywords `0x8020000000000000` 입니다.
 
 ## 증거로서 의미
 
@@ -204,12 +198,12 @@ Microsoft 는 4720 에서 다음 값을 살피라고 권합니다.
 - 쓸 수 있는 문장: "보안 로그에 ○○(UTC) 의 4720 이 있습니다. 새 계정은 ○○ (SID ○○) 입니다. Subject 는 ○○\○○ 이고 로그온 ID 는 ○○ 입니다. ○○(UTC) 의 4732 에서 MemberSid 가 이 SID 이고 그룹 이름은 ○○ 입니다."
 - 쓰면 안 되는 문장: "사용자 ○○가 몰래 관리자 계정을 만들었다."
 
-두 번째 문장은 기록에 없는 사람과 의도를 적습니다. 로그온 ID 로 세션을 잇고, 그 세션의 다른 기록을 따로 적습니다.
+두 번째 문장은 기록에 없는 사람과 의도를 적고 있습니다. 로그온 ID 로 세션을 잇고, 그 세션의 다른 기록을 따로 적습니다.
 
 ## 시각 해석
 
-- 4720 의 기록 시각은 계정이 만들어진 때입니다. 4738 은 계정이 바뀐 때, 4732 는 구성원이 더해진 때입니다.
-- 4720 의 PasswordLastSet 칸은 이벤트 시각과 따로 적힌 값입니다. Microsoft 는 이 값이 미래 시각이면 살피라고 권합니다.
+- 4720 의 기록 시각은 계정이 만들어진 때이고, 4738 은 계정이 바뀐 때, 4732 는 구성원이 더해진 때입니다.
+- 4720 의 PasswordLastSet 칸은 이벤트 시각과 따로 적힌 값이며, Microsoft 는 이 값이 미래 시각이면 살피라고 권합니다.
 - 레코드의 기록 시각을 저장하는 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 - 보안 로그는 크기 한도에 이르면 오래된 기록부터 밀려납니다. 한 PC 에서는 약 2일치만 남아 있었습니다. (확인 범위: Win11 25H2 한 대) 오래전에 만든 계정의 4720 은 남아 있지 않을 때가 많습니다.

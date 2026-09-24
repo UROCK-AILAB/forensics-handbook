@@ -22,9 +22,9 @@ WinRAR 도 `HKEY_CURRENT_USER\Software\WinRAR\` 아래에 압축 파일 이름�
 - 7-Zip 파일 관리자 창에서 본 폴더 (7-Zip FolderHistory·PanelPath#)
 - 연 압축 파일과 압축 창에 넣은 이름 (WinRAR ArcHistory·ArcName)
 
-HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 그래서 어느 계정의 기록인지 알 수 있습니다. 하이브 파일은 [하이브 파일 종류와 위치](../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
+HKCU 는 로그온한 사용자의 NTUSER.DAT 라서 어느 계정의 기록인지 알 수 있습니다. 하이브 파일은 [하이브 파일 종류와 위치](../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
 
-자료를 빼돌리기 전에 모아서 압축하는 일이 많습니다. 그래서 이 기록은 유출 조사에서 자주 봅니다. 조사 흐름은 [퇴사 전 자료를 모으고 압축했나](../../04-scenarios/exfiltration/data-exfiltration/staging.md) 에서 다룹니다.
+자료를 빼돌리기 전에 모아서 압축하는 일이 많아서 이 기록은 유출 조사에서 자주 봅니다. 조사 흐름은 [퇴사 전 자료를 모으고 압축했나](../../04-scenarios/exfiltration/data-exfiltration/staging.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -34,7 +34,7 @@ HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 그래서 어느 계정
 | WinRAR | `HKCU\Software\WinRAR\ArcHistory`, `HKCU\Software\WinRAR\DialogEditHistory\ArcName`, `HKCU\Software\WinRAR\DialogEditHistory\ExtrPath` | winreg-kb WinRAR |
 | Bandizip | 확인하지 못했습니다 | — |
 
-- 이 기록은 Windows 가 아니라 각 프로그램이 씁니다. 그래서 Windows 버전보다 프로그램 버전에 따라 달라질 수 있습니다.
+- 이 기록은 Windows 가 아니라 각 프로그램이 쓰므로 Windows 버전보다 프로그램 버전에 따라 달라질 수 있습니다.
 - 7-Zip 값은 공식 저장소의 현재 소스 코드 기준입니다. 값마다 들어온 7-Zip 버전은 확인하지 못했습니다.
 - WinRAR 값이 버전마다 어떻게 다른지는 확인하지 못했습니다.
 

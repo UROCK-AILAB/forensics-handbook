@@ -11,10 +11,9 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 | WinRM/Operational | WSMan 세션·셸·명령을 만들고 닫을 때, 인증에 실패할 때, 서비스가 시작·멈출 때 | 연결 문자열, 리소스 URI, 셸 ID, 명령 ID, 인증 실패 내용, 가상 계정으로 실행한 사용자 |
 | WMI-Activity/Operational | WMI 공급자가 시작할 때, WMI 호출이 실패할 때, 이벤트 구독이 동작할 때 | 공급자 이름과 호스트 프로세스, 호출한 사용자·컴퓨터·프로세스, 네임스페이스와 쿼리 원문 |
 
-- WinRM 은 지금 지원되는 모든 Windows 에 기본으로 설치돼 있습니다.
-- WinRM 서비스가 돌아도 리스너 (Listener) 가 없으면 요청을 주고받지 못합니다. 기본으로는 리스너가 없습니다.
-- `winrm quickconfig` (`winrm qc`) 는 서비스를 자동 시작으로 바꾸고 시작합니다. 이어서 HTTP 또는 HTTPS 리스너를 모든 IP 에 만들고 방화벽 예외를 엽니다.
-- Vista 부터 WMI 는 옛 로그 파일 대신 ETW 를 씁니다. 이벤트 뷰어나 `wevtutil` 로 봅니다.
+WinRM 은 지금 지원되는 모든 Windows 에 기본으로 설치돼 있지만, 서비스가 돌아도 리스너 (Listener) 가 없으면 요청을 주고받지 못하고 기본으로는 리스너가 없습니다. `winrm quickconfig` (`winrm qc`) 는 서비스를 자동 시작으로 바꾸고 시작한 뒤 HTTP 또는 HTTPS 리스너를 모든 IP 에 만들고 방화벽 예외를 엽니다.
+
+WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어나 `wevtutil` 로 봅니다.
 
 원격 실행 도구가 도착 PC 에 남기는 흔적 전체는 [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md)에서 다룹니다. 이 페이지는 두 로그와 설정 흔적만 다룹니다.
 
@@ -85,8 +84,7 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 | 44 | The WinRM protocol handler started to create a session at the following destination: %1. | destination | WMI 를 WinRM 으로 부를 때로 보임 |
 | 47 | …operation of type %1 to the server. The operation accesses class %3 under the %2 namespace. | — | WMI 를 WinRM 으로 부를 때로 보임 |
 
-- 이 공급자 메타데이터에는 80·81·82·143·166·168·169 정의가 없었습니다. Operational·Analytic·Debug 채널 모두 같았습니다.
-- 다른 자료가 적은 80·143·166 은 이 빌드에서 확인하지 못했습니다.
+이 공급자 메타데이터에는 80·81·82·143·166·168·169 정의가 없었고 Operational·Analytic·Debug 채널 모두 같았으며, 다른 자료가 적은 80·143·166 은 이 빌드에서 확인하지 못했습니다.
 
 ### WMI-Activity/Operational 이벤트
 
@@ -100,8 +98,8 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 
 (확인 범위: Win11 빌드 26200 한 대)
 
-- 이 이벤트들의 값은 EventData 가 아니라 UserData 아래에 들어 있었습니다.
-- 5857 은 `UserData\Operation_StartedOperational`, 5858 은 `UserData\Operation_ClientFailure` 요소였습니다. 네임스페이스는 `http://manifests.microsoft.com/win/2006/windows/WMI` 였습니다.
+이 이벤트들의 값은 EventData 가 아니라 UserData 아래에 들어 있었습니다. 5857 은 `UserData\Operation_StartedOperational`, 5858 은 `UserData\Operation_ClientFailure` 요소였고 네임스페이스는 `http://manifests.microsoft.com/win/2006/windows/WMI` 였습니다.
+
 - 5857 의 칸은 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다.
 - 5861 은 영구 이벤트 구독과 관련된 이벤트입니다. [WMI 영구 이벤트 구독](../persistence/wmi-event-subscription.md)에서 다룹니다.
 
@@ -112,10 +110,7 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 | 5857 | ProviderName CIMWin32, Code 0x0, HostProcess `wmiprvse.exe`, ProviderPath `%systemroot%\system32\wbem\cimwin32.dll`, Security UserID S-1-5-20 (NETWORK SERVICE), Level 0 |
 | 5858 | ClientMachine [컴퓨터 이름], User [컴퓨터 이름]\[사용자], ClientProcessId, Operation `Start IWbemServices::ExecQuery - root\CIMV2 : SELECT * FROM Win32_ComputerSystem`, ResultCode 0x80041032, Security UserID S-1-5-18 |
 
-- 5858 의 Operation 칸에는 네임스페이스와 WQL 쿼리 원문이 들어 있습니다.
-- 그래서 실패한 호출만이라도 누가 (User), 어느 컴퓨터에서 (ClientMachine), 어떤 프로세스로 (ClientProcessId), 무엇을 물었는지 볼 수 있습니다.
-- 5858 이 실패한 작업만 남는지는 확인하지 못했습니다.
-- 원격 호출일 때 ClientMachine 에 출발 PC 이름이 들어가는지도 확인하지 못했습니다.
+5858 의 Operation 칸에는 네임스페이스와 WQL 쿼리 원문이 들어 있어서, 실패한 호출만이라도 누가 (User), 어느 컴퓨터에서 (ClientMachine), 어떤 프로세스로 (ClientProcessId), 무엇을 물었는지 볼 수 있습니다. 5858 이 실패한 작업만 남는지, 원격 호출일 때 ClientMachine 에 출발 PC 이름이 들어가는지는 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -136,7 +131,7 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 
 ## 시각 해석
 
-- 세션을 여는 쪽과 받는 쪽의 기록은 서로 다른 PC 에 있습니다. 두 PC 의 시계가 맞는지 먼저 확인합니다. 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
+- 세션을 여는 쪽과 받는 쪽의 기록은 서로 다른 PC 에 있으므로 두 PC 의 시계가 맞는지 먼저 확인합니다. 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 - 145 의 메시지는 작업 시작, 132·142 의 메시지는 작업 성공·실패입니다. 같은 operationName 의 145 와 132·142 사이를 작업 시간으로 볼 수 있습니다. 이 판단은 메시지에서 이끈 해석입니다.
 - 두 로그는 1MB 라 덮는 기간이 짧습니다. 조사한 PC 에서 WinRM 로그 1,984건은 가장 오래된 기록이 약 40일 전이었습니다. WMI-Activity 로그는 약 하루 치만 있었습니다 (5858 1,080건, 5857 112건). (확인 범위: Win11 빌드 26200 한 대)
 - 시각 값 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.

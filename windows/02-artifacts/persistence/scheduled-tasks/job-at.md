@@ -25,7 +25,7 @@ XP 에서는 `HKLM\Software\Microsoft\SchedulingAgent` 키를 씁니다. 이 키
 
 - DataVersion, LastTaskRun, LogPath, MaxLogSizeKB, MinutesBeforeIdle, OldName, PriorDataVersion, TasksFolder
 
-winreg-kb 문서에는 이 값들의 뜻이 비어 있습니다. 다만 TasksFolder 와 LogPath 는 이름으로 보아 작업 폴더와 로그 파일의 위치를 찾는 첫 단서입니다. `.job` 파일의 기본 위치와 XP 작업 로그 파일은 이번 조사에서 확인하지 못했습니다. XP 검체에서는 TasksFolder 값을 먼저 읽고, 그 폴더를 봅니다.
+winreg-kb 문서에는 이 값들의 뜻이 비어 있습니다. 다만 TasksFolder 와 LogPath 는 이름으로 보아 작업 폴더와 로그 파일의 위치를 찾는 첫 단서입니다. `.job` 파일의 기본 위치와 XP 작업 로그 파일은 이번 조사에서 확인하지 못했고, XP 검체에서는 TasksFolder 값을 먼저 읽고, 그 폴더를 봅니다.
 
 Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](taskcache-tree-tasks.md)에서 다룹니다.
 
@@ -44,9 +44,9 @@ Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree
 | 0x0603 | 8.1 |
 | 0x0a00 | 10 |
 
-표에는 Windows 10 값까지 있습니다. 하지만 Vista 이후 시스템에서 `at` 이나 `schtasks /v1` 으로 만든 작업이 `.job` 을 함께 남기는지는 이번 조사에서 확인하지 못했습니다.
+표에는 Windows 10 값까지 있지만 Vista 이후 시스템에서 `at` 이나 `schtasks /v1` 으로 만든 작업이 `.job` 을 함께 남기는지는 이번 조사에서 확인하지 못했습니다.
 
-한 PC 의 `C:\Windows\Tasks` 폴더에는 `SA.DAT` 파일 하나만 있었습니다. 크기는 6바이트(`06 00 00 00 02 03`)였습니다. 이 파일의 뜻은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 의 `C:\Windows\Tasks` 폴더에는 6바이트(`06 00 00 00 02 03`)짜리 `SA.DAT` 파일 하나만 있었고, 이 파일의 뜻은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
 
 ## 구조
 
@@ -123,13 +123,7 @@ Vista 이후 작업 스케줄러에서도 같은 꼴의 값이 보입니다. 한
 
 ## at 명령
 
-Microsoft 문서는 `at` 을 다음과 같이 설명합니다.
-
-- 정해진 날짜와 시각에 명령이나 프로그램을 실행하도록 예약합니다.
-- Schedule 서비스가 돌고 있을 때만 쓸 수 있습니다.
-- 인자 없이 실행하면 예약 목록을 보여 줍니다.
-- 로컬 Administrators 그룹 구성원이어야 씁니다.
-- 예약한 명령은 백그라운드로 돌고, 현재 폴더는 systemroot 입니다.
+Microsoft 문서에 따르면 `at` 은 정해진 날짜와 시각에 명령이나 프로그램을 실행하도록 예약하며, Schedule 서비스가 돌고 있을 때만 쓸 수 있습니다. 인자 없이 실행하면 예약 목록을 보여 주고, 로컬 Administrators 그룹 구성원이어야 쓸 수 있습니다. 예약한 명령은 백그라운드로 돌고 현재 폴더는 systemroot 입니다.
 
 형식은 다음과 같습니다.
 

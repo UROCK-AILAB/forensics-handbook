@@ -13,7 +13,7 @@
 | 자동완성 (Autocomplete) | 입력란 하나의 이름과 값 한 쌍 | `autofill` |
 | 자동 채우기 (Autofill) | 주소·카드처럼 여러 입력란을 한 번에 채우는 묶음 | 주소 표, `credit_cards` 등 |
 
-Chromium 소스는 입력란 하나짜리를 Autocomplete, 묶음을 Autofill 로 부릅니다. 그런데 자동완성 항목을 담는 표의 이름은 `autofill` 입니다. 이름 때문에 둘을 헷갈리기 쉽습니다.
+Chromium 소스는 입력란 하나짜리를 Autocomplete, 묶음을 Autofill 로 부르는데, 자동완성 항목을 담는 표의 이름은 `autofill` 이라서 둘을 헷갈리기 쉽습니다.
 
 Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁니다.
 
@@ -25,7 +25,7 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 - 설정에서 자동완성을 끄면 저장하지 않습니다.
 - 시크릿 창 (Incognito) 에서 제출한 폼은 저장하지 않습니다.
 
-같은 이름과 값을 다시 제출하면 새 행이 생기지 않습니다. 기존 행의 `count` 가 1 늘고 `date_last_used` 가 그때 시각으로 바뀝니다. `date_created` 는 그대로입니다.
+같은 이름과 값을 다시 제출하면 새 행이 생기지 않고, 기존 행의 `count` 가 1 늘며 `date_last_used` 가 그때 시각으로 바뀝니다. `date_created` 는 그대로입니다.
 
 주소와 카드는 사용자가 브라우저에 저장한 정보입니다. 계정 쪽에 저장된 카드는 번호를 가린 사본으로 따로 남습니다.
 
@@ -73,10 +73,7 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 | `date_last_used` | INTEGER, 기본값 0 | 마지막으로 제출한 시각입니다 |
 | `count` | INTEGER, 기본값 1 | 제출한 횟수입니다 |
 
-- 기본 키는 (`name`, `value`) 입니다. 같은 값이라도 입력란 이름이 다르면 다른 행입니다.
-- 색인은 `name` 하나짜리와 (`name`, `value_lower`) 짜리가 있습니다.
-- 사이트 주소, 페이지 제목, 사용자 이름을 담는 열은 없습니다.
-- 사이트 안 검색창도 폼 입력란입니다. 그래서 검색어가 `q` 같은 이름으로 남을 수 있습니다.
+기본 키는 (`name`, `value`) 이라서 같은 값이라도 입력란 이름이 다르면 다른 행입니다. 색인은 `name` 하나짜리와 (`name`, `value_lower`) 짜리가 있습니다. 사이트 주소, 페이지 제목, 사용자 이름을 담는 열은 없습니다. 사이트 안 검색창도 폼 입력란이라서 검색어가 `q` 같은 이름으로 남을 수 있습니다.
 
 ### 주소 표 (스키마 134 이후)
 
@@ -151,11 +148,9 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 | `addresses.date_modified`, `credit_cards.date_modified` | Unix 시각, 초, UTC | 내용을 마지막으로 고친 때 |
 | `keywords.date_created`·`last_modified`·`last_visited` | WebKit 시각, 1601-01-01 부터 마이크로초, UTC | 열 이름대로의 사건 |
 
-- Chromium 은 자동완성·주소·카드 시각을 `ToTimeT()` 로 씁니다. 1970년부터 센 초입니다.
-- `keywords` 는 SQLite 도우미 `BindTime()` 으로 씁니다. 1601년부터 센 마이크로초입니다.
-- 둘 다 UTC 입니다. 현지 시각으로 바꿀 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
-- 값 0 은 시각이 없다는 뜻입니다. 열의 기본값이 0 입니다.
-- 형식을 잘못 짐작하면 티가 납니다. Unix 초를 WebKit 마이크로초로 읽으면 1601년 1월 1일 새벽이 나옵니다.
+Chromium 은 자동완성·주소·카드 시각을 `ToTimeT()` 로 써서 1970년부터 센 초로 남기고, `keywords` 는 SQLite 도우미 `BindTime()` 으로 써서 1601년부터 센 마이크로초로 남깁니다. 둘 다 UTC 이며, 현지 시각으로 바꿀 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
+
+값 0 은 시각이 없다는 뜻이고 열의 기본값도 0 입니다. 형식을 잘못 짐작하면 티가 나는데, Unix 초를 WebKit 마이크로초로 읽으면 1601년 1월 1일 새벽이 나옵니다.
 
 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 

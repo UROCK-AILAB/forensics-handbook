@@ -8,11 +8,11 @@ OneDrive 는 연결한 계정마다 사용자 레지스트리의 `HKCU\Software\
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하나 만듭니다. 개인 계정은 `Personal`, 회사·학교 계정은 `Business1`, `Business2` … 입니다 (관찰).
-- 앱은 이 키에 계정을 알아보는 값, 동기화 폴더 경로, 여러 시각 값을 적습니다 (관찰).
-- 앱은 동기화 폴더를 Windows 클라우드 파일 기능에도 등록합니다. 그래서 같은 폴더가 `SyncEngines` 키와 `SyncRootManager` 키에 다시 나옵니다 (관찰). 이 등록 방식 전반은 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
-- 계정별 설정 파일은 레지스트리와 별도로 `%LOCALAPPDATA%\Microsoft\OneDrive\settings\` 아래 계정 폴더에 있습니다.
-- 관리자는 그룹 정책 (Group Policy) 으로 OneDrive 설정을 강제할 수 있습니다. 그룹 정책은 `Policies` 아래에 레지스트리 키를 써서 동작합니다.
+OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하나 만듭니다. 개인 계정은 `Personal`, 회사·학교 계정은 `Business1`, `Business2` … 이고, 앱은 이 키에 계정을 알아보는 값, 동기화 폴더 경로, 여러 시각 값을 적습니다 (관찰).
+
+앱은 동기화 폴더를 Windows 클라우드 파일 기능에도 등록하기 때문에 같은 폴더가 `SyncEngines` 키와 `SyncRootManager` 키에 다시 나옵니다 (관찰). 이 등록 방식 전반은 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
+
+계정별 설정 파일은 레지스트리와 별도로 `%LOCALAPPDATA%\Microsoft\OneDrive\settings\` 아래 계정 폴더에 있습니다. 관리자는 그룹 정책 (Group Policy) 으로 OneDrive 설정을 강제할 수 있고, 그룹 정책은 `Policies` 아래에 레지스트리 키를 써서 동작합니다.
 
 ## 위치와 버전별 차이
 
@@ -25,9 +25,9 @@ OneDrive 는 연결한 계정마다 사용자 레지스트리의 `HKCU\Software\
 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive`, `HKCU\SOFTWARE\Policies\Microsoft\OneDrive` | `SOFTWARE`, 사용자 `NTUSER.DAT` | 관리자 정책 |
 | `%LOCALAPPDATA%\Microsoft\OneDrive\settings\<Personal 또는 BusinessN>\` | 파일 | 계정별 ini 설정 파일과 DB |
 
-- `settings` 폴더는 회사 계정을 `Business1` 부터 `Business9` 까지 나눠 둡니다.
-- 하이브 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
-- 값의 이름과 구성은 OneDrive 앱이 정합니다. 이 페이지의 값 목록은 OneDrive 26.168.0830.0006 에서 본 것이므로, 옛 버전에서는 없는 값이 있을 수 있습니다.
+`settings` 폴더는 회사 계정을 `Business1` 부터 `Business9` 까지 나눠 둡니다. 하이브 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+
+값의 이름과 구성은 OneDrive 앱이 정하는데, 이 페이지의 값 목록은 OneDrive 26.168.0830.0006 에서 본 것이라 옛 버전에서는 없는 값이 있을 수 있습니다.
 
 `SyncRootManager` 키에는 Windows 버전에 따라 생기는 값이 있습니다. 동기화 앱은 아래 값을 동기화 루트 키에 적습니다.
 
@@ -87,9 +87,9 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `KFMOnboardingEnabledStartTime`, `LastKFMOptInTime`, `LastKnownFolderBackupTime` | 알려진 폴더 이동 (Known Folder Move, KFM) 관련 시각 |
 | `WebView2InstallCheckedTimeStamp` | WebView2 설치 여부를 확인한 때 |
 
-`FirstRunSignInOriginDateTime` 은 형식이 REG_SZ 입니다. 그런데 내용은 Unix 초 숫자를 적은 문자열이었습니다.
+`FirstRunSignInOriginDateTime` 은 형식이 REG_SZ 이지만 내용은 Unix 초 숫자를 적은 문자열이었습니다.
 
-각 값을 정확히 언제 적는지는 공개 자료로 확인하지 못했습니다. 예를 들어 `_Upload` 가 올리기를 시작한 때인지 끝낸 때인지 알 수 없습니다. 보고서에는 이름에서 짐작한 뜻이라고 밝힙니다.
+각 값을 정확히 언제 적는지는 공개 자료로 확인하지 못했고, 예를 들어 `_Upload` 가 올리기를 시작한 때인지 끝낸 때인지 알 수 없습니다. 보고서에는 이름에서 짐작한 뜻이라고 밝힙니다.
 
 **상태 값**
 
@@ -181,9 +181,7 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive\EnableODIgnoreListFromGPO` | 올리지 않을 파일 목록입니다 |
 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive` `FilesOnDemandEnabled` = 1 | 파일 주문형 (Files On-Demand) 을 켭니다 |
 
-- `LocalMassDeleteFileDeleteThreshold` 를 구성하지 않으면, 짧은 시간에 파일을 200개 넘게 지울 때 알림이 뜹니다.
-- 파일 주문형 옵션이 보이지 않으면 `HKLM\SYSTEM\CurrentControlSet\Services\CldFlt` 의 `Start` 가 2(AUTO_START)인지 봅니다. 이 드라이버가 Windows Cloud Files Filter Driver 입니다. 서비스 키 읽는 법은 [서비스·드라이버](../../persistence/services-drivers.md) 에 있습니다.
-- 관찰한 PC 에는 두 정책 키가 모두 없었습니다 (관찰).
+`LocalMassDeleteFileDeleteThreshold` 를 구성하지 않으면, 짧은 시간에 파일을 200개 넘게 지울 때 알림이 뜹니다. 파일 주문형 옵션이 보이지 않으면 `HKLM\SYSTEM\CurrentControlSet\Services\CldFlt` 의 `Start` 가 2(AUTO_START)인지 보는데, 이 드라이버가 Windows Cloud Files Filter Driver 입니다. 서비스 키 읽는 법은 [서비스·드라이버](../../persistence/services-drivers.md) 에 있습니다. 관찰한 PC 에는 두 정책 키가 모두 없었습니다 (관찰).
 
 ## 증거로서 의미
 

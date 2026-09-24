@@ -4,10 +4,7 @@
 
 ## 한 줄 요약
 
-Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대로 씁니다.
-그래서 앱 폴더 안에 브라우저와 같은 모양의 폴더가 생깁니다.
-위치는 앱이 정합니다.
-기본 위치를 알아 두고, 기본 위치를 벗어난 폴더는 `Local State`·`EBWebView` 이름으로 찾습니다.
+Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대로 써서 앱 폴더 안에 브라우저와 같은 모양의 폴더가 생깁니다. 위치는 앱이 정하므로 기본 위치를 알아 두고, 기본 위치를 벗어난 폴더는 `Local State`·`EBWebView` 이름으로 찾습니다.
 
 ## 이 구조를 쓰는 아티팩트
 
@@ -22,12 +19,9 @@ Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대�
 | Discord | 폴더 두 개를 봤지만 안은 보지 않음 | 관찰 | [디스코드](../../../02-artifacts/messengers/discord.md) |
 | Slack | 관찰 PC 에 없음 | — | [슬랙](../../../02-artifacts/messengers/slack.md) |
 
-이 페이지에서 "관찰" 이라고 적은 내용은 Windows 11(빌드 26200) PC 한 대에서 본 것입니다.
-폴더·파일 이름, JSON 키 이름, 파일 앞 몇 바이트만 봤습니다.
-모든 PC 와 모든 앱 버전에 맞는다고 보장하지 못합니다.
+이 페이지에서 "관찰" 이라고 적은 내용은 Windows 11(빌드 26200) PC 한 대에서 폴더·파일 이름, JSON 키 이름, 파일 앞 몇 바이트만 보고 적은 것이라 모든 PC 와 모든 앱 버전에 맞는다고 보장하지 못합니다.
 
-안에 든 파일을 읽는 법은 브라우저와 같습니다.
-프로필 폴더와 `Local State` 는 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 에서, 캐시는 [캐시 형식](blockfile-simple-cache.md) 에서, 암호화는 [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) 에서 다룹니다.
+안에 든 파일을 읽는 법은 브라우저와 같아서 프로필 폴더와 `Local State` 는 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 에서, 캐시는 [캐시 형식](blockfile-simple-cache.md) 에서, 암호화는 [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) 에서 다룹니다.
 
 ## 구조
 
@@ -35,8 +29,7 @@ Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대�
 
 ### Electron 앱
 
-Electron 은 폴더 자리에 이름을 붙여 부릅니다.
-아래 표는 Electron 문서에 적힌 Windows 기본값입니다.
+Electron 은 폴더 자리에 이름을 붙여 부르며, 아래 표는 Electron 문서에 적힌 Windows 기본값입니다.
 
 | 이름 | Windows 기본값 | 두는 것 |
 |---|---|---|
@@ -44,21 +37,17 @@ Electron 은 폴더 자리에 이름을 붙여 부릅니다.
 | `userData` | `appData` 에 앱 이름을 붙인 폴더. 곧 `%APPDATA%\<앱 이름>` | 앱 데이터 |
 | `sessionData` | `userData` 와 같음 | localStorage·쿠키·디스크 캐시·네트워크 상태·DevTools 파일·GPU 셰이더 같은 세션 데이터 |
 
-- 앱 이름은 `package.json` 의 이름에서 옵니다. 보통 `productName` 을 `name` 보다 먼저 씁니다 (Electron 문서).
-- 그래서 폴더 이름이 실행 파일 이름이나 제품 이름과 다를 수 있습니다.
-- 앱은 `ready` 이벤트 전에 `sessionData` 경로를 바꿀 수 있습니다 (Electron 문서). 그러면 쿠키·캐시가 `userData` 가 아닌 곳에 생깁니다.
-- Electron 문서는 앱 전용 파일을 `userData` 바로 아래가 아니라 하위 폴더에 두라고 권합니다. Chromium 이 만드는 폴더와 이름이 겹칠 수 있기 때문입니다.
-- 이 권고를 따르지 않은 앱은 `userData` 바로 아래에 Chromium 폴더와 앱 폴더가 섞입니다. 폴더마다 누가 만들었는지 가려서 읽습니다.
+앱 이름은 `package.json` 의 이름에서 오고, 보통 `productName` 을 `name` 보다 먼저 씁니다 (Electron 문서). 그래서 폴더 이름이 실행 파일 이름이나 제품 이름과 다를 수 있습니다.
+
+앱은 `ready` 이벤트 전에 `sessionData` 경로를 바꿀 수 있고 (Electron 문서), 그러면 쿠키·캐시가 `userData` 가 아닌 곳에 생깁니다.
+
+Electron 문서는 Chromium 이 만드는 폴더와 이름이 겹칠 수 있으므로 앱 전용 파일을 `userData` 바로 아래가 아니라 하위 폴더에 두라고 권합니다. 이 권고를 따르지 않은 앱은 `userData` 바로 아래에 Chromium 폴더와 앱 폴더가 섞이므로, 폴더마다 누가 만들었는지 가려서 읽습니다.
 
 #### 관찰 예: VS Code
 
 VS Code 의 폴더는 `%APPDATA%\Code` 였습니다 (관찰).
 
-- `Default` 같은 프로필 폴더가 없었습니다.
-- `Cache`, `Code Cache`, `Local Storage`, `Session Storage`, `Network`, `Preferences`, `Service Worker` 가 `userData` 바로 아래에 있었습니다.
-- `Local State` 도 같은 폴더에 있었습니다.
-- `Partitions` 폴더 아래에 따로 나뉜 세션 데이터 폴더가 있었습니다. 예: `vscode-browser`
-- `Network\Cookies` 와 `Cache\Cache_Data` 는 브라우저와 같은 구조였습니다.
+`Default` 같은 프로필 폴더가 없었고, `Cache`, `Code Cache`, `Local Storage`, `Session Storage`, `Network`, `Preferences`, `Service Worker` 와 `Local State` 가 `userData` 바로 아래에 있었습니다. `Partitions` 폴더 아래에는 따로 나뉜 세션 데이터 폴더가 있었습니다. 예: `vscode-browser`. `Network\Cookies` 와 `Cache\Cache_Data` 는 브라우저와 같은 구조였습니다.
 
 `Partitions` 아래 폴더도 프로필 폴더처럼 쿠키·캐시가 따로 쌓이는 자리로 보고 따로 읽습니다.
 
@@ -72,14 +61,12 @@ WebView2 는 사용자 데이터 폴더 (User Data Folder, UDF) 에 쿠키·권�
 | ClickOnce | 실행 파일이 있는 폴더 또는 그 하위 |
 | WinUI 2 (UWP)·패키지된 WinUI 3 | 패키지 폴더의 `ApplicationData\LocalFolder` |
 
-- Microsoft 문서는 Win32·.NET 앱에 대부분 위치를 직접 정하라고 권합니다(`userDataFolder` 인수).
-- 이유는 설치 폴더(`Program Files` 등)에 쓰기 권한이 없어서 기본 위치가 실패하기 때문입니다.
-- 그래서 실제 앱은 기본 위치가 아닌 곳을 쓰는 경우가 많습니다.
-- UDF 를 만든 뒤 브라우저 데이터는 UDF 안의 하위 폴더에 쌓입니다 (Microsoft 문서).
-- 관찰한 하위 폴더 이름은 모두 `EBWebView` 였습니다.
-- `EBWebView` 안은 브라우저 User Data 와 같은 구성이었습니다 (관찰). `Local State`, `Last Version`, 그리고 `Default\` 아래 `History`, `Login Data`, `Network\Cookies`, `Cache\Cache_Data`, `Code Cache`, `Local Storage` 등이 있었습니다.
-- UDF 하나에 프로필을 여러 개 둘 수 있습니다. 프로필마다 전용 폴더가 생깁니다 (Microsoft 문서).
-- UDF 하나는 한 번에 WebView2 세션 하나만 씁니다. 같은 UDF 를 쓰는 컨트롤은 앱이 달라도 세션을 함께 씁니다 (Microsoft 문서).
+Microsoft 문서는 설치 폴더(`Program Files` 등)에 쓰기 권한이 없어 기본 위치가 실패하기 때문에 Win32·.NET 앱에 대부분 위치를 직접 정하라고 권합니다(`userDataFolder` 인수). 그래서 실제 앱은 기본 위치가 아닌 곳을 쓰는 경우가 많습니다.
+
+UDF 를 만든 뒤 브라우저 데이터는 UDF 안의 하위 폴더에 쌓이고 (Microsoft 문서), 관찰한 하위 폴더 이름은 모두 `EBWebView` 였습니다. `EBWebView` 안은 브라우저 User Data 와 같은 구성이었습니다 (관찰). `Local State`, `Last Version`, 그리고 `Default\` 아래 `History`, `Login Data`, `Network\Cookies`, `Cache\Cache_Data`, `Code Cache`, `Local Storage` 등이 있었습니다.
+
+UDF 하나에는 프로필을 여러 개 둘 수 있고 프로필마다 전용 폴더가 생깁니다 (Microsoft 문서). 다만 UDF 하나는 한 번에 WebView2 세션 하나만 쓰며, 같은 UDF 를 쓰는 컨트롤은 앱이 달라도 세션을 함께 씁니다 (Microsoft 문서).
+
 - 패키지 앱 폴더의 구조는 [UWP 앱 데이터 구조](../packages-settings-dat.md) 에서 다룹니다.
 
 #### 관찰한 EBWebView 위치
@@ -103,9 +90,7 @@ WebView2 는 사용자 데이터 폴더 (User Data Folder, UDF) 에 쿠키·권�
 | 새 Teams | `153.0.4234.48` |
 | OneDrive | `149.0.4022.96` |
 
-같은 PC 안에서도 폴더마다 Chromium 버전이 다를 수 있습니다.
-그래서 파일 구조를 판단할 때는 그 폴더의 `Last Version` 을 기준으로 삼습니다.
-같은 PC 의 Edge 브라우저 버전으로 짐작하지 않습니다.
+같은 PC 안에서도 폴더마다 Chromium 버전이 다를 수 있으므로, 파일 구조를 판단할 때는 그 폴더의 `Last Version` 을 기준으로 삼고 같은 PC 의 Edge 브라우저 버전으로 짐작하지 않습니다.
 
 ### Teams
 
@@ -114,10 +99,8 @@ WebView2 는 사용자 데이터 폴더 (User Data Folder, UDF) 에 쿠키·권�
 | 클래식 Teams | `%appdata%\Microsoft\Teams` |
 | 새 Teams | `%userprofile%\appdata\local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams` |
 
-- 새 Teams 의 `EBWebView\Local State` 에는 프로필이 두 개 있었습니다. `Default` 와 `WV2Profile_tfw` 입니다 (관찰).
-- `EBWebView` 아래에 `WV2Profile_tfw` 폴더가 있었습니다 (관찰). "tfw" 의 뜻은 확인하지 못했습니다.
-- 두 프로필 폴더를 모두 읽습니다.
-- 새 Teams 를 WebView2 기반으로 본 근거는 `EBWebView` 폴더뿐입니다. 공식 설명은 확인하지 못했습니다.
+새 Teams 의 `EBWebView\Local State` 에는 `Default` 와 `WV2Profile_tfw` 두 프로필이 있었고, `EBWebView` 아래에도 `WV2Profile_tfw` 폴더가 있었습니다 (관찰). "tfw" 의 뜻은 확인하지 못했습니다. 두 프로필 폴더를 모두 읽습니다. 새 Teams 를 WebView2 기반으로 본 근거는 `EBWebView` 폴더뿐이고 공식 설명은 확인하지 못했습니다.
+
 - 대화 기록 같은 Teams 고유 해석은 [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) 에서 다룹니다.
 
 ### Discord·Slack
@@ -149,27 +132,21 @@ Microsoft 문서에 적힌 UDF 삭제 규칙은 아래와 같습니다.
 | ClickOnce 앱 | 세션이 끝나면 UDF 를 자동으로 지웁니다 |
 | 앱이 UDF 위치를 바꿈 | 이전 UDF 를 자동으로 정리하지 않습니다 |
 
-- 그래서 앱을 지운 뒤에도 UDF 가 남을 수 있습니다 (해석).
-- 설치 목록에 없는 앱의 `EBWebView` 가 보이면 지운 앱의 흔적인지 확인합니다.
-- MSIX 와 스토어 패키지 앱의 규칙이 서로 달라 보입니다. 실제로 남았는지는 폴더를 직접 보고 판단합니다.
+그래서 앱을 지운 뒤에도 UDF 가 남을 수 있습니다 (해석). 설치 목록에 없는 앱의 `EBWebView` 가 보이면 지운 앱의 흔적인지 확인합니다. MSIX 와 스토어 패키지 앱의 규칙이 서로 달라 보이므로 실제로 남았는지는 폴더를 직접 보고 판단합니다.
 
 ### 여러 앱이 함께 쓰는 UDF
 
-- 같은 UDF 를 쓰는 컨트롤은 앱이 달라도 세션을 함께 씁니다 (Microsoft 문서).
-- 그래서 한 UDF 안의 쿠키·기록이 폴더 경로가 가리키는 앱에서만 나왔다고 단정하지 않습니다 (해석).
+같은 UDF 를 쓰는 컨트롤은 앱이 달라도 세션을 함께 쓰므로 (Microsoft 문서), 한 UDF 안의 쿠키·기록이 폴더 경로가 가리키는 앱에서만 나왔다고 단정하지 않습니다 (해석).
 
 ### 캐시를 지운 경우
 
-- 새 Teams 는 설정 > 앱 > 설치된 앱 > 고급 옵션 > 재설정 으로도 앱 데이터를 지울 수 있습니다 (Microsoft 문서).
-- Microsoft 문서는 Teams 캐시를 지우면 원인 조사에 쓰는 진단 로그도 함께 지워진다고 적었습니다.
-- 그래서 캐시와 로그가 함께 없으면 사용자가 캐시를 지웠을 가능성도 따져 봅니다 (해석).
+새 Teams 는 설정 > 앱 > 설치된 앱 > 고급 옵션 > 재설정 으로도 앱 데이터를 지울 수 있습니다 (Microsoft 문서). Microsoft 문서는 Teams 캐시를 지우면 원인 조사에 쓰는 진단 로그도 함께 지운다고 적었으므로, 캐시와 로그가 함께 없으면 사용자가 캐시를 지웠을 가능성도 따져 봅니다 (해석).
+
 - 지운 파일은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 방법으로 찾습니다.
 
 ### 지운 기록과 손상
 
-앱 폴더 안의 파일 형식은 브라우저와 같습니다.
-그래서 지운 레코드와 비정상 종료 흔적도 같은 방법으로 봅니다.
-DB 파일은 [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md), 캐시는 [캐시 형식](blockfile-simple-cache.md) 을 봅니다.
+앱 폴더 안의 파일 형식은 브라우저와 같아서 지운 레코드와 비정상 종료 흔적도 같은 방법으로 봅니다. DB 파일은 [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md), 캐시는 [캐시 형식](blockfile-simple-cache.md) 을 봅니다.
 
 ## 함정
 

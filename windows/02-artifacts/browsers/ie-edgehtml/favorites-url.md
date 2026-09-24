@@ -6,12 +6,9 @@ IE 는 즐겨찾기를 사용자 즐겨찾기 폴더 (Favorites) 안의 `.url` �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 즐겨찾기는 사용자가 다시 찾아가려고 저장해 둔 웹 주소입니다.
-- IE 의 즐겨찾기 하나는 즐겨찾기 폴더 안의 `.url` 파일 하나입니다.
-- `.url` 파일은 인터넷 바로가기 (Internet Shortcut) 입니다. 파일 안의 `[InternetShortcut]` 절에 주소가 있습니다.
-- 즐겨찾기를 추가하면 폴더에 파일이 생깁니다. 지우면 폴더에서 파일이 없어집니다.
-- 그래서 즐겨찾기는 파일 시스템 기록과 함께 읽습니다.
-- Forensafe 글은 옛 엣지의 새 버전이 즐겨찾기를 `spartan.edb` 에 둔다고 적었습니다.
+즐겨찾기는 사용자가 다시 찾아가려고 저장해 둔 웹 주소입니다. IE 의 즐겨찾기 하나는 즐겨찾기 폴더 안의 `.url` 파일 하나이고, 이 파일은 인터넷 바로가기 (Internet Shortcut) 로서 안의 `[InternetShortcut]` 절에 주소가 있습니다. 즐겨찾기를 추가하면 폴더에 파일이 생기고 지우면 파일이 없어지므로, 즐겨찾기는 파일 시스템 기록과 함께 읽습니다.
+
+Forensafe 글은 옛 엣지의 새 버전이 즐겨찾기를 `spartan.edb` 에 둔다고 적었습니다.
 
 이 페이지는 즐겨찾기 파일과 그 위치만 다룹니다. 즐겨찾기 주소에 실제로 방문했는지는 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 와 [옛 기록 파일 (index.dat)](index-dat.md) 에서 봅니다.
 
@@ -66,9 +63,7 @@ IconIndex=0
 IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 ```
 
-- 바이너리가 아니라 INI 형식의 글자 파일입니다.
-- 파일은 `[{` (0x5B 0x7B) 로 시작했습니다. `[InternetShortcut]` 으로 시작하지 않았습니다.
-- 위 일곱 줄의 글자 수를 모두 더하면 194입니다. 줄마다 줄 끝 두 바이트 (CR LF) 를 더하면 208로 파일 크기와 같습니다. 그래서 이 파일은 한 글자를 한 바이트로 적고 줄 끝에 CR LF 를 붙인 것으로 보입니다.
+바이너리가 아니라 INI 형식의 글자 파일이며, `[InternetShortcut]` 이 아니라 `[{` (0x5B 0x7B) 로 시작했습니다. 위 일곱 줄의 글자 수를 모두 더하면 194이고, 줄마다 줄 끝 두 바이트 (CR LF) 를 더하면 208로 파일 크기와 같습니다. 그래서 이 파일은 한 글자를 한 바이트로 적고 줄 끝에 CR LF 를 붙인 것으로 보입니다.
 
 | 줄 | 이 파일의 값 | 읽는 법 |
 |---|---|---|
@@ -116,7 +111,7 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 - **처음부터 들어 있던 항목이 섞입니다.** 한 PC 의 `Bing.url` 은 주소가 `go.microsoft.com` 의 안내 링크였고, 아이콘은 Internet Explorer 설치 폴더의 그림이었습니다. 이런 항목을 사용자가 추가했다고 단정하지 않습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
 - **파일 첫머리만 보면 놓칩니다.** 한 PC 의 `.url` 은 `[InternetShortcut]` 이 아니라 `[{000214A0-…}]` 절로 시작했습니다. 지운 `.url` 을 내용으로 찾을 때는 `[InternetShortcut]` 과 `URL=` 문자열을 파일 어디서든 찾습니다. 검색 방법은 [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) 에서 다룹니다.
 - **지운 즐겨찾기는 파일 시스템에서 찾습니다.** 휴지통, 지운 MFT 레코드, USN 저널, 폴더 인덱스 슬랙을 차례로 봅니다. 크기가 작은 파일은 내용이 MFT 레코드 안에 들어가기도 합니다. 복구 방법은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
-- **쉽게 고칠 수 있습니다.** 글자 파일이라 메모장으로도 주소를 바꿀 수 있습니다. 수정 시각과 USN 저널 기록을 함께 봅니다. 조작 흔적을 보는 법은 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
+- **쉽게 고칠 수 있습니다.** 글자 파일이라 메모장으로도 주소를 바꿀 수 있으므로 수정 시각과 USN 저널 기록을 함께 봅니다. 조작 흔적을 보는 법은 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
 - **폴더를 옮겼을 수 있습니다.** 기본 위치만 보지 않고 `User Shell Folders` 의 `Favorites` 값을 확인합니다.
 - **옛 엣지는 버전에 따라 저장 방식이 다릅니다.** 옛 버전은 패키지 폴더 안 `Favorites` 에 `.url` 을 두고, 새 버전은 `spartan.edb` 에 둡니다. IE 즐겨찾기 폴더의 `.url` 만 찾으면 옛 엣지 즐겨찾기를 놓칩니다. 패키지 폴더를 따로 모읍니다.
 - **`MenuOrder` 키를 해석하지 않습니다.** 형식을 확인하지 못한 키입니다.

@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-이벤트 뷰어에 보이는 설명 문장은 로그 파일 안에 없습니다. 레코드에는 문장의 빈자리(`%1`, `%2` …)에 들어갈 값만 있습니다. 문장 틀은 이벤트를 낸 공급자 (Provider) 의 메시지 파일 (Message File) 에 있습니다. 레지스트리로 메시지 파일을 찾고, 이벤트 식별자로 문장을 고르고, 레코드 값을 채워야 설명 문장이 됩니다.
+이벤트 뷰어에 보이는 설명 문장은 로그 파일 안에 없고, 레코드에는 문장의 빈자리(`%1`, `%2` …)에 들어갈 값만 있습니다. 문장 틀은 이벤트를 낸 공급자 (Provider) 의 메시지 파일 (Message File) 에 있으므로, 레지스트리로 메시지 파일을 찾고 이벤트 식별자로 문장을 고른 뒤 레코드 값을 채워야 설명 문장이 됩니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 레코드 안의 값을 꺼내는 법은 [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) 에 있습니다.
 
@@ -17,9 +17,7 @@
 
 ### 파일 밖에 있는 것
 
-- 이벤트 뷰어가 보여 주는 내용 가운데 일부는 로그 파일 밖에 있습니다.
-- 설명 문장은 메시지 파일에 있습니다. 레코드에는 `%1`·`%2` 자리에 들어갈 문자열만 있습니다.
-- Vista 부터는 WEVT_TEMPLATE 리소스도 파일 밖에 있습니다. 이 리소스로 메시지 식별자, 채널·키워드·수준·opcode·task 이름의 문자열 식별자, UserData 의 해석을 찾습니다.
+이벤트 뷰어가 보여 주는 내용 가운데 일부는 로그 파일 밖에 있습니다. 설명 문장은 메시지 파일에 있고, 레코드에는 `%1`·`%2` 자리에 들어갈 문자열만 있습니다. Vista 부터는 WEVT_TEMPLATE 리소스도 파일 밖에 있으며, 이 리소스로 메시지 식별자, 채널·키워드·수준·opcode·task 이름의 문자열 식별자, UserData 의 해석을 찾습니다.
 
 ### 레지스트리에서 메시지 파일 찾기
 
@@ -27,10 +25,7 @@
 
 **원본 키** — `HKLM\System\CurrentControlSet\Services\EventLog\<로그 종류>\<원본 이름>`
 
-- XP 이하에서 쓰던 방식입니다.
-- 로그 종류는 XML 의 `Channel` 요소에서 얻습니다.
-- 원본 (Source) 이름은 XML `Provider` 요소의 `EventSourceName` 속성입니다. 이 속성이 없으면 `Name` 속성을 씁니다.
-- 원본 이름은 대소문자를 가리지 않습니다.
+XP 이하에서 쓰던 방식이고, 로그 종류는 XML 의 `Channel` 요소에서 얻습니다. 원본 (Source) 이름은 XML `Provider` 요소의 `EventSourceName` 속성이고, 이 속성이 없으면 `Name` 속성을 씁니다. 원본 이름은 대소문자를 가리지 않습니다.
 
 | 값 | 뜻 |
 |---|---|
@@ -55,11 +50,7 @@
 
 확인 PC 의 예입니다(확인 범위: Windows 11 25H2 PC 한 대).
 
-- 원본 키 `EventLog\System\Service Control Manager` 에는 ProviderGuid `{555908d1-a6d7-4695-8e1e-26931d2012f4}` 와 EventMessageFile `%SystemRoot%\system32\services.exe` 가 있었습니다.
-- 같은 GUID 의 Publishers 키는 기본값이 "Service Control Manager" 였습니다.
-- 그 키의 ResourceFileName 과 MessageFileName 은 `%SystemRoot%\system32\services.exe` 였습니다.
-- 그 키의 ParameterFileName 은 `%SystemRoot%\system32\kernel32.dll` 이었습니다.
-- 그 키 아래에 하위 키 ChannelReferences 가 있었습니다.
+원본 키 `EventLog\System\Service Control Manager` 에는 ProviderGuid `{555908d1-a6d7-4695-8e1e-26931d2012f4}` 와 EventMessageFile `%SystemRoot%\system32\services.exe` 가 있었습니다. 같은 GUID 의 Publishers 키는 기본값이 "Service Control Manager" 였고, ResourceFileName 과 MessageFileName 은 `%SystemRoot%\system32\services.exe`, ParameterFileName 은 `%SystemRoot%\system32\kernel32.dll` 이었습니다. 이 키 아래에는 하위 키 ChannelReferences 가 있었습니다.
 
 살아 있는 시스템에서는 `wevtutil gp <공급자 이름>` 으로 공급자 정보를 봅니다. 수집 절차는 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
 
@@ -79,19 +70,13 @@
 
 ### 메시지 파일의 종류
 
-- 메시지 파일은 `.rsrc` 섹션이 있는 PE/COFF 실행 파일입니다. 확장자는 `.exe`·`.dll`·`.dll.mui`·`.sys` 등입니다. PE 구조는 [실행 파일 메타데이터](../../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 를 봅니다.
-- 종류는 두 가지입니다. 메시지 테이블 (Message Table) 리소스가 든 파일과 MUI 리소스 파일입니다.
-- 둘 다 있으면 메시지 테이블을 먼저 쓰는 것으로 보입니다.
-- 언어 중립 MUI 파일에는 메시지 테이블이 없습니다. 문장은 언어별 파일에 있습니다. 예: `C:\Windows\System32\services.exe` → `C:\Windows\System32\en-US\services.exe.mui`.
-- 언어별 파일이 같은 폴더에 있을 수도 있습니다(`C:\Windows\System32\services.exe.mui`).
-- 문장은 언어마다 다릅니다. 한 파일에 여러 언어가 들어 있을 수도 있습니다.
-- ResourceFileName 의 파일에는 WEVT_TEMPLATE 리소스가 있어야 합니다. 최근 Windows 10 에서는 이 리소스가 `C:\Windows\SystemResources\<파일>.mun` 에 있을 수도 있습니다(예: `tquery.dll.mun`).
+메시지 파일은 `.rsrc` 섹션이 있는 PE/COFF 실행 파일이고, 확장자는 `.exe`·`.dll`·`.dll.mui`·`.sys` 등입니다. PE 구조는 [실행 파일 메타데이터](../../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 를 봅니다.
 
-확인 PC 에서 본 모습입니다(확인 범위: Windows 11 25H2 PC 한 대).
+종류는 메시지 테이블 (Message Table) 리소스가 든 파일과 MUI 리소스 파일 두 가지이며, 둘 다 있으면 메시지 테이블을 먼저 쓰는 것으로 보입니다. 언어 중립 MUI 파일에는 메시지 테이블이 없고 문장은 언어별 파일에 있습니다. 예: `C:\Windows\System32\services.exe` → `C:\Windows\System32\en-US\services.exe.mui`. 언어별 파일이 같은 폴더에 있을 수도 있습니다(`C:\Windows\System32\services.exe.mui`). 문장은 언어마다 다르고, 한 파일에 여러 언어가 들어 있을 수도 있습니다.
 
-- `System32\en-US\services.exe.mui` 와 `System32\ko-KR\services.exe.mui` 가 둘 다 있었습니다.
-- `C:\Windows\SystemResources` 에는 항목이 172개 있었습니다.
-- `tquery.dll.mun` 안에서 "CRIM" 서명이 보였습니다.
+ResourceFileName 의 파일에는 WEVT_TEMPLATE 리소스가 있어야 합니다. 최근 Windows 10 에서는 이 리소스가 `C:\Windows\SystemResources\<파일>.mun` 에 있을 수도 있습니다(예: `tquery.dll.mun`).
+
+확인 PC 에서 본 모습입니다(확인 범위: Windows 11 25H2 PC 한 대). `System32\en-US\services.exe.mui` 와 `System32\ko-KR\services.exe.mui` 가 둘 다 있었고, `C:\Windows\SystemResources` 에는 항목이 172개 있었으며, `tquery.dll.mun` 안에서 "CRIM" 서명이 보였습니다.
 
 ### 이벤트 식별자에서 메시지 식별자로
 
@@ -120,8 +105,8 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 | 7040 | 0x40001b80 |
 | 7045 | 0x40001b85 |
 
-- 7036 의 값은 위 Qualifiers 계산 결과와 같습니다.
-- 이 정의들의 키워드는 0x0080000000000000 이었습니다. libevtx 명세는 이 비트를 "Classic"(win:EventlogClassic) 으로 적습니다.
+7036 의 값은 위 Qualifiers 계산 결과와 같습니다. 이 정의들의 키워드는 0x0080000000000000 이었고, libevtx 명세는 이 비트를 "Classic"(win:EventlogClassic) 으로 적습니다.
+
 - 7045 이벤트를 조사에 쓰는 법은 [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md) 에 있습니다.
 
 ### 자리 표시자
@@ -139,8 +124,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 ### WEVT_TEMPLATE 리소스 (CRIM)
 
-- Vista 부터 PE 파일의 `WEVT_TEMPLATE` 리소스에 이벤트 매니페스트 (Event Manifest) 가 이진으로 들어갈 수 있습니다.
-- 서명 CRIM 은 "Compiled resource instrumentation manifest" 에서 왔거나, Longhorn 시절 이벤트 로그 서비스의 코드명 Crimson 에서 왔다고 libfwevt 명세는 짐작합니다.
+Vista 부터 PE 파일의 `WEVT_TEMPLATE` 리소스에 이벤트 매니페스트 (Event Manifest) 가 이진으로 들어갈 수 있습니다. 서명 CRIM 은 "Compiled resource instrumentation manifest" 에서 왔거나, Longhorn 시절 이벤트 로그 서비스의 코드명 Crimson 에서 왔다고 libfwevt 명세는 짐작합니다.
 
 **머리**
 
@@ -192,9 +176,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 확인 PC 에서 본 모습입니다(확인 범위: Windows 11 25H2 PC 한 대).
 
-- services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었습니다. 명세의 3.1 과 다릅니다.
-- services.exe 의 CRIM 은 크기가 24,532바이트였고, 공급자가 3개였습니다. 그 가운데 하나가 {555908d1-…}(Service Control Manager) 였습니다.
-- 세 공급자 모두 CHAN·TTBL·PRVA·OPCO·LEVL·TASK·KEYW·EVNT 요소 8개가 있었습니다.
+services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었고, 명세의 3.1 과 다릅니다. services.exe 의 CRIM 은 크기가 24,532바이트였고 공급자가 3개였으며, 그 가운데 하나가 {555908d1-…}(Service Control Manager) 였습니다. 세 공급자 모두 CHAN·TTBL·PRVA·OPCO·LEVL·TASK·KEYW·EVNT 요소 8개가 있었습니다.
 
 ## 읽는 법
 
@@ -228,8 +210,8 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 ## 포렌식에서 중요한 점
 
-- 설명 문장은 해석 결과이고, 기록은 레코드의 값입니다. 보고서에는 문장과 함께 원래 값을 적습니다.
-- 메시지 파일이 이미지에 없으면 문장을 만들 수 없습니다. 그래도 레코드의 값은 남아 있으므로 값 목록을 그대로 보고합니다.
+설명 문장은 해석 결과이고 기록은 레코드의 값이므로, 보고서에는 문장과 함께 원래 값을 적습니다. 메시지 파일이 이미지에 없으면 문장을 만들 수 없지만 레코드의 값은 남아 있으므로 값 목록을 그대로 보고합니다.
+
 - 분석 PC 의 레지스트리와 파일로 풀면 다른 버전이나 다른 언어의 문장이 나올 수 있습니다. 이미지 안의 것으로 풉니다.
 - 같은 메시지 식별자라도 어느 언어별 파일을 읽었는지에 따라 문장의 언어가 다릅니다.
 - 도구마다 문장이 다르면 어느 파일과 어느 레지스트리 값을 읽었는지부터 비교합니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.

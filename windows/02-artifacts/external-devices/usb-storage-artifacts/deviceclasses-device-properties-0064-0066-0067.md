@@ -2,11 +2,11 @@
 
 ## 한 줄 요약
 
-Windows 8 부터는 USB 저장장치를 마지막으로 꽂은 시각과 마지막으로 뺀 시각이 장치 속성 값으로 남습니다. 자리는 SYSTEM 하이브 `Enum\USBSTOR` 장치 키 아래 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 의 `0066`·`0067` 입니다. 같은 자리의 `0064`·`0065` 에는 설치 시각이 남습니다. Windows 7 까지는 연결 시각 값이 따로 없었습니다. 그래서 `Control\DeviceClasses` 아래 키의 마지막 기록 시각으로 연결 시각을 짐작했습니다.
+Windows 8 부터는 USB 저장장치를 마지막으로 꽂은 시각과 마지막으로 뺀 시각이 장치 속성 값으로 남습니다. 자리는 SYSTEM 하이브 `Enum\USBSTOR` 장치 키 아래 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 의 `0066`·`0067` 이고, 같은 자리의 `0064`·`0065` 에는 설치 시각이 남습니다. Windows 7 까지는 연결 시각 값이 따로 없었기 때문에 `Control\DeviceClasses` 아래 키의 마지막 기록 시각으로 연결 시각을 짐작했습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-플러그 앤 플레이 관리자 (Plug and Play Manager) 는 장치 인스턴스마다 장치 속성 (Device Property) 을 저장합니다. 속성은 GUID 와 번호 한 쌍으로 구분합니다. 시각 속성 네 개는 GUID `{83da6326-97a6-4088-9453-a1923f573b29}` 를 함께 씁니다. 번호는 10진 100~103 입니다. 레지스트리에는 이 번호를 16진 네 자리 키 이름으로 적습니다. 그래서 100 은 `0064` 가 됩니다.
+플러그 앤 플레이 관리자 (Plug and Play Manager) 는 장치 인스턴스마다 장치 속성 (Device Property) 을 저장합니다. 속성은 GUID 와 번호 한 쌍으로 구분하는데, 시각 속성 네 개는 GUID `{83da6326-97a6-4088-9453-a1923f573b29}` 를 함께 쓰고 번호는 10진 100~103 입니다. 레지스트리에는 이 번호를 16진 네 자리 키 이름으로 적기 때문에 100 은 `0064` 가 됩니다.
 
 | 키 이름 | 번호 | 속성 이름 (Windows SDK `devpkey.h`) | 뜻 | 버전 |
 |---|---|---|---|---|
@@ -15,13 +15,13 @@ Windows 8 부터는 USB 저장장치를 마지막으로 꽂은 시각과 마지�
 | `0066` | 102 | `DEVPKEY_Device_LastArrivalDate` | 장치가 마지막으로 연결(도착)된 때 | 8 이상 |
 | `0067` | 103 | `DEVPKEY_Device_LastRemovalDate` | 장치가 마지막으로 제거된 때 | 8 이상 |
 
-USB 저장장치는 처음 꽂을 때 설치 과정을 거칩니다. 그래서 `0065` 는 보통 처음 연결한 때와 가깝습니다. `0066`·`0067` 은 연결하고 뺄 때마다 다시 쓰입니다.
+USB 저장장치는 처음 꽂을 때 설치 과정을 거치므로 `0065` 는 보통 처음 연결한 때와 가깝고, `0066`·`0067` 은 연결하고 뺄 때마다 다시 쓰입니다.
 
-`Control\DeviceClasses` 는 장치 인터페이스 클래스 (Device Interface Class) 를 모아 둔 키입니다. 저장장치가 연결되면 디스크 인터페이스와 볼륨 인터페이스가 등록됩니다. 등록된 인터페이스마다 하위 키가 하나씩 생깁니다. 이 하위 키에는 시각 값이 없습니다. 쓸 수 있는 시각은 키의 마지막 기록 시각뿐입니다.
+`Control\DeviceClasses` 는 장치 인터페이스 클래스 (Device Interface Class) 를 모아 둔 키입니다. 저장장치가 연결되면 디스크 인터페이스와 볼륨 인터페이스가 등록되고, 등록된 인터페이스마다 하위 키가 하나씩 생깁니다. 이 하위 키에는 시각 값이 없어서 쓸 수 있는 시각은 키의 마지막 기록 시각뿐입니다.
 
 ## 위치와 버전별 차이
 
-모든 경로는 SYSTEM 하이브 안에 있습니다. 오프라인 하이브에는 `CurrentControlSet` 이 없습니다. 어느 `ControlSet00X` 를 볼지는 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)를 봅니다.
+모든 경로는 SYSTEM 하이브 안에 있고, 오프라인 하이브에는 `CurrentControlSet` 이 없습니다. 어느 `ControlSet00X` 를 볼지는 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)를 봅니다.
 
 | 무엇 | 경로 |
 |---|---|
@@ -29,7 +29,7 @@ USB 저장장치는 처음 꽂을 때 설치 과정을 거칩니다. 그래서 `
 | 디스크 인터페이스 | `ControlSet00X\Control\DeviceClasses\{53f56307-b6bf-11d0-94f2-00a0c91efb8b}\##?#USBSTOR#Disk&Ven_...&Prod_...&Rev_...#<인스턴스 ID>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}` |
 | 볼륨 인터페이스 | `ControlSet00X\Control\DeviceClasses\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\##?#STORAGE#RemovableMedia#<...>&RM#{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}` 꼴 |
 
-`{53f56307-...}` 는 디스크 인터페이스 클래스 (`GUID_DEVINTERFACE_DISK`) 입니다. `{53f5630d-...}` 는 볼륨 인터페이스 클래스 (`GUID_DEVINTERFACE_VOLUME`) 입니다. 디스크 쪽 하위 키 이름에는 USBSTOR 장치 이름과 인스턴스 ID 가 그대로 들어갑니다. 볼륨 쪽 하위 키 이름에는 부모 ID 접두사 (ParentIdPrefix) 가 들어갈 수 있습니다. 이 값으로 드라이브 문자 기록과 잇는 방법은 [드라이브 문자 매핑](mounteddevices.md)에서 다룹니다. 장치 이름과 인스턴스 ID 읽는 법은 [USB 저장장치 목록](usbstor.md)을 봅니다.
+`{53f56307-...}` 는 디스크 인터페이스 클래스 (`GUID_DEVINTERFACE_DISK`) 이고, `{53f5630d-...}` 는 볼륨 인터페이스 클래스 (`GUID_DEVINTERFACE_VOLUME`) 입니다. 디스크 쪽 하위 키 이름에는 USBSTOR 장치 이름과 인스턴스 ID 가 그대로 들어가고, 볼륨 쪽 하위 키 이름에는 부모 ID 접두사 (ParentIdPrefix) 가 들어갈 수 있습니다. 이 값으로 드라이브 문자 기록과 잇는 방법은 [드라이브 문자 매핑](mounteddevices.md)에서 다루고, 장치 이름과 인스턴스 ID 읽는 법은 [USB 저장장치 목록](usbstor.md)을 봅니다.
 
 같은 속성 GUID 는 `Enum` 아래 다른 장치 인스턴스 키에도 있습니다. 예를 들어 같은 USB 저장장치의 `Enum\USB\VID_xxxx&PID_xxxx\<일련번호>` 키에도 `Properties` 가 있습니다([USB 장치 식별자](enum-usb-vid-pid.md)).
 
@@ -103,7 +103,7 @@ Yogesh Khatri 는 Windows 8 에서 `0066`·`0067` 이 언제 바뀌는지 시험
 2. **`0067` 이 없으면** 마지막 연결 뒤에 켜진 상태에서 뺀 기록이 없다는 뜻입니다. 수집 때 꽂혀 있었거나, 꽂은 채로 꺼졌을 수 있습니다. 마지막 종료 시각과 비교합니다([시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md)).
 3. **`0066` 이 부팅 시각과 거의 같으면** 사람이 꽂은 때가 아닐 수 있습니다. 장치를 꽂은 채로 켜거나 다시 시작한 경우입니다. 부팅 기록과 비교합니다([켜짐·꺼짐](../../event-logs/power-on-off-events.md)).
 
-`DeviceClasses` 키의 마지막 기록 시각은 뜻이 더 느슨합니다. Forensics Wiki 는 이 시각을 "마지막 연결 시각(마지막 부팅 동안의 첫 연결)" 으로 설명합니다. 이 설명은 XP 시절 자료입니다. 키의 마지막 기록 시각은 그 키에 무언가 바뀐 때일 뿐입니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)). 새 버전에서는 `0066` 을 먼저 보고, `DeviceClasses` 시각은 보조 단서로만 씁니다.
+`DeviceClasses` 키의 마지막 기록 시각은 뜻이 더 느슨합니다. Forensics Wiki 는 이 시각을 "마지막 연결 시각(마지막 부팅 동안의 첫 연결)" 으로 설명하는데, 이 설명은 XP 시절 자료입니다. 키의 마지막 기록 시각은 그 키에 무언가 바뀐 때일 뿐입니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)). 새 버전에서는 `0066` 을 먼저 보고, `DeviceClasses` 시각은 보조 단서로만 씁니다.
 
 ## 함정과 한계
 

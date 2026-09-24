@@ -2,32 +2,19 @@
 
 ## 한 줄 요약
 
-SRUM 데이터베이스 `SRUDB.dat` 안의 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` 표입니다. 앱과 사용자 계정 짝마다 CPU 사용량, 앱이 앞에 떠 있던 시간, 읽고 쓴 바이트 수를 적습니다. 행의 시각 (TimeStamp) 은 활동한 때가 아니라 행을 데이터베이스에 적은 때입니다. 기본 설정에서는 한 시간 간격으로 적습니다.
+SRUM 데이터베이스 `SRUDB.dat` 안의 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` 표입니다. 앱과 사용자 계정 짝마다 CPU 사용량, 앱이 앞에 떠 있던 시간, 읽고 쓴 바이트 수를 적으며, 행의 시각 (TimeStamp) 은 활동한 때가 아니라 행을 데이터베이스에 적은 때이고 기본 설정에서는 한 시간 간격으로 적습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-SRUM (System Resource Usage Monitor) 은 앱·서비스·네트워크가 쓴 자원을 모으는 윈도 기능입니다. SRUM 은 진단 정책 서비스 (Diagnostic Policy Service, DPS) 안에서 돌아갑니다. 실제 수집과 저장은 `srumsvc.dll` 이 맡습니다. 자원 종류마다 확장 (Extension) DLL 이 따로 있습니다. 이 표는 앱 자원 사용 제공자 (Application Resource Usage Provider) 인 `appsruprov.dll` 이 채웁니다.
+SRUM (System Resource Usage Monitor) 은 앱·서비스·네트워크가 쓴 자원을 모으는 윈도 기능입니다. SRUM 은 진단 정책 서비스 (Diagnostic Policy Service, DPS) 안에서 돌아가고 실제 수집과 저장은 `srumsvc.dll` 이 맡습니다. 자원 종류마다 확장 (Extension) DLL 이 따로 있으며, 이 표는 앱 자원 사용 제공자 (Application Resource Usage Provider) 인 `appsruprov.dll` 이 채웁니다.
 
-한 행에는 다음 값이 들어 있습니다.
+한 행에는 행을 적은 시각, 앱 (AppId) 과 사용자 계정 (UserId), 그동안 쓴 CPU 사이클 (Cycle), 앱이 사용자 앞에 떠 있던 시간 (FaceTime), 컨텍스트 전환 (Context Switch) 횟수, 읽고 쓴 바이트 수와 횟수, 플러시 (Flush) 횟수가 들어 있습니다.
 
-- 행을 적은 시각
-- 앱 (AppId) 과 사용자 계정 (UserId)
-- 그동안 쓴 CPU 사이클 (Cycle)
-- 앱이 사용자 앞에 떠 있던 시간 (FaceTime)
-- 컨텍스트 전환 (Context Switch) 횟수
-- 읽고 쓴 바이트 수와 횟수, 플러시 (Flush) 횟수
+대부분의 값은 앞 (Foreground) 과 뒤 (Background) 두 벌로 나뉩니다. 앞은 앱 창이 사용자 앞에 떠 있던 동안으로 흔히 읽지만, 두 구분의 정확한 기준을 적은 공식 문서는 없습니다.
 
-대부분의 값은 앞 (Foreground) 과 뒤 (Background) 두 벌로 나뉩니다. 앞은 앱 창이 사용자 앞에 떠 있던 동안으로 흔히 읽습니다. 두 구분의 정확한 기준을 적은 공식 문서는 없습니다.
+이 표로 어떤 앱이 어떤 계정으로 돌면서 자원을 썼는지, 그 일이 대략 어느 시간대에 있었는지, 그 시간대에 앱이 얼마나 많이 읽고 썼는지 (양만) 알 수 있습니다. 실행 파일을 지워도 이 표의 행은 지워지지 않고 보관 기간이 지나야 정리됩니다.
 
-이 표로 다음을 알 수 있습니다.
-
-- 어떤 앱이 어떤 계정으로 돌면서 자원을 썼는지
-- 그 일이 대략 어느 시간대에 있었는지
-- 그 시간대에 앱이 얼마나 많이 읽고 썼는지 (양만)
-
-실행 파일을 지워도 이 표의 행은 지워지지 않습니다. 행은 보관 기간이 지나야 정리됩니다.
-
-SRUM 전체 구조와 다른 표는 [SRUM](index.md) 허브에서 다룹니다. AppId·UserId 를 문자열로 푸는 법은 [구조와 ID 매핑](srudbidmaptable.md)에서 다룹니다. 여기서는 이 표 하나를 읽고 해석하는 일만 다룹니다.
+SRUM 전체 구조와 다른 표는 [SRUM](index.md) 허브에서, AppId·UserId 를 문자열로 푸는 법은 [구조와 ID 매핑](srudbidmaptable.md)에서 다룹니다. 여기서는 이 표 하나를 읽고 해석하는 일만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -39,7 +26,7 @@ SRUM 전체 구조와 다른 표는 [SRUM](index.md) 허브에서 다룹니다. 
 | 제공자 등록 | SOFTWARE 하이브 `Microsoft\Windows NT\CurrentVersion\SRUM\Extensions` 아래. DLL 은 `%SystemRoot%\System32\appsruprov.dll` |
 | 이름 풀이 | AppId·UserId 는 같은 파일의 `SruDbIdMapTable` 에서 풉니다 |
 
-GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니다. 그 표는 푸시 알림 (WPN) 제공자가 채웁니다. 끝자리 `89` 와 `86` 을 헷갈리지 않습니다.
+GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있는데, 그 표는 푸시 알림 (WPN) 제공자가 채우므로 끝자리 `89` 와 `86` 을 헷갈리지 않습니다.
 
 | Windows | SRUM | 이 표 | 근거 |
 |---|---|---|---|
@@ -51,25 +38,19 @@ GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니
 
 ### 행이 데이터베이스에 들어가기까지
 
-- SRUM 은 값을 먼저 메모리 (Tier1) 에 모읍니다. 기본 60초마다 갱신합니다 (Tier1Period).
-- 모은 값은 기본 1시간마다 `SRUDB.dat` (Tier2) 에 옮겨 적습니다 (Tier2Period).
-- 컴퓨터를 끌 때와 DPS 서비스를 멈출 때도 옮겨 적습니다.
-- 초기 버전은 옮기기 전의 값을 레지스트리에 두었습니다. 발표자는 Windows 10 1607 뒤로는 데스크톱에서 이 값이 메모리에만 있다고 관찰했습니다.
+SRUM 은 값을 먼저 메모리 (Tier1) 에 모으고 기본 60초마다 갱신하며 (Tier1Period), 모은 값은 기본 1시간마다 `SRUDB.dat` (Tier2) 에 옮겨 적습니다 (Tier2Period). 컴퓨터를 끌 때와 DPS 서비스를 멈출 때도 옮겨 적습니다. 초기 버전은 옮기기 전의 값을 레지스트리에 두었는데, 발표자는 Windows 10 1607 뒤로는 데스크톱에서 이 값이 메모리에만 있다고 관찰했습니다.
 
 기록 간격과 레지스트리 임시 저장은 [SRUM 해석 함정](1.md)에서 자세히 다룹니다.
 
 ### 보관 기간
 
-- 보관 기간은 Tier2Period × Tier2MaxEntries 로 계산합니다.
-- 기본값은 3,600초 × 1,440 입니다. 60일입니다.
-- Windows Server 에서는 확장마다 Tier2MaxEntries 를 9,000 으로 둔 경우가 많습니다. 이때는 375일입니다.
-- SRUM 은 이 값들을 SOFTWARE 하이브의 `Microsoft\Windows NT\CurrentVersion\SRUM` 아래에서 읽습니다. 검체의 값이 기본값과 다를 수 있으므로 이 키를 확인합니다.
+보관 기간은 Tier2Period × Tier2MaxEntries 로 계산하며, 기본값은 3,600초 × 1,440 으로 60일입니다. Windows Server 에서는 확장마다 Tier2MaxEntries 를 9,000 으로 둔 경우가 많고, 이때는 375일입니다. SRUM 은 이 값들을 SOFTWARE 하이브의 `Microsoft\Windows NT\CurrentVersion\SRUM` 아래에서 읽으며, 검체의 값이 기본값과 다를 수 있으므로 이 키를 확인합니다.
 
 ## 구조
 
-이 표는 ESE 표 하나입니다. 페이지·B-트리·카탈로그를 읽는 법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 아래 열 목록은 libyal 명세에서 옮겼습니다. 명세는 Windows 10 파일로 시험했습니다. 다른 버전의 검체는 카탈로그에서 열 구성을 먼저 확인합니다.
+이 표는 ESE 표 하나이고, 페이지·B-트리·카탈로그를 읽는 법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 아래 열 목록은 libyal 명세에서 옮겼고 명세는 Windows 10 파일로 시험했으므로, 다른 버전의 검체는 카탈로그에서 열 구성을 먼저 확인합니다.
 
-열은 모두 고정 크기입니다. ESE 레코드에서 고정 크기 열 값은 4바이트 머리글 뒤에 열 번호 순서로 붙어 있습니다. "위치" 칸은 이 규칙과 열 크기로 계산한 값입니다. 레코드 데이터의 첫 바이트(머리글 시작)부터 셉니다. 정수는 모두 부호 있는 리틀 엔디언입니다.
+열은 모두 고정 크기이고, ESE 레코드에서 고정 크기 열 값은 4바이트 머리글 뒤에 열 번호 순서로 붙어 있습니다. "위치" 칸은 이 규칙과 열 크기로 계산한 값으로, 레코드 데이터의 첫 바이트(머리글 시작)부터 셉니다. 정수는 모두 부호 있는 리틀 엔디언입니다.
 
 | 번호 | 열 이름 | 형식 | 위치 | 뜻 |
 |---|---|---|---|---|
@@ -105,7 +86,7 @@ GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니
 
 ### 같은 파일의 앱 타임라인 표와 구분하기
 
-`{5C8CF1C7-7257-4F13-B223-970EF5939312}` 표도 앱 단위로 기록합니다. 발표 자료는 이 표를 앱 타임라인 제공자 (App Timeline Provider) 라고 부릅니다. 이 표는 `eeprov.dll` 이 채웁니다. 이 표에는 끝난 무렵 시각 (EndTime) 과 실행 시간 (DurationMS, 밀리초) 열이 있습니다. 앱별 자원 사용 표에는 이런 열이 없습니다. 발표자 실험에서 앱 타임라인 표는 Windows 10 · 11 에만 있었고 서버에는 없었습니다. 그래서 서버에서는 앱별 자원 사용 표가 앱 활동을 보여 주는 주된 SRUM 기록입니다.
+`{5C8CF1C7-7257-4F13-B223-970EF5939312}` 표도 앱 단위로 기록합니다. 발표 자료는 이 표를 앱 타임라인 제공자 (App Timeline Provider) 라고 부르며, 이 표는 `eeprov.dll` 이 채웁니다. 이 표에는 끝난 무렵 시각 (EndTime) 과 실행 시간 (DurationMS, 밀리초) 열이 있지만 앱별 자원 사용 표에는 이런 열이 없습니다. 발표자 실험에서 앱 타임라인 표는 Windows 10 · 11 에만 있었고 서버에는 없었습니다. 그래서 서버에서는 앱별 자원 사용 표가 앱 활동을 보여 주는 주된 SRUM 기록입니다.
 
 ## 증거로서 의미
 
@@ -133,23 +114,19 @@ GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니
 
 TimeStamp 열은 ESE 의 날짜·시각 열 (JET_coltypDateTime) 입니다. Microsoft 문서는 이 형식을 날 수를 담은 8바이트 실수로 적고, 변형 날짜 (Variant Date) 와 같다고 적습니다. 흔히 OLE 자동화 날짜 (OLE Automation Date) 라고 부릅니다. 0 은 1899-12-30 자정입니다. 정수 부분이 날이고 소수 부분이 하루 안의 시각입니다. 계산법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 
-libesedb 명세는 이 열 형식을 FILETIME 으로 적고, 실수라는 설명과 맞춰 봐야 한다는 메모를 남겼습니다. SRUM 명세와 Microsoft 문서는 실수로 적습니다. 직접 파서를 짤 때는 실수로 읽습니다.
+libesedb 명세는 이 열 형식을 FILETIME 으로 적고 실수라는 설명과 맞춰 봐야 한다는 메모를 남겼지만, SRUM 명세와 Microsoft 문서는 실수로 적으므로 직접 파서를 짤 때는 실수로 읽습니다.
 
 ### 시간대
 
-값에는 시간대 정보가 없습니다. 두 명세도 시간대를 적지 않습니다. 공개 도구 가운데 srum-dump 는 이 값을 UTC 로 풀어 보여 줍니다. 검체에서는 알려진 사건과 한 번 맞춰 봅니다. 컴퓨터를 끌 때도 행을 적으므로, 종료 시각 무렵에 행이 몰려 있는지 봅니다([켜짐·꺼짐](../../event-logs/power-on-off-events.md)). 현지 시각으로 바꾸는 법은 [시간대 설정](../../system-account/time-zone.md)과 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+값에는 시간대 정보가 없고 두 명세도 시간대를 적지 않습니다. 공개 도구 가운데 srum-dump 는 이 값을 UTC 로 풀어 보여 줍니다. 검체에서는 알려진 사건과 한 번 맞춰 보고, 컴퓨터를 끌 때도 행을 적으므로 종료 시각 무렵에 행이 몰려 있는지 봅니다([켜짐·꺼짐](../../event-logs/power-on-off-events.md)). 현지 시각으로 바꾸는 법은 [시간대 설정](../../system-account/time-zone.md)과 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ### 행을 적은 때와 활동한 때
 
-- TimeStamp 는 메모리의 값을 `SRUDB.dat` 에 옮겨 적은 때입니다.
-- 활동은 그 앞의 기록 구간에 있었습니다. 구간은 Tier2Period 로 정해지고 기본값은 1시간입니다.
-- 끄기나 DPS 중지로 적은 행은 구간이 1시간보다 짧을 수 있습니다.
-- 공개 실험(Windows 10 21H2)은 TimeStamp 와 실제 활동 시각 사이에 한 시간쯤 오차가 있다고 적습니다.
-- 보고서에는 한 시각이 아니라 "이 시각 이전의 기록 구간" 처럼 폭으로 적습니다.
+TimeStamp 는 메모리의 값을 `SRUDB.dat` 에 옮겨 적은 때이고, 활동은 그 앞의 기록 구간에 있었습니다. 구간은 Tier2Period 로 정해지며 기본값은 1시간입니다. 끄기나 DPS 중지로 적은 행은 구간이 1시간보다 짧을 수 있습니다. 공개 실험(Windows 10 21H2)은 TimeStamp 와 실제 활동 시각 사이에 한 시간쯤 오차가 있다고 적습니다. 그래서 보고서에는 한 시각이 아니라 "이 시각 이전의 기록 구간" 처럼 폭으로 적습니다.
 
 ### 순서로 시계 변경 찾기
 
-AutoIncId 는 이름대로라면 행을 넣을 때마다 커지는 번호입니다. 그렇다면 AutoIncId 가 커질수록 TimeStamp 도 같거나 커야 합니다. 순서가 뒤집힌 곳은 시계 변경을 의심할 단서입니다. 이 규칙은 명세에 적힌 것이 아닙니다. 열 이름에서 나온 기대입니다. 확인은 [시간 변경 (4616·Kernel-General)](../../event-logs/4616-kernel-general.md)과 맞춰서 합니다.
+AutoIncId 는 이름대로라면 행을 넣을 때마다 커지는 번호이므로 AutoIncId 가 커질수록 TimeStamp 도 같거나 커야 하고, 순서가 뒤집힌 곳은 시계 변경을 의심할 단서입니다. 이 규칙은 명세에 적힌 것이 아니라 열 이름에서 나온 기대입니다. 확인은 [시간 변경 (4616·Kernel-General)](../../event-logs/4616-kernel-general.md)과 맞춰서 합니다.
 
 ## 함정과 한계
 

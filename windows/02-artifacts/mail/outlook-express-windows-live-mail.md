@@ -20,9 +20,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 세 프로그램은 모두 메일을 PC 안의 파일로 둡니다[1][2][3].
-- 요즘 PC 에서는 드뭅니다. 옛 PC 의 이미지, 새 PC 로 옮겨 온 옛 사용자 폴더, 백업 매체에서 만날 수 있습니다.
-- 프로그램과 판에 따라 저장 형식이 다릅니다. 판을 먼저 정해야 어떤 파일을 찾을지 정할 수 있습니다.
+세 프로그램은 모두 메일을 PC 안의 파일로 둡니다[1][2][3]. 요즘 PC 에서는 드물고, 옛 PC 의 이미지, 새 PC 로 옮겨 온 옛 사용자 폴더, 백업 매체에서 만날 수 있습니다. 프로그램과 판에 따라 저장 형식이 다르므로 판을 먼저 정해야 어떤 파일을 찾을지 정할 수 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -36,13 +34,11 @@
 | 5.5 | Windows Me (2000년 6월) | `.dbx`[1] |
 | 6.0 | Windows XP (2001년 10월), Internet Explorer 6 | `.dbx`[1] |
 
-- Windows Vista 에서 Outlook Express 는 Windows Mail 로 바뀌었습니다[1].
-- 참고한 문서에는 Outlook Express 의 지원 종료 날짜가 없습니다[1].
+Windows Vista 에서 Outlook Express 는 Windows Mail 로 바뀌었습니다[1]. 참고한 문서에는 Outlook Express 의 지원 종료 날짜가 없습니다[1].
 
 ### Windows Mail (Vista)
 
-- Windows Vista 에 들어 있었습니다[3].
-- Windows 7 에는 Windows Mail 이 빠졌습니다[3]. 대신 Windows Live Mail 을 쓰게 했습니다[3].
+Windows Mail 은 Windows Vista 에 들어 있었고[3], Windows 7 에서는 빠졌습니다[3]. Windows 7 에서는 대신 Windows Live Mail 을 쓰게 했습니다[3].
 
 ### Windows Live Mail
 
@@ -52,9 +48,9 @@
 | 2011 (Wave 4) | 2010년 9월 30일 | Vista 이상[2] |
 | 2012 (Wave 5) | 2012년 8월 7일 | Windows 7·Server 2008 R2·Windows 8. Vista 지원이 끝났습니다[2] |
 
-- 2012 판 지원은 2017년 1월 10일에 끝났습니다[2].
-- 지원한 프로토콜은 POP3, IMAP, DeltaSync, Exchange ActiveSync, WebDAV 입니다[2]. DeltaSync 는 Hotmail·Outlook.com 전용입니다[2]. 2012 판은 DeltaSync 대신 Exchange ActiveSync 를 썼습니다[2].
-- Microsoft 는 2016년 6월 30일에 DeltaSync 지원을 끝냈습니다[2]. 2011·2012 판은 IMAP 이나 POP3 로 Hotmail 계정을 계속 쓸 수 있었습니다[2].
+2012 판 지원은 2017년 1월 10일에 끝났습니다[2].
+
+지원한 프로토콜은 POP3, IMAP, DeltaSync, Exchange ActiveSync, WebDAV 입니다[2]. DeltaSync 는 Hotmail·Outlook.com 전용이고, 2012 판은 DeltaSync 대신 Exchange ActiveSync 를 썼습니다[2]. Microsoft 는 2016년 6월 30일에 DeltaSync 지원을 끝냈지만, 2011·2012 판은 IMAP 이나 POP3 로 Hotmail 계정을 계속 쓸 수 있었습니다[2].
 
 ### 흔히 알려진 위치 (확인하지 못함)
 
@@ -70,34 +66,26 @@
 
 ### ID 와 사용자 프로필
 
-- Outlook Express 는 ID (Identities) 를 썼습니다[3]. Vista 의 Windows Mail 에서 이 ID 가 Windows 사용자 프로필로 바뀌었습니다[3].
-- ID 로 Windows 사용자 하나 안에 메일 사용자를 여럿 둘 수 있었다는 설명이 흔합니다. 이번에 확인하지 못했습니다.
+Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서 이 ID 가 Windows 사용자 프로필로 바뀌었습니다[3]. ID 로 Windows 사용자 하나 안에 메일 사용자를 여럿 둘 수 있었다는 설명이 흔한데, 이번에 확인하지 못했습니다.
 
 ## 구조
 
 ### Outlook Express: `.dbx`
 
-- 메일 폴더마다 `.dbx` 파일이 하나씩 있습니다[1].
-- `.dbx` 는 2GB 보다 작은 파일만 지원했습니다[1]. 한계에 가까워지면 성능 문제가 있었습니다[1].
-- 데이터베이스가 자주 손상돼 복구 도구 시장이 생겼습니다[1]. 공개 복구 도구로 UnDBX 가 있습니다[1].
-- 주소록은 Windows 주소록 파일(`.wab`)을 썼습니다[1].
+메일 폴더마다 `.dbx` 파일이 하나씩 있습니다[1]. `.dbx` 는 2GB 보다 작은 파일만 지원했고, 한계에 가까워지면 성능 문제가 있었습니다[1]. 데이터베이스가 자주 손상돼 복구 도구 시장이 생겼고, 공개 복구 도구로 UnDBX 가 있습니다[1]. 주소록은 Windows 주소록 파일(`.wab`)을 썼습니다[1].
+
+
 - 폴더 목록 파일 `Folders.dbx` 와 `Inbox.dbx`·`Sent Items.dbx`·`Deleted Items.dbx`·`Offline.dbx`·`Pop3uidl.dbx` 같은 파일이 있다는 설명이 흔합니다. 확인하지 못했습니다.
 - 시그니처, 헤더 안 값의 오프셋, 메시지를 담는 방식은 공개 명세로 확인하지 못해 적지 않습니다. 구현 코드로 알려진 값이 있지만, 명세로 다시 맞추기 전에는 보고서에 쓰지 않습니다.
 - 지운 메시지 조각이 `.dbx` 안에 남아 되살릴 수 있다는 설명도 있습니다. 이번에 확인하지 못했습니다.
 
 ### Windows Mail (Vista)
 
-- 메시지를 `.eml`·`.nws` 파일로 하나씩 저장했습니다[3]. `.dbx` 는 쓰지 않았습니다[3].
-- 항목 관리는 ESE (Extensible Storage Engine) 데이터베이스가 맡았습니다[3].
-- 설정은 레지스트리 대신 사용자 프로필 안의 XML 파일에 두었습니다[3].
-- 계정 정보는 메일 데이터 옆의 `.oeaccount` 파일에 있습니다[3].
+메시지를 `.eml`·`.nws` 파일로 하나씩 저장했고 `.dbx` 는 쓰지 않았습니다[3]. 항목 관리는 ESE (Extensible Storage Engine) 데이터베이스가 맡았습니다[3]. 설정은 레지스트리 대신 사용자 프로필 안의 XML 파일에 두었고[3], 계정 정보는 메일 데이터 옆의 `.oeaccount` 파일에 있습니다[3].
 
 ### Windows Live Mail
 
-- 메시지를 `.eml` 파일로 하나씩 저장합니다[2].
-- 폴더 구조는 ESE 데이터베이스 `Mail.MSMessageStore` 가 관리합니다[2].
-- 이 데이터베이스의 백업 사본을 `Backup` 하위 폴더에 둡니다[2].
-- 계정 파일 `account{GUID}.oeaccount` 는 XML 이고 비밀번호는 암호화돼 있다는 설명이 흔합니다. 확인하지 못했습니다.
+메시지를 `.eml` 파일로 하나씩 저장하고[2], 폴더 구조는 ESE 데이터베이스 `Mail.MSMessageStore` 가 관리합니다[2]. 이 데이터베이스의 백업 사본은 `Backup` 하위 폴더에 둡니다[2]. 계정 파일 `account{GUID}.oeaccount` 는 XML 이고 비밀번호는 암호화돼 있다는 설명이 흔한데, 확인하지 못했습니다.
 
 `.eml` 파일의 형식은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서, ESE 데이터베이스의 구조는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 

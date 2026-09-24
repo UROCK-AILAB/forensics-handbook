@@ -38,16 +38,13 @@
 
 ### 307
 
-- 307 은 `Microsoft-Windows-PrintService/Operational` 채널의 이벤트입니다(관찰).
-- 수준은 정보이고, 이벤트 버전은 0 입니다(관찰).
-- 메시지 틀은 아래와 같습니다(관찰).
+307 은 `Microsoft-Windows-PrintService/Operational` 채널의 이벤트이고, 수준은 정보, 이벤트 버전은 0 입니다(관찰). 메시지 틀은 아래와 같습니다(관찰).
 
 ```
 Document %1, %2 owned by %3 on %4 was printed on %5 through port %6. Size in bytes: %7. Pages printed: %8. No user action is required.
 ```
 
-- 칸 이름은 param1~param8 입니다(관찰).
-- 칸 이름만으로는 뜻을 알 수 없습니다. 그래서 메시지 틀에서 칸의 자리를 보고 뜻을 읽습니다.
+칸 이름은 param1~param8 입니다(관찰). 칸 이름만으로는 뜻을 알 수 없으므로 메시지 틀에서 칸의 자리를 보고 뜻을 읽습니다.
 
 | 칸 | 메시지 틀 자리 | 뜻 |
 |---|---|---|
@@ -64,22 +61,17 @@ Document %1, %2 owned by %3 on %4 was printed on %5 through port %6. Size in byt
 
 ### 842
 
-- 같은 채널에 842 도 있습니다(관찰).
-- 메시지 틀의 앞부분은 아래와 같습니다(관찰). 뒷부분은 줄였습니다.
+같은 채널에 842 도 있습니다(관찰). 메시지 틀의 앞부분은 아래와 같습니다(관찰). 뒷부분은 줄였습니다.
 
 ```
 The print job %1 was sent through the print processor %2 on printer %3, driver %4, in the isolation mode %5 …
 ```
 
-- 칸 이름은 JobId, Processor, Printer, Driver, IsolationMode, Error 입니다(관찰).
-- 842 의 JobId 와 307 의 작업 번호로 같은 인쇄 작업의 두 이벤트를 잇습니다. 작업 번호만으로 묶지 않고 시각이 가까운지도 봅니다.
+칸 이름은 JobId, Processor, Printer, Driver, IsolationMode, Error 입니다(관찰). 842 의 JobId 와 307 의 작업 번호로 같은 인쇄 작업의 두 이벤트를 잇는데, 작업 번호만으로 묶지 않고 시각이 가까운지도 봅니다.
 
 ### 로그가 꺼져 있을 때
 
-- 관찰한 PC 에서 PrintService/Operational 로그는 꺼져 있었습니다(관찰).
-- 이 로그가 기본으로 꺼져 있는지는 확인하지 못했습니다.
-- 꺼져 있던 기간에는 307 이 남지 않습니다. 그래서 307 이 없다는 것이 인쇄하지 않았다는 뜻은 아닙니다.
-- 같은 PC 의 PrintService/Admin 로그는 켜져 있었고, 이벤트는 0건이었습니다(관찰).
+관찰한 PC 에서 PrintService/Operational 로그는 꺼져 있었지만(관찰), 이 로그가 기본으로 꺼져 있는지는 확인하지 못했습니다. 꺼져 있던 기간에는 307 이 남지 않으므로 307 이 없다는 것이 인쇄하지 않았다는 뜻은 아닙니다. 같은 PC 의 PrintService/Admin 로그는 켜져 있었고, 이벤트는 0건이었습니다(관찰).
 
 ## 프린터 목록과 스풀 폴더
 
@@ -97,10 +89,9 @@ HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers
         Datatype
 ```
 
-- 프린터마다 `Printers\<프린터 이름>` 하위 키가 있었습니다(관찰).
-- 하위 키에는 `Attributes`, `Port`, `Print Processor`, `Datatype` 값이 있었습니다(관찰).
-- 이 PC 의 프린터 5개는 모두 인쇄 프로세서가 `winprint`, 데이터 형식이 `RAW` 였습니다(관찰).
-- 이미지에서 볼 때는 SYSTEM 하이브에서 실제로 쓰던 컨트롤 세트를 먼저 정하고 그 아래에서 찾습니다([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)).
+프린터마다 `Printers\<프린터 이름>` 하위 키가 있었고, 하위 키에는 `Attributes`, `Port`, `Print Processor`, `Datatype` 값이 있었습니다(관찰). 이 PC 의 프린터 5개는 모두 인쇄 프로세서가 `winprint`, 데이터 형식이 `RAW` 였습니다(관찰).
+
+이미지에서 볼 때는 SYSTEM 하이브에서 실제로 쓰던 컨트롤 세트를 먼저 정하고 그 아래에서 찾습니다([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)).
 
 ### 가상 프린터
 
@@ -114,18 +105,15 @@ HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers
 
 (표는 관찰)
 
-- PDF 프린터로 인쇄하면 종이가 아니라 PDF 파일이 생깁니다.
-- 307 의 프린터(%5)·포트(%6) 칸을 이 목록과 맞춰 종이 프린터인지 가립니다.
-- PDF 프린터로 만든 파일은 바로가기 파일·최근 문서로 추적합니다.
-- 그 PDF 가 다시 밖으로 나갔는지는 [USB 로 무엇을 가져갔나](usb.md), [메일로 밖에 보냈나](email.md), [웹메일·웹하드로 올렸나](web-upload.md) 를 따라 봅니다.
+PDF 프린터로 인쇄하면 종이가 아니라 PDF 파일이 생기므로, 307 의 프린터(%5)·포트(%6) 칸을 이 목록과 맞춰 종이 프린터인지 가립니다. PDF 프린터로 만든 파일은 바로가기 파일·최근 문서로 추적합니다. 그 PDF 가 다시 밖으로 나갔는지는 [USB 로 무엇을 가져갔나](usb.md), [메일로 밖에 보냈나](email.md), [웹메일·웹하드로 올렸나](web-upload.md) 를 따라 봅니다.
 
 ### 스풀 폴더
 
-- 관찰한 PC 의 `DefaultSpoolDirectory` 값은 `C:\Windows\system32\spool\PRINTERS` 였습니다(관찰).
-- 그 폴더는 비어 있었습니다(관찰).
-- 스풀 폴더의 SPL(인쇄 데이터)·SHD(작업 정보) 파일은 이 페이지를 쓰면서 확인하지 못했습니다. 파일 구조, 인쇄가 끝난 뒤 지워지는지, "인쇄한 문서 유지 (Keep printed documents)" 설정과 `Attributes` 값의 관계가 여기에 들어갑니다. 이 내용은 [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) 에서 확인합니다.
-- 스풀 폴더가 비어 있다는 것만으로 인쇄하지 않았다고 보지 않습니다.
-- 스풀 파일이 지워졌다면 [지운 파일의 흔적 찾기](../../activity/deleted-file-traces.md) 순서로 찾아봅니다.
+관찰한 PC 의 `DefaultSpoolDirectory` 값은 `C:\Windows\system32\spool\PRINTERS` 였고, 그 폴더는 비어 있었습니다(관찰).
+
+스풀 폴더의 SPL(인쇄 데이터)·SHD(작업 정보) 파일은 이 페이지를 쓰면서 확인하지 못했습니다. 파일 구조, 인쇄가 끝난 뒤 지워지는지, "인쇄한 문서 유지 (Keep printed documents)" 설정과 `Attributes` 값의 관계가 여기에 들어갑니다. 이 내용은 [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) 에서 확인합니다.
+
+스풀 폴더가 비어 있다는 것만으로 인쇄하지 않았다고 보지 않으며, 스풀 파일이 지워졌다면 [지운 파일의 흔적 찾기](../../activity/deleted-file-traces.md) 순서로 찾아봅니다.
 
 ## 분석 흐름
 

@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-클래식 Outlook 은 메일·연락처·일정 같은 항목을 PST·OST 데이터 파일에 저장합니다. 두 파일은 같은 PFF (Personal Folder File) 구조를 씁니다. 파일 맨 앞의 헤더에는 파일 종류, 형식 버전, 인코딩 방식, 파일 크기가 적혀 있습니다. 도구로 메시지를 뽑기 전에 헤더부터 확인하면 도구가 파일을 제대로 읽었는지 가릴 수 있습니다.
+클래식 Outlook 은 메일·연락처·일정 같은 항목을 PST·OST 데이터 파일에 저장하며, 두 파일은 같은 PFF (Personal Folder File) 구조를 씁니다. 파일 맨 앞의 헤더에는 파일 종류, 형식 버전, 인코딩 방식, 파일 크기가 적혀 있어서, 도구로 메시지를 뽑기 전에 헤더부터 확인하면 도구가 파일을 제대로 읽었는지 가릴 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -16,12 +16,9 @@ PFF 구조를 쓰는 파일은 세 종류입니다.
 | OST | 오프라인 폴더 (Offline Folders) | 서버 사서함의 로컬 사본 |
 | PAB | 개인 주소록 (Personal Address Book) | 주소록 |
 
-Microsoft 지원 문서는 PST 가 생기는 경우를 이렇게 적습니다.
+Microsoft 지원 문서는 POP·IMAP 계정이 모든 Outlook 정보를 PST 에 담고, Exchange 계정이라도 자동 보관 (AutoArchive) 을 쓰면 PST 가 생길 수 있다고 적습니다.
 
-- POP·IMAP 계정은 모든 Outlook 정보를 PST 에 담습니다.
-- Exchange 계정이라도 자동 보관 (AutoArchive) 을 쓰면 PST 가 생길 수 있습니다.
-
-OST 가 언제 생기고 무엇이 들어가는지는 [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md)에서 다룹니다. 이 페이지는 두 파일이 함께 쓰는 구조만 다룹니다.
+OST 가 언제 생기고 무엇이 들어가는지는 [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md)에서 다루고, 이 페이지는 두 파일이 함께 쓰는 구조만 다룹니다.
 
 파일 안에는 화면에 보이는 폴더 말고도 숨은 메시지가 들어 있을 수 있습니다. 자동완성 목록이 한 예입니다([자동완성 목록 (NK2·Stream_Autocomplete)](nk2-stream-autocomplete.md)).
 
@@ -36,7 +33,7 @@ Microsoft 지원 문서가 적은 새 PST 의 기본 위치입니다(Windows 10 
 | 2016 이후 | `드라이브:\Users\<사용자>\Documents\Outlook Files\archive.pst` |
 | 그보다 앞선 판 | `드라이브:\Users\<사용자>\AppData\Local\Microsoft\Outlook\archive.pst` |
 
-- 이 위치는 새 파일을 만들 때의 기본값입니다. 검체에서는 확장자와 헤더 시그니처로 디스크 전체를 찾습니다.
+- 이 위치는 새 파일을 만들 때의 기본값이라서, 검체에서는 확장자와 헤더 시그니처로 디스크 전체를 찾습니다.
 - OST 는 `%LOCALAPPDATA%\Microsoft\Outlook\` 에 있다는 설명이 흔합니다. 이번에 연 공식 자료에는 OST 경로가 없어 확인하지 못했습니다.
 - 클래식 Outlook 이 깔려 있지 않은 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook` 폴더 자체가 없었습니다. (확인 범위: Windows 11 25H2 PC 한 대, 새 Outlook 만 설치)
 
@@ -73,7 +70,7 @@ Outlook 은 데이터 파일의 크기 한도를 레지스트리 값으로 정�
 - 사용자 설정은 `HKCU\Software\Microsoft\Office\<버전>\Outlook\PST` 에 둡니다.
 - 정책은 `HKCU\Software\Policies\Microsoft\Office\<버전>\Outlook\PST` 에 둡니다.
 - `<버전>` 자리에는 Office 버전 번호(16.0 등)가 들어갑니다. 번호와 제품 이름의 대응은 [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md)에서 다룹니다.
-- 이 값들은 기본으로는 없습니다. 필요할 때 만들어 넣는 값입니다. 그래서 값이 있으면 사용자나 관리자, 정책이 따로 넣은 것입니다.
+- 이 값들은 기본으로는 없고 필요할 때 만들어 넣는 값이라서, 값이 있으면 사용자나 관리자, 정책이 따로 넣은 것입니다.
 - ANSI 파일은 `MaxFileSize` 를 크게 줘도 2GB 로 묶입니다. Microsoft 문서는 파일 손상을 막으려는 제한이라고 적습니다.
 
 레지스트리 값을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
@@ -115,7 +112,7 @@ NDB 층의 B-트리 두 개는 다음과 같습니다.
 | `bSentinel` | ANSI 460 / 유니코드 512 | `0x80` |
 | `bCryptMethod` | ANSI 461 / 유니코드 513 | 인코딩 방식. 아래 표를 봅니다 |
 
-- MS-PST 명세는 PST 만 다룹니다. 그래서 명세는 `wMagicClient` 를 "SM" 으로만 적습니다. "SO"·"AB" 는 libpff 문서에 있습니다.
+- MS-PST 명세는 PST 만 다루므로 `wMagicClient` 를 "SM" 으로만 적고, "SO"·"AB" 는 libpff 문서에 있습니다.
 - ANSI 헤더의 `bSentinel`·`bCryptMethod` 위치는 libpff 문서에 적힌 값입니다. 명세의 칸 크기를 더해도 같은 값이 나옵니다.
 - 유니코드 헤더의 512·513 은 명세의 칸 크기를 더해 얻은 값입니다.
 - 빈 PST 를 만들 때 `rgnid` 의 시작값은 일반 폴더 `0x400`, 검색 폴더 `0x4000`, 일반 메시지 `0x10000`, 연관 메시지 `0x8000`, 나머지 `0x400` 입니다.
@@ -156,7 +153,7 @@ ROOT 는 헤더 안에 든 구조입니다. libpff 문서가 적은 칸 위치�
 | 보통 (ANSI·유니코드) | 512바이트 | 64바이트 단위 | 8,192바이트 |
 | 4KB 형식 (wVer 36) | 4,096바이트 | — | 약 65,536바이트 |
 
-4KB 형식에서는 블록을 deflate (RFC 1951) 로 압축할 수 있습니다. 이때 블록 끝부분에 압축 전 크기를 적는 칸이 따로 있습니다.
+4KB 형식에서는 블록을 deflate (RFC 1951) 로 압축할 수 있고, 이때 블록 끝부분에 압축 전 크기를 적는 칸이 따로 있습니다.
 
 ### 항목 번호 (NID)
 
@@ -211,7 +208,7 @@ NID 에는 항목 종류를 나타내는 값이 들어 있습니다.
 ## 함정과 한계
 
 1. **확장자로만 파일을 찾습니다.** 이름을 바꾼 PST 는 확장자 검색에서 빠집니다. 시그니처 `21 42 44 4E` 와 오프셋 8 의 `wMagicClient` 로 한 번 더 찾습니다.
-2. **"높은 암호화" 라는 화면 이름을 보고 복호화 키부터 찾습니다.** 명세는 `0x01`·`0x02` 를 인코딩으로 적습니다. 암호로 단정하기 전에 공개 파서로 먼저 열어 봅니다.
+2. **"높은 암호화" 라는 화면 이름을 보고 복호화 키부터 찾습니다.** 명세는 `0x01`·`0x02` 를 인코딩으로 적으므로, 암호로 단정하기 전에 공개 파서로 먼저 열어 봅니다.
 3. **인코딩된 파일에서 글자를 그대로 검색합니다.** `bCryptMethod` 가 `0x01`·`0x02` 이면 블록 바이트가 원래 글자와 다릅니다. 원시 바이트 검색에서 본문이 빠질 수 있으므로 파서로 먼저 풀어낸 결과를 검색합니다([파일 내용 검색](../../../03-techniques/analysis/content-search/index.md)).
 4. **헤더의 인코딩 값을 그대로 믿습니다.** libpff 문서에는 인코딩 종류가 0 인데도 내용이 인코딩된 손상 사례가 있습니다. 도구가 깨진 글자를 내면 이 경우를 의심합니다.
 5. **4KB 형식을 옛 도구로 읽습니다.** `wVer` 가 36 이면 페이지 크기와 블록 압축이 다릅니다. 도구가 이 형식을 지원하는지 먼저 확인합니다.

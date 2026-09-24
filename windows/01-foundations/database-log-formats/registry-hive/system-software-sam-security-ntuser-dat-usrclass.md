@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-레지스트리는 파일 하나가 아닙니다. 여러 개의 하이브 (Hive) 파일이 디스크에 따로 저장됩니다. 부팅할 때와 사용자가 로그온할 때 이 파일들이 한 트리에 붙습니다. 이 페이지는 어떤 파일이 어디에 있는지, 레지스트리 편집기의 어느 경로로 보이는지, 어떤 아티팩트를 담는지 정리합니다.
+레지스트리는 파일 하나가 아니라 여러 개의 하이브 (Hive) 파일이 디스크에 따로 저장된 것이고, 부팅할 때와 사용자가 로그온할 때 이 파일들이 한 트리에 붙습니다. 이 페이지는 어떤 파일이 어디에 있는지, 레지스트리 편집기의 어느 경로로 보이는지, 어떤 아티팩트를 담는지 정리합니다.
 
 파일 안의 구조(regf 머리글·hbin·셀)는 [하이브 내부 구조 (regf·hbin·Cell)](regf-hbin-cell.md) 에서 다룹니다.
 
@@ -36,11 +36,11 @@
 | BCD | UEFI 는 EFI 시스템 파티션의 `\EFI\Microsoft\Boot\BCD`, BIOS 방식은 활성 파티션(Microsoft 용어로 시스템 파티션)의 `\Boot\BCD` | `HKLM\BCD00000000` | 부팅 설정 |
 | (없음) | 휘발성 | `HKLM\HARDWARE` | 부팅 때 찾은 장치 |
 
-- `HKU\S-1-5-18` 은 따로 된 하이브가 아닙니다. `HKU\.DEFAULT` 를 가리키는 연결입니다.
-- UsrClass.dat 는 사용자가 로그온하면 NTUSER.DAT 다음에 올라옵니다. `HKU\<SID>\Software\Classes` 는 이 `_Classes` 하이브를 가리키는 연결입니다.
-- NTUSER.DAT 는 그 계정이 처음 로그온할 때 만들어집니다. 한 번도 로그온하지 않은 계정에는 프로필 폴더도 NTUSER.DAT 도 없습니다.
+- `HKU\S-1-5-18` 은 따로 된 하이브가 아니라 `HKU\.DEFAULT` 를 가리키는 연결입니다.
+- UsrClass.dat 는 사용자가 로그온하면 NTUSER.DAT 다음에 올라오고, `HKU\<SID>\Software\Classes` 는 이 `_Classes` 하이브를 가리키는 연결입니다.
+- NTUSER.DAT 는 그 계정이 처음 로그온할 때 만들어지므로, 한 번도 로그온하지 않은 계정에는 프로필 폴더도 NTUSER.DAT 도 없습니다.
 
-`%SystemRoot%\System32\config` 에는 이 밖에도 regf 형식 파일이 더 있습니다. COMPONENTS·DRIVERS·ELAM·BBI 입니다. 이 페이지에서는 다루지 않습니다.
+`%SystemRoot%\System32\config` 에는 이 밖에도 regf 형식 파일로 COMPONENTS·DRIVERS·ELAM·BBI 가 있지만 이 페이지에서는 다루지 않습니다.
 
 regf 형식은 레지스트리 밖에서도 씁니다.
 
@@ -67,7 +67,7 @@ regf 형식은 레지스트리 밖에서도 씁니다.
 | UsrClass.dat | [셸백](../../../02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) (Vista 이후 주로 여기), [MUICache](../../../02-artifacts/execution/muicache.md) (Vista 이후), 사용자별 파일 연결·COM 등록 |
 | DEFAULT | LocalSystem 으로 도는 프로그램의 사용자 설정 (로그온 화면 설정 등) |
 
-SAM 의 해시는 SYSTEM 하이브에서 구한 부트키로 풀립니다. 그래서 SAM 만 가져오면 해시를 풀지 못합니다. 절차는 [부트키 구하기 (SYSTEM Boot Key)](../../../02-artifacts/credentials/sam-security/system-boot-key.md) 에 있습니다.
+SAM 의 해시는 SYSTEM 하이브에서 구한 부트키로 풀리므로 SAM 만 가져오면 해시를 풀지 못합니다. 절차는 [부트키 구하기 (SYSTEM Boot Key)](../../../02-artifacts/credentials/sam-security/system-boot-key.md) 에 있습니다.
 
 ## Windows 버전별 차이
 
@@ -80,8 +80,8 @@ SAM 의 해시는 SYSTEM 하이브에서 구한 부트키로 풀립니다. 그�
 | config 폴더 안 옛 사본 | `.sav` (설치 도중 만든 사본) | `RegBack` 폴더에 RegIdleBackup 예약 작업이 만든 사본 | `RegBack` 에 크기 0 파일만 남음 (기본값) |
 | 그 밖의 옛 사본 | 시스템 복원 지점 | 볼륨 섀도 복사본 | 볼륨 섀도 복사본 |
 
-- Windows 10 1803 부터는 RegBack 백업이 기본으로 꺼져 있습니다. 파일 이름은 보이지만 크기가 0 입니다.
-- `HKLM\System\CurrentControlSet\Control\Session Manager\Configuration Manager\EnablePeriodicBackup` 을 1 로 두면 예전처럼 백업합니다. 검체에서 이 값이 1 이면 RegBack 사본이 있을 수 있습니다.
+- Windows 10 1803 부터는 RegBack 백업이 기본으로 꺼져 있어서 파일 이름은 보이지만 크기가 0 입니다.
+- `HKLM\System\CurrentControlSet\Control\Session Manager\Configuration Manager\EnablePeriodicBackup` 을 1 로 두면 예전처럼 백업하므로, 검체에서 이 값이 1 이면 RegBack 사본이 있을 수 있습니다.
 - 로그 파일의 형식과 쓰는 법은 [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](log1-log2.md) 에서 다룹니다.
 
 ## 읽는 법 — 이 파일은 누구의 것인가
@@ -101,10 +101,10 @@ SAM 의 해시는 SYSTEM 하이브에서 구한 부트키로 풀립니다. 그�
 
 **수집**
 
-- 올라와 있는 하이브는 운영체제가 잠가 둡니다. 탐색기 복사로는 가져올 수 없습니다. 원시 NTFS 를 읽는 수집 도구나 섀도 복사본으로 복사합니다. 방법은 [선별 수집 (Triage Collection)](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [실행 중 시스템 이미징 (Live Imaging)](../../../03-techniques/process-acquisition/live-response/live-imaging.md) 에 있습니다.
+- 올라와 있는 하이브는 운영체제가 잠가 두므로 탐색기 복사로는 가져올 수 없고, 원시 NTFS 를 읽는 수집 도구나 섀도 복사본으로 복사합니다. 방법은 [선별 수집 (Triage Collection)](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [실행 중 시스템 이미징 (Live Imaging)](../../../03-techniques/process-acquisition/live-response/live-imaging.md) 에 있습니다.
 - 하이브를 가져올 때 같은 폴더의 `.LOG1`·`.LOG2` 를 함께 가져옵니다. 최근 변경이 아직 하이브 파일에 쓰이지 않고 로그에만 있을 수 있습니다.
-- `config\TxR` 폴더와 사용자 하이브 옆의 `.regtrans-ms` 파일도 함께 가져옵니다. 이 파일들은 트랜잭션 레지스트리 (TxR) 기록입니다. `.LOG1`·`.LOG2` 와는 다른 파일입니다.
-- API 로 내보낸 사본(`reg save` 등)은 원본 파일을 바이트 그대로 복사한 것이 아닙니다. 지운 키가 남은 빈 공간이 사본에는 없을 수 있습니다. 지운 데이터를 볼 계획이면 원본 파일을 그대로 복사합니다.
+- `config\TxR` 폴더와 사용자 하이브 옆의 `.regtrans-ms` 파일도 함께 가져옵니다. 이 파일들은 `.LOG1`·`.LOG2` 와는 다른 트랜잭션 레지스트리 (TxR) 기록입니다.
+- API 로 내보낸 사본(`reg save` 등)은 원본 파일을 바이트 그대로 복사한 것이 아니라서 지운 키가 남은 빈 공간이 사본에는 없을 수 있습니다. 지운 데이터를 볼 계획이면 원본 파일을 그대로 복사합니다.
 
 **옛 사본과 비교**
 
@@ -114,17 +114,17 @@ SAM 의 해시는 SYSTEM 하이브에서 구한 부트키로 풀립니다. 그�
 
 **하이브 파일 자체의 시각**
 
-- NTUSER.DAT 가 만들어진 시각은 그 계정이 처음 로그온한 때에 가깝습니다. 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않습니다. 그래서 현장에서는 이 파일의 생성 시각($STANDARD_INFORMATION)을 계정 생성 시각 대신 쓰는 경우가 많습니다. 보고서에는 추정값이라고 밝힙니다 (현장 관찰). NTFS 시각은 [두 벌의 시각](../../disk-volume/ntfs/standard-information-file-name.md) 을 봅니다.
+- NTUSER.DAT 가 만들어진 시각은 그 계정이 처음 로그온한 때에 가깝고, 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않습니다. 그래서 현장에서는 이 파일의 생성 시각($STANDARD_INFORMATION)을 계정 생성 시각 대신 쓰는 경우가 많습니다. 보고서에는 추정값이라고 밝힙니다 (현장 관찰). NTFS 시각은 [두 벌의 시각](../../disk-volume/ntfs/standard-information-file-name.md) 을 봅니다.
 - 하이브 파일의 NTFS 수정 시각은 파일에 마지막으로 쓴 때입니다. 특정 키가 바뀐 때가 아닙니다. 키마다의 시각은 [키 마지막 기록 시각 (Last Write Time)](last-write-time.md) 에서 읽습니다.
 
 ## 함정
 
-- **`HKU\.DEFAULT` 는 새 사용자의 기본값이 아닙니다.** LocalSystem 계정의 설정입니다. 새 사용자 틀은 `C:\Users\Default\NTUSER.DAT` 입니다.
-- **새 프로필은 틀을 복사해 만듭니다.** 그래서 새 사용자의 NTUSER.DAT 안에는 계정보다 먼저 기록된 키 시각이 있을 수 있습니다. 이 시각을 사용자 행위로 읽지 않습니다.
-- **`HKCU\Software\Classes` 는 NTUSER.DAT 에 없습니다.** UsrClass.dat 에 있습니다. 사용자 단위 COM 등록을 이용한 자동실행을 찾을 때 NTUSER.DAT 만 보면 놓칩니다. [악성코드 지속성 찾기](../../../04-scenarios/incident/persistence.md) 를 함께 봅니다.
+- **`HKU\.DEFAULT` 는 새 사용자의 기본값이 아닙니다.** LocalSystem 계정의 설정이고, 새 사용자 틀은 `C:\Users\Default\NTUSER.DAT` 입니다.
+- **새 프로필은 틀을 복사해 만듭니다.** 그래서 새 사용자의 NTUSER.DAT 안에는 계정보다 먼저 기록된 키 시각이 있을 수 있으며, 이 시각을 사용자 행위로 읽지 않습니다.
+- **`HKCU\Software\Classes` 는 NTUSER.DAT 에 없고 UsrClass.dat 에 있습니다.** 사용자 단위 COM 등록을 이용한 자동실행을 찾을 때 NTUSER.DAT 만 보면 놓칩니다. [악성코드 지속성 찾기](../../../04-scenarios/incident/persistence.md) 를 함께 봅니다.
 - **실행 중 시스템의 HKU 에는 로그온한 사용자만 보입니다.** 다른 사용자의 설정은 그 사람의 NTUSER.DAT 파일을 따로 열어야 봅니다.
 - **서비스 계정 하이브를 빼먹기 쉽습니다.** LocalService·NetworkService 로 도는 프로그램의 사용자 설정은 사람 계정의 NTUSER.DAT 가 아니라 `ServiceProfiles` 아래에 남습니다.
-- **관리자 권한으로도 SAM·SECURITY 속은 비어 보입니다.** 실행 중 시스템에서 이 두 하이브의 속은 SYSTEM 계정만 읽도록 권한이 걸려 있습니다. 비어 보인다고 내용이 없는 것이 아닙니다.
+- **관리자 권한으로도 SAM·SECURITY 속은 비어 보입니다.** 실행 중 시스템에서 이 두 하이브의 속은 SYSTEM 계정만 읽도록 권한이 걸려 있으므로, 비어 보인다고 내용이 없는 것은 아닙니다.
 - **64비트 Windows 의 SOFTWARE 에는 32비트 프로그램 설정이 `WOW6432Node` 아래에 따로 있습니다.** 같은 파일 안이므로 두 곳을 다 봅니다.
 - **RegBack 파일이 있다고 사본이 있는 것이 아닙니다.** 1803 이후 기본값에서는 크기가 0 입니다. 파일 크기를 먼저 확인합니다.
 

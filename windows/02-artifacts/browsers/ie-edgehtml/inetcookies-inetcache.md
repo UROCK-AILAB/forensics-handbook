@@ -6,12 +6,9 @@ IE 는 받은 웹 자원을 캐시 폴더(IE 4~9 는 `Content.IE5`, IE 10 이후
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 캐시 (Cache) 는 브라우저가 받은 웹 자원의 사본입니다. 캐시 폴더에는 이 사본이 파일로 남습니다.
-- 쿠키 (Cookie) 는 웹사이트가 브라우저에 맡겨 두는 이름과 값의 쌍입니다.
-- IE 4~9 는 캐시 파일을 이름이 8글자인 하위 폴더에 나눠 둡니다. 어느 파일이 어느 주소에서 왔는지는 캐시 폴더의 `index.dat` 에 적습니다.
-- IE 4~9 는 쿠키 기록도 `index.dat` 에 적습니다.
-- IE 10 이후는 캐시 기록과 쿠키를 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에 둡니다.
-- 옛 엣지도 쿠키를 WebCacheV01.dat 에 둡니다.
+캐시 (Cache) 는 브라우저가 받은 웹 자원의 사본이고, 캐시 폴더에는 이 사본이 파일로 남습니다. 쿠키 (Cookie) 는 웹사이트가 브라우저에 맡겨 두는 이름과 값의 쌍입니다.
+
+IE 4~9 는 캐시 파일을 이름이 8글자인 하위 폴더에 나눠 두고, 어느 파일이 어느 주소에서 왔는지는 캐시 폴더의 `index.dat` 에 적습니다. 쿠키 기록도 `index.dat` 에 적습니다. IE 10 이후는 캐시 기록과 쿠키를 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에 두고, 옛 엣지도 쿠키를 WebCacheV01.dat 에 둡니다.
 
 ## 위치와 버전별 차이
 
@@ -53,11 +50,7 @@ Windows 11 25H2 PC 에서 본 모습입니다. (확인 범위: Windows 11 25H2, 
    └─ deprecated.cookie         (91바이트)
 ```
 
-- `Temporary Internet Files` 는 `INetCache` 를 가리키는 연결 폴더 (Junction) 였습니다.
-- `INetCache\Content.IE5` 는 `INetCache\IE` 를 가리키는 연결 폴더였습니다. 숨김·시스템 속성이 붙어 있었습니다.
-- `INetCache\IE` 에는 8글자 캐시 하위 폴더가 없었습니다.
-- `%APPDATA%\Microsoft\Windows\Cookies` 폴더는 없었습니다.
-- 같은 PC 의 WebCacheV01.dat 사본에서는 `CookieEntryEx_#` 표 이름이 여럿 나왔습니다.
+`Temporary Internet Files` 는 `INetCache` 를 가리키는 연결 폴더 (Junction) 였고, `INetCache\Content.IE5` 는 `INetCache\IE` 를 가리키는 연결 폴더였으며 숨김·시스템 속성이 붙어 있었습니다. `INetCache\IE` 에는 8글자 캐시 하위 폴더가 없었고, `%APPDATA%\Microsoft\Windows\Cookies` 폴더도 없었습니다. 같은 PC 의 WebCacheV01.dat 사본에서는 `CookieEntryEx_#` 표 이름이 여럿 나왔습니다.
 
 ## 구조
 

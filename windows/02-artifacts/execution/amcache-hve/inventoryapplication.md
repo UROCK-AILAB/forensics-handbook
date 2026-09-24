@@ -2,16 +2,15 @@
 
 ## 한 줄 요약
 
-설치 프로그램 항목 (InventoryApplication) 은 `Amcache.hve` 하이브 안의 `Root\InventoryApplication` 키입니다. 윈도가 설치된 것으로 파악한 프로그램마다 하위 키가 하나씩 있습니다. 하위 키에는 이름·버전·게시자·설치 방식·설치 폴더·제거 키 경로·설치 날짜가 남습니다. 이 목록은 설치 기록입니다. 실행 기록이 아닙니다. Windows 10 1709 무렵의 라이브러리부터는 목록 전체를 주기적으로 다시 씁니다. 그래서 하위 키의 마지막 기록 시각은 설치 시각이 아닙니다.
+설치 프로그램 항목 (InventoryApplication) 은 `Amcache.hve` 하이브 안의 `Root\InventoryApplication` 키입니다. 윈도가 설치된 것으로 파악한 프로그램마다 하위 키가 하나씩 있고, 하위 키에는 이름·버전·게시자·설치 방식·설치 폴더·제거 키 경로·설치 날짜가 남습니다. 이 목록은 실행 기록이 아니라 설치 기록입니다. Windows 10 1709 무렵의 라이브러리부터는 목록 전체를 주기적으로 다시 쓰기 때문에 하위 키의 마지막 기록 시각은 설치 시각이 아닙니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-윈도는 설치된 프로그램이 새 버전과 잘 맞는지 점검하려고 설치 프로그램 목록(인벤토리, Inventory)을 만듭니다. 이 목록을 `Amcache.hve` 에 적는 곳이 이 키입니다.
+윈도는 설치된 프로그램이 새 버전과 잘 맞는지 점검하려고 설치 프로그램 목록(인벤토리, Inventory)을 만들고, 이 목록을 `Amcache.hve` 에 적는 곳이 이 키입니다.
 
-- 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](../pca.md) 서비스가 `compattelrunner.exe -m:aeinv.dll -f:UpdateSoftwareInventory` 를 실행합니다. 이때 `aeinv.dll` 이 하이브를 고칩니다(ANSSI).
-- 호환성 점검 예약 작업 (Microsoft Compatibility Appraiser) 도 이 키를 고칩니다. 10.0.16299 버전 라이브러리부터는 작업이 돌 때마다 항목을 모두 다시 씁니다(ANSSI).
+설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](../pca.md) 서비스가 `compattelrunner.exe -m:aeinv.dll -f:UpdateSoftwareInventory` 를 실행하고, 이때 `aeinv.dll` 이 하이브를 고칩니다(ANSSI). 호환성 점검 예약 작업 (Microsoft Compatibility Appraiser) 도 이 키를 고치는데, 10.0.16299 버전 라이브러리부터는 작업이 돌 때마다 항목을 모두 다시 씁니다(ANSSI).
 
-윈도는 같은 목록을 진단 데이터로 Microsoft 에 보냅니다. Microsoft 는 그 이벤트(`Microsoft.Windows.Inventory.Core.InventoryApplicationAdd`)의 필드 설명을 공개합니다. 필드 이름이 이 키의 값 이름과 같습니다. 그래서 값의 뜻을 짐작할 때 이 문서를 씁니다. 다만 두 쪽이 같다는 공식 보장은 없습니다.
+윈도는 같은 목록을 진단 데이터로 Microsoft 에 보내고, Microsoft 는 그 이벤트(`Microsoft.Windows.Inventory.Core.InventoryApplicationAdd`)의 필드 설명을 공개합니다. 필드 이름이 이 키의 값 이름과 같아서 값의 뜻을 짐작할 때 이 문서를 씁니다. 다만 두 쪽이 같다는 공식 보장은 없습니다.
 
 목록에 들어오는 프로그램은 설치 방식으로 나뉩니다. `Source` 값이 그 구분입니다.
 
@@ -40,7 +39,7 @@ AmCache 의 모양은 Windows 버전보다 그 안의 `ae*.dll` 라이브러리 
 | 10.0.14913 (Windows 10 1607) | 이 키가 새로 생깁니다. `Programs` 도 남아 있습니다 | 설치 시각과 맞습니다 | 이 키에서는 하위 키를 지웁니다. `Programs` 의 `b` 값에는 제거 시각이 남습니다 |
 | 10.0.16299 이후 (Windows 10 1709~) | 점검 작업이 돌 때마다 항목을 모두 다시 씁니다. 10.0.17134 부터 `Programs` 키가 없어집니다 | 점검 작업이 돈 시각입니다 | 다음에 다시 쓸 때 목록에서 빠집니다 |
 
-ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대에서는 321개 하위 키의 마지막 기록 시각이 모두 `LastScanTime` 16초 앞부터 42초 뒤 사이에 몰려 있었습니다(확인 범위: Windows 11 25H2 한 대). 1709 이후 동작과 같습니다.
+ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대에서는 321개 하위 키의 마지막 기록 시각이 모두 `LastScanTime` 16초 앞부터 42초 뒤 사이에 몰려 있었고(확인 범위: Windows 11 25H2 한 대), 이는 1709 이후 동작과 같습니다.
 
 ## 구조
 
@@ -69,13 +68,12 @@ ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대
 | `PackageFullName`·`ManifestPath`·`BundleManifestPath` | REG_SZ | 스토어 앱의 패키지 전체 이름과 매니페스트 경로입니다 | 문서 |
 | `UserSid` | REG_SZ | 사용자 SID 입니다. 사용자별 설치 항목과 일부 MSI 항목에만 있었습니다. 공식 설명은 찾지 못했습니다 | 관찰 |
 
-라이브러리 버전에 따라 값 목록이 다릅니다. Windows 11 25H2 한 대에는 `Type` 과 `OSVersionAtInstallTime` 이 없었습니다. Microsoft 문서에 있는 `InstallDateArpLastModified`·`InstallDateMsi`·`InstallDateFromLinkFile` 도 그 하이브에는 없었습니다.
+라이브러리 버전에 따라 값 목록이 다릅니다. Windows 11 25H2 한 대에는 `Type` 과 `OSVersionAtInstallTime` 이 없었고, Microsoft 문서에 있는 `InstallDateArpLastModified`·`InstallDateMsi`·`InstallDateFromLinkFile` 도 그 하이브에는 없었습니다.
 
 ### ProgramId 읽기
 
-- Microsoft 문서는 ProgramId 를 "Name·Version·Publisher·Language 로 만든 해시" 로 설명합니다. 계산 방법은 공개하지 않습니다.
-- 같은 프로그램의 같은 버전은 다른 PC 에서도 ProgramId 가 같습니다(ANSSI).
-- 버전은 해시 입력에 들어갑니다. 그래서 업데이트한 뒤에는 다른 ProgramId 로 잡힐 수 있습니다.
+Microsoft 문서는 ProgramId 를 "Name·Version·Publisher·Language 로 만든 해시" 로 설명하지만 계산 방법은 공개하지 않습니다. 같은 프로그램의 같은 버전은 다른 PC 에서도 ProgramId 가 같고(ANSSI), 버전이 해시 입력에 들어가므로 업데이트한 뒤에는 다른 ProgramId 로 잡힐 수 있습니다.
+
 - 하위 키 이름은 `0000` 으로 시작하는 16진 44자리입니다.
 - 끝 네 자리는 `Language` 값을 리틀 엔디언 2바이트로 적은 것과 맞았습니다. 예를 들어 1033(0x0409)은 `0904`, 65535 는 `ffff` 였습니다(확인 범위: Windows 11 25H2 한 대, 321개 항목). 공식 설명은 없습니다.
 

@@ -5,21 +5,13 @@
 ## 한 줄 요약
 
 시그널 데스크톱은 Electron 앱이고, 사용자 데이터를 `C:\Users\<사용자>\AppData\Roaming\Signal\` 에 둡니다.
-대화방·메시지·첨부 파일 정보는 `sql\db.sqlite` 에 있습니다.
-이 DB 는 SQLCipher 로 암호화돼 있습니다.
-DB 키는 같은 폴더의 `config.json` 에 있습니다.
-옛 방식은 키를 평문 `key` 칸에 적었고, 지금 소스는 키를 암호화해 `encryptedKey` 칸에 적습니다.
-Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
-그래서 `encryptedKey` 만 있는 이미지에서는 그 사용자의 DPAPI 를 풀어야 DB 키를 얻습니다.
+대화방·메시지·첨부 파일 정보는 `sql\db.sqlite` 에 있고, 이 DB 는 SQLCipher 로 암호화돼 있습니다. DB 키는 같은 폴더의 `config.json` 에 있습니다. 옛 방식은 키를 평문 `key` 칸에 적었고, 지금 소스는 키를 암호화해 `encryptedKey` 칸에 적습니다. Windows 에서 이 암호화의 키는 DPAPI 로 만들기 때문에, `encryptedKey` 만 있는 이미지에서는 그 사용자의 DPAPI 를 풀어야 DB 키를 얻습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 시그널 데스크톱은 대화를 PC 의 로컬 DB 에 저장합니다. 이 DB 가 `sql\db.sqlite` 입니다.
-- 앱은 이 DB 를 SQLCipher 로 암호화합니다. SQLCipher 형식은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
-- DB 를 여는 키는 `config.json` 에 둡니다.
-- 연락처와 대화 상대의 프로필 사진, 첨부 파일은 `attachments.noindex\` 에 둡니다.
-- 앱 로그는 `logs\` 에 둡니다.
-- 시그널 데스크톱은 Electron 의 `safeStorage` 를 불러 씁니다. Electron 앱이므로 Chromium 공통 폴더도 생깁니다. 공통 폴더는 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에서 다룹니다.
+시그널 데스크톱은 대화를 PC 의 로컬 DB 인 `sql\db.sqlite` 에 저장하고, 이 DB 를 SQLCipher 로 암호화합니다. SQLCipher 형식은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. DB 를 여는 키는 `config.json` 에 두고, 연락처와 대화 상대의 프로필 사진, 첨부 파일은 `attachments.noindex\` 에, 앱 로그는 `logs\` 에 둡니다.
+
+시그널 데스크톱은 Electron 의 `safeStorage` 를 불러 쓰며, Electron 앱이라서 Chromium 공통 폴더도 생깁니다. 공통 폴더는 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -30,8 +22,7 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 | 사용자 데이터 폴더 | `C:\Users\<사용자>\AppData\Roaming\Signal\` | 수집 정의 파일 |
 | 프로그램 설치 폴더 | 알려진 바로는 `%LOCALAPPDATA%\Programs\signal-desktop\` (버전마다 확인 필요) | 확인하지 못함 |
 
-- `%APPDATA%` 는 사용자마다 따로 있습니다. 사용자 프로필마다 봅니다.
-- 저장 위치가 Windows 버전에 따라 다르다는 자료는 찾지 못했습니다.
+`%APPDATA%` 는 사용자마다 따로 있으므로 사용자 프로필마다 봅니다. 저장 위치가 Windows 버전에 따라 다르다는 자료는 찾지 못했습니다.
 
 ### 폴더·파일별 내용
 
@@ -50,9 +41,7 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 | 옛 방식 | `key` 에 평문 키 |
 | 새 방식 | `encryptedKey` 에 암호화한 키 |
 
-- 새 방식이 처음 들어간 버전과 날짜는 확인하지 못했습니다.
-- 옛 수집 정의 파일은 "`config.json` 에 `db.sqlite` 의 SQLCipher 원시 키 (Raw Key) 가 있다" 고 적었습니다. 이 설명은 평문 `key` 시절 기준입니다.
-- 그래서 옛 자료만 보고 `config.json` 에서 평문 키를 기대하면 틀릴 수 있습니다.
+새 방식이 처음 들어간 버전과 날짜는 확인하지 못했습니다. 옛 수집 정의 파일은 "`config.json` 에 `db.sqlite` 의 SQLCipher 원시 키 (Raw Key) 가 있다" 고 적었는데, 이 설명은 평문 `key` 시절 기준입니다. 그래서 옛 자료만 보고 `config.json` 에서 평문 키를 기대하면 틀릴 수 있습니다.
 
 ## 구조
 
@@ -60,8 +49,7 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 
 아래 동작은 2026-09-23 에 받은 Signal-Desktop main 브랜치 소스의 `getSQLKey` 함수를 따릅니다.
 
-- 앱이 읽는 키 칸은 두 개입니다. 옛 방식 `key` 와 새 방식 `encryptedKey` 입니다.
-- `encryptedKey` 는 키를 `safeStorage.encryptString` 으로 암호화한 결과를 16진수 문자열로 적은 값입니다.
+앱이 읽는 키 칸은 옛 방식 `key` 와 새 방식 `encryptedKey` 두 개입니다. `encryptedKey` 는 키를 `safeStorage.encryptString` 으로 암호화한 결과를 16진수 문자열로 적은 값입니다.
 
 앱은 시작할 때 아래 순서로 키를 정합니다.
 
@@ -73,32 +61,23 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 | 두 칸이 모두 있고 푼 값이 같음 | `key` 를 지웁니다 |
 | 암호화를 쓸 수 없음 | 평문 `key` 로 저장합니다 |
 
-- `safeStorageBackend` 칸은 리눅스에서만 씁니다.
-- 그래서 같은 Windows PC 라도 이미지를 뜬 시점에 따라 `config.json` 에 평문 `key` 가 있을 수도, `encryptedKey` 만 있을 수도 있습니다(해석).
+`safeStorageBackend` 칸은 리눅스에서만 쓰는데, 같은 Windows PC 라도 이미지를 뜬 시점에 따라 `config.json` 에 평문 `key` 가 있을 수도, `encryptedKey` 만 있을 수도 있습니다(해석).
 
 ### Windows 의 safeStorage
 
-- Windows 에서 safeStorage 의 암호화 키는 DPAPI 로 만듭니다.
-- Electron 문서는 Microsoft 문서를 인용해, 같은 로그온 자격 증명으로 로그온한 사용자만 대개 풀 수 있다고 적습니다.
-- 같은 PC 의 다른 사용자로부터는 보호됩니다.
-- 같은 사용자 공간에서 도는 다른 앱으로부터는 보호되지 않습니다.
-- Windows 에서 `isEncryptionAvailable()` 은 앱이 `ready` 이벤트를 낸 뒤 true 를 돌려줍니다.
-- safeStorage 가 값마다 DPAPI 를 직접 쓰는지, Chromium 처럼 `Local State` 파일에 둔 키를 DPAPI 로 감싸는지는 이번 자료로 확인하지 못했습니다.
-- 사용자 DPAPI 의 마스터 키와 푸는 조건은 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+Windows 에서 safeStorage 의 암호화 키는 DPAPI 로 만듭니다. Electron 문서는 Microsoft 문서를 인용해, 같은 로그온 자격 증명으로 로그온한 사용자만 대개 풀 수 있다고 적습니다. 그래서 같은 PC 의 다른 사용자로부터는 보호되지만, 같은 사용자 공간에서 도는 다른 앱으로부터는 보호되지 않습니다. Windows 에서 `isEncryptionAvailable()` 은 앱이 `ready` 이벤트를 낸 뒤 true 를 돌려줍니다.
+
+safeStorage 가 값마다 DPAPI 를 직접 쓰는지, Chromium 처럼 `Local State` 파일에 둔 키를 DPAPI 로 감싸는지는 이번 자료로 확인하지 못했습니다. 사용자 DPAPI 의 마스터 키와 푸는 조건은 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
 ### DB 파일
 
-- `db.sqlite` 는 SQLCipher 로 암호화한 SQLite 파일입니다.
-- 옛 수집 정의 파일에 적힌 여는 설정은 "키를 원시 키로 넣고, 나머지는 SQLCipher 4 기본값" 입니다.
-- SQLCipher 의 페이지 배치와 버전별 기본값은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
-- `-wal`·`-shm` 짝 파일이 함께 생깁니다. 본 파일에 아직 옮겨지지 않은 페이지가 WAL 에 있을 수 있습니다. 세 파일을 함께 수집합니다.
-- 알려진 바로는 DB 안에 `messages`, `conversations` 같은 표가 있습니다(버전마다 확인 필요).
+`db.sqlite` 는 SQLCipher 로 암호화한 SQLite 파일입니다. 옛 수집 정의 파일에 적힌 여는 설정은 "키를 원시 키로 넣고, 나머지는 SQLCipher 4 기본값" 입니다. SQLCipher 의 페이지 배치와 버전별 기본값은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+
+`-wal`·`-shm` 짝 파일이 함께 생기며, 본 파일에 아직 옮겨지지 않은 페이지가 WAL 에 있을 수 있으므로 세 파일을 함께 수집합니다. 알려진 바로는 DB 안에 `messages`, `conversations` 같은 표가 있습니다(버전마다 확인 필요).
 
 ### 첨부 파일
 
-- `attachments.noindex\` 에는 프로필 사진과 첨부 파일이 있을 수 있습니다.
-- 첨부 파일을 디스크에 암호화해 저장하는지는 버전마다 다를 수 있고, 이번에 확인하지 못했습니다.
-- 파일 앞머리로 평문 이미지·문서인지 먼저 봅니다.
+`attachments.noindex\` 에는 프로필 사진과 첨부 파일이 있을 수 있습니다. 첨부 파일을 디스크에 암호화해 저장하는지는 버전마다 다를 수 있고 이번에 확인하지 못했으므로, 파일 앞머리로 평문 이미지·문서인지 먼저 봅니다.
 
 ### 디스크 이미지만으로 풀리나
 
@@ -135,9 +114,9 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 | `db.sqlite`·`-wal` 수정 시각 | 파일 시스템 | 앱이 DB 에 쓸 때 | UTC |
 | 로그 파일 시각 | 파일 시스템, 로그 줄 | 앱이 로그를 쓸 때 | 로그 줄의 형식은 확인하지 못함 |
 
-- 유닉스 시각은 UTC 기준입니다. 밀리초 단위 값을 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
-- 앱은 `key` 를 `encryptedKey` 로 옮길 때 `config.json` 을 다시 씁니다. 그래서 `config.json` 의 수정 시각은 옮긴 때이거나 그 뒤 다른 이유로 다시 쓴 때입니다(해석).
-- 가장 최근 로그는 `.log`, 예전 로그는 `.log.0`, `.log.1` … 입니다. 로그 파일마다 파일 시스템 시각을 적어 두면 로그가 넘어간 시점을 가늠할 수 있습니다.
+유닉스 시각은 UTC 기준입니다. 밀리초 단위 값을 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+
+앱은 `key` 를 `encryptedKey` 로 옮길 때 `config.json` 을 다시 쓰므로, `config.json` 의 수정 시각은 옮긴 때이거나 그 뒤 다른 이유로 다시 쓴 때입니다(해석). 가장 최근 로그는 `.log`, 예전 로그는 `.log.0`, `.log.1` … 입니다. 로그 파일마다 파일 시스템 시각을 적어 두면 로그가 넘어간 시점을 가늠할 수 있습니다.
 
 ## 함정과 한계
 
@@ -217,9 +196,7 @@ DB 를 연 뒤에는 도구가 보여 주는 메시지 수와 표의 행 수를 
 
 ## 실습
 
-시그널 데스크톱이 든 공개 검체는 이번에 확인하지 못했습니다.
-Windows 가상 머신에 시그널 데스크톱을 설치해 직접 시험합니다.
-시험 전에 앱 버전과 Windows 버전을 적어 둡니다.
+시그널 데스크톱이 든 공개 검체는 이번에 확인하지 못했습니다. Windows 가상 머신에 시그널 데스크톱을 설치해 직접 시험하고, 시험 전에 앱 버전과 Windows 버전을 적어 둡니다.
 
 1. 새로 설치하고 처음 실행한 뒤 `config.json` 에 어떤 키 칸이 있습니까?
 2. `sql\db.sqlite` 의 앞 16바이트는 평문 SQLite 헤더입니까?

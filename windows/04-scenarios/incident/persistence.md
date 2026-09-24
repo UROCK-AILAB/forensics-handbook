@@ -48,11 +48,7 @@ Microsoft Sysinternals 의 Autoruns 문서는 자동실행 위치로 시작 프�
 
 ## 공개 사례에서 본 지속성
 
-- The DFIR Report 사례에서는 원격 관리 프로그램 ScreenConnect 가 자동 시작 서비스로 남았습니다[2].
-- 이 설치는 System 로그의 7045("A service was installed in the system")에 남았습니다[2]. Sysmon 이벤트 13(레지스트리 값 설정)에도 흔적이 있었습니다[2].
-- 같은 사례에서는 다른 원격 관리 프로그램(Atera)도 자동 시작 서비스로 등록됐습니다[2]. 이 등록도 7045 에 남았습니다[2].
-- MITRE 는 원격 접속 도구의 설치 과정이 흔히 Windows 서비스로 지속성을 만든다고 적습니다[3].
-- 이 사례의 서비스 종류·시작 방식·실행 경로는 [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) 에 있습니다.
+The DFIR Report 사례에서는 원격 관리 프로그램 ScreenConnect 가 자동 시작 서비스로 남았고, 이 설치는 System 로그의 7045("A service was installed in the system")와 Sysmon 이벤트 13(레지스트리 값 설정)에 흔적을 남겼습니다[2]. 같은 사례에서 다른 원격 관리 프로그램(Atera)도 자동 시작 서비스로 등록됐고, 이 등록도 7045 에 남았습니다[2]. MITRE 는 원격 접속 도구의 설치 과정이 흔히 Windows 서비스로 지속성을 만든다고 적습니다[3]. 이 사례의 서비스 종류·시작 방식·실행 경로는 [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) 에 있습니다.
 
 ## 등록 시각과 실행 여부
 
@@ -70,8 +66,7 @@ Microsoft Sysinternals 의 Autoruns 문서는 자동실행 위치로 시작 프�
 
 **실행 여부.**
 
-- 등록과 실행은 다른 일입니다.
-- 가리키는 파일이 실제로 실행됐는지는 프리페치·AmCache·4688·Sysmon 1 같은 실행 흔적으로 따로 확인합니다. 순서는 [어떤 프로그램을 언제 실행했나](../activity/program-execution.md) 에 있습니다.
+- 등록과 실행은 다른 일이라서 가리키는 파일이 실제로 실행됐는지는 프리페치·AmCache·4688·Sysmon 1 같은 실행 흔적으로 따로 확인합니다. 순서는 [어떤 프로그램을 언제 실행했나](../activity/program-execution.md) 에 있습니다.
 
 ## 분석 흐름
 

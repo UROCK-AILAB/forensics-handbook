@@ -8,9 +8,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- Microsoft 문서는 이 목록을 닉네임 캐시 (nickname cache) 라고도 부릅니다.
-- 사용자가 Outlook 에서 메일을 보내면 목록이 저절로 만들어집니다.
-- 목록은 받는 사람 칸에 글자를 칠 때 후보를 띄우는 데 씁니다.
+Microsoft 문서는 이 목록을 닉네임 캐시 (nickname cache) 라고도 부릅니다. 사용자가 Outlook 에서 메일을 보내면 목록이 저절로 만들어지고, 받는 사람 칸에 글자를 칠 때 후보를 띄우는 데 씁니다.
 
 목록에는 이전에 메일을 보낸 상대마다 다음 값이 들어 있습니다.
 
@@ -18,7 +16,7 @@
 - LegacyExchangeDN
 - 표시 이름
 
-Outlook 의 목록은 웹 Outlook (Outlook on the web) 과 함께 쓰지 않습니다. 웹 Outlook 에는 목록이 따로 있습니다. 그래서 PC 의 목록만 보고 사용자가 메일을 보낸 상대를 모두 알 수는 없습니다.
+Outlook 의 목록은 웹 Outlook (Outlook on the web) 과 함께 쓰지 않고 웹 Outlook 에는 목록이 따로 있어서, PC 의 목록만 보고 사용자가 메일을 보낸 상대를 모두 알 수는 없습니다.
 
 ## 위치와 버전별 차이
 
@@ -29,9 +27,9 @@ Outlook 의 목록은 웹 Outlook (Outlook on the web) 과 함께 쓰지 않습�
 | 2007 이전 | 디스크의 닉네임 파일 (`.nk2`). 폴더는 `%APPDATA%\Microsoft\Outlook` 입니다 |
 | 2010 이후 | 기본 메시지 저장소 안의 숨은 메시지. 메시지 클래스는 `IPM.Configuration.Autocomplete` 입니다 |
 
-- Outlook 2010 이후는 옛 `.nk2` 를 가져올 수 있습니다. 가져오는 명령은 `outlook /importnk2` 입니다.
-- `.nk2` 를 다른 PC 로 옮길 때는 파일 이름을 프로필 이름과 맞춰야 한다고 Microsoft 지원 문서에 적혀 있습니다. 프로필은 [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md)에서 다룹니다.
-- 기본 메시지 저장소는 계정에 따라 PST 이거나 OST 입니다. 어느 쪽인지는 [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md)에서 다룹니다.
+Outlook 2010 이후는 옛 `.nk2` 를 가져올 수 있고, 가져오는 명령은 `outlook /importnk2` 입니다. `.nk2` 를 다른 PC 로 옮길 때는 파일 이름을 프로필 이름과 맞춰야 한다고 Microsoft 지원 문서에 적혀 있습니다. 프로필은 [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md)에서 다룹니다.
+
+기본 메시지 저장소는 계정에 따라 PST 이거나 OST 입니다. 어느 쪽인지는 [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md)에서 다룹니다.
 
 ### 판 기준과 계정 기준
 
@@ -40,15 +38,13 @@ Outlook 의 목록은 웹 Outlook (Outlook on the web) 과 함께 쓰지 않습�
 - POP3 계정: PC 에 있는 파일. 폴더는 `%APPDATA%\Microsoft\Outlook` 입니다
 - Microsoft 365·Exchange·IMAP 계정: Outlook 데이터 파일 안의 숨은 메시지
 
-두 설명은 기준이 다릅니다. 두 문서 모두 이 차이를 풀어 설명하지 않습니다. 그래서 검체에서는 판과 계정 종류에 상관없이 두 곳을 모두 찾습니다.
+두 설명은 기준이 다른데 두 문서 모두 이 차이를 풀어 설명하지 않습니다. 그래서 검체에서는 판과 계정 종류에 상관없이 두 곳을 모두 찾습니다.
 
 ### 항목 수 한도
 
-- Outlook for Microsoft 365·2019·2016 은 모두 항목을 1,000개까지 둡니다.
-- 한도를 넘으면 Outlook 이 사용 빈도로 무게를 매겨 지울 이름을 고릅니다.
-- 한도는 `HKCU\Software\Microsoft\Office\16.0\Outlook\AutoNameCheck` 의 `MaxNickNames` 값으로 바꿉니다. 값 형식은 REG_DWORD 이고, 10진수로 넣습니다.
-- 이 값이 있으면 한도를 기본값과 다르게 정한 것입니다.
-- `16.0` 같은 Office 버전 번호와 Outlook 판의 대응은 [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md)에서 다룹니다.
+Outlook for Microsoft 365·2019·2016 은 모두 항목을 1,000개까지 두고, 한도를 넘으면 Outlook 이 사용 빈도로 무게를 매겨 지울 이름을 고릅니다. 한도는 `HKCU\Software\Microsoft\Office\16.0\Outlook\AutoNameCheck` 의 `MaxNickNames` 값으로 바꿉니다. 값 형식은 REG_DWORD 이고, 10진수로 넣습니다. 이 값이 있으면 한도를 기본값과 다르게 정한 것입니다.
+
+`16.0` 같은 Office 버전 번호와 Outlook 판의 대응은 [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md)에서 다룹니다.
 
 ### 받는 사람 칸 후보가 바뀐 판
 
@@ -58,14 +54,13 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 
 ### 확인한 것
 
-- 2010 이후의 목록은 메시지 저장소 안의 메시지 하나입니다. 이 메시지는 화면의 폴더 목록에 보이지 않습니다.
-- 메시지 클래스 `IPM.Configuration.Autocomplete` 로 이 메시지를 가려냅니다.
-- Microsoft 지원 문서는 MFCMAPI 로 이 메시지를 볼 수 있다고 적습니다. 문서는 이 메시지를 연관 콘텐츠 표 (Associated Content Table) 에서 찾으라고 안내합니다. 어느 폴더의 표인지는 적혀 있지 않습니다.
-- 데이터 파일 안에서 메시지를 찾아가는 구조는 [데이터 파일 구조 (PST·OST)](pst-ost.md)에서 다룹니다. 메시지의 값은 [MAPI 속성](../../../01-foundations/app-mail-data/mapi-property.md)으로 들어 있습니다.
+2010 이후의 목록은 메시지 저장소 안의 메시지 하나이고, 이 메시지는 화면의 폴더 목록에 보이지 않습니다. 메시지 클래스 `IPM.Configuration.Autocomplete` 로 이 메시지를 가려냅니다. Microsoft 지원 문서는 MFCMAPI 로 이 메시지를 볼 수 있다고 적고, 연관 콘텐츠 표 (Associated Content Table) 에서 찾으라고 안내하지만 어느 폴더의 표인지는 적혀 있지 않습니다.
+
+데이터 파일 안에서 메시지를 찾아가는 구조는 [데이터 파일 구조 (PST·OST)](pst-ost.md)에서 다룹니다. 메시지의 값은 [MAPI 속성](../../../01-foundations/app-mail-data/mapi-property.md)으로 들어 있습니다.
 
 ### 흔히 알려진 내용 (확인하지 못함)
 
-아래 내용은 공개 분석 자료에 널리 퍼져 있습니다. Microsoft 의 [MS-OXOCFG] 명세에 있다고 알려져 있습니다. 그러나 지금 Microsoft Learn 에 있는 [MS-OXOCFG] 목차에는 자동완성을 다루는 절이 없었습니다(2026-09 확인). 검체에서 직접 확인한 뒤 씁니다.
+아래 내용은 공개 분석 자료에 널리 퍼져 있고 Microsoft 의 [MS-OXOCFG] 명세에 있다고 알려져 있지만, 지금 Microsoft Learn 에 있는 [MS-OXOCFG] 목차에는 자동완성을 다루는 절이 없었습니다(2026-09 확인). 검체에서 직접 확인한 뒤 씁니다.
 
 | 대상 | 흔한 설명 |
 |---|---|
@@ -74,9 +69,9 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 | 목록 데이터가 든 속성 | `PidTagRoamingBinary` |
 | 목록 데이터와 `.nk2` 의 바이너리 형식 | 시작 값 `0xBAADF00D`, 주 버전 `0x0C`, 행 수, 행마다 속성 목록 |
 
-- 이 페이지 제목의 "Stream_Autocomplete" 는 위 로컬 사본 파일 이름에서 온 말입니다.
-- 목록 항목에 마지막 사용 시각이나 사용 횟수 같은 칸이 있는지도 확인하지 못했습니다.
-- 클래식 Outlook 이 없는 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook\RoamCache` 폴더가 없었습니다. (확인 범위: Windows 11 25H2 PC 한 대, 새 Outlook 만 설치)
+이 페이지 제목의 "Stream_Autocomplete" 는 위 로컬 사본 파일 이름에서 온 말입니다. 목록 항목에 마지막 사용 시각이나 사용 횟수 같은 칸이 있는지도 확인하지 못했습니다.
+
+클래식 Outlook 이 없는 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook\RoamCache` 폴더가 없었습니다. (확인 범위: Windows 11 25H2 PC 한 대, 새 Outlook 만 설치)
 
 ## 증거로서 의미
 
@@ -100,8 +95,8 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 
 ## 시각 해석
 
-- 목록 항목에 시각 칸이 있는지 확인하지 못했습니다. 공개 도구가 항목마다 시각을 보여 주면, 그 값이 어느 칸에서 왔는지 도구 문서로 확인합니다.
-- 숨은 메시지의 시각 속성이 언제 바뀌는지도 확인하지 못했습니다. 아래 실습에서 메일을 보내기 전과 뒤를 비교해 봅니다.
+목록 항목에 시각 칸이 있는지 확인하지 못했습니다. 공개 도구가 항목마다 시각을 보여 주면, 그 값이 어느 칸에서 왔는지 도구 문서로 확인합니다. 숨은 메시지의 시각 속성이 언제 바뀌는지도 확인하지 못했으므로, 아래 실습에서 메일을 보내기 전과 뒤를 비교해 봅니다.
+
 - `.nk2` 파일의 NTFS 시각은 파일이 생기고 바뀐 시각입니다. 항목 하나가 들어간 시각이 아닙니다([마스터 파일 테이블](../../filesystem/mft.md)).
 - `AutoNameCheck` 키의 마지막 기록 시각은 그 키의 값이 마지막으로 바뀐 때입니다. `MaxNickNames` 를 넣은 무렵을 좁힐 때 씁니다. 키 시각은 UTC 기준입니다. 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 - 현지 시각으로 옮길 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
@@ -120,7 +115,7 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 
 ### 원시 바이트로 한 번
 
-찾을 글자를 바이트로 바꾼 값입니다. 아래 바이트는 글자를 ASCII 와 UTF-16LE 로 바꿔 계산한 값입니다.
+찾을 글자를 ASCII 와 UTF-16LE 바이트로 바꿔 계산한 값입니다.
 
 | 찾을 글자 | ASCII | UTF-16LE |
 |---|---|---|
@@ -159,8 +154,7 @@ with open(path, "rb") as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as
 
 사용 예: `python find.py archive.pst IPM.Configuration.Autocomplete`
 
-- 이 코드는 대소문자를 가립니다. 글자를 한 자라도 다르게 넣으면 찾지 못합니다.
-- 원본이 아니라 수집한 사본에서 돌립니다.
+이 코드는 대소문자를 가리므로 글자를 한 자라도 다르게 넣으면 찾지 못합니다. 원본이 아니라 수집한 사본에서 돌립니다.
 
 > 그림 자리: 2007 이전(`%APPDATA%\Microsoft\Outlook` 의 `.nk2` 파일)과 2010 이후(데이터 파일 안 숨은 메시지 `IPM.Configuration.Autocomplete`)를 나란히 놓고, 각 항목에 SMTP 주소·LegacyExchangeDN·표시 이름이 든다는 것을 보여 주는 그림
 

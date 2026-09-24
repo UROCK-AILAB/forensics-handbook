@@ -4,11 +4,11 @@
 
 ## 한 줄 요약
 
-윈도 업데이트 기록은 한 파일이 아니라 여러 곳에 나뉘어 남습니다. 설치된 업데이트 목록과 설치 시각은 SOFTWARE 하이브의 Component Based Servicing 키에 남습니다. 설치 과정은 이벤트 로그·CBS.log·ETL 로그·ReportingEvents.log 에 남습니다. 기록마다 시각 기준(UTC·현지 시각)이 달라서 섞어 쓰면 시간대만큼 어긋납니다.
+윈도 업데이트 기록은 한 파일이 아니라 여러 곳에 나뉘어 남습니다. 설치된 업데이트 목록과 설치 시각은 SOFTWARE 하이브의 Component Based Servicing 키에 남고, 설치 과정은 이벤트 로그·CBS.log·ETL 로그·ReportingEvents.log 에 남습니다. 기록마다 시각 기준(UTC·현지 시각)이 달라서 섞어 쓰면 시간대만큼 어긋납니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-업데이트는 여러 구성 요소가 나눠 처리합니다. 구성 요소마다 로그를 따로 씁니다.
+업데이트는 여러 구성 요소가 나눠 처리하고, 구성 요소마다 로그를 따로 씁니다.
 
 | 구성 요소·기록 | 하는 일 | 남기는 기록 |
 |---|---|---|
@@ -36,10 +36,7 @@ Microsoft 문서가 밝힌 로그 파일은 아래와 같습니다.
 | NotificationUxBroker.etl | `C:\ProgramData\USOShared\Logs` | Windows 10 부터 | 알림 표시 기록 |
 | CBS.log | `%systemroot%\Logs\CBS` | — | 서비싱 스택이 업데이트를 설치한 과정 |
 
-- Windows Update 는 이제 WindowsUpdate.log 를 직접 만들지 않습니다. 바로 읽을 수 없는 .etl 파일을 만듭니다.
-- 읽을 수 있는 WindowsUpdate.log 는 PowerShell `Get-WindowsUpdateLog` 로 .etl 을 풀어서 만듭니다.
-- Windows 8.1 이전의 텍스트 로그 위치는 이번에 연 자료로 확인하지 못했습니다.
-- CBS.log 가 처음 생긴 Windows 버전은 확인하지 못했습니다.
+Windows Update 는 이제 WindowsUpdate.log 를 직접 만들지 않고 바로 읽을 수 없는 .etl 파일을 만들기 때문에, 읽을 수 있는 WindowsUpdate.log 는 PowerShell `Get-WindowsUpdateLog` 로 .etl 을 풀어서 만듭니다. Windows 8.1 이전의 텍스트 로그 위치는 이번에 연 자료로 확인하지 못했고, CBS.log 가 처음 생긴 Windows 버전도 확인하지 못했습니다.
 
 조사 PC 에서 실제로 본 위치는 아래와 같습니다. (확인 범위: 조사 PC)
 
@@ -55,9 +52,7 @@ Microsoft 문서가 밝힌 로그 파일은 아래와 같습니다.
 | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages` | 패키지 키 6,680개 |
 | 이벤트 로그 | System, Setup, `Microsoft-Windows-WindowsUpdateClient/Operational` |
 
-- USO 로그는 `Logs\` 바로 아래가 아니라 `System\`, `User\` 하위 폴더에 있었습니다.
-- NotificationUxBroker.etl 은 없었습니다.
-- 두 가지 모두 Microsoft 문서의 표와 다릅니다. 검체에서는 `USOShared\Logs` 아래를 통째로 수집합니다.
+USO 로그는 `Logs\` 바로 아래가 아니라 `System\`, `User\` 하위 폴더에 있었고 NotificationUxBroker.etl 은 없었습니다. 두 가지 모두 Microsoft 문서의 표와 다르므로 검체에서는 `USOShared\Logs` 아래를 통째로 수집합니다.
 
 ## 구조
 
@@ -91,18 +86,14 @@ Microsoft 문서가 밝힌 로그 파일은 아래와 같습니다.
 YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 ```
 
-- 줄의 시각은 현지 시각입니다. 시간대 표시가 없습니다. 마지막 줄의 시각이 파일 수정 시각(+0900)과 같았습니다.
-- TrustedInstaller 가 시작할 때마다 `TI: --- Initializing Trusted Installer ---` 줄이 찍힙니다.
-- 바로 이어서 `TI: Last boot time: <시각>` 줄이 찍힙니다. 두 줄을 세션 경계로 씁니다.
+- 줄의 시각은 시간대 표시가 없는 현지 시각이고, 마지막 줄의 시각이 파일 수정 시각(+0900)과 같았습니다.
+- TrustedInstaller 가 시작할 때마다 `TI: --- Initializing Trusted Installer ---` 줄이 찍히고, 바로 이어서 `TI: Last boot time: <시각>` 줄이 찍힙니다. 두 줄을 세션 경계로 씁니다.
 - `Loaded Servicing Stack v<버전> with Core: C:\WINDOWS\winsxs\...` 줄에 서비싱 스택 버전이 나옵니다.
 - 패키지는 `Package_for_KB5054156~31bf3856ad364e35~amd64~~26100.6717.1.4` 같은 이름으로 나옵니다.
-- 이 이름은 `~` 로 나뉩니다. 순서는 이름, 공개 키 토큰, 아키텍처, 언어, 버전입니다. 각 칸의 공식 이름은 확인하지 못했습니다.
+- 이 이름은 `~` 로 나뉘며, 순서는 이름, 공개 키 토큰, 아키텍처, 언어, 버전입니다. 각 칸의 공식 이름은 확인하지 못했습니다.
 
-로그가 넘겨지면 옛 로그는 `CbsPersist_` 파일로 바뀝니다. (확인 범위: 조사 PC)
+로그가 넘겨지면 옛 로그는 `CbsPersist_` 파일로 바뀝니다. 파일 이름의 시각은 UTC 이고 새 CBS.log 가 시작한 시각이며, 파일 수정 시각은 그 로그의 마지막 기록 시각에 가깝습니다. (확인 범위: 조사 PC)
 
-- 파일 이름의 시각은 UTC 입니다.
-- 이름의 시각은 새 CBS.log 가 시작한 시각입니다.
-- 파일 수정 시각은 그 로그의 마지막 기록 시각에 가깝습니다.
 - `CbsPersist_20260920234451.log` 의 이름 시각(23:44:51 UTC)은 새 CBS.log 첫 줄 시각(현지 2026-09-21 08:44:51)과 정확히 9시간 차이였습니다. 다른 .cab 파일도 같은 관계였습니다.
 - 옛 로그가 늘 .cab 으로 눌려 있지는 않았습니다. 압축하지 않은 .log 도 있었습니다.
 - CBS.log 를 몇 MB 에서 넘기는지, 옛 로그를 몇 개까지 남기는지는 확인하지 못했습니다.
@@ -128,14 +119,13 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | 12 | 설명 문장 | — |
 
 - 호출한 프로세스 칸에는 제3자 업데이트 도구의 실행 파일 이름도 찍혔습니다. 어떤 프로그램이 Windows Update 를 불렀는지 이 칸에서 보입니다.
-- 조사 PC 에서 1,264줄이었습니다. 가장 오래된 줄은 약 3주 반 전(2026-08-30)이었습니다.
-- 앞부분이 잘려 나가는 것으로 보입니다. 잘리는 기준은 확인하지 못했습니다.
+- 조사 PC 에서 1,264줄이었고 가장 오래된 줄은 약 3주 반 전(2026-08-30)이었습니다. 앞부분이 잘려 나가는 것으로 보이지만 잘리는 기준은 확인하지 못했습니다.
 - 이 파일이 모든 Windows 버전에 있는지는 확인하지 못했습니다.
 
 ### DataStore.edb
 
 - `SoftwareDistribution\DataStore\DataStore.edb` 는 ESE DB 입니다. 옆의 `Logs\` 폴더에 edb.chk, edb.log, `edb0029C.log` 같은 세대 로그, edbres00001.jrs, edbres00002.jrs, edbtmp.log 가 있었습니다. (확인 범위: 조사 PC)
-- 로그 이름은 옛 형식(.log·.chk)이었습니다. Windows 10 이후 Windows Search 는 로그를 .jtx, 체크포인트를 .jcp 로 씁니다. DB 마다 이름 규칙이 다르므로 복구할 때 확인합니다.
+- 로그 이름은 옛 형식(.log·.chk)이었습니다. Windows 10 이후 Windows Search 는 로그를 .jtx, 체크포인트를 .jcp 로 쓰는 등 DB 마다 이름 규칙이 다르므로 복구할 때 확인합니다.
 - 안의 표 이름과 칸은 이번에 보지 않았습니다.
 - ESE 의 구조와 복구는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
@@ -207,7 +197,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | 13 | 선택 기능을 켜기 전에 재부팅 필요 |
 
 - 상태 이름으로 Superseded, Absent, Installed 가 보였습니다.
-- 조사 PC 에서는 세 로그 모두 OS 설치 날(2026-06-27 현지)부터 남아 있었습니다. 이 PC 가 새것이라 그렇습니다. 오래 쓴 PC 에서 얼마나 남는지는 확인하지 못했습니다.
+- 조사 PC 에서는 이 PC 가 새것이라 세 로그 모두 OS 설치 날(2026-06-27 현지)부터 남아 있었습니다. 오래 쓴 PC 에서 얼마나 남는지는 확인하지 못했습니다.
 
 이벤트 로그와 ETL 파일의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
@@ -247,9 +237,9 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | Component Based Servicing 키의 `InstallTimeHigh`·`InstallTimeLow` | FILETIME, UTC |
 | `Get-HotFix` 의 `InstalledOn` | 날짜만 |
 
-- CBS.log 안은 현지 시각이고 `CbsPersist_` 파일 이름은 UTC 입니다. 한국 표준시 PC 에서 둘을 섞어 쓰면 9시간 어긋납니다.
+- CBS.log 안은 현지 시각이고 `CbsPersist_` 파일 이름은 UTC 이므로, 한국 표준시 PC 에서 둘을 섞어 쓰면 9시간 어긋납니다.
 - ETL 파일 이름의 시각은 현지 시각이었습니다. 이름이 16:58:24 인 파일의 수정 시각이 현지 17:08 이었습니다.
-- `InstallTimeHigh`·`InstallTimeLow` 는 64비트 값의 위 32비트와 아래 32비트입니다. 합쳐서 FILETIME 으로 읽습니다.
+- `InstallTimeHigh`·`InstallTimeLow` 는 64비트 값의 위 32비트와 아래 32비트이며, 합쳐서 FILETIME 으로 읽습니다.
 - 조사 PC 에서 OS 설치 때 들어간 패키지는 2026-06-26 18:10:32 UTC 로 나왔습니다. OS 설치 시각(`InstallDate`)은 18:07:41 UTC 였습니다. OS 설치 시각은 [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 - 한 RollupFix 항목은 설치 시각이 0(1601-01-01)이었습니다. 이 값은 설치 시각으로 쓰지 않습니다.
 - 현지 시각 기록을 UTC 로 바꿀 때는 검체의 시간대 설정을 먼저 확인합니다. [시간대 설정](time-zone.md) 에서 다룹니다.

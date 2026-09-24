@@ -8,14 +8,13 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 박스 드라이브 폴더에는 로컬에 있는 파일과 필요할 때 내려받는(on-demand) 클라우드 파일이 함께 보입니다.
-- 이렇게 보여 주려면 앱이 파일·폴더 목록과 동기화 상태를 로컬 DB 에 적어 둡니다.
-- 앞의 블로그는 이 DB 에서 아래 정보를 뽑아 보여 줍니다.
+박스 드라이브 폴더에는 로컬에 있는 파일과 필요할 때 내려받는(on-demand) 클라우드 파일이 함께 보이는데, 이렇게 보여 주려고 앱이 파일·폴더 목록과 동기화 상태를 로컬 DB 에 적어 둡니다. 앞의 블로그는 이 DB 에서 아래 정보를 뽑아 보여 줍니다.
+
   - 파일·폴더 이름, 부모 폴더, 크기, 만든·고친 시각
   - 이름 바꾸기 같은 로컬 동기화 사건
   - 앱 로그
   - 로그인 이름, 회사(Enterprise) 이름, 동기화 폴더 같은 설정
-- 옛 제품 Box Sync 는 다른 폴더를 씁니다(아래 표).
+옛 제품 Box Sync 는 다른 폴더를 씁니다(아래 표).
 
 ## 위치와 버전별 차이
 
@@ -28,8 +27,7 @@
 - KAPE 수집 설정은 바뀐 위치를 이렇게 찾으라고 적습니다.
   - 박스 드라이브: `Box_Streem` 로그
   - Box Sync: `sync_root_folder.txt`
-- `Box_Streem` 로그의 정확한 폴더와 파일 이름 형식은 확인하지 못했습니다. 메타데이터 폴더를 하위 폴더째 모은 뒤 그 안에서 찾습니다.
-- 로컬 캐시 폴더 위치도 확인하지 못했습니다.
+- `Box_Streem` 로그의 정확한 폴더와 파일 이름 형식, 로컬 캐시 폴더 위치는 확인하지 못했습니다. 메타데이터 폴더를 하위 폴더째 모은 뒤 그 안에서 찾습니다.
 
 ### 클라우드 파일을 보여 주는 방식
 
@@ -41,8 +39,7 @@
 
 ### 메타데이터 DB 파일
 
-- 앞의 블로그는 박스 파일·캐시 파일·가상 파일 정보를 담은 DB 로 `streemfs.db` 를 듭니다.
-- 이 이름은 `streemsfs.db` 로 적힌 경우도 있습니다. 어느 철자가 맞는지 확인하지 못했습니다.
+- 앞의 블로그는 박스 파일·캐시 파일·가상 파일 정보를 담은 DB 로 `streemfs.db` 를 드는데, 이 이름은 `streemsfs.db` 로 적힌 경우도 있어서 어느 철자가 맞는지 확인하지 못했습니다.
 - 검체에서는 메타데이터 폴더에서 `streem` 으로 시작하는 `.db` 파일을 찾습니다.
 - 파일 형식은 파일 머리로 가립니다. SQLite 머리이면 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 방법으로 읽습니다.
 
@@ -59,9 +56,7 @@
 | Box Logs | Logged Date, Log Level, Component, Source File, Log Message, Process, Offset |
 | Box Preferences | Display Username, Last Modified Time, Last Sync time, Box Homepage, Enterprise Name, Is Startup Completed, Currently Logged In, Sync Directory, Is First Run, Login Name |
 
-- 각 묶음이 어느 DB 파일의 어느 표에서 오는지는 확인하지 못했습니다.
-- 실제 표·칸 이름과 시각 저장 형식도 확인하지 못했습니다.
-- 검체에서는 DB 마다 표 목록을 먼저 뽑고, 위 칸 이름과 뜻이 맞는 칸을 찾아 짝을 짓습니다.
+각 묶음이 어느 DB 파일의 어느 표에서 오는지, 실제 표·칸 이름과 시각 저장 형식은 확인하지 못했습니다. 그래서 검체에서는 DB 마다 표 목록을 먼저 뽑고, 위 칸 이름과 뜻이 맞는 칸을 찾아 짝을 짓습니다.
 
 ## 증거로서 의미
 
@@ -83,8 +78,7 @@
 
 ## 시각 해석
 
-- 블로그는 Creation Date, Modification Date, Last Update Date, Logged Date 같은 시각 칸을 보여 줍니다.
-- DB 안에 시각이 어떤 단위·기준으로 저장되는지 확인하지 못했습니다. UTC 인지 현지 시각인지도 확인하지 못했습니다.
+- 블로그는 Creation Date, Modification Date, Last Update Date, Logged Date 같은 시각 칸을 보여 주는데, DB 안에 시각이 어떤 단위·기준으로 저장되는지, UTC 인지 현지 시각인지는 확인하지 못했습니다.
 - 값의 자릿수로 형식을 먼저 짐작합니다. 자릿수로 형식을 가리는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 짐작한 변환이 맞는지는 시각을 아는 사건(예: 조사 중 직접 만든 파일, 로그의 앱 시작 줄)과 맞춰 봅니다.
 - 파일 목록의 만든·고친 시각이 서버 쪽 값인지, 로컬 파일 시스템 값인지도 확인하지 못했습니다.

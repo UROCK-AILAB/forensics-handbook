@@ -6,10 +6,9 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 파이어폭스는 사용자가 저장하기로 한 로그인 정보를 프로필에 담아 둡니다. 다음에 같은 사이트를 열면 아이디와 비밀번호를 자동으로 채우려는 것입니다.
-- 로그인 하나에는 사이트 주소, 암호화한 아이디, 암호화한 비밀번호가 있습니다.
-- 아이디와 비밀번호를 푸는 키는 `key4.db` 에 있습니다. 이 키 자체도 암호화되어 있습니다.
-- 기본 비밀번호 (primary password) 를 걸어 두면 그 비밀번호를 알아야 키를 풀 수 있습니다. 걸어 두지 않으면 빈 문자열로 키를 만듭니다.
+파이어폭스는 사용자가 저장하기로 한 로그인 정보를 프로필에 담아 두고, 다음에 같은 사이트를 열면 아이디와 비밀번호를 자동으로 채웁니다. 로그인 하나에는 사이트 주소, 암호화한 아이디, 암호화한 비밀번호가 들어 있습니다.
+
+아이디와 비밀번호를 푸는 키는 `key4.db` 에 있고, 이 키 자체도 암호화되어 있습니다. 기본 비밀번호 (primary password) 를 걸어 두면 그 비밀번호를 알아야 키를 풀 수 있습니다. 걸어 두지 않으면 빈 문자열로 키를 만듭니다.
 
 ## 위치와 버전별 차이
 
@@ -30,11 +29,9 @@
 
 ### `logins.json`
 
-- `logins.json` 은 텍스트 JSON 파일입니다.
-- 공개 도구 firepwd 가 읽는 칸은 `hostname`, `encryptedUsername`, `encryptedPassword` 입니다.
-- `hostname` 은 평문입니다. 곧 어느 사이트에 로그인 정보를 저장했는지는 값을 풀지 않아도 알 수 있습니다.
-- `encryptedUsername`·`encryptedPassword` 는 암호화한 값입니다.
-- 그 밖의 칸(`httpRealm`, `formSubmitURL`, `timeCreated`, `timeLastUsed`, `timePasswordChanged`, `timesUsed` 등)과 시각 단위는 이번 조사에서 확인하지 못했습니다.
+`logins.json` 은 텍스트 JSON 파일입니다. 공개 도구 firepwd 가 읽는 칸은 `hostname`, `encryptedUsername`, `encryptedPassword` 입니다. `hostname` 은 평문이라 어느 사이트에 로그인 정보를 저장했는지는 값을 풀지 않아도 알 수 있고, `encryptedUsername`·`encryptedPassword` 는 암호화한 값입니다.
+
+그 밖의 칸(`httpRealm`, `formSubmitURL`, `timeCreated`, `timeLastUsed`, `timePasswordChanged`, `timesUsed` 등)과 시각 단위는 이번 조사에서 확인하지 못했습니다.
 
 ### `key4.db`
 
@@ -50,7 +47,7 @@
 - `metadata` 의 행은 `id = 'password'` 로 고릅니다.
 - 파이어폭스 비밀번호 키의 CKA_ID 는 `f8000000000000000000000000000001` 입니다. `nssPrivate` 에서 이 식별자를 찾으면 됩니다.
 - 확인값(`item2`)을 풀면 `password-check` 뒤에 `02 02` 두 바이트가 붙은 값이 나와야 합니다. 이 값이 맞으면 기본 비밀번호가 맞은 것입니다.
-- 전역 솔트와 기본 비밀번호로 중간 키를 만듭니다. 암호 방식 버전에 따라 HMAC-SHA1 이나 PBKDF2-HMAC-SHA256 을 씁니다. 이 중간 키로 마스터 키를 풉니다. 마스터 키로 `logins.json` 의 값을 풉니다.
+- 전역 솔트와 기본 비밀번호로 중간 키를 만듭니다. 암호 방식 버전에 따라 HMAC-SHA1 이나 PBKDF2-HMAC-SHA256 을 씁니다. 이 중간 키로 마스터 키를 풀고, 마스터 키로 `logins.json` 의 값을 풉니다.
 
 ### 쓰이는 ASN.1 OID
 
@@ -91,8 +88,8 @@
 - **원본을 브라우저로 열지 않습니다.** 파이어폭스로 프로필을 열면 파일이 바뀝니다. 해시를 기록한 사본으로 분석합니다.
 - **`logins.json` 과 `key4.db` 는 짝입니다.** 값을 풀려면 두 파일이 같은 프로필의 것이어야 합니다. 한쪽만 수집하면 값을 풀 수 없습니다.
 - **기본 비밀번호가 걸려 있으면 그 비밀번호가 필요합니다.** 확인값이 빈 문자열로 풀리지 않으면 기본 비밀번호가 걸린 것입니다. 이때는 사이트 목록만 뽑을 수 있습니다. 암호를 다루는 절차는 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 를 참고합니다.
-- **키를 못 풀어도 할 수 있는 일이 많습니다.** `hostname` 은 평문입니다. 어느 사이트에 계정을 저장했는지 목록으로 뽑아 다른 흔적과 맞춰 봅니다.
-- **Windows 계정 비밀번호 없이도 풀 수 있습니다.** 기본 비밀번호가 없으면 firepwd 는 `key4.db` 와 `logins.json` 두 파일만으로 값을 풉니다. 크롬 계열은 사용자 [DPAPI](../../../01-foundations/protection/data-protection-api/index.md) 로 키를 보호하므로 Windows 쪽 키가 필요합니다. 두 방식을 섞어 생각하지 않습니다.
+- **키를 못 풀어도 할 수 있는 일이 많습니다.** `hostname` 이 평문이라 어느 사이트에 계정을 저장했는지 목록으로 뽑아 다른 흔적과 맞춰 볼 수 있습니다.
+- **Windows 계정 비밀번호 없이도 풀 수 있습니다.** 기본 비밀번호가 없으면 firepwd 는 `key4.db` 와 `logins.json` 두 파일만으로 값을 풉니다. 크롬 계열은 사용자 [DPAPI](../../../01-foundations/protection/data-protection-api/index.md) 로 키를 보호하므로 Windows 쪽 키가 필요한데, 두 방식을 섞어 생각하지 않습니다.
 - **버전마다 암호 방식이 다릅니다.** `key4.db` 인지 `key3.db` 인지, 3DES 인지 AES-256 인지 먼저 확인합니다. 도구가 옛 방식만 알면 새 파일에서 실패합니다.
 - **지운 로그인은 `logins.json` 에서 사라집니다.** 옛 로그인을 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
 

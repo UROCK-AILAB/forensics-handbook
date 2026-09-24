@@ -8,11 +8,9 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 동기화 엔진은 이 DB 에 동기화 범위 안의 파일과 폴더 목록을 적습니다.
-- 파일 한 개가 `od_ClientFile_Records` 의 한 행, 폴더 한 개가 `od_ClientFolder_Records` 의 한 행입니다 (관찰).
-- 파일 행에는 이름, 크기, 로컬 수정 시각, 서버 쪽 수정 시각, 내용 해시가 있습니다 (관찰).
-- 이 밖에 파일을 내려받은 기록, 서비스와 주고받은 작업 기록 같은 활동 기록 성격의 표도 있습니다 (관찰).
-- 같은 폴더의 `SafeDelete.db` 에는 지운 파일에 관한 기록이 남습니다 (관찰).
+동기화 엔진은 이 DB 에 동기화 범위 안의 파일과 폴더 목록을 적습니다. 파일 한 개가 `od_ClientFile_Records` 의 한 행이고 폴더 한 개가 `od_ClientFolder_Records` 의 한 행이며, 파일 행에는 이름, 크기, 로컬 수정 시각, 서버 쪽 수정 시각, 내용 해시가 있습니다 (관찰). 이 밖에 파일을 내려받은 기록, 서비스와 주고받은 작업 기록 같은 활동 기록 성격의 표도 있습니다 (관찰).
+
+같은 폴더의 `SafeDelete.db` 에는 지운 파일에 관한 기록이 남습니다 (관찰).
 
 ## 위치와 버전별 차이
 
@@ -23,9 +21,9 @@
 | 형식 | 암호화하지 않은 SQLite 입니다. 파일이 `SQLite format 3` 으로 시작하고, `journal_mode` 는 `wal` 이었습니다 (관찰) |
 | 크기 | 개인 계정 약 8.4MB(파일 9,925행·폴더 1,226행), 회사 계정 약 4.9MB(파일 4,551행·폴더 401행)였습니다 (관찰) |
 
-- 옛 OneDrive 는 같은 정보를 `<UserCid>.dat` 와 `<UserCid>.dat.previous` 에 저장했습니다. 새 버전은 SQLite 로 바꿨습니다.
-- 어느 앱 버전에서 SQLite 로 바뀌었는지는 확인하지 못했습니다. 옛 검체에서 `.db` 가 없으면 `.dat` 파일을 찾습니다.
-- 계정마다 폴더가 따로 있으므로 DB 도 계정마다 하나씩 있습니다. 계정 폴더와 레지스트리 계정 키의 관계는 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
+옛 OneDrive 는 같은 정보를 `<UserCid>.dat` 와 `<UserCid>.dat.previous` 에 저장했고 새 버전은 SQLite 로 바꿨습니다. 어느 앱 버전에서 바뀌었는지는 확인하지 못했으므로, 옛 검체에서 `.db` 가 없으면 `.dat` 파일을 찾습니다.
+
+계정마다 폴더가 따로 있어서 DB 도 계정마다 하나씩 있습니다. 계정 폴더와 레지스트리 계정 키의 관계는 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
 
 ## 구조
 
@@ -91,7 +89,7 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 
 칸은 `resourceID`, `parentResourceID`, `parentScopeID`, `eTag`, `folderName`, `volumeID`, `itemIndex`, `folderStatus`, `locallyDeleted`, `serverDeleted`, `sharedItem`, `teamsChannelFolder`, `shortcutsFolder`, `folderColor` 등입니다.
 
-파일의 전체 경로는 어느 칸에도 통째로 들어 있지 않습니다. 파일 행의 `parentResourceID` 로 폴더 행의 `resourceID` 를 찾습니다. 그 폴더의 `parentResourceID` 로 다시 위 폴더를 찾습니다. 이렇게 맨 위까지 올라가며 `folderName` 을 이어 붙입니다.
+파일의 전체 경로는 어느 칸에도 통째로 들어 있지 않습니다. 파일 행의 `parentResourceID` 로 폴더 행의 `resourceID` 를 찾고, 그 폴더의 `parentResourceID` 로 다시 위 폴더를 찾으며 맨 위까지 올라가 `folderName` 을 이어 붙입니다.
 
 > 그림 자리: 파일 행 하나에서 `parentResourceID` → 폴더 행 `resourceID` 를 따라 맨 위 폴더까지 올라가며 경로를 이어 붙이는 과정을 화살표로 보여 주는 그림
 
@@ -99,9 +97,7 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 
 동기화 범위, 즉 라이브러리 하나가 한 행입니다. 칸은 `scopeID`, `scopeType`, `libraryType`, `cid`, `siteID`, `webID`, `listID`, `webURL`, `tenantID`, `remotePath`, `lastKnownFolderPath`, `selectiveSyncEnabled`, `syncTokenData` 등입니다.
 
-- 두 계정 DB 모두 `scopeType` 3, `libraryType` 2 인 행이 있었습니다.
-- 개인 계정 DB 에만 `scopeType` 7, `libraryType` 3 인 행이 하나 더 있었습니다. 이 행이 무엇을 가리키는지는 확인하지 못했습니다.
-- SharePoint 라이브러리를 가르는 데 이 표를 쓰는 법은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
+두 계정 DB 모두 `scopeType` 3, `libraryType` 2 인 행이 있었고, 개인 계정 DB 에만 `scopeType` 7, `libraryType` 3 인 행이 하나 더 있었는데 이 행이 무엇을 가리키는지는 확인하지 못했습니다. SharePoint 라이브러리를 가르는 데 이 표를 쓰는 법은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
 
 ### 활동 기록 성격의 표
 
@@ -127,9 +123,7 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 | `items_moved_to_recycle_bin` | `fileId`, `volumeId`, `itemName`, `resourceId`, `parentResourceId`, `reparentStatus`, `notificationTime` 등 |
 | `unvalidated_deletes_displayed_in_ux`, `placeholder_deletes_info`, `redundant_placeholder_deletes` | 이름만 확인했습니다 |
 
-- `notificationTime` 은 Unix 초였습니다.
-- 회사 계정의 `filter_delete_info` 에 8행이 있었습니다. `process` 칸에는 서로 다른 프로그램 4개가 적혀 있었습니다. 즉 "어떤 프로그램이 어떤 경로를 지웠는지" 가 남을 수 있습니다.
-- 어떤 조건에서 이 표에 행을 쓰는지는 확인하지 못했습니다.
+`notificationTime` 은 Unix 초였습니다. 회사 계정의 `filter_delete_info` 에는 8행이 있었고 `process` 칸에 서로 다른 프로그램 4개가 적혀 있었으므로, "어떤 프로그램이 어떤 경로를 지웠는지" 가 남을 수 있습니다. 어떤 조건에서 이 표에 행을 쓰는지는 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -165,8 +159,7 @@ DB 의 시각 칸은 모두 Unix 초로 보였습니다 (관찰). 1970-01-01 00:
 | `od_ServiceOperationHistory.timestamp` | 작업 시각 | Unix 초였습니다 (관찰) |
 | `SafeDelete.db` 의 `notificationTime` | 삭제 알림 시각으로 보입니다 | Unix 초였습니다 (관찰) |
 
-- `lastChange` 의 최솟값은 315500400 이었습니다 (관찰). 이 값은 1980-01-01 00:00 (UTC+9), 곧 1979-12-31 15:00 UTC 입니다. 날짜가 비어 있던 파일로 보입니다. 이런 값을 실제 수정 시각으로 읽지 않습니다.
-- `diskCreationTime` 을 파일을 만든 시각으로 보고서에 쓰지 않습니다. 실제 파일과 맞은 비율이 낮았습니다.
+`lastChange` 의 최솟값은 315500400 이었습니다 (관찰). 이 값은 1980-01-01 00:00 (UTC+9), 곧 1979-12-31 15:00 UTC 이고 날짜가 비어 있던 파일로 보이므로, 이런 값을 실제 수정 시각으로 읽지 않습니다. `diskCreationTime` 도 실제 파일과 맞은 비율이 낮았으므로 파일을 만든 시각으로 보고서에 쓰지 않습니다.
 
 ## 함정과 한계
 

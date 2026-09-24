@@ -2,15 +2,11 @@
 
 ## 한 줄 요약
 
-파이어폭스는 프로필에 설치한 확장 프로그램 (Extension) 을 비롯한 추가 기능 (Add-on) 목록을 `extensions.json` 에 JSON 으로 적어 둡니다. 추가 기능마다 식별자, 판, 켜짐·꺼짐 상태, 설치·갱신 시각, 권한 정보가 남습니다. 파이어폭스 밖에서 설치한 추가 기능인지도 따로 표시합니다.
+파이어폭스는 프로필에 설치한 확장 프로그램 (Extension) 을 비롯한 추가 기능 (Add-on) 목록을 `extensions.json` 에 JSON 으로 적어 두며, 추가 기능마다 식별자, 판, 켜짐·꺼짐 상태, 설치·갱신 시각, 권한 정보가 남고 파이어폭스 밖에서 설치한 추가 기능인지도 따로 표시합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 파이어폭스는 설치한 추가 기능의 정보를 데이터베이스로 관리합니다. 소스는 이 데이터베이스의 JSON 파일 이름을 `FILE_JSON_DB = "extensions.json"` 으로 정합니다.
-- 파일 맨 위에는 `schemaVersion` 과 `addons` 가 있습니다. `addons` 는 추가 기능 목록을 담은 배열입니다.
-- 스키마 버전은 설정 `extensions.databaseSchema` 에도 적힙니다.
-- 추가 기능마다 저장하는 칸은 소스의 `PROP_JSON_FIELDS` 목록이 정합니다.
-- 악성 확장은 브라우저 안에서 방문 페이지를 엿보거나 바꿀 수 있습니다. 그래서 침해 조사에서 확장 목록을 봅니다.
+파이어폭스는 설치한 추가 기능의 정보를 데이터베이스로 관리하며, 소스는 이 데이터베이스의 JSON 파일 이름을 `FILE_JSON_DB = "extensions.json"` 으로 정합니다. 파일 맨 위에는 `schemaVersion` 과 `addons` 가 있고, `addons` 는 추가 기능 목록을 담은 배열입니다. 스키마 버전은 설정 `extensions.databaseSchema` 에도 적히고, 추가 기능마다 저장하는 칸은 소스의 `PROP_JSON_FIELDS` 목록이 정합니다. 악성 확장은 브라우저 안에서 방문 페이지를 엿보거나 바꿀 수 있어서 침해 조사에서 확장 목록을 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -60,8 +56,7 @@
 
 ### `signedState` 의 이름
 
-- 소스에는 `SIGNEDSTATE_SYSTEM`, `SIGNEDSTATE_PRIVILEGED`, `SIGNEDSTATE_SIGNED`, `SIGNEDSTATE_NOT_REQUIRED` 같은 이름이 있습니다.
-- 이름마다 어떤 숫자 값인지는 확인하지 못했습니다.
+소스에는 `SIGNEDSTATE_SYSTEM`, `SIGNEDSTATE_PRIVILEGED`, `SIGNEDSTATE_SIGNED`, `SIGNEDSTATE_NOT_REQUIRED` 같은 이름이 있지만, 이름마다 어떤 숫자 값인지는 확인하지 못했습니다.
 
 ### 설치 위치 이름
 
@@ -75,7 +70,7 @@
 | `app-temporary` | 임시로 설치한 것 |
 | `app-system-share`·`app-system-local` | 유닉스 계열의 시스템 공용 위치 |
 
-- 이 이름은 각 항목의 `location` 칸에 들어갑니다. `PROP_JSON_FIELDS` 목록에는 없지만, 저장할 때(`toJSON()`) 설치 위치 이름을 `location` 으로 덧붙입니다.
+- 이 이름은 각 항목의 `location` 칸에 들어갑니다. `PROP_JSON_FIELDS` 목록에는 없지만 저장할 때(`toJSON()`) 설치 위치 이름을 `location` 으로 덧붙입니다.
 - `location` 이 `app-profile` 이 아닌 항목은 사용자 프로필 밖에서 온 추가 기능입니다.
 - Windows 레지스트리로 설치하는 위치의 이름과 그 레지스트리 경로도 확인하지 못했습니다.
 
@@ -101,7 +96,7 @@
 ## 시각 해석
 
 - `installDate`·`updateDate`·`signedDate` 는 1970년 1월 1일 00:00 UTC 부터 센 밀리초입니다.
-- 이 단위는 소스를 요약해 받은 결과입니다. 원문 주석은 따로 확인하지 못했습니다. 검체에서 [$MFT](../../filesystem/mft.md) 의 파일 시각과 맞춰 확인합니다.
+- 이 단위는 소스를 요약해 받은 결과이고 원문 주석은 따로 확인하지 못했으므로, 검체에서 [$MFT](../../filesystem/mft.md) 의 파일 시각과 맞춰 확인합니다.
 - 시작할 때 새로 찾아낸 추가 기능은 `installDate`·`updateDate` 에 파일 수정 시각을 넣습니다. 이 값은 실제 설치 시각과 다를 수 있습니다.
 - [places.sqlite](places-sqlite.md) 같은 SQLite 파일의 시각은 대부분 마이크로초입니다. 이 파일은 밀리초이므로 섞어 읽지 않습니다.
 - `active` 같은 상태 칸에는 시각이 붙지 않습니다. 상태는 이 파일을 마지막으로 쓴 무렵의 것입니다.

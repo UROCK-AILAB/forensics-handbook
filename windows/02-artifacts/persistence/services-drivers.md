@@ -6,12 +6,11 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- Services 트리는 시스템의 서비스마다 정보를 담습니다. 드라이버마다 `Services\[드라이버 이름]` 키가 있습니다.
-- 서비스(Win32 프로그램)와 커널 드라이버는 같은 트리를 씁니다. 둘은 Type 값으로 갈립니다.
-- 드라이버를 설치할 때는 INF 파일의 AddService 지시문을 씁니다. Windows 는 그 지시문이 가리키는 절의 ServiceBinary 항목으로 ImagePath 값을 만듭니다.
-- `Parameters` 하위 키에는 드라이버별 데이터가 들어갑니다. `Performance` 하위 키에는 성능 모니터링 DLL 이름 같은 정보가 들어갑니다.
-- 서비스 제어 관리자 (Service Control Manager, SCM) 가 자동 시작 서비스를 올립니다.
-- 원격 실행 도구 가운데에는 대상 PC 에 서비스를 만들어 명령을 돌리는 것이 있습니다. 그 흐름은 [PsExec·WMI·WinRM](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에서 다룹니다.
+Services 트리는 시스템의 서비스마다 정보를 담고, 드라이버마다 `Services\[드라이버 이름]` 키가 있습니다. 서비스(Win32 프로그램)와 커널 드라이버는 같은 트리를 쓰며 Type 값으로 갈립니다.
+
+드라이버를 설치할 때는 INF 파일의 AddService 지시문을 쓰고, Windows 는 그 지시문이 가리키는 절의 ServiceBinary 항목으로 ImagePath 값을 만듭니다. `Parameters` 하위 키에는 드라이버별 데이터가, `Performance` 하위 키에는 성능 모니터링 DLL 이름 같은 정보가 들어갑니다. 자동 시작 서비스는 서비스 제어 관리자 (Service Control Manager, SCM) 가 올립니다.
+
+원격 실행 도구 가운데에는 대상 PC 에 서비스를 만들어 명령을 돌리는 것이 있는데, 그 흐름은 [PsExec·WMI·WinRM](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -40,8 +39,7 @@
 | 0x3 | Demand | 필요할 때 올립니다. 드라이버는 장치에 필요하면 PnP 가 자동으로 올립니다 |
 | 0x4 | Disabled | 올리지 않습니다 |
 
-- Start=2 에는 지연된 자동 시작도 들어갑니다. 자동 시작 서비스가 다 뜬 뒤 지연을 두고 하나씩 시작하는 방식입니다.
-- Windows 11 PC 한 대에서는 지연된 자동 시작이 `DelayedAutostart`=1 값으로 표시되어 있었습니다(21개). (확인 범위: Win11 25H2 한 대)
+Start=2 에는 지연된 자동 시작도 들어갑니다. 자동 시작 서비스가 다 뜬 뒤 지연을 두고 하나씩 시작하는 방식이고, Windows 11 PC 한 대에서는 `DelayedAutostart`=1 값으로 표시되어 있었습니다(21개). (확인 범위: Win11 25H2 한 대)
 
 **Type (조합할 수 있습니다)**
 
@@ -85,10 +83,7 @@ Services\<이름>
         ServiceDll    <실제 코드가 든 DLL 경로>
 ```
 
-- 프로세스를 나누어 쓰는 서비스(0x20)의 ImagePath 는 svchost 를 가리켰습니다.
-- 실제 코드가 든 DLL 은 `Parameters` 하위 키의 `ServiceDll` 값에 있었습니다(226개).
-- 서비스 키 바로 아래에 `ServiceDll` 이 있는 경우도 3개 있었습니다.
-- 그래서 svchost 형 서비스는 ImagePath 만 보면 안 되고 `ServiceDll` 을 봐야 합니다.
+프로세스를 나누어 쓰는 서비스(0x20)의 ImagePath 는 svchost 를 가리켰고, 실제 코드가 든 DLL 은 `Parameters` 하위 키의 `ServiceDll` 값에 있었습니다(226개). 서비스 키 바로 아래에 `ServiceDll` 이 있는 경우도 3개 있었습니다. 그래서 svchost 형 서비스는 ImagePath 만 보면 안 되고 `ServiceDll` 을 봐야 합니다.
 
 ### 드라이버 키의 예
 
@@ -102,17 +97,13 @@ Services\disk
     ErrorControl   0x1
 ```
 
-- ImagePath 에 드라이브 문자도 `%SystemRoot%` 도 없는 상대 경로가 들어 있었습니다.
-- ImagePath 가 아예 없을 때 어느 경로를 쓰는지는 확인하지 못했습니다.
+ImagePath 에는 드라이브 문자도 `%SystemRoot%` 도 없는 상대 경로가 들어 있었습니다. ImagePath 가 아예 없을 때 어느 경로를 쓰는지는 확인하지 못했습니다.
 
 ### 사용자별 서비스
 
 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
 
-- Type 0x60 과 0xE0 이 쌍을 이뤘습니다.
-- 0x60 은 원형 키였습니다. 0xE0 은 같은 이름 뒤에 `_[16진 5자리]` 가 붙은 사용자 세션용 사본이었습니다.
-- 원형 0x60 키 가운데 15개에 `UserServiceFlags` 값이 있었습니다.
-- 0x40·0x80 비트의 공식 뜻은 확인하지 못했습니다.
+Type 0x60 과 0xE0 이 쌍을 이뤘는데, 0x60 은 원형 키였고 0xE0 은 같은 이름 뒤에 `_[16진 5자리]` 가 붙은 사용자 세션용 사본이었습니다. 원형 0x60 키 가운데 15개에 `UserServiceFlags` 값이 있었습니다. 0x40·0x80 비트의 공식 뜻은 확인하지 못했습니다.
 
 ### 한 PC 의 분포
 
@@ -151,8 +142,7 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 
 ## 시각 해석
 
-- 서비스 키의 시각은 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 하나입니다. 이 시각은 키가 마지막으로 바뀐 때일 뿐이라서 설치 시각이라고 단정하지 않습니다.
-- 설치와 변경의 시각은 이벤트 로그가 알려 줍니다.
+서비스 키의 시각은 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 하나뿐이고, 키가 마지막으로 바뀐 때일 뿐이라서 설치 시각이라고 단정하지 않습니다. 설치와 변경의 시각은 이벤트 로그가 알려 줍니다.
 
 | 이벤트 | 로그 | 알려 주는 것 |
 |---|---|---|

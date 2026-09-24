@@ -6,12 +6,11 @@ Amcache.hve 의 `Root\InventoryDevicePnp` 키에는 플러그 앤 플레이 (Plu
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- Windows 는 업그레이드한 뒤에도 장치와 드라이버가 호환되는지 판단하려고 PnP 장치와 드라이버 정보를 모읍니다.
-- Microsoft 진단 데이터 문서는 이 정보를 `Microsoft.Windows.Inventory.Core.InventoryDevicePnpAdd` 이벤트로 설명합니다.
-- Amcache.hve 하위 키의 값 이름은 이 이벤트의 필드 이름과 같습니다. 공개 파서 소스가 읽는 값 이름과 Microsoft 필드 목록을 맞대어 확인한 결과입니다.
-- ANSSI 는 Windows 10 1607 기본 라이브러리에서 장치 정보가 예약 작업 Microsoft Compatibility Appraiser 가 돌 때만 갱신된다고 관찰했습니다.
-- 그래서 장치를 꽂은 순간에 바로 기록된다고 볼 수 없습니다.
-- USB 장치만 들어가는 것이 아닙니다. Zimmerman 이 본 표본에는 프로세서·디스플레이·블루투스·오디오·프린터·볼륨·디스크 같은 클래스가 두루 들어 있었습니다.
+Windows 는 업그레이드한 뒤에도 장치와 드라이버가 호환되는지 판단하려고 PnP 장치와 드라이버 정보를 모읍니다. Microsoft 진단 데이터 문서는 이 정보를 `Microsoft.Windows.Inventory.Core.InventoryDevicePnpAdd` 이벤트로 설명하고, Amcache.hve 하위 키의 값 이름은 이 이벤트의 필드 이름과 같습니다. 공개 파서 소스가 읽는 값 이름과 Microsoft 필드 목록을 맞대어 확인한 결과입니다.
+
+ANSSI 는 Windows 10 1607 기본 라이브러리에서 장치 정보가 예약 작업 Microsoft Compatibility Appraiser 가 돌 때만 갱신된다고 관찰했습니다. 그래서 장치를 꽂은 순간에 바로 기록된다고 볼 수 없습니다.
+
+USB 장치만 들어가는 것도 아닙니다. Zimmerman 이 본 표본에는 프로세서·디스플레이·블루투스·오디오·프린터·볼륨·디스크 같은 클래스가 두루 들어 있었습니다.
 
 ## 위치와 버전별 차이
 
@@ -74,10 +73,7 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 
 ### 짝이 되는 InventoryDeviceContainer
 
-- 하위 키 이름이 컨테이너 ID 입니다.
-- `InventoryDevicePnp` 의 `ContainerId` 값이 이 이름을 가리킵니다(Zimmerman).
-- 여기에는 `FriendlyName`·`Manufacturer`·`ModelName`·`ModelNumber`·`Categories`·`IsConnected`·`IsPaired` 같은 값이 있습니다.
-- 사람이 읽기 좋은 장치 이름은 이쪽에서 찾습니다.
+하위 키 이름이 컨테이너 ID 이고, `InventoryDevicePnp` 의 `ContainerId` 값이 이 이름을 가리킵니다(Zimmerman). 이 키에는 `FriendlyName`·`Manufacturer`·`ModelName`·`ModelNumber`·`Categories`·`IsConnected`·`IsPaired` 같은 값이 있어서, 사람이 읽기 좋은 장치 이름은 이쪽에서 찾습니다.
 
 ## 증거로서 의미
 

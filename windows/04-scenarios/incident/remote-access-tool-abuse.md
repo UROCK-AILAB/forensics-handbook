@@ -23,13 +23,9 @@
 
 ## MITRE 가 설명하는 원격 접속 도구 악용
 
-- MITRE ATT&CK 은 이 기법을 T1219 Remote Access Tools 로 둡니다[1].
-- 공격자는 정상 원격 접속 도구로 네트워크 안에 대화형 명령·제어 통로를 만듭니다[1].
-- 그래픽 화면, 명령줄, 개발·관리 소프트웨어의 터널, KVM over IP 같은 하드웨어 접속이 모두 여기에 듭니다[1].
-- 하위 기법은 T1219.001 IDE Tunneling, T1219.002 Remote Desktop Software, T1219.003 Remote Access Hardware 입니다[1].
-- 페이지가 드는 도구의 예에는 AnyDesk, PuTTY, TeamViewer, Ammyy Admin, VNC, ConnectWise Control, MeshCentral, LogMeIn, ngrok 등이 있습니다[1].
-- 원격 접속 모듈이 다른 소프트웨어 안에 들어 있기도 합니다[1]. 예를 들면 Google Chrome 의 원격 데스크톱입니다[1].
-- 설치 과정은 흔히 Windows 서비스로 지속성을 만듭니다[1].
+MITRE ATT&CK 은 이 기법을 T1219 Remote Access Tools 로 두며, 공격자가 정상 원격 접속 도구로 네트워크 안에 대화형 명령·제어 통로를 만드는 것을 가리킵니다[1]. 그래픽 화면, 명령줄, 개발·관리 소프트웨어의 터널, KVM over IP 같은 하드웨어 접속이 모두 여기에 듭니다[1]. 하위 기법은 T1219.001 IDE Tunneling, T1219.002 Remote Desktop Software, T1219.003 Remote Access Hardware 입니다[1].
+
+페이지가 드는 도구의 예에는 AnyDesk, PuTTY, TeamViewer, Ammyy Admin, VNC, ConnectWise Control, MeshCentral, LogMeIn, ngrok 등이 있습니다[1]. 원격 접속 모듈이 다른 소프트웨어 안에 들어 있기도 한데, 예를 들면 Google Chrome 의 원격 데스크톱입니다[1]. 설치 과정은 흔히 Windows 서비스로 지속성을 만듭니다[1].
 
 **탐지 사슬을 흔적으로 옮기기.** MITRE 는 탐지 사슬을 네 단계로 적습니다[1]. 아래 표는 각 단계를 받는 PC 의 흔적과 짝지은 것입니다. 짝지은 것은 이 위키의 정리입니다.
 
@@ -63,18 +59,15 @@
 
 **휴대용.**
 
-- 휴대용 (portable) 실행 파일은 설치 없이 사용자 권한으로 돕니다[2].
-- CISA 는 이 방식에 관리자 권한이 필요 없다고 적습니다[2]. 그래서 설치를 감사·차단하는 통제가 있어도 승인되지 않은 소프트웨어가 돌 수 있다고 적습니다[2].
-- 휴대용 도구는 서비스나 설치 이벤트를 남기지 않을 수 있습니다. 실행 흔적(프리페치·AmCache·4688·Sysmon 1)과 다운로드 흔적으로 찾습니다.
-- CISA 는 원격 관리 프로그램 실행 로그에서 휴대용 실행 파일로 돈 비정상 사용을 찾으라고 권합니다[2].
+휴대용 (portable) 실행 파일은 설치 없이 사용자 권한으로 돕니다[2]. CISA 는 이 방식에 관리자 권한이 필요 없어서, 설치를 감사·차단하는 통제가 있어도 승인되지 않은 소프트웨어가 돌 수 있다고 적습니다[2]. 또 원격 관리 프로그램 실행 로그에서 휴대용 실행 파일로 돈 비정상 사용을 찾으라고 권합니다[2].
+
+휴대용 도구는 서비스나 설치 이벤트를 남기지 않을 수 있으므로, 실행 흔적(프리페치·AmCache·4688·Sysmon 1)과 다운로드 흔적으로 찾습니다.
 
 ## 공개 사례에서 본 원격 조작
 
-- CISA 권고 AA23-025A 에서 공격자는 ScreenConnect(지금 이름 ConnectWise Control)와 AnyDesk 를 썼습니다[2].
-- 공격자는 피해자 PC 에 접속해 피해자가 은행 계좌에 로그인하게 했습니다[2]. 그 뒤 계좌 요약 화면을 고쳐 가짜 환불을 보여 주고 돈을 돌려보내게 했습니다(환불 사기)[2].
-- 이 사례에서는 현장 사용자와 원격 쪽이 같은 세션에서 함께 움직였습니다. 그래서 "원격 쪽만" 또는 "사용자만" 으로 나눌 수 없는 행위도 있습니다.
-- The DFIR Report 사례(2023-09-25)에서 ScreenConnect 는 스크립트를 디스크에 떨군 뒤 명령 프롬프트나 PowerShell 로 실행했습니다[3]. 이 흔적은 Sysmon 11(파일 생성)과 1(프로세스 생성)에 드러났습니다[3].
-- 같은 사례에서 원격 관리 도구로 실행한 발견 명령은 [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) 에 있습니다.
+CISA 권고 AA23-025A 에서 공격자는 ScreenConnect(지금 이름 ConnectWise Control)와 AnyDesk 를 썼습니다[2]. 공격자는 피해자 PC 에 접속해 피해자가 은행 계좌에 로그인하게 한 뒤, 계좌 요약 화면을 고쳐 가짜 환불을 보여 주고 돈을 돌려보내게 했습니다(환불 사기)[2]. 이 사례에서는 현장 사용자와 원격 쪽이 같은 세션에서 함께 움직였기 때문에, "원격 쪽만" 또는 "사용자만" 으로 나눌 수 없는 행위도 있습니다.
+
+The DFIR Report 사례(2023-09-25)에서 ScreenConnect 는 스크립트를 디스크에 떨군 뒤 명령 프롬프트나 PowerShell 로 실행했고, 이 흔적은 Sysmon 11(파일 생성)과 1(프로세스 생성)에 드러났습니다[3]. 같은 사례에서 원격 관리 도구로 실행한 발견 명령은 [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) 에 있습니다.
 
 ## 원격 조작과 현장 사용자 가르기
 

@@ -15,18 +15,13 @@ Run 키 말고도 로그온, 프로그램 시작, DLL 로드에 끼어드는 레
 
 ### IFEO (Image File Execution Options)
 
-- 이미지 파일 실행 옵션 (Image File Execution Options, IFEO) 키 아래에는 실행 파일 이름마다 하위 키를 둘 수 있습니다.
-- 하위 키에 `Debugger` 값을 넣으면, 그 프로그램이 만들어질 때 지정한 디버거가 대신 실행됩니다. 대상 프로그램은 디버거의 인자로 넘어갑니다.
-- MITRE ATT&CK 는 이 자리를 쓰는 수법을 T1546.012(Image File Execution Options Injection) 로 분류합니다.
-- MITRE 는 조용한 프로세스 종료 (silent process exit) 감시도 같은 수법으로 적습니다. 관련 값은 `SilentProcessExit` 키 아래 `ReportingMode`·`MonitorProcess` 값과, IFEO 하위 키의 `GlobalFlag` 에 켠 플래그 512(0x200, FLG_MONITOR_SILENT_PROCESS_EXIT) 입니다.
-- 이 값들은 레지스트리를 직접 고치거나 GFlags(gflags.exe) 로 설정합니다.
+이미지 파일 실행 옵션 (Image File Execution Options, IFEO) 키 아래에는 실행 파일 이름마다 하위 키를 둘 수 있습니다. 하위 키에 `Debugger` 값을 넣으면 그 프로그램이 만들어질 때 지정한 디버거가 대신 실행되고, 대상 프로그램은 디버거의 인자로 넘어갑니다. MITRE ATT&CK 는 이 자리를 쓰는 수법을 T1546.012(Image File Execution Options Injection) 로 분류합니다.
+
+MITRE 는 조용한 프로세스 종료 (silent process exit) 감시도 같은 수법으로 적습니다. 관련 값은 `SilentProcessExit` 키 아래 `ReportingMode`·`MonitorProcess` 값과, IFEO 하위 키의 `GlobalFlag` 에 켠 플래그 512(0x200, FLG_MONITOR_SILENT_PROCESS_EXIT) 이고, 레지스트리를 직접 고치거나 GFlags(gflags.exe) 로 설정합니다.
 
 ### AppInit_DLLs
 
-- AppInit_DLLs 는 사용자가 지정한 DLL 을 모든 대화형 응용 프로그램의 주소 공간에 올리게 하는 장치입니다.
-- 정상 앱은 거의 쓰지 않습니다. 많은 악성코드가 API 를 가로채는 데 씁니다.
-- Microsoft 는 이 장치를 쓰지 말라고 권합니다.
-- Windows 8 데스크톱 앱 인증 요건은 AppInit_DLLs 로 임의 DLL 을 올려 Win32 API 를 가로채는 것을 금지합니다.
+AppInit_DLLs 는 사용자가 지정한 DLL 을 모든 대화형 응용 프로그램의 주소 공간에 올리게 하는 장치입니다. 정상 앱은 거의 쓰지 않지만 많은 악성코드가 API 를 가로채는 데 씁니다. Microsoft 는 이 장치를 쓰지 말라고 권하고, Windows 8 데스크톱 앱 인증 요건은 AppInit_DLLs 로 임의 DLL 을 올려 Win32 API 를 가로채는 것을 금지합니다.
 
 ### BootExecute·Load
 
@@ -90,13 +85,9 @@ Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 
 
 `SilentProcessExit` 의 동작은 Microsoft 디버거 문서에 있습니다.
 
-- Windows 7 부터 쓸 수 있습니다.
-- 감시 대상은 IFEO 하위 키 `GlobalFlag` 에 0x200 이 켜진 프로그램입니다.
-- 대상이 ExitProcess 로 스스로 끝나거나, 다른 프로세스가 TerminateProcess 로 끝낼 때만 반응합니다. 마지막 스레드가 끝나는 보통 종료에는 반응하지 않습니다.
-- 프로그램별 설정은 `SilentProcessExit\<실행 파일 이름>` 키에 있습니다.
-- `ReportingMode` 에 0x1 비트가 켜져 있으면 `MonitorProcess` 에 적힌 명령줄을 실행합니다. 0x2 는 덤프 생성, 0x4 는 팝업 알림입니다.
-- 감시 대상이 이렇게 끝나면 Application 로그에 원본 "Process Exit Monitor" 항목이 남습니다.
-- 그래서 이 키가 있고 `MonitorProcess` 에 프로그램 경로가 있으면 살펴볼 대상으로 둡니다.
+Windows 7 부터 쓸 수 있고, 감시 대상은 IFEO 하위 키 `GlobalFlag` 에 0x200 이 켜진 프로그램입니다. 대상이 ExitProcess 로 스스로 끝나거나 다른 프로세스가 TerminateProcess 로 끝낼 때만 반응하며, 마지막 스레드가 끝나는 보통 종료에는 반응하지 않습니다.
+
+프로그램별 설정은 `SilentProcessExit\<실행 파일 이름>` 키에 있습니다. `ReportingMode` 에 0x1 비트가 켜져 있으면 `MonitorProcess` 에 적힌 명령줄을 실행하고, 0x2 는 덤프 생성, 0x4 는 팝업 알림입니다. 감시 대상이 이렇게 끝나면 Application 로그에 원본 "Process Exit Monitor" 항목이 남습니다. 그래서 이 키가 있고 `MonitorProcess` 에 프로그램 경로가 있으면 살펴볼 대상으로 둡니다.
 
 ### AppInit_DLLs 값
 

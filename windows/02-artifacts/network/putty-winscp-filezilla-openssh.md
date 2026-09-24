@@ -29,21 +29,17 @@ SSH 클라이언트는 처음 접속한 서버의 호스트 키 (host key) 를 �
 
 ### PuTTY
 
-- 설정은 대부분 `HKEY_CURRENT_USER\Software\SimonTatham\PuTTY` 에 저장됩니다. [1]
-- 저장한 세션은 그 아래 `Sessions`, SSH 호스트 키는 `SshHostKeys` 에 있습니다. [1]
-- 난수 시드 파일 `PUTTY.RND` 는 기본으로 Application Data 폴더에 있습니다. 위치는 `...\PuTTY\RandSeedFile` 값으로 바꿀 수 있습니다. [1]
-- Windows 7 이후에는 최근 실행한 세션이 점프 목록에 남습니다. [1]
-- PuTTY 는 비밀번호를 저장하지 않습니다. FAQ 는 보안 때문에 일부러 그렇게 만들었다고 설명합니다. [1]
-- `Sessions` 아래 값 이름과 `SshHostKeys` 값 이름의 형식은 이번 자료로 확인하지 못했습니다.
+설정은 대부분 `HKEY_CURRENT_USER\Software\SimonTatham\PuTTY` 에 저장되고, 저장한 세션은 그 아래 `Sessions`, SSH 호스트 키는 `SshHostKeys` 에 있습니다. [1] 난수 시드 파일 `PUTTY.RND` 는 기본으로 Application Data 폴더에 있으며 위치는 `...\PuTTY\RandSeedFile` 값으로 바꿀 수 있습니다. [1] Windows 7 이후에는 최근 실행한 세션이 점프 목록에 남습니다. [1]
+
+PuTTY 는 비밀번호를 저장하지 않는데, FAQ 는 보안 때문에 일부러 그렇게 만들었다고 설명합니다. [1] `Sessions` 아래 값 이름과 `SshHostKeys` 값 이름의 형식은 이번 자료로 확인하지 못했습니다.
 
 ### WinSCP
 
-- 레지스트리에 저장하면 `HKEY_CURRENT_USER\SOFTWARE\Martin Prikryl\WinSCP 2` 에 들어갑니다. [2]
-- 문서에는 `HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Martin Prikryl\WinSCP 2` 도 나옵니다. 문서는 이 키를 설치 프로그램이 만든다고 적습니다. 설정을 찾을 때 WinSCP 는 HKCU 다음에 HKLM 을 봅니다. 두 곳을 모두 봅니다. [2]
-- INI 파일에 저장할 수도 있습니다. 파일 이름은 실행 파일과 같은 이름(`WinSCP.ini`)이어야 합니다. [2]
-- WinSCP 는 INI 파일을 먼저 실행 파일 폴더에서 찾고, 다음으로 `C:\Users\<사용자>\AppData\Roaming\WinSCP.ini` 에서 찾습니다. [2]
-- 새 INI 파일은 실행 파일 폴더에 쓰려고 합니다. 쓸 수 없으면 사용자 프로필의 응용 프로그램 데이터 폴더에 씁니다. [2]
-- 공개 도구 RegRipper 의 winscp 플러그인은 `WinSCP 2` 밑의 다음 키를 읽습니다. [5]
+레지스트리에 저장하면 `HKEY_CURRENT_USER\SOFTWARE\Martin Prikryl\WinSCP 2` 에 들어갑니다. [2] 문서에는 `HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Martin Prikryl\WinSCP 2` 도 나오는데, 문서는 이 키를 설치 프로그램이 만든다고 적습니다. 설정을 찾을 때 WinSCP 는 HKCU 다음에 HKLM 까지 두 곳을 모두 봅니다. [2]
+
+INI 파일에 저장할 수도 있으며 파일 이름은 실행 파일과 같은 이름(`WinSCP.ini`)이어야 합니다. [2] WinSCP 는 INI 파일을 먼저 실행 파일 폴더에서 찾고 다음으로 `C:\Users\<사용자>\AppData\Roaming\WinSCP.ini` 에서 찾습니다. [2] 새 INI 파일은 실행 파일 폴더에 쓰려고 하고, 쓸 수 없으면 사용자 프로필의 응용 프로그램 데이터 폴더에 씁니다. [2]
+
+공개 도구 RegRipper 의 winscp 플러그인은 `WinSCP 2` 밑의 다음 키를 읽습니다. [5]
 
 | 키 | 담긴 것 (키 이름과 플러그인 동작으로 읽은 뜻) |
 |---|---|

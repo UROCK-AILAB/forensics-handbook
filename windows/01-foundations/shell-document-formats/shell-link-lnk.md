@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-바로가기 형식 (Shell Link Binary File Format) 은 Windows 바로가기 파일 (.lnk) 의 저장 형식입니다. 바로가기는 파일, 네트워크 공유, 검색 결과 같은 대상을 가리킵니다. 76바이트 파일 머리 뒤에 링크 대상 식별자, 위치 정보, 데이터 문자열, 추가 데이터 블록이 차례로 옵니다. 머리의 플래그가 어느 부분이 있는지 정합니다. 이 글은 형식만 다룹니다. 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
+바로가기 형식 (Shell Link Binary File Format) 은 Windows 바로가기 파일 (.lnk) 의 저장 형식입니다. 바로가기는 파일, 네트워크 공유, 검색 결과 같은 대상을 가리킵니다. 76바이트 파일 머리 뒤에 링크 대상 식별자, 위치 정보, 데이터 문자열, 추가 데이터 블록이 차례로 오며, 머리의 플래그가 어느 부분이 있는지 정합니다. 이 글은 형식만 다루고, 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트
 
@@ -34,8 +34,7 @@
 | 5 | 추가 데이터 블록 (Extra Data Block) | 블록마다 다릅니다 |
 | 6 | 끝 블록 (Terminal Block) | 크기 0 인 4바이트입니다 |
 
-- 바이트 순서는 리틀 엔디언입니다.
-- 날짜·시각은 UTC 기준 FILETIME 입니다. FILETIME 을 푸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+바이트 순서는 리틀 엔디언이고, 날짜·시각은 UTC 기준 FILETIME 입니다. FILETIME 을 푸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ### 파일 머리 (76바이트)
 
@@ -56,9 +55,7 @@
 | 68 | 0x44 | 4 | 예약 | 반드시 0 입니다 |
 | 72 | 0x48 | 4 | 예약 | 반드시 0 입니다 |
 
-- 머리의 세 시각은 LNK 파일 자신의 시각이 아닙니다. 대상 파일의 시각입니다.
-- ShowCommand 값은 0x1 (SW_SHOWNORMAL), 0x3 (SW_SHOWMAXIMIZED), 0x7 (SW_SHOWMINNOACTIVE) 입니다. 다른 값은 SW_SHOWNORMAL 로 취급합니다.
-- 머리를 헥스로 읽는 예는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
+머리의 세 시각은 LNK 파일 자신의 시각이 아니라 대상 파일의 시각입니다. ShowCommand 값은 0x1 (SW_SHOWNORMAL), 0x3 (SW_SHOWMAXIMIZED), 0x7 (SW_SHOWMINNOACTIVE) 이고, 다른 값은 SW_SHOWNORMAL 로 취급합니다. 머리를 헥스로 읽는 예는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
 
 ### 데이터 플래그 (LinkFlags)
 
@@ -83,14 +80,11 @@
 | 0x00040000 | ForceNoLinkTrack | 분산 링크 추적 블록이 없습니다 |
 | 0x00080000 | EnableTargetMetadata | 메타데이터 속성 저장소 블록이 있습니다 |
 
-- 0x00100000 부터 0x04000000 까지의 플래그 (DisableLinkPathTracking, DisableKnownFolderTracking, DisableKnownFolderAlias, AllowLinkToLink, UnaliasOnSave, PreferEnvironmentPath, KeepLocalIDListForUNCTarget) 는 liblnk 문서에서도 뜻이 대부분 확인되지 않았습니다.
-- XP 이하의 LNK 는 ForceNoLinkTrack 플래그를 쓰지 않습니다.
-- 모든 추가 데이터 블록이 플래그로 표시되지는 않습니다.
+0x00100000 부터 0x04000000 까지의 플래그 (DisableLinkPathTracking, DisableKnownFolderTracking, DisableKnownFolderAlias, AllowLinkToLink, UnaliasOnSave, PreferEnvironmentPath, KeepLocalIDListForUNCTarget) 는 liblnk 문서에서도 뜻이 대부분 확인되지 않았습니다. XP 이하의 LNK 는 ForceNoLinkTrack 플래그를 쓰지 않으며, 모든 추가 데이터 블록이 플래그로 표시되지도 않습니다.
 
 ### 링크 대상 식별자 (LinkTargetIDList)
 
-- 2바이트 크기 뒤에 셸 아이템 목록이 옵니다.
-- 목록과 셸 아이템을 읽는 법은 [셸 아이템 (Shell Item·PIDL)](shell-item-pidl.md) 에서 다룹니다.
+2바이트 크기 뒤에 셸 아이템 목록이 옵니다. 목록과 셸 아이템을 읽는 법은 [셸 아이템 (Shell Item·PIDL)](shell-item-pidl.md) 에서 다룹니다.
 
 ### 위치 정보 (LinkInfo)
 
@@ -144,24 +138,15 @@
 
 **전체 경로 만들기**
 
-- 대상이 볼륨에 있으면 전체 경로는 로컬 경로 뒤에 공통 경로를 이은 것입니다.
-- 대상이 네트워크 공유에 있으면 전체 경로는 공유 이름 뒤에 공통 경로를 이은 것입니다.
-- 공유 이름은 경로 구분자 (`\`) 로 끝나지 않을 수 있습니다.
-- 공통 경로가 비어 있고 로컬 경로에 전체 경로가 들어 있을 수도 있습니다.
-- 경로 문자열에도 짝 없는 서로게이트가 들어갈 수 있습니다.
+대상이 볼륨에 있으면 전체 경로는 로컬 경로 뒤에 공통 경로를 이은 것이고, 대상이 네트워크 공유에 있으면 공유 이름 뒤에 공통 경로를 이은 것입니다. 공유 이름은 경로 구분자 (`\`) 로 끝나지 않을 수 있습니다. 공통 경로가 비어 있고 로컬 경로에 전체 경로가 들어 있을 수도 있습니다. 경로 문자열에도 짝 없는 서로게이트가 들어갈 수 있습니다.
 
 ### 데이터 문자열 (StringData)
 
-- 순서는 설명 → 상대 경로 → 작업 디렉터리 → 명령줄 인수 → 아이콘 위치입니다.
-- 플래그가 켜진 문자열만 있습니다. 꺼진 문자열은 자리도 없이 건너뜁니다.
-- 문자열 하나는 2바이트 글자 수와 문자열로 이루어집니다.
-- 크기 칸은 바이트 수가 아니라 글자 수입니다.
-- IsUnicode 가 켜져 있으면 UTF-16LE 이고, 아니면 코드 페이지 문자열입니다. 코드 페이지 문자열을 읽는 법은 [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+순서는 설명 → 상대 경로 → 작업 디렉터리 → 명령줄 인수 → 아이콘 위치이고, 플래그가 켜진 문자열만 있습니다. 꺼진 문자열은 자리도 없이 건너뜁니다. 문자열 하나는 2바이트 글자 수와 문자열로 이루어지는데, 크기 칸은 바이트 수가 아니라 글자 수입니다. IsUnicode 가 켜져 있으면 UTF-16LE 이고, 아니면 코드 페이지 문자열입니다. 코드 페이지 문자열을 읽는 법은 [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ### 추가 데이터 블록 (Extra Data Block)
 
-- 블록마다 4바이트 크기와 4바이트 서명으로 시작합니다.
-- 블록이 모두 끝나면 크기 0 인 4바이트 끝 블록이 옵니다.
+블록마다 4바이트 크기와 4바이트 서명으로 시작하고, 블록이 모두 끝나면 크기 0 인 4바이트 끝 블록이 옵니다.
 
 | 서명 | 블록 | 크기 (바이트) |
 |---|---|---|
@@ -197,13 +182,7 @@
 | 64 | 16 | birth droid 볼륨 ID (GUID) |
 | 80 | 16 | birth droid 파일 ID (GUID) |
 
-- droid 는 CDomainRelativeObjId 를 뜻합니다.
-- 네 GUID 는 NTFS 객체 ID 입니다.
-- droid 볼륨 ID 는 그 볼륨 `$Volume` 파일의 `$OBJECT_ID` 속성에 있습니다.
-- droid 파일 ID 는 그 파일의 `$OBJECT_ID` 속성에 있습니다.
-- `$OBJECT_ID` 속성은 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 다룹니다.
-- droid 볼륨 ID 의 가장 낮은 비트가 볼륨 사이 이동 플래그라는 설명이 있습니다. liblnk 문서는 이 설명에 불확실 표시를 붙였습니다.
-- 머신 식별자와 GUID 를 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
+droid 는 CDomainRelativeObjId 를 뜻하고, 네 GUID 는 NTFS 객체 ID 입니다. droid 볼륨 ID 는 그 볼륨 `$Volume` 파일의 `$OBJECT_ID` 속성에, droid 파일 ID 는 그 파일의 `$OBJECT_ID` 속성에 있으며, 이 속성은 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 다룹니다. droid 볼륨 ID 의 가장 낮은 비트가 볼륨 사이 이동 플래그라는 설명이 있는데, liblnk 문서는 이 설명에 불확실 표시를 붙였습니다. 머신 식별자와 GUID 를 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
 
 ## 읽는 법
 
@@ -275,15 +254,11 @@
 
 ### 파일 조각 찾기
 
-- 머리 크기 4바이트와 LNK 클래스 ID 16바이트는 명세가 값을 못 박아 둔 칸입니다.
-- 그래서 모든 LNK 의 앞 20바이트는 같습니다. 비할당 영역에서 LNK 를 찾을 때 이 20바이트를 서명으로 씁니다.
-- 찾은 뒤에는 플래그와 각 부분의 크기 칸으로 끝을 가늠합니다. 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+머리 크기 4바이트와 LNK 클래스 ID 16바이트는 명세가 값을 못 박아 둔 칸이라서 모든 LNK 의 앞 20바이트는 같습니다. 비할당 영역에서 LNK 를 찾을 때 이 20바이트를 서명으로 쓰고, 찾은 뒤에는 플래그와 각 부분의 크기 칸으로 끝을 가늠합니다. 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ### 남은 바이트
 
-- liblnk 문서는 환경 변수 위치 블록 (0xa0000001) 과 아이콘 위치 블록 (0xa0000007) 의 쓰지 않은 바이트에 이전 데이터가 남아 있을 수 있다고 적습니다.
-- 두 블록은 크기가 788바이트로 정해져 있습니다. 그래서 짧은 경로를 적으면 경로 뒤쪽 바이트가 쓰이지 않고 남습니다.
-- 남은 바이트는 경로 문자열과 따로 적어 둡니다. 어느 시점의 값인지는 형식만으로 알 수 없습니다.
+liblnk 문서는 환경 변수 위치 블록 (0xa0000001) 과 아이콘 위치 블록 (0xa0000007) 의 쓰지 않은 바이트에 이전 데이터가 남아 있을 수 있다고 적습니다. 두 블록은 크기가 788바이트로 정해져 있어서 짧은 경로를 적으면 경로 뒤쪽 바이트가 쓰이지 않고 남습니다. 남은 바이트는 경로 문자열과 따로 적어 두며, 어느 시점의 값인지는 형식만으로 알 수 없습니다.
 
 ### 명세와 어긋나지만 Windows 가 받아들이는 파일
 
@@ -298,11 +273,11 @@ liblnk 문서에 적힌 사례입니다.
 
 ### 시각이 0 인 LNK
 
-- 명세에서 머리 시각 0 은 대상에 그 시각이 설정되지 않았다는 뜻입니다.
-- Windows 11 PC 한 대의 시작 메뉴 LNK 125개 가운데 48개는 머리의 세 시각이 모두 0 이었습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
-- 같은 125개 가운데 링크 대상 식별자가 없는 파일은 39개, 위치 정보가 없는 파일은 48개였습니다.
-- 한 설치 프로그램이 만든 LNK 는 플래그가 0x020003E4 였습니다. HasName·HasArguments·HasIconLocation·IsUnicode·ForceNoLinkInfo·HasExpString·PreferEnvironmentPath 가 켜져 있었습니다. 링크 대상 식별자가 없었고, 세 시각이 모두 0 이었습니다. 아이콘 번호는 -114 였습니다.
-- 그래서 시각이 0 이거나 부분이 빠져 있다는 것만으로 조작을 의심하지 않습니다. 누가 만든 LNK 인지부터 봅니다.
+명세에서 머리 시각 0 은 대상에 그 시각이 설정되지 않았다는 뜻입니다. Windows 11 PC 한 대의 시작 메뉴 LNK 125개 가운데 48개는 머리의 세 시각이 모두 0 이었습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대). 같은 125개 가운데 링크 대상 식별자가 없는 파일은 39개, 위치 정보가 없는 파일은 48개였습니다.
+
+한 설치 프로그램이 만든 LNK 는 플래그가 0x020003E4 였고, HasName·HasArguments·HasIconLocation·IsUnicode·ForceNoLinkInfo·HasExpString·PreferEnvironmentPath 가 켜져 있었습니다. 링크 대상 식별자가 없었고 세 시각이 모두 0 이었으며, 아이콘 번호는 -114 였습니다.
+
+그래서 시각이 0 이거나 부분이 빠져 있다는 것만으로 조작을 의심하지 않습니다. 누가 만든 LNK 인지부터 봅니다.
 
 ## 함정
 
@@ -319,8 +294,7 @@ liblnk 문서에 적힌 사례입니다.
 
 ## 도구
 
-- 이 글이 따른 형식 문서는 libyal 의 liblnk 저장소에 있는 문서와 Microsoft MS-SHLLINK 의 ShellLinkHeader 절입니다.
-- LNK 파서 예와 도구 설정에서 볼 점은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
+이 글이 따른 형식 문서는 libyal 의 liblnk 저장소에 있는 문서와 Microsoft MS-SHLLINK 의 ShellLinkHeader 절입니다. LNK 파서 예와 도구 설정에서 볼 점은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
 
 도구를 쓸 때는 다음을 확인합니다.
 

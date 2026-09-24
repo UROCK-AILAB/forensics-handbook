@@ -36,9 +36,7 @@
 
 ## 4616 에서 읽을 것
 
-- 제목은 "4616(S) The system time was changed." 입니다[1]. 시스템 시각이 바뀔 때마다 생깁니다[1].
-- 하위 범주는 Audit Security State Change 입니다[1]. 하지만 이 하위 범주의 설정과 상관없이 항상 기록됩니다[1].
-- 공급자는 Microsoft-Windows-Security-Auditing 이고, 채널은 Security 입니다[1].
+제목은 "4616(S) The system time was changed." 이고 시스템 시각이 바뀔 때마다 생깁니다[1]. 하위 범주는 Audit Security State Change 이지만 이 하위 범주의 설정과 상관없이 항상 기록되며[1], 공급자는 Microsoft-Windows-Security-Auditing, 채널은 Security 입니다[1].
 
 | 칸 | 뜻 | 이어 볼 곳 |
 |---|---|---|
@@ -51,21 +49,16 @@
 
 (칸과 이어 볼 곳은 Microsoft 문서[1] 기준입니다.)
 
-- PreviousTime·NewTime 은 YYYY-MM-DDThh:mm:ss.nnnnnnnZ 형식으로 보입니다[1].
-- 두 값의 차이가 시각을 옮긴 폭입니다.
-- 문서 예시는 PreviousTime 2015-10-09T05:04:30.000941900Z, NewTime 2015-10-09T05:04:30.000000000Z 입니다[1]. 1밀리초가 안 되는 보정입니다.
+PreviousTime·NewTime 은 YYYY-MM-DDThh:mm:ss.nnnnnnnZ 형식으로 보이며[1], 두 값의 차이가 시각을 옮긴 폭입니다. 문서 예시는 PreviousTime 2015-10-09T05:04:30.000941900Z, NewTime 2015-10-09T05:04:30.000000000Z 입니다[1]. 1밀리초가 안 되는 보정입니다.
 
 **Microsoft 문서의 판단 기준.**
 
-- Subject 의 Security ID 가 LOCAL SERVICE 인 4616 은 보통 보이는 정상 시각 보정입니다[1].
-- Subject 가 LOCAL SERVICE 가 아니면 보고하라고 권합니다[1]. Windows Time 서비스가 한 변경이 아니라는 뜻입니다[1].
-- Process Name 이 `C:\Windows\System32\svchost.exe` 가 아니면 보고하라고 권합니다[1].
+Subject 의 Security ID 가 LOCAL SERVICE 인 4616 은 보통 보이는 정상 시각 보정입니다[1]. Subject 가 LOCAL SERVICE 가 아니면 Windows Time 서비스가 한 변경이 아니라는 뜻이며, 문서는 이때 보고하라고 권합니다[1]. Process Name 이 `C:\Windows\System32\svchost.exe` 가 아닌 경우에도 보고하라고 권합니다[1].
 
 ## 누가 시각을 바꿀 수 있나
 
-- 시각을 바꾸려면 "Change the system time" 사용자 권한이 있어야 합니다[2]. 상수 이름은 SeSystemtimePrivilege 입니다[2].
-- 이 권한으로 이벤트 로그·DB 트랜잭션·파일 시스템 기록에 붙는 날짜와 시각을 바꿀 수 있습니다[2].
-- 시각 동기화 프로세스에도 이 권한이 필요합니다[2].
+시각을 바꾸려면 "Change the system time" 사용자 권한(상수 이름 SeSystemtimePrivilege)이 있어야 합니다[2]. 이 권한으로 이벤트 로그·DB 트랜잭션·파일 시스템 기록에 붙는 날짜와 시각을 바꿀 수 있고, 시각 동기화 프로세스에도 이 권한이 필요합니다[2].
+
 - 정책 위치는 `Computer Configuration\Windows Settings\Security Settings\Local Policies\User Rights Assignment` 입니다[2].
 
 | 컴퓨터 종류 | 기본으로 권한을 받는 계정 |
@@ -75,7 +68,7 @@
 
 (표는 Microsoft 문서[2] 기준입니다.)
 
-- 시간대를 바꾸는 권한("Change the time zone")은 따로 있습니다[2]. 시각을 바꾸는 권한은 시간대에 영향이 없습니다[2].
+시간대를 바꾸는 권한("Change the time zone")은 따로 있으며[2], 시각을 바꾸는 권한은 시간대에 영향이 없습니다[2].
 - 4616 의 Subject 가 이 기본 목록에 없는 계정이면, 권한 정책을 바꿨는지 함께 봅니다.
 
 ## 시각을 바꾸면 무엇이 틀어지나
@@ -89,9 +82,8 @@ Microsoft 문서가 적은 위험은 아래와 같습니다[2].
 
 ## 이벤트 로그 레코드로 순서 보기
 
-- .evtx 레코드마다 레코드 식별자와 기록 시각(FILETIME, UTC)이 함께 들어 있습니다[3].
-- 레코드를 식별자 순서로 늘어놓고, 기록 시각이 거꾸로 가는 곳이 있는지 살펴볼 수는 있습니다.
-- 이 방법을 검증한 자료는 이번에 확인하지 못했습니다. 4616 을 보조하는 단서로만 씁니다.
+.evtx 레코드마다 레코드 식별자와 기록 시각(FILETIME, UTC)이 함께 들어 있으므로[3], 레코드를 식별자 순서로 늘어놓고 기록 시각이 거꾸로 가는 곳이 있는지 살펴볼 수는 있습니다. 다만 이 방법을 검증한 자료는 이번에 확인하지 못했고, 4616 을 보조하는 단서로만 씁니다.
+
 - 손상된 파일에서는 식별자가 이어지지 않을 수 있습니다[3]. 식별자를 읽는 주의점은 [이벤트 로그를 지웠나 (Log Clearing)](log-clearing.md) 에 있습니다.
 
 ## 분석 흐름

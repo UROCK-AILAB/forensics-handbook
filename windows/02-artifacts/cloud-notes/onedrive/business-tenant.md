@@ -8,12 +8,13 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- Microsoft 365 를 쓰는 조직 하나를 테넌트 (Tenant) 라고 부릅니다. 조직마다 GUID 모양의 테넌트 ID 가 있습니다.
-- 회사·학교 계정의 OneDrive 는 SharePoint 쪽 주소를 씁니다. 관찰한 PC 의 계정 키에는 `-my.sharepoint.com` 주소가 남아 있었습니다 (관찰).
-- SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 수 있습니다. 이 기능은 Microsoft 365 회사·학교 구독이나 SharePoint Server 2019 가 있어야 합니다.
-- 관리자는 그룹 정책으로 어느 조직 계정을 허용할지, 동기화 폴더를 어디에 둘지, 어느 라이브러리를 자동으로 받을지 정할 수 있습니다. 이런 정책 값에 테넌트 ID 가 들어갑니다.
-- 예전 회사용 동기화 앱은 `Groove.exe`, 새 동기화 앱은 `OneDrive.exe` 입니다. 같은 계정이면 새 앱이 예전 앱의 동기화를 넘겨받으려 합니다.
-- 자동 로그인 정책 `SilentAccountConfig` 를 켜면 Microsoft Entra ID 에 가입한 PC 에서 Windows 로그인 계정으로 OneDrive 를 자동 연결합니다. 다단계 인증이 필요한 사용자에게는 동작하지 않습니다. 자동 연결에 성공하면 남는 값은 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
+Microsoft 365 를 쓰는 조직 하나를 테넌트 (Tenant) 라고 부르고, 조직마다 GUID 모양의 테넌트 ID 가 있습니다. 회사·학교 계정의 OneDrive 는 SharePoint 쪽 주소를 쓰며, 관찰한 PC 의 계정 키에는 `-my.sharepoint.com` 주소가 남아 있었습니다 (관찰).
+
+SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 수 있는데, 이 기능은 Microsoft 365 회사·학교 구독이나 SharePoint Server 2019 가 있어야 합니다. 관리자는 그룹 정책으로 어느 조직 계정을 허용할지, 동기화 폴더를 어디에 둘지, 어느 라이브러리를 자동으로 받을지 정할 수 있고, 이런 정책 값에 테넌트 ID 가 들어갑니다.
+
+예전 회사용 동기화 앱은 `Groove.exe`, 새 동기화 앱은 `OneDrive.exe` 이며, 같은 계정이면 새 앱이 예전 앱의 동기화를 넘겨받으려 합니다.
+
+자동 로그인 정책 `SilentAccountConfig` 를 켜면 Microsoft Entra ID 에 가입한 PC 에서 Windows 로그인 계정으로 OneDrive 를 자동 연결하지만, 다단계 인증이 필요한 사용자에게는 동작하지 않습니다. 자동 연결에 성공하면 남는 값은 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -25,9 +26,7 @@
 | 회사 OneDrive 동기화 폴더 | 기본 이름이 `OneDrive - {organization name}` 입니다 |
 | SharePoint·Teams 라이브러리 | 조직 이름으로 된 폴더 아래로 받습니다. 예: `%userprofile%\Contoso` |
 
-- 옛 PC 에는 `Groove.exe` 로 동기화한 흔적이 있을 수 있습니다.
-- 관찰한 PC 에는 팀 사이트 라이브러리 동기화 흔적이 없었습니다. 그래서 그 경우의 레지스트리·DB 값(`LibraryType` 등)은 확인하지 못했습니다.
-- 조직 이름 폴더 아래 하위 폴더의 이름 형식도 확인하지 못했습니다.
+옛 PC 에는 `Groove.exe` 로 동기화한 흔적이 있을 수 있습니다. 관찰한 PC 에는 팀 사이트 라이브러리 동기화 흔적이 없었으므로 그 경우의 레지스트리·DB 값(`LibraryType` 등)은 확인하지 못했고, 조직 이름 폴더 아래 하위 폴더의 이름 형식도 확인하지 못했습니다.
 
 ## 구조
 
@@ -59,12 +58,9 @@
 
 **회사 OneDrive 폴더**
 
-- 기본 이름은 `OneDrive - {organization name}` 입니다.
-- 관리자는 정책으로 이 이름을 바꿀 수 있습니다. 키는 `HKLM\SOFTWARE\Policies\Microsoft\OneDrive\CustomSyncRootFolderName` 이고, 값 이름이 테넌트 ID, 데이터가 새 폴더 이름입니다.
-- 이미 동기화 중인 사용자는 연결을 끊었다가 다시 연결해야 새 이름이 적용됩니다.
-- 새 이름은 `OneDrive` 일 수 없습니다. 전체 경로(예: `C:\Users\{alias}\OneDrive - {organization name}`)는 120자를 넘을 수 없습니다.
-- 기본 위치는 `HKCU\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir` 로 정합니다. 값 이름이 테넌트 ID, 데이터가 경로입니다. 이 정책을 끄면 기본 위치는 `%userprofile%` 입니다.
-- `HKCU\Software\Policies\Microsoft\OneDrive\DisableCustomRoot` 에 테넌트 ID 이름으로 1 을 넣으면 사용자가 위치를 바꾸지 못합니다.
+기본 이름은 `OneDrive - {organization name}` 입니다. 관리자는 정책으로 이 이름을 바꿀 수 있는데, 키는 `HKLM\SOFTWARE\Policies\Microsoft\OneDrive\CustomSyncRootFolderName` 이고 값 이름이 테넌트 ID, 데이터가 새 폴더 이름입니다. 이미 동기화 중인 사용자는 연결을 끊었다가 다시 연결해야 새 이름이 적용됩니다. 새 이름은 `OneDrive` 일 수 없고, 전체 경로(예: `C:\Users\{alias}\OneDrive - {organization name}`)는 120자를 넘을 수 없습니다.
+
+기본 위치는 `HKCU\SOFTWARE\Policies\Microsoft\OneDrive\DefaultRootDir` 로 정하며, 값 이름이 테넌트 ID, 데이터가 경로입니다. 이 정책을 끄면 기본 위치는 `%userprofile%` 입니다. `HKCU\Software\Policies\Microsoft\OneDrive\DisableCustomRoot` 에 테넌트 ID 이름으로 1 을 넣으면 사용자가 위치를 바꾸지 못합니다.
 
 **SharePoint·Teams 라이브러리**
 
@@ -101,12 +97,7 @@
 | 알려진 폴더 되돌리기 금지 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive` `KFMBlockOptOut` = 1 | 문서·사진·바탕 화면을 OneDrive 에 묶어 두고 "Stop protecting" 을 막습니다 |
 | 자동 내려받기 크기 한도 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive\DiskSpaceCheckThresholdMB` 에 테넌트 ID 이름의 DWORD | 조직별로 자동 내려받기 크기 한도를 정합니다 |
 
-`TenantAutoMount` 에서 더 볼 점이 있습니다.
-
-- 라이브러리 ID 는 `tenantId=xxx&siteId=xxx&webId=xxx&listId=xxx&webUrl=httpsxxx&version=1` 모양입니다.
-- SharePoint 에서 복사한 문자열은 `%2D`·`%7B`·`%7D`·`%3A`·`%2F`·`%2E` 를 풀어서 넣어야 합니다.
-- 이 정책으로 받은 라이브러리는 다음 로그인 때 온라인 전용 파일로 동기화됩니다.
-- 사용자는 이 라이브러리의 동기화를 멈출 수 없습니다.
+`TenantAutoMount` 의 라이브러리 ID 는 `tenantId=xxx&siteId=xxx&webId=xxx&listId=xxx&webUrl=httpsxxx&version=1` 모양이고, SharePoint 에서 복사한 문자열은 `%2D`·`%7B`·`%7D`·`%3A`·`%2F`·`%2E` 를 풀어서 넣어야 합니다. 이 정책으로 받은 라이브러리는 다음 로그인 때 온라인 전용 파일로 동기화되며, 사용자는 이 라이브러리의 동기화를 멈출 수 없습니다.
 
 다른 조직의 OneDrive 로 이미 옮긴 알려진 폴더를 새 조직으로 옮기면 새 빈 폴더가 생깁니다. 사용자에게는 빈 바탕 화면이 보입니다. 이런 PC 에서는 옛 조직 쪽 폴더도 함께 찾습니다.
 

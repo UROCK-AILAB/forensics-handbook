@@ -12,10 +12,7 @@ Teams 는 메시지·연락처·일정 같은 데이터를 IndexedDB 에 LevelDB
 
 Teams 는 브라우저와 같은 로컬 저장소에 데이터를 적어 둡니다.
 
-- Teams 는 데이터를 IndexedDB 에 LevelDB 형식으로 저장합니다. (forensicsim README)
-- 공개 파서 forensicsim 은 여기서 메시지, 댓글, 게시물, 연락처, 일정, 반응 (reactions) 을 꺼냅니다. (forensicsim README)
-- 새 Teams 폴더에는 WebView2 가 쓰는 `EBWebView` 폴더가 있습니다. (관찰)
-- 앱 자체도 로그, 설정 JSON, 원격 측정 (telemetry) DB 를 앱 폴더에 적습니다. (관찰)
+Teams 는 데이터를 IndexedDB 에 LevelDB 형식으로 저장하고, 공개 파서 forensicsim 은 여기서 메시지, 댓글, 게시물, 연락처, 일정, 반응 (reactions) 을 꺼냅니다. (forensicsim README) 새 Teams 폴더에는 WebView2 가 쓰는 `EBWebView` 폴더가 있고, 앱 자체도 로그, 설정 JSON, 원격 측정 (telemetry) DB 를 앱 폴더에 적습니다. (관찰)
 
 ## 위치와 버전별 차이
 
@@ -60,7 +57,7 @@ README 가 적은 폴더 이름은 `IndexedDB\https_teams.microsoft.com_0.indexe
 
 - `...indexeddb.leveldb` 폴더에는 `CURRENT`, `MANIFEST-011437`, 번호가 붙은 `.ldb`·`.log` 파일 등 33개가 있었습니다. (관찰)
 - `<조직>-my.sharepoint.com` 출처의 IndexedDB 도 있었습니다. 조직 OneDrive 의 출처입니다. (관찰)
-- `EBWebView\Default` 프로필에는 IndexedDB 가 없었습니다. `Local Storage` 만 있었습니다. (관찰)
+- `EBWebView\Default` 프로필에는 IndexedDB 가 없고 `Local Storage` 만 있었습니다. (관찰)
 - 그래서 대화 데이터는 `Default` 가 아니라 `WV2Profile_tfw` 에서 찾습니다. (확인 범위: 위 PC 한 대)
 - `WV2Profile_tfw` 에는 `History`, `Login Data`, `Network`, `Cache`, `Local Storage\leveldb` 등 브라우저와 같은 구성이 있었습니다. (관찰) 이 파일들은 [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) 와 같은 방법으로 읽습니다.
 
@@ -95,8 +92,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | `web_client_version_used` | 웹 클라이언트 버전 |
 | `main_window_bounds` | 창 위치와 크기 |
 
-- 첫 실행 시각 칸이 0 이었으므로 이 칸으로 첫 실행 시각을 잡을 수 있는지는 확인하지 못했습니다.
-- `default_download_location` 이 가리키는 폴더에서 Teams 로 받은 파일을 찾습니다.
+첫 실행 시각 칸이 0 이었으므로 이 칸으로 첫 실행 시각을 잡을 수 있는지는 확인하지 못했습니다. Teams 로 받은 파일은 `default_download_location` 이 가리키는 폴더에서 찾습니다.
 
 `tfw` 폴더에는 이름이 base64 로 인코딩된 SQLite 파일들이 있었습니다. `-wal`·`-shm` 짝도 있었습니다. 이름을 풀면 `telemetry_offline_storage_EMEACOMMERCIAL` 같은 원격 측정 저장소였습니다. 첫 16바이트는 `SQLite format 3` 과 0 바이트였습니다. (관찰)
 
@@ -107,8 +103,9 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 `AC`, `AppData`, `LocalCache`, `LocalState`(비어 있음), `RoamingState`(비어 있음), `Settings`, `SystemAppData`, `TempState`
 
 - `Settings` 에는 `settings.dat`, `settings.dat.LOG1`, `settings.dat.LOG2` 가 있었습니다. (관찰)
-- 이 `settings.dat` 의 형식은 확인하지 못했습니다. 스토어 앱의 `settings.dat` 은 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
-- 데이터는 `LocalState` 가 아니라 `LocalCache` 에 있었습니다. `LocalState` 가 비었다고 데이터가 없다고 보지 않습니다.
+이 `settings.dat` 의 형식은 확인하지 못했습니다. 스토어 앱의 `settings.dat` 은 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+
+데이터는 `LocalState` 가 아니라 `LocalCache` 에 있었으므로, `LocalState` 가 비었다고 데이터가 없다고 보지 않습니다.
 
 ### 로그
 
@@ -164,11 +161,9 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 
 ### 로그 줄 시각은 UTC 였습니다 (관찰)
 
-- 가장 최근 로그의 마지막 줄 시각은 `11:43:36.818898+09:00` 이었습니다.
-- 그 파일의 수정 시각은 20:43:36 KST 였습니다. UTC 로 바꾸면 11:43:36 입니다.
-- 곧 줄 시각의 숫자는 UTC 인데 `+09:00` 표시만 붙었습니다.
-- MSTeams 로그 2개와 Launcher 로그 1개에서 모두 같았습니다.
-- 파일 이름은 현지 시각이었습니다. 첫 줄이 `2026-09-20T23:33:05+09:00` 인 파일의 이름은 `MSTeams_2026-09-21_08-33-05.00.log` 였습니다. 23:33:05 UTC 는 다음 날 08:33:05 KST 입니다.
+가장 최근 로그의 마지막 줄 시각은 `11:43:36.818898+09:00` 이었고, 그 파일의 수정 시각은 20:43:36 KST, 곧 UTC 로 11:43:36 이었습니다. 줄 시각의 숫자는 UTC 인데 `+09:00` 표시만 붙은 것이며, MSTeams 로그 2개와 Launcher 로그 1개에서 모두 같았습니다.
+
+파일 이름은 현지 시각이었습니다. 첫 줄이 `2026-09-20T23:33:05+09:00` 인 파일의 이름은 `MSTeams_2026-09-21_08-33-05.00.log` 였습니다. 23:33:05 UTC 는 다음 날 08:33:05 KST 입니다.
 
 확인 범위는 Windows 11, 새 Teams 26225.1806.5074.1452, KST PC 한 대입니다. 다른 버전과 시간대에서도 같은지는 확인하지 못했습니다. 줄 시각을 표시대로 현지 시각으로 읽으면 KST PC 에서 9시간이 틀립니다. 증거 PC 에서도 마지막 줄 시각과 파일 수정 시각을 맞춰 본 뒤 씁니다. 증거 PC 의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 
@@ -233,7 +228,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 
 ## 실습
 
-새 Teams 가 들어간 공개 검체는 확인하지 못했습니다. Windows 11 가상 머신에 새 Teams 를 설치해 직접 시험합니다. 시험 전에 Teams 버전과 가상 머신의 시간대를 적어 둡니다.
+새 Teams 가 들어간 공개 검체는 확인하지 못했습니다. Windows 11 가상 머신에 새 Teams 를 설치해 직접 시험하고, 시험 전에 Teams 버전과 가상 머신의 시간대를 적어 둡니다.
 
 1. `EBWebView` 아래 프로필 폴더는 몇 개입니까? `teams.microsoft.com` 출처의 IndexedDB 는 어느 프로필에 있습니까?
 2. 메시지 하나를 보낸 직후 IndexedDB 폴더의 `.log` 에서 그 문장이 검색됩니까?

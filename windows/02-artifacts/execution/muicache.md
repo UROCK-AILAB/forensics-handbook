@@ -6,11 +6,7 @@ NirSoft 에 따르면 사용자가 새 프로그램을 쓰기 시작할 때 Wind
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- libyal 은 이 키를 다국어 사용자 인터페이스 캐시 (Multilingual User Interface (MUI) cache) 로 부릅니다.
-- NirSoft 의 설명은 이렇습니다. 새 응용 프로그램을 쓰기 시작할 때마다 Windows 가 실행 파일의 버전 리소스에서 앱 이름을 꺼냅니다. 그리고 나중에 쓰려고 이 이름을 `MuiCache` 키에 저장합니다.
-- 항목을 지워도 그 프로그램을 다시 실행하면 항목이 다시 생긴다고 NirSoft 는 적습니다.
-- 사용자 하이브에 있으므로 계정마다 따로 남습니다.
-- 실행 파일의 버전 리소스는 [실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
+libyal 은 이 키를 다국어 사용자 인터페이스 캐시 (Multilingual User Interface (MUI) cache) 로 부릅니다. NirSoft 의 설명에 따르면 새 응용 프로그램을 쓰기 시작할 때마다 Windows 가 실행 파일의 버전 리소스에서 앱 이름을 꺼내 나중에 쓰려고 `MuiCache` 키에 저장합니다. 항목을 지워도 그 프로그램을 다시 실행하면 항목이 다시 생긴다고 NirSoft 는 적습니다. 사용자 하이브에 있으므로 계정마다 따로 남습니다. 실행 파일의 버전 리소스는 [실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -75,10 +71,9 @@ MuiCache
 
 ## 시각 해석
 
-- 값에는 시각이 없습니다.
-- 키의 마지막 기록 시각 (LastWrite) 이 하나 있습니다. 이 시각은 키 안의 어떤 값이 마지막으로 바뀐 때를 말할 뿐, 어느 값인지는 말하지 않습니다.
-- 값이 놓인 순서로 쓴 순서를 짐작하는 근거는 이번에 연 자료에 없습니다. 순서로 시간 순서를 단정하지 않습니다.
-- 시각이 필요하면 같은 경로를 [BAM·DAM](background-activity-moderator.md), [UserAssist](userassist.md), [프리페치](prefetch/index.md) 에서 찾습니다.
+값에는 시각이 없고 키의 마지막 기록 시각 (LastWrite) 이 하나 있을 뿐입니다. 이 시각은 키 안의 어떤 값이 마지막으로 바뀐 때를 말할 뿐, 어느 값인지는 말하지 않습니다. 값이 놓인 순서로 쓴 순서를 짐작하는 근거는 이번에 연 자료에 없으므로 순서로 시간 순서를 단정하지 않습니다.
+
+시각이 필요하면 같은 경로를 [BAM·DAM](background-activity-moderator.md), [UserAssist](userassist.md), [프리페치](prefetch/index.md) 에서 찾습니다.
 
 ## 함정과 한계
 

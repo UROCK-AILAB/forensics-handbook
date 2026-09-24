@@ -6,11 +6,9 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 파이어폭스는 방문한 주소를 `moz_places` 표에 한 번씩 적어 둡니다. 같은 주소를 여러 번 방문하면 방문마다 `moz_historyvisits` 표에 행이 하나씩 늘어납니다.
-- 즐겨찾기와 폴더는 `moz_bookmarks` 표에 있습니다.
-- Firefox 21 부터 다운로드 기록도 `places.sqlite` 에 들어갑니다. 그 전에는 `downloads.sqlite` 라는 파일을 따로 썼습니다.
-- 주소창에 친 글자와 그때 고른 페이지는 `moz_inputhistory` 표에 남습니다.
-- 방문 하나에는 어떻게 그 페이지에 닿았는지를 나타내는 방문 유형 (visit type) 이 붙습니다. 링크를 눌렀는지, 주소창에 쳤는지, 리다이렉트로 넘어갔는지가 이 값으로 갈립니다.
+파이어폭스는 방문한 주소를 `moz_places` 표에 한 번씩 적어 두고, 같은 주소를 여러 번 방문하면 방문마다 `moz_historyvisits` 표에 행을 하나씩 늘립니다. 즐겨찾기와 폴더는 `moz_bookmarks` 표에, 주소창에 친 글자와 그때 고른 페이지는 `moz_inputhistory` 표에 남습니다. Firefox 21 부터는 다운로드 기록도 `places.sqlite` 에 들어가며, 그 전에는 `downloads.sqlite` 라는 파일을 따로 썼습니다.
+
+방문 하나에는 그 페이지에 어떻게 닿았는지를 나타내는 방문 유형 (visit type) 이 붙습니다. 링크를 눌렀는지, 주소창에 쳤는지, 리다이렉트로 넘어갔는지가 이 값으로 갈립니다.
 
 ## 위치와 버전별 차이
 
@@ -48,8 +46,8 @@
 ### `moz_historyvisits` 의 칸
 
 - `id`, `from_visit`, `place_id`, `visit_date`, `visit_type`, `session`, `source`, `triggeringPlaceId` 입니다.
-- `place_id` 는 `moz_places.id` 를 가리킵니다. 곧 어느 주소를 방문했는지 잇는 열쇠입니다.
-- `from_visit` 은 이 방문의 바로 앞 방문을 가리킵니다. 링크를 눌러 넘어온 경로를 되짚을 수 있습니다.
+- `place_id` 는 `moz_places.id` 를 가리키며, 어느 주소를 방문했는지 잇는 열쇠입니다.
+- `from_visit` 은 이 방문의 바로 앞 방문을 가리키므로 링크를 눌러 넘어온 경로를 되짚을 수 있습니다.
 - `visit_date` 는 방문 시각입니다.
 
 ### `visit_type` 값

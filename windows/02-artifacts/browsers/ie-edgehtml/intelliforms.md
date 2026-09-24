@@ -6,11 +6,9 @@ IE 7~9 는 웹 폼에 입력한 아이디·비밀번호를 사용자 하이브�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- IE 는 로그인 폼의 아이디·비밀번호를 자동 완성 (AutoComplete) 용으로 저장할 수 있습니다.
-- IE 7~9 는 이 값을 `IntelliForms\Storage2` 키에 둡니다.
-- 한 사이트에 아이디·비밀번호 쌍이 여러 개 있을 수 있습니다.
-- HTTP 기본 인증 (Basic Authentication) 창에 넣은 비밀번호는 다른 곳에 저장합니다. IE 7 이후 이 비밀번호는 사용자의 `Credentials` 폴더에 들어갑니다.
-- Windows 11 25H2 PC 의 `IntelliForms` 키에는 값도 하위 키도 없었습니다. `Storage2` 도 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+IE 는 로그인 폼의 아이디·비밀번호를 자동 완성 (AutoComplete) 용으로 저장할 수 있고, IE 7~9 는 이 값을 `IntelliForms\Storage2` 키에 둡니다. 한 사이트에 아이디·비밀번호 쌍이 여러 개 있을 수 있습니다. HTTP 기본 인증 (Basic Authentication) 창에 넣은 비밀번호는 다른 곳에 저장하는데, IE 7 이후 이 비밀번호는 사용자의 `Credentials` 폴더에 들어갑니다.
+
+Windows 11 25H2 PC 의 `IntelliForms` 키에는 값도 하위 키도 없었고 `Storage2` 도 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
 
 ## 위치와 버전별 차이
 
@@ -48,7 +46,7 @@ IE 7~9 는 웹 폼에 입력한 아이디·비밀번호를 사용자 하이브�
 
 - 값 데이터는 DPAPI (Data Protection API) 의 `CryptProtectData` 함수로 암호화돼 있습니다.
 - 추가 엔트로피 (Additional Entropy) 로 사이트 주소 자체를 넣습니다. 형식은 값 이름을 만들 때와 같은 UTF-16 문자열이고, 끝의 0 까지 넣습니다.
-- 그래서 주소를 모르면 풀 수 없습니다. 방문 기록에 그 주소가 남아 있어야 되살릴 수 있습니다.
+- 그래서 주소를 모르면 풀 수 없고, 방문 기록에 그 주소가 남아 있어야 되살릴 수 있습니다.
 - DPAPI 블롭과 마스터 키 구조는 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
 풀어낸 데이터는 아래 순서로 이어집니다.

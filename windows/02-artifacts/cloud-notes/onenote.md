@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-원노트는 전자 필기장을 구역마다 `.one` 파일 하나로 저장하고, 필기장 목차를 `.onetoc2` 파일로 저장합니다. 두 파일 모두 맨 앞 1,024바이트에 파일 머리가 있습니다. 파일 머리로 파일 종류, 소속 필기장, 바뀐 횟수를 알 수 있습니다. 파일 안의 속성에서는 제목·작성자·시각·첨부 파일을 꺼낼 수 있습니다. 동기화한 필기장은 로컬 백업 폴더와 캐시 폴더에도 흔적이 남습니다. 스토어 앱 원노트는 앱 폴더의 SQLite DB 에 검색 색인과 최근 필기장 주소를 남깁니다.
+원노트는 전자 필기장을 구역마다 `.one` 파일 하나로 저장하고, 필기장 목차를 `.onetoc2` 파일로 저장합니다. 두 파일 모두 맨 앞 1,024바이트가 파일 머리이며, 여기서 파일 종류, 소속 필기장, 바뀐 횟수를 알 수 있습니다. 파일 안의 속성에서는 제목·작성자·시각·첨부 파일을 꺼낼 수 있습니다. 동기화한 필기장은 로컬 백업 폴더와 캐시 폴더에도 흔적이 남습니다. 스토어 앱 원노트는 앱 폴더의 SQLite DB 에 검색 색인과 최근 필기장 주소를 남깁니다.
 
 이 페이지에서 "관찰" 이라고 적은 것은 Windows 11(빌드 26200) PC 한 대에서 폴더와 레지스트리 키가 있는지만 본 결과입니다. 한 대의 결과이므로 모든 PC 에 맞는다고 보장하지 못합니다.
 
@@ -12,7 +12,7 @@
 
 원노트 파일은 개정 저장 파일 (revision store file) 형식입니다. 구역 (section) 파일은 `.one` 이고, 목차 (table of contents) 파일은 `.onetoc2` 입니다. (MS-ONESTORE)
 
-Microsoft 는 이 형식을 공개 명세 두 개로 설명합니다. [MS-ONESTORE] 는 저장 구조를 다룹니다. [MS-ONE] 은 원노트 내용 구조를 다룹니다. (MS-ONESTORE)
+Microsoft 는 이 형식을 공개 명세 두 개로 설명합니다. [MS-ONESTORE] 는 저장 구조를, [MS-ONE] 은 원노트 내용 구조를 다룹니다. (MS-ONESTORE)
 
 원노트는 쓰는 방식에 따라 흔적을 여러 곳에 남깁니다.
 
@@ -62,7 +62,7 @@ KAPE 수집 대상 파일(작성자 Andrew Rathbun, 버전 1.0)은 이 폴더 �
 | `OneNote\16.0\NoteTags\*LiveId.db` | 사용자가 정한 태그입니다 |
 | `OneNote\16.0\RecentSearches\RecentSearches.db` | 최근 검색어입니다. 작성자 PC 에서는 비어 있었습니다 |
 
-- 위 설명은 모두 작성자가 자기 PC 에서 본 것입니다. 작성자는 여러 항목에 "~로 보인다 (appears to)" 라고 적었습니다. 공식 문서로 확인한 내용이 아닙니다.
+- 위 설명은 모두 작성자가 자기 PC 에서 본 것입니다. 작성자는 여러 항목에 "~로 보인다 (appears to)" 라고 적었고, 공식 문서로 확인한 내용도 아닙니다.
 - 각 DB 의 표와 칸 이름은 확인하지 못했습니다. DB 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 - 이 KAPE 대상에는 데스크톱 원노트의 `Backup`·`cache` 경로가 없습니다. (KAPE 대상 파일)
 - 스토어 앱 폴더 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
@@ -148,7 +148,7 @@ GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 �
 | `.onetoc2` 의 guidFileType | `{43FF2FA1-EFD9-4C76-9EE2-10EA5722765F}` | `A1 2F FF 43 EF D9 76 4C 9E E2 10 EA 57 22 76 5F` |
 | 두 파일의 guidFileFormat (0x030) | `{109ADD3F-911B-49F5-A5D0-1791EDC8AED8}` | `3F DD 9A 10 1B 91 F5 49 A5 D0 17 91 ED C8 AE D8` |
 
-파일 머리는 파일 맨 앞에 있어야 하고, guidFileType 값은 형식마다 정해져 있습니다. 그래서 첫 16바이트로 `.one` 과 `.onetoc2` 를 가릴 수 있습니다. 확장자를 바꾼 파일도 이 16바이트로 찾습니다. 지운 파일을 찾는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+파일 머리는 파일 맨 앞에 있어야 하고 guidFileType 값은 형식마다 정해져 있어서 첫 16바이트로 `.one` 과 `.onetoc2` 를 가릴 수 있습니다. 확장자를 바꾼 파일도 이 16바이트로 찾습니다. 지운 파일을 찾는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ### 페이지 속성 (pyOneNote 기준)
 
@@ -226,7 +226,7 @@ pyOneNote 는 시각 속성을 값 길이에 따라 두 가지로 풉니다. (py
 
 - pyOneNote 는 속성 이름에 `time` 이 든 속성만 시각으로 풉니다. TopologyCreationTimeStamp, CreationTimeStamp, LastModifiedTimeStamp, LastModifiedTime 이 여기에 듭니다. NoteTagCreated, NoteTagCompleted, TaskTagDueDate 는 이름에 `time` 이 없어서 pyOneNote 가 시각으로 풀지 않습니다. 이 값들이 시각인지는 확인하지 못했습니다. (pyOneNote)
 - 어느 속성이 몇 바이트인지는 명세로 확인하지 못했습니다. 값 길이를 보고 형식을 가립니다.
-- Time32 는 초 단위이고 FILETIME 은 100ns 단위입니다. 같은 사건이라도 두 값의 정밀도가 다릅니다. 두 값이 초 아래에서 어긋나도 이상한 일이 아닙니다.
+- Time32 는 초 단위이고 FILETIME 은 100ns 단위라서 같은 사건이라도 두 값의 정밀도가 다릅니다. 두 값이 초 아래에서 어긋나도 이상한 일이 아닙니다.
 - Time32 의 기준이 UTC 인지는 명세로 확인하지 못했습니다. pyOneNote 코드 주석은 기준을 "1980-01-01 UTC" 라고 적었습니다. 하지만 계산할 때는 시간대를 붙이지 않습니다. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다.
 - FILETIME·Time32 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 속성 시각이 어떤 동작에서 바뀌는지는 참고한 자료로 확인하지 못했습니다.

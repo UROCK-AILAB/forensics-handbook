@@ -8,10 +8,9 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 매크로가 든 문서를 저장하면 VBA 프로젝트가 문서 파일 안에 함께 들어갑니다. 코드는 `vbaProject.bin` 이나 `Macros/VBA/` 저장소 같은 OLE 구조 안에 있습니다(참고 1).
-- VBA 프로젝트에는 프로젝트 이름, 모듈 이름, 모듈 소스, 컴파일된 코드, 코드 페이지 같은 값이 남습니다(관찰).
-- 문서를 열거나 닫을 때 저절로 실행되는 프로시저 이름이 있습니다. 목록은 아래 "구조" 에 있습니다.
-- 사고 대응에서는 첨부 파일이나 받은 문서에 매크로가 있는지, 자동 실행 이름과 의심 키워드가 있는지 먼저 봅니다. 공개 도구 olevba 가 이런 항목을 찾아 줍니다(참고 1).
+매크로가 든 문서를 저장하면 VBA 프로젝트가 문서 파일 안에 함께 들어가고, 코드는 `vbaProject.bin` 이나 `Macros/VBA/` 저장소 같은 OLE 구조 안에 놓입니다(참고 1). VBA 프로젝트에는 프로젝트 이름, 모듈 이름, 모듈 소스, 컴파일된 코드, 코드 페이지 같은 값이 남습니다(관찰). 문서를 열거나 닫을 때 저절로 실행되는 프로시저 이름도 있으며, 목록은 아래 "구조" 에 있습니다.
+
+사고 대응에서는 첨부 파일이나 받은 문서에 매크로가 있는지, 자동 실행 이름과 의심 키워드가 있는지 먼저 봅니다. 공개 도구 olevba 가 이런 항목을 찾아 줍니다(참고 1).
 
 ## 위치와 버전별 차이
 
@@ -23,9 +22,7 @@
 | 2007 이후 OpenXML | `.docm`·`.dotm`·`.xlsm`·`.xlsb`·`.pptm`·`.ppsm` | ZIP 안의 `vbaProject.bin`. Excel 추가 기능 `.XLAM` 에서는 `xl/vbaProject.bin` 이었습니다(관찰) |
 | 그 밖에 olevba 가 읽는 형식 | Word 2003 XML, MHTML (`.mht`), Publisher (`.pub`), SYLK (`.slk`) | 이 페이지에서 실물로 보지 않았습니다 |
 
-- `_VBA_PROJECT_CUR` 아래 구성은 `vbaProject.bin` 의 루트와 같았습니다(관찰).
-- Word 97-2003 문서의 `Macros` 저장소는 olevba 문서에 이름만 나옵니다(참고 1). 이 페이지에서 실물로 보지 못했습니다.
-- `vbaProject.bin` 의 첫 8바이트는 `D0 CF 11 E0 A1 B1 1A E1` 이었습니다(관찰). OLE 복합 파일이라는 뜻입니다. 이 형식은 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
+`_VBA_PROJECT_CUR` 아래 구성은 `vbaProject.bin` 의 루트와 같았습니다(관찰). Word 97-2003 문서의 `Macros` 저장소는 olevba 문서에 이름만 나오는데(참고 1), 이 페이지에서는 실물로 보지 못했습니다. `vbaProject.bin` 의 첫 8바이트는 `D0 CF 11 E0 A1 B1 1A E1` 이었고(관찰), 이는 OLE 복합 파일이라는 뜻이며 이 형식은 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
 
 ### OpenXML 의 서명 파트 (관찰)
 
@@ -37,8 +34,7 @@
 | `vbaProjectSignatureAgile.bin` | `.../2014/relationships/vbaProjectSignatureAgile` |
 | `vbaProjectSignatureV3.bin` | `.../2020/07/relationships/vbaProjectSignatureV3` |
 
-- 97-2003 OLE 파일 안에서 서명이 들어가는 스트림 이름은 확인하지 못했습니다. 관찰한 `EXPTOOWS.XLA` 에는 서명이 없었습니다.
-- 서명 파트가 있다는 것과 서명이 유효하다는 것은 다릅니다. 이 페이지에서는 서명 검증을 다루지 않습니다.
+97-2003 OLE 파일 안에서 서명이 들어가는 스트림 이름은 확인하지 못했으며, 관찰한 `EXPTOOWS.XLA` 에는 서명이 없었습니다. 서명 파트가 있다는 것과 서명이 유효하다는 것은 다르고, 이 페이지에서는 서명 검증을 다루지 않습니다.
 
 ### 인터넷에서 받은 파일의 매크로 차단 (참고 2)
 
@@ -68,12 +64,9 @@ Office 는 아래 순서로 매크로를 켤지 정합니다(참고 2).
 | 6 | 이 변경 전에 사용자가 [콘텐츠 사용] 을 눌러 신뢰 문서가 된 파일인지 | 그렇다면 매크로를 켭니다 |
 | 7 | 나머지 | 막고 SECURITY RISK 배너를 띄웁니다 |
 
-- 새 SECURITY RISK 배너에는 [콘텐츠 사용] 단추가 없습니다. 예전 SECURITY WARNING 배너에는 이 단추가 있었습니다.
-- 정책 이름은 "Block macros from running in Office files from the Internet" 과 "VBA Macro Notification Settings" 입니다. Excel 은 "Macro Notification Settings" 라는 이름을 씁니다.
-- 정책은 사용자 구성\정책\관리 템플릿 아래 앱마다 있습니다. Word 의 예는 `Microsoft Word 2016\Word Options\Security\Trust Center` 입니다.
-- 이 정책은 Microsoft 365 Apps for enterprise 에서만 쓸 수 있습니다.
-- 보안 센터의 매크로 설정 기본값은 "알림과 함께 모든 매크로 사용 안 함" 입니다.
-- 설정 값이 남는 레지스트리 경로는 참고 2 에 나오지 않습니다. 사용자별 매크로 설정 값은 [신뢰 문서 기록 (Trust Records)](../file-folder-usage/microsoft-office/trust-records.md) 에서 다룹니다.
+새 SECURITY RISK 배너에는 [콘텐츠 사용] 단추가 없지만, 예전 SECURITY WARNING 배너에는 이 단추가 있었습니다. 정책 이름은 "Block macros from running in Office files from the Internet" 과 "VBA Macro Notification Settings" 이고, Excel 은 "Macro Notification Settings" 라는 이름을 씁니다. 정책은 사용자 구성\정책\관리 템플릿 아래 앱마다 있으며, Word 의 예는 `Microsoft Word 2016\Word Options\Security\Trust Center` 입니다. 이 정책은 Microsoft 365 Apps for enterprise 에서만 쓸 수 있고, 보안 센터의 매크로 설정 기본값은 "알림과 함께 모든 매크로 사용 안 함" 입니다.
+
+설정 값이 남는 레지스트리 경로는 참고 2 에 나오지 않습니다. 사용자별 매크로 설정 값은 [신뢰 문서 기록 (Trust Records)](../file-folder-usage/microsoft-office/trust-records.md) 에서 다룹니다.
 
 ## 구조
 
@@ -122,8 +115,7 @@ Office 는 아래 순서로 매크로를 켤지 정합니다(참고 2).
 | `SOLVER.XLAM` | `CC 61 B5 00 00 03 00` |
 | `EXPTOOWS.XLA` | `CC 61 A3 00 00 01 00` |
 
-- 앞 2바이트 `CC 61` 은 두 파일이 같았습니다. 그 뒤 2바이트(0x00B5, 0x00A3)는 달랐습니다.
-- 이 값이 어떤 Office 판에 대응하는지는 확인하지 못했습니다.
+앞 2바이트 `CC 61` 은 두 파일이 같았고 그 뒤 2바이트(0x00B5, 0x00A3)는 달랐는데, 이 값이 어떤 Office 판에 대응하는지는 확인하지 못했습니다.
 
 ### dir 스트림 (관찰)
 
@@ -138,7 +130,7 @@ Office 는 아래 순서로 매크로를 켤지 정합니다(참고 2).
 | 0x0003 | CODEPAGE | 1252 | 1252 |
 | 0x0004 | 프로젝트 이름 | `Solver` | |
 
-- `EXPTOOWS.XLA` 는 한국어 폴더(1042)에 있었지만 CODEPAGE 는 1252 였습니다. 폴더 언어로 코드 페이지를 짐작하지 않습니다.
+`EXPTOOWS.XLA` 는 한국어 폴더(1042)에 있었지만 CODEPAGE 는 1252 였으므로, 폴더 언어로 코드 페이지를 짐작하지 않습니다.
 - SYSKIND 값은 0 = 16비트 Windows, 1 = 32비트 Windows, 2 = Macintosh, 3 = 64비트 Windows 로 읽습니다(oletools 소스).
 
 모듈마다 아래 레코드가 있습니다.
@@ -157,9 +149,7 @@ Office 는 아래 순서로 매크로를 켤지 정합니다(참고 2).
 
 모듈 스트림의 앞부분은 소스가 아닙니다.
 
-- `SOLVER.XLAM` 의 `modLocalize` 스트림은 3,448바이트였고, MODULEOFFSET 은 2,698 이었습니다.
-- 2,698 위치의 바이트는 `01` 이었습니다. 여기부터 풀면 `Attribute VB_Name = "modLocalize"` 로 시작하는 소스 글자가 나왔습니다.
-- 그 앞 2,698바이트는 컴파일된 코드 (P-code) 영역입니다. oletools 는 이 영역을 pcodedmp 로 풀어 읽습니다(oletools 소스).
+`SOLVER.XLAM` 의 `modLocalize` 스트림은 3,448바이트였고 MODULEOFFSET 은 2,698 이었습니다. 2,698 위치의 바이트는 `01` 이었으며, 여기부터 풀면 `Attribute VB_Name = "modLocalize"` 로 시작하는 소스 글자가 나왔습니다. 그 앞 2,698바이트는 컴파일된 코드 (P-code) 영역이고, oletools 는 이 영역을 pcodedmp 로 풀어 읽습니다(oletools 소스).
 
 > 그림 자리: 모듈 스트림 하나를 가로 막대로 그리고, 0 ~ MODULEOFFSET 구간을 P-code, MODULEOFFSET 부터 끝까지를 압축된 소스(첫 바이트 01)로 나눠 표시. dir 스트림의 0x0031 레코드에서 화살표로 경계를 가리킴
 

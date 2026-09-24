@@ -10,12 +10,7 @@ EXIF 는 사진 파일 안에 들어가는 메타데이터입니다. 기기 제�
 
 ### 칸은 목록 몇 개에 나뉘어 들어갑니다
 
-EXIF 의 칸은 태그 (tag) 번호로 구분합니다. 칸들은 이미지 파일 디렉터리 (Image File Directory, IFD) 라는 목록에 모여 있습니다.
-
-- IFD0 에는 기기와 파일에 관한 칸이 있습니다(참고 1).
-- IFD0 의 ExifOffset 칸이 Exif IFD 를 가리키고, GPSInfo 칸이 GPS IFD 를 가리킵니다(참고 1).
-- IFD1 에는 섬네일 (thumbnail) 의 위치와 길이가 있습니다(참고 1).
-- 칸 이름을 보면 기기가 채우는 칸(Make·Model·SerialNumber·LensModel)과 프로그램이 채우는 칸(Software)이 섞여 있습니다.
+EXIF 의 칸은 태그 (tag) 번호로 구분하며, 칸들은 이미지 파일 디렉터리 (Image File Directory, IFD) 라는 목록에 모여 있습니다. IFD0 에는 기기와 파일에 관한 칸이 있고, 그 안의 ExifOffset 칸이 Exif IFD 를, GPSInfo 칸이 GPS IFD 를 가리킵니다(참고 1). IFD1 에는 섬네일 (thumbnail) 의 위치와 길이가 있습니다(참고 1). 칸 이름을 보면 기기가 채우는 칸(Make·Model·SerialNumber·LensModel)과 프로그램이 채우는 칸(Software)이 섞여 있습니다.
 
 ### 포렌식에서 자주 보는 칸
 
@@ -47,16 +42,14 @@ EXIF 의 칸은 태그 (tag) 번호로 구분합니다. 칸들은 이미지 파�
 | Exif IFD | 0xA433 · 0xA434 | LensMake · LensModel | 렌즈 제조사·모델 |
 | IFD1 | 0x0201 · 0x0202 | ThumbnailOffset · ThumbnailLength | 섬네일 위치·길이 |
 
-- 탐색기는 XPTitle 보다 ImageDescription 을 먼저 씁니다(참고 1).
-- GPS IFD 안의 칸 번호와 단위는 이 페이지에서 확인하지 못했습니다. GPS 시각이 UTC 인지도 확인하지 못했습니다.
+탐색기는 XPTitle 보다 ImageDescription 을 먼저 씁니다(참고 1). GPS IFD 안의 칸 번호와 단위, GPS 시각이 UTC 인지는 이 페이지에서 확인하지 못했습니다.
 
 ### 한 파일에 메타데이터가 여러 벌 들어갑니다 (관찰)
 
 Windows 기본 이미지 `C:\Windows\Web\touchkeyboard\TouchKeyboardThemeDark000.jpg` 에는 EXIF 말고도 메타데이터 조각이 여럿 있었습니다.
 
 - 조각 순서는 APP1 (Exif) → APP13 (Photoshop) → APP1 (XMP, `http://ns.adobe.com/xap/1.0/`) → APP2 (ICC_PROFILE) → APP14 (Adobe) 였습니다.
-- XMP 속성의 뜻은 [PDF 정보 사전과 XMP](document-metadata/pdf-info-xmp.md) 에서 다룹니다.
-- 같은 뜻의 값이 IFD0, Exif IFD, XMP, 섬네일에 따로 있을 수 있습니다. 어긋난 예는 아래 "구조" 에 있습니다.
+XMP 속성의 뜻은 [PDF 정보 사전과 XMP](document-metadata/pdf-info-xmp.md) 에서 다룹니다. 같은 뜻의 값이 IFD0, Exif IFD, XMP, 섬네일에 따로 있을 수 있으며, 어긋난 예는 아래 "구조" 에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -122,9 +115,7 @@ TIFF 머리는 이렇게 읽었습니다.
 | 프로그램 이름 | IFD0 Software = `Adobe Photoshop 21.1 (Windows)` | XMP CreatorTool = `Adobe Photoshop 22.0 (Windows)` |
 | 이미지 크기 | IFD0 ImageWidth·ImageLength = 4096 × 2304 | Exif IFD PixelXDimension·PixelYDimension = 2736 × 1539 |
 
-- 실제 이미지 크기는 2736 × 1539 였습니다. Exif IFD 쪽 값과 맞습니다.
-- IFD1 에는 JPEG 섬네일(Compression 값 6, 오프셋 394, 길이 2070)이 따로 있었습니다.
-- 편집 프로그램이 모든 칸을 함께 고치지는 않는다는 뜻입니다.
+실제 이미지 크기는 2736 × 1539 로 Exif IFD 쪽 값과 맞았고, IFD1 에는 JPEG 섬네일(Compression 값 6, 오프셋 394, 길이 2070)이 따로 있었습니다. 편집 프로그램이 모든 칸을 함께 고치지는 않는다는 뜻입니다.
 
 > 그림 자리: JPEG 한 파일 안에서 APP1(Exif: IFD0 → Exif IFD, IFD1 섬네일), APP13, APP1(XMP) 조각을 나란히 그리고, 같은 뜻의 칸(프로그램 이름·이미지 크기·시각)을 선으로 이어 값이 다른 곳을 표시
 
@@ -156,9 +147,7 @@ TIFF 머리는 이렇게 읽었습니다.
 | DateTimeOriginal, 0x9003 | Exif IFD | OffsetTimeOriginal, 0x9011 | SubSecTimeOriginal, 0x9291 |
 | CreateDate (DateTimeDigitized), 0x9004 | Exif IFD | OffsetTimeDigitized, 0x9012 | SubSecTimeDigitized, 0x9292 |
 
-- 날짜 글자열 형식은 `YYYY:mm:dd HH:MM:SS` 입니다(참고 1).
-- 날짜 글자열에는 시간대가 없습니다. 시간대는 OffsetTime 계열 칸에 따로 적습니다(참고 1).
-- DateTimeOriginal 은 원본 사진을 찍은 시각입니다(참고 1). 기기 시계가 맞았는지는 이 값만으로 알 수 없습니다.
+날짜 글자열 형식은 `YYYY:mm:dd HH:MM:SS` 이고 시간대가 없어서, 시간대는 OffsetTime 계열 칸에 따로 적습니다(참고 1). DateTimeOriginal 은 원본 사진을 찍은 시각인데(참고 1), 기기 시계가 맞았는지는 이 값만으로 알 수 없습니다.
 
 ### EXIF 와 XMP 의 시각 (관찰)
 
@@ -171,9 +160,7 @@ TIFF 머리는 이렇게 읽었습니다.
 | XMP CreateDate | `2020-12-11T17:19:52+01:00` |
 | XMP 편집 이력 (stEvt:when) | `2020-12-11T17:19:52+01:00`, `2020-12-14T11:24:57+01:00`, `2021-04-09T09:43:05-07:00` |
 
-- EXIF 값은 XMP 값에서 시간대만 뺀 모양입니다. 편집한 컴퓨터의 현지 시각이었습니다.
-- XMP 편집 이력을 보면 편집한 곳의 시간대가 +01:00 에서 -07:00 으로 바뀌었습니다.
-- 시간대가 다른 곳에서 편집한 파일은 EXIF 시각만 늘어놓으면 순서가 틀릴 수 있습니다. 시간대가 적힌 XMP 값과 함께 봅니다.
+EXIF 값은 XMP 값에서 시간대만 뺀 모양이며, 편집한 컴퓨터의 현지 시각이었습니다. XMP 편집 이력을 보면 편집한 곳의 시간대가 +01:00 에서 -07:00 으로 바뀌었습니다. 그래서 시간대가 다른 곳에서 편집한 파일은 EXIF 시각만 늘어놓으면 순서가 틀릴 수 있으므로, 시간대가 적힌 XMP 값과 함께 봅니다.
 
 ### 탐색기의 "찍은 날짜" (관찰)
 
@@ -185,9 +172,8 @@ Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOrigina
 | 2 | `+09:00` | 2020-01-02 오전 3:04 | 2020-01-01 18:04:05 (Kind=Unspecified) |
 | 3 | `-05:00` | 2020-01-02 오전 3:04 | 2020-01-01 18:04:05 (Kind=Unspecified) |
 
-- 세 파일 모두 값이 같았습니다. 탐색기는 OffsetTimeOriginal 을 반영하지 않았습니다.
-- System.Photo.DateTaken 은 EXIF 값에서 9시간을 뺀 값이었습니다. 9시간은 이 PC 의 시간대 차이입니다.
-- 이 Windows 는 EXIF 시각을 "보고 있는 PC 의 현지 시각" 으로 보고 UTC 로 바꿔 두었습니다. 화면에 보여 줄 때는 다시 현지 시각으로 바꿨습니다.
+세 파일 모두 값이 같았고, 탐색기는 OffsetTimeOriginal 을 반영하지 않았습니다. System.Photo.DateTaken 은 EXIF 값에서 9시간을 뺀 값이었는데, 9시간은 이 PC 의 시간대 차이입니다. 이 Windows 는 EXIF 시각을 "보고 있는 PC 의 현지 시각" 으로 보고 UTC 로 바꿔 두었다가, 화면에 보여 줄 때 다시 현지 시각으로 바꿨습니다.
+
 - 이대로라면 Windows 검색 색인에 저장된 찍은 날짜도 색인한 PC 의 시간대에 따라 달라질 수 있습니다. 색인 DB 값을 직접 비교하지는 않았습니다. 색인 속에 남은 파일 속성은 [파일 속성 되살리기 (PropertyStore)](../file-folder-usage/windows-search/propertystore.md) 에서 다룹니다.
 - 분석 대상 PC 의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 - 파일 시스템 시각은 EXIF 와 다른 기록입니다. 읽는 법은 [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.

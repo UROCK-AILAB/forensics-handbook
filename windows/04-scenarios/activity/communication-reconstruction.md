@@ -1,6 +1,6 @@
 # 누구와 연락을 주고받았나 (Communication Reconstruction)
 
-PC 한 대를 두고 "이 사용자가 누구와, 언제, 무엇을 주고받았나" 를 묻는 조사를 다룹니다. 연락 수단은 메일 프로그램, 메신저, 브라우저로 쓰는 웹메일까지 여러 가지입니다. 수단마다 데이터가 남는 곳이 다릅니다. 이 페이지는 어떤 연락 수단을 썼는지부터 가리고, 수단마다 어디를 보는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다.
+PC 한 대를 두고 "이 사용자가 누구와, 언제, 무엇을 주고받았나" 를 묻는 조사를 다룹니다. 연락 수단은 메일 프로그램, 메신저, 브라우저로 쓰는 웹메일까지 여러 가지이고 수단마다 데이터가 남는 곳이 다릅니다. 이 페이지는 어떤 연락 수단을 썼는지부터 가리고, 수단마다 어디를 보는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다.
 
 프로그램마다의 파일 구조는 각 아티팩트 페이지에 있습니다. 이 페이지에서는 Outlook 데이터 파일의 위치만 Microsoft 문서로 확인해 적었습니다. 다른 프로그램의 위치와 형식은 링크한 페이지에서 확인합니다.
 
@@ -48,17 +48,14 @@ Microsoft 문서가 적은 위치와 동작입니다.
 | | | 옛 Windows: `drive:\Documents and Settings\<user>\Local Settings\Application Data\Microsoft\Outlook` [1] |
 | 오프라인 폴더 파일 (.ost) | Exchange·Microsoft 365·Outlook.com 계정은 이 파일을 쓸 수 있습니다[1]. | `AppData\Local\Microsoft\Outlook` [1] |
 
-- .ost 는 다른 컴퓨터로 옮길 수 없습니다[1].
-- 계정을 다시 추가하면 Outlook 이 .ost 를 새로 만듭니다[1].
-- 서명·서식 파일·사전 같은 다른 설정은 `AppData\Roaming\Microsoft\` 아래 폴더에 있습니다[1].
-- 이 문서는 새 Outlook for Windows 를 다루지 않습니다[1]. 새 Outlook 은 [새 Outlook](../../02-artifacts/mail/new-outlook.md) 에서 따로 봅니다.
+.ost 는 다른 컴퓨터로 옮길 수 없고[1], 계정을 다시 추가하면 Outlook 이 .ost 를 새로 만듭니다[1]. 서명·서식 파일·사전 같은 다른 설정은 `AppData\Roaming\Microsoft\` 아래 폴더에 있습니다[1]. 이 문서는 새 Outlook for Windows 를 다루지 않으므로[1], 새 Outlook 은 [새 Outlook](../../02-artifacts/mail/new-outlook.md) 에서 따로 봅니다.
 
 **조사에서 뜻하는 것.**
 
 - Exchange 계정을 쓰는 PC 라도 `Documents\Outlook Files` 를 함께 봅니다. 이런 계정에 .pst 가 없다고 적은 원문은 찾지 못했습니다.
-- .ost 는 계정을 다시 추가할 때 새로 생깁니다. 그래서 .ost 파일의 만든 시각은 계정을 처음 추가한 시각이 아닐 수 있습니다.
-- .ost 를 다른 PC 의 Outlook 에 붙여 여는 방법은 쓸 수 없습니다. 파일을 직접 읽는 방법은 [아웃룩](../../02-artifacts/mail/outlook/index.md) 에서 봅니다.
-- 서버와 동기화할 때 .ost 에서 무엇이 바뀌는지, 지운 항목을 어떻게 되살리는지도 [아웃룩](../../02-artifacts/mail/outlook/index.md) 에서 다룹니다.
+- .ost 는 계정을 다시 추가할 때 새로 생기므로 .ost 파일의 만든 시각은 계정을 처음 추가한 시각이 아닐 수 있습니다.
+- .ost 를 다른 PC 의 Outlook 에 붙여 여는 방법은 쓸 수 없고, 파일을 직접 읽는 방법은 [아웃룩](../../02-artifacts/mail/outlook/index.md) 에서 봅니다.
+- 서버와 동기화할 때 .ost 에서 무엇이 바뀌는지와 지운 항목을 되살리는 방법도 [아웃룩](../../02-artifacts/mail/outlook/index.md) 에서 다룹니다.
 - 받는 사람 자동 완성 목록의 위치와 형식은 이번 자료로 확인하지 못했습니다. [아웃룩](../../02-artifacts/mail/outlook/index.md) 에서 확인합니다.
 
 **메일 한 통에서 읽을 것.** 보낸 사람·받는 사람·날짜는 메일 헤더에서 읽습니다. 헤더를 읽는 법은 [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) 에 있습니다. Outlook 이 저장한 항목의 속성은 [MAPI 속성](../../01-foundations/app-mail-data/mapi-property.md) 에서 봅니다.
@@ -81,7 +78,7 @@ Microsoft 문서가 적은 위치와 동작입니다.
 
 ## 웹메일과 웹 메신저
 
-브라우저로 쓴 연락은 메일 프로그램의 저장소에 없습니다. 브라우저 방문 기록과 캐시에서 흔적을 찾습니다. PC 에서 본문을 얼마나 되살릴 수 있는지는 이번 자료로 확인하지 못했습니다. [웹 사용 행위 재구성](web-activity.md) 과 [크롬 계열 브라우저](../../02-artifacts/browsers/chrome-edge-whale/index.md) 에서 봅니다. 시크릿 창으로 썼다면 [시크릿 모드로 무엇을 했나](private-browsing.md) 를 봅니다.
+브라우저로 쓴 연락은 메일 프로그램의 저장소에 없으므로 브라우저 방문 기록과 캐시에서 흔적을 찾습니다. PC 에서 본문을 얼마나 되살릴 수 있는지는 이번 자료로 확인하지 못했습니다. [웹 사용 행위 재구성](web-activity.md) 과 [크롬 계열 브라우저](../../02-artifacts/browsers/chrome-edge-whale/index.md) 에서 봅니다. 시크릿 창으로 썼다면 [시크릿 모드로 무엇을 했나](private-browsing.md) 를 봅니다.
 
 ## 분석 흐름
 

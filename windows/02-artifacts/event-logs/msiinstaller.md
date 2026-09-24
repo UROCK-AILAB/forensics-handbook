@@ -2,19 +2,13 @@
 
 ## 한 줄 요약
 
-Windows Installer (MSI) 로 프로그램을 설치하거나 제거하거나 구성을 바꾸면 응용 프로그램 로그 (Application) 에 이벤트가 남습니다. 이벤트의 원본 (Source) 이름은 MsiInstaller 입니다. 이벤트에는 제품 이름, 버전, 제조사, 결과 상태가 적힙니다. 관찰 PC 에서는 Binary 칸에 제품 코드 (ProductCode) 가 들어 있었습니다. 제품을 지운 뒤에도 이벤트는 남습니다. 그래서 레지스트리 설치 목록에서 사라진 앱의 이력을 찾을 수 있습니다. 시각은 UTC 입니다. 관찰 PC 처럼 로그가 순환하면 오래된 기록부터 사라집니다.
+Windows Installer (MSI) 로 프로그램을 설치하거나 제거하거나 구성을 바꾸면 응용 프로그램 로그 (Application) 에 이벤트가 남습니다. 이벤트의 원본 (Source) 이름은 MsiInstaller 이고, 제품 이름, 버전, 제조사, 결과 상태가 적힙니다. 관찰 PC 에서는 Binary 칸에 제품 코드 (ProductCode) 가 들어 있었습니다. 제품을 지운 뒤에도 이벤트는 남으므로 레지스트리 설치 목록에서 사라진 앱의 이력을 찾을 수 있습니다. 시각은 UTC 이며, 관찰 PC 처럼 로그가 순환하면 오래된 기록부터 사라집니다.
 
 > 이 페이지에서 "관찰 PC" 는 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) PC 한 대를 말합니다. 관찰 PC 에서 본 내용은 모두 "확인 범위: Win11 25H2 한 대" 입니다. 다른 PC 에서도 같다고 보장하지 못합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Windows Installer 는 아래 일을 이벤트 로그에 씁니다.
-
-- 설치·제거·복구가 성공했는지 실패했는지
-- 제품을 구성하다가 난 오류
-- 손상된 구성 데이터를 찾은 일
-
-기록이 많아 로그 파일이 가득 차면 설치 관리자가 "The Application log file is full." 메시지를 띄웁니다.
+Windows Installer 는 설치·제거·복구가 성공했는지 실패했는지, 제품을 구성하다가 난 오류, 손상된 구성 데이터를 찾은 일을 이벤트 로그에 씁니다. 기록이 많아 로그 파일이 가득 차면 설치 관리자가 "The Application log file is full." 메시지를 띄웁니다.
 
 ### 이벤트 번호를 짓는 규칙
 
@@ -44,8 +38,7 @@ Microsoft 문서가 적은 메시지 틀입니다.
 | 1037 | 업데이트 제거 결과 | 1036 과 같은 틀 |
 | 1038 | 재부팅이 필요함 | 재부팅 종류 (Reboot Type) 와 재부팅 이유 (Reboot Reason) 를 적습니다 |
 
-- 1033 의 칸은 차례로 ProductName, ProductVersion, ProductLanguage, 상태, Manufacturer 입니다.
-- 1036·1037 의 Update 칸에는 패치 이름이 들어갑니다. 패치에 MsiPatchMetadata 표가 있으면 알아보기 쉬운 이름이 들어갑니다. 없으면 패치 코드 GUID 가 들어갑니다.
+1033 의 칸은 차례로 ProductName, ProductVersion, ProductLanguage, 상태, Manufacturer 입니다. 1036·1037 의 Update 칸에는 패치 이름이 들어가는데, 패치에 MsiPatchMetadata 표가 있으면 알아보기 쉬운 이름이, 없으면 패치 코드 GUID 가 들어갑니다.
 
 1038 의 두 값은 아래와 같습니다.
 
@@ -63,11 +56,9 @@ Microsoft 문서가 적은 메시지 틀입니다.
 
 관찰 PC 에는 Microsoft 이벤트 표에 없는 1040 과 1042 가 있었습니다.
 
-- 1040 은 "Beginning a Windows Installer transaction: <.msi 경로>. Client Process Id: <번호>." 입니다.
-- 1042 는 "Ending a Windows Installer transaction: …" 입니다.
-- Data 1 에는 .msi 경로가, Data 2 에는 클라이언트 프로세스 ID 가 들어 있었습니다.
+1040 은 "Beginning a Windows Installer transaction: <.msi 경로>. Client Process Id: <번호>." 이고, 1042 는 "Ending a Windows Installer transaction: …" 입니다. Data 1 에는 .msi 경로가, Data 2 에는 클라이언트 프로세스 ID 가 들어 있었습니다.
 
-관찰 PC 의 1040 한 건은 경로가 `C:\Users\<사용자>\AppData\Local\Temp\<임의 폴더>\data\<16진 32자>-x64.msi` 모양이었습니다. Client Process Id 는 27940 이었습니다. 이 경로로 설치에 쓴 .msi 파일이 그때 사용자 임시 폴더에 있었다는 것을 알 수 있습니다.
+관찰 PC 의 1040 한 건은 경로가 `C:\Users\<사용자>\AppData\Local\Temp\<임의 폴더>\data\<16진 32자>-x64.msi` 모양이고 Client Process Id 는 27940 이었습니다. 이 경로로 설치에 쓴 .msi 파일이 그때 사용자 임시 폴더에 있었다는 것을 알 수 있습니다.
 
 ### 그 밖의 이벤트
 
@@ -94,8 +85,8 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 | 로그 파일 | `%SystemRoot%\System32\Winevt\Logs\Application.evtx` |
 | 메시지 파일 | `HKLM\SYSTEM\CurrentControlSet\Services\EventLog\Application\MsiInstaller` 의 `EventMessageFile` 값. 관찰 PC 에서는 `C:\Windows\System32\msimsg.dll` 이었습니다 |
 
-- MsiInstaller 는 매니페스트 공급자가 아니라 예전 방식의 이벤트 원본입니다. 관찰 PC 에서 공급자 GUID 가 0 이었습니다.
-- 관찰 PC 레코드의 Keywords 는 `0x80000000000000` 이었습니다. 이 값은 표준 키워드 EventLogClassic 입니다.
+- MsiInstaller 는 매니페스트 공급자가 아니라 예전 방식의 이벤트 원본이며, 관찰 PC 에서 공급자 GUID 가 0 이었습니다.
+- 관찰 PC 레코드의 Keywords 는 `0x80000000000000` 이었고, 이 값은 표준 키워드 EventLogClassic 입니다.
 - 오프라인 이미지에서는 SYSTEM 하이브의 `ControlSet00X` 아래 같은 경로를 엽니다. `ControlSet00X` 를 고르는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 메시지 파일로 문장을 푸는 법은 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
@@ -149,9 +140,7 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 | 5 | 제조사 | `Microsoft Corporation` |
 | 6 | 비어 있음 | `(NULL)` |
 
-- 제품 이름은 설치 패키지의 ProductName 속성 값입니다. 패키지가 적은 이름이므로 실제 프로그램과 다를 수 있습니다.
-- 언어 칸의 1033 은 이벤트 ID 1033 과 다른 값입니다. 둘을 헷갈리지 않습니다.
-- 관찰 PC 에는 1035 의 언어 칸이 0 인 레코드도 있었습니다(Office 16 Click-to-Run Extensibility Component).
+제품 이름은 설치 패키지의 ProductName 속성 값이라서 실제 프로그램과 다를 수 있습니다. 언어 칸의 1033 은 이벤트 ID 1033 과 다른 값이므로 둘을 헷갈리지 않습니다. 관찰 PC 에는 1035 의 언어 칸이 0 인 레코드도 있었습니다(Office 16 Click-to-Run Extensibility Component).
 
 ### 상태 값
 
@@ -171,17 +160,11 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 | 1641 | ERROR_SUCCESS_REBOOT_INITIATED | 성공했고 다시 시작을 시작했습니다 |
 | 3010 | ERROR_SUCCESS_REBOOT_REQUIRED | 성공했고 다시 시작이 필요합니다 |
 
-- 0, 1641, 3010 이 성공입니다.
-- 1033 의 상태 칸에 이 반환 코드가 그대로 들어간다고 적은 문서는 찾지 못했습니다.
-- 관찰 PC 의 1033·1034·1035 는 상태가 모두 0 이었습니다.
+0, 1641, 3010 이 성공입니다. 1033 의 상태 칸에 이 반환 코드가 그대로 들어간다고 적은 문서는 찾지 못했고, 관찰 PC 의 1033·1034·1035 는 상태가 모두 0 이었습니다.
 
 ### 11707·11724·11728 의 EventData
 
-- 관찰 PC 에서는 첫 Data 에 완성된 문장이 들어 있었습니다. 나머지 Data 5개는 `(NULL)` 이었습니다.
-- 문장이 레코드 안에 그대로 저장됩니다. 그래서 한 로그 안에서 언어가 섞일 수 있습니다.
-- 관찰 PC 의 11707 은 영어였습니다. `Product: … -- Installation completed successfully.`
-- 같은 PC 의 11728 은 한국어였습니다. `제품: Office 16 Click-to-Run Extensibility Component -- 구성을 마쳤습니다.`
-- Microsoft 문서에 따르면, 패키지에 이벤트용 오류 문자열이 없을 때 설치 관리자는 ProductLanguage 속성의 언어로 된 문자열을 불러옵니다.
+관찰 PC 에서는 첫 Data 에 완성된 문장이 들어 있었고 나머지 Data 5개는 `(NULL)` 이었습니다. 문장이 레코드 안에 그대로 저장되므로 한 로그 안에서 언어가 섞일 수 있습니다. 관찰 PC 의 11707 은 영어(`Product: … -- Installation completed successfully.`)였고, 같은 PC 의 11728 은 한국어(`제품: Office 16 Click-to-Run Extensibility Component -- 구성을 마쳤습니다.`)였습니다. Microsoft 문서에 따르면, 패키지에 이벤트용 오류 문자열이 없을 때 설치 관리자는 ProductLanguage 속성의 언어로 된 문자열을 불러옵니다.
 
 ### Binary 칸과 제품 코드
 
@@ -190,9 +173,7 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 | 11707, 11724, 11728 | 제품 코드 GUID 문자열 |
 | 1033, 1034, 1035 | 제품 코드 뒤에 `0000` + 16진 32자 + 16진 8자 |
 
-- 관찰 PC 에서 마지막 16진 8자는 `00000904` 이거나 `00000000` 이었습니다.
-- 제품 코드 뒤에 붙는 부분의 뜻은 확인하지 못했습니다.
-- 같은 제품을 여러 번 설치해도 1033 의 Binary 는 바이트 하나까지 같았습니다. 관찰 PC 의 .NET Workloads 제품 1033 9건이 그랬습니다. Binary 로 설치 한 번 한 번을 가를 수는 없습니다. 시각으로 가릅니다.
+관찰 PC 에서 마지막 16진 8자는 `00000904` 이거나 `00000000` 이었고, 제품 코드 뒤에 붙는 부분의 뜻은 확인하지 못했습니다. 같은 제품을 여러 번 설치해도 1033 의 Binary 는 바이트 하나까지 같았는데, 관찰 PC 의 .NET Workloads 제품 1033 9건이 그랬습니다. 그래서 Binary 로는 설치 한 번 한 번을 가를 수 없고 시각으로 가릅니다.
 
 제품 코드로 레지스트리의 설치 목록을 찾을 수 있습니다. 관찰 PC 에서 `{A7AB73A3-CB10-4AA5-9D38-6AEFFBDE4C91}` 로 `SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A7AB73A3-CB10-4AA5-9D38-6AEFFBDE4C91}` 키를 찾았습니다.
 
@@ -207,12 +188,9 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 
 ### 기록한 계정
 
-- 레코드의 System 부분에 있는 `Security UserID` 에 SID 가 들어갑니다.
-- 관찰 PC 에는 사용자 SID(`S-1-5-21-…-1001`) 인 레코드와 `S-1-5-18`(SYSTEM) 인 레코드가 섞여 있었습니다.
-- Teams Meeting Add-in 과 .NET Workloads 설치는 사용자 SID 였습니다.
-- Office Click-to-Run 구성 변경(11728·1035)은 `S-1-5-18` 이었습니다.
-- 한 트랜잭션에서 1040 은 사용자 SID 로, 1042 는 `S-1-5-18` 로 남은 예도 있었습니다.
-- 이 SID 가 "설치를 시작한 사람" 이라고 적은 문서는 찾지 못했습니다. 업데이트 서비스가 SYSTEM 으로 설치했다면 사용자가 한 일이 아닐 수 있습니다.
+레코드의 System 부분에 있는 `Security UserID` 에 SID 가 들어갑니다. 관찰 PC 에는 사용자 SID(`S-1-5-21-…-1001`) 인 레코드와 `S-1-5-18`(SYSTEM) 인 레코드가 섞여 있었습니다. Teams Meeting Add-in 과 .NET Workloads 설치는 사용자 SID 였고, Office Click-to-Run 구성 변경(11728·1035)은 `S-1-5-18` 이었습니다. 한 트랜잭션에서 1040 은 사용자 SID 로, 1042 는 `S-1-5-18` 로 남은 예도 있었습니다.
+
+이 SID 가 "설치를 시작한 사람" 이라고 적은 문서는 찾지 못했습니다. 업데이트 서비스가 SYSTEM 으로 설치했다면 사용자가 한 일이 아닐 수 있습니다.
 
 SID 의 모양과 읽는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 
@@ -237,9 +215,7 @@ SID 의 모양과 읽는 법은 [윈도 식별자 형식](../../01-foundations/v
 
 ## 시각 해석
 
-- 이벤트 시각은 `<TimeCreated SystemTime>` 에 있습니다. 끝에 Z 가 붙은 UTC 값입니다.
-- 관찰 PC 의 한 레코드는 `2026-09-22T22:45:04.4126114Z` 였습니다. 한국 시각으로는 2026-09-23 07:45:04 입니다. 날짜가 하루 바뀝니다.
-- 현지 시각으로 바꾸는 법은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
+이벤트 시각은 `<TimeCreated SystemTime>` 에 있고, 끝에 Z 가 붙은 UTC 값입니다. 관찰 PC 의 한 레코드는 `2026-09-22T22:45:04.4126114Z` 였는데, 한국 시각으로는 2026-09-23 07:45:04 라서 날짜가 하루 바뀝니다. 현지 시각으로 바꾸는 법은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 
 ### 짝으로 남는 기록
 
@@ -259,10 +235,7 @@ SID 의 모양과 읽는 법은 [윈도 식별자 형식](../../01-foundations/v
 
 ### Uninstall 키의 날짜와 맞추기
 
-- 관찰 PC 의 Teams Meeting Add-in 1033 은 `2026-09-07 02:53:35Z` 였습니다. 한국 시각으로 11:53:35 입니다.
-- 같은 제품의 `InstallDate` 는 20260907 이었습니다. 날짜가 맞았습니다.
-- `InstallDate` 는 처음 설치한 날이 아니라 마지막으로 패치·복구한 날일 수 있습니다. 뜻은 [설치 프로그램](../system-account/uninstall.md)에서 다룹니다.
-- `InstallDate` 가 어느 시간대 기준 날짜인지는 확인하지 못했습니다. UTC 날짜와 현지 날짜가 다른 시간대에 설치했다면 두 날짜를 모두 적어 비교합니다.
+관찰 PC 의 Teams Meeting Add-in 1033 은 `2026-09-07 02:53:35Z`(한국 시각으로 11:53:35)였고, 같은 제품의 `InstallDate` 는 20260907 이어서 날짜가 맞았습니다. `InstallDate` 는 처음 설치한 날이 아니라 마지막으로 패치·복구한 날일 수 있으며, 뜻은 [설치 프로그램](../system-account/uninstall.md)에서 다룹니다. `InstallDate` 가 어느 시간대 기준 날짜인지는 확인하지 못했으므로, UTC 날짜와 현지 날짜가 다른 시간대에 설치했다면 두 날짜를 모두 적어 비교합니다.
 
 ## 함정과 한계
 

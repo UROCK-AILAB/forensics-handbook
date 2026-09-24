@@ -34,9 +34,7 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 | `15.0` | Outlook 2013 |
 | `16.0` | Outlook 2016 |
 
-- 2016 이후 판(2019·2021·Microsoft 365)도 `16.0` 을 같이 쓴다는 설명이 흔합니다. 이를 바로 적은 문서는 찾지 못했습니다.
-- 간접 근거는 있습니다. Microsoft 의 자동완성 목록 문서는 `Office\<16.0>\Outlook\AutoNameCheck` 키를 안내하면서 Outlook 2021 에 넣을 값을 예로 듭니다.
-- 그래서 `16.0` 키만 보고 Outlook 2016 이라고 단정하지 않습니다. 설치된 판은 [설치 프로그램](../../system-account/uninstall.md)에서 함께 확인합니다.
+2016 이후 판(2019·2021·Microsoft 365)도 `16.0` 을 같이 쓴다는 설명이 흔한데, 이를 바로 적은 문서는 찾지 못했습니다. 간접 근거는 있습니다. Microsoft 의 자동완성 목록 문서는 `Office\<16.0>\Outlook\AutoNameCheck` 키를 안내하면서 Outlook 2021 에 넣을 값을 예로 듭니다. 그래서 `16.0` 키만 보고 Outlook 2016 이라고 단정하지 않으며, 설치된 판은 [설치 프로그램](../../system-account/uninstall.md)에서 함께 확인합니다.
 
 같은 `HKCU\Software\Microsoft\Office\<버전>\Outlook` 아래에서 확인한 하위 키는 다음과 같습니다.
 
@@ -45,21 +43,15 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 | `PST` | 데이터 파일 크기 한도 | [데이터 파일 구조 (PST·OST)](pst-ost.md) |
 | `AutoNameCheck` | 자동완성 목록의 항목 수 한도 | [자동완성 목록 (NK2·Stream_Autocomplete)](nk2-stream-autocomplete.md) |
 
-- 두 키의 값은 기본으로 없습니다. 값이 있으면 사용자나 관리자, 정책이 따로 넣은 것입니다.
-- 크기 한도는 정책 키에도 들어갈 수 있습니다. 정책 키의 경로는 [데이터 파일 구조 (PST·OST)](pst-ost.md)에서 다룹니다.
-- `HKCU` 는 로그온한 사용자의 하이브입니다. 검체에서는 사용자마다 NTUSER.DAT 를 따로 엽니다([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)).
+두 키의 값은 기본으로 없고, 값이 있으면 사용자나 관리자, 정책이 따로 넣은 것입니다. 크기 한도는 정책 키에도 들어갈 수 있으며 정책 키의 경로는 [데이터 파일 구조 (PST·OST)](pst-ost.md)에서 다룹니다.
+
+`HKCU` 는 로그온한 사용자의 하이브라서, 검체에서는 사용자마다 NTUSER.DAT 를 따로 엽니다([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)).
 
 ### 흔한 설명 (확인하지 못함)
 
 분석가 사이에 널리 퍼진 설명은 다음과 같습니다. 모두 이번에 공식 자료로 확인하지 못했습니다.
 
-- 프로필은 Outlook 이 계정과 데이터 파일을 묶어 부르는 단위입니다. 사용자 레지스트리에 프로필마다 키가 하나 있습니다.
-- 프로필 키 아래에는 계정마다 하위 키가 있습니다. 여기에 계정 이름·메일 주소·표시 이름·보내는 서버와 받는 서버 이름·사용자 이름 같은 값이 들어 있습니다.
-- 이 값들은 이진 값 (REG_BINARY) 안에 UTF-16 글자로 들어 있습니다.
-- POP3·IMAP 계정의 비밀번호 값은 DPAPI 로 보호돼 있습니다.
-- 프로필에는 연결된 PST·OST 의 경로도 들어 있습니다.
-- 기본 프로필 이름을 가리키는 값이 따로 있습니다.
-- 새 Outlook 은 이 레지스트리 프로필을 쓰지 않습니다.
+프로필은 Outlook 이 계정과 데이터 파일을 묶어 부르는 단위이고, 사용자 레지스트리에 프로필마다 키가 하나 있습니다. 프로필 키 아래에는 계정마다 하위 키가 있고, 여기에 계정 이름·메일 주소·표시 이름·보내는 서버와 받는 서버 이름·사용자 이름 같은 값이 이진 값 (REG_BINARY) 안에 UTF-16 글자로 들어 있습니다. POP3·IMAP 계정의 비밀번호 값은 DPAPI 로 보호돼 있고, 프로필에는 연결된 PST·OST 의 경로도 들어 있습니다. 기본 프로필 이름을 가리키는 값이 따로 있으며, 새 Outlook 은 이 레지스트리 프로필을 쓰지 않습니다.
 
 하위 키 이름과 값 이름도 흔히 알려져 있습니다. 이번에 확인하지 못해 이 페이지에는 적지 않습니다. 검체에서 찾은 이름을 씁니다.
 
@@ -74,16 +66,15 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 | 2013 이후 | `HKCU\Software\Microsoft\Office\<15.0 또는 16.0>\Outlook\Profiles\<프로필 이름>` |
 | 2010 이전 | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows Messaging Subsystem\Profiles\<프로필 이름>` |
 
-판이 바뀌면 자리도 바뀐다는 설명입니다. 그래서 두 자리를 모두 봅니다. 두 자리에 없으면 아래 방법으로 하이브 전체에서 찾습니다.
+판이 바뀌면 자리도 바뀐다는 설명이라서 두 자리를 모두 보고, 두 자리에 없으면 아래 방법으로 하이브 전체에서 찾습니다.
 
 ### 클래식 Outlook 이 없는 PC 에서 본 것
 
 아래는 새 Outlook 만 깔린 PC 에서 본 것입니다. (확인 범위: Windows 11 25H2 PC 한 대, 클래식 Outlook 없음, 새 Outlook 1.2026.707.300)
 
-- 위 표의 두 `Profiles` 키가 모두 없었습니다.
-- `HKCU\Software\Microsoft\Office\16.0\Outlook` 키는 있었습니다. 그 아래에는 `Options` 키만 있었습니다.
+위 표의 두 `Profiles` 키가 모두 없었습니다. `HKCU\Software\Microsoft\Office\16.0\Outlook` 키는 있었고, 그 아래에는 `Options` 키만 있었습니다.
 
-클래식 Outlook 을 쓰지 않은 PC 에도 `Office\16.0\Outlook` 키가 있을 수 있습니다. 이 키가 있다는 것만으로 클래식 Outlook 을 썼다고 보지 않습니다.
+클래식 Outlook 을 쓰지 않은 PC 에도 `Office\16.0\Outlook` 키가 있을 수 있으므로, 이 키가 있다는 것만으로 클래식 Outlook 을 썼다고 보지 않습니다.
 
 ## 증거로서 의미
 
@@ -104,9 +95,8 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 
 ## 시각 해석
 
-- 레지스트리 키마다 마지막 기록 시각이 하나 있습니다. 값은 UTC 기준입니다. 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
-- 키 시각은 그 키가 마지막으로 바뀐 때입니다. 계정을 처음 추가한 때가 아닐 수 있습니다.
-- 계정을 추가한 시각이 따로 값으로 남는지는 확인하지 못했습니다.
+레지스트리 키마다 마지막 기록 시각이 하나 있고 값은 UTC 기준입니다. 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다. 키 시각은 그 키가 마지막으로 바뀐 때라서 계정을 처음 추가한 때가 아닐 수 있고, 계정을 추가한 시각이 따로 값으로 남는지는 확인하지 못했습니다.
+
 - 프로필 값에 적힌 데이터 파일의 NTFS 시각과 키 시각을 나란히 봅니다. 데이터 파일이 생긴 무렵과 설정이 바뀐 무렵을 따로 말할 수 있습니다([마스터 파일 테이블](../../filesystem/mft.md)).
 - 현지 시각으로 옮길 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
 

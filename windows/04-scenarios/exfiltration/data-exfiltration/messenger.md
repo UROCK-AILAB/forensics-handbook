@@ -34,9 +34,9 @@
 | 카카오톡 PC | `%LOCALAPPDATA%\Kakao\KakaoTalk` | 그 아래 `users`, `global`, `OpenLinkPreset` 폴더가 있었습니다. |
 | 카카오톡 PC (레지스트리) | `HKCU\Software\Kakao\KakaoTalk` | 그 아래 `DeviceInfo`, `UserAccounts`, `Update` 등 하위 키가 있었습니다. |
 
-- 이 PC 에는 카카오톡이 있었지만 `Documents\카카오톡 받은 파일` 폴더는 없었습니다(관찰).
-- 카카오톡이 받은 파일을 어디에 두는지는 [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) 에서 확인합니다.
-- 새 Teams 폴더의 `History`·`Cookies` 는 브라우저가 아니라 Teams 가 쓰는 WebView2 프로필의 파일입니다. 읽는 법은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+이 PC 에는 카카오톡이 있었지만 `Documents\카카오톡 받은 파일` 폴더는 없었습니다(관찰). 카카오톡이 받은 파일을 어디에 두는지는 [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) 에서 확인합니다.
+
+새 Teams 폴더의 `History`·`Cookies` 는 브라우저가 아니라 Teams 가 쓰는 WebView2 프로필의 파일이며, 읽는 법은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 
 ## 볼 아티팩트와 순서
 
@@ -63,7 +63,7 @@
 
 1. **받은 파일 폴더에 있는 파일을 보낸 파일로 봅니다.** 받은 파일 폴더는 받은 쪽 흔적입니다. 보낸 기록은 대화 DB 에서 찾습니다.
 2. **받은 파일 폴더가 없으니 메신저로 파일을 주고받지 않았다고 봅니다.** 관찰한 PC 에는 카카오톡이 있었지만 `Documents\카카오톡 받은 파일` 폴더가 없었습니다(관찰). 폴더가 없다는 것만으로 결론을 내리지 않습니다.
-3. **SRUM 송신량을 파일 전송 증거로 씁니다.** SRUM 네트워크 사용량 표에는 목적지 주소나 파일 이름 칸이 없습니다[1]. 송신량은 그 앱이 그 시간대에 보낸 양일 뿐입니다.
+3. **SRUM 송신량을 파일 전송 증거로 씁니다.** SRUM 네트워크 사용량 표에는 목적지 주소나 파일 이름 칸이 없고[1], 송신량은 그 앱이 그 시간대에 보낸 양일 뿐입니다.
 4. **클래식 Teams 폴더만 보고 Teams 를 안 썼다고 봅니다.** 관찰한 PC 의 새 Teams 는 `Packages\MSTeams_8wekyb3d8bbwe` 아래에 있었습니다(관찰).
 5. **대화 DB 를 못 읽었으니 보낸 기록이 없다고 적습니다.** 읽지 못한 것과 기록이 없는 것은 다릅니다. 보고서에는 "암호화로 읽지 못했다" 고 적습니다.
 

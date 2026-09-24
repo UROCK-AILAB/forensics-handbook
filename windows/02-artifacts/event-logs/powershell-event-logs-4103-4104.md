@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4104 에는 스크립트 블록 (Script Block) 의 내용이, 4103 에는 명령과 인자 값이 남습니다. 옛 방식 "Windows PowerShell" 로그의 400 에는 PowerShell 을 띄운 명령줄이 남습니다. 정책을 켜지 않아도 의심스러운 내용이 든 스크립트 블록은 4104 로 자동 기록됩니다.
+PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4104 에는 스크립트 블록 (Script Block) 의 내용이, 4103 에는 명령과 인자 값이 남고, 옛 방식 "Windows PowerShell" 로그의 400 에는 PowerShell 을 띄운 명령줄이 남습니다. 정책을 켜지 않아도 의심스러운 내용이 든 스크립트 블록은 4104 로 자동 기록됩니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -15,11 +15,9 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | 40961 · 40962 · 53504 | PowerShell/Operational | PowerShell 이 뜰 때 | PowerShell 이 떴다는 사실 |
 | 녹취 (Transcription) | 로그가 아닌 텍스트 파일 | 녹취 정책을 켰을 때 | 입력한 명령과 출력 |
 
-- 4104 를 켜면 PowerShell 이 처리하는 모든 스크립트 블록의 내용이 남습니다.
-- 켠 뒤 새로 뜬 PowerShell 세션부터 남습니다.
-- `Invoke-Expression` 처럼 실행 중에 만든 코드도 따로 스크립트 블록으로 남습니다.
-- 그래서 난독화하거나 암호화한 스크립트도 푼 뒤의 내용을 볼 수 있습니다. Microsoft 블로그의 예에서는 Base64·XOR 로 감춘 코드가 풀린 `Write-Host 'Pwnd'` 로 남았습니다.
-- 대화형 셸에 입력한 명령의 기록 파일은 [PowerShell 명령 기록 (ConsoleHost_history.txt)](../execution/consolehost-history-txt.md)에서 다룹니다.
+4104 를 켜면 켠 뒤 새로 뜬 PowerShell 세션부터 PowerShell 이 처리하는 모든 스크립트 블록의 내용이 남습니다. `Invoke-Expression` 처럼 실행 중에 만든 코드도 따로 스크립트 블록으로 남기 때문에 난독화하거나 암호화한 스크립트도 푼 뒤의 내용을 볼 수 있습니다. Microsoft 블로그의 예에서는 Base64·XOR 로 감춘 코드가 풀린 `Write-Host 'Pwnd'` 로 남았습니다.
+
+대화형 셸에 입력한 명령의 기록 파일은 [PowerShell 명령 기록 (ConsoleHost_history.txt)](../execution/consolehost-history-txt.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -82,16 +80,11 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | ScriptBlockId | 스크립트 블록이 살아 있는 동안 유지되는 GUID | 4105·4106 과 이을 때 씁니다 |
 | Path | 스크립트 파일 경로 | 조사한 PC 의 4104 는 모두 명령줄로 넘긴 코드라 비어 있었습니다 |
 
-- 한 이벤트에 담기 너무 긴 스크립트는 여러 이벤트로 나뉩니다.
-- MessageNumber 로 정렬해 ScriptBlockText 를 이으면 원래 스크립트가 됩니다.
-- 조사한 PC 에서 1/2·2/2, 1/3~3/3, 5/5 처럼 나뉜 예가 있었습니다.
-- 한 이벤트에 들어가는 최대 길이는 확인하지 못했습니다.
+한 이벤트에 담기 너무 긴 스크립트는 여러 이벤트로 나뉘는데, MessageNumber 로 정렬해 ScriptBlockText 를 이으면 원래 스크립트가 됩니다. 조사한 PC 에서 1/2·2/2, 1/3~3/3, 5/5 처럼 나뉜 예가 있었습니다. 한 이벤트에 들어가는 최대 길이는 확인하지 못했습니다.
 
 ### 정책 없이 남는 4104
 
-- 스크립트 블록 기록을 켜지 않았어도 PowerShell 은 악성 스크립트가 자주 쓰는 내용이 든 블록을 자동으로 남깁니다.
-- Microsoft 블로그는 이 기록을 "최후의 기록" 이라고 적었습니다. 백신이나 전체 기록을 대신하지 않습니다.
-- 어떤 낱말이 걸리는지 목록은 확인하지 못했습니다.
+스크립트 블록 기록을 켜지 않았어도 PowerShell 은 악성 스크립트가 자주 쓰는 내용이 든 블록을 자동으로 남깁니다. Microsoft 블로그는 이 기록을 "최후의 기록" 이라고 적었으며, 백신이나 전체 기록을 대신하지 않습니다. 어떤 낱말이 걸리는지 목록은 확인하지 못했습니다.
 
 정책이 없는 PC 에서 본 4104 의 머리 값입니다. (확인 범위: Win11 빌드 26200 한 대)
 
@@ -105,8 +98,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | Security UserID | 실행한 사용자 SID |
 | Execution ProcessID | 실행한 `powershell.exe` 의 PID |
 
-- 이 PC 의 4104 는 모두 Level 3 (Warning) 이었습니다.
-- 그래서 Warning 인 4104 는 자동 기록, Verbose (5) 인 4104 는 정책으로 켠 전체 기록으로 가를 수 있어 보입니다. 이 구분은 해석입니다. 이 PC 에서 Verbose 4104 를 만들어 보지는 않았습니다. 정책을 켠 PC 에서 의심 내용이 든 블록이 어느 Level 로 남는지도 확인하지 못했습니다. 그래서 Warning 이라고 정책이 꺼져 있었다고 단정하지 않습니다.
+이 PC 의 4104 는 모두 Level 3 (Warning) 이었습니다. 그래서 Warning 인 4104 는 자동 기록, Verbose (5) 인 4104 는 정책으로 켠 전체 기록으로 가를 수 있어 보이지만 이 구분은 해석입니다. 이 PC 에서 Verbose 4104 를 만들어 보지는 않았고, 정책을 켠 PC 에서 의심 내용이 든 블록이 어느 Level 로 남는지도 확인하지 못했습니다. 그래서 Warning 이라고 정책이 꺼져 있었다고 단정하지 않습니다.
 
 ### 4105 · 4106 실행 시작·끝
 
@@ -115,9 +107,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | 4105 (0x1009) | Started invocation of ScriptBlock ID: %1 Runspace ID: %2 | ScriptBlockId, RunspaceId |
 | 4106 (0x100A) | Completed invocation of ScriptBlock ID: %1 Runspace ID: %2 | ScriptBlockId, RunspaceId |
 
-- ScriptBlock ID 로 4104 와 이을 수 있습니다.
-- Runspace ID 는 그 블록이 돈 런스페이스 (Runspace) 입니다.
-- 스크립트 블록이 실행될 때마다 남으므로 양이 매우 많아질 수 있습니다.
+ScriptBlock ID 로 4104 와 이을 수 있고, Runspace ID 는 그 블록이 돈 런스페이스 (Runspace) 입니다. 스크립트 블록이 실행될 때마다 남으므로 양이 매우 많아질 수 있습니다.
 
 ### 4103 모듈 기록
 
@@ -142,7 +132,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 
 "호스트 응용 프로그램" 에는 `powershell.exe` 의 전체 명령줄이 들어 있었습니다. 예: `-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command …`.
 
-- 조사한 PC 는 모듈 기록 정책이 없는데도 4103 이 9건 있었습니다. 그중 7건이 `Add-Type` 이었습니다. 왜 남았는지는 확인하지 못했습니다.
+- 조사한 PC 는 모듈 기록 정책이 없는데도 4103 이 9건 있었고 그중 7건이 `Add-Type` 이었는데, 왜 남았는지는 확인하지 못했습니다.
 - 영어 PC 의 키 이름 목록은 확인하지 못했습니다.
 
 ### 옛 방식 "Windows PowerShell" 로그
@@ -160,8 +150,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 - 400 의 Details 에는 NewEngineState, PreviousEngineState, SequenceNumber, HostName, HostVersion, HostId, HostApplication, EngineVersion, RunspaceId, PipelineId, CommandName, CommandType, ScriptName, CommandPath, CommandLine 이 있습니다.
 - 800 의 Context 에는 DetailSequence, DetailTotal, UserId, HostName … CommandLine 이 있고, 이어서 Details 에 CommandInvocation·ParameterBinding 이 있습니다.
 - 이 로그의 Details 키는 4103 과 달리 영어였습니다 (예: `HostName=ConsoleHost`).
-- HostApplication 에는 `-EncodedCommand` 로 넘긴 Base64 전체가 그대로 들어 있었습니다.
-- 그래서 스크립트 블록 기록이 꺼져 있어도 400 의 HostApplication 으로 실행 명령줄을 볼 수 있습니다.
+- HostApplication 에는 `-EncodedCommand` 로 넘긴 Base64 전체가 그대로 들어 있었고, 그래서 스크립트 블록 기록이 꺼져 있어도 400 의 HostApplication 으로 실행 명령줄을 볼 수 있습니다.
 
 ### 그 밖의 Operational 이벤트
 
@@ -195,8 +184,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 - 4104 의 기록 시각은 스크립트 블록을 처음 만들 때 (컴파일) 입니다.
 - 기본 설정에서는 같은 블록을 다시 실행해도 다시 남지 않습니다. 스크립트 블록을 처음 쓸 때 한 번만 남기기 때문입니다.
 - 실행할 때마다의 시각은 4105·4106 에서 봅니다. 따로 켜야 남습니다.
-- 400 의 메시지는 엔진이 사용 가능 (Available) 상태가 됐다는 뜻이고, 403 은 멈춤 (Stopped) 상태가 됐다는 뜻입니다.
-- 그래서 400 과 403 사이를 엔진이 떠 있던 구간으로 볼 수 있습니다. 이 판단은 메시지에서 이끈 해석입니다.
+- 400 의 메시지는 엔진이 사용 가능 (Available) 상태가 됐다는 뜻이고, 403 은 멈춤 (Stopped) 상태가 됐다는 뜻이라서 400 과 403 사이를 엔진이 떠 있던 구간으로 볼 수 있습니다. 이 판단은 메시지에서 이끈 해석입니다.
 - 시각 값 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계
@@ -222,7 +210,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 
 ### 헥스로 한 번
 
-4104 의 칸 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류와 배열은 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다. 여기서는 값 데이터 세 개만 봅니다.
+4104 의 칸 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류와 배열은 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다루므로 여기서는 값 데이터 세 개만 봅니다.
 
 아래 바이트는 설명을 위해 명세대로 만든 예시입니다. 검체에서 나온 값이 아닙니다. 스크립트가 세 조각으로 나뉘었고 그 가운데 첫 조각이라고 하겠습니다.
 

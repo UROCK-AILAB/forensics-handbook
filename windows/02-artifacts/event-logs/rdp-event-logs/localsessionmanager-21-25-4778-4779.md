@@ -14,15 +14,11 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
 | 끊김·다시 연결 | 24, 25, 39, 40 | 4778, 4779 | |
 | 로그오프 | 23 | 4634, 4647 | 9009 |
 
-- 세션 ID (Session ID) 로 한 세션의 활동을 이어서 따라갑니다.
-- 로그온 단계의 4624 는 [인증 단계](1149-4624-10-4625.md) 에서 다룹니다.
+세션 ID (Session ID) 로 한 세션의 활동을 이어서 따라갑니다. 로그온 단계의 4624 는 [인증 단계](1149-4624-10-4625.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-- LocalSessionManager/Operational 의 공급자는 Microsoft-Windows-TerminalServices-LocalSessionManager 입니다.
-- 이 채널의 파일 위치와 기본 크기는 [허브](index.md) 의 "채널 이름과 파일 경로" 표에 모았습니다.
-- 4778·4779 는 보안 로그에 남습니다. 하위 범주는 기타 로그온/로그오프 감사 (Audit Other Logon/Logoff Events) 입니다.
-- 9009 는 System 로그에 남습니다.
+LocalSessionManager/Operational 의 공급자는 Microsoft-Windows-TerminalServices-LocalSessionManager 이고, 이 채널의 파일 위치와 기본 크기는 [허브](index.md) 의 "채널 이름과 파일 경로" 표에 모았습니다. 4778·4779 는 보안 로그에 남으며 하위 범주는 기타 로그온/로그오프 감사 (Audit Other Logon/Logoff Events) 입니다. 9009 는 System 로그에 남습니다.
 
 | Windows | 내용 |
 |---|---|
@@ -45,10 +41,7 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
 | 41 | `Begin session arbitration:` | User, Session ID |
 | 42 | `End session arbitration:` | User, Session ID |
 
-- 메시지 원문은 Windows 11 Home 빌드 26200 의 공급자 정의에서 읽었습니다.
-- XML 에서 이 값들은 EventData 아래에 있지 않습니다.
-- 값은 UserData 아래 EventXML 요소에 있습니다. 요소 이름은 User, SessionID, Address 입니다.
-- 40 의 요소 이름은 Session, Reason 입니다.
+메시지 원문은 Windows 11 Home 빌드 26200 의 공급자 정의에서 읽었습니다. XML 에서 이 값들은 EventData 아래에 있지 않고 UserData 아래 EventXML 요소에 있으며, 요소 이름은 User, SessionID, Address 입니다. 40 의 요소 이름은 Session, Reason 입니다.
 
 아래는 요소 배치만 보여 주는 틀입니다. 괄호 안은 자리표시이고, 실제 XML 과 글자 하나하나까지 같지는 않습니다.
 
@@ -77,8 +70,7 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
 
 ### 이유 코드 (40)
 
-- Ponder The Bits 는 40 의 이유 코드가 IMsRdpClient::ExtendedDisconnectReason 값이라고 설명합니다.
-- Microsoft 는 이 값을 ExtendedDisconnectReasonCode 열거형으로 정의합니다.
+Ponder The Bits 는 40 의 이유 코드가 IMsRdpClient::ExtendedDisconnectReason 값이라고 설명하고, Microsoft 는 이 값을 ExtendedDisconnectReasonCode 열거형으로 정의합니다.
 
 | 코드 | 이름 | Microsoft 정의 | Ponder The Bits 해석 |
 |---|---|---|---|
@@ -116,15 +108,11 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
 | ClientName | 클라이언트 이름. 콘솔 세션이면 `Unknown` 입니다 |
 | ClientAddress | 클라이언트 주소. 콘솔 세션이면 `LOCAL` 입니다. IPv6 나 `::ffff:IPv4` 형식으로 올 수 있습니다 |
 
-- Microsoft 문서 본문에는 원격 데스크톱 세션 이름이 `RDP-Rcp#N` 으로 적혀 있습니다.
-- 같은 문서의 XML 예시에는 `RDP-Tcp#6`, `RDP-Tcp#3` 이 나옵니다. 본문 쪽이 오타입니다.
+Microsoft 문서 본문에는 원격 데스크톱 세션 이름이 `RDP-Rcp#N` 으로 적혀 있지만, 같은 문서의 XML 예시에는 `RDP-Tcp#6`, `RDP-Tcp#3` 이 나오므로 본문 쪽이 오타입니다.
 
 ### 세션이 끝날 때 남는 다른 기록
 
-- 4634 는 끊김과 로그오프 둘 다에서 남습니다. 로그온 유형은 10 이나 7 입니다.
-- 4647 (사용자가 로그오프를 시작함) 은 원격 데스크톱 전용 이벤트가 아닙니다.
-- System 로그의 9009 `The Desktop Window Manager has exited with code (<X>)` 는 원격 데스크톱 연결이 정식으로 닫혔다는 표시일 수 있습니다.
-- 9009 는 늘 남지는 않습니다.
+4634 는 끊김과 로그오프 둘 다에서 남고, 로그온 유형은 10 이나 7 입니다. 4647 (사용자가 로그오프를 시작함) 은 원격 데스크톱 전용 이벤트가 아닙니다. System 로그의 9009 `The Desktop Window Manager has exited with code (<X>)` 는 원격 데스크톱 연결이 정식으로 닫혔다는 표시일 수 있지만 늘 남지는 않습니다.
 
 ## 증거로서 의미
 
@@ -146,14 +134,10 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
 ## 시각 해석
 
 - 시각이 어느 기준으로 저장되는지는 [허브](index.md) 의 "시각" 절을 봅니다.
-- 21 의 시각은 세션 로그온에 성공한 때입니다.
-- 22 의 시각은 셸 시작 알림을 받은 때입니다.
-- 24 의 시각은 세션이 끊긴 때입니다.
-- 23 의 시각은 로그오프에 성공한 때입니다.
+- 21 의 시각은 세션 로그온에 성공한 때, 22 는 셸 시작 알림을 받은 때, 24 는 세션이 끊긴 때, 23 은 로그오프에 성공한 때입니다.
 - 세션 길이를 셀 때 24 를 끝으로 잡으면, 25 로 다시 붙은 뒤의 시간이 빠집니다.
-- LocalSessionManager 21~25 에는 로그온 ID 칸이 없습니다.
-- 4778·4779 에는 세션 ID 칸이 없습니다.
-- 그래서 두 로그는 시각과 사용자로 맞춥니다. 4778·4779 와 4624 는 로그온 ID 로 잇습니다.
+
+LocalSessionManager 21~25 에는 로그온 ID 칸이 없고 4778·4779 에는 세션 ID 칸이 없어서, 두 로그는 시각과 사용자로 맞춥니다. 4778·4779 와 4624 는 로그온 ID 로 잇습니다.
 
 ## 함정과 한계
 

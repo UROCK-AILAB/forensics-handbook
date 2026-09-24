@@ -6,11 +6,9 @@ Windows 10 1709 무렵부터 SYSTEM 하이브의 `Services\bam` 키 아래에 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- BAM (Background Activity Moderator) 은 커널 드라이버입니다. Windows 11 PC 한 대에서 드라이버 파일은 `%SystemRoot%\System32\drivers\bam.sys`, 설명은 "BAM Kernel Driver" 였습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 에는 짝을 이루는 DAM 드라이버 `dam.sys`(설명 "DAM Kernel Driver")도 있었습니다. (확인 범위: Win11 25H2 한 대)
-- libyal 에 따르면 `UserSettings` 키 아래에 사용자 SID 마다 하위 키가 있습니다. 하위 키에는 추적한 실행 파일마다 값이 하나씩 있습니다.
-- 값 하나에는 실행 파일 경로(값 이름)와 시각(값 데이터)이 들어 있습니다.
-- 드라이버가 이 기록을 어떤 목적으로 남기는지는 이번에 연 자료에 나오지 않습니다.
+BAM (Background Activity Moderator) 은 커널 드라이버입니다. Windows 11 PC 한 대에서 드라이버 파일은 `%SystemRoot%\System32\drivers\bam.sys`, 설명은 "BAM Kernel Driver" 였습니다. (확인 범위: Win11 25H2 한 대) 같은 PC 에는 짝을 이루는 DAM 드라이버 `dam.sys`(설명 "DAM Kernel Driver")도 있었습니다. (확인 범위: Win11 25H2 한 대)
+
+libyal 에 따르면 `UserSettings` 키 아래에 사용자 SID 마다 하위 키가 있고, 하위 키에는 추적한 실행 파일마다 값이 하나씩 있습니다. 값 하나에는 실행 파일 경로(값 이름)와 시각(값 데이터)이 들어 있습니다. 드라이버가 이 기록을 어떤 목적으로 남기는지는 이번에 연 자료에 나오지 않습니다.
 
 ## 위치와 버전별 차이
 
@@ -51,7 +49,7 @@ Windows 10 1709 무렵부터 SYSTEM 하이브의 `Services\bam` 키 아래에 �
 | 16 | 4 | "Windows app" 인지 나타내는 플래그 |
 | 20 | 4 | 알 수 없음 (항상 2) |
 
-- 표는 libyal 의 정리입니다. dfir.ru 도 값이 24바이트(0x18) REG_BINARY 이고 앞 8바이트가 FILETIME 이라고 적습니다.
+- 표는 libyal 의 정리이고, dfir.ru 도 값이 24바이트(0x18) REG_BINARY 이며 앞 8바이트가 FILETIME 이라고 적습니다.
 - Windows 11 PC 한 대에서 실행 파일 경로 항목은 오프셋 16 이 0, 패키지 앱 항목은 1 이었습니다. 오프셋 20 은 모두 2, 오프셋 8~15 는 모두 0 이었습니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 의 SID 키마다 DWORD 값 `Version`(모두 1)과 `SequenceNumber`(키마다 다름, 624~4886)가 있었습니다. 두 값의 뜻은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 의 `UserSettings` 아래에는 SID 키가 네 개 있었습니다. `S-1-5-18` 하나, 로컬 계정 `S-1-5-21-…` 두 개, `S-1-5-90-0-…` 하나입니다. `S-1-5-90-0` 계정의 뜻은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
@@ -80,7 +78,7 @@ SID 의 짜임과 잘 알려진 SID 는 [윈도 식별자 형식](../../01-found
 
 - 오프셋 0 의 8바이트는 FILETIME 이고 UTC 로 읽습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - dfir.ru 실험은 빌드 19592·18363 에서 했습니다. 같은 글은 "It's too early to make conclusions about possible cases when the FILETIME timestamp can be updated" 라고 적습니다. 시각이 바뀌는 조건은 아직 다 밝혀지지 않았습니다.
-- 시각은 마지막 부팅 시각과 함께 봅니다. 부팅 때 지우는 규칙이 있기 때문입니다. 부팅 시각은 [켜짐·꺼짐](../event-logs/power-on-off-events.md) 에서 찾습니다.
+- 부팅 때 지우는 규칙이 있으므로 시각은 마지막 부팅 시각과 함께 봅니다. 부팅 시각은 [켜짐·꺼짐](../event-logs/power-on-off-events.md) 에서 찾습니다.
 - Windows 11 PC 한 대에서 실행 파일 경로 항목 44개는 모두 마지막 부팅 7일 전 이후의 시각이었습니다. 44개 가운데 39개는 마지막 부팅 뒤의 시각이었습니다. (확인 범위: Win11 25H2 한 대)
 
 ## 함정과 한계

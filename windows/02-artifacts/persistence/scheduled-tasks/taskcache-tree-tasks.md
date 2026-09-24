@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-작업 스케줄러는 작업을 등록할 때 SOFTWARE 하이브의 `TaskCache` 아래에 키를 두 개 만듭니다. `Tree` 아래 키는 작업 경로를 이름으로 씁니다. `Tasks` 아래 키는 GUID 를 이름으로 쓰고, 작업의 해시·명령·시각을 담습니다. XML 파일과 따로 남기 때문에, 파일이 없거나 바뀌었을 때 비교할 기준이 됩니다.
+작업 스케줄러는 작업을 등록할 때 SOFTWARE 하이브의 `TaskCache` 아래에 키를 두 개 만듭니다. `Tree` 아래 키는 작업 경로를 이름으로 쓰고, `Tasks` 아래 키는 GUID 를 이름으로 쓰며 작업의 해시·명령·시각을 담습니다. XML 파일과 따로 남기 때문에, 파일이 없거나 바뀌었을 때 비교할 기준이 됩니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -13,7 +13,7 @@
 - `...\Schedule\TaskCache\Tree\<작업 경로>`
 - `...\Schedule\TaskCache\Tasks\{GUID}`
 
-Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GUID 를 가리킵니다. Tasks 쪽 키에는 작업 경로, XML 해시, 트리거, 동작, 등록·실행 시각이 들어 있습니다. 같은 때에 `C:\Windows\System32\Tasks` 아래에 XML 파일도 생깁니다. XML 파일은 [작업 정의 파일 (System32\Tasks XML)](system32-tasks-xml.md)에서 다룹니다.
+Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GUID 를 가리킵니다. Tasks 쪽 키에는 작업 경로, XML 해시, 트리거, 동작, 등록·실행 시각이 들어 있습니다. 같은 때에 `C:\Windows\System32\Tasks` 아래에 XML 파일도 생기는데, 이 파일은 [작업 정의 파일 (System32\Tasks XML)](system32-tasks-xml.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -102,10 +102,7 @@ Boot·Logon·Plain·Maintenance 아래 GUID 키에는 값이 없었습니다. �
 
 ### Hash
 
-Hash 는 `System32\Tasks` 에 있는 XML 파일의 무결성 해시입니다. 계산 방식은 다음과 같습니다.
-
-- 알고리즘은 SHA-256 입니다. KB2305420 이전에는 CRC32 였습니다.
-- 파일 앞의 BOM(`FF FE`)은 계산에서 뺍니다.
+Hash 는 `System32\Tasks` 에 있는 XML 파일의 무결성 해시입니다. 알고리즘은 SHA-256 이고(KB2305420 이전에는 CRC32 였습니다), 파일 앞의 BOM(`FF FE`)은 계산에서 뺍니다.
 
 한 PC 에서 Hash(32바이트) 269개가 모두 "BOM 을 뺀 XML 의 SHA-256" 과 같았습니다. BOM 을 넣고 계산한 해시와는 한 건도 맞지 않았습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -145,9 +142,7 @@ winreg-kb 문서의 예시 헥스에서 오프셋 20 값은 Windows 7 예가 `2b
 
 두 값의 공개 명세는 이번 조사에서 찾지 못했습니다. 아래는 한 PC 에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
 
-- Actions 269개는 모두 첫 2바이트가 `03 00` 이었습니다.
-- 한 Actions 값은 `03 00`, `0C 00 00 00`(12), UTF-16 문자열 `Author`, `66 66` 순서로 시작했습니다. 12 는 `Author` 여섯 글자를 UTF-16 으로 쓴 바이트 수와 같습니다.
-- 그 뒤에 명령 경로와 인자가 UTF-16 문자열로 들어 있었습니다. XML 의 `<Actions Context="Author">`, Command, Arguments 와 같은 글자였습니다.
+Actions 269개는 모두 첫 2바이트가 `03 00` 이었습니다. 한 Actions 값은 `03 00`, `0C 00 00 00`(12), UTF-16 문자열 `Author`, `66 66` 순서로 시작했고, 12 는 `Author` 여섯 글자를 UTF-16 으로 쓴 바이트 수와 같습니다. 그 뒤에는 명령 경로와 인자가 UTF-16 문자열로 들어 있었으며, XML 의 `<Actions Context="Author">`, Command, Arguments 와 같은 글자였습니다.
 
 winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인다고 적었습니다.
 
@@ -157,7 +152,7 @@ winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인�
 
 - Tree 키의 Id 가 가리키는 GUID 가 Tasks 에 있으면, 작업 스케줄러가 알고 있는 작업입니다. 한 PC 에서 Tasks 하위 키 수(269)와 Get-ScheduledTask 결과 수(269)가 같았습니다. (확인 범위: Win11 25H2 한 대)
 - DynamicInfo 오프셋 12 는 마지막 실행 시각입니다. 한 PC 에서 한 번 이상 실행된 작업 175개 모두 이 값이 Get-ScheduledTaskInfo 의 LastRunTime(UTC)과 초 단위까지 같았습니다. (확인 범위: Win11 25H2 한 대)
-- Actions 값에 명령 경로와 인자가 문자열로 남습니다. XML 파일이 없을 때 실행 대상을 찾는 단서입니다.
+- Actions 값에 명령 경로와 인자가 문자열로 남아서, XML 파일이 없을 때 실행 대상을 찾는 단서가 됩니다.
 - Hash 로 지금의 XML 파일이 레지스트리에 적힌 내용과 같은지 확인할 수 있습니다.
 
 **증명하지 못하는 것**

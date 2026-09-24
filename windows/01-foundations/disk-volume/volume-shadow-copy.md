@@ -220,9 +220,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 
 ### 예전 판을 되찾기
 
-- 스냅숏 뒤에 덮어쓴 블록의 예전 내용은 저장소에 남습니다.
-- 그래서 지금 볼륨에서 바뀌거나 지운 파일도 스냅숏 시점의 모습으로 다시 볼 수 있습니다.
-- 여러 스냅숏을 차례로 다시 만들면 같은 파일이 시점마다 어떻게 바뀌었는지 비교할 수 있습니다. 비교 절차는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에 있습니다.
+스냅숏 뒤에 덮어쓴 블록의 예전 내용은 저장소에 남으므로, 지금 볼륨에서 바뀌거나 지운 파일도 스냅숏 시점의 모습으로 다시 볼 수 있습니다. 여러 스냅숏을 차례로 다시 만들면 같은 파일이 시점마다 어떻게 바뀌었는지 비교할 수 있습니다. 비교 절차는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에 있습니다.
 
 ### 만든 시각과 순서
 
@@ -238,16 +236,15 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 
 ### 범위 스냅숏
 
-- Windows 8·Server 2012 부터 범위 스냅숏 (Scoped Snapshot) 이 있습니다.
-- 범위 스냅숏은 업데이트에 관계된 파일만 쓰기 시 복사를 합니다.
-- 그래서 스냅숏 안의 다른 파일 내용이 그 시점의 내용과 다를 수 있습니다.
-- 설정 자리는 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore` 의 `ScopeSnapshots` 값입니다. 오프라인 이미지에서는 SOFTWARE 하이브에서 읽습니다([레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md)).
+Windows 8·Server 2012 부터 있는 범위 스냅숏 (Scoped Snapshot) 은 업데이트에 관계된 파일만 쓰기 시 복사를 하므로, 스냅숏 안의 다른 파일 내용이 그 시점의 내용과 다를 수 있습니다.
+
+설정 자리는 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore` 의 `ScopeSnapshots` 값입니다. 오프라인 이미지에서는 SOFTWARE 하이브에서 읽습니다([레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md)).
 
 ### 쓰지 않는 블록과 손상
 
-- 비트맵에서 저장소가 쓰지 않는 블록을 Windows 가 읽을 때의 결과는 정해져 있지 않습니다.
-- libvshadow 는 이런 블록을 0 으로 채웁니다. 다른 도구는 다르게 처리할 수 있습니다. 그래서 같은 스냅숏도 도구마다 결과가 조금 다를 수 있습니다.
-- 카탈로그 항목의 볼륨 크기가 실제 볼륨보다 큰 사례가 있습니다. libvshadow 는 이때 NTFS 볼륨 헤더로 볼륨 크기를 구합니다.
+비트맵에서 저장소가 쓰지 않는 블록을 Windows 가 읽을 때의 결과는 정해져 있지 않습니다. libvshadow 는 이런 블록을 0 으로 채우지만 다른 도구는 다르게 처리할 수 있어서, 같은 스냅숏도 도구마다 결과가 조금 다를 수 있습니다.
+
+카탈로그 항목의 볼륨 크기가 실제 볼륨보다 큰 사례가 있습니다. libvshadow 는 이때 NTFS 볼륨 헤더로 볼륨 크기를 구합니다.
 
 ### 섀도 복사본이 없을 때
 

@@ -45,10 +45,7 @@
 
 첨부 파일 관리자 (Attachment Manager) 는 파일을 열기 전에 경고를 띄울지 정합니다[1]. 이때 "웹 표시 (Mark of the Web, MOTW)" 라고 부르는 보안 정보를 봅니다[1]. 문서의 적용 대상은 Windows 11·Windows 10 입니다[1].
 
-- 파일이 차단돼 있는지는 탐색기의 파일 속성 → 일반 탭 아래쪽 보안 메시지로 봅니다[1].
-- 차단돼 있으면 "차단 해제 (Unblock)" 를 고를 수 있습니다[1].
-- 차단 해제가 Zone.Identifier 스트림을 지우는지는 확인하지 못했습니다.
-- Sysmon 문서는 브라우저가 붙이는 `Zone.Identifier` 스트림을 "mark of the web" 이라고 부릅니다[2].
+파일이 차단돼 있는지는 탐색기의 파일 속성 → 일반 탭 아래쪽 보안 메시지로 보며, 차단돼 있으면 "차단 해제 (Unblock)" 를 고를 수 있습니다[1]. 차단 해제가 Zone.Identifier 스트림을 지우는지는 확인하지 못했습니다. Sysmon 문서는 브라우저가 붙이는 `Zone.Identifier` 스트림을 "mark of the web" 이라고 부릅니다[2].
 
 **ZoneId 값.** ZoneId 번호는 URLZONE 열거와 같은 번호로 알려져 있습니다.
 
@@ -60,19 +57,13 @@
 | 3 | URLZONE_INTERNET | 인터넷 |
 | 4 | URLZONE_UNTRUSTED | 신뢰하지 않는 영역 |
 
-- -1 은 URLZONE_INVALID(IE7)이고, 1000~10000 은 사용자 정의 영역입니다[3].
-- URLZONE 문서는 Zone.Identifier 를 언급하지 않습니다[3]. ZoneId 와 URLZONE 이 같은 번호라는 것은 알려진 해석입니다.
-- 아래 관찰에서 Downloads 폴더 파일의 ZoneId 는 모두 3 이었습니다. 이 해석과 맞습니다.
+-1 은 URLZONE_INVALID(IE7)이고, 1000~10000 은 사용자 정의 영역입니다[3]. URLZONE 문서는 Zone.Identifier 를 언급하지 않으며[3], ZoneId 와 URLZONE 이 같은 번호라는 것은 알려진 해석입니다. 아래 관찰에서 Downloads 폴더 파일의 ZoneId 는 모두 3 이었고, 이 해석과 맞습니다.
 
 **이 PC 에서 본 값.**
 
-- 사용자 Downloads 폴더의 파일 262개 가운데 211개에 Zone.Identifier 스트림이 있었습니다(관찰).
-- 211개 모두 `[ZoneTransfer]` 절과 ZoneId 줄이 있었습니다(관찰). ZoneId 는 모두 3 이었습니다(관찰).
-- HostUrl 줄은 206개, ReferrerUrl 줄은 179개에 있었습니다(관찰). 그 밖의 키는 없었습니다(관찰).
-- HostUrl 은 https 주소가 195개, http 주소가 8개, `about:internet` 이 3개였습니다(관찰).
-- 그래서 HostUrl 이 늘 실제 주소인 것은 아닙니다.
-- 스트림은 `[ZoneTransfer]` 와 줄바꿈(CRLF)으로 시작하는 ASCII 글자였습니다(관찰). 한 예의 크기는 192바이트였습니다(관찰).
-- 이 PC 에서 본 스트림에는 시각을 적은 키가 없었습니다(관찰).
+사용자 Downloads 폴더의 파일 262개 가운데 211개에 Zone.Identifier 스트림이 있었고(관찰), 211개 모두 `[ZoneTransfer]` 절과 ZoneId 줄이 있었으며 ZoneId 는 모두 3 이었습니다(관찰). HostUrl 줄은 206개, ReferrerUrl 줄은 179개에 있었고 그 밖의 키는 없었습니다(관찰). HostUrl 은 https 주소가 195개, http 주소가 8개, `about:internet` 이 3개였으므로(관찰) HostUrl 이 늘 실제 주소인 것은 아닙니다.
+
+스트림은 `[ZoneTransfer]` 와 줄바꿈(CRLF)으로 시작하는 ASCII 글자였고(관찰) 한 예의 크기는 192바이트였습니다(관찰). 이 PC 에서 본 스트림에는 시각을 적은 키가 없었습니다(관찰).
 
 아래는 관찰한 절 이름과 키 이름으로 만든 예시입니다. 실제 검체에서 떼어 온 내용이 아닙니다. 주소는 예시 주소이고, 줄 순서도 예시입니다.
 
@@ -93,16 +84,11 @@ HostUrl=https://example.com/files/sample.zip
 
 **스트림이 붙은 시각은 저널로 좁힙니다.**
 
-- 이름 있는 스트림이 더해지거나 없어지면 $UsnJrnl 에 USN_REASON_STREAM_CHANGE(0x00200000)가 남습니다[4].
-- 이름 있는 스트림에 데이터가 늘면 USN_REASON_NAMED_DATA_EXTEND(0x00000020)가 남습니다[4].
-- 스트림 안에 시각이 없으므로, 저널이 남아 있으면 이 두 값이 켜진 레코드로 스트림이 붙은 시각을 좁힙니다.
-- 저널 레코드의 다른 칸과 추출 방법은 [지운 파일의 흔적 찾기](deleted-file-traces.md) 의 "$UsnJrnl" 절에 있습니다.
+이름 있는 스트림이 더해지거나 없어지면 $UsnJrnl 에 USN_REASON_STREAM_CHANGE(0x00200000)가 남고[4], 이름 있는 스트림에 데이터가 늘면 USN_REASON_NAMED_DATA_EXTEND(0x00000020)가 남습니다[4]. 스트림 안에 시각이 없으므로, 저널이 남아 있으면 이 두 값이 켜진 레코드로 스트림이 붙은 시각을 좁힙니다. 저널 레코드의 다른 칸과 추출 방법은 [지운 파일의 흔적 찾기](deleted-file-traces.md) 의 "$UsnJrnl" 절에 있습니다.
 
 **NTFS 밖을 거친 파일.**
 
-- FAT 처럼 NTFS 가 아닌 파일 시스템으로 옮기면 이름 있는 스트림이 없어집니다.
-- 그래서 FAT·exFAT 로 포맷한 USB 를 거친 파일에는 출처 표시가 없을 수 있습니다.
-- 압축 파일을 풀 때 풀린 파일에도 출처 표시가 붙는지는 확인하지 못했습니다. 압축 파일 자체의 출처 표시와 [압축 프로그램 사용 기록](../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 을 함께 봅니다.
+FAT 처럼 NTFS 가 아닌 파일 시스템으로 옮기면 이름 있는 스트림이 없어지므로, FAT·exFAT 로 포맷한 USB 를 거친 파일에는 출처 표시가 없을 수 있습니다. 압축 파일을 풀 때 풀린 파일에도 출처 표시가 붙는지는 확인하지 못했습니다. 압축 파일 자체의 출처 표시와 [압축 프로그램 사용 기록](../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 을 함께 봅니다.
 
 ## 브라우저 다운로드 기록
 
@@ -120,12 +106,9 @@ HostUrl=https://example.com/files/sample.zip
 | 어떤 형식인가 | mime_type, original_mime_type |
 | 같은 파일인가 | hash (원시 32바이트) |
 
-- `downloads_url_chains` 표에서 chain_index 0 은 처음 요청한 주소입니다.
-- 가장 큰 chain_index 가 실제로 받은 주소입니다.
-- `hash` 는 16진으로 바꿔 디스크 파일의 해시와 비교합니다.
-- 다운로드 목록만 지우면 받은 파일은 디스크에 남아 있을 수 있습니다. 이때는 출처 표시와 $MFT 로 파일을 찾습니다.
-- 파이어폭스와 옛 IE·Edge 의 다운로드 기록은 [파이어폭스](../../02-artifacts/browsers/firefox/index.md) 와 [인터넷 익스플로러·옛 엣지](../../02-artifacts/browsers/ie-edgehtml/index.md) 에서 봅니다.
-- 받기 전후에 어떤 사이트를 불러왔는지는 [웹 사용 행위 재구성](web-activity.md) 을 따라 봅니다.
+`downloads_url_chains` 표에서 chain_index 0 은 처음 요청한 주소이고, 가장 큰 chain_index 가 실제로 받은 주소입니다. `hash` 는 16진으로 바꿔 디스크 파일의 해시와 비교합니다.
+
+다운로드 목록만 지우면 받은 파일은 디스크에 남아 있을 수 있는데, 이때는 출처 표시와 $MFT 로 파일을 찾습니다. 파이어폭스와 옛 IE·Edge 의 다운로드 기록은 [파이어폭스](../../02-artifacts/browsers/firefox/index.md) 와 [인터넷 익스플로러·옛 엣지](../../02-artifacts/browsers/ie-edgehtml/index.md) 에서 보고, 받기 전후에 어떤 사이트를 불러왔는지는 [웹 사용 행위 재구성](web-activity.md) 을 따라 봅니다.
 
 ## 다른 길로 들어온 파일
 
@@ -135,18 +118,13 @@ HostUrl=https://example.com/files/sample.zip
 
 **USB·외부 장치.**
 
-- 파일을 USB 에서 열었다면 그때 생긴 바로가기 파일에 볼륨 정보가 남습니다.
-- 볼륨 정보에는 드라이브 종류와 볼륨 시리얼이 있습니다. 드라이브 종류 2 는 이동식입니다.
-- 이 값으로 파일을 연 장치를 좁힙니다. 장치를 연결한 시각은 [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 에서 봅니다.
-- 바로가기 파일의 구조는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에 있습니다.
+파일을 USB 에서 열었다면 그때 생긴 바로가기 파일에 볼륨 정보가 남고, 볼륨 정보에는 드라이브 종류와 볼륨 시리얼이 있습니다. 드라이브 종류 2 는 이동식이며, 이 값으로 파일을 연 장치를 좁힙니다. 장치를 연결한 시각은 [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 에서 보고, 바로가기 파일의 구조는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에 있습니다.
 
 **공유 폴더.** 바로가기 파일에 네트워크 위치가 남을 수 있습니다. 파일 서버가 있으면 서버의 [공유 폴더 접근](../../02-artifacts/event-logs/5140-5145.md) 이벤트를 봅니다.
 
 **같은 파일인지 가리기.**
 
-- AmCache 에는 파일의 SHA-1 이 남습니다([AmCache](../../02-artifacts/execution/amcache-hve/index.md)).
-- 크롬 계열 다운로드 기록의 `hash` 도 비교에 씁니다.
-- 알려진 파일 목록과 맞추는 법은 [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) 에 있습니다.
+AmCache 에는 파일의 SHA-1 이 남고([AmCache](../../02-artifacts/execution/amcache-hve/index.md)), 크롬 계열 다운로드 기록의 `hash` 도 비교에 씁니다. 알려진 파일 목록과 맞추는 법은 [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) 에 있습니다.
 
 **Sysmon 이 설치돼 있을 때.**
 
@@ -183,7 +161,7 @@ HostUrl=https://example.com/files/sample.zip
 ## 보고서 문장 예
 
 - 쓰지 않을 문장: "피조사자는 ○○ 에 ○○ 사이트에서 invoice.zip 을 내려받았습니다."
-- 쓸 문장: "`○○\Downloads\invoice.zip` 에 Zone.Identifier 스트림이 있습니다. 스트림의 ZoneId 는 3 이고, HostUrl 은 `https://○○` 입니다. 사용자 ○○ 프로필의 ○○ 브라우저 다운로드 기록에도 같은 저장 경로의 항목이 있습니다. 이 항목의 끝 시각은 ○○(UTC) 입니다. 항목에 적힌 해시는 디스크 파일의 해시와 같습니다. 이 기록은 이 계정의 세션에서 이 브라우저가 이 주소로부터 파일을 받았음을 보여 줍니다. 화면 앞에 있던 사람은 이 기록만으로 정할 수 없습니다."
+- 쓸 문장: "`○○\Downloads\invoice.zip` 에 Zone.Identifier 스트림이 있습니다. 스트림의 ZoneId 는 3 이고, HostUrl 은 `https://○○` 입니다. 사용자 ○○ 프로필의 ○○ 브라우저 다운로드 기록에도 같은 저장 경로의 항목이 있습니다. 이 항목의 끝 시각은 ○○(UTC) 이고, 항목에 적힌 해시는 디스크 파일의 해시와 같습니다. 이 기록은 이 계정의 세션에서 이 브라우저가 이 주소로부터 파일을 받았음을 보여 주지만, 화면 앞에 있던 사람은 이 기록만으로 정할 수 없습니다."
 - 출처 표시만 있을 때: "`○○\invoice.zip` 에 Zone.Identifier 스트림이 있고 ZoneId 는 3 입니다. 이 값은 인터넷 영역을 뜻하는 값으로 알려져 있습니다. 어느 프로그램이 언제 이 스트림을 붙였는지는 이 기록만으로 정할 수 없습니다."
 
 ## 함께 볼 페이지

@@ -2,15 +2,14 @@
 
 ## 한 줄 요약
 
-크롬 계열 브라우저는 크로미움 (Chromium) 소스를 바탕으로 만든 브라우저입니다. Chrome, 크로미움 판 Edge, 네이버 Whale 이 여기에 듭니다. 이 브라우저들은 사용자마다 `User Data` 폴더를 두고, 그 아래에 같은 이름의 파일로 방문 기록·다운로드·쿠키·캐시·저장 비밀번호를 남깁니다.
+크롬 계열 브라우저는 크로미움 (Chromium) 소스를 바탕으로 만든 브라우저입니다. Chrome, 크로미움 판 Edge, 네이버 Whale 이 여기에 들며, 이 브라우저들은 사용자마다 `User Data` 폴더를 두고, 그 아래에 같은 이름의 파일로 방문 기록·다운로드·쿠키·캐시·저장 비밀번호를 남깁니다.
 
 ## 왜 중요한가
 
-- 웹에서 한 일은 대부분 브라우저 안에서 일어납니다. 방문한 주소, 내려받은 파일, 입력한 검색어가 프로필 폴더 하나에 모입니다.
-- 계열 브라우저끼리는 `User Data` 폴더 위치만 다릅니다. 그 아래 파일 이름과 형식은 거의 같습니다. 그래서 Chrome 에서 익힌 읽는 법을 Edge·Whale 에도 그대로 씁니다.
-- 파일 대부분은 SQLite·JSON·LevelDB 형식입니다. 브라우저를 띄우지 않고 공개 도구로 읽을 수 있습니다.
-- `User Data` 폴더는 Windows 사용자 폴더 아래 있습니다. 그래서 어느 Windows 계정에서 남은 기록인지 알 수 있습니다.
-- 한 계정 안에도 브라우저 프로필 (Profile) 이 여러 개일 수 있습니다. 프로필마다 폴더가 따로 있고, 기록도 따로 쌓입니다.
+웹에서 한 일은 대부분 브라우저 안에서 일어나므로 방문한 주소, 내려받은 파일, 입력한 검색어가 프로필 폴더 하나에 모입니다. 계열 브라우저끼리는 `User Data` 폴더 위치만 다르고 그 아래 파일 이름과 형식은 거의 같아서, Chrome 에서 익힌 읽는 법을 Edge·Whale 에도 그대로 씁니다. 파일 대부분은 SQLite·JSON·LevelDB 형식이라 브라우저를 띄우지 않고 공개 도구로 읽을 수 있습니다.
+
+`User Data` 폴더는 Windows 사용자 폴더 아래 있어서 어느 Windows 계정에서 남은 기록인지 알 수 있습니다. 한 계정 안에도 브라우저 프로필 (Profile) 이 여러 개일 수 있는데, 프로필마다 폴더가 따로 있고 기록도 따로 쌓입니다.
+
 - 다운로드 기록에는 받은 주소와 저장 경로가 남습니다. 이 기록을 [다운로드 출처 표시 (Zone.Identifier)](../../filesystem/zone-identifier.md) 와 맞춰 보면 파일이 어디서 왔는지 좁힐 수 있습니다.
 
 증명하지 못하는 것도 분명합니다.
@@ -65,7 +64,7 @@ Windows 버전보다 브라우저 판에 따른 차이가 더 큽니다. 아래 
 | 세션 파일 | 프로필 폴더 바로 아래 `Current Session`·`Last Session`·`Current Tabs`·`Last Tabs` | `Sessions` 폴더 아래 `Session_<숫자>`·`Tabs_<숫자>` |
 | 쿠키·비밀번호 암호화 | 값마다 DPAPI 로 암호화 | `Local State` 에 든 키로 값을 암호화하고, 그 키를 DPAPI 로 보호합니다. Chrome 127 부터는 쿠키에 앱 바운드 암호화 (App-Bound Encryption) 를 더합니다. |
 
-브라우저를 업데이트하면 옛 자리의 파일이 남아 있기도 합니다. 그래서 옛 자리와 새 자리를 둘 다 봅니다. 암호화 구조는 [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 에서 다룹니다.
+브라우저를 업데이트하면 옛 자리의 파일이 남아 있기도 하므로 옛 자리와 새 자리를 둘 다 봅니다. 암호화 구조는 [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 에서 다룹니다.
 
 ### 알려 주는 것
 

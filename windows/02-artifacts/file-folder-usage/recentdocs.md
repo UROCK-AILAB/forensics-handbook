@@ -6,12 +6,9 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-키 하나에 항목 값이 여러 개 있습니다. Windows Vista 이후에는 항목 값 하나에 두 가지가 들어 있습니다.
+키 하나에 항목 값이 여러 개 있고, Windows Vista 이후에는 항목 값 하나에 파일 이름 (UTF-16LE 문자열) 과 그 파일 이름을 담은 셸 항목 (Shell Item) 이 함께 들어 있습니다.
 
-- 파일 이름 (UTF-16LE 문자열)
-- 그 파일 이름을 담은 셸 항목 (Shell Item)
-
-뿌리 키 아래에는 확장자마다 하위 키가 있습니다. 하위 키에는 그 확장자의 파일만 모입니다.
+뿌리 키 아래에는 확장자마다 하위 키가 있고, 하위 키에는 그 확장자의 파일만 모입니다.
 
 ### 기록이 생기는 계기
 
@@ -61,7 +58,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 | 순서 | 첫 정수가 가장 최근 항목, 두 번째 정수가 그다음 항목입니다 |
 | 끝 표시 | -1 (`FF FF FF FF`) |
 
-- 배열의 정수는 항목 값의 이름을 가리킵니다. 항목 값 이름 `0`, `1`, `2` … 는 번호표일 뿐입니다. 이름의 숫자 순서는 시간 순서가 아닙니다.
+- 배열의 정수는 항목 값의 이름을 가리킵니다. 항목 값 이름 `0`, `1`, `2` … 는 번호표일 뿐이라 이름의 숫자 순서는 시간 순서가 아닙니다.
 
 ### 항목 값 (Vista 이후)
 
@@ -100,13 +97,13 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 
 - 항목 값에는 시각이 없습니다. plaso 도 RecentDocs 기록의 시각으로 키의 마지막 기록 시각 하나만 씁니다.
 - 키의 마지막 기록 시각은 MRUListEx 첫 항목이 들어간 때와 가깝다고 보는 것이 보통입니다. 확인한 자료가 이 해석을 확정하지는 않습니다. 보고서에는 "키의 마지막 기록 시각" 으로 적고, 첫 항목과 이어 읽는 것은 추정이라고 밝힙니다.
-- 뿌리 키와 확장자 하위 키는 시각이 따로 있습니다. 확장자 하위 키의 시각은 그 확장자 목록이 마지막으로 바뀐 때입니다.
+- 뿌리 키와 확장자 하위 키는 시각이 따로 있으며, 확장자 하위 키의 시각은 그 확장자 목록이 마지막으로 바뀐 때입니다.
 - 두 번째 이후 항목의 시각은 이 키만으로 알 수 없습니다. 같은 파일의 바로가기 파일이나 점프리스트 시각을 찾아 맞춰 봅니다.
 - 키 시각의 성질은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-1. **값 이름의 번호를 순서로 읽습니다.** 순서는 MRUListEx 만 정합니다. 값 이름 `0` 이 가장 오래된 항목이라는 보장이 없습니다.
+1. **값 이름의 번호를 순서로 읽습니다.** 순서는 MRUListEx 만 정하며 값 이름 `0` 이 가장 오래된 항목이라는 보장이 없습니다.
 2. **키 시각을 모든 항목에 붙입니다.** 키 시각은 첫 항목에만 조건부로 이어집니다.
 3. **빈 키를 "쓰지 않았다" 로 읽습니다.** Windows 11 25H2 PC 한 대에서 다음을 봤습니다. (확인 범위: Windows 11 25H2, PC 한 대)
    - `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced` 의 `Start_TrackDocs` 값이 0 이었습니다.
@@ -123,7 +120,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 ### 지우기와 조작
 
 - **정책으로 로그오프 때 지웁니다.** 정책 "Clear history of recently opened documents on exit" 의 값은 `Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` 키 (사용자 구성) 의 `ClearRecentDocsOnExit` 입니다. Microsoft 문서에 따르면 이 정책은 로그오프 때 최근 문서 바로가기를 지웁니다. 점프리스트의 최근·자주 항목도 지웁니다 ([점프리스트](jump-lists.md)). 프로그램 파일 메뉴 아래의 최근 파일 목록은 지우지 않습니다. 이 정책이 RecentDocs 레지스트리 키도 지우는지는 확인하지 못했습니다.
-- **메뉴만 숨깁니다.** 정책 "Remove Recent Items menu from Start Menu" (값 `NoRecentDocsMenu`) 를 켜도 바로가기는 계속 저장됩니다. 메뉴만 보이지 않습니다. 이 값이 켜져 있어도 기록이 없다고 보지 않습니다.
+- **메뉴만 숨깁니다.** 정책 "Remove Recent Items menu from Start Menu" (값 `NoRecentDocsMenu`) 를 켜도 바로가기는 계속 저장되고 메뉴만 보이지 않습니다. 이 값이 켜져 있어도 기록이 없다고 보지 않습니다.
 - **기록을 남기지 않는 정책.** Microsoft 문서는 "Do not keep history of recently opened documents" 정책을 이름으로만 언급합니다. 이 정책의 값 이름과 동작은 확인하지 못했습니다.
 - **값이나 키를 지웁니다.** 지운 키와 값은 하이브 안 빈 공간이나 트랜잭션 로그에 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 옛 하이브는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
 
@@ -159,7 +156,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 
 ### 공개 도구로 한 번
 
-plaso 의 레지스트리 파서는 RecentDocs 키와 그 하위 키를 "문자열 + 셸 항목" 형식으로 읽습니다. 플러그인 이름은 `mrulistex_string_and_shell_item` 입니다. 다른 레지스트리 파서를 써도 됩니다. 도구를 쓸 때는 다음을 확인합니다.
+plaso 의 레지스트리 파서는 RecentDocs 키와 그 하위 키를 "문자열 + 셸 항목" 형식으로 읽으며, 플러그인 이름은 `mrulistex_string_and_shell_item` 입니다. 다른 레지스트리 파서를 써도 됩니다. 도구를 쓸 때는 다음을 확인합니다.
 
 - 도구가 보여 준 순서가 MRUListEx 를 푼 순서와 같은지 확인합니다.
 - 도구가 키 시각을 항목마다 붙여서 보여 주지 않는지 확인합니다.

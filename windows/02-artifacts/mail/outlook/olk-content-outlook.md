@@ -23,11 +23,9 @@
 
 분석가 사이에 널리 퍼진 설명은 다음과 같습니다. 모두 이번에 공식 자료로 확인하지 못했습니다.
 
-- 사용자가 첨부를 Outlook 안에서 바로 열면, Outlook 이 임시 폴더에 첨부 사본을 만듭니다.
-- Outlook 이 비정상 종료되거나 첨부를 연 채로 두면 사본이 지워지지 않고 남습니다.
-- 같은 이름의 파일이 쌓이면 이름 뒤에 `(2)` 같은 번호가 붙습니다. 99개를 넘으면 "파일을 만들 수 없습니다" 오류가 납니다.
+사용자가 첨부를 Outlook 안에서 바로 열면 Outlook 이 임시 폴더에 첨부 사본을 만들고, Outlook 이 비정상 종료되거나 첨부를 연 채로 두면 사본이 지워지지 않고 남습니다. 같은 이름의 파일이 쌓이면 이름 뒤에 `(2)` 같은 번호가 붙고, 99개를 넘으면 "파일을 만들 수 없습니다" 오류가 납니다.
 
-이 설명이 맞다면 폴더 안의 파일은 첨부를 연 흔적입니다. 첨부를 저장하지 않고 열기만 해도 흔적이 남는다는 점에서 분석가가 자주 찾습니다. 다만 동작을 확인하지 못했으므로, 이 페이지는 폴더를 찾고 내용을 맞춰 보는 방법에 무게를 둡니다.
+이 설명이 맞다면 폴더 안의 파일은 첨부를 연 흔적이고, 첨부를 저장하지 않고 열기만 해도 흔적이 남기 때문에 분석가가 자주 찾습니다. 다만 동작을 확인하지 못했으므로, 이 페이지는 폴더를 찾고 내용을 맞춰 보는 방법에 무게를 둡니다.
 
 ## 위치와 버전별 차이
 
@@ -39,24 +37,24 @@
 | Outlook 2007 이후, Windows Vista·7 | `%LOCALAPPDATA%\Microsoft\Windows\Temporary Internet Files\Content.Outlook\<무작위 8글자>\` |
 | Outlook 2007 이후, Windows 8 이후 | `%LOCALAPPDATA%\Microsoft\Windows\INetCache\Content.Outlook\<무작위 8글자>\` |
 
-- 폴더 위치는 Outlook 의 레지스트리 설정이 정한다는 설명도 흔합니다. 키와 값 이름은 이번에 확인하지 못해 이 페이지에 적지 않습니다.
-- Microsoft 문서 "Change the folder where emails and attachments are saved in Outlook" (옛 KB 823131) 은 이름이 비슷하지만 임시 폴더를 다루지 않습니다. 이 문서는 "다른 이름으로 저장" 의 기본 폴더(기본값 `Documents`)를 바꾸는 값 `HKCU\Software\Microsoft\Office\16.0\Outlook\Options` 의 `DefaultPath` 를 설명합니다. 이 값을 첨부 임시 폴더 위치로 읽지 않습니다.
+폴더 위치는 Outlook 의 레지스트리 설정이 정한다는 설명도 흔하지만, 키와 값 이름은 이번에 확인하지 못해 이 페이지에 적지 않습니다.
+
+- Microsoft 문서 "Change the folder where emails and attachments are saved in Outlook" (옛 KB 823131) 은 이름이 비슷하지만 임시 폴더를 다루지 않습니다. 이 문서는 "다른 이름으로 저장" 의 기본 폴더(기본값 `Documents`)를 바꾸는 값 `HKCU\Software\Microsoft\Office\16.0\Outlook\Options` 의 `DefaultPath` 를 설명하며, 이 값을 첨부 임시 폴더 위치로 읽지 않습니다.
 - 위치가 바뀔 수 있으므로 기본 위치만 보지 않습니다. 디스크 전체에서 폴더 이름으로 찾습니다(아래 "직접 분석해 보기").
 
 ### 클래식 Outlook 이 없는 PC 에서 본 것
 
 아래는 새 Outlook 만 깔린 PC 에서 본 것입니다. (확인 범위: Windows 11 25H2 PC 한 대, 클래식 Outlook 없음)
 
-- `%LOCALAPPDATA%\Microsoft\Windows\INetCache` 아래에는 `Content.IE5`·`Content.MSO`·`Content.Word`·`IE`·`Low`·`Virtualized`·`WebTempDir` 만 있었습니다. `Content.Outlook` 은 없었습니다.
-- `HKCU\Software\Microsoft\Office\16.0\Outlook` 아래에는 `Options` 키만 있었습니다.
+`%LOCALAPPDATA%\Microsoft\Windows\INetCache` 아래에는 `Content.IE5`·`Content.MSO`·`Content.Word`·`IE`·`Low`·`Virtualized`·`WebTempDir` 만 있었고 `Content.Outlook` 은 없었습니다. `HKCU\Software\Microsoft\Office\16.0\Outlook` 아래에는 `Options` 키만 있었습니다.
 
-클래식 Outlook 을 쓰지 않은 PC 에서는 이 폴더가 없을 수 있습니다. 폴더가 없다는 사실만으로 첨부를 열지 않았다고 볼 수 없습니다. 먼저 클래식 Outlook 을 썼는지부터 확인합니다([설치 프로그램](../../system-account/uninstall.md)).
+클래식 Outlook 을 쓰지 않은 PC 에서는 이 폴더가 없을 수 있고, 폴더가 없다는 사실만으로 첨부를 열지 않았다고 볼 수 없습니다. 먼저 클래식 Outlook 을 썼는지부터 확인합니다([설치 프로그램](../../system-account/uninstall.md)).
 
 ### 이름이 헷갈리는 폴더: 새 Outlook 의 `Olk`
 
 새 Outlook 은 `%LOCALAPPDATA%\Microsoft\Olk` 폴더를 씁니다. 같은 PC 에서 이 폴더 안에는 `EBWebView`·`Feedback`·`logs` 폴더와 `UserSettings.json`·`updated.txt`·`xpdApi.log` 파일이 있었습니다. (확인 범위: Windows 11 25H2 PC 한 대, 새 Outlook 1.2026.707.300)
 
-이 폴더는 클래식 Outlook 의 OLK 임시 폴더와 다른 것입니다. 이름만 보고 첨부 임시 폴더로 보고하지 않습니다. 새 Outlook 의 흔적은 [새 Outlook](../new-outlook.md)에서 다룹니다.
+이 폴더는 클래식 Outlook 의 OLK 임시 폴더와 다르므로 이름만 보고 첨부 임시 폴더로 보고하지 않습니다. 새 Outlook 의 흔적은 [새 Outlook](../new-outlook.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -77,10 +75,9 @@
 
 ## 시각 해석
 
-- 폴더 안 파일의 NTFS 시각은 파일이 그 폴더에 생기고 바뀐 시각입니다. 읽는 법은 [마스터 파일 테이블](../../filesystem/mft.md)을 봅니다.
-- 흔한 설명이 맞다면 파일 만든 시각은 첨부를 연 무렵입니다. 이 해석은 재현으로 확인한 뒤에 씁니다.
-- 첨부가 붙은 메시지의 보낸 시각·받은 시각은 PST·OST 안의 속성 값입니다. 폴더 안 파일의 시각과 따로 봅니다.
-- 사본이 지워졌어도 [USN 변경 저널](../../filesystem/usnjrnl.md)에 파일이 생기고 지워진 기록이 남았는지 봅니다.
+폴더 안 파일의 NTFS 시각은 파일이 그 폴더에 생기고 바뀐 시각입니다. 읽는 법은 [마스터 파일 테이블](../../filesystem/mft.md)을 봅니다. 흔한 설명이 맞다면 파일 만든 시각은 첨부를 연 무렵이지만, 이 해석은 재현으로 확인한 뒤에 씁니다.
+
+첨부가 붙은 메시지의 보낸 시각·받은 시각은 PST·OST 안의 속성 값이므로 폴더 안 파일의 시각과 따로 봅니다. 사본이 지워졌어도 [USN 변경 저널](../../filesystem/usnjrnl.md)에 파일이 생기고 지워진 기록이 남았는지 봅니다.
 
 ## 함정과 한계
 
@@ -95,7 +92,7 @@
 
 ### 원시 바이트로 한 번
 
-NTFS 는 파일 이름을 UTF-16LE 로 적습니다. 그래서 MFT 에서 폴더 이름을 바이트로 찾을 수 있습니다. 아래 바이트는 글자를 UTF-16LE 로 바꿔 계산한 값입니다.
+NTFS 는 파일 이름을 UTF-16LE 로 적기 때문에 MFT 에서 폴더 이름을 바이트로 찾을 수 있습니다. 아래 바이트는 글자를 UTF-16LE 로 바꿔 계산한 값입니다.
 
 | 찾을 글자 | 바이트 |
 |---|---|

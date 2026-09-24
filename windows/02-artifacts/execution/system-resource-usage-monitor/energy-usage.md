@@ -8,7 +8,7 @@ SRUM 의 에너지 사용 표에는 노트북이 전원에 꽂혀 있었는지, 
 
 ## 무엇을 기록하나 · 왜 생기나
 
-에너지 사용 공급자 (Energy Usage Provider)는 SRUM 확장 가운데 하나입니다. 이 확장의 파일은 `%SystemRoot%\System32\energyprov.dll` 입니다. 확장 목록은 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SRUM\Extensions` 아래에 있습니다. 이 공급자의 GUID 가 그대로 표 이름이 됩니다.
+에너지 사용 공급자 (Energy Usage Provider)는 SRUM 확장 가운데 하나이고, 파일은 `%SystemRoot%\System32\energyprov.dll` 입니다. 확장 목록은 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SRUM\Extensions` 아래에 있으며, 이 공급자의 GUID 가 그대로 표 이름이 됩니다.
 
 | 표 이름 | 이 글에서 부르는 이름 | 남는 것 |
 |---|---|---|
@@ -17,7 +17,7 @@ SRUM 의 에너지 사용 표에는 노트북이 전원에 꽂혀 있었는지, 
 
 배터리 열의 이름(DesignedCapacity·FullChargedCapacity·CycleCount)은 배터리 드라이버가 돌려주는 `BATTERY_INFORMATION` 구조의 멤버 이름과 같습니다. Microsoft 문서는 이 구조의 용량 단위를 mWh 로 적습니다. 배터리가 상대 단위(BATTERY_CAPACITY_RELATIVE)로 보고하면 단위가 없습니다.
 
-이름이 비슷한 에너지 추정 공급자 (Energy Estimation Provider, `eeprov.dll`)도 있습니다. 이 공급자는 앱별 에너지 추정값을 `{DA73FB89-2BEA-4DDC-86B8-6E048C6DA477}` 표의 이진 열(BinaryData)에 넣습니다. 이 이진 값의 구조는 공개 명세에 없습니다. 이 페이지는 에너지 사용 공급자의 두 표만 다룹니다.
+이름이 비슷한 에너지 추정 공급자 (Energy Estimation Provider, `eeprov.dll`)도 있습니다. 이 공급자는 앱별 에너지 추정값을 `{DA73FB89-2BEA-4DDC-86B8-6E048C6DA477}` 표의 이진 열(BinaryData)에 넣는데, 이 이진 값의 구조는 공개 명세에 없습니다. 이 페이지는 에너지 사용 공급자의 두 표만 다룹니다.
 
 ## 위치와 버전별 차이
 

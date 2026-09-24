@@ -2,7 +2,7 @@
 
 > 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
 
-보안 프로그램을 끄거나 설정을 바꾸면 그 일도 기록으로 남습니다. Windows 에 들어 있는 Microsoft Defender 바이러스 백신 (Microsoft Defender Antivirus) 은 실시간 보호 (Real-time protection) 가 꺼지거나 설정이 바뀔 때 운영 로그 (Operational log) 에 이벤트를 남깁니다[1]. 이 페이지는 이 운영 로그로 언제 무엇을 껐는지 찾고, 누가 했는지 좁히는 순서를 다룹니다. 탐지 이벤트 1116·1117 의 구조는 [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 에서, 검사 로그와 격리 파일은 [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) 에서 다룹니다. 다른 보안 제품은 제품마다 기록이 달라 여기서 다루지 않습니다.
+보안 프로그램을 끄거나 설정을 바꾸면 그 일도 기록으로 남습니다. Windows 에 들어 있는 Microsoft Defender 바이러스 백신 (Microsoft Defender Antivirus) 은 실시간 보호 (Real-time protection) 가 꺼지거나 설정이 바뀔 때 운영 로그 (Operational log) 에 이벤트를 남깁니다[1]. 이 페이지는 이 운영 로그로 언제 무엇을 껐는지 찾고 누가 했는지 좁히는 순서를 다룹니다. 탐지 이벤트 1116·1117 의 구조는 [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 에서, 검사 로그와 격리 파일은 [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) 에서 다룹니다. 다른 보안 제품은 제품마다 기록이 달라 여기서 다루지 않습니다.
 
 ## 조사 질문
 
@@ -39,9 +39,7 @@
 
 ## Defender 운영 로그 찾기
 
-- 이벤트 뷰어에서는 Applications and Services Logs > Microsoft > Windows > Windows Defender > Operational 에 있습니다[1].
-- 채널 이름은 `Microsoft-Windows-Windows Defender/Operational` 입니다[1].
-- 수집한 로그를 도구로 열 때는 이 채널 이름으로 찾습니다.
+이벤트 뷰어에서는 Applications and Services Logs > Microsoft > Windows > Windows Defender > Operational 에 있고[1], 채널 이름은 `Microsoft-Windows-Windows Defender/Operational` 입니다[1]. 수집한 로그를 도구로 열 때는 이 채널 이름으로 찾습니다.
 
 ## 끄기와 설정 바꾸기
 
@@ -57,13 +55,11 @@
 
 (표는 Microsoft 문서[1] 기준입니다. 칸이 빈 곳은 이번 자료에서 칸 이름을 확인하지 못한 곳입니다.)
 
-- 5001 과 그 뒤의 5000 을 짝지으면 실시간 보호가 꺼져 있던 구간이 나옵니다.
-- 5007 의 Old value 와 New value 로 어느 설정이 어떻게 바뀌었는지 봅니다[1].
-- Microsoft 문서는 예상하지 못한 5007 이 악성코드 때문일 수 있다고 적습니다[1]. 이때는 설정을 살피라고 권합니다[1].
-- 변조 방지 (Tamper protection) 가 켜져 있으면 Defender 는 설정을 바꾸려는 시도를 막습니다[1].
-- 5013 에는 어떤 설정 변경을 막았는지 남습니다[1].
-- 5013 은 설정을 바꾸려다 막힌 기록입니다. 설정이 바뀐 기록이 아닙니다.
-- 문서에는 5013 의 기호 이름이 MALWAREPROTECTION_SCAN_CANCELLED 로 적혀 있습니다[1]. 이 이름은 1002(검사 중단)의 기호 이름과 같습니다[1]. 문서의 잘못일 수 있으니 기호 이름이 아니라 이벤트 ID 로 거릅니다.
+5001 과 그 뒤의 5000 을 짝지으면 실시간 보호가 꺼져 있던 구간이 나오고, 5007 의 Old value 와 New value 로 어느 설정이 어떻게 바뀌었는지 볼 수 있습니다[1]. Microsoft 문서는 예상하지 못한 5007 이 악성코드 때문일 수 있다고 적고, 이때는 설정을 살피라고 권합니다[1].
+
+변조 방지 (Tamper protection) 가 켜져 있으면 Defender 는 설정을 바꾸려는 시도를 막고[1], 5013 에는 어떤 설정 변경을 막았는지 남습니다[1]. 5013 은 설정을 바꾸려다 막힌 기록이지 설정이 바뀐 기록이 아닙니다.
+
+- - 문서에는 5013 의 기호 이름이 MALWAREPROTECTION_SCAN_CANCELLED 로 적혀 있습니다[1]. 이 이름은 1002(검사 중단)의 기호 이름과 같습니다[1]. 문서의 잘못일 수 있으니 기호 이름이 아니라 이벤트 ID 로 거릅니다.
 
 ## 사람이 껐는지, 오류로 멈췄는지
 
@@ -83,13 +79,10 @@
 
 ## 탐지하고도 두었나, 탐지 기록을 지웠나
 
-- 1116 은 위협을 탐지한 기록입니다[1]. 1117 은 조치한 기록이고, 1118 은 조치에 실패한 기록입니다[1].
-- 1117 의 Action 값은 Clean, Quarantine, Remove, Allow, User defined, No action, Block 가운데 하나입니다[1].
-- Allow·No action·None 은 위협을 치료하지 않습니다[1].
-- Allow 는 이후 탐지 이벤트를 억누릅니다[1]. None 은 알림과 보호 기록을 계속 만듭니다[1].
-- 변조 방지가 켜져 있으면 이 조치들을 설정할 수 없습니다[1].
-- ThreatSeverityDefaultAction 이 None 이면 1116 이 남습니다[1]. 뒤따르는 1117 의 Action 이 Allow 이면 탐지는 했지만 치료하지 않았다는 뜻입니다[1].
-- 1013 (MALWAREPROTECTION_MALWARE_HISTORY_DELETE) 은 악성코드 탐지 기록을 지운 기록입니다[1]. Time 칸은 기록을 지운 때입니다[1]. User 칸도 있습니다[1].
+1116 은 위협을 탐지한 기록이고, 1117 은 조치한 기록이며, 1118 은 조치에 실패한 기록입니다[1]. 1117 의 Action 값은 Clean, Quarantine, Remove, Allow, User defined, No action, Block 가운데 하나입니다[1]. Allow·No action·None 은 위협을 치료하지 않는데[1], Allow 는 이후 탐지 이벤트를 억누르고 None 은 알림과 보호 기록을 계속 만듭니다[1]. 변조 방지가 켜져 있으면 이 조치들을 설정할 수 없습니다[1].
+
+ThreatSeverityDefaultAction 이 None 이면 1116 이 남고[1], 뒤따르는 1117 의 Action 이 Allow 이면 탐지는 했지만 치료하지 않았다는 뜻입니다[1]. 1013 (MALWAREPROTECTION_MALWARE_HISTORY_DELETE) 은 악성코드 탐지 기록을 지운 기록이며[1], Time 칸은 기록을 지운 때이고 User 칸도 있습니다[1].
+
 - 1116 의 다른 칸과 Detection Source 값은 [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 에서 다룹니다.
 
 Defender 는 악성코드를 탐지하면 악성코드가 바꿨을 수 있는 설정을 되돌립니다[1]. 문서가 드는 설정은 아래와 같습니다[1].
@@ -104,12 +97,9 @@ Defender 는 악성코드를 탐지하면 악성코드가 바꿨을 수 있는 �
 
 ## 상태 보고 (1150·1151)
 
-- 1150 은 Defender 가 정상으로 돌고 있다는 보고입니다[1]. 한 시간마다 남습니다[1].
-- 1151 은 상태 보고서이고, 시각은 UTC 입니다[1].
-- 1151 에는 RTP state, OA state, IOAV state, BM state 가 남습니다[1]. 값은 Enabled·Disabled 가운데 하나입니다[1].
-- 1151 에는 서명 나이와 생성 시각, 마지막 빠른 검사·전체 검사의 시작·끝 시각 같은 값도 남습니다[1].
-- 문서는 1150 을 설명하면서 "상태를 모니터링 플랫폼에 보고하면" 이라는 조건을 붙입니다[1]. 따로 보고하지 않는 가정용 PC 에도 남는지는 이번 자료로 확인하지 못했습니다.
-- 1151 이 남은 검체에서는 RTP state 가 Disabled 인 보고로 실시간 보호가 꺼져 있던 시점을 따로 확인합니다.
+1150 은 Defender 가 정상으로 돌고 있다는 보고이며 한 시간마다 남습니다[1]. 1151 은 상태 보고서이고 시각은 UTC 입니다[1]. 1151 에는 RTP state, OA state, IOAV state, BM state 가 남고 값은 Enabled·Disabled 가운데 하나이며[1], 서명 나이와 생성 시각, 마지막 빠른 검사·전체 검사의 시작·끝 시각 같은 값도 남습니다[1].
+
+문서는 1150 을 설명하면서 "상태를 모니터링 플랫폼에 보고하면" 이라는 조건을 붙입니다[1]. 따로 보고하지 않는 가정용 PC 에도 남는지는 이번 자료로 확인하지 못했습니다. 1151 이 남은 검체에서는 RTP state 가 Disabled 인 보고로 실시간 보호가 꺼져 있던 시점을 따로 확인합니다.
 
 ## 서비스를 멈추거나 프로그램을 지운 흔적
 

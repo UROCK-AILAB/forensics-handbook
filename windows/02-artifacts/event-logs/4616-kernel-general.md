@@ -2,23 +2,17 @@
 
 ## 한 줄 요약
 
-시스템 시각이 바뀌면 보안 로그에 4616 이, 시스템 로그에 Kernel-General 1 이 남습니다. 두 이벤트 모두 바뀌기 전 시각과 바뀐 뒤 시각을 UTC 로 적습니다. 4616 은 감사 정책 설정과 상관없이 늘 남습니다. Kernel-General 1 에는 바꾼 까닭 (Reason) 과 바뀐 폭이 더 들어 있습니다. 대부분은 Windows 시간 서비스가 하는 보정이므로, 먼저 어느 계정과 어느 프로세스가 바꿨는지를 봅니다.
+시스템 시각이 바뀌면 보안 로그에 4616 이, 시스템 로그에 Kernel-General 1 이 남습니다. 두 이벤트 모두 바뀌기 전 시각과 바뀐 뒤 시각을 UTC 로 적는데, 4616 은 감사 정책 설정과 상관없이 늘 남고 Kernel-General 1 에는 바꾼 까닭 (Reason) 과 바뀐 폭이 더 들어 있습니다. 대부분은 Windows 시간 서비스가 하는 보정이므로, 먼저 어느 계정과 어느 프로세스가 바꿨는지를 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 ### 보안 로그 4616
 
-- 제목은 "4616(S) The system time was changed." 입니다.
-- 시스템 시각이 바뀔 때마다 생깁니다.
-- 하위 범주는 보안 상태 변경 감사 (Audit Security State Change) 입니다. 그러나 이 하위 범주를 어떻게 설정하든 늘 남습니다.
-- Subject 칸은 시스템 시각 바꾸기를 요청한 계정입니다.
-- Microsoft 문서는 Subject 가 LOCAL SERVICE 인 4616 을 흔히 보는 정상 보정이라고 적습니다.
+제목은 "4616(S) The system time was changed." 이고, 시스템 시각이 바뀔 때마다 생깁니다. 하위 범주는 보안 상태 변경 감사 (Audit Security State Change) 지만 이 하위 범주를 어떻게 설정하든 늘 남습니다. Subject 칸은 시스템 시각 바꾸기를 요청한 계정이며, Microsoft 문서는 Subject 가 LOCAL SERVICE 인 4616 을 흔히 보는 정상 보정이라고 적습니다.
 
 ### 시스템 로그 Kernel-General 1
 
-- 공급자는 Microsoft-Windows-Kernel-General 이고, 채널은 System 입니다.
-- 메시지 틀은 "The system time has changed to %1 from %2." 입니다. 버전 1 부터 "Change Reason: %3." 이 붙습니다 (확인 범위: Win11 25H2 한 대의 공급자 템플릿).
-- Reason 칸은 시각을 바꾼 까닭을 숫자로 적습니다. 공개 도구 EvtxECmd 의 맵은 아래처럼 풉니다.
+공급자는 Microsoft-Windows-Kernel-General 이고 채널은 System 입니다. 메시지 틀은 "The system time has changed to %1 from %2." 이며 버전 1 부터 "Change Reason: %3." 이 붙습니다 (확인 범위: Win11 25H2 한 대의 공급자 템플릿). Reason 칸은 시각을 바꾼 까닭을 숫자로 적으며, 공개 도구 EvtxECmd 의 맵은 아래처럼 풉니다.
 
 | Reason | 맵의 풀이 |
 |---|---|
@@ -27,7 +21,7 @@
 | 3 | 새 시간대로 맞춤 |
 | 그 밖 | "Unknown code" |
 
-- 맵은 근거로 다른 사이트의 이벤트 설명 페이지를 적었습니다. 그 페이지와 Microsoft 공식 문서의 Reason 표는 확인하지 못했습니다.
+맵은 근거로 다른 사이트의 이벤트 설명 페이지를 적었는데, 그 페이지와 Microsoft 공식 문서의 Reason 표는 확인하지 못했습니다.
 
 조사한 PC 의 Kernel-General 1 은 199건이었습니다. Reason 마다 모습이 달랐습니다 (확인 범위: Win11 25H2 한 대).
 
@@ -37,8 +31,7 @@
 | 2 | 10 | 빈 값 (ProcessID 4) | 없음 | 모두 절전·최대 절전에서 깨어날 때 |
 | 3 | 2 | `msoobe.exe`, `CloudExperienceHostBroker.exe` | `S-1-5-18` (SYSTEM) | OOBE (첫 설정) 때. TimeDeltaInMs 0 |
 
-- Reason 2 뒤 몇 초 안에 Kernel-Boot 18·25·27·30·32, Kernel-Power 506·507·566(또는 105·107), Power-Troubleshooter 1 이 뒤따랐습니다.
-- 관찰은 맵의 풀이와 맞습니다. 2 는 깨어날 때 하드웨어 시계에서 시각을 다시 읽은 것으로, 3 은 설치 중 시간대를 정한 것으로 보입니다.
+Reason 2 뒤 몇 초 안에 Kernel-Boot 18·25·27·30·32, Kernel-Power 506·507·566(또는 105·107), Power-Troubleshooter 1 이 뒤따랐습니다. 이 관찰은 맵의 풀이와 맞아서, 2 는 깨어날 때 하드웨어 시계에서 시각을 다시 읽은 것으로, 3 은 설치 중 시간대를 정한 것으로 보입니다.
 
 ### 같은 공급자의 다른 시각 이벤트
 
@@ -52,8 +45,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 | 24 | "The time zone information was refreshed … Current time zone bias is %2." | ExitReason, CurrentBias, CurrentTimeZoneID 등 |
 | 25 | "The system time was initialized to %1." | SystemTime, LoaderTime, HalRtcErrorCode, RealTimeIsUniversal, IsSoftBoot 등 |
 
-- 16 "The access history in hive %2 was cleared …" 도 같은 공급자입니다. 시각 변경과는 관계가 없습니다.
-- 12·13 으로 켜짐·꺼짐을 읽는 법은 [켜짐·꺼짐](power-on-off-events.md)에서 다룹니다.
+16 "The access history in hive %2 was cleared …" 도 같은 공급자지만 시각 변경과는 관계가 없습니다. 12·13 으로 켜짐·꺼짐을 읽는 법은 [켜짐·꺼짐](power-on-off-events.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -87,9 +79,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 | 3 | CmosTime (FILETIME), TimeZoneBias (Int32), RealTimeIsUniversal (Boolean), SystemInCmosMode (Boolean) |
 | 4 | TimeDeltaInMs (Int64, 밀리초) |
 
-- 버전마다 어느 Windows 빌드에서 쓰이는지는 확인하지 못했습니다.
-- EvtxECmd 맵의 예시(2020년)는 버전 2 였습니다.
-- 조사한 PC(Win11 25H2)의 199건은 모두 버전 4 였습니다.
+버전마다 어느 Windows 빌드에서 쓰이는지는 확인하지 못했습니다. EvtxECmd 맵의 예시(2020년)는 버전 2 였고, 조사한 PC(Win11 25H2)의 199건은 모두 버전 4 였습니다.
 
 ### 로그 보존 기간
 
@@ -127,8 +117,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 | 9 | RealTimeIsUniversal | Boolean | 하드웨어 시계가 UTC 인지 |
 | 10 | SystemInCmosMode | Boolean | |
 
-- 칸 이름과 형식은 공급자 템플릿에서 읽었습니다 (확인 범위: Win11 25H2 한 대).
-- "뜻" 은 칸 이름과 관찰한 값으로 풀었습니다. SystemInCmosMode 의 뜻은 확인하지 못했습니다.
+칸 이름과 형식은 공급자 템플릿에서 읽었고 (확인 범위: Win11 25H2 한 대), "뜻" 은 칸 이름과 관찰한 값으로 풀었습니다. SystemInCmosMode 의 뜻은 확인하지 못했습니다.
 
 ### Microsoft 의 4616 예시 값
 
@@ -146,9 +135,8 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 
 조사한 PC 에서 보안 로그가 남아 있던 기간(2026-09-21T22:39Z 이후)에 두 이벤트를 맞대 봤습니다 (확인 범위: Win11 25H2 한 대).
 
-- Kernel-General 1 이 4건, 4616 이 4건이었고 하나씩 짝이 맞았습니다.
-- 짝끼리 기록 시각 차이는 1ms 미만이었습니다.
-- 4616 의 PreviousTime·NewTime 과 Kernel-General 1 의 OldTime·NewTime 이 100ns 단위까지 같았습니다.
+Kernel-General 1 이 4건, 4616 이 4건이었고 하나씩 짝이 맞았습니다. 짝끼리 기록 시각 차이는 1ms 미만이었고, 4616 의 PreviousTime·NewTime 과 Kernel-General 1 의 OldTime·NewTime 은 100ns 단위까지 같았습니다.
+
 - 4616 4건은 모두 버전 1 이었습니다. SubjectUserSid 는 `S-1-5-19`(LOCAL SERVICE), SubjectLogonId 는 `0x3e5`, ProcessName 은 `C:\Windows\System32\svchost.exe` 였습니다.
 
 같은 변경인데 적는 방식이 다릅니다.
@@ -180,9 +168,8 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 
 ## 시각 해석
 
-- 이벤트 시각은 `<TimeCreated SystemTime>` 에 들어 있습니다. 끝에 Z 가 붙은 UTC 값입니다.
-- PreviousTime·NewTime·OldTime 도 UTC 입니다.
-- CmosTime 도 끝에 Z 를 붙여 보여 줍니다. 그러나 RealTimeIsUniversal 이 false 이면 현지 시각입니다. 조사한 PC 에서는 CmosTime 이 NewTime 에 9시간을 더한 값이었습니다 (확인 범위: Win11 25H2 한 대).
+- 이벤트 시각은 `<TimeCreated SystemTime>` 에 들어 있고, 끝에 Z 가 붙은 UTC 값입니다. PreviousTime·NewTime·OldTime 도 UTC 입니다.
+- CmosTime 도 끝에 Z 를 붙여 보여 주지만 RealTimeIsUniversal 이 false 이면 현지 시각입니다. 조사한 PC 에서는 CmosTime 이 NewTime 에 9시간을 더한 값이었습니다 (확인 범위: Win11 25H2 한 대).
 - TimeZoneBias 는 부호 있는 32비트 값입니다. 조사한 PC 에서는 -540(UTC+9)이었습니다.
 - TimeDeltaInMs 는 음수가 될 수 있습니다. 조사한 PC 에서 -1995 는 약 2초 뒤로 돌린 것이었고, 깨어날 때 121010 은 약 2분 앞으로 옮긴 것이었습니다. 뒤로 간 변경을 찾을 때는 이 칸의 부호를 봅니다.
 - 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md)을 씁니다.
@@ -214,7 +201,7 @@ Microsoft 문서는 4616 을 이렇게 지켜보라고 권합니다.
 
 그 밖에 알아 둘 것입니다.
 
-- 시스템 시각을 바꾸려면 시스템 시각 변경 권한 (SeSystemtimePrivilege) 이 있어야 합니다. 이 권한을 기본으로 받는 계정은 [시스템 시각을 바꿨나](../../04-scenarios/activity/anti-forensics/system-time-change.md)에서 다룹니다.
+- 시스템 시각을 바꾸려면 시스템 시각 변경 권한 (SeSystemtimePrivilege) 이 있어야 하며, 이 권한을 기본으로 받는 계정은 [시스템 시각을 바꿨나](../../04-scenarios/activity/anti-forensics/system-time-change.md)에서 다룹니다.
 - 보안 로그를 지워도 시스템 로그의 Kernel-General 1 은 따로 남습니다. 로그를 지운 기록은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
 - 조사한 PC 에는 Microsoft-Windows-Time-Service/Operational 로그도 켜져 있었습니다(1MB, 764건, ID 257~266·272). 각 ID 의 뜻은 확인하지 못했습니다.
 

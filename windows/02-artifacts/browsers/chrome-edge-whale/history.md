@@ -2,11 +2,11 @@
 
 ## 한 줄 요약
 
-크롬 계열 브라우저는 프로필 폴더의 `History` 파일에 방문 기록과 다운로드 기록을 남깁니다. 이 파일은 SQLite 데이터베이스입니다. 방문은 주소마다 한 행(`urls`)과 방문마다 한 행(`visits`)으로 나눠 적습니다. 다운로드는 `downloads` 표와 주소 사슬 표(`downloads_url_chains`)에 적습니다. 시각 칸은 1601-01-01 0시(UTC)부터 센 마이크로초입니다.
+크롬 계열 브라우저는 프로필 폴더의 `History` 파일에 방문 기록과 다운로드 기록을 남깁니다. 이 파일은 SQLite 데이터베이스이고, 방문은 주소마다 한 행(`urls`)과 방문마다 한 행(`visits`)으로 나눠 적으며, 다운로드는 `downloads` 표와 주소 사슬 표(`downloads_url_chains`)에 적습니다. 시각 칸은 1601-01-01 0시(UTC)부터 센 마이크로초입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-브라우저는 방문 기록 화면, 주소창 추천, 새 탭의 자주 가는 사이트를 보여 주려고 이 기록을 씁니다. 다운로드 목록 화면도 이 파일을 읽습니다. 기록은 사용자가 지우거나 보관 기한이 지나야 사라집니다.
+브라우저는 방문 기록 화면, 주소창 추천, 새 탭의 자주 가는 사이트를 보여 주려고 이 기록을 쓰며, 다운로드 목록 화면도 이 파일을 읽습니다. 기록은 사용자가 지우거나 보관 기한이 지나야 사라집니다.
 
 | 표 | 한 행이 뜻하는 것 | 주요 내용 |
 |---|---|---|
@@ -17,7 +17,7 @@
 | `downloads` | 다운로드 하나 | 저장 경로, 시작·끝 시각, 받은 크기, 상태, 위험 판정, 해시 |
 | `downloads_url_chains` | 다운로드 주소 사슬의 한 칸 | 처음 요청한 주소부터 실제로 받은 주소까지 |
 
-이 밖에도 `meta`, `segments`, `segment_usage` 같은 표가 있습니다. 브라우저 판이 올라가면서 표가 늘어납니다. 이 페이지는 위 여섯 표를 다룹니다.
+이 밖에도 `meta`, `segments`, `segment_usage` 같은 표가 있고 브라우저 판이 올라가면서 표가 늘어납니다. 이 페이지는 위 여섯 표를 다룹니다.
 
 시크릿 창에서 연 페이지는 이 파일에 남지 않습니다. 이 점과 기록의 한계는 [크롬 계열 브라우저](index.md) 허브에서 다룹니다.
 
@@ -27,7 +27,7 @@
 
 `History` 는 프로필 폴더(`Default`, `Profile 1` 등) 바로 아래 있습니다. 브라우저별 `User Data` 폴더 위치는 [크롬 계열 브라우저](index.md) 허브에 정리했습니다. 프로필 이름과 폴더를 잇는 법은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
 
-같은 폴더에 `History-journal` 이 함께 있습니다. 이 파일은 SQLite 롤백 저널입니다. 두 파일을 함께 수집합니다. 저널을 어떻게 읽는지는 [WAL과 롤백 저널](../../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md)에서 다룹니다.
+같은 폴더에 `History-journal` 이 함께 있습니다. 이 파일은 SQLite 롤백 저널이라서 두 파일을 함께 수집합니다. 저널을 어떻게 읽는지는 [WAL과 롤백 저널](../../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md)에서 다룹니다.
 
 ### 버전별 차이
 
@@ -41,9 +41,7 @@
 | 판이 올라갈 때마다 | `visits`·`downloads` 에 열이 늘어납니다. 동기화 방문을 가리는 `originator_cache_guid` 가 그런 예입니다 | Chromium 소스 |
 | 옛 판의 다운로드 상태 | 상태 값 3 은 옛 버그 때 쓰던 값입니다. 지금 코드는 이 값을 4(중단)로 바꿉니다 | Chromium `download_database.cc` |
 
-- 스키마 판 번호는 `meta` 표에 있습니다. 검체마다 먼저 확인합니다.
-- 열 목록은 `sqlite_master` 의 `CREATE TABLE` 문으로 확인합니다. 아래 표는 2026년 9월 Chromium 소스 기준입니다. 옛 판에는 없는 열이 있습니다.
-- Edge·Whale 도 같은 Chromium 코드로 이 파일을 만듭니다. 제조사가 표를 더할 수 있으니 표 목록부터 봅니다.
+스키마 판 번호는 `meta` 표에 있으므로 검체마다 먼저 확인합니다. 열 목록은 `sqlite_master` 의 `CREATE TABLE` 문으로 확인하는데, 아래 표는 2026년 9월 Chromium 소스 기준이라 옛 판에는 없는 열이 있습니다. Edge·Whale 도 같은 Chromium 코드로 이 파일을 만들지만 제조사가 표를 더할 수 있으니 표 목록부터 봅니다.
 
 ## 구조
 
@@ -61,8 +59,7 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../..
 | `last_visit_time` | 마지막 방문 시각 |
 | `hidden` | 1 이면 주소창 자동 완성에 쓰지 않는 주소입니다 |
 
-- 소스 주석은 `visit_count` 가 `visits` 의 행 수와 "자주 같지만 늘 같지는 않다" 고 적습니다.
-- `id` 는 AUTOINCREMENT 로 만듭니다. 소스 주석에 따르면 동기화 때문에 번호를 다시 쓰지 않으려는 것입니다.
+소스 주석은 `visit_count` 가 `visits` 의 행 수와 "자주 같지만 늘 같지는 않다" 고 적습니다. `id` 는 AUTOINCREMENT 로 만드는데, 소스 주석에 따르면 동기화 때문에 번호를 다시 쓰지 않으려는 것입니다.
 
 ### visits — 방문마다 한 행
 
@@ -82,7 +79,7 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../..
 
 ### transition — 전환 유형
 
-`transition` 은 32비트 값입니다. 아래 8비트(`& 0xFF`)가 기본 유형입니다. 위 24비트(`& 0xFFFFFF00`)는 덧붙은 표시입니다. 값과 뜻은 Chromium `page_transition_types.h` 에서 옮겼습니다.
+`transition` 은 32비트 값입니다. 아래 8비트(`& 0xFF`)가 기본 유형입니다. 위 24비트(`& 0xFFFFFF00`)는 덧붙은 표시이며, 값과 뜻은 Chromium `page_transition_types.h` 에서 옮겼습니다.
 
 | 기본 유형 | 이름 | 뜻 |
 |---|---|---|
@@ -110,7 +107,7 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../..
 | 0x40000000 | CLIENT_REDIRECT | 자바스크립트나 meta refresh 로 넘어갔습니다 |
 | 0x80000000 | SERVER_REDIRECT | 서버의 HTTP 헤더로 넘어갔습니다 |
 
-예를 들어 805306369 는 0x30000001 입니다. 기본 유형은 1(TYPED)입니다. 표시는 CHAIN_START 와 CHAIN_END 입니다. 리다이렉트 없이 주소를 입력해 온 방문이라는 뜻입니다.
+예를 들어 805306369 는 0x30000001 입니다. 기본 유형은 1(TYPED)이고 표시는 CHAIN_START 와 CHAIN_END 이므로, 리다이렉트 없이 주소를 입력해 온 방문이라는 뜻입니다.
 
 ### visit_source — 방문의 출처
 
@@ -158,7 +155,7 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../..
 | `by_ext_id` · `by_ext_name` | 다운로드를 만든 확장 프로그램 |
 | `mime_type` · `original_mime_type` | 내용 형식. 앞의 것은 추정일 수 있습니다 |
 
-`downloads_url_chains` 는 `id`·`chain_index`·`url` 세 열입니다. `id` 는 `downloads.id` 입니다. `chain_index` 가 0 인 주소가 처음 요청한 주소입니다. 번호가 가장 큰 주소가 실제로 데이터를 받은 주소입니다.
+`downloads_url_chains` 는 `id`·`chain_index`·`url` 세 열이고, `id` 는 `downloads.id` 입니다. `chain_index` 가 0 인 주소가 처음 요청한 주소이고, 번호가 가장 큰 주소가 실제로 데이터를 받은 주소입니다.
 
 | `state` | 뜻 |
 |---|---|

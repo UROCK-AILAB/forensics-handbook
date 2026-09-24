@@ -38,9 +38,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 
 ### PC 에 남는 것
 
-- 앱을 쓰면 `%LOCALAPPDATA%\Microsoft\Olk` 폴더에 WebView2 사용자 데이터 폴더와 로그가 쌓입니다 (관찰).
-- 로그 한 줄마다 시각이 붙습니다 (관찰). 앱 시작·종료, 계정 조회, 실행 인자가 행으로 남았습니다.
-- 스토어 앱이라 `%LOCALAPPDATA%\Packages` 아래에도 패키지 데이터 폴더가 생깁니다 (관찰).
+앱을 쓰면 `%LOCALAPPDATA%\Microsoft\Olk` 폴더에 WebView2 사용자 데이터 폴더와 로그가 쌓입니다 (관찰). 로그는 한 줄마다 시각이 붙고, 앱 시작·종료, 계정 조회, 실행 인자가 행으로 남았습니다 (관찰). 스토어 앱이라 `%LOCALAPPDATA%\Packages` 아래에도 패키지 데이터 폴더가 생깁니다 (관찰).
 
 ## 위치와 버전별 차이
 
@@ -50,10 +48,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 | 주 데이터 폴더 | `%LOCALAPPDATA%\Microsoft\Olk` | WebView2 프로필, 로그, 창 설정 |
 | 패키지 데이터 폴더 | `%LOCALAPPDATA%\Packages\Microsoft.OutlookForWindows_8wekyb3d8bbwe` | 패키지 설정, 배포 정보 |
 
-- 패키지 이름은 `Microsoft.OutlookForWindows_8wekyb3d8bbwe` 였습니다 (관찰).
-- `Olk` 폴더는 클래식 Outlook 의 첨부 임시 폴더(OLK)와 이름만 비슷한 다른 폴더입니다. 첨부 임시 폴더는 [아웃룩](outlook/index.md) 허브에서 다룹니다.
-- Windows 10 에서 같은 위치를 쓰는지는 확인하지 못했습니다.
-- 앱 판에 따라 폴더 구성과 로그 형식이 바뀔 수 있습니다. 이번에는 한 판만 봤습니다.
+패키지 이름은 `Microsoft.OutlookForWindows_8wekyb3d8bbwe` 였습니다 (관찰). `Olk` 폴더는 클래식 Outlook 의 첨부 임시 폴더(OLK)와 이름만 비슷한 다른 폴더이며, 첨부 임시 폴더는 [아웃룩](outlook/index.md) 허브에서 다룹니다. Windows 10 에서 같은 위치를 쓰는지는 확인하지 못했습니다. 앱 판에 따라 폴더 구성과 로그 형식이 바뀔 수 있는데, 이번에는 한 판만 봤습니다.
 
 ## 구조
 
@@ -106,9 +101,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 | `Command-line`, `Application started with the following command line` | 실행 인자 | 앱이 열린 방법. `mailto:` 링크로 열렸으면 받는 사람 주소가 그대로 남았습니다 |
 | `Sending verb result response` | 값 안의 계정 메일 주소 | 앱에 연결된 계정 |
 
-- 실행 인자에는 `olk.exe` 의 전체 경로가 남습니다 (관찰). 경로의 패키지 폴더 이름으로 그때의 앱 판을 알 수 있습니다.
-- 관찰한 PC 의 로그에서는 판이 1.2025.1104.200 에서 1.2026.707.300 으로 바뀐 것이 보였습니다.
-- 관찰한 PC 에는 로그가 3개(2026-07-21 두 개, 2026-08-19 한 개)뿐이었습니다. 몇 개, 며칠치를 남기는지는 확인하지 못했습니다.
+실행 인자에는 `olk.exe` 의 전체 경로가 남아서 (관찰), 경로의 패키지 폴더 이름으로 그때의 앱 판을 알 수 있습니다. 관찰한 PC 의 로그에서는 판이 1.2025.1104.200 에서 1.2026.707.300 으로 바뀐 것이 보였습니다. 이 PC 에는 로그가 3개(2026-07-21 두 개, 2026-08-19 한 개)뿐이었고, 몇 개, 며칠치를 남기는지는 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -132,11 +125,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 
 ## 시각 해석
 
-- 로그의 `Time` 칸은 UTC 입니다 (관찰, 확인 범위: 로그 파일 한 개). 근거는 아래와 같습니다.
-  - 관찰한 PC 의 시간대는 UTC+9 였습니다.
-  - 마지막 행 `Application exiting` 의 `Time` 값은 2026-08-19 02:01:05.382 였습니다.
-  - 같은 파일의 수정 시각은 2026-08-19 11:01:05.38(+09:00) 이었습니다.
-  - 두 값은 9시간 차이만 났습니다.
+- 로그의 `Time` 칸은 UTC 입니다 (관찰, 확인 범위: 로그 파일 한 개). 관찰한 PC 의 시간대는 UTC+9 였고, 마지막 행 `Application exiting` 의 `Time` 값은 2026-08-19 02:01:05.382, 같은 파일의 수정 시각은 2026-08-19 11:01:05.38(+09:00) 이어서 두 값은 9시간 차이만 났습니다.
 - 파일 이름의 시각도 UTC 입니다 (관찰). 파일 이름의 시각은 첫 행의 시각과 거의 같았습니다.
 - 다른 검체에서는 같은 방법으로 한 번 맞춰 봅니다. 마지막 행의 시각과 파일 수정 시각을 비교하고, 차이가 그 PC 의 시간대와 같은지 봅니다([시간대 설정](../system-account/time-zone.md)).
 - `EBWebView` 안 파일의 시각 값은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 와 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 읽는 법을 봅니다.

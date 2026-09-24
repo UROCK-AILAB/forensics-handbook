@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의 추적 기능입니다. 커널이나 앱이 정한 이벤트를 실시간으로 넘기거나 로그 파일(`.etl`)에 씁니다. `.etl` 파일의 첫 이벤트에는 세션 머리 정보 (TRACE_LOGFILE_HEADER) 가 들어 있습니다. 이 머리 정보에 세션 시작 시각과 시스템 부팅 시각이 남습니다.
+ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의 추적 기능입니다. 커널이나 앱이 정한 이벤트를 실시간으로 넘기거나 로그 파일(`.etl`)에 씁니다. `.etl` 파일의 첫 이벤트에는 세션 머리 정보 (TRACE_LOGFILE_HEADER) 가 들어 있고, 여기에 세션 시작 시각과 시스템 부팅 시각이 남습니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 이벤트 뷰어가 여는 `.evtx` 파일은 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에서 다룹니다.
 
@@ -27,13 +27,9 @@ ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의
 
 ### 공급자 종류
 
-- 공급자는 MOF(고전)·WPP·매니페스트 기반·TraceLogging 네 종류입니다.
-- 종류마다 이벤트 값의 형식과 해석 정보를 두는 곳이 다릅니다.
-- MOF·WPP 공급자는 한 번에 세션 하나에만 켤 수 있습니다.
-- 매니페스트 기반·TraceLogging 공급자는 세션 8개까지 동시에 켤 수 있습니다.
-- WPP 공급자의 해석 정보는 TMF 파일에 있습니다. TMF 는 바이너리의 `.pdb` 안에 들어 있습니다.
-- TraceLogging 이벤트는 해석에 필요한 정보를 이벤트 안에 모두 담습니다(self-describing).
-- 매니페스트는 PE 파일의 WEVT_TEMPLATE 리소스에 이진 형태로 들어갈 수 있습니다. 리소스 구조는 [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) 에서 다룹니다.
+공급자는 MOF(고전)·WPP·매니페스트 기반·TraceLogging 네 종류이고, 종류마다 이벤트 값의 형식과 해석 정보를 두는 곳이 다릅니다. MOF·WPP 공급자는 한 번에 세션 하나에만 켤 수 있지만, 매니페스트 기반·TraceLogging 공급자는 세션 8개까지 동시에 켤 수 있습니다.
+
+WPP 공급자의 해석 정보는 TMF 파일에 있고, TMF 는 바이너리의 `.pdb` 안에 들어 있습니다. TraceLogging 이벤트는 해석에 필요한 정보를 이벤트 안에 모두 담습니다(self-describing). 매니페스트는 PE 파일의 WEVT_TEMPLATE 리소스에 이진 형태로 들어갈 수 있으며, 리소스 구조는 [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) 에서 다룹니다.
 
 ### 로그 모드 (LogFileMode)
 
@@ -95,12 +91,9 @@ AutoLogger 는 부팅 초기, 로그인 전의 이벤트를 기록하는 세션�
 
 버퍼 머리 구조 (WMI_BUFFER_HEADER) 의 공식 필드 표는 이 페이지가 참고한 자료로 확인하지 못했습니다. 아래는 확인 PC 의 `.etl` 4개(LwtNetLog·NtfsLog·ReFSLog·NetCore)를 읽어 본 결과입니다.
 
-- 파일 맨 앞에 고정 서명이 없었습니다.
-- 첫 4바이트는 버퍼 크기였습니다. LwtNetLog 는 0x10000, NtfsLog 는 0x2000, ReFSLog 는 0x1000, NetCore 는 0x20000 이었습니다.
-- 레지스트리에 BufferSize 가 있는 세션은 이 값과 맞았습니다. LwtNetLog 0x40, NtfsLog 0x8, NetCore 0x80 이고 단위는 KB 입니다.
-- 파일 크기는 버퍼 크기의 정수배였습니다.
-- 모든 버퍼의 첫 4바이트가 같은 버퍼 크기였습니다. LwtNetLog 는 버퍼 81개가 모두 그랬습니다.
-- 첫 버퍼의 TRACE_LOGFILE_HEADER 는 파일 오프셋 0x68 에서 시작했습니다.
+파일 맨 앞에는 고정 서명이 없었고, 첫 4바이트가 버퍼 크기였습니다. LwtNetLog 는 0x10000, NtfsLog 는 0x2000, ReFSLog 는 0x1000, NetCore 는 0x20000 이었습니다. 레지스트리에 BufferSize 가 있는 세션은 이 값과 맞았으며, LwtNetLog 0x40, NtfsLog 0x8, NetCore 0x80 이고 단위는 KB 입니다.
+
+파일 크기는 버퍼 크기의 정수배였고, 모든 버퍼의 첫 4바이트가 같은 버퍼 크기였습니다. LwtNetLog 는 버퍼 81개가 모두 그랬습니다. 첫 버퍼의 TRACE_LOGFILE_HEADER 는 파일 오프셋 0x68 에서 시작했습니다.
 
 ### 머리 정보 (TRACE_LOGFILE_HEADER)
 
@@ -130,11 +123,9 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 
 확인 PC 의 `.etl` 4개에서 본 값입니다.
 
-- 버전은 10.0, ProviderVersion 은 26100, 프로세서 수는 24, PointerSize 는 8 이었습니다.
-- EndTime 은 모두 0 이었습니다. 쓰는 중인 파일이었습니다.
-- 시간대 Bias 는 −540, 시간대 이름은 `@tzres.dll,-622` 였습니다.
-- LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetCore 는 0x22 와 22, LwtNetLog 는 0x2 와 16 이었습니다.
-- ReFSLog 는 레지스트리에 MaxFileSize 값이 없었고, 머리에는 기본값 100 이 들어 있었습니다.
+버전은 10.0, ProviderVersion 은 26100, 프로세서 수는 24, PointerSize 는 8 이었습니다. EndTime 은 모두 0 이었는데 쓰는 중인 파일이었습니다. 시간대 Bias 는 −540, 시간대 이름은 `@tzres.dll,-622` 였습니다.
+
+LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetCore 는 0x22 와 22, LwtNetLog 는 0x2 와 16 이었습니다. ReFSLog 는 레지스트리에 MaxFileSize 값이 없었고, 머리에는 기본값 100 이 들어 있었습니다.
 
 ## 읽는 법
 
@@ -172,7 +163,7 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 - 확인 PC 의 LwtNetLog·NetCore·NtfsLog.etl.006 은 BootTime 이 2026-09-20 21:44:17, StartTime 이 21:44:18 이었습니다. FILETIME 을 그대로 UTC 로 푼 값입니다.
 - 한국 시각으로는 09-21 06:44 입니다. `RtBackup` 파일들의 수정 시각(09-21 06:44)과 맞았습니다. 확인 PC 에서는 이 시각이 UTC 로 저장돼 있었습니다.
 - NtfsLog.etl.002 는 BootTime 이 2026-09-10 21:57:03(UTC) 이었습니다. 이전 부팅의 시각이 남아 있었습니다.
-- 확인 PC 에서는 부팅마다 번호 파일이 생겼습니다. 그래서 번호 파일마다 그때의 부팅 시각이 남았습니다.
+- 확인 PC 에서는 부팅마다 번호 파일이 생겨서 번호 파일마다 그때의 부팅 시각이 남았습니다.
 - 이 값은 켜짐·꺼짐 기록과 맞춰 볼 수 있습니다. [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) 과 [PC 사용 시간 재구성](../../../04-scenarios/activity/system-usage-time.md) 을 봅니다.
 
 ### 시간대 값
@@ -199,10 +190,9 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 
 ### 이벤트 로그(EVTX)와의 관계
 
-- 확인 PC 의 Autologger 키 아래에 EventLog-Application·EventLog-Security·EventLog-System 세션 키가 있었습니다.
-- EventLog-System 키의 값은 OwningChannel=System, LogFileMode=0x98000180, BufferSize=0x40, FlushTimer=1 이었습니다.
+- 확인 PC 의 Autologger 키 아래에 EventLog-Application·EventLog-Security·EventLog-System 세션 키가 있었고, EventLog-System 키의 값은 OwningChannel=System, LogFileMode=0x98000180, BufferSize=0x40, FlushTimer=1 이었습니다.
 - 0x98000180 을 로그 모드 상수로 풀면 SECURE(0x80)·REAL_TIME(0x100)·INDEPENDENT_SESSION(0x08000000)·NO_PER_PROCESSOR_BUFFERING(0x10000000)·ADDTO_TRIAGE_DUMP(0x80000000) 입니다.
-- 파일 모드 비트는 없습니다. 이 세션은 `.etl` 파일을 쓰지 않고 이벤트를 실시간으로 넘깁니다.
+- 파일 모드 비트가 없어서 이 세션은 `.etl` 파일을 쓰지 않고 이벤트를 실시간으로 넘깁니다.
 - "About Event Tracing" 문서는 실시간 소비자가 없을 때 이벤트가 빠지는 예로 이벤트 로그 서비스를 멈췄다 켜는 경우를 듭니다. 다만 EventLog-* 세션을 받는 쪽이 이벤트 로그 서비스라고 직접 적은 공식 문서는 확인하지 못했습니다.
 - 로그를 없애려 한 흔적은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 와 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
 

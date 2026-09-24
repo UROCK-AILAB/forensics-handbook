@@ -2,15 +2,13 @@
 
 ## 한 줄 요약
 
-실행 파일 항목 (InventoryApplicationFile) 은 `Amcache.hve` 하이브 안의 `Root\InventoryApplicationFile` 키입니다. 윈도의 호환성 점검 기능이 찾아낸 실행 파일마다 하위 키가 하나씩 생깁니다. 하위 키에는 파일 경로, 내용의 SHA-1, 크기, 버전 정보, 링크 시각이 남습니다.
+실행 파일 항목 (InventoryApplicationFile) 은 `Amcache.hve` 하이브 안의 `Root\InventoryApplicationFile` 키입니다. 윈도의 호환성 점검 기능이 찾아낸 실행 파일마다 하위 키가 하나씩 생기고, 하위 키에는 파일 경로, 내용의 SHA-1, 크기, 버전 정보, 링크 시각이 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-윈도는 설치된 프로그램이 새 버전과 잘 맞는지 점검하려고 실행 파일 목록을 모읍니다. 이 목록을 `Amcache.hve` 에 적습니다.
+윈도는 설치된 프로그램이 새 버전과 잘 맞는지 점검하려고 실행 파일 목록을 모아 `Amcache.hve` 에 적습니다.
 
-- 목록은 주로 호환성 점검 예약 작업 (Microsoft Compatibility Appraiser) 이 채웁니다. 이 작업은 `compattelrunner.exe` 를 실행합니다.
-- 호환성 조치 (shim) 가 필요한 프로그램을 실행하면 DiagTrack 서비스가 그 파일을 바로 적습니다.
-- 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](../pca.md) 서비스가 목록을 고칩니다.
+목록은 주로 호환성 점검 예약 작업 (Microsoft Compatibility Appraiser) 이 채우며, 이 작업은 `compattelrunner.exe` 를 실행합니다. 호환성 조치 (shim) 가 필요한 프로그램을 실행하면 DiagTrack 서비스가 그 파일을 바로 적고, 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](../pca.md) 서비스가 목록을 고칩니다.
 
 ANSSI 는 10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일을 세 종류로 나눴습니다.
 
@@ -20,9 +18,7 @@ ANSSI 는 10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일
 | 프로그램을 설치하면서 생긴 EXE·SYS | 설치 처리, 점검 작업 | 아니오 |
 | 점검 작업이 훑는 폴더의 EXE (`Program Files`, `Program Files (x86)`, 바탕 화면) | 점검 작업 | 아니오 |
 
-- ANSSI 실험에서 설치 폴더의 DLL 은 이 키에 들어오지 않았습니다(10.0.17134 기준).
-- 항목 하나만 보고는 세 종류 가운데 어디에 속하는지 가릴 수 없습니다.
-- 실행 증거로 쓸 수 있는 조건은 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
+ANSSI 실험에서 설치 폴더의 DLL 은 이 키에 들어오지 않았습니다(10.0.17134 기준). 항목 하나만 보고는 세 종류 가운데 어디에 속하는지 가릴 수 없으며, 실행 증거로 쓸 수 있는 조건은 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -42,11 +38,11 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 | 10.0.16299 (1709) | `파일 이름\|해시` | `Size` 가 REG_QWORD 로 바뀝니다. `Name`·`Publisher`·`Version`·`BinFileVersion`·`ProductName`·`ProductVersion`·`LinkDate`·`BinProductVersion`·`Language`·`IsPeFile`·`IsOsComponent` 가 더해집니다. |
 | 10.0.17134 (1803) · 10.0.17763 (1809) | 위와 같음 | 옛 `File`·`Programs` 키가 없어집니다. 실행 파일 목록은 이 키만 맡습니다. |
 
-- `파일 이름|해시` 의 해시 계산 방식은 공개되지 않았습니다.
-- ANSSI 는 이 해시가 파일 이름과 경로로 정해진다고 봤습니다. 서로 다른 두 PC 에서 같은 경로에 있는 다른 버전 파일이 같은 해시를 냈기 때문입니다.
-- 해시 길이는 자료마다 다릅니다. ANSSI 예시는 8자리입니다. Windows 10 21H2 관찰 예(Psmths)는 16자리입니다.
-- ANSSI 의 값 목록에 없는 `Usn`·`OriginalFileName`·`Description`·`AppxPackageFullName`·`AppxPackageRelativeId` 도 쓰입니다. Windows 10 21H2 관찰 예에는 `Usn` 이 있습니다. 공개 파서(AmcacheParser)도 이 값들을 읽습니다. 어느 버전에서 처음 생겼는지는 확인하지 못했습니다.
-- Windows 11 도 같은 점검 기능을 씁니다. Microsoft 진단 데이터 문서에 같은 이름의 인벤토리 이벤트가 있습니다. 다만 Windows 11 하이브의 버전별 차이를 정리한 공개 자료는 찾지 못했습니다.
+`파일 이름|해시` 의 해시 계산 방식은 공개되지 않았습니다. ANSSI 는 서로 다른 두 PC 에서 같은 경로에 있는 다른 버전 파일이 같은 해시를 냈기 때문에 이 해시가 파일 이름과 경로로 정해진다고 봤습니다. 해시 길이는 자료마다 달라서 ANSSI 예시는 8자리이고 Windows 10 21H2 관찰 예(Psmths)는 16자리입니다.
+
+ANSSI 의 값 목록에 없는 `Usn`·`OriginalFileName`·`Description`·`AppxPackageFullName`·`AppxPackageRelativeId` 도 쓰입니다. Windows 10 21H2 관찰 예에는 `Usn` 이 있고 공개 파서(AmcacheParser)도 이 값들을 읽지만, 어느 버전에서 처음 생겼는지는 확인하지 못했습니다.
+
+Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서에 같은 이름의 인벤토리 이벤트가 있습니다. 다만 Windows 11 하이브의 버전별 차이를 정리한 공개 자료는 찾지 못했습니다.
 
 ## 구조
 
@@ -79,11 +75,7 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 
 > 그림 자리: InventoryApplicationFile 하위 키의 `ProgramId` 값이 InventoryApplication 하위 키 이름과 이어지는 모습. 짝이 있는 항목과 짝이 없는 항목을 나란히 보여 주는 그림
 
-- [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 입니다(ANSSI).
-- 이 키의 `ProgramId` 와 같은 이름의 하위 키가 있으면 그 설치 프로그램에 딸린 파일입니다.
-- 짝이 없는 항목은 설치 기록과 이어지지 않는 파일입니다. 공개 파서 AmcacheParser 는 이런 항목을 "Unassociated" 로 따로 모읍니다.
-- 설치 없이 들어온 파일이 이 무리에 섞이므로 먼저 훑어볼 후보가 됩니다.
-- 다만 프로그램을 지우면 InventoryApplication 쪽 하위 키가 지워집니다(ANSSI). 짝이 없다는 것만으로 설치 없이 들어온 파일이라고 단정하지 않습니다.
+[설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 이고(ANSSI), 이 키의 `ProgramId` 와 같은 이름의 하위 키가 있으면 그 설치 프로그램에 딸린 파일입니다. 짝이 없는 항목은 설치 기록과 이어지지 않는 파일이며, 공개 파서 AmcacheParser 는 이런 항목을 "Unassociated" 로 따로 모읍니다. 설치 없이 들어온 파일이 이 무리에 섞이므로 먼저 훑어볼 후보가 됩니다. 다만 프로그램을 지우면 InventoryApplication 쪽 하위 키가 지워지므로(ANSSI), 짝이 없다는 것만으로 설치 없이 들어온 파일이라고 단정하지 않습니다.
 
 ## 증거로서 의미
 

@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-윈도 방화벽의 흔적은 세 곳에 남습니다. 설정과 규칙은 SYSTEM 하이브의 `FirewallPolicy` 키에 남습니다. 규칙을 더하거나 지운 기록은 방화벽 이벤트 채널에 남습니다. 허용·차단한 통신은 `pfirewall.log` 에 남지만, 이 로그는 기본으로 꺼져 있습니다.
+윈도 방화벽의 흔적은 세 곳에 남습니다. 설정과 규칙은 SYSTEM 하이브의 `FirewallPolicy` 키에, 규칙을 더하거나 지운 기록은 방화벽 이벤트 채널에 남습니다. 허용·차단한 통신은 `pfirewall.log` 에 남지만, 이 로그는 기본으로 꺼져 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -50,7 +50,7 @@
 | XP·2003 | `HKLM\Software\Policies\Microsoft\WindowsFirewall\<프로필>\...` |
 | Vista 이후 | `...\FirewallPolicy\<프로필>\AuthorizedApplications\List`, `...\FirewallPolicy\<프로필>\GloballyOpenPorts\List` |
 
-규칙 이벤트 번호도 두 벌입니다. 공급자에는 옛 번호와 새 번호가 모두 정의돼 있습니다. 조사 PC 에 실제로 남은 것은 새 번호뿐이었습니다. (확인 범위: 조사 PC) 어느 윈도 버전부터 새 번호로 바뀌었는지는 확인하지 못했습니다.
+규칙 이벤트 번호도 두 벌입니다. 공급자에는 옛 번호와 새 번호가 모두 정의돼 있지만, 조사 PC 에 실제로 남은 것은 새 번호뿐이었습니다. (확인 범위: 조사 PC) 어느 윈도 버전부터 새 번호로 바뀌었는지는 확인하지 못했습니다.
 
 | 뜻 | 옛 번호 | 새 번호 |
 |---|---|---|
@@ -78,7 +78,7 @@ ForensicArtifacts 는 프로필 키에서 아래 값을 봅니다. 조사 PC 의
 | `DefaultInboundAction` | 적지 않았습니다 |
 | `DefaultOutboundAction` | 적지 않았습니다 |
 
-ForensicArtifacts 설명에 따르면 악성코드가 이 값들을 바꿔 통신을 쉽게 만듭니다. Emotet 이 그 예입니다.
+ForensicArtifacts 설명에 따르면 악성코드가 이 값들을 바꿔 통신을 쉽게 만들며, Emotet 이 그 예입니다.
 
 ### 규칙 문자열
 
@@ -88,7 +88,7 @@ ForensicArtifacts 설명에 따르면 악성코드가 이 값들을 바꿔 통�
 v2.33|Action=Allow|Active=FALSE|Dir=Out|Protocol=6|Profile=Public|RPort=2869|RA4=LocalSubnet|RA6=LocalSubnet|App=%SystemRoot%\system32\svchost.exe|Svc=fdphost|Name=@FirewallAPI.dll,-32765|Desc=@FirewallAPI.dll,-32768|EmbedCtxt=@FirewallAPI.dll,-32752|
 ```
 
-칸의 공식 정의는 이번 자료로 확인하지 않았습니다. 아래 표의 뜻은 칸 이름과 2097 이벤트의 데이터 칸 이름(LocalPorts·RemotePorts·RemoteAddresses·ApplicationPath·ServiceName 등)을 보고 읽은 것입니다.
+칸의 공식 정의는 이번 자료로 확인하지 않았고, 아래 표의 뜻은 칸 이름과 2097 이벤트의 데이터 칸 이름(LocalPorts·RemotePorts·RemoteAddresses·ApplicationPath·ServiceName 등)을 보고 읽은 것입니다.
 
 | 칸 | 예의 값 | 읽는 법 |
 |---|---|---|

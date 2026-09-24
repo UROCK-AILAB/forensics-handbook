@@ -40,12 +40,9 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 
 ### Partition/Diagnostic 1006
 
-- 로그 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Partition%4Diagnostic.evtx` 입니다(관찰).
-- 이 로그는 켜져 있었습니다(관찰).
-- 최대 크기는 16MB 이고 순환 (Circular) 방식이었습니다(관찰). 가득 차면 오래된 이벤트부터 덮어씁니다.
-- 이 로그의 이벤트는 모두 ID 1006, 이벤트 버전 7 이었습니다(관찰).
-- 공급자 설명문은 "For internal use only." 였습니다(관찰). 칸의 뜻은 이름으로 읽고, 다른 기록과 맞춰 확인합니다.
-- 버전 7 의 1006 에는 칸이 85개 있었습니다(관찰). 조사에 쓰는 칸은 아래와 같습니다.
+로그 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Partition%4Diagnostic.evtx` 이고 켜져 있었습니다(관찰). 최대 크기는 16MB 이고 순환 (Circular) 방식이어서, 가득 차면 오래된 이벤트부터 덮어씁니다(관찰). 이 로그의 이벤트는 모두 ID 1006, 이벤트 버전 7 이었습니다(관찰).
+
+공급자 설명문이 "For internal use only." 였는데(관찰) 칸의 뜻은 이름으로 읽고 다른 기록과 맞춰 확인합니다. 버전 7 의 1006 에는 칸이 85개 있었고(관찰), 조사에 쓰는 칸은 아래와 같습니다.
 
 | 묶음 | 칸 이름 |
 |---|---|
@@ -67,22 +64,17 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 | 15 | FileBackedVirtual | 파일 기반 가상 디스크 (VHD 등) |
 | 17 | Nvme | NVMe |
 
-- 표의 이름은 앞의 `BusType` 을 뺀 것입니다. 문서의 열거 이름은 `BusTypeMaxReserved` 처럼 앞에 `BusType` 이 붙습니다[1].
-- 이 값들은 문서의 C 열거 선언 순서로 센 것입니다[1].
-- 문서가 숫자를 직접 적은 값은 0x00 과 BusTypeMaxReserved(0x7F) 둘뿐입니다[1].
-- 이 PC 의 1006 에는 BusType 7·17·15 가 있었습니다(관찰).
-- 그래서 USB 연결은 BusType 이 7 인 이벤트부터 봅니다. 그다음 SerialNumber·Model 칸으로 장치마다 묶습니다.
-- UASP 장치처럼 USBSTOR 에 남지 않는 저장장치도 있습니다. 이런 장치는 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 허브의 읽는 순서를 따라 따로 확인합니다.
+표의 이름은 앞의 `BusType` 을 뺀 것이고, 문서의 열거 이름은 `BusTypeMaxReserved` 처럼 앞에 `BusType` 이 붙습니다[1]. 이 값들은 문서의 C 열거 선언 순서로 센 것이며, 문서가 숫자를 직접 적은 값은 0x00 과 BusTypeMaxReserved(0x7F) 둘뿐입니다[1].
+
+이 PC 의 1006 에는 BusType 7·17·15 가 있었습니다(관찰). 그래서 USB 연결은 BusType 이 7 인 이벤트부터 보고, 그다음 SerialNumber·Model 칸으로 장치마다 묶습니다. UASP 장치처럼 USBSTOR 에 남지 않는 저장장치도 있는데, 이런 장치는 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 허브의 읽는 순서를 따라 따로 확인합니다.
 
 **볼륨 시리얼 번호는 기대하지 않습니다.** 이 PC 의 버전 7 에는 이름에 Vbr 이 든 칸이 없었습니다(관찰). 공급자 메타데이터에도 1006 은 버전 7 하나만 있었습니다(관찰). 이 PC 에서는 1006 으로 볼륨 시리얼 번호를 얻지 못합니다. 다른 빌드의 검체는 이벤트 버전부터 확인합니다.
 
-**PartitionCount 0 인 이벤트.** BusType 이 7 인 1006 가운데 PartitionCount 가 0 인 이벤트가 적지 않았습니다(관찰). 이 이벤트가 연결 때 남는지 해제 때 남는지는 확인하지 못했습니다. 이 값 하나로 연결과 해제를 가르지 않고, 아래 Kernel-PnP 이벤트와 장치 속성 시각에 맞춰 봅니다.
+**PartitionCount 0 인 이벤트.** BusType 이 7 인 1006 가운데 PartitionCount 가 0 인 이벤트가 적지 않았습니다(관찰). 이 이벤트가 연결 때 남는지 해제 때 남는지는 확인하지 못했는데, 이 값 하나로 연결과 해제를 가르지 않고 아래 Kernel-PnP 이벤트와 장치 속성 시각에 맞춰 봅니다.
 
 ### Kernel-PnP/Configuration 400·410
 
-- `Microsoft-Windows-Kernel-PnP/Configuration` 로그는 켜져 있었습니다(관찰).
-- 최대 크기는 1MB 이고 순환 방식이었습니다(관찰).
-- 이 PC 에서 가장 오래된 이벤트는 약 3개월 전 것이었습니다(관찰). 크기가 작아서 오래된 연결은 새 이벤트에 밀려 사라집니다.
+`Microsoft-Windows-Kernel-PnP/Configuration` 로그는 켜져 있었고, 최대 크기는 1MB 이며 순환 방식이었습니다(관찰). 이 PC 에서 가장 오래된 이벤트는 약 3개월 전 것이었습니다(관찰). 크기가 작아서 오래된 연결은 새 이벤트에 밀려 사라집니다.
 
 | ID | 메시지 틀 | 주로 보는 칸 |
 |---|---|---|
@@ -93,15 +85,11 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 
 (메시지 틀과 칸 이름은 공급자 템플릿에서 읽었습니다. 관찰)
 
-- 410 의 DeviceInstanceId 에 `USBSTOR\Disk&Ven_…&Prod_…&Rev_…\<시리얼>` 모양의 값이 있었습니다(관찰).
-- 이 값은 USBSTOR 키 경로와 같은 모양입니다. 끝의 시리얼 부분으로 USBSTOR 인스턴스와 바로 잇습니다.
-- 같은 연결 때 `STORAGE\Volume\…` 장치의 400·410 도 남았습니다(관찰).
+410 의 DeviceInstanceId 에 `USBSTOR\Disk&Ven_…&Prod_…&Rev_…\<시리얼>` 모양의 값이 있었습니다(관찰). 이 값은 USBSTOR 키 경로와 같은 모양이라서 끝의 시리얼 부분으로 USBSTOR 인스턴스와 바로 잇습니다. 같은 연결 때 `STORAGE\Volume\…` 장치의 400·410 도 남았습니다(관찰).
 
 ### DriverFrameworks-UserMode/Operational
 
-- 이 로그는 이 PC 에서 꺼져 있었습니다(관찰). 검체에서 켜져 있는지부터 봅니다.
-- 2003 의 메시지 틀은 "The UMDF Host Process (%1) has been asked to load drivers for device %2." 입니다(관찰). 칸은 LifetimeId 와 InstanceId 입니다. 켜져 있다면 InstanceId 칸에서 장치를 찾습니다.
-- 2100·2102 는 PnP·전원 작업을 적는 이벤트입니다(관찰). 칸은 LifetimeId, InstanceId, MajorCode, MinorCode, Argument1~4, Status 입니다.
+이 로그는 이 PC 에서 꺼져 있었는데(관찰) 검체에서 켜져 있는지부터 봅니다. 2003 의 메시지 틀은 "The UMDF Host Process (%1) has been asked to load drivers for device %2." 이고 칸은 LifetimeId 와 InstanceId 인데(관찰), 켜져 있다면 InstanceId 칸에서 장치를 찾습니다. 2100·2102 는 PnP·전원 작업을 적는 이벤트이며 칸은 LifetimeId, InstanceId, MajorCode, MinorCode, Argument1~4, Status 입니다(관찰).
 
 ## 장치 안의 파일을 열었나
 
@@ -127,13 +115,11 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 | 5 | DRIVE_CDROM |
 | 6 | DRIVE_RAMDISK |
 
-- 드라이브 종류 값 하나로 USB 장치인지 정하지 않습니다. 드라이브 시리얼 번호를 장치 기록과 맞춰 봅니다.
-- 드라이브 시리얼 번호를 EMDMgmt 의 볼륨 시리얼 번호와 맞추는 방법은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 의 "이어 붙이는 열쇠" 표에 있습니다.
+드라이브 종류 값 하나로 USB 장치인지 정하지 않고, 드라이브 시리얼 번호를 장치 기록과 맞춰 봅니다. 드라이브 시리얼 번호를 EMDMgmt 의 볼륨 시리얼 번호와 맞추는 방법은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 의 "이어 붙이는 열쇠" 표에 있습니다.
 
 **대상 파일의 시각.** 바로가기 파일 헤더는 76바이트입니다[2]. 헤더의 오프셋 28·36·44 에는 대상 파일의 만든 시각·마지막 접근 시각·마지막 수정 시각이 있습니다[2]. 값은 FILETIME 형식의 UTC 이고, 없으면 0 입니다[2].
 
-- 이 세 시각은 바로가기 파일 자신의 시각이 아닙니다. 장치 안에 있던 대상 파일의 시각입니다.
-- PC 안에 같은 이름의 파일이 있으면 시각을 맞춰 봅니다. 같은 파일인지 판단하는 재료 가운데 하나로 씁니다.
+이 세 시각은 바로가기 파일 자신의 시각이 아니라 장치 안에 있던 대상 파일의 시각입니다. PC 안에 같은 이름의 파일이 있으면 시각을 맞춰 보고, 같은 파일인지 판단하는 재료 가운데 하나로 씁니다.
 
 **분산 링크 추적 (Distributed Link Tracker) 블록.** 서명 0xa0000003, 크기 96바이트인 추가 데이터 블록입니다[2].
 
@@ -145,8 +131,7 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 | 64 | birth droid 볼륨 식별자 |
 | 80 | birth droid 파일 식별자 |
 
-- droid 값은 NTFS $OBJECT_ID 의 GUID 입니다[2].
-- FAT·exFAT 에는 $OBJECT_ID 가 없습니다. 장치가 이 파일 시스템일 때 이 블록이 어떻게 남는지는 확인하지 못했습니다. 이 블록이 비어 있어도 이상하게 보지 않습니다.
+droid 값은 NTFS $OBJECT_ID 의 GUID 입니다[2]. FAT·exFAT 에는 $OBJECT_ID 가 없는데, 장치가 이 파일 시스템일 때 이 블록이 어떻게 남는지는 확인하지 못했습니다. 이 블록이 비어 있어도 이상하게 보지 않습니다.
 
 ## 분석 흐름
 

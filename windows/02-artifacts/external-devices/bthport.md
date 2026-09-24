@@ -8,13 +8,9 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 블루투스 장치 하나가 `Devices` 아래 하위 키 하나입니다.
-- 하위 키 이름은 상대 장치의 블루투스 주소입니다. 16진수 12자리를 소문자로, 구분 기호 없이 적습니다(관찰 PC).
-- 같은 주소가 System 로그에서는 콜론을 넣은 모양으로 나옵니다. 예를 들어 키 이름이 `a1b2c3d4e5f6` 이면 로그에는 `a1:b2:c3:d4:e5:f6` 으로 적힙니다(관찰 PC, 주소는 만든 예시).
-- 관찰 PC 에는 장치가 3개 있었습니다. 저전력 블루투스 (Bluetooth Low Energy, BLE) 장치 2개(A·B)와 일반 블루투스(BR/EDR) 장치 1개(C)입니다.
-- 장치 A·B 는 이 키의 항목, `Enum\BTHLE` 키, System 로그의 페어링 성공 이벤트가 짝을 이뤄 나왔습니다. 그래서 페어링할 때 항목이 생긴다고 봅니다.
-- 장치 C 는 이 키에만 있었습니다. Enum 쪽 키도, 페어링 이벤트도 없었습니다. 그 시점의 System 로그가 남아 있었는지는 확인하지 않았습니다.
-- 장치를 검색하기만 해도 항목이 생기는지는 확인하지 못했습니다.
+블루투스 장치 하나는 `Devices` 아래 하위 키 하나이고, 하위 키 이름은 상대 장치의 블루투스 주소입니다. 16진수 12자리를 소문자로, 구분 기호 없이 적습니다(관찰 PC). 같은 주소가 System 로그에서는 콜론을 넣은 모양으로 나오는데, 예를 들어 키 이름이 `a1b2c3d4e5f6` 이면 로그에는 `a1:b2:c3:d4:e5:f6` 으로 적힙니다(관찰 PC, 주소는 만든 예시).
+
+관찰 PC 에는 저전력 블루투스 (Bluetooth Low Energy, BLE) 장치 2개(A·B)와 일반 블루투스(BR/EDR) 장치 1개(C)가 있었습니다. 장치 A·B 는 이 키의 항목, `Enum\BTHLE` 키, System 로그의 페어링 성공 이벤트가 짝을 이뤄 나왔습니다. 그래서 페어링할 때 항목이 생긴다고 봅니다. 장치 C 는 이 키에만 있었고 Enum 쪽 키도, 페어링 이벤트도 없었는데, 그 시점의 System 로그가 남아 있었는지는 확인하지 않았습니다. 장치를 검색하기만 해도 항목이 생기는지는 확인하지 못했습니다.
 
 ## 위치와 버전별 차이
 
@@ -28,8 +24,8 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 | BLE 서비스 노드 | SYSTEM `ControlSet00X\Enum\BTHLEDevice\{서비스 UUID}_Dev_VID&…_PID&…_REV&…_<주소>` | VID·PID·리비전 |
 | 지속성 확인용 값 | SYSTEM `…\BTHPORT\Parameters\Radio Support` 의 `SupportDLL` | 불러오는 DLL |
 
-- 공개 플러그인 RegRipper `bthport` 는 `Select` 키의 `Current` 값으로 현재 컨트롤셋 번호를 찾습니다. 그다음 `Devices` 키를 읽습니다.
-- 같은 플러그인은 `Radio Support` 키의 `SupportDLL` 값도 읽습니다. 레지스트리 지속성 (persistence) 을 확인하려고 2017-01-29 판에서 넣은 항목입니다. 관찰 PC 에는 이 키가 없었습니다.
+- 공개 플러그인 RegRipper `bthport` 는 `Select` 키의 `Current` 값으로 현재 컨트롤셋 번호를 찾은 뒤 `Devices` 키를 읽습니다.
+- 같은 플러그인은 `Radio Support` 키의 `SupportDLL` 값도 읽는데, 레지스트리 지속성 (persistence) 을 확인하려고 2017-01-29 판에서 넣은 항목입니다. 관찰 PC 에는 이 키가 없었습니다.
 - 관찰 PC 의 `Parameters` 아래에는 `Devices` 말고도 하위 키가 12개 더 있었습니다. `ExceptionDB`, `HciBypassServices`, `Keys`, `LocalServices`, `PerDevices`, `PnpId`, `Restrictions`, `ServiceGroups`, `Services`, `SupportedServices`, `UnsupportedServices`, `Wdf` 입니다.
 - `Keys` 키는 관리자 권한 PowerShell 로도 열리지 않았습니다. 오류는 "Requested registry access is not allowed" 였습니다(관찰 PC).
 - `Keys` 에 페어링 키인 링크 키 (link key) 가 있다는 설명이 널리 알려져 있습니다. 이 글에서는 확인하지 못했습니다.
@@ -59,20 +55,15 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 | `LMPFeatures`, `HostSupportedFeaturesMap`, `LocalEvaldIoCap` | C | 장치 C 에는 `Name` 이 없었습니다. |
 | `COD` | B·C | C 는 2752780(0x2A010C), B 는 0 이었습니다. 비트 해석은 확인하지 못했습니다. |
 
-- RegRipper 는 `Name` 을 장치 이름으로 출력합니다.
-- 한글처럼 ASCII 가 아닌 이름이 어떤 인코딩으로 들어가는지는 확인하지 못했습니다.
-- 사용자가 붙인 이름이 `FriendlyName` 에 들어가는지도 확인하지 못했습니다.
-- 각 장치 키 아래에는 `ServicesFor<16진수 12자리>` 하위 키가 하나씩 있었습니다.
-- 이 이름 뒤 12자리는 세 장치 모두 같았습니다. PC 쪽 어댑터 주소로 보이지만 확인하지 못했습니다.
+RegRipper 는 `Name` 을 장치 이름으로 출력합니다. 한글처럼 ASCII 가 아닌 이름이 어떤 인코딩으로 들어가는지, 사용자가 붙인 이름이 `FriendlyName` 에 들어가는지는 확인하지 못했습니다.
+
+각 장치 키 아래에는 `ServicesFor<16진수 12자리>` 하위 키가 하나씩 있었고, 이 이름 뒤 12자리는 세 장치 모두 같았습니다. PC 쪽 어댑터 주소로 보이지만 확인하지 못했습니다.
 
 ### VID·PID 맞춰 보기
 
-- `VID`·`PID` 는 10진 DWORD 로 저장됩니다(관찰 PC).
-- 16진으로 바꾸면 `Enum\BTHLEDevice` 하위 키 이름 속 VID·PID 와 맞습니다.
-- 관찰 PC 의 장치 A 는 `VID` 13652(0x3554), `PID` 62771(0xF533) 이었습니다. 키 이름에는 `VID&023554_PID&f533_REV&0001` 로 들어 있었습니다.
-- `VID&` 뒤 `02` 는 `VIDType` 값 2 와 같습니다. `VIDType` 2 가 어떤 번호 체계를 뜻하는지는 확인하지 못했습니다.
-- `REV&` 뒤 네 자리는 `Version` 값입니다. `Version` 1 은 `REV&0001`, 768(0x300) 은 `REV&0300` 이었습니다.
-- 키 이름 속 PID 의 16진 글자는 소문자였습니다.
+`VID`·`PID` 는 10진 DWORD 로 저장되고(관찰 PC), 16진으로 바꾸면 `Enum\BTHLEDevice` 하위 키 이름 속 VID·PID 와 맞습니다. 관찰 PC 의 장치 A 는 `VID` 13652(0x3554), `PID` 62771(0xF533) 이었고 키 이름에는 `VID&023554_PID&f533_REV&0001` 로 들어 있었습니다. 키 이름 속 PID 의 16진 글자는 소문자였습니다.
+
+`VID&` 뒤 `02` 는 `VIDType` 값 2 와 같지만, `VIDType` 2 가 어떤 번호 체계를 뜻하는지는 확인하지 못했습니다. `REV&` 뒤 네 자리는 `Version` 값이어서, `Version` 1 은 `REV&0001`, 768(0x300) 은 `REV&0300` 이었습니다.
 
 ### 장치 속성
 
@@ -87,9 +78,7 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 | `DEVPKEY_Device_FirstInstallDate` | 같은 GUID, 번호는 확인하지 못함 | 시각 |
 | `DEVPKEY_Device_LastArrivalDate` | `{83DA6326-97A6-4088-9453-A1923F573B29}` 102 | FILETIME |
 
-- `Enum\BTHLE\Dev_<주소>\<인스턴스>\Properties` 키는 관리자 권한으로도 열리지 않았습니다(관찰 PC).
-- USB 장치는 이런 속성이 `Properties\{GUID}\<번호 16진 4자리>` 에 남습니다. 규칙은 [USB 저장장치 흔적](usb-storage-artifacts/index.md)에서 다룹니다.
-- 같은 규칙이라면 블루투스 장치의 `LastConnectedTime` 은 `000B`, `InstallDate` 는 `0064`, `LastArrivalDate` 는 `0066` 에 있습니다. 블루투스 장치에서 이 위치를 직접 확인하지는 못했습니다.
+`Enum\BTHLE\Dev_<주소>\<인스턴스>\Properties` 키는 관리자 권한으로도 열리지 않았습니다(관찰 PC). USB 장치는 이런 속성이 `Properties\{GUID}\<번호 16진 4자리>` 에 남으며, 규칙은 [USB 저장장치 흔적](usb-storage-artifacts/index.md)에서 다룹니다. 같은 규칙이라면 블루투스 장치의 `LastConnectedTime` 은 `000B`, `InstallDate` 는 `0064`, `LastArrivalDate` 는 `0066` 에 있지만, 블루투스 장치에서 이 위치를 직접 확인하지는 못했습니다.
 
 ## 증거로서 의미
 
@@ -128,17 +117,13 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 1. System 로그 BTHUSB 이벤트 8 의 기록 시각은 2026-09-10 23:19:56.06 (UTC) 이었습니다. 메시지는 "The remote adapter (…) successfully paired with the local adapter." 입니다.
 2. 같은 장치의 `DEVPKEY_Device_InstallDate` 원시값도 2026-09-10 23:19:56.06 이었습니다. 이벤트 8 과 같은 순간입니다.
 3. 이 순간을 한국 시간(UTC+9)으로 바꾸면 2026-09-11 08:19:56 입니다.
-4. BTHPORT `LastConnected` 원시값을 UTC 로 읽으면 2026-09-11 08:19:54.90 입니다. `LastSeen` 은 08:19:55.06 입니다.
-5. 두 값은 페어링 순간과 9시간 차이가 납니다. 9시간을 빼면 2초 안쪽으로 붙습니다.
+4. BTHPORT `LastConnected` 원시값을 UTC 로 읽으면 2026-09-11 08:19:54.90 이고, `LastSeen` 은 08:19:55.06 입니다.
+5. 두 값은 페어링 순간과 9시간 차이가 나는데, 9시간을 빼면 2초 안쪽으로 붙습니다.
 6. 그래서 원시값 08:19:54 는 UTC 가 아니라 한국 시간 08:19:54 로 읽어야 앞뒤가 맞습니다.
 
-- `DEVPKEY_Bluetooth_LastConnectedTime` 도 현지 시각이었습니다. UTC 11:43:04 에 조회했을 때 원시값은 20:41:45 였습니다. UTC 로 읽으면 9시간 가까이 뒤의 미래이고, 한국 시간으로 읽으면 조회 1분여 전입니다.
-- 같은 장치의 `DEVPKEY_Device_LastArrivalDate` 는 UTC 였습니다. 원시값은 2026-09-20 21:44:33 이었고, 마지막 부팅은 21:44:15(UTC) 였습니다.
-- 한 장치 노드 안에서도 PnP 공통 시각은 UTC 였고, 블루투스 전용 시각은 현지 시각이었습니다.
-- 장치 A 는 조회 1분여 전에 연결한 기록(`DEVPKEY_Bluetooth_LastConnectedTime`)이 있었습니다. 그런데 BTHPORT `LastConnected` 는 페어링 때 값 그대로였습니다.
-- 장치 B 는 `LastSeen`, `LastConnected`, `DEVPKEY_Bluetooth_LastConnectedTime` 원시값이 모두 134322957501039515 로 같았습니다. UTC 로 읽으면 2026-08-27 09:15:50 입니다.
-- 장치 B 의 페어링 이벤트 8 은 2026-06-26 03:11:25.19(UTC), `InstallDate` 는 03:11:25.21 이었습니다.
-- BTHPORT 값이 언제 바뀌는지(연결이 끊길 때, 종료할 때 등)는 확인하지 못했습니다.
+`DEVPKEY_Bluetooth_LastConnectedTime` 도 현지 시각이었습니다. UTC 11:43:04 에 조회했을 때 원시값은 20:41:45 였는데, UTC 로 읽으면 9시간 가까이 뒤의 미래이고 한국 시간으로 읽으면 조회 1분여 전입니다. 같은 장치의 `DEVPKEY_Device_LastArrivalDate` 는 UTC 여서 원시값 2026-09-20 21:44:33 이 마지막 부팅 21:44:15(UTC) 뒤였습니다. 한 장치 노드 안에서도 PnP 공통 시각은 UTC 였고 블루투스 전용 시각은 현지 시각이었습니다.
+
+장치 A 는 조회 1분여 전에 연결한 기록(`DEVPKEY_Bluetooth_LastConnectedTime`)이 있었는데도 BTHPORT `LastConnected` 는 페어링 때 값 그대로였습니다. 장치 B 는 `LastSeen`, `LastConnected`, `DEVPKEY_Bluetooth_LastConnectedTime` 원시값이 모두 134322957501039515 로 같았고, UTC 로 읽으면 2026-08-27 09:15:50 입니다. 장치 B 의 페어링 이벤트 8 은 2026-06-26 03:11:25.19(UTC), `InstallDate` 는 03:11:25.21 이었습니다. BTHPORT 값이 언제 바뀌는지(연결이 끊길 때, 종료할 때 등)는 확인하지 못했습니다.
 
 ### 읽는 법
 

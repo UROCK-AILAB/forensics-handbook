@@ -10,13 +10,9 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- `tdata` 안 파일은 설정 파일과 캐시 파일입니다. (telegram-desktop-decrypt README)
-- 대화 기록 (chat histories) 은 `tdata` 에 들어 있지 않습니다. (telegram-desktop-decrypt README)
-- 해석: 데스크톱 앱은 대화를 서버에서 받아 보여 줍니다. 디스크에는 설정과, 화면에 띄운 사진·영상·파일의 캐시가 남습니다.
-- 캐시를 풀면 JPEG, 영상, 공유된 파일이 나올 수 있습니다. (telegram-desktop-decrypt README)
-- 앱은 실행할 때마다 로그 파일에 실행 정보를 적습니다. (관찰)
+`tdata` 안 파일은 설정 파일과 캐시 파일이고, 대화 기록 (chat histories) 은 들어 있지 않습니다. (telegram-desktop-decrypt README) 캐시를 풀면 JPEG, 영상, 공유된 파일이 나올 수 있습니다. (telegram-desktop-decrypt README) 해석: 데스크톱 앱은 대화를 서버에서 받아 보여 주므로, 디스크에는 설정과 화면에 띄운 사진·영상·파일의 캐시가 남습니다. 앱은 실행할 때마다 로그 파일에 실행 정보를 적습니다. (관찰)
 
-이 페이지는 대화 본문이 로컬 DB 에 있다고 보지 않습니다. 대화 본문을 찾는다면 다른 경로를 봅니다. 아래 "교차 검증" 을 참고합니다.
+이 페이지는 대화 본문이 로컬 DB 에 있다고 보지 않으며, 대화 본문을 찾는다면 다른 경로를 봅니다. 아래 "교차 검증" 을 참고합니다.
 
 ## 위치와 버전별 차이
 
@@ -25,10 +21,7 @@
 | Windows 설치판 | `%USERPROFILE%\AppData\Roaming\Telegram Desktop` | README |
 | 스토어 판, 포터블 판 | 확인하지 못했습니다 | — |
 
-- 관찰 PC 에서는 실행 파일과 데이터가 같은 폴더에 있었습니다. (관찰)
-- 그 폴더에는 `Telegram.exe`, `Updater.exe`, `unins000.exe`·`unins000.dat`·`unins000.msg`, `log.txt`, `log_start0.txt`, `modules`, `tdata`, `tupdates` 가 있었습니다. (관찰)
-- 경로를 모를 때는 이름 `tdata` 폴더와 `Telegram.exe` 로 찾습니다.
-- 설치 기록은 [설치 프로그램](../system-account/uninstall.md) 에서 확인합니다.
+관찰 PC 에서는 실행 파일과 데이터가 같은 폴더에 있었고, 그 폴더에는 `Telegram.exe`, `Updater.exe`, `unins000.exe`·`unins000.dat`·`unins000.msg`, `log.txt`, `log_start0.txt`, `modules`, `tdata`, `tupdates` 가 있었습니다. (관찰) 경로를 모를 때는 이름 `tdata` 폴더와 `Telegram.exe` 로 찾고, 설치 기록은 [설치 프로그램](../system-account/uninstall.md) 에서 확인합니다.
 
 파일을 쓰는 방식(요즘 방식·옛 방식)에 따라 파일 이름 끝 글자가 달라집니다. 아래 "파일 이름" 을 참고합니다.
 
@@ -62,8 +55,8 @@
 | `0` | 옛 방식 |
 | `1` | 옛 방식의 백업 |
 
-- 앱은 읽을 때 `s` 파일을 먼저 찾습니다. 없으면 `0` 과 `1` 가운데 수정 시각이 새것을 고릅니다. (tdesktop 소스)
-- README 는 예로 `tdata/D877F783D5D3EF8C/map0` 을 들었습니다. 관찰 PC 에서는 `maps` 였습니다. 끝 글자 규칙과 맞습니다. (관찰)
+- 앱은 읽을 때 `s` 파일을 먼저 찾고, 없으면 `0` 과 `1` 가운데 수정 시각이 새것을 고릅니다. (tdesktop 소스)
+- README 는 예로 `tdata/D877F783D5D3EF8C/map0` 을 들었지만 관찰 PC 에서는 `maps` 였고, 끝 글자 규칙과 맞습니다. (관찰)
 - 폴더 이름 `D877F783D5D3EF8C` 는 MD5("data") 에서 나온 값과 같습니다. 계산은 아래 "헥스로 한 번" 에 있습니다.
 - 두 번째 계정부터 폴더 이름이 어떻게 정해지는지는 확인하지 못했습니다.
 
@@ -72,14 +65,14 @@
 이 절은 무엇이 암호화됐고 키가 무엇에 묶였는지만 적습니다. 푸는 절차는 적지 않습니다.
 
 - 암호화된 부분은 AES 로 "로컬 방식" 암호화를 합니다(`aesEncryptLocal`·`aesDecryptLocal`). (tdesktop 소스)
-- 암호 블록은 SHA1 해시 16바이트와 암호문으로 이루어집니다. 암호문은 16바이트 단위로 맞추고, 남는 자리는 무작위 바이트로 채웁니다. (tdesktop 소스)
+- 암호 블록은 SHA1 해시 16바이트와 암호문으로 이루어지며, 암호문은 16바이트 단위로 맞추고 남는 자리는 무작위 바이트로 채웁니다. (tdesktop 소스)
 - 키는 PKCS5_PBKDF2_HMAC 와 SHA-512 로 만듭니다. 반복 횟수는 100,000번(`kStrongIterationsCount`)입니다. (tdesktop 소스)
 - 로컬 암호가 비어 있으면 반복 횟수는 1번입니다. (tdesktop 소스)
 - 옛 키 방식은 SHA1 기반 PBKDF2(`CreateLegacyLocalKey`)입니다. (tdesktop 소스)
 - AES 의 모드 이름은 이번에 본 자료에 없었습니다.
 - `key_datas` 가 로컬 키를 담는 파일인지는 이름으로 짐작만 했고 확인하지 못했습니다.
 
-해석: 로컬 암호를 걸지 않았으면 `tdata` 만으로 풀 수 있습니다. 로컬 암호를 걸었으면 그 암호가 있어야 합니다. 암호화된 증거를 다루는 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
+해석: 로컬 암호를 걸지 않았으면 `tdata` 만으로 풀 수 있고, 걸었으면 그 암호가 있어야 합니다. 암호화된 증거를 다루는 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
 
 ### 캐시
 
@@ -106,9 +99,7 @@
 
 ### 로그 (관찰)
 
-- 설치 폴더에 `log.txt` 와 `log_start0.txt` 가 있었습니다.
-- 줄마다 `[YYYY.MM.DD HH:MM:SS]` 모양의 시각이 붙습니다.
-- 실행할 때 아래 줄들이 적혔습니다.
+설치 폴더에 `log.txt` 와 `log_start0.txt` 가 있었고, 줄마다 `[YYYY.MM.DD HH:MM:SS]` 모양의 시각이 붙습니다. 실행할 때 아래 줄들이 적혔습니다.
 
 | 줄 | 알려 주는 것 |
 |---|---|
@@ -188,7 +179,7 @@
 
 ### 공개 도구로 한 번
 
-공개 도구의 예로 telegram-desktop-decrypt 가 있습니다. `tdata` 의 설정과 캐시를 풀어 보는 도구입니다. 이 페이지에서는 도구 자체의 동작을 시험하지 않았습니다.
+공개 도구의 예로 `tdata` 의 설정과 캐시를 풀어 보는 telegram-desktop-decrypt 가 있습니다. 이 페이지에서는 도구 자체의 동작을 시험하지 않았습니다.
 
 - 도구가 읽은 파일 목록과 `tdata` 의 파일 목록을 맞춰 봅니다.
 - 도구가 `s`·`0`·`1` 가운데 어느 파일을 읽었는지 적습니다.

@@ -2,7 +2,7 @@
 
 ## 한 줄 요약
 
-USBSTOR 키에는 Usbstor.sys 드라이버가 맡은 저장장치만 남습니다. UASP 로 붙은 USB 저장장치와 eSATA·썬더볼트 외장 디스크는 `Enum\SCSI` 에 남습니다. 내장 SD 슬롯에 꽂은 메모리 카드는 `Enum\SD` 에 남습니다. 그래서 USBSTOR 가 비어 있어도 외부 저장장치를 안 썼다고 단정할 수 없습니다.
+USBSTOR 키에는 Usbstor.sys 드라이버가 맡은 저장장치만 남습니다. UASP 로 붙은 USB 저장장치와 eSATA·썬더볼트 외장 디스크는 `Enum\SCSI` 에 남고, 내장 SD 슬롯에 꽂은 메모리 카드는 `Enum\SD` 에 남습니다. 그래서 USBSTOR 가 비어 있어도 외부 저장장치를 안 썼다고 단정할 수 없습니다.
 
 ## 왜 USBSTOR 에 안 남나
 
@@ -41,14 +41,11 @@ USBSTOR 를 거치지 않는 경우는 세 가지입니다.
 | 장치 속성 0064·0065 | 있음 | 있음 | 있음 |
 | 장치 속성 0066·0067 | 없음 | 있음 | 있음 |
 
-- Windows 7 에는 UASP 기본 드라이버가 없습니다. 그래서 같은 장치도 Windows 7 PC 에서는 Usbstor.sys 로 붙어 USBSTOR 에 남을 수 있습니다.
-- Windows 8 이후라도 USB 2.0 포트에 꽂으면 장치가 SuperSpeed 로 붙지 않습니다. 이때도 Usbstor.sys 로 붙을 수 있습니다.
-- 컨테이너 ID 는 Windows 7 부터 모든 장치 노드에 붙는 속성입니다.
-- 장치 속성 0064~0067 의 버전별 차이는 [연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)](deviceclasses-device-properties-0064-0066-0067.md) 에서 다룹니다.
+Windows 7 에는 UASP 기본 드라이버가 없어서 같은 장치도 Windows 7 PC 에서는 Usbstor.sys 로 붙어 USBSTOR 에 남을 수 있습니다. Windows 8 이후라도 USB 2.0 포트에 꽂으면 장치가 SuperSpeed 로 붙지 않으므로 이때도 Usbstor.sys 로 붙을 수 있습니다. 컨테이너 ID 는 Windows 7 부터 모든 장치 노드에 붙는 속성입니다. 장치 속성 0064~0067 의 버전별 차이는 [연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)](deviceclasses-device-properties-0064-0066-0067.md) 에서 다룹니다.
 
 ## 구조 — UASP 장치의 두 항목 잇기
 
-UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁니다. `Enum\USB` 항목은 USB 장치 자체입니다. `Enum\SCSI` 항목은 그 안의 디스크입니다. 두 항목을 이어야 VID·PID·시리얼 번호와 디스크 모델명·시각을 한 장치로 묶을 수 있습니다.
+UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁니다. `Enum\USB` 항목은 USB 장치 자체이고 `Enum\SCSI` 항목은 그 안의 디스크이므로, 두 항목을 이어야 VID·PID·시리얼 번호와 디스크 모델명·시각을 한 장치로 묶을 수 있습니다.
 
 아래에서 "(관찰)" 을 붙인 내용은 문서가 아니라 실제 레지스트리에서 확인한 것입니다. (확인 범위: Windows 11 빌드 26200 한 대, UASP 항목 2개)
 
@@ -63,9 +60,7 @@ UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁�
 | 인스턴스 ID | `MSFT30` 뒤에 시리얼 번호 (관찰) | 시리얼 번호 |
 | ParentIdPrefix | 있음 (관찰) | 장치에 따라 다름 |
 
-- `MSFT30` 여섯 글자는 장치 시리얼 번호가 아닙니다. 다른 기록과 맞출 때는 이 접두어를 떼고 비교합니다.
-- 이 접두어가 붙는 조건을 밝힌 Microsoft 문서는 찾지 못했습니다. 그래서 UASP 여부는 접두어가 아니라 Service 값과 ClassGUID 값으로 가립니다.
-- 시리얼 번호와 VID·PID 를 읽는 법은 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) 에서 다룹니다.
+`MSFT30` 여섯 글자는 장치 시리얼 번호가 아니므로 다른 기록과 맞출 때는 이 접두어를 떼고 비교합니다. 이 접두어가 붙는 조건을 밝힌 Microsoft 문서는 찾지 못했습니다. 그래서 UASP 여부는 접두어가 아니라 Service 값과 ClassGUID 값으로 가립니다. 시리얼 번호와 VID·PID 를 읽는 법은 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) 에서 다룹니다.
 
 ### Enum\SCSI 인스턴스 키
 
@@ -102,19 +97,15 @@ Microsoft 문서가 정한 SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID
 | PID | 제조사가 넣은 제품 이름. ASCII 0~5자 |
 | REV | 제조사가 넣은 리비전. 예: `6.2` |
 
-- 하드웨어 ID 는 두 개입니다. 하나는 장치 ID 와 같습니다. 다른 하나는 장치 ID 에서 리비전을 뺀 값입니다.
-- 호환 ID 는 언제나 `SD\CLASS_STORAGE` 입니다.
-- 이 식별자는 카드 모델을 가리킵니다. 문서의 장치 ID 에는 카드 한 장을 가리키는 시리얼 번호가 없습니다.
-- 인스턴스 ID 에 무엇이 들어가는지는 문서에 없습니다. 인스턴스 ID 를 카드 시리얼 번호로 단정하지 않습니다.
-- Microsoft 의 SD 드라이버 스택 문서는 카드 위에 sffdisk.sys 와 sffp_sd.sys 가 올라간다고 설명합니다. Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다.
-- 카드 아래 디스크 항목이 어느 열거자에 생기는지는 이 글에서 확인하지 못했습니다. 같은 ContainerID 를 가진 항목을 찾아 잇습니다.
+하드웨어 ID 는 두 개인데, 하나는 장치 ID 와 같고 다른 하나는 장치 ID 에서 리비전을 뺀 값입니다. 호환 ID 는 언제나 `SD\CLASS_STORAGE` 입니다.
+
+이 식별자는 카드 모델을 가리키며, 문서의 장치 ID 에는 카드 한 장을 가리키는 시리얼 번호가 없습니다. 인스턴스 ID 에 무엇이 들어가는지는 문서에 없으므로 인스턴스 ID 를 카드 시리얼 번호로 단정하지 않습니다.
+
+Microsoft 의 SD 드라이버 스택 문서는 카드 위에 sffdisk.sys 와 sffp_sd.sys 가 올라간다고 설명하고, Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다. 카드 아래 디스크 항목이 어느 열거자에 생기는지는 이 글에서 확인하지 못했습니다. 같은 ContainerID 를 쓰는 항목을 찾아 잇습니다.
 
 ### USB 카드 리더
 
-- Microsoft 문서의 예에서 CF 슬롯과 스마트미디어 슬롯이 있는 리더는 장치 객체를 두 개 만듭니다. 슬롯마다 USBSTOR 항목이 생긴다는 뜻입니다.
-- 그래서 카드를 꽂은 적이 없는 슬롯도 USBSTOR 항목으로 남을 수 있습니다.
-- 이 항목의 제조사·제품·시리얼 번호는 리더가 알려 준 값입니다. 카드를 바꿔 꽂아도 이 값은 그대로입니다.
-- 어떤 카드를 꽂았는지는 볼륨 기록 (볼륨 시리얼 번호·볼륨 이름) 으로 봅니다.
+Microsoft 문서의 예에서 CF 슬롯과 스마트미디어 슬롯이 있는 리더는 장치 객체를 두 개 만듭니다. 슬롯마다 USBSTOR 항목이 생긴다는 뜻이라서 카드를 꽂은 적이 없는 슬롯도 USBSTOR 항목으로 남을 수 있습니다. 이 항목의 제조사·제품·시리얼 번호는 리더가 알려 준 값이며 카드를 바꿔 꽂아도 그대로입니다. 어떤 카드를 꽂았는지는 볼륨 기록 (볼륨 시리얼 번호·볼륨 이름) 으로 봅니다.
 
 ## 증거로서 의미
 
@@ -123,6 +114,7 @@ Microsoft 문서가 정한 SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID
 - `Enum\USB` 항목의 Service 값이 `UASPStor` 이면, 그 VID·PID·시리얼 번호를 쓰는 장치가 이 PC 에 UASP 로 붙은 적이 있습니다.
 - 그 항목과 이어진 `Enum\SCSI` 항목은 디스크 모델명과 설치·연결·해제 시각을 알려 줍니다.
 - `Enum\SD` 항목은 그 제조사 번호·제품 이름을 쓰는 SD 메모리 카드가 내장 SD 슬롯에 들어간 적이 있음을 알려 줍니다.
+
 
 **증명하지 못하는 것**
 

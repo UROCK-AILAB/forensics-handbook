@@ -2,18 +2,13 @@
 
 ## 한 줄 요약
 
-MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 설정 파일, 로그, SQLite 상태 DB 를 둡니다. 동기화 폴더 안에는 숨은 `Rubbish` 폴더가 생깁니다. 동기화 때문에 지워지거나 덮어쓰인 로컬 파일은 이 폴더의 날짜 폴더로 옮겨집니다.
+MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 설정 파일, 로그, SQLite 상태 DB 를 두고, 동기화 폴더 안에는 숨은 `Rubbish` 폴더를 만듭니다. 동기화 때문에 지워지거나 덮어쓰인 로컬 파일은 이 폴더의 날짜 폴더로 옮겨집니다.
 
 > **(코드)** 표시는 MEGA 가 공개한 소스 코드(MEGAsync 커밋 22e72f5, MEGA SDK 커밋 b93cc67)에서 읽은 동작입니다. 코드에 그렇게 쓰여 있다는 뜻이고, 실제 검체에서 본 것은 아닙니다. 앱 버전이 다르면 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화합니다.
-- 계정의 파일·폴더 정보를 로컬 SQLite DB 에 캐시합니다 (코드).
-- 전송 대기열과 동기화 폴더별 상태도 DB 를 따로 만들어 둡니다 (코드).
-- 앱 로그를 텍스트로 남기고, 오래된 로그는 번호를 붙여 압축해 둡니다 (코드).
-- 동기화 때문에 로컬에서 사라질 파일을 바로 지우지 않고 `Rubbish` 폴더로 옮깁니다 (코드).
-- 탐색기의 탐색 창과 `Links` 폴더에 동기화 폴더를 등록합니다 (코드).
+MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, 계정의 파일·폴더 정보를 로컬 SQLite DB 에 캐시하고 전송 대기열과 동기화 폴더별 상태도 DB 를 따로 만들어 둡니다 (코드). 앱 로그는 텍스트로 남기고 오래된 로그는 번호를 붙여 압축해 둡니다 (코드). 동기화 때문에 로컬에서 사라질 파일은 바로 지우지 않고 `Rubbish` 폴더로 옮기며, 탐색기의 탐색 창과 `Links` 폴더에 동기화 폴더를 등록합니다 (코드).
 
 ## 위치와 버전별 차이
 
@@ -53,8 +48,7 @@ MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 �
 ### 상태 DB 와 곁 파일
 
 - 상태 DB 는 저널 방식으로 WAL 을 씁니다 (코드). 그래서 `.db-wal`·`.db-shm` 파일이 함께 생길 수 있습니다. 곁 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
-- SQLite 파일 전체를 암호화하는 코드는 찾지 못했습니다. 곧 파일은 일반 SQLite 도구로 열릴 것으로 보입니다(코드에서 추론).
-- 파일 안의 일부 표는 레코드 내용을 따로 암호화합니다(아래 `statecache` 표).
+- SQLite 파일 전체를 암호화하는 코드는 찾지 못했습니다. 곧 파일은 일반 SQLite 도구로 열릴 것으로 보이지만(코드에서 추론), 파일 안의 일부 표는 레코드 내용을 따로 암호화합니다(아래 `statecache` 표).
 
 ### nodes 표 (코드)
 
@@ -75,18 +69,13 @@ MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 �
 
 ### statecache 표 (코드)
 
-- 칸은 `id`(INTEGER)와 `content`(BLOB) 두 개입니다.
-- 앱은 레코드 내용을 저장하기 전에 PaddedCBC 로 암호화합니다.
-- 그래서 세션 키 없이 `content` 를 읽을 수 없습니다(코드에서 추론).
+칸은 `id`(INTEGER)와 `content`(BLOB) 두 개입니다. 앱이 레코드 내용을 저장하기 전에 PaddedCBC 로 암호화하므로, 세션 키 없이 `content` 를 읽을 수 없습니다(코드에서 추론).
 
 ### 로컬 휴지통 폴더 Rubbish (코드)
 
-- Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 입니다. macOS·Linux 에서는 `.debris` 입니다.
-- 앱이 이 폴더를 숨김 속성으로 만듭니다. 동기화를 해제하면 숨김을 풉니다.
-- 동기화 중 지워지거나 덮어쓰인 로컬 파일은 `Rubbish\YYYY-MM-DD\` 로 옮겨집니다. 날짜는 로컬 시각입니다.
-- 그 날짜 폴더에 같은 이름이 이미 있으면 `Rubbish\YYYY-MM-DD\YYYY-MM-DD HH.MM.SS.<번호>\` 하위 폴더를 만들어 넣습니다.
-- 클라우드 쪽에서는 휴지통(Rubbish Bin) 아래에 `SyncDebris` 폴더와 날짜(`YYYY-MM-DD`) 하위 폴더를 만듭니다.
-- 앱 설정 화면에 이 폴더를 비우는 기능이 있습니다.
+Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 이고, macOS·Linux 에서는 `.debris` 입니다. 앱이 이 폴더를 숨김 속성으로 만들고, 동기화를 해제하면 숨김을 풉니다.
+
+동기화 중 지워지거나 덮어쓰인 로컬 파일은 `Rubbish\YYYY-MM-DD\` 로 옮기며, 날짜는 로컬 시각입니다. 그 날짜 폴더에 같은 이름이 이미 있으면 `Rubbish\YYYY-MM-DD\YYYY-MM-DD HH.MM.SS.<번호>\` 하위 폴더를 만들어 넣습니다. 클라우드 쪽에서는 휴지통(Rubbish Bin) 아래에 `SyncDebris` 폴더와 날짜(`YYYY-MM-DD`) 하위 폴더를 만듭니다. 앱 설정 화면에는 이 폴더를 비우는 기능이 있습니다.
 
 > 그림 자리: 동기화 폴더 → 숨은 `Rubbish` → `YYYY-MM-DD` 날짜 폴더 → (이름이 겹칠 때) `YYYY-MM-DD HH.MM.SS.<번호>` 하위 폴더로 이어지는 모양
 

@@ -8,8 +8,8 @@ SYSTEM 하이브의 `AppCompatCache` 값에 실행 파일 경로와 그 파일�
 
 - Mandiant 는 심캐시를 Microsoft 가 Windows XP 부터 만든 캐시로 설명합니다. 실행한 프로그램의 호환성 문제를 추적하려는 캐시입니다.
 - 여러 자료가 이 캐시를 응용 프로그램 호환성 데이터베이스 (Application Compatibility Database) 의 일부로 소개합니다. libyal 은 이 설명에 근거가 없다고 적습니다.
-- "Application Compatibility Cache" 와 "Shim Cache" 가 정확히 어떻게 다른지는 알려져 있지 않습니다. 자료마다 두 이름을 섞어 씁니다. 이 페이지에서는 심캐시로 부릅니다.
-- 항목마다 파일 경로와 파일의 마지막 수정 시각이 들어 있습니다. Windows 버전에 따라 파일 크기나 플래그도 들어 있습니다.
+- "Application Compatibility Cache" 와 "Shim Cache" 가 정확히 어떻게 다른지는 알려져 있지 않고 자료마다 두 이름을 섞어 쓰므로, 이 페이지에서는 심캐시로 부릅니다.
+- 항목마다 파일 경로와 파일의 마지막 수정 시각이 들어 있고, Windows 버전에 따라 파일 크기나 플래그도 들어 있습니다.
 - 캐시를 다루는 DLL 로 apphelp.dll(AppHelp·호환성 DB)과 kernel32.dll(기본 캐시 관리)이 알려져 있습니다.
 - libyal 은 관련 키로 `HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags` 를 듭니다.
 
@@ -37,7 +37,7 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 ## 구조
 
-값 하나가 헤더와 항목 목록으로 이루어집니다. 헤더 크기와 서명은 Windows 버전마다 다릅니다. 아래 표는 libyal 의 정리입니다. 최대 항목 수는 libyal 도 추정으로 적은 값입니다.
+값 하나는 헤더와 항목 목록으로 이루어지고, 헤더 크기와 서명은 Windows 버전마다 다릅니다. 아래 표는 libyal 의 정리이며 최대 항목 수는 libyal 도 추정으로 적은 값입니다.
 
 | Windows | 헤더 크기 | 서명 | 항목 수 위치 | 최대 항목 수(추정) |
 |---|---|---|---|---|
@@ -120,9 +120,9 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 ## 시각 해석
 
-- 항목의 시각은 파일의 마지막 수정 시각입니다. NTFS 에서는 `$STANDARD_INFORMATION` 의 수정 시각입니다. 이 속성은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
+- 항목의 시각은 파일의 마지막 수정 시각이며, NTFS 에서는 `$STANDARD_INFORMATION` 의 수정 시각입니다. 이 속성은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
 - 시각은 FILETIME 이고 UTC 로 읽습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 예외가 하나 있습니다. PsExec 는 원격 PC 에 PSEXESVC.exe 를 새로 만듭니다. 그래서 이 항목의 수정 시각은 파일을 만든 시각과 같습니다. 결과적으로 실행 무렵의 시각이 됩니다.
+- 예외가 하나 있습니다. PsExec 는 원격 PC 에 PSEXESVC.exe 를 새로 만들므로 이 항목의 수정 시각은 파일을 만든 시각과 같고, 결과적으로 실행 무렵의 시각이 됩니다.
 - XP 항목에는 마지막 갱신 시각 칸이 따로 있습니다(오프셋 544).
 - 목록은 위에서 아래로 최근 사용 순 큐입니다. 맨 위가 가장 최근 항목입니다. 시각은 수정 시각이라서 목록 순서와 시각 순서가 다를 수 있습니다.
 - Windows 11 PC 한 대에서 시각이 1970-01-01 00:00:00(UTC)인 항목이 있었습니다. 패키지 앱 항목의 시각은 모두 0 이었습니다. 이런 값은 타임라인에 그대로 넣지 말고 파일 쪽 시각과 맞춰 봅니다. (확인 범위: Win11 25H2 한 대)

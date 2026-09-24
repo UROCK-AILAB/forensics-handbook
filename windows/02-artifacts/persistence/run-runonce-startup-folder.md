@@ -6,11 +6,8 @@ Run·RunOnce 키와 시작프로그램 폴더 (Startup Folder) 는 사용자가 
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- Run 키와 RunOnce 키는 사용자가 로그온할 때 프로그램을 실행하게 합니다.
-- 두 키는 사용자별(HKCU)과 컴퓨터 전체(HKLM)에 한 벌씩 있습니다.
-- 값 하나가 명령 하나입니다. 값 이름은 설명 문자열이고, 값 데이터는 260자 이하의 명령줄입니다.
-- 한 키에 값을 여러 개 둘 수 있습니다. 이때 실행 순서는 정해져 있지 않습니다.
-- 시스템은 Run 키 프로그램을 언제 실행할지 보장하지 않습니다. 사용자가 쓰는 화면을 방해하지 않도록 Run 키와 시작프로그램 그룹의 실행을 늦출 수 있습니다.
+Run 키와 RunOnce 키는 사용자가 로그온할 때 프로그램을 실행하게 하며, 사용자별(HKCU)과 컴퓨터 전체(HKLM)에 한 벌씩 있습니다. 값 하나가 명령 하나이고, 값 이름은 설명 문자열이며 값 데이터는 260자 이하의 명령줄입니다. 한 키에 값을 여러 개 둘 수 있지만 이때 실행 순서는 정해져 있지 않습니다. 시스템은 Run 키 프로그램을 언제 실행할지 보장하지 않으며, 사용자가 쓰는 화면을 방해하지 않도록 Run 키와 시작프로그램 그룹의 실행을 늦출 수 있습니다.
+
 - 정상 프로그램도 이 자리를 씁니다. Windows 11 PC 한 대의 HKCU Run 키에는 값이 6개 있었습니다. (확인 범위: Win11 25H2 한 대)
 - 악성코드도 Run 키와 시작프로그램 폴더를 자동실행 수단으로 씁니다. MITRE ATT&CK 는 이 수단을 T1547.001 로 분류합니다.
 
@@ -62,8 +59,7 @@ MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
 | 사용자별 | `C:\Users\[사용자]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` |
 | 모든 사용자 | `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp` |
 
-- 폴더 위치는 `HKCU·HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 와 같은 경로의 `Shell Folders` 값이 정합니다.
-- 그래서 기본 경로만 보지 말고 이 값이 가리키는 폴더를 봅니다. 이 문장은 위 사실에서 끌어낸 해석입니다.
+- 폴더 위치는 `HKCU·HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 와 같은 경로의 `Shell Folders` 값이 정하므로, 기본 경로만 보지 말고 이 값이 가리키는 폴더를 봅니다. 이 문장은 위 사실에서 끌어낸 해석입니다.
 - Windows 11 PC 한 대에서 본 값은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
 
 | 키 | 값 이름 | 데이터 |

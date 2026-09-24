@@ -4,17 +4,13 @@
 
 ## 한 줄 요약
 
-윈도 검색 색인 DB 는 한 폴더에 모여 있습니다. Windows 10 까지는 ESE 형식의 `Windows.edb` 가 본 DB 입니다. Windows 11 은 SQLite 형식의 `Windows.db` 와 `Windows-gather.db` 로 나뉩니다. 이 페이지는 폴더 위치, 함께 모을 파일, 표 목록, 바이트 순서, 그리고 Windows 11 PC 한 대에서 본 `AesGcm1 SQLite3` 헤더를 다룹니다.
+윈도 검색 색인 DB 는 한 폴더에 모여 있습니다. Windows 10 까지는 ESE 형식의 `Windows.edb` 가 본 DB 이고, Windows 11 은 SQLite 형식의 `Windows.db` 와 `Windows-gather.db` 로 나뉩니다. 이 페이지는 폴더 위치, 함께 모을 파일, 표 목록, 바이트 순서, 그리고 Windows 11 PC 한 대에서 본 `AesGcm1 SQLite3` 헤더를 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 윈도 검색이 쓰는 색인의 이름은 SystemIndex 입니다.
-- SystemIndex 는 세 부분으로 이루어집니다.
-  - 속성 저장소 (Property Store)
-  - 속성과 본문을 담은 색인
-  - 글자로 찾는 데 쓰는 역색인 (Inverted Index)
-- DB 파일 안의 표 이름은 Windows 버전마다 다릅니다.
-- 파일마다 남는 속성은 [파일 속성 되살리기](propertystore.md) 에서, 수집기가 남기는 기록은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
+윈도 검색이 쓰는 색인의 이름은 SystemIndex 이고, 속성 저장소 (Property Store), 속성과 본문을 담은 색인, 글자로 찾는 데 쓰는 역색인 (Inverted Index) 세 부분으로 이루어집니다. DB 파일 안의 표 이름은 Windows 버전마다 다릅니다.
+
+파일마다 남는 속성은 [파일 속성 되살리기](propertystore.md) 에서, 수집기가 남기는 기록은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -26,10 +22,9 @@
 | 기본 폴더 (XP) | `C:\Documents and Settings\All Users\Application Data\Microsoft\Search\Data\Applications\Windows\` | libyal |
 | 폴더를 정하는 값 | `HKLM\Software\Microsoft\Windows Search` 키의 `DataDirectory` 값 | libyal |
 
-- 폴더는 `DataDirectory` 값이 정합니다. 그래서 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다.
-- 한 PC 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 였습니다. DB 파일은 그 아래 `Applications\Windows\` 에 있었습니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대)
-- 같은 키의 `SetupCompletedSuccessfully` 값은 그 PC 에서 1 이었습니다. 이 값의 뜻을 설명한 자료는 확인하지 못했습니다.
-- 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+폴더는 `DataDirectory` 값이 정하므로, 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다. 한 PC 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 였고, DB 파일은 그 아래 `Applications\Windows\` 에 있었습니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대) 같은 키의 `SetupCompletedSuccessfully` 값은 그 PC 에서 1 이었지만, 이 값의 뜻을 설명한 자료는 확인하지 못했습니다.
+
+하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ### Windows 버전별 본 DB
 
@@ -132,9 +127,8 @@ Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn
 | 21~23 | `0x40 0x20 0x20` | 보통 SQLite 와 같은 값입니다. |
 | 24 이후 | 파일마다 무작위처럼 보이는 값 | 평문 SQLite 헤더값이 아닙니다. |
 
-- 이 파일을 `sqlite3` 로 열면 "file is not a database" 오류가 났습니다.
-- 48바이트 예약 공간에 암호 검증값(nonce·tag)이 들어 있는지는 확인하지 못했습니다.
-- 암호 키가 어디에 있는지도 확인하지 못했습니다.
+이 파일을 `sqlite3` 로 열면 "file is not a database" 오류가 났습니다. 48바이트 예약 공간에 암호 검증값(nonce·tag)이 들어 있는지와 암호 키가 어디에 있는지는 확인하지 못했습니다.
+
 - 보통 SQLite 헤더는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
@@ -153,7 +147,7 @@ Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn
 ## 함정과 한계
 
 1. **압수 이미지의 ESE DB 는 대부분 비정상 종료 상태입니다.** 압수 이미지에서 꺼낸 ESE DB(`Windows.edb` 포함)는 대부분 비정상 종료 (Dirty Shutdown) 상태였습니다. (현장 관찰)
-2. **로그 복구가 안 되는 경우가 있습니다.** JET API 로 열려면 같은 폴더의 트랜잭션 로그로 복구해야 합니다. 이미지 안의 로그가 끊겨 있으면 복구가 안 됩니다. 오래된 로그가 지워진 경우입니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다. (현장 관찰)
+2. **로그 복구가 안 되는 경우가 있습니다.** JET API 로 열려면 같은 폴더의 트랜잭션 로그로 복구해야 하는데, 오래된 로그가 지워져 이미지 안의 로그가 끊겨 있으면 복구가 안 됩니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다. (현장 관찰)
 3. **원본을 열면 바뀔 수 있습니다.** 항상 사본에서 작업합니다. (현장 관찰)
 4. **Windows 10 이후 로그 확장자가 다릅니다.** `.jtx`·`.jcp` 를 `.log`·`.chk` 로 착각하면 로그를 못 찾습니다. (현장 관찰)
 5. **Windows 11 파일은 암호화된 것으로 보이는 형식일 수 있습니다.** 보통 SQLite 도구로 열리지 않으면 첫 16바이트부터 확인합니다. WAL 안의 페이지 내용도 암호화돼 있는지는 확인하지 못했습니다.

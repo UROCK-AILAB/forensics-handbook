@@ -13,10 +13,7 @@
 | 보안 로그 4698~4702 | 작업을 만들 때, 지울 때, 사용·사용 안 함으로 바꿀 때, 수정할 때 | 요청한 계정과 로그온 ID, 작업 이름, 작업 XML |
 | TaskScheduler/Operational | 작업을 등록·수정·삭제할 때, 작업과 동작 (Action) 이 시작하고 끝날 때 | 작업 이름, 사용자 이름, 실행 인스턴스, 반환 코드 |
 
-- 4698 은 새 예약 작업이 만들어질 때마다 남습니다.
-- 4698 의 TaskContent 칸에는 새 작업의 XML 전체가 들어갑니다. 실행할 명령도 이 XML 안에 있습니다.
-- Operational 로그의 등록 이벤트 106 에는 작업 이름과 사용자만 있습니다. 작업 내용은 없습니다.
-- 그래서 "무엇을 실행하게 했나" 는 4698 에서 찾고, "실제로 실행했나" 는 Operational 로그에서 찾습니다.
+4698 은 새 예약 작업이 만들어질 때마다 남고, TaskContent 칸에 새 작업의 XML 전체가 들어가며 실행할 명령도 이 XML 안에 있습니다. Operational 로그의 등록 이벤트 106 에는 작업 이름과 사용자만 있고 작업 내용은 없습니다. 그래서 "무엇을 실행하게 했나" 는 4698 에서 찾고, "실제로 실행했나" 는 Operational 로그에서 찾습니다.
 
 작업 정의 파일과 레지스트리에 남는 흔적은 [예약 작업](../persistence/scheduled-tasks/index.md)에서 다룹니다. 이 페이지는 이벤트만 다룹니다.
 
@@ -31,9 +28,7 @@
 | 켜는 방법 | 감사 하위 범주 기타 개체 액세스 이벤트 (Audit Other Object Access Events) 를 켭니다 | 로그를 사용하도록 켭니다 |
 | 기본 상태 | 꺼짐 | 꺼짐 |
 
-- Microsoft 는 4698 과 TaskScheduler Operational 로그를 두고 "Neither of these are audited by default and must be explicitly turned on by an administrator." 라고 적었습니다. 관리자가 따로 켜야 한다는 뜻입니다.
-- 4698 의 감사 하위 범주는 Other Object Access Events 입니다.
-- 4699~4702 의 감사 하위 범주도 같은지는 이번에 확인하지 못했습니다.
+- Microsoft 는 4698 과 TaskScheduler Operational 로그를 두고 "Neither of these are audited by default and must be explicitly turned on by an administrator." 라고 적었습니다. 관리자가 따로 켜야 한다는 뜻입니다. 4698 의 감사 하위 범주는 Other Object Access Events 이고, 4699~4702 의 감사 하위 범주도 같은지는 이번에 확인하지 못했습니다.
 - TaskScheduler 공급자는 Operational 말고도 System 로그와 `Microsoft-Windows-TaskScheduler/Debug`·`/Diagnostic`·`/Maintenance` 로그에 씁니다. (확인 범위: Win11 25H2 한 대)
 
 한 PC 에서 설정을 읽어 본 결과는 다음과 같습니다. (확인 범위: Win11 25H2 한 대)

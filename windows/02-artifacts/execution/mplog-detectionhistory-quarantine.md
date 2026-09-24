@@ -12,10 +12,7 @@ Microsoft Defender 바이러스 백신은 `C:\ProgramData\Microsoft\Windows Defe
 | DetectionHistory | 탐지 한 건의 위협 이름, 파일, 해시, 사용자, 부모 프로세스 | 실시간 보호 (Real-Time Protection, RTP) 가 위협을 잡을 때 |
 | Quarantine | 격리한 파일의 원래 경로, 탐지 정보, 원본 내용 | 탐지한 파일을 격리할 때 |
 
-- MPLog 는 Windows Defender 나 Microsoft Security Essentials 가 만드는 텍스트 로그입니다.
-- DetectionHistory 는 실시간 보호가 PUA·바이러스·트로이 목마 같은 위협을 잡을 때 생깁니다. 사용자가 그 파일을 실행했는지와는 관계가 없습니다.
-- DetectionHistory 파일은 Windows 보안 > 바이러스 및 위협 방지 > "보호 기록 (Protection History)" 에 보이는 항목의 원본입니다.
-- 격리 폴더에서는 원본 파일을 되살릴 수 있습니다. 그래서 공격자가 떨어뜨린 도구의 원본을 되찾는 통로가 됩니다.
+MPLog 는 Windows Defender 나 Microsoft Security Essentials 가 만드는 텍스트 로그입니다. DetectionHistory 는 실시간 보호가 PUA·바이러스·트로이 목마 같은 위협을 잡을 때 생기며, 사용자가 그 파일을 실행했는지와는 관계가 없습니다. DetectionHistory 파일은 Windows 보안 > 바이러스 및 위협 방지 > "보호 기록 (Protection History)" 에 보이는 항목의 원본입니다. 격리 폴더에서는 원본 파일을 되살릴 수 있어서 공격자가 떨어뜨린 도구의 원본을 되찾는 통로가 됩니다.
 
 Defender 는 운영 이벤트 로그에도 탐지 (1116) 와 조치 (1117) 를 남깁니다. 이 페이지는 파일 쪽만 다룹니다. 이벤트는 [Windows Defender 탐지](../event-logs/1116-1117.md) 에서 다룹니다.
 
@@ -148,11 +145,7 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 | `ResourceData` | 격리한 원본 내용. 해시 이름의 파일이 이름 앞 두 글자 하위 폴더에 들어갑니다 (예: `ResourceData\5D\5D92927E35A6D8FECE000ABB9739F5AEFF914A3E`) |
 | `Resources` | 항목과 원본 내용 파일을 이어 주는 메타데이터 |
 
-- 폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다.
-- 키는 256바이트입니다. `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다.
-- `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있습니다. 풀면 원래 전체 경로, 탐지 정보, 시각이 나옵니다. `ResourceData` 파일과 짝지을 해시도 나옵니다.
-- `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있습니다. 이것을 떼어 내야 원본 파일이 됩니다.
-- 오프셋과 칸 단위의 구조는 확인한 자료에 없습니다.
+폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다. 오프셋과 칸 단위의 구조는 확인한 자료에 없습니다.
 
 관찰한 PC 에서는 다음을 봤습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 

@@ -10,20 +10,9 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Arsenal Recon 의 2019년 10월 글은 이 캐시를 이렇게 설명합니다.
+Arsenal Recon 의 2019년 10월 글은 이 캐시를 이렇게 설명합니다. 오피스 문서 캐시 (Office Document Cache) 는 중간 저장소이고, OneDrive·SharePoint 에 최종 저장할 문서와 그 수정 내용을 잠시 담습니다. 오피스 업로드 센터 (Upload Center) 가 캐시·클라우드·로컬 파일 사이의 동기화를 맡기 때문에 오프라인에서도 작업할 수 있고, 연결이 끊겨도 고친 내용은 나중에 올라갑니다. 문서는 보통 14일 넘게 캐시에 남으며, OneDrive·SharePoint 에 저장한 파일 가운데 오피스 문서가 아닌 파일도 들어가는 경우가 있습니다.
 
-- 오피스 문서 캐시 (Office Document Cache) 는 중간 저장소입니다.
-- OneDrive·SharePoint 에 최종 저장할 문서와 그 수정 내용을 잠시 담습니다.
-- 오피스 업로드 센터 (Upload Center) 가 캐시·클라우드·로컬 파일 사이의 동기화를 맡습니다.
-- 그래서 오프라인에서도 작업할 수 있습니다.
-- 연결이 끊겨도 고친 내용은 나중에 올라갑니다.
-- 문서는 보통 14일 넘게 캐시에 남습니다.
-- OneDrive·SharePoint 에 저장한 파일 가운데 오피스 문서가 아닌 파일도 들어가는 경우가 있습니다.
-
-같은 글은 이 캐시가 중요한 까닭을 사례로 보여 줍니다.
-
-- 사용자가 지워서 다른 곳에는 없는 문서를 FSD 파일에서 온전히 되살린 사례가 있습니다.
-- FSD 파일 하나에 문서 수정 204건이 들어 있던 사례도 있습니다.
+같은 글은 이 캐시가 중요한 까닭을 사례로 보여 줍니다. 사용자가 지워서 다른 곳에는 없는 문서를 FSD 파일에서 온전히 되살린 사례가 있고, FSD 파일 하나에 문서 수정 204건이 들어 있던 사례도 있습니다.
 
 로컬 디스크나 네트워크 공유 폴더에서 연 문서의 백업은 [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) 에서 다룹니다.
 
@@ -46,11 +35,9 @@ Arsenal Recon 의 2019년 10월 글은 이 캐시를 이렇게 설명합니다.
 | 공개 자료가 설명한 형식 | Arsenal, kacos2000 | `CentralTable.accdb`, FSF 파일, FSD 파일 |
 | 관찰한 형식 | 관찰 (Microsoft 365 앱 16.0.20326.20158) | `0\0\<32자 이름>\` 아래 `.R`·`.P`·`.C4`·`.UR` 파일 |
 
-- Arsenal 글은 시험한 오피스 버전을 적지 않았습니다.
-- 관찰한 형식이 어느 버전부터 쓰였는지는 확인하지 못했습니다.
-- 업로드 센터가 Microsoft 365 에서 없어졌는지도 확인하지 못했습니다.
-- kacos2000 자료에 따르면 Windows 의 CentralTable 은 Access (`.accdb`) DB 입니다.
-- 같은 자료에 따르면 Android·iOS·macOS 에서 가져온 OfficeFileCache 는 SQLite 로 된 `centraltable` 을 씁니다. SQLite 를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+Arsenal 글은 시험한 오피스 버전을 적지 않았고, 관찰한 형식이 어느 버전부터 쓰였는지와 업로드 센터가 Microsoft 365 에서 없어졌는지는 확인하지 못했습니다.
+
+kacos2000 자료에 따르면 Windows 의 CentralTable 은 Access (`.accdb`) DB 이고, Android·iOS·macOS 에서 가져온 OfficeFileCache 는 SQLite 로 된 `centraltable` 을 씁니다. SQLite 를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ## 구조
 
@@ -66,9 +53,7 @@ kacos2000 자료는 세 가지 파일이 이렇게 이어진다고 적었습니�
 
 > 그림 자리: `CentralTable.accdb` 의 행이 FSF 파일 이름의 GUID 를 가리키고, FSF 파일이 다시 FSD 컨테이너의 GUID 를 가리키는 세 단계 연결
 
-- `CentralTable.accdb` 의 표 이름과 칸 이름은 확인하지 못했습니다.
-- Arsenal 글도 표·칸 이름과 시각 칸의 형식을 적지 않았습니다.
-- FSF·FSD 의 바이트 배치는 두 자료 모두 적지 않았습니다.
+`CentralTable.accdb` 의 표 이름과 칸 이름은 확인하지 못했습니다. Arsenal 글도 표·칸 이름과 시각 칸의 형식을 적지 않았고, FSF·FSD 의 바이트 배치는 두 자료 모두 적지 않았습니다.
 
 ### 관찰한 형식 (관찰)
 
@@ -96,11 +81,7 @@ kacos2000 자료는 세 가지 파일이 이렇게 이어진다고 적었습니�
 
 **증명하는 것**
 
-- FSD 에서 꺼낸 문서는 그 사용자 프로필의 오피스 문서 캐시에 들어 있던 내용입니다.
-- 공개 자료의 설명대로라면 그 문서는 OneDrive·SharePoint 에 저장할 문서였습니다.
-- 사용자가 지운 문서의 내용이 남아 있을 수 있습니다.
-- 한 문서를 여러 번 고친 내용이 남아 있을 수 있습니다.
-- 옛 버전 폴더와 섀도 복사본에는 지금보다 앞선 때의 캐시가 남아 있을 수 있습니다.
+FSD 에서 꺼낸 문서는 그 사용자 프로필의 오피스 문서 캐시에 들어 있던 내용이고, 공개 자료의 설명대로라면 OneDrive·SharePoint 에 저장할 문서였습니다. 사용자가 지운 문서의 내용이나 한 문서를 여러 번 고친 내용이 남아 있을 수 있고, 옛 버전 폴더와 섀도 복사본에는 지금보다 앞선 때의 캐시가 남아 있을 수 있습니다.
 
 **증명하지 못하는 것**
 
