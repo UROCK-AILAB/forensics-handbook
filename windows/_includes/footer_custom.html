@@ -1,5 +1,5 @@
 <script>
-  // 목차 맨 위 단계의 "기반 · 디스크·볼륨" 같은 이름을 갈래 제목 + 그룹 이름으로 나눈다.
+  /* 목차 맨 위 단계의 "기반 · 디스크·볼륨" 같은 이름을 갈래 제목 + 그룹 이름으로 나눈다. */
   (function () {
     var full = { '기반': '기반 구조', '아티팩트': '아티팩트 사전', '기법': '분석 기법', '시나리오': '조사 시나리오' };
     var list = document.querySelector('#site-nav > .nav-list');
@@ -20,7 +20,7 @@
         a.textContent = m[2];
       });
     }
-    // 잘린 목차 제목은 마우스를 올리면 전체가 보인다.
+    /* 잘린 목차 제목은 마우스를 올리면 전체가 보인다. */
     document.querySelectorAll('.nav-list-link').forEach(function (a) {
       if (!a.title) a.title = a.textContent.trim();
     });
