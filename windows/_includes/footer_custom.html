@@ -20,7 +20,7 @@
         a.textContent = m[2];
       });
     }
-    /* 펼쳐진 메뉴를 다시 누르면 이동하지 않고 접고, 접힌 메뉴는 이동하며 펼쳐진다. */
+    /* 맨 위 단계(그룹)는 이동 없이 펼치고 접기만 한다. 그 밖의 메뉴는 열린 것을 누르면 접고, 닫힌 것은 이동하며 펼쳐진다. */
     var nav = document.getElementById('site-nav');
     if (nav) {
       nav.addEventListener('click', function (e) {
@@ -30,7 +30,7 @@
         var ex = li.querySelector(':scope > .nav-list-expander');
         if (!ex) return;
         /* 열린 메뉴는 접는다. 현재 쪽의 메뉴는 링크 주소가 없으므로 닫힌 것도 여기서 펼친다. */
-        if (li.classList.contains('active') || !a.getAttribute('href')) {
+        if (li.parentElement === list || li.classList.contains('active') || !a.getAttribute('href')) {
           e.preventDefault();
           ex.click();
         }
