@@ -1,5 +1,6 @@
 ---
 title: "기반 · 데이터베이스·로그 형식"
+nav_title: "데이터베이스·로그 형식"
 nav_order: 125
 has_children: true
 ---

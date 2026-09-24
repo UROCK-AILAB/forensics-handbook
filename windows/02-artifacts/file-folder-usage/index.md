@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 파일·폴더 사용 흔적"
+nav_title: "파일·폴더 사용 흔적"
 nav_order: 1125
 has_children: true
 ---

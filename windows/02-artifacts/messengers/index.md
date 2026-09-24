@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 메신저"
+nav_title: "메신저"
 nav_order: 1975
 has_children: true
 ---

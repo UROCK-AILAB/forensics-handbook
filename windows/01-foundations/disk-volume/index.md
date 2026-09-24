@@ -1,5 +1,7 @@
 ---
 title: "기반 · 디스크·볼륨"
+nav_title: "디스크·볼륨"
+nav_section: "기반 구조"
 nav_order: -5
 has_children: true
 ---

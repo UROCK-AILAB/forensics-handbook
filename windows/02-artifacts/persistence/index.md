@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 자동실행·지속성"
+nav_title: "자동실행·지속성"
 nav_order: 685
 has_children: true
 ---

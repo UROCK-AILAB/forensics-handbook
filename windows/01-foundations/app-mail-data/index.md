@@ -1,5 +1,6 @@
 ---
 title: "기반 · 앱·메일 데이터 구조"
+nav_title: "앱·메일 데이터 구조"
 nav_order: 415
 has_children: true
 ---

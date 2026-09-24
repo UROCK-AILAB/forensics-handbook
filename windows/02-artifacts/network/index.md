@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 네트워크"
+nav_title: "네트워크"
 nav_order: 2315
 has_children: true
 ---

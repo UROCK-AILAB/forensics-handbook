@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 이벤트 로그"
+nav_title: "이벤트 로그"
 nav_order: 2465
 has_children: true
 ---

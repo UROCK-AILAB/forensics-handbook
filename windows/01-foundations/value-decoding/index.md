@@ -1,5 +1,6 @@
 ---
 title: "기반 · 값 읽는 법"
+nav_title: "값 읽는 법"
 nav_order: 495
 has_children: true
 ---

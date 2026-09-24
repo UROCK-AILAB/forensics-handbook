@@ -1,43 +1,23 @@
 <script>
-  /* 목차 맨 위 단계의 "기반 · 디스크·볼륨" 같은 이름을 갈래 제목 + 그룹 이름으로 나눈다. */
   (function () {
-    var full = { '기반': '기반 구조', '아티팩트': '아티팩트 사전', '기법': '분석 기법', '시나리오': '조사 시나리오' };
     var list = document.querySelector('#site-nav > .nav-list');
-    if (list) {
-      var last = '';
-      Array.prototype.slice.call(list.children).forEach(function (li) {
-        var a = li.querySelector(':scope > a.nav-list-link');
-        if (!a) return;
-        var m = a.textContent.trim().match(/^(기반|아티팩트|기법|시나리오) · (.+)$/);
-        if (!m) return;
-        if (m[1] !== last) {
-          var h = document.createElement('li');
-          h.className = 'nav-section-title';
-          h.textContent = full[m[1]];
-          list.insertBefore(h, li);
-          last = m[1];
-        }
-        a.textContent = m[2];
-      });
-    }
-    /* 맨 위 단계(그룹)는 이동 없이 펼치고 접기만 한다. 그 밖의 메뉴는 열린 것을 누르면 접고, 닫힌 것은 이동하며 펼쳐진다. */
     var nav = document.getElementById('site-nav');
-    if (nav) {
-      nav.addEventListener('click', function (e) {
-        var a = e.target.closest ? e.target.closest('a.nav-list-link') : null;
-        if (!a) return;
-        var li = a.parentElement;
-        var ex = li.querySelector(':scope > .nav-list-expander');
-        if (!ex) return;
-        /* 열린 메뉴는 접는다. 현재 쪽의 메뉴는 링크 주소가 없으므로 닫힌 것도 여기서 펼친다. */
-        if (li.parentElement === list || li.classList.contains('active') || !a.getAttribute('href')) {
-          e.preventDefault();
-          ex.click();
-        }
-      });
-    }
+    if (!nav || !list) return;
+    /* 맨 위 단계(그룹)는 이동 없이 펼치고 접기만 한다. 그 밖의 메뉴는 열린 것을 누르면 접고, 닫힌 것은 이동하며 펼쳐진다. */
+    nav.addEventListener('click', function (e) {
+      var a = e.target.closest ? e.target.closest('a.nav-list-link') : null;
+      if (!a) return;
+      var li = a.parentElement;
+      var ex = li.querySelector(':scope > .nav-list-expander');
+      if (!ex) return;
+      /* 현재 쪽의 메뉴는 테마가 링크 주소를 지우므로 닫힌 것도 여기서 펼친다. */
+      if (li.parentElement === list || li.classList.contains('active') || !a.getAttribute('href')) {
+        e.preventDefault();
+        ex.click();
+      }
+    });
     /* 잘린 목차 제목은 마우스를 올리면 전체가 보인다. */
-    document.querySelectorAll('.nav-list-link').forEach(function (a) {
+    nav.querySelectorAll('.nav-list-link').forEach(function (a) {
       if (!a.title) a.title = a.textContent.trim();
     });
   })();

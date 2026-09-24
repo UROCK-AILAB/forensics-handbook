@@ -1,5 +1,7 @@
 ---
 title: "기법 · 조사 절차·증거 확보"
+nav_title: "조사 절차·증거 확보"
+nav_section: "분석 기법"
 nav_order: 3025
 has_children: true
 ---

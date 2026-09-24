@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 파일시스템"
+nav_title: "파일시스템"
 nav_order: 1415
 has_children: true
 ---

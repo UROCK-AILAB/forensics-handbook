@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 인터넷·브라우저"
+nav_title: "인터넷·브라우저"
 nav_order: 1585
 has_children: true
 ---

@@ -1,5 +1,6 @@
 ---
 title: "시나리오 · 행위 재구성"
+nav_title: "행위 재구성"
 nav_order: 3775
 has_children: true
 ---

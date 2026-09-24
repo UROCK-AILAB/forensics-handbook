@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 메일"
+nav_title: "메일"
 nav_order: 1855
 has_children: true
 ---

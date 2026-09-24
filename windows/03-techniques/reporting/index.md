@@ -1,5 +1,6 @@
 ---
 title: "기법 · 보고"
+nav_title: "보고"
 nav_order: 3555
 has_children: true
 ---

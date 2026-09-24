@@ -1,5 +1,7 @@
 ---
 title: "시나리오 · 정보 유출"
+nav_title: "정보 유출"
+nav_section: "조사 시나리오"
 nav_order: 3575
 has_children: true
 ---

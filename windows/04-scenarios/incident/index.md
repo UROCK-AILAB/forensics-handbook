@@ -1,5 +1,6 @@
 ---
 title: "시나리오 · 침해 사고"
+nav_title: "침해 사고"
 nav_order: 3675
 has_children: true
 ---

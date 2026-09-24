@@ -1,5 +1,6 @@
 ---
 title: "기반 · 암호 보호"
+nav_title: "암호 보호"
 nav_order: 535
 has_children: true
 ---

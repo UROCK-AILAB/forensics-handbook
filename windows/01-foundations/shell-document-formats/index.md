@@ -1,5 +1,6 @@
 ---
 title: "기반 · 셸·문서 형식"
+nav_title: "셸·문서 형식"
 nav_order: 385
 has_children: true
 ---

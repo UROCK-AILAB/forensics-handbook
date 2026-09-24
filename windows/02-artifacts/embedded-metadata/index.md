@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 파일 내장 메타데이터"
+nav_title: "파일 내장 메타데이터"
 nav_order: 2925
 has_children: true
 ---

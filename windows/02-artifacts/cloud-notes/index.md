@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 클라우드·노트"
+nav_title: "클라우드·노트"
 nav_order: 2155
 has_children: true
 ---

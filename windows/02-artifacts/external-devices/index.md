@@ -1,5 +1,6 @@
 ---
 title: "아티팩트 · 외부 장치"
+nav_title: "외부 장치"
 nav_order: 1465
 has_children: true
 ---
