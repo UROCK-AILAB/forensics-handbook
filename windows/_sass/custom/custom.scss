@@ -66,3 +66,14 @@
 .main-content-wrap {
   max-width: 90rem;
 }
+
+// 사이드바의 상단 제목과 하단 회사 표기를 가운데에 둔다.
+.site-footer {
+  text-align: center;
+}
+
+.site-title {
+  @include mq(md) {
+    justify-content: center;
+  }
+}
