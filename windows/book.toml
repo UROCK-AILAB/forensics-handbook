@@ -6,15 +6,17 @@ src = "src"
 
 [output.html]
 default-theme = "light"
-preferred-dark-theme = "navy"
-git-repository-url = "https://github.com/UROCK-AILAB/windows-forensics-wiki-ko"
-git-repository-icon = "fab-github"
+preferred-dark-theme = "light"
+sidebar-header-nav = false
 additional-css = ["custom.css"]
 additional-js = ["custom.js"]
 
+[output.html.print]
+enable = false
+
 [output.html.fold]
 enable = true
-level = 1
+level = 0
 
 [output.html.search]
 limit-results = 20
