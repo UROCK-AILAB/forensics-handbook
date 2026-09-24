@@ -14,7 +14,7 @@
 
 ## 위치와 버전별 차이
 
-- 파일은 프로필 폴더에서 찾습니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 파일은 프로필 폴더에서 찾습니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - 이번에 연 소스에서는 파일 이름만 확인했습니다. 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 검체에서 확인합니다.
 - 아래 칸 목록은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 예전 출시판에 어느 칸이 있었는지는 이 자료로 알 수 없습니다.
 - 분석을 시작할 때 `schemaVersion` 값을 먼저 적어 둡니다. 도구 결과가 이상하면 이 값부터 봅니다.
@@ -101,12 +101,12 @@
 ## 시각 해석
 
 - `installDate`·`updateDate`·`signedDate` 는 1970년 1월 1일 00:00 UTC 부터 센 밀리초입니다.
-- 이 단위는 소스를 요약해 받은 결과입니다. 원문 주석은 따로 확인하지 못했습니다. 검체에서 [$MFT](/02-artifacts/filesystem/mft.md) 의 파일 시각과 맞춰 확인합니다.
+- 이 단위는 소스를 요약해 받은 결과입니다. 원문 주석은 따로 확인하지 못했습니다. 검체에서 [$MFT](../../filesystem/mft.md) 의 파일 시각과 맞춰 확인합니다.
 - 시작할 때 새로 찾아낸 추가 기능은 `installDate`·`updateDate` 에 파일 수정 시각을 넣습니다. 이 값은 실제 설치 시각과 다를 수 있습니다.
-- [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) 같은 SQLite 파일의 시각은 대부분 마이크로초입니다. 이 파일은 밀리초이므로 섞어 읽지 않습니다.
+- [places.sqlite](places-sqlite.md) 같은 SQLite 파일의 시각은 대부분 마이크로초입니다. 이 파일은 밀리초이므로 섞어 읽지 않습니다.
 - `active` 같은 상태 칸에는 시각이 붙지 않습니다. 상태는 이 파일을 마지막으로 쓴 무렵의 것입니다.
 - 이 파일의 마지막 수정 시각은 파이어폭스가 목록을 마지막으로 다시 쓴 때입니다.
-- 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다. 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다. 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
@@ -172,13 +172,13 @@ jq -r '.addons[] | [.id, .version, .location, .active, .userDisabled, .appDisabl
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문·다운로드·즐겨찾기 | `installDate` 무렵에 추가 기능 배포 페이지를 열거나 파일을 내려받았는지 봅니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| $MFT·$UsnJrnl | 추가 기능 파일과 이 파일을 만들고 고친 시각을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| 설치 프로그램 | `foreignInstall` 확장과 같은 무렵에 설치한 프로그램을 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 프로그램 실행 흔적 | 같은 무렵에 실행한 설치 파일을 봅니다 | [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) |
-| 크롬 계열 확장 | 같은 확장을 다른 브라우저에도 설치했는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) |
+| 방문·다운로드·즐겨찾기 | `installDate` 무렵에 추가 기능 배포 페이지를 열거나 파일을 내려받았는지 봅니다 | [places.sqlite](places-sqlite.md) |
+| $MFT·$UsnJrnl | 추가 기능 파일과 이 파일을 만들고 고친 시각을 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| 설치 프로그램 | `foreignInstall` 확장과 같은 무렵에 설치한 프로그램을 봅니다 | [설치 프로그램](../../system-account/uninstall.md) |
+| 프로그램 실행 흔적 | 같은 무렵에 실행한 설치 파일을 봅니다 | [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) |
+| 크롬 계열 확장 | 같은 확장을 다른 브라우저에도 설치했는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md) |
 
-브라우저 확장을 심어 자리를 잡는 수법은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에서 다른 자동실행 위치와 함께 봅니다.
+브라우저 확장을 심어 자리를 잡는 수법은 [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) 에서 다른 자동실행 위치와 함께 봅니다.
 
 ## 실습
 

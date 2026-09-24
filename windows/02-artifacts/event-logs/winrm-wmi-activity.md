@@ -16,7 +16,7 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 - `winrm quickconfig` (`winrm qc`) 는 서비스를 자동 시작으로 바꾸고 시작합니다. 이어서 HTTP 또는 HTTPS 리스너를 모든 IP 에 만들고 방화벽 예외를 엽니다.
 - Vista 부터 WMI 는 옛 로그 파일 대신 ETW 를 씁니다. 이벤트 뷰어나 `wevtutil` 로 봅니다.
 
-원격 실행 도구가 도착 PC 에 남기는 흔적 전체는 [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md)에서 다룹니다. 이 페이지는 두 로그와 설정 흔적만 다룹니다.
+원격 실행 도구가 도착 PC 에 남기는 흔적 전체는 [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md)에서 다룹니다. 이 페이지는 두 로그와 설정 흔적만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -35,7 +35,7 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 - Microsoft 의 WMI 추적 문서는 이벤트 원본을 "Microsoft-Windows-WMI" 라고 적습니다. 조사한 PC 의 공급자 이름은 Microsoft-Windows-WMI-Activity 였습니다.
 - WMI-Activity 의 Trace 채널은 기본으로 꺼져 있습니다. `wevtutil sl Microsoft-Windows-WMI-Activity/Trace /e:true` 로 켭니다.
 - Trace 채널의 Event 1·2·3 에는 GroupOperationID, OperationId, Operation, User, Namespace, ProviderName, Path 가 있다고 문서에 적혀 있습니다.
-- 다른 채널의 크기와 켜짐은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+- 다른 채널의 크기와 켜짐은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### WinRM 기본 동작과 버전
 
@@ -103,7 +103,7 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 - 이 이벤트들의 값은 EventData 가 아니라 UserData 아래에 들어 있었습니다.
 - 5857 은 `UserData\Operation_StartedOperational`, 5858 은 `UserData\Operation_ClientFailure` 요소였습니다. 네임스페이스는 `http://manifests.microsoft.com/win/2006/windows/WMI` 였습니다.
 - 5857 의 칸은 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다.
-- 5861 은 영구 이벤트 구독과 관련된 이벤트입니다. [WMI 영구 이벤트 구독](/02-artifacts/persistence/wmi-event-subscription.md)에서 다룹니다.
+- 5861 은 영구 이벤트 구독과 관련된 이벤트입니다. [WMI 영구 이벤트 구독](../persistence/wmi-event-subscription.md)에서 다룹니다.
 
 조사한 PC 에서 본 값입니다. 컴퓨터 이름과 사용자는 가렸습니다.
 
@@ -132,14 +132,14 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 - 쓸 수 있는 문장: "WinRM/Operational 로그에 ○○(UTC) 의 91 이 있습니다. resourceUri 는 ○○ 입니다. 같은 분 안에 193 이 있고, 요청 사용자는 ○○\○○ 입니다."
 - 쓰면 안 되는 문장: "공격자가 WinRM 으로 원격 명령을 실행했다."
 
-두 번째 문장은 사람과 명령을 적지만, 이 로그에는 둘 다 없습니다. 명령 내용은 [PowerShell 실행 기록 (4103·4104)](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md)과 프로세스 생성 기록에서 따로 찾습니다.
+두 번째 문장은 사람과 명령을 적지만, 이 로그에는 둘 다 없습니다. 명령 내용은 [PowerShell 실행 기록 (4103·4104)](powershell-event-logs-4103-4104.md)과 프로세스 생성 기록에서 따로 찾습니다.
 
 ## 시각 해석
 
-- 세션을 여는 쪽과 받는 쪽의 기록은 서로 다른 PC 에 있습니다. 두 PC 의 시계가 맞는지 먼저 확인합니다. 방법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
+- 세션을 여는 쪽과 받는 쪽의 기록은 서로 다른 PC 에 있습니다. 두 PC 의 시계가 맞는지 먼저 확인합니다. 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 - 145 의 메시지는 작업 시작, 132·142 의 메시지는 작업 성공·실패입니다. 같은 operationName 의 145 와 132·142 사이를 작업 시간으로 볼 수 있습니다. 이 판단은 메시지에서 이끈 해석입니다.
 - 두 로그는 1MB 라 덮는 기간이 짧습니다. 조사한 PC 에서 WinRM 로그 1,984건은 가장 오래된 기록이 약 40일 전이었습니다. WMI-Activity 로그는 약 하루 치만 있었습니다 (5858 1,080건, 5857 112건). (확인 범위: Win11 빌드 26200 한 대)
-- 시각 값 저장 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 시각 값 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -153,9 +153,9 @@ Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Manage
 
 ### 지우기와 조작
 
-- **로그를 지웁니다.** 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md)를 봅니다.
+- **로그를 지웁니다.** 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
 - **잡음에 묻힙니다.** 1MB 로그는 잡음만으로도 며칠~몇십 일 만에 밀려납니다. 원격 실행 기록이 이미 밀려났을 수 있습니다.
-- **레코드 일부만 남습니다.** 밀려난 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
+- **레코드 일부만 남습니다.** 밀려난 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -207,18 +207,18 @@ reg query "HKLM\CASE_SW\Microsoft\Windows\CurrentVersion\WSMAN" /s
 reg unload HKLM\CASE_SW
 ```
 
-도구가 UserData 아래 값을 제대로 보여 주는지 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+도구가 UserData 아래 값을 제대로 보여 주는지 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [로그온 세션 잇기 (Logon ID·4624~4634·4647)](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) | 받는 쪽 PC 의 로그온 유형 3 로그온과 시각 |
-| [PowerShell 실행 기록 (4103·4104)](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) | 원격 PowerShell 로 실행한 스크립트 내용 |
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) | 받는 쪽에서 뜬 프로세스. 4688 은 기본으로 꺼져 있습니다 |
-| [WMI 영구 이벤트 구독](/02-artifacts/persistence/wmi-event-subscription.md) | 5861 과 WMI 저장소의 구독 |
-| [서비스 설치 (7045·4697)](/02-artifacts/event-logs/7045-4697.md) | 같은 시각대에 서비스를 만든 원격 실행 |
-| [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) | 출발 PC 와 도착 PC 기록을 합친 흐름 |
+| [로그온 세션 잇기 (Logon ID·4624~4634·4647)](logon-events/logon-id-4624-4634-4647.md) | 받는 쪽 PC 의 로그온 유형 3 로그온과 시각 |
+| [PowerShell 실행 기록 (4103·4104)](powershell-event-logs-4103-4104.md) | 원격 PowerShell 로 실행한 스크립트 내용 |
+| [프로세스 생성 (4688)](4688.md) | 받는 쪽에서 뜬 프로세스. 4688 은 기본으로 꺼져 있습니다 |
+| [WMI 영구 이벤트 구독](../persistence/wmi-event-subscription.md) | 5861 과 WMI 저장소의 구독 |
+| [서비스 설치 (7045·4697)](7045-4697.md) | 같은 시각대에 서비스를 만든 원격 실행 |
+| [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) | 출발 PC 와 도착 PC 기록을 합친 흐름 |
 
 ## 실습
 

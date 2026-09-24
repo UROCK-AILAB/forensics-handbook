@@ -4,11 +4,11 @@
 
 SQLite 는 행을 지워도 그 바이트를 곧바로 0 으로 채우지 않습니다. 그 자리를 빈 공간으로 표시해 두었다가 나중에 다시 씁니다. 페이지 전체가 비면 프리리스트 (Freelist) 에 올라갑니다. 페이지 일부가 비면 프리블록 (Freeblock) 이나 비할당 영역 (Unallocated Region) 이 됩니다. 이 세 곳이 파일 안에서 지운 레코드를 찾는 자리입니다. 다만 앱이 보안 삭제 (secure_delete) 를 켜 두었으면 대부분 0 으로 바뀌어 있습니다.
 
-페이지·셀·레코드 형식 자체는 [파일·페이지 구조 (B-tree·Record Format)](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에서 다룹니다. 이 글은 빈 공간만 봅니다.
+페이지·셀·레코드 형식 자체는 [파일·페이지 구조 (B-tree·Record Format)](b-tree-record-format.md) 에서 다룹니다. 이 글은 빈 공간만 봅니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-Windows 에서 만나는 SQLite 파일은 모두 해당합니다. 크롬 계열 [방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md), 파이어폭스 [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md), [윈도 타임라인 (ActivitiesCache.db)](/02-artifacts/file-folder-usage/activitiescache-db.md), [윈도 알림 기록 (wpndatabase.db)](/02-artifacts/execution/wpndatabase-db.md) 이 그 예입니다.
+Windows 에서 만나는 SQLite 파일은 모두 해당합니다. 크롬 계열 [방문·다운로드 기록 (History)](../../../02-artifacts/browsers/chrome-edge-whale/history.md), 파이어폭스 [places.sqlite](../../../02-artifacts/browsers/firefox/places-sqlite.md), [윈도 타임라인 (ActivitiesCache.db)](../../../02-artifacts/file-folder-usage/activitiescache-db.md), [윈도 알림 기록 (wpndatabase.db)](../../../02-artifacts/execution/wpndatabase-db.md) 이 그 예입니다.
 
 지운 레코드가 남는 정도는 Windows 버전보다 앱 설정에 달려 있습니다. 앱이 SQLite 를 직접 넣어 배포하는 경우가 많기 때문입니다. 보안 삭제 설정은 DB 파일 헤더에 적히지 않습니다. 이 설정은 연결마다 정하는 값이고, 기본값은 앱을 빌드할 때 정합니다. 확인한 앱은 아래와 같습니다.
 
@@ -18,7 +18,7 @@ Windows 에서 만나는 SQLite 파일은 모두 해당합니다. 크롬 계열 
 | 파이어폭스 | 빌드 설정(moz.build)에서 `SQLITE_SECURE_DELETE` 를 1 로 정합니다. | 위와 같습니다. |
 | 그 밖의 앱·Windows 기본 DB | 확인하지 않았습니다. | 빈 공간을 직접 열어 보고 판단합니다. |
 
-보안 삭제가 켜진 앱이라도 `-wal` 파일의 옛 프레임이나 롤백 저널에는 지우기 전 페이지가 남을 수 있습니다. Meng·Baier(2019)도 secure_delete 를 켠 DB 에서 WAL 파일로 지운 레코드를 되살릴 수 있다고 보고했습니다. 자세한 내용은 [WAL과 롤백 저널 (-wal·-journal·-shm)](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
+보안 삭제가 켜진 앱이라도 `-wal` 파일의 옛 프레임이나 롤백 저널에는 지우기 전 페이지가 남을 수 있습니다. Meng·Baier(2019)도 secure_delete 를 켠 DB 에서 WAL 파일로 지운 레코드를 되살릴 수 있다고 보고했습니다. 자세한 내용은 [WAL과 롤백 저널 (-wal·-journal·-shm)](wal-journal-shm.md) 에 있습니다.
 
 ## 구조
 
@@ -147,7 +147,7 @@ Windows 에서 만나는 SQLite 파일은 모두 해당합니다. 크롬 계열 
 | `VACUUM` 실행 뒤 | 파일을 새로 짜므로 남지 않습니다. | 남지 않습니다. | PRAGMA 문서 |
 
 - 자동 정리는 프리리스트 페이지만 잘라 냅니다. 공식 문서에 따르면 자동 정리는 페이지 안을 다시 채우지 않습니다. 그래서 auto_vacuum=FULL 인 DB 도 살아 있는 페이지의 프리블록에는 지운 레코드가 남을 수 있습니다.
-- 잘려 나간 파일 끝부분은 파일 시스템의 비할당 영역에 남을 수 있습니다. 이 부분은 [레코드 카빙 (Record Carving)](/03-techniques/analysis/data-recovery/record-carving.md) 으로 찾습니다.
+- 잘려 나간 파일 끝부분은 파일 시스템의 비할당 영역에 남을 수 있습니다. 이 부분은 [레코드 카빙 (Record Carving)](../../../03-techniques/analysis/data-recovery/record-carving.md) 으로 찾습니다.
 - 공식 문서는 전문 검색 (FTS3·FTS5) 가상 표의 섀도 표에는 secure_delete 를 켜도 흔적이 남을 수 있다고 밝힙니다.
 - 공식 문서는 지운 행뿐 아니라 고친 행도 흔적을 남긴다고 설명합니다. 흔적을 없애려면 지우거나 고치기 전에 secure_delete 를 켜거나, 그 뒤에 `VACUUM` 을 실행하라고 안내합니다.
 
@@ -162,12 +162,12 @@ Windows 에서 만나는 SQLite 파일은 모두 해당합니다. 크롬 계열 
 ## 함정
 
 - **지운 레코드가 곧 지운 행은 아닙니다.** 행을 고쳐 셀 크기가 바뀌면 옛 셀이 프리블록이 됩니다. 크기가 같으면 SQLite 는 제자리에 덮어써서 옛 값이 본 파일에 남지 않습니다. 페이지가 합쳐지며 빈 페이지가 프리리스트로 가면, 그 안의 셀 일부는 다른 페이지로 옮겨져 아직 살아 있을 수 있습니다. 되살린 레코드는 현재 표와 대조해 겹치는 것을 뺍니다.
-- **지운 시각은 없습니다.** 프리블록 사슬은 위치 순서이지 시간 순서가 아닙니다. 레코드 안의 시각 열은 그 행이 쓰일 때의 값입니다. 시각 값 형식은 [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 확인합니다.
+- **지운 시각은 없습니다.** 프리블록 사슬은 위치 순서이지 시간 순서가 아닙니다. 레코드 안의 시각 열은 그 행이 쓰일 때의 값입니다. 시각 값 형식은 [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 확인합니다.
 - **어느 표의 레코드인지 적혀 있지 않습니다.** 프리리스트 페이지에는 원래 표가 적히지 않습니다. serial type 모양이 비슷한 표가 여럿이면 다른 표에 잘못 붙일 수 있습니다. 지운 표의 `CREATE` 문은 `sqlite_schema` 표(루트는 1번 페이지)의 빈 공간에 남아 있을 수 있습니다.
 - **반쯤 덮인 레코드가 섞입니다.** 새 셀이 프리블록을 쓸 때는 블록의 뒤쪽부터 차지합니다(SQLite 소스). 그래서 옛 레코드의 앞부분과 새 레코드가 한 블록 안에 이어져 있을 수 있습니다. 길이 값과 맞지 않는 레코드는 잘라 내고 보고합니다.
 - **조각 모음이 흔적을 지웁니다.** 셀을 넣을 연속 공간이 모자라면 SQLite 는 페이지를 조각 모음 (Defragment) 합니다. 현재 소스(2026년 9월 확인)는 이때 비할당 영역을 0 으로 채웁니다. 쓰기가 잦은 DB 일수록 페이지 안에 남는 것이 적습니다.
-- **복호하거나 내보내면 빈 공간이 사라집니다.** `VACUUM INTO` 나 내보내기로 만든 새 파일에는 살아 있는 행만 옮겨집니다. 암호화된 DB 에서 지운 레코드를 찾으려면 페이지 단위로 풀어야 합니다. [암호화된 SQLite (SQLCipher)](/01-foundations/database-log-formats/sqlite/sqlcipher.md) 를 함께 봅니다.
-- **도구마다 결과가 다릅니다.** 복구 도구는 레코드 경계를 추정하므로 같은 파일에서도 건수가 다를 수 있습니다. 중요한 레코드는 헥스로 한 번 더 확인합니다. [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md) 을 참고합니다.
+- **복호하거나 내보내면 빈 공간이 사라집니다.** `VACUUM INTO` 나 내보내기로 만든 새 파일에는 살아 있는 행만 옮겨집니다. 암호화된 DB 에서 지운 레코드를 찾으려면 페이지 단위로 풀어야 합니다. [암호화된 SQLite (SQLCipher)](sqlcipher.md) 를 함께 봅니다.
+- **도구마다 결과가 다릅니다.** 복구 도구는 레코드 경계를 추정하므로 같은 파일에서도 건수가 다를 수 있습니다. 중요한 레코드는 헥스로 한 번 더 확인합니다. [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) 을 참고합니다.
 
 ## 도구
 
@@ -176,7 +176,7 @@ Windows 에서 만나는 SQLite 파일은 모두 해당합니다. 크롬 계열 
 - **공개 복구 도구의 예:** bring2lite, FQLite, undark 가 있습니다. 도구마다 보는 범위(프리블록·비할당 영역·프리리스트·WAL)와 출력 방식이 다릅니다. undark 처럼 살아 있는 행과 지운 행을 함께 내보내는 도구는 현재 표와 대조해 나눠야 합니다.
 - **검증용 검체:** Nemetz·Schmitt·Freiling(2018)이 만든 [SQLite Forensic Corpus](https://digitalcorpora.org/corpora/sql/sqlite-forensic-corpus/) 에 지운 레코드가 든 DB 가 있습니다. 도구가 무엇을 되살리고 무엇을 놓치는지 먼저 이 검체로 확인해 볼 수 있습니다.
 
-같은 문제를 ESE 형식에서 다룬 글은 [파일 안에 남은 지운 레코드 (Deleted Records)](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 입니다. 상위 허브는 [SQLite 데이터베이스 (SQLite)](/01-foundations/database-log-formats/sqlite/index.md) 입니다.
+같은 문제를 ESE 형식에서 다룬 글은 [파일 안에 남은 지운 레코드 (Deleted Records)](../extensible-storage-engine/deleted-records.md) 입니다. 상위 허브는 [SQLite 데이터베이스 (SQLite)](index.md) 입니다.
 
 ## 참고 문헌
 

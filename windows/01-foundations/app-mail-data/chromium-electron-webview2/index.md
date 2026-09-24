@@ -39,32 +39,32 @@ Chrome·Edge 같은 브라우저, Electron 앱, WebView2 를 쓰는 앱은 모�
 
 | 요소 | 알려 주는 것 | 자세히 |
 |---|---|---|
-| `Local State` | 프로필 목록, 계정 정보로 보이는 칸, 암호화 키 | [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) |
-| 프로필 폴더 (`Default`, `Profile 1` …) | 프로필마다 따로 쌓인 기록 | [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) |
-| `Last Version`·`Last Browser` | 마지막으로 실행한 버전과 실행 파일. 어느 브라우저·앱의 폴더인지 가리는 단서 | [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) |
-| `EBWebView` 폴더 | WebView2 앱이 쓰는 Chromium 데이터 | [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) |
-| `Cache\Cache_Data` | HTTP 캐시. 블록 파일 방식 (관찰) | [캐시 형식](/01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md) |
-| `Code Cache\js`·`Code Cache\wasm` | 스크립트 캐시. Simple Cache (관찰) | [캐시 형식](/01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md) |
-| 쿠키·비밀번호 DB 의 암호문 | 암호화한 쿠키·비밀번호 값. 앞 3바이트 `v10`·`v20` 으로 방식을 가림 | [쿠키·비밀번호 암호화](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) |
+| `Local State` | 프로필 목록, 계정 정보로 보이는 칸, 암호화 키 | [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) |
+| 프로필 폴더 (`Default`, `Profile 1` …) | 프로필마다 따로 쌓인 기록 | [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) |
+| `Last Version`·`Last Browser` | 마지막으로 실행한 버전과 실행 파일. 어느 브라우저·앱의 폴더인지 가리는 단서 | [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) |
+| `EBWebView` 폴더 | WebView2 앱이 쓰는 Chromium 데이터 | [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) |
+| `Cache\Cache_Data` | HTTP 캐시. 블록 파일 방식 (관찰) | [캐시 형식](blockfile-simple-cache.md) |
+| `Code Cache\js`·`Code Cache\wasm` | 스크립트 캐시. Simple Cache (관찰) | [캐시 형식](blockfile-simple-cache.md) |
+| 쿠키·비밀번호 DB 의 암호문 | 암호화한 쿠키·비밀번호 값. 앞 3바이트 `v10`·`v20` 으로 방식을 가림 | [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) |
 
 > 그림 자리: 브라우저 `User Data`, Electron 앱 폴더, WebView2 앱의 `EBWebView` 를 나란히 놓고 공통 요소(`Local State`·프로필 폴더·`Cache`·`Network\Cookies`)를 같은 색으로 칠한 비교 그림
 
 ## 읽는 순서
 
-1. [프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) — 브라우저별 User Data 위치와 프로필 폴더 구성을 다룹니다. `Local State` 로 폴더 이름과 표시 이름을 짝짓고, Chrome 과 Edge 를 가리는 단서를 정리합니다.
-2. [Electron·WebView2 앱 데이터 위치 (Teams·Discord·Slack 등)](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) — Electron 과 WebView2 가 데이터 폴더를 어디에 만드는지 다룹니다. 관찰한 앱별 위치와, 앱을 지운 뒤에도 폴더가 남는 경우를 정리합니다.
-3. [캐시 형식 (Blockfile·Simple Cache)](/01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md) — 두 캐시 형식의 파일 구성과 오프셋을 헥스로 따라갑니다. 비정상 종료와 지운 항목이 어떻게 남는지도 다룹니다.
-4. [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) — `Local State` 의 두 키와 `v10`·`v20` 암호문을 가리는 법을 다룹니다. 디스크 이미지만으로 무엇을 풀 수 있는지도 나눕니다.
+1. [프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)](user-data-profile-local-state.md) — 브라우저별 User Data 위치와 프로필 폴더 구성을 다룹니다. `Local State` 로 폴더 이름과 표시 이름을 짝짓고, Chrome 과 Edge 를 가리는 단서를 정리합니다.
+2. [Electron·WebView2 앱 데이터 위치 (Teams·Discord·Slack 등)](teams-discord-slack.md) — Electron 과 WebView2 가 데이터 폴더를 어디에 만드는지 다룹니다. 관찰한 앱별 위치와, 앱을 지운 뒤에도 폴더가 남는 경우를 정리합니다.
+3. [캐시 형식 (Blockfile·Simple Cache)](blockfile-simple-cache.md) — 두 캐시 형식의 파일 구성과 오프셋을 헥스로 따라갑니다. 비정상 종료와 지운 항목이 어떻게 남는지도 다룹니다.
+4. [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](dpapi-app-bound-encryption.md) — `Local State` 의 두 키와 `v10`·`v20` 암호문을 가리는 법을 다룹니다. 디스크 이미지만으로 무엇을 풀 수 있는지도 나눕니다.
 
 ## 함께 볼 페이지
 
-- [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) — 방문 기록·쿠키·캐시 같은 파일을 아티팩트로 해석합니다.
-- [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) — 프로필 폴더의 `History` 같은 DB 파일을 읽는 법입니다.
-- [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) — `Local State` 의 키를 보호하는 DPAPI 마스터 키와 블롭을 다룹니다.
-- [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) — 패키지 앱의 `Packages` 폴더 구조를 다룹니다.
-- [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — 캐시와 DB 에 든 시각 값을 바꿉니다.
-- [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md), [새 Outlook](/02-artifacts/mail/new-outlook.md), [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md), [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md), [디스코드](/02-artifacts/messengers/discord.md), [슬랙](/02-artifacts/messengers/slack.md) — 이 구조를 쓰거나 쓸 수 있는 앱의 아티팩트 페이지입니다.
-- [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) — 브라우저와 앱의 기록을 묶어 웹 사용 흐름을 다시 짭니다.
+- [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) — 방문 기록·쿠키·캐시 같은 파일을 아티팩트로 해석합니다.
+- [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md) — 프로필 폴더의 `History` 같은 DB 파일을 읽는 법입니다.
+- [DPAPI 구조](../../protection/data-protection-api/index.md) — `Local State` 의 키를 보호하는 DPAPI 마스터 키와 블롭을 다룹니다.
+- [UWP 앱 데이터 구조](../packages-settings-dat.md) — 패키지 앱의 `Packages` 폴더 구조를 다룹니다.
+- [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) — 캐시와 DB 에 든 시각 값을 바꿉니다.
+- [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md), [새 Outlook](../../../02-artifacts/mail/new-outlook.md), [원드라이브](../../../02-artifacts/cloud-notes/onedrive/index.md), [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md), [디스코드](../../../02-artifacts/messengers/discord.md), [슬랙](../../../02-artifacts/messengers/slack.md) — 이 구조를 쓰거나 쓸 수 있는 앱의 아티팩트 페이지입니다.
+- [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) — 브라우저와 앱의 기록을 묶어 웹 사용 흐름을 다시 짭니다.
 
 ## 참고 문헌
 

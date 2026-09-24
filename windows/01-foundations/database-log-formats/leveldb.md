@@ -27,7 +27,7 @@ CCL 글(2020년 9월)은 크롬과 크로뮴 계열 브라우저가 IndexedDB �
 | `Local Extension Settings\<확장 ID>\` | 브라우저 확장 설정 | `CURRENT`, `LOCK`, `LOG`, `MANIFEST-…`, `*.log`, `*.ldb` |
 
 - 프로필 폴더는 `%LOCALAPPDATA%\...\User Data\Default\` 입니다.
-- 브라우저마다 다른 경로와 각 폴더 값의 해석은 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다.
+- 브라우저마다 다른 경로와 각 폴더 값의 해석은 [크롬 계열 브라우저](../../02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다.
 - 로컬 스토리지의 키·값 인코딩도 그쪽에서 다룹니다. 이 페이지는 LevelDB 겉포장만 다룹니다.
 
 ### Electron 앱
@@ -37,8 +37,8 @@ CCL 글(2020년 9월)은 LevelDB 를 쓰는 Electron 앱으로 아래를 들었�
 - Discord, GitHub Desktop, Signal 데스크톱, Skype, Slack, Microsoft Teams, WebTorrent, WhatsApp 데스크톱, Microsoft Yammer
 
 지금 판도 그런지는 확인하지 못했습니다.
-앱별 흔적은 [디스코드](/02-artifacts/messengers/discord.md), [시그널](/02-artifacts/messengers/signal.md), [스카이프](/02-artifacts/messengers/skype.md), [슬랙](/02-artifacts/messengers/slack.md), [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md), [왓츠앱 데스크톱](/02-artifacts/messengers/whatsapp-desktop.md) 페이지에서 다룹니다.
-이런 앱이 공통으로 쓰는 폴더 구조는 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에 있습니다.
+앱별 흔적은 [디스코드](../../02-artifacts/messengers/discord.md), [시그널](../../02-artifacts/messengers/signal.md), [스카이프](../../02-artifacts/messengers/skype.md), [슬랙](../../02-artifacts/messengers/slack.md), [마이크로소프트 팀즈](../../02-artifacts/messengers/teams.md), [왓츠앱 데스크톱](../../02-artifacts/messengers/whatsapp-desktop.md) 페이지에서 다룹니다.
+이런 앱이 공통으로 쓰는 폴더 구조는 [크롬 계열 앱 공통 구조](../app-mail-data/chromium-electron-webview2/index.md) 에 있습니다.
 
 ### 버전
 
@@ -262,14 +262,14 @@ CCL 글은 키의 마지막 8바이트를 아래처럼 설명합니다.
 - 압축 정리가 중복을 정리한 뒤에도 이전 레벨 파일에 옛 값과 지운 값이 남아 있을 수 있습니다. 그래서 지운 레코드를 되살릴 수 있습니다. (CCL 글)
 - 압축 정리는 덮어쓴 값과 삭제 표시를 버립니다. (impl.md) 압축 정리가 돈 뒤에는 옛 값이 파일에서 사라질 수 있습니다.
 - 쓸모없어진 로그 파일과 표 파일은 라이브러리가 지웁니다. (impl.md)
-- 지운 파일을 비할당 영역에서 되살릴 수 있는지는 확인하지 못했습니다. 일반 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에 있습니다.
-- 예전 시점의 폴더는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾아볼 수 있습니다.
+- 지운 파일을 비할당 영역에서 되살릴 수 있는지는 확인하지 못했습니다. 일반 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
+- 예전 시점의 폴더는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾아볼 수 있습니다.
 
 ### 문자열 검색과 카빙
 
 - 로그 파일은 키와 값을 압축하지 않습니다. 문자열 검색과 카빙이 됩니다. (CCL 글)
 - CCL 글이 본 `.ldb` 는 Snappy 로 압축되어 있었습니다. 풀어야 읽힙니다.
-- 그래서 디스크 전체 문자열 검색만으로는 `.ldb` 안의 값을 놓칠 수 있습니다. 검색 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 을 봅니다.
+- 그래서 디스크 전체 문자열 검색만으로는 `.ldb` 안의 값을 놓칠 수 있습니다. 검색 방법은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 을 봅니다.
 
 ### 손상
 
@@ -296,9 +296,9 @@ LevelDB 는 DB 를 열 때 아래 순서로 복구합니다. (impl.md)
 - 열어 본 로그·쓰기 묶음·표 파일 구조에는 시각 칸이 없습니다. (log_format.md, write_batch.cc, table_format.md)
 - 레코드마다 시각이 없다고 적은 문장은 확인하지 못했습니다.
 - 순서 번호는 쓰기 순서만 알려 줍니다. 언제 썼는지는 알려 주지 않습니다.
-- 시각이 필요하면 `.log`·`.ldb` 파일 자체의 파일 시스템 시각을 봅니다. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 을 봅니다.
-- 값 안에 앱이 시각을 적었다면 그 값을 따로 풉니다. 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
-- 여러 출처의 시각을 한 줄로 세우는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에 있습니다.
+- 시각이 필요하면 `.log`·`.ldb` 파일 자체의 파일 시스템 시각을 봅니다. [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) 을 봅니다.
+- 값 안에 앱이 시각을 적었다면 그 값을 따로 풉니다. 형식은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
+- 여러 출처의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 ## 함정
 
@@ -325,7 +325,7 @@ LevelDB 는 DB 를 열 때 아래 순서로 복구합니다. (impl.md)
 - 흔히 쓰는 공개 도구로 ccl_chrome_indexeddb, plyvel 등이 있습니다.
 - 이 페이지를 쓰면서 두 도구의 기능은 확인하지 않았습니다.
 - 어느 도구든 사본에서 돌립니다. 결과에 삭제 표시와 옛 값이 나오는지 먼저 확인합니다.
-- 두 도구의 결과가 다르면 로그 파일을 넣었는지, 삭제 표시를 어떻게 다뤘는지부터 비교합니다. 검증 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 두 도구의 결과가 다르면 로그 파일을 넣었는지, 삭제 표시를 어떻게 다뤘는지부터 비교합니다. 검증 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

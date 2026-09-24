@@ -11,7 +11,7 @@
 - 보기 설정 자체는 Bags 에 남습니다.
 - 조사에서 주로 쓰는 쪽은 BagMRU 입니다. 폴더 경로가 여기서 나옵니다.
 - Lo 의 실험에서 Vista~8.1 은 폴더를 두 번 클릭해 열지 않아도 셸백을 만들었습니다. 폴더를 고르기만 하거나, 오른쪽 클릭하거나, 이름을 바꾸거나, 복사해도 셸백이 생겼습니다.
-- 어떤 동작이 셸백을 만드는지는 [셸백 해석 함정](/02-artifacts/file-folder-usage/shellbags/pitfalls.md) 에서 다룹니다. 이 페이지는 키가 어디에 어떤 모양으로 남는지만 다룹니다.
+- 어떤 동작이 셸백을 만드는지는 [셸백 해석 함정](pitfalls.md) 에서 다룹니다. 이 페이지는 키가 어디에 어떤 모양으로 남는지만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -22,9 +22,9 @@
 | NTUSER.DAT | `%UserProfile%\NTUSER.DAT` | `HKCU` |
 | UsrClass.dat | `%UserProfile%\AppData\Local\Microsoft\Windows\UsrClass.dat` | `HKCU\Software\Classes` |
 
-- 하이브 파일의 쓰임새와 옛 버전 위치는 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
+- 하이브 파일의 쓰임새와 옛 버전 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
 - UsrClass.dat 옆에도 `UsrClass.dat.LOG1`·`UsrClass.dat.LOG2` 가 있습니다. (확인 범위: Windows 11 25H2)
-- 하이브 파일만 뽑지 말고 같은 폴더의 로그 파일도 함께 수집합니다. 까닭은 [트랜잭션 로그와 반영 안 된 변경](/01-foundations/database-log-formats/registry-hive/log1-log2.md) 에 있습니다.
+- 하이브 파일만 뽑지 말고 같은 폴더의 로그 파일도 함께 수집합니다. 까닭은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) 에 있습니다.
 
 ### 키 경로
 
@@ -80,9 +80,9 @@ BagMRU 키 안의 값은 다음과 같습니다.
 | `NodeSlot` | REG_DWORD | 대부분의 BagMRU 키 | 이 폴더의 보기 설정이 든 `Bags` 하위 키 번호 | winreg-kb, Lo |
 | `NodeSlots` | REG_BINARY (관찰) | BagMRU 맨 위 키에만 | 공개 명세에 뜻이 적혀 있지 않습니다 | winreg-kb |
 
-- 숫자 값의 형식은 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 풉니다.
+- 숫자 값의 형식은 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 풉니다.
 - Windows 11 25H2 PC 한 대에서는 모든 숫자 값이 같은 모양이었습니다. 셸 아이템 하나 뒤에 목록 끝 표시 0x0000 두 바이트가 붙었습니다. 즉 항목이 하나뿐인 셸 아이템 목록입니다. (확인 범위: Windows 11 25H2)
-- `MRUListEx` 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md) 에 있습니다.
+- `MRUListEx` 읽는 법은 [MRU 목록 읽는 법](../../../01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md) 에 있습니다.
 - Lo 는 하위 키 번호를 셸백이 만들어진 차례로 설명합니다. `BagMRU\0` 이 처음 만든 폴더이고 `BagMRU\1` 이 두 번째입니다. 최근에 고른 순서는 번호가 아니라 `MRUListEx` 로 봅니다.
 - `MRUListEx` 는 같은 부모 아래 형제 폴더끼리의 순서만 알려 줍니다. 다른 부모 아래 폴더와의 앞뒤는 알려 주지 않습니다.
 
@@ -109,7 +109,7 @@ Windows 11 25H2 PC 한 대에서 관찰한 점은 다음과 같습니다. (확�
 | `Bags\AllFolders\Shell` | 창 위치 값 모음 | 관찰 (Windows 11 25H2) |
 
 - Lo 의 실험에서 `ComDlg` 는 대화상자로 폴더를 열었다가 닫아야 생겼습니다. 대화상자 안에서 다른 폴더로 옮겨 가도 생겼습니다.
-- 그래서 `ComDlg` 가 있는 슬롯은 그 폴더를 대화상자로 다룬 적이 있다는 단서가 됩니다. 대화상자 기록은 [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) 과 맞춰 봅니다.
+- 그래서 `ComDlg` 가 있는 슬롯은 그 폴더를 대화상자로 다룬 적이 있다는 단서가 됩니다. 대화상자 기록은 [열기·저장 대화상자 기록](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) 과 맞춰 봅니다.
 - Windows 11 25H2 PC 한 대에서 NTUSER.DAT `Bags\1\Desktop` 에는 `IconLayouts` 값이 있었습니다. 이름으로 보아 바탕 화면 아이콘 배치입니다. 형식은 확인하지 않았습니다. (확인 범위: Windows 11 25H2)
 
 #### `Shell` 키의 값
@@ -139,8 +139,8 @@ GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersio
 
 - 표의 짝은 Windows 11 25H2 PC 한 대의 SOFTWARE 하이브에서 읽었습니다. Generic·Pictures·Documents 세 GUID 는 Lo 의 설명과도 같습니다.
 - Microsoft 는 StorageProvider 로 시작하는 폴더 유형을 Windows 8.1 에서 들어온 저장소 공급자 (Storage Provider) 폴더로 설명합니다.
-- Microsoft 는 CompressedFolder 를 .zip 같은 압축 파일 폴더로 설명합니다. 압축 폴더 흔적은 [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) 에서 다룹니다.
-- GUID 를 바이트로 읽는 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+- Microsoft 는 CompressedFolder 를 .zip 같은 압축 파일 폴더로 설명합니다. 압축 폴더 흔적은 [외부 장치·네트워크·압축 폴더 탐색 흔적](removable-network-zip.md) 에서 다룹니다.
+- GUID 를 바이트로 읽는 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 #### `AllFolders\Shell` 의 창 위치 값
 
@@ -156,24 +156,24 @@ GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersio
 4. 숫자 값마다 셸 아이템을 풀어 이름을 얻습니다.
 5. 같은 번호의 하위 키로 내려갑니다. 지금까지의 경로에 이름을 붙이고 3번부터 되풀이합니다.
 6. 키마다 `NodeSlot` 을 읽고 `Bags\<NodeSlot>` 을 찾습니다. 폴더 유형과 `ComDlg` 유무를 경로 옆에 적습니다.
-7. 키마다 마지막 기록 시각과 셸 아이템 속 시각을 따로 적습니다. 두 시각의 뜻은 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) 에서 다룹니다.
+7. 키마다 마지막 기록 시각과 셸 아이템 속 시각을 따로 적습니다. 두 시각의 뜻은 [셸백 시각 해석](timestamps.md) 에서 다룹니다.
 8. 두 하이브의 결과를 합칩니다. 어느 하이브에서 나온 행인지 열로 남깁니다.
 
 ## 증거로서 의미
 
-이 절은 키의 모양에서 나오는 것만 다룹니다. 시각에서 나오는 것은 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) 에 있습니다.
+이 절은 키의 모양에서 나오는 것만 다룹니다. 시각에서 나오는 것은 [셸백 시각 해석](timestamps.md) 에 있습니다.
 
 ### 증명하는 것
 
 - BagMRU 에 경로가 있으면, 이 하이브를 쓰는 사용자 환경에서 셸이 그 폴더를 다룬 기록이 있습니다.
-- 하이브는 사용자 프로필마다 따로 있습니다. 그래서 어느 프로필의 기록인지 나뉩니다. 프로필과 계정을 잇는 법은 [사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md) 에 있습니다.
+- 하이브는 사용자 프로필마다 따로 있습니다. 그래서 어느 프로필의 기록인지 나뉩니다. 프로필과 계정을 잇는 법은 [사용자 프로필 목록 (ProfileList)](../../system-account/profilelist.md) 에 있습니다.
 - `Bags\<번호>\ComDlg` 가 있으면 그 폴더를 열기·저장 대화상자에서 다룬 기록이 있습니다.
 
 ### 증명하지 못하는 것
 
 - 폴더 안의 파일을 열었다는 사실은 증명하지 못합니다. 셸백은 폴더 단위 기록입니다.
 - 사용자가 폴더를 두 번 클릭해 열었다는 사실도 증명하지 못합니다. Vista~8.1 에서는 고르기·오른쪽 클릭·이름 바꾸기·복사로도 셸백이 생겼습니다. (Lo)
-- 폴더가 지금도 있다는 뜻이 아닙니다. 폴더를 지워도 셸백은 지워지지 않습니다. (Lo) 이 점을 쓰는 법은 [지운 폴더 흔적 찾기](/02-artifacts/file-folder-usage/shellbags/deleted-folders.md) 에 있습니다.
+- 폴더가 지금도 있다는 뜻이 아닙니다. 폴더를 지워도 셸백은 지워지지 않습니다. (Lo) 이 점을 쓰는 법은 [지운 폴더 흔적 찾기](deleted-folders.md) 에 있습니다.
 - 폴더 유형이 실제 내용을 뜻하지는 않습니다. Microsoft 는 폴더 유형이 보기 틀일 뿐이라고 설명합니다. 폴더 내용과 맞는지 따로 검사하지 않는다고도 적습니다.
 - 전체 탐색 순서는 알 수 없습니다. `MRUListEx` 는 형제 폴더끼리의 순서만 담습니다.
 
@@ -185,8 +185,8 @@ GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersio
 - **하이브를 건너 NodeSlot 을 잇는 실수.** NTUSER.DAT 의 `NodeSlot` 은 NTUSER.DAT 의 `Bags` 만 가리킵니다.
 - **덜 알려진 경로를 빠뜨리는 실수.** Vista 64비트의 `Wow6432Node` 경로와 XP 의 `ShellNoRoam` 경로도 찾아봅니다.
 - **같은 이름 폴더.** Lo 의 실험에서 폴더를 지우고 같은 이름으로 다시 만들면 새 폴더가 옛 셸백을 그대로 이어받았습니다. 셸백 경로 하나가 서로 다른 두 폴더를 가리킬 수 있습니다.
-- **풀지 못하는 셸 아이템.** libfwsi 명세에도 뜻이 확인되지 않은 칸이 남아 있습니다. 도구마다 모르는 셸 아이템을 다르게 처리할 수 있습니다. 도구 두 개로 풀어 비교합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
-- **지운 키.** 셸백 키를 지우는 도구가 있습니다. (Lo) 지운 키는 하이브의 빈 공간에 남을 수 있습니다. [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 를 함께 봅니다.
+- **풀지 못하는 셸 아이템.** libfwsi 명세에도 뜻이 확인되지 않은 칸이 남아 있습니다. 도구마다 모르는 셸 아이템을 다르게 처리할 수 있습니다. 도구 두 개로 풀어 비교합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
+- **지운 키.** 셸백 키를 지우는 도구가 있습니다. (Lo) 지운 키는 하이브의 빈 공간에 남을 수 있습니다. [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 를 함께 봅니다.
 
 ## 직접 분석해 보기
 
@@ -244,7 +244,7 @@ UsrClass.dat 의 `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` 키에
 
 - 따라서 `BagMRU\0\0` 은 "바탕 화면 > 내 PC > C:\" 입니다.
 - 이 폴더의 보기 설정은 `NodeSlot` 2 가 가리키는 `Bags\2` 에 있습니다.
-- `BagMRU\0\0` 아래 하위 키가 있으면 그 값은 `C:\` 아래 폴더입니다. 그 값은 파일 항목 셸 아이템 (종류 0x31 등) 입니다. 그 안의 이름과 시각은 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 풉니다.
+- `BagMRU\0\0` 아래 하위 키가 있으면 그 값은 `C:\` 아래 폴더입니다. 그 값은 파일 항목 셸 아이템 (종류 0x31 등) 입니다. 그 안의 이름과 시각은 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 풉니다.
 
 ### 공개 도구로 한 번
 
@@ -257,11 +257,11 @@ UsrClass.dat 의 `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` 키에
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [열기·저장 대화상자 기록 (ComDlg32)](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | `ComDlg` 가 있는 슬롯의 폴더를 대화상자에서 실제로 골랐는지 |
-| [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](/02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) | 주소창에 경로를 직접 입력했는지 |
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트 (Jump Lists)](/02-artifacts/file-folder-usage/jump-lists.md) | 셸백의 폴더 안에서 파일을 열었는지 |
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) · [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) | 그 폴더가 디스크에 있는지, 있었는지 |
-| [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) | 셸백의 볼륨이 어떤 외부 장치였는지 |
+| [열기·저장 대화상자 기록 (ComDlg32)](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | `ComDlg` 가 있는 슬롯의 폴더를 대화상자에서 실제로 골랐는지 |
+| [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](../typedpaths-wordwheelquery.md) | 주소창에 경로를 직접 입력했는지 |
+| [바로가기 파일 (LNK)](../lnk.md) · [점프리스트 (Jump Lists)](../jump-lists.md) | 셸백의 폴더 안에서 파일을 열었는지 |
+| [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md) · [폴더 인덱스와 슬랙 ($I30)](../../filesystem/i30.md) | 그 폴더가 디스크에 있는지, 있었는지 |
+| [사용자별 장치 연결 (MountPoints2)](../../external-devices/usb-storage-artifacts/mountpoints2.md) | 셸백의 볼륨이 어떤 외부 장치였는지 |
 
 ## 실습
 

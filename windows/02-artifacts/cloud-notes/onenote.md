@@ -63,9 +63,9 @@ KAPE 수집 대상 파일(작성자 Andrew Rathbun, 버전 1.0)은 이 폴더 �
 | `OneNote\16.0\RecentSearches\RecentSearches.db` | 최근 검색어입니다. 작성자 PC 에서는 비어 있었습니다 |
 
 - 위 설명은 모두 작성자가 자기 PC 에서 본 것입니다. 작성자는 여러 항목에 "~로 보인다 (appears to)" 라고 적었습니다. 공식 문서로 확인한 내용이 아닙니다.
-- 각 DB 의 표와 칸 이름은 확인하지 못했습니다. DB 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 각 DB 의 표와 칸 이름은 확인하지 못했습니다. DB 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 - 이 KAPE 대상에는 데스크톱 원노트의 `Backup`·`cache` 경로가 없습니다. (KAPE 대상 파일)
-- 스토어 앱 폴더 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+- 스토어 앱 폴더 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 
 ### 관찰: 설치만 된 PC
 
@@ -138,7 +138,7 @@ KAPE 수집 대상 파일(작성자 Andrew Rathbun, 버전 1.0)은 이 폴더 �
 
 ### 첫 16바이트로 가리기
 
-GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 순서가 뒤집힙니다(리틀 엔디언). pyOneNote 도 GUID 를 이 순서로 읽습니다. (pyOneNote) GUID 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 순서가 뒤집힙니다(리틀 엔디언). pyOneNote 도 GUID 를 이 순서로 읽습니다. (pyOneNote) GUID 바이트 순서는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 명세의 GUID 를 이 순서로 바꾸면 파일에 적히는 바이트가 나옵니다.
 
@@ -148,7 +148,7 @@ GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 �
 | `.onetoc2` 의 guidFileType | `{43FF2FA1-EFD9-4C76-9EE2-10EA5722765F}` | `A1 2F FF 43 EF D9 76 4C 9E E2 10 EA 57 22 76 5F` |
 | 두 파일의 guidFileFormat (0x030) | `{109ADD3F-911B-49F5-A5D0-1791EDC8AED8}` | `3F DD 9A 10 1B 91 F5 49 A5 D0 17 91 ED C8 AE D8` |
 
-파일 머리는 파일 맨 앞에 있어야 하고, guidFileType 값은 형식마다 정해져 있습니다. 그래서 첫 16바이트로 `.one` 과 `.onetoc2` 를 가릴 수 있습니다. 확장자를 바꾼 파일도 이 16바이트로 찾습니다. 지운 파일을 찾는 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+파일 머리는 파일 맨 앞에 있어야 하고, guidFileType 값은 형식마다 정해져 있습니다. 그래서 첫 16바이트로 `.one` 과 `.onetoc2` 를 가릴 수 있습니다. 확장자를 바꾼 파일도 이 16바이트로 찾습니다. 지운 파일을 찾는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ### 페이지 속성 (pyOneNote 기준)
 
@@ -205,7 +205,7 @@ guidHeader·guidFooter 의 실제 GUID 값은 확인하지 못했습니다.
 
 ### 증명하지 못하는 것
 
-- **누가 썼는지.** Author 는 원노트에 설정한 이름 문자열입니다. 계정과 사람은 다를 수 있습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **누가 썼는지.** Author 는 원노트에 설정한 이름 문자열입니다. 계정과 사람은 다를 수 있습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **프로그램을 썼다는 것.** 관찰한 PC 에는 원노트 실행 파일이 있었지만 프로필에 흔적이 하나도 없었습니다. 설치 기록만으로 사용을 말할 수 없습니다.
 - **파일 머리로 본 시각.** 파일 머리에는 날짜·시각 칸이 없습니다. 바뀐 횟수와 바뀔 때마다 새로 생기는 GUID 만 있습니다. (MS-ONESTORE)
 - **파일을 만든 프로그램의 버전.** bn 칸 네 개에 빌드 번호가 적힙니다. 하지만 명세는 이 칸을 무시해도 된다고 적었습니다. 버전 추정에 쓸 수 있는지는 확인하지 못했습니다.
@@ -228,7 +228,7 @@ pyOneNote 는 시각 속성을 값 길이에 따라 두 가지로 풉니다. (py
 - 어느 속성이 몇 바이트인지는 명세로 확인하지 못했습니다. 값 길이를 보고 형식을 가립니다.
 - Time32 는 초 단위이고 FILETIME 은 100ns 단위입니다. 같은 사건이라도 두 값의 정밀도가 다릅니다. 두 값이 초 아래에서 어긋나도 이상한 일이 아닙니다.
 - Time32 의 기준이 UTC 인지는 명세로 확인하지 못했습니다. pyOneNote 코드 주석은 기준을 "1980-01-01 UTC" 라고 적었습니다. 하지만 계산할 때는 시간대를 붙이지 않습니다. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다.
-- FILETIME·Time32 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- FILETIME·Time32 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 속성 시각이 어떤 동작에서 바뀌는지는 참고한 자료로 확인하지 못했습니다.
 
 파일 머리에는 시각이 없지만 순서를 알려 주는 칸이 있습니다. (MS-ONESTORE)
@@ -241,13 +241,13 @@ pyOneNote 는 시각 속성을 값 길이에 따라 두 가지로 풉니다. (py
 
 guidFile 이 같은 두 파일을 찾았다면 nFileVersionGeneration 을 비교합니다. 명세의 정의대로라면 값이 큰 쪽이 나중 상태입니다. 두 값의 차이는 그사이에 바뀐 횟수입니다.
 
-파일 시스템 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다. 캐시를 새로 만들었다면 캐시 파일의 파일 시스템 시각은 다시 만든 때를 가리킬 수 있습니다.
+파일 시스템 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다. 캐시를 새로 만들었다면 캐시 파일의 파일 시스템 시각은 다시 만든 때를 가리킬 수 있습니다.
 
 ## 함정과 한계
 
 - **데스크톱 원노트 위치는 공식 문서로 확인하지 못했습니다.** `Backup`·`cache` 경로는 다른 프로그램의 도움말과 소스에서 가져왔습니다. 증거 PC 에서 실제 폴더를 확인합니다.
 - **수집 도구의 대상 범위를 봅니다.** 앞에서 본 KAPE 대상은 스토어 앱 폴더만 잡습니다. 데스크톱 원노트의 `Backup`·`cache` 와 `Documents\OneNote Notebooks` 는 따로 수집합니다.
-- **증거 PC 에서 원노트를 열지 않습니다.** 원노트는 캐시를 다시 받아 새로 만들 수 있습니다. 폴더를 먼저 복사합니다. 수집 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+- **증거 PC 에서 원노트를 열지 않습니다.** 원노트는 캐시를 다시 받아 새로 만들 수 있습니다. 폴더를 먼저 복사합니다. 수집 순서는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 - **스토어 앱 DB 설명은 한 사람의 관찰입니다.** 필기장 글 전체가 검색 색인에 있다는 설명도 KAPE 대상 작성자의 관찰입니다. 표와 칸을 직접 열어 확인합니다.
 - **설치와 사용을 섞지 않습니다.** 관찰한 PC 처럼 원노트가 깔려 있어도 프로필에 흔적이 없을 수 있습니다.
 - **시각 형식이 두 가지입니다.** 4바이트 Time32 를 FILETIME 으로 풀거나 반대로 풀면 엉뚱한 날짜가 나옵니다. Time32 의 시간대 기준도 확인하지 못했습니다.
@@ -295,22 +295,22 @@ guidFile 이 같은 두 파일을 찾았다면 nFileVersionGeneration 을 비교
 
 스토어 앱 원노트 폴더는 KAPE 의 `MicrosoftOneNote.tkape` 대상으로 수집할 수 있습니다. 이 대상은 데스크톱 원노트 경로를 잡지 않습니다. (KAPE 대상 파일) 수집한 DB 는 SQLite 도구로 엽니다.
 
-차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) | 동기화한 필기장과 첨부 원본 경로(`pathSource`)가 원드라이브 폴더인지 봅니다 |
-| [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) | 데스크톱 원노트는 오피스 프로그램입니다. 다른 오피스 흔적과 함께 봅니다 |
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 원노트가 설치됐는지 봅니다. 설치와 사용은 따로 판단합니다 |
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 스토어 앱 원노트가 설치됐는지 봅니다 |
-| [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) | 스토어 앱 원노트 DB 를 읽는 법을 봅니다 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | `.one`·`.onetoc2`·캐시 `.bin` 의 파일 시스템 시각을 봅니다 |
-| [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `.one` 이 남았는지 봅니다. nFileVersionGeneration 으로 순서를 가립니다 |
-| [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md) | 관찰한 PC 에는 원노트 가상 프린터가 있었습니다. 원노트로 보낸 인쇄가 남았는지 봅니다 |
+| [원드라이브](onedrive/index.md) | 동기화한 필기장과 첨부 원본 경로(`pathSource`)가 원드라이브 폴더인지 봅니다 |
+| [오피스 사용 흔적](../file-folder-usage/microsoft-office/index.md) | 데스크톱 원노트는 오피스 프로그램입니다. 다른 오피스 흔적과 함께 봅니다 |
+| [설치 프로그램](../system-account/uninstall.md) | 원노트가 설치됐는지 봅니다. 설치와 사용은 따로 판단합니다 |
+| [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 스토어 앱 원노트가 설치됐는지 봅니다 |
+| [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) | 스토어 앱 원노트 DB 를 읽는 법을 봅니다 |
+| [마스터 파일 테이블](../filesystem/mft.md) | `.one`·`.onetoc2`·캐시 `.bin` 의 파일 시스템 시각을 봅니다 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `.one` 이 남았는지 봅니다. nFileVersionGeneration 으로 순서를 가립니다 |
+| [인쇄 흔적](../external-devices/print-spooler-spl-shd.md) | 관찰한 PC 에는 원노트 가상 프린터가 있었습니다. 원노트로 보낸 인쇄가 남았는지 봅니다 |
 
-첨부 파일의 출처를 따지는 흐름은 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 에서 다룹니다.
+첨부 파일의 출처를 따지는 흐름은 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 에서 다룹니다.
 
 ## 실습
 

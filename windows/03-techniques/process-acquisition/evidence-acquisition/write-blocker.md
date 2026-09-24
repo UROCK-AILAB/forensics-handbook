@@ -1,6 +1,6 @@
 # 쓰기 방지 (Write Blocker)
 
-> 상위 허브: [증거 획득 (Evidence Acquisition)](/03-techniques/process-acquisition/evidence-acquisition/index.md)
+> 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)
 
 ## 한 줄 요약
 
@@ -10,7 +10,7 @@
 
 ## 언제 쓰나
 
-- 원본 매체를 이미징 컴퓨터에 연결할 때 씁니다. 이미징 절차 전체는 [디스크 이미징](/03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 에 있습니다.
+- 원본 매체를 이미징 컴퓨터에 연결할 때 씁니다. 이미징 절차 전체는 [디스크 이미징](disk-imaging.md) 에 있습니다.
 - 분석 단계에서도 씁니다. 매체에 복원한 이미지에 쓰기가 일어나지 않게 막습니다.
 - 이미지 파일이든 복원한 이미지든 읽기 전용으로만 접근합니다.
 
@@ -51,7 +51,7 @@ Mac OS X 나 Linux 같은 운영체제는 보조 장치를 마운트하지 않�
 
 - 쓰기 방지 도구가 새 장치를 제대로 지원하는지 주기적으로 시험합니다.
 - 새 장치는 예약된 기능을 써서 장치에 쓰는 명령을 만들 수 있기 때문입니다.
-- 시험한 날짜와 결과를 남깁니다. 도구 검증 기록을 남기는 법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 시험한 날짜와 결과를 남깁니다. 도구 검증 기록을 남기는 법은 [도구 결과 교차 검증](../../reporting/tool-validation.md) 에 있습니다.
 
 ## Windows 의 diskpart 읽기 전용 속성
 
@@ -75,7 +75,7 @@ attributes disk set readonly
 
 그래서 이 속성만 믿지 않습니다.
 연결 전후에 원본 해시를 비교해 매체가 그대로인지 확인합니다.
-비교 절차는 [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 에 있습니다.
+비교 절차는 [해시로 무결성 검증](hash-verification.md) 에 있습니다.
 
 ## 분석 단계에서
 
@@ -86,7 +86,7 @@ attributes disk set readonly
 - 이 복구가 파일 내용을 바꿀 수 있습니다.
 - 압수 이미지에서 꺼낸 ESE 데이터베이스는 대부분 비정상 종료 상태였습니다(현장 관찰).
 
-ESE 파일을 로그와 함께 다루는 법은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다.
+ESE 파일을 로그와 함께 다루는 법은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다.
 
 ## 함정과 한계
 

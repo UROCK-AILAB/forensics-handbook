@@ -33,7 +33,7 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 - Windows 11 PC 한 대의 `Select` 값은 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 의 `AppCompatCache` 키에는 값이 셋 있었습니다. `AppCompatCache`(REG_BINARY, 214,066바이트), `CacheMainSdb`(REG_BINARY, 6,512바이트), `SdbTime`(REG_BINARY, 96바이트)입니다. (확인 범위: Win11 25H2 한 대)
 
-하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -120,8 +120,8 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 ## 시각 해석
 
-- 항목의 시각은 파일의 마지막 수정 시각입니다. NTFS 에서는 `$STANDARD_INFORMATION` 의 수정 시각입니다. 이 속성은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다.
-- 시각은 FILETIME 이고 UTC 로 읽습니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 항목의 시각은 파일의 마지막 수정 시각입니다. NTFS 에서는 `$STANDARD_INFORMATION` 의 수정 시각입니다. 이 속성은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
+- 시각은 FILETIME 이고 UTC 로 읽습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 예외가 하나 있습니다. PsExec 는 원격 PC 에 PSEXESVC.exe 를 새로 만듭니다. 그래서 이 항목의 수정 시각은 파일을 만든 시각과 같습니다. 결과적으로 실행 무렵의 시각이 됩니다.
 - XP 항목에는 마지막 갱신 시각 칸이 따로 있습니다(오프셋 544).
 - 목록은 위에서 아래로 최근 사용 순 큐입니다. 맨 위가 가장 최근 항목입니다. 시각은 수정 시각이라서 목록 순서와 시각 순서가 다를 수 있습니다.
@@ -131,13 +131,13 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 ## 함정과 한계
 
-- **수정 시각을 실행 시각으로 읽는 오해.** 가장 흔한 오판입니다. 실행 시각은 [프리페치](/02-artifacts/execution/prefetch/index.md) 나 [프로세스 생성](/02-artifacts/event-logs/4688.md) 이벤트에서 찾습니다.
-- **최근 항목이 빠질 수 있습니다.** Mandiant 는 이 캐시가 "somewhat volatile" 하니 되도록 빨리 보존하라고 적습니다. 캐시를 메모리에 두었다가 종료나 재부팅 때만 레지스트리에 쓴다는 설명도 흔합니다. 이 설명은 이번에 연 자료로 확인하지 못했습니다. 켜진 PC 는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 과 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 도 함께 검토합니다.
+- **수정 시각을 실행 시각으로 읽는 오해.** 가장 흔한 오판입니다. 실행 시각은 [프리페치](prefetch/index.md) 나 [프로세스 생성](../event-logs/4688.md) 이벤트에서 찾습니다.
+- **최근 항목이 빠질 수 있습니다.** Mandiant 는 이 캐시가 "somewhat volatile" 하니 되도록 빨리 보존하라고 적습니다. 캐시를 메모리에 두었다가 종료나 재부팅 때만 레지스트리에 쓴다는 설명도 흔합니다. 이 설명은 이번에 연 자료로 확인하지 못했습니다. 켜진 PC 는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md) 도 함께 검토합니다.
 - **헤더의 항목 수를 믿지 않습니다.** Windows 11 PC 한 대에서 헤더의 항목 수 칸은 0 이었지만 실제 항목은 904개였습니다. 항목을 끝까지 따라가며 셉니다. (확인 범위: Win11 25H2 한 대)
 - **32비트와 64비트의 항목 크기가 다릅니다.** 2003·Vista·7 형식은 운영체제의 비트 수에 맞는 표로 읽습니다.
 - **XP 경로 칸에 이전 데이터가 남습니다.** 528바이트 경로 칸의 남는 자리에 앞 항목의 글자가 남을 수 있습니다. 문자열 끝의 NUL 뒤는 버립니다.
 - **실행 파일만 있지 않습니다.** Windows 11 PC 한 대에는 .tmp·.dll·.scr 과 확장자 없는 항목도 있었습니다. (확인 범위: Win11 25H2 한 대)
-- **캐시를 비우는 명령이 있습니다.** Vista 이후에는 `Rundll32.exe apphelp.dll,ShimFlushCache`, XP·2003 에서는 `Rundll32.exe kernel32.dll,BaseFlushAppcompatCache` 입니다. Vista 형식은 캐시가 비면 헤더만 남습니다. 항목이 없거나 너무 적으면 이전 시점 하이브를 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 명령 실행 흔적은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 찾습니다.
+- **캐시를 비우는 명령이 있습니다.** Vista 이후에는 `Rundll32.exe apphelp.dll,ShimFlushCache`, XP·2003 에서는 `Rundll32.exe kernel32.dll,BaseFlushAppcompatCache` 입니다. Vista 형식은 캐시가 비면 헤더만 남습니다. 항목이 없거나 너무 적으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 명령 실행 흔적은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -167,7 +167,7 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 1. 첫 4바이트 `31 30 74 73` 은 ASCII 로 `10ts` 입니다. 항목의 시작이 맞습니다.
 2. 오프셋 8 의 `1E 00 00 00` 은 30 입니다. 앞 12바이트를 뺀 나머지 길이입니다. 2(경로 크기) + 16(경로) + 8(시각) + 4(Data 크기) = 30 입니다.
-3. 오프셋 12 의 `10 00` 은 16 입니다. 경로가 16바이트, 곧 UTF-16LE 여덟 글자입니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+3. 오프셋 12 의 `10 00` 은 16 입니다. 경로가 16바이트, 곧 UTF-16LE 여덟 글자입니다. 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 4. 경로 뒤 8바이트를 리틀 엔디언으로 읽으면 `0x01DA3C457689C000` 입니다. FILETIME 으로 바꾸면 2024-01-01 00:00:00(UTC) 입니다. 실행 시각이 아니라 파일의 수정 시각입니다.
 5. 다음 항목은 이 항목 시작점에서 12 + 30 = 42바이트 뒤에 있습니다. 이 예시에서는 오프셋 52 + 42 = 94 입니다.
 
@@ -184,17 +184,17 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 프리페치 | 같은 실행 파일의 실행 횟수와 실행 시각을 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| AmCache | 같은 경로의 실행 파일 기록이 있는지 봅니다 | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| BAM | 사용자 계정별로 남은 최근 실행 시각을 봅니다 | [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| UserAssist | 탐색기로 띄운 횟수와 마지막 실행 시각을 봅니다 | [UserAssist](/02-artifacts/execution/userassist.md) |
-| MUICache | 사용자가 쓰기 시작한 프로그램 이름이 있는지 봅니다 | [MUICache](/02-artifacts/execution/muicache.md) |
-| 프로그램 호환성 도우미 | 같은 경로가 있는지 봅니다 | [프로그램 호환성 도우미](/02-artifacts/execution/pca.md) |
-| 마스터 파일 테이블 | 파일의 지금 수정 시각과 항목 시각을 비교합니다 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| 프로세스 생성 이벤트 | 실행 시각을 이벤트로 확인합니다 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| 섀도 복사본 | 이전 시점 캐시에 지금은 없는 항목이 있는지 봅니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 프리페치 | 같은 실행 파일의 실행 횟수와 실행 시각을 봅니다 | [프리페치](prefetch/index.md) |
+| AmCache | 같은 경로의 실행 파일 기록이 있는지 봅니다 | [AmCache](amcache-hve/index.md) |
+| BAM | 사용자 계정별로 남은 최근 실행 시각을 봅니다 | [BAM·DAM](background-activity-moderator.md) |
+| UserAssist | 탐색기로 띄운 횟수와 마지막 실행 시각을 봅니다 | [UserAssist](userassist.md) |
+| MUICache | 사용자가 쓰기 시작한 프로그램 이름이 있는지 봅니다 | [MUICache](muicache.md) |
+| 프로그램 호환성 도우미 | 같은 경로가 있는지 봅니다 | [프로그램 호환성 도우미](pca.md) |
+| 마스터 파일 테이블 | 파일의 지금 수정 시각과 항목 시각을 비교합니다 | [마스터 파일 테이블](../filesystem/mft.md) |
+| 프로세스 생성 이벤트 | 실행 시각을 이벤트로 확인합니다 | [프로세스 생성](../event-logs/4688.md) |
+| 섀도 복사본 | 이전 시점 캐시에 지금은 없는 항목이 있는지 봅니다 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에 있습니다. 시각을 한 줄로 늘어놓는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에서 다룹니다.
+실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에 있습니다. 시각을 한 줄로 늘어놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 실습
 
@@ -205,7 +205,7 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 3. 맨 위 항목 다섯 개의 시각을 직접 FILETIME 으로 바꿔 봅니다. 도구가 보여 주는 값과 같습니까?
 4. 목록에 있는 경로 가운데 지금 디스크에 없는 파일은 몇 개입니까?
 5. 같은 실행 파일이 프리페치에도 있습니까? 프리페치의 실행 시각과 심캐시의 수정 시각은 어떻게 다릅니까?
-6. Vista·7 검체라면 실행 표시가 꺼진 항목은 무엇입니까? 그 폴더를 탐색한 흔적이 [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) 에 있습니까?
+6. Vista·7 검체라면 실행 표시가 꺼진 항목은 무엇입니까? 그 폴더를 탐색한 흔적이 [셸백](../file-folder-usage/shellbags/index.md) 에 있습니까?
 
 ## 참고 문헌
 

@@ -1,6 +1,6 @@
 # 긴 값과 압축 열 (Long Value·Compressed Column)
 
-> 위치: [ESE 데이터베이스 (Extensible Storage Engine)](/01-foundations/database-log-formats/extensible-storage-engine/index.md) > 긴 값과 압축 열
+> 위치: [ESE 데이터베이스 (Extensible Storage Engine)](index.md) > 긴 값과 압축 열
 
 ## 한 줄 요약
 
@@ -17,8 +17,8 @@ Windows 7 부터는 이런 값을 압축해서 저장할 수도 있습니다.
 | 11 | JET_coltypLongBinary | 바이너리 | 2,147,483,647 바이트 |
 | 12 | JET_coltypLongText | 문자열 (ASCII 또는 UTF-16) | 2,147,483,647 바이트 |
 
-- 열 형식 코드는 카탈로그 (MSysObjects) 의 열 정의에 있습니다. 카탈로그를 읽는 법은 [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
-- SRUDB.dat·WebCacheV01.dat·Windows.edb·qmgr.db·ntds.dit 처럼 ESE 로 된 파일이라면 모두 이 규칙으로 읽습니다. 파일 목록과 위치는 [ESE 허브](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다.
+- 열 형식 코드는 카탈로그 (MSysObjects) 의 열 정의에 있습니다. 카탈로그를 읽는 법은 [파일 구조 (Page·B+Tree·Catalog)](page-b-tree-catalog.md) 에 있습니다.
+- SRUDB.dat·WebCacheV01.dat·Windows.edb·qmgr.db·ntds.dit 처럼 ESE 로 된 파일이라면 모두 이 규칙으로 읽습니다. 파일 목록과 위치는 [ESE 허브](index.md) 에 있습니다.
 - 어느 표의 어느 열이 긴 값인지는 앱이 정합니다. 그래서 파일마다 카탈로그에서 열 형식이 11·12 인 열을 먼저 찾습니다.
 
 | 형식 (버전, 리비전) | Windows | 이 글과 관련된 점 | 근거 |
@@ -31,7 +31,7 @@ Windows 7 부터는 이런 값을 압축해서 저장할 수도 있습니다.
 
 - Microsoft Learn 은 값을 저장할 때 압축을 요청하는 옵션(JET_bitSetCompressed)이 Windows 7 에서 들어왔다고 적습니다.
 - ESE 공개 소스(sysver.cxx)는 LZ4 기능을 DB 형식 버전 0x620, 갱신 번호 210(0xD2) 이상에 묶어 둡니다. 이 기능은 2021년 3월에 추가됐습니다.
-- 소스의 갱신 번호는 libyal 명세가 헤더의 "형식 리비전" 이라고 부르는 값과 같은 칸입니다. 헤더 읽는 법은 [파일 구조](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
+- 소스의 갱신 번호는 libyal 명세가 헤더의 "형식 리비전" 이라고 부르는 값과 같은 칸입니다. 헤더 읽는 법은 [파일 구조](page-b-tree-catalog.md) 에 있습니다.
 - Windows 의 어느 빌드부터 이 조건을 채우는지는 이 글에서 확인하지 않았습니다. 그래서 헤더의 리비전과 실제 값의 첫 바이트를 함께 봅니다.
 - 8바이트 긴 값 식별자(아래)가 어느 Windows 부터 쓰였는지도 이 글에서 확인하지 않았습니다.
 
@@ -60,7 +60,7 @@ ESE 소스는 압축 옵션과 암호화 옵션을 긴 값 열에만 허용합�
 태그 열 값 앞에는 플래그 바이트 하나가 붙을 수 있습니다.
 libyal 명세에 따르면 이 바이트는 오프셋 배열 칸의 0x4000 비트가 켜져 있을 때 붙습니다.
 Windows 7(리비전 0x11) 이후의 16·32 KiB 페이지에서는 늘 붙습니다.
-태그 열 영역의 전체 배치는 [파일 구조](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
+태그 열 영역의 전체 배치는 [파일 구조](page-b-tree-catalog.md) 에 있습니다.
 
 | 비트 | ESE 소스의 이름 | 뜻 |
 |---|---|---|
@@ -139,7 +139,7 @@ libyal 명세에 따르면 이 트리의 페이지는 페이지 플래그 0x0080
 
 - 7비트 방식의 아래 3비트는 "마지막 바이트에서 쓴 비트 수 − 1" 입니다.
 - 원래 크기 칸은 리틀 엔디언 2바이트입니다. 그래서 한 번에 65,535바이트까지만 압축합니다.
-- XPRESS 는 허프만 부호가 없는 LZ77 방식입니다. libyal 은 이것을 LZXPRESS 라고 부릅니다. 형식은 [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
+- XPRESS 는 허프만 부호가 없는 LZ77 방식입니다. libyal 은 이것을 LZXPRESS 라고 부릅니다. 형식은 [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](../../value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
 - LZ4 는 프레임 머리가 없는 LZ4 블록 형식입니다.
 - XPRESS9·XPRESS10 은 ESE 소스에서 조건부로 빌드되는 방식입니다. Windows 아티팩트 DB 에서 쓰이는지는 이 글에서 확인하지 않았습니다.
 
@@ -233,7 +233,7 @@ libyal 명세에 따르면 이 트리의 페이지는 페이지 플래그 0x0080
 **6단계. 결과를 글자로 바꿉니다.**
 LongText 열이면 1단계의 코드 페이지로 글자를 해석합니다.
 libyal 명세는 코드 페이지가 1200 이어도 실제로는 ASCII 인 값이 있다고 적습니다. 길이가 짝수면 UTF-16 으로 먼저 읽어 보고, 깨지면 ASCII 로 읽습니다.
-인코딩 판별은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+인코딩 판별은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](../../value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
@@ -241,7 +241,7 @@ libyal 명세는 코드 페이지가 1200 이어도 실제로는 ASCII 인 값�
 
 - 7비트 압축 값에는 원래 문자열의 바이트가 없습니다. 글자가 7비트씩 밀려 있기 때문입니다.
 - XPRESS·LZ4 는 되풀이되는 부분을 앞 위치 참조로 바꿉니다. 그래서 문자열의 일부만 보이거나 전혀 안 보입니다.
-- ESE 파일이나 비할당 영역을 [키워드 검색](/03-techniques/analysis/content-search/keyword-search.md) 이나 [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) 으로 훑을 때 이 한계를 보고서에 적습니다.
+- ESE 파일이나 비할당 영역을 [키워드 검색](../../../03-techniques/analysis/content-search/keyword-search.md) 이나 [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) 으로 훑을 때 이 한계를 보고서에 적습니다.
 - 반대로 바이트 분포가 고른 값은 압축되지 않은 채 남는 경우가 많습니다. 암호화된 데이터나 이미 압축된 데이터가 여기에 들어갑니다. 엔진이 분포를 보고 압축을 건너뛰기 때문입니다.
 
 ### 지운 레코드와 긴 값은 따로 남습니다
@@ -253,7 +253,7 @@ libyal 명세는 코드 페이지가 1200 이어도 실제로는 ASCII 인 값�
 - 거꾸로 레코드는 없고 긴 값 조각만 남을 수도 있습니다. 이때 어느 레코드의 값인지는 LID 로만 이을 수 있습니다.
 - 참조 수가 0xFFFFFFFF 인 뿌리는 지우던 도중에 멈춘 값입니다.
 - 첫 바이트가 0x20 이고 뒤가 같은 바이트로 채워진 값은 엔진이 덮어 지운 값입니다. 원래 내용은 되살릴 수 없습니다. 이 값은 "그 자리에 지운 데이터가 있었다" 는 사실만 말해 줍니다.
-- 페이지 안에서 지운 레코드를 찾는 법은 [파일 안에 남은 지운 레코드 (Deleted Records)](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에 있습니다.
+- 페이지 안에서 지운 레코드를 찾는 법은 [파일 안에 남은 지운 레코드 (Deleted Records)](deleted-records.md) 에 있습니다.
 
 ### 비정상 종료 DB
 
@@ -262,7 +262,7 @@ libyal 명세는 코드 페이지가 1200 이어도 실제로는 ASCII 인 값�
 - 페이지를 직접 해석하면 로그 없이 읽을 수 있습니다. 대신 이 글의 규칙대로 조각을 잇고 압축을 직접 풀어야 합니다.
 - libyal 명세는 가지 노드가 가리킨 잎 페이지에 찾는 키가 없고, 그다음 잎 페이지에 있던 사례를 적었습니다.
 - 비정상 종료 DB(Vista 검색 DB, Exchange 2013)에서 긴 값 뿌리 노드가 그랬습니다. 잎 페이지 하나만 보고 "값 없음" 으로 판단하지 않습니다.
-- 복구와 로그는 [트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 에서 다룹니다. 어느 쪽이든 원본이 아닌 사본에서 작업합니다.
+- 복구와 로그는 [트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)](edb-log-dirty-shutdown.md) 에서 다룹니다. 어느 쪽이든 원본이 아닌 사본에서 작업합니다.
 
 ### 시각과 증거의 범위
 
@@ -278,8 +278,8 @@ libyal 명세는 코드 페이지가 1200 이어도 실제로는 ASCII 인 값�
 - **결과 길이를 확인하지 않습니다.** 이어 붙인 결과 길이는 뿌리 노드의 크기와 같아야 합니다. 다르면 조각이 빠졌거나 경계를 잘못 계산한 것입니다.
 - **도구가 아는 압축 방식을 확인하지 않습니다.** libesedb 의 공개 소스(2026년 5월 커밋 기준)는 첫 바이트 0x18 만 XPRESS 로 풉니다. 나머지는 모두 7비트 방식으로 풉니다. 이런 도구에 LZ4(0x38) 값을 넣으면 오류 없이 깨진 글자가 나올 수 있습니다.
 - **7비트 유니코드 결과를 ASCII 로 읽습니다.** 방식 2 를 풀면 UTF-16LE 입니다.
-- **ESE 압축만 풀면 끝이라고 생각합니다.** 앱이 값을 자기 방식으로 한 번 더 인코딩하기도 합니다. 예를 들어 공개 도구 esedbexport 에는 Windows Search 값만을 위한 별도 디코딩 코드가 있습니다. 앱별 처리는 [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 같은 아티팩트 페이지를 봅니다.
-- **페이지에 적힌 키를 그대로 비교합니다.** ESE 는 페이지 안에서 키의 공통 앞부분을 줄여 저장합니다. 전체 키를 되살린 뒤에 LID 를 비교합니다. 방법은 [파일 구조](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
+- **ESE 압축만 풀면 끝이라고 생각합니다.** 앱이 값을 자기 방식으로 한 번 더 인코딩하기도 합니다. 예를 들어 공개 도구 esedbexport 에는 Windows Search 값만을 위한 별도 디코딩 코드가 있습니다. 앱별 처리는 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 같은 아티팩트 페이지를 봅니다.
+- **페이지에 적힌 키를 그대로 비교합니다.** ESE 는 페이지 안에서 키의 공통 앞부분을 줄여 저장합니다. 전체 키를 되살린 뒤에 LID 를 비교합니다. 방법은 [파일 구조](page-b-tree-catalog.md) 에 있습니다.
 - **8바이트 키를 한 가지로만 읽습니다.** 8바이트 키는 새 형식 뿌리일 수도 있고 옛 형식 조각일 수도 있습니다. 첫 바이트의 가장 높은 비트로 가립니다.
 - **암호화 플래그를 지나칩니다.** 머리 바이트 0x40 이나 뿌리 플래그 0x01 이 켜져 있으면 압축을 풀기 전에 복호해야 합니다. 키가 없으면 풀 수 없습니다.
 - **여러 값 열의 모든 값이 같은 방식이라고 가정합니다.** libyal 명세는 압축 플래그가 켜진 여러 값 열에서 첫 값만 압축된 사례를 적었습니다.
@@ -296,7 +296,7 @@ libyal 명세는 코드 페이지가 1200 이어도 실제로는 ASCII 인 값�
 | 헥스 편집기와 짧은 스크립트 | — | 이 글의 표대로 뿌리·조각·첫 바이트를 직접 읽습니다. LZ4·XPRESS 는 공개 라이브러리로 풉니다 |
 
 두 도구의 결과가 다르면 먼저 같은 LID 의 조각 수, 뿌리 크기, 압축 방식을 비교합니다.
-검증 방법은 [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+검증 방법은 [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

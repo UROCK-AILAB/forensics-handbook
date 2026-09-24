@@ -34,9 +34,9 @@
 | 기본 폴더 (Vista 이후) | `C:\ProgramData\Microsoft\Search\Data\Applications\Windows\` |
 | 기본 폴더 (XP) | `C:\Documents and Settings\All Users\Application Data\Microsoft\Search\Data\Applications\Windows\` |
 | 폴더를 정하는 값 | `HKLM\Software\Microsoft\Windows Search` 키의 `DataDirectory` 값 |
-| 형식 | Windows 10 까지 ESE, Windows 11 은 SQLite. 형식 자체는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 와 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. |
+| 형식 | Windows 10 까지 ESE, Windows 11 은 SQLite. 형식 자체는 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 와 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. |
 
-폴더에 함께 있는 로그·임시 파일과 표 목록은 [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 에 있습니다.
+폴더에 함께 있는 로그·임시 파일과 표 목록은 [위치와 형식](windows-edb-windows-db.md) 에 있습니다.
 
 ### Windows 버전에 따라 달라지는 점
 
@@ -53,32 +53,32 @@
 
 | 알고 싶은 것 | 어디에 남나 | 자세히 |
 |---|---|---|
-| 파일 이름·전체 경로·크기·특성·소유자 | 속성 저장소 (Property Store) | [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) |
-| 색인이 파일을 처리한 시각 | 속성 저장소의 `System.Search.GatherTime` | [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) |
-| IE·Edge 로 연 주소, 활동 기록 | 속성 저장소의 주소·활동 기록 속성 | [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) |
-| 수집기가 다룬 파일 이름과 주소 | `SystemIndex_Gthr`·`SystemIndex_GthrPth`, GatherLogs 폴더 | [수집 기록](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) |
-| 지운 파일의 흔적 | Windows 11 의 WAL 파일, ESE 판의 `SystemIndex_DeletedDocIds` | [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) |
-| 어느 폴더가 색인 대상이었나 | SOFTWARE 하이브의 `CrawlScopeManager` 키 | [색인 해석 함정](/02-artifacts/file-folder-usage/windows-search/pitfalls.md) |
+| 파일 이름·전체 경로·크기·특성·소유자 | 속성 저장소 (Property Store) | [파일 속성 되살리기](propertystore.md) |
+| 색인이 파일을 처리한 시각 | 속성 저장소의 `System.Search.GatherTime` | [파일 속성 되살리기](propertystore.md) |
+| IE·Edge 로 연 주소, 활동 기록 | 속성 저장소의 주소·활동 기록 속성 | [파일 속성 되살리기](propertystore.md) |
+| 수집기가 다룬 파일 이름과 주소 | `SystemIndex_Gthr`·`SystemIndex_GthrPth`, GatherLogs 폴더 | [수집 기록](systemindex-gthr.md) |
+| 지운 파일의 흔적 | Windows 11 의 WAL 파일, ESE 판의 `SystemIndex_DeletedDocIds` | [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) |
+| 어느 폴더가 색인 대상이었나 | SOFTWARE 하이브의 `CrawlScopeManager` 키 | [색인 해석 함정](pitfalls.md) |
 
 ## 읽는 순서
 
-1. [위치와 형식 (Windows.edb·Windows.db)](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) — 색인 폴더에서 무엇을 모을지 정리합니다. Windows 버전별 파일과 표 목록, 바이트 순서, Windows 11 에서 본 `AesGcm1 SQLite3` 헤더를 다룹니다.
-2. [파일 속성 되살리기 (PropertyStore)](/02-artifacts/file-folder-usage/windows-search/propertystore.md) — 파일마다 남은 이름·경로·크기·시각을 읽습니다. 압축된 문자열, IE·Edge 주소, 활동 기록, GatherTime 의 뜻도 다룹니다.
-3. [수집 기록 (SystemIndex_Gthr)](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) — 수집기가 파일을 어떻게 찾아 처리하는지 설명합니다. 수집 기록 표의 칸과 GatherLogs 글자 로그를 읽는 법을 다룹니다.
-4. [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) — 지금 디스크에 없는 파일의 기록을 찾습니다. WAL 파일과 지운 문서 번호 표를 다루고, 라이브 수집 때 조심할 점을 짚습니다.
-5. [색인 해석 함정 (색인 범위·재구성)](/02-artifacts/file-folder-usage/windows-search/pitfalls.md) — "색인에 없다" 를 어디까지 말할 수 있는지 정리합니다. 색인 범위 규칙, 색인 방식, 초기화, 사용자 구분 문제를 다룹니다.
+1. [위치와 형식 (Windows.edb·Windows.db)](windows-edb-windows-db.md) — 색인 폴더에서 무엇을 모을지 정리합니다. Windows 버전별 파일과 표 목록, 바이트 순서, Windows 11 에서 본 `AesGcm1 SQLite3` 헤더를 다룹니다.
+2. [파일 속성 되살리기 (PropertyStore)](propertystore.md) — 파일마다 남은 이름·경로·크기·시각을 읽습니다. 압축된 문자열, IE·Edge 주소, 활동 기록, GatherTime 의 뜻도 다룹니다.
+3. [수집 기록 (SystemIndex_Gthr)](systemindex-gthr.md) — 수집기가 파일을 어떻게 찾아 처리하는지 설명합니다. 수집 기록 표의 칸과 GatherLogs 글자 로그를 읽는 법을 다룹니다.
+4. [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) — 지금 디스크에 없는 파일의 기록을 찾습니다. WAL 파일과 지운 문서 번호 표를 다루고, 라이브 수집 때 조심할 점을 짚습니다.
+5. [색인 해석 함정 (색인 범위·재구성)](pitfalls.md) — "색인에 없다" 를 어디까지 말할 수 있는지 정리합니다. 색인 범위 규칙, 색인 방식, 초기화, 사용자 구분 문제를 다룹니다.
 
 ## 함께 볼 페이지
 
-- [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) · [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) — 두 DB 형식을 직접 읽는 데 필요한 구조입니다.
-- [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) · [윈도 압축 형식](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) · [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) — FILETIME, LZXPRESS 허프만, UTF-16LE 를 풉니다.
-- [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) — 색인에 남은 경로를 지금 파일 시스템과 맞춰 보고, 수집기가 받은 변경 알림의 원천을 봅니다.
-- [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) · [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) — 색인이 말하지 못하는 "사용자가 열었다" 를 채웁니다.
-- [윈도 타임라인](/02-artifacts/file-folder-usage/activitiescache-db.md) · [인터넷 익스플로러·옛 엣지](/02-artifacts/browsers/ie-edgehtml/index.md) — 색인에 들어간 활동 기록과 방문 주소를 맞춰 봅니다.
-- [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 시점의 색인 DB 를 꺼냅니다.
-- [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) — SQLite 도구로 열리지 않는 Windows 11 색인 DB 를 만났을 때 봅니다.
-- [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) — 손상된 DB 를 여러 방식으로 읽고 비교합니다.
-- [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) · [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) — 색인 DB 를 다른 기록과 묶어 읽는 조사 흐름입니다.
+- [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) · [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) — 두 DB 형식을 직접 읽는 데 필요한 구조입니다.
+- [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) · [윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) · [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) — FILETIME, LZXPRESS 허프만, UTF-16LE 를 풉니다.
+- [마스터 파일 테이블](../../filesystem/mft.md) · [USN 변경 저널](../../filesystem/usnjrnl.md) — 색인에 남은 경로를 지금 파일 시스템과 맞춰 보고, 수집기가 받은 변경 알림의 원천을 봅니다.
+- [바로가기 파일](../lnk.md) · [점프리스트](../jump-lists.md) · [최근 문서](../recentdocs.md) — 색인이 말하지 못하는 "사용자가 열었다" 를 채웁니다.
+- [윈도 타임라인](../activitiescache-db.md) · [인터넷 익스플로러·옛 엣지](../../browsers/ie-edgehtml/index.md) — 색인에 들어간 활동 기록과 방문 주소를 맞춰 봅니다.
+- [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 시점의 색인 DB 를 꺼냅니다.
+- [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) — SQLite 도구로 열리지 않는 Windows 11 색인 DB 를 만났을 때 봅니다.
+- [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) — 손상된 DB 를 여러 방식으로 읽고 비교합니다.
+- [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md) · [이 파일을 누가 언제 열었나](../../../04-scenarios/activity/file-access.md) — 색인 DB 를 다른 기록과 묶어 읽는 조사 흐름입니다.
 
 ## 참고 문헌
 

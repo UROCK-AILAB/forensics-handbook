@@ -46,24 +46,24 @@ RFC 3227 (2002년 2월, BCP 55) 은 증거를 휘발성이 큰 것부터 모으�
 
 ## 읽는 순서
 
-1. [메모리 덤프 확보 (Memory Acquisition)](/03-techniques/analysis/memory-forensics/memory-acquisition.md) — 켜진 PC 에서 물리 메모리를 뜨는 원칙과 절차입니다. 확보 기록을 남기는 법도 다룹니다.
-2. [프로세스와 DLL 분석 (Process Analysis)](/03-techniques/analysis/memory-forensics/process-analysis.md) — 이미지에서 프로세스 목록, 명령줄, DLL, 핸들을 읽습니다. 플러그인 이름을 읽는 법도 여기 있습니다.
-3. [메모리 속 네트워크 흔적 (Network Artifacts)](/03-techniques/analysis/memory-forensics/network-artifacts.md) — 메모리에 남은 연결과 수신 대기 흔적을 찾아 프로세스에 잇습니다.
-4. [코드 주입·숨긴 프로세스 탐지 (Injection·Rootkit)](/03-techniques/analysis/memory-forensics/injection-rootkit.md) — 정상 프로세스 안에 들어간 코드와, 목록에서 숨긴 프로세스·모듈을 찾습니다.
-5. [메모리 속 문자열·자격증명·암호 키 (Strings·Credentials·Keys)](/03-techniques/analysis/memory-forensics/strings-credentials-keys.md) — 문자열 검색, 계정 해시와 비밀, Credential Guard 가 켜진 PC 의 차이를 다룹니다.
-6. [최대 절전 파일 (hiberfil.sys)](/03-techniques/analysis/memory-forensics/hiberfil-sys.md) — 최대 절전·빠른 시작 때 남는 파일의 서명과 헤더를 읽고 해석합니다.
-7. [페이지 파일 (pagefile.sys·swapfile.sys)](/03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md) — 물리 메모리에서 내보낸 페이지를 검색하는 법과 그 한계입니다.
-8. [크래시 덤프 (MEMORY.DMP·Minidump)](/03-techniques/analysis/memory-forensics/memory-dmp-minidump.md) — 커널·사용자 모드 덤프의 종류, 설정 레지스트리, 찾는 순서입니다.
+1. [메모리 덤프 확보 (Memory Acquisition)](memory-acquisition.md) — 켜진 PC 에서 물리 메모리를 뜨는 원칙과 절차입니다. 확보 기록을 남기는 법도 다룹니다.
+2. [프로세스와 DLL 분석 (Process Analysis)](process-analysis.md) — 이미지에서 프로세스 목록, 명령줄, DLL, 핸들을 읽습니다. 플러그인 이름을 읽는 법도 여기 있습니다.
+3. [메모리 속 네트워크 흔적 (Network Artifacts)](network-artifacts.md) — 메모리에 남은 연결과 수신 대기 흔적을 찾아 프로세스에 잇습니다.
+4. [코드 주입·숨긴 프로세스 탐지 (Injection·Rootkit)](injection-rootkit.md) — 정상 프로세스 안에 들어간 코드와, 목록에서 숨긴 프로세스·모듈을 찾습니다.
+5. [메모리 속 문자열·자격증명·암호 키 (Strings·Credentials·Keys)](strings-credentials-keys.md) — 문자열 검색, 계정 해시와 비밀, Credential Guard 가 켜진 PC 의 차이를 다룹니다.
+6. [최대 절전 파일 (hiberfil.sys)](hiberfil-sys.md) — 최대 절전·빠른 시작 때 남는 파일의 서명과 헤더를 읽고 해석합니다.
+7. [페이지 파일 (pagefile.sys·swapfile.sys)](pagefile-sys-swapfile-sys.md) — 물리 메모리에서 내보낸 페이지를 검색하는 법과 그 한계입니다.
+8. [크래시 덤프 (MEMORY.DMP·Minidump)](memory-dmp-minidump.md) — 커널·사용자 모드 덤프의 종류, 설정 레지스트리, 찾는 순서입니다.
 
 ## 함께 볼 페이지
 
-- [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) — 켜진 PC 에서 메모리 말고 무엇을 먼저 모으는지 다룹니다.
-- [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) — 해시와 확보 기록을 남기는 방법입니다.
-- [포렌식 조사 절차](/03-techniques/process-acquisition/investigation-process.md) — 메모리 분석이 조사 전체에서 어디에 오는지 다룹니다.
-- [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) — 암호화 볼륨이 열린 PC 를 끄기 전에 정할 것을 다룹니다.
-- [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) — 메모리 검색에 쓰는 YARA 규칙을 다룹니다.
-- [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) — 메모리에 남은 자격증명 흔적을 쓰는 조사 시나리오입니다.
-- [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) — 도구마다 결과가 다를 때 확인하는 법입니다.
+- [라이브 응답](../../process-acquisition/live-response/index.md) — 켜진 PC 에서 메모리 말고 무엇을 먼저 모으는지 다룹니다.
+- [증거 획득](../../process-acquisition/evidence-acquisition/index.md) — 해시와 확보 기록을 남기는 방법입니다.
+- [포렌식 조사 절차](../../process-acquisition/investigation-process.md) — 메모리 분석이 조사 전체에서 어디에 오는지 다룹니다.
+- [암호화 증거 다루기](../encrypted-evidence/index.md) — 암호화 볼륨이 열린 PC 를 끄기 전에 정할 것을 다룹니다.
+- [의심 실행 파일 선별](../code-signing-yara.md) — 메모리 검색에 쓰는 YARA 규칙을 다룹니다.
+- [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) — 메모리에 남은 자격증명 흔적을 쓰는 조사 시나리오입니다.
+- [도구 결과 교차 검증](../../reporting/tool-validation.md) — 도구마다 결과가 다를 때 확인하는 법입니다.
 
 ## 참고 문헌
 

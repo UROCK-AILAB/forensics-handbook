@@ -1,6 +1,6 @@
 # PDF 증분 저장과 이전 판 복원 (Incremental Update)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](/02-artifacts/embedded-metadata/document-metadata/index.md)
+> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
 
 ## 한 줄 요약
 
@@ -19,7 +19,7 @@ ExifTool 은 PDF 메타데이터를 고칠 때 증분 저장 방식을 씁니다
 
 포렌식에서는 이 성질이 쓸모 있습니다. 누군가 메타데이터를 고쳤어도, 덧붙여 저장했다면 고치기 전 값이 파일 안에 남습니다.
 
-정보 사전과 XMP 가 무엇을 담는지는 [PDF 정보 사전과 XMP (PDF Info·XMP)](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) 에서 다룹니다.
+정보 사전과 XMP 가 무엇을 담는지는 [PDF 정보 사전과 XMP (PDF Info·XMP)](pdf-info-xmp.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -106,8 +106,8 @@ trailer
 
 - 덧붙은 부분에는 따로 시각 칸이 없었습니다. 관찰한 파일에서 시각은 다시 정의한 정보 사전 안의 `ModDate` 뿐이었습니다. (관찰)
 - 그 `ModDate` 는 고친 도구가 넣은 값입니다. 관찰에서는 원하는 값을 그대로 넣을 수 있었습니다. (관찰)
-- XMP 는 고치지 않아 `xmp:ModifyDate` 는 옛 값 그대로였습니다. 이 어긋남은 [PDF 정보 사전과 XMP (PDF Info·XMP)](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) 에서 다룹니다.
-- 파일이 디스크에서 언제 커졌는지는 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 과 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 봅니다.
+- XMP 는 고치지 않아 `xmp:ModifyDate` 는 옛 값 그대로였습니다. 이 어긋남은 [PDF 정보 사전과 XMP (PDF Info·XMP)](pdf-info-xmp.md) 에서 다룹니다.
+- 파일이 디스크에서 언제 커졌는지는 [마스터 파일 테이블](../../filesystem/mft.md) 과 [USN 변경 저널](../../filesystem/usnjrnl.md) 에서 봅니다.
 
 ## 함정과 한계
 
@@ -166,19 +166,19 @@ print(len(r.pages), r.metadata)
 
 - 다시 정의된 객체 번호는 `re.finditer(rb"(\d+) (\d+) obj", data)` 로 위치와 함께 모아 볼 수 있습니다. 같은 번호가 두 번 넘게 나오는 것을 고릅니다. 이 글자 검색 결과는 도구 결과와 맞춰 봅니다.
 - ExifTool 로 고친 파일은 사본에 `-PDF-update:all=` 를 주면 원래 파일로 되돌린다고 ExifTool 문서에 적혀 있습니다. 되돌린 사본과 잘라 낸 사본을 견줍니다.
-- 결과가 서로 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+- 결과가 서로 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [PDF 정보 사전과 XMP (PDF Info·XMP)](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) | 덧붙은 부분에서 바뀐 정보 사전과 그대로인 XMP |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일 크기와 수정 시각 |
-| [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 파일에 데이터가 덧붙은 기록 |
-| [볼륨 섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 같은 PDF 와 크기·내용 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 받은 뒤 고친 파일인지 |
+| [PDF 정보 사전과 XMP (PDF Info·XMP)](pdf-info-xmp.md) | 덧붙은 부분에서 바뀐 정보 사전과 그대로인 XMP |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일 크기와 수정 시각 |
+| [USN 변경 저널](../../filesystem/usnjrnl.md) | 파일에 데이터가 덧붙은 기록 |
+| [볼륨 섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 같은 PDF 와 크기·내용 |
+| [다운로드 출처 표시](../../filesystem/zone-identifier.md) | 받은 뒤 고친 파일인지 |
 
-시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 와 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) 와 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 를 봅니다.
 
 ## 실습
 

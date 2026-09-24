@@ -7,23 +7,23 @@
 실행 파일이 많을 때 먼저 코드 서명으로 크게 거르고, 서명이 없거나 이상한 파일을 해시와 YARA 규칙으로 좁히는 방법입니다.
 이 과정에서 나오는 결과는 모두 "더 볼 파일" 을 고르는 신호입니다.
 악성이라고 판정하는 근거가 아닙니다.
-실행 파일 한 개의 헤더·버전 정보·서명 구조는 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
+실행 파일 한 개의 헤더·버전 정보·서명 구조는 [실행 파일 메타데이터](../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
 
 ## 언제 쓰나
 
 - **실행 파일이 너무 많아 하나씩 볼 수 없을 때** 씁니다. 시스템 폴더나 사용자 폴더 전체가 대상일 때입니다.
-- **자동실행 위치에 등록된 파일을 확인할 때** 씁니다. 등록 위치는 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에서 다룹니다.
+- **자동실행 위치에 등록된 파일을 확인할 때** 씁니다. 등록 위치는 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에서 다룹니다.
 - **사건에서 찾은 악성 파일과 같은 계열을 찾을 때** 씁니다. 찾은 파일의 특징을 YARA 규칙으로 적어 다른 파일에 돌립니다.
-- **실행 흔적이 남은 파일을 추릴 때** 씁니다. [프리페치](/02-artifacts/execution/prefetch/index.md) 나 [AmCache](/02-artifacts/execution/amcache-hve/index.md) 에 남은 경로의 파일을 먼저 봅니다.
+- **실행 흔적이 남은 파일을 추릴 때** 씁니다. [프리페치](../../02-artifacts/execution/prefetch/index.md) 나 [AmCache](../../02-artifacts/execution/amcache-hve/index.md) 에 남은 경로의 파일을 먼저 봅니다.
 
 ## 절차
 
 > 그림 자리: 전체 실행 파일 → (서명 확인) → 서명 없음·검증 실패 → (카탈로그 확인) → (해시셋 대조) → (YARA 검사) → 직접 분석할 짧은 목록. 단계마다 목록이 줄어드는 깔때기 그림
 
-1. **실행 파일을 모읍니다.** 확장자는 믿지 않습니다. 파일 내용으로 실행 파일인지 봅니다. 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 의 파일 형식 식별 글에 있습니다.
+1. **실행 파일을 모읍니다.** 확장자는 믿지 않습니다. 파일 내용으로 실행 파일인지 봅니다. 방법은 [파일 내용 검색](content-search/index.md) 의 파일 형식 식별 글에 있습니다.
 2. **서명을 확인합니다.** 서명이 없거나 검증에 실패한 파일을 뽑습니다. 아래 "코드 서명" 절을 봅니다.
 3. **카탈로그 서명을 확인합니다.** 파일 안에 서명이 없어도 카탈로그로 서명된 파일일 수 있습니다. 오프라인 이미지라면 그 이미지의 카탈로그로 확인합니다.
-4. **알려진 파일을 거릅니다.** 남은 파일의 해시를 알려진 파일 목록과 맞춥니다. 방법은 [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) 에 있습니다.
+4. **알려진 파일을 거릅니다.** 남은 파일의 해시를 알려진 파일 목록과 맞춥니다. 방법은 [해시셋 대조와 유사 해시](hash-set-fuzzy-hash.md) 에 있습니다.
 5. **YARA 규칙으로 검사합니다.** 사건에서 얻은 특징이나 검증한 규칙 모음으로 검사합니다. 아래 "YARA" 절을 봅니다.
 6. **남은 파일을 직접 봅니다.** 실행 흔적, 들어온 경로, 자동실행 등록 여부를 확인합니다.
 7. **단계마다 목록을 남깁니다.** 어떤 조건으로 몇 개가 빠졌는지 적어 두어야 다른 분석가가 같은 결과를 다시 얻습니다.
@@ -48,7 +48,7 @@
 - 카탈로그로 서명된 파일은 파일만 보면 "서명 없음" 으로 잘못 볼 수 있습니다.
 - 오프라인 이미지에서 이런 파일을 확인하려면 그 이미지의 카탈로그 파일이 필요합니다. 분석하는 PC 의 카탈로그는 이미지 속 Windows 의 카탈로그와 다를 수 있습니다.
 - 카탈로그 파일이 이미지의 어느 폴더에 있는지는 이 페이지의 자료로 확인하지 못했습니다.
-- 파일 안 서명의 바이트 구조, 서명이 덮는 범위, 서명 타임스탬프는 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에 있습니다.
+- 파일 안 서명의 바이트 구조, 서명이 덮는 범위, 서명 타임스탬프는 [실행 파일 메타데이터](../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에 있습니다.
 
 ### Sigcheck 로 서명 목록 뽑기
 
@@ -201,10 +201,10 @@ rule Example_Case_Marker : triage example
 아래 도구는 예로만 듭니다.
 
 - **Sigcheck (Microsoft Sysinternals)**: 서명·카탈로그·해시·엔트로피를 한꺼번에 봅니다.
-- **PowerShell**: 서명을 확인하는 명령이 있습니다. 결과 예는 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에 있습니다.
+- **PowerShell**: 서명을 확인하는 명령이 있습니다. 결과 예는 [실행 파일 메타데이터](../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에 있습니다.
 - **YARA**: 규칙으로 파일을 검사합니다.
-- **해시 도구**: [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) 를 봅니다.
-- 두 도구의 서명 판정이 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 의 방법으로 맞춰 봅니다.
+- **해시 도구**: [해시셋 대조와 유사 해시](hash-set-fuzzy-hash.md) 를 봅니다.
+- 두 도구의 서명 판정이 다르면 [도구 결과 교차 검증](../reporting/tool-validation.md) 의 방법으로 맞춰 봅니다.
 
 ## 함정과 한계
 
@@ -222,15 +222,15 @@ rule Example_Case_Marker : triage example
 | 신호 | 말해 주는 것 | 다음에 할 일 |
 |---|---|---|
 | 서명 없음 | 파일 안 서명도, 확인한 카탈로그의 서명도 없다는 것 | 이미지의 카탈로그로 다시 확인하고, 파일의 목적을 조사합니다 |
-| 서명 검증 실패 | 서명이 있지만 검증을 통과하지 못했다는 것 | 서명 뒤로 파일이 바뀌었는지 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 의 방법으로 봅니다 |
+| 서명 검증 실패 | 서명이 있지만 검증을 통과하지 못했다는 것 | 서명 뒤로 파일이 바뀌었는지 [실행 파일 메타데이터](../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 의 방법으로 봅니다 |
 | 엔트로피 높음 | 파일 내용의 바이트당 비트 수가 높다는 것 | 다른 신호와 함께 봅니다 |
 | YARA 일치 | 규칙에 적힌 조건과 맞았다는 것 | 어느 문자열이 어디서 맞았는지 확인합니다 |
 | 알려진 파일 목록과 일치 | 알려진 소프트웨어 파일이라는 것 | 해킹 도구도 목록에 있을 수 있으니 어떤 소프트웨어인지 봅니다 |
 
 - 선별 결과는 "이 파일을 먼저 봐야 한다" 까지만 말합니다.
-- 파일이 실행되었는지는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에서 따로 확인합니다.
-- 실행 중에 남는 서명·해시 기록은 [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) 에서 봅니다.
-- 켜진 시스템에서 지금 도는 프로세스를 볼 때는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
+- 파일이 실행되었는지는 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에서 따로 확인합니다.
+- 실행 중에 남는 서명·해시 기록은 [Sysmon 로그](../../02-artifacts/event-logs/sysmon/index.md) 에서 봅니다.
+- 켜진 시스템에서 지금 도는 프로세스를 볼 때는 [라이브 응답](../process-acquisition/live-response/index.md) 을 봅니다.
 
 보고서에는 어떤 조건으로 골랐는지를 씁니다.
 

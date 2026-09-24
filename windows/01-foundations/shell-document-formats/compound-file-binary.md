@@ -8,11 +8,11 @@ OLE 복합 파일 (Compound File Binary) 은 파일 하나 안에 작은 파일 
 
 | 아티팩트 | 이 형식이 들어가는 곳 | 페이지 |
 |---|---|---|
-| Office 97–2003 문서 | 파일 전체. 이 형식을 쓰는 파일로 널리 알려져 있습니다 | [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) |
-| 점프리스트 자동 목록 | `.automaticDestinations-ms` 파일 전체. 안에 `DestList` 스트림과 16진수 이름 스트림이 있습니다 | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
+| Office 97–2003 문서 | 파일 전체. 이 형식을 쓰는 파일로 널리 알려져 있습니다 | [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) |
+| 점프리스트 자동 목록 | `.automaticDestinations-ms` 파일 전체. 안에 `DestList` 스트림과 16진수 이름 스트림이 있습니다 | [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) |
 
 - 점프리스트의 16진수 이름 스트림은 이름이 정규식 `^[1-9a-f][0-9a-f]*$` 에 맞습니다.
-- 번호 스트림에 든 LNK 데이터의 형식은 [바로가기 형식](/01-foundations/shell-document-formats/shell-link-lnk.md) 에서 다룹니다.
+- 번호 스트림에 든 LNK 데이터의 형식은 [바로가기 형식](shell-link-lnk.md) 에서 다룹니다.
 
 ### 형식 버전
 
@@ -33,7 +33,7 @@ OLE 복합 파일 (Compound File Binary) 은 파일 하나 안에 작은 파일 
 - 할당 표는 섹터를 어떻게 쓰는지 적습니다.
 - 디렉터리는 스트림 사이의 계층을 적습니다.
 - 스트림은 실제 내용을 담습니다.
-- 날짜·시각은 UTC 기준 FILETIME 입니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 날짜·시각은 UTC 기준 FILETIME 입니다. 푸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 유니코드 문자열은 BOM 없는 UTF-16LE 입니다.
 
 Microsoft MS-CFB 명세와 libyal 문서는 같은 것을 다른 이름으로 부릅니다.
@@ -189,7 +189,7 @@ Microsoft MS-CFB 명세와 libyal 문서는 같은 것을 다른 이름으로 �
 - 속성 목록 항목은 8바이트입니다. 속성 ID 와 위치로 이루어집니다.
 - 속성 값은 4바이트 값 종류 (VARIANT 형) 뒤에 데이터가 옵니다.
 - VT_LPWSTR 문자열의 크기는 글자 수로 적습니다.
-- 속성 ID 가 무엇을 뜻하는지는 [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
+- 속성 ID 가 무엇을 뜻하는지는 [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
 
 ## 읽는 법
 
@@ -298,11 +298,11 @@ Microsoft MS-CFB 명세와 libyal 문서는 같은 것을 다른 이름으로 �
 
 - 디렉터리 항목의 두 시각은 저장소 객체만 기록합니다.
 - 스트림 항목의 두 시각은 반드시 0 입니다. 그래서 복합 파일 구조만으로는 스트림 하나하나가 언제 생겼는지 알 수 없습니다.
-- 뿌리의 만든 시각은 반드시 0 입니다. 복합 파일이 언제 생겼는지는 파일 시스템의 시각에서 봅니다([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
+- 뿌리의 만든 시각은 반드시 0 입니다. 복합 파일이 언제 생겼는지는 파일 시스템의 시각에서 봅니다([마스터 파일 테이블](../../02-artifacts/filesystem/mft.md)).
 - 뿌리의 수정 시각은 0 이어도 됩니다.
 - Windows 11 PC 한 대의 점프리스트 자동 목록 22개는 모두 뿌리의 만든 시각이 0 이고 수정 시각은 채워져 있었습니다. 가장 큰 파일의 스트림 항목 (`DestList`·`1`·`2`·`3` …) 은 두 시각이 모두 0 이었습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대). 명세와 맞습니다.
 - Office 서식 파일 (템플릿) 에서 만든 시각이 -1 (0xFFFFFFFFFFFFFFFF) 인 사례가 있습니다. 뜻은 알려져 있지 않습니다.
-- 스트림 안쪽에 시각을 따로 적는 형식도 있습니다. 점프리스트의 `DestList` 스트림이 그 예입니다([점프리스트](/02-artifacts/file-folder-usage/jump-lists.md)). Office 문서의 속성은 [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
+- 스트림 안쪽에 시각을 따로 적는 형식도 있습니다. 점프리스트의 `DestList` 스트림이 그 예입니다([점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md)). Office 문서의 속성은 [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
 
 ### 지운 데이터
 
@@ -311,7 +311,7 @@ Microsoft MS-CFB 명세와 libyal 문서는 같은 것을 다른 이름으로 �
 - 두 곳에 지운 스트림의 흔적이 남는지는 이번에 연 자료로 확인하지 못했습니다. 아래는 PC 한 대에서 본 결과입니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
   - 가장 큰 점프리스트 파일 (약 1.8MB) 의 디렉터리 항목 576개 가운데 248개가 종류 0x00 이었습니다. 248개 모두 이름 칸과 이름 길이가 0 이었습니다. 이 파일에서는 지운 항목의 이름이 남아 있지 않았습니다.
   - 22개 파일의 FAT 에서 빈 섹터로 표시된 섹터는 모두 256개였습니다. 256개 모두 0 이 아닌 바이트를 담고 있었습니다. 이전 데이터가 남은 것으로 보이지만 내용은 해석하지 않았습니다.
-- 빈 섹터를 살펴볼 때는 섹터 번호로 파일 오프셋을 구해 직접 꺼냅니다. 복구 방법 일반은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- 빈 섹터를 살펴볼 때는 섹터 번호로 파일 오프셋을 구해 직접 꺼냅니다. 복구 방법 일반은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ### 손상과 낯선 값
 
@@ -338,7 +338,7 @@ libolecf 문서와 MS-CFB 명세에 적힌 사례입니다.
 ## 도구
 
 - 이 글이 따른 형식 문서는 libyal 의 libolecf 저장소에 있는 문서와 Microsoft MS-CFB 명세의 파일 머리·디렉터리 항목 절입니다.
-- 점프리스트를 읽는 도구 예는 [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) 페이지에 있습니다.
+- 점프리스트를 읽는 도구 예는 [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) 페이지에 있습니다.
 
 도구를 쓸 때는 다음을 확인합니다.
 
@@ -346,7 +346,7 @@ libolecf 문서와 MS-CFB 명세에 적힌 사례입니다.
 - 저장소 항목의 시각을 UTC 로 보여 주는지, 0 과 -1 을 어떻게 표시하는지 확인합니다.
 - 스트림을 꺼낼 때 미니 스트림과 일반 섹터를 제대로 가르는지 확인합니다. 작은 스트림 하나를 헥스로 따라가 결과와 맞춰 봅니다.
 - 손상된 파일 (형제 ID 0, 뿌리 미사용) 에서 멈추거나 같은 자리를 맴돌지 않는지 확인합니다.
-- 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

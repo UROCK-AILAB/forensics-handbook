@@ -1,6 +1,6 @@
 # 최대 절전 파일 (hiberfil.sys)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](/03-techniques/analysis/memory-forensics/index.md)
+> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
 
 ## 한 줄 요약
 
@@ -10,7 +10,7 @@
 
 ## 언제 쓰나
 
-- 전원이 꺼진 채 들어온 PC 에서 메모리 흔적을 찾을 때 씁니다. 켜진 PC 라면 먼저 [메모리 덤프 확보](/03-techniques/analysis/memory-forensics/memory-acquisition.md) 를 봅니다.
+- 전원이 꺼진 채 들어온 PC 에서 메모리 흔적을 찾을 때 씁니다. 켜진 PC 라면 먼저 [메모리 덤프 확보](memory-acquisition.md) 를 봅니다.
 - 켜진 PC 에서 뜬 메모리 이미지가 있어도 씁니다. 이 파일에는 그보다 앞선 시점의 메모리가 들어 있을 수 있습니다.
 - PC 가 최대 절전이나 빠른 시작을 썼는지 확인할 때 씁니다.
 
@@ -36,7 +36,7 @@ Microsoft 문서는 Windows 가 시작하는 방식을 세 가지로 나눕니�
 - 빠른 시작으로 만든 파일에는 사용자 세션을 로그오프한 뒤의 커널 쪽 메모리만 들어 있다고 볼 수 있습니다. 위 순서에서 끌어낸 해석이며, 실제 검체로는 확인하지 못했습니다.
 - 그래서 빠른 시작으로 만든 파일에서는 사용자 프로그램의 메모리를 기대하기 어렵습니다.
 - 사용자가 최대 절전을 골라 끄면 세션을 닫지 않으므로 사용자 프로그램의 메모리도 담긴다고 알려져 있습니다. 이 글의 참고 문헌에는 이 내용이 직접 나오지 않습니다.
-- 두 경우는 담긴 범위가 다릅니다. 그래서 어느 쪽으로 만든 파일인지 먼저 가립니다. PC 가 꺼지고 켜진 기록은 [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 에서 봅니다.
+- 두 경우는 담긴 범위가 다릅니다. 그래서 어느 쪽으로 만든 파일인지 먼저 가립니다. PC 가 꺼지고 켜진 기록은 [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) 에서 봅니다.
 
 ## 위치와 설정
 
@@ -64,7 +64,7 @@ powercfg /hibernate /type full
 - 최대 절전에 들어가기까지 기다리는 시간(분)은 `powercfg /change` 의 `hibernate-timeout-ac`·`hibernate-timeout-dc` 로 정합니다 [2].
 
 디스크 이미지에서 떼어 낸 SYSTEM 하이브를 읽을 때는 경로의 `CurrentControlSet` 부분을 실제로 쓰던 제어 집합으로 바꿔 읽습니다.
-방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ### 켜진 PC 에서 확인하기
 
@@ -77,7 +77,7 @@ powercfg /hibernate /type full
 
 이 명령은 대상 PC 의 프로그램입니다.
 실행한 시각과 명령을 그대로 적습니다.
-전체 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 따릅니다.
+전체 순서는 [라이브 응답](../../process-acquisition/live-response/index.md) 을 따릅니다.
 
 ## 구조 (Windows 2000 ~ 7)
 
@@ -139,7 +139,7 @@ Vista 64비트 값은 문서에 따로 나오지 않습니다 [3].
 | 32 | — | LZ XPRESS 로 압축한 자료 |
 
 - 블록 끝은 8바이트 단위로 맞춥니다 [3].
-- XPRESS 압축을 푸는 법은 [윈도 압축 형식](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
+- XPRESS 압축을 푸는 법은 [윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
 - Windows 8 이후로는 압축 방식과 구조가 바뀌었다고 알려져 있습니다. 이 글의 참고 문헌으로는 확인하지 못했습니다.
 
 ## 헥스로 따라가기
@@ -162,7 +162,7 @@ x86·x64 에서 정수는 낮은 자리 바이트부터 적습니다 (리틀 엔
 3. 0x08~0x0B 는 체크섬 칸입니다.
 4. 0x0C~0x0F 는 크기 칸입니다.
 5. 0x14~0x17 의 `00 10 00 00` 은 0x1000, 곧 4096 입니다. 페이지 크기 칸입니다.
-6. 0x20~0x27 은 시스템 시각입니다. 8바이트 FILETIME 으로 읽습니다. 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+6. 0x20~0x27 은 시스템 시각입니다. 8바이트 FILETIME 으로 읽습니다. 읽는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 7. 0x28~0x2F 는 인터럽트 시각입니다.
 
 첫 4바이트가 모두 `00` 이면 헤더 페이지가 비어 있는 파일일 수 있습니다.
@@ -187,19 +187,19 @@ x86·x64 에서 정수는 낮은 자리 바이트부터 적습니다 (리틀 엔
 - 문서에는 칸 이름 (System time) 만 있고 뜻 설명은 없습니다 [3].
 - 그래서 이 값을 최대 절전에 들어간 시각이라고 단정하지 않습니다.
 - 이 값이 UTC 인지 현지 시각인지도 문서에 적혀 있지 않습니다.
-- 이 값을 쓰려면 PC 가 꺼진 기록과 맞대 봅니다. [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 과 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md) 을 봅니다.
-- 파일 시스템에 남은 hiberfil.sys 의 시각도 함께 적습니다. 이 시각이 무엇에 따라 바뀌는지는 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에 있습니다.
+- 이 값을 쓰려면 PC 가 꺼진 기록과 맞대 봅니다. [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) 과 [PC 사용 시간 재구성](../../../04-scenarios/activity/system-usage-time.md) 을 봅니다.
+- 파일 시스템에 남은 hiberfil.sys 의 시각도 함께 적습니다. 이 시각이 무엇에 따라 바뀌는지는 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 에 있습니다.
 
 ## 절차
 
-1. 디스크 이미지에서 hiberfil.sys 를 찾아 꺼냅니다. 꺼낸 도구·방법과 해시를 적습니다. 방법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 에 있습니다.
-2. 운영체제 버전을 확인합니다. [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 를 봅니다.
+1. 디스크 이미지에서 hiberfil.sys 를 찾아 꺼냅니다. 꺼낸 도구·방법과 해시를 적습니다. 방법은 [증거 획득](../../process-acquisition/evidence-acquisition/index.md) 에 있습니다.
+2. 운영체제 버전을 확인합니다. [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 를 봅니다.
 3. Windows 2000 ~ 7 이면 위 구조를 그대로 댑니다. Windows 8 이후라면 쓰는 도구가 그 버전을 지원하는지 먼저 확인합니다.
 4. SYSTEM 하이브의 Power 키에서 HiberFileSizePercent 를 읽습니다. full 인지 reduced 인지 가늠합니다.
 5. 첫 4바이트 서명을 봅니다. 헤더 페이지가 모두 0 인지도 봅니다.
 6. 헤더의 시스템 시각을 읽어 적습니다. 뜻은 켜짐·꺼짐 기록과 맞대 본 뒤에 정합니다.
 7. 도구로 압축 블록을 풀어 메모리 이미지처럼 엽니다.
-8. 풀어 낸 내용에서 프로세스·연결·문자열을 봅니다. 방법은 [프로세스와 DLL 분석](/03-techniques/analysis/memory-forensics/process-analysis.md), [메모리 속 네트워크 흔적](/03-techniques/analysis/memory-forensics/network-artifacts.md), [메모리 속 문자열·자격증명·암호 키](/03-techniques/analysis/memory-forensics/strings-credentials-keys.md) 에 있습니다.
+8. 풀어 낸 내용에서 프로세스·연결·문자열을 봅니다. 방법은 [프로세스와 DLL 분석](process-analysis.md), [메모리 속 네트워크 흔적](network-artifacts.md), [메모리 속 문자열·자격증명·암호 키](strings-credentials-keys.md) 에 있습니다.
 9. 켜진 PC 에서 뜬 메모리 이미지가 있으면 둘을 견줍니다. 두 파일은 서로 다른 시점의 메모리입니다.
 
 ## 도구
@@ -231,7 +231,7 @@ x86·x64 에서 정수는 낮은 자리 바이트부터 적습니다 (리틀 엔
 
 - 헤더만으로는 파일을 쓴 정확한 시각을 정할 수 없습니다. 시스템 시각 칸의 뜻이 문서에 없습니다.
 - 빠른 시작 파일에 사용자 프로그램의 흔적이 없다고 해서 그 프로그램을 쓰지 않았다는 뜻은 아닙니다.
-- 이 파일만으로는 그때 PC 를 쓴 사람을 알 수 없습니다. [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 를 봅니다.
+- 이 파일만으로는 그때 PC 를 쓴 사람을 알 수 없습니다. [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 를 봅니다.
 
 보고서 문장 예입니다.
 
@@ -240,10 +240,10 @@ x86·x64 에서 정수는 낮은 자리 바이트부터 적습니다 (리틀 엔
 
 ## 함께 볼 페이지
 
-- [메모리 덤프 확보](/03-techniques/analysis/memory-forensics/memory-acquisition.md) — 켜진 PC 에서 메모리를 뜨는 절차입니다.
-- [페이지 파일](/03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md) · [크래시 덤프](/03-techniques/analysis/memory-forensics/memory-dmp-minidump.md) — 디스크에 남는 다른 메모리 조각입니다.
-- [윈도 압축 형식](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) — 압축 블록을 푸는 법입니다.
-- [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) — 최대 절전·빠른 시작을 쓴 시점을 맞대 봅니다.
+- [메모리 덤프 확보](memory-acquisition.md) — 켜진 PC 에서 메모리를 뜨는 절차입니다.
+- [페이지 파일](pagefile-sys-swapfile-sys.md) · [크래시 덤프](memory-dmp-minidump.md) — 디스크에 남는 다른 메모리 조각입니다.
+- [윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) — 압축 블록을 푸는 법입니다.
+- [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) — 최대 절전·빠른 시작을 쓴 시점을 맞대 봅니다.
 
 ## 참고 문헌
 

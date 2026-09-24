@@ -6,7 +6,7 @@ ESE 파일은 크기가 같은 페이지 (Page) 를 이어 붙인 파일입니�
 
 ## 이 형식을 쓰는 아티팩트
 
-SRUDB.dat·WebCacheV01.dat·Windows.edb·qmgr.db·ntds.dit 가 모두 이 구조를 씁니다. 파일마다 표와 열의 정의가 다릅니다. 파일 목록과 위치는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 허브에 있습니다.
+SRUDB.dat·WebCacheV01.dat·Windows.edb·qmgr.db·ntds.dit 가 모두 이 구조를 씁니다. 파일마다 표와 열의 정의가 다릅니다. 파일 목록과 위치는 [ESE 데이터베이스](index.md) 허브에 있습니다.
 
 ## 구조
 
@@ -103,7 +103,7 @@ FDP 는 Father Data Page 의 줄임말입니다. 트리마다 개체 ID 가 하�
 | 태그 플래그 | 이름 | 뜻 |
 |---|---|---|
 | `0x1` | Version | 트랜잭션 처리와 관련된 표시입니다. |
-| `0x2` | Deleted | 지움 표시만 하고 아직 정리하지 않은 값입니다. [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에서 다룹니다. |
+| `0x2` | Deleted | 지움 표시만 하고 아직 정리하지 않은 값입니다. [파일 안에 남은 지운 레코드](deleted-records.md) 에서 다룹니다. |
 | `0x4` | Compressed | 키 앞부분을 공통 키에서 빌려 씁니다. |
 
 ### B+트리: 루트·가지·잎
@@ -125,7 +125,7 @@ FDP 는 Father Data Page 의 줄임말입니다. 트리마다 개체 ID 가 하�
 - 잎끼리는 페이지 헤더의 이전·다음 페이지 번호로 이어집니다. 첫 잎을 찾으면 옆으로 차례대로 읽을 수 있습니다.
 - 표 트리는 기본 인덱스 (Primary Index) 순서로 레코드를 담습니다. 기본 인덱스를 따로 두지 않은 표는 넣은 순서대로 담습니다.
 - 보조 인덱스 (Secondary Index) 는 트리가 따로 있습니다. 보조 인덱스 잎의 데이터는 레코드의 기본 키입니다.
-- 긴 값은 표마다 트리가 따로 있습니다. 자세한 내용은 [긴 값과 압축 열](/01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md) 에 있습니다.
+- 긴 값은 표마다 트리가 따로 있습니다. 자세한 내용은 [긴 값과 압축 열](long-value-compressed-column.md) 에 있습니다.
 - 공간 트리 (Space Tree) 는 트리가 쓰는 페이지를 관리합니다. 루트 헤더가 가리키는 페이지는 이 트리에 속한 페이지 구간을 적습니다. 그다음 번호의 페이지는 그중 비어 있는 구간을 적습니다.
 - 키는 바이트 단위로 비교해도 순서가 맞도록 바꿔서 저장합니다. libyal 명세에 실린 키 예는 `7F 80 00 00 02 7F 80 01 7F 80 00 00 02` 입니다. 이 예를 보면 열마다 `7F` 로 시작합니다. 정수는 빅 엔디언이고 맨 위 비트가 뒤집혀 있습니다. 카탈로그 기본 키의 짜임(4바이트·2바이트·4바이트)에 맞춰 읽으면 (2, 1, 2) 가 됩니다.
 
@@ -181,7 +181,7 @@ FDP 는 Father Data Page 의 줄임말입니다. 트리마다 개체 ID 가 하�
 - 고정 열 값은 ID 순서대로 이어집니다. 크기는 카탈로그의 열 형식으로 정합니다. 고정 열 뒤에 짧은 추가 바이트가 올 수 있으므로 가변 열 위치는 머리의 오프셋으로 찾습니다.
 - 가변 열 영역은 2바이트짜리 끝 위치 배열로 시작합니다. 끝 위치는 누적값입니다. 맨 위 비트가 켜진 칸은 빈 값입니다.
 - 태그 열은 가변 열 뒤에 옵니다. 4바이트 항목(열 ID 2바이트, 오프셋 2바이트)의 배열 뒤에 값이 이어집니다. 값이 없는 태그 열은 레코드에 아무것도 남기지 않습니다.
-- 태그 열 값에는 압축·긴 값·다중 값 표시가 붙을 수 있습니다. 푸는 법은 [긴 값과 압축 열](/01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md) 에서 다룹니다.
+- 태그 열 값에는 압축·긴 값·다중 값 표시가 붙을 수 있습니다. 푸는 법은 [긴 값과 압축 열](long-value-compressed-column.md) 에서 다룹니다.
 
 ### 버전에 따라 달라지는 점
 
@@ -258,21 +258,21 @@ FDP 는 Father Data Page 의 줄임말입니다. 트리마다 개체 ID 가 하�
 ### 비정상 종료 파일을 페이지로 읽을 때
 
 - 헤더 52 오프셋이 2 면 비정상 종료 (Dirty Shutdown) 상태입니다.
-- 페이지를 직접 읽으면 로그 없이 파일에 적힌 것만 봅니다. 로그에만 있는 변경은 보이지 않습니다. 로그로 복구할지 고르는 기준은 [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 에서 다룹니다.
+- 페이지를 직접 읽으면 로그 없이 파일에 적힌 것만 봅니다. 로그에만 있는 변경은 보이지 않습니다. 로그로 복구할지 고르는 기준은 [트랜잭션 로그와 비정상 종료 상태](edb-log-dirty-shutdown.md) 에서 다룹니다.
 - libyal 명세는 비정상 종료 DB 의 긴 값 트리에서 트리가 어긋난 사례를 적고 있습니다. 가지 엔트리가 가리킨 잎에 찾는 키가 없고, 다음 잎이나 다음 가지에 있었습니다. 키로 찾다가 없으면 옆 페이지까지 확인합니다.
 
 ### 트리 밖에 남는 데이터
 
 - 트리에서 빠진 페이지, 빈 페이지, 지움 표시가 붙은 태그에 옛 레코드가 남을 수 있습니다. 레코드를 지워도 태그와 데이터 영역은 그대로 남고, 레코드 수와 페이지 플래그만 바뀐다는 연구가 있습니다(Kim 외, 2015).
 - 한 표의 페이지는 루트에서 트리를 따라 모을 수도 있고, 파일 전체에서 헤더의 FDP 개체 ID 가 같은 페이지를 골라 모을 수도 있습니다. 두 번째 방법은 트리에서 빠진 페이지까지 모으므로 같은 레코드가 겹치거나 지운 레코드가 섞입니다.
-- 찾는 절차와 스크럽 (`0x4000`) 의 한계는 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에서 다룹니다.
+- 찾는 절차와 스크럽 (`0x4000`) 의 한계는 [파일 안에 남은 지운 레코드](deleted-records.md) 에서 다룹니다.
 
 ### 손상된 파일
 
-- 손상된 DB 는 읽는 방식에 따라 행 수가 달랐고, 트리를 끝까지 못 따라간 쪽이 적게 냈습니다(관찰, 사례는 [허브](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 참고). 트리 따라가기와 FDP 개체 ID 모으기를 둘 다 해 보고 결과를 맞춰 봅니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 도 함께 봅니다.
+- 손상된 DB 는 읽는 방식에 따라 행 수가 달랐고, 트리를 끝까지 못 따라간 쪽이 적게 냈습니다(관찰, 사례는 [허브](index.md) 참고). 트리 따라가기와 FDP 개체 ID 모으기를 둘 다 해 보고 결과를 맞춰 봅니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 도 함께 봅니다.
 - 카탈로그 페이지가 망가졌다면 페이지 24 의 카탈로그 사본 `MSysObjectsShadow` 를 읽어 봅니다.
 - 페이지 체크섬이 맞지 않으면 그 페이지는 손상됐거나 다른 자리에서 왔을 수 있습니다.
-- DB 가 아예 열리지 않으면 페이지에서 레코드를 직접 찾습니다. [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
+- DB 가 아예 열리지 않으면 페이지에서 레코드를 직접 찾습니다. [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
 
 ### 시각 값
 
@@ -288,7 +288,7 @@ FDP 는 Father Data Page 의 줄임말입니다. 트리마다 개체 ID 가 하�
 - JET_LOGTIME 은 8바이트입니다. 초·분·시·일·월·연이 1바이트씩 들어 있습니다. 연에는 1900 을 더합니다.
 - 7번째 바이트(6 오프셋)의 맨 아래 비트가 UTC 표시 (fTimeIsUTC) 입니다. 이 비트가 켜져 있으면 UTC 입니다. 꺼져 있으면 UTC 라고 단정하지 않고 다른 시각과 맞춰 봅니다.
 - 헤더 시각은 엔진이 DB 를 열고 닫은 때를 알려 줍니다. 사용자가 그 앱으로 무엇을 했는지는 알려 주지 않습니다.
-- 레코드 속 시각은 구조가 아니라 열 값입니다. DateTime 열의 설명은 자료마다 다릅니다. libyal 명세는 FILETIME 으로 적습니다. 1899년 12월 30일부터 센 날수를 실수로 적는 형식(OLE 날짜)으로 설명하는 자료도 있습니다. 앱이 시각을 정수 열에 넣기도 합니다. 여러 형식으로 풀어 보고 앞뒤가 맞는 쪽을 고릅니다. 형식별 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 레코드 속 시각은 구조가 아니라 열 값입니다. DateTime 열의 설명은 자료마다 다릅니다. libyal 명세는 FILETIME 으로 적습니다. 1899년 12월 30일부터 센 날수를 실수로 적는 형식(OLE 날짜)으로 설명하는 자료도 있습니다. 앱이 시각을 정수 열에 넣기도 합니다. 여러 형식으로 풀어 보고 앞뒤가 맞는 쪽을 고릅니다. 형식별 변환은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
 ## 함정
 
@@ -297,9 +297,9 @@ FDP 는 Father Data Page 의 줄임말입니다. 트리마다 개체 ID 가 하�
 - 한 파일에 옛 체크섬 형식과 새 형식이 섞일 수 있습니다. 새 엔진은 고쳐 쓴 페이지만 새 형식으로 바꿉니다. 그래서 형식은 페이지마다 플래그 `0x2000` 으로 판단합니다.
 - 8 KiB 이하의 새 형식 페이지는 헤더에 자기 페이지 번호가 없습니다. 파일에서 떼어 낸 페이지는 원래 위치를 알아야 번호를 셀 수 있습니다.
 - 16·32 KiB 페이지에서는 엔트리 첫 2바이트의 위 3비트가 태그 플래그입니다. 이 비트를 지우지 않고 읽으면 키 길이가 틀립니다.
-- 표와 열 이름은 카탈로그에 적힌 그대로 씁니다. 같은 아티팩트라도 버전에 따라 열 이름이 다를 수 있습니다. 예는 [허브](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 와 [파일 속성 되살리기 (PropertyStore)](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
-- libyal 명세에 따르면 Text 열의 코드페이지가 1200 이어도 값이 ASCII 로 들어 있을 수 있습니다. 길이가 짝수면 UTF-16LE 로 먼저 풀어 봅니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
-- 긴 값은 조각 경계를 잘못 계산해도 오류 없이 값이 망가집니다. [긴 값과 압축 열](/01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md) 을 봅니다.
+- 표와 열 이름은 카탈로그에 적힌 그대로 씁니다. 같은 아티팩트라도 버전에 따라 열 이름이 다를 수 있습니다. 예는 [허브](index.md) 와 [파일 속성 되살리기 (PropertyStore)](../../../02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
+- libyal 명세에 따르면 Text 열의 코드페이지가 1200 이어도 값이 ASCII 로 들어 있을 수 있습니다. 길이가 짝수면 UTF-16LE 로 먼저 풀어 봅니다. 인코딩은 [문자 인코딩](../../value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- 긴 값은 조각 경계를 잘못 계산해도 오류 없이 값이 망가집니다. [긴 값과 압축 열](long-value-compressed-column.md) 을 봅니다.
 
 ## 도구
 

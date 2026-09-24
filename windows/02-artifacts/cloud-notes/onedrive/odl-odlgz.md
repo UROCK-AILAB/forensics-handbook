@@ -184,7 +184,7 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 
 - OneDrive 레지스트리와 동기화 DB 의 시각은 Unix **초** 입니다. 로그 레코드만 Unix **밀리초** 입니다. 한 시간 축에 놓을 때 단위를 맞춥니다.
 - 파일 이름의 시각을 현지 시각으로 읽으면 시간대만큼 어긋납니다. 관찰한 PC 에서는 9시간 차이였습니다.
-- 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
@@ -192,7 +192,7 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 - **확장자로 압축 여부를 정하지 않습니다.** 관찰한 PC 에서는 `.odlsent` 도 압축돼 있었습니다.
 - **키 파일을 빠뜨리지 않습니다.** 로그만 모으면 이름을 풀 수 없습니다.
 - **사전 방식의 키는 다시 쓰입니다.** 옛 로그를 지금 사전으로 풀면 다른 이름이 나올 수 있습니다.
-- **로그는 금방 지워집니다.** 사건 뒤 시간이 지났다면 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 이나 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 로 옛 로그 파일을 찾습니다.
+- **로그는 금방 지워집니다.** 사건 뒤 시간이 지났다면 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 이나 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 로 옛 로그 파일을 찾습니다.
 - **형식이 앱 버전에 따라 바뀝니다.** 파일 머리의 `odl_version` 을 먼저 보고, 도구가 그 버전을 읽는지 확인합니다.
 - **빈 곳을 짐작으로 채우지 않습니다.** 파일 머리의 unknown 칸과 레코드 머리의 unk 칸은 뜻을 확인하지 못했습니다.
 
@@ -226,13 +226,13 @@ OneDrive 동기화 앱은 `logs` 폴더에 ODL 이라는 이진 로그를 남깁
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 동기화 DB | 로그 시각 무렵의 서비스 작업 기록과 파일 행을 봅니다 | [동기화 DB](/02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md) |
-| 계정·설정 레지스트리 | 로그 폴더(`Personal`·`Business1`)가 어느 계정 것인지 봅니다 | [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) |
-| 회사 계정 | `logs\Business1`·`ListSync` 로그를 조직 계정과 이어 봅니다 | [회사용 OneDrive와 SharePoint 동기화](/02-artifacts/cloud-notes/onedrive/business-tenant.md) |
-| 프로세스 생성 | 파일 이름의 PID 와 시각이 `OneDrive.exe` 실행 기록과 맞는지 봅니다 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| 프리페치 | `OneDrive.exe` 가 언제 실행됐는지 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| SRUM | 그 시간대에 `OneDrive.exe` 가 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| USN 변경 저널 | 로그 파일이 언제 생기고 지워졌는지 봅니다 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
+| 동기화 DB | 로그 시각 무렵의 서비스 작업 기록과 파일 행을 봅니다 | [동기화 DB](syncenginedatabase-db.md) |
+| 계정·설정 레지스트리 | 로그 폴더(`Personal`·`Business1`)가 어느 계정 것인지 봅니다 | [계정·설정 레지스트리](accounts-settings.md) |
+| 회사 계정 | `logs\Business1`·`ListSync` 로그를 조직 계정과 이어 봅니다 | [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) |
+| 프로세스 생성 | 파일 이름의 PID 와 시각이 `OneDrive.exe` 실행 기록과 맞는지 봅니다 | [프로세스 생성](../../event-logs/4688.md) |
+| 프리페치 | `OneDrive.exe` 가 언제 실행됐는지 봅니다 | [프리페치](../../execution/prefetch/index.md) |
+| SRUM | 그 시간대에 `OneDrive.exe` 가 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](../../execution/system-resource-usage-monitor/index.md) |
+| USN 변경 저널 | 로그 파일이 언제 생기고 지워졌는지 봅니다 | [USN 변경 저널](../../filesystem/usnjrnl.md) |
 
 ## 실습
 

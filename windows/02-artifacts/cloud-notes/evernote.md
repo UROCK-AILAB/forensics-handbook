@@ -39,7 +39,7 @@
 | 로컬 저장소 DB | `LocalCache\Roaming\Evernote\Local Storage\databases\<파일 이름>.db` |
 | 로그 | `LocalCache\Roaming\Evernote\logs\YYYYMMDD.txt` |
 
-패키지 폴더의 공통 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에 있습니다.
+패키지 폴더의 공통 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에 있습니다.
 
 ### v10 이후 앱
 
@@ -53,7 +53,7 @@
 
 ### 옛 노트 DB (.exb)
 
-- `.exb` 는 SQLite 파일입니다. SQLite 파일 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- `.exb` 는 SQLite 파일입니다. SQLite 파일 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 - 앞의 블로그에는 실제 표·칸 이름이 나오지 않습니다.
 - 한 분석 구현은 아래 이름을 읽습니다. 이 글의 자료로 확인한 이름이 아니므로, 검체에서 먼저 찾아볼 후보로만 씁니다.
 
@@ -88,7 +88,7 @@
 ### 증명하지 못하는 것
 
 - 노트가 DB 에 있다고 이 PC 에서 쓴 노트라는 뜻은 아닙니다. 다른 기기에서 쓴 노트가 동기화로 내려왔을 수 있습니다.
-- 작성자 칸은 노트에 기록된 값입니다. 그 노트를 실제로 쓴 사람은 따로 밝힙니다([그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)).
+- 작성자 칸은 노트에 기록된 값입니다. 그 노트를 실제로 쓴 사람은 따로 밝힙니다([그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
 - 위치 정보는 노트에 기록된 좌표입니다. 이 PC 가 그 자리에 있었다는 뜻은 아닙니다.
 - 옛 DB 의 정보가 v10 이후 앱에도 같은 모양으로 남는지는 확인하지 못했습니다.
 - 로그 파일이 없는 날은 앱을 실행하지 않았을 수 있습니다. 로그를 지웠을 수도 있으므로 단정하지 않습니다.
@@ -114,7 +114,7 @@ datetime((값 * 86400) - 62135683200, 'unixepoch')
 
 - 소수 부분이 하루 안의 시각입니다. 0.5 는 12시간입니다.
 - 결과가 UTC 인지 현지 시각인지 확인하지 못했습니다. 로그의 앱 시작 시각이나 파일의 NTFS 시각과 맞춰 시간대를 정합니다.
-- 다른 시각 형식과의 관계는 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 다른 시각 형식과의 관계는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
@@ -124,8 +124,8 @@ datetime((값 * 86400) - 62135683200, 'unixepoch')
 - **시각 변환식은 검증하고 씁니다.** 조사 중 직접 만든 노트나 로그의 시각처럼 답을 아는 값으로 맞춰 봅니다.
 - **v10 이후 구조는 이 글의 범위 밖입니다.** 그 폴더에서 노트 파일을 찾는 일은 검체로 합니다.
 - **자료가 오래됐습니다.** 2021년 11월 자료 기준입니다.
-- **지운 노트가 DB 파일 안에 조각으로 남을 수 있습니다.** SQLite 의 빈 페이지와 빈 칸에서 찾는 법은 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에 있습니다.
-- **곁 파일을 함께 모읍니다.** `.exb` 와 이름이 같은 `-wal`·`-journal` 파일이 있으면 같이 둡니다([WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md)).
+- **지운 노트가 DB 파일 안에 조각으로 남을 수 있습니다.** SQLite 의 빈 페이지와 빈 칸에서 찾는 법은 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에 있습니다.
+- **곁 파일을 함께 모읍니다.** `.exb` 와 이름이 같은 `-wal`·`-journal` 파일이 있으면 같이 둡니다([WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md)).
 
 ## 직접 분석해 보기
 
@@ -134,7 +134,7 @@ datetime((값 * 86400) - 62135683200, 'unixepoch')
 1. `Databases` 폴더를 사본으로 뜹니다. 분석은 사본에서만 합니다.
 2. `.exb` 를 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다.
 3. 조사 대상 노트 제목 하나를 검색합니다. 찾은 자리가 살아 있는 페이지인지, 빈 페이지인지 봅니다. 빈 페이지이면 지운 레코드의 조각일 수 있습니다.
-4. 날짜 칸 값이 8바이트 실수로 저장돼 있으면, 그 값을 위 식으로 바꿉니다. SQLite 레코드 안의 값 종류(정수·실수·텍스트)를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+4. 날짜 칸 값이 8바이트 실수로 저장돼 있으면, 그 값을 위 식으로 바꿉니다. SQLite 레코드 안의 값 종류(정수·실수·텍스트)를 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -156,12 +156,12 @@ FROM note_attr;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 설치 프로그램 | 데스크톱 앱이 설치된 적이 있는지 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 스토어 앱 설치 목록 | 스토어 판이 설치된 적이 있는지 봅니다 | [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) |
-| 프리페치 | 에버노트 실행 시각을 로그의 시작 시각과 맞춰 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 시간대 설정 | 로그 파일 이름의 날짜와 DB 시각의 시간대를 정합니다 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
-| 섀도 복사본 활용 | 예전 시점의 `.exb` 와 비교해 지운 노트를 찾습니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 누구와 연락을 주고받았나 | 공유 정보를 다른 연락 흔적과 묶어 봅니다 | [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) |
+| 설치 프로그램 | 데스크톱 앱이 설치된 적이 있는지 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
+| 스토어 앱 설치 목록 | 스토어 판이 설치된 적이 있는지 봅니다 | [스토어 앱 설치 목록](../system-account/appx-staterepository.md) |
+| 프리페치 | 에버노트 실행 시각을 로그의 시작 시각과 맞춰 봅니다 | [프리페치](../execution/prefetch/index.md) |
+| 시간대 설정 | 로그 파일 이름의 날짜와 DB 시각의 시간대를 정합니다 | [시간대 설정](../system-account/time-zone.md) |
+| 섀도 복사본 활용 | 예전 시점의 `.exb` 와 비교해 지운 노트를 찾습니다 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 누구와 연락을 주고받았나 | 공유 정보를 다른 연락 흔적과 묶어 봅니다 | [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) |
 
 ## 실습
 

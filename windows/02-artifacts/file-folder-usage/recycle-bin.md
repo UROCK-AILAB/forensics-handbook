@@ -39,7 +39,7 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 - 두 폴더 이름이 다른 까닭도 이것입니다. CONVERT 로 FAT 를 NTFS 로 바꾼 뒤 옛 폴더를 새 구조로 잘못 읽지 않게 하려고 이름을 달리했습니다. (Chen, 2006)
 - Vista 이후 FAT·exFAT 볼륨에서 폴더가 어떻게 구성되는지 밝힌 자료는 찾지 못했습니다.
 - USB 메모리 같은 이동식 매체와 네트워크 드라이브에서 지운 파일은 기본 설정에서 휴지통으로 가지 않는다고 널리 알려져 있습니다. 이 페이지에서는 직접 확인하지 못했습니다. 장치를 분석할 때는 그 볼륨 루트에 휴지통 폴더가 있는지부터 봅니다.
-- SID 폴더 이름이 어느 계정인지는 [사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md) 과 [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md) 에서 찾습니다. SID 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+- SID 폴더 이름이 어느 계정인지는 [사용자 프로필 목록 (ProfileList)](../system-account/profilelist.md) 과 [사용자 계정 (SAM)](../system-account/sam.md) 에서 찾습니다. SID 읽는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 관찰한 폴더 모습은 다음과 같습니다.
 
@@ -59,12 +59,12 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 | 키 개수 | 지금 붙어 있는 볼륨보다 많았습니다. 지금 없는 볼륨 GUID 의 키가 8개 남아 있었습니다 |
 
 - `NukeOnDelete` 는 1 이면 그 볼륨에서 지운 파일이 휴지통을 거치지 않는 설정으로 알려져 있습니다. 이 페이지에서 값을 바꿔 시험하지는 않았습니다.
-- 지금 없는 볼륨의 키는 예전에 붙었던 볼륨의 실마리가 됩니다. 볼륨 GUID 는 [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) 과 맞춰 봅니다.
-- 키가 언제 바뀌었는지는 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 으로 봅니다. 이 시각이 무엇을 뜻하는지 밝힌 자료는 찾지 못했습니다.
+- 지금 없는 볼륨의 키는 예전에 붙었던 볼륨의 실마리가 됩니다. 볼륨 GUID 는 [드라이브 문자 매핑 (MountedDevices)](../external-devices/usb-storage-artifacts/mounteddevices.md) 과 맞춰 봅니다.
+- 키가 언제 바뀌었는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 으로 봅니다. 이 시각이 무엇을 뜻하는지 밝힌 자료는 찾지 못했습니다.
 
 ## 구조
 
-숫자는 모두 리틀 엔디언입니다. 시각은 모두 UTC 기준 FILETIME 입니다. FILETIME 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+숫자는 모두 리틀 엔디언입니다. 시각은 모두 UTC 기준 FILETIME 입니다. FILETIME 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
 ### INFO2 (Windows XP 까지)
 
@@ -94,7 +94,7 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 - 휴지통에 들어간 파일은 `DC1.TXT` 처럼 이름이 바뀝니다. 숫자는 INFO2 레코드의 번호와 같습니다. 확장자는 원래 것을 씁니다. (Jones)
 - Jones 가 본 XP 에서 크기 칸은 클러스터 크기의 배수였습니다. 파일이 디스크에서 차지한 크기라는 뜻입니다. `dir` 이 보여 주는 크기와 다를 수 있습니다.
 - 휴지통을 비우면 INFO2 를 빈 파일로 새로 만듭니다. 번호도 1 부터 다시 셉니다. (Jones)
-- ANSI 경로는 그 PC 의 코드 페이지로 읽습니다. 한국어 Windows 라면 CP949 입니다. [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 참고합니다.
+- ANSI 경로는 그 PC 의 코드 페이지로 읽습니다. 한국어 Windows 라면 CP949 입니다. [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 참고합니다.
 
 ### $I 파일 (Vista 이후)
 
@@ -121,7 +121,7 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 - 내용은 원래 파일 그대로입니다.
 - 폴더를 지우면 `$R` 도 폴더가 됩니다. 그 안의 파일과 하위 폴더는 원래 이름을 그대로 씁니다. `$I` 는 맨 위 폴더에 하나만 생깁니다(관찰). RBCmd 도 `$R` 폴더 안을 뒤져 파일 목록을 만듭니다.
 
-관찰에서 `$R` 은 원래 파일과 파일 ID(MFT 레코드 번호와 순번)가 같았습니다. 복사가 아니라 이름과 부모 폴더만 바꾼 것입니다. 폴더도 같았습니다. `$I` 는 새로 만든 파일이라 새 파일 ID 를 받았습니다. MFT 레코드의 구조는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 다룹니다.
+관찰에서 `$R` 은 원래 파일과 파일 ID(MFT 레코드 번호와 순번)가 같았습니다. 복사가 아니라 이름과 부모 폴더만 바꾼 것입니다. 폴더도 같았습니다. `$I` 는 새로 만든 파일이라 새 파일 ID 를 받았습니다. MFT 레코드의 구조는 [MFT 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -136,7 +136,7 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 ### 증명하지 못하는 것
 
 - 사람이 직접 지웠는지 알려 주지 않습니다. 어떤 프로그램이든 셸 함수로 파일을 휴지통에 보낼 수 있습니다.
-- SID 는 계정만 가리킵니다. 그 계정을 그때 누가 썼는지는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 의 방법으로 따로 밝힙니다.
+- SID 는 계정만 가리킵니다. 그 계정을 그때 누가 썼는지는 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 의 방법으로 따로 밝힙니다.
 - 파일을 언제 만들었는지, 언제 열었는지는 `$I` 에 없습니다.
 - 휴지통을 언제 비웠는지는 휴지통 안에 남지 않습니다.
 - `$I` 가 없다고 해서 지우지 않았다고 볼 수 없습니다. 휴지통을 거치지 않는 삭제가 많습니다. 아래 "함정과 한계" 에 있습니다.
@@ -153,12 +153,12 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 | `$I` 의 만든 시각 | `$I` 의 $STANDARD_INFORMATION | 관찰에서 지운 시각 칸과 1 ms 안쪽으로 같았습니다 | 관찰 |
 | `$R` 의 만든·수정 시각 | `$R` 의 $STANDARD_INFORMATION | 관찰에서 원래 파일 값 그대로였습니다. 지운 시각이 아닙니다 | 관찰 |
 | `$R` 의 $FILE_NAME 시각 | `$R` 의 $FILE_NAME | 이름이 바뀔 때 새로 적힐 수 있습니다. 이 페이지에서는 확인하지 않았습니다 | 확인 전 |
-| 비운 시각·복원 시각 | [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 의 `$I`·`$R` 삭제·이름 바꾸기 기록 | 휴지통 안에는 남지 않습니다. 저널에 남아 있어야 씁니다 | 추정 |
+| 비운 시각·복원 시각 | [$UsnJrnl](../filesystem/usnjrnl.md) 의 `$I`·`$R` 삭제·이름 바꾸기 기록 | 휴지통 안에는 남지 않습니다. 저널에 남아 있어야 씁니다 | 추정 |
 
 - 관찰에서 지운 시각 칸은 두 번 모두 밀리초 아래 자리가 0 이었습니다. `$I` 의 만든 시각과 1 ms 안쪽으로 어긋나는 것은 이 때문으로 보입니다.
-- 지운 시각은 그때의 시스템 시계를 따릅니다. 시계를 바꿨다면 시각도 틀어집니다. [시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md) 를 참고합니다.
-- 화면에 현지 시각으로 보여 줄 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 확인합니다.
-- `$R` 의 만든 시각이 지운 시각보다 한참 앞서는 것은 정상입니다. 두 벌의 시각이 이름 바꾸기에 어떻게 반응하는지는 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) 과 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md) 에서 다룹니다.
+- 지운 시각은 그때의 시스템 시계를 따릅니다. 시계를 바꿨다면 시각도 틀어집니다. [시스템 시각을 바꿨나](../../04-scenarios/activity/anti-forensics/system-time-change.md) 를 참고합니다.
+- 화면에 현지 시각으로 보여 줄 때는 [시간대 설정](../system-account/time-zone.md) 을 확인합니다.
+- `$R` 의 만든 시각이 지운 시각보다 한참 앞서는 것은 정상입니다. 두 벌의 시각이 이름 바꾸기에 어떻게 반응하는지는 [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) 과 [파일 시각 네 가지와 변화 규칙](../../03-techniques/analysis/timeline/macb-timestamp-rules.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -171,10 +171,10 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 2. **복원한 뒤에도 `$I` 가 남을 수 있습니다.** 관찰에서 셸 복원 명령을 쓰자 `$R` 은 원래 자리로 돌아갔습니다. 되돌아간 파일의 파일 ID 는 그대로였습니다. 그런데 `$I` 는 30초 넘게 지나도 남아 있었습니다. 한 번 시험한 결과입니다. 짝 없는 `$I` 는 비우기·복원·수동 삭제 가운데 무엇인지 $UsnJrnl 로 가립니다.
 3. **셸 화면과 폴더 내용이 다릅니다.** 관찰에서 짝 없는 `$I` 는 셸이 보여 주는 휴지통 목록에 나오지 않았습니다. 휴지통 폴더 자체는 숨김·시스템 속성이라 보통 화면에 보이지 않습니다. 분석은 셸 화면이 아니라 폴더의 파일을 직접 읽어서 합니다.
 4. **폴더 안의 파일에는 따로 `$I` 가 없습니다.** 폴더째 지우면 안의 파일은 맨 위 폴더의 `$I` 시각 하나만 씁니다. 안의 파일마다 지운 시각이 따로 남지 않습니다.
-5. **비운 뒤에도 흔적이 남을 수 있습니다.** 관찰에서 198바이트짜리 `$I` 의 $DATA 는 MFT 레코드 안에 상주(Resident)했습니다. 이런 `$I` 는 비운 뒤에도 MFT 레코드가 다른 파일에 쓰이기 전까지 내용이 남을 수 있습니다. 544바이트인 버전 1 이 상주하는지는 확인하지 못했습니다. 상주 데이터는 [데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) 에서 다룹니다.
-6. **`$R` 복구는 저장 장치에 달려 있습니다.** 비운 `$R` 의 내용은 클러스터를 덮어쓰기 전까지만 되살릴 수 있습니다. SSD 는 TRIM 때문에 더 빨리 사라질 수 있습니다. [SSD TRIM과 복구 한계](/03-techniques/analysis/data-recovery/ssd-trim.md) 를 참고합니다.
+5. **비운 뒤에도 흔적이 남을 수 있습니다.** 관찰에서 198바이트짜리 `$I` 의 $DATA 는 MFT 레코드 안에 상주(Resident)했습니다. 이런 `$I` 는 비운 뒤에도 MFT 레코드가 다른 파일에 쓰이기 전까지 내용이 남을 수 있습니다. 544바이트인 버전 1 이 상주하는지는 확인하지 못했습니다. 상주 데이터는 [데이터 런과 상주·비상주 데이터](../../01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) 에서 다룹니다.
+6. **`$R` 복구는 저장 장치에 달려 있습니다.** 비운 `$R` 의 내용은 클러스터를 덮어쓰기 전까지만 되살릴 수 있습니다. SSD 는 TRIM 때문에 더 빨리 사라질 수 있습니다. [SSD TRIM과 복구 한계](../../03-techniques/analysis/data-recovery/ssd-trim.md) 를 참고합니다.
 7. **`$I` 는 고칠 수 있는 평범한 파일입니다.** 서명이나 체크섬이 없습니다. 권한만 있으면 만들거나 고칠 수 있습니다. `$I` 의 만든 시각, $UsnJrnl 기록, `$R` 의 MFT 레코드와 서로 맞는지 확인합니다.
-8. **예전 판이 섀도 복사본에 있을 수 있습니다.** 이미 비운 `$I`·`$R` 이나 INFO2 의 예전 판이 남아 있을 수 있습니다. 방법은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
+8. **예전 판이 섀도 복사본에 있을 수 있습니다.** 이미 비운 `$I`·`$R` 이나 INFO2 의 예전 판이 남아 있을 수 있습니다. 방법은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
 9. **알려진 SID 가 아닐 수 있습니다.** 지금 프로필 목록에 없는 SID 폴더가 있으면 지운 계정이거나 다른 PC 의 계정일 수 있습니다. 외장 디스크를 다른 PC 에서 쓴 경우에도 생길 수 있습니다. 어느 쪽인지는 다른 기록으로 가립니다.
 
 ## 직접 분석해 보기
@@ -207,26 +207,26 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적습니다. 원�
 
 Velociraptor 의 `Windows.Forensics.RecycleBin` 수집 규칙은 `C:\$Recycle.Bin` 아래의 `$I` 파일을 찾아 읽습니다. 이 규칙의 설명은 할당된 `$I` 만 읽는다고 밝힙니다. 미할당 MFT 레코드에 남은 `$I` 는 따로 되살려야 합니다. INFO2 는 읽지 않습니다.
 
-도구가 보여 주는 항목 수와 폴더 안의 `$I` 파일 수를 맞춰 봅니다. 짝 없는 `$I`·`$R` 을 도구가 어떻게 다루는지도 확인합니다. 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+도구가 보여 주는 항목 수와 폴더 안의 `$I` 파일 수를 맞춰 봅니다. 짝 없는 `$I`·`$R` 을 도구가 어떻게 다루는지도 확인합니다. 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 원래 이름이 `$R` 이름으로 바뀐 기록, `$I` 가 생긴 기록, 비우거나 복원한 기록을 봅니다 |
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | `$R` 의 레코드에서 원래 파일의 만든 시각을 봅니다. 미할당 레코드에서 비운 `$I` 를 찾습니다 |
-| [NTFS 트랜잭션 로그 ($LogFile)](/02-artifacts/filesystem/logfile.md) | 짧은 기간의 이름 바꾸기·삭제 동작을 봅니다 |
-| [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) | SID 폴더의 인덱스 슬랙에 예전 `$I`·`$R` 이름이 남았는지 봅니다 |
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) | 지운 파일을 전에 열었는지 봅니다. `$I` 의 경로와 LNK 의 대상 경로를 맞춥니다 |
-| [점프리스트 (Jump Lists)](/02-artifacts/file-folder-usage/jump-lists.md) | 어떤 프로그램으로 그 파일을 열었는지 봅니다 |
-| [셸백 (ShellBags)](/02-artifacts/file-folder-usage/shellbags/index.md) | 지운 파일이 있던 폴더를 탐색한 흔적을 봅니다 |
-| [썸네일 캐시 (thumbcache_*.db·Thumbs.db)](/02-artifacts/file-folder-usage/thumbcache-db-thumbs-db.md) | 지운 그림 파일의 작은 그림이 남았는지 봅니다 |
-| [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) | 색인 DB 에 지운 파일의 속성이 남았는지 봅니다 |
-| [파일 접근 감사 (4656·4663·4660)](/02-artifacts/event-logs/4656-4663-4660.md) | 감사 정책이 켜져 있으면 삭제 요청을 한 프로세스와 계정을 봅니다 |
-| [파일 생성·삭제 (Sysmon 이벤트 11·23·26)](/02-artifacts/event-logs/sysmon/11-23-26.md) | Sysmon 이 있으면 파일 삭제 기록을 봅니다. 휴지통으로 옮긴 동작이 이 이벤트로 남는지는 확인하지 못했습니다 |
-| [사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md) | SID 폴더가 어느 계정인지 봅니다 |
+| [USN 변경 저널 ($UsnJrnl)](../filesystem/usnjrnl.md) | 원래 이름이 `$R` 이름으로 바뀐 기록, `$I` 가 생긴 기록, 비우거나 복원한 기록을 봅니다 |
+| [마스터 파일 테이블 ($MFT)](../filesystem/mft.md) | `$R` 의 레코드에서 원래 파일의 만든 시각을 봅니다. 미할당 레코드에서 비운 `$I` 를 찾습니다 |
+| [NTFS 트랜잭션 로그 ($LogFile)](../filesystem/logfile.md) | 짧은 기간의 이름 바꾸기·삭제 동작을 봅니다 |
+| [폴더 인덱스와 슬랙 ($I30)](../filesystem/i30.md) | SID 폴더의 인덱스 슬랙에 예전 `$I`·`$R` 이름이 남았는지 봅니다 |
+| [바로가기 파일 (LNK)](lnk.md) | 지운 파일을 전에 열었는지 봅니다. `$I` 의 경로와 LNK 의 대상 경로를 맞춥니다 |
+| [점프리스트 (Jump Lists)](jump-lists.md) | 어떤 프로그램으로 그 파일을 열었는지 봅니다 |
+| [셸백 (ShellBags)](shellbags/index.md) | 지운 파일이 있던 폴더를 탐색한 흔적을 봅니다 |
+| [썸네일 캐시 (thumbcache_*.db·Thumbs.db)](thumbcache-db-thumbs-db.md) | 지운 그림 파일의 작은 그림이 남았는지 봅니다 |
+| [지운 파일·옛 파일 흔적 찾기](windows-search/deleted-file-traces.md) | 색인 DB 에 지운 파일의 속성이 남았는지 봅니다 |
+| [파일 접근 감사 (4656·4663·4660)](../event-logs/4656-4663-4660.md) | 감사 정책이 켜져 있으면 삭제 요청을 한 프로세스와 계정을 봅니다 |
+| [파일 생성·삭제 (Sysmon 이벤트 11·23·26)](../event-logs/sysmon/11-23-26.md) | Sysmon 이 있으면 파일 삭제 기록을 봅니다. 휴지통으로 옮긴 동작이 이 이벤트로 남는지는 확인하지 못했습니다 |
+| [사용자 프로필 목록 (ProfileList)](../system-account/profilelist.md) | SID 폴더가 어느 계정인지 봅니다 |
 
-조사 전체 흐름은 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 에서 다룹니다. 완전삭제 도구를 의심한다면 [완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md) 도 함께 봅니다.
+조사 전체 흐름은 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) 에서 다룹니다. 완전삭제 도구를 의심한다면 [완전삭제 도구를 썼나](../../04-scenarios/activity/anti-forensics/wiping-tools.md) 도 함께 봅니다.
 
 ## 실습
 

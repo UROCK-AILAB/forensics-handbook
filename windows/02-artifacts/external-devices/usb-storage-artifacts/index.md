@@ -28,7 +28,7 @@ USB 저장장치 흔적 (USB Storage Artifacts) 은 USB 메모리나 외장 디�
 
 ### 위치
 
-SYSTEM 하이브의 `ControlSet00X` 는 오프라인 분석에서 어느 컨트롤셋을 볼지 먼저 골라야 합니다. 고르는 법은 [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다. 하이브 파일이 디스크 어디에 있는지는 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 를 봅니다.
+SYSTEM 하이브의 `ControlSet00X` 는 오프라인 분석에서 어느 컨트롤셋을 볼지 먼저 골라야 합니다. 고르는 법은 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다. 하이브 파일이 디스크 어디에 있는지는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 를 봅니다.
 
 | 흔적 | 하이브·위치 | 알려 주는 것 |
 |---|---|---|
@@ -57,8 +57,8 @@ SYSTEM 하이브의 `ControlSet00X` 는 오프라인 분석에서 어느 컨트�
 ### 시각 기준
 
 - 장치 속성 0064~0067 은 FILETIME 형식이고 UTC 입니다.
-- 레지스트리 키의 마지막 기록 시각도 UTC 입니다. 이 시각이 무엇이 바뀔 때 바뀌는지는 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
-- `setupapi.dev.log` 의 시각은 현지 시각입니다. 다른 흔적과 맞춰 보려면 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 확인해 UTC 로 바꿉니다.
+- 레지스트리 키의 마지막 기록 시각도 UTC 입니다. 이 시각이 무엇이 바뀔 때 바뀌는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
+- `setupapi.dev.log` 의 시각은 현지 시각입니다. 다른 흔적과 맞춰 보려면 [시간대 설정](../../system-account/time-zone.md) 을 확인해 UTC 로 바꿉니다.
 
 ### 이어 붙이는 열쇠
 
@@ -73,26 +73,26 @@ SYSTEM 하이브의 `ControlSet00X` 는 오프라인 분석에서 어느 컨트�
 
 ## 읽는 순서
 
-1. [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) — 연결된 저장장치 목록을 읽습니다. 키 이름에서 제조사·제품·리비전을, 인스턴스 ID 에서 시리얼 번호를 꺼냅니다.
-2. [USB 장치 식별자 (Enum\USB VID·PID)](/02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md) — USBSTOR 항목과 같은 장치를 `Enum\USB` 에서 찾아 VID·PID 를 읽습니다. VID·PID 로 제조사와 제품을 다시 확인합니다.
-3. [연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) — 장치 속성에 남은 설치·연결·해제 시각과 DeviceClasses 키 시각을 읽습니다. 버전마다 남는 값이 다른 점을 정리합니다.
-4. [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) — 드라이브 문자와 볼륨 GUID 가 어느 장치를 가리키는지 값 데이터로 풀어 봅니다.
-5. [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) — 사용자 하이브에서 볼륨 GUID 를 찾아 장치가 어느 사용자 세션에 나타났는지 좁힙니다.
-6. [장치 설치 로그 (setupapi.dev.log)](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md) — 장치를 처음 설치한 기록을 텍스트 로그에서 찾습니다. 현지 시각을 UTC 로 바꾸는 법도 다룹니다.
-7. [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) — 볼륨 이름과 볼륨 시리얼 번호를 SOFTWARE 하이브에서 읽습니다. 이 값을 바로가기 파일의 볼륨 정보와 맞춥니다.
-8. [USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md) — USBSTOR 에서 찾지 못하는 저장장치를 다룹니다. UASP 장치는 Usbstor.sys 대신 Uaspstor.sys 가 맡기 때문에 기록 위치가 다릅니다.
+1. [USB 저장장치 목록 (USBSTOR)](usbstor.md) — 연결된 저장장치 목록을 읽습니다. 키 이름에서 제조사·제품·리비전을, 인스턴스 ID 에서 시리얼 번호를 꺼냅니다.
+2. [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) — USBSTOR 항목과 같은 장치를 `Enum\USB` 에서 찾아 VID·PID 를 읽습니다. VID·PID 로 제조사와 제품을 다시 확인합니다.
+3. [연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)](deviceclasses-device-properties-0064-0066-0067.md) — 장치 속성에 남은 설치·연결·해제 시각과 DeviceClasses 키 시각을 읽습니다. 버전마다 남는 값이 다른 점을 정리합니다.
+4. [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) — 드라이브 문자와 볼륨 GUID 가 어느 장치를 가리키는지 값 데이터로 풀어 봅니다.
+5. [사용자별 장치 연결 (MountPoints2)](mountpoints2.md) — 사용자 하이브에서 볼륨 GUID 를 찾아 장치가 어느 사용자 세션에 나타났는지 좁힙니다.
+6. [장치 설치 로그 (setupapi.dev.log)](setupapi-dev-log.md) — 장치를 처음 설치한 기록을 텍스트 로그에서 찾습니다. 현지 시각을 UTC 로 바꾸는 법도 다룹니다.
+7. [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](wpd-emdmgmt.md) — 볼륨 이름과 볼륨 시리얼 번호를 SOFTWARE 하이브에서 읽습니다. 이 값을 바로가기 파일의 볼륨 정보와 맞춥니다.
+8. [USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)](uasp-scsi-sd.md) — USBSTOR 에서 찾지 못하는 저장장치를 다룹니다. UASP 장치는 Usbstor.sys 대신 Uaspstor.sys 가 맡기 때문에 기록 위치가 다릅니다.
 
 ## 함께 볼 페이지
 
-- [USB 로 무엇을 가져갔나 (USB)](/04-scenarios/exfiltration/data-exfiltration/usb.md) — 이 흔적들을 다른 아티팩트와 함께 읽는 조사 순서입니다.
-- [스마트폰으로 옮겼나 (MTP·Phone Link)](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) — USBSTOR 에 남지 않는 스마트폰 연결을 다룹니다.
-- [외부 장치 연결 이벤트 (Partition/Diagnostic·Kernel-PnP·DriverFrameworks)](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) — 처음과 마지막 사이의 연결을 이벤트 로그에서 찾습니다.
-- [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) — 장치 안의 폴더를 연 흔적입니다.
-- [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트 (Jump Lists)](/02-artifacts/file-folder-usage/jump-lists.md) — 장치 안의 파일을 연 흔적과 볼륨 시리얼 번호가 남습니다.
-- [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) — AmCache 에 따로 남는 장치 목록입니다.
-- [지워진 키·값 복구 (Deleted Keys·Values)](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) · [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](/01-foundations/database-log-formats/registry-hive/log1-log2.md) — 정리 도구로 지운 USBSTOR 키를 되살립니다.
-- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 예전 시점의 하이브에서 지금은 없는 장치 기록을 꺼냅니다.
-- [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — 장치 속성의 FILETIME 값을 사람이 읽는 시각으로 바꿉니다.
+- [USB 로 무엇을 가져갔나 (USB)](../../../04-scenarios/exfiltration/data-exfiltration/usb.md) — 이 흔적들을 다른 아티팩트와 함께 읽는 조사 순서입니다.
+- [스마트폰으로 옮겼나 (MTP·Phone Link)](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) — USBSTOR 에 남지 않는 스마트폰 연결을 다룹니다.
+- [외부 장치 연결 이벤트 (Partition/Diagnostic·Kernel-PnP·DriverFrameworks)](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) — 처음과 마지막 사이의 연결을 이벤트 로그에서 찾습니다.
+- [외부 장치·네트워크·압축 폴더 탐색 흔적](../../file-folder-usage/shellbags/removable-network-zip.md) — 장치 안의 폴더를 연 흔적입니다.
+- [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md) · [점프리스트 (Jump Lists)](../../file-folder-usage/jump-lists.md) — 장치 안의 파일을 연 흔적과 볼륨 시리얼 번호가 남습니다.
+- [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md) — AmCache 에 따로 남는 장치 목록입니다.
+- [지워진 키·값 복구 (Deleted Keys·Values)](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) · [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) — 정리 도구로 지운 USBSTOR 키를 되살립니다.
+- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 예전 시점의 하이브에서 지금은 없는 장치 기록을 꺼냅니다.
+- [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — 장치 속성의 FILETIME 값을 사람이 읽는 시각으로 바꿉니다.
 
 ## 참고 문헌
 

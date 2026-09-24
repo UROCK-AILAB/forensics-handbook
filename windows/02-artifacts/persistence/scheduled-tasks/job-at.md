@@ -1,6 +1,6 @@
 # 옛 작업 파일 (.job·at)
 
-> 상위 허브: [예약 작업 (Scheduled Tasks)](/02-artifacts/persistence/scheduled-tasks/index.md)
+> 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)
 
 ## 한 줄 요약
 
@@ -13,9 +13,9 @@ XML 작업 정의가 나오기 전에는 예약 작업을 `.job` 이라는 바�
 - 고정 길이 부분(68바이트): 버전, 작업 식별자, 재시도·유휴 설정, 최대 실행 시간, 종료 코드, 상태, 마지막 실행 시각
 - 가변 길이 부분: 응용 프로그램 이름, 인자, 작업 폴더, 작성자, 설명, 트리거 같은 문자열과 목록
 
-문자열은 BOM 없는 UTF-16 LE 로 적습니다. 인코딩은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+문자열은 BOM 없는 UTF-16 LE 로 적습니다. 인코딩은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
-Vista·2008 부터 쓰는 XML 작업 정의는 [작업 정의 파일 (System32\Tasks XML)](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md)에서 다룹니다.
+Vista·2008 부터 쓰는 XML 작업 정의는 [작업 정의 파일 (System32\Tasks XML)](system32-tasks-xml.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -27,7 +27,7 @@ XP 에서는 `HKLM\Software\Microsoft\SchedulingAgent` 키를 씁니다. 이 키
 
 winreg-kb 문서에는 이 값들의 뜻이 비어 있습니다. 다만 TasksFolder 와 LogPath 는 이름으로 보아 작업 폴더와 로그 파일의 위치를 찾는 첫 단서입니다. `.job` 파일의 기본 위치와 XP 작업 로그 파일은 이번 조사에서 확인하지 못했습니다. XP 검체에서는 TasksFolder 값을 먼저 읽고, 그 폴더를 봅니다.
 
-Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)에서 다룹니다.
+Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](taskcache-tree-tasks.md)에서 다룹니다.
 
 ### 제품 버전 값
 
@@ -139,7 +139,7 @@ at [\\computername] <time> [/interactive] [/every:date[,...] | /next:date[,...]]
 
 `\\computername` 을 쓰면 원격 컴퓨터에 작업을 예약합니다. 예약을 지울 때는 `/delete [/yes]` 를 씁니다.
 
-**실행 시간 제한.** 예약한 명령은 기본으로 72시간이 지나면 멈춥니다. `HKLM\SYSTEM\CurrentControlSet\Services\Schedule` 에 REG_DWORD 값 `atTaskMaxHours` 를 넣으면 이 제한을 바꿉니다. 0 은 제한 없음, 1~99 는 시간 수입니다. 오프라인 SYSTEM 하이브에서는 CurrentControlSet 대신 실제로 쓰인 ControlSet 번호 키를 봅니다. 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+**실행 시간 제한.** 예약한 명령은 기본으로 72시간이 지나면 멈춥니다. `HKLM\SYSTEM\CurrentControlSet\Services\Schedule` 에 REG_DWORD 값 `atTaskMaxHours` 를 넣으면 이 제한을 바꿉니다. 0 은 제한 없음, 1~99 는 시간 수입니다. 오프라인 SYSTEM 하이브에서는 CurrentControlSet 대신 실제로 쓰인 ControlSet 번호 키를 봅니다. 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 **저장 위치.** 문서에는 "Scheduled commands are stored in the registry." 라는 문장만 있습니다. 어느 키인지는 적혀 있지 않습니다. 이 문서의 날짜는 2017년입니다.
 
@@ -172,9 +172,9 @@ The binding handle is invalid.
 
 ## 시각 해석
 
-- 마지막 실행 시각은 FILETIME 이 아니라 SYSTEMTIME 입니다. 연·월·일·시·분·초 칸을 바로 읽습니다. 시각 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
-- 이 값이 현지 시각인지 UTC 인지는 확정되지 않았습니다. 형식 명세에도 "TODO: confirm this is local time" 이라고 남아 있습니다. 보고서에 쓰기 전에 같은 시각 무렵의 다른 기록과 맞춰 봅니다. 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 확인합니다.
-- `.job` 파일 자체의 만든·고친 시각은 파일 시스템에 남습니다. 파일 시각을 읽는 법은 [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md)에서 다룹니다.
+- 마지막 실행 시각은 FILETIME 이 아니라 SYSTEMTIME 입니다. 연·월·일·시·분·초 칸을 바로 읽습니다. 시각 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- 이 값이 현지 시각인지 UTC 인지는 확정되지 않았습니다. 형식 명세에도 "TODO: confirm this is local time" 이라고 남아 있습니다. 보고서에 쓰기 전에 같은 시각 무렵의 다른 기록과 맞춰 봅니다. 시간대는 [시간대 설정](../../system-account/time-zone.md)에서 확인합니다.
+- `.job` 파일 자체의 만든·고친 시각은 파일 시스템에 남습니다. 파일 시각을 읽는 법은 [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -235,11 +235,11 @@ def job_fixed(b):                          # b: .job 파일 앞 68바이트
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 작업 정의 XML · 작업 캐시 | Vista 이후의 같은 작업 정보 | [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md), [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md) |
-| 프리페치 | `at.exe` 와 작업이 실행한 프로그램의 실행 흔적 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 이벤트 로그 | XP 는 EVT 형식, Vista 이후는 EVTX 형식 | [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) |
-| 마스터 파일 테이블 | `.job` 파일이 생기고 바뀐 시각 | [$MFT](/02-artifacts/filesystem/mft.md) |
-| 측면 이동 | 원격 컴퓨터에 `at` 으로 작업을 넣은 경우 | [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) |
+| 작업 정의 XML · 작업 캐시 | Vista 이후의 같은 작업 정보 | [작업 정의 파일](system32-tasks-xml.md), [작업 캐시 레지스트리](taskcache-tree-tasks.md) |
+| 프리페치 | `at.exe` 와 작업이 실행한 프로그램의 실행 흔적 | [프리페치](../../execution/prefetch/index.md) |
+| 이벤트 로그 | XP 는 EVT 형식, Vista 이후는 EVTX 형식 | [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) |
+| 마스터 파일 테이블 | `.job` 파일이 생기고 바뀐 시각 | [$MFT](../../filesystem/mft.md) |
+| 측면 이동 | 원격 컴퓨터에 `at` 으로 작업을 넣은 경우 | [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) |
 
 ## 실습
 

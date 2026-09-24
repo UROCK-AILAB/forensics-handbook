@@ -1,6 +1,6 @@
 # 파일 시각 네 가지와 변화 규칙 (MACB·Timestamp Rules)
 
-상위 허브: [타임라인 작성 (Timeline)](/03-techniques/analysis/timeline/index.md)
+상위 허브: [타임라인 작성 (Timeline)](index.md)
 
 ## 한 줄 요약
 
@@ -48,7 +48,7 @@ NTFS 파일 레코드에서 시각을 담는 속성은 두 가지입니다. 표�
 - $SI 에 네 개, $FN 에 네 개가 있으므로 파일 하나의 시각은 대개 여덟 개입니다. $SI 없이 $FN 만 있는 MFT 항목도 관찰됐다고 libyal 문서는 적었습니다(참고 4).
 - 긴 이름과 짧은 이름(8.3)이 따로 있으면 $FN 이 두 개일 수 있습니다(참고 4). 그만큼 시각도 늘어납니다.
 
-속성의 저장 형식과 헥스 풀이는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md)에서 다룹니다. FILETIME 을 날짜로 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. NTFS 와 FAT 는 시각을 저장하는 기준이 다릅니다. 기준을 맞추는 법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
+속성의 저장 형식과 헥스 풀이는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md)에서 다룹니다. FILETIME 을 날짜로 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. NTFS 와 FAT 는 시각을 저장하는 기준이 다릅니다. 기준을 맞추는 법은 [시간대·시계 오차 보정](time-normalization.md)에서 다룹니다.
 
 ### API 가 다루는 시각
 
@@ -73,7 +73,7 @@ NTFS 파일 레코드에서 시각을 담는 속성은 두 가지입니다. 표�
 
 - FAT 접근 시각으로는 그날 몇 시에 열었는지 알 수 없습니다.
 - FAT 쓰기 시각이 같은 두 파일은 2초 안에서 어느 쪽이 먼저인지 알 수 없습니다.
-- 구조는 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md)를 봅니다.
+- 구조는 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md)를 봅니다.
 
 ### 핸들이 닫힐 때 반영됩니다
 
@@ -95,11 +95,11 @@ NTFS 파일 레코드에서 시각을 담는 속성은 두 가지입니다. 표�
 - 이 명령은 레지스트리 값 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem\NtfsDisableLastAccessUpdate` 를 바꿉니다(참고 2).
 - 문서에는 1 과 0 만 나옵니다. 검체에서 다른 값이 보이면 같은 버전에서 재현해 뜻을 확인합니다.
 - 기본값은 Windows 버전마다 다르다고 알려져 있습니다. 공식 문서로는 확인하지 못했습니다. 그래서 기본값을 짐작하지 않고 검체의 값을 직접 읽습니다.
-- 오프라인 SYSTEM 하이브에서 어느 컨트롤셋을 읽을지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
+- 오프라인 SYSTEM 하이브에서 어느 컨트롤셋을 읽을지는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 
 ## 작업별 변화 규칙
 
-이름 바꾸기·이동이 USN 저널에 어떻게 남는지는 문서로 확인했습니다. 이 내용은 [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
+이름 바꾸기·이동이 USN 저널에 어떻게 남는지는 문서로 확인했습니다. 이 내용은 [파일시스템 타임라인](filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
 
 아래 규칙은 분석가 사이에서 흔히 인용됩니다. 하지만 이 페이지에서 연 공식 자료로는 확인하지 못했습니다. Windows 버전마다 다르다는 말도 있습니다.
 
@@ -124,7 +124,7 @@ NTFS 파일 레코드에서 시각을 담는 속성은 두 가지입니다. 표�
 
 ### 변화 규칙 재현하기
 
-1. 검체와 같은 Windows 버전·빌드로 시험 환경을 만듭니다. 검체의 버전은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)에서 확인합니다.
+1. 검체와 같은 Windows 버전·빌드로 시험 환경을 만듭니다. 검체의 버전은 [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)에서 확인합니다.
 2. 시험 파일을 만들고 그 파일의 $SI 와 $FN 시각을 적어 둡니다.
 3. 확인하려는 작업을 한 가지만 합니다. 복사, 같은 볼륨 안 이동, 다른 볼륨으로 이동, 이름 바꾸기가 그 예입니다.
 4. 작업에 쓴 프로그램을 닫은 뒤 두 속성을 다시 읽습니다. 접근 시각은 최대 1시간 늦게 적힐 수 있다는 점을 감안합니다.
@@ -134,8 +134,8 @@ NTFS 파일 레코드에서 시각을 담는 속성은 두 가지입니다. 표�
 
 ## 도구
 
-- 타임라인 도구는 MACB 칸 말고도 시각의 뜻을 적는 칸을 둡니다. plaso 의 timestamp_desc 가 그 예입니다(참고 5). 출력 칸은 [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md)에서 다룹니다.
-- 어느 도구든 파일 몇 개를 골라 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 타임라인 도구는 MACB 칸 말고도 시각의 뜻을 적는 칸을 둡니다. plaso 의 timestamp_desc 가 그 예입니다(참고 5). 출력 칸은 [여러 아티팩트 합친 타임라인](super-timeline.md)에서 다룹니다.
+- 어느 도구든 파일 몇 개를 골라 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../reporting/tool-validation.md)을 봅니다.
 - 도구가 보여 주는 $FN 이 긴 이름의 것인지 짧은 이름의 것인지 확인합니다.
 
 ## 함정과 한계
@@ -154,7 +154,7 @@ NTFS 파일 레코드에서 시각을 담는 속성은 두 가지입니다. 표�
 - 보고서에는 어느 속성의 어느 시각인지 늘 밝힙니다.
 - 쓸 수 있는 문장(예): "report.docx 의 $SI 마지막 수정 시각은 2024-03-15 10:00:00 UTC 입니다."
 - 쓰면 안 되는 문장(예): "사용자가 2024-03-15 10:00:00 UTC 에 report.docx 를 고쳤습니다."
-- 시각을 누군가 고쳤을 가능성은 [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)에서 따집니다.
+- 시각을 누군가 고쳤을 가능성은 [시각 조작 탐지](timestomping.md)에서 따집니다.
 
 ## 참고 문헌
 

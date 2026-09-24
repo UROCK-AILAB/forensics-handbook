@@ -22,7 +22,7 @@ PID 는 제조사가 제품마다 정합니다.
 저장장치 말고도 키보드·마우스, 스마트폰, 웹캠, 허브가 여기에 남습니다.
 USB 저장장치 하나는 두 곳에 나뉘어 남습니다.
 `Enum\USB` 키는 USB 장치 자체를 나타냅니다.
-[USBSTOR](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) 키는 그 장치 안의 디스크를 나타냅니다.
+[USBSTOR](usbstor.md) 키는 그 장치 안의 디스크를 나타냅니다.
 `Enum\USB` 쪽은 VID·PID 숫자로 장치를 가리킵니다.
 USBSTOR 쪽은 제조사·제품 이름 문자열로 장치를 가리킵니다.
 
@@ -33,9 +33,9 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp\<인스턴스 ID>
 SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복합 장치의 인터페이스)
 ```
 
-- 하이브 파일 위치는 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
+- 하이브 파일 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
 - 실행 중인 시스템에서는 `HKLM\SYSTEM\CurrentControlSet\Enum\USB` 로 보입니다.
-- 이미지에서 꺼낸 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키에서 쓰던 컨트롤셋 번호를 먼저 확인합니다. → [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md)
+- 이미지에서 꺼낸 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키에서 쓰던 컨트롤셋 번호를 먼저 확인합니다. → [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)
 - `vvvv`·`pppp` 는 16진수 네 자리입니다.
 - `MI_zz` 의 `zz` 는 인터페이스 번호입니다.
 - 키 이름을 비교할 때는 대소문자를 가리지 않습니다.
@@ -47,8 +47,8 @@ Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고, 구조가 바�
 |---|---|---|
 | `VID_vvvv&PID_pppp\<인스턴스 ID>` 키 구조 | XP ~ 11 | 이름 규칙이 같습니다 |
 | 장치가 보내는 컨테이너 ID 설명자 (Microsoft OS ContainerID descriptor) | 7 이후 | 공식 문서 기준 |
-| `Properties` 아래 마지막 연결·해제 시각 | 8 이후 | → [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) |
-| UASP 저장장치 (서비스 `UASPStor`) | 8 이후 | 디스크가 USBSTOR 가 아닌 곳에 남습니다 → [USBSTOR 에 안 남는 장치](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md) |
+| `Properties` 아래 마지막 연결·해제 시각 | 8 이후 | → [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) |
+| UASP 저장장치 (서비스 `UASPStor`) | 8 이후 | 디스크가 USBSTOR 가 아닌 곳에 남습니다 → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md) |
 
 ## 구조
 
@@ -90,7 +90,7 @@ USB 에서는 두 가지 모양으로 나타납니다.
 | `CompatibleIDs` | REG_MULTI_SZ | 클래스 코드가 들어 있습니다. 장치 종류를 가리는 데 씁니다. |
 | `Service` | REG_SZ | 이 장치에 붙은 드라이버 서비스입니다. 예: `USBSTOR`, `UASPStor`, `usbccgp`, `HidUsb` |
 | `DeviceDesc`·`Mfg` | REG_SZ | 드라이버 설치 파일 (INF) 이 정한 이름과 제조사입니다. `@usb.inf,...;표시 문자열` 처럼 INF 참조 뒤에 표시 문자열이 붙기도 합니다. |
-| `ClassGUID`·`Class` | REG_SZ | 장치 설치 클래스입니다. → [GUID 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) |
+| `ClassGUID`·`Class` | REG_SZ | 장치 설치 클래스입니다. → [GUID 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) |
 | `Driver` | REG_SZ | `{클래스 GUID}\nnnn` 형태로 드라이버 설정 키를 가리킵니다. |
 | `ContainerID` | REG_SZ | 한 물리 장치에서 나온 여러 장치 노드를 묶는 GUID 입니다. |
 | `LocationInformation` | REG_SZ | 장치가 잡힌 포트와 허브입니다. 예: `Port_#0002.Hub_#0001` |
@@ -136,7 +136,7 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 
 **증명하지 못하는 것**
 
-- 누가 연결했는지 알려 주지 않습니다. SYSTEM 하이브는 PC 전체의 기록입니다. 사용자는 [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) 로 좁힙니다.
+- 누가 연결했는지 알려 주지 않습니다. SYSTEM 하이브는 PC 전체의 기록입니다. 사용자는 [사용자별 장치 연결 (MountPoints2)](mountpoints2.md) 로 좁힙니다.
 - 언제 연결했는지는 키 이름과 값만으로 알 수 없습니다.
 - 파일을 옮겼는지 알려 주지 않습니다.
 - 겉에 찍힌 상표를 증명하지 않습니다. VID·PID·일련번호는 장치 펌웨어가 스스로 보고한 값입니다. 펌웨어를 고친 장치는 다른 번호를 댈 수 있습니다.
@@ -147,11 +147,11 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 
 ## 시각 해석
 
-- 인스턴스 키의 마지막 기록 시각 (Last Write Time) 은 UTC 기준 FILETIME 입니다. → [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md), [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
+- 인스턴스 키의 마지막 기록 시각 (Last Write Time) 은 UTC 기준 FILETIME 입니다. → [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md), [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
 - 이 시각은 그 키의 값이나 하위 키 목록이 바뀔 때 바뀝니다.
 - 그래서 이 시각을 첫 연결 시각이나 마지막 연결 시각으로 바로 쓰지 않습니다.
 - 옛 자료에는 USB 장치 키의 마지막 기록 시각을 마지막 연결 시각으로 설명한 것도 있습니다. 다른 기록과 맞춰 보기 전에는 따르지 않습니다.
-- 설치·연결·해제 시각은 인스턴스 키 아래 `Properties` 하위 키에 따로 남습니다. 읽는 법은 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) 에서 다룹니다.
+- 설치·연결·해제 시각은 인스턴스 키 아래 `Properties` 하위 키에 따로 남습니다. 읽는 법은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) 에서 다룹니다.
 - 저장장치라면 `Enum\USB` 쪽 시각과 USBSTOR 쪽 시각을 나란히 놓고 비교합니다.
 
 ## 함정과 한계
@@ -159,11 +159,11 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 1. **시스템이 만든 인스턴스 ID 를 일련번호로 적지 않습니다.** 두 번째 글자가 `&` 인 값은 장치의 일련번호가 아닙니다.
 2. **키 개수는 장치 개수와 다릅니다.** 일련번호가 없는 장치는 꽂은 포트마다 키가 따로 생길 수 있습니다. 반대로 일련번호 없는 같은 모델 두 개를 같은 포트에 번갈아 꽂으면 키 하나로 보일 수 있습니다.
 3. **일련번호가 같다고 반드시 같은 장치는 아닙니다.** 값싼 장치 가운데에는 여러 개가 같은 일련번호를 보고하는 제품이 있습니다.
-4. **USB 일련번호와 볼륨 일련번호 (Volume Serial Number) 는 다른 값입니다.** 볼륨 일련번호는 포맷할 때 파일시스템이 정합니다. 볼륨 일련번호는 [WPD·EMDMgmt](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) 와 [LNK](/02-artifacts/file-folder-usage/lnk.md) 에서 봅니다.
+4. **USB 일련번호와 볼륨 일련번호 (Volume Serial Number) 는 다른 값입니다.** 볼륨 일련번호는 포맷할 때 파일시스템이 정합니다. 볼륨 일련번호는 [WPD·EMDMgmt](wpd-emdmgmt.md) 와 [LNK](../../file-folder-usage/lnk.md) 에서 봅니다.
 5. **VID 로 상표를 바로 단정하지 않습니다.** 저장장치는 컨트롤러 칩 제조사의 VID 를 그대로 쓰는 경우가 있습니다. 공개 VID·PID 목록 (예: Linux USB ID 목록 `usb.ids`) 은 여러 사람이 모아 만든 목록이며 공식 등록부가 아닙니다.
 6. **외부 장치만 있는 것이 아닙니다.** 루트 허브 (`ROOT_HUB20`, `ROOT_HUB30`) 와 노트북 내장 웹캠·블루투스 어댑터 같은 내부 장치도 `Enum\USB` 에 있습니다. Microsoft 문서에 따르면 PC 안에 붙은 것으로 판단한 장치는 PC 본체의 컨테이너 ID 를 물려받습니다. 여러 장치가 같은 `ContainerID` 를 나눠 쓰면 내장 장치인지 확인합니다.
 7. **`ContainerID` 로 다른 PC 의 기록을 잇지 않습니다.** Microsoft 문서는 USB 장치의 컨테이너 ID 가 일련번호의 해시이거나 무작위 값이라고 설명합니다. 무작위 값이면 PC 마다 달라집니다. 같은 PC 안에서 노드를 묶는 데만 씁니다.
-8. **지운 흔적이 다른 곳에 남습니다.** 흔적 정리 도구는 `Enum\USB`·USBSTOR 키를 지울 수 있습니다. 지운 키는 하이브 안 빈 공간, 트랜잭션 로그, 섀도 복사본에 남아 있을 수 있습니다. → [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md), [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)
+8. **지운 흔적이 다른 곳에 남습니다.** 흔적 정리 도구는 `Enum\USB`·USBSTOR 키를 지울 수 있습니다. 지운 키는 하이브 안 빈 공간, 트랜잭션 로그, 섀도 복사본에 남아 있을 수 있습니다. → [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md), [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)
 
 ## 직접 분석해 보기
 
@@ -205,10 +205,10 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 **2) `HardwareID` 값**
 
 `HardwareID` 는 문자열 여러 개를 담는 REG_MULTI_SZ (값 종류 7) 입니다.
-문자열은 UTF-16LE 로 저장됩니다. → [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)
+문자열은 UTF-16LE 로 저장됩니다. → [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)
 문자열마다 끝에 `00 00` 이 붙습니다.
 목록 끝에는 `00 00` 이 한 번 더 붙습니다.
-값 셀 (vk) 에서 데이터 위치를 찾는 법은 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에 있습니다.
+값 셀 (vk) 에서 데이터 위치를 찾는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에 있습니다.
 
 아래는 위 예시 장치를 가정해 명세대로 만든 108바이트입니다.
 
@@ -235,7 +235,7 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 3. 인스턴스 ID 마다 일련번호인지, 시스템이 만든 값인지 적습니다.
 4. `Service`·`CompatibleIDs` 로 장치 종류를 적습니다.
 5. `ContainerID` 가 같은 키끼리 묶어 물리 장치 단위로 정리합니다.
-6. 저장장치는 USBSTOR 인스턴스 ID 와 일련번호를 맞춥니다. USBSTOR 인스턴스 ID 는 일련번호 뒤에 `&0` 같은 꼬리가 붙은 꼴이 많습니다. 긴 일련번호가 잘리거나 `&0` 이 없는 이름도 있으니 `ContainerID` 도 함께 맞춥니다. → [USBSTOR](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md)
+6. 저장장치는 USBSTOR 인스턴스 ID 와 일련번호를 맞춥니다. USBSTOR 인스턴스 ID 는 일련번호 뒤에 `&0` 같은 꼬리가 붙은 꼴이 많습니다. 긴 일련번호가 잘리거나 `&0` 이 없는 이름도 있으니 `ContainerID` 도 함께 맞춥니다. → [USBSTOR](usbstor.md)
 7. `Control\usbflags` 에서 `IgnoreHWSerNum` 설정을 확인합니다.
 
 ### 공개 도구로 한 번
@@ -243,25 +243,25 @@ Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent 
 - 하이브 뷰어 (예: Registry Explorer) 로 SYSTEM 하이브를 열고 `Enum\USB` 를 펼칩니다.
 - 열기 전에 트랜잭션 로그 (.LOG1·.LOG2) 를 반영할지 정합니다. 반영하는지에 따라 보이는 키가 다를 수 있습니다.
 - 스크립트형 도구 (예: RegRipper) 로 같은 하이브에서 장치 목록을 따로 뽑습니다.
-- 두 결과의 VID·PID·인스턴스 ID 개수를 맞춰 봅니다. → [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)
+- 두 결과의 VID·PID·인스턴스 ID 개수를 맞춰 봅니다. → [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) | 일련번호, 제조사·제품 문자열 |
-| [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) | 설치·마지막 연결·해제 시각 |
-| [장치 설치 로그 (setupapi.dev.log)](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md) | 같은 장치 인스턴스 ID 가 처음 설치된 시각 |
-| [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) | 저장장치에 붙은 드라이브 문자 |
-| [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) | 어느 사용자 계정에 남았는지 |
-| [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | 스마트폰 이름, 볼륨 이름, 볼륨 일련번호 |
-| [USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md) | `Service` 가 `UASPStor` 인 장치의 디스크 기록 |
-| [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) | 레지스트리와 따로 남은 장치 기록 |
-| [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) | 연결 이벤트의 시각 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 SYSTEM 하이브에만 있는 장치 |
+| [USB 저장장치 목록 (USBSTOR)](usbstor.md) | 일련번호, 제조사·제품 문자열 |
+| [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) | 설치·마지막 연결·해제 시각 |
+| [장치 설치 로그 (setupapi.dev.log)](setupapi-dev-log.md) | 같은 장치 인스턴스 ID 가 처음 설치된 시각 |
+| [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) | 저장장치에 붙은 드라이브 문자 |
+| [사용자별 장치 연결 (MountPoints2)](mountpoints2.md) | 어느 사용자 계정에 남았는지 |
+| [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](wpd-emdmgmt.md) | 스마트폰 이름, 볼륨 이름, 볼륨 일련번호 |
+| [USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)](uasp-scsi-sd.md) | `Service` 가 `UASPStor` 인 장치의 디스크 기록 |
+| [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md) | 레지스트리와 따로 남은 장치 기록 |
+| [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) | 연결 이벤트의 시각 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 SYSTEM 하이브에만 있는 장치 |
 
-USB 흔적 전체의 읽는 순서는 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) 에 있습니다.
-조사 흐름은 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md) 와 [스마트폰으로 옮겼나](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) 에서 이어집니다.
+USB 흔적 전체의 읽는 순서는 [USB 저장장치 흔적](index.md) 에 있습니다.
+조사 흐름은 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md) 와 [스마트폰으로 옮겼나](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) 에서 이어집니다.
 
 ## 실습
 

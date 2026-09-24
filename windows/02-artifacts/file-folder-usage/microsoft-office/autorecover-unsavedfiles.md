@@ -1,6 +1,6 @@
 # 자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)
 
-> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](/02-artifacts/file-folder-usage/microsoft-office/index.md)
+> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)
 
 ## 한 줄 요약
 
@@ -17,7 +17,7 @@ Microsoft 문서는 두 가지 저장 방식을 나눠 설명합니다.
 | 로컬 디스크, 네트워크 공유 폴더 | 자동 복구 (AutoRecover) | AutoRecover 파일 |
 | OneDrive, SharePoint | 자동 저장 (AutoSave) | 클라우드의 그 문서 |
 
-그래서 로컬 백업 파일이 남는 쪽은 로컬 디스크나 공유 폴더에서 연 문서입니다. OneDrive·SharePoint 문서의 로컬 사본은 [오피스 문서 캐시 (OfficeFileCache)](/02-artifacts/file-folder-usage/microsoft-office/officefilecache.md) 에서 다룹니다.
+그래서 로컬 백업 파일이 남는 쪽은 로컬 디스크나 공유 폴더에서 연 문서입니다. OneDrive·SharePoint 문서의 로컬 사본은 [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) 에서 다룹니다.
 
 Microsoft 문서가 적은 복구 흐름은 아래와 같습니다.
 
@@ -89,18 +89,18 @@ Excel 의 자동 복구 파일이 `.asd` 가 아니라 `.xlsb` 였다는 것은 
 
 ## 시각 해석
 
-- 자동 복구 파일 안에 시각이 있는지는 확인하지 못했습니다. 시각은 파일시스템에서 읽습니다 ([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
+- 자동 복구 파일 안에 시각이 있는지는 확인하지 못했습니다. 시각은 파일시스템에서 읽습니다 ([마스터 파일 테이블](../../filesystem/mft.md)).
 - 백업 파일의 생성·수정 시각은 그 백업 파일의 시각입니다. 원본 문서의 시각이 아닙니다.
 - 관찰한 PC 에서는 `.xlsb` 수정 시각이 폴더 수정 시각보다 몇 분 일렀습니다. (관찰) 폴더 시각을 백업 파일 시각으로 옮겨 적지 않습니다.
-- **18자리 숫자.** 요즘 날짜의 FILETIME 을 10진수로 적으면 18자리입니다. 그래서 시각일 수도 있습니다. 그러나 이 글에서 시각으로 확인하지 못했습니다. 풀어 본 값은 파일시스템 시각과 맞춰 본 뒤에만 씁니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- **18자리 숫자.** 요즘 날짜의 FILETIME 을 10진수로 적으면 18자리입니다. 그래서 시각일 수도 있습니다. 그러나 이 글에서 시각으로 확인하지 못했습니다. 풀어 본 값은 파일시스템 시각과 맞춰 본 뒤에만 씁니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
 ## 함정과 한계
 
 - **공식 경로와 실제 모양이 다를 수 있습니다.** 공식 문서는 보관 처리됐습니다. 관찰한 PC 에는 `UnsavedFiles` 폴더도, Word 의 `.asd` 파일도 없었고, Excel 은 다른 모양의 파일을 남겼습니다. (관찰)
 - **수집 범위를 확인합니다.** KAPE OfficeAutosave 타깃의 폴더는 `Roaming` 아래 네 곳입니다. `UnsavedFiles` 는 `Local` 아래에 있으므로 수집 목록에 따로 넣습니다.
 - **폴더 위치가 바뀌었을 수 있습니다.** 위치를 정하는 레지스트리 값을 확인하지 못했습니다. 기본 폴더에 없으면 디스크 전체에서 `*.asd`, `Backup of *.wbk`, `*((Unsaved-*` 이름을 찾습니다.
-- **클라우드 문서는 여기 남지 않을 수 있습니다.** OneDrive·SharePoint 문서는 자동 저장을 씁니다. [오피스 문서 캐시 (OfficeFileCache)](/02-artifacts/file-folder-usage/microsoft-office/officefilecache.md) 를 봅니다.
-- **지운 백업 파일.** 지우는 조건을 모르므로 지금 없는 파일도 찾아봅니다. [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
+- **클라우드 문서는 여기 남지 않을 수 있습니다.** OneDrive·SharePoint 문서는 자동 저장을 씁니다. [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) 를 봅니다.
+- **지운 백업 파일.** 지우는 조건을 모르므로 지금 없는 파일도 찾아봅니다. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
 - **확장자만 믿지 않습니다.** 파일 앞 바이트로 실제 형식을 확인합니다.
 
 ## 직접 분석해 보기
@@ -110,7 +110,7 @@ Excel 의 자동 복구 파일이 `.asd` 가 아니라 `.xlsb` 였다는 것은 
 1. 사용자마다 `AppData\Roaming\Microsoft\` 아래 `Word`·`Excel`·`Powerpoint`·`Publisher` 폴더와 `AppData\Local\Microsoft\Office\UnsavedFiles` 를 하위 폴더까지 모읍니다. KAPE 를 쓴다면 OfficeAutosave 타깃에 `UnsavedFiles` 를 더합니다.
 2. 이름 모양으로 거릅니다. `*.asd`, `Backup of *.wbk`, `~*.tmp`, `*((Unsaved-*` 를 찾습니다.
 3. 파일마다 앞 바이트를 보고 실제 형식을 적습니다.
-4. 폴더 안 `.lnk` 는 바로가기 파서로 풀어 원래 경로를 봅니다 ([바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)).
+4. 폴더 안 `.lnk` 는 바로가기 파서로 풀어 원래 경로를 봅니다 ([바로가기 파일](../lnk.md)).
 5. 사본을 격리된 환경에서 열어 내용을 봅니다. 원래 문서가 남아 있으면 내용을 견줍니다.
 6. $MFT 와 USN 변경 저널에서 같은 폴더의 지운 파일 이름을 찾습니다.
 
@@ -118,14 +118,14 @@ Excel 의 자동 복구 파일이 `.asd` 가 아니라 `.xlsb` 였다는 것은 
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [오피스 최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | 같은 문서의 최근 사용 기록 |
-| [오피스 문서 캐시 (OfficeFileCache)](/02-artifacts/file-folder-usage/microsoft-office/officefilecache.md) | OneDrive·SharePoint 문서의 로컬 사본 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) | 폴더 안 `.lnk` 가 가리키는 원래 경로 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)·[USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 백업 파일이 생기고 지워진 기록 |
-| [윈도 오류 보고](/02-artifacts/execution/wer.md) | 오피스 앱이 비정상으로 끝난 기록 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 지금은 없는 옛 백업 파일 |
+| [오피스 최근 파일 (File MRU·Place MRU)](file-mru-place-mru.md) | 같은 문서의 최근 사용 기록 |
+| [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) | OneDrive·SharePoint 문서의 로컬 사본 |
+| [바로가기 파일](../lnk.md) | 폴더 안 `.lnk` 가 가리키는 원래 경로 |
+| [마스터 파일 테이블](../../filesystem/mft.md)·[USN 변경 저널](../../filesystem/usnjrnl.md) | 백업 파일이 생기고 지워진 기록 |
+| [윈도 오류 보고](../../execution/wer.md) | 오피스 앱이 비정상으로 끝난 기록 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 지금은 없는 옛 백업 파일 |
 
-시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 를 봅니다.
+시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md) 를 봅니다.
 
 ## 실습
 

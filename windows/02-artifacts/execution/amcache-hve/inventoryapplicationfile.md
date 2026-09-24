@@ -10,7 +10,7 @@
 
 - 목록은 주로 호환성 점검 예약 작업 (Microsoft Compatibility Appraiser) 이 채웁니다. 이 작업은 `compattelrunner.exe` 를 실행합니다.
 - 호환성 조치 (shim) 가 필요한 프로그램을 실행하면 DiagTrack 서비스가 그 파일을 바로 적습니다.
-- 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](/02-artifacts/execution/pca.md) 서비스가 목록을 고칩니다.
+- 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](../pca.md) 서비스가 목록을 고칩니다.
 
 ANSSI 는 10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일을 세 종류로 나눴습니다.
 
@@ -22,7 +22,7 @@ ANSSI 는 10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일
 
 - ANSSI 실험에서 설치 폴더의 DLL 은 이 키에 들어오지 않았습니다(10.0.17134 기준).
 - 항목 하나만 보고는 세 종류 가운데 어디에 속하는지 가릴 수 없습니다.
-- 실행 증거로 쓸 수 있는 조건은 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md) 에서 다룹니다.
+- 실행 증거로 쓸 수 있는 조건은 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -34,7 +34,7 @@ ANSSI 는 10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일
 | 사용자 정보 | 없습니다 |
 | 시각 | 하위 키의 마지막 기록 시각 (FILETIME, UTC), `LinkDate` 값 (문자열) |
 
-AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러리 버전을 따릅니다. 그래서 업데이트를 받은 Windows 7 에도 Windows 10 과 같은 형식이 생길 수 있습니다. 전체 흐름은 [구조와 버전별 차이](/02-artifacts/execution/amcache-hve/structure-versions.md) 에서 다룹니다. 이 키와 관련된 변화만 추리면 다음과 같습니다(ANSSI).
+AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러리 버전을 따릅니다. 그래서 업데이트를 받은 Windows 7 에도 Windows 10 과 같은 형식이 생길 수 있습니다. 전체 흐름은 [구조와 버전별 차이](structure-versions.md) 에서 다룹니다. 이 키와 관련된 변화만 추리면 다음과 같습니다(ANSSI).
 
 | 라이브러리 버전 (처음 실린 Windows 10) | 하위 키 이름 | 달라진 점 |
 |---|---|---|
@@ -73,13 +73,13 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 | `AppxPackageFullName`·`AppxPackageRelativeId` | REG_SZ | 스토어 앱 패키지에 속한 파일일 때의 패키지 이름 | 추정 |
 
 - 관찰 예(Psmths)에서는 `Publisher`·`ProductName`·`BinaryType` 도 소문자로 남았습니다. 문자열을 찾을 때는 대소문자를 가리지 않습니다.
-- 값이 어떻게 셀에 저장되는지는 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에서 다룹니다.
+- 값이 어떻게 셀에 저장되는지는 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에서 다룹니다.
 
 ### 설치 프로그램과 잇기 (ProgramId)
 
 > 그림 자리: InventoryApplicationFile 하위 키의 `ProgramId` 값이 InventoryApplication 하위 키 이름과 이어지는 모습. 짝이 있는 항목과 짝이 없는 항목을 나란히 보여 주는 그림
 
-- [설치 프로그램 항목 (InventoryApplication)](/02-artifacts/execution/amcache-hve/inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 입니다(ANSSI).
+- [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 입니다(ANSSI).
 - 이 키의 `ProgramId` 와 같은 이름의 하위 키가 있으면 그 설치 프로그램에 딸린 파일입니다.
 - 짝이 없는 항목은 설치 기록과 이어지지 않는 파일입니다. 공개 파서 AmcacheParser 는 이런 항목을 "Unassociated" 로 따로 모읍니다.
 - 설치 없이 들어온 파일이 이 무리에 섞이므로 먼저 훑어볼 후보가 됩니다.
@@ -90,7 +90,7 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 ### 증명하는 것
 
 - 기록한 때에 그 경로에 그 파일이 있었습니다. 경로와 크기와 SHA-1 이 함께 남습니다.
-- 파일이 지금 디스크에 없어도 경로와 SHA-1 로 무슨 파일이었는지 찾아볼 수 있습니다. SHA-1 은 [해시셋 대조](/03-techniques/analysis/hash-set-fuzzy-hash.md) 로 알려진 파일과 맞춰 봅니다.
+- 파일이 지금 디스크에 없어도 경로와 SHA-1 로 무슨 파일이었는지 찾아볼 수 있습니다. SHA-1 은 [해시셋 대조](../../../03-techniques/analysis/hash-set-fuzzy-hash.md) 로 알려진 파일과 맞춰 봅니다.
 - 버전 정보와 게시자로 파일이 무엇인지 좁힐 수 있습니다.
 - `ProgramId` 로 어느 설치 프로그램에 딸린 파일인지 알 수 있습니다.
 
@@ -99,7 +99,7 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 - 대부분의 항목은 실행 기록이 아닙니다. 폴더를 훑거나 프로그램을 설치할 때도 항목이 생깁니다.
 - 누가 파일을 두었는지, 누가 실행했는지는 남지 않습니다. 사용자를 가리키는 값이 없습니다.
 - 실행 횟수와 마지막 실행 시각은 없습니다.
-- 큰 파일의 `FileId` 는 파일 전체의 해시가 아닐 수 있습니다. 계산 범위는 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md) 에서 다룹니다.
+- 큰 파일의 `FileId` 는 파일 전체의 해시가 아닐 수 있습니다. 계산 범위는 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 - 항목이 없다고 파일이 없었던 것은 아닙니다. 점검 작업이 돌기 전에 지운 파일은 목록에 들어오지 않을 수 있습니다.
 - 항목이 언제 지워지는지는 공개 자료로 확인하지 못했습니다.
 
@@ -126,7 +126,7 @@ ANSSI 실험에서 이 시각의 뜻은 라이브러리 버전에 따라 달랐�
 
 - 가장 안전한 해석은 "이 시각에 이 경로에 이 파일이 있었다" 입니다.
 - 파일이 처음 생긴 때는 이 시각보다 앞일 수 있습니다.
-- 이 시각은 키 단위입니다. 어느 값이 바뀌어서 시각이 바뀌었는지는 알 수 없습니다. 자세한 성질은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
+- 이 시각은 키 단위입니다. 어느 값이 바뀌어서 시각이 바뀌었는지는 알 수 없습니다. 자세한 성질은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 
 ### LinkDate
 
@@ -135,27 +135,27 @@ ANSSI 실험에서 이 시각의 뜻은 라이브러리 버전에 따라 달랐�
 - 공개 파서 AmcacheParser 는 이 문자열을 UTC 로 읽습니다.
 - 이 칸은 파일을 만든 쪽이 정합니다. 마음대로 바꿀 수 있습니다.
 - Windows 10 의 자체 모듈은 재현 가능한 빌드 (reproducible build) 때문에 이 칸에 시각 대신 해시를 넣습니다(Raymond Chen). 그래서 엉뚱한 날짜가 나옵니다.
-- 원본 파일이 남아 있으면 헤더 값과 맞춰 봅니다. PE 헤더는 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
+- 원본 파일이 남아 있으면 헤더 값과 맞춰 봅니다. PE 헤더는 [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-- **항목은 경로마다 하나입니다.** 하위 키 이름이 경로로 정해지기 때문입니다. 같은 경로의 파일을 다른 파일로 바꾸면 같은 항목의 값이 바뀔 수 있습니다. 이전 `FileId` 는 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾아봅니다.
+- **항목은 경로마다 하나입니다.** 하위 키 이름이 경로로 정해지기 때문입니다. 같은 경로의 파일을 다른 파일로 바꾸면 같은 항목의 값이 바뀔 수 있습니다. 이전 `FileId` 는 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾아봅니다.
 - **같은 파일도 경로가 다르면 항목이 따로 생깁니다.** `FileId` 로 묶어 보면 복사해 옮긴 흔적이 보입니다.
 - **점검 작업이 돌아야 목록이 채워집니다.** 이 작업이 꺼져 있거나 오래 돌지 않은 PC 에서는 새 항목이 늦게 생기거나 생기지 않을 수 있습니다.
 - **경로는 소문자로만 남습니다.** 원래 대소문자는 알 수 없습니다.
 - **최근 변경이 하이브 본문에 없을 수 있습니다.** 사용 중인 하이브는 바뀐 내용을 `.LOG1`·`.LOG2` 에 먼저 적습니다. 로그를 반영하지 않으면 최근 항목을 놓칩니다.
-- **도구마다 읽는 값이 다릅니다.** AmcacheParser 소스는 `AppxPackageFullName` 같은 값을 결과에 넣지 않습니다. 결과가 이상하면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 처럼 원시 값을 다시 봅니다.
+- **도구마다 읽는 값이 다릅니다.** AmcacheParser 소스는 `AppxPackageFullName` 같은 값을 결과에 넣지 않습니다. 결과가 이상하면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 처럼 원시 값을 다시 봅니다.
 - **하이브는 오프라인에서 고칠 수 있습니다.** 지운 하위 키는 빈 셀로 남을 수 있습니다. 다른 실행 흔적과 어긋나는 항목은 조작을 의심해 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-1. `Amcache.hve` 와 `.LOG1`·`.LOG2` 를 함께 복사합니다. 켜져 있는 시스템에서는 하이브가 잠겨 있습니다. 수집 방법은 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 에서 다룹니다.
+1. `Amcache.hve` 와 `.LOG1`·`.LOG2` 를 함께 복사합니다. 켜져 있는 시스템에서는 하이브가 잠겨 있습니다. 수집 방법은 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 에서 다룹니다.
 2. 사본에 트랜잭션 로그를 반영합니다.
 3. `Root` → `InventoryApplicationFile` → 하위 키 순서로 내려갑니다.
 4. 하위 키의 값 셀 (vk) 에서 이름·형식·데이터를 읽습니다. 형식 번호는 REG_SZ 가 1, REG_DWORD 가 4, REG_QWORD 가 11 입니다.
-5. 하위 키 셀 (nk) 의 마지막 기록 시각을 FILETIME 으로 풉니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+5. 하위 키 셀 (nk) 의 마지막 기록 시각을 FILETIME 으로 풉니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 아래는 명세로 만든 예시입니다. 실제 검체에서 나온 값이 아닙니다. `FileId` 에는 설명하려고 빈 데이터의 SHA-1 (`da39a3ee…`) 을 넣었습니다.
 
@@ -188,19 +188,19 @@ LinkDate (REG_SZ, UTF-16LE)
 
 | 아티팩트 | 더 알려 주는 것 |
 |---|---|
-| [설치 프로그램 항목 (InventoryApplication)](/02-artifacts/execution/amcache-hve/inventoryapplication.md) | `ProgramId` 의 짝, 설치 날짜 |
-| [바로가기 항목 (InventoryApplicationShortcut)](/02-artifacts/execution/amcache-hve/inventoryapplicationshortcut.md) | 같은 프로그램의 시작 메뉴 바로가기 |
-| [드라이버 항목 (InventoryDriverBinary)](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md) | SYS 파일의 해시와 서명 정보 |
-| [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md) | 실행 횟수, 실행 시각 |
-| [심캐시 (ShimCache·AppCompatCache)](/02-artifacts/execution/shimcache-appcompatcache.md) | 같은 경로의 파일 수정 시각 |
-| [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) · [UserAssist](/02-artifacts/execution/userassist.md) | 실행한 사용자, 마지막 실행 시각 |
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | 파일이 생긴 시각. 하위 키 시각보다 앞서는지 봅니다. |
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 파일이 생기고 지워진 기록. `Usn` 값을 맞춰 볼 곳입니다. |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 파일을 내려받은 주소 |
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) · [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) | 켜 둔 경우 실행 증거와 명령줄 |
-| [예약 작업 이벤트 (TaskScheduler·4698)](/02-artifacts/event-logs/taskscheduler-4698.md) | 로그가 켜져 있으면 점검 작업이 돈 시각 |
+| [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) | `ProgramId` 의 짝, 설치 날짜 |
+| [바로가기 항목 (InventoryApplicationShortcut)](inventoryapplicationshortcut.md) | 같은 프로그램의 시작 메뉴 바로가기 |
+| [드라이버 항목 (InventoryDriverBinary)](inventorydriverbinary.md) | SYS 파일의 해시와 서명 정보 |
+| [프리페치 (Prefetch)](../prefetch/index.md) | 실행 횟수, 실행 시각 |
+| [심캐시 (ShimCache·AppCompatCache)](../shimcache-appcompatcache.md) | 같은 경로의 파일 수정 시각 |
+| [BAM·DAM](../background-activity-moderator.md) · [UserAssist](../userassist.md) | 실행한 사용자, 마지막 실행 시각 |
+| [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md) | 파일이 생긴 시각. 하위 키 시각보다 앞서는지 봅니다. |
+| [USN 변경 저널 ($UsnJrnl)](../../filesystem/usnjrnl.md) | 파일이 생기고 지워진 기록. `Usn` 값을 맞춰 볼 곳입니다. |
+| [다운로드 출처 표시 (Zone.Identifier)](../../filesystem/zone-identifier.md) | 파일을 내려받은 주소 |
+| [프로세스 생성 (4688)](../../event-logs/4688.md) · [Sysmon 이벤트 1](../../event-logs/sysmon/1.md) | 켜 둔 경우 실행 증거와 명령줄 |
+| [예약 작업 이벤트 (TaskScheduler·4698)](../../event-logs/taskscheduler-4698.md) | 로그가 켜져 있으면 점검 작업이 돈 시각 |
 
-여러 흔적을 묶어 읽는 순서는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에서 다룹니다.
+여러 흔적을 묶어 읽는 순서는 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) 에서 다룹니다.
 
 ## 실습
 

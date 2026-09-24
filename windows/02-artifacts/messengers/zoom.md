@@ -80,9 +80,9 @@
 - "SQLite 머리" 는 첫 16바이트가 `SQLite format 3\0` 인 파일입니다.
 - 나머지 DB 는 첫 바이트부터 규칙 없는 값이었습니다. 파일 전체를 암호화한 모양입니다.
 - 이름에 `enc` 가 없는 `telemetrydata.db`, `local_dns_cache.db` 도 암호화돼 있었습니다.
-- 암호 방식은 확인한 자료에 없습니다. SQLite 파일을 통째로 암호화하는 대표 방식은 [암호화된 SQLite (SQLCipher)](/01-foundations/database-log-formats/sqlite/sqlcipher.md) 에서 다룹니다.
+- 암호 방식은 확인한 자료에 없습니다. SQLite 파일을 통째로 암호화하는 대표 방식은 [암호화된 SQLite (SQLCipher)](../../01-foundations/database-log-formats/sqlite/sqlcipher.md) 에서 다룹니다.
 - 모든 DB 옆에 크기가 0 인 `-journal` 파일이 있었습니다. `-wal`·`-shm` 은 없었습니다.
-- 그래서 롤백 저널 (rollback journal) 방식으로 봅니다. 저널 파일의 뜻은 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
+- 그래서 롤백 저널 (rollback journal) 방식으로 봅니다. 저널 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 - 설정 파일 `Zoom.us.ini`, `client.config`, `viper.ini`, `transcoding.ini`, `SSBAvatarCacheIndex.ini` 도 같은 폴더에 있었습니다.
 
 ### 평문 DB 세 개의 표
@@ -159,10 +159,10 @@
 - `Zoom.us.ini` `[ZoomChat]` 절의 `win_osencrypt_key` 값은 `ZWOSKEY` 로 시작했습니다.
 - `ZWOSKEY` 뒤는 Base64 였습니다. 값 전체 길이는 359자였습니다.
 - Base64 부분을 풀면 첫 20바이트가 `01 00 00 00 D0 8C 9D DF 01 15 D1 11 8C 7A 00 C0 4F C2 97 EB` 였습니다.
-- 이 20바이트는 DPAPI 블롭 머리(버전 1 + 제공자 GUID)와 모양이 같습니다. 머리 구조는 [DPAPI 블롭 구조](/01-foundations/protection/data-protection-api/dpapi-blob.md) 에서 다룹니다.
+- 이 20바이트는 DPAPI 블롭 머리(버전 1 + 제공자 GUID)와 모양이 같습니다. 머리 구조는 [DPAPI 블롭 구조](../../01-foundations/protection/data-protection-api/dpapi-blob.md) 에서 다룹니다.
 - 그래서 줌 로컬 DB 의 키 재료를 그 Windows 사용자의 데이터 보호 API (Data Protection API, DPAPI) 로 보호한다고 봅니다. 관찰한 값을 해석한 것입니다.
 - 디스크 이미지만으로 이 값을 풀려면 그 사용자의 DPAPI 마스터키를 풀 재료(사용자 암호 등)가 필요할 것으로 봅니다. DPAPI 일반 원리에서 추론한 것이고, 줌 쪽 자료로는 확인하지 않았습니다.
-- DPAPI 일반 원리는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+- DPAPI 일반 원리는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 - 이 값에서 DB 키를 만드는 방법과 암호 설정값은 확인하지 못했습니다. 이 페이지는 키를 꺼내 DB 를 여는 절차를 다루지 않습니다.
 
 ## 증거로서 의미
@@ -179,7 +179,7 @@
 
 - 회의에서 오간 말과 화면 내용: 이 페이지에서 확인한 흔적 가운데 이것을 담은 것은 로컬 녹화 파일뿐입니다.
 - 클라우드 녹화 내용: PC 에 남는지 확인하지 못했습니다.
-- 웹 브라우저로만 참가한 회의: 이 폴더에 남는지 확인하지 못했습니다. 브라우저 기록을 따로 봅니다([크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md)).
+- 웹 브라우저로만 참가한 회의: 이 폴더에 남는지 확인하지 못했습니다. 브라우저 기록을 따로 봅니다([크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md)).
 - 평문 DB 행의 뜻: 칸 이름만 봤고 행 내용과 칸의 뜻은 검증하지 않았습니다.
 - 회의 시각: DB 파일 수정 시각만으로는 말할 수 없습니다(아래 "시각 해석").
 
@@ -193,7 +193,7 @@
 - 업체 블로그는 회의 참가 시각·메시지 보낸 시각 같은 칸이 있다고 적었습니다[2]. 시각 형식(단위·시간대)은 적지 않았습니다[2].
 - 평문 DB 의 `start_time`·`end_time`·`metry_time`·`file_mtime_at_start` 형식은 확인하지 못했습니다.
 - `Zoom.us.ini` `LastRunTime` 의 단위도 확인하지 못했습니다.
-- 형식을 모르는 값은 자릿수로 초·밀리초·FILETIME 가운데 무엇인지 먼저 가려 봅니다. 형식별 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 형식을 모르는 값은 자릿수로 초·밀리초·FILETIME 가운데 무엇인지 먼저 가려 봅니다. 형식별 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 가린 결과는 프리페치의 실행 시각 같은 다른 기록과 맞춰 검증합니다.
 
 파일 시스템 시각은 파일마다 달랐습니다(관찰).
@@ -219,7 +219,7 @@
 ### 지우기와 제거
 
 - 줌을 제거한 뒤 `data` 폴더가 남는지는 확인하지 못했습니다.
-- 폴더가 없어도 설치·실행 흔적은 [설치 프로그램](/02-artifacts/system-account/uninstall.md), [프리페치](/02-artifacts/execution/prefetch/index.md), [AmCache](/02-artifacts/execution/amcache-hve/index.md) 에서 따로 찾습니다.
+- 폴더가 없어도 설치·실행 흔적은 [설치 프로그램](../system-account/uninstall.md), [프리페치](../execution/prefetch/index.md), [AmCache](../execution/amcache-hve/index.md) 에서 따로 찾습니다.
 - 사용자가 채팅을 지우면 DB 에 무엇이 남는지는 확인하지 못했습니다.
 - 파일 전체가 암호화돼 있으면 DB 의 빈 공간도 키 없이는 읽지 못합니다.
 
@@ -257,7 +257,7 @@ ZWOSKEYAQAAANCMnd8BFdERjHoAwE/C…
 ```
 
 7. 0x00 의 4바이트 `01 00 00 00` 은 버전 1 입니다.
-8. 0x04 부터 16바이트는 제공자 GUID (provider GUID) 입니다. GUID 를 읽는 법과 그 뒤 칸은 [DPAPI 블롭 구조](/01-foundations/protection/data-protection-api/dpapi-blob.md) 를 봅니다.
+8. 0x04 부터 16바이트는 제공자 GUID (provider GUID) 입니다. GUID 를 읽는 법과 그 뒤 칸은 [DPAPI 블롭 구조](../../01-foundations/protection/data-protection-api/dpapi-blob.md) 를 봅니다.
 9. 이 머리를 Base64 로 쓰면 앞 24글자가 늘 `AQAAANCMnd8BFdERjHoAwE/C` 입니다. 다른 앱의 설정 파일에서도 이 글자열로 DPAPI 블롭을 찾을 수 있습니다.
 
 ### 공개 도구로 한 번
@@ -274,24 +274,24 @@ ORDER BY metry_time;
 
 - `metry_time` 의 단위는 확인하지 못했습니다. 값을 그대로 적고, 해석은 따로 검증합니다.
 - `client.config`, `Zoom.us.ini` 는 텍스트 편집기로 엽니다. `[emoji.recent.` 로 시작하는 절 이름에서 JID 를 읽습니다.
-- 암호화된 DB 는 일반 SQLite 도구로 열리지 않습니다. 암호화된 증거를 다루는 일반 방법은 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
-- 도구 결과는 몇 건이라도 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 암호화된 DB 는 일반 SQLite 도구로 열리지 않습니다. 암호화된 증거를 다루는 일반 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
+- 도구 결과는 몇 건이라도 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 사용자 하이브의 Uninstall `ZoomUMX` 키와 `InstallLocation` |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | `Zoom.exe` 를 실행한 시각 |
-| [AmCache](/02-artifacts/execution/amcache-hve/index.md) | `%APPDATA%\Zoom\bin\Zoom.exe` 가 기록됐는지 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 줌이 쓴 네트워크 양과 그 시간대 |
-| [카메라·마이크 사용 기록](/02-artifacts/execution/capabilityaccessmanager.md) | 회의 중 카메라·마이크를 쓴 시각. 줌 항목이 여기 남는지는 확인하지 못했습니다 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 채팅·회의 초대 알림. 줌 알림이 여기 남는지는 확인하지 못했습니다 |
-| [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) | `win_osencrypt_key` 를 보호하는 방식 |
-| [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) | 평문 DB 의 형식 |
-| [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) | 평문 DB 시각 칸의 형식 |
+| [설치 프로그램](../system-account/uninstall.md) | 사용자 하이브의 Uninstall `ZoomUMX` 키와 `InstallLocation` |
+| [프리페치](../execution/prefetch/index.md) | `Zoom.exe` 를 실행한 시각 |
+| [AmCache](../execution/amcache-hve/index.md) | `%APPDATA%\Zoom\bin\Zoom.exe` 가 기록됐는지 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 줌이 쓴 네트워크 양과 그 시간대 |
+| [카메라·마이크 사용 기록](../execution/capabilityaccessmanager.md) | 회의 중 카메라·마이크를 쓴 시각. 줌 항목이 여기 남는지는 확인하지 못했습니다 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 채팅·회의 초대 알림. 줌 알림이 여기 남는지는 확인하지 못했습니다 |
+| [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) | `win_osencrypt_key` 를 보호하는 방식 |
+| [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) | 평문 DB 의 형식 |
+| [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) | 평문 DB 시각 칸의 형식 |
 
-여러 연락 기록을 합쳐 읽는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다. `UploadInfos` 처럼 파일을 올린 흔적을 볼 때는 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 도 함께 봅니다.
+여러 연락 기록을 합쳐 읽는 순서는 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다. `UploadInfos` 처럼 파일을 올린 흔적을 볼 때는 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 도 함께 봅니다.
 
 ## 실습
 

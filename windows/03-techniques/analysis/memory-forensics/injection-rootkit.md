@@ -1,6 +1,6 @@
 # 코드 주입·숨긴 프로세스 탐지 (Injection·Rootkit)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](/03-techniques/analysis/memory-forensics/index.md)
+> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
 
 ## 한 줄 요약
 
@@ -11,8 +11,8 @@
 ## 언제 쓰나
 
 - 프로세스 목록에는 정상 프로그램만 보이는데 악성 활동의 흔적이 있을 때 씁니다.
-- [메모리 속 네트워크 흔적](/03-techniques/analysis/memory-forensics/network-artifacts.md) 에서 정상 프로세스가 수상한 곳과 연결되어 있을 때 씁니다.
-- [프로세스와 DLL 분석](/03-techniques/analysis/memory-forensics/process-analysis.md) 에서 목록끼리 어긋나는 프로세스를 찾았을 때 씁니다.
+- [메모리 속 네트워크 흔적](network-artifacts.md) 에서 정상 프로세스가 수상한 곳과 연결되어 있을 때 씁니다.
+- [프로세스와 DLL 분석](process-analysis.md) 에서 목록끼리 어긋나는 프로세스를 찾았을 때 씁니다.
 
 ## 코드 주입이란
 
@@ -50,13 +50,13 @@ ATT&CK 은 탐지할 때 아래를 보라고 합니다 [1].
 
 메모리 이미지로 보는 것은 이 호출 자체보다 호출이 남긴 결과입니다.
 다른 프로세스에 새로 잡힌 메모리 영역, 새 스레드, 새로 올라온 DLL 이 그 결과입니다.
-호출 순간의 기록이 필요하면 실시간 감시 기록을 봅니다. [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) 를 봅니다.
+호출 순간의 기록이 필요하면 실시간 감시 기록을 봅니다. [Sysmon 로그](../../../02-artifacts/event-logs/sysmon/index.md) 를 봅니다.
 
 ## 플러그인
 
 Volatility 3 문서의 Windows 플러그인 목록에서 아래 이름을 확인했습니다 [2].
 왼쪽 칸의 묶음은 플러그인 이름을 보고 나눈 것입니다.
-같은 플러그인이 windows.malfind 와 windows.malware.malfind 처럼 두 이름으로 나오기도 합니다. 이 점은 [프로세스와 DLL 분석](/03-techniques/analysis/memory-forensics/process-analysis.md) 의 "플러그인 이름 읽는 법" 에 있습니다.
+같은 플러그인이 windows.malfind 와 windows.malware.malfind 처럼 두 이름으로 나오기도 합니다. 이 점은 [프로세스와 DLL 분석](process-analysis.md) 의 "플러그인 이름 읽는 법" 에 있습니다.
 
 | 찾는 것 | 플러그인 [2] |
 |---|---|
@@ -83,22 +83,22 @@ Volatility 3 문서의 Windows 플러그인 목록에서 아래 이름을 확인
 1. 프로세스 목록을 맞대 봅니다. windows.pslist 와 windows.psscan 결과를 비교하고, windows.psxview 로 여러 목록을 한 번에 봅니다.
 2. 한쪽 목록에만 있는 프로세스는 이미 끝난 프로세스일 수 있습니다. 끝난 프로세스가 아니라고 가린 뒤에 숨긴 프로세스 후보로 둡니다.
 3. windows.malfind 로 주입 후보 영역을 찾습니다. 결과가 많으면 다음 단계에서 걸러 냅니다.
-4. 후보 영역을 파일로 꺼냅니다. 해시를 계산하고 YARA 규칙으로 검사합니다. [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) 과 [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) 를 봅니다.
+4. 후보 영역을 파일로 꺼냅니다. 해시를 계산하고 YARA 규칙으로 검사합니다. [의심 실행 파일 선별](../code-signing-yara.md) 과 [해시셋 대조와 유사 해시](../hash-set-fuzzy-hash.md) 를 봅니다.
 5. 비우기·위장을 찾는 플러그인을 돌립니다(windows.hollowprocesses, windows.processghosting, windows.malware.pebmasquerade).
 6. 모듈 목록을 맞대 봅니다. 사용자 모드 DLL 은 windows.ldrmodules 로, 커널 모듈은 windows.modules 와 windows.modscan 을 나란히 놓고 봅니다.
 7. 스레드와 시스템 호출 쪽을 봅니다(windows.malware.suspicious_threads, windows.orphan_kernel_threads, 시스템 호출 우회 플러그인).
-8. 커널 후킹과 드라이버를 봅니다(windows.ssdt, windows.callbacks, windows.driverirp, windows.driverscan 등). 메모리에 있는 드라이버를 디스크의 서비스·드라이버 등록과 견줍니다. [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) 를 봅니다.
-9. 찾은 후보를 디스크 기록과 잇습니다. 어디서 들어왔는지는 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) 에서, 어떻게 다시 뜨는지는 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에서 봅니다.
-10. 보안 제품의 탐지 기록과 맞대 봅니다. [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) 와 [디펜더 검사 로그·격리 파일](/02-artifacts/execution/mplog-detectionhistory-quarantine.md) 을 봅니다.
+8. 커널 후킹과 드라이버를 봅니다(windows.ssdt, windows.callbacks, windows.driverirp, windows.driverscan 등). 메모리에 있는 드라이버를 디스크의 서비스·드라이버 등록과 견줍니다. [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) 를 봅니다.
+9. 찾은 후보를 디스크 기록과 잇습니다. 어디서 들어왔는지는 [악성코드는 어디서 들어왔나](../../../04-scenarios/incident/initial-access.md) 에서, 어떻게 다시 뜨는지는 [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) 에서 봅니다.
+10. 보안 제품의 탐지 기록과 맞대 봅니다. [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 와 [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) 을 봅니다.
 
 ## 함정과 한계
 
 - **malfind 결과에는 정상 영역이 섞일 수 있습니다.** .NET 이나 브라우저처럼 실행 중에 코드를 만드는 JIT 컴파일러가 이런 영역을 만든다고 알려져 있습니다. 결과 하나하나를 내용으로 확인합니다.
 - **정상 프로그램도 비슷한 흔적을 남길 수 있다고 알려져 있습니다.** 보안 제품처럼 다른 프로세스나 커널에 손대는 프로그램이 그렇습니다. 같은 제품을 설치한 깨끗한 PC 의 이미지와 견주어 봅니다.
 - **psscan 에만 있다고 숨긴 프로세스는 아닙니다.** 이미 끝난 프로세스일 수 있습니다.
-- **페이지 파일로 나간 영역은 보이지 않습니다.** 주입 영역의 일부가 페이지 파일에 있으면 물리 메모리 이미지에서 읽을 수 없습니다. [페이지 파일](/03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md) 을 봅니다.
+- **페이지 파일로 나간 영역은 보이지 않습니다.** 주입 영역의 일부가 페이지 파일에 있으면 물리 메모리 이미지에서 읽을 수 없습니다. [페이지 파일](pagefile-sys-swapfile-sys.md) 을 봅니다.
 - **플러그인 이름과 결과 형식은 버전마다 다릅니다.** 보고서에는 쓴 도구의 버전과 플러그인 이름을 적습니다.
-- **탐지 플러그인의 결과는 판정이 아닙니다.** 결과는 후보입니다. 중요한 결과는 다른 도구로 한 번 더 확인합니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- **탐지 플러그인의 결과는 판정이 아닙니다.** 결과는 후보입니다. 중요한 결과는 다른 도구로 한 번 더 확인합니다. [도구 결과 교차 검증](../../reporting/tool-validation.md) 을 봅니다.
 
 ## 결과를 어떻게 해석하나
 
@@ -123,10 +123,10 @@ Volatility 3 문서의 Windows 플러그인 목록에서 아래 이름을 확인
 
 ## 함께 볼 페이지
 
-- [프로세스와 DLL 분석](/03-techniques/analysis/memory-forensics/process-analysis.md) — 프로세스 목록과 DLL 목록을 만드는 법입니다.
-- [메모리 속 네트워크 흔적](/03-techniques/analysis/memory-forensics/network-artifacts.md) — 주입당한 프로세스의 연결입니다.
-- [메모리 속 문자열·자격증명·암호 키](/03-techniques/analysis/memory-forensics/strings-credentials-keys.md) — 꺼낸 영역의 문자열을 봅니다.
-- [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) — 자격증명을 빼 가는 단계를 다룹니다.
+- [프로세스와 DLL 분석](process-analysis.md) — 프로세스 목록과 DLL 목록을 만드는 법입니다.
+- [메모리 속 네트워크 흔적](network-artifacts.md) — 주입당한 프로세스의 연결입니다.
+- [메모리 속 문자열·자격증명·암호 키](strings-credentials-keys.md) — 꺼낸 영역의 문자열을 봅니다.
+- [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) — 자격증명을 빼 가는 단계를 다룹니다.
 
 ## 참고 문헌
 

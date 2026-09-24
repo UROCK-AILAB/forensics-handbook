@@ -35,7 +35,7 @@
 | Vista·7 | `C:\Users\%USERNAME%\AppData\Roaming\Mozilla\Firefox\Profiles\%PROFILE%.default\places.sqlite` |
 | XP | `C:\Documents and Settings\%USERNAME%\Application Data\Mozilla\Firefox\Profiles\%PROFILE%.default\places.sqlite` |
 
-- 캐시는 로컬 폴더 쪽에 있습니다. Vista·7 의 캐시 폴더 예는 `C:\Users\%USERNAME%\AppData\Local\Mozilla\Firefox\Profiles\%PROFILE%.default\cache2\` 입니다. 자세한 내용은 [캐시 (cache2)](/02-artifacts/browsers/firefox/cache2.md) 에서 다룹니다.
+- 캐시는 로컬 폴더 쪽에 있습니다. Vista·7 의 캐시 폴더 예는 `C:\Users\%USERNAME%\AppData\Local\Mozilla\Firefox\Profiles\%PROFILE%.default\cache2\` 입니다. 자세한 내용은 [캐시 (cache2)](cache2.md) 에서 다룹니다.
 - 폴더 이름의 앞부분은 무작위 문자열입니다. 뒤에 `.default` 처럼 프로필 이름이 붙습니다.
 
 ### 확인하지 못한 것
@@ -65,7 +65,7 @@
 
 ### 증명하지 못하는 것
 
-- 어느 프로필을 언제 마지막으로 썼는지는 `profiles.ini` 만으로 알기 어렵습니다. 마지막 사용 시각은 프로필 안 파일의 시각으로 봅니다. [방문·다운로드·즐겨찾기 (places.sqlite)](/02-artifacts/browsers/firefox/places-sqlite.md) 를 참고합니다.
+- 어느 프로필을 언제 마지막으로 썼는지는 `profiles.ini` 만으로 알기 어렵습니다. 마지막 사용 시각은 프로필 안 파일의 시각으로 봅니다. [방문·다운로드·즐겨찾기 (places.sqlite)](places-sqlite.md) 를 참고합니다.
 - 프로필이 있다고 그 프로필의 주인이 키보드 앞의 사람이라고 단정할 수 없습니다.
 - `profiles.ini` 에서 사라진 프로필이 실제로 지워졌다는 뜻은 아닙니다. 프로필 폴더가 디스크에 그대로 남아 있을 수 있습니다.
 
@@ -74,7 +74,7 @@
 ## 함정과 한계
 
 - **원본 프로필을 브라우저로 열지 않습니다.** 파이어폭스로 프로필을 열면 파일이 바뀝니다. 항상 해시를 기록한 사본으로 분석합니다.
-- **쓰는 중인 프로필은 잠깁니다.** 파이어폭스는 쓰는 중인 프로필을 운영체제 파일 잠금으로 잠급니다. 같은 프로필로 두 번째 실행을 하면 "프로필 사용 중" 오류가 납니다. 실행 중인 프로필은 파일이 계속 바뀌고, 복사가 막히는 파일이 있을 수 있습니다. [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 참고합니다.
+- **쓰는 중인 프로필은 잠깁니다.** 파이어폭스는 쓰는 중인 프로필을 운영체제 파일 잠금으로 잠급니다. 같은 프로필로 두 번째 실행을 하면 "프로필 사용 중" 오류가 납니다. 실행 중인 프로필은 파일이 계속 바뀌고, 복사가 막히는 파일이 있을 수 있습니다. [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 을 참고합니다.
 - **`profiles.ini` 하나만 보고 끝내지 않습니다.** 디스크에는 목록에 없는 프로필 폴더가 남아 있을 수 있습니다. `Profiles` 폴더 아래를 직접 훑습니다.
 - **본 폴더와 로컬 폴더를 함께 봅니다.** 방문 기록은 본 폴더에 있고 캐시는 로컬 폴더에 있습니다. 한쪽만 수집하면 캐시나 기록이 빠집니다.
 - **다른 컴퓨터의 프로필일 수 있습니다.** 프로필 폴더는 통째로 복사할 수 있습니다. 폴더 안 파일의 시각과 이 컴퓨터의 다른 흔적을 맞춰 봅니다.
@@ -83,12 +83,12 @@
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문·다운로드·즐겨찾기 | 프로필을 실제로 언제 썼는지, 무엇을 열었는지 봅니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| $MFT·$UsnJrnl | 프로필 폴더와 그 안 파일의 생성·수정 시각, 지운 프로필의 흔적을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| 사용자 프로필 목록 | 이 파이어폭스 프로필이 어느 윈도 사용자 계정에 속하는지 봅니다 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
-| 섀도 복사본 | 지금은 없는 프로필의 옛 상태를 봅니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 방문·다운로드·즐겨찾기 | 프로필을 실제로 언제 썼는지, 무엇을 열었는지 봅니다 | [places.sqlite](places-sqlite.md) |
+| $MFT·$UsnJrnl | 프로필 폴더와 그 안 파일의 생성·수정 시각, 지운 프로필의 흔적을 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| 사용자 프로필 목록 | 이 파이어폭스 프로필이 어느 윈도 사용자 계정에 속하는지 봅니다 | [사용자 프로필 목록](../../system-account/profilelist.md) |
+| 섀도 복사본 | 지금은 없는 프로필의 옛 상태를 봅니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-파이어폭스 프로필 안 파일을 한눈에 보려면 [파이어폭스 (Firefox)](/02-artifacts/browsers/firefox/index.md) 허브에서 시작합니다.
+파이어폭스 프로필 안 파일을 한눈에 보려면 [파이어폭스 (Firefox)](index.md) 허브에서 시작합니다.
 
 ## 참고 문헌
 

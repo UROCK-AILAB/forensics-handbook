@@ -35,9 +35,9 @@
 | 채널 · 공급자 | 채널 `Security`, 공급자 `Microsoft-Windows-Security-Auditing` |
 | 시각 | UTC. EVTX 는 FILETIME, EVT 는 32비트 POSIX 시각입니다. |
 | 로그 파일 경로를 바꾼 경우 | SYSTEM 하이브 `ControlSet00X\Services\EventLog\Security` 키의 `File` 값에 경로가 남습니다. 값이 없으면 기본 폴더를 씁니다. |
-| 무엇을 남길지 | 감사 정책이 정합니다. 확인하는 법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 다룹니다. |
+| 무엇을 남길지 | 감사 정책이 정합니다. 확인하는 법은 [감사 정책과 로그 설정](../audit-policy-log-settings.md) 에서 다룹니다. |
 
-파일 형식은 [이벤트 로그 형식 (EVTX·EVT·ETL)](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다. XP·2003 의 옛 형식은 [구형 EVT 형식](/01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md) 에서 다룹니다.
+파일 형식은 [이벤트 로그 형식 (EVTX·EVT·ETL)](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다. XP·2003 의 옛 형식은 [구형 EVT 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md) 에서 다룹니다.
 
 ### 이벤트 목록
 
@@ -75,46 +75,46 @@
 
 | 알 수 있는 것 | 어디에 남나 | 자세히 |
 |---|---|---|
-| 어느 계정이 언제 로그온했나 | 4624 의 새 로그온 (New Logon) 계정과 기록 시각 | [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) |
-| 어떤 방식으로 들어왔나 | 4624·4625 의 로그온 유형 | [로그온 유형 해석](/02-artifacts/event-logs/logon-events/logon-type.md) |
-| 어디서 들어왔나 | 4624·4625 의 워크스테이션 이름, 원본 네트워크 주소 | [로그온 유형 해석](/02-artifacts/event-logs/logon-events/logon-type.md) |
-| 왜 실패했나 | 4625 의 상태 (Status) · 하위 상태 (Sub Status) 코드 | [로그온 실패와 실패 코드](/02-artifacts/event-logs/logon-events/4625.md) |
-| 세션이 얼마나 이어졌나 | 로그온 ID 로 짝지은 4624 와 4634·4647 | [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) |
-| 자리를 비웠다 돌아왔나 | 4800·4801, 4624 의 로그온 유형 7 (잠금 해제) | [화면 잠금·해제](/02-artifacts/event-logs/logon-events/4800-4801.md) |
-| 다른 계정의 자격 증명을 넣어 접속했나 | 4648 | [명시적 자격 증명·특수 권한](/02-artifacts/event-logs/logon-events/4648-4672.md) |
-| 관리자급 권한으로 로그온했나 | 4672, 4624 의 관리자 권한 토큰 칸 | [명시적 자격 증명·특수 권한](/02-artifacts/event-logs/logon-events/4648-4672.md) |
-| 도메인 계정이 어느 컴퓨터에서 인증을 요청했나 | 도메인 컨트롤러의 4768·4769·4776 | [도메인 인증 이벤트](/02-artifacts/event-logs/logon-events/4768-4769-4776.md) |
-| 도착 PC 의 로그온과 도메인 컨트롤러 기록 잇기 | 4624·4648 과 4769 에 같이 남는 로그온 GUID (Logon GUID). 값이 모두 0 으로 비어 있는 경우도 있습니다. | [도메인 인증 이벤트](/02-artifacts/event-logs/logon-events/4768-4769-4776.md) |
-| 어느 컴퓨터의 로그를 모아야 하나 | 이벤트마다 남는 컴퓨터가 다름 | [기록이 남는 위치](/02-artifacts/event-logs/logon-events/pc.md) |
+| 어느 계정이 언제 로그온했나 | 4624 의 새 로그온 (New Logon) 계정과 기록 시각 | [로그온 세션 잇기](logon-id-4624-4634-4647.md) |
+| 어떤 방식으로 들어왔나 | 4624·4625 의 로그온 유형 | [로그온 유형 해석](logon-type.md) |
+| 어디서 들어왔나 | 4624·4625 의 워크스테이션 이름, 원본 네트워크 주소 | [로그온 유형 해석](logon-type.md) |
+| 왜 실패했나 | 4625 의 상태 (Status) · 하위 상태 (Sub Status) 코드 | [로그온 실패와 실패 코드](4625.md) |
+| 세션이 얼마나 이어졌나 | 로그온 ID 로 짝지은 4624 와 4634·4647 | [로그온 세션 잇기](logon-id-4624-4634-4647.md) |
+| 자리를 비웠다 돌아왔나 | 4800·4801, 4624 의 로그온 유형 7 (잠금 해제) | [화면 잠금·해제](4800-4801.md) |
+| 다른 계정의 자격 증명을 넣어 접속했나 | 4648 | [명시적 자격 증명·특수 권한](4648-4672.md) |
+| 관리자급 권한으로 로그온했나 | 4672, 4624 의 관리자 권한 토큰 칸 | [명시적 자격 증명·특수 권한](4648-4672.md) |
+| 도메인 계정이 어느 컴퓨터에서 인증을 요청했나 | 도메인 컨트롤러의 4768·4769·4776 | [도메인 인증 이벤트](4768-4769-4776.md) |
+| 도착 PC 의 로그온과 도메인 컨트롤러 기록 잇기 | 4624·4648 과 4769 에 같이 남는 로그온 GUID (Logon GUID). 값이 모두 0 으로 비어 있는 경우도 있습니다. | [도메인 인증 이벤트](4768-4769-4776.md) |
+| 어느 컴퓨터의 로그를 모아야 하나 | 이벤트마다 남는 컴퓨터가 다름 | [기록이 남는 위치](pc.md) |
 
 ### 시각을 읽을 때
 
 - 레코드 시각은 UTC 로 저장됩니다. 이벤트 뷰어 같은 도구는 이 값을 보는 PC 의 시간대로 바꿔 보여 줄 수 있습니다. 보고서에는 어느 시간대로 적었는지 밝힙니다.
-- 이 시각은 이벤트를 기록한 컴퓨터의 시계를 따릅니다. 여러 컴퓨터의 로그를 합칠 때는 컴퓨터마다 시계 오차를 확인합니다. 방법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md) 에서 다룹니다.
-- 시스템 시각을 바꾼 기록은 [시간 변경 (4616·Kernel-General)](/02-artifacts/event-logs/4616-kernel-general.md) 에서 찾습니다.
+- 이 시각은 이벤트를 기록한 컴퓨터의 시계를 따릅니다. 여러 컴퓨터의 로그를 합칠 때는 컴퓨터마다 시계 오차를 확인합니다. 방법은 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md) 에서 다룹니다.
+- 시스템 시각을 바꾼 기록은 [시간 변경 (4616·Kernel-General)](../4616-kernel-general.md) 에서 찾습니다.
 
 ## 읽는 순서
 
-1. [로그온 유형 해석 (Logon Type)](/02-artifacts/event-logs/logon-events/logon-type.md) — 4624·4625 의 로그온 유형 숫자가 어떤 접속 방식인지 정리합니다. 유형마다 원격 주소와 계정 칸이 어떻게 채워지는지도 다룹니다.
-2. [로그온 실패와 실패 코드 (4625)](/02-artifacts/event-logs/logon-events/4625.md) — 상태 코드와 하위 상태 코드로 실패 이유를 나눕니다. 짧은 시간에 몰린 실패를 읽는 법도 다룹니다.
-3. [로그온 세션 잇기 (Logon ID·4624~4634·4647)](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) — 로그온 ID 로 4624 와 4634·4647 을 짝지어 세션 길이를 구합니다. 짝이 없는 이벤트와 재부팅 뒤 같은 ID 가 다시 나오는 경우도 다룹니다.
-4. [화면 잠금·해제 (4800·4801)](/02-artifacts/event-logs/logon-events/4800-4801.md) — 자리를 비운 시각과 돌아온 시각을 읽습니다. 이 감사가 꺼져 있을 때 기댈 수 있는 다른 기록도 다룹니다.
-5. [명시적 자격 증명·특수 권한 (4648·4672)](/02-artifacts/event-logs/logon-events/4648-4672.md) — 다른 계정의 자격 증명을 넣어 접속한 흔적과 특수 권한이 붙은 로그온을 읽습니다. 4648 을 어느 컴퓨터에서 찾을지도 다룹니다.
-6. [도메인 인증 이벤트 (4768·4769·4776)](/02-artifacts/event-logs/logon-events/4768-4769-4776.md) — 도메인 컨트롤러에 남는 Kerberos·NTLM 인증 기록을 읽습니다. 어느 컴퓨터에서 어느 계정이 인증을 요청했는지 좁힙니다.
-7. [기록이 남는 위치 (로컬 PC와 도메인 컨트롤러)](/02-artifacts/event-logs/logon-events/pc.md) — 한 번의 접속이 출발 PC, 도착 PC, 도메인 컨트롤러에 각각 무엇을 남기는지 정리합니다. 어느 컴퓨터의 로그를 수집해야 하는지 이 페이지로 정합니다.
+1. [로그온 유형 해석 (Logon Type)](logon-type.md) — 4624·4625 의 로그온 유형 숫자가 어떤 접속 방식인지 정리합니다. 유형마다 원격 주소와 계정 칸이 어떻게 채워지는지도 다룹니다.
+2. [로그온 실패와 실패 코드 (4625)](4625.md) — 상태 코드와 하위 상태 코드로 실패 이유를 나눕니다. 짧은 시간에 몰린 실패를 읽는 법도 다룹니다.
+3. [로그온 세션 잇기 (Logon ID·4624~4634·4647)](logon-id-4624-4634-4647.md) — 로그온 ID 로 4624 와 4634·4647 을 짝지어 세션 길이를 구합니다. 짝이 없는 이벤트와 재부팅 뒤 같은 ID 가 다시 나오는 경우도 다룹니다.
+4. [화면 잠금·해제 (4800·4801)](4800-4801.md) — 자리를 비운 시각과 돌아온 시각을 읽습니다. 이 감사가 꺼져 있을 때 기댈 수 있는 다른 기록도 다룹니다.
+5. [명시적 자격 증명·특수 권한 (4648·4672)](4648-4672.md) — 다른 계정의 자격 증명을 넣어 접속한 흔적과 특수 권한이 붙은 로그온을 읽습니다. 4648 을 어느 컴퓨터에서 찾을지도 다룹니다.
+6. [도메인 인증 이벤트 (4768·4769·4776)](4768-4769-4776.md) — 도메인 컨트롤러에 남는 Kerberos·NTLM 인증 기록을 읽습니다. 어느 컴퓨터에서 어느 계정이 인증을 요청했는지 좁힙니다.
+7. [기록이 남는 위치 (로컬 PC와 도메인 컨트롤러)](pc.md) — 한 번의 접속이 출발 PC, 도착 PC, 도메인 컨트롤러에 각각 무엇을 남기는지 정리합니다. 어느 컴퓨터의 로그를 수집해야 하는지 이 페이지로 정합니다.
 
 ## 함께 볼 페이지
 
-- [감사 정책과 로그 설정 (Audit Policy·Log Settings)](/02-artifacts/event-logs/audit-policy-log-settings.md) — 이 이벤트들이 남도록 켜져 있었는지, 로그 크기 한도가 얼마였는지 확인합니다.
-- [EVTX 파일 구조 (File Header·Chunk·Record)](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) · [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md) — 보안 로그 파일을 직접 읽고, 손상된 레코드를 되살립니다.
-- [원격 데스크톱 이벤트 (RDP Event Logs)](/02-artifacts/event-logs/rdp-event-logs/index.md) — 4624 유형 10 과 세션 재연결·연결 끊김 (4778·4779) 을 원격 데스크톱 로그와 함께 읽습니다.
-- [켜짐·꺼짐 (Power On·Off Events)](/02-artifacts/event-logs/power-on-off-events.md) — 로그오프 이벤트가 없는 세션의 끝을 전원 기록으로 메웁니다.
-- [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md) — 보안 로그를 지운 흔적을 찾습니다.
-- [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md) · [사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md) · [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — 이벤트에 남은 SID 를 계정 이름과 프로필 폴더에 맞춥니다.
-- [공유 폴더 접근 (5140·5145)](/02-artifacts/event-logs/5140-5145.md) · [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) — 네트워크 로그온 뒤에 무엇을 했는지 이어 봅니다.
-- [이벤트 로그 규칙 검색 (Sigma Rules)](/03-techniques/analysis/sigma-rules.md) — 많은 로그온 이벤트에서 의심스러운 형태를 골라냅니다.
-- [PC 사용 시간 재구성 (켜짐·꺼짐·로그온)](/04-scenarios/activity/system-usage-time.md) · [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 로그온 기록을 사용 시간과 사용자 판단에 씁니다.
-- [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) · [비밀번호 대입 공격이 있었나](/04-scenarios/incident/credential-theft-lateral-movement/brute-force.md) · [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) — 침해 조사에서 로그온 이벤트를 읽는 순서입니다.
+- [감사 정책과 로그 설정 (Audit Policy·Log Settings)](../audit-policy-log-settings.md) — 이 이벤트들이 남도록 켜져 있었는지, 로그 크기 한도가 얼마였는지 확인합니다.
+- [EVTX 파일 구조 (File Header·Chunk·Record)](../../../01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) · [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](../../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md) — 보안 로그 파일을 직접 읽고, 손상된 레코드를 되살립니다.
+- [원격 데스크톱 이벤트 (RDP Event Logs)](../rdp-event-logs/index.md) — 4624 유형 10 과 세션 재연결·연결 끊김 (4778·4779) 을 원격 데스크톱 로그와 함께 읽습니다.
+- [켜짐·꺼짐 (Power On·Off Events)](../power-on-off-events.md) — 로그오프 이벤트가 없는 세션의 끝을 전원 기록으로 메웁니다.
+- [이벤트 로그 삭제 (1102·104)](../1102-104.md) — 보안 로그를 지운 흔적을 찾습니다.
+- [사용자 계정 (SAM)](../../system-account/sam.md) · [사용자 프로필 목록 (ProfileList)](../../system-account/profilelist.md) · [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — 이벤트에 남은 SID 를 계정 이름과 프로필 폴더에 맞춥니다.
+- [공유 폴더 접근 (5140·5145)](../5140-5145.md) · [프로세스 생성 (4688)](../4688.md) — 네트워크 로그온 뒤에 무엇을 했는지 이어 봅니다.
+- [이벤트 로그 규칙 검색 (Sigma Rules)](../../../03-techniques/analysis/sigma-rules.md) — 많은 로그온 이벤트에서 의심스러운 형태를 골라냅니다.
+- [PC 사용 시간 재구성 (켜짐·꺼짐·로그온)](../../../04-scenarios/activity/system-usage-time.md) · [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) — 로그온 기록을 사용 시간과 사용자 판단에 씁니다.
+- [원격 데스크톱 침입 확인](../../../04-scenarios/incident/rdp-intrusion.md) · [비밀번호 대입 공격이 있었나](../../../04-scenarios/incident/credential-theft-lateral-movement/brute-force.md) · [다른 PC 에서 원격 실행했나](../../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) — 침해 조사에서 로그온 이벤트를 읽는 순서입니다.
 
 ## 참고 문헌
 

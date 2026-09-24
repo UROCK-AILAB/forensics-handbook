@@ -1,6 +1,6 @@
 # 숨긴 예약 작업 찾기 (SD 값 삭제)
 
-> 상위 허브: [예약 작업 (Scheduled Tasks)](/02-artifacts/persistence/scheduled-tasks/index.md)
+> 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)
 
 ## 한 줄 요약
 
@@ -19,7 +19,7 @@ Microsoft 분석에 따르면 살아 있는 시스템에서 SD 값을 지우려�
 
 재부팅한 뒤에 숨긴 작업이 다시 실행되는지는 이번 조사에서 확인하지 못했습니다. Tarrask 가 `System32\Tasks` 의 XML 파일도 지웠는지도 확인하지 못했습니다.
 
-예약 작업을 기록하는 이벤트 로그(보안 로그 4698, TaskScheduler/Operational)는 둘 다 기본으로 꺼져 있습니다. 한 PC 에서도 둘 다 꺼져 있었습니다. (확인 범위: Win11 25H2 한 대) 그래서 이런 작업의 흔적은 레지스트리와 파일에만 남을 수 있습니다. 로그 설정은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 확인합니다.
+예약 작업을 기록하는 이벤트 로그(보안 로그 4698, TaskScheduler/Operational)는 둘 다 기본으로 꺼져 있습니다. 한 PC 에서도 둘 다 꺼져 있었습니다. (확인 범위: Win11 25H2 한 대) 그래서 이런 작업의 흔적은 레지스트리와 파일에만 남을 수 있습니다. 로그 설정은 [감사 정책과 로그 설정](../../event-logs/audit-policy-log-settings.md)에서 확인합니다.
 
 ## 위치
 
@@ -30,7 +30,7 @@ Microsoft 분석에 따르면 살아 있는 시스템에서 SD 값을 지우려�
 | 이어서 볼 키 | `TaskCache\Tasks\{Id 의 GUID}` |
 | 이어서 볼 파일 | `C:\Windows\System32\Tasks\<작업 경로>` |
 
-Tree 키의 값과 SD 값의 구조는 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)에서 다룹니다.
+Tree 키의 값과 SD 값의 구조는 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](taskcache-tree-tasks.md)에서 다룹니다.
 
 ## Hidden 설정과 다른 점
 
@@ -42,17 +42,17 @@ XML 의 `Settings\Hidden` 도 작업을 화면에서 가립니다. 하지만 두
 | 화면에서 | 기본으로 보이지 않습니다. 관리자가 숨긴 작업을 모두 보이게 하는 스위치로 다시 볼 수 있습니다 | `schtasks /query` 결과와 작업 스케줄러 화면에서 사라집니다 |
 | 정상 작업도 쓰나 | 씁니다. 한 PC 의 업데이트 작업도 Hidden 이 true 였습니다 (확인 범위: Win11 25H2 한 대) | 정상으로 보이는 PC 한 대에서 한 건도 없었습니다 (아래 절차 3) |
 
-그래서 Hidden 이 true 인 작업만 보고 숨김 기법이라고 판단하지 않습니다. Hidden 요소는 [작업 정의 파일 (System32\Tasks XML)](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md)에서 다룹니다.
+그래서 Hidden 이 true 인 작업만 보고 숨김 기법이라고 판단하지 않습니다. Hidden 요소는 [작업 정의 파일 (System32\Tasks XML)](system32-tasks-xml.md)에서 다룹니다.
 
 ## 찾는 절차
 
 1. **SOFTWARE 하이브와 `System32\Tasks` 폴더를 수집합니다.** 숨긴 작업은 `schtasks /query` 와 작업 스케줄러 화면에 나오지 않습니다. 그래서 목록 도구보다 레지스트리를 직접 읽습니다.
 2. **Tree 아래 키를 모두 훑고, Id 값이 있는 키만 고릅니다.** 폴더에 해당하는 키에는 Id 가 없고 SD 만 있습니다.
 3. **그중 SD 값이 없는 키를 적습니다.** 정상으로 보이는 PC 한 대에서는 Id 가 있는 Tree 키 306개가 모두 SD 값이 있었습니다. SD 없는 키는 0개였습니다. (확인 범위: Win11 25H2 한 대)
-4. **Id 의 GUID 로 `Tasks\{GUID}` 키를 찾습니다.** Path, Actions, DynamicInfo 를 읽습니다. Actions 에는 실행 대상 문자열이, DynamicInfo 오프셋 12 에는 마지막 실행 시각(UTC)이 있습니다. 읽는 법은 [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)를 봅니다.
+4. **Id 의 GUID 로 `Tasks\{GUID}` 키를 찾습니다.** Path, Actions, DynamicInfo 를 읽습니다. Actions 에는 실행 대상 문자열이, DynamicInfo 오프셋 12 에는 마지막 실행 시각(UTC)이 있습니다. 읽는 법은 [작업 캐시 레지스트리](taskcache-tree-tasks.md)를 봅니다.
 5. **Path 로 XML 파일을 찾습니다.** 파일이 있으면 Command, Arguments, Triggers 를 읽습니다. 레지스트리 Hash 와 파일 해시가 같은지도 봅니다.
 6. **목록과 대조합니다.** `TaskCache\Tasks` 의 작업 경로 목록을 `schtasks /query`·`Get-ScheduledTask` 결과와 맞춰 봅니다. 한 PC 에서는 Tasks 하위 키 269개와 Get-ScheduledTask 결과 269개가 같았습니다. (확인 범위: Win11 25H2 한 대) 레지스트리에만 있는 작업이 있으면 그 작업부터 봅니다.
-7. **로그를 켜 두었다면 이벤트를 찾습니다.** 작업 이름으로 [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md)를 검색합니다.
+7. **로그를 켜 두었다면 이벤트를 찾습니다.** 작업 이름으로 [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md)를 검색합니다.
 
 `Get-ScheduledTask` 가 SD 없는 작업을 보여 주는지는 이번 조사에서 확인하지 못했습니다. Microsoft 분석은 `schtasks /query` 와 작업 스케줄러 화면만 언급합니다. 그래서 6단계는 보조 수단으로 쓰고, 3단계의 레지스트리 검사를 기준으로 삼습니다. Microsoft 도 탐지 권고로 SD 값이 없는 작업을 레지스트리에서 훑어보라고 적었습니다.
 
@@ -100,7 +100,7 @@ XML 의 `Settings\Hidden` 도 작업을 화면에서 가립니다. 하지만 두
 | `Microsoft\Windows\ExampleMaintenance` | `{GUID-A}` | 있음 (REG_BINARY 148바이트) | 보통 작업입니다 |
 | `ExampleUpdater` | `{GUID-B}` | 없음 | 숨긴 작업일 수 있습니다. `Tasks\{GUID-B}` 를 봅니다 |
 
-세 번째 키는 작업 경로가 루트(`\ExampleUpdater`)이기도 합니다. 루트에 있는 작업을 눈여겨보는 까닭은 [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md)의 "증거로서 의미" 를 봅니다.
+세 번째 키는 작업 경로가 루트(`\ExampleUpdater`)이기도 합니다. 루트에 있는 작업을 눈여겨보는 까닭은 [작업 정의 파일](system32-tasks-xml.md)의 "증거로서 의미" 를 봅니다.
 
 ### 공개 도구로 한 번
 
@@ -138,12 +138,12 @@ Compare-Object $reg $api
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 작업 캐시 레지스트리 | 숨긴 작업의 경로, 실행 대상, 마지막 실행 시각 | [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md) |
-| 작업 정의 XML | 실행할 명령, 트리거, 실행 계정 | [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md) |
-| 예약 작업 이벤트 | 작업을 만든 계정과 XML 전체 (켜 둔 경우) | [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md) |
-| 프로세스 생성 · Sysmon | 작업이 실행한 프로그램이 숨긴 뒤에도 돌았는지 (켜 둔 경우) | [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md), [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 메모리 | 아직 실행 중인 작업 프로세스 | [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) |
-| 섀도 복사본 | 예전 SOFTWARE 하이브에서 SD 값이 있던 모습 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 작업 캐시 레지스트리 | 숨긴 작업의 경로, 실행 대상, 마지막 실행 시각 | [작업 캐시 레지스트리](taskcache-tree-tasks.md) |
+| 작업 정의 XML | 실행할 명령, 트리거, 실행 계정 | [작업 정의 파일](system32-tasks-xml.md) |
+| 예약 작업 이벤트 | 작업을 만든 계정과 XML 전체 (켜 둔 경우) | [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md) |
+| 프로세스 생성 · Sysmon | 작업이 실행한 프로그램이 숨긴 뒤에도 돌았는지 (켜 둔 경우) | [프로세스 생성 (4688)](../../event-logs/4688.md), [Sysmon 로그](../../event-logs/sysmon/index.md) |
+| 메모리 | 아직 실행 중인 작업 프로세스 | [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) |
+| 섀도 복사본 | 예전 SOFTWARE 하이브에서 SD 값이 있던 모습 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
 ## 실습
 

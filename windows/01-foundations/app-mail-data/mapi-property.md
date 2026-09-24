@@ -18,13 +18,13 @@ libfmapi 는 MAPI 를 쓰는 파일 형식으로 아래를 듭니다.
 
 | 파일 형식 | 다루는 페이지 |
 |---|---|
-| PFF (PST·OST·PAB) | [아웃룩](/02-artifacts/mail/outlook/index.md) |
-| NK2 | [아웃룩](/02-artifacts/mail/outlook/index.md) |
-| Exchange 의 EDB (ESE 기반) | [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) |
+| PFF (PST·OST·PAB) | [아웃룩](../../02-artifacts/mail/outlook/index.md) |
+| NK2 | [아웃룩](../../02-artifacts/mail/outlook/index.md) |
+| Exchange 의 EDB (ESE 기반) | [ESE 데이터베이스](../database-log-formats/extensible-storage-engine/index.md) |
 
 - 이 페이지는 속성 번호와 값 형식만 다룹니다.
 - 파일 안에서 속성을 찾아가는 구조는 각 형식의 페이지에서 다룹니다.
-- 메일에 원래 붙어 있던 인터넷 헤더의 문법은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
+- 메일에 원래 붙어 있던 인터넷 헤더의 문법은 [인터넷 메일 형식](eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
 
 ## 구조
 
@@ -273,18 +273,18 @@ Microsoft 문서에서 두 속성을 따로 확인했습니다.
 
 - PS_INTERNET_HEADERS 집합에는 `Content-Type`·`Content-Transfer-Encoding`·`Accept-Language` 같은 인터넷 헤더 이름이 PidName 속성으로 들어 있습니다.
 - 같은 이름 붙은 속성이 저장소마다 같은 번호를 받는지는 확인하지 못했습니다. 그래서 0x8000 이상 속성은 번호가 아니라 GUID 와 이름으로 가립니다.
-- GUID 표기는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+- GUID 표기는 [윈도 식별자 형식](../value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ## 읽는 법
 
-1. **저장소 형식부터 풉니다.** PST·OST·NK2 는 [아웃룩](/02-artifacts/mail/outlook/index.md), Exchange EDB 는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 를 따라 속성 목록까지 갑니다.
+1. **저장소 형식부터 풉니다.** PST·OST·NK2 는 [아웃룩](../../02-artifacts/mail/outlook/index.md), Exchange EDB 는 [ESE 데이터베이스](../database-log-formats/extensible-storage-engine/index.md) 를 따라 속성 목록까지 갑니다.
 2. **식별자와 값 형식을 따로 적습니다.** 둘을 짝으로 속성을 가립니다.
 3. **범위로 성격을 봅니다.** MAPI 정의인지, 제공자가 정한 것인지, 전송 안 되는 속성인지 위 범위 표로 봅니다.
 4. **0x8000 이상은 대응표로 풉니다.** 저장소의 name-to-id map 에서 GUID 와 이름(문자열이나 숫자)을 찾습니다.
 5. **값 형식대로 풉니다.** 문자열은 끝 NUL 에 기대지 말고 저장소가 적은 길이로 자릅니다. String8 은 코드 페이지를 확인합니다.
-6. **시각을 풉니다.** Time(0x0040)은 FILETIME, FloatingTime(0x0007)은 1899-12-30 기준 날 수입니다. FILETIME 은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+6. **시각을 풉니다.** Time(0x0040)은 FILETIME, FloatingTime(0x0007)은 1899-12-30 기준 날 수입니다. FILETIME 은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 7. **본문 세 가지를 비교합니다.** 0x1000(텍스트), 0x1009(압축 RTF), 0x1013(HTML)이 모두 있으면 내용이 서로 맞는지 봅니다. RTF 는 LZFu 압축을 풀어서 읽습니다.
-8. **원래 헤더와 대조합니다.** 0x007D 의 헤더를 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 대로 읽습니다. 그 안의 `Message-ID`·`In-Reply-To` 를 0x1035·0x1042·0x1039 와 맞춰 봅니다.
+8. **원래 헤더와 대조합니다.** 0x007D 의 헤더를 [인터넷 메일 형식](eml-mbox-rfc-5322-mime.md) 대로 읽습니다. 그 안의 `Message-ID`·`In-Reply-To` 를 0x1035·0x1042·0x1039 와 맞춰 봅니다.
 
 ### 헥스로 한 번 따라가기
 
@@ -299,7 +299,7 @@ String8 (0x001E)            52 65           Re
 ```
 
 - 둘 다 끝 NUL 이 없는 꼴로 적었습니다. libfmapi 는 끝 NUL 이 없을 때도 있다고 적습니다.
-- String8 의 한글은 코드 페이지를 알아야 풉니다. [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- String8 의 한글은 코드 페이지를 알아야 풉니다. [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 
 **다중 값 문자열 (0x101F) 의 뼈대**
 
@@ -330,7 +330,7 @@ String8 (0x001E)            52 65           Re
 - 0x3008 은 하위 객체를 고쳐도 바뀝니다. libfmapi 설명이 "객체나 하위 객체" 라고 적습니다. 첨부 같은 하위 객체의 변경도 이 시각에 반영될 수 있습니다.
 - 0x3007 이 이 저장소에 사본을 만든 시각인지, 원래 메시지를 만든 시각인지는 이번 자료로 가리지 못했습니다. 다른 시각과 대조한 뒤에 씁니다.
 - 0x0055 는 이 메시지의 배달 시각이 아닙니다. 답장·전달한 원래 메시지의 배달 시각 사본입니다 (Microsoft 문서).
-- 0x007D 에 원래 헤더가 있으면 그 안의 `Date`·`Received` 시각과 비교합니다. 헤더 시각의 뜻은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
+- 0x007D 에 원래 헤더가 있으면 그 안의 `Date`·`Received` 시각과 비교합니다. 헤더 시각의 뜻은 [인터넷 메일 형식](eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
 - 보고서에는 "0x0039 속성에 이 시각이 있다" 처럼 속성 번호를 붙여 씁니다.
 
 ### 전송 안 되는 속성은 이쪽 저장소의 상태입니다
@@ -353,7 +353,7 @@ String8 (0x001E)            52 65           Re
 
 ### Bcc
 
-- 받은 쪽 헤더에서는 `Bcc` 줄이 빠질 수 있습니다. [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 을 봅니다.
+- 받은 쪽 헤더에서는 `Bcc` 줄이 빠질 수 있습니다. [인터넷 메일 형식](eml-mbox-rfc-5322-mime.md) 을 봅니다.
 - MAPI 에는 숨은 참조를 담는 자리가 따로 있습니다. 0x0E02 PidTagDisplayBcc 와 수신자 형식 3(BCC)입니다.
 - 숨은 수신자를 찾을 때는 보낸 쪽 저장소의 이 자리를 확인합니다.
 
@@ -370,7 +370,7 @@ String8 (0x001E)            52 65           Re
 ### 지운 메시지
 
 - 속성 값은 저장소 형식 안에 들어 있습니다.
-- 지운 항목과 빈 블록에서 속성을 되살리는 법은 [아웃룩](/02-artifacts/mail/outlook/index.md) 과 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+- 지운 항목과 빈 블록에서 속성을 되살리는 법은 [아웃룩](../../02-artifacts/mail/outlook/index.md) 과 [ESE 데이터베이스](../database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ## 함정
 
@@ -384,7 +384,7 @@ String8 (0x001E)            52 65           Re
 - **도구가 보여 준 이름을 공식 이름으로 씁니다.** 0x0E06 처럼 자료마다 이름이 어긋나는 속성이 있습니다. libfmapi 는 0x0E06 이름 칸에 0x0055 의 이름을 적습니다. 보고서에는 번호와 값 형식을 함께 적습니다.
 - **"Unknown" 설명을 뜻 없음으로 봅니다.** 0x0055, 0x0E1B, 0x1039 는 libfmapi 설명이 "Unknown" 이지만 Microsoft 문서에는 뜻이 있습니다. 뜻은 공식 문서에서 찾습니다.
 - **다중 값의 빈 요소를 손상으로 봅니다.** 위치가 겹치면 빈 값입니다.
-- **압축 RTF 를 그대로 검색합니다.** 0x1009 는 보통 LZFu 로 압축돼 있습니다. 풀기 전에는 글자 검색에 걸리지 않습니다. [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 을 봅니다.
+- **압축 RTF 를 그대로 검색합니다.** 0x1009 는 보통 LZFu 로 압축돼 있습니다. 풀기 전에는 글자 검색에 걸리지 않습니다. [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 을 봅니다.
 
 ## 도구
 
@@ -396,8 +396,8 @@ String8 (0x001E)            52 65           Re
 | libfmapi 문서 | 속성 번호·값 형식 번호표로 씁니다 |
 | 헥스 편집기 | 문자열 인코딩, 다중 값 구조를 직접 봅니다 |
 
-도구마다 속성 이름이나 시각이 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
-메일 주고받은 기록을 사람 단위로 묶는 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 를 봅니다.
+도구마다 속성 이름이나 시각이 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
+메일 주고받은 기록을 사람 단위로 묶는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 를 봅니다.
 
 ## 참고 문헌
 

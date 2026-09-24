@@ -6,9 +6,9 @@ IE 10 이후의 인터넷 익스플로러와 옛 엣지(EdgeHTML)는 방문 기�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- IE 4~9 는 이 기록을 용도별 `index.dat` 파일에 나눠 두었습니다. 옛 형식은 [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) 에서 다룹니다.
+- IE 4~9 는 이 기록을 용도별 `index.dat` 파일에 나눠 두었습니다. 옛 형식은 [옛 기록 파일 (index.dat)](index-dat.md) 에서 다룹니다.
 - IE 10 부터는 `WebCacheV*.dat` 파일 하나에 기록을 둡니다.
-- 이 파일의 형식은 ESE (Extensible Storage Engine) 데이터베이스입니다. 페이지·B-트리·트랜잭션 로그 같은 저장 형식은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+- 이 파일의 형식은 ESE (Extensible Storage Engine) 데이터베이스입니다. 페이지·B-트리·트랜잭션 로그 같은 저장 형식은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 - 옛 엣지도 캐시·방문 기록·내려받기 기록을 이 파일 안의 서로 다른 컨테이너에 둡니다.
 - 옛 엣지의 새 버전은 쿠키도 이 파일에 둡니다.
 - 컨테이너는 기록을 묶는 단위입니다. 컨테이너마다 표가 하나씩 따로 생깁니다.
@@ -48,7 +48,7 @@ V01tmp.log
 ```
 
 - 로그와 체크포인트 파일은 이름이 `V01` 로 시작하고 확장자가 `.log`·`.chk` 였습니다.
-- [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 처럼 `.jtx`·`.jcp` 확장자를 쓰지 않았습니다.
+- [윈도 검색 색인 DB](../../file-folder-usage/windows-search/index.md) 처럼 `.jtx`·`.jcp` 확장자를 쓰지 않았습니다.
 - 비정상 종료 상태의 DB 를 JET API 로 열려면 이 로그가 필요합니다. 그래서 폴더를 통째로 수집합니다.
 
 ## 구조
@@ -82,7 +82,7 @@ V01tmp.log
 3. 그 번호가 붙은 `Container_#` 표를 엽니다.
 4. 쿠키는 같은 번호가 붙은 `CookieEntryEx_#` 표에서 읽습니다.
 
-`Container_#` 의 Filename·FileSize 칸과 캐시 폴더의 실제 파일을 잇는 방법은 [쿠키·캐시 폴더 (INetCookies·INetCache)](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) 에서 다룹니다.
+`Container_#` 의 Filename·FileSize 칸과 캐시 폴더의 실제 파일을 잇는 방법은 [쿠키·캐시 폴더 (INetCookies·INetCache)](inetcookies-inetcache.md) 에서 다룹니다.
 
 ### 컨테이너 이름
 
@@ -94,7 +94,7 @@ V01tmp.log
 | wpnidm, iecompat, iecompatua, DNTException, DOMStore | 코드에 "아직 지원하지 않음" 으로 적혀 있습니다 |
 
 - DOMStore 는 두 목록에 모두 나옵니다.
-- `MSHist` 이름 규칙과 옛 index.dat 의 관계는 [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) 에서 다룹니다.
+- `MSHist` 이름 규칙과 옛 index.dat 의 관계는 [옛 기록 파일 (index.dat)](index-dat.md) 에서 다룹니다.
 
 ### 한 PC 에서 찾은 표 이름
 
@@ -127,7 +127,7 @@ Windows 11 25H2 PC 의 WebCacheV01.dat 사본에서 표 이름 문자열을 찾�
 
 ## 시각 해석
 
-- 시각 칸은 모두 FILETIME 입니다. 변환 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 시각 칸은 모두 FILETIME 입니다. 변환 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 값이 `0x7FFFFFFFFFFFFFFF` 이면 plaso 는 "기한 없음" 으로 처리합니다.
 - 값이 1 인 FILETIME 같은 특수값은 plaso 도 아직 처리하지 않는다고 적어 두었습니다. 변환 결과가 1601년 1월 1일로 나오면 특수값을 먼저 의심합니다.
 
@@ -156,9 +156,9 @@ plaso 는 각 시각 칸에 아래 설명을 붙입니다.
 - **사본은 비정상 종료 상태입니다.** 사용 중인 DB 를 복사한 사본은 머리글 상태가 Dirty Shutdown 이었습니다. (확인 범위: 같은 PC)
 - **압수 이미지에서 꺼낸 파일도 대부분 비정상 종료 (dirty shutdown) 상태입니다.** JET API 로 열려면 같은 폴더의 트랜잭션 로그로 먼저 복구해야 합니다. 로그 사슬이 끊겨 복구가 안 되는 경우가 있습니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다. (확인 범위: 현장 검체 분석 관찰)
 - **원본을 열지 않습니다.** 원본을 열면 내용이 바뀔 수 있습니다. 항상 사본에서 작업합니다. (확인 범위: 현장 검체 분석 관찰)
-- **도구마다 행 수가 다를 수 있습니다.** 손상된 ESE DB 는 읽는 방식에 따라 결과 행 수가 달라집니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냅니다. 두 가지 이상 방식으로 열어 비교합니다. 비교 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다. (확인 범위: 현장 검체 분석 관찰)
+- **도구마다 행 수가 다를 수 있습니다.** 손상된 ESE DB 는 읽는 방식에 따라 결과 행 수가 달라집니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냅니다. 두 가지 이상 방식으로 열어 비교합니다. 비교 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에서 다룹니다. (확인 범위: 현장 검체 분석 관찰)
 - **긴 값이 조용히 망가질 수 있습니다.** ESE 의 긴 값 (Long Value) 은 조각으로 나뉘어 저장됩니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가집니다. 긴 값이 들어가는 칸은 길이가 그럴듯한지 확인합니다. (확인 범위: 현장 검체 분석 관찰)
-- **값이 압축돼 있을 수 있습니다.** ESE 값 압축에는 7비트 ASCII·7비트 유니코드·XPRESS·XPRESS9·XPRESS10·LZ4 가 있습니다. 압축 형식은 [윈도 압축 형식](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에서 다룹니다. (확인 범위: 현장 검체 분석 관찰)
+- **값이 압축돼 있을 수 있습니다.** ESE 값 압축에는 7비트 ASCII·7비트 유니코드·XPRESS·XPRESS9·XPRESS10·LZ4 가 있습니다. 압축 형식은 [윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에서 다룹니다. (확인 범위: 현장 검체 분석 관찰)
 - **문자열 검색 결과는 표 목록이 아닙니다.** 파일 바이트에서 찾은 표 이름에는 지운 표의 잔재가 섞일 수 있습니다. 표 목록은 카탈로그 (Catalog) 를 해석해서 얻습니다.
 
 ## 직접 분석해 보기
@@ -170,7 +170,7 @@ plaso 는 각 시각 칸에 아래 설명을 붙입니다.
 3. `CookieEntryEx_` 문자열을 찾습니다. 쿠키 표 이름이 나옵니다.
 4. 찾은 번호를 적어 두고, 뒤에서 공개 도구로 연 `Containers` 표의 ContainerId 와 맞춰 봅니다.
 
-이 방법으로 얻는 것은 표 이름 후보뿐입니다. 표 목록은 카탈로그를 해석해야 확정됩니다. 카탈로그와 페이지 구조는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+이 방법으로 얻는 것은 표 이름 후보뿐입니다. 표 목록은 카탈로그를 해석해야 확정됩니다. 카탈로그와 페이지 구조는 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -193,17 +193,17 @@ plaso 는 각 시각 칸에 아래 설명을 붙입니다.
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 옛 기록 파일 | 같은 PC 에서 IE 9 이전에 남긴 기록을 봅니다 | [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) |
-| 주소창 입력 주소 | History 행의 주소를 사용자가 직접 입력했는지 봅니다 | [주소창 입력 주소](/02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) |
-| 쿠키·캐시 폴더 | Filename 칸이 가리키는 캐시 파일이 실제로 있는지 봅니다 | [쿠키·캐시 폴더](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) |
-| 저장 비밀번호 | History 에 남은 주소로 저장 비밀번호 값을 풉니다 | [저장 비밀번호 (IntelliForms)](/02-artifacts/browsers/ie-edgehtml/intelliforms.md) |
-| 다운로드 출처 표시 | iedownload 행의 파일에 다운로드 출처 표시가 남았는지 봅니다 | [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) |
-| $MFT·$UsnJrnl | WebCacheV01.dat 와 로그 파일이 언제 만들어지고 바뀌었는지 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| 섀도 복사본 | 이전 시점의 DB 를 꺼내 지운 행을 찾습니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 시간대 설정 | 시각 칸을 현지 시각으로 바꿀 때 기준을 봅니다 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
-| 다른 브라우저 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md), [파이어폭스](/02-artifacts/browsers/firefox/index.md) |
+| 옛 기록 파일 | 같은 PC 에서 IE 9 이전에 남긴 기록을 봅니다 | [옛 기록 파일 (index.dat)](index-dat.md) |
+| 주소창 입력 주소 | History 행의 주소를 사용자가 직접 입력했는지 봅니다 | [주소창 입력 주소](typedurls-typedurlstime.md) |
+| 쿠키·캐시 폴더 | Filename 칸이 가리키는 캐시 파일이 실제로 있는지 봅니다 | [쿠키·캐시 폴더](inetcookies-inetcache.md) |
+| 저장 비밀번호 | History 에 남은 주소로 저장 비밀번호 값을 풉니다 | [저장 비밀번호 (IntelliForms)](intelliforms.md) |
+| 다운로드 출처 표시 | iedownload 행의 파일에 다운로드 출처 표시가 남았는지 봅니다 | [다운로드 출처 표시](../../filesystem/zone-identifier.md) |
+| $MFT·$UsnJrnl | WebCacheV01.dat 와 로그 파일이 언제 만들어지고 바뀌었는지 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| 섀도 복사본 | 이전 시점의 DB 를 꺼내 지운 행을 찾습니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 시간대 설정 | 시각 칸을 현지 시각으로 바꿀 때 기준을 봅니다 | [시간대 설정](../../system-account/time-zone.md) |
+| 다른 브라우저 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md), [파이어폭스](../firefox/index.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

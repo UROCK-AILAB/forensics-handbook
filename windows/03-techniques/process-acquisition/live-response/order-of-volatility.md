@@ -10,7 +10,7 @@
 - 끄기 전에 무엇을 어떤 순서로 모을지 정할 때 씁니다.
 - 현장에 가기 전에 도구 매체와 기록 양식을 준비할 때 씁니다.
 
-켜진 시스템에서 수집할지 말지 정하는 기준은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 허브에서 다룹니다. 이 페이지는 수집하기로 정한 뒤의 순서와 규칙을 다룹니다.
+켜진 시스템에서 수집할지 말지 정하는 기준은 [라이브 응답](index.md) 허브에서 다룹니다. 이 페이지는 수집하기로 정한 뒤의 순서와 규칙을 다룹니다.
 
 ## 두 문서의 순서
 
@@ -36,12 +36,12 @@ NIST SP 800-86 은 2006년 8월에 나온 문서입니다. 5.2.1.3 절은 아래
 
 | 순서 | 대상 | 이 위키에서 다루는 곳 |
 |---|---|---|
-| 1 | 네트워크 연결 | [네트워크 상태 수집](/03-techniques/process-acquisition/live-response/connections-dns-arp-routes.md) |
-| 2 | 로그인 세션 | [로그온 세션·클립보드·화면 수집](/03-techniques/process-acquisition/live-response/sessions-clipboard-screen.md) |
-| 3 | 메모리 내용 | [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) |
-| 4 | 실행 중 프로세스 | [프로세스·DLL·핸들 수집](/03-techniques/process-acquisition/live-response/processes-dlls-handles.md) |
-| 5 | 열린 파일 | [프로세스·DLL·핸들 수집](/03-techniques/process-acquisition/live-response/processes-dlls-handles.md) |
-| 6 | 네트워크 설정 | [네트워크 상태 수집](/03-techniques/process-acquisition/live-response/connections-dns-arp-routes.md) |
+| 1 | 네트워크 연결 | [네트워크 상태 수집](connections-dns-arp-routes.md) |
+| 2 | 로그인 세션 | [로그온 세션·클립보드·화면 수집](sessions-clipboard-screen.md) |
+| 3 | 메모리 내용 | [메모리 분석](../../analysis/memory-forensics/index.md) |
+| 4 | 실행 중 프로세스 | [프로세스·DLL·핸들 수집](processes-dlls-handles.md) |
+| 5 | 열린 파일 | [프로세스·DLL·핸들 수집](processes-dlls-handles.md) |
+| 6 | 네트워크 설정 | [네트워크 상태 수집](connections-dns-arp-routes.md) |
 | 7 | OS 시각 | 이 페이지의 "시각 기록" |
 
 네트워크 연결과 로그인 세션을 앞에 두는 까닭은 둘입니다. 연결은 시간이 지나면 끊기거나 닫힙니다. 접속한 사용자 목록은 순간마다 달라집니다. 네트워크 설정처럼 덜 바뀌는 데이터는 뒤로 돌립니다.
@@ -63,12 +63,12 @@ NIST 는 모을 데이터가 사건마다 다르다고 적습니다. 문서가 �
 
 ## 절차
 
-1. **화면을 먼저 기록합니다.** 시스템을 만지기 전에 화면을 사진으로 남깁니다. 방법은 [로그온 세션·클립보드·화면 수집](/03-techniques/process-acquisition/live-response/sessions-clipboard-screen.md)에 있습니다.
+1. **화면을 먼저 기록합니다.** 시스템을 만지기 전에 화면을 사진으로 남깁니다. 방법은 [로그온 세션·클립보드·화면 수집](sessions-clipboard-screen.md)에 있습니다.
 2. **관련 시스템을 찾고, 밖에서 바뀔 길을 막습니다.** RFC 3227 이 적은 수집 단계입니다. 네트워크를 끊을 때는 아래 "하지 말 것" 을 먼저 봅니다.
 3. **도구 매체를 연결하고 기록을 시작합니다.** 명령과 결과를 남기는 스크립트를 먼저 돌립니다. 아래 "도구 준비" 를 봅니다.
 4. **빨리 사라지는 것부터 모읍니다.** NIST 순서로는 네트워크 연결, 로그인 세션, 메모리, 프로세스, 열린 파일, 네트워크 설정 차례입니다.
 5. **시각과 시간대를 기록합니다.** 대상 시스템의 시계가 얼마나 어긋났는지도 적습니다. 아래 "시각 기록" 을 봅니다.
-6. **필요하면 켜진 채로 디스크를 복사합니다.** 방법과 한계는 [실행 중 시스템 이미징](/03-techniques/process-acquisition/live-response/live-imaging.md)에서 다룹니다.
+6. **필요하면 켜진 채로 디스크를 복사합니다.** 방법과 한계는 [실행 중 시스템 이미징](live-imaging.md)에서 다룹니다.
 7. **끄는 방법을 정합니다.** 아래 "끄는 방법" 을 봅니다.
 8. **보관 기록을 남깁니다.** 아래 "기록과 보관" 을 봅니다.
 
@@ -101,7 +101,7 @@ NIST 5.2.1.1 절과 RFC 3227 이 권하는 내용입니다.
 - NIST 는 Windows 에서 `date`, `time`, `nlsinfo` 명령을 함께 써서 시각과 시간대를 얻는다고 적었습니다. 2006년 문서이므로 지금 Windows 에 같은 명령이 있는지는 따로 확인합니다.
 - RFC 3227 은 수집 단계에 시계 어긋남 기록을 넣습니다. 대상 시스템의 시계와 믿을 수 있는 시계를 나란히 적습니다.
 
-디스크에 남은 시간대 설정은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서, 시계를 바꾼 기록은 [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md)에서 다룹니다.
+디스크에 남은 시간대 설정은 [시간대 설정](../../../02-artifacts/system-account/time-zone.md)에서, 시계를 바꾼 기록은 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md)에서 다룹니다.
 
 ### 끄는 방법
 
@@ -124,7 +124,7 @@ RFC 3227 은 증거마다 아래 내용을 남기라고 적습니다. 이 기록
 - 어떻게 보관했는지
 - 누가 언제 접근했는지
 
-개인정보는 조직 방침을 따릅니다. 정당한 이유 없이 개인 데이터를 들여다보지 않습니다. 현장 기록을 보고서로 옮기는 방법은 [분석 보고서 작성](/03-techniques/reporting/forensic-report.md)에서 다룹니다.
+개인정보는 조직 방침을 따릅니다. 정당한 이유 없이 개인 데이터를 들여다보지 않습니다. 현장 기록을 보고서로 옮기는 방법은 [분석 보고서 작성](../../reporting/forensic-report.md)에서 다룹니다.
 
 ## 도구
 
@@ -132,16 +132,16 @@ RFC 3227 은 도구 종류를 아래처럼 예로 듭니다. 예로 든 이름�
 
 | 도구 종류 | RFC 3227 의 예 | Windows 에서 다루는 곳 |
 |---|---|---|
-| 프로세스 확인 | `ps` | [프로세스·DLL·핸들 수집](/03-techniques/process-acquisition/live-response/processes-dlls-handles.md) |
-| 시스템 상태 확인 | `netstat`, `arp` | [네트워크 상태 수집](/03-techniques/process-acquisition/live-response/connections-dns-arp-routes.md) |
-| 비트 복사 | `dd` | [실행 중 시스템 이미징](/03-techniques/process-acquisition/live-response/live-imaging.md) |
+| 프로세스 확인 | `ps` | [프로세스·DLL·핸들 수집](processes-dlls-handles.md) |
+| 시스템 상태 확인 | `netstat`, `arp` | [네트워크 상태 수집](connections-dns-arp-routes.md) |
+| 비트 복사 | `dd` | [실행 중 시스템 이미징](live-imaging.md) |
 | 체크섬 | `sha1sum` | 모든 결과 파일에 씁니다 |
 
 ## 함정과 한계
 
 1. **순서를 규칙처럼 따릅니다.** 두 문서의 순서부터 다릅니다. 사건과 시스템을 보고 고른 뒤, 고른 까닭을 적습니다.
 2. **수집 도구는 흔적을 남기지 않는다고 생각합니다.** 도구도 대상 시스템에 흔적을 남깁니다. 도구마다 시스템을 어떻게 바꾸는지 미리 알아 둡니다.
-3. **믿을 수 있는 도구면 결과도 믿을 수 있다고 봅니다.** 커널 수준 루트킷이 있으면 사용자 수준 도구에 거짓 결과가 돌아올 수 있습니다. 결과는 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 결과와 맞춰 봅니다.
+3. **믿을 수 있는 도구면 결과도 믿을 수 있다고 봅니다.** 커널 수준 루트킷이 있으면 사용자 수준 도구에 거짓 결과가 돌아올 수 있습니다. 결과는 [메모리 분석](../../analysis/memory-forensics/index.md) 결과와 맞춰 봅니다.
 4. **대상 시스템의 명령을 그대로 씁니다.** 명령 파일이 바뀌어 있을 수 있습니다. OS 명령도 읽기 전용 매체의 사본을 씁니다.
 5. **네트워크나 전원을 먼저 끊습니다.** 둘 다 되돌릴 수 없습니다. 휘발성 데이터를 다 모은 뒤에 정합니다.
 
@@ -150,7 +150,7 @@ RFC 3227 은 도구 종류를 아래처럼 예로 듭니다. 예로 든 이름�
 - 모은 결과는 명령을 돌린 순간의 모습입니다. 명령마다 돌린 시각이 있어야 결과끼리 견줄 수 있습니다.
 - 먼저 모은 결과와 나중에 모은 결과가 다를 수 있습니다. 그사이에 상태가 바뀐 것일 수 있으니, 차이를 곧바로 조작 흔적으로 보지 않습니다.
 - 결과에 수집 도구 자신의 프로세스나 파일이 보일 수 있습니다. 도구 기록과 맞춰 조사 대상의 활동과 가려 냅니다.
-- 켜진 상태에서 모은 결과는 끈 뒤의 디스크 분석과 함께 읽습니다. 전체 흐름은 [포렌식 조사 절차](/03-techniques/process-acquisition/investigation-process.md)와 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다.
+- 켜진 상태에서 모은 결과는 끈 뒤의 디스크 분석과 함께 읽습니다. 전체 흐름은 [포렌식 조사 절차](../investigation-process.md)와 [증거 획득](../evidence-acquisition/index.md)에서 다룹니다.
 
 ## 참고 문헌
 

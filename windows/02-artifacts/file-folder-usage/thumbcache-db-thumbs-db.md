@@ -30,7 +30,7 @@ Vista 이후에는 캐시 종류마다 파일이 따로 있습니다. 색인 파
 | `thumbcache_*.db` | `\Users\<사용자>\AppData\Local\Microsoft\Windows\Explorer` | Vista 이후 |
 | `Thumbs.db` | 미리 보기를 만든 폴더 안. 숨김 파일입니다 | XP. 7 이후는 조건에 따라 생깁니다 |
 
-- 중앙 캐시는 사용자 프로필 폴더 안에 있습니다. 그래서 어느 계정의 캐시인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 확인합니다.
+- 중앙 캐시는 사용자 프로필 폴더 안에 있습니다. 그래서 어느 계정의 캐시인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
 Windows 11 25H2 PC 한 대의 `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 폴더에서 본 파일은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 
@@ -61,7 +61,7 @@ Windows 11 25H2 PC 한 대에서는 모든 thumbcache 파일의 형식 버전이
 | 8 · 8.1 | 사용자 프로필 폴더 (`C:\Users\<사용자>\` 아래) 에서만 만듭니다. 다른 폴더도 네트워크 경로로 열면 만듭니다 |
 | 10 · 11 | 확인한 자료에 없습니다 |
 
-네트워크 폴더에서 Thumbs.db 를 막는 정책은 아래 "함정과 한계" 에서 다룹니다. 공유 폴더 흔적은 [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) 에서 봅니다.
+네트워크 폴더에서 Thumbs.db 를 막는 정책은 아래 "함정과 한계" 에서 다룹니다. 공유 폴더 흔적은 [공유 폴더·네트워크 드라이브](../network/network-shares-mapped-drives.md) 에서 봅니다.
 
 ## 구조
 
@@ -136,7 +136,7 @@ Windows 11 25H2 PC 한 대에서는 모든 thumbcache 파일의 형식 버전이
 
 - 식별자 문자열은 64비트 ThumbnailCacheId 를 앞자리 0 없이 16진수로 쓴 값일 수 있습니다.
 - CRC-64 의 다항식은 알려져 있지 않습니다. 조회표는 `thumbcache.dll` 안에 있습니다. 문서는 계산할 때 처음과 마지막에 -1 로 XOR 하지 않는다고 적습니다. 헤더 체크섬 칸 설명에는 초기값을 -1 로 둔다고 적혀 있습니다.
-- 문자열 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- 문자열 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 Windows 11 25H2 PC 한 대에서 본 내용은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 
@@ -180,7 +180,7 @@ Windows 11 25H2 PC 한 대의 색인 파일은 오프셋 4 에 `IMMM`, 8 에 `0x
 
 ### Thumbs.db
 
-- Thumbs.db 는 OLE 복합 파일 (Compound File) 입니다. Office 문서와 같은 형식입니다. 스트림을 꺼내는 방법은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
+- Thumbs.db 는 OLE 복합 파일 (Compound File) 입니다. Office 문서와 같은 형식입니다. 스트림을 꺼내는 방법은 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
 - Windows 7 이후의 Thumbs.db 도 OLE 컨테이너입니다. 다만 Catalog 스트림이 없고 몇 가지가 바뀌었습니다.
 - XP Thumbs.db 의 Catalog 스트림에 파일 이름과 시각이 들어 있다는 설명이 널리 쓰입니다. 확인한 자료로는 그 구조와 스트림 이름 규칙을 확정하지 못했습니다.
 - libwtcdb 문서는 "Vista 에서 thumbs.db 가 thumbcache 파일로 바뀌었다" 고만 적고, Thumbs.db 형식은 설명하지 않습니다.
@@ -215,15 +215,15 @@ Windows 11 25H2 PC 한 대의 색인 파일은 오프셋 4 에 `IMMM`, 8 에 `0x
 
 - 버전 21 이후 캐시 파일과 색인 파일에는 원본 파일의 시각이나 캐시를 만든 시각 칸이 문서화돼 있지 않습니다.
 - 캐시 파일의 파일 시스템 시각은 파일 전체에 하나뿐입니다. 항목마다 따로 시각을 알려 주지 않습니다.
-- 그래서 시각은 다른 기록에서 찾습니다. 원본 파일의 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서, 폴더를 연 시각은 [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) 에서, 파일을 연 시각은 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 과 [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) 에서 찾습니다.
-- FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 그래서 시각은 다른 기록에서 찾습니다. 원본 파일의 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서, 폴더를 연 시각은 [셸백](shellbags/index.md) 에서, 파일을 연 시각은 [바로가기 파일](lnk.md) 과 [점프리스트](jump-lists.md) 에서 찾습니다.
+- FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 1. **캐시 종류 값을 다른 버전 표로 읽습니다.** 값 5 는 버전 30·31 에서 1024 이고, 버전 32 에서 768 입니다. 먼저 헤더의 형식 버전을 읽습니다.
 2. **버전 32 파일 헤더를 문서 순서대로 믿습니다.** 오프셋 12~23 의 값은 문서와 어긋나 보였습니다. 항목은 `CMMM` 서명과 항목 크기로 하나씩 따라가며 확인합니다.
 3. **24바이트 파일을 손상으로 봅니다.** 헤더만 있는 빈 캐시입니다.
-4. **식별자를 파일 이름으로 읽습니다.** 식별자는 ThumbnailCacheId 의 16진수 표기일 수 있습니다. 파일 이름이 아닙니다. 이 값이 [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 의 속성과 이어진다는 설명이 있습니다. 확인한 자료로는 확정하지 못했습니다.
+4. **식별자를 파일 이름으로 읽습니다.** 식별자는 ThumbnailCacheId 의 16진수 표기일 수 있습니다. 파일 이름이 아닙니다. 이 값이 [윈도 검색 색인 DB](windows-search/index.md) 의 속성과 이어진다는 설명이 있습니다. 확인한 자료로는 확정하지 못했습니다.
 5. **원본을 지운 뒤에도 그림이 남는다고 단정합니다.** Thumbs.db 는 원본 그림을 폴더에서 옮기거나 지워도 갱신되지 않습니다. thumbcache 도 그런지는 확인한 자료에 없습니다. 실험으로 확인하기 전에는 보고서에 쓰지 않습니다.
 6. **Thumbs.db 가 없으면 미리 보기를 안 봤다고 봅니다.** Windows 7 이후 로컬 폴더에서는 기본으로 만들지 않습니다. Windows 10·11 에서 만드는 조건은 확인한 자료에 없습니다.
 7. **체크섬 검증 결과를 그대로 믿습니다.** CRC-64 다항식이 문서에 없습니다. 도구마다 검증 방식이 다를 수 있습니다.
@@ -240,8 +240,8 @@ Windows 11 25H2 PC 한 대의 색인 파일은 오프셋 4 에 `IMMM`, 8 에 `0x
 
 - Microsoft 문서는 이 세 정책의 적용 대상을 Windows 10 2004·20H2·21H1 (KB5005101 이후) 과 Windows 11 21H2 이후로 적습니다. 이 범위는 MDM (Policy CSP) 으로 설정할 수 있는 범위입니다. 그룹 정책이 처음 나온 버전이 아닙니다.
 - thumbcache 자체를 끄는 정책의 이름과 위치는 확인하지 못했습니다.
-- 캐시 파일을 지우거나 비운 흔적은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 과 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 봅니다.
-- 지우기 전의 캐시는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다. 지운 캐시 파일의 조각은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다루는 방법으로 찾습니다.
+- 캐시 파일을 지우거나 비운 흔적은 [마스터 파일 테이블](../filesystem/mft.md) 과 [USN 변경 저널](../filesystem/usnjrnl.md) 에서 봅니다.
+- 지우기 전의 캐시는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다. 지운 캐시 파일의 조각은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다루는 방법으로 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -295,21 +295,21 @@ Windows 11 25H2 PC 한 대의 색인 파일은 오프셋 4 에 `IMMM`, 8 에 `0x
 - 형식 버전 32 의 캐시 종류 값을 제대로 이름으로 바꾸는지 확인합니다. 768·1280·1920·2560·custom_stream 파일을 옛 표로 읽지 않는지 봅니다.
 - 데이터 없는 항목을 따로 표시하는지, 조용히 빼는지 확인합니다.
 - 식별자 문자열을 그대로 보여 주는지 확인합니다. 16진수가 아닌 긴 식별자도 잘리지 않는지 봅니다.
-- 도구가 보여 준 항목 수를 헥스로 따라간 항목 수와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 도구가 보여 준 항목 수를 헥스로 따라간 항목 수와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 그림과 같은 원본 파일이 어디에 있었고 언제 바뀌거나 지워졌는지. 캐시 파일이 언제 바뀌었는지 |
-| [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) | 원본이 있던 폴더를 탐색기로 연 흔적 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 같은 파일을 연 흔적과 시각 |
-| [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) | 그림의 원본을 지운 기록 |
-| [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) | 색인에 같은 파일의 기록이 있는지 |
-| [사진 EXIF](/02-artifacts/embedded-metadata/exif.md) | 원본을 찾았다면 촬영 정보 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 캐시 파일. 지금 캐시와 비교하면 사라진 항목이 드러납니다 |
+| [마스터 파일 테이블](../filesystem/mft.md) · [USN 변경 저널](../filesystem/usnjrnl.md) | 그림과 같은 원본 파일이 어디에 있었고 언제 바뀌거나 지워졌는지. 캐시 파일이 언제 바뀌었는지 |
+| [셸백](shellbags/index.md) | 원본이 있던 폴더를 탐색기로 연 흔적 |
+| [바로가기 파일](lnk.md) · [점프리스트](jump-lists.md) | 같은 파일을 연 흔적과 시각 |
+| [휴지통](recycle-bin.md) | 그림의 원본을 지운 기록 |
+| [윈도 검색 색인 DB](windows-search/index.md) | 색인에 같은 파일의 기록이 있는지 |
+| [사진 EXIF](../embedded-metadata/exif.md) | 원본을 찾았다면 촬영 정보 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 캐시 파일. 지금 캐시와 비교하면 사라진 항목이 드러납니다 |
 
-여러 기록으로 지운 파일을 좇는 순서는 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 에서 다룹니다.
+여러 기록으로 지운 파일을 좇는 순서는 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) 에서 다룹니다.
 
 ## 실습
 

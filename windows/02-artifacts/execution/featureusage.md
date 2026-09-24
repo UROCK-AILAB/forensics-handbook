@@ -31,7 +31,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage
 
 Windows 11 열은 PC 한 대에서 본 결과입니다. (확인 범위: Win11 25H2 한 대)
 
-하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -62,7 +62,7 @@ Windows 11 PC 한 대에서 본 값은 모두 REG_DWORD 횟수였습니다. 값 
 - 앱 사용자 모델 ID (AppUserModelID). `…!App` 처럼 이름에 `!` 가 들어 있습니다
 - `!` 없는 앱 ID. 예를 들어 `MSEdge`, `Microsoft.Windows.Explorer` 입니다
 - `C:\…` 로 시작하는 전체 경로
-- 알려진 폴더 GUID 로 시작하는 경로. 예를 들어 `{6D809377-…}\…` 은 Program Files 아래입니다. GUID 를 경로로 푸는 표는 [UserAssist](/02-artifacts/execution/userassist.md) 페이지에 있습니다
+- 알려진 폴더 GUID 로 시작하는 경로. 예를 들어 `{6D809377-…}\…` 은 Program Files 아래입니다. GUID 를 경로로 푸는 표는 [UserAssist](userassist.md) 페이지에 있습니다
 - `*PID` 뒤에 16진수 8자리가 붙은 이름. AppSwitched 에 6개 있었습니다
 - 숫자만으로 된 이름
 
@@ -84,15 +84,15 @@ Windows 11 PC 한 대에서 본 값은 모두 REG_DWORD 횟수였습니다. 값 
 - **언제 했나.** 값에는 시각이 없습니다.
 - **작업 표시줄 밖의 사용.** CrowdStrike 에 따르면 작업 표시줄로 다루지 않은 앱은 이 숫자에 잡히지 않습니다. 시작 메뉴나 명령줄로만 띄운 앱은 값이 없을 수 있습니다. 값이 없다고 실행하지 않은 것은 아닙니다.
 - **정확한 첫 로그온 시각.** 아래 "시각 해석" 에서 보듯 다른 흔적보다 늦을 수 있습니다.
-- **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 보고서에는 "이 계정의 FeatureUsage\AppSwitched 에 이 앱의 값이 있고, 횟수는 N 이다" 처럼 씁니다. 횟수에 시각을 붙이지 않습니다.
 
 ## 시각 해석
 
-- `KeyCreationTime` 은 REG_QWORD 입니다. CrowdStrike 는 이 값을 64비트 FILETIME 숫자로 설명합니다. UTC 로 읽습니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- `KeyCreationTime` 은 REG_QWORD 입니다. CrowdStrike 는 이 값을 64비트 FILETIME 숫자로 설명합니다. UTC 로 읽습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - CrowdStrike 는 이 값을 키가 처음 만들어진 때, 곧 그 사용자가 처음 대화형 로그온한 때로 봅니다.
-- Windows 11 PC 한 대에서 `KeyCreationTime` 은 같은 날 가장 오래된 UserAssist·BAM 항목보다 20여 분 늦었습니다. 첫 로그온 시각 그 자체로 쓰지 말고 "그 무렵" 으로 씁니다. 첫 로그온 시각은 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 이벤트와 맞춰 봅니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 `KeyCreationTime` 은 같은 날 가장 오래된 UserAssist·BAM 항목보다 20여 분 늦었습니다. 첫 로그온 시각 그 자체로 쓰지 말고 "그 무렵" 으로 씁니다. 첫 로그온 시각은 [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트와 맞춰 봅니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 에서 하위 키의 마지막 기록 시각 (LastWrite) 은 사용할 때마다 바뀌었습니다. AppBadgeUpdated·AppSwitched 의 마지막 기록 시각은 조사 당일이었습니다. (확인 범위: Win11 25H2 한 대)
 - 하위 키의 마지막 기록 시각은 그 종류의 동작이 마지막으로 셈에 들어간 무렵을 말합니다. 어느 앱의 값이 바뀌었는지는 말하지 않습니다.
 - 같은 PC 에서 부모 키 `FeatureUsage` 의 마지막 기록 시각은 `KeyCreationTime` 과 같은 날이었습니다. 하위 키가 바뀌어도 부모 키의 시각은 따라 바뀌지 않았습니다. (확인 범위: Win11 25H2 한 대)
@@ -103,7 +103,7 @@ Windows 11 PC 한 대에서 본 값은 모두 REG_DWORD 횟수였습니다. 값 
 - **하위 키가 버전마다 다를 수 있습니다.** Windows 11 PC 한 대에는 TrayButtonClicked 가 없었습니다. (확인 범위: Win11 25H2 한 대)
 - **값 이름 형태가 여러 가지입니다.** 같은 앱이 앱 ID, 전체 경로, 알려진 폴더 GUID 경로 가운데 어느 것으로든 남을 수 있습니다. 하나로 묶기 전에 같은 앱인지 확인합니다.
 - **뜻을 모르는 이름이 있습니다.** `*PID…` 이름과 숫자 이름은 해석하지 않고 그대로 적어 둡니다.
-- **값과 키는 지울 수 있습니다.** 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+- **값과 키는 지울 수 있습니다.** 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 - **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 함께 수집합니다.
 
 ## 직접 분석해 보기
@@ -142,15 +142,15 @@ REG_DWORD 를 리틀 엔디언으로 읽으면 5 입니다. 그 하위 키가 �
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| UserAssist | 같은 계정이 탐색기로 띄운 횟수와 마지막 실행 시각을 봅니다 | [UserAssist](/02-artifacts/execution/userassist.md) |
-| BAM | 같은 앱의 최근 실행 시각을 봅니다 | [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| 점프리스트 | 작업 표시줄 오른쪽 클릭 메뉴와 같은 앱의 최근 파일을 봅니다 | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 바로가기 파일 | 작업 표시줄에 고정한 앱의 바로 가기를 봅니다 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 로그온·로그오프 | `KeyCreationTime` 을 첫 로그온 이벤트와 맞춰 봅니다 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 스토어 앱 설치 목록 | 앱 사용자 모델 ID 가 어떤 앱인지 봅니다 | [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) |
-| 사용자 프로필 목록 | 하이브가 어느 계정의 것인지 확인합니다 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
+| UserAssist | 같은 계정이 탐색기로 띄운 횟수와 마지막 실행 시각을 봅니다 | [UserAssist](userassist.md) |
+| BAM | 같은 앱의 최근 실행 시각을 봅니다 | [BAM·DAM](background-activity-moderator.md) |
+| 점프리스트 | 작업 표시줄 오른쪽 클릭 메뉴와 같은 앱의 최근 파일을 봅니다 | [점프리스트](../file-folder-usage/jump-lists.md) |
+| 바로가기 파일 | 작업 표시줄에 고정한 앱의 바로 가기를 봅니다 | [바로가기 파일](../file-folder-usage/lnk.md) |
+| 로그온·로그오프 | `KeyCreationTime` 을 첫 로그온 이벤트와 맞춰 봅니다 | [로그온·로그오프](../event-logs/logon-events/index.md) |
+| 스토어 앱 설치 목록 | 앱 사용자 모델 ID 가 어떤 앱인지 봅니다 | [스토어 앱 설치 목록](../system-account/appx-staterepository.md) |
+| 사용자 프로필 목록 | 하이브가 어느 계정의 것인지 확인합니다 | [사용자 프로필 목록](../system-account/profilelist.md) |
 
-실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에, PC 사용 시간을 재구성하는 흐름은 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md) 에 있습니다.
+실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에, PC 사용 시간을 재구성하는 흐름은 [PC 사용 시간 재구성](../../04-scenarios/activity/system-usage-time.md) 에 있습니다.
 
 ## 실습
 

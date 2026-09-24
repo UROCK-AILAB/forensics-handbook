@@ -42,28 +42,28 @@ DPAPI 는 보호 블롭 자체를 저장하지 않습니다. 블롭은 그 데�
 | 보호 블롭 | 앱이 정한 파일 | 실제로 보호된 데이터 |
 
 - 파일 구조는 대부분 공식 명세가 없습니다. 아래 하위 페이지의 바이트 구조는 역공학 자료로 확인한 것이며, 확인 범위는 Windows 7 까지입니다.
-- SID·GUID 형식은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
+- SID·GUID 형식은 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
 
 ## 읽는 순서
 
 아래 순서로 읽으면 데이터 한 조각이 어떻게 풀리는지 처음부터 끝까지 따라갈 수 있습니다.
 
-1. [DPAPI 동작 원리 (Protect·Unprotect)](/01-foundations/protection/data-protection-api/protect-unprotect.md) — 두 함수가 하는 일, 매개변수와 플래그, 블롭을 푸는 다섯 단계를 다룹니다.
-2. [DPAPI 블롭 구조 (DPAPI Blob)](/01-foundations/protection/data-protection-api/dpapi-blob.md) — 앱이 저장하는 보호 블롭의 필드 순서와 알고리즘 ID 를 헥스로 따라갑니다.
-3. [마스터키 파일 (Master Key·Protect\SID)](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) — 마스터키를 사용자 암호로 감싼 파일의 구조와 버전별 알고리즘을 다룹니다.
-4. [비밀번호 변경 기록 (CREDHIST)](/01-foundations/protection/data-protection-api/credhist.md) — 암호를 바꿀 때마다 자라는 해시 사슬과 그 쓰임을 다룹니다.
-5. [시스템 DPAPI 키 (DPAPI_SYSTEM)](/01-foundations/protection/data-protection-api/dpapi-system.md) — 암호가 없는 SYSTEM·머신 계정이 마스터키를 무엇으로 푸는지 다룹니다.
-6. [도메인 백업 키 (Domain Backup Key)](/01-foundations/protection/data-protection-api/domain-backup-key.md) — 도메인 가입 PC 의 두 번째 복호 경로를 다룹니다.
-7. [오프라인 복호 재료와 절차 (비밀번호·NT 해시·백업 키)](/01-foundations/protection/data-protection-api/nt.md) — 꺼진 디스크에서 블롭을 풀 때 무엇을 모으고 어디를 조심하는지 다룹니다.
+1. [DPAPI 동작 원리 (Protect·Unprotect)](protect-unprotect.md) — 두 함수가 하는 일, 매개변수와 플래그, 블롭을 푸는 다섯 단계를 다룹니다.
+2. [DPAPI 블롭 구조 (DPAPI Blob)](dpapi-blob.md) — 앱이 저장하는 보호 블롭의 필드 순서와 알고리즘 ID 를 헥스로 따라갑니다.
+3. [마스터키 파일 (Master Key·Protect\SID)](master-key-protect-sid.md) — 마스터키를 사용자 암호로 감싼 파일의 구조와 버전별 알고리즘을 다룹니다.
+4. [비밀번호 변경 기록 (CREDHIST)](credhist.md) — 암호를 바꿀 때마다 자라는 해시 사슬과 그 쓰임을 다룹니다.
+5. [시스템 DPAPI 키 (DPAPI_SYSTEM)](dpapi-system.md) — 암호가 없는 SYSTEM·머신 계정이 마스터키를 무엇으로 푸는지 다룹니다.
+6. [도메인 백업 키 (Domain Backup Key)](domain-backup-key.md) — 도메인 가입 PC 의 두 번째 복호 경로를 다룹니다.
+7. [오프라인 복호 재료와 절차 (비밀번호·NT 해시·백업 키)](nt.md) — 꺼진 디스크에서 블롭을 풀 때 무엇을 모으고 어디를 조심하는지 다룹니다.
 
 ## 함께 볼 페이지
 
-- [Wi-Fi 프로필 (WLAN Profiles)](/02-artifacts/network/wlan-profiles.md) — 무선 키의 오프라인 복호가 DPAPI 열쇠 계층을 씁니다.
-- [자격 증명 관리자와 볼트 (Credential Manager·Windows Vault)](/02-artifacts/credentials/credential-manager-windows-vault.md) — 저장된 자격증명이 DPAPI 로 보호됩니다.
-- [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) — 사용자 암호 해시와 DPAPI_SYSTEM 이 여기 있습니다.
-- [윈도 식별자 형식 (SID·GUID·CLSID·KnownFolderID)](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — 마스터키 폴더 이름과 파일 이름을 읽습니다.
-- [문자 인코딩 (UTF-16LE·UTF-8·CP949)](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) — 암호를 해시하기 전 UTF-16LE 로 바꾸는 이유를 봅니다.
-- [암호화 증거 다루기 (Encrypted Evidence)](/03-techniques/analysis/encrypted-evidence/index.md) — 풀 수 있는 것과 없는 것을 나누는 실무 절차입니다.
+- [Wi-Fi 프로필 (WLAN Profiles)](../../../02-artifacts/network/wlan-profiles.md) — 무선 키의 오프라인 복호가 DPAPI 열쇠 계층을 씁니다.
+- [자격 증명 관리자와 볼트 (Credential Manager·Windows Vault)](../../../02-artifacts/credentials/credential-manager-windows-vault.md) — 저장된 자격증명이 DPAPI 로 보호됩니다.
+- [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](../../../02-artifacts/credentials/sam-security/index.md) — 사용자 암호 해시와 DPAPI_SYSTEM 이 여기 있습니다.
+- [윈도 식별자 형식 (SID·GUID·CLSID·KnownFolderID)](../../value-decoding/sid-guid-clsid-known-folder-id.md) — 마스터키 폴더 이름과 파일 이름을 읽습니다.
+- [문자 인코딩 (UTF-16LE·UTF-8·CP949)](../../value-decoding/utf-16le-utf-8-cp949.md) — 암호를 해시하기 전 UTF-16LE 로 바꾸는 이유를 봅니다.
+- [암호화 증거 다루기 (Encrypted Evidence)](../../../03-techniques/analysis/encrypted-evidence/index.md) — 풀 수 있는 것과 없는 것을 나누는 실무 절차입니다.
 
 ## 참고 문헌
 

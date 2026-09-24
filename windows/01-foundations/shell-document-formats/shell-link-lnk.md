@@ -2,17 +2,17 @@
 
 ## 한 줄 요약
 
-바로가기 형식 (Shell Link Binary File Format) 은 Windows 바로가기 파일 (.lnk) 의 저장 형식입니다. 바로가기는 파일, 네트워크 공유, 검색 결과 같은 대상을 가리킵니다. 76바이트 파일 머리 뒤에 링크 대상 식별자, 위치 정보, 데이터 문자열, 추가 데이터 블록이 차례로 옵니다. 머리의 플래그가 어느 부분이 있는지 정합니다. 이 글은 형식만 다룹니다. 증거로 읽는 법은 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
+바로가기 형식 (Shell Link Binary File Format) 은 Windows 바로가기 파일 (.lnk) 의 저장 형식입니다. 바로가기는 파일, 네트워크 공유, 검색 결과 같은 대상을 가리킵니다. 76바이트 파일 머리 뒤에 링크 대상 식별자, 위치 정보, 데이터 문자열, 추가 데이터 블록이 차례로 옵니다. 머리의 플래그가 어느 부분이 있는지 정합니다. 이 글은 형식만 다룹니다. 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트
 
 | 아티팩트 | 이 형식이 들어가는 곳 | 페이지 |
 |---|---|---|
-| 바로가기 파일 | 최근 항목 폴더 등에 있는 `.lnk` 파일 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 점프리스트 자동 목록 | `.automaticDestinations-ms` 안의 16진수 이름 스트림. 스트림 하나가 LNK 데이터 하나입니다 | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 점프리스트 사용자 지정 목록 | `.customDestinations-ms` 안의 항목. LNK 클래스 ID 16바이트 뒤에 LNK 데이터가 이어집니다 | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
+| 바로가기 파일 | 최근 항목 폴더 등에 있는 `.lnk` 파일 | [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) |
+| 점프리스트 자동 목록 | `.automaticDestinations-ms` 안의 16진수 이름 스트림. 스트림 하나가 LNK 데이터 하나입니다 | [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) |
+| 점프리스트 사용자 지정 목록 | `.customDestinations-ms` 안의 항목. LNK 클래스 ID 16바이트 뒤에 LNK 데이터가 이어집니다 | [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) |
 
-자동 목록 파일 자체는 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 형식입니다.
+자동 목록 파일 자체는 [OLE 복합 파일](compound-file-binary.md) 형식입니다.
 
 ### Windows 버전
 
@@ -35,7 +35,7 @@
 | 6 | 끝 블록 (Terminal Block) | 크기 0 인 4바이트입니다 |
 
 - 바이트 순서는 리틀 엔디언입니다.
-- 날짜·시각은 UTC 기준 FILETIME 입니다. FILETIME 을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 날짜·시각은 UTC 기준 FILETIME 입니다. FILETIME 을 푸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ### 파일 머리 (76바이트)
 
@@ -58,7 +58,7 @@
 
 - 머리의 세 시각은 LNK 파일 자신의 시각이 아닙니다. 대상 파일의 시각입니다.
 - ShowCommand 값은 0x1 (SW_SHOWNORMAL), 0x3 (SW_SHOWMAXIMIZED), 0x7 (SW_SHOWMINNOACTIVE) 입니다. 다른 값은 SW_SHOWNORMAL 로 취급합니다.
-- 머리를 헥스로 읽는 예는 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
+- 머리를 헥스로 읽는 예는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
 
 ### 데이터 플래그 (LinkFlags)
 
@@ -90,7 +90,7 @@
 ### 링크 대상 식별자 (LinkTargetIDList)
 
 - 2바이트 크기 뒤에 셸 아이템 목록이 옵니다.
-- 목록과 셸 아이템을 읽는 법은 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
+- 목록과 셸 아이템을 읽는 법은 [셸 아이템 (Shell Item·PIDL)](shell-item-pidl.md) 에서 다룹니다.
 
 ### 위치 정보 (LinkInfo)
 
@@ -156,7 +156,7 @@
 - 플래그가 켜진 문자열만 있습니다. 꺼진 문자열은 자리도 없이 건너뜁니다.
 - 문자열 하나는 2바이트 글자 수와 문자열로 이루어집니다.
 - 크기 칸은 바이트 수가 아니라 글자 수입니다.
-- IsUnicode 가 켜져 있으면 UTF-16LE 이고, 아니면 코드 페이지 문자열입니다. 코드 페이지 문자열을 읽는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- IsUnicode 가 켜져 있으면 UTF-16LE 이고, 아니면 코드 페이지 문자열입니다. 코드 페이지 문자열을 읽는 법은 [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ### 추가 데이터 블록 (Extra Data Block)
 
@@ -179,7 +179,7 @@
 
 - **환경 변수 위치**: 260바이트 ASCII 경로와 520바이트 유니코드 경로가 들어갑니다.
 - **특수 폴더 위치**: 오프셋 8 에 특수 폴더 번호, 오프셋 12 에 첫 자식 위치가 있습니다. 첫 자식 위치는 셸 아이템 목록 시작에서 센 바이트 수입니다.
-- **알려진 폴더 위치**: 오프셋 8 에 알려진 폴더 GUID 16바이트, 오프셋 24 에 첫 자식 위치가 있습니다. 알려진 폴더 GUID 는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+- **알려진 폴더 위치**: 오프셋 8 에 알려진 폴더 GUID 16바이트, 오프셋 24 에 첫 자식 위치가 있습니다. 알려진 폴더 GUID 는 [윈도 식별자 형식](../value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 - **메타데이터 속성 저장소**: 속성 저장소 (Property Store) 가 하나 이상 들어갑니다.
 - **셸 아이템 목록**: 셸 아이템 목록이 들어갑니다. liblnk 문서는 이 블록을 Vista 에서 추가된 것으로 적지만 불확실하다고 표시합니다.
 
@@ -201,9 +201,9 @@
 - 네 GUID 는 NTFS 객체 ID 입니다.
 - droid 볼륨 ID 는 그 볼륨 `$Volume` 파일의 `$OBJECT_ID` 속성에 있습니다.
 - droid 파일 ID 는 그 파일의 `$OBJECT_ID` 속성에 있습니다.
-- `$OBJECT_ID` 속성은 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
+- `$OBJECT_ID` 속성은 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 다룹니다.
 - droid 볼륨 ID 의 가장 낮은 비트가 볼륨 사이 이동 플래그라는 설명이 있습니다. liblnk 문서는 이 설명에 불확실 표시를 붙였습니다.
-- 머신 식별자와 GUID 를 증거로 읽는 법은 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
+- 머신 식별자와 GUID 를 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
 
 ## 읽는 법
 
@@ -277,7 +277,7 @@
 
 - 머리 크기 4바이트와 LNK 클래스 ID 16바이트는 명세가 값을 못 박아 둔 칸입니다.
 - 그래서 모든 LNK 의 앞 20바이트는 같습니다. 비할당 영역에서 LNK 를 찾을 때 이 20바이트를 서명으로 씁니다.
-- 찾은 뒤에는 플래그와 각 부분의 크기 칸으로 끝을 가늠합니다. 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- 찾은 뒤에는 플래그와 각 부분의 크기 칸으로 끝을 가늠합니다. 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ### 남은 바이트
 
@@ -306,28 +306,28 @@ liblnk 문서에 적힌 사례입니다.
 
 ## 함정
 
-1. **머리 시각을 LNK 파일의 시각으로 읽습니다.** 머리의 세 시각은 대상 파일의 시각입니다. 시각 해석은 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
+1. **머리 시각을 LNK 파일의 시각으로 읽습니다.** 머리의 세 시각은 대상 파일의 시각입니다. 시각 해석은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
 2. **문자열 크기를 바이트 수로 읽습니다.** 데이터 문자열의 크기 칸은 글자 수입니다.
 3. **FileSize 를 실제 크기로 씁니다.** 0xFFFFFFFF 보다 큰 파일은 하위 32비트만 남습니다.
 4. **플래그만 보고 블록이 없다고 봅니다.** 모든 추가 데이터 블록이 플래그로 표시되지는 않습니다. XP 이하 LNK 는 ForceNoLinkTrack 도 쓰지 않습니다. 블록은 끝 블록까지 직접 따라가 확인합니다.
 5. **서명 검색 개수를 블록 개수로 씁니다.** 위 Windows 11 PC 에서 125개 파일을 바이트 검색하니 0xa0000003 서명이 77개 파일에서 나왔습니다. 이 숫자는 블록을 차례로 따라간 값이 아니라 대략값입니다. 보고서에는 블록을 따라가 센 값을 씁니다.
 6. **공유 이름과 공통 경로를 그냥 붙입니다.** 공유 이름이 `\` 로 끝나지 않을 수 있습니다. 붙일 때 구분자가 빠졌는지 봅니다.
 7. **코드 페이지 문자열을 분석 PC 의 코드 페이지로 읽습니다.** IsUnicode 가 꺼진 문자열과 위치 정보의 ASCII 경로는 만든 PC 의 코드 페이지를 따릅니다. 한글 경로가 깨지면 코드 페이지부터 확인합니다.
-8. **사용자 지정 점프 목록 안의 LNK 길이를 FileSize 로 잽니다.** 이 값으로 항목 크기를 판단하면 안 됩니다. 경계를 찾는 법은 [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) 에서 다룹니다.
+8. **사용자 지정 점프 목록 안의 LNK 길이를 FileSize 로 잽니다.** 이 값으로 항목 크기를 판단하면 안 됩니다. 경계를 찾는 법은 [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) 에서 다룹니다.
 9. **뜻이 확인되지 않은 플래그와 비트를 해석합니다.** 0x00100000 이후 플래그들과 droid 볼륨 ID 의 가장 낮은 비트는 liblnk 문서에서도 뜻이 불확실합니다. 보고서에는 값만 적습니다.
 10. **IconIndex 를 부호 없는 수로 읽습니다.** 부호 있는 정수입니다. 위 설치 프로그램 LNK 의 값은 -114 였습니다.
 
 ## 도구
 
 - 이 글이 따른 형식 문서는 libyal 의 liblnk 저장소에 있는 문서와 Microsoft MS-SHLLINK 의 ShellLinkHeader 절입니다.
-- LNK 파서 예와 도구 설정에서 볼 점은 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
+- LNK 파서 예와 도구 설정에서 볼 점은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
 
 도구를 쓸 때는 다음을 확인합니다.
 
 - 명세와 어긋난 파일 (위치 정보가 0 으로 채워진 파일, 블록 크기가 틀린 파일) 에서 멈추지 않는지 확인합니다.
 - 추가 데이터 블록을 끝 블록까지 모두 보여 주는지, 모르는 서명의 블록을 건너뛰는지 확인합니다.
 - 코드 페이지 문자열을 어떤 코드 페이지로 읽는지, 바꿀 수 있는지 확인합니다.
-- 파일 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 파일 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

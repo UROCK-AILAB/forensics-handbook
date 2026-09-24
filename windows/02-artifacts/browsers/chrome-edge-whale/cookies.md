@@ -20,7 +20,7 @@
 
 ### 파일 위치
 
-크롬 계열 브라우저는 모두 `User Data\<프로필>\` 아래에 같은 이름으로 쿠키 파일을 둡니다. 프로필 폴더 이름(`Default`, `Profile 1` 등)과 브라우저별 차이는 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 에서 다룹니다.
+크롬 계열 브라우저는 모두 `User Data\<프로필>\` 아래에 같은 이름으로 쿠키 파일을 둡니다. 프로필 폴더 이름(`Default`, `Profile 1` 등)과 브라우저별 차이는 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 에서 다룹니다.
 
 | 브라우저 | 기본 User Data 위치 |
 |---|---|
@@ -45,7 +45,7 @@
 - `Network\Cookies` 의 파일 생성 시각은 옮긴 때입니다. 프로필을 처음 만든 때가 아닙니다.
 - 옛 `Cookies` 는 지운 파일로 남을 수 있습니다. 옮기기 전 상태를 볼 수 있는 곳입니다.
 
-Electron·WebView2 로 만든 앱도 크로미엄의 쿠키 형식을 그대로 씁니다. 앱별 위치는 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에 있습니다.
+Electron·WebView2 로 만든 앱도 크로미엄의 쿠키 형식을 그대로 씁니다. 앱별 위치는 [Electron·WebView2 앱 데이터 위치](../../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에 있습니다.
 
 ### DB 스키마 버전
 
@@ -68,21 +68,21 @@ Electron·WebView2 로 만든 앱도 크로미엄의 쿠키 형식을 그대로 
 
 ### 값 암호화 방식
 
-`encrypted_value` 의 첫 바이트를 보면 어느 방식인지 알 수 있습니다. 키가 어디 있고 어떻게 푸는지는 [쿠키·비밀번호 암호화](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 에서 다룹니다.
+`encrypted_value` 의 첫 바이트를 보면 어느 방식인지 알 수 있습니다. 키가 어디 있고 어떻게 푸는지는 [쿠키·비밀번호 암호화](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 에서 다룹니다.
 
 | 첫머리 | 방식 | 키 |
 |---|---|---|
-| `01 00 00 00 D0 8C 9D DF …` | 옛 방식입니다. 값 전체가 사용자 DPAPI 블롭입니다 | 사용자 [DPAPI 마스터키](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) |
+| `01 00 00 00 D0 8C 9D DF …` | 옛 방식입니다. 값 전체가 사용자 DPAPI 블롭입니다 | 사용자 [DPAPI 마스터키](../../../01-foundations/protection/data-protection-api/master-key-protect-sid.md) |
 | `v10` (`76 31 30`) | AES-256-GCM 입니다 | `Local State` 의 `os_crypt.encrypted_key`. `DPAPI` 다섯 글자 뒤에 사용자 DPAPI 블롭이 있습니다 |
 | `v20` (`76 32 30`) | 앱 바인딩 암호화 (App-Bound Encryption) 입니다. Chrome 127 부터 쿠키에 씁니다 | `Local State` 의 `os_crypt.app_bound_encrypted_key`. `APPB` 네 글자로 시작합니다. SYSTEM 권한 서비스를 거쳐야 풀립니다 |
 
-- 옛 방식 블롭의 구조는 [DPAPI 블롭 구조](/01-foundations/protection/data-protection-api/dpapi-blob.md) 에 있습니다.
+- 옛 방식 블롭의 구조는 [DPAPI 블롭 구조](../../../01-foundations/protection/data-protection-api/dpapi-blob.md) 에 있습니다.
 - DB 버전 14 에서 윈도판은 모든 값을 새 방식으로 다시 암호화했습니다.
 - Edge·Whale 이 `v20` 을 쓰는지는 브라우저와 버전마다 다릅니다. 행마다 첫 3바이트를 직접 확인합니다.
 
 ## 구조
 
-저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 와 [파일·페이지 구조](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에서 다룹니다.
+저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 와 [파일·페이지 구조](../../../01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에서 다룹니다.
 
 ### 파일
 
@@ -91,7 +91,7 @@ Electron·WebView2 로 만든 앱도 크로미엄의 쿠키 형식을 그대로 
 | `Cookies` | SQLite 주 파일입니다 |
 | `Cookies-journal` | 롤백 저널입니다. 크로미엄은 저널을 TRUNCATE 방식으로 씁니다. 커밋이 끝나면 길이가 0 이 됩니다 |
 
-크로미엄의 SQLite 연결은 따로 켜야만 WAL 을 씁니다. 쿠키 DB 는 이 설정을 켜지 않습니다(2026년 9월 소스 기준). 그래서 `Cookies-wal` 파일은 생기지 않습니다. 저널 방식의 차이는 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
+크로미엄의 SQLite 연결은 따로 켜야만 WAL 을 씁니다. 쿠키 DB 는 이 설정을 켜지 않습니다(2026년 9월 소스 기준). 그래서 `Cookies-wal` 파일은 생기지 않습니다. 저널 방식의 차이는 [WAL과 롤백 저널](../../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 
 ### 표
 
@@ -157,7 +157,7 @@ DB 버전 24 이상에서는 평문 앞 32바이트가 `host_key` 의 SHA-256 �
 
 ## 시각 해석
 
-모든 시각 열은 1601년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 현지 시각이 아닙니다. 0 은 값이 없다는 뜻입니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+모든 시각 열은 1601년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 현지 시각이 아닙니다. 0 은 값이 없다는 뜻입니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 > 그림 자리: 쿠키 하나를 심고, 같은 값으로 다시 심고, 다른 값으로 바꾸고, 요청에 실어 보낼 때 네 시각 열이 각각 어떻게 움직이는지 보여 주는 시간 축 그림
 
@@ -171,20 +171,20 @@ DB 버전 24 이상에서는 평문 앞 32바이트가 `host_key` 의 SHA-256 �
 - 브라우저는 바뀐 내용을 최대 30초 모았다가 씁니다. 브라우저를 강제로 끄면 마지막 몇십 초의 변경이 파일에 없을 수 있습니다.
 - `last_access_utc` 는 60초 단위로만 갱신되므로 마지막 사용 시각보다 최대 1분 가까이 이를 수 있습니다.
 - 사이트가 늘 같은 수명(`Max-Age`)을 주는 쿠키라면 `expires_utc` 에서 그 수명을 빼서 마지막으로 심은 시각을 짐작할 수 있습니다. `last_update_utc` 가 없는 옛 DB 에서 쓸 만한 추정입니다. 보고서에는 추정이라고 밝힙니다.
-- 여러 기록을 한 시간 축에 놓을 때는 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md) 을 따릅니다.
+- 여러 기록을 한 시간 축에 놓을 때는 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **원본 프로필을 브라우저로 열지 않습니다.** 브라우저는 시작할 때 세션 쿠키를 지웁니다. 만료된 쿠키도 불러온 뒤 정리합니다. 스키마 버전이 브라우저가 지원하지 않을 만큼 옛것이면 파일을 지우고 새로 만들 수 있습니다. 항상 해시를 기록한 사본을 SQLite 도구로 엽니다.
-- **실행 중에는 복사가 막힐 수 있습니다.** 윈도판 크로미엄은 쿠키 DB 를 단독 잠금으로 여는 것이 기본값입니다. 라이브 수집에서는 섀도 복사본이나 원시 디스크 읽기를 씁니다. [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 참고합니다.
+- **실행 중에는 복사가 막힐 수 있습니다.** 윈도판 크로미엄은 쿠키 DB 를 단독 잠금으로 여는 것이 기본값입니다. 라이브 수집에서는 섀도 복사본이나 원시 디스크 읽기를 씁니다. [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 을 참고합니다.
 - **브라우저를 닫는 것도 증거를 바꿉니다.** "종료 시 쿠키 삭제" 로 정한 사이트의 쿠키는 브라우저를 닫을 때 지워집니다.
-- **지운 쿠키는 DB 안에서 되살리기 어렵습니다.** 크로미엄은 SQLite 의 `secure_delete` 를 기본으로 켭니다. 지운 행 자리는 0 으로 덮입니다. 그래서 [프리리스트·프리블록](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 옛 행을 찾을 가능성이 낮습니다.
-- **DB 밖에는 남을 수 있습니다.** 커밋 전 원래 페이지는 `Cookies-journal` 에 먼저 적힙니다. 이 저널은 커밋 뒤 길이만 0 으로 줄어듭니다. 그래서 전에 쓰던 클러스터가 [비할당 영역](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 남을 수 있습니다. 옮기기 전 옛 `Cookies`, [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md), 메모리도 봅니다. SSD 에서는 [TRIM](/03-techniques/analysis/data-recovery/ssd-trim.md) 때문에 이런 흔적이 빨리 사라집니다.
+- **지운 쿠키는 DB 안에서 되살리기 어렵습니다.** 크로미엄은 SQLite 의 `secure_delete` 를 기본으로 켭니다. 지운 행 자리는 0 으로 덮입니다. 그래서 [프리리스트·프리블록](../../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 옛 행을 찾을 가능성이 낮습니다.
+- **DB 밖에는 남을 수 있습니다.** 커밋 전 원래 페이지는 `Cookies-journal` 에 먼저 적힙니다. 이 저널은 커밋 뒤 길이만 0 으로 줄어듭니다. 그래서 전에 쓰던 클러스터가 [비할당 영역](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 남을 수 있습니다. 옮기기 전 옛 `Cookies`, [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md), 메모리도 봅니다. SSD 에서는 [TRIM](../../../03-techniques/analysis/data-recovery/ssd-trim.md) 때문에 이런 흔적이 빨리 사라집니다.
 - **값을 못 풀어도 할 수 있는 일이 많습니다.** 도메인·이름·경로·시각은 평문입니다. 값 길이도 계산할 수 있습니다. DB 버전 24 이상의 `v10`·`v20` 행은 `encrypted_value` 길이에서 63(접두사 3 + 논스 12 + 해시 32 + 태그 16)을 빼면 값의 바이트 수입니다. 버전 24 전이면 31을 뺍니다.
 - **복호 도구가 해시를 떼는지 확인합니다.** DB 버전 24 이상에서 앞 32바이트를 떼지 않으면 값 앞에 깨진 글자가 붙어 나옵니다.
-- **`v20` 은 사용자 비밀번호만으로 풀리지 않습니다.** 사용자 DPAPI 에 더해 SYSTEM 쪽 재료가 필요합니다. [시스템 DPAPI 키](/01-foundations/protection/data-protection-api/dpapi-system.md) 와 [오프라인 복호 재료와 절차](/01-foundations/protection/data-protection-api/nt.md) 를 참고합니다.
+- **`v20` 은 사용자 비밀번호만으로 풀리지 않습니다.** 사용자 DPAPI 에 더해 SYSTEM 쪽 재료가 필요합니다. [시스템 DPAPI 키](../../../01-foundations/protection/data-protection-api/dpapi-system.md) 와 [오프라인 복호 재료와 절차](../../../01-foundations/protection/data-protection-api/nt.md) 를 참고합니다.
 - **평문 `value` 가 있는 행을 눈여겨봅니다.** 윈도판 크롬 계열 브라우저는 암호화를 쓰면 `value` 를 비워 둡니다. `value` 와 `encrypted_value` 가 둘 다 찬 행은 현재 크로미엄이 불러오지 않고 버립니다. 이런 행은 옛 버전이나 다른 프로그램이 쓴 것일 수 있습니다.
-- **시크릿 창의 쿠키는 파일에 없습니다.** 시크릿 창은 쿠키를 메모리에만 둡니다. [시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md) 를 참고합니다.
+- **시크릿 창의 쿠키는 파일에 없습니다.** 시크릿 창은 쿠키를 메모리에만 둡니다. [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 를 참고합니다.
 - **프로필마다 쿠키 파일이 따로 있습니다.** `Default` 만 보고 끝내지 않습니다.
 - **도구가 스키마 버전을 모를 수 있습니다.** 옛 도구는 `secure`·`httponly` 같은 옛 열 이름을 찾다가 실패합니다. 새 열(`last_update_utc`, `source_type`)을 빼고 보여 주는 도구도 있습니다. 결과가 이상하면 `meta` 표의 버전부터 봅니다.
 
@@ -241,18 +241,18 @@ ORDER BY creation_utc;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문 기록 | 쿠키 생성 시각 무렵에 그 도메인이나 끼워 넣은 페이지를 연 기록이 있는지 봅니다 | [방문·다운로드 기록](/02-artifacts/browsers/chrome-edge-whale/history.md) |
-| 캐시 | 같은 도메인의 응답을 받은 시각을 봅니다 | [캐시](/02-artifacts/browsers/chrome-edge-whale/cache.md) |
-| 웹 저장소 | 같은 사이트가 로컬 저장소에도 흔적을 남겼는지 봅니다 | [웹 저장소](/02-artifacts/browsers/chrome-edge-whale/local-storage-indexeddb.md) |
-| 저장 비밀번호 | 같은 사이트에 로그인 정보를 저장했는지 봅니다 | [저장 비밀번호](/02-artifacts/browsers/chrome-edge-whale/login-data.md) |
-| 세션·탭 복원 | 세션 쿠키가 남은 이유(세션 복원 설정)와 열린 탭을 봅니다 | [세션·탭 복원](/02-artifacts/browsers/chrome-edge-whale/sessions.md) |
-| 확장 프로그램 | 확장 프로그램이 요청을 보내 쿠키를 만들었을 가능성을 봅니다 | [확장 프로그램](/02-artifacts/browsers/chrome-edge-whale/extensions.md) |
-| $MFT·$UsnJrnl | `Cookies`·`NetworkDataMigrated` 의 생성 시각과 옛 `Cookies` 삭제 기록을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| SRUM 네트워크 사용량 | 그 시간대에 브라우저가 실제로 통신했는지 봅니다 | [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) |
-| 응용 프로그램 이벤트 로그 | 앱 바인딩 검증에 실패한 기록이 Application 로그에 남는지 봅니다. 다른 프로그램이 쿠키를 풀려고 한 흔적일 수 있습니다. 이벤트 원본과 ID 는 판마다 검체에서 확인합니다 | [자격 증명을 빼냈나](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) |
-| 다른 브라우저 쿠키 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [파이어폭스 쿠키](/02-artifacts/browsers/firefox/cookies-sqlite.md), [IE 쿠키·캐시 폴더](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) |
+| 방문 기록 | 쿠키 생성 시각 무렵에 그 도메인이나 끼워 넣은 페이지를 연 기록이 있는지 봅니다 | [방문·다운로드 기록](history.md) |
+| 캐시 | 같은 도메인의 응답을 받은 시각을 봅니다 | [캐시](cache.md) |
+| 웹 저장소 | 같은 사이트가 로컬 저장소에도 흔적을 남겼는지 봅니다 | [웹 저장소](local-storage-indexeddb.md) |
+| 저장 비밀번호 | 같은 사이트에 로그인 정보를 저장했는지 봅니다 | [저장 비밀번호](login-data.md) |
+| 세션·탭 복원 | 세션 쿠키가 남은 이유(세션 복원 설정)와 열린 탭을 봅니다 | [세션·탭 복원](sessions.md) |
+| 확장 프로그램 | 확장 프로그램이 요청을 보내 쿠키를 만들었을 가능성을 봅니다 | [확장 프로그램](extensions.md) |
+| $MFT·$UsnJrnl | `Cookies`·`NetworkDataMigrated` 의 생성 시각과 옛 `Cookies` 삭제 기록을 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| SRUM 네트워크 사용량 | 그 시간대에 브라우저가 실제로 통신했는지 봅니다 | [네트워크 사용량](../../execution/system-resource-usage-monitor/network-data-usage.md) |
+| 응용 프로그램 이벤트 로그 | 앱 바인딩 검증에 실패한 기록이 Application 로그에 남는지 봅니다. 다른 프로그램이 쿠키를 풀려고 한 흔적일 수 있습니다. 이벤트 원본과 ID 는 판마다 검체에서 확인합니다 | [자격 증명을 빼냈나](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) |
+| 다른 브라우저 쿠키 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [파이어폭스 쿠키](../firefox/cookies-sqlite.md), [IE 쿠키·캐시 폴더](../ie-edgehtml/inetcookies-inetcache.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

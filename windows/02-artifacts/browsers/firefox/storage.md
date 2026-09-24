@@ -16,7 +16,7 @@
 
 ## 위치와 버전별 차이
 
-- 파이어폭스 프로필은 본 폴더와 로컬 폴더로 나뉩니다. 두 폴더의 위치는 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 파이어폭스 프로필은 본 폴더와 로컬 폴더로 나뉩니다. 두 폴더의 위치는 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - `storage` 폴더가 두 폴더 중 어디에 있는지는 확인하지 못했습니다. 두 폴더를 모두 훑습니다.
 - 파이어폭스 판에 따라 웹 저장소를 담는 방식이 달라졌는지도 확인하지 못했습니다. 옛 검체와 요즘 검체의 폴더 모양이 다르면 판 차이를 먼저 의심합니다.
 
@@ -32,7 +32,7 @@
 - 사이트 주소를 폴더 이름으로 바꿀 때 특수 문자를 어떻게 바꾸는지입니다.
 - 값을 압축해서 저장하는지입니다.
 - 예전 판의 로컬 저장소 파일이 무엇이었고, 몇 번 판에서 지금 방식으로 바뀌었는지입니다.
-- [쿠키 (cookies.sqlite)](/02-artifacts/browsers/firefox/cookies-sqlite.md) 의 `originAttributes` 처럼 컨테이너·분할 정보가 폴더나 파일 이름에 붙는지입니다.
+- [쿠키 (cookies.sqlite)](cookies-sqlite.md) 의 `originAttributes` 처럼 컨테이너·분할 정보가 폴더나 파일 이름에 붙는지입니다.
 
 ### 확인한 것
 
@@ -62,20 +62,20 @@
 
 - 저장소 파일 안에 시각 칸이 있는지, 있다면 단위가 무엇인지 확인하지 못했습니다.
 - `.metadata`·`.metadata-v2` 파일에는 출처의 마지막 접근 시각이 들어 있습니다. 단위와 위치를 확인하지 못했으므로, 값을 풀었다면 방문 기록의 시각과 맞춰 본 뒤에 씁니다.
-- 폴더와 파일의 생성·수정 시각은 [$MFT](/02-artifacts/filesystem/mft.md) 에서 봅니다.
+- 폴더와 파일의 생성·수정 시각은 [$MFT](../../filesystem/mft.md) 에서 봅니다.
 - 사이트 폴더가 생긴 시각은 그 사이트가 처음 데이터를 넣은 때와 가까울 수 있습니다. 이 해석은 확인하지 못한 짐작입니다. 방문 기록의 시각과 맞춰 본 뒤에 씁니다.
-- 파일을 만들고 고친 차례는 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 에서 봅니다.
-- 여러 시각을 한 시간 축에 놓을 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- 파일을 만들고 고친 차례는 [$UsnJrnl](../../filesystem/usnjrnl.md) 에서 봅니다.
+- 여러 시각을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **원본 프로필로 브라우저를 켜지 않습니다.** 브라우저를 켜고 사이트가 다시 열리면 저장소 파일이 바뀔 수 있습니다. 해시를 기록한 사본으로 분석합니다.
 - **구조를 단정하지 않습니다.** 이번 조사에서 구조를 확인하지 못했습니다. 공개 도구가 보여 주는 표 이름과 칸 이름을 원본 파일과 맞춰 봅니다.
 - **두 폴더를 모두 봅니다.** `storage` 폴더의 위치를 확인하지 못했으므로 본 폴더와 로컬 폴더를 함께 훑습니다.
-- **SQLite 파일이면 `-wal` 파일도 뜹니다.** 최근 변경이 본 파일에 아직 합쳐지지 않았을 수 있습니다. [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
-- **읽히지 않는 값은 따로 표시합니다.** 사람이 읽을 수 없는 바이트 덩어리는 압축·직렬화한 값일 수 있습니다. 푸는 법을 확인하기 전에는 키워드 검색에 걸리지 않을 수 있습니다. [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 을 참고합니다.
-- **크롬 계열의 읽는 법을 그대로 쓰지 않습니다.** 파이어폭스와 크롬 계열은 웹 저장소를 담는 방식이 다릅니다. [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 와 섞어 읽지 않습니다.
-- **지운 사이트 데이터는 따로 찾습니다.** [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
+- **SQLite 파일이면 `-wal` 파일도 뜹니다.** 최근 변경이 본 파일에 아직 합쳐지지 않았을 수 있습니다. [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
+- **읽히지 않는 값은 따로 표시합니다.** 사람이 읽을 수 없는 바이트 덩어리는 압축·직렬화한 값일 수 있습니다. 푸는 법을 확인하기 전에는 키워드 검색에 걸리지 않을 수 있습니다. [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) 을 참고합니다.
+- **크롬 계열의 읽는 법을 그대로 쓰지 않습니다.** 파이어폭스와 크롬 계열은 웹 저장소를 담는 방식이 다릅니다. [크롬 계열 브라우저](../chrome-edge-whale/index.md) 와 섞어 읽지 않습니다.
+- **지운 사이트 데이터는 따로 찾습니다.** [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
 
 ## 직접 분석해 보기
 
@@ -84,7 +84,7 @@
 구조를 확인하지 못했으므로 명세로 만든 헥스 예시는 싣지 않습니다. 대신 검체에서 파일 종류부터 가립니다.
 
 1. `storage` 폴더를 찾아 그 아래 모든 파일의 목록과 크기를 뽑습니다.
-2. 각 파일을 헥스로 열어 머리 16바이트를 봅니다. SQLite 파일인지는 이 머리로 가립니다. 머리 모양은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+2. 각 파일을 헥스로 열어 머리 16바이트를 봅니다. SQLite 파일인지는 이 머리로 가립니다. 머리 모양은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 3. SQLite 가 아닌 파일은 머리 바이트를 적어 두고 종류를 따로 확인합니다. 이름이 `.metadata`·`.metadata-v2` 인 파일은 출처의 마지막 접근 시각을 담은 파일입니다.
 
 ### 공개 도구로 한 번
@@ -98,20 +98,20 @@ SELECT type, name, sql FROM sqlite_master;
 
 3. 표 이름과 칸 이름을 적어 둡니다. 값이 글자로 읽히는 칸과 바이트 덩어리인 칸을 나눕니다.
 4. 폴더 이름에 사이트 주소가 드러나면, 방문 기록·쿠키의 도메인과 맞춰 봅니다.
-5. 웹 저장소를 풀어 주는 공개 도구를 쓸 때는 그 결과를 위에서 직접 읽은 표와 맞춰 봅니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 참고합니다.
+5. 웹 저장소를 풀어 주는 공개 도구를 쓸 때는 그 결과를 위에서 직접 읽은 표와 맞춰 봅니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 참고합니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 쿠키 | 같은 사이트의 쿠키가 언제 생겼는지 봅니다 | [쿠키 (cookies.sqlite)](/02-artifacts/browsers/firefox/cookies-sqlite.md) |
-| 방문·다운로드·즐겨찾기 | 그 사이트를 언제, 어떤 방식으로 열었는지 봅니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| 캐시 | 같은 사이트의 자원을 받은 기록을 봅니다 | [캐시 (cache2)](/02-artifacts/browsers/firefox/cache2.md) |
-| 세션 복원 | 그 사이트의 탭이 열려 있었는지 봅니다 | [세션 복원 (sessionstore.jsonlz4)](/02-artifacts/browsers/firefox/sessionstore-jsonlz4.md) |
-| $MFT·$UsnJrnl | 사이트 폴더와 파일을 만들고 고친 시각을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| 크롬 계열 웹 저장소 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) |
+| 쿠키 | 같은 사이트의 쿠키가 언제 생겼는지 봅니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
+| 방문·다운로드·즐겨찾기 | 그 사이트를 언제, 어떤 방식으로 열었는지 봅니다 | [places.sqlite](places-sqlite.md) |
+| 캐시 | 같은 사이트의 자원을 받은 기록을 봅니다 | [캐시 (cache2)](cache2.md) |
+| 세션 복원 | 그 사이트의 탭이 열려 있었는지 봅니다 | [세션 복원 (sessionstore.jsonlz4)](sessionstore-jsonlz4.md) |
+| $MFT·$UsnJrnl | 사이트 폴더와 파일을 만들고 고친 시각을 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| 크롬 계열 웹 저장소 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

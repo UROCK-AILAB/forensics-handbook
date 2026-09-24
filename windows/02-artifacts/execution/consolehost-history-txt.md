@@ -28,7 +28,7 @@ PowerShell 의 PSReadLine 모듈은 대화형 콘솔에서 친 명령을 사용�
 | Windows | `%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\` |
 | Windows 가 아닌 OS | `$Env:XDG_DATA_HOME/powershell/PSReadLine/` 또는 `$HOME/.local/share/powershell/PSReadLine/` |
 
-- `%APPDATA%` 는 사용자 프로필 아래에 있습니다. 사용자마다 파일이 따로 생깁니다. 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 확인합니다.
+- `%APPDATA%` 는 사용자 프로필 아래에 있습니다. 사용자마다 파일이 따로 생깁니다. 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 - `HistorySavePath` 옵션으로 경로를 바꿀 수 있습니다.
 - `Set-PSReadLineOption` 으로 바꾼 설정은 그 세션에만 적용됩니다. 계속 쓰려면 사용자가 프로필 스크립트에 넣어야 합니다. 경로가 바뀌었는지 알려면 사용자의 프로필 스크립트를 확인합니다.
 
@@ -123,11 +123,11 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 
 - 줄마다 시각이 없습니다.
 - 파일의 마지막 수정 시각은 마지막으로 저장한 때입니다. 기본값 `SaveIncrementally` 이면 마지막 명령을 실행한 무렵입니다. `SaveAtExit` 이면 PowerShell 을 끝낸 무렵입니다.
-- 파일 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 읽습니다.
+- 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 읽습니다.
 - 줄마다 시각을 붙이려면 다른 기록과 맞춥니다.
-  - 스크립트 블록 기록 이벤트가 켜져 있으면 그 이벤트의 시각과 내용을 봅니다. [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 에서 다룹니다.
+  - 스크립트 블록 기록 이벤트가 켜져 있으면 그 이벤트의 시각과 내용을 봅니다. [PowerShell 실행 기록](../event-logs/powershell-event-logs-4103-4104.md) 에서 다룹니다.
   - 명령이 띄운 프로그램이나 만든 파일의 시각을 봅니다.
-  - [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에 이 파일의 변경 기록이 남아 있으면, 파일이 바뀐 시각을 여러 개 얻을 수 있습니다.
+  - [USN 변경 저널](../filesystem/usnjrnl.md) 에 이 파일의 변경 기록이 남아 있으면, 파일이 바뀐 시각을 여러 개 얻을 수 있습니다.
 - 줄에 시각을 붙인 뒤에는 앞 줄이 뒤 줄보다 늦은 시각이 되지 않는지 봅니다.
 
 ## 함정과 한계
@@ -140,7 +140,7 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 - **여러 창의 명령이 섞입니다.** 기본값에서는 여러 창이 같은 파일에 씁니다. 앞뒤 줄이 같은 창에서 나왔다고 단정하지 않습니다.
 - **중복 명령도 파일에 그대로 있습니다.** `HistoryNoDuplicates` 가 켜져 있어도 마찬가지입니다. 같은 명령이 여러 번 나오면 여러 번 친 것으로 봅니다.
 - **`AddToHistoryHandler` 가 있다고 조작을 단정하지 않습니다.** 관찰한 PC 에서도 설정되어 있었습니다. 설정 내용이 어디서 왔는지 프로필 스크립트에서 확인합니다. (확인 범위: Win11 25H2 한 대)
-- **지우기와 조작.** 글자 파일이라 줄을 지우거나 고치기 쉽습니다. 파일 전체를 지울 수도 있습니다. `SaveNothing` 인 채로 세션을 끝내면 그 세션의 명령은 파일에 들어가지 않습니다. 지운 파일과 옛 내용은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 로 찾습니다.
+- **지우기와 조작.** 글자 파일이라 줄을 지우거나 고치기 쉽습니다. 파일 전체를 지울 수도 있습니다. `SaveNothing` 인 채로 세션을 끝내면 그 세션의 명령은 파일에 들어가지 않습니다. 지운 파일과 옛 내용은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 로 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -156,7 +156,7 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 - 한글은 한 글자에 3바이트입니다. `EB AC B8` 이 "문", `EC 84 9C` 가 "서" 입니다.
 - 줄 끝은 `0D 0A` 입니다. `0A` 의 개수가 저장된 명령 줄 수입니다.
 - BOM 이 없으면 파일 첫 바이트가 바로 첫 명령의 첫 글자입니다.
-- 인코딩 규칙은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 정리합니다.
+- 인코딩 규칙은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 정리합니다.
 
 ### 공개 도구로 한 번
 
@@ -182,14 +182,14 @@ Select-String -Path .\*_history.txt -Encoding UTF8 `
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| PowerShell 실행 기록 | 스크립트 블록 내용과 시각 | [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) |
-| 프로세스 생성 이벤트 | PowerShell 프로세스가 뜬 시각과 명령 줄 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| 원격 명령 실행 이벤트 | 대화형 콘솔을 거치지 않은 원격 실행 | [원격 명령 실행 이벤트](/02-artifacts/event-logs/winrm-wmi-activity.md) |
-| 프리페치 | PowerShell 과 명령이 띄운 프로그램의 실행 시각 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| USN 변경 저널 | 기록 파일이 바뀐 시각들 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 사용자 프로필 목록 | 파일이 든 프로필 폴더의 계정 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
+| PowerShell 실행 기록 | 스크립트 블록 내용과 시각 | [PowerShell 실행 기록](../event-logs/powershell-event-logs-4103-4104.md) |
+| 프로세스 생성 이벤트 | PowerShell 프로세스가 뜬 시각과 명령 줄 | [프로세스 생성](../event-logs/4688.md) |
+| 원격 명령 실행 이벤트 | 대화형 콘솔을 거치지 않은 원격 실행 | [원격 명령 실행 이벤트](../event-logs/winrm-wmi-activity.md) |
+| 프리페치 | PowerShell 과 명령이 띄운 프로그램의 실행 시각 | [프리페치](prefetch/index.md) |
+| USN 변경 저널 | 기록 파일이 바뀐 시각들 | [USN 변경 저널](../filesystem/usnjrnl.md) |
+| 사용자 프로필 목록 | 파일이 든 프로필 폴더의 계정 | [사용자 프로필 목록](../system-account/profilelist.md) |
 
-침해 조사에서 쓰는 흐름은 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) 와 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+침해 조사에서 쓰는 흐름은 [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md) 와 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 
 ## 실습
 

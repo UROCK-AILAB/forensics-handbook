@@ -15,8 +15,8 @@ Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 �
 | 버전 정보 (VERSIONINFO) | 개발자가 리소스에 적습니다(참고 2) | 파일·제품 버전, 원래 파일 이름, 회사 이름, 설명 |
 | 디지털 서명 (Authenticode) | 서명한 쪽 | 서명자, 서명 뒤로 바뀌지 않았는지, 타임스탬프 |
 
-- 다른 기록이 이 값들을 옮겨 적습니다. Sysmon 이벤트의 FileVersion·Description·Product·Company·OriginalFileName 은 실행 파일 안의 정보에서 옵니다. 칸의 뜻은 [프로세스 생성 (이벤트 1)](/02-artifacts/event-logs/sysmon/1.md) 에서 다룹니다.
-- Amcache 에 옮겨 적힌 값은 [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) 에서 다룹니다.
+- 다른 기록이 이 값들을 옮겨 적습니다. Sysmon 이벤트의 FileVersion·Description·Product·Company·OriginalFileName 은 실행 파일 안의 정보에서 옵니다. 칸의 뜻은 [프로세스 생성 (이벤트 1)](../event-logs/sysmon/1.md) 에서 다룹니다.
+- Amcache 에 옮겨 적힌 값은 [실행 파일 항목 (InventoryApplicationFile)](../execution/amcache-hve/inventoryapplicationfile.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -47,7 +47,7 @@ Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 �
 | 16 | 2 | SizeOfOptionalHeader |
 | 18 | 2 | Characteristics |
 
-- TimeDateStamp 는 1970-01-01 00:00 부터 센 초의 아래 32비트입니다. C 런타임의 time_t 값입니다. 참고 1 은 이 값이 파일을 만든 때를 나타낸다고 적었습니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- TimeDateStamp 는 1970-01-01 00:00 부터 센 초의 아래 32비트입니다. C 런타임의 time_t 값입니다. 참고 1 은 이 값이 파일을 만든 때를 나타낸다고 적었습니다. 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - Characteristics 의 0x0002 (IMAGE_FILE_EXECUTABLE_IMAGE) 는 실행할 수 있는 이미지라는 뜻입니다. 0x2000 (IMAGE_FILE_DLL) 은 DLL 이라는 뜻입니다.
 - COFF 헤더 뒤에 선택적 헤더 (Optional Header) 가 옵니다. 첫 칸 Magic 이 0x10B 면 PE32, 0x20B 면 PE32+ 입니다.
 - CheckSum 은 선택적 헤더의 오프셋 64 에 있는 4바이트입니다. 계산법은 IMAGHELP.DLL 에 있습니다. 로드할 때 이 값을 검사하는 것은 모든 드라이버, 부팅 때 읽는 DLL, 중요한 Windows 프로세스가 읽는 DLL 입니다.
@@ -261,7 +261,7 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 - `git-bash.exe` 는 CODEVIEW 디버그 항목의 TimeDateStamp 가 0 이었습니다. 헤더 값은 위 시각이었습니다.
 - 두 파일 모두 수정 시각이 서명 시각보다 앞섭니다. 9시간(이 PC 의 시간대 차이)을 더하면 `git-bash.exe` 는 17:51:22, `python.exe` 는 12:57:36 이 됩니다.
 - 설치 프로그램이 넣은 값으로 보이지만, 원인은 확인하지 못했습니다.
-- 설치된 파일의 수정 시각은 설치 시각도 빌드 시각도 아닐 수 있습니다. 파일 시스템 시각은 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
+- 설치된 파일의 수정 시각은 설치 시각도 빌드 시각도 아닐 수 있습니다. 파일 시스템 시각은 [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -280,7 +280,7 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 ### 지우기와 조작
 
 - 서명이 덮는 바이트를 한 바이트라도 바꾸면 HashMismatch 가 나왔습니다(관찰). TimeDateStamp 를 고친 서명 파일은 이 결과로 드러납니다.
-- 파일 이름 바꾸기와 CheckSum 바꾸기는 서명 결과에 드러나지 않았습니다(관찰). 이름은 OriginalFilename·해시와 맞춰 봅니다. 알려진 파일 해시와 대조하는 법은 [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) 에서 다룹니다.
+- 파일 이름 바꾸기와 CheckSum 바꾸기는 서명 결과에 드러나지 않았습니다(관찰). 이름은 OriginalFilename·해시와 맞춰 봅니다. 알려진 파일 해시와 대조하는 법은 [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) 에서 다룹니다.
 - 서명이 없는 파일은 이런 보증이 없습니다. 버전 정보와 TimeDateStamp 를 다른 기록과 맞춰 봅니다.
 
 ## 직접 분석해 보기
@@ -325,22 +325,22 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 - TimeDateStamp 를 날짜로 바꿔 보여 줄 때 REPRO 항목을 함께 보여 주는지 확인합니다.
 - 버전 정보를 글자열에서 읽는지, 고정 정보에서 읽는지 확인합니다.
 - 서명 결과가 파일 안 서명에서 왔는지, 카탈로그에서 왔는지 확인합니다.
-- 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) | Amcache 에 옮겨 적힌 버전·게시자·링크 시각 |
-| [프로세스 생성 (이벤트 1)](/02-artifacts/event-logs/sysmon/1.md) | 실행 때 기록된 OriginalFileName·버전 정보·해시 |
-| [이미지 로드·프로세스 접근 (이벤트 7·8·10)](/02-artifacts/event-logs/sysmon/7-8-10.md) | 불러온 모듈의 버전 정보와 서명 |
-| [프로세스 생성](/02-artifacts/event-logs/4688.md) | 파일 경로로 실행한 기록 |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 파일이 바깥에서 들어왔는지 |
-| [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) | 서명과 규칙으로 여러 파일을 한꺼번에 선별하기 |
-| [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) | 알려진 파일과 같은지 |
-| [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) | 파일 시스템 시각 |
+| [실행 파일 항목 (InventoryApplicationFile)](../execution/amcache-hve/inventoryapplicationfile.md) | Amcache 에 옮겨 적힌 버전·게시자·링크 시각 |
+| [프로세스 생성 (이벤트 1)](../event-logs/sysmon/1.md) | 실행 때 기록된 OriginalFileName·버전 정보·해시 |
+| [이미지 로드·프로세스 접근 (이벤트 7·8·10)](../event-logs/sysmon/7-8-10.md) | 불러온 모듈의 버전 정보와 서명 |
+| [프로세스 생성](../event-logs/4688.md) | 파일 경로로 실행한 기록 |
+| [다운로드 출처 표시 (Zone.Identifier)](../filesystem/zone-identifier.md) | 파일이 바깥에서 들어왔는지 |
+| [의심 실행 파일 선별](../../03-techniques/analysis/code-signing-yara.md) | 서명과 규칙으로 여러 파일을 한꺼번에 선별하기 |
+| [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) | 알려진 파일과 같은지 |
+| [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) | 파일 시스템 시각 |
 
-어떤 프로그램을 언제 실행했는지 여러 기록으로 좁히는 순서는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에서 다룹니다. 파일의 출처는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 봅니다.
+어떤 프로그램을 언제 실행했는지 여러 기록으로 좁히는 순서는 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에서 다룹니다. 파일의 출처는 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 를 봅니다.
 
 ## 실습
 

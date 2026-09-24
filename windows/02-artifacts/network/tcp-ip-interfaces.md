@@ -18,7 +18,7 @@ HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\<인터페이
 HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\<인터페이스 GUID>\<SSID 하위 키>
 ```
 
-- 오프라인 이미지에는 `CurrentControlSet` 이 없습니다. 공개 도구 RegRipper 의 nic2 플러그인은 SYSTEM 하이브의 `ControlSet00<현재 번호>\Services\Tcpip\Parameters\Interfaces` 를 읽습니다. 컨트롤 세트는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- 오프라인 이미지에는 `CurrentControlSet` 이 없습니다. 공개 도구 RegRipper 의 nic2 플러그인은 SYSTEM 하이브의 `ControlSet00<현재 번호>\Services\Tcpip\Parameters\Interfaces` 를 읽습니다. 컨트롤 세트는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - 이 플러그인은 인터페이스 GUID 하위 키와 그 아래 하위 키(무선 SSID)까지 돕니다.
 
 **인터페이스 GUID 를 어댑터 이름으로 바꾸기**
@@ -31,7 +31,7 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkCards\<번호>
 
 - `ServiceName` 이 인터페이스 GUID 이고, `Description` 이 어댑터 이름입니다. (확인 범위: Win11 25H2 한 대)
 - Windows 11 PC 한 대에서 `ServiceName` 4개 모두 Tcpip `Interfaces` 의 하위 키 이름과 같았습니다. (확인 범위: Win11 25H2 한 대)
-- Wi-Fi 프로필 폴더의 인터페이스 GUID 도 이 키 이름과 같았습니다. [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md) 에서 다룹니다.
+- Wi-Fi 프로필 폴더의 인터페이스 GUID 도 이 키 이름과 같았습니다. [Wi-Fi 프로필](wlan-profiles.md) 에서 다룹니다.
 
 **Windows 11 PC 한 대에서 본 것** (확인 범위: Win11 25H2 한 대)
 
@@ -92,7 +92,7 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위
 
 - 무선 인터페이스 키 아래에 하위 키가 3개 있었습니다.
 - 하위 키 이름은 그 안의 `DhcpNetworkHint` 값과 같았습니다.
-- 두 자리씩 바꾸면 [네트워크 목록](/02-artifacts/network/networklist.md) 의 `Nla\Wireless` 에 있는 SSID 16진수와 같았습니다(3/3).
+- 두 자리씩 바꾸면 [네트워크 목록](networklist.md) 의 `Nla\Wireless` 에 있는 SSID 16진수와 같았습니다(3/3).
 - 하위 키마다 `DhcpIPAddress`·`DhcpServer`·`LeaseObtainedTime` 등 부모 키와 같은 값 묶음이 있었습니다.
 - 지금 연결된 네트워크(부모 키의 `DhcpNetworkHint`)와 같은 이름의 하위 키는 없었습니다. 하위 키가 언제 만들어지는지는 확인하지 못했습니다.
 
@@ -129,7 +129,7 @@ Windows 11 PC 한 대에서 4개 모두 14바이트였습니다. (확인 범위:
 
 ## 시각 해석
 
-- `LeaseObtainedTime` 은 1970-01-01 0시부터 흐른 초입니다. Microsoft 문서는 기준 시간대를 적지 않습니다. RegRipper nic2 플러그인은 UTC 로 읽고, Windows 11 PC 한 대에서도 UTC 였습니다. (확인 범위: Win11 25H2 한 대) 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- `LeaseObtainedTime` 은 1970-01-01 0시부터 흐른 초입니다. Microsoft 문서는 기준 시간대를 적지 않습니다. RegRipper nic2 플러그인은 UTC 로 읽고, Windows 11 PC 한 대에서도 UTC 였습니다. (확인 범위: Win11 25H2 한 대) 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - `T1`·`T2`·`LeaseTerminatesTime` 도 같은 Unix 시각으로 읽습니다. 기간이 아니라 시각입니다.
 - 같은 순간이 두 기록에 다른 기준으로 적혀 있었습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -140,7 +140,7 @@ Windows 11 PC 한 대에서 4개 모두 14바이트였습니다. (확인 범위:
 | `ipconfig /all` 의 "Lease Obtained" | 현지 시각 | 같은 순간을 현지 시각으로 보여 줬습니다 |
 | 네트워크 목록 `DateLastConnected` | SYSTEMTIME, 현지 시각 | 같은 순간을 현지 시각으로 적었습니다 |
 
-- 두 레지스트리 값을 나란히 놓을 때는 한쪽을 시간대로 바꿔 맞춥니다. 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 확인합니다.
+- 두 레지스트리 값을 나란히 놓을 때는 한쪽을 시간대로 바꿔 맞춥니다. 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 - 한 PC 에서 1시간짜리 임대도 있었습니다. 임대를 갱신할 때 `LeaseObtainedTime` 이 바뀌는지는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
 
 ## 함정과 한계
@@ -152,7 +152,7 @@ Windows 11 PC 한 대에서 4개 모두 14바이트였습니다. (확인 범위:
 - **값이 없는 인터페이스 키가 있습니다.** 한 PC 에서 12개 가운데 2개가 비어 있었습니다. (확인 범위: Win11 25H2 한 대)
 - **IPv6 는 따로 있습니다.** `Tcpip6\Parameters\Interfaces` 는 이 페이지에서 다루지 않았습니다.
 - **공식 설명은 Windows 2000 자료입니다.** 이후 버전은 관찰로 맞춰 본 것입니다.
-- **앞선 값은 이전 시점에서 찾습니다.** [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 과 하이브 로그로 이전 임대 값을 찾아봅니다. 하이브 로그는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- **앞선 값은 이전 시점에서 찾습니다.** [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 하이브 로그로 이전 임대 값을 찾아봅니다. 하이브 로그는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -212,11 +212,11 @@ SSID 16진          48   4F   4D   45     ← 네트워크 목록 Nla\Wireless �
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 네트워크 목록 | 게이트웨이 MAC, SSID 16진수, 마지막 연결 시각(현지) | [네트워크 목록](/02-artifacts/network/networklist.md) |
-| Wi-Fi 프로필 | 같은 인터페이스 GUID 폴더의 무선 설정 | [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md) |
-| 네트워크 연결 이벤트 | 연결 시각 | [네트워크 연결 이벤트](/02-artifacts/event-logs/wlan-autoconfig-networkprofile.md) |
-| SRUM | 네트워크 연결 기록 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 시간대 설정 | UTC 와 현지 시각을 맞출 기준 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
+| 네트워크 목록 | 게이트웨이 MAC, SSID 16진수, 마지막 연결 시각(현지) | [네트워크 목록](networklist.md) |
+| Wi-Fi 프로필 | 같은 인터페이스 GUID 폴더의 무선 설정 | [Wi-Fi 프로필](wlan-profiles.md) |
+| 네트워크 연결 이벤트 | 연결 시각 | [네트워크 연결 이벤트](../event-logs/wlan-autoconfig-networkprofile.md) |
+| SRUM | 네트워크 연결 기록 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
+| 시간대 설정 | UTC 와 현지 시각을 맞출 기준 | [시간대 설정](../system-account/time-zone.md) |
 
 ## 실습
 

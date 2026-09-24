@@ -68,9 +68,9 @@ PC 에 남은 파일이 평문인지 암호문인지는 따로 확인합니다.
 
 ### 찾는 법
 
-1. [설치 프로그램](/02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 라인이 설치됐는지, 어디에 설치됐는지 봅니다.
-2. [프리페치](/02-artifacts/execution/prefetch/index.md) 와 [AmCache](/02-artifacts/execution/amcache-hve/index.md) 에서 라인 실행 파일의 경로를 봅니다. 이 경로가 설치 폴더를 알려 줍니다.
-3. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 목록에서 이름에 `LINE` 이 들어간 폴더를 사용자 프로필마다 찾습니다. `%APPDATA%`, `%LOCALAPPDATA%`, `%LOCALAPPDATA%\Packages` 를 먼저 봅니다.
+1. [설치 프로그램](../system-account/uninstall.md) 과 [스토어 앱 설치 목록](../system-account/appx-staterepository.md) 에서 라인이 설치됐는지, 어디에 설치됐는지 봅니다.
+2. [프리페치](../execution/prefetch/index.md) 와 [AmCache](../execution/amcache-hve/index.md) 에서 라인 실행 파일의 경로를 봅니다. 이 경로가 설치 폴더를 알려 줍니다.
+3. [마스터 파일 테이블](../filesystem/mft.md) 목록에서 이름에 `LINE` 이 들어간 폴더를 사용자 프로필마다 찾습니다. `%APPDATA%`, `%LOCALAPPDATA%`, `%LOCALAPPDATA%\Packages` 를 먼저 봅니다.
 4. 찾은 폴더에서 크기가 크고 자주 바뀐 파일을 대화 DB 후보로 적습니다.
 5. 후보 파일의 형식을 아래 "직접 분석해 보기" 처럼 앞머리로 가립니다.
 6. 검체의 앱 버전을 적습니다. 결과는 이 버전 기준으로만 말합니다.
@@ -93,16 +93,16 @@ PC 판 대화 DB 의 형식은 확인하지 못했습니다.
 
 | 앞머리 모양 | 다음에 볼 페이지 |
 |---|---|
-| SQLite 헤더 문자열 | [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) |
-| 폴더 안에 `CURRENT`·`MANIFEST-*`·`*.log`·`*.ldb` 가 함께 있음 | [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) |
-| 알아볼 서명이 없고 바이트가 고르게 흩어져 있음 | [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) |
+| SQLite 헤더 문자열 | [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) |
+| 폴더 안에 `CURRENT`·`MANIFEST-*`·`*.log`·`*.ldb` 가 함께 있음 | [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) |
+| 알아볼 서명이 없고 바이트가 고르게 흩어져 있음 | [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) |
 
 ## 증거로서 의미
 
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
 | 사용자 프로필 아래 라인 폴더가 있으면, 그 Windows 계정에서 라인을 설치했거나 실행했습니다 | 폴더만으로 그 계정이 대화를 주고받았는지 |
-| 실행 흔적이 있으면 그 시각에 라인이 실행됐습니다 | 그 시각에 누가 앱을 조작했는지. [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 를 봅니다 |
+| 실행 흔적이 있으면 그 시각에 라인이 실행됐습니다 | 그 시각에 누가 앱을 조작했는지. [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 를 봅니다 |
 | 대화 DB 를 읽을 수 있으면, 이 PC 에 내려온 메시지가 있습니다 | 계정의 전체 대화. 로그인 전 대화가 PC 에 모두 내려오지 않는다는 설명이 있습니다 |
 | 받은 파일이 폴더에 있으면 그 파일이 이 PC 에 있었습니다 | 사용자가 그 파일을 열어 봤는지 |
 | | 대화 DB 를 못 읽었을 때 대화가 없었다는 것 |
@@ -117,10 +117,10 @@ PC 판 대화 DB 의 형식은 확인하지 못했습니다.
 ## 시각 해석
 
 - 대화 DB 안 시각 칸의 형식은 확인하지 못했습니다.
-- 형식을 모르면 후보 형식을 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 맞춰 차례로 풀어 봅니다.
+- 형식을 모르면 후보 형식을 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 맞춰 차례로 풀어 봅니다.
 - 보낸 시각을 아는 시험 메시지를 가상 머신에서 만들어 두면 형식을 가리기 쉽습니다.
-- 시각이 UTC 인지 현지 시각인지도 시험 메시지로 확인합니다. 검체의 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 봅니다.
-- 폴더와 파일의 시각은 파일 시스템 시각입니다. NTFS 는 이 시각을 UTC 로 적습니다. 자세한 해석은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에 있습니다.
+- 시각이 UTC 인지 현지 시각인지도 시험 메시지로 확인합니다. 검체의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 봅니다.
+- 폴더와 파일의 시각은 파일 시스템 시각입니다. NTFS 는 이 시각을 UTC 로 적습니다. 자세한 해석은 [마스터 파일 테이블](../filesystem/mft.md) 에 있습니다.
 - 파일 수정 시각은 앱이 그 파일을 마지막으로 고친 때입니다. 메시지를 보낸 시각과 같지 않습니다.
 
 ## 함정과 한계
@@ -130,7 +130,7 @@ PC 판 대화 DB 의 형식은 확인하지 못했습니다.
 - **종단 간 암호화와 로컬 암호화를 섞습니다.** Letter Sealing 은 전송 구간 이야기입니다. PC 파일의 상태는 파일을 보고 판단합니다.
 - **PC 의 대화를 전체 대화로 봅니다.** PC 판에는 로그인 뒤에 내려온 대화만 있을 수 있습니다.
 - **다른 버전의 설명을 그대로 씁니다.** 폴더 구성과 암호화 방식은 앱 버전에 따라 바뀔 수 있습니다. 검체의 버전을 먼저 적습니다.
-- **앱을 지운 PC 에서 흔적이 없다고 봅니다.** 앱 폴더를 지워도 실행 흔적과 파일 시스템 기록은 남을 수 있습니다. [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 라인 폴더의 파일 이름과 삭제 기록을 찾습니다.
+- **앱을 지운 PC 에서 흔적이 없다고 봅니다.** 앱 폴더를 지워도 실행 흔적과 파일 시스템 기록은 남을 수 있습니다. [USN 변경 저널](../filesystem/usnjrnl.md) 에서 라인 폴더의 파일 이름과 삭제 기록을 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -138,7 +138,7 @@ PC 판 대화 DB 의 형식은 확인하지 못했습니다.
 
 대화 DB 후보를 찾으면 헥스 편집기로 파일 앞 16바이트를 봅니다.
 
-1. SQLite 헤더 문자열이 보이면 평문 SQLite 입니다. [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 의 방법으로 엽니다.
+1. SQLite 헤더 문자열이 보이면 평문 SQLite 입니다. [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 의 방법으로 엽니다.
 2. 헤더 문자열이 없으면 파일 뒤쪽도 봅니다. 알아볼 수 있는 문자열이 거의 없고 바이트가 고르게 흩어져 있으면 암호문일 가능성이 큽니다.
 3. 같은 폴더에 `-wal`·`-journal` 같은 짝 파일이 있는지 봅니다. 짝 파일이 있으면 SQLite 계열일 가능성이 큽니다.
 4. 짝 파일도 함께 수집합니다. 본 파일에 아직 반영되지 않은 내용이 짝 파일에 있을 수 있습니다.
@@ -154,21 +154,21 @@ PC 판 대화 DB 의 형식은 확인하지 못했습니다.
 | 헥스 편집기 | 파일 앞머리로 형식을 가립니다 |
 | SQLite 뷰어 | 평문 SQLite 로 확인된 파일만 엽니다 |
 
-도구가 낸 결과는 헥스로 본 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+도구가 낸 결과는 헥스로 본 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) · [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 설치 여부, 설치 방식, 설치 폴더 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 라인 실행 파일의 경로와 실행 시각 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 라인 앱의 네트워크 사용량 기록이 있는지 |
-| [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md) | 로그온할 때 라인이 자동으로 켜지도록 등록됐는지 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 라인 알림이 남았는지 |
-| [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 라인 폴더가 남았는지 |
+| [설치 프로그램](../system-account/uninstall.md) · [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 설치 여부, 설치 방식, 설치 폴더 |
+| [프리페치](../execution/prefetch/index.md) · [AmCache](../execution/amcache-hve/index.md) | 라인 실행 파일의 경로와 실행 시각 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 라인 앱의 네트워크 사용량 기록이 있는지 |
+| [로그온 자동실행](../persistence/run-runonce-startup-folder.md) | 로그온할 때 라인이 자동으로 켜지도록 등록됐는지 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 라인 알림이 남았는지 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 라인 폴더가 남았는지 |
 
-- 다른 메신저와 함께 볼 때는 [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md) · [텔레그램](/02-artifacts/messengers/telegram.md) 페이지를 봅니다.
-- 조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 와 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
+- 다른 메신저와 함께 볼 때는 [카카오톡 PC](kakaotalk-pc/index.md) · [텔레그램](telegram.md) 페이지를 봅니다.
+- 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 와 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
 
 ## 실습
 

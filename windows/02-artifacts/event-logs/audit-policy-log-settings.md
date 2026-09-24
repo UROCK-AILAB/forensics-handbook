@@ -43,8 +43,8 @@ Microsoft 는 "Recommended System Audit Policy by operating system" 이라는 �
 - Audit Credential Validation 은 표에 "No" 라고 적혀 있습니다. 칸이 빈 것과 다릅니다.
 - 나머지 하위 범주는 기본값 칸이 비어 있습니다. 기본으로 켜 있지 않다고 읽습니다. 다만 아래 PC 에서는 칸이 빈 보안 그룹 관리가 켜져 있었습니다.
 - 칸이 빈 하위 범주의 예: Audit Process Creation, Audit Security System Extension, Audit File Share, Audit File System, Audit Registry, Audit Other Logon/Logoff Events, Audit Kerberos Authentication Service, Audit Removable Storage.
-- Audit Process Creation 을 켜야 [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) 이 남습니다.
-- Audit Security System Extension 을 켜야 [서비스 설치 (7045·4697)](/02-artifacts/event-logs/7045-4697.md) 의 4697 이 남습니다.
+- Audit Process Creation 을 켜야 [프로세스 생성 (4688)](4688.md) 이 남습니다.
+- Audit Security System Extension 을 켜야 [서비스 설치 (7045·4697)](7045-4697.md) 의 4697 이 남습니다.
 
 버전에 따라 다른 값이 하나 있습니다.
 
@@ -53,7 +53,7 @@ Microsoft 는 "Recommended System Audit Policy by operating system" 이라는 �
 | Windows 10 1809 전 | 성공만 |
 | Windows 10 1809 부터 | 성공·실패 둘 다 |
 
-로그온 이벤트 자체는 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md)에서 다룹니다.
+로그온 이벤트 자체는 [로그온·로그오프](logon-events/index.md)에서 다룹니다.
 
 ### 한 PC 에서 읽은 실제 감사 정책
 
@@ -74,7 +74,7 @@ Microsoft 는 "Recommended System Audit Policy by operating system" 이라는 �
 | 그 밖의 채널 (`Microsoft-Windows-…/Operational` 등) | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\<채널 이름>` | 한 PC 관찰 (확인 범위: Win11 빌드 26200 한 대) |
 
 - 같은 PC 에 `WINEVT\Channels\Security` 키는 없었습니다. 보안 로그 설정은 `Services\Eventlog\Security` 에만 있었습니다.
-- 이미지에서는 `CurrentControlSet` 이 없습니다. 실제로 쓰인 컨트롤셋 번호를 골라 읽습니다. 고르는 방법은 [컨트롤셋 고르기 (ControlSet·Select)](/01-foundations/database-log-formats/registry-hive/controlset-select.md)에서 다룹니다.
+- 이미지에서는 `CurrentControlSet` 이 없습니다. 실제로 쓰인 컨트롤셋 번호를 골라 읽습니다. 고르는 방법은 [컨트롤셋 고르기 (ControlSet·Select)](../../01-foundations/database-log-formats/registry-hive/controlset-select.md)에서 다룹니다.
 
 `Services\Eventlog\<로그 이름>` 키의 값은 Microsoft 문서에 다음과 같이 적혀 있습니다.
 
@@ -178,7 +178,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 | 1105 | Security | Event log automatic backup | Channel, BackupPath |
 | 105 | System | 1105 와 같은 자동 백업 메시지 | — |
 
-- 로그를 지울 때 남는 1102 (보안 로그)·104 (다른 로그) 는 [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md)에서 다룹니다.
+- 로그를 지울 때 남는 1102 (보안 로그)·104 (다른 로그) 는 [이벤트 로그 삭제 (1102·104)](1102-104.md)에서 다룹니다.
 - 같은 PC 의 보안 로그에는 4719·4902·1100·1102 가 한 건도 없었습니다. 보안 로그에는 약 이틀 치만 남아 있었습니다.
 
 ## 증거로서 의미
@@ -195,7 +195,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 - 쓸 수 있는 문장: "조사 시점에 이 PC 의 '프로세스 만들기' 하위 범주는 감사 없음이었습니다. 보안 로그의 가장 오래된 레코드는 ○○(UTC) 입니다."
 - 쓰면 안 되는 문장: "4688 이 없으므로 이 기간에 프로그램이 실행되지 않았다."
 
-두 번째 문장은 기록하지 않은 것을 일어나지 않은 것으로 적습니다. 실행 여부는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)의 다른 흔적으로 확인합니다.
+두 번째 문장은 기록하지 않은 것을 일어나지 않은 것으로 적습니다. 실행 여부는 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md)의 다른 흔적으로 확인합니다.
 
 ## 시각 해석
 
@@ -205,7 +205,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 - 같은 PC 에서 보안 로그 20MB 에는 약 3만 4천 건이 있었고, 가장 오래된 기록은 조사 시점 약 이틀 전이었습니다. (확인 범위: Win11 빌드 26200 한 대)
 - 같은 크기의 System 로그에는 약 2만 건, 약 3개월 치가 있었습니다.
 - 크기가 같아도 이벤트가 쌓이는 속도에 따라 덮는 기간이 크게 다릅니다.
-- 레코드 시각의 저장 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 레코드 시각의 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -215,23 +215,23 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 4. **문서의 기본값을 그대로 믿습니다.** 조사한 PC 에서 MaxSize 는 문서 기본값 1MB 가 아니라 20MB 였습니다. 보안 그룹 관리도 문서 표와 달리 켜져 있었습니다. 기본값은 검체에서 직접 확인합니다.
 5. **Retention 을 도구가 보여 주는 숫자로만 읽습니다.** REG_DWORD 값을 문자열로 받는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다. 그래서 0xFFFFFFFF 가 4294967295 로 보일 수 있습니다. 원시 바이트로 확인합니다.
 6. **고급 감사 정책을 설정했다고 그대로 적용됐다고 봅니다.** Microsoft 는 고급 감사 정책 (Advanced Audit Policy Configuration) 을 쓸 때 기본 감사 정책 (basic audit policy) 이 덮어쓰지 않는지 확인하라고 적었습니다. 덮어쓰면 4719 가 남습니다. 이를 막는 설정은 Security Options 의 "Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings" 입니다. 이 설정을 Enabled 로 둡니다.
-7. **4688 에 명령줄이 당연히 있다고 봅니다.** 프로세스 만들기 감사를 켜도 명령줄은 따로 켜야 남습니다. 켜는 설정과 주의점은 [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md)에서 다룹니다.
+7. **4688 에 명령줄이 당연히 있다고 봅니다.** 프로세스 만들기 감사를 켜도 명령줄은 따로 켜야 남습니다. 켜는 설정과 주의점은 [프로세스 생성 (4688)](4688.md)에서 다룹니다.
 8. **채널이 켜져 있다고 봅니다.** 조사한 PC 에서 TaskScheduler/Operational·DriverFrameworks-UserMode/Operational·DNS-Client/Operational 은 꺼져 있었습니다. Sysmon 은 설치돼 있지 않았습니다.
 9. **Retention 이 0 이 아닌 로그의 끝부분을 믿습니다.** 이 경우 로그가 가득 차면 새 이벤트를 버립니다. 그래서 오래된 기록은 남고 최근 기록이 빠질 수 있습니다. 보안 로그가 가득 차면 1104 가 남습니다.
 
 ### 지우기와 조작
 
 - **감사 정책을 끕니다.** 4719 에 바뀐 하위 범주와 요청한 계정이 남습니다.
-- **로그를 지웁니다.** 1102·104 가 남습니다. [이벤트 로그를 지웠나](/04-scenarios/activity/anti-forensics/log-clearing.md)에서 흐름을 봅니다.
+- **로그를 지웁니다.** 1102·104 가 남습니다. [이벤트 로그를 지웠나](../../04-scenarios/activity/anti-forensics/log-clearing.md)에서 흐름을 봅니다.
 - **이벤트 로그 서비스를 멈춥니다.** 1100 이 남습니다.
 - **자동 백업을 켭니다.** 1105·105 의 BackupPath 칸에 백업 파일 위치가 적힙니다. 원래 로그에서 밀려난 기록이 그 파일에 있을 수 있습니다. 이 판단은 해석입니다.
-- **레코드 일부만 남습니다.** 덮어쓰거나 지운 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
+- **레코드 일부만 남습니다.** 덮어쓰거나 지운 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-MaxSize 와 Retention 은 REG_DWORD 입니다. 값 데이터는 4바이트 리틀 엔디언입니다. 값이 저장되는 셀 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+MaxSize 와 Retention 은 REG_DWORD 입니다. 값 데이터는 4바이트 리틀 엔디언입니다. 값이 저장되는 셀 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 아래 바이트는 설명을 위해 명세대로 만든 예시입니다. 검체에서 나온 값이 아닙니다.
 
@@ -285,19 +285,19 @@ Get-WinEvent -Path 'E:\case\Security.evtx' |
   Group-Object Task | Sort-Object Count -Descending | Select-Object Name, Count
 ```
 
-도구가 REG_DWORD 를 어떻게 보여 주는지 한 값은 원시 바이트와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+도구가 REG_DWORD 를 어떻게 보여 주는지 한 값은 원시 바이트와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) | 4688 이 없을 때 프로세스 만들기 감사가 꺼져 있었는지 |
-| [서비스 설치 (7045·4697)](/02-artifacts/event-logs/7045-4697.md) | 4697 이 없을 때 보안 시스템 확장 감사가 꺼져 있었는지 |
-| [PowerShell 실행 기록 (4103·4104)](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) | Operational 채널 크기와 실제로 남은 기간 |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | Audit Logon 기본값이 성공만인지, 실패도 남는지 (Windows 10 1809 전후) |
-| [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md) | 설정 변경 앞뒤에 로그를 지웠는지 |
-| [EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) | 파일 크기와 MaxSize, 가장 오래된 레코드 |
-| [Sysmon 개념과 설정 확인](/02-artifacts/event-logs/sysmon/sysmon-config.md) | 기본 감사에 없는 기록을 Sysmon 이 채우고 있었는지 |
+| [프로세스 생성 (4688)](4688.md) | 4688 이 없을 때 프로세스 만들기 감사가 꺼져 있었는지 |
+| [서비스 설치 (7045·4697)](7045-4697.md) | 4697 이 없을 때 보안 시스템 확장 감사가 꺼져 있었는지 |
+| [PowerShell 실행 기록 (4103·4104)](powershell-event-logs-4103-4104.md) | Operational 채널 크기와 실제로 남은 기간 |
+| [로그온·로그오프](logon-events/index.md) | Audit Logon 기본값이 성공만인지, 실패도 남는지 (Windows 10 1809 전후) |
+| [이벤트 로그 삭제 (1102·104)](1102-104.md) | 설정 변경 앞뒤에 로그를 지웠는지 |
+| [EVTX 파일 구조](../../01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) | 파일 크기와 MaxSize, 가장 오래된 레코드 |
+| [Sysmon 개념과 설정 확인](sysmon/sysmon-config.md) | 기본 감사에 없는 기록을 Sysmon 이 채우고 있었는지 |
 
 ## 실습
 

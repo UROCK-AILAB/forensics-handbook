@@ -37,26 +37,26 @@
 
 ## 읽는 순서
 
-1. [파일 형식 식별 (File Signature)](/03-techniques/analysis/content-search/file-signature.md) — 시그니처 표를 읽는 법과 자주 보는 시그니처를 정리합니다. ZIP 계열·OLE 복합 파일 계열처럼 시그니처 하나를 여러 형식이 쓰는 경우를 가르는 법과, 확장자와 내용이 다를 때 할 일을 다룹니다.
-2. [압축·복합 파일 펼치기 (Archive Expansion)](/03-techniques/analysis/content-search/archive-expansion.md) — ZIP 의 세 레코드와 로컬 파일 헤더의 칸을 따라갑니다. 암호화·UTF-8 이름 플래그, 압축 방식, 항목 시각을 읽는 법과 OLE 복합 파일에서 스트림을 꺼내는 요점을 다룹니다.
-3. [본문 추출과 글자 인식 (Text Extraction·OCR)](/03-techniques/analysis/content-search/text-extraction-ocr.md) — Windows 필터가 본문을 뽑는 방식과 필터를 찾는 순서를 다룹니다. 글자 인식 품질을 떨어뜨리는 요인과 페이지 분할 설정도 정리합니다.
-4. [키워드 검색 (Keyword Search)](/03-techniques/analysis/content-search/keyword-search.md) — 파일 단위·원시·색인 세 검색 방식을 비교합니다. 인코딩마다 다른 바이트열과, 뽑은 파일에서 오프셋이 어긋나는 경우를 다룹니다.
-5. [개인정보 탐지 (PII Detection)](/03-techniques/analysis/content-search/pii-detection.md) — 형식·검증 규칙·주변 키워드 세 요소로 탐지 규칙을 짭니다. 주민등록번호 구조와 검증 번호, 신용카드 번호 정의, 신뢰도 등급을 다룹니다.
+1. [파일 형식 식별 (File Signature)](file-signature.md) — 시그니처 표를 읽는 법과 자주 보는 시그니처를 정리합니다. ZIP 계열·OLE 복합 파일 계열처럼 시그니처 하나를 여러 형식이 쓰는 경우를 가르는 법과, 확장자와 내용이 다를 때 할 일을 다룹니다.
+2. [압축·복합 파일 펼치기 (Archive Expansion)](archive-expansion.md) — ZIP 의 세 레코드와 로컬 파일 헤더의 칸을 따라갑니다. 암호화·UTF-8 이름 플래그, 압축 방식, 항목 시각을 읽는 법과 OLE 복합 파일에서 스트림을 꺼내는 요점을 다룹니다.
+3. [본문 추출과 글자 인식 (Text Extraction·OCR)](text-extraction-ocr.md) — Windows 필터가 본문을 뽑는 방식과 필터를 찾는 순서를 다룹니다. 글자 인식 품질을 떨어뜨리는 요인과 페이지 분할 설정도 정리합니다.
+4. [키워드 검색 (Keyword Search)](keyword-search.md) — 파일 단위·원시·색인 세 검색 방식을 비교합니다. 인코딩마다 다른 바이트열과, 뽑은 파일에서 오프셋이 어긋나는 경우를 다룹니다.
+5. [개인정보 탐지 (PII Detection)](pii-detection.md) — 형식·검증 규칙·주변 키워드 세 요소로 탐지 규칙을 짭니다. 주민등록번호 구조와 검증 번호, 신용카드 번호 정의, 신뢰도 등급을 다룹니다.
 
 ## 함께 볼 페이지
 
-- [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) — 대상 PC 에 남은 검색 색인을 아티팩트로 읽습니다.
-- [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) — DOC·XLS·PPT 안의 디렉터리와 섹터 사슬을 따라가는 법입니다.
-- [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) — UTF-16 LE·UTF-8·CP949 의 바이트 구성을 다룹니다.
-- [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) — 본문 밖의 문서 속성과 메타데이터를 다룹니다.
-- [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) — 압축 파일·희소 파일처럼 디스크 바이트와 파일 내용이 다르게 놓이는 경우를 봅니다.
-- [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) — 비할당 영역에서 걸린 내용을 파일로 되살리는 방법을 다룹니다.
-- [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) — 암호를 걸어 펼치지 못한 파일과 항목을 넘겨받습니다.
-- [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) — 검색 전에 이미 아는 파일을 걸러 냅니다.
-- [압축 프로그램 사용 기록](/02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) — 압축 프로그램을 쓴 흔적을 다룹니다.
-- [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) — 같은 파일을 두 도구로 추출·검색해 결과를 비교합니다.
-- [개인정보 파일이 어디 있고 밖으로 나갔나](/04-scenarios/exfiltration/pii-exposure.md) — 개인정보 탐지 결과를 사건 흐름에 넣습니다.
-- [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) — 키워드로 찾은 문서가 밖으로 나갔는지 따집니다.
+- [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) — 대상 PC 에 남은 검색 색인을 아티팩트로 읽습니다.
+- [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) — DOC·XLS·PPT 안의 디렉터리와 섹터 사슬을 따라가는 법입니다.
+- [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) — UTF-16 LE·UTF-8·CP949 의 바이트 구성을 다룹니다.
+- [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) — 본문 밖의 문서 속성과 메타데이터를 다룹니다.
+- [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) — 압축 파일·희소 파일처럼 디스크 바이트와 파일 내용이 다르게 놓이는 경우를 봅니다.
+- [삭제 데이터 복구](../data-recovery/index.md) — 비할당 영역에서 걸린 내용을 파일로 되살리는 방법을 다룹니다.
+- [암호화 증거 다루기](../encrypted-evidence/index.md) — 암호를 걸어 펼치지 못한 파일과 항목을 넘겨받습니다.
+- [해시셋 대조와 유사 해시](../hash-set-fuzzy-hash.md) — 검색 전에 이미 아는 파일을 걸러 냅니다.
+- [압축 프로그램 사용 기록](../../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) — 압축 프로그램을 쓴 흔적을 다룹니다.
+- [도구 결과 교차 검증](../../reporting/tool-validation.md) — 같은 파일을 두 도구로 추출·검색해 결과를 비교합니다.
+- [개인정보 파일이 어디 있고 밖으로 나갔나](../../../04-scenarios/exfiltration/pii-exposure.md) — 개인정보 탐지 결과를 사건 흐름에 넣습니다.
+- [자료를 밖으로 빼돌렸나](../../../04-scenarios/exfiltration/data-exfiltration/index.md) — 키워드로 찾은 문서가 밖으로 나갔는지 따집니다.
 
 ## 참고 문헌
 

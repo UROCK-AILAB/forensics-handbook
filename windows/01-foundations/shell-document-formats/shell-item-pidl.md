@@ -10,11 +10,11 @@ libfwsi 문서는 바로가기 파일 (LNK), Windows 7 의 셸백 (BagMRU), 열�
 
 | 아티팩트 | 셸 아이템이 있는 곳 | 페이지 |
 |---|---|---|
-| 바로가기 파일 | 링크 대상 식별자 (LinkTargetIDList) | [바로가기 형식](/01-foundations/shell-document-formats/shell-link-lnk.md), [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 바로가기 파일 | 추가 데이터 블록 0xa000000c (셸 아이템 목록 블록) | [바로가기 형식](/01-foundations/shell-document-formats/shell-link-lnk.md) |
-| 점프리스트 | 번호 스트림에 든 LNK 데이터 | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 셸백 | BagMRU 아래 값 | [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) |
-| 열기·저장 대화상자 기록 | 최근 폴더 기록 값 | [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
+| 바로가기 파일 | 링크 대상 식별자 (LinkTargetIDList) | [바로가기 형식](shell-link-lnk.md), [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) |
+| 바로가기 파일 | 추가 데이터 블록 0xa000000c (셸 아이템 목록 블록) | [바로가기 형식](shell-link-lnk.md) |
+| 점프리스트 | 번호 스트림에 든 LNK 데이터 | [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) |
+| 셸백 | BagMRU 아래 값 | [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) |
+| 열기·저장 대화상자 기록 | 최근 폴더 기록 값 | [열기·저장 대화상자 기록](../../02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
 
 libfwsi 문서에는 라이브러리 정의 파일 (.library-ms, XML) 안에도 이 데이터를 직렬화해 넣는다는 주석이 있습니다.
 
@@ -110,7 +110,7 @@ PIDL 은 "항목 ID 목록을 가리키는 포인터" 의 줄임말입니다. �
 
 - GUID `20d04fe0-3aea-1069-a2d8-08002b30309d` 는 XP 에서 "My Computer" 로, Windows 10 에서 "This PC" 로 보입니다.
 - 표시 이름은 레지스트리의 그 CLSID 키에 있습니다.
-- GUID 를 바이트에서 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+- GUID 를 바이트에서 읽는 법은 [윈도 식별자 형식](../value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ### 볼륨 (0x2X)
 
@@ -188,7 +188,7 @@ XP 이후 파일 항목의 구조는 아래와 같습니다.
 | 9 | 8.1·10. 위의 Windows 11 PC 한 대에서도 9 였습니다 |
 
 - libfwsi 는 파일 참조 칸이 늘 파일 참조는 아닐 수 있다고 표시합니다.
-- 이름 문자열에는 짝 없는 서로게이트 (Unpaired Surrogate, 예: U+D800) 가 들어갈 수 있습니다. 그래서 엄격한 UTF-16 이 아닙니다. 문자열 변환은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- 이름 문자열에는 짝 없는 서로게이트 (Unpaired Surrogate, 예: U+D800) 가 들어갈 수 있습니다. 그래서 엄격한 UTF-16 이 아닙니다. 문자열 변환은 [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ## 읽는 법
 
@@ -233,7 +233,7 @@ XP 이후 파일 항목의 구조는 아래와 같습니다.
 8. 0x2B 의 `4E 00` 은 크기 78 입니다. 셋째 아이템은 0x2B~0x78 입니다.
 9. 0x2D 의 `31` 에 0x70 을 AND 하면 0x30 입니다. 그래서 파일 항목입니다. 0x01 비트가 켜져 있으므로 디렉터리입니다.
 10. 0x2F (아이템 +4) 의 `00 00 00 00` 은 파일 크기 0 입니다.
-11. 0x33 (아이템 +8) 의 `6A 5A 94 49` 는 마지막 수정 시각입니다. FAT 날짜·시각을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+11. 0x33 (아이템 +8) 의 `6A 5A 94 49` 는 마지막 수정 시각입니다. FAT 날짜·시각을 푸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 12. 0x37 (아이템 +12) 의 `10 00` 은 파일 속성의 아래 16비트입니다.
 13. 0x39 (아이템 +14) 부터 기본 이름 `Work` 와 NULL 이 옵니다.
 14. 0x3E 의 `00` 은 16비트 경계를 맞추는 바이트입니다.
@@ -269,20 +269,20 @@ XP 이후 파일 항목의 구조는 아래와 같습니다.
 - 세 시각 모두 FILETIME 이 아니라 4바이트 FAT 날짜·시각입니다.
 - 시각이 채워지지 않은 아이템도 있습니다.
 - 셸이 이 시각을 언제 채우고 언제 다시 쓰는지는 형식 문서에 없습니다. 그래서 대상 파일의 지금 시각과 다를 수 있습니다.
-- 시각을 증거로 읽는 법은 아티팩트마다 다릅니다. [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) 과 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 페이지를 봅니다.
+- 시각을 증거로 읽는 법은 아티팩트마다 다릅니다. [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) 과 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지를 봅니다.
 
 ### NTFS 파일 참조
 
 - 버전 7 이상 블록에는 MFT 항목 번호 6바이트와 시퀀스 번호 2바이트가 있습니다.
-- 파일 참조의 구조는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
+- 파일 참조의 구조는 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 다룹니다.
 - libfwsi 는 이 칸이 늘 파일 참조는 아닐 수 있다고 표시합니다. 번호 하나만으로 결론을 내리지 않습니다. 같은 아이템의 이름도 함께 봅니다.
-- 이 번호를 $MFT 와 맞춰 보는 절차는 [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) 페이지에서 다룹니다.
+- 이 번호를 $MFT 와 맞춰 보는 절차는 [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) 페이지에서 다룹니다.
 
 ### 지운 대상
 
 - 셸 아이템은 대상 파일 안이 아니라 LNK 파일이나 셸백 같은 다른 기록 안에 있습니다.
 - 그래서 대상을 지워도 그 기록을 지우지 않으면 셸 아이템은 남습니다.
-- 대상이 지금 없다면 셸 아이템의 이름·크기·시각·파일 참조가 대상의 흔적을 알려 주는 단서가 됩니다([지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)).
+- 대상이 지금 없다면 셸 아이템의 이름·크기·시각·파일 참조가 대상의 흔적을 알려 주는 단서가 됩니다([지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md)).
 
 ### 손상과 낯선 값
 
@@ -304,7 +304,7 @@ XP 이후 파일 항목의 구조는 아래와 같습니다.
 ## 도구
 
 - 이 글이 따른 형식 문서는 libyal 의 libfwsi 저장소에 있습니다.
-- 셸 아이템은 따로 떨어진 파일로 나오지 않습니다. LNK·셸백 파서가 안쪽의 셸 아이템을 함께 풉니다. 도구 예는 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 과 [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) 페이지에 있습니다.
+- 셸 아이템은 따로 떨어진 파일로 나오지 않습니다. LNK·셸백 파서가 안쪽의 셸 아이템을 함께 풉니다. 도구 예는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 과 [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) 페이지에 있습니다.
 
 도구를 쓸 때는 다음을 확인합니다.
 
@@ -312,7 +312,7 @@ XP 이후 파일 항목의 구조는 아래와 같습니다.
 - 기본 이름과 긴 이름을 나눠 보여 주는지 확인합니다.
 - FAT 시각을 UTC 그대로 보여 주는지, 분석 PC 의 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 모르는 종류의 아이템을 건너뛰는지, 원본 바이트를 보여 주는지 확인합니다.
-- 아이템 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 아이템 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

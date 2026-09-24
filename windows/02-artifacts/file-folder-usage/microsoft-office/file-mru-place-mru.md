@@ -1,6 +1,6 @@
 # 오피스 최근 파일 (File MRU·Place MRU)
 
-> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](/02-artifacts/file-folder-usage/microsoft-office/index.md)
+> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)
 
 ## 한 줄 요약
 
@@ -23,7 +23,7 @@ MRU 는 "가장 최근에 쓴 것 (Most Recently Used)" 을 줄인 말입니다.
 
 ## 위치와 버전별 차이
 
-값은 NTUSER.DAT (HKCU) 아래 두 갈래에 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+값은 NTUSER.DAT (HKCU) 아래 두 갈래에 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ```
 Software\Microsoft\Office\<버전>\<앱>\File MRU
@@ -32,7 +32,7 @@ Software\Microsoft\Office\<버전>\<앱>\User MRU\<하위 키>\File MRU
 Software\Microsoft\Office\<버전>\<앱>\User MRU\<하위 키>\Place MRU
 ```
 
-위치는 Windows 버전이 아니라 오피스 버전 키 (`<버전>`) 에 따라 달라집니다. 버전 키가 어느 오피스 제품을 뜻하는지는 [허브 페이지](/02-artifacts/file-folder-usage/microsoft-office/index.md) 에서 다룹니다.
+위치는 Windows 버전이 아니라 오피스 버전 키 (`<버전>`) 에 따라 달라집니다. 버전 키가 어느 오피스 제품을 뜻하는지는 [허브 페이지](index.md) 에서 다룹니다.
 
 | 버전 키 | 확인한 내용 | 근거 |
 |---|---|---|
@@ -46,7 +46,7 @@ Software\Microsoft\Office\<버전>\<앱>\User MRU\<하위 키>\Place MRU
 
 이 구분은 관찰한 계정과 이름으로 짐작한 것입니다. 공식 설명은 확인하지 못했습니다. 계정마다 목록이 따로 있습니다. 같은 파일이 두 목록에 모두 나올 수 있고, 두 목록의 시각이 서로 달랐습니다. (관찰)
 
-오피스에 로그인한 계정 이름을 찾는 법은 [허브 페이지](/02-artifacts/file-folder-usage/microsoft-office/index.md) 에 있습니다.
+오피스에 로그인한 계정 이름을 찾는 법은 [허브 페이지](index.md) 에 있습니다.
 
 ## 구조
 
@@ -69,7 +69,7 @@ Software\Microsoft\Office\<버전>\<앱>\User MRU\<하위 키>\Place MRU
 
 Place MRU 값도 형식이 같습니다. 관찰한 Place MRU 경로 15개는 모두 `\` 로 끝났습니다. (관찰)
 
-**`FOLDER` 로 시작하는 값.** `FOLDERID_Desktop` 같은 값에는 시각이 없고 폴더 경로만 있습니다. Registry Explorer 는 이 값을 `Item` 값과 따로 다룹니다. `FOLDERID_` 이름은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+**`FOLDER` 로 시작하는 값.** `FOLDERID_Desktop` 같은 값에는 시각이 없고 폴더 경로만 있습니다. Registry Explorer 는 이 값을 `Item` 값과 따로 다룹니다. `FOLDERID_` 이름은 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 **순서.** 관찰한 목록마다 `Item 1` 의 T 값이 가장 최근이었습니다. 번호가 커질수록 T 값이 오래됐습니다. (관찰) 목록에 몇 개까지 남는지는 확인하지 못했습니다.
 
@@ -89,19 +89,19 @@ Place MRU 값도 형식이 같습니다. 관찰한 Place MRU 경로 15개는 모
 - T 값이 연 시각인지 닫은 시각인지.
 - 파일을 연 횟수. 이 형식에서 횟수를 뜻한다고 밝혀진 칸은 없습니다.
 - 그 파일이 지금도 그 경로에 있는지, 내용이 그때와 같은지.
-- 그때 PC 앞에 누가 있었는지. 이 문제는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 그때 PC 앞에 누가 있었는지. 이 문제는 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - 목록에 없는 파일을 열지 않았다는 것. 목록 크기를 모르고, 관찰한 File MRU 에는 https 주소가 하나도 없었습니다. 아래 "함정과 한계" 를 봅니다.
 
 보고서 문장은 기록이 말하는 만큼만 씁니다.
 
 - 쓰지 않을 문장: "사용자가 2024-03-15 02:19 UTC 에 report.docx 를 처음 열었다."
-- 쓸 문장: "사용자 kim 의 NTUSER.DAT, `Software\Microsoft\Office\16.0\Word\User MRU\<하위 키>\File MRU` 의 `Item 1` 값에 `C:\Users\kim\Documents\report.docx` 경로가 있다. 이 값의 시각 칸은 2024-03-15 02:19:30 UTC 이다. 이 시각은 목록 항목에 적힌 시각이며, 처음 연 시각이나 수정 시각으로 확인한 값이 아니다." (예시 문장입니다. 같은 예를 [읽던 위치](/02-artifacts/file-folder-usage/microsoft-office/reading-locations.md) 페이지에서도 씁니다.)
+- 쓸 문장: "사용자 kim 의 NTUSER.DAT, `Software\Microsoft\Office\16.0\Word\User MRU\<하위 키>\File MRU` 의 `Item 1` 값에 `C:\Users\kim\Documents\report.docx` 경로가 있다. 이 값의 시각 칸은 2024-03-15 02:19:30 UTC 이다. 이 시각은 목록 항목에 적힌 시각이며, 처음 연 시각이나 수정 시각으로 확인한 값이 아니다." (예시 문장입니다. 같은 예를 [읽던 위치](reading-locations.md) 페이지에서도 씁니다.)
 
 ## 시각 해석
 
-- T 값은 FILETIME 이고 UTC 입니다. RegRipper 는 이 값을 UTC 로 풀어 보여 줄 뿐 뜻을 붙이지 않습니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- T 값은 FILETIME 이고 UTC 입니다. RegRipper 는 이 값을 UTC 로 풀어 보여 줄 뿐 뜻을 붙이지 않습니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - Registry Explorer 플러그인 설명은 "최근 문서 이름과 마지막으로 열거나 닫은 시각" 을 뽑는다고 적었습니다. 그런데 코드는 T 값을 `firstOpen` 칸에 넣습니다. 같은 자료 안에서도 뜻이 엇갈립니다.
-- Registry Explorer 의 `lastOpen` 칸은 T 값이 아닙니다. 이 칸이 어디서 오는지는 [읽던 위치 (Reading Locations)](/02-artifacts/file-folder-usage/microsoft-office/reading-locations.md) 에 있습니다.
+- Registry Explorer 의 `lastOpen` 칸은 T 값이 아닙니다. 이 칸이 어디서 오는지는 [읽던 위치 (Reading Locations)](reading-locations.md) 에 있습니다.
 
 관찰한 PC 에서 T 값을 파일시스템 시각과 견줘 본 결과는 아래와 같습니다. (관찰)
 
@@ -120,12 +120,12 @@ User MRU 의 두 목록에 같은 파일이 있으면 시각이 서로 다를 �
 
 - **User MRU 밖만 보면 목록이 비어 보입니다.** 관찰한 16.0 에서는 파일 목록이 User MRU 아래에만 있었습니다. (관찰) 쓰는 도구가 User MRU 를 읽는지 확인합니다.
 - **계정 목록이 여럿입니다.** 같은 파일이 여러 하위 키에 나오면 시각도 따로 봅니다.
-- **클라우드 문서가 빠질 수 있습니다.** 관찰한 File MRU 경로는 모두 로컬 경로였습니다. 같은 PC 의 신뢰 문서 기록에는 https 주소가 있었지만 File MRU 에는 없었습니다. (관찰) 클라우드 문서는 [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) 과 [백스테이지 캐시 (BackstageInAppNavCache)](/02-artifacts/file-folder-usage/microsoft-office/backstageinappnavcache.md) 도 봅니다.
+- **클라우드 문서가 빠질 수 있습니다.** 관찰한 File MRU 경로는 모두 로컬 경로였습니다. 같은 PC 의 신뢰 문서 기록에는 https 주소가 있었지만 File MRU 에는 없었습니다. (관찰) 클라우드 문서는 [신뢰 문서 기록 (Trust Records)](trust-records.md) 과 [백스테이지 캐시 (BackstageInAppNavCache)](backstageinappnavcache.md) 도 봅니다.
 - **도구의 칸 이름은 뜻이 아닙니다.** `firstOpen` 은 도구가 붙인 이름입니다. 보고서에는 칸 이름 대신 "T 칸의 시각" 이라고 씁니다.
 - **목록 크기를 모릅니다.** 목록에 몇 개까지 남는지 확인하지 못했습니다.
 - **`[F…]`·`[O…]` 칸의 뜻을 모릅니다.** 관찰한 값은 모두 0 이었습니다. 0 이 아닌 값을 만나도 짐작으로 풀지 않습니다.
 - **경로 끝의 `\`.** Place MRU 경로를 다른 기록과 문자열로 맞출 때 끝의 `\` 까지 맞춥니다. (관찰)
-- **시간대.** T 는 UTC 입니다. 로컬 시각으로 적힌 기록과 나란히 볼 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 먼저 확인합니다.
+- **시간대.** T 는 UTC 입니다. 로컬 시각으로 적힌 기록과 나란히 볼 때는 [시간대 설정](../../system-account/time-zone.md) 을 먼저 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -145,7 +145,7 @@ User MRU 의 두 목록에 같은 파일이 있으면 시각이 서로 다를 �
 
 | 값 오프셋 | 바이트 | 뜻 |
 |---|---|---|
-| 0x00 | `5B 00 46 00` | `[F`. 글자 하나가 2바이트인 UTF-16LE 문자열입니다 ([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)). |
+| 0x00 | `5B 00 46 00` | `[F`. 글자 하나가 2바이트인 UTF-16LE 문자열입니다 ([문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)). |
 | 0x16 | `5B 00 54 00` | `[T`. 시각 칸이 시작합니다. |
 | 0x1A~0x39 | `30 00 31 00 … 30 00` | 16글자 `01D005C5B44B6300` |
 | 0x3A | `5D 00` | `]`. 시각 칸이 끝납니다. |
@@ -166,22 +166,22 @@ User MRU 의 두 목록에 같은 파일이 있으면 시각이 서로 다를 �
 2. 두 도구를 모두 돌립니다.
 3. 앱마다, User MRU 하위 키마다 항목 수가 같은지 봅니다.
 4. 항목 하나를 골라 위 헥스 절차로 T 값을 직접 풀고 도구 결과와 맞춰 봅니다.
-5. 두 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+5. 두 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [읽던 위치 (Reading Locations)](/02-artifacts/file-folder-usage/microsoft-office/reading-locations.md) | 같은 Word 문서의 로컬 시각 (분 단위) 과 하위 키 시각 |
-| [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) | 같은 문서의 신뢰 기록, File MRU 에 없는 https 문서 |
-| [백스테이지 캐시 (BackstageInAppNavCache)](/02-artifacts/file-folder-usage/microsoft-office/backstageinappnavcache.md) | 오피스 [파일] 탭에서 둘러본 폴더와 그 안의 파일 목록 |
-| [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](/02-artifacts/file-folder-usage/microsoft-office/autorecover-unsavedfiles.md) | 같은 문서 이름의 백업 파일 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 같은 파일을 연 다른 기록 |
-| [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) | 탐색기 쪽 최근 문서 목록 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일의 생성·수정 시각과 T 값의 앞뒤 |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | 로컬 시각 기록과 나란히 볼 때의 시간대 |
+| [읽던 위치 (Reading Locations)](reading-locations.md) | 같은 Word 문서의 로컬 시각 (분 단위) 과 하위 키 시각 |
+| [신뢰 문서 기록 (Trust Records)](trust-records.md) | 같은 문서의 신뢰 기록, File MRU 에 없는 https 문서 |
+| [백스테이지 캐시 (BackstageInAppNavCache)](backstageinappnavcache.md) | 오피스 [파일] 탭에서 둘러본 폴더와 그 안의 파일 목록 |
+| [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) | 같은 문서 이름의 백업 파일 |
+| [바로가기 파일](../lnk.md)·[점프리스트](../jump-lists.md) | 같은 파일을 연 다른 기록 |
+| [최근 문서](../recentdocs.md) | 탐색기 쪽 최근 문서 목록 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일의 생성·수정 시각과 T 값의 앞뒤 |
+| [시간대 설정](../../system-account/time-zone.md) | 로컬 시각 기록과 나란히 볼 때의 시간대 |
 
-시나리오로 이어서 보려면 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 파일을 누가 언제 열었나](../../../04-scenarios/activity/file-access.md) 를 봅니다.
 
 ## 실습
 

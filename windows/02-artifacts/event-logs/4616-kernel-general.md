@@ -53,7 +53,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 | 25 | "The system time was initialized to %1." | SystemTime, LoaderTime, HalRtcErrorCode, RealTimeIsUniversal, IsSoftBoot 등 |
 
 - 16 "The access history in hive %2 was cleared …" 도 같은 공급자입니다. 시각 변경과는 관계가 없습니다.
-- 12·13 으로 켜짐·꺼짐을 읽는 법은 [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md)에서 다룹니다.
+- 12·13 으로 켜짐·꺼짐을 읽는 법은 [켜짐·꺼짐](power-on-off-events.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -185,9 +185,9 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 - CmosTime 도 끝에 Z 를 붙여 보여 줍니다. 그러나 RealTimeIsUniversal 이 false 이면 현지 시각입니다. 조사한 PC 에서는 CmosTime 이 NewTime 에 9시간을 더한 값이었습니다 (확인 범위: Win11 25H2 한 대).
 - TimeZoneBias 는 부호 있는 32비트 값입니다. 조사한 PC 에서는 -540(UTC+9)이었습니다.
 - TimeDeltaInMs 는 음수가 될 수 있습니다. 조사한 PC 에서 -1995 는 약 2초 뒤로 돌린 것이었고, 깨어날 때 121010 은 약 2분 앞으로 옮긴 것이었습니다. 뒤로 간 변경을 찾을 때는 이 칸의 부호를 봅니다.
-- 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md)을 씁니다.
 - 시각을 되돌리면, 레코드 번호는 늘어나는데 기록 시각은 거꾸로 가는 곳이 생길 수 있습니다. 이 방법으로 되돌림을 찾을 수 있는지는 확인하지 못했습니다. "실습" 에서 직접 확인해 봅니다.
-- 여러 기록의 시각을 한 기준으로 맞추는 법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md)에서 다룹니다.
+- 여러 기록의 시각을 한 기준으로 맞추는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -214,15 +214,15 @@ Microsoft 문서는 4616 을 이렇게 지켜보라고 권합니다.
 
 그 밖에 알아 둘 것입니다.
 
-- 시스템 시각을 바꾸려면 시스템 시각 변경 권한 (SeSystemtimePrivilege) 이 있어야 합니다. 이 권한을 기본으로 받는 계정은 [시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md)에서 다룹니다.
-- 보안 로그를 지워도 시스템 로그의 Kernel-General 1 은 따로 남습니다. 로그를 지운 기록은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)에서 찾습니다.
+- 시스템 시각을 바꾸려면 시스템 시각 변경 권한 (SeSystemtimePrivilege) 이 있어야 합니다. 이 권한을 기본으로 받는 계정은 [시스템 시각을 바꿨나](../../04-scenarios/activity/anti-forensics/system-time-change.md)에서 다룹니다.
+- 보안 로그를 지워도 시스템 로그의 Kernel-General 1 은 따로 남습니다. 로그를 지운 기록은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
 - 조사한 PC 에는 Microsoft-Windows-Time-Service/Operational 로그도 켜져 있었습니다(1MB, 764건, ID 257~266·272). 각 ID 의 뜻은 확인하지 못했습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-PreviousTime·NewTime·OldTime 은 FILETIME 입니다. 값을 시각으로 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 여기서는 바이트 순서를 뒤집어 저장한다(리틀 엔디언)는 것만 씁니다.
+PreviousTime·NewTime·OldTime 은 FILETIME 입니다. 값을 시각으로 바꾸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 여기서는 바이트 순서를 뒤집어 저장한다(리틀 엔디언)는 것만 씁니다.
 
 아래는 Microsoft 문서의 예시 값과 조사한 PC 에서 본 값을 형식대로 옮긴 예시입니다. 검체에서 뽑은 바이트가 아닙니다.
 
@@ -251,7 +251,7 @@ TimeDeltaInMs 121010 (Int64)  →  B2 D8 01 00 00 00 00 00
 3. 바이트를 뒤집어 읽고 시각으로 바꿉니다. 두 값의 차이가 TimeDeltaInMs 와 맞는지 봅니다.
 4. TimeZoneBias 의 4바이트가 `FF` 로 끝나면 음수입니다. 부호 있는 값으로 읽습니다.
 
-값 영역의 구조는 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+값 영역의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -293,20 +293,20 @@ Get-WinEvent -Path .\System.evtx -FilterXPath "*[System[Provider[@Name='Microsof
 
 - 두 결과를 기록 시각으로 맞대면 짝을 찾을 수 있습니다. 프로세스 ID 는 진법을 맞춘 뒤 비교합니다.
 - EvtxECmd 맵 저장소에는 Security 4616 맵과 System 의 Kernel-General 1·12·13 맵이 있습니다. Kernel-General 1 맵은 Reason 숫자를 위 표의 문구로 바꿔 줍니다.
-- 도구가 바꿔 보여 준 값은 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- 도구가 바꿔 보여 준 값은 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 기록 | 무엇을 맞춰 보나 | 링크 |
 |---|---|---|
-| 로그온 이벤트 | SubjectLogonId 가 가리키는 로그온 세션 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 4688 | ProcessId 로 찾은 프로세스의 부모와 명령줄 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| 전원 이벤트 | Reason 2 가 깨어날 때의 보정인지 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
-| 시간대 설정 | TimeZoneBias 와 레지스트리 Bias 가 맞는지 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
-| 파일·문서 시각 | 바뀐 시각 동안 만든 파일과 문서의 날짜 | [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) |
-| 타임라인 | 되돌린 구간의 앞뒤 기록 순서 | [타임라인 작성](/03-techniques/analysis/timeline/index.md) |
+| 로그온 이벤트 | SubjectLogonId 가 가리키는 로그온 세션 | [로그온·로그오프](logon-events/index.md) |
+| 4688 | ProcessId 로 찾은 프로세스의 부모와 명령줄 | [프로세스 생성](4688.md) |
+| 전원 이벤트 | Reason 2 가 깨어날 때의 보정인지 | [켜짐·꺼짐](power-on-off-events.md) |
+| 시간대 설정 | TimeZoneBias 와 레지스트리 Bias 가 맞는지 | [시간대 설정](../system-account/time-zone.md) |
+| 파일·문서 시각 | 바뀐 시각 동안 만든 파일과 문서의 날짜 | [이 문서의 날짜를 믿을 수 있나](../../04-scenarios/activity/document-date-verification.md) |
+| 타임라인 | 되돌린 구간의 앞뒤 기록 순서 | [타임라인 작성](../../03-techniques/analysis/timeline/index.md) |
 
-시각 조작을 의심할 때 합쳐 읽는 순서는 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+시각 조작을 의심할 때 합쳐 읽는 순서는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 실습
 

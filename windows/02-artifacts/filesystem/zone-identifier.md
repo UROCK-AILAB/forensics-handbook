@@ -10,7 +10,7 @@
 
 - `Zone.Identifier` 는 이름 있는 `$DATA` 스트림입니다(참고 1). 파일 본문과 같은 MFT 항목에 붙습니다.
 - 내용은 `[ZoneTransfer]` 줄과 `ZoneId=3` 같은 줄로 이뤄집니다. 줄 끝은 CR LF 입니다(참고 1).
-- 스트림의 구조와 이름 쓰는 법은 [대체 데이터 스트림 (ADS)](/01-foundations/disk-volume/ntfs/ads.md)에서 다룹니다.
+- 스트림의 구조와 이름 쓰는 법은 [대체 데이터 스트림 (ADS)](../../01-foundations/disk-volume/ntfs/ads.md)에서 다룹니다.
 
 ### 누가 붙이나
 
@@ -18,7 +18,7 @@
 - 크롬 계열 브라우저는 보통 Windows 첨부 파일 서비스의 `IAttachmentExecute::Save` 를 불러 표시를 맡깁니다(참고 4).
 - 이 호출은 백신 검사를 할 수 있습니다. 정책에 막히거나 감염된 파일은 이 호출이 지울 수 있습니다(참고 4).
 - 브라우저가 표시를 직접 쓰는 경우도 있습니다. 0바이트 파일일 때, 클라이언트 GUID 가 없을 때, 첨부 파일 서비스를 부르지 못했을 때입니다(참고 4). 이때는 늘 `ZoneId=3` 을 씁니다.
-- 다른 브라우저, 메신저, 압축 프로그램이 어떤 칸을 쓰는지는 이 페이지에서 확인하지 못했습니다. 압축을 풀 때 표시를 옮기는지는 [압축 프로그램 사용 기록](/02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md)에서 다룹니다.
+- 다른 브라우저, 메신저, 압축 프로그램이 어떤 칸을 쓰는지는 이 페이지에서 확인하지 못했습니다. 압축을 풀 때 표시를 옮기는지는 [압축 프로그램 사용 기록](../file-folder-usage/7-zip-winrar-bandizip.md)에서 다룹니다.
 
 ### NTFS 가 있어야 붙습니다
 
@@ -29,8 +29,8 @@
 
 ### 위치
 
-- 표시가 붙은 파일의 MFT 항목 안, 이름이 `Zone.Identifier` 인 `$DATA` 속성입니다([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
-- 스트림 내용이 MFT 항목 안에 있는지, 밖 클러스터에 있는지는 속성 머리로 가립니다([데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)).
+- 표시가 붙은 파일의 MFT 항목 안, 이름이 `Zone.Identifier` 인 `$DATA` 속성입니다([마스터 파일 테이블](mft.md)).
+- 스트림 내용이 MFT 항목 안에 있는지, 밖 클러스터에 있는지는 속성 머리로 가립니다([데이터 런과 상주·비상주 데이터](../../01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)).
 
 ### 표시를 막거나 지우는 정책
 
@@ -43,7 +43,7 @@
 
 - 두 값의 레지스트리 키는 `Software\Microsoft\Windows\CurrentVersion\Policies\Attachments` 입니다. ADMX 파일은 `AttachmentManager.admx` 입니다(참고 3).
 - `SaveZoneInformation` 의 숫자 값(1·2)이 각각 무엇을 뜻하는지는 이 페이지에서 확인하지 못했습니다. 값이 있으면 정책을 건드린 흔적으로 적고, 뜻은 따로 확인합니다.
-- 레지스트리 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 레지스트리 읽는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ### 버전별 차이
 
@@ -133,11 +133,11 @@ Chromium 소스 코드에서 읽은 규칙입니다(참고 4).
 
 - `Zone.Identifier` 내용에는 시각 칸이 없습니다(참고 1, 참고 4).
 - 받은 시각은 다른 기록에서 찾습니다.
-  - 브라우저의 다운로드 기록: [방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md), [방문·다운로드·즐겨찾기 (places.sqlite)](/02-artifacts/browsers/firefox/places-sqlite.md)
-  - 표시가 붙은 파일의 [$MFT](/02-artifacts/filesystem/mft.md) 시각
-  - [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)의 레코드
+  - 브라우저의 다운로드 기록: [방문·다운로드 기록 (History)](../browsers/chrome-edge-whale/history.md), [방문·다운로드·즐겨찾기 (places.sqlite)](../browsers/firefox/places-sqlite.md)
+  - 표시가 붙은 파일의 [$MFT](mft.md) 시각
+  - [USN 변경 저널](usnjrnl.md)의 레코드
 - `Zone.Identifier` 는 이름 있는 스트림이므로, 스트림이 생기거나 지워지면 USN 이유 플래그 STREAM_CHANGE(이름 있는 스트림 추가·삭제)의 정의에 들어맞습니다(참고 1). 실제 다운로드나 차단 해제 때 이 플래그가 찍히는지는 이 페이지에서 실측하지 않았습니다.
-- 여러 기록의 시각을 합칠 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md)을 봅니다.
+- 여러 기록의 시각을 합칠 때는 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -146,7 +146,7 @@ Chromium 소스 코드에서 읽은 규칙입니다(참고 4).
 3. **HostUrl 을 파일 주소로 단정합니다.** 받은 주소가 비면 요청한 페이지 주소를 대신 씁니다. 시크릿 다운로드나 너무 긴 주소는 `about:internet` 이 됩니다(참고 4). 한 PC 에서도 `about` 으로 시작하는 값이 3개 있었습니다(관찰).
 4. **ReferrerUrl 이 없다고 참조 페이지가 없었다고 봅니다.** 참조 주소가 너무 길어도 줄을 뺍니다(참고 4).
 5. **다운로드 기록은 있는데 파일이 없습니다.** 첨부 파일 서비스 호출이 정책에 막히거나 감염된 파일을 지울 수 있습니다(참고 4). 백신 기록을 함께 봅니다.
-6. **압축을 푼 파일의 표시를 다운로드 표시로 읽습니다.** 압축 프로그램이 압축 파일의 표시를 풀린 파일에 옮겼을 수 있습니다. [압축 프로그램 사용 기록](/02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md)을 봅니다.
+6. **압축을 푼 파일의 표시를 다운로드 표시로 읽습니다.** 압축 프로그램이 압축 파일의 표시를 풀린 파일에 옮겼을 수 있습니다. [압축 프로그램 사용 기록](../file-folder-usage/7-zip-winrar-bandizip.md)을 봅니다.
 7. **ZoneId 1~4 를 문서에 적힌 숫자로 인용합니다.** 문서 선언에는 1~4 가 숫자로 적혀 있지 않습니다. 열거형 규칙으로 읽은 값이라고 밝힙니다(참고 2).
 8. **옮긴 사본에서 읽습니다.** 파일을 다른 매체로 복사하거나 압축·메일로 옮길 때 표시가 따라가는지는 이 페이지에서 확인하지 못했습니다. 그래서 이미지나 원본 볼륨의 MFT 항목에서 직접 읽습니다.
 
@@ -154,8 +154,8 @@ Chromium 소스 코드에서 읽은 규칙입니다(참고 4).
 
 - **차단 해제**: 파일 속성 창의 "차단 해제" 버튼과 경고 창의 체크 상자로 영역 정보를 지울 수 있습니다. 지우면 위험한 첨부 파일도 열 수 있게 됩니다(참고 3).
 - **정책 변경**: `SaveZoneInformation` 정책을 켜면 표시가 붙지 않습니다(참고 3). 사용자별 정책 값을 확인합니다.
-- **스트림 삭제·수정**: 스트림을 지우거나 바꾸면 STREAM_CHANGE 정의에 들어맞는 USN 레코드를 찾아봅니다(참고 1). 스트림을 지운 흔적은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서도 찾습니다.
-- 표시를 일부러 없앤 정황은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)에서 다른 흔적과 함께 따집니다.
+- **스트림 삭제·수정**: 스트림을 지우거나 바꾸면 STREAM_CHANGE 정의에 들어맞는 USN 레코드를 찾아봅니다(참고 1). 스트림을 지운 흔적은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서도 찾습니다.
+- 표시를 일부러 없앤 정황은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)에서 다른 흔적과 함께 따집니다.
 
 ## 직접 분석해 보기
 
@@ -198,20 +198,20 @@ The Sleuth Kit 같은 공개 도구는 MFT 항목의 속성 목록에서 이름 
 - 이름 있는 `$DATA` 를 모두 보여 주는지 확인합니다.
 - 스트림 내용을 그대로 뽑는지, 줄 끝을 바꾸는지 확인합니다.
 - 비할당 MFT 항목의 스트림도 읽는지 확인합니다.
-- 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md) | 크롬 계열 브라우저의 다운로드 항목에 적힌 저장 경로·주소·시각 |
-| [방문·다운로드·즐겨찾기 (places.sqlite)](/02-artifacts/browsers/firefox/places-sqlite.md) | 파이어폭스의 다운로드 기록 |
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | 표시가 붙은 파일의 이름·시각·크기와 이름 있는 `$DATA` |
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 파일을 만든 기록과 STREAM_CHANGE 레코드 |
-| [압축 프로그램 사용 기록](/02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) | 풀린 파일에 표시가 옮겨졌는지 |
-| [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) | 다운로드 기록은 있는데 파일이 없을 때 백신이 막았는지 |
+| [방문·다운로드 기록 (History)](../browsers/chrome-edge-whale/history.md) | 크롬 계열 브라우저의 다운로드 항목에 적힌 저장 경로·주소·시각 |
+| [방문·다운로드·즐겨찾기 (places.sqlite)](../browsers/firefox/places-sqlite.md) | 파이어폭스의 다운로드 기록 |
+| [마스터 파일 테이블 ($MFT)](mft.md) | 표시가 붙은 파일의 이름·시각·크기와 이름 있는 `$DATA` |
+| [USN 변경 저널 ($UsnJrnl)](usnjrnl.md) | 파일을 만든 기록과 STREAM_CHANGE 레코드 |
+| [압축 프로그램 사용 기록](../file-folder-usage/7-zip-winrar-bandizip.md) | 풀린 파일에 표시가 옮겨졌는지 |
+| [Windows Defender 탐지](../event-logs/1116-1117.md) | 다운로드 기록은 있는데 파일이 없을 때 백신이 막았는지 |
 
-파일의 출처를 여러 기록으로 좁히는 순서는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md)에서 다룹니다. 악성 파일이 들어온 경로를 좇을 때는 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md)를 봅니다.
+파일의 출처를 여러 기록으로 좁히는 순서는 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md)에서 다룹니다. 악성 파일이 들어온 경로를 좇을 때는 [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md)를 봅니다.
 
 ## 실습
 

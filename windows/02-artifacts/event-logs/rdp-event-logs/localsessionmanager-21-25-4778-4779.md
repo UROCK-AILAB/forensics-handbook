@@ -6,7 +6,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다. 이 페이지는 그 가운데 로그온, 끊김·다시 연결, 로그오프 단계를 다룹니다. 앞의 연결·인증 단계는 [인증 단계](/02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) 에서 다룹니다.
+Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다. 이 페이지는 그 가운데 로그온, 끊김·다시 연결, 로그오프 단계를 다룹니다. 앞의 연결·인증 단계는 [인증 단계](1149-4624-10-4625.md) 에서 다룹니다.
 
 | 단계 | LocalSessionManager/Operational | Security | System |
 |---|---|---|---|
@@ -15,12 +15,12 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
 | 로그오프 | 23 | 4634, 4647 | 9009 |
 
 - 세션 ID (Session ID) 로 한 세션의 활동을 이어서 따라갑니다.
-- 로그온 단계의 4624 는 [인증 단계](/02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) 에서 다룹니다.
+- 로그온 단계의 4624 는 [인증 단계](1149-4624-10-4625.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
 - LocalSessionManager/Operational 의 공급자는 Microsoft-Windows-TerminalServices-LocalSessionManager 입니다.
-- 이 채널의 파일 위치와 기본 크기는 [허브](/02-artifacts/event-logs/rdp-event-logs/index.md) 의 "채널 이름과 파일 경로" 표에 모았습니다.
+- 이 채널의 파일 위치와 기본 크기는 [허브](index.md) 의 "채널 이름과 파일 경로" 표에 모았습니다.
 - 4778·4779 는 보안 로그에 남습니다. 하위 범주는 기타 로그온/로그오프 감사 (Audit Other Logon/Logoff Events) 입니다.
 - 9009 는 System 로그에 남습니다.
 
@@ -145,7 +145,7 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
 
 ## 시각 해석
 
-- 시각이 어느 기준으로 저장되는지는 [허브](/02-artifacts/event-logs/rdp-event-logs/index.md) 의 "시각" 절을 봅니다.
+- 시각이 어느 기준으로 저장되는지는 [허브](index.md) 의 "시각" 절을 봅니다.
 - 21 의 시각은 세션 로그온에 성공한 때입니다.
 - 22 의 시각은 셸 시작 알림을 받은 때입니다.
 - 24 의 시각은 세션이 끊긴 때입니다.
@@ -171,15 +171,15 @@ Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다.
    - 그러므로 주소 칸을 보지 않고 21·22·24·39·40 의 번호만으로 원격 접속이라고 하지 않습니다.
 3. **23 에서 접속 주소를 찾습니다.** 21~25 를 한데 묶어 "원본 IP 와 사용자 이름을 적는 이벤트" 로 소개하는 자료가 있습니다. 관찰한 공급자 정의에서 23 에는 주소 칸이 없었습니다. 주소는 같은 세션 ID 의 21·22·25 에서 찾습니다.
 4. **4778·4779 를 모두 원격 데스크톱으로 봅니다.** 빠른 사용자 전환과 Hyper-V 확장 세션에서도 남습니다. SessionName 칸의 `RDP-Tcp#N` 과 `Console` 로 나눕니다.
-5. **4778·4779 가 없으면 다시 연결도 없었다고 봅니다.** 두 이벤트는 기타 로그온/로그오프 감사가 켜져 있어야 남습니다. 관찰한 PC 는 이 하위 범주가 No Auditing 이었고, 보안 로그에 4778·4779 가 0건이었습니다. 이 설정이 Windows 기본값인지는 확인하지 못했습니다. 검체마다 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 으로 확인합니다.
+5. **4778·4779 가 없으면 다시 연결도 없었다고 봅니다.** 두 이벤트는 기타 로그온/로그오프 감사가 켜져 있어야 남습니다. 관찰한 PC 는 이 하위 범주가 No Auditing 이었고, 보안 로그에 4778·4779 가 0건이었습니다. 이 설정이 Windows 기본값인지는 확인하지 못했습니다. 검체마다 [감사 정책과 로그 설정](../audit-policy-log-settings.md) 으로 확인합니다.
 6. **4647·9009 를 원격 데스크톱 세션의 끝으로 바로 읽습니다.** 4647 은 원격 데스크톱 전용이 아니어서 시각을 맞춰 봐야 합니다. 9009 는 늘 남지 않습니다.
-7. **오래된 세션 기록을 찾습니다.** 로그 크기 한도가 작으면 오래된 기록이 밀려납니다. 관찰한 크기는 [허브](/02-artifacts/event-logs/rdp-event-logs/index.md) 에 있습니다.
+7. **오래된 세션 기록을 찾습니다.** 로그 크기 한도가 작으면 오래된 기록이 밀려납니다. 관찰한 크기는 [허브](index.md) 에 있습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 읽을 때
 
-EVTX 레코드를 바이트 단위로 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다. 이 페이지는 XML 보기와 명령으로만 따라갑니다.
+EVTX 레코드를 바이트 단위로 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다. 이 페이지는 XML 보기와 명령으로만 따라갑니다.
 
 ### 공개 도구로 한 번
 
@@ -211,22 +211,22 @@ Get-WinEvent -Path $sec -FilterXPath "*[System[(EventID=4778 or EventID=4779)]]"
 ```
 
 - 조건에 맞는 이벤트가 하나도 없으면 Get-WinEvent 는 "No events were found that match the specified selection criteria." 오류를 냅니다. 이 오류는 해당 기록이 없다는 뜻입니다.
-- 다른 공개 EVTX 파서로 뽑았다면 UserData 칸을 제대로 읽었는지 한두 건을 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 다른 공개 EVTX 파서로 뽑았다면 UserData 칸을 제대로 읽었는지 한두 건을 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 기록 | 맞춰 볼 것 | 링크 |
 |---|---|---|
-| 1149, 4624 유형 10 | 같은 사용자와 주소, 21 바로 앞의 시각 | [인증 단계](/02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) |
-| 4624 | 4778·4779 의 LogonID 와 같은 로그온 ID | [인증 단계](/02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) |
-| 4634 · 4647 | 23 과 같은 시각대의 로그오프 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 대상 컴퓨터의 TSTHEME.EXE·RDPCLIP.EXE 프리패치 | 원격 데스크톱 접속을 받은 쪽에 생기는 프리패치 파일 | [프리패치](/02-artifacts/execution/prefetch/index.md) |
+| 1149, 4624 유형 10 | 같은 사용자와 주소, 21 바로 앞의 시각 | [인증 단계](1149-4624-10-4625.md) |
+| 4624 | 4778·4779 의 LogonID 와 같은 로그온 ID | [인증 단계](1149-4624-10-4625.md) |
+| 4634 · 4647 | 23 과 같은 시각대의 로그오프 | [로그온·로그오프](../logon-events/index.md) |
+| 대상 컴퓨터의 TSTHEME.EXE·RDPCLIP.EXE 프리패치 | 원격 데스크톱 접속을 받은 쪽에 생기는 프리패치 파일 | [프리패치](../../execution/prefetch/index.md) |
 | 대상 컴퓨터의 프린터 드라이버 설치 | 처음 접속할 때 Remote Desktop Easy Print 드라이버가 설치됩니다 | |
-| 출발 컴퓨터의 RDPClient 1026 | 끊긴 시각 | [나간 접속](/02-artifacts/event-logs/rdp-event-logs/rdpclient-1024-1102.md) |
-| 전원 기록 | 로그오프 기록 없이 끝난 세션 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
+| 출발 컴퓨터의 RDPClient 1026 | 끊긴 시각 | [나간 접속](rdpclient-1024-1102.md) |
+| 전원 기록 | 로그오프 기록 없이 끝난 세션 | [켜짐·꺼짐](../power-on-off-events.md) |
 
 - 프리패치와 Easy Print 드라이버는 JPCERT/CC 자료를 따릅니다. 이 자료는 시험한 OS 버전을 적지 않았습니다.
-- 세션 기록으로 그 시각의 사용자를 좁히는 흐름은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 를 봅니다.
+- 세션 기록으로 그 시각의 사용자를 좁히는 흐름은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 를 봅니다.
 
 ## 실습
 

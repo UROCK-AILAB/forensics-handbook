@@ -12,7 +12,7 @@ NTFS (New Technology File System) 는 Windows 가 기본으로 쓰는 파일 시
 - 파일을 지우면 그 MFT 레코드는 "비어 있음" 으로 표시됩니다. 레코드는 다른 파일이 다시 쓸 때까지 그 자리에 남습니다.
 - 파일을 지워도 MFT 크기는 줄지 않습니다. 그래서 지운 파일의 레코드를 MFT 안에서 찾을 수 있습니다.
 - 파일 하나에 시각이 두 벌 있습니다. 두 벌은 바뀌는 조건이 다릅니다. 이 차이가 시각 조작을 가려내는 단서가 됩니다.
-- NTFS 의 시각 값은 UTC 기준 FILETIME 으로 저장됩니다. 화면에 보이는 현지 시각은 도구가 시간대를 적용해 바꾼 값입니다. 값 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- NTFS 의 시각 값은 UTC 기준 FILETIME 으로 저장됩니다. 화면에 보이는 현지 시각은 도구가 시간대를 적용해 바꾼 값입니다. 값 형식은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
 ## 한눈에 보기
 
@@ -62,49 +62,49 @@ NTFS 는 자기 관리 정보도 파일로 둡니다. 이 파일들을 메타 �
 
 아래 순서대로 읽으면 볼륨 첫 섹터에서 출발해 파일 내용까지 따라갈 수 있습니다.
 
-1. [부트 섹터와 클러스터 (Boot Sector·Cluster)](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md) — 볼륨 첫 섹터에서 섹터 크기, 클러스터 크기, $MFT 위치, 레코드 크기를 읽습니다. 뒤의 모든 계산이 여기서 시작합니다.
-2. [MFT 레코드와 속성 (FILE Record·Attribute)](/01-foundations/disk-volume/ntfs/file-record-attribute.md) — 레코드 머리글, 섹터 끝 바이트를 되돌리는 고정값 (Fixup), 속성 (Attribute) 목록을 읽습니다. 레코드 하나에 다 담기지 않는 파일은 $ATTRIBUTE_LIST 로 확장 레코드를 씁니다. 이때 긴 이름이 확장 레코드에만 있을 수 있습니다 (현장 관찰).
-3. [데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) — 작은 파일은 내용이 레코드 안에 있습니다. 큰 파일은 데이터 런으로 클러스터 위치를 적습니다. 조각난 파일과 조각난 $MFT 를 이 방법으로 따라갑니다.
-4. [두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) — 두 속성의 시각이 각각 언제 바뀌는지 봅니다. 시각 조작을 찾는 방법의 바탕입니다.
-5. [대체 데이터 스트림 (ADS)](/01-foundations/disk-volume/ntfs/ads.md) — 파일 하나에 이름 있는 $DATA 스트림이 여럿 붙을 수 있습니다. 탐색기에는 보이지 않습니다. 다운로드 출처를 적는 Zone.Identifier 가 대표 예입니다.
-6. [압축·희소 파일 (Compressed·Sparse)](/01-foundations/disk-volume/ntfs/compressed-sparse.md) — 압축된 파일과 구멍이 있는 희소 파일은 데이터 런이 다르게 생겼습니다. $UsnJrnl:$J 도 희소 스트림입니다. 구멍을 0 으로 채워 뽑는지, 건너뛰고 뽑는지에 따라 크기와 해시가 달라집니다 (현장 관찰).
-7. [링크와 리파스 포인트 (Hard Link·Junction·Reparse Point)](/01-foundations/disk-volume/ntfs/hard-link-junction-reparse-point.md) — 하드 링크 이름과 8.3 짧은 이름도 $FILE_NAME 속성에 들어갑니다. 정션과 심볼릭 링크는 리파스 포인트로 다른 경로를 가리킵니다.
-8. [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) — $Bitmap 으로 클러스터가 쓰이는지 확인하고, $Secure 로 권한을 찾고, $Extend 안의 파일들을 봅니다.
+1. [부트 섹터와 클러스터 (Boot Sector·Cluster)](boot-sector-cluster.md) — 볼륨 첫 섹터에서 섹터 크기, 클러스터 크기, $MFT 위치, 레코드 크기를 읽습니다. 뒤의 모든 계산이 여기서 시작합니다.
+2. [MFT 레코드와 속성 (FILE Record·Attribute)](file-record-attribute.md) — 레코드 머리글, 섹터 끝 바이트를 되돌리는 고정값 (Fixup), 속성 (Attribute) 목록을 읽습니다. 레코드 하나에 다 담기지 않는 파일은 $ATTRIBUTE_LIST 로 확장 레코드를 씁니다. 이때 긴 이름이 확장 레코드에만 있을 수 있습니다 (현장 관찰).
+3. [데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)](data-run-resident-non-resident.md) — 작은 파일은 내용이 레코드 안에 있습니다. 큰 파일은 데이터 런으로 클러스터 위치를 적습니다. 조각난 파일과 조각난 $MFT 를 이 방법으로 따라갑니다.
+4. [두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)](standard-information-file-name.md) — 두 속성의 시각이 각각 언제 바뀌는지 봅니다. 시각 조작을 찾는 방법의 바탕입니다.
+5. [대체 데이터 스트림 (ADS)](ads.md) — 파일 하나에 이름 있는 $DATA 스트림이 여럿 붙을 수 있습니다. 탐색기에는 보이지 않습니다. 다운로드 출처를 적는 Zone.Identifier 가 대표 예입니다.
+6. [압축·희소 파일 (Compressed·Sparse)](compressed-sparse.md) — 압축된 파일과 구멍이 있는 희소 파일은 데이터 런이 다르게 생겼습니다. $UsnJrnl:$J 도 희소 스트림입니다. 구멍을 0 으로 채워 뽑는지, 건너뛰고 뽑는지에 따라 크기와 해시가 달라집니다 (현장 관찰).
+7. [링크와 리파스 포인트 (Hard Link·Junction·Reparse Point)](hard-link-junction-reparse-point.md) — 하드 링크 이름과 8.3 짧은 이름도 $FILE_NAME 속성에 들어갑니다. 정션과 심볼릭 링크는 리파스 포인트로 다른 경로를 가리킵니다.
+8. [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](bitmap-secure-extend.md) — $Bitmap 으로 클러스터가 쓰이는지 확인하고, $Secure 로 권한을 찾고, $Extend 안의 파일들을 봅니다.
 
 ## 함께 볼 페이지
 
 이 구조 위에서 읽는 아티팩트입니다.
 
-- [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) — MFT 를 증거로 해석하는 법
-- [NTFS 트랜잭션 로그 ($LogFile)](/02-artifacts/filesystem/logfile.md) — 메타데이터 변경 기록
-- [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) — 파일 생성·삭제·이름 변경 기록
-- [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) — 폴더 목록 B-트리와 그 안에 남은 옛 항목
-- [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) — ADS 를 쓰는 대표 아티팩트
+- [마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md) — MFT 를 증거로 해석하는 법
+- [NTFS 트랜잭션 로그 ($LogFile)](../../../02-artifacts/filesystem/logfile.md) — 메타데이터 변경 기록
+- [USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md) — 파일 생성·삭제·이름 변경 기록
+- [폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md) — 폴더 목록 B-트리와 그 안에 남은 옛 항목
+- [다운로드 출처 표시 (Zone.Identifier)](../../../02-artifacts/filesystem/zone-identifier.md) — ADS 를 쓰는 대표 아티팩트
 
 이 구조를 쓰는 분석 기법입니다.
 
-- [파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)
-- [시각 조작 탐지 (Timestomping)](/03-techniques/analysis/timeline/timestomping.md)
-- [파일시스템 기반 복구 (Undelete: NTFS·FAT)](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)
-- [비할당 영역과 슬랙 (Unallocated·Slack Space)](/03-techniques/analysis/data-recovery/unallocated-slack-space.md)
-- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](/03-techniques/analysis/volume-shadow-copy-analysis.md)
-- [SSD TRIM과 복구 한계 (SSD·TRIM)](/03-techniques/analysis/data-recovery/ssd-trim.md)
-- [EFS 암호화 파일 (Encrypting File System)](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md)
-- [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md)
+- [파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)](../../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)
+- [시각 조작 탐지 (Timestomping)](../../../03-techniques/analysis/timeline/timestomping.md)
+- [파일시스템 기반 복구 (Undelete: NTFS·FAT)](../../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)
+- [비할당 영역과 슬랙 (Unallocated·Slack Space)](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)
+- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)
+- [SSD TRIM과 복구 한계 (SSD·TRIM)](../../../03-techniques/analysis/data-recovery/ssd-trim.md)
+- [EFS 암호화 파일 (Encrypting File System)](../../../03-techniques/analysis/encrypted-evidence/encrypting-file-system.md)
+- [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)
 
 NTFS 앞뒤에 있는 구조입니다.
 
-- [증거 이미지·가상 디스크 형식 (E01·RAW·AFF4·VHDX·VMDK)](/01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md)
-- [파티션 구조 (MBR·GPT)](/01-foundations/disk-volume/mbr-gpt.md)
-- [FAT·exFAT 구조 (FAT·exFAT)](/01-foundations/disk-volume/fat-exfat.md)
-- [볼륨 섀도 복사본 구조 (Volume Shadow Copy)](/01-foundations/disk-volume/volume-shadow-copy.md)
-- [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md)
-- [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
+- [증거 이미지·가상 디스크 형식 (E01·RAW·AFF4·VHDX·VMDK)](../e01-raw-aff4-vhdx-vmdk.md)
+- [파티션 구조 (MBR·GPT)](../mbr-gpt.md)
+- [FAT·exFAT 구조 (FAT·exFAT)](../fat-exfat.md)
+- [볼륨 섀도 복사본 구조 (Volume Shadow Copy)](../volume-shadow-copy.md)
+- [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](../../value-decoding/lznt1-xpress-xpress-huffman.md)
+- [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../value-decoding/filetime-unix-webkit-dos-ole.md)
 
 이 구조가 쓰이는 조사 시나리오입니다.
 
-- [지운 파일의 흔적 찾기 (Deleted File Traces)](/04-scenarios/activity/deleted-file-traces.md)
-- [이 문서의 날짜를 믿을 수 있나 (Document Date Verification)](/04-scenarios/activity/document-date-verification.md)
+- [지운 파일의 흔적 찾기 (Deleted File Traces)](../../../04-scenarios/activity/deleted-file-traces.md)
+- [이 문서의 날짜를 믿을 수 있나 (Document Date Verification)](../../../04-scenarios/activity/document-date-verification.md)
 
 ## 참고 문헌
 

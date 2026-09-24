@@ -27,7 +27,7 @@ CCL 글은 Local Storage·IndexedDB 를 LevelDB 로 저장하는 앱 목록에 �
 | `%LOCALAPPDATA%\Discord` | 프로그램 | 관찰 |
 
 - `%APPDATA%\discord` 는 Electron 의 기본 규칙 `%APPDATA%\<앱 이름>` 과 맞습니다. (관찰, Electron 문서)
-- Electron 앱 폴더의 일반 구조는 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+- Electron 앱 폴더의 일반 구조는 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 - `%APPDATA%\discord\1.0.9253` 이라는 빈 폴더가 있었습니다. 앱 버전 번호의 단서로 보입니다. (관찰)
 - PTB·Canary 같은 다른 판의 폴더 이름은 확인하지 못했습니다.
 - 두 폴더 모두 사용자 프로필 아래에 있습니다. 사용자마다 따로 봅니다.
@@ -59,7 +59,7 @@ CCL 글은 Local Storage·IndexedDB 를 LevelDB 로 저장하는 앱 목록에 �
 
 - `IndexedDB` 폴더는 없었습니다. (관찰)
 - `Local State` 의 `os_crypt` 에는 `encrypted_key` 와 `audit_enabled` 만 있었습니다. App-Bound 키는 없었습니다. (관찰)
-- 쿠키 암호화와 캐시 형식은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다. Local Storage 형식은 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
+- 쿠키 암호화와 캐시 형식은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다. Local Storage 형식은 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
 
 ### 디스코드 고유 파일 (관찰)
 
@@ -121,7 +121,7 @@ CCL 글은 Local Storage·IndexedDB 를 LevelDB 로 저장하는 앱 목록에 �
 - **메시지가 지금도 서버에 있는지.** 캐시는 받아 온 시점의 사본입니다.
 - **사용자가 보냈는지.** 이 페이지는 응답 JSON 의 칸을 확인하지 못했습니다. 보낸 사람은 응답 안의 칸을 보고 판단합니다.
 - **캐시에 없는 대화.** 캐시 크기와 교체에 따라 얼마나 남는지 달라집니다. 없다고 대화가 없었다고 말할 수 없습니다.
-- **누가 자판 앞에 있었는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **누가 자판 앞에 있었는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 해석: 채널을 연 순간의 메시지 API 응답이 캐시에 남으면, 서버에서 나중에 지운 메시지도 캐시에서 보일 수 있습니다. 얼마나 오래 남는지는 확인하지 못했습니다.
 
@@ -131,13 +131,13 @@ CCL 글은 Local Storage·IndexedDB 를 LevelDB 로 저장하는 앱 목록에 �
 
 | 시각 | 무엇이 바뀔 때 | 주의 |
 |---|---|---|
-| 캐시 항목의 시각 | 앱이 응답을 받아 캐시에 적을 때 | 형식과 기준은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 캐시 형식에서 다룹니다 |
-| 응답 JSON 안의 시각 | 서버가 적은 값 | 칸 이름과 형식은 확인하지 못했습니다. [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 후보 형식을 봅니다 |
+| 캐시 항목의 시각 | 앱이 응답을 받아 캐시에 적을 때 | 형식과 기준은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 캐시 형식에서 다룹니다 |
+| 응답 JSON 안의 시각 | 서버가 적은 값 | 칸 이름과 형식은 확인하지 못했습니다. [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 후보 형식을 봅니다 |
 | 로그 줄 시각 | 로그를 쓸 때 | 형식을 확인하지 못했습니다. UTC 인지 현지 시각인지 파일 수정 시각과 맞춰 봅니다 |
-| 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 봅니다 |
+| 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](../filesystem/mft.md) 에서 봅니다 |
 
 - 디스코드의 숫자 ID 에서 시각을 읽어 내는 방법이 알려져 있습니다. 이 페이지는 공식 문서로 확인하지 못해 싣지 않습니다.
-- 현지 시각으로 옮길 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 확인합니다.
+- 현지 시각으로 옮길 때는 [시간대 설정](../system-account/time-zone.md) 을 확인합니다.
 
 ## 함정과 한계
 
@@ -146,7 +146,7 @@ CCL 글은 Local Storage·IndexedDB 를 LevelDB 로 저장하는 앱 목록에 �
 - **`Default` 프로필을 찾습니다.** 프로필 하위 폴더 없이 `%APPDATA%\discord` 바로 아래에 Chromium 구성이 있었습니다. `Default` 를 찾는 도구는 이 폴더를 건너뛸 수 있습니다.
 - **프로그램 폴더로 설치 여부를 판단합니다.** 관찰 PC 처럼 프로그램이 없어도 사용자 데이터가 남을 수 있습니다.
 - **토큰을 보고서에 옮깁니다.** `userDataCache.json` 의 `tokens` 값은 인증 정보일 수 있습니다. 값은 옮기지 않고 키가 있다는 사실만 적습니다.
-- **증거 PC 에서 앱을 엽니다.** 앱을 열면 캐시가 새로 쓰이고 옛 항목이 밀려날 수 있습니다. 폴더를 먼저 복사합니다. 켜진 PC 는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 순서를 따릅니다.
+- **증거 PC 에서 앱을 엽니다.** 앱을 열면 캐시가 새로 쓰이고 옛 항목이 밀려날 수 있습니다. 폴더를 먼저 복사합니다. 켜진 PC 는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 순서를 따릅니다.
 - **캐시가 모든 메시지를 담는다고 봅니다.** 관찰 PC 의 메시지 API 캐시 키는 3건뿐이었습니다.
 
 ## 직접 분석해 보기
@@ -164,8 +164,8 @@ CCL 글은 Local Storage·IndexedDB 를 LevelDB 로 저장하는 앱 목록에 �
 
 3. 찾은 자리 뒤에 `/messages` 가 이어지면 채널 메시지 API 의 캐시 키입니다.
 4. 같은 검색을 `discordapp.com` 과 `discord.com` 으로도 합니다.
-5. 캐시 키와 응답 본문을 잇는 구조, 본문이 압축돼 있는지는 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 캐시 형식에서 확인합니다.
-6. 문자열 검색 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에서 다룹니다.
+5. 캐시 키와 응답 본문을 잇는 구조, 본문이 압축돼 있는지는 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 캐시 형식에서 확인합니다.
+6. 문자열 검색 방법은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -173,20 +173,20 @@ CCL 글은 Local Storage·IndexedDB 를 LevelDB 로 저장하는 앱 목록에 �
 
 - 도구가 낸 API 응답 수와 헥스 검색으로 찾은 캐시 키 수를 맞춰 봅니다.
 - 크롬 계열 캐시를 읽는 다른 도구로도 같은 폴더를 읽어 봅니다.
-- 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+- 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 설치·제거 기록과 프로그램 폴더 상태를 맞춰 봅니다 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | 디스코드 실행 시각을 봅니다 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 앱이 네트워크를 쓴 시간대를 봅니다 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 디스코드 알림이 남았는지 봅니다 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 디스코드에서 받은 파일에 출처 표시가 붙었는지 봅니다 |
-| [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) | 브라우저로 디스코드 웹을 쓴 흔적을 봅니다 |
+| [설치 프로그램](../system-account/uninstall.md) | 설치·제거 기록과 프로그램 폴더 상태를 맞춰 봅니다 |
+| [프리페치](../execution/prefetch/index.md) | 디스코드 실행 시각을 봅니다 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 앱이 네트워크를 쓴 시간대를 봅니다 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 디스코드 알림이 남았는지 봅니다 |
+| [다운로드 출처 표시](../filesystem/zone-identifier.md) | 디스코드에서 받은 파일에 출처 표시가 붙었는지 봅니다 |
+| [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) | 브라우저로 디스코드 웹을 쓴 흔적을 봅니다 |
 
-조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다. 프로그램을 지운 흔적은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 와 함께 봅니다.
+조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다. 프로그램을 지운 흔적은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 와 함께 봅니다.
 
 ## 실습
 

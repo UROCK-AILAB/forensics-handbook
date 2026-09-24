@@ -96,8 +96,8 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 
 - MsiInstaller 는 매니페스트 공급자가 아니라 예전 방식의 이벤트 원본입니다. 관찰 PC 에서 공급자 GUID 가 0 이었습니다.
 - 관찰 PC 레코드의 Keywords 는 `0x80000000000000` 이었습니다. 이 값은 표준 키워드 EventLogClassic 입니다.
-- 오프라인 이미지에서는 SYSTEM 하이브의 `ControlSet00X` 아래 같은 경로를 엽니다. `ControlSet00X` 를 고르는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
-- 메시지 파일로 문장을 푸는 법은 [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
+- 오프라인 이미지에서는 SYSTEM 하이브의 `ControlSet00X` 아래 같은 경로를 엽니다. `ControlSet00X` 를 고르는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 메시지 파일로 문장을 푸는 법은 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
 ### 관찰 PC 의 로그 상태
 
@@ -203,7 +203,7 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 | InstallSource | `C:\Users\<사용자>\AppData\Local\Microsoft\TeamsMeetingAddinMsis\1.26.21803\` |
 | WindowsInstaller | 1 |
 
-`Uninstall` 키의 값과 32비트·사용자별 위치는 [설치 프로그램](/02-artifacts/system-account/uninstall.md)에서 다룹니다.
+`Uninstall` 키의 값과 32비트·사용자별 위치는 [설치 프로그램](../system-account/uninstall.md)에서 다룹니다.
 
 ### 기록한 계정
 
@@ -214,7 +214,7 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 - 한 트랜잭션에서 1040 은 사용자 SID 로, 1042 는 `S-1-5-18` 로 남은 예도 있었습니다.
 - 이 SID 가 "설치를 시작한 사람" 이라고 적은 문서는 찾지 못했습니다. 업데이트 서비스가 SYSTEM 으로 설치했다면 사용자가 한 일이 아닐 수 있습니다.
 
-SID 의 모양과 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
+SID 의 모양과 읽는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -239,7 +239,7 @@ SID 의 모양과 읽는 법은 [윈도 식별자 형식](/01-foundations/value-
 
 - 이벤트 시각은 `<TimeCreated SystemTime>` 에 있습니다. 끝에 Z 가 붙은 UTC 값입니다.
 - 관찰 PC 의 한 레코드는 `2026-09-22T22:45:04.4126114Z` 였습니다. 한국 시각으로는 2026-09-23 07:45:04 입니다. 날짜가 하루 바뀝니다.
-- 현지 시각으로 바꾸는 법은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 다룹니다.
+- 현지 시각으로 바꾸는 법은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 
 ### 짝으로 남는 기록
 
@@ -261,7 +261,7 @@ SID 의 모양과 읽는 법은 [윈도 식별자 형식](/01-foundations/value-
 
 - 관찰 PC 의 Teams Meeting Add-in 1033 은 `2026-09-07 02:53:35Z` 였습니다. 한국 시각으로 11:53:35 입니다.
 - 같은 제품의 `InstallDate` 는 20260907 이었습니다. 날짜가 맞았습니다.
-- `InstallDate` 는 처음 설치한 날이 아니라 마지막으로 패치·복구한 날일 수 있습니다. 뜻은 [설치 프로그램](/02-artifacts/system-account/uninstall.md)에서 다룹니다.
+- `InstallDate` 는 처음 설치한 날이 아니라 마지막으로 패치·복구한 날일 수 있습니다. 뜻은 [설치 프로그램](../system-account/uninstall.md)에서 다룹니다.
 - `InstallDate` 가 어느 시간대 기준 날짜인지는 확인하지 못했습니다. UTC 날짜와 현지 날짜가 다른 시간대에 설치했다면 두 날짜를 모두 적어 비교합니다.
 
 ## 함정과 한계
@@ -272,15 +272,15 @@ SID 의 모양과 읽는 법은 [윈도 식별자 형식](/01-foundations/value-
 4. **상태 칸을 반환 코드표로 바로 풉니다.** 상태 칸이 반환 코드라고 적은 문서는 찾지 못했습니다. 0 이 아닌 값이 나오면 같은 시각의 11708 같은 실패 이벤트와 함께 봅니다.
 5. **문서 표에 없는 번호를 버립니다.** 11724·1040·1042 는 Microsoft 이벤트 표에 없지만 실제로 남았습니다.
 6. **1033 Binary 가 같으니 같은 설치로 묶습니다.** 같은 제품을 다시 설치해도 Binary 가 같았습니다. 시각으로 나눕니다.
-7. **MSI 가 아닌 설치도 여기 남는다고 봅니다.** 자체 EXE 설치 프로그램, 압축만 푸는 프로그램, 스토어 앱이 이 이벤트를 남기는지는 확인하지 못했습니다. 스토어 앱은 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md)을 따로 봅니다.
+7. **MSI 가 아닌 설치도 여기 남는다고 봅니다.** 자체 EXE 설치 프로그램, 압축만 푸는 프로그램, 스토어 앱이 이 이벤트를 남기는지는 확인하지 못했습니다. 스토어 앱은 [스토어 앱 설치 목록](../system-account/appx-staterepository.md)을 따로 봅니다.
 8. **오래된 설치를 찾습니다.** 관찰 PC 처럼 응용 프로그램 로그가 한 달쯤만 남으면 그보다 오래된 설치·제거는 이벤트로 볼 수 없습니다. 가장 오래된 레코드의 시각을 먼저 적어 둡니다.
 
 ### 지우기와 조작
 
-- **응용 프로그램 로그를 지웁니다.** 지운 흔적은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)에서 찾습니다.
+- **응용 프로그램 로그를 지웁니다.** 지운 흔적은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
 - **로그를 빨리 채웁니다.** 로그가 꽉 차면 오래된 기록부터 덮어씁니다. 가장 오래된 레코드가 유난히 최근이면 로그 크기와 기록 양을 함께 봅니다.
-- **흔적을 지우는 도구를 설치했다가 지웁니다.** 그 도구가 MSI 로 설치됐다면 1033 과 1034 가 남을 수 있습니다. 찾는 순서는 [완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)에서 다룹니다.
-- 지운 레코드를 파일 안에서 찾는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- **흔적을 지우는 도구를 설치했다가 지웁니다.** 그 도구가 MSI 로 설치됐다면 1033 과 1034 가 남을 수 있습니다. 찾는 순서는 [완전삭제 도구를 썼나](../../04-scenarios/activity/anti-forensics/wiping-tools.md)에서 다룹니다.
+- 지운 레코드를 파일 안에서 찾는 법은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -303,7 +303,7 @@ Binary 칸은 제품 코드 GUID 문자열을 ASCII 바이트로 담습니다. �
 5. 1033 이면 38바이트 뒤에 `0000` 과 16진 글자가 더 이어집니다. 이 부분은 뜻을 확인하지 못했으므로 그대로 옮겨 적습니다.
 6. 풀어 낸 제품 코드로 `Uninstall` 키를 찾습니다.
 
-EVTX 파일 안에서 이 칸이 저장되는 방식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+EVTX 파일 안에서 이 칸이 저장되는 방식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -327,19 +327,19 @@ Get-WinEvent -Path .\Application.evtx -FilterXPath "*[System[Provider[@Name='Msi
 
 - 결과에서 같은 제품 코드끼리 모으면 설치·제거·다시 설치의 순서가 보입니다.
 - 1033·1034·1035 의 Data 1 은 제품 이름이고, 11707·11724·11728 의 Data 1 은 완성된 문장입니다.
-- EvtxECmd, python-evtx 같은 공개 도구도 이 레코드를 읽습니다. 도구가 Binary 칸을 빼고 보여 주는지 확인합니다. 도구의 풀이는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- EvtxECmd, python-evtx 같은 공개 도구도 이 레코드를 읽습니다. 도구가 Binary 칸을 빼고 보여 주는지 확인합니다. 도구의 풀이는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 기록 | 무엇을 맞춰 보나 | 링크 |
 |---|---|---|
-| 설치 프로그램 목록 | 같은 제품 코드의 키가 있는지, `InstallDate` 와 `InstallSource` | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| AmCache 설치 프로그램 항목 | 같은 앱이 AmCache 에도 설치 프로그램으로 남아 있는지 | [설치 프로그램 항목 (InventoryApplication)](/02-artifacts/execution/amcache-hve/inventoryapplication.md) |
-| 프로세스 생성 (4688) | 1040 의 Client Process Id 와 같은 번호의 프로세스. 1040 은 10진(예: 27940), 4688 은 16진(예: `0x6D24`)이라 진법을 맞춥니다. 두 번호가 같은 프로세스를 가리키는지는 확인하지 못했습니다 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| 이벤트 로그 삭제 | 응용 프로그램 로그가 지워진 적이 있는지 | [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) |
-| 메시지 파일 | 도구가 문장을 제대로 풀었는지 | [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) |
+| 설치 프로그램 목록 | 같은 제품 코드의 키가 있는지, `InstallDate` 와 `InstallSource` | [설치 프로그램](../system-account/uninstall.md) |
+| AmCache 설치 프로그램 항목 | 같은 앱이 AmCache 에도 설치 프로그램으로 남아 있는지 | [설치 프로그램 항목 (InventoryApplication)](../execution/amcache-hve/inventoryapplication.md) |
+| 프로세스 생성 (4688) | 1040 의 Client Process Id 와 같은 번호의 프로세스. 1040 은 10진(예: 27940), 4688 은 16진(예: `0x6D24`)이라 진법을 맞춥니다. 두 번호가 같은 프로세스를 가리키는지는 확인하지 못했습니다 | [프로세스 생성](4688.md) |
+| 이벤트 로그 삭제 | 응용 프로그램 로그가 지워진 적이 있는지 | [이벤트 로그 삭제](1102-104.md) |
+| 메시지 파일 | 도구가 문장을 제대로 풀었는지 | [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) |
 
-설치한 프로그램을 실제로 실행했는지는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)의 순서로 확인합니다.
+설치한 프로그램을 실제로 실행했는지는 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md)의 순서로 확인합니다.
 
 ## 실습
 

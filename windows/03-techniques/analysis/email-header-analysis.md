@@ -8,7 +8,7 @@
 메일이 어느 서버를 거쳐 왔는지, 발신 도메인 확인이 어떻게 나왔는지를 가립니다.
 핵심은 어느 줄부터 믿을지 정하는 일입니다.
 받은 조직의 서버가 붙인 줄은 그 조직의 기록과 맞춰 볼 수 있고, 그보다 아래 줄은 보낸 쪽이 적어 넣었을 수 있습니다.
-메일 파일의 형식과 `Date`·`Message-ID` 같은 헤더 칸은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
+메일 파일의 형식과 `Date`·`Message-ID` 같은 헤더 칸은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
 
 ## 언제 쓰나
 
@@ -19,9 +19,9 @@
 
 ## 헤더를 얻는 곳
 
-- EML·MBOX 파일은 글자 파일이라 헤더를 바로 읽습니다. 형식은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에 있습니다.
-- 아웃룩 저장소에서 인터넷 헤더를 꺼내는 법은 [MAPI 속성](/01-foundations/app-mail-data/mapi-property.md) 과 [아웃룩](/02-artifacts/mail/outlook/index.md) 에서 다룹니다.
-- 다른 메일 프로그램의 저장 방식은 [썬더버드](/02-artifacts/mail/thunderbird.md), [새 Outlook](/02-artifacts/mail/new-outlook.md), [Windows 메일 앱](/02-artifacts/mail/hxstore.md) 을 봅니다.
+- EML·MBOX 파일은 글자 파일이라 헤더를 바로 읽습니다. 형식은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에 있습니다.
+- 아웃룩 저장소에서 인터넷 헤더를 꺼내는 법은 [MAPI 속성](../../01-foundations/app-mail-data/mapi-property.md) 과 [아웃룩](../../02-artifacts/mail/outlook/index.md) 에서 다룹니다.
+- 다른 메일 프로그램의 저장 방식은 [썬더버드](../../02-artifacts/mail/thunderbird.md), [새 Outlook](../../02-artifacts/mail/new-outlook.md), [Windows 메일 앱](../../02-artifacts/mail/hxstore.md) 을 봅니다.
 - 헤더는 원문 그대로 얻습니다. 메일 프로그램이 풀어서 보여 준 화면은 원문 대신 쓰지 않습니다.
 
 ## 봉투와 헤더
@@ -127,7 +127,7 @@ To: <user@example.com>
 4. 그보다 아래 줄은 "보낸 쪽이 적은 기록" 으로 따로 적습니다.
 
 - RFC 5321 은 `Received` 줄을 비교하면 느린 중계 같은 문제를 찾는 데 쓸모 있다고 적습니다. 두 줄 사이의 UTC 시각 차이로 두 서버 사이에 걸린 시간을 가늠합니다. 두 서버의 시계가 서로 어긋나 있으면 이 차이도 틀어집니다.
-- RFC 5321 은 LAN 안에서 보낸 메일의 `Received` 줄이 내부 호스트 이름 같은 정보를 드러낼 수 있다고 적습니다. 조직 안에서 보낸 메일이라면 발신 PC 를 찾는 단서가 됩니다. 그 PC 를 누가 썼는지는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- RFC 5321 은 LAN 안에서 보낸 메일의 `Received` 줄이 내부 호스트 이름 같은 정보를 드러낼 수 있다고 적습니다. 조직 안에서 보낸 메일이라면 발신 PC 를 찾는 단서가 됩니다. 그 PC 를 누가 썼는지는 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 ## Return-Path
 
@@ -242,7 +242,7 @@ dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.qua
 2. **발신자를 셋으로 나눠 적습니다.** `From` 주소, `Return-Path`(봉투 발신자), 인증 결과의 `smtp.mailfrom`·`header.from` 도메인입니다.
 3. **`Received` 줄에 번호를 붙입니다.** 맨 아래를 1번으로 두고 위로 올라갑니다.
 4. **줄마다 붙인 서버, 보낸 쪽이 댄 이름, 괄호 안 IP, 시각을 표로 옮깁니다.**
-5. **시각을 UTC 로 바꿉니다.** 바꾼 시각이 아래에서 위로 늘어나는지 봅니다. 시간대 맞추기는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 봅니다.
+5. **시각을 UTC 로 바꿉니다.** 바꾼 시각이 아래에서 위로 늘어나는지 봅니다. 시간대 맞추기는 [타임라인 작성](timeline/index.md) 을 봅니다.
 6. **신뢰 경계를 정합니다.** 받은 조직의 서버가 붙인 가장 아래 줄을 찾고, 그 아래 줄은 보낸 쪽 기록으로 표시합니다.
 7. **인증 결과와 스팸 판정 헤더를 읽습니다.** `compauth` 와 `reason`, `CAT`, `SFV`, `SFTY` 를 적습니다.
 8. **다른 기록과 맞춥니다.** 받은 조직의 메일 서버 로그, 같은 메일의 다른 사본, 받은 PC 의 메일 저장소를 비교합니다.
@@ -254,7 +254,7 @@ dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.qua
 - **텍스트 편집기**: 헤더 원문을 읽습니다. 원본이 아닌 사본으로 엽니다.
 - **Message Header Analyzer**: Microsoft 문서가 헤더를 읽기 쉽게 풀어 주는 도구로 안내합니다. 결과는 원문과 한 번 맞춰 봅니다.
 - **스프레드시트**: `Received` 줄을 표로 옮겨 UTC 로 바꿀 때 씁니다.
-- 도구마다 풀어 준 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 도구마다 풀어 준 결과가 다르면 [도구 결과 교차 검증](../reporting/tool-validation.md) 을 봅니다.
 
 ## 함정과 한계
 
@@ -278,9 +278,9 @@ dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.qua
 | 인증 결과 | 받은 서비스가 그 도메인을 검사한 결과 | 계정 주인이 직접 보냈다는 것 |
 | 내부 호스트 이름 | 그 이름의 호스트를 거쳤다고 적혀 있다는 것 | 그 PC 앞에 누가 있었는지 |
 
-- 메일을 누구와 주고받았는지 묶어 보는 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
-- 메일로 자료를 내보냈는지는 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
-- 악성 첨부가 메일로 들어왔는지는 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) 에서 다룹니다.
+- 메일을 누구와 주고받았는지 묶어 보는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+- 메일로 자료를 내보냈는지는 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
+- 악성 첨부가 메일로 들어왔는지는 [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md) 에서 다룹니다.
 
 보고서에는 줄마다 누가 적은 값인지 밝힙니다.
 

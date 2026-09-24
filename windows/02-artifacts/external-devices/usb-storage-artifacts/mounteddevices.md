@@ -22,12 +22,12 @@ SYSTEM 하이브의 `MountedDevices` 키는 마운트 관리자 (Mount Manager) 
 
 | 항목 | 내용 |
 |---|---|
-| 하이브 파일 | SYSTEM ([하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)) |
+| 하이브 파일 | SYSTEM ([하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)) |
 | 키 경로 | `SYSTEM\MountedDevices` (라이브에서는 `HKLM\SYSTEM\MountedDevices`) |
 | 값 형식 | 모두 REG_BINARY |
 | 확인된 버전 | Windows 2000 부터 Windows 11 까지 같은 위치 |
 
-이 키는 하이브 바로 아래에 있습니다. `ControlSet00X` 아래가 아니므로 [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md)가 필요 없습니다.
+이 키는 하이브 바로 아래에 있습니다. `ControlSet00X` 아래가 아니므로 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)가 필요 없습니다.
 
 이동식 USB 저장장치가 남기는 값 데이터는 자료마다 모양이 다릅니다.
 
@@ -38,7 +38,7 @@ SYSTEM 하이브의 `MountedDevices` 키는 마운트 관리자 (Mount Manager) 
 
 위 두 줄은 참고 문헌에 실린 예시입니다. 두 번째 줄의 끝 GUID 는 원문에서 가린 값입니다. 어느 버전에서 모양이 바뀌었는지는 이 글에서 확인한 자료로 못 박지 않습니다. 검체에서 실제 모양을 보고 판단합니다.
 
-USBSTOR 쪽 이름과 ParentIdPrefix 는 [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md)에서 다룹니다.
+USBSTOR 쪽 이름과 ParentIdPrefix 는 [USB 저장장치 목록 (USBSTOR)](usbstor.md)에서 다룹니다.
 
 ## 구조
 
@@ -61,8 +61,8 @@ USBSTOR 쪽 이름과 ParentIdPrefix 는 [USB 저장장치 목록 (USBSTOR)](/02
 | GPT 파티션 | 24바이트 | 0 · 8 · 아스키 `DMIO:ID:`<br>8 · 16 · GPT 파티션 GUID (리틀 엔디언) |
 | 장치 문자열 | 가변 | 0 · … · UTF-16LE 장치 경로. 끝에 널 문자가 없습니다. |
 
-- 디스크 서명과 파티션 GUID 의 뜻은 [파티션 구조 (MBR·GPT)](/01-foundations/disk-volume/mbr-gpt.md)에서 다룹니다.
-- GUID 의 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
+- 디스크 서명과 파티션 GUID 의 뜻은 [파티션 구조 (MBR·GPT)](../../../01-foundations/disk-volume/mbr-gpt.md)에서 다룹니다.
+- GUID 의 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 - 장치 문자열은 `#{GUID}` 로 끝납니다. 이 GUID 는 장치 인터페이스 종류를 나타냅니다. 디스크 인터페이스 (GUID_DEVINTERFACE_DISK) 라면 `{53f56307-b6bf-11d0-94f2-00a0c91efb8b}` 입니다.
 
 MBR·GPT 모양에는 제조사·제품·일련번호가 없습니다. 이 모양만 보고는 USB 장치인지 알 수 없습니다. 고정 디스크로 인식되는 외장 디스크는 이 모양으로 남을 수 있습니다. 이때는 디스크 서명이나 파티션 GUID 를 다른 기록과 맞춰 봅니다.
@@ -91,27 +91,27 @@ MBR·GPT 모양에는 제조사·제품·일련번호가 없습니다. 이 모�
 
 ## 시각 해석
 
-레지스트리 값에는 시각이 따로 없습니다. 시각은 키 단위로만 남습니다 ([키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)).
+레지스트리 값에는 시각이 따로 없습니다. 시각은 키 단위로만 남습니다 ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)).
 
 - `MountedDevices` 키의 마지막 기록 시각은 UTC FILETIME 입니다.
 - 이 시각은 키 안의 값 가운데 어느 하나가 바뀐 때를 가리킵니다.
 - 어느 값이 바뀌었는지는 알려 주지 않습니다.
 - 따라서 이 시각을 특정 USB 의 연결 시각으로 쓰면 안 됩니다.
 
-연결·해제 시각은 [연결·해제 시각 (DeviceClasses·Device Properties)](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 구합니다.
+연결·해제 시각은 [연결·해제 시각 (DeviceClasses·Device Properties)](deviceclasses-device-properties-0064-0066-0067.md)에서 구합니다.
 
 ## 함정과 한계
 
 1. **드라이브 문자는 덮어씁니다.** 값 이름 `\DosDevices\E:` 에는 데이터가 하나만 들어갑니다. 나중에 다른 볼륨이 E: 를 받으면 데이터가 바뀝니다. 그래서 드라이브 문자로는 마지막 장치만 보입니다.
 2. **볼륨 GUID 값은 남습니다.** `\??\Volume{GUID}` 값은 장치를 뽑아도 남습니다. 드라이브 문자가 없는 볼륨 GUID 값이 여럿 있는 것은 정상입니다.
 3. **접두어로 검색하지 않습니다.** 참고 문헌 예시에서 USB 장치 문자열은 `\??\` 가 아니라 `_??_` 로 시작합니다. `USBSTOR` 나 인스턴스 ID 로 검색해야 놓치지 않습니다.
-4. **헥스로만 보여 주는 도구가 있습니다.** 장치 문자열은 UTF-16LE 로 풀어야 읽힙니다 ([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
-5. **인스턴스 ID 가 일련번호가 아닐 수 있습니다.** 장치에 일련번호가 없으면 윈도가 만든 값이 들어갑니다. 구별하는 법은 [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md)에서 다룹니다.
-6. **네트워크 드라이브는 여기에 없습니다.** 공유 폴더에 붙인 드라이브 문자는 사용자 하이브에 남습니다 ([공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md)).
+4. **헥스로만 보여 주는 도구가 있습니다.** 장치 문자열은 UTF-16LE 로 풀어야 읽힙니다 ([문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
+5. **인스턴스 ID 가 일련번호가 아닐 수 있습니다.** 장치에 일련번호가 없으면 윈도가 만든 값이 들어갑니다. 구별하는 법은 [USB 저장장치 목록 (USBSTOR)](usbstor.md)에서 다룹니다.
+6. **네트워크 드라이브는 여기에 없습니다.** 공유 폴더에 붙인 드라이브 문자는 사용자 하이브에 남습니다 ([공유 폴더·네트워크 드라이브](../../network/network-shares-mapped-drives.md)).
 7. **정리 명령으로 지울 수 있습니다.** `mountvol /r` 은 지금 시스템에 없는 볼륨의 마운트 지점 폴더와 레지스트리 설정을 지웁니다. 레지스트리 편집기로 값을 지울 수도 있습니다. 두 경우 모두 키의 마지막 기록 시각이 바뀝니다. 지운 값은 다음 자리에서 찾아봅니다.
-   - [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 안의 옛 SYSTEM 하이브
-   - [트랜잭션 로그 (.LOG1·.LOG2)](/01-foundations/database-log-formats/registry-hive/log1-log2.md)
-   - 하이브 안에 남은 [지워진 키·값](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)
+   - [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 안의 옛 SYSTEM 하이브
+   - [트랜잭션 로그 (.LOG1·.LOG2)](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)
+   - 하이브 안에 남은 [지워진 키·값](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)
 
 ## 직접 분석해 보기
 
@@ -157,7 +157,7 @@ def decode(data: bytes) -> str:
         sig, off = struct.unpack('<IQ', data)
         return f'MBR 디스크 서명 {sig:08X}, 파티션 시작 {off} 바이트'
     if len(data) == 24 and data[:8] == b'DMIO:ID:':
-        return f'GPT 파티션 GUID {{{uuid.UUID(bytes_le=data[8:])}}}'
+        return 'GPT 파티션 GUID {' + str(uuid.UUID(bytes_le=data[8:])) + '}'
     return data.decode('utf-16-le', errors='replace')
 ```
 
@@ -171,15 +171,15 @@ def decode(data: bytes) -> str:
 
 | 아티팩트 | 이 페이지와 잇는 값 | 더해 주는 것 |
 |---|---|---|
-| [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) | 장치 이름·인스턴스 ID | 제조사·제품·일련번호 |
-| [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) | 볼륨 GUID | 어느 사용자 프로필에서 그 볼륨이 보였는지 |
-| [연결·해제 시각 (DeviceClasses·Device Properties)](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) | 장치 인스턴스 | 처음·마지막 연결 시각, 해제 시각 |
-| [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | 장치 인스턴스 | 볼륨 이름, 볼륨 일련번호 |
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 드라이브 문자 경로 | 그 드라이브에서 연 파일 |
-| [셸백 — 외부 장치 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) | 드라이브 문자 | 사용자가 연 폴더 |
-| [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) | 장치 인스턴스·디스크 정보 | 연결 시각과 디스크 정보 |
+| [USB 저장장치 목록 (USBSTOR)](usbstor.md) | 장치 이름·인스턴스 ID | 제조사·제품·일련번호 |
+| [사용자별 장치 연결 (MountPoints2)](mountpoints2.md) | 볼륨 GUID | 어느 사용자 프로필에서 그 볼륨이 보였는지 |
+| [연결·해제 시각 (DeviceClasses·Device Properties)](deviceclasses-device-properties-0064-0066-0067.md) | 장치 인스턴스 | 처음·마지막 연결 시각, 해제 시각 |
+| [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](wpd-emdmgmt.md) | 장치 인스턴스 | 볼륨 이름, 볼륨 일련번호 |
+| [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md)·[점프리스트](../../file-folder-usage/jump-lists.md) | 드라이브 문자 경로 | 그 드라이브에서 연 파일 |
+| [셸백 — 외부 장치 탐색 흔적](../../file-folder-usage/shellbags/removable-network-zip.md) | 드라이브 문자 | 사용자가 연 폴더 |
+| [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) | 장치 인스턴스·디스크 정보 | 연결 시각과 디스크 정보 |
 
-드라이브 문자는 덮어쓰기 때문에 한 장치에 한 번만 이어 보면 틀리기 쉽습니다. LNK·셸백의 드라이브 문자 경로를 쓸 때는 그 시각에 E: 를 받은 장치가 누구인지 연결 시각으로 따로 확인합니다. 전체 흐름은 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
+드라이브 문자는 덮어쓰기 때문에 한 장치에 한 번만 이어 보면 틀리기 쉽습니다. LNK·셸백의 드라이브 문자 경로를 쓸 때는 그 시각에 E: 를 받은 장치가 누구인지 연결 시각으로 따로 확인합니다. 전체 흐름은 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
 
 ## 실습
 

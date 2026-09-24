@@ -4,7 +4,7 @@
 
 EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식입니다. 48바이트 헤더 뒤에 레코드가 원형 버퍼처럼 이어집니다. 파일 끝 레코드 (EOF Record) 에는 헤더와 같은 위치 정보가 한 벌 더 들어 있습니다. 시각은 32비트 유닉스 시각(UTC)입니다. 레코드 본문은 XML 이 아니라 고정 칸과 문자열입니다.
 
-이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 의 하위 주제입니다. Vista 이후 형식은 [EVTX 파일 구조 (File Header·Chunk·Record)](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 에서 다룹니다.
+이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. Vista 이후 형식은 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에서 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트
 
@@ -16,7 +16,7 @@ EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식입니다. 48바이�
 | NT 4 | `C:\WINNT\System32\config` |
 | 2000 이후 | `C:\Windows\System32\config` |
 
-- Windows 2000 의 SystemRoot 값은 `C:\WINNT` 로도 적혀 있습니다([공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) 의 표). 실제 폴더는 이미지의 SystemRoot 값으로 확인합니다.
+- Windows 2000 의 SystemRoot 값은 `C:\WINNT` 로도 적혀 있습니다([공급자와 메시지 파일](provider-message-table.md) 의 표). 실제 폴더는 이미지의 SystemRoot 값으로 확인합니다.
 - 기본 파일 이름은 AppEvent.Evt(응용 프로그램), SecEvent.Evt(보안), SysEvent.Evt(시스템) 입니다.
 - 그 밖에 DFSR.Evt·DNSEvent.Evt·FwdEvents.Evt·HrwEvents.Evt·Internet.Evt·NTDS.Evt·NtFrs.Evt·ODiag.Evt·WindowsPowerShell.evt 등이 있습니다.
 - 도메인 컨트롤러에는 Directory service 로그와 File Replication service 로그가 더 있습니다.
@@ -85,7 +85,7 @@ EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식입니다. 48바이�
 - 고정 부분은 0x38(56)바이트입니다.
 - 원본 이름은 끝 문자가 붙은 UTF-16 문자열입니다. 그 뒤에 컴퓨터 이름이 옵니다.
 - 문자열·SID·데이터 오프셋은 레코드 안의 위치입니다. 레코드 범위를 넘는 오프셋은 무시해야 합니다.
-- SID 를 푸는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+- SID 를 푸는 법은 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 | 이벤트 종류 | 뜻 |
 |---|---|
@@ -95,8 +95,8 @@ EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식입니다. 48바이�
 | `0x8` | 감사 성공 |
 | `0x10` | 감사 실패 |
 
-- 이벤트 식별자의 비트 구조는 EVTX 와 같습니다. 표는 [EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 의 "이벤트 식별자와 수준" 에 있습니다.
-- 이 형식에서는 이벤트 식별자가 곧 메시지 식별자입니다. 설명 문장을 만드는 법은 [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) 에 있습니다.
+- 이벤트 식별자의 비트 구조는 EVTX 와 같습니다. 표는 [EVTX 파일 구조](file-header-chunk-record.md) 의 "이벤트 식별자와 수준" 에 있습니다.
+- 이 형식에서는 이벤트 식별자가 곧 메시지 식별자입니다. 설명 문장을 만드는 법은 [공급자와 메시지 파일](provider-message-table.md) 에 있습니다.
 
 ### 파일 끝 레코드 (ELF_EOF_RECORD, 40바이트)
 
@@ -196,7 +196,7 @@ EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식입니다. 48바이�
 
 - 레코드마다 생성 시각과 기록 시각이 있습니다. 둘 다 UTC 이고 초 단위입니다.
 - 생성 시각은 레코드가 만들어진 때입니다. 기록 시각은 파일에 쓰인 때입니다.
-- 정수 초 값이므로 1초보다 작은 단위는 없습니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
+- 정수 초 값이므로 1초보다 작은 단위는 없습니다. 변환은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
 
 ### wrap 과 빈 틈
 
@@ -213,7 +213,7 @@ EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식입니다. 48바이�
 
 ### 설정
 
-- 로그 크기와 덮어쓰기 설정은 EVTX 와 같은 `HKLM\SYSTEM\CurrentControlSet\Services\Eventlog\<로그>` 키에 있습니다. 값의 뜻은 [EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 의 "로그 크기·덮어쓰기 설정" 을 봅니다.
+- 로그 크기와 덮어쓰기 설정은 EVTX 와 같은 `HKLM\SYSTEM\CurrentControlSet\Services\Eventlog\<로그>` 키에 있습니다. 값의 뜻은 [EVTX 파일 구조](file-header-chunk-record.md) 의 "로그 크기·덮어쓰기 설정" 을 봅니다.
 - Windows Server 2003 에서 AutoBackupLogFiles 가 동작하려면 Retention 이 -1 또는 1 이어야 합니다.
 - libevt 명세는 헤더 40 오프셋의 알 수 없는 값을 Retention 으로 짐작합니다. 레지스트리의 Retention 값과 견줘 볼 수 있습니다.
 
@@ -229,7 +229,7 @@ EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식입니다. 48바이�
 ## 도구
 
 - libevt: 형식 명세와 함께 공개된 라이브러리입니다. 명세에 손상 사례가 적혀 있습니다.
-- 도구 결과는 헥스로 본 헤더·파일 끝 레코드 값과 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 의 방식으로 비교합니다.
+- 도구 결과는 헥스로 본 헤더·파일 끝 레코드 값과 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 의 방식으로 비교합니다.
 
 ## 참고 문헌
 

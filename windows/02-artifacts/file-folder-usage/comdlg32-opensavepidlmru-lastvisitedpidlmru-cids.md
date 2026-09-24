@@ -6,7 +6,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-공통 파일 대화상자는 여러 앱이 함께 쓰는 "열기"·"다른 이름으로 저장" 창입니다. 이 창으로 파일을 열거나, 저장하거나, 새로 만들면 셸이 앱 대신 `SHAddToRecentDocs` 함수를 부릅니다. 그 결과로 생기는 최근 항목 바로가기와 점프리스트는 [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) 과 [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) 에서 다룹니다.
+공통 파일 대화상자는 여러 앱이 함께 쓰는 "열기"·"다른 이름으로 저장" 창입니다. 이 창으로 파일을 열거나, 저장하거나, 새로 만들면 셸이 앱 대신 `SHAddToRecentDocs` 함수를 부릅니다. 그 결과로 생기는 최근 항목 바로가기와 점프리스트는 [바로가기 파일 (LNK)](lnk.md) 과 [점프리스트](jump-lists.md) 에서 다룹니다.
 
 `ComDlg32` 키를 누가 언제 쓰는지 밝힌 Microsoft 문서는 확인하지 못했습니다. 키 이름과 아래 관찰로 보아 대화상자를 쓴 일이 계기로 보입니다.
 
@@ -42,7 +42,7 @@ winreg-kb 가 Vista·7 까지만 적은 키도 Windows 11 에 그대로 있습�
 
 ## 구조
 
-MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 의 MRU 목록 설명을 따릅니다. 셸 항목 목록을 푸는 방법은 [셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
+MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 의 MRU 목록 설명을 따릅니다. 셸 항목 목록을 푸는 방법은 [셸 아이템](../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
 
 ### 순서 값
 
@@ -130,7 +130,7 @@ winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관
 - 관찰한 PC 에서는 `OpenSavePidlMRU\*`, `LastVisitedPidlMRU`, `CIDSizeMRU` 세 키의 마지막 기록 시각이 초까지 같았습니다. 대화상자를 한 번 쓰면 여러 키가 함께 바뀌는 것으로 보입니다. (확인 범위: Windows 11 25H2, PC 한 대)
 - 그래서 시각이 같은 키들의 첫 항목끼리 짝을 지어 "어느 프로그램으로 어느 파일을" 을 추정할 수 있습니다. 첫 항목에만 쓸 수 있고, 추정이라고 밝힙니다.
 - 같은 PC 에서 상위 키 `OpenSavePidlMRU` 와 하위 키 `OpenSavePidlMRU\pdf` 의 시각은 서로 달랐습니다. 상위 키 시각은 하위 키가 바뀔 때 함께 움직이지 않습니다. 시각은 항목이 들어 있는 하위 키에서 읽습니다. (확인 범위: Windows 11 25H2, PC 한 대)
-- 키 시각의 성질은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+- 키 시각의 성질은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -139,7 +139,7 @@ winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관
 3. **키 시각을 모든 항목에 붙입니다.** 키 시각은 첫 항목에만 이어집니다.
 4. **LastVisitedPidlMRU 의 문자열을 실행 파일 이름으로 단정합니다.** 널리 쓰는 설명이지만 확인한 자료로 확정하지 못했습니다. 실행 흔적과 맞춰 본 뒤에 씁니다.
 5. **CIDSizeMRU 의 뒤 72바이트를 해석합니다.** 뜻이 확인되지 않았습니다.
-6. **RecentDocs 가 비었으니 대화상자 기록도 없다고 봅니다.** 관찰한 PC 에서는 `Start_TrackDocs` 값이 0 이고 [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) 가 비어 있었습니다. 그래도 ComDlg32 키는 갱신되고 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+6. **RecentDocs 가 비었으니 대화상자 기록도 없다고 봅니다.** 관찰한 PC 에서는 `Start_TrackDocs` 값이 0 이고 [최근 문서](recentdocs.md) 가 비어 있었습니다. 그래도 ComDlg32 키는 갱신되고 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 7. **셸 항목 목록 풀이를 도구 하나에 맡깁니다.** 값 한두 개는 원시 바이트로 풀어 도구가 보여 준 경로와 맞춰 봅니다.
 8. **확인하지 못한 점을 사실로 씁니다.** 다음은 확인한 자료로 정하지 못했습니다.
    - `*` 키의 정확한 뜻
@@ -150,9 +150,9 @@ winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관
 ### 지우기와 조작
 
 - 이 키들을 지우거나 끄는 정책은 확인한 자료에 없습니다.
-- 값이나 키를 지우면 하이브 안 빈 공간이나 트랜잭션 로그에 흔적이 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- 값이나 키를 지우면 하이브 안 빈 공간이나 트랜잭션 로그에 흔적이 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - MRUListEx 가 가리키는 번호와 실제 값이 맞지 않으면 원시 바이트를 직접 봅니다. plaso 는 -1 에서 읽기를 멈추므로 끝 표시 뒤에 남은 번호를 보여 주지 않습니다. MRUListEx 가 가리키는 값이 없으면 경고를 남깁니다.
-- 옛 하이브는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다. 지금 목록과 비교하면 사라진 항목이 드러납니다.
+- 옛 하이브는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다. 지금 목록과 비교하면 사라진 항목이 드러납니다.
 
 ## 직접 분석해 보기
 
@@ -181,7 +181,7 @@ winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관
 3. 0x00 부터 UTF-16LE 로 읽으면 `editor.exe` 입니다.
 4. 0x14 의 `00 00` 이 문자열의 끝입니다.
 5. 0x16 부터 셸 항목 목록입니다. 첫 셸 항목의 크기는 `3A 00` 곧 0x003A (58바이트) 이고, 종류 값은 0x18 의 `1F` 입니다.
-6. 첫 셸 항목은 0x16 부터 58바이트이므로 다음 셸 항목은 0x50 에서 시작합니다. 이어지는 풀이는 [셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md) 페이지를 따릅니다.
+6. 첫 셸 항목은 0x16 부터 58바이트이므로 다음 셸 항목은 0x50 에서 시작합니다. 이어지는 풀이는 [셸 아이템](../../01-foundations/shell-document-formats/shell-item-pidl.md) 페이지를 따릅니다.
 7. `OpenSavePidlMRU` 의 값은 이 문자열 부분 없이 오프셋 0 부터 셸 항목 목록입니다.
 8. `LastVisitedPidlMRU`, `CIDSizeMRU`, `OpenSavePidlMRU\*` 키의 마지막 기록 시각을 나란히 적어 봅니다. 시각이 같은 키가 있는지 봅니다.
 
@@ -198,21 +198,21 @@ plaso 의 레지스트리 파서가 이 키들을 읽습니다.
 - `*` 키와 확장자 키를 따로 보여 주는지 확인합니다.
 - 키 시각을 상위 키에서 가져오는지, 하위 키에서 가져오는지 확인합니다.
 - 셸 항목 목록에서 푼 경로가 원시 바이트와 맞는지 한두 개 확인합니다.
-- 시각을 UTC 로 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 시각을 UTC 로 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) | 같은 파일 이름이 확장자별 목록에 있는지 |
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 같은 대화상자 사용으로 생긴 바로가기와 앱별 목록. 점프리스트는 어느 앱인지 알려 줍니다 |
-| [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) | 대화상자로 드나든 폴더 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) · [UserAssist](/02-artifacts/execution/userassist.md) · [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) | LastVisitedPidlMRU 의 프로그램이 그 무렵 실제로 실행됐는지 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 저장이라면 그 시각 무렵 파일이 생기거나 바뀐 기록 |
-| [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) · [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) | 경로의 드라이브 문자나 네트워크 경로가 어느 장치·공유인지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브의 목록과 시각 |
+| [최근 문서](recentdocs.md) | 같은 파일 이름이 확장자별 목록에 있는지 |
+| [바로가기 파일 (LNK)](lnk.md) · [점프리스트](jump-lists.md) | 같은 대화상자 사용으로 생긴 바로가기와 앱별 목록. 점프리스트는 어느 앱인지 알려 줍니다 |
+| [셸백](shellbags/index.md) | 대화상자로 드나든 폴더 |
+| [프리페치](../execution/prefetch/index.md) · [UserAssist](../execution/userassist.md) · [BAM·DAM](../execution/background-activity-moderator.md) | LastVisitedPidlMRU 의 프로그램이 그 무렵 실제로 실행됐는지 |
+| [마스터 파일 테이블](../filesystem/mft.md) · [USN 변경 저널](../filesystem/usnjrnl.md) | 저장이라면 그 시각 무렵 파일이 생기거나 바뀐 기록 |
+| [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) · [공유 폴더·네트워크 드라이브](../network/network-shares-mapped-drives.md) | 경로의 드라이브 문자나 네트워크 경로가 어느 장치·공유인지 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브의 목록과 시각 |
 
-여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 와 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
+여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](../../04-scenarios/activity/file-access.md) 와 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
 
 ## 실습
 

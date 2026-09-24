@@ -42,7 +42,7 @@
 
 - 프로필 폴더 이름에는 무작위 글자가 붙는다는 설명이 흔합니다. 이름을 짐작하지 말고 `profiles.ini` 가 가리키는 폴더를 따라갑니다.
 - 프로필 폴더가 여럿일 수 있습니다. 모든 프로필 폴더를 봅니다.
-- 파이어폭스에도 `profiles.ini`·`prefs.js` 가 있습니다. 두 프로그램의 파일 형식이 같은지는 확인하지 못했습니다. 파이어폭스 쪽 설명은 [파이어폭스](/02-artifacts/browsers/firefox/index.md) 에서 다룹니다.
+- 파이어폭스에도 `profiles.ini`·`prefs.js` 가 있습니다. 두 프로그램의 파일 형식이 같은지는 확인하지 못했습니다. 파이어폭스 쪽 설명은 [파이어폭스](../browsers/firefox/index.md) 에서 다룹니다.
 
 ### 판에 따른 차이 (확인하지 못함)
 
@@ -59,7 +59,7 @@
 | `<폴더 이름>.msf` | 폴더의 요약(색인) 파일입니다. Mork 형식입니다. 지워도 mbox 에서 다시 만듭니다 |
 | `<폴더 이름>.sbd\` | 하위 폴더를 담는 디렉터리입니다 |
 
-mbox 형식과 메시지를 나누는 법은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
+mbox 형식과 메시지를 나누는 법은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
 
 ### 메시지 플래그 (확인함)
 
@@ -108,8 +108,8 @@ Mozilla 소스 `mailnews/base/public/nsMsgMessageFlags.idl` 에 정의된 값입
 | `virtualFolders.dat` | 저장된 검색입니다 |
 | `folderTree.json`, `panacea.dat` | 폴더 캐시입니다 |
 
-- `global-messages-db.sqlite` 와 `abook.sqlite` 를 여는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
-- `logins.json`·`key4.db` 의 복호는 [파이어폭스](/02-artifacts/browsers/firefox/index.md) 에서 다룹니다.
+- `global-messages-db.sqlite` 와 `abook.sqlite` 를 여는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- `logins.json`·`key4.db` 의 복호는 [파이어폭스](../browsers/firefox/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -134,14 +134,14 @@ Mozilla 소스 `mailnews/base/public/nsMsgMessageFlags.idl` 에 정의된 값입
 ## 시각 해석
 
 - 플래그 비트에는 시각이 없습니다. 상태가 언제 바뀌었는지는 비트만으로 알 수 없습니다.
-- 메시지를 보낸 시각은 mbox 안 메시지의 헤더에 있습니다. 읽는 법은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 과 [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
+- 메시지를 보낸 시각은 mbox 안 메시지의 헤더에 있습니다. 읽는 법은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 과 [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
 - 흔한 설명대로 폴더 하나가 mbox 파일 하나라면, 파일의 NTFS 시각은 폴더 전체가 마지막으로 바뀐 때입니다. 메시지 한 통의 시각이 아닙니다.
-- `global-messages-db.sqlite` 의 시각 단위는 확인하지 못했습니다. 값을 읽을 때는 같은 메시지의 헤더 시각과 맞춰 단위부터 정합니다([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
+- `global-messages-db.sqlite` 의 시각 단위는 확인하지 못했습니다. 값을 읽을 때는 같은 메시지의 헤더 시각과 맞춰 단위부터 정합니다([시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
 
 ## 함정과 한계
 
 1. **지운 메일이 파일에서 사라졌다고 봅니다.** 지운 메시지는 폴더 압축 전까지 `Expunged` 비트가 선 채 남습니다[1]. 휴지통 폴더만 보지 말고 모든 mbox 에서 이 비트를 찾습니다.
-2. **압축 뒤에도 파일에 남는다고 봅니다.** 압축하면 지운 메시지가 파일에서 빠진다는 설명이 흔합니다. 자동 압축 기준과 함께 확인하지 못했습니다. 압축 뒤라면 미할당 영역과 섀도 복사본에서 옛 모습을 찾습니다([삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md), [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)).
+2. **압축 뒤에도 파일에 남는다고 봅니다.** 압축하면 지운 메시지가 파일에서 빠진다는 설명이 흔합니다. 자동 압축 기준과 함께 확인하지 못했습니다. 압축 뒤라면 미할당 영역과 섀도 복사본에서 옛 모습을 찾습니다([삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md), [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 3. **헤더에서 `New`·`Offline` 비트를 찾습니다.** 이 두 값과 `Elided` 는 헤더에 적지 않습니다[1]. 헤더에 이 비트가 없다고 새 메시지가 아니었다거나 본문이 PC 에 없었다고 보지 않습니다.
 4. **본문이 짧으니 누가 지웠다고 봅니다.** `Partial` 비트는 본문이 잘려 있고 나머지를 POP 서버에서 받아야 한다는 뜻입니다[1]. 이 비트가 서 있으면 본문 일부만 받은 메시지입니다.
 5. **IMAP 계정 폴더에 모든 메일이 있다고 봅니다.** IMAP 계정은 "오프라인 사용" 설정일 때만 본문 전체를 받아 둔다는 설명이 흔합니다. `Offline` 비트의 뜻("디스크 캐시에 있음")이 이 설명과 맞습니다[1]. 기본값은 확인하지 못했습니다. PC 에서 찾지 못한 메일은 서버에 있을 수 있습니다.
@@ -183,7 +183,7 @@ mbox 는 글자로 된 메시지를 이어 붙인 파일이라 헥스 편집기�
 - mbox 를 읽는 공개 도구나 메일 뷰어로 폴더 파일을 엽니다. 도구가 `Expunged` 메시지를 보여 주는지, 숨기는지 먼저 확인합니다.
 - 격리한 가상 머신의 썬더버드에 프로필 사본을 넣고 화면과 파일 내용을 비교합니다.
 - `global-messages-db.sqlite`·`abook.sqlite` 는 SQLite 뷰어로 엽니다. 표 이름부터 목록으로 뽑습니다.
-- 도구 두 가지로 같은 mbox 의 메시지 수를 세어 비교합니다([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+- 도구 두 가지로 같은 mbox 의 메시지 수를 세어 비교합니다([도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)).
 
 > 그림 자리: 프로필 폴더 → 계정별 폴더 → mbox·`.msf`·`.sbd` 의 관계(흔한 설명 기준), 그리고 메시지 한 통의 `X-Mozilla-Status` 값을 비트로 푸는 흐름
 
@@ -191,15 +191,15 @@ mbox 는 글자로 된 메시지를 이어 붙인 파일이라 헥스 편집기�
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) | mbox 안 메시지의 헤더·본문·첨부 |
-| [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) | 보낸 시각, 거친 서버 |
-| [파이어폭스](/02-artifacts/browsers/firefox/index.md) | 저장된 비밀번호 파일의 복호 |
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 썬더버드가 깔렸던 때와 판 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | mbox 파일이 바뀌고 다시 써진 때 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 압축 전의 mbox |
-| [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) | 검색 색인과 주소록 |
+| [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) | mbox 안 메시지의 헤더·본문·첨부 |
+| [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) | 보낸 시각, 거친 서버 |
+| [파이어폭스](../browsers/firefox/index.md) | 저장된 비밀번호 파일의 복호 |
+| [설치 프로그램](../system-account/uninstall.md) | 썬더버드가 깔렸던 때와 판 |
+| [마스터 파일 테이블](../filesystem/mft.md) · [USN 변경 저널](../filesystem/usnjrnl.md) | mbox 파일이 바뀌고 다시 써진 때 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 압축 전의 mbox |
+| [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) | 검색 색인과 주소록 |
 
-메일로 누구와 연락했는지 정리하는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+메일로 누구와 연락했는지 정리하는 순서는 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

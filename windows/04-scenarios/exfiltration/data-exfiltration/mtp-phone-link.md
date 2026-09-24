@@ -1,6 +1,6 @@
 # 스마트폰으로 옮겼나 (MTP·Phone Link)
 
-> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](/04-scenarios/exfiltration/data-exfiltration/index.md)
+> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
 
 스마트폰이 PC 와 자료를 주고받는 길은 크게 두 가지입니다. 하나는 USB 선으로 연결해 MTP (Media Transfer Protocol) 로 붙는 길입니다. 다른 하나는 휴대폰과 연결 (Phone Link) 앱으로 휴대폰과 PC 를 연동하는 길입니다. 이 페이지는 두 길이 PC 에 남기는 흔적과, 그 흔적으로 말할 수 있는 범위를 다룹니다.
 
@@ -16,9 +16,9 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| USBSTOR 만 보지 않기 | MTP 로 붙는 휴대폰은 USBSTOR 가 아닌 다른 위치에 남습니다([USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)). |
-| 앱 버전 | 아래 Phone Link DB 위치는 2019년 연구 기준입니다. 검체에 설치된 Phone Link 판을 먼저 봅니다([스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md)). |
-| 시간대 | 레지스트리 장치 속성 시각과 이벤트 시각을 같은 기준으로 맞춥니다([시간대 설정](/02-artifacts/system-account/time-zone.md)). |
+| USBSTOR 만 보지 않기 | MTP 로 붙는 휴대폰은 USBSTOR 가 아닌 다른 위치에 남습니다([USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md)). |
+| 앱 버전 | 아래 Phone Link DB 위치는 2019년 연구 기준입니다. 검체에 설치된 Phone Link 판을 먼저 봅니다([스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md)). |
+| 시간대 | 레지스트리 장치 속성 시각과 이벤트 시각을 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
 | 사용자 | 휴대폰 연결 기록이 남는 SYSTEM·SOFTWARE 하이브에는 사용자 정보가 없습니다. Phone Link 폴더는 사용자 프로필 안에 있으므로 사용자별로 봅니다. |
 | 수집 범위 | SYSTEM·SOFTWARE 하이브, WPD-MTPClassDriver/Operational·Kernel-PnP/Configuration 이벤트 로그, 사용자마다 `%LocalAppData%\Packages\Microsoft.YourPhone_8wekyb3d8bbwe` 폴더 전체를 확보합니다. |
 
@@ -26,12 +26,12 @@
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | SYSTEM `Enum\USB` 의 휴대폰 키 | 휴대폰의 VID·PID, 설치·연결·해제 시각 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
-| 2 | SOFTWARE `Windows Portable Devices\Devices` | 사용자가 휴대폰에 붙인 기기 이름 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
+| 1 | SYSTEM `Enum\USB` 의 휴대폰 키 | 휴대폰의 VID·PID, 설치·연결·해제 시각 | [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) |
+| 2 | SOFTWARE `Windows Portable Devices\Devices` | 사용자가 휴대폰에 붙인 기기 이름 | [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) |
 | 3 | WPD-MTPClassDriver/Operational 로그 | MTP 드라이버가 시작한 시각 | 이 페이지 아래 |
-| 4 | Kernel-PnP/Configuration 로그 | 장치를 설정·시작한 시각 | [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
-| 5 | 바로가기 파일·점프리스트·셸백 | 연결 무렵 PC 에서 연 원본 파일, 탐색한 폴더 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) |
-| 6 | Phone Link 폴더 | 연동한 휴대폰의 연락처·메시지·알림·사진·통화 | [휴대폰과 연결](/02-artifacts/messengers/phone-link.md) |
+| 4 | Kernel-PnP/Configuration 로그 | 장치를 설정·시작한 시각 | [외부 장치 연결 이벤트](../../../02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| 5 | 바로가기 파일·점프리스트·셸백 | 연결 무렵 PC 에서 연 원본 파일, 탐색한 폴더 | [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md), [셸백](../../../02-artifacts/file-folder-usage/shellbags/index.md) |
+| 6 | Phone Link 폴더 | 연동한 휴대폰의 연락처·메시지·알림·사진·통화 | [휴대폰과 연결](../../../02-artifacts/messengers/phone-link.md) |
 
 ## MTP 로 연결한 휴대폰
 
@@ -39,7 +39,7 @@
 
 - 관찰한 삼성 휴대폰(`VID_04E8&PID_6860`)은 `Enum\USBSTOR` 에 없었습니다(관찰).
 - 이 휴대폰은 SYSTEM 하이브 `Enum\USB\VID_04E8&PID_6860\<인스턴스>` 에 있었습니다(관찰).
-- 이 인스턴스 키에도 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 0064·0065·0066·0067 이 모두 있었습니다(관찰). 그래서 USB 메모리와 같은 방법으로 설치·연결·해제 시각을 읽습니다. 네 값의 뜻은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) 에 있습니다.
+- 이 인스턴스 키에도 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 0064·0065·0066·0067 이 모두 있었습니다(관찰). 그래서 USB 메모리와 같은 방법으로 설치·연결·해제 시각을 읽습니다. 네 값의 뜻은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 에 있습니다.
 - 인스턴스 키의 `Service` 값은 제조사가 만든 드라이버 이름이었습니다(관찰). 관찰한 휴대폰은 `dg_ssudbus` 였습니다. 드라이버 이름은 휴대폰 제조사마다 다릅니다.
 
 SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마다 하위 키가 있었습니다(관찰). 이 PC 에는 11개가 있었습니다.
@@ -82,7 +82,7 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 
 ## Phone Link
 
-Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일반 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서, 이 앱의 흔적은 [휴대폰과 연결](/02-artifacts/messengers/phone-link.md) 에서 자세히 다룹니다.
+Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일반 구조는 [UWP 앱 데이터 구조](../../../01-foundations/app-mail-data/packages-settings-dat.md) 에서, 이 앱의 흔적은 [휴대폰과 연결](../../../02-artifacts/messengers/phone-link.md) 에서 자세히 다룹니다.
 
 ### 2019년 연구 기준 위치와 DB
 
@@ -123,8 +123,8 @@ Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일�
 4. WPD-MTPClassDriver/Operational 의 1000 시각을 모두 뽑습니다. Kernel-PnP/Configuration 이벤트와 장치 속성 시각에 맞춰 휴대폰마다 연결 구간표를 만듭니다.
 5. 연결 구간 안에 PC 의 원본 파일을 연 흔적이 있는지 바로가기 파일·점프리스트·셸백에서 찾습니다.
 6. 사용자마다 Phone Link 패키지 폴더를 봅니다. `LocalCache\Indexed` 가 있으면 DB 를 사본으로 열어 휴대폰 이름과 DB 에 남은 시각을 확인합니다.
-7. 블루투스로 짝지은 장치 목록에 같은 휴대폰이 있는지 [블루투스 장치](/02-artifacts/external-devices/bthport.md) 에서 확인합니다.
-8. 모든 시각을 UTC 로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다.
+7. 블루투스로 짝지은 장치 목록에 같은 휴대폰이 있는지 [블루투스 장치](../../../02-artifacts/external-devices/bthport.md) 에서 확인합니다.
+8. 모든 시각을 UTC 로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다.
 
 ## 흔한 오판
 
@@ -142,14 +142,14 @@ Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일�
 
 ## 함께 볼 페이지
 
-- [USB 로 무엇을 가져갔나 (USB)](/04-scenarios/exfiltration/data-exfiltration/usb.md) — 저장장치로 붙는 USB 메모리의 조사 순서입니다.
-- [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) — `Enum\USB`·장치 속성·WPD 키의 구조입니다.
-- [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) — Kernel-PnP 이벤트로 연결 시각을 찾습니다.
-- [휴대폰과 연결](/02-artifacts/messengers/phone-link.md) — Phone Link DB 의 구조입니다.
-- [블루투스 장치](/02-artifacts/external-devices/bthport.md) — 블루투스로 짝지은 장치 목록입니다.
-- [스마트폰 백업 파일](/02-artifacts/external-devices/itunes-smart-switch-backup.md) — PC 에 남은 휴대폰 백업입니다.
-- [메신저로 파일을 보냈나 (Messenger)](/04-scenarios/exfiltration/data-exfiltration/messenger.md) — 메신저 PC 판으로 파일을 보낸 경우입니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 기기 이름을 사용자 특정에 쓸 때 함께 봅니다.
+- [USB 로 무엇을 가져갔나 (USB)](usb.md) — 저장장치로 붙는 USB 메모리의 조사 순서입니다.
+- [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) — `Enum\USB`·장치 속성·WPD 키의 구조입니다.
+- [외부 장치 연결 이벤트](../../../02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) — Kernel-PnP 이벤트로 연결 시각을 찾습니다.
+- [휴대폰과 연결](../../../02-artifacts/messengers/phone-link.md) — Phone Link DB 의 구조입니다.
+- [블루투스 장치](../../../02-artifacts/external-devices/bthport.md) — 블루투스로 짝지은 장치 목록입니다.
+- [스마트폰 백업 파일](../../../02-artifacts/external-devices/itunes-smart-switch-backup.md) — PC 에 남은 휴대폰 백업입니다.
+- [메신저로 파일을 보냈나 (Messenger)](messenger.md) — 메신저 PC 판으로 파일을 보낸 경우입니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](../../activity/user-attribution.md) — 기기 이름을 사용자 특정에 쓸 때 함께 봅니다.
 
 ## 참고 문헌
 

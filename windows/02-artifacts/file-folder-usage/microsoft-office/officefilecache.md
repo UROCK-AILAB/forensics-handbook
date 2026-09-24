@@ -1,6 +1,6 @@
 # 오피스 문서 캐시 (OfficeFileCache)
 
-> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](/02-artifacts/file-folder-usage/microsoft-office/index.md)
+> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)
 
 ## 한 줄 요약
 
@@ -25,7 +25,7 @@ Arsenal Recon 의 2019년 10월 글은 이 캐시를 이렇게 설명합니다.
 - 사용자가 지워서 다른 곳에는 없는 문서를 FSD 파일에서 온전히 되살린 사례가 있습니다.
 - FSD 파일 하나에 문서 수정 204건이 들어 있던 사례도 있습니다.
 
-로컬 디스크나 네트워크 공유 폴더에서 연 문서의 백업은 [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](/02-artifacts/file-folder-usage/microsoft-office/autorecover-unsavedfiles.md) 에서 다룹니다.
+로컬 디스크나 네트워크 공유 폴더에서 연 문서의 백업은 [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -37,7 +37,7 @@ Arsenal Recon 의 2019년 10월 글은 이 캐시를 이렇게 설명합니다.
 - 이전 오피스 버전의 `OfficeFileCache` 폴더가 남아 있을 수 있습니다. Arsenal 은 몇 년 전까지 거슬러 갈 수 있다고 적었습니다.
 - 볼륨 섀도 복사본에도 남아 있을 수 있습니다.
 - KAPE 의 OfficeDocumentCache 타깃은 `C:\Users\%user%\AppData\Local\Microsoft\Office\*\OfficeFileCache\` 를 하위 폴더까지 모읍니다. 버전 폴더 자리가 `*` 라서 옛 버전 폴더도 함께 모입니다.
-- 버전 번호가 어느 오피스 제품을 뜻하는지는 [허브 페이지](/02-artifacts/file-folder-usage/microsoft-office/index.md) 에서 다룹니다.
+- 버전 번호가 어느 오피스 제품을 뜻하는지는 [허브 페이지](index.md) 에서 다룹니다.
 
 폴더 안의 파일 구성은 자료와 관찰이 서로 달랐습니다.
 
@@ -50,7 +50,7 @@ Arsenal Recon 의 2019년 10월 글은 이 캐시를 이렇게 설명합니다.
 - 관찰한 형식이 어느 버전부터 쓰였는지는 확인하지 못했습니다.
 - 업로드 센터가 Microsoft 365 에서 없어졌는지도 확인하지 못했습니다.
 - kacos2000 자료에 따르면 Windows 의 CentralTable 은 Access (`.accdb`) DB 입니다.
-- 같은 자료에 따르면 Android·iOS·macOS 에서 가져온 OfficeFileCache 는 SQLite 로 된 `centraltable` 을 씁니다. SQLite 를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- 같은 자료에 따르면 Android·iOS·macOS 에서 가져온 OfficeFileCache 는 SQLite 로 된 `centraltable` 을 씁니다. SQLite 를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ## 구조
 
@@ -120,8 +120,8 @@ kacos2000 자료는 세 가지 파일이 이렇게 이어진다고 적었습니�
 | 시각 | 뜻 | 조심할 점 |
 |---|---|---|
 | `CentralTable.accdb` 안의 시각 | 확인하지 못했습니다. | 공개 자료가 칸 이름과 형식을 적지 않았습니다. 도구가 보여 주는 시각은 칸의 뜻을 확인한 뒤에만 씁니다. |
-| 캐시 파일의 파일시스템 시각 | 캐시 파일을 만들고 쓴 때입니다. | 읽는 법은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에 있습니다. |
-| 꺼낸 문서 안의 속성 시각 | 문서 파일 안에 적힌 만든 날짜·고친 날짜입니다. | 캐시에 담긴 때가 아닙니다. [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 를 봅니다. |
+| 캐시 파일의 파일시스템 시각 | 캐시 파일을 만들고 쓴 때입니다. | 읽는 법은 [마스터 파일 테이블](../../filesystem/mft.md) 에 있습니다. |
+| 꺼낸 문서 안의 속성 시각 | 문서 파일 안에 적힌 만든 날짜·고친 날짜입니다. | 캐시에 담긴 때가 아닙니다. [문서 메타데이터](../../embedded-metadata/document-metadata/index.md) 를 봅니다. |
 
 **가장 오래된 캐시 파일 시각을 오피스를 처음 쓴 때로 옮기지 않습니다.** 관찰한 PC 의 캐시 파일은 2026-08-19 이후 것뿐이었습니다. (관찰) 캐시에서 파일을 언제 지우는지 확인하지 못했습니다. 공개 자료는 문서가 보통 14일 넘게 남는다고만 적었습니다.
 
@@ -129,7 +129,7 @@ kacos2000 자료는 세 가지 파일이 이렇게 이어진다고 적었습니�
 
 - **옛 형식을 전제한 도구는 아무것도 못 찾을 수 있습니다.** 관찰한 PC 에는 `CentralTable.accdb`·FSD·FSF 가 없었습니다. (관찰) 도구 결과가 비면 폴더 안 파일 목록부터 봅니다. "결과 없음" 을 "캐시 없음" 으로 적지 않습니다.
 - **모든 버전 폴더를 모읍니다.** 이전 오피스 버전의 폴더에 몇 년 치 캐시가 남아 있을 수 있습니다.
-- **섀도 복사본을 봅니다.** 지금은 지워진 캐시가 남아 있을 수 있습니다 ([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)).
+- **섀도 복사본을 봅니다.** 지금은 지워진 캐시가 남아 있을 수 있습니다 ([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 - **크기가 클 수 있습니다.** 관찰한 PC 에서는 약 601MB 였습니다. (관찰) 선별 수집 계획에 넣습니다.
 - **오피스 문서만 있지 않습니다.** 클라우드에 저장한 다른 파일도 들어갑니다.
 - **플랫폼마다 DB 형식이 다릅니다.** Windows 는 Access, Android·iOS·macOS 는 SQLite 입니다.
@@ -151,21 +151,21 @@ FSF·FSD 의 바이트 배치를 적은 자료를 확인하지 못해 헥스 예
 4. FSD 에서 문서를 꺼냅니다. 꺼낸 문서는 격리된 환경에서 엽니다.
 5. `CentralTable.accdb` 는 사본을 만들어 Access DB 를 읽는 다른 도구로도 엽니다. 표 목록과 행 수를 도구 결과와 맞춰 봅니다.
 6. 관찰한 형식이면 `.UR` 파일의 JSON 부분에서 칸 값을 적습니다. 나머지 파일은 이름·크기·시각을 목록으로 남깁니다.
-7. 도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+7. 도구마다 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) | 같은 문서가 동기화 폴더에 있는지, 어느 계정인지 |
-| [오피스 최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | 같은 문서를 오피스로 다룬 기록 |
-| [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) | https 주소로 남은 클라우드 문서 경로 |
-| [백스테이지 캐시 (BackstageInAppNavCache)](/02-artifacts/file-folder-usage/microsoft-office/backstageinappnavcache.md) | 백스테이지에서 둘러본 클라우드 폴더의 내용 목록 |
-| [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](/02-artifacts/file-folder-usage/microsoft-office/autorecover-unsavedfiles.md) | 로컬에서 연 문서의 백업 사본 |
-| [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) | 꺼낸 문서 안의 작성자와 시각 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)·[USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 캐시 파일이 생기고 지워진 기록 |
+| [원드라이브](../../cloud-notes/onedrive/index.md) | 같은 문서가 동기화 폴더에 있는지, 어느 계정인지 |
+| [오피스 최근 파일 (File MRU·Place MRU)](file-mru-place-mru.md) | 같은 문서를 오피스로 다룬 기록 |
+| [신뢰 문서 기록 (Trust Records)](trust-records.md) | https 주소로 남은 클라우드 문서 경로 |
+| [백스테이지 캐시 (BackstageInAppNavCache)](backstageinappnavcache.md) | 백스테이지에서 둘러본 클라우드 폴더의 내용 목록 |
+| [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) | 로컬에서 연 문서의 백업 사본 |
+| [문서 메타데이터](../../embedded-metadata/document-metadata/index.md) | 꺼낸 문서 안의 작성자와 시각 |
+| [마스터 파일 테이블](../../filesystem/mft.md)·[USN 변경 저널](../../filesystem/usnjrnl.md) | 캐시 파일이 생기고 지워진 기록 |
 
-시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 와 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 를 봅니다.
+시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md) 와 [자료를 밖으로 빼돌렸나](../../../04-scenarios/exfiltration/data-exfiltration/index.md) 를 봅니다.
 
 ## 실습
 

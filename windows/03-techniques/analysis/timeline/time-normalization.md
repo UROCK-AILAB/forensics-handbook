@@ -1,6 +1,6 @@
 # 시간대·시계 오차 보정 (Time Normalization)
 
-상위 허브: [타임라인 작성 (Timeline)](/03-techniques/analysis/timeline/index.md)
+상위 허브: [타임라인 작성 (Timeline)](index.md)
 
 ## 한 줄 요약
 
@@ -27,8 +27,8 @@
 - NTFS 는 시각을 UTC 로 저장합니다(참고 1). 그래서 시간대나 일광 절약 시간 (Daylight Saving Time) 이 바뀌어도 저장된 값은 그대로입니다(참고 1).
 - FAT 는 현지 시각으로 저장합니다(참고 1). 그래서 FAT 시각을 UTC 로 바꾸려면 그 시각을 적은 컴퓨터의 시간대를 알아야 합니다.
 - 이벤트 로그의 시각은 `2015-10-09T05:04:29.995794600Z` 처럼 적습니다(참고 4). 끝의 Z 가 UTC 라는 표시입니다(참고 4).
-- exFAT 에 시간대를 적는 칸이 있는지는 이 페이지에서 확인하지 못했습니다. 구조는 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md)를 봅니다.
-- 값을 날짜로 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. 레지스트리·브라우저처럼 다른 출처의 기준은 각 아티팩트 페이지를 봅니다.
+- exFAT 에 시간대를 적는 칸이 있는지는 이 페이지에서 확인하지 못했습니다. 구조는 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md)를 봅니다.
+- 값을 날짜로 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. 레지스트리·브라우저처럼 다른 출처의 기준은 각 아티팩트 페이지를 봅니다.
 
 Microsoft 문서의 예를 표로 옮기면 아래와 같습니다(참고 1). 워싱턴(PST)에서 오후 3시에 저장한 파일을 뉴욕 컴퓨터에서 본 경우입니다.
 
@@ -79,8 +79,8 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 - TZI 값은 REG_TZI_FORMAT 구조입니다(참고 2). Bias, StandardBias, DaylightBias 를 LONG 으로 차례로 적고, 그 뒤에 StandardDate, DaylightDate 를 SYSTEMTIME 으로 적습니다(참고 2).
 - Bias 는 REG_DWORD 로 저장하지만 부호 있는 32비트로 읽어야 합니다(현장 관찰). UTC+9 의 -540 을 부호 없이 읽으면 4,294,966,756 이 됩니다(현장 관찰).
 - 하이브의 REG_DWORD 를 글자로 보여 주는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다(현장 관찰). 부호에 뜻이 있는 값은 원시 바이트로 확인합니다.
-- TimeZoneInformation 키의 다른 값과 그 뜻은 이 페이지에서 확인하지 못했습니다. 이 키의 풀이는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 봅니다.
-- 오프라인 SYSTEM 하이브에서 어느 컨트롤셋을 읽을지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
+- TimeZoneInformation 키의 다른 값과 그 뜻은 이 페이지에서 확인하지 못했습니다. 이 키의 풀이는 [시간대 설정](../../../02-artifacts/system-account/time-zone.md)을 봅니다.
+- 오프라인 SYSTEM 하이브에서 어느 컨트롤셋을 읽을지는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 
 ### 헥스로 한 번
 
@@ -138,7 +138,7 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 - 문서의 예시는 PreviousTime `2015-10-09T05:04:30.000941900Z`, NewTime `2015-10-09T05:04:30.000000000Z` 입니다(참고 4). 두 값을 빼면 시계를 약 0.94밀리초 뒤로 돌렸습니다.
 - Subject 가 LOCAL SERVICE 이면 보통의 시각 보정입니다(참고 4). Windows Time 서비스가 한 보정입니다(참고 4).
 - Microsoft 는 Subject 가 LOCAL SERVICE 가 아니거나 프로세스 이름이 svchost.exe 가 아니면 보고하라고 권합니다(참고 4).
-- 시각을 바꿀 때 System 로그에 함께 남는 이벤트는 이 페이지에서 확인하지 못했습니다. 이 이벤트의 자세한 풀이는 [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md)을 봅니다.
+- 시각을 바꿀 때 System 로그에 함께 남는 이벤트는 이 페이지에서 확인하지 못했습니다. 이 이벤트의 자세한 풀이는 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md)을 봅니다.
 
 ### 바뀐 시계로 적힌 기록 읽기
 
@@ -154,20 +154,20 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 1. **검체의 시간대 설정을 읽습니다.** SYSTEM 하이브의 TimeZoneInformation\Bias 를 부호 있는 32비트로 읽습니다.
 2. **일광 절약 시간 규칙을 읽습니다.** SOFTWARE 하이브의 Time Zones 아래에서 검체 시간대의 TZI 를 읽습니다. 전환일의 wMonth 가 0 이면 일광 절약 시간이 없는 시간대입니다.
 3. **출처마다 저장 기준을 적습니다.** 위 "출처마다 시각 기준이 다릅니다" 표에서 시작합니다. 표에 없는 출처는 해당 아티팩트 페이지에서 확인합니다.
-4. **도구 출력의 시간대를 확인합니다.** 헥스로 읽은 값 하나와 도구가 보여 준 값을 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+4. **도구 출력의 시간대를 확인합니다.** 헥스로 읽은 값 하나와 도구가 보여 준 값을 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../reporting/tool-validation.md)을 봅니다.
 5. **현지 시각 출처를 UTC 로 바꿉니다.** UTC = 현지 시각 + Bias 를 씁니다. 그 시각이 일광 절약 시간 안이면 DaylightBias 를 더합니다. 전환일은 그 시각의 연도로 계산합니다.
-6. **다른 컴퓨터에서 쓴 FAT 장치를 따로 봅니다.** 그 장치를 쓴 컴퓨터의 시간대를 확인합니다. 확인하지 못하면 보고서에 그 한계를 적습니다. 장치 연결 흔적은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)에서 찾습니다.
+6. **다른 컴퓨터에서 쓴 FAT 장치를 따로 봅니다.** 그 장치를 쓴 컴퓨터의 시간대를 확인합니다. 확인하지 못하면 보고서에 그 한계를 적습니다. 장치 연결 흔적은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md)에서 찾습니다.
 7. **4616 을 모읍니다.** 보안 로그에서 4616 을 찾아 PreviousTime·NewTime·Subject·ProcessName 을 표로 적습니다.
 8. **보통의 보정이 아닌 4616 을 표시합니다.** Subject 가 LOCAL SERVICE 가 아니거나 프로세스가 svchost.exe 가 아닌 것을 따로 봅니다. 그 뒤의 기록은 시계가 뛴 크기를 감안해 읽습니다.
-9. **UTC 로 정렬합니다.** 합치는 방법은 [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md)을 봅니다.
+9. **UTC 로 정렬합니다.** 합치는 방법은 [여러 아티팩트 합친 타임라인](super-timeline.md)을 봅니다.
 10. **보정 근거를 남깁니다.** 보정한 줄마다 원래 값, 적용한 Bias, 일광 절약 시간 적용 여부를 함께 적습니다.
 
 ## 도구
 
 - 레지스트리 뷰어로 Bias 를 볼 때는 부호 없는 10진으로 나오지 않는지 확인합니다(현장 관찰). 의심스러우면 원시 바이트를 읽습니다.
-- 타임라인 도구의 출력 시간대는 결과의 시간대 칸으로 확인합니다. 출력 칸은 [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md)에서 다룹니다.
+- 타임라인 도구의 출력 시간대는 결과의 시간대 칸으로 확인합니다. 출력 칸은 [여러 아티팩트 합친 타임라인](super-timeline.md)에서 다룹니다.
 - 변환을 도구에 맡기더라도 한두 값은 위 공식으로 직접 계산해 맞춰 봅니다.
-- 4616 은 이벤트 로그 파일에서 읽습니다. 파일을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)을 봅니다.
+- 4616 은 이벤트 로그 파일에서 읽습니다. 파일을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -178,7 +178,7 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 5. **FAT 시각을 UTC 로 여깁니다.** FAT 는 현지 시각으로 저장합니다(참고 1).
 6. **이동식 장치를 검체의 시간대로 풉니다.** 그 장치는 시간대가 다른 컴퓨터에서 쓰였을 수 있습니다.
 7. **4616 을 모두 조작으로 읽습니다.** Subject 가 LOCAL SERVICE 인 것은 보통의 시각 보정입니다(참고 4).
-8. **4616 이 없으면 시계가 그대로였다고 단정합니다.** 보안 로그를 지웠거나 오래된 기록이 밀려났을 수 있습니다. 로그 삭제 흔적은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)를 봅니다.
+8. **4616 이 없으면 시계가 그대로였다고 단정합니다.** 보안 로그를 지웠거나 오래된 기록이 밀려났을 수 있습니다. 로그 삭제 흔적은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md)를 봅니다.
 9. **시계 오차를 재지 않고 초 단위 순서를 단정합니다.** 다른 PC 나 서버의 기록과 섞을 때는 두 시계의 차이를 먼저 따집니다.
 
 ## 결과를 어떻게 해석하나
@@ -188,7 +188,7 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 - 쓰면 안 되는 문장(예): "파일은 2024-03-15 10:00:00 UTC 에 저장됐습니다." 전제와 보정 근거가 빠져 있습니다.
 - 쓸 수 있는 문장(예): "보안 로그에 PreviousTime 과 NewTime 이 1시간 차이 나는 4616 기록이 있습니다. Subject 는 LOCAL SERVICE 가 아닙니다."
 - 쓰면 안 되는 문장(예): "사용자가 시계를 1시간 되돌렸습니다." 누가 바꿨는지는 Subject·ProcessName 과 다른 기록으로 따로 확인합니다.
-- 파일 시각 자체를 고친 흔적은 [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)에서 따집니다.
+- 파일 시각 자체를 고친 흔적은 [시각 조작 탐지](timestomping.md)에서 따집니다.
 
 ## 참고 문헌
 

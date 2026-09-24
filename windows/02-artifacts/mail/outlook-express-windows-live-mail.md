@@ -16,7 +16,7 @@
 | `.dbx` 의 시그니처·헤더 오프셋·내부 구조 | 공개 명세로 확인하지 못해 적지 않습니다 |
 | ESE 데이터베이스를 다룰 때의 주의 | 다른 ESE 파일에서 관찰한 내용입니다. `MSMessageStore` 는 직접 보지 않았습니다 |
 
-위키백과는 2차 자료입니다. 판과 날짜를 보고서에 쓰기 전에 검체 안 프로그램 파일의 판 정보로 한 번 더 맞춥니다([실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md)).
+위키백과는 2차 자료입니다. 판과 날짜를 보고서에 쓰기 전에 검체 안 프로그램 파일의 판 정보로 한 번 더 맞춥니다([실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md)).
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -99,7 +99,7 @@
 - 이 데이터베이스의 백업 사본을 `Backup` 하위 폴더에 둡니다[2].
 - 계정 파일 `account{GUID}.oeaccount` 는 XML 이고 비밀번호는 암호화돼 있다는 설명이 흔합니다. 확인하지 못했습니다.
 
-`.eml` 파일의 형식은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서, ESE 데이터베이스의 구조는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+`.eml` 파일의 형식은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서, ESE 데이터베이스의 구조는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -117,23 +117,23 @@
 - 쓸 수 있는 문장: "`Windows Live Mail` 폴더 아래 계정 폴더에 `.eml` 파일이 있습니다. 이 파일의 보낸 날짜 헤더는 2015-06-02 09:14 +0900 이고, 받는 사람 헤더에는 `partner@example.com` 이 있습니다."
 - 쓰면 안 되는 문장: "사용자는 2015년 6월 2일 이 PC 에서 partner@example.com 에 메일을 보냈습니다."
 
-앞 문장은 파일에 적힌 값만 말합니다. 이 PC 에서 보냈다고 쓰려면 헤더의 거친 서버와 계정 설정을 함께 봐야 합니다([메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md)).
+앞 문장은 파일에 적힌 값만 말합니다. 이 PC 에서 보냈다고 쓰려면 헤더의 거친 서버와 계정 설정을 함께 봐야 합니다([메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md)).
 
 ## 시각 해석
 
-- 메시지 헤더의 시각을 읽는 법은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 과 [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
+- 메시지 헤더의 시각을 읽는 법은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 과 [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
 - `.eml`·`.dbx` 파일의 NTFS 시각은 PC 에 파일이 생기고 바뀐 때입니다. 메일을 받은 때와 같다고 쓰려면 같은 판으로 재현해 확인합니다.
 - `.dbx` 는 메일 폴더 하나에 파일 하나입니다[1]. 그래서 파일 시각은 폴더 안 어느 메시지가 바뀐 때인지 알려 주지 않습니다.
-- ESE 데이터베이스 안의 시각 칸과 형식은 이번에 확인하지 못했습니다. 값을 읽을 때는 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 보고, 같은 메시지의 헤더 시각과 맞춰 봅니다.
-- 옛 PC 의 이미지는 시간대 설정부터 확인합니다([시간대 설정](/02-artifacts/system-account/time-zone.md)).
+- ESE 데이터베이스 안의 시각 칸과 형식은 이번에 확인하지 못했습니다. 값을 읽을 때는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 보고, 같은 메시지의 헤더 시각과 맞춰 봅니다.
+- 옛 PC 의 이미지는 시간대 설정부터 확인합니다([시간대 설정](../system-account/time-zone.md)).
 
 ## 함정과 한계
 
-1. **원본 ESE 데이터베이스를 바로 엽니다.** 압수 이미지에서 꺼낸 ESE 데이터베이스는 비정상 종료 상태인 경우가 많았습니다(관찰). 사본에서만 작업합니다. 비정상 종료와 손상을 다루는 법은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 이 관찰은 SRUDB.dat·WebCacheV01.dat·Windows.edb 에서 한 것이고, `MSMessageStore` 는 직접 보지 않았습니다.
+1. **원본 ESE 데이터베이스를 바로 엽니다.** 압수 이미지에서 꺼낸 ESE 데이터베이스는 비정상 종료 상태인 경우가 많았습니다(관찰). 사본에서만 작업합니다. 비정상 종료와 손상을 다루는 법은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 이 관찰은 SRUDB.dat·WebCacheV01.dat·Windows.edb 에서 한 것이고, `MSMessageStore` 는 직접 보지 않았습니다.
 2. **도구 하나의 행 수를 믿습니다.** 손상된 ESE 데이터베이스는 읽는 방식에 따라 행 수가 달랐습니다(관찰, 확인 범위는 1번과 같습니다). 두 가지 이상으로 열어 비교합니다.
 3. **`Backup` 사본을 빠뜨립니다.** Windows Live Mail 은 데이터베이스의 백업 사본을 `Backup` 하위 폴더에 둡니다[2]. 본 데이터베이스와 사본의 목록을 비교합니다.
 4. **데이터베이스에 없으면 메일이 없다고 봅니다.** 메시지는 `.eml` 파일로 따로 있습니다[2][3]. 폴더 안 `.eml` 목록과 데이터베이스 목록을 따로 세어 비교합니다.
-5. **지운 `.eml` 을 데이터베이스에서만 찾습니다.** `.eml` 은 개별 파일이라, 지운 메일은 파일 시스템에서 찾아야 한다고 추론할 수 있습니다. 문서로 확인하지는 못했습니다. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md), [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 를 함께 봅니다.
+5. **지운 `.eml` 을 데이터베이스에서만 찾습니다.** `.eml` 은 개별 파일이라, 지운 메일은 파일 시스템에서 찾아야 한다고 추론할 수 있습니다. 문서로 확인하지는 못했습니다. [마스터 파일 테이블](../filesystem/mft.md), [USN 변경 저널](../filesystem/usnjrnl.md), [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를 함께 봅니다.
 6. **크기가 2GB 에 가까운 `.dbx` 를 정상 파일로 봅니다.** `.dbx` 는 2GB 보다 작은 파일만 지원했고 손상도 잦았습니다[1]. 크기가 한계에 가까우면 손상을 의심하고, 복구 도구 두 가지 이상의 결과를 비교합니다.
 7. **Windows 계정 하나를 메일 사용자 하나로 봅니다.** Outlook Express 에는 ID 가 있었습니다[3]. ID 로 메일 사용자를 여럿 둘 수 있었다는 설명이 흔합니다(확인하지 못함). `Identities` 아래 `{GUID}` 폴더가 여럿이면 메일 사용자도 여럿일 수 있습니다. 이 폴더 구조도 흔한 설명이라 검체에서 확인합니다.
 8. **구현 코드의 값을 명세처럼 씁니다.** `.dbx` 시그니처와 오프셋은 공개 명세로 확인하지 못했습니다. 보고서에 쓸 때는 어느 구현 코드에서 가져온 값인지 밝힙니다.
@@ -149,15 +149,15 @@
 2. 파일마다 앞 16바이트를 뽑아 나란히 놓습니다. 어느 바이트가 같고 어느 바이트가 다른지 적습니다.
 3. 폴더 목록 파일과 메시지 폴더 파일은 첫 바이트가 조금 다르다는 설명이 있습니다. 확인하지 못했으므로 2번 결과로 직접 봅니다.
 4. 공개 복구 도구의 소스가 파일을 알아보는 값과 2번 결과를 맞춰 봅니다.
-5. 같은 앞 16바이트를 미할당 영역에서 찾으면 지워진 `.dbx` 의 시작 자리를 찾아볼 수 있습니다([삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)).
+5. 같은 앞 16바이트를 미할당 영역에서 찾으면 지워진 `.dbx` 의 시작 자리를 찾아볼 수 있습니다([삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)).
 
-ESE 데이터베이스는 파일 머리의 상태 값으로 비정상 종료인지 먼저 봅니다. 헥스로 읽는 법은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. `.eml` 은 [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 의 방법으로 헤더와 본문 경계를 찾습니다.
+ESE 데이터베이스는 파일 머리의 상태 값으로 비정상 종료인지 먼저 봅니다. 헥스로 읽는 법은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. `.eml` 은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 의 방법으로 헤더와 본문 경계를 찾습니다.
 
 ### 공개 도구로 한 번
 
 - `.dbx`: UnDBX 같은 공개 복구 도구로 메시지를 풀어냅니다[1]. 다른 도구의 결과와 메시지 수를 비교합니다.
 - `.eml`: 메일 뷰어나 파서로 헤더와 첨부를 뽑습니다.
-- `Mail.MSMessageStore`: ESE 를 읽는 공개 도구로 표 목록을 뽑습니다. 도구 두 가지 이상으로 열어 행 수를 비교합니다([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+- `Mail.MSMessageStore`: ESE 를 읽는 공개 도구로 표 목록을 뽑습니다. 도구 두 가지 이상으로 열어 행 수를 비교합니다([도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)).
 - `.oeaccount`: 글자 편집기로 열어 계정 설정을 봅니다.
 
 > 그림 자리: Outlook Express(폴더마다 `.dbx`) → Vista Windows Mail(`.eml` + ESE) → Windows Live Mail(`.eml` + `Mail.MSMessageStore` + `Backup`) 으로 저장 방식이 바뀐 흐름을 판·Windows 연대와 함께 보여 주는 그림
@@ -166,15 +166,15 @@ ESE 데이터베이스는 파일 머리의 상태 값으로 비정상 종료인�
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) | 데이터베이스 상태, 복구, 표 읽기 |
-| [인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) | `.eml` 의 헤더·본문·첨부 |
-| [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) | 보낸 시각, 거친 서버 |
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | Windows Live Mail 이 깔렸는지 |
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | 메일 폴더가 어느 사용자 프로필에 속하는지 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | `.eml`·`.dbx` 가 생기고 지워진 때 |
-| [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) | 지운 `.eml`·`.dbx` 조각 |
+| [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) | 데이터베이스 상태, 복구, 표 읽기 |
+| [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) | `.eml` 의 헤더·본문·첨부 |
+| [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) | 보낸 시각, 거친 서버 |
+| [설치 프로그램](../system-account/uninstall.md) | Windows Live Mail 이 깔렸는지 |
+| [사용자 프로필 목록](../system-account/profilelist.md) | 메일 폴더가 어느 사용자 프로필에 속하는지 |
+| [마스터 파일 테이블](../filesystem/mft.md) · [USN 변경 저널](../filesystem/usnjrnl.md) | `.eml`·`.dbx` 가 생기고 지워진 때 |
+| [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) | 지운 `.eml`·`.dbx` 조각 |
 
-메일로 누구와 연락했는지 정리하는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+메일로 누구와 연락했는지 정리하는 순서는 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

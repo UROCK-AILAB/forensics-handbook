@@ -6,7 +6,7 @@ Amcache.hve 는 레지스트리 하이브 형식의 파일입니다. 안에 든 
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Windows 에는 응용 프로그램 호환성 인프라 (Application Compatibility Infrastructure) 가 있습니다. 오래된 프로그램이 새 Windows 에서도 돌도록 호환성 보정(심, Shim)을 거는 장치입니다. Amcache 는 이 장치가 남기는 기록입니다. 실행 파일·설치 프로그램·드라이버·장치 목록을 적습니다. 항목별 내용은 [AmCache 허브](/02-artifacts/execution/amcache-hve/index.md)와 각 항목 페이지에서 다룹니다.
+Windows 에는 응용 프로그램 호환성 인프라 (Application Compatibility Infrastructure) 가 있습니다. 오래된 프로그램이 새 Windows 에서도 돌도록 호환성 보정(심, Shim)을 거는 장치입니다. Amcache 는 이 장치가 남기는 기록입니다. 실행 파일·설치 프로그램·드라이버·장치 목록을 적습니다. 항목별 내용은 [AmCache 허브](index.md)와 각 항목 페이지에서 다룹니다.
 
 이 기록은 `%WinDir%\System32` 에 있는 `ae` 로 시작하는 라이브러리들이 채웁니다(aecache.dll·aeevts.dll·aeinv.dll·aelupsvc.dll·aepdu.dll·aepic.dll). Microsoft 는 이 라이브러리를 업데이트로 옛 Windows 에도 배포합니다. Windows 7 에는 KB2952664 가, Windows 8·8.1 에는 KB2976978 이 이 업데이트입니다. 그래서 업데이트를 받은 Windows 7 과 같은 시기의 Windows 10 은 같은 형식의 Amcache 를 씁니다(ANSSI, 2019). Khatri 도 KB2952664 를 받은 Windows 7 에서 Amcache.hve 와 RecentFileCache.bcf 가 함께 갱신되는 것을 확인했습니다(2016).
 
@@ -18,7 +18,7 @@ Windows 에는 응용 프로그램 호환성 인프라 (Application Compatibilit
 |---|---|---|
 | Amcache.hve | `%WinDir%\AppCompat\Programs\` | 본 하이브입니다 |
 | Amcache.hve.LOG1·Amcache.hve.LOG2 | 같은 폴더 | 트랜잭션 로그 (Transaction Log) 입니다. 하이브에 아직 반영되지 않은 변경이 여기에만 있을 수 있습니다 |
-| RecentFileCache.bcf | 같은 폴더 | Amcache.hve 이전 형식입니다. [구버전 실행 기록](/02-artifacts/execution/amcache-hve/recentfilecache-bcf.md)에서 다룹니다 |
+| RecentFileCache.bcf | 같은 폴더 | Amcache.hve 이전 형식입니다. [구버전 실행 기록](recentfilecache-bcf.md)에서 다룹니다 |
 | AEINV_*.xml·FullCompatReport.xml | 같은 폴더 | 일부 라이브러리 버전에서만 생기는 보고서 파일입니다. 10.0.10586 부터는 보이지 않습니다 |
 | INSTALL_*.xml·INSTALL_*.txt | `%WinDir%\AppCompat\Programs\Install\` | 설치 과정 기록입니다. 6.2~10.0.14913 은 XML 이고, 10.0.16299 에서는 쓰지 않으며, 10.0.17134 부터 TXT 로 다시 생깁니다 |
 | APPRAISER_*.xml·APPRAISER_*.bin | `%WinDir%\AppCompat` 아래 `appraiser` 폴더 | Appraiser 작업이 쓰는 파일입니다. ANSSI 논문 안에서도 위치 표기가 두 가지라서 검체에서 확인합니다 |
@@ -55,7 +55,7 @@ Amcache 는 한 번에 한 곳에서 쓰는 기록이 아닙니다. 실행할 �
 
 ## 구조
 
-Amcache.hve 는 일반 레지스트리 하이브 (regf) 입니다. 기본 블록·hbin·셀 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)와 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 이 페이지는 ANSSI 논문처럼 `Root` 키부터 경로를 적습니다.
+Amcache.hve 는 일반 레지스트리 하이브 (regf) 입니다. 기본 블록·hbin·셀 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)와 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 이 페이지는 ANSSI 논문처럼 `Root` 키부터 경로를 적습니다.
 
 ### 옛 형식 (6.2.9200 ~ 10.0.14913)
 
@@ -67,8 +67,8 @@ Root                              값 Sync: ProgramDataUpdater 마지막 실행 
 └─ Generic\0\{0000+SHA-1}          설치된 드라이버
 ```
 
-- `File` 아래 첫 단계는 볼륨 GUID (Volume GUID) 입니다. Khatri 는 이 GUID 가 SYSTEM 하이브의 [MountedDevices](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md)에 있는 볼륨 GUID 와 같다고 설명합니다.
-- 둘째 단계는 파일 ID 입니다. NTFS 에서는 MFT 순번(Sequence Number) 뒤에 MFT 항목 번호를 8자리 16진수로 붙입니다. 순번 5, 항목 번호 0xF99C 인 파일의 키 이름은 `50000f99c` 입니다(ANSSI 의 예). MFT 항목 번호와 순번은 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다.
+- `File` 아래 첫 단계는 볼륨 GUID (Volume GUID) 입니다. Khatri 는 이 GUID 가 SYSTEM 하이브의 [MountedDevices](../../external-devices/usb-storage-artifacts/mounteddevices.md)에 있는 볼륨 GUID 와 같다고 설명합니다.
+- 둘째 단계는 파일 ID 입니다. NTFS 에서는 MFT 순번(Sequence Number) 뒤에 MFT 항목 번호를 8자리 16진수로 붙입니다. 순번 5, 항목 번호 0xF99C 인 파일의 키 이름은 `50000f99c` 입니다(ANSSI 의 예). MFT 항목 번호와 순번은 [MFT 레코드와 속성](../../../01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다.
 - FAT 볼륨에서는 파일 ID 자리에 디렉터리 항목의 바이트 오프셋이 들어갑니다.
 - `Orphan` 아래 키에는 값 `c` 하나만 있습니다. 값은 0 이나 1 입니다.
 - `Generic\0` 아래에는 드라이버 SHA-1 앞에 `0000` 을 붙인 이름의 키가 있습니다. 같은 자리에 장치 모델 ID(DeviceModelId) 로 보이는 GUID 이름의 키도 있습니다.
@@ -93,7 +93,7 @@ Root                              값 Sync: ProgramDataUpdater 마지막 실행 
 | d | 이미지 버전(PE 헤더의 MajorImageVersion·MinorImageVersion)으로 보입니다(ANSSI). Khatri 는 뜻을 확정하지 않았습니다 | DWORD |
 | a·b·10·16 | 뜻이 확인되지 않았습니다 | — |
 
-값 11 과 17 은 둘 다 수정 시각으로 보입니다. Khatri 는 17 이 11 보다 거의 늘 1초 차이가 난다고 관찰했습니다. ANSSI 는 11 이 수정 시각이거나 그보다 몇 초 뒤라고 보았습니다. 값 101 은 비어 있는 키가 많습니다. 이유는 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md)에서 다룹니다.
+값 11 과 17 은 둘 다 수정 시각으로 보입니다. Khatri 는 17 이 11 보다 거의 늘 1초 차이가 난다고 관찰했습니다. ANSSI 는 11 이 수정 시각이거나 그보다 몇 초 뒤라고 보았습니다. 값 101 은 비어 있는 키가 많습니다. 이유는 [AmCache 해석 함정](sha1.md)에서 다룹니다.
 
 `Programs` 아래 프로그램 키의 값은 아래와 같습니다. 6.2 부터는 Uninstall 키에 등록된 프로그램만 적습니다.
 
@@ -110,7 +110,7 @@ Root                              값 Sync: ProgramDataUpdater 마지막 실행 
 | 3·5·13 | 뜻이 확인되지 않았습니다 |
 | 14~18 | 10.0.10240 에서 생긴 값입니다. 뜻이 확인되지 않았습니다 |
 
-`Programs` 에는 제거된 프로그램도 남습니다. 제거된 프로그램은 값 b 에 제거 시각이 들어갑니다. 설치 프로그램 목록 자체는 [설치 프로그램 (Uninstall)](/02-artifacts/system-account/uninstall.md)과 대조합니다.
+`Programs` 에는 제거된 프로그램도 남습니다. 제거된 프로그램은 값 b 에 제거 시각이 들어갑니다. 설치 프로그램 목록 자체는 [설치 프로그램 (Uninstall)](../../system-account/uninstall.md)과 대조합니다.
 
 ### 새 형식 (10.0.14913 부터)
 
@@ -126,11 +126,11 @@ Root
 
 주요 키는 항목 페이지에서 따로 다룹니다.
 
-- [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md)
-- [설치 프로그램 항목 (InventoryApplication)](/02-artifacts/execution/amcache-hve/inventoryapplication.md)
-- [드라이버 항목 (InventoryDriverBinary)](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md)
-- [바로가기 항목 (InventoryApplicationShortcut)](/02-artifacts/execution/amcache-hve/inventoryapplicationshortcut.md)
-- [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md)
+- [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md)
+- [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md)
+- [드라이버 항목 (InventoryDriverBinary)](inventorydriverbinary.md)
+- [바로가기 항목 (InventoryApplicationShortcut)](inventoryapplicationshortcut.md)
+- [장치 항목 (InventoryDevicePnp)](inventorydevicepnp.md)
 
 나머지 키가 처음 보인 버전은 아래와 같습니다(ANSSI).
 
@@ -152,7 +152,7 @@ Root
 
 ## 증거로서 의미
 
-이 절은 키 구성과 버전 판별이 알려 주는 것만 다룹니다. 실행 증거로서의 의미는 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md)에서 다룹니다.
+이 절은 키 구성과 버전 판별이 알려 주는 것만 다룹니다. 실행 증거로서의 의미는 [AmCache 해석 함정](sha1.md)에서 다룹니다.
 
 | 알려 주는 것 | 알려 주지 못하는 것 |
 |---|---|
@@ -162,10 +162,10 @@ Root
 
 ## 시각 해석
 
-- 하이브 안에는 시각 형식이 섞여 있습니다. 옛 형식 `File` 의 값 11·12·17 과 `Root` 의 `Sync` 는 FILETIME 입니다. 값 f 와 `Programs` 의 a·b 는 Unix 시각입니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+- 하이브 안에는 시각 형식이 섞여 있습니다. 옛 형식 `File` 의 값 11·12·17 과 `Root` 의 `Sync` 는 FILETIME 입니다. 값 f 와 `Programs` 의 a·b 는 Unix 시각입니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 - FILETIME 은 정의상 UTC 기준입니다. ANSSI 는 `Sync` 값이 UTC 라고 밝혔습니다.
 - 기본 블록 (Base Block) 의 마지막 기록 시각은 Win8.1 부터 갱신되지 않습니다. 이 값으로 Amcache 가 마지막으로 바뀐 때를 판단하지 않습니다.
-- 키 마지막 기록 시각 (Last Write Time) 은 키가 마지막으로 바뀐 때입니다([키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)). Amcache 에서는 이 시각을 누가 바꿨는지가 버전마다 다릅니다. 아래는 ANSSI 가 실험으로 얻은 결과입니다.
+- 키 마지막 기록 시각 (Last Write Time) 은 키가 마지막으로 바뀐 때입니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)). Amcache 에서는 이 시각을 누가 바꿨는지가 버전마다 다릅니다. 아래는 ANSSI 가 실험으로 얻은 결과입니다.
 
 | 라이브러리 버전 | 키 | 키 시각이 맞았던 것 |
 |---|---|---|
@@ -184,12 +184,12 @@ Root
 1. **OS 버전으로 형식을 단정합니다.** 형식은 라이브러리 버전을 따릅니다. KB2952664 를 받은 Windows 7 에도 새 형식 키가 있을 수 있습니다.
 2. **업그레이드한 시스템의 옛 파일을 놓칩니다.** 라이브러리가 바뀌어도 이전 형식의 파일이 남아 계속 쓰일 수 있습니다. Windows 7 에서 RecentFileCache.bcf 와 Amcache.hve 가 함께 있는 경우가 그 예입니다.
 3. **빈 키를 "기록 없음" 으로 읽습니다.** 10.0.16299 에서는 옛 키 4개가 빈 채로 남습니다. 빈 키는 지운 흔적이 아닐 수 있습니다. ANSSI 도 항목이 없다는 사실로 결론을 내리는 것은 연구 범위 밖이라고 밝혔습니다.
-4. **도구가 한쪽 형식만 읽습니다.** 도구마다 읽는 키가 다릅니다. 도구 결과에 없는 키가 하이브에 있는지 트리를 직접 열어 확인합니다([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
-5. **트랜잭션 로그를 빼고 읽습니다.** 최근 항목이 LOG1·LOG2 에만 있을 수 있습니다. 로그를 반영하는 방법은 [트랜잭션 로그와 반영 안 된 변경](/01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
+4. **도구가 한쪽 형식만 읽습니다.** 도구마다 읽는 키가 다릅니다. 도구 결과에 없는 키가 하이브에 있는지 트리를 직접 열어 확인합니다([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
+5. **트랜잭션 로그를 빼고 읽습니다.** 최근 항목이 LOG1·LOG2 에만 있을 수 있습니다. 로그를 반영하는 방법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
 6. **뜻이 밝혀지지 않은 값을 해석합니다.** 옛 형식 값 이름의 뜻은 대부분 실험으로 얻은 것입니다. ANSSI 도 코드 분석이 아니라 실험 결과라고 밝혔습니다. "뜻이 확인되지 않았습니다" 인 값은 보고서 근거로 쓰지 않습니다.
 7. **1809 이후 동작을 옛 연구로 설명합니다.** 이 페이지의 버전별 동작은 10.0.17763 까지의 실험입니다. 뒤 버전에서는 관찰로 다시 확인하고 확인 범위를 밝힙니다.
 
-Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 트랜잭션 로그에 남을 수 있습니다([지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 섀도 복사본 안의 옛 Amcache.hve 와 비교하면 사라진 항목을 찾을 수 있습니다([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)).
+Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 트랜잭션 로그에 남을 수 있습니다([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 섀도 복사본 안의 옛 Amcache.hve 와 비교하면 사라진 항목을 찾을 수 있습니다([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 
 ## 직접 분석해 보기
 
@@ -210,7 +210,7 @@ Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 �
 4. 두 순번이 다르므로 이 하이브는 쓰기가 끝나지 않은 상태(dirty)입니다. 오프셋 508 의 체크섬이 틀려도 같은 상태로 봅니다. 이때는 LOG1·LOG2 를 반영해야 가장 새 내용이 보입니다.
 5. 오프셋 12 의 8바이트(`00 E4 … DA 01`)는 기본 블록의 마지막 기록 시각입니다. Win8.1 부터 갱신되지 않으므로 해석에 쓰지 않습니다.
 6. 오프셋 36 의 `20 00 00 00` 은 루트 셀 오프셋 0x20 입니다. 이 값은 hbin 데이터 시작(파일 오프셋 4096)에서 센 값입니다. 그래서 루트 키 셀은 파일 오프셋 0x1020 에 있습니다.
-7. 루트 키에서 `Root` 키와 그 하위 키 이름을 차례로 따라갑니다. 키 셀을 읽는 법은 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다.
+7. 루트 키에서 `Root` 키와 그 하위 키 이름을 차례로 따라갑니다. 키 셀을 읽는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -226,13 +226,13 @@ Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 �
 
 | 확인할 것 | 함께 볼 기록 |
 |---|---|
-| 라이브러리를 바꾼 업데이트(KB2952664·KB2976978)를 언제 받았나 | [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md) |
-| 실제 OS 버전과 설치 시각 | [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) |
-| ProgramDataUpdater·Microsoft Compatibility Appraiser 작업이 있고 돌았나 | [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md) |
-| 실행 사실과 실행 시각 | [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md), [프리페치](/02-artifacts/execution/prefetch/index.md), [프로그램 호환성 도우미](/02-artifacts/execution/pca.md), [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| 설치·제거된 프로그램 | [설치 프로그램 (Uninstall)](/02-artifacts/system-account/uninstall.md) |
+| 라이브러리를 바꾼 업데이트(KB2952664·KB2976978)를 언제 받았나 | [윈도 업데이트 기록](../../system-account/windows-update-cbs-log.md) |
+| 실제 OS 버전과 설치 시각 | [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) |
+| ProgramDataUpdater·Microsoft Compatibility Appraiser 작업이 있고 돌았나 | [예약 작업](../../persistence/scheduled-tasks/index.md) |
+| 실행 사실과 실행 시각 | [심캐시](../shimcache-appcompatcache.md), [프리페치](../prefetch/index.md), [프로그램 호환성 도우미](../pca.md), [BAM·DAM](../background-activity-moderator.md) |
+| 설치·제거된 프로그램 | [설치 프로그램 (Uninstall)](../../system-account/uninstall.md) |
 
-실행 흔적을 모아 보는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)에서 다룹니다.
+실행 흔적을 모아 보는 흐름은 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md)에서 다룹니다.
 
 ## 실습
 

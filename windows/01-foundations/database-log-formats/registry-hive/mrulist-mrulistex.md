@@ -1,6 +1,6 @@
 # MRU 목록 읽는 법 (MRUList·MRUListEx)
 
-> 위치: [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) > MRU 목록 읽는 법
+> 위치: [레지스트리 하이브 구조](index.md) > MRU 목록 읽는 법
 
 ## 한 줄 요약
 
@@ -8,22 +8,22 @@ MRU 목록 (Most Recently Used list) 은 최근에 쓴 항목 여러 개를 레�
 
 ## 이 형식을 쓰는 아티팩트
 
-MRU 목록은 대부분 사용자 하이브 NTUSER.DAT 와 UsrClass.dat 에 있습니다. 하이브 파일의 위치는 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
+MRU 목록은 대부분 사용자 하이브 NTUSER.DAT 와 UsrClass.dat 에 있습니다. 하이브 파일의 위치는 [하이브 파일 종류와 위치](system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
 
 아래 표의 키는 NTUSER.DAT 의 `Software\Microsoft\Windows\CurrentVersion\Explorer\` 아래 경로입니다. 셸백만 경로를 따로 적었습니다.
 
 | 아티팩트 | 키 | 순서 값 | 항목 데이터 | 해석 페이지 |
 |---|---|---|---|---|
-| 실행 창 명령 | `RunMRU` | MRUList | 문자열 | [실행 창 명령 기록 (RunMRU)](/02-artifacts/execution/runmru.md) |
-| 최근 문서 | `RecentDocs`, `RecentDocs\<확장자>` | MRUListEx (Vista 이후) | 문자열 + 셸 아이템 | [최근 문서 (RecentDocs)](/02-artifacts/file-folder-usage/recentdocs.md) |
-| 열기·저장 대화상자 | `ComDlg32\OpenSavePidlMRU\<확장자>` | MRUListEx | 셸 아이템 목록 | [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
-| 대화상자가 마지막으로 연 폴더 | `ComDlg32\LastVisitedPidlMRU` | MRUListEx | 문자열 + 셸 아이템 목록 | [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
-| 대화상자 창 크기 | `ComDlg32\CIDSizeMRU` | MRUListEx | UTF-16 문자열로 시작하는 이진 값 | [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
+| 실행 창 명령 | `RunMRU` | MRUList | 문자열 | [실행 창 명령 기록 (RunMRU)](../../../02-artifacts/execution/runmru.md) |
+| 최근 문서 | `RecentDocs`, `RecentDocs\<확장자>` | MRUListEx (Vista 이후) | 문자열 + 셸 아이템 | [최근 문서 (RecentDocs)](../../../02-artifacts/file-folder-usage/recentdocs.md) |
+| 열기·저장 대화상자 | `ComDlg32\OpenSavePidlMRU\<확장자>` | MRUListEx | 셸 아이템 목록 | [열기·저장 대화상자 기록](../../../02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
+| 대화상자가 마지막으로 연 폴더 | `ComDlg32\LastVisitedPidlMRU` | MRUListEx | 문자열 + 셸 아이템 목록 | [열기·저장 대화상자 기록](../../../02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
+| 대화상자 창 크기 | `ComDlg32\CIDSizeMRU` | MRUListEx | UTF-16 문자열로 시작하는 이진 값 | [열기·저장 대화상자 기록](../../../02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
 | 연결 프로그램 목록 | `FileExts\<확장자>\OpenWithList` | MRUList | 문자열 | — |
-| 셸백 | NTUSER.DAT `Software\Microsoft\Windows\Shell\BagMRU`, UsrClass.dat `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` | MRUListEx | 셸 아이템 한 개 | [셸백 저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) |
+| 셸백 | NTUSER.DAT `Software\Microsoft\Windows\Shell\BagMRU`, UsrClass.dat `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` | MRUListEx | 셸 아이템 한 개 | [셸백 저장 위치와 구조](../../../02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) |
 
 - 셸백의 BagMRU 에는 값마다 같은 번호의 하위 키가 있습니다. 하위 키마다 MRUListEx 가 또 있어서 폴더 트리를 이룹니다.
-- 항목 데이터에 든 셸 아이템은 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 풉니다.
+- 항목 데이터에 든 셸 아이템은 [셸 아이템 (Shell Item·PIDL)](../../shell-document-formats/shell-item-pidl.md) 에서 풉니다.
 
 ### Windows 버전별 차이
 
@@ -157,7 +157,7 @@ MRUList 는 comctl32.dll 의 MRU 함수가 쓰는 저장 형식입니다. Micros
 
 ### 시각
 
-- 레지스트리 키에는 시각이 하나뿐입니다. 키의 마지막 기록 시각 (Last Write Time) 입니다. 자세한 내용은 [키 마지막 기록 시각 (Last Write Time)](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에 있습니다.
+- 레지스트리 키에는 시각이 하나뿐입니다. 키의 마지막 기록 시각 (Last Write Time) 입니다. 자세한 내용은 [키 마지막 기록 시각 (Last Write Time)](last-write-time.md) 에 있습니다.
 - 이 시각은 FILETIME 형식의 UTC 값입니다.
 - 항목을 추가하거나 다시 쓰면 순서 값을 다시 기록합니다 (Wine 구현 기준). 값을 기록하면 키의 마지막 기록 시각이 바뀝니다. 그래서 이 시각은 보통 첫 번째 항목이 마지막으로 쓰인 때에 가깝습니다.
 - 키 안의 다른 값이나 하위 키를 지워도 이 시각이 바뀝니다. Windows 10 의 RecentDocs 에서 이런 경우가 보고됐습니다. 이때 키 시각은 첫 번째 항목의 사용 시각보다 늦습니다.
@@ -172,18 +172,18 @@ MRUList 는 comctl32.dll 의 MRU 함수가 쓰는 저장 형식입니다. Micros
   2. 그렇게 찾은 항목보다 더 최근 쪽에 있는 항목도 모두 그 사이에 쓰인 것입니다.
 - 예를 들어 순서가 `cab` 에서 `acb` 로 바뀌었다면, 두 시점 사이에 `a` 를 다시 쓴 것입니다.
 - 이 규칙으로는 "확실히 바뀐 항목" 만 가릴 수 있습니다. 이미 맨 앞에 있던 항목을 다시 쓰면 순서가 그대로라서 알 수 없습니다.
-- 섀도 복사본을 다루는 법은 [섀도 복사본 활용 (Volume Shadow Copy Analysis)](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에 있습니다.
+- 섀도 복사본을 다루는 법은 [섀도 복사본 활용 (Volume Shadow Copy Analysis)](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에 있습니다.
 
 ### 지운 항목과 덮어쓴 항목
 
 - 사용자가 목록을 지우면 항목 값이나 키 전체가 사라집니다.
-- 지운 값과 키는 하이브의 빈 셀에 남아 있을 수 있습니다. 가득 찬 목록에서 덮어쓴 옛 데이터도 빈 셀에 남아 있을 수 있습니다. 찾는 방법은 [지워진 키·값 복구 (Deleted Keys·Values)](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 에 있습니다.
+- 지운 값과 키는 하이브의 빈 셀에 남아 있을 수 있습니다. 가득 찬 목록에서 덮어쓴 옛 데이터도 빈 셀에 남아 있을 수 있습니다. 찾는 방법은 [지워진 키·값 복구 (Deleted Keys·Values)](deleted-keys-values.md) 에 있습니다.
 - 빈 셀에서 찾은 항목 값에는 순서 정보가 없습니다. 그 값이 목록의 몇 번째였는지는 알 수 없습니다.
 
 ### 비정상 종료
 
 - 마지막 변경이 하이브 본 파일에 반영되지 않고 트랜잭션 로그에만 있을 수 있습니다. 로그를 반영하지 않고 읽으면 최근 변경이 빠진 옛 목록이 보입니다.
-- 순서 값이 없는 이름을 가리키거나, 순서 값에 없는 항목 값이 있으면 먼저 로그 반영 여부를 확인합니다. 로그 반영은 [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](/01-foundations/database-log-formats/registry-hive/log1-log2.md) 에 있습니다.
+- 순서 값이 없는 이름을 가리키거나, 순서 값에 없는 항목 값이 있으면 먼저 로그 반영 여부를 확인합니다. 로그 반영은 [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](log1-log2.md) 에 있습니다.
 
 ## 함정
 
@@ -192,9 +192,9 @@ MRUList 는 comctl32.dll 의 MRU 함수가 쓰는 저장 형식입니다. Micros
 - 같은 항목을 여러 번 써도 항목은 하나만 남습니다. 목록으로는 몇 번 썼는지 알 수 없습니다.
 - 목록에는 최대 개수가 있습니다. 오래된 항목은 밀려서 사라집니다. 목록에 없다고 해서 쓰지 않았다는 뜻은 아닙니다.
 - 목록에 올랐다고 사용자가 직접 열었다는 뜻은 아닙니다. Windows 10 의 RecentDocs 는 파일을 만들기만 해도 항목이 생기고, 상위 폴더 항목도 함께 생긴다고 보고됐습니다. 키마다 무엇이 항목을 만드는지는 각 아티팩트 페이지에서 확인합니다.
-- 최근 목록인데 이 방식이 아닌 키가 있습니다. [TypedURLs](/02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) 는 순서 값 없이 `url1`, `url2` … 이름을 씁니다. 새 주소가 들어오면 기존 값의 이름을 하나씩 뒤로 밀어서 다시 씁니다. 이런 키는 값 이름의 번호가 곧 순서입니다.
+- 최근 목록인데 이 방식이 아닌 키가 있습니다. [TypedURLs](../../../02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) 는 순서 값 없이 `url1`, `url2` … 이름을 씁니다. 새 주소가 들어오면 기존 값의 이름을 하나씩 뒤로 밀어서 다시 씁니다. 이런 키는 값 이름의 번호가 곧 순서입니다.
 - 이런 키는 새 항목 하나만 들어와도 모든 값을 다시 씁니다. 두 시점을 비교할 때 바뀐 값이 모두 사용자가 쓴 항목은 아닙니다.
-- 탐색기 주소창 기록인 TypedPaths 에도 순서 값이 없었습니다. (확인 범위: Windows 11 25H2) 해석은 [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](/02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) 에 있습니다.
+- 탐색기 주소창 기록인 TypedPaths 에도 순서 값이 없었습니다. (확인 범위: Windows 11 25H2) 해석은 [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](../../../02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) 에 있습니다.
 - 끝 표시에서 읽기를 멈춰야 합니다. 끝 표시 뒤에 바이트가 더 있거나 끝 표시가 없으면 도구마다 결과가 다를 수 있습니다. 이런 경우에는 원시 바이트를 직접 확인합니다.
 
 ## 도구
@@ -202,7 +202,7 @@ MRUList 는 comctl32.dll 의 MRU 함수가 쓰는 저장 형식입니다. Micros
 - RegRipper 는 RunMRU·RecentDocs·ComDlg32 같은 키마다 플러그인이 있습니다. 플러그인은 순서 값을 풀어서 순서대로 보여 줍니다.
 - Registry Explorer 에는 MRU 키를 순서대로 풀어 보여 주는 플러그인이 있습니다.
 - regipy·python-registry 같은 파이썬 라이브러리로 값을 꺼내면 순서 값을 직접 풀 수 있습니다. 위 "헥스로 한 번 따라가기" 의 방법 그대로입니다.
-- 도구가 순서 값에 없는 항목 값을 보여 주는지, 끝 표시 뒤를 어떻게 다루는지는 도구마다 다릅니다. 두 가지 이상 도구로 결과를 맞춰 봅니다. 방법은 [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 도구가 순서 값에 없는 항목 값을 보여 주는지, 끝 표시 뒤를 어떻게 다루는지는 도구마다 다릅니다. 두 가지 이상 도구로 결과를 맞춰 봅니다. 방법은 [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

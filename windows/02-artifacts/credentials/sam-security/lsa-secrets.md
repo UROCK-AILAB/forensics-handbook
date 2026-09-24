@@ -1,6 +1,6 @@
 # LSA 시크릿 (LSA Secrets, 자동 로그온 비밀번호 포함)
 
-> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) > LSA 시크릿
+> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > LSA 시크릿
 
 ## 한 줄 요약
 
@@ -26,7 +26,7 @@ LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 
 
 ## 푸는 순서 (Vista 이후)
 
-1. [부트키](/02-artifacts/credentials/sam-security/system-boot-key.md) 를 먼저 만듭니다.
+1. [부트키](system-boot-key.md) 를 먼저 만듭니다.
 2. `PolEKList` 값을 `LSA_SECRET` 구조로 읽고, 그 안 EncryptedData 의 앞 32바이트를 떼어 둡니다.
 3. 임시 키를 만듭니다. 부트키 뒤에 그 32바이트를 1000번 이어 붙인 것을 SHA256 에 넣습니다.
 4. 그 임시 키로 EncryptedData 의 나머지를 AES-CBC 로 풉니다.
@@ -64,8 +64,8 @@ LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 
 
 | 이름 | 담긴 것 | 이어지는 페이지 |
 |---|---|---|
-| DPAPI_SYSTEM | 시스템 DPAPI 열쇠 | [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) |
-| NL$KM | 도메인 캐시 자격증명을 푸는 열쇠 | [도메인 캐시 자격증명 (MSCache v2)](/02-artifacts/credentials/sam-security/mscache-v2.md) |
+| DPAPI_SYSTEM | 시스템 DPAPI 열쇠 | [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) |
+| NL$KM | 도메인 캐시 자격증명을 푸는 열쇠 | [도메인 캐시 자격증명 (MSCache v2)](mscache-v2.md) |
 
 - NL$KM 은 `Policy\Secrets\NL$KM\CurrVal\default` 에 있습니다.
 
@@ -94,10 +94,10 @@ LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 
 
 ## 교차 검증 — 함께 볼 아티팩트
 
-- [부트키 구하기 (SYSTEM Boot Key)](/02-artifacts/credentials/sam-security/system-boot-key.md) — LSA 키를 푸는 전제입니다.
-- [도메인 캐시 자격증명 (MSCache v2)](/02-artifacts/credentials/sam-security/mscache-v2.md) — NL$KM 시크릿을 열쇠로 씁니다.
-- [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) — DPAPI_SYSTEM 시크릿을 시스템 비밀 복호에 씁니다.
-- [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) — 사용자·시스템이 저장한 다른 비밀을 함께 봅니다.
+- [부트키 구하기 (SYSTEM Boot Key)](system-boot-key.md) — LSA 키를 푸는 전제입니다.
+- [도메인 캐시 자격증명 (MSCache v2)](mscache-v2.md) — NL$KM 시크릿을 열쇠로 씁니다.
+- [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) — DPAPI_SYSTEM 시크릿을 시스템 비밀 복호에 씁니다.
+- [자격 증명 관리자와 볼트](../credential-manager-windows-vault.md) — 사용자·시스템이 저장한 다른 비밀을 함께 봅니다.
 
 ## 참고 문헌
 

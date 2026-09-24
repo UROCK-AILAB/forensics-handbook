@@ -25,11 +25,11 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 - 패키지 앱이 남기는 설정과 파일이 이 구조 위에 쌓입니다.
 - 패키지가 없는 앱은 이 저장소를 쓰지 못합니다. 그런 앱은 파일이나 레지스트리에 직접 씁니다 (Microsoft 문서).
 - 앱별 해석은 아래 페이지에서 다룹니다. 조사하는 PC 에서 그 앱이 패키지 앱으로 설치됐는지는 폴더 이름과 설치 기록으로 먼저 확인합니다.
-  - [Windows 메일 앱](/02-artifacts/mail/hxstore.md)
-  - [스티커 메모](/02-artifacts/cloud-notes/sticky-notes.md)
-  - [휴대폰과 연결](/02-artifacts/messengers/phone-link.md)
-  - [메모장 탭 저장 파일](/02-artifacts/file-folder-usage/notepad-tabstate.md)
-- 설치된 패키지 목록은 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 다룹니다.
+  - [Windows 메일 앱](../../02-artifacts/mail/hxstore.md)
+  - [스티커 메모](../../02-artifacts/cloud-notes/sticky-notes.md)
+  - [휴대폰과 연결](../../02-artifacts/messengers/phone-link.md)
+  - [메모장 탭 저장 파일](../../02-artifacts/file-folder-usage/notepad-tabstate.md)
+- 설치된 패키지 목록은 [스토어 앱 설치 목록](../../02-artifacts/system-account/appx-staterepository.md) 에서 다룹니다.
 
 ## 구조
 
@@ -100,8 +100,8 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 | `PackageSid` | REG_BINARY | 패키지 SID |
 | `OSMinVersion`, `OSMaxVersionTested` | REG_QWORD | OS 버전 값 |
 
-- StateRepository 파일은 이번에 열어 보지 않았습니다. 설치 기록 해석은 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 다룹니다.
-- 디스크 이미지에서 `HKCU\Software\Classes` 를 어느 하이브 파일에서 읽는지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
+- StateRepository 파일은 이번에 열어 보지 않았습니다. 설치 기록 해석은 [스토어 앱 설치 목록](../../02-artifacts/system-account/appx-staterepository.md) 에서 다룹니다.
+- 디스크 이미지에서 `HKCU\Software\Classes` 를 어느 하이브 파일에서 읽는지는 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 를 봅니다.
 
 ### 패키지 폴더 안 (관찰)
 
@@ -139,7 +139,7 @@ Microsoft 문서는 저장 위치를 밝히지 않습니다.
 - 루트 셀 위치는 0x20 이었습니다.
 - 파일 크기는 8KB 에서 128KB 사이였습니다.
 - 기본 블록의 파일 이름 칸에는 경로 끝부분(`…\Settings\settings.dat`)이 UTF-16 으로 들어 있었습니다.
-- regf·hbin·셀의 배치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- regf·hbin·셀의 배치는 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 키 트리는 아래 꼴이었습니다.
 
@@ -232,7 +232,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 3. **설치 기록과 짝짓습니다.** 설치 폴더 이름과 Repository 키 이름은 전체 이름입니다. 여기서 버전과 아키텍처를 읽습니다.
 4. **하이브로 엽니다.** 하이브 도구나 헥스 편집기로 `Test\LocalState` 아래를 봅니다. 로그를 적용했는지 결과에 적어 둡니다.
 5. **형식 번호를 풉니다.** 형식 칸이 `0x05F5E1xx` 꼴이면 `0x05F5E100` 을 뺍니다. 남은 수를 위 표의 PropertyType 으로 읽습니다.
-6. **끝 8바이트를 떼어 냅니다.** 앞부분은 값으로 읽고, 끝 8바이트는 FILETIME 으로 풉니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
+6. **끝 8바이트를 떼어 냅니다.** 앞부분은 값으로 읽고, 끝 8바이트는 FILETIME 으로 풉니다. 푸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
 7. **합성 값은 항목 단위로 풉니다.** 크기 칸을 따라가며 8바이트 경계마다 다음 항목을 읽습니다.
 8. **폴더 안 파일도 봅니다.** `LocalState` 같은 폴더 안 파일의 형식은 앱마다 따로 확인합니다.
 
@@ -272,7 +272,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 - 0x00~0x03 은 UTF-16LE 로 `ab` 입니다.
 - 0x04~0x05 는 끝 NUL 입니다.
 - 0x06 부터 8바이트가 끝 시각입니다.
-- 글자 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- 글자 인코딩은 [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
@@ -280,7 +280,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 
 - 문서 원문은 이렇습니다. "The system removes the contents of these data stores completely and cleanly when your app is uninstalled."
 - 그래서 앱을 지운 PC 에는 그 앱의 폴더가 없을 수 있습니다.
-- 지운 폴더와 파일은 파일 시스템 수준에서 찾습니다. [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
+- 지운 폴더와 파일은 파일 시스템 수준에서 찾습니다. [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
 - 앱을 업데이트할 때는 시스템이 대체로 내용을 남깁니다.
 - RoamingSettings 는 스토어 업데이트 때 남지 않을 수 있습니다. 문서는 Windows 10 에서도 그렇다고 적습니다.
 - 임시 저장소는 시스템이 언제든 지울 수 있습니다. 비어 있다고 앱을 쓰지 않았다고 단정하지 않습니다.
@@ -297,7 +297,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 - 관찰한 PC 에서 settings.dat 86개 가운데 65개 옆에 LOG1·LOG2 가 있었습니다.
 - 로그를 적용하지 않은 사본에서 값 5개의 끝 시각이 키 시각보다 늦었습니다.
 - 그래서 로그를 함께 수집하고, 적용했는지 결과에 적습니다.
-- 로그를 다루는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- 로그를 다루는 법은 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ### 지운 키와 값
 
@@ -314,7 +314,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 - 빈 틀 파일에 박힌 시각으로 보입니다. 앱을 설치하거나 쓴 시각이 아닙니다.
 - 값 끝 시각은 값마다 따로 있습니다. 뜻이 문서로 확인되지 않았으므로 보고서에는 "이 값의 끝 8바이트를 FILETIME 으로 풀면 이 시각이 나온다" 까지만 씁니다.
 - 키 시각을 값 시각의 상한으로 쓰지 않습니다. 관찰에서 키 시각보다 늦은 값이 5개 있었습니다.
-- 키 시각의 일반 해석은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
+- 키 시각의 일반 해석은 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 를 봅니다.
 
 ### 설정 파일 속 비밀 값
 
@@ -326,7 +326,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 
 - 실행 중인 앱의 settings.dat 는 잠겨서 복사되지 않았습니다 (관찰).
 - 86개 가운데 11개에서 "Device or resource busy" 가 났습니다.
-- 볼륨 섀도 복사본이나 원시 디스크 읽기로 가져옵니다. [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 과 [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) 를 봅니다.
+- 볼륨 섀도 복사본이나 원시 디스크 읽기로 가져옵니다. [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [볼륨 섀도 복사본 구조](../disk-volume/volume-shadow-copy.md) 를 봅니다.
 
 ## 함정
 
@@ -348,9 +348,9 @@ Test                        ← 루트 키. 75개 모두 이 이름
 |---|---|
 | 헥스 편집기 | 형식 칸, 끝 8바이트, 합성 값 항목을 직접 봅니다 |
 | 레지스트리 하이브 도구 (Registry Explorer, regipy 등) | 키 트리와 값 목록을 봅니다. 형식 번호와 끝 시각은 직접 풀어 대조합니다 |
-| SQLite 조회 도구 | StateRepository 파일을 엽니다. 형식은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다 |
+| SQLite 조회 도구 | StateRepository 파일을 엽니다. 형식은 [SQLite 데이터베이스](../database-log-formats/sqlite/index.md) 에서 다룹니다 |
 
-도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+도구마다 결과가 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

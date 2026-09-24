@@ -25,16 +25,16 @@ ESE (Extensible Storage Engine) 는 Windows 에 들어 있는 데이터베이스
 
 | 파일 | 위치 | Windows 버전 | 알려 주는 것 |
 |---|---|---|---|
-| SRUDB.dat | `%SystemRoot%\System32\sru\SRUDB.dat` | 8 이후 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md): 앱별 자원 사용, 네트워크 사용량, 네트워크 연결 |
-| WebCacheV01.dat | `%LOCALAPPDATA%\Microsoft\Windows\WebCache\WebCacheV01.dat` | IE 10 이후 | [웹캐시 DB](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md): 방문 기록, 쿠키, 캐시 목록 |
-| Windows.edb | `%ProgramData%\Microsoft\Search\Data\Applications\Windows\Windows.edb` | Vista ~ 10 | [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md): 색인된 파일의 속성, 지운 파일의 흔적 |
-| qmgr.db | `%ProgramData%\Microsoft\Network\Downloader\qmgr.db` | 10 부터 | [BITS 전송 작업](/02-artifacts/persistence/bits-jobs-qmgr-db.md): 내려받기·올리기 작업과 대상 파일 |
-| DataStore.edb | `%SystemRoot%\SoftwareDistribution\DataStore\DataStore.edb` | 확인 전 | [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md) |
-| WindowsMail.MSMessageStore | `%USERPROFILE%\AppData\Local\Microsoft\Windows Mail\WindowsMail.MSMessageStore` | Vista (Windows Mail) | [옛 윈도 메일 프로그램](/02-artifacts/mail/outlook-express-windows-live-mail.md): 메일 폴더 정보 |
-| ntds.dit | `%SystemRoot%\NTDS\ntds.dit` (기본 위치) | 도메인 컨트롤러 | [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md): 도메인 계정과 비밀번호 해시 |
+| SRUDB.dat | `%SystemRoot%\System32\sru\SRUDB.dat` | 8 이후 | [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md): 앱별 자원 사용, 네트워크 사용량, 네트워크 연결 |
+| WebCacheV01.dat | `%LOCALAPPDATA%\Microsoft\Windows\WebCache\WebCacheV01.dat` | IE 10 이후 | [웹캐시 DB](../../../02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md): 방문 기록, 쿠키, 캐시 목록 |
+| Windows.edb | `%ProgramData%\Microsoft\Search\Data\Applications\Windows\Windows.edb` | Vista ~ 10 | [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md): 색인된 파일의 속성, 지운 파일의 흔적 |
+| qmgr.db | `%ProgramData%\Microsoft\Network\Downloader\qmgr.db` | 10 부터 | [BITS 전송 작업](../../../02-artifacts/persistence/bits-jobs-qmgr-db.md): 내려받기·올리기 작업과 대상 파일 |
+| DataStore.edb | `%SystemRoot%\SoftwareDistribution\DataStore\DataStore.edb` | 확인 전 | [윈도 업데이트 기록](../../../02-artifacts/system-account/windows-update-cbs-log.md) |
+| WindowsMail.MSMessageStore | `%USERPROFILE%\AppData\Local\Microsoft\Windows Mail\WindowsMail.MSMessageStore` | Vista (Windows Mail) | [옛 윈도 메일 프로그램](../../../02-artifacts/mail/outlook-express-windows-live-mail.md): 메일 폴더 정보 |
+| ntds.dit | `%SystemRoot%\NTDS\ntds.dit` (기본 위치) | 도메인 컨트롤러 | [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md): 도메인 계정과 비밀번호 해시 |
 
 - Windows 10 전의 BITS 는 ESE 가 아닌 `qmgr0.dat`·`qmgr1.dat` 를 씁니다.
-- Windows 11 에서는 검색 색인이 SQLite 파일(`Windows.db`·`Windows-gather.db`·`Windows-usn.db`)로 바뀝니다. 어느 빌드부터 바뀌었는지와 두 형식을 구별하는 법은 [위치와 형식 (Windows.edb·Windows.db)](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 에서 다룹니다.
+- Windows 11 에서는 검색 색인이 SQLite 파일(`Windows.db`·`Windows-gather.db`·`Windows-usn.db`)로 바뀝니다. 어느 빌드부터 바뀌었는지와 두 형식을 구별하는 법은 [위치와 형식 (Windows.edb·Windows.db)](../../../02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 에서 다룹니다.
 - 라이브 시스템에서는 서비스가 파일을 잠가 두어 그냥 복사되지 않을 수 있습니다. 예를 들어 Windows 10 의 BITS 서비스는 qmgr.db 를 다른 프로그램과 나눠 쓰지 않게 엽니다.
 - Exchange 서버의 메일 DB(`.edb`)도 ESE 를 씁니다.
 
@@ -66,22 +66,22 @@ ESE (Extensible Storage Engine) 는 Windows 에 들어 있는 데이터베이스
 
 ## 읽는 순서
 
-1. [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) — 첫 페이지의 파일 헤더와 둘째 페이지의 헤더 사본, 고정 크기 페이지, 표를 이루는 B+트리를 헥스로 따라갑니다. 모든 표·열 정의가 든 카탈로그 (MSysObjects) 를 읽는 법도 다룹니다.
-2. [트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) — 헤더의 상태 값을 읽는 법을 다룹니다. 명세에 따르면 2 는 비정상 종료, 3 은 정상 종료 (Clean Shutdown) 입니다. 로그로 복구할지, 로그 없이 읽을지 고르는 기준도 설명합니다.
-3. [긴 값과 압축 열 (Long Value·Compressed Column)](/01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md) — 페이지보다 큰 값은 여러 조각으로 나뉘어 따로 저장됩니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가집니다(관찰: 6,000바이트 값이 11,158바이트로 나온 사례). 7비트·XPRESS·LZ4 같은 열 압축도 다룹니다.
-4. [파일 안에 남은 지운 레코드 (Deleted Records)](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) — 지운 레코드가 페이지 안에 남는 경우와 찾는 법, 그 한계를 다룹니다.
+1. [파일 구조 (Page·B+Tree·Catalog)](page-b-tree-catalog.md) — 첫 페이지의 파일 헤더와 둘째 페이지의 헤더 사본, 고정 크기 페이지, 표를 이루는 B+트리를 헥스로 따라갑니다. 모든 표·열 정의가 든 카탈로그 (MSysObjects) 를 읽는 법도 다룹니다.
+2. [트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)](edb-log-dirty-shutdown.md) — 헤더의 상태 값을 읽는 법을 다룹니다. 명세에 따르면 2 는 비정상 종료, 3 은 정상 종료 (Clean Shutdown) 입니다. 로그로 복구할지, 로그 없이 읽을지 고르는 기준도 설명합니다.
+3. [긴 값과 압축 열 (Long Value·Compressed Column)](long-value-compressed-column.md) — 페이지보다 큰 값은 여러 조각으로 나뉘어 따로 저장됩니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가집니다(관찰: 6,000바이트 값이 11,158바이트로 나온 사례). 7비트·XPRESS·LZ4 같은 열 압축도 다룹니다.
+4. [파일 안에 남은 지운 레코드 (Deleted Records)](deleted-records.md) — 지운 레코드가 페이지 안에 남는 경우와 찾는 법, 그 한계를 다룹니다.
 
 ## 함께 볼 페이지
 
-- [SQLite 데이터베이스 (SQLite)](/01-foundations/database-log-formats/sqlite/index.md) — Windows 11 검색 색인처럼 ESE 에서 SQLite 로 옮겨 간 데이터를 읽습니다.
-- [레지스트리 하이브 구조 (Registry Hive)](/01-foundations/database-log-formats/registry-hive/index.md) — 로그에 먼저 쓰고 주 파일에 나중에 쓰는 같은 구조를 다룹니다.
-- [SRUM 해석 함정 (1시간 단위 기록·레지스트리 임시 저장)](/02-artifacts/execution/system-resource-usage-monitor/1.md) — ESE 파일에 아직 들어가지 않은 데이터가 어디 머무는지 다룹니다.
-- [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — 열마다 다른 시각 값을 읽습니다.
-- [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) — 압축 열을 풀 때 필요합니다.
-- [레코드 카빙 (Record Carving)](/03-techniques/analysis/data-recovery/record-carving.md) — DB 가 열리지 않을 때 페이지에서 레코드를 직접 찾습니다.
-- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 시점의 DB 와 로그를 꺼내 지금과 비교합니다.
-- [선별 수집 (Triage Collection)](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) — 잠긴 DB 를 로그와 함께 수집하는 법을 다룹니다.
-- [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md) — 손상 DB 를 여러 방식으로 읽고 결과를 맞춰 봅니다.
+- [SQLite 데이터베이스 (SQLite)](../sqlite/index.md) — Windows 11 검색 색인처럼 ESE 에서 SQLite 로 옮겨 간 데이터를 읽습니다.
+- [레지스트리 하이브 구조 (Registry Hive)](../registry-hive/index.md) — 로그에 먼저 쓰고 주 파일에 나중에 쓰는 같은 구조를 다룹니다.
+- [SRUM 해석 함정 (1시간 단위 기록·레지스트리 임시 저장)](../../../02-artifacts/execution/system-resource-usage-monitor/1.md) — ESE 파일에 아직 들어가지 않은 데이터가 어디 머무는지 다룹니다.
+- [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../value-decoding/filetime-unix-webkit-dos-ole.md) — 열마다 다른 시각 값을 읽습니다.
+- [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](../../value-decoding/lznt1-xpress-xpress-huffman.md) — 압축 열을 풀 때 필요합니다.
+- [레코드 카빙 (Record Carving)](../../../03-techniques/analysis/data-recovery/record-carving.md) — DB 가 열리지 않을 때 페이지에서 레코드를 직접 찾습니다.
+- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 시점의 DB 와 로그를 꺼내 지금과 비교합니다.
+- [선별 수집 (Triage Collection)](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) — 잠긴 DB 를 로그와 함께 수집하는 법을 다룹니다.
+- [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) — 손상 DB 를 여러 방식으로 읽고 결과를 맞춰 봅니다.
 
 ## 참고 문헌
 

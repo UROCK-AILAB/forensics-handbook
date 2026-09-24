@@ -13,7 +13,7 @@
 
 ## 위치와 버전별 차이
 
-- 위치는 프로필 본 폴더입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 위치는 프로필 본 폴더입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - 파일 이름과 암호 방식은 파이어폭스 버전을 따릅니다. 아래는 공개 도구 firepwd 의 설명에서 확인한 것입니다.
 
 | 파이어폭스 판 | 로그인 파일 | 키 파일 |
@@ -38,7 +38,7 @@
 
 ### `key4.db`
 
-`key4.db` 는 SQLite 파일입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. 로그인 값을 푸는 키가 여기에 두 조각으로 들어 있습니다.
+`key4.db` 는 SQLite 파일입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. 로그인 값을 푸는 키가 여기에 두 조각으로 들어 있습니다.
 
 | 표 | 칸 | 담는 것 |
 |---|---|---|
@@ -84,17 +84,17 @@
 ## 시각 해석
 
 - `logins.json` 의 시각 칸(`timeCreated`·`timeLastUsed`·`timePasswordChanged`)은 1970년 기준 밀리초로 알려져 있습니다. 이번 조사에서 소스로 확인하지는 못했습니다. 검체에서 다른 아티팩트의 시각과 맞춰 확인합니다.
-- 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
 - **원본을 브라우저로 열지 않습니다.** 파이어폭스로 프로필을 열면 파일이 바뀝니다. 해시를 기록한 사본으로 분석합니다.
 - **`logins.json` 과 `key4.db` 는 짝입니다.** 값을 풀려면 두 파일이 같은 프로필의 것이어야 합니다. 한쪽만 수집하면 값을 풀 수 없습니다.
-- **기본 비밀번호가 걸려 있으면 그 비밀번호가 필요합니다.** 확인값이 빈 문자열로 풀리지 않으면 기본 비밀번호가 걸린 것입니다. 이때는 사이트 목록만 뽑을 수 있습니다. 암호를 다루는 절차는 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 를 참고합니다.
+- **기본 비밀번호가 걸려 있으면 그 비밀번호가 필요합니다.** 확인값이 빈 문자열로 풀리지 않으면 기본 비밀번호가 걸린 것입니다. 이때는 사이트 목록만 뽑을 수 있습니다. 암호를 다루는 절차는 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 를 참고합니다.
 - **키를 못 풀어도 할 수 있는 일이 많습니다.** `hostname` 은 평문입니다. 어느 사이트에 계정을 저장했는지 목록으로 뽑아 다른 흔적과 맞춰 봅니다.
-- **Windows 계정 비밀번호 없이도 풀 수 있습니다.** 기본 비밀번호가 없으면 firepwd 는 `key4.db` 와 `logins.json` 두 파일만으로 값을 풉니다. 크롬 계열은 사용자 [DPAPI](/01-foundations/protection/data-protection-api/index.md) 로 키를 보호하므로 Windows 쪽 키가 필요합니다. 두 방식을 섞어 생각하지 않습니다.
+- **Windows 계정 비밀번호 없이도 풀 수 있습니다.** 기본 비밀번호가 없으면 firepwd 는 `key4.db` 와 `logins.json` 두 파일만으로 값을 풉니다. 크롬 계열은 사용자 [DPAPI](../../../01-foundations/protection/data-protection-api/index.md) 로 키를 보호하므로 Windows 쪽 키가 필요합니다. 두 방식을 섞어 생각하지 않습니다.
 - **버전마다 암호 방식이 다릅니다.** `key4.db` 인지 `key3.db` 인지, 3DES 인지 AES-256 인지 먼저 확인합니다. 도구가 옛 방식만 알면 새 파일에서 실패합니다.
-- **지운 로그인은 `logins.json` 에서 사라집니다.** 옛 로그인을 찾으려면 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
+- **지운 로그인은 `logins.json` 에서 사라집니다.** 옛 로그인을 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
 
 ## 직접 분석해 보기
 
@@ -120,11 +120,11 @@
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 쿠키 | 같은 사이트의 로그인 쿠키가 있는지, 그 시각을 봅니다 | [쿠키 (cookies.sqlite)](/02-artifacts/browsers/firefox/cookies-sqlite.md) |
-| 방문·다운로드·즐겨찾기 | 저장한 사이트를 실제로 방문한 기록이 있는지 봅니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| 양식 기록 | 로그인 창에 친 아이디가 양식 기록에도 남았는지 봅니다 | [양식 기록 (formhistory.sqlite)](/02-artifacts/browsers/firefox/formhistory-sqlite.md) |
-| 자격 증명 관리자와 볼트 | 같은 사이트의 자격 증명이 윈도 쪽에도 저장됐는지 봅니다 | [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) |
-| 다른 브라우저 저장 비밀번호 | 같은 사이트 계정을 다른 브라우저에도 저장했는지 봅니다 | [크롬 계열 저장 비밀번호](/02-artifacts/browsers/chrome-edge-whale/login-data.md) |
+| 쿠키 | 같은 사이트의 로그인 쿠키가 있는지, 그 시각을 봅니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
+| 방문·다운로드·즐겨찾기 | 저장한 사이트를 실제로 방문한 기록이 있는지 봅니다 | [places.sqlite](places-sqlite.md) |
+| 양식 기록 | 로그인 창에 친 아이디가 양식 기록에도 남았는지 봅니다 | [양식 기록 (formhistory.sqlite)](formhistory-sqlite.md) |
+| 자격 증명 관리자와 볼트 | 같은 사이트의 자격 증명이 윈도 쪽에도 저장됐는지 봅니다 | [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) |
+| 다른 브라우저 저장 비밀번호 | 같은 사이트 계정을 다른 브라우저에도 저장했는지 봅니다 | [크롬 계열 저장 비밀번호](../chrome-edge-whale/login-data.md) |
 
 ## 실습
 

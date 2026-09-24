@@ -16,8 +16,8 @@ SYSTEM 하이브의 `TimeZoneInformation` 키에는 이 PC 에 설정된 시간�
 |---|---|---|
 | SYSTEM | `ControlSet00x\Control\TimeZoneInformation` | Bias, ActiveTimeBias, StandardName, DaylightName, TimeZoneKeyName |
 
-- `ControlSet00x` 의 번호를 고르는 법은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)에서 다룹니다.
-- 하이브 파일 위치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- `ControlSet00x` 의 번호를 고르는 법은 [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md)에서 다룹니다.
+- 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 이 페이지가 기댄 공개 도구 소스는 Windows 버전별 차이를 적지 않습니다. 값이 빠져 있으면 하이브에서 직접 확인합니다.
 
 ## 구조
@@ -65,15 +65,15 @@ Bias 는 REG_DWORD 로 저장하지만 부호 있는 32비트로 읽어야 합�
 
 이 키의 값은 시각이 아니라 시각을 바꾸는 데 쓰는 차이입니다. 현지 시각으로 바꾸는 순서는 다음과 같습니다.
 
-1. 바꿀 기록이 UTC 로 적힌 것인지 확인합니다. 레지스트리의 FILETIME 값은 UTC 로 해석합니다([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
+1. 바꿀 기록이 UTC 로 적힌 것인지 확인합니다. 레지스트리의 FILETIME 값은 UTC 로 해석합니다([시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
 2. 이 키에서 TimeZoneKeyName 과 Bias 를 읽습니다. 둘이 서로 맞는지 봅니다.
 3. 바꿀 날짜에 일광 절약 시간이 적용되는지 정합니다. ActiveTimeBias 는 한 시점의 값이라, 날짜마다 다를 수 있습니다. 그 시간대의 규칙은 TimeZoneKeyName 으로 따로 확인합니다.
 4. 현지 시각 = UTC − 적용할 차이(분) 로 계산합니다.
 5. 보고서에는 UTC 와 현지 시각을 함께 적습니다. 어느 차이를 썼는지도 적습니다.
 
 - 이미지에서 읽은 ActiveTimeBias 는 이 PC 가 마지막으로 이 값을 쓴 때의 상태입니다. 수집한 날이나 사건 날짜의 상태가 아닐 수 있습니다.
-- 키의 마지막 기록 시각(LastWrite)은 레지스트리 키마다 있는 값입니다([레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)). 무엇이 이 키의 LastWrite 를 바꾸는지는 이 페이지가 기댄 자료에 없습니다. 참고로만 봅니다.
-- 여러 기록을 하나의 시간 축에 놓는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md)에서 다룹니다.
+- 키의 마지막 기록 시각(LastWrite)은 레지스트리 키마다 있는 값입니다([레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)). 무엇이 이 키의 LastWrite 를 바꾸는지는 이 페이지가 기댄 자료에 없습니다. 참고로만 봅니다.
+- 여러 기록을 하나의 시간 축에 놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -87,8 +87,8 @@ Bias 는 REG_DWORD 로 저장하지만 부호 있는 32비트로 읽어야 합�
 ### 지우기와 조작
 
 - **시간대를 바꿉니다.** 현지 시각으로 보이는 값만 달라집니다. UTC 로 적힌 기록의 값은 그대로입니다. 현지 시각으로 적는 기록이 있다면 영향을 받습니다.
-- **시스템 시각을 바꿉니다.** 시간대 변경과 다른 일입니다. 흔적은 [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md)에서 찾습니다.
-- **옛 설정을 찾습니다.** [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 SYSTEM 하이브에서 그 시점의 값을 읽을 수 있습니다.
+- **시스템 시각을 바꿉니다.** 시간대 변경과 다른 일입니다. 흔적은 [시간 변경](../event-logs/4616-kernel-general.md)에서 찾습니다.
+- **옛 설정을 찾습니다.** [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 SYSTEM 하이브에서 그 시점의 값을 읽을 수 있습니다.
 
 ## 직접 분석해 보기
 
@@ -118,18 +118,18 @@ RegRipper 의 `timezone` 플러그인이 이 키의 값을 읽습니다. 레지�
 
 - Bias 와 ActiveTimeBias 를 음수로 보여 주는지 확인합니다.
 - 도구가 어느 ControlSet 을 읽었는지 확인합니다.
-- 헥스로 계산한 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 헥스로 계산한 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) | 설치·종료 시각을 현지 시각으로 바꿔 사용 시간과 맞는지 |
-| [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md) | 시스템 시각을 바꾼 기록. 시간대만으로 설명되지 않는 시각 차이가 있는지 |
-| [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) | 이벤트 로그의 시각을 같은 차이로 바꿨을 때 다른 기록과 맞는지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 시간대 설정 |
+| [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) | 설치·종료 시각을 현지 시각으로 바꿔 사용 시간과 맞는지 |
+| [시간 변경](../event-logs/4616-kernel-general.md) | 시스템 시각을 바꾼 기록. 시간대만으로 설명되지 않는 시각 차이가 있는지 |
+| [켜짐·꺼짐](../event-logs/power-on-off-events.md) | 이벤트 로그의 시각을 같은 차이로 바꿨을 때 다른 기록과 맞는지 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 시간대 설정 |
 
-시각을 맞춘 뒤 PC 사용 시간을 재구성하는 흐름은 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md)에서 다룹니다.
+시각을 맞춘 뒤 PC 사용 시간을 재구성하는 흐름은 [PC 사용 시간 재구성](../../04-scenarios/activity/system-usage-time.md)에서 다룹니다.
 
 ## 실습
 

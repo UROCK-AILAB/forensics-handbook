@@ -1,6 +1,6 @@
 # 해시로 무결성 검증 (Hash Verification)
 
-> 상위 허브: [증거 획득 (Evidence Acquisition)](/03-techniques/process-acquisition/evidence-acquisition/index.md)
+> 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)
 
 ## 한 줄 요약
 
@@ -29,13 +29,13 @@ SP 800-86 은 데이터 획득의 마지막 단계로 이 무결성 검증을 �
 
 > 그림 자리: 원본 해시(이미징 전) → 이미징 → 사본 해시 → 비교 → 원본 해시(이미징 후) 로 이어지는 흐름
 
-이미징 절차 전체는 [디스크 이미징](/03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 에 있습니다.
+이미징 절차 전체는 [디스크 이미징](disk-imaging.md) 에 있습니다.
 
 ### 논리 백업과 선별 수집물
 
 같은 절차를 따릅니다.
 다만 다이제스트를 데이터 파일마다 계산해 비교합니다.
-어떤 파일을 모을지 고르는 법은 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 에 있습니다.
+어떤 파일을 모을지 고르는 법은 [선별 수집](triage-collection.md) 에 있습니다.
 
 ## 알고리즘 고르기
 
@@ -72,7 +72,7 @@ SP 800-86 은 데이터 획득의 마지막 단계로 이 무결성 검증을 �
 - 그래서 누군가 증거를 조작했을 가능성까지 따져야 하면 SHA-2 계열이나 SHA-3 을 씁니다.
 - 옛 기록과 맞춰 봐야 해서 MD5 나 SHA-1 을 계산할 때도 SHA-256 값을 함께 적어 둡니다.
 
-해시셋으로 알려진 파일을 걸러 내는 일은 목적이 다릅니다. [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) 에서 다룹니다.
+해시셋으로 알려진 파일을 걸러 내는 일은 목적이 다릅니다. [해시셋 대조와 유사 해시](../../analysis/hash-set-fuzzy-hash.md) 에서 다룹니다.
 
 ## Windows 에서 계산하기
 
@@ -96,7 +96,7 @@ E01 세그먼트 파일은 청크 데이터와 머리 정보를 함께 담은 �
 원본과 비교할 값은 이미지 안의 매체 데이터로 계산한 해시입니다.
 
 EWF 는 이미지 전체의 해시를 hash 섹션과 digest 섹션에 적습니다.
-형식 전체는 [증거 이미지·가상 디스크 형식](/01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) 에서 다룹니다.
+형식 전체는 [증거 이미지·가상 디스크 형식](../../../01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) 에서 다룹니다.
 
 **hash 섹션 (36바이트)**
 
@@ -130,12 +130,12 @@ EWF 는 이미지 전체의 해시를 hash 섹션과 digest 섹션에 적습니�
 | 희소 속성이 있는 일반 파일 | 구멍을 건너뛰고 뽑으면 내용이 앞으로 밀립니다 | 추출 방식 |
 | E01 세그먼트 파일끼리 비교 | 그릇 파일과 매체 데이터는 다른 바이트열입니다 | 무엇의 해시인지 |
 
-- 희소 (Sparse) 스트림은 비어 있는 구간(구멍)을 디스크에 실제로 두지 않는 스트림입니다. NTFS 의 희소 속성은 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
+- 희소 (Sparse) 스트림은 비어 있는 구간(구멍)을 디스크에 실제로 두지 않는 스트림입니다. NTFS 의 희소 속성은 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
 - `$UsnJrnl:$J` 는 앞부분이 비어 있는 희소 스트림입니다. 두 방식으로 뽑은 결과는 크기도 해시도 다릅니다(현장 관찰).
 - 두 방식 모두 틀린 방법은 아닙니다. 어떻게 뽑았는지 기록해야 다른 분석가가 같은 해시를 다시 얻습니다.
-- `$UsnJrnl:$J` 자체는 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 다룹니다.
-- 켜진 시스템의 물리 장치 전체 이미지는 애초에 검증할 수 없습니다. 이 내용은 [디스크 이미징](/03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 의 "켜진 시스템에서" 절에 있습니다.
-- 읽기 오류가 난 구간은 [디스크 이미징](/03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 의 error2 설명을 함께 봅니다.
+- `$UsnJrnl:$J` 자체는 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) 에서 다룹니다.
+- 켜진 시스템의 물리 장치 전체 이미지는 애초에 검증할 수 없습니다. 이 내용은 [디스크 이미징](disk-imaging.md) 의 "켜진 시스템에서" 절에 있습니다.
+- 읽기 오류가 난 구간은 [디스크 이미징](disk-imaging.md) 의 error2 설명을 함께 봅니다.
 
 ## 함정과 한계
 

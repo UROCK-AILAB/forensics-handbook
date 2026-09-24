@@ -98,7 +98,7 @@ HKCU\SOFTWARE\Dropbox\ks1   값 Client
 HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안 파일 풀기
 ```
 
-- DPAPI blob 과 마스터 키 구조는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에 있습니다.
+- DPAPI blob 과 마스터 키 구조는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에 있습니다.
 - 같은 저자는 복호 도구 모음 decwindbx 를 공개했습니다. 저장소에는 `dbx-key-win-dpapi.py`, `dbx-key-win-live.py`, `dbx-key-win-live.ps1`, `sqlite3dbx` 폴더 등이 있습니다.
 
 ### `.dbx` 안 표 (구현)
@@ -117,7 +117,7 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 - 이 파일에는 표 `sync_history` 가 있고, 칸 `local_path`, `file_event_type`, `direction`, `timestamp` 가 있습니다 (구현).
 - `direction` 은 올리기·내려받기 방향으로 짐작합니다. 값 목록은 확인하지 못했습니다.
 - 흔히 거론하는 `aggregation.dbx`, `home.db`, `nucleus.sqlite3` 같은 이름은 이번에 확인하지 못했습니다.
-- SQLite 파일을 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ## 증거로서 의미
 
@@ -143,17 +143,17 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 - `info.json` 의 키에는 시각이 없습니다.
 - `info.json` 파일의 파일 시스템 시각이 무엇이 바뀔 때 바뀌는지는 확인하지 못했습니다.
 - 구현에서 본 시각 칸(`local_timestamp`, `local_mtime`, `local_ctime`, `date_added`, `timestamp`)은 단위와 시간대를 확인하지 못했습니다.
-- 값의 자릿수로 단위를 먼저 가립니다. 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 값의 자릿수로 단위를 먼저 가립니다. 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - `local_mtime`, `local_ctime` 은 이름으로 보면 로컬 파일의 시각입니다. `mtime` 은 수정 시각으로 보이지만, `ctime` 이 만든 시각인지 메타데이터를 바꾼 시각인지는 이름만으로 알 수 없습니다. 같은 파일의 MFT 시각과 맞춰 본 뒤에 뜻을 정합니다.
 
 ## 함정과 한계
 
 - **자료가 오래됐습니다.** 암호화와 키 저장 방식은 2017년 자료입니다. 지금 버전 앱에서도 같은지 확인하지 못했습니다. 검체의 앱 버전을 먼저 적고, 그 버전에서 키 위치가 맞는지 확인합니다.
 - **`info.json` 은 두 곳을 봅니다.** `%APPDATA%` 와 `%LOCALAPPDATA%` 가운데 한쪽에만 있을 수 있습니다.
-- **모든 `.dbx` 가 암호화돼 있지는 않습니다.** 파일 앞머리를 먼저 보고 SQLite 인지, base64 인지, 암호화한 파일인지 가립니다. SQLite 파일 머리 모양은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
-- **오프라인에서는 DPAPI 부터 풀어야 합니다.** 2017년 자료는 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 필요하다고 적습니다. 셋 다 없으면 이 자료의 방법으로는 풀지 못합니다. 비밀번호 없이 다루는 방법은 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 에 있습니다.
-- **살아 있는 PC 에서 키를 뽑을 때는 기록을 남깁니다.** decwindbx 에는 이름에 `live` 가 붙은 스크립트가 있습니다. 살아 있는 PC 에서 도구를 돌리면 PC 에 흔적이 남습니다. 절차는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 따릅니다.
-- **클라우드 파일 API 사용 여부를 모릅니다.** 드롭박스가 Windows 에서 이 API 로 온라인 전용 파일을 만드는지는 확인하지 못했습니다. `SyncRootManager` 에 드롭박스 공급자 키가 있는지, 동기화 폴더 파일의 특성이 어떤지 검체에서 확인합니다. 방법은 [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) 에 있습니다.
+- **모든 `.dbx` 가 암호화돼 있지는 않습니다.** 파일 앞머리를 먼저 보고 SQLite 인지, base64 인지, 암호화한 파일인지 가립니다. SQLite 파일 머리 모양은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- **오프라인에서는 DPAPI 부터 풀어야 합니다.** 2017년 자료는 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 필요하다고 적습니다. 셋 다 없으면 이 자료의 방법으로는 풀지 못합니다. 비밀번호 없이 다루는 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에 있습니다.
+- **살아 있는 PC 에서 키를 뽑을 때는 기록을 남깁니다.** decwindbx 에는 이름에 `live` 가 붙은 스크립트가 있습니다. 살아 있는 PC 에서 도구를 돌리면 PC 에 흔적이 남습니다. 절차는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 을 따릅니다.
+- **클라우드 파일 API 사용 여부를 모릅니다.** 드롭박스가 Windows 에서 이 API 로 온라인 전용 파일을 만드는지는 확인하지 못했습니다. `SyncRootManager` 에 드롭박스 공급자 키가 있는지, 동기화 폴더 파일의 특성이 어떤지 검체에서 확인합니다. 방법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
 
 ## 직접 분석해 보기
 
@@ -169,7 +169,7 @@ HKCU\SOFTWARE\Dropbox\ks1  값 Client
 ```
 
 1. 값 데이터를 바이트로 내보냅니다.
-2. 앞머리 다음부터 DPAPI blob 이 시작합니다. blob 의 머리 모양은 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 보고 시작 자리를 맞춥니다.
+2. 앞머리 다음부터 DPAPI blob 이 시작합니다. blob 의 머리 모양은 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 보고 시작 자리를 맞춥니다.
 3. blob 이 끝난 뒤 남는 바이트가 HMAC 입니다.
 
 **고정 값.** 자료에 나온 두 값을 바이트 순서대로 적으면 아래와 같습니다. 둘 다 16바이트입니다.
@@ -187,7 +187,7 @@ PBKDF2 솔트:     0d 63 8c 09 2e 8b 82 fc 45 28 83 f9 5f 35 5b 8e
 
 1. 사용자 프로필에서 `info.json` 두 위치와 `AppData\Local\Dropbox\` 폴더 전체를 사본으로 뜹니다.
 2. 사용자 `NTUSER.DAT` 와 트랜잭션 로그를 사본으로 뜹니다. 레지스트리 하이브 뷰어로 `SOFTWARE\Dropbox\ks`, `SOFTWARE\Dropbox\ks1` 의 `Client` 값을 내보냅니다.
-3. 사용자 DPAPI 마스터 키 폴더를 함께 모읍니다. 위치는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에 있습니다.
+3. 사용자 DPAPI 마스터 키 폴더를 함께 모읍니다. 위치는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에 있습니다.
 4. decwindbx 로 키를 풉니다. 이름으로 보면 오프라인 DPAPI 용 스크립트와 살아 있는 PC 용 스크립트가 따로 있습니다. 쓰는 법은 저장소 설명을 따릅니다.
 5. 푼 키로 `.dbx` 사본을 엽니다. 표 이름 목록을 먼저 보고, 위 구현 후보가 실제로 있는지 확인합니다.
 
@@ -195,14 +195,14 @@ PBKDF2 솔트:     0d 63 8c 09 2e 8b 82 fc 45 28 83 f9 5f 35 5b 8e
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 클라우드 동기화 공통 구조 | `SyncRootManager` 에 드롭박스 공급자 키가 있는지 봅니다 | [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) |
-| DPAPI 구조 | `Client` 값의 blob 과 마스터 키를 풉니다 | [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) |
-| 설치 프로그램 | 드롭박스 앱을 깔았는지, 언제 깔았는지 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 셸백·바로가기 파일 | `path` 아래 폴더를 둘러보거나 파일을 연 기록을 찾습니다 | [셸백](/02-artifacts/file-folder-usage/shellbags/index.md), [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 마스터 파일 테이블 | 동기화 폴더 파일의 시각과 특성을 봅니다 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| SRUM | 앱별 네트워크 송수신 양을 봅니다 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
+| 클라우드 동기화 공통 구조 | `SyncRootManager` 에 드롭박스 공급자 키가 있는지 봅니다 | [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) |
+| DPAPI 구조 | `Client` 값의 blob 과 마스터 키를 풉니다 | [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) |
+| 설치 프로그램 | 드롭박스 앱을 깔았는지, 언제 깔았는지 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
+| 셸백·바로가기 파일 | `path` 아래 폴더를 둘러보거나 파일을 연 기록을 찾습니다 | [셸백](../file-folder-usage/shellbags/index.md), [바로가기 파일](../file-folder-usage/lnk.md) |
+| 마스터 파일 테이블 | 동기화 폴더 파일의 시각과 특성을 봅니다 | [마스터 파일 테이블](../filesystem/mft.md) |
+| SRUM | 앱별 네트워크 송수신 양을 봅니다 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
 
-반출 여부를 따지는 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
+반출 여부를 따지는 흐름은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 

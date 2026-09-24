@@ -10,7 +10,7 @@
 - 누가 이 시스템에 로그온해 있는지, 원격으로 붙은 사용자가 있는지 확인할 때 씁니다.
 - 복사해 둔 글·그림이 사건과 이어질 수 있을 때 씁니다.
 
-NIST SP 800-86 순서에서 로그인 세션은 둘째입니다. 접속한 사용자 목록은 순간마다 바뀌기 때문입니다. 순서 전체는 [수집 순서와 원칙](/03-techniques/process-acquisition/live-response/order-of-volatility.md)에서 다룹니다.
+NIST SP 800-86 순서에서 로그인 세션은 둘째입니다. 접속한 사용자 목록은 순간마다 바뀌기 때문입니다. 순서 전체는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다.
 
 ## 절차
 
@@ -46,7 +46,7 @@ NIST 는 OS 가 아래 정보를 관리할 수 있다고 적습니다.
 - 특권 사용
 - 가장 (impersonation)
 
-다만 로그온 감사를 켜 두어야 남는 정보도 있습니다. 감사 설정은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다. 로그온 기록은 어떤 사건이 일어날 때 그 계정이 쓰이고 있었는지 확인하는 데 씁니다.
+다만 로그온 감사를 켜 두어야 남는 정보도 있습니다. 감사 설정은 [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다. 로그온 기록은 어떤 사건이 일어날 때 그 계정이 쓰이고 있었는지 확인하는 데 씁니다.
 
 ### query user
 
@@ -86,11 +86,11 @@ Microsoft 문서가 적은 `LogonType` 값의 뜻은 아래와 같습니다.
 | 10 | RemoteInteractive | 원격이면서 대화형인 터미널 서비스 세션 |
 | 11 | CachedInteractive | 네트워크에 묻지 않고 캐시한 자격 증명으로 로그온 |
 
-문서에는 6 (Proxy), 12 (CachedRemoteInteractive), 13 (CachedUnlock) 도 있습니다. 이벤트 로그의 로그온 유형은 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md)에서 다룹니다.
+문서에는 6 (Proxy), 12 (CachedRemoteInteractive), 13 (CachedUnlock) 도 있습니다. 이벤트 로그의 로그온 유형은 [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md)에서 다룹니다.
 
 ### 프로세스와 세션 잇기
 
-`Win32_Process` 와 `Win32_LogonSession` 은 연관 클래스 `Win32_SessionProcess` 로 이어집니다. 이 연결로 어떤 프로세스가 어느 로그온 세션에 속하는지 알 수 있습니다. `tasklist /v` 의 세션 칸과 사용자 칸도 함께 봅니다. 프로세스 쪽 수집 방법은 [프로세스·DLL·핸들 수집](/03-techniques/process-acquisition/live-response/processes-dlls-handles.md)에서 다룹니다.
+`Win32_Process` 와 `Win32_LogonSession` 은 연관 클래스 `Win32_SessionProcess` 로 이어집니다. 이 연결로 어떤 프로세스가 어느 로그온 세션에 속하는지 알 수 있습니다. `tasklist /v` 의 세션 칸과 사용자 칸도 함께 봅니다. 프로세스 쪽 수집 방법은 [프로세스·DLL·핸들 수집](processes-dlls-handles.md)에서 다룹니다.
 
 ## 클립보드
 
@@ -145,9 +145,9 @@ Microsoft 문서가 적은 `LogonType` 값의 뜻은 아래와 같습니다.
 
 | 함께 볼 페이지 | 무엇을 맞춰 보나 |
 |---|---|
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | 수집 전의 로그온·로그오프 이력 |
-| [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) | 원격으로 붙은 세션의 이력 |
-| [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) | 세션 정보를 사용자 특정에 쓰는 흐름 |
+| [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) | 수집 전의 로그온·로그오프 이력 |
+| [원격 데스크톱 이벤트](../../../02-artifacts/event-logs/rdp-event-logs/index.md) | 원격으로 붙은 세션의 이력 |
+| [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) | 세션 정보를 사용자 특정에 쓰는 흐름 |
 
 ## 참고 문헌
 

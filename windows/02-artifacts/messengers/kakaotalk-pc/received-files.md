@@ -1,6 +1,6 @@
 # 받은 파일·사진 폴더 (Received Files)
 
-> 위치: [카카오톡 PC (KakaoTalk PC)](/02-artifacts/messengers/kakaotalk-pc/index.md) > 받은 파일·사진 폴더
+> 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 받은 파일·사진 폴더
 
 ## 한 줄 요약
 
@@ -24,7 +24,7 @@
 
 ## 위치와 버전별 차이
 
-- 계정 폴더 경로는 [설치 위치와 파일 구성](/02-artifacts/messengers/kakaotalk-pc/install-paths-files.md) 에 있습니다.
+- 계정 폴더 경로는 [설치 위치와 파일 구성](install-paths-files.md) 에 있습니다.
 - `.cng` 가 들어 있는 하위 폴더 이름은 이번 자료로 확정하지 못했습니다. 검체에서는 계정 폴더 아래를 `.cng` 확장자로 찾습니다.
 - 관찰한 PC 의 계정 폴더 아래에 `.cng` 이미지가 있었습니다.
 - 이 파일들은 기기 지문으로 만든 키로 풀렸습니다. 계정의 키 암호화 키 (Key Encryption Key, KEK) 는 필요 없었습니다.
@@ -37,8 +37,8 @@
 확인한 것은 복호에 무엇이 필요한가입니다.
 
 - 복호하려면 기기 지문과 계정 userId 가 있어야 합니다(논문, 관찰).
-- 기기 지문을 무엇으로 만드는지는 [대화 DB 암호화와 버전별 차이](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) 의 키 재료 절에 있습니다.
-- userId 가 어디 있는지는 [계정·로그인 흔적](/02-artifacts/messengers/kakaotalk-pc/account-login.md) 에 있습니다.
+- 기기 지문을 무엇으로 만드는지는 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 의 키 재료 절에 있습니다.
+- userId 가 어디 있는지는 [계정·로그인 흔적](account-login.md) 에 있습니다.
 - 복호 절차는 이 위키에 싣지 않습니다.
 
 ## 증거로서 의미
@@ -60,8 +60,8 @@
 
 - 파일 시스템 시각으로 받은 시각을 가늠할 수 있습니다.
 - 파일 시각만으로 "그 순간에 받았다" 고 단정하지 않습니다.
-- 대화 DB 안의 메시지 시각과 맞춰 봅니다. 메시지 시각 칸은 [대화 DB 암호화와 버전별 차이](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) 에서 다룹니다.
-- 파일 시각이 무엇을 할 때 바뀌는지와 기준 시간대는 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다.
+- 대화 DB 안의 메시지 시각과 맞춰 봅니다. 메시지 시각 칸은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에서 다룹니다.
+- 파일 시각이 무엇을 할 때 바뀌는지와 기준 시간대는 [마스터 파일 테이블](../../filesystem/mft.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -82,11 +82,11 @@
 
 | 함께 볼 것 | 알려 주는 것 |
 |---|---|
-| [대화 DB 암호화와 버전별 차이](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) | 키 재료와 메시지 시각 |
-| [계정·로그인 흔적](/02-artifacts/messengers/kakaotalk-pc/account-login.md) | 기기 정보 레지스트리 값과 userId |
-| [사진 EXIF](/02-artifacts/embedded-metadata/exif.md) | 복호한 이미지에 촬영 정보가 남아 있으면 촬영 기기와 시각 |
-| [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | `.cng` 파일이 언제 생기고 지워졌는지 |
-| [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) | 파일 출처를 가리는 흐름 |
+| [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) | 키 재료와 메시지 시각 |
+| [계정·로그인 흔적](account-login.md) | 기기 정보 레지스트리 값과 userId |
+| [사진 EXIF](../../embedded-metadata/exif.md) | 복호한 이미지에 촬영 정보가 남아 있으면 촬영 기기와 시각 |
+| [USN 변경 저널](../../filesystem/usnjrnl.md) | `.cng` 파일이 언제 생기고 지워졌는지 |
+| [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) | 파일 출처를 가리는 흐름 |
 
 ## 실습
 

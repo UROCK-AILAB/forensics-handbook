@@ -5,8 +5,8 @@
 찾을 낱말을 인코딩마다 바이트열로 바꿔 파일·원시 영역·색인에서 찾습니다.
 걸린 곳마다 위치·인코딩·앞뒤 글을 적습니다.
 
-이 글은 [파일 내용 검색 (Content Search)](/03-techniques/analysis/content-search/index.md) 묶음의 한 편입니다.
-압축된 파일과 문서 파일은 [압축·복합 파일 펼치기](/03-techniques/analysis/content-search/archive-expansion.md) 와 [본문 추출과 글자 인식](/03-techniques/analysis/content-search/text-extraction-ocr.md) 을 거친 결과에서도 찾습니다.
+이 글은 [파일 내용 검색 (Content Search)](index.md) 묶음의 한 편입니다.
+압축된 파일과 문서 파일은 [압축·복합 파일 펼치기](archive-expansion.md) 와 [본문 추출과 글자 인식](text-extraction-ocr.md) 을 거친 결과에서도 찾습니다.
 
 ## 언제 쓰나
 
@@ -33,9 +33,9 @@ ZIP 항목은 대개 Deflate(압축 방식 8)로 압축돼 있습니다.
 
 색인 검색은 색인을 만든 방식에 묶입니다.
 Windows Search 는 필터가 뽑은 글을 낱말로 끊고 정규화해 색인에 넣습니다.
-낱말 끊기와 언어(LCID)의 관계는 [본문 추출과 글자 인식](/03-techniques/analysis/content-search/text-extraction-ocr.md) 에 있습니다.
+낱말 끊기와 언어(LCID)의 관계는 [본문 추출과 글자 인식](text-extraction-ocr.md) 에 있습니다.
 색인이 낱말 단위라서 낱말 중간 문자열이나 정규식은 원문 검색과 결과가 다를 수 있습니다.
-색인 파일 자체는 [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 에서 다룹니다.
+색인 파일 자체는 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 에서 다룹니다.
 
 ## 인코딩: 같은 글자, 다른 바이트
 
@@ -74,13 +74,13 @@ ANSI 코드 페이지는 컴퓨터마다 다를 수 있습니다.
 이 표에서 끌어낸 실무 기준은 다음과 같습니다.
 한국어 키워드는 적어도 UTF-16 LE·UTF-8·CP949 세 가지 바이트열로 찾습니다.
 오래된 파일이나 다른 운영체제에서 온 파일이 있으면 표의 다른 인코딩도 더합니다.
-인코딩 자체의 구조는 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+인코딩 자체의 구조는 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ## 절차
 
 1. 키워드 목록을 만듭니다. 띄어쓰기·영문 표기·줄임말 같은 표기 차이를 함께 넣습니다.
 2. 키워드마다 인코딩별 바이트열을 만듭니다.
-3. 검색 범위를 정하고 적습니다. 파일 단위·원시·색인 가운데 무엇을 쓸지, 비할당 영역과 슬랙을 넣을지 정합니다. 비할당 영역과 슬랙은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+3. 검색 범위를 정하고 적습니다. 파일 단위·원시·색인 가운데 무엇을 쓸지, 비할당 영역과 슬랙을 넣을지 정합니다. 비할당 영역과 슬랙은 [삭제 데이터 복구](../data-recovery/index.md) 에서 다룹니다.
 4. 압축·복합 파일을 펼치고 본문을 뽑은 결과에서도 찾습니다.
 5. 걸린 곳마다 위치를 적습니다. 파일이면 경로와 파일 안 오프셋을, 원시 영역이면 이미지 오프셋을 적습니다. 인코딩과 앞뒤 글도 함께 적습니다.
 6. 걸린 곳을 원본에서 헥스로 다시 확인합니다.
@@ -93,7 +93,7 @@ ANSI 코드 페이지는 컴퓨터마다 다를 수 있습니다.
 이런 파일에서 찾은 오프셋을 보고서에 쓸 때는 어떤 방식으로 뽑았는지 함께 적습니다.
 
 NTFS 변경 저널 `$UsnJrnl:$J` 도 앞부분이 빈 희소 스트림입니다.
-희소 파일의 구조는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서, 변경 저널은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 다룹니다.
+희소 파일의 구조는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 에서, 변경 저널은 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) 에서 다룹니다.
 
 ## 도구
 
@@ -113,9 +113,9 @@ NTFS 변경 저널 `$UsnJrnl:$J` 도 앞부분이 빈 희소 스트림입니다.
 ## 결과를 어떻게 해석하나
 
 - 결과는 기록이 말하는 만큼만 씁니다. 예를 들어 "키워드 X 가 UTF-16 LE 바이트열로 이미지 오프셋 Y 에 있다" 처럼 씁니다. "사용자가 X 를 입력했다" 는 이 결과만으로 쓸 수 없습니다.
-- 비할당 영역에서 걸린 결과는 어느 파일에 속했는지, 언제 쓰였는지 알려 주지 않습니다. 파일을 되살려 볼 수 있으면 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 로 넘깁니다.
-- 원시 오프셋이 어느 파일의 클러스터인지는 파일 시스템 정보로 되짚습니다. [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 와 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 을 봅니다.
-- 개인정보처럼 꼴이 정해진 값을 찾는 일은 [개인정보 탐지](/03-techniques/analysis/content-search/pii-detection.md) 에서 다룹니다.
+- 비할당 영역에서 걸린 결과는 어느 파일에 속했는지, 언제 쓰였는지 알려 주지 않습니다. 파일을 되살려 볼 수 있으면 [삭제 데이터 복구](../data-recovery/index.md) 로 넘깁니다.
+- 원시 오프셋이 어느 파일의 클러스터인지는 파일 시스템 정보로 되짚습니다. [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 와 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 을 봅니다.
+- 개인정보처럼 꼴이 정해진 값을 찾는 일은 [개인정보 탐지](pii-detection.md) 에서 다룹니다.
 
 ## 참고 문헌
 

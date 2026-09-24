@@ -1,6 +1,6 @@
 # 대화 DB 암호화와 버전별 차이 (Chat DB Encryption)
 
-> 위치: [카카오톡 PC (KakaoTalk PC)](/02-artifacts/messengers/kakaotalk-pc/index.md) > 대화 DB 암호화와 버전별 차이
+> 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 대화 DB 암호화와 버전별 차이
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@
 `chatLogs_<대화방 식별자>.edb` 파일 하나에 대화방 하나의 대화 기록이 들어 있습니다(논문).
 관찰한 PC 에서 이 DB 에는 `message`·`authorId`·`threadId` 칸과 시각 칸이 있었습니다. (확인 범위: 카카오톡 PC 26.6.0.5208, Windows 11 한 대)
 대화방 목록과 연락처는 다른 DB 에 따로 있습니다.
-파일 이름과 위치는 [설치 위치와 파일 구성](/02-artifacts/messengers/kakaotalk-pc/install-paths-files.md) 에 정리했습니다.
+파일 이름과 위치는 [설치 위치와 파일 구성](install-paths-files.md) 에 정리했습니다.
 
 ## 위치와 버전별 차이
 
@@ -51,7 +51,7 @@ Windows 버전에 따른 차이는 확인하지 못했습니다.
 | 20 | 1 | 페이지마다 끝에 비워 두는 바이트 수 |
 
 위 표는 SQLite 파일 형식 문서에서 가져왔습니다.
-머리 전체와 페이지 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+머리 전체와 페이지 구조는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### SQLCipher 로 암호화한 파일
 
@@ -78,8 +78,8 @@ EvaSQLite 로 암호화한 파일의 머리 모양은 이번 자료로 확인하
 EvaSQLite 키는 기기 지문과 계정 userId 를 섞어 만듭니다(논문).
 
 - 기기 지문 (논문 용어 "Pragma") 은 메인보드 UUID 와 저장장치 모델·시리얼로 만듭니다.
-- 이 값은 레지스트리 `DeviceInfo` 키의 `sys_uuid`·`hdd_model`·`hdd_serial` 에서 옵니다. 키 전체 경로는 [계정·로그인 흔적](/02-artifacts/messengers/kakaotalk-pc/account-login.md) 에 있습니다.
-- userId 가 어디 있는지도 [계정·로그인 흔적](/02-artifacts/messengers/kakaotalk-pc/account-login.md) 에서 다룹니다.
+- 이 값은 레지스트리 `DeviceInfo` 키의 `sys_uuid`·`hdd_model`·`hdd_serial` 에서 옵니다. 키 전체 경로는 [계정·로그인 흔적](account-login.md) 에 있습니다.
+- userId 가 어디 있는지도 [계정·로그인 흔적](account-login.md) 에서 다룹니다.
 - 패스프레이즈를 짜는 방식은 여러 가지이고, 씨앗 값도 들어갑니다. 세부는 논문이 정리했습니다. 이 위키는 그 값을 옮기지 않습니다.
 
 25.7.2 이상에서 SQLCipher 키를 무엇으로 만드는지는 이 페이지에서 다루지 않습니다.
@@ -90,8 +90,8 @@ EvaSQLite 키는 기기 지문과 계정 userId 를 섞어 만듭니다(논문).
 - 25.7.2 이상에서 SQLCipher 로 암호화한 대화 DB 를 전원을 끈 뒤 만든 디스크 이미지만으로 푸는 공개된 방법은 이번에 연 자료에서 찾지 못했습니다.
 - 논문의 복호 방법은 25.7.2 미만에 맞춘 것입니다. 25.7.2 이상으로 업데이트하면 계정 폴더가 `<계정 폴더>_backup_<백업 시각>` 으로 이름이 바뀌고, 논문의 방법은 이 백업 폴더에만 적용됩니다.
 - 암호문을 풀려면 키가 있어야 합니다. 키를 얻는 절차는 이 위키 범위 밖입니다.
-- 메모리 이미지를 다루는 법은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 에서, 암호문을 다루는 일반 절차는 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
-- 키 없이 볼 수 있는 다른 단서는 [대화 DB가 안 열릴 때 남는 단서](/02-artifacts/messengers/kakaotalk-pc/when-db-wont-open.md) 에 모았습니다.
+- 메모리 이미지를 다루는 법은 [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) 에서, 암호문을 다루는 일반 절차는 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
+- 키 없이 볼 수 있는 다른 단서는 [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) 에 모았습니다.
 
 ## 증거로서 의미
 
@@ -113,13 +113,13 @@ EvaSQLite 키는 기기 지문과 계정 userId 를 섞어 만듭니다(논문).
 ## 시각 해석
 
 - 메시지 시각 칸이 어떤 형식인지는 이번 자료로 확인하지 못했습니다.
-- 값을 풀 때는 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 의 후보와 맞춰 봅니다. 시험 PC 에서 알고 있는 시각에 보낸 메시지로 검증합니다.
+- 값을 풀 때는 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 의 후보와 맞춰 봅니다. 시험 PC 에서 알고 있는 시각에 보낸 메시지로 검증합니다.
 - `.edb` 파일의 파일 시스템 시각은 DB 파일이 바뀐 때를 보여 줄 뿐입니다. 메시지 하나하나의 시각이 아닙니다.
 - 최근 변경이 아직 `-wal` 에만 있으면 주 파일의 수정 시각이 마지막 메시지보다 이를 수 있습니다.
 
 ## 함정과 한계
 
-- `.edb` 를 ESE 로 오인해 ESE 도구로 열면 실패합니다. SQLite 로 엽니다(논문, 관찰). ESE 형식의 `.edb` 는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+- `.edb` 를 ESE 로 오인해 ESE 도구로 열면 실패합니다. SQLite 로 엽니다(논문, 관찰). ESE 형식의 `.edb` 는 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 - 도구나 문서가 "암호화 대상" 이라고 해도 먼저 첫 16바이트를 봅니다. 관찰한 PC 에서는 대화 DB 다수가 평문이었습니다.
 - 같은 계정 폴더 안에서도 파일마다 평문·암호문이 다를 수 있습니다.
 - 한 PC 의 관찰을 모든 PC·버전으로 넓히지 않습니다.
@@ -172,17 +172,17 @@ for p in sorted(list(root.rglob("*.edb")) + list(root.rglob("*.backup"))):
 ```
 
 4. 평문이면 `sqlite3 <사본> ".tables"` 로 표 목록을 보고, `.schema` 로 칸을 봅니다.
-5. 평문이 아니면 SQLite 도구로 열리지 않습니다. 키 없이 볼 단서는 [대화 DB가 안 열릴 때 남는 단서](/02-artifacts/messengers/kakaotalk-pc/when-db-wont-open.md) 에서 찾습니다.
+5. 평문이 아니면 SQLite 도구로 열리지 않습니다. 키 없이 볼 단서는 [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) 에서 찾습니다.
 
 ## 교차 검증
 
 | 함께 볼 것 | 알려 주는 것 |
 |---|---|
-| [계정·로그인 흔적](/02-artifacts/messengers/kakaotalk-pc/account-login.md) | 키 재료인 기기 정보 레지스트리 값과 userId 위치 |
-| [받은 파일·사진 폴더](/02-artifacts/messengers/kakaotalk-pc/received-files.md) | 같은 모듈로 암호화한 `.cng` 이미지 |
-| [대화 DB가 안 열릴 때 남는 단서](/02-artifacts/messengers/kakaotalk-pc/when-db-wont-open.md) | 평문 백업과 `-wal` 처럼 키 없이 볼 수 있는 단서 |
-| [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) | 머리 전체, WAL, 지운 행을 찾는 법 |
-| [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) | 대화 기록을 다른 연락 흔적과 맞추는 흐름 |
+| [계정·로그인 흔적](account-login.md) | 키 재료인 기기 정보 레지스트리 값과 userId 위치 |
+| [받은 파일·사진 폴더](received-files.md) | 같은 모듈로 암호화한 `.cng` 이미지 |
+| [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) | 평문 백업과 `-wal` 처럼 키 없이 볼 수 있는 단서 |
+| [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) | 머리 전체, WAL, 지운 행을 찾는 법 |
+| [누구와 연락을 주고받았나](../../../04-scenarios/activity/communication-reconstruction.md) | 대화 기록을 다른 연락 흔적과 맞추는 흐름 |
 
 ## 실습
 

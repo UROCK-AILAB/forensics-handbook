@@ -21,7 +21,7 @@ Amcache.hve 의 `Root\InventoryDevicePnp` 키에는 플러그 앤 플레이 (Plu
 | 장치 항목 | `Root\InventoryDevicePnp\<장치 인스턴스 ID 를 바꾼 이름>` |
 | 짝이 되는 키 | `Root\InventoryDeviceContainer\<컨테이너 ID>` |
 
-형식은 Windows 버전이 아니라 호환성 라이브러리의 판을 따릅니다(ANSSI). 판별 키 구성은 [구조와 버전별 차이](/02-artifacts/execution/amcache-hve/structure-versions.md)에서 다룹니다. 이 키에 관련된 것만 추립니다.
+형식은 Windows 버전이 아니라 호환성 라이브러리의 판을 따릅니다(ANSSI). 판별 키 구성은 [구조와 버전별 차이](structure-versions.md)에서 다룹니다. 이 키에 관련된 것만 추립니다.
 
 | 라이브러리 판 (처음 실린 Windows) | InventoryDevicePnp | 근거 |
 |---|---|---|
@@ -49,7 +49,7 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 
 - 끝의 GUID 는 디스크 장치 인터페이스 GUID 입니다.
 - 네 하위 키에는 같은 `ContainerId` 값이 들어 있습니다. 이 값으로 네 키를 한 장치로 묶습니다.
-- 일련번호 자리에 Windows 가 만든 ID 가 들어가는 경우는 [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md)에서 다룹니다.
+- 일련번호 자리에 Windows 가 만든 ID 가 들어가는 경우는 [USB 저장장치 목록 (USBSTOR)](../../external-devices/usb-storage-artifacts/usbstor.md)에서 다룹니다.
 
 > 그림 자리: USB 저장장치 하나가 만든 하위 키 네 개가 `ContainerId` 로 `InventoryDeviceContainer` 하위 키 하나와 SYSTEM 하이브 `Enum\USBSTOR` 항목에 이어지는 모습
 
@@ -66,7 +66,7 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 | `Description`·`BusReportedDescription` | 장치 설명, 버스가 알려 준 장치 설명 | WPD 하위 키의 `Description` 에 볼륨 이름이 들어간 사례가 있습니다(df-stream). |
 | `Manufacturer`·`Model` | 제조사, 모델 | |
 | `HWID`·`COMPID`·`MatchingID` | 하드웨어 ID 목록, 호환 ID 목록, 설치에 실제로 쓴 ID | |
-| `DriverName`·`Service` | 드라이버 이미지 파일 이름, 서비스 이름 | [드라이버 항목](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md)과 잇습니다. |
+| `DriverName`·`Service` | 드라이버 이미지 파일 이름, 서비스 이름 | [드라이버 항목](inventorydriverbinary.md)과 잇습니다. |
 | `Inf`·`DriverPackageStrongName` | INF 이름(`oemXX.inf` 로 바뀔 수 있음), 드라이버 패키지 이름 | `DriverPackageStrongName` 은 `InventoryDriverPackage`·`InventoryDriverBinary` 에도 있어 셋을 잇습니다(Zimmerman). |
 | `DriverVerDate`·`DriverVerVersion` | 드라이버 날짜와 버전 | 장치를 꽂은 때와 관계없습니다. |
 | `InstallState`·`ProblemCode`·`DeviceState` | 설치 상태, 오류 코드, 상태 비트 | 아래 "증명하지 못하는 것" 참고 |
@@ -108,7 +108,7 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 
 | 시각 | 무엇이 바뀔 때 바뀌나 | 기준 |
 |---|---|---|
-| 하위 키 마지막 기록 시각 | 인벤토리 작업이 항목을 다시 쓸 때 바뀝니다. 첫 연결 때도 바뀌지만, 연결·해제와 관계없는 때에도 바뀝니다(df-stream). 한 장치의 하위 키 네 개는 시각이 같았습니다. | UTC, FILETIME ([키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
+| 하위 키 마지막 기록 시각 | 인벤토리 작업이 항목을 다시 쓸 때 바뀝니다. 첫 연결 때도 바뀌지만, 연결·해제와 관계없는 때에도 바뀝니다(df-stream). 한 장치의 하위 키 네 개는 시각이 같았습니다. | UTC, FILETIME ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
 | `FirstInstallDate` 값 | Microsoft 필드 설명으로는 이 장치를 처음 설치한 때입니다. | 저장 형식은 아래 참고 |
 | `InstallDate` 값 | Microsoft 필드 설명으로는 이 장치를 가장 최근에 설치한 날짜입니다. | 저장 형식은 아래 참고 |
 | `DriverVerDate` 값 | 드라이버 패키지의 날짜입니다. 장치 사용과 관계없습니다. | 날짜만 |
@@ -116,27 +116,27 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 - SYSTEM 하이브의 장치 속성에도 같은 이름의 값이 있습니다. `DEVPKEY_Device_InstallDate` 는 속성 번호 0064, `DEVPKEY_Device_FirstInstallDate` 는 0065 입니다.
 - Microsoft 설명에서 `FirstInstallDate` 속성은 드라이버를 업데이트해도 바뀌지 않습니다. `InstallDate` 속성은 드라이버를 업데이트할 때마다 바뀔 수 있습니다.
 - Amcache 의 두 값이 이 속성을 그대로 옮긴 것인지는 명세로 확인하지 못했습니다. 저장 형식과 시간대도 확인하지 못했습니다.
-- 그래서 두 값은 원시 바이트를 먼저 보고, SYSTEM 하이브의 속성 값과 맞춰 본 뒤에 씁니다. 속성 위치는 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
+- 그래서 두 값은 원시 바이트를 먼저 보고, SYSTEM 하이브의 속성 값과 맞춰 본 뒤에 씁니다. 속성 위치는 [연결·해제 시각](../../external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **키 시각을 연결 시각으로 쓰는 실수.** 공개 파서가 내는 "시각" 열이 하위 키 마지막 기록 시각인 경우가 있습니다. 한 공개 파서(AmcacheParser)는 소스에서 이 열에 하위 키 마지막 기록 시각을 넣습니다. 여러 장치가 같은 시각이면 인벤토리 작업이 한꺼번에 다시 쓴 흔적으로 봅니다.
-2. **항목이 빨리 빠집니다.** df-stream 은 USB 장치 항목이 금방 목록에서 빠지는 사례를 적었습니다. [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 Amcache.hve, [지워진 키](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md)를 함께 봅니다.
+2. **항목이 빨리 빠집니다.** df-stream 은 USB 장치 항목이 금방 목록에서 빠지는 사례를 적었습니다. [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 Amcache.hve, [지워진 키](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)를 함께 봅니다.
 3. **도구마다 내는 값이 다릅니다.** 앞의 공개 파서는 소스상 `InstallDate`·`FirstInstallDate`·`LocationPaths`·필터 값을 결과에 넣지 않습니다(2026-09 소스 기준). 이 값이 필요하면 원시 키를 봅니다.
 4. **키 이름은 소문자입니다.** 일련번호나 모델명으로 찾을 때 대소문자를 가리지 않고 찾습니다.
 5. **USB 가 아닌 항목이 대부분입니다.** `usb/`·`usbstor/`·`swd/wpdbusenum/`·`storage/volume/` 으로 시작하는 하위 키를 먼저 거릅니다.
 6. **Microsoft 문서 판마다 설명이 다릅니다.** Windows 10 22H2·21H2 판 문서의 `InventoryDevicePnpAdd` 필드 설명은 표에서 한 칸씩 밀려 있습니다(2026-09 열람 기준). 예를 들어 `ContainerId` 옆에 호환 ID 설명이 붙어 있습니다. 값의 뜻은 1809 판과 맞대어 봅니다.
-7. **Amcache 공통 함정**은 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md)에서 다룹니다.
+7. **Amcache 공통 함정**은 [AmCache 해석 함정](sha1.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-1. Amcache.hve 와 `.LOG1`·`.LOG2` 를 사본으로 확보합니다. 로그 반영은 [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
+1. Amcache.hve 와 `.LOG1`·`.LOG2` 를 사본으로 확보합니다. 로그 반영은 [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
 2. 조사할 장치의 일련번호를 정합니다. SYSTEM 하이브 `Enum\USBSTOR` 에서 가져옵니다.
 3. 하이브에서 일련번호를 소문자 ASCII 로 찾습니다. 키 이름이 걸리면 그 셀이 하위 키의 nk 셀입니다.
 4. 같은 일련번호를 UTF-16LE 로도 찾습니다. 대문자와 소문자를 모두 찾습니다. 값 데이터(`ParentId`·`HWID` 등)가 걸립니다.
-5. nk 셀에서 값 목록을 따라가 vk 셀을 읽습니다. vk 셀 안에는 값 이름이 있고, 데이터는 따로 떨어진 셀에 있습니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
+5. nk 셀에서 값 목록을 따라가 vk 셀을 읽습니다. vk 셀 안에는 값 이름이 있고, 데이터는 따로 떨어진 셀에 있습니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 6. nk 셀에서 마지막 기록 시각(FILETIME)을 읽고 UTC 로 풉니다.
 
 아래는 문자 인코딩 규칙으로 만든 예시입니다. 검체에서 나온 값이 아닙니다. 일련번호가 `AB12CD34` 라고 가정합니다.
@@ -153,23 +153,23 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 - 레지스트리 뷰어로 하이브를 열고 `Root\InventoryDevicePnp` 를 펼칩니다. 뷰어는 로그를 반영해 여는지 확인합니다.
 - Amcache 전용 공개 파서(예: AmcacheParser)는 이 키를 따로 표로 냅니다. 표에서 USB 관련 하위 키를 거르고 `ContainerId` 로 묶습니다.
 - 파서 결과에 빠진 값은 뷰어로 원시 키에서 확인합니다.
-- 두 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 절차를 따릅니다.
+- 두 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 절차를 따릅니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 값 | 링크 |
 |---|---|---|
-| USBSTOR | 일련번호, 제조사·모델, `ContainerID` | [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) |
-| Enum\USB | VID·PID, `ParentId` | [USB 장치 식별자 (Enum\USB VID·PID)](/02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md) |
-| 장치 속성 0064·0065·0066·0067 | `InstallDate`·`FirstInstallDate`, 마지막 연결·해제 시각 | [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) |
-| WPD·EMDMgmt | WPD 하위 키 `Description` 의 볼륨 이름 | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) |
-| MountedDevices | 드라이브 문자 | [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) |
-| setupapi.dev.log | 장치를 처음 설치한 시각 | [장치 설치 로그 (setupapi.dev.log)](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md) |
-| 외부 장치 연결 이벤트 | 연결 시각 | [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
-| InventoryDriverBinary | `DriverPackageStrongName`·`Service` | [드라이버 항목](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md) |
-| 블루투스 장치 | 블루투스 클래스 항목 | [블루투스 장치 (BTHPORT)](/02-artifacts/external-devices/bthport.md) |
+| USBSTOR | 일련번호, 제조사·모델, `ContainerID` | [USB 저장장치 목록 (USBSTOR)](../../external-devices/usb-storage-artifacts/usbstor.md) |
+| Enum\USB | VID·PID, `ParentId` | [USB 장치 식별자 (Enum\USB VID·PID)](../../external-devices/usb-storage-artifacts/enum-usb-vid-pid.md) |
+| 장치 속성 0064·0065·0066·0067 | `InstallDate`·`FirstInstallDate`, 마지막 연결·해제 시각 | [연결·해제 시각](../../external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) |
+| WPD·EMDMgmt | WPD 하위 키 `Description` 의 볼륨 이름 | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](../../external-devices/usb-storage-artifacts/wpd-emdmgmt.md) |
+| MountedDevices | 드라이브 문자 | [드라이브 문자 매핑 (MountedDevices)](../../external-devices/usb-storage-artifacts/mounteddevices.md) |
+| setupapi.dev.log | 장치를 처음 설치한 시각 | [장치 설치 로그 (setupapi.dev.log)](../../external-devices/usb-storage-artifacts/setupapi-dev-log.md) |
+| 외부 장치 연결 이벤트 | 연결 시각 | [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| InventoryDriverBinary | `DriverPackageStrongName`·`Service` | [드라이버 항목](inventorydriverbinary.md) |
+| 블루투스 장치 | 블루투스 클래스 항목 | [블루투스 장치 (BTHPORT)](../../external-devices/bthport.md) |
 
-USB 흔적 전체 흐름은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)과 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
+USB 흔적 전체 흐름은 [USB 저장장치 흔적](../../external-devices/usb-storage-artifacts/index.md)과 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
 
 ## 실습
 

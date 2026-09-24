@@ -1,6 +1,6 @@
 # 다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)
 
-> 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](/04-scenarios/incident/credential-theft-lateral-movement/index.md)
+> 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)
 
 이 페이지는 손에 넣은 자격 증명으로 다른 PC 에서 명령을 실행했는지 확인하는 순서를 다룹니다. 원격 실행은 출발 PC 와 도착 PC 양쪽에 다른 흔적을 남깁니다. 그래서 이 페이지는 도구마다 두 쪽을 나눠 봅니다.
 
@@ -18,21 +18,21 @@
 | 확인할 것 | 까닭 |
 |---|---|
 | 출발·도착 구분 | 흔적이 양쪽에 나뉩니다. 두 PC 의 로그를 모두 확보해야 한 번의 실행을 이어 봅니다. |
-| 시간대 | 두 PC 의 시계 오차를 확인해 같은 기준으로 맞춥니다([시간대 설정](/02-artifacts/system-account/time-zone.md)). |
-| 감사·Sysmon 설정 | 기본 설정에서도 남는 흔적과, 감사 정책·Sysmon 을 켜야 남는 흔적이 나뉩니다[1][2][3]. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 을 봅니다. |
+| 시간대 | 두 PC 의 시계 오차를 확인해 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
+| 감사·Sysmon 설정 | 기본 설정에서도 남는 흔적과, 감사 정책·Sysmon 을 켜야 남는 흔적이 나뉩니다[1][2][3]. [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 을 봅니다. |
 | 로그 크기 | WMI-Activity·WinRM 운영 로그는 1MB 순환이었습니다(관찰). 오래된 기록은 밀려납니다. |
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 서비스 설치 (System 7045·Security 4697) | PsExec 의 도착 PC 에 서비스가 설치됐나 | [서비스 설치](/02-artifacts/event-logs/7045-4697.md) |
-| 2 | 공유 폴더 접근 (5140·5145) | ADMIN$·IPC$ 접근, 올린 파일 이름과 출발 PC 이름 | [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md) |
-| 3 | 로그온 (4624·4634·4672) | 도착 PC 의 원격 로그온과 특수 권한 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 4 | 프로세스 생성 (4688·Sysmon 1) | 실행 프로세스의 명령줄과 부모 프로세스 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) |
-| 5 | WMI-Activity·WinRM 운영 로그 | WMI·WinRM 공급자 시작과 세션 생성 | [원격 명령 실행 이벤트](/02-artifacts/event-logs/winrm-wmi-activity.md) |
-| 6 | 실행 흔적 (프리페치·레지스트리) | 도구 실행 기록, EULA 동의 값 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 7 | 네트워크 연결 (Sysmon 3) | 도착 포트 135·445·5985 로의 연결 | [네트워크 연결·DNS 질의](/02-artifacts/event-logs/sysmon/3-22.md) |
+| 1 | 서비스 설치 (System 7045·Security 4697) | PsExec 의 도착 PC 에 서비스가 설치됐나 | [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md) |
+| 2 | 공유 폴더 접근 (5140·5145) | ADMIN$·IPC$ 접근, 올린 파일 이름과 출발 PC 이름 | [공유 폴더 접근](../../../02-artifacts/event-logs/5140-5145.md) |
+| 3 | 로그온 (4624·4634·4672) | 도착 PC 의 원격 로그온과 특수 권한 | [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) |
+| 4 | 프로세스 생성 (4688·Sysmon 1) | 실행 프로세스의 명령줄과 부모 프로세스 | [프로세스 생성](../../../02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](../../../02-artifacts/event-logs/sysmon/1.md) |
+| 5 | WMI-Activity·WinRM 운영 로그 | WMI·WinRM 공급자 시작과 세션 생성 | [원격 명령 실행 이벤트](../../../02-artifacts/event-logs/winrm-wmi-activity.md) |
+| 6 | 실행 흔적 (프리페치·레지스트리) | 도구 실행 기록, EULA 동의 값 | [프리페치](../../../02-artifacts/execution/prefetch/index.md) |
+| 7 | 네트워크 연결 (Sysmon 3) | 도착 포트 135·445·5985 로의 연결 | [네트워크 연결·DNS 질의](../../../02-artifacts/event-logs/sysmon/3-22.md) |
 
 ## PsExec
 
@@ -78,7 +78,7 @@
 
 - Security 4624: 로그온 유형 3, 출발 PC 에서 Kerberos 로 인증(시트 예시)[2].
 - 실행 프로세스: `WmiPrvSE.exe -secured -Embedding`, 부모 `svchost.exe -k DcomLaunch`(Sysmon 1·Security 4688)[2].
-- Sysmon 10: WmiPrvSE.exe 가 lsass.exe·services.exe·csrss.exe 에 접근[2]. 정상 원격 wmic 실행에서도 남습니다. 그래서 이 접근만으로 덤프라고 보지 않습니다. [자격 증명을 빼냈나](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) 를 봅니다.
+- Sysmon 10: WmiPrvSE.exe 가 lsass.exe·services.exe·csrss.exe 에 접근[2]. 정상 원격 wmic 실행에서도 남습니다. 그래서 이 접근만으로 덤프라고 보지 않습니다. [자격 증명을 빼냈나](credential-dumping.md) 를 봅니다.
 - Security 4673: SeTcbPrivilege 사용[2].
 - 필요한 감사 정책: 프로세스 생성은 "Audit Process Creation", 권한 사용은 "Audit Sensitive Privilege Use", 필터링 플랫폼 연결은 "Audit Filtering Platform Connection" 입니다[2]. 레지스트리 추적은 Sysmon 이 있어야 합니다[2].
 
@@ -88,7 +88,7 @@
 - 5857: 공급자 시작. 칸은 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다(관찰).
 - 5858: 칸은 Id, ClientMachine, User, ClientProcessId, Component, Operation, ResultCode, PossibleCause 입니다(관찰).
 - JPCERT WinRM 시트의 도착 PC 에 WMI-Activity 5857 이 있었습니다[3].
-- 5861 은 영구 이벤트 구독 쪽입니다. [WMI 영구 이벤트 구독](/02-artifacts/persistence/wmi-event-subscription.md) 을 봅니다.
+- 5861 은 영구 이벤트 구독 쪽입니다. [WMI 영구 이벤트 구독](../../../02-artifacts/persistence/wmi-event-subscription.md) 을 봅니다.
 
 ## WinRM
 
@@ -113,7 +113,7 @@ JPCERT 시트의 예시 명령은 원격 명령 실행이 아니라 설정 조�
 - 91 "Creating WSMan shell on server with ResourceUri: %1"(관찰).
 - 162 "Authenticating the user failed. The credentials didn't work."(관찰).
 - 메시지 문구로 보면 6 은 세션을 여는 쪽(클라이언트), 91 은 서버 쪽 셸 생성입니다. 출발·도착 어느 쪽에 남는지는 검체에서 실측해 확인합니다.
-- PowerShell 원격 명령의 내용은 PowerShell 로그(4103·4104)로 넘깁니다: [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md).
+- PowerShell 원격 명령의 내용은 PowerShell 로그(4103·4104)로 넘깁니다: [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md).
 
 ## 서비스 설치 이벤트 (7045·4697)
 
@@ -122,13 +122,13 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 - System 7045(공급자 Service Control Manager): 칸은 ServiceName, ImagePath, ServiceType, StartType, AccountName 입니다(관찰).
 - 7045 의 공급자 원시 ID 는 1073748869(0x40001B85)입니다(관찰). 도구에 따라 7045 가 아니라 이 값으로 보일 수 있습니다.
 - Security 4697 은 누가 설치했는지(Subject)를 함께 남깁니다. 7045 에는 그 칸이 없습니다(관찰 — 두 템플릿 비교).
-- 두 이벤트의 칸과 차이는 [서비스 설치](/02-artifacts/event-logs/7045-4697.md) 에서 다룹니다.
+- 두 이벤트의 칸과 차이는 [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md) 에서 다룹니다.
 
 ## 공통 판단
 
 - PsExec·wmic·WinRM 모두 도착 PC 에 로그온 유형 3 을 남겼습니다[1][2][3]. 유형 3 은 파일 공유 접근 같은 흔한 일에도 생깁니다. 그래서 같은 Logon ID·같은 시각대의 서비스 설치·프로세스 생성과 이어서 봅니다.
 - 인증 패키지가 PsExec 예시에서는 NTLM, wmic·WinRM 예시에서는 Kerberos 였습니다[1][2][3]. 인증 패키지 하나로 도구를 가를 수 없습니다.
-- 로그온 유형·세션 잇기는 [로그온 유형 해석](/02-artifacts/event-logs/logon-events/logon-type.md) 과 [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) 에서 다룹니다.
+- 로그온 유형·세션 잇기는 [로그온 유형 해석](../../../02-artifacts/event-logs/logon-events/logon-type.md) 과 [로그온 세션 잇기](../../../02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) 에서 다룹니다.
 
 ## 분석 흐름
 
@@ -138,8 +138,8 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 4. 묶음의 실행 프로세스로 도구를 가립니다. PSEXESVC 서비스는 PsExec 입니다[1]. wmic 와 JPCERT 의 WinRM 예시는 모두 도착 PC 에 WmiPrvSE.exe 를 남겼습니다[2][3]. 그래서 WmiPrvSE.exe 하나로 WMI 와 WinRM 을 가르지 않고, WinRM 운영 로그와 출발 PC 기록을 함께 봅니다. PowerShell 원격의 도착 프로세스는 이 자료로 확인하지 못했습니다.
 5. 5145 의 Relative Target Name 이나 명령줄에서 출발 PC 이름을 꺼냅니다.
 6. 출발 PC 를 특정하면 그 PC 의 프리페치·EULA 값·Sysmon 3·WinRM 클라이언트 로그로 출발 쪽을 맞춰 봅니다.
-7. 원격 실행에 쓴 계정이 앞선 [자격 증명을 빼냈나](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) 단계와 이어지는지 봅니다.
-8. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다.
+7. 원격 실행에 쓴 계정이 앞선 [자격 증명을 빼냈나](credential-dumping.md) 단계와 이어지는지 봅니다.
+8. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다.
 
 ## 흔한 오판
 
@@ -148,7 +148,7 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 3. **PSEXESVC 파일이 없으니 PsExec 을 안 썼다고 봅니다.** 이 파일은 쓴 뒤 지워집니다[1]. 7045·프리페치·USN 을 봅니다.
 4. **인증 패키지로 도구를 가릅니다.** NTLM·Kerberos 는 도구가 아니라 인증 방식에 따라 달라집니다[1][2][3].
 5. **로그에 없으니 원격 실행도 없었다고 봅니다.** WMI-Activity·WinRM 운영 로그는 1MB 순환이었습니다(관찰). 오래된 기록은 밀려납니다.
-6. **WMI-Activity 5861 을 원격 실행으로 봅니다.** 5861 은 영구 이벤트 구독 쪽입니다. [WMI 영구 이벤트 구독](/02-artifacts/persistence/wmi-event-subscription.md) 을 봅니다.
+6. **WMI-Activity 5861 을 원격 실행으로 봅니다.** 5861 은 영구 이벤트 구독 쪽입니다. [WMI 영구 이벤트 구독](../../../02-artifacts/persistence/wmi-event-subscription.md) 을 봅니다.
 
 ## 보고서 문장 예
 
@@ -159,13 +159,13 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 
 ## 함께 볼 페이지
 
-- [서비스 설치 (7045·4697)](/02-artifacts/event-logs/7045-4697.md) · [공유 폴더 접근 (5140·5145)](/02-artifacts/event-logs/5140-5145.md) — 도착 PC 의 서비스·공유 흔적입니다.
-- [원격 명령 실행 이벤트 (WinRM·WMI-Activity)](/02-artifacts/event-logs/winrm-wmi-activity.md) · [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) — WMI·WinRM·PowerShell 원격의 로그입니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) · [로그온 유형 해석](/02-artifacts/event-logs/logon-events/logon-type.md) · [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) · [명시적 자격 증명·특수 권한 (4648·4672)](/02-artifacts/event-logs/logon-events/4648-4672.md) — 도착 PC 의 로그온과 권한입니다.
-- [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) · [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) · [네트워크 연결 (Sysmon 3·22)](/02-artifacts/event-logs/sysmon/3-22.md) — 실행 프로세스와 연결입니다.
-- [프리페치](/02-artifacts/execution/prefetch/index.md) · [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) — 실행과 공유 흔적입니다.
-- [예약 작업 이벤트 (4698)](/02-artifacts/event-logs/taskscheduler-4698.md) · [WMI 영구 이벤트 구독](/02-artifacts/persistence/wmi-event-subscription.md) — 원격 실행에 자주 쓰이는 다른 수단입니다.
-- [자격 증명을 빼냈나](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) · [새 계정을 만들거나 권한을 올렸나](/04-scenarios/incident/credential-theft-lateral-movement/account-privilege.md) — 앞뒤 단계입니다.
+- [서비스 설치 (7045·4697)](../../../02-artifacts/event-logs/7045-4697.md) · [공유 폴더 접근 (5140·5145)](../../../02-artifacts/event-logs/5140-5145.md) — 도착 PC 의 서비스·공유 흔적입니다.
+- [원격 명령 실행 이벤트 (WinRM·WMI-Activity)](../../../02-artifacts/event-logs/winrm-wmi-activity.md) · [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) — WMI·WinRM·PowerShell 원격의 로그입니다.
+- [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) · [로그온 유형 해석](../../../02-artifacts/event-logs/logon-events/logon-type.md) · [로그온 세션 잇기](../../../02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) · [명시적 자격 증명·특수 권한 (4648·4672)](../../../02-artifacts/event-logs/logon-events/4648-4672.md) — 도착 PC 의 로그온과 권한입니다.
+- [프로세스 생성 (4688)](../../../02-artifacts/event-logs/4688.md) · [Sysmon 이벤트 1](../../../02-artifacts/event-logs/sysmon/1.md) · [네트워크 연결 (Sysmon 3·22)](../../../02-artifacts/event-logs/sysmon/3-22.md) — 실행 프로세스와 연결입니다.
+- [프리페치](../../../02-artifacts/execution/prefetch/index.md) · [공유 폴더·네트워크 드라이브](../../../02-artifacts/network/network-shares-mapped-drives.md) — 실행과 공유 흔적입니다.
+- [예약 작업 이벤트 (4698)](../../../02-artifacts/event-logs/taskscheduler-4698.md) · [WMI 영구 이벤트 구독](../../../02-artifacts/persistence/wmi-event-subscription.md) — 원격 실행에 자주 쓰이는 다른 수단입니다.
+- [자격 증명을 빼냈나](credential-dumping.md) · [새 계정을 만들거나 권한을 올렸나](account-privilege.md) — 앞뒤 단계입니다.
 
 ## 참고 문헌
 

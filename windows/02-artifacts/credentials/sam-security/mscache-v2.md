@@ -1,6 +1,6 @@
 # 도메인 캐시 자격증명 (MSCache v2)
 
-> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) > 도메인 캐시 자격증명
+> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > 도메인 캐시 자격증명
 
 ## 한 줄 요약
 
@@ -19,7 +19,7 @@
 - 같은 키에 `NL$Control`, `NL$IterationCount` 도 있습니다. 이 둘은 캐시 항목이 아닙니다.
 - 각 항목은 `NL_RECORD` 구조입니다.
 - 빈 칸도 값으로 남습니다. Impacket 은 IV 가 모두 0 인 항목을 빈 칸으로 보고 건너뜁니다. 그래서 `NL$` 값의 개수를 로그온한 계정 수로 세지 않습니다.
-- 캐시 값은 암호문입니다. 푸는 열쇠는 LSA 시크릿 NL$KM 입니다. NL$KM 은 [LSA 시크릿](/02-artifacts/credentials/sam-security/lsa-secrets.md) 에서 다룹니다.
+- 캐시 값은 암호문입니다. 푸는 열쇠는 LSA 시크릿 NL$KM 입니다. NL$KM 은 [LSA 시크릿](lsa-secrets.md) 에서 다룹니다.
 - Vista 이후는 NL$KM 의 17~32번째 바이트를 열쇠로, 각 항목의 IV 를 써서 AES-CBC 로 풉니다.
 
 | 방식 | 이름 | 쓰는 Windows |
@@ -88,10 +88,10 @@ MSCache v2 는 DCC2 나 mscash2 라고도 부릅니다. 두 단계로 만듭니�
 
 ## 교차 검증 — 함께 볼 아티팩트
 
-- [LSA 시크릿 (LSA Secrets)](/02-artifacts/credentials/sam-security/lsa-secrets.md) — 캐시를 푸는 열쇠 NL$KM 이 여기 있습니다.
-- [부트키 구하기 (SYSTEM Boot Key)](/02-artifacts/credentials/sam-security/system-boot-key.md) — NL$KM 을 얻는 사슬의 맨 앞입니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) — 도메인 계정이 언제 로그온했는지는 이벤트 로그로 맞춰 봅니다.
-- [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) — 캐시 자격증명을 노린 공격을 조사하는 흐름입니다.
+- [LSA 시크릿 (LSA Secrets)](lsa-secrets.md) — 캐시를 푸는 열쇠 NL$KM 이 여기 있습니다.
+- [부트키 구하기 (SYSTEM Boot Key)](system-boot-key.md) — NL$KM 을 얻는 사슬의 맨 앞입니다.
+- [로그온·로그오프](../../event-logs/logon-events/index.md) — 도메인 계정이 언제 로그온했는지는 이벤트 로그로 맞춰 봅니다.
+- [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) — 캐시 자격증명을 노린 공격을 조사하는 흐름입니다.
 
 ## 참고 문헌
 

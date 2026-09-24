@@ -1,6 +1,6 @@
 # 시각 조작 탐지 (Timestomping)
 
-상위 허브: [타임라인 작성 (Timeline)](/03-techniques/analysis/timeline/index.md)
+상위 허브: [타임라인 작성 (Timeline)](index.md)
 
 ## 한 줄 요약
 
@@ -10,8 +10,8 @@
 
 - 파일 시각이 다른 기록과 맞지 않을 때 씁니다.
 - 의심 파일의 시각이 같은 폴더의 정상 파일과 비슷하게 맞춰져 있을 때 씁니다.
-- 문서 날짜를 증거로 쓰기 전에 씁니다. 흐름은 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md)를 봅니다.
-- 증거를 없애려 했는지 따질 때 씁니다. 흐름은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)를 봅니다.
+- 문서 날짜를 증거로 쓰기 전에 씁니다. 흐름은 [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md)를 봅니다.
+- 증거를 없애려 했는지 따질 때 씁니다. 흐름은 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)를 봅니다.
 
 ## 기법의 정의
 
@@ -22,7 +22,7 @@
 - MITRE 는 $STANDARD_INFORMATION($SI)을 사용자에게 보이는 쪽, $FILE_NAME($FN)을 커널이 다루는 쪽으로 설명합니다(참고 1).
 - 두 속성을 모두 바꾸는 "double timestomping" 도 있다고 적었습니다(참고 1).
 
-시스템 시계를 바꾸는 일은 이 기법과 다릅니다. 파일 하나가 아니라 그 뒤에 적히는 모든 시각이 영향을 받습니다. 흔적과 보정 방법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
+시스템 시계를 바꾸는 일은 이 기법과 다릅니다. 파일 하나가 아니라 그 뒤에 적히는 모든 시각이 영향을 받습니다. 흔적과 보정 방법은 [시간대·시계 오차 보정](time-normalization.md)에서 다룹니다.
 
 ## 시각을 바꾸는 공식 방법
 
@@ -34,7 +34,7 @@
 - SetFileTime 은 파일 내용을 바꾸지 않고 시각만 바꿉니다(참고 2).
 - FILE_BASIC_INFORMATION 으로 값을 설정하려면 FILE_WRITE_ATTRIBUTES 권한이 필요합니다(참고 3).
 - 두 방법 모두 공개된 API 입니다. 그래서 정상 프로그램도 이 API 로 시각을 바꿀 수 있습니다.
-- 시각 값은 1601년 시작부터 센 100나노초 단위입니다(참고 3). 날짜로 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+- 시각 값은 1601년 시작부터 센 100나노초 단위입니다(참고 3). 날짜로 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 
 FILE_BASIC_INFORMATION 에는 특별한 값이 있습니다.
 
@@ -55,8 +55,8 @@ MITRE 는 $SI 는 사용자 수준 API 로 바꿀 수 있고, $FN 은 대개 커
 MITRE 는 탐지 방향으로 $SI 와 $FN 의 불일치 찾기를 듭니다(참고 1).
 
 - 같은 종류의 시각끼리 짝지어 비교합니다. 생성은 생성과, 마지막 수정은 마지막 수정과 비교합니다.
-- 생성 시각은 $SI 오프셋 0, $FN 오프셋 8 에 있습니다(참고 4). 네 시각의 오프셋 표는 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md)에 있습니다.
-- $FN 은 이름마다 하나씩 있습니다. 긴 이름의 $FN 이 확장 레코드에만 있을 수 있습니다(현장 관찰). 그래서 $ATTRIBUTE_LIST 가 있는 파일은 확장 레코드까지 따라가 비교합니다(현장 관찰). 이름공간과 확장 레코드는 [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
+- 생성 시각은 $SI 오프셋 0, $FN 오프셋 8 에 있습니다(참고 4). 네 시각의 오프셋 표는 [파일 시각 네 가지와 변화 규칙](macb-timestamp-rules.md)에 있습니다.
+- $FN 은 이름마다 하나씩 있습니다. 긴 이름의 $FN 이 확장 레코드에만 있을 수 있습니다(현장 관찰). 그래서 $ATTRIBUTE_LIST 가 있는 파일은 확장 레코드까지 따라가 비교합니다(현장 관찰). 이름공간과 확장 레코드는 [파일시스템 타임라인](filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
 
 분석가 사이에서 흔히 쓰는 기준은 아래와 같습니다. 이 페이지에서 연 자료로는 확인하지 못했습니다.
 
@@ -73,14 +73,14 @@ MITRE 는 탐지 방향으로 $SI 와 $FN 의 불일치 찾기를 듭니다(참�
 - Reason 값 가운데 시각 변경만 가리키는 플래그는 없습니다(참고 5).
 - 그래서 이 플래그는 "속성이나 시각이 바뀌었다" 는 단서일 뿐입니다. 레코드의 TimeStamp 는 UTC 로 적은 그 레코드의 시각입니다(참고 5).
 - 그 파일의 FILE_CREATE 레코드 시각과 $SI 생성 시각을 비교합니다. 두 값이 크게 다르면 이유를 따로 확인합니다.
-- $SI 의 USN 칸은 그 파일의 마지막 USN 레코드 번호로 알려져 있습니다. 이 값으로 마지막 레코드를 찾습니다. 방법은 [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다. 마지막 레코드의 Reason 에 BASIC_INFO_CHANGE 가 있으면, 마지막 변경에 속성이나 시각의 변경이 들어 있었습니다.
-- 저널에 남은 기간 밖의 변경은 볼 수 없습니다. 레코드 구조는 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)을 봅니다.
+- $SI 의 USN 칸은 그 파일의 마지막 USN 레코드 번호로 알려져 있습니다. 이 값으로 마지막 레코드를 찾습니다. 방법은 [파일시스템 타임라인](filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다. 마지막 레코드의 Reason 에 BASIC_INFO_CHANGE 가 있으면, 마지막 변경에 속성이나 시각의 변경이 들어 있었습니다.
+- 저널에 남은 기간 밖의 변경은 볼 수 없습니다. 레코드 구조는 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md)을 봅니다.
 
 ### 다른 기록과 맞추기
 
-- $LogFile 에 바뀌기 전후의 $SI 값이 남는다는 설명이 있습니다. 이 페이지의 출처로는 확인하지 못했습니다. 해석 방법은 [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md)를 봅니다.
-- MITRE 는 탐지 방향을 두 가지 더 듭니다(참고 1). 하나는 SetFileTime 같은 API 호출을 지켜보는 것입니다(참고 1). 다른 하나는 시각을 바꾸는 명령을 평소와 다른 사용자나 폴더에서 쓰는지 살피는 것입니다(참고 1). 사후 분석에서는 그런 도구를 실행한 흔적을 찾습니다. [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md), [프리페치](/02-artifacts/execution/prefetch/index.md)를 봅니다.
-- 파일 안에 날짜를 적는 형식이면 그 값과 비교합니다. [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md), [사진 EXIF](/02-artifacts/embedded-metadata/exif.md)를 봅니다.
+- $LogFile 에 바뀌기 전후의 $SI 값이 남는다는 설명이 있습니다. 이 페이지의 출처로는 확인하지 못했습니다. 해석 방법은 [NTFS 트랜잭션 로그](../../../02-artifacts/filesystem/logfile.md)를 봅니다.
+- MITRE 는 탐지 방향을 두 가지 더 듭니다(참고 1). 하나는 SetFileTime 같은 API 호출을 지켜보는 것입니다(참고 1). 다른 하나는 시각을 바꾸는 명령을 평소와 다른 사용자나 폴더에서 쓰는지 살피는 것입니다(참고 1). 사후 분석에서는 그런 도구를 실행한 흔적을 찾습니다. [프로세스 생성](../../../02-artifacts/event-logs/4688.md), [Sysmon 로그](../../../02-artifacts/event-logs/sysmon/index.md), [프리페치](../../../02-artifacts/execution/prefetch/index.md)를 봅니다.
+- 파일 안에 날짜를 적는 형식이면 그 값과 비교합니다. [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md), [사진 EXIF](../../../02-artifacts/embedded-metadata/exif.md)를 봅니다.
 - 이 페이지의 $SI·$FN 비교는 NTFS 를 전제로 합니다. FAT·exFAT 에 비교할 두 번째 시각 기록이 있는지는 확인하지 못했습니다.
 
 ## 헥스로 한 번
@@ -114,9 +114,9 @@ $FN 속성 값
 5. **USN 저널에서 그 파일의 레코드를 찾습니다.** FILE_CREATE, RENAME_OLD_NAME·RENAME_NEW_NAME, BASIC_INFO_CHANGE 가 붙은 레코드의 시각을 적습니다.
 6. **$SI 의 USN 칸으로 마지막 레코드를 확인합니다.**
 7. **같은 폴더의 다른 파일과 비교합니다.** 의심 파일만 시각이 튀는지, 반대로 이웃과 지나치게 똑같은지 봅니다.
-8. **시각을 바꾸는 도구를 실행한 흔적을 찾습니다.** 실행 흔적 아티팩트와 이벤트 로그를 봅니다. 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)를 봅니다.
+8. **시각을 바꾸는 도구를 실행한 흔적을 찾습니다.** 실행 흔적 아티팩트와 이벤트 로그를 봅니다. 흐름은 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md)를 봅니다.
 9. **시스템 시계 변경을 따로 확인합니다.** 보안 로그의 4616 을 봅니다.
-10. **정상 동작으로 설명되는지 재현합니다.** 검체와 같은 버전에서 같은 작업을 해 봅니다. 방법은 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md)의 "변화 규칙 재현하기" 를 봅니다.
+10. **정상 동작으로 설명되는지 재현합니다.** 검체와 같은 버전에서 같은 작업을 해 봅니다. 방법은 [파일 시각 네 가지와 변화 규칙](macb-timestamp-rules.md)의 "변화 규칙 재현하기" 를 봅니다.
 11. **근거를 표로 정리합니다.** 칸마다 값, 출처, 해석을 적습니다.
 
 ## 도구
@@ -126,8 +126,8 @@ MFT 를 푸는 공개 도구의 예로 libfsntfs, The Sleuth Kit 이 있습니�
 - $FN 시각을 보여 주는지 확인합니다.
 - 어느 이름공간의 $FN 을 보여 주는지 확인합니다.
 - $ATTRIBUTE_LIST 의 확장 레코드를 따라가는지 확인합니다.
-- 초 아래 자리를 잘라 내지 않는지 확인합니다. 초 단위까지만 담는 출력 형식도 있습니다([여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md)).
-- 몇 파일은 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 초 아래 자리를 잘라 내지 않는지 확인합니다. 초 단위까지만 담는 출력 형식도 있습니다([여러 아티팩트 합친 타임라인](super-timeline.md)).
+- 몇 파일은 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../reporting/tool-validation.md)을 봅니다.
 
 ## 함정과 한계
 

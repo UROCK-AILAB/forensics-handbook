@@ -23,32 +23,32 @@ Windows 는 계정 비밀번호와 시스템 비밀을 레지스트리 하이브
 - 공개 구현인 Impacket 의 secretsdump.py 는 `HKLM\SAM`, `HKLM\SECURITY`, `HKLM\SYSTEM` 세 하이브를 함께 열어 처리합니다.
 - 작업그룹이나 도메인 이름은 SECURITY 하이브의 `Policy\PolPrDmN` 에 있습니다.
 - 압수 이미지에서 꺼낸 하이브는 사본에서 작업합니다. 원본을 열면 내용이 바뀔 수 있습니다.
-- 하이브 자체의 저장 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
+- 하이브 자체의 저장 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
 
 ### 버전에 따라 달라지는 점
 
-- SAM 해시를 감싸는 방식은 옛 Windows 가 RC4, 요즘 Windows 가 AES 입니다. 두 방식 모두 계정별 DES 한 겹이 더 있습니다. 나누는 법은 [NTLM 비밀번호 해시](/02-artifacts/credentials/sam-security/nt-hash.md) 에 있습니다.
-- LSA 키가 암호화되어 있는 자리는 Vista 를 경계로 다릅니다. [LSA 시크릿](/02-artifacts/credentials/sam-security/lsa-secrets.md) 에 있습니다.
-- 도메인 캐시는 Vista 이전이 v1, 이후가 v2 입니다. [도메인 캐시 자격증명](/02-artifacts/credentials/sam-security/mscache-v2.md) 에 있습니다.
+- SAM 해시를 감싸는 방식은 옛 Windows 가 RC4, 요즘 Windows 가 AES 입니다. 두 방식 모두 계정별 DES 한 겹이 더 있습니다. 나누는 법은 [NTLM 비밀번호 해시](nt-hash.md) 에 있습니다.
+- LSA 키가 암호화되어 있는 자리는 Vista 를 경계로 다릅니다. [LSA 시크릿](lsa-secrets.md) 에 있습니다.
+- 도메인 캐시는 Vista 이전이 v1, 이후가 v2 입니다. [도메인 캐시 자격증명](mscache-v2.md) 에 있습니다.
 
 ## 읽는 순서
 
 부트키가 나머지 셋의 전제입니다. 그래서 부트키를 맨 앞에 둡니다.
 
-1. [부트키 구하기 (SYSTEM Boot Key)](/02-artifacts/credentials/sam-security/system-boot-key.md) — SYSTEM 하이브의 네 키 클래스 이름으로 16바이트 부트키를 만듭니다. 나머지 세 페이지가 이 열쇠를 씁니다.
-2. [NTLM 비밀번호 해시 (NT Hash)](/02-artifacts/credentials/sam-security/nt-hash.md) — 부트키로 SAM 을 풀어 로컬 계정의 해시를 꺼냅니다. 옛 방식과 새 방식을 나누는 법을 다룹니다.
-3. [LSA 시크릿 (LSA Secrets)](/02-artifacts/credentials/sam-security/lsa-secrets.md) — 부트키로 LSA 키를 풀고, 서비스 비밀·자동 로그온 비밀번호·시스템 열쇠를 읽습니다.
-4. [도메인 캐시 자격증명 (MSCache v2)](/02-artifacts/credentials/sam-security/mscache-v2.md) — LSA 시크릿 NL$KM 으로 도메인 계정의 캐시 검증자를 읽습니다.
+1. [부트키 구하기 (SYSTEM Boot Key)](system-boot-key.md) — SYSTEM 하이브의 네 키 클래스 이름으로 16바이트 부트키를 만듭니다. 나머지 세 페이지가 이 열쇠를 씁니다.
+2. [NTLM 비밀번호 해시 (NT Hash)](nt-hash.md) — 부트키로 SAM 을 풀어 로컬 계정의 해시를 꺼냅니다. 옛 방식과 새 방식을 나누는 법을 다룹니다.
+3. [LSA 시크릿 (LSA Secrets)](lsa-secrets.md) — 부트키로 LSA 키를 풀고, 서비스 비밀·자동 로그온 비밀번호·시스템 열쇠를 읽습니다.
+4. [도메인 캐시 자격증명 (MSCache v2)](mscache-v2.md) — LSA 시크릿 NL$KM 으로 도메인 계정의 캐시 검증자를 읽습니다.
 
 ## 함께 볼 페이지
 
-- [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md) — 같은 SAM 하이브에서 계정 이름·RID·로그온 정보를 읽습니다. 해시와 계정 이름을 맞출 때 함께 봅니다.
-- [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) — 사용자·시스템이 저장한 다른 비밀을 함께 봅니다.
-- [액티브 디렉터리 DB (NTDS.dit)](/02-artifacts/credentials/ntds-dit.md) — 도메인 계정의 해시는 로컬 SAM 이 아니라 도메인 컨트롤러의 이 DB 에 있습니다.
-- [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) — 시스템 DPAPI 를 풀 때 LSA 시크릿 DPAPI_SYSTEM 을 씁니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) — 비밀번호가 무엇인지가 아니라 언제 로그온했는지를 이벤트 로그로 맞춰 봅니다.
-- [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) — 해시·검증자를 크래킹으로 되찾는 절차를 다룹니다.
-- [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) — 이 하이브의 비밀을 노린 공격을 조사하는 흐름입니다.
+- [사용자 계정 (SAM)](../../system-account/sam.md) — 같은 SAM 하이브에서 계정 이름·RID·로그온 정보를 읽습니다. 해시와 계정 이름을 맞출 때 함께 봅니다.
+- [자격 증명 관리자와 볼트](../credential-manager-windows-vault.md) — 사용자·시스템이 저장한 다른 비밀을 함께 봅니다.
+- [액티브 디렉터리 DB (NTDS.dit)](../ntds-dit.md) — 도메인 계정의 해시는 로컬 SAM 이 아니라 도메인 컨트롤러의 이 DB 에 있습니다.
+- [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) — 시스템 DPAPI 를 풀 때 LSA 시크릿 DPAPI_SYSTEM 을 씁니다.
+- [로그온·로그오프](../../event-logs/logon-events/index.md) — 비밀번호가 무엇인지가 아니라 언제 로그온했는지를 이벤트 로그로 맞춰 봅니다.
+- [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) — 해시·검증자를 크래킹으로 되찾는 절차를 다룹니다.
+- [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) — 이 하이브의 비밀을 노린 공격을 조사하는 흐름입니다.
 
 ## 참고 문헌
 

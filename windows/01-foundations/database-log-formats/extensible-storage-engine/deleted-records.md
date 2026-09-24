@@ -2,7 +2,7 @@
 
 ESE 데이터베이스에서 지운 행은 곧바로 사라지지 않습니다. 지움 표시, 페이지 안 빈 공간, B-트리에서 빠진 페이지의 모습으로 파일 안에 한동안 남습니다.
 
-이 페이지는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md)의 하위 주제입니다. 지운 행이 남는 자리, 찾는 방법, 믿을 수 있는 범위를 다룹니다. 페이지·태그·카탈로그의 기본 구조는 [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에 있습니다. SQLite 에서 같은 주제는 [파일 안에 남은 지운 레코드 (Freelist·Freeblock)](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md)에서 다룹니다.
+이 페이지는 [ESE 데이터베이스](index.md)의 하위 주제입니다. 지운 행이 남는 자리, 찾는 방법, 믿을 수 있는 범위를 다룹니다. 페이지·태그·카탈로그의 기본 구조는 [파일 구조 (Page·B+Tree·Catalog)](page-b-tree-catalog.md)에 있습니다. SQLite 에서 같은 주제는 [파일 안에 남은 지운 레코드 (Freelist·Freeblock)](../sqlite/freelist-freeblock.md)에서 다룹니다.
 
 ## 이 내용이 쓰이는 아티팩트
 
@@ -10,9 +10,9 @@ ESE 데이터베이스에서 지운 행은 곧바로 사라지지 않습니다. 
 
 | 파일 | 행이 지워지는 때 | 자세히 |
 |---|---|---|
-| WebCacheV01.dat | 사용자가 브라우저 방문 기록을 지울 때 | [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) |
-| Windows.edb | 색인에 들어 있던 파일을 지울 때 | [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) |
-| SRUDB.dat 등 그 밖의 ESE 파일 | 앱이 행을 지울 때. 언제 지우는지는 앱마다 다릅니다 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
+| WebCacheV01.dat | 사용자가 브라우저 방문 기록을 지울 때 | [웹캐시 DB (WebCacheV01.dat)](../../../02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) |
+| Windows.edb | 색인에 들어 있던 파일을 지울 때 | [지운 파일·옛 파일 흔적 찾기](../../../02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) |
+| SRUDB.dat 등 그 밖의 ESE 파일 | 앱이 행을 지울 때. 언제 지우는지는 앱마다 다릅니다 | [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) |
 
 Kim 등은 IE 방문 기록을 지운 뒤 WebCacheV01.dat 의 지운 행을 되살려 보였습니다. 되살린 항목으로는 웹 페이지 제목, HTTP 응답 헤더, 다운로드 정보를 들었습니다. Chivers 와 Hargreaves 는 Windows Search 가 파일을 지우면 그 파일의 색인 행도 지운다고 보고했습니다. 그 행은 DB 안 빈 공간에 남을 수 있습니다.
 
@@ -83,7 +83,7 @@ Chivers 와 Hargreaves 의 실험에서 중간 번호의 행이 지워진 자리
 ### 절차
 
 1. 원본의 해시를 구하고 사본에서 작업합니다. 쓰기 모드로 열면 엔진이 파일을 바꿀 수 있습니다.
-2. 트랜잭션 로그를 재생하기 전의 사본을 따로 남깁니다. 재생은 페이지를 다시 쓰므로 빈 공간의 내용이 바뀔 수 있습니다. 로그와 비정상 종료는 [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)를 봅니다.
+2. 트랜잭션 로그를 재생하기 전의 사본을 따로 남깁니다. 재생은 페이지를 다시 쓰므로 빈 공간의 내용이 바뀔 수 있습니다. 로그와 비정상 종료는 [트랜잭션 로그와 비정상 종료 상태](edb-log-dirty-shutdown.md)를 봅니다.
 3. 파일 헤더에서 페이지 크기와 형식 개정을 읽습니다. 헤더 크기와 플래그 자리가 여기서 정해집니다.
 4. 카탈로그(MSysObjects)에서 테이블 이름, FDP 개체 ID, 열 정의를 얻습니다. 지운 테이블은 카탈로그 페이지의 빈 공간을 같은 방법으로 뒤져 찾습니다.
 5. B-트리를 따라가지 않고 파일의 모든 페이지를 훑습니다. 헤더의 FDP 개체 ID 로 페이지를 테이블별로 묶습니다. B-트리에서 빠진 페이지도 이 단계에서 잡힙니다.
@@ -91,7 +91,7 @@ Chivers 와 Hargreaves 의 실험에서 중간 번호의 행이 지워진 자리
 7. 빈 공간에서 레코드 머리 후보를 찾고 열 정의로 거릅니다. 레코드 머리는 마지막 고정 열 ID(1바이트), 마지막 가변 열 ID(1바이트), 가변 데이터 시작 오프셋(2바이트)으로 시작합니다. Kim 등은 두 ID 가 스키마의 열 범위 안에 있는지, 오프셋이 페이지 크기보다 작은지로 후보를 걸렀습니다.
 8. 살아 있는 행과 키를 맞춰 봅니다. 같은 키의 행이 살아 있으면 지운 행이 아니라 고치기 전의 옛 판일 수 있습니다.
 
-빈 공간에서 레코드를 골라내는 일반 기법은 [레코드 카빙 (Record Carving)](/03-techniques/analysis/data-recovery/record-carving.md)에 있습니다.
+빈 공간에서 레코드를 골라내는 일반 기법은 [레코드 카빙 (Record Carving)](../../../03-techniques/analysis/data-recovery/record-carving.md)에 있습니다.
 
 ### 헥스로 한 번 따라가기
 
@@ -166,7 +166,7 @@ Chivers 와 Hargreaves 의 실험에서 중간 번호의 행이 지워진 자리
 
 ### 시각 해석
 
-- 되살린 행의 시각 열은 행이 살아 있을 때 앱이 쓴 값 그대로입니다. UTC 인지 현지 시각인지는 열마다 다르므로 해당 아티팩트 페이지를 따릅니다. 값 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+- 되살린 행의 시각 열은 행이 살아 있을 때 앱이 쓴 값 그대로입니다. UTC 인지 현지 시각인지는 열마다 다르므로 해당 아티팩트 페이지를 따릅니다. 값 형식은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 - 데이터베이스 시각(dbtime)은 바뀔 때마다 커지는 카운터입니다. 어느 페이지가 나중에 바뀌었는지 견주는 데만 쓸 수 있고, 날짜로 바꿀 수 없습니다.
 
 ### 지우기·조작이 남기는 모습
@@ -180,10 +180,10 @@ Chivers 와 Hargreaves 의 실험에서 중간 번호의 행이 지워진 자리
 
 같은 행이 DB 파일 밖에도 남을 수 있습니다. Chivers 와 Hargreaves 는 로그 파일, 섀도 복사본, 파일시스템 비할당 영역, 메모리·pagefile 에서도 Windows Search 행이 나온다고 보고했습니다.
 
-- 트랜잭션 로그: [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)
-- 섀도 복사본: [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md)
-- 비할당 영역: [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md)
-- 페이지 파일: [페이지 파일 (pagefile.sys·swapfile.sys)](/03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md)
+- 트랜잭션 로그: [트랜잭션 로그와 비정상 종료 상태](edb-log-dirty-shutdown.md)
+- 섀도 복사본: [볼륨 섀도 복사본 구조](../../disk-volume/volume-shadow-copy.md)
+- 비할당 영역: [비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)
+- 페이지 파일: [페이지 파일 (pagefile.sys·swapfile.sys)](../../../03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md)
 
 ## 함정
 
@@ -191,14 +191,14 @@ Chivers 와 Hargreaves 의 실험에서 중간 번호의 행이 지워진 자리
 - **로그를 재생한 파일만 보면 안 됩니다.** 압수 이미지의 ESE 파일은 대부분 비정상 종료 상태였고, 오래된 로그가 지워져 재생이 안 되는 경우도 있었습니다(현장 관찰). 페이지를 직접 읽는 방식은 로그 없이도 됩니다.
 - **같은 키의 행이 여러 벌 나옵니다.** 고치기 전의 옛 판이나 페이지 분할의 복사본일 수 있습니다.
 - **ID 가 다시 쓰입니다.** Chivers 와 Hargreaves 의 실험에서는 가장 큰 번호의 행을 지우면 다음 새 행이 그 번호를 다시 썼습니다. 되살린 행의 ID 가 살아 있는 다른 행과 같을 수 있습니다.
-- **긴 값은 따로 저장됩니다.** 행에는 긴 값의 ID 만 들어 있습니다. ID 가 다시 쓰일 수 있어 지운 행과 긴 값 조각을 믿을 만하게 잇기 어렵습니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가집니다(현장 관찰에서 6,000바이트 값이 11,158바이트로 나왔습니다). 되살린 값이 압축되어 있을 수도 있습니다. 둘 다 [긴 값과 압축 열](/01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md)을 봅니다.
+- **긴 값은 따로 저장됩니다.** 행에는 긴 값의 ID 만 들어 있습니다. ID 가 다시 쓰일 수 있어 지운 행과 긴 값 조각을 믿을 만하게 잇기 어렵습니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가집니다(현장 관찰에서 6,000바이트 값이 11,158바이트로 나왔습니다). 되살린 값이 압축되어 있을 수도 있습니다. 둘 다 [긴 값과 압축 열](long-value-compressed-column.md)을 봅니다.
 - **큰 페이지에서 태그 위쪽 비트를 플래그로 읽으면 틀립니다.** 16·32 KiB 페이지는 플래그가 값 안에 있습니다.
 - **도구가 0건을 내도 없다는 뜻이 아닙니다.** libesedb 는 지움 표시가 붙은 값을 건너뜁니다(소스 확인). JET API 로 여는 도구는 살아 있는 행만 돌려줍니다.
 - **빈 공간에는 쓰레기 바이트가 많습니다.** 열 정의로 거르지 않은 후보는 잘못 잡은 것이 섞입니다. 레코드 머리가 망가진 행은 이 방법으로 찾지 못합니다.
 
 ## 도구
 
-아래는 예시입니다. 한 도구의 결과만 믿지 말고 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)의 방식으로 견줘 봅니다.
+아래는 예시입니다. 한 도구의 결과만 믿지 말고 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)의 방식으로 견줘 봅니다.
 
 - **libesedb (esedbinfo·esedbexport)**: 살아 있는 행을 페이지 단위로 읽습니다. 형식 문서가 함께 공개되어 있습니다. 지움 표시가 붙은 값은 건너뜁니다.
 - **esentutl**: Windows 에 들어 있습니다. 헤더 덤프(/m), 로그 재생(/r), 오프라인 압축(/d)을 합니다. 재생과 압축은 파일을 바꾸므로 사본에서만 씁니다.

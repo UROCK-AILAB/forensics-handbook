@@ -1,6 +1,6 @@
 # 기록이 남는 위치 (로컬 PC와 도메인 컨트롤러)
 
-> 위치: 아티팩트 사전 > 이벤트 로그 > [로그온·로그오프 (Logon Events)](/02-artifacts/event-logs/logon-events/index.md)
+> 위치: 아티팩트 사전 > 이벤트 로그 > [로그온·로그오프 (Logon Events)](index.md)
 
 ## 한 줄 요약
 
@@ -35,15 +35,15 @@ Microsoft 의 로그온 감사 (Audit Logon) 문서는 이 하위 범주를 이�
 
 | 이벤트 | 남는 컴퓨터 | 근거 | 자세히 |
 |---|---|---|---|
-| 4624 | 접속을 받은 컴퓨터. 곧 세션이 만들어진 컴퓨터 | 문서 | [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) |
-| 4625 | 접속을 받은 컴퓨터 | 문서 (로그온 감사 하위 범주 설명) | [로그온 실패와 실패 코드](/02-artifacts/event-logs/logon-events/4625.md) |
-| 4634 · 4647 | 세션이 있던 컴퓨터 | 해석. 문서는 로그온 ID 로 같은 컴퓨터의 4624 와 짝짓는다고 적습니다. 로그오프 감사 문서는 이번에 확인하지 못했습니다 | [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) |
-| 4648 | 자격 증명을 넣은 프로세스가 돈 컴퓨터 | 해석. 아래 "4648 을 따로 보는 이유" 를 봅니다 | [명시적 자격 증명·특수 권한](/02-artifacts/event-logs/logon-events/4648-4672.md) |
-| 4672 | 권한이 붙은 세션이 있는 컴퓨터 | 해석. 문서는 `SubjectLogonId` 로 4624 와 잇는다고만 적습니다 | [명시적 자격 증명·특수 권한](/02-artifacts/event-logs/logon-events/4648-4672.md) |
-| 4768 · 4769 | 도메인 컨트롤러만 | 문서 | [도메인 인증 이벤트](/02-artifacts/event-logs/logon-events/4768-4769-4776.md) |
-| 4776 | 자격 증명의 주인인 컴퓨터. 도메인 계정은 도메인 컨트롤러, 로컬 계정은 그 컴퓨터 | 문서 | [도메인 인증 이벤트](/02-artifacts/event-logs/logon-events/4768-4769-4776.md) |
+| 4624 | 접속을 받은 컴퓨터. 곧 세션이 만들어진 컴퓨터 | 문서 | [로그온 세션 잇기](logon-id-4624-4634-4647.md) |
+| 4625 | 접속을 받은 컴퓨터 | 문서 (로그온 감사 하위 범주 설명) | [로그온 실패와 실패 코드](4625.md) |
+| 4634 · 4647 | 세션이 있던 컴퓨터 | 해석. 문서는 로그온 ID 로 같은 컴퓨터의 4624 와 짝짓는다고 적습니다. 로그오프 감사 문서는 이번에 확인하지 못했습니다 | [로그온 세션 잇기](logon-id-4624-4634-4647.md) |
+| 4648 | 자격 증명을 넣은 프로세스가 돈 컴퓨터 | 해석. 아래 "4648 을 따로 보는 이유" 를 봅니다 | [명시적 자격 증명·특수 권한](4648-4672.md) |
+| 4672 | 권한이 붙은 세션이 있는 컴퓨터 | 해석. 문서는 `SubjectLogonId` 로 4624 와 잇는다고만 적습니다 | [명시적 자격 증명·특수 권한](4648-4672.md) |
+| 4768 · 4769 | 도메인 컨트롤러만 | 문서 | [도메인 인증 이벤트](4768-4769-4776.md) |
+| 4776 | 자격 증명의 주인인 컴퓨터. 도메인 계정은 도메인 컨트롤러, 로컬 계정은 그 컴퓨터 | 문서 | [도메인 인증 이벤트](4768-4769-4776.md) |
 
-화면 잠금·해제 이벤트는 [화면 잠금·해제](/02-artifacts/event-logs/logon-events/4800-4801.md)에서 다룹니다.
+화면 잠금·해제 이벤트는 [화면 잠금·해제](4800-4801.md)에서 다룹니다.
 
 - 4624·4634·4647·4648·4672·4776 은 Vista·Server 2008 부터 있습니다.
 - 4768·4769 는 Windows Server 2008 이후의 Active Directory 도메인 컨트롤러에서 생깁니다.
@@ -63,7 +63,7 @@ Microsoft 의 로그온 감사 (Audit Logon) 문서는 이 하위 범주를 이�
 ### 감사 설정과 기록 양
 
 - Microsoft 의 로그온 감사 문서는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 성공과 실패를 감사하라고 권합니다.
-- 권장은 권장일 뿐입니다. 컴퓨터마다 실제 감사 설정을 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 확인합니다.
+- 권장은 권장일 뿐입니다. 컴퓨터마다 실제 감사 설정을 [감사 정책과 로그 설정](../audit-policy-log-settings.md)에서 확인합니다.
 - 같은 문서는 로그온 감사 이벤트의 양이 클라이언트에서는 적고, 도메인 컨트롤러·네트워크 서버에서는 중간이라고 적습니다.
 - 컴퓨터마다 쌓이는 양이 다르므로 로그가 거슬러 올라가는 기간도 다를 수 있습니다. 모은 로그마다 첫 기록의 시각을 적어 둡니다.
 
@@ -92,7 +92,7 @@ Microsoft 의 로그온 감사 (Audit Logon) 문서는 이 하위 범주를 이�
 | 계정 이름 | 모든 이벤트 | 4769 는 `이름@전체 도메인 이름` 꼴이라 모양이 다릅니다 |
 | 로그온 ID (Logon ID) | 한 컴퓨터 안의 4624·4634·4647·4648·4672 | 다른 컴퓨터끼리는 쓸 수 없습니다. 같은 컴퓨터에서도 재부팅 사이에서만 겹치지 않습니다 |
 
-IP 와 이름을 컴퓨터로 바꿀 때는 [네트워크 인터페이스 설정](/02-artifacts/network/tcp-ip-interfaces.md)과 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)를 봅니다.
+IP 와 이름을 컴퓨터로 바꿀 때는 [네트워크 인터페이스 설정](../../network/tcp-ip-interfaces.md)과 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md)를 봅니다.
 
 ### 인증 방식과 계정 종류에 따른 차이
 
@@ -105,7 +105,7 @@ IP 와 이름을 컴퓨터로 바꿀 때는 [네트워크 인터페이스 설정
 | 도메인 계정이 도메인 컨트롤러에 직접 로그온 | 4776 은 생기지 않습니다 | (로그온한 컴퓨터가 곧 도메인 컨트롤러입니다) | 문서 |
 
 - 계정이 저장된 컴퓨터에 로컬로 로그온하면 늘 NTLM 인증을 씁니다.
-- 로그온 유형의 뜻은 [로그온 유형 해석](/02-artifacts/event-logs/logon-events/logon-type.md)에서 다룹니다.
+- 로그온 유형의 뜻은 [로그온 유형 해석](logon-type.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -126,10 +126,10 @@ IP 와 이름을 컴퓨터로 바꿀 때는 [네트워크 인터페이스 설정
 
 - 모든 이벤트의 `TimeCreated SystemTime` 은 끝에 `Z` 가 붙은 UTC 형식입니다.
 - 시각은 이벤트를 남긴 컴퓨터의 시계를 따릅니다. 출발 PC, 도착 PC, 도메인 컨트롤러의 시계는 서로 다를 수 있습니다.
-- 세 컴퓨터의 기록을 한 줄로 세우기 전에 컴퓨터마다 시계 차이를 구합니다. 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md)에서 다룹니다.
+- 세 컴퓨터의 기록을 한 줄로 세우기 전에 컴퓨터마다 시계 차이를 구합니다. 방법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 - 보정하기 전에는 컴퓨터를 넘나드는 앞뒤 순서를 단정하지 않습니다.
-- 도메인 컨트롤러의 4768 Result Code 0x25 는 시계 차이가 너무 크다는 뜻입니다. [도메인 인증 이벤트](/02-artifacts/event-logs/logon-events/4768-4769-4776.md)를 봅니다.
-- 시스템 시각을 바꾼 기록은 컴퓨터마다 [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md)에서 찾습니다.
+- 도메인 컨트롤러의 4768 Result Code 0x25 는 시계 차이가 너무 크다는 뜻입니다. [도메인 인증 이벤트](4768-4769-4776.md)를 봅니다.
+- 시스템 시각을 바꾼 기록은 컴퓨터마다 [시간 변경](../4616-kernel-general.md)에서 찾습니다.
 
 ## 함정과 한계
 
@@ -146,7 +146,7 @@ IP 와 이름을 컴퓨터로 바꿀 때는 [네트워크 인터페이스 설정
 ### 지우기와 조작
 
 - 한 컴퓨터의 로그를 지워도 다른 컴퓨터의 기록은 남습니다. PC 의 로그가 지워졌으면 도메인 컨트롤러와 상대 PC 의 기록으로 빈자리를 메웁니다.
-- 지운 흔적은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)에서 찾습니다. 여러 흔적을 모아 읽는 순서는 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+- 지운 흔적은 [이벤트 로그 삭제](../1102-104.md)에서 찾습니다. 여러 흔적을 모아 읽는 순서는 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -158,7 +158,7 @@ IP 와 이름을 컴퓨터로 바꿀 때는 [네트워크 인터페이스 설정
 4. 로컬 계정이 쓰였으면 그 계정이 있는 컴퓨터의 4776 을 봅니다.
 5. 컴퓨터마다 감사 설정, 로그 크기, 첫 기록 시각, 시계 차이를 적습니다.
 
-모으는 방법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)과 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
+모으는 방법은 [증거 획득](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)과 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -185,19 +185,19 @@ Get-ChildItem .\logs\*.evtx | ForEach-Object {
 - 도메인 컨트롤러 파일에 4768·4769 가 없으면 Kerberos 감사가 꺼져 있었는지 먼저 봅니다.
 - PC 파일에 4768·4769 가 있으면 그 파일이 정말 PC 의 로그인지 다시 확인합니다.
 - 파일마다 `FirstUtc` 가 다르면 그 차이만큼 볼 수 있는 기간이 다릅니다.
-- 도구가 여러 파일을 합쳐 보여 줄 때 어느 컴퓨터의 기록인지 칸이 남는지 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- 도구가 여러 파일을 합쳐 보여 줄 때 어느 컴퓨터의 기록인지 칸이 남는지 확인합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 기록 | 무엇을 맞춰 보나 | 링크 |
 |---|---|---|
-| 도착 PC 의 로그온 유형 | 접속 방식에 따라 출발지 칸이 어떻게 채워지는지 | [로그온 유형 해석](/02-artifacts/event-logs/logon-events/logon-type.md) |
-| 원격 데스크톱 로그 | 원격 데스크톱 접속이 출발 PC 와 도착 PC 에 남긴 기록 | [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) |
-| 공유 폴더 접근 기록 | 네트워크 로그온 뒤 도착 PC 에서 어떤 공유에 접근했는지 | [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md) |
-| 출발 PC 의 연결 흔적 | 출발 PC 에서 연결한 공유·드라이브 | [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) |
-| 컴퓨터별 감사 설정 | 기록이 없는 까닭이 설정 때문인지 | [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) |
+| 도착 PC 의 로그온 유형 | 접속 방식에 따라 출발지 칸이 어떻게 채워지는지 | [로그온 유형 해석](logon-type.md) |
+| 원격 데스크톱 로그 | 원격 데스크톱 접속이 출발 PC 와 도착 PC 에 남긴 기록 | [원격 데스크톱 이벤트](../rdp-event-logs/index.md) |
+| 공유 폴더 접근 기록 | 네트워크 로그온 뒤 도착 PC 에서 어떤 공유에 접근했는지 | [공유 폴더 접근](../5140-5145.md) |
+| 출발 PC 의 연결 흔적 | 출발 PC 에서 연결한 공유·드라이브 | [공유 폴더·네트워크 드라이브](../../network/network-shares-mapped-drives.md) |
+| 컴퓨터별 감사 설정 | 기록이 없는 까닭이 설정 때문인지 | [감사 정책과 로그 설정](../audit-policy-log-settings.md) |
 
-세 컴퓨터의 기록을 합쳐 읽는 순서는 [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md)과 [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md)에서 다룹니다.
+세 컴퓨터의 기록을 합쳐 읽는 순서는 [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md)과 [원격 데스크톱 침입 확인](../../../04-scenarios/incident/rdp-intrusion.md)에서 다룹니다.
 
 ## 실습
 

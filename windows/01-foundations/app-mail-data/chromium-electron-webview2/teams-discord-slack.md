@@ -1,6 +1,6 @@
 # Electron·WebView2 앱 데이터 위치 (Teams·Discord·Slack 등)
 
-> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) > Electron·WebView2 앱 데이터 위치
+> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > Electron·WebView2 앱 데이터 위치
 
 ## 한 줄 요약
 
@@ -14,20 +14,20 @@ Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대�
 | 앱 | 방식 | 근거 | 자세히 |
 |---|---|---|---|
 | VS Code | Electron | 관찰 | 이 위키에 따로 페이지 없음 |
-| 새 Teams | WebView2 (`EBWebView` 폴더) | 관찰 | [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) |
-| 클래식 Teams | 방식은 확인하지 못함. 위치만 문서로 확인 | Microsoft 문서 | [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) |
-| 새 Outlook | WebView2 (`EBWebView` 폴더) | 관찰 | [새 Outlook](/02-artifacts/mail/new-outlook.md) |
-| OneDrive | WebView2 (`EBWebView` 폴더) | 관찰 | [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) |
-| 카카오톡 PC | 사용자별 폴더 안에 `EBWebView` 폴더 | 관찰 | [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md) |
-| Discord | 폴더 두 개를 봤지만 안은 보지 않음 | 관찰 | [디스코드](/02-artifacts/messengers/discord.md) |
-| Slack | 관찰 PC 에 없음 | — | [슬랙](/02-artifacts/messengers/slack.md) |
+| 새 Teams | WebView2 (`EBWebView` 폴더) | 관찰 | [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) |
+| 클래식 Teams | 방식은 확인하지 못함. 위치만 문서로 확인 | Microsoft 문서 | [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) |
+| 새 Outlook | WebView2 (`EBWebView` 폴더) | 관찰 | [새 Outlook](../../../02-artifacts/mail/new-outlook.md) |
+| OneDrive | WebView2 (`EBWebView` 폴더) | 관찰 | [원드라이브](../../../02-artifacts/cloud-notes/onedrive/index.md) |
+| 카카오톡 PC | 사용자별 폴더 안에 `EBWebView` 폴더 | 관찰 | [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) |
+| Discord | 폴더 두 개를 봤지만 안은 보지 않음 | 관찰 | [디스코드](../../../02-artifacts/messengers/discord.md) |
+| Slack | 관찰 PC 에 없음 | — | [슬랙](../../../02-artifacts/messengers/slack.md) |
 
 이 페이지에서 "관찰" 이라고 적은 내용은 Windows 11(빌드 26200) PC 한 대에서 본 것입니다.
 폴더·파일 이름, JSON 키 이름, 파일 앞 몇 바이트만 봤습니다.
 모든 PC 와 모든 앱 버전에 맞는다고 보장하지 못합니다.
 
 안에 든 파일을 읽는 법은 브라우저와 같습니다.
-프로필 폴더와 `Local State` 는 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 에서, 캐시는 [캐시 형식](/01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md) 에서, 암호화는 [쿠키·비밀번호 암호화](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 에서 다룹니다.
+프로필 폴더와 `Local State` 는 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 에서, 캐시는 [캐시 형식](blockfile-simple-cache.md) 에서, 암호화는 [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) 에서 다룹니다.
 
 ## 구조
 
@@ -80,7 +80,7 @@ WebView2 는 사용자 데이터 폴더 (User Data Folder, UDF) 에 쿠키·권�
 - `EBWebView` 안은 브라우저 User Data 와 같은 구성이었습니다 (관찰). `Local State`, `Last Version`, 그리고 `Default\` 아래 `History`, `Login Data`, `Network\Cookies`, `Cache\Cache_Data`, `Code Cache`, `Local Storage` 등이 있었습니다.
 - UDF 하나에 프로필을 여러 개 둘 수 있습니다. 프로필마다 전용 폴더가 생깁니다 (Microsoft 문서).
 - UDF 하나는 한 번에 WebView2 세션 하나만 씁니다. 같은 UDF 를 쓰는 컨트롤은 앱이 달라도 세션을 함께 씁니다 (Microsoft 문서).
-- 패키지 앱 폴더의 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+- 패키지 앱 폴더의 구조는 [UWP 앱 데이터 구조](../packages-settings-dat.md) 에서 다룹니다.
 
 #### 관찰한 EBWebView 위치
 
@@ -118,23 +118,23 @@ WebView2 는 사용자 데이터 폴더 (User Data Folder, UDF) 에 쿠키·권�
 - `EBWebView` 아래에 `WV2Profile_tfw` 폴더가 있었습니다 (관찰). "tfw" 의 뜻은 확인하지 못했습니다.
 - 두 프로필 폴더를 모두 읽습니다.
 - 새 Teams 를 WebView2 기반으로 본 근거는 `EBWebView` 폴더뿐입니다. 공식 설명은 확인하지 못했습니다.
-- 대화 기록 같은 Teams 고유 해석은 [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) 에서 다룹니다.
+- 대화 기록 같은 Teams 고유 해석은 [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) 에서 다룹니다.
 
 ### Discord·Slack
 
 - Discord 는 `%APPDATA%\discord` 와 `%LOCALAPPDATA%\Discord` 두 폴더가 있었습니다 (관찰). 두 폴더 안의 구성은 이번에 보지 않았습니다.
 - Slack 은 관찰 PC 에 없었습니다. 설치형과 스토어 판의 경로는 확인하지 못했습니다.
-- 두 앱의 해석은 [디스코드](/02-artifacts/messengers/discord.md) 와 [슬랙](/02-artifacts/messengers/slack.md) 에서 다룹니다.
+- 두 앱의 해석은 [디스코드](../../../02-artifacts/messengers/discord.md) 와 [슬랙](../../../02-artifacts/messengers/slack.md) 에서 다룹니다.
 - 경로를 모를 때는 아래 "읽는 법" 처럼 `Local State` 와 `EBWebView` 이름으로 찾습니다.
 
 ## 읽는 법
 
-1. **이름으로 후보를 모읍니다.** 사용자 프로필마다 `Local State` 파일과 `EBWebView` 폴더를 모두 찾습니다. `%APPDATA%`, `%LOCALAPPDATA%`, `%LOCALAPPDATA%\Packages` 아래를 먼저 보고 디스크 전체로 넓힙니다. 이미지에서는 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 목록에서 이름으로 찾습니다.
-2. **경로로 앱을 가립니다.** `%APPDATA%\<앱 이름>`, 패키지 폴더 이름, 실행 파일 경로 + `.WebView2` 같은 모양을 봅니다. 폴더 이름이 제품 이름과 다를 수 있으니 [설치 프로그램](/02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 설치 경로를 맞춰 봅니다.
+1. **이름으로 후보를 모읍니다.** 사용자 프로필마다 `Local State` 파일과 `EBWebView` 폴더를 모두 찾습니다. `%APPDATA%`, `%LOCALAPPDATA%`, `%LOCALAPPDATA%\Packages` 아래를 먼저 보고 디스크 전체로 넓힙니다. 이미지에서는 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 목록에서 이름으로 찾습니다.
+2. **경로로 앱을 가립니다.** `%APPDATA%\<앱 이름>`, 패키지 폴더 이름, 실행 파일 경로 + `.WebView2` 같은 모양을 봅니다. 폴더 이름이 제품 이름과 다를 수 있으니 [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md) 에서 설치 경로를 맞춰 봅니다.
 3. **층을 확인합니다.** `Default` 같은 프로필 폴더가 있는지 봅니다. 관찰한 Electron 앱처럼 없을 수도 있습니다. 그때는 `Local State` 가 있는 폴더를 프로필 폴더처럼 읽습니다.
 4. **버전을 적습니다.** `Last Version` 파일이 있으면 그 값을 적습니다. 파일 구조는 이 버전에 맞춰 판단합니다.
 5. **추가 세션 폴더를 찾습니다.** `Partitions` 아래 폴더와 WebView2 의 추가 프로필 폴더(예: 새 Teams 의 `WV2Profile_tfw`)도 같은 방법으로 읽습니다.
-6. **파일을 읽습니다.** 방문 기록·쿠키·저장소·캐시는 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 와 같은 방법으로 읽습니다. 결과에는 브라우저가 아니라 앱 이름과 폴더 경로를 붙입니다.
+6. **파일을 읽습니다.** 방문 기록·쿠키·저장소·캐시는 [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) 와 같은 방법으로 읽습니다. 결과에는 브라우저가 아니라 앱 이름과 폴더 경로를 붙입니다.
 
 ## 포렌식에서 중요한 점
 
@@ -163,13 +163,13 @@ Microsoft 문서에 적힌 UDF 삭제 규칙은 아래와 같습니다.
 - 새 Teams 는 설정 > 앱 > 설치된 앱 > 고급 옵션 > 재설정 으로도 앱 데이터를 지울 수 있습니다 (Microsoft 문서).
 - Microsoft 문서는 Teams 캐시를 지우면 원인 조사에 쓰는 진단 로그도 함께 지워진다고 적었습니다.
 - 그래서 캐시와 로그가 함께 없으면 사용자가 캐시를 지웠을 가능성도 따져 봅니다 (해석).
-- 지운 파일은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 방법으로 찾습니다.
+- 지운 파일은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 방법으로 찾습니다.
 
 ### 지운 기록과 손상
 
 앱 폴더 안의 파일 형식은 브라우저와 같습니다.
 그래서 지운 레코드와 비정상 종료 흔적도 같은 방법으로 봅니다.
-DB 파일은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md), 캐시는 [캐시 형식](/01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md) 을 봅니다.
+DB 파일은 [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md), 캐시는 [캐시 형식](blockfile-simple-cache.md) 을 봅니다.
 
 ## 함정
 

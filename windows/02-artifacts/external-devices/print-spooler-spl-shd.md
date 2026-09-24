@@ -39,7 +39,7 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 
 ## 위치와 버전별 차이
 
-하이브 파일 위치와 `ControlSet00X` 를 고르는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
+하이브 파일 위치와 `ControlSet00X` 를 고르는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 
 | 기록 | 위치 | 주로 보는 것 |
 |---|---|---|
@@ -47,7 +47,7 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 | 프린터별 설정 | SYSTEM `ControlSet00X\Control\Print\Printers\<프린터 이름>` | `Attributes`, `Port`, `Printer Driver`, `Print Processor`, `Datatype`, `SpoolDirectory` |
 | 사용자별 프린터 목록 | NTUSER.DAT `Software\Microsoft\Windows NT\CurrentVersion\Devices`, 같은 곳의 `PrinterPorts` | 값 이름이 프린터 이름입니다. |
 | 기본 프린터 | NTUSER.DAT `Software\Microsoft\Windows NT\CurrentVersion\Windows` 의 `Device` 값 | `<프린터 이름>,winspool,<포트>` 모양 |
-| 인쇄 이벤트 | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-PrintService%4Operational.evtx` | [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) |
+| 인쇄 이벤트 | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-PrintService%4Operational.evtx` | [인쇄 이벤트](../event-logs/printservice-307.md) |
 
 - 라이브 PC 에서는 SYSTEM 쪽 키를 `HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers` 로 엽니다.
 - 관찰 PC 에서 기본 프린터 `Device` 값은 `<가상 PDF 프린터 이름>,winspool,Ne01:` 모양이었고, 같은 키의 `LegacyDefaultPrinterMode` 는 0 이었습니다.
@@ -117,7 +117,7 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 
 - 관찰 PC 에서 `Microsoft-Windows-PrintService/Operational` 채널은 꺼져 있었습니다. `Microsoft-Windows-PrintService/Admin` 채널은 켜져 있었고 0건이었습니다.
 - Operational 채널의 최대 크기는 1052672 바이트였습니다. 보존 설정(retention)은 false 여서, 꽉 차면 오래된 이벤트부터 덮어씁니다.
-- 이 채널이 켜져 있으면 307 이벤트에 문서, 소유자, 프린터, 포트, 바이트 크기, 쪽수가 남습니다. 칸별 설명은 [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md)에서 다룹니다.
+- 이 채널이 켜져 있으면 307 이벤트에 문서, 소유자, 프린터, 포트, 바이트 크기, 쪽수가 남습니다. 칸별 설명은 [인쇄 이벤트](../event-logs/printservice-307.md)에서 다룹니다.
 - 같은 채널의 800(스풀), 801(인쇄), 805(렌더링), 842(인쇄 처리기) 이벤트에는 작업 번호(`JobId`) 칸이 있습니다.
 
 ## 증거로서 의미
@@ -150,9 +150,9 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 |---|---|---|
 | 프린터 키 `StartTime`·`UntilTime` | 이름이 같은 `PRINTER_INFO_2` 멤버는 프린터 정보의 일부입니다. 인쇄 작업 시각으로 쓰지 않습니다. | 구조체 멤버는 "GMT 0시부터 지난 분" (Microsoft) |
 | SHD 안의 제출 시각 | 형식(SYSTEMTIME 인지)과 기준(UTC 인지 현지 시각인지)을 확인하지 못했습니다. | 확인하지 못함 |
-| 스풀 폴더 파일의 파일시스템 시각 | 스풀 파일도 NTFS 위의 파일입니다. 파일이나 그 MFT 항목이 남아 있으면 시각을 볼 수 있습니다. | UTC ([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)) |
+| 스풀 폴더 파일의 파일시스템 시각 | 스풀 파일도 NTFS 위의 파일입니다. 파일이나 그 MFT 항목이 남아 있으면 시각을 볼 수 있습니다. | UTC ([마스터 파일 테이블](../filesystem/mft.md)) |
 | 프린터 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 확인하지 못했습니다. 프린터를 추가한 시각으로 쓰지 않습니다. | UTC |
-| PrintService 이벤트 기록 시각 | [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md)에서 다룹니다. | UTC |
+| PrintService 이벤트 기록 시각 | [인쇄 이벤트](../event-logs/printservice-307.md)에서 다룹니다. | UTC |
 
 - 인쇄한 때를 정하려면 이벤트 로그와 스풀 폴더의 파일시스템 기록을 함께 봅니다. 프린터 키의 시각 값으로 정하지 않습니다.
 
@@ -162,10 +162,10 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 2. **스풀하지 않는 프린터.** Direct 비트가 켜져 있으면 스풀하지 않고 바로 프린터로 보냅니다. 이때는 스풀 파일이 생기지 않는다고 볼 수 있지만, 이 글에서 직접 확인하지는 못했습니다.
 3. **다른 스풀 폴더.** `DefaultSpoolDirectory` 와 프린터별 `SpoolDirectory` 를 먼저 읽습니다. `SpoolDirectory` 가 비어 있지 않으면 그 폴더도 봅니다. 그 폴더에 스풀 파일이 생기는지는 확인하지 못했습니다.
 4. **꺼져 있는 이벤트 채널.** 관찰 PC 에서 PrintService/Operational 은 꺼져 있었습니다. 이 채널이 기본으로 꺼져 있다는 설명이 있지만 이 글에서 확인하지는 못했습니다. 켜져 있어도 1MB 남짓한 크기라 오래된 이벤트는 덮어씁니다.
-5. **가상 프린터.** PDF·OneNote 같은 가상 프린터는 종이 대신 파일이나 노트를 만듭니다. 만든 PDF 파일은 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)과 [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md)로 추적합니다.
+5. **가상 프린터.** PDF·OneNote 같은 가상 프린터는 종이 대신 파일이나 노트를 만듭니다. 만든 PDF 파일은 [바로가기 파일](../file-folder-usage/lnk.md)과 [최근 문서](../file-folder-usage/recentdocs.md)로 추적합니다.
 6. **스풀 파일 형식을 미리 정하는 실수.** 관찰 PC 의 프린터는 모두 `Datatype` 이 RAW 였습니다. 작업마다 형식이 달라질 수 있는지는 확인하지 못했습니다. SPL 을 열 때는 형식을 가정하지 말고 첫 바이트부터 확인합니다.
 7. **비트 값의 근거.** 이 페이지의 비트 숫자는 .NET 열거형과 Wine 의 `winspool.h` 에서 나왔습니다. .NET 열거형에는 0x40(`LOCAL`) 같은 비트가 없습니다. 도구가 .NET 이름만 보여 주면 헤더 값으로 다시 풉니다.
-8. **지워진 스풀 파일.** 비할당 영역에서 SPL·SHD 를 되살리는 방법은 이 글에서 확인하지 못했습니다. 일반 절차는 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
+8. **지워진 스풀 파일.** 비할당 영역에서 SPL·SHD 를 되살리는 방법은 이 글에서 확인하지 못했습니다. 일반 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
 
 ## 직접 분석해 보기
 
@@ -205,14 +205,14 @@ Attributes 데이터 바이트    01 09 00 00
 
 | 아티팩트 | 맞춰 볼 것 | 링크 |
 |---|---|---|
-| 인쇄 이벤트 (307 등) | 문서, 소유자, 프린터, 포트, 크기, 쪽수 | [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) |
-| 마스터 파일 테이블 | 스풀 폴더 파일의 생성·삭제 흔적과 시각 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| USN 변경 저널 | 스풀 폴더 파일이 생기고 지워진 기록 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 바로가기 파일 | 가상 PDF 프린터로 만든 파일을 열었나 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 최근 문서 | 가상 PDF 프린터로 만든 파일 | [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) |
-| 섀도 복사본 | 예전 스풀 폴더와 예전 하이브 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 인쇄 이벤트 (307 등) | 문서, 소유자, 프린터, 포트, 크기, 쪽수 | [인쇄 이벤트](../event-logs/printservice-307.md) |
+| 마스터 파일 테이블 | 스풀 폴더 파일의 생성·삭제 흔적과 시각 | [마스터 파일 테이블](../filesystem/mft.md) |
+| USN 변경 저널 | 스풀 폴더 파일이 생기고 지워진 기록 | [USN 변경 저널](../filesystem/usnjrnl.md) |
+| 바로가기 파일 | 가상 PDF 프린터로 만든 파일을 열었나 | [바로가기 파일](../file-folder-usage/lnk.md) |
+| 최근 문서 | 가상 PDF 프린터로 만든 파일 | [최근 문서](../file-folder-usage/recentdocs.md) |
+| 섀도 복사본 | 예전 스풀 폴더와 예전 하이브 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-- 인쇄를 자료 유출 경로로 볼 때의 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다.
+- 인쇄를 자료 유출 경로로 볼 때의 흐름은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다.
 
 ## 실습
 

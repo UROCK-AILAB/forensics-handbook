@@ -11,7 +11,7 @@
 - 드라이버를 설치할 때는 INF 파일의 AddService 지시문을 씁니다. Windows 는 그 지시문이 가리키는 절의 ServiceBinary 항목으로 ImagePath 값을 만듭니다.
 - `Parameters` 하위 키에는 드라이버별 데이터가 들어갑니다. `Performance` 하위 키에는 성능 모니터링 DLL 이름 같은 정보가 들어갑니다.
 - 서비스 제어 관리자 (Service Control Manager, SCM) 가 자동 시작 서비스를 올립니다.
-- 원격 실행 도구 가운데에는 대상 PC 에 서비스를 만들어 명령을 돌리는 것이 있습니다. 그 흐름은 [PsExec·WMI·WinRM](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에서 다룹니다.
+- 원격 실행 도구 가운데에는 대상 PC 에 서비스를 만들어 명령을 돌리는 것이 있습니다. 그 흐름은 [PsExec·WMI·WinRM](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -21,7 +21,7 @@
 | 드라이버별 데이터 | `...\Services\<이름>\Parameters` |
 | svchost 그룹 목록 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Svchost` |
 
-- `CurrentControlSet` 은 켜진 PC 에서 보이는 이름입니다. 이미지에서 어느 컨트롤셋을 읽어야 하는지는 [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다.
+- `CurrentControlSet` 은 켜진 PC 에서 보이는 이름입니다. 이미지에서 어느 컨트롤셋을 읽어야 하는지는 [컨트롤셋 고르기](../../01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다.
 - Windows 11 PC 한 대에서 `HKLM\SYSTEM\Select` 는 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다. `ControlSet001` 과 `CurrentControlSet` 만 보였고 `ControlSet002` 는 없었습니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 의 `Svchost` 키에는 그룹 목록 값이 67개 있었습니다. 예를 들어 `netsvcs` 그룹에는 lanmanserver·IKEEXT·iphlpsvc 등이 들어 있었습니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 에는 사용자별 서비스가 있었습니다. 아래 "사용자별 서비스" 를 봅니다. 이 형태가 어느 버전부터 생겼는지는 확인하지 못했습니다.
@@ -142,7 +142,7 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 
 ### 증명하지 못하는 것
 
-- **실행됐나.** 서비스 키는 등록만 알려 줍니다. 실행은 서비스 상태 변경 이벤트(7036), [프리페치](/02-artifacts/execution/prefetch/index.md), [프로세스 생성](/02-artifacts/event-logs/4688.md) 으로 따로 봅니다. Windows 11 PC 한 대에는 7036 이 한 건도 없었습니다. 7036 이 없다고 실행되지 않았다고 볼 수 없습니다. (확인 범위: Win11 25H2 한 대)
+- **실행됐나.** 서비스 키는 등록만 알려 줍니다. 실행은 서비스 상태 변경 이벤트(7036), [프리페치](../execution/prefetch/index.md), [프로세스 생성](../event-logs/4688.md) 으로 따로 봅니다. Windows 11 PC 한 대에는 7036 이 한 건도 없었습니다. 7036 이 없다고 실행되지 않았다고 볼 수 없습니다. (확인 범위: Win11 25H2 한 대)
 - **언제 설치됐나.** 값에는 시각이 없습니다. 아래 "시각 해석" 의 설치 이벤트와 키 시각을 봅니다.
 - **지금 그 경로의 파일이 그때 그 파일인가.** 키에는 해시가 없습니다.
 - **누가 설치했나.** 서비스 키에는 설치한 계정을 적는 칸이 없습니다. 설치 이벤트에서 찾습니다.
@@ -151,7 +151,7 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 
 ## 시각 해석
 
-- 서비스 키의 시각은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 하나입니다. 이 시각은 키가 마지막으로 바뀐 때일 뿐이라서 설치 시각이라고 단정하지 않습니다.
+- 서비스 키의 시각은 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 하나입니다. 이 시각은 키가 마지막으로 바뀐 때일 뿐이라서 설치 시각이라고 단정하지 않습니다.
 - 설치와 변경의 시각은 이벤트 로그가 알려 줍니다.
 
 | 이벤트 | 로그 | 알려 주는 것 |
@@ -165,8 +165,8 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 - 4697 의 서비스 파일 경로(ServiceFileName)는 서비스를 만들 때의 값입니다. 나중에 경로를 바꿔도 기록되지 않습니다. 실행 계정(ServiceAccount)도 마찬가지입니다.
 - 그래서 설치 이벤트의 경로·계정이 지금 레지스트리 값과 다르면, 설치 뒤에 값이 바뀐 것입니다. 이 문장은 4697 문서에서 끌어낸 해석입니다.
 - System 로그가 덮어쓰이면 7045 도 사라집니다. Windows 11 PC 한 대에서 System 로그의 가장 오래된 SCM 이벤트는 2026-06-27(UTC)이었습니다. (확인 범위: Win11 25H2 한 대)
-- 두 이벤트의 칸과 해석은 [서비스 설치](/02-artifacts/event-logs/7045-4697.md) 에서 다룹니다.
-- 드라이버 파일의 기록은 [AmCache 드라이버 항목](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md) 에서도 찾습니다.
+- 두 이벤트의 칸과 해석은 [서비스 설치](../event-logs/7045-4697.md) 에서 다룹니다.
+- 드라이버 파일의 기록은 [AmCache 드라이버 항목](../execution/amcache-hve/inventorydriverbinary.md) 에서도 찾습니다.
 
 ## 함정과 한계
 
@@ -229,21 +229,21 @@ E0 00 00 00
 3. 그 컨트롤셋의 `Services` 아래 키마다 Type·Start·ImagePath·ObjectName 과 `Parameters\ServiceDll` 을 표로 뽑습니다.
 4. 위 "먼저 볼 기준" 으로 걸러 봅니다.
 5. 켜진 PC 에서는 `reg query HKLM\SYSTEM\CurrentControlSet\Services\<이름> /s` 처럼 읽기만 하는 명령으로 같은 값을 볼 수 있습니다.
-6. 걸린 파일의 서명과 버전 정보를 확인합니다. 방법은 [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) 과 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에 있습니다.
+6. 걸린 파일의 서명과 버전 정보를 확인합니다. 방법은 [의심 실행 파일 선별](../../03-techniques/analysis/code-signing-yara.md) 과 [실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md) 에 있습니다.
 7. 도구 결과의 한 줄을 골라 위 풀이대로 DWORD 값을 원시 바이트로 직접 한 번 읽어 봅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 7045·4697 | 설치 시각, 설치 때의 경로·계정 | [서비스 설치](/02-artifacts/event-logs/7045-4697.md) |
-| 키 마지막 기록 시각 | 서비스 키가 마지막으로 바뀐 때 | [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) |
-| AmCache 드라이버 항목 | 드라이버 파일의 기록 | [AmCache 드라이버 항목](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md) |
-| 4688 | 서비스 실행 파일이 프로세스로 만들어졌나 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| Sysmon 12·13·14 | 서비스 키를 만들거나 바꾼 프로세스 | [레지스트리 변경](/02-artifacts/event-logs/sysmon/12-13-14.md) |
-| 로그온 자동실행·예약 작업 | 같은 파일이 다른 자리에도 등록되어 있나 | [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md), [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md) |
+| 7045·4697 | 설치 시각, 설치 때의 경로·계정 | [서비스 설치](../event-logs/7045-4697.md) |
+| 키 마지막 기록 시각 | 서비스 키가 마지막으로 바뀐 때 | [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) |
+| AmCache 드라이버 항목 | 드라이버 파일의 기록 | [AmCache 드라이버 항목](../execution/amcache-hve/inventorydriverbinary.md) |
+| 4688 | 서비스 실행 파일이 프로세스로 만들어졌나 | [프로세스 생성](../event-logs/4688.md) |
+| Sysmon 12·13·14 | 서비스 키를 만들거나 바꾼 프로세스 | [레지스트리 변경](../event-logs/sysmon/12-13-14.md) |
+| 로그온 자동실행·예약 작업 | 같은 파일이 다른 자리에도 등록되어 있나 | [로그온 자동실행](run-runonce-startup-folder.md), [예약 작업](scheduled-tasks/index.md) |
 
-자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에 있습니다.
+자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 

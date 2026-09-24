@@ -4,7 +4,7 @@
 
 ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의 추적 기능입니다. 커널이나 앱이 정한 이벤트를 실시간으로 넘기거나 로그 파일(`.etl`)에 씁니다. `.etl` 파일의 첫 이벤트에는 세션 머리 정보 (TRACE_LOGFILE_HEADER) 가 들어 있습니다. 이 머리 정보에 세션 시작 시각과 시스템 부팅 시각이 남습니다.
 
-이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 의 하위 주제입니다. 이벤트 뷰어가 여는 `.evtx` 파일은 [EVTX 파일 구조 (File Header·Chunk·Record)](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 에서 다룹니다.
+이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 이벤트 뷰어가 여는 `.evtx` 파일은 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에서 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트
 
@@ -33,7 +33,7 @@ ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의
 - 매니페스트 기반·TraceLogging 공급자는 세션 8개까지 동시에 켤 수 있습니다.
 - WPP 공급자의 해석 정보는 TMF 파일에 있습니다. TMF 는 바이너리의 `.pdb` 안에 들어 있습니다.
 - TraceLogging 이벤트는 해석에 필요한 정보를 이벤트 안에 모두 담습니다(self-describing).
-- 매니페스트는 PE 파일의 WEVT_TEMPLATE 리소스에 이진 형태로 들어갈 수 있습니다. 리소스 구조는 [공급자와 메시지 파일 (Provider·Message Table)](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) 에서 다룹니다.
+- 매니페스트는 PE 파일의 WEVT_TEMPLATE 리소스에 이진 형태로 들어갈 수 있습니다. 리소스 구조는 [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) 에서 다룹니다.
 
 ### 로그 모드 (LogFileMode)
 
@@ -56,7 +56,7 @@ LogFileMode 는 아래 상수를 비트로 합친 값입니다.
 
 AutoLogger 는 부팅 초기, 로그인 전의 이벤트를 기록하는 세션입니다. Windows Vista 부터 지원합니다. 그 전에는 Global Logger 를 썼습니다.
 
-설정은 `HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\<세션 이름>` 키에 있습니다. 그 아래에 공급자 GUID 를 이름으로 쓴 키가 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+설정은 `HKLM\SYSTEM\CurrentControlSet\Control\WMI\Autologger\<세션 이름>` 키에 있습니다. 그 아래에 공급자 GUID 를 이름으로 쓴 키가 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../registry-hive/index.md) 에 있습니다.
 
 | 세션 키 값 | 뜻 |
 |---|---|
@@ -74,7 +74,7 @@ AutoLogger 는 부팅 초기, 로그인 전의 이벤트를 기록하는 세션�
 
 - 이 밖에 Guid·MaximumBuffers·MinimumBuffers 값이 있습니다.
 - 공급자 키에는 Enabled·EnableLevel·EnableFlags·EnableProperty·MatchAnyKeyword·MatchAllKeyword 값이 있습니다.
-- EnableProperty 가 0x1 이면 이벤트의 확장 데이터에 사용자 SID 가 들어갑니다. SID 를 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+- EnableProperty 가 0x1 이면 이벤트의 확장 데이터에 사용자 SID 가 들어갑니다. SID 를 읽는 법은 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 - AutoLogger 는 NEWFILE 모드를 지원하지 않습니다.
 - FileMax 를 쓰면 문서상 파일 이름이 `<세션이름>.etl.0001`, `.0002` … 로 늘어납니다. 한도를 넘으면 1 로 돌아가 덮어씁니다.
 
@@ -125,7 +125,7 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 | ReservedFlags | 시계 종류 |
 | BuffersLost | 세션 동안 잃은 버퍼 수 |
 
-- StartTime·EndTime·BootTime 은 1601-01-01 부터 센 100ns 단위입니다. FILETIME 과 단위가 같습니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- StartTime·EndTime·BootTime 은 1601-01-01 부터 센 100ns 단위입니다. FILETIME 과 단위가 같습니다. 푸는 법은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 다른 PC 나 32비트(WOW) 세션에서 만든 파일은 구조 크기가 다를 수 있습니다. 분석 PC 의 구조 정의로 바로 읽으면 값이 틀릴 수 있습니다.
 
 확인 PC 의 `.etl` 4개에서 본 값입니다.
@@ -173,12 +173,12 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 - 한국 시각으로는 09-21 06:44 입니다. `RtBackup` 파일들의 수정 시각(09-21 06:44)과 맞았습니다. 확인 PC 에서는 이 시각이 UTC 로 저장돼 있었습니다.
 - NtfsLog.etl.002 는 BootTime 이 2026-09-10 21:57:03(UTC) 이었습니다. 이전 부팅의 시각이 남아 있었습니다.
 - 확인 PC 에서는 부팅마다 번호 파일이 생겼습니다. 그래서 번호 파일마다 그때의 부팅 시각이 남았습니다.
-- 이 값은 켜짐·꺼짐 기록과 맞춰 볼 수 있습니다. [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 과 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md) 을 봅니다.
+- 이 값은 켜짐·꺼짐 기록과 맞춰 볼 수 있습니다. [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) 과 [PC 사용 시간 재구성](../../../04-scenarios/activity/system-usage-time.md) 을 봅니다.
 
 ### 시간대 값
 
 - TimeZone 필드는 머리에 적힌 시각들의 시간대입니다.
-- Bias 는 부호 있는 32비트로 읽습니다. UTC+9 는 −540 입니다. 부호 없이 읽으면 엉뚱한 큰 수가 나옵니다. 레지스트리의 시간대 값도 같은 방식입니다. [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 봅니다.
+- Bias 는 부호 있는 32비트로 읽습니다. UTC+9 는 −540 입니다. 부호 없이 읽으면 엉뚱한 큰 수가 나옵니다. 레지스트리의 시간대 값도 같은 방식입니다. [시간대 설정](../../../02-artifacts/system-account/time-zone.md) 을 봅니다.
 
 ### 빠진 이벤트
 
@@ -204,12 +204,12 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 - 0x98000180 을 로그 모드 상수로 풀면 SECURE(0x80)·REAL_TIME(0x100)·INDEPENDENT_SESSION(0x08000000)·NO_PER_PROCESSOR_BUFFERING(0x10000000)·ADDTO_TRIAGE_DUMP(0x80000000) 입니다.
 - 파일 모드 비트는 없습니다. 이 세션은 `.etl` 파일을 쓰지 않고 이벤트를 실시간으로 넘깁니다.
 - "About Event Tracing" 문서는 실시간 소비자가 없을 때 이벤트가 빠지는 예로 이벤트 로그 서비스를 멈췄다 켜는 경우를 듭니다. 다만 EventLog-* 세션을 받는 쪽이 이벤트 로그 서비스라고 직접 적은 공식 문서는 확인하지 못했습니다.
-- 로그를 없애려 한 흔적은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) 와 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
+- 로그를 없애려 한 흔적은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 와 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
 
 ## 함정
 
 - `.etl` 은 파일 맨 앞에 고정 서명이 없었습니다(확인 PC). 맨 앞 바이트만으로는 파일 종류를 가려낼 수 없었습니다.
-- 문서는 ProviderVersion 을 OS 빌드 번호로 설명합니다. 확인 PC 에서는 이 값이 26100 이었습니다. 같은 PC 의 `ver` 출력은 10.0.26200.9457 이었습니다. 이 값으로 OS 버전을 정하지 않습니다. OS 버전은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 확인합니다.
+- 문서는 ProviderVersion 을 OS 빌드 번호로 설명합니다. 확인 PC 에서는 이 값이 26100 이었습니다. 같은 PC 의 `ver` 출력은 10.0.26200.9457 이었습니다. 이 값으로 OS 버전을 정하지 않습니다. OS 버전은 [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 확인합니다.
 - 문서는 BootTime 을 Global Logger 세션에서만 지원한다고 적습니다. 확인 PC 에서는 Global Logger 가 아닌 LwtNetLog 에도 BootTime 이 채워져 있었습니다. 값이 있으면 읽고, 없으면 그 이유를 따로 확인합니다.
 - 레지스트리에 MaxFileSize 가 없다고 제한이 없는 것은 아닙니다. 확인 PC 의 ReFSLog 는 머리에 기본값 100 이 들어 있었습니다.
 - 번호 파일 이름은 문서와 다를 수 있습니다. 확인 PC 는 세 자리(`.002`)였습니다. 파일을 찾을 때 자릿수를 정해 두지 않습니다.
@@ -219,8 +219,8 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 ## 도구
 
 - Microsoft 문서는 분석 도구의 예로 WPA, PerfView, xperf, tracerpt 를 듭니다. tracerpt 는 Windows 에 기본으로 들어 있습니다.
-- 도구가 보여 주는 머리 값(시각·로그 모드·잃은 이벤트 수)을 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
-- 여러 세션의 시각을 한 줄로 모으는 법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 봅니다.
+- 도구가 보여 주는 머리 값(시각·로그 모드·잃은 이벤트 수)을 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 여러 세션의 시각을 한 줄로 모으는 법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 봅니다.
 
 ## 참고 문헌
 

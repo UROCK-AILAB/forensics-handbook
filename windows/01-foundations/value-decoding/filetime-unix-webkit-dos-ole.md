@@ -11,20 +11,20 @@
 
 | 형식 | 쓰는 곳 | 시간대 | 자세한 내용 |
 |---|---|---|---|
-| FILETIME | NTFS 의 날짜·시각 값 | UTC | [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) |
-| DOS 날짜·시각 | FAT 의 날짜·시각 | 대개 현지 시각 | [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) |
-| WebKit 시각 | Chromium 계열 프로그램 | 대개 UTC | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) |
+| FILETIME | NTFS 의 날짜·시각 값 | UTC | [NTFS 구조](../disk-volume/ntfs/index.md) |
+| DOS 날짜·시각 | FAT 의 날짜·시각 | 대개 현지 시각 | [FAT·exFAT 구조](../disk-volume/fat-exfat.md) |
+| WebKit 시각 | Chromium 계열 프로그램 | 대개 UTC | [크롬 계열 브라우저](../../02-artifacts/browsers/chrome-edge-whale/index.md) |
 
 dfDateTime 문서는 WebKit 시각의 근거로 Chromium 소스의 `time.h` 를 듭니다.
 
 아래 아티팩트도 시각 값을 저장합니다.
 어느 형식을 쓰는지는 각 페이지에서 근거와 함께 다룹니다.
 
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)
-- [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)
-- [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)
-- [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md)
-- [파이어폭스](/02-artifacts/browsers/firefox/index.md)
+- [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md)
+- [이벤트 로그 형식](../database-log-formats/evtx-evt-etl/index.md)
+- [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md)
+- [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md)
+- [파이어폭스](../../02-artifacts/browsers/firefox/index.md)
 
 ## 구조
 
@@ -85,7 +85,7 @@ FILETIME 이 실제로 담을 수 있는 날짜의 상한은 분명하지 않습
 Windows 에서는 kernel32 의 `DosDateTimeToFileTime` 함수로 FILETIME 으로 바꿉니다. 이 함수는 Windows 2000 부터 있습니다.
 
 시각 워드와 날짜 워드 중 어느 쪽이 먼저 오는지는 파일 형식마다 다릅니다.
-FAT 디렉터리 항목 안의 배치는 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) 에서 봅니다.
+FAT 디렉터리 항목 안의 배치는 [FAT·exFAT 구조](../disk-volume/fat-exfat.md) 에서 봅니다.
 
 ### OLE 자동화 날짜
 
@@ -201,8 +201,8 @@ DOS 는 현지 시각 2024-01-01 12:34:56 을 적은 것입니다.
 
 ### 시간대 맞추기
 
-현지 시각 값을 UTC 로 맞추는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에서 다룹니다.
-압수 PC 의 시간대 설정은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 읽습니다.
+현지 시각 값을 UTC 로 맞추는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
+압수 PC 의 시간대 설정은 [시간대 설정](../../02-artifacts/system-account/time-zone.md) 에서 읽습니다.
 
 ## 포렌식에서 중요한 점
 
@@ -235,12 +235,12 @@ FILETIME 과 WebKit 은 기준 시각이 같고 단위만 10배 다릅니다.
 
 ## 함정
 
-- **시간대 Bias 는 부호 있게 읽습니다.** `SYSTEM\ControlSet00X\Control\TimeZoneInformation\Bias` 는 REG_DWORD 로 저장합니다. 그러나 부호 있는 32비트로 읽어야 합니다. UTC+9 는 -540 이고, 부호 없이 읽으면 4294966756 입니다(확인 범위: 압수 이미지에서 꺼낸 SYSTEM 하이브, 현장 관찰). 자세한 내용은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에 있습니다.
+- **시간대 Bias 는 부호 있게 읽습니다.** `SYSTEM\ControlSet00X\Control\TimeZoneInformation\Bias` 는 REG_DWORD 로 저장합니다. 그러나 부호 있는 32비트로 읽어야 합니다. UTC+9 는 -540 이고, 부호 없이 읽으면 4294966756 입니다(확인 범위: 압수 이미지에서 꺼낸 SYSTEM 하이브, 현장 관찰). 자세한 내용은 [시간대 설정](../../02-artifacts/system-account/time-zone.md) 에 있습니다.
 - **도구가 보여 주는 10진수를 그대로 믿지 않습니다.** 하이브의 REG_DWORD 를 문자열로 받는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다(확인 범위: 압수 이미지에서 꺼낸 하이브, 현장 관찰). 부호에 뜻이 있는 값은 원시 바이트로 확인합니다.
 - **32비트 POSIX 시각은 2038-01-19 03:14:07 에서 끝납니다.**
 - **DOS 시각의 초는 짝수뿐입니다.** 같은 사건을 적은 다른 출처의 시각과 1초 차이가 나면 이 때문일 수 있습니다.
 - **OLE 자동화 날짜의 기준일을 잘못 적은 문서가 있습니다.** dfDateTime 문서는 기준일을 1889-12-30 으로 적었습니다. Microsoft 문서는 1899-12-30 으로 적습니다. dfDateTime 문서 안의 Delphi 항목도 1899-12-30 입니다. 계산은 1899-12-30 으로 합니다.
-- **GUID 안의 시각은 기준 시각이 다릅니다.** 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+- **GUID 안의 시각은 기준 시각이 다릅니다.** 읽는 법은 [윈도 식별자 형식](sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 ## 도구
 
@@ -265,7 +265,7 @@ datetime(1899, 12, 30) + timedelta(days=45292.0)                          # OLE 
 - **헥스 편집기** — 고른 8바이트를 리틀 엔디언 정수나 double 로 보여 주는 기능이 있으면 위 따라가기를 바로 해 볼 수 있습니다.
 
 도구마다 표시 시간대가 다를 수 있습니다.
-같은 값을 두 도구로 풀어 비교하는 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+같은 값을 두 도구로 풀어 비교하는 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

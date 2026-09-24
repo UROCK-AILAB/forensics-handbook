@@ -1,6 +1,6 @@
 # 작업 캐시 레지스트리 (TaskCache Tree·Tasks)
 
-> 상위 허브: [예약 작업 (Scheduled Tasks)](/02-artifacts/persistence/scheduled-tasks/index.md)
+> 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)
 
 ## 한 줄 요약
 
@@ -13,7 +13,7 @@
 - `...\Schedule\TaskCache\Tree\<작업 경로>`
 - `...\Schedule\TaskCache\Tasks\{GUID}`
 
-Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GUID 를 가리킵니다. Tasks 쪽 키에는 작업 경로, XML 해시, 트리거, 동작, 등록·실행 시각이 들어 있습니다. 같은 때에 `C:\Windows\System32\Tasks` 아래에 XML 파일도 생깁니다. XML 파일은 [작업 정의 파일 (System32\Tasks XML)](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md)에서 다룹니다.
+Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GUID 를 가리킵니다. Tasks 쪽 키에는 작업 경로, XML 해시, 트리거, 동작, 등록·실행 시각이 들어 있습니다. 같은 때에 `C:\Windows\System32\Tasks` 아래에 XML 파일도 생깁니다. XML 파일은 [작업 정의 파일 (System32\Tasks XML)](system32-tasks-xml.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -25,7 +25,7 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 | 오프라인 | SOFTWARE 하이브의 `Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache` |
 | 최소 버전 | Windows Vista |
 
-하이브 파일을 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+하이브 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 `Schedule` 키 아래에는 Aliases, CompatibilityAdapter, Configuration, CredWom, Handlers, Handshake, TaskCache 하위 키가 있습니다. DomainJoinDetected, HashingCompleted, MigrationCleanupCompleted 값도 있습니다. 이 값들의 뜻은 winreg-kb 문서에 비어 있습니다.
 
@@ -42,7 +42,7 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 
 | Windows | 작업 정보를 담는 곳 | DynamicInfo 크기 |
 |---|---|---|
-| XP | `HKLM\Software\Microsoft\SchedulingAgent` ([옛 작업 파일](/02-artifacts/persistence/scheduled-tasks/job-at.md) 참고) | 없음 |
+| XP | `HKLM\Software\Microsoft\SchedulingAgent` ([옛 작업 파일](job-at.md) 참고) | 없음 |
 | Vista · 2008 · 7 | `Schedule\TaskCache` | 28바이트 |
 | 8 · 10 | `Schedule\TaskCache` | 36바이트 |
 | 11 25H2 | `Schedule\TaskCache` (Maintenance 하위 키도 있음) | 36바이트 (확인 범위: 한 대) |
@@ -67,7 +67,7 @@ Tree 아래 키 경로는 Tasks\{GUID} 의 Path 값을 Tree 뒤에 붙인 것입
 O:BAG:SYD:(A;ID;0x1f019f;;;BA)(A;ID;0x1f019f;;;SY)(A;ID;FA;;;BA)(A;;FR;;;SY)
 ```
 
-`O:` 뒤는 소유자, `G:` 뒤는 그룹, `D:` 뒤의 괄호들은 접근 허용 항목입니다. `BA` 는 Administrators 그룹, `SY` 는 SYSTEM 계정을 가리키는 약어입니다. SID 표기는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. 작업 키에 SD 값이 없을 때 무슨 일이 생기는지는 [숨긴 예약 작업 찾기 (SD 값 삭제)](/02-artifacts/persistence/scheduled-tasks/sd.md)에서 다룹니다.
+`O:` 뒤는 소유자, `G:` 뒤는 그룹, `D:` 뒤의 괄호들은 접근 허용 항목입니다. `BA` 는 Administrators 그룹, `SY` 는 SYSTEM 계정을 가리키는 약어입니다. SID 표기는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. 작업 키에 SD 값이 없을 때 무슨 일이 생기는지는 [숨긴 예약 작업 찾기 (SD 값 삭제)](sd.md)에서 다룹니다.
 
 **Index 값.** 공식 뜻은 이번 조사에서 확인하지 못했습니다. 한 PC 에서는 Index 값과, 같은 GUID 가 들어 있는 하위 키가 이렇게 맞았습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -162,7 +162,7 @@ winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인�
 
 **증명하지 못하는 것**
 
-- 누가 등록했는지는 여기서 확정하지 못합니다. Author 는 문자열 값입니다. 등록한 계정은 [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md)에서 찾습니다(켜 둔 경우).
+- 누가 등록했는지는 여기서 확정하지 못합니다. Author 는 문자열 값입니다. 등록한 계정은 [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md)에서 찾습니다(켜 둔 경우).
 - 오프셋 12 는 마지막 한 번의 실행 시각입니다. 이 값만으로는 그 전에 몇 번, 언제 실행했는지 알 수 없습니다.
 - 오프셋 4 를 작업을 처음 만든 시각으로 단정하지 못합니다. 문서도 물음표로 적었고, 기본 작업에서는 OS 설치보다 앞선 날짜가 나왔습니다.
 - 실행이 성공했는지는 여기서 알 수 없습니다. 오프셋 20 과 28 의 뜻이 확정되지 않았습니다.
@@ -178,7 +178,7 @@ winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인�
 | DynamicInfo 오프셋 28 | FILETIME | 확인 못 함 | 뜻 모름 |
 | Triggers 안의 시각 | FILETIME | 현지 시각으로 보임 (winreg-kb) | 트리거에 적은 시각 |
 
-FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각 값은 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 보고 바꿉니다.
+FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각 값은 [시간대 설정](../../system-account/time-zone.md)을 보고 바꿉니다.
 
 한 PC 에서 본 모습은 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -186,7 +186,7 @@ FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](
 - **오프셋 4 와 XML 파일.** 여러 작업에서 오프셋 4 의 시각과 XML 파일의 마지막 기록 시각(UTC)이 초 단위까지 같았습니다. 모든 작업이 이렇지는 않았습니다.
 - **오프셋 28.** 0 인 것이 100개, 오프셋 12 와 같거나 늦은 것이 159개였습니다. 늦은 것은 대개 몇 초 뒤였습니다. 오프셋 12 보다 이른 것도 10개 있었습니다. 마지막 완료 시각으로 보이지만 확인하지 못했습니다.
 
-한 번도 실행하지 않은 작업을 PowerShell 로 조회하면 특이한 날짜가 나옵니다. 이 내용은 [옛 작업 파일 (.job·at)](/02-artifacts/persistence/scheduled-tasks/job-at.md)의 상태 값 절에서 다룹니다.
+한 번도 실행하지 않은 작업을 PowerShell 로 조회하면 특이한 날짜가 나옵니다. 이 내용은 [옛 작업 파일 (.job·at)](job-at.md)의 상태 값 절에서 다룹니다.
 
 ## 함정과 한계
 
@@ -264,12 +264,12 @@ Get-ChildItem $k | ForEach-Object {
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 작업 정의 XML | Path 로 파일을 찾고 Hash 로 내용을 검증합니다 | [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md) |
-| Tree 의 SD 값 | SD 가 없는 작업 키는 숨긴 작업일 수 있습니다 | [숨긴 예약 작업 찾기](/02-artifacts/persistence/scheduled-tasks/sd.md) |
-| 예약 작업 이벤트 | 등록한 계정과 등록 시각 (켜 둔 경우) | [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md) |
-| 프리페치 · 프로세스 생성 | 오프셋 12 무렵에 Actions 의 프로그램이 실행됐는지 | [프리페치](/02-artifacts/execution/prefetch/index.md), [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) |
-| 시스템 기본 정보 | OS 설치 시각과 오프셋 4 비교 | [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) |
-| 섀도 복사본 | 예전 SOFTWARE 하이브의 TaskCache 와 비교 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 작업 정의 XML | Path 로 파일을 찾고 Hash 로 내용을 검증합니다 | [작업 정의 파일](system32-tasks-xml.md) |
+| Tree 의 SD 값 | SD 가 없는 작업 키는 숨긴 작업일 수 있습니다 | [숨긴 예약 작업 찾기](sd.md) |
+| 예약 작업 이벤트 | 등록한 계정과 등록 시각 (켜 둔 경우) | [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md) |
+| 프리페치 · 프로세스 생성 | 오프셋 12 무렵에 Actions 의 프로그램이 실행됐는지 | [프리페치](../../execution/prefetch/index.md), [프로세스 생성 (4688)](../../event-logs/4688.md) |
+| 시스템 기본 정보 | OS 설치 시각과 오프셋 4 비교 | [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) |
+| 섀도 복사본 | 예전 SOFTWARE 하이브의 TaskCache 와 비교 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
 ## 실습
 

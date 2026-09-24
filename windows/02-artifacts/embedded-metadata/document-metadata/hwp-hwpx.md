@@ -1,6 +1,6 @@
 # 한글 문서 (HWP·HWPX)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](/02-artifacts/embedded-metadata/document-metadata/index.md)
+> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
 
 ## 한 줄 요약
 
@@ -46,7 +46,7 @@ HWP 5.0 명세는 "파일-문서 정보-문서 요약" 에서 입력한 내용�
 - OWPML 은 2011년 12월 30일에 KS X 6101 로 제정됐습니다.
 - 한글 몇 판부터 HWPX 를 기본 저장 형식으로 쓰는지는 확인하지 못했습니다.
 
-.hwp 와 .doc 는 첫 바이트가 같습니다. 둘 다 OLE 복합 파일이기 때문입니다. `FileHeader` 스트림이 있고 그 첫 32바이트가 `HWP Document File` 로 시작하면 HWP 5.0 입니다. OLE 복합 파일에서 스트림을 찾는 법은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
+.hwp 와 .doc 는 첫 바이트가 같습니다. 둘 다 OLE 복합 파일이기 때문입니다. `FileHeader` 스트림이 있고 그 첫 32바이트가 `HWP Document File` 로 시작하면 HWP 5.0 입니다. OLE 복합 파일에서 스트림을 찾는 법은 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
 
 값을 적는 쪽은 Windows 가 아니라 한글입니다. 그래서 Windows 버전보다 저장한 한글의 판을 먼저 확인합니다. 관찰한 hwp 의 파일 버전은 5.1.1.0 이었습니다. hwpx 의 `version.xml` 에도 major 5, minor 1, micro 1 이 적혀 있었습니다. (관찰)
 
@@ -127,7 +127,7 @@ Scripts/JScriptVersion
 
 ### 문서 요약 스트림
 
-`\005HwpSummaryInformation` 은 옛 오피스 문서와 같은 속성 집합 (property set) 구조를 씁니다. 머리글·섹션·속성 목록의 오프셋은 [옛 오피스 문서 속성 (OLE SummaryInformation)](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) 에 있습니다. 명세도 자세한 설명은 Microsoft 의 Summary Information 문서를 보라고 적었습니다.
+`\005HwpSummaryInformation` 은 옛 오피스 문서와 같은 속성 집합 (property set) 구조를 씁니다. 머리글·섹션·속성 목록의 오프셋은 [옛 오피스 문서 속성 (OLE SummaryInformation)](ole-summaryinformation.md) 에 있습니다. 명세도 자세한 설명은 Microsoft 의 Summary Information 문서를 보라고 적었습니다.
 
 관찰한 hwp 에서 섹션의 형식 식별자 (FMTID) 는 `9FA2B660-1061-11D4-B4C6-006097C09D8C` 였습니다. (관찰)
 
@@ -258,7 +258,7 @@ META-INF/manifest.xml
 
 **증명하지 못하는 것**
 
-- 그 이름의 사람이 문서를 썼다는 것. 사용자 이름은 프로그램 설정값입니다. 이 문제는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 그 이름의 사람이 문서를 썼다는 것. 사용자 이름은 프로그램 설정값입니다. 이 문제는 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - 제목이 사용자가 붙인 제목이라는 것. 문서 정보를 입력하지 않아도 본문 첫 줄이 제목 칸에 들어갔습니다. (관찰)
 - 0x09 가 고친 횟수라는 것. 관찰한 파일의 0x09 에는 프로그램 판 글자열이 있었습니다.
 - 쪽 수·문단 수가 0 이면 빈 문서라는 것. 한 줄짜리 시험 문서에서도 둘 다 0 이었습니다. (관찰)
@@ -275,10 +275,10 @@ META-INF/manifest.xml
 
 **hwp 의 0x0C·0x0D**
 
-- FILETIME 이고 UTC 입니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- FILETIME 이고 UTC 입니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 1초보다 작은 단위까지 적혀 있었습니다. (관찰)
 - 0x0D 는 11:30:10.35 UTC 였습니다. 같은 파일의 파일 시스템 수정 시각은 11:30:10.729 UTC 였습니다. (관찰) 두 값은 1초 안쪽으로 가까웠습니다.
-- 다른 형식과 정밀도를 견준 표는 [문서 메타데이터 (Document Metadata)](/02-artifacts/embedded-metadata/document-metadata/index.md) 에 있습니다.
+- 다른 형식과 정밀도를 견준 표는 [문서 메타데이터 (Document Metadata)](index.md) 에 있습니다.
 
 **hwp 의 0x0B**
 
@@ -290,7 +290,7 @@ META-INF/manifest.xml
 - 현지 시각 글자열이고 시간대 표기가 없습니다. (관찰)
 - 관찰한 값은 0x0C (만든 시각, UTC) 에 9시간을 더한 값이었습니다. 0x0D (마지막으로 저장한 시각) 와는 맞지 않았습니다. (관찰)
 - 다른 사람이 저장한 hwpx 도 `CreatedDate` 03:51:47Z 와 `date` "오후 12:51:47" 이 9시간 차이였습니다. (관찰)
-- 그래서 이 글자열과 UTC 값의 차이로 저장한 PC 의 시간대를 짐작할 수 있습니다. 짐작한 값은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 과 맞춰 봅니다.
+- 그래서 이 글자열과 UTC 값의 차이로 저장한 PC 의 시간대를 짐작할 수 있습니다. 짐작한 값은 [시간대 설정](../../system-account/time-zone.md) 과 맞춰 봅니다.
 - 글자열은 "오전·오후" 가 붙은 12시간제입니다. 24시간제로 옮길 때 틀리지 않게 봅니다.
 
 **hwpx 의 `CreatedDate`·`ModifiedDate`**
@@ -303,11 +303,11 @@ META-INF/manifest.xml
 ## 함정과 한계
 
 - **명세 본문의 스트림 이름에 오타가 있습니다.** 명세 본문에는 `\005HwpSummaryInfomation` (r 빠짐) 으로 적혀 있습니다. 실제 파일의 이름은 `\005HwpSummaryInformation` 이었습니다. (관찰) 이름으로 스트림을 찾는 도구를 만들 때 실제 이름을 씁니다.
-- **글자열 형식이 명세와 다릅니다.** 명세 표는 글자열 속성을 VT_LPSTR 로 적었습니다. 관찰한 파일의 글자열 속성은 VT_LPWSTR (0x1F, 유니코드) 이었습니다. (관찰) 값 앞 4바이트의 값 형식을 보고 풉니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- **글자열 형식이 명세와 다릅니다.** 명세 표는 글자열 속성을 VT_LPSTR 로 적었습니다. 관찰한 파일의 글자열 속성은 VT_LPWSTR (0x1F, 유니코드) 이었습니다. (관찰) 값 앞 4바이트의 값 형식을 보고 풉니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 - **본문 압축은 zlib 머리글이 없었습니다.** 명세는 zlib 을 쓴다고 적었습니다. 관찰한 `BodyText/Section0` 은 zlib 머리글이 없는 raw deflate 였습니다. Python zlib 에서 wbits=15 로 풀면 "incorrect header check" 오류가 났습니다. wbits=-15 로는 풀렸습니다. (관찰)
 - **미리보기 그림 형식이 명세와 다릅니다.** 명세는 BMP 또는 GIF 라고 적었습니다. 관찰한 `PrvImage` 는 PNG (`89 50 4E 47`) 였습니다. (관찰)
 - **0x09 는 개정 번호가 아니었습니다.** 표 이름은 Revision Number 입니다. 그러나 관찰한 값은 프로그램 판 글자열이었습니다. (관찰)
-- **인쇄하지 않아도 0x0B 칸이 있습니다.** 한글 13 은 인쇄하지 않은 문서에도 0x0B 를 0 으로 썼습니다. (관찰) 칸이 있다는 것만으로 인쇄했다고 보지 않습니다. Word 가 이 칸을 다루는 방식은 [옛 오피스 문서 속성](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) 에 있습니다.
+- **인쇄하지 않아도 0x0B 칸이 있습니다.** 한글 13 은 인쇄하지 않은 문서에도 0x0B 를 0 으로 썼습니다. (관찰) 칸이 있다는 것만으로 인쇄했다고 보지 않습니다. Word 가 이 칸을 다루는 방식은 [옛 오피스 문서 속성](ole-summaryinformation.md) 에 있습니다.
 - **시스템 판 칸을 믿지 않습니다.** 관찰한 문서 요약 스트림 머리글의 시스템 판 칸은 0x0000000D 였습니다. (관찰) 위 16비트가 0x0000 이므로 libyal 문서의 표대로 읽으면 Win16 입니다. Windows 11 에서 저장한 파일이므로 이 칸으로 플랫폼을 가리지 않습니다.
 - **`version.xml` 의 속성 이름 철자가 틀립니다.** `targetApplication` 이 아니라 `tagetApplication` 으로 적혀 있었습니다. (관찰) 바른 철자로 찾는 도구는 이 값을 놓칩니다.
 - **암호 문서에서 무엇이 읽히는지 확인하지 못했습니다.** 명세 표에서 암호화 대상으로 적힌 것은 `DocInfo`, `BodyText`, `DocHistory` 입니다. 문서 요약 스트림은 암호화 대상으로 적혀 있지 않습니다. 암호를 건 실제 파일에서 문서 요약을 읽을 수 있는지는 확인하지 못했습니다.
@@ -356,9 +356,9 @@ META-INF/manifest.xml
 | 0x1C | `60 B6 A2 9F … 9D 8C` | FMTID `9FA2B660-1061-11D4-B4C6-006097C09D8C` |
 | 0x2C | `30 00 00 00` | 섹션 위치 0x30 |
 
-- FMTID 는 앞 세 부분의 바이트 순서를 뒤집어 적습니다. `9FA2B660` 이 `60 B6 A2 9F` 로, `1061` 이 `61 10` 으로, `11D4` 가 `D4 11` 로 적혔습니다. GUID 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+- FMTID 는 앞 세 부분의 바이트 순서를 뒤집어 적습니다. `9FA2B660` 이 `60 B6 A2 9F` 로, `1061` 이 `61 10` 으로, `11D4` 가 `D4 11` 로 적혔습니다. GUID 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
-섹션부터는 [옛 오피스 문서 속성](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) 의 헥스 절과 같은 순서로 따라갑니다.
+섹션부터는 [옛 오피스 문서 속성](ole-summaryinformation.md) 의 헥스 절과 같은 순서로 따라갑니다.
 
 1. 오프셋 0x30 에서 섹션 머리 8바이트를 읽습니다.
 2. 속성 목록에서 속성 ID 0x0C 를 찾습니다.
@@ -410,22 +410,22 @@ print(z.read("Contents/content.hpf").decode("utf-8", errors="replace"))
 2. HWP 는 `FileHeader` 서명과 속성 비트를 먼저 봅니다. 비트 1·2·4·6·7·14 가 켜져 있는지 적습니다.
 3. 0x0C·0x0D·0x14 를 파일 시스템 시각과 나란히 적습니다.
 4. HWPX 는 `content.hpf` 의 `CreatedDate`·`ModifiedDate`·`date` 와 `version.xml` 의 `appVersion` 을 적습니다.
-5. 0x0C 를 헥스로 직접 푼 값과 도구 결과를 맞춰 봅니다. 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+5. 0x0C 를 헥스로 직접 푼 값과 도구 결과를 맞춰 봅니다. 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [옛 오피스 문서 속성 (OLE SummaryInformation)](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) | 같은 속성 집합 구조를 쓰는 .doc 의 값 모양 |
-| [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) | ZIP 안 XML 에 속성을 두는 docx 의 값 모양 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일 시스템 생성·수정 시각과 0x0C·0x0D 의 차이 |
-| [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 파일이 이 볼륨에서 만들어지고 바뀐 기록 |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | 날짜 글자열과 UTC 값의 차이 |
-| [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md)·[바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 같은 파일을 연 다른 기록 |
-| [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md)·[인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) | 0x0B 가 0 이 아닐 때 그 무렵의 인쇄 기록 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 문서를 내려받았는지 |
+| [옛 오피스 문서 속성 (OLE SummaryInformation)](ole-summaryinformation.md) | 같은 속성 집합 구조를 쓰는 .doc 의 값 모양 |
+| [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) | ZIP 안 XML 에 속성을 두는 docx 의 값 모양 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일 시스템 생성·수정 시각과 0x0C·0x0D 의 차이 |
+| [USN 변경 저널](../../filesystem/usnjrnl.md) | 파일이 이 볼륨에서 만들어지고 바뀐 기록 |
+| [시간대 설정](../../system-account/time-zone.md) | 날짜 글자열과 UTC 값의 차이 |
+| [최근 문서](../../file-folder-usage/recentdocs.md)·[바로가기 파일](../../file-folder-usage/lnk.md)·[점프리스트](../../file-folder-usage/jump-lists.md) | 같은 파일을 연 다른 기록 |
+| [인쇄 흔적](../../external-devices/print-spooler-spl-shd.md)·[인쇄 이벤트](../../event-logs/printservice-307.md) | 0x0B 가 0 이 아닐 때 그 무렵의 인쇄 기록 |
+| [다운로드 출처 표시](../../filesystem/zone-identifier.md) | 문서를 내려받았는지 |
 
-시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) 를 봅니다.
 
 ## 실습
 

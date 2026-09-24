@@ -48,7 +48,7 @@
 - 조사 PC 에서 `StateRepository-Machine.srd-wal` 은 103,032바이트였습니다. 비어 있지 않았습니다.
 - 조사 PC 의 `AppRepository` 폴더에는 `<패키지 전체 이름>.xml` 파일이 393개 있었습니다. Package 표의 행 수도 393개였습니다.
 - 이전 버전을 지울 때 `WindowsApps\Deleted\` 로 옮긴 뒤 지운다는 내용이 이벤트 471(삭제 실패 오류)에 남아 있었습니다. 이 폴더는 실제로 있었습니다.
-- 사용자별 앱 데이터 폴더 아래에는 AC, AppData, LocalCache, LocalState, RoamingState, Settings, SystemAppData, TempState 가 있었습니다. 앱 데이터의 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+- 사용자별 앱 데이터 폴더 아래에는 AC, AppData, LocalCache, LocalState, RoamingState, Settings, SystemAppData, TempState 가 있었습니다. 앱 데이터의 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 - 일부 앱 폴더에는 `SystemAppData\Helium\UserClasses.dat` 라는 앱 전용 레지스트리 하이브가 따로 있습니다. 조사 PC 의 hivelist 에는 이 하이브가 `\REGISTRY\WC\Silo<GUID>user_classes` 로 올라와 있었습니다.
 - HKCU 쪽 키는 파일로는 `C:\Users\<사용자>\AppData\Local\Microsoft\Windows\UsrClass.dat` 에 있습니다. 조사 PC 의 `HKLM\SYSTEM\CurrentControlSet\Control\hivelist` 에서 `\REGISTRY\USER\<SID>_Classes` 가 이 파일을 가리켰습니다.
 
@@ -57,7 +57,7 @@
 - StateRepository 가 처음 생긴 Windows 버전은 이번에 연 자료로 확인하지 못했습니다.
 - 이 페이지의 표·칸 이름은 조사 PC 한 대에서 본 것입니다. 다른 버전의 검체에서는 표 목록부터 확인합니다.
 
-SQLite 파일과 WAL 의 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서, 하이브 파일은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+SQLite 파일과 WAL 의 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서, 하이브 파일은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -177,7 +177,7 @@ AppXDeploymentServer/Operational 에서 본 이벤트는 아래와 같습니다.
 - 조사 PC 에서 AppXDeploymentServer/Operational 의 최대 크기는 5,242,880바이트였습니다.
 - 가장 오래된 이벤트는 8일 전(2026-09-15)이었습니다.
 
-이벤트 로그 파일의 구조는 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+이벤트 로그 파일의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ### 자주 보이는 오류 코드
 
@@ -210,13 +210,13 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 
 ### 증명하지 못하는 것
 
-- 앱을 실행했는지는 알 수 없습니다. 등록은 실행이 아닙니다. 실행 흔적은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에서 다룹니다.
+- 앱을 실행했는지는 알 수 없습니다. 등록은 실행이 아닙니다. 실행 흔적은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에서 다룹니다.
 - 사용자가 스스로 설치했는지 단정하지 못합니다. IsExplicitlyInstalled·DeploymentState 숫자의 뜻을 확인하지 못했습니다.
 - 앱을 어디서 받았는지 단정하지 못합니다. PackageOrigin·SignatureOrigin 숫자의 뜻을 확인하지 못했습니다.
 - InstallTime 은 내려받은 시각이 아닙니다. 조사 PC 에서는 Add 완료 시각과 31분 차이가 났습니다.
 - 제거한 시각은 이번에 본 표에서 찾지 못했습니다. PackageIdentity 에는 시각 칸이 없습니다. 이벤트 로그가 남아 있을 때만 이벤트 607 로 제거 작업의 시각을 봅니다.
 - 앱을 완전히 제거하면 Package·PackageUser 행이 곧바로 지워지는지는 확인하지 못했습니다.
-- 그 시각에 누가 PC 앞에 있었는지는 알 수 없습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 그 시각에 누가 PC 앞에 있었는지는 알 수 없습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 보고서에는 "StateRepository-Machine.srd 의 PackageUser 표에 따르면 이 패키지는 SID <SID> 계정에 등록돼 있고, 등록 시각 값(InstallTime)은 <UTC 시각> 이다" 처럼 씁니다. "이 시각에 앱을 내려받았다" 로 쓰지 않습니다.
 
@@ -231,7 +231,7 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 
 - FILETIME 은 1601-01-01 UTC 부터 센 100나노초 단위의 수입니다.
 - SQLite 에서는 `datetime(값/10000000-11644473600,'unixepoch')` 로 UTC 날짜를 얻습니다.
-- 변환 원리는 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 변환 원리는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 조사 PC 에서 한 앱의 시각을 맞춰 보면 이렇습니다. (확인 범위: 조사 PC)
 
@@ -251,7 +251,7 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 - 기본 탑재 앱의 가장 이른 InstallTime 은 2026-06-26 02:15:10 UTC 였습니다.
 - 같은 PC 의 OS 설치 시각(`InstallDate`)은 2026-06-26 18:07:41 UTC 였습니다.
 - 기본 탑재 앱의 InstallTime 이 OS 설치 시각보다 16시간 일렀습니다.
-- 그러므로 기본 탑재 앱의 InstallTime 을 OS 설치 시각으로 쓰지 않습니다. OS 설치 시각은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
+- 그러므로 기본 탑재 앱의 InstallTime 을 OS 설치 시각으로 쓰지 않습니다. OS 설치 시각은 [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -267,7 +267,7 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 10. **옛 버전 이름에는 시각이 없습니다.** PackageIdentity 에 남은 이름만으로 그 버전을 언제 썼는지 말할 수 없습니다.
 11. **Deprovisioned 키의 뜻은 확인하지 못했습니다.** 키 이름만 보고 "사용자가 앱을 뺐다" 고 쓰지 않습니다.
 12. **흐리게 보이는 앱은 PackageStatus 값을 봅니다.** 이 값이 바뀌면 앱이 실행되지 않습니다. TWinUI/Operational 이벤트 5960 과 함께 봅니다.
-13. **스토어 앱 업데이트 실패는 Windows Update 이벤트에도 섞여 남습니다.** 조사 PC 에서는 System 로그의 Windows Update 클라이언트 이벤트 20 에 남았습니다. 제목은 스토어 상품 ID 로 시작했습니다. 예: `9NMPJ99VJBWV-Microsoft.YourPhone`, 오류 0x80073D02. 이 이벤트는 [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md) 에서 다룹니다.
+13. **스토어 앱 업데이트 실패는 Windows Update 이벤트에도 섞여 남습니다.** 조사 PC 에서는 System 로그의 Windows Update 클라이언트 이벤트 20 에 남았습니다. 제목은 스토어 상품 ID 로 시작했습니다. 예: `9NMPJ99VJBWV-Microsoft.YourPhone`, 오류 0x80073D02. 이 이벤트는 [윈도 업데이트 기록](windows-update-cbs-log.md) 에서 다룹니다.
 14. **다른 Windows 버전은 따로 확인합니다.** 이 페이지의 표·칸은 조사 PC 한 대에서 본 것입니다.
 
 ## 직접 분석해 보기
@@ -288,7 +288,7 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 2. 11,644,473,600 을 빼면 1,704,067,200 입니다. 1970-01-01 부터 센 초입니다.
 3. 날짜로 바꾸면 2024-01-01 00:00:00 UTC 입니다.
 
-SQLite 가 정수를 파일에 어떻게 적는지는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+SQLite 가 정수를 파일에 어떻게 적는지는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 **HResult 음수를 오류 코드로 바꾸기.** DeploymentHistory 의 HResult 가 `-2147009278` 이라고 해 봅니다.
 
@@ -300,7 +300,7 @@ SQLite 가 정수를 파일에 어떻게 적는지는 [SQLite 데이터베이스
 ### 공개 도구로 한 번
 
 1. `AppRepository` 폴더에서 두 .srd 파일과 각각의 `-wal`, `-shm` 파일을 같은 폴더로 사본을 뜹니다. 파일 이름은 바꾸지 않습니다.
-2. sqlite3 명령줄 도구나 DB Browser for SQLite 같은 공개 SQLite 도구로 사본을 엽니다. WAL 을 다룰 때 주의할 점은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+2. sqlite3 명령줄 도구나 DB Browser for SQLite 같은 공개 SQLite 도구로 사본을 엽니다. WAL 을 다룰 때 주의할 점은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 3. 사용자별 등록 시각을 뽑습니다.
 
 ```sql
@@ -314,7 +314,7 @@ JOIN Package AS p ON p._PackageID = pu.Package
 ORDER BY pu.InstallTime;
 ```
 
-4. `pu.User` 값으로 User 표의 행을 찾아 `UserSid` 를 읽습니다. 이진 SID 를 문자열로 바꾸는 방법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. SID 와 계정 이름은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 잇습니다.
+4. `pu.User` 값으로 User 표의 행을 찾아 `UserSid` 를 읽습니다. 이진 SID 를 문자열로 바꾸는 방법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. SID 와 계정 이름은 [사용자 프로필 목록](profilelist.md) 으로 잇습니다.
 5. 지금은 설치돼 있지 않은 옛 버전 이름을 뽑습니다.
 
 ```sql
@@ -342,17 +342,17 @@ ORDER BY WhenOccurred;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 설치 프로그램 | 스토어 앱이 아닌 일반 설치 프로그램 목록을 나란히 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| AmCache | InventoryApplication 에서 `Source` 가 `AppxPackage` 인 항목을 StateRepository 목록과 맞춰 봅니다 | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| UWP 앱 데이터 | `%LOCALAPPDATA%\Packages` 안의 앱 설정과 데이터를 봅니다 | [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) |
-| 사용자 프로필 목록 | PackageUser 의 SID 를 계정 이름과 프로필 폴더로 잇습니다 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
-| 사용자 계정 | RID 1000·1001 같은 로컬 계정을 확인합니다 | [사용자 계정](/02-artifacts/system-account/sam.md) |
-| 시스템 기본 정보 | OS 설치 시각을 기본 탑재 앱 시각과 나눠 봅니다 | [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) |
-| 윈도 업데이트 기록 | 스토어 앱 업데이트 실패가 Windows Update 이벤트 20 에도 남았는지 봅니다 | [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md) |
-| 실행 흔적 | 등록한 앱을 실제로 실행했는지 봅니다 | [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) |
-| 섀도 복사본 | 이전 시점의 .srd 에 지금은 없는 패키지가 있는지 봅니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 설치 프로그램 | 스토어 앱이 아닌 일반 설치 프로그램 목록을 나란히 봅니다 | [설치 프로그램](uninstall.md) |
+| AmCache | InventoryApplication 에서 `Source` 가 `AppxPackage` 인 항목을 StateRepository 목록과 맞춰 봅니다 | [AmCache](../execution/amcache-hve/index.md) |
+| UWP 앱 데이터 | `%LOCALAPPDATA%\Packages` 안의 앱 설정과 데이터를 봅니다 | [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) |
+| 사용자 프로필 목록 | PackageUser 의 SID 를 계정 이름과 프로필 폴더로 잇습니다 | [사용자 프로필 목록](profilelist.md) |
+| 사용자 계정 | RID 1000·1001 같은 로컬 계정을 확인합니다 | [사용자 계정](sam.md) |
+| 시스템 기본 정보 | OS 설치 시각을 기본 탑재 앱 시각과 나눠 봅니다 | [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) |
+| 윈도 업데이트 기록 | 스토어 앱 업데이트 실패가 Windows Update 이벤트 20 에도 남았는지 봅니다 | [윈도 업데이트 기록](windows-update-cbs-log.md) |
+| 실행 흔적 | 등록한 앱을 실제로 실행했는지 봅니다 | [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) |
+| 섀도 복사본 | 이전 시점의 .srd 에 지금은 없는 패키지가 있는지 봅니다 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-여러 기록의 시각을 한 줄로 세우는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에 있습니다.
+여러 기록의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 ## 실습
 

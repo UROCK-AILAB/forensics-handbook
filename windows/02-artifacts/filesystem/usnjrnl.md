@@ -30,7 +30,7 @@ USN 변경 저널 (USN Change Journal) 은 NTFS 볼륨에서 파일과 폴더가
 | `$UsnJrnl:$Max` | 최대 크기 같은 설정이 든 스트림입니다 (32바이트) |
 | `$UsnJrnl:$J` | 변경 레코드가 쌓이는 희소 (sparse) 스트림입니다 |
 
-`$Extend` 폴더와 다른 메타 파일은 [NTFS 메타 파일](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md)에서 다룹니다. 희소 스트림은 [압축·희소 파일](/01-foundations/disk-volume/ntfs/compressed-sparse.md)에서 다룹니다.
+`$Extend` 폴더와 다른 메타 파일은 [NTFS 메타 파일](../../01-foundations/disk-volume/ntfs/bitmap-secure-extend.md)에서 다룹니다. 희소 스트림은 [압축·희소 파일](../../01-foundations/disk-volume/ntfs/compressed-sparse.md)에서 다룹니다.
 
 ### `$Max` (32바이트)
 
@@ -81,7 +81,7 @@ USN 변경 저널 (USN Change Journal) 은 NTFS 볼륨에서 파일과 폴더가
 | 0 | 4 | 레코드 크기 | 다음 레코드로 넘어가기 |
 | 4 | 2 | 주 버전 (2) | 버전 확인 |
 | 6 | 2 | 부 버전 (0) | |
-| 8 | 8 | 파일 참조 | [MFT](/02-artifacts/filesystem/mft.md) 항목과 잇기 |
+| 8 | 8 | 파일 참조 | [MFT](mft.md) 항목과 잇기 |
 | 16 | 8 | 부모 폴더 참조 | 경로 세우기 |
 | 24 | 8 | USN | `$J` 안 위치, 고유 번호 |
 | 32 | 8 | 변경 시각 (FILETIME, UTC) | 시간표 |
@@ -93,7 +93,7 @@ USN 변경 저널 (USN Change Journal) 은 NTFS 볼륨에서 파일과 폴더가
 | 58 | 2 | 이름 위치 | |
 | 60 | 가변 | 이름 (UTF-16), 뒤에 0 채움 | 파일 이름 |
 
-파일 참조는 MFT 항목 번호 6바이트와 순번 2바이트로 이뤄집니다. 읽는 법은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)에서 다룹니다.
+파일 참조는 MFT 항목 번호 6바이트와 순번 2바이트로 이뤄집니다. 읽는 법은 [마스터 파일 테이블](mft.md)에서 다룹니다.
 
 ### 변경 이유 (Reason) 플래그
 
@@ -172,12 +172,12 @@ Microsoft 문서가 설명하는 규칙입니다(참고 2).
 
 ## 시각 해석
 
-- 레코드 오프셋 32 의 변경 시각은 FILETIME 이고 UTC 입니다(참고 1). 계산법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- 레코드 오프셋 32 의 변경 시각은 FILETIME 이고 UTC 입니다(참고 1). 계산법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 - 이 시각은 레코드를 쓴 시각입니다. CLOSE 레코드의 시각은 파일을 닫을 때 쓴 요약 레코드의 시각입니다. 앞선 변경은 그보다 이르게 일어났을 수 있습니다.
 - `$J` 에 남은 가장 이른 레코드가 이 기록의 시작점입니다. 그보다 앞의 변경은 `$J` 로 볼 수 없습니다.
 - `$Max` 의 저널 ID 도 FILETIME 입니다(참고 1). 위 관찰처럼 설치 시각과 맞지 않을 수 있으므로 뜻을 단정하지 않습니다.
-- 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다. 시계 오차 보정은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
-- `$MFT`·`$LogFile` 과 합쳐 시간표를 만드는 절차는 [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
+- 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md)을 씁니다. 시계 오차 보정은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+- `$MFT`·`$LogFile` 과 합쳐 시간표를 만드는 절차는 [파일시스템 타임라인](../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -202,10 +202,10 @@ fsutil 문서가 설명하는 동작입니다(참고 3).
 분석할 때는 이렇게 봅니다.
 
 - `$UsnJrnl` 이 없거나, 가장 이른 레코드가 수집 직전이면 저널을 지우거나 다시 만들었는지 따집니다.
-- 다른 볼륨이나 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)의 옛 `$J` 와 비교합니다.
+- 다른 볼륨이나 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md)의 옛 `$J` 와 비교합니다.
 - `$LogFile` 이 덮는 기간의 USN 레코드는 `$LogFile` 안에도 있습니다(참고 4). 저널을 지운 시점이 그 기간 안이면 `$LogFile` 에서 레코드를 더 찾을 수 있습니다.
-- 명령 실행 흔적은 [PowerShell 명령 기록](/02-artifacts/execution/consolehost-history-txt.md)과 [프로세스 생성](/02-artifacts/event-logs/4688.md) 기록에서 찾습니다.
-- 완전삭제 도구를 의심하면 [완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
+- 명령 실행 흔적은 [PowerShell 명령 기록](../execution/consolehost-history-txt.md)과 [프로세스 생성](../event-logs/4688.md) 기록에서 찾습니다.
+- 완전삭제 도구를 의심하면 [완전삭제 도구를 썼나](../../04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -232,7 +232,7 @@ fsutil 문서가 설명하는 동작입니다(참고 3).
 8. 0x2C 의 출처 플래그는 0 입니다. 켜진 값이 없습니다.
 9. 0x30 은 보안 설명자 ID, 0x34 는 파일 속성 플래그입니다. 이 예시에서는 풀지 않습니다.
 10. 0x38 의 `0E 00` 은 이름 길이 14바이트, 0x3A 의 `3C 00` 은 이름 위치 0x3C(60)입니다.
-11. 0x3C 부터 14바이트는 UTF-16LE 이름입니다. `F4 BC` 는 U+BCF4 '보', `E0 AC` 는 U+ACE0 '고', `1C C1` 은 U+C11C '서' 입니다. 이어서 `.hwp` 가 옵니다. 이름은 `보고서.hwp` 입니다. 한글 이름 읽는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+11. 0x3C 부터 14바이트는 UTF-16LE 이름입니다. `F4 BC` 는 U+BCF4 '보', `E0 AC` 는 U+ACE0 '고', `1C C1` 은 U+C11C '서' 입니다. 이어서 `.hwp` 가 옵니다. 이름은 `보고서.hwp` 입니다. 한글 이름 읽는 법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 12. 0x4A 부터 6바이트는 0 채움입니다.
 
 그다음 할 일은 이렇습니다.
@@ -260,21 +260,21 @@ fsutil 로 확인합니다(참고 3).
 - 출처 플래그를 칸으로 보여 주는지 확인합니다.
 - 경로를 붙일 때 부모 참조의 순번을 비교하는지 확인합니다. 비교하지 않으면 틀린 경로가 나올 수 있습니다.
 - 시각을 UTC 로 내는지 확인합니다.
-- 레코드 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 레코드 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | 파일 참조로 항목을 찾고 경로를 세웁니다. `$STANDARD_INFORMATION` 의 USN 칸 값과 같은 USN 의 레코드를 찾습니다 |
-| [NTFS 트랜잭션 로그 ($LogFile)](/02-artifacts/filesystem/logfile.md) | 같은 기간의 세부 동작. `$LogFile` 은 기간이 짧고 내용이 자세합니다(참고 4) |
-| [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) | 저널에서 지운 파일의 이름이 폴더 색인 슬랙에도 남았는지 |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 이름 있는 스트림을 더하거나 지운 STREAM_CHANGE 레코드 |
-| [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) | 휴지통 기록의 원래 경로와 삭제 시각을 저널 레코드와 비교 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) | 최근 항목 LNK 가 다시 쓰이거나 지워진 기록 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 `$J` 에 남은 더 이른 레코드 |
+| [마스터 파일 테이블 ($MFT)](mft.md) | 파일 참조로 항목을 찾고 경로를 세웁니다. `$STANDARD_INFORMATION` 의 USN 칸 값과 같은 USN 의 레코드를 찾습니다 |
+| [NTFS 트랜잭션 로그 ($LogFile)](logfile.md) | 같은 기간의 세부 동작. `$LogFile` 은 기간이 짧고 내용이 자세합니다(참고 4) |
+| [폴더 인덱스와 슬랙 ($I30)](i30.md) | 저널에서 지운 파일의 이름이 폴더 색인 슬랙에도 남았는지 |
+| [다운로드 출처 표시 (Zone.Identifier)](zone-identifier.md) | 이름 있는 스트림을 더하거나 지운 STREAM_CHANGE 레코드 |
+| [휴지통](../file-folder-usage/recycle-bin.md) | 휴지통 기록의 원래 경로와 삭제 시각을 저널 레코드와 비교 |
+| [바로가기 파일](../file-folder-usage/lnk.md) | 최근 항목 LNK 가 다시 쓰이거나 지워진 기록 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 `$J` 에 남은 더 이른 레코드 |
 
-여러 기록으로 지운 파일을 좇는 순서는 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)에서 다룹니다. 대량 이름 변경처럼 짧은 시간에 레코드가 몰리는 사건은 [랜섬웨어는 언제 어떻게 퍼졌나](/04-scenarios/incident/ransomware.md)를 봅니다.
+여러 기록으로 지운 파일을 좇는 순서는 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md)에서 다룹니다. 대량 이름 변경처럼 짧은 시간에 레코드가 몰리는 사건은 [랜섬웨어는 언제 어떻게 퍼졌나](../../04-scenarios/incident/ransomware.md)를 봅니다.
 
 ## 실습
 

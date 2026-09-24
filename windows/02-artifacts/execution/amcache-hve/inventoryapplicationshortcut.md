@@ -15,11 +15,11 @@ Amcache.hve 의 `Root\InventoryApplicationShortcut` 키에는 호환성 인벤�
 
 시작 메뉴 바로가기는 대개 설치 프로그램이 만듭니다. 그래서 이 키는 설치 흔적을 보강하는 데 주로 씁니다. 다만 Zimmerman 은 MSI 나 설치 프로그램이 아닌 다른 프로그램이 직접 만든 바로가기도 들어온 것을 보고했습니다.
 
-Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](/02-artifacts/execution/amcache-hve/index.md) 허브에서 다룹니다. 여기서는 바로가기 키만 다룹니다.
+Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브에서 다룹니다. 여기서는 바로가기 키만 다룹니다.
 
 ## 위치와 버전별 차이
 
-키 위치는 `%WinDir%\AppCompat\Programs\Amcache.hve` 의 `Root\InventoryApplicationShortcut` 입니다. 이 키의 모양은 Windows 버전보다 호환성 라이브러리의 판을 따릅니다([구조와 버전별 차이](/02-artifacts/execution/amcache-hve/structure-versions.md)).
+키 위치는 `%WinDir%\AppCompat\Programs\Amcache.hve` 의 `Root\InventoryApplicationShortcut` 입니다. 이 키의 모양은 Windows 버전보다 호환성 라이브러리의 판을 따릅니다([구조와 버전별 차이](structure-versions.md)).
 
 | 자료 | 확인한 곳 | 하위 키 안의 값 | 나온 폴더 |
 |---|---|---|---|
@@ -52,7 +52,7 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](/02-artifacts/exe
 |---|---|---|---|
 | `ShortcutPath` | REG_SZ | LNK 파일의 전체 경로. 검사할 때의 위치입니다 | ANSSI, Securelist, 표본 |
 | `ShortcutTargetPath` | REG_SZ | 바로가기가 가리킨 대상 경로 | Securelist |
-| `ShortcutProgramId` | REG_SZ | 연결된 설치 프로그램의 식별자. [설치 프로그램 항목](/02-artifacts/execution/amcache-hve/inventoryapplication.md)의 하위 키 이름과 맞춰 봅니다 | Securelist |
+| `ShortcutProgramId` | REG_SZ | 연결된 설치 프로그램의 식별자. [설치 프로그램 항목](inventoryapplication.md)의 하위 키 이름과 맞춰 봅니다 | Securelist |
 | `ShortcutAumid` | REG_SZ | 값 이름으로 보아 앱 사용자 모델 ID (AppUserModelID) 입니다. 작업 표시줄이 창과 바로가기를 한 앱으로 묶을 때 쓰는 식별자입니다 | 파서 소스, 관찰 |
 | 이름 없는 기본값 | REG_DWORD | 뜻을 확인하지 못했습니다 | 관찰 (Win11 한 대) |
 
@@ -62,7 +62,7 @@ Windows 11 한 대에서 본 모습은 다음과 같습니다(확인 범위: Win
 - `ShortcutTargetPath`·`ShortcutAumid` 는 몇 항목에서 비어 있었습니다.
 - `ShortcutProgramId` 는 절반이 넘는 항목에서 비어 있었습니다.
 
-LNK 파일 자체의 구조는 [바로가기 형식](/01-foundations/shell-document-formats/shell-link-lnk.md)에서 다룹니다. 이 키에는 LNK 안의 시각·볼륨 정보·셸 아이템이 없습니다.
+LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/shell-document-formats/shell-link-lnk.md)에서 다룹니다. 이 키에는 LNK 안의 시각·볼륨 정보·셸 아이템이 없습니다.
 
 > 그림 자리: `Root\InventoryApplicationShortcut\<파일 이름|16진수>` 하위 키 하나를 펼쳐, 옛 판(값 하나)과 새 판(값 네 개와 기본값)을 나란히 보여 주는 그림. `ShortcutProgramId` 가 InventoryApplication 하위 키로 이어지는 화살표 포함
 
@@ -78,7 +78,7 @@ LNK 파일 자체의 구조는 [바로가기 형식](/01-foundations/shell-docum
 
 바로가기를 최근에 열었다는 뜻으로 이 키를 읽는 설명도 있습니다. 그러나 이 키에는 LNK 를 연 시각이 없습니다. 실행을 말하려면 아래 교차 검증 표의 실행 흔적이 따로 있어야 합니다.
 
-사용자별 시작 메뉴 경로에는 프로필 폴더 이름이 들어 있습니다. 이 이름으로 사용자 SID 를 찾을 수 있습니다([사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)). `C:\ProgramData` 와 공용 바탕 화면의 바로가기는 특정 사용자와 묶이지 않습니다.
+사용자별 시작 메뉴 경로에는 프로필 폴더 이름이 들어 있습니다. 이 이름으로 사용자 SID 를 찾을 수 있습니다([사용자 프로필 목록](../../system-account/profilelist.md)). `C:\ProgramData` 와 공용 바탕 화면의 바로가기는 특정 사용자와 묶이지 않습니다.
 
 ### 보고서 문장
 
@@ -89,7 +89,7 @@ LNK 파일 자체의 구조는 [바로가기 형식](/01-foundations/shell-docum
 
 ## 시각 해석
 
-이 키의 값에는 시각이 없습니다. 쓸 수 있는 시각은 하위 키의 마지막 기록 시각 (Last Write Time) 하나입니다. 이 시각은 UTC 기준 FILETIME 입니다([키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md), [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
+이 키의 값에는 시각이 없습니다. 쓸 수 있는 시각은 하위 키의 마지막 기록 시각 (Last Write Time) 하나입니다. 이 시각은 UTC 기준 FILETIME 입니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md), [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
 
 이 시각은 인벤토리가 하위 키를 쓴 때입니다. LNK 파일이 생긴 때가 아닙니다. Qazeer 노트도 이 시각이 LNK 파일의 NTFS 시각 넷 가운데 어느 것과도 맞지 않는 것 같다고 적습니다. 그런데 하위 키를 언제 다시 쓰는지는 판마다 달랐습니다.
 
@@ -102,32 +102,32 @@ LNK 파일 자체의 구조는 [바로가기 형식](/01-foundations/shell-docum
 
 - 모든 하위 키가 한 시각에 몰려 있으면 그 시각은 마지막 검사 시각입니다. 개별 바로가기가 언제 생겼는지는 알 수 없습니다.
 - 여러 무리로 나뉘면 각 무리가 한 번의 검사일 수 있습니다. 이때 하위 키 시각은 "늦어도 이때는 있었다" 는 하한으로만 씁니다.
-- 같은 분에 [실행 파일 항목](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md)이 함께 몰려 있는지도 봅니다. 공개 표본에서는 한 사용자의 바로가기 무리와 같은 분에 실행 파일 항목도 여럿 기록돼 있었습니다.
+- 같은 분에 [실행 파일 항목](inventoryapplicationfile.md)이 함께 몰려 있는지도 봅니다. 공개 표본에서는 한 사용자의 바로가기 무리와 같은 분에 실행 파일 항목도 여럿 기록돼 있었습니다.
 
-검사는 예약 작업이 돌 때만 합니다. 그래서 LNK 가 생긴 때와 하위 키 시각 사이에는 검사 간격만큼 틈이 생길 수 있습니다. 예약 작업의 실행 기록은 [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md)에서 확인합니다.
+검사는 예약 작업이 돌 때만 합니다. 그래서 LNK 가 생긴 때와 하위 키 시각 사이에는 검사 간격만큼 틈이 생길 수 있습니다. 예약 작업의 실행 기록은 [예약 작업](../../persistence/scheduled-tasks/index.md)에서 확인합니다.
 
 ## 함정과 한계
 
 1. **실행 증거로 씁니다.** 이 키는 바로가기가 있었다는 기록입니다. ANSSI 는 이 키를 찾은 LNK 파일 목록으로만 설명합니다. Kaspersky 도 이 키를 다른 자료와 함께 봐야 실행을 말할 수 있는 키로 분류합니다.
 2. **하위 키 이름으로 경로를 짐작합니다.** 이름은 파일 이름의 앞 16자만 남깁니다. 폴더도 들어 있지 않습니다. 경로는 `ShortcutPath` 에서 읽습니다.
 3. **대소문자로 비교합니다.** 공개 표본에서 사용자별 경로는 `c:\users\…` 처럼 앞부분이 소문자였습니다. 모든 사용자 경로는 `C:\ProgramData\…` 로 대문자였습니다. 다른 기록과 경로를 맞출 때는 대소문자를 가리지 않고 비교합니다.
-4. **`ShortcutProgramId` 짝을 믿고 끝냅니다.** Kaspersky 는 이 값으로 InventoryApplication 항목을 찾으라고 설명합니다. 그러나 Windows 11 한 대에서 값이 있는 항목을 하위 키 이름과 글자 그대로 맞춰 보니 짝이 나오지 않았습니다. 원인(표기 차이인지, 이미 지운 프로그램인지)은 확인하지 못했습니다. 짝이 없으면 [설치 프로그램 (Uninstall)](/02-artifacts/system-account/uninstall.md)에서 다시 찾아봅니다.
-5. **검사 범위를 전체로 봅니다.** 이 키에는 검사하는 폴더의 LNK 만 들어옵니다. 검사 폴더는 판마다 다릅니다. 검체에서 실제로 나온 경로로 범위를 가늠합니다. 최근 문서 폴더의 LNK 는 [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md)에서 따로 봅니다.
+4. **`ShortcutProgramId` 짝을 믿고 끝냅니다.** Kaspersky 는 이 값으로 InventoryApplication 항목을 찾으라고 설명합니다. 그러나 Windows 11 한 대에서 값이 있는 항목을 하위 키 이름과 글자 그대로 맞춰 보니 짝이 나오지 않았습니다. 원인(표기 차이인지, 이미 지운 프로그램인지)은 확인하지 못했습니다. 짝이 없으면 [설치 프로그램 (Uninstall)](../../system-account/uninstall.md)에서 다시 찾아봅니다.
+5. **검사 범위를 전체로 봅니다.** 이 키에는 검사하는 폴더의 LNK 만 들어옵니다. 검사 폴더는 판마다 다릅니다. 검체에서 실제로 나온 경로로 범위를 가늠합니다. 최근 문서 폴더의 LNK 는 [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md)에서 따로 봅니다.
 6. **값이 빠진 판을 오류로 봅니다.** 옛 판에는 `ShortcutPath` 하나만 있습니다. 대상 경로가 없다고 해서 하이브가 손상된 것이 아닙니다.
 7. **도구 출력만 봅니다.** 아래 "공개 도구로 한 번" 에서 보듯 도구마다 읽는 값이 다릅니다.
 
 ### 지우기와 조작
 
-- **LNK 파일을 지웁니다.** LNK 를 지운 뒤 다음 검사에서 하위 키가 빠지는지 밝힌 공개 연구는 찾지 못했습니다. Qazeer 노트는 지금은 없는 LNK 도 이 키에 남아 있을 수 있다고 적습니다. LNK 가 지워진 기록은 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)과 [$MFT](/02-artifacts/filesystem/mft.md)에서 찾습니다.
-- **하위 키나 하이브를 지웁니다.** 지운 키는 하이브 안의 비할당 셀에 남을 수 있습니다([지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 아직 주 파일에 들어가지 않은 변경은 `.LOG1`·`.LOG2` 에 있습니다([트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md)). 옛 하이브는 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
-- **키 시각을 바꿉니다.** 키 마지막 기록 시각은 따로 바꿀 수 있습니다. 조작 흔적을 가리는 법은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다. 같은 무리의 다른 하위 키와 시각이 동떨어진 항목이 있으면 의심해 봅니다.
+- **LNK 파일을 지웁니다.** LNK 를 지운 뒤 다음 검사에서 하위 키가 빠지는지 밝힌 공개 연구는 찾지 못했습니다. Qazeer 노트는 지금은 없는 LNK 도 이 키에 남아 있을 수 있다고 적습니다. LNK 가 지워진 기록은 [$UsnJrnl](../../filesystem/usnjrnl.md)과 [$MFT](../../filesystem/mft.md)에서 찾습니다.
+- **하위 키나 하이브를 지웁니다.** 지운 키는 하이브 안의 비할당 셀에 남을 수 있습니다([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 아직 주 파일에 들어가지 않은 변경은 `.LOG1`·`.LOG2` 에 있습니다([트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)). 옛 하이브는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
+- **키 시각을 바꿉니다.** 키 마지막 기록 시각은 따로 바꿀 수 있습니다. 조작 흔적을 가리는 법은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다. 같은 무리의 다른 하위 키와 시각이 동떨어진 항목이 있으면 의심해 봅니다.
 - **검사 폴더 밖에 바로가기를 둡니다.** 이 키에는 남지 않습니다. 다른 기록으로 찾아야 합니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 레지스트리 하이브 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 하위 키 이름의 16진수와 셀 오프셋도 지어낸 값입니다. 값이 하나인 옛 판 모양입니다. 셀·키 노드·값 구조의 자세한 설명은 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
+아래는 레지스트리 하이브 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 하위 키 이름의 16진수와 셀 오프셋도 지어낸 값입니다. 값이 하나인 옛 판 모양입니다. 셀·키 노드·값 구조의 자세한 설명은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 
 오프셋은 셀 맨 앞(셀 크기 칸)부터 센 값입니다. 명세 표의 오프셋에 4 를 더한 값과 같습니다.
 
@@ -184,7 +184,7 @@ LNK 파일 자체의 구조는 [바로가기 형식](/01-foundations/shell-docum
 | Velociraptor (Windows.Forensics.Amcache) | `ShortcutPath`, 하위 키 시각 |
 | frnsc-amcache | 값 네 개, 하위 키 시각 |
 
-그래서 새 판 하이브를 앞의 세 도구로만 보면 `ShortcutTargetPath`·`ShortcutProgramId`·`ShortcutAumid` 를 놓칩니다. 첫 번째 값만 읽는 도구는 값 순서에 따라 엉뚱한 값을 보여 줄 수도 있습니다. 하위 키 몇 개는 일반 레지스트리 뷰어로 열어 모든 값을 직접 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+그래서 새 판 하이브를 앞의 세 도구로만 보면 `ShortcutTargetPath`·`ShortcutProgramId`·`ShortcutAumid` 를 놓칩니다. 첫 번째 값만 읽는 도구는 값 순서에 따라 엉뚱한 값을 보여 줄 수도 있습니다. 하위 키 몇 개는 일반 레지스트리 뷰어로 열어 모든 값을 직접 확인합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 하이브를 열 때는 `.LOG1`·`.LOG2` 를 함께 가져와 반영합니다. 도구가 로그를 반영했는지도 확인합니다.
 
@@ -192,16 +192,16 @@ LNK 파일 자체의 구조는 [바로가기 형식](/01-foundations/shell-docum
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) | `ShortcutPath` 의 LNK 가 아직 있으면 그 안의 대상 경로·대상 파일 시각·볼륨 정보 |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | LNK 파일이 생기고 지워진 시각. 하위 키 시각이 이보다 뒤인지 |
-| [설치 프로그램 항목 (InventoryApplication)](/02-artifacts/execution/amcache-hve/inventoryapplication.md) · [설치 프로그램 (Uninstall)](/02-artifacts/system-account/uninstall.md) | 바로가기를 만든 설치 프로그램과 설치 날짜 |
-| [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) | `ShortcutTargetPath` 와 같은 경로의 실행 파일 항목과 SHA-1 |
-| [스토어 앱 설치 목록 (AppX·StateRepository)](/02-artifacts/system-account/appx-staterepository.md) | `ShortcutAumid` 가 앱 패키지와 이어지는지 |
-| [UserAssist](/02-artifacts/execution/userassist.md) · [프리페치](/02-artifacts/execution/prefetch/index.md) | 바로가기 대상이 실제로 실행됐는지. UserAssist 는 바로가기를 거친 실행도 따로 적습니다 |
-| [점프리스트 (Jump Lists)](/02-artifacts/file-folder-usage/jump-lists.md) | 그 앱으로 연 파일. 앱을 실제로 썼는지 |
-| [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 Amcache.hve 의 바로가기 목록. 지금 목록과 비교하면 새로 생기거나 빠진 바로가기를 알 수 있습니다 |
+| [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md) | `ShortcutPath` 의 LNK 가 아직 있으면 그 안의 대상 경로·대상 파일 시각·볼륨 정보 |
+| [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | LNK 파일이 생기고 지워진 시각. 하위 키 시각이 이보다 뒤인지 |
+| [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) · [설치 프로그램 (Uninstall)](../../system-account/uninstall.md) | 바로가기를 만든 설치 프로그램과 설치 날짜 |
+| [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) | `ShortcutTargetPath` 와 같은 경로의 실행 파일 항목과 SHA-1 |
+| [스토어 앱 설치 목록 (AppX·StateRepository)](../../system-account/appx-staterepository.md) | `ShortcutAumid` 가 앱 패키지와 이어지는지 |
+| [UserAssist](../userassist.md) · [프리페치](../prefetch/index.md) | 바로가기 대상이 실제로 실행됐는지. UserAssist 는 바로가기를 거친 실행도 따로 적습니다 |
+| [점프리스트 (Jump Lists)](../../file-folder-usage/jump-lists.md) | 그 앱으로 연 파일. 앱을 실제로 썼는지 |
+| [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 Amcache.hve 의 바로가기 목록. 지금 목록과 비교하면 새로 생기거나 빠진 바로가기를 알 수 있습니다 |
 
-여러 기록을 합쳐 실행을 판단하는 순서는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)에서 다룹니다. Amcache 전체의 해석 함정은 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md)을 봅니다.
+여러 기록을 합쳐 실행을 판단하는 순서는 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md)에서 다룹니다. Amcache 전체의 해석 함정은 [AmCache 해석 함정](sha1.md)을 봅니다.
 
 ## 실습
 

@@ -35,7 +35,7 @@ Microsoft 는 이 기능이 사용자 파일에는 영향을 주지 않는다고
 | 설정 파일 | `%LOCALAPPDATA%\Packages\Microsoft.WindowsNotepad_8wekyb3d8bbwe\Settings\` | `settings.dat` |
 
 - 탭 파일의 이름은 GUID 입니다. 같은 GUID 의 파일들이 탭 하나를 이룹니다.
-- `settings.dat` 는 응용 프로그램 하이브 (application hive) 입니다. 레지스트리 편집기와 하이브 도구로 열 수 있습니다. 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+- `settings.dat` 는 응용 프로그램 하이브 (application hive) 입니다. 레지스트리 편집기와 하이브 도구로 열 수 있습니다. 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 - 관찰에서는 `Settings` 폴더에 `settings.dat.LOG1`·`settings.dat.LOG2` 도 있었습니다. (확인 범위: Win11 25H2 한 대, 메모장 11.2607.14.0)
 
 ### Windows 버전
@@ -52,7 +52,7 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
 
 ### 메모장 버전
 
-형식은 Windows 버전보다 메모장 버전에 따라 달라집니다. 증거 PC 의 메모장 버전을 먼저 확인합니다. 스토어 앱의 설치 기록은 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 다룹니다.
+형식은 Windows 버전보다 메모장 버전에 따라 달라집니다. 증거 PC 의 메모장 버전을 먼저 확인합니다. 스토어 앱의 설치 기록은 [스토어 앱 설치 목록](../system-account/appx-staterepository.md) 에서 다룹니다.
 
 | 메모장 버전 | 달라진 점 | 근거 |
 |---|---|---|
@@ -71,7 +71,7 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
 - 모든 파일은 앞 바이트들의 CRC32 를 적어 무결성을 확인합니다.
 - 숫자 칸 대부분은 uLEB128 이라는 가변 길이 형식입니다. 바이트마다 아래 7비트가 값입니다. 맨 위 비트가 1이면 다음 바이트가 이어집니다. 앞 바이트가 낮은 자리입니다.
 - 예를 들어 `82 01` 은 2 + 1 × 128 = 130 입니다. 0x80 보다 작은 값은 한 바이트입니다.
-- 글자는 UTF-16LE 로 적습니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- 글자는 UTF-16LE 로 적습니다. 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ### 탭 파일의 종류
 
@@ -182,7 +182,7 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
 
 - 창 파일은 크기가 줄지 않는 것으로 보입니다. 탭을 닫으면 CRC32 뒤에 남는 공간이 생깁니다. 거기서 예전 탭의 GUID 를 통째로 또는 일부 되찾을 수 있습니다. 탭을 여닫을수록 내용이 뒤섞이므로 늘 되찾는다는 보장은 없습니다. (ogmini README·원고)
 - 탭을 창 밖으로 끌어 새 창을 만들면 새 창 파일이 생깁니다. 추가 창을 닫으면 그 창 파일은 지워집니다. 마지막으로 닫은 창의 창 파일만 남습니다. (ogmini README·원고)
-- 관찰에서는 NumberTabs 가 2 였습니다. 뒤이은 16바이트 두 개를 GUID 로 읽자(앞 세 칸은 리틀 엔디언) TabState 파일 이름 두 개와 정확히 같았습니다. (확인 범위: Win11 25H2 한 대, 메모장 11.2607.14.0) GUID 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+- 관찰에서는 NumberTabs 가 2 였습니다. 뒤이은 16바이트 두 개를 GUID 로 읽자(앞 세 칸은 리틀 엔디언) TabState 파일 이름 두 개와 정확히 같았습니다. (확인 범위: Win11 25H2 한 대, 메모장 11.2607.14.0) GUID 바이트 순서는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ### settings.dat 값
 
@@ -224,7 +224,7 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
 
 ### 증명하지 못하는 것
 
-- **누가 입력했는지.** 계정까지만 알려 줍니다. 자판 앞의 사람은 다른 흔적으로 좁힙니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **누가 입력했는지.** 계정까지만 알려 줍니다. 자판 앞의 사람은 다른 흔적으로 좁힙니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **조각마다의 시각.** 버퍼 조각에는 시각 칸이 없습니다. 입력 순서는 알아도 각 입력의 시각은 모릅니다.
 - **파일 없는 탭의 시각.** 파일 없는 탭에는 시각 칸이 없습니다. 언제 입력했는지는 파일 시스템 시각과 다른 흔적으로 좁힙니다.
 - **디스크 파일의 지금 내용.** 파일 탭의 Content 는 탭의 내용입니다. 저장하지 않은 변경이 있으면 디스크 파일과 다릅니다.
@@ -243,7 +243,7 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
 | 상태 파일의 Sequence Number | 저장하지 않은 변경이 있는 탭이면 메모장을 닫을 때마다 | 변경 없는 탭이면 늘지 않습니다 |
 | 파일 시스템 시각 | 파일을 다시 쓸 때 | 아래 관찰 참고 |
 
-- Timestamp 는 Win32 FILETIME 형식입니다. 참고한 자료는 이 값이 UTC 인지 현지 시각인지 밝히지 않습니다. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다. 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- Timestamp 는 Win32 FILETIME 형식입니다. 참고한 자료는 이 값이 UTC 인지 현지 시각인지 밝히지 않습니다. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다. 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - `.0.bin` 과 `.1.bin` 은 번갈아 갱신됩니다. Sequence Number 가 큰 쪽이 현재 것입니다. 상태 파일과 창 파일 모두 같습니다. (ogmini README·원고)
 
 상태 파일은 탭의 상태에 따라 생기고 지워지는 때가 다릅니다. (ogmini README·원고)
@@ -262,14 +262,14 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
   - 메모장을 닫으면 버퍼 조각이 사라집니다. 입력했다 지운 비밀번호도 함께 사라집니다.
   - 메모장을 열면 이제 없거나 접근할 수 없는 파일(예: 빠진 USB 의 파일)에 대한 탭·창 파일이 지워질 수 있습니다.
   - 현재 탭을 바꾸거나 커서만 옮겨도 파일이 바뀝니다.
-- **실행 중인 PC 에서는 메모장을 닫지 않습니다.** `TabState`·`WindowState`·`Settings` 폴더를 먼저 복사합니다. 내용을 보려고 증거 PC 에서 메모장을 열지 않습니다. 수집 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/order-of-volatility.md) 에서 다룹니다.
+- **실행 중인 PC 에서는 메모장을 닫지 않습니다.** `TabState`·`WindowState`·`Settings` 폴더를 먼저 복사합니다. 내용을 보려고 증거 PC 에서 메모장을 열지 않습니다. 수집 순서는 [라이브 응답](../../03-techniques/process-acquisition/live-response/order-of-volatility.md) 에서 다룹니다.
 - **빈 화면도 확인합니다.** 열린 메모장 화면이 비어 보여도 버퍼 조각에 되살릴 내용이 있을 수 있습니다. (ogmini 원고)
 - **형식이 버전마다 바뀝니다.** 서식 칸은 원고에는 없고 README 에는 있습니다. 관찰한 메모장 11.2607.14.0 에서는 상태 파일의 TypeFlag 도 문서와 달랐습니다. 특정 버전에 맞춘 도구는 다른 버전을 잘못 읽을 수 있습니다. 결과가 이상하면 헥스로 확인합니다.
 - **창 파일은 크기로 판단하지 않습니다.** 관찰에서는 크기가 더 큰 창 파일이 예전 것이었습니다. 현재 파일은 Sequence Number 로 가립니다. (확인 범위: Win11 25H2 한 대, 메모장 11.2607.14.0)
 - **마크다운 서식 탭에는 버퍼 조각이 없습니다.** 조각이 없다고 편집이 없었다고 볼 수 없습니다.
 - **남는 공간의 GUID 는 보장되지 않습니다.** 탭을 여러 번 여닫으면 예전 GUID 가 덮이거나 잘립니다.
 - **CRC32 는 손상을 가리는 값입니다.** 조작을 막지는 못합니다. 누군가 내용을 고치고 CRC32 를 다시 계산하면 CRC32 만으로는 알 수 없습니다.
-- **지우거나 기능을 끌 수 있습니다.** 사용자가 `TabState` 폴더를 지우거나 세션 저장을 끄면 탭 파일이 남지 않습니다. 예전 탭 파일은 볼륨 섀도 복사본에 남아 있을 수 있습니다. 방법은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
+- **지우거나 기능을 끌 수 있습니다.** 사용자가 `TabState` 폴더를 지우거나 세션 저장을 끄면 탭 파일이 남지 않습니다. 예전 탭 파일은 볼륨 섀도 복사본에 남아 있을 수 있습니다. 방법은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
 - **Windows 10 은 확인하지 못했습니다.**
 
 ## 직접 분석해 보기
@@ -310,7 +310,7 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
 
 공개 도구의 예로 ogmini 의 Notepad State Library 가 있습니다. 이 저장소의 WindowsNotepadParser.exe 는 기본 위치나 지정한 폴더의 탭 파일과 창 파일을 CSV 로 냅니다. 버퍼 조각이 있으면 변경 과정을 GIF 로 만듭니다. 같은 저장소에 010 Editor 템플릿과 ImHex 패턴도 있습니다. (ogmini README)
 
-도구가 확인한 메모장 버전과 증거 PC 의 메모장 버전을 맞춰 봅니다. 도구가 낸 탭 수와 폴더의 `.bin` 수를 맞춰 봅니다. 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+도구가 확인한 메모장 버전과 증거 PC 의 메모장 버전을 맞춰 봅니다. 도구가 낸 탭 수와 폴더의 `.bin` 수를 맞춰 봅니다. 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 `settings.dat` 는 복사본을 하이브 도구로 엽니다. 값 끝 8바이트의 FILETIME 을 따로 풉니다.
 
@@ -318,14 +318,14 @@ Windows 10 에서 같은 파일이 생기는지는 확인하지 못했습니다.
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) | 파일 탭의 경로에 있는 파일을 연 다른 흔적이 있는지 봅니다 |
-| [점프리스트 (Jump Lists)](/02-artifacts/file-folder-usage/jump-lists.md) | 메모장으로 연 파일 목록에 같은 경로가 있는지 봅니다 |
-| [최근 문서 (RecentDocs)](/02-artifacts/file-folder-usage/recentdocs.md) | 같은 파일 이름이 최근 문서에 있는지 봅니다 |
-| [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) | `settings.dat` 를 읽는 법을 봅니다 |
-| [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 탭 파일·창 파일이 남았는지 봅니다 |
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 증거 PC 의 메모장 버전을 확인합니다 |
+| [바로가기 파일 (LNK)](lnk.md) | 파일 탭의 경로에 있는 파일을 연 다른 흔적이 있는지 봅니다 |
+| [점프리스트 (Jump Lists)](jump-lists.md) | 메모장으로 연 파일 목록에 같은 경로가 있는지 봅니다 |
+| [최근 문서 (RecentDocs)](recentdocs.md) | 같은 파일 이름이 최근 문서에 있는지 봅니다 |
+| [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) | `settings.dat` 를 읽는 법을 봅니다 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 탭 파일·창 파일이 남았는지 봅니다 |
+| [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 증거 PC 의 메모장 버전을 확인합니다 |
 
-조사 전체 흐름은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 에서 다룹니다.
+조사 전체 흐름은 [이 파일을 누가 언제 열었나](../../04-scenarios/activity/file-access.md) 에서 다룹니다.
 
 ## 실습
 

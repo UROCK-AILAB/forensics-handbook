@@ -6,14 +6,14 @@
 
 이 페이지의 근거 자료에는 "레코드 카빙" 이라는 말을 정의한 곳이 없었습니다. 이 위키에서는 위 방법을 레코드 카빙이라고 부릅니다.
 
-이 페이지는 [삭제 데이터 복구 (Data Recovery)](/03-techniques/analysis/data-recovery/index.md) 의 하위 주제입니다. 파일 단위로 찾는 방법은 [파일 카빙 (File Carving)](/03-techniques/analysis/data-recovery/file-carving.md) 에 있습니다. 카빙할 데이터를 어디서 뽑는지는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 있습니다.
+이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 파일 단위로 찾는 방법은 [파일 카빙 (File Carving)](file-carving.md) 에 있습니다. 카빙할 데이터를 어디서 뽑는지는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](unallocated-slack-space.md) 에 있습니다.
 
 ## 언제 쓰나
 
 - 파일은 남아 있는데 그 안의 옛 레코드를 찾을 때 씁니다. EVTX 파일의 청크 빈 공간이 이런 경우입니다.
 - 파일 전체를 되살리지 못해도 레코드 하나라도 읽고 싶을 때 씁니다. EVTX 레코드에는 레코드 번호와 쓴 시각이 들어 있습니다. 그래서 레코드 하나만 되살려도 이벤트 하나를 읽을 수 있습니다.
 - 비할당 영역에서 옛 MFT 레코드나 색인 블록을 찾을 때 씁니다.
-- [파일시스템 기반 복구 (Undelete: NTFS·FAT)](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 에서 MFT 레코드를 읽기 전에 fix-up 을 되돌릴 때도 이 페이지의 검사를 씁니다.
+- [파일시스템 기반 복구 (Undelete: NTFS·FAT)](undelete-ntfs-fat.md) 에서 MFT 레코드를 읽기 전에 fix-up 을 되돌릴 때도 이 페이지의 검사를 씁니다.
 
 ## 원리
 
@@ -30,7 +30,7 @@
 
 ### EVTX 에서 쓰는 값
 
-EVTX 파일은 파일 헤더 블록 뒤에 청크가 이어지는 모양입니다. 레코드는 청크 안에 있습니다. 전체 구조와 레코드 본문을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다. 여기서는 레코드를 찾고 가리는 데 쓰는 값만 추립니다.
+EVTX 파일은 파일 헤더 블록 뒤에 청크가 이어지는 모양입니다. 레코드는 청크 안에 있습니다. 전체 구조와 레코드 본문을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다. 여기서는 레코드를 찾고 가리는 데 쓰는 값만 추립니다.
 
 | 자리 | 크기 | 내용 |
 |---|---|---|
@@ -72,19 +72,19 @@ MFT 레코드와 색인 블록에는 fix-up 이 있습니다. fix-up 을 되돌�
 
 > 그림 자리: 1,024바이트 MFT 레코드를 512바이트 블록 두 개로 나누고, 두 블록의 마지막 2바이트가 자리 값으로 바뀐 모습. fix-up 값 목록의 원래 값을 제자리로 되돌려 넣는 화살표
 
-MFT 레코드 안의 값은 [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 와 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다. 색인 블록 안의 항목은 [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) 에서 다룹니다. $UsnJrnl·$LogFile 의 레코드 구조는 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 과 [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md) 에 있습니다.
+MFT 레코드 안의 값은 [파일시스템 기반 복구](undelete-ntfs-fat.md) 와 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 에서 다룹니다. 색인 블록 안의 항목은 [폴더 인덱스와 슬랙](../../../02-artifacts/filesystem/i30.md) 에서 다룹니다. $UsnJrnl·$LogFile 의 레코드 구조는 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) 과 [NTFS 트랜잭션 로그](../../../02-artifacts/filesystem/logfile.md) 에 있습니다.
 
 ### DB 파일 안의 지운 레코드
 
 ESE·SQLite·레지스트리 하이브 안의 지운 레코드는 형식마다 남는 자리와 읽는 법이 다릅니다. 각 기반 구조 페이지에서 다룹니다.
 
-- [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md)
-- [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md)
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)
+- [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md)
+- [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md)
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)
 
 ESE 에서 레코드를 되살릴 때 현장에서 본 점은 이렇습니다(현장 관찰).
 
-- 손상된 ESE DB 는 읽는 방식에 따라 결과 행 수가 달랐습니다. 같은 손상 SRUDB.dat 의 앱 사용량 표에서 도구마다 1,612행과 1,742행으로 갈렸습니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. SRUDB.dat 자체는 [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) 에서 다룹니다.
+- 손상된 ESE DB 는 읽는 방식에 따라 결과 행 수가 달랐습니다. 같은 손상 SRUDB.dat 의 앱 사용량 표에서 도구마다 1,612행과 1,742행으로 갈렸습니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. SRUDB.dat 자체는 [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) 에서 다룹니다.
 - 압수 이미지의 ESE DB 는 대부분 비정상 종료 상태였습니다. JET API 로 열려면 트랜잭션 로그로 먼저 복구해야 합니다. 로그 사슬이 끊겨 있으면 이 복구가 안 될 수 있습니다.
 - 페이지를 직접 해석하는 방식은 로그 없이 읽습니다.
 
@@ -92,7 +92,7 @@ ESE 에서 레코드를 되살릴 때 현장에서 본 점은 이렇습니다(�
 
 ### EVTX
 
-1. 원본의 해시를 구하고 사본에서 작업합니다. 방법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 에 있습니다.
+1. 원본의 해시를 구하고 사본에서 작업합니다. 방법은 [증거 획득](../../process-acquisition/evidence-acquisition/index.md) 에 있습니다.
 2. 파일 헤더 서명 `ElfFile\0` 을 확인합니다. 헤더 플래그의 dirty 표시가 켜져 있는지 적습니다.
 3. 파일 헤더 블록 4,096바이트 뒤부터 65,536바이트씩 청크를 읽습니다. 청크마다 서명 `ElfChnk\0` 을 봅니다.
 4. 청크 헤더의 CRC32 두 개를 계산해 적힌 값과 맞춰 봅니다. 맞지 않는 청크는 결과에 따로 표시합니다.
@@ -106,7 +106,7 @@ ESE 에서 레코드를 되살릴 때 현장에서 본 점은 이렇습니다(�
 
 ### NTFS 레코드
 
-1. 찾을 데이터를 정합니다. 비할당 영역을 뽑는 법은 [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 있습니다.
+1. 찾을 데이터를 정합니다. 비할당 영역을 뽑는 법은 [비할당 영역과 슬랙](unallocated-slack-space.md) 에 있습니다.
 2. `FILE` 또는 `INDX` 서명을 찾습니다.
 3. 오프셋 4·6 에서 fix-up 값 목록의 위치와 개수를 읽습니다.
 4. 512바이트 블록마다 마지막 2바이트가 자리 값과 같은지 봅니다.
@@ -134,7 +134,7 @@ ESE 에서 레코드를 되살릴 때 현장에서 본 점은 이렇습니다(�
 - 레코드 끝은 0x11E40 + 0x70 = 0x11EB0 입니다. 청크 끝 0x20FFF 를 넘지 않습니다.
 - 끝 바로 앞 0x11EAC~0x11EAF 가 `70 00 00 00` 입니다. 오프셋 4 의 크기와 같습니다. 이 후보를 레코드로 받아들입니다.
 - 레코드 오프셋 8 의 레코드 번호는 0x13A(314)입니다. 살아 있는 레코드 목록에 314 가 이미 있으면 무시합니다. 없으면 되살린 레코드로 적습니다.
-- 레코드 오프셋 16(파일 오프셋 0x11E50)의 8바이트는 쓴 시각입니다. UTC 기준 FILETIME 입니다. FILETIME 값을 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 레코드 오프셋 16(파일 오프셋 0x11E50)의 8바이트는 쓴 시각입니다. UTC 기준 FILETIME 입니다. FILETIME 값을 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 0x11EB0 에 다시 서명이 있습니다. 다음 후보로 같은 검사를 되풀이합니다.
 
 0x11EAC~0x11EAF 가 `70 00 00 00` 이 아니었다면 이 후보는 버립니다. 서명과 크기만 맞은 바이트일 수 있기 때문입니다.
@@ -143,7 +143,7 @@ ESE 에서 레코드를 되살릴 때 현장에서 본 점은 이렇습니다(�
 
 - 헥스 편집기로 위 값을 직접 읽어 도구 결과를 확인합니다.
 - 값의 뜻은 libyal 의 libevtx·libfsntfs 형식 문서를 기준으로 삼습니다.
-- 손상된 DB 는 도구마다 결과 행 수가 달랐습니다(위 현장 관찰). 두 가지 이상 방식으로 열어 비교합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 손상된 DB 는 도구마다 결과 행 수가 달랐습니다(위 현장 관찰). 두 가지 이상 방식으로 열어 비교합니다. 방법은 [도구 결과 교차 검증](../../reporting/tool-validation.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -154,14 +154,14 @@ ESE 에서 레코드를 되살릴 때 현장에서 본 점은 이렇습니다(�
 - 같은 번호의 레코드가 살아 있는 쪽과 빈 공간 쪽에 함께 있을 수 있습니다. 되살린 레코드 수를 셀 때 겹친 번호를 뺍니다.
 - 조각을 이어 붙이는 레코드는 경계를 잘못 계산하면 오류 없이 값이 망가집니다. ESE 긴 값 (Long Value) 은 여러 조각으로 나뉘어 따로 저장됩니다. 조각 경계를 잘못 계산해 6,000바이트 값이 11,158바이트로 나온 사례가 있습니다(현장 관찰). 오류가 나지 않았다고 값이 맞다고 보지 않습니다.
 - DB 파일은 원본을 열면 바뀔 수 있습니다. 사본에서 작업합니다(현장 관찰).
-- SSD 에서는 비할당 영역이 이미 비워졌을 수 있습니다. [SSD TRIM과 복구 한계 (SSD·TRIM)](/03-techniques/analysis/data-recovery/ssd-trim.md) 를 봅니다.
+- SSD 에서는 비할당 영역이 이미 비워졌을 수 있습니다. [SSD TRIM과 복구 한계 (SSD·TRIM)](ssd-trim.md) 를 봅니다.
 
 ## 결과를 어떻게 해석하나
 
 - 되살린 EVTX 레코드에는 레코드 번호와 쓴 시각이 레코드 안에 들어 있습니다. 파일 카빙 결과와 다른 점입니다.
 - 이 시각은 레코드를 쓴 시각입니다. 레코드가 지워진 시각이 아닙니다.
 - 청크 빈 공간에서 나온 레코드는 지금 파일을 보통 방법으로 읽을 때 나오지 않는 레코드입니다. 왜 빈 공간에 남았는지는 레코드만으로 알 수 없습니다.
-- 로그를 지운 기록은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) 에서 따로 봅니다.
+- 로그를 지운 기록은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 에서 따로 봅니다.
 
 **증명하는 것**
 

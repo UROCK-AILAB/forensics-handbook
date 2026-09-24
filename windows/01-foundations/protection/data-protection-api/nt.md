@@ -1,6 +1,6 @@
 # 오프라인 복호 재료와 절차 (비밀번호·NT 해시·백업 키)
 
-> 위치: [DPAPI 구조 (Data Protection API)](/01-foundations/protection/data-protection-api/index.md) > 오프라인 복호 재료와 절차
+> 위치: [DPAPI 구조 (Data Protection API)](index.md) > 오프라인 복호 재료와 절차
 
 ## 한 줄 요약
 
@@ -8,7 +8,7 @@
 꺼진 디스크 이미지에서 블롭을 풀려면 마스터키 파일, 사용자 암호(또는 그 해시), 사용자 SID 를 직접 모아야 합니다.
 도메인 계정은 사용자 암호 대신 DC 의 백업 개인키로도 풀립니다.
 
-> 마스터키를 푸는 흐름 자체는 [DPAPI 동작 원리](/01-foundations/protection/data-protection-api/protect-unprotect.md) 의 다섯 단계와 같습니다.
+> 마스터키를 푸는 흐름 자체는 [DPAPI 동작 원리](protect-unprotect.md) 의 다섯 단계와 같습니다.
 > 이 글은 그 흐름을 오프라인에서 밟을 때 무엇을 모으고 어디를 조심하는지를 다룹니다.
 
 ## 필요한 재료
@@ -17,12 +17,12 @@
 
 | 재료 | 어디서 얻나 |
 |---|---|
-| 마스터키 파일 | 사용자 프로필의 `Protect\{SID}` 폴더. [마스터키 파일](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) 참고 |
+| 마스터키 파일 | 사용자 프로필의 `Protect\{SID}` 폴더. [마스터키 파일](master-key-protect-sid.md) 참고 |
 | 사용자 로그온 암호 또는 그 해시 | 아래 "암호 대신 해시" 참고 |
-| 사용자 SID | 마스터키 폴더 이름. [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 참고 |
-| 풀려는 블롭 | 그 블롭을 저장한 앱의 파일. [DPAPI 블롭](/01-foundations/protection/data-protection-api/dpapi-blob.md) 참고 |
+| 사용자 SID | 마스터키 폴더 이름. [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 참고 |
+| 풀려는 블롭 | 그 블롭을 저장한 앱의 파일. [DPAPI 블롭](dpapi-blob.md) 참고 |
 
-- 도메인 계정은 사용자 암호 대신 DC 의 백업 개인키로도 마스터키를 풀 수 있습니다. [도메인 백업 키](/01-foundations/protection/data-protection-api/domain-backup-key.md) 를 봅니다.
+- 도메인 계정은 사용자 암호 대신 DC 의 백업 개인키로도 마스터키를 풀 수 있습니다. [도메인 백업 키](domain-backup-key.md) 를 봅니다.
 - 그래서 사용자 암호를 모르는 사건이라도 도메인이면 복호 길이 남아 있을 수 있습니다.
 
 ## 암호 대신 해시 — 로컬과 도메인이 다릅니다
@@ -46,12 +46,12 @@
 - 내부 해시가 SHA-1 이면 PBKDF2 는 한 번에 20바이트를 냅니다.
 - 3DES 는 키 3개(각 8바이트)와 IV 8바이트, 곧 40바이트가 필요합니다.
 - 그래서 XP·Vista 처럼 3DES 를 쓰는 버전은 PBKDF2 를 두 번 부릅니다.
-- 버전별 암호·반복수는 [마스터키 파일](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) 의 표에 있습니다.
+- 버전별 암호·반복수는 [마스터키 파일](master-key-protect-sid.md) 의 표에 있습니다.
 
 ## 옛 암호로 감싼 마스터키까지 풀기
 
 - 아직 새 암호로 다시 감싸지 않은 옛 마스터키가 남아 있을 수 있습니다.
-- 지금 암호로 [CREDHIST](/01-foundations/protection/data-protection-api/credhist.md) 를 풀면 이전 암호들의 SHA-1 을 얻습니다.
+- 지금 암호로 [CREDHIST](credhist.md) 를 풀면 이전 암호들의 SHA-1 을 얻습니다.
 - 그 옛 SHA-1 로 옛 암호에 감싸인 옛 마스터키를 풉니다.
 - 그래서 블롭이 옛 마스터키를 썼어도, CREDHIST 사슬을 거슬러 풀 수 있습니다.
 
@@ -62,7 +62,7 @@
 - 로컬 계정의 암호 해시는 SAM 하이브에 NT 해시로 남습니다. LM 해시는 Vista 이후 기본으로 저장하지 않습니다.
 - 도메인 계정의 암호 해시는 클라이언트 SAM 이 아니라 DC 에 있습니다.
 - WOOT 2010 논문은 SAM 해시로 암호를 찾는 편이 빨라서, 마스터키 파생을 느리게 해도 보안 이득이 크지 않다고 지적했습니다.
-- SAM 하이브의 해시는 [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) 를 봅니다.
+- SAM 하이브의 해시는 [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) 를 봅니다.
 
 ## 시각 해석
 
@@ -77,8 +77,8 @@
 - **말해 주는 것**: 재료가 다 모이면 그 블롭이 담은 평문. 이것이 오프라인 복호의 목적입니다.
 - **말해 주는 것**: 어느 사용자의 마스터키로 풀렸는지. 그 데이터가 그 계정과 이어진다는 실마리가 됩니다.
 - **말해 주지 못하는 것**: 재료 하나라도 빠지면 나오는 것이 없습니다. 마스터키 파일이나 암호(해시)가 없으면 블롭은 무작위 값으로 남습니다.
-- **말해 주지 못하는 것**: 앱이 추가 엔트로피를 썼다면, 그 값을 모르는 한 풀리지 않습니다. [DPAPI 동작 원리](/01-foundations/protection/data-protection-api/protect-unprotect.md) 를 봅니다.
-- 그래서 수집할 때 마스터키 폴더 전체(마스터키 파일·Preferred), CREDHIST 파일, SAM·SECURITY·SYSTEM 하이브를 함께 모읍니다. SAM 해시를 풀려면 SYSTEM 하이브의 [부트 키](/02-artifacts/credentials/sam-security/system-boot-key.md) 가 필요합니다.
+- **말해 주지 못하는 것**: 앱이 추가 엔트로피를 썼다면, 그 값을 모르는 한 풀리지 않습니다. [DPAPI 동작 원리](protect-unprotect.md) 를 봅니다.
+- 그래서 수집할 때 마스터키 폴더 전체(마스터키 파일·Preferred), CREDHIST 파일, SAM·SECURITY·SYSTEM 하이브를 함께 모읍니다. SAM 해시를 풀려면 SYSTEM 하이브의 [부트 키](../../../02-artifacts/credentials/sam-security/system-boot-key.md) 가 필요합니다.
 
 ## 함정
 

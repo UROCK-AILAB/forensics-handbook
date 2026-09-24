@@ -6,7 +6,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 접속을 받은 컴퓨터 (대상) 의 기록에는 접속해 온 주소가 남습니다. 대상 쪽 기록은 [인증 단계](/02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) 와 [세션 단계](/02-artifacts/event-logs/rdp-event-logs/localsessionmanager-21-25-4778-4779.md) 에서 다룹니다.
+- 접속을 받은 컴퓨터 (대상) 의 기록에는 접속해 온 주소가 남습니다. 대상 쪽 기록은 [인증 단계](1149-4624-10-4625.md) 와 [세션 단계](localsessionmanager-21-25-4778-4779.md) 에서 다룹니다.
 - 출발 컴퓨터의 기록에는 어느 서버로 나갔는지가 남습니다.
 - 두 쪽을 맞추면 한 번의 접속을 양 끝에서 확인할 수 있습니다.
 - 이벤트를 쓰는 공급자 (Provider) 이름은 Microsoft-Windows-TerminalServices-ClientActiveXCore 입니다.
@@ -16,7 +16,7 @@
 ## 위치와 버전별 차이
 
 - 채널: Microsoft-Windows-TerminalServices-RDPClient/Operational
-- 파일 위치와 기본 크기는 [허브](/02-artifacts/event-logs/rdp-event-logs/index.md) 의 "채널 이름과 파일 경로" 표에 모았습니다.
+- 파일 위치와 기본 크기는 [허브](index.md) 의 "채널 이름과 파일 경로" 표에 모았습니다.
 - 이번에 연 자료에는 Windows 버전마다 달라지는 점이 없었습니다.
 - 메시지 원문은 Windows 11 Home 빌드 26200 의 공급자 정의에서 읽었습니다.
 - 그 PC 에는 RDPClient/Operational 파일이 없었습니다. 그래서 실제 이벤트 예시는 보지 못했습니다.
@@ -69,25 +69,25 @@
 
 ## 시각 해석
 
-- 시각이 어느 기준으로 저장되는지는 [허브](/02-artifacts/event-logs/rdp-event-logs/index.md) 의 "시각" 절을 봅니다.
+- 시각이 어느 기준으로 저장되는지는 [허브](index.md) 의 "시각" 절을 봅니다.
 - 1024 의 시각은 연결을 시도한 때입니다.
 - 1025 의 시각은 연결된 때입니다.
 - 1026 의 시각은 연결이 끊긴 때입니다.
-- 출발 컴퓨터의 시각과 대상 컴퓨터의 시각을 맞출 때는 두 컴퓨터의 시계 차이를 먼저 확인합니다. 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 봅니다.
+- 출발 컴퓨터의 시각과 대상 컴퓨터의 시각을 맞출 때는 두 컴퓨터의 시계 차이를 먼저 확인합니다. 방법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 봅니다.
 
 ## 함정과 한계
 
 1. **1024 의 값을 사용자가 입력한 문자열로 단정합니다.** 1024 의 값이 입력한 이름이나 IP 그대로인지는 확인하지 못했습니다. 대상은 1102 와 레지스트리의 접속 기록으로 함께 확인합니다.
 2. **1102 가 없으면 연결도 없었다고 봅니다.** 1102 는 다중 전송 연결을 시작할 때의 메시지입니다. UDP 를 쓰지 않는 연결에서도 남는지는 확인하지 못했습니다.
 3. **1029 에서 사용자 이름을 되살리려 합니다.** 해시에서 원래 이름을 거꾸로 구할 수는 없습니다. 후보 이름을 같은 방법으로 해시해 맞춰 봅니다. 해시 규칙을 확인하지 못했으므로 여러 형태를 시험합니다.
-4. **1026 의 Reason 숫자를 LocalSessionManager 40 의 이유 코드 표로 읽습니다.** 1026 의 숫자가 어떤 코드표를 따르는지 확인하지 못했습니다. [세션 단계](/02-artifacts/event-logs/rdp-event-logs/localsessionmanager-21-25-4778-4779.md) 의 표를 그대로 적용하지 않습니다.
-5. **파일이 없으면 지웠다고 봅니다.** 채널이 켜져 있어도 파일이 없는 경우를 관찰했습니다. [허브](/02-artifacts/event-logs/rdp-event-logs/index.md) 를 봅니다. 로그를 지운 흔적은 [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md) 에서 찾습니다. 그 페이지의 1102 는 이 페이지의 RDPClient 1102 와 채널이 다른 별개의 이벤트입니다. 번호만 보고 섞지 않습니다.
+4. **1026 의 Reason 숫자를 LocalSessionManager 40 의 이유 코드 표로 읽습니다.** 1026 의 숫자가 어떤 코드표를 따르는지 확인하지 못했습니다. [세션 단계](localsessionmanager-21-25-4778-4779.md) 의 표를 그대로 적용하지 않습니다.
+5. **파일이 없으면 지웠다고 봅니다.** 채널이 켜져 있어도 파일이 없는 경우를 관찰했습니다. [허브](index.md) 를 봅니다. 로그를 지운 흔적은 [이벤트 로그 삭제 (1102·104)](../1102-104.md) 에서 찾습니다. 그 페이지의 1102 는 이 페이지의 RDPClient 1102 와 채널이 다른 별개의 이벤트입니다. 번호만 보고 섞지 않습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 읽을 때
 
-EVTX 레코드를 바이트 단위로 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다. 이 페이지는 명령으로만 따라갑니다.
+EVTX 레코드를 바이트 단위로 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다. 이 페이지는 명령으로만 따라갑니다.
 
 ### 공개 도구로 한 번
 
@@ -106,7 +106,7 @@ Get-WinEvent -Path $cli -FilterXPath "*[System[(EventID>=1024 and EventID<=1029)
   ForEach-Object { '{0:o} {1} {2}' -f $_.TimeCreated.ToUniversalTime(), $_.Id, $_.Message }
 ```
 
-1029 값과 맞춰 볼 후보 해시는 아래처럼 만듭니다. 이름은 예시입니다. 해시 규칙을 확인하지 못했으므로 대소문자, 도메인 포함 여부, 문자 인코딩을 바꿔 가며 시험합니다. 문자 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+1029 값과 맞춰 볼 후보 해시는 아래처럼 만듭니다. 이름은 예시입니다. 해시 규칙을 확인하지 못했으므로 대소문자, 도메인 포함 여부, 문자 인코딩을 바꿔 가며 시험합니다. 문자 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 
 ```powershell
 $candidates = 'kim', 'KIM', 'CORP\kim'
@@ -127,16 +127,16 @@ foreach ($u in $candidates) {
 
 | 흔적 | 위치 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 4648 | 보안 로그 | 명시적 자격 증명으로 로그온을 시도한 기록입니다. 대상 서버와 계정이 적힙니다. 시작한 프로세스로 mstsc 등이 보일 수 있습니다 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| MRU0 | `HKEY_USERS\<SID>\SOFTWARE\Microsoft\Terminal Server Client\Default` | 접속한 대상 호스트 | [원격 데스크톱 접속 기록](/02-artifacts/network/rdp-client-mru.md) |
-| UsernameHint | `HKEY_USERS\<SID>\SOFTWARE\Microsoft\Terminal Server Client\Servers\<대상 호스트>` | 그 대상에 쓴 사용자 이름 | [원격 데스크톱 접속 기록](/02-artifacts/network/rdp-client-mru.md) |
+| 4648 | 보안 로그 | 명시적 자격 증명으로 로그온을 시도한 기록입니다. 대상 서버와 계정이 적힙니다. 시작한 프로세스로 mstsc 등이 보일 수 있습니다 | [로그온·로그오프](../logon-events/index.md) |
+| MRU0 | `HKEY_USERS\<SID>\SOFTWARE\Microsoft\Terminal Server Client\Default` | 접속한 대상 호스트 | [원격 데스크톱 접속 기록](../../network/rdp-client-mru.md) |
+| UsernameHint | `HKEY_USERS\<SID>\SOFTWARE\Microsoft\Terminal Server Client\Servers\<대상 호스트>` | 그 대상에 쓴 사용자 이름 | [원격 데스크톱 접속 기록](../../network/rdp-client-mru.md) |
 | Default.rdp | `C:\Users\<사용자>\Documents\` | 접속 설정 | |
-| bcache`<번호>`.bmc | `C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\` | 비트맵 캐시 | [원격 데스크톱 비트맵 캐시](/02-artifacts/network/rdp-bitmap-cache.md) |
-| MSTSC.EXE-`<해시>`.pf | `C:\Windows\Prefetch\` | mstsc 실행 흔적 | [프리패치](/02-artifacts/execution/prefetch/index.md) |
+| bcache`<번호>`.bmc | `C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\` | 비트맵 캐시 | [원격 데스크톱 비트맵 캐시](../../network/rdp-bitmap-cache.md) |
+| MSTSC.EXE-`<해시>`.pf | `C:\Windows\Prefetch\` | mstsc 실행 흔적 | [프리패치](../../execution/prefetch/index.md) |
 
-- 1024·1102 의 대상과 같은 시각대에 대상 컴퓨터의 1149·4624 유형 10 이 있는지 봅니다. [인증 단계](/02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) 를 봅니다.
-- 1026 의 시각은 대상 컴퓨터의 LocalSessionManager 24·40 과 맞춰 봅니다. [세션 단계](/02-artifacts/event-logs/rdp-event-logs/localsessionmanager-21-25-4778-4779.md) 를 봅니다.
-- 여러 컴퓨터를 옮겨 다닌 흐름은 [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) 을 봅니다.
+- 1024·1102 의 대상과 같은 시각대에 대상 컴퓨터의 1149·4624 유형 10 이 있는지 봅니다. [인증 단계](1149-4624-10-4625.md) 를 봅니다.
+- 1026 의 시각은 대상 컴퓨터의 LocalSessionManager 24·40 과 맞춰 봅니다. [세션 단계](localsessionmanager-21-25-4778-4779.md) 를 봅니다.
+- 여러 컴퓨터를 옮겨 다닌 흐름은 [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) 을 봅니다.
 
 ## 실습
 

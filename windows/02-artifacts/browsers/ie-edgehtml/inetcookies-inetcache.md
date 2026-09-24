@@ -10,7 +10,7 @@ IE 는 받은 웹 자원을 캐시 폴더(IE 4~9 는 `Content.IE5`, IE 10 이후
 - 쿠키 (Cookie) 는 웹사이트가 브라우저에 맡겨 두는 이름과 값의 쌍입니다.
 - IE 4~9 는 캐시 파일을 이름이 8글자인 하위 폴더에 나눠 둡니다. 어느 파일이 어느 주소에서 왔는지는 캐시 폴더의 `index.dat` 에 적습니다.
 - IE 4~9 는 쿠키 기록도 `index.dat` 에 적습니다.
-- IE 10 이후는 캐시 기록과 쿠키를 [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) 에 둡니다.
+- IE 10 이후는 캐시 기록과 쿠키를 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에 둡니다.
 - 옛 엣지도 쿠키를 WebCacheV01.dat 에 둡니다.
 
 ## 위치와 버전별 차이
@@ -21,7 +21,7 @@ IE 는 받은 웹 자원을 캐시 폴더(IE 4~9 는 `Content.IE5`, IE 10 이후
 | 캐시 기록 | 캐시 폴더의 `index.dat` | WebCache DB 의 `Container_#` 표 |
 | 쿠키 | `%APPDATA%\Microsoft\Windows\Cookies\index.dat` | WebCache DB 의 `CookieEntryEx_#` 표 |
 
-- Windows XP 에서 쓰던 경로는 [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) 에 정리했습니다.
+- Windows XP 에서 쓰던 경로는 [옛 기록 파일 (index.dat)](index-dat.md) 에 정리했습니다.
 - 옛 엣지의 쿠키 폴더로는 아래 두 곳이 알려져 있습니다.
 
 ```
@@ -63,7 +63,7 @@ Windows 11 25H2 PC 에서 본 모습입니다. (확인 범위: Windows 11 25H2, 
 
 ### IE 4~9: 캐시 폴더 표로 잇기
 
-`index.dat` 머리글의 오프셋 72부터 캐시 폴더 표가 있습니다. 표는 4바이트 개수 뒤에 12바이트 항목이 이어지는 모양입니다. 머리글의 나머지 칸은 [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) 에서 다룹니다.
+`index.dat` 머리글의 오프셋 72부터 캐시 폴더 표가 있습니다. 표는 4바이트 개수 뒤에 12바이트 항목이 이어지는 모양입니다. 머리글의 나머지 칸은 [옛 기록 파일 (index.dat)](index-dat.md) 에서 다룹니다.
 
 | 오프셋 | 크기 | 내용 |
 |---|---|---|
@@ -90,7 +90,7 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 - WebCache DB 의 `Container_#` 표에는 캐시 파일과 관련된 칸이 있습니다. Filename, FileExtension, FileSize, CacheId, ResponseHeaders, RequestHeaders 입니다.
 - `Containers` 표에도 Directory 칸이 있습니다. 이 칸과 실제 캐시 폴더의 관계는 이번에 연 자료로 확인하지 못했습니다. Filename 칸 값으로 실제 폴더를 검색해 맞춰 봅니다.
 - 쿠키는 `CookieEntryEx_#` 표의 Name, Value, RDomain, Expires, LastModified 같은 칸에 들어갑니다.
-- 표와 칸 전체는 [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) 에서 다룹니다.
+- 표와 칸 전체는 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -111,18 +111,18 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 
 ## 시각 해석
 
-- 주소와 캐시 파일의 시각 칸은 기록 파일에 있습니다. [웹캐시 DB](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) 와 [index.dat](/02-artifacts/browsers/ie-edgehtml/index-dat.md) 의 시각 해석을 따릅니다.
-- 캐시 파일 자체의 파일 시스템 시각은 [$MFT](/02-artifacts/filesystem/mft.md) 에서 봅니다.
-- 두 시각이 크게 어긋나면 파일을 옮기거나 복사한 흔적인지 확인합니다. 파일 생성과 삭제 순서는 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 로 확인합니다.
+- 주소와 캐시 파일의 시각 칸은 기록 파일에 있습니다. [웹캐시 DB](webcachev01-dat.md) 와 [index.dat](index-dat.md) 의 시각 해석을 따릅니다.
+- 캐시 파일 자체의 파일 시스템 시각은 [$MFT](../../filesystem/mft.md) 에서 봅니다.
+- 두 시각이 크게 어긋나면 파일을 옮기거나 복사한 흔적인지 확인합니다. 파일 생성과 삭제 순서는 [$UsnJrnl](../../filesystem/usnjrnl.md) 로 확인합니다.
 
 ## 함정과 한계
 
 - **연결 폴더를 따라가면 같은 파일을 두 번 셉니다.** `Temporary Internet Files` 와 `INetCache`, `Content.IE5` 와 `IE` 는 같은 곳을 가리킬 수 있습니다. 수집 도구가 연결 폴더를 따라가는지 확인합니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
-- **숨김·시스템 폴더를 놓치기 쉽습니다.** 탐색기 기본 설정으로는 `Content.IE5` 같은 폴더가 보이지 않을 수 있습니다. 연결 폴더는 재분석 지점 (Reparse Point) 이므로 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 의 속성으로 확인합니다.
+- **숨김·시스템 폴더를 놓치기 쉽습니다.** 탐색기 기본 설정으로는 `Content.IE5` 같은 폴더가 보이지 않을 수 있습니다. 연결 폴더는 재분석 지점 (Reparse Point) 이므로 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 의 속성으로 확인합니다.
 - **`Low` 폴더를 빠뜨리기 쉽습니다.** `INetCache` 와 `INetCookies` 아래에 `Low` 폴더가 따로 있습니다.
 - **폴더 이름만 보고 IE 버전을 정하지 않습니다.** `Content.IE5` 라는 이름은 IE 10 이후 PC 에도 연결 폴더로 남아 있었습니다. 기록 형식은 기록 파일에서 확인합니다.
 - **폴더만 보고 쿠키를 찾으면 빠집니다.** IE 10 이후 쿠키는 WebCache DB 에 있습니다.
-- **지운 캐시 파일이 남을 수 있습니다.** 캐시를 비워도 파일 내용이 할당 해제 영역에 남을 수 있습니다. 찾는 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- **지운 캐시 파일이 남을 수 있습니다.** 캐시를 비워도 파일 내용이 할당 해제 영역에 남을 수 있습니다. 찾는 방법은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -156,14 +156,14 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 웹캐시 DB | IE 10 이후 캐시 파일과 주소, 쿠키 행을 봅니다 | [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) |
-| 옛 기록 파일 | IE 9 이전 캐시 레코드와 폴더 표를 봅니다 | [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) |
-| $MFT·$UsnJrnl | 캐시 파일을 만들고 지운 시각을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| 다운로드 출처 표시 | 캐시를 거쳐 저장한 파일에 출처 표시가 남았는지 봅니다 | [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) |
-| 섀도 복사본 | 캐시를 비우기 전의 파일을 찾습니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 다른 브라우저 | 같은 사이트의 캐시·쿠키가 다른 브라우저에도 있는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md), [파이어폭스](/02-artifacts/browsers/firefox/index.md) |
+| 웹캐시 DB | IE 10 이후 캐시 파일과 주소, 쿠키 행을 봅니다 | [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) |
+| 옛 기록 파일 | IE 9 이전 캐시 레코드와 폴더 표를 봅니다 | [옛 기록 파일 (index.dat)](index-dat.md) |
+| $MFT·$UsnJrnl | 캐시 파일을 만들고 지운 시각을 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| 다운로드 출처 표시 | 캐시를 거쳐 저장한 파일에 출처 표시가 남았는지 봅니다 | [다운로드 출처 표시](../../filesystem/zone-identifier.md) |
+| 섀도 복사본 | 캐시를 비우기 전의 파일을 찾습니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 다른 브라우저 | 같은 사이트의 캐시·쿠키가 다른 브라우저에도 있는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md), [파이어폭스](../firefox/index.md) |
 
-파일이 어디서 왔는지 따지는 흐름은 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 에 있습니다.
+파일이 어디서 왔는지 따지는 흐름은 [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) 에 있습니다.
 
 ## 실습
 

@@ -39,7 +39,7 @@ userNotificationListener, videosLibrary, webcam, wifiData, wiFiDirect
 | NTUSER.DAT (사용자마다) | `Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\<권한 이름>` |
 | SOFTWARE | `Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\<권한 이름>` |
 
-하이브 파일의 위치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+하이브 파일의 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ### 데이터베이스
 
@@ -51,7 +51,7 @@ userNotificationListener, videosLibrary, webcam, wifiData, wiFiDirect
 | `CapabilityConsentStorage.db` | `-wal`, `-shm` |
 | `CapabilityAccessManager (1).db` (예전 파일로 보임) | `-wal`, `-shm` |
 
-SQLite 형식은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+SQLite 형식은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 버전에 따라 달라지는 점
 
@@ -113,7 +113,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 - 사용 기록 표의 Capability, BinaryFullPath, UserSid, FileID 같은 칸에는 숫자 ID 가 들어 있습니다.
 - 실제 문자열은 같은 이름의 사전 표에서 찾습니다. 예를 들어 Capability 칸의 숫자는 `Capabilities` 표의 ID 입니다.
 - 사전 표에서 본 값은 다음과 같습니다. `Capabilities` 에 `location`, `BinaryFullPaths` 에 `C:\Windows\System32\dllhost.exe`, `Users` 에 `S-1-5-21-…-500` 모양의 SID 가 있었습니다.
-- `FileIDs` 와 `ProgramIDs` 의 값은 `0000` 뒤에 16진수 40자가 붙은 44자 문자열이었습니다. [AmCache](/02-artifacts/execution/amcache-hve/index.md) 의 FileId·ProgramId 와 모양이 같습니다. 파일의 SHA-1 인지는 확인하지 못했습니다.
+- `FileIDs` 와 `ProgramIDs` 의 값은 `0000` 뒤에 16진수 40자가 붙은 44자 문자열이었습니다. [AmCache](amcache-hve/index.md) 의 FileId·ProgramId 와 모양이 같습니다. 파일의 SHA-1 인지는 확인하지 못했습니다.
 - 시각 칸에는 FILETIME 정수가 들어 있었습니다.
 
 레지스트리에는 앱마다 마지막 한 쌍만 남습니다. DB 는 사용할 때마다 행을 쌓을 수 있는 표 모양입니다. 실제로 여러 번 쓴 기록이 여러 행으로 남는지는 지금 쓰는 DB 로 확인하지 못했습니다.
@@ -152,22 +152,22 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 - 레지스트리에는 앱마다 시작·끝 한 쌍만 있었습니다. 새로 쓰면 이 한 쌍을 덮어쓰는 것으로 보입니다. 이 해석은 관찰에서 나온 추정입니다.
 - 장치를 쓰는 동안 `LastUsedTimeStop` 이 0 인지는 확인하지 못했습니다. 관찰한 PC 에는 0 인 항목이 없었습니다.
 - 옛 DB 파일의 `NonPackagedUsageHistory` 4행은 모두 `AccessBlocked=1` 이었습니다. `LastUsedTimeStart` 는 0 이고 `LastUsedTimeStop` 에만 시각이 있었습니다. 막힌 접근은 시작 시각 없이 남는 것으로 보입니다. 4행뿐이라 일반화하지 못합니다.
-- FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+- FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 1. **SOFTWARE 하이브만 봅니다.** 관찰한 PC 에서는 앱별 사용 시각이 모두 NTUSER.DAT 에 있었습니다. SOFTWARE 만 읽는 도구로는 결과가 비어 나올 수 있습니다. 사용자 프로필마다 NTUSER.DAT 를 따로 봅니다.
 2. **기록이 없으면 쓰지 않았다고 봅니다.** 데스크톱 앱이 설정 목록에 늘 나오지는 않습니다. 설정을 꺼도 접근할 수 있는 경우가 있습니다.
-3. **마지막 한 쌍을 전체 이력으로 읽습니다.** 레지스트리에는 앱마다 마지막 시작·끝만 있습니다. 이전 사용은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 하이브를 찾아 봅니다.
+3. **마지막 한 쌍을 전체 이력으로 읽습니다.** 레지스트리에는 앱마다 마지막 시작·끝만 있습니다. 이전 사용은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 하이브를 찾아 봅니다.
 4. **하위 키 이름을 그대로 경로로 적습니다.** 하위 키 이름의 `#` 은 `\` 로 바꿔 읽습니다.
-5. **라이브 PC 에서 DB 를 보통 방식으로 복사합니다.** 관찰한 PC 에서는 관리자 권한으로도 DB 폴더의 목록 보기가 거부됐습니다. 백업 권한 복사 (`robocopy /B`) 로는 잠기지 않은 옛 파일만 복사됐습니다. 지금 쓰는 DB 는 사용 중이라 복사하지 못했습니다. 라이브 수집에는 볼륨 섀도 복사본이나 원시 디스크 읽기가 필요합니다. (확인 범위: Windows 11 25H2, PC 한 대) 방법은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 과 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
+5. **라이브 PC 에서 DB 를 보통 방식으로 복사합니다.** 관찰한 PC 에서는 관리자 권한으로도 DB 폴더의 목록 보기가 거부됐습니다. 백업 권한 복사 (`robocopy /B`) 로는 잠기지 않은 옛 파일만 복사됐습니다. 지금 쓰는 DB 는 사용 중이라 복사하지 못했습니다. 라이브 수집에는 볼륨 섀도 복사본이나 원시 디스크 읽기가 필요합니다. (확인 범위: Windows 11 25H2, PC 한 대) 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
 6. **옛 DB 와 지금 DB 를 섞습니다.** 같은 폴더에 `CapabilityAccessManager (1).db` 가 있었습니다. 파일마다 따로 읽고, 결과에 어느 파일에서 나온 값인지 적습니다.
 7. **DB 표 구조를 고정된 것으로 봅니다.** 위 표 구조는 옛 파일에서 본 것입니다. 지금 DB 는 표 목록부터 다시 확인합니다.
 
 ### 지우기와 조작
 
-- **키나 값을 지웁니다.** 지운 키와 값은 하이브 안 빈 공간이나 트랜잭션 로그에 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
-- **DB 행을 지웁니다.** SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. DB 를 복사할 때는 `-wal`, `-shm` 파일을 함께 가져옵니다.
+- **키나 값을 지웁니다.** 지운 키와 값은 하이브 안 빈 공간이나 트랜잭션 로그에 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- **DB 행을 지웁니다.** SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. DB 를 복사할 때는 `-wal`, `-shm` 파일을 함께 가져옵니다.
 - **레지스트리와 DB 가 맞지 않습니다.** 같은 앱의 레지스트리 값과 DB 행을 서로 맞춰 봅니다. 한쪽에만 기록이 있으면 한쪽을 지웠을 수도 있고, 두 곳에 남는 조건이 달라서일 수도 있습니다. 어느 쪽인지 단정하지 않습니다.
 
 ## 직접 분석해 보기
@@ -225,23 +225,23 @@ LEFT JOIN Users           u ON u.ID = h.UserSid;
 - 쿼리를 돌리기 전에 표 목록과 칸 이름이 위와 같은지 확인합니다.
 - 시각 칸은 FILETIME 정수이므로 따로 풉니다.
 - 도구가 보여 준 시각이 UTC 인지, 분석 PC 의 현지 시각인지 확인합니다.
-- 값 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 값 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [AmCache](/02-artifacts/execution/amcache-hve/index.md) | DB 의 FileID·ProgramID 와 같은 모양의 값으로 같은 실행 파일을 찾습니다 |
-| [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) | 같은 실행 파일이 같은 시간대에 실행된 흔적 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | 같은 실행 파일의 실행 시각과 횟수 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 같은 시간대에 그 앱이 자원을 쓴 기록 |
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 패키지 패밀리 이름이 어떤 앱인지 |
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | DB 의 `Users` 표 SID 가 어느 계정인지 |
-| [원격 제어 프로그램](/02-artifacts/network/remote-access-tools/index.md) | NonPackaged 경로가 원격 도구일 때 그 도구의 접속 기록 |
-| [줌](/02-artifacts/messengers/zoom.md) · [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) | 화상 회의 프로그램이 따로 남긴 회의 기록 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브에 남은 이전 시작·끝 시각 |
+| [AmCache](amcache-hve/index.md) | DB 의 FileID·ProgramID 와 같은 모양의 값으로 같은 실행 파일을 찾습니다 |
+| [BAM·DAM](background-activity-moderator.md) | 같은 실행 파일이 같은 시간대에 실행된 흔적 |
+| [프리페치](prefetch/index.md) | 같은 실행 파일의 실행 시각과 횟수 |
+| [SRUM](system-resource-usage-monitor/index.md) | 같은 시간대에 그 앱이 자원을 쓴 기록 |
+| [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 패키지 패밀리 이름이 어떤 앱인지 |
+| [사용자 프로필 목록](../system-account/profilelist.md) | DB 의 `Users` 표 SID 가 어느 계정인지 |
+| [원격 제어 프로그램](../network/remote-access-tools/index.md) | NonPackaged 경로가 원격 도구일 때 그 도구의 접속 기록 |
+| [줌](../messengers/zoom.md) · [마이크로소프트 팀즈](../messengers/teams.md) | 화상 회의 프로그램이 따로 남긴 회의 기록 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브에 남은 이전 시작·끝 시각 |
 
-여러 기록을 합쳐 읽는 순서는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 와 [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) 에서 다룹니다.
+여러 기록을 합쳐 읽는 순서는 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 와 [원격 제어 프로그램으로 누가 조작했나](../../04-scenarios/incident/remote-access-tool-abuse.md) 에서 다룹니다.
 
 ## 실습
 

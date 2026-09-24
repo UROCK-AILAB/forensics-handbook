@@ -1,6 +1,6 @@
 # 색인 해석 함정 (색인 범위·재구성)
 
-> 위치: [윈도 검색 색인 DB (Windows Search)](/02-artifacts/file-folder-usage/windows-search/index.md) > 색인 해석 함정
+> 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 색인 해석 함정
 
 ## 한 줄 요약
 
@@ -53,16 +53,16 @@
 - `SearchRoots` 에는 `defaultroot://{사용자 SID}/`, `winrt://{사용자 SID}/` 처럼 사용자 SID 가 든 루트가 있었습니다.
 - 각 값의 정확한 뜻과 우선순위는 확인하지 못했습니다. 값 이름으로 뜻을 짐작해 보고서에 쓰지 않습니다.
 
-검체에서는 SOFTWARE 하이브의 이 키를 먼저 읽어 둡니다. 조사하는 폴더가 규칙 목록에 들어 있는지, 빠져 있는지를 적습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서, 볼륨 GUID 는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+검체에서는 SOFTWARE 하이브의 이 키를 먼저 읽어 둡니다. 조사하는 폴더가 규칙 목록에 들어 있는지, 빠져 있는지를 적습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서, 볼륨 GUID 는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ## 색인 방식 — 속성만, 또는 속성과 본문
 
 - 색인 방식은 "속성만" 과 "속성과 본문" 두 가지입니다.
 - 기본 설정에서는 글자가 든 파일의 본문도 색인합니다.
 - "속성만" 방식으로 색인한 파일은 본문이 색인에 들어가지 않습니다.
-- 파일 특성에 "본문 색인 안 함" 비트가 켜진 파일도 있습니다. 비트 값은 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
+- 파일 특성에 "본문 색인 안 함" 비트가 켜진 파일도 있습니다. 비트 값은 [파일 속성 되살리기](propertystore.md) 에 있습니다.
 
-그래서 본문 낱말로 찾아지지 않는다고 그 낱말이 파일에 없었다고 말할 수 없습니다. 본문 확인은 파일 자체나 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 으로 합니다.
+그래서 본문 낱말로 찾아지지 않는다고 그 낱말이 파일에 없었다고 말할 수 없습니다. 본문 확인은 파일 자체나 [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) 으로 합니다.
 
 ## 재구성 (Rebuild)
 
@@ -76,7 +76,7 @@
 
 - 초기화 전 기록이 새 DB 에 이어지는지는 확인한 자료가 없습니다.
 - 그래서 색인 기록이 짧다는 것만으로 PC 를 쓴 기간이 짧다고 쓰지 않습니다.
-- 레지스트리 `Gather\Windows\SystemIndex` 키의 `CatalogResetSignature` 같은 값으로 재구성 시점을 알 수 있는지도 확인하지 못했습니다. 이 값은 [수집 기록](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) 에서 다룹니다.
+- 레지스트리 `Gather\Windows\SystemIndex` 키의 `CatalogResetSignature` 같은 값으로 재구성 시점을 알 수 있는지도 확인하지 못했습니다. 이 값은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
 
 ### 수집 시각이 몰리는 경우
 
@@ -84,16 +84,16 @@
 - 처음 색인과 재구성은 전체를 새로 색인하고, 몇 시간까지 걸릴 수 있습니다.
 - 두 사실을 합치면, 처음 색인이나 재구성 직후에는 많은 파일의 수집 시각이 몇 시간 안에 몰릴 수 있습니다.
 - 이런 묶음을 사용자가 그 시간에 파일을 많이 다룬 흔적으로 읽지 않습니다.
-- 수집 시각의 정의는 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
+- 수집 시각의 정의는 [파일 속성 되살리기](propertystore.md) 에 있습니다.
 
 ## 시각 해석 — 다른 페이지에서 다루는 함정
 
 | 함정 | 자세히 |
 |---|---|
-| 수집 시각을 파일을 연 시각으로 읽는 것 | [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) |
-| XP·7 의 빅엔디언 FILETIME 을 리틀엔디언으로 읽어 엉뚱한 날짜를 얻는 것 | [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) |
-| 수집 로그의 상위·하위 32비트 칸을 거꾸로 합치는 것 | [수집 기록](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) |
-| 지운 파일 행의 수집 시각을 삭제 시각으로 읽는 것 | [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) |
+| 수집 시각을 파일을 연 시각으로 읽는 것 | [파일 속성 되살리기](propertystore.md) |
+| XP·7 의 빅엔디언 FILETIME 을 리틀엔디언으로 읽어 엉뚱한 날짜를 얻는 것 | [위치와 형식](windows-edb-windows-db.md) |
+| 수집 로그의 상위·하위 32비트 칸을 거꾸로 합치는 것 | [수집 기록](systemindex-gthr.md) |
+| 지운 파일 행의 수집 시각을 삭제 시각으로 읽는 것 | [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) |
 
 ## 크기와 분량
 
@@ -103,12 +103,12 @@
 ## 사용자 구분
 
 - 한 PC 의 `SearchRoots` 에는 사용자별 SID 가 든 루트가 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
-- 검색 프로토콜 호스트는 시스템용과 사용자용으로 나뉩니다. 자세한 내용은 [수집 기록](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) 에 있습니다.
+- 검색 프로토콜 호스트는 시스템용과 사용자용으로 나뉩니다. 자세한 내용은 [수집 기록](systemindex-gthr.md) 에 있습니다.
 - 속성 저장소에는 `System_FileOwner` 칸이 있습니다(LevelBlue).
 - 수집 기록 표에는 `SDID`·`RequiredSIDs` 칸이 있습니다(libyal).
 - 이 칸들로 색인 기록을 특정 사용자와 잇는 구체적 방법은 확인하지 못했습니다.
 
-그래서 기록마다 "어느 사용자의 파일" 인지 적을 때는 경로(`C:\Users\<이름>\…`)나 SID 루트 같은 근거를 함께 적습니다. 근거가 경로뿐이면 "이 사용자 프로필 폴더 아래의 파일" 이라고만 씁니다. SID 를 계정과 잇는 일은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 합니다.
+그래서 기록마다 "어느 사용자의 파일" 인지 적을 때는 경로(`C:\Users\<이름>\…`)나 SID 루트 같은 근거를 함께 적습니다. 근거가 경로뿐이면 "이 사용자 프로필 폴더 아래의 파일" 이라고만 씁니다. SID 를 계정과 잇는 일은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 합니다.
 
 ## 흔한 오판과 바른 문장
 
@@ -125,19 +125,19 @@
 1. SOFTWARE 하이브에서 `Microsoft\Windows Search\CrawlScopeManager\Windows\SystemIndex` 키를 엽니다.
 2. `DefaultRules`·`WorkingSetRules` 의 규칙마다 `URL`·`Include`·`Default` 값을 표로 적습니다.
 3. 규칙 URL 의 대괄호 속 볼륨 GUID 를 적습니다. 같은 이미지의 볼륨 정보와 맞춰 어느 볼륨인지 정합니다.
-4. `SearchRoots` 의 SID 를 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 풉니다.
+4. `SearchRoots` 의 SID 를 [사용자 프로필 목록](../../system-account/profilelist.md) 으로 풉니다.
 5. 조사하는 폴더가 어느 규칙에 걸리는지 적습니다.
 6. 속성 저장소의 수집 시각을 시간 단위로 세어 분포를 봅니다. 몇 시간 안에 크게 몰린 묶음이 있으면 처음 색인이나 재구성의 흔적인지 따져 봅니다.
 
 ## 교차 검증
 
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) — 색인 범위 규칙이 든 SOFTWARE 하이브를 읽습니다.
-- [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — 규칙 URL 의 볼륨 GUID 와 검색 루트의 SID 를 읽습니다.
-- [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) — SID 를 프로필 폴더와 잇습니다.
-- [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — 설치 날짜와 가장 이른 수집 시각을 비교합니다.
-- [파일 내용 검색](/03-techniques/analysis/content-search/index.md) — 색인에 기대지 않고 본문을 직접 찾습니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 수집 시각을 "색인 처리" 로 따로 표시해 넣습니다.
-- [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) · [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 색인 기록을 사용자 행동과 잇는 조사 흐름입니다.
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) — 색인 범위 규칙이 든 SOFTWARE 하이브를 읽습니다.
+- [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — 규칙 URL 의 볼륨 GUID 와 검색 루트의 SID 를 읽습니다.
+- [사용자 프로필 목록](../../system-account/profilelist.md) — SID 를 프로필 폴더와 잇습니다.
+- [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) — 설치 날짜와 가장 이른 수집 시각을 비교합니다.
+- [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) — 색인에 기대지 않고 본문을 직접 찾습니다.
+- [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) — 수집 시각을 "색인 처리" 로 따로 표시해 넣습니다.
+- [이 파일을 누가 언제 열었나](../../../04-scenarios/activity/file-access.md) · [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) — 색인 기록을 사용자 행동과 잇는 조사 흐름입니다.
 
 ## 실습
 

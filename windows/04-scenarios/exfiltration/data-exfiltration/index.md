@@ -7,7 +7,7 @@ PC 의 자료가 USB·휴대폰·메일·메신저·클라우드·웹·인쇄로
 ## 왜 중요한가
 
 - MITRE ATT&CK 은 유출 (Exfiltration, TA0010) 을 "적이 데이터를 훔치려 한다" 로 정의합니다[1].
-- 파일을 밖으로 옮겼다는 사실 하나만 적는 기록에 기대기는 어렵습니다. 파일에 접근한 기록(4663)도 파일 접근 감사를 켜 둔 PC 에서만 남습니다([파일 접근 감사](/02-artifacts/event-logs/4656-4663-4660.md)).
+- 파일을 밖으로 옮겼다는 사실 하나만 적는 기록에 기대기는 어렵습니다. 파일에 접근한 기록(4663)도 파일 접근 감사를 켜 둔 PC 에서만 남습니다([파일 접근 감사](../../../02-artifacts/event-logs/4656-4663-4660.md)).
 - 그래서 장치 연결, 파일 열람, 앱 송신 같은 흔적을 시각으로 이어 붙여 판단합니다.
 - 각 흔적은 제 몫만 말합니다. 연결 기록은 장치가 붙었다는 것만, 송신량은 앱이 보낸 양만 보여 줍니다.
 - 보고서에는 "파일을 보냈다" 가 아니라 "이 시간대에 이 앱이 이만큼 송신한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
@@ -42,31 +42,31 @@ TA0010 에는 이 밖에도 C2 채널, 다른 프로토콜, 블루투스, 예약
 
 ## 읽는 순서
 
-1. [USB 로 무엇을 가져갔나 (USB)](/04-scenarios/exfiltration/data-exfiltration/usb.md) — 장치 연결 기록에 이벤트 로그와 장치 안 파일을 연 흔적을 이어 붙입니다.
-2. [스마트폰으로 옮겼나 (MTP·Phone Link)](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) — USB 저장장치로 남지 않는 휴대폰 연결과 휴대폰 연동 앱 기록을 봅니다.
-3. [메일로 밖에 보냈나 (Email)](/04-scenarios/exfiltration/data-exfiltration/email.md) — 메일 프로그램의 보낸 메일과 첨부를 봅니다.
-4. [메신저로 파일을 보냈나 (Messenger)](/04-scenarios/exfiltration/data-exfiltration/messenger.md) — 메신저 대화 DB 와, 읽지 못할 때 볼 앱 송신량을 다룹니다.
-5. [클라우드로 밖에 보냈나 (Cloud)](/04-scenarios/exfiltration/data-exfiltration/cloud.md) — 동기화 앱의 동기화 루트와 파일 상태를 봅니다.
-6. [웹메일·웹하드로 올렸나 (Web Upload)](/04-scenarios/exfiltration/data-exfiltration/web-upload.md) — 방문 기록과 SRUM 으로 브라우저 업로드를 봅니다. 앱별 송신량을 읽는 법도 여기 있습니다.
-7. [인쇄해서 가져갔나 (Print)](/04-scenarios/exfiltration/data-exfiltration/print.md) — 인쇄 이벤트와 프린터 목록으로 종이 인쇄와 PDF 인쇄를 가립니다.
-8. [퇴사 전 자료를 모으고 압축했나 (Staging)](/04-scenarios/exfiltration/data-exfiltration/staging.md) — 내보내기 전에 한 폴더에 모으고 압축한 흔적을 봅니다.
+1. [USB 로 무엇을 가져갔나 (USB)](usb.md) — 장치 연결 기록에 이벤트 로그와 장치 안 파일을 연 흔적을 이어 붙입니다.
+2. [스마트폰으로 옮겼나 (MTP·Phone Link)](mtp-phone-link.md) — USB 저장장치로 남지 않는 휴대폰 연결과 휴대폰 연동 앱 기록을 봅니다.
+3. [메일로 밖에 보냈나 (Email)](email.md) — 메일 프로그램의 보낸 메일과 첨부를 봅니다.
+4. [메신저로 파일을 보냈나 (Messenger)](messenger.md) — 메신저 대화 DB 와, 읽지 못할 때 볼 앱 송신량을 다룹니다.
+5. [클라우드로 밖에 보냈나 (Cloud)](cloud.md) — 동기화 앱의 동기화 루트와 파일 상태를 봅니다.
+6. [웹메일·웹하드로 올렸나 (Web Upload)](web-upload.md) — 방문 기록과 SRUM 으로 브라우저 업로드를 봅니다. 앱별 송신량을 읽는 법도 여기 있습니다.
+7. [인쇄해서 가져갔나 (Print)](print.md) — 인쇄 이벤트와 프린터 목록으로 종이 인쇄와 PDF 인쇄를 가립니다.
+8. [퇴사 전 자료를 모으고 압축했나 (Staging)](staging.md) — 내보내기 전에 한 폴더에 모으고 압축한 흔적을 봅니다.
 
 **경로를 모를 때.**
 
 1. 먼저 Staging 페이지를 따라 조사 기간에 모은 폴더와 압축 파일을 찾습니다.
 2. 찾은 파일의 이름과 시각을 기준으로 경로별 페이지를 차례로 봅니다.
 3. 앱별 송신량(SRUM)은 경로와 상관없이 함께 봅니다.
-4. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다.
+4. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다.
 
 ## 함께 볼 페이지
 
-- [개인정보 파일이 어디 있고 밖으로 나갔나](/04-scenarios/exfiltration/pii-exposure.md) — 나간 자료가 개인정보 파일일 때 봅니다.
-- [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) · [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) — 파일 하나를 중심으로 흔적을 모읍니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 계정과 사람을 잇습니다.
-- [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) — 내보낸 뒤 흔적을 지웠는지 봅니다.
-- [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) · [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) · [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) — 여러 하위 페이지가 함께 쓰는 아티팩트입니다.
-- [파일 접근 감사](/02-artifacts/event-logs/4656-4663-4660.md) · [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) — 파일 접근 기록이 남는 조건입니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) · [분석 보고서 작성](/03-techniques/reporting/forensic-report.md) — 흔적을 이어 붙이고 보고서에 옮깁니다.
+- [개인정보 파일이 어디 있고 밖으로 나갔나](../pii-exposure.md) — 나간 자료가 개인정보 파일일 때 봅니다.
+- [이 파일을 누가 언제 열었나](../../activity/file-access.md) · [이 파일은 어디서 왔나](../../activity/file-origin.md) — 파일 하나를 중심으로 흔적을 모읍니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](../../activity/user-attribution.md) — 계정과 사람을 잇습니다.
+- [증거를 없애려 했나](../../activity/anti-forensics/index.md) — 내보낸 뒤 흔적을 지웠는지 봅니다.
+- [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) · [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) · [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md) · [셸백](../../../02-artifacts/file-folder-usage/shellbags/index.md) — 여러 하위 페이지가 함께 쓰는 아티팩트입니다.
+- [파일 접근 감사](../../../02-artifacts/event-logs/4656-4663-4660.md) · [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) — 파일 접근 기록이 남는 조건입니다.
+- [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) · [분석 보고서 작성](../../../03-techniques/reporting/forensic-report.md) — 흔적을 이어 붙이고 보고서에 옮깁니다.
 
 ## 참고 문헌
 

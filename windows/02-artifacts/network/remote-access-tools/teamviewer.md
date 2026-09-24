@@ -1,6 +1,6 @@
 # 팀뷰어 (TeamViewer)
 
-> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](/02-artifacts/network/remote-access-tools/index.md)
+> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
 
 ## 한 줄 요약
 
@@ -15,7 +15,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 - 동작 로그 (`TeamViewer15_Logfile.log`): 들어오고 나간 접속, 시각, 상대 호스트 이름, TeamViewer ID 가 남습니다. 받는 쪽과 거는 쪽 모두에 생깁니다.
 - 받은 접속 목록 (`Connections_incoming.txt`): 들어온 접속을 한 줄씩 적습니다. 받는 쪽에만 생깁니다.
 
-이 밖에 설치 기록, 채팅 캐시, 원격 인쇄 DB, 레지스트리 값이 남습니다. 받는 쪽과 거는 쪽이 무엇인지, 설치하지 않고 실행하면 무엇이 달라지는지는 [허브](/02-artifacts/network/remote-access-tools/index.md)에서 정리합니다.
+이 밖에 설치 기록, 채팅 캐시, 원격 인쇄 DB, 레지스트리 값이 남습니다. 받는 쪽과 거는 쪽이 무엇인지, 설치하지 않고 실행하면 무엇이 달라지는지는 [허브](index.md)에서 정리합니다.
 
 ## 위치와 버전별 차이
 
@@ -36,7 +36,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 | 시작 메뉴 바로가기 | `%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\TeamViewer.lnk` | |
 | 뜻을 확인하지 못한 경로 | `C:\Users\*\AppData\Roaming\TeamViewer\MRU\RemoteSupport\*tvc` | LOLRMM 이 흔적 목록에 올렸습니다. 무엇을 담는지는 이번 자료로 확인하지 못했습니다 |
 
-LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.txt` 꼴로 적습니다. 수집할 때는 이 꼴로 넓게 찾습니다. 설치 기록에는 설치한 사용자의 SID 가 `User-SID:      S-1-5-21-…-1001` 모양으로 적힙니다. SID 를 사용자 이름에 맞추는 법은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md)에서 다룹니다.
+LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.txt` 꼴로 적습니다. 수집할 때는 이 꼴로 넓게 찾습니다. 설치 기록에는 설치한 사용자의 SID 가 `User-SID:      S-1-5-21-…-1001` 모양으로 적힙니다. SID 를 사용자 이름에 맞추는 법은 [사용자 프로필 목록](../../system-account/profilelist.md)에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md)에서 다룹니다.
 
 ### 레지스트리
 
@@ -50,7 +50,7 @@ LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.tx
 | `HKLM\SOFTWARE\TeamViewer\ConnectionHistory` | 거는 쪽. 16바이트 이진값입니다 |
 | `HKU\<SID>\SOFTWARE\TeamViewer` 아래 ClientWindow_Mode, ClientWindowPositions | 거는 쪽 |
 
-하이브 파일과 키 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+하이브 파일과 키 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ## 구조
 
@@ -123,7 +123,7 @@ LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.tx
 - 동작 로그 시각이 UTC 인지 현지 시각인지는 자료에 적혀 있지 않습니다.
 - Synacktiv 의 두 예시는 같은 접속으로 보입니다. 동작 로그 줄은 16:50:52 이고, 받은 접속 목록 줄의 시작 시각은 14:50:52 입니다. 두 값은 정확히 2시간 차이 납니다.
 - 시험 환경이 프랑스 여름 시간(UTC+2)이었다면, 받은 접속 목록은 UTC 이고 동작 로그는 현지 시각일 수 있습니다. 이 판단은 예시 두 개를 비교해 추론한 것입니다. 공식 문서로는 확인하지 못했습니다.
-- 사건에서는 같은 접속을 두 파일에서 찾아 차이를 직접 잽니다. 그 차이를 PC 의 시간대 설정과 맞춰 봅니다. 시간대 설정은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 봅니다.
+- 사건에서는 같은 접속을 두 파일에서 찾아 차이를 직접 잽니다. 그 차이를 PC 의 시간대 설정과 맞춰 봅니다. 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
 - 받은 접속 목록의 날짜는 일-월-년 순서입니다. 일이 12 이하이면 월과 헷갈리기 쉽습니다.
 - 설치 기록(`TV15Install.log`)에도 시각이 적힙니다. 이 시각의 시간대도 이번 자료로 확인하지 못했습니다.
 
@@ -132,7 +132,7 @@ LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.tx
 - **두 로그의 시간대가 다를 수 있습니다.** 한 파일의 시각을 다른 파일에 그대로 이어 붙이지 않습니다.
 - **파일 이름의 숫자가 버전마다 다릅니다.** `TeamViewer15_Logfile.log` 이름 그대로만 찾으면 다른 주 버전의 로그를 놓칩니다.
 - **로그 위치가 두 곳입니다.** 설치 폴더와 `%APPDATA%\TeamViewer\` 를 모두 수집합니다.
-- **로그를 지웠을 수 있습니다.** Sigma 규칙 "TeamViewer Log File Deleted" 는 이름에 `\TeamViewer_` 가 들어간 .log 파일을 지우는 동작을 증거 인멸 시도로 봅니다. 지운 파일의 흔적은 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)에서 다룹니다.
+- **로그를 지웠을 수 있습니다.** Sigma 규칙 "TeamViewer Log File Deleted" 는 이름에 `\TeamViewer_` 가 들어간 .log 파일을 지우는 동작을 증거 인멸 시도로 봅니다. 지운 파일의 흔적은 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md)에서 다룹니다.
 - **TVNetwork.log 에 기대지 않습니다.** 세션 중 쓴 포트만 남습니다.
 
 ## 직접 분석해 보기
@@ -141,7 +141,7 @@ LOLRMM 은 받은 접속 목록을 `C:\Program Files*\TeamViewer\connections*.tx
 
 이 페이지의 로그와 목록은 텍스트 파일입니다. 이진 구조가 있는 값은 ConnectionHistory(16바이트) 하나입니다. 이 값의 구조는 공개 자료로 확인하지 못해 헥스 예시를 싣지 않습니다.
 
-텍스트 파일의 인코딩도 자료에 적혀 있지 않습니다. 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+텍스트 파일의 인코딩도 자료에 적혀 있지 않습니다. 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -182,13 +182,13 @@ with open(path, encoding="utf-8", errors="replace") as f:
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 서비스 설치 (System 7045) | ServiceName "TeamViewer", ImagePath `C:\Program Files\TeamViewer\TeamViewer_Service.exe`, 자동 시작. 설치 시각 | [서비스 설치](/02-artifacts/event-logs/7045-4697.md) |
-| 프로세스 생성 · Sysmon | TeamViewer_Service.exe 가 TeamViewer_Desktop.exe 를 `--IPCport 5939 --Module 1` 로 띄운 시각. 받는 쪽 세션이 시작된 때 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 프리페치 | `TEAMVIEWER.EXE-[A-F0-9]{8}.pf`. 실행 시각과 횟수 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 설치 프로그램 | `Uninstall\TeamViewer` 키 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
+| 서비스 설치 (System 7045) | ServiceName "TeamViewer", ImagePath `C:\Program Files\TeamViewer\TeamViewer_Service.exe`, 자동 시작. 설치 시각 | [서비스 설치](../../event-logs/7045-4697.md) |
+| 프로세스 생성 · Sysmon | TeamViewer_Service.exe 가 TeamViewer_Desktop.exe 를 `--IPCport 5939 --Module 1` 로 띄운 시각. 받는 쪽 세션이 시작된 때 | [프로세스 생성](../../event-logs/4688.md), [Sysmon 로그](../../event-logs/sysmon/index.md) |
+| 프리페치 | `TEAMVIEWER.EXE-[A-F0-9]{8}.pf`. 실행 시각과 횟수 | [프리페치](../../execution/prefetch/index.md) |
+| 설치 프로그램 | `Uninstall\TeamViewer` 키 | [설치 프로그램](../../system-account/uninstall.md) |
 | DNS·프록시 기록 | 접속 도메인 `router15.teamviewer.com:443`, `client.teamviewer.com:443`, `taf.teamviewer.com:443` | — |
-| 메모리 | 뮤텍스 TeamViewer_LogMutex, TeamViewerHooks_DynamicMemMutex | [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) |
-| 이벤트 로그 규칙 | 세션 시작, 로그 삭제를 잡는 Sigma 규칙 | [이벤트 로그 규칙 검색](/03-techniques/analysis/sigma-rules.md) |
+| 메모리 | 뮤텍스 TeamViewer_LogMutex, TeamViewerHooks_DynamicMemMutex | [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) |
+| 이벤트 로그 규칙 | 세션 시작, 로그 삭제를 잡는 Sigma 규칙 | [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) |
 
 ## 실습
 

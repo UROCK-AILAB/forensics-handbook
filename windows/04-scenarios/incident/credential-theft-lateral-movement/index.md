@@ -28,10 +28,10 @@
 
 | 질문 | 흔적이 남는 곳 | 먼저 볼 흔적 | Windows 버전·설정 | 자세히 |
 |---|---|---|---|---|
-| 비밀번호 대입이 있었나 | 비밀번호 시도를 받은 PC. 도메인 계정이면 도메인 컨트롤러 | 보안 로그 4625(로그온 실패), 4740(계정 잠김), 실패 뒤의 4624(로그온 성공) | 4740 은 Windows Vista·Windows Server 2008 부터 있습니다[6] | [비밀번호 대입 공격이 있었나](/04-scenarios/incident/credential-theft-lateral-movement/brute-force.md) |
-| 자격 증명을 빼냈나 | 공격자가 이미 들어온 PC | lsass.exe 에 접근한 기록(Sysmon 10), 덤프 도구의 명령줄(4688·Sysmon 1), 덤프 파일 생성, LSA 보호 설정(RunAsPPL) | LSA 추가 보호는 Windows 8.1 부터 있습니다. Windows 11 22H2 이후 새로 설치한 PC 는 조건을 만족하면 기본으로 켜집니다[8] | [자격 증명을 빼냈나](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) |
-| 다른 PC 에서 원격 실행했나 | 출발 PC 와 도착 PC 양쪽 | 도착 PC: 서비스 설치(System 7045), ADMIN$·IPC$ 공유 접근(5140·5145), 로그온 유형 3, WmiPrvSE.exe 실행. 출발 PC: 도구의 프리페치, PsExec 사용권 동의 값(EulaAccepted) | JPCERT/CC 시트는 시험한 윈도 버전을 적지 않았습니다[3][4][5] | [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) |
-| 새 계정을 만들거나 권한을 올렸나 | 4732 는 워크스테이션·멤버 서버·도메인 컨트롤러 모두에서 생깁니다[7] | 4720(계정 생성), 4732(로컬 그룹에 구성원 추가), 4798·4799(그룹 구성원 조회), 뒤이은 4672(특수 권한) | 4732 는 Windows Vista·Windows Server 2008 부터 있습니다[7]. Microsoft 는 계정 관리 감사의 성공·실패를 모두 켜라고 권합니다[9] | [새 계정을 만들거나 권한을 올렸나](/04-scenarios/incident/credential-theft-lateral-movement/account-privilege.md) |
+| 비밀번호 대입이 있었나 | 비밀번호 시도를 받은 PC. 도메인 계정이면 도메인 컨트롤러 | 보안 로그 4625(로그온 실패), 4740(계정 잠김), 실패 뒤의 4624(로그온 성공) | 4740 은 Windows Vista·Windows Server 2008 부터 있습니다[6] | [비밀번호 대입 공격이 있었나](brute-force.md) |
+| 자격 증명을 빼냈나 | 공격자가 이미 들어온 PC | lsass.exe 에 접근한 기록(Sysmon 10), 덤프 도구의 명령줄(4688·Sysmon 1), 덤프 파일 생성, LSA 보호 설정(RunAsPPL) | LSA 추가 보호는 Windows 8.1 부터 있습니다. Windows 11 22H2 이후 새로 설치한 PC 는 조건을 만족하면 기본으로 켜집니다[8] | [자격 증명을 빼냈나](credential-dumping.md) |
+| 다른 PC 에서 원격 실행했나 | 출발 PC 와 도착 PC 양쪽 | 도착 PC: 서비스 설치(System 7045), ADMIN$·IPC$ 공유 접근(5140·5145), 로그온 유형 3, WmiPrvSE.exe 실행. 출발 PC: 도구의 프리페치, PsExec 사용권 동의 값(EulaAccepted) | JPCERT/CC 시트는 시험한 윈도 버전을 적지 않았습니다[3][4][5] | [다른 PC 에서 원격 실행했나](psexec-wmi-winrm.md) |
+| 새 계정을 만들거나 권한을 올렸나 | 4732 는 워크스테이션·멤버 서버·도메인 컨트롤러 모두에서 생깁니다[7] | 4720(계정 생성), 4732(로컬 그룹에 구성원 추가), 4798·4799(그룹 구성원 조회), 뒤이은 4672(특수 권한) | 4732 는 Windows Vista·Windows Server 2008 부터 있습니다[7]. Microsoft 는 계정 관리 감사의 성공·실패를 모두 켜라고 권합니다[9] | [새 계정을 만들거나 권한을 올렸나](account-privilege.md) |
 
 ### 출발 PC·도착 PC·도메인 컨트롤러
 
@@ -48,7 +48,7 @@
 - PsExec 의 도착 PC 에서는 서비스 설치 기록(System 7045)과 프리페치가 기본 설정에서도 남습니다[3].
 - 같은 도착 PC 라도 공유 폴더의 파일 접근 기록(5145)은 추가 감사 정책이 있어야 남습니다[3].
 - wmic 흔적 가운데 레지스트리 변경은 Sysmon 이 있어야 남습니다[4].
-- 그래서 수집한 이미지의 감사 정책을 먼저 확인하고, Sysmon 을 설치했는지도 봅니다. 확인하는 법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 과 [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) 에서 다룹니다.
+- 그래서 수집한 이미지의 감사 정책을 먼저 확인하고, Sysmon 을 설치했는지도 봅니다. 확인하는 법은 [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 과 [Sysmon 로그](../../../02-artifacts/event-logs/sysmon/index.md) 에서 다룹니다.
 
 ### 자료 기준
 
@@ -66,31 +66,31 @@
 ### 시각을 읽을 때
 
 - Microsoft 문서의 예시 XML 에서 TimeCreated 의 SystemTime 값은 끝에 Z 가 붙은 UTC 입니다(예: `2015-08-21T22:06:08.576887500Z`)[6][7].
-- 레코드 시각을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
-- PC 의 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 확인합니다.
-- 측면 이동은 여러 PC 에 걸칩니다. 출발 PC·도착 PC·도메인 컨트롤러의 기록을 한 줄로 합치는 법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에서 봅니다.
+- 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+- PC 의 시간대는 [시간대 설정](../../../02-artifacts/system-account/time-zone.md) 에서 확인합니다.
+- 측면 이동은 여러 PC 에 걸칩니다. 출발 PC·도착 PC·도메인 컨트롤러의 기록을 한 줄로 합치는 법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 에서 봅니다.
 
 ## 읽는 순서
 
 꼭 이 순서로 읽지 않아도 됩니다. 사건에서 먼저 드러난 흔적의 페이지부터 펼쳐도 됩니다.
 
-1. [비밀번호 대입 공격이 있었나 (Brute Force)](/04-scenarios/incident/credential-theft-lateral-movement/brute-force.md) — 로그온 실패(4625)가 몰린 모양으로 한 계정 짐작과 여러 계정 스프레이를 나눕니다. 계정 잠김(4740)과 실패 뒤의 로그온 성공도 봅니다.
-2. [자격 증명을 빼냈나 (Credential Dumping)](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) — LSASS 메모리 덤프의 흔적을 lsass.exe 접근, 명령줄, 덤프 파일에서 찾습니다. LSA 보호(RunAsPPL)와 Credential Guard 가 켜져 있었는지, 꺼진 흔적이 있는지도 봅니다.
-3. [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) — PsExec·wmic·WinRM 이 출발 PC 와 도착 PC 에 남기는 흔적을 나눠 정리합니다. 서비스 설치 이벤트(7045·4697)도 다룹니다.
-4. [새 계정을 만들거나 권한을 올렸나 (Account·Privilege)](/04-scenarios/incident/credential-theft-lateral-movement/account-privilege.md) — 계정 생성(4720)과 그룹 구성원 추가(4732 등)를 읽습니다. 계정을 만들기 전의 조회 이벤트(4798·4799)와 SAM 속 계정 목록도 봅니다.
+1. [비밀번호 대입 공격이 있었나 (Brute Force)](brute-force.md) — 로그온 실패(4625)가 몰린 모양으로 한 계정 짐작과 여러 계정 스프레이를 나눕니다. 계정 잠김(4740)과 실패 뒤의 로그온 성공도 봅니다.
+2. [자격 증명을 빼냈나 (Credential Dumping)](credential-dumping.md) — LSASS 메모리 덤프의 흔적을 lsass.exe 접근, 명령줄, 덤프 파일에서 찾습니다. LSA 보호(RunAsPPL)와 Credential Guard 가 켜져 있었는지, 꺼진 흔적이 있는지도 봅니다.
+3. [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](psexec-wmi-winrm.md) — PsExec·wmic·WinRM 이 출발 PC 와 도착 PC 에 남기는 흔적을 나눠 정리합니다. 서비스 설치 이벤트(7045·4697)도 다룹니다.
+4. [새 계정을 만들거나 권한을 올렸나 (Account·Privilege)](account-privilege.md) — 계정 생성(4720)과 그룹 구성원 추가(4732 등)를 읽습니다. 계정을 만들기 전의 조회 이벤트(4798·4799)와 SAM 속 계정 목록도 봅니다.
 
 ## 함께 볼 페이지
 
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) — 4624·4625·4648·4672·4768·4769·4776 의 칸을 읽습니다. 이 묶음의 페이지는 이 칸 설명을 되풀이하지 않습니다.
-- [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) — 어떤 흔적이 남을 수 있었는지 먼저 정합니다.
-- [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) · [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md) — 공격자가 빼내려는 자격 증명이 어디에 어떤 구조로 들어 있는지 봅니다.
-- [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) — 메모리 이미지에서 자격 증명을 찾습니다.
-- [서비스 설치](/02-artifacts/event-logs/7045-4697.md) · [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md) · [원격 명령 실행 이벤트](/02-artifacts/event-logs/winrm-wmi-activity.md) — 원격 실행의 도착 PC 흔적을 읽습니다.
-- [프로세스 생성](/02-artifacts/event-logs/4688.md) · [프리페치](/02-artifacts/execution/prefetch/index.md) — 도구를 실행한 명령줄과 실행 기록을 봅니다.
-- [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) · [사용자 계정](/02-artifacts/system-account/sam.md) — 계정 이벤트와 SAM 의 계정 목록을 읽습니다.
-- [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) — 원격 데스크톱이나 원격 제어 프로그램으로 옮겨 간 경우를 다룹니다.
-- [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) — 보안 로그를 지운 흔적을 봅니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 계정이 아니라 사람을 특정할 때 봅니다.
+- [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) — 4624·4625·4648·4672·4768·4769·4776 의 칸을 읽습니다. 이 묶음의 페이지는 이 칸 설명을 되풀이하지 않습니다.
+- [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) — 어떤 흔적이 남을 수 있었는지 먼저 정합니다.
+- [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) · [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) — 공격자가 빼내려는 자격 증명이 어디에 어떤 구조로 들어 있는지 봅니다.
+- [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) — 메모리 이미지에서 자격 증명을 찾습니다.
+- [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md) · [공유 폴더 접근](../../../02-artifacts/event-logs/5140-5145.md) · [원격 명령 실행 이벤트](../../../02-artifacts/event-logs/winrm-wmi-activity.md) — 원격 실행의 도착 PC 흔적을 읽습니다.
+- [프로세스 생성](../../../02-artifacts/event-logs/4688.md) · [프리페치](../../../02-artifacts/execution/prefetch/index.md) — 도구를 실행한 명령줄과 실행 기록을 봅니다.
+- [계정 생성·변경](../../../02-artifacts/event-logs/account-management-events.md) · [사용자 계정](../../../02-artifacts/system-account/sam.md) — 계정 이벤트와 SAM 의 계정 목록을 읽습니다.
+- [원격 데스크톱 침입 확인](../rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](../remote-access-tool-abuse.md) — 원격 데스크톱이나 원격 제어 프로그램으로 옮겨 간 경우를 다룹니다.
+- [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) — 보안 로그를 지운 흔적을 봅니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](../../activity/user-attribution.md) — 계정이 아니라 사람을 특정할 때 봅니다.
 
 ## 참고 문헌
 

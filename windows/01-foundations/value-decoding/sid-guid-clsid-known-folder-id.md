@@ -11,8 +11,8 @@ COM 클래스나 표준 폴더 같은 대상은 GUID 로 가리킵니다.
 
 | 식별자 | 볼 수 있는 곳 | 자세한 내용 |
 |---|---|---|
-| SID | 사용자 계정 정보와 사용자 프로필 목록 | [사용자 계정](/02-artifacts/system-account/sam.md), [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
-| SID | SECURITY 하이브의 작업그룹·도메인 정보 | [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) |
+| SID | 사용자 계정 정보와 사용자 프로필 목록 | [사용자 계정](../../02-artifacts/system-account/sam.md), [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) |
+| SID | SECURITY 하이브의 작업그룹·도메인 정보 | [레지스트리 속 비밀번호 정보](../../02-artifacts/credentials/sam-security/index.md) |
 | CLSID | `HKLM\SOFTWARE\Classes\CLSID\{GUID}` 의 클래스 등록 정보 | 아래 "CLSID" 절 |
 | Known Folder ID | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{GUID}` 의 폴더 정의 | 아래 "Known Folder ID" 절 |
 
@@ -21,9 +21,9 @@ COM 클래스나 표준 폴더 같은 대상은 GUID 로 가리킵니다.
 아래 아티팩트에도 GUID 나 CLSID 가 나옵니다.
 어느 칸에 어떤 식별자가 들어가는지는 각 페이지에서 다룹니다.
 
-- [셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md), [셸백](/02-artifacts/file-folder-usage/shellbags/index.md)
-- [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md)
-- [UserAssist](/02-artifacts/execution/userassist.md)
+- [셸 아이템](../shell-document-formats/shell-item-pidl.md), [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md)
+- [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md), [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md)
+- [UserAssist](../../02-artifacts/execution/userassist.md)
 
 ## 구조
 
@@ -171,8 +171,8 @@ dfDateTime 문서는 UUID 버전 1 의 구조를 다음과 같이 설명합니�
 RFC 4122 의 정의로는 60비트 시각이 time_hi_and_version 의 아래 12비트, time_mid 16비트, time_low 32비트를 차례로 이은 값입니다.
 기준 시각이 FILETIME 의 1601-01-01 과 다릅니다.
 그래서 FILETIME 변환식에 그대로 넣으면 틀린 날짜가 나옵니다.
-시각 형식 전반은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-어떤 아티팩트에 버전 1 GUID 가 들어가는지는 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 등 각 페이지에서 봅니다.
+시각 형식 전반은 [시각 값 형식](filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+어떤 아티팩트에 버전 1 GUID 가 들어가는지는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 등 각 페이지에서 봅니다.
 
 ### CLSID
 
@@ -289,8 +289,8 @@ Python `uuid` 모듈로 계산했습니다.
 
 명세는 SID 를 쓰는 쪽이 "구조가 맞다" 는 것 이상에 기대면 안 된다고 적습니다.
 잘 알려진 SID 가 아니면 숫자만 보고 계정 종류를 단정하지 않습니다.
-그 SID 가 누구인지는 [사용자 계정](/02-artifacts/system-account/sam.md) 과 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 이름과 맞춰 봅니다.
-시각과 사람을 잇는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+그 SID 가 누구인지는 [사용자 계정](../../02-artifacts/system-account/sam.md) 과 [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 에서 이름과 맞춰 봅니다.
+시각과 사람을 잇는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 ### LOGON_ID 는 재시작을 넘어 유일하지 않습니다
 
@@ -321,7 +321,7 @@ ProgramFiles 처럼 비트 수에 따라 다른 곳을 가리키는 GUID 도 있
 - **GUID 는 대소문자를 가리지 않고 비교합니다.** Microsoft 문서의 표 안에서도 `{905e63b6-...}`, `{A52BBA46-E9E1-435f-...}` 처럼 대소문자가 섞여 있습니다.
 - **GUID 바이트를 헥스 그대로 이으면 다른 GUID 가 됩니다.** 위 예에서 `B4BFCC3A` 가 헥스 편집기에는 `3ACCBFB4` 로 보입니다.
 - **ProgramFiles GUID 하나가 여러 경로를 가리킵니다.** 64비트 OS 에서도 32비트 앱에서는 Program Files (x86) 입니다.
-- **SID 가 다른 값 뒤에 붙어 있기도 합니다.** 길이 칸이 있는 문자열 뒤에 이진 SID 가 이어지는 예는 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 의 길이 칸 설명에 있습니다.
+- **SID 가 다른 값 뒤에 붙어 있기도 합니다.** 길이 칸이 있는 문자열 뒤에 이진 SID 가 이어지는 예는 [문자 인코딩](utf-16le-utf-8-cp949.md) 의 길이 칸 설명에 있습니다.
 - **식별 기관과 하위 기관은 바이트 순서가 다릅니다.** 식별 기관은 큰 자리부터, 하위 기관은 리틀 엔디언으로 읽어야 알려진 SID 와 맞습니다(확인 범위: 한국어 Windows 11 PC 의 .NET 변환 결과).
 
 ## 도구
@@ -335,7 +335,7 @@ uuid.UUID(bytes_le=bytes.fromhex('3ACCBFB42CDB4C42B0297FE99A87C641'))
 # UUID('b4bfcc3a-db2c-424c-b029-7fe99a87c641')
 ```
 
-- **레지스트리 조회 도구** — CLSID 이름과 Known Folder 정의를 찾을 때 씁니다. 분석 PC 가 아니라 압수 PC 의 SOFTWARE 하이브에서 찾습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+- **레지스트리 조회 도구** — CLSID 이름과 Known Folder 정의를 찾을 때 씁니다. 분석 PC 가 아니라 압수 PC 의 SOFTWARE 하이브에서 찾습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ## 참고 문헌
 

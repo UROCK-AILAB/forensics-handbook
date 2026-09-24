@@ -1,17 +1,17 @@
 # NTLM 비밀번호 해시 (NT Hash)
 
-> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) > NTLM 비밀번호 해시
+> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > NTLM 비밀번호 해시
 
 ## 한 줄 요약
 
-NT 해시 (NT Hash) 는 로컬 계정의 비밀번호를 MD4 로 줄인 값입니다. 이 값은 SAM 하이브 안에 계정마다 하나씩 들어 있습니다. 꺼내려면 [부트키](/02-artifacts/credentials/sam-security/system-boot-key.md) 로 여러 겹을 벗겨야 합니다.
+NT 해시 (NT Hash) 는 로컬 계정의 비밀번호를 MD4 로 줄인 값입니다. 이 값은 SAM 하이브 안에 계정마다 하나씩 들어 있습니다. 꺼내려면 [부트키](system-boot-key.md) 로 여러 겹을 벗겨야 합니다.
 
 ## 무엇을 담나 · 왜 생기나
 
 - Windows 는 로컬 계정의 비밀번호를 평문으로 두지 않습니다.
 - 대신 비밀번호를 줄인 NT 해시를 SAM 하이브에 적어 둡니다.
 - 로그온할 때 입력한 비밀번호로 같은 해시를 만들어 저장된 값과 맞춰 봅니다.
-- NT 해시를 만드는 법은 비밀번호를 UTF-16-LE 로 인코딩한 뒤 MD4 를 거는 것입니다. 문자 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- NT 해시를 만드는 법은 비밀번호를 UTF-16-LE 로 인코딩한 뒤 MD4 를 거는 것입니다. 문자 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -19,7 +19,7 @@ NT 해시 (NT Hash) 는 로컬 계정의 비밀번호를 MD4 로 줄인 값입�
 - 항목은 RID (상대 식별자, Relative Identifier) 별로 하나입니다.
 - 각 항목에는 `F` 값과 `V` 값이 있습니다. 암호화된 해시는 `V` 값에 들어 있습니다.
 - `Users` 아래 하위 키 이름은 RID 를 16진수로 적은 것입니다(예: `000001F4` 는 RID 500).
-- RID 는 계정 SID 의 마지막 숫자입니다. SID 는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
+- RID 는 계정 SID 의 마지막 숫자입니다. SID 는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
 
 SAM 해시를 감싸는 방식은 Windows 버전에 따라 다릅니다. 방식을 나누는 표시는 두 군데에 있습니다.
 
@@ -36,7 +36,7 @@ SAM 해시를 감싸는 방식은 Windows 버전에 따라 다릅니다. 방식�
 
 ## 여러 겹을 벗기는 순서
 
-1. 부트키를 먼저 만듭니다. 만드는 법은 [부트키 구하기](/02-artifacts/credentials/sam-security/system-boot-key.md) 에 있습니다.
+1. 부트키를 먼저 만듭니다. 만드는 법은 [부트키 구하기](system-boot-key.md) 에 있습니다.
 2. 부트키만으로는 바로 못 풉니다. 먼저 "해시된 부트키 (samKey)" 를 만듭니다.
 3. 옛 방식(0x01)이면 samKey 를 푸는 RC4 키를 MD5 로 얻습니다. 재료는 `Account` 의 `F` 안 솔트, QWERTY 상수, 부트키, DIGITS 상수를 이 순서로 이은 것입니다. 그 RC4 키로 키 데이터를 풀면 samKey 가 나옵니다.
 4. 새 방식(0x02)이면 부트키를 열쇠로, `F` 안의 솔트를 IV 로 써서 키 데이터를 AES 로 풉니다. 이 경우 두 상수는 쓰지 않습니다.
@@ -53,7 +53,7 @@ SAM 해시를 감싸는 방식은 Windows 버전에 따라 다릅니다. 방식�
 - 증명하는 것: 하이브를 수집한 시점에 그 계정에 설정된 비밀번호의 해시입니다.
 - 해시 자리가 비어 있으면 Impacket 은 빈 비밀번호의 NT 해시(`31d6cfe0d16ae931b73c59d7e0c089c0`)를 대신 적습니다. 이 값이 보이면 해시가 없거나 비밀번호가 빈 것이므로, 비밀번호가 설정되었다고 단정하지 않습니다.
 - 증명하지 못하는 것: 평문 비밀번호 자체입니다. NT 해시에서 비밀번호를 되찾으려면 사전 대입이나 크래킹이 따로 필요합니다.
-- 증명하지 못하는 것: 그 비밀번호로 실제 로그온한 시각입니다. 해시는 비밀번호가 무엇인지만 담고, 언제 썼는지는 담지 않습니다. 로그온 시각은 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 에서 찾습니다.
+- 증명하지 못하는 것: 그 비밀번호로 실제 로그온한 시각입니다. 해시는 비밀번호가 무엇인지만 담고, 언제 썼는지는 담지 않습니다. 로그온 시각은 [로그온·로그오프](../../event-logs/logon-events/index.md) 에서 찾습니다.
 
 ## 시각 해석
 
@@ -61,7 +61,7 @@ SAM 해시를 감싸는 방식은 Windows 버전에 따라 다릅니다. 방식�
 - 흔히 그 계정 SID 의 `NTUSER.DAT` 생성 시각으로 짐작합니다.
 - 다만 `NTUSER.DAT` 는 프로필이 처음 만들어질 때 생깁니다. 계정을 만든 뒤 한참 지나 처음 로그온했다면 이 시각은 계정 생성보다 늦습니다.
 - 이 값은 짐작이므로 보고서에 추정값이라고 밝힙니다.
-- 계정을 언제 만들고 바꿨는지는 [계정 생성·변경 이벤트](/02-artifacts/event-logs/account-management-events.md) 로 맞춰 봅니다.
+- 계정을 언제 만들고 바꿨는지는 [계정 생성·변경 이벤트](../../event-logs/account-management-events.md) 로 맞춰 봅니다.
 
 ## 함정과 한계
 
@@ -81,9 +81,9 @@ SAM 해시를 감싸는 방식은 Windows 버전에 따라 다릅니다. 방식�
 
 ## 교차 검증 — 함께 볼 아티팩트
 
-- [부트키 구하기 (SYSTEM Boot Key)](/02-artifacts/credentials/sam-security/system-boot-key.md) — 이 페이지의 전제입니다.
-- [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md) — 같은 SAM 하이브에서 계정 이름·RID·로그온 정보를 읽습니다. 계정 이름과 해시를 이 페이지로 맞춥니다.
-- [액티브 디렉터리 DB (NTDS.dit)](/02-artifacts/credentials/ntds-dit.md) — 도메인 계정의 해시는 로컬 SAM 이 아니라 도메인 컨트롤러의 이 DB 에 있습니다.
+- [부트키 구하기 (SYSTEM Boot Key)](system-boot-key.md) — 이 페이지의 전제입니다.
+- [사용자 계정 (SAM)](../../system-account/sam.md) — 같은 SAM 하이브에서 계정 이름·RID·로그온 정보를 읽습니다. 계정 이름과 해시를 이 페이지로 맞춥니다.
+- [액티브 디렉터리 DB (NTDS.dit)](../ntds-dit.md) — 도메인 계정의 해시는 로컬 SAM 이 아니라 도메인 컨트롤러의 이 DB 에 있습니다.
 
 ## 참고 문헌
 

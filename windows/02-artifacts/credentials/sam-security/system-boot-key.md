@@ -1,10 +1,10 @@
 # 부트키 구하기 (SYSTEM Boot Key)
 
-> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) > 부트키 구하기
+> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > 부트키 구하기
 
 ## 한 줄 요약
 
-부트키 (Boot Key) 는 SAM 과 SECURITY 하이브의 비밀을 풀 때 맨 처음 필요한 16바이트 열쇠입니다. 이 열쇠는 SYSTEM 하이브 안에 조각나 숨어 있습니다. 부트키를 먼저 만들어야 [NTLM 비밀번호 해시](/02-artifacts/credentials/sam-security/nt-hash.md) 와 [LSA 시크릿](/02-artifacts/credentials/sam-security/lsa-secrets.md) 으로 넘어갑니다.
+부트키 (Boot Key) 는 SAM 과 SECURITY 하이브의 비밀을 풀 때 맨 처음 필요한 16바이트 열쇠입니다. 이 열쇠는 SYSTEM 하이브 안에 조각나 숨어 있습니다. 부트키를 먼저 만들어야 [NTLM 비밀번호 해시](nt-hash.md) 와 [LSA 시크릿](lsa-secrets.md) 으로 넘어갑니다.
 
 ## 어디서 나오나 · 왜 이렇게 숨겨 두나
 
@@ -19,7 +19,7 @@
 - 네 하위 키는 `JD`, `Skew1`, `GBG`, `Data` 입니다.
 - 재료는 각 키의 값이 아닙니다. 각 키의 클래스 이름에 들어 있습니다.
 - 클래스 이름은 레지스트리 편집기에 잘 드러나지 않는 항목입니다. 하이브를 직접 읽는 도구로 꺼냅니다.
-- 오프라인 하이브에서는 `CurrentControlSet` 대신 `ControlSet001` 같은 실제 이름을 씁니다. 이 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
+- 오프라인 하이브에서는 `CurrentControlSet` 대신 `ControlSet001` 같은 실제 이름을 씁니다. 이 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 를 봅니다.
 
 ## 만드는 법
 
@@ -62,9 +62,9 @@
 
 ## 교차 검증 — 함께 볼 아티팩트
 
-- [NTLM 비밀번호 해시 (NT Hash)](/02-artifacts/credentials/sam-security/nt-hash.md) — 부트키로 SAM 해시를 푸는 다음 단계입니다.
-- [LSA 시크릿 (LSA Secrets)](/02-artifacts/credentials/sam-security/lsa-secrets.md) — 부트키로 LSA 키를 푸는 갈래입니다.
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) — 클래스 이름과 `CurrentControlSet` 가 하이브에 어떻게 저장되는지 다룹니다.
+- [NTLM 비밀번호 해시 (NT Hash)](nt-hash.md) — 부트키로 SAM 해시를 푸는 다음 단계입니다.
+- [LSA 시크릿 (LSA Secrets)](lsa-secrets.md) — 부트키로 LSA 키를 푸는 갈래입니다.
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) — 클래스 이름과 `CurrentControlSet` 가 하이브에 어떻게 저장되는지 다룹니다.
 
 ## 참고 문헌
 

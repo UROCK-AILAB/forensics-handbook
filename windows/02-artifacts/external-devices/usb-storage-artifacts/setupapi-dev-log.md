@@ -32,7 +32,7 @@ XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니�
 
 ### 로그 위치와 기록 수준을 바꾸는 값
 
-두 값 모두 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Setup` 키에 있습니다(Microsoft). 하이브 위치는 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를 봅니다.
+두 값 모두 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Setup` 키에 있습니다(Microsoft). 하이브 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를 봅니다.
 
 | 값 | 형식 | 뜻 |
 |---|---|---|
@@ -66,7 +66,7 @@ XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니�
 
 - ANSI 일반 텍스트이고, 문구는 영어입니다(Microsoft).
 - 관찰한 파일은 BOM 없이 시작했고 줄 끝이 CR LF (`0D 0A`) 였습니다.
-- 한국어판 Windows 에서는 서비스 표시 이름 같은 한글이 CP949 로 적혀 있었습니다(확인 범위: Windows 11 25H2 한국어판 한 대). UTF-8 로 열면 글자가 깨집니다. [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
+- 한국어판 Windows 에서는 서비스 표시 이름 같은 한글이 CP949 로 적혀 있었습니다(확인 범위: Windows 11 25H2 한국어판 한 대). UTF-8 로 열면 글자가 깨집니다. [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
 - 맨 앞은 머리말 (Text Log Header) 입니다. `[Device Install Log]` 아래에 OS 버전, 서비스 팩, 아키텍처가 있고 `[BeginLog]` 로 끝납니다(Microsoft).
 - 날짜 붙은 옛 로그에도 머리말이 따로 있었습니다(관찰).
 - 머리말 뒤에는 섹션이 만든 순서대로 이어집니다(Microsoft). 줄 순서는 곧 기록한 순서입니다.
@@ -124,8 +124,8 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 - 두 섹션의 시작 시각은 1초 안쪽으로 붙어 있었습니다.
 - `USBSTOR\Disk&…` 를 대상으로 한 섹션은 없었습니다. 로그 전체에서 `USBSTOR\Disk` 문자열도 나오지 않았습니다.
 - 그래서 `USBSTOR` 로 찾지 말고 일련번호로 찾습니다.
-- 일련번호가 Windows 가 만든 ID 일 수 있습니다. 이 경우는 [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md)에서 다룹니다.
-- VID·PID 읽는 법은 [USB 장치 식별자](/02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md)에서 다룹니다.
+- 일련번호가 Windows 가 만든 ID 일 수 있습니다. 이 경우는 [USB 저장장치 목록 (USBSTOR)](usbstor.md)에서 다룹니다.
+- VID·PID 읽는 법은 [USB 장치 식별자](enum-usb-vid-pid.md)에서 다룹니다.
 
 > 그림 자리: USB 메모리 하나가 만든 두 설치 섹션(USB\VID…, SWD\WPDBUSENUM…)이 같은 일련번호로 USBSTOR·Enum\USB 레지스트리 항목에 이어지는 모습
 
@@ -143,7 +143,7 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 
 ### 증명하지 못하는 것
 
-- 누가 꽂았는지 알 수 없습니다. 이 로그는 시스템 전체에 하나입니다. 사용자는 [MountPoints2](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md)로 좁힙니다.
+- 누가 꽂았는지 알 수 없습니다. 이 로그는 시스템 전체에 하나입니다. 사용자는 [MountPoints2](mountpoints2.md)로 좁힙니다.
 - 장치에서 파일을 복사하거나 열었는지 알 수 없습니다.
 - 마지막 연결 시각, 해제 시각, 연결 횟수를 알 수 없습니다.
 - 가장 이른 섹션이 "처음 꽂은 때" 라고 단정할 수 없습니다. 옛 로그가 없어졌거나, 장치를 지운 뒤 다시 설치했을 수 있습니다.
@@ -165,12 +165,12 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 | 옛 로그 파일 이름 속 날짜·시각 | 관찰한 파일에서는 그 파일 마지막 섹션의 시각과 같았습니다. | 현지 시각(관찰) |
 
 - 섹션 헤더의 시각은 현지 시각이라고 Microsoft 문서에 적혀 있습니다.
-- 그래서 UTC 로 바꾸려면 기록할 당시의 시간대 설정이 필요합니다. [시간대 설정](/02-artifacts/system-account/time-zone.md)을 봅니다.
+- 그래서 UTC 로 바꾸려면 기록할 당시의 시간대 설정이 필요합니다. [시간대 설정](../../system-account/time-zone.md)을 봅니다.
 - 시간대의 `Bias` 값은 부호 있는 32비트로 읽습니다. UTC+9 는 `-540` 입니다. 부호 없이 읽으면 `4294966756` 이 됩니다(관찰).
 - 일광 절약 시간이 끝나는 날에는 같은 현지 시각이 두 번 있습니다. 그 한 시간 안의 시각은 UTC 로 하나로 정할 수 없습니다.
 - 섹션이 자정을 넘기면 본문 줄의 날짜는 섹션 시작 날짜와 다를 수 있습니다.
-- 줄 순서는 기록한 순서입니다. 그런데 plaso 공개 시험 파일에는 뒤에 나온 `Boot Session` 시각이 앞의 것보다 이른 곳이 있었습니다. 이런 역전은 시계나 시간대를 바꾼 흔적일 수 있습니다. [시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md)의 절차로 확인합니다.
-- 레지스트리의 첫 설치 시각 (`DEVPKEY_Device_FirstInstallDate`) 은 FILETIME 이고 UTC 입니다. 이 로그 시각을 UTC 로 바꾼 뒤에 비교합니다. 위치는 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
+- 줄 순서는 기록한 순서입니다. 그런데 plaso 공개 시험 파일에는 뒤에 나온 `Boot Session` 시각이 앞의 것보다 이른 곳이 있었습니다. 이런 역전은 시계나 시간대를 바꾼 흔적일 수 있습니다. [시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)의 절차로 확인합니다.
+- 레지스트리의 첫 설치 시각 (`DEVPKEY_Device_FirstInstallDate`) 은 FILETIME 이고 UTC 입니다. 이 로그 시각을 UTC 로 바꾼 뒤에 비교합니다. 위치는 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 - df-stream 은 이 로그의 설치 시작·끝 시각이 장치 컨테이너 속성의 두 시각과 맞는다고 관찰했습니다(2015).
 - 같은 글은 그 두 시각이 레지스트리의 설치·첫 설치 시각과 조금 다르다고 적었습니다.
 - 그러므로 이 로그 시각과 레지스트리 첫 설치 시각이 딱 맞지 않을 수 있습니다. 차이의 크기는 검체에서 직접 확인합니다.
@@ -178,13 +178,13 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 ## 함정과 한계
 
 1. **옛 로그를 빠뜨리는 실수.** 관찰한 Windows 11 에서는 옛 내용이 `setupapi.dev.<날짜>_<시각>.log` 로 따로 있었습니다. `setupapi.dev*.log` 를 모두 모아서 봅니다. 파일을 언제, 몇 개까지 넘기는지는 공식 문서로 확인하지 못했습니다.
-2. **업그레이드 뒤에 로그가 새로 시작합니다.** 관찰한 PC 는 기능 업데이트를 한 날부터 로그가 시작했습니다. 그 전 내용은 `INF` 폴더에 없었습니다. 업그레이드 전 기록은 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)이나 `Windows.old` 폴더에서 찾습니다.
+2. **업그레이드 뒤에 로그가 새로 시작합니다.** 관찰한 PC 는 기능 업데이트를 한 날부터 로그가 시작했습니다. 그 전 내용은 `INF` 폴더에 없었습니다. 업그레이드 전 기록은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)이나 `Windows.old` 폴더에서 찾습니다.
 3. **"처음 연결" 이 두 번 나올 수 있습니다.** 관찰한 파일에서 같은 장치 인스턴스의 설치 섹션이 같은 날 두 번 있었습니다. 가장 이른 것을 쓰고, 나머지는 따로 설명합니다.
 4. **장치 정리 뒤 다시 설치될 수 있습니다.** HECF 는 `Plug and Play Cleanup` 예약 작업이 30일 넘게 꽂지 않은 장치를 레지스트리에서 지운다고 보고했습니다(Windows 8.1·10 관찰, 2017). 이 작업은 `Device and Driver Disk Cleanup Handler` 섹션에 `set: Device … was removed.` 로 남습니다. 지운 장치를 다시 꽂으면 설치 섹션이 새로 생길 수 있습니다. HECF 예시에서는 이 섹션의 `cmd:` 줄이 `taskhostw.exe` 였습니다. 관찰한 Windows 11 에서는 디스크 정리 프로그램(`cleanmgr.exe /autocleanstoragesense`) 이었습니다.
-5. **로그를 끄거나 옮길 수 있습니다.** `LogLevel`·`LogPath` 값과 그 키의 [마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)을 봅니다. 다만 앞에서 본 것처럼 0 이 아닌 `LogLevel` 이 곧 조작은 아닙니다.
-6. **텍스트 파일이라 고치기 쉽습니다.** 관리자 권한이 있으면 지우거나 줄을 뺄 수 있습니다. 머리말이 없는지, 기간이 비는지, 시각이 거꾸로 가는지 봅니다. 파일 크기가 줄어든 흔적은 [$MFT](/02-artifacts/filesystem/mft.md)와 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)에서 찾습니다.
-7. **지운 로그는 조각으로 되살릴 수 있습니다.** 형식이 일정한 텍스트라서 비할당 영역에서 찾기 쉽습니다(HECF). [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md)을 봅니다.
-8. **USBSTOR 에 없는 장치도 여기에는 남을 수 있습니다.** 이 로그는 드라이버 종류와 관계없이 설치 작업을 적습니다. UASP 장치나 SD 카드는 [USBSTOR 에 안 남는 장치](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md)를 함께 봅니다.
+5. **로그를 끄거나 옮길 수 있습니다.** `LogLevel`·`LogPath` 값과 그 키의 [마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)을 봅니다. 다만 앞에서 본 것처럼 0 이 아닌 `LogLevel` 이 곧 조작은 아닙니다.
+6. **텍스트 파일이라 고치기 쉽습니다.** 관리자 권한이 있으면 지우거나 줄을 뺄 수 있습니다. 머리말이 없는지, 기간이 비는지, 시각이 거꾸로 가는지 봅니다. 파일 크기가 줄어든 흔적은 [$MFT](../../filesystem/mft.md)와 [$UsnJrnl](../../filesystem/usnjrnl.md)에서 찾습니다.
+7. **지운 로그는 조각으로 되살릴 수 있습니다.** 형식이 일정한 텍스트라서 비할당 영역에서 찾기 쉽습니다(HECF). [비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)을 봅니다.
+8. **USBSTOR 에 없는 장치도 여기에는 남을 수 있습니다.** 이 로그는 드라이버 종류와 관계없이 설치 작업을 적습니다. UASP 장치나 SD 카드는 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)를 함께 봅니다.
 9. **인코딩.** 비 ASCII 글자는 시스템 ANSI 코드 페이지로 적힙니다. 문자열 검색 도구의 인코딩을 맞춥니다.
 
 ## 직접 분석해 보기
@@ -193,7 +193,7 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 
 1. `%SystemRoot%\INF\setupapi*.log` 를 모두 사본으로 확보합니다. XP 는 `%SystemRoot%\setupapi.log*` 입니다.
 2. SOFTWARE 하이브에서 `LogPath` 를 봅니다. 값이 있으면 그 폴더에서도 수집합니다.
-3. 조사할 장치의 일련번호를 [USBSTOR](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) 에서 구합니다.
+3. 조사할 장치의 일련번호를 [USBSTOR](usbstor.md) 에서 구합니다.
 4. 모든 로그에서 일련번호를 대소문자 구분 없이 찾습니다. ANSI 파일이므로 한 바이트 문자로 찾습니다. UTF-16 으로 찾으면 걸리지 않습니다.
 5. 걸린 줄에서 위로 올라가 `>>>  [` 로 시작하는 섹션 제목을 찾습니다. 바로 다음 줄에서 `Section start` 시각을 읽습니다.
 6. 아래로 내려가 `<<<  [Exit status:` 줄에서 결과를 읽습니다.
@@ -223,24 +223,24 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 - 텍스트 편집기나 `grep` 같은 문자열 검색 도구로 충분합니다. 예: 일련번호로 찾고 앞뒤 몇 줄을 함께 봅니다.
 - 타임라인 도구 plaso 에는 이 로그의 파서가 있습니다. 소스상 섹션 시작·끝 시각을 현지 시각으로 처리합니다. 그래서 분석할 때 시간대를 맞게 지정해야 합니다.
 - 도구가 섹션을 0건으로 내면 먼저 형식을 확인합니다. 앞의 "문서 예시와 실제 형식이 다릅니다" 표를 봅니다.
-- 도구 결과와 직접 찾은 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 절차를 따릅니다.
+- 도구 결과와 직접 찾은 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 절차를 따릅니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 값 | 링크 |
 |---|---|---|
-| USBSTOR | 일련번호, 제조사·모델 | [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) |
-| Enum\USB | VID·PID·일련번호 | [USB 장치 식별자 (Enum\USB VID·PID)](/02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md) |
-| 장치 속성 | 첫 설치 시각(UTC)과 `Section start`(현지) | [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) |
-| MountedDevices | 드라이브 문자 | [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) |
-| MountPoints2 | 어느 사용자 환경에서 연결됐나 | [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) |
-| WPD·EMDMgmt | 볼륨 이름, WPD 장치 ID | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) |
-| AmCache 장치 항목 | 같은 장치 ID 가 다른 파일에도 있나 | [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) |
-| 외부 장치 연결 이벤트 | 설치 시각 앞뒤의 연결 이벤트 | [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
-| 시간대 설정 | 현지 시각을 UTC 로 바꿀 값 | [시간대 설정 (Time Zone)](/02-artifacts/system-account/time-zone.md) |
-| 켜짐·꺼짐 이벤트 | `Boot Session` 줄과 부팅 시각 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
+| USBSTOR | 일련번호, 제조사·모델 | [USB 저장장치 목록 (USBSTOR)](usbstor.md) |
+| Enum\USB | VID·PID·일련번호 | [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) |
+| 장치 속성 | 첫 설치 시각(UTC)과 `Section start`(현지) | [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) |
+| MountedDevices | 드라이브 문자 | [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) |
+| MountPoints2 | 어느 사용자 환경에서 연결됐나 | [사용자별 장치 연결 (MountPoints2)](mountpoints2.md) |
+| WPD·EMDMgmt | 볼륨 이름, WPD 장치 ID | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](wpd-emdmgmt.md) |
+| AmCache 장치 항목 | 같은 장치 ID 가 다른 파일에도 있나 | [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md) |
+| 외부 장치 연결 이벤트 | 설치 시각 앞뒤의 연결 이벤트 | [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| 시간대 설정 | 현지 시각을 UTC 로 바꿀 값 | [시간대 설정 (Time Zone)](../../system-account/time-zone.md) |
+| 켜짐·꺼짐 이벤트 | `Boot Session` 줄과 부팅 시각 | [켜짐·꺼짐](../../event-logs/power-on-off-events.md) |
 
-휴대폰은 [스마트폰으로 옮겼나](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md)를, USB 흔적 전체 흐름은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)과 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)를 봅니다.
+휴대폰은 [스마트폰으로 옮겼나](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md)를, USB 흔적 전체 흐름은 [USB 저장장치 흔적](index.md)과 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)를 봅니다.
 
 ## 실습
 

@@ -164,14 +164,14 @@ RegRipper winscp 플러그인은 `RemoteTarget`·`LocalTarget` 값을 URL 디코
 
 ## 시각 해석
 
-- 레지스트리 값에는 시각이 없습니다. 시각은 키의 LastWrite 하나뿐입니다. RegRipper putty 플러그인은 `SshHostKeys` 키의 LastWrite 를 함께 보여 줍니다. [5] 이 시각은 그 키 안의 무언가가 마지막으로 바뀐 때입니다. 서버마다의 접속 시각이 아닙니다. LastWrite 를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
-- `config`·`known_hosts`·개인 키 파일은 파일 시스템 시각으로 봅니다. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)에서 읽습니다.
+- 레지스트리 값에는 시각이 없습니다. 시각은 키의 LastWrite 하나뿐입니다. RegRipper putty 플러그인은 `SshHostKeys` 키의 LastWrite 를 함께 보여 줍니다. [5] 이 시각은 그 키 안의 무언가가 마지막으로 바뀐 때입니다. 서버마다의 접속 시각이 아닙니다. LastWrite 를 읽는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- `config`·`known_hosts`·개인 키 파일은 파일 시스템 시각으로 봅니다. [마스터 파일 테이블](../filesystem/mft.md)에서 읽습니다.
 - 서버 호스트 키와 `sshd_config` 는 없으면 서비스가 시작할 때 만듭니다. [4] 그러니 이 파일들을 만든 시각은 sshd 서비스를 처음 시작한 때를 가늠하는 단서가 됩니다. 이 판단은 문서 내용에서 나온 추론입니다.
-- 이벤트 시각은 레코드 시각입니다. 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 이벤트 시각은 레코드 시각입니다. 읽는 법은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
-- **휴대용 WinSCP 는 레지스트리에 흔적이 없을 수 있습니다.** WinSCP 는 INI 파일을 실행 파일 폴더에서 먼저 찾고, 새로 쓸 때도 실행 파일 폴더를 먼저 씁니다. [2] 그래서 USB 에서 실행하면 흔적이 USB 의 `WinSCP.ini` 에만 남을 수 있습니다. 이 판단은 문서 내용에서 나온 추론입니다. USB 흔적은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)에서 다룹니다.
+- **휴대용 WinSCP 는 레지스트리에 흔적이 없을 수 있습니다.** WinSCP 는 INI 파일을 실행 파일 폴더에서 먼저 찾고, 새로 쓸 때도 실행 파일 폴더를 먼저 씁니다. [2] 그래서 USB 에서 실행하면 흔적이 USB 의 `WinSCP.ini` 에만 남을 수 있습니다. 이 판단은 문서 내용에서 나온 추론입니다. USB 흔적은 [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md)에서 다룹니다.
 - **`putty -cleanup` 은 흔적을 지웁니다.** 현재 사용자의 레지스트리 항목, 난수 시드 파일, 점프 목록 정보를 지웁니다. FAQ 는 공용 PC 에서 쓰라고 안내합니다. [1] PuTTY 실행 흔적은 있는데 레지스트리 키가 없으면 이 명령을 의심합니다.
 - **WinSCP 에 저장한 비밀번호는 쉽게 풀릴 수 있습니다.** 마스터 비밀번호로 보호하지 않은 저장 비밀번호는 "쉽게 복구할 수 있는 방식" 으로 저장됩니다. 문서는 자동으로 쓸 수 있으면서 안전하게 암호화하는 방법은 없다고 적습니다. [3] 비밀번호를 풀어 쓸 때는 조사 권한 범위를 먼저 확인합니다.
 - **관리자 그룹 사용자의 공개 키는 사용자 홈에 없습니다.** 관리자 그룹 사용자는 `administrators_authorized_keys` 를 씁니다. [4] 사용자 홈의 `.ssh` 만 보면 이 키를 놓칩니다.
@@ -185,7 +185,7 @@ RegRipper winscp 플러그인은 `RemoteTarget`·`LocalTarget` 값을 URL 디코
 
 ### 헥스로 한 번
 
-이 페이지의 흔적은 레지스트리 문자열 값과 텍스트 파일입니다. 레지스트리 값의 저장 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다. 여기서는 WinSCP 경로 기록의 `%XX` 를 손으로 풀어 봅니다.
+이 페이지의 흔적은 레지스트리 문자열 값과 텍스트 파일입니다. 레지스트리 값의 저장 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다. 여기서는 WinSCP 경로 기록의 `%XX` 를 손으로 풀어 봅니다.
 
 URL 인코딩에서 `%XX` 의 `XX` 는 바이트 값을 16진수 두 자리로 적은 것입니다. 아래는 규칙을 보여 주려고 만든 예시입니다.
 
@@ -194,7 +194,7 @@ URL 인코딩에서 `%XX` 의 `XX` 는 바이트 값을 16진수 두 자리로 �
 | `/var/www/my%20site` | `%20` | `0x20` | 공백 | `/var/www/my site` |
 | `C%3A%5CUsers` | `%3A`, `%5C` | `0x3A`, `0x5C` | `:`, `\` | `C:\Users` |
 
-영문이 아닌 문자가 어느 문자 인코딩으로 들어가는지는 확인하지 못했습니다. 한글 경로를 풀 때는 UTF-8 과 CP949 로 모두 풀어 보고 맞는 쪽을 고릅니다. 두 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+영문이 아닌 문자가 어느 문자 인코딩으로 들어가는지는 확인하지 못했습니다. 한글 경로를 풀 때는 UTF-8 과 CP949 로 모두 풀어 보고 맞는 쪽을 고릅니다. 두 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -221,7 +221,7 @@ Get-ChildItem "$root\Users\*\.ssh\known_hosts*" -ErrorAction SilentlyContinue |
   ForEach-Object { $f = $_.FullName; Get-Content $f | ForEach-Object { "{0}`t{1}" -f $f, ($_ -split '\s+')[0] } }
 ```
 
-PowerShell 명령 기록 파일에서는 `^(ssh|scp|sftp)\s` 로 줄을 거릅니다. 파일 위치는 [PowerShell 명령 기록](/02-artifacts/execution/consolehost-history-txt.md)에서 다룹니다.
+PowerShell 명령 기록 파일에서는 `^(ssh|scp|sftp)\s` 로 줄을 거릅니다. 파일 위치는 [PowerShell 명령 기록](../execution/consolehost-history-txt.md)에서 다룹니다.
 
 서버 이벤트는 수집한 evtx 파일로 봅니다.
 
@@ -234,14 +234,14 @@ Get-WinEvent -Path 'E:\case\OpenSSH%4Operational.evtx' |
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 프리페치 | 조사 PC 에는 `SSH.EXE-17F86097.pf` 가 있었습니다 (확인 범위: 조사 PC). PuTTY·WinSCP·FileZilla 실행 파일도 같은 방식으로 찾습니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| PowerShell 명령 기록 | `ssh`·`scp` 명령줄의 접속 대상과 옵션 | [PowerShell 명령 기록](/02-artifacts/execution/consolehost-history-txt.md) |
-| 점프리스트 | Windows 7 이후 PuTTY 의 최근 세션 [1] | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| AmCache · 심캐시 | 설치하지 않고 실행한 도구의 경로 | [AmCache](/02-artifacts/execution/amcache-hve/index.md), [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md) |
-| 설치 프로그램 | 설치한 도구 목록 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 서비스·드라이버 | sshd·ssh-agent 서비스의 시작 유형 | [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) |
-| USB 저장장치 흔적 | 휴대용 WinSCP 를 실행한 장치 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
-| 자료 유출 시나리오 | SFTP·SCP 로 파일을 내보냈는지 따지는 순서 | [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) |
+| 프리페치 | 조사 PC 에는 `SSH.EXE-17F86097.pf` 가 있었습니다 (확인 범위: 조사 PC). PuTTY·WinSCP·FileZilla 실행 파일도 같은 방식으로 찾습니다 | [프리페치](../execution/prefetch/index.md) |
+| PowerShell 명령 기록 | `ssh`·`scp` 명령줄의 접속 대상과 옵션 | [PowerShell 명령 기록](../execution/consolehost-history-txt.md) |
+| 점프리스트 | Windows 7 이후 PuTTY 의 최근 세션 [1] | [점프리스트](../file-folder-usage/jump-lists.md) |
+| AmCache · 심캐시 | 설치하지 않고 실행한 도구의 경로 | [AmCache](../execution/amcache-hve/index.md), [심캐시](../execution/shimcache-appcompatcache.md) |
+| 설치 프로그램 | 설치한 도구 목록 | [설치 프로그램](../system-account/uninstall.md) |
+| 서비스·드라이버 | sshd·ssh-agent 서비스의 시작 유형 | [서비스·드라이버](../persistence/services-drivers.md) |
+| USB 저장장치 흔적 | 휴대용 WinSCP 를 실행한 장치 | [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) |
+| 자료 유출 시나리오 | SFTP·SCP 로 파일을 내보냈는지 따지는 순서 | [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) |
 
 ## 실습
 

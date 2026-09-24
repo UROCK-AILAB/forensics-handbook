@@ -1,6 +1,6 @@
 # 작업 정의 파일 (System32\Tasks XML)
 
-> 상위 허브: [예약 작업 (Scheduled Tasks)](/02-artifacts/persistence/scheduled-tasks/index.md)
+> 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)
 
 ## 한 줄 요약
 
@@ -8,7 +8,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-작업 스케줄러 (Task Scheduler) 는 작업 하나를 등록할 때 흔적을 세 곳에 남깁니다. 레지스트리에 키가 두 개 생깁니다. 이 폴더에는 XML 파일이 하나 생깁니다. 레지스트리 쪽은 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)에서 다룹니다.
+작업 스케줄러 (Task Scheduler) 는 작업 하나를 등록할 때 흔적을 세 곳에 남깁니다. 레지스트리에 키가 두 개 생깁니다. 이 폴더에는 XML 파일이 하나 생깁니다. 레지스트리 쪽은 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](taskcache-tree-tasks.md)에서 다룹니다.
 
 XML 파일에는 작업 정의 전체가 들어 있습니다.
 
@@ -18,7 +18,7 @@ XML 파일에는 작업 정의 전체가 들어 있습니다.
 - 작성자, 등록 일시, 설명 같은 관리 정보
 - 숨김, 실행 시간 제한 같은 설정
 
-XML 작업 정의는 Windows Vista · Server 2008 부터 쓰입니다. 그 전의 작업 파일은 [옛 작업 파일 (.job·at)](/02-artifacts/persistence/scheduled-tasks/job-at.md)에서 다룹니다.
+XML 작업 정의는 Windows Vista · Server 2008 부터 쓰입니다. 그 전의 작업 파일은 [옛 작업 파일 (.job·at)](job-at.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -41,13 +41,13 @@ XML 작업 정의는 Windows Vista · Server 2008 부터 쓰입니다. 그 전�
 | 1.6 | 35 |
 | 속성 없음 | 179 |
 
-속성이 없는 파일은 주로 Windows 기본 작업이었습니다. 레지스트리 Schema 값과 이 속성이 어떻게 짝을 이루는지는 [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)에서 다룹니다.
+속성이 없는 파일은 주로 Windows 기본 작업이었습니다. 레지스트리 Schema 값과 이 속성이 어떻게 짝을 이루는지는 [작업 캐시 레지스트리](taskcache-tree-tasks.md)에서 다룹니다.
 
 ## 구조
 
 ### 파일 첫 부분
 
-한 PC 의 XML 271개는 모두 첫 2바이트가 `FF FE` 였습니다. 이 두 바이트는 UTF-16 LE 의 바이트 순서 표시 (BOM) 입니다. XML 선언은 `<?xml version="1.0" encoding="UTF-16"?>` 였습니다. (확인 범위: Win11 25H2 한 대) 인코딩은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+한 PC 의 XML 271개는 모두 첫 2바이트가 `FF FE` 였습니다. 이 두 바이트는 UTF-16 LE 의 바이트 순서 표시 (BOM) 입니다. XML 선언은 `<?xml version="1.0" encoding="UTF-16"?>` 였습니다. (확인 범위: Win11 25H2 한 대) 인코딩은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 뿌리 요소는 다음 꼴입니다.
 
@@ -108,7 +108,7 @@ Principal 의 id 값과 Actions 의 Context 값에는 같은 이름(Author)이 �
 
 간격과 기간은 ISO 8601 기간 표기로 적습니다. `PT1H` 는 1시간, `PT72H` 는 72시간, `P3D` 는 3일입니다.
 
-Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, StartWhenAvailable, Priority 같은 요소가 들어갑니다. Hidden 의 기본값은 false 입니다. true 이면 작업 스케줄러 화면에 기본으로 보이지 않습니다. 관리자는 숨긴 작업을 모두 보이게 하는 스위치로 이 작업을 다시 볼 수 있습니다. 이 설정은 레지스트리 SD 값을 지워 숨기는 기법과 다릅니다. 차이는 [숨긴 예약 작업 찾기 (SD 값 삭제)](/02-artifacts/persistence/scheduled-tasks/sd.md)에서 다룹니다.
+Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, StartWhenAvailable, Priority 같은 요소가 들어갑니다. Hidden 의 기본값은 false 입니다. true 이면 작업 스케줄러 화면에 기본으로 보이지 않습니다. 관리자는 숨긴 작업을 모두 보이게 하는 스위치로 이 작업을 다시 볼 수 있습니다. 이 설정은 레지스트리 SD 값을 지워 숨기는 기법과 다릅니다. 차이는 [숨긴 예약 작업 찾기 (SD 값 삭제)](sd.md)에서 다룹니다.
 
 ### 예시
 
@@ -167,7 +167,7 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 
 **증명하지 못하는 것**
 
-- 작업이 실제로 실행됐는지는 XML 에 없습니다. 마지막 실행 시각은 레지스트리 DynamicInfo 값에서 봅니다. [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)를 봅니다.
+- 작업이 실제로 실행됐는지는 XML 에 없습니다. 마지막 실행 시각은 레지스트리 DynamicInfo 값에서 봅니다. [작업 캐시 레지스트리](taskcache-tree-tasks.md)를 봅니다.
 - 파일이 있다고 해서 등록된 작업이라는 뜻은 아닙니다. 한 PC 에서는 XML 파일 두 개(`\Microsoft\Windows\PI\SecureBootEncodeUEFI`, `\Microsoft\Windows\Security\Pwdless\IntelligentPwdlessTask`)가 TaskCache 에 항목이 없었습니다. 두 작업은 Get-ScheduledTask 결과에도 나오지 않았습니다. (확인 범위: Win11 25H2 한 대)
 - 누가 만들었는지 확정하지 못합니다. Author 는 문자열 칸입니다. Date 는 작업을 만든 쪽이 적어 넣은 값일 수 있습니다(아래 "시각 해석").
 - Hidden 이 false 여도 숨긴 작업일 수 있습니다. 레지스트리 SD 값을 지워 숨기는 방법이 따로 있습니다.
@@ -188,16 +188,16 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 **파일 자체의 시각**
 
 - 한 PC 에서 Windows 기본 작업 XML 의 파일 생성 시각은 2026-06-26 18:07:30 (UTC) 에 모여 있었습니다. 같은 PC 의 OS 설치 시각(InstallDate)은 2026-06-26 18:07:41 (UTC) 이었습니다. (확인 범위: Win11 25H2 한 대)
-- 기능 업데이트나 재설치 때 파일을 새로 만들면, 파일 생성 시각은 작업을 처음 만든 때를 뜻하지 않습니다. OS 설치 시각은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)에서 봅니다.
+- 기능 업데이트나 재설치 때 파일을 새로 만들면, 파일 생성 시각은 작업을 처음 만든 때를 뜻하지 않습니다. OS 설치 시각은 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md)에서 봅니다.
 - 여러 작업에서 XML 파일의 마지막 기록 시각(UTC)이 DynamicInfo 오프셋 4 의 시각과 초 단위까지 같았습니다. 수정한 작업은 파일 생성 시각과는 다르고 마지막 기록 시각과는 같았습니다. 모든 작업이 이렇지는 않았습니다. (확인 범위: Win11 25H2 한 대)
 
-파일 시각을 읽는 법은 [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md)에서 다룹니다.
+파일 시각을 읽는 법은 [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md)에서 다룹니다.
 
 ## 함정과 한계
 
 - **확장자가 없습니다.** 확장자로 거르는 검색이나 수집 규칙은 이 파일을 놓칠 수 있습니다.
 - **UTF-16 LE 입니다.** 명령 경로를 ASCII·UTF-8 로만 검색하면 걸리지 않습니다. 키워드 검색은 두 인코딩으로 모두 합니다.
-- **파일과 등록 상태가 어긋날 수 있습니다.** 등록되지 않은 XML 이 있을 수 있습니다. 반대로 레지스트리 항목만 남은 작업도 있습니다. 둘을 맞추는 법은 [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)의 Hash 절을 봅니다.
+- **파일과 등록 상태가 어긋날 수 있습니다.** 등록되지 않은 XML 이 있을 수 있습니다. 반대로 레지스트리 항목만 남은 작업도 있습니다. 둘을 맞추는 법은 [작업 캐시 레지스트리](taskcache-tree-tasks.md)의 Hash 절을 봅니다.
 - **Date 를 그대로 믿지 않습니다.** 없거나, 현지 시각이거나, 만든 쪽이 적은 값일 수 있습니다.
 - **파일 시각은 업데이트로 바뀔 수 있습니다.** 기본 작업의 파일 시각은 OS 설치 시각에 모이기 쉽습니다.
 - **Hidden 과 SD 삭제는 다릅니다.** 화면에 안 보이는 작업을 찾을 때 두 가지를 모두 확인합니다.
@@ -217,7 +217,7 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 1. 0x00 의 `ff fe` 는 UTF-16 LE 의 BOM 입니다.
 2. 0x02 부터는 글자마다 2바이트입니다. `3c 00` 은 `<`, `3f 00` 은 `?` 입니다.
 3. 오른쪽 글자 칸에 `.` 이 한 칸씩 끼어 보이면 UTF-16 LE 문서일 가능성이 큽니다.
-4. BOM 은 레지스트리 Hash 를 계산할 때 빼는 부분입니다. 자세한 내용은 [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md)를 봅니다.
+4. BOM 은 레지스트리 Hash 를 계산할 때 빼는 부분입니다. 자세한 내용은 [작업 캐시 레지스트리](taskcache-tree-tasks.md)를 봅니다.
 
 ### 공개 도구로 한 번
 
@@ -251,12 +251,12 @@ for dirpath, _, names in os.walk(top):
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 작업 캐시 레지스트리 | 등록 여부, XML 해시, 마지막 실행 시각 | [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md) |
-| 예약 작업 이벤트 | 4698 의 Task Content 필드에 새 작업의 XML 전체가 남습니다. 로그를 켜 두었다면 XML 파일을 지운 뒤에도 내용이 남습니다 | [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md) |
-| 자격 증명 관리자 | LogonType 이 Password 인 작업의 저장 비밀번호 | [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) |
-| 마스터 파일 테이블 · USN 변경 저널 | XML 파일이 생기고 바뀌고 지워진 흔적 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| 프리페치 · 프로세스 생성 | Command 의 프로그램이 실제로 실행됐는지 | [프리페치](/02-artifacts/execution/prefetch/index.md), [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) |
-| 섀도 복사본 | 지금은 없거나 바뀐 옛 XML | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 작업 캐시 레지스트리 | 등록 여부, XML 해시, 마지막 실행 시각 | [작업 캐시 레지스트리](taskcache-tree-tasks.md) |
+| 예약 작업 이벤트 | 4698 의 Task Content 필드에 새 작업의 XML 전체가 남습니다. 로그를 켜 두었다면 XML 파일을 지운 뒤에도 내용이 남습니다 | [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md) |
+| 자격 증명 관리자 | LogonType 이 Password 인 작업의 저장 비밀번호 | [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) |
+| 마스터 파일 테이블 · USN 변경 저널 | XML 파일이 생기고 바뀌고 지워진 흔적 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| 프리페치 · 프로세스 생성 | Command 의 프로그램이 실제로 실행됐는지 | [프리페치](../../execution/prefetch/index.md), [프로세스 생성 (4688)](../../event-logs/4688.md) |
+| 섀도 복사본 | 지금은 없거나 바뀐 옛 XML | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
 ## 실습
 

@@ -1,6 +1,6 @@
 # 비밀번호 변경 기록 (CREDHIST)
 
-> 위치: [DPAPI 구조 (Data Protection API)](/01-foundations/protection/data-protection-api/index.md) > CREDHIST
+> 위치: [DPAPI 구조 (Data Protection API)](index.md) > CREDHIST
 
 ## 한 줄 요약
 
@@ -8,7 +8,7 @@ CREDHIST 파일은 사용자가 암호를 바꿀 때마다 이전 암호의 해�
 목적은 옛 암호로 감싼 옛 마스터키를 지금 암호로 풀 수 있게 하는 것입니다.
 포렌식에서는 이 파일 하나에서 이전 암호들의 SHA-1 해시를 한꺼번에 얻을 수 있습니다.
 
-> 마스터키가 CREDHIST 를 왜 필요로 하는지는 [마스터키 파일](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) 에 있습니다.
+> 마스터키가 CREDHIST 를 왜 필요로 하는지는 [마스터키 파일](master-key-protect-sid.md) 에 있습니다.
 > 이 글은 CREDHIST 파일 자체의 구조와 쓰임을 다룹니다.
 
 ## 무엇을 담나 · 왜 생기나
@@ -29,7 +29,7 @@ CREDHIST 파일은 사용자가 암호를 바꿀 때마다 이전 암호의 해�
 ## 위치
 
 - CREDHIST 파일은 사용자 프로필의 key-ring 폴더, 곧 `%APPDATA%\Microsoft\Protect` 아래에 있습니다.
-- 이 폴더 아래에는 [마스터키 파일](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) 이 든 `{SID}` 폴더도 있습니다.
+- 이 폴더 아래에는 [마스터키 파일](master-key-protect-sid.md) 이 든 `{SID}` 폴더도 있습니다.
 
 ## 구조
 
@@ -62,7 +62,7 @@ CREDHIST 파일은 사용자가 암호를 바꿀 때마다 이전 암호의 해�
 
 - pShaHash·pNtHash 는 앞 해시로 암호화되어 있습니다.
 - bPasswordID 는 마스터키 푸터의 credHist GUID 와 짝을 이룹니다.
-- SID 형식은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
+- SID 형식은 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
 
 ### SID 가 여럿 들어가는 까닭
 
@@ -87,7 +87,7 @@ CREDHIST 항목을 감싸는 알고리즘은 데이터 블롭과 비슷합니다
 2. 첫 항목에서 바로 앞 암호의 SHA-1 을 얻습니다.
 3. 그 SHA-1 로 다음 항목을 풉니다.
 4. 필요한 옛 암호의 SHA-1 이 나올 때까지 사슬을 따라갑니다.
-5. 얻은 SHA-1 로 그 암호에 감싸인 [마스터키](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) 를 풉니다.
+5. 얻은 SHA-1 로 그 암호에 감싸인 [마스터키](master-key-protect-sid.md) 를 풉니다.
 
 - bPasswordID 로 어느 항목이 어느 마스터키에 맞는지 짝을 찾습니다.
 
@@ -99,7 +99,7 @@ CREDHIST 는 옛 암호 해시가 한자리에 모여 있어 크래킹 관점에
 - salt 가 없어 병렬 크래킹과 레인보우 테이블을 쓸 수 있습니다.
 - 다만 암호를 먼저 UTF-16LE 로 바꾼 뒤 해시합니다.
 - 그래서 표준 SHA-1 크래커를 그대로 쓰면 맞지 않습니다.
-- UTF-16LE 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- UTF-16LE 인코딩은 [문자 인코딩](../../value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 
 증거로서 정리하면 이렇습니다.
 

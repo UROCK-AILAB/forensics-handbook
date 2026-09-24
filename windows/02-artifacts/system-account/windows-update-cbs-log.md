@@ -137,7 +137,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - `SoftwareDistribution\DataStore\DataStore.edb` 는 ESE DB 입니다. 옆의 `Logs\` 폴더에 edb.chk, edb.log, `edb0029C.log` 같은 세대 로그, edbres00001.jrs, edbres00002.jrs, edbtmp.log 가 있었습니다. (확인 범위: 조사 PC)
 - 로그 이름은 옛 형식(.log·.chk)이었습니다. Windows 10 이후 Windows Search 는 로그를 .jtx, 체크포인트를 .jcp 로 씁니다. DB 마다 이름 규칙이 다르므로 복구할 때 확인합니다.
 - 안의 표 이름과 칸은 이번에 보지 않았습니다.
-- ESE 의 구조와 복구는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+- ESE 의 구조와 복구는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ### Component Based Servicing 레지스트리
 
@@ -168,7 +168,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | 80 (0x50) | 1,280 | 그 전 누적 업데이트들이 이 값이었습니다 |
 | 64 (0x40) | 3,110 | — |
 
-하이브의 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+하이브의 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ### 이벤트 로그
 
@@ -209,7 +209,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - 상태 이름으로 Superseded, Absent, Installed 가 보였습니다.
 - 조사 PC 에서는 세 로그 모두 OS 설치 날(2026-06-27 현지)부터 남아 있었습니다. 이 PC 가 새것이라 그렇습니다. 오래 쓴 PC 에서 얼마나 남는지는 확인하지 못했습니다.
 
-이벤트 로그와 ETL 파일의 구조는 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+이벤트 로그와 ETL 파일의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -250,10 +250,10 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - CBS.log 안은 현지 시각이고 `CbsPersist_` 파일 이름은 UTC 입니다. 한국 표준시 PC 에서 둘을 섞어 쓰면 9시간 어긋납니다.
 - ETL 파일 이름의 시각은 현지 시각이었습니다. 이름이 16:58:24 인 파일의 수정 시각이 현지 17:08 이었습니다.
 - `InstallTimeHigh`·`InstallTimeLow` 는 64비트 값의 위 32비트와 아래 32비트입니다. 합쳐서 FILETIME 으로 읽습니다.
-- 조사 PC 에서 OS 설치 때 들어간 패키지는 2026-06-26 18:10:32 UTC 로 나왔습니다. OS 설치 시각(`InstallDate`)은 18:07:41 UTC 였습니다. OS 설치 시각은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
+- 조사 PC 에서 OS 설치 때 들어간 패키지는 2026-06-26 18:10:32 UTC 로 나왔습니다. OS 설치 시각(`InstallDate`)은 18:07:41 UTC 였습니다. OS 설치 시각은 [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 - 한 RollupFix 항목은 설치 시각이 0(1601-01-01)이었습니다. 이 값은 설치 시각으로 쓰지 않습니다.
-- 현지 시각 기록을 UTC 로 바꿀 때는 검체의 시간대 설정을 먼저 확인합니다. [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
-- FILETIME 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 현지 시각 기록을 UTC 로 바꿀 때는 검체의 시간대 설정을 먼저 확인합니다. [시간대 설정](time-zone.md) 에서 다룹니다.
+- FILETIME 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -263,7 +263,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
    - 1709 부터의 로그는 심볼 서버가 필요 없습니다. Windows 10 1709 이상에서 풀어야 합니다.
 3. **푼 결과는 그때의 사본입니다.** `Get-WindowsUpdateLog` 로 만든 WindowsUpdate.log 는 새 내용을 따라가지 않습니다. 다시 실행해야 새 내용이 들어갑니다.
 4. **조사 대상 PC 에서 돌리면 파일이 생깁니다.** 기본 출력은 현재 사용자 바탕 화면의 WindowsUpdate.log 입니다. 중간 파일은 `$env:TEMP\WindowsUpdateLog` 에 만듭니다.
-5. **`-ForceFlush` 는 서비스를 멈춥니다.** 추적 내용을 .etl 로 강제로 내보내면서 업데이트 오케스트레이터와 Windows Update 서비스를 멈춥니다. 관리자 권한이 필요합니다. 라이브 시스템에서는 쓰기 전에 기록을 남깁니다. [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+5. **`-ForceFlush` 는 서비스를 멈춥니다.** 추적 내용을 .etl 로 강제로 내보내면서 업데이트 오케스트레이터와 Windows Update 서비스를 멈춥니다. 관리자 권한이 필요합니다. 라이브 시스템에서는 쓰기 전에 기록을 남깁니다. [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 6. **문서와 실제 위치가 다를 수 있습니다.** 조사 PC 에서 USO 로그는 하위 폴더에 있었고 NotificationUxBroker.etl 은 없었습니다.
 7. **로그가 짧게 남습니다.** 조사 PC 에서 ETL 은 7일치, ReportingEvents.log 는 약 3주 반치였습니다.
 8. **옛 CBS 로그는 .cab 과 .log 둘 다 있을 수 있습니다.** `Logs\CBS\` 폴더를 통째로 수집합니다.
@@ -271,9 +271,9 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 10. **설치 시각이 0 인 항목이 있습니다.** 1601-01-01 로 보이면 값이 비어 있는 것으로 봅니다.
 11. **`CurrentState` 숫자의 공식 뜻은 확인하지 못했습니다.** 값과 개수만 적습니다.
 12. **이벤트 제목은 설치 언어로 적힙니다.** 영어 제목으로 검색하면 한국어 PC 의 기록을 놓칩니다. `updateGuid` 로 찾습니다.
-13. **스토어 앱 업데이트 실패도 이벤트 20 에 섞여 남습니다.** 제목이 스토어 상품 ID 로 시작하면 OS 업데이트가 아닙니다. [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 다룹니다.
+13. **스토어 앱 업데이트 실패도 이벤트 20 에 섞여 남습니다.** 제목이 스토어 상품 ID 로 시작하면 OS 업데이트가 아닙니다. [스토어 앱 설치 목록](appx-staterepository.md) 에서 다룹니다.
 14. **개정 ID 는 원본마다 따로 매깁니다.** WSUS 를 쓰는 PC 와 Windows Update 를 쓰는 PC 에서 같은 번호가 다른 업데이트일 수 있습니다.
-15. **DataStore.edb 는 ESE DB 입니다.** 비정상 종료·끊긴 로그 사슬·손상 문제를 DataStore.edb 에서 직접 확인하지는 않았습니다. 같은 ESE 형식이라 주의합니다. 자세한 내용은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+15. **DataStore.edb 는 ESE DB 입니다.** 비정상 종료·끊긴 로그 사슬·손상 문제를 DataStore.edb 에서 직접 확인하지는 않았습니다. 같은 ESE 형식이라 주의합니다. 자세한 내용은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -308,7 +308,7 @@ FF FE                       BOM (UTF-16LE, 파일 맨 앞)
 09 00                       탭
 ```
 
-인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -337,15 +337,15 @@ Get-WindowsUpdateLog -ETLPath D:\case\WindowsUpdate -LogPath D:\case\out\Windows
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 시스템 기본 정보 | OS 설치 시각과 `UBR` 을 업데이트 기록과 맞춰 봅니다 | [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) |
-| 시간대 설정 | 현지 시각 기록을 UTC 로 바꿀 때 씁니다 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
-| 스토어 앱 설치 목록 | 이벤트 20 의 스토어 앱 업데이트 실패를 AppX 기록과 맞춰 봅니다 | [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) |
-| 설치 프로그램 | 같은 시기에 설치한 일반 프로그램을 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 켜짐·꺼짐 | CBS.log 의 `Last boot time` 과 재부팅 기록을 맞춰 봅니다 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
-| 초기 침입 조사 | 침입 시점에 어떤 누적 업데이트까지 설치돼 있었는지 봅니다 | [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) |
-| 초기화·재설치 흔적 | OS 설치 때 들어간 패키지 시각과 OS 설치 시각을 함께 봅니다 | [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) |
+| 시스템 기본 정보 | OS 설치 시각과 `UBR` 을 업데이트 기록과 맞춰 봅니다 | [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) |
+| 시간대 설정 | 현지 시각 기록을 UTC 로 바꿀 때 씁니다 | [시간대 설정](time-zone.md) |
+| 스토어 앱 설치 목록 | 이벤트 20 의 스토어 앱 업데이트 실패를 AppX 기록과 맞춰 봅니다 | [스토어 앱 설치 목록](appx-staterepository.md) |
+| 설치 프로그램 | 같은 시기에 설치한 일반 프로그램을 봅니다 | [설치 프로그램](uninstall.md) |
+| 켜짐·꺼짐 | CBS.log 의 `Last boot time` 과 재부팅 기록을 맞춰 봅니다 | [켜짐·꺼짐](../event-logs/power-on-off-events.md) |
+| 초기 침입 조사 | 침입 시점에 어떤 누적 업데이트까지 설치돼 있었는지 봅니다 | [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md) |
+| 초기화·재설치 흔적 | OS 설치 때 들어간 패키지 시각과 OS 설치 시각을 함께 봅니다 | [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) |
 
-여러 기록의 시각을 한 줄로 세우는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에 있습니다.
+여러 기록의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 ## 실습
 

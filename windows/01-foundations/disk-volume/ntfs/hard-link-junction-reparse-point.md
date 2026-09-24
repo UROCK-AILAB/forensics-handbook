@@ -1,6 +1,6 @@
 # 링크와 리파스 포인트 (Hard Link·Junction·Reparse Point)
 
-상위: [NTFS 구조 (NTFS)](/01-foundations/disk-volume/ntfs/index.md)
+상위: [NTFS 구조 (NTFS)](index.md)
 
 ## 한 줄 요약
 
@@ -49,7 +49,7 @@ NTFS 에서 파일 하나를 여러 경로로 보이게 하는 방법은 두 가
 | `$FILE_NAME` 내용 | 0x3C | 4 | 리파스 포인트면 리파스 태그, 아니면 확장 속성 크기 |
 | `$FILE_NAME` 내용 | 0x41 | 1 | 이름 공간 (Namespace): 0 POSIX, 1 Win32, 2 DOS, 3 Win32+DOS |
 
-`$FILE_NAME` 전체 구조는 [MFT 레코드와 속성 (FILE Record·Attribute)](/01-foundations/disk-volume/ntfs/file-record-attribute.md)을 봅니다.
+`$FILE_NAME` 전체 구조는 [MFT 레코드와 속성 (FILE Record·Attribute)](file-record-attribute.md)을 봅니다.
 
 - 이름마다 `$FILE_NAME` 이 하나씩 있고, 각 이름에는 자기 부모 폴더 참조가 따로 있습니다.
 - 부모 폴더의 `$I30` 색인에도 이름마다 항목이 하나씩 있습니다.
@@ -106,9 +106,9 @@ NTFS 에서 파일 하나를 여러 경로로 보이게 하는 방법은 두 가
 - 이름 길이에는 끝의 널 문자가 들어가지 않습니다.
 - 대체 이름 (Substitute Name)은 시스템이 실제로 따라가는 경로입니다. 절대 경로면 보통 `\??\C:\…` 꼴입니다.
 - 표시 이름 (Print Name)은 사람에게 보여 주려고 적은 경로입니다.
-- 마운트 폴더 (Mounted Folder)도 정션과 같은 태그를 씁니다. 대체 이름이 `\??\Volume{GUID}\` 꼴이면 볼륨을 폴더에 붙인 것입니다. 볼륨 GUID 의 짝은 [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md)에서 찾습니다.
+- 마운트 폴더 (Mounted Folder)도 정션과 같은 태그를 씁니다. 대체 이름이 `\??\Volume{GUID}\` 꼴이면 볼륨을 폴더에 붙인 것입니다. 볼륨 GUID 의 짝은 [드라이브 문자 매핑 (MountedDevices)](../../../02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md)에서 찾습니다.
 
-`$Extend\$Reparse` 파일은 볼륨의 리파스 포인트를 `$R` 색인에 모아 둡니다. 색인 키는 리파스 태그(4바이트)와 MFT 참조(8바이트)이고 데이터는 없습니다. 이 색인만 읽어도 링크·자리표시 파일이 있는 MFT 레코드 목록을 얻습니다. `$Extend` 의 다른 파일은 [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md)을 봅니다.
+`$Extend\$Reparse` 파일은 볼륨의 리파스 포인트를 `$R` 색인에 모아 둡니다. 색인 키는 리파스 태그(4바이트)와 MFT 참조(8바이트)이고 데이터는 없습니다. 이 색인만 읽어도 링크·자리표시 파일이 있는 MFT 레코드 목록을 얻습니다. `$Extend` 의 다른 파일은 [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](bitmap-secure-extend.md)을 봅니다.
 
 ## 읽는 법
 
@@ -147,31 +147,31 @@ NTFS 에서 파일 하나를 여러 경로로 보이게 하는 방법은 두 가
 
 - 하드 링크 이름 하나를 지우면 그 `$FILE_NAME` 과 부모 폴더의 `$I30` 항목만 빠집니다. 데이터는 마지막 이름이 지워질 때까지 남습니다.
 - 그래서 지운 기록이 있어도 같은 MFT 번호의 다른 경로로 내용이 남아 있을 수 있습니다.
-- 빠진 이름은 부모 폴더 `$I30` 의 빈 공간에 남을 수 있습니다([폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md)). `$I30` 항목의 `$FILE_NAME` 사본에는 리파스 태그도 들어가므로, 지운 정션·심볼릭 링크도 가늠할 수 있습니다.
-- 변경 저널에는 하드 링크가 생기거나 지워질 때 USN_REASON_HARD_LINK_CHANGE (0x00010000)가 남습니다. 리파스 포인트를 붙이거나 바꾸거나 떼면 USN_REASON_REPARSE_POINT_CHANGE (0x00100000)가 남습니다([USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md)).
+- 빠진 이름은 부모 폴더 `$I30` 의 빈 공간에 남을 수 있습니다([폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md)). `$I30` 항목의 `$FILE_NAME` 사본에는 리파스 태그도 들어가므로, 지운 정션·심볼릭 링크도 가늠할 수 있습니다.
+- 변경 저널에는 하드 링크가 생기거나 지워질 때 USN_REASON_HARD_LINK_CHANGE (0x00010000)가 남습니다. 리파스 포인트를 붙이거나 바꾸거나 떼면 USN_REASON_REPARSE_POINT_CHANGE (0x00100000)가 남습니다([USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md)).
 
 **시각**
 
 - `$STANDARD_INFORMATION` 은 레코드에 하나라서 어느 경로로 고쳐도 같은 네 시각이 바뀝니다.
-- `$FILE_NAME` 시각은 이름마다 따로 있어서 경로마다 다를 수 있습니다([두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
+- `$FILE_NAME` 시각은 이름마다 따로 있어서 경로마다 다를 수 있습니다([두 벌의 시각](standard-information-file-name.md)).
 - 폴더 목록(`$I30`)의 크기·속성 사본은 변경이 일어난 경로의 항목만 바로 바뀝니다. 다른 경로의 목록 값은 옛 값일 수 있습니다.
 - 정션·심볼릭 링크에는 자기 MFT 레코드가 따로 있습니다. 그 시각은 링크 자체의 기록이고 대상의 시각이 아닙니다.
-- 모든 시각은 UTC 기준 FILETIME 입니다([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
-- 프로필 안의 호환용 정션은 보통 프로필이 만들어질 때 함께 생깁니다. 그래서 그 생성 시각으로 프로필 생성 시점을 어림할 수 있지만, 추정값으로만 씁니다([사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md)).
+- 모든 시각은 UTC 기준 FILETIME 입니다([시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md)).
+- 프로필 안의 호환용 정션은 보통 프로필이 만들어질 때 함께 생깁니다. 그래서 그 생성 시각으로 프로필 생성 시점을 어림할 수 있지만, 추정값으로만 씁니다([사용자 프로필 목록 (ProfileList)](../../../02-artifacts/system-account/profilelist.md)).
 
 **악용될 때 남는 모습**
 
 - 눈에 안 띄는 폴더에 하드 링크로 두 번째 이름을 붙이면, 보이는 경로를 지워도 데이터가 남습니다. 사용자 파일인데 링크 수가 2 이상이면 모든 경로를 뽑아 봅니다.
-- 심볼릭 링크 대상에 `HarddiskVolumeShadowCopy` 장치 이름이 있으면 섀도 복사본 안을 폴더처럼 연 흔적일 수 있습니다. 이 방법은 잠긴 파일을 복사하려고 쓰이기도 합니다([자격 증명을 빼냈나 (Credential Dumping)](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md), [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)).
+- 심볼릭 링크 대상에 `HarddiskVolumeShadowCopy` 장치 이름이 있으면 섀도 복사본 안을 폴더처럼 연 흔적일 수 있습니다. 이 방법은 잠긴 파일을 복사하려고 쓰이기도 합니다([자격 증명을 빼냈나 (Credential Dumping)](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md), [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 - Microsoft 는 심볼릭 링크 공격으로 파일 권한을 바꾸거나 데이터를 망가뜨릴 수 있다고 경고합니다. 사용자가 쓸 수 있는 폴더에 시스템 폴더를 가리키는 링크가 있으면, 만든 시각 전후의 실행 기록을 함께 봅니다.
 
 ## 함정
 
 1. **분석 PC 로 빠지는 경로.** 이미지를 드라이브 문자로 붙이고 링크를 따라가면 대체 이름의 `\??\C:\` 는 분석 PC 의 C: 로 풀립니다. 링크는 따라가지 말고 대체 이름 문자열로 기록합니다.
-2. **중복과 순환.** 논리 복사·수집 도구가 정션을 따라가면 같은 자료를 두 번 담거나 순환에 빠집니다. Microsoft 도 백업 프로그램이 호환용 정션을 따라가지 말라고 안내합니다([선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md)).
+2. **중복과 순환.** 논리 복사·수집 도구가 정션을 따라가면 같은 자료를 두 번 담거나 순환에 빠집니다. Microsoft 도 백업 프로그램이 호환용 정션을 따라가지 말라고 안내합니다([선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md)).
 3. **액세스 거부는 숨김이 아님.** 호환용 정션에는 숨김·시스템 속성과 Everyone 읽기 거부 ACL 이 걸려 있습니다. 목록 열기가 실패하는 것은 정상입니다.
-4. **같은 해시 여러 개.** 하드 링크된 파일은 해시가 같은 파일 여러 개로 나옵니다. MFT 번호가 같으면 사본이 아니라 한 파일입니다([해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md)).
-5. **내용이 빈 파일.** WOF·클라우드 태그 파일에서 이름 없는 `$DATA` 만 읽으면 비어 있거나 0 으로 보입니다. WOF 는 `WofCompressedData` 스트림을 풀어야 합니다([압축·희소 파일](/01-foundations/disk-volume/ntfs/compressed-sparse.md), [ADS](/01-foundations/disk-volume/ntfs/ads.md)). 클라우드 자리표시 파일은 내용이 디스크에 없을 수 있습니다([클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md)).
+4. **같은 해시 여러 개.** 하드 링크된 파일은 해시가 같은 파일 여러 개로 나옵니다. MFT 번호가 같으면 사본이 아니라 한 파일입니다([해시셋 대조와 유사 해시](../../../03-techniques/analysis/hash-set-fuzzy-hash.md)).
+5. **내용이 빈 파일.** WOF·클라우드 태그 파일에서 이름 없는 `$DATA` 만 읽으면 비어 있거나 0 으로 보입니다. WOF 는 `WofCompressedData` 스트림을 풀어야 합니다([압축·희소 파일](compressed-sparse.md), [ADS](ads.md)). 클라우드 자리표시 파일은 내용이 디스크에 없을 수 있습니다([클라우드 동기화 공통 구조](../../../02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md)).
 6. **이름 순서와 널 문자.** 관찰 사례입니다(확인 범위: Windows 11 25H2, 빌드 26200). `C:\Users\All Users` 심볼릭 링크는 표시 이름 `C:\ProgramData` 가 앞에, 대체 이름 `\??\C:\ProgramData` 가 뒤에 있었고 널 문자가 없었습니다. 같은 PC 의 `C:\Documents and Settings` 정션은 대체 이름이 앞이었고 이름마다 널 문자가 붙어 있었습니다. 항상 오프셋과 길이로 읽습니다.
 7. **태그 값이 문서마다 다름.** 문서나 도구에 따라 태그 이름과 값이 다르게 적힌 곳이 있습니다. 태그 값은 MS-FSCC 표로 확인합니다.
 
@@ -179,7 +179,7 @@ NTFS 에서 파일 하나를 여러 경로로 보이게 하는 방법은 두 가
 
 - Windows 기본 명령: `fsutil reparsepoint query` 는 태그와 리파스 데이터를 헥스로 보여 줍니다. `fsutil hardlink list` 는 같은 파일의 모든 경로를 보여 줍니다. `dir /AL` 은 링크만 골라 `<JUNCTION>`·`<SYMLINKD>` 처럼 표시합니다. 붙인 이미지에서 쓸 때는 함정 1 을 기억합니다.
 - libyal libfsntfs 의 `fsntfsinfo` 는 MFT 항목의 `$FILE_NAME` 과 리파스 포인트(태그, 대체 이름)를 풀어 보여 줍니다.
-- The Sleuth Kit 의 `istat` 은 MFT 항목의 속성 목록을 보여 줍니다. MFT 파서 결과에 링크 수·리파스 대상이 없으면 이 페이지의 오프셋으로 헥스를 직접 봅니다([마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md)).
+- The Sleuth Kit 의 `istat` 은 MFT 항목의 속성 목록을 보여 줍니다. MFT 파서 결과에 링크 수·리파스 대상이 없으면 이 페이지의 오프셋으로 헥스를 직접 봅니다([마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md)).
 
 ## 참고 문헌
 

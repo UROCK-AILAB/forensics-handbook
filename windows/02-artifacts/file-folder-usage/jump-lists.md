@@ -43,7 +43,7 @@ Microsoft 문서가 밝히는 동작은 다음과 같습니다.
 | 사용자 지정 목록 | `C:\Users\<사용자>\AppData\Roaming\Microsoft\Windows\Recent\CustomDestinations\<AppID>.customDestinations-ms` | 헤더·범주·LNK 를 이어 붙인 형식 |
 
 - 폴더가 사용자 프로필 안에 있습니다. 그래서 어느 계정의 기록인지 가를 수 있습니다.
-- 두 폴더의 부모인 `Recent` 폴더에는 [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) 이 따로 쌓입니다.
+- 두 폴더의 부모인 `Recent` 폴더에는 [바로가기 파일 (LNK)](lnk.md) 이 따로 쌓입니다.
 - 폴더가 `Roaming` 아래에 있습니다. 로밍 프로필을 쓰는 환경에서는 다른 PC 에서 쌓인 항목이 함께 들어올 수 있습니다. 이 점은 구조로 보아 가능한 일이고, 확인한 사례는 아닙니다. 항목마다 호스트 이름 칸을 봅니다.
 
 ### AppID — 파일 이름 앞 16자리
@@ -60,7 +60,7 @@ Microsoft 문서가 밝히는 동작은 다음과 같습니다.
 - 인터넷에 도는 AppID 목록은 특정 경로·버전에서 계산한 값입니다. 예를 들어 hexacorn 글(2013)은 Forensics Wiki 목록을 옮겨 64비트 메모장을 `9b9cdc69c1c24e2b`, 32비트 메모장을 `918e0ecb43d17e23` 로 적습니다. 다른 환경에서는 값이 다를 수 있습니다.
 - 목록에 없는 AppID 는 안쪽 LNK 의 대상 확장자와 경로로 앱을 짐작합니다. 보고서에는 짐작이라고 밝힙니다.
 
-알려진 폴더 식별자는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+알려진 폴더 식별자는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ### Windows 버전에 따라 달라지는 점
 
@@ -80,7 +80,7 @@ Microsoft 문서가 밝히는 동작은 다음과 같습니다.
 
 ## 구조
 
-저장 형식 자체는 기반 구조 페이지에서 다룹니다. 복합 파일은 [OLE 복합 파일 (Compound File Binary)](/01-foundations/shell-document-formats/compound-file-binary.md), LNK 는 [바로가기 형식 (Shell Link·LNK)](/01-foundations/shell-document-formats/shell-link-lnk.md) 을 봅니다. 여기서는 점프리스트에만 있는 부분을 다룹니다. 오프셋은 libyal 의 Jump lists 형식 명세에서 옮겼습니다.
+저장 형식 자체는 기반 구조 페이지에서 다룹니다. 복합 파일은 [OLE 복합 파일 (Compound File Binary)](../../01-foundations/shell-document-formats/compound-file-binary.md), LNK 는 [바로가기 형식 (Shell Link·LNK)](../../01-foundations/shell-document-formats/shell-link-lnk.md) 을 봅니다. 여기서는 점프리스트에만 있는 부분을 다룹니다. 오프셋은 libyal 의 Jump lists 형식 명세에서 옮겼습니다.
 
 > 그림 자리: `.automaticDestinations-ms` 파일 하나를 복합 파일 디렉터리(Root Entry·DestList·번호 스트림 `1`·`2`·…·`1a`)로 펼치고, DestList 항목의 엔트리 번호가 같은 이름의 번호 스트림(LNK)을 가리키는 관계를 화살표로 보여 주는 그림
 
@@ -137,9 +137,9 @@ DestList 항목의 엔트리 번호를 16진수로 쓰면 짝이 되는 번호 �
 
 칸마다 알아 둘 점은 다음과 같습니다.
 
-- **드로이드 (Droid)** 칸 네 개에는 NTFS 개체 식별자 (Object ID) 가 GUID 로 들어 있습니다. LNK 의 추적 블록 (TrackerDataBlock) 에 있는 같은 이름의 값과 성격이 같습니다. 링크 추적 서비스가 옮겨진 대상을 다시 찾을 때 쓰는 값입니다. 파일 쪽 식별자는 흔히 버전 1 UUID 입니다. 버전 1 UUID 에는 만든 시각과 6바이트 노드 값이 들어 있습니다. 노드 값은 MAC 주소일 수 있지만 반드시 그렇지는 않습니다. 개체 식별자를 모아 두는 NTFS 메타 파일은 [NTFS 메타 파일](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) 에서 다룹니다.
-- **호스트 이름** 칸을 명세는 "호스트 이름 (또는 NetBIOS 이름)" 이라고만 적습니다. LNK 추적 블록의 같은 성격 칸은 대상이 마지막으로 있던 컴퓨터의 NetBIOS 이름입니다. 해석은 [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
-- **경로** 는 엄격한 UTF-16 이 아닙니다. 짝이 없는 대리 코드 (surrogate) 가 들어 있을 수 있습니다. 이런 값을 만나면 도구가 글자를 깨뜨리거나 오류를 낼 수 있습니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- **드로이드 (Droid)** 칸 네 개에는 NTFS 개체 식별자 (Object ID) 가 GUID 로 들어 있습니다. LNK 의 추적 블록 (TrackerDataBlock) 에 있는 같은 이름의 값과 성격이 같습니다. 링크 추적 서비스가 옮겨진 대상을 다시 찾을 때 쓰는 값입니다. 파일 쪽 식별자는 흔히 버전 1 UUID 입니다. 버전 1 UUID 에는 만든 시각과 6바이트 노드 값이 들어 있습니다. 노드 값은 MAC 주소일 수 있지만 반드시 그렇지는 않습니다. 개체 식별자를 모아 두는 NTFS 메타 파일은 [NTFS 메타 파일](../../01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) 에서 다룹니다.
+- **호스트 이름** 칸을 명세는 "호스트 이름 (또는 NetBIOS 이름)" 이라고만 적습니다. LNK 추적 블록의 같은 성격 칸은 대상이 마지막으로 있던 컴퓨터의 NetBIOS 이름입니다. 해석은 [바로가기 파일 (LNK)](lnk.md) 에서 다룹니다.
+- **경로** 는 엄격한 UTF-16 이 아닙니다. 짝이 없는 대리 코드 (surrogate) 가 들어 있을 수 있습니다. 이런 값을 만나면 도구가 글자를 깨뜨리거나 오류를 낼 수 있습니다. 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 - 경로는 파일이 아니라 폴더나 `.library-ms` 라이브러리 파일을 가리킬 수도 있습니다.
 - 버전 2 이상의 116 오프셋 값을 명세는 "접근 횟수?" 로 적습니다. 뜻이 확정되지 않았습니다.
 
@@ -194,11 +194,11 @@ DestList 항목의 엔트리 번호를 16진수로 쓰면 짝이 되는 번호 �
 | 드로이드 파일 식별자 안의 시각 | DestList 항목, LNK 추적 블록 | 대상 파일에 개체 식별자를 붙인 때 | 버전 1 UUID 시각 |
 | 점프리스트 파일 자체의 NTFS 시각 | $MFT | 생성은 이 앱의 점프리스트가 처음 생긴 무렵 (추정), 수정은 마지막으로 다시 쓴 무렵 | FILETIME, UTC |
 
-- DestList 시각은 명세 이름이 "마지막 수정 시각" 입니다. 항목마다 한 번만 남습니다. 앞선 사용 시각은 덮어써집니다. 옛 시각은 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에 남은 옛 파일에서 찾습니다.
+- DestList 시각은 명세 이름이 "마지막 수정 시각" 입니다. 항목마다 한 번만 남습니다. 앞선 사용 시각은 덮어써집니다. 옛 시각은 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에 남은 옛 파일에서 찾습니다.
 - LNK 헤더의 세 시각은 파일을 연 시각이 아닙니다. Microsoft 의 LNK 명세는 이 칸을 "링크 대상의" 생성·접근·수정 시각이라고 정의합니다. LNK 헤더의 수정 시각이 DestList 시각과 가까우면 그 무렵 파일을 저장했을 수 있습니다. 이 해석은 추정입니다.
 - 헤더에 마지막 엔트리 번호 칸이 있습니다. 그래서 번호는 새 항목이 생길 때 차례로 붙는 것으로 보입니다. 명세가 이 칸의 뜻에 물음표를 붙였으므로, 번호 순서를 처음 추가된 순서로 쓸 때는 추정이라고 밝힙니다.
-- 모든 시각은 UTC 입니다. 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 과 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md) 을 따릅니다. FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 윈도가 점프리스트 파일을 제자리에서 고치는지, 새로 만들어 바꿔 끼우는지는 확인한 자료에 없습니다. 파일을 지웠다가 다시 만든 경우도 있을 수 있습니다. 그래서 파일 생성 시각을 앱의 첫 사용 무렵으로 쓸 때는 추정이라고 밝힙니다. 파일의 두 벌 NTFS 시각은 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
+- 모든 시각은 UTC 입니다. 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md) 과 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md) 을 따릅니다. FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 윈도가 점프리스트 파일을 제자리에서 고치는지, 새로 만들어 바꿔 끼우는지는 확인한 자료에 없습니다. 파일을 지웠다가 다시 만든 경우도 있을 수 있습니다. 그래서 파일 생성 시각을 앱의 첫 사용 무렵으로 쓸 때는 추정이라고 밝힙니다. 파일의 두 벌 NTFS 시각은 [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -209,15 +209,15 @@ DestList 항목의 엔트리 번호를 16진수로 쓰면 짝이 되는 번호 �
 5. **사용자 작업을 사용자 행위로 읽습니다.** 사용자 지정 목록의 작업 범주는 앱이 정한 명령입니다. 범주 종류를 먼저 확인합니다.
 6. **탐색기 점프리스트를 놓칩니다.** 폴더 항목은 탐색기의 점프리스트에만 남습니다. 폴더를 연 흔적을 찾을 때는 탐색기 쪽 파일을 따로 봅니다.
 7. **Recent 폴더 LNK 와 개수가 같기를 기대합니다.** IShellLink 로 넘긴 항목은 점프리스트에만 들어갑니다. 반대로 셸 확장이 등록한 컨텍스트 메뉴 동사로 연 문서는 Recent 항목에는 나타나지만 앱 점프리스트에는 나타나지 않습니다 (Microsoft 문서, Windows 7 기준). 두 기록의 개수가 달라도 이상하지 않습니다.
-8. **수집한 사본의 파일 시각을 씁니다.** 복사 방법에 따라 사본의 NTFS 시각이 바뀔 수 있습니다. 파일 시각은 원본 볼륨의 [$MFT](/02-artifacts/filesystem/mft.md) 에서 읽습니다.
+8. **수집한 사본의 파일 시각을 씁니다.** 복사 방법에 따라 사본의 NTFS 시각이 바뀔 수 있습니다. 파일 시각은 원본 볼륨의 [$MFT](../filesystem/mft.md) 에서 읽습니다.
 
 ### 지우기와 조작
 
 - **정책으로 로그오프 때 지웁니다.** 로그오프할 때 최근 문서 기록을 지우는 정책 "Clear history of recently opened documents on exit" 이 있습니다. 레지스트리 값은 `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` 의 `ClearRecentDocsOnExit` 입니다. Microsoft 문서에 따르면 이 정책을 켜면 로그오프 때 점프리스트의 최근·자주 사용 항목이 지워집니다. 고정 항목과 앱이 정한 작업은 지워지지 않습니다. 정책 값이 켜져 있으면 점프리스트가 비어 있는 까닭이 설명됩니다.
 - **앱이나 사용자가 목록을 비웁니다.** `SHAddToRecentDocs` 에 빈 값 (NULL) 을 넘기면 모든 사용 기록이 지워집니다. 사용자는 항목을 하나씩 목록에서 뺄 수 있습니다. 앱은 `RemoveDestination`·`RemoveAllDestinations` 로 항목을 지울 수 있습니다.
-- **파일째 지웁니다.** 점프리스트 파일이 생기고 지워진 기록은 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 과 $MFT 에 남을 수 있습니다. 옛 파일은 섀도 복사본에서 찾습니다. 지운 파일은 [파일 카빙](/03-techniques/analysis/data-recovery/file-carving.md) 으로 복합 파일 서명 (`D0 CF 11 E0 A1 B1 1A E1`) 을 찾아 되살려 봅니다.
+- **파일째 지웁니다.** 점프리스트 파일이 생기고 지워진 기록은 [$UsnJrnl](../filesystem/usnjrnl.md) 과 $MFT 에 남을 수 있습니다. 옛 파일은 섀도 복사본에서 찾습니다. 지운 파일은 [파일 카빙](../../03-techniques/analysis/data-recovery/file-carving.md) 으로 복합 파일 서명 (`D0 CF 11 E0 A1 B1 1A E1`) 을 찾아 되살려 봅니다.
 - **항목만 지웁니다.** 지운 항목의 LNK 데이터가 복합 파일 안 빈 섹터에 남는지는 확인한 자료에 없습니다. 복합 파일 구조로 보아 남을 수 있으므로 빈 섹터와 스트림 끝 뒤 영역을 따로 봅니다.
-- **파일 시각만 바꿉니다.** 파일 안의 DestList 시각은 그대로입니다. 두 시각을 비교하면 드러날 수 있습니다 ([시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)).
+- **파일 시각만 바꿉니다.** 파일 안의 DestList 시각은 그대로입니다. 두 시각을 비교하면 드러날 수 있습니다 ([시각 조작 탐지](../../03-techniques/analysis/timeline/timestomping.md)).
 
 ## 직접 분석해 보기
 
@@ -253,7 +253,7 @@ DestList 항목의 엔트리 번호를 16진수로 쓰면 짝이 되는 번호 �
 
 이 파일을 버전 1 틀로 잘못 읽으면 0x90 (항목 +112) 을 경로 글자 수로 읽습니다. 그러면 엉뚱한 길이로 경로를 읽고, 다음 항목 위치도 어긋납니다.
 
-그다음 `1a` 스트림을 꺼내면 LNK 가 나옵니다. 스트림은 LNK 헤더 크기 `4C 00 00 00` 과 LNK 클래스 식별자로 시작합니다. 그 뒤는 [바로가기 형식](/01-foundations/shell-document-formats/shell-link-lnk.md) 페이지대로 읽습니다. 대상 경로를 담은 셸 아이템은 [셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
+그다음 `1a` 스트림을 꺼내면 LNK 가 나옵니다. 스트림은 LNK 헤더 크기 `4C 00 00 00` 과 LNK 클래스 식별자로 시작합니다. 그 뒤는 [바로가기 형식](../../01-foundations/shell-document-formats/shell-link-lnk.md) 페이지대로 읽습니다. 대상 경로를 담은 셸 아이템은 [셸 아이템](../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
 
 > 그림 자리: 위 DestList 예시에서 헤더(0x00~0x1F)·호스트 이름·엔트리 번호·시각·고정 상태·접근 횟수 추정 칸·경로를 색으로 나누고, 엔트리 번호 0x1A 가 `1a` 스트림으로 이어지는 모습을 보여 주는 그림
 
@@ -277,25 +277,25 @@ JLECmd, JumpListsView 같은 공개 파서가 자동·사용자 지정 목록을
 - 도구가 DestList 시각과 LNK 헤더 시각을 어떤 이름으로 보여 주는지 확인합니다. 둘을 바꿔 읽기 쉽습니다.
 - 시각을 UTC 로 보여 주는지, 분석 PC 의 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 도구가 붙여 주는 앱 이름은 AppID 목록에서 찾은 값입니다. 그 목록이 이 환경과 맞는지 따로 확인합니다.
-- 파일 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 파일 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) | Recent 폴더의 LNK 와 같은 대상이 있는지. 같은 호출로 함께 생기는 경우가 많습니다 |
-| [최근 문서 (RecentDocs)](/02-artifacts/file-folder-usage/recentdocs.md) | 확장자별 최근 파일 순서와 이름 |
-| [열기·저장 대화상자 기록 (ComDlg32)](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 공통 대화상자로 열거나 저장한 파일과 그때 쓴 앱 |
-| [오피스 최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | 오피스 앱이 따로 남긴 최근 파일과 시각 |
-| [셸백 (ShellBags)](/02-artifacts/file-folder-usage/shellbags/index.md) | 탐색기 점프리스트의 폴더 항목과 폴더 탐색 흔적 |
-| [윈도 타임라인 (ActivitiesCache.db)](/02-artifacts/file-folder-usage/activitiescache-db.md) | 같은 파일을 연 활동 기록 (켜 둔 경우) |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | 대상 파일의 시각과 LNK 헤더 시각. 점프리스트 파일이 다시 쓰인 기록 |
-| [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) | LNK 에 남은 볼륨 시리얼 번호·볼륨 이름과 연결된 장치 |
-| [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) | LNK 에 남은 네트워크 경로와 연결한 공유 |
-| [UserAssist](/02-artifacts/execution/userassist.md) · [프리페치](/02-artifacts/execution/prefetch/index.md) | 점프리스트의 앱이 그 무렵 실제로 실행됐는지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 점프리스트 파일의 항목과 시각. 지금 파일과 비교하면 사라진 항목이 드러납니다 |
+| [바로가기 파일 (LNK)](lnk.md) | Recent 폴더의 LNK 와 같은 대상이 있는지. 같은 호출로 함께 생기는 경우가 많습니다 |
+| [최근 문서 (RecentDocs)](recentdocs.md) | 확장자별 최근 파일 순서와 이름 |
+| [열기·저장 대화상자 기록 (ComDlg32)](comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 공통 대화상자로 열거나 저장한 파일과 그때 쓴 앱 |
+| [오피스 최근 파일 (File MRU·Place MRU)](microsoft-office/file-mru-place-mru.md) | 오피스 앱이 따로 남긴 최근 파일과 시각 |
+| [셸백 (ShellBags)](shellbags/index.md) | 탐색기 점프리스트의 폴더 항목과 폴더 탐색 흔적 |
+| [윈도 타임라인 (ActivitiesCache.db)](activitiescache-db.md) | 같은 파일을 연 활동 기록 (켜 둔 경우) |
+| [$MFT](../filesystem/mft.md) · [$UsnJrnl](../filesystem/usnjrnl.md) | 대상 파일의 시각과 LNK 헤더 시각. 점프리스트 파일이 다시 쓰인 기록 |
+| [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) | LNK 에 남은 볼륨 시리얼 번호·볼륨 이름과 연결된 장치 |
+| [공유 폴더·네트워크 드라이브](../network/network-shares-mapped-drives.md) | LNK 에 남은 네트워크 경로와 연결한 공유 |
+| [UserAssist](../execution/userassist.md) · [프리페치](../execution/prefetch/index.md) | 점프리스트의 앱이 그 무렵 실제로 실행됐는지 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 점프리스트 파일의 항목과 시각. 지금 파일과 비교하면 사라진 항목이 드러납니다 |
 
-여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나 (File Access)](/04-scenarios/activity/file-access.md) 와 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md) 에서 다룹니다. 계정 뒤의 사람을 밝히는 일은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 를 봅니다.
+여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나 (File Access)](../../04-scenarios/activity/file-access.md) 와 [USB 로 무엇을 가져갔나](../../04-scenarios/exfiltration/data-exfiltration/usb.md) 에서 다룹니다. 계정 뒤의 사람을 밝히는 일은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 를 봅니다.
 
 ## 실습
 

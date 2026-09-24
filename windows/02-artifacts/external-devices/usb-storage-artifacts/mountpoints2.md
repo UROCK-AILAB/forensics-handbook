@@ -6,7 +6,7 @@ MountPoints2 는 사용자 하이브(NTUSER.DAT)에 있는 키입니다. 그 사
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- 볼륨이 붙으면 마운트 관리자 (Mount Manager) 가 볼륨 GUID 를 붙이고 SYSTEM 하이브의 `MountedDevices` 에 적습니다([드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md)).
+- 볼륨이 붙으면 마운트 관리자 (Mount Manager) 가 볼륨 GUID 를 붙이고 SYSTEM 하이브의 `MountedDevices` 에 적습니다([드라이브 문자 매핑 (MountedDevices)](mounteddevices.md)).
 - 같은 볼륨 GUID 가 사용자 하이브의 MountPoints2 아래에 `{GUID}` 이름의 하위 키로도 생깁니다.
 - 이 하위 키는 사용자마다 따로 생깁니다. 그래서 장치와 사용자를 잇는 몇 안 되는 레지스트리 기록입니다.
 - 볼륨만 남는 것이 아닙니다. 연결한 네트워크 공유도 `##서버#공유` 꼴의 하위 키로 남습니다.
@@ -23,10 +23,10 @@ Harlan Carvey 가 정리한 순서는 다음과 같습니다(2013).
 
 | 항목 | 내용 |
 |---|---|
-| 하이브 파일 | 사용자 프로필의 `NTUSER.DAT` ([하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)) |
+| 하이브 파일 | 사용자 프로필의 `NTUSER.DAT` ([하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)) |
 | 키 경로 | `Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2` |
 | 라이브 경로 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2` |
-| 사용자 확인 | 하이브가 어느 SID 의 것인지는 [사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md)으로 확인합니다 |
+| 사용자 확인 | 하이브가 어느 SID 의 것인지는 [사용자 프로필 목록 (ProfileList)](../../system-account/profilelist.md)으로 확인합니다 |
 
 | 버전 | 키 이름 | 근거 |
 |---|---|---|
@@ -73,7 +73,7 @@ Win11 25H2 한 대에서 본 모습은 이렇습니다(관찰).
 
 Carvey 는 MountPoints2 와 `MountedDevices` 의 볼륨 GUID 일부가 버전 1 형식이라고 보고했습니다(2012). 노드 값에서 그 PC 의 MAC 주소가 나왔습니다. 모든 GUID 가 버전 1 은 아닙니다. Win11 25H2 한 대에서는 세 번째 칸이 `0…` 이나 `4…` 로 시작하는 GUID 가 대부분이었습니다(관찰). 이런 GUID 에는 시각도 MAC 주소도 없습니다.
 
-GUID 문자열과 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
+GUID 문자열과 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -94,7 +94,7 @@ Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙�
 
 ## 시각 해석
 
-값에는 시각이 없습니다. 시각은 키마다 하나씩 있는 마지막 기록 시각 (Last Write Time) 뿐입니다. 이 시각은 UTC FILETIME 입니다. 무엇이 이 시각을 바꾸는지는 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
+값에는 시각이 없습니다. 시각은 키마다 하나씩 있는 마지막 기록 시각 (Last Write Time) 뿐입니다. 이 시각은 UTC FILETIME 입니다. 무엇이 이 시각을 바꾸는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
 | 시각 | 흔히 읽는 뜻 | 조심할 점 |
 |---|---|---|
@@ -103,27 +103,27 @@ Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙�
 | `Shell`·`_Autorun` 같은 더 아래 하위 키의 시각 | 그 하위 키가 바뀐 때 | 아래 키의 변경은 `{GUID}` 키의 시각을 바꾸지 않습니다 |
 | 버전 1 GUID 안의 시각 | GUID 를 만든 무렵 | 사용자별 값이 아닙니다. Carvey 의 시험에서는 장치를 연결한 부팅 세션의 부팅 시각을 가리켰습니다(2012). 확인된 규칙이 아니라 시험 결과입니다 |
 
-- `{GUID}` 하위 키 시각은 [장치 속성의 마지막 연결 시각 (0066)](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)과 맞춰 봅니다. 두 시각이 가까우면 마지막 연결 때 이 사용자가 로그온해 있었다고 볼 근거가 됩니다.
+- `{GUID}` 하위 키 시각은 [장치 속성의 마지막 연결 시각 (0066)](deviceclasses-device-properties-0064-0066-0067.md)과 맞춰 봅니다. 두 시각이 가까우면 마지막 연결 때 이 사용자가 로그온해 있었다고 볼 근거가 됩니다.
 - 하위 키 시각이 0066 보다 한참 앞서면, 그 뒤의 연결 때는 이 사용자 키가 다시 쓰이지 않았을 수 있습니다. 이 사용자가 그때 로그온해 있지 않았을 가능성을 따져 봅니다.
-- 현지 시각으로 바꿀 때는 그 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- 현지 시각으로 바꿀 때는 그 PC 의 [시간대 설정](../../system-account/time-zone.md)을 씁니다.
 
 ## 함정과 한계
 
-1. **여러 사용자에게 같은 GUID 가 남을 수 있습니다.** 로그온해 있던 사용자 모두에게 남는다는 연구가 있습니다. 한 하이브에서 GUID 를 찾았다고 그 사용자가 꽂았다고 단정하지 않습니다. 그 시각의 [로그온 세션](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md)을 함께 봅니다.
+1. **여러 사용자에게 같은 GUID 가 남을 수 있습니다.** 로그온해 있던 사용자 모두에게 남는다는 연구가 있습니다. 한 하이브에서 GUID 를 찾았다고 그 사용자가 꽂았다고 단정하지 않습니다. 그 시각의 [로그온 세션](../../event-logs/logon-events/logon-id-4624-4634-4647.md)을 함께 봅니다.
 2. **GUID 는 장치가 아니라 볼륨 단위입니다.** 파티션이 여럿인 장치는 GUID 도 여럿입니다. Microsoft 문서에 따르면 볼륨을 포맷할 때도 볼륨 GUID 를 붙입니다. 같은 USB 라도 포맷한 뒤에는 다른 GUID 로 남을 수 있습니다.
 3. **볼륨 GUID 는 이 PC 가 붙인 이름입니다.** 장치 자체에 적힌 번호가 아닙니다. 다른 PC 의 GUID 와 맞춰 보는 용도로 쓰지 않습니다.
 4. **USB 만 남지 않습니다.** 내장 디스크와 광학 드라이브의 GUID 도 남습니다(Carvey 2012). `MountedDevices` 와 짝을 맞춰 USB 장치인지 먼저 가립니다.
-5. **짝이 없는 GUID 가 흔합니다.** Win11 25H2 한 대에서는 MountPoints2 의 볼륨 GUID 11개 가운데 1개만 지금의 `MountedDevices` 에 있었습니다(관찰, 원인은 확인하지 않음). 짝이 없으면 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 안의 옛 SYSTEM 하이브에서 찾습니다.
+5. **짝이 없는 GUID 가 흔합니다.** Win11 25H2 한 대에서는 MountPoints2 의 볼륨 GUID 11개 가운데 1개만 지금의 `MountedDevices` 에 있었습니다(관찰, 원인은 확인하지 않음). 짝이 없으면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 안의 옛 SYSTEM 하이브에서 찾습니다.
 6. **도구가 보여 주는 MAC 주소를 그대로 믿지 않습니다.** RegRipper 의 mp2 플러그인(2020-05-26 판)은 `{` 로 시작하는 모든 하위 키에서 마지막 칸을 떼어 MAC 목록에 넣습니다. 버전 1 인지는 확인하지 않습니다. 버전 4 GUID 의 마지막 칸은 MAC 주소가 아닙니다.
 7. **버전 1 GUID 의 MAC 주소가 이 PC 의 실제 네트워크 카드라는 보장도 없습니다.** Carvey 의 시험에서 가상 머신 프로그램의 가상 어댑터 MAC 이 나왔고, 어느 MAC 과도 맞지 않는 노드 값도 있었습니다(2012).
-8. **키가 없다고 연결이 없었던 것은 아닙니다.** 이 키는 사용자 권한으로 지울 수 있습니다. 하위 키를 지우면 `MountPoints2` 키의 마지막 기록 시각이 바뀝니다. 지운 키는 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md), 섀도 복사본에서 다시 찾아봅니다.
-9. **`Shell\AutoRun\Command` 에 명령이 적혀 있으면 따로 봅니다.** 이름대로 명령을 담는 자리입니다. 무엇을 실행하도록 걸려 있는지 확인하고 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md)와 함께 봅니다.
+8. **키가 없다고 연결이 없었던 것은 아닙니다.** 이 키는 사용자 권한으로 지울 수 있습니다. 하위 키를 지우면 `MountPoints2` 키의 마지막 기록 시각이 바뀝니다. 지운 키는 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), 섀도 복사본에서 다시 찾아봅니다.
+9. **`Shell\AutoRun\Command` 에 명령이 적혀 있으면 따로 봅니다.** 이름대로 명령을 담는 자리입니다. 무엇을 실행하도록 걸려 있는지 확인하고 [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md)와 함께 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `{GUID}` 하위 키 하나의 키 노드(`nk`) 셀입니다. 칸의 위치는 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 따릅니다.
+아래는 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `{GUID}` 하위 키 하나의 키 노드(`nk`) 셀입니다. 칸의 위치는 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 따릅니다.
 
 ```
 셀 시작 기준
@@ -139,7 +139,7 @@ Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙�
 1. `88 FF FF FF` 는 셀 크기 칸입니다. 부호 있는 정수로 -120 입니다. 음수이므로 사용 중인 셀입니다.
 2. `6E 6B` 는 `nk` 서명입니다. `20 00` 은 키 이름이 ASCII 로 저장됐다는 플래그 0x0020 입니다.
 3. `00 2D 0B CF 96 CB DA 01` 이 마지막 기록 시각입니다. 리틀 엔디언으로 0x01DACB96CF0B2D00 이고, 10진으로 133,642,987,540,000,000 입니다.
-4. 이 값을 날짜로 바꾸면 2024-07-01 09:12:34 UTC 입니다. 한국 시각으로는 같은 날 18:12:34 입니다. 계산법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+4. 이 값을 날짜로 바꾸면 2024-07-01 09:12:34 UTC 입니다. 한국 시각으로는 같은 날 18:12:34 입니다. 계산법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 5. 셀 오프셋 0x4C 의 `26 00` 은 키 이름 길이 38바이트입니다.
 6. 0x50 부터 38바이트가 키 이름 `{9a6a5500-373c-11ef-9a2b-0a1b2c3d4e5f}` 입니다.
 
@@ -167,21 +167,21 @@ if u.version == 1:  # 버전 1 이 아니면 시각·MAC 이 없다
 - 사용자 프로필마다 `NTUSER.DAT` 를 꺼냅니다. 같은 폴더의 `.LOG1`·`.LOG2` 도 함께 꺼냅니다.
 - 레지스트리 뷰어로 MountPoints2 를 엽니다. Registry Explorer·RECmd, RegRipper 의 mp2 플러그인, yarp·python-registry 같은 라이브러리가 예입니다.
 - mp2 플러그인은 하위 키를 네트워크 공유(`#`)·볼륨(`{`)·드라이브 문자로 나누고 시각 순으로 보여 줍니다. MAC 목록은 위 함정 6번을 생각하고 읽습니다.
-- 도구가 보여 준 GUID 와 시각 한두 개를 헥스 풀이와 맞춰 봅니다([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+- 도구가 보여 준 GUID 와 시각 한두 개를 헥스 풀이와 맞춰 봅니다([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 
 ## 교차 검증
 
 | 아티팩트 | 잇는 값 | 더해 주는 것 |
 |---|---|---|
-| [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) | 볼륨 GUID | 그 볼륨이 어느 장치의 것인지, 드라이브 문자 |
-| [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) | 인스턴스 ID | 제조사·제품·시리얼 번호 |
-| [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) | 장치 인스턴스 | 처음·마지막 연결 시각 |
-| [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) | 시각 | 그 시각에 누가 로그온해 있었는지 |
-| [셸백 — 외부 장치 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) | 드라이브 문자·경로 | 이 사용자가 볼륨 안의 폴더를 열었는지 |
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 드라이브 문자·볼륨 시리얼 번호 | 이 사용자가 볼륨 안의 파일을 열었는지 |
-| [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) | `##서버#공유` | 연결한 네트워크 드라이브와 드라이브 문자 |
+| [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) | 볼륨 GUID | 그 볼륨이 어느 장치의 것인지, 드라이브 문자 |
+| [USB 저장장치 목록 (USBSTOR)](usbstor.md) | 인스턴스 ID | 제조사·제품·시리얼 번호 |
+| [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) | 장치 인스턴스 | 처음·마지막 연결 시각 |
+| [로그온 세션 잇기](../../event-logs/logon-events/logon-id-4624-4634-4647.md) | 시각 | 그 시각에 누가 로그온해 있었는지 |
+| [셸백 — 외부 장치 탐색 흔적](../../file-folder-usage/shellbags/removable-network-zip.md) | 드라이브 문자·경로 | 이 사용자가 볼륨 안의 폴더를 열었는지 |
+| [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md)·[점프리스트](../../file-folder-usage/jump-lists.md) | 드라이브 문자·볼륨 시리얼 번호 | 이 사용자가 볼륨 안의 파일을 열었는지 |
+| [공유 폴더·네트워크 드라이브](../../network/network-shares-mapped-drives.md) | `##서버#공유` | 연결한 네트워크 드라이브와 드라이브 문자 |
 
-MountPoints2 는 "이 사용자 세션에 볼륨이 나타났다" 까지만 말합니다. 사용자가 그 볼륨을 실제로 썼는지는 셸백·LNK·점프리스트로 따로 확인합니다. 전체 흐름은 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)와 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)에서 다룹니다.
+MountPoints2 는 "이 사용자 세션에 볼륨이 나타났다" 까지만 말합니다. 사용자가 그 볼륨을 실제로 썼는지는 셸백·LNK·점프리스트로 따로 확인합니다. 전체 흐름은 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)와 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md)에서 다룹니다.
 
 ## 실습
 

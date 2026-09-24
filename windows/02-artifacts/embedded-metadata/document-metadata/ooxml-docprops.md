@@ -1,6 +1,6 @@
 # 오피스 문서 속성 (OOXML docProps)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](/02-artifacts/embedded-metadata/document-metadata/index.md)
+> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
 
 ## 한 줄 요약
 
@@ -101,7 +101,7 @@ Word 16 이 쓴 요소는 아래와 같습니다. (관찰)
 
 `TotalTime` 은 ISO/IEC 29500-1 에 "문서를 편집한 총 시간" 으로 정의돼 있습니다. 기본 단위는 분입니다. 값은 XML Schema 의 int 형식입니다.
 
-`HeadingPairs`, `TitlesOfParts`, `Company`, `LinksUpToDate`, `ScaleCrop` 은 옛 오피스 형식의 DocumentSummaryInformation 속성과 이름이 같습니다. 옛 형식의 속성 표는 [옛 오피스 문서 속성 (OLE SummaryInformation)](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) 에 있습니다.
+`HeadingPairs`, `TitlesOfParts`, `Company`, `LinksUpToDate`, `ScaleCrop` 은 옛 오피스 형식의 DocumentSummaryInformation 속성과 이름이 같습니다. 옛 형식의 속성 표는 [옛 오피스 문서 속성 (OLE SummaryInformation)](ole-summaryinformation.md) 에 있습니다.
 
 ## 증거로서 의미
 
@@ -114,7 +114,7 @@ Word 16 이 쓴 요소는 아래와 같습니다. (관찰)
 
 **증명하지 못하는 것**
 
-- 그 이름의 사람이 문서를 썼다는 것. 사용자 이름은 프로그램 설정값이라 누구나 바꿀 수 있습니다. PC 앞에 누가 있었는지는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 그 이름의 사람이 문서를 썼다는 것. 사용자 이름은 프로그램 설정값이라 누구나 바꿀 수 있습니다. PC 앞에 누가 있었는지는 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - 작성자가 이 PC 에서 문서를 처음 만들었다는 것. 공개 템플릿 파일 자체에 이미 작성자·회사·시각이 들어 있었습니다. 아래 "함정과 한계" 를 봅니다.
 - 초 단위 저장 시각. Word 16 은 분 아래를 버렸습니다. (관찰)
 - 실제로 일한 시간. `TotalTime` 은 분 단위라 짧은 편집은 `0` 이 됩니다. (관찰)
@@ -140,7 +140,7 @@ Word 16 이 쓴 요소는 아래와 같습니다. (관찰)
 
 - `TotalTime` 은 시점이 아니라 길이입니다. 단위는 분입니다.
 - ZIP 항목에도 시각 칸이 있습니다. 그런데 Word 가 만든 docx 와 공개 템플릿 docx 의 ZIP 항목 시각은 모두 1980-01-01 00:00:00 이었습니다. (관찰) 이 칸으로는 언제 저장했는지 알 수 없습니다.
-- 현지 시각으로 적힌 다른 기록과 나란히 볼 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 먼저 확인합니다.
+- 현지 시각으로 적힌 다른 기록과 나란히 볼 때는 [시간대 설정](../../system-account/time-zone.md) 을 먼저 확인합니다.
 
 ## 함정과 한계
 
@@ -149,8 +149,8 @@ Word 16 이 쓴 요소는 아래와 같습니다. (관찰)
 - **개정 번호가 무엇을 세는지 확정하지 못했습니다.** 두 번 저장한 docx 가 `2` 였습니다. 같은 세션에서 두 번째로 저장한 .doc 도 개정 번호가 2 였습니다. (관찰) 저장 횟수로 단정하지 않습니다.
 - **ZIP 항목 시각을 믿지 않습니다.** 1980-01-01 로 고정돼 있었습니다. (관찰)
 - **custom.xml 이 없을 수 있습니다.** 없다고 해서 누가 지웠다는 뜻은 아닙니다.
-- **PDF 로 내보내면 속성이 달라집니다.** 어떤 값이 옮겨 가고 어떤 값이 빠지는지는 [PDF 정보 사전과 XMP (PDF Info·XMP)](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) 에서 다룹니다.
-- **본문 쪽 편집 흔적은 따로 있습니다.** 문단마다 붙는 편집 세션 식별자는 [편집 흔적 식별자 (RSID)](/02-artifacts/embedded-metadata/document-metadata/rsid.md) 에서 다룹니다.
+- **PDF 로 내보내면 속성이 달라집니다.** 어떤 값이 옮겨 가고 어떤 값이 빠지는지는 [PDF 정보 사전과 XMP (PDF Info·XMP)](pdf-info-xmp.md) 에서 다룹니다.
+- **본문 쪽 편집 흔적은 따로 있습니다.** 문단마다 붙는 편집 세션 식별자는 [편집 흔적 식별자 (RSID)](rsid.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -206,22 +206,22 @@ with zipfile.ZipFile("copy.docx") as z:
 
 - `el.tag` 는 `{이름공간}요소이름` 꼴로 나옵니다. 이름공간 차이를 여기서 바로 봅니다.
 - ZIP 항목 시각이 모두 1980-01-01 이면 위 관찰과 같습니다.
-- 쓰는 포렌식 도구의 결과와 이 값을 맞춰 봅니다. 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+- 쓰는 포렌식 도구의 결과와 이 값을 맞춰 봅니다. 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [편집 흔적 식별자 (RSID)](/02-artifacts/embedded-metadata/document-metadata/rsid.md) | 본문이 몇 차례의 편집 세션에 걸쳐 저장됐는지 |
-| [옛 오피스 문서 속성 (OLE SummaryInformation)](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) | 같은 문서를 .doc 로도 저장했을 때의 속성 |
-| [PDF 정보 사전과 XMP (PDF Info·XMP)](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) | 이 문서에서 내보낸 PDF 의 속성 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일 시스템 생성·수정 시각과 `created`·`modified` 의 차이 |
-| [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 파일이 이 볼륨에서 만들어지고 바뀐 기록 |
-| [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) | 이 PC 의 오피스가 그 문서를 다룬 기록 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 같은 파일을 연 다른 기록 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 문서를 내려받았는지 |
+| [편집 흔적 식별자 (RSID)](rsid.md) | 본문이 몇 차례의 편집 세션에 걸쳐 저장됐는지 |
+| [옛 오피스 문서 속성 (OLE SummaryInformation)](ole-summaryinformation.md) | 같은 문서를 .doc 로도 저장했을 때의 속성 |
+| [PDF 정보 사전과 XMP (PDF Info·XMP)](pdf-info-xmp.md) | 이 문서에서 내보낸 PDF 의 속성 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일 시스템 생성·수정 시각과 `created`·`modified` 의 차이 |
+| [USN 변경 저널](../../filesystem/usnjrnl.md) | 파일이 이 볼륨에서 만들어지고 바뀐 기록 |
+| [오피스 사용 흔적](../../file-folder-usage/microsoft-office/index.md) | 이 PC 의 오피스가 그 문서를 다룬 기록 |
+| [바로가기 파일](../../file-folder-usage/lnk.md)·[점프리스트](../../file-folder-usage/jump-lists.md) | 같은 파일을 연 다른 기록 |
+| [다운로드 출처 표시](../../filesystem/zone-identifier.md) | 문서를 내려받았는지 |
 
-시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) 를 봅니다.
 
 ## 실습
 

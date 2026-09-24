@@ -15,9 +15,9 @@
 - 항목을 추가한 시각과 마지막으로 연 시각
 - 폴더가 마지막으로 바뀐 시각
 
-동기화를 켜면 다른 기기에서 만든 즐겨찾기도 이 파일에 들어옵니다. 시크릿 창에서 만든 즐겨찾기도 일반 프로필에 저장됩니다. Google 도움말은 시크릿 모드를 나가도 저장한 북마크는 남는다고 적습니다([시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md)).
+동기화를 켜면 다른 기기에서 만든 즐겨찾기도 이 파일에 들어옵니다. 시크릿 창에서 만든 즐겨찾기도 일반 프로필에 저장됩니다. Google 도움말은 시크릿 모드를 나가도 저장한 북마크는 남는다고 적습니다([시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md)).
 
-프로필 폴더를 찾고 계열 브라우저를 가리는 법은 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다. 이 페이지는 즐겨찾기 파일만 다룹니다.
+프로필 폴더를 찾고 계열 브라우저를 가리는 법은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다. 이 페이지는 즐겨찾기 파일만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -49,7 +49,7 @@
 
 ### 암호화 파일
 
-현재 Chromium 소스(2026년 9월 main 가지)에는 즐겨찾기 암호화 기능이 기본으로 켜져 있습니다. 기본 단계는 평문 파일과 암호화 파일을 둘 다 쓰고, 읽을 때는 평문 파일만 읽는 단계입니다. 소스에는 암호화 파일만 쓰는 단계도 정의돼 있습니다. 암호화는 쿠키·비밀번호와 같은 운영체제 암호화 계층(OSCrypt)을 씁니다. 키를 구하는 법은 [쿠키·비밀번호 암호화](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다룹니다.
+현재 Chromium 소스(2026년 9월 main 가지)에는 즐겨찾기 암호화 기능이 기본으로 켜져 있습니다. 기본 단계는 평문 파일과 암호화 파일을 둘 다 쓰고, 읽을 때는 평문 파일만 읽는 단계입니다. 소스에는 암호화 파일만 쓰는 단계도 정의돼 있습니다. 암호화는 쿠키·비밀번호와 같은 운영체제 암호화 계층(OSCrypt)을 씁니다. 키를 구하는 법은 [쿠키·비밀번호 암호화](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다룹니다.
 
 이 기능이 어느 안정 버전부터 켜졌는지는 확인하지 못했습니다. 엣지·웨일이 같은 설정을 따르는지도 확인하지 못했습니다. 검체에 암호화 파일이 있으면 평문 파일과 저장 시각을 비교합니다. 옛 이름인 `EncryptedBookmarks` · `EncryptedAccountBookmarks` 가 남아 있을 수도 있습니다.
 
@@ -136,7 +136,7 @@
 
 ### 단위와 기준
 
-시각은 1601-01-01 00:00:00 UTC 부터 센 마이크로초입니다. 흔히 WebKit 시각이라고 부릅니다. FILETIME(100나노초 단위)과 기준일은 같고 단위만 다릅니다. 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각으로 옮길 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 봅니다.
+시각은 1601-01-01 00:00:00 UTC 부터 센 마이크로초입니다. 흔히 WebKit 시각이라고 부릅니다. FILETIME(100나노초 단위)과 기준일은 같고 단위만 다릅니다. 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각으로 옮길 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
 
 2012-12-14 부터 2044-08-23 까지의 값은 모두 `13` 으로 시작하는 17자리 수입니다. 이 범위를 벗어난 값은 0 이거나 조작·손상을 의심합니다.
 
@@ -159,8 +159,8 @@
 
 ### 지우기와 조작
 
-- **즐겨찾기를 지웁니다.** 다음 저장 때 파일에서 항목이 사라집니다. 지우기 전 모습은 `Bookmarks.bak`, [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)에 남을 수 있습니다. 저장할 때마다 파일을 새로 쓰므로 옛 내용이 비할당 영역에 남을 수도 있습니다([레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md)).
-- **방문 기록을 지웁니다.** 즐겨찾기는 남고 `date_last_used` 만 0 이 됩니다. 0 이 많고 방문 기록이 비어 있으면 [방문 기록 삭제](/02-artifacts/browsers/chrome-edge-whale/history.md) 흔적과 함께 봅니다.
+- **즐겨찾기를 지웁니다.** 다음 저장 때 파일에서 항목이 사라집니다. 지우기 전 모습은 `Bookmarks.bak`, [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에 남을 수 있습니다. 저장할 때마다 파일을 새로 쓰므로 옛 내용이 비할당 영역에 남을 수도 있습니다([레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md)).
+- **방문 기록을 지웁니다.** 즐겨찾기는 남고 `date_last_used` 만 0 이 됩니다. 0 이 많고 방문 기록이 비어 있으면 [방문 기록 삭제](history.md) 흔적과 함께 봅니다.
 - **브라우저를 닫고 파일을 직접 고칩니다.** 현재 Chromium 소스는 파일을 읽을 때 `checksum` 을 검사하지 않습니다. 다음 저장 때 새 값을 계산해 적을 뿐입니다. 그래서 수집한 파일의 `checksum` 이 내용과 안 맞으면, 브라우저가 마지막으로 저장한 뒤 다른 프로그램이 내용을 바꿨다는 뜻입니다. 반대로 값이 맞는다고 조작이 없었다는 증명은 아닙니다. 고친 사람이 값을 다시 계산할 수 있습니다.
 
 ## 직접 분석해 보기
@@ -255,21 +255,21 @@ print("계산한 값:", m.hexdigest())
 - 시각을 UTC 로 보여 주는지, 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - `date_last_used` 를 보여 주는지 확인합니다.
 - `Bookmarks.bak`, `AccountBookmarks`, 다른 프로필 폴더까지 읽는지 확인합니다.
-- 항목 두세 개는 손으로 바꾼 시각과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 항목 두세 개는 손으로 바꾼 시각과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md) | 즐겨찾기 URL 을 실제로 방문했는지, 언제 방문했는지. 방문의 이동 유형에는 `AUTO_BOOKMARK`(2) 값이 있습니다 |
-| [세션·탭 복원 (Sessions)](/02-artifacts/browsers/chrome-edge-whale/sessions.md) | `date_last_used` 무렵에 그 주소가 탭에 열려 있었는지 |
-| [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) | 프로필에 로그인한 계정. 동기화 항목일 가능성을 가립니다 |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | `Bookmarks` 를 다시 쓴 시각들. 저널이 남은 기간의 저장 이력 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 `Bookmarks`. 지금 파일과 비교해 지운 항목을 찾습니다 |
-| [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) | 비할당 영역에 남은 옛 JSON 조각 |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | UTC 를 현지 시각으로 바꿀 때 쓸 설정 |
+| [방문·다운로드 기록 (History)](history.md) | 즐겨찾기 URL 을 실제로 방문했는지, 언제 방문했는지. 방문의 이동 유형에는 `AUTO_BOOKMARK`(2) 값이 있습니다 |
+| [세션·탭 복원 (Sessions)](sessions.md) | `date_last_used` 무렵에 그 주소가 탭에 열려 있었는지 |
+| [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) | 프로필에 로그인한 계정. 동기화 항목일 가능성을 가립니다 |
+| [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | `Bookmarks` 를 다시 쓴 시각들. 저널이 남은 기간의 저장 이력 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 `Bookmarks`. 지금 파일과 비교해 지운 항목을 찾습니다 |
+| [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) | 비할당 영역에 남은 옛 JSON 조각 |
+| [시간대 설정](../../system-account/time-zone.md) | UTC 를 현지 시각으로 바꿀 때 쓸 설정 |
 
-여러 기록을 합쳐 읽는 순서는 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md)에서 다룹니다.
+여러 기록을 합쳐 읽는 순서는 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md)에서 다룹니다.
 
 ## 실습
 

@@ -1,6 +1,6 @@
 # 메신저로 파일을 보냈나 (Messenger)
 
-> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](/04-scenarios/exfiltration/data-exfiltration/index.md)
+> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
 
 이 페이지는 PC 용 메신저로 자료 파일을 보냈는지 확인하는 순서를 다룹니다. 메신저마다 대화 DB 의 위치·구조·암호화가 다르므로, 메신저별 내용은 각 메신저 페이지에서 다룹니다. 여기서는 어느 메신저에나 쓰는 조사 순서와, PC 한 대에서 본 메신저 폴더 위치를 다룹니다.
 
@@ -16,10 +16,10 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| 설치된 메신저 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 메신저를 찾습니다. 설치 목록에 없어도 사용자 프로필 안의 앱 폴더를 봅니다. |
+| 설치된 메신저 | [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md) 에서 메신저를 찾습니다. 설치 목록에 없어도 사용자 프로필 안의 앱 폴더를 봅니다. |
 | 사용자·계정 | 메신저 데이터는 사용자 프로필 안에 있습니다. 한 사용자가 여러 메신저 계정을 썼을 수 있습니다. |
-| 대화 DB 암호화 | 대화 DB 가 암호화돼 있으면 파일 전송 기록을 바로 읽지 못합니다. 이때 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 를 봅니다. |
-| 시간대 | 메신저 기록 시각과 PC 흔적 시각을 같은 기준으로 맞춥니다([시간대 설정](/02-artifacts/system-account/time-zone.md)). |
+| 대화 DB 암호화 | 대화 DB 가 암호화돼 있으면 파일 전송 기록을 바로 읽지 못합니다. 이때 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 를 봅니다. |
+| 시간대 | 메신저 기록 시각과 PC 흔적 시각을 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
 | 수집 범위 | 사용자 프로필의 메신저 폴더 전체, 사용자 하이브(NTUSER.DAT), SRUDB.dat 를 확보합니다. |
 
 ## 이 PC 에서 본 메신저 폴더
@@ -35,8 +35,8 @@
 | 카카오톡 PC (레지스트리) | `HKCU\Software\Kakao\KakaoTalk` | 그 아래 `DeviceInfo`, `UserAccounts`, `Update` 등 하위 키가 있었습니다. |
 
 - 이 PC 에는 카카오톡이 있었지만 `Documents\카카오톡 받은 파일` 폴더는 없었습니다(관찰).
-- 카카오톡이 받은 파일을 어디에 두는지는 [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md) 에서 확인합니다.
-- 새 Teams 폴더의 `History`·`Cookies` 는 브라우저가 아니라 Teams 가 쓰는 WebView2 프로필의 파일입니다. 읽는 법은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+- 카카오톡이 받은 파일을 어디에 두는지는 [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) 에서 확인합니다.
+- 새 Teams 폴더의 `History`·`Cookies` 는 브라우저가 아니라 Teams 가 쓰는 WebView2 프로필의 파일입니다. 읽는 법은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 
 ## 볼 아티팩트와 순서
 
@@ -44,20 +44,20 @@
 |---|---|---|---|
 | 1 | 메신저별 대화 DB | 보낸 메시지와 파일 전송 기록 (남는 모양은 메신저마다 다름) | 아래 "함께 볼 페이지" 의 메신저 페이지 |
 | 2 | 메신저 폴더 안에 저장된 파일 | 주고받은 파일이 남아 있는지 | 메신저 페이지 |
-| 3 | SRUM 네트워크 사용량 | 메신저 앱이 그 시간대에 보낸 바이트 수 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 4 | 바로가기 파일·점프리스트·최근 문서 | 보내기 전에 원본 파일을 연 흔적 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md), [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) |
-| 5 | 열기·저장 대화상자 기록 | 파일을 고른 대화상자 흔적 | [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
+| 3 | SRUM 네트워크 사용량 | 메신저 앱이 그 시간대에 보낸 바이트 수 | [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) |
+| 4 | 바로가기 파일·점프리스트·최근 문서 | 보내기 전에 원본 파일을 연 흔적 | [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md), [점프리스트](../../../02-artifacts/file-folder-usage/jump-lists.md), [최근 문서](../../../02-artifacts/file-folder-usage/recentdocs.md) |
+| 5 | 열기·저장 대화상자 기록 | 파일을 고른 대화상자 흔적 | [열기·저장 대화상자 기록](../../../02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
 
 ## 분석 흐름
 
 1. 사용자마다 설치된 메신저와 프로필 안 메신저 폴더를 정리합니다.
 2. 메신저 폴더를 통째로 사본으로 확보합니다. 원본은 열지 않고 사본에서 작업합니다.
 3. 대화 DB 를 읽을 수 있으면 조사 기간의 파일 전송 메시지를 찾습니다. 보낸 파일이 DB 에 어떤 모양으로 남는지는 메신저마다 다르므로 각 메신저 페이지를 따릅니다.
-4. 대화 DB 가 암호화돼 있으면 먼저 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 로 풀 수 있는지 봅니다.
-5. 풀지 못하면 SRUM 네트워크 사용량에서 그 메신저 앱이 보낸 바이트 수(BytesSent)를 시간대별로 뽑습니다[1]. 표를 읽는 법은 [웹메일·웹하드로 올렸나](/04-scenarios/exfiltration/data-exfiltration/web-upload.md) 에서 다룹니다.
+4. 대화 DB 가 암호화돼 있으면 먼저 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 로 풀 수 있는지 봅니다.
+5. 풀지 못하면 SRUM 네트워크 사용량에서 그 메신저 앱이 보낸 바이트 수(BytesSent)를 시간대별로 뽑습니다[1]. 표를 읽는 법은 [웹메일·웹하드로 올렸나](web-upload.md) 에서 다룹니다.
 6. 송신량이 많은 시간대 앞뒤로 원본 파일을 연 흔적(바로가기 파일·점프리스트·최근 문서)이 있는지 맞춰 봅니다.
-7. 브라우저에서 웹판 메신저를 썼다면 [웹메일·웹하드로 올렸나](/04-scenarios/exfiltration/data-exfiltration/web-upload.md) 순서로 봅니다.
-8. 대화 상대 목록은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 정리합니다.
+7. 브라우저에서 웹판 메신저를 썼다면 [웹메일·웹하드로 올렸나](web-upload.md) 순서로 봅니다.
+8. 대화 상대 목록은 [누구와 연락을 주고받았나](../../activity/communication-reconstruction.md) 에서 정리합니다.
 
 ## 흔한 오판
 
@@ -74,12 +74,12 @@
 
 ## 함께 볼 페이지
 
-- [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md) · [네이트온](/02-artifacts/messengers/nateon.md) · [라인](/02-artifacts/messengers/line.md) · [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) · [슬랙](/02-artifacts/messengers/slack.md) · [줌](/02-artifacts/messengers/zoom.md) — 메신저별 저장 위치와 대화 DB 입니다.
-- [텔레그램](/02-artifacts/messengers/telegram.md) · [왓츠앱 데스크톱](/02-artifacts/messengers/whatsapp-desktop.md) · [디스코드](/02-artifacts/messengers/discord.md) · [시그널](/02-artifacts/messengers/signal.md) · [위챗](/02-artifacts/messengers/wechat.md) · [스카이프](/02-artifacts/messengers/skype.md) — 같은 내용을 다루는 다른 메신저 페이지입니다.
-- [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) · [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) · [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) — 대화 DB 를 열 때 함께 보는 저장 형식 페이지입니다.
-- [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) — 암호화된 대화 DB 를 다룹니다.
-- [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) · [웹메일·웹하드로 올렸나 (Web Upload)](/04-scenarios/exfiltration/data-exfiltration/web-upload.md) — 앱별 송신량을 읽는 법입니다.
-- [스마트폰으로 옮겼나 (MTP·Phone Link)](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) — 파일을 휴대폰으로 옮긴 경우입니다.
+- [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) · [네이트온](../../../02-artifacts/messengers/nateon.md) · [라인](../../../02-artifacts/messengers/line.md) · [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) · [슬랙](../../../02-artifacts/messengers/slack.md) · [줌](../../../02-artifacts/messengers/zoom.md) — 메신저별 저장 위치와 대화 DB 입니다.
+- [텔레그램](../../../02-artifacts/messengers/telegram.md) · [왓츠앱 데스크톱](../../../02-artifacts/messengers/whatsapp-desktop.md) · [디스코드](../../../02-artifacts/messengers/discord.md) · [시그널](../../../02-artifacts/messengers/signal.md) · [위챗](../../../02-artifacts/messengers/wechat.md) · [스카이프](../../../02-artifacts/messengers/skype.md) — 같은 내용을 다루는 다른 메신저 페이지입니다.
+- [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) · [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) · [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md) — 대화 DB 를 열 때 함께 보는 저장 형식 페이지입니다.
+- [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) — 암호화된 대화 DB 를 다룹니다.
+- [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) · [웹메일·웹하드로 올렸나 (Web Upload)](web-upload.md) — 앱별 송신량을 읽는 법입니다.
+- [스마트폰으로 옮겼나 (MTP·Phone Link)](mtp-phone-link.md) — 파일을 휴대폰으로 옮긴 경우입니다.
 
 ## 참고 문헌
 

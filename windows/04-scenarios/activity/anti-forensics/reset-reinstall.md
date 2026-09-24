@@ -1,6 +1,6 @@
 # PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)
 
-> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](/04-scenarios/activity/anti-forensics/index.md)
+> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
 
 Windows 10·11 의 PC 초기화 (Push-button reset) 는 OS 를 다시 만들면서 여러 폴더를 비웁니다. 무엇을 남기고 무엇을 지우는지는 고른 옵션에 따라 정해져 있습니다. 이 페이지는 Microsoft 문서 "How push-button reset features work"[1] 를 바탕으로, 초기화한 PC 에서 무엇을 어디서 찾는지 다룹니다.
 
@@ -67,10 +67,10 @@ Windows 10·11 의 PC 초기화 (Push-button reset) 는 OS 를 다시 만들면�
 
 **조사에서 뜻하는 것.**
 
-- 이벤트 로그와 프리패치처럼 `\Windows` 아래에 있는 기록도 새로 만드는 범위에 듭니다. 위치는 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 과 [프리패치](/02-artifacts/execution/prefetch/index.md) 에서 봅니다.
+- 이벤트 로그와 프리패치처럼 `\Windows` 아래에 있는 기록도 새로 만드는 범위에 듭니다. 위치는 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 과 [프리패치](../../../02-artifacts/execution/prefetch/index.md) 에서 봅니다.
 - 문서는 옛 `\AppData` 가 `C:\Windows.old` 에 남는다고만 적습니다[1]. 옛 `\Windows`·`\Program Files` 의 내용이 어디 남는지는 이 문서로 확인하지 못했습니다. `C:\Windows.old` 안을 목록으로 만들어 무엇이 있는지 직접 확인합니다.
 - 브라우저·메신저처럼 AppData 아래에 데이터를 두던 앱의 기록은 옛 AppData 에서 찾습니다.
-- 무선 네트워크 프로필은 남으므로 초기화 전에 접속한 네트워크가 [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md) 에 남아 있을 수 있습니다.
+- 무선 네트워크 프로필은 남으므로 초기화 전에 접속한 네트워크가 [Wi-Fi 프로필](../../../02-artifacts/network/wlan-profiles.md) 에 남아 있을 수 있습니다.
 - OS 가 아닌 파티션과 파일 히스토리 데이터는 그대로 남습니다[1]. 초기화 전 자료를 찾는 첫 자리입니다.
 
 ## "모두 제거" (Remove everything) 로 초기화했을 때
@@ -83,24 +83,24 @@ Windows 10·11 의 PC 초기화 (Push-button reset) 는 OS 를 다시 만들면�
 - 문서는 데이터 지우기가 일반 사용자용이며 정부·업계의 데이터 삭제 기준을 만족하지 않는다고 적습니다[1].
 - 데이터 지우기에 걸리는 시간은 드라이브 속도·파티션 크기·BitLocker 여부에 따라 다릅니다[1].
 - Compact OS 가 켜져 있었으면 초기화 뒤에도 켜진 채로 남습니다[1].
-- 데이터 지우기를 고르지 않았을 때 지운 파일을 얼마나 되살릴 수 있는지는 문서에 없습니다. 문서는 "하나씩 지운다" 까지만 적습니다[1]. [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 로 직접 시도해 보고 결과를 적습니다.
+- 데이터 지우기를 고르지 않았을 때 지운 파일을 얼마나 되살릴 수 있는지는 문서에 없습니다. 문서는 "하나씩 지운다" 까지만 적습니다[1]. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 로 직접 시도해 보고 결과를 적습니다.
 
 ## 다시 설치했을 때
 
 - 이 페이지의 출처는 초기화 기능 문서 하나입니다. 설치 매체로 새로 깐 경우의 설치 기록 위치는 이번에 연 자료로 확인하지 못했습니다.
-- OS 설치 시각은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 읽습니다.
+- OS 설치 시각은 [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 읽습니다.
 - 로컬 계정을 만든 시각은 레지스트리에 직접 없습니다(현장 관찰). 흔히 그 SID 의 NTUSER.DAT 생성 시각($STANDARD_INFORMATION)으로 추정합니다(현장 관찰). NTUSER.DAT 가 없으면 OS 설치 시각을 씁니다(현장 관찰). 보고서에는 추정값이라고 밝힙니다.
 - "내 파일 유지" 초기화 뒤에도 계정은 남습니다[1]. 그래서 계정 생성 추정 시각과 OS 설치 시각이 크게 어긋날 수 있습니다. 이 내용은 두 사실을 맞대 본 것이고, 실제로 재 보지는 않았습니다.
 
 ## 분석 흐름
 
 1. `C:\Windows.old` 가 있는지 봅니다. 있으면 안의 목록과 항목마다의 시각을 뽑습니다.
-2. [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 OS 설치 시각을 읽습니다. 사용자마다 NTUSER.DAT 생성 시각을 뽑아 나란히 놓습니다.
-3. [설치 프로그램](/02-artifacts/system-account/uninstall.md) 목록과 사용자 파일 쪽 흔적을 비교합니다. 사용자 파일은 남아 있는데 사용자가 설치한 프로그램이 없고 제조사 프로그램만 있으면 "내 파일 유지" 초기화를 의심합니다.
+2. [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 OS 설치 시각을 읽습니다. 사용자마다 NTUSER.DAT 생성 시각을 뽑아 나란히 놓습니다.
+3. [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 목록과 사용자 파일 쪽 흔적을 비교합니다. 사용자 파일은 남아 있는데 사용자가 설치한 프로그램이 없고 제조사 프로그램만 있으면 "내 파일 유지" 초기화를 의심합니다.
 4. OS 가 아닌 볼륨과 파일 히스토리 데이터를 확보합니다.
 5. 옛 AppData 에서 사용자별 앱 기록을 찾습니다.
-6. "모두 제거" 가 의심되면 볼륨마다 따로 봅니다. Windows 볼륨은 포맷하지 않고 파일을 하나씩 지우므로[1], [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 를 따라 남은 흔적을 찾습니다.
-7. 초기화 전후의 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다. 초기화 전 기간에서 기록이 비는 곳은 빈칸으로 두고 그렇게 적습니다.
+6. "모두 제거" 가 의심되면 볼륨마다 따로 봅니다. Windows 볼륨은 포맷하지 않고 파일을 하나씩 지우므로[1], [지운 파일의 흔적 찾기](../deleted-file-traces.md) 를 따라 남은 흔적을 찾습니다.
+7. 초기화 전후의 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다. 초기화 전 기간에서 기록이 비는 곳은 빈칸으로 두고 그렇게 적습니다.
 
 ## 흔한 오판
 
@@ -119,12 +119,12 @@ Windows 10·11 의 PC 초기화 (Push-button reset) 는 OS 를 다시 만들면�
 
 ## 함께 볼 페이지
 
-- [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — OS 설치 시각입니다.
-- [설치 프로그램](/02-artifacts/system-account/uninstall.md) · [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md) — 지금 설치된 프로그램과 업데이트입니다.
-- [사용자 계정](/02-artifacts/system-account/sam.md) · [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) — 초기화 뒤에도 남는 계정입니다.
-- [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md) — 초기화 뒤에도 남는 무선 네트워크 기록입니다.
-- [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) · [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) — "모두 제거" 뒤에 남은 흔적을 찾습니다.
-- [완전삭제 도구를 썼나 (Wiping Tools)](/04-scenarios/activity/anti-forensics/wiping-tools.md) — 초기화 대신 도구로 지운 경우입니다.
+- [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — OS 설치 시각입니다.
+- [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) · [윈도 업데이트 기록](../../../02-artifacts/system-account/windows-update-cbs-log.md) — 지금 설치된 프로그램과 업데이트입니다.
+- [사용자 계정](../../../02-artifacts/system-account/sam.md) · [사용자 프로필 목록](../../../02-artifacts/system-account/profilelist.md) — 초기화 뒤에도 남는 계정입니다.
+- [Wi-Fi 프로필](../../../02-artifacts/network/wlan-profiles.md) — 초기화 뒤에도 남는 무선 네트워크 기록입니다.
+- [지운 파일의 흔적 찾기](../deleted-file-traces.md) · [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) — "모두 제거" 뒤에 남은 흔적을 찾습니다.
+- [완전삭제 도구를 썼나 (Wiping Tools)](wiping-tools.md) — 초기화 대신 도구로 지운 경우입니다.
 
 ## 참고 문헌
 

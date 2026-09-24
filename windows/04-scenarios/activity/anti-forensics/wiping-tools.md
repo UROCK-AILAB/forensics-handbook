@@ -1,6 +1,6 @@
 # 완전삭제 도구를 썼나 (Wiping Tools)
 
-> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](/04-scenarios/activity/anti-forensics/index.md)
+> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
 
 완전삭제 도구는 파일 내용을 덮어쓰고 이름을 바꾼 뒤 지웁니다. 덮어쓴 내용은 되살리기 어렵습니다. 하지만 도구를 실행한 기록과 이름을 바꾼 기록은 따로 남습니다. 이 페이지는 공개 도구 SDelete 와 Windows 기본 명령 `cipher /w` 를 예로 흔적을 찾는 순서를 다룹니다. 다른 완전삭제 프로그램은 제품마다 흔적이 달라 여기서 다루지 않습니다.
 
@@ -60,7 +60,7 @@ sdelete [-p passes] [-q] [-z|-c] <물리 디스크 번호>
 - NTFS 에서는 이어서 MFT 의 빈 레코드를 작은 파일로 채웁니다[1]. 새 파일을 더 만들 수 없을 때까지 되풀이합니다[1]. MFT 레코드는 보통 1KB 입니다[1].
 - 빈 레코드를 채우므로, 빈 레코드에 남아 있던 지운 파일 정보도 덮어써질 수 있습니다.
 - 빈 공간을 정리할 때는 파일 이름을 지우지 않습니다[1].
-- 문서는 폴더 구조의 빈 공간에 지운 파일 이름이 남아 있을 수 있다고 적습니다[1]. 그 공간은 다른 파일에 할당되지 않아 덮어쓸 방법이 없다고 설명합니다[1]. 이 이름은 [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) 에서 찾습니다.
+- 문서는 폴더 구조의 빈 공간에 지운 파일 이름이 남아 있을 수 있다고 적습니다[1]. 그 공간은 다른 파일에 할당되지 않아 덮어쓸 방법이 없다고 설명합니다[1]. 이 이름은 [폴더 인덱스와 슬랙](../../../02-artifacts/filesystem/i30.md) 에서 찾습니다.
 
 **EFS.** 문서는 EFS 로 파일을 암호화하면 새 암호화 파일이 만들어지고, 원래 평문 데이터는 디스크에 남는다고 적습니다[1].
 
@@ -80,33 +80,33 @@ sdelete [-p passes] [-q] [-z|-c] <물리 디스크 번호>
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 사용자 하이브 `Software\Sysinternals\SDelete\EulaAccepted` | 이 사용자가 SDelete 사용권에 동의함 (DWORD, 값 1) | [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) |
-| 2 | 프리패치 | 실행 기록, 마지막 실행 시각 | [프리패치](/02-artifacts/execution/prefetch/index.md) |
-| 3 | UserAssist | 실행 시각과 실행 횟수 | [UserAssist](/02-artifacts/execution/userassist.md) |
-| 4 | 보안 4688·4689, Sysmon 1 | 프로세스 생성과 종료 | [프로세스 생성](/02-artifacts/event-logs/4688.md) · [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 5 | Sysmon 11·12·13 | 프리패치 파일 생성, 레지스트리 기록 | [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 6 | USN 변경 저널 | 이름 바꾸기와 삭제 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 7 | MFT | 지운 파일 레코드의 상태 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| 8 | 보안 4656·4663·4660·4658 | 삭제 권한 요청과 개체 삭제 | [파일 접근 감사](/02-artifacts/event-logs/4656-4663-4660.md) |
-| 9 | 폴더 인덱스 슬랙 | 지운 파일의 이름 | [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) |
+| 1 | 사용자 하이브 `Software\Sysinternals\SDelete\EulaAccepted` | 이 사용자가 SDelete 사용권에 동의함 (DWORD, 값 1) | [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) |
+| 2 | 프리패치 | 실행 기록, 마지막 실행 시각 | [프리패치](../../../02-artifacts/execution/prefetch/index.md) |
+| 3 | UserAssist | 실행 시각과 실행 횟수 | [UserAssist](../../../02-artifacts/execution/userassist.md) |
+| 4 | 보안 4688·4689, Sysmon 1 | 프로세스 생성과 종료 | [프로세스 생성](../../../02-artifacts/event-logs/4688.md) · [Sysmon 로그](../../../02-artifacts/event-logs/sysmon/index.md) |
+| 5 | Sysmon 11·12·13 | 프리패치 파일 생성, 레지스트리 기록 | [Sysmon 로그](../../../02-artifacts/event-logs/sysmon/index.md) |
+| 6 | USN 변경 저널 | 이름 바꾸기와 삭제 | [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) |
+| 7 | MFT | 지운 파일 레코드의 상태 | [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) |
+| 8 | 보안 4656·4663·4660·4658 | 삭제 권한 요청과 개체 삭제 | [파일 접근 감사](../../../02-artifacts/event-logs/4656-4663-4660.md) |
+| 9 | 폴더 인덱스 슬랙 | 지운 파일의 이름 | [폴더 인덱스와 슬랙](../../../02-artifacts/filesystem/i30.md) |
 
 **USN 변경 저널.** JPCERT 분석에서 대상 파일은 이름이 다른 글자로 바뀐 기록을 남겼습니다[2]. 대상 파일에는 CLOSE+FILE_DELETE 가 남았습니다[2]. 프리패치 파일에는 FILE_CREATE 와 DATA_EXTEND+FILE_CREATE 가 남았습니다[2].
 
 **MFT.** 지운 파일은 삭제 상태로, 프리패치 항목은 할당 상태로 남았습니다[2].
 
-**보안 로그.** DELETE 권한을 요청한 4656 이 여러 건 남았습니다[2]. 4663·4660(개체 삭제)·4658 도 남았습니다[2]. JPCERT 는 이 기록이 남으려면 개체 접근 감사가 켜져 있어야 한다고 적습니다[2]. 이 이벤트가 남는 조건은 [파일 접근 감사](/02-artifacts/event-logs/4656-4663-4660.md) 에서 봅니다.
+**보안 로그.** DELETE 권한을 요청한 4656 이 여러 건 남았습니다[2]. 4663·4660(개체 삭제)·4658 도 남았습니다[2]. JPCERT 는 이 기록이 남으려면 개체 접근 감사가 켜져 있어야 한다고 적습니다[2]. 이 이벤트가 남는 조건은 [파일 접근 감사](../../../02-artifacts/event-logs/4656-4663-4660.md) 에서 봅니다.
 
 ## 분석 흐름
 
 1. 사용자 하이브마다 `Software\Sysinternals\SDelete\EulaAccepted` 값을 찾습니다. 값이 있으면 그 사용자가 SDelete 사용권에 동의한 기록입니다.
 2. 프리패치·UserAssist·4688·Sysmon 1 에서 실행 시각을 모읍니다. 명령줄이 남아 있으면 대상이 파일인지 드라이브인지, 어떤 옵션을 썼는지 읽습니다.
 3. 실행 시각 앞뒤의 USN 변경 저널을 뽑습니다. 같은 파일이 이름을 여러 번 바꾼 뒤 지워진 흐름을 찾습니다. SDelete 는 이름을 26번 바꿉니다[1].
-4. 이름이 바뀌기 전의 레코드에서 원래 파일 이름과 부모 폴더를 찾습니다. 레코드 칸을 읽는 법은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에 있습니다.
+4. 이름이 바뀌기 전의 레코드에서 원래 파일 이름과 부모 폴더를 찾습니다. 레코드 칸을 읽는 법은 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) 에 있습니다.
 5. MFT 에서 그 파일 레코드가 삭제 상태인지 확인합니다. 레코드가 $ATTRIBUTE_LIST 로 확장 레코드를 쓰면 긴 이름($FILE_NAME)이 확장 레코드에만 있을 수 있습니다(현장 관찰). 기본 레코드만 보면 8.3 짧은 이름만 보입니다(현장 관찰). 확장 레코드까지 따라가서 이름을 읽습니다.
-6. [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) 에서 원래 이름을 찾습니다. 빈 공간 정리는 폴더 구조에 남은 이름을 지우지 않습니다[1].
-7. 빈 공간 정리(SDelete -c·-z, `cipher /w`) 흔적이 있으면, 그보다 앞서 파일을 지운 기록을 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 로 찾습니다. 빈 공간을 덮어쓴 뒤에는 내용보다 이름·시각·크기를 중심으로 정리합니다.
+6. [폴더 인덱스와 슬랙](../../../02-artifacts/filesystem/i30.md) 에서 원래 이름을 찾습니다. 빈 공간 정리는 폴더 구조에 남은 이름을 지우지 않습니다[1].
+7. 빈 공간 정리(SDelete -c·-z, `cipher /w`) 흔적이 있으면, 그보다 앞서 파일을 지운 기록을 [지운 파일의 흔적 찾기](../deleted-file-traces.md) 로 찾습니다. 빈 공간을 덮어쓴 뒤에는 내용보다 이름·시각·크기를 중심으로 정리합니다.
 8. 파일 접근 감사가 켜져 있었으면 4656·4663·4660 으로 지운 개체와 계정을 봅니다.
-9. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다.
+9. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다.
 
 ## 흔한 오판
 
@@ -125,12 +125,12 @@ sdelete [-p passes] [-q] [-z|-c] <물리 디스크 번호>
 
 ## 함께 볼 페이지
 
-- [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) · [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) — 이름 바꾸기와 삭제의 흔적입니다.
-- [프리패치](/02-artifacts/execution/prefetch/index.md) · [UserAssist](/02-artifacts/execution/userassist.md) — 도구를 실행한 흔적입니다.
-- [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) — 실행 흔적을 모으는 순서입니다.
-- [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) · [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) — 덮어쓰기 전 일반 삭제를 봅니다.
-- [PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)](/04-scenarios/activity/anti-forensics/reset-reinstall.md) — 초기화의 드라이브 데이터 지우기 옵션입니다.
-- [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) — MFT 레코드와 속성의 구조입니다.
+- [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) · [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) · [폴더 인덱스와 슬랙](../../../02-artifacts/filesystem/i30.md) — 이름 바꾸기와 삭제의 흔적입니다.
+- [프리패치](../../../02-artifacts/execution/prefetch/index.md) · [UserAssist](../../../02-artifacts/execution/userassist.md) — 도구를 실행한 흔적입니다.
+- [어떤 프로그램을 언제 실행했나](../program-execution.md) — 실행 흔적을 모으는 순서입니다.
+- [지운 파일의 흔적 찾기](../deleted-file-traces.md) · [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) — 덮어쓰기 전 일반 삭제를 봅니다.
+- [PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)](reset-reinstall.md) — 초기화의 드라이브 데이터 지우기 옵션입니다.
+- [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) — MFT 레코드와 속성의 구조입니다.
 
 ## 참고 문헌
 

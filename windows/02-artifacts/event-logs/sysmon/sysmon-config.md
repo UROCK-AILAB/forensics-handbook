@@ -12,7 +12,7 @@ Sysmon (System Monitor) 은 Windows 서비스와 장치 드라이버로 이루�
 - Sysmon 은 사건을 분석하지 않습니다.
 - 공격자에게서 자신을 숨기려 하지도 않습니다.
 - Windows 내장 Sysmon 의 Microsoft 문서도 같은 뜻을 적습니다. 기록만 하고 분석·경보·차단은 하지 않는다고 적습니다.
-- 다만 Sysinternals 문서의 이벤트 목록에는 실행 파일 생성 차단(27)과 파일 파쇄 차단(28)이 있습니다. 두 문서의 설명이 엇갈리므로 이 두 이벤트는 [파일 생성·삭제](/02-artifacts/event-logs/sysmon/11-23-26.md)에서 따로 봅니다.
+- 다만 Sysinternals 문서의 이벤트 목록에는 실행 파일 생성 차단(27)과 파일 파쇄 차단(28)이 있습니다. 두 문서의 설명이 엇갈리므로 이 두 이벤트는 [파일 생성·삭제](11-23-26.md)에서 따로 봅니다.
 
 Sysmon 은 두 부분이 함께 돕니다.
 
@@ -29,7 +29,7 @@ Sysmon 은 두 부분이 함께 돕니다.
 - 그래서 Sysmon 로그에 어떤 활동이 없다고 해서 그 활동이 없었다고 쓸 수 없습니다.
 - 그 기간의 설정이 그 활동을 기록하게 돼 있었는지부터 봅니다.
 
-이벤트 번호별 목록은 [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) 허브에 있습니다.
+이벤트 번호별 목록은 [Sysmon 로그](index.md) 허브에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -54,10 +54,10 @@ Sysmon 은 두 부분이 함께 돕니다.
 | 로그 파일 | `%SystemRoot%\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx` | 이름 규칙으로 짐작한 경로입니다. 아래 설명을 봅니다 |
 | 사용자 키 | `HKCU\Software\Sysinternals\System Monitor` | Carlos Perez 는 이 키를 Sysinternals 도구가 사용권 동의를 기록하는 곳으로 설명합니다. 그 밖에 어떤 값이 들어가는지는 확인하지 못했습니다 |
 
-- 오프라인 SYSTEM 하이브에는 CurrentControlSet 이 없습니다. `ControlSet00x` 처럼 번호가 붙은 키에서 찾습니다. 하이브 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 오프라인 SYSTEM 하이브에는 CurrentControlSet 이 없습니다. `ControlSet00x` 처럼 번호가 붙은 키에서 찾습니다. 하이브 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 이벤트 로그 파일 이름은 채널 이름의 "/" 를 "%4" 로 바꿔 짓습니다. Windows 11 25H2 (빌드 26200.9457) PC 한 대에서 `Microsoft-Windows-AAD%4Operational.evtx` 같은 파일로 이 규칙을 확인했습니다. 그 PC 에는 Sysmon 이 없어서 Sysmon 로그 파일 자체는 보지 못했습니다.
 - 같은 PC 에서 `-s`·`-?` 만 실행했을 때는 사용자 키가 생기지 않았습니다.
-- 서비스 키와 드라이버 키를 읽는 법은 [서비스·드라이버](/02-artifacts/persistence/services-drivers.md)에서 다룹니다.
+- 서비스 키와 드라이버 키를 읽는 법은 [서비스·드라이버](../../persistence/services-drivers.md)에서 다룹니다.
 
 ### 로그 채널 기본값
 
@@ -71,7 +71,7 @@ Sysmon 은 두 부분이 함께 돕니다.
 | 접근 권한 (SDDL) | SYSTEM 모든 권한 · Administrators 읽기·쓰기·지우기 · Backup Operators, Server Operators, Event Log Readers (S-1-5-32-573) 읽기 |
 
 - 최대 크기는 관리자가 바꿀 수 있습니다. 실물에서는 채널 설정을 따로 확인합니다.
-- 채널 크기와 보관 방식을 확인하는 법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+- 채널 크기와 보관 방식을 확인하는 법은 [감사 정책과 로그 설정](../audit-policy-log-settings.md)에서 다룹니다.
 
 ### Windows 내장 Sysmon
 
@@ -186,7 +186,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 - 서비스가 따라가지 못해 드라이버 대기열(DriverQueueSize)이 차면, 오래된 이벤트부터 버리고 오류 이벤트 255 를 남깁니다.
 - 해시 기본값은 Sysinternals 문서 안에서도 엇갈립니다. 기능 목록과 설치 예시는 "기본 SHA1" 이라고 적고, 설정 항목 표는 "HashAlgorithms 기본 None" 이라고 적습니다. 실물에서는 적용된 설정과 이벤트의 Hashes 칸을 직접 봅니다.
 - Microsoft 의 내장 Sysmon 문서 표는 CopyOnDeleteExtensions 설명을 "프로세스 이름" 으로 적었습니다. DriverName 기본값은 "자동 생성" 으로 적었습니다. 이 페이지의 설명은 Sysinternals 문서를 따릅니다.
-- 삭제 파일 보관 폴더를 읽는 법은 [파일 생성·삭제](/02-artifacts/event-logs/sysmon/11-23-26.md)에서 다룹니다.
+- 삭제 파일 보관 폴더를 읽는 법은 [파일 생성·삭제](11-23-26.md)에서 다룹니다.
 
 ### 기본 동작과 명령줄 스위치
 
@@ -272,7 +272,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 
 ## 시각 해석
 
-- Sysmon 이벤트의 시각은 UTC 입니다. UtcTime 칸의 서식은 [프로세스 생성](/02-artifacts/event-logs/sysmon/1.md)에서 다룹니다.
+- Sysmon 이벤트의 시각은 UTC 입니다. UtcTime 칸의 서식은 [프로세스 생성](1.md)에서 다룹니다.
 - 이벤트 16 의 UtcTime 은 설정이 바뀐 때입니다. 이 시각 앞뒤로 기록되는 이벤트 종류가 달라질 수 있습니다.
 - 이벤트 4 의 UtcTime 은 서비스 상태가 바뀐 때입니다.
 - 드라이버는 부팅 초기 활동을 모아 두었다가 서비스가 뜬 뒤 넘깁니다. 그래서 부팅 직후에는 서비스 시작보다 이른 UtcTime 의 이벤트가 나중에 쓰일 수 있습니다. 이 점은 추론이며 확인하지 못했습니다.
@@ -293,13 +293,13 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 ### 지우기와 조작
 
 - **드라이버를 내립니다.** fltmc 로 Sysmon 드라이버를 내리면 System 로그에 Filter Manager 이벤트 1 이 남는다고 Carlos Perez 는 적습니다. Sysmon 은 그 명령의 실행을 마지막으로 기록합니다.
-- **규칙 값을 지웁니다.** 레지스트리 감사를 켜 두었다면, Rules 값을 지운 행위가 보안 로그 4657 로 보인다고 Carlos Perez 는 적습니다. 감사 설정은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 확인합니다.
+- **규칙 값을 지웁니다.** 레지스트리 감사를 켜 두었다면, Rules 값을 지운 행위가 보안 로그 4657 로 보인다고 Carlos Perez 는 적습니다. 감사 설정은 [감사 정책과 로그 설정](../audit-policy-log-settings.md)에서 확인합니다.
 - **설정을 바꿉니다.** 설정 변경은 이벤트 16 으로 남고, 필터로 끌 수 없습니다.
 - **서비스 상태를 바꿉니다.** 서비스 상태 변경은 이벤트 4 로 남고, 필터로 끌 수 없습니다.
-- **로그를 지웁니다.** 매니페스트 기본 권한으로는 Administrators 가 이 채널을 지울 수 있습니다. [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)를 봅니다.
-- **Sysmon 을 제거합니다.** 제거 뒤에 무엇이 남는지는 확인하지 못했습니다. 설치 때 남은 [서비스 설치](/02-artifacts/event-logs/7045-4697.md) 기록과 실행 흔적을 찾습니다.
+- **로그를 지웁니다.** 매니페스트 기본 권한으로는 Administrators 가 이 채널을 지울 수 있습니다. [이벤트 로그 삭제](../1102-104.md)를 봅니다.
+- **Sysmon 을 제거합니다.** 제거 뒤에 무엇이 남는지는 확인하지 못했습니다. 설치 때 남은 [서비스 설치](../7045-4697.md) 기록과 실행 흔적을 찾습니다.
 
-여러 흔적을 모아 판단하는 순서는 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+여러 흔적을 모아 판단하는 순서는 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -310,7 +310,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 3. 찾은 실행 파일로 `-c` 를 인수 없이 실행해 지금 설정을 봅니다.
 4. `-s` 로 그 실행 파일이 아는 스키마를 봅니다.
 
-라이브 시스템에서 명령을 실행하면 시스템에 흔적이 더해집니다. 순서와 기록 방법은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
+라이브 시스템에서 명령을 실행하면 시스템에 흔적이 더해집니다. 순서와 기록 방법은 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
 
 ### 디스크 이미지에서
 
@@ -319,7 +319,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 3. 드라이버 키 Parameters 아래 값을 모두 적습니다.
 4. SOFTWARE 하이브에서 채널 등록 키를 확인합니다.
 5. 로그 폴더에서 Sysmon 로그 파일을 찾아 이벤트 4·16·255 를 뽑습니다.
-6. `%SystemRoot%` 의 실행 파일에서 버전과 서명을 확인합니다. 방법은 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md)에서 다룹니다.
+6. `%SystemRoot%` 의 실행 파일에서 버전과 서명을 확인합니다. 방법은 [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md)에서 다룹니다.
 
 ### 헥스로 한 번
 
@@ -333,26 +333,26 @@ HashingAlgorithm  05 00 00 00   → 0x00000005
 1. Options 는 0x3 입니다. 1 (네트워크 연결) 과 2 (이미지 로드) 를 더한 값입니다. 두 기록이 모두 켜져 있다는 뜻입니다.
 2. HashingAlgorithm 은 0x5 입니다. 1 (SHA1) 과 4 (SHA256) 를 더한 값입니다.
 
-하이브 안에서 값 데이터를 찾아가는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+하이브 안에서 값 데이터를 찾아가는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
 - 공개 레지스트리 뷰어(예: Registry Explorer, RegRipper)로 서비스 키와 Parameters 값을 봅니다.
 - PSSysmonTools 의 SysmonRuleParser.ps1 에는 Rules 값을 해석하는 코드가 있습니다. Sysmon 6.20 시절 형식 기준이라, 요즘 버전의 Rules 값에 맞는지는 따로 확인합니다.
-- 이벤트 4·16·255 는 이벤트 뷰어나 공개 EVTX 해석 도구(예: EvtxECmd, python-evtx)로 뽑습니다. EVTX 저장 구조는 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
-- 도구 결과는 한두 건이라도 원본과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- 이벤트 4·16·255 는 이벤트 뷰어나 공개 EVTX 해석 도구(예: EvtxECmd, python-evtx)로 뽑습니다. EVTX 저장 구조는 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 도구 결과는 한두 건이라도 원본과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) | Sysmon 서비스·드라이버 키의 이름, 시작 방식, 실행 파일 경로 |
-| [서비스 설치](/02-artifacts/event-logs/7045-4697.md) | Sysmon 을 설치한 시각 |
-| [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) | Sysmon 채널이 지워진 흔적 |
-| [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) | 채널 크기·보관 방식, 레지스트리 감사가 켜져 있었는지 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | Sysmon 실행 파일이나 fltmc 를 실행한 흔적 |
-| [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) | Sysmon 실행 파일의 버전과 서명 |
-| 같은 로그의 [프로세스 생성](/02-artifacts/event-logs/sysmon/1.md) | 설정 변경 명령을 실행한 프로세스와 명령줄 |
+| [서비스·드라이버](../../persistence/services-drivers.md) | Sysmon 서비스·드라이버 키의 이름, 시작 방식, 실행 파일 경로 |
+| [서비스 설치](../7045-4697.md) | Sysmon 을 설치한 시각 |
+| [이벤트 로그 삭제](../1102-104.md) | Sysmon 채널이 지워진 흔적 |
+| [감사 정책과 로그 설정](../audit-policy-log-settings.md) | 채널 크기·보관 방식, 레지스트리 감사가 켜져 있었는지 |
+| [프리페치](../../execution/prefetch/index.md) | Sysmon 실행 파일이나 fltmc 를 실행한 흔적 |
+| [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md) | Sysmon 실행 파일의 버전과 서명 |
+| 같은 로그의 [프로세스 생성](1.md) | 설정 변경 명령을 실행한 프로세스와 명령줄 |
 
 ## 실습
 

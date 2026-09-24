@@ -1,6 +1,6 @@
 # 캐시 형식 (Blockfile·Simple Cache)
 
-> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) > 캐시 형식
+> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 캐시 형식
 
 ## 한 줄 요약
 
@@ -26,8 +26,8 @@ Chromium 설계 문서에 적힌 기본값은 이렇습니다.
 
 - 두 형식 모두 `index` 라는 이름의 파일이 있습니다. 그래서 `index` 파일만 보고 형식을 가리지 않습니다.
 - `data_0` 이 있으면 블록 파일 방식입니다. `index-dir` 폴더와 `_0` 으로 끝나는 파일이 있으면 Simple Cache 입니다.
-- 캐시 폴더가 어디 있는지는 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 과 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에서 다룹니다.
-- 캐시 항목이 사용자 행위로 무엇을 뜻하는지는 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다. 이 페이지는 저장 형식만 다룹니다.
+- 캐시 폴더가 어디 있는지는 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 과 [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 에서 다룹니다.
+- 캐시 항목이 사용자 행위로 무엇을 뜻하는지는 [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다. 이 페이지는 저장 형식만 다룹니다.
 
 ## 구조 — 블록 파일 방식
 
@@ -199,7 +199,7 @@ Chromium 소스(`addr.h`)의 비트 배치는 아래와 같습니다.
 4. **항목 블록을 읽습니다.** `data_1` 의 256바이트 블록에서 캐시 항목을 읽습니다. 오프셋 96 의 키와 오프셋 32 의 키 크기를 먼저 봅니다. 키 크기가 160 을 넘으면 나머지 키는 이어진 블록에 있거나, 오프셋 36 의 긴 키 주소가 가리키는 곳에 있습니다.
 5. **스트림을 따라갑니다.** 오프셋 56 의 스트림 주소 네 개를 풉니다. 주소가 가리키는 `data_N` 블록이나 `f_xxxxxx` 파일에서 스트림 크기만큼 읽습니다. 어느 칸이 HTTP 헤더이고 어느 칸이 내용인지는 이번 자료로 확인하지 못했습니다. 읽은 내용으로 가립니다.
 6. **Simple Cache 면 파일 하나씩 읽습니다.** 파일 이름에서 항목 해시를 읽습니다. 파일 안에서 URL 과 데이터를 찾습니다. 색인 파일에 없는 항목 파일도 읽습니다.
-7. **시각을 바꿉니다.** 캐시 항목의 만든 시각은 1601-01-01 UTC 부터 센 마이크로초입니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+7. **시각을 바꿉니다.** 캐시 항목의 만든 시각은 1601-01-01 UTC 부터 센 마이크로초입니다. 변환은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 이 페이지의 정수는 리틀 엔디언으로 읽습니다.
 관찰한 `index` 버전 칸 `03 00` 을 3 으로 읽을 때와 같은 방식입니다.
@@ -275,13 +275,13 @@ Code Cache\js 의 <16자리 16진수>_0 파일 앞 16바이트 (관찰한 값으
 - 블록 파일 방식에서 항목을 지울 때는 Doom 계열 메서드가 먼저 표시합니다. 그 항목을 쓰는 곳이 모두 닫은 뒤에 실제로 지웁니다 (설계 문서).
 - 지운 항목의 블록이 덮어쓰기 전까지 남는지는 확인하지 못했습니다.
 - `data_N` 헤더의 블록 할당 비트맵(오프셋 80)에서 빈 블록으로 표시한 자리도 내용을 한 번 봅니다. 옛 항목이 남았는지는 검체마다 확인합니다.
-- `f_xxxxxx` 파일과 Simple Cache 항목 파일은 파일 하나가 데이터 하나입니다. 이런 파일이 지워졌으면 파일 시스템 수준에서 찾습니다 (해석). [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 를 봅니다.
+- `f_xxxxxx` 파일과 Simple Cache 항목 파일은 파일 하나가 데이터 하나입니다. 이런 파일이 지워졌으면 파일 시스템 수준에서 찾습니다 (해석). [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 를 봅니다.
 
 ### 시각
 
 - 캐시 항목의 만든 시각은 1601-01-01 UTC 부터 센 마이크로초입니다 (dtformats). UTC 값이므로 현지 시각으로 바꿀 때 시간대를 밝힙니다.
 - 이 값은 항목을 만든 시각입니다. 사용자가 그 페이지를 마지막으로 본 시각과 같다고 보지 않습니다.
-- `f_xxxxxx` 파일과 Simple Cache 파일은 파일 시스템 시각도 있습니다. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 의 시각과 함께 봅니다.
+- `f_xxxxxx` 파일과 Simple Cache 파일은 파일 시스템 시각도 있습니다. [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 의 시각과 함께 봅니다.
 
 ## 함정
 
@@ -304,7 +304,7 @@ Code Cache\js 의 <16자리 16진수>_0 파일 앞 16바이트 (관찰한 값으
 | 캐시 목록을 뽑는 공개 분석 도구 | 항목 목록과 내용을 한 번에 뽑습니다. 결과 일부를 헥스로 다시 맞춰 봅니다 |
 | Python 같은 스크립트 언어 | 위 표대로 캐시 항목과 주소를 직접 풉니다 |
 
-도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+도구마다 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

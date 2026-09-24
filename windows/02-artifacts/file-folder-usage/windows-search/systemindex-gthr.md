@@ -1,6 +1,6 @@
 # 수집 기록 (SystemIndex_Gthr)
 
-> 위치: [윈도 검색 색인 DB (Windows Search)](/02-artifacts/file-folder-usage/windows-search/index.md) > 수집 기록
+> 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 수집 기록
 
 ## 한 줄 요약
 
@@ -38,7 +38,7 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 
 - 이 문서는 FAT 를 "주기적으로 다시 훑는 곳" 과 "알림 가능 원본" 양쪽에 예로 듭니다.
 - FAT 볼륨의 항목은 NTFS 와 처리 흐름이 다르다는 점만 기억해 둡니다.
-- USN 변경 저널은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 다룹니다.
+- USN 변경 저널은 [USN 변경 저널](../../filesystem/usnjrnl.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -51,7 +51,7 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 | 11 25H2 (PC 한 대) | `GatherLogs\SystemIndex\` 폴더 | 글자 로그 파일 `.Crwl`·`.gthr` | 관찰 |
 
 - Windows 11 에서는 두 표가 `Windows.db` 가 아니라 `Windows-gather.db` 에 있습니다.
-- Vista 에는 두 표의 사본 표(`_S`)가 따로 있습니다. 목록은 [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 에 있습니다.
+- Vista 에는 두 표의 사본 표(`_S`)가 따로 있습니다. 목록은 [위치와 형식](windows-edb-windows-db.md) 에 있습니다.
 
 ## 구조
 
@@ -72,7 +72,7 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 
 - 두 열은 같은 줄끼리 짝이 아닙니다. 버전별 칸 목록을 나란히 둔 것입니다.
 - Windows 10 의 주요 칸은 `ScopeID`, `DocumentID`, `SDID`, `LastModified`, `FileName` 입니다(LevelBlue).
-- `FileName` 은 압축된 문자열입니다. 압축과 난독화를 푸는 법은 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
+- `FileName` 은 압축된 문자열입니다. 압축과 난독화를 푸는 법은 [파일 속성 되살리기](propertystore.md) 에 있습니다.
 
 ### `SystemIndex_GthrPth` 칸
 
@@ -140,7 +140,7 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 - `LastModified` 의 정확한 뜻은 확인하지 못했습니다. 이 값을 파일 수정 시각이라고 단정해 적지 않습니다.
 - 로그가 얼마나 남는지 모르므로, 로그에 없는 경로가 수집된 적이 없다고 말할 수 없습니다.
 - 앞 두 칸의 시각이 정확히 무엇을 뜻하는지는 확인하지 못했습니다. `.Crwl` 첫 줄 하나를 폴더 생성 시각과 맞춰 본 것이 전부입니다. 검체에서 다른 기록과 한 번 더 맞춰 봅니다.
-- `SDID`·`RequiredSIDs` 로 기록을 사용자와 잇는 방법은 확인하지 못했습니다. [색인 해석 함정](/02-artifacts/file-folder-usage/windows-search/pitfalls.md) 에서 다룹니다.
+- `SDID`·`RequiredSIDs` 로 기록을 사용자와 잇는 방법은 확인하지 못했습니다. [색인 해석 함정](pitfalls.md) 에서 다룹니다.
 
 보고서에는 기록이 말하는 만큼만 적습니다.
 예: "GatherLogs 의 `SystemIndex.○○.gthr` 에 `file:C:/Users/○○/Documents/계약서.docx` 줄이 있습니다. 이 줄의 앞 두 칸을 FILETIME 으로 풀면 ○○ UTC 입니다." (경로는 설명용 예시입니다.)
@@ -153,9 +153,9 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 | `SystemIndex_Gthr.FirstAccess`·`LastAccess` (XP·Vista) | 형식을 확인하지 못했습니다 | 확인하지 못했습니다 |
 | GatherLogs 한 줄의 첫째·둘째 칸 | 16진수 글자 두 조각으로 적은 FILETIME. UTC 입니다. (관찰) | 이 PC 에서 폴더 생성 시각과 맞았습니다 |
 
-- FILETIME 을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 빅엔디언 FILETIME 을 푸는 예는 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
-- 속성 저장소의 GatherTime 과 수집 기록의 시각은 다른 칸입니다. GatherTime 의 뜻은 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
+- FILETIME 을 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 빅엔디언 FILETIME 을 푸는 예는 [파일 속성 되살리기](propertystore.md) 에 있습니다.
+- 속성 저장소의 GatherTime 과 수집 기록의 시각은 다른 칸입니다. GatherTime 의 뜻은 [파일 속성 되살리기](propertystore.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -183,7 +183,7 @@ FF FE
 00000020  09 00                                              ..
 ```
 
-1. 글자마다 2바이트이고 뒤 바이트가 `00` 입니다. UTF-16LE 영문의 모양입니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+1. 글자마다 2바이트이고 뒤 바이트가 `00` 입니다. UTF-16LE 영문의 모양입니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 2. `09 00` 은 탭입니다. 이 줄의 첫째 칸은 `100d0580`, 둘째 칸은 `1db9158` 입니다.
 3. 둘째 칸은 일곱 자리입니다. 앞에 0 을 채워 `01db9158` 로 맞춥니다.
 4. 둘째 칸을 상위, 첫째 칸을 하위로 이으면 `0x01DB9158100D0580` 입니다.
@@ -200,16 +200,16 @@ FF FE
 
 - `SystemIndex_Gthr` 의 `FileName` 과 속성 저장소의 `System_FileName` 이 같은 파일을 가리키는지
 - `.gthr` 에 나온 경로가 속성 저장소에도 있는지
-- `.gthr` 시각과 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 의 같은 파일 기록이 가까운지
+- `.gthr` 시각과 [USN 변경 저널](../../filesystem/usnjrnl.md) 의 같은 파일 기록이 가까운지
 
 ## 교차 검증
 
-- [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) — NTFS 수집 알림의 원천입니다. 수집 시각 직전에 그 파일의 변경 기록이 있는지 봅니다.
-- [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) — `LastModified` 가 파일 수정 시각과 맞는지 검체에서 확인합니다.
-- [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) — 알림이 없는 볼륨의 파일을 다룰 때 봅니다.
-- [아웃룩](/02-artifacts/mail/outlook/index.md) — `mapi://` 주소로 수집된 편지함 항목을 맞춰 봅니다.
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) — SOFTWARE 하이브의 `Gather` 키를 읽습니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 수집 시각을 다른 기록과 한 줄에 놓을 때 "색인 처리" 로 따로 표시합니다.
+- [USN 변경 저널](../../filesystem/usnjrnl.md) — NTFS 수집 알림의 원천입니다. 수집 시각 직전에 그 파일의 변경 기록이 있는지 봅니다.
+- [마스터 파일 테이블](../../filesystem/mft.md) — `LastModified` 가 파일 수정 시각과 맞는지 검체에서 확인합니다.
+- [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md) — 알림이 없는 볼륨의 파일을 다룰 때 봅니다.
+- [아웃룩](../../mail/outlook/index.md) — `mapi://` 주소로 수집된 편지함 항목을 맞춰 봅니다.
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) — SOFTWARE 하이브의 `Gather` 키를 읽습니다.
+- [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) — 수집 시각을 다른 기록과 한 줄에 놓을 때 "색인 처리" 로 따로 표시합니다.
 
 ## 실습
 

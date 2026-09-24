@@ -19,7 +19,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 - 사용자마다 `%LOCALAPPDATA%\Microsoft\Windows\Notifications\wpndatabase.db` 가 있습니다.
 - 출처 글(inc0x0)은 이 경로를 `%APPDATA%\Local\Microsoft\Windows\Notifications\wpndatabase.db` 로 적었습니다. `%LOCALAPPDATA%` 와 같은 폴더를 가리킵니다.
 - 관찰한 PC 에서는 같은 폴더에 `wpndatabase.db-wal`, `wpndatabase.db-shm`, `WPNPRMRY.tmp`(0바이트), 빈 `wpnidm` 폴더가 함께 있었습니다. (확인 범위: Win11 25H2 한 대)
-- 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 확인합니다.
+- 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
 ### Windows 버전
 
@@ -37,7 +37,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ## 구조
 
-저장 형식은 SQLite 입니다. 페이지와 레코드, `-wal` 파일을 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+저장 형식은 SQLite 입니다. 페이지와 레코드, `-wal` 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 - 관찰한 파일은 헤더의 오프셋 18·19 바이트가 모두 2 였습니다. WAL 모드라는 뜻입니다. 페이지 크기는 4096 이었습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -176,15 +176,15 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 - inc0x0 글의 변환식은 `(값 ÷ 10000000) − 11644473600 = 유닉스 시간` 입니다.
 - 관찰한 토스트 5건은 모두 `ExpiryTime − ArrivalTime` 이 정확히 72시간 (3일) 이었습니다. 3일이 기본값인지는 문서로 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
-- FILETIME 의 뜻과 다른 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
-- 알림 시각을 다른 기록과 한 시간 축에 놓는 법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- FILETIME 의 뜻과 다른 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 알림 시각을 다른 기록과 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **세 파일을 함께 수집합니다.** 관찰한 PC 에서는 `-wal` 파일이 DB 파일보다 늦게 바뀌었습니다. 사본을 뜨는 몇 분 사이에도 `-wal` 이 70KB 에서 1.5MB 로 커졌습니다. 최근 알림은 `-wal` 에만 있을 수 있습니다. `wpndatabase.db`, `-wal`, `-shm` 을 함께 뜹니다. (확인 범위: Win11 25H2 한 대)
-- **원본을 열지 않습니다.** SQLite 도구로 열면 `-wal` 의 내용이 DB 파일로 옮겨질 수 있습니다. 해시를 기록한 사본으로 작업합니다. [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
-- **행이 적은 것이 정상일 수 있습니다.** 알림은 만료되면 지워집니다. 과거 알림은 섀도 복사본 속 옛 파일에서 찾습니다. [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 참고합니다.
-- **지운 행.** 관찰한 파일은 202쪽 가운데 5쪽이 빈 페이지 (freelist) 였습니다. 지운 행을 되살릴 수 있는지는 확인하지 못했습니다. 찾는 법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에 있습니다. (확인 범위: Win11 25H2 한 대)
+- **원본을 열지 않습니다.** SQLite 도구로 열면 `-wal` 의 내용이 DB 파일로 옮겨질 수 있습니다. 해시를 기록한 사본으로 작업합니다. [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
+- **행이 적은 것이 정상일 수 있습니다.** 알림은 만료되면 지워집니다. 과거 알림은 섀도 복사본 속 옛 파일에서 찾습니다. [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 참고합니다.
+- **지운 행.** 관찰한 파일은 202쪽 가운데 5쪽이 빈 페이지 (freelist) 였습니다. 지운 행을 되살릴 수 있는지는 확인하지 못했습니다. 찾는 법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다. (확인 범위: Win11 25H2 한 대)
 - **시각 형식이 표마다 다릅니다.** `NotificationHandler` 의 시각은 글자이고 시간대를 모릅니다. FILETIME 칸과 같은 방법으로 풀지 않습니다.
 - **`Payload` 는 BLOB 입니다.** 뷰어가 헥스로만 보여 줄 수 있습니다. 글자로 바꿔 읽습니다. 글자가 깨지면 문자 인코딩을 헥스로 확인합니다.
 - **API 이름과 DB 칸을 섞어 쓰지 않습니다.** 이름이 같다고 뜻이 같다고 확인한 것은 아닙니다. 보고서에는 DB 칸 이름을 씁니다.
@@ -204,7 +204,7 @@ ExpiryTime  = 133552278000000000 → 2024-03-18 09:30:00 UTC
 ExpiryTime − ArrivalTime = 2,592,000,000,000 (100나노초 단위) = 259,200초 = 72시간
 ```
 
-- SQLite 레코드 안에서 이 정수를 찾는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- SQLite 레코드 안에서 이 정수를 찾는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 DB 파일 헤더에서 WAL 모드를 확인합니다.
 
@@ -250,13 +250,13 @@ SELECT "Key", Value FROM Metadata;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 크롬 계열 브라우저 | 웹 알림을 보낸 사이트의 방문 기록 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) |
-| 스토어 앱 설치 목록 | `PrimaryId` 의 패키지 패밀리 이름으로 앱 확인 | [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) |
-| 윈도 타임라인 | 같은 알림이 있는지 | [윈도 타임라인](/02-artifacts/file-folder-usage/activitiescache-db.md) |
-| 메신저·메일 앱 | 알림 내용과 원본 메시지 | [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md), [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) |
-| 섀도 복사본 | 만료로 지워진 옛 알림 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 크롬 계열 브라우저 | 웹 알림을 보낸 사이트의 방문 기록 | [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) |
+| 스토어 앱 설치 목록 | `PrimaryId` 의 패키지 패밀리 이름으로 앱 확인 | [스토어 앱 설치 목록](../system-account/appx-staterepository.md) |
+| 윈도 타임라인 | 같은 알림이 있는지 | [윈도 타임라인](../file-folder-usage/activitiescache-db.md) |
+| 메신저·메일 앱 | 알림 내용과 원본 메시지 | [카카오톡 PC](../messengers/kakaotalk-pc/index.md), [마이크로소프트 팀즈](../messengers/teams.md) |
+| 섀도 복사본 | 만료로 지워진 옛 알림 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-연락 내용을 엮는 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에 있습니다.
+연락 내용을 엮는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에 있습니다.
 
 ## 실습
 

@@ -14,14 +14,14 @@
 
 ## 위치와 버전별 차이
 
-- 파일 이름은 `formhistory.sqlite` 입니다. 프로필 폴더에서 찾습니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 파일 이름은 `formhistory.sqlite` 입니다. 프로필 폴더에서 찾습니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - 이번에 연 소스에서는 파일 이름만 확인했습니다. 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 검체에서 확인합니다.
 - 아래 표와 칸은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 이때 DB 스키마 버전 상수(`DB_SCHEMA_VERSION`)는 5 입니다.
 - 예전 스키마 버전에 어느 표와 칸이 있었는지, 각 버전이 어느 출시판에 들어갔는지는 확인하지 못했습니다.
 
 ## 구조
 
-저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 표
 
@@ -63,7 +63,7 @@
 
 - 소스는 `browser.formfill` 아래 설정을 읽습니다. `enable`, `expire_days`, `agedWeight`, `boundaryWeight`, `bucketSize`, `debug`, `maxTimeGroupings`, `prefixWeight`, `timeGroupingSize` 입니다.
 - 분석에서 먼저 볼 설정은 `enable` 과 `expire_days` 입니다. `expire_days` 는 항목을 며칠 뒤에 지울지 정합니다.
-- `expire_days` 의 기본값은 확인하지 못했습니다. 설정 파일의 형식도 확인하지 못했습니다. [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 를 참고합니다.
+- `expire_days` 의 기본값은 확인하지 못했습니다. 설정 파일의 형식도 확인하지 못했습니다. [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 를 참고합니다.
 
 ### 확인하지 못한 것
 
@@ -95,18 +95,18 @@
 ## 시각 해석
 
 - `firstUsed`, `lastUsed`, `timeDeleted` 는 1970년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 파이어폭스 소스는 이 단위를 PRTime 이라고 부릅니다.
-- 현지 시각이 아닙니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 현지 시각이 아닙니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 - 처음 저장할 때 `firstUsed`·`lastUsed` 를 그때 시각으로, `timesUsed` 를 1 로 씁니다.
 - 같은 값을 다시 쓰면 `timesUsed` 를 1 올리고 `lastUsed` 만 그때 시각으로 바꿉니다. `firstUsed` 는 그대로입니다.
 - 만료 판정에는 `lastUsed` 를 씁니다. 오래 쓰지 않은 값이 먼저 사라집니다.
-- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **원본 프로필로 브라우저를 켜지 않습니다.** 파이어폭스는 만료된 항목을 스스로 지웁니다. 해시를 기록한 사본으로 분석합니다.
-- **저널 파일을 함께 뜹니다.** 이 파일의 저널 방식은 확인하지 못했습니다. 같은 폴더에 `formhistory.sqlite-wal` 이나 `formhistory.sqlite-journal` 이 있으면 함께 사본으로 뜹니다. [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
+- **저널 파일을 함께 뜹니다.** 이 파일의 저널 방식은 확인하지 못했습니다. 같은 폴더에 `formhistory.sqlite-wal` 이나 `formhistory.sqlite-journal` 이 있으면 함께 사본으로 뜹니다. [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
 - **입력란 이름으로 사이트를 단정하지 않습니다.** `email`, `q` 같은 이름은 여러 사이트가 함께 씁니다. 사이트는 방문 기록의 시각과 맞춰 좁힙니다.
-- **지운 항목은 옛 사본과 견줘 찾습니다.** Windows 판에는 지운 항목 표에 행이 없습니다. 섀도 복사본 속 옛 파일에만 있는 `guid` 를 찾고, SQLite 의 빈 공간과 메모리도 봅니다. [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 를 참고합니다.
+- **지운 항목은 옛 사본과 견줘 찾습니다.** Windows 판에는 지운 항목 표에 행이 없습니다. 섀도 복사본 속 옛 파일에만 있는 `guid` 를 찾고, SQLite 의 빈 공간과 메모리도 봅니다. [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 를 참고합니다.
 - **민감한 값이 평문으로 나옵니다.** 이름·주소·전화번호 같은 개인정보가 들어 있을 수 있습니다. 보고서에 옮길 때는 필요한 만큼만 적습니다.
 
 ## 직접 분석해 보기
@@ -160,13 +160,13 @@ WHERE o.guid NOT IN (SELECT guid FROM main.moz_formhistory);
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문·다운로드·즐겨찾기 | `lastUsed` 무렵에 연 페이지로 어느 사이트에서 쳤는지 좁힙니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| 세션 복원 | 그 시각에 열려 있던 탭을 봅니다 | [세션 복원 (sessionstore.jsonlz4)](/02-artifacts/browsers/firefox/sessionstore-jsonlz4.md) |
-| 저장 비밀번호 | 로그인 정보를 저장한 사이트 목록과 견줍니다 | [저장 비밀번호 (logins.json·key4.db)](/02-artifacts/browsers/firefox/logins-json-key4-db.md) |
-| 섀도 복사본 | 지운 항목이 남은 옛 파일을 꺼냅니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 크롬 계열 자동완성 | 같은 값을 다른 브라우저에도 쳤는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) |
+| 방문·다운로드·즐겨찾기 | `lastUsed` 무렵에 연 페이지로 어느 사이트에서 쳤는지 좁힙니다 | [places.sqlite](places-sqlite.md) |
+| 세션 복원 | 그 시각에 열려 있던 탭을 봅니다 | [세션 복원 (sessionstore.jsonlz4)](sessionstore-jsonlz4.md) |
+| 저장 비밀번호 | 로그인 정보를 저장한 사이트 목록과 견줍니다 | [저장 비밀번호 (logins.json·key4.db)](logins-json-key4-db.md) |
+| 섀도 복사본 | 지운 항목이 남은 옛 파일을 꺼냅니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 크롬 계열 자동완성 | 같은 값을 다른 브라우저에도 쳤는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

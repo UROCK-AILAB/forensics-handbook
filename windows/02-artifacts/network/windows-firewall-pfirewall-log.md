@@ -41,7 +41,7 @@
 | 그룹 정책 | `HKLM\SOFTWARE\Policies\Microsoft\WindowsFirewall` | 조사 PC 에는 이 키가 없었습니다. 그룹 정책을 적용하지 않은 PC 입니다 (확인 범위: 조사 PC) |
 
 - 조사 PC 의 `FirewallPolicy` 아래에는 DomainProfile, StandardProfile, PublicProfile, FirewallRules, RestrictedServices, RestrictedInterfaces, DynamicKeywords, HyperVFirewallPolicy, HyperVVMCreators, Mdm, TenantRestrictions 하위 키가 있었습니다. (확인 범위: 조사 PC)
-- 오프라인 SYSTEM 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키가 가리키는 `ControlSet00n` 을 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 오프라인 SYSTEM 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키가 가리키는 `ControlSet00n` 을 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 옛 방식의 예외 목록은 윈도 버전마다 위치가 다릅니다. ForensicArtifacts 는 아래 위치를 수집 대상으로 정의합니다.
 
@@ -197,7 +197,7 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 
 ### Security 로그의 방화벽 이벤트
 
-감사 정책을 켜 둔 PC 에서만 남습니다. 어느 감사 하위 범주를 켜야 하는지는 이번에 확인하지 못했습니다. 감사 설정은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+감사 정책을 켜 둔 PC 에서만 남습니다. 어느 감사 하위 범주를 켜야 하는지는 이번에 확인하지 못했습니다. 감사 설정은 [감사 정책과 로그 설정](../event-logs/audit-policy-log-settings.md)에서 다룹니다.
 
 | ID | 뜻 | 칸 |
 |---|---|---|
@@ -240,10 +240,10 @@ WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156�
 
 ## 시각 해석
 
-- `pfirewall.log` 의 시각은 현지 시각이고 시간대 표시가 없습니다(`#Time Format: Local`). UTC 로 바꾸려면 그 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 따로 확인합니다.
+- `pfirewall.log` 의 시각은 현지 시각이고 시간대 표시가 없습니다(`#Time Format: Local`). UTC 로 바꾸려면 그 PC 의 [시간대 설정](../system-account/time-zone.md)을 따로 확인합니다.
 - 로그를 켠 직후의 통신은 바로 파일에 쓰이지 않았습니다. 약 1분 뒤에 다시 보니 들어와 있었습니다. (확인 범위: 조사 PC 시험) 수집 직전의 통신은 파일에 아직 없을 수 있습니다.
 - 레지스트리 값에는 시각이 없습니다. `FirewallRules` 키의 마지막 기록 시각은 어느 규칙이 바뀌었는지 알려 주지 않습니다. 규칙마다 언제 생겼는지는 2097 로 봅니다.
-- 이벤트 시각은 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 이벤트 시각은 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 조사 PC 의 방화벽 채널(1MB)에는 992건이 있었습니다. 2026-09-05 부터 2026-09-23 까지 약 18일만 남아 있었습니다. (확인 범위: 조사 PC)
 
 ## 함정과 한계
@@ -255,7 +255,7 @@ WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156�
 5. **시각이 현지 시각입니다.** UTC 로 적힌 다른 기록과 섞을 때 시간대를 먼저 맞춥니다.
 6. **pid 만 있습니다.** 프로세스 ID 는 다시 쓰일 수 있습니다. 같은 시각의 다른 기록으로 프로그램을 잇습니다.
 7. **첫 기록 앞에 NUL 바이트가 있습니다.** 텍스트 도구가 첫 줄을 깨뜨려 보여 줄 수 있습니다. NUL 을 지우고 읽습니다.
-8. **라이브 수집에서 파일이 잠겨 있습니다.** 서비스가 파일을 연 채로 있어 보통 방식으로 읽으면 "다른 프로세스가 사용 중" 오류가 났습니다. 쓰기 공유(`FileShare.ReadWrite`)를 허용해 열면 읽혔습니다. (확인 범위: 조사 PC 시험) 라이브 수집은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
+8. **라이브 수집에서 파일이 잠겨 있습니다.** 서비스가 파일을 연 채로 있어 보통 방식으로 읽으면 "다른 프로세스가 사용 중" 오류가 났습니다. 쓰기 공유(`FileShare.ReadWrite`)를 허용해 열면 읽혔습니다. (확인 범위: 조사 PC 시험) 라이브 수집은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
 9. **방화벽 채널은 빨리 밀려납니다.** 최대 1MB 인데 스토어 앱 규칙이 자주 추가·삭제됩니다. 조사 PC 에는 약 18일만 남아 있었습니다.
 10. **옛 번호로만 찾으면 놓칩니다.** 조사 PC(25H2)에는 2004·2005·2006 이 한 건도 없었습니다. 2097·2099·2052 도 함께 찾습니다.
 11. **값이 표시 언어로 번역돼 남습니다.** 2082 의 Value 가 "예" 로 남았습니다. (확인 범위: 조사 PC 시험) 영어 "Yes" 만 검색하면 놓칩니다.
@@ -338,17 +338,17 @@ netsh advfirewall monitor show firewall rule name=all
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| Sysmon 로그 | 프로세스와 묶인 네트워크 연결 기록 | [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| SRUM | 앱별 네트워크 사용량 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 프리페치 | `netsh` 로 로그를 켠 뒤 `NETSH.EXE` 항목이 생기거나 갱신됐습니다 (확인 범위: 조사 PC 시험) | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| PowerShell 명령 기록 | `netsh`·방화벽 설정 명령이 남았는지 | [PowerShell 명령 기록](/02-artifacts/execution/consolehost-history-txt.md) |
-| 사용자 계정 | 2097·2082 의 사용자 SID 가 어느 계정인지 | [사용자 계정](/02-artifacts/system-account/sam.md), [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) |
-| 시간대 설정 | `pfirewall.log` 현지 시각을 UTC 로 바꿀 때 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
-| 감사 정책과 로그 설정 | Security 로그의 방화벽 이벤트가 남을 수 있는 설정이었는지 | [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) |
-| 이벤트 로그 삭제 | 방화벽 채널이나 Security 로그를 지운 기록 | [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) |
-| 섀도 복사본 | 예전 SYSTEM 하이브의 규칙·설정 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| Sysmon 로그 | 프로세스와 묶인 네트워크 연결 기록 | [Sysmon 로그](../event-logs/sysmon/index.md) |
+| SRUM | 앱별 네트워크 사용량 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
+| 프리페치 | `netsh` 로 로그를 켠 뒤 `NETSH.EXE` 항목이 생기거나 갱신됐습니다 (확인 범위: 조사 PC 시험) | [프리페치](../execution/prefetch/index.md) |
+| PowerShell 명령 기록 | `netsh`·방화벽 설정 명령이 남았는지 | [PowerShell 명령 기록](../execution/consolehost-history-txt.md) |
+| 사용자 계정 | 2097·2082 의 사용자 SID 가 어느 계정인지 | [사용자 계정](../system-account/sam.md), [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) |
+| 시간대 설정 | `pfirewall.log` 현지 시각을 UTC 로 바꿀 때 | [시간대 설정](../system-account/time-zone.md) |
+| 감사 정책과 로그 설정 | Security 로그의 방화벽 이벤트가 남을 수 있는 설정이었는지 | [감사 정책과 로그 설정](../event-logs/audit-policy-log-settings.md) |
+| 이벤트 로그 삭제 | 방화벽 채널이나 Security 로그를 지운 기록 | [이벤트 로그 삭제](../event-logs/1102-104.md) |
+| 섀도 복사본 | 예전 SYSTEM 하이브의 규칙·설정 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-방화벽 규칙을 고쳐 자리를 잡는 흔적은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md)와 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md)에서 함께 다룹니다. 받는 연결 기록은 [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md)에서도 씁니다.
+방화벽 규칙을 고쳐 자리를 잡는 흔적은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md)와 [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md)에서 함께 다룹니다. 받는 연결 기록은 [원격 데스크톱 침입 확인](../../04-scenarios/incident/rdp-intrusion.md)에서도 씁니다.
 
 ## 실습
 

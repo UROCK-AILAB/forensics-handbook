@@ -31,7 +31,7 @@ Microsoft 지원 문서는 아래처럼 적었습니다. (Microsoft Support)
 
 1. 옛 PC·디스크 이미지에 남은 Skype 로컬 파일
 2. 사용자가 기한 전에 내려받아 둔 내보내기 파일. 파일 형식은 확인하지 못했습니다.
-3. 무료 Teams 로 옮겨진 대화. [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) 에서 다룹니다.
+3. 무료 Teams 로 옮겨진 대화. [마이크로소프트 팀즈](teams.md) 에서 다룹니다.
 
 ### main.db
 
@@ -49,9 +49,9 @@ Skype 는 세대마다 저장 방식이 달랐습니다. 이 페이지에서 확
 
 - 경로를 확인하지 못했으므로, 이미지에서는 이름으로 찾습니다.
 - `main.db` 라는 이름의 파일을 모두 찾습니다. 그 가운데 아래 "구조" 의 표 일곱 개가 모두 있는 파일을 Skype DB 로 봅니다.
-- 이미지 전체에서 이름으로 찾는 방법은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다.
-- 크롬 계열 구조는 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 와 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
-- 설치했던 버전은 [설치 프로그램](/02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 확인합니다.
+- 이미지 전체에서 이름으로 찾는 방법은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
+- 크롬 계열 구조는 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 와 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
+- 설치했던 버전은 [설치 프로그램](../system-account/uninstall.md) 과 [스토어 앱 설치 목록](../system-account/appx-staterepository.md) 에서 확인합니다.
 
 ## 구조
 
@@ -123,7 +123,7 @@ plaso 파서는 아래 일곱 표가 있어야 이 파일을 Skype DB 로 읽습
 | `status` | 전송 상태. 값의 뜻은 확인하지 못했습니다 |
 | `id`, `parent_id`, `pk_id` | 식별 정보 |
 
-SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -140,7 +140,7 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 
 - **전송이 끝났는지.** `status` 값의 뜻을 확인하지 못했습니다. `finishtime` 이 채워져 있는지와 대상 경로에 파일이 있는지를 함께 봅니다.
 - **메시지를 읽었는지.** 읽음 여부를 가리는 칸은 이 페이지에서 확인하지 못했습니다.
-- **누가 자판 앞에 있었는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **누가 자판 앞에 있었는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **Skype 를 쓰지 않았다는 것.** `main.db` 가 없어도 크롬 계열 구조의 판이나 스토어 판을 썼을 수 있습니다.
 - **계정의 전체 대화.** 이 PC 의 `main.db` 가 계정의 모든 대화를 담았다고 볼 수 없습니다. Teams 로 옮겨진 대화와 비교해 빠진 부분을 적습니다.
 
@@ -149,8 +149,8 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 ## 시각 해석
 
 - plaso 는 이 파일의 시각 칸을 모두 POSIX 초로 풉니다. 곧 1970-01-01 00:00:00 UTC 부터 센 초입니다. (plaso skype.py)
-- 값은 UTC 기준입니다. 현지 시각으로 옮길 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 확인합니다.
-- 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 값은 UTC 기준입니다. 현지 시각으로 옮길 때는 [시간대 설정](../system-account/time-zone.md) 을 확인합니다.
+- 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 | 칸 | 알려 주는 때 |
 |---|---|
@@ -196,20 +196,20 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 
 - 파서가 읽는 칸은 위 표에 적은 칸뿐입니다. 다른 칸은 SQLite 도구로 따로 봅니다.
 - 도구가 낸 메시지 수와 `Messages` 표의 행 수를 맞춰 봅니다.
-- 차이가 나면 SQL 로 직접 셉니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+- 차이가 나면 SQL 로 직접 셉니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) | 무료 Teams 로 옮겨진 대화가 있는지 봅니다 |
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | Skype 를 설치·제거한 기록을 봅니다 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | Skype 실행 시각을 봅니다 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | `Transfers.filepath` 의 파일에 출처 표시가 붙었는지 봅니다 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) | 전송한 파일을 연 흔적이 있는지 봅니다 |
-| [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `main.db` 가 남았는지 봅니다 |
+| [마이크로소프트 팀즈](teams.md) | 무료 Teams 로 옮겨진 대화가 있는지 봅니다 |
+| [설치 프로그램](../system-account/uninstall.md) | Skype 를 설치·제거한 기록을 봅니다 |
+| [프리페치](../execution/prefetch/index.md) | Skype 실행 시각을 봅니다 |
+| [다운로드 출처 표시](../filesystem/zone-identifier.md) | `Transfers.filepath` 의 파일에 출처 표시가 붙었는지 봅니다 |
+| [바로가기 파일](../file-folder-usage/lnk.md) | 전송한 파일을 연 흔적이 있는지 봅니다 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `main.db` 가 남았는지 봅니다 |
 
-조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 와 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 에서 다룹니다.
+조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 와 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 에서 다룹니다.
 
 ## 실습
 

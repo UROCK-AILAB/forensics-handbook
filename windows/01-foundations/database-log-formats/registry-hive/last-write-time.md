@@ -10,15 +10,15 @@
 
 | 아티팩트 | 키 시각이 가리키는 것 | 자세한 내용 |
 |---|---|---|
-| MRU 목록 (RunMRU·RecentDocs·TypedPaths 등) | 목록이 마지막으로 바뀐 때. 보통 가장 최근 항목이 들어오거나 순서가 바뀐 때입니다 | [MRU 목록 읽는 법](/01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md), [실행 창 명령 기록](/02-artifacts/execution/runmru.md), [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md), [탐색기 입력 기록](/02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) |
-| 셸백 | 폴더 항목 키가 마지막으로 바뀐 때 | [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) |
-| 자동실행·서비스 | 항목이 추가·변경·삭제된 때 | [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md), [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) |
+| MRU 목록 (RunMRU·RecentDocs·TypedPaths 등) | 목록이 마지막으로 바뀐 때. 보통 가장 최근 항목이 들어오거나 순서가 바뀐 때입니다 | [MRU 목록 읽는 법](mrulist-mrulistex.md), [실행 창 명령 기록](../../../02-artifacts/execution/runmru.md), [최근 문서](../../../02-artifacts/file-folder-usage/recentdocs.md), [탐색기 입력 기록](../../../02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) |
+| 셸백 | 폴더 항목 키가 마지막으로 바뀐 때 | [셸백 시각 해석](../../../02-artifacts/file-folder-usage/shellbags/timestamps.md) |
+| 자동실행·서비스 | 항목이 추가·변경·삭제된 때 | [로그온 자동실행](../../../02-artifacts/persistence/run-runonce-startup-folder.md), [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) |
 
-값 데이터 안에 자기 시각을 따로 담는 아티팩트도 있습니다. [UserAssist](/02-artifacts/execution/userassist.md), [TypedURLsTime](/02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md), [USB 장치 속성의 연결 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)이 그 예입니다. 이런 경우에는 값 안의 시각이 키 시각보다 구체적입니다.
+값 데이터 안에 자기 시각을 따로 담는 아티팩트도 있습니다. [UserAssist](../../../02-artifacts/execution/userassist.md), [TypedURLsTime](../../../02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md), [USB 장치 속성의 연결 시각](../../../02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)이 그 예입니다. 이런 경우에는 값 안의 시각이 키 시각보다 구체적입니다.
 
 ## 구조
 
-키는 하이브 안에서 키 노드 (Key Node, 서명 `nk`) 셀 하나로 저장됩니다. 셀과 오프셋 계산은 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 시각과 관련된 칸만 봅니다.
+키는 하이브 안에서 키 노드 (Key Node, 서명 `nk`) 셀 하나로 저장됩니다. 셀과 오프셋 계산은 [하이브 내부 구조](regf-hbin-cell.md)에서 다룹니다. 여기서는 시각과 관련된 칸만 봅니다.
 
 | 위치 | 오프셋 | 크기 | 칸 | 뜻 |
 |---|---|---|---|---|
@@ -79,7 +79,7 @@ Microsoft 문서는 이 시각을 "이 키나 이 키의 값이 마지막으로 
 6. 초로 바꾸면 13,354,957,800초입니다. 날짜로는 2024-03-15 06:30:00 UTC 입니다. 한국 시각(UTC+9)으로는 같은 날 15:30:00 입니다.
 7. `02 00 00 00` 은 접근 비트입니다. 0x2 가 켜져 있습니다.
 
-FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 자세히 다룹니다.
+FILETIME 계산은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md)에서 자세히 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -87,7 +87,7 @@ FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-u
 
 - 시각을 UTC 로 보여 주는지, 분석 PC 의 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 트랜잭션 로그를 반영하고 읽었는지 확인합니다. 반영 여부에 따라 시각이 달라질 수 있습니다.
-- 헥스로 읽은 값과 한두 키를 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 헥스로 읽은 값과 한두 키를 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 포렌식에서 중요한 점
 
@@ -108,13 +108,13 @@ FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-u
 
 ### 트랜잭션 로그에 남은 더 새 시각
 
-Win8.1 부터는 바뀐 내용이 트랜잭션 로그에 먼저 기록됩니다. 하이브 파일에 반영되는 것은 최대 1시간까지 늦어질 수 있습니다. 전원이 갑자기 꺼지거나 실행 중에 하이브를 복사하면, 가장 새 시각이 로그에만 있을 수 있습니다. 로그를 반영하는 방법은 [트랜잭션 로그와 반영 안 된 변경](/01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다. 보고서에는 로그를 반영했는지 함께 적습니다.
+Win8.1 부터는 바뀐 내용이 트랜잭션 로그에 먼저 기록됩니다. 하이브 파일에 반영되는 것은 최대 1시간까지 늦어질 수 있습니다. 전원이 갑자기 꺼지거나 실행 중에 하이브를 복사하면, 가장 새 시각이 로그에만 있을 수 있습니다. 로그를 반영하는 방법은 [트랜잭션 로그와 반영 안 된 변경](log1-log2.md)에서 다룹니다. 보고서에는 로그를 반영했는지 함께 적습니다.
 
 ### 지운 키와 옛 사본
 
-지운 키의 셀이 비할당 영역에 남아 있으면, 그 셀에도 마지막 기록 시각이 남아 있습니다. 이 시각은 지우기 전 마지막 변경 시각입니다. 지운 시각이 아닙니다. 하위 키를 지우면 부모 키의 시각이 바뀝니다. 그래서 부모 키의 시각이 삭제 시각의 단서가 될 수 있습니다. 복구 방법은 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)를 봅니다.
+지운 키의 셀이 비할당 영역에 남아 있으면, 그 셀에도 마지막 기록 시각이 남아 있습니다. 이 시각은 지우기 전 마지막 변경 시각입니다. 지운 시각이 아닙니다. 하위 키를 지우면 부모 키의 시각이 바뀝니다. 그래서 부모 키의 시각이 삭제 시각의 단서가 될 수 있습니다. 복구 방법은 [지워진 키·값 복구](deleted-keys-values.md)를 봅니다.
 
-키 시각은 마지막 한 번만 남습니다. 그 전 시각은 옛 사본에서 찾습니다. 섀도 복사본 안의 하이브가 대표적입니다([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)). `System32\config\RegBack` 폴더도 옛 사본 자리입니다. 다만 Windows 10 1803 부터는 기본으로 백업하지 않습니다. 이때 RegBack 의 하이브 파일은 0바이트입니다.
+키 시각은 마지막 한 번만 남습니다. 그 전 시각은 옛 사본에서 찾습니다. 섀도 복사본 안의 하이브가 대표적입니다([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)). `System32\config\RegBack` 폴더도 옛 사본 자리입니다. 다만 Windows 10 1803 부터는 기본으로 백업하지 않습니다. 이때 RegBack 의 하이브 파일은 0바이트입니다.
 
 ### 읽기 흔적: 접근 비트 (Win8 이후)
 
@@ -130,15 +130,15 @@ Win8.1 부터는 바뀐 내용이 트랜잭션 로그에 먼저 기록됩니다.
 
 ## 시각 해석
 
-- 값은 UTC 입니다. 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](/02-artifacts/system-account/time-zone.md), [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)).
-- 시각은 변경이 일어날 때의 시스템 시계에서 옵니다. 누군가 시스템 시각을 바꿔 두었다면 키 시각도 그 틀린 시계를 따릅니다([시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md)).
+- 값은 UTC 입니다. 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md), [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)).
+- 시각은 변경이 일어날 때의 시스템 시계에서 옵니다. 누군가 시스템 시각을 바꿔 두었다면 키 시각도 그 틀린 시계를 따릅니다([시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)).
 - 단위는 100나노초입니다.
 - 한 번도 바뀌지 않은 키에는 만든 시각이 그대로 남습니다. 하지만 이 값만 보고 만든 시각인지, 나중에 바뀐 시각인지 구분할 수는 없습니다.
 
 ## 함정
 
 1. **기본 블록 시각과 혼동합니다.** Win8.1 부터 기본 블록의 마지막 기록 시각은 갱신되지 않습니다. 이 값을 하이브가 마지막으로 바뀐 때로 읽으면 안 됩니다.
-2. **하이브 파일의 NTFS 시각과 혼동합니다.** 하이브 파일의 수정 시각은 파일이 디스크에 쓰인 때입니다. 키가 바뀐 때와 다릅니다. Win8.1 부터는 파일 쓰기가 늦어지므로 차이가 더 커질 수 있습니다([두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
+2. **하이브 파일의 NTFS 시각과 혼동합니다.** 하이브 파일의 수정 시각은 파일이 디스크에 쓰인 때입니다. 키가 바뀐 때와 다릅니다. Win8.1 부터는 파일 쓰기가 늦어지므로 차이가 더 커질 수 있습니다([두 벌의 시각](../../disk-volume/ntfs/standard-information-file-name.md)).
 3. **부모 키가 하위 키보다 오래됐다고 조작으로 봅니다.** 하위 키 안의 변경은 부모로 올라가지 않으므로 이 차이는 흔합니다.
 4. **사용자 하이브의 시각을 사용자 행동으로 단정합니다.** NTUSER.DAT 의 키라도 그 사용자 권한으로 돌던 프로그램이면 어느 것이든 바꿀 수 있습니다.
 5. **여러 키의 시각이 같으면 한 행동으로 봅니다.** 설치 프로그램이나 시스템 작업이 많은 키를 한꺼번에 다시 쓰면 여러 키의 시각이 비슷해집니다.
@@ -148,21 +148,21 @@ Win8.1 부터는 바뀐 내용이 트랜잭션 로그에 먼저 기록됩니다.
 
 `NtSetInformationKey` 에 `KeyWriteTimeInformation` 을 넘기면 키의 마지막 기록 시각을 원하는 값으로 바꿀 수 있습니다. 그 키를 고칠 수 있는 권한이면 됩니다. 값은 그대로 두고 시각만 바꿀 수 있습니다. 공개 도구로도 나와 있습니다(Carvey, 2022). 조작 흔적은 다음처럼 찾습니다.
 
-- **다른 기록과 순서를 비교합니다.** Sysmon 이벤트 13(값 설정)처럼 변경 시각을 따로 남기는 기록보다 키 시각이 앞서면 이상합니다([Sysmon 레지스트리 변경](/02-artifacts/event-logs/sysmon/12-13-14.md)).
+- **다른 기록과 순서를 비교합니다.** Sysmon 이벤트 13(값 설정)처럼 변경 시각을 따로 남기는 기록보다 키 시각이 앞서면 이상합니다([Sysmon 레지스트리 변경](../../../02-artifacts/event-logs/sysmon/12-13-14.md)).
 - **값 안의 시각과 비교합니다.** 값 데이터에 담긴 시각보다 키 시각이 앞서면 이상합니다.
 - **옛 사본과 비교합니다.** 트랜잭션 로그·섀도 복사본·RegBack 의 같은 키 시각이 더 새것이면 이상합니다.
-- **말이 안 되는 시각을 찾습니다.** OS 설치 시각보다 앞선 시각이나 수집 시각보다 뒤의 시각이 그 예입니다([시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)).
+- **말이 안 되는 시각을 찾습니다.** OS 설치 시각보다 앞선 시각이나 수집 시각보다 뒤의 시각이 그 예입니다([시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)).
 - **4바이트 한쪽이 모두 0 인 시각을 찾습니다.** Carvey(2022)는 공개 조작 도구의 예시 시각을 넣으면 8바이트 시각을 4바이트씩 나눈 두 칸 가운데 하나가 모두 0 이 된다고 적었습니다. 그래서 하이브 전체에서 이런 시각을 자동으로 찾아보자고 제안했습니다. 조작 여부를 가르는 기준이 아니라 더 볼 키를 고르는 단서로만 씁니다.
 
-하위 키가 없는 키는 부모와 비교할 거리도 없습니다. 이런 키는 위의 다른 기록에 기대야 합니다. 시각 조작 전반은 [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)를 봅니다.
+하위 키가 없는 키는 부모와 비교할 거리도 없습니다. 이런 키는 위의 다른 기록에 기대야 합니다. 시각 조작 전반은 [시각 조작 탐지](../../../03-techniques/analysis/timeline/timestomping.md)를 봅니다.
 
 ## 함께 볼 페이지
 
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)
-- [하이브 내부 구조 (regf·hbin·Cell)](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)
-- [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](/01-foundations/database-log-formats/registry-hive/log1-log2.md)
-- [MRU 목록 읽는 법 (MRUList·MRUListEx)](/01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md)
-- [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md)
+- [레지스트리 하이브 구조](index.md)
+- [하이브 내부 구조 (regf·hbin·Cell)](regf-hbin-cell.md)
+- [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](log1-log2.md)
+- [MRU 목록 읽는 법 (MRUList·MRUListEx)](mrulist-mrulistex.md)
+- [여러 아티팩트 합친 타임라인](../../../03-techniques/analysis/timeline/super-timeline.md)
 
 ## 참고 문헌
 

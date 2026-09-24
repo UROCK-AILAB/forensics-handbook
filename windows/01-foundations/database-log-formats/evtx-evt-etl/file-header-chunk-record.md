@@ -4,13 +4,13 @@
 
 EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 청크 (Chunk) 를 이어 붙인 파일입니다. 이벤트 레코드 (Event Record) 는 청크 안에 차례로 들어 있습니다. 파일 헤더와 청크 헤더에는 서명과 CRC32 체크섬이 있습니다. 레코드에는 서명과 크기 사본이 있습니다. 이 값들을 따라가면 헥스만으로 레코드 경계를 찾고 손상을 가려낼 수 있습니다.
 
-이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 의 하위 주제입니다. 레코드 본문을 푸는 법은 [이진 XML 해석 (Binary XML·Template)](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md) 에 있습니다. 설명 문장을 찾는 법은 [공급자와 메시지 파일 (Provider·Message Table)](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) 에 있습니다. 빈 공간과 손상은 [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md) 에서 다룹니다.
+이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 레코드 본문을 푸는 법은 [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) 에 있습니다. 설명 문장을 찾는 법은 [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) 에 있습니다. 빈 공간과 손상은 [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](chunk-slack-corrupted-evtx.md) 에서 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-- Windows Vista 부터 이벤트 로그는 EVTX 형식입니다. XP 까지 쓰던 형식은 [구형 EVT 형식 (Windows XP·2003)](/01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md) 에서 다룹니다.
+- Windows Vista 부터 이벤트 로그는 EVTX 형식입니다. XP 까지 쓰던 형식은 [구형 EVT 형식 (Windows XP·2003)](windows-xp-2003.md) 에서 다룹니다.
 - 파일은 `C:\Windows\System32\winevt\Logs\` 에 있습니다. 로그마다 파일이 따로 있습니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md), [서비스 설치](/02-artifacts/event-logs/7045-4697.md), [프로세스 생성](/02-artifacts/event-logs/4688.md), [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 같은 이벤트 아티팩트는 모두 이 파일에서 읽습니다.
+- [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md), [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md), [프로세스 생성](../../../02-artifacts/event-logs/4688.md), [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 같은 이벤트 아티팩트는 모두 이 파일에서 읽습니다.
 
 ## 구조
 
@@ -20,8 +20,8 @@ EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 �
 
 - 파일은 파일 헤더, 청크 여러 개, 뒤쪽 빈 값 순서로 놓입니다.
 - 정수는 모두 리틀 엔디언입니다.
-- 날짜와 시각은 UTC 기준 FILETIME 입니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
-- 문자열은 BOM 없는 UTF-16LE 입니다. [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- 날짜와 시각은 UTC 기준 FILETIME 입니다. 푸는 법은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 문자열은 BOM 없는 UTF-16LE 입니다. [문자 인코딩](../../value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 - 첫 청크는 파일 오프셋 4096 에서 시작합니다. 그 뒤로 청크가 65536바이트씩 이어집니다.
 - 아래 오프셋은 libevtx 명세 기준의 10진 바이트입니다. 괄호 안은 16진입니다.
 
@@ -105,7 +105,7 @@ EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 �
 | 24 (0x18) | 가변 | 이벤트 본문(이진 XML) |
 | 끝 − 4 | 4 | 크기 사본. 4 오프셋의 크기와 같아야 합니다 |
 
-- 본문을 푸는 법은 [이진 XML 해석](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md) 에 있습니다.
+- 본문을 푸는 법은 [이진 XML 해석](binary-xml-template.md) 에 있습니다.
 - 확인 PC 의 System.evtx 첫 레코드는 크기가 1,624, 식별자가 1 이었습니다. 끝 4바이트도 1,624 였습니다.
 
 ### 이벤트 식별자와 수준
@@ -133,7 +133,7 @@ EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 �
 
 ### 로그 크기·덮어쓰기 설정
 
-로그 설정은 `HKLM\SYSTEM\CurrentControlSet\Services\Eventlog\<로그 이름>` 키에 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다. 감사 정책 쪽 설정은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 다룹니다.
+로그 설정은 `HKLM\SYSTEM\CurrentControlSet\Services\Eventlog\<로그 이름>` 키에 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../registry-hive/index.md) 에 있습니다. 감사 정책 쪽 설정은 [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 다룹니다.
 
 | 값 | 형식 | 뜻 |
 |---|---|---|
@@ -235,7 +235,7 @@ EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 �
 
 - 파일 플래그 0x0001 은 파일이 정상적으로 닫히지 않았다는 표시입니다.
 - 켜져 있는 PC 에서 쓰는 중인 파일을 읽으면 dirty 가 보일 수 있습니다. 확인 PC 에서는 225개 가운데 211개가 플래그 0, 14개가 dirty 였습니다(확인 범위: Windows 11 25H2 PC 한 대).
-- dirty 파일은 헤더 값이 실제 청크와 어긋날 수 있습니다. 사례와 읽는 법은 [파일 안에 남은 지운·손상 레코드](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md) 에 있습니다.
+- dirty 파일은 헤더 값이 실제 청크와 어긋날 수 있습니다. 사례와 읽는 법은 [파일 안에 남은 지운·손상 레코드](chunk-slack-corrupted-evtx.md) 에 있습니다.
 
 ### 한 바퀴 돈 로그
 
@@ -261,11 +261,11 @@ EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 �
 - 레코드 헤더의 기록 시각은 레코드가 파일에 쓰인 시각입니다. UTC 입니다.
 - 본문 XML 안의 TimeCreated 는 헤더의 기록 시각과 다를 수 있습니다.
 - 일부 wevtutil 버전이 내보낸 파일에 헤더 시각을 잘못 쓴 사례가 명세에 있습니다.
-- 두 값이 다르면 둘 다 적고, 보고서에는 어느 값을 썼는지 밝힙니다. 시간순 정리는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 봅니다.
+- 두 값이 다르면 둘 다 적고, 보고서에는 어느 값을 썼는지 밝힙니다. 시간순 정리는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 봅니다.
 
 ### 로그를 지운 경우
 
-로그 지우기(Clear) 가 파일을 어떻게 바꾸는지는 이 위키가 참고한 자료로 확인하지 못했습니다. 지운 흔적을 찾는 법은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) 에서 다룹니다.
+로그 지우기(Clear) 가 파일을 어떻게 바꾸는지는 이 위키가 참고한 자료로 확인하지 못했습니다. 지운 흔적을 찾는 법은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 에서 다룹니다.
 
 ## 함정
 
@@ -274,14 +274,14 @@ EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 �
 - 체크섬마다 계산 범위가 다릅니다. 파일 헤더는 앞 120바이트, 청크 헤더는 0~119 바이트와 128~511 바이트, 레코드 데이터는 512 바이트부터 빈 공간 오프셋 앞까지입니다. 마지막 범위는 확인 PC 에서 맞춰 본 것입니다.
 - 청크 헤더에는 레코드 번호 한 쌍과 레코드 식별자 한 쌍이 따로 있습니다. 두 쌍을 섞어 쓰지 않습니다.
 - 레코드 하나만 떼어 XML 로 풀 수는 없습니다. 이름과 템플릿이 같은 청크의 다른 자리에 있습니다.
-- 설명 문장은 파일 안에 없습니다. [공급자와 메시지 파일 (Provider·Message Table)](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) 을 봅니다.
+- 설명 문장은 파일 안에 없습니다. [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) 을 봅니다.
 
 ## 도구
 
 - libevtx: 형식 명세와 함께 공개된 라이브러리입니다. 헤더·청크·레코드를 파일에서 직접 읽습니다.
 - wevtutil: Windows 명령줄 도구입니다. 명세에는 일부 버전이 내보낸 파일의 헤더 시각을 잘못 쓴 사례가 있습니다.
 - 이벤트 뷰어: 살아 있는 시스템이나 사본 파일을 열어 결과를 견줘 볼 때 씁니다.
-- 한 도구의 결과만 믿지 않습니다. 헥스로 본 헤더 값과 도구 결과를 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 의 방식으로 비교합니다.
+- 한 도구의 결과만 믿지 않습니다. 헥스로 본 헤더 값과 도구 결과를 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 의 방식으로 비교합니다.
 
 ## 참고 문헌
 

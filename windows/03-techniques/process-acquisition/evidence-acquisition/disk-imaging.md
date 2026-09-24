@@ -1,6 +1,6 @@
 # 디스크 이미징 (Disk Imaging)
 
-> 상위 허브: [증거 획득 (Evidence Acquisition)](/03-techniques/process-acquisition/evidence-acquisition/index.md)
+> 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)
 
 ## 한 줄 요약
 
@@ -22,10 +22,10 @@ NIST SP 800-86 은 매체에서 데이터를 복사하는 방식을 둘로 나�
 
 - **증거로 쓸 가능성이 있을 때.** 법적·징계 절차에 쓸지는 데이터를 모으기 전에 정합니다. 보존할지 분명하지 않으면 보존하는 쪽을 기본으로 삼습니다.
 - **파일 시각이 중요할 때.** 일부 도구로 논리 백업을 하면 복사하면서 파일 생성 시각이 바뀔 수 있습니다.
-- **지운 파일과 슬랙 공간을 살펴야 할 때.** 복구하는 법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- **지운 파일과 슬랙 공간을 살펴야 할 때.** 복구하는 법은 [삭제 데이터 복구](../../analysis/data-recovery/index.md) 에서 다룹니다.
 
-중요한 서버를 멈출 수 없어서 필요한 파일만 가져와야 할 때는 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 을 봅니다.
-가상 머신과 클라우드 디스크는 [가상 머신·클라우드 디스크 확보](/03-techniques/process-acquisition/evidence-acquisition/vm-cloud-disk.md) 에서 다룹니다.
+중요한 서버를 멈출 수 없어서 필요한 파일만 가져와야 할 때는 [선별 수집](triage-collection.md) 을 봅니다.
+가상 머신과 클라우드 디스크는 [가상 머신·클라우드 디스크 확보](vm-cloud-disk.md) 에서 다룹니다.
 
 ## 이미지를 만드는 두 가지 방법
 
@@ -45,10 +45,10 @@ SP 800-86 은 데이터 획득을 계획 세우기, 획득, 무결성 검증의 
 
 1. **시스템이 켜져 있으면 끌지부터 정합니다.** 판단 기준은 아래 "켜진 시스템에서" 절에 있습니다.
 2. **사본을 담을 매체를 준비합니다.** 기존 데이터를 지우고 용량이 충분한지 확인합니다.
-3. **원본에 쓰기 방지를 겁니다.** 연결 순서는 [쓰기 방지](/03-techniques/process-acquisition/evidence-acquisition/write-blocker.md) 에 있습니다.
+3. **원본에 쓰기 방지를 겁니다.** 연결 순서는 [쓰기 방지](write-blocker.md) 에 있습니다.
 4. **원본의 해시를 계산해 적습니다.**
 5. **비트 스트림 이미지를 뜹니다.** 디스크→디스크와 디스크→파일 가운데 하나를 고릅니다.
-6. **사본의 해시를 원본 값과 비교합니다.** 이미징 뒤에 원본 해시를 다시 계산하는 까닭과 알고리즘 고르는 법은 [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 에 있습니다.
+6. **사본의 해시를 원본 값과 비교합니다.** 이미징 뒤에 원본 해시를 다시 계산하는 까닭과 알고리즘 고르는 법은 [해시로 무결성 검증](hash-verification.md) 에 있습니다.
 7. **모든 단계를 기록합니다.** 아래 목록을 빠짐없이 적습니다.
 8. **원본에 표시를 붙여 안전하게 보관합니다.** 이후 분석은 사본으로만 합니다. 원본은 필요할 때 사본을 다시 만들 수 있게 남겨 둡니다.
 
@@ -60,14 +60,14 @@ SP 800-86 은 데이터 획득을 계획 세우기, 획득, 무결성 검증의 
 - 이미지를 만든 모든 단계
 
 모든 단계와 쓴 도구를 자세히 적어 두면 다른 분석가가 나중에 같은 과정을 되풀이할 수 있습니다.
-원본과 사본을 누가 언제 맡았는지 적는 법은 [증거 보관 연속성](/03-techniques/process-acquisition/evidence-acquisition/chain-of-custody.md) 에서 다룹니다.
+원본과 사본을 누가 언제 맡았는지 적는 법은 [증거 보관 연속성](chain-of-custody.md) 에서 다룹니다.
 
 ## 켜진 시스템에서
 
 - 켜진 시스템에서 물리 장치 전체를 비트 단위로 뜨는 방법은 권하지 않습니다. 뜨는 동안 파일과 메모리가 계속 바뀌어서 결과를 검증할 수 없습니다.
 - 켜진 시스템이라도 논리 영역은 비트 단위로 뜨고 검증할 수 있습니다.
 - 사용자가 아무것도 하지 않아도 서비스와 프로세스가 하드 드라이브에 쓰고 있을 수 있습니다.
-- 메모리처럼 먼저 사라지는 데이터를 어떻게 모을지는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+- 메모리처럼 먼저 사라지는 데이터를 어떻게 모을지는 [라이브 응답](../live-response/index.md) 에서 다룹니다.
 
 ### 끌 것인가, 어떻게 끌 것인가
 
@@ -90,13 +90,13 @@ SP 800-86 은 끄는 방법을 둘로 나눕니다.
 - 스트라이핑 RAID (RAID-0·RAID-5) 는 디스크마다 따로 이미지를 뜹니다. 그다음 분석 시스템에서 RAID 구성을 다시 만듭니다.
 - RAID-5 는 디스크 하나를 빼고 나머지를 모두 이미징해도 볼륨을 볼 수 있습니다.
 
-이미지 안의 파티션을 읽는 법은 [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md) 에 있습니다.
+이미지 안의 파티션을 읽는 법은 [파티션 구조](../../../01-foundations/disk-volume/mbr-gpt.md) 에 있습니다.
 
 ## E01 (EWF) 로 뜰 때 알아 둘 것
 
 EWF (Expert Witness Compression Format) 는 디스크→파일 방식에서 쓰는 이미지 형식 가운데 하나입니다.
 첫 세그먼트 파일의 확장자가 .E01 이라서 흔히 E01 이라고 부릅니다.
-섹션 구조와 청크 압축 같은 형식 전체는 [증거 이미지·가상 디스크 형식](/01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) 에서 다룹니다.
+섹션 구조와 청크 압축 같은 형식 전체는 [증거 이미지·가상 디스크 형식](../../../01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) 에서 다룹니다.
 여기서는 이미지를 뜨거나 넘겨받을 때 확인할 것만 봅니다.
 
 ### 세그먼트 파일은 모두 함께 옮깁니다
@@ -155,7 +155,7 @@ EnCase 4 부터는 같은 정보를 UTF-16 으로 적은 header2 섹션도 씁�
 | md | 매체 모델 (EnCase 6 이상) |
 | sn | 매체 일련번호 (EnCase 6 이상) |
 
-사건 번호와 증거 번호, 조사자 이름은 [증거 보관 연속성](/03-techniques/process-acquisition/evidence-acquisition/chain-of-custody.md) 기록과 맞춰 봅니다.
+사건 번호와 증거 번호, 조사자 이름은 [증거 보관 연속성](chain-of-custody.md) 기록과 맞춰 봅니다.
 
 날짜를 적는 방식은 이미지를 만든 도구마다 다릅니다.
 EnCase 와 linen 은 둘 다 EWF 를 만드는 획득 도구입니다.
@@ -167,7 +167,7 @@ EnCase 와 linen 은 둘 다 EWF 를 만드는 획득 도구입니다.
 | linen 6.19 부터 | POSIX 32비트 초 값 | 획득 일시는 UTC, 시스템 일시는 현지 시각 |
 
 그래서 획득 일시를 보고서에 옮길 때는 만든 도구와 버전을 먼저 확인합니다.
-시각 값을 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+시각 값을 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
 ### 읽기 오류 구간을 확인합니다
 
@@ -183,7 +183,7 @@ EnCase 와 linen 은 둘 다 EWF 를 만드는 획득 도구입니다.
 - libyal/libewf 는 EWF 형식 명세 문서를 공개한 오픈 소스 라이브러리입니다. 한 도구로 만든 E01 을 다른 구현으로 읽어 볼 때 예로 들 수 있습니다.
 - 어떤 도구를 썼든 이름과 버전을 절차 7단계대로 기록합니다.
 
-두 도구의 결과를 맞춰 보는 법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+두 도구의 결과를 맞춰 보는 법은 [도구 결과 교차 검증](../../reporting/tool-validation.md) 에 있습니다.
 
 ## 함정과 한계
 

@@ -101,7 +101,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 
 ### 증명하지 못하는 것
 
-- **동작했나.** 구독이 있다는 것만 알려 줍니다. 소비자가 실제로 실행한 프로그램은 [프로세스 생성](/02-artifacts/event-logs/4688.md) 이나 [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) 에서 따로 찾습니다.
+- **동작했나.** 구독이 있다는 것만 알려 줍니다. 소비자가 실제로 실행한 프로그램은 [프로세스 생성](../event-logs/4688.md) 이나 [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 에서 따로 찾습니다.
 - **언제 만들었나.** 저장소 파일 안에 객체별 생성 시각이 있는지 확인하지 못했습니다.
 - **바인딩이 없는 필터나 소비자가 동작하나.** 바인딩이 필터와 소비자를 잇습니다. 바인딩 없이 남은 객체만으로 동작했다고 보지 않습니다. 이 문장은 구성 방식에서 끌어낸 해석입니다.
 - **지운 구독이 있었나.** 지운 구독을 OBJECTS.DATA 에서 찾을 수 있는지 확인하지 못했습니다.
@@ -110,7 +110,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 
 ## 시각 해석
 
-- 객체별 시각을 확인하지 못했으므로 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있습니다. 이 문장은 해석입니다. 파일 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다.
+- 객체별 시각을 확인하지 못했으므로 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있습니다. 이 문장은 해석입니다. 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
 - Windows 11 PC 한 대에서 세 MAPPING 파일의 마지막 수정 시각이 서로 달랐습니다. 가장 최근 것이 INDEX.BTR·OBJECTS.DATA 와 같은 시각이었습니다. (확인 범위: Win11 25H2 한 대)
 - 파일 시각은 저장소 전체가 마지막으로 바뀐 때를 말할 뿐, 어느 객체가 바뀌었는지 말하지 않습니다.
 - WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 칸 이름은 Windows 11 PC 한 대의 공급자 메시지에서 읽었습니다. (확인 범위: Win11 25H2 한 대)
@@ -124,8 +124,8 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 | 5861 | "Namespace = %1; Eventfilter = %2 (refer to its activate eventid:5859); Consumer = %3; PossibleCause = %4" |
 
 - 5861 은 필터와 소비자를 함께 적습니다. 영구 구독이 등록될 때 남는 이벤트로 쓰입니다. "등록할 때 발생한다" 는 공식 설명은 확인하지 못했습니다.
-- 이 로그 전반은 [원격 명령 실행 이벤트](/02-artifacts/event-logs/winrm-wmi-activity.md) 에서 다룹니다.
-- Sysmon 은 이벤트 19·20·21(WmiEvent) 로 필터·소비자·바인딩을 기록합니다. [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) 를 봅니다.
+- 이 로그 전반은 [원격 명령 실행 이벤트](../event-logs/winrm-wmi-activity.md) 에서 다룹니다.
+- Sysmon 은 이벤트 19·20·21(WmiEvent) 로 필터·소비자·바인딩을 기록합니다. [Sysmon 로그](../event-logs/sysmon/index.md) 를 봅니다.
 
 ## 함정과 한계
 
@@ -170,19 +170,19 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 3. 소비자의 ScriptText·CommandLineTemplate·ExecutablePath 를 따로 뽑습니다.
 4. 위 "한 PC 에 있던 구독" 과 같은 한 벌은 따로 표시합니다.
 5. 오프라인 이미지에서는 저장소 폴더의 파일을 모두 함께 사본으로 뜹니다. 여러 파일이 한 저장소를 이루기 때문입니다.
-6. WMI-Activity/Operational 로그에서 5859·5860·5861 을 뽑아 필터 이름과 맞춰 봅니다. 로그 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+6. WMI-Activity/Operational 로그에서 5859·5860·5861 을 뽑아 필터 이름과 맞춰 봅니다. 로그 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| WMI-Activity 로그 | 구독 등록과 쿼리 활동의 흔적 | [원격 명령 실행 이벤트](/02-artifacts/event-logs/winrm-wmi-activity.md) |
-| Sysmon 19·20·21 | 필터·소비자·바인딩을 만든 기록 | [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 4688·Sysmon 1 | 소비자가 실행한 프로세스 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) |
-| 프리페치 | 소비자가 가리킨 프로그램의 실행 흔적 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 예약 작업 | 같은 명령이 다른 자동실행 자리에도 있나 | [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md) |
+| WMI-Activity 로그 | 구독 등록과 쿼리 활동의 흔적 | [원격 명령 실행 이벤트](../event-logs/winrm-wmi-activity.md) |
+| Sysmon 19·20·21 | 필터·소비자·바인딩을 만든 기록 | [Sysmon 로그](../event-logs/sysmon/index.md) |
+| 4688·Sysmon 1 | 소비자가 실행한 프로세스 | [프로세스 생성](../event-logs/4688.md), [Sysmon 이벤트 1](../event-logs/sysmon/1.md) |
+| 프리페치 | 소비자가 가리킨 프로그램의 실행 흔적 | [프리페치](../execution/prefetch/index.md) |
+| 예약 작업 | 같은 명령이 다른 자동실행 자리에도 있나 | [예약 작업](scheduled-tasks/index.md) |
 
-원격에서 WMI 로 명령을 실행한 흐름은 [PsExec·WMI·WinRM](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에, 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에 있습니다.
+원격에서 WMI 로 명령을 실행한 흐름은 [PsExec·WMI·WinRM](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에, 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 

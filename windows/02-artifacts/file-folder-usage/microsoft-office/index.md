@@ -31,14 +31,14 @@ Word·Excel·PowerPoint 같은 오피스 앱은 사용자가 다룬 문서의 �
 
 | 흔적 | 위치 | 버전 (확인 범위) | 알려 주는 것 |
 |---|---|---|---|
-| [최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | NTUSER.DAT `...\<버전>\<앱>\File MRU`·`Place MRU`, `...\<앱>\User MRU\<하위 키>\...` | 15.0 경로 예가 있습니다. 16.0 은 관찰입니다. | 앱에서 다룬 파일·폴더 경로와 FILETIME 시각 |
-| [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) | NTUSER.DAT `...\<버전>\<앱>\Security\Trusted Documents\TrustRecords` | 14.0·15.0 Word 로 시험한 자료가 있습니다. 16.0 은 관찰입니다. | 경고 단추를 누른 문서 경로, 매크로를 켰는지 |
-| [읽던 위치 (Reading Locations)](/02-artifacts/file-folder-usage/microsoft-office/reading-locations.md) | NTUSER.DAT `...\<버전>\Word\Reading Locations\<하위 키>` | 15.0 경로 예가 있습니다. 16.0 은 관찰입니다. | Word 문서 경로와 분 단위 로컬 시각 |
-| [백스테이지 캐시 (BackstageInAppNavCache)](/02-artifacts/file-folder-usage/microsoft-office/backstageinappnavcache.md) | `AppData\Local\Microsoft\Office\16.0\BackstageInAppNavCache` | 공개 자료의 경로는 16.0 입니다. | [파일] 탭 화면에서 둘러본 폴더의 내용 목록 |
-| [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](/02-artifacts/file-folder-usage/microsoft-office/autorecover-unsavedfiles.md) | `AppData\Roaming\Microsoft\Word`, `AppData\Local\Microsoft\Office\UnsavedFiles` | Microsoft 365 기준 안내입니다. | 로컬에서 작업한 문서의 백업 사본 |
-| [오피스 문서 캐시 (OfficeFileCache)](/02-artifacts/file-folder-usage/microsoft-office/officefilecache.md) | `AppData\Local\Microsoft\Office\<버전>\OfficeFileCache` | 옛 버전 폴더도 남습니다. 16.0 은 모양이 달랐습니다 (관찰). | OneDrive·SharePoint 문서의 로컬 사본 |
+| [최근 파일 (File MRU·Place MRU)](file-mru-place-mru.md) | NTUSER.DAT `...\<버전>\<앱>\File MRU`·`Place MRU`, `...\<앱>\User MRU\<하위 키>\...` | 15.0 경로 예가 있습니다. 16.0 은 관찰입니다. | 앱에서 다룬 파일·폴더 경로와 FILETIME 시각 |
+| [신뢰 문서 기록 (Trust Records)](trust-records.md) | NTUSER.DAT `...\<버전>\<앱>\Security\Trusted Documents\TrustRecords` | 14.0·15.0 Word 로 시험한 자료가 있습니다. 16.0 은 관찰입니다. | 경고 단추를 누른 문서 경로, 매크로를 켰는지 |
+| [읽던 위치 (Reading Locations)](reading-locations.md) | NTUSER.DAT `...\<버전>\Word\Reading Locations\<하위 키>` | 15.0 경로 예가 있습니다. 16.0 은 관찰입니다. | Word 문서 경로와 분 단위 로컬 시각 |
+| [백스테이지 캐시 (BackstageInAppNavCache)](backstageinappnavcache.md) | `AppData\Local\Microsoft\Office\16.0\BackstageInAppNavCache` | 공개 자료의 경로는 16.0 입니다. | [파일] 탭 화면에서 둘러본 폴더의 내용 목록 |
+| [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) | `AppData\Roaming\Microsoft\Word`, `AppData\Local\Microsoft\Office\UnsavedFiles` | Microsoft 365 기준 안내입니다. | 로컬에서 작업한 문서의 백업 사본 |
+| [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) | `AppData\Local\Microsoft\Office\<버전>\OfficeFileCache` | 옛 버전 폴더도 남습니다. 16.0 은 모양이 달랐습니다 (관찰). | OneDrive·SharePoint 문서의 로컬 사본 |
 
-레지스트리 값을 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+레지스트리 값을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ### 오피스 버전 키
 
@@ -57,7 +57,7 @@ Word·Excel·PowerPoint 같은 오피스 앱은 사용자가 다룬 문서의 �
 ### 로그인 계정
 
 - RegRipper 의 msoffice 플러그인은 `Common\Identity\Identities` 아래 `FriendlyName`·`EmailAddress` 값으로 오피스에 로그인한 계정을 뽑습니다.
-- 최근 파일 목록은 계정마다 나뉘어 있을 수 있습니다. 관찰한 PC 의 `User MRU` 아래에는 계정별 하위 키가 두 개 있었습니다. (관찰) 자세한 내용은 [오피스 최근 파일](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) 에 있습니다.
+- 최근 파일 목록은 계정마다 나뉘어 있을 수 있습니다. 관찰한 PC 의 `User MRU` 아래에는 계정별 하위 키가 두 개 있었습니다. (관찰) 자세한 내용은 [오피스 최근 파일](file-mru-place-mru.md) 에 있습니다.
 
 ### 관찰한 PC 의 구성 (관찰)
 
@@ -68,22 +68,22 @@ Word·Excel·PowerPoint 같은 오피스 앱은 사용자가 다룬 문서의 �
 
 ## 읽는 순서
 
-1. [오피스 최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) — 앱마다 최근에 다룬 파일·폴더 경로와 FILETIME 시각을 읽습니다. 계정별 `User MRU` 와 시각의 뜻이 엇갈리는 문제를 다룹니다.
-2. [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) — 경고 단추를 누른 문서 경로와 매크로를 켰는지를 읽습니다. 값 안의 시각이 매크로를 켠 때가 아니라는 점을 다룹니다.
-3. [읽던 위치 (Reading Locations)](/02-artifacts/file-folder-usage/microsoft-office/reading-locations.md) — Word 문서의 경로와 분 단위 로컬 시각을 읽습니다. 최근 파일 목록의 UTC 시각과 맞추는 법을 다룹니다.
-4. [백스테이지 캐시 (BackstageInAppNavCache)](/02-artifacts/file-folder-usage/microsoft-office/backstageinappnavcache.md) — [파일] 탭 화면에서 둘러본 폴더의 내용 목록을 JSON 에서 읽습니다. 연 파일 목록이 아니라는 점과 UTF-16LE 인코딩을 다룹니다.
-5. [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](/02-artifacts/file-folder-usage/microsoft-office/autorecover-unsavedfiles.md) — 로컬에서 작업한 문서의 백업 사본을 찾습니다. 공식 안내의 경로와 관찰한 실제 모양의 차이를 다룹니다.
-6. [오피스 문서 캐시 (OfficeFileCache)](/02-artifacts/file-folder-usage/microsoft-office/officefilecache.md) — OneDrive·SharePoint 문서의 로컬 캐시에서 문서를 되살립니다. 공개 자료의 형식과 최근 PC 에서 본 다른 형식을 다룹니다.
+1. [오피스 최근 파일 (File MRU·Place MRU)](file-mru-place-mru.md) — 앱마다 최근에 다룬 파일·폴더 경로와 FILETIME 시각을 읽습니다. 계정별 `User MRU` 와 시각의 뜻이 엇갈리는 문제를 다룹니다.
+2. [신뢰 문서 기록 (Trust Records)](trust-records.md) — 경고 단추를 누른 문서 경로와 매크로를 켰는지를 읽습니다. 값 안의 시각이 매크로를 켠 때가 아니라는 점을 다룹니다.
+3. [읽던 위치 (Reading Locations)](reading-locations.md) — Word 문서의 경로와 분 단위 로컬 시각을 읽습니다. 최근 파일 목록의 UTC 시각과 맞추는 법을 다룹니다.
+4. [백스테이지 캐시 (BackstageInAppNavCache)](backstageinappnavcache.md) — [파일] 탭 화면에서 둘러본 폴더의 내용 목록을 JSON 에서 읽습니다. 연 파일 목록이 아니라는 점과 UTF-16LE 인코딩을 다룹니다.
+5. [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) — 로컬에서 작업한 문서의 백업 사본을 찾습니다. 공식 안내의 경로와 관찰한 실제 모양의 차이를 다룹니다.
+6. [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) — OneDrive·SharePoint 문서의 로컬 캐시에서 문서를 되살립니다. 공개 자료의 형식과 최근 PC 에서 본 다른 형식을 다룹니다.
 
 ## 함께 볼 페이지
 
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) · [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — 레지스트리 값과 FILETIME 을 직접 풉니다.
-- [시간대 설정](/02-artifacts/system-account/time-zone.md) — 로컬 시각으로 남은 값을 UTC 로 옮길 때 봅니다.
-- [오피스 경고](/02-artifacts/event-logs/oalerts.md) — 이벤트 로그 쪽의 오피스 기록입니다.
-- [오피스 매크로](/02-artifacts/embedded-metadata/vba-macro.md) · [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) — 문서 파일 안에 남은 매크로와 속성을 봅니다.
-- [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) · [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) — 오피스 밖에서 윈도가 남기는 문서 사용 기록입니다.
-- [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) — 클라우드 문서의 동기화 기록을 봅니다.
-- [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) · [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) · [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) — 오피스 흔적을 다른 기록과 묶어 읽는 조사 흐름입니다.
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) · [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — 레지스트리 값과 FILETIME 을 직접 풉니다.
+- [시간대 설정](../../system-account/time-zone.md) — 로컬 시각으로 남은 값을 UTC 로 옮길 때 봅니다.
+- [오피스 경고](../../event-logs/oalerts.md) — 이벤트 로그 쪽의 오피스 기록입니다.
+- [오피스 매크로](../../embedded-metadata/vba-macro.md) · [문서 메타데이터](../../embedded-metadata/document-metadata/index.md) — 문서 파일 안에 남은 매크로와 속성을 봅니다.
+- [바로가기 파일](../lnk.md) · [점프리스트](../jump-lists.md) · [최근 문서](../recentdocs.md) — 오피스 밖에서 윈도가 남기는 문서 사용 기록입니다.
+- [원드라이브](../../cloud-notes/onedrive/index.md) — 클라우드 문서의 동기화 기록을 봅니다.
+- [이 파일을 누가 언제 열었나](../../../04-scenarios/activity/file-access.md) · [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) · [악성코드는 어디서 들어왔나](../../../04-scenarios/incident/initial-access.md) — 오피스 흔적을 다른 기록과 묶어 읽는 조사 흐름입니다.
 
 ## 참고 문헌
 

@@ -1,6 +1,6 @@
 # 캐시 (Cache)
 
-> 상위 허브: [크롬 계열 브라우저 (Chrome·Edge·Whale 등)](/02-artifacts/browsers/chrome-edge-whale/index.md)
+> 상위 허브: [크롬 계열 브라우저 (Chrome·Edge·Whale 등)](index.md)
 
 ## 한 줄 요약
 
@@ -20,11 +20,11 @@
 
 캐시 크기에는 상한이 있습니다. 상한은 디스크 빈 공간을 보고 정합니다. 상한을 넘으면 오래 안 쓴 항목부터 지웁니다 (Chromium 설계 문서). 그래서 캐시에는 최근 자원이 주로 남습니다.
 
-저장 형식 자체(블록 파일, 주소 체계, Simple Cache)는 [캐시 형식 (Blockfile·Simple Cache)](/01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md)에서 다룹니다. 이 페이지는 해석에 필요한 만큼만 짚습니다.
+저장 형식 자체(블록 파일, 주소 체계, Simple Cache)는 [캐시 형식 (Blockfile·Simple Cache)](../../../01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md)에서 다룹니다. 이 페이지는 해석에 필요한 만큼만 짚습니다.
 
 ## 위치와 버전별 차이
 
-경로는 프로필 폴더(`User Data\<프로필>`) 기준입니다. 브라우저마다 User Data 가 어디 있는지, 프로필 이름을 어떻게 찾는지는 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
+경로는 프로필 폴더(`User Data\<프로필>`) 기준입니다. 브라우저마다 User Data 가 어디 있는지, 프로필 이름을 어떻게 찾는지는 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
 
 | 폴더 (프로필 기준) | 담는 것 | 형식 |
 |---|---|---|
@@ -44,13 +44,13 @@
 | 요즘 버전 | `Cache\Cache_Data` 아래에 둡니다 | 관찰 (Chrome 153·Edge 151) |
 | Chrome 86 부터 | 키에 최상위 사이트와 프레임 사이트가 들어갑니다. 이것을 캐시 분할 (Cache Partitioning) 이라고 합니다 | Chrome 개발자 블로그 |
 | Windows 판 형식 | 기본은 blockfile 입니다. Android 는 Simple Cache 가 기본입니다 | Chromium 설계 문서·소스 |
-| 옛 엣지 (EdgeHTML)·IE | 전혀 다른 형식입니다. [쿠키·캐시 폴더 (INetCookies·INetCache)](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md)를 봅니다 | |
+| 옛 엣지 (EdgeHTML)·IE | 전혀 다른 형식입니다. [쿠키·캐시 폴더 (INetCookies·INetCache)](../ie-edgehtml/inetcookies-inetcache.md)를 봅니다 | |
 
 캐시 위치가 기본값과 다를 수 있습니다.
 
 - 관리 정책 `DiskCacheDir` 로 캐시 폴더를 옮길 수 있습니다 (Chromium 소스 `profile_network_context_service.cc`). Chrome 정책은 `HKLM\SOFTWARE\Policies\Google\Chrome` 과 HKCU 의 같은 경로에 있습니다.
 - Chromium 에는 캐시 형식을 바꾸는 실험 설정 (`DiskCacheBackendExperiment`) 이 있습니다. 소스에서 기본값은 꺼짐입니다. 그래도 형식은 폴더 안 파일 이름으로 확인합니다. `data_0` 이 있으면 blockfile, `index-dir` 와 `_0` 파일이 있으면 Simple Cache 입니다.
-- Teams·Discord·Slack 같은 Electron·WebView2 앱도 Chromium 의 캐시를 씁니다. 앱 폴더 안의 캐시를 브라우저 캐시로 착각하지 않습니다. 위치는 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md)를 봅니다.
+- Teams·Discord·Slack 같은 Electron·WebView2 앱도 Chromium 의 캐시를 씁니다. 앱 폴더 안의 캐시를 브라우저 캐시로 착각하지 않습니다. 위치는 [Electron·WebView2 앱 데이터 위치](../../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md)를 봅니다.
 
 ## 구조
 
@@ -132,14 +132,14 @@ Chromium 소스(`net/http/http_cache.cc`)에 적힌 키 형식은 `자격 증명
 | 그 자원을 부를 때 최상위에 떠 있던 사이트 (분할 키가 있을 때) | 그 사이트를 몇 번, 언제 모두 방문했는지. 한 자원은 한 항목만 남습니다 |
 | 항목을 만든 시각과 마지막으로 쓴 시각 | 캐시에 없으니 방문하지 않았다는 것 |
 | 응답을 보낸 서버의 주소, 콘텐츠 형식, 서버가 적은 시각 | 사용자가 무엇을 올리거나 보냈는지. 캐시에는 응답만 남고 요청 본문은 남지 않습니다 |
-| 그 시각 PC 시계와 서버 시계의 차이 (아래 시각 해석) | 파일을 내려받아 저장했는지. 다운로드는 [방문·다운로드 기록](/02-artifacts/browsers/chrome-edge-whale/history.md)에서 봅니다 |
+| 그 시각 PC 시계와 서버 시계의 차이 (아래 시각 해석) | 파일을 내려받아 저장했는지. 다운로드는 [방문·다운로드 기록](history.md)에서 봅니다 |
 
 사용자가 열지 않은 자원도 캐시에 남습니다.
 
 - 페이지 안의 광고·추적 스크립트·다른 도메인 이미지가 함께 남습니다.
 - 브라우저는 사용자가 누르기 전에 페이지를 미리 불러올 수 있습니다 (미리 로드).
 - 확장 프로그램과 서비스 워커도 요청을 보냅니다.
-- 백그라운드 탭과 세션 복원으로 다시 연 탭도 자원을 받습니다. 복원 흐름은 [세션·탭 복원](/02-artifacts/browsers/chrome-edge-whale/sessions.md)을 봅니다.
+- 백그라운드 탭과 세션 복원으로 다시 연 탭도 자원을 받습니다. 복원 흐름은 [세션·탭 복원](sessions.md)을 봅니다.
 
 ### 보고서 문장
 
@@ -150,7 +150,7 @@ Chromium 소스(`net/http/http_cache.cc`)에 적힌 키 형식은 `자격 증명
 
 ## 시각 해석
 
-캐시의 내부 시각은 모두 1601-01-01 00:00 UTC 부터 센 마이크로초입니다. 8바이트 리틀 엔디언입니다. 흔히 WebKit 시각이라고 부르는 형식입니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. 내부 시각은 그 순간의 PC 시계로 적습니다.
+캐시의 내부 시각은 모두 1601-01-01 00:00 UTC 부터 센 마이크로초입니다. 8바이트 리틀 엔디언입니다. 흔히 WebKit 시각이라고 부르는 형식입니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. 내부 시각은 그 순간의 PC 시계로 적습니다.
 
 | 시각 | 자리 | 언제 적나 | 기준 |
 |---|---|---|---|
@@ -167,7 +167,7 @@ Chromium 소스(`net/http/http_cache.cc`)에 적힌 키 형식은 `자격 증명
 - 요청·응답 시각의 뜻은 Chromium 소스 `http_response_info.h` 주석을 따랐습니다. 주석에는 "캐시된 응답은 마지막으로 다시 확인한 시각" 이라고 적혀 있습니다.
 - 항목을 만든 시각은 "처음 받은 때" 에 가깝습니다. 요청·응답 시각은 "마지막으로 서버에 확인한 때" 에 가깝습니다. 마지막 사용 시각은 "마지막으로 캐시에서 꺼낸 때" 에 가깝습니다. 세 값을 나눠서 적습니다.
 - `Last-Modified` 는 서버 쪽 파일 이야기입니다. 사용자 행위 시각이 아닙니다.
-- 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- 현지 시각으로 바꿀 때는 [시간대 설정](../../system-account/time-zone.md)을 씁니다.
 
 ### PC 시계 확인에 쓰기
 
@@ -176,28 +176,28 @@ Chromium 소스(`net/http/http_cache.cc`)에 적힌 키 형식은 `자격 증명
 - 두 값이 크게 벌어지면 그때 PC 시계가 틀렸을 수 있습니다.
 - CDN 이 저장해 둔 응답을 주면 `Date` 가 과거일 수 있습니다. 이때는 `Age` 헤더(초)를 더해서 비교합니다.
 - 한 항목이 아니라 여러 서버의 여러 항목에서 같은 방향의 차이가 나오는지 봅니다.
-- 시계 조작 여부의 판단 흐름은 [시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md)와 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+- 시계 조작 여부의 판단 흐름은 [시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)와 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ## 함정과 한계
 
 1. **캐시에 나온 URL 을 방문한 페이지로 봅니다.** 대부분은 페이지가 부른 부속 자원입니다. 사용자가 연 페이지는 분할 키의 최상위 사이트로 좁힙니다. 그래도 미리 로드한 페이지일 수 있습니다.
 2. **키 전체를 URL 로 읽습니다.** `1/0/_dk_…` 를 그대로 URL 칸에 넣는 도구가 있을 수 있습니다. 최상위 사이트·프레임 사이트·자원 URL 을 나눠서 적습니다.
-3. **본문이 깨졌다고 봅니다.** `Content-Encoding` 으로 눌린 채 저장된 본문일 수 있습니다. 헤더를 먼저 봅니다. 풀고 난 뒤 형식은 [파일 형식 식별](/03-techniques/analysis/content-search/file-signature.md)로 확인합니다.
+3. **본문이 깨졌다고 봅니다.** `Content-Encoding` 으로 눌린 채 저장된 본문일 수 있습니다. 헤더를 먼저 봅니다. 풀고 난 뒤 형식은 [파일 형식 식별](../../../03-techniques/analysis/content-search/file-signature.md)로 확인합니다.
 4. **옛 문서의 "마지막 수정 시각" 칸을 씁니다.** 요즘 소스는 이 칸을 더 쓰지 않는다는 이름으로 바꿨습니다. 마지막 사용 시각과 스트림 0 의 시각을 씁니다.
-5. **지운 항목이 `data_N` 안에 남아 있으리라 기대합니다.** 요즘 소스는 항목 하나를 지울 때 그 블록을 0 으로 덮습니다 (`block_files.cc` 의 `DeleteBlock`). 16KB 가 넘는 스트림은 `f_` 파일을 통째로 지웁니다. 그래서 지운 항목은 캐시 파일 안보다 파일시스템에서 찾습니다. `f_` 파일은 [$MFT](/02-artifacts/filesystem/mft.md)와 [비할당 영역](/03-techniques/analysis/data-recovery/unallocated-slack-space.md)에 흔적이 남을 수 있습니다.
+5. **지운 항목이 `data_N` 안에 남아 있으리라 기대합니다.** 요즘 소스는 항목 하나를 지울 때 그 블록을 0 으로 덮습니다 (`block_files.cc` 의 `DeleteBlock`). 16KB 가 넘는 스트림은 `f_` 파일을 통째로 지웁니다. 그래서 지운 항목은 캐시 파일 안보다 파일시스템에서 찾습니다. `f_` 파일은 [$MFT](../../filesystem/mft.md)와 [비할당 영역](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)에 흔적이 남을 수 있습니다.
 6. **분석 PC 의 브라우저로 캐시 HTML 을 엽니다.** HTML 안의 링크가 외부 자원을 다시 불러옵니다. 분석 PC 의 캐시가 바뀌고 상대 서버에 접속 기록이 남습니다. 네트워크를 끊은 환경에서 텍스트나 헥스로 봅니다.
 7. **실행 중인 브라우저의 캐시를 그대로 복사합니다.** 브라우저가 파일을 쓰는 중이면 복사본이 앞뒤가 안 맞을 수 있습니다. 실행 중 Chrome 의 `data_1` 을 어떤 방식은 열지 못했고 다른 방식은 읽었습니다 (관찰). 가능하면 브라우저를 닫은 뒤나 디스크 이미지에서 꺼냅니다.
 8. **캐시에 없으니 그 사이트를 안 갔다고 봅니다.** `no-store` 응답, 상한을 넘어 지운 항목, 사용자가 비운 캐시, 시크릿 창이 모두 빈자리를 만듭니다.
-9. **시크릿 창의 흔적을 캐시에서 찾습니다.** 시크릿 (Off-the-Record) 프로필은 HTTP 캐시를 메모리에만 둡니다 (Chromium 소스). 켜져 있는 PC 라면 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md)으로 찾습니다. 흐름은 [시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md)를 봅니다.
+9. **시크릿 창의 흔적을 캐시에서 찾습니다.** 시크릿 (Off-the-Record) 프로필은 HTTP 캐시를 메모리에만 둡니다 (Chromium 소스). 켜져 있는 PC 라면 [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md)으로 찾습니다. 흐름은 [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md)를 봅니다.
 10. **프로필 하나만 봅니다.** 캐시는 프로필마다 따로 있습니다. `Default` 말고 `Profile 1` 같은 폴더와 다른 계열 브라우저도 확인합니다.
 
 ### 지우기와 조작
 
 - 브라우저의 "캐시된 이미지 및 파일" 삭제로 캐시 전체를 비우면, 소스는 캐시 폴더의 파일을 지우고 새로 만듭니다 (`backend_impl.cc` 의 `RestartCache`). 그래서 `index` 머리의 캐시를 만든 시각이 그 뒤 시각으로 바뀔 수 있습니다. 손상을 복구할 때도 새로 만들 수 있으니 이 값 하나로 "사용자가 지웠다" 고 쓰지 않습니다.
-- 파일을 지우고 새로 만든 흔적은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)에 남을 수 있습니다. 옛 캐시는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)으로 찾습니다.
+- 파일을 지우고 새로 만든 흔적은 [USN 변경 저널](../../filesystem/usnjrnl.md)에 남을 수 있습니다. 옛 캐시는 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)으로 찾습니다.
 - 방문 기록만 지우고 캐시는 남기는 경우가 있습니다. 이때 캐시 키의 최상위 사이트가 History 에 없는 사이트를 알려 줍니다.
 - 캐시 파일을 손으로 고치면 항목 머리와 순위 노드의 `self_hash` 칸이 안 맞을 수 있습니다. 이 칸은 각 구조의 앞부분으로 계산한 해시입니다 (소스 주석). 다만 해시 계산 방법은 이 글에서 따라가지 않았습니다.
-- 완전삭제 도구의 흔적은 [완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
+- 완전삭제 도구의 흔적은 [완전삭제 도구를 썼나](../../../04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -284,22 +284,22 @@ ChromeCacheView, Hindsight, plaso 의 `chrome_cache` 파서가 이 형식을 읽
 - `Cache\Cache_Data` 를 찾아 들어가는지, 옛 경로인 `Cache` 만 보는지 확인합니다.
 - 본문을 뽑을 때 `Content-Encoding` 을 풀어 주는지 확인합니다.
 - 도구가 낸 항목 수를 `index` 머리 0x08 의 항목 수와 비교합니다.
-- 한두 항목은 위 헥스 절차로 직접 풀어 도구 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 한두 항목은 위 헥스 절차로 직접 풀어 도구 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md) | 캐시 키의 최상위 사이트가 방문 기록에 있는지. 없으면 기록을 지웠거나 미리 로드였을 수 있습니다 |
-| [세션·탭 복원 (Sessions)](/02-artifacts/browsers/chrome-edge-whale/sessions.md) | 복원한 탭이 자원을 다시 받은 것인지 |
-| [쿠키 (Cookies)](/02-artifacts/browsers/chrome-edge-whale/cookies.md) | 같은 사이트의 쿠키가 만들어지고 마지막으로 쓰인 시각 |
-| [웹 저장소 (Local Storage·IndexedDB)](/02-artifacts/browsers/chrome-edge-whale/local-storage-indexeddb.md) | 사이트가 스스로 저장한 데이터. `Service Worker\CacheStorage` 와 함께 봅니다 |
-| [확장 프로그램 (Extensions)](/02-artifacts/browsers/chrome-edge-whale/extensions.md) | 사용자 행위가 아니라 확장 프로그램이 부른 요청인지 |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 캐시에 있는 자원 URL 이 내려받은 파일의 출처 URL 과 같은지 |
-| [네트워크 사용량 (SRUM)](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) | 같은 시간대에 브라우저가 받은 양 |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | `f_` 파일과 `data_N` 이 만들어지고 지워진 시각 |
+| [방문·다운로드 기록 (History)](history.md) | 캐시 키의 최상위 사이트가 방문 기록에 있는지. 없으면 기록을 지웠거나 미리 로드였을 수 있습니다 |
+| [세션·탭 복원 (Sessions)](sessions.md) | 복원한 탭이 자원을 다시 받은 것인지 |
+| [쿠키 (Cookies)](cookies.md) | 같은 사이트의 쿠키가 만들어지고 마지막으로 쓰인 시각 |
+| [웹 저장소 (Local Storage·IndexedDB)](local-storage-indexeddb.md) | 사이트가 스스로 저장한 데이터. `Service Worker\CacheStorage` 와 함께 봅니다 |
+| [확장 프로그램 (Extensions)](extensions.md) | 사용자 행위가 아니라 확장 프로그램이 부른 요청인지 |
+| [다운로드 출처 표시 (Zone.Identifier)](../../filesystem/zone-identifier.md) | 캐시에 있는 자원 URL 이 내려받은 파일의 출처 URL 과 같은지 |
+| [네트워크 사용량 (SRUM)](../../execution/system-resource-usage-monitor/network-data-usage.md) | 같은 시간대에 브라우저가 받은 양 |
+| [$MFT](../../filesystem/mft.md) · [USN 변경 저널](../../filesystem/usnjrnl.md) | `f_` 파일과 `data_N` 이 만들어지고 지워진 시각 |
 
-사이트 방문 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md)을 봅니다. 파이어폭스 캐시는 [캐시 (cache2)](/02-artifacts/browsers/firefox/cache2.md)에서 다룹니다.
+사이트 방문 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md)을 봅니다. 파이어폭스 캐시는 [캐시 (cache2)](../firefox/cache2.md)에서 다룹니다.
 
 ## 실습
 

@@ -55,7 +55,7 @@ EXIF 의 칸은 태그 (tag) 번호로 구분합니다. 칸들은 이미지 파�
 Windows 기본 이미지 `C:\Windows\Web\touchkeyboard\TouchKeyboardThemeDark000.jpg` 에는 EXIF 말고도 메타데이터 조각이 여럿 있었습니다.
 
 - 조각 순서는 APP1 (Exif) → APP13 (Photoshop) → APP1 (XMP, `http://ns.adobe.com/xap/1.0/`) → APP2 (ICC_PROFILE) → APP14 (Adobe) 였습니다.
-- XMP 속성의 뜻은 [PDF 정보 사전과 XMP](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) 에서 다룹니다.
+- XMP 속성의 뜻은 [PDF 정보 사전과 XMP](document-metadata/pdf-info-xmp.md) 에서 다룹니다.
 - 같은 뜻의 값이 IFD0, Exif IFD, XMP, 섬네일에 따로 있을 수 있습니다. 어긋난 예는 아래 "구조" 에 있습니다.
 
 ## 위치와 버전별 차이
@@ -65,7 +65,7 @@ Windows 기본 이미지 `C:\Windows\Web\touchkeyboard\TouchKeyboardThemeDark000
 - JPEG 에서는 EXIF 가 APP1 조각에 들어갑니다. 조각 앞머리에 식별 글자 `Exif\0\0` 가 있습니다(관찰).
 - 조각 순서는 파일마다 다릅니다. `C:\Windows\Web\Wallpaper\Spotlight\img50.jpg` 는 APP0 (JFIF) 조각이 먼저 오고, 그 뒤에 34바이트짜리 작은 EXIF APP1 조각이 있었습니다(관찰).
 - HEIC·PNG·TIFF 처럼 JPEG 가 아닌 형식에서 EXIF 가 어디에 들어가는지는 이 페이지에서 확인하지 못했습니다.
-- 확장자와 실제 형식이 맞는지는 [파일 형식 식별](/03-techniques/analysis/content-search/file-signature.md) 로 먼저 확인합니다.
+- 확장자와 실제 형식이 맞는지는 [파일 형식 식별](../../03-techniques/analysis/content-search/file-signature.md) 로 먼저 확인합니다.
 
 ### 버전별 차이
 
@@ -188,9 +188,9 @@ Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOrigina
 - 세 파일 모두 값이 같았습니다. 탐색기는 OffsetTimeOriginal 을 반영하지 않았습니다.
 - System.Photo.DateTaken 은 EXIF 값에서 9시간을 뺀 값이었습니다. 9시간은 이 PC 의 시간대 차이입니다.
 - 이 Windows 는 EXIF 시각을 "보고 있는 PC 의 현지 시각" 으로 보고 UTC 로 바꿔 두었습니다. 화면에 보여 줄 때는 다시 현지 시각으로 바꿨습니다.
-- 이대로라면 Windows 검색 색인에 저장된 찍은 날짜도 색인한 PC 의 시간대에 따라 달라질 수 있습니다. 색인 DB 값을 직접 비교하지는 않았습니다. 색인 속에 남은 파일 속성은 [파일 속성 되살리기 (PropertyStore)](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에서 다룹니다.
-- 분석 대상 PC 의 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 확인합니다.
-- 파일 시스템 시각은 EXIF 와 다른 기록입니다. 읽는 법은 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
+- 이대로라면 Windows 검색 색인에 저장된 찍은 날짜도 색인한 PC 의 시간대에 따라 달라질 수 있습니다. 색인 DB 값을 직접 비교하지는 않았습니다. 색인 속에 남은 파일 속성은 [파일 속성 되살리기 (PropertyStore)](../file-folder-usage/windows-search/propertystore.md) 에서 다룹니다.
+- 분석 대상 PC 의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
+- 파일 시스템 시각은 EXIF 와 다른 기록입니다. 읽는 법은 [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -207,7 +207,7 @@ Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOrigina
 - EXIF 값은 나중에 고칠 수 있습니다. Pillow 로 DateTimeOriginal 에 임의 값을 넣은 JPEG 를 만들었더니, 탐색기는 그 값을 찍은 날짜로 보여 줬습니다(관찰).
 - 고친 흔적이 파일 안에 남는지는 이 페이지에서 확인하지 못했습니다.
 - 자리끼리 어긋난 값과 XMP 편집 이력은 파일을 다시 저장했는지 따질 때 단서가 됩니다. 어긋남만으로 조작이라고 결론 내지 않습니다. 정상 편집에서도 생깁니다(관찰).
-- 날짜를 여러 기록으로 따지는 순서는 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 에서 다룹니다. 일부러 지우거나 바꾼 정황은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 다른 흔적과 함께 봅니다.
+- 날짜를 여러 기록으로 따지는 순서는 [이 문서의 날짜를 믿을 수 있나](../../04-scenarios/activity/document-date-verification.md) 에서 다룹니다. 일부러 지우거나 바꾼 정황은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에서 다른 흔적과 함께 봅니다.
 
 ## 직접 분석해 보기
 
@@ -242,21 +242,21 @@ Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOrigina
 - IFD0·Exif IFD·XMP 값을 자리별로 나눠 보여 주는지 확인합니다.
 - 시각을 적힌 그대로 보여 주는지, 분석 PC 의 시간대로 바꿔 보여 주는지 확인합니다.
 - IFD1 섬네일을 따로 뽑을 수 있는지 확인합니다.
-- 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 - 메타데이터를 고치는 명령을 실수로 주지 않도록 사본에서 작업합니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [썸네일 캐시](/02-artifacts/file-folder-usage/thumbcache-db-thumbs-db.md) | 사진의 작은 그림이 캐시에 남았는지. 이 PC 의 `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 에 `thumbcache_exif.db` 가 있었지만, 무엇이 담기는지는 확인하지 못했습니다(관찰) |
-| [파일 속성 되살리기 (PropertyStore)](/02-artifacts/file-folder-usage/windows-search/propertystore.md) | 색인에 들어간 파일 속성 |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | 분석 대상 PC 의 시간대 |
-| [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) | 파일을 만들거나 옮긴 시각 |
-| [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) | 문서 파일 안의 작성자·시각. XMP 는 [PDF 정보 사전과 XMP](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) 에서 다룹니다 |
-| [파일 형식 식별](/03-techniques/analysis/content-search/file-signature.md) | 확장자와 실제 형식이 맞는지 |
+| [썸네일 캐시](../file-folder-usage/thumbcache-db-thumbs-db.md) | 사진의 작은 그림이 캐시에 남았는지. 이 PC 의 `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 에 `thumbcache_exif.db` 가 있었지만, 무엇이 담기는지는 확인하지 못했습니다(관찰) |
+| [파일 속성 되살리기 (PropertyStore)](../file-folder-usage/windows-search/propertystore.md) | 색인에 들어간 파일 속성 |
+| [시간대 설정](../system-account/time-zone.md) | 분석 대상 PC 의 시간대 |
+| [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) | 파일을 만들거나 옮긴 시각 |
+| [문서 메타데이터](document-metadata/index.md) | 문서 파일 안의 작성자·시각. XMP 는 [PDF 정보 사전과 XMP](document-metadata/pdf-info-xmp.md) 에서 다룹니다 |
+| [파일 형식 식별](../../03-techniques/analysis/content-search/file-signature.md) | 확장자와 실제 형식이 맞는지 |
 
-파일이 어디서 왔는지 여러 기록으로 좁히는 순서는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 에서 다룹니다.
+파일이 어디서 왔는지 여러 기록으로 좁히는 순서는 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 에서 다룹니다.
 
 ## 실습
 

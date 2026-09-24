@@ -10,7 +10,7 @@ SOFTWARE 하이브의 `Windows Portable Devices\Devices` 키와 `EMDMgmt` 키에
 
 - 휴대용 장치 (Windows Portable Devices, WPD) 는 PC 가 연결된 장치와 데이터를 주고받게 하는 Windows 구성 요소입니다.
 - Microsoft 는 WPD 가 다루는 장치로 음악 플레이어, 저장장치, 휴대전화, 카메라를 듭니다.
-- USB 저장장치를 꽂으면 그 볼륨이 WPD 장치로도 한 번 더 등록됩니다. Windows 10 관찰 사례에서 Amcache 에 WPD 클래스 항목이 따로 생긴 것이 그 흔적입니다([장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md)).
+- USB 저장장치를 꽂으면 그 볼륨이 WPD 장치로도 한 번 더 등록됩니다. Windows 10 관찰 사례에서 Amcache 에 WPD 클래스 항목이 따로 생긴 것이 그 흔적입니다([장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)).
 - 이때 SOFTWARE 하이브의 `Windows Portable Devices\Devices` 아래에 장치마다 하위 키가 생깁니다. 값 `FriendlyName` 에는 사람이 보는 이름이 들어갑니다.
 - SANS 가 2009년에 낸 Windows Vista 용 USB 분석 안내서는 이 키에서 일련번호로 장치를 찾아 드라이브 문자와 볼륨 이름을 확인하라고 적었습니다.
 
@@ -22,11 +22,11 @@ SOFTWARE 하이브의 `Windows Portable Devices\Devices` 키와 `EMDMgmt` 키에
 - 플래시 장치를 꽂으면 레디부스트 서비스가 장치 성능을 검사합니다. 서비스는 검사 결과를 `EMDMgmt` 아래에 적습니다(Russinovich).
 - 사용자가 그 장치를 레디부스트용으로 쓰지 않아도 하위 키는 생깁니다(Cowen, 확인 범위: Vista·7).
 - USB 메모리만 남는 것이 아닙니다. eSATA·FireWire 장치와 시스템 디스크가 아닌 로컬 디스크도 남는다고 Cowen 이 적었습니다.
-- 그래서 [USBSTOR 에 안 남는 장치](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
+- 그래서 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
 
 ## 위치와 버전별 차이
 
-하이브 파일 위치는 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를, `ControlSet00X` 를 고르는 법은 [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md)를 봅니다.
+하이브 파일 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를, `ControlSet00X` 를 고르는 법은 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)를 봅니다.
 
 | 기록 | 하이브와 경로 | 주로 보는 것 |
 |---|---|---|
@@ -54,13 +54,13 @@ SOFTWARE 하이브의 `Windows Portable Devices\Devices` 키와 `EMDMgmt` 키에
 - 값 `FriendlyName` 에 볼륨 이름이나 드라이브 문자가 들어갑니다.
 - SANS 안내서는 여기서 두 가지를 모두 찾으라고 적었습니다. 초기 플러그인은 이 값을 드라이브 문자로 출력합니다.
 - 어떤 경우에 둘 중 무엇이 들어가는지 정한 명세는 찾지 못했습니다.
-- 이 키에는 볼륨 이름이 없는데 Amcache 의 WPD 항목에는 있던 사례가 있습니다. 이 키가 비어 있으면 [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md)을 봅니다.
+- 이 키에는 볼륨 이름이 없는데 Amcache 의 WPD 항목에는 있던 사례가 있습니다. 이 키가 비어 있으면 [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다.
 
 ### Enum\SWD\WPDBUSENUM
 
 - 장치 인스턴스 ID (Device Instance ID) 하나가 하위 키 하나입니다.
 - 공개 플러그인(RegRipper `wpdbusenum`)은 `FriendlyName`·`DeviceDesc`·`Mfg` 값을 읽습니다.
-- `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 속성 번호 0064~0067 에는 설치·연결·해제 시각이 있습니다. 뜻은 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
+- `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 속성 번호 0064~0067 에는 설치·연결·해제 시각이 있습니다. 뜻은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 - SOFTWARE 쪽 `FriendlyName` 과 이 키의 `FriendlyName` 이 늘 같은지는 확인하지 못했습니다. 검체에서 두 값을 맞춰 봅니다.
 
 > 그림 자리: USBSTOR 일련번호 하나가 WPD Devices 하위 키 이름, SWD\WPDBUSENUM 인스턴스 키 이름, EMDMgmt 하위 키 이름에 모두 들어 있고, EMDMgmt 끝의 볼륨 일련번호가 LNK 파일의 볼륨 일련번호와 이어지는 모습
@@ -76,13 +76,13 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 | 조각 | 뜻 |
 |---|---|
 | `_??_USBSTOR` | USB 저장장치라는 표시 |
-| `<장치 이름>` | `Disk&Ven_…&Prod_…&Rev_…`. [USBSTOR](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md)의 장치 키 이름과 같은 모양입니다. |
+| `<장치 이름>` | `Disk&Ven_…&Prod_…&Rev_…`. [USBSTOR](usbstor.md)의 장치 키 이름과 같은 모양입니다. |
 | `<일련번호>` | USBSTOR 의 인스턴스 키 이름과 같은 모양입니다(끝의 `&0` 포함). |
 | `{53f56307-…}` | 디스크 장치 인터페이스 GUID |
 | `<볼륨 이름>` | 볼륨 이름(레이블)입니다. 비어 있을 수 있습니다. |
 | `<볼륨 일련번호>` | 마지막 밑줄 뒤의 10진 숫자입니다. |
 
-- 볼륨 일련번호 (Volume Serial Number, VSN) 는 파일시스템을 포맷할 때 정해지는 번호입니다. 볼륨 부트 섹터에 저장됩니다([FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md), [부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)).
+- 볼륨 일련번호 (Volume Serial Number, VSN) 는 파일시스템을 포맷할 때 정해지는 번호입니다. 볼륨 부트 섹터에 저장됩니다([FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md), [부트 섹터와 클러스터](../../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)).
 - Windows 가 보여 주는 VSN 은 32비트(4바이트) 값입니다.
 - 장치 펌웨어에 박힌 USB 일련번호와는 다른 번호입니다.
 - 10진 값을 16진 8자리로 바꾸고 4자리씩 끊으면 `XXXX-XXXX` 모양이 됩니다. Windows 가 볼륨 일련번호를 보여 줄 때 쓰는 모양입니다.
@@ -104,7 +104,7 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 ### 증명하지 못하는 것
 
 - 연결 시각, 해제 시각, 연결 횟수를 알 수 없습니다.
-- 누가 꽂았는지 알 수 없습니다. SOFTWARE 하이브는 사용자별 파일이 아닙니다. 사용자는 [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md)에서 찾습니다.
+- 누가 꽂았는지 알 수 없습니다. SOFTWARE 하이브는 사용자별 파일이 아닙니다. 사용자는 [사용자별 장치 연결 (MountPoints2)](mountpoints2.md)에서 찾습니다.
 - 장치에서 파일을 복사하거나 열었는지 알 수 없습니다.
 - 볼륨 이름은 기록할 때의 이름입니다. 뒤에 이름을 바꿨을 수 있습니다.
 - VSN 이 같다고 같은 물리 장치라고 단정할 수 없습니다. VSN 은 부트 섹터에 있는 값이라서 섹터 단위로 복제하면 그대로 따라가고, 부트 섹터를 고치면 바뀝니다.
@@ -119,10 +119,10 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 
 | 시각 | 무엇이 바뀔 때 바뀌나 | 기준 |
 |---|---|---|
-| EMDMgmt 하위 키 마지막 기록 시각 | 여러 하위 키의 시각이 같거나 가까운 경우가 많습니다. 연결·해제가 아닌 다른 동작도 이 시각을 바꾼다고 봅니다(RegRipper 소스 주석). | UTC, FILETIME ([키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
+| EMDMgmt 하위 키 마지막 기록 시각 | 여러 하위 키의 시각이 같거나 가까운 경우가 많습니다. 연결·해제가 아닌 다른 동작도 이 시각을 바꾼다고 봅니다(RegRipper 소스 주석). | UTC, FILETIME ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
 | `LastTestedTime` 값 | 이름으로는 마지막 검사 때로 보이지만 명세는 없습니다. 관심 시간대와 크게 떨어진 경우가 많다고 보고됐습니다. 값이 0 일 수 있습니다. | 공개 플러그인은 FILETIME·UTC 로 풉니다. |
 | WPD Devices 하위 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 공개된 설명을 찾지 못했습니다. | UTC, FILETIME |
-| SWD\WPDBUSENUM 장치 속성 0064~0067 | [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다. | UTC, FILETIME |
+| SWD\WPDBUSENUM 장치 속성 0064~0067 | [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다. | UTC, FILETIME |
 
 - 이 페이지의 두 키에서 나온 시각은 연결 시각으로 쓰지 않습니다.
 - 연결 시각은 교차 검증 표의 다른 아티팩트에서 정하고, 이 키들은 장치와 볼륨을 잇는 데 씁니다.
@@ -134,21 +134,21 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 3. **볼륨 이름에 밑줄이 있을 때.** 볼륨 이름과 VSN 은 밑줄로 이어져 있습니다. 볼륨 이름이 `MY_DATA` 처럼 밑줄을 품으면 도구가 이름과 VSN 을 잘못 자를 수 있습니다. VSN 은 마지막 밑줄 뒤 숫자로 직접 읽습니다.
 4. **한 장치에 하위 키가 여럿.** 하위 키 이름에 볼륨 이름과 VSN 이 함께 들어갑니다. 그래서 장치를 다시 포맷하거나 이름을 바꾼 뒤 꽂으면 다른 하위 키가 생길 수 있습니다. 이 동작은 명세로 확인하지 못했습니다. 같은 일련번호로 하위 키가 여럿 있으면 각 VSN 을 따로 추적합니다.
 5. **`FriendlyName` 을 볼륨 이름으로 단정하는 실수.** 드라이브 문자가 들어 있을 수 있습니다.
-6. **속성 번호에 붙인 이름이 도구마다 다릅니다.** 한 공개 플러그인(`wpdbusenum`)은 0064 를 "First InstallDate", 0065 를 "InstallDate" 로 표시합니다(소스 기준). 이 위키의 [장치 항목](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) 페이지는 0064 를 `DEVPKEY_Device_InstallDate`, 0065 를 `DEVPKEY_Device_FirstInstallDate` 로 적었습니다. 도구 출력의 이름 대신 속성 번호로 확인합니다.
-7. **지워진 하위 키.** 키가 없으면 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SOFTWARE 하이브를 봅니다.
-8. **스마트폰.** Microsoft 는 휴대전화도 WPD 장치로 설명합니다. MTP 로 연결한 스마트폰이 이 키들에 어떻게 남는지는 [스마트폰으로 옮겼나](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md)에서 다룹니다.
+6. **속성 번호에 붙인 이름이 도구마다 다릅니다.** 한 공개 플러그인(`wpdbusenum`)은 0064 를 "First InstallDate", 0065 를 "InstallDate" 로 표시합니다(소스 기준). 이 위키의 [장치 항목](../../execution/amcache-hve/inventorydevicepnp.md) 페이지는 0064 를 `DEVPKEY_Device_InstallDate`, 0065 를 `DEVPKEY_Device_FirstInstallDate` 로 적었습니다. 도구 출력의 이름 대신 속성 번호로 확인합니다.
+7. **지워진 하위 키.** 키가 없으면 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SOFTWARE 하이브를 봅니다.
+8. **스마트폰.** Microsoft 는 휴대전화도 WPD 장치로 설명합니다. MTP 로 연결한 스마트폰이 이 키들에 어떻게 남는지는 [스마트폰으로 옮겼나](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
 1. SOFTWARE·SYSTEM 하이브와 각 `.LOG1`·`.LOG2` 를 사본으로 확보합니다.
-2. [USBSTOR](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md)에서 조사할 장치의 일련번호를 정합니다.
+2. [USBSTOR](usbstor.md)에서 조사할 장치의 일련번호를 정합니다.
 3. SOFTWARE 하이브에서 일련번호를 ASCII 와 UTF-16LE 로 모두 찾습니다. 키 이름은 ASCII 로 저장되는 경우가 많습니다. 대소문자를 가리지 않고 찾습니다.
-4. 걸린 nk 셀에서 부모 키를 따라 올라가 `EMDMgmt` 아래인지 `Devices` 아래인지 확인합니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
+4. 걸린 nk 셀에서 부모 키를 따라 올라가 `EMDMgmt` 아래인지 `Devices` 아래인지 확인합니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 5. EMDMgmt 하위 키 이름 끝의 10진 숫자를 16진으로 바꿉니다.
 6. Devices 하위 키에서 `FriendlyName` 의 vk 셀을 찾아 데이터 셀의 UTF-16LE 문자열을 읽습니다.
-7. USB 장치의 이미지가 있으면 부트 섹터의 VSN 과 맞춰 봅니다. LNK 파일이 있으면 볼륨 정보의 일련번호와 맞춰 봅니다([바로가기 형식 (Shell Link·LNK)](/01-foundations/shell-document-formats/shell-link-lnk.md)).
+7. USB 장치의 이미지가 있으면 부트 섹터의 VSN 과 맞춰 봅니다. LNK 파일이 있으면 볼륨 정보의 일련번호와 맞춰 봅니다([바로가기 형식 (Shell Link·LNK)](../../../01-foundations/shell-document-formats/shell-link-lnk.md)).
 
 아래는 공개 플러그인이 읽는 이름 규칙과 문자 인코딩 규칙으로 만든 예시입니다. 검체에서 나온 값이 아닙니다.
 
@@ -171,7 +171,7 @@ VSN 이 디스크에 놓인 모양 (리틀 엔디언) CD AB 34 12               
 ```
 
 - FAT·exFAT 부트 섹터와 LNK 파일은 VSN 을 리틀 엔디언 4바이트로 적습니다. 그래서 헥스 창에서는 `CD AB 34 12` 로 보입니다.
-- NTFS 는 부트 섹터에 더 긴 값으로 적습니다. 어느 부분을 맞춰 볼지는 [부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)를 봅니다.
+- NTFS 는 부트 섹터에 더 긴 값으로 적습니다. 어느 부분을 맞춰 볼지는 [부트 섹터와 클러스터](../../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)를 봅니다.
 - 이 네 바이트를 USB 이미지와 LNK 파일에서 찾으면 세 기록을 한 줄로 이을 수 있습니다.
 
 ### 공개 도구로 한 번
@@ -185,19 +185,19 @@ VSN 이 디스크에 놓인 모양 (리틀 엔디언) CD AB 34 12               
 
 | 아티팩트 | 맞춰 볼 것 | 링크 |
 |---|---|---|
-| USBSTOR | 장치 이름과 일련번호 | [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) |
-| Enum\USB | VID·PID | [USB 장치 식별자 (Enum\USB VID·PID)](/02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md) |
-| MountedDevices | 드라이브 문자와 볼륨 GUID | [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) |
-| MountPoints2 | 어느 사용자가 그 볼륨을 봤나 | [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) |
-| 장치 속성 시각 | 설치·연결·해제 시각 | [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) |
-| setupapi.dev.log | 처음 설치한 때 | [장치 설치 로그 (setupapi.dev.log)](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md) |
-| Amcache WPD 항목 | 볼륨 이름 | [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) |
-| LNK·점프리스트 | VSN·볼륨 이름으로 어떤 파일을 열었나 | [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 셸백 | 외부 장치의 폴더를 탐색했나 | [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) |
-| 이벤트 로그 | 연결 이벤트 | [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| USBSTOR | 장치 이름과 일련번호 | [USB 저장장치 목록 (USBSTOR)](usbstor.md) |
+| Enum\USB | VID·PID | [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) |
+| MountedDevices | 드라이브 문자와 볼륨 GUID | [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) |
+| MountPoints2 | 어느 사용자가 그 볼륨을 봤나 | [사용자별 장치 연결 (MountPoints2)](mountpoints2.md) |
+| 장치 속성 시각 | 설치·연결·해제 시각 | [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) |
+| setupapi.dev.log | 처음 설치한 때 | [장치 설치 로그 (setupapi.dev.log)](setupapi-dev-log.md) |
+| Amcache WPD 항목 | 볼륨 이름 | [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md) |
+| LNK·점프리스트 | VSN·볼륨 이름으로 어떤 파일을 열었나 | [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md), [점프리스트](../../file-folder-usage/jump-lists.md) |
+| 셸백 | 외부 장치의 폴더를 탐색했나 | [외부 장치·네트워크·압축 폴더 탐색 흔적](../../file-folder-usage/shellbags/removable-network-zip.md) |
+| 이벤트 로그 | 연결 이벤트 | [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
 
 - 사용자가 장치를 레디부스트용으로 쓰기로 하면 장치 루트에 `ReadyBoost.sfcache` 파일이 생깁니다(Russinovich, Vista 기준 설명). USB 이미지가 있으면 이 파일이 있는지 봅니다.
-- 전체 흐름은 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
+- 전체 흐름은 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
 
 ## 실습
 

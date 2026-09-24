@@ -55,7 +55,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 | `Compatibility Assistant\Persisted` | RegRipper 플러그인이 읽는 키입니다. 관찰한 PC 에는 없었습니다 (확인 범위: Win11 25H2 한 대) |
 | `Custom`, `InstalledSDB` | RegRipper 플러그인이 읽는 키입니다. 담는 내용은 이번 자료로 확인하지 못했습니다 |
 
-하이브를 수집하고 여는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 를 따릅니다.
+하이브를 수집하고 여는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 를 따릅니다.
 
 ## 구조
 
@@ -150,21 +150,21 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 - 두 파일의 시각은 `YYYY-MM-DD HH:MM:SS.mmm` 모양 글자입니다.
 - AboutDFIR 글은 이 시각이 UTC 인지 현지 시각인지 밝히지 않았습니다.
 - 관찰한 PC 에서는 두 파일 모두 가장 늦은 줄의 시각이 파일의 마지막 수정 시각 (UTC) 과 같았습니다. 시각은 UTC 로 보입니다. (확인 범위: Win11 25H2 한 대)
-- 검체마다 같은 방법으로 확인합니다. 가장 늦은 줄의 시각을 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 의 수정 시각과 견줍니다.
+- 검체마다 같은 방법으로 확인합니다. 가장 늦은 줄의 시각을 [마스터 파일 테이블](../filesystem/mft.md) 의 수정 시각과 견줍니다.
 - 줄 순서는 시각 순서가 아닙니다. 시각 칸으로 정렬한 뒤 읽습니다.
 - Store 키의 마지막 기록 시각은 UTC 입니다. 이 시각이 `PcaGeneralDb0.txt` 의 마지막 수정 시각과 맞는지 봅니다. 관찰한 PC 에서는 초 단위까지 같았습니다. (확인 범위: Win11 25H2 한 대)
 - 세 파일을 만든 시각은 관찰한 PC 에서 모두 OS 설치 당일이었습니다. 파일을 만든 시각은 어느 프로그램의 첫 실행 시각도 알려 주지 않습니다. (확인 범위: Win11 25H2 한 대)
-- 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **줄이 없다고 실행하지 않았다고 쓰지 않습니다.** 모든 실행이 남지 않습니다. 다른 실행 흔적과 함께 봅니다.
-- **두 파일의 인코딩이 다릅니다.** `PcaGeneralDb0.txt` 는 BOM 이 없는 UTF-16 LE 입니다. 편집기나 도구가 이를 알아보지 못하면 글자 사이에 빈 바이트가 끼어 보입니다. 인코딩을 고르는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
+- **두 파일의 인코딩이 다릅니다.** `PcaGeneralDb0.txt` 는 BOM 이 없는 UTF-16 LE 입니다. 편집기나 도구가 이를 알아보지 못하면 글자 사이에 빈 바이트가 끼어 보입니다. 인코딩을 고르는 법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 - **비 ASCII 경로가 잘립니다.** 관찰한 PC 의 `PcaAppLaunchDic.txt` 에서 한글 경로가 잘렸습니다. 같은 프로그램을 `PcaGeneralDb0.txt` 에서 찾아 온전한 경로를 봅니다. (확인 범위: Win11 25H2 한 대)
 - **반복 줄에 묻히지 않습니다.** 한 프로그램의 반복 오류가 줄 대부분을 차지할 수 있습니다. 경로별로 묶어 센 뒤 드문 줄부터 봅니다.
 - **8번 칸 이름에 매이지 않습니다.** 출처는 종료 코드라고 불렀지만 관찰한 PC 에서는 문장이 들어 있었습니다. 문장 그대로 보고서에 옮깁니다.
 - **Store 값의 0x2C 시각을 믿기 전에 확인합니다.** 도구가 이 값을 실행 시각처럼 보여 줄 수 있습니다. 값들이 한 시각으로 몰려 있는지 먼저 봅니다.
-- **글자 파일은 고치기 쉽습니다.** 줄을 지우거나 바꿔도 형식이 깨지지 않습니다. 가장 늦은 줄의 시각, 파일 수정 시각, Store 키의 마지막 기록 시각이 서로 맞는지 봅니다. 섀도 복사본 속 옛 파일과 견주고, [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 파일이 바뀐 기록을 찾습니다. [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 참고합니다.
+- **글자 파일은 고치기 쉽습니다.** 줄을 지우거나 바꿔도 형식이 깨지지 않습니다. 가장 늦은 줄의 시각, 파일 수정 시각, Store 키의 마지막 기록 시각이 서로 맞는지 봅니다. 섀도 복사본 속 옛 파일과 견주고, [USN 변경 저널](../filesystem/usnjrnl.md) 에서 파일이 바뀐 기록을 찾습니다. [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 참고합니다.
 - **세 파일을 모두 수집합니다.** `PcaGeneralDb1.txt` 가 언제 쓰이는지 모릅니다. 0바이트라도 크기와 시각을 적어 둡니다.
 
 ## 직접 분석해 보기
@@ -241,14 +241,14 @@ rip.exe -r SOFTWARE -p appcompatflags
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 심캐시 | 같은 경로가 실행 파일 목록에 있는지 | [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md) |
-| AmCache | 같은 경로의 파일 정보 | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| 프리페치 | 실행 횟수와 실행 시각 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| BAM·DAM | 사용자별 마지막 실행 시각 | [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| 윈도 오류 보고 | `Abnormal process exit` 줄과 같은 사건의 보고서·이벤트 | [윈도 오류 보고](/02-artifacts/execution/wer.md) |
-| 프로그램 설치·삭제 이벤트 | `Installer failed` 줄 무렵의 설치 시도 | [프로그램 설치·삭제 이벤트](/02-artifacts/event-logs/msiinstaller.md) |
+| 심캐시 | 같은 경로가 실행 파일 목록에 있는지 | [심캐시](shimcache-appcompatcache.md) |
+| AmCache | 같은 경로의 파일 정보 | [AmCache](amcache-hve/index.md) |
+| 프리페치 | 실행 횟수와 실행 시각 | [프리페치](prefetch/index.md) |
+| BAM·DAM | 사용자별 마지막 실행 시각 | [BAM·DAM](background-activity-moderator.md) |
+| 윈도 오류 보고 | `Abnormal process exit` 줄과 같은 사건의 보고서·이벤트 | [윈도 오류 보고](wer.md) |
+| 프로그램 설치·삭제 이벤트 | `Installer failed` 줄 무렵의 설치 시도 | [프로그램 설치·삭제 이벤트](../event-logs/msiinstaller.md) |
 
-실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에 있습니다.
+실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에 있습니다.
 
 ## 실습
 

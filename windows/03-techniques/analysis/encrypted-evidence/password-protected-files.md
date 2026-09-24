@@ -1,6 +1,6 @@
 # 암호 걸린 문서·압축 파일 (Password-Protected Files)
 
-> 위치: [암호화 증거 다루기 (Encrypted Evidence)](/03-techniques/analysis/encrypted-evidence/index.md) > 암호 걸린 문서·압축 파일
+> 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > 암호 걸린 문서·압축 파일
 
 ## 한 줄 요약
 
@@ -19,11 +19,11 @@ ZIP 은 일반 비트 플래그의 bit 0 으로 표시합니다.
 
 ## 절차
 
-1. **실제 형식을 확인합니다.** 확장자가 아니라 파일 앞머리의 서명으로 형식을 가립니다. 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다.
+1. **실제 형식을 확인합니다.** 확장자가 아니라 파일 앞머리의 서명으로 형식을 가립니다. 방법은 [파일 내용 검색](../content-search/index.md) 에 있습니다.
 2. **형식별 암호 표시를 읽습니다.** 아래 오피스·ZIP·한글 절을 봅니다.
 3. **암호 방식을 적습니다.** 방식에 따라 복구할 수 있는지와 걸리는 시간이 다릅니다.
-4. **DRM 표시가 있는지도 봅니다.** 암호 표시가 없는데 열리지 않으면 [DRM 문서 판별](/03-techniques/analysis/encrypted-evidence/enterprise-drm.md) 로 넘어갑니다.
-5. **복구가 필요하면 넘깁니다.** 비밀번호를 찾아야 하면 [비밀번호 복구](/03-techniques/analysis/encrypted-evidence/password-recovery.md) 를 봅니다.
+4. **DRM 표시가 있는지도 봅니다.** 암호 표시가 없는데 열리지 않으면 [DRM 문서 판별](enterprise-drm.md) 로 넘어갑니다.
+5. **복구가 필요하면 넘깁니다.** 비밀번호를 찾아야 하면 [비밀번호 복구](password-recovery.md) 를 봅니다.
 6. **기록합니다.** 파일마다 실제 형식, 암호 표시, 암호 방식, 복호 여부를 적습니다.
 
 ### 오피스 문서
@@ -45,7 +45,7 @@ POI 가 어느 형식에서 어떤 방식을 읽을 수 있는지를 보여 줍�
 - POI 문서는 OOXML 의 RC4 행에 "명세(MS-OFFCRYPTO)는 이 방식을 제자리 암호화로만 설명하지만 컨테이너 방식도 있는 듯하다" 는 주석을 붙였습니다.
 - 암호 걸린 OOXML(`.docx`·`.xlsx`·`.pptx`)은 ZIP 파일이 통째로 OLE 파일 안의 `EncryptedPackage` 스트림에 들어갑니다.
 - 그래서 확장자는 `.docx` 인데 파일은 ZIP 이 아니라 OLE 복합 파일로 시작합니다.
-- OLE 파일 안의 스트림 목록을 보는 법은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
+- OLE 파일 안의 스트림 목록을 보는 법은 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
 - 일부 "쓰기 보호" 파일은 내장 비밀번호 `VelvetSweatshop` 으로 암호화되어 있습니다.
 
 ### ZIP
@@ -94,8 +94,8 @@ POI 가 어느 형식에서 어떤 방식을 읽을 수 있는지를 보여 줍�
 | bit 1 | 암호 설정 여부 |
 | bit 2 | 배포용 문서 여부 |
 
-- DRM 과 공인 인증서에 관련된 비트는 [DRM 문서 판별](/03-techniques/analysis/encrypted-evidence/enterprise-drm.md) 에 있습니다.
-- 나머지 비트의 뜻은 명세의 속성 표를 봅니다. 한글 문서의 메타데이터 전반은 [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 에 있습니다.
+- DRM 과 공인 인증서에 관련된 비트는 [DRM 문서 판별](enterprise-drm.md) 에 있습니다.
+- 나머지 비트의 뜻은 명세의 속성 표를 봅니다. 한글 문서의 메타데이터 전반은 [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) 에 있습니다.
 
 EncryptVersion 값은 아래와 같습니다.
 
@@ -118,8 +118,8 @@ XML 로 된 HWPX 형식의 암호 표시는 이 페이지에서 다루지 않습
 ### PDF·7-Zip·RAR
 
 - 이 세 형식의 암호 표시는 이 페이지에서 다루지 않습니다.
-- 복구 방식은 [비밀번호 복구](/03-techniques/analysis/encrypted-evidence/password-recovery.md) 를 봅니다.
-- 어떤 압축 프로그램을 썼는지는 [압축 프로그램 사용 기록](/02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 에서 찾습니다.
+- 복구 방식은 [비밀번호 복구](password-recovery.md) 를 봅니다.
+- 어떤 압축 프로그램을 썼는지는 [압축 프로그램 사용 기록](../../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 에서 찾습니다.
 
 ### 헥스로 한 번 따라가기
 
@@ -166,10 +166,10 @@ HWP 문서의 FileHeader 스트림 앞부분 (명세로 만든 예시)
 ## 결과를 어떻게 해석하나
 
 - **암호 표시**: 파일을 저장한 때 암호가 걸려 있었다는 뜻입니다. 누가 걸었는지, 비밀번호가 무엇인지는 말하지 않습니다.
-- **암호 방식**: 복구할 수 있는지를 가늠하는 근거입니다. 판단은 [비밀번호 복구](/03-techniques/analysis/encrypted-evidence/password-recovery.md) 에서 합니다.
-- **암호 걸린 OOXML 의 문서 속성**: ZIP 전체가 `EncryptedPackage` 안에 들어가므로, ZIP 안에 있던 문서 속성도 암호문 속에 있습니다. 풀기 전에는 작성자·수정 시각 같은 메타데이터를 읽을 수 없습니다(구조에서 끌어낸 판단). 메타데이터 해석은 [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 를 봅니다.
+- **암호 방식**: 복구할 수 있는지를 가늠하는 근거입니다. 판단은 [비밀번호 복구](password-recovery.md) 에서 합니다.
+- **암호 걸린 OOXML 의 문서 속성**: ZIP 전체가 `EncryptedPackage` 안에 들어가므로, ZIP 안에 있던 문서 속성도 암호문 속에 있습니다. 풀기 전에는 작성자·수정 시각 같은 메타데이터를 읽을 수 없습니다(구조에서 끌어낸 판단). 메타데이터 해석은 [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) 를 봅니다.
 - **`VelvetSweatshop` 으로 풀린 파일**: 사용자가 따로 비밀번호를 걸었다는 근거가 되지 않습니다.
-- **`EncryptedPackage` 만 보고 비밀번호 방식이라고 단정하지 않습니다.** 이유는 [DRM 문서 판별](/03-techniques/analysis/encrypted-evidence/enterprise-drm.md) 에 있습니다.
+- **`EncryptedPackage` 만 보고 비밀번호 방식이라고 단정하지 않습니다.** 이유는 [DRM 문서 판별](enterprise-drm.md) 에 있습니다.
 
 보고서 문장 예:
 

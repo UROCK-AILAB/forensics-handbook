@@ -24,7 +24,7 @@
 (표는 [1])
 
 - 이 목록 작성자는 안드로이드 휴대폰으로만 시험했습니다. 아이폰은 확인하지 않았다고 적었습니다[1].
-- 2019년 연구 환경에서 본 DB 구성과 사진 폴더는 [스마트폰으로 옮겼나 (MTP·Phone Link)](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) 에 정리돼 있습니다.
+- 2019년 연구 환경에서 본 DB 구성과 사진 폴더는 [스마트폰으로 옮겼나 (MTP·Phone Link)](../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) 에 정리돼 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -37,7 +37,7 @@ C:\Users\<사용자>\AppData\Local\Packages\Microsoft.YourPhone_8wekyb3d8bbwe\Lo
 ```
 
 - 공개 수집 목록은 `...\LocalCache\Indexed` 아래를 통째로 모읍니다[1].
-- 패키지 폴더의 일반 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+- 패키지 폴더의 일반 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 - 앱 이름이 Your Phone 에서 Phone Link 로 바뀐 시점은 확인하지 못했습니다.
 
 ### 관찰한 PC
@@ -47,7 +47,7 @@ C:\Users\<사용자>\AppData\Local\Packages\Microsoft.YourPhone_8wekyb3d8bbwe\Lo
 - 패키지 폴더에 `LocalCache\Indexed` 가 없었습니다.
 - 이 PC 에서 휴대폰을 연결해 쓴 적이 없는지는 모릅니다.
 - `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json`, `YppCryptoTrustRelationships`, `Local\`, `Roaming\` 이 있었습니다.
-- 패키지 폴더의 `Settings\` 에는 `settings.dat` 와 `settings.dat.LOG1`·`settings.dat.LOG2` 가 있었습니다. 이 파일의 형식은 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+- 패키지 폴더의 `Settings\` 에는 `settings.dat` 와 `settings.dat.LOG1`·`settings.dat.LOG2` 가 있었습니다. 이 파일의 형식은 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 - 같은 PC 에 `MicrosoftWindows.CrossDevice_cw5n1h2txyewy` 패키지(1.26072.116.0)도 있었습니다.
 - 이 패키지의 `LocalCache` 에도 같은 이름의 `DeviceMetadataStorage.json`, `YppCryptoTrustRelationships` 가 있었습니다.
 - 이 패키지에는 `SystemAppData\Helium\User.dat`·`UserClasses.dat` 도 있었습니다.
@@ -84,7 +84,7 @@ settings.db       settings.db-shm       settings.db-wal
 - `deviceData.db` 는 목록에 `-shm`·`-wal` 만 적혀 있었습니다[1].
 - DB 마다 `-wal`·`-shm` 짝 파일이 있습니다[1]. 선행 기록 로그 (Write-Ahead Log, WAL) 방식입니다.
 - 최근 기록은 아직 `.db` 로 옮겨지지 않고 `-wal` 에만 있을 수 있습니다. 그래서 세 파일을 함께 수집합니다.
-- WAL 을 읽는 법은 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
+- WAL 을 읽는 법은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 
 ### phone.db 를 알아보는 기준
 
@@ -163,7 +163,7 @@ settings.db       settings.db-shm       settings.db-wal
 - 그다음 `datetime(..., 'unixepoch')` 으로 읽습니다[2]. 결과는 UTC 입니다.
 - SQLite 에서 정수끼리 나누면 소수점 아래를 버립니다. 그래서 이 식은 1초 미만을 버립니다.
 - 이 시각이 휴대폰에서 문자가 오간 시각인지, PC 로 동기화된 시각인지는 확인하지 못했습니다. 공개 질의는 이 칸을 문자 시각으로 씁니다.
-- 다른 DB 의 시각 칸 형식은 확인하지 못했습니다. 자릿수로 형식부터 가립니다. 형식별 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 다른 DB 의 시각 칸 형식은 확인하지 못했습니다. 자릿수로 형식부터 가립니다. 형식별 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -173,13 +173,13 @@ settings.db       settings.db-shm       settings.db-wal
 - 아이폰 연결은 공개 수집 목록에서 시험하지 않았습니다[1].
 - 관찰 PC 에 `PlatformEncryptedKeyStorage.json` 처럼 암호와 관련된 이름의 파일이 있었습니다(관찰). 이 파일이 DB 를 암호화하는 데 쓰이는지는 확인하지 못했습니다.
 - 공개 수집 목록은 DB 를 일반 SQLite 뷰어로 바로 연다고 적었습니다[1]. 검체에서도 첫 16바이트로 평문인지 먼저 확인합니다.
-- 원본 말고 사본에서 작업합니다. `.db`·`-wal`·`-shm` 세 파일을 함께 복사한 사본을 엽니다. WAL 이 붙은 DB 를 열고 닫을 때 파일이 어떻게 바뀌는지는 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
+- 원본 말고 사본에서 작업합니다. `.db`·`-wal`·`-shm` 세 파일을 함께 복사한 사본을 엽니다. WAL 이 붙은 DB 를 열고 닫을 때 파일이 어떻게 바뀌는지는 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 
 ### 지운 기록
 
-- 앱이 DB 에서 행을 지우면 빈 공간에 흔적이 남을 수 있습니다. 찾는 법은 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 다룹니다.
+- 앱이 DB 에서 행을 지우면 빈 공간에 흔적이 남을 수 있습니다. 찾는 법은 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 다룹니다.
 - Phone Link DB 에서 지운 문자가 실제로 남는지는 확인하지 못했습니다.
-- 사용자가 앱과 휴대폰의 연결을 끊으면 PC 쪽 DB 가 어떻게 되는지도 확인하지 못했습니다. 섀도 복사본에 옛 DB 가 남아 있는지 찾아봅니다([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)).
+- 사용자가 앱과 휴대폰의 연결을 끊으면 PC 쪽 DB 가 어떻게 되는지도 확인하지 못했습니다. 섀도 복사본에 옛 DB 가 남아 있는지 찾아봅니다([섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 
 ## 직접 분석해 보기
 
@@ -206,7 +206,7 @@ settings.db       settings.db-shm       settings.db-wal
 5. 11,644,473,600 을 뺍니다. 1,704,067,200 입니다. 1970-01-01 부터 센 Unix 초입니다.
 6. UTC 로 읽으면 2024-01-01 00:00:00 입니다.
 
-SQLite 레코드 안에 정수가 어떤 바이트로 들어가는지는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+SQLite 레코드 안에 정수가 어떤 바이트로 들어가는지는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -232,23 +232,23 @@ SELECT sim_slot_index, name, number, country_iso, is_roaming
 FROM subscription;
 ```
 
-- `time_utc` 는 UTC 입니다. 보고서에 현지 시각을 함께 적을 때는 검체의 시간대 설정을 확인합니다([시간대 설정](/02-artifacts/system-account/time-zone.md)).
-- 결과 가운데 한두 건은 위 헥스 절처럼 손으로 다시 계산해 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- `time_utc` 는 UTC 입니다. 보고서에 현지 시각을 함께 적을 때는 검체의 시간대 설정을 확인합니다([시간대 설정](../system-account/time-zone.md)).
+- 결과 가운데 한두 건은 위 헥스 절처럼 손으로 다시 계산해 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [스마트폰으로 옮겼나 (MTP·Phone Link)](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) | USB·MTP 연결 기록과 Phone Link 를 함께 읽는 순서 |
-| [휴대용 장치·볼륨 이름 기록](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | 같은 휴대폰을 USB·MTP 로도 연결했는지 |
-| [블루투스 장치](/02-artifacts/external-devices/bthport.md) | 휴대폰과 블루투스로 짝지은 기록. Phone Link 가 블루투스를 쓰는지는 확인하지 못했습니다 |
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | Phone Link 패키지를 설치한 기록과 판 |
-| [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) | 패키지 폴더의 `settings.dat` |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | PC 쪽 윈도 알림에 휴대폰 알림이 남는지. 확인하지 못했습니다 |
-| [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) | DB 형식과 WAL·빈 공간 |
-| [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) | `timestamp` 의 FILETIME 방식 |
+| [스마트폰으로 옮겼나 (MTP·Phone Link)](../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) | USB·MTP 연결 기록과 Phone Link 를 함께 읽는 순서 |
+| [휴대용 장치·볼륨 이름 기록](../external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | 같은 휴대폰을 USB·MTP 로도 연결했는지 |
+| [블루투스 장치](../external-devices/bthport.md) | 휴대폰과 블루투스로 짝지은 기록. Phone Link 가 블루투스를 쓰는지는 확인하지 못했습니다 |
+| [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | Phone Link 패키지를 설치한 기록과 판 |
+| [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) | 패키지 폴더의 `settings.dat` |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | PC 쪽 윈도 알림에 휴대폰 알림이 남는지. 확인하지 못했습니다 |
+| [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) | DB 형식과 WAL·빈 공간 |
+| [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) | `timestamp` 의 FILETIME 방식 |
 
-문자·통화 기록을 다른 연락 흔적과 합쳐 읽는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+문자·통화 기록을 다른 연락 흔적과 합쳐 읽는 순서는 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

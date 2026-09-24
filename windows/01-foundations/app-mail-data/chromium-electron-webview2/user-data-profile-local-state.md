@@ -1,6 +1,6 @@
 # 프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)
 
-> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) > 프로필 폴더와 계열 브라우저 구분
+> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 프로필 폴더와 계열 브라우저 구분
 
 ## 한 줄 요약
 
@@ -11,8 +11,8 @@
 
 ## 이 구조를 쓰는 아티팩트
 
-- Chrome·Edge 같은 크롬 계열 브라우저의 모든 기록이 이 구조 위에 있습니다. 파일별 해석은 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다.
-- Electron 앱과 WebView2 앱도 비슷한 구조를 씁니다. 다만 프로필 폴더가 없거나 폴더 층이 다를 수 있습니다. 이 차이는 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에서 다룹니다.
+- Chrome·Edge 같은 크롬 계열 브라우저의 모든 기록이 이 구조 위에 있습니다. 파일별 해석은 [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다.
+- Electron 앱과 WebView2 앱도 비슷한 구조를 씁니다. 다만 프로필 폴더가 없거나 폴더 층이 다를 수 있습니다. 이 차이는 [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 에서 다룹니다.
 
 이 페이지에서 "관찰" 이라고 적은 내용은 Windows 11(빌드 26200) PC 한 대에서 본 것입니다.
 그 PC 의 브라우저는 Chrome 153.0.8010.48 과 Edge 151.0.4129.101 이었습니다.
@@ -67,7 +67,7 @@
 | `profile.last_used` | 마지막으로 쓴 프로필의 폴더 이름입니다. Edge 의 `Local State` 에는 이 키가 없었습니다 |
 | `profile.last_active_profiles` | 목록입니다. 어떤 기준으로 채우는지는 확인하지 못했습니다 |
 | `profile.profiles_order` | 목록입니다. 어떤 기준으로 채우는지는 확인하지 못했습니다 |
-| `os_crypt.encrypted_key`, `os_crypt.app_bound_encrypted_key`, `os_crypt.audit_enabled` | 쿠키·비밀번호 암호화에 쓰는 키입니다. [쿠키·비밀번호 암호화](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 에서 다룹니다 |
+| `os_crypt.encrypted_key`, `os_crypt.app_bound_encrypted_key`, `os_crypt.audit_enabled` | 쿠키·비밀번호 암호화에 쓰는 키입니다. [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) 에서 다룹니다 |
 
 Chrome 의 `info_cache` 에서 프로필 하나에 딸린 칸은 아래와 같았습니다 (관찰).
 
@@ -90,9 +90,9 @@ Chrome 의 `info_cache` 에서 프로필 하나에 딸린 칸은 아래와 같�
 | 확장 프로그램 | `Extensions` |
 | 새 이름 | `Sessions_Encrypted`, `EncryptedBookmarks2` |
 
-- `History` 파일의 첫 16바이트는 `SQLite format 3\0` 이었습니다. 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- `History` 파일의 첫 16바이트는 `SQLite format 3\0` 이었습니다. 읽는 법은 [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md) 에서 다룹니다.
 - 쿠키 DB 는 프로필 바로 아래가 아니라 `Network` 폴더 안에 있었습니다. 옛 버전은 프로필 바로 아래 `Cookies` 에 두었습니다. 자리를 옮긴 버전은 확인하지 못했습니다.
-- 캐시도 옛 버전은 `Default\Cache` 바로 아래에 두었습니다. `Cache\Cache_Data` 로 옮긴 버전은 확인하지 못했습니다. 캐시 파일의 형식은 [캐시 형식](/01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md) 에서 다룹니다.
+- 캐시도 옛 버전은 `Default\Cache` 바로 아래에 두었습니다. `Cache\Cache_Data` 로 옮긴 버전은 확인하지 못했습니다. 캐시 파일의 형식은 [캐시 형식](blockfile-simple-cache.md) 에서 다룹니다.
 - `Sessions_Encrypted` 와 `EncryptedBookmarks2` 는 뜻과 처음 생긴 버전을 확인하지 못했습니다.
 
 ### 계열 브라우저를 가리는 단서
@@ -115,7 +115,7 @@ Chrome 과 Edge 는 폴더 구성이 거의 같습니다 (관찰).
 ## 읽는 법
 
 1. **User Data 폴더를 찾습니다.** 사용자 프로필마다 위 기본 위치를 봅니다.
-2. **기본 위치 밖도 찾습니다.** 디스크 전체에서 `Local State` 라는 이름의 파일을 찾습니다. 이 파일이 있는 폴더가 크롬 계열 데이터 폴더 후보입니다. `--user-data-dir` 로 옮긴 폴더와 Electron·WebView2 앱 폴더가 함께 나옵니다. 실행 인수가 남았을 수 있는 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 도 봅니다.
+2. **기본 위치 밖도 찾습니다.** 디스크 전체에서 `Local State` 라는 이름의 파일을 찾습니다. 이 파일이 있는 폴더가 크롬 계열 데이터 폴더 후보입니다. `--user-data-dir` 로 옮긴 폴더와 Electron·WebView2 앱 폴더가 함께 나옵니다. 실행 인수가 남았을 수 있는 [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md) 도 봅니다.
 3. **계열을 가립니다.** `Last Version`, `Last Browser`, `Local State` 최상위 키를 위 표와 맞춰 봅니다.
 4. **프로필 폴더와 표시 이름을 짝짓습니다.** 사본의 `Local State` 를 JSON 으로 엽니다. `profile.info_cache` 아래 키가 폴더 이름입니다. 그 안의 칸에서 표시 이름과 계정 정보를 읽습니다.
 5. **실제 폴더 목록과 비교합니다.** `info_cache` 에 없는 폴더가 있거나 그 반대면 이유를 따로 확인합니다. 프로필을 지울 때 어느 쪽이 먼저 사라지는지는 확인하지 못했습니다.
@@ -135,7 +135,7 @@ Chrome 과 Edge 는 폴더 구성이 거의 같습니다 (관찰).
 - 영문자와 기호 하나가 2바이트입니다. 둘째 바이트는 `00` 입니다.
 - 그래서 문자열을 1바이트씩 읽는 도구에서는 글자 사이에 점이 끼어 보입니다.
 - 파일 첫머리에 다른 바이트가 붙는지는 확인하지 못했습니다. 첫 몇 바이트를 직접 봅니다.
-- 인코딩 규칙은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- 인코딩 규칙은 [문자 인코딩](../../value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 `Local State` 의 뼈대는 아래와 같습니다.
 관찰한 키 이름으로 만든 예시입니다.
@@ -175,12 +175,12 @@ Chrome 과 Edge 는 폴더 구성이 거의 같습니다 (관찰).
 
 - `active_time` 은 Unix 초로 보입니다 (관찰). 공식 문서로 확인하지 못한 해석이므로 다른 시각 기록과 대조합니다.
 - 이 값이 정확히 어떤 동작 때 바뀌는지도 확인하지 못했습니다. 보고서에는 "이 프로필에 이 시각 값이 적혀 있다" 까지만 씁니다.
-- 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 변환은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ### 지운 프로필과 옛 상태
 
-- `Local State` 는 모든 프로필이 함께 쓰는 파일 하나입니다. 옛 시점의 프로필 목록을 보려면 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 `Local State` 와 비교합니다.
-- 지운 프로필 폴더는 파일 시스템 수준에서 찾습니다. [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 를 봅니다.
+- `Local State` 는 모든 프로필이 함께 쓰는 파일 하나입니다. 옛 시점의 프로필 목록을 보려면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 `Local State` 와 비교합니다.
+- 지운 프로필 폴더는 파일 시스템 수준에서 찾습니다. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 를 봅니다.
 
 ## 함정
 
@@ -188,7 +188,7 @@ Chrome 과 Edge 는 폴더 구성이 거의 같습니다 (관찰).
 - **Canary 를 놓칩니다.** Canary 폴더 이름은 `Chrome SxS` 입니다.
 - **`last_used` 만으로 마지막 프로필을 찾습니다.** 관찰한 Edge 의 `Local State` 에는 이 키가 없었습니다.
 - **`Guest Profile`·`System Profile` 을 사용자 프로필과 같이 셉니다.** 두 폴더의 쓰임은 확인하지 못했습니다. 안의 파일을 보고 따로 판단합니다.
-- **폴더 모양으로 브라우저를 가립니다.** Chrome 과 Edge 는 폴더 구성이 거의 같습니다. Electron·WebView2 앱 폴더에도 `Local State` 가 있습니다. 앱 안에 든 폴더를 브라우저 프로필로 착각하지 않습니다. [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 를 봅니다.
+- **폴더 모양으로 브라우저를 가립니다.** Chrome 과 Edge 는 폴더 구성이 거의 같습니다. Electron·WebView2 앱 폴더에도 `Local State` 가 있습니다. 앱 안에 든 폴더를 브라우저 프로필로 착각하지 않습니다. [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 를 봅니다.
 - **쿠키 파일을 한 자리에서만 찾습니다.** 요즘 버전은 `Network\Cookies`, 옛 버전은 프로필 바로 아래 `Cookies` 입니다.
 - **원본 폴더를 브라우저로 엽니다.** `Last Version` 은 마지막으로 실행한 버전을 적는 파일입니다. 다른 버전의 브라우저로 열면 이런 값이 바뀔 수 있습니다. 사본을 만들고 파일 단위로 읽습니다.
 
@@ -203,7 +203,7 @@ Chrome 과 Edge 는 폴더 구성이 거의 같습니다 (관찰).
 | SQLite 조회 도구(DB Browser for SQLite 등) | `History` 같은 프로필 파일을 엽니다 |
 
 도구가 프로필을 하나만 보여 주면 폴더 목록과 비교합니다.
-결과가 도구마다 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+결과가 도구마다 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

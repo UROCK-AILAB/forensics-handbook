@@ -63,28 +63,28 @@ ANSSI 논문이 실험으로 확인한 흐름입니다(Win10 1803 판까지).
 
 ## 읽는 순서
 
-1. [구조와 버전별 차이 (Structure·Versions)](/02-artifacts/execution/amcache-hve/structure-versions.md) — 라이브러리 판마다 `Root` 아래 키가 어떻게 바뀌는지 다룹니다. 옛 형식과 새 형식이 한 파일에 섞여 있을 때 가려 읽는 법도 봅니다.
-2. [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) — 경로, `FileId`, `LinkDate`, 게시자 같은 값을 읽습니다. 키 이름 규칙과 키 시각이 뜻하는 것도 다룹니다.
-3. [설치 프로그램 항목 (InventoryApplication)](/02-artifacts/execution/amcache-hve/inventoryapplication.md) — 설치 방식과 설치 날짜를 읽습니다. `InstallDate` 가 왜 추정값인지, 지운 프로그램이 어떻게 빠지는지도 다룹니다.
-4. [드라이버 항목 (InventoryDriverBinary)](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md) — 드라이버 파일의 경로, 해시, 서명 정보를 읽고 낯선 드라이버를 가려냅니다.
-5. [바로가기 항목 (InventoryApplicationShortcut)](/02-artifacts/execution/amcache-hve/inventoryapplicationshortcut.md) — 시작 메뉴 바로가기 목록으로 설치 흔적을 보강합니다.
-6. [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) — 연결된 장치 항목을 읽고 USB 흔적과 맞춰 봅니다.
-7. [구버전 실행 기록 (RecentFileCache.bcf)](/02-artifacts/execution/amcache-hve/recentfilecache-bcf.md) — Windows 7 기본 라이브러리가 쓰던 파일을 읽습니다. 이 파일이 실행한 파일을 모두 담지는 않는다는 점도 다룹니다.
-8. [AmCache 해석 함정 (실행 증거가 아닌 경우·SHA1 계산 범위)](/02-artifacts/execution/amcache-hve/sha1.md) — 실행 증거가 되는 경우와 안 되는 경우를 나눕니다. SHA-1 을 앞 30MiB 로만 계산하는 문제도 정리합니다.
+1. [구조와 버전별 차이 (Structure·Versions)](structure-versions.md) — 라이브러리 판마다 `Root` 아래 키가 어떻게 바뀌는지 다룹니다. 옛 형식과 새 형식이 한 파일에 섞여 있을 때 가려 읽는 법도 봅니다.
+2. [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) — 경로, `FileId`, `LinkDate`, 게시자 같은 값을 읽습니다. 키 이름 규칙과 키 시각이 뜻하는 것도 다룹니다.
+3. [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) — 설치 방식과 설치 날짜를 읽습니다. `InstallDate` 가 왜 추정값인지, 지운 프로그램이 어떻게 빠지는지도 다룹니다.
+4. [드라이버 항목 (InventoryDriverBinary)](inventorydriverbinary.md) — 드라이버 파일의 경로, 해시, 서명 정보를 읽고 낯선 드라이버를 가려냅니다.
+5. [바로가기 항목 (InventoryApplicationShortcut)](inventoryapplicationshortcut.md) — 시작 메뉴 바로가기 목록으로 설치 흔적을 보강합니다.
+6. [장치 항목 (InventoryDevicePnp)](inventorydevicepnp.md) — 연결된 장치 항목을 읽고 USB 흔적과 맞춰 봅니다.
+7. [구버전 실행 기록 (RecentFileCache.bcf)](recentfilecache-bcf.md) — Windows 7 기본 라이브러리가 쓰던 파일을 읽습니다. 이 파일이 실행한 파일을 모두 담지는 않는다는 점도 다룹니다.
+8. [AmCache 해석 함정 (실행 증거가 아닌 경우·SHA1 계산 범위)](sha1.md) — 실행 증거가 되는 경우와 안 되는 경우를 나눕니다. SHA-1 을 앞 30MiB 로만 계산하는 문제도 정리합니다.
 
 ## 함께 볼 페이지
 
-- [심캐시 (ShimCache·AppCompatCache)](/02-artifacts/execution/shimcache-appcompatcache.md) — 같은 호환성 기능이 SYSTEM 하이브에 남기는 기록입니다.
-- [프로그램 호환성 도우미 (PCA)](/02-artifacts/execution/pca.md) — 설치 프로그램을 기록하는 PcaSvc 쪽 실행 기록입니다.
-- [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md) — 실행 횟수와 실행 시각으로 AmCache 의 빈틈을 채웁니다.
-- [BAM·DAM (Background Activity Moderator)](/02-artifacts/execution/background-activity-moderator.md) — 사용자별 마지막 실행 시각을 더합니다.
-- [설치 프로그램 (Uninstall)](/02-artifacts/system-account/uninstall.md) — InventoryApplication 과 맞춰 볼 레지스트리 목록입니다.
-- [서비스·드라이버 (Services·Drivers)](/02-artifacts/persistence/services-drivers.md) — InventoryDriverBinary 의 드라이버가 서비스로 등록됐는지 확인합니다.
-- [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](/01-foundations/database-log-formats/registry-hive/log1-log2.md) — Amcache.hve 를 로그와 함께 읽는 법입니다.
-- [키 마지막 기록 시각 (Last Write Time)](/01-foundations/database-log-formats/registry-hive/last-write-time.md) — 키 시각이 바뀌는 조건을 다룹니다.
-- [실행 파일 메타데이터 (PE Header·Version Info·Digital Signature)](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) — `LinkDate`·게시자·버전 값의 출처입니다.
-- [해시셋 대조와 유사 해시 (Hash Set·Fuzzy Hash)](/03-techniques/analysis/hash-set-fuzzy-hash.md) — `FileId` 를 알려진 파일 목록과 대조합니다.
-- [어떤 프로그램을 언제 실행했나 (Program Execution)](/04-scenarios/activity/program-execution.md) — 실행 흔적을 묶어 읽는 조사 흐름입니다.
+- [심캐시 (ShimCache·AppCompatCache)](../shimcache-appcompatcache.md) — 같은 호환성 기능이 SYSTEM 하이브에 남기는 기록입니다.
+- [프로그램 호환성 도우미 (PCA)](../pca.md) — 설치 프로그램을 기록하는 PcaSvc 쪽 실행 기록입니다.
+- [프리페치 (Prefetch)](../prefetch/index.md) — 실행 횟수와 실행 시각으로 AmCache 의 빈틈을 채웁니다.
+- [BAM·DAM (Background Activity Moderator)](../background-activity-moderator.md) — 사용자별 마지막 실행 시각을 더합니다.
+- [설치 프로그램 (Uninstall)](../../system-account/uninstall.md) — InventoryApplication 과 맞춰 볼 레지스트리 목록입니다.
+- [서비스·드라이버 (Services·Drivers)](../../persistence/services-drivers.md) — InventoryDriverBinary 의 드라이버가 서비스로 등록됐는지 확인합니다.
+- [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) — Amcache.hve 를 로그와 함께 읽는 법입니다.
+- [키 마지막 기록 시각 (Last Write Time)](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) — 키 시각이 바뀌는 조건을 다룹니다.
+- [실행 파일 메타데이터 (PE Header·Version Info·Digital Signature)](../../embedded-metadata/pe-header-version-info-digital-signature.md) — `LinkDate`·게시자·버전 값의 출처입니다.
+- [해시셋 대조와 유사 해시 (Hash Set·Fuzzy Hash)](../../../03-techniques/analysis/hash-set-fuzzy-hash.md) — `FileId` 를 알려진 파일 목록과 대조합니다.
+- [어떤 프로그램을 언제 실행했나 (Program Execution)](../../../04-scenarios/activity/program-execution.md) — 실행 흔적을 묶어 읽는 조사 흐름입니다.
 
 ## 참고 문헌
 

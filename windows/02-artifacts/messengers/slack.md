@@ -14,7 +14,7 @@
 
 - 지금의 슬랙 데스크톱 앱은 Electron 기반입니다.
 - Electron 앱은 Chromium 의 저장 방식을 그대로 씁니다. 그래서 앱 폴더 안에 브라우저와 같은 모양의 폴더(`Cache`, `Local Storage`, `IndexedDB` 등)가 생깁니다.
-- 이 공통 구조는 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 와 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다. 이 페이지는 슬랙에 고유한 내용만 적습니다.
+- 이 공통 구조는 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 와 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다. 이 페이지는 슬랙에 고유한 내용만 적습니다.
 - 수집 정의 파일은 `IndexedDB\` 를 대화 기록(Chat Logs)으로 분류합니다.
 - 앱 로그는 `logs\` 에, 내려받은 파일 기록은 `storage\` 에 남습니다.
 - PC 에 남는 대화는 앱이 받아서 저장한 만큼이라고 보는 편이 안전합니다(해석).
@@ -53,7 +53,7 @@
 
 ## 구조
 
-LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번호, 압축 정리는 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
+LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번호, 압축 정리는 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
 
 ### IndexedDB — 수집 정의 작성자의 관찰
 
@@ -73,18 +73,18 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 `.ldb` 는 LevelDB 의 표 파일이고, 블록이 압축돼 있을 수 있습니다.
 압축된 블록은 풀기 전에는 문자열 검색에 걸리지 않습니다.
 압축 정리 뒤에는 지운 레코드와 옛 값이 빠질 수도 있습니다.
-두 가지 모두 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서 확인합니다.
+두 가지 모두 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 확인합니다.
 
 ### Local Storage
 
 - `Local Storage\leveldb` 는 크롬 계열 브라우저의 로컬 스토리지와 같은 LevelDB 폴더입니다.
-- 키와 값의 모양은 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 의 웹 저장소 설명을 따릅니다.
+- 키와 값의 모양은 [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) 의 웹 저장소 설명을 따릅니다.
 - 슬랙이 여기에 무엇을 넣는지는 이번에 확인하지 못했습니다.
 
 ### Cache
 
 - 수집 정의 파일은 `Cache` 를 Chrome 브라우저 캐시처럼 해석할 수 있다고 적었습니다.
-- 캐시 형식은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+- 캐시 형식은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 - 대화에 올라온 이미지·파일 미리보기가 캐시에 남았는지 봅니다.
 
 ### logs
@@ -96,14 +96,14 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 
 - `storage\` 에는 사용자 활동 기록이 있을 수 있습니다.
 - 내려받은 파일 기록(slack-downloads)도 여기 들어 있습니다.
-- 내려받은 파일 기록은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 파일이 들어온 경로를 보여 줄 수 있습니다.
+- 내려받은 파일 기록은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 파일이 들어온 경로를 보여 줄 수 있습니다.
 
 ### 암호화
 
 - 쿠키 같은 값을 Chromium 방식으로 암호화하는지는 슬랙에 대해 확인하지 못했습니다.
 - Chromium 방식은 `Local State` 파일에 둔 키를 DPAPI 로 보호합니다.
 - 슬랙 폴더의 `Local State` 에 암호화 키 칸이 있는지 직접 봅니다.
-- 키 칸이 있으면 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 암호화 설명과 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 를 봅니다.
+- 키 칸이 있으면 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 암호화 설명과 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
 
 ## 증거로서 의미
 
@@ -133,7 +133,7 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 - LevelDB 레코드 자체에는 시각이 없습니다. 순서 번호로 앞뒤만 알 수 있습니다. 그래서 메시지 시각은 레코드 값 안에서 찾습니다.
 - 슬랙 개발자 문서는 메시지 값 `ts` 가 유닉스 시각처럼 보이지만 실제로는 메시지 식별자라고 적습니다. 한 대화방 안에서 겹치지 않습니다.
 - 점 앞 부분은 유닉스 초로 만들어집니다. 점 뒤 숫자는 식별을 위한 값이어서 정확한 소수 초로 읽지 않습니다.
-- 점 앞 초는 UTC 기준입니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 점 앞 초는 UTC 기준입니다. 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 앱이 PC 에 `ts` 를 그대로 저장하는지는 버전마다 확인합니다.
 - 관찰 메모대로 앱을 꺼야 기록이 반영되면, `.ldb` 파일의 시각은 앱을 끈 때에 가까울 수 있습니다(해석). 이 시각을 메시지 시각으로 쓰지 않습니다.
 - 로그 줄의 시각이 UTC 인지 현지 시각인지는 시험 환경에서 확인합니다.
@@ -141,13 +141,13 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 ## 함정과 한계
 
 - **옛 관찰을 지금 버전에 그대로 씁니다.** 관찰 메모는 2017년 보고서를 근거로 합니다. 폴더 구성이 바뀌었을 수 있습니다.
-- **앱이 켜진 채 수집하고 끝냅니다.** 관찰 메모에서는 앱을 제대로 종료해야 새 기록이 반영됐습니다. 라이브 수집에서 앱을 끌지 말지는 조사 목적에 따라 정하고, 무엇을 했는지 기록합니다. 방법은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+- **앱이 켜진 채 수집하고 끝냅니다.** 관찰 메모에서는 앱을 제대로 종료해야 새 기록이 반영됐습니다. 라이브 수집에서 앱을 끌지 말지는 조사 목적에 따라 정하고, 무엇을 했는지 기록합니다. 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 - **`.ldb` 를 빈 파일로 봅니다.** 압축된 블록은 풀어야 보입니다.
-- **한 인코딩으로만 검색합니다.** 문자열은 한 바이트 문자로도, UTF-16LE 로도 저장될 수 있습니다. 두 모양을 모두 검색합니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- **한 인코딩으로만 검색합니다.** 문자열은 한 바이트 문자로도, UTF-16LE 로도 저장될 수 있습니다. 두 모양을 모두 검색합니다. 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 - **폴더 하나를 워크스페이스 하나로 봅니다.** 관찰 메모에서는 워크스페이스 두 곳이 한 폴더를 같이 썼습니다.
-- **기본 위치만 봅니다.** 설치형과 스토어 판의 위치가 다를 수 있습니다. 경로를 모르면 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 의 방법처럼 `Local State` 이름으로 찾습니다.
+- **기본 위치만 봅니다.** 설치형과 스토어 판의 위치가 다를 수 있습니다. 경로를 모르면 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 의 방법처럼 `Local State` 이름으로 찾습니다.
 - **같은 메시지가 여러 번 나와 여러 건으로 셉니다.** LevelDB 에는 같은 키의 레코드가 여러 개 남을 수 있습니다. 순서 번호로 나중 기록을 가립니다.
-- **지운 흔적을 앱 폴더에서만 찾습니다.** 사용자가 로그아웃하거나 앱 데이터를 지우면 무엇이 지워지는지는 확인하지 못했습니다. 지운 파일의 흔적은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 과 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서도 찾습니다.
+- **지운 흔적을 앱 폴더에서만 찾습니다.** 사용자가 로그아웃하거나 앱 데이터를 지우면 무엇이 지워지는지는 확인하지 못했습니다. 지운 파일의 흔적은 [USN 변경 저널](../filesystem/usnjrnl.md) 과 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서도 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -164,7 +164,7 @@ UTF-16LE         73 00 75 00 62 00 74 00 79 00 70 00 65 00 5F 00    s.u.b.t.y.p.
 1. `IndexedDB\` 아래 폴더를 통째로 복사합니다. 원본 폴더에서 바로 작업하지 않습니다.
 2. 복사한 `.log` 파일에서 위 두 바이트 열을 모두 검색합니다.
 3. 찾은 자리 앞뒤에서 메시지 본문으로 보이는 문자열과 `ts` 로 보이는 숫자 문자열을 찾습니다.
-4. 찾은 자리가 어느 LevelDB 레코드 안인지 봅니다. 레코드의 키와 순서 번호를 읽는 법은 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에 있습니다.
+4. 찾은 자리가 어느 LevelDB 레코드 안인지 봅니다. 레코드의 키와 순서 번호를 읽는 법은 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에 있습니다.
 5. 같은 본문이 여러 번 나오면 순서 번호를 비교해 어느 것이 나중 기록인지 가립니다.
 6. `.ldb` 파일은 블록을 풀어 같은 검색을 되풀이합니다.
 
@@ -180,22 +180,22 @@ UTF-16LE         73 00 75 00 62 00 74 00 79 00 70 00 65 00 5F 00    s.u.b.t.y.p.
 
 도구가 낸 메시지 수와 헥스 검색으로 찾은 수를 맞춰 봅니다.
 차이가 나면 헥스로 돌아갑니다.
-방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) · [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 설치 방식과 설치 폴더 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 슬랙 실행 파일의 경로와 실행 시각 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 슬랙 앱의 네트워크 사용량 기록이 있는지 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 슬랙 알림이 남았는지 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | `storage\` 에 기록된 내려받은 파일에 출처 표시가 붙었는지 |
-| [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) | 브라우저에서 슬랙 웹을 연 기록이 있는지 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 내려받은 파일이 디스크 어디에 생겼는지 |
+| [설치 프로그램](../system-account/uninstall.md) · [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 설치 방식과 설치 폴더 |
+| [프리페치](../execution/prefetch/index.md) · [AmCache](../execution/amcache-hve/index.md) | 슬랙 실행 파일의 경로와 실행 시각 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 슬랙 앱의 네트워크 사용량 기록이 있는지 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 슬랙 알림이 남았는지 |
+| [다운로드 출처 표시](../filesystem/zone-identifier.md) | `storage\` 에 기록된 내려받은 파일에 출처 표시가 붙었는지 |
+| [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) | 브라우저에서 슬랙 웹을 연 기록이 있는지 |
+| [마스터 파일 테이블](../filesystem/mft.md) | 내려받은 파일이 디스크 어디에 생겼는지 |
 
-- 같은 Electron 계열 메신저는 [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) 와 [디스코드](/02-artifacts/messengers/discord.md) 페이지를 봅니다.
-- 조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+- 같은 Electron 계열 메신저는 [마이크로소프트 팀즈](teams.md) 와 [디스코드](discord.md) 페이지를 봅니다.
+- 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

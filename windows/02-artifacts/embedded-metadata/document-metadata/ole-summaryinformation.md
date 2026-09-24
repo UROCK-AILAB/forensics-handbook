@@ -1,6 +1,6 @@
 # 옛 오피스 문서 속성 (OLE SummaryInformation)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](/02-artifacts/embedded-metadata/document-metadata/index.md)
+> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
 
 ## 한 줄 요약
 
@@ -22,11 +22,11 @@
 - 한 스트림에 속성 집합 두 개가 들어가는 경우는 DocumentSummaryInformation 과 UserDefined 뿐입니다.
 - 속성 이름은 보통 파일에 저장하지 않습니다. 속성 ID 로 무슨 속성인지 알아냅니다.
 
-한글 HWP 5.0 문서도 같은 속성 집합 구조를 씁니다. 한글 쪽 속성은 [한글 문서 (HWP·HWPX)](/02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md) 에서 다룹니다.
+한글 HWP 5.0 문서도 같은 속성 집합 구조를 씁니다. 한글 쪽 속성은 [한글 문서 (HWP·HWPX)](hwp-hwpx.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-스트림은 OLE 복합 파일 안에 있습니다. 파일 서명으로 OLE 복합 파일인지 확인하고 스트림을 찾는 법은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
+스트림은 OLE 복합 파일 안에 있습니다. 파일 서명으로 OLE 복합 파일인지 확인하고 스트림을 찾는 법은 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
 
 Word 16 이 저장한 .doc 에는 스트림 다섯 개가 있었습니다. (관찰)
 
@@ -148,7 +148,7 @@ Microsoft Learn 의 DocumentSummaryInformation 문서에 실린 표입니다.
 
 관찰한 .doc 의 DocumentSummaryInformation 에는 이 표에 없는 ID 0x11·0x13·0x16·0x17 도 있었습니다. 형식은 VT_I4 나 VT_BOOL 이었습니다. (관찰) 이 ID 들의 이름은 확인하지 못했습니다.
 
-docx 에도 같은 이름의 속성이 있습니다. [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) 을 봅니다.
+docx 에도 같은 이름의 속성이 있습니다. [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) 을 봅니다.
 
 ## 증거로서 의미
 
@@ -160,7 +160,7 @@ docx 에도 같은 이름의 속성이 있습니다. [오피스 문서 속성 (O
 
 **증명하지 못하는 것**
 
-- 그 이름의 사람이 문서를 썼다는 것. 사용자 이름은 프로그램 설정값입니다. 이 문제는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 그 이름의 사람이 문서를 썼다는 것. 사용자 이름은 프로그램 설정값입니다. 이 문제는 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - 0x0B 가 없으면 한 번도 인쇄하지 않았다는 것. 인쇄하지 않은 시험 파일에서 없었다는 관찰 하나뿐입니다.
 - 초 단위 저장 시각. 관찰한 Word 16 은 초를 00 으로 적었습니다.
 - 실제로 일한 시간. 몇 초 편집한 문서의 총 편집 시간이 0 이었습니다. (관찰)
@@ -173,7 +173,7 @@ docx 에도 같은 이름의 속성이 있습니다. [오피스 문서 속성 (O
 
 ## 시각 해석
 
-- 0x0B·0x0C·0x0D 는 FILETIME 이고 UTC 입니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 0x0B·0x0C·0x0D 는 FILETIME 이고 UTC 입니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 관찰한 .doc 의 0x0C·0x0D 는 11:27:00 UTC 였습니다. 같은 파일의 파일 시스템 생성 시각은 11:27:51 UTC 였습니다. (관찰) 초를 버린 값으로 보입니다.
 - Microsoft Learn 의 속성 표 주석은 파일을 옮기는 방식 (예: BBS 내려받기) 에 따라 파일 시스템 쪽 시각이 제대로 남지 않을 수 있다고 적었습니다. 파일 시스템 시각과 문서 속 시각이 다르면 둘 다 적어 둡니다.
 - 0x0A (총 편집 시간) 는 표에 VT_FILETIME 으로 적혀 있습니다. 그런데 이름으로 보면 시점이 아니라 길이입니다. 길이로 읽어야 한다는 원문 설명은 확인하지 못했습니다. 도구가 이 값을 날짜로 보여 주면 그대로 옮기지 않습니다.
@@ -182,7 +182,7 @@ docx 에도 같은 이름의 속성이 있습니다. [오피스 문서 속성 (O
 ## 함정과 한계
 
 - **확장자가 .doc 라도 OLE 가 아닐 수 있습니다.** 공공 법령 사이트에서 받은 .doc 파일 6개는 모두 RTF 였습니다. 파일이 `{\rtf1\ansi` 로 시작했습니다. OLE 도구로 열면 "OLE 파일이 아니다" 오류가 났습니다. (관찰) 확장자보다 첫 바이트를 먼저 봅니다.
-- **코드 페이지를 알아야 합니다.** 글자열이 VT_LPSTR 이라 코드 페이지를 모르면 한글이 깨집니다. 관찰한 .doc 는 949 였습니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- **코드 페이지를 알아야 합니다.** 글자열이 VT_LPSTR 이라 코드 페이지를 모르면 한글이 깨집니다. 관찰한 .doc 는 949 였습니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 - **같은 ID 라도 섹션마다 뜻이 다릅니다.** 0x02 는 Summary Information 에서 Title 이고 DocumentSummaryInformation 에서 Category 입니다. 어느 FMTID 의 섹션인지 먼저 확인합니다.
 - **표에 없는 ID 가 있습니다.** 이름을 모르는 ID 는 번호와 형식, 값만 적습니다. 짐작으로 이름을 붙이지 않습니다.
 - **없는 속성과 0 은 다릅니다.** Word 16 은 인쇄하지 않은 문서에 0x0B 를 아예 쓰지 않았습니다. (관찰) 도구가 빈 칸을 0 이나 1601-01-01 로 보여 주면 원래 없던 값인지 확인합니다.
@@ -211,7 +211,7 @@ docx 에도 같은 이름의 속성이 있습니다. [오피스 문서 속성 (O
 | 0x1C | `E0 85 9F F2 … B3 D9` | FMTID `F29F85E0-4FF9-1068-AB91-08002B27B3D9` |
 | 0x2C | `30 00 00 00` | 섹션 위치 0x30 |
 
-FMTID 는 앞 세 부분의 바이트 순서를 뒤집어 적습니다. `F29F85E0` 이 `E0 85 9F F2` 로, `4FF9` 가 `F9 4F` 로, `1068` 이 `68 10` 으로 적혔습니다. GUID 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+FMTID 는 앞 세 부분의 바이트 순서를 뒤집어 적습니다. `F29F85E0` 이 `E0 85 9F F2` 로, `4FF9` 가 `F9 4F` 로, `1068` 이 `68 10` 으로 적혔습니다. GUID 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 섹션부터는 이렇게 따라갑니다.
 
@@ -252,21 +252,21 @@ for pid in sorted(props):
 1. 스트림 목록에 `\x05SummaryInformation` 과 `\x05DocumentSummaryInformation` 이 있는지 봅니다.
 2. 0x01 값으로 코드 페이지를 확인합니다. 글자열이 깨지면 이 값으로 다시 풉니다.
 3. 0x0C·0x0D 를 헥스로 직접 푼 값과 맞춰 봅니다.
-4. 쓰는 포렌식 도구의 결과와도 맞춰 봅니다. 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+4. 쓰는 포렌식 도구의 결과와도 맞춰 봅니다. 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) | 같은 문서의 docx 판 속성 |
-| [한글 문서 (HWP·HWPX)](/02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md) | 같은 속성 집합 구조를 쓰는 한글 문서 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일 시스템 생성·수정 시각과 0x0C·0x0D 의 차이 |
-| [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md)·[인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) | 0x0B 마지막 인쇄 시각 무렵의 인쇄 기록 |
-| [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) | 이 PC 의 오피스가 그 문서를 다룬 기록 |
-| [오피스 매크로](/02-artifacts/embedded-metadata/vba-macro.md) | 같은 문서 파일에 든 매크로 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 문서를 내려받았는지 |
+| [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) | 같은 문서의 docx 판 속성 |
+| [한글 문서 (HWP·HWPX)](hwp-hwpx.md) | 같은 속성 집합 구조를 쓰는 한글 문서 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일 시스템 생성·수정 시각과 0x0C·0x0D 의 차이 |
+| [인쇄 흔적](../../external-devices/print-spooler-spl-shd.md)·[인쇄 이벤트](../../event-logs/printservice-307.md) | 0x0B 마지막 인쇄 시각 무렵의 인쇄 기록 |
+| [오피스 사용 흔적](../../file-folder-usage/microsoft-office/index.md) | 이 PC 의 오피스가 그 문서를 다룬 기록 |
+| [오피스 매크로](../vba-macro.md) | 같은 문서 파일에 든 매크로 |
+| [다운로드 출처 표시](../../filesystem/zone-identifier.md) | 문서를 내려받았는지 |
 
-시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) 를 봅니다.
 
 ## 실습
 

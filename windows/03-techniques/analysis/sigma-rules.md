@@ -8,7 +8,7 @@ Sigma 는 로그에서 찾을 조건을 YAML 파일로 적는 규칙 형식입�
 규칙은 그대로 실행되지 않습니다.
 변환 도구가 규칙을 검색 도구의 질의 언어로 바꿔야 돌릴 수 있습니다.
 Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 먼저 볼 이벤트를 고를 때 씁니다.
-이벤트 로그 파일의 구조는 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+이벤트 로그 파일의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ## 언제 쓰나
 
@@ -65,7 +65,7 @@ Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 
 - `category` 값이 실제로 어느 채널의 어느 이벤트로 이어지는지는 규칙 파일이 정하지 않습니다.
 - 변환 도구의 설정, 곧 매핑 (Mapping) 이 정합니다.
 - 그래서 같은 규칙도 매핑이 다르면 다른 로그를 검색합니다.
-- 프로세스 생성을 기록하는 로그는 [프로세스 생성](/02-artifacts/event-logs/4688.md) 과 [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) 에서 다룹니다. 쓰는 매핑이 이 가운데 어느 것을 가리키는지 확인합니다.
+- 프로세스 생성을 기록하는 로그는 [프로세스 생성](../../02-artifacts/event-logs/4688.md) 과 [Sysmon 로그](../../02-artifacts/event-logs/sysmon/index.md) 에서 다룹니다. 쓰는 매핑이 이 가운데 어느 것을 가리키는지 확인합니다.
 
 ### detection: 무엇을 찾을지
 
@@ -99,7 +99,7 @@ Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 
 아래 규칙은 명세의 문법으로 만든 예시입니다.
 공개 규칙 모음에서 가져온 규칙이 아닙니다.
 VssAdmin 으로 섀도 복사본을 지우는 명령이 실행된 기록을 찾는 모양입니다.
-`delete shadows` 는 Microsoft 문서에 적힌 VssAdmin 명령입니다. 섀도 복사본은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
+`delete shadows` 는 Microsoft 문서에 적힌 VssAdmin 명령입니다. 섀도 복사본은 [섀도 복사본 활용](volume-shadow-copy-analysis.md) 에서 다룹니다.
 
 ```yaml
 title: 'Shadow copy deletion with vssadmin (wiki example)'
@@ -128,14 +128,14 @@ level: 'high'
 
 ## 절차
 
-1. **로그가 남아 있는지 먼저 봅니다.** 어떤 채널이 켜져 있었는지, 로그 크기가 얼마였는지, 언제부터 남아 있는지 적습니다. 설정은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 봅니다.
+1. **로그가 남아 있는지 먼저 봅니다.** 어떤 채널이 켜져 있었는지, 로그 크기가 얼마였는지, 언제부터 남아 있는지 적습니다. 설정은 [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 봅니다.
 2. **로그와 맞는 규칙을 고릅니다.** 규칙의 `logsource` 와 확보한 로그가 맞지 않으면 규칙을 돌려도 걸리지 않습니다.
 3. **매핑을 확인합니다.** 쓰는 변환 설정이 `category` 를 어느 채널과 이벤트로 잇는지 적습니다.
 4. **`status` 를 확인합니다.** `experimental`, `deprecated`, `unsupported` 규칙을 쓸지 정하고, 쓴다면 결과에 표시합니다.
 5. **규칙을 돌립니다.** 변환한 질의를 검색 도구에서 돌리거나, EVTX 파일을 읽는 도구로 돌립니다.
 6. **걸린 이벤트를 원래 이벤트에서 확인합니다.** 도구가 보여 준 필드를 EVTX 원래 레코드와 맞춰 봅니다.
 7. **`falsepositives` 와 주변 이벤트를 봅니다.** 같은 시각 앞뒤의 로그온, 프로세스 생성, 서비스 설치를 함께 봅니다.
-8. **타임라인에 넣습니다.** 이벤트마다 걸린 규칙의 제목과 판을 붙입니다. 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에 있습니다.
+8. **타임라인에 넣습니다.** 이벤트마다 걸린 규칙의 제목과 판을 붙입니다. 방법은 [타임라인 작성](timeline/index.md) 에 있습니다.
 
 ## 도구
 
@@ -144,12 +144,12 @@ level: 'high'
 - **텍스트 편집기와 YAML 검사기**: 규칙 파일을 읽고 문법을 확인합니다.
 - **변환 도구**: Sigma 규칙을 검색 도구의 질의 언어로 바꿉니다. 변환에 쓴 설정(매핑)을 함께 보관합니다.
 - **EVTX 에 규칙을 바로 돌리는 도구**: Chainsaw, Hayabusa 같은 공개 도구가 알려져 있습니다. 이 페이지의 자료로는 각 도구의 매핑 방식을 확인하지 못했습니다. 도구의 설정 파일을 확인합니다.
-- 두 도구의 결과 수가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 의 방법으로 원래 레코드와 맞춰 봅니다.
+- 두 도구의 결과 수가 다르면 [도구 결과 교차 검증](../reporting/tool-validation.md) 의 방법으로 원래 레코드와 맞춰 봅니다.
 
 ## 함정과 한계
 
 - **로그가 없는데 0건을 "없었다" 로 씁니다.** 0건은 그 로그가 켜져 있었고 남아 있을 때만 뜻이 있습니다.
-- **로그가 지워진 것을 놓칩니다.** 규칙 결과가 비었으면 로그 삭제 흔적을 확인합니다. [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) 를 봅니다.
+- **로그가 지워진 것을 놓칩니다.** 규칙 결과가 비었으면 로그 삭제 흔적을 확인합니다. [이벤트 로그 삭제](../../02-artifacts/event-logs/1102-104.md) 를 봅니다.
 - **규칙에 걸린 것을 침해로 씁니다.** `level` 과 `status` 는 규칙 작성자가 붙인 값입니다. `falsepositives` 를 함께 읽습니다.
 - **매핑을 확인하지 않습니다.** `category` 가 어느 로그로 이어지는지는 변환 설정이 정합니다. 매핑과 확보한 로그가 맞지 않으면 걸려야 할 이벤트가 빠질 수 있습니다.
 - **필드 이름이 로그와 다릅니다.** 규칙의 필드 이름이 로그의 필드 이름과 다르면 일치가 빠질 수 있습니다. 걸려야 할 표본 이벤트로 규칙을 먼저 시험해 봅니다.
@@ -164,7 +164,7 @@ level: 'high'
 | `level: critical` | 규칙 작성자가 중요도를 높게 매겼다는 것 | 사건의 심각도 |
 
 - 규칙은 로그에 적힌 것만 봅니다. 로그를 켜지 않은 행위, 로그가 덮어쓴 기간의 행위는 찾지 못합니다.
-- 걸린 이벤트는 다른 아티팩트와 맞춰 봅니다. PowerShell 이면 [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md), 서비스면 [서비스 설치](/02-artifacts/event-logs/7045-4697.md) 를 봅니다.
+- 걸린 이벤트는 다른 아티팩트와 맞춰 봅니다. PowerShell 이면 [PowerShell 실행 기록](../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md), 서비스면 [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) 를 봅니다.
 
 보고서에는 규칙과 매핑과 로그 범위를 함께 씁니다.
 

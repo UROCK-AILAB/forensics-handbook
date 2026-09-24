@@ -52,7 +52,7 @@ Windows 11 PC 한 대의 폴더 내용은 이랬습니다. (확인 범위: Win11
 
 ## 구조
 
-ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 여기서는 Windows 10 이후 `qmgr.db` 의 표 두 개만 봅니다.
+ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 여기서는 Windows 10 이후 `qmgr.db` 의 표 두 개만 봅니다.
 
 ### 표
 
@@ -106,8 +106,8 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](/01-foundati
 | 작업 식별 | `{8F5657D0-012C-4E3E-AD2C-F4A5D7656FAF}` |
 | 작업 식별 | `{94416750-0357-461D-A4CC-5DD9990706E4}` |
 
-- GUID 를 바이트로 적는 규칙은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. `qmgr.db` 안에서 이 GUID 가 어떤 바이트 순서로 들어 있는지는 이번 자료로 확인하지 못했습니다.
-- ESE 파일 안에 지운 행이 어떻게 남는지는 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에서 다룹니다.
+- GUID 를 바이트로 적는 규칙은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. `qmgr.db` 안에서 이 GUID 가 어떤 바이트 순서로 들어 있는지는 이번 자료로 확인하지 못했습니다.
+- ESE 파일 안에 지운 행이 어떻게 남는지는 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -120,7 +120,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](/01-foundati
 
 ### 증명하지 못하는 것
 
-- **알림 명령이 실행됐나.** DB 에 명령이 있다는 것은 설정만 알려 줍니다. 이벤트 64 는 실행에 **실패했을 때** 남습니다. 실행은 [프로세스 생성](/02-artifacts/event-logs/4688.md) 이나 [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) 로 따로 봅니다.
+- **알림 명령이 실행됐나.** DB 에 명령이 있다는 것은 설정만 알려 줍니다. 이벤트 64 는 실행에 **실패했을 때** 남습니다. 실행은 [프로세스 생성](../event-logs/4688.md) 이나 [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 로 따로 봅니다.
 - **언제 만들었나.** Blob 의 시각 필드를 확인하지 못했습니다. 아래 "시각 해석" 을 봅니다.
 - **받은 파일이 지금도 있나.** 목적지 경로의 파일을 따로 확인합니다.
 
@@ -144,15 +144,15 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](/01-foundati
 
 - 이벤트 3 은 버전마다 칸이 다릅니다. 버전 0 에는 작업 이름과 소유자만 있고, 버전 2 부터 Process Path·Process ID 가 있습니다. Windows 11 PC 한 대의 템플릿은 버전 3 이었습니다. (확인 범위: Win11 25H2 한 대)
 - Mandiant 는 이벤트 3(작업 생성), 61(전송 중지 경고), 64(알림 명령 경고) 를 짚습니다. 64 에는 작업 이름·대상 실행 파일·URL 이 보입니다.
-- 이벤트 로그 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+- 이벤트 로그 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 - **로그가 금방 밀려납니다.** Windows 11 PC 한 대에서 이 로그는 최대 약 1MB, 순환 방식이었습니다. 1,451건이 약 17일 치(2026-09-06~09-23 UTC)였습니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 에서 많은 이벤트는 59(236건), 3(226), 60(226), 16403(226), 4(225), 306(191), 310(103), 61(10) 순이었습니다. 정상 업데이트 작업이 3·59·60·4 를 계속 남기므로 오래된 악성 작업의 기록은 쉽게 밀려납니다.
 - **켜진 PC 에서는 파일이 잠겨 있습니다.** Windows 11 PC 한 대에서 BITS 서비스가 `qmgr.db` 를 잠가 다시 읽지 못했습니다. `esentutl /mh` 도 JET_errFileAccessDenied(-1032) 로 실패했습니다. (확인 범위: Win11 25H2 한 대)
-- BitsParser 단독판도 잠긴 파일은 읽지 못합니다. 서비스를 멈추거나 잠긴 파일을 복사하는 도구를 따로 씁니다. 수집 방법은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
-- **압수 이미지의 `qmgr.db` 는 비정상 종료 상태일 수 있습니다.** 손상된 ESE DB 는 읽는 방식마다 행 수가 다를 수 있습니다. 로그를 함께 수집하고 [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 를 봅니다.
+- BitsParser 단독판도 잠긴 파일은 읽지 못합니다. 서비스를 멈추거나 잠긴 파일을 복사하는 도구를 따로 씁니다. 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+- **압수 이미지의 `qmgr.db` 는 비정상 종료 상태일 수 있습니다.** 손상된 ESE DB 는 읽는 방식마다 행 수가 다를 수 있습니다. 로그를 함께 수집하고 [트랜잭션 로그와 비정상 종료 상태](../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 를 봅니다.
 - **이벤트 64 는 실패의 기록입니다.** 알림 명령이 성공적으로 실행되었을 때 어떤 이벤트가 남는지는 확인하지 못했습니다.
 - **이벤트 61 과 60 은 메시지 문구가 같습니다.** 이벤트 ID 로 구별합니다.
 - **Windows 10 이전 검체는 형식이 다릅니다.** `qmgr0.dat`·`qmgr1.dat` 를 찾습니다.
@@ -171,7 +171,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](/01-foundati
 
 1. 오프셋 4 의 `EF CD AB 89` 를 리틀 엔디언으로 읽으면 0x89ABCDEF 입니다. ESE 파일의 서명입니다.
 2. Windows 11 PC 한 대의 `qmgr.db` 에서도 오프셋 4 에 이 4바이트가 있었고, 오프셋 8 의 값은 0x620 이었습니다. `20 06 00 00` 은 그 값을 리틀 엔디언으로 적은 모양입니다. (확인 범위: Win11 25H2 한 대)
-3. 오프셋 0 의 4바이트와 오프셋 8 값의 뜻은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+3. 오프셋 0 의 4바이트와 오프셋 8 값의 뜻은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 **Files Blob 에서 URL 을 찾을 때의 바이트 (`http://`).**
 
@@ -196,13 +196,13 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](/01-foundati
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 4688·Sysmon 1 | bitsadmin.exe·powershell.exe 가 작업을 만든 흔적, 알림 명령으로 뜬 프로세스 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) |
-| 프리페치 | BITSADMIN.EXE 나 알림 명령 프로그램의 실행 흔적 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| SRUM | 그 무렵 앱별 네트워크 사용량 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 마스터 파일 테이블 | 목적지 파일이 만들어진 시각 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| 다른 자동실행 위치 | 같은 명령이 다른 자리에도 있나 | [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md), [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md) |
+| 4688·Sysmon 1 | bitsadmin.exe·powershell.exe 가 작업을 만든 흔적, 알림 명령으로 뜬 프로세스 | [프로세스 생성](../event-logs/4688.md), [Sysmon 이벤트 1](../event-logs/sysmon/1.md) |
+| 프리페치 | BITSADMIN.EXE 나 알림 명령 프로그램의 실행 흔적 | [프리페치](../execution/prefetch/index.md) |
+| SRUM | 그 무렵 앱별 네트워크 사용량 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
+| 마스터 파일 테이블 | 목적지 파일이 만들어진 시각 | [마스터 파일 테이블](../filesystem/mft.md) |
+| 다른 자동실행 위치 | 같은 명령이 다른 자리에도 있나 | [로그온 자동실행](run-runonce-startup-folder.md), [예약 작업](scheduled-tasks/index.md) |
 
-자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에 있습니다.
+자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 

@@ -1,6 +1,6 @@
 # 전원·배터리 사용 (Energy Usage)
 
-> 상위 허브: [SRUM (System Resource Usage Monitor)](/02-artifacts/execution/system-resource-usage-monitor/index.md)
+> 상위 허브: [SRUM (System Resource Usage Monitor)](index.md)
 
 ## 한 줄 요약
 
@@ -21,7 +21,7 @@ SRUM 의 에너지 사용 표에는 노트북이 전원에 꽂혀 있었는지, 
 
 ## 위치와 버전별 차이
 
-파일은 `C:\Windows\System32\sru\SRUDB.dat` 이고, 형식은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md)입니다. SRUM 공통 구조와 ID 풀이는 [구조와 ID 매핑](/02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md)을 봅니다.
+파일은 `C:\Windows\System32\sru\SRUDB.dat` 이고, 형식은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md)입니다. SRUM 공통 구조와 ID 풀이는 [구조와 ID 매핑](srudbidmaptable.md)을 봅니다.
 
 | Windows | 두 표 | 근거 |
 |---|---|---|
@@ -109,13 +109,13 @@ S3 절전을 쓰는 노트북에서 이 값이 어떻게 나오는지는 확인�
 | EventTimestamp | FILETIME | UTC | 전원·대기 상태가 바뀐 순간 |
 | TimeStamp | OLE 자동화 날짜 | UTC | SRUM 이 모아 둔 행을 DB 에 쓴 순간 |
 
-두 형식의 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+두 형식의 계산은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 
-사건 시각은 EventTimestamp 로 씁니다. TimeStamp 는 "이때 DB 에 들어갔다" 는 뜻입니다. SRUM 이 약 1시간마다 DB 에 쓰는 규칙은 [SRUM 해석 함정](/02-artifacts/execution/system-resource-usage-monitor/1.md)을 봅니다.
+사건 시각은 EventTimestamp 로 씁니다. TimeStamp 는 "이때 DB 에 들어갔다" 는 뜻입니다. SRUM 이 약 1시간마다 DB 에 쓰는 규칙은 [SRUM 해석 함정](1.md)을 봅니다.
 
 관찰한 노트북의 기본 표에는 행 3,210개에 TimeStamp 값이 1,415가지뿐이었습니다. 여러 행이 한 TimeStamp 를 나눠 씁니다. 두 시각의 차이는 가운데값이 약 27분이었고, 15시간 넘게 벌어진 행도 있었습니다. 두 값이 1초 안에서 같은 행은 1,351개였습니다. 형식이 다른 두 값이 이만큼 겹치므로 TimeStamp 도 UTC 로 봅니다. (확인 범위: 관찰한 노트북)
 
-시계 조작을 볼 때는 AutoIncId 순서와 EventTimestamp 순서를 견줍니다. 관찰한 노트북에서는 AutoIncId 순으로 놓은 이웃 행 3,209쌍 가운데 EventTimestamp 가 거꾸로 간 곳이 없었습니다. 거꾸로 가는 곳이 있으면 [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md) 이벤트를 확인합니다. 현지 시각으로 바꾸는 방법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+시계 조작을 볼 때는 AutoIncId 순서와 EventTimestamp 순서를 견줍니다. 관찰한 노트북에서는 AutoIncId 순으로 놓은 이웃 행 3,209쌍 가운데 EventTimestamp 가 거꾸로 간 곳이 없었습니다. 거꾸로 가는 곳이 있으면 [시간 변경](../../event-logs/4616-kernel-general.md) 이벤트를 확인합니다. 현지 시각으로 바꾸는 방법은 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ## 증거로서 의미
 
@@ -146,13 +146,13 @@ S3 절전을 쓰는 노트북에서 이 값이 어떻게 나오는지는 확인�
 - **새 열을 빠뜨리는 도구가 있습니다.** BatteryCount·BatteryChargeLimited 는 libyal 명세와 SrumECmd 소스(2026년 9월 master)에 없습니다. 열 이름을 정해 두고 읽는 도구는 새 열을 내놓지 않습니다.
 - **빈 번호를 삭제로 단정하지 않습니다.** 관찰한 노트북의 기본 표는 AutoIncId 가 1,408 부터 시작했고, 그 뒤로도 빈 번호가 220군데 있었습니다. 장기 표는 홀수 번호만 있었습니다. (확인 범위: 관찰한 노트북)
 - **보관 기간이 짧습니다.** 관찰한 노트북에서는 기본 표에 약 60일, 장기 표에 약 13주 치가 남아 있었습니다. 보관 기간은 공식 문서에 없습니다. WithSecure 발표 자료는 기본 설정으로 계산하면 기본 표가 60일, 장기 표가 1,820일(7일 × 260)이라고 적습니다. 관찰한 노트북의 장기 표가 13주 치뿐이었던 까닭은 확인하지 못했습니다. 오래된 사건은 장기 표의 주간 합계로만 남을 수 있습니다.
-- **압수 이미지의 SRUDB.dat 는 대부분 비정상 종료 상태입니다.** 이미지 안의 로그가 끊겨 복구가 안 되는 경우가 있습니다. 손상 DB 는 도구마다 행 수가 달라서, 같은 표에서 1,612행과 1,742행이 나온 사례가 있습니다. 사본에서 작업하고 두 가지 이상 방식으로 열어 비교합니다. (확인 범위: 현장 관찰) [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)와 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- **압수 이미지의 SRUDB.dat 는 대부분 비정상 종료 상태입니다.** 이미지 안의 로그가 끊겨 복구가 안 되는 경우가 있습니다. 손상 DB 는 도구마다 행 수가 달라서, 같은 표에서 1,612행과 1,742행이 나온 사례가 있습니다. 사본에서 작업하고 두 가지 이상 방식으로 열어 비교합니다. (확인 범위: 현장 관찰) [트랜잭션 로그와 비정상 종료 상태](../../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)와 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 바이트는 명세의 형식에 맞춰 만든 예시이며, 실제 검체의 값이 아닙니다. 열 값만 하나씩 떼어 보였습니다. 이 값들이 레코드 안 어디에 놓이는지는 [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)를 봅니다.
+아래 바이트는 명세의 형식에 맞춰 만든 예시이며, 실제 검체의 값이 아닙니다. 열 값만 하나씩 떼어 보였습니다. 이 값들이 레코드 안 어디에 놓이는지는 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)를 봅니다.
 
 | 열 | 바이트 (리틀 엔디언) | 값 | 풀이 |
 |---|---|---|---|
@@ -171,19 +171,19 @@ S3 절전을 쓰는 노트북에서 이 값이 어떻게 나오는지는 확인�
 - SrumECmd 는 두 표를 합쳐 CSV 로 내고 EventTimestamp 를 UTC 시각으로 바꿉니다. 위 함정의 번호 바꿈과 새 열 누락을 염두에 둡니다.
 - 파이썬 ESE 라이브러리(예: dissect.esedb)로 직접 읽으면 늘어난 열까지 볼 수 있습니다. 이 글의 관찰은 이 방식으로 얻었습니다.
 
-실행 중인 시스템에서는 Windows 의 `powercfg /batteryreport` 가 배터리 사용 보고서를 만듭니다. `powercfg /srumutil` 은 SRUM 의 에너지 추정 자료를 CSV·XML 로 내보냅니다. Microsoft 블로그는 이 결과가 앱별 에너지 추정값이라고 설명합니다. 두 명령은 대상 시스템에 파일을 만듭니다. 쓴다면 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 기록에 남깁니다.
+실행 중인 시스템에서는 Windows 의 `powercfg /batteryreport` 가 배터리 사용 보고서를 만듭니다. `powercfg /srumutil` 은 SRUM 의 에너지 추정 자료를 CSV·XML 로 내보냅니다. Microsoft 블로그는 이 결과가 앱별 에너지 추정값이라고 설명합니다. 두 명령은 대상 시스템에 파일을 만듭니다. 쓴다면 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 기록에 남깁니다.
 
 ## 교차 검증
 
 | 함께 볼 것 | 맞춰 볼 내용 |
 |---|---|
-| [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 이벤트 | Kernel-Power 105·506·507 과 전환 행의 시각이 맞는지, 기록이 빈 기간이 실제로 꺼진 때인지 |
-| [앱별 자원 사용](/02-artifacts/execution/system-resource-usage-monitor/application-resource-usage.md) | 켜짐 구간에 어떤 앱이 돌았는지 |
-| [네트워크 연결 기록](/02-artifacts/execution/system-resource-usage-monitor/network-connectivity.md) | 같은 시간대에 어느 네트워크에 붙어 있었는지 |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md), [화면 잠금·해제](/02-artifacts/event-logs/logon-events/4800-4801.md) | 켜짐 구간에 누가 로그온해 있었는지 |
-| [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md) | EventTimestamp 가 거꾸로 간 곳이 시계 조작인지 |
+| [켜짐·꺼짐](../../event-logs/power-on-off-events.md) 이벤트 | Kernel-Power 105·506·507 과 전환 행의 시각이 맞는지, 기록이 빈 기간이 실제로 꺼진 때인지 |
+| [앱별 자원 사용](application-resource-usage.md) | 켜짐 구간에 어떤 앱이 돌았는지 |
+| [네트워크 연결 기록](network-connectivity.md) | 같은 시간대에 어느 네트워크에 붙어 있었는지 |
+| [로그온·로그오프](../../event-logs/logon-events/index.md), [화면 잠금·해제](../../event-logs/logon-events/4800-4801.md) | 켜짐 구간에 누가 로그온해 있었는지 |
+| [시간 변경](../../event-logs/4616-kernel-general.md) | EventTimestamp 가 거꾸로 간 곳이 시계 조작인지 |
 
-조사 흐름은 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md)과 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)를 봅니다.
+조사 흐름은 [PC 사용 시간 재구성](../../../04-scenarios/activity/system-usage-time.md)과 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md)를 봅니다.
 
 ## 실습
 

@@ -82,13 +82,13 @@ iPhone·iPad 를 iTunes 나 Apple 기기 앱으로 백업하면 PC 의 사용자
 - 도메인 예: `HomeDomain`, `CameraRollDomain`, `AppDomain-*`, `MediaDomain`.
 - 경로 예: `HomeDomain` 의 `Library/SMS/sms.db` 는 메시지, `Library/AddressBook/AddressBook.sqlitedb` 는 연락처입니다.
 - `flags` 값의 뜻(파일·폴더·링크 구분)과 `file` BLOB 안의 칸 이름(크기, 수정 시각 등)은 확인하지 못했습니다.
-- SQLite 파일을 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md)를 봅니다.
+- SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md)를 봅니다.
 
 ### 암호화
 
 - 백업이 암호화됐는지는 `Manifest.plist` 에 적힙니다. 칸 이름은 이 글에서 확인하지 못했습니다.
 - 키를 유도하는 방법, 암호화 백업에만 들어가는 항목, `Manifest.db` 자체가 암호화되는 iOS 판도 확인하지 못했습니다.
-- 암호화 백업을 다루는 일반 절차는 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md)를 봅니다.
+- 암호화 백업을 다루는 일반 절차는 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md)를 봅니다.
 
 ### Smart Switch 백업에서 확인할 점
 
@@ -112,7 +112,7 @@ iPhone·iPad 를 iTunes 나 Apple 기기 앱으로 백업하면 PC 의 사용자
 ### 증명하지 못하는 것
 
 - 이 PC 에 기기를 연결해 백업했다고 흔히 해석합니다. 이 글에서는 이 해석을 자료로 확인하지 못했습니다. 백업 폴더는 다른 PC 에서 복사해 올 수도 있습니다. 연결 흔적과 맞춰 봅니다.
-- 백업 폴더가 있는 사용자 프로필은 알 수 있습니다. 그 계정으로 누가 백업했는지는 따로 정합니다([그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)).
+- 백업 폴더가 있는 사용자 프로필은 알 수 있습니다. 그 계정으로 누가 백업했는지는 따로 정합니다([그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
 - 백업 뒤 기기에서 일어난 일은 알 수 없습니다.
 - 백업에 없는 앱·파일이 기기에 없었다고 단정할 수 없습니다. 어떤 항목이 백업에서 빠지는지는 이 글에서 확인하지 못했습니다.
 
@@ -127,8 +127,8 @@ iPhone·iPad 를 iTunes 나 Apple 기기 앱으로 백업하면 PC 의 사용자
 |---|---|---|
 | 백업 완료 날짜 | `Status.plist` | UTC 인지 현지 시각인지 확인하지 못했습니다. |
 | 파일별 시각 | `Manifest.db` `Files` 표의 `file` BLOB | 칸 이름과 기준을 확인하지 못했습니다. |
-| 메시지·연락처 안의 시각 | `sms.db` 등 백업 안 DB | DB 마다 형식이 다릅니다. [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. |
-| 백업 폴더·파일의 파일시스템 시각 | NTFS | UTC. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)에서 다룹니다. |
+| 메시지·연락처 안의 시각 | `sms.db` 등 백업 안 DB | DB 마다 형식이 다릅니다. [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. |
+| 백업 폴더·파일의 파일시스템 시각 | NTFS | UTC. [마스터 파일 테이블](../filesystem/mft.md)에서 다룹니다. |
 
 - 백업 완료 날짜와 폴더의 파일시스템 시각을 나란히 적어 둡니다.
 - 두 시각이 크게 떨어지면 폴더를 옮기거나 복사했을 가능성을 봅니다.
@@ -141,7 +141,7 @@ iPhone·iPad 를 iTunes 나 Apple 기기 앱으로 백업하면 PC 의 사용자
 4. **형식 판.** iOS 9 백업은 `Manifest.mbdb` 를 쓰고 하위 폴더가 없습니다. `Manifest.db` 가 없다고 파일 목록이 없는 것이 아닙니다.
 5. **오래된 근거.** 구조 설명의 근거 글은 2019년에 마지막으로 고쳤습니다. 최신 iOS 백업은 검체에서 다시 확인합니다.
 6. **암호화 백업.** 암호화 여부부터 확인합니다. 복호 조건은 이 글에서 확인하지 못했습니다.
-7. **SQLite 의 숨은 데이터.** 백업 안 메시지·연락처 DB 에도 WAL 파일과 지운 레코드가 남을 수 있습니다. [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md)를 봅니다.
+7. **SQLite 의 숨은 데이터.** 백업 안 메시지·연락처 DB 에도 WAL 파일과 지운 레코드가 남을 수 있습니다. [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md)를 봅니다.
 8. **Smart Switch.** 확인한 자료가 없습니다. 다른 글이나 도구 설명을 그대로 옮기지 말고 검체에서 직접 확인합니다.
 
 ## 직접 분석해 보기
@@ -184,15 +184,15 @@ WHERE relativePath LIKE '%sms.db';
 
 | 아티팩트 | 맞춰 볼 것 | 링크 |
 |---|---|---|
-| USB 연결 흔적 | 백업 무렵 기기를 PC 에 연결했나 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
-| 외부 장치 연결 이벤트 | 연결 시각 | [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
-| 설치 프로그램 | iTunes·Smart Switch 를 설치했나 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 스토어 앱 설치 목록 | Apple 기기 앱, Store 판 iTunes | [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) |
-| 휴대폰과 연결 | 백업 말고 다른 경로로 휴대폰과 주고받은 흔적 | [휴대폰과 연결](/02-artifacts/messengers/phone-link.md) |
-| 아이클라우드 | PC 쪽 Apple 클라우드 흔적 | [아이클라우드](/02-artifacts/cloud-notes/icloud-for-windows.md) |
+| USB 연결 흔적 | 백업 무렵 기기를 PC 에 연결했나 | [USB 저장장치 흔적](usb-storage-artifacts/index.md) |
+| 외부 장치 연결 이벤트 | 연결 시각 | [외부 장치 연결 이벤트](../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| 설치 프로그램 | iTunes·Smart Switch 를 설치했나 | [설치 프로그램](../system-account/uninstall.md) |
+| 스토어 앱 설치 목록 | Apple 기기 앱, Store 판 iTunes | [스토어 앱 설치 목록](../system-account/appx-staterepository.md) |
+| 휴대폰과 연결 | 백업 말고 다른 경로로 휴대폰과 주고받은 흔적 | [휴대폰과 연결](../messengers/phone-link.md) |
+| 아이클라우드 | PC 쪽 Apple 클라우드 흔적 | [아이클라우드](../cloud-notes/icloud-for-windows.md) |
 
-- 백업 안 메시지·연락처로 대화 상대를 정리하는 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md)를 봅니다.
-- 스마트폰으로 자료를 옮겼는지 묻는 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다.
+- 백업 안 메시지·연락처로 대화 상대를 정리하는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md)를 봅니다.
+- 스마트폰으로 자료를 옮겼는지 묻는 흐름은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다.
 
 ## 실습
 

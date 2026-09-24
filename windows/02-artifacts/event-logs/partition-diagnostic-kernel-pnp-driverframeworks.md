@@ -55,7 +55,7 @@
 - 순환 (Circular) 방식 로그는 가득 차면 오래된 이벤트부터 덮어씁니다.
 - Device Management 로그는 크기가 가장 컸지만 남은 기간이 가장 짧았습니다. 까닭은 "함정과 한계" 에서 다룹니다.
 - Windows 7 에서는 DriverFrameworks-UserMode/Operational 로그가 기본으로 켜져 있었다는 설명이 널리 퍼져 있습니다. 이번에는 확인하지 못했습니다. 검체마다 켜져 있는지부터 봅니다.
-- 로그 설정 읽는 법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+- 로그 설정 읽는 법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### 1006 의 이벤트 버전
 
@@ -88,8 +88,8 @@
 | MbrBytes | 꽂을 때 512, 뺄 때 0 이었습니다 |
 
 - 표의 "꽂을 때·뺄 때" 값은 조사한 PC 에서 본 것입니다 (확인 범위: Win11 25H2 한 대).
-- BusType 값 표는 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
-- 디스크 구조 칸은 [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md)를 알고 읽습니다.
+- BusType 값 표는 [USB 로 무엇을 가져갔나](../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
+- 디스크 구조 칸은 [파티션 구조](../../01-foundations/disk-volume/mbr-gpt.md)를 알고 읽습니다.
 
 ### 시리얼 번호 맞추기
 
@@ -102,7 +102,7 @@
 
 - 외장 SSD 는 USBSTOR 아래에 없었습니다. 그런데도 1006 에는 BusType 7(USB)로 남았습니다.
 - 곧 USBSTOR 에 남지 않는 UASP 장치도 1006 에는 USB 연결로 잡힙니다.
-- UASP 장치의 레지스트리 흔적은 [USBSTOR 에 안 남는 장치](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md)에서 다룹니다.
+- UASP 장치의 레지스트리 흔적은 [USBSTOR 에 안 남는 장치](../external-devices/usb-storage-artifacts/uasp-scsi-sd.md)에서 다룹니다.
 
 ### 꽂을 때와 뺄 때가 번갈아 남는다
 
@@ -196,7 +196,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다 (확인 범�
 ## 시각 해석
 
 - 이 페이지의 이벤트 시각은 모두 `<TimeCreated SystemTime>` 에 들어 있습니다. 끝에 Z 가 붙은 UTC 값입니다.
-- 현지 시각으로 바꿀 때는 조사 대상 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- 현지 시각으로 바꿀 때는 조사 대상 PC 의 [시간대 설정](../system-account/time-zone.md)을 씁니다.
 
 ### 장치 속성 시각과 맞춰 보기
 
@@ -212,7 +212,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다 (확인 범�
 - 네 쌍 모두 1초 안팎으로 맞았습니다.
 - 이 PC 에서는 Capacity 0·PartitionCount 0 인 1006 이 장치를 뺀 시각과 맞았습니다. 모든 빌드에서 그런지는 확인하지 못했습니다.
 - 장치 속성은 마지막 한 번만 남깁니다. 1006 은 꽂고 뺄 때마다 쌓입니다. 외장 SSD 한 대에 1006 이 189건 있었습니다. 여러 번 꽂은 이력은 1006 이 더 자세합니다.
-- 장치 속성 읽는 법은 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
+- 장치 속성 읽는 법은 [연결·해제 시각](../external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
 ### Kernel-PnP 시각이 뜻하는 것
 
@@ -236,8 +236,8 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다 (확인 범�
 
 ### 지우기와 조작
 
-- **로그를 지웁니다.** 지운 기록은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)에서 찾습니다.
-- **로그를 끄거나 크기를 줄입니다.** 로그 설정이 검체에서 어떤 상태였는지는 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 봅니다.
+- **로그를 지웁니다.** 지운 기록은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
+- **로그를 끄거나 크기를 줄입니다.** 로그 설정이 검체에서 어떤 상태였는지는 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 봅니다.
 - 조작이 없어도 순환 로그는 스스로 밀려납니다. 기록이 없는 기간은 "연결 없음" 이 아니라 "기록 없음" 으로 적습니다.
 
 ## 직접 분석해 보기
@@ -256,9 +256,9 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다 (확인 범�
 2. 위 바이트 열을 찾습니다.
 3. 찾은 자리의 앞뒤를 읽어 `USBSTOR\Disk&Ven_…&Prod_…&Rev_…\<시리얼>` 전체를 확인합니다.
 4. 같은 시리얼 번호를 UTF-16LE 로 바꿔 Partition/Diagnostic 로그 사본에서도 찾습니다.
-5. 도구 결과에 없는 자리에서 나왔다면, [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 설명하는 구조로 그 자리가 레코드인지 확인합니다.
+5. 도구 결과에 없는 자리에서 나왔다면, [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 설명하는 구조로 그 자리가 레코드인지 확인합니다.
 
-인코딩 자체는 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+인코딩 자체는 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -284,21 +284,21 @@ Get-WinEvent -Path '.\Microsoft-Windows-Partition%4Diagnostic.evtx' -FilterXPath
 
 - 결과를 SerialNumber 로 묶으면 장치마다 꽂고 뺀 이력이 나옵니다.
 - 같은 방법으로 Kernel-PnP 로그에서 400·410·1010 을 뽑아 DeviceInstanceId 를 봅니다.
-- EvtxECmd 맵 저장소에는 Partition/Diagnostic 1006, Kernel-PnP/Configuration 400·410·430, DriverFrameworks-UserMode/Operational 2100, System 의 DriverFrameworks-UserMode 10000 맵이 있습니다. 도구가 뽑은 칸은 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- EvtxECmd 맵 저장소에는 Partition/Diagnostic 1006, Kernel-PnP/Configuration 400·410·430, DriverFrameworks-UserMode/Operational 2100, System 의 DriverFrameworks-UserMode 10000 맵이 있습니다. 도구가 뽑은 칸은 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 기록 | 무엇을 맞춰 보나 | 링크 |
 |---|---|---|
-| USBSTOR·장치 속성 | 시리얼 번호, 처음·마지막 연결 시각, UASP 장치 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
-| 서비스 설치 이벤트 | 처음 꽂을 때 함께 남은 7045 | [서비스 설치](/02-artifacts/event-logs/7045-4697.md) |
-| 파티션 구조 | MbrBytes 가 가리키는 디스크 첫머리 | [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md) |
-| 가상 디스크 | BusType 15 기록의 대상 파일 | [증거 이미지·가상 디스크 형식](/01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) |
-| 블루투스 장치 | Device Management 로그를 채운 블루투스 장치 | [블루투스 장치](/02-artifacts/external-devices/bthport.md) |
-| 바로가기 파일 | 장치 안의 파일을 열었는지 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 로그온 기록 | 그 시각에 로그온해 있던 사용자 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
+| USBSTOR·장치 속성 | 시리얼 번호, 처음·마지막 연결 시각, UASP 장치 | [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) |
+| 서비스 설치 이벤트 | 처음 꽂을 때 함께 남은 7045 | [서비스 설치](7045-4697.md) |
+| 파티션 구조 | MbrBytes 가 가리키는 디스크 첫머리 | [파티션 구조](../../01-foundations/disk-volume/mbr-gpt.md) |
+| 가상 디스크 | BusType 15 기록의 대상 파일 | [증거 이미지·가상 디스크 형식](../../01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) |
+| 블루투스 장치 | Device Management 로그를 채운 블루투스 장치 | [블루투스 장치](../external-devices/bthport.md) |
+| 바로가기 파일 | 장치 안의 파일을 열었는지 | [바로가기 파일](../file-folder-usage/lnk.md) |
+| 로그온 기록 | 그 시각에 로그온해 있던 사용자 | [로그온·로그오프](logon-events/index.md) |
 
-합쳐 읽는 순서는 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md)와 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)에서 다룹니다.
+합쳐 읽는 순서는 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md)와 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)에서 다룹니다.
 
 ## 실습
 

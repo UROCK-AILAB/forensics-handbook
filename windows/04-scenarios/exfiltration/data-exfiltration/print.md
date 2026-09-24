@@ -1,8 +1,8 @@
 # 인쇄해서 가져갔나 (Print)
 
-> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](/04-scenarios/exfiltration/data-exfiltration/index.md)
+> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
 
-이 페이지는 자료를 종이로 인쇄했는지, 또는 PDF 프린터 같은 가상 프린터로 파일을 만들었는지 확인하는 순서를 다룹니다. 인쇄 이벤트와 스풀 파일의 구조는 [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) 와 [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md) 에서 다룹니다.
+이 페이지는 자료를 종이로 인쇄했는지, 또는 PDF 프린터 같은 가상 프린터로 파일을 만들었는지 확인하는 순서를 다룹니다. 인쇄 이벤트와 스풀 파일의 구조는 [인쇄 이벤트](../../../02-artifacts/event-logs/printservice-307.md) 와 [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) 에서 다룹니다.
 
 이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 것입니다(확인 범위: Win11 25H2 한 대). 이벤트의 메시지 틀과 칸 이름은 이 PC 의 이벤트 공급자 메타데이터에서 읽었습니다. 이 페이지를 쓰면서 인쇄에 관한 외부 문서는 확인하지 못했습니다.
 
@@ -16,25 +16,25 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| PrintService/Operational 로그가 켜져 있었나 | 인쇄 이벤트 307 은 이 로그가 켜져 있을 때만 남습니다. 관찰한 PC 에서는 꺼져 있었습니다(관찰). 로그 설정을 읽는 법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 다룹니다. |
+| PrintService/Operational 로그가 켜져 있었나 | 인쇄 이벤트 307 은 이 로그가 켜져 있을 때만 남습니다. 관찰한 PC 에서는 꺼져 있었습니다(관찰). 로그 설정을 읽는 법은 [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 다룹니다. |
 | 로그 크기 | 관찰한 PC 에서 이 로그의 최대 크기는 1MB 이고 순환 방식이었습니다(관찰). 켜져 있어도 오래된 인쇄 기록은 새 기록에 밀려 사라집니다. |
 | 설치된 프린터 | 종이 프린터와 가상 프린터를 먼저 나눕니다. 아래 "프린터 목록과 스풀 폴더" 를 봅니다. |
-| 시간대 | 이벤트 시각과 다른 기록의 시각을 같은 기준으로 맞춥니다([시간대 설정](/02-artifacts/system-account/time-zone.md)). |
+| 시간대 | 이벤트 시각과 다른 기록의 시각을 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
 | 수집 범위 | 이벤트 로그 폴더, SYSTEM 하이브, 스풀 폴더, 사용자 프로필(바로가기 파일·최근 문서)을 확보합니다. |
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | PrintService/Operational 307 | 작업 번호, 문서 이름, 사용자, 컴퓨터, 프린터, 포트, 바이트 수, 쪽수 | [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) |
-| 2 | PrintService/Operational 842 | 작업 번호, 인쇄 프로세서, 프린터, 드라이버, 격리 모드 | [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) |
-| 3 | SYSTEM 하이브의 프린터 목록 | 프린터 이름, 포트, 인쇄 프로세서, 데이터 형식, 스풀 폴더 위치 | [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md) |
-| 4 | 스풀 폴더 | 남아 있다면 인쇄 작업 파일 | [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md) |
-| 5 | 바로가기 파일·최근 문서·점프리스트 | 인쇄한 문서를 연 흔적, PDF 로 인쇄해 만든 파일 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
+| 1 | PrintService/Operational 307 | 작업 번호, 문서 이름, 사용자, 컴퓨터, 프린터, 포트, 바이트 수, 쪽수 | [인쇄 이벤트](../../../02-artifacts/event-logs/printservice-307.md) |
+| 2 | PrintService/Operational 842 | 작업 번호, 인쇄 프로세서, 프린터, 드라이버, 격리 모드 | [인쇄 이벤트](../../../02-artifacts/event-logs/printservice-307.md) |
+| 3 | SYSTEM 하이브의 프린터 목록 | 프린터 이름, 포트, 인쇄 프로세서, 데이터 형식, 스풀 폴더 위치 | [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) |
+| 4 | 스풀 폴더 | 남아 있다면 인쇄 작업 파일 | [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) |
+| 5 | 바로가기 파일·최근 문서·점프리스트 | 인쇄한 문서를 연 흔적, PDF 로 인쇄해 만든 파일 | [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md), [최근 문서](../../../02-artifacts/file-folder-usage/recentdocs.md), [점프리스트](../../../02-artifacts/file-folder-usage/jump-lists.md) |
 
 ## 인쇄 이벤트
 
-로그 파일을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+로그 파일을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ### 307
 
@@ -100,7 +100,7 @@ HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers
 - 프린터마다 `Printers\<프린터 이름>` 하위 키가 있었습니다(관찰).
 - 하위 키에는 `Attributes`, `Port`, `Print Processor`, `Datatype` 값이 있었습니다(관찰).
 - 이 PC 의 프린터 5개는 모두 인쇄 프로세서가 `winprint`, 데이터 형식이 `RAW` 였습니다(관찰).
-- 이미지에서 볼 때는 SYSTEM 하이브에서 실제로 쓰던 컨트롤 세트를 먼저 정하고 그 아래에서 찾습니다([레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)).
+- 이미지에서 볼 때는 SYSTEM 하이브에서 실제로 쓰던 컨트롤 세트를 먼저 정하고 그 아래에서 찾습니다([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)).
 
 ### 가상 프린터
 
@@ -117,15 +117,15 @@ HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers
 - PDF 프린터로 인쇄하면 종이가 아니라 PDF 파일이 생깁니다.
 - 307 의 프린터(%5)·포트(%6) 칸을 이 목록과 맞춰 종이 프린터인지 가립니다.
 - PDF 프린터로 만든 파일은 바로가기 파일·최근 문서로 추적합니다.
-- 그 PDF 가 다시 밖으로 나갔는지는 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md), [메일로 밖에 보냈나](/04-scenarios/exfiltration/data-exfiltration/email.md), [웹메일·웹하드로 올렸나](/04-scenarios/exfiltration/data-exfiltration/web-upload.md) 를 따라 봅니다.
+- 그 PDF 가 다시 밖으로 나갔는지는 [USB 로 무엇을 가져갔나](usb.md), [메일로 밖에 보냈나](email.md), [웹메일·웹하드로 올렸나](web-upload.md) 를 따라 봅니다.
 
 ### 스풀 폴더
 
 - 관찰한 PC 의 `DefaultSpoolDirectory` 값은 `C:\Windows\system32\spool\PRINTERS` 였습니다(관찰).
 - 그 폴더는 비어 있었습니다(관찰).
-- 스풀 폴더의 SPL(인쇄 데이터)·SHD(작업 정보) 파일은 이 페이지를 쓰면서 확인하지 못했습니다. 파일 구조, 인쇄가 끝난 뒤 지워지는지, "인쇄한 문서 유지 (Keep printed documents)" 설정과 `Attributes` 값의 관계가 여기에 들어갑니다. 이 내용은 [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md) 에서 확인합니다.
+- 스풀 폴더의 SPL(인쇄 데이터)·SHD(작업 정보) 파일은 이 페이지를 쓰면서 확인하지 못했습니다. 파일 구조, 인쇄가 끝난 뒤 지워지는지, "인쇄한 문서 유지 (Keep printed documents)" 설정과 `Attributes` 값의 관계가 여기에 들어갑니다. 이 내용은 [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) 에서 확인합니다.
 - 스풀 폴더가 비어 있다는 것만으로 인쇄하지 않았다고 보지 않습니다.
-- 스풀 파일이 지워졌다면 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 순서로 찾아봅니다.
+- 스풀 파일이 지워졌다면 [지운 파일의 흔적 찾기](../../activity/deleted-file-traces.md) 순서로 찾아봅니다.
 
 ## 분석 흐름
 
@@ -137,7 +137,7 @@ HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers
 6. 가상 프린터로 인쇄했다면 만든 파일을 찾습니다. 그 파일이 이후 밖으로 나갔는지 다른 하위 페이지로 이어 봅니다.
 7. 스풀 폴더에 남은 파일이 있으면 사본으로 확보합니다.
 8. 로그가 꺼져 있었다면 인쇄 여부는 "정하지 못함" 으로 적습니다. 원본 문서를 연 흔적은 따로 적습니다.
-9. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다.
+9. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다.
 
 ## 흔한 오판
 
@@ -145,7 +145,7 @@ HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers
 2. **스풀 폴더가 비었으니 인쇄하지 않았다고 봅니다.** 관찰한 PC 의 스풀 폴더도 비어 있었습니다(관찰).
 3. **PDF 프린터 기록을 종이 인쇄로 적습니다.** 프린터 이름과 포트로 가상 프린터인지 먼저 가립니다.
 4. **307 의 문서 이름을 디스크의 파일 경로로 읽습니다.** 문서 이름은 메시지 틀의 한 자리입니다. 디스크의 어느 파일인지는 다른 기록과 맞춰 정합니다.
-5. **307 의 사용자 칸으로 사람을 정합니다.** 이 칸은 계정 이름입니다. 그 시각에 그 계정을 쓴 사람은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 순서로 따로 확인합니다.
+5. **307 의 사용자 칸으로 사람을 정합니다.** 이 칸은 계정 이름입니다. 그 시각에 그 계정을 쓴 사람은 [그 시각에 PC 를 쓴 사람이 누구인가](../../activity/user-attribution.md) 순서로 따로 확인합니다.
 
 ## 보고서 문장 예
 
@@ -154,12 +154,12 @@ HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers
 
 ## 함께 볼 페이지
 
-- [인쇄 이벤트](/02-artifacts/event-logs/printservice-307.md) · [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md) — 307 과 스풀 파일의 구조입니다.
-- [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) · [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) — 로그가 켜져 있었는지, 로그 파일을 어떻게 읽는지입니다.
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) — 프린터 목록 키를 이미지에서 찾는 법입니다.
-- [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) · [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) — 인쇄한 문서를 연 흔적입니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 계정과 사람을 잇습니다.
-- [퇴사 전 자료를 모으고 압축했나 (Staging)](/04-scenarios/exfiltration/data-exfiltration/staging.md) — 인쇄하기 전에 자료를 모은 흔적입니다.
+- [인쇄 이벤트](../../../02-artifacts/event-logs/printservice-307.md) · [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) — 307 과 스풀 파일의 구조입니다.
+- [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) · [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) — 로그가 켜져 있었는지, 로그 파일을 어떻게 읽는지입니다.
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) — 프린터 목록 키를 이미지에서 찾는 법입니다.
+- [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md) · [최근 문서](../../../02-artifacts/file-folder-usage/recentdocs.md) · [점프리스트](../../../02-artifacts/file-folder-usage/jump-lists.md) · [오피스 사용 흔적](../../../02-artifacts/file-folder-usage/microsoft-office/index.md) — 인쇄한 문서를 연 흔적입니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](../../activity/user-attribution.md) — 계정과 사람을 잇습니다.
+- [퇴사 전 자료를 모으고 압축했나 (Staging)](staging.md) — 인쇄하기 전에 자료를 모은 흔적입니다.
 
 ## 참고 문헌
 

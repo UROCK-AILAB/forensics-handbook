@@ -7,14 +7,14 @@
 해시셋 대조는 증거 파일의 해시를 미리 모아 둔 해시 목록과 맞춰 보는 방법입니다.
 이미 아는 파일을 걸러 볼 양을 줄이거나, 찾는 파일과 똑같은 파일을 찾을 때 씁니다.
 유사 해시 (Fuzzy Hash) 는 똑같지는 않지만 비슷한 파일을 찾는 방법입니다.
-증거 사본이 원본과 같은지 확인하는 해시 검증은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
+증거 사본이 원본과 같은지 확인하는 해시 검증은 [증거 획득](../process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
 
 ## 언제 쓰나
 
 - **운영체제·응용 프로그램 파일을 걸러 낼 때** 씁니다. 알려진 소프트웨어 파일을 빼면 사람이 볼 파일이 줄어듭니다.
 - **찾는 파일의 해시를 이미 알 때** 씁니다. 유출된 문서나 사건에서 찾은 악성 파일과 똑같은 파일이 다른 곳에 있는지 찾습니다.
 - **조금 고친 파일을 찾을 때** 씁니다. 내용을 일부 고친 문서나 다시 빌드한 실행 파일은 정확 일치로 찾지 못합니다. 이때 유사 해시를 씁니다.
-- **아티팩트에 남은 해시를 맞춰 볼 때** 씁니다. [AmCache](/02-artifacts/execution/amcache-hve/index.md) 에 남은 파일 해시가 그 예입니다.
+- **아티팩트에 남은 해시를 맞춰 볼 때** 씁니다. [AmCache](../../02-artifacts/execution/amcache-hve/index.md) 에 남은 파일 해시가 그 예입니다.
 
 ## 알려진 파일 해시셋: NSRL RDS
 
@@ -48,7 +48,7 @@ RDS 에 무엇이 들어 있고 무엇이 빠져 있는지가 해석을 가릅�
 - 희소 (Sparse) 스트림은 구멍을 0 으로 채워 뽑느냐 건너뛰느냐에 따라 크기와 해시가 달라집니다(현장 관찰).
 - `$UsnJrnl:$J` 가 대표적입니다. 희소 속성이 있는 일반 파일도 같습니다.
 - 목록의 해시와 증거의 해시를 비교하기 전에, 두 쪽이 파일을 어떻게 뽑았는지 기록하고 맞춥니다.
-- 뽑는 방식별 차이는 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 의 해시 검증 글에 있습니다. `$UsnJrnl:$J` 자체는 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 다룹니다.
+- 뽑는 방식별 차이는 [증거 획득](../process-acquisition/evidence-acquisition/index.md) 의 해시 검증 글에 있습니다. `$UsnJrnl:$J` 자체는 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에서 다룹니다.
 
 ## 유사 해시: ssdeep
 
@@ -112,7 +112,7 @@ bar.txt matches hashes.txt:foo.txt (99)
 - YARA 의 pe 모듈에는 가져오기 해시 (Import Hash) 를 돌려주는 `pe.imphash()` 가 있습니다.
 - 가져오는 함수 목록이 같은 실행 파일끼리 묶는 데 씁니다.
 - 파일 내용 해시가 달라도 가져오기 해시가 같을 수 있습니다. 그래서 다시 빌드한 실행 파일을 묶는 단서가 됩니다.
-- YARA 규칙을 쓰는 법은 [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) 에서 다룹니다.
+- YARA 규칙을 쓰는 법은 [의심 실행 파일 선별](code-signing-yara.md) 에서 다룹니다.
 
 ## 절차
 
@@ -122,7 +122,7 @@ bar.txt matches hashes.txt:foo.txt (99)
 4. **찾는 파일과 정확히 대조합니다.** 사건에서 모은 해시 목록으로 대조합니다.
 5. **정확히 일치하지 않은 관심 파일은 유사 해시로 넓힙니다.** 사건 파일의 유사 해시 목록을 만들고 증거 전체와 대조합니다.
 6. **유사 해시로 걸린 파일은 직접 엽니다.** 두 파일을 나란히 놓고 같은 부분과 다른 부분을 확인합니다.
-7. **필요하면 해시로 평판을 조회합니다.** Sigcheck 의 `-h` 는 파일 해시를 보여 줍니다. `-o` 는 예전에 `-h` 로 만들어 둔 CSV 의 해시로 VirusTotal 을 조회합니다. 문서는 `-o` 를 오프라인 시스템 검사용이라고 적습니다. 파일 자체를 올리는 옵션과의 차이는 [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) 에 있습니다.
+7. **필요하면 해시로 평판을 조회합니다.** Sigcheck 의 `-h` 는 파일 해시를 보여 줍니다. `-o` 는 예전에 `-h` 로 만들어 둔 CSV 의 해시로 VirusTotal 을 조회합니다. 문서는 `-o` 를 오프라인 시스템 검사용이라고 적습니다. 파일 자체를 올리는 옵션과의 차이는 [의심 실행 파일 선별](code-signing-yara.md) 에 있습니다.
 
 ## 도구
 
@@ -133,7 +133,7 @@ bar.txt matches hashes.txt:foo.txt (99)
 - **ssdeep**: 유사 해시를 만들고 비교합니다.
 - **YARA 의 pe 모듈**: `pe.imphash()` 로 가져오기 해시를 씁니다.
 - **Sigcheck (Microsoft Sysinternals)**: 파일 해시를 보여 주고, 해시로 평판을 조회합니다.
-- 도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 도구마다 결과가 다르면 [도구 결과 교차 검증](../reporting/tool-validation.md) 을 봅니다.
 
 ## 함정과 한계
 
@@ -156,7 +156,7 @@ bar.txt matches hashes.txt:foo.txt (99)
 | 가져오기 해시 일치 | 두 실행 파일의 가져오기 목록이 같다는 것 | 두 파일이 같은 계열의 프로그램이라는 것 |
 
 - 해시는 파일 내용으로 계산합니다. 파일 이름과 파일 시스템 시각은 따로 확인합니다.
-- 파일이 언제 어디서 들어왔는지는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 에서 찾습니다.
+- 파일이 언제 어디서 들어왔는지는 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 에서 찾습니다.
 
 보고서에는 어떤 목록과 어떤 방법으로 대조했는지를 씁니다.
 

@@ -1,6 +1,6 @@
 # EFS 암호화 파일 (Encrypting File System)
 
-> 위치: [암호화 증거 다루기 (Encrypted Evidence)](/03-techniques/analysis/encrypted-evidence/index.md) > EFS 암호화 파일
+> 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > EFS 암호화 파일
 
 ## 한 줄 요약
 
@@ -26,19 +26,19 @@ EFS (Encrypting File System) 는 NTFS 볼륨의 파일을 하나씩 공개 키 �
 
 ## 절차
 
-1. **볼륨이 NTFS 인지 확인합니다.** EFS 는 NTFS 에만 있습니다. NTFS 구조는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 를 봅니다.
-2. **MFT 에서 암호화 표시가 있는 파일을 모읍니다.** `$STANDARD_INFORMATION` 의 플래그, `$FILE_NAME` 의 플래그, 속성 헤더의 플래그, `$EFS` 스트림의 네 자리를 봅니다. 값은 아래 표에 있습니다. MFT 레코드를 읽는 법은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에 있습니다.
+1. **볼륨이 NTFS 인지 확인합니다.** EFS 는 NTFS 에만 있습니다. NTFS 구조는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 를 봅니다.
+2. **MFT 에서 암호화 표시가 있는 파일을 모읍니다.** `$STANDARD_INFORMATION` 의 플래그, `$FILE_NAME` 의 플래그, 속성 헤더의 플래그, `$EFS` 스트림의 네 자리를 봅니다. 값은 아래 표에 있습니다. MFT 레코드를 읽는 법은 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 에 있습니다.
 3. **표시를 모두 적어 둡니다.** 한 자리의 표시만 보고 판단하지 않습니다. 네 자리의 값을 파일마다 함께 적습니다.
 4. **켜진 시스템이면 `cipher` 로 목록을 뽑습니다.** `cipher /u /n` 을 씁니다. `/n` 을 빼면 파일이 바뀔 수 있습니다. 아래 "cipher 명령과 증거 변경" 표를 봅니다.
 5. **켜진 시스템이면 키 백업을 정합니다.**
    - `cipher /x` 로 EFS 인증서와 키를 파일로 백업할 수 있습니다.
    - 백업 파일은 증거 볼륨이 아닌 외부 매체에 씁니다.
    - `cipher /y` 로 현재 EFS 인증서 지문을 기록해 둡니다.
-   - 켜진 시스템에서 명령을 실행할 때 따를 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
+   - 켜진 시스템에서 명령을 실행할 때 따를 순서는 [라이브 응답](../../process-acquisition/live-response/index.md) 을 봅니다.
 6. **꺼진 이미지라면 개인 키가 든 파일부터 찾습니다.**
    - 사용자가 `cipher /x` 로 백업한 파일이나 복구 에이전트의 `.pfx` 를 찾습니다.
    - 관리자는 `.pfx` 를 가져와 개별 파일을 복구할 수 있습니다.
-   - 이미지 안에서 사용자 개인 키를 되살리는 절차는 이 페이지에서 다루지 않습니다. Windows 가 사용자 비밀 값을 보호하는 구조는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에 있습니다.
+   - 이미지 안에서 사용자 개인 키를 되살리는 절차는 이 페이지에서 다루지 않습니다. Windows 가 사용자 비밀 값을 보호하는 구조는 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에 있습니다.
 7. **기록합니다.** 파일마다 네 자리의 표시, 복호 여부, 쓴 키의 출처를 적습니다.
 
 ### MFT 안의 표시
@@ -112,9 +112,9 @@ NTFS 는 여러 바이트 값을 리틀 엔디언으로 적습니다. 그래서 
 ## 결과를 어떻게 해석하나
 
 - **플래그 0x4000 이 켜진 파일**: MFT 레코드를 기록한 때 그 파일이 EFS 로 암호화된 상태였다는 뜻입니다.
-- **증명하지 못하는 것**: 플래그만으로는 누가, 언제 암호화했는지 알 수 없습니다. MFT 시각이 무엇을 따라 바뀌는지는 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 을 봅니다.
-- **플래그가 없는 파일**: 한 번도 암호화된 적이 없다는 뜻은 아닙니다. 상위 디렉터리가 암호화되어 있지 않으면 수정할 때 복호될 수 있습니다. 옛 상태는 섀도 복사본 속 MFT 와 비교해 봅니다. 방법은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에 있습니다.
-- **`cipher /w` 를 쓴 흔적**: 사용자가 빈 공간을 지웠다면 지운 파일 복구가 어려워집니다. 증거를 없애려 했는지는 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 함께 판단합니다.
+- **증명하지 못하는 것**: 플래그만으로는 누가, 언제 암호화했는지 알 수 없습니다. MFT 시각이 무엇을 따라 바뀌는지는 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 을 봅니다.
+- **플래그가 없는 파일**: 한 번도 암호화된 적이 없다는 뜻은 아닙니다. 상위 디렉터리가 암호화되어 있지 않으면 수정할 때 복호될 수 있습니다. 옛 상태는 섀도 복사본 속 MFT 와 비교해 봅니다. 방법은 [섀도 복사본 활용](../volume-shadow-copy-analysis.md) 에 있습니다.
+- **`cipher /w` 를 쓴 흔적**: 사용자가 빈 공간을 지웠다면 지운 파일 복구가 어려워집니다. 증거를 없애려 했는지는 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 함께 판단합니다.
 
 보고서 문장 예:
 

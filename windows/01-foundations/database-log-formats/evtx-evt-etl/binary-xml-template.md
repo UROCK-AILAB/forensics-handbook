@@ -4,12 +4,12 @@
 
 EVTX 레코드 본문은 글자로 쓴 XML 이 아니라 토큰으로 줄인 이진 XML (Binary XML) 입니다. 요소 이름과 이벤트의 틀인 템플릿 (Template) 은 청크 안에 한 번만 들어 있습니다. 레코드는 그 자리를 가리키고 값만 담습니다. 그래서 레코드를 XML 로 되살리려면 같은 청크의 이름과 템플릿이 함께 있어야 합니다.
 
-이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 의 하위 주제입니다. 레코드가 파일 어디에 있는지는 [EVTX 파일 구조 (File Header·Chunk·Record)](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 에서 다룹니다.
+이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 레코드가 파일 어디에 있는지는 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에서 다룹니다.
 
 ## 이 형식을 쓰는 곳
 
 - EVTX 이벤트 레코드의 본문입니다. 레코드 시작에서 24바이트 뒤부터입니다.
-- 메시지 파일의 WEVT_TEMPLATE 리소스에도 이진 XML 로 된 템플릿이 있습니다. 모양이 조금 다릅니다(아래 "함정"). 리소스 자체는 [공급자와 메시지 파일 (Provider·Message Table)](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) 에서 다룹니다.
+- 메시지 파일의 WEVT_TEMPLATE 리소스에도 이진 XML 로 된 템플릿이 있습니다. 모양이 조금 다릅니다(아래 "함정"). 리소스 자체는 [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) 에서 다룹니다.
 - libevtx 명세는 MS-EVEN6(EventLog Remoting Protocol 6.0) 을 원 명세로 따릅니다.
 
 ## 구조
@@ -132,7 +132,7 @@ EVTX 레코드 본문은 글자로 쓴 XML 이 아니라 토큰으로 줄인 이
 | `0x80` 비트 | 배열. `0x81` 은 끝 문자로 나눈 UTF-16 문자열 배열입니다 |
 
 - SYSTEMTIME 은 연·월·요일·일·시·분·초·밀리초가 2바이트씩 들어 있습니다.
-- FILETIME 과 SYSTEMTIME 을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다. GUID 와 SID 는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
+- FILETIME 과 SYSTEMTIME 을 푸는 법은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다. GUID 와 SID 는 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
 
 ### 이벤트 데이터 모양
 
@@ -141,7 +141,7 @@ EVTX 레코드 본문은 글자로 쓴 XML 이 아니라 토큰으로 줄인 이
 - `ProcessingErrorData`(`ErrorCode`·`DataItemName`·`EventPayload`) 는 `EventData` 의 변형입니다.
 - `Binary` 요소 값은 16진 문자열로 보입니다.
 - 템플릿 정의의 치환 토큰은 레코드의 치환 값과 번호로 짝을 이룹니다. libevtx 는 20130208 판부터 이 방식으로 이벤트 문자열을 뽑습니다.
-- 이렇게 뽑은 문자열이 설명 문장의 `%1`·`%2` 자리에 들어갑니다. 문장을 만드는 법은 [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) 에 있습니다.
+- 이렇게 뽑은 문자열이 설명 문장의 `%1`·`%2` 자리에 들어갑니다. 문장을 만드는 법은 [공급자와 메시지 파일](provider-message-table.md) 에 있습니다.
 
 ### 특수 문자 처리
 
@@ -213,7 +213,7 @@ EVTX 레코드 본문은 글자로 쓴 XML 이 아니라 토큰으로 줄인 이
 ## 포렌식에서 중요한 점
 
 - 레코드 하나만으로는 XML 을 만들 수 없습니다. 이름과 템플릿 정의가 같은 청크의 다른 자리에 있습니다. 확인 PC 에서는 살아 있는 레코드 대부분이 앞쪽 정의를 빌려 썼습니다.
-- 템플릿 정의가 있는 자리가 망가지면, 그 정의를 빌려 쓰는 레코드가 함께 풀리지 않습니다. 대처법은 [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md) 에 있습니다.
+- 템플릿 정의가 있는 자리가 망가지면, 그 정의를 빌려 쓰는 레코드가 함께 풀리지 않습니다. 대처법은 [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](chunk-slack-corrupted-evtx.md) 에 있습니다.
 - 인스턴스 데이터에는 값마다 크기와 종류가 붙어 있습니다. 템플릿이 없어도 값 목록은 읽을 수 있습니다.
 - 이름 오프셋과 정의 데이터 오프셋은 청크 시작 기준입니다. 청크 시작 위치를 잘못 잡으면 이름과 템플릿을 모두 잘못 읽습니다.
 
@@ -232,7 +232,7 @@ EVTX 레코드 본문은 글자로 쓴 XML 이 아니라 토큰으로 줄인 이
 - libevtx: 이진 XML 과 템플릿을 직접 풉니다. 형식 명세도 함께 공개했습니다.
 - 이벤트 뷰어: XML 보기와 XML 내보내기로 결과를 견줘 볼 수 있습니다.
 - EVTXtract: 템플릿을 잃은 레코드를 다른 청크의 템플릿으로 다시 만듭니다.
-- 도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 의 방식으로 비교합니다.
+- 도구마다 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 의 방식으로 비교합니다.
 
 ## 참고 문헌
 

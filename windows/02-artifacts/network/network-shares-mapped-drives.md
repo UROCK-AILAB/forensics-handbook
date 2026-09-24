@@ -41,7 +41,7 @@
 | 서버 쪽 채널 | `Microsoft-Windows-SMBServer/Operational`·`/Connectivity`·`/Security`·`/Audit` | 최대 8MB 입니다. 내용은 이번에 확인하지 않았습니다 (확인 범위: 조사 PC) |
 
 - shares 플러그인 주석에는 윈도 버전에 따라 키 이름이 `lanmanserver` 와 `LanmanServer` 로 대소문자가 다르다고 적혀 있습니다. 직접 만든 스크립트로 키를 찾을 때는 대소문자를 가리지 않고 비교합니다.
-- 오프라인 SYSTEM 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키가 가리키는 `ControlSet00n` 을 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 오프라인 SYSTEM 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키가 가리키는 `ControlSet00n` 을 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 이벤트 채널과 ID 는 조사 PC 에서만 확인했습니다. 다른 윈도 버전의 채널 구성은 확인하지 않았습니다.
 
 ## 구조
@@ -84,7 +84,7 @@ Type=0
 
 ### MountPoints2 의 원격 드라이브
 
-MountPoints2 의 전체 구조와 시각 해석은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) 허브의 MountPoints2 페이지에서 다룹니다. 여기서는 공유와 관련된 점만 적습니다.
+MountPoints2 의 전체 구조와 시각 해석은 [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) 허브의 MountPoints2 페이지에서 다룹니다. 여기서는 공유와 관련된 점만 적습니다.
 
 RegRipper mp2 플러그인은 하위 키 이름의 첫 글자로 종류를 나눕니다.
 
@@ -143,7 +143,7 @@ Security 채널에는 실패 기록이 남습니다. (확인 범위: 조사 PC)
 
 (확인 범위: 조사 PC)
 
-칸과 해석은 [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md)에서 다룹니다. 감사를 켜는 설정은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+칸과 해석은 [공유 폴더 접근](../event-logs/5140-5145.md)에서 다룹니다. 감사를 켜는 설정은 [감사 정책과 로그 설정](../event-logs/audit-policy-log-settings.md)에서 다룹니다.
 
 - 조사 PC 는 "파일 공유" 와 "세부 파일 공유" 감사가 모두 "No Auditing" 이었습니다. 그래서 시험 연결에서 5140·5145 가 한 건도 남지 않았습니다. (확인 범위: 조사 PC 시험)
 - 5142~5144 가 어느 감사 하위 범주에 속하는지는 확인하지 못했습니다.
@@ -175,9 +175,9 @@ Security 채널에는 실패 기록이 남습니다. (확인 범위: 조사 PC)
 - `Map Network Drive MRU` 는 값이 여러 개여도 시각이 하나입니다. 이 시각은 어느 값 때문에 바뀌었는지 알려 주지 않습니다.
 - `Shares` 키의 마지막 기록 시각도 마찬가지입니다. 이 시각을 특정 공유를 만든 때라고 단정하지 않습니다. 공유를 만든 때는 감사를 켠 PC 의 5142 로 확인합니다.
 - mp2 플러그인은 MountPoints2 하위 키마다 마지막 기록 시각을 붙여 시간순으로 보여 줍니다.
-- 이벤트 시각은 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 이벤트 시각은 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 조사 PC 의 Connectivity 로그에는 1,968건이 있었습니다. OS 를 설치한 2026-06-26 부터 2026-09-23 까지 약 3개월이 남아 있었습니다. (확인 범위: 조사 PC) 보존 기간은 연결이 얼마나 잦은지에 따라 달라집니다.
-- 현지 시각으로 바꿀 때는 그 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- 현지 시각으로 바꿀 때는 그 PC 의 [시간대 설정](../system-account/time-zone.md)을 씁니다.
 
 ## 함정과 한계
 
@@ -187,7 +187,7 @@ Security 채널에는 실패 기록이 남습니다. (확인 범위: 조사 PC)
 4. **사용자 레지스트리에 흔적이 남지 않을 수 있습니다.** 조사 PC 에서 `net use W:`·`Z:` 로 `\\localhost\C$` 를 `/persistent:yes` 로 연결했습니다. `New-SmbMapping -Persistent $true` 로도 연결했습니다. 연결 직후 `HKCU\Network` 아래에 하위 키가 생기지 않았습니다. HKCU 전체에서 연결 경로 문자열도 찾지 못했습니다. 관리자 권한 PowerShell 에서 시험했고, 원인은 확인하지 못했습니다. (확인 범위: 조사 PC 시험)
 5. **`HKCU\Network` 설명은 확인되지 않았습니다.** 영구 연결 드라이브가 `HKCU\Network\<드라이브 문자>` 에 남는다는 설명이 흔합니다. 위 시험에서는 재현하지 못했습니다. 이 키가 없다고 드라이브 연결이 없었다고 보지 않습니다.
 6. **관리 공유는 `Shares` 에 없습니다.** C$·ADMIN$·IPC$ 는 값으로 적혀 있지 않았습니다. (확인 범위: 조사 PC) `Shares` 가 비어 있다고 이 PC 에 공유가 하나도 없다고 단정하지 않습니다.
-7. **지운 공유는 레지스트리에서 바로 사라집니다.** `Remove-SmbShare` 로 지우자 `Shares` 값과 `Shares\Security` 값이 둘 다 바로 없어졌습니다. (확인 범위: 조사 PC 시험) 예전 공유는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)으로 옛 SYSTEM 하이브를 열어 찾습니다. 하이브 안의 지운 값을 되살리는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+7. **지운 공유는 레지스트리에서 바로 사라집니다.** `Remove-SmbShare` 로 지우자 `Shares` 값과 `Shares\Security` 값이 둘 다 바로 없어졌습니다. (확인 범위: 조사 PC 시험) 예전 공유는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)으로 옛 SYSTEM 하이브를 열어 찾습니다. 하이브 안의 지운 값을 되살리는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 8. **서버 쪽 접근 기록은 없을 수 있습니다.** 파일 공유 감사가 꺼져 있으면 5140·5145 가 남지 않습니다. 조사 PC 는 꺼져 있었습니다. 5140 이 없다고 공유 접근이 없었다고 보지 않습니다. 먼저 감사 설정을 확인합니다.
 9. **Map Network Drive MRU 는 한 가지 연결 방법의 기록입니다.** `net use` 나 PowerShell 로 연결하면 이 키를 기대하지 않습니다. 이 판단은 조사 PC 에서 키가 없었던 관찰과 키 이름에서 나온 추론입니다.
 
@@ -218,7 +218,7 @@ ip = ".".join(str(b) for b in raw[4:8])         # 127.0.0.1
 print(family.hex(" "), port, ip)
 ```
 
-레지스트리 값을 헥스로 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+레지스트리 값을 헥스로 읽는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -251,17 +251,17 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\<수집한 Connectivity 로그>
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 공유 폴더 접근 (5140·5145) | 서버 쪽에서 어느 계정이 어느 주소에서 들어와 어느 파일을 요청했는지 | [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md) |
-| 감사 정책과 로그 설정 | 5140·5145 가 남을 수 있는 설정이었는지 | [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) |
-| MountPoints2 | 사용자 세션에 나타난 원격 드라이브 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
-| 셸백 | 탐색기로 연 네트워크 폴더 | [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) |
-| 바로가기 파일·점프리스트 | 공유 안에서 연 파일 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 프리페치 | `net use` 를 실행한 뒤 `NET.EXE`·`NET1.EXE` 항목이 생기거나 갱신됐습니다 (확인 범위: 조사 PC 시험) | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| PowerShell 명령 기록 | `net use`·`New-SmbMapping`·`New-SmbShare` 같은 명령이 남았는지 | [PowerShell 명령 기록](/02-artifacts/execution/consolehost-history-txt.md) |
-| 로그온·로그오프 | 30833 시각에 로그온해 있던 사용자 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 시간대 설정 | 현지 시각 기록과 맞출 때 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
+| 공유 폴더 접근 (5140·5145) | 서버 쪽에서 어느 계정이 어느 주소에서 들어와 어느 파일을 요청했는지 | [공유 폴더 접근](../event-logs/5140-5145.md) |
+| 감사 정책과 로그 설정 | 5140·5145 가 남을 수 있는 설정이었는지 | [감사 정책과 로그 설정](../event-logs/audit-policy-log-settings.md) |
+| MountPoints2 | 사용자 세션에 나타난 원격 드라이브 | [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) |
+| 셸백 | 탐색기로 연 네트워크 폴더 | [셸백](../file-folder-usage/shellbags/index.md) |
+| 바로가기 파일·점프리스트 | 공유 안에서 연 파일 | [바로가기 파일](../file-folder-usage/lnk.md), [점프리스트](../file-folder-usage/jump-lists.md) |
+| 프리페치 | `net use` 를 실행한 뒤 `NET.EXE`·`NET1.EXE` 항목이 생기거나 갱신됐습니다 (확인 범위: 조사 PC 시험) | [프리페치](../execution/prefetch/index.md) |
+| PowerShell 명령 기록 | `net use`·`New-SmbMapping`·`New-SmbShare` 같은 명령이 남았는지 | [PowerShell 명령 기록](../execution/consolehost-history-txt.md) |
+| 로그온·로그오프 | 30833 시각에 로그온해 있던 사용자 | [로그온·로그오프](../event-logs/logon-events/index.md) |
+| 시간대 설정 | 현지 시각 기록과 맞출 때 | [시간대 설정](../system-account/time-zone.md) |
 
-공유를 거쳐 자료를 옮겼는지는 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다. 다른 PC 의 관리 공유로 옮겨 다닌 흔적은 [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md)에서 다룹니다.
+공유를 거쳐 자료를 옮겼는지는 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다. 다른 PC 의 관리 공유로 옮겨 다닌 흔적은 [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md)에서 다룹니다.
 
 ## 실습
 

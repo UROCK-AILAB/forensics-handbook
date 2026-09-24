@@ -4,14 +4,14 @@
 
 EVTX 청크의 빈 공간 (Chunk Slack) 에는 정상 레코드 목록에서 빠진 옛 레코드가 남을 수 있습니다. 손상된 파일은 도구마다 읽어 내는 건수가 다릅니다. 레코드 서명, 크기 사본, 시각, 이진 XML 머리를 함께 봐야 진짜 레코드를 골라낼 수 있습니다. 되살린 레코드를 XML 로 풀 때는 템플릿이 맞는지도 확인합니다.
 
-이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 의 하위 주제입니다. 청크와 레코드의 기본 구조는 [EVTX 파일 구조 (File Header·Chunk·Record)](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 에 있습니다. 템플릿은 [이진 XML 해석 (Binary XML·Template)](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md) 에 있습니다. 옛 EVT 형식의 손상 사례는 [구형 EVT 형식 (Windows XP·2003)](/01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md) 에서 다룹니다.
+이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 청크와 레코드의 기본 구조는 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에 있습니다. 템플릿은 [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) 에 있습니다. 옛 EVT 형식의 손상 사례는 [구형 EVT 형식 (Windows XP·2003)](windows-xp-2003.md) 에서 다룹니다.
 
 ## 이 내용이 쓰이는 때
 
-- 필요한 시간대의 레코드가 정상 목록에 없을 때 씁니다. 로그가 한 바퀴 돌아 덮였거나 지워졌을 수 있습니다. 로그를 지운 흔적은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) 에서, 증거를 없애려 한 정황은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
+- 필요한 시간대의 레코드가 정상 목록에 없을 때 씁니다. 로그가 한 바퀴 돌아 덮였거나 지워졌을 수 있습니다. 로그를 지운 흔적은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 에서, 증거를 없애려 한 정황은 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
 - dirty 파일이나 쓰는 중에 복사한 파일을 읽을 때 씁니다.
 - 도구마다 이벤트 건수가 다를 때 씁니다.
-- 디스크 비할당 영역이나 메모리 이미지에서 EVTX 조각을 찾을 때 씁니다. [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 와 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 을 함께 봅니다.
+- 디스크 비할당 영역이나 메모리 이미지에서 EVTX 조각을 찾을 때 씁니다. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 와 [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) 을 함께 봅니다.
 
 ## 구조 — 레코드가 남는 자리
 
@@ -86,7 +86,7 @@ EVTX 청크의 빈 공간 (Chunk Slack) 에는 정상 레코드 목록에서 빠
 
 - 레코드에는 템플릿 참조와 치환 값 목록이 들어 있습니다. XML 로 바꾸려면 템플릿을 찾아 자리 표시자를 채웁니다.
 - 템플릿이 망가지면 그 64KB 청크 안의 많은 레코드를 되살릴 수 없습니다. 그래도 치환 값 배열은 남아 있을 수 있습니다.
-- [프로세스 생성](/02-artifacts/event-logs/4688.md) 이나 [로그온](/02-artifacts/event-logs/logon-events/index.md) 같은 흔한 이벤트는 템플릿이 거의 바뀌지 않습니다. 그래서 다른 청크의 템플릿을 빌려 다시 만들 수 있습니다.
+- [프로세스 생성](../../../02-artifacts/event-logs/4688.md) 이나 [로그온](../../../02-artifacts/event-logs/logon-events/index.md) 같은 흔한 이벤트는 템플릿이 거의 바뀌지 않습니다. 그래서 다른 청크의 템플릿을 빌려 다시 만들 수 있습니다.
 
 EVTXtract 는 디스크 이미지의 비할당 영역이나 메모리 이미지 같은 원시 데이터에서 EVTX 조각을 되살립니다. 순서는 다음과 같습니다.
 
@@ -105,10 +105,10 @@ EVTXtract 는 디스크 이미지의 비할당 영역이나 메모리 이미지 
 **헤더 값이 이상한 파일**
 
 - 체크섬은 맞는데 첫 청크 번호 206 이 마지막 청크 번호 205 보다 큰 파일이 명세에 있습니다(청크 1,024개).
-- 한 바퀴 돈 정상 로그도 이 모양입니다([EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 의 "한 바퀴 돈 로그"). 이 모양만으로 손상이라고 보지 않습니다.
+- 한 바퀴 돈 정상 로그도 이 모양입니다([EVTX 파일 구조](file-header-chunk-record.md) 의 "한 바퀴 돈 로그"). 이 모양만으로 손상이라고 보지 않습니다.
 - dirty 파일에서 헤더의 청크 수가 실제보다 적은 경우가 있습니다. 이벤트 뷰어는 이런 파일을 "고쳐서" 읽는 것 같습니다.
 - libevtx(20130713 판)는 헤더가 말한 마지막 청크 뒤로도 청크를 계속 찾습니다. 거기서 나온 레코드는 "되살린 레코드" 로 표시하지 않습니다.
-- 헤더보다 칸이 많아도 남는 칸이 모두 0 일 수 있습니다. 확인 PC 의 System.evtx 가 그랬습니다([EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 의 "헤더 값과 실제 파일 비교").
+- 헤더보다 칸이 많아도 남는 칸이 모두 0 일 수 있습니다. 확인 PC 의 System.evtx 가 그랬습니다([EVTX 파일 구조](file-header-chunk-record.md) 의 "헤더 값과 실제 파일 비교").
 
 **레코드·청크 손상**
 
@@ -128,12 +128,12 @@ EVTXtract 는 디스크 이미지의 비할당 영역이나 메모리 이미지 
 
 - 사례 1 에서 레코드 번호가 끊긴 것은 레코드를 쓰는 도중에 파일을 복사했기 때문으로 보입니다.
 - 정상 파일에서도 이벤트 뷰어의 "모든 이벤트를 다른 이름으로 저장(XML)" 결과가 화면 건수보다 적었습니다(20,568건 → 4,168건).
-- wevtutil 로 내보낸 파일의 헤더 시각 문제는 [EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 의 "시각" 을 봅니다.
+- wevtutil 로 내보낸 파일의 헤더 시각 문제는 [EVTX 파일 구조](file-header-chunk-record.md) 의 "시각" 을 봅니다.
 
 ### 원본 다루기
 
-- 원본을 열면 바뀔 수 있으므로 늘 사본에서 작업합니다. 이 원칙은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 관찰한 것과 같습니다.
-- 손상된 ESE 데이터베이스는 읽는 방식에 따라 결과 행 수가 달랐습니다(현장 관찰). EVTX 도 위 사례처럼 도구마다 건수가 다릅니다. 두 가지 이상의 방식으로 읽어 비교합니다. 비교 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 원본을 열면 바뀔 수 있으므로 늘 사본에서 작업합니다. 이 원칙은 [ESE 데이터베이스](../extensible-storage-engine/index.md) 에서 관찰한 것과 같습니다.
+- 손상된 ESE 데이터베이스는 읽는 방식에 따라 결과 행 수가 달랐습니다(현장 관찰). EVTX 도 위 사례처럼 도구마다 건수가 다릅니다. 두 가지 이상의 방식으로 읽어 비교합니다. 비교 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ### 증거로서 의미
 

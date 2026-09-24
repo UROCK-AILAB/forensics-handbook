@@ -57,9 +57,9 @@ PC 판의 폴더 구성과 DB 형식은 이번에 공개 자료로 확인하지 
 
 ### 찾는 법
 
-1. [설치 프로그램](/02-artifacts/system-account/uninstall.md) 에서 위챗(Weixin) 설치 여부와 버전을 봅니다.
-2. [프리페치](/02-artifacts/execution/prefetch/index.md) 와 [AmCache](/02-artifacts/execution/amcache-hve/index.md) 에서 실행 파일 경로를 봅니다.
-3. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 목록에서 `WeChat`·`Weixin`·`Tencent` 가 들어간 폴더를 찾습니다. 알려진 폴더 이름 `WeChat Files`·`xwechat_files` 도 검색합니다.
+1. [설치 프로그램](../system-account/uninstall.md) 에서 위챗(Weixin) 설치 여부와 버전을 봅니다.
+2. [프리페치](../execution/prefetch/index.md) 와 [AmCache](../execution/amcache-hve/index.md) 에서 실행 파일 경로를 봅니다.
+3. [마스터 파일 테이블](../filesystem/mft.md) 목록에서 `WeChat`·`Weixin`·`Tencent` 가 들어간 폴더를 찾습니다. 알려진 폴더 이름 `WeChat Files`·`xwechat_files` 도 검색합니다.
 4. 저장 폴더는 사용자가 바꿀 수 있다고 알려져 있습니다. 문서 폴더에 없으면 다른 드라이브도 봅니다.
 5. `%APPDATA%\Tencent` 아래에서 저장 경로를 적은 설정 파일이 있는지 봅니다.
 6. 찾은 폴더의 이름·구성과 앱 버전을 함께 적습니다.
@@ -73,8 +73,8 @@ PC 판의 폴더 구성과 DB 형식은 이번에 공개 자료로 확인하지 
 
 | 앞머리 모양 | 뜻 | 다음에 볼 페이지 |
 |---|---|---|
-| SQLite 헤더 문자열 | 평문 SQLite | [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) |
-| 알아볼 서명이 없고 바이트가 고르게 흩어져 있음 | 암호문일 가능성이 큼 | [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) |
+| SQLite 헤더 문자열 | 평문 SQLite | [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) |
+| 알아볼 서명이 없고 바이트가 고르게 흩어져 있음 | 암호문일 가능성이 큼 | [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) |
 
 - 알려진 바로는 `<wxid>` 폴더 이름은 계정 식별자입니다(버전마다 확인 필요). 이 이름으로 계정을 가늠합니다.
 - 알려진 바로는 3.x 사진 캐시 `.dat` 은 단순 XOR 로 가려져 있습니다(버전마다 확인 필요). 그러면 파일 앞머리에 이미지 서명이 보이지 않습니다. 확장자와 앞머리만 보고 이미지가 아니라고 판단하지 않습니다.
@@ -100,9 +100,9 @@ PC 판의 폴더 구성과 DB 형식은 이번에 공개 자료로 확인하지 
 ## 시각 해석
 
 - 대화 DB 안 시각 칸의 형식은 확인하지 못했습니다.
-- DB 를 풀 수 있으면 보낸 시각을 아는 시험 메시지로 형식을 맞춥니다. 후보 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- DB 를 풀 수 있으면 보낸 시각을 아는 시험 메시지로 형식을 맞춥니다. 후보 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 받은 파일과 사진 파일의 시각은 파일 시스템 시각입니다. NTFS 는 이 시각을 UTC 로 적습니다.
-- 받은 파일이 이 PC 에 처음 쓰인 때를 보려면 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 의 두 시각 묶음을 함께 봅니다. 파일을 옮기거나 복사하면 시각이 달라질 수 있습니다.
+- 받은 파일이 이 PC 에 처음 쓰인 때를 보려면 [마스터 파일 테이블](../filesystem/mft.md) 의 두 시각 묶음을 함께 봅니다. 파일을 옮기거나 복사하면 시각이 달라질 수 있습니다.
 - 저장 폴더를 바꾼 경우 파일이 한꺼번에 옮겨졌을 수 있습니다. 여러 파일의 시각이 한 시점에 몰려 있으면 폴더 이동을 의심합니다(해석).
 
 ## 함정과 한계
@@ -113,7 +113,7 @@ PC 판의 폴더 구성과 DB 형식은 이번에 공개 자료로 확인하지 
 - **자동 수집 목록에 기댑니다.** 한 공개 수집 정의 모음에는 위챗 항목이 없었습니다. 위챗 폴더를 따로 수집합니다.
 - **`.dat` 사진을 깨진 파일로 봅니다.** 가림 처리 때문에 이미지 서명이 보이지 않을 수 있습니다.
 - **공개 복호 도구가 늘 있다고 봅니다.** 아래 "공개 복호 도구 삭제" 를 봅니다.
-- **앱을 지운 PC 에서 흔적이 없다고 봅니다.** 저장 폴더가 문서 폴더나 다른 드라이브에 남아 있을 수 있습니다(해석). [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 지운 파일 이름도 찾습니다.
+- **앱을 지운 PC 에서 흔적이 없다고 봅니다.** 저장 폴더가 문서 폴더나 다른 드라이브에 남아 있을 수 있습니다(해석). [USN 변경 저널](../filesystem/usnjrnl.md) 에서 지운 파일 이름도 찾습니다.
 
 ### 공개 복호 도구 삭제
 
@@ -122,7 +122,7 @@ PC 판의 폴더 구성과 DB 형식은 이번에 공개 자료로 확인하지 
 - GitHub 는 원 저장소를 포함해 포크까지 저장소 4,195개 네트워크 전체에 이 요청을 적용했습니다.
 - 요청서 표에 이름이 적힌 저장소는 30여 개입니다.
 - 그래서 공개 복호 도구에 기대던 분석 방법이 막혔을 수 있습니다(해석).
-- 예전에 받아 둔 도구를 쓸 때는 도구 버전과 검체의 앱 버전을 적습니다. 결과는 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 방법으로 확인합니다.
+- 예전에 받아 둔 도구를 쓸 때는 도구 버전과 검체의 앱 버전을 적습니다. 결과는 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 방법으로 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -146,22 +146,22 @@ PC 판의 폴더 구성과 DB 형식은 이번에 공개 자료로 확인하지 
 | MFT 목록 도구 | 위챗 폴더와 파일 목록, 시각을 뽑습니다 |
 | 헥스 편집기 | 파일 앞머리로 형식과 가림 처리를 가립니다 |
 | SQLite 뷰어 | 평문 SQLite 로 확인된 파일만 엽니다 |
-| 파일 내용 검색 도구 | 받은 파일 폴더에서 사건 관련 문서를 찾습니다. 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다 |
+| 파일 내용 검색 도구 | 받은 파일 폴더에서 사건 관련 문서를 찾습니다. 방법은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에 있습니다 |
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 위챗 버전(3.x·4.x)과 설치 폴더 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 실행 파일의 경로와 실행 시각 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 위챗 앱의 네트워크 사용량 기록이 있는지 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 위챗 알림이 남았는지 |
-| [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md) | 로그온할 때 위챗이 자동으로 켜지도록 등록됐는지 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 받은 파일 폴더의 파일을 연 흔적이 있는지 |
-| [스마트폰 백업 파일](/02-artifacts/external-devices/itunes-smart-switch-backup.md) | 이 PC 에 휴대폰 백업이 있는지. 위챗 자료가 들어 있는지는 백업 종류마다 확인합니다 |
+| [설치 프로그램](../system-account/uninstall.md) | 위챗 버전(3.x·4.x)과 설치 폴더 |
+| [프리페치](../execution/prefetch/index.md) · [AmCache](../execution/amcache-hve/index.md) | 실행 파일의 경로와 실행 시각 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 위챗 앱의 네트워크 사용량 기록이 있는지 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 위챗 알림이 남았는지 |
+| [로그온 자동실행](../persistence/run-runonce-startup-folder.md) | 로그온할 때 위챗이 자동으로 켜지도록 등록됐는지 |
+| [바로가기 파일](../file-folder-usage/lnk.md) · [점프리스트](../file-folder-usage/jump-lists.md) | 받은 파일 폴더의 파일을 연 흔적이 있는지 |
+| [스마트폰 백업 파일](../external-devices/itunes-smart-switch-backup.md) | 이 PC 에 휴대폰 백업이 있는지. 위챗 자료가 들어 있는지는 백업 종류마다 확인합니다 |
 
-- 다른 메신저와 함께 볼 때는 [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md) · [텔레그램](/02-artifacts/messengers/telegram.md) 페이지를 봅니다.
-- 조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 와 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
+- 다른 메신저와 함께 볼 때는 [카카오톡 PC](kakaotalk-pc/index.md) · [텔레그램](telegram.md) 페이지를 봅니다.
+- 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 와 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
 
 ## 실습
 

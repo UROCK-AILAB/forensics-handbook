@@ -1,6 +1,6 @@
 # 두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)
 
-상위 허브: [NTFS 구조 (NTFS)](/01-foundations/disk-volume/ntfs/index.md)
+상위 허브: [NTFS 구조 (NTFS)](index.md)
 
 ## 한 줄 요약
 
@@ -8,12 +8,12 @@ NTFS 파일에는 생성·수정·레코드 변경·접근 시각이 두 벌 있
 
 ## 이 형식을 쓰는 아티팩트
 
-- [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md): 파일 레코드마다 $SI 한 개와 $FN 한 개 이상이 들어 있습니다.
-- [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md): 상위 폴더의 색인 항목마다 $FN 사본이 들어 있습니다.
-- [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md): 두 벌을 따로 줄 세워 봅니다.
-- [시각 조작 탐지 (Timestomping)](/03-techniques/analysis/timeline/timestomping.md): 두 벌의 차이를 첫 단서로 씁니다.
+- [마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md): 파일 레코드마다 $SI 한 개와 $FN 한 개 이상이 들어 있습니다.
+- [폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md): 상위 폴더의 색인 항목마다 $FN 사본이 들어 있습니다.
+- [파일시스템 타임라인](../../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md): 두 벌을 따로 줄 세워 봅니다.
+- [시각 조작 탐지 (Timestomping)](../../../03-techniques/analysis/timeline/timestomping.md): 두 벌의 차이를 첫 단서로 씁니다.
 
-레코드와 속성 머리의 생김새는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다. 이 페이지는 두 속성의 값 부분과 시각만 다룹니다.
+레코드와 속성 머리의 생김새는 [MFT 레코드와 속성](file-record-attribute.md)에서 다룹니다. 이 페이지는 두 속성의 값 부분과 시각만 다룹니다.
 
 ## 구조
 
@@ -29,13 +29,13 @@ NTFS 파일에는 생성·수정·레코드 변경·접근 시각이 두 벌 있
 
 파일 레코드의 $FN 은 폴더 색인이 망가졌을 때 되살리려고 둔 예비 사본입니다(참고 5). 예비 사본이라 늘 최신으로 맞춰 둘 필요가 없습니다(참고 5). 그래서 평소 작업으로는 잘 바뀌지 않습니다. 색인 쪽 사본은 $SI 와 거의 늘 맞춰 둡니다(참고 5). 다만 늦게 반영된 옛 값이 남은 사례가 있습니다(참고 5).
 
-MFT 를 푸는 도구가 보여 주는 $FN 은 파일 레코드 쪽 값입니다. 색인 쪽 사본은 $I30 을 따로 풀어야 보입니다. 하드 링크는 [링크와 리파스 포인트](/01-foundations/disk-volume/ntfs/hard-link-junction-reparse-point.md)에서 다룹니다.
+MFT 를 푸는 도구가 보여 주는 $FN 은 파일 레코드 쪽 값입니다. 색인 쪽 사본은 $I30 을 따로 풀어야 보입니다. 하드 링크는 [링크와 리파스 포인트](hard-link-junction-reparse-point.md)에서 다룹니다.
 
 > 그림 자리: 파일 레코드 안의 $SI 와 $FN(긴 이름·짧은 이름) 두 개, 그리고 상위 폴더 $I30 색인 항목 안의 $FN 사본이 어떻게 이어지는지 보여 주는 그림
 
 ### 네 시각의 이름과 저장 순서
 
-두 속성은 시각 네 개를 같은 순서로 둡니다. 각 값은 8바이트 FILETIME 입니다. NTFS 는 시각을 UTC 로 적습니다(참고 2). FILETIME 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+두 속성은 시각 네 개를 같은 순서로 둡니다. 각 값은 8바이트 FILETIME 입니다. NTFS 는 시각을 UTC 로 적습니다(참고 2). FILETIME 읽는 법은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 
 | 저장 순서 | 이름 | 흔한 약자 | 뜻 |
 |---|---|---|---|
@@ -63,7 +63,7 @@ MFT 를 푸는 도구가 보여 주는 $FN 은 파일 레코드 쪽 값입니다
 | 56 | 8 | 할당량 사용량 (Quota Charged, NTFS 3.0 부터) |
 | 64 | 8 | 변경 저널 번호 (Update Sequence Number, NTFS 3.0 부터) |
 
-보안 설명자 ID 는 $Secure:$SII 색인의 항목 번호입니다(참고 1). $Secure 는 [NTFS 메타 파일](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md)에서 다룹니다.
+보안 설명자 ID 는 $Secure:$SII 색인의 항목 번호입니다(참고 1). $Secure 는 [NTFS 메타 파일](bitmap-secure-extend.md)에서 다룹니다.
 
 $SI 의 크기는 NTFS 버전에 따라 다릅니다(참고 1).
 
@@ -109,7 +109,7 @@ $SI 의 크기는 NTFS 버전에 따라 다릅니다(참고 1).
 
 1. 파일의 MFT 레코드를 찾습니다. 첫 속성 위치는 레코드 머리 오프셋 20 의 2바이트 값입니다(참고 1).
 2. 속성을 차례로 넘기며 종류 코드를 봅니다. 0x10 이 $SI 이고 0x30 이 $FN 입니다(참고 1).
-3. 두 속성은 늘 상주 속성 (Resident)으로 저장됩니다(참고 1). 값 크기는 속성 머리 오프셋 16 의 4바이트입니다. 값 위치는 속성 머리 오프셋 20 의 2바이트입니다(참고 1). 상주 속성은 [데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)에서 다룹니다.
+3. 두 속성은 늘 상주 속성 (Resident)으로 저장됩니다(참고 1). 값 크기는 속성 머리 오프셋 16 의 4바이트입니다. 값 위치는 속성 머리 오프셋 20 의 2바이트입니다(참고 1). 상주 속성은 [데이터 런과 상주·비상주 데이터](data-run-resident-non-resident.md)에서 다룹니다.
 4. 시각 8바이트를 리틀 엔디언 정수로 읽습니다. 이 값을 FILETIME 으로 바꾸면 UTC 시각이 나옵니다.
 5. $FN 은 레코드에 있는 것을 모두 읽습니다. 이름 공간과 상위 폴더 참조를 함께 적어 둡니다.
 6. 레코드에 $ATTRIBUTE_LIST(0x20)가 있으면 확장 레코드도 따라갑니다. 긴 이름의 $FN 이 확장 레코드에만 있고 기본 레코드에는 짧은 이름만 보인 사례가 있습니다(현장 관찰). 확장 레코드는 기본 레코드와 멀리 떨어져 있는 일이 많습니다(현장 관찰).
@@ -169,7 +169,7 @@ $SI 속성입니다. 머리를 포함해 96바이트이고, 왼쪽 오프셋은 
 - $SI 의 생성·수정·접근 시각은 1초 아래 자리가 모두 0 입니다.
 - $SI 레코드 변경 시각은 $FN 시각보다 뒤입니다. 레코드가 생긴 뒤에 한 번 더 바뀌었다는 뜻입니다.
 
-이 모양은 $SI 를 나중에 덮어쓴 파일에서 흔히 보입니다. 그래도 이것만으로 조작이라고 결론 내지 않습니다. 아래 "함정"과 [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)의 교차 확인을 거칩니다.
+이 모양은 $SI 를 나중에 덮어쓴 파일에서 흔히 보입니다. 그래도 이것만으로 조작이라고 결론 내지 않습니다. 아래 "함정"과 [시각 조작 탐지](../../../03-techniques/analysis/timeline/timestomping.md)의 교차 확인을 거칩니다.
 
 ## 포렌식에서 중요한 점
 
@@ -181,7 +181,7 @@ $SI 속성입니다. 머리를 포함해 96바이트이고, 왼쪽 오프셋은 
 - 내용 수정이나 읽기 같은 평소 작업으로는 파일 레코드의 $FN 이 믿을 만하게 갱신되지 않습니다(참고 6).
 - 위 규칙은 SANS 의 "Windows Time Rules" 자료를 바탕으로 한 분석가 정리입니다(참고 6). Windows 버전에 따라 달라질 수 있습니다. 중요한 결론은 같은 버전에서 재현해 확인합니다.
 
-작업별 규칙 전체는 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md)에서 다룹니다.
+작업별 규칙 전체는 [파일 시각 네 가지와 변화 규칙](../../../03-techniques/analysis/timeline/macb-timestamp-rules.md)에서 다룹니다.
 
 ### 시각 조작을 볼 때
 
@@ -190,15 +190,15 @@ $SI 속성입니다. 머리를 포함해 96바이트이고, 왼쪽 오프셋은 
 - 그래서 $SI 생성 시각이 $FN 생성 시각보다 이르면 $SI 를 과거로 되돌린 흔적일 수 있습니다(참고 6).
 - 1초 아래 자리가 모두 0 인 시각도 단서입니다. 초 단위로만 값을 넣는 도구가 이런 모양을 남깁니다(참고 6).
 - 시각을 고친 뒤 같은 볼륨 안에서 이름을 바꾸거나 옮기면 $FN 도 고친 $SI 값을 복사해 갑니다(참고 6). 이때 두 벌은 서로 맞아 보입니다. 두 벌이 같다는 사실은 조작이 없었다는 증거가 아닙니다.
-- 두 벌만으로 판단이 안 서면 [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md)을 봅니다. 기본 정보 변경(USN_REASON_BASIC_INFO_CHANGE) 기록에는 시각 변경도 들어갑니다(참고 1). 이름 바꾸기 기록도 함께 봅니다.
-- [NTFS 트랜잭션 로그 ($LogFile)](/02-artifacts/filesystem/logfile.md), $I30 슬랙에 남은 옛 사본, 다른 아티팩트의 시각도 함께 봅니다.
+- 두 벌만으로 판단이 안 서면 [USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md)을 봅니다. 기본 정보 변경(USN_REASON_BASIC_INFO_CHANGE) 기록에는 시각 변경도 들어갑니다(참고 1). 이름 바꾸기 기록도 함께 봅니다.
+- [NTFS 트랜잭션 로그 ($LogFile)](../../../02-artifacts/filesystem/logfile.md), $I30 슬랙에 남은 옛 사본, 다른 아티팩트의 시각도 함께 봅니다.
 
 ### 접근 시각은 늦게 쓰이거나 꺼져 있습니다
 
 - NTFS 는 접근 시각을 디스크에 쓰는 일을 최대 1시간 미룹니다(참고 2, 참고 3).
 - 실행 중인 시스템에서는 메모리에 있는 정확한 값을 돌려줍니다(참고 3). 디스크 이미지에는 아직 쓰지 않은 접근 시각이 빠져 있을 수 있습니다.
 - 접근 시각 갱신은 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem\NtfsDisableLastAccessUpdate` 값으로 끌 수 있습니다(참고 3).
-- 압수 이미지의 SYSTEM 하이브에는 CurrentControlSet 이 없습니다. 실제로 쓰던 컨트롤셋을 골라 읽습니다. [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md)를 봅니다.
+- 압수 이미지의 SYSTEM 하이브에는 CurrentControlSet 이 없습니다. 실제로 쓰던 컨트롤셋을 골라 읽습니다. [컨트롤셋 고르기](../../database-log-formats/registry-hive/controlset-select.md)를 봅니다.
 
 이 값의 뜻과 기본값은 분석가 정리 자료를 따릅니다(참고 6). 공식 문서로는 확인하지 못했습니다.
 
@@ -220,14 +220,14 @@ $SI 속성입니다. 머리를 포함해 96바이트이고, 왼쪽 오프셋은 
 
 - $FN 의 상위 폴더 참조로 지운 파일의 원래 경로를 되짚을 수 있습니다.
 - 참조의 순서 번호가 지금 상위 레코드의 순서 번호와 다르면, 그 상위 레코드는 이미 다른 파일·폴더로 다시 쓰인 것입니다. 이때 경로는 믿을 수 없습니다.
-- 폴더 색인에서 빠진 항목의 $FN 사본이 $I30 슬랙에 남기도 합니다. 여기에도 시각 네 개가 들어 있습니다. [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md)을 봅니다.
-- 레코드 복구 절차는 [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)에서 다룹니다.
+- 폴더 색인에서 빠진 항목의 $FN 사본이 $I30 슬랙에 남기도 합니다. 여기에도 시각 네 개가 들어 있습니다. [폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md)을 봅니다.
+- 레코드 복구 절차는 [파일시스템 기반 복구](../../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)에서 다룹니다.
 
 ### 보고서에 쓸 때
 
 - 어느 속성의 어느 시각인지 밝힙니다. 위 예시라면 "파일은 2019년에 만들어졌다" 라고 쓰지 않습니다. "$SI 생성 시각은 2019-01-01 00:00:00 UTC 이고 $FN 생성 시각은 2024-03-15 01:23:45 UTC 로 서로 다르다" 라고 씁니다.
-- NTFS 시각은 UTC 입니다(참고 2). 현지 시각으로 바꿨다면 어느 시간대를 썼는지 적습니다. [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
-- $SI 생성 시각을 다른 사실의 추정 근거로 쓸 때는 추정이라고 밝힙니다. 예를 들어 로컬 계정이 만들어진 시각은 레지스트리에 직접 적혀 있지 않습니다(현장 관찰). 그래서 그 사용자 NTUSER.DAT 의 $SI 생성 시각으로 흔히 추정합니다(현장 관찰). 계정 정보는 [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md)에서 다룹니다.
+- NTFS 시각은 UTC 입니다(참고 2). 현지 시각으로 바꿨다면 어느 시간대를 썼는지 적습니다. [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+- $SI 생성 시각을 다른 사실의 추정 근거로 쓸 때는 추정이라고 밝힙니다. 예를 들어 로컬 계정이 만들어진 시각은 레지스트리에 직접 적혀 있지 않습니다(현장 관찰). 그래서 그 사용자 NTUSER.DAT 의 $SI 생성 시각으로 흔히 추정합니다(현장 관찰). 계정 정보는 [사용자 계정 (SAM)](../../../02-artifacts/system-account/sam.md)에서 다룹니다.
 
 ## 함정
 
@@ -249,7 +249,7 @@ $SI 속성입니다. 머리를 포함해 96바이트이고, 왼쪽 오프셋은 
 - libfsntfs 의 fsntfsinfo: 참고 1 명세를 쓴 프로젝트의 도구입니다. 레코드의 속성을 풀어 보여 줍니다.
 - MFTECmd, analyzeMFT: $MFT 전체를 표로 풀면서 두 벌을 따로 칸으로 냅니다.
 
-도구마다 보여 주는 $FN 이 다를 수 있습니다. 긴 이름 것인지, 짧은 이름 것인지 확인합니다. $I30 사본을 읽는지도 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+도구마다 보여 주는 $FN 이 다를 수 있습니다. 긴 이름 것인지, 짧은 이름 것인지 확인합니다. $I30 사본을 읽는지도 확인합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 참고 문헌
 

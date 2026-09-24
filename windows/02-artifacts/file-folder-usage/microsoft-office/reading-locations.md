@@ -1,6 +1,6 @@
 # 읽던 위치 (Reading Locations)
 
-> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](/02-artifacts/file-folder-usage/microsoft-office/index.md)
+> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@ Word 는 `Reading Locations` 키 아래에 문서마다 하위 키를 하나씩 
 
 이 기록은 Word 에만 있습니다. 관찰한 PC 에서도 Excel·PowerPoint 아래에는 이 키가 없었습니다. (관찰)
 
-Word 로 연 문서가 모두 여기 남지는 않았습니다. 관찰한 PC 에서는 [최근 파일 목록 (File MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) 에 있는 Word 문서 가운데 일부만 Reading Locations 에 있었습니다. (관찰) 어떤 문서가 남고 어떤 문서가 빠지는지는 확인하지 못했습니다.
+Word 로 연 문서가 모두 여기 남지는 않았습니다. 관찰한 PC 에서는 [최근 파일 목록 (File MRU)](file-mru-place-mru.md) 에 있는 Word 문서 가운데 일부만 Reading Locations 에 있었습니다. (관찰) 어떤 문서가 남고 어떤 문서가 빠지는지는 확인하지 못했습니다.
 
 ## 위치와 버전별 차이
 
@@ -22,7 +22,7 @@ Word 로 연 문서가 모두 여기 남지는 않았습니다. 관찰한 PC 에
 HKCU\Software\Microsoft\Office\<버전>\Word\Reading Locations\<하위 키>
 ```
 
-사용자마다 NTUSER.DAT 에 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다. 버전 키가 어느 오피스 제품을 뜻하는지는 [허브 페이지](/02-artifacts/file-folder-usage/microsoft-office/index.md) 에서 다룹니다.
+사용자마다 NTUSER.DAT 에 있습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다. 버전 키가 어느 오피스 제품을 뜻하는지는 [허브 페이지](index.md) 에서 다룹니다.
 
 | 버전 키 | 확인한 내용 | 근거 |
 |---|---|---|
@@ -78,7 +78,7 @@ RegRipper 자료에는 `File Path` 와 `Datetime` 만 나옵니다. `Position` �
 
 **Registry Explorer 의 `lastOpen`.** Registry Explorer 는 File MRU 항목마다 `Reading Locations` 에서 `File Path` 가 같은 하위 키를 찾습니다. 찾으면 그 하위 키의 마지막 쓰기 시각을 그 문서의 `lastOpen` 칸에 넣습니다. `lastOpen` 은 도구가 붙인 이름입니다. 키 시각은 그 키에 마지막으로 무언가를 쓴 때일 뿐입니다. 어떤 동작이 그 쓰기를 일으켰는지는 키만으로 알 수 없습니다.
 
-**시간대.** `Datetime` 에는 `Z` 나 `+09:00` 같은 시간대 표시가 없습니다. 먼저 그 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 확인합니다. UTC 로 옮긴 값을 [타임라인](/03-techniques/analysis/timeline/index.md) 에 넣습니다.
+**시간대.** `Datetime` 에는 `Z` 나 `+09:00` 같은 시간대 표시가 없습니다. 먼저 그 PC 의 [시간대 설정](../../system-account/time-zone.md) 을 확인합니다. UTC 로 옮긴 값을 [타임라인](../../../03-techniques/analysis/timeline/index.md) 에 넣습니다.
 
 ## 함정과 한계
 
@@ -95,10 +95,10 @@ RegRipper 자료에는 `File Path` 와 `Datetime` 만 나옵니다. `Position` �
 
 아래는 관찰한 값 형식으로 만든 예시입니다. 실제 검체에서 나온 값이 아닙니다. 같은 문서를 가리키는 File MRU 값과 Reading Locations 하위 키가 있다고 합시다.
 
-- File MRU 값 데이터: `[F00000000][T01DA767F3603E500][O00000000]*C:\Users\kim\Documents\report.docx` (형식은 [오피스 최근 파일](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) 에 있습니다)
+- File MRU 값 데이터: `[F00000000][T01DA767F3603E500][O00000000]*C:\Users\kim\Documents\report.docx` (형식은 [오피스 최근 파일](file-mru-place-mru.md) 에 있습니다)
 - Reading Locations 하위 키의 `File Path`: `C:\Users\kim\Documents\report.docx`
 
-`Datetime` 값 데이터를 헥스로 보면 아래와 같습니다. REG_SZ 라 UTF-16LE 입니다 ([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
+`Datetime` 값 데이터를 헥스로 보면 아래와 같습니다. REG_SZ 라 UTF-16LE 입니다 ([문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
 
 ```
 오프셋    00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
@@ -108,7 +108,7 @@ RegRipper 자료에는 `File Path` 와 `Datetime` 만 나옵니다. `Position` �
 
 1. 글자마다 00 을 건너뛰면 `2024-03-15T11:19` 입니다. 16글자, 32바이트입니다.
 2. 초 칸이 없습니다. `Z` 나 `+09:00` 같은 시간대 표시도 없습니다.
-3. File MRU 의 T 값 0x01DA767F3603E500 을 풀면 2024-03-15 02:19:30 UTC 입니다 ([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
+3. File MRU 의 T 값 0x01DA767F3603E500 을 풀면 2024-03-15 02:19:30 UTC 입니다 ([시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
 4. T 값에 9시간을 더하면 11:19:30 입니다. `Datetime` 의 11:19 와 분까지 같습니다.
 5. 그 PC 의 시간대가 UTC+9 라면 두 기록은 같은 때를 가리킨다고 볼 수 있습니다.
 
@@ -121,19 +121,19 @@ RegRipper 자료에는 `File Path` 와 `Datetime` 만 나옵니다. `Position` �
 2. RegRipper 결과에서 `Datetime` 과 하위 키 시각을 나란히 적습니다.
 3. Registry Explorer 의 `lastOpen` 이 어느 하위 키의 시각인지 `File Path` 로 확인합니다.
 4. `Position` 은 레지스트리 뷰어로 직접 봅니다. RegRipper 자료에는 이 값이 나오지 않습니다.
-5. 도구 결과와 직접 읽은 값이 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+5. 도구 결과와 직접 읽은 값이 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [오피스 최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | 같은 문서의 T 값 (UTC) |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | `Datetime` 을 UTC 로 옮길 때의 시간대 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 같은 문서를 연 다른 기록 |
-| [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) | 문서 안에 적힌 시각 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 문서 파일의 수정 시각 |
+| [오피스 최근 파일 (File MRU·Place MRU)](file-mru-place-mru.md) | 같은 문서의 T 값 (UTC) |
+| [시간대 설정](../../system-account/time-zone.md) | `Datetime` 을 UTC 로 옮길 때의 시간대 |
+| [바로가기 파일](../lnk.md)·[점프리스트](../jump-lists.md) | 같은 문서를 연 다른 기록 |
+| [문서 메타데이터](../../embedded-metadata/document-metadata/index.md) | 문서 안에 적힌 시각 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 문서 파일의 수정 시각 |
 
-시나리오로 이어서 보려면 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 파일을 누가 언제 열었나](../../../04-scenarios/activity/file-access.md) 를 봅니다.
 
 ## 실습
 

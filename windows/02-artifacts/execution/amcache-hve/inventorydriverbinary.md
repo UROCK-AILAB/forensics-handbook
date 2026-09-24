@@ -6,7 +6,7 @@
 
 ## 무엇을 기록하나 · 왜 생기나
 
-AmCache 는 윈도의 프로그램 호환성 기능이 쓰는 레지스트리 하이브입니다. 전체 모습은 [AmCache](/02-artifacts/execution/amcache-hve/index.md) 허브에서 다룹니다.
+AmCache 는 윈도의 프로그램 호환성 기능이 쓰는 레지스트리 하이브입니다. 전체 모습은 [AmCache](index.md) 허브에서 다룹니다.
 
 드라이버 항목은 호환성 조사 작업 (Microsoft Compatibility Appraiser) 이라는 예약 작업이 씁니다. ANSSI 연구는 Windows 10 1607·1709 의 기본 라이브러리에서 이 키를 이 작업만 갱신한다고 적습니다. 그래서 드라이버가 설치되거나 로드되는 순간에 항목이 생기지 않습니다. 작업이 다음에 돌 때 생깁니다.
 
@@ -19,7 +19,7 @@ Microsoft 는 같은 이름의 필드를 진단 데이터 이벤트 `Microsoft.W
 - 파일: `C:\Windows\AppCompat\Programs\Amcache.hve`
 - 키: `Root\InventoryDriverBinary`
 
-하이브 파일의 전체 구조와 수집 방법은 [구조와 버전별 차이](/02-artifacts/execution/amcache-hve/structure-versions.md)에서 다룹니다.
+하이브 파일의 전체 구조와 수집 방법은 [구조와 버전별 차이](structure-versions.md)에서 다룹니다.
 
 ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라이브러리 버전을 따른다고 적습니다. 아래 표는 라이브러리 버전별로 드라이버가 어디에 적히는지 정리한 것입니다. "처음 실린 Windows" 는 그 라이브러리가 기본으로 들어 있던 Windows 입니다.
 
@@ -47,10 +47,10 @@ ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라�
 | 1709 이후 | 드라이버 전체 경로. 소문자이고 구분자는 `/` 입니다 | `c:/windows/system32/drivers/1394ohci.sys` |
 
 - 레지스트리 키 이름에는 역슬래시(`\`)를 쓸 수 없습니다(Microsoft 문서). 그래서 경로 구분자를 `/` 로 바꿔 적은 것으로 보입니다.
-- 1709 이후에는 경로가 키 이름이라서 한 경로에 항목이 하나뿐입니다. 같은 경로의 파일이 다른 파일로 바뀌면 이 키에는 새 SHA-1 만 남을 것으로 봅니다. 옛 값은 [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md), [지워진 키·값](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
+- 1709 이후에는 경로가 키 이름이라서 한 경로에 항목이 하나뿐입니다. 같은 경로의 파일이 다른 파일로 바뀌면 이 키에는 새 SHA-1 만 남을 것으로 봅니다. 옛 값은 [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [지워진 키·값](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
 - 1607 형식에서는 키 이름이 해시입니다. 경로로 키를 찾는 방식이 통하지 않습니다.
 
-키와 값이 하이브 파일 안에 어떻게 저장되는지는 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다.
+키와 값이 하이브 파일 안에 어떻게 저장되는지는 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다.
 
 ### 값
 
@@ -59,7 +59,7 @@ ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라�
 | 값 | 공식 설명 | 읽을 때 주의 |
 |---|---|---|
 | `DriverName` | 드라이버 파일 이름 | |
-| `DriverId` | (공식 필드 목록에 없음) ANSSI 는 드라이버의 SHA-1 앞에 `0000` 을 붙인 값이라고 적습니다 | 앞 네 글자를 떼고 해시를 조회합니다. 계산 범위는 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md)을 봅니다 |
+| `DriverId` | (공식 필드 목록에 없음) ANSSI 는 드라이버의 SHA-1 앞에 `0000` 을 붙인 값이라고 적습니다 | 앞 네 글자를 떼고 해시를 조회합니다. 계산 범위는 [AmCache 해석 함정](sha1.md)을 봅니다 |
 | `DriverVersion` | 드라이버 파일의 버전 | |
 | `DriverCompany` | 드라이버를 만든 회사 이름 | 파일 버전 정보에 적힌 글자입니다. 서명한 곳과 다를 수 있습니다 |
 | `Product` · `ProductVersion` | 드라이버 파일에 적힌 제품 이름과 제품 버전 | |
@@ -72,7 +72,7 @@ ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라�
 | `DriverCheckSum` | 드라이버 파일의 체크섬 | 이름으로 보아 PE 선택 헤더의 `CheckSum` 으로 보입니다(추정). 아래 헥스 절에서 맞춰 봅니다 |
 | `ImageSize` | 드라이버 파일의 크기 | 아래 함정과 한계 4번을 봅니다 |
 | `Inf` | INF 파일 이름 | |
-| `Service` | 장치용으로 설치된 서비스 이름 | [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) 키와 잇습니다 |
+| `Service` | 장치용으로 설치된 서비스 이름 | [서비스·드라이버](../../persistence/services-drivers.md) 키와 잇습니다 |
 | `DriverPackageStrongName` | 드라이버 패키지의 강한 이름 (Strong Name) | |
 | `WdfVersion` | 드라이버 프레임워크 (Windows Driver Framework) 버전 | |
 
@@ -106,9 +106,9 @@ ANSSI 가 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에서 �
 ### 함께 보는 두 키
 
 - **`InventoryDriverPackage`** 는 INF 로 묶인 드라이버 패키지를 적습니다. Microsoft 문서의 필드에는 `Class`·`ClassGuid`·`Date`·`Directory`·`DriverInBox`·`Inf`·`Provider`·`SubmissionId`·`Version` 이 있습니다. Microsoft 문서는 `Date` 를 "드라이버 패키지 날짜" 라고만 적습니다. ANSSI 예시에서 기본 INF(`acpi.inf`)의 날짜는 06/21/2006 입니다. 그래서 `Date` 를 설치한 날짜로 읽지 않습니다.
-- **`InventoryApplicationDriver`** 는 프로그램이 함께 설치한 드라이버를 적습니다(1803 라이브러리부터). 값은 `DriverServiceName` 과 `ProgramIds` 두 개입니다. `ProgramIds` 는 [설치 프로그램 항목](/02-artifacts/execution/amcache-hve/inventoryapplication.md)의 키 이름을 가리킵니다. ANSSI 시험에서는 Wireshark 를 설치하자 `npcap` 항목이 생겼습니다.
+- **`InventoryApplicationDriver`** 는 프로그램이 함께 설치한 드라이버를 적습니다(1803 라이브러리부터). 값은 `DriverServiceName` 과 `ProgramIds` 두 개입니다. `ProgramIds` 는 [설치 프로그램 항목](inventoryapplication.md)의 키 이름을 가리킵니다. ANSSI 시험에서는 Wireshark 를 설치하자 `npcap` 항목이 생겼습니다.
 
-[장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md)에도 `DriverName`·`Inf`·`Service` 값이 있습니다. 이 값으로 장치와 드라이버를 잇습니다.
+[장치 항목 (InventoryDevicePnp)](inventorydevicepnp.md)에도 `DriverName`·`Inf`·`Service` 값이 있습니다. 이 값으로 장치와 드라이버를 잇습니다.
 
 ## 증거로서 의미
 
@@ -150,7 +150,7 @@ ANSSI 가 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에서 �
 
 이 시각은 조사 작업이 이 항목을 쓴 때입니다. 드라이버를 설치한 때보다 늦습니다. 둘 사이는 작업이 도는 간격만큼 벌어질 수 있습니다.
 
-ANSSI 는 1709 이후 조사 작업이 돌 때마다 `InventoryApplication` 의 항목을 모두 다시 쓴다고 적습니다. 드라이버 항목도 그런지는 따로 적지 않았습니다. 여러 드라이버 키의 시각이 몇 초 안에 몰려 있으면 한꺼번에 다시 쓴 것으로 봅니다. 이런 시각은 드라이버 하나하나의 시각으로 쓰지 않습니다. 키 시각의 성질은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
+ANSSI 는 1709 이후 조사 작업이 돌 때마다 `InventoryApplication` 의 항목을 모두 다시 쓴다고 적습니다. 드라이버 항목도 그런지는 따로 적지 않았습니다. 여러 드라이버 키의 시각이 몇 초 안에 몰려 있으면 한꺼번에 다시 쓴 것으로 봅니다. 이런 시각은 드라이버 하나하나의 시각으로 쓰지 않습니다. 키 시각의 성질은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
 ### DriverTimeStamp
 
@@ -163,30 +163,30 @@ Microsoft 문서는 이 값을 "드라이버 파일 시각의 하위 32비트" �
 
 ### DriverLastWriteTime
 
-이 값은 날짜와 시각을 적은 문자열입니다. 공개 파서 AmcacheParser 는 이 문자열을 날짜로 읽고 UTC 로 다룹니다. 이 문자열의 시간대를 밝힌 공식 문서는 없습니다. 그래서 검체마다 [$MFT](/02-artifacts/filesystem/mft.md)의 파일 수정 시각과 한 번 맞춰 보고, 보고서에 확인 범위를 적습니다.
+이 값은 날짜와 시각을 적은 문자열입니다. 공개 파서 AmcacheParser 는 이 문자열을 날짜로 읽고 UTC 로 다룹니다. 이 문자열의 시간대를 밝힌 공식 문서는 없습니다. 그래서 검체마다 [$MFT](../../filesystem/mft.md)의 파일 수정 시각과 한 번 맞춰 보고, 보고서에 확인 범위를 적습니다.
 
-윈도 API 가 돌려주는 파일 수정 시각은 보통 $STANDARD_INFORMATION 의 값입니다. 그래서 이 값도 시각 조작 도구의 영향을 받을 수 있다고 봅니다([두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
+윈도 API 가 돌려주는 파일 수정 시각은 보통 $STANDARD_INFORMATION 의 값입니다. 그래서 이 값도 시각 조작 도구의 영향을 받을 수 있다고 봅니다([두 벌의 시각](../../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
 
 수정 시각이 빌드 시각보다 늦은 것은 정상입니다. 드라이버 파일은 빌드한 뒤에 복사되고 설치되기 때문입니다. 이것만으로 파일을 고쳤다고 보지 않습니다.
 
 ### 현지 시각으로 바꾸기
 
-UTC 값은 그 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md)으로 바꿉니다. 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)과 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+UTC 값은 그 PC 의 [시간대 설정](../../system-account/time-zone.md)으로 바꿉니다. 계산은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)과 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ## 함정과 한계
 
-1. **실행 증거로 씁니다.** 이 목록은 조사 결과입니다. AmCache 전체에 걸친 이 함정은 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md)에서 다룹니다.
-2. **키 시각을 설치 시각으로 씁니다.** 키 시각은 조사 작업이 쓴 때입니다. 설치 시각은 [장치 설치 로그](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md)나 [서비스 설치 이벤트](/02-artifacts/event-logs/7045-4697.md)에서 찾습니다.
+1. **실행 증거로 씁니다.** 이 목록은 조사 결과입니다. AmCache 전체에 걸친 이 함정은 [AmCache 해석 함정](sha1.md)에서 다룹니다.
+2. **키 시각을 설치 시각으로 씁니다.** 키 시각은 조사 작업이 쓴 때입니다. 설치 시각은 [장치 설치 로그](../../external-devices/usb-storage-artifacts/setupapi-dev-log.md)나 [서비스 설치 이벤트](../../event-logs/7045-4697.md)에서 찾습니다.
 3. **재현 가능한 빌드의 시각을 날짜로 읽습니다.** 위 시각 해석의 DriverTimeStamp 절을 봅니다.
 4. **`ImageSize` 를 파일 크기와 바로 비교합니다.** Microsoft 문서는 이 값을 파일 크기라고 적습니다. 그런데 ANSSI 가 `AEINV_AMI_WER` XML 에서 보인 예시 값 `0x0003D000` 은 4KB(0x1000)의 배수입니다. 이 모양은 PE 헤더의 `SizeOfImage`(메모리에 올렸을 때의 크기)와 닮았습니다. 파일 크기와 다르다고 곧바로 변조로 보지 않습니다.
-5. **`DriverCompany` 를 서명한 곳으로 읽습니다.** 회사 이름은 파일에 누구나 적을 수 있는 글자입니다. 서명자는 파일의 서명에서 확인합니다([실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md)).
+5. **`DriverCompany` 를 서명한 곳으로 읽습니다.** 회사 이름은 파일에 누구나 적을 수 있는 글자입니다. 서명자는 파일의 서명에서 확인합니다([실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md)).
 6. **조사 작업 사이에 들어왔다 나간 드라이버를 찾습니다.** 작업이 돌기 전에 드라이버를 올리고 지웠다면 이 목록에 남지 않을 수 있습니다. 목록에 없다고 드라이버가 없었다고 쓰지 않습니다.
 7. **도구마다 `DriverType` 을 다르게 보여 줍니다.** 10진(예: 262170)으로 보여 주는 도구도 있습니다. 비트를 읽을 때는 16진(0x4001A)으로 바꿉니다.
 
 ### 지우기와 조작
 
-- **드라이버 파일을 지웁니다.** Microsoft 문서에는 드라이버 목록 항목이 "더는 없다" 고 알리는 이벤트(`InventoryDriverBinaryRemove`)도 있습니다. 그래서 다음 조사 때 항목이 빠질 수 있습니다. 빠진 뒤에는 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](/01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
-- **`Amcache.hve` 를 지우거나 고칩니다.** 하이브 파일은 오프라인에서 고칠 수 있습니다. 파일을 지우거나 바꾼 흔적은 [$MFT](/02-artifacts/filesystem/mft.md)와 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)에 남을 수 있습니다.
+- **드라이버 파일을 지웁니다.** Microsoft 문서에는 드라이버 목록 항목이 "더는 없다" 고 알리는 이벤트(`InventoryDriverBinaryRemove`)도 있습니다. 그래서 다음 조사 때 항목이 빠질 수 있습니다. 빠진 뒤에는 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
+- **`Amcache.hve` 를 지우거나 고칩니다.** 하이브 파일은 오프라인에서 고칠 수 있습니다. 파일을 지우거나 바꾼 흔적은 [$MFT](../../filesystem/mft.md)와 [$UsnJrnl](../../filesystem/usnjrnl.md)에 남을 수 있습니다.
 - **기본 드라이버 이름을 흉내 냅니다.** 이름만 보지 않고 경로, SHA-1, `DriverInBox`, `DriverSigned` 를 함께 봅니다.
 - **PE 헤더의 시각을 고칩니다.** `DriverTimeStamp` 도 고친 값을 따릅니다. 파일 시스템 시각과 다른 기록의 시각을 함께 봅니다.
 
@@ -194,7 +194,7 @@ UTC 값은 그 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.
 
 ### 헥스로 한 번 — 드라이버 파일의 PE 헤더와 맞춰 보기
 
-하이브 안의 키와 값을 헥스로 따라가는 법은 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 드라이버 파일이 남아 있을 때 `DriverTimeStamp`·`ImageSize`·`DriverCheckSum` 에 대응하는 칸을 파일에서 직접 찾습니다.
+하이브 안의 키와 값을 헥스로 따라가는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 드라이버 파일이 남아 있을 때 `DriverTimeStamp`·`ImageSize`·`DriverCheckSum` 에 대응하는 칸을 파일에서 직접 찾습니다.
 
 Microsoft PE 형식 문서에 따른 위치입니다.
 
@@ -239,25 +239,25 @@ AmcacheParser, Registry Explorer 같은 공개 도구로 이 키를 볼 수 있�
 - AmcacheParser 소스는 `DriverId` 의 앞 네 글자(`0000`)를 떼고 보여 줍니다. 다른 도구 결과와 비교할 때 이 차이를 맞춥니다.
 - 같은 소스는 `DriverLastWriteTime` 문자열을 UTC 로 다룹니다. `DriverTimeStamp` 는 1970년부터 센 초로 바꾸고, 0 이면 비워 둡니다.
 - 도구가 그 라이브러리 형식을 아는지 확인합니다. 1607 형식처럼 키 이름이 해시인 파일도 읽는지 봅니다.
-- 항목 한두 개는 레지스트리 뷰어로 연 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 항목 한두 개는 레지스트리 뷰어로 연 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [서비스·드라이버 (Services·Drivers)](/02-artifacts/persistence/services-drivers.md) | `Service` 값의 서비스가 SYSTEM 하이브에 있는지. 이미지 경로와 시작 방식 |
-| [서비스 설치 (7045·4697)](/02-artifacts/event-logs/7045-4697.md) | 드라이버 서비스가 설치된 시각 |
-| [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) | Sysmon 설정에서 드라이버 로드(이벤트 6) 기록을 켰다면 로드 시각과 서명 정보 |
-| [장치 설치 로그 (setupapi.dev.log)](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md) | `Inf` 값의 INF 가 설치된 시각 |
-| [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) | 같은 `Inf`·`Service` 를 쓰는 장치 |
-| [설치 프로그램 항목 (InventoryApplication)](/02-artifacts/execution/amcache-hve/inventoryapplication.md) | `InventoryApplicationDriver` 의 `ProgramIds` 가 가리키는 프로그램 |
-| [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) | ANSSI 는 프로그램 설치와 함께 생긴 SYS 파일도 이 키에 오른다고 적습니다(1709 라이브러리) |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | `.sys` 파일이 생기고 지워진 시각 |
-| [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) | 파일이 남아 있으면 서명자와 버전 정보 |
-| [해시셋 대조](/03-techniques/analysis/hash-set-fuzzy-hash.md) | `DriverId` 의 SHA-1 이 LOLDrivers 같은 공개 취약 드라이버 목록에 있는지 |
-| [코드 주입·숨긴 프로세스 탐지](/03-techniques/analysis/memory-forensics/injection-rootkit.md) | 메모리 덤프가 있으면 실제로 올라와 있던 드라이버 |
+| [서비스·드라이버 (Services·Drivers)](../../persistence/services-drivers.md) | `Service` 값의 서비스가 SYSTEM 하이브에 있는지. 이미지 경로와 시작 방식 |
+| [서비스 설치 (7045·4697)](../../event-logs/7045-4697.md) | 드라이버 서비스가 설치된 시각 |
+| [Sysmon 로그](../../event-logs/sysmon/index.md) | Sysmon 설정에서 드라이버 로드(이벤트 6) 기록을 켰다면 로드 시각과 서명 정보 |
+| [장치 설치 로그 (setupapi.dev.log)](../../external-devices/usb-storage-artifacts/setupapi-dev-log.md) | `Inf` 값의 INF 가 설치된 시각 |
+| [장치 항목 (InventoryDevicePnp)](inventorydevicepnp.md) | 같은 `Inf`·`Service` 를 쓰는 장치 |
+| [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) | `InventoryApplicationDriver` 의 `ProgramIds` 가 가리키는 프로그램 |
+| [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) | ANSSI 는 프로그램 설치와 함께 생긴 SYS 파일도 이 키에 오른다고 적습니다(1709 라이브러리) |
+| [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | `.sys` 파일이 생기고 지워진 시각 |
+| [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md) | 파일이 남아 있으면 서명자와 버전 정보 |
+| [해시셋 대조](../../../03-techniques/analysis/hash-set-fuzzy-hash.md) | `DriverId` 의 SHA-1 이 LOLDrivers 같은 공개 취약 드라이버 목록에 있는지 |
+| [코드 주입·숨긴 프로세스 탐지](../../../03-techniques/analysis/memory-forensics/injection-rootkit.md) | 메모리 덤프가 있으면 실제로 올라와 있던 드라이버 |
 
-드라이버를 이용한 지속성과 보안 프로그램 무력화는 [악성코드 지속성 찾기](/04-scenarios/incident/persistence.md)와 [보안 프로그램을 끄거나 지웠나](/04-scenarios/activity/anti-forensics/defense-evasion.md)에서 흐름으로 다룹니다.
+드라이버를 이용한 지속성과 보안 프로그램 무력화는 [악성코드 지속성 찾기](../../../04-scenarios/incident/persistence.md)와 [보안 프로그램을 끄거나 지웠나](../../../04-scenarios/activity/anti-forensics/defense-evasion.md)에서 흐름으로 다룹니다.
 
 ## 실습
 

@@ -10,7 +10,7 @@ NirSoft 에 따르면 사용자가 새 프로그램을 쓰기 시작할 때 Wind
 - NirSoft 의 설명은 이렇습니다. 새 응용 프로그램을 쓰기 시작할 때마다 Windows 가 실행 파일의 버전 리소스에서 앱 이름을 꺼냅니다. 그리고 나중에 쓰려고 이 이름을 `MuiCache` 키에 저장합니다.
 - 항목을 지워도 그 프로그램을 다시 실행하면 항목이 다시 생긴다고 NirSoft 는 적습니다.
 - 사용자 하이브에 있으므로 계정마다 따로 남습니다.
-- 실행 파일의 버전 리소스는 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
+- 실행 파일의 버전 리소스는 [실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -24,7 +24,7 @@ NirSoft 에 따르면 사용자가 새 프로그램을 쓰기 시작할 때 Wind
 - 같은 PC 의 하이브 목록에서 `<SID>_Classes` 의 파일은 `C:\Users\<user>\AppData\Local\Microsoft\Windows\UsrClass.dat` 였습니다. 오프라인에서는 UsrClass.dat 를 열고 `Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로 들어갑니다. (확인 범위: Win11 25H2 한 대)
 - 같은 PC 에는 XP 용 `ShellNoRoam\MUICache` 키가 없었습니다. (확인 범위: Win11 25H2 한 대)
 
-하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -69,7 +69,7 @@ MuiCache
 - **몇 번 썼나.** 횟수 칸이 없습니다.
 - **실행했나, 보기만 했나.** 이 캐시가 실행의 증거인지, 탐색기에서 파일을 보기만 해도 생기는지는 이번에 연 자료로 확인하지 못했습니다. "실행했다" 고 쓰려면 다른 실행 흔적으로 받칩니다.
 - **지금 그 경로의 파일이 그때와 같은 파일인가.** 경로와 이름만 남고 해시는 없습니다.
-- **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 보고서에는 "이 계정의 MuiCache 에 이 경로의 앱 이름 값이 있다" 처럼 씁니다. 시각을 붙여야 하면 다른 아티팩트의 시각을 근거와 함께 따로 적습니다.
 
@@ -78,7 +78,7 @@ MuiCache
 - 값에는 시각이 없습니다.
 - 키의 마지막 기록 시각 (LastWrite) 이 하나 있습니다. 이 시각은 키 안의 어떤 값이 마지막으로 바뀐 때를 말할 뿐, 어느 값인지는 말하지 않습니다.
 - 값이 놓인 순서로 쓴 순서를 짐작하는 근거는 이번에 연 자료에 없습니다. 순서로 시간 순서를 단정하지 않습니다.
-- 시각이 필요하면 같은 경로를 [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md), [UserAssist](/02-artifacts/execution/userassist.md), [프리페치](/02-artifacts/execution/prefetch/index.md) 에서 찾습니다.
+- 시각이 필요하면 같은 경로를 [BAM·DAM](background-activity-moderator.md), [UserAssist](userassist.md), [프리페치](prefetch/index.md) 에서 찾습니다.
 
 ## 함정과 한계
 
@@ -86,7 +86,7 @@ MuiCache
 - **앱 이름이 파일의 FileDescription 과 다를 수 있습니다.** 현지화된 이름이 들어가거나, 파일 이름이 대신 들어갈 수 있습니다. 앱 이름으로 파일을 찾을 때는 경로를 기준으로 삼습니다.
 - **.exe 만 있지 않습니다.** Windows 11 PC 한 대에는 .dll·.bat 경로도 있었습니다. (확인 범위: Win11 25H2 한 대)
 - **XP 와 Vista 이후의 경로가 다릅니다.** 검체 버전에 맞는 경로를 봅니다.
-- **항목은 지울 수 있습니다.** 다만 NirSoft 에 따르면 다시 실행하면 다시 생깁니다. 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+- **항목은 지울 수 있습니다.** 다만 NirSoft 에 따르면 다시 실행하면 다시 생깁니다. 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 - **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 함께 수집합니다.
 
 ## 직접 분석해 보기
@@ -113,7 +113,7 @@ D0 D0 C9 C0 30 AE                                  탐 색 기
 1. REG_SZ 문자열은 UTF-16LE 입니다. 한 글자가 2바이트입니다.
 2. `57 00` 은 U+0057, 곧 'W' 입니다.
 3. `D0 D0` 은 U+D0D0 '탐', `C9 C0` 은 U+C0C9 '색', `30 AE` 는 U+AE30 '기' 입니다.
-4. 한글도 UTF-16LE 로 그대로 들어갑니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+4. 한글도 UTF-16LE 로 그대로 들어갑니다. 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -128,16 +128,16 @@ D0 D0 C9 C0 30 AE                                  탐 색 기
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 실행 파일 메타데이터 | 앱 이름이 파일의 버전 정보와 맞는지 봅니다 | [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) |
-| BAM | 같은 경로의 최근 실행 시각을 봅니다 | [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| UserAssist | 같은 계정이 탐색기로 띄운 횟수와 마지막 실행 시각을 봅니다 | [UserAssist](/02-artifacts/execution/userassist.md) |
-| 심캐시 | 같은 경로의 파일이 시스템에 있었는지 봅니다 | [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md) |
-| 프리페치 | 실행 횟수와 실행 시각을 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| AmCache | 같은 경로의 실행 파일 기록이 있는지 봅니다 | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| 설치 프로그램 | 지금은 없는 프로그램이 설치 목록에 있었는지 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 사용자 프로필 목록 | 하이브가 어느 계정의 것인지 확인합니다 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
+| 실행 파일 메타데이터 | 앱 이름이 파일의 버전 정보와 맞는지 봅니다 | [실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md) |
+| BAM | 같은 경로의 최근 실행 시각을 봅니다 | [BAM·DAM](background-activity-moderator.md) |
+| UserAssist | 같은 계정이 탐색기로 띄운 횟수와 마지막 실행 시각을 봅니다 | [UserAssist](userassist.md) |
+| 심캐시 | 같은 경로의 파일이 시스템에 있었는지 봅니다 | [심캐시](shimcache-appcompatcache.md) |
+| 프리페치 | 실행 횟수와 실행 시각을 봅니다 | [프리페치](prefetch/index.md) |
+| AmCache | 같은 경로의 실행 파일 기록이 있는지 봅니다 | [AmCache](amcache-hve/index.md) |
+| 설치 프로그램 | 지금은 없는 프로그램이 설치 목록에 있었는지 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
+| 사용자 프로필 목록 | 하이브가 어느 계정의 것인지 확인합니다 | [사용자 프로필 목록](../system-account/profilelist.md) |
 
-실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에 있습니다.
+실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에 있습니다.
 
 ## 실습
 

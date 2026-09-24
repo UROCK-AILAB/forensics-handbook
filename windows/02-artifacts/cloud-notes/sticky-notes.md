@@ -25,13 +25,13 @@
 - 옛 파일의 폴더 이름 철자가 자료마다 다릅니다. KAPE 대상 파일은 공백 없는 `StickyNotes` 를, 한 포렌식 블로그의 예시는 공백 있는 `Sticky Notes` 를 씁니다. 검체에서 두 이름을 모두 찾습니다.
 - KAPE 대상 파일은 `Microsoft.MicrosoftStickyNotes*\LocalState\` 아래를 `plum.sqlite*` 로 모읍니다. 그래서 `-wal`·`-shm` 까지 함께 들어옵니다.
 - KAPE 대상 파일은 옛 파일을 공백 없는 `StickyNotes` 폴더에서만 찾습니다. `Sticky Notes` 폴더는 따로 모읍니다.
-- OneNote 앱 안에 들어간 새 스티커 메모가 어디에 저장되는지는 확인하지 못했습니다. [원노트](/02-artifacts/cloud-notes/onenote.md) 쪽도 함께 봅니다.
+- OneNote 앱 안에 들어간 새 스티커 메모가 어디에 저장되는지는 확인하지 못했습니다. [원노트](onenote.md) 쪽도 함께 봅니다.
 
 ### 패키지 폴더 (관찰)
 
 - 관찰한 PC 에는 패키지 `Microsoft.MicrosoftStickyNotes` 6.1.4.0 이 깔려 있었습니다.
 - 패키지 폴더 안에는 `AC`, `AppData`, `LocalCache`, `LocalState`, `RoamingState`, `Settings`, `SystemAppData`, `TempState` 가 있었습니다.
-- `Settings` 에는 `settings.dat`, `settings.dat.LOG1`, `settings.dat.LOG2` 가 있었습니다. 이 폴더의 구조는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에 있습니다.
+- `Settings` 에는 `settings.dat`, `settings.dat.LOG1`, `settings.dat.LOG2` 가 있었습니다. 이 폴더의 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에 있습니다.
 - 앱을 쓴 적이 없어 `LocalState` 는 비어 있었습니다.
 
 ## 구조
@@ -40,7 +40,7 @@
 
 - SQLECmd 맵은 `Note`, `Media`, `Insight`, `User`, `Stroke` 다섯 표가 모두 있으면 스티커 메모 DB 로 판정합니다.
 - 메모는 `Note` 표에 들어갑니다.
-- SQLite 파일 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- SQLite 파일 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ### Note 표
 
@@ -82,7 +82,7 @@
 ### 저널과 곁 파일
 
 - 설치 파일에 `PRAGMA journal_mode=WAL` 이 있습니다 (설치 파일 문자열). 그래서 `plum.sqlite-wal`·`plum.sqlite-shm` 이 생깁니다.
-- 아직 본 파일에 반영되지 않은 변경이 `-wal` 에 남아 있을 수 있습니다. 뜻과 읽는 법은 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
+- 아직 본 파일에 반영되지 않은 변경이 `-wal` 에 남아 있을 수 있습니다. 뜻과 읽는 법은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
 
 ### 본문(Text)
 
@@ -92,7 +92,7 @@
 ### 옛 형식(.snt)과 업그레이드
 
 - 한 포렌식 블로그는 옛 앱에서 "Note Text" 와 "Modification Date" 두 가지를 뽑습니다.
-- `.snt` 의 내부 형식은 이 글의 자료로 확인하지 못했습니다. 파일 머리가 OLE 복합 파일 머리이면 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 방법으로 엽니다.
+- `.snt` 의 내부 형식은 이 글의 자료로 확인하지 못했습니다. 파일 머리가 OLE 복합 파일 머리이면 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 방법으로 엽니다.
 - 업그레이드 모듈 `Microsoft.Notes.Upgrade.dll` 에 `Legacy`, `ThresholdNotes.snt`, `Version`, `Metafile`, `_text.rtf`, `_ink.bin` 문자열이 있습니다 (설치 파일 문자열).
 - 앱이 옛 메모를 옮겨 올 때 쓰는 이름으로 보입니다. 정확한 경로와 각 문자열의 뜻은 확인하지 못했습니다. 패키지 폴더에서 이 이름들을 찾아봅니다.
 
@@ -139,7 +139,7 @@ datetime((값 / 10000000) - 62135596800, 'unixepoch')
 | 638396640000000000 | 0x08DC0A5C9900C000 | 2024-01-01 00:00:00 |
 
 - 계산은 이렇게 합니다. 638396640000000000 ÷ 10000000 = 63839664000 초이고, 여기서 62135596800 을 빼면 1704067200 초입니다. 이 값은 1970-01-01 00:00 부터 센 Unix 초로 2024-01-01 00:00:00 입니다.
-- 다른 시각 형식과의 관계는 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 다른 시각 형식과의 관계는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
@@ -149,7 +149,7 @@ datetime((값 / 10000000) - 62135596800, 'unixepoch')
 - **칸 목록이 판마다 다릅니다.** 맵과 설치 파일의 칸이 서로 다릅니다.
 - **`Theme` 값을 사용자의 선택으로 단정하지 않습니다.**
 - **OneNote 안의 새 스티커 메모는 이 글의 범위 밖입니다.** 저장 위치를 확인하지 못했습니다.
-- **지운 메모가 파일 빈 공간에 남을 수 있습니다.** `DeletedAt` 행이 없어도 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 방법으로 찾아봅니다.
+- **지운 메모가 파일 빈 공간에 남을 수 있습니다.** `DeletedAt` 행이 없어도 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 방법으로 찾아봅니다.
 
 ## 직접 분석해 보기
 
@@ -158,7 +158,7 @@ datetime((값 / 10000000) - 62135596800, 'unixepoch')
 1. `LocalState` 폴더의 `plum.sqlite`, `plum.sqlite-wal`, `plum.sqlite-shm` 을 함께 사본으로 뜹니다.
 2. `plum.sqlite` 를 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다.
 3. 조사 대상 메모의 문구 하나를 검색합니다. `plum.sqlite` 와 `-wal` 에서 각각 찾아, 어느 쪽에 어떤 판이 있는지 적습니다.
-4. 시각 값을 위 식으로 바꿉니다. 예를 들어 16진 `08 DC 0A 5C 99 00 C0 00` 여덟 바이트를 정수로 읽으면 638396640000000000 이고, 2024-01-01 00:00:00 이 됩니다. 이 바이트는 식으로 만든 예시이며 검체 값이 아닙니다. SQLite 레코드 안에서 정수가 어떤 바이트 순서로 놓이는지는 [파일·페이지 구조](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에 있습니다.
+4. 시각 값을 위 식으로 바꿉니다. 예를 들어 16진 `08 DC 0A 5C 99 00 C0 00` 여덟 바이트를 정수로 읽으면 638396640000000000 이고, 2024-01-01 00:00:00 이 됩니다. 이 바이트는 식으로 만든 예시이며 검체 값이 아닙니다. SQLite 레코드 안에서 정수가 어떤 바이트 순서로 놓이는지는 [파일·페이지 구조](../../01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -180,12 +180,12 @@ FROM Note;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 스토어 앱 설치 목록 | 패키지가 설치·갱신된 때를 봅니다 | [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) |
-| UWP 앱 데이터 구조 | 패키지 폴더와 `settings.dat` 를 읽습니다 | [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) |
-| 원노트 | OneNote 안 새 스티커 메모 쪽 흔적을 봅니다 | [원노트](/02-artifacts/cloud-notes/onenote.md) |
-| USN 변경 저널 | `plum.sqlite`·`-wal` 이 언제 바뀌었는지 봅니다 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 섀도 복사본 활용 | 예전 시점의 `plum.sqlite` 에서 지금은 없는 메모를 찾습니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 시간대 설정 | 시각 값을 현지 시각과 맞출 때 봅니다 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
+| 스토어 앱 설치 목록 | 패키지가 설치·갱신된 때를 봅니다 | [스토어 앱 설치 목록](../system-account/appx-staterepository.md) |
+| UWP 앱 데이터 구조 | 패키지 폴더와 `settings.dat` 를 읽습니다 | [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) |
+| 원노트 | OneNote 안 새 스티커 메모 쪽 흔적을 봅니다 | [원노트](onenote.md) |
+| USN 변경 저널 | `plum.sqlite`·`-wal` 이 언제 바뀌었는지 봅니다 | [USN 변경 저널](../filesystem/usnjrnl.md) |
+| 섀도 복사본 활용 | 예전 시점의 `plum.sqlite` 에서 지금은 없는 메모를 찾습니다 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 시간대 설정 | 시각 값을 현지 시각과 맞출 때 봅니다 | [시간대 설정](../system-account/time-zone.md) |
 
 ## 실습
 

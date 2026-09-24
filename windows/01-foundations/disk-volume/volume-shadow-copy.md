@@ -12,14 +12,14 @@
 
 | 쓰는 곳 | 섀도 복사본에서 찾는 것 |
 |---|---|
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 섀도 복사본을 찾아 붙이고 지금 볼륨과 비교하는 절차 |
-| [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) | 예전 시점의 하이브 파일 |
-| [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) | 예전 시점의 데이터베이스 파일 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 예전 시점의 MFT 레코드 |
-| [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) | 지금은 지운 파일이 스냅숏 시점에 있던 모습 |
-| [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) | VSS 볼륨 헤더가 NTFS 부트 영역 안에 있습니다. |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 섀도 복사본을 찾아 붙이고 지금 볼륨과 비교하는 절차 |
+| [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) | 예전 시점의 하이브 파일 |
+| [ESE 데이터베이스](../database-log-formats/extensible-storage-engine/index.md) | 예전 시점의 데이터베이스 파일 |
+| [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) | 예전 시점의 MFT 레코드 |
+| [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) | 지금은 지운 파일이 스냅숏 시점에 있던 모습 |
+| [NTFS 구조](ntfs/index.md) | VSS 볼륨 헤더가 NTFS 부트 영역 안에 있습니다. |
 
-- 섀도 복사본을 찾고 붙이는 절차는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다. 이 페이지는 디스크 위의 저장 구조만 봅니다.
+- 섀도 복사본을 찾고 붙이는 절차는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다. 이 페이지는 디스크 위의 저장 구조만 봅니다.
 
 ## 구조
 
@@ -28,7 +28,7 @@
 - 이 페이지는 libvshadow 문서를 따릅니다. 이 문서는 "Microsoft Software Shadow Copy provider 1.0" (GUID b5946137-7b9f-4925-af80-51abd60b20d5) 을 다룹니다.
 - 이 공급자는 16 KiB 블록 단위로 저장합니다.
 - 여러 볼륨을 같은 순간에 찍은 섀도 복사본은 한 세트 (Set) 로 묶을 수 있습니다.
-- 날짜·시각은 UTC 기준 FILETIME 입니다. 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에 있습니다.
+- 날짜·시각은 UTC 기준 FILETIME 입니다. 형식은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md)에 있습니다.
 - 문자열은 BOM 없는 UTF-16LE 입니다.
 - 여러 바이트 정수는 리틀 엔디언 (little-endian) 입니다.
 
@@ -55,7 +55,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 
 - 볼륨 헤더 자리는 NTFS 볼륨 헤더 ($Boot) 영역의 일부입니다.
 - 저장소 파일 이름의 앞 GUID 는 시각과 MAC 주소로 만든 GUID 입니다. 이 GUID 는 카탈로그 항목의 저장소 GUID 와 같습니다.
-- GUID 를 바이트에서 문자열로 바꾸는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에 있습니다.
+- GUID 를 바이트에서 문자열로 바꾸는 법은 [윈도 식별자 형식](../value-decoding/sid-guid-clsid-known-folder-id.md)에 있습니다.
 
 ### 볼륨 헤더
 
@@ -164,7 +164,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 
 ### 섀도 복사본이 있는지 보기
 
-1. 볼륨 시작에서 0x1E00 바이트 위치를 엽니다. 디스크 전체 이미지라면 [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md)에서 구한 볼륨 시작 위치를 먼저 더합니다.
+1. 볼륨 시작에서 0x1E00 바이트 위치를 엽니다. 디스크 전체 이미지라면 [파티션 구조](mbr-gpt.md)에서 구한 볼륨 시작 위치를 먼저 더합니다.
 2. 오프셋 0 의 GUID 가 VSS 식별자 3808876b-c176-4e48-b7ae-04046e6cc752 인지 확인합니다.
 3. 판 값으로 Windows 세대를 짐작합니다. 1 은 Vista·7, 2 는 8 입니다.
 4. 카탈로그 위치 (48) 를 읽습니다. 0 이면 스냅숏이 없습니다.
@@ -214,7 +214,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 3. 보려는 스냅숏의 저장소를 마지막으로 덮습니다.
 4. 어느 저장소에도 설명자가 없는 블록은 지금 볼륨에서 읽습니다.
 5. 다시 만든 볼륨은 섹터 크기의 배수로만 읽습니다.
-6. 다시 만든 볼륨을 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md)대로 읽어 예전 판 파일을 꺼냅니다.
+6. 다시 만든 볼륨을 [NTFS 구조](ntfs/index.md)대로 읽어 예전 판 파일을 꺼냅니다.
 
 ## 포렌식에서 중요한 점
 
@@ -222,7 +222,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 
 - 스냅숏 뒤에 덮어쓴 블록의 예전 내용은 저장소에 남습니다.
 - 그래서 지금 볼륨에서 바뀌거나 지운 파일도 스냅숏 시점의 모습으로 다시 볼 수 있습니다.
-- 여러 스냅숏을 차례로 다시 만들면 같은 파일이 시점마다 어떻게 바뀌었는지 비교할 수 있습니다. 비교 절차는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)에 있습니다.
+- 여러 스냅숏을 차례로 다시 만들면 같은 파일이 시점마다 어떻게 바뀌었는지 비교할 수 있습니다. 비교 절차는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에 있습니다.
 
 ### 만든 시각과 순서
 
@@ -241,7 +241,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 - Windows 8·Server 2012 부터 범위 스냅숏 (Scoped Snapshot) 이 있습니다.
 - 범위 스냅숏은 업데이트에 관계된 파일만 쓰기 시 복사를 합니다.
 - 그래서 스냅숏 안의 다른 파일 내용이 그 시점의 내용과 다를 수 있습니다.
-- 설정 자리는 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore` 의 `ScopeSnapshots` 값입니다. 오프라인 이미지에서는 SOFTWARE 하이브에서 읽습니다([레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)).
+- 설정 자리는 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore` 의 `ScopeSnapshots` 값입니다. 오프라인 이미지에서는 SOFTWARE 하이브에서 읽습니다([레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md)).
 
 ### 쓰지 않는 블록과 손상
 
@@ -252,7 +252,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 ### 섀도 복사본이 없을 때
 
 - 카탈로그 위치가 0 이면 VSS 는 켜져 있지만 스냅숏이 없는 상태입니다.
-- 스냅숏이 없다는 사실만으로 누가 지웠다고 쓰지 않습니다. 지운 흔적은 다른 기록으로 확인합니다([증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)).
+- 스냅숏이 없다는 사실만으로 누가 지웠다고 쓰지 않습니다. 지운 흔적은 다른 기록으로 확인합니다([증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)).
 
 ## 함정
 
@@ -271,8 +271,8 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 
 - 헥스 편집기로 볼륨 헤더 (0x1E00), 카탈로그, 블록 목록을 직접 따라갈 수 있습니다.
 - libyal 의 libvshadow 는 이 페이지가 참고한 VSS 형식 문서를 공개한 오픈 소스 라이브러리입니다. 저장소가 쓰지 않는 블록을 0 으로 채운다는 점을 알고 씁니다.
-- 실행 중인 Windows 에서 섀도 복사본을 찾고 붙이는 방법은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다. 조사 대상 시스템에서 명령을 실행하면 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 원칙에 따라 기록을 남깁니다.
-- 두 도구의 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다.
+- 실행 중인 Windows 에서 섀도 복사본을 찾고 붙이는 방법은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다. 조사 대상 시스템에서 명령을 실행하면 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 원칙에 따라 기록을 남깁니다.
+- 두 도구의 결과가 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다.
 
 ## 참고 문헌
 

@@ -13,7 +13,7 @@
 ## 위치와 버전별 차이
 
 - 디스크 캐시 버전 2(`cache2`)는 Firefox 32 부터입니다. 그 전 버전 1 은 같은 로컬 프로필 폴더 아래 `Cache` 폴더를 썼습니다.
-- 캐시는 프로필 로컬 폴더 쪽에 있습니다. 본 폴더와 로컬 폴더의 차이는 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 캐시는 프로필 로컬 폴더 쪽에 있습니다. 본 폴더와 로컬 폴더의 차이는 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 
 | Windows 판 | `cache2` 폴더 경로 예 |
 |---|---|
@@ -91,14 +91,14 @@
 - 메타데이터 헤더의 시각 칸은 32비트 정수입니다. 헤더는 빅엔디언으로 저장됩니다.
 - `mLastFetched`·`mLastModified`·`mExpirationTime` 은 1970년 1월 1일 (UTC) 부터 센 초입니다. 캐시 인터페이스 정의(nsICacheEntry.idl)의 설명에서 확인했습니다.
 - `mLastFetched` 는 항목을 열 때, `mLastModified` 는 항목을 고칠 때 바뀝니다. 서버 쪽 수정 시각은 응답 헤더에서 따로 봅니다.
-- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **암호화된 항목이 있습니다.** `kCacheEntryIsEncrypted` 플래그가 선 항목은 메타데이터와 데이터가 암호화되어 있습니다. 헥스로 바로 읽히지 않습니다.
 - **`mLastModified` 를 서버 수정 시각으로 읽지 않습니다.** 이 값은 캐시 항목을 고친 시각입니다.
 - **캐시는 용량을 넘으면 항목을 지웁니다.** 어떤 항목부터 지우는지는 이번 조사에서 확인하지 못했습니다. 캐시가 없다고 받지 않은 것은 아닙니다.
-- **지운 항목은 되살리기 어렵습니다.** 옛 캐시를 찾으려면 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
+- **지운 항목은 되살리기 어렵습니다.** 옛 캐시를 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
 - **버전 1 캐시일 수 있습니다.** Firefox 32 전 검체는 `Cache` 폴더를 씁니다. `cache2` 만 찾고 끝내지 않습니다.
 
 ## 직접 분석해 보기
@@ -130,12 +130,12 @@
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문·다운로드·즐겨찾기 | 캐시에 남은 자원의 주소를 방문 기록과 맞춰 봅니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| 쿠키 | 같은 도메인의 쿠키가 언제 생겼는지 봅니다 | [쿠키 (cookies.sqlite)](/02-artifacts/browsers/firefox/cookies-sqlite.md) |
-| 세션 복원 | 캐시를 남긴 시각에 열려 있던 탭을 봅니다 | [세션 복원 (sessionstore.jsonlz4)](/02-artifacts/browsers/firefox/sessionstore-jsonlz4.md) |
-| 다른 브라우저 캐시 | 같은 자원을 다른 브라우저로 받았는지 봅니다 | [크롬 계열 캐시](/02-artifacts/browsers/chrome-edge-whale/cache.md) |
+| 방문·다운로드·즐겨찾기 | 캐시에 남은 자원의 주소를 방문 기록과 맞춰 봅니다 | [places.sqlite](places-sqlite.md) |
+| 쿠키 | 같은 도메인의 쿠키가 언제 생겼는지 봅니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
+| 세션 복원 | 캐시를 남긴 시각에 열려 있던 탭을 봅니다 | [세션 복원 (sessionstore.jsonlz4)](sessionstore-jsonlz4.md) |
+| 다른 브라우저 캐시 | 같은 자원을 다른 브라우저로 받았는지 봅니다 | [크롬 계열 캐시](../chrome-edge-whale/cache.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

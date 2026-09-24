@@ -1,6 +1,6 @@
 # 위치와 형식 (Windows.edb·Windows.db)
 
-> 위치: [윈도 검색 색인 DB (Windows Search)](/02-artifacts/file-folder-usage/windows-search/index.md) > 위치와 형식
+> 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 위치와 형식
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@
   - 속성과 본문을 담은 색인
   - 글자로 찾는 데 쓰는 역색인 (Inverted Index)
 - DB 파일 안의 표 이름은 Windows 버전마다 다릅니다.
-- 파일마다 남는 속성은 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에서, 수집기가 남기는 기록은 [수집 기록](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) 에서 다룹니다.
+- 파일마다 남는 속성은 [파일 속성 되살리기](propertystore.md) 에서, 수집기가 남기는 기록은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -29,7 +29,7 @@
 - 폴더는 `DataDirectory` 값이 정합니다. 그래서 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다.
 - 한 PC 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 였습니다. DB 파일은 그 아래 `Applications\Windows\` 에 있었습니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대)
 - 같은 키의 `SetupCompletedSuccessfully` 값은 그 PC 에서 1 이었습니다. 이 값의 뜻을 설명한 자료는 확인하지 못했습니다.
-- 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ### Windows 버전별 본 DB
 
@@ -60,7 +60,7 @@ libyal 문서(XP~8 기준)가 적은 파일입니다.
 
 - Windows 10 이후의 윈도 검색은 트랜잭션 로그를 `.jtx`, 체크포인트를 `.jcp` 확장자로 씁니다. 예전 확장자는 `.log`·`.chk` 였습니다. (현장 관찰)
 - 로그로 복구할 때는 이 이름 규칙을 맞춰야 도구가 로그를 찾습니다. (현장 관찰)
-- 트랜잭션 로그와 체크포인트의 역할은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+- 트랜잭션 로그와 체크포인트의 역할은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ### SQLite 판 폴더의 파일
 
@@ -71,12 +71,12 @@ libyal 문서(XP~8 기준)가 적은 파일입니다.
 | `Windows.db`, `Windows.db-wal`, `Windows.db-shm` | 파일 속성 DB 와 그 `-wal`·`-shm` 파일 |
 | `Windows-gather.db`, `Windows-gather.db-wal`, `Windows-gather.db-shm` | 수집 기록 DB 와 그 `-wal`·`-shm` 파일 |
 | `Windows-usn.db`, `Windows-usn.db-wal`, `Windows-usn.db-shm` | 세 번째 DB 와 그 `-wal`·`-shm` 파일 |
-| `GatherLogs\SystemIndex\` | 수집 로그 폴더. [수집 기록](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) 에서 다룹니다. |
+| `GatherLogs\SystemIndex\` | 수집 로그 폴더. [수집 기록](systemindex-gthr.md) 에서 다룹니다. |
 | `Projects\SystemIndex\PropMap\PropMap.db` | 첫 16바이트가 `AesGcm1 SQLite3` 였습니다 |
 | `Projects\SystemIndex\SecStore\SecStore.db` | 첫 16바이트가 `AesGcm1 SQLite3` 였습니다 |
 
 - `-wal` 파일에는 아직 본 DB 에 쓰지 않은 변경이 들어 있습니다. 그래서 `.db` 와 함께 `-wal`·`-shm` 도 모읍니다.
-- WAL 파일의 헤더와 지운 파일 흔적은 [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) 에서 다룹니다.
+- WAL 파일의 헤더와 지운 파일 흔적은 [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) 에서 다룹니다.
 
 ### 표 목록 — ESE 판 (libyal, XP~8)
 
@@ -92,9 +92,9 @@ libyal 문서(XP~8 기준)가 적은 파일입니다.
 | `SystemIndex_1`, `SystemIndex_1_Properties`, `SystemIndex_1_DATA_#`, `SystemIndex_1_OCC_#` | Windows 8 의 역색인 관련 표 |
 | `SystemIndex_Gthr_S`, `SystemIndex_GthrPth_S`, `SystemIndex_MaxDoc_S`, `SystemIndex_DeletedDocIds_S` | Vista 에만 있는 사본 표입니다. 이름 끝에 `_S` 가 붙습니다. |
 
-- 속성 표의 칸은 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에서 다룹니다.
-- 수집 기록 표의 칸은 [수집 기록](/02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md) 에서 다룹니다.
-- 지운 문서 번호 표는 [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) 에서 다룹니다.
+- 속성 표의 칸은 [파일 속성 되살리기](propertystore.md) 에서 다룹니다.
+- 수집 기록 표의 칸은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
+- 지운 문서 번호 표는 [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) 에서 다룹니다.
 
 ### 표 목록 — SQLite 판 (Windows 11)
 
@@ -116,8 +116,8 @@ libyal 문서는 이진 값의 바이트 순서가 Windows 버전마다 다르�
 | 7 | 빅엔디언 | 빅엔디언 |
 | 8 | 칸마다 다릅니다 | 칸마다 다릅니다 |
 
-- FILETIME 은 1601-01-01 부터 센 100나노초 단위 값입니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 빅엔디언 FILETIME 을 실제로 풀어 보는 예는 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 의 헥스 예시에 있습니다.
+- FILETIME 은 1601-01-01 부터 센 100나노초 단위 값입니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 빅엔디언 FILETIME 을 실제로 풀어 보는 예는 [파일 속성 되살리기](propertystore.md) 의 헥스 예시에 있습니다.
 
 ### `AesGcm1 SQLite3` 헤더
 
@@ -135,14 +135,14 @@ Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn
 - 이 파일을 `sqlite3` 로 열면 "file is not a database" 오류가 났습니다.
 - 48바이트 예약 공간에 암호 검증값(nonce·tag)이 들어 있는지는 확인하지 못했습니다.
 - 암호 키가 어디에 있는지도 확인하지 못했습니다.
-- 보통 SQLite 헤더는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 보통 SQLite 헤더는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
 - `DataDirectory` 값은 그 PC 가 색인 DB 를 둔 폴더를 알려 줍니다.
-- DB 형식으로 어느 세대의 윈도 검색이 만든 DB 인지 가늠할 수 있습니다. LevelBlue 글은 Windows 10 까지 ESE, Windows 11 은 SQLite 라고 적습니다. 빌드는 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 로 따로 확인합니다.
+- DB 형식으로 어느 세대의 윈도 검색이 만든 DB 인지 가늠할 수 있습니다. LevelBlue 글은 Windows 10 까지 ESE, Windows 11 은 SQLite 라고 적습니다. 빌드는 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 따로 확인합니다.
 - 폴더 안의 파일 목록은 무엇을 함께 모아야 하는지 알려 줍니다.
 
 **증명하지 못하는 것**
@@ -200,11 +200,11 @@ AesGcm1 SQLite3 헤더의 첫 32바이트 (관찰 값으로 만든 예시)
 
 ## 교차 검증
 
-- [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — Windows 버전과 빌드를 확인해 어느 형식을 기대할지 정합니다.
-- [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) — 비정상 종료 DB 와 로그 복구를 다룹니다.
-- [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) — 보통 SQLite 헤더와 WAL 구조를 다룹니다.
-- [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) — 열리지 않는 DB 를 기록하고 다루는 법입니다.
-- [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) · [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) — 켜져 있는 PC 에서 색인 폴더를 모을 때 봅니다.
+- [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) — Windows 버전과 빌드를 확인해 어느 형식을 기대할지 정합니다.
+- [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) — 비정상 종료 DB 와 로그 복구를 다룹니다.
+- [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) — 보통 SQLite 헤더와 WAL 구조를 다룹니다.
+- [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) — 열리지 않는 DB 를 기록하고 다루는 법입니다.
+- [증거 획득](../../../03-techniques/process-acquisition/evidence-acquisition/index.md) · [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) — 켜져 있는 PC 에서 색인 폴더를 모을 때 봅니다.
 
 ## 실습
 

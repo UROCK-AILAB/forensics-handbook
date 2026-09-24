@@ -115,7 +115,7 @@
 
 - 레코드마다 시각은 `<TimeCreated SystemTime>` 하나뿐입니다. 끝에 Z 가 붙은 UTC 값입니다.
 - 이 시각은 경고를 기록한 시각입니다. 대화상자를 닫은 시각은 남지 않습니다.
-- 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md)을 씁니다.
 
 ## 함정과 한계
 
@@ -129,7 +129,7 @@
 
 ### 지우기와 조작
 
-- **로그를 지웁니다.** 지운 기록은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)에서 찾습니다.
+- **로그를 지웁니다.** 지운 기록은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
 - 조작이 없어도 작은 순환 로그는 스스로 밀려납니다. 기록이 없는 기간은 "경고 없음" 이 아니라 "기록 없음" 으로 적습니다.
 
 ## 직접 분석해 보기
@@ -148,9 +148,9 @@
 2. 위 바이트 열을 찾습니다.
 3. 찾은 자리 뒤에서 추가 기능 식별 문자열과 문서 경로·URL 을 읽습니다.
 4. 파일 이름 조각도 같은 방법으로 찾습니다. 한글 파일 이름도 UTF-16LE 로 바꿔 찾습니다.
-5. 도구 결과에 없는 자리에서 나왔다면, [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 설명하는 구조로 그 자리가 레코드인지 확인합니다.
+5. 도구 결과에 없는 자리에서 나왔다면, [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 설명하는 구조로 그 자리가 레코드인지 확인합니다.
 
-인코딩 자체는 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+인코딩 자체는 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -170,21 +170,21 @@ Get-WinEvent -Path .\OAlerts.evtx -Oldest |
 ```
 
 - "Compositor Type" 레코드를 빼면 대화상자 경고와 추가 기능 기록만 남습니다.
-- EvtxECmd 맵 저장소에는 OAlerts 용 맵이 오피스 주 버전별로 있습니다. 맵은 첫 줄을 Program, 경고 문구를 Alert 로 뽑습니다. 도구 출력은 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- EvtxECmd 맵 저장소에는 OAlerts 용 맵이 오피스 주 버전별로 있습니다. 맵은 첫 줄을 Program, 경고 문구를 Alert 로 뽑습니다. 도구 출력은 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 기록 | 무엇을 맞춰 보나 | 링크 |
 |---|---|---|
-| 오피스 사용 흔적 | 같은 문서가 최근 파일 목록·신뢰 기록에 있는지 | [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) |
-| 바로가기 파일 | 같은 문서를 연 시각 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 점프리스트 | 같은 프로그램으로 연 문서 목록 | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 최근 문서 | 사용자별로 연 문서 | [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) |
-| 원드라이브 | "Activated App" 의 OneDrive URL 이 가리키는 파일 | [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) |
-| 설치 프로그램 | 오피스 빌드와 설치 기록 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 로그온 기록 | 그 시각에 로그온해 있던 사용자 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
+| 오피스 사용 흔적 | 같은 문서가 최근 파일 목록·신뢰 기록에 있는지 | [오피스 사용 흔적](../file-folder-usage/microsoft-office/index.md) |
+| 바로가기 파일 | 같은 문서를 연 시각 | [바로가기 파일](../file-folder-usage/lnk.md) |
+| 점프리스트 | 같은 프로그램으로 연 문서 목록 | [점프리스트](../file-folder-usage/jump-lists.md) |
+| 최근 문서 | 사용자별로 연 문서 | [최근 문서](../file-folder-usage/recentdocs.md) |
+| 원드라이브 | "Activated App" 의 OneDrive URL 이 가리키는 파일 | [원드라이브](../cloud-notes/onedrive/index.md) |
+| 설치 프로그램 | 오피스 빌드와 설치 기록 | [설치 프로그램](../system-account/uninstall.md) |
+| 로그온 기록 | 그 시각에 로그온해 있던 사용자 | [로그온·로그오프](logon-events/index.md) |
 
-합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md)와 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)에서 다룹니다.
+합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](../../04-scenarios/activity/file-access.md)와 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)에서 다룹니다.
 
 ## 실습
 

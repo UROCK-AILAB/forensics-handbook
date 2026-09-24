@@ -17,7 +17,7 @@ IE 4~9 는 방문 기록·캐시·쿠키·내려받기 기록을 같은 형식�
 | 5.2 | IE 5~9 |
 
 - IE 3 은 `mm256.dat`, `mm1024.dat` 라는 다른 파일을 썼습니다.
-- IE 10 부터는 이 기록을 ESE DB 하나에 둡니다. 새 형식은 [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) 에서 다룹니다.
+- IE 10 부터는 이 기록을 ESE DB 하나에 둡니다. 새 형식은 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -52,7 +52,7 @@ IE 4~9 는 방문 기록·캐시·쿠키·내려받기 기록을 같은 형식�
 
 - `MSHist01` 뒤의 `yyyymmddyyyymmdd` 는 시작일과 끝일입니다. 폴더 이름에 이 기록이 덮는 기간이 적혀 있습니다.
 - Vista·7 에는 `Temporary Internet Files\Low\Content.IE5` 아래에도 따로 `index.dat` 가 있습니다. 두 곳을 모두 수집합니다.
-- 캐시 폴더 안의 파일과 기록을 잇는 방법은 [쿠키·캐시 폴더 (INetCookies·INetCache)](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) 에서 다룹니다.
+- 캐시 폴더 안의 파일과 기록을 잇는 방법은 [쿠키·캐시 폴더 (INetCookies·INetCache)](inetcookies-inetcache.md) 에서 다룹니다.
 
 ### 요즘 Windows 에 남은 폴더
 
@@ -81,7 +81,7 @@ Windows 11 25H2 PC 에서 본 모습입니다. (확인 범위: Windows 11 25H2, 
 | 48~51 | 4 | 캐시 크기 한도 |
 | 56~59 | 4 | 현재 캐시 크기 |
 | 64~67 | 4 | 지울 수 없는 캐시 크기 |
-| 72~ | 가변 | 캐시 폴더 표 ([쿠키·캐시 폴더](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) 참고) |
+| 72~ | 가변 | 캐시 폴더 표 ([쿠키·캐시 폴더](inetcookies-inetcache.md) 참고) |
 
 ### 블록과 할당 비트맵
 
@@ -166,10 +166,10 @@ URL 레코드의 두 시각은 파일 종류마다 뜻이 다릅니다.
 | 내려받기 기록 | 내려받은 파일을 만든 시각 (UTC) | 비어 있음 |
 
 - 첫 번째 시각은 오프셋 16~23, 두 번째 시각은 오프셋 8~15 입니다. 순서가 뒤집혀 있으니 주의합니다.
-- 일간·주간 방문 기록의 두 번째 시각은 현지 시각입니다. UTC 로 바꾸려면 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 확인합니다.
+- 일간·주간 방문 기록의 두 번째 시각은 현지 시각입니다. UTC 로 바꾸려면 [시간대 설정](../../system-account/time-zone.md) 을 확인합니다.
 - 주간 기록의 첫 번째 시각은 방문 시각이 아닙니다. 그 index.dat 를 만든 날입니다.
 - 만료 시각은 4.7 판에서 FILETIME 이고, 5.2 판에서 FAT 날짜·시각입니다.
-- FILETIME 과 FAT 날짜·시각을 바꾸는 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- FILETIME 과 FAT 날짜·시각을 바꾸는 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -178,7 +178,7 @@ URL 레코드의 두 시각은 파일 종류마다 뜻이 다릅니다.
 - **해시 표 특수값을 레코드 위치로 읽지 않습니다.** `0x0badf00d`·`0xdeadbeef` 는 빈 칸입니다.
 - **폴더만 남은 경우가 있습니다.** 요즘 Windows 에서는 `History.IE5` 아래 폴더에 0바이트 `container.dat` 만 있을 수 있습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
 - **`Low` 폴더를 빠뜨리기 쉽습니다.** Vista·7 에서는 `Low\Content.IE5` 에도 따로 기록 파일이 있습니다.
-- **지운 레코드가 남을 수 있습니다.** `LEAK` 레코드와 비트맵에서 비어 있다고 표시된 블록에 옛 레코드가 남을 수 있습니다. 비어 있는 블록을 서명으로 훑는 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- **지운 레코드가 남을 수 있습니다.** `LEAK` 레코드와 비트맵에서 비어 있다고 표시된 블록에 옛 레코드가 남을 수 있습니다. 비어 있는 블록을 서명으로 훑는 방법은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -225,15 +225,15 @@ URL 레코드의 두 시각은 파일 종류마다 뜻이 다릅니다.
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 웹캐시 DB | 같은 PC 가 IE 10 이후로 바뀐 뒤의 기록을 봅니다 | [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) |
-| 쿠키·캐시 폴더 | URL 레코드가 가리키는 캐시 파일이 실제로 있는지 봅니다 | [쿠키·캐시 폴더](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) |
-| 주소창 입력 주소 | 방문 기록의 주소를 직접 입력했는지 봅니다 | [주소창 입력 주소](/02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) |
-| 저장 비밀번호 | 방문 기록에 남은 주소로 저장 비밀번호 값을 풉니다 | [저장 비밀번호 (IntelliForms)](/02-artifacts/browsers/ie-edgehtml/intelliforms.md) |
-| 시간대 설정 | 현지 시각으로 적힌 두 번째 시각을 UTC 로 바꿉니다 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
-| $MFT | index.dat 와 `MSHist01…` 폴더를 만든 시각을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md) |
-| 섀도 복사본 | 이전 시점의 index.dat 에서 지금은 없는 레코드를 찾습니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 웹캐시 DB | 같은 PC 가 IE 10 이후로 바뀐 뒤의 기록을 봅니다 | [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) |
+| 쿠키·캐시 폴더 | URL 레코드가 가리키는 캐시 파일이 실제로 있는지 봅니다 | [쿠키·캐시 폴더](inetcookies-inetcache.md) |
+| 주소창 입력 주소 | 방문 기록의 주소를 직접 입력했는지 봅니다 | [주소창 입력 주소](typedurls-typedurlstime.md) |
+| 저장 비밀번호 | 방문 기록에 남은 주소로 저장 비밀번호 값을 풉니다 | [저장 비밀번호 (IntelliForms)](intelliforms.md) |
+| 시간대 설정 | 현지 시각으로 적힌 두 번째 시각을 UTC 로 바꿉니다 | [시간대 설정](../../system-account/time-zone.md) |
+| $MFT | index.dat 와 `MSHist01…` 폴더를 만든 시각을 봅니다 | [$MFT](../../filesystem/mft.md) |
+| 섀도 복사본 | 이전 시점의 index.dat 에서 지금은 없는 레코드를 찾습니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

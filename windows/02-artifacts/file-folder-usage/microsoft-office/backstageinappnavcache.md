@@ -1,6 +1,6 @@
 # 백스테이지 캐시 (BackstageInAppNavCache)
 
-> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](/02-artifacts/file-folder-usage/microsoft-office/index.md)
+> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)
 
 ## 한 줄 요약
 
@@ -41,7 +41,7 @@ Arsenal 은 지금은 없는 로컬·원격 폴더의 경로가 이 캐시에 �
 
 아래 내용은 모두 관찰한 PC 에서 본 것입니다. 각 칸의 공식 설명은 확인하지 못했습니다. (관찰)
 
-**인코딩.** JSON 은 UTF-16LE 로 저장돼 있었습니다. 첫 바이트는 `7B 00 22 00` 이었고 BOM 이 없었습니다. UTF-8 로 읽으면 깨집니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+**인코딩.** JSON 은 UTF-16LE 로 저장돼 있었습니다. 첫 바이트는 `7B 00 22 00` 이었고 BOM 이 없었습니다. UTF-8 로 읽으면 깨집니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 **맨 위 칸.**
 
@@ -85,17 +85,17 @@ Arsenal 은 지금은 없는 로컬·원격 폴더의 경로가 이 캐시에 �
 |---|---|---|
 | `LastReadOn` | FILETIME 을 10진 정수로 적음 (UTC) | JSON 파일의 마지막 수정 시각과 같았습니다. 목록을 받아 둔 시각으로 보입니다. |
 | `Files[].LastModified` | 같은 형식 (UTC) | 실제 파일의 수정 시각과 1초 안에서 맞았습니다. |
-| JSON 파일의 파일시스템 시각 | [$MFT](/02-artifacts/filesystem/mft.md) 의 시각 | 캐시 파일을 쓴 때입니다. |
+| JSON 파일의 파일시스템 시각 | [$MFT](../../filesystem/mft.md) 의 시각 | 캐시 파일을 쓴 때입니다. |
 
 **캐시는 오피스를 쓸 때마다 바뀌지 않았습니다.** 관찰한 PC 에서 캐시 파일 5개의 마지막 수정 시각은 모두 2026-07-07 이었습니다. 그 뒤 9월까지 오피스를 썼습니다. File MRU 의 가장 최근 T 값은 2026-09-21 이었습니다. 그래도 캐시는 그대로였습니다. (관찰) 언제 캐시를 새로 쓰는지는 확인하지 못했습니다.
 
 캐시가 그대로인 동안 실제 파일이 바뀌면 `LastModified` 와 지금 파일의 시각이 달라질 수 있습니다. 두 시각이 다르면 캐시를 쓴 뒤 파일이 바뀐 것인지 먼저 따집니다.
 
-FILETIME 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+FILETIME 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
 ## 함정과 한계
 
-- **UTF-8 검색으로는 못 찾습니다.** BOM 없는 UTF-16LE 입니다. 파일 이름이나 경로를 키워드로 찾을 때 두 인코딩으로 모두 찾습니다 ([파일 내용 검색](/03-techniques/analysis/content-search/index.md)).
+- **UTF-8 검색으로는 못 찾습니다.** BOM 없는 UTF-16LE 입니다. 파일 이름이나 경로를 키워드로 찾을 때 두 인코딩으로 모두 찾습니다 ([파일 내용 검색](../../../03-techniques/analysis/content-search/index.md)).
 - **연 파일 목록이 아닙니다.** `Files` 항목을 "오피스로 열었다" 로 옮기지 않습니다.
 - **캐시가 오래됐을 수 있습니다.** `LastReadOn` 을 보고 캐시가 언제 적 목록인지 먼저 적습니다.
 - **칸 목록은 한 PC 관찰입니다.** 버전과 계정 종류에 따라 칸이 다를 수 있습니다.
@@ -136,19 +136,19 @@ FILETIME 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/fileti
 2. 도구로 `ContainerUrl`, `LastReadOn`, `Files` 의 `DisplayName`·`LastModified` 를 뽑습니다.
 3. JSON 파일 하나를 직접 열어 도구 결과와 항목 수, 시각을 맞춰 봅니다.
 4. `LastReadOn` 을 그 JSON 파일의 파일시스템 수정 시각과 견줍니다.
-5. 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+5. 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [오피스 최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | 오피스로 실제 연 파일, 최근 위치 폴더 |
-| [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) | 탐색기로 다룬 같은 폴더 |
-| [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 다른 앱에서 같은 폴더를 연 기록 |
-| [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) | `OD-`·`ODB-` 폴더 이름의 계정 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)·[USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | `Files` 항목의 지금 상태, 지우기·이름 바꾸기 기록 |
+| [오피스 최근 파일 (File MRU·Place MRU)](file-mru-place-mru.md) | 오피스로 실제 연 파일, 최근 위치 폴더 |
+| [셸백](../shellbags/index.md) | 탐색기로 다룬 같은 폴더 |
+| [열기·저장 대화상자 기록](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 다른 앱에서 같은 폴더를 연 기록 |
+| [원드라이브](../../cloud-notes/onedrive/index.md) | `OD-`·`ODB-` 폴더 이름의 계정 |
+| [마스터 파일 테이블](../../filesystem/mft.md)·[USN 변경 저널](../../filesystem/usnjrnl.md) | `Files` 항목의 지금 상태, 지우기·이름 바꾸기 기록 |
 
-시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 를 봅니다.
+시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md) 를 봅니다.
 
 ## 실습
 

@@ -1,6 +1,6 @@
 # 계정·프로필 레지스트리 (Outlook Profiles)
 
-> 상위 허브: [아웃룩 (Outlook)](/02-artifacts/mail/outlook/index.md)
+> 상위 허브: [아웃룩 (Outlook)](index.md)
 
 ## 한 줄 요약
 
@@ -36,18 +36,18 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 
 - 2016 이후 판(2019·2021·Microsoft 365)도 `16.0` 을 같이 쓴다는 설명이 흔합니다. 이를 바로 적은 문서는 찾지 못했습니다.
 - 간접 근거는 있습니다. Microsoft 의 자동완성 목록 문서는 `Office\<16.0>\Outlook\AutoNameCheck` 키를 안내하면서 Outlook 2021 에 넣을 값을 예로 듭니다.
-- 그래서 `16.0` 키만 보고 Outlook 2016 이라고 단정하지 않습니다. 설치된 판은 [설치 프로그램](/02-artifacts/system-account/uninstall.md)에서 함께 확인합니다.
+- 그래서 `16.0` 키만 보고 Outlook 2016 이라고 단정하지 않습니다. 설치된 판은 [설치 프로그램](../../system-account/uninstall.md)에서 함께 확인합니다.
 
 같은 `HKCU\Software\Microsoft\Office\<버전>\Outlook` 아래에서 확인한 하위 키는 다음과 같습니다.
 
 | 하위 키 | 담는 것 | 자세히 |
 |---|---|---|
-| `PST` | 데이터 파일 크기 한도 | [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md) |
-| `AutoNameCheck` | 자동완성 목록의 항목 수 한도 | [자동완성 목록 (NK2·Stream_Autocomplete)](/02-artifacts/mail/outlook/nk2-stream-autocomplete.md) |
+| `PST` | 데이터 파일 크기 한도 | [데이터 파일 구조 (PST·OST)](pst-ost.md) |
+| `AutoNameCheck` | 자동완성 목록의 항목 수 한도 | [자동완성 목록 (NK2·Stream_Autocomplete)](nk2-stream-autocomplete.md) |
 
 - 두 키의 값은 기본으로 없습니다. 값이 있으면 사용자나 관리자, 정책이 따로 넣은 것입니다.
-- 크기 한도는 정책 키에도 들어갈 수 있습니다. 정책 키의 경로는 [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md)에서 다룹니다.
-- `HKCU` 는 로그온한 사용자의 하이브입니다. 검체에서는 사용자마다 NTUSER.DAT 를 따로 엽니다([레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)).
+- 크기 한도는 정책 키에도 들어갈 수 있습니다. 정책 키의 경로는 [데이터 파일 구조 (PST·OST)](pst-ost.md)에서 다룹니다.
+- `HKCU` 는 로그온한 사용자의 하이브입니다. 검체에서는 사용자마다 NTUSER.DAT 를 따로 엽니다([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)).
 
 ### 흔한 설명 (확인하지 못함)
 
@@ -104,21 +104,21 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 
 ## 시각 해석
 
-- 레지스트리 키마다 마지막 기록 시각이 하나 있습니다. 값은 UTC 기준입니다. 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 레지스트리 키마다 마지막 기록 시각이 하나 있습니다. 값은 UTC 기준입니다. 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 키 시각은 그 키가 마지막으로 바뀐 때입니다. 계정을 처음 추가한 때가 아닐 수 있습니다.
 - 계정을 추가한 시각이 따로 값으로 남는지는 확인하지 못했습니다.
-- 프로필 값에 적힌 데이터 파일의 NTFS 시각과 키 시각을 나란히 봅니다. 데이터 파일이 생긴 무렵과 설정이 바뀐 무렵을 따로 말할 수 있습니다([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
-- 현지 시각으로 옮길 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 봅니다.
+- 프로필 값에 적힌 데이터 파일의 NTFS 시각과 키 시각을 나란히 봅니다. 데이터 파일이 생긴 무렵과 설정이 바뀐 무렵을 따로 말할 수 있습니다([마스터 파일 테이블](../../filesystem/mft.md)).
+- 현지 시각으로 옮길 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
 
 ## 함정과 한계
 
 1. **`Office\16.0\Outlook` 키가 있으니 클래식 Outlook 을 썼다고 봅니다.** 클래식 Outlook 이 없는 PC 에도 이 키가 있었습니다. 프로필·데이터 파일·설치 기록을 함께 봅니다.
 2. **`16.0` 을 Outlook 2016 으로 읽습니다.** 2016 이후 판도 같은 번호를 쓴다는 설명이 흔합니다. 설치 기록으로 판을 확인합니다.
 3. **한 자리만 봅니다.** 프로필 키의 자리는 판에 따라 다르다는 설명이 흔합니다. 하이브 안의 모든 `Office\<번호>` 키와 `Windows Messaging Subsystem` 쪽을 모두 보고, 메일 주소로 전체를 한 번 더 찾습니다.
-4. **프로필 키가 없으면 메일을 쓰지 않았다고 봅니다.** 새 Outlook 만 깔린 PC 에는 프로필 키가 없었습니다. 웹 메일이나 다른 메일 프로그램을 썼을 수 있습니다. 지운 키가 하이브 안에 남았을 수도 있습니다([레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)).
-5. **메일 주소를 ASCII 로만 찾습니다.** 값이 이진 값 안에 UTF-16 으로 들어 있다는 설명이 흔합니다. ASCII 와 UTF-16LE 둘 다 찾습니다([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
-6. **비밀번호를 평문으로 찾습니다.** 비밀번호 값은 DPAPI 로 보호돼 있다는 설명이 흔합니다. 보호된 값을 다루는 법은 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md)를 봅니다.
-7. **라이브 시스템에서 `HKCU` 만 봅니다.** `HKCU` 는 지금 로그온한 사용자의 하이브입니다. 다른 사용자의 설정은 그 사용자의 NTUSER.DAT 를 따로 열어야 보입니다([사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)).
+4. **프로필 키가 없으면 메일을 쓰지 않았다고 봅니다.** 새 Outlook 만 깔린 PC 에는 프로필 키가 없었습니다. 웹 메일이나 다른 메일 프로그램을 썼을 수 있습니다. 지운 키가 하이브 안에 남았을 수도 있습니다([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)).
+5. **메일 주소를 ASCII 로만 찾습니다.** 값이 이진 값 안에 UTF-16 으로 들어 있다는 설명이 흔합니다. ASCII 와 UTF-16LE 둘 다 찾습니다([문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
+6. **비밀번호를 평문으로 찾습니다.** 비밀번호 값은 DPAPI 로 보호돼 있다는 설명이 흔합니다. 보호된 값을 다루는 법은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md)를 봅니다.
+7. **라이브 시스템에서 `HKCU` 만 봅니다.** `HKCU` 는 지금 로그온한 사용자의 하이브입니다. 다른 사용자의 설정은 그 사용자의 NTUSER.DAT 를 따로 열어야 보입니다([사용자 프로필 목록](../../system-account/profilelist.md)).
 
 ## 직접 분석해 보기
 
@@ -133,7 +133,7 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 | `.ost` | `2E 6F 73 74` | `2E 00 6F 00 73 00 74 00` |
 
 1. 사용자의 NTUSER.DAT 사본에서 메일 주소를 두 형식으로 찾습니다.
-2. 찾은 자리가 어느 값의 데이터인지 확인합니다. 그 값이 붙은 키를 부모 쪽으로 따라 올라가 전체 경로를 적습니다. 하이브 안에서 키와 값을 따라가는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
+2. 찾은 자리가 어느 값의 데이터인지 확인합니다. 그 값이 붙은 키를 부모 쪽으로 따라 올라가 전체 경로를 적습니다. 하이브 안에서 키와 값을 따라가는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 3. 적은 경로가 위 "흔히 알려진 자리" 가운데 어디인지, 아니면 다른 자리인지 기록합니다.
 4. 같은 키의 다른 값을 읽습니다. 서버 이름·사용자 이름·표시 이름이 있는지 봅니다. 값의 이름은 검체에 적힌 그대로 씁니다.
 5. `.pst`·`.ost` 를 찾아 데이터 파일 경로가 든 값을 찾습니다. 경로에 실제로 파일이 있는지 디스크에서 확인합니다.
@@ -169,22 +169,22 @@ with open(path, "rb") as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as
 - 흔히 알려진 두 `Profiles` 자리를 엽니다. 이진 값을 UTF-16 글자로 풀어 보여 주는지 확인합니다.
 - Outlook 프로필을 따로 풀어 주는 도구나 플러그인을 쓰면, 그 도구가 어느 경로를 보는지 확인합니다. 검체의 Outlook 판과 맞지 않는 경로만 보면 결과가 비어 나올 수 있습니다.
 - 지운 키와 값도 보여 주는지 확인합니다.
-- 도구가 보여 준 계정 수와 위 원시 바이트 검색 결과를 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 도구가 보여 준 계정 수와 위 원시 바이트 검색 결과를 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md) | 프로필 값의 데이터 파일 경로에 실제 파일이 있는지. 크기 한도 값 |
-| [PST와 OST 차이 (Cached Mode·Exchange)](/02-artifacts/mail/outlook/cached-mode-exchange.md) | 계정 종류와 데이터 파일 종류가 맞는지 |
-| [자동완성 목록 (NK2·Stream_Autocomplete)](/02-artifacts/mail/outlook/nk2-stream-autocomplete.md) | `.nk2` 파일 이름과 프로필 이름 |
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 설치된 Outlook 판과 레지스트리의 버전 번호 |
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) · [새 Outlook](/02-artifacts/mail/new-outlook.md) | 새 Outlook 앱이 깔려 있었는지 |
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | NTUSER.DAT 가 어느 사용자 계정의 것인지 |
-| [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) · [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) | 메일 계정의 비밀번호가 어디에 어떻게 보호돼 있는지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 NTUSER.DAT. 계정 키가 언제 생기고 사라졌는지 |
+| [데이터 파일 구조 (PST·OST)](pst-ost.md) | 프로필 값의 데이터 파일 경로에 실제 파일이 있는지. 크기 한도 값 |
+| [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md) | 계정 종류와 데이터 파일 종류가 맞는지 |
+| [자동완성 목록 (NK2·Stream_Autocomplete)](nk2-stream-autocomplete.md) | `.nk2` 파일 이름과 프로필 이름 |
+| [설치 프로그램](../../system-account/uninstall.md) | 설치된 Outlook 판과 레지스트리의 버전 번호 |
+| [스토어 앱 설치 목록](../../system-account/appx-staterepository.md) · [새 Outlook](../new-outlook.md) | 새 Outlook 앱이 깔려 있었는지 |
+| [사용자 프로필 목록](../../system-account/profilelist.md) | NTUSER.DAT 가 어느 사용자 계정의 것인지 |
+| [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) · [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) | 메일 계정의 비밀번호가 어디에 어떻게 보호돼 있는지 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 NTUSER.DAT. 계정 키가 언제 생기고 사라졌는지 |
 
-계정 정보를 다른 연락 기록과 합쳐 읽는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md)에서 다룹니다.
+계정 정보를 다른 연락 기록과 합쳐 읽는 순서는 [누구와 연락을 주고받았나](../../../04-scenarios/activity/communication-reconstruction.md)에서 다룹니다.
 
 ## 실습
 

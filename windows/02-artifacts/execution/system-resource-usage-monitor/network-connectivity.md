@@ -1,6 +1,6 @@
 # 네트워크 연결 기록 (Network Connectivity)
 
-> 상위 허브: [SRUM (System Resource Usage Monitor)](/02-artifacts/execution/system-resource-usage-monitor/index.md)
+> 상위 허브: [SRUM (System Resource Usage Monitor)](index.md)
 
 ## 한 줄 요약
 
@@ -16,7 +16,7 @@ SRUM 은 확장 모듈 여러 개가 각자 표를 채우는 구조입니다. �
 
 > 그림 자리: 한 연결의 행 여러 개가 같은 ConnectStartTime 을 두고, 기록 시각(TimeStamp)마다 ConnectedTime 만 늘어나는 모습을 시간 축에 그린 그림
 
-데이터를 얼마나 주고받았는지는 이 표에 없습니다. 그 내용은 [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) 표에 있습니다.
+데이터를 얼마나 주고받았는지는 이 표에 없습니다. 그 내용은 [네트워크 사용량](network-data-usage.md) 표에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -34,7 +34,7 @@ SRUM 은 확장 모듈 여러 개가 각자 표를 채우는 구조입니다. �
 | 10 | 형식 명세(libyal)가 이 버전으로 열 목록을 확인했습니다 |
 | 11 | 명세와 같은 열 아홉 개를 확인했습니다 (확인 범위: 25H2 한 대) |
 
-SRUM 전체의 보관 기간과 버전별 차이는 [SRUM 허브](/02-artifacts/execution/system-resource-usage-monitor/index.md)를 봅니다. ESE 파일 구조는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md)를 봅니다.
+SRUM 전체의 보관 기간과 버전별 차이는 [SRUM 허브](index.md)를 봅니다. ESE 파일 구조는 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md)를 봅니다.
 
 ## 구조
 
@@ -52,7 +52,7 @@ SRUM 전체의 보관 기간과 버전별 차이는 [SRUM 허브](/02-artifacts/
 | ConnectStartTime | 64비트 정수 (FILETIME) | 연결을 시작한 시각 |
 | L2ProfileFlags | 32비트 정수 | 프로필 플래그 |
 
-AppId·UserId 를 푸는 방법은 [구조와 ID 매핑](/02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md)을 봅니다. 이 표에서는 두 열이 쓸모없는 경우가 많습니다. 확인한 PC 에서는 1,472행 모두 AppId 가 1, UserId 가 2 였습니다. 매핑 표의 1번과 2번은 이름 칸(`IdBlob`)이 비어 있었습니다. (확인 범위: Windows 11 25H2 한 대)
+AppId·UserId 를 푸는 방법은 [구조와 ID 매핑](srudbidmaptable.md)을 봅니다. 이 표에서는 두 열이 쓸모없는 경우가 많습니다. 확인한 PC 에서는 1,472행 모두 AppId 가 1, UserId 가 2 였습니다. 매핑 표의 1번과 2번은 이름 칸(`IdBlob`)이 비어 있었습니다. (확인 범위: Windows 11 25H2 한 대)
 
 L2ProfileFlags 의 뜻은 공개 자료에서 찾지 못했습니다. 확인한 PC 에서는 모든 행이 0 이었습니다.
 
@@ -93,7 +93,7 @@ InterfaceLuid 에는 어댑터 이름이나 MAC 주소가 없습니다. 유형�
 
 확인한 PC 에서도 같은 모양이었습니다. 표에 나온 L2ProfileId 네 개가 모두 `ProfileIndex` 와 맞았습니다. `ProfileIndex` 는 0x10000001(268435457)부터 1씩 늘어난 값 열 개였습니다. `Band Channel Hints` 는 100바이트였고, 앞 4바이트 길이 뒤에 네트워크 이름이 있었습니다. (확인 범위: Windows 11 25H2 한 대)
 
-SSID 는 문자열이 아니라 바이트열입니다. 한글 이름이면 인코딩을 따져 봅니다. [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다. Wi-Fi 프로필 자체의 구조는 [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md)을 봅니다.
+SSID 는 문자열이 아니라 바이트열입니다. 한글 이름이면 인코딩을 따져 봅니다. [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다. Wi-Fi 프로필 자체의 구조는 [Wi-Fi 프로필](../../network/wlan-profiles.md)을 봅니다.
 
 ## 증거로서 의미
 
@@ -107,7 +107,7 @@ SSID 는 문자열이 아니라 바이트열입니다. 한글 이름이면 인�
 **증명하지 못하는 것**
 
 - 어느 프로그램이나 사용자가 네트워크를 썼는지. 이 표의 AppId·UserId 는 흔히 이 정보를 담지 않습니다.
-- 데이터를 주고받았는지, 얼마나 주고받았는지. [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) 표를 함께 봅니다.
+- 데이터를 주고받았는지, 얼마나 주고받았는지. [네트워크 사용량](network-data-usage.md) 표를 함께 봅니다.
 - 접속한 무선 AP 의 MAC 주소(BSSID), 받은 IP 주소, 물리적 위치
 - 사람이 직접 연결했는지, 저장된 프로필로 자동 연결되었는지
 - 같은 이름(SSID)의 다른 장소 네트워크인지. 이름이 같으면 한 프로필로 묶일 수 있습니다.
@@ -122,7 +122,7 @@ SSID 는 문자열이 아니라 바이트열입니다. 한글 이름이면 인�
 | ConnectStartTime | FILETIME | 이 연결이 시작된 시각 | UTC |
 | ConnectedTime | 초 | 시작부터 잰 연결 시간 | 시간 길이 |
 
-두 날짜 형식을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+두 날짜 형식을 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 
 **TimeStamp 도 UTC 입니다.** 확인한 PC 는 한국 표준시(UTC+9)였습니다. 1,472행 중 1,355행에서 "TimeStamp − ConnectStartTime" 이 ConnectedTime 과 1초 안으로 같았습니다. TimeStamp 가 현지 시각이었다면 9시간이 어긋났을 것입니다. (확인 범위: Windows 11 25H2 한 대)
 
@@ -130,25 +130,25 @@ SSID 는 문자열이 아니라 바이트열입니다. 한글 이름이면 인�
 
 **연결이 끝난 시각은 계산으로 구합니다.** 끝난 시각은 "ConnectStartTime + ConnectedTime" 으로 추정합니다. srum-dump 도 이 식으로 "Calculated Stop Time" 열을 만듭니다. 한 연결의 마지막 행은 TimeStamp 가 이 계산값보다 늦을 수 있습니다. 확인한 PC 의 108개 연결 가운데 23개는 마지막 행이 계산한 끝 시각보다 1시간 넘게 뒤에 적혀 있었습니다. (확인 범위: Windows 11 25H2 한 대) 그러니 마지막 행의 TimeStamp 를 연결이 끊긴 시각으로 쓰지 않습니다.
 
-**행이 적히는 때는 따로 따집니다.** 확인한 PC 에서는 기록 간격이 대부분 1시간 안팎이었습니다. 기록 간격 1,375개 중 1,353개가 50~70분이었습니다. (확인 범위: Windows 11 25H2 한 대) 기록 주기와 레지스트리 임시 저장은 [SRUM 해석 함정](/02-artifacts/execution/system-resource-usage-monitor/1.md)을 봅니다.
+**행이 적히는 때는 따로 따집니다.** 확인한 PC 에서는 기록 간격이 대부분 1시간 안팎이었습니다. 기록 간격 1,375개 중 1,353개가 50~70분이었습니다. (확인 범위: Windows 11 25H2 한 대) 기록 주기와 레지스트리 임시 저장은 [SRUM 해석 함정](1.md)을 봅니다.
 
-**절전 시간이 ConnectedTime 에 들어가는지는 확인하지 못했습니다.** 공개 자료에서 이 점을 적은 곳을 찾지 못했습니다. 연결이 여러 날 이어진 것처럼 보이면 [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 기록과 맞춰 봅니다.
+**절전 시간이 ConnectedTime 에 들어가는지는 확인하지 못했습니다.** 공개 자료에서 이 점을 적은 곳을 찾지 못했습니다. 연결이 여러 날 이어진 것처럼 보이면 [켜짐·꺼짐](../../event-logs/power-on-off-events.md) 기록과 맞춰 봅니다.
 
 ## 함정과 한계
 
 - **행 수는 연결 횟수가 아닙니다.** 같은 연결이 기록 때마다 행을 하나씩 더 남깁니다. 인터페이스·L2ProfileId·ConnectStartTime 이 같은 행을 한 연결로 묶습니다. 연결 시간은 그 묶음에서 가장 큰 ConnectedTime 을 씁니다.
 - **L2ProfileId 가 0 인 짧은 행이 섞입니다.** 확인한 PC 의 무선 행 중 53행이 L2ProfileId 0 이었습니다. 그중 52행은 ConnectedTime 이 0 이었습니다. 이 52행은 모두 같은 인터페이스의 프로필 번호가 있는 행과 시작 시각이 1초 안으로 붙어 있었습니다. 이런 행을 별도 연결로 세지 않습니다. (확인 범위: Windows 11 25H2 한 대)
-- **유선 연결은 이름을 풀기 어렵습니다.** 확인한 PC 의 유선(IfType 6) 행은 L2ProfileId 가 0 이었습니다. (확인 범위: Windows 11 25H2 한 대) 유선 연결은 [네트워크 목록](/02-artifacts/network/networklist.md)과 시각을 맞춰 어느 네트워크였는지 좁힙니다.
-- **이름을 못 풀 때가 있습니다.** SOFTWARE 하이브에 맞는 `ProfileIndex` 가 없으면 네트워크 이름을 알 수 없습니다. 프로필을 지웠거나, 하이브와 SRUDB.dat 의 시점이 다를 수 있습니다. SRUM 행은 별도 파일에 있으므로 프로필이 없다고 연결이 없었던 것은 아닙니다. 예전 하이브는 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾아봅니다.
+- **유선 연결은 이름을 풀기 어렵습니다.** 확인한 PC 의 유선(IfType 6) 행은 L2ProfileId 가 0 이었습니다. (확인 범위: Windows 11 25H2 한 대) 유선 연결은 [네트워크 목록](../../network/networklist.md)과 시각을 맞춰 어느 네트워크였는지 좁힙니다.
+- **이름을 못 풀 때가 있습니다.** SOFTWARE 하이브에 맞는 `ProfileIndex` 가 없으면 네트워크 이름을 알 수 없습니다. 프로필을 지웠거나, 하이브와 SRUDB.dat 의 시점이 다를 수 있습니다. SRUM 행은 별도 파일에 있으므로 프로필이 없다고 연결이 없었던 것은 아닙니다. 예전 하이브는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾아봅니다.
 - **시작 시각이 보관 기간보다 앞설 수 있습니다.** 확인한 PC 에서 가장 오래된 행의 TimeStamp 보다 4일 넘게 앞선 ConnectStartTime 이 있었습니다. 연결이 오래 이어지면 시작 시각이 보관 기간보다 앞선 날짜로 남습니다.
 - **도구마다 InterfaceLuid 를 다르게 보여 줍니다.** 원래 숫자를 그대로 보여 주는 도구도 있고, 유형 이름으로 바꿔 주는 도구도 있습니다. 결과를 비교할 때 한 행을 직접 풀어 봅니다.
-- **압수 이미지의 SRUDB.dat 는 대개 비정상 종료 상태입니다.** 로그로 복구해야 여는 방식은 실패할 수 있습니다. 같은 손상 DB 도 읽는 방식에 따라 행 수가 다르게 나왔습니다. 두 가지 이상 방식으로 열어 행 수를 비교하고, 항상 사본에서 작업합니다. (관찰) 자세한 내용은 [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)를 봅니다.
+- **압수 이미지의 SRUDB.dat 는 대개 비정상 종료 상태입니다.** 로그로 복구해야 여는 방식은 실패할 수 있습니다. 같은 손상 DB 도 읽는 방식에 따라 행 수가 다르게 나왔습니다. 두 가지 이상 방식으로 열어 행 수를 비교하고, 항상 사본에서 작업합니다. (관찰) 자세한 내용은 [트랜잭션 로그와 비정상 종료 상태](../../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)를 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 값은 형식 명세와 Microsoft 문서로 만든 예시입니다. 검체에서 나온 값이 아닙니다. ESE 레코드 안에서 열을 찾는 방법은 [파일 구조](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)를 봅니다. 여기서는 열 값만 풉니다. 모든 값은 리틀 엔디언 (Little-endian)입니다.
+아래 값은 형식 명세와 Microsoft 문서로 만든 예시입니다. 검체에서 나온 값이 아닙니다. ESE 레코드 안에서 열을 찾는 방법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)를 봅니다. 여기서는 열 값만 풉니다. 모든 값은 리틀 엔디언 (Little-endian)입니다.
 
 | 열 | 바이트 | 푼 값 |
 |---|---|---|
@@ -186,15 +186,15 @@ L2ProfileId 0x10000001 은 SOFTWARE 하이브에서 `ProfileIndex` 가 268435457
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md) | L2ProfileId 에 해당하는 SSID 와 보안 설정 |
-| [네트워크 목록](/02-artifacts/network/networklist.md) | 네트워크별 처음·마지막 연결 날짜와 게이트웨이 MAC 주소 |
-| [네트워크 연결 이벤트](/02-artifacts/event-logs/wlan-autoconfig-networkprofile.md) | 연결·해제 시각을 분·초 단위로 확인 |
-| [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) | 같은 시간대, 같은 인터페이스·프로필에서 앱별 송수신량 |
-| [네트워크 인터페이스 설정](/02-artifacts/network/tcp-ip-interfaces.md) | 인터페이스가 받은 IP 주소와 DHCP 기록 |
-| [VPN 연결 기록](/02-artifacts/network/vpn-connections.md) | PPP·터널 유형 인터페이스가 보일 때 |
-| [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) | 긴 연결 시간이 PC 가 켜져 있던 시간과 맞는지 |
+| [Wi-Fi 프로필](../../network/wlan-profiles.md) | L2ProfileId 에 해당하는 SSID 와 보안 설정 |
+| [네트워크 목록](../../network/networklist.md) | 네트워크별 처음·마지막 연결 날짜와 게이트웨이 MAC 주소 |
+| [네트워크 연결 이벤트](../../event-logs/wlan-autoconfig-networkprofile.md) | 연결·해제 시각을 분·초 단위로 확인 |
+| [네트워크 사용량](network-data-usage.md) | 같은 시간대, 같은 인터페이스·프로필에서 앱별 송수신량 |
+| [네트워크 인터페이스 설정](../../network/tcp-ip-interfaces.md) | 인터페이스가 받은 IP 주소와 DHCP 기록 |
+| [VPN 연결 기록](../../network/vpn-connections.md) | PPP·터널 유형 인터페이스가 보일 때 |
+| [켜짐·꺼짐](../../event-logs/power-on-off-events.md) | 긴 연결 시간이 PC 가 켜져 있던 시간과 맞는지 |
 
-사용 시간 전체를 재구성하는 흐름은 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md)을 봅니다.
+사용 시간 전체를 재구성하는 흐름은 [PC 사용 시간 재구성](../../../04-scenarios/activity/system-usage-time.md)을 봅니다.
 
 ## 실습
 

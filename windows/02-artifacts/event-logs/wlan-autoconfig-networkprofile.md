@@ -14,8 +14,8 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 | NetworkProfile/Operational | 네트워크에 연결되거나 끊길 때, 네트워크 범주가 바뀔 때, 연결 상태가 바뀔 때 | Windows 가 붙인 네트워크 이름, 설명, 프로필 GUID, 상태 값, 범주 값 |
 
 - NetworkProfile 의 메시지 문구 "Network Connected" 는 무선 전용이 아닙니다. 유선(이더넷)·모바일 연결에도 이 이벤트가 생기는지는 확인하지 못했습니다.
-- Wi-Fi 프로필 파일에 남는 설정은 [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md)에서 다룹니다.
-- 레지스트리의 네트워크 프로필은 [네트워크 목록](/02-artifacts/network/networklist.md)에서 다룹니다.
+- Wi-Fi 프로필 파일에 남는 설정은 [Wi-Fi 프로필](../network/wlan-profiles.md)에서 다룹니다.
+- 레지스트리의 네트워크 프로필은 [네트워크 목록](../network/networklist.md)에서 다룹니다.
 - 이 페이지는 이벤트만 다룹니다.
 
 ## 위치와 버전별 차이
@@ -48,7 +48,7 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 | 남은 기간 | 2026-06-27 ~ 2026-09-23, 약 3개월 | 같음 |
 
 - 두 로그가 기본으로 켜져 있는지는 확인하지 못했습니다. 한 PC 에서 켜져 있었을 뿐입니다.
-- 로그 크기와 보관 방식을 확인하는 방법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+- 로그 크기와 보관 방식을 확인하는 방법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### 버전
 
@@ -205,17 +205,17 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 - 8000 은 연결을 시작한 때, 8001 은 연결에 성공한 때, 8003 은 연결이 끊긴 때입니다.
 - 8000~8003 에는 모두 ConnectionId 칸이 있습니다. 같은 값끼리 묶으면 연결 하나의 시작부터 끝까지 볼 수 있을 것으로 보입니다. 이 방법은 칸 이름에서 나온 해석입니다.
 - 10000 은 Windows 가 연결을 판단한 때, 10001 은 끊김을 판단한 때입니다. 8001 과 10000 을 시각으로 맞추면 SSID 와 Windows 의 네트워크 이름을 이을 수 있습니다.
-- 한 PC 에서 레지스트리 네트워크 프로필의 마지막 연결 시각과 10000 의 시각을 맞춰 본 결과는 [네트워크 목록](/02-artifacts/network/networklist.md)의 시각 해석 절에 있습니다.
-- 이 로그들의 기록 시각이 다른 EVTX 레코드처럼 UTC 로 저장된다는 점은 EVTX 형식의 일반 사실입니다. 이번에 이 두 로그에서 따로 확인하지는 않았습니다. 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
-- 두 로그 모두 1MB 남짓의 순환 로그라서, 한 PC 에서는 약 3개월치만 남아 있었습니다. (확인 범위: Win11 25H2 한 대) 더 오래된 연결은 레지스트리의 네트워크 목록·Wi-Fi 프로필이나 [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md)에서 찾습니다. 이 판단은 해석입니다.
-- 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
+- 한 PC 에서 레지스트리 네트워크 프로필의 마지막 연결 시각과 10000 의 시각을 맞춰 본 결과는 [네트워크 목록](../network/networklist.md)의 시각 해석 절에 있습니다.
+- 이 로그들의 기록 시각이 다른 EVTX 레코드처럼 UTC 로 저장된다는 점은 EVTX 형식의 일반 사실입니다. 이번에 이 두 로그에서 따로 확인하지는 않았습니다. 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 두 로그 모두 1MB 남짓의 순환 로그라서, 한 PC 에서는 약 3개월치만 남아 있었습니다. (확인 범위: Win11 25H2 한 대) 더 오래된 연결은 레지스트리의 네트워크 목록·Wi-Fi 프로필이나 [SRUM](../execution/system-resource-usage-monitor/index.md)에서 찾습니다. 이 판단은 해석입니다.
+- 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **문장 값으로 검색합니다.** ConnectionMode·Reason·FailureReason 은 OS 언어를 따르는 문장입니다. 여러 언어의 검체를 문자열로 찾으면 빠질 수 있습니다. 숫자 칸인 ReasonCode 로 찾는 편이 안전합니다. 이 판단은 해석입니다.
 2. **8001 에서 AP 를 찾습니다.** 8001 에는 BSSID 가 없습니다. PeerMac 이 AP 의 MAC 인지도 확인하지 못했습니다.
 3. **"식별 중..." 을 네트워크 하나로 묶습니다.** 한 PC 에서 이 이름에는 Guid 가 29개 있었습니다. "식별되지 않은 네트워크" 에는 10개가 있었습니다. 둘 다 레지스트리 프로필과 이어지지 않았습니다.
-4. **Category·State·Type 숫자를 뜻으로 바꿔 적습니다.** 이번에는 세 값의 뜻을 확인하지 못했습니다. 레지스트리 Category 의 뜻과 한계는 [네트워크 목록](/02-artifacts/network/networklist.md)에서 다룹니다.
+4. **Category·State·Type 숫자를 뜻으로 바꿔 적습니다.** 이번에는 세 값의 뜻을 확인하지 못했습니다. 레지스트리 Category 의 뜻과 한계는 [네트워크 목록](../network/networklist.md)에서 다룹니다.
 5. **WEP 가 적혔으니 WEP 로 연결했다고 봅니다.** 한 PC 에서 CipherAlgorithm WEP 는 모두 인증 방식 Open 과 함께 나왔습니다. 까닭은 확인하지 못했습니다.
 6. **로그가 없으면 연결이 없었다고 봅니다.** 두 로그가 기본으로 켜져 있는지 확인하지 못했습니다. 로그 설정과 남은 기간부터 봅니다.
 7. **레코드의 계정을 사용자로 읽습니다.** 8001 은 S-1-5-18, 10000 은 S-1-5-20 으로 기록됐습니다. 사용자는 로그온 기록에서 따로 찾습니다.
@@ -223,15 +223,15 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 
 ### 지우기와 조작
 
-- **로그를 지웁니다.** 보안 로그가 아닌 로그를 지우면 System 로그에 104 가 남는 구조입니다. [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md)를 봅니다.
+- **로그를 지웁니다.** 보안 로그가 아닌 로그를 지우면 System 로그에 104 가 남는 구조입니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
 - **Wi-Fi 프로필을 지웁니다.** 프로필 파일을 지워도 이미 남은 이벤트는 따로 지워지지 않습니다. 이벤트의 ProfileName·SSID 로 지금은 없는 프로필을 찾을 수 있습니다. 이 판단은 두 기록이 다른 곳에 저장된다는 점에서 나온 해석입니다.
-- **레코드 일부만 남아 있습니다.** 덮어쓴 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
+- **레코드 일부만 남아 있습니다.** 덮어쓴 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-이벤트 칸의 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류 번호와 배열 구조는 [이진 XML 해석](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다.
+이벤트 칸의 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류 번호와 배열 구조는 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다.
 
 아래 바이트는 명세로 만든 예시입니다. 검체에서 나온 값이 아닙니다. Reason 칸이 UTF-16 문자열로 들어 있다고 보고 만들었습니다. 이 칸의 값 종류는 이번에 확인하지 않았습니다.
 
@@ -247,7 +247,7 @@ DC B4 7C B7 74 C7 84 BC
 3. 그래서 "드라이버" 로 바이트 검색을 하면 한국어판 검체의 레코드만 걸립니다.
 4. ReasonCode 는 숫자 칸이라 언어와 관계없이 같은 값으로 남습니다. 여러 언어의 검체는 ReasonCode 로 찾습니다.
 
-문자 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+문자 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 > 그림 자리: 같은 ReasonCode 0 이 한국어판과 영문판에서 서로 다른 Reason 문장 바이트로 저장되는 모습을 나란히 놓은 그림
 
@@ -278,18 +278,18 @@ Get-WinEvent -FilterHashtable @{ Path = $np; Id = 10000, 10001 } | ForEach-Objec
 
 이벤트의 Guid 는 NetworkList `Profiles` 아래 하위 키 이름과 맞춥니다. 대소문자와 중괄호 표기를 맞춘 뒤 비교합니다. 라이브 시스템의 로그 설정은 `Get-WinEvent -ListLog Microsoft-Windows-WLAN-AutoConfig/Operational, Microsoft-Windows-NetworkProfile/Operational` 로 봅니다. 칸 구성은 `(Get-WinEvent -ListProvider Microsoft-Windows-WLAN-AutoConfig).Events` 로 확인합니다. 이 명령은 분석 PC 의 매니페스트를 읽습니다.
 
-도구가 한국어 문장 칸을 깨뜨리지 않고 보여 주는지 확인합니다. 레코드 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+도구가 한국어 문장 칸을 깨뜨리지 않고 보여 주는지 확인합니다. 레코드 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [네트워크 목록](/02-artifacts/network/networklist.md) | 10000 의 Guid 와 Profiles 하위 키, 프로필의 처음·마지막 연결 시각 |
-| [Wi-Fi 프로필](/02-artifacts/network/wlan-profiles.md) | 8001 의 ProfileName·SSID 와 저장된 프로필, 지금은 없는 프로필 |
-| [네트워크 연결 기록 (Network Connectivity)](/02-artifacts/execution/system-resource-usage-monitor/network-connectivity.md) | 이벤트가 밀려난 기간의 연결 기록 |
-| [네트워크 사용량 (Network Data Usage)](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) | 연결된 동안 앱이 주고받은 양 |
-| [네트워크 인터페이스 설정](/02-artifacts/network/tcp-ip-interfaces.md) | InterfaceGuid 로 어댑터 설정 찾기. 이 연결 방법은 해석입니다 |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | 연결 시각에 로그온해 있던 사용자 |
+| [네트워크 목록](../network/networklist.md) | 10000 의 Guid 와 Profiles 하위 키, 프로필의 처음·마지막 연결 시각 |
+| [Wi-Fi 프로필](../network/wlan-profiles.md) | 8001 의 ProfileName·SSID 와 저장된 프로필, 지금은 없는 프로필 |
+| [네트워크 연결 기록 (Network Connectivity)](../execution/system-resource-usage-monitor/network-connectivity.md) | 이벤트가 밀려난 기간의 연결 기록 |
+| [네트워크 사용량 (Network Data Usage)](../execution/system-resource-usage-monitor/network-data-usage.md) | 연결된 동안 앱이 주고받은 양 |
+| [네트워크 인터페이스 설정](../network/tcp-ip-interfaces.md) | InterfaceGuid 로 어댑터 설정 찾기. 이 연결 방법은 해석입니다 |
+| [로그온·로그오프](logon-events/index.md) | 연결 시각에 로그온해 있던 사용자 |
 
 ## 실습
 

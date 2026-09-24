@@ -19,7 +19,7 @@ SOFTWARE 하이브의 `ProfileList` 키 아래에는 SID 마다 하위 키가 �
 | SOFTWARE | `Microsoft\Windows NT\CurrentVersion\ProfileList\<SID>` | ProfileImagePath |
 
 - 실행 중인 PC 에서는 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList` 로 보입니다.
-- 하이브 파일 위치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 이 페이지가 기댄 공개 도구(RegRipper 의 `profilelist`)는 SID 키마다 `ProfileImagePath` 만 읽습니다. SID 키 안의 다른 값은 이 페이지에서 다루지 않습니다.
 - 이 도구 소스는 Windows 버전별 차이를 적지 않습니다.
 
@@ -44,7 +44,7 @@ SID 는 `S-R-X-Y1-...-Yn` 꼴입니다.
 | 로컬 계정 | `S-1-5-21-<숫자 세 개>-<RID>` | PC 마다 다릅니다 |
 | 도메인 계정 | `S-1-5-21-<숫자 세 개>-<RID>` | 같은 도메인 안에서는 모두 같습니다 |
 
-로컬 계정의 RID 는 그 PC 의 SAM 이 겹치지 않게 발급합니다. SID 의 바이트 구조는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
+로컬 계정의 RID 는 그 PC 의 SAM 이 겹치지 않게 발급합니다. SID 의 바이트 구조는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 
 ### 잘 알려진 SID
 
@@ -79,7 +79,7 @@ SID 의 마지막 값(RID)으로 계정 종류를 가릴 수 있는 경우가 �
 
 겉모양만으로는 둘을 가리지 못합니다. 다음 순서로 가립니다.
 
-1. [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md)에서 로컬 계정의 RID 와 이름을 읽습니다.
+1. [사용자 계정 (SAM)](sam.md)에서 로컬 계정의 RID 와 이름을 읽습니다.
 2. ProfileList 에서 끝 값이 그 RID 이고 폴더 이름이 맞는 SID 를 찾습니다.
 3. 그 SID 의 앞부분(21 뒤 숫자 세 개)이 이 PC 의 식별자입니다.
 4. 앞부분이 다른 `S-1-5-21-...` SID 는 도메인 계정일 수 있습니다. 같은 앞부분이 다른 PC 의 기록에도 나오는지 봅니다.
@@ -106,8 +106,8 @@ SID 의 마지막 값(RID)으로 계정 종류를 가릴 수 있는 경우가 �
 ## 시각 해석
 
 - 공개 도구가 읽는 `ProfileImagePath` 는 시각이 아닙니다.
-- SID 키에도 레지스트리 키마다 있는 마지막 기록 시각(LastWrite)이 있습니다([레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)). 무엇이 이 시각을 바꾸는지는 이 페이지가 기댄 자료에 없습니다. 참고로만 봅니다.
-- 이 키로 찾은 프로필 폴더의 NTUSER.DAT 생성 시각은 계정 생성 시각을 추정하는 데 씁니다. 방법과 한계는 [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md)에서 다룹니다.
+- SID 키에도 레지스트리 키마다 있는 마지막 기록 시각(LastWrite)이 있습니다([레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)). 무엇이 이 시각을 바꾸는지는 이 페이지가 기댄 자료에 없습니다. 참고로만 봅니다.
+- 이 키로 찾은 프로필 폴더의 NTUSER.DAT 생성 시각은 계정 생성 시각을 추정하는 데 씁니다. 방법과 한계는 [사용자 계정 (SAM)](sam.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -120,7 +120,7 @@ SID 의 마지막 값(RID)으로 계정 종류를 가릴 수 있는 경우가 �
 
 ### 지우기와 조작
 
-- **프로필을 지웁니다.** 키와 폴더가 함께 사라질 수 있습니다. 옛 키는 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 SOFTWARE 하이브나 하이브 안의 빈 공간에서 찾습니다. 지운 폴더의 흔적은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)에서 찾습니다.
+- **프로필을 지웁니다.** 키와 폴더가 함께 사라질 수 있습니다. 옛 키는 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 SOFTWARE 하이브나 하이브 안의 빈 공간에서 찾습니다. 지운 폴더의 흔적은 [마스터 파일 테이블](../filesystem/mft.md)에서 찾습니다.
 - **`ProfileImagePath` 를 고칩니다.** 레지스트리 값이라 고칠 수 있습니다. 가리키는 폴더가 디스크에 실제로 있는지 확인합니다.
 
 ## 직접 분석해 보기
@@ -151,19 +151,19 @@ RegRipper 의 `profilelist` 플러그인이 SID 와 `ProfileImagePath` 의 짝�
 
 - SID 키가 모두 나왔는지 확인합니다. 레지스트리 뷰어에서 하위 키 수와 맞춰 봅니다.
 - 도구가 폴더 이름을 사용자 이름으로 바꿔 보여 준다면, 그 이름이 어디서 왔는지 확인합니다.
-- 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md) | 로컬 계정의 RID·이름. 이 PC 의 식별자 |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | 이벤트에 적힌 SID 와 계정 이름. 그 계정의 로그온 시각 |
-| [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) | 계정을 만들거나 지운 시각 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 프로필 폴더와 NTUSER.DAT 의 생성 시각. 지운 프로필 폴더의 흔적 |
-| [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) | 바이트로 저장된 SID 를 글자로 바꾸는 법 |
+| [사용자 계정 (SAM)](sam.md) | 로컬 계정의 RID·이름. 이 PC 의 식별자 |
+| [로그온·로그오프](../event-logs/logon-events/index.md) | 이벤트에 적힌 SID 와 계정 이름. 그 계정의 로그온 시각 |
+| [계정 생성·변경](../event-logs/account-management-events.md) | 계정을 만들거나 지운 시각 |
+| [마스터 파일 테이블](../filesystem/mft.md) | 프로필 폴더와 NTUSER.DAT 의 생성 시각. 지운 프로필 폴더의 흔적 |
+| [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) | 바이트로 저장된 SID 를 글자로 바꾸는 법 |
 
-SID 로 사용자를 이어 그 시각의 사용자를 밝히는 흐름은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)에서 다룹니다. 여러 PC 에서 같은 도메인 계정을 추적하는 흐름은 [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md)에서 다룹니다.
+SID 로 사용자를 이어 그 시각의 사용자를 밝히는 흐름은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)에서 다룹니다. 여러 PC 에서 같은 도메인 계정을 추적하는 흐름은 [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md)에서 다룹니다.
 
 ## 실습
 

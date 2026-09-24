@@ -17,7 +17,7 @@ SAM 하이브에는 이 PC 의 로컬 계정마다 키가 하나씩 있습니다
 - 각 계정이 쓸 수 있는 상태인지, 잠겼는지
 - 각 계정이 마지막으로 로그인하고, 비밀번호를 바꾸고, 로그인에 실패한 시각
 
-비밀번호 해시도 F·V 의 다른 부분에 들어 있습니다. 해시는 따로 복호해야 합니다. 이 내용은 [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md)에서 다룹니다.
+비밀번호 해시도 F·V 의 다른 부분에 들어 있습니다. 해시는 따로 복호해야 합니다. 이 내용은 [레지스트리 속 비밀번호 정보](../credentials/sam-security/index.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -25,8 +25,8 @@ SAM 하이브에는 이 PC 의 로컬 계정마다 키가 하나씩 있습니다
 |---|---|---|
 | SAM | `SAM\Domains\Account\Users\<RID>` | F, V |
 
-- 하이브 파일이 디스크 어디에 있는지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
-- 이 하이브에서 읽는 것은 로컬 계정입니다. 도메인 계정 정보는 도메인 컨트롤러의 [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md) 쪽을 봅니다.
+- 하이브 파일이 디스크 어디에 있는지는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 이 하이브에서 읽는 것은 로컬 계정입니다. 도메인 계정 정보는 도메인 컨트롤러의 [액티브 디렉터리 DB](../credentials/ntds-dit.md) 쪽을 봅니다.
 - Microsoft 는 SAM 의 온디스크 형식을 문서로 공개하지 않았습니다. 아래 오프셋은 공개 포렌식 도구(RegRipper 의 `samparse`)가 쓰는 값입니다.
 - 이 도구 소스는 Windows 버전별 차이를 적지 않습니다. 새 버전의 검체에서는 헥스로 한 번 확인합니다.
 
@@ -73,8 +73,8 @@ V 값에는 계정 이름·전체 이름·설명·계정 종류가 글자로 들
 
 - RID 는 F 값의 0x30 에도 들어 있습니다.
 - 로컬 계정의 SID 는 `S-1-5-21-<이 PC 고유의 숫자 세 개>-<RID>` 꼴입니다.
-- 그래서 SAM 의 RID 와 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)에 있는 SID 의 끝 값을 맞추면 계정과 프로필 폴더를 이을 수 있습니다.
-- SID 를 읽는 법과 RID 로 계정 종류를 가리는 표는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)에서 다룹니다.
+- 그래서 SAM 의 RID 와 [사용자 프로필 목록](profilelist.md)에 있는 SID 의 끝 값을 맞추면 계정과 프로필 폴더를 이을 수 있습니다.
+- SID 를 읽는 법과 RID 로 계정 종류를 가리는 표는 [사용자 프로필 목록](profilelist.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -97,18 +97,18 @@ V 값에는 계정 이름·전체 이름·설명·계정 종류가 글자로 들
 
 ## 시각 해석
 
-- 네 시각 칸은 FILETIME 이고 UTC 로 해석합니다. 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- 네 시각 칸은 FILETIME 이고 UTC 로 해석합니다. 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 - 칸마다 시각이 하나뿐입니다. 새 일이 생기면 그 칸에는 마지막 시각만 남습니다.
 - **0 인 칸**을 그대로 날짜로 바꾸면 1601-01-01 00:00:00 UTC 가 나옵니다. 이 날짜를 실제 일이 있던 때로 적지 않습니다. 도구가 이런 칸을 어떻게 표시하는지도 확인합니다.
-- **플래그는 지금 상태이고, 시각은 지난 일입니다.** 사용 안 함 플래그가 켜진 계정에 최근 로그인 시각이 있을 수 있습니다. 로그인 뒤에 계정을 막았을 수 있기 때문입니다. 순서는 [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) 이벤트로 확인합니다.
+- **플래그는 지금 상태이고, 시각은 지난 일입니다.** 사용 안 함 플래그가 켜진 계정에 최근 로그인 시각이 있을 수 있습니다. 로그인 뒤에 계정을 막았을 수 있기 때문입니다. 순서는 [계정 생성·변경](../event-logs/account-management-events.md) 이벤트로 확인합니다.
 
 ### 계정을 만든 시각
 
 로컬 계정을 만든 시각은 레지스트리에 직접 없습니다. 현장에서는 다음 순서로 추정합니다(현장 관찰).
 
-1. 그 계정 SID 의 NTUSER.DAT 파일을 찾습니다. 프로필 폴더는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)에서 찾습니다.
-2. NTUSER.DAT 의 생성 시각($STANDARD_INFORMATION)을 읽습니다([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
-3. NTUSER.DAT 가 없으면 OS 설치 시각을 씁니다([시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md)).
+1. 그 계정 SID 의 NTUSER.DAT 파일을 찾습니다. 프로필 폴더는 [사용자 프로필 목록](profilelist.md)에서 찾습니다.
+2. NTUSER.DAT 의 생성 시각($STANDARD_INFORMATION)을 읽습니다([마스터 파일 테이블](../filesystem/mft.md)).
+3. NTUSER.DAT 가 없으면 OS 설치 시각을 씁니다([시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md)).
 
 NTUSER.DAT 는 계정 키가 아니라 사용자 프로필 파일입니다. 그래서 이 시각은 계정을 만든 때와 다를 수 있습니다. 보고서에는 추정값이라고 밝힙니다. 이벤트 로그에 계정 생성 기록이 남아 있으면 그쪽을 먼저 씁니다.
 
@@ -119,11 +119,11 @@ NTUSER.DAT 는 계정 키가 아니라 사용자 프로필 파일입니다. 그�
 3. **이름으로 계정을 가립니다.** 계정 이름은 바꿀 수 있습니다. 같은 계정인지는 RID 로 가립니다.
 4. **0 인 시각 칸을 날짜로 옮깁니다.** 1601-01-01 이 보고서에 들어가면 안 됩니다.
 5. **로컬 계정만 있다는 것을 잊습니다.** 도메인 계정으로 쓴 PC 는 SAM 만으로 사용을 설명하지 못합니다.
-6. **마지막 로그인 시각 하나로 사용 이력을 말합니다.** 칸에는 마지막 한 번만 남습니다. 이력은 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 이벤트에서 찾습니다.
+6. **마지막 로그인 시각 하나로 사용 이력을 말합니다.** 칸에는 마지막 한 번만 남습니다. 이력은 [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트에서 찾습니다.
 
 ### 지우기와 조작
 
-- **계정을 지웁니다.** 그 RID 의 키가 사라집니다. 옛 키는 하이브 안의 빈 공간이나 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 SAM 하이브에 남을 수 있습니다. 지운 기록은 [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) 이벤트에서 찾습니다.
+- **계정을 지웁니다.** 그 RID 의 키가 사라집니다. 옛 키는 하이브 안의 빈 공간이나 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 SAM 하이브에 남을 수 있습니다. 지운 기록은 [계정 생성·변경](../event-logs/account-management-events.md) 이벤트에서 찾습니다.
 - **계정을 막거나 다시 풉니다.** 플래그에는 마지막 상태만 남습니다. 바꾼 이력은 이벤트 로그에서 찾습니다.
 - **F 값을 직접 고칩니다.** 시각과 플래그는 레지스트리 값이라 고칠 수 있습니다. 이벤트 로그의 로그온 기록과 어긋나는지 봅니다.
 
@@ -145,7 +145,7 @@ NTUSER.DAT 는 계정 키가 아니라 사용자 프로필 파일입니다. 그�
 2. 0x18 의 8바이트는 0x01DB448502732000 입니다. 날짜로 바꾸면 2024-12-02 06:40:00 UTC 입니다. 마지막 비밀번호 변경 시각입니다.
 3. 0x20 의 8바이트는 모두 0 입니다. 계정 만료 칸이 비어 있습니다. 1601-01-01 로 옮기지 않습니다.
 4. 0x28 의 8바이트는 0x01DB9473C41DD180 입니다. 날짜로 바꾸면 2025-03-13 23:58:07 UTC 입니다. 마지막 로그인 실패 시각입니다.
-5. 0x30 의 `F4 01 00 00` 은 0x1F4, 곧 RID 500 입니다. RID 500 이 어떤 계정인지는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)의 RID 표를 봅니다.
+5. 0x30 의 `F4 01 00 00` 은 0x1F4, 곧 RID 500 입니다. RID 500 이 어떤 계정인지는 [사용자 프로필 목록](profilelist.md)의 RID 표를 봅니다.
 6. 0x38 의 `11 02` 는 0x0211 입니다. 0x0200 + 0x0010 + 0x0001 로 풉니다.
 
 | 켜진 비트 | 뜻 |
@@ -165,20 +165,20 @@ RegRipper 의 `samparse` 플러그인이 계정마다 이름, RID, 네 시각, �
 
 - 시각을 UTC 로 보여 주는지 확인합니다.
 - 0 인 시각 칸을 어떻게 표시하는지 확인합니다.
-- 계정 하나쯤은 F 값을 헥스로 읽어 도구 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 계정 하나쯤은 F 값을 헥스로 읽어 도구 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | RID 와 SID 의 끝 값. 계정과 프로필 폴더의 짝 |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | 마지막 로그인 시각과 로그온 이벤트. 로그인 실패 시각과 실패 이벤트 |
-| [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) | 계정 생성·삭제·사용 안 함 처리 시각. 플래그가 바뀐 순서 |
-| [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) | 같은 SAM 하이브의 비밀번호 해시 |
-| [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) | 계정 기록의 시각이 OS 설치 시각보다 뒤인지 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | NTUSER.DAT 의 생성 시각 |
+| [사용자 프로필 목록](profilelist.md) | RID 와 SID 의 끝 값. 계정과 프로필 폴더의 짝 |
+| [로그온·로그오프](../event-logs/logon-events/index.md) | 마지막 로그인 시각과 로그온 이벤트. 로그인 실패 시각과 실패 이벤트 |
+| [계정 생성·변경](../event-logs/account-management-events.md) | 계정 생성·삭제·사용 안 함 처리 시각. 플래그가 바뀐 순서 |
+| [레지스트리 속 비밀번호 정보](../credentials/sam-security/index.md) | 같은 SAM 하이브의 비밀번호 해시 |
+| [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) | 계정 기록의 시각이 OS 설치 시각보다 뒤인지 |
+| [마스터 파일 테이블](../filesystem/mft.md) | NTUSER.DAT 의 생성 시각 |
 
-그 시각에 PC 를 쓴 사람을 밝히는 흐름은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)에서 다룹니다. 계정을 몰래 만들거나 가로챈 흔적은 [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md)에서 다룹니다.
+그 시각에 PC 를 쓴 사람을 밝히는 흐름은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)에서 다룹니다. 계정을 몰래 만들거나 가로챈 흔적은 [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md)에서 다룹니다.
 
 ## 실습
 

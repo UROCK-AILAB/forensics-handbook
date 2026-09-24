@@ -39,9 +39,9 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 
 - `<프로필>` 자리에는 `Default`, `Profile 1` 같은 폴더 이름이 옵니다.
 - 파일 이름에는 확장자가 없습니다. 이름 가운데에 빈칸이 있습니다.
-- 같은 폴더에 이름 뒤에 `-journal` 이나 `-wal` 이 붙은 파일이 있으면 함께 꺼냅니다. 이유는 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md)에서 다룹니다.
+- 같은 폴더에 이름 뒤에 `-journal` 이나 `-wal` 이 붙은 파일이 있으면 함께 꺼냅니다. 이유는 [WAL과 롤백 저널](../../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md)에서 다룹니다.
 - 명령줄 옵션 `--user-data-dir` 로 User Data 위치를 바꿀 수 있습니다.
-- 프로필 폴더 고르기와 계열 브라우저 구분은 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
+- 프로필 폴더 고르기와 계열 브라우저 구분은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
 
 표 구성은 브라우저 버전보다 `Web Data` 의 스키마 버전 (Schema Version) 을 따릅니다. 스키마 버전은 `meta` 표의 `version` 행에 있습니다. 이 번호는 브라우저 버전과 따로 매깁니다. 먼저 이 값을 읽고 표 목록(`sqlite_master`)을 확인합니다.
 
@@ -60,7 +60,7 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 
 ## 구조
 
-저장 형식은 보통의 SQLite 입니다. 페이지와 레코드 구조는 [파일·페이지 구조](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md)에서 다룹니다. 여기서는 표와 열의 뜻만 봅니다.
+저장 형식은 보통의 SQLite 입니다. 페이지와 레코드 구조는 [파일·페이지 구조](../../../01-foundations/database-log-formats/sqlite/b-tree-record-format.md)에서 다룹니다. 여기서는 표와 열의 뜻만 봅니다.
 
 ### autofill 표 (자동완성)
 
@@ -108,7 +108,7 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 | `server_card_metadata` | `id`, `use_count`, `use_date` | 계정 쪽 카드의 사용 기록입니다 |
 | `local_ibans`·`masked_ibans` | `value_encrypted` / `prefix`·`suffix` | 국제 계좌 번호입니다. 기기 쪽은 암호화하고, 계정 쪽은 앞뒤 일부만 둡니다 |
 
-카드 번호와 CVC 는 운영체제 암호화 계층(OSCrypt)으로 암호화합니다. 복호에 무엇이 필요한지는 [쿠키·비밀번호 암호화](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다룹니다. 카드에 적힌 이름과 유효기간은 평문입니다.
+카드 번호와 CVC 는 운영체제 암호화 계층(OSCrypt)으로 암호화합니다. 복호에 무엇이 필요한지는 [쿠키·비밀번호 암호화](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다룹니다. 카드에 적힌 이름과 유효기간은 평문입니다.
 
 ### 같은 파일의 다른 표
 
@@ -129,7 +129,7 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 
 ### 증명하지 못하는 것
 
-- 어느 사이트에서 입력했는지. 표에 주소 열이 없습니다. [방문 기록](/02-artifacts/browsers/chrome-edge-whale/history.md)과 시각을 맞춰 추정할 뿐입니다.
+- 어느 사이트에서 입력했는지. 표에 주소 열이 없습니다. [방문 기록](history.md)과 시각을 맞춰 추정할 뿐입니다.
 - 누가 입력했는지. 프로필 폴더의 주인 계정만 알 수 있습니다.
 - 처음과 마지막 사이에 언제 제출했는지. 중간 시각은 남지 않습니다.
 - 이 PC 에서 입력했는지. 동기화로 다른 기기의 항목이 들어올 수 있습니다.
@@ -153,11 +153,11 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 
 - Chromium 은 자동완성·주소·카드 시각을 `ToTimeT()` 로 씁니다. 1970년부터 센 초입니다.
 - `keywords` 는 SQLite 도우미 `BindTime()` 으로 씁니다. 1601년부터 센 마이크로초입니다.
-- 둘 다 UTC 입니다. 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 봅니다.
+- 둘 다 UTC 입니다. 현지 시각으로 바꿀 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
 - 값 0 은 시각이 없다는 뜻입니다. 열의 기본값이 0 입니다.
 - 형식을 잘못 짐작하면 티가 납니다. Unix 초를 WebKit 마이크로초로 읽으면 1601년 1월 1일 새벽이 나옵니다.
 
-바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -170,13 +170,13 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
    - 그래서 고친 행의 시각과 횟수는 실제 사용 기록이 아닙니다. 여러 행의 시각이 같은 경계 값에 몰려 있으면 기간 삭제를 의심해 볼 수 있습니다(추론).
 2. **오래된 항목은 저절로 지워집니다.** 마지막 사용이 14×31일(약 14개월)보다 오래된 자동완성 항목을 Chromium 이 지웁니다. 이 정리는 브라우저 주 버전이 올라간 뒤 한 번 돕니다. 마지막으로 정리한 주 버전은 프로필 설정(Preferences)에 적어 둡니다.
 3. **동기화 항목이 섞입니다.** 동기화 (Sync) 를 켜면 다른 기기의 자동완성 항목이 이 표에 들어옵니다. 양쪽에 같은 항목이 있으면 `date_created` 는 더 이른 값, `date_last_used` 는 더 늦은 값을 씁니다. 그래서 두 시각 모두 다른 기기의 사용일 수 있습니다.
-4. **지운 행은 되살리기 어렵습니다.** Chromium 은 SQLite 를 빌드할 때 `SQLITE_SECURE_DELETE` 를 넣습니다. 그래서 `secure_delete` 가 기본으로 켜집니다. 이 설정은 지운 내용을 0 으로 덮어씁니다. 파일 안의 빈 공간을 뒤지는 방법([파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md))은 이 파일에서 거의 소득이 없습니다. 남은 저널 파일, [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md), 비할당 영역의 옛 사본을 찾습니다. Edge·Whale 이 같은 빌드 설정을 쓰는지는 이 글에서 확인하지 않았습니다.
-5. **시크릿 창 사용은 여기 없습니다.** Chromium 소스는 시크릿 창에서 제출한 폼을 저장하지 않습니다. 시크릿 창 조사는 [시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md)를 봅니다.
-6. **값이 없어도 입력했을 수 있습니다.** 비밀번호 입력란, 자동완성을 막은 입력란, 카드 번호 모양의 값은 처음부터 저장하지 않습니다. 비밀번호는 [저장 비밀번호 (Login Data)](/02-artifacts/browsers/chrome-edge-whale/login-data.md)에 따로 남을 수 있습니다.
+4. **지운 행은 되살리기 어렵습니다.** Chromium 은 SQLite 를 빌드할 때 `SQLITE_SECURE_DELETE` 를 넣습니다. 그래서 `secure_delete` 가 기본으로 켜집니다. 이 설정은 지운 내용을 0 으로 덮어씁니다. 파일 안의 빈 공간을 뒤지는 방법([파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md))은 이 파일에서 거의 소득이 없습니다. 남은 저널 파일, [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md), 비할당 영역의 옛 사본을 찾습니다. Edge·Whale 이 같은 빌드 설정을 쓰는지는 이 글에서 확인하지 않았습니다.
+5. **시크릿 창 사용은 여기 없습니다.** Chromium 소스는 시크릿 창에서 제출한 폼을 저장하지 않습니다. 시크릿 창 조사는 [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md)를 봅니다.
+6. **값이 없어도 입력했을 수 있습니다.** 비밀번호 입력란, 자동완성을 막은 입력란, 카드 번호 모양의 값은 처음부터 저장하지 않습니다. 비밀번호는 [저장 비밀번호 (Login Data)](login-data.md)에 따로 남을 수 있습니다.
 7. **입력란 이름은 사이트가 정합니다.** `name` 이 `email` 이라고 이메일 입력란이라는 보장은 없습니다. 이름만 보고 값의 종류를 단정하지 않습니다.
 8. **쓰는 중인 파일입니다.** 브라우저가 켜져 있으면 최근 변경이 저널에만 있을 수 있습니다. 원본을 도구로 열면 파일이 바뀔 수 있습니다. 항상 사본을 만들어 엽니다.
 
-**안티포렌식.** 설정 화면에서 자동완성 데이터를 지우면 행이 사라지고, 기간을 정하면 위 1번처럼 값이 바뀝니다. 주소·카드를 지우면 그 행이 빠집니다. 동기화를 켰다면 다른 기기나 계정 쪽에 같은 항목이 남아 있을 수 있습니다. `Web Data` 파일을 통째로 지우면 [$MFT](/02-artifacts/filesystem/mft.md)와 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)에 삭제 흔적이 남습니다.
+**안티포렌식.** 설정 화면에서 자동완성 데이터를 지우면 행이 사라지고, 기간을 정하면 위 1번처럼 값이 바뀝니다. 주소·카드를 지우면 그 행이 빠집니다. 동기화를 켰다면 다른 기기나 계정 쪽에 같은 항목이 남아 있을 수 있습니다. `Web Data` 파일을 통째로 지우면 [$MFT](../../filesystem/mft.md)와 [$UsnJrnl](../../filesystem/usnjrnl.md)에 삭제 흔적이 남습니다.
 
 ## 직접 분석해 보기
 
@@ -247,21 +247,21 @@ SQLite 정수는 빅 엔디언입니다. 윈도 레지스트리 값처럼 리틀
    FROM keywords;
    ```
 
-7. 브라우저 기록 전용 도구(예: Hindsight)로 같은 프로필을 한 번 더 돌립니다. 몇 행을 골라 SQL 결과와 시각을 맞춰 봅니다. 도구가 시각 형식을 어떻게 읽는지 확인하는 과정입니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+7. 브라우저 기록 전용 도구(예: Hindsight)로 같은 프로필을 한 번 더 돌립니다. 몇 행을 골라 SQL 결과와 시각을 맞춰 봅니다. 도구가 시각 형식을 어떻게 읽는지 확인하는 과정입니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md) | `date_created`·`date_last_used` 무렵에 방문한 페이지. 어느 사이트의 폼인지 추정합니다 |
-| [저장 비밀번호 (Login Data)](/02-artifacts/browsers/chrome-edge-whale/login-data.md) | 같은 아이디·이메일 값. 로그인 폼이었는지 확인합니다 |
-| [쿠키 (Cookies)](/02-artifacts/browsers/chrome-edge-whale/cookies.md) | 그 시각 무렵에 쿠키를 받은 사이트 |
-| [세션·탭 복원 (Sessions)](/02-artifacts/browsers/chrome-edge-whale/sessions.md) | 마지막 세션에 열려 있던 페이지 |
-| [양식 기록 (formhistory.sqlite)](/02-artifacts/browsers/firefox/formhistory-sqlite.md) | 같은 사용자가 Firefox 에서 넣은 값 |
-| [저장 비밀번호 (IntelliForms)](/02-artifacts/browsers/ie-edgehtml/intelliforms.md) | 옛 IE·Edge 에서 넣은 값 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 `Web Data` 와 비교해 사라진 행과 바뀐 횟수 |
+| [방문·다운로드 기록 (History)](history.md) | `date_created`·`date_last_used` 무렵에 방문한 페이지. 어느 사이트의 폼인지 추정합니다 |
+| [저장 비밀번호 (Login Data)](login-data.md) | 같은 아이디·이메일 값. 로그인 폼이었는지 확인합니다 |
+| [쿠키 (Cookies)](cookies.md) | 그 시각 무렵에 쿠키를 받은 사이트 |
+| [세션·탭 복원 (Sessions)](sessions.md) | 마지막 세션에 열려 있던 페이지 |
+| [양식 기록 (formhistory.sqlite)](../firefox/formhistory-sqlite.md) | 같은 사용자가 Firefox 에서 넣은 값 |
+| [저장 비밀번호 (IntelliForms)](../ie-edgehtml/intelliforms.md) | 옛 IE·Edge 에서 넣은 값 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 `Web Data` 와 비교해 사라진 행과 바뀐 횟수 |
 
-웹 사용 전체 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md), 올리기·보내기 조사는 [웹메일·웹하드로 올렸나](/04-scenarios/exfiltration/data-exfiltration/web-upload.md)에서 다룹니다.
+웹 사용 전체 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md), 올리기·보내기 조사는 [웹메일·웹하드로 올렸나](../../../04-scenarios/exfiltration/data-exfiltration/web-upload.md)에서 다룹니다.
 
 ## 실습
 

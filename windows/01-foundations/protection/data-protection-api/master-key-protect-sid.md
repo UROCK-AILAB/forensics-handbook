@@ -1,6 +1,6 @@
 # 마스터키 파일 (Master Key·Protect\SID)
 
-> 위치: [DPAPI 구조 (Data Protection API)](/01-foundations/protection/data-protection-api/index.md) > 마스터키 파일
+> 위치: [DPAPI 구조 (Data Protection API)](index.md) > 마스터키 파일
 
 ## 한 줄 요약
 
@@ -8,8 +8,8 @@
 마스터키 자체는 사용자 암호에서 나온 열쇠로 암호화되어 디스크의 마스터키 파일에 들어 있습니다.
 그래서 마스터키 파일과 사용자 암호가 있어야 블롭을 풀 수 있습니다.
 
-> 블롭에서 마스터키 GUID 를 찾는 법은 [DPAPI 블롭 구조](/01-foundations/protection/data-protection-api/dpapi-blob.md) 에 있습니다.
-> 마스터키를 풀어 블롭을 여는 전체 흐름은 [DPAPI 동작 원리](/01-foundations/protection/data-protection-api/protect-unprotect.md) 에 있습니다.
+> 블롭에서 마스터키 GUID 를 찾는 법은 [DPAPI 블롭 구조](dpapi-blob.md) 에 있습니다.
+> 마스터키를 풀어 블롭을 여는 전체 흐름은 [DPAPI 동작 원리](protect-unprotect.md) 에 있습니다.
 
 ## 무엇을 담나 · 왜 생기나
 
@@ -25,10 +25,10 @@
 - 풀어 쓰면 `C:\Users\<사용자>\AppData\Roaming\Microsoft\Protect\S-1-5-21-...\{GUID}` 같은 경로입니다.
 - 폴더 이름의 {SID} 는 그 사용자의 SID 입니다.
 - 파일 이름의 {GUID} 는 마스터키 ID 입니다.
-- SID·GUID 형식은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
+- SID·GUID 형식은 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
 - 이 폴더에는 마스터키 파일 여러 개와 Preferred 파일이 함께 있습니다.
-- [CREDHIST](/01-foundations/protection/data-protection-api/credhist.md) 파일도 같은 `Microsoft\Protect` 폴더 아래에 있습니다.
-- 머신·SYSTEM 계정의 마스터키는 다른 곳에 있습니다. [시스템 DPAPI 키](/01-foundations/protection/data-protection-api/dpapi-system.md) 를 봅니다.
+- [CREDHIST](credhist.md) 파일도 같은 `Microsoft\Protect` 폴더 아래에 있습니다.
+- 머신·SYSTEM 계정의 마스터키는 다른 곳에 있습니다. [시스템 DPAPI 키](dpapi-system.md) 를 봅니다.
 
 ### Preferred 파일
 
@@ -83,9 +83,9 @@
 3. Pre key 와 salt(16바이트)·반복수로 PBKDF2 를 돌려 대칭 키를 얻습니다.
 4. 그 대칭 키로 마스터키를 풉니다. 대칭 암호는 버전에 따라 3DES 또는 AES 입니다.
 
-- 옛 암호로 암호화된 마스터키면, 먼저 [CREDHIST](/01-foundations/protection/data-protection-api/credhist.md) 를 풀어 그 옛 암호의 SHA-1 을 얻습니다.
+- 옛 암호로 암호화된 마스터키면, 먼저 [CREDHIST](credhist.md) 를 풀어 그 옛 암호의 SHA-1 을 얻습니다.
 - 도메인 계정은 SHA-1 대신 NT 해시(MD4)를 씁니다.
-- 오프라인에서 이 흐름을 밟는 재료 목록은 [오프라인 복호 재료와 절차](/01-foundations/protection/data-protection-api/nt.md) 에 있습니다.
+- 오프라인에서 이 흐름을 밟는 재료 목록은 [오프라인 복호 재료와 절차](nt.md) 에 있습니다.
 
 ## 위치와 버전별 차이
 

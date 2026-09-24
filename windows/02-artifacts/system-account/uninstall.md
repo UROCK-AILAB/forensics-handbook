@@ -27,8 +27,8 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 
 - 실행 중인 PC 에서 컴퓨터 전체 키는 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall` 로 보입니다.
 - 64비트 윈도에 32비트 앱을 설치하면 `Wow6432Node` 아래로 들어갑니다. 64비트 윈도에서는 두 자리를 모두 봐야 합니다.
-- 사용자별 설치는 그 사용자의 NTUSER.DAT 에만 있습니다. 사용자마다 하이브를 따로 엽니다. 사용자별 NTUSER.DAT 는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)에서 찾은 프로필 폴더에서 찾습니다.
-- 하이브 파일 위치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 사용자별 설치는 그 사용자의 NTUSER.DAT 에만 있습니다. 사용자마다 하이브를 따로 엽니다. 사용자별 NTUSER.DAT 는 [사용자 프로필 목록](profilelist.md)에서 찾은 프로필 폴더에서 찾습니다.
+- 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 이 페이지가 기댄 자료는 이 밖의 Windows 버전별 차이를 적지 않습니다.
 
 ## 구조
@@ -84,29 +84,29 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 - 공개 도구(RegRipper 의 `uninstall`)는 앱 키마다 `DisplayName`·`DisplayVersion` 만 읽습니다. `InstallDate` 는 읽지 않습니다.
 - 대신 앱 키의 LastWrite 를 뽑아 최신순으로 늘어놓습니다. 이렇게 "언제 설치하거나 바꿨나" 를 봅니다.
 - 두 시각은 뜻이 달라서 서로 다를 수 있습니다. 다르다고 조작의 흔적은 아닙니다.
-- LastWrite 가 무엇이고 어디 있는지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다. FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
-- 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- LastWrite 가 무엇이고 어디 있는지는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다. FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- 현지 시각으로 바꿀 때는 [시간대 설정](time-zone.md)을 씁니다.
 
 ## 함정과 한계
 
 1. **한 자리만 봅니다.** 64비트 윈도의 `Wow6432Node` 와 사용자별 NTUSER.DAT 를 빼먹으면 앱을 놓칩니다. 네 자리를 모두 봅니다.
 2. **`InstallDate` 를 처음 설치한 날로 씁니다.** 패치나 복구를 했다면 그 뒤 날짜입니다.
 3. **LastWrite 를 설치한 날로 씁니다.** LastWrite 는 항목을 마지막으로 손댄 때입니다. 처음 설치한 날보다 뒤일 수 있습니다.
-4. **설치를 실행으로 씁니다.** 설치 기록은 실행 기록이 아닙니다. 실행은 [프리페치](/02-artifacts/execution/prefetch/index.md) 같은 실행 흔적으로 따로 확인합니다.
+4. **설치를 실행으로 씁니다.** 설치 기록은 실행 기록이 아닙니다. 실행은 [프리페치](../execution/prefetch/index.md) 같은 실행 흔적으로 따로 확인합니다.
 5. **MSI 표대로 값을 기대합니다.** MSI 가 아닌 설치 프로그램은 값 구성이 다를 수 있습니다. 값이 빠졌다고 이상한 항목은 아닙니다.
 6. **도구가 읽지 않은 값을 놓칩니다.** 공개 도구 출력에 `InstallDate`·`InstallLocation` 이 없다면 레지스트리 뷰어로 키를 직접 엽니다.
 
 ### 지우기와 조작
 
-- **앱을 지웁니다.** 항목이 목록에서 빠질 수 있습니다. 옛 항목은 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 하이브나 하이브 안의 빈 공간에서 찾습니다. 설치·삭제 기록은 [프로그램 설치·삭제 이벤트](/02-artifacts/event-logs/msiinstaller.md)에서 찾습니다.
-- **항목만 지웁니다.** 앱 파일은 남고 목록에서만 빠질 수 있습니다. [AmCache](/02-artifacts/execution/amcache-hve/index.md)와 파일 흔적으로 확인합니다.
-- **값을 고칩니다.** `DisplayName`·`Publisher` 는 레지스트리 값이라 고칠 수 있습니다. 설치 위치의 실행 파일 정보([실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md))와 맞춰 봅니다.
+- **앱을 지웁니다.** 항목이 목록에서 빠질 수 있습니다. 옛 항목은 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 하이브나 하이브 안의 빈 공간에서 찾습니다. 설치·삭제 기록은 [프로그램 설치·삭제 이벤트](../event-logs/msiinstaller.md)에서 찾습니다.
+- **항목만 지웁니다.** 앱 파일은 남고 목록에서만 빠질 수 있습니다. [AmCache](../execution/amcache-hve/index.md)와 파일 흔적으로 확인합니다.
+- **값을 고칩니다.** `DisplayName`·`Publisher` 는 레지스트리 값이라 고칠 수 있습니다. 설치 위치의 실행 파일 정보([실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md))와 맞춰 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 FILETIME 형식을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 앱 하위 키의 LastWrite 칸이 다음 8바이트라고 합니다. 키 레코드 안에서 이 칸을 찾는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+아래는 FILETIME 형식을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 앱 하위 키의 LastWrite 칸이 다음 8바이트라고 합니다. 키 레코드 안에서 이 칸을 찾는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ```
 LastWrite (8바이트)  00 1D C6 13 4E 83 DB 01
@@ -127,20 +127,20 @@ RegRipper 의 `uninstall` 플러그인은 앱 키를 LastWrite 최신순으로 �
 - `Wow6432Node` 와 사용자별 NTUSER.DAT 도 읽었는지 확인합니다.
 - LastWrite 를 UTC 로 보여 주는지 확인합니다.
 - 도구가 읽지 않는 값은 레지스트리 뷰어로 직접 봅니다.
-- 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [프로그램 설치·삭제 이벤트](/02-artifacts/event-logs/msiinstaller.md) | 설치·삭제 시각. 지금 목록에 없는 앱의 설치 이력 |
-| [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 같은 앱의 실행 파일 정보와 해시 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | 설치한 앱을 실제로 실행했는지 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 설치 위치 폴더와 파일의 생성 시각. LastWrite 무렵에 생긴 파일 |
-| [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md) | 윈도 구성 요소의 설치·갱신 이력 |
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 스토어 앱의 설치 기록 |
+| [프로그램 설치·삭제 이벤트](../event-logs/msiinstaller.md) | 설치·삭제 시각. 지금 목록에 없는 앱의 설치 이력 |
+| [AmCache](../execution/amcache-hve/index.md) | 같은 앱의 실행 파일 정보와 해시 |
+| [프리페치](../execution/prefetch/index.md) | 설치한 앱을 실제로 실행했는지 |
+| [마스터 파일 테이블](../filesystem/mft.md) | 설치 위치 폴더와 파일의 생성 시각. LastWrite 무렵에 생긴 파일 |
+| [윈도 업데이트 기록](windows-update-cbs-log.md) | 윈도 구성 요소의 설치·갱신 이력 |
+| [스토어 앱 설치 목록](appx-staterepository.md) | 스토어 앱의 설치 기록 |
 
-설치 기록과 실행 기록을 함께 읽는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)에서 다룹니다. 원격 제어 프로그램 설치를 찾는 흐름은 [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md)에서 다룹니다.
+설치 기록과 실행 기록을 함께 읽는 흐름은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md)에서 다룹니다. 원격 제어 프로그램 설치를 찾는 흐름은 [원격 제어 프로그램으로 누가 조작했나](../../04-scenarios/incident/remote-access-tool-abuse.md)에서 다룹니다.
 
 ## 실습
 

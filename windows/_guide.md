@@ -71,7 +71,7 @@
 
 ## 링크
 
-- 다른 페이지는 위키 루트 기준 경로로 링크합니다. 예: `/01-foundations/database-log-formats/registry-hive/index.md`
+- 다른 페이지는 그 쪽이 있는 폴더 기준 상대 경로로 링크합니다. 예: `../registry-hive/index.md`. GitHub 저장소 화면과 GitHub Pages 둘 다에서 풀립니다
 - 같은 사실은 한 페이지에만 쓰고 나머지는 링크합니다. 저장 형식 설명은 기반 구조 페이지로 링크합니다.
 - 그림이 필요한 곳은 `> 그림 자리: (무엇을 보여 줄지)` 로 표시합니다.
 

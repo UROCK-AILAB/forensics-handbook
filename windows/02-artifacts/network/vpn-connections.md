@@ -149,20 +149,20 @@ HighDateTime=31279980
 
 - `LowDateTime` 은 FILETIME 의 아래 32비트, `HighDateTime` 은 위 32비트로 읽습니다. 합친 값은 UTC 입니다. 계산은 아래 "헥스로 한 번" 에서 따라갑니다.
 - 시험 프로필에서 두 칸을 합친 값은 2026-09-23T15:01:32.613Z 로, 프로필을 만든 시각과 같았습니다. (확인 범위: 조사 PC 시험)
-- 이벤트 시각은 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 이벤트 시각은 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 같은 CoId 의 20225 와 20226 이 있으면 두 시각의 차이로 접속이 이어진 시간을 가늠합니다. 이번 시험은 실패한 접속이라 이 쌍을 직접 보지는 못했습니다.
-- `rasphone.pbk` 파일의 파일 시스템 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)에서 읽습니다.
+- `rasphone.pbk` 파일의 파일 시스템 시각은 [마스터 파일 테이블](../filesystem/mft.md)에서 읽습니다.
 
 ## 함정과 한계
 
 - **사용자 칸이 SYSTEM 으로 남을 수 있습니다.** 관리자 권한 PowerShell 에서 `rasdial` 로 접속하자 `%2` 가 로그인한 사용자 이름이 아니라 "SYSTEM" 이었습니다. 이벤트 레코드의 UserId(보안 SID)도 비어 있었습니다. (확인 범위: 조사 PC 시험) 설정 앱에서 접속했을 때 어떻게 남는지는 확인하지 못했습니다.
-- **지운 프로필은 파일에 남지 않습니다.** 프로필을 지우자 그 절만 빠진 것이 아니라 `rasphone.pbk` 파일 자체가 사라졌습니다. 시험 파일에는 항목이 하나뿐이었습니다. 사용자용·모든 사용자용 둘 다 같았습니다. (확인 범위: 조사 PC 시험) 지운 프로필 내용은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)나 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)으로 찾습니다. 이 판단은 시험 관찰에서 나온 추론입니다.
+- **지운 프로필은 파일에 남지 않습니다.** 프로필을 지우자 그 절만 빠진 것이 아니라 `rasphone.pbk` 파일 자체가 사라졌습니다. 시험 파일에는 항목이 하나뿐이었습니다. 사용자용·모든 사용자용 둘 다 같았습니다. (확인 범위: 조사 PC 시험) 지운 프로필 내용은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)나 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)으로 찾습니다. 이 판단은 시험 관찰에서 나온 추론입니다.
 - **pbk 의 장치와 이벤트의 장치가 다를 수 있습니다.** 시험 프로필의 `Device` 칸은 IKEv2 였지만 20222 의 장치는 SSTP 였습니다. (확인 범위: 조사 PC 시험) 한 칸만 보고 실제로 쓴 터널 종류를 단정하지 않습니다.
 - **기록이 아예 없을 수 있습니다.** 조사 PC 에는 시험 전까지 RasClient 이벤트가 한 건도 없었습니다. (확인 범위: 조사 PC)
 - **VPN-Client/Operational 은 최대 1MB 입니다.** 오래 쓴 PC 에서는 앞선 기록이 밀려났을 수 있습니다.
 - **추적 로그는 기본값이 꺼져 있습니다.** `EnableFileTracing` 이 1 이 아니면 추적 로그를 기대하지 않습니다.
-- **네트워크 목록과의 관계가 확인되지 않았습니다.** RegRipper networklist 플러그인은 NameType 0x17 을 "broadband (3g)" 로 표시합니다. VPN 연결이 이 값으로 네트워크 목록에 남는다는 설명이 흔하지만 이번에 확인하지 못했습니다. 시험 접속은 실패해서 네트워크 목록에 새 프로필이 생기지 않았습니다. (확인 범위: 조사 PC 시험) 목록을 읽는 법은 [네트워크 목록](/02-artifacts/network/networklist.md)에서 다룹니다.
-- **메시지 문장은 분석 PC 에서 만듭니다.** RasClient 레코드에는 빈자리 값만 들어 있습니다. 문장 틀은 메시지 파일에서 읽습니다. 자세한 내용은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- **네트워크 목록과의 관계가 확인되지 않았습니다.** RegRipper networklist 플러그인은 NameType 0x17 을 "broadband (3g)" 로 표시합니다. VPN 연결이 이 값으로 네트워크 목록에 남는다는 설명이 흔하지만 이번에 확인하지 못했습니다. 시험 접속은 실패해서 네트워크 목록에 새 프로필이 생기지 않았습니다. (확인 범위: 조사 PC 시험) 목록을 읽는 법은 [네트워크 목록](networklist.md)에서 다룹니다.
+- **메시지 문장은 분석 PC 에서 만듭니다.** RasClient 레코드에는 빈자리 값만 들어 있습니다. 문장 틀은 메시지 파일에서 읽습니다. 자세한 내용은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -179,9 +179,9 @@ HighDateTime=31279980
 | 합친 64비트 값 (High 를 위, Low 를 아래에) | `0x01DD4B6C6BAE7750` = 134346492926130000 |
 | 1601-01-01 부터 센 100ns 단위로 읽음 | 2026-09-23T15:01:32.613Z |
 
-다른 아티팩트에서 이 FILETIME 을 리틀 엔디언 8바이트로 찾는다면 `50 77 AE 6B 6C 4B DD 01` 로 보입니다. 이 바이트열은 위 값을 규칙대로 뒤집어 만든 예시입니다. FILETIME 을 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+다른 아티팩트에서 이 FILETIME 을 리틀 엔디언 8바이트로 찾는다면 `50 77 AE 6B 6C 4B DD 01` 로 보입니다. 이 바이트열은 위 값을 규칙대로 뒤집어 만든 예시입니다. FILETIME 을 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 
-파일 인코딩은 이번에 기록하지 않았습니다. 파일 앞 몇 바이트로 BOM 이 있는지 먼저 확인합니다. 인코딩을 가리는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+파일 인코딩은 이번에 기록하지 않았습니다. 파일 앞 몇 바이트로 BOM 이 있는지 먼저 확인합니다. 인코딩을 가리는 법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -226,13 +226,13 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Application.evtx'; ProviderName
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 프리페치 | `rasdial` 을 실행한 뒤 `RASDIAL.EXE-0870CD35.pf` 가 생겼습니다 (확인 범위: 조사 PC 시험) | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| PowerShell 명령 기록 | PowerShell 로 프로필을 만들거나 접속한 명령이 남았는지 봅니다 | [PowerShell 명령 기록](/02-artifacts/execution/consolehost-history-txt.md) |
-| 네트워크 목록 | VPN 접속으로 새 네트워크 프로필이 생겼는지 봅니다 | [네트워크 목록](/02-artifacts/network/networklist.md) |
-| 네트워크 인터페이스 설정 | 접속 때 받은 주소 설정이 남았는지 봅니다 | [네트워크 인터페이스 설정](/02-artifacts/network/tcp-ip-interfaces.md) |
-| 섀도 복사본 | 지운 `rasphone.pbk` 의 예전 내용 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 로그온·로그오프 | 접속 시각에 로그온해 있던 사용자 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 시간대 설정 | 다른 현지 시각 기록과 맞출 때 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
+| 프리페치 | `rasdial` 을 실행한 뒤 `RASDIAL.EXE-0870CD35.pf` 가 생겼습니다 (확인 범위: 조사 PC 시험) | [프리페치](../execution/prefetch/index.md) |
+| PowerShell 명령 기록 | PowerShell 로 프로필을 만들거나 접속한 명령이 남았는지 봅니다 | [PowerShell 명령 기록](../execution/consolehost-history-txt.md) |
+| 네트워크 목록 | VPN 접속으로 새 네트워크 프로필이 생겼는지 봅니다 | [네트워크 목록](networklist.md) |
+| 네트워크 인터페이스 설정 | 접속 때 받은 주소 설정이 남았는지 봅니다 | [네트워크 인터페이스 설정](tcp-ip-interfaces.md) |
+| 섀도 복사본 | 지운 `rasphone.pbk` 의 예전 내용 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 로그온·로그오프 | 접속 시각에 로그온해 있던 사용자 | [로그온·로그오프](../event-logs/logon-events/index.md) |
+| 시간대 설정 | 다른 현지 시각 기록과 맞출 때 | [시간대 설정](../system-account/time-zone.md) |
 
 ## 실습
 

@@ -1,6 +1,6 @@
 # 암호화된 SQLite (SQLCipher)
 
-> 위치: [SQLite 데이터베이스 (SQLite)](/01-foundations/database-log-formats/sqlite/index.md) > 암호화된 SQLite
+> 위치: [SQLite 데이터베이스 (SQLite)](index.md) > 암호화된 SQLite
 
 ## 한 줄 요약
 
@@ -22,17 +22,17 @@ SQLCipher 는 Windows 구성 요소가 아닙니다.
 - 키는 같은 `Signal` 폴더의 `config.json` 에 있습니다.
 - 예전 버전은 64자리 16진 키를 `key` 항목에 평문으로 적었습니다.
 - 지금 버전은 키를 암호화해 `encryptedKey` 항목에 둡니다. 그 키를 푸는 키는 `Local State` 파일에 DPAPI 로 보호해 둡니다.
-- 이 방식은 크롬 계열의 키 보호와 같습니다. 자세한 내용은 [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](/01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 와 [시그널 (Signal)](/02-artifacts/messengers/signal.md) 에 있습니다.
+- 이 방식은 크롬 계열의 키 보호와 같습니다. 자세한 내용은 [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](../../app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md) 와 [시그널 (Signal)](../../../02-artifacts/messengers/signal.md) 에 있습니다.
 
 SQLite 를 암호화하는 확장은 SQLCipher 말고도 있습니다.
 SQLite 개발진이 만든 SEE (SQLite Encryption Extension) 가 있습니다.
 여러 암호 방식을 한데 모은 SQLite3 Multiple Ciphers 도 있습니다.
 겉으로 보면 모두 무작위 바이트처럼 보입니다.
-대화 DB 를 암호화하는 방식은 메신저마다 다르므로 각 아티팩트 페이지를 함께 봅니다. 예: [대화 DB 암호화와 버전별 차이 (카카오톡 PC)](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md)
+대화 DB 를 암호화하는 방식은 메신저마다 다르므로 각 아티팩트 페이지를 함께 봅니다. 예: [대화 DB 암호화와 버전별 차이 (카카오톡 PC)](../../../02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md)
 
 ## 구조
 
-평문 SQLite 의 페이지 구조는 [파일·페이지 구조 (B-tree·Record Format)](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에 있습니다.
+평문 SQLite 의 페이지 구조는 [파일·페이지 구조 (B-tree·Record Format)](b-tree-record-format.md) 에 있습니다.
 여기서는 SQLCipher 가 바꾸는 부분만 적습니다.
 
 ### 파일 전체
@@ -94,7 +94,7 @@ SQLite 개발진이 만든 SEE (SQLite Encryption Extension) 가 있습니다.
 
 ### 딸린 파일
 
-딸린 파일 자체의 구조는 [WAL과 롤백 저널 (-wal·-journal·-shm)](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
+딸린 파일 자체의 구조는 [WAL과 롤백 저널 (-wal·-journal·-shm)](wal-journal-shm.md) 에 있습니다.
 
 | 파일 | 평문으로 남는 부분 | 암호화하는 부분 |
 |---|---|---|
@@ -113,8 +113,8 @@ SQLite 개발진이 만든 SEE (SQLite Encryption Extension) 가 있습니다.
    - 파일 크기가 페이지 크기의 배수인지 봅니다. 3.x 이하 기본값이면 1024, 4.x 기본값이면 4096 의 배수입니다.
    - 같은 이름의 -wal 이 있으면 그 헤더를 봅니다. 앞 4바이트가 0x377F0682 또는 0x377F0683 이면 SQLite WAL 입니다.
    - WAL 헤더 오프셋 8 의 4바이트(빅 엔디언)가 페이지 크기입니다. DB 파일에서 못 읽는 페이지 크기를 여기서 얻습니다.
-   - 이것만으로는 SQLCipher 인지 다른 암호화 확장인지 가리지 못합니다. 앱 폴더의 라이브러리 이름과 앱 버전으로 좁힙니다. 암호화 파일을 찾는 일반 방법은 [암호화 컨테이너 찾기](/03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md) 에 있습니다.
-3. **키를 구합니다.** 키는 앱마다 다른 곳에 있습니다. 설정 파일, DPAPI 로 보호한 값, 실행 중인 앱의 메모리가 흔한 자리입니다. [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 와 [메모리 속 문자열·자격증명·암호 키](/03-techniques/analysis/memory-forensics/strings-credentials-keys.md) 를 봅니다.
+   - 이것만으로는 SQLCipher 인지 다른 암호화 확장인지 가리지 못합니다. 앱 폴더의 라이브러리 이름과 앱 버전으로 좁힙니다. 암호화 파일을 찾는 일반 방법은 [암호화 컨테이너 찾기](../../../03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md) 에 있습니다.
+3. **키를 구합니다.** 키는 앱마다 다른 곳에 있습니다. 설정 파일, DPAPI 로 보호한 값, 실행 중인 앱의 메모리가 흔한 자리입니다. [DPAPI 구조](../../protection/data-protection-api/index.md) 와 [메모리 속 문자열·자격증명·암호 키](../../../03-techniques/analysis/memory-forensics/strings-credentials-keys.md) 를 봅니다.
 4. **첫 페이지로 키와 설정을 확인합니다.**
    - 오프셋 0x10 의 암호문 첫 블록(16바이트)과 첫 페이지의 IV 만 있으면 헤더 16~31바이트를 풀 수 있습니다.
    - 푼 16~23바이트가 SQLite 헤더 규칙에 맞으면 키와 설정이 맞습니다.
@@ -153,13 +153,13 @@ SQLite 개발진이 만든 SEE (SQLite Encryption Extension) 가 있습니다.
 
 ### 지운 데이터
 
-- 복호한 페이지 안은 평문 SQLite 와 같습니다. 그래서 지운 레코드도 [파일 안에 남은 지운 레코드 (Freelist·Freeblock)](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 와 같은 방법으로 찾습니다.
+- 복호한 페이지 안은 평문 SQLite 와 같습니다. 그래서 지운 레코드도 [파일 안에 남은 지운 레코드 (Freelist·Freeblock)](freelist-freeblock.md) 와 같은 방법으로 찾습니다.
 - 다만 복호 방식에 따라 이 흔적이 남기도 하고 사라지기도 합니다.
 - `sqlcipher_export()` 나 `VACUUM` 으로 평문 DB 를 새로 만들면 살아 있는 레코드만 옮겨집니다. 빈 페이지와 Freeblock 은 따라오지 않습니다.
 - 페이지마다 풀어서 같은 위치에 쓰면 배치가 그대로 남습니다.
 - 이렇게 만든 파일은 일반 SQLite 로 열립니다. 푼 헤더의 20번 바이트가 이미 예약 크기를 가리키므로, SQLite 는 페이지 끝의 IV·HMAC 을 예약 공간으로 보고 건너뜁니다.
 - 디스크의 비할당 영역에 남은 옛 페이지는 무작위 바이트라 서명으로 찾을 수 없습니다.
-- 키가 있으면 이런 페이지도 풀 수 있습니다. CBC 복호에는 키와 그 페이지 끝의 IV 만 필요합니다. 페이지 번호는 HMAC 검사에만 쓰입니다. 조각을 모으는 방법은 [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
+- 키가 있으면 이런 페이지도 풀 수 있습니다. CBC 복호에는 키와 그 페이지 끝의 IV 만 필요합니다. 페이지 번호는 HMAC 검사에만 쓰입니다. 조각을 모으는 방법은 [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
 
 ### 비정상 종료와 딸린 파일
 
@@ -178,10 +178,10 @@ SQLite 개발진이 만든 SEE (SQLite Encryption Extension) 가 있습니다.
 
 ### 시각
 
-- SQLCipher 층에는 시각 값이 없습니다. 시각은 풀어낸 레코드 안에 앱이 적은 값뿐입니다. 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
+- SQLCipher 층에는 시각 값이 없습니다. 시각은 풀어낸 레코드 안에 앱이 적은 값뿐입니다. 형식은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
 - IV 를 쓸 때마다 새로 뽑으므로, 같은 내용을 다시 써도 페이지 바이트가 모두 바뀝니다.
 - 그래서 섀도 복사본 속 옛 DB 와 지금 DB 를 페이지 단위로 비교하면, 키 없이도 어느 페이지를 다시 썼는지 알 수 있습니다.
-- 무엇이 바뀌었는지는 키 없이 알 수 없습니다. 비교 방법은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에 있습니다.
+- 무엇이 바뀌었는지는 키 없이 알 수 없습니다. 비교 방법은 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에 있습니다.
 
 ## 함정
 
@@ -190,8 +190,8 @@ SQLite 개발진이 만든 SEE (SQLite Encryption Extension) 가 있습니다.
 - **증거 원본에 `PRAGMA cipher_migrate` 를 씁니다.** 이 명령은 옛 버전 DB 를 4.x 형식으로 바꿔 파일을 다시 씁니다. 옛 버전 파일은 사본에서 `cipher_compatibility` 설정으로 엽니다.
 - **헤더 문자열이 보이니 평문이라고 봅니다.** 평문 헤더 설정을 쓴 SQLCipher 파일일 수 있습니다. 이때는 솔트도 앱에서 따로 구해야 합니다.
 - **무차별 대입부터 시작합니다.** 앱이 무작위 32바이트 원시 키를 쓰면 대입은 소용없습니다. 키를 보관하는 자리를 찾는 편이 빠릅니다.
-- **비밀번호 방식이면 쉽게 풀린다고 봅니다.** 4.x 기본값은 추측 하나마다 PBKDF2-HMAC-SHA512 를 256,000 번 돌립니다. [비밀번호 복구](/03-techniques/analysis/encrypted-evidence/password-recovery.md) 를 봅니다.
-- **전원부터 끕니다.** 키를 메모리에서만 얻을 수 있는 앱도 있습니다. 켜진 PC 라면 메모리를 확보할지 먼저 정합니다. [메모리 덤프 확보](/03-techniques/analysis/memory-forensics/memory-acquisition.md) 를 봅니다.
+- **비밀번호 방식이면 쉽게 풀린다고 봅니다.** 4.x 기본값은 추측 하나마다 PBKDF2-HMAC-SHA512 를 256,000 번 돌립니다. [비밀번호 복구](../../../03-techniques/analysis/encrypted-evidence/password-recovery.md) 를 봅니다.
+- **전원부터 끕니다.** 키를 메모리에서만 얻을 수 있는 앱도 있습니다. 켜진 PC 라면 메모리를 확보할지 먼저 정합니다. [메모리 덤프 확보](../../../03-techniques/analysis/memory-forensics/memory-acquisition.md) 를 봅니다.
 - **복호 결과의 행 수를 그대로 비교합니다.** 내보내기와 페이지 단위 복호, -wal 포함 여부에 따라 결과가 다릅니다. 어떻게 풀었는지를 보고서에 함께 씁니다.
 
 ## 도구
@@ -207,7 +207,7 @@ SQLite 개발진이 만든 SEE (SQLite Encryption Extension) 가 있습니다.
 | 헥스 편집기 | 첫 16바이트, 파일 크기, -wal 헤더를 직접 봅니다 |
 
 결과가 서로 다르면 먼저 복호 방식과 -wal 포함 여부를 비교합니다.
-검증 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+검증 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

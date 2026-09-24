@@ -1,6 +1,6 @@
 # 신뢰 문서 기록 (Trust Records)
 
-> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](/02-artifacts/file-folder-usage/microsoft-office/index.md)
+> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)
 
 ## 한 줄 요약
 
@@ -35,7 +35,7 @@ az4n6 블로그는 Word 로 이 기록을 시험했습니다. 결과는 아래�
 HKCU\Software\Microsoft\Office\<버전>\<앱>\Security\Trusted Documents\TrustRecords
 ```
 
-사용자마다 NTUSER.DAT 에 있습니다. RegRipper 는 Word, PowerPoint, Excel, Access 네 앱에서 이 키를 읽습니다. 버전 키가 어느 오피스 제품을 뜻하는지는 [허브 페이지](/02-artifacts/file-folder-usage/microsoft-office/index.md) 에서 다룹니다.
+사용자마다 NTUSER.DAT 에 있습니다. RegRipper 는 Word, PowerPoint, Excel, Access 네 앱에서 이 키를 읽습니다. 버전 키가 어느 오피스 제품을 뜻하는지는 [허브 페이지](index.md) 에서 다룹니다.
 
 | 버전 키 | 확인 범위 | 근거 |
 |---|---|---|
@@ -110,15 +110,15 @@ az4n6 는 Excel·Access·PowerPoint 를 직접 시험하지 않았다고 적었�
 | 오프셋 16 의 4바이트 (관찰) | 1970-01-01 UTC 부터 센 분 | 신뢰를 준 시각일 가능성이 있습니다. 확인하지 못한 해석입니다. 분 단위라 초가 없습니다. |
 | 부모 키의 `LastPurgeTime` (관찰) | 분 단위로 보입니다 | 뜻을 확인하지 못했습니다. |
 
-- 처음 8바이트를 "매크로를 켠 시각" 으로 적으면 틀립니다. FILETIME 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
-- 오프셋 8 의 값이 시간대 차이라면, 기록을 남길 때의 시간대를 짐작하는 단서가 됩니다. 이 해석도 한 PC 관찰에서 나왔습니다. [시간대 설정](/02-artifacts/system-account/time-zone.md) 과 맞춰 봅니다.
+- 처음 8바이트를 "매크로를 켠 시각" 으로 적으면 틀립니다. FILETIME 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 오프셋 8 의 값이 시간대 차이라면, 기록을 남길 때의 시간대를 짐작하는 단서가 됩니다. 이 해석도 한 PC 관찰에서 나왔습니다. [시간대 설정](../../system-account/time-zone.md) 과 맞춰 봅니다.
 
 ## 함정과 한계
 
 - **[편집 사용] 만으로 값이 생깁니다.** 값이 있다고 "매크로를 실행했다" 로 쓰지 않습니다.
 - **알림을 끈 환경에서는 남지 않습니다.** 먼저 `VBAWarnings` 를 확인합니다. 값이 없으면 기본 설정입니다.
 - **경로 기준 기록입니다.** 값 이름이 문서 경로입니다. 파일을 옮기면 다시 경고가 뜹니다. 같은 문서라도 경로가 다르면 따로 봅니다.
-- **사용자가 모두 지울 수 있습니다.** 보안 센터에서 신뢰 문서를 모두 지울 수 있습니다. 지운 뒤 레지스트리에 무엇이 남는지는 확인하지 못했습니다. 부모 키의 `LastPurgeTime` 이 이 동작과 관련 있는지도 확인하지 못했습니다. 지운 값은 하이브 안의 빈 공간 ([레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)) 과 섀도 복사본 속 옛 NTUSER.DAT ([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)) 에서 찾아봅니다.
+- **사용자가 모두 지울 수 있습니다.** 보안 센터에서 신뢰 문서를 모두 지울 수 있습니다. 지운 뒤 레지스트리에 무엇이 남는지는 확인하지 못했습니다. 부모 키의 `LastPurgeTime` 이 이 동작과 관련 있는지도 확인하지 못했습니다. 지운 값은 하이브 안의 빈 공간 ([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)) 과 섀도 복사본 속 옛 NTUSER.DAT ([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)) 에서 찾아봅니다.
 - **시험 범위가 좁습니다.** az4n6 는 Word 2010·2013 만 시험했습니다. 다른 앱과 16.0 은 검체와 같은 환경에서 따로 시험합니다.
 - **24바이트 배치는 관찰입니다.** 오프셋 8~19 는 공식 명세가 없습니다.
 - **처음 8바이트가 0 인 기록이 있습니다.** https 기록과 일부 로컬 기록이 0 이었습니다. (관찰) 0 을 1601-01-01 로 풀어 적지 않습니다.
@@ -154,22 +154,22 @@ RegRipper 의 msoffice 플러그인은 Word·PowerPoint·Excel·Access 의 Trust
 2. msoffice 플러그인을 돌려 앱마다 값 목록을 봅니다.
 3. 값 몇 개를 레지스트리 뷰어에서 헥스로 열어 길이와 마지막 4바이트를 직접 확인합니다.
 4. 같은 `Security` 키의 `VBAWarnings` 를 확인합니다.
-5. 도구 결과와 헥스 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+5. 도구 결과와 헥스 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [오피스 최근 파일 (File MRU·Place MRU)](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | 같은 문서가 최근 목록에 있는지, 그 시각 |
-| [오피스 매크로](/02-artifacts/embedded-metadata/vba-macro.md) | 문서 안의 매크로 코드 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 문서가 어디서 왔는지 |
-| [오피스 경고](/02-artifacts/event-logs/oalerts.md) | 같은 시각대에 남은 오피스 경고 기록 |
-| [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) | 문서 안에 적힌 만든 시각과 처음 8바이트 시각 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일 생성 시각, 지운 문서의 레코드 |
-| [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) | 지운 문서의 원래 경로 |
-| [프로세스 생성](/02-artifacts/event-logs/4688.md)·[프리페치](/02-artifacts/execution/prefetch/index.md) | 문서를 연 뒤에 실행한 프로그램 |
+| [오피스 최근 파일 (File MRU·Place MRU)](file-mru-place-mru.md) | 같은 문서가 최근 목록에 있는지, 그 시각 |
+| [오피스 매크로](../../embedded-metadata/vba-macro.md) | 문서 안의 매크로 코드 |
+| [다운로드 출처 표시](../../filesystem/zone-identifier.md) | 문서가 어디서 왔는지 |
+| [오피스 경고](../../event-logs/oalerts.md) | 같은 시각대에 남은 오피스 경고 기록 |
+| [문서 메타데이터](../../embedded-metadata/document-metadata/index.md) | 문서 안에 적힌 만든 시각과 처음 8바이트 시각 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일 생성 시각, 지운 문서의 레코드 |
+| [휴지통](../recycle-bin.md) | 지운 문서의 원래 경로 |
+| [프로세스 생성](../../event-logs/4688.md)·[프리페치](../../execution/prefetch/index.md) | 문서를 연 뒤에 실행한 프로그램 |
 
-시나리오로 이어서 보려면 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) 를 봅니다.
+시나리오로 이어서 보려면 [악성코드는 어디서 들어왔나](../../../04-scenarios/incident/initial-access.md) 를 봅니다.
 
 ## 실습
 

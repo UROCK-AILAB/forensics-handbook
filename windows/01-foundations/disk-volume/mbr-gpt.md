@@ -12,13 +12,13 @@
 
 | 쓰는 곳 | 파티션 표에서 가져오는 값 |
 |---|---|
-| [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) | 파티션 시작 LBA. 볼륨 안 오프셋을 디스크 오프셋으로 바꿀 때 더합니다. |
-| [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) | 파티션 시작 LBA와 파티션 종류 값 |
-| [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) | MBR 디스크 서명, GPT 디스크 GUID·파티션 GUID. 다른 기록과 맞춰 볼 값입니다. |
-| [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) | 파티션마다 시작 위치와 크기 |
-| [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) | 어느 파티션에도 속하지 않은 섹터 |
+| [NTFS 구조](ntfs/index.md) | 파티션 시작 LBA. 볼륨 안 오프셋을 디스크 오프셋으로 바꿀 때 더합니다. |
+| [FAT·exFAT 구조](fat-exfat.md) | 파티션 시작 LBA와 파티션 종류 값 |
+| [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) | MBR 디스크 서명, GPT 디스크 GUID·파티션 GUID. 다른 기록과 맞춰 볼 값입니다. |
+| [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) | 파티션마다 시작 위치와 크기 |
+| [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) | 어느 파티션에도 속하지 않은 섹터 |
 
-- 디스크 이미지 파일(E01·VHDX·VMDK)을 먼저 풀어야 첫 섹터를 읽을 수 있습니다. 이미지 형식은 [증거 이미지·가상 디스크 형식](/01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md)에 있습니다.
+- 디스크 이미지 파일(E01·VHDX·VMDK)을 먼저 풀어야 첫 섹터를 읽을 수 있습니다. 이미지 형식은 [증거 이미지·가상 디스크 형식](e01-raw-aff4-vhdx-vmdk.md)에 있습니다.
 
 ## 구조
 
@@ -158,7 +158,7 @@ GPT (GUID Partition Table) 디스크는 아래처럼 놓입니다.
 | 48 | 8 | 속성 플래그 | 아래 표 |
 | 56 | 72 | 파티션 이름 | UTF-16LE |
 
-- GUID 를 바이트에서 문자열로 바꾸는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에 있습니다.
+- GUID 를 바이트에서 문자열로 바꾸는 법은 [윈도 식별자 형식](../value-decoding/sid-guid-clsid-known-folder-id.md)에 있습니다.
 
 ### Windows 가 쓰는 파티션 종류 GUID
 
@@ -226,7 +226,7 @@ GPT (GUID Partition Table) 디스크는 아래처럼 놓입니다.
 3. 종류가 0xEE 인 항목이 있으면 GPT 디스크입니다. 아래 GPT 순서로 넘어갑니다.
 4. 종류가 0x05 나 0x0F 인 항목이 있으면 EPR 사슬을 따라가며 논리 파티션을 모읍니다.
 5. 시작 LBA 에 섹터 크기를 곱해 볼륨 시작 바이트를 구합니다.
-6. 그 자리의 볼륨 부트 섹터를 확인합니다. NTFS 는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md), FAT 와 exFAT 는 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md)를 봅니다.
+6. 그 자리의 볼륨 부트 섹터를 확인합니다. NTFS 는 [NTFS 구조](ntfs/index.md), FAT 와 exFAT 는 [FAT·exFAT 구조](fat-exfat.md)를 봅니다.
 7. 파티션 끝 LBA 를 구합니다. 이 예시에서는 2,048 + 209,715,200 − 1 = 209,717,247 입니다.
 8. 파티션 사이와 마지막 파티션 뒤에 빈 섹터 구간이 있는지 적어 둡니다.
 
@@ -294,11 +294,11 @@ LBA 2 (디스크 오프셋 0x400) 의 첫 항목을 같은 방식으로 풀면 �
 - MBR 디스크에는 MBR 과 첫 파티션 사이, 파티션과 파티션 사이, 마지막 파티션 뒤에 파티션이 가리키지 않는 섹터가 생길 수 있습니다.
 - GPT 디스크에서는 파티션 영역 첫 LBA 앞과 끝 LBA 뒤를 파티션이 쓸 수 없습니다. 파티션 영역 안에서도 항목이 가리키지 않는 구간이 생길 수 있습니다.
 - 이 구간은 어느 파일시스템의 파일 목록에도 나오지 않습니다. 이미지에서 바이트를 직접 봅니다.
-- 이 구간을 다루는 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)에 있습니다.
+- 이 구간을 다루는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)에 있습니다.
 
 ### 지운 파티션과 망가진 파티션 표
 
-- 파티션 표만 망가지고 볼륨이 남아 있으면 볼륨 부트 섹터로 파티션 위치를 다시 찾을 수 있습니다. 찾는 법은 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md)와 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md)에 있습니다.
+- 파티션 표만 망가지고 볼륨이 남아 있으면 볼륨 부트 섹터로 파티션 위치를 다시 찾을 수 있습니다. 찾는 법은 [NTFS 구조](ntfs/index.md)와 [FAT·exFAT 구조](fat-exfat.md)에 있습니다.
 - GPT 는 헤더와 항목 배열의 백업이 디스크 끝에 있습니다. 주 헤더가 망가졌으면 백업 헤더로 항목 배열을 찾습니다.
 - 주 쪽과 백업 쪽이 다르면 한쪽이 손상됐거나 바뀐 것입니다. 두 값을 모두 기록하고, 보고서에는 어느 쪽으로 해석했는지 밝힙니다.
 - EPR 사슬 가운데 하나가 망가지면 그 뒤의 논리 파티션은 사슬로 찾을 수 없습니다. 섹터 경계마다 `55 AA` 와 EPR 모양을 찾아 이어 붙입니다.
@@ -319,7 +319,7 @@ LBA 2 (디스크 오프셋 0x400) 의 첫 항목을 같은 방식으로 풀면 �
 ### 디스크와 파티션을 가리키는 값
 
 - MBR 디스크 서명 (오프셋 440, 4바이트), GPT 디스크 GUID (헤더 오프셋 56), GPT 파티션 고유 GUID (항목 오프셋 16) 는 디스크와 파티션을 가리키는 값입니다.
-- 다른 기록에 같은 값이 남아 있으면 이 값으로 맞춰 볼 수 있습니다. 외부 저장장치 조사에서 쓰는 방법은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)에서 다룹니다.
+- 다른 기록에 같은 값이 남아 있으면 이 값으로 맞춰 볼 수 있습니다. 외부 저장장치 조사에서 쓰는 방법은 [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md)에서 다룹니다.
 - 이 값들은 파티션 표 안의 바이트일 뿐이라 고칠 수 있습니다. 값이 같다는 사실만으로 같은 디스크라고 단정하지 않습니다. 디스크 크기, 파티션 배치 같은 다른 값과 함께 봅니다.
 
 ### 동적 디스크와 저장소 공간
@@ -344,13 +344,13 @@ LBA 2 (디스크 오프셋 0x400) 의 첫 항목을 같은 방식으로 풀면 �
 7. **EPR 두 항목의 LBA 를 같은 기준으로 계산합니다.** 항목 1 은 지금 EPR 기준, 항목 2 는 첫 EPR 기준입니다. 계산한 자리에 서명이 있는지도 확인합니다.
 8. **CRC 칸을 그대로 둔 채 헤더 CRC 를 계산합니다.** 오프셋 16 을 0 으로 두고 계산해야 맞습니다.
 9. **백업 헤더의 오프셋 72 를 주 항목 위치로 씁니다.** 백업 헤더에서는 백업 항목 위치입니다.
-10. **GUID 바이트를 그대로 읽어 문자열로 적습니다.** 바이트 순서를 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)대로 바꿉니다.
+10. **GUID 바이트를 그대로 읽어 문자열로 적습니다.** 바이트 순서를 [윈도 식별자 형식](../value-decoding/sid-guid-clsid-known-folder-id.md)대로 바꿉니다.
 
 ## 도구
 
 - 헥스 편집기로 위 순서를 직접 따라갈 수 있습니다.
 - libyal 의 libvsmbr 와 libvsgpt 는 이 페이지가 참고한 MBR·GPT 문서를 공개한 오픈 소스 라이브러리입니다.
-- 두 도구가 보여 주는 파티션 목록이 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다. 혼합 MBR 디스크에서는 도구마다 MBR 과 GPT 가운데 어느 쪽을 읽었는지부터 확인합니다.
+- 두 도구가 보여 주는 파티션 목록이 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다. 혼합 MBR 디스크에서는 도구마다 MBR 과 GPT 가운데 어느 쪽을 읽었는지부터 확인합니다.
 
 ## 참고 문헌
 

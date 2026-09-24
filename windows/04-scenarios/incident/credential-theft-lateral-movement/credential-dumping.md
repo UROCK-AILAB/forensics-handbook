@@ -1,6 +1,6 @@
 # 자격 증명을 빼냈나 (Credential Dumping)
 
-> 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](/04-scenarios/incident/credential-theft-lateral-movement/index.md)
+> 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)
 
 이 페이지는 이미 들어온 PC 에서 비밀번호·해시·티켓 같은 자격 증명을 빼내려 한 흔적을 찾는 순서를 다룹니다. SAM·LSA 시크릿·NTDS 같은 저장 구조는 각 아티팩트 페이지에서 다룹니다. 이 페이지는 그 자료를 빼내려 할 때 로그·레지스트리·파일에 무엇이 남는지, 그 흔적을 어디까지 읽을 수 있는지를 다룹니다.
 
@@ -17,8 +17,8 @@
 | 확인할 것 | 까닭 |
 |---|---|
 | Windows 버전 | LSA 보호·Credential Guard 의 기본값이 버전마다 다릅니다. 아래 표에서 확인합니다. |
-| 시간대 | 이벤트·레지스트리 시각을 같은 기준으로 맞춥니다([시간대 설정](/02-artifacts/system-account/time-zone.md)). |
-| 감사·Sysmon 설정 | 프로세스 접근·명령줄·파일 생성 기록은 감사 정책이나 Sysmon 을 켜야 남습니다. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 을 봅니다. |
+| 시간대 | 이벤트·레지스트리 시각을 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
+| 감사·Sysmon 설정 | 프로세스 접근·명령줄·파일 생성 기록은 감사 정책이나 Sysmon 을 켜야 남습니다. [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 을 봅니다. |
 | 수집 범위 | 보안 로그, Sysmon 로그, CodeIntegrity 로그, SYSTEM·SOFTWARE 하이브, 사용자 프로필, 메모리 이미지가 있으면 메모리도 확보합니다. |
 
 ## 무엇을 노리나
@@ -28,26 +28,26 @@ MITRE ATT&CK 은 자격 증명 빼내기를 T1003(OS Credential Dumping) 으로 
 | 하위 기법 | 노리는 것 | 저장 구조 페이지 |
 |---|---|---|
 | T1003.001 LSASS Memory | LSASS 프로세스 메모리 속 자격 증명 | 이 페이지 아래 |
-| T1003.002 Security Account Manager | SAM 하이브의 로컬 계정 해시 | [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) |
-| T1003.003 NTDS | 도메인 계정 데이터베이스 | [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md) |
-| T1003.004 LSA Secrets | LSA 시크릿 | [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) |
-| T1003.005 Cached Domain Credentials | 캐시된 도메인 자격 증명 | [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) |
-| T1003.006 DCSync | 도메인 컨트롤러에 복제를 요청해 얻는 해시 | [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md) |
+| T1003.002 Security Account Manager | SAM 하이브의 로컬 계정 해시 | [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) |
+| T1003.003 NTDS | 도메인 계정 데이터베이스 | [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) |
+| T1003.004 LSA Secrets | LSA 시크릿 | [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) |
+| T1003.005 Cached Domain Credentials | 캐시된 도메인 자격 증명 | [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) |
+| T1003.006 DCSync | 도메인 컨트롤러에 복제를 요청해 얻는 해시 | [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) |
 
 - T1003.007·T1003.008 은 리눅스 대상이라 이 위키 범위 밖입니다[1].
-- 하이브에서 부트키로 해시를 풀고 LSA 시크릿·캐시 자격 증명으로 이어지는 구조는 [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) 에 있습니다.
+- 하이브에서 부트키로 해시를 풀고 LSA 시크릿·캐시 자격 증명으로 이어지는 구조는 [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) 에 있습니다.
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | Sysmon 이벤트 10 | 어떤 프로세스가 lsass.exe 에 어떤 권한으로 접근했나 | [이미지 로드·프로세스 접근](/02-artifacts/event-logs/sysmon/7-8-10.md) |
-| 2 | 프로세스 생성 (4688·Sysmon 1) | 덤프 도구의 명령줄, 하이브 복사 명령 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) |
-| 3 | 파일 생성 (Sysmon 11·MFT·USN) | 덤프 파일이 생겼나 | [Sysmon 파일 이벤트](/02-artifacts/event-logs/sysmon/11-23-26.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 4 | 실행 흔적 (프리페치 등) | 덤프 도구가 실행됐나 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
+| 1 | Sysmon 이벤트 10 | 어떤 프로세스가 lsass.exe 에 어떤 권한으로 접근했나 | [이미지 로드·프로세스 접근](../../../02-artifacts/event-logs/sysmon/7-8-10.md) |
+| 2 | 프로세스 생성 (4688·Sysmon 1) | 덤프 도구의 명령줄, 하이브 복사 명령 | [프로세스 생성](../../../02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](../../../02-artifacts/event-logs/sysmon/1.md) |
+| 3 | 파일 생성 (Sysmon 11·MFT·USN) | 덤프 파일이 생겼나 | [Sysmon 파일 이벤트](../../../02-artifacts/event-logs/sysmon/11-23-26.md), [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) |
+| 4 | 실행 흔적 (프리페치 등) | 덤프 도구가 실행됐나 | [프리페치](../../../02-artifacts/execution/prefetch/index.md) |
 | 5 | 레지스트리 (SSP·RunAsPPL·WDigest) | 자격 증명을 더 캐내려는 설정이 바뀌었나 | 이 페이지 아래 |
 | 6 | CodeIntegrity·WinInit 이벤트 | LSA 보호가 켜져 있었나, 꺼졌나 | 이 페이지 아래 |
-| 7 | Windows Defender 탐지 | 덤프 도구를 탐지했나 | [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) |
+| 7 | Windows Defender 탐지 | 덤프 도구를 탐지했나 | [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) |
 
 ## LSASS 메모리 (T1003.001)
 
@@ -69,7 +69,7 @@ MITRE 는 LSASS 메모리를 파일로 뜨는 예로 아래를 듭니다[1]. 조
 ### Sysmon 이벤트 10 으로 LSASS 접근 보기
 
 - MITRE 의 탐지 절은 권한 없는 또는 이상한 프로세스가 lsass.exe 에 전체 권한(0x1F0FFF) 핸들을 연 뒤, 메모리 덤프·파일 생성·레지스트리 변경이 이어지는 것을 보라고 합니다[1].
-- Sysmon 이벤트 10 은 어떤 프로세스가 다른 프로세스에 접근했는지와 그때의 GrantedAccess 값을 남깁니다. 칸과 설정은 [이미지 로드·프로세스 접근](/02-artifacts/event-logs/sysmon/7-8-10.md) 에 있습니다.
+- Sysmon 이벤트 10 은 어떤 프로세스가 다른 프로세스에 접근했는지와 그때의 GrantedAccess 값을 남깁니다. 칸과 설정은 [이미지 로드·프로세스 접근](../../../02-artifacts/event-logs/sysmon/7-8-10.md) 에 있습니다.
 - 정상 동작에서도 lsass.exe 접근은 남습니다. 원격으로 wmic 명령을 실행하면 도착 PC 의 WmiPrvSE.exe 가 lsass.exe·services.exe·csrss.exe 에 접근하는 Sysmon 10 이 남았습니다[2].
 - 원격 실행 도구가 남긴 Sysmon 10 의 GrantedAccess 예로는 0x1FFFFF, 0x1400, 0x1410, 0x101410 이 있었습니다[3].
 - 그래서 "lsass 에 접근한 기록이 있다" 만으로 덤프라고 단정하지 않습니다. 접근한 프로세스 이름, 권한 값, 뒤이은 파일 생성을 함께 봅니다[1][2].
@@ -131,13 +131,13 @@ LSASS 를 덤프하기 어렵게 만드는 두 가지 보호가 있습니다. �
 
 ## 하이브·NTDS 복사
 
-- SAM·SECURITY·SYSTEM 하이브를 복사해 대상 밖에서 해시를 푸는 방법이 있습니다. 하이브에서 해시를 푸는 구조는 [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) 에 있습니다(부트키 → NT 해시 → LSA 시크릿 → 캐시 자격 증명).
+- SAM·SECURITY·SYSTEM 하이브를 복사해 대상 밖에서 해시를 푸는 방법이 있습니다. 하이브에서 해시를 푸는 구조는 [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) 에 있습니다(부트키 → NT 해시 → LSA 시크릿 → 캐시 자격 증명).
 - 복사 명령이 실행됐다면 프로세스 생성 로그(4688·Sysmon 1)에서 명령줄을, 파일 생성은 Sysmon 11·MFT·USN 에서 찾습니다.
-- 도메인 컨트롤러에서 NTDS.dit 을 복사하는 흔적은 [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md) 에서 다룹니다.
+- 도메인 컨트롤러에서 NTDS.dit 을 복사하는 흔적은 [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) 에서 다룹니다.
 
 ## 메모리에서 찾기
 
-- 메모리 이미지가 있으면 LSASS 영역과 문자열에서 자격 증명 흔적을 찾습니다. 방법은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 에서 다룹니다.
+- 메모리 이미지가 있으면 LSASS 영역과 문자열에서 자격 증명 흔적을 찾습니다. 방법은 [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) 에서 다룹니다.
 
 ## 분석 흐름
 
@@ -148,7 +148,7 @@ LSASS 를 덤프하기 어렵게 만드는 두 가지 보호가 있습니다. �
 5. 4번의 접근 앞뒤로 프로세스 생성(4688·Sysmon 1)의 명령줄을 봅니다. 덤프·복사 명령의 문자열을 찾습니다.
 6. 같은 구간의 파일 생성(Sysmon 11·MFT·USN)에서 덤프 파일이 생겼는지 봅니다.
 7. Security Packages 값에 낯선 DLL 이, WDigest 에 UseLogonCredential 이 더해졌는지 봅니다.
-8. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리하고, 빼낸 자격 증명이 쓰인 흔적은 [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 로 이어 봅니다.
+8. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리하고, 빼낸 자격 증명이 쓰인 흔적은 [다른 PC 에서 원격 실행했나](psexec-wmi-winrm.md) 로 이어 봅니다.
 
 ## 흔한 오판
 
@@ -167,14 +167,14 @@ LSASS 를 덤프하기 어렵게 만드는 두 가지 보호가 있습니다. �
 
 ## 함께 볼 페이지
 
-- [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) · [액티브 디렉터리 DB (NTDS.dit)](/02-artifacts/credentials/ntds-dit.md) — 하이브·데이터베이스의 저장 구조입니다.
-- [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) · [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) — 다른 자격 증명 저장소입니다.
-- [이미지 로드·프로세스 접근 (Sysmon 7·8·10)](/02-artifacts/event-logs/sysmon/7-8-10.md) — lsass 접근을 읽습니다.
-- [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) · [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) — 덤프·복사 명령줄입니다.
-- [Windows Defender 탐지 (1116·1117)](/02-artifacts/event-logs/1116-1117.md) — 덤프 도구 탐지 기록입니다.
-- [프리페치](/02-artifacts/execution/prefetch/index.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) — 실행과 파일 생성 흔적입니다.
-- [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) — 메모리에서 자격 증명을 찾습니다.
-- [비밀번호 대입 공격이 있었나](/04-scenarios/incident/credential-theft-lateral-movement/brute-force.md) · [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) — 앞뒤 단계입니다.
+- [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](../../../02-artifacts/credentials/sam-security/index.md) · [액티브 디렉터리 DB (NTDS.dit)](../../../02-artifacts/credentials/ntds-dit.md) — 하이브·데이터베이스의 저장 구조입니다.
+- [자격 증명 관리자와 볼트](../../../02-artifacts/credentials/credential-manager-windows-vault.md) · [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) — 다른 자격 증명 저장소입니다.
+- [이미지 로드·프로세스 접근 (Sysmon 7·8·10)](../../../02-artifacts/event-logs/sysmon/7-8-10.md) — lsass 접근을 읽습니다.
+- [프로세스 생성 (4688)](../../../02-artifacts/event-logs/4688.md) · [Sysmon 이벤트 1](../../../02-artifacts/event-logs/sysmon/1.md) — 덤프·복사 명령줄입니다.
+- [Windows Defender 탐지 (1116·1117)](../../../02-artifacts/event-logs/1116-1117.md) — 덤프 도구 탐지 기록입니다.
+- [프리페치](../../../02-artifacts/execution/prefetch/index.md) · [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) — 실행과 파일 생성 흔적입니다.
+- [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) — 메모리에서 자격 증명을 찾습니다.
+- [비밀번호 대입 공격이 있었나](brute-force.md) · [다른 PC 에서 원격 실행했나](psexec-wmi-winrm.md) — 앞뒤 단계입니다.
 
 ## 참고 문헌
 

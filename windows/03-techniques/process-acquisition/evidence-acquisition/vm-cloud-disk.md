@@ -1,6 +1,6 @@
 # 가상 머신·클라우드 디스크 확보 (VM·Cloud Disk)
 
-> 상위 허브: [증거 획득 (Evidence Acquisition)](/03-techniques/process-acquisition/evidence-acquisition/index.md)
+> 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)
 
 ## 한 줄 요약
 
@@ -12,17 +12,17 @@
 
 - Hyper-V 나 VMware 같은 가상화 환경의 가상 머신을 조사할 때 씁니다.
 - Azure, AWS 같은 클라우드의 가상 머신을 조사할 때 씁니다.
-- 실물 디스크를 뜨는 방법은 [디스크 이미징](/03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 에 있습니다.
-- 가상 디스크 형식의 구조 전체는 [증거 이미지·가상 디스크 형식](/01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) 에서 다룹니다. 이 페이지는 확보할 때 필요한 부분만 봅니다.
+- 실물 디스크를 뜨는 방법은 [디스크 이미징](disk-imaging.md) 에 있습니다.
+- 가상 디스크 형식의 구조 전체는 [증거 이미지·가상 디스크 형식](../../../01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) 에서 다룹니다. 이 페이지는 확보할 때 필요한 부분만 봅니다.
 
 ## 절차
 
-1. **메모리를 먼저 뜰지 정합니다.** RFC 3227 과 SP 800-86 의 휘발성 순서에서 메모리는 디스크보다 앞섭니다. 가상 머신을 멈추거나 끄기 전에 정합니다. 방법은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 과 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에 있습니다.
+1. **메모리를 먼저 뜰지 정합니다.** RFC 3227 과 SP 800-86 의 휘발성 순서에서 메모리는 디스크보다 앞섭니다. 가상 머신을 멈추거나 끄기 전에 정합니다. 방법은 [메모리 분석](../../analysis/memory-forensics/index.md) 과 [라이브 응답](../live-response/index.md) 에 있습니다.
 2. **가상 디스크 구성을 파악합니다.** 고정·동적·차등 가운데 무엇인지, 부모 파일과 익스텐트 파일이 몇 개인지 확인합니다.
 3. **디스크를 확보합니다.** 온프레미스는 가상 디스크 파일과 부모·익스텐트 파일을 모두 복사합니다. 클라우드는 디스크 스냅숏을 뜹니다.
-4. **해시를 계산해 따로 보관합니다.** 복사한 파일마다 계산합니다. 절차와 알고리즘은 [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 에 있습니다.
+4. **해시를 계산해 따로 보관합니다.** 복사한 파일마다 계산합니다. 절차와 알고리즘은 [해시로 무결성 검증](hash-verification.md) 에 있습니다.
 5. **사본으로 분석합니다.** 원본 가상 머신을 켜거나 접속하지 않고, 디스크 사본을 분석용 컴퓨터에 붙여 읽습니다.
-6. **누가 언제 무엇을 했는지 기록합니다.** 기록 항목은 [증거 보관 연속성](/03-techniques/process-acquisition/evidence-acquisition/chain-of-custody.md) 에 있습니다.
+6. **누가 언제 무엇을 했는지 기록합니다.** 기록 항목은 [증거 보관 연속성](chain-of-custody.md) 에 있습니다.
 
 ## 가상 디스크 파일 확보
 
@@ -159,13 +159,13 @@ Microsoft 의 Azure 아키텍처 센터에는 디지털 증거의 보관 연속�
 - 문서의 예에서는 SOC 관리자 두 명 가운데 한 명이 8시간 뒤 만료되는 읽기 전용 SAS URI 를 만듭니다.
 - 조사자의 IP 는 스토리지 방화벽 허용 목록에 명시적으로 넣습니다.
 - 조사자는 얻은 디스크 사본을 원본 가상 머신을 켜거나 접속하지 않고 분석용 컴퓨터에 붙일 수 있습니다.
-- 접근 통제와 감사 로그로 보관 연속성을 보이는 부분은 [증거 보관 연속성](/03-techniques/process-acquisition/evidence-acquisition/chain-of-custody.md) 에서 다룹니다.
+- 접근 통제와 감사 로그로 보관 연속성을 보이는 부분은 [증거 보관 연속성](chain-of-custody.md) 에서 다룹니다.
 
 이 예시가 다루지 않는 것도 있습니다.
 
 - 임시 (Ephemeral) OS 디스크는 가상 머신 호스트에만 저장되고 디스크 스냅숏을 지원하지 않습니다. 그래서 증거를 모아야 할 수 있는 가상 머신에는 쓰지 않습니다.
 - 이 아키텍처는 플랫폼 관리 키를 쓰는 호스트 암호화 (Encryption at Host) 를 전제로 합니다.
-- BitLocker 나 dm-crypt 같은 운영체제 수준 암호화는 다루지 않습니다. 이런 디스크는 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 를 함께 봅니다.
+- BitLocker 나 dm-crypt 같은 운영체제 수준 암호화는 다루지 않습니다. 이런 디스크는 [암호화 증거 다루기](../../analysis/encrypted-evidence/index.md) 를 함께 봅니다.
 - 규정에 따라 증거와 인프라를 같은 Azure 지역에 두어야 할 수 있습니다.
 - 런북 단계에는 메모리 수집이 없습니다.
 

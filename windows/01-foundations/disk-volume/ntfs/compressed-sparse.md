@@ -19,11 +19,11 @@ WIMBoot 는 파일 내용을 별도 WIM 파일에 두는 방식이라 이 페이
 
 `$STANDARD_INFORMATION` 의 파일 특성 값에도 표시가 남습니다.
 희소는 0x00000200, 리파스 포인트는 0x00000400, 압축은 0x00000800 입니다.
-두 시각 속성의 전체 구조는 [두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에 있습니다.
+두 시각 속성의 전체 구조는 [두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)](standard-information-file-name.md) 에 있습니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-- **USN 변경 저널** — `$UsnJrnl:$J` 는 희소 스트림입니다. 오래된 레코드가 있던 앞부분이 비어 있습니다. [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) 을 봅니다.
+- **USN 변경 저널** — `$UsnJrnl:$J` 는 희소 스트림입니다. 오래된 레코드가 있던 앞부분이 비어 있습니다. [USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md) 을 봅니다.
 - **사용자가 압축한 파일·폴더** — 탐색기의 압축 설정이나 `compact /c` 로 만듭니다. 폴더에 압축 표시를 하면 그 뒤에 그 폴더에 새로 만드는 파일이 압축됩니다.
 - **Windows 10 이후 시스템 실행 파일** — Compact OS 를 켜면 OS 실행 파일이 WOF 로 압축됩니다. `compact /EXE` 로 사용자가 아무 파일이나 WOF 로 압축할 수도 있습니다.
 - **앱이 만든 큰 파일** — 대부분이 0 인 데이터베이스 파일 등을 앱이 희소 파일로 만들기도 합니다.
@@ -32,7 +32,7 @@ WIMBoot 는 파일 내용을 별도 WIM 파일에 두는 방식이라 이 페이
 
 ### 속성 헤더에서 볼 곳
 
-속성 헤더 전체와 데이터 런 인코딩은 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md) 과 [데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) 에 있습니다.
+속성 헤더 전체와 데이터 런 인코딩은 [MFT 레코드와 속성](file-record-attribute.md) 과 [데이터 런과 상주·비상주 데이터](data-run-resident-non-resident.md) 에 있습니다.
 여기서는 압축·희소와 관련된 필드만 봅니다.
 오프셋은 속성 시작 기준입니다.
 
@@ -46,7 +46,7 @@ WIMBoot 는 파일 내용을 별도 WIM 파일에 두는 방식이라 이 페이
 | 0x38 | 8 | 유효 데이터 크기 (Valid Data Length) | |
 | 0x40 | 8 | 전체 할당 크기 (Total Allocated Size) | 압축 단위 값이 0보다 클 때만 있습니다. 실제로 잡힌 클러스터 양입니다 |
 
-암호화 플래그(0x4000)는 [EFS 암호화 파일](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) 에서 다룹니다.
+암호화 플래그(0x4000)는 [EFS 암호화 파일](../../../03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) 에서 다룹니다.
 
 ### 압축 단위와 데이터 런
 
@@ -76,7 +76,7 @@ NTFS 압축은 파일을 압축 단위 (Compression Unit) 로 잘라서 따로�
 조각은 2바이트 헤더로 시작합니다.
 헤더의 15번 비트는 압축 여부, 12~14번 비트는 서명 값 3, 0~11번 비트는 "조각 크기 − 3" 입니다.
 헤더 뒤에는 플래그 바이트 1개와 원소 8개가 되풀이됩니다.
-LZNT1 의 자세한 풀이법은 [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
+LZNT1 의 자세한 풀이법은 [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](../../value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
 
 ### 희소 파일
 
@@ -107,7 +107,7 @@ WOF 압축 파일은 속성 세 개로 이루어집니다.
 조각 위치 표는 32비트 또는 64비트 값의 배열입니다.
 첫 조각의 위치는 표 바로 뒤라서 표에 적지 않습니다.
 조각 크기가 원래 크기와 같으면 그 조각은 압축하지 않은 그대로입니다.
-리파스 포인트 자체는 [링크와 리파스 포인트](/01-foundations/disk-volume/ntfs/hard-link-junction-reparse-point.md) 에서, 이름 있는 스트림은 [대체 데이터 스트림 (ADS)](/01-foundations/disk-volume/ntfs/ads.md) 에서 다룹니다.
+리파스 포인트 자체는 [링크와 리파스 포인트](hard-link-junction-reparse-point.md) 에서, 이름 있는 스트림은 [대체 데이터 스트림 (ADS)](ads.md) 에서 다룹니다.
 
 WOF 압축 파일을 쓰기 모드로 열면 파일이 압축 안 된 상태로 돌아갑니다.
 
@@ -169,7 +169,7 @@ LCN 0x1000 의 첫머리가 아래와 같다고 해 봅니다.
 ### 디스크 전체 키워드 검색과 카빙에 잘 걸리지 않습니다
 
 압축된 단위의 원문은 디스크에 그대로 있지 않습니다.
-디스크를 바이트 그대로 훑는 [키워드 검색](/03-techniques/analysis/content-search/keyword-search.md) 은 압축된 단위의 내용을 놓칩니다.
+디스크를 바이트 그대로 훑는 [키워드 검색](../../../03-techniques/analysis/content-search/keyword-search.md) 은 압축된 단위의 내용을 놓칩니다.
 압축 안 된 단위는 그대로 있으므로 한 파일에서 일부만 걸리기도 합니다.
 파일 시스템을 해석해 압축을 푼 뒤 검색하면 이 문제가 없습니다.
 
@@ -177,7 +177,7 @@ LCN 0x1000 의 첫머리가 아래와 같다고 해 봅니다.
 앞에 복사해 올 데이터가 없기 때문입니다.
 그래서 파일 앞머리의 시그니처는 클러스터 시작이 아니라 조각 헤더 뒤에 보이는 경우가 많습니다.
 압축 조각이면 3바이트 뒤(헤더 2 + 플래그 1), 압축 안 한 조각이면 2바이트 뒤입니다.
-클러스터 시작만 보는 [파일 카빙](/03-techniques/analysis/data-recovery/file-carving.md) 은 이런 파일을 놓칩니다.
+클러스터 시작만 보는 [파일 카빙](../../../03-techniques/analysis/data-recovery/file-carving.md) 은 이런 파일을 놓칩니다.
 
 ### 지운 압축 파일은 MFT 레코드가 있어야 제대로 풉니다
 
@@ -185,14 +185,14 @@ MFT 레코드가 남아 있으면 런 목록으로 압축 단위 경계를 알 �
 레코드가 덮어써졌으면 경계를 알 수 없습니다.
 이때는 조각 헤더의 서명 값 3 을 단서로 조각을 찾고, 단위 경계는 추정해야 합니다.
 추정으로 복원한 내용은 보고서에 추정이라고 밝힙니다.
-파일 시스템 정보로 되살리는 방법은 [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 에 있습니다.
+파일 시스템 정보로 되살리는 방법은 [파일시스템 기반 복구](../../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 에 있습니다.
 
 ### 빈 구간에는 되살릴 것이 없습니다
 
 빈 구간에는 클러스터가 없습니다.
 그 구간에 예전에 있던 데이터는 해제된 클러스터, 곧 비할당 영역에 남아 있을 수 있습니다.
 `$UsnJrnl:$J` 의 앞부분에서 풀려난 클러스터에도 옛 USN 레코드가 남아 있을 수 있습니다.
-이런 레코드는 [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) 으로 찾습니다.
+이런 레코드는 [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) 으로 찾습니다.
 
 ### 뽑는 방식에 따라 크기와 해시가 다릅니다
 
@@ -202,19 +202,19 @@ MFT 레코드가 남아 있으면 런 목록으로 압축 단위 경계를 알 �
 일반 파일도 희소 표시가 있으면, 빈 구간을 건너뛰고 뽑을 때 뒤쪽 내용이 앞으로 밀립니다.
 그러면 파일 안의 오프셋이 원래와 달라집니다.
 그래서 뽑은 방식(0 채움 또는 건너뜀)과 크기·해시를 함께 기록합니다.
-해시 기록 방법은 [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 을 봅니다.
+해시 기록 방법은 [해시로 무결성 검증](../../../03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 을 봅니다.
 
 희소 파일을 다른 볼륨으로 보통 방식으로 복사하면 0 구간이 실제 0 바이트로 채워집니다.
 Microsoft NTDebugging 글은 볼륨보다 큰 희소 파일을 `COPY` 로 복사하다 실패한 예를 보여 줍니다.
-[선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 에서 희소 파일을 받을 때 이 점을 미리 봅니다.
+[선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 에서 희소 파일을 받을 때 이 점을 미리 봅니다.
 
 ### WOF 를 모르는 도구는 0 을 봅니다
 
 WOF 압축 파일의 이름 없는 `$DATA` 는 전부 0 입니다.
 WOF 를 모르는 도구가 이것만 읽으면 다음 일이 생깁니다.
 
-- 파일 해시가 0 뭉치의 해시가 됩니다. 그래서 알려진 파일 [해시셋 대조](/03-techniques/analysis/hash-set-fuzzy-hash.md) 에서 빠집니다.
-- 키워드 검색과 [파일 형식 식별](/03-techniques/analysis/content-search/file-signature.md) 이 내용을 못 봅니다.
+- 파일 해시가 0 뭉치의 해시가 됩니다. 그래서 알려진 파일 [해시셋 대조](../../../03-techniques/analysis/hash-set-fuzzy-hash.md) 에서 빠집니다.
+- 키워드 검색과 [파일 형식 식별](../../../03-techniques/analysis/content-search/file-signature.md) 이 내용을 못 봅니다.
 
 Khatri 의 2016년 글 시점에는 널리 쓰는 포렌식 도구 여러 개가 WOF 를 자동으로 풀지 못했습니다.
 지금 쓰는 도구가 WOF 를 푸는지는 직접 확인해야 합니다.
@@ -224,7 +224,7 @@ Khatri 의 2016년 글 시점에는 널리 쓰는 포렌식 도구 여러 개가
 
 - **증명하는 것**: 수집 시점에 그 파일이 NTFS 압축·희소·WOF 상태였다는 것입니다.
 - **증명하지 못하는 것**: 누가 언제 압축했는지입니다. 압축된 폴더에 만들어진 파일은 저절로 압축됩니다. Compact OS 상태에서는 OS 실행 파일이 사용자 조작 없이 압축됩니다.
-- 압축 상태가 바뀐 시점은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 의 이유 값 `COMPRESSION_CHANGE` 로 찾아볼 수 있습니다. 저널이 그 시점까지 남아 있을 때만 가능합니다.
+- 압축 상태가 바뀐 시점은 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) 의 이유 값 `COMPRESSION_CHANGE` 로 찾아볼 수 있습니다. 저널이 그 시점까지 남아 있을 때만 가능합니다.
 
 ## 함정
 
@@ -242,7 +242,7 @@ Khatri 의 2016년 글 시점에는 널리 쓰는 포렌식 도구 여러 개가
 
 도구 결과는 시험용 가상 머신에서 확인합니다.
 NTFS 압축·희소·WOF 파일을 하나씩 만들고, 살아 있는 시스템에서 구한 해시와 도구가 뽑은 파일의 해시를 비교합니다.
-방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

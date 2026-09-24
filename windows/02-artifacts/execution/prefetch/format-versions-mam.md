@@ -1,6 +1,6 @@
 # 파일 구조와 버전 (Format Versions·MAM)
 
-> 위치: [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md) > 파일 구조와 버전
+> 위치: [프리페치 (Prefetch)](index.md) > 파일 구조와 버전
 
 ## 한 줄 요약
 
@@ -15,21 +15,21 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 프리페치 파일은 `C:\Windows\Prefetch\` 에 있습니다.
 파일 이름은 `<실행 파일 이름>-<프리페치 해시>.pf` 꼴이고, 확장자를 빼면 보통 대문자입니다.
 실행 파일 이름은 29자에서 잘립니다.
-해시를 무엇으로 계산하는지는 [경로 해시로 실행 위치 구분하기](/02-artifacts/execution/prefetch/path-hash.md) 에 있습니다.
+해시를 무엇으로 계산하는지는 [경로 해시로 실행 위치 구분하기](path-hash.md) 에 있습니다.
 
 압축을 푼 파일은 아래 순서로 이어집니다.
 
 | 순서 | 부분 | 담는 것 | 해석은 어디서 |
 |---|---|---|---|
 | 1 | 파일 머리 (File Header), 84바이트 | 형식 버전·서명·파일 크기·실행 파일 이름·프리페치 해시 | 이 페이지 |
-| 2 | 파일 정보 (File Information) | 다른 부분의 위치와 개수, 마지막 실행 시각, 실행 횟수 | [실행 횟수와 실행 시각 읽기](/02-artifacts/execution/prefetch/run-count-last-run-times.md) |
-| 3 | 파일 메트릭 배열 (File Metrics Array) | 프로그램이 실행하면서 불러온 파일마다 한 항목 | [참조 파일·폴더 목록 활용](/02-artifacts/execution/prefetch/referenced-files.md) |
+| 2 | 파일 정보 (File Information) | 다른 부분의 위치와 개수, 마지막 실행 시각, 실행 횟수 | [실행 횟수와 실행 시각 읽기](run-count-last-run-times.md) |
+| 3 | 파일 메트릭 배열 (File Metrics Array) | 프로그램이 실행하면서 불러온 파일마다 한 항목 | [참조 파일·폴더 목록 활용](referenced-files.md) |
 | 4 | 트레이스 체인 배열 (Trace Chains Array) | 파일마다 불러온 블록 기록 | 이 페이지 |
-| 5 | 파일 이름 문자열 (Filename Strings) | 불러온 파일의 전체 경로 | [참조 파일·폴더 목록 활용](/02-artifacts/execution/prefetch/referenced-files.md) |
-| 6 | 볼륨 정보 (Volumes Information) | 볼륨 장치 경로·만든 시각·일련번호, 파일 참조, 디렉터리 목록 | [참조 파일·폴더 목록 활용](/02-artifacts/execution/prefetch/referenced-files.md) |
+| 5 | 파일 이름 문자열 (Filename Strings) | 불러온 파일의 전체 경로 | [참조 파일·폴더 목록 활용](referenced-files.md) |
+| 6 | 볼륨 정보 (Volumes Information) | 볼륨 장치 경로·만든 시각·일련번호, 파일 참조, 디렉터리 목록 | [참조 파일·폴더 목록 활용](referenced-files.md) |
 
 - 숫자는 모두 리틀 엔디언입니다.
-- 시각은 모두 UTC 기준 FILETIME 입니다. 값을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 시각은 모두 UTC 기준 FILETIME 입니다. 값을 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 문자열은 BOM 없는 UTF-16LE 입니다.
 - libscca 명세는 파일 정보를 파일 머리와 따로 봅니다. 다른 자료는 둘을 묶어 "파일 머리" 라고 부르기도 합니다. 자료끼리 오프셋을 비교할 때 이 차이를 먼저 맞춥니다.
 
@@ -69,7 +69,7 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 | 8 또는 12 | 나머지 | | Xpress Huffman 압축 데이터 |
 
 - 압축 방식은 Xpress Huffman (LZXPRESS Huffman) 입니다.
-- 이름이 비슷한 Xpress (LZ77+DIRECT2) 와는 다른 방식입니다. 알고리즘은 [윈도 압축 형식](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
+- 이름이 비슷한 Xpress (LZ77+DIRECT2) 와는 다른 방식입니다. 알고리즘은 [윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에 있습니다.
 - dfirfpi 는 `04` 의 4 가 `COMPRESSION_FORMAT_XPRESS_HUFF` 를 뜻한다고 설명합니다. 그가 공개한 스크립트는 이 값을 그대로 Windows 함수 `RtlDecompressBufferEx` 에 넘겨 압축을 풉니다.
 - 위 4비트가 8 이면(`84`) 압축 데이터 앞에 CRC32 4바이트가 붙습니다.
 - dfirfpi 는 이 검사합을 SuperFetch 파일에서만 보았고 Prefetch 파일에서는 보지 못했다고 적었습니다.
@@ -132,7 +132,7 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 - 버전 30 에는 해시 문자열 (Hash String) 이라는 이름의 위치·크기 칸이 더 있습니다. 파일 정보 안 오프셋으로 변형 1 은 136·140, 변형 2 는 128·132 입니다.
 - 명세도 해시 문자열 부분의 뜻은 아직 정리하지 못했습니다.
 - 마지막 실행 시각 8개 가운데 첫 번째가 가장 최근입니다. 빈 칸은 0 입니다.
-- 시각과 횟수의 해석은 [실행 횟수와 실행 시각 읽기](/02-artifacts/execution/prefetch/run-count-last-run-times.md) 에서 다룹니다.
+- 시각과 횟수의 해석은 [실행 횟수와 실행 시각 읽기](run-count-last-run-times.md) 에서 다룹니다.
 
 ### 나머지 부분의 항목 크기
 
@@ -157,7 +157,7 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 | 24 | 8 | 파일 참조. 채우지 않았으면 0 |
 
 - 버전 17 의 항목(20바이트)에는 오프셋 8 의 블록 수 칸과 파일 참조가 없습니다.
-- 파일 참조는 MFT 엔트리 번호 6바이트와 순번 2바이트입니다. 뜻은 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md) 에 있습니다.
+- 파일 참조는 MFT 엔트리 번호 6바이트와 순번 2바이트입니다. 뜻은 [MFT 레코드와 속성](../../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에 있습니다.
 
 **트레이스 체인 항목**
 
@@ -189,7 +189,7 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 
 - 형식 버전만으로는 정확한 빌드를 알 수 없습니다. 30 은 Windows 10 전체와 Windows 11 일부에 걸칩니다.
 - 구조가 온전하다고 해서 내용을 고치지 않았다고 말할 수는 없습니다. Prefetch 의 MAM 머리에는 보통 검사합이 없습니다.
-- 구조는 실행 여부 판단의 재료일 뿐입니다. 실행 증거로서의 뜻은 [실행 횟수와 실행 시각 읽기](/02-artifacts/execution/prefetch/run-count-last-run-times.md) 와 [프리페치 해석 함정](/02-artifacts/execution/prefetch/pitfalls.md) 에서 다룹니다.
+- 구조는 실행 여부 판단의 재료일 뿐입니다. 실행 증거로서의 뜻은 [실행 횟수와 실행 시각 읽기](run-count-last-run-times.md) 와 [프리페치 해석 함정](pitfalls.md) 에서 다룹니다.
 
 ## 시각 해석
 
@@ -202,19 +202,19 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 
 - 파일 머리와 MAM 머리에는 시각 칸이 없습니다.
 - .pf 파일 자체의 NTFS 시각은 이 구조 밖에 있습니다.
-- 실행 시각과 NTFS 시각을 함께 읽는 법은 [실행 횟수와 실행 시각 읽기](/02-artifacts/execution/prefetch/run-count-last-run-times.md) 에 있습니다.
+- 실행 시각과 NTFS 시각을 함께 읽는 법은 [실행 횟수와 실행 시각 읽기](run-count-last-run-times.md) 에 있습니다.
 
 ## 함정과 한계
 
 1. **헥스로 바로 열면 `SCCA` 가 안 보입니다.** Windows 10 이후 파일은 압축된 상태입니다. 첫 3바이트가 `MAM` 이면 먼저 압축을 풉니다.
 2. **`SCCA` 로 카빙하면 Windows 10 이후 프리페치를 놓칩니다.** 압축 데이터 안에서는 서명 글자가 그대로 드러나지 않습니다. `MAM` 머리로 찾아야 합니다.
-3. **카빙한 MAM 조각은 끝을 바로 알 수 없습니다.** 머리에 압축된 크기가 없기 때문입니다. 압축을 풀면서 머리에 적힌 크기만큼 나오는지로 확인합니다. 카빙 일반은 [파일 카빙](/03-techniques/analysis/data-recovery/file-carving.md) 에 있습니다.
+3. **카빙한 MAM 조각은 끝을 바로 알 수 없습니다.** 머리에 압축된 크기가 없기 때문입니다. 압축을 풀면서 머리에 적힌 크기만큼 나오는지로 확인합니다. 카빙 일반은 [파일 카빙](../../../03-techniques/analysis/data-recovery/file-carving.md) 에 있습니다.
 4. **크기 두 개가 다릅니다.** 파일 시스템에 보이는 .pf 크기는 압축된 크기입니다. 파일 머리의 파일 크기 칸은 압축을 푼 크기입니다.
 5. **버전 30 변형을 잘못 고르면 오류 없이 틀린 숫자가 나옵니다.** 두 변형은 실행 횟수 자리가 8바이트 어긋납니다. 아래 헥스 예시에서 직접 봅니다.
-6. **모르는 버전을 만났을 때 도구마다 반응이 다릅니다.** 버전 31 이 처음 보고되었을 때 libscca 는 "지원하지 않는 형식 버전" 오류를 냈습니다. 버전 값을 따지지 않는 도구는 같은 파일을 그대로 읽었습니다. libscca 관리자는 느슨한 파서가 틀린 결과를 조용히 낼 수 있다고 지적했습니다. 도구가 표시하는 형식 버전을 확인하고, 두 도구 이상으로 결과를 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+6. **모르는 버전을 만났을 때 도구마다 반응이 다릅니다.** 버전 31 이 처음 보고되었을 때 libscca 는 "지원하지 않는 형식 버전" 오류를 냈습니다. 버전 값을 따지지 않는 도구는 같은 파일을 그대로 읽었습니다. libscca 관리자는 느슨한 파서가 틀린 결과를 조용히 낼 수 있다고 지적했습니다. 도구가 표시하는 형식 버전을 확인하고, 두 도구 이상으로 결과를 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 7. **남는 바이트에 예전 데이터가 있습니다.** 실행 파일 이름 칸의 끝 문자 뒤, 볼륨 정보 뒤의 남는 데이터가 그렇습니다. 문자열은 끝 문자(0x0000)까지만 읽습니다.
-8. **파일 이름은 엄격한 UTF-16 이 아닙니다.** 짝 없는 서로게이트(U+D800 등)가 들어갈 수 있습니다. 엄격하게 디코딩하는 도구는 이런 이름을 깨뜨리거나 건너뛸 수 있습니다. 인코딩 일반은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
-9. **대체 데이터 스트림에서 실행하면 이름 규칙이 달라집니다.** 명세의 예에서 `C:\Windows\System32\notepad.exe:evil.exe` 를 실행하면 `C:\Windows\Prefetch\notepad.exe:evil.pf` 가 생깁니다. 이 이름에는 해시가 없습니다. NTFS 경로 규칙으로 보면 이것은 Prefetch 폴더의 `notepad.exe` 에 붙은 `evil.pf` 스트림입니다. 폴더 목록만 훑는 수집은 이런 파일을 놓칠 수 있습니다. 스트림 일반은 [대체 데이터 스트림](/01-foundations/disk-volume/ntfs/ads.md) 에 있습니다.
+8. **파일 이름은 엄격한 UTF-16 이 아닙니다.** 짝 없는 서로게이트(U+D800 등)가 들어갈 수 있습니다. 엄격하게 디코딩하는 도구는 이런 이름을 깨뜨리거나 건너뛸 수 있습니다. 인코딩 일반은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
+9. **대체 데이터 스트림에서 실행하면 이름 규칙이 달라집니다.** 명세의 예에서 `C:\Windows\System32\notepad.exe:evil.exe` 를 실행하면 `C:\Windows\Prefetch\notepad.exe:evil.pf` 가 생깁니다. 이 이름에는 해시가 없습니다. NTFS 경로 규칙으로 보면 이것은 Prefetch 폴더의 `notepad.exe` 에 붙은 `evil.pf` 스트림입니다. 폴더 목록만 훑는 수집은 이런 파일을 놓칠 수 있습니다. 스트림 일반은 [대체 데이터 스트림](../../../01-foundations/disk-volume/ntfs/ads.md) 에 있습니다.
 10. **명세에는 뜻을 모르는 칸이 많습니다.** 뜻을 모르는 칸의 값은 보고서의 근거로 쓰지 않습니다.
 
 ## 직접 분석해 보기
@@ -266,7 +266,7 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 - 변형 2 의 실행 횟수 자리는 0xC8 입니다. `05 00 00 00` 이므로 5 입니다.
 - 0xCC 의 `01 00 00 00` 과 0xD0 의 `03 00 00 00` 은 명세가 "뜻 모름, 1 과 3 이 보임" 이라고 적은 칸입니다. 이 예시는 그 설명대로 값을 넣었습니다.
 - 변형 1 로 잘못 읽으면 0xD0 을 실행 횟수로 읽습니다. 그러면 5 가 아니라 3 이 나옵니다.
-- 마지막 실행 시각 8개는 0x80~0xBF 에 있습니다. 읽는 법은 [실행 횟수와 실행 시각 읽기](/02-artifacts/execution/prefetch/run-count-last-run-times.md) 에 있습니다.
+- 마지막 실행 시각 8개는 0x80~0xBF 에 있습니다. 읽는 법은 [실행 횟수와 실행 시각 읽기](run-count-last-run-times.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -282,11 +282,11 @@ Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` �
 
 ## 교차 검증
 
-- [시스템 기본 정보 (OS Version·Computer Name·Install Date·Shutdown Time)](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md): 형식 버전이 가리키는 세대가 그 PC 의 OS 버전과 맞는지 봅니다. 맞지 않으면 다른 PC 에서 복사해 온 파일일 수 있습니다.
-- [경로 해시로 실행 위치 구분하기](/02-artifacts/execution/prefetch/path-hash.md): 파일 머리 0x4C 의 해시와 파일 이름의 해시를 맞춰 봅니다.
-- [참조 파일·폴더 목록 활용](/02-artifacts/execution/prefetch/referenced-files.md): 메트릭 배열과 볼륨 정보를 해석합니다.
-- [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md): MAM 안의 압축 알고리즘입니다.
-- [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md): 파서마다 결과가 다를 때 따릅니다.
+- [시스템 기본 정보 (OS Version·Computer Name·Install Date·Shutdown Time)](../../system-account/os-version-computer-name-install-date-shutdown-t.md): 형식 버전이 가리키는 세대가 그 PC 의 OS 버전과 맞는지 봅니다. 맞지 않으면 다른 PC 에서 복사해 온 파일일 수 있습니다.
+- [경로 해시로 실행 위치 구분하기](path-hash.md): 파일 머리 0x4C 의 해시와 파일 이름의 해시를 맞춰 봅니다.
+- [참조 파일·폴더 목록 활용](referenced-files.md): 메트릭 배열과 볼륨 정보를 해석합니다.
+- [윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md): MAM 안의 압축 알고리즘입니다.
+- [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md): 파서마다 결과가 다를 때 따릅니다.
 
 ## 실습
 

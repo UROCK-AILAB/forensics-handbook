@@ -1,6 +1,6 @@
 # 크래시 덤프 (MEMORY.DMP·Minidump)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](/03-techniques/analysis/memory-forensics/index.md)
+> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
 
 ## 한 줄 요약
 
@@ -13,7 +13,7 @@
 - 파란 화면이 난 뒤, 그 순간 올라와 있던 드라이버와 멈춘 프로세스를 볼 때 씁니다.
 - 전원이 꺼진 PC 에서 메모리 조각을 찾을 때 씁니다.
 - 디스크에서 덤프 파일을 찾았을 때, 무엇이 언제 만든 파일인지 가릴 때 씁니다.
-- lsass 같은 프로세스의 덤프가 남았는지 볼 때 씁니다. 자격증명과의 관계는 [메모리 속 문자열·자격증명·암호 키](/03-techniques/analysis/memory-forensics/strings-credentials-keys.md) 에 있습니다.
+- lsass 같은 프로세스의 덤프가 남았는지 볼 때 씁니다. 자격증명과의 관계는 [메모리 속 문자열·자격증명·암호 키](strings-credentials-keys.md) 에 있습니다.
 
 ## 커널 크래시 덤프 종류
 
@@ -66,7 +66,7 @@ Windows 는 버그 체크 때 덤프 파일을 만들 수 있습니다 [1].
 - DumpFile, MinidumpDir, Overwrite, AutoReboot, LogEvent, SendAlert 는 문서에 값의 예만 있고 뜻 설명은 따로 없습니다 [1].
 - 바뀐 설정은 재부팅해야 적용됩니다 [1].
 - Windows 버전별 기본값은 이 글의 참고 문헌으로 확인하지 못했습니다. 이미지마다 값을 직접 읽습니다.
-- 디스크 이미지에서 떼어 낸 SYSTEM 하이브를 읽을 때는 경로의 `CurrentControlSet` 부분을 실제로 쓰던 제어 집합으로 바꿔 읽습니다. 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+- 디스크 이미지에서 떼어 낸 SYSTEM 하이브를 읽을 때는 경로의 `CurrentControlSet` 부분을 실제로 쓰던 제어 집합으로 바꿔 읽습니다. 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ## 사용자 모드 덤프 — WER 로컬 덤프
 
@@ -96,8 +96,8 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 - 프로그램 크래시용 자동 디버깅을 설정해 두면 덤프를 모으지 않습니다 [2].
 - WER 을 꺼 두었거나 사용자가 보고를 취소해도 로컬 덤프는 남을 수 있습니다 [2].
 - 로컬 덤프는 Microsoft 로 보낸 덤프와 다를 수 있습니다 [2].
-- WER 보고서 파일은 [윈도 오류 보고](/02-artifacts/execution/wer.md) 에서 다룹니다.
-- 작업 관리자나 ProcDump 로 만든 덤프는 [메모리 덤프 확보](/03-techniques/analysis/memory-forensics/memory-acquisition.md) 에서 다룹니다. 이런 덤프의 기본 저장 위치는 이 글의 참고 문헌으로 확인하지 못했습니다.
+- WER 보고서 파일은 [윈도 오류 보고](../../../02-artifacts/execution/wer.md) 에서 다룹니다.
+- 작업 관리자나 ProcDump 로 만든 덤프는 [메모리 덤프 확보](memory-acquisition.md) 에서 다룹니다. 이런 덤프의 기본 저장 위치는 이 글의 참고 문헌으로 확인하지 못했습니다.
 
 ## 구조 — 미니덤프 헤더
 
@@ -124,17 +124,17 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 1. SYSTEM 하이브의 CrashControl 값을 읽습니다. 어떤 종류의 덤프를 어디에 남기게 했는지 봅니다.
 2. DumpFile 과 MinidumpDir 에 적힌 경로에서 파일을 찾습니다.
 3. SOFTWARE 하이브에서 LocalDumps 키를 찾습니다. 키가 있으면 DumpFolder, 서비스 프로필 폴더, 프로그램별 키를 봅니다.
-4. `%LOCALAPPDATA%` 는 사용자마다 다릅니다. 모든 사용자 프로필에서 찾습니다. 프로필 목록은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에 있습니다.
+4. `%LOCALAPPDATA%` 는 사용자마다 다릅니다. 모든 사용자 프로필에서 찾습니다. 프로필 목록은 [사용자 프로필 목록](../../../02-artifacts/system-account/profilelist.md) 에 있습니다.
 5. 이미지 전체에서 확장자가 `.dmp` 인 파일을 찾습니다. 작업 관리자나 ProcDump 로 만든 덤프는 설정과 다른 곳에 있을 수 있습니다.
-6. 찾은 파일의 파일 시스템 시각을 적습니다. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 을 봅니다.
+6. 찾은 파일의 파일 시스템 시각을 적습니다. [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 을 봅니다.
 7. 완전·커널 덤프는 Windows 디버거 (WinDbg) 로 엽니다 [1].
-8. 작은 덤프에서는 중지 메시지, 드라이버 목록, 멈춘 프로세스·스레드를 봅니다. 드라이버가 의심스러우면 [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) 에서 등록 기록을 찾습니다.
-9. 크래시가 난 때를 이벤트 로그와 맞대 봅니다. [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 과 [윈도 오류 보고](/02-artifacts/execution/wer.md) 를 봅니다.
+8. 작은 덤프에서는 중지 메시지, 드라이버 목록, 멈춘 프로세스·스레드를 봅니다. 드라이버가 의심스러우면 [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) 에서 등록 기록을 찾습니다.
+9. 크래시가 난 때를 이벤트 로그와 맞대 봅니다. [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) 과 [윈도 오류 보고](../../../02-artifacts/execution/wer.md) 를 봅니다.
 
 ## 시각 해석
 
 - 작은 덤프는 파일 이름에 날짜가 들어갑니다 [1]. 이름 형식은 문서의 예로만 확인했습니다.
-- 미니덤프 헤더의 TimeDateStamp 는 time_t 형식입니다 [3]. UTC 인지는 문서에 적혀 있지 않습니다. time_t 를 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 미니덤프 헤더의 TimeDateStamp 는 time_t 형식입니다 [3]. UTC 인지는 문서에 적혀 있지 않습니다. time_t 를 읽는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 완전 덤프는 다음 크래시 때 이전 파일을 덮어씁니다 [1]. 커널 덤프도 덮어쓰기 설정이 켜져 있으면 덮어씁니다 [1]. 덮어썼다면 이 파일에는 마지막 크래시만 남습니다.
 - 파일 시스템 시각과 헤더 시각이 크게 다르면 파일을 옮기거나 복사했는지 봅니다.
 
@@ -151,7 +151,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 ## 함정과 한계
 
 - **읽은 설정이 크래시 때 설정과 다를 수 있습니다.** 바뀐 설정은 재부팅해야 적용됩니다 [1]. 설정을 바꾸고 재부팅하기 전에 크래시가 났다면 이전 설정을 따랐습니다.
-- **설정이 켜져 있어도 덤프가 없을 수 있습니다.** 완전 덤프와 작은 덤프는 페이지 파일 조건이 맞아야 합니다 [1]. 페이지 파일은 [페이지 파일](/03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md) 에 있습니다.
+- **설정이 켜져 있어도 덤프가 없을 수 있습니다.** 완전 덤프와 작은 덤프는 페이지 파일 조건이 맞아야 합니다 [1]. 페이지 파일은 [페이지 파일](pagefile-sys-swapfile-sys.md) 에 있습니다.
 - **이전 크래시는 사라졌을 수 있습니다.** 완전·커널 덤프는 덮어씁니다 [1]. 사용자 모드 덤프는 DumpCount 를 넘으면 가장 오래된 것부터 바꿉니다 [2].
 - **커널 덤프에는 사용자 프로그램 메모리가 없습니다** [1]. 커널 덤프에 사용자 프로그램의 흔적이 없다고 해서 그 프로그램을 쓰지 않았다고 볼 수 없습니다.
 - **파일 크기로 덤프 종류를 가리지 않습니다.** 문서는 작은 메모리 덤프를 64KB 로 적습니다 [1]. 실제 파일 크기는 이 값과 다를 수 있습니다. CrashDumpEnabled 값과 파일 위치로 가립니다.
@@ -169,7 +169,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 
 - 덤프가 있다는 것만으로 크래시 원인을 알 수는 없습니다. 원인은 디버거 분석으로 따로 밝힙니다.
 - 덤프가 없다고 해서 크래시가 없었다는 뜻은 아닙니다. 설정을 꺼 두었거나, 페이지 파일 조건이 맞지 않았거나, 덮어썼거나, 누가 지웠을 수 있습니다.
-- 덤프 파일만으로는 누가 만들었는지 알 수 없습니다. 작업 관리자나 ProcDump 를 실행한 흔적은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에서 찾습니다.
+- 덤프 파일만으로는 누가 만들었는지 알 수 없습니다. 작업 관리자나 ProcDump 를 실행한 흔적은 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) 에서 찾습니다.
 
 보고서 문장 예입니다.
 
@@ -178,10 +178,10 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 
 ## 함께 볼 페이지
 
-- [메모리 덤프 확보](/03-techniques/analysis/memory-forensics/memory-acquisition.md) — 켜진 PC 에서 덤프를 만드는 방법입니다.
-- [프로세스와 DLL 분석](/03-techniques/analysis/memory-forensics/process-analysis.md) — 덤프에서 프로세스 정보를 읽는 법입니다.
-- [윈도 오류 보고](/02-artifacts/execution/wer.md) — WER 보고서 파일에 남는 크래시 기록입니다.
-- [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) — 크래시로 꺼진 시점을 맞대 봅니다.
+- [메모리 덤프 확보](memory-acquisition.md) — 켜진 PC 에서 덤프를 만드는 방법입니다.
+- [프로세스와 DLL 분석](process-analysis.md) — 덤프에서 프로세스 정보를 읽는 법입니다.
+- [윈도 오류 보고](../../../02-artifacts/execution/wer.md) — WER 보고서 파일에 남는 크래시 기록입니다.
+- [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) — 크래시로 꺼진 시점을 맞대 봅니다.
 
 ## 참고 문헌
 

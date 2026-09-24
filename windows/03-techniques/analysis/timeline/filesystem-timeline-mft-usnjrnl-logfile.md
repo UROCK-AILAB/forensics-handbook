@@ -1,6 +1,6 @@
 # 파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)
 
-상위 허브: [타임라인 작성 (Timeline)](/03-techniques/analysis/timeline/index.md)
+상위 허브: [타임라인 작성 (Timeline)](index.md)
 
 ## 한 줄 요약
 
@@ -11,7 +11,7 @@ NTFS 볼륨의 메타데이터 파일 세 개로 파일 단위 시간표를 만�
 - 어떤 시간대에 파일이 생기고 바뀌고 지워졌는지 볼 때 씁니다.
 - 이름을 바꾸거나 옮긴 파일의 경로를 따라갈 때 씁니다.
 - $MFT 에서 이미 사라진 파일의 이름을 찾을 때 씁니다. USN 레코드에는 삭제 기록에도 파일 이름 칸이 있습니다.
-- [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md)의 뼈대를 만들 때 씁니다.
+- [여러 아티팩트 합친 타임라인](super-timeline.md)의 뼈대를 만들 때 씁니다.
 
 ## 세 파일의 위치
 
@@ -24,11 +24,11 @@ NTFS 볼륨의 메타데이터 파일 세 개로 파일 단위 시간표를 만�
 
 - $UsnJrnl 은 $Extend 폴더 안에 있습니다(참고 1).
 - libyal 문서의 고정 번호 표에는 $UsnJrnl 이 없습니다(참고 1). 그래서 번호가 아니라 $Extend 안의 이름으로 찾습니다.
-- 파일마다의 전체 구조는 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md), [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md)에서 다룹니다. 이 페이지는 시간표를 만드는 데 쓰는 칸만 다룹니다.
+- 파일마다의 전체 구조는 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md), [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md), [NTFS 트랜잭션 로그](../../../02-artifacts/filesystem/logfile.md)에서 다룹니다. 이 페이지는 시간표를 만드는 데 쓰는 칸만 다룹니다.
 
 ## $MFT 에서 얻는 시각
 
-- MFT 항목마다 $SI 네 시각과 $FN 네 시각이 있습니다. 오프셋과 뜻은 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md)에서 다룹니다.
+- MFT 항목마다 $SI 네 시각과 $FN 네 시각이 있습니다. 오프셋과 뜻은 [파일 시각 네 가지와 변화 규칙](macb-timestamp-rules.md)에서 다룹니다.
 - 칸마다 마지막 값 하나만 남습니다. 그 전 값은 $MFT 로 알 수 없습니다.
 - $SI 크기는 NTFS 1.2 에서 48바이트, 3.0 이상에서 72바이트입니다(참고 1).
 - 3.0 이상의 $SI 에는 칸이 더 붙습니다(참고 1). 오프셋 48 은 소유자 ID, 52 는 보안 설명자 ID, 56 은 할당량, 64 는 USN(8바이트)입니다(참고 1).
@@ -43,7 +43,7 @@ $FN 은 이름마다 하나씩 있습니다. 어느 이름의 시각인지는 �
 | 2 | DOS (8.3 짧은 이름) |
 | 3 | DOS 이름과 Win32 이름이 같음 |
 
-- $SI 없이 $FN 과 $I30 인덱스만 있는 MFT 항목도 관찰됐다고 libyal 문서는 적었습니다(참고 1). 이런 항목에서는 $SI 줄이 나오지 않습니다. $I30 은 [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md)에서 다룹니다.
+- $SI 없이 $FN 과 $I30 인덱스만 있는 MFT 항목도 관찰됐다고 libyal 문서는 적었습니다(참고 1). 이런 항목에서는 $SI 줄이 나오지 않습니다. $I30 은 [폴더 인덱스와 슬랙](../../../02-artifacts/filesystem/i30.md)에서 다룹니다.
 - MFT 레코드가 $ATTRIBUTE_LIST(0x20)로 확장 레코드를 쓰면, 긴 이름의 $FN 이 확장 레코드에만 있을 수 있습니다(현장 관찰).
 - 이때 기본 레코드만 보면 8.3 짧은 이름만 보입니다(현장 관찰).
 - 확장 레코드는 대개 기본 레코드와 멀리 떨어져 있습니다(현장 관찰).
@@ -135,7 +135,7 @@ SourceInfo 는 변경을 만든 쪽이 FSCTL_MARK_HANDLE 로 붙인 출처 정�
 - $J 앞부분은 비어 있습니다(현장 관찰).
 - 빈 구멍을 0 으로 채워 뽑으면 논리 크기만큼 나옵니다. 이 크기는 수 GB 에 이릅니다(현장 관찰).
 - 구멍을 건너뛰어 뽑으면 실제 데이터만 남습니다(현장 관찰).
-- 두 방법은 크기와 해시가 다릅니다. 그래서 어느 방법으로 뽑았는지 기록합니다. 획득 절차는 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)을 봅니다.
+- 두 방법은 크기와 해시가 다릅니다. 그래서 어느 방법으로 뽑았는지 기록합니다. 획득 절차는 [증거 획득](../../process-acquisition/evidence-acquisition/index.md)을 봅니다.
 - 저널이 기본으로 켜져 있는지, 기본 최대 크기가 얼마인지는 이 페이지에서 확인하지 못했습니다. 검체의 $Max 에서 최대 크기를 직접 읽습니다.
 
 ### 헥스로 한 번
@@ -154,9 +154,9 @@ SourceInfo 는 변경을 만든 쪽이 FSCTL_MARK_HANDLE 로 붙인 출처 정�
 1. `48 00 00 00` 은 RecordLength 입니다. 레코드 길이는 0x48, 곧 72바이트입니다. 72 는 8의 배수이므로 64비트 경계에 맞습니다.
 2. `02 00` 은 MajorVersion 2 입니다. 그래서 위 V2 표로 읽습니다.
 3. 0x08 의 8바이트는 이 파일의 참조 번호입니다.
-4. 0x10 의 8바이트는 부모 폴더의 참조 번호입니다. 참조 번호의 구성은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)에서 다룹니다.
+4. 0x10 의 8바이트는 부모 폴더의 참조 번호입니다. 참조 번호의 구성은 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md)에서 다룹니다.
 5. 0x18 의 `00 A8 3C 01 00 00 00 00` 은 Usn 입니다. 리틀 엔디언으로 0x013CA800, 10진으로 20,752,384 입니다. 이 파일의 $SI USN 칸이 같은 값이면 이 레코드가 그 파일의 마지막 USN 레코드입니다.
-6. 0x20 의 `00 50 C7 8A BF 76 DA 01` 은 TimeStamp 입니다. 리틀 엔디언으로 0x01DA76BF8AC75000, 10진으로 133,549,704,000,000,000 입니다. 날짜로는 2024-03-15 10:00:00 UTC 입니다. 계산법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+6. 0x20 의 `00 50 C7 8A BF 76 DA 01` 은 TimeStamp 입니다. 리틀 엔디언으로 0x01DA76BF8AC75000, 10진으로 133,549,704,000,000,000 입니다. 날짜로는 2024-03-15 10:00:00 UTC 입니다. 계산법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 7. 0x28 의 `00 01 00 80` 은 Reason 0x80000100 입니다. FILE_CREATE(0x00000100)와 CLOSE(0x80000000)가 켜져 있습니다. 파일을 만들고 닫았다는 기록입니다.
 8. 0x2C 의 SourceInfo 는 0 입니다. 켜진 플래그가 없습니다.
 9. 0x30 은 SecurityId, 0x34 는 FileAttributes 입니다. 이 예시에서는 풀지 않습니다.
@@ -183,7 +183,7 @@ $LogFile 은 페이지 단위로 읽습니다. 페이지 헤더 서명은 "RSTR"
 
 - 레코드 헤더(LFS_RECORD_HEADER)에 LSN 이 있다는 점까지 확인했습니다(참고 1). 칸 배치는 이 페이지에서 확인하지 못했습니다.
 - 레코드 자체에 시각 칸이 있는지는 확인하지 못했습니다. 몇 시간 분량이 남는지도 확인하지 못했습니다.
-- 그래서 $LogFile 해석 결과를 시간표에 넣을 때는 도구가 시각을 어디서 가져왔는지 확인합니다. 해석 방법은 [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md)에서 다룹니다.
+- 그래서 $LogFile 해석 결과를 시간표에 넣을 때는 도구가 시각을 어디서 가져왔는지 확인합니다. 해석 방법은 [NTFS 트랜잭션 로그](../../../02-artifacts/filesystem/logfile.md)에서 다룹니다.
 
 ## 절차
 
@@ -197,7 +197,7 @@ $LogFile 은 페이지 단위로 읽습니다. 페이지 헤더 서명은 "RSTR"
 8. $SI 의 USN 칸과 $J 의 Usn 을 맞춥니다. $MFT 에 보이는 마지막 상태가 어느 레코드 다음의 것인지 확인합니다.
 9. $LogFile 해석 결과는 따로 줄로 넣고 출처를 표시합니다.
 10. $MFT 와 $J 의 시각은 둘 다 UTC 입니다(참고 3, 참고 2). 한 기준으로 정렬하고 줄마다 출처 칸을 남깁니다.
-11. 다른 아티팩트와 합칠 때는 [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md)으로 넘어갑니다.
+11. 다른 아티팩트와 합칠 때는 [여러 아티팩트 합친 타임라인](super-timeline.md)으로 넘어갑니다.
 
 ## 도구
 
@@ -209,13 +209,13 @@ libfsntfs(이 페이지 구조 설명의 출처), The Sleuth Kit, plaso 가 공�
 - SourceInfo 칸을 보여 주는지 확인합니다.
 - 시각을 UTC 로 내는지, 분석 PC 의 현지 시각으로 바꿔 내는지 확인합니다.
 
-몇 줄은 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+몇 줄은 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../reporting/tool-validation.md)을 봅니다.
 
 ## 함정과 한계
 
 1. **$MFT 는 마지막 값만 보여 줍니다.** 그 전의 변경은 $J 에서 찾습니다.
 2. **USN 레코드 한 건은 행동 한 번이 아닙니다.** 열고 닫는 사이의 이유가 한 레코드에 모입니다.
-3. **BASIC_INFO_CHANGE 만으로 시각 변경을 가릴 수 없습니다.** 이 플래그는 속성이나 시각 가운데 하나 이상이 바뀌면 붙습니다(참고 2). 시각 조작 여부는 [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)에서 따집니다.
+3. **BASIC_INFO_CHANGE 만으로 시각 변경을 가릴 수 없습니다.** 이 플래그는 속성이나 시각 가운데 하나 이상이 바뀌면 붙습니다(참고 2). 시각 조작 여부는 [시각 조작 탐지](timestomping.md)에서 따집니다.
 4. **SourceInfo 가 켜진 레코드를 사용자 행동으로 읽습니다.** 사용자 관점에서 데이터가 바뀌지 않은 변경일 수 있습니다(참고 2).
 5. **$J 를 뽑는 방법에 따라 크기와 해시가 다릅니다**(현장 관찰). 방법을 적지 않으면 나중에 해시를 맞출 수 없습니다.
 6. **기본 레코드만 읽습니다.** 긴 이름과 그 시각을 놓칠 수 있습니다(현장 관찰).
@@ -225,7 +225,7 @@ libfsntfs(이 페이지 구조 설명의 출처), The Sleuth Kit, plaso 가 공�
 
 - $MFT 줄은 "지금 이 칸에 이 값이 적혀 있다" 는 뜻입니다.
 - $J 줄은 "이 시각에 이 이유로 레코드가 쓰였다" 는 뜻입니다.
-- FILE_DELETE 레코드에는 지운 파일의 이름과 부모 폴더 참조가 남습니다. $MFT 에서 사라진 파일을 찾을 때 씁니다. 자세한 흐름은 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)를 봅니다.
+- FILE_DELETE 레코드에는 지운 파일의 이름과 부모 폴더 참조가 남습니다. $MFT 에서 사라진 파일을 찾을 때 씁니다. 자세한 흐름은 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md)를 봅니다.
 - 쓸 수 있는 문장(예): "USN 저널에 2024-03-15 10:00:00 UTC, 이름 a.txt, 이유 FILE_CREATE·CLOSE 인 레코드가 있습니다."
 - 쓰면 안 되는 문장(예): "사용자가 2024-03-15 10:00:00 UTC 에 a.txt 를 만들었습니다."
 

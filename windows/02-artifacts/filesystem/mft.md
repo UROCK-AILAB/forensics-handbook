@@ -8,7 +8,7 @@
 
 ### 파일시스템이 쓰는 목록입니다
 
-MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목록입니다. 그래서 파일을 만들 때마다 항목이 생기고, 파일이 바뀔 때마다 항목의 값이 바뀝니다. 항목의 칸마다 지금 값 하나만 남습니다. 예전 값은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)과 [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md)에서 찾습니다.
+MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목록입니다. 그래서 파일을 만들 때마다 항목이 생기고, 파일이 바뀔 때마다 항목의 값이 바뀝니다. 항목의 칸마다 지금 값 하나만 남습니다. 예전 값은 [USN 변경 저널](usnjrnl.md)과 [NTFS 트랜잭션 로그](logfile.md)에서 찾습니다.
 
 ### 항목 하나에 남는 값
 
@@ -25,7 +25,7 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 | 사용 중인지, 폴더인지 | 항목 머리의 플래그 |
 | 순번, `$LogFile` 순번 (LSN) | 항목 머리 |
 
-속성 종류 전체와 바이트 구조는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다. 이 페이지는 이 값들을 증거로 읽는 법을 다룹니다.
+속성 종류 전체와 바이트 구조는 [MFT 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다. 이 페이지는 이 값들을 증거로 읽는 법을 다룹니다.
 
 ### 앞 번호는 NTFS 가 씁니다
 
@@ -35,14 +35,14 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 |---|---|---|
 | 0 | `$MFT` | MFT 자신입니다. 이 항목의 데이터 런으로 MFT 전체 위치를 구합니다 |
 | 1 | `$MFTMirr` | MFT 앞 항목 4개의 사본입니다 |
-| 2 | `$LogFile` | [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md) |
+| 2 | `$LogFile` | [NTFS 트랜잭션 로그](logfile.md) |
 | 5 | 루트 폴더 (`.`) | 경로를 세울 때 끝점입니다 |
 | 6 | `$Bitmap` | 클러스터마다 할당 여부를 적습니다 |
 | 11 | `$Extend` | `$UsnJrnl` 같은 확장 메타 파일이 들어 있는 폴더입니다 |
 
 - 12~15번은 사용 중으로 표시돼 있지만 비어 있습니다. 16~23번은 미사용으로 표시돼 있습니다(참고 1).
 - `$Extend\$UsnJrnl` 은 흔히 쓰는 번호가 있지만 번호가 고정되지 않습니다(참고 1). 그래서 `$Extend` 폴더 안에서 이름으로 찾습니다.
-- 나머지 메타 파일은 [NTFS 메타 파일](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md)에서 다룹니다.
+- 나머지 메타 파일은 [NTFS 메타 파일](../../01-foundations/disk-volume/ntfs/bitmap-secure-extend.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -50,8 +50,8 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 
 - MFT 시작 위치는 볼륨 헤더(부트 섹터)에 적혀 있습니다. 계산식은 "볼륨 시작 + MFT 시작 클러스터 번호 × 클러스터 크기" 입니다(참고 1).
 - MFT 는 한 덩어리가 아닐 수 있습니다. 0번 항목의 데이터 런이 여러 조각을 가리킵니다(참고 1).
-- 그래서 시작 위치부터 연달아 읽으면 뒤쪽 항목을 놓칠 수 있습니다. 조각은 [데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)의 방법으로 따라갑니다.
-- 볼륨 헤더의 칸 전체는 [부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)에서 다룹니다. 아래 "직접 분석해 보기" 에서 한 번 따라갑니다.
+- 그래서 시작 위치부터 연달아 읽으면 뒤쪽 항목을 놓칠 수 있습니다. 조각은 [데이터 런과 상주·비상주 데이터](../../01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)의 방법으로 따라갑니다.
+- 볼륨 헤더의 칸 전체는 [부트 섹터와 클러스터](../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)에서 다룹니다. 아래 "직접 분석해 보기" 에서 한 번 따라갑니다.
 
 ### 항목 크기
 
@@ -90,7 +90,7 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 
 ## 구조
 
-바이트 구조는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다. 여기서는 분석에 쓰는 칸이 어디 있는지만 모읍니다.
+바이트 구조는 [MFT 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다. 여기서는 분석에 쓰는 칸이 어디 있는지만 모읍니다.
 
 | 있는 곳 | 오프셋 | 칸 | 분석에서 쓰는 곳 |
 |---|---|---|---|
@@ -101,7 +101,7 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 | 항목 머리 | 32 | 기본 레코드 참조 | 확장 레코드를 기본 레코드에 묶기 |
 | 항목 머리 | 44 | 자기 항목 번호 (NTFS 3.1) | 떨어져 나온 항목의 원래 번호 찾기 |
 | `$STANDARD_INFORMATION` | 0·8·16·24 | 시각 네 개 | 타임라인 |
-| `$STANDARD_INFORMATION` | 64 | USN (8바이트) | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 레코드와 맞춰 보기 |
+| `$STANDARD_INFORMATION` | 64 | USN (8바이트) | [USN 변경 저널](usnjrnl.md) 레코드와 맞춰 보기 |
 | `$FILE_NAME` | 0 | 부모 폴더 참조 | 경로 세우기 |
 | `$FILE_NAME` | 8·16·24·32 | 시각 네 개 | `$STANDARD_INFORMATION` 시각과 비교 |
 | `$FILE_NAME` | 65 | 이름공간 (0 POSIX, 1 Win32, 2 DOS, 3 DOS 와 Win32 가 같음) | 긴 이름과 짧은 이름 가리기 |
@@ -112,7 +112,7 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 - libyal 문서가 옮긴 Microsoft 설명으로는 항목이 해제될 때마다 순번이 1 늘어납니다(참고 1). 해석 도구 설명서는 지운 항목을 다시 쓸 때 1 늘어난다고 적었습니다(참고 2).
 - 이름만 바꿀 때는 순번이 늘지 않습니다(참고 2).
 - 한 번도 쓰지 않은 항목의 순번은 0 입니다(참고 1).
-- 폴더 색인, USN 레코드, `$FILE_NAME` 의 부모 참조가 모두 이 형식입니다. 참조의 순번과 지금 항목의 순번이 다르면 그 참조는 옛 파일을 가리킵니다. 비교표는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)의 "지운 파일의 레코드" 절에 있습니다.
+- 폴더 색인, USN 레코드, `$FILE_NAME` 의 부모 참조가 모두 이 형식입니다. 참조의 순번과 지금 항목의 순번이 다르면 그 참조는 옛 파일을 가리킵니다. 비교표는 [MFT 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md)의 "지운 파일의 레코드" 절에 있습니다.
 
 ### 항목의 할당 표시
 
@@ -126,7 +126,7 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 - 1024바이트 항목에 들어가는 상주 `$DATA` 는 최대 744바이트 정도이고, 보통은 그보다 작습니다(참고 2).
 - 속성 목록은 0xFFFFFFFF 로 끝납니다(참고 1). 그 뒤부터 항목 끝까지를 레코드 슬랙이라고 부릅니다(참고 2).
 - 속성 뒤 8바이트 맞춤 여백에도 옛 데이터가 남을 수 있습니다(참고 1).
-- 레코드 슬랙에 무엇이 남는지는 Windows 버전마다 다르다는 시험 결과가 있습니다. [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)의 "레코드 슬랙" 절을 봅니다.
+- 레코드 슬랙에 무엇이 남는지는 Windows 버전마다 다르다는 시험 결과가 있습니다. [MFT 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md)의 "레코드 슬랙" 절을 봅니다.
 
 > 그림 자리: MFT 를 항목 번호 순서의 칸으로 그리고, 한 항목 안의 머리·`$STANDARD_INFORMATION`·`$FILE_NAME`·`$DATA`·끝 표시·슬랙을 펼친 그림. 옆에 `$BITMAP` 의 비트 하나가 항목 하나에 이어지는 화살표를 붙인다
 
@@ -149,14 +149,14 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 
 ## 시각 해석
 
-- MFT 의 시각은 모두 FILETIME 이고 UTC 입니다(참고 1). 계산법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- MFT 의 시각은 모두 FILETIME 이고 UTC 입니다(참고 1). 계산법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 - `$STANDARD_INFORMATION` 에서는 오프셋 0 이 생성, 8 이 내용 수정, 16 이 MFT 항목 수정, 24 가 접근 시각입니다(참고 1).
 - `$FILE_NAME` 에서는 오프셋 8 이 생성, 16 이 내용 수정, 24 가 MFT 항목 수정, 32 가 접근 시각입니다(참고 1).
 - 한 항목에 `$FILE_NAME` 이 여러 개일 수 있습니다. 긴 이름과 짧은 이름이 따로 있고, 하드 링크마다 부모 참조가 다른 `$FILE_NAME` 이 더 붙습니다(참고 1). 보고서에는 어느 이름의 시각인지 적습니다.
 - `$STANDARD_INFORMATION` 은 없고 `$FILE_NAME`·`$I30` 색인 같은 다른 속성만 있는 항목을 본 사례가 있습니다(참고 1). 이런 항목에는 첫 번째 시각 묶음이 없습니다.
-- 두 벌의 시각이 어떤 동작에 바뀌는지는 이 페이지에서 확인하지 않았습니다. [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)과 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md)을 봅니다.
-- 현지 시각으로 바꿀 때는 그 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
-- MFT 로 시간표를 만드는 절차는 [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
+- 두 벌의 시각이 어떤 동작에 바뀌는지는 이 페이지에서 확인하지 않았습니다. [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)과 [파일 시각 네 가지와 변화 규칙](../../03-techniques/analysis/timeline/macb-timestamp-rules.md)을 봅니다.
+- 현지 시각으로 바꿀 때는 그 PC 의 [시간대 설정](../system-account/time-zone.md)을 씁니다.
+- MFT 로 시간표를 만드는 절차는 [파일시스템 타임라인](../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -167,15 +167,15 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 5. **fix-up 을 빠뜨리지 않습니다.** 디스크에서는 512바이트마다 마지막 2바이트가 fix-up 표시 값으로 바뀌어 있습니다. 원래 값은 fix-up 배열에 있습니다(참고 1).
 6. **`BAAD` 항목을 만날 수 있습니다.** chkdsk 가 fix-up 이 맞지 않는 항목을 찾으면 `BAAD` 로 표시하고, 첫 섹터 끝의 fix-up 값만 빼고 0 으로 채운다는 설명이 있습니다. `BAAD` 는 NT4·XP 에서 보였습니다(참고 1).
 7. **`$FILE_NAME` 의 크기 값을 그대로 쓰지 않습니다.** MFT 안 `$FILE_NAME` 의 크기 값은 정확하지 않을 때가 있습니다(참고 1). 크기는 `$DATA` 에서 읽습니다.
-8. **순번이 같다고 이름까지 같지는 않습니다.** 이름을 바꿔도 순번은 그대로입니다(참고 2). 옛 이름은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)에서 찾습니다.
+8. **순번이 같다고 이름까지 같지는 않습니다.** 이름을 바꿔도 순번은 그대로입니다(참고 2). 옛 이름은 [USN 변경 저널](usnjrnl.md)에서 찾습니다.
 9. **비할당 항목이 모두 지운 파일은 아닙니다.** 16~23번처럼 미사용으로 표시된 항목도 있습니다(참고 1). 이름 속성이 남아 있는지 함께 봅니다.
 
 ### 지우기와 조작
 
-- **파일 삭제**: 항목은 비할당으로 바뀌고, 다른 파일이 다시 쓸 때까지 값이 남을 수 있습니다. 되살리는 절차는 [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)에서 다룹니다. 항목이 이미 덮였으면 `$LogFile` 과 `$UsnJrnl`, 폴더 색인 슬랙에서 이름을 찾습니다([지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)).
-- **시각 조작**: 시각 칸은 마지막 값만 남으므로 조작한 값도 그대로 남습니다. `$STANDARD_INFORMATION` 과 `$FILE_NAME`, USN 레코드의 기본 정보 변경 표시를 함께 봅니다. 판단 방법은 [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)에서 다룹니다.
-- **변경 저널 끄기**: 저널을 끄면 MFT 레코드의 값도 바뀝니다. [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)의 "지우기와 조작" 절을 봅니다.
-- **완전삭제 도구**: [완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
+- **파일 삭제**: 항목은 비할당으로 바뀌고, 다른 파일이 다시 쓸 때까지 값이 남을 수 있습니다. 되살리는 절차는 [파일시스템 기반 복구](../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)에서 다룹니다. 항목이 이미 덮였으면 `$LogFile` 과 `$UsnJrnl`, 폴더 색인 슬랙에서 이름을 찾습니다([지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md)).
+- **시각 조작**: 시각 칸은 마지막 값만 남으므로 조작한 값도 그대로 남습니다. `$STANDARD_INFORMATION` 과 `$FILE_NAME`, USN 레코드의 기본 정보 변경 표시를 함께 봅니다. 판단 방법은 [시각 조작 탐지](../../03-techniques/analysis/timeline/timestomping.md)에서 다룹니다.
+- **변경 저널 끄기**: 저널을 끄면 MFT 레코드의 값도 바뀝니다. [USN 변경 저널](usnjrnl.md)의 "지우기와 조작" 절을 봅니다.
+- **완전삭제 도구**: [완전삭제 도구를 썼나](../../04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -196,7 +196,7 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 3. 오프셋 64(0x40)의 1바이트 `F6` 은 MFT 항목 크기입니다(참고 1).
 4. 크기 값이 0~127 이면 클러스터 개수, 128~255 면 2^(256−값) 바이트입니다(참고 1). 0xF6 은 246 이므로 2^(256−246) = 2^10 = 1024바이트입니다.
 5. 오프셋 68(0x44)의 1바이트 `01` 은 폴더 색인 항목 크기입니다(참고 1). 1 은 127 이하이므로 클러스터 1개입니다.
-6. 클러스터 크기가 4096바이트라면 MFT 는 볼륨 시작에서 786,432 × 4096 = 3,221,225,472바이트(0xC0000000) 떨어진 곳에서 시작합니다. 클러스터 크기 읽는 법은 [부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)에서 다룹니다.
+6. 클러스터 크기가 4096바이트라면 MFT 는 볼륨 시작에서 786,432 × 4096 = 3,221,225,472바이트(0xC0000000) 떨어진 곳에서 시작합니다. 클러스터 크기 읽는 법은 [부트 섹터와 클러스터](../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)에서 다룹니다.
 
 **2단계: `$BITMAP` 에서 할당 여부 읽기**
 
@@ -220,7 +220,7 @@ MFT 는 로그가 아닙니다. NTFS 가 파일을 찾고 여는 데 쓰는 목�
 ### 실행 중인 시스템에서
 
 - `fsutil fsinfo ntfsinfo C:` 는 NTFS 버전, 클러스터 크기, MFT 항목 크기, MFT 유효 데이터 길이를 보여 줍니다(위 "실제 PC 한 대에서 본 값").
-- 실행 중인 볼륨에서 `$MFT` 를 뽑는 방법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)과 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md)을 봅니다.
+- 실행 중인 볼륨에서 `$MFT` 를 뽑는 방법은 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md)과 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md)을 봅니다.
 
 ### 공개 도구로 한 번
 
@@ -231,19 +231,19 @@ The Sleuth Kit, libfsntfs 같은 공개 도구와 라이브러리가 MFT 를 풀
 - `$FILE_NAME` 을 어느 이름공간의 것으로 보여 주는지 확인합니다.
 - 비할당 항목과 순번을 칸으로 보여 주는지 확인합니다.
 - 시각을 UTC 로 내는지, 분석 PC 의 현지 시각으로 바꿔 내는지 확인합니다.
-- 항목 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 항목 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 파일 참조로 항목과 레코드를 잇습니다. `$STANDARD_INFORMATION` 의 USN 칸과 같은 USN 레코드를 찾습니다. 옛 이름과 삭제 기록을 봅니다 |
-| [NTFS 트랜잭션 로그 ($LogFile)](/02-artifacts/filesystem/logfile.md) | 항목 머리의 LSN 과 로그 레코드를 잇습니다 |
-| [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) | 폴더 색인에 남은 이름과 시각 사본, 슬랙의 옛 항목 |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 항목의 이름 있는 `$DATA` 로 붙은 출처 표시 |
-| [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) | 휴지통으로 옮긴 파일의 원래 경로 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) | LNK 에 적힌 대상 시각과 지금 항목의 시각 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 `$MFT` 에 남은 칸 값 |
+| [USN 변경 저널 ($UsnJrnl)](usnjrnl.md) | 파일 참조로 항목과 레코드를 잇습니다. `$STANDARD_INFORMATION` 의 USN 칸과 같은 USN 레코드를 찾습니다. 옛 이름과 삭제 기록을 봅니다 |
+| [NTFS 트랜잭션 로그 ($LogFile)](logfile.md) | 항목 머리의 LSN 과 로그 레코드를 잇습니다 |
+| [폴더 인덱스와 슬랙 ($I30)](i30.md) | 폴더 색인에 남은 이름과 시각 사본, 슬랙의 옛 항목 |
+| [다운로드 출처 표시 (Zone.Identifier)](zone-identifier.md) | 항목의 이름 있는 `$DATA` 로 붙은 출처 표시 |
+| [휴지통](../file-folder-usage/recycle-bin.md) | 휴지통으로 옮긴 파일의 원래 경로 |
+| [바로가기 파일](../file-folder-usage/lnk.md) | LNK 에 적힌 대상 시각과 지금 항목의 시각 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 `$MFT` 에 남은 칸 값 |
 
 ## 실습
 

@@ -29,7 +29,7 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 - 41 은 예기치 않게 꺼진 뒤 다음 부팅 때 남습니다.
 - Windows 는 꺼질 때 오류 코드를 기록할 수 있으면 기록합니다. 다음 시작의 커널 단계에서 그 코드를 41 의 데이터에 넣습니다.
 - 6006 은 제대로 꺼졌다는 뜻입니다. 6008 은 직전 종료가 예기치 않았다는 뜻입니다.
-- Winlogon 7001 은 로그온 알림입니다. 로그온 자체는 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md)에서 다룹니다.
+- Winlogon 7001 은 로그온 알림입니다. 로그온 자체는 [로그온·로그오프](logon-events/index.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -57,7 +57,7 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 - ID 1 은 Kernel-General (시각 변경)·Power-Troubleshooter (깨어남) 말고도 Configuration-Change-Monitor·FilterManager·Hyper-V-Hypervisor·IsolatedUserMode 가 썼습니다.
 - 7001·7002 도 Winlogon 말고 다른 드라이버가 썼습니다.
 
-그래서 번호만으로 거르지 않습니다. 공급자 이름을 함께 거릅니다. Kernel-General 1 (시각 변경) 은 [시간 변경 (4616·Kernel-General)](/02-artifacts/event-logs/4616-kernel-general.md)에서 다룹니다.
+그래서 번호만으로 거르지 않습니다. 공급자 이름을 함께 거릅니다. Kernel-General 1 (시각 변경) 은 [시간 변경 (4616·Kernel-General)](4616-kernel-general.md)에서 다룹니다.
 
 ## 구조
 
@@ -78,7 +78,7 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 ### 칸 이름이 없는 옛 방식 이벤트
 
-EventLog 공급자와 User32 공급자는 매니페스트가 없는 옛 방식입니다. 메시지 파일은 각각 `%SystemRoot%\System32\netevent.dll`, `%SystemRoot%\system32\user32.dll` 이었습니다. 그래서 칸 이름이 없고, 순서로 읽습니다. 공급자와 메시지 파일의 관계는 [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
+EventLog 공급자와 User32 공급자는 매니페스트가 없는 옛 방식입니다. 메시지 파일은 각각 `%SystemRoot%\System32\netevent.dll`, `%SystemRoot%\system32\user32.dll` 이었습니다. 그래서 칸 이름이 없고, 순서로 읽습니다. 공급자와 메시지 파일의 관계는 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
 | ID | 메시지 |
 |---|---|
@@ -164,12 +164,12 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 - 쓸 수 있는 문장: "System 로그의 User32 1074 에 따르면 ○○(UTC) 에 `StartMenuExperienceHost.exe` 가 ○○\○○ 계정으로 재시작을 일으켰습니다. 이어서 Kernel-General 13 의 StopTime 은 ○○, 다음 Kernel-General 12 의 StartTime 은 ○○ 입니다."
 - 쓰면 안 되는 문장: "사용자가 ○○시에 PC 를 껐다."
 
-두 번째 문장은 계정을 사람으로 바꾸고, 어떤 기록인지도 밝히지 않습니다. 사용 시간 전체를 재구성하는 방법은 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md)에서 다룹니다.
+두 번째 문장은 계정을 사람으로 바꾸고, 어떤 기록인지도 밝히지 않습니다. 사용 시간 전체를 재구성하는 방법은 [PC 사용 시간 재구성](../../04-scenarios/activity/system-usage-time.md)에서 다룹니다.
 
 ## 시각 해석
 
-- 12 의 StartTime, 13 의 StopTime, Power-Troubleshooter 1 의 SleepTime·WakeTime 은 FILETIME 입니다. 값 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
-- Microsoft 문서는 이벤트 뷰어가 .evtx 의 시각을 시스템 시간대로 바꿔 보여 준다고 주의를 줍니다. 서버 시간대를 확인하라고 적었습니다. 시간대 설정은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 다룹니다.
+- 12 의 StartTime, 13 의 StopTime, Power-Troubleshooter 1 의 SleepTime·WakeTime 은 FILETIME 입니다. 값 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- Microsoft 문서는 이벤트 뷰어가 .evtx 의 시각을 시스템 시간대로 바꿔 보여 준다고 주의를 줍니다. 서버 시간대를 확인하라고 적었습니다. 시간대 설정은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 
 한 PC 에서 본 시각의 특징입니다. (확인 범위: Win11 빌드 26200 한 대)
 
@@ -196,13 +196,13 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 7. **모던 스탠바이 PC 에서 42·107 만 찾습니다.** 한 노트북에서 약 3개월 동안 506 은 319건, 507 은 314건, 566 은 687건이었습니다. 42·107 은 7건뿐이었습니다. 이런 PC 에서는 뚜껑을 닫고 여는 일이 506·507 로 남는 것으로 보입니다. 이 판단은 해석입니다.
 8. **절전 코드 값을 추측합니다.** 최대 절전 한 번에서 42 의 TargetState 는 5, 27 의 BootType 은 2 였습니다. Power-Troubleshooter 1 에 HiberWriteDuration 11073, HiberReadDuration 14298, HiberPagesWritten 2532886 이 있어 최대 절전과 맞습니다. 그러나 TargetState 5 와 BootType 2 의 공식 대응은 확인하지 못했습니다.
 9. **6013 의 OS 이름을 믿습니다.** Windows 11 인데 6013 의 이진 데이터에는 "Windows 10 Home" 으로 적혀 있었습니다.
-10. **Security 로그에서 4608·4609 를 기대합니다.** 보안 로그는 빨리 밀려납니다. 한 PC 에서는 이틀 치만 남아 있었습니다. 로그 크기와 보존 기간은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+10. **Security 로그에서 4608·4609 를 기대합니다.** 보안 로그는 빨리 밀려납니다. 한 PC 에서는 이틀 치만 남아 있었습니다. 로그 크기와 보존 기간은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### 지우기와 조작
 
-- **로그를 지웁니다.** System 로그를 지우면 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md)를 봅니다.
+- **로그를 지웁니다.** System 로그를 지우면 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
 - **Reliability 값을 지웁니다.** Microsoft 문서는 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` 에 DirtyShutdown, LastAliveStamp, TimeStampInterval 값이 있다고 적었습니다. 이 값을 지우면 비정상 종료 뒤 종료 이벤트 추적기가 뜨지 않게 할 수 있다고도 적었습니다. 그래서 이 값이 없다고 비정상 종료가 없었다고 보지 않습니다. 41·6008 을 따로 봅니다.
-- **시스템 시각을 바꿉니다.** 켜짐·꺼짐 시각 전체가 어긋납니다. [시간 변경 (4616·Kernel-General)](/02-artifacts/event-logs/4616-kernel-general.md)을 봅니다.
+- **시스템 시각을 바꿉니다.** 켜짐·꺼짐 시각 전체가 어긋납니다. [시간 변경 (4616·Kernel-General)](4616-kernel-general.md)을 봅니다.
 
 ## 직접 분석해 보기
 
@@ -245,19 +245,19 @@ Get-WinEvent -Path $f | Sort-Object TimeCreated | Select-Object TimeCreated, Rec
 ```
 
 - 10진 PowerButtonTimestamp 는 `[datetime]::FromFileTimeUtc(131728546170882432)` 로 풀 수 있습니다.
-- 도구가 레코드 번호 순서로만 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- 도구가 레코드 번호 순서로만 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) | ShutdownTime 과 마지막 정상 13 의 StopTime. 한 PC 에서 이 값은 비정상 종료 뒤 바뀌지 않았습니다 |
+| [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) | ShutdownTime 과 마지막 정상 13 의 StopTime. 한 PC 에서 이 값은 비정상 종료 뒤 바뀌지 않았습니다 |
 | Reliability 키 | DirtyShutdownTime (16바이트 SYSTEMTIME) 과 6008 이진 데이터의 UTC SYSTEMTIME. 한 PC 에서 같은 값이었습니다. 하위 키 `shutdown` 의 ReasonCode 는 마지막 1074 의 이유 코드와 같았습니다 |
 | `Bootstat.dat` | 파일 수정 시각과 마지막 부팅·깨어남 |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | 켜짐과 꺼짐 사이의 로그온 세션 |
-| [시간 변경 (4616·Kernel-General)](/02-artifacts/event-logs/4616-kernel-general.md) | 시각을 바꿔 켜짐·꺼짐 시각이 어긋났는지 |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | 6008·6013 의 현지 시각과 바이어스 |
-| [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md) | 다른 기록과 시각을 맞출 때 |
+| [로그온·로그오프](logon-events/index.md) | 켜짐과 꺼짐 사이의 로그온 세션 |
+| [시간 변경 (4616·Kernel-General)](4616-kernel-general.md) | 시각을 바꿔 켜짐·꺼짐 시각이 어긋났는지 |
+| [시간대 설정](../system-account/time-zone.md) | 6008·6013 의 현지 시각과 바이어스 |
+| [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md) | 다른 기록과 시각을 맞출 때 |
 
 Reliability 키와 `Bootstat.dat` 에 대해 한 PC 에서 본 것은 다음과 같습니다. (확인 범위: Win11 빌드 26200 한 대)
 

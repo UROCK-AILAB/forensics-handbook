@@ -28,8 +28,8 @@ Teams 는 브라우저와 같은 로컬 저장소에 데이터를 적어 둡니�
 
 - 두 위치 모두 사용자 프로필 아래에 있습니다. 사용자마다 따로 봅니다.
 - 클래식 Teams 의 지원 종료 날짜는 확인하지 못했습니다.
-- 새 Teams 의 앱 버전은 패키지 버전 폴더 이름(`MSTeams_<버전>_x64__8wekyb3d8bbwe`)에서 읽습니다. 설치 기록은 [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) 에서 확인합니다.
-- `EBWebView` 폴더 구성과 WebView2 버전 파일(`Last Version`)은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+- 새 Teams 의 앱 버전은 패키지 버전 폴더 이름(`MSTeams_<버전>_x64__8wekyb3d8bbwe`)에서 읽습니다. 설치 기록은 [스토어 앱 설치 목록](../system-account/appx-staterepository.md) 에서 확인합니다.
+- `EBWebView` 폴더 구성과 WebView2 버전 파일(`Last Version`)은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 
 ### 공개 파서가 시험한 버전
 
@@ -62,11 +62,11 @@ README 가 적은 폴더 이름은 `IndexedDB\https_teams.microsoft.com_0.indexe
 - `<조직>-my.sharepoint.com` 출처의 IndexedDB 도 있었습니다. 조직 OneDrive 의 출처입니다. (관찰)
 - `EBWebView\Default` 프로필에는 IndexedDB 가 없었습니다. `Local Storage` 만 있었습니다. (관찰)
 - 그래서 대화 데이터는 `Default` 가 아니라 `WV2Profile_tfw` 에서 찾습니다. (확인 범위: 위 PC 한 대)
-- `WV2Profile_tfw` 에는 `History`, `Login Data`, `Network`, `Cache`, `Local Storage\leveldb` 등 브라우저와 같은 구성이 있었습니다. (관찰) 이 파일들은 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 와 같은 방법으로 읽습니다.
+- `WV2Profile_tfw` 에는 `History`, `Login Data`, `Network`, `Cache`, `Local Storage\leveldb` 등 브라우저와 같은 구성이 있었습니다. (관찰) 이 파일들은 [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) 와 같은 방법으로 읽습니다.
 
 forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb`)을 모두 읽습니다. README 는 기록 대부분이 `.ldb` 에 있다고 적었습니다. (forensicsim README)
 
-- LevelDB 의 파일 구성, 지운 기록이 남는 방식, 압축된 `.ldb` 를 푸는 법은 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
+- LevelDB 의 파일 구성, 지운 기록이 남는 방식, 압축된 `.ldb` 를 푸는 법은 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
 - IndexedDB 안 객체 저장소 이름과 메시지 레코드의 칸 이름은 새 Teams 기준으로 확인하지 못했습니다.
 - README 에는 지운 기록을 되살리는 기능 설명이 없습니다.
 
@@ -107,7 +107,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 `AC`, `AppData`, `LocalCache`, `LocalState`(비어 있음), `RoamingState`(비어 있음), `Settings`, `SystemAppData`, `TempState`
 
 - `Settings` 에는 `settings.dat`, `settings.dat.LOG1`, `settings.dat.LOG2` 가 있었습니다. (관찰)
-- 이 `settings.dat` 의 형식은 확인하지 못했습니다. 스토어 앱의 `settings.dat` 은 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+- 이 `settings.dat` 의 형식은 확인하지 못했습니다. 스토어 앱의 `settings.dat` 은 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 - 데이터는 `LocalState` 가 아니라 `LocalCache` 에 있었습니다. `LocalState` 가 비었다고 데이터가 없다고 보지 않습니다.
 
 ### 로그
@@ -146,7 +146,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 
 - **전체 대화.** IndexedDB 는 앱이 PC 에 저장한 만큼만 담습니다. 여기 없다고 대화가 없었다고 말할 수 없습니다.
 - **메시지를 읽었는지.** 저장된 것은 앱이 받은 데이터입니다. 사용자가 화면에서 읽었다는 뜻은 아닙니다.
-- **누가 입력했는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **누가 입력했는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **첫 실행 시각.** 관찰 PC 에서는 `app_settings.json` 의 첫 실행 칸이 0 이었습니다.
 - **원격 측정 DB 의 사용자 행위.** `tfw` 의 DB 는 원격 측정 저장소입니다. 대화 기록으로 보지 않습니다.
 
@@ -159,8 +159,8 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | 로그 줄 시각 | 로그 줄을 쓸 때 | 관찰 PC 에서는 `+09:00` 이 붙었지만 실제 값은 UTC 였습니다 |
 | 로그 파일 이름의 날짜·시각 | 새 로그 파일을 만들 때 | 관찰 PC 에서는 현지 시각(KST)이었습니다 |
 | `app_settings.json` 의 실행 시각 칸 | 확인하지 못했습니다 | 관찰 PC 에서는 0 이었습니다 |
-| IndexedDB 레코드 안의 시각 | 확인하지 못했습니다 | LevelDB 자체의 기록에는 시각 칸이 없습니다. [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 참고 |
-| 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 참고 |
+| IndexedDB 레코드 안의 시각 | 확인하지 못했습니다 | LevelDB 자체의 기록에는 시각 칸이 없습니다. [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 참고 |
+| 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](../filesystem/mft.md) 참고 |
 
 ### 로그 줄 시각은 UTC 였습니다 (관찰)
 
@@ -170,18 +170,18 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 - MSTeams 로그 2개와 Launcher 로그 1개에서 모두 같았습니다.
 - 파일 이름은 현지 시각이었습니다. 첫 줄이 `2026-09-20T23:33:05+09:00` 인 파일의 이름은 `MSTeams_2026-09-21_08-33-05.00.log` 였습니다. 23:33:05 UTC 는 다음 날 08:33:05 KST 입니다.
 
-확인 범위는 Windows 11, 새 Teams 26225.1806.5074.1452, KST PC 한 대입니다. 다른 버전과 시간대에서도 같은지는 확인하지 못했습니다. 줄 시각을 표시대로 현지 시각으로 읽으면 KST PC 에서 9시간이 틀립니다. 증거 PC 에서도 마지막 줄 시각과 파일 수정 시각을 맞춰 본 뒤 씁니다. 증거 PC 의 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 확인합니다.
+확인 범위는 Windows 11, 새 Teams 26225.1806.5074.1452, KST PC 한 대입니다. 다른 버전과 시간대에서도 같은지는 확인하지 못했습니다. 줄 시각을 표시대로 현지 시각으로 읽으면 KST PC 에서 9시간이 틀립니다. 증거 PC 에서도 마지막 줄 시각과 파일 수정 시각을 맞춰 본 뒤 씁니다. 증거 PC 의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 
 ## 함정과 한계
 
 - **`Default` 프로필만 봅니다.** 관찰 PC 에서 대화용 IndexedDB 는 `WV2Profile_tfw` 에 있었습니다. `EBWebView` 아래 프로필 폴더를 모두 봅니다.
 - **로그 줄 시각의 `+09:00` 을 믿습니다.** 관찰 PC 에서는 실제 값이 UTC 였습니다. 파일 수정 시각과 맞춰 봅니다.
 - **`LocalState` 만 봅니다.** 새 Teams 의 데이터는 `LocalCache` 아래에 있었습니다.
-- **원본 LevelDB 를 라이브러리로 엽니다.** 여는 과정에서 옛 값이 정리될 수 있습니다. 늘 사본에서 작업합니다. 이유는 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
-- **캐시 지우기와 재설정.** 새 Teams 는 앱 재설정으로 데이터를 지울 수 있습니다. 캐시를 지우면 진단 로그도 함께 지워집니다. 자세한 규칙은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다. 폴더와 로그가 함께 비어 있으면 지운 흔적인지 따져 보고, 옛 시점은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+- **원본 LevelDB 를 라이브러리로 엽니다.** 여는 과정에서 옛 값이 정리될 수 있습니다. 늘 사본에서 작업합니다. 이유는 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
+- **캐시 지우기와 재설정.** 새 Teams 는 앱 재설정으로 데이터를 지울 수 있습니다. 캐시를 지우면 진단 로그도 함께 지워집니다. 자세한 규칙은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다. 폴더와 로그가 함께 비어 있으면 지운 흔적인지 따져 보고, 옛 시점은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
 - **공개 파서를 그대로 씁니다.** forensicsim 이 시험한 버전은 새 Teams 와 다를 수 있습니다.
 - **원격 측정 DB 를 대화 DB 로 봅니다.** `tfw` 의 SQLite 는 원격 측정 저장소였습니다.
-- **SharePoint 출처를 Teams 대화로 봅니다.** `<조직>-my.sharepoint.com` 출처는 조직 OneDrive 쪽 데이터입니다. [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) 와 함께 해석합니다.
+- **SharePoint 출처를 Teams 대화로 봅니다.** `<조직>-my.sharepoint.com` 출처는 조직 OneDrive 쪽 데이터입니다. [원드라이브](../cloud-notes/onedrive/index.md) 와 함께 해석합니다.
 
 ## 직접 분석해 보기
 
@@ -208,7 +208,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 
 3. 로그 시각을 확인합니다. 최신 `MSTeams_*.log` 의 마지막 줄 시각과 그 파일의 수정 시각(UTC)을 나란히 적습니다. 숫자가 같으면 줄 시각은 표시와 달리 UTC 입니다.
 
-4. IndexedDB 의 `.log` 파일에서 문자열을 찾습니다. `.log` 는 압축하지 않아 문자열이 보입니다. `.ldb` 는 압축돼 있어 풀어야 합니다. 자세한 구조는 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
+4. IndexedDB 의 `.log` 파일에서 문자열을 찾습니다. `.log` 는 압축하지 않아 문자열이 보입니다. `.ldb` 는 압축돼 있어 풀어야 합니다. 자세한 구조는 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -216,20 +216,20 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 
 - 도구에 `WV2Profile_tfw` 아래 폴더를 넣었는지 확인합니다.
 - 시험한 버전과 증거 PC 의 버전이 다르면 결과 몇 건을 `.log` 문자열 검색으로 맞춰 봅니다.
-- 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+- 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 새 Teams 의 설치 시각과 버전을 봅니다 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | Teams 가 네트워크를 쓴 시간대를 로그 시각과 맞춰 봅니다 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | Teams 알림이 남았는지 봅니다 |
-| [원드라이브](/02-artifacts/cloud-notes/onedrive/index.md) | SharePoint 출처 데이터와 조직 OneDrive 동기화 기록을 맞춰 봅니다 |
-| [스카이프](/02-artifacts/messengers/skype.md) | Skype 에서 옮겨 온 대화가 있는지 봅니다 |
-| [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) | `EBWebView` 의 쿠키·캐시·방문 기록을 읽는 법을 봅니다 |
+| [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 새 Teams 의 설치 시각과 버전을 봅니다 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | Teams 가 네트워크를 쓴 시간대를 로그 시각과 맞춰 봅니다 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | Teams 알림이 남았는지 봅니다 |
+| [원드라이브](../cloud-notes/onedrive/index.md) | SharePoint 출처 데이터와 조직 OneDrive 동기화 기록을 맞춰 봅니다 |
+| [스카이프](skype.md) | Skype 에서 옮겨 온 대화가 있는지 봅니다 |
+| [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) | `EBWebView` 의 쿠키·캐시·방문 기록을 읽는 법을 봅니다 |
 
-여러 출처의 시각을 한 줄로 세우는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에서 다룹니다. 조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+여러 출처의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다. 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

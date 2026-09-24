@@ -1,6 +1,6 @@
 # 자동완성 목록 (NK2·Stream_Autocomplete)
 
-> 상위 허브: [아웃룩 (Outlook)](/02-artifacts/mail/outlook/index.md)
+> 상위 허브: [아웃룩 (Outlook)](index.md)
 
 ## 한 줄 요약
 
@@ -30,8 +30,8 @@ Outlook 의 목록은 웹 Outlook (Outlook on the web) 과 함께 쓰지 않습�
 | 2010 이후 | 기본 메시지 저장소 안의 숨은 메시지. 메시지 클래스는 `IPM.Configuration.Autocomplete` 입니다 |
 
 - Outlook 2010 이후는 옛 `.nk2` 를 가져올 수 있습니다. 가져오는 명령은 `outlook /importnk2` 입니다.
-- `.nk2` 를 다른 PC 로 옮길 때는 파일 이름을 프로필 이름과 맞춰야 한다고 Microsoft 지원 문서에 적혀 있습니다. 프로필은 [계정·프로필 레지스트리 (Outlook Profiles)](/02-artifacts/mail/outlook/outlook-profiles.md)에서 다룹니다.
-- 기본 메시지 저장소는 계정에 따라 PST 이거나 OST 입니다. 어느 쪽인지는 [PST와 OST 차이 (Cached Mode·Exchange)](/02-artifacts/mail/outlook/cached-mode-exchange.md)에서 다룹니다.
+- `.nk2` 를 다른 PC 로 옮길 때는 파일 이름을 프로필 이름과 맞춰야 한다고 Microsoft 지원 문서에 적혀 있습니다. 프로필은 [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md)에서 다룹니다.
+- 기본 메시지 저장소는 계정에 따라 PST 이거나 OST 입니다. 어느 쪽인지는 [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md)에서 다룹니다.
 
 ### 판 기준과 계정 기준
 
@@ -48,7 +48,7 @@ Outlook 의 목록은 웹 Outlook (Outlook on the web) 과 함께 쓰지 않습�
 - 한도를 넘으면 Outlook 이 사용 빈도로 무게를 매겨 지울 이름을 고릅니다.
 - 한도는 `HKCU\Software\Microsoft\Office\16.0\Outlook\AutoNameCheck` 의 `MaxNickNames` 값으로 바꿉니다. 값 형식은 REG_DWORD 이고, 10진수로 넣습니다.
 - 이 값이 있으면 한도를 기본값과 다르게 정한 것입니다.
-- `16.0` 같은 Office 버전 번호와 Outlook 판의 대응은 [계정·프로필 레지스트리 (Outlook Profiles)](/02-artifacts/mail/outlook/outlook-profiles.md)에서 다룹니다.
+- `16.0` 같은 Office 버전 번호와 Outlook 판의 대응은 [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md)에서 다룹니다.
 
 ### 받는 사람 칸 후보가 바뀐 판
 
@@ -61,7 +61,7 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 - 2010 이후의 목록은 메시지 저장소 안의 메시지 하나입니다. 이 메시지는 화면의 폴더 목록에 보이지 않습니다.
 - 메시지 클래스 `IPM.Configuration.Autocomplete` 로 이 메시지를 가려냅니다.
 - Microsoft 지원 문서는 MFCMAPI 로 이 메시지를 볼 수 있다고 적습니다. 문서는 이 메시지를 연관 콘텐츠 표 (Associated Content Table) 에서 찾으라고 안내합니다. 어느 폴더의 표인지는 적혀 있지 않습니다.
-- 데이터 파일 안에서 메시지를 찾아가는 구조는 [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md)에서 다룹니다. 메시지의 값은 [MAPI 속성](/01-foundations/app-mail-data/mapi-property.md)으로 들어 있습니다.
+- 데이터 파일 안에서 메시지를 찾아가는 구조는 [데이터 파일 구조 (PST·OST)](pst-ost.md)에서 다룹니다. 메시지의 값은 [MAPI 속성](../../../01-foundations/app-mail-data/mapi-property.md)으로 들어 있습니다.
 
 ### 흔히 알려진 내용 (확인하지 못함)
 
@@ -102,9 +102,9 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 
 - 목록 항목에 시각 칸이 있는지 확인하지 못했습니다. 공개 도구가 항목마다 시각을 보여 주면, 그 값이 어느 칸에서 왔는지 도구 문서로 확인합니다.
 - 숨은 메시지의 시각 속성이 언제 바뀌는지도 확인하지 못했습니다. 아래 실습에서 메일을 보내기 전과 뒤를 비교해 봅니다.
-- `.nk2` 파일의 NTFS 시각은 파일이 생기고 바뀐 시각입니다. 항목 하나가 들어간 시각이 아닙니다([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
-- `AutoNameCheck` 키의 마지막 기록 시각은 그 키의 값이 마지막으로 바뀐 때입니다. `MaxNickNames` 를 넣은 무렵을 좁힐 때 씁니다. 키 시각은 UTC 기준입니다. 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
-- 현지 시각으로 옮길 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 봅니다.
+- `.nk2` 파일의 NTFS 시각은 파일이 생기고 바뀐 시각입니다. 항목 하나가 들어간 시각이 아닙니다([마스터 파일 테이블](../../filesystem/mft.md)).
+- `AutoNameCheck` 키의 마지막 기록 시각은 그 키의 값이 마지막으로 바뀐 때입니다. `MaxNickNames` 를 넣은 무렵을 좁힐 때 씁니다. 키 시각은 UTC 기준입니다. 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
+- 현지 시각으로 옮길 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -113,7 +113,7 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 3. **목록에 없으면 보낸 적이 없다고 봅니다.** 사용자는 항목을 X 로 지울 수 있습니다. 옵션 > 메일 > "자동 완성 목록 비우기" 나 `Outlook.exe /CleanAutoCompleteCache` 로 목록을 통째로 비울 수도 있습니다. 1,000개 한도를 넘으면 Outlook 이 항목을 지웁니다.
 4. **지웠다는 진술과 목록이 어긋나면 진술을 거짓으로 봅니다.** X 로 지운 항목도 그 상대에게 다시 메일을 보내면 목록에 되살아납니다. Microsoft 문서는 X 가 자동완성 후보에서만 빼고, 검색 상자 같은 다른 곳에는 그 이름이 계속 뜰 수 있다고 적습니다. 지운 뒤에 다시 보냈는지부터 확인합니다.
 5. **새 판에서 받는 사람 칸 후보를 이 목록으로 설명합니다.** 버전 2202 이후 Exchange Online 사서함에서는 후보를 Microsoft Search 가 띄웁니다. "화면에 후보가 떴다" 는 진술을 로컬 목록과 바로 잇지 않습니다.
-6. **인코딩된 데이터 파일에서 글자를 그대로 찾습니다.** 헤더의 `bCryptMethod` 가 `0x01`·`0x02` 이면 블록 바이트가 원래 글자와 다릅니다. 파서로 먼저 풀어낸 결과를 검색합니다([데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md)).
+6. **인코딩된 데이터 파일에서 글자를 그대로 찾습니다.** 헤더의 `bCryptMethod` 가 `0x01`·`0x02` 이면 블록 바이트가 원래 글자와 다릅니다. 파서로 먼저 풀어낸 결과를 검색합니다([데이터 파일 구조 (PST·OST)](pst-ost.md)).
 7. **흔히 알려진 경로와 형식을 그대로 보고서에 씁니다.** 위 "흔히 알려진 내용" 표는 확인하지 못한 설명입니다. 검체의 실제 경로·값과 다르면 검체를 따릅니다.
 
 ## 직접 분석해 보기
@@ -129,14 +129,14 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 
 데이터 파일에서 숨은 메시지를 찾습니다.
 
-1. PST·OST 헤더의 `bCryptMethod` 를 읽습니다. 읽는 법은 [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md)에 있습니다.
+1. PST·OST 헤더의 `bCryptMethod` 를 읽습니다. 읽는 법은 [데이터 파일 구조 (PST·OST)](pst-ost.md)에 있습니다.
 2. 값이 `0x00` 이면 원시 바이트에서 메시지 클래스를 찾을 수 있습니다. `0x01`·`0x02` 이면 원시 바이트 검색으로는 찾지 못할 수 있습니다. 이때는 공개 도구 단계로 넘어갑니다.
 3. 파일 형식에 따라 글자를 한 바이트로 적을 수도, 두 바이트로 적을 수도 있습니다. 그래서 ASCII 와 UTF-16LE 둘 다 찾습니다.
 4. 찾은 자리는 메시지가 있다는 표시일 뿐입니다. 어느 폴더의 어느 메시지인지는 파서로 확인합니다.
 
 레지스트리에서 한도 값을 찾습니다.
 
-1. 사용자의 NTUSER.DAT 에서 `MaxNickNames` 를 찾습니다. 하이브가 값 이름을 어떤 글자 형식으로 적는지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)를 봅니다. 여기서는 두 형식을 다 찾습니다.
+1. 사용자의 NTUSER.DAT 에서 `MaxNickNames` 를 찾습니다. 하이브가 값 이름을 어떤 글자 형식으로 적는지는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다. 여기서는 두 형식을 다 찾습니다.
 2. 찾은 값이 `AutoNameCheck` 키에 붙어 있는지 확인합니다.
 3. 값 데이터 4바이트를 낮은 바이트가 앞에 오는 순서(리틀 엔디언)로 읽습니다. 예를 들어 `D0 07 00 00` 이면 `0x7D0` = 2,000개입니다. 이 바이트는 설명을 위해 만든 예입니다.
 4. 값이 없으면 이 키로는 한도를 바꾸지 않은 것입니다.
@@ -169,22 +169,22 @@ with open(path, "rb") as f, mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as
 - Microsoft 지원 문서는 숨은 메시지를 볼 때 MFCMAPI 를 예로 듭니다. 분석용 가상 머신에서 데이터 파일의 사본으로 엽니다. 원본 데이터 파일은 Outlook 에 붙이지 않습니다.
 - PST·OST 파서(예: libpff 의 pffexport)로 데이터 파일을 풀어낼 때는 숨은 메시지까지 내보내는지 확인합니다.
 - 오프라인 하이브를 읽는 공개 레지스트리 도구로 NTUSER.DAT 의 `AutoNameCheck` 키를 엽니다.
-- 목록을 풀어 주는 도구를 쓰면, 도구가 보여 준 주소 수와 위 원시 바이트 검색 결과를 맞춰 봅니다. 도구 두 개의 결과를 비교하는 법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 목록을 풀어 주는 도구를 쓰면, 도구가 보여 준 주소 수와 위 원시 바이트 검색 결과를 맞춰 봅니다. 도구 두 개의 결과를 비교하는 법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md) | 목록의 상대에게 간 메시지가 보낸 편지함에 있는지 |
-| [PST와 OST 차이 (Cached Mode·Exchange)](/02-artifacts/mail/outlook/cached-mode-exchange.md) | 기본 메시지 저장소가 PST 인지 OST 인지 |
-| [지운 메시지 복구 (Recoverable Items·Free Blocks)](/02-artifacts/mail/outlook/recoverable-items-free-blocks.md) | 보낸 편지함에 없는 상대라면 지운 메시지가 남았는지 |
-| [계정·프로필 레지스트리 (Outlook Profiles)](/02-artifacts/mail/outlook/outlook-profiles.md) | `.nk2` 파일 이름과 프로필 이름. Outlook 판 |
-| [개별 메시지 파일 (MSG)](/02-artifacts/mail/outlook/msg.md) | 따로 저장한 메시지의 수신자와 목록의 상대 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | `.nk2` 파일이 생기고, 바뀌고, 지워진 기록 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 `.nk2`·데이터 파일. 지금 목록과 항목을 비교합니다 |
-| [새 Outlook](/02-artifacts/mail/new-outlook.md) | 사용자가 새 Outlook 으로 옮겨 갔는지 |
+| [데이터 파일 구조 (PST·OST)](pst-ost.md) | 목록의 상대에게 간 메시지가 보낸 편지함에 있는지 |
+| [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md) | 기본 메시지 저장소가 PST 인지 OST 인지 |
+| [지운 메시지 복구 (Recoverable Items·Free Blocks)](recoverable-items-free-blocks.md) | 보낸 편지함에 없는 상대라면 지운 메시지가 남았는지 |
+| [계정·프로필 레지스트리 (Outlook Profiles)](outlook-profiles.md) | `.nk2` 파일 이름과 프로필 이름. Outlook 판 |
+| [개별 메시지 파일 (MSG)](msg.md) | 따로 저장한 메시지의 수신자와 목록의 상대 |
+| [마스터 파일 테이블](../../filesystem/mft.md) · [USN 변경 저널](../../filesystem/usnjrnl.md) | `.nk2` 파일이 생기고, 바뀌고, 지워진 기록 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 `.nk2`·데이터 파일. 지금 목록과 항목을 비교합니다 |
+| [새 Outlook](../new-outlook.md) | 사용자가 새 Outlook 으로 옮겨 갔는지 |
 
-메일 기록을 다른 연락 기록과 합쳐 읽는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md)에서 다룹니다.
+메일 기록을 다른 연락 기록과 합쳐 읽는 순서는 [누구와 연락을 주고받았나](../../../04-scenarios/activity/communication-reconstruction.md)에서 다룹니다.
 
 ## 실습
 

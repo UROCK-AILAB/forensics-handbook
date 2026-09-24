@@ -15,11 +15,11 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 ## 무엇을 기록하나 · 왜 생기나
 
 - 시그널 데스크톱은 대화를 PC 의 로컬 DB 에 저장합니다. 이 DB 가 `sql\db.sqlite` 입니다.
-- 앱은 이 DB 를 SQLCipher 로 암호화합니다. SQLCipher 형식은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 앱은 이 DB 를 SQLCipher 로 암호화합니다. SQLCipher 형식은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 - DB 를 여는 키는 `config.json` 에 둡니다.
 - 연락처와 대화 상대의 프로필 사진, 첨부 파일은 `attachments.noindex\` 에 둡니다.
 - 앱 로그는 `logs\` 에 둡니다.
-- 시그널 데스크톱은 Electron 의 `safeStorage` 를 불러 씁니다. Electron 앱이므로 Chromium 공통 폴더도 생깁니다. 공통 폴더는 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에서 다룹니다.
+- 시그널 데스크톱은 Electron 의 `safeStorage` 를 불러 씁니다. Electron 앱이므로 Chromium 공통 폴더도 생깁니다. 공통 폴더는 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -84,13 +84,13 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 - 같은 사용자 공간에서 도는 다른 앱으로부터는 보호되지 않습니다.
 - Windows 에서 `isEncryptionAvailable()` 은 앱이 `ready` 이벤트를 낸 뒤 true 를 돌려줍니다.
 - safeStorage 가 값마다 DPAPI 를 직접 쓰는지, Chromium 처럼 `Local State` 파일에 둔 키를 DPAPI 로 감싸는지는 이번 자료로 확인하지 못했습니다.
-- 사용자 DPAPI 의 마스터 키와 푸는 조건은 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+- 사용자 DPAPI 의 마스터 키와 푸는 조건은 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
 ### DB 파일
 
 - `db.sqlite` 는 SQLCipher 로 암호화한 SQLite 파일입니다.
 - 옛 수집 정의 파일에 적힌 여는 설정은 "키를 원시 키로 넣고, 나머지는 SQLCipher 4 기본값" 입니다.
-- SQLCipher 의 페이지 배치와 버전별 기본값은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- SQLCipher 의 페이지 배치와 버전별 기본값은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 - `-wal`·`-shm` 짝 파일이 함께 생깁니다. 본 파일에 아직 옮겨지지 않은 페이지가 WAL 에 있을 수 있습니다. 세 파일을 함께 수집합니다.
 - 알려진 바로는 DB 안에 `messages`, `conversations` 같은 표가 있습니다(버전마다 확인 필요).
 
@@ -105,7 +105,7 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 | `config.json` 상태 | DB 를 열려면 |
 |---|---|
 | 평문 `key` 가 있음 | 키가 파일에 그대로 있습니다. 원시 키로 넣고 SQLCipher 4 기본값으로 엽니다 |
-| `encryptedKey` 만 있음 | 그 사용자의 DPAPI 를 풀어야 키를 얻습니다. 푸는 데 필요한 재료는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다 |
+| `encryptedKey` 만 있음 | 그 사용자의 DPAPI 를 풀어야 키를 얻습니다. 푸는 데 필요한 재료는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다 |
 | 두 칸이 모두 있음 | 평문 `key` 로 먼저 열어 봅니다 |
 | `config.json` 이 없음 | 디스크에서 DB 키를 얻을 자리가 없습니다(해석). 섀도 복사본과 지운 파일에서 예전 `config.json` 을 찾습니다 |
 
@@ -135,7 +135,7 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 | `db.sqlite`·`-wal` 수정 시각 | 파일 시스템 | 앱이 DB 에 쓸 때 | UTC |
 | 로그 파일 시각 | 파일 시스템, 로그 줄 | 앱이 로그를 쓸 때 | 로그 줄의 형식은 확인하지 못함 |
 
-- 유닉스 시각은 UTC 기준입니다. 밀리초 단위 값을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 유닉스 시각은 UTC 기준입니다. 밀리초 단위 값을 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 앱은 `key` 를 `encryptedKey` 로 옮길 때 `config.json` 을 다시 씁니다. 그래서 `config.json` 의 수정 시각은 옮긴 때이거나 그 뒤 다른 이유로 다시 쓴 때입니다(해석).
 - 가장 최근 로그는 `.log`, 예전 로그는 `.log.0`, `.log.1` … 입니다. 로그 파일마다 파일 시스템 시각을 적어 두면 로그가 넘어간 시점을 가늠할 수 있습니다.
 
@@ -143,12 +143,12 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 
 - **옛 자료대로 평문 키를 기대합니다.** 지금 소스는 암호화를 쓸 수 있으면 평문 `key` 를 지웁니다.
 - **`db.sqlite` 만 수집합니다.** `-wal`·`-shm`·`config.json` 을 함께 수집합니다. 로그의 `.log.0`, `.log.1` 도 함께 수집합니다.
-- **다른 사용자의 DPAPI 로 풀려고 합니다.** safeStorage 는 같은 로그온 자격 증명으로 로그온한 사용자만 대개 풀 수 있습니다. `Signal` 폴더가 있는 그 사용자의 DPAPI 를 풉니다. SID 와 사용자는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 맞춥니다.
+- **다른 사용자의 DPAPI 로 풀려고 합니다.** safeStorage 는 같은 로그온 자격 증명으로 로그온한 사용자만 대개 풀 수 있습니다. `Signal` 폴더가 있는 그 사용자의 DPAPI 를 풉니다. SID 와 사용자는 [사용자 프로필 목록](../system-account/profilelist.md) 에서 맞춥니다.
 - **`Local State` 를 거친다고 단정합니다.** safeStorage 가 Windows 에서 키를 어떻게 보관하는지는 이번 자료로 확인하지 못했습니다. 아래 "헥스로 한 번" 처럼 값을 직접 봅니다.
 - **safeStorage 를 강한 보호로 봅니다.** 같은 사용자 공간에서 도는 다른 앱으로부터는 보호되지 않습니다. 사용자 권한으로 도는 악성 프로그램도 키를 풀 수 있다는 뜻입니다(해석).
-- **암호문에서 지운 레코드를 찾습니다.** 페이지가 암호화돼 있어서 풀기 전에는 지운 레코드를 찾을 수 없습니다. DB 를 푼 뒤 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 의 방법으로 찾습니다.
+- **암호문에서 지운 레코드를 찾습니다.** 페이지가 암호화돼 있어서 풀기 전에는 지운 레코드를 찾을 수 없습니다. DB 를 푼 뒤 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 의 방법으로 찾습니다.
 - **첨부 파일을 모두 평문으로 봅니다.** 첨부 파일을 디스크에 암호화하는지는 버전마다 확인합니다.
-- **폴더를 지웠다고 끝으로 봅니다.** 예전 `config.json` 이 [볼륨 섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 이나 지운 파일 영역에 남았을 수 있습니다(해석). 지운 파일은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 방법으로 찾습니다.
+- **폴더를 지웠다고 끝으로 봅니다.** 예전 `config.json` 이 [볼륨 섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 이나 지운 파일 영역에 남았을 수 있습니다(해석). 지운 파일은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -181,7 +181,7 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 ### 헥스로 한 번 — 암호문과 DB
 
 1. 4번에서 바꾼 바이트를 헥스 편집기로 봅니다.
-2. 이 바이트가 DPAPI 블롭 모양인지 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 의 블롭 구조와 맞춰 봅니다.
+2. 이 바이트가 DPAPI 블롭 모양인지 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 의 블롭 구조와 맞춰 봅니다.
 3. DPAPI 블롭 모양이면 값마다 DPAPI 를 직접 쓴 것으로 봅니다. 아니면 다른 키를 거친 것으로 보고 `Signal` 폴더의 `Local State` 를 봅니다.
 4. `sql\db.sqlite` 의 앞 16바이트를 봅니다. SQLite 헤더 문자열이 없고 무작위 바이트로 보이면 SQLCipher 로 암호화된 상태입니다.
 5. `-wal` 파일 크기가 0 보다 크면 본 DB 에 아직 옮겨지지 않은 페이지가 있을 수 있습니다. 함께 엽니다.
@@ -197,23 +197,23 @@ Windows 에서 이 암호화의 키는 DPAPI 로 만듭니다.
 | SQLCipher 를 지원하는 SQLite 도구 | 원시 키와 SQLCipher 4 기본값으로 `db.sqlite` 를 엽니다 |
 
 DB 를 연 뒤에는 도구가 보여 주는 메시지 수와 표의 행 수를 맞춰 봅니다.
-방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) | 그 사용자의 마스터 키 파일이 이미지에 있는지 |
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | `Signal` 폴더가 있는 프로필의 SID |
-| [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) | `Signal` 폴더의 `Local State` 에 암호화 키 칸이 있는지 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 시그널 실행 파일의 경로와 실행 시각 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 시그널 앱의 네트워크 사용량 기록이 있는지 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 시그널 알림이 남았는지 |
-| [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `config.json` 에 평문 `key` 가 남았는지 |
+| [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) | 그 사용자의 마스터 키 파일이 이미지에 있는지 |
+| [사용자 프로필 목록](../system-account/profilelist.md) | `Signal` 폴더가 있는 프로필의 SID |
+| [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) | `Signal` 폴더의 `Local State` 에 암호화 키 칸이 있는지 |
+| [프리페치](../execution/prefetch/index.md) · [AmCache](../execution/amcache-hve/index.md) | 시그널 실행 파일의 경로와 실행 시각 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 시그널 앱의 네트워크 사용량 기록이 있는지 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 시그널 알림이 남았는지 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `config.json` 에 평문 `key` 가 남았는지 |
 
-- 대화 DB 를 암호화하는 다른 메신저는 [텔레그램](/02-artifacts/messengers/telegram.md), [왓츠앱 데스크톱](/02-artifacts/messengers/whatsapp-desktop.md), [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md) 페이지를 봅니다.
-- 암호화된 증거를 다루는 순서는 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
-- 조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+- 대화 DB 를 암호화하는 다른 메신저는 [텔레그램](telegram.md), [왓츠앱 데스크톱](whatsapp-desktop.md), [카카오톡 PC](kakaotalk-pc/index.md) 페이지를 봅니다.
+- 암호화된 증거를 다루는 순서는 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
+- 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

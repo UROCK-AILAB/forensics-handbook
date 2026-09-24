@@ -4,7 +4,7 @@
 
 TRIM 은 OS 가 저장 장치에 어느 블록을 더는 쓰지 않는지 알려 주는 명령입니다. TRIM 을 받은 SSD 는 그 영역을 무효로 표시합니다. 그 뒤 드라이브 내부 정리 (Garbage Collection) 가 끝나면 지운 데이터는 되살리기 어렵거나 불가능할 수 있습니다. Windows 의 NTFS 는 기본 설정에서 이 알림을 보냅니다.
 
-이 페이지는 [삭제 데이터 복구 (Data Recovery)](/03-techniques/analysis/data-recovery/index.md) 의 하위 주제입니다. 다른 하위 페이지의 복구 방법이 SSD 에서 어디까지 통하는지 가늠할 때 봅니다.
+이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 다른 하위 페이지의 복구 방법이 SSD 에서 어디까지 통하는지 가늠할 때 봅니다.
 
 ## 언제 쓰나
 
@@ -54,7 +54,7 @@ TRIM 한 자리를 읽을 때 무엇이 나오는지는 드라이브마다 다�
 
 ### 삭제 알림 설정 — fsutil
 
-라이브 시스템에서는 아래 명령으로 설정을 봅니다. 라이브 시스템에서 명령을 실행하는 절차는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에 있습니다.
+라이브 시스템에서는 아래 명령으로 설정을 봅니다. 라이브 시스템에서 명령을 실행하는 절차는 [라이브 응답](../../process-acquisition/live-response/index.md) 에 있습니다.
 
 ```
 fsutil behavior query DisableDeleteNotify
@@ -78,7 +78,7 @@ ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 - 같은 PC 의 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem` 에서 `DisableDeleteNotification` 값은 0 이었습니다.
 - 같은 키에 `RefsDisableDeleteNotification` 값은 없었습니다.
 - fsutil 문서에는 "레지스트리를 바꾼다" 는 말만 있고 값 이름은 없습니다. 그래서 이 레지스트리 값이 fsutil 설정과 같은 것인지는 공식 문서로 확인하지 못했습니다.
-- 디스크 이미지에서 이 값을 근거로 쓰려면 이 관계부터 따로 확인합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+- 디스크 이미지에서 이 값을 근거로 쓰려면 이 관계부터 따로 확인합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ### 빈 섹터 전체에 다시 TRIM — Optimize-Volume·defrag
 
@@ -110,28 +110,28 @@ ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 - NVMe SSD 인데도 "다시 잘라내기" 와 "조각 모음" 이벤트가 둘 다 남았습니다.
 - 이 이벤트로 retrim 시각을 읽는 방법이 모든 Windows 버전에 맞는지는 확인하지 못했습니다. 로그를 얼마나 오래 두는지도 확인하지 못했습니다.
 
-작업 정의를 이미지에서 읽는 법은 [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md) 에 있습니다. 이벤트 로그 파일을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다.
+작업 정의를 이미지에서 읽는 법은 [예약 작업](../../../02-artifacts/persistence/scheduled-tasks/index.md) 에 있습니다. 이벤트 로그 파일을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다.
 
 ## 절차
 
 1. 매체 종류와 연결 방식을 적습니다. SSD 인지, SATA·NVMe·USB·하드웨어 RAID 가운데 어느 것으로 붙었는지 봅니다.
 2. 볼륨마다 파일시스템을 적습니다. NTFS·ReFS 인지 FAT·exFAT 인지 봅니다.
-3. Windows 버전을 적습니다. 버전은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 읽습니다. 위 버전 표와 맞춰 그 연결 방식에 TRIM 이 갈 수 있었는지 봅니다.
+3. Windows 버전을 적습니다. 버전은 [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 읽습니다. 위 버전 표와 맞춰 그 연결 방식에 TRIM 이 갈 수 있었는지 봅니다.
 4. 라이브 시스템이면 `fsutil behavior query DisableDeleteNotify` 결과를 남깁니다.
 5. 예약된 retrim 을 봅니다. ScheduledDefrag 작업과 Defrag 이벤트 258 을 찾습니다. 위 관찰 범위를 함께 적습니다.
-6. 이미지를 뜹니다. 방법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 에 있습니다.
-7. 비할당 영역에서 0 이나 같은 값으로 채워진 구간이 얼마나 되는지 적습니다. 비할당 영역을 뽑는 법은 [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 있습니다.
+6. 이미지를 뜹니다. 방법은 [증거 획득](../../process-acquisition/evidence-acquisition/index.md) 에 있습니다.
+7. 비할당 영역에서 0 이나 같은 값으로 채워진 구간이 얼마나 되는지 적습니다. 비할당 영역을 뽑는 법은 [비할당 영역과 슬랙](unallocated-slack-space.md) 에 있습니다.
 8. 복구를 시도합니다. 1~5단계에서 적은 조건을 결과와 함께 적습니다.
 
 ## 함정과 한계
 
 - 비결정적 TRIM 드라이브는 TRIM 한 LBA 를 읽을 때마다 다른 데이터가 나올 수 있습니다. 이 성질대로라면 같은 드라이브를 두 번 이미징해도 그 구간이 달라 해시가 다를 수 있습니다.
-- 이미지에서 0 이 이어진 구간이 TRIM 때문인지 완전삭제 도구 때문인지 이미지만으로 가르는 근거는 이 위키에서 확인하지 못했습니다. 0 구간만으로 지우려 했다고 쓰지 않습니다. 완전삭제 여부는 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 다른 기록과 함께 봅니다.
+- 이미지에서 0 이 이어진 구간이 TRIM 때문인지 완전삭제 도구 때문인지 이미지만으로 가르는 근거는 이 위키에서 확인하지 못했습니다. 0 구간만으로 지우려 했다고 쓰지 않습니다. 완전삭제 여부는 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다른 기록과 함께 봅니다.
 - 삭제 알림이 켜져 있어도 TRIM 이 드라이브까지 간다고 단정하지 않습니다. USB 로 붙인 외장 SSD, 하드웨어 RAID, FAT·exFAT 볼륨은 TRIM 이 가지 않을 수 있습니다.
 - TRIM 이 내려간 뒤 실제로 언제 지워지는지는 드라이브 내부 정리에 달렸습니다. 파일을 지운 시각과 데이터가 사라진 시각은 다를 수 있습니다.
 - 예약된 retrim 은 삭제 시점과 상관없이 비어 있는 모든 섹터에 TRIM 을 다시 보냅니다. 그래서 파일을 지울 때 알림이 가지 않았더라도 다음 retrim 때 알림이 갈 수 있습니다.
 - 설정은 재부팅 없이 바뀝니다. 수집 때 본 값이 파일을 지울 때의 값과 같다고 보지 않습니다.
-- 복구가 어렵다고 해서 파일시스템 기록까지 사라지는 것은 아닙니다. 이름·시각 같은 기록은 [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 로 따로 봅니다.
+- 복구가 어렵다고 해서 파일시스템 기록까지 사라지는 것은 아닙니다. 이름·시각 같은 기록은 [파일시스템 기반 복구](undelete-ntfs-fat.md) 로 따로 봅니다.
 
 ## 결과를 어떻게 해석하나
 

@@ -1,6 +1,6 @@
 # 경로 해시로 실행 위치 구분하기 (Path Hash)
 
-> 상위 허브: [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md)
+> 상위 허브: [프리페치 (Prefetch)](index.md)
 
 ## 한 줄 요약
 
@@ -70,7 +70,7 @@ Windows 11 에서는 시스템 폴더의 실행 파일 여덟 개로 확인했�
 
 ## 파일 안에 적힌 해시
 
-해시는 파일 이름뿐 아니라 파일 헤더에도 있습니다. 헤더의 자리는 다음과 같습니다. 파일 구조 전체는 [파일 구조와 버전](/02-artifacts/execution/prefetch/format-versions-mam.md)을 봅니다.
+해시는 파일 이름뿐 아니라 파일 헤더에도 있습니다. 헤더의 자리는 다음과 같습니다. 파일 구조 전체는 [파일 구조와 버전](format-versions-mam.md)을 봅니다.
 
 | 오프셋 | 크기 | 내용 |
 |---|---|---|
@@ -102,7 +102,7 @@ Windows 11 에서는 시스템 폴더의 실행 파일 여덟 개로 확인했�
 
 ## 시각 해석
 
-해시에는 시각이 없습니다. 대신 경로마다 `.pf` 가 따로 있으므로 실행 횟수와 마지막 실행 시각도 경로마다 따로 쌓입니다. 그래서 같은 이름의 프로그램을 어느 위치에서 언제 실행했는지 나누어 볼 수 있습니다. 시각을 읽는 법은 [실행 횟수와 실행 시각 읽기](/02-artifacts/execution/prefetch/run-count-last-run-times.md)를 봅니다. `.pf` 파일 자체의 만든 시각을 해석할 때 주의할 점은 [프리페치 해석 함정](/02-artifacts/execution/prefetch/pitfalls.md)을 봅니다.
+해시에는 시각이 없습니다. 대신 경로마다 `.pf` 가 따로 있으므로 실행 횟수와 마지막 실행 시각도 경로마다 따로 쌓입니다. 그래서 같은 이름의 프로그램을 어느 위치에서 언제 실행했는지 나누어 볼 수 있습니다. 시각을 읽는 법은 [실행 횟수와 실행 시각 읽기](run-count-last-run-times.md)를 봅니다. `.pf` 파일 자체의 만든 시각을 해석할 때 주의할 점은 [프리페치 해석 함정](pitfalls.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -111,7 +111,7 @@ Windows 11 에서는 시스템 폴더의 실행 파일 여덟 개로 확인했�
 - **호스팅 프로그램은 미리 표를 만들기 어렵습니다.** 명령줄의 대소문자와 공백까지 반영되기 때문입니다. 증거 안에서 실제 명령줄을 찾아 그대로 넣어 계산합니다.
 - **버전에 맞는 함수를 써야 합니다.** XP·2003 과 Vista 이후는 같은 경로에도 다른 값이 나옵니다.
 - **영문 밖의 문자가 든 경로는 조심합니다.** 계산 도구의 대문자 변환이 윈도와 다르면 값이 맞지 않습니다. 계산이 안 맞을 때 먼저 의심할 부분입니다.
-- **대체 데이터 스트림으로 실행하면 이름 규칙이 깨집니다.** 명세의 예에서는 `notepad.exe:evil.exe` 를 실행하자 `Prefetch` 폴더에 `notepad.exe:evil.pf` 가 생겼습니다. 해시가 붙은 이름이 아닙니다. 대체 데이터 스트림 (ADS)은 [대체 데이터 스트림](/01-foundations/disk-volume/ntfs/ads.md)을 봅니다.
+- **대체 데이터 스트림으로 실행하면 이름 규칙이 깨집니다.** 명세의 예에서는 `notepad.exe:evil.exe` 를 실행하자 `Prefetch` 폴더에 `notepad.exe:evil.pf` 가 생겼습니다. 해시가 붙은 이름이 아닙니다. 대체 데이터 스트림 (ADS)은 [대체 데이터 스트림](../../../01-foundations/disk-volume/ntfs/ads.md)을 봅니다.
 - **파일 이름의 해시와 헤더의 해시가 다르면 따져 봅니다.** 명세상 두 값은 같아야 합니다. 다르면 파일 이름을 바꾼 것은 아닌지 확인할 단서로 씁니다.
 
 ## 직접 분석해 보기
@@ -182,13 +182,13 @@ libyal 의 libscca, Eric Zimmerman 의 PECmd 같은 공개 파서는 `.pf` 를 �
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 프리페치 참조 파일 목록 | `.pf` 안에 실행 파일의 전체 경로가 남습니다. 해시 계산에 넣을 첫 후보입니다 | [참조 파일·폴더 목록 활용](/02-artifacts/execution/prefetch/referenced-files.md) |
-| BAM·DAM | 경로를 `\Device\HarddiskVolume<번호>\...` 꼴로 적습니다(확인 범위: Windows 11 빌드 26200). 볼륨 번호 단서입니다 | [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| AmCache | 실행 파일의 전체 경로와 SHA1 이 남습니다. 그 경로에 어떤 파일이 있었는지 봅니다 | [실행 파일 항목](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) |
-| 심캐시 | 전체 경로가 남습니다 | [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md) |
-| 프로세스 생성 이벤트 | 명령줄이 남습니다. 호스팅 프로그램 해시 계산에 넣습니다 | [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) |
-| $MFT | 후보 경로에 그 파일이 있었는지 봅니다 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| MountedDevices | 드라이브 문자가 어느 볼륨이었는지 봅니다 | [드라이브 문자 매핑](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) |
+| 프리페치 참조 파일 목록 | `.pf` 안에 실행 파일의 전체 경로가 남습니다. 해시 계산에 넣을 첫 후보입니다 | [참조 파일·폴더 목록 활용](referenced-files.md) |
+| BAM·DAM | 경로를 `\Device\HarddiskVolume<번호>\...` 꼴로 적습니다(확인 범위: Windows 11 빌드 26200). 볼륨 번호 단서입니다 | [BAM·DAM](../background-activity-moderator.md) |
+| AmCache | 실행 파일의 전체 경로와 SHA1 이 남습니다. 그 경로에 어떤 파일이 있었는지 봅니다 | [실행 파일 항목](../amcache-hve/inventoryapplicationfile.md) |
+| 심캐시 | 전체 경로가 남습니다 | [심캐시](../shimcache-appcompatcache.md) |
+| 프로세스 생성 이벤트 | 명령줄이 남습니다. 호스팅 프로그램 해시 계산에 넣습니다 | [프로세스 생성 (4688)](../../event-logs/4688.md), [Sysmon 이벤트 1](../../event-logs/sysmon/1.md) |
+| $MFT | 후보 경로에 그 파일이 있었는지 봅니다 | [마스터 파일 테이블](../../filesystem/mft.md) |
+| MountedDevices | 드라이브 문자가 어느 볼륨이었는지 봅니다 | [드라이브 문자 매핑](../../external-devices/usb-storage-artifacts/mounteddevices.md) |
 
 ## 실습
 

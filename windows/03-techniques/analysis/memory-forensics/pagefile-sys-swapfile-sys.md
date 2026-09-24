@@ -1,6 +1,6 @@
 # 페이지 파일 (pagefile.sys·swapfile.sys)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](/03-techniques/analysis/memory-forensics/index.md)
+> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
 
 ## 한 줄 요약
 
@@ -11,7 +11,7 @@
 ## 언제 쓰나
 
 - 전원이 꺼진 PC 에서 메모리 조각을 찾을 때 씁니다.
-- 메모리 이미지에서 프로세스의 명령줄이나 DLL 목록이 비어 나올 때 씁니다. 그 부분이 페이지 파일로 나가 있었을 수 있습니다. [프로세스와 DLL 분석](/03-techniques/analysis/memory-forensics/process-analysis.md) 을 봅니다.
+- 메모리 이미지에서 프로세스의 명령줄이나 DLL 목록이 비어 나올 때 씁니다. 그 부분이 페이지 파일로 나가 있었을 수 있습니다. [프로세스와 DLL 분석](process-analysis.md) 을 봅니다.
 - 키워드·주소·명령 조각을 넓게 찾을 때 씁니다.
 
 ## 무엇을 담나
@@ -21,7 +21,7 @@
 - 페이지 파일은 디스크에 두는 숨김 시스템 파일입니다.
 - 페이지 파일은 선택 사항입니다. 두지 않을 수도 있습니다.
 - Windows 는 자주 쓰지 않는 수정된 페이지를 물리 메모리에서 빼내 여기에 둡니다.
-- 시스템 크래시 덤프를 남길 때도 페이지 파일을 씁니다. 필요한 크기는 [크래시 덤프](/03-techniques/analysis/memory-forensics/memory-dmp-minidump.md) 에 있습니다.
+- 시스템 크래시 덤프를 남길 때도 페이지 파일을 씁니다. 필요한 크기는 [크래시 덤프](memory-dmp-minidump.md) 에 있습니다.
 - 시스템 커밋 한도 (Commit Limit) 는 물리 메모리와 모든 페이지 파일을 더한 크기입니다.
 - 도메인 컨트롤러, DFS-R 서버, 인증서 서버, ADAM/LDS 서버에는 페이지 파일이 필요합니다.
 
@@ -37,7 +37,7 @@
 - 위 문서에는 파일 이름과 기본 위치가 직접 나오지 않습니다 [1]. 디스크 이미지의 모든 볼륨에서 이름으로 찾습니다.
 - 페이지 파일 설정은 `HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management` 키의 `PagingFiles` 값에 있습니다 [2].
 - 이 값의 형식은 이 글의 참고 문헌에 나오지 않습니다. 값을 읽어 시스템 볼륨 말고 다른 볼륨에도 페이지 파일을 두었는지 확인합니다.
-- 디스크 이미지에서 떼어 낸 SYSTEM 하이브를 읽을 때는 경로의 `CurrentControlSet` 부분을 실제로 쓰던 제어 집합으로 바꿔 읽습니다. 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+- 디스크 이미지에서 떼어 낸 SYSTEM 하이브를 읽을 때는 경로의 `CurrentControlSet` 부분을 실제로 쓰던 제어 집합으로 바꿔 읽습니다. 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 - 종료할 때 페이지 파일을 비우는 설정과 페이지 파일을 암호화하는 설정이 있다고 알려져 있습니다. 설정 이름과 값은 이 글의 참고 문헌으로 확인하지 못했습니다.
 
 ## swapfile.sys
@@ -50,13 +50,13 @@
 ## 절차
 
 1. 디스크 이미지의 모든 볼륨에서 pagefile.sys 와 swapfile.sys 를 찾습니다.
-2. 파일을 꺼내고, 꺼낸 도구·방법과 해시를 적습니다. 방법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 에 있습니다.
+2. 파일을 꺼내고, 꺼낸 도구·방법과 해시를 적습니다. 방법은 [증거 획득](../../process-acquisition/evidence-acquisition/index.md) 에 있습니다.
 3. SYSTEM 하이브에서 `PagingFiles` 값을 읽습니다. 설정에 나온 페이지 파일과 실제로 찾은 파일을 맞대 봅니다.
 4. 파일 앞부분과 몇 군데를 헥스로 봅니다. 모두 0 이면 종료할 때 비웠을 수 있습니다.
-5. 키워드를 ASCII 와 UTF-16LE 로 둘 다 검색합니다. 키워드를 정하고 결과를 정리하는 법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다.
-6. 패턴으로 찾을 것이 있으면 YARA 규칙을 씁니다. 규칙을 쓰는 법은 [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) 에 있습니다.
-7. 이미지·문서·실행 파일 조각은 카빙으로 꺼냅니다. [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 를 봅니다.
-8. 찾은 조각을 디스크 기록과 맞대 봅니다. 조각에 나온 파일 이름은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서, 웹 주소는 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에서 이어 봅니다.
+5. 키워드를 ASCII 와 UTF-16LE 로 둘 다 검색합니다. 키워드를 정하고 결과를 정리하는 법은 [파일 내용 검색](../content-search/index.md) 에 있습니다.
+6. 패턴으로 찾을 것이 있으면 YARA 규칙을 씁니다. 규칙을 쓰는 법은 [의심 실행 파일 선별](../code-signing-yara.md) 에 있습니다.
+7. 이미지·문서·실행 파일 조각은 카빙으로 꺼냅니다. [삭제 데이터 복구](../data-recovery/index.md) 를 봅니다.
+8. 찾은 조각을 디스크 기록과 맞대 봅니다. 조각에 나온 파일 이름은 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 에서, 웹 주소는 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에서 이어 봅니다.
 
 ## 헥스로 보기
 
@@ -71,7 +71,7 @@ UTF-16LE  68 00 74 00 74 00 70 00 73 00 3A 00 2F 00 2F 00    h.t.t.p.s.:././
 
 - UTF-16LE 에서는 영문 한 글자마다 뒤에 `00` 이 붙습니다.
 - 한 가지 인코딩으로만 검색하면 다른 쪽을 놓칩니다.
-- 한글처럼 영문이 아닌 글자는 인코딩마다 바이트가 다릅니다. [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- 한글처럼 영문이 아닌 글자는 인코딩마다 바이트가 다릅니다. [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 
 ## 도구
 
@@ -92,7 +92,7 @@ UTF-16LE  68 00 74 00 74 00 70 00 73 00 3A 00 2F 00 2F 00    h.t.t.p.s.:././
 - **크기로 사용량을 가늠하지 않습니다.** 시스템이 관리하는 페이지 파일은 필요하면 늘어납니다 [1].
 - **비어 있을 수 있습니다.** 종료할 때 비우는 설정을 켰다면 내용이 0 일 수 있습니다. 비어 있다고 해서 누가 일부러 지웠다고 단정하지 않습니다.
 - **없을 수도 있습니다.** 페이지 파일은 선택 사항입니다 [1]. 파일이 없으면 먼저 `PagingFiles` 설정을 봅니다.
-- **물리 메모리 이미지와 함께 봅니다.** 페이지 파일만으로는 어느 페이지가 어느 프로세스의 것인지 알기 어렵습니다. 메모리 이미지 분석은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 의 하위 페이지를 따릅니다.
+- **물리 메모리 이미지와 함께 봅니다.** 페이지 파일만으로는 어느 페이지가 어느 프로세스의 것인지 알기 어렵습니다. 메모리 이미지 분석은 [메모리 분석](index.md) 의 하위 페이지를 따릅니다.
 
 ## 결과를 어떻게 해석하나
 
@@ -108,10 +108,10 @@ UTF-16LE  68 00 74 00 74 00 70 00 73 00 3A 00 2F 00 2F 00    h.t.t.p.s.:././
 
 ## 함께 볼 페이지
 
-- [메모리 속 문자열·자격증명·암호 키](/03-techniques/analysis/memory-forensics/strings-credentials-keys.md) — 메모리 이미지에서 문자열을 찾는 법입니다.
-- [최대 절전 파일](/03-techniques/analysis/memory-forensics/hiberfil-sys.md) · [크래시 덤프](/03-techniques/analysis/memory-forensics/memory-dmp-minidump.md) — 디스크에 남는 다른 메모리 조각입니다.
-- [파일 내용 검색](/03-techniques/analysis/content-search/index.md) — 키워드 목록을 만들고 결과를 정리합니다.
-- [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) — 카빙으로 파일 조각을 꺼냅니다.
+- [메모리 속 문자열·자격증명·암호 키](strings-credentials-keys.md) — 메모리 이미지에서 문자열을 찾는 법입니다.
+- [최대 절전 파일](hiberfil-sys.md) · [크래시 덤프](memory-dmp-minidump.md) — 디스크에 남는 다른 메모리 조각입니다.
+- [파일 내용 검색](../content-search/index.md) — 키워드 목록을 만들고 결과를 정리합니다.
+- [삭제 데이터 복구](../data-recovery/index.md) — 카빙으로 파일 조각을 꺼냅니다.
 
 ## 참고 문헌
 

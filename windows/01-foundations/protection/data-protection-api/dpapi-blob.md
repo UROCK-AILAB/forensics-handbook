@@ -1,6 +1,6 @@
 # DPAPI 블롭 구조 (DPAPI Blob)
 
-> 위치: [DPAPI 구조 (Data Protection API)](/01-foundations/protection/data-protection-api/index.md) > DPAPI Blob
+> 위치: [DPAPI 구조 (Data Protection API)](index.md) > DPAPI Blob
 
 ## 한 줄 요약
 
@@ -8,7 +8,7 @@ DPAPI 블롭 (Blob) 은 암호문과 그것을 풀 메타데이터를 한 덩어
 DPAPI 는 이 블롭을 스스로 저장하지 않습니다. 블롭을 받은 앱이 저장합니다.
 그래서 블롭은 앱마다 다른 파일이나 레지스트리 값 안에 들어 있습니다.
 
-> 블롭을 실제로 푸는 다섯 단계는 [DPAPI 동작 원리](/01-foundations/protection/data-protection-api/protect-unprotect.md) 에 있습니다.
+> 블롭을 실제로 푸는 다섯 단계는 [DPAPI 동작 원리](protect-unprotect.md) 에 있습니다.
 > 이 글은 블롭의 바이트가 어떻게 놓이는지를 다룹니다.
 
 ## 이 구조가 나오는 곳
@@ -16,7 +16,7 @@ DPAPI 는 이 블롭을 스스로 저장하지 않습니다. 블롭을 받은 �
 - 브라우저에 저장한 비밀번호, 자격 증명 관리자 항목, 무선 프로필 키 같은 값이 이 블롭으로 감싸여 있습니다.
 - 앱이 CryptProtectData 를 부르면 이 블롭을 돌려받습니다.
 - 앱은 이 블롭을 자기 파일이나 레지스트리에 그대로 저장합니다.
-- 자격 증명 저장 위치는 [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) 를 봅니다.
+- 자격 증명 저장 위치는 [자격 증명 관리자와 볼트](../../../02-artifacts/credentials/credential-manager-windows-vault.md) 를 봅니다.
 
 ## 구조
 
@@ -51,7 +51,7 @@ DPAPI 는 이 블롭을 스스로 저장하지 않습니다. 블롭을 받은 �
 - 그 논문은 arrKeys 가 마스터키 ID 를 여러 개 담을 수 있다고 보고, 도메인 백업키나 호환 키를 위한 것으로 추정합니다. 논문도 직접 확인하지는 못했다고 적습니다.
 - 위 공개 코드는 마스터키 GUID 를 한 칸(16바이트)만 읽습니다.
 
-GUID 형식 자체는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
+GUID 형식 자체는 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
 
 ### 무결성 값이 둘이라는 점
 
@@ -69,7 +69,7 @@ GUID 형식 자체는 [윈도 식별자 형식](/01-foundations/value-decoding/s
 
 - 역공학 논문에 따르면, 개발자가 CryptProtectData 에 설명을 NULL 로 주면 DPAPI 는 빈 문자열을 저장합니다.
 - 이 빈 문자열은 UTF-16LE 의 L"" 이고 크기가 2바이트입니다.
-- 문자 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- 문자 인코딩은 [문자 인코딩](../../value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
 
 ### 크기와 해시 범위
 
@@ -107,7 +107,7 @@ GUID 형식 자체는 [윈도 식별자 형식](/01-foundations/value-decoding/s
 - **말해 주는 것**: 어떤 암호·해시 알고리즘을 썼는지. 알고리즘 ID 로 알 수 있습니다.
 - **말해 주지 못하는 것**: 블롭 안의 평문. 마스터키 없이는 풀리지 않습니다.
 - **말해 주지 못하는 것**: 누가 언제 이 블롭을 만들었는지. 블롭에는 시각 칸이 없습니다.
-- 블롭에서 얻은 마스터키 GUID 로 [마스터키 파일](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) 을 찾아 짝을 맞춥니다.
+- 블롭에서 얻은 마스터키 GUID 로 [마스터키 파일](master-key-protect-sid.md) 을 찾아 짝을 맞춥니다.
 
 ## 함정
 

@@ -1,6 +1,6 @@
 # 파일·페이지 구조 (B-tree·Record Format)
 
-상위 허브: [SQLite 데이터베이스 (SQLite)](/01-foundations/database-log-formats/sqlite/index.md)
+상위 허브: [SQLite 데이터베이스 (SQLite)](index.md)
 
 ## 한 줄 요약
 
@@ -12,11 +12,11 @@ SQLite 파일은 크기가 같은 페이지를 차례로 이어 붙인 것입니
 ## 이 형식을 쓰는 아티팩트
 
 암호화하지 않은 SQLite 파일은 모두 이 구조를 따릅니다.
-크롬 계열 [방문 기록](/02-artifacts/browsers/chrome-edge-whale/history.md), 파이어폭스 [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md), [윈도 타임라인](/02-artifacts/file-folder-usage/activitiescache-db.md), [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md), Windows 11 [검색 색인](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 이 그 예입니다.
-파일별 위치와 버전은 [SQLite 허브](/01-foundations/database-log-formats/sqlite/index.md) 의 표에 있습니다.
+크롬 계열 [방문 기록](../../../02-artifacts/browsers/chrome-edge-whale/history.md), 파이어폭스 [places.sqlite](../../../02-artifacts/browsers/firefox/places-sqlite.md), [윈도 타임라인](../../../02-artifacts/file-folder-usage/activitiescache-db.md), [윈도 알림 기록](../../../02-artifacts/execution/wpndatabase-db.md), Windows 11 [검색 색인](../../../02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 이 그 예입니다.
+파일별 위치와 버전은 [SQLite 허브](index.md) 의 표에 있습니다.
 SQLite 파일 형식은 Windows 버전과 상관없습니다.
 달라지는 것은 앱에 들어 있는 SQLite 라이브러리의 판입니다.
-암호화된 파일은 먼저 풀어야 이 구조로 읽을 수 있습니다. 자세한 내용은 [암호화된 SQLite](/01-foundations/database-log-formats/sqlite/sqlcipher.md) 를 봅니다.
+암호화된 파일은 먼저 풀어야 이 구조로 읽을 수 있습니다. 자세한 내용은 [암호화된 SQLite](sqlcipher.md) 를 봅니다.
 
 ## 구조
 
@@ -37,7 +37,7 @@ SQLite 파일 형식은 Windows 버전과 상관없습니다.
 | 색인 B-트리 내부 페이지 | 첫 바이트 0x02 | 자식 페이지 번호와 색인 키를 담습니다. |
 | 색인 B-트리 잎 페이지 | 첫 바이트 0x0A | 색인 키가 들어갑니다. |
 | 넘침 페이지 (Overflow Page) | 서명 없음 | 셀에 다 못 넣은 레코드 뒷부분이 들어갑니다. |
-| 빈 페이지 목록 (Freelist) 의 줄기·잎 페이지 | 서명 없음 | 지금 안 쓰는 페이지입니다. [지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 다룹니다. |
+| 빈 페이지 목록 (Freelist) 의 줄기·잎 페이지 | 서명 없음 | 지금 안 쓰는 페이지입니다. [지운 레코드](freelist-freeblock.md) 에서 다룹니다. |
 | 포인터 맵 페이지 (Pointer Map) | 서명 없음 | 자동 정리(auto_vacuum)·증분 정리 모드 파일에만 있습니다. 자식에서 부모 쪽으로 가는 연결 정보를 담습니다. |
 | 잠금 바이트 페이지 (Lock-byte Page) | 위치로 정해짐 | 파일 오프셋 1,073,741,824~1,073,742,335 를 포함하는 페이지입니다. 1 GiB 보다 큰 파일에만 있습니다. SQLite 는 이 페이지를 읽지도 쓰지도 않습니다. |
 
@@ -109,7 +109,7 @@ B-트리 페이지 하나는 아래 순서로 나뉩니다.
 그래서 셀의 실제 위치 순서는 키 순서와 다를 수 있습니다.
 
 셀 내용 영역 안의 빈 곳은 빈 블록 (Freeblock) 사슬로 이어집니다.
-빈 블록 구조와 그 안에 남는 지운 레코드는 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 다룹니다.
+빈 블록 구조와 그 안에 남는 지운 레코드는 [파일 안에 남은 지운 레코드](freelist-freeblock.md) 에서 다룹니다.
 
 ### 셀 (Cell)
 
@@ -167,7 +167,7 @@ B-트리 페이지 하나는 아래 순서로 나뉩니다.
 | 13 이상 홀수 N | (N − 13) / 2 | 텍스트. 파일 머리 56 의 인코딩을 따릅니다. 끝의 0x00 은 적지 않습니다. |
 
 텍스트 길이는 글자 수가 아니라 바이트 수입니다.
-UTF-16 파일에서는 한 글자가 2바이트 이상입니다([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
+UTF-16 파일에서는 한 글자가 2바이트 이상입니다([문자 인코딩](../../value-decoding/utf-16le-utf-8-cp949.md)).
 
 형식은 열이 아니라 값마다 정해집니다.
 SQLite 는 `INTEGER PRIMARY KEY` 열을 빼면 어느 열에나 어떤 형식의 값이든 넣을 수 있습니다.
@@ -233,7 +233,7 @@ U 가 4096 이면 표 잎 셀의 X 는 4061, M 은 489 입니다. 색인 셀의 
 | 스키마 형식 3 | 늘린 열에 NULL 이 아닌 기본값을 줄 수 있습니다. 3.1.4 부터. |
 | 스키마 형식 4 | 색인의 `DESC` 를 따르고 형식 번호 8·9 를 씁니다. 3.3.0 부터. 새 파일의 기본값입니다. |
 | 파일 머리 28 의 페이지 수 | 3.7.0 이후 판만 고친 파일에서 늘 믿을 수 있습니다. |
-| 파일 머리 18·19 = 2 | WAL 모드입니다. [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 을 함께 봅니다. |
+| 파일 머리 18·19 = 2 | WAL 모드입니다. [WAL과 롤백 저널](wal-journal-shm.md) 을 함께 봅니다. |
 
 ## 읽는 법 — 헥스로 한 번 따라가기
 
@@ -344,13 +344,13 @@ CE 10 01 04 81 9C 24 AB AB AB ...
 파일 변경 카운터는 횟수일 뿐 시각이 아닙니다.
 화면에 보이는 시각은 모두 앱이 열 값으로 적은 것입니다.
 SQLite 에는 날짜 전용 저장 형식이 없습니다.
-그래서 열마다 기준 시점과 단위를 앱 기준으로 따로 확인합니다([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
+그래서 열마다 기준 시점과 단위를 앱 기준으로 따로 확인합니다([시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md)).
 파일 자체가 언제 바뀌었는지는 파일 시스템 시각으로 봅니다.
 
 ### 지운 행을 읽을 때 구조에서 알아 둘 점
 
 SQL 로 조회하면 지금 살아 있는 행만 나옵니다.
-지운 행이 남는 자리와 설정별 차이는 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 다룹니다.
+지운 행이 남는 자리와 설정별 차이는 [파일 안에 남은 지운 레코드](freelist-freeblock.md) 에서 다룹니다.
 여기서는 이 페이지의 구조와 이어지는 점만 적습니다.
 
 - 지운 셀이 빈 블록이 되면 첫 4바이트가 빈 블록 머리로 덮입니다. 표 잎 셀의 첫 부분은 페이로드 크기·rowid·레코드 머리 크기입니다. 그래서 남은 형식 번호 배열을 스키마의 열 구성과 맞춰 어느 표의 행인지 좁힙니다.
@@ -362,7 +362,7 @@ SQL 로 조회하면 지금 살아 있는 행만 나옵니다.
 파일 머리 18·19 가 2 이면 WAL 모드입니다.
 WAL 모드에서는 커밋한 페이지가 `-wal` 파일에만 있을 수 있습니다.
 이 모드에서는 변경 카운터가 트랜잭션마다 늘지 않을 수 있습니다.
-수집과 해석은 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 을 봅니다.
+수집과 해석은 [WAL과 롤백 저널](wal-journal-shm.md) 을 봅니다.
 
 ### rowid 로 보는 삭제 흔적
 
@@ -381,7 +381,7 @@ WAL 모드에서는 커밋한 페이지가 `-wal` 파일에만 있을 수 있습
 - 페이지 수를 믿을 수 있는데 파일이 `페이지 수 × 페이지 크기` 보다 짧으면 뒤쪽이 빠진 사본일 수 있습니다.
 - 페이지 종류 바이트가 네 값 가운데 하나가 아니면 B-트리 페이지가 아닙니다. 넘침·빈 목록·포인터 맵 페이지이거나 손상된 페이지입니다.
 - 스키마 표 페이지가 망가지면 어느 페이지가 어느 표인지 알 수 없습니다. 이때는 레코드의 형식 번호 배열을 알려진 스키마와 맞춰 봅니다.
-- 페이지 머리와 레코드 머리의 규칙은 디스크 비할당 영역에서 조각을 찾는 데에도 씁니다([레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md)).
+- 페이지 머리와 레코드 머리의 규칙은 디스크 비할당 영역에서 조각을 찾는 데에도 씁니다([레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md)).
 
 ## 함정
 
@@ -394,7 +394,7 @@ WAL 모드에서는 커밋한 페이지가 `-wal` 파일에만 있을 수 있습
 - **열 형식을 선언대로 가정함.** 같은 열에 다른 형식 값이 섞일 수 있습니다. 형식 번호를 값마다 봅니다.
 - **넘침 사슬을 따라가지 않음.** 긴 URL·JSON·BLOB 은 앞부분만 잎 페이지에 있습니다. 잎 페이지만 카빙하면 값이 잘립니다. 넘침 페이지가 다른 용도로 다시 쓰였으면 사슬이 끊겨 있습니다.
 - **잠금 바이트 페이지를 손상으로 봄.** 1 GiB 보다 큰 파일에서 이 페이지가 비어 있는 것은 정상입니다.
-- **서명이 없다고 SQLite 가 아니라고 판단함.** 파일 전체를 암호화하면 첫 16바이트도 바뀝니다([암호화된 SQLite](/01-foundations/database-log-formats/sqlite/sqlcipher.md)).
+- **서명이 없다고 SQLite 가 아니라고 판단함.** 파일 전체를 암호화하면 첫 16바이트도 바뀝니다([암호화된 SQLite](sqlcipher.md)).
 - **원본을 SQLite 라이브러리로 바로 엶.** 라이브러리가 저널을 되돌리거나 WAL 을 본 파일에 반영하면서 파일이 바뀔 수 있습니다. 해시를 남긴 사본에서 작업합니다.
 
 ## 도구
@@ -405,7 +405,7 @@ DB Browser for SQLite 같은 조회 도구는 살아 있는 행만 보여 줍니
 Kaitai Struct 의 sqlite3 형식 정의나 헥스 편집기 템플릿을 쓰면 칸 단위로 헥스를 볼 수 있습니다.
 도구마다 넘침 사슬·UTF-16·지운 레코드를 다루는 방식이 다릅니다.
 Nemetz·Schmitt·Freiling 이 공개한 SQLite Forensic Corpus 는 이런 특이 사례를 일부러 넣은 검사용 파일 모음입니다.
-도구 결과를 맞춰 보는 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+도구 결과를 맞춰 보는 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

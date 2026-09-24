@@ -2,7 +2,7 @@
 
 PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언제 로그온하고 자리를 비웠나" 를 묻는 조사를 다룹니다. 전원 기록과 세션 기록은 서로 다른 로그와 레지스트리에 흩어져 있습니다. 이 페이지는 두 기록을 어떤 순서로 이어 붙이는지, 기록이 빈 구간을 어떻게 읽는지를 정리합니다.
 
-이벤트마다의 전체 칸과 다른 켜짐·꺼짐 이벤트는 [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 과 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 에 있습니다. "(현장 관찰)" 을 붙인 내용은 분석 현장에서 겪은 일을 적어 둔 메모에서 가져왔습니다. 공식 문서로 확인한 내용이 아닙니다.
+이벤트마다의 전체 칸과 다른 켜짐·꺼짐 이벤트는 [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) 과 [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) 에 있습니다. "(현장 관찰)" 을 붙인 내용은 분석 현장에서 겪은 일을 적어 둔 메모에서 가져왔습니다. 공식 문서로 확인한 내용이 아닙니다.
 
 ## 조사 질문
 
@@ -16,24 +16,24 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | 이벤트의 버전과 칸이 Windows 버전마다 다를 수 있습니다. [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
-| 시간대 | 이벤트 로그 도구가 보여 주는 .evtx 시각은 보는 PC 의 시각 설정에 맞춰 바꾼 값입니다[1]. Microsoft 문서도 시간대를 확인하라고 적었습니다[1]. [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 읽고, Bias 값은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 의 "먼저 확인할 것" 에 적은 대로 부호 있는 수로 읽습니다. |
-| 감사 정책 | 잠금·해제와 원격 세션 이벤트는 감사 하위 범주 하나에 묶여 있습니다[2]. 참고한 문서에는 이 범주가 기본으로 켜져 있는지 적혀 있지 않습니다. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 검체의 설정을 확인합니다. |
-| 로그 삭제·시각 변경 | 로그를 지웠거나 시스템 시각을 바꿨다면 순서가 틀어집니다. [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) 와 [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md) 을 먼저 봅니다. |
-| 수집 범위 | System·Security 이벤트 로그, SYSTEM·SOFTWARE 하이브, `%SystemRoot%\Bootstat.dat`, SRUDB.dat 를 함께 확보합니다. 이벤트 로그 파일 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다. |
+| Windows 버전 | 이벤트의 버전과 칸이 Windows 버전마다 다를 수 있습니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
+| 시간대 | 이벤트 로그 도구가 보여 주는 .evtx 시각은 보는 PC 의 시각 설정에 맞춰 바꾼 값입니다[1]. Microsoft 문서도 시간대를 확인하라고 적었습니다[1]. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽고, Bias 값은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 적은 대로 부호 있는 수로 읽습니다. |
+| 감사 정책 | 잠금·해제와 원격 세션 이벤트는 감사 하위 범주 하나에 묶여 있습니다[2]. 참고한 문서에는 이 범주가 기본으로 켜져 있는지 적혀 있지 않습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 검체의 설정을 확인합니다. |
+| 로그 삭제·시각 변경 | 로그를 지웠거나 시스템 시각을 바꿨다면 순서가 틀어집니다. [이벤트 로그 삭제](../../02-artifacts/event-logs/1102-104.md) 와 [시간 변경](../../02-artifacts/event-logs/4616-kernel-general.md) 을 먼저 봅니다. |
+| 수집 범위 | System·Security 이벤트 로그, SYSTEM·SOFTWARE 하이브, `%SystemRoot%\Bootstat.dat`, SRUDB.dat 를 함께 확보합니다. 이벤트 로그 파일 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다. |
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | System 로그 1074·6006·6008·41 | 종료·재시작의 종류와 시각 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
-| 2 | 레지스트리의 마지막 종료 시각 | 마지막으로 꺼진 시각 | [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) |
-| 3 | `Bootstat.dat` · Reliability 키 | 부팅·종료·재개가 성공했는지, 비정상 종료와 관계있는 값 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
-| 4 | Security 로그의 로그온·로그오프 | 세션이 열리고 닫힌 시각 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 5 | Security 로그 4800·4801·4802·4803 | 잠금·해제·화면 보호기 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 6 | Security 로그 4778·4779 | 원격 세션 다시 연결·끊김 | [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) |
-| 7 | SRUM | 앱별 사용량 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 8 | 프리페치·윈도 오류 보고 | 켜져 있던 동안의 실행 흔적 | [프리페치](/02-artifacts/execution/prefetch/index.md) · [윈도 오류 보고](/02-artifacts/execution/wer.md) |
+| 1 | System 로그 1074·6006·6008·41 | 종료·재시작의 종류와 시각 | [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) |
+| 2 | 레지스트리의 마지막 종료 시각 | 마지막으로 꺼진 시각 | [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) |
+| 3 | `Bootstat.dat` · Reliability 키 | 부팅·종료·재개가 성공했는지, 비정상 종료와 관계있는 값 | [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) |
+| 4 | Security 로그의 로그온·로그오프 | 세션이 열리고 닫힌 시각 | [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) |
+| 5 | Security 로그 4800·4801·4802·4803 | 잠금·해제·화면 보호기 | [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) |
+| 6 | Security 로그 4778·4779 | 원격 세션 다시 연결·끊김 | [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) |
+| 7 | SRUM | 앱별 사용량 | [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) |
+| 8 | 프리페치·윈도 오류 보고 | 켜져 있던 동안의 실행 흔적 | [프리페치](../../02-artifacts/execution/prefetch/index.md) · [윈도 오류 보고](../../02-artifacts/execution/wer.md) |
 
 전원 기록(1~3)으로 켜져 있던 구간을 먼저 정합니다. 그 구간 안에 세션 기록(4~6)을 올립니다. 로그가 빈 구간은 7~8 로 채웁니다.
 
@@ -79,7 +79,7 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 
 - 문서의 PowerButtonTimestamp 예시 값은 131728546170882432 입니다[1].
 - 이 칸의 단위는 문서에 없습니다.
-- 예시 값을 FILETIME 으로 풀면 2018-06-07 14:16:57 UTC 가 나옵니다(직접 계산). 이 칸을 FILETIME 이라고 단정하지는 않습니다. FILETIME 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 예시 값을 FILETIME 으로 풀면 2018-06-07 14:16:57 UTC 가 나옵니다(직접 계산). 이 칸을 FILETIME 이라고 단정하지는 않습니다. FILETIME 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 물리 서버의 자동 서버 복구 (Automatic Server Recovery, ASR) 소프트웨어나 Hyper-V·VMware 하트비트 기능이 응답 없는 컴퓨터·VM 을 다시 켰을 수도 있습니다[1]. 41 이 있다고 사람이 전원을 만졌다고 보지 않습니다.
 
 ## 부팅 상태 파일과 Reliability 키
@@ -88,12 +88,12 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 - 사용자는 이 파일을 편집할 수 없습니다[1].
 - `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` 에 DirtyShutdown, LastAliveStamp, TimeStampInterval 값이 있습니다[1].
 - 이 값들을 지우면 비정상 종료 뒤 종료 이벤트 추적기 창이 뜨지 않게 할 수 있습니다[1].
-- 세 값의 형식과 뜻은 이번 자료로 확인하지 못했습니다. [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 에서 확인합니다.
-- 레지스트리에 남는 마지막 종료 시각은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
+- 세 값의 형식과 뜻은 이번 자료로 확인하지 못했습니다. [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) 에서 확인합니다.
+- 레지스트리에 남는 마지막 종료 시각은 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 
 ## 로그온·잠금·원격 세션
 
-세션이 열리고 닫힌 기록은 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 에서 다룹니다. 로그온 ID 로 한 세션의 시작과 끝을 잇는 법, 로그온 유형의 뜻도 그 페이지에 있습니다. 여기서는 세션 안의 잠금과 원격 연결을 적습니다.
+세션이 열리고 닫힌 기록은 [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) 에서 다룹니다. 로그온 ID 로 한 세션의 시작과 끝을 잇는 법, 로그온 유형의 뜻도 그 페이지에 있습니다. 여기서는 세션 안의 잠금과 원격 연결을 적습니다.
 
 "Audit Other Logon/Logoff Events" 하위 범주가 아래 이벤트를 남깁니다[2].
 
@@ -111,28 +111,28 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 - Microsoft 는 워크스테이션·멤버 서버·도메인 컨트롤러 모두 Success 감사를 권합니다[2]. 이벤트 양은 적다고 적었습니다[2].
 - 4800 과 4801 사이에는 그 세션의 화면이 잠겨 있었습니다.
 - 4779 와 다음 4778 사이에는 그 원격 세션이 끊겨 있었습니다.
-- 원격 세션 전체의 흐름은 [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) 에서 봅니다.
+- 원격 세션 전체의 흐름은 [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) 에서 봅니다.
 
 ## 로그가 빈 구간 채우기
 
-- 프로그램을 실행한 시각은 그때 PC 가 켜져 있었다는 보조 근거입니다. [프리페치](/02-artifacts/execution/prefetch/index.md) 와 [윈도 오류 보고](/02-artifacts/execution/wer.md) 를 봅니다.
-- SRUM 에는 앱별 사용량이 남습니다. 기록 간격과 표 구조는 [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) 에서 확인합니다.
+- 프로그램을 실행한 시각은 그때 PC 가 켜져 있었다는 보조 근거입니다. [프리페치](../../02-artifacts/execution/prefetch/index.md) 와 [윈도 오류 보고](../../02-artifacts/execution/wer.md) 를 봅니다.
+- SRUM 에는 앱별 사용량이 남습니다. 기록 간격과 표 구조는 [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) 에서 확인합니다.
 - 압수 이미지의 SRUDB.dat 같은 ESE 데이터베이스는 대부분 비정상 종료 상태입니다(현장 관찰). 트랜잭션 로그 사슬이 끊겨 JET API 로 복구가 안 되는 경우가 있습니다(현장 관찰). 항상 사본에서 작업합니다.
-- 손상된 데이터베이스는 읽는 방식에 따라 행 수가 달라질 수 있습니다(현장 관찰). 두 가지 이상 방식으로 열어 비교합니다. 사례는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다.
+- 손상된 데이터베이스는 읽는 방식에 따라 행 수가 달라질 수 있습니다(현장 관찰). 두 가지 이상 방식으로 열어 비교합니다. 사례는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다.
 
 ## 분석 흐름
 
 1. Windows 버전·시간대·감사 정책을 정리합니다.
-2. 이벤트 로그를 지웠는지, 시스템 시각을 바꿨는지 먼저 봅니다. 흔적이 있으면 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 를 함께 봅니다.
-3. System 로그에서 1074·6006·6008·41 을 시각 순으로 뽑습니다. 켜진 시각을 알려 주는 이벤트는 [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 에서 골라 함께 뽑습니다.
+2. 이벤트 로그를 지웠는지, 시스템 시각을 바꿨는지 먼저 봅니다. 흔적이 있으면 [증거를 없애려 했나](anti-forensics/index.md) 를 함께 봅니다.
+3. System 로그에서 1074·6006·6008·41 을 시각 순으로 뽑습니다. 켜진 시각을 알려 주는 이벤트는 [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) 에서 골라 함께 뽑습니다.
 4. 종료 이벤트마다 다음 켜짐을 짝짓습니다. 6008·41 은 다시 켜진 뒤의 기록이므로 꺼진 시각으로 쓰지 않습니다. 6008 메시지 안의 직전 종료 시각을 따로 적습니다.
 5. 41 이 있으면 칸 값으로 까닭을 가릅니다.
 6. 레지스트리의 마지막 종료 시각, `Bootstat.dat`, Reliability 키로 마지막 종료를 한 번 더 확인합니다.
 7. 켜져 있던 구간마다 Security 로그의 로그온 세션을 올립니다.
 8. 세션 안에 4800·4801·4802·4803 으로 잠금 구간을, 4778·4779 로 원격 연결 구간을 표시합니다.
 9. 로그가 빈 구간은 SRUM·프리페치로 채웁니다. 채우지 못한 구간은 "기록 없음" 으로 남깁니다.
-10. 모든 시각을 UTC 로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 에 올립니다. 이벤트 뷰어 화면에서 옮겨 적은 시각이면 보는 PC 의 시간대를 함께 적습니다.
-11. 그 구간에 PC 앞에 있던 사람은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 를 따라 좁힙니다.
+10. 모든 시각을 UTC 로 맞춰 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올립니다. 이벤트 뷰어 화면에서 옮겨 적은 시각이면 보는 PC 의 시간대를 함께 적습니다.
+11. 그 구간에 PC 앞에 있던 사람은 [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) 를 따라 좁힙니다.
 
 ## 흔한 오판
 
@@ -141,7 +141,7 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 3. **41 이 없으니 전원이 끊긴 적이 없다고 봅니다.** 전원이 끊기면 41 이 아예 남지 않을 수 있습니다[1].
 4. **이벤트 뷰어 화면의 시각을 그대로 옮깁니다.** 그 시각은 보는 PC 의 시각 설정에 맞춰 바꾼 값입니다[1].
 5. **4800 이 없으니 화면을 잠그지 않았다고 봅니다.** 이 이벤트는 감사 하위 범주가 켜져 있어야 남습니다[2]. 설정부터 확인합니다.
-6. **로그가 빈 구간을 PC 가 꺼져 있던 시간으로 봅니다.** 로그 삭제, 감사 꺼짐, 절전 상태에서도 빈 구간이 생깁니다. 절전·재개 이벤트는 [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 에서 봅니다.
+6. **로그가 빈 구간을 PC 가 꺼져 있던 시간으로 봅니다.** 로그 삭제, 감사 꺼짐, 절전 상태에서도 빈 구간이 생깁니다. 절전·재개 이벤트는 [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) 에서 봅니다.
 7. **1074 의 사용자 이름을 끈 사람으로 씁니다.** 1074 에 들어가는 것은 계정 이름입니다[1]. 사람은 따로 좁힙니다.
 8. **Reliability 값이 없으니 비정상 종료가 없었다고 봅니다.** 이 값들은 지울 수 있습니다[1].
 
@@ -152,15 +152,15 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 
 ## 함께 볼 페이지
 
-- [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) — 전원 이벤트 전체와 칸입니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) — 세션을 잇는 법과 로그온 유형입니다.
-- [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) — 원격 세션의 흐름입니다.
-- [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) — 이벤트가 남는 조건입니다.
-- [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — 마지막 종료 시각입니다.
-- [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) — 로그가 빈 구간을 채우는 사용량 기록입니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 시각을 한 줄로 세웁니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 구간에서 사람으로 좁힙니다.
-- [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) — 로그 삭제와 시각 변경입니다.
+- [켜짐·꺼짐](../../02-artifacts/event-logs/power-on-off-events.md) — 전원 이벤트 전체와 칸입니다.
+- [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) — 세션을 잇는 법과 로그온 유형입니다.
+- [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) — 원격 세션의 흐름입니다.
+- [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) — 이벤트가 남는 조건입니다.
+- [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — 마지막 종료 시각입니다.
+- [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) — 로그가 빈 구간을 채우는 사용량 기록입니다.
+- [타임라인 작성](../../03-techniques/analysis/timeline/index.md) — 시각을 한 줄로 세웁니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) — 구간에서 사람으로 좁힙니다.
+- [증거를 없애려 했나](anti-forensics/index.md) — 로그 삭제와 시각 변경입니다.
 
 ## 참고 문헌
 

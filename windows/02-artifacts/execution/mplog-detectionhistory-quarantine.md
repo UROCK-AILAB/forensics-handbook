@@ -17,7 +17,7 @@ Microsoft Defender 바이러스 백신은 `C:\ProgramData\Microsoft\Windows Defe
 - DetectionHistory 파일은 Windows 보안 > 바이러스 및 위협 방지 > "보호 기록 (Protection History)" 에 보이는 항목의 원본입니다.
 - 격리 폴더에서는 원본 파일을 되살릴 수 있습니다. 그래서 공격자가 떨어뜨린 도구의 원본을 되찾는 통로가 됩니다.
 
-Defender 는 운영 이벤트 로그에도 탐지 (1116) 와 조치 (1117) 를 남깁니다. 이 페이지는 파일 쪽만 다룹니다. 이벤트는 [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) 에서 다룹니다.
+Defender 는 운영 이벤트 로그에도 탐지 (1116) 와 조치 (1117) 를 남깁니다. 이 페이지는 파일 쪽만 다룹니다. 이벤트는 [Windows Defender 탐지](../event-logs/1116-1117.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -56,7 +56,7 @@ Network Inspection System, Payloads, Platform, Quarantine, Scans, Snapshots, Sup
 | 인코딩 | UTF-16LE 텍스트. 파일 앞 2바이트가 `FF FE` 입니다 (관찰) |
 | 시각 | UTC |
 
-인코딩을 읽는 방법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다. 관찰한 PC 의 `Support` 폴더에는 MPLog 말고도 다음 파일이 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+인코딩을 읽는 방법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다. 관찰한 PC 의 `Support` 폴더에는 MPLog 말고도 다음 파일이 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 
 - `MPDetection-*.log` (UTF-16LE)
 - `MPDeviceControl-*.log`, `MPScanSkip-*.log`
@@ -123,7 +123,7 @@ MPLog 가 몇 개까지 남는지, 언제 새 파일로 넘어가는지는 확�
 | 칸 구분 | ASCII 콜론 (`0x3A`) |
 | 구역 | 세 구역이 서로 다른 방식으로 적혀 있습니다. 3구역 구분자는 `0A 00` 입니다 |
 
-GUID 의 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 | 구역 | 칸 |
 |---|---|
@@ -210,7 +210,7 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 - 줄 앞머리에 `Z` 가 없어도 UTC 입니다. 관찰한 PC 에서 로그 마지막 줄은 11:36 이었습니다. 그때 한국 시각은 20:36 이었고 9시간 차이가 났습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 - 한 파일 안에서도 날짜를 적는 순서가 다릅니다. 줄 앞머리는 년-월-일, 격리 복구 블록은 월-일-년이었습니다.
 - MPLog 파일 이름 속 날짜가 무엇을 기준으로 붙는지는 확인하지 못했습니다.
-- FILETIME 과 웹킷 시각을 푸는 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. 현지 시각으로 바꿀 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 봅니다.
+- FILETIME 과 웹킷 시각을 푸는 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md) 을 봅니다.
 
 ## 함정과 한계
 
@@ -218,18 +218,18 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 2. **Count 를 "사용자가 연 파일 수" 로 읽습니다.** Count 는 그 프로세스가 접근해서 Defender 가 검사한 파일 수입니다. 사용자가 파일을 하나하나 열었다는 뜻이 아닙니다.
 3. **장치 경로를 그대로 적습니다.** MPLog 경로는 `\Device\HarddiskVolumeN` 형식입니다. 드라이브 문자로 바꿔 읽어야 합니다. 볼륨 번호와 드라이브 문자의 짝은 따로 확인합니다.
 4. **칸 위치에 기대 파싱합니다.** MPLog 줄 형식은 시기마다 바뀝니다. 관찰한 줄에는 원문 목록에 없는 `Pid` 칸이 있었습니다. 칸 이름으로 값을 찾습니다.
-5. **보통 방식으로 복사합니다.** 서비스가 켜져 있으면 MPLog 가 잠겨 있어 보통 방식으로는 열리지 않습니다. 관찰한 PC 에서는 공유 읽기 (`FileShare.ReadWrite`) 로는 읽혔습니다. (확인 범위: Windows 11 25H2, PC 한 대) 수집 방법은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
-6. **MPLog 가 오래된 기록까지 담는다고 봅니다.** 관찰한 PC 에는 약 24MB 의 MPLog 가 하나뿐이었고 약 16일 분량이었습니다. (확인 범위: Windows 11 25H2, PC 한 대) 옛 기록은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+5. **보통 방식으로 복사합니다.** 서비스가 켜져 있으면 MPLog 가 잠겨 있어 보통 방식으로는 열리지 않습니다. 관찰한 PC 에서는 공유 읽기 (`FileShare.ReadWrite`) 로는 읽혔습니다. (확인 범위: Windows 11 25H2, PC 한 대) 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+6. **MPLog 가 오래된 기록까지 담는다고 봅니다.** 관찰한 PC 에는 약 24MB 의 MPLog 가 하나뿐이었고 약 16일 분량이었습니다. (확인 범위: Windows 11 25H2, PC 한 대) 옛 기록은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
 7. **빈 DetectionHistory 를 "탐지 없음" 으로 읽습니다.** 관찰한 PC 에서는 DetectionHistory 파일이 0개였습니다. 같은 PC 의 7월 말 격리 항목은 남아 있었습니다. 검사 기록 보관 기간 (그룹 정책 문서 기준 30일) 이 격리 보관 기간 (90일) 보다 짧아서 먼저 지워진 것으로 보입니다. 이 PC 의 실제 설정 값은 확인하지 않았고, 이것은 추정입니다. (확인 범위: Windows 11 25H2, PC 한 대)
 8. **영어 문구로만 검색합니다.** `MPDetection-*.log` 의 서비스 이름은 OS 표시 언어로 적혔습니다. 한국어 Windows 에서는 한국어 문구로도 검색합니다.
 
 ### 지우기와 조작
 
-- **보호 기록 파일을 지웁니다.** DetectionHistory 파일을 지우면 보호 기록 화면의 알림도 사라집니다. 화면에 없어도 MPLog, [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) 이벤트, 격리 폴더를 따로 봅니다.
+- **보호 기록 파일을 지웁니다.** DetectionHistory 파일을 지우면 보호 기록 화면의 알림도 사라집니다. 화면에 없어도 MPLog, [Windows Defender 탐지](../event-logs/1116-1117.md) 이벤트, 격리 폴더를 따로 봅니다.
 - **보관 기간을 줄입니다.** 위 "보관 기간과 조치 정책" 의 두 설정을 짧게 바꾸면 기록이 빨리 지워집니다. 정책 값과 `Set-MpPreference` 설정을 함께 확인합니다.
 - **조치를 바꿉니다.** Allow 와 조치 값 Ignore (6) 는 치료하지 않고 뒤이은 탐지 이벤트를 막습니다. 조치 값 None (11) 도 치료하지 않지만 경고와 보호 기록 항목은 남깁니다.
 - **격리에서 복원합니다.** Microsoft 문서에 따르면 오탐으로 격리된 파일은 장치를 재부팅한 뒤 격리에서 복원할 수 있습니다. 복원한 뒤 격리 폴더에 무엇이 남는지는 확인하지 못했습니다.
-- **파일을 직접 지웁니다.** 지운 로그와 격리 파일의 흔적은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 과 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 찾습니다. 지운 내용을 되살리는 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- **파일을 직접 지웁니다.** 지운 로그와 격리 파일의 흔적은 [마스터 파일 테이블](../filesystem/mft.md) 과 [USN 변경 저널](../filesystem/usnjrnl.md) 에서 찾습니다. 지운 내용을 되살리는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -283,23 +283,23 @@ GUID `8CC4BE3D-8D3F-4952-9953-F24EB6638A37` 은 파일 안에 다음 바이트�
 - **Quarantine**: 공개 도구 defender-dump (Python) 가 격리 목록을 보여 줍니다. `--dump` 를 주면 원본 파일을 `quarantine.tar` 로 묶어 꺼냅니다.
 - 꺼낸 파일은 격리 전 원본입니다. 악성 코드일 수 있으므로 분석용으로 따로 떼어 둔 환경에서만 다룹니다.
 - 도구가 보여 준 시각이 UTC 인지, 분석 PC 의 현지 시각인지 확인합니다.
-- 파일 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 파일 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) | 탐지와 조치 이벤트의 시각, 탐지명 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | 성능 영향 줄의 프로세스가 실행된 시각과 횟수 |
-| [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 같은 실행 파일의 경로와 해시 |
-| [프로세스 생성](/02-artifacts/event-logs/4688.md) | 성능 영향 줄의 프로세스를 누가 언제 만들었는지 |
-| [윈도 오류 보고](/02-artifacts/execution/wer.md) | 같은 프로세스가 오류를 낸 기록 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 격리한 파일이 원래 경로에 생긴 때와 사라진 때 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 탐지한 파일을 어디서 받았는지 |
-| [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) | SDN 줄과 DetectionHistory 의 해시를 알려진 해시와 대조 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 보관 기간이 지나 사라진 DetectionHistory·격리 파일과 옛 MPLog |
+| [Windows Defender 탐지](../event-logs/1116-1117.md) | 탐지와 조치 이벤트의 시각, 탐지명 |
+| [프리페치](prefetch/index.md) | 성능 영향 줄의 프로세스가 실행된 시각과 횟수 |
+| [AmCache](amcache-hve/index.md) | 같은 실행 파일의 경로와 해시 |
+| [프로세스 생성](../event-logs/4688.md) | 성능 영향 줄의 프로세스를 누가 언제 만들었는지 |
+| [윈도 오류 보고](wer.md) | 같은 프로세스가 오류를 낸 기록 |
+| [마스터 파일 테이블](../filesystem/mft.md) · [USN 변경 저널](../filesystem/usnjrnl.md) | 격리한 파일이 원래 경로에 생긴 때와 사라진 때 |
+| [다운로드 출처 표시](../filesystem/zone-identifier.md) | 탐지한 파일을 어디서 받았는지 |
+| [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) | SDN 줄과 DetectionHistory 의 해시를 알려진 해시와 대조 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 보관 기간이 지나 사라진 DetectionHistory·격리 파일과 옛 MPLog |
 
-여러 기록을 합쳐 읽는 순서는 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) 와 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에서 다룹니다.
+여러 기록을 합쳐 읽는 순서는 [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md) 와 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에서 다룹니다.
 
 ## 실습
 

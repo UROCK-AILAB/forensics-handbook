@@ -6,7 +6,7 @@
 
 ## 언제 쓰나
 
-- NIST SP 800-86 순서에서 네트워크 연결은 첫째, 네트워크 설정은 여섯째입니다. 순서 전체는 [수집 순서와 원칙](/03-techniques/process-acquisition/live-response/order-of-volatility.md)에서 다룹니다.
+- NIST SP 800-86 순서에서 네트워크 연결은 첫째, 네트워크 설정은 여섯째입니다. 순서 전체는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다.
 - 많은 호스트가 IP 주소를 DHCP 로 받습니다. 그래서 저장된 설정이 아니라 지금 설정을 봐야 합니다.
 - 유선, 무선, VPN 처럼 인터페이스가 여럿일 수 있습니다. 지금 설정을 보면 어느 인터페이스를 쓰는지 압니다.
 - 대부분의 OS 는 원격으로 탑재한 파일 시스템 목록도 보여 줍니다. 이 목록은 연결 목록보다 자세합니다.
@@ -85,7 +85,7 @@ NetTCPIP 모듈의 명령입니다. 아래는 PowerShell 5.1 에서 본 속성�
 - 로컬 hosts 파일에서 미리 올린 항목
 - 이 컴퓨터가 최근에 이름을 찾아 얻은 레코드
 
-DNS Client 서비스는 이 캐시로 자주 찾는 이름을 DNS 서버에 묻기 전에 바로 풉니다. hosts 파일 자체는 [hosts 파일](/02-artifacts/network/hosts.md)에서 다룹니다.
+DNS Client 서비스는 이 캐시로 자주 찾는 이름을 DNS 서버에 묻기 전에 바로 풉니다. hosts 파일 자체는 [hosts 파일](../../../02-artifacts/network/hosts.md)에서 다룹니다.
 
 두 명령이 보여 주는 칸은 아래와 같습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
 
@@ -116,7 +116,7 @@ IPv4 활성 경로의 칸은 네트워크 대상, 네트워크 마스크, 게이
 
 ### 네트워크 설정
 
-`ipconfig /all` 은 모든 어댑터의 전체 TCP/IP 설정을 보여 줍니다. 레지스트리에 남은 인터페이스 설정은 [네트워크 인터페이스 설정](/02-artifacts/network/tcp-ip-interfaces.md)에서 다룹니다. 원격으로 탑재한 드라이브와 공유는 [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md)에서 다룹니다.
+`ipconfig /all` 은 모든 어댑터의 전체 TCP/IP 설정을 보여 줍니다. 레지스트리에 남은 인터페이스 설정은 [네트워크 인터페이스 설정](../../../02-artifacts/network/tcp-ip-interfaces.md)에서 다룹니다. 원격으로 탑재한 드라이브와 공유는 [공유 폴더·네트워크 드라이브](../../../02-artifacts/network/network-shares-mapped-drives.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -133,7 +133,7 @@ IPv4 활성 경로의 칸은 네트워크 대상, 네트워크 마스크, 게이
 
 ### 연결과 프로세스
 
-`-o` 의 PID 와 `OwningProcess` 는 [프로세스·DLL·핸들 수집](/03-techniques/process-acquisition/live-response/processes-dlls-handles.md)에서 모은 목록과 잇습니다. 두 목록은 따로 모은 것이라 그사이에 프로세스가 끝나고 PID 가 다시 쓰였을 수 있습니다. PID 를 잇는 주의점은 그 페이지에서 다룹니다.
+`-o` 의 PID 와 `OwningProcess` 는 [프로세스·DLL·핸들 수집](processes-dlls-handles.md)에서 모은 목록과 잇습니다. 두 목록은 따로 모은 것이라 그사이에 프로세스가 끝나고 PID 가 다시 쓰였을 수 있습니다. PID 를 잇는 주의점은 그 페이지에서 다룹니다.
 
 ### 증명하는 것 / 증명하지 못하는 것
 
@@ -155,12 +155,12 @@ IPv4 활성 경로의 칸은 네트워크 대상, 네트워크 마스크, 게이
 
 | 함께 볼 페이지 | 무엇을 맞춰 보나 |
 |---|---|
-| [윈도 방화벽](/02-artifacts/network/windows-firewall-pfirewall-log.md) | 방화벽 로그에 남은 과거 연결 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 앱별 네트워크 사용량 |
-| [네트워크 연결 이벤트](/02-artifacts/event-logs/wlan-autoconfig-networkprofile.md) | 어느 네트워크에 붙어 있었는지 |
-| [VPN 연결 기록](/02-artifacts/network/vpn-connections.md) | VPN 인터페이스를 쓴 기록 |
-| [원격 제어 프로그램](/02-artifacts/network/remote-access-tools/index.md) | 연결을 연 프로그램이 원격 제어 도구인지 |
-| [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) | 연결을 유출 흐름 안에서 읽는 법 |
+| [윈도 방화벽](../../../02-artifacts/network/windows-firewall-pfirewall-log.md) | 방화벽 로그에 남은 과거 연결 |
+| [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) | 앱별 네트워크 사용량 |
+| [네트워크 연결 이벤트](../../../02-artifacts/event-logs/wlan-autoconfig-networkprofile.md) | 어느 네트워크에 붙어 있었는지 |
+| [VPN 연결 기록](../../../02-artifacts/network/vpn-connections.md) | VPN 인터페이스를 쓴 기록 |
+| [원격 제어 프로그램](../../../02-artifacts/network/remote-access-tools/index.md) | 연결을 연 프로그램이 원격 제어 도구인지 |
+| [자료를 밖으로 빼돌렸나](../../../04-scenarios/exfiltration/data-exfiltration/index.md) | 연결을 유출 흐름 안에서 읽는 법 |
 
 ## 참고 문헌
 

@@ -19,15 +19,15 @@
 
 이 밖에도 `meta`, `segments`, `segment_usage` 같은 표가 있습니다. 브라우저 판이 올라가면서 표가 늘어납니다. 이 페이지는 위 여섯 표를 다룹니다.
 
-시크릿 창에서 연 페이지는 이 파일에 남지 않습니다. 이 점과 기록의 한계는 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 허브에서 다룹니다.
+시크릿 창에서 연 페이지는 이 파일에 남지 않습니다. 이 점과 기록의 한계는 [크롬 계열 브라우저](index.md) 허브에서 다룹니다.
 
 ## 위치와 버전별 차이
 
 ### 위치
 
-`History` 는 프로필 폴더(`Default`, `Profile 1` 등) 바로 아래 있습니다. 브라우저별 `User Data` 폴더 위치는 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 허브에 정리했습니다. 프로필 이름과 폴더를 잇는 법은 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
+`History` 는 프로필 폴더(`Default`, `Profile 1` 등) 바로 아래 있습니다. 브라우저별 `User Data` 폴더 위치는 [크롬 계열 브라우저](index.md) 허브에 정리했습니다. 프로필 이름과 폴더를 잇는 법은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
 
-같은 폴더에 `History-journal` 이 함께 있습니다. 이 파일은 SQLite 롤백 저널입니다. 두 파일을 함께 수집합니다. 저널을 어떻게 읽는지는 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md)에서 다룹니다.
+같은 폴더에 `History-journal` 이 함께 있습니다. 이 파일은 SQLite 롤백 저널입니다. 두 파일을 함께 수집합니다. 저널을 어떻게 읽는지는 [WAL과 롤백 저널](../../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md)에서 다룹니다.
 
 ### 버전별 차이
 
@@ -47,7 +47,7 @@
 
 ## 구조
 
-SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md)와 [파일·페이지 구조](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md)에서 다룹니다. 여기서는 표와 열의 뜻만 다룹니다.
+SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md)와 [파일·페이지 구조](../../../01-foundations/database-log-formats/sqlite/b-tree-record-format.md)에서 다룹니다. 여기서는 표와 열의 뜻만 다룹니다.
 
 ### urls — 주소마다 한 행
 
@@ -129,7 +129,7 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-f
 
 | 열 | 뜻 |
 |---|---|
-| `keyword_id` | 검색 엔진 번호. 검색 엔진 목록은 [자동완성·폼 기록 (Web Data)](/02-artifacts/browsers/chrome-edge-whale/web-data-autofill.md) 쪽 파일에 있습니다 |
+| `keyword_id` | 검색 엔진 번호. 검색 엔진 목록은 [자동완성·폼 기록 (Web Data)](web-data-autofill.md) 쪽 파일에 있습니다 |
 | `url_id` | 검색 결과 주소의 `urls.id` |
 | `term` | 입력한 검색어 |
 | `normalized_term` | 소문자로 바꾸고 공백을 합친 검색어 |
@@ -193,7 +193,7 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-f
 | 어떤 주소에서 어떤 경로로 파일을 받았는지, 얼마나 받았는지 | 그 파일이 지금도 디스크에 있는지 |
 | 브라우저 안에서 그 파일을 연 적이 있는지(`opened`) | 탐색기 등 브라우저 밖에서 그 파일을 열었는지 |
 
-- 프로필은 Windows 계정 안의 브라우저 단위입니다. 한 프로필을 여러 사람이 쓸 수 있습니다([그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)).
+- 프로필은 Windows 계정 안의 브라우저 단위입니다. 한 프로필을 여러 사람이 쓸 수 있습니다([그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md)).
 - 기록이 없다는 것은 방문하지 않았다는 뜻이 아닙니다. 시크릿 창, 기록 지우기, 90일 만료, 다른 프로필·다른 브라우저가 모두 이유가 됩니다.
 - 리다이렉트 한 번에도 `visits` 행이 여러 개 생깁니다. 사용자가 누른 횟수로 세지 않습니다.
 - `visit_duration` 은 창을 보고 있던 시간과 같다고 볼 수 없습니다.
@@ -213,8 +213,8 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-f
 
 - Unix 시각으로 바꾸려면 11,644,473,600,000,000 을 빼고 1,000,000 으로 나눕니다.
 - 값이 0 이면 비어 있는 칸입니다. 그대로 바꾸면 1601-01-01 이 나옵니다. 끝나지 않은 다운로드의 `end_time` 이 그런 예입니다.
-- 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](/02-artifacts/system-account/time-zone.md), [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)).
-- 계산 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](../../system-account/time-zone.md), [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)).
+- 계산 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 
 ### 칸마다 뜻
 
@@ -228,7 +228,7 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-f
 
 ### 동기화와 시계 변경
 
-`visits.id` 는 새 행일수록 커집니다. 그래서 `id` 순서와 `visit_time` 순서가 어긋나는 곳을 찾으면 쓸모가 있습니다. 그 행이 동기화나 가져오기로 나중에 들어온 방문이면 어긋나도 정상입니다. 그렇지 않은 행이 어긋나면 시스템 시계 변경을 의심해 봅니다([시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md)).
+`visits.id` 는 새 행일수록 커집니다. 그래서 `id` 순서와 `visit_time` 순서가 어긋나는 곳을 찾으면 쓸모가 있습니다. 그 행이 동기화나 가져오기로 나중에 들어온 방문이면 어긋나도 정상입니다. 그렇지 않은 행이 어긋나면 시스템 시계 변경을 의심해 봅니다([시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)).
 
 ## 함정과 한계
 
@@ -239,16 +239,16 @@ SQLite 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-f
 5. **`current_path` 를 최종 경로로 씁니다.** 받는 중이거나 중단된 다운로드는 두 경로가 다를 수 있습니다. 두 칸을 모두 적습니다.
 6. **중단 상태를 사용자 행동으로 읽습니다.** 소스에 따르면 브라우저는 시작할 때 "받는 중" 으로 남은 행을 "중단" 으로 바꿉니다. 이전 실행이 비정상으로 끝났다는 뜻일 수 있습니다.
 7. **`hash` 를 16진 문자열로 봅니다.** 원시 32바이트입니다. 디스크의 파일과 맞추려면 16진으로 바꿔 비교합니다.
-8. **실행 중인 브라우저에서 파일을 복사합니다.** 브라우저가 파일을 열고 있으면 복사가 안 되거나, 저널에만 있는 변경을 놓칠 수 있습니다. 수집 방법은 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md)을 따릅니다.
+8. **실행 중인 브라우저에서 파일을 복사합니다.** 브라우저가 파일을 열고 있으면 복사가 안 되거나, 저널에만 있는 변경을 놓칠 수 있습니다. 수집 방법은 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md)을 따릅니다.
 9. **다운로드 기록 보관 기한을 방문과 같다고 봅니다.** 2014년 Benson 의 글은 다운로드 기록이 설치 때부터 쌓인다고 적었습니다. 지금 판에서도 그런지는 검체의 가장 오래된 `start_time` 으로 확인합니다.
 
 ### 지우기와 조작
 
-- **브라우저 메뉴로 기록을 지웁니다.** 행이 사라집니다. Chromium 은 SQLite 보안 삭제를 켜고 빌드하므로, 파일 안 빈 공간은 대부분 0 입니다([파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md)). 저널에 지우기 전 페이지가 남을 수 있습니다.
+- **브라우저 메뉴로 기록을 지웁니다.** 행이 사라집니다. Chromium 은 SQLite 보안 삭제를 켜고 빌드하므로, 파일 안 빈 공간은 대부분 0 입니다([파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md)). 저널에 지우기 전 페이지가 남을 수 있습니다.
 - **일부 항목만 지웁니다.** `visits.id` 가 비어 있는 구간이 생깁니다. 번호가 빈 곳은 지운 흔적의 단서입니다. 90일 만료로도 앞쪽 번호가 빠지므로, 빈 구간이 어디 있는지 봅니다.
-- **다운로드 목록만 지웁니다.** 받은 파일은 디스크에 남을 수 있습니다. 파일 쪽 흔적은 [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md)와 [$MFT](/02-artifacts/filesystem/mft.md)에서 찾습니다.
-- **`History` 파일째 지웁니다.** 브라우저는 다음 실행 때 빈 파일을 새로 만듭니다. 옛 파일은 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)이나 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)에서 흔적을 찾습니다.
-- **시크릿 창을 씁니다.** 이 파일에는 처음부터 남지 않습니다([시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md)).
+- **다운로드 목록만 지웁니다.** 받은 파일은 디스크에 남을 수 있습니다. 파일 쪽 흔적은 [다운로드 출처 표시 (Zone.Identifier)](../../filesystem/zone-identifier.md)와 [$MFT](../../filesystem/mft.md)에서 찾습니다.
+- **`History` 파일째 지웁니다.** 브라우저는 다음 실행 때 빈 파일을 새로 만듭니다. 옛 파일은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)이나 [$UsnJrnl](../../filesystem/usnjrnl.md)에서 흔적을 찾습니다.
+- **시크릿 창을 씁니다.** 이 파일에는 처음부터 남지 않습니다([시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md)).
 
 ## 직접 분석해 보기
 
@@ -315,23 +315,23 @@ ORDER BY d.start_time, c.chain_index;
 
 - 시각을 UTC 로 보여 주는지, 분석 PC 의 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 도구가 `visit_source` 를 보여 주는지 확인합니다. 보여 주지 않으면 동기화 방문과 직접 방문을 가릴 수 없습니다.
-- 행 몇 개는 위 쿼리나 헥스로 읽은 값과 맞춰 봅니다([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+- 행 몇 개는 위 쿼리나 헥스로 읽은 값과 맞춰 봅니다([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 받은 파일에 붙은 출처 주소와 `downloads_url_chains` 의 주소 |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | `target_path` 파일의 생성 시각과 `end_time`. 파일이 나중에 지워졌는지 |
-| [캐시 (Cache)](/02-artifacts/browsers/chrome-edge-whale/cache.md) | 방문 기록을 지운 뒤에도 남은 페이지 조각 |
-| [세션·탭 복원 (Sessions)](/02-artifacts/browsers/chrome-edge-whale/sessions.md) | 닫을 때 열려 있던 탭과 탭별 뒤로 가기 목록 |
-| [쿠키 (Cookies)](/02-artifacts/browsers/chrome-edge-whale/cookies.md) | 방문 시각 무렵 그 사이트의 쿠키가 생기거나 쓰였는지 |
-| [즐겨찾기 (Bookmarks)](/02-artifacts/browsers/chrome-edge-whale/bookmarks.md) | 즐겨찾기로 온 방문(AUTO_BOOKMARK)과 즐겨찾기 목록 |
-| [확장 프로그램 (Extensions)](/02-artifacts/browsers/chrome-edge-whale/extensions.md) | 확장이 넣은 방문(`source` 2)이나 확장이 만든 다운로드 |
-| [네트워크 사용량 (SRUM)](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) | 그 시간대에 브라우저가 실제로 주고받은 양 |
-| [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 지우기 전이나 만료 전의 `History` |
+| [다운로드 출처 표시 (Zone.Identifier)](../../filesystem/zone-identifier.md) | 받은 파일에 붙은 출처 주소와 `downloads_url_chains` 의 주소 |
+| [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | `target_path` 파일의 생성 시각과 `end_time`. 파일이 나중에 지워졌는지 |
+| [캐시 (Cache)](cache.md) | 방문 기록을 지운 뒤에도 남은 페이지 조각 |
+| [세션·탭 복원 (Sessions)](sessions.md) | 닫을 때 열려 있던 탭과 탭별 뒤로 가기 목록 |
+| [쿠키 (Cookies)](cookies.md) | 방문 시각 무렵 그 사이트의 쿠키가 생기거나 쓰였는지 |
+| [즐겨찾기 (Bookmarks)](bookmarks.md) | 즐겨찾기로 온 방문(AUTO_BOOKMARK)과 즐겨찾기 목록 |
+| [확장 프로그램 (Extensions)](extensions.md) | 확장이 넣은 방문(`source` 2)이나 확장이 만든 다운로드 |
+| [네트워크 사용량 (SRUM)](../../execution/system-resource-usage-monitor/network-data-usage.md) | 그 시간대에 브라우저가 실제로 주고받은 양 |
+| [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 지우기 전이나 만료 전의 `History` |
 
-여러 기록을 한 타임라인으로 묶는 순서는 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md)에서 다룹니다. 받은 파일의 출처를 좇는 순서는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md)를, 브라우저로 올린 흔적은 [웹메일·웹하드로 올렸나](/04-scenarios/exfiltration/data-exfiltration/web-upload.md)를 봅니다.
+여러 기록을 한 타임라인으로 묶는 순서는 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md)에서 다룹니다. 받은 파일의 출처를 좇는 순서는 [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md)를, 브라우저로 올린 흔적은 [웹메일·웹하드로 올렸나](../../../04-scenarios/exfiltration/data-exfiltration/web-upload.md)를 봅니다.
 
 ## 실습
 

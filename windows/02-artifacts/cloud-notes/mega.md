@@ -52,7 +52,7 @@ MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 �
 
 ### 상태 DB 와 곁 파일
 
-- 상태 DB 는 저널 방식으로 WAL 을 씁니다 (코드). 그래서 `.db-wal`·`.db-shm` 파일이 함께 생길 수 있습니다. 곁 파일의 뜻은 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
+- 상태 DB 는 저널 방식으로 WAL 을 씁니다 (코드). 그래서 `.db-wal`·`.db-shm` 파일이 함께 생길 수 있습니다. 곁 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
 - SQLite 파일 전체를 암호화하는 코드는 찾지 못했습니다. 곧 파일은 일반 SQLite 도구로 열릴 것으로 보입니다(코드에서 추론).
 - 파일 안의 일부 표는 레코드 내용을 따로 암호화합니다(아래 `statecache` 표).
 
@@ -97,7 +97,7 @@ MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 �
 - 값은 XOR 을 거친 뒤 Windows DPAPI(`CryptProtectData`, 사용자 범위, 추가 엔트로피 사용)로 암호화하고, Base64 로 적습니다.
 - 해시·XOR 에 쓰는 키 재료는 현재 사용자 토큰의 SID 에 고정 시드를 XOR 한 뒤 SHA-1 한 값입니다.
 - Windows 에서는 이 키 재료를 설정 파일 안에 `LocalStorageKey` 라는 항목으로 저장해 둡니다.
-- 오프라인 이미지에서 값을 풀려면 그 사용자의 DPAPI 마스터 키가 필요합니다(코드에서 추론). 마스터 키를 푸는 재료와 절차는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에 정리합니다.
+- 오프라인 이미지에서 값을 풀려면 그 사용자의 DPAPI 마스터 키가 필요합니다(코드에서 추론). 마스터 키를 푸는 재료와 절차는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에 정리합니다.
 - 풀었을 때 어떤 설정 값(계정 이메일, 동기화 목록 등)이 나오는지는 확인하지 못했습니다.
 
 ### 레지스트리·탐색기 흔적 (코드)
@@ -112,7 +112,7 @@ MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 �
 | `Explorer\StartupApproved` 아래 | 자동 시작 승인 여부를 읽고 씁니다. 정확한 하위 키 이름은 확인하지 못했습니다 |
 
 - 동기화 폴더에 폴더 아이콘 설정(`SHGetSetFolderCustomSettings`)을 씁니다. 이 설정이 `desktop.ini` 로 남는지는 확인하지 못했습니다.
-- MEGAsync 와 SDK 코드에서 Cloud Files API 호출(`CfRegisterSyncRoot`, `StorageProviderSyncRootManager`)을 찾지 못했습니다. 곧 동기화 폴더의 파일은 자리표시자가 아닌 실제 파일이고, SyncRootManager 에 등록되지 않는 것으로 보입니다(코드에서 추론). 검체로는 확인하지 못했습니다. 공통 구조는 [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) 에 있습니다.
+- MEGAsync 와 SDK 코드에서 Cloud Files API 호출(`CfRegisterSyncRoot`, `StorageProviderSyncRootManager`)을 찾지 못했습니다. 곧 동기화 폴더의 파일은 자리표시자가 아닌 실제 파일이고, SyncRootManager 에 등록되지 않는 것으로 보입니다(코드에서 추론). 검체로는 확인하지 못했습니다. 공통 구조는 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
 
 ## 증거로서 의미
 
@@ -142,17 +142,17 @@ MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 �
 | nodes 표 `ctime`, `mtime` | int64 `m_time_t`. `time(NULL)` 로 만드는 Unix 초입니다 (코드) | Unix 초는 1970-01-01 00:00 UTC 부터 센 값입니다. 서버 값인지 로컬 값인지는 확인하지 못했습니다 |
 | `Rubbish\YYYY-MM-DD\` 폴더 이름 | 날짜 | 로컬 시각입니다 (코드) |
 | `YYYY-MM-DD HH.MM.SS.<번호>` 하위 폴더 이름 | 날짜·시각 | 같은 코드 부분에서 만듭니다. 폴더의 NTFS 만든 시각과 맞춰 시간대를 확인합니다 |
-| `Rubbish` 안 폴더·파일의 NTFS 시각 | FILETIME | UTC. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 참고 |
+| `Rubbish` 안 폴더·파일의 NTFS 시각 | FILETIME | UTC. [마스터 파일 테이블](../filesystem/mft.md) 참고 |
 
 - 로그 줄의 시각 형식은 확인하지 못했습니다.
-- 폴더 이름의 로컬 날짜를 UTC 시각과 한 줄에 놓을 때는 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 먼저 봅니다.
-- 변환 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 폴더 이름의 로컬 날짜를 UTC 시각과 한 줄에 놓을 때는 PC 의 [시간대 설정](../system-account/time-zone.md) 을 먼저 봅니다.
+- 변환 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
 - **돌린 로그는 gzip 입니다.** `MEGAsync.0.log` 같은 파일은 이름이 `.log` 라도 텍스트 편집기로 열면 깨져 보입니다. 먼저 gzip 으로 풉니다.
 - **`Rubbish` 는 숨은 폴더입니다.** 숨김 파일을 보이지 않게 둔 채 훑으면 놓칩니다. 이미지의 파일 목록에서 `\Rubbish\` 경로로 찾습니다.
-- **`Rubbish` 는 비울 수 있습니다.** 설정 화면에 비우기 기능이 있습니다. 폴더가 비었다고 옮긴 일이 없었던 것은 아닙니다. [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 과 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 로 확인합니다.
+- **`Rubbish` 는 비울 수 있습니다.** 설정 화면에 비우기 기능이 있습니다. 폴더가 비었다고 옮긴 일이 없었던 것은 아닙니다. [USN 변경 저널](../filesystem/usnjrnl.md) 과 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) 로 확인합니다.
 - **동기화를 해제하면 숨김이 풀립니다.** 숨김이 풀린 `Rubbish` 는 동기화 해제 뒤일 수 있습니다(코드에서 추론).
 - **`.cfg.bak` 은 저장할 때마다 새로 만듭니다.** 옛 설정을 오래 담아 두는 파일로 보지 않습니다.
 - **SyncRootManager 로만 찾으면 놓칩니다.** MEGAsync 는 Cloud Files API 를 쓰지 않는 것으로 보입니다(코드에서 추론). 데이터 폴더, 탐색 창 등록, `Links` 바로가기로 찾습니다.
@@ -164,7 +164,7 @@ MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 �
 ### 헥스로 한 번
 
 1. 데이터 폴더를 하위 폴더째 사본으로 뜹니다. 동기화 폴더의 `Rubbish` 도 따로 떠 둡니다.
-2. `megaclient_statecache15_<이름>.db` 를 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다. 머리가 보이면 파일 전체 암호화는 없다는 코드 추론과 맞습니다. 머리 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+2. `megaclient_statecache15_<이름>.db` 를 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다. 머리가 보이면 파일 전체 암호화는 없다는 코드 추론과 맞습니다. 머리 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 3. 조사 대상 파일 이름 하나를 UTF-8 로 검색합니다. 찾으면 nodes 표의 `name` 이 평문으로 남는다는 뜻입니다. 같은 이름을 `.db-wal` 에서도 찾아봅니다.
 4. `ctime` 값을 Unix 초로 바꿉니다. 아래는 계산 예시이며 검체 값이 아닙니다.
 
@@ -189,21 +189,21 @@ SELECT nodehandle, parenthandle, name, type,
 FROM nodes;
 ```
 
-- 레지스트리 보기 도구로 `NTUSER.DAT` 와 `UsrClass.dat` 를 열어 `NameSpace\{uuid}` 와 `CLSID\{uuid}\Instance\InitPropertyBag` 을 봅니다. 하이브 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+- 레지스트리 보기 도구로 `NTUSER.DAT` 와 `UsrClass.dat` 를 열어 `NameSpace\{uuid}` 와 `CLSID\{uuid}\Instance\InitPropertyBag` 을 봅니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 바로가기 파일 | `Links\<동기화 이름>.lnk` 의 대상 경로와 시각을 봅니다 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 설치 프로그램 | `Uninstall\MEGAsync` 로 설치 사실과 판을 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 로그온 자동실행 | `StartupApproved` 와 자동 시작 등록을 봅니다 | [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md) |
-| DPAPI 구조 | 설정 파일 값을 풀 재료를 봅니다 | [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) |
-| USN 변경 저널 | 파일이 `Rubbish` 로 옮겨진 시각을 봅니다 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 마스터 파일 테이블 | `Rubbish` 날짜 폴더의 NTFS 만든 시각을 봅니다 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| SRUM | 그 시간대에 MEGAsync 가 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 프리페치 | MEGAsync 실행 시각을 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 자료 유출 시나리오 | 클라우드 업로드를 다른 흔적과 묶어 봅니다 | [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) |
+| 바로가기 파일 | `Links\<동기화 이름>.lnk` 의 대상 경로와 시각을 봅니다 | [바로가기 파일](../file-folder-usage/lnk.md) |
+| 설치 프로그램 | `Uninstall\MEGAsync` 로 설치 사실과 판을 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
+| 로그온 자동실행 | `StartupApproved` 와 자동 시작 등록을 봅니다 | [로그온 자동실행](../persistence/run-runonce-startup-folder.md) |
+| DPAPI 구조 | 설정 파일 값을 풀 재료를 봅니다 | [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) |
+| USN 변경 저널 | 파일이 `Rubbish` 로 옮겨진 시각을 봅니다 | [USN 변경 저널](../filesystem/usnjrnl.md) |
+| 마스터 파일 테이블 | `Rubbish` 날짜 폴더의 NTFS 만든 시각을 봅니다 | [마스터 파일 테이블](../filesystem/mft.md) |
+| SRUM | 그 시간대에 MEGAsync 가 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
+| 프리페치 | MEGAsync 실행 시각을 봅니다 | [프리페치](../execution/prefetch/index.md) |
+| 자료 유출 시나리오 | 클라우드 업로드를 다른 흔적과 묶어 봅니다 | [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) |
 
 ## 실습
 

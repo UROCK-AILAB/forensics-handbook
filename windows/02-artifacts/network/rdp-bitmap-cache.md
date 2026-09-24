@@ -9,7 +9,7 @@
 - 원격 데스크톱 클라이언트는 원격 화면을 작은 사각형 조각으로 받습니다. 이 조각을 이 글에서는 타일 (tile) 이라고 부릅니다.
 - 클라이언트는 받은 타일을 파일로 저장합니다. 이 파일이 비트맵 캐시 (Bitmap Cache) 입니다.
 - 캐시 파일은 사용자 프로필 안에 있습니다. 그래서 계정마다 따로 남습니다.
-- 접속을 건 쪽(출발 PC)에 남는 흔적입니다. 접속을 받은 쪽의 흔적은 [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) 에서 다룹니다.
+- 접속을 건 쪽(출발 PC)에 남는 흔적입니다. 접속을 받은 쪽의 흔적은 [원격 데스크톱 이벤트](../event-logs/rdp-event-logs/index.md) 에서 다룹니다.
 - 타일에는 원격 화면의 픽셀이 그대로 들어 있습니다. 그래서 화면에 떠 있던 글자나 창 모양이 조각으로 남습니다.
 - 클라이언트의 "지속 비트맵 캐싱" 옵션과 캐시 파일이 생기는지의 관계는 확인하지 못했습니다.
 - mstsc 가 아닌 다른 원격 데스크톱 클라이언트가 같은 파일을 만드는지는 확인하지 못했습니다.
@@ -107,22 +107,22 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 
 ### 증명하지 못하는 것
 
-- **어느 컴퓨터의 화면인지.** 타일 머리에는 대상 호스트가 없습니다. 대상은 [원격 데스크톱 접속 기록](/02-artifacts/network/rdp-client-mru.md) 과 이벤트 로그로 맞춰 봅니다.
+- **어느 컴퓨터의 화면인지.** 타일 머리에는 대상 호스트가 없습니다. 대상은 [원격 데스크톱 접속 기록](rdp-client-mru.md) 과 이벤트 로그로 맞춰 봅니다.
 - **언제 본 화면인지.** 타일에는 시각이 없습니다. 아래 "시각 해석" 절을 봅니다.
 - **어느 접속의 화면인지.** 한 캐시 파일에 여러 접속의 타일이 섞이는지, 새 접속 때 덮어쓰는지는 확인하지 못했습니다.
 - **화면 전체 모습.** 타일은 조각일 뿐입니다. 캐시에 없는 부분은 알 수 없습니다.
-- **키보드 앞의 사람.** 캐시 파일이 가리키는 것은 사용자 프로필(계정)입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **키보드 앞의 사람.** 캐시 파일이 가리키는 것은 사용자 프로필(계정)입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 보고서에는 "이 계정의 원격 데스크톱 비트맵 캐시에서 이 글자가 보이는 타일이 나왔다" 처럼 씁니다. "이 시각에 이 화면을 봤다" 로 쓰지 않습니다.
 
 ## 시각 해석
 
 - 타일 머리에는 시각 칸이 없습니다.
-- 시각은 캐시 파일의 파일 시스템 시각으로 잡습니다. 파일 시스템 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 읽습니다.
+- 시각은 캐시 파일의 파일 시스템 시각으로 잡습니다. 파일 시스템 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 읽습니다.
 - 캐시 파일의 만든 시각·수정 시각이 원격 데스크톱의 어떤 동작 때 바뀌는지는 확인하지 못했습니다.
 - 그래서 파일 시각은 "이 무렵에 캐시 파일이 만들어졌거나 바뀌었다" 로만 씁니다.
-- 접속 시각은 [원격 데스크톱 접속 기록](/02-artifacts/network/rdp-client-mru.md) 과 [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) 로 맞춰 봅니다.
-- 시각 값의 기준(UTC·현지)은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 접속 시각은 [원격 데스크톱 접속 기록](rdp-client-mru.md) 과 [원격 데스크톱 이벤트](../event-logs/rdp-event-logs/index.md) 로 맞춰 봅니다.
+- 시각 값의 기준(UTC·현지)은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -130,11 +130,11 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 - **색이 어긋날 수 있습니다.** `.bmc` 는 데이터 길이로 색 형식을 정합니다. 뽑은 그림의 색이 이상하면 타일 머리를 헥스로 직접 읽어 봅니다.
 - **캐시 파일이 없다고 원격 데스크톱을 쓰지 않은 것은 아닙니다.** 캐시를 만드는 조건(클라이언트 옵션 등)은 확인하지 못했습니다.
 - **"old bitmap data" 는 따로 표시합니다.** `-o` 로 뽑은 조각이 무엇인지 확인하지 못했으므로, 일반 타일과 섞어 보고하지 않습니다.
-- **지운 캐시 파일.** 사용자가 캐시 폴더를 지웠다면 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾아봅니다.
+- **지운 캐시 파일.** 사용자가 캐시 폴더를 지웠다면 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾아봅니다.
   - `.bin` 은 머리 문자열 `RDP8bmp` 로 비할당 영역을 검색할 수 있습니다.
   - `.bmc` 에는 파일 머리가 없어서 머리 문자열로 찾을 수 없습니다.
-  - 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
-- **어느 계정의 프로필인지 먼저 확인합니다.** [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 프로필 폴더와 계정을 잇습니다.
+  - 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+- **어느 계정의 프로필인지 먼저 확인합니다.** [사용자 프로필 목록](../system-account/profilelist.md) 으로 프로필 폴더와 계정을 잇습니다.
 
 ## 직접 분석해 보기
 
@@ -188,16 +188,16 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 원격 데스크톱 접속 기록 (MRU) | 이 계정이 접속한 대상과 순서, 사용자 이름 힌트 | [원격 데스크톱 접속 기록](/02-artifacts/network/rdp-client-mru.md) |
-| 출발 쪽 이벤트 로그 | Security 로그 4648, RDPClient/Operational 로그의 접속 기록 | [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) |
-| mstsc 프리페치 | mstsc 실행 횟수와 시각 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 캐시 파일의 파일 시스템 시각 | 캐시 파일이 만들어지고 바뀐 무렵 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
+| 원격 데스크톱 접속 기록 (MRU) | 이 계정이 접속한 대상과 순서, 사용자 이름 힌트 | [원격 데스크톱 접속 기록](rdp-client-mru.md) |
+| 출발 쪽 이벤트 로그 | Security 로그 4648, RDPClient/Operational 로그의 접속 기록 | [원격 데스크톱 이벤트](../event-logs/rdp-event-logs/index.md) |
+| mstsc 프리페치 | mstsc 실행 횟수와 시각 | [프리페치](../execution/prefetch/index.md) |
+| 캐시 파일의 파일 시스템 시각 | 캐시 파일이 만들어지고 바뀐 무렵 | [마스터 파일 테이블](../filesystem/mft.md) |
 
 - 타일에 보이는 글자(호스트 이름, 폴더 이름 등)를 MRU 의 대상과 맞춰 보면, 어느 접속의 화면인지 좁힐 수 있습니다.
-- 여러 흔적의 시각은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 으로 한 줄에 놓고 봅니다.
-- 원격 데스크톱이 아닌 다른 원격 제어 도구는 [원격 제어 프로그램](/02-artifacts/network/remote-access-tools/index.md) 에서 다룹니다.
+- 여러 흔적의 시각은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 으로 한 줄에 놓고 봅니다.
+- 원격 데스크톱이 아닌 다른 원격 제어 도구는 [원격 제어 프로그램](remote-access-tools/index.md) 에서 다룹니다.
 
-전체 흐름은 [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) 과 [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) 에 있습니다.
+전체 흐름은 [원격 데스크톱 침입 확인](../../04-scenarios/incident/rdp-intrusion.md) 과 [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md) 에 있습니다.
 
 ## 실습
 

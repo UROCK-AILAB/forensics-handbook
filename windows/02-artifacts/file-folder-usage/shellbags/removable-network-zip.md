@@ -10,7 +10,7 @@
 
 셸은 네임스페이스의 각 항목을 셸 아이템 (Shell Item)으로 가리킵니다. 셸 아이템의 내용은 그 항목을 담은 폴더가 정합니다. 그 형식을 해석할 수 있는 것도 그 폴더뿐입니다. (같은 문서)
 
-그래서 셸백 경로 한 줄은 여러 형식의 셸 아이템이 이어진 것입니다. USB 폴더는 볼륨 아이템 뒤에 파일 항목 아이템이 붙습니다. 네트워크 공유는 네트워크 위치 아이템으로 시작합니다. 휴대폰은 MTP 전용 아이템으로, ZIP 속 폴더는 압축 폴더 아이템으로 기록됩니다. 셸 아이템 공통 구조는 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md)에서 다룹니다.
+그래서 셸백 경로 한 줄은 여러 형식의 셸 아이템이 이어진 것입니다. USB 폴더는 볼륨 아이템 뒤에 파일 항목 아이템이 붙습니다. 네트워크 공유는 네트워크 위치 아이템으로 시작합니다. 휴대폰은 MTP 전용 아이템으로, ZIP 속 폴더는 압축 폴더 아이템으로 기록됩니다. 셸 아이템 공통 구조는 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md)에서 다룹니다.
 
 셸백은 사용자 레지스트리 하이브에 있습니다. 그래서 장치를 빼거나 공유가 사라져도 항목이 함께 지워지지 않습니다.
 
@@ -18,7 +18,7 @@
 
 ## 위치와 버전별 차이
 
-저장하는 키는 일반 셸백과 같습니다. 하이브·키 경로·BagMRU 트리 읽는 법은 [저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md)를 봅니다.
+저장하는 키는 일반 셸백과 같습니다. 하이브·키 경로·BagMRU 트리 읽는 법은 [저장 위치와 구조](ntuser-usrclass-bagmru-bags.md)를 봅니다.
 
 이 페이지 주제와 관련해 눈여겨볼 차이는 아래와 같습니다.
 
@@ -83,7 +83,7 @@ NTFS 볼륨의 폴더를 가리키는 파일 항목 아이템에는 확장 블�
 
 ## 시각 해석
 
-키의 마지막 기록 시각, 처음 연 때와 마지막 바뀐 때를 읽는 법은 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md)에서 다룹니다. 이 페이지에서는 아이템 안에 든 시각 가운데 외부 위치에서만 생기는 문제를 적습니다.
+키의 마지막 기록 시각, 처음 연 때와 마지막 바뀐 때를 읽는 법은 [셸백 시각 해석](timestamps.md)에서 다룹니다. 이 페이지에서는 아이템 안에 든 시각 가운데 외부 위치에서만 생기는 문제를 적습니다.
 
 | 아이템 | 시각 | 뜻과 주의점 |
 |---|---|---|
@@ -92,7 +92,7 @@ NTFS 볼륨의 폴더를 가리키는 파일 항목 아이템에는 확장 블�
 | URI 아이템 | FILETIME 한 개 | FTP 서버에 처음 접근한 시각으로 추정합니다. 명세에서도 확정하지 않은 뜻입니다. (libfwsi) |
 | MTP 파일 항목 아이템 | FILETIME 두 개 | 명세는 수정 시각과 생성 시각으로 추정만 합니다. 직접 시험하기 전에는 보고서에 쓰지 않습니다. (libfwsi) |
 
-아이템 안의 시각은 아이템이 처음 만들어진 뒤 갱신되지 않는다는 시험 결과가 있습니다. (4n6k, 확인 범위: Win7) FAT 날짜·시각 형식 자체는 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)과 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md)를 봅니다.
+아이템 안의 시각은 아이템이 처음 만들어진 뒤 갱신되지 않는다는 시험 결과가 있습니다. (4n6k, 확인 범위: Win7) FAT 날짜·시각 형식 자체는 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)과 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md)를 봅니다.
 
 ## 함정과 한계
 
@@ -101,10 +101,10 @@ NTFS 볼륨의 폴더를 가리키는 파일 항목 아이템에는 확장 블�
 - **MTP 아이템은 종류 표시가 0x00 입니다.** 오프셋 6의 서명으로만 가릴 수 있습니다. 명세의 MTP 절은 아직 작성 중(TODO)이고 뜻을 모르는 칸이 많습니다.
 - **압축 폴더 아이템은 자기 서명이 없습니다.** 부모가 ZIP 파일이라는 사실로만 가립니다. 도구가 부모를 보지 않고 아이템만 해석하면 알 수 없는 아이템으로 처리할 수 있습니다.
 - **ZIP·CAB 말고 다른 압축 형식은 명세에 없습니다.** 탐색기 안에서 다른 압축 형식을 열었을 때 남는 아이템은 libfwsi 에 정리돼 있지 않습니다. 이런 아이템을 만나면 원시 바이트를 직접 봅니다.
-- **압축 프로그램 창 안의 탐색은 다른 이야기입니다.** 압축 프로그램이 자기 창에서 보여 준 압축 파일 속 폴더가 탐색기 셸백에 남는다고 단정할 수 없습니다. 그 흔적은 [압축 프로그램 사용 기록](/02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md)에서 찾습니다.
+- **압축 프로그램 창 안의 탐색은 다른 이야기입니다.** 압축 프로그램이 자기 창에서 보여 준 압축 파일 속 폴더가 탐색기 셸백에 남는다고 단정할 수 없습니다. 그 흔적은 [압축 프로그램 사용 기록](../7-zip-winrar-bandizip.md)에서 찾습니다.
 - **도구마다 모르는 아이템을 다루는 방식이 다릅니다.** MTP·URI·위임 폴더처럼 명세가 덜 된 아이템은 도구에 따라 건너뛰거나 경로 일부가 비어 나옵니다.
 
-셸백 전반의 해석 함정은 [셸백 해석 함정](/02-artifacts/file-folder-usage/shellbags/pitfalls.md)에 모았습니다.
+셸백 전반의 해석 함정은 [셸백 해석 함정](pitfalls.md)에 모았습니다.
 
 ## 직접 분석해 보기
 
@@ -151,16 +151,16 @@ NTFS 볼륨의 폴더를 가리키는 파일 항목 아이템에는 확장 블�
 
 | 확인할 것 | 함께 볼 아티팩트 |
 |---|---|
-| 그 드라이브 문자가 어느 USB 였나 | [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md), [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md), [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) |
-| 그 시각에 장치가 꽂혀 있었나 | [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md), [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
-| NTFS USB 를 압수했을 때 같은 장치인가 | 파일 항목 아이템의 파일 참조를 그 장치의 [$MFT](/02-artifacts/filesystem/mft.md) 항목 번호·순번과 맞춰 봄 |
-| 휴대폰이었나 | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md), [스마트폰으로 옮겼나](/04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) |
-| 네트워크 공유·매핑 드라이브였나 | [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md), 서버 쪽 [공유 폴더 접근 이벤트 (5140·5145)](/02-artifacts/event-logs/5140-5145.md) |
-| FTP 를 다른 도구로도 썼나 | [SSH·FTP 도구 흔적](/02-artifacts/network/putty-winscp-filezilla-openssh.md) |
-| 그 폴더의 파일을 열었나 | [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md), [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
-| ZIP 을 만들거나 풀었나 | [압축 프로그램 사용 기록](/02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md), [퇴사 전 자료를 모으고 압축했나](/04-scenarios/exfiltration/data-exfiltration/staging.md) |
+| 그 드라이브 문자가 어느 USB 였나 | [드라이브 문자 매핑 (MountedDevices)](../../external-devices/usb-storage-artifacts/mounteddevices.md), [사용자별 장치 연결 (MountPoints2)](../../external-devices/usb-storage-artifacts/mountpoints2.md), [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](../../external-devices/usb-storage-artifacts/wpd-emdmgmt.md) |
+| 그 시각에 장치가 꽂혀 있었나 | [연결·해제 시각](../../external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md), [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| NTFS USB 를 압수했을 때 같은 장치인가 | 파일 항목 아이템의 파일 참조를 그 장치의 [$MFT](../../filesystem/mft.md) 항목 번호·순번과 맞춰 봄 |
+| 휴대폰이었나 | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](../../external-devices/usb-storage-artifacts/wpd-emdmgmt.md), [스마트폰으로 옮겼나](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md) |
+| 네트워크 공유·매핑 드라이브였나 | [공유 폴더·네트워크 드라이브](../../network/network-shares-mapped-drives.md), 서버 쪽 [공유 폴더 접근 이벤트 (5140·5145)](../../event-logs/5140-5145.md) |
+| FTP 를 다른 도구로도 썼나 | [SSH·FTP 도구 흔적](../../network/putty-winscp-filezilla-openssh.md) |
+| 그 폴더의 파일을 열었나 | [바로가기 파일 (LNK)](../lnk.md), [점프리스트](../jump-lists.md), [열기·저장 대화상자 기록](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
+| ZIP 을 만들거나 풀었나 | [압축 프로그램 사용 기록](../7-zip-winrar-bandizip.md), [퇴사 전 자료를 모으고 압축했나](../../../04-scenarios/exfiltration/data-exfiltration/staging.md) |
 
-USB 반출 조사 전체 흐름은 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)를 봅니다. 지금은 없는 폴더를 찾는 법은 [지운 폴더 흔적 찾기](/02-artifacts/file-folder-usage/shellbags/deleted-folders.md)를 봅니다.
+USB 반출 조사 전체 흐름은 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)를 봅니다. 지금은 없는 폴더를 찾는 법은 [지운 폴더 흔적 찾기](deleted-folders.md)를 봅니다.
 
 ## 실습
 

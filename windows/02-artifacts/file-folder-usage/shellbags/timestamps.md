@@ -14,15 +14,15 @@
 | Bags 키의 마지막 기록 시각 | `Bags\<번호>` 아래 키 | FILETIME, 100나노초 | UTC | 그 폴더의 보기 설정 값이 마지막으로 바뀐 때 |
 
 - 키 시각은 레지스트리가 적습니다. 셸 아이템 시각은 파일 시스템에서 가져온 값입니다. 출처가 다르므로 뜻도 다릅니다.
-- 키 시각이 무엇에 바뀌는지는 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다. 이 페이지는 그 규칙이 셸백에서 무엇을 뜻하는지만 다룹니다.
-- BagMRU·Bags 키의 위치와 연결 방식은 [저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) 를 봅니다.
-- 셸 아이템의 전체 구조는 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md) 을 봅니다.
+- 키 시각이 무엇에 바뀌는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다. 이 페이지는 그 규칙이 셸백에서 무엇을 뜻하는지만 다룹니다.
+- BagMRU·Bags 키의 위치와 연결 방식은 [저장 위치와 구조](ntuser-usrclass-bagmru-bags.md) 를 봅니다.
+- 셸 아이템의 전체 구조는 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 을 봅니다.
 
 여러 도구가 이 시각들을 조합해 "처음 연 때 (First Interacted)" 와 "마지막으로 연 때 (Last Interacted)" 같은 열을 만듭니다. 이 열은 레지스트리에 그대로 적힌 값이 아닙니다. 도구가 규칙으로 계산한 값입니다. 열 이름과 계산 규칙은 도구마다 다릅니다. 아래 "시각 해석" 절에서 그 규칙을 따라가 봅니다.
 
 ## 위치와 버전별 차이
 
-셸백 키를 두는 하이브는 버전마다 다릅니다. Windows XP 는 NTUSER.DAT 에 둡니다. Vista 부터는 UsrClass.dat 에도 둡니다. 정확한 경로는 [저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) 에 있습니다.
+셸백 키를 두는 하이브는 버전마다 다릅니다. Windows XP 는 NTUSER.DAT 에 둡니다. Vista 부터는 UsrClass.dat 에도 둡니다. 정확한 경로는 [저장 위치와 구조](ntuser-usrclass-bagmru-bags.md) 에 있습니다.
 
 시각과 관련해 버전마다 달라지는 것은 확장 블록 0xBEEF0004 의 버전입니다. 아래 표는 libfwsi 명세를 따릅니다.
 
@@ -35,11 +35,11 @@
 
 - 셸 아이템의 수정 시각 칸은 XP 이전 형식에도 있습니다.
 - 명세는 Windows 11 을 따로 적지 않았습니다.
-- Windows 8.1 부터 하이브 변경은 트랜잭션 로그에 먼저 쓰입니다. 그래서 가장 새 키 시각이 UsrClass.dat 의 .LOG1·.LOG2 에만 있을 수 있습니다. 반영 방법은 [트랜잭션 로그와 반영 안 된 변경](/01-foundations/database-log-formats/registry-hive/log1-log2.md) 을 봅니다.
+- Windows 8.1 부터 하이브 변경은 트랜잭션 로그에 먼저 쓰입니다. 그래서 가장 새 키 시각이 UsrClass.dat 의 .LOG1·.LOG2 에만 있을 수 있습니다. 반영 방법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) 을 봅니다.
 
 ## 구조 — 시각이 든 칸
 
-BagMRU 의 번호 값에는 셸 아이템이 하나 들어 있습니다. 파일 시스템의 폴더는 파일 항목 셸 아이템으로 적힙니다. 내 PC·드라이브·네트워크 같은 항목은 셸 아이템 종류가 달라서 아래 시각 칸이 없거나 구조가 다릅니다. 외부 장치·네트워크·압축 폴더는 [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) 에서 다룹니다.
+BagMRU 의 번호 값에는 셸 아이템이 하나 들어 있습니다. 파일 시스템의 폴더는 파일 항목 셸 아이템으로 적힙니다. 내 PC·드라이브·네트워크 같은 항목은 셸 아이템 종류가 달라서 아래 시각 칸이 없거나 구조가 다릅니다. 외부 장치·네트워크·압축 폴더는 [외부 장치·네트워크·압축 폴더 탐색 흔적](removable-network-zip.md) 에서 다룹니다.
 
 | 위치 | 오프셋 | 크기 | 칸 | 뜻 |
 |---|---|---|---|---|
@@ -65,7 +65,7 @@ FAT 날짜·시각 (FAT Date and Time) 4바이트는 앞 2바이트가 날짜, �
 | 시각 | 5–10 | 분 (0–59) |
 | 시각 | 11–15 | 시 (0–23) |
 
-초를 2로 나눠 적으므로 홀수 초는 남지 않습니다. 명세는 이 시각 값이 늘 채워지지는 않는다고 적었습니다. 값이 0 이면 날짜가 성립하지 않으므로 비어 있는 칸으로 봅니다. FAT 날짜·시각과 다른 시각 형식의 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+초를 2로 나눠 적으므로 홀수 초는 남지 않습니다. 명세는 이 시각 값이 늘 채워지지는 않는다고 적었습니다. 값이 0 이면 날짜가 성립하지 않으므로 비어 있는 칸으로 봅니다. FAT 날짜·시각과 다른 시각 형식의 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -77,7 +77,7 @@ FAT 날짜·시각 (FAT Date and Time) 4바이트는 앞 2바이트가 날짜, �
 | 하위 폴더 항목이 없는 키의 시각은 그 키를 처음 만든 때일 가능성이 큽니다 (확인 범위: Windows 7) | 하위 폴더 항목이 생긴 키를 처음 만든 때 |
 | 셸 아이템 시각은 항목을 기록할 때 그 폴더의 생성·수정·접근 시각입니다 | 셸 아이템 시각이 폴더를 연 때라는 것 |
 | | 폴더 안의 파일을 열었는지. 폴더가 지금도 있는지 |
-| | 사람이 직접 탐색기로 열었는지. 셸백이 생기는 조건은 [셸백 해석 함정](/02-artifacts/file-folder-usage/shellbags/pitfalls.md) 을 봅니다 |
+| | 사람이 직접 탐색기로 열었는지. 셸백이 생기는 조건은 [셸백 해석 함정](pitfalls.md) 을 봅니다 |
 
 보고서에는 기록이 말하는 만큼만 씁니다. 아래 시각과 이름은 설명을 위한 예입니다.
 
@@ -102,7 +102,7 @@ BagMRU 키 하나는 폴더 하나에 해당합니다. 그 키 안의 번호 값
 - 키 안의 값이 하나라도 바뀌면 키 시각이 바뀝니다. NodeSlot 같은 다른 값도 마찬가지입니다.
 - 루트 키 시각은 마지막으로 새 폴더 항목이 생긴 때보다 앞설 수 없습니다. 루트 키에는 다른 값도 있으므로, 루트 키 시각이 곧 그때라고 단정하지는 않습니다.
 - 루트 키 시각을 바로 아래 항목(내 PC 등)의 "마지막으로 연 때" 로 붙이면 안 됩니다. 어디서든 새 폴더 항목이 생기면 루트 키 시각이 바뀌므로, 바로 아래 항목이 방금 열린 것처럼 보입니다.
-- 지운 셸백 항목을 찾는 방법은 [지운 폴더 흔적 찾기](/02-artifacts/file-folder-usage/shellbags/deleted-folders.md) 를 봅니다.
+- 지운 셸백 항목을 찾는 방법은 [지운 폴더 흔적 찾기](deleted-folders.md) 를 봅니다.
 
 > 그림 자리: BagMRU 트리에서 부모 키 하나와 자식 키 셋을 그립니다. 부모 키의 MRUListEx 맨 앞 칸에서 자식 하나로 화살표를 긋고, 부모 키 시각이 그 자식에게만 붙는다는 것을 보여 줍니다. 자식이 없는 키에는 "처음 만든 시각 그대로" 라고 표시합니다.
 
@@ -115,7 +115,7 @@ BagMRU 키 하나는 폴더 하나에 해당합니다. 그 키 안의 번호 값
 - MRUListEx 순서로 형제 폴더끼리 앞뒤는 알 수 있습니다. 앞에 있는 폴더가 더 나중에 맨 앞에 올랐습니다.
 - 4n6k 는 2013년에 당시 공개 도구 두 개가 부모 키 시각을 모든 자식에게 똑같이 붙인다고 보고했습니다. 하위 폴더가 수백 개인 폴더라면 수백 개가 모두 같은 "마지막으로 연 때" 를 받게 됩니다.
 
-MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md) 에 있습니다.
+MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](../../../01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md) 에 있습니다.
 
 ### 처음 연 때: 하위 폴더 항목이 없는 키에서만 남는다
 
@@ -123,7 +123,7 @@ MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log
 
 - 그 폴더 아래에 하위 폴더 항목이 하나라도 생기면 키 시각이 옮겨 갑니다. 이때 처음 기록된 때는 키에서 사라집니다.
 - 이 규칙은 관찰에 기댄 추정입니다. 다른 Windows 버전에서 쓸 때는 같은 버전의 시험 시스템에서 먼저 확인합니다.
-- 처음 기록된 때가 사라진 폴더는 다른 곳에서 범위를 좁힙니다. 섀도 복사본 안의 옛 UsrClass.dat 에서 그 항목이 처음 보이는 사본을 찾으면, 처음 기록된 때가 두 사본 사이로 좁혀집니다([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)).
+- 처음 기록된 때가 사라진 폴더는 다른 곳에서 범위를 좁힙니다. 섀도 복사본 안의 옛 UsrClass.dat 에서 그 항목이 처음 보이는 사본을 찾으면, 처음 기록된 때가 두 사본 사이로 좁혀집니다([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 - 셸 아이템의 시각들은 항목을 기록할 때 이미 있던 값입니다. 그래서 항목을 처음 기록한 때는 셸 아이템의 생성 시각보다 앞설 수 없습니다. 시계를 바꾸지 않았고 시각을 조작하지 않았다는 전제가 필요합니다.
 
 ### 가상 예로 한 번 읽기
@@ -148,8 +148,8 @@ MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log
 
 셸 아이템 속 생성·수정·접근 시각은 항목을 기록할 때 파일 시스템이 알려 준 그 폴더의 시각을 옮겨 적은 값입니다. 4n6k 의 Windows 7 실험에서 이 시각은 항목을 만든 뒤 폴더를 다시 열어도 바뀌지 않았습니다.
 
-- NTFS 에서 Windows 파일 API 가 돌려주는 시각은 $STANDARD_INFORMATION 쪽 시각입니다([두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
-- 폴더의 수정 시각은 폴더 안에 파일을 만들거나 지우거나 이름을 바꿀 때 바뀝니다. 그래서 셸 아이템의 수정 시각은 폴더 안 내용이 마지막으로 바뀐 때에 가깝습니다. 파일 시각의 변화 규칙은 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md) 을 봅니다.
+- NTFS 에서 Windows 파일 API 가 돌려주는 시각은 $STANDARD_INFORMATION 쪽 시각입니다([두 벌의 시각](../../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
+- 폴더의 수정 시각은 폴더 안에 파일을 만들거나 지우거나 이름을 바꿀 때 바뀝니다. 그래서 셸 아이템의 수정 시각은 폴더 안 내용이 마지막으로 바뀐 때에 가깝습니다. 파일 시각의 변화 규칙은 [파일 시각 네 가지와 변화 규칙](../../../03-techniques/analysis/timeline/macb-timestamp-rules.md) 을 봅니다.
 - 접근 시각은 파일 시스템 설정에 따라 늦게 갱신되거나 갱신되지 않습니다. Microsoft 문서는 NTFS 가 마지막 접근 시각 갱신을 최대 1시간까지 늦춘다고 적었습니다.
 - FAT 볼륨은 접근 시각을 날짜로만 남깁니다. 그래서 FAT 볼륨 폴더의 셸 아이템 접근 시각은 날짜만 뜻이 있습니다. 4n6k 의 Windows 7 실험에서는 시·분 자리에 그 PC 의 시간대만큼 밀린 값이 보였습니다.
 - 이 값은 기록 당시의 사본입니다. 그래서 지금 폴더 시각과 비교하면 기록 뒤에 폴더 시각이 바뀌었는지 볼 수 있습니다. 방법은 아래 "교차 검증" 절에 있습니다.
@@ -159,12 +159,12 @@ MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log
 - 키 시각은 FILETIME 이고 UTC 입니다.
 - libfwsi 명세는 셸 아이템의 FAT 날짜·시각을 UTC 로 적었습니다. FAT 형식 자체에는 시간대 정보가 없습니다.
 - FAT 볼륨은 디스크에 현지 시각을 적습니다. Microsoft 문서에 따르면 이 값을 UTC 로 바꿀 때 지금의 시간대·일광 절약 시간 설정을 씁니다. 그래서 FAT 볼륨 폴더의 시각은 한 시간 어긋날 수 있습니다.
-- 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](/02-artifacts/system-account/time-zone.md), [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)).
+- 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](../../system-account/time-zone.md), [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)).
 - 키 시각과 셸 아이템 시각을 비교할 때는 셸 아이템 쪽의 2초 단위를 감안합니다.
 
 ## 함정과 한계
 
-셸백 전반의 함정은 [셸백 해석 함정](/02-artifacts/file-folder-usage/shellbags/pitfalls.md) 에서 다룹니다. 아래는 시각에 관한 것만 모았습니다.
+셸백 전반의 함정은 [셸백 해석 함정](pitfalls.md) 에서 다룹니다. 아래는 시각에 관한 것만 모았습니다.
 
 1. **부모 키 시각을 모든 자식에게 붙입니다.** 부모 키 시각은 MRUListEx 맨 앞 자식 하나에만 붙습니다.
 2. **맨 앞 자식의 시각을 마지막 방문으로 단정합니다.** 이미 맨 앞인 폴더는 다시 열어도 키가 바뀌지 않습니다.
@@ -173,7 +173,7 @@ MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log
 5. **트랜잭션 로그를 반영하지 않습니다.** Windows 8.1 부터 가장 새 키 시각이 로그에만 있을 수 있습니다.
 6. **UTC 와 현지 시각을 섞습니다.** 도구가 분석 PC 의 시간대로 바꿔 보여 주는지 확인합니다. FAT 볼륨 폴더는 한 시간 차이도 생길 수 있습니다.
 7. **셸 아이템 시각의 0 을 날짜로 바꿉니다.** 값이 비어 있는 칸입니다.
-8. **키 시각을 조작하지 않았다고 가정합니다.** 키 시각은 API 로 바꿀 수 있습니다([키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 의 "조작과 흔적"). 셸백 정리 도구가 하위 키를 지우면 부모 키 시각이 지운 때로 바뀝니다.
+8. **키 시각을 조작하지 않았다고 가정합니다.** 키 시각은 API 로 바꿀 수 있습니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 의 "조작과 흔적"). 셸백 정리 도구가 하위 키를 지우면 부모 키 시각이 지운 때로 바뀝니다.
 9. **분석 중에 원본을 바꿉니다.** 분석 PC 에서 하이브를 불러와 열면 키 시각이나 파일이 바뀔 수 있습니다. 항상 사본에서 작업합니다.
 
 ## 직접 분석해 보기
@@ -203,7 +203,7 @@ MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log
 11. 셸 아이템 오프셋 0x22(확장 블록 오프셋 12)의 `6F 58 C1 33` 이 접근 시각입니다. 2024-03-15 06:30:02 UTC 입니다.
 12. 셸 아이템 오프셋 0x26(확장 블록 오프셋 16)의 `2E 00` 은 긴 이름의 위치입니다. 그 뒤의 MFT 번호·순번과 긴 이름 `Report` 는 생략했습니다.
 
-이 세 시각은 항목을 기록할 때 `Report` 폴더의 시각입니다. 폴더를 연 때가 아닙니다. 이 값만으로는 "이 항목은 2024-03-15 06:30:02 UTC 이후에 기록됐다" 는 것까지만 말할 수 있습니다. 이 항목을 담은 키의 시각을 읽는 방법은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 의 헥스 예시를 봅니다.
+이 세 시각은 항목을 기록할 때 `Report` 폴더의 시각입니다. 폴더를 연 때가 아닙니다. 이 값만으로는 "이 항목은 2024-03-15 06:30:02 UTC 이후에 기록됐다" 는 것까지만 말할 수 있습니다. 이 항목을 담은 키의 시각을 읽는 방법은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 의 헥스 예시를 봅니다.
 
 ### 공개 도구로 한 번
 
@@ -213,20 +213,20 @@ MRUListEx 를 읽는 법은 [MRU 목록 읽는 법](/01-foundations/database-log
 - "처음 연 때" 같은 열을 어떤 키에서 채우는지 봅니다. 하위 폴더 항목이 있는 키의 시각을 처음 연 때로 보여 주면 틀린 값입니다.
 - 셸 아이템 시각과 키 시각을 각각 UTC 로 보여 주는지 확인합니다.
 - 트랜잭션 로그를 반영하고 읽었는지 확인합니다.
-- 헥스로 읽은 값과 한두 항목을 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 헥스로 읽은 값과 한두 항목을 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 맞춰 볼 것 | 링크 |
 |---|---|---|
-| $MFT | 셸 아이템의 MFT 번호·순번으로 폴더 레코드를 찾습니다. 순번이 다르면 그 레코드는 이제 다른 폴더나 파일입니다. 순번이 같은데 생성 시각이 다르면 기록 뒤에 폴더 시각이 바뀐 것입니다. 수정 시각은 폴더 안 내용이 바뀌면 자연스럽게 달라집니다 | [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md), [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md) |
-| $UsnJrnl·$LogFile | 폴더를 만들거나 이름을 바꾼 때 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md), [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md) |
-| LNK·점프리스트 | 그 폴더 안의 파일을 연 때 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 최근 문서·열기/저장 대화상자·탐색기 입력 기록 | 같은 폴더를 다른 경로로 연 흔적과 그 시각 | [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md), [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md), [탐색기 입력 기록](/02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) |
-| 섀도 복사본 속 UsrClass.dat | 예전 키 시각과 예전 MRUListEx 순서 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 로그온 기록 | 그 시각에 그 사용자가 로그온해 있었는지 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md), [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) |
+| $MFT | 셸 아이템의 MFT 번호·순번으로 폴더 레코드를 찾습니다. 순번이 다르면 그 레코드는 이제 다른 폴더나 파일입니다. 순번이 같은데 생성 시각이 다르면 기록 뒤에 폴더 시각이 바뀐 것입니다. 수정 시각은 폴더 안 내용이 바뀌면 자연스럽게 달라집니다 | [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md), [시각 조작 탐지](../../../03-techniques/analysis/timeline/timestomping.md) |
+| $UsnJrnl·$LogFile | 폴더를 만들거나 이름을 바꾼 때 | [USN 변경 저널](../../filesystem/usnjrnl.md), [NTFS 트랜잭션 로그](../../filesystem/logfile.md) |
+| LNK·점프리스트 | 그 폴더 안의 파일을 연 때 | [바로가기 파일](../lnk.md), [점프리스트](../jump-lists.md) |
+| 최근 문서·열기/저장 대화상자·탐색기 입력 기록 | 같은 폴더를 다른 경로로 연 흔적과 그 시각 | [최근 문서](../recentdocs.md), [열기·저장 대화상자 기록](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md), [탐색기 입력 기록](../typedpaths-wordwheelquery.md) |
+| 섀도 복사본 속 UsrClass.dat | 예전 키 시각과 예전 MRUListEx 순서 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 로그온 기록 | 그 시각에 그 사용자가 로그온해 있었는지 | [로그온·로그오프](../../event-logs/logon-events/index.md), [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) |
 
-여러 기록을 한 줄로 합치는 방법은 [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md) 을 봅니다. 파일을 누가 언제 열었는지 묻는 조사 흐름은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 에 있습니다.
+여러 기록을 한 줄로 합치는 방법은 [여러 아티팩트 합친 타임라인](../../../03-techniques/analysis/timeline/super-timeline.md) 을 봅니다. 파일을 누가 언제 열었는지 묻는 조사 흐름은 [이 파일을 누가 언제 열었나](../../../04-scenarios/activity/file-access.md) 에 있습니다.
 
 ## 실습
 

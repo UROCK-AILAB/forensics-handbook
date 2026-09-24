@@ -1,6 +1,6 @@
 # 암호화 컨테이너 찾기 (Encrypted Container Detection)
 
-> 위치: [암호화 증거 다루기 (Encrypted Evidence)](/03-techniques/analysis/encrypted-evidence/index.md) > 암호화 컨테이너 찾기
+> 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > 암호화 컨테이너 찾기
 
 ## 한 줄 요약
 
@@ -21,12 +21,12 @@ VeraCrypt 볼륨에는 서명이 없습니다.
 
 | 대상 | 단위 | 찾는 단서 | 자세한 내용 |
 |---|---|---|---|
-| BitLocker 볼륨 | 볼륨 | 볼륨 헤더 오프셋 3 의 `-FVE-FS-` | 이 페이지, [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) |
-| BitLocker To Go | 이동식 드라이브의 볼륨 | 겉은 FAT32. FVE 메타데이터 위치 칸 | 이 페이지, [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) |
+| BitLocker 볼륨 | 볼륨 | 볼륨 헤더 오프셋 3 의 `-FVE-FS-` | 이 페이지, [BitLocker 볼륨 구조와 풀기](bitlocker.md) |
+| BitLocker To Go | 이동식 드라이브의 볼륨 | 겉은 FAT32. FVE 메타데이터 위치 칸 | 이 페이지, [BitLocker 볼륨 구조와 풀기](bitlocker.md) |
 | VeraCrypt 볼륨 | 파티션 또는 파일 | 서명 없음. 전체가 무작위처럼 보임 | 이 페이지 |
-| EFS 암호화 파일 | NTFS 파일 | MFT 의 암호화 플래그 | [EFS 암호화 파일](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) |
-| 암호 걸린 문서·압축 파일 | 파일 | 형식 안의 암호 표시 | [암호 걸린 문서·압축 파일](/03-techniques/analysis/encrypted-evidence/password-protected-files.md) |
-| DRM 보안 문서 | 파일 | 형식 안의 DRM 표시 | [DRM 문서 판별](/03-techniques/analysis/encrypted-evidence/enterprise-drm.md) |
+| EFS 암호화 파일 | NTFS 파일 | MFT 의 암호화 플래그 | [EFS 암호화 파일](encrypting-file-system.md) |
+| 암호 걸린 문서·압축 파일 | 파일 | 형식 안의 암호 표시 | [암호 걸린 문서·압축 파일](password-protected-files.md) |
+| DRM 보안 문서 | 파일 | 형식 안의 DRM 표시 | [DRM 문서 판별](enterprise-drm.md) |
 
 ### BitLocker 볼륨의 앞머리
 
@@ -39,7 +39,7 @@ VeraCrypt 볼륨에는 서명이 없습니다.
 - 오프셋 3 의 서명 `-FVE-FS-` 는 Vista 와 Windows 7 이상에서 같습니다.
 - BitLocker To Go 는 오프셋 3 에 `MSWIN4.1` 이 있습니다. 겉으로는 FAT32 볼륨처럼 보입니다.
 - 그래서 BitLocker To Go 는 이 두 칸만으로 가리지 못합니다. 볼륨 헤더의 FVE 메타데이터 위치 칸을 따로 읽어야 합니다.
-- 서명 뒤의 구조(메타데이터 위치 칸, 메타데이터 블록)는 [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) 에 있습니다.
+- 서명 뒤의 구조(메타데이터 위치 칸, 메타데이터 블록)는 [BitLocker 볼륨 구조와 풀기](bitlocker.md) 에 있습니다.
 
 ### VeraCrypt 볼륨의 배치
 
@@ -62,10 +62,10 @@ VeraCrypt 볼륨은 파티션 전체일 수도 있고 파일 하나일 수도 �
 
 1. **켜진 시스템인지 먼저 봅니다.**
    - 전원이 켜져 있고 암호화 볼륨이 열려 있으면, 끄기 전에 할 일을 정합니다.
-   - 잠금이 풀린 상태에서만 할 수 있는 일이 있습니다. [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) 와 [EFS 암호화 파일](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) 에 적었습니다.
-   - 켜진 시스템을 다루는 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
+   - 잠금이 풀린 상태에서만 할 수 있는 일이 있습니다. [BitLocker 볼륨 구조와 풀기](bitlocker.md) 와 [EFS 암호화 파일](encrypting-file-system.md) 에 적었습니다.
+   - 켜진 시스템을 다루는 순서는 [라이브 응답](../../process-acquisition/live-response/index.md) 을 봅니다.
 2. **파티션을 모두 셉니다.**
-   - 파티션 표를 읽어 파티션마다 시작 위치와 크기를 적습니다. 읽는 법은 [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md) 에 있습니다.
+   - 파티션 표를 읽어 파티션마다 시작 위치와 크기를 적습니다. 읽는 법은 [파티션 구조](../../../01-foundations/disk-volume/mbr-gpt.md) 에 있습니다.
    - 파일 시스템으로 읽히지 않는 파티션을 따로 표시합니다.
 3. **볼륨마다 앞머리 11바이트를 봅니다.**
    - 오프셋 3 의 8바이트가 `-FVE-FS-` 면 BitLocker 볼륨입니다.
@@ -73,7 +73,7 @@ VeraCrypt 볼륨은 파티션 전체일 수도 있고 파일 하나일 수도 �
 4. **FAT32 로 보이는 이동식 드라이브를 다시 봅니다.**
    - 오프셋 3 이 `MSWIN4.1` 이면 BitLocker To Go 일 수 있습니다.
    - 볼륨 헤더의 FVE 메타데이터 위치 칸을 읽고, 그 자리에 FVE 메타데이터 블록이 있는지 확인합니다.
-   - 칸의 오프셋과 블록의 서명은 [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) 에 있습니다. FAT32 부트 섹터 자체는 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) 를 봅니다.
+   - 칸의 오프셋과 블록의 서명은 [BitLocker 볼륨 구조와 풀기](bitlocker.md) 에 있습니다. FAT32 부트 섹터 자체는 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md) 를 봅니다.
 5. **서명도 파일 시스템도 없는 영역을 VeraCrypt 후보로 적습니다.**
    - 읽히지 않는 파티션과, 파일 시스템 안의 알아볼 수 없는 큰 파일이 대상입니다.
    - VeraCrypt 명세가 말하는 모습은 "서명이 없고 무작위 데이터로만 보인다" 는 것입니다. 후보를 고르는 단서도 이것뿐입니다(명세에서 끌어낸 판단).
@@ -81,15 +81,15 @@ VeraCrypt 볼륨은 파티션 전체일 수도 있고 파일 하나일 수도 �
 6. **알려진 형식을 먼저 걸러 냅니다.**
    - 후보 가운데 알려진 파일 서명이 있는 파일은 그 형식부터 확인합니다.
    - VeraCrypt 볼륨의 첫 64바이트는 알아볼 문자열이 없는 솔트이기 때문입니다.
-   - 서명으로 형식을 가리는 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다.
+   - 서명으로 형식을 가리는 방법은 [파일 내용 검색](../content-search/index.md) 에 있습니다.
 7. **파일 하나에 걸린 암호를 모읍니다.**
-   - NTFS 볼륨이면 MFT 에서 암호화 플래그가 켜진 파일을 모읍니다. 플래그 값과 자리는 [EFS 암호화 파일](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) 에 있습니다.
-   - 문서·압축 파일은 [암호 걸린 문서·압축 파일](/03-techniques/analysis/encrypted-evidence/password-protected-files.md), DRM 문서는 [DRM 문서 판별](/03-techniques/analysis/encrypted-evidence/enterprise-drm.md) 의 표시로 가립니다.
+   - NTFS 볼륨이면 MFT 에서 암호화 플래그가 켜진 파일을 모읍니다. 플래그 값과 자리는 [EFS 암호화 파일](encrypting-file-system.md) 에 있습니다.
+   - 문서·압축 파일은 [암호 걸린 문서·압축 파일](password-protected-files.md), DRM 문서는 [DRM 문서 판별](enterprise-drm.md) 의 표시로 가립니다.
    - 확장자와 실제 형식이 어긋나는 파일도 이 단계에서 걸립니다. 암호 걸린 오피스 문서가 그런 예입니다.
 8. **암호화 프로그램을 쓴 흔적을 찾습니다.**
    - 서명이 없는 컨테이너는 파일만 보고 확정하기 어렵습니다.
-   - 암호화 프로그램을 설치하거나 실행한 흔적이 있으면 후보를 좁힐 수 있습니다. [설치 프로그램](/02-artifacts/system-account/uninstall.md) 과 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 를 봅니다.
-   - 드라이브 문자가 붙었던 기록을 볼 때는 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) 을 함께 봅니다.
+   - 암호화 프로그램을 설치하거나 실행한 흔적이 있으면 후보를 좁힐 수 있습니다. [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) 를 봅니다.
+   - 드라이브 문자가 붙었던 기록을 볼 때는 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 을 함께 봅니다.
 9. **찾은 것을 적습니다.**
    - 위치(파티션 번호와 시작 오프셋, 또는 파일 경로)를 적습니다.
    - 판단 근거(서명, 플래그, 성질만 보고 한 추정)를 적습니다.
@@ -151,7 +151,7 @@ VeraCrypt 볼륨 앞부분 (명세로 만든 예시)
 - **서명이 맞은 BitLocker 볼륨**: "이 볼륨은 BitLocker 형식이다" 까지는 확정입니다. 누가 언제 BitLocker 를 켰는지는 서명이 말하지 않습니다.
 - **VeraCrypt 후보**: 복호에 성공하기 전에는 "VeraCrypt 볼륨이다" 라고 쓰지 않습니다. 복호한 헤더에서 `VERA` 가 보이면 확정합니다.
 - **프로그램 흔적**: 암호화 프로그램을 실행한 기록은 "이 PC 에서 그 프로그램을 실행했다" 를 뒷받침합니다. 특정 후보 파일을 그 프로그램으로 만들었다는 증명은 아닙니다.
-- **복호에 필요한 것**: 비밀번호를 대입해야 하면 [비밀번호 복구](/03-techniques/analysis/encrypted-evidence/password-recovery.md) 로 넘어갑니다.
+- **복호에 필요한 것**: 비밀번호를 대입해야 하면 [비밀번호 복구](password-recovery.md) 로 넘어갑니다.
 
 보고서 문장 예:
 

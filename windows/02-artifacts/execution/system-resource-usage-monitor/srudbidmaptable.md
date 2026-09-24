@@ -1,6 +1,6 @@
 # 구조와 ID 매핑 (SruDbIdMapTable)
 
-> 위치: [SRUM (System Resource Usage Monitor)](/02-artifacts/execution/system-resource-usage-monitor/index.md) > 구조와 ID 매핑
+> 위치: [SRUM (System Resource Usage Monitor)](index.md) > 구조와 ID 매핑
 
 ## 한 줄 요약
 
@@ -26,7 +26,7 @@ SRUM 데이터베이스(SRUDB.dat)의 기록 표에는 프로그램 경로와 �
 | 항목 | 위치·값 |
 |---|---|
 | 데이터베이스 파일 | `C:\Windows\System32\sru\SRUDB.dat` |
-| 파일 형식 | ESE 데이터베이스. 형식은 [ESE 데이터베이스 (Extensible Storage Engine)](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다 |
+| 파일 형식 | ESE 데이터베이스. 형식은 [ESE 데이터베이스 (Extensible Storage Engine)](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다 |
 | 트랜잭션 로그 | 같은 `sru` 폴더. 공개 파서 안내문의 복구 명령(`esentutl /r sru`)이 로그 기본 이름으로 `sru` 를 씁니다 |
 | 제공자 목록 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SRUM\Extensions` 아래의 GUID 키 |
 
@@ -34,10 +34,10 @@ libyal 명세가 적은 제공자와 표는 아래와 같습니다.
 
 | 표 이름 (GUID) | 제공자 DLL | 명세의 이름 | 이 위키 페이지 |
 |---|---|---|---|
-| `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` | appsruprov.dll | Application Resource Usage Provider | [앱별 자원 사용](/02-artifacts/execution/system-resource-usage-monitor/application-resource-usage.md) |
-| `{973F5D5C-1D90-4944-BE8E-24B94231A174}` | nduprov.dll | Network Data Usage Monitor | [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) |
-| `{DD6636C4-8929-4683-974E-22C046A43763}` | ncuprov.dll | Network Connectivity Usage Monitor | [네트워크 연결 기록](/02-artifacts/execution/system-resource-usage-monitor/network-connectivity.md) |
-| `{FEE4E14F-02A9-4550-B5CE-5FA2DA202E37}`, 이름 끝에 `LT` 가 붙은 같은 GUID 표 | energyprov.dll | Energy Usage Provider | [전원·배터리 사용](/02-artifacts/execution/system-resource-usage-monitor/energy-usage.md) |
+| `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` | appsruprov.dll | Application Resource Usage Provider | [앱별 자원 사용](application-resource-usage.md) |
+| `{973F5D5C-1D90-4944-BE8E-24B94231A174}` | nduprov.dll | Network Data Usage Monitor | [네트워크 사용량](network-data-usage.md) |
+| `{DD6636C4-8929-4683-974E-22C046A43763}` | ncuprov.dll | Network Connectivity Usage Monitor | [네트워크 연결 기록](network-connectivity.md) |
+| `{FEE4E14F-02A9-4550-B5CE-5FA2DA202E37}`, 이름 끝에 `LT` 가 붙은 같은 GUID 표 | energyprov.dll | Energy Usage Provider | [전원·배터리 사용](energy-usage.md) |
 | `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` | wpnsruprov.dll | Push Notifications (WPN) Provider | — |
 | `{DA73FB89-2BEA-4DDC-86B8-6E048C6DA477}` | eeprov.dll | 뜻 모름 (Energy Estimator 로 추정) | — |
 | `{5C8CF1C7-7257-4F13-B223-970EF5939312}` | eeprov.dll | 뜻 모름 (Energy Estimator 로 추정) | — |
@@ -63,7 +63,7 @@ libyal 명세가 적은 제공자와 표는 아래와 같습니다.
 
 | 표 | 하는 일 |
 |---|---|
-| `MSysObjects` 처럼 `MSys` 로 시작하는 표 | ESE 가 스스로 쓰는 카탈로그 표입니다. [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다 |
+| `MSysObjects` 처럼 `MSys` 로 시작하는 표 | ESE 가 스스로 쓰는 카탈로그 표입니다. [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다 |
 | `SruDbIdMapTable` | 번호와 이름의 짝을 담습니다 |
 | `SruDbCheckpointTable` | 명세에는 열 이름(ProviderId·CheckpointId·NextIncId·SeqNumber·RecordSet)만 있고 뜻은 적혀 있지 않습니다 |
 | `{GUID}` 표 | 제공자별 기록입니다 |
@@ -78,8 +78,8 @@ libyal 명세가 적은 제공자와 표는 아래와 같습니다.
 | 256 | IdBlob | 긴 이진 데이터 (Large Binary) | 이름 본문. 내용은 IdType 에 따라 다릅니다 |
 
 - 이 표에는 시각 열이 없습니다.
-- IdBlob 은 긴 이진 형식입니다. 이 형식의 값은 크면 레코드 밖의 긴 값 (Long Value) 으로 따로 저장될 수 있습니다. 저장 방식은 [긴 값과 압축 열](/01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md) 에 있습니다.
-- 열 번호가 고정·가변·태그 열 가운데 무엇인지 가리는 규칙은 [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
+- IdBlob 은 긴 이진 형식입니다. 이 형식의 값은 크면 레코드 밖의 긴 값 (Long Value) 으로 따로 저장될 수 있습니다. 저장 방식은 [긴 값과 압축 열](../../../01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md) 에 있습니다.
+- 열 번호가 고정·가변·태그 열 가운데 무엇인지 가리는 규칙은 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
 
 ### IdType 값
 
@@ -95,10 +95,10 @@ libyal 명세가 적은 제공자와 표는 아래와 같습니다.
 - IdType 0 이 실행 파일 경로라는 점은 Autopsy 의 SRUM 모듈 코드에서도 보입니다.
 - 이 코드는 IdType 0 행에서 `\Device\HarddiskVolume` 앞머리를 떼어 프로그램 이름을 만듭니다.
 - 같은 코드는 `!!` 로 시작하는 IdType 0 행을 따로 뺍니다.
-- 문자열은 UTF-16LE 입니다. 공개 파서들은 끝에 붙은 0 을 잘라 냅니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
+- 문자열은 UTF-16LE 입니다. 공개 파서들은 끝에 붙은 0 을 잘라 냅니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 - IdType 3 의 IdBlob 은 Windows 의 이진 SID 입니다.
 - 이진 SID 는 개정 번호 1바이트, 하위 권한 개수 1바이트, 식별 기관 6바이트, 하위 권한 4바이트씩으로 이어집니다.
-- 공개 파서는 식별 기관을 큰 엔디언으로, 하위 권한을 리틀 엔디언으로 읽습니다. 자세한 구조는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+- 공개 파서는 식별 기관을 큰 엔디언으로, 하위 권한을 리틀 엔디언으로 읽습니다. 자세한 구조는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 ### `!!` 로 시작하는 IdBlob
 
@@ -128,8 +128,8 @@ srum-dump 문서에는 아래 예가 실려 있습니다.
 - SrumECmd 라이브러리는 IdType 3 행과 나머지 행을 두 사전에 나눠 넣습니다.
 - srum-dump 문서의 예에서는 IdIndex 3 이 프로그램이고 4 가 SID(S-1-5-19) 입니다.
 - 두 방식이 같은 결과를 내려면 IdIndex 가 종류와 상관없이 겹치지 않아야 합니다. 명세에는 이 점이 적혀 있지 않습니다.
-- SID 를 계정과 잇는 일은 이 표 밖에서 합니다. 같은 PC 의 SOFTWARE 하이브 `Microsoft\Windows NT\CurrentVersion\ProfileList\<SID>` 의 ProfileImagePath 를 봅니다. 자세한 내용은 [사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md) 에 있습니다.
-- 네트워크 표의 L2ProfileId 는 이 표로 풀지 않습니다. 공개 파서는 SOFTWARE 하이브 `Microsoft\WlanSvc\Interfaces\…\Profiles` 의 ProfileIndex 로 풉니다. [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) 에서 다룹니다.
+- SID 를 계정과 잇는 일은 이 표 밖에서 합니다. 같은 PC 의 SOFTWARE 하이브 `Microsoft\Windows NT\CurrentVersion\ProfileList\<SID>` 의 ProfileImagePath 를 봅니다. 자세한 내용은 [사용자 프로필 목록 (ProfileList)](../../system-account/profilelist.md) 에 있습니다.
+- 네트워크 표의 L2ProfileId 는 이 표로 풀지 않습니다. 공개 파서는 SOFTWARE 하이브 `Microsoft\WlanSvc\Interfaces\…\Profiles` 의 ProfileIndex 로 풉니다. [네트워크 사용량](network-data-usage.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -158,18 +158,18 @@ srum-dump 문서에는 아래 예가 실려 있습니다.
 - 시각은 기록 표에 있습니다.
 - 기록 표의 TimeStamp 는 OLE 자동화 날짜 (OLE Automation Date) 입니다. srum-dump 는 이 값을 UTC 로 봅니다.
 - 네트워크 연결 기록 표의 ConnectStartTime 은 FILETIME 입니다.
-- 두 형식을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
-- TimeStamp 가 실제 사용 시각과 어떻게 어긋나는지는 [SRUM 해석 함정](/02-artifacts/execution/system-resource-usage-monitor/1.md) 에서 다룹니다.
+- 두 형식을 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- TimeStamp 가 실제 사용 시각과 어떻게 어긋나는지는 [SRUM 해석 함정](1.md) 에서 다룹니다.
 - `!!` 행 안의 시각 문자열은 뜻이 확인되지 않았습니다. 타임라인에 넣을 때는 실행 시각과 섞지 않고 따로 표시합니다.
 
 ## 함정과 한계
 
 1. **IdType 0·1·2 의 이름은 명세에 없습니다.** 파서마다 부르는 이름이 다를 수 있습니다. 보고서에는 IdType 숫자를 함께 적습니다.
-2. **매핑을 못 찾은 번호를 도구마다 다르게 다룹니다.** srum-dump 는 빈칸으로 둡니다. SrumECmd 라이브러리(`Srum.cs`, 2022년 11월 코드)는 번호를 확인하지 않고 사전에서 바로 꺼냅니다. 번호가 없으면 예외가 납니다. 그러면 그 표의 나머지 행은 처리하지 않고 경고만 남깁니다. 결과 행 수와 경고 기록을 확인하고, 다른 도구와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+2. **매핑을 못 찾은 번호를 도구마다 다르게 다룹니다.** srum-dump 는 빈칸으로 둡니다. SrumECmd 라이브러리(`Srum.cs`, 2022년 11월 코드)는 번호를 확인하지 않고 사전에서 바로 꺼냅니다. 번호가 없으면 예외가 납니다. 그러면 그 표의 나머지 행은 처리하지 않고 경고만 남깁니다. 결과 행 수와 경고 기록을 확인하고, 다른 도구와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 3. **모르는 IdType 을 다루는 방식도 다릅니다.** plaso 는 0~3 밖의 값을 만나면 경고를 냅니다. SrumECmd 라이브러리는 0~3 밖의 값을 알리지 않고 건너뜁니다. 매핑 표의 IdType 별 행 수를 직접 세어 둡니다.
 4. **종류가 맞는지 확인합니다.** AppId 를 풀었는데 SID 가 나오거나, UserId 를 풀었는데 경로가 나오면 매핑을 잘못 읽은 것입니다.
 5. **볼륨 번호는 드라이브 문자가 아닙니다.** `HarddiskVolume3` 은 Windows 가 볼륨 장치에 붙인 번호입니다. 이 표만으로는 이 번호가 어느 드라이브 문자인지 정할 수 없습니다. 드라이브 문자로 경로를 적는 다른 아티팩트와 맞춰 봅니다. 번호가 시스템 볼륨과 다르면 다른 볼륨에서 실행한 흔적일 수 있습니다. 경로를 비교할 때는 대소문자를 무시합니다.
-6. **비정상 종료 상태가 흔합니다.** 압수 이미지에서 꺼낸 SRUDB.dat 는 대부분 비정상 종료 (Dirty Shutdown) 상태였습니다. 이미지 안의 로그 사슬이 끊겨 로그로 복구하지 못한 경우도 있었습니다(관찰). 복구하면 파일이 바뀌므로 항상 사본에서 작업합니다. 자세한 내용은 [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 에 있습니다.
+6. **비정상 종료 상태가 흔합니다.** 압수 이미지에서 꺼낸 SRUDB.dat 는 대부분 비정상 종료 (Dirty Shutdown) 상태였습니다. 이미지 안의 로그 사슬이 끊겨 로그로 복구하지 못한 경우도 있었습니다(관찰). 복구하면 파일이 바뀌므로 항상 사본에서 작업합니다. 자세한 내용은 [트랜잭션 로그와 비정상 종료 상태](../../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 에 있습니다.
 7. **손상된 DB 는 읽는 방식마다 결과가 다릅니다.** 같은 손상 SRUDB.dat 의 앱 사용량 표에서 도구마다 행 수가 1,612 와 1,742 로 달랐습니다(관찰). B-트리를 끝까지 못 따라간 쪽이 적게 냈습니다. 매핑 표를 끝까지 못 읽으면 풀리지 않는 번호가 생깁니다. 두 가지 이상 방식으로 열어 매핑 표 행 수부터 비교합니다.
 8. **긴 값 경계를 잘못 잡으면 경로가 조용히 망가집니다.** ESE 의 긴 값은 여러 조각으로 나뉘어 저장됩니다. 조각 경계를 잘못 계산한 파서가 오류 없이 크기가 다른 값을 낸 사례가 있습니다(관찰, ESE 일반). 경로 끝이 이상하거나 UTF-16 으로 풀리지 않는 바이트가 섞이면 다른 도구로 다시 읽습니다.
 9. **SID 를 계정 이름으로 바꾸려면 같은 PC 의 SOFTWARE 하이브가 필요합니다.** ProfileImagePath 의 폴더 이름은 계정 이름과 다를 수 있습니다. 계정 이름을 바꿔도 프로필 폴더 이름은 그대로이기 때문입니다. 프로필을 지웠으면 ProfileList 에 그 SID 키가 없습니다. 이때는 이름을 짐작하지 말고 SID 그대로 적습니다.
@@ -179,7 +179,7 @@ srum-dump 문서에는 아래 예가 실려 있습니다.
 ### 헥스로 한 번
 
 아래 바이트는 **명세로 만든 예시**입니다. 실제 검체에서 나온 값이 아닙니다.
-ESE 페이지에서 레코드와 열 값을 꺼내는 과정은 [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
+ESE 페이지에서 레코드와 열 값을 꺼내는 과정은 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
 여기서는 꺼낸 열 값부터 시작합니다.
 
 **1단계. 기록 표 한 행에서 AppId 와 UserId 를 읽습니다.**
@@ -252,13 +252,13 @@ ESE 를 직접 여는 도구와 SRUM 전용 도구를 하나씩 골라 아래를
 
 ## 교차 검증
 
-- [사용자 프로필 목록 (ProfileList)](/02-artifacts/system-account/profilelist.md): IdType 3 의 SID 를 프로필 폴더와 잇습니다.
-- [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md): 로컬 계정 SID 의 RID 와 계정 이름을 확인합니다.
-- [BAM·DAM (Background Activity Moderator)](/02-artifacts/execution/background-activity-moderator.md): 같은 `\Device\HarddiskVolume번호\` 꼴 경로로 실행 파일을 적습니다. 경로를 그대로 맞춰 볼 수 있습니다.
-- [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md): 드라이브 문자 경로와 SHA1 이 있습니다. 볼륨 번호를 드라이브 문자와 맞추고, 파일이 같은지 확인할 때 씁니다.
-- [Wi-Fi 프로필 (WLAN Profiles)](/02-artifacts/network/wlan-profiles.md): 네트워크 표의 L2ProfileId 를 푸는 데 씁니다.
-- [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md): 이진 SID 해석입니다.
-- [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md): 파서마다 결과가 다를 때 따릅니다.
+- [사용자 프로필 목록 (ProfileList)](../../system-account/profilelist.md): IdType 3 의 SID 를 프로필 폴더와 잇습니다.
+- [사용자 계정 (SAM)](../../system-account/sam.md): 로컬 계정 SID 의 RID 와 계정 이름을 확인합니다.
+- [BAM·DAM (Background Activity Moderator)](../background-activity-moderator.md): 같은 `\Device\HarddiskVolume번호\` 꼴 경로로 실행 파일을 적습니다. 경로를 그대로 맞춰 볼 수 있습니다.
+- [실행 파일 항목 (InventoryApplicationFile)](../amcache-hve/inventoryapplicationfile.md): 드라이브 문자 경로와 SHA1 이 있습니다. 볼륨 번호를 드라이브 문자와 맞추고, 파일이 같은지 확인할 때 씁니다.
+- [Wi-Fi 프로필 (WLAN Profiles)](../../network/wlan-profiles.md): 네트워크 표의 L2ProfileId 를 푸는 데 씁니다.
+- [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md): 이진 SID 해석입니다.
+- [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md): 파서마다 결과가 다를 때 따릅니다.
 
 ## 실습
 

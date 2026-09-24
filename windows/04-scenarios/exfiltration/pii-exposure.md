@@ -1,6 +1,6 @@
 # 개인정보 파일이 어디 있고 밖으로 나갔나 (PII Exposure)
 
-개인정보가 든 파일을 두고 "어디에 있었고, 밖으로 나갔나" 를 묻는 조사의 순서를 다룹니다. 반출 경로마다 남는 흔적은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다. 파일 속 개인정보를 찾는 규칙은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다. 이 페이지는 두 쪽을 잇습니다. 그리고 분석 결과를 개인정보 유출 통지·신고에 들어갈 사실로 정리하는 법을 다룹니다.
+개인정보가 든 파일을 두고 "어디에 있었고, 밖으로 나갔나" 를 묻는 조사의 순서를 다룹니다. 반출 경로마다 남는 흔적은 [자료를 밖으로 빼돌렸나](data-exfiltration/index.md) 에 있습니다. 파일 속 개인정보를 찾는 규칙은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에 있습니다. 이 페이지는 두 쪽을 잇습니다. 그리고 분석 결과를 개인정보 유출 통지·신고에 들어갈 사실로 정리하는 법을 다룹니다.
 
 - 법령은 「개인정보 보호법」 [시행 2026. 9. 11.] 법률 제21445호와 「개인정보 보호법 시행령」 [시행 2026. 9. 11.] 대통령령 제36671호를 기준으로 합니다[1][2][3].
 - 조문은 민간 법령 사이트(casenote.kr)에서 읽었습니다.
@@ -74,7 +74,7 @@
 | | 운전면허번호 (도로교통법 제80조) |
 | | 외국인등록번호 (출입국관리법 제31조제5항) |
 
-이 두 목록은 신고 기준인 시행령 제40조 제1항 2호와 이어집니다[2]. 파일에 이런 항목이 있는지는 사람 수와 따로 확인합니다. 번호 형식과 검증 규칙으로 찾는 법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다.
+이 두 목록은 신고 기준인 시행령 제40조 제1항 2호와 이어집니다[2]. 파일에 이런 항목이 있는지는 사람 수와 따로 확인합니다. 번호 형식과 검증 규칙으로 찾는 법은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에 있습니다.
 
 ## 통지·신고 기준과 기록에서 확인할 것
 
@@ -120,12 +120,12 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | 아티팩트가 남는 조건이 버전마다 다릅니다. [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 적어 둡니다. |
-| 시간대 | PC 기록과 서버 접속기록의 시각을 맞추려면 시간대부터 정합니다. `Bias` 값은 분 단위이고 부호 있는 32비트로 읽습니다. UTC+9 는 -540 입니다. 도구가 부호 없는 10진수로 보여 주면 원시 바이트로 다시 봅니다(현장 관찰). [시간대 설정](/02-artifacts/system-account/time-zone.md) · [타임라인 작성](/03-techniques/analysis/timeline/index.md) |
-| 사용자 | 열람 흔적은 사용자 프로필마다 따로 남습니다. [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 SID 와 프로필 폴더를 짝지어 둡니다. |
-| 수집 범위 | PC 디스크 이미지와 개인정보처리시스템 접속기록을 함께 모읍니다. 메일·클라우드 서버 쪽 기록이 있으면 그것도 모읍니다. [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) |
-| 작업 사본 | SRUDB.dat·Windows.edb 같은 ESE DB 는 원본을 열면 바뀔 수 있습니다. 항상 사본에서 작업합니다(현장 관찰). [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) |
-| 감사 정책 | 파일 접근 이벤트는 감사를 켜 둔 PC 에서만 남습니다. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 먼저 봅니다. |
+| Windows 버전 | 아티팩트가 남는 조건이 버전마다 다릅니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 적어 둡니다. |
+| 시간대 | PC 기록과 서버 접속기록의 시각을 맞추려면 시간대부터 정합니다. `Bias` 값은 분 단위이고 부호 있는 32비트로 읽습니다. UTC+9 는 -540 입니다. 도구가 부호 없는 10진수로 보여 주면 원시 바이트로 다시 봅니다(현장 관찰). [시간대 설정](../../02-artifacts/system-account/time-zone.md) · [타임라인 작성](../../03-techniques/analysis/timeline/index.md) |
+| 사용자 | 열람 흔적은 사용자 프로필마다 따로 남습니다. [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 으로 SID 와 프로필 폴더를 짝지어 둡니다. |
+| 수집 범위 | PC 디스크 이미지와 개인정보처리시스템 접속기록을 함께 모읍니다. 메일·클라우드 서버 쪽 기록이 있으면 그것도 모읍니다. [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md) |
+| 작업 사본 | SRUDB.dat·Windows.edb 같은 ESE DB 는 원본을 열면 바뀔 수 있습니다. 항상 사본에서 작업합니다(현장 관찰). [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) |
+| 감사 정책 | 파일 접근 이벤트는 감사를 켜 둔 PC 에서만 남습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 먼저 봅니다. |
 
 ### 접속기록 — PC 이미지 밖에 있는 증거
 
@@ -141,16 +141,16 @@
 
 | 순서 | 아티팩트·기법 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 파일 내용 검색 (형식 식별·압축 펼치기·본문 추출·글자 인식·개인정보 탐지) | 개인정보 후보가 든 파일과 후보의 신뢰도 | [파일 내용 검색](/03-techniques/analysis/content-search/index.md) |
-| 1 | 해시셋 대조와 유사 해시 | 같은 파일의 사본, 이름만 바꾸거나 조금 고친 사본 | [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) |
-| 1 | 윈도 검색 색인 | 색인된 파일의 경로와 자동 요약 글 | [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) |
-| 1 | $MFT 와 지운 데이터 | 지금 있는 파일과 지운 파일의 이름·위치 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) |
-| 1 | 암호 걸린 파일 | 열리지 않아 검색에서 빠진 파일 | [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) |
-| 2 | 다운로드 출처 표시·문서 메타데이터·오피스 사용 흔적 | 파일을 내려받은 곳, 문서를 만든 사람과 마지막으로 저장한 사람, 오피스에서 다룬 기록 | [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) · [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) · [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) · [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) |
-| 3 | 바로가기 파일·점프리스트·최근 문서·셸백·파일 접근 감사 | 파일을 다룬 사용자 프로필과 시각의 단서 | [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) |
-| 4 | USB·휴대폰·메일·메신저·클라우드·웹 업로드·인쇄·압축 | 경로마다 남는 반출 흔적 | [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) |
-| 4 | SRUM 네트워크 사용량 | 시간대별로 앱이 보내고 받은 양 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 5 | 휴지통·USN 변경 저널·섀도 복사본 | 지운 시각과 지난 시점의 파일 | [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) · [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 1 | 파일 내용 검색 (형식 식별·압축 펼치기·본문 추출·글자 인식·개인정보 탐지) | 개인정보 후보가 든 파일과 후보의 신뢰도 | [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) |
+| 1 | 해시셋 대조와 유사 해시 | 같은 파일의 사본, 이름만 바꾸거나 조금 고친 사본 | [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) |
+| 1 | 윈도 검색 색인 | 색인된 파일의 경로와 자동 요약 글 | [윈도 검색 색인 DB](../../02-artifacts/file-folder-usage/windows-search/index.md) |
+| 1 | $MFT 와 지운 데이터 | 지금 있는 파일과 지운 파일의 이름·위치 | [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) · [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) |
+| 1 | 암호 걸린 파일 | 열리지 않아 검색에서 빠진 파일 | [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) |
+| 2 | 다운로드 출처 표시·문서 메타데이터·오피스 사용 흔적 | 파일을 내려받은 곳, 문서를 만든 사람과 마지막으로 저장한 사람, 오피스에서 다룬 기록 | [이 파일은 어디서 왔나](../activity/file-origin.md) · [다운로드 출처 표시](../../02-artifacts/filesystem/zone-identifier.md) · [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) · [오피스 사용 흔적](../../02-artifacts/file-folder-usage/microsoft-office/index.md) |
+| 3 | 바로가기 파일·점프리스트·최근 문서·셸백·파일 접근 감사 | 파일을 다룬 사용자 프로필과 시각의 단서 | [이 파일을 누가 언제 열었나](../activity/file-access.md) |
+| 4 | USB·휴대폰·메일·메신저·클라우드·웹 업로드·인쇄·압축 | 경로마다 남는 반출 흔적 | [자료를 밖으로 빼돌렸나](data-exfiltration/index.md) |
+| 4 | SRUM 네트워크 사용량 | 시간대별로 앱이 보내고 받은 양 | [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) |
+| 5 | 휴지통·USN 변경 저널·섀도 복사본 | 지운 시각과 지난 시점의 파일 | [지운 파일의 흔적 찾기](../activity/deleted-file-traces.md) · [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
 1 단계에서 파일 목록과 항목 목록을 먼저 만듭니다. 2~5 단계는 그 파일 목록을 기준으로 봅니다.
 
@@ -161,35 +161,35 @@
    - 파일 이름으로 찾을 때는 MFT 의 확장 레코드를 함께 봅니다.
    - MFT 레코드가 `$ATTRIBUTE_LIST` 로 확장 레코드를 쓰면, Win32 긴 이름이 확장 레코드에만 있을 수 있습니다(현장 관찰).
    - 이때 기본 레코드만 읽으면 8.3 짧은 이름만 보입니다(현장 관찰).
-   - 그래서 "고객명단_전체.xlsx" 같은 긴 이름으로 찾으면 놓칠 수 있습니다. 레코드 구조는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에 있습니다.
-3. **개인정보를 탐지합니다.** 압축 파일, OOXML(ZIP), HWP 안의 글은 원시 바이트 검색으로 잘 보이지 않습니다. 펼치고 본문을 뽑은 뒤 찾습니다. 신분증 사본 같은 스캔 이미지는 글자 인식이 필요합니다. 순서와 규칙은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 을 따릅니다.
+   - 그래서 "고객명단_전체.xlsx" 같은 긴 이름으로 찾으면 놓칠 수 있습니다. 레코드 구조는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 에 있습니다.
+3. **개인정보를 탐지합니다.** 압축 파일, OOXML(ZIP), HWP 안의 글은 원시 바이트 검색으로 잘 보이지 않습니다. 펼치고 본문을 뽑은 뒤 찾습니다. 신분증 사본 같은 스캔 이미지는 글자 인식이 필요합니다. 순서와 규칙은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 을 따릅니다.
 4. **적중을 거릅니다.** 형식만 맞은 적중은 후보입니다. 검증 규칙과 주변 키워드로 걸러 신뢰도를 나눕니다.
 5. **항목 목록을 만듭니다.** 파일마다 어떤 항목이 들었는지 적습니다. 민감정보와 고유식별정보는 따로 표시합니다.
 6. **정보주체 수를 셉니다.** 같은 사람을 어떤 값으로 가려낼지 먼저 정합니다. 그 기준으로 중복을 빼고 셉니다. 기준은 보고서에 함께 적습니다.
 7. **사본을 찾습니다.** 해시셋과 유사 해시로 이름만 바꾼 사본과 조금 고친 사본을 찾습니다. 윈도 검색 색인에 남은 경로와 자동 요약 글도 봅니다. 지운 사본은 삭제 데이터 복구와 섀도 복사본으로 찾습니다.
-8. **출처와 열람을 봅니다.** 파일이 어디서 왔는지는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 따릅니다. 누가 언제 열었는지는 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 를 따릅니다. 그 계정을 쓴 사람이 누구인지는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 따로 따집니다.
-9. **반출 경로를 봅니다.** 경로마다의 흔적은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 를 따릅니다. SRUM 네트워크 사용량은 그 시간대에 그 앱이 보낸 양까지만 알려 줍니다. 어느 곳으로 무엇을 보냈는지는 SRUM 에 없습니다.
-10. **안인지 밖인지 가립니다.** 원격 접속이나 악성코드 흔적이 보이면 침해 사고 시나리오로 넘어갑니다. [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) · [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) · [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) 을 봅니다.
-11. **지우거나 고친 흔적을 봅니다.** [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md), [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
+8. **출처와 열람을 봅니다.** 파일이 어디서 왔는지는 [이 파일은 어디서 왔나](../activity/file-origin.md) 를 따릅니다. 누가 언제 열었는지는 [이 파일을 누가 언제 열었나](../activity/file-access.md) 를 따릅니다. 그 계정을 쓴 사람이 누구인지는 [그 시각에 PC 를 쓴 사람이 누구인가](../activity/user-attribution.md) 에서 따로 따집니다.
+9. **반출 경로를 봅니다.** 경로마다의 흔적은 [자료를 밖으로 빼돌렸나](data-exfiltration/index.md) 를 따릅니다. SRUM 네트워크 사용량은 그 시간대에 그 앱이 보낸 양까지만 알려 줍니다. 어느 곳으로 무엇을 보냈는지는 SRUM 에 없습니다.
+10. **안인지 밖인지 가립니다.** 원격 접속이나 악성코드 흔적이 보이면 침해 사고 시나리오로 넘어갑니다. [원격 데스크톱 침입 확인](../incident/rdp-intrusion.md) · [악성코드는 어디서 들어왔나](../incident/initial-access.md) · [계정 탈취와 측면 이동](../incident/credential-theft-lateral-movement/index.md) 을 봅니다.
+11. **지우거나 고친 흔적을 봅니다.** [휴지통](../../02-artifacts/file-folder-usage/recycle-bin.md), [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md), [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
     - `$UsnJrnl:$J` 는 희소 스트림입니다(현장 관찰).
     - 희소 스트림은 뽑는 방식에 따라 크기와 해시가 달라집니다(현장 관찰).
     - 구멍을 건너뛰고 뽑으면 내용이 앞으로 밀립니다(현장 관찰).
     - 그래서 어떤 방식으로 뽑았는지 기록해 둡니다.
-    - 기록을 지우려 한 흔적은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 봅니다.
+    - 기록을 지우려 한 흔적은 [증거를 없애려 했나](../activity/anti-forensics/index.md) 에서 봅니다.
 12. **단계별로 보고합니다.** 확인한 사실과 확인하지 못한 것을 나눠 먼저 보고합니다. 추가로 확인한 것은 이어서 보고합니다.
 
 ## 흔한 오판
 
 | 오판 | 바로잡는 법 |
 |---|---|
-| 탐지 도구가 적중을 냈으니 개인정보 파일이라고 봅니다. | 13자리 숫자가 모두 주민등록번호는 아닙니다. 검증 규칙과 주변 키워드로 거릅니다. [파일 내용 검색](/03-techniques/analysis/content-search/index.md) |
+| 탐지 도구가 적중을 냈으니 개인정보 파일이라고 봅니다. | 13자리 숫자가 모두 주민등록번호는 아닙니다. 검증 규칙과 주변 키워드로 거릅니다. [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) |
 | 이름·주민등록번호 칸이 없으니 개인정보가 아니라고 봅니다. | 법은 다른 정보와 쉽게 결합해 알아볼 수 있는 정보도 개인정보로 봅니다[3]. 가명정보도 개인정보에 듭니다[3]. |
 | 파일 행 수를 정보주체 수로 적습니다. | 같은 사람이 여러 행, 여러 파일에 나올 수 있습니다. 중복을 빼고 셉니다. 1천명 기준[2]과 바로 이어지는 숫자입니다. |
 | 파일이 PC 에 있으니 밖으로 나갔다고 봅니다. | "있다" 와 "나갔다" 는 다른 질문입니다. 반출 경로의 기록이 따로 있어야 합니다. |
 | 법의 "유출등" 과 밖으로 보낸 일을 한 낱말로 섞어 씁니다. | 법의 "유출등" 에는 분실·도난·위조·변조·훼손도 듭니다[3]. 보고서에는 어느 쪽인지 나눠 적습니다. |
-| 색인에 경로가 있으니 지금도 파일이 있다고 봅니다. | 색인에 남은 경로는 지금 디스크에 파일이 있다는 뜻이 아닙니다. [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) |
-| 4663 이 없으니 열지 않았다고 봅니다. | 4663 은 감사를 켜 두고 개체에 SACL 을 건 경우에만 남습니다. [파일 접근 감사](/02-artifacts/event-logs/4656-4663-4660.md) |
-| 속성 이름을 정확히 찾는 도구로 Windows.edb 를 읽고 0건이라고 결론 냅니다. | Win8/10 의 색인 속성 표는 칸 이름 앞에 숫자 속성 ID 가 붙습니다(현장 관찰). 이름을 정확히 찾으면 0건이 나옵니다(현장 관찰). [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) |
+| 색인에 경로가 있으니 지금도 파일이 있다고 봅니다. | 색인에 남은 경로는 지금 디스크에 파일이 있다는 뜻이 아닙니다. [윈도 검색 색인 DB](../../02-artifacts/file-folder-usage/windows-search/index.md) |
+| 4663 이 없으니 열지 않았다고 봅니다. | 4663 은 감사를 켜 두고 개체에 SACL 을 건 경우에만 남습니다. [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) |
+| 속성 이름을 정확히 찾는 도구로 Windows.edb 를 읽고 0건이라고 결론 냅니다. | Win8/10 의 색인 속성 표는 칸 이름 앞에 숫자 속성 ID 가 붙습니다(현장 관찰). 이름을 정확히 찾으면 0건이 나옵니다(현장 관찰). [윈도 검색 색인 DB](../../02-artifacts/file-folder-usage/windows-search/index.md) |
 
 ## 보고서 문장 예
 
@@ -206,19 +206,19 @@
 
 - 추정한 값은 추정이라고 밝힙니다(현장 관찰). 예: "계정을 만든 시각은 기록으로 찾지 못했습니다. 그 계정의 NTUSER.DAT 생성 시각으로 추정한 값입니다."
 - 정보주체 수에는 중복을 가려낸 기준을 함께 적습니다.
-- 보고서 전체 틀은 [분석 보고서 작성](/03-techniques/reporting/forensic-report.md) 을 따릅니다. 도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+- 보고서 전체 틀은 [분석 보고서 작성](../../03-techniques/reporting/forensic-report.md) 을 따릅니다. 도구마다 결과가 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 함께 볼 페이지
 
-- [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) — 반출 경로마다의 흔적을 봅니다.
-- [파일 내용 검색](/03-techniques/analysis/content-search/index.md) — 개인정보 탐지 규칙과 압축 펼치기·본문 추출·글자 인식을 다룹니다.
-- [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) — 개인정보 파일이 PC 에 들어온 경로를 봅니다.
-- [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) — 파일을 다룬 사용자와 시각을 봅니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 계정과 사람을 잇습니다.
-- [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) — 지운 사본을 찾습니다.
-- [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) — 기록을 지우거나 고친 흔적을 봅니다.
-- [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) — 밖에서 들어온 일인지 가릴 때 봅니다.
-- [분석 보고서 작성](/03-techniques/reporting/forensic-report.md) — 보고서 틀을 봅니다.
+- [자료를 밖으로 빼돌렸나](data-exfiltration/index.md) — 반출 경로마다의 흔적을 봅니다.
+- [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) — 개인정보 탐지 규칙과 압축 펼치기·본문 추출·글자 인식을 다룹니다.
+- [이 파일은 어디서 왔나](../activity/file-origin.md) — 개인정보 파일이 PC 에 들어온 경로를 봅니다.
+- [이 파일을 누가 언제 열었나](../activity/file-access.md) — 파일을 다룬 사용자와 시각을 봅니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](../activity/user-attribution.md) — 계정과 사람을 잇습니다.
+- [지운 파일의 흔적 찾기](../activity/deleted-file-traces.md) — 지운 사본을 찾습니다.
+- [증거를 없애려 했나](../activity/anti-forensics/index.md) — 기록을 지우거나 고친 흔적을 봅니다.
+- [원격 데스크톱 침입 확인](../incident/rdp-intrusion.md) — 밖에서 들어온 일인지 가릴 때 봅니다.
+- [분석 보고서 작성](../../03-techniques/reporting/forensic-report.md) — 보고서 틀을 봅니다.
 
 ## 참고 문헌
 

@@ -1,6 +1,6 @@
 # 편집 흔적 식별자 (RSID)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](/02-artifacts/embedded-metadata/document-metadata/index.md)
+> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
 
 ## 한 줄 요약
 
@@ -49,7 +49,7 @@ RSID 는 docx ZIP 안의 여러 XML 파일에 나옵니다. (관찰)
 - 옛 .doc (바이너리) 형식에서 RSID 가 어디에 저장되는지는 확인하지 못했습니다.
 - 값의 모양은 Windows 버전이 아니라 저장한 프로그램에 따라 달라집니다. 명세도 프로그램이 원하는 대로 쓸 수 있다고 적었습니다.
 
-docx 의 다른 속성 (작성자·시각) 은 [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) 에서 다룹니다.
+docx 의 다른 속성 (작성자·시각) 은 [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) 에서 다룹니다.
 
 ## 구조
 
@@ -109,8 +109,8 @@ RSID 에는 시각이 없습니다. 목록 순서도 시간 순서가 아닙니�
 
 시각은 다른 기록에서 가져옵니다.
 
-- 문서의 만든 시각·수정 시각은 [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) 에서 봅니다.
-- 파일이 디스크에서 바뀐 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 봅니다.
+- 문서의 만든 시각·수정 시각은 [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) 에서 봅니다.
+- 파일이 디스크에서 바뀐 시각은 [마스터 파일 테이블](../../filesystem/mft.md) 에서 봅니다.
 
 RSID 로 할 수 있는 일은 본문을 세션별 묶음으로 나누는 것까지입니다. 묶음마다 시각을 붙이려면 이런 다른 기록과 맞춰 봐야 합니다.
 
@@ -162,18 +162,18 @@ for v in listed:
 ```
 
 - 이 코드는 관찰한 Word 16 파일의 모양 (`<w:rsid w:val="…"/>`) 에 맞춘 것입니다. 다른 프로그램이 쓴 파일은 속성 순서나 접두어가 다를 수 있습니다.
-- 쓰는 포렌식 도구가 RSID 를 보여 주면 이 결과와 맞춰 봅니다. 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+- 쓰는 포렌식 도구가 RSID 를 보여 주면 이 결과와 맞춰 봅니다. 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) | 개정 번호, 만든 시각·수정 시각 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일이 디스크에서 바뀐 시각 |
-| [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) | 이 PC 의 오피스가 그 문서를 다룬 기록 |
-| [볼륨 섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 판 파일의 RSID 목록과 지금 판의 차이 |
+| [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) | 개정 번호, 만든 시각·수정 시각 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일이 디스크에서 바뀐 시각 |
+| [오피스 사용 흔적](../../file-folder-usage/microsoft-office/index.md) | 이 PC 의 오피스가 그 문서를 다룬 기록 |
+| [볼륨 섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 판 파일의 RSID 목록과 지금 판의 차이 |
 
-시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) 를 봅니다.
 
 ## 실습
 

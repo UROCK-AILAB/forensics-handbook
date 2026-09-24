@@ -4,7 +4,7 @@
 
 ## 한 줄 요약
 
-디스크를 통째로 뜬 증거 이미지와 가상 머신의 가상 디스크는 섹터 데이터를 파일에 담습니다. E01·VHDX·VMDK 파일에는 섹터 데이터 말고도 조각 목록, 체크섬, 사건 정보, 부모 파일 정보 같은 관리 정보가 함께 들어 있습니다. 이 관리 정보를 먼저 풀어야 안쪽의 [파티션 표](/01-foundations/disk-volume/mbr-gpt.md)와 파일시스템을 읽을 수 있습니다.
+디스크를 통째로 뜬 증거 이미지와 가상 머신의 가상 디스크는 섹터 데이터를 파일에 담습니다. E01·VHDX·VMDK 파일에는 섹터 데이터 말고도 조각 목록, 체크섬, 사건 정보, 부모 파일 정보 같은 관리 정보가 함께 들어 있습니다. 이 관리 정보를 먼저 풀어야 안쪽의 [파티션 표](mbr-gpt.md)와 파일시스템을 읽을 수 있습니다.
 
 ## 이 형식을 쓰는 아티팩트
 
@@ -12,14 +12,14 @@
 
 | 만나는 곳 | 형식 | 이 페이지에서 볼 값 |
 |---|---|---|
-| 디스크·파티션을 뜬 결과 ([증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)) | E01 (EWF) | 조각 파일, 사건 정보, 매체 해시, 읽기 오류 구간 |
+| 디스크·파티션을 뜬 결과 ([증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md)) | E01 (EWF) | 조각 파일, 사건 정보, 매체 해시, 읽기 오류 구간 |
 | 논리 증거 파일 | L01 (EWF) | 서명 `LVF`, 매체 종류 0x0e |
-| 메모리를 뜬 결과 ([메모리 분석](/03-techniques/analysis/memory-forensics/index.md)) | EWF | 매체 종류 0x10 (물리 메모리) |
+| 메모리를 뜬 결과 ([메모리 분석](../../03-techniques/analysis/memory-forensics/index.md)) | EWF | 매체 종류 0x10 (물리 메모리) |
 | Microsoft 가상화 제품의 가상 머신 | VHDX | BAT, 부모 위치 |
 | VMware 가상화 제품의 가상 머신 | VMDK | 설명 파일, 그레인 표, 부모 CID |
 
-- 이미지를 뜨고 넘겨받는 절차와 해시 검증 절차는 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다. 이 페이지는 파일 안의 구조만 봅니다.
-- 이미지를 푼 뒤 첫 섹터부터 읽는 법은 [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md)로 이어집니다.
+- 이미지를 뜨고 넘겨받는 절차와 해시 검증 절차는 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다. 이 페이지는 파일 안의 구조만 봅니다.
+- 이미지를 푼 뒤 첫 섹터부터 읽는 법은 [파티션 구조](mbr-gpt.md)로 이어집니다.
 
 ## 구조
 
@@ -204,7 +204,7 @@ table 섹션 (EnCase 6~7) 은 청크마다 위치를 적습니다.
 - L01 에서 EnCase 5 는 두 일시를 0 으로 적습니다.
 - EnCase 6~7 은 L01 의 두 일시를 1970-01-01 00:00:00 으로 적습니다.
 - 이 값은 보는 도구의 시간대에 따라 다른 날짜로 보입니다.
-- POSIX 시각을 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에 있습니다.
+- POSIX 시각을 바꾸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md)에 있습니다.
 
 ### RAW 와 AFF4
 
@@ -218,7 +218,7 @@ VHDX 는 Microsoft 가상화 제품이 쓰는 가상 디스크 형식입니다.
 
 - 파일은 파일 식별자, 이미지 헤더 2개, 영역 표 (Region Table) 2개, 로그, BAT 영역, 메타데이터 영역, 디스크 내용으로 이뤄집니다.
 - 요소는 64 KiB 경계에 맞춰 놓입니다.
-- 문자열은 BOM 없는 UTF-16LE 입니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
+- 문자열은 BOM 없는 UTF-16LE 입니다. 인코딩은 [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
 - libvhdi 문서는 Windows 10 2004 의 Diskpart 로 만든 이미지로 시험했습니다.
 - 공식 명세로 Microsoft 의 MS-VHDX 가 있습니다. libvhdi 문서는 4.0판 (2018-09-12) 을 인용합니다. 이 페이지는 libvhdi 문서만 참고했습니다.
 
@@ -452,7 +452,7 @@ VMDK 는 VMware 가상화 제품이 쓰는 가상 디스크 형식입니다.
 - EWF 의 hash·digest 값은 매체 데이터의 해시입니다.
 - 조각 파일에는 섹션 설명자, 체크섬, 압축한 청크가 섞여 있습니다. 그래서 조각 파일 자체의 해시는 매체 해시와 다릅니다.
 - 압축하지 않은 청크의 Adler-32 는 청크 하나가 손상됐는지 보는 값입니다. 이미지 전체의 해시를 대신하지 못합니다.
-- 해시를 비교하는 절차는 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다.
+- 해시를 비교하는 절차는 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다.
 
 ### 읽기 오류로 채운 구간
 
@@ -507,7 +507,7 @@ libewf 문서에 적힌 사례입니다.
 - 헥스 편집기로 위 순서를 직접 따라갈 수 있습니다. 서명 `EVF`, `vhdxfile`, `head`, `regi`, `metadata`, `KDMV`, `COWD` 를 찾는 데서 시작합니다.
 - libyal 의 libewf·libvhdi·libvmdk 는 이 페이지가 참고한 형식 문서를 공개한 오픈 소스 라이브러리입니다. 한 도구로 만든 이미지를 다른 구현으로 다시 읽어 볼 때 예로 들 수 있습니다.
 - 시험용 VHDX 는 Windows 의 Diskpart 로 만들 수 있습니다. libvhdi 문서도 이 방법으로 시험했습니다.
-- 두 도구의 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다.
+- 두 도구의 결과가 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다.
 
 ## 참고 문헌
 

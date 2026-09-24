@@ -34,7 +34,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 
 이 문서는 Windows 11 을 중심으로 쓰였습니다[1]. 문서에는 Windows 10 에서도 2025년 1월 선택 업데이트부터 새 기능을 쓸 수 있고, 2월부터 더 넓게 배포한다는 문장이 있습니다[1]. 다만 그 문장만으로는 어떤 기능인지 분명하지 않습니다.
 
-그래서 새 Outlook 흔적이 있는 PC 에는 옛 메일 앱이나 클래식 Outlook 의 흔적이 함께 있을 수 있습니다. 옛 메일 앱은 [Windows 메일 앱](/02-artifacts/mail/hxstore.md) 에서, 클래식 Outlook 은 [아웃룩](/02-artifacts/mail/outlook/index.md) 에서 다룹니다. 새 Outlook 에 캐시 모드가 없다는 점과 PST 를 다루는 범위도 [아웃룩](/02-artifacts/mail/outlook/index.md) 허브에 있습니다.
+그래서 새 Outlook 흔적이 있는 PC 에는 옛 메일 앱이나 클래식 Outlook 의 흔적이 함께 있을 수 있습니다. 옛 메일 앱은 [Windows 메일 앱](hxstore.md) 에서, 클래식 Outlook 은 [아웃룩](outlook/index.md) 에서 다룹니다. 새 Outlook 에 캐시 모드가 없다는 점과 PST 를 다루는 범위도 [아웃룩](outlook/index.md) 허브에 있습니다.
 
 ### PC 에 남는 것
 
@@ -51,7 +51,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 | 패키지 데이터 폴더 | `%LOCALAPPDATA%\Packages\Microsoft.OutlookForWindows_8wekyb3d8bbwe` | 패키지 설정, 배포 정보 |
 
 - 패키지 이름은 `Microsoft.OutlookForWindows_8wekyb3d8bbwe` 였습니다 (관찰).
-- `Olk` 폴더는 클래식 Outlook 의 첨부 임시 폴더(OLK)와 이름만 비슷한 다른 폴더입니다. 첨부 임시 폴더는 [아웃룩](/02-artifacts/mail/outlook/index.md) 허브에서 다룹니다.
+- `Olk` 폴더는 클래식 Outlook 의 첨부 임시 폴더(OLK)와 이름만 비슷한 다른 폴더입니다. 첨부 임시 폴더는 [아웃룩](outlook/index.md) 허브에서 다룹니다.
 - Windows 10 에서 같은 위치를 쓰는지는 확인하지 못했습니다.
 - 앱 판에 따라 폴더 구성과 로그 형식이 바뀔 수 있습니다. 이번에는 한 판만 봤습니다.
 
@@ -76,7 +76,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 | `updated.txt`, `xpdApi.log`, `Feedback\` | 있었습니다. 이 페이지에서는 다루지 않습니다 |
 
 - 같은 PC 의 `EBWebView\Default\` 에는 `IndexedDB` 폴더와 `Service Worker` 폴더가 없었습니다 (관찰).
-- WebView2 프로필 파일을 읽는 법은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+- WebView2 프로필 파일을 읽는 법은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 
 ### 패키지 데이터 폴더 (관찰)
 
@@ -88,7 +88,7 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 | `Settings\settings.dat` (+ `.LOG1`·`.LOG2`) | 패키지 설정 파일입니다 |
 | `RoamingState`, `SystemAppData\Helium`, `TempState` | 있었습니다 |
 
-`settings.dat` 의 형식과 읽는 법은 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
+`settings.dat` 의 형식과 읽는 법은 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 
 ### 로그 파일 (`logs\olk_*.log`)
 
@@ -138,18 +138,18 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
   - 같은 파일의 수정 시각은 2026-08-19 11:01:05.38(+09:00) 이었습니다.
   - 두 값은 9시간 차이만 났습니다.
 - 파일 이름의 시각도 UTC 입니다 (관찰). 파일 이름의 시각은 첫 행의 시각과 거의 같았습니다.
-- 다른 검체에서는 같은 방법으로 한 번 맞춰 봅니다. 마지막 행의 시각과 파일 수정 시각을 비교하고, 차이가 그 PC 의 시간대와 같은지 봅니다([시간대 설정](/02-artifacts/system-account/time-zone.md)).
-- `EBWebView` 안 파일의 시각 값은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 와 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 읽는 법을 봅니다.
+- 다른 검체에서는 같은 방법으로 한 번 맞춰 봅니다. 마지막 행의 시각과 파일 수정 시각을 비교하고, 차이가 그 PC 의 시간대와 같은지 봅니다([시간대 설정](../system-account/time-zone.md)).
+- `EBWebView` 안 파일의 시각 값은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 와 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 읽는 법을 봅니다.
 
 ## 함정과 한계
 
 1. **클래식 Outlook 위치만 봅니다.** 새 Outlook 흔적은 클래식 Outlook 과 다른 곳에 있습니다. 클래식 Outlook 폴더가 없다고 메일 앱을 쓰지 않았다고 보지 않습니다.
 2. **`Olk` 폴더를 첨부 임시 폴더로 봅니다.** 이름만 비슷합니다. 경로를 끝까지 읽습니다.
-3. **`EBWebView` 의 기록을 사용자의 웹 사용으로 봅니다.** 이 폴더는 앱 안의 웹 화면이 쓰는 프로필입니다. 브라우저 기록과 나눠 적습니다([크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md)).
+3. **`EBWebView` 의 기록을 사용자의 웹 사용으로 봅니다.** 이 폴더는 앱 안의 웹 화면이 쓰는 프로필입니다. 브라우저 기록과 나눠 적습니다([크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md)).
 4. **계정이 연결됐으니 메일이 PC 에 있다고 봅니다.** 관찰한 PC 에서는 `accountFound` 가 true 였는데도 `IndexedDB` 폴더가 없었습니다. 메일 본문을 두는 곳은 확인하지 못했습니다. 오프라인 설정을 켰을 때 어디에 두는지도 확인하지 못했습니다.
 5. **다른 회사 계정의 메일은 그 회사 서버에만 있다고 봅니다.** 새 Outlook 이 Gmail·Yahoo·iCloud·IMAP 계정을 Microsoft 클라우드를 거쳐 동기화한다는 설명이 흔합니다. 이번에 확인하지 못했습니다. 이 설명이 맞다면 메일 사본이 Microsoft 서버에도 생깁니다. 서버 쪽 자료를 어디에 요청할지 정할 때 따로 확인합니다.
 6. **로그 시각을 현지 시각으로 읽습니다.** `Time` 칸과 파일 이름의 시각은 UTC 였습니다 (관찰).
-7. **로그가 오래 남는다고 봅니다.** 관찰한 PC 에는 두 날짜의 로그 3개뿐이었습니다. 보관 기간을 모르므로, 로그가 없는 날에 앱을 쓰지 않았다고 보지 않습니다. 지워진 로그 파일은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 찾습니다.
+7. **로그가 오래 남는다고 봅니다.** 관찰한 PC 에는 두 날짜의 로그 3개뿐이었습니다. 보관 기간을 모르므로, 로그가 없는 날에 앱을 쓰지 않았다고 보지 않습니다. 지워진 로그 파일은 [USN 변경 저널](../filesystem/usnjrnl.md) 에서 찾습니다.
 8. **전환 토글의 레지스트리 값으로 새 Outlook 사용을 단정합니다.** 이 값은 흔히 알려져 있지만 이번에 확인하지 못했습니다. 관찰한 PC 에는 `HKCU\Software\Microsoft\Office\16.0\Outlook\Preferences` 키가 없었습니다. 로그와 패키지 흔적으로 판단합니다.
 9. **로그 형식이 늘 같다고 봅니다.** 판에 따라 바뀔 수 있습니다. 머리글 줄을 먼저 읽고 칸을 맞춥니다.
 
@@ -166,18 +166,18 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 | `FindAccountResult` | `46 69 6E 64 41 63 63 6F 75 6E 74 52 65 73 75 6C 74` | 각 바이트 뒤에 `00` |
 
 1. `logs` 폴더의 파일을 사본으로 뜹니다.
-2. 파일의 첫 바이트로 인코딩을 정합니다. 읽는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+2. 파일의 첫 바이트로 인코딩을 정합니다. 읽는 법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 3. 첫 줄에서 탭 바이트로 나뉜 칸 이름을 셉니다. 관찰한 판에서는 25칸이었습니다. 칸 수가 다르면 판이 다른 로그입니다.
 4. `mailto:` 바이트를 찾아 실행 인자 행을 봅니다. 그 행의 `Time` 칸을 UTC 로 읽습니다.
 5. `FindAccountResult` 바이트를 찾아 계정 조회 결과를 봅니다.
-6. 지워진 로그의 조각은 미할당 영역에서 같은 바이트로 찾아볼 수 있습니다([삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)).
+6. 지워진 로그의 조각은 미할당 영역에서 같은 바이트로 찾아볼 수 있습니다([삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)).
 
 ### 공개 도구로 한 번
 
 - 로그는 표 계산 프로그램이나 명령줄 도구에서 탭으로 칸을 나눠 봅니다. 첫 줄을 머리글로 씁니다.
 - `EBWebView` 안의 파일은 크롬 계열 브라우저 기록을 읽는 공개 도구로 엽니다. 도구가 브라우저가 아닌 프로필 폴더를 받는지 먼저 확인합니다.
 - `UserSettings.json`·`sentinel.json` 은 JSON 을 보여 주는 편집기로 엽니다.
-- `settings.dat` 는 [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) 의 방법으로 엽니다.
+- `settings.dat` 는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 의 방법으로 엽니다.
 
 > 그림 자리: `Olk` 폴더와 패키지 데이터 폴더의 구성, 파일마다 알려 주는 것(앱 판·시작과 종료 시각·계정·웹 화면 기록)을 한 장에 놓은 그림
 
@@ -185,17 +185,17 @@ Microsoft 는 Windows 메일·일정·사람 앱 대신 새 Outlook 을 쓰라�
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [스토어 앱 설치 목록](/02-artifacts/system-account/appx-staterepository.md) | 새 Outlook 패키지가 언제 깔렸고 판이 무엇인지 |
-| [프리패치](/02-artifacts/execution/prefetch/index.md) · [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) | `olk.exe` 실행 흔적이 로그의 시작 시각과 맞는지 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 로그의 시작·종료 시각 사이에 이 앱이 네트워크를 쓴 양 |
-| [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) | `EBWebView` 의 웹 화면 기록과 쿠키 |
-| [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) | 패키지 `settings.dat` 의 설정 값 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 새 메일 알림이 남았는지 |
-| [아웃룩](/02-artifacts/mail/outlook/index.md) | 같은 사용자가 클래식 Outlook 이나 PST 를 함께 썼는지 |
-| [Windows 메일 앱](/02-artifacts/mail/hxstore.md) | 옛 메일 앱에서 옮겨 왔는지 |
-| [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 로그 파일이 생기고 지워진 때 |
+| [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 새 Outlook 패키지가 언제 깔렸고 판이 무엇인지 |
+| [프리패치](../execution/prefetch/index.md) · [BAM·DAM](../execution/background-activity-moderator.md) | `olk.exe` 실행 흔적이 로그의 시작 시각과 맞는지 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 로그의 시작·종료 시각 사이에 이 앱이 네트워크를 쓴 양 |
+| [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) | `EBWebView` 의 웹 화면 기록과 쿠키 |
+| [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) | 패키지 `settings.dat` 의 설정 값 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 새 메일 알림이 남았는지 |
+| [아웃룩](outlook/index.md) | 같은 사용자가 클래식 Outlook 이나 PST 를 함께 썼는지 |
+| [Windows 메일 앱](hxstore.md) | 옛 메일 앱에서 옮겨 왔는지 |
+| [USN 변경 저널](../filesystem/usnjrnl.md) | 로그 파일이 생기고 지워진 때 |
 
-메일로 누구와 연락했는지 정리하는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+메일로 누구와 연락했는지 정리하는 순서는 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

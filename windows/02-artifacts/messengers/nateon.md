@@ -45,7 +45,7 @@ PC 판의 설치 폴더, 사용자 데이터 폴더, 대화 저장 파일의 이
 
 | 확인할 것 | 왜 보나 | 찾는 곳 |
 |---|---|---|
-| 설치 폴더 | 실행 파일 버전과 설치 시점 | [설치 프로그램](/02-artifacts/system-account/uninstall.md), [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) 의 실행 파일 경로 |
+| 설치 폴더 | 실행 파일 버전과 설치 시점 | [설치 프로그램](../system-account/uninstall.md), [프리페치](../execution/prefetch/index.md) · [AmCache](../execution/amcache-hve/index.md) 의 실행 파일 경로 |
 | 사용자 데이터 폴더 | 계정별 설정과 대화 파일 | 사용자 프로필의 `%APPDATA%`·`%LOCALAPPDATA%`·문서 폴더에서 이름 검색 |
 | 받은 파일 폴더 | 받은 파일 | 사용자 데이터 폴더의 설정 파일, 문서·다운로드 폴더 |
 | 대화 저장 설정 | PC 에 대화가 남는 설정이었는지 | 사용자 데이터 폴더의 설정 파일, 사용자 레지스트리(NTUSER.DAT) |
@@ -57,10 +57,10 @@ PC 판의 설치 폴더, 사용자 데이터 폴더, 대화 저장 파일의 이
 
 ### 찾는 법
 
-1. [설치 프로그램](/02-artifacts/system-account/uninstall.md) 에서 네이트온 항목과 설치 경로를 찾습니다.
-2. [프리페치](/02-artifacts/execution/prefetch/index.md) 와 [AmCache](/02-artifacts/execution/amcache-hve/index.md) 에서 실행 파일 경로를 확인합니다.
-3. [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 목록에서 `NateOn`·`Nate` 가 들어간 폴더와 파일을 사용자 프로필마다 찾습니다. 한글 이름도 함께 검색합니다.
-4. 사용자 레지스트리에서 네이트온 이름이 들어간 키를 찾습니다. 하이브 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+1. [설치 프로그램](../system-account/uninstall.md) 에서 네이트온 항목과 설치 경로를 찾습니다.
+2. [프리페치](../execution/prefetch/index.md) 와 [AmCache](../execution/amcache-hve/index.md) 에서 실행 파일 경로를 확인합니다.
+3. [마스터 파일 테이블](../filesystem/mft.md) 목록에서 `NateOn`·`Nate` 가 들어간 폴더와 파일을 사용자 프로필마다 찾습니다. 한글 이름도 함께 검색합니다.
+4. 사용자 레지스트리에서 네이트온 이름이 들어간 키를 찾습니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 5. 찾은 폴더에서 설정 파일을 열어 받은 파일 폴더와 대화 저장 위치를 적은 값이 있는지 봅니다.
 6. 앱 버전과 찾은 경로를 함께 적습니다.
 
@@ -71,16 +71,16 @@ PC 판의 설치 폴더, 사용자 데이터 폴더, 대화 저장 파일의 이
 
 | 앞머리 모양 | 다음에 볼 페이지 |
 |---|---|
-| SQLite 헤더 문자열 | [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) |
-| OLE 복합 파일 서명 | [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) |
+| SQLite 헤더 문자열 | [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) |
+| OLE 복합 파일 서명 | [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) |
 | 사람이 읽을 수 있는 글자(HTML·XML·텍스트) | 아래 "문자 인코딩" |
-| 알아볼 서명이 없고 바이트가 고르게 흩어져 있음 | [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) |
+| 알아볼 서명이 없고 바이트가 고르게 흩어져 있음 | [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) |
 
 ### 문자 인코딩
 
 - 텍스트 형식이면 인코딩부터 확인합니다.
 - 한글이 깨져 보이면 UTF-16LE, UTF-8, CP949 를 차례로 시험합니다.
-- 인코딩을 가리는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
+- 인코딩을 가리는 법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 
 ## 증거로서 의미
 
@@ -103,10 +103,10 @@ PC 판의 설치 폴더, 사용자 데이터 폴더, 대화 저장 파일의 이
 
 - 대화 파일 안 시각의 형식은 확인하지 못했습니다.
 - 텍스트 형식이면 시각이 글자로 적혀 있을 수 있습니다. 이때 시간대가 붙어 있지 않으면 현지 시각인지 UTC 인지 알 수 없습니다.
-- 한국에서 쓴 PC 라면 한국 시각(UTC+9)으로 적었을 수 있습니다(해석). 검체의 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 확인합니다.
-- 숫자로 적혀 있으면 후보 형식을 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 맞춰 차례로 풀어 봅니다.
+- 한국에서 쓴 PC 라면 한국 시각(UTC+9)으로 적었을 수 있습니다(해석). 검체의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
+- 숫자로 적혀 있으면 후보 형식을 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 맞춰 차례로 풀어 봅니다.
 - 보낸 시각을 아는 시험 메시지를 가상 머신에서 만들어 두면 형식을 가리기 쉽습니다.
-- 폴더와 파일의 시각은 파일 시스템 시각입니다. 해석은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에 있습니다.
+- 폴더와 파일의 시각은 파일 시스템 시각입니다. 해석은 [마스터 파일 테이블](../filesystem/mft.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -115,7 +115,7 @@ PC 판의 설치 폴더, 사용자 데이터 폴더, 대화 저장 파일의 이
 - **자동 수집 목록에 기댑니다.** 한 공개 수집 정의 모음에는 네이트온 항목이 없었습니다. 네이트온 폴더를 따로 수집합니다.
 - **글자가 깨져서 쓸모없다고 봅니다.** 인코딩을 바꿔 다시 봅니다.
 - **약한 출처를 확정 사실로 씁니다.** 이 페이지의 배경 사실은 포털 문서에서 왔습니다. 보고서에는 검체에서 확인한 사실만 씁니다.
-- **앱을 지운 PC 에서 흔적이 없다고 봅니다.** [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 네이트온 폴더의 파일 이름과 삭제 기록을 찾습니다. 예전 시점의 폴더는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+- **앱을 지운 PC 에서 흔적이 없다고 봅니다.** [USN 변경 저널](../filesystem/usnjrnl.md) 에서 네이트온 폴더의 파일 이름과 삭제 기록을 찾습니다. 예전 시점의 폴더는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -126,7 +126,7 @@ PC 판의 설치 폴더, 사용자 데이터 폴더, 대화 저장 파일의 이
 1. 파일 앞 16바이트를 봅니다. 위 "구조" 표의 서명 가운데 무엇과 맞는지 봅니다.
 2. 서명이 없으면 파일 여러 곳을 봅니다. 알아볼 수 있는 글자가 보이면 텍스트일 가능성이 큽니다. 바이트가 고르게 흩어져 있으면 암호문이나 압축일 가능성이 큽니다.
 3. 텍스트로 보이면 영문·숫자 바이트 뒤마다 `00` 이 붙어 있는지 봅니다. 붙어 있으면 UTF-16LE 일 가능성이 큽니다.
-4. 대화 상대 이름이나 알고 있는 낱말을 여러 인코딩으로 바꿔 검색합니다. 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다.
+4. 대화 상대 이름이나 알고 있는 낱말을 여러 인코딩으로 바꿔 검색합니다. 방법은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -140,21 +140,21 @@ PC 판의 설치 폴더, 사용자 데이터 폴더, 대화 저장 파일의 이
 | 헥스 편집기 | 파일 앞머리로 형식을 가립니다 |
 | SQLite 뷰어, 텍스트 편집기 | 형식을 확인한 파일만 엽니다 |
 
-도구가 낸 결과는 헥스로 본 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+도구가 낸 결과는 헥스로 본 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 설치 여부와 설치 폴더 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 실행 파일의 경로와 실행 시각 |
-| [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md) | 로그온할 때 네이트온이 자동으로 켜지도록 등록됐는지 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 네이트온의 네트워크 사용량 기록이 있는지 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 받은 파일을 연 흔적이 있는지 |
-| [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 네이트온 폴더가 남았는지 |
+| [설치 프로그램](../system-account/uninstall.md) | 설치 여부와 설치 폴더 |
+| [프리페치](../execution/prefetch/index.md) · [AmCache](../execution/amcache-hve/index.md) | 실행 파일의 경로와 실행 시각 |
+| [로그온 자동실행](../persistence/run-runonce-startup-folder.md) | 로그온할 때 네이트온이 자동으로 켜지도록 등록됐는지 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 네이트온의 네트워크 사용량 기록이 있는지 |
+| [바로가기 파일](../file-folder-usage/lnk.md) · [점프리스트](../file-folder-usage/jump-lists.md) | 받은 파일을 연 흔적이 있는지 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 네이트온 폴더가 남았는지 |
 
-- 국내 메신저를 함께 볼 때는 [카카오톡 PC](/02-artifacts/messengers/kakaotalk-pc/index.md) 와 [라인](/02-artifacts/messengers/line.md) 페이지를 봅니다.
-- 조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 와 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
+- 국내 메신저를 함께 볼 때는 [카카오톡 PC](kakaotalk-pc/index.md) 와 [라인](line.md) 페이지를 봅니다.
+- 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 와 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
 
 ## 실습
 

@@ -1,6 +1,6 @@
 # 쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)
 
-> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) > 쿠키·비밀번호 암호화
+> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 쿠키·비밀번호 암호화
 
 ## 한 줄 요약
 
@@ -12,8 +12,8 @@
 ## 이 구조를 쓰는 아티팩트
 
 앱 바인딩 암호화가 보호하는 값은 쿠키, 비밀번호, 결제 수단, IBAN, OAuth 토큰입니다 (xaitax 저장소 설명).
-값이 든 파일과 칸, 파일마다의 해석은 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다.
-`Local State` 파일의 위치와 나머지 키는 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 에서 다룹니다.
+값이 든 파일과 칸, 파일마다의 해석은 [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) 에서 다룹니다.
+`Local State` 파일의 위치와 나머지 키는 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 에서 다룹니다.
 
 브라우저와 앱은 `Local State` 에 든 키가 달랐습니다.
 아래 표는 Windows 11(빌드 26200) PC 한 대에서 본 결과입니다 (관찰).
@@ -26,7 +26,7 @@
 | Electron 앱 1개 (VS Code) | 있음 | 없음 |
 
 - 관찰한 WebView2·Electron 앱에는 `encrypted_key` 와 `audit_enabled` 만 있었습니다.
-- 앱 폴더를 찾는 법은 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 에서 다룹니다.
+- 앱 폴더를 찾는 법은 [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 에서 다룹니다.
 
 ## 구조
 
@@ -45,8 +45,8 @@ base64 를 풀면 앞에 짧은 표시 문자열이 붙어 있습니다.
 - 표의 보호 방식과 짝은 xaitax 저장소 설명에서 가져왔습니다.
 - 관찰한 Chrome 153·Edge 151 에서도 base64 를 풀면 앞 바이트가 각각 `DPAPI`, `APPB` 였습니다.
 - `os_crypt.audit_enabled` 키도 있었습니다 (관찰). 뜻은 확인하지 못했습니다.
-- Edge 에는 `os_crypt` 아래 키가 하나 더 있었습니다 (관찰). 이름과 관찰 내용은 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 의 구분 단서 표에 있습니다.
-- DPAPI 마스터 키와 블롭 구조는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+- Edge 에는 `os_crypt` 아래 키가 하나 더 있었습니다 (관찰). 이름과 관찰 내용은 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 의 구분 단서 표에 있습니다.
+- DPAPI 마스터 키와 블롭 구조는 [DPAPI 구조](../../protection/data-protection-api/index.md) 에서 다룹니다.
 
 ### 암호문 앞 3바이트
 
@@ -60,7 +60,7 @@ base64 를 풀면 앞에 짧은 표시 문자열이 붙어 있습니다.
 - 쿠키 DB 형식 버전 24 부터는 쿠키 값을 암호화하기 전에 앞에 도메인의 SHA-256 해시(32바이트)를 붙입니다 (Chromium 소스 `sqlite_persistent_cookie_store.cc`). 쿠키 값은 복호한 평문의 32바이트 뒤부터입니다.
 - 이 32바이트는 `v10`·`v20` 과 상관없이 쿠키 DB 형식 버전에 따라 붙습니다. xaitax 저장소는 `v20` 쿠키에 32바이트 머리가 있다고만 적었습니다.
 - 소스는 불러올 때 이 해시가 도메인과 맞지 않으면 그 쿠키를 버린다고 적습니다.
-- 암호문 칸 안에서 논스·암호문·태그가 놓인 자리와 칸 이름은 파일마다 다르게 다룹니다. [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 의 쿠키·저장 비밀번호 페이지를 봅니다.
+- 암호문 칸 안에서 논스·암호문·태그가 놓인 자리와 칸 이름은 파일마다 다르게 다룹니다. [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) 의 쿠키·저장 비밀번호 페이지를 봅니다.
 - `v10`·`v20` 이 아닌 값도 있을 수 있습니다. 접두사 없이 값 전체를 DPAPI 블롭으로 저장한 옛 방식이 알려져 있습니다. 이 방식과 바뀐 버전은 이번에 원 출처로 확인하지 못했습니다.
 
 ### 앱 바인딩 암호화
@@ -85,7 +85,7 @@ base64 를 풀면 앞에 짧은 표시 문자열이 붙어 있습니다.
 2. **키 종류를 확인합니다.** 사본의 `Local State` 를 JSON 으로 열고 `os_crypt` 아래 키를 봅니다. `app_bound_encrypted_key` 가 없으면 `v20` 값도 없을 가능성이 큽니다 (해석). 그래도 DB 값을 직접 확인합니다.
 3. **base64 를 풀어 앞부분을 봅니다.** `encrypted_key` 는 `DPAPI` 로, `app_bound_encrypted_key` 는 `APPB` 로 시작해야 합니다.
 4. **DB 의 암호문 앞 3바이트를 셉니다.** 행마다 `v10`·`v20`·그 밖의 값을 세어 둡니다. 한 DB 에 두 방식이 섞일 수 있는지는 이번에 확인하지 못했습니다. 그래서 행마다 봅니다.
-5. **`v10` 을 풉니다.** 사용자 DPAPI 마스터 키로 `encrypted_key` 의 `DPAPI` 뒤 부분을 풉니다. 그 결과가 AES-256-GCM 키입니다. DPAPI 마스터 키를 푸는 데 무엇이 필요한지는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 를 봅니다.
+5. **`v10` 을 풉니다.** 사용자 DPAPI 마스터 키로 `encrypted_key` 의 `DPAPI` 뒤 부분을 풉니다. 그 결과가 AES-256-GCM 키입니다. DPAPI 마스터 키를 푸는 데 무엇이 필요한지는 [DPAPI 구조](../../protection/data-protection-api/index.md) 를 봅니다.
 6. **`v20` 을 풉니다.** SYSTEM DPAPI 로 한 겹, 사용자 DPAPI 로 한 겹을 벗겨야 합니다. 그 뒤에 가공 단계가 더 있다는 설명이 있지만 이번에 확인하지 못했습니다. 쿠키 DB 형식 버전이 24 이상이면 쿠키의 복호한 평문 앞 32바이트를 떼어 냅니다. `v10` 쿠키도 같습니다.
 7. **기록합니다.** 쓴 키의 종류, 마스터 키의 출처, 복호한 행 수와 못 푼 행 수를 적습니다.
 
@@ -125,18 +125,18 @@ base64 규칙으로 셈하면 JSON 텍스트에서도 바로 알아볼 수 있�
 - `v20` 은 SYSTEM DPAPI 까지 풀어야 합니다.
 - `v20` 은 그 뒤 가공 단계가 더 있다는 설명이 있으나 확인하지 못했습니다. 한 방식이 풀렸다고 다른 방식도 풀린다고 보지 않습니다.
 - 관찰한 WebView2·Electron 앱에는 DPAPI 키만 있었습니다. 이런 앱은 사용자 DPAPI 로 풀릴 가능성이 큽니다. 그래도 값 앞 3바이트를 직접 확인합니다.
-- 암호화한 증거 전반을 다루는 절차는 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
+- 암호화한 증거 전반을 다루는 절차는 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
 
 ### 켜진 PC 를 다룰 때
 
 - 앱 바인딩 키는 브라우저의 권한 상승 서비스를 거쳐야 풀립니다. 이 서비스는 그 PC 에서만 돌아갑니다.
-- 켜진 PC 에서 무엇을 먼저 확보할지는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+- 켜진 PC 에서 무엇을 먼저 확보할지는 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 
 ### 지운 값과 옛 값
 
-- 암호문 칸은 DB 파일 안에 있습니다. 지운 행이 남는 자리는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 암호문 칸은 DB 파일 안에 있습니다. 지운 행이 남는 자리는 [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md) 에서 다룹니다.
 - 지운 행에서 건진 암호문도 앞 3바이트로 방식을 가린 뒤 같은 키로 풉니다.
-- `Local State` 의 키가 바뀌면 옛 암호문은 지금 키로 풀리지 않을 수 있습니다. 옛 `Local State` 는 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾습니다. 키가 언제 바뀌는지는 확인하지 못했습니다.
+- `Local State` 의 키가 바뀌면 옛 암호문은 지금 키로 풀리지 않을 수 있습니다. 옛 `Local State` 는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾습니다. 키가 언제 바뀌는지는 확인하지 못했습니다.
 
 ### 보고서에 쓸 문장
 
@@ -165,7 +165,7 @@ base64 규칙으로 셈하면 JSON 텍스트에서도 바로 알아볼 수 있�
 | SQLite 조회 도구 | 암호문 칸을 뽑아 방식별로 셉니다 |
 | DPAPI 를 오프라인으로 푸는 공개 도구 | 사용자·SYSTEM 마스터 키로 키를 풉니다. 도구가 `v20` 을 지원하는지 먼저 확인합니다 |
 
-복호 결과가 도구마다 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+복호 결과가 도구마다 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

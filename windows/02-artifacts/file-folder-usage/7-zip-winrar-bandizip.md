@@ -22,9 +22,9 @@ WinRAR 도 `HKEY_CURRENT_USER\Software\WinRAR\` 아래에 압축 파일 이름�
 - 7-Zip 파일 관리자 창에서 본 폴더 (7-Zip FolderHistory·PanelPath#)
 - 연 압축 파일과 압축 창에 넣은 이름 (WinRAR ArcHistory·ArcName)
 
-HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 그래서 어느 계정의 기록인지 알 수 있습니다. 하이브 파일은 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
+HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 그래서 어느 계정의 기록인지 알 수 있습니다. 하이브 파일은 [하이브 파일 종류와 위치](../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
 
-자료를 빼돌리기 전에 모아서 압축하는 일이 많습니다. 그래서 이 기록은 유출 조사에서 자주 봅니다. 조사 흐름은 [퇴사 전 자료를 모으고 압축했나](/04-scenarios/exfiltration/data-exfiltration/staging.md) 에서 다룹니다.
+자료를 빼돌리기 전에 모아서 압축하는 일이 많습니다. 그래서 이 기록은 유출 조사에서 자주 봅니다. 조사 흐름은 [퇴사 전 자료를 모으고 압축했나](../../04-scenarios/exfiltration/data-exfiltration/staging.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -164,7 +164,7 @@ ArcHistory 와 PathHistory 는 한 값에 문자열 목록을 담는 함수(`Set
 ## 시각 해석
 
 - **값에는 시각이 없습니다.** ArcHistory·PathHistory 는 문자열 목록만 담습니다. (7-Zip 소스)
-- **키의 마지막 기록 시각을 씁니다.** 레지스트리 키마다 마지막 기록 시각이 있습니다. 읽는 법은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
+- **키의 마지막 기록 시각을 씁니다.** 레지스트리 키마다 마지막 기록 시각이 있습니다. 읽는 법은 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 - **7-Zip Compression 키.** 저장할 때마다 ArcHistory 전체를 다시 쓰고 `Options` 하위 키도 다시 만듭니다. 그래서 이 키의 마지막 기록 시각은 "압축 설정을 마지막으로 저장한 때" 입니다. 목록 속 특정 경로를 기록한 때가 아닙니다. 이 해석은 소스 코드에서 끌어낸 것입니다.
 - **7-Zip Extraction 키.** PathHistory 도 전체를 다시 씁니다. 같은 방식으로 읽습니다. 저장 함수가 어느 때 불리는지는 확인하지 못했습니다.
 - **WinRAR 키.** 키 안의 값 하나가 바뀌면 키의 마지막 기록 시각도 바뀝니다. 어느 값이 그때 바뀌었는지는 시각만으로 알 수 없습니다.
@@ -175,10 +175,10 @@ ArcHistory 와 PathHistory 는 한 값에 문자열 목록을 담는 함수(`Set
 - **winreg-kb 문서는 대략적인 메모입니다.** 7-Zip 파일 관리자와 WinRAR 값은 실제 하이브로 확인한 뒤 씁니다.
 - **목록 순서를 짐작하지 않습니다.** 7-Zip 목록과 WinRAR 값 번호의 순서는 확인하지 못했습니다. "가장 최근에 만든 압축 파일" 같은 말은 재현 시험으로 확인한 뒤에만 씁니다.
 - **숫자 값은 원시 바이트로 확인합니다.** 하이브의 REG_DWORD 를 문자열로 받는 도구는 부호 없는 10진수로 보여 줍니다. -1 같은 값이 큰 수로 보일 수 있습니다. (현장 관찰)
-- **프리페치와 겹치는 해석은 그 페이지를 따릅니다.** 압축 도구는 시작하자마자 대상 파일과 폴더를 읽습니다. 그래서 7-Zip 의 .pf 참조 목록에 대상 이름이 남을 수 있습니다. 쓸 문장과 쓰지 않을 문장은 [참조 파일·폴더 목록 활용](/02-artifacts/execution/prefetch/referenced-files.md) 에서 다룹니다.
-- **탐색기로 연 ZIP 은 여기에 남지 않습니다.** 탐색기 안에서 ZIP 속 폴더를 연 흔적은 셸백에 남습니다. [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) 에서 다룹니다.
-- **Zone.Identifier 를 옮겨 적을 수 있습니다.** 7-Zip 에는 WriteZoneIdExtract 설정이 있습니다. Bandizip 은 v6.15 부터 Zone.Identifier 정보를 복사합니다. 풀린 파일의 Zone.Identifier 는 그 파일을 직접 내려받았다는 뜻이 아닐 수 있습니다. 압축 파일에서 옮겨 적었을 수 있습니다. [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) 와 함께 봅니다.
-- **지운 기록.** 사용자가 키나 값을 지울 수 있습니다. 지운 키·값을 되살리는 방법은 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
+- **프리페치와 겹치는 해석은 그 페이지를 따릅니다.** 압축 도구는 시작하자마자 대상 파일과 폴더를 읽습니다. 그래서 7-Zip 의 .pf 참조 목록에 대상 이름이 남을 수 있습니다. 쓸 문장과 쓰지 않을 문장은 [참조 파일·폴더 목록 활용](../execution/prefetch/referenced-files.md) 에서 다룹니다.
+- **탐색기로 연 ZIP 은 여기에 남지 않습니다.** 탐색기 안에서 ZIP 속 폴더를 연 흔적은 셸백에 남습니다. [외부 장치·네트워크·압축 폴더 탐색 흔적](shellbags/removable-network-zip.md) 에서 다룹니다.
+- **Zone.Identifier 를 옮겨 적을 수 있습니다.** 7-Zip 에는 WriteZoneIdExtract 설정이 있습니다. Bandizip 은 v6.15 부터 Zone.Identifier 정보를 복사합니다. 풀린 파일의 Zone.Identifier 는 그 파일을 직접 내려받았다는 뜻이 아닐 수 있습니다. 압축 파일에서 옮겨 적었을 수 있습니다. [다운로드 출처 표시](../filesystem/zone-identifier.md) 와 함께 봅니다.
+- **지운 기록.** 사용자가 키나 값을 지울 수 있습니다. 지운 키·값을 되살리는 방법은 [지워진 키·값 복구](../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
 - **Bandizip 의 기록 위치는 모릅니다.** Bandizip 기록이 없다고 Bandizip 을 쓰지 않았다고 말할 수 없습니다.
 
 ## 직접 분석해 보기
@@ -199,31 +199,31 @@ ArcHistory 와 PathHistory 는 한 값에 문자열 목록을 담는 함수(`Set
 4. 목록 끝에 무엇이 더 붙는지는 실제 값의 원시 바이트로 확인합니다.
 5. 두 경로 가운데 어느 쪽이 최근인지는 이 바이트만으로 말하지 않습니다.
 
-ArcHistory·PathHistory 도 같은 모양입니다. 소스 코드로는 REG_BINARY 값에 끝 문자가 붙은 UTF-16LE 문자열을 이어 붙입니다. 실제 하이브에서는 원시 바이트로 한 번 더 확인합니다. 키의 마지막 기록 시각은 하이브의 키 레코드에 있습니다. 위치는 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에서 다룹니다.
+ArcHistory·PathHistory 도 같은 모양입니다. 소스 코드로는 REG_BINARY 값에 끝 문자가 붙은 UTF-16LE 문자열을 이어 붙입니다. 실제 하이브에서는 원시 바이트로 한 번 더 확인합니다. 키의 마지막 기록 시각은 하이브의 키 레코드에 있습니다. 위치는 [하이브 내부 구조](../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에서 다룹니다.
 
 ### 공개 도구로 한 번
 
 사용자의 NTUSER.DAT 를 복사해 공개 하이브 뷰어(예: Registry Explorer, RegRipper)로 엽니다. `Software\7-Zip`·`Software\WinRAR` 아래 키와 값을 봅니다. 키마다 마지막 기록 시각을 적습니다. 문자열 목록 값은 헥스 보기로도 확인합니다.
 
-값 이름의 뜻은 7-Zip 소스 코드의 `ZipRegistry.cpp` 와 맞춰 봅니다. 도구가 보여 준 목록 개수와 원시 바이트의 문자열 개수가 같은지 봅니다. 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+값 이름의 뜻은 7-Zip 소스 코드의 `ZipRegistry.cpp` 와 맞춰 봅니다. 도구가 보여 준 목록 개수와 원시 바이트의 문자열 개수가 같은지 봅니다. 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md) | 압축 프로그램의 실행 흔적과 시작 직후 읽은 파일·폴더를 봅니다 |
-| [UserAssist](/02-artifacts/execution/userassist.md) | 탐색기에서 압축 프로그램을 실행한 기록을 봅니다 |
-| [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) | 압축 프로그램 실행 파일의 마지막 실행 시각을 봅니다 |
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) | 기록된 압축 파일을 연 흔적이 있는지 봅니다 |
-| [점프리스트 (Jump Lists)](/02-artifacts/file-folder-usage/jump-lists.md) | 압축 프로그램으로 연 파일 목록을 봅니다 |
-| [최근 문서 (RecentDocs)](/02-artifacts/file-folder-usage/recentdocs.md) | 압축 파일 확장자의 최근 문서를 봅니다 |
-| [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 대화상자에서 고른 압축 파일·폴더가 남았는지 봅니다 |
-| [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) | 탐색기 안에서 ZIP 속 폴더를 연 흔적을 봅니다 |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 풀린 파일에 Zone.Identifier 가 옮겨졌는지 봅니다 |
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 기록된 경로에 압축 파일이 만들어지거나 지워진 기록을 봅니다 |
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) | 명령줄 압축 도구를 실행한 기록을 봅니다 |
+| [프리페치 (Prefetch)](../execution/prefetch/index.md) | 압축 프로그램의 실행 흔적과 시작 직후 읽은 파일·폴더를 봅니다 |
+| [UserAssist](../execution/userassist.md) | 탐색기에서 압축 프로그램을 실행한 기록을 봅니다 |
+| [BAM·DAM](../execution/background-activity-moderator.md) | 압축 프로그램 실행 파일의 마지막 실행 시각을 봅니다 |
+| [바로가기 파일 (LNK)](lnk.md) | 기록된 압축 파일을 연 흔적이 있는지 봅니다 |
+| [점프리스트 (Jump Lists)](jump-lists.md) | 압축 프로그램으로 연 파일 목록을 봅니다 |
+| [최근 문서 (RecentDocs)](recentdocs.md) | 압축 파일 확장자의 최근 문서를 봅니다 |
+| [열기·저장 대화상자 기록](comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 대화상자에서 고른 압축 파일·폴더가 남았는지 봅니다 |
+| [외부 장치·네트워크·압축 폴더 탐색 흔적](shellbags/removable-network-zip.md) | 탐색기 안에서 ZIP 속 폴더를 연 흔적을 봅니다 |
+| [다운로드 출처 표시 (Zone.Identifier)](../filesystem/zone-identifier.md) | 풀린 파일에 Zone.Identifier 가 옮겨졌는지 봅니다 |
+| [USN 변경 저널 ($UsnJrnl)](../filesystem/usnjrnl.md) | 기록된 경로에 압축 파일이 만들어지거나 지워진 기록을 봅니다 |
+| [프로세스 생성 (4688)](../event-logs/4688.md) | 명령줄 압축 도구를 실행한 기록을 봅니다 |
 
-유출 조사 전체 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
+유출 조사 전체 흐름은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에서 다룹니다.
 
 ## 실습
 

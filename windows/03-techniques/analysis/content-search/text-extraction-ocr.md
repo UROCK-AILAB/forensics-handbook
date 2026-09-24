@@ -5,8 +5,8 @@
 문서 파일에서 서식을 걷어 내고 글만 뽑아 검색할 수 있게 만듭니다.
 그림 속 글자는 글자 인식 (Optical Character Recognition, OCR) 으로 글로 바꿉니다.
 
-이 글은 [파일 내용 검색 (Content Search)](/03-techniques/analysis/content-search/index.md) 묶음의 한 편입니다.
-ZIP 이나 OLE 복합 파일은 먼저 [압축·복합 파일 펼치기](/03-techniques/analysis/content-search/archive-expansion.md) 를 거친 뒤 이 단계로 옵니다.
+이 글은 [파일 내용 검색 (Content Search)](index.md) 묶음의 한 편입니다.
+ZIP 이나 OLE 복합 파일은 먼저 [압축·복합 파일 펼치기](archive-expansion.md) 를 거친 뒤 이 단계로 옵니다.
 
 ## 언제 쓰나
 
@@ -54,7 +54,7 @@ IFilter 의 메서드는 다섯 개입니다.
 
 분석 대상 PC 의 레지스트리에서 이 경로를 따라가면, 확장자마다 어떤 필터가 등록돼 있었는지 볼 수 있습니다.
 색인에 어떤 파일의 본문이 없을 때 까닭을 찾는 출발점이 됩니다.
-레지스트리 파일 자체는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서, 색인은 [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 에서 다룹니다.
+레지스트리 파일 자체는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서, 색인은 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 에서 다룹니다.
 
 ### 필터를 돌리는 프로세스
 
@@ -77,13 +77,13 @@ Windows Search 가 LCID 를 보고 낱말 끊기 (Word Breaker) 를 고르기 �
 언어와 맞지 않는 낱말 끊기를 쓰면 검색 결과가 나빠집니다.
 
 한국어와 영어가 섞인 문서라면 이 점이 검색 결과에 영향을 줄 수 있습니다.
-색인 검색과 원문 검색을 나란히 돌려 보는 방법은 [키워드 검색](/03-techniques/analysis/content-search/keyword-search.md) 에 있습니다.
+색인 검색과 원문 검색을 나란히 돌려 보는 방법은 [키워드 검색](keyword-search.md) 에 있습니다.
 
 ## 형식마다 본문이 있는 곳
 
 - **OOXML(DOCX·XLSX·PPTX)** 은 ZIP 입니다. 먼저 펼쳐야 본문 XML 에 닿습니다.
-- **OLE 복합 파일(DOC·XLS·PPT 등)** 은 스트림을 이어 붙여야 글이 이어집니다. 스트림을 따라가는 방법은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
-- **그 밖의 문서 형식** 은 형식마다 본문 위치와 저장 방식이 다릅니다. 형식에 맞는 추출기를 씁니다. 문서 속성과 메타데이터는 [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
+- **OLE 복합 파일(DOC·XLS·PPT 등)** 은 스트림을 이어 붙여야 글이 이어집니다. 스트림을 따라가는 방법은 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) 에 있습니다.
+- **그 밖의 문서 형식** 은 형식마다 본문 위치와 저장 방식이 다릅니다. 형식에 맞는 추출기를 씁니다. 문서 속성과 메타데이터는 [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
 
 ## 글자 인식 (OCR)
 
@@ -122,11 +122,11 @@ Windows Search 가 LCID 를 보고 낱말 끊기 (Word Breaker) 를 고르기 �
 ### 사전과 글자 제한
 
 - 사전에 없는 낱말이 많으면 사전을 끄는 편이 인식률을 높일 수 있습니다. `load_system_dawg` 와 `load_freq_dawg` 를 false 로 둡니다.
-- 인식할 글자를 제한할 때는 `tessedit_char_whitelist` 를 씁니다. 숫자만 뽑을 때 쓸 수 있습니다. 주민등록번호·카드 번호를 찾는 일은 [개인정보 탐지](/03-techniques/analysis/content-search/pii-detection.md) 에서 다룹니다.
+- 인식할 글자를 제한할 때는 `tessedit_char_whitelist` 를 씁니다. 숫자만 뽑을 때 쓸 수 있습니다. 주민등록번호·카드 번호를 찾는 일은 [개인정보 탐지](pii-detection.md) 에서 다룹니다.
 
 ## 절차
 
-1. [파일 형식 식별](/03-techniques/analysis/content-search/file-signature.md) 결과로 파일을 나눕니다. 글 파일, 문서, 그림, 컨테이너로 나눕니다.
+1. [파일 형식 식별](file-signature.md) 결과로 파일을 나눕니다. 글 파일, 문서, 그림, 컨테이너로 나눕니다.
 2. 컨테이너는 먼저 펼칩니다.
 3. 문서는 형식에 맞는 추출기로 본문과 속성을 따로 뽑습니다.
 4. 뽑은 글은 원본 파일 경로와 짝지어 저장합니다. 추출기 이름과 판도 함께 적습니다.
@@ -141,12 +141,12 @@ Windows Search 가 LCID 를 보고 낱말 끊기 (Word Breaker) 를 고르기 �
 
 - **Windows 필터 (IFilter)**: 그 PC 에 등록된 필터가 본문을 뽑습니다. 분석용 PC 에서 필터를 쓰면 분석용 PC 에 설치된 필터에 따라 결과가 달라질 수 있습니다.
 - **Tesseract**: 공개 OCR 엔진입니다. 한국어 문서는 쓰는 판과 언어 데이터로 시험 그림을 먼저 인식해 봅니다.
-- **형식별 공개 추출 라이브러리**: 형식마다 여러 가지가 있습니다. 같은 파일을 두 도구로 뽑아 결과를 비교합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+- **형식별 공개 추출 라이브러리**: 형식마다 여러 가지가 있습니다. 같은 파일을 두 도구로 뽑아 결과를 비교합니다. 방법은 [도구 결과 교차 검증](../../reporting/tool-validation.md) 에 있습니다.
 
 ## 함정과 한계
 
 - **추출한 글은 원본 바이트가 아닙니다.** 필터는 서식을 걸러 내고 글만 남깁니다. 보고서에 원본 위치를 적으려면 추출기가 남긴 위치 정보를 함께 보관합니다.
-- **색인에 본문이 없어도 파일에 글이 없다는 뜻이 아닙니다.** 필터가 없거나 필터가 실패했을 수 있습니다. 이 점은 [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 에서도 다룹니다.
+- **색인에 본문이 없어도 파일에 글이 없다는 뜻이 아닙니다.** 필터가 없거나 필터가 실패했을 수 있습니다. 이 점은 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 에서도 다룹니다.
 - **언어를 잘못 고르면 낱말이 잘못 끊깁니다.** 낱말 끊기가 언어와 맞지 않으면 검색 결과가 나빠집니다.
 - **OCR 결과에는 원본에 없는 글자가 섞이거나 글자가 빠질 수 있습니다.** 위 표의 요인이 하나라도 있으면 인식 품질이 떨어집니다. 숫자 0 과 글자 O 처럼 모양이 비슷한 글자가 바뀌면 검증 규칙이 틀어질 수 있습니다.
 - **OCR 결과는 설정에 따라 달라집니다.** 같은 그림도 해상도·`--psm`·사전 설정을 바꾸면 결과가 바뀝니다.

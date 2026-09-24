@@ -12,13 +12,13 @@ MBOX 는 메일 여러 통을 한 파일에 차례로 이어 붙인 형식입니
 ## 이 형식을 쓰는 아티팩트
 
 - 메일 프로그램이 받은 메일을 어떤 형식으로 두는지는 프로그램마다 다릅니다. 프로그램별 저장 방식은 아래 페이지에서 다룹니다.
-  - [아웃룩](/02-artifacts/mail/outlook/index.md)
-  - [새 Outlook](/02-artifacts/mail/new-outlook.md)
-  - [썬더버드](/02-artifacts/mail/thunderbird.md)
-  - [옛 윈도 메일 프로그램](/02-artifacts/mail/outlook-express-windows-live-mail.md)
-  - [Windows 메일 앱](/02-artifacts/mail/hxstore.md)
-- 아웃룩 저장소 안에도 원래 인터넷 헤더가 속성 하나로 남습니다. [MAPI 속성](/01-foundations/app-mail-data/mapi-property.md) 을 봅니다.
-- `Received` 칸을 따라 전달 경로를 되짚는 방법은 [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
+  - [아웃룩](../../02-artifacts/mail/outlook/index.md)
+  - [새 Outlook](../../02-artifacts/mail/new-outlook.md)
+  - [썬더버드](../../02-artifacts/mail/thunderbird.md)
+  - [옛 윈도 메일 프로그램](../../02-artifacts/mail/outlook-express-windows-live-mail.md)
+  - [Windows 메일 앱](../../02-artifacts/mail/hxstore.md)
+- 아웃룩 저장소 안에도 원래 인터넷 헤더가 속성 하나로 남습니다. [MAPI 속성](mapi-property.md) 을 봅니다.
+- `Received` 칸을 따라 전달 경로를 되짚는 방법은 [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
 - 이 페이지는 파일 안의 글자를 어떻게 나눠 읽는지만 다룹니다.
 
 ## 구조
@@ -247,11 +247,11 @@ Content-Transfer-Encoding: base64
 | `Date` | 헤더 | 작성자가 보낼 준비를 마친 시각 | 칸에 적힌 차이값. 현지 시각이 권장입니다 |
 | `Received` 끝 날짜·시각 | trace 칸마다 | 각 시스템이 적은 날짜·시각. 자세한 뜻은 RFC 5321 몫입니다 | 칸마다 적힌 차이값 |
 | mbox 구분 줄 시각 | 구분 줄 | 최종 수신자가 받은 시각 | "default" 형식은 UTC, 시간대 표시 없음. 구현마다 다를 수 있습니다 |
-| 파일 시스템 시각 | NTFS 등 | 파일을 만들거나 바꾼 시각 | [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) |
+| 파일 시스템 시각 | NTFS 등 | 파일을 만들거나 바꾼 시각 | [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) |
 
 - 네 시각이 같은 사건을 가리킨다고 가정하지 않습니다.
 - 보고서에는 "`Date` 칸에 이 시각이 적혀 있다" 처럼 시각마다 출처를 붙입니다.
-- 시각을 한 줄로 늘어놓는 법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 봅니다.
+- 시각을 한 줄로 늘어놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 을 봅니다.
 
 ### 위조와 조작
 
@@ -259,12 +259,12 @@ Content-Transfer-Encoding: base64
 - 그래서 헤더 값 하나만으로 진위를 판단하지 않습니다. 다른 사람의 사본, 서버 쪽 기록과 비교합니다.
 - `Message-ID` 는 만드는 쪽이 유일하게 만들어야 합니다. 여러 사본에서 같은 `Message-ID` 가 보이면 같은 메시지의 사본으로 보고 묶습니다.
 - 같은 `Message-ID` 인데 내용이 다르면 따로 조사합니다.
-- 아래쪽 `Received` 일수록 먼저 붙은 칸입니다. 어느 칸부터 믿을지 정하는 법은 [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
+- 아래쪽 `Received` 일수록 먼저 붙은 칸입니다. 어느 칸부터 믿을지 정하는 법은 [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
 
 ### 지운 메일과 조각
 
 - mbox 는 메일 여러 통을 한 파일에 잇습니다.
-- 파일 안이나 빈 공간에서 구분 줄과 헤더 칸 이름을 찾으면 메일 조각을 찾을 수 있습니다. [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 과 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 를 봅니다.
+- 파일 안이나 빈 공간에서 구분 줄과 헤더 칸 이름을 찾으면 메일 조각을 찾을 수 있습니다. [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 과 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를 봅니다.
 - 본문의 `From ` 줄을 바꾸지 않는 구현도 있습니다. 그래서 `From ` 줄마다 메일을 자르면 한 통이 둘로 갈릴 수 있습니다.
 
 ### 손상과 섞인 형식
@@ -295,8 +295,8 @@ Content-Transfer-Encoding: base64
 | 헥스 편집기 | 줄 끝(CRLF·LF), 빈 줄 경계, 구분 줄을 봅니다 |
 | Python 표준 라이브러리 (`email`, `mailbox` 모듈) | 헤더 펴기, MIME 풀기, mbox 나누기를 스크립트로 합니다. 결과는 헥스로 몇 통 대조합니다 |
 
-도구마다 메일 수나 시각이 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
-누구와 메일을 주고받았는지 묶어 보는 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 를 봅니다.
+도구마다 메일 수나 시각이 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
+누구와 메일을 주고받았는지 묶어 보는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 를 봅니다.
 
 ## 참고 문헌
 

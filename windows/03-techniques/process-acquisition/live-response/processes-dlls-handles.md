@@ -15,7 +15,7 @@ NIST SP 800-86 은 프로세스 목록의 쓰임을 이렇게 적습니다.
 
 OS 는 열린 파일 목록과 그 파일을 연 사용자·프로세스를 관리할 수 있습니다. 핸들 목록은 이 정보를 보여 줍니다.
 
-NIST 순서에서 실행 중 프로세스는 넷째, 열린 파일은 다섯째입니다. 순서 전체와 도구 준비는 [수집 순서와 원칙](/03-techniques/process-acquisition/live-response/order-of-volatility.md)에서 다룹니다.
+NIST 순서에서 실행 중 프로세스는 넷째, 열린 파일은 다섯째입니다. 순서 전체와 도구 준비는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다.
 
 ## 절차
 
@@ -86,7 +86,7 @@ CSV 로 받으면 칸은 아래처럼 나옵니다 (확인 범위: Windows 11 Ho
 | `GetOwner` | 프로세스를 실행한 사용자 이름과 도메인 이름을 돌려줍니다 |
 | `GetOwnerSid` | 소유자 SID 를 돌려줍니다 |
 
-SID 형식은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. PowerShell 5.1 의 `Get-Process -IncludeUserName` 도 관리자 권한에서 `UserName` 을 돌려줬습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
+SID 형식은 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. PowerShell 5.1 의 `Get-Process -IncludeUserName` 도 관리자 권한에서 `UserName` 을 돌려줬습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
 
 ### Sysinternals Handle
 
@@ -113,27 +113,27 @@ SID 형식은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-
 4. **빈 칸을 숨긴 흔적으로 읽습니다.** 관리자 권한으로도 352개 가운데 25개 프로세스는 `CommandLine` 과 `ExecutablePath` 가 비어 있었습니다. 대부분 System, Secure System, Registry, smss, csrss, wininit, services, lsass, LsaIso, Memory Compression, MsMpEng 같은 보호되는 프로세스였습니다. 같은 25개는 `tasklist /m` 의 Modules 칸이 "N/A" 였습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
 5. **`TerminationDate` 와 `Status` 로 상태를 판단합니다.** `TerminationDate` 는 프로세스 핸들을 열어 두지 않으면 NULL 입니다. `Status` 는 구현되지 않아 늘 NULL 입니다.
 6. **Handle 의 `-c` 를 씁니다.** 핸들을 닫으면 앱이나 시스템이 불안정해질 수 있다고 문서가 경고합니다. 증거를 바꾸는 옵션이기도 합니다.
-7. **목록에 없으면 실행되지 않았다고 봅니다.** 커널 수준 루트킷이 있으면 사용자 수준 도구는 숨긴 프로세스를 보지 못할 수 있습니다. 도구를 믿는 범위는 [수집 순서와 원칙](/03-techniques/process-acquisition/live-response/order-of-volatility.md)에서 다룹니다.
+7. **목록에 없으면 실행되지 않았다고 봅니다.** 커널 수준 루트킷이 있으면 사용자 수준 도구는 숨긴 프로세스를 보지 못할 수 있습니다. 도구를 믿는 범위는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다.
 8. **원격으로 같은 필터를 씁니다.** `tasklist` 의 `STATUS` 와 `WINDOWTITLE` 필터는 원격 시스템에서 쓸 수 없습니다.
 
 ## 결과를 어떻게 해석하나
 
 ### 부모와 자식
 
-`ParentProcessId` 로 프로세스 나무를 그립니다. 부모의 `CreationDate` 가 자식보다 늦으면, 그 부모 PID 는 원래 부모가 끝난 뒤 다시 쓰인 번호입니다. 이런 경우 진짜 부모는 이 목록만으로 알 수 없습니다. 끝난 프로세스의 기록은 [프로세스 생성](/02-artifacts/event-logs/4688.md) 이벤트, [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md), [메모리 분석](/03-techniques/analysis/memory-forensics/index.md)에서 찾습니다.
+`ParentProcessId` 로 프로세스 나무를 그립니다. 부모의 `CreationDate` 가 자식보다 늦으면, 그 부모 PID 는 원래 부모가 끝난 뒤 다시 쓰인 번호입니다. 이런 경우 진짜 부모는 이 목록만으로 알 수 없습니다. 끝난 프로세스의 기록은 [프로세스 생성](../../../02-artifacts/event-logs/4688.md) 이벤트, [Sysmon 로그](../../../02-artifacts/event-logs/sysmon/index.md), [메모리 분석](../../analysis/memory-forensics/index.md)에서 찾습니다.
 
 ### 서비스와 DLL
 
-- `/svc` 결과로 서비스가 어느 프로세스 안에서 도는지 봅니다. 서비스 등록 정보는 [서비스·드라이버](/02-artifacts/persistence/services-drivers.md)와 맞춰 봅니다.
-- `/m` 결과로 의심 DLL 을 불러온 프로세스를 찾습니다. DLL 파일은 [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md)과 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md)로 이어서 봅니다.
+- `/svc` 결과로 서비스가 어느 프로세스 안에서 도는지 봅니다. 서비스 등록 정보는 [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md)와 맞춰 봅니다.
+- `/m` 결과로 의심 DLL 을 불러온 프로세스를 찾습니다. DLL 파일은 [의심 실행 파일 선별](../../analysis/code-signing-yara.md)과 [실행 파일 메타데이터](../../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md)로 이어서 봅니다.
 
 ### 세션과 사용자
 
-`SessionId` 와 `tasklist /v` 의 Session#, User Name 으로 프로세스가 어느 세션에서 돌았는지 봅니다. 로그온 세션과 잇는 방법은 [로그온 세션·클립보드·화면 수집](/03-techniques/process-acquisition/live-response/sessions-clipboard-screen.md)에서 다룹니다.
+`SessionId` 와 `tasklist /v` 의 Session#, User Name 으로 프로세스가 어느 세션에서 돌았는지 봅니다. 로그온 세션과 잇는 방법은 [로그온 세션·클립보드·화면 수집](sessions-clipboard-screen.md)에서 다룹니다.
 
 ### 핸들
 
-핸들 목록은 수집한 순간에 어떤 프로세스가 어떤 파일·레지스트리 키를 열고 있었는지 보여 줍니다. 파일을 연 기록을 디스크에서 찾는 방법은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md)에서 다룹니다.
+핸들 목록은 수집한 순간에 어떤 프로세스가 어떤 파일·레지스트리 키를 열고 있었는지 보여 줍니다. 파일을 연 기록을 디스크에서 찾는 방법은 [이 파일을 누가 언제 열었나](../../../04-scenarios/activity/file-access.md)에서 다룹니다.
 
 ### 증명하는 것 / 증명하지 못하는 것
 

@@ -22,7 +22,7 @@
 | `notion.db` | `C:\Users\<USER>\AppData\Roaming\Notion\notion.db` | 로컬 DB (SQLite) |
 | `Custom Dictionary.txt` | `C:\Users\<USER>\AppData\Roaming\Notion\Partitions\notion\Custom Dictionary.txt` | 사용자가 사전에 넣은 단어 |
 
-- `Partitions\notion` 폴더와 `Custom Dictionary.txt` 는 Electron(Chromium) 앱의 세션 폴더와 맞춤법 사전 이름 규칙과 같습니다(KAPE 경로에서 추론). 규칙은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에 있습니다.
+- `Partitions\notion` 폴더와 `Custom Dictionary.txt` 는 Electron(Chromium) 앱의 세션 폴더와 맞춤법 사전 이름 규칙과 같습니다(KAPE 경로에서 추론). 규칙은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에 있습니다.
 - 이 폴더에 `Cache`·`Local Storage`·`IndexedDB` 같은 다른 Chromium 폴더도 있는지는 확인하지 못했습니다.
 - 앱 판에 따라 DB 구조가 다른지, 스토어 판이 따로 있는지는 확인하지 못했습니다.
 - 노션에 오프라인 모드가 들어온 때와, 그 뒤 로컬에 담아 두는 범위가 바뀌었는지도 확인하지 못했습니다.
@@ -32,7 +32,7 @@
 ### notion.db 판정
 
 - SQLECmd 맵은 파일에 `block` 표가 있으면 노션 DB 로 판정합니다.
-- SQLite 파일 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- SQLite 파일 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ### block 표
 
@@ -89,15 +89,15 @@ SQLECmd 맵은 `block` 표에서 아래 칸을 읽습니다.
 | 1704067200000 | 13자리 | Unix 밀리초 | 2024-01-01 00:00:00 UTC |
 
 - 짐작이 맞는지는 답을 아는 시각으로 확인합니다. 예를 들어 시험용 PC 에서 페이지를 하나 만들고 그 시각과 행의 값을 비교합니다.
-- Unix 시각은 UTC 기준입니다. 형식별 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- Unix 시각은 UTC 기준입니다. 형식별 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
 - **칸 이름이 판마다 다를 수 있습니다.** 맵 쿼리부터 `created_by` 와 `created_by_id` 를 섞어 씁니다. 쿼리 전에 `.schema block` 으로 칸을 확인합니다.
 - **담긴 범위를 모릅니다.** "모든 페이지" 라는 설명만 믿고 없는 페이지를 지운 것으로 보지 않습니다.
 - **`properties` 형식을 모릅니다.** 원문 그대로 보존하고, 뽑은 텍스트를 보고서에 옮길 때는 원문 값과 함께 적습니다.
-- **곁 파일을 함께 모읍니다.** `notion.db` 와 이름이 같은 `-wal`·`-journal`·`-shm` 파일이 있으면 같이 둡니다. 뜻은 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
-- **지운 행은 파일 안 빈 공간에 남을 수 있습니다.** 찾는 법은 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에 있습니다.
+- **곁 파일을 함께 모읍니다.** `notion.db` 와 이름이 같은 `-wal`·`-journal`·`-shm` 파일이 있으면 같이 둡니다. 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
+- **지운 행은 파일 안 빈 공간에 남을 수 있습니다.** 찾는 법은 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에 있습니다.
 - **공개 자료가 적습니다.** 이 글은 수집 규칙과 SQL 맵 두 가지에 기댑니다. 표 구조는 검체로 넓혀 확인합니다.
 
 ## 직접 분석해 보기
@@ -130,12 +130,12 @@ LEFT JOIN notion_user AS u ON b.created_by_id = u.id;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 크롬 계열 앱 공통 구조 | `Partitions\notion` 아래 다른 Chromium 폴더를 읽는 법을 봅니다 | [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) |
-| 설치 프로그램 | 노션 앱이 설치된 적이 있는지 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 프리페치 | 노션 실행 시각을 `last_edited_time` 과 맞춰 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| SRUM | 그 시간대에 노션 앱이 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 섀도 복사본 활용 | 예전 시점의 `notion.db` 와 비교해 사라진 행을 찾습니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 자료 유출 시나리오 | 노션에 옮겨 적은 자료를 다른 흔적과 묶어 봅니다 | [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) |
+| 크롬 계열 앱 공통 구조 | `Partitions\notion` 아래 다른 Chromium 폴더를 읽는 법을 봅니다 | [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) |
+| 설치 프로그램 | 노션 앱이 설치된 적이 있는지 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
+| 프리페치 | 노션 실행 시각을 `last_edited_time` 과 맞춰 봅니다 | [프리페치](../execution/prefetch/index.md) |
+| SRUM | 그 시간대에 노션 앱이 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
+| 섀도 복사본 활용 | 예전 시점의 `notion.db` 와 비교해 사라진 행을 찾습니다 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 자료 유출 시나리오 | 노션에 옮겨 적은 자료를 다른 흔적과 묶어 봅니다 | [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) |
 
 ## 실습
 

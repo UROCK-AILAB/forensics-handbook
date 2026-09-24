@@ -1,6 +1,6 @@
 # 지운 파일·옛 파일 흔적 찾기
 
-> 위치: [윈도 검색 색인 DB (Windows Search)](/02-artifacts/file-folder-usage/windows-search/index.md) > 지운 파일·옛 파일 흔적 찾기
+> 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 지운 파일·옛 파일 흔적 찾기
 
 ## 한 줄 요약
 
@@ -26,7 +26,7 @@ Microsoft 문서가 설명하는 흐름입니다.
 | 11 | 파일을 지워도, WAL 에 쌓인 변경이 재부팅이나 체크포인트 때 본 DB 에 쓰이기 전까지는 파일 기록이 본 DB 에 남아 있습니다. | LevelBlue |
 | XP~8 (ESE) | `SystemIndex_DeletedDocIds` 표가 지운 문서 번호를 적습니다. | libyal |
 
-- Vista 에는 이 표의 사본 표(`SystemIndex_DeletedDocIds_S`)도 있습니다. 사본 표 목록은 [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 에 있습니다.
+- Vista 에는 이 표의 사본 표(`SystemIndex_DeletedDocIds_S`)도 있습니다. 사본 표 목록은 [위치와 형식](windows-edb-windows-db.md) 에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -52,7 +52,7 @@ Windows 11 25H2 PC 한 대에서 본 WAL 파일입니다. (확인 범위: Window
 - 본 DB 는 `AesGcm1 SQLite3` 로 시작했지만 WAL 파일의 시작값은 표준 값이었습니다.
 - WAL 안의 페이지 내용도 암호화돼 있는지는 확인하지 못했습니다.
 - 크기는 그 순간의 값입니다. WAL 크기는 쓰기와 체크포인트에 따라 바뀝니다.
-- WAL 의 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- WAL 의 구조는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### ESE 판 — `SystemIndex_DeletedDocIds`
 
@@ -69,13 +69,13 @@ Windows 11 25H2 PC 한 대에서 본 WAL 파일입니다. (확인 범위: Window
 1. **폴더를 통째로 모읍니다.** 본 DB 와 함께 `-wal`·`-shm` 파일, ESE 판이면 로그 파일까지 모읍니다. 켜져 있는 PC 라면 아래 "함정" 의 라이브 수집 경고를 먼저 봅니다.
 2. **사본에서 작업합니다.** 원본을 열면 바뀔 수 있습니다. (현장 관찰)
 3. **Windows 11 이면 본 DB 만 연 결과와 WAL 을 함께 연 결과를 따로 뽑습니다.** 본 DB 사본만 둔 폴더와, 본 DB·WAL 사본을 함께 둔 폴더를 따로 만듭니다. 두 결과의 차이가 WAL 에 쌓인 변경입니다.
-4. **색인에 남은 경로 목록을 뽑습니다.** 속성 저장소의 `System_ItemPathDisplay` 를 씁니다. 방법은 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
-5. **지금 파일 시스템과 대조합니다.** 경로 목록을 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 의 경로와 맞춥니다. 색인에만 있는 경로가 지운 파일의 후보입니다.
+4. **색인에 남은 경로 목록을 뽑습니다.** 속성 저장소의 `System_ItemPathDisplay` 를 씁니다. 방법은 [파일 속성 되살리기](propertystore.md) 에 있습니다.
+5. **지금 파일 시스템과 대조합니다.** 경로 목록을 [마스터 파일 테이블](../../filesystem/mft.md) 의 경로와 맞춥니다. 색인에만 있는 경로가 지운 파일의 후보입니다.
 6. **ESE 판이면 지운 문서 번호를 봅니다.** `SystemIndex_DeletedDocIds` 의 번호를 적어 둡니다. 속성 저장소와의 짝은 확인되지 않았으므로, 번호가 겹치는 행이 있으면 경로와 시각을 함께 보고 판단합니다.
-7. **후보마다 다른 흔적을 찾습니다.** [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 그 파일의 삭제·이름 바꿈 기록을 찾습니다. [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) 에 들어갔는지도 봅니다.
+7. **후보마다 다른 흔적을 찾습니다.** [USN 변경 저널](../../filesystem/usnjrnl.md) 에서 그 파일의 삭제·이름 바꿈 기록을 찾습니다. [휴지통](../recycle-bin.md) 에 들어갔는지도 봅니다.
 8. **손상된 DB 는 두 가지 이상 방식으로 엽니다.** 행 수가 다르면 적게 나온 쪽이 끝까지 읽지 못한 것일 수 있습니다. (현장 관찰, 아래 함정 참고)
 
-ESE 페이지에 남은 지운 레코드를 찾는 일반 방법은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 와 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+ESE 페이지에 남은 지운 레코드를 찾는 일반 방법은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -89,23 +89,23 @@ ESE 페이지에 남은 지운 레코드를 찾는 일반 방법은 [ESE 데이�
 
 - 사용자가 그 파일을 지웠다는 것. 파일을 옮기거나 이름을 바꿔도 그 경로에서는 사라집니다. 색인만으로는 셋을 가르지 않습니다.
 - 언제 지웠는지. 지운 파일의 행에 남은 수집 시각 (GatherTime) 은 색인이 그 파일을 마지막으로 처리한 시각입니다. 삭제 시각이 아닙니다.
-- 색인에 없던 파일이 없었다는 것. 이 문제는 [색인 해석 함정](/02-artifacts/file-folder-usage/windows-search/pitfalls.md) 에서 다룹니다.
+- 색인에 없던 파일이 없었다는 것. 이 문제는 [색인 해석 함정](pitfalls.md) 에서 다룹니다.
 
 보고서에는 기록이 말하는 만큼만 적습니다.
 예: "Windows.db 의 속성 저장소에 `C:\Users\○○\Documents\계약서.docx` 행이 있습니다. 이 경로는 지금 $MFT 에 없습니다. 이 행의 수집 시각은 ○○ 입니다. 이 시각은 색인이 이 파일을 처리한 시각이며 삭제 시각은 아닙니다." (경로는 설명용 예시입니다.)
 
 ## 시각 해석
 
-- 지운 파일의 행에 남은 시각은 그 파일이 있던 때의 기록입니다. 수집 시각의 뜻은 [파일 속성 되살리기](/02-artifacts/file-folder-usage/windows-search/propertystore.md) 에 있습니다.
+- 지운 파일의 행에 남은 시각은 그 파일이 있던 때의 기록입니다. 수집 시각의 뜻은 [파일 속성 되살리기](propertystore.md) 에 있습니다.
 - 삭제 시각은 색인이 아니라 USN 변경 저널이나 휴지통 기록에서 찾습니다.
 - WAL 이 언제 본 DB 에 합쳐졌는지 알려 주는 값은 이번에 연 자료에 없었습니다.
 
 ## 함정과 한계
 
-1. **라이브 수집이 증거를 덮을 수 있습니다.** SIDR 안내는 Velociraptor 연동을 설명하며 경고합니다. 켜져 있는 시스템에서 DB 의 새 사본을 만들면 미할당 영역 수 GB 를 덮어써 증거가 사라질 수 있습니다. 복사본을 어디에 쓸지 먼저 정합니다. [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
+1. **라이브 수집이 증거를 덮을 수 있습니다.** SIDR 안내는 Velociraptor 연동을 설명하며 경고합니다. 켜져 있는 시스템에서 DB 의 새 사본을 만들면 미할당 영역 수 GB 를 덮어써 증거가 사라질 수 있습니다. 복사본을 어디에 쓸지 먼저 정합니다. [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
 2. **재부팅하면 흔적이 줄 수 있습니다.** WAL 의 변경은 재부팅이나 체크포인트 때 본 DB 에 쓰입니다. 그러면 본 DB 에 남아 있던 지운 파일의 기록도 사라질 수 있습니다.
-3. **WAL 내용이 읽히는지 확인합니다.** 한 PC 에서 본 DB 는 `AesGcm1 SQLite3` 로 시작했습니다. WAL 안의 페이지 내용도 암호화돼 있는지는 확인하지 못했습니다. [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 을 봅니다.
-4. **손상된 ESE DB 는 도구마다 행 수가 다릅니다.** 다른 ESE DB(SRUDB.dat)의 사례에서, 같은 손상 DB 의 한 표를 도구마다 1,612행과 1,742행으로 다르게 읽었습니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. (현장 관찰) 지운 파일 후보를 셀 때 이 차이가 그대로 섞입니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+3. **WAL 내용이 읽히는지 확인합니다.** 한 PC 에서 본 DB 는 `AesGcm1 SQLite3` 로 시작했습니다. WAL 안의 페이지 내용도 암호화돼 있는지는 확인하지 못했습니다. [위치와 형식](windows-edb-windows-db.md) 을 봅니다.
+4. **손상된 ESE DB 는 도구마다 행 수가 다릅니다.** 다른 ESE DB(SRUDB.dat)의 사례에서, 같은 손상 DB 의 한 표를 도구마다 1,612행과 1,742행으로 다르게 읽었습니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. (현장 관찰) 지운 파일 후보를 셀 때 이 차이가 그대로 섞입니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 5. **도구가 WAL 을 어떻게 다루는지 확인합니다.** 도구가 본 DB 와 같은 폴더의 WAL 을 함께 읽는지 문서에서 확인하지 못했다면, 절차 3 처럼 폴더를 나눠 두 번 읽어 봅니다.
 6. **`Windows-usn.db` 는 가치가 낮다고 알려져 있습니다.** LevelBlue 글의 평가입니다. 그래도 파일은 함께 모읍니다.
 
@@ -124,7 +124,7 @@ Windows.db-wal 의 첫 4바이트 (관찰 값으로 만든 예시)
 2. 크기가 0 보다 크면 첫 4바이트를 봅니다.
 3. `37 7F 06 82` 이면 SQLite WAL 의 표준 시작값입니다.
 4. 같은 폴더 본 DB 의 첫 16바이트도 봅니다. `AesGcm1 SQLite3` 로 시작하면 WAL 내용도 바로 읽히지 않을 수 있습니다.
-5. WAL 헤더의 나머지 칸과 프레임 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 를 따라 읽습니다.
+5. WAL 헤더의 나머지 칸과 프레임 구조는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 를 따라 읽습니다.
 
 ### 공개 도구로 한 번
 
@@ -136,12 +136,12 @@ Windows.db-wal 의 첫 4바이트 (관찰 값으로 만든 예시)
 
 ## 교차 검증
 
-- [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) — 지금 파일 시스템에 그 경로가 있는지, 지운 항목의 흔적이 남았는지 봅니다.
-- [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) — 삭제·이름 바꿈의 시각을 찾습니다.
-- [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) — 휴지통을 거쳐 지웠는지 봅니다.
-- [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) · [썸네일 캐시](/02-artifacts/file-folder-usage/thumbcache-db-thumbs-db.md) — 지운 파일을 열거나 본 흔적을 더합니다.
-- [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 시점의 색인 DB 를 꺼내 지금 DB 와 비교합니다.
-- [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) · [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) — 색인 흔적을 다른 기록과 묶어 읽는 조사 흐름입니다.
+- [마스터 파일 테이블](../../filesystem/mft.md) · [폴더 인덱스와 슬랙](../../filesystem/i30.md) — 지금 파일 시스템에 그 경로가 있는지, 지운 항목의 흔적이 남았는지 봅니다.
+- [USN 변경 저널](../../filesystem/usnjrnl.md) — 삭제·이름 바꿈의 시각을 찾습니다.
+- [휴지통](../recycle-bin.md) — 휴지통을 거쳐 지웠는지 봅니다.
+- [바로가기 파일](../lnk.md) · [점프리스트](../jump-lists.md) · [썸네일 캐시](../thumbcache-db-thumbs-db.md) — 지운 파일을 열거나 본 흔적을 더합니다.
+- [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 시점의 색인 DB 를 꺼내 지금 DB 와 비교합니다.
+- [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md) · [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) — 색인 흔적을 다른 기록과 묶어 읽는 조사 흐름입니다.
 
 ## 실습
 

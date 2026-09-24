@@ -1,6 +1,6 @@
 # 선별 수집 (Triage Collection)
 
-> 상위 허브: [증거 획득 (Evidence Acquisition)](/03-techniques/process-acquisition/evidence-acquisition/index.md)
+> 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)
 
 ## 한 줄 요약
 
@@ -12,7 +12,7 @@
 
 - 데이터 출처가 너무 많아서 모두 얻기 어려울 때가 있습니다. SP 800-86 은 이때를 대비해 우선순위를 정하는 계획과 절차를 미리 만들어 두라고 합니다.
 - 중요한 서버를 멈추지 않고 사용자 한 명의 홈 폴더만 가져오는 것처럼, 필요한 파일만 켜진 시스템에서 복사할 수 있습니다.
-- 증거로 쓸 가능성이 크거나 지운 파일과 슬랙 공간까지 봐야 하면 [디스크 이미징](/03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 을 씁니다.
+- 증거로 쓸 가능성이 크거나 지운 파일과 슬랙 공간까지 봐야 하면 [디스크 이미징](disk-imaging.md) 을 씁니다.
 
 ## 우선순위 정하기
 
@@ -26,7 +26,7 @@ SP 800-86 은 우선순위를 정할 때 세 가지를 따지라고 합니다.
 
 - 휘발성 데이터는 전원이 꺼지거나 시간이 지나면 사라지는 켜진 시스템의 데이터입니다.
 - 로그처럼 덮어쓰이는 비휘발성 데이터도 시간이 지나면 어느 정도 바뀝니다.
-- 매체 종류 사이의 휘발성 순서(RFC 3227)는 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 허브에 있습니다.
+- 매체 종류 사이의 휘발성 순서(RFC 3227)는 [증거 획득](index.md) 허브에 있습니다.
 
 ### 휘발성 데이터를 모으는 순서
 
@@ -42,8 +42,8 @@ SP 800-86 은 휘발성 데이터를 아래 순서로 모으라고 권합니다.
 
 - 네트워크 연결을 먼저 모으는 까닭은 연결이 끊기거나 시간이 지나 사라지기 때문입니다.
 - 로그인 세션을 일찍 모으는 까닭은 접속한 사용자 목록이 바뀌기 때문입니다.
-- 메모리를 뜨고 분석하는 법은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 에 있습니다.
-- 켜진 시스템에서 모으는 일 전반은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+- 메모리를 뜨고 분석하는 법은 [메모리 분석](../../analysis/memory-forensics/index.md) 에 있습니다.
+- 켜진 시스템에서 모으는 일 전반은 [라이브 응답](../live-response/index.md) 에서 다룹니다.
 
 ## 절차
 
@@ -57,8 +57,8 @@ RFC 3227 의 수집 절차를 선별 수집에 맞춰 옮기면 아래와 같습
 6. **휘발성 순서에 따라 알맞은 도구로 모읍니다.** SP 800-86 은 일관성을 위해 툴킷 CD 의 자동 스크립트로 모을 수 있다고 적었습니다.
 7. **시스템 시계가 얼마나 어긋났는지 기록합니다.**
 8. **그 밖에 증거가 될 만한 것이 없는지 다시 따져 봅니다.**
-9. **단계마다 기록합니다.** 현장에 누가 있었고 무엇을 했는지도 적습니다. 기록 항목은 [증거 보관 연속성](/03-techniques/process-acquisition/evidence-acquisition/chain-of-custody.md) 에 있습니다.
-10. **모은 파일마다 해시를 계산합니다.** 절차는 [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 에 있습니다.
+9. **단계마다 기록합니다.** 현장에 누가 있었고 무엇을 했는지도 적습니다. 기록 항목은 [증거 보관 연속성](chain-of-custody.md) 에 있습니다.
+10. **모은 파일마다 해시를 계산합니다.** 절차는 [해시로 무결성 검증](hash-verification.md) 에 있습니다.
 
 ## 무엇을 모을지 고를 때
 
@@ -68,19 +68,19 @@ RFC 3227 의 수집 절차를 선별 수집에 맞춰 옮기면 아래와 같습
 
 | 알고 싶은 것 | 볼 페이지 |
 |---|---|
-| 어떤 프로그램을 실행했나 | [프리페치](/02-artifacts/execution/prefetch/index.md), [AmCache](/02-artifacts/execution/amcache-hve/index.md), [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 어떤 파일과 폴더를 열었나 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md), [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) |
-| 파일 시스템이 어떻게 바뀌었나 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 누가 언제 로그온했나 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 웹에서 무엇을 했나 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) |
-| 어떤 USB 를 꽂았나 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
+| 어떤 프로그램을 실행했나 | [프리페치](../../../02-artifacts/execution/prefetch/index.md), [AmCache](../../../02-artifacts/execution/amcache-hve/index.md), [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) |
+| 어떤 파일과 폴더를 열었나 | [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md), [점프리스트](../../../02-artifacts/file-folder-usage/jump-lists.md), [셸백](../../../02-artifacts/file-folder-usage/shellbags/index.md) |
+| 파일 시스템이 어떻게 바뀌었나 | [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md), [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) |
+| 누가 언제 로그온했나 | [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) |
+| 웹에서 무엇을 했나 | [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) |
+| 어떤 USB 를 꽂았나 | [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) |
 
 주 파일 곁에 트랜잭션 로그를 두는 형식은 로그도 함께 모읍니다.
 
 - ESE 데이터베이스를 JET API 로 열려면 같은 폴더의 트랜잭션 로그로 먼저 복구해야 합니다(현장 관찰).
 - 로그를 빼고 데이터베이스 파일만 가져오면 이 복구를 할 수 없습니다.
 - 로그를 함께 모아도 오래된 로그가 지워져 사슬이 끊겨 있으면 복구가 안 될 수 있습니다(현장 관찰).
-- ESE 는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md), 레지스트리는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 함께 모을 파일을 확인합니다.
+- ESE 는 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md), 레지스트리는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 함께 모을 파일을 확인합니다.
 
 ## 도구
 
@@ -114,7 +114,7 @@ Velociraptor 오프라인 수집 문서에는 아래 내용이 나오지 않습�
 - 모은 파일마다 해시를 기록하는지
 - 관리자 권한이 필요한지
 
-두 도구의 결과를 맞춰 보는 법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+두 도구의 결과를 맞춰 보는 법은 [도구 결과 교차 검증](../../reporting/tool-validation.md) 에 있습니다.
 
 ## 함정과 한계
 

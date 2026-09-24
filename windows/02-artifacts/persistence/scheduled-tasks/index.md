@@ -44,33 +44,33 @@
 
 | 알고 싶은 것 | 어디에 남나 | 자세히 |
 |---|---|---|
-| 무엇을 실행하도록 했나 | XML 의 Actions, Tasks 키의 Actions 값 | [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md) |
-| 언제 실행하도록 했나 | XML 의 Triggers | [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md) |
-| 어느 계정으로 실행하나 | XML 의 Principals | [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md) |
-| 마지막으로 언제 실행했나 | Tasks 키의 DynamicInfo | [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md) |
-| XML 이 등록 뒤에 바뀌었나 | Tasks 키의 Hash | [작업 캐시 레지스트리](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md) |
-| 목록에서 숨긴 작업이 있나 | Tree 키의 SD 값 | [숨긴 예약 작업 찾기](/02-artifacts/persistence/scheduled-tasks/sd.md) |
-| 옛 시스템의 작업은 무엇인가 | `.job` 파일 | [옛 작업 파일](/02-artifacts/persistence/scheduled-tasks/job-at.md) |
-| 누가 등록했나 | 4698 이벤트 (켜 둔 경우) | [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md) |
+| 무엇을 실행하도록 했나 | XML 의 Actions, Tasks 키의 Actions 값 | [작업 정의 파일](system32-tasks-xml.md) |
+| 언제 실행하도록 했나 | XML 의 Triggers | [작업 정의 파일](system32-tasks-xml.md) |
+| 어느 계정으로 실행하나 | XML 의 Principals | [작업 정의 파일](system32-tasks-xml.md) |
+| 마지막으로 언제 실행했나 | Tasks 키의 DynamicInfo | [작업 캐시 레지스트리](taskcache-tree-tasks.md) |
+| XML 이 등록 뒤에 바뀌었나 | Tasks 키의 Hash | [작업 캐시 레지스트리](taskcache-tree-tasks.md) |
+| 목록에서 숨긴 작업이 있나 | Tree 키의 SD 값 | [숨긴 예약 작업 찾기](sd.md) |
+| 옛 시스템의 작업은 무엇인가 | `.job` 파일 | [옛 작업 파일](job-at.md) |
+| 누가 등록했나 | 4698 이벤트 (켜 둔 경우) | [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md) |
 
 ## 읽는 순서
 
-1. [작업 정의 파일 (System32\Tasks XML)](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md) — 작업 정의 XML 의 위치와 요소를 읽습니다. 실행할 명령, 트리거, 실행 계정, 등록 일시(Date)를 해석하는 법을 다룹니다.
-2. [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](/02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md) — Tree 와 Tasks 키의 값을 읽습니다. XML 해시를 검증하고, DynamicInfo 에서 마지막 실행 시각을 꺼내는 법을 다룹니다.
-3. [옛 작업 파일 (.job·at)](/02-artifacts/persistence/scheduled-tasks/job-at.md) — XP 까지 쓰인 `.job` 파일의 구조와 `at` 명령을 다룹니다. 상태 값과 마지막 실행 시각을 읽습니다.
-4. [숨긴 예약 작업 찾기 (SD 값 삭제)](/02-artifacts/persistence/scheduled-tasks/sd.md) — SD 값을 지워 목록에서 감춘 작업을 레지스트리로 찾는 절차입니다. XML 의 Hidden 설정과 다른 점도 다룹니다.
+1. [작업 정의 파일 (System32\Tasks XML)](system32-tasks-xml.md) — 작업 정의 XML 의 위치와 요소를 읽습니다. 실행할 명령, 트리거, 실행 계정, 등록 일시(Date)를 해석하는 법을 다룹니다.
+2. [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](taskcache-tree-tasks.md) — Tree 와 Tasks 키의 값을 읽습니다. XML 해시를 검증하고, DynamicInfo 에서 마지막 실행 시각을 꺼내는 법을 다룹니다.
+3. [옛 작업 파일 (.job·at)](job-at.md) — XP 까지 쓰인 `.job` 파일의 구조와 `at` 명령을 다룹니다. 상태 값과 마지막 실행 시각을 읽습니다.
+4. [숨긴 예약 작업 찾기 (SD 값 삭제)](sd.md) — SD 값을 지워 목록에서 감춘 작업을 레지스트리로 찾는 절차입니다. XML 의 Hidden 설정과 다른 점도 다룹니다.
 
 ## 함께 볼 페이지
 
-- [예약 작업 이벤트 (TaskScheduler·4698)](/02-artifacts/event-logs/taskscheduler-4698.md) — 작업을 등록한 계정, 실행 기록, 작업 XML 전체가 남는 이벤트입니다.
-- [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) — 예약 작업을 다른 자동실행 위치와 함께 훑는 순서입니다.
-- [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md) · [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) · [WMI 영구 이벤트 구독](/02-artifacts/persistence/wmi-event-subscription.md) · [BITS 전송 작업](/02-artifacts/persistence/bits-jobs-qmgr-db.md) · [기타 자동실행 위치](/02-artifacts/persistence/winlogon-ifeo-appinit-dlls.md) — 다른 자동실행 흔적입니다.
-- [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) — 4698 과 TaskScheduler 로그가 켜져 있었는지 확인합니다.
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) — TaskCache 키를 오프라인 하이브에서 읽는 바탕입니다.
-- [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) — 비밀번호를 저장해 실행하는 작업의 자격 증명이 남는 곳입니다.
-- [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) — 원격 컴퓨터에 작업을 넣어 명령을 실행한 경우를 다룹니다.
-- [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) — 작업을 숨기거나 지운 흔적을 다른 안티포렌식 흔적과 함께 봅니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 등록 시각, 마지막 실행 시각, 파일 시각을 한 줄로 늘어놓습니다.
+- [예약 작업 이벤트 (TaskScheduler·4698)](../../event-logs/taskscheduler-4698.md) — 작업을 등록한 계정, 실행 기록, 작업 XML 전체가 남는 이벤트입니다.
+- [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) — 예약 작업을 다른 자동실행 위치와 함께 훑는 순서입니다.
+- [로그온 자동실행](../run-runonce-startup-folder.md) · [서비스·드라이버](../services-drivers.md) · [WMI 영구 이벤트 구독](../wmi-event-subscription.md) · [BITS 전송 작업](../bits-jobs-qmgr-db.md) · [기타 자동실행 위치](../winlogon-ifeo-appinit-dlls.md) — 다른 자동실행 흔적입니다.
+- [감사 정책과 로그 설정](../../event-logs/audit-policy-log-settings.md) — 4698 과 TaskScheduler 로그가 켜져 있었는지 확인합니다.
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) — TaskCache 키를 오프라인 하이브에서 읽는 바탕입니다.
+- [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) — 비밀번호를 저장해 실행하는 작업의 자격 증명이 남는 곳입니다.
+- [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) — 원격 컴퓨터에 작업을 넣어 명령을 실행한 경우를 다룹니다.
+- [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) — 작업을 숨기거나 지운 흔적을 다른 안티포렌식 흔적과 함께 봅니다.
+- [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) — 등록 시각, 마지막 실행 시각, 파일 시각을 한 줄로 늘어놓습니다.
 
 ## 참고 문헌
 

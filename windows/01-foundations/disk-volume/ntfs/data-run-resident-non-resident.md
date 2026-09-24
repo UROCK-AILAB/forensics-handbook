@@ -1,6 +1,6 @@
 # 데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)
 
-> 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md)
+> 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](index.md)
 
 ## 한 줄 요약
 
@@ -12,12 +12,12 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 
 | 쓰는 곳 | 이 페이지와 관련된 점 |
 |---|---|
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | 작은 파일은 내용이 MFT 레코드 안에 있습니다. |
-| [$MFT 자신](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md) | 부트 섹터에는 $MFT 의 첫 클러스터만 있습니다. $MFT 가 조각났으면 레코드 0번의 데이터 런을 따라가야 뒤쪽 레코드를 찾습니다. |
-| [대체 데이터 스트림 (ADS)](/01-foundations/disk-volume/ntfs/ads.md)·[Zone.Identifier](/02-artifacts/filesystem/zone-identifier.md) | 이름 있는 $DATA 도 크기가 작으면 상주로 들어갈 수 있습니다. |
-| [폴더 인덱스 ($I30)](/02-artifacts/filesystem/i30.md) | $INDEX_ROOT 는 상주, $INDEX_ALLOCATION 은 비상주입니다. |
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | $J 스트림의 앞부분은 디스크 자리가 없는 희소 런입니다. |
-| [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) | 지운 레코드에 남은 데이터 런으로 옛 클러스터를 찾습니다. |
+| [마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md) | 작은 파일은 내용이 MFT 레코드 안에 있습니다. |
+| [$MFT 자신](boot-sector-cluster.md) | 부트 섹터에는 $MFT 의 첫 클러스터만 있습니다. $MFT 가 조각났으면 레코드 0번의 데이터 런을 따라가야 뒤쪽 레코드를 찾습니다. |
+| [대체 데이터 스트림 (ADS)](ads.md)·[Zone.Identifier](../../../02-artifacts/filesystem/zone-identifier.md) | 이름 있는 $DATA 도 크기가 작으면 상주로 들어갈 수 있습니다. |
+| [폴더 인덱스 ($I30)](../../../02-artifacts/filesystem/i30.md) | $INDEX_ROOT 는 상주, $INDEX_ALLOCATION 은 비상주입니다. |
+| [USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md) | $J 스트림의 앞부분은 디스크 자리가 없는 희소 런입니다. |
+| [파일시스템 기반 복구](../../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) | 지운 레코드에 남은 데이터 런으로 옛 클러스터를 찾습니다. |
 
 ## 구조
 
@@ -25,7 +25,7 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 
 - 속성 헤더의 오프셋 0x08 한 바이트가 형태를 정합니다.
 - 0 이면 상주, 1 이면 비상주입니다.
-- 앞 16바이트 공통 헤더(종류·길이·이름·플래그)는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)에서 다룹니다.
+- 앞 16바이트 공통 헤더(종류·길이·이름·플래그)는 [MFT 레코드와 속성](file-record-attribute.md)에서 다룹니다.
 - 이 페이지는 오프셋 0x10 부터 달라지는 부분만 다룹니다.
 - $AttrDef 에는 속성 종류마다 상주로만 둘 수 있는지가 적혀 있습니다.
 - $STANDARD_INFORMATION·$FILE_NAME·$INDEX_ROOT 는 상주로만 저장됩니다.
@@ -73,7 +73,7 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 
 ### 데이터 런
 
-- 가상 클러스터 번호 (VCN) 와 논리 클러스터 번호 (LCN) 의 뜻은 [부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)에 있습니다.
+- 가상 클러스터 번호 (VCN) 와 논리 클러스터 번호 (LCN) 의 뜻은 [부트 섹터와 클러스터](boot-sector-cluster.md)에 있습니다.
 - 데이터 런 하나는 "VCN 몇 개가 어느 LCN 부터 이어서 놓였는지" 를 적은 덩어리입니다.
 - 데이터 런을 이어 적은 것이 런 목록 (Runlist) 입니다. Microsoft 문서는 매핑 쌍 (Mapping Pairs) 이라고 부릅니다.
 
@@ -150,8 +150,8 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 
 - 두 번째 런의 `F0` 은 부호 있는 1바이트라서 −16 입니다.
 - 파일 뒷부분이 앞부분보다 볼륨 앞쪽에 놓여 있다는 뜻입니다.
-- 첫 런의 볼륨 안 바이트 위치는 90,112 × 4,096 = 369,098,752 입니다. 디스크 전체 이미지라면 파티션 시작 위치를 더합니다 ([부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)).
-- 마지막 클러스터에는 163,840 − 160,000 = 3,840 바이트가 파일 끝 뒤에 남습니다. 이 자리가 파일 슬랙입니다 ([비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md)).
+- 첫 런의 볼륨 안 바이트 위치는 90,112 × 4,096 = 369,098,752 입니다. 디스크 전체 이미지라면 파티션 시작 위치를 더합니다 ([부트 섹터와 클러스터](boot-sector-cluster.md)).
+- 마지막 클러스터에는 163,840 − 160,000 = 3,840 바이트가 파일 끝 뒤에 남습니다. 이 자리가 파일 슬랙입니다 ([비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)).
 
 > 그림 자리: 위 예시의 VCN 0~39 를 위쪽 막대로, 볼륨의 LCN 90,096~90,143 을 아래쪽 막대로 그리고, VCN 0~31 은 LCN 90,112 로, VCN 32~39 는 그보다 앞쪽인 LCN 90,096 으로 가는 화살표를 그린다.
 
@@ -170,7 +170,7 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 
 - 네 번째 런의 위치는 두 번째 런의 LCN (90,096) 에 256 을 더한 값입니다.
 - 희소 런은 LCN 을 바꾸지 않기 때문입니다.
-- 압축 속성도 런 목록에 희소 런을 씁니다. 압축·희소 속성을 푸는 법은 [압축·희소 파일](/01-foundations/disk-volume/ntfs/compressed-sparse.md)에 있습니다.
+- 압축 속성도 런 목록에 희소 런을 씁니다. 압축·희소 속성을 푸는 법은 [압축·희소 파일](compressed-sparse.md)에 있습니다.
 
 ### 위치 값 부호 확인하기
 
@@ -185,7 +185,7 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 - 조각이 아주 많으면 런 목록이 레코드 하나에 다 들어가지 않습니다.
 - 이때 $DATA 는 여러 속성으로 나뉘어 확장 레코드 (Extension Record) 에 들어갑니다.
 - 나뉜 속성은 저마다 시작 VCN·끝 VCN 으로 자기가 맡은 구간을 밝힙니다.
-- 어느 레코드에 어느 구간이 있는지는 $ATTRIBUTE_LIST 가 알려 줍니다 ([MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)).
+- 어느 레코드에 어느 구간이 있는지는 $ATTRIBUTE_LIST 가 알려 줍니다 ([MFT 레코드와 속성](file-record-attribute.md)).
 - 세 크기 값은 시작 VCN 이 0 인 첫 속성에서만 뜻이 있습니다. 나머지 속성의 크기 값은 읽지 않습니다.
 - 확장 레코드는 기본 레코드와 멀리 떨어져 있는 경우가 많습니다 (현장 관찰). 기본 레코드 주변만 보면 뒤쪽 런을 놓칩니다.
 
@@ -196,8 +196,8 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 - 파일을 지우면 MFT 레코드는 "비어 있음" 으로 표시만 됩니다.
 - 상주 내용은 레코드 안에 있으므로, 레코드가 다른 파일에 다시 쓰이기 전까지 남습니다.
 - 상주 파일은 클러스터를 받지 않습니다. 그래서 비할당 클러스터만 덮는 방식으로는 상주 내용이 지워지지 않습니다.
-- 완전삭제 흔적은 [완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
-- 조각난 MFT 레코드를 비할당 영역에서 찾는 방법은 [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md)에 있습니다.
+- 완전삭제 흔적은 [완전삭제 도구를 썼나](../../../04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
+- 조각난 MFT 레코드를 비할당 영역에서 찾는 방법은 [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md)에 있습니다.
 
 ### 커진 파일에 남는 옛 상주 내용
 
@@ -206,7 +206,7 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 - 그는 실제 사건에서 지금 파일에는 없는 문자열이 이 잔재에서 검색된 경험을 적었습니다.
 - 글에는 실험한 Windows 버전이 적혀 있지 않습니다.
 - 이 잔재는 섀도 복사본에도 없을 수 있는 옛 내용입니다.
-- 잔재에는 따로 시각이 없습니다. 언제의 내용인지는 [$LogFile](/02-artifacts/filesystem/logfile.md)·[$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 기록과 맞춰 봐야 합니다.
+- 잔재에는 따로 시각이 없습니다. 언제의 내용인지는 [$LogFile](../../../02-artifacts/filesystem/logfile.md)·[$UsnJrnl](../../../02-artifacts/filesystem/usnjrnl.md) 기록과 맞춰 봐야 합니다.
 - 보고서에는 "이 파일의 MFT 레코드 중 쓰이지 않는 부분에 이런 내용이 남아 있다" 까지만 씁니다.
 - libfsntfs 는 속성 끝의 채움 바이트에 옛 데이터가 남을 수 있다고 적습니다. 런 목록 뒤의 바이트도 늘 0 은 아니라고 적습니다.
 
@@ -214,9 +214,9 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 
 - 지운 레코드의 런 목록도 레코드가 다시 쓰이기 전까지 남습니다.
 - 런이 가리키는 클러스터는 풀려나서 다른 파일이 쓸 수 있습니다.
-- 그 클러스터가 지금 다른 파일에 할당됐는지 [$Bitmap](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md)으로 확인합니다.
+- 그 클러스터가 지금 다른 파일에 할당됐는지 [$Bitmap](bitmap-secure-extend.md)으로 확인합니다.
 - 할당된 클러스터라면 런을 따라 뽑은 내용은 원래 파일이 아닐 수 있습니다.
-- SSD 에서는 풀린 클러스터가 TRIM 으로 비워졌을 수 있습니다 ([SSD TRIM과 복구 한계](/03-techniques/analysis/data-recovery/ssd-trim.md)).
+- SSD 에서는 풀린 클러스터가 TRIM 으로 비워졌을 수 있습니다 ([SSD TRIM과 복구 한계](../../../03-techniques/analysis/data-recovery/ssd-trim.md)).
 
 ### 유효 데이터 길이 너머
 
@@ -231,12 +231,12 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 - 그래서 런 목록 중간의 바이트 하나가 깨지면 그 뒤 모든 런의 위치가 어긋납니다.
 - 첫 바이트의 크기 값이 깨지면 뒤의 바이트를 모두 잘못 끊어 읽습니다.
 - 도구가 오류 없이 엉뚱한 내용을 내놓을 수 있습니다.
-- 뽑은 결과의 파일 형식 시그니처를 확인하고, 필요하면 [파일 카빙](/03-techniques/analysis/data-recovery/file-carving.md) 결과와 대조합니다.
+- 뽑은 결과의 파일 형식 시그니처를 확인하고, 필요하면 [파일 카빙](../../../03-techniques/analysis/data-recovery/file-carving.md) 결과와 대조합니다.
 
 ## 함정
 
 1. **크기만 보고 상주라고 판단합니다.** 작은 파일도 비상주일 수 있습니다. libfsntfs 는 데이터 크기 0 인 비상주 속성을 적었습니다. 헤더 0x08 을 봅니다.
-2. **섹터 끝 2바이트를 되돌리지 않습니다.** MFT 레코드의 각 섹터 마지막 2바이트는 디스크에서 고정값 (Fixup) 으로 바뀌어 있습니다. 상주 내용이 섹터 경계를 넘으면 되돌리지 않은 2바이트가 틀립니다. 방법은 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)에 있습니다.
+2. **섹터 끝 2바이트를 되돌리지 않습니다.** MFT 레코드의 각 섹터 마지막 2바이트는 디스크에서 고정값 (Fixup) 으로 바뀌어 있습니다. 상주 내용이 섹터 경계를 넘으면 되돌리지 않은 2바이트가 틀립니다. 방법은 [MFT 레코드와 속성](file-record-attribute.md)에 있습니다.
 3. **희소 런 뒤에서 기준을 0 으로 되돌립니다.** 다음 런의 기준은 마지막 보통 런의 LCN 입니다.
 4. **런을 모두 이어 붙여 파일로 씁니다.** 마지막 클러스터의 슬랙까지 붙습니다. 데이터 크기에서 잘라야 파일 해시가 맞습니다.
 5. **희소 구간을 어떻게 뽑았는지 적지 않습니다.** 구멍을 0 으로 채우면 논리 크기가 되고, 건너뛰면 실제 데이터만 남습니다. 둘은 크기와 해시가 다릅니다. $UsnJrnl:$J 는 0 으로 채우면 수 GB 가 됩니다 (현장 관찰).
@@ -247,7 +247,7 @@ NTFS 의 모든 파일과 폴더가 이 두 형태 중 하나로 내용을 저�
 - 헥스 편집기로 위 예시처럼 한 번 직접 풀어 두면 도구 결과를 검산하는 기준이 됩니다.
 - The Sleuth Kit 의 `istat` 는 MFT 항목의 속성마다 상주 여부와 크기를 보여 주고, 비상주면 클러스터 번호를 늘어놓습니다. `icat` 은 그 런을 따라 내용을 뽑습니다.
 - libyal 의 libfsntfs 도 MFT 항목과 속성을 읽습니다.
-- 도구마다 희소 구간, 유효 데이터 길이 너머, 슬랙을 다루는 방식이 다를 수 있습니다. 두 가지 이상으로 뽑아 크기와 해시를 비교합니다 ([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+- 도구마다 희소 구간, 유효 데이터 길이 너머, 슬랙을 다루는 방식이 다를 수 있습니다. 두 가지 이상으로 뽑아 크기와 해시를 비교합니다 ([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 
 ## 참고 문헌
 

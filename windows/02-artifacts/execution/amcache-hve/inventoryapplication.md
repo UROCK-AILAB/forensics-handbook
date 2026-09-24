@@ -8,7 +8,7 @@
 
 윈도는 설치된 프로그램이 새 버전과 잘 맞는지 점검하려고 설치 프로그램 목록(인벤토리, Inventory)을 만듭니다. 이 목록을 `Amcache.hve` 에 적는 곳이 이 키입니다.
 
-- 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](/02-artifacts/execution/pca.md) 서비스가 `compattelrunner.exe -m:aeinv.dll -f:UpdateSoftwareInventory` 를 실행합니다. 이때 `aeinv.dll` 이 하이브를 고칩니다(ANSSI).
+- 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](../pca.md) 서비스가 `compattelrunner.exe -m:aeinv.dll -f:UpdateSoftwareInventory` 를 실행합니다. 이때 `aeinv.dll` 이 하이브를 고칩니다(ANSSI).
 - 호환성 점검 예약 작업 (Microsoft Compatibility Appraiser) 도 이 키를 고칩니다. 10.0.16299 버전 라이브러리부터는 작업이 돌 때마다 항목을 모두 다시 씁니다(ANSSI).
 
 윈도는 같은 목록을 진단 데이터로 Microsoft 에 보냅니다. Microsoft 는 그 이벤트(`Microsoft.Windows.Inventory.Core.InventoryApplicationAdd`)의 필드 설명을 공개합니다. 필드 이름이 이 키의 값 이름과 같습니다. 그래서 값의 뜻을 짐작할 때 이 문서를 씁니다. 다만 두 쪽이 같다는 공식 보장은 없습니다.
@@ -32,7 +32,7 @@
 | 프로그램 하나 | `Root\InventoryApplication\{ProgramId}` |
 | 목록을 마지막으로 고친 시각 | `Root\InventoryApplication` 키 자체의 `LastScanTime` 값 (REG_QWORD) |
 
-AmCache 의 모양은 Windows 버전보다 그 안의 `ae*.dll` 라이브러리 버전을 따릅니다. 라이브러리별 전체 흐름은 [구조와 버전별 차이](/02-artifacts/execution/amcache-hve/structure-versions.md)에서 다룹니다. 아래 표는 이 키와 관련된 부분만 추렸습니다(ANSSI 실험 기준).
+AmCache 의 모양은 Windows 버전보다 그 안의 `ae*.dll` 라이브러리 버전을 따릅니다. 라이브러리별 전체 흐름은 [구조와 버전별 차이](structure-versions.md)에서 다룹니다. 아래 표는 이 키와 관련된 부분만 추렸습니다(ANSSI 실험 기준).
 
 | 라이브러리 버전 (처음 실린 Windows) | 설치 프로그램 목록 | 하위 키의 마지막 기록 시각 | 프로그램을 지우면 |
 |---|---|---|---|
@@ -44,7 +44,7 @@ ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대
 
 ## 구조
 
-저장 형식은 보통의 레지스트리 하이브입니다. 셀 구조는 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 값의 뜻만 봅니다.
+저장 형식은 보통의 레지스트리 하이브입니다. 셀 구조는 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 값의 뜻만 봅니다.
 
 "형식" 칸은 공개된 Windows 10 21H2 예시(Psmths)나 Windows 11 25H2 한 대의 관찰에서 확인한 것입니다. 두 곳에 다 있던 값은 형식이 서로 같았습니다. "근거" 칸의 "문서" 는 Microsoft 진단 데이터 문서입니다.
 
@@ -83,9 +83,9 @@ ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대
 
 > 그림 자리: 가운데 InventoryApplication 하위 키(ProgramId)를 두고, InventoryApplicationFile 의 `ProgramId` 와 InventoryApplicationDriver 의 `ProgramIds` 가 이 키 이름을 가리키는 모습. `RegistryKeyPath` 가 SOFTWARE 또는 NTUSER.DAT 의 Uninstall 키를 가리키는 화살표도 함께 그립니다.
 
-- [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) 의 `ProgramId` 가 이 키의 하위 키 이름과 같으면, 그 실행 파일은 이 설치 프로그램에 딸린 파일입니다.
+- [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) 의 `ProgramId` 가 이 키의 하위 키 이름과 같으면, 그 실행 파일은 이 설치 프로그램에 딸린 파일입니다.
 - ARP 항목이 없는 실행 파일은 파일 정보로 ProgramId 를 따로 만듭니다(Microsoft 문서). 이런 ProgramId 는 이 키에서 찾을 수 없습니다.
-- `Root\InventoryApplicationDriver` 의 `ProgramIds` 값에는 그 드라이버를 설치한 프로그램의 ProgramId 가 들어 있습니다(ANSSI). 드라이버 자체는 [드라이버 항목 (InventoryDriverBinary)](/02-artifacts/execution/amcache-hve/inventorydriverbinary.md)에서 봅니다.
+- `Root\InventoryApplicationDriver` 의 `ProgramIds` 값에는 그 드라이버를 설치한 프로그램의 ProgramId 가 들어 있습니다(ANSSI). 드라이버 자체는 [드라이버 항목 (InventoryDriverBinary)](inventorydriverbinary.md)에서 봅니다.
 
 ## 증거로서 의미
 
@@ -99,7 +99,7 @@ ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대
 
 ### 증명하지 못하는 것
 
-- 프로그램을 실행했다는 사실. 이 키는 설치 목록입니다. 실행 여부는 [프리페치](/02-artifacts/execution/prefetch/index.md) 같은 실행 흔적으로 따로 확인합니다. AmCache 전반의 같은 함정은 [AmCache 해석 함정](/02-artifacts/execution/amcache-hve/sha1.md)에서 다룹니다.
+- 프로그램을 실행했다는 사실. 이 키는 설치 목록입니다. 실행 여부는 [프리페치](../prefetch/index.md) 같은 실행 흔적으로 따로 확인합니다. AmCache 전반의 같은 함정은 [AmCache 해석 함정](sha1.md)에서 다룹니다.
 - 정확한 설치 시각. `InstallDate` 는 추정 날짜입니다.
 - 수집한 때에도 설치되어 있었다는 사실. 목록은 `LastScanTime` 무렵의 모습입니다.
 - 목록에 없는 프로그램은 설치된 적이 없다는 사실. ANSSI 도 항목이 "있을 때" 만 결론을 내리라고 권합니다.
@@ -126,20 +126,20 @@ ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대
 - Windows 11 한 대에서는 128개 가운데 115개가 `00:00:00` 이었습니다. `AddRemoveProgram` 계열 항목 13개에만 시·분·초가 있었습니다(확인 범위: Windows 11 25H2 한 대).
 - 문자열에 시간대가 적혀 있지 않습니다. 어떤 도구는 이 문자열을 UTC 로 간주해 보여 줍니다. 예를 들어 AmcacheParser 소스는 시간대 차이를 0 으로 두고 읽습니다. 보고서에는 날짜만 쓰고 다른 근거로 확인합니다.
 
-FILETIME 을 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서, 키 시각이 바뀌는 규칙은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
+FILETIME 을 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서, 키 시각이 바뀌는 규칙은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **하위 키 시각을 설치 시각으로 읽는 실수.** 1709 이후 라이브러리는 목록을 통째로 다시 씁니다. 하위 키 시각이 `LastScanTime` 근처에 몰려 있으면 설치 시각이 아닙니다.
 2. **새로 설치한 프로그램이 아직 없을 수 있습니다.** ANSSI 는 설치 프로그램을 실행할 때 PCA 서비스가 바로 이 키를 고친다고 봤습니다. 반면 Kaspersky 와 Psmths 는 마지막 점검 작업 뒤에 설치한 프로그램은 안 보일 수 있다고 씁니다. `LastScanTime` 뒤의 설치는 이 키만으로 판단하지 않습니다.
 3. **지운 프로그램은 빠집니다.** 1607 라이브러리는 프로그램을 지우면 하위 키를 지웁니다. 1709 이후는 다음에 다시 쓸 때 빠집니다. 그 사이에 수집하면 항목이 남아 있을 수 있습니다. Kaspersky 는 이미 지운 원격 제어 프로그램 항목을 사고 조사에서 여러 번 봤다고 보고합니다.
-4. **지운 항목은 다른 곳에 남을 수 있습니다.** 하이브의 빈 셀, 트랜잭션 로그, 볼륨 섀도 복사본에 예전 항목이 남을 수 있습니다. [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
-5. **로그를 반영하지 않은 하이브.** 이미지에서 꺼낸 `Amcache.hve` 는 최근 변경이 `.LOG1`·`.LOG2` 에만 있을 수 있습니다. 세 파일을 함께 꺼내 반영합니다. 방법은 [트랜잭션 로그와 반영 안 된 변경](/01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
+4. **지운 항목은 다른 곳에 남을 수 있습니다.** 하이브의 빈 셀, 트랜잭션 로그, 볼륨 섀도 복사본에 예전 항목이 남을 수 있습니다. [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
+5. **로그를 반영하지 않은 하이브.** 이미지에서 꺼낸 `Amcache.hve` 는 최근 변경이 `.LOG1`·`.LOG2` 에만 있을 수 있습니다. 세 파일을 함께 꺼내 반영합니다. 방법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
 6. **스토어 앱이 목록 대부분을 차지할 수 있습니다.** 관찰한 Windows 11 한 대에서는 321개 중 193개가 `AppxPackage` 였습니다. `Source` 로 걸러서 봅니다.
 7. **사용자별 설치를 놓치기 쉽습니다.** `AddRemoveProgramPerUser` 항목의 `RegistryKeyPath` 는 `HKEY_USERS\{SID}\…` 로 시작했습니다(관찰). 그 SID 의 NTUSER.DAT 에서 제거 키를 찾습니다.
-8. **도구마다 보여 주는 값이 다릅니다.** 라이브러리 버전에 따라 값 목록이 바뀝니다. 도구가 모르는 값은 빠지거나 빈칸이 될 수 있습니다. 중요한 항목은 레지스트리 뷰어로 원래 값을 확인합니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+8. **도구마다 보여 주는 값이 다릅니다.** 라이브러리 버전에 따라 값 목록이 바뀝니다. 도구가 모르는 값은 빠지거나 빈칸이 될 수 있습니다. 중요한 항목은 레지스트리 뷰어로 원래 값을 확인합니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
-**안티포렌식.** 프로그램을 지우면 다음 재작성 때 이 목록에서 빠집니다. 하지만 설치 폴더에 있던 실행 파일은 [실행 파일 항목](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md), [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)에 흔적이 남을 수 있습니다. `Amcache.hve` 파일을 지우거나 바꾸면 그 파일의 생성·변경 시각과 $UsnJrnl 기록에 흔적이 남습니다.
+**안티포렌식.** 프로그램을 지우면 다음 재작성 때 이 목록에서 빠집니다. 하지만 설치 폴더에 있던 실행 파일은 [실행 파일 항목](inventoryapplicationfile.md), [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md)에 흔적이 남을 수 있습니다. `Amcache.hve` 파일을 지우거나 바꾸면 그 파일의 생성·변경 시각과 $UsnJrnl 기록에 흔적이 남습니다.
 
 ## 직접 분석해 보기
 
@@ -177,7 +177,7 @@ FILETIME 을 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding
 ```
 
 9. `D0 FF FF FF` 는 셀 크기 -48 입니다.
-10. 뒤의 40바이트를 UTF-16LE 로 읽으면 `03/15/2024 00:00:00` 과 끝 널 문자입니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+10. 뒤의 40바이트를 UTF-16LE 로 읽으면 `03/15/2024 00:00:00` 과 끝 널 문자입니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 11. 월/일/연 순서이므로 2024년 3월 15일입니다. 시각 부분은 `00:00:00` 입니다. 시간대 표시는 없습니다.
 
 `HiddenArp`·`Language` 같은 REG_DWORD 값은 데이터 크기 칸의 맨 위 비트가 켜져 있습니다(예: `04 00 00 80`). 이때는 데이터 오프셋 칸 4바이트가 곧 값입니다. `LastScanTime` 은 REG_QWORD 라서 8바이트 데이터 셀에 FILETIME 으로 들어 있습니다.
@@ -195,20 +195,20 @@ FILETIME 을 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [설치 프로그램 (Uninstall)](/02-artifacts/system-account/uninstall.md) | `RegistryKeyPath` 의 제거 키가 아직 있는지, 그 키의 설치 날짜와 마지막 기록 시각 |
-| [프로그램 설치·삭제 이벤트 (MsiInstaller)](/02-artifacts/event-logs/msiinstaller.md) | `Source` 가 `Msi` 인 항목의 설치·제거 시각 |
-| [스토어 앱 설치 목록 (AppX·StateRepository)](/02-artifacts/system-account/appx-staterepository.md) | `AppxPackage` 항목의 설치 시각과 사용자 |
-| [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) | 같은 ProgramId 로 묶인 실행 파일의 경로와 SHA-1 |
-| [바로가기 항목 (InventoryApplicationShortcut)](/02-artifacts/execution/amcache-hve/inventoryapplicationshortcut.md) | 설치하면서 생긴 시작 메뉴 바로가기 |
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | `RootDirPath` 폴더의 생성 시각. `InstallDate` 의 근거를 확인합니다 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md), [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) | 설치한 프로그램을 실제로 실행했는지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 `Amcache.hve` 의 목록. 그 사이에 빠진 프로그램 |
+| [설치 프로그램 (Uninstall)](../../system-account/uninstall.md) | `RegistryKeyPath` 의 제거 키가 아직 있는지, 그 키의 설치 날짜와 마지막 기록 시각 |
+| [프로그램 설치·삭제 이벤트 (MsiInstaller)](../../event-logs/msiinstaller.md) | `Source` 가 `Msi` 인 항목의 설치·제거 시각 |
+| [스토어 앱 설치 목록 (AppX·StateRepository)](../../system-account/appx-staterepository.md) | `AppxPackage` 항목의 설치 시각과 사용자 |
+| [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) | 같은 ProgramId 로 묶인 실행 파일의 경로와 SHA-1 |
+| [바로가기 항목 (InventoryApplicationShortcut)](inventoryapplicationshortcut.md) | 설치하면서 생긴 시작 메뉴 바로가기 |
+| [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md) | `RootDirPath` 폴더의 생성 시각. `InstallDate` 의 근거를 확인합니다 |
+| [프리페치](../prefetch/index.md), [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) | 설치한 프로그램을 실제로 실행했는지 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 `Amcache.hve` 의 목록. 그 사이에 빠진 프로그램 |
 
 ## 실습
 
 NIST CFReDS 같은 공개 검체에서 Windows 10 1709 이후 이미지를 하나 고릅니다. 가상 머신에 직접 프로그램을 설치하고 점검 작업 전후의 하이브를 비교해도 됩니다.
 
-1. `LastScanTime` 을 UTC 와 현지 시각으로 바꿔 봅니다. 시간대는 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 찾습니다.
+1. `LastScanTime` 을 UTC 와 현지 시각으로 바꿔 봅니다. 시간대는 [시간대 설정](../../system-account/time-zone.md)에서 찾습니다.
 2. 하위 키의 마지막 기록 시각은 어떻게 퍼져 있습니까? 이 하이브는 어느 라이브러리 동작을 따릅니까?
 3. `Source` 별로 개수를 세어 봅니다. 스토어 앱을 뺀 목록을 만듭니다.
 4. 항목 하나를 골라 `RegistryKeyPath` 의 제거 키를 SOFTWARE 또는 NTUSER.DAT 에서 찾습니다. 제거 키의 설치 날짜, `InstallDate`, `RootDirPath` 폴더의 생성 시각을 비교합니다.

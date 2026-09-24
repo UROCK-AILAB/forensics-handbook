@@ -1,8 +1,8 @@
 # 시스템 시각을 바꿨나 (System Time Change)
 
-> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](/04-scenarios/activity/anti-forensics/index.md)
+> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
 
-시스템 시각을 바꾸면 이벤트 로그 항목과 파일의 타임스탬프가 틀어질 수 있습니다[2]. Windows 는 시스템 시각이 바뀔 때마다 보안 로그에 4616 을 남깁니다[1]. 이 페이지는 4616 으로 누가 어떤 프로세스로 시각을 바꿨는지 가리고, 틀어진 구간을 표시하는 순서를 다룹니다. 4616 이벤트 자체는 [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md) 에서, 시각 값 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+시스템 시각을 바꾸면 이벤트 로그 항목과 파일의 타임스탬프가 틀어질 수 있습니다[2]. Windows 는 시스템 시각이 바뀔 때마다 보안 로그에 4616 을 남깁니다[1]. 이 페이지는 4616 으로 누가 어떤 프로세스로 시각을 바꿨는지 가리고, 틀어진 구간을 표시하는 순서를 다룹니다. 4616 이벤트 자체는 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md) 에서, 시각 값 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 "(현장 관찰)" 을 붙인 내용은 조사 현장에서 본 것입니다. 확인한 검체의 범위가 넓지 않으니 다른 검체에서는 다시 확인합니다.
 
@@ -18,7 +18,7 @@
 | 확인할 것 | 까닭 |
 |---|---|
 | Windows 버전 | 4616 은 Windows Vista·Windows Server 2008 부터 있습니다[1]. 이벤트 버전 0 은 Vista·Server 2008 입니다[1]. 버전 1 은 Windows 7·Server 2008 R2 이고, "Process Information" 절이 더해졌습니다[1]. |
-| 시간대 | 시각을 바꾸는 일과 시간대를 바꾸는 일은 다릅니다. 권한도 따로 있습니다[2]. 시간대 값은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 먼저 읽습니다. |
+| 시간대 | 시각을 바꾸는 일과 시간대를 바꾸는 일은 다릅니다. 권한도 따로 있습니다[2]. 시간대 값은 [시간대 설정](../../../02-artifacts/system-account/time-zone.md) 에서 먼저 읽습니다. |
 | 도메인 가입 여부 | 도메인 PC 는 인증한 도메인 컨트롤러와 자동으로 시각을 맞춥니다[2]. 도메인 컨트롤러는 PDC 에뮬레이터와 맞춥니다[2]. |
 | 수집 범위 | 보안 로그와 다른 이벤트 로그, 사용자 권한 정책, 파일 시스템 메타데이터($MFT·USN 변경 저널)를 확보합니다. |
 
@@ -26,13 +26,13 @@
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 보안 4616 | 바뀌기 전후 시각, 바꾼 계정, 프로세스 | [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md) |
-| 2 | 보안 4624 | 바꾼 계정의 로그온 세션 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 3 | 보안 4688 | 시각을 바꾼 프로세스를 만든 기록 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
+| 1 | 보안 4616 | 바뀌기 전후 시각, 바꾼 계정, 프로세스 | [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md) |
+| 2 | 보안 4624 | 바꾼 계정의 로그온 세션 | [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) |
+| 3 | 보안 4688 | 시각을 바꾼 프로세스를 만든 기록 | [프로세스 생성](../../../02-artifacts/event-logs/4688.md) |
 | 4 | 사용자 권한 정책 | 시각을 바꿀 수 있는 계정 | 이 페이지 아래 |
-| 5 | 이벤트 로그 레코드 | 레코드 식별자와 기록 시각 | [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) |
-| 6 | 파일 시스템 시각 | 틀어진 구간에 만들거나 고친 파일 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 7 | 서비스 설정 | Windows Time 서비스를 멈추거나 바꿨는지 | [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) |
+| 5 | 이벤트 로그 레코드 | 레코드 식별자와 기록 시각 | [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) |
+| 6 | 파일 시스템 시각 | 틀어진 구간에 만들거나 고친 파일 | [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) · [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) |
+| 7 | 서비스 설정 | Windows Time 서비스를 멈추거나 바꿨는지 | [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) |
 
 ## 4616 에서 읽을 것
 
@@ -92,7 +92,7 @@ Microsoft 문서가 적은 위험은 아래와 같습니다[2].
 - .evtx 레코드마다 레코드 식별자와 기록 시각(FILETIME, UTC)이 함께 들어 있습니다[3].
 - 레코드를 식별자 순서로 늘어놓고, 기록 시각이 거꾸로 가는 곳이 있는지 살펴볼 수는 있습니다.
 - 이 방법을 검증한 자료는 이번에 확인하지 못했습니다. 4616 을 보조하는 단서로만 씁니다.
-- 손상된 파일에서는 식별자가 이어지지 않을 수 있습니다[3]. 식별자를 읽는 주의점은 [이벤트 로그를 지웠나 (Log Clearing)](/04-scenarios/activity/anti-forensics/log-clearing.md) 에 있습니다.
+- 손상된 파일에서는 식별자가 이어지지 않을 수 있습니다[3]. 식별자를 읽는 주의점은 [이벤트 로그를 지웠나 (Log Clearing)](log-clearing.md) 에 있습니다.
 
 ## 분석 흐름
 
@@ -104,17 +104,17 @@ Microsoft 문서가 적은 위험은 아래와 같습니다[2].
 6. 시각을 옮긴 4616 뒤에 시각을 되돌린 4616 이 있는지 봅니다. 두 이벤트 사이가 시각이 틀어진 구간입니다.
 7. 도메인 PC 이면 사람이 바꾼 4616 뒤에 LOCAL SERVICE 의 4616 이 이어지는지 봅니다. 도메인 PC 는 도메인 컨트롤러와 자동으로 시각을 맞춥니다[2].
 8. 틀어진 구간에 만들거나 고친 파일과 로그 항목을 표시하고, 옮긴 폭을 함께 적습니다. 시각을 고쳐 적을지는 다른 기록과 맞춰 본 뒤 정합니다.
-9. Windows Time 서비스의 설정을 [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) 에서 확인합니다.
-10. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다.
+9. Windows Time 서비스의 설정을 [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) 에서 확인합니다.
+10. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다.
 
 ## 흔한 오판
 
 1. **4616 이 있으니 시각을 조작했다고 봅니다.** LOCAL SERVICE 가 남긴 4616 은 보통 보이는 정상 보정입니다[1].
-2. **4616 이 없으니 감사 설정이 꺼져 있었다고 봅니다.** 4616 은 하위 범주 설정과 상관없이 항상 기록됩니다[1]. 4616 이 없으면 로그를 지웠는지 [이벤트 로그를 지웠나 (Log Clearing)](/04-scenarios/activity/anti-forensics/log-clearing.md) 를 따라 봅니다.
+2. **4616 이 없으니 감사 설정이 꺼져 있었다고 봅니다.** 4616 은 하위 범주 설정과 상관없이 항상 기록됩니다[1]. 4616 이 없으면 로그를 지웠는지 [이벤트 로그를 지웠나 (Log Clearing)](log-clearing.md) 를 따라 봅니다.
 3. **PreviousTime·NewTime 을 현지 시각으로 읽습니다.** 두 값은 UTC 입니다[1].
 4. **시간대 변경을 시각 변경으로 봅니다.** 둘은 권한부터 다릅니다[2]. 시간대 Bias 는 REG_DWORD 로 저장되지만 부호 있는 32비트로 읽습니다(현장 관찰). UTC+9 는 -540 이고, 부호 없이 읽으면 4294966756 입니다(현장 관찰).
 5. **도구가 보여 준 10진 값을 그대로 씁니다.** 레지스트리 값을 문자열로 받는 도구는 REG_DWORD 를 부호 없는 10진으로 보여 주는 경우가 많습니다(현장 관찰). 부호에 뜻이 있는 값은 원시 바이트로 확인합니다.
-6. **틀어진 구간의 파일 시각을 그대로 보고합니다.** 시각을 바꾸면 새로 만들거나 고친 파일의 타임스탬프가 틀릴 수 있습니다[2]. 문서 날짜를 따질 때는 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 를 함께 봅니다.
+6. **틀어진 구간의 파일 시각을 그대로 보고합니다.** 시각을 바꾸면 새로 만들거나 고친 파일의 타임스탬프가 틀릴 수 있습니다[2]. 문서 날짜를 따질 때는 [이 문서의 날짜를 믿을 수 있나](../document-date-verification.md) 를 함께 봅니다.
 
 ## 보고서 문장 예
 
@@ -123,12 +123,12 @@ Microsoft 문서가 적은 위험은 아래와 같습니다[2].
 
 ## 함께 볼 페이지
 
-- [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md) — 시간 변경 이벤트의 구조입니다.
-- [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — FILETIME 을 읽는 법입니다.
-- [시간대 설정](/02-artifacts/system-account/time-zone.md) — 시간대 값과 Bias 를 읽는 법입니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) · [프로세스 생성](/02-artifacts/event-logs/4688.md) — 4616 의 계정과 프로세스를 잇는 기록입니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 틀어진 구간을 표시해 시각을 정리합니다.
-- [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) — 파일과 문서의 날짜를 따로 따집니다.
+- [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md) — 시간 변경 이벤트의 구조입니다.
+- [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — FILETIME 을 읽는 법입니다.
+- [시간대 설정](../../../02-artifacts/system-account/time-zone.md) — 시간대 값과 Bias 를 읽는 법입니다.
+- [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) · [프로세스 생성](../../../02-artifacts/event-logs/4688.md) — 4616 의 계정과 프로세스를 잇는 기록입니다.
+- [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) — 틀어진 구간을 표시해 시각을 정리합니다.
+- [이 문서의 날짜를 믿을 수 있나](../document-date-verification.md) — 파일과 문서의 날짜를 따로 따집니다.
 
 ## 참고 문헌
 

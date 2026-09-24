@@ -1,6 +1,6 @@
 # 악성코드는 어디서 들어왔나 (Initial Access)
 
-이 페이지는 악성코드가 PC 에 처음 들어온 길을 거슬러 찾는 순서를 다룹니다. 메일 첨부, 메일·메신저 링크, 웹 방문, 원격 접속, USB 가운데 어느 길인지 가립니다. 파일 하나의 출처를 가리는 기본 순서는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 에 있습니다. 이 페이지는 그 순서를 침해 사고에 맞춰 쓰는 법과 오피스 매크로 차단을 다룹니다. 원격 데스크톱과 원격 제어 프로그램으로 들어온 경우는 [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) 과 [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) 에서 다룹니다.
+이 페이지는 악성코드가 PC 에 처음 들어온 길을 거슬러 찾는 순서를 다룹니다. 메일 첨부, 메일·메신저 링크, 웹 방문, 원격 접속, USB 가운데 어느 길인지 가립니다. 파일 하나의 출처를 가리는 기본 순서는 [이 파일은 어디서 왔나](../activity/file-origin.md) 에 있습니다. 이 페이지는 그 순서를 침해 사고에 맞춰 쓰는 법과 오피스 매크로 차단을 다룹니다. 원격 데스크톱과 원격 제어 프로그램으로 들어온 경우는 [원격 데스크톱 침입 확인](rdp-intrusion.md) 과 [원격 제어 프로그램으로 누가 조작했나](remote-access-tool-abuse.md) 에서 다룹니다.
 
 ## 조사 질문
 
@@ -31,26 +31,26 @@ MITRE ATT&CK 은 처음 들어오는 단계를 초기 접근 (Initial Access) �
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | 버전과 빌드를 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 먼저 적습니다. |
-| 시간대 | 메일·브라우저·이벤트 로그·파일 시스템의 시각 기준이 서로 다릅니다. [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
-| 사용자와 권한 | 대상 계정과 그 계정이 로컬 관리자였는지 적습니다. 한 공개 사례에서는 사용자가 로컬 관리자여서 첫 파일의 설치가 성공했습니다[2]. 보고서는 권한이 낮은 사용자였다면 설치가 실패했을 것이라고 적었습니다[2]. 계정은 [사용자 계정](/02-artifacts/system-account/sam.md) 에서 봅니다. |
+| Windows 버전 | 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 먼저 적습니다. |
+| 시간대 | 메일·브라우저·이벤트 로그·파일 시스템의 시각 기준이 서로 다릅니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](../activity/file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
+| 사용자와 권한 | 대상 계정과 그 계정이 로컬 관리자였는지 적습니다. 한 공개 사례에서는 사용자가 로컬 관리자여서 첫 파일의 설치가 성공했습니다[2]. 보고서는 권한이 낮은 사용자였다면 설치가 실패했을 것이라고 적었습니다[2]. 계정은 [사용자 계정](../../02-artifacts/system-account/sam.md) 에서 봅니다. |
 | Office 버전과 업데이트 채널 | 인터넷에서 온 문서의 매크로를 기본으로 막는 변경은 채널과 버전마다 적용 시기가 다릅니다[3]. 아래 "오피스 매크로 차단" 절의 표와 맞춰 봅니다. |
 | 파일 시스템 | 웹 표시 (Mark of the Web, MOTW) 는 NTFS 에 저장한 파일에만 붙습니다[3]. FAT32 로 포맷한 장치에 저장한 파일에는 붙지 않습니다[3]. |
-| 감사 정책·Sysmon | 이벤트 기록은 감사 정책과 Sysmon 설정에 따라 남기도 하고 안 남기도 합니다. 기록이 없다고 해서 일이 없었다고 읽지 않습니다. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
+| 감사 정책·Sysmon | 이벤트 기록은 감사 정책과 Sysmon 설정에 따라 남기도 하고 안 남기도 합니다. 기록이 없다고 해서 일이 없었다고 읽지 않습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
 | 수집 범위 | 의심 파일과 그 스트림, 사용자 프로필의 메일·브라우저 데이터, $MFT, $UsnJrnl:$J, 이벤트 로그, 레지스트리 하이브를 함께 확보합니다. |
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 실행 흔적 | 악성 파일의 경로, 실행 시각의 단서 | [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| 2 | 출처 표시 (Zone.Identifier) | 인터넷 영역에서 온 파일인지 | [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) |
-| 3 | 브라우저 방문·다운로드 기록 | 받은 주소, 받은 시각, 저장 경로 | [방문·다운로드 기록 (크롬 계열)](/02-artifacts/browsers/chrome-edge-whale/history.md) · [places.sqlite (파이어폭스)](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| 4 | 메일 데이터·첨부 임시 폴더 | 첨부 파일, 보낸 곳, 받은 시각 | [아웃룩](/02-artifacts/mail/outlook/index.md) · [첨부 임시 폴더](/02-artifacts/mail/outlook/olk-content-outlook.md) · [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) |
-| 5 | 오피스 흔적 | 신뢰 문서 기록, 매크로 내용, 오피스가 띄운 경고 | [신뢰 문서 기록](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) · [오피스 매크로](/02-artifacts/embedded-metadata/vba-macro.md) · [오피스 경고](/02-artifacts/event-logs/oalerts.md) |
-| 6 | 바로가기 파일 | 파일을 열었을 때의 볼륨 정보 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 7 | USB 저장장치 흔적 | 장치를 연결한 시각 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
-| 8 | 원격 접속 흔적 | 원격 데스크톱·원격 제어 프로그램 접속 | [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) |
+| 1 | 실행 흔적 | 악성 파일의 경로, 실행 시각의 단서 | [프리페치](../../02-artifacts/execution/prefetch/index.md) · [AmCache](../../02-artifacts/execution/amcache-hve/index.md) |
+| 2 | 출처 표시 (Zone.Identifier) | 인터넷 영역에서 온 파일인지 | [다운로드 출처 표시](../../02-artifacts/filesystem/zone-identifier.md) |
+| 3 | 브라우저 방문·다운로드 기록 | 받은 주소, 받은 시각, 저장 경로 | [방문·다운로드 기록 (크롬 계열)](../../02-artifacts/browsers/chrome-edge-whale/history.md) · [places.sqlite (파이어폭스)](../../02-artifacts/browsers/firefox/places-sqlite.md) |
+| 4 | 메일 데이터·첨부 임시 폴더 | 첨부 파일, 보낸 곳, 받은 시각 | [아웃룩](../../02-artifacts/mail/outlook/index.md) · [첨부 임시 폴더](../../02-artifacts/mail/outlook/olk-content-outlook.md) · [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) |
+| 5 | 오피스 흔적 | 신뢰 문서 기록, 매크로 내용, 오피스가 띄운 경고 | [신뢰 문서 기록](../../02-artifacts/file-folder-usage/microsoft-office/trust-records.md) · [오피스 매크로](../../02-artifacts/embedded-metadata/vba-macro.md) · [오피스 경고](../../02-artifacts/event-logs/oalerts.md) |
+| 6 | 바로가기 파일 | 파일을 열었을 때의 볼륨 정보 | [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) |
+| 7 | USB 저장장치 흔적 | 장치를 연결한 시각 | [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) |
+| 8 | 원격 접속 흔적 | 원격 데스크톱·원격 제어 프로그램 접속 | [원격 데스크톱 침입 확인](rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](remote-access-tool-abuse.md) |
 
 악성으로 확인된 파일(1)에서 시작해 거꾸로 올라갑니다. 2~3 은 인터넷 갈래, 4~5 는 메일 갈래, 6~7 은 USB 갈래입니다. 셋 다 막히면 8 을 봅니다.
 
@@ -94,16 +94,16 @@ Office 는 인터넷에서 온 파일의 VBA 매크로를 기본으로 막도록
 - OneDrive 로 동기화하는 알려진 폴더(바탕 화면·문서·사진·스크린샷·카메라 앨범)의 파일
 - FAT32 로 포맷한 장치에 저장한 파일
 
-브라우저로 OneDrive·SharePoint 파일을 내려받을 때는 인터넷 보안 영역 설정에 따라 MOTW 가 붙습니다[3]. 예를 들어 Microsoft Edge 는 인터넷 영역 파일에 MOTW 를 붙입니다[3]. ZoneId 값의 뜻과 스트림 구조는 [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) 에 있습니다.
+브라우저로 OneDrive·SharePoint 파일을 내려받을 때는 인터넷 보안 영역 설정에 따라 MOTW 가 붙습니다[3]. 예를 들어 Microsoft Edge 는 인터넷 영역 파일에 MOTW 를 붙입니다[3]. ZoneId 값의 뜻과 스트림 구조는 [다운로드 출처 표시](../../02-artifacts/filesystem/zone-identifier.md) 에 있습니다.
 
 **매크로 가설을 세울 때 함께 볼 것.** "인터넷에서 받은 문서의 매크로가 실행됐다" 는 가설을 세우면 아래를 함께 봅니다.
 
 1. Office 버전과 업데이트 채널 — 기본 차단이 적용된 버전인지 위 표와 맞춥니다.
-2. 문서의 ZoneId — [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) 에서 읽습니다.
+2. 문서의 ZoneId — [다운로드 출처 표시](../../02-artifacts/filesystem/zone-identifier.md) 에서 읽습니다.
 3. 차단 해제 흔적 — 파일에서 ZoneId 값이 지워졌는지 봅니다. 같은 페이지의 "시각 해석" 절을 따릅니다.
-4. 신뢰 문서 기록 — [신뢰 문서 기록](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) 에서 그 문서 경로를 찾습니다.
+4. 신뢰 문서 기록 — [신뢰 문서 기록](../../02-artifacts/file-folder-usage/microsoft-office/trust-records.md) 에서 그 문서 경로를 찾습니다.
 5. 신뢰할 수 있는 위치 — 설정된 위치와 문서가 저장된 폴더를 맞춥니다.
-6. 매크로 내용 — [오피스 매크로](/02-artifacts/embedded-metadata/vba-macro.md) 에서 무엇을 하려 했는지 봅니다.
+6. 매크로 내용 — [오피스 매크로](../../02-artifacts/embedded-metadata/vba-macro.md) 에서 무엇을 하려 했는지 봅니다.
 
 ## 공개 사례에서 본 첫 파일
 
@@ -117,14 +117,14 @@ Office 는 인터넷에서 온 파일의 VBA 매크로를 기본으로 막도록
 ## 분석 흐름
 
 1. Windows 버전·시간대·대상 계정과 그 계정의 권한을 정리합니다. Office 버전과 업데이트 채널도 적습니다.
-2. 악성으로 확인된 파일에서 시작합니다. [프리페치](/02-artifacts/execution/prefetch/index.md) 와 [AmCache](/02-artifacts/execution/amcache-hve/index.md) 로 경로와 실행 시각의 단서를 모읍니다. 실행 흔적을 읽는 순서는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에 있습니다.
-3. 그 파일을 만든 프로세스를 거슬러 올라갑니다. 프로세스 생성 기록이 있으면 부모 프로세스를 봅니다. 기록의 칸은 [프로세스 생성](/02-artifacts/event-logs/4688.md) 과 [프로세스 생성 (Sysmon 1)](/02-artifacts/event-logs/sysmon/1.md) 에 있습니다. 가장 먼저 생긴 관련 파일이 나올 때까지 되풀이합니다.
-4. 가장 먼저 생긴 파일의 출처 표시와 브라우저 다운로드 기록을 봅니다. 순서는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 따릅니다.
-5. 출처가 메일로 보이면 메일 데이터와 첨부 임시 폴더에서 같은 이름·크기·해시의 첨부를 찾습니다. 보낸 곳은 [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) 으로 확인합니다.
+2. 악성으로 확인된 파일에서 시작합니다. [프리페치](../../02-artifacts/execution/prefetch/index.md) 와 [AmCache](../../02-artifacts/execution/amcache-hve/index.md) 로 경로와 실행 시각의 단서를 모읍니다. 실행 흔적을 읽는 순서는 [어떤 프로그램을 언제 실행했나](../activity/program-execution.md) 에 있습니다.
+3. 그 파일을 만든 프로세스를 거슬러 올라갑니다. 프로세스 생성 기록이 있으면 부모 프로세스를 봅니다. 기록의 칸은 [프로세스 생성](../../02-artifacts/event-logs/4688.md) 과 [프로세스 생성 (Sysmon 1)](../../02-artifacts/event-logs/sysmon/1.md) 에 있습니다. 가장 먼저 생긴 관련 파일이 나올 때까지 되풀이합니다.
+4. 가장 먼저 생긴 파일의 출처 표시와 브라우저 다운로드 기록을 봅니다. 순서는 [이 파일은 어디서 왔나](../activity/file-origin.md) 를 따릅니다.
+5. 출처가 메일로 보이면 메일 데이터와 첨부 임시 폴더에서 같은 이름·크기·해시의 첨부를 찾습니다. 보낸 곳은 [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) 으로 확인합니다.
 6. 첫 파일이 매크로 문서면 위 "매크로 가설을 세울 때 함께 볼 것" 을 차례로 확인합니다.
 7. 출처 표시도, 다운로드 기록도, 메일도 없으면 USB 와 원격 접속 갈래를 봅니다. 그 전에 아래 흔한 오판 1 의 경우인지 먼저 가립니다.
-8. 첫 파일 뒤에 설치된 프로그램·서비스·자동실행 항목을 찾습니다. [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 와 [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) 로 이어 갑니다.
-9. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 에 올립니다. "처음 들어온 시각" 과 "처음 눈에 띈 파일의 실행 시각" 을 나눠 적습니다.
+8. 첫 파일 뒤에 설치된 프로그램·서비스·자동실행 항목을 찾습니다. [악성코드 지속성(자동실행) 찾기](persistence.md) 와 [원격 제어 프로그램으로 누가 조작했나](remote-access-tool-abuse.md) 로 이어 갑니다.
+9. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올립니다. "처음 들어온 시각" 과 "처음 눈에 띈 파일의 실행 시각" 을 나눠 적습니다.
 
 ## 흔한 오판
 
@@ -141,15 +141,15 @@ Office 는 인터넷에서 온 파일의 VBA 매크로를 기본으로 막도록
 
 ## 함께 볼 페이지
 
-- [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) — 파일 하나의 출처를 가리는 기본 순서입니다.
-- [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) — Zone.Identifier 스트림의 구조와 ZoneId 값입니다.
-- [방문·다운로드 기록 (크롬 계열)](/02-artifacts/browsers/chrome-edge-whale/history.md) · [places.sqlite (파이어폭스)](/02-artifacts/browsers/firefox/places-sqlite.md) — 받은 주소와 시각입니다.
-- [아웃룩](/02-artifacts/mail/outlook/index.md) · [첨부 임시 폴더](/02-artifacts/mail/outlook/olk-content-outlook.md) · [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) — 메일 첨부 갈래입니다.
-- [신뢰 문서 기록](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) · [오피스 매크로](/02-artifacts/embedded-metadata/vba-macro.md) · [오피스 경고](/02-artifacts/event-logs/oalerts.md) — 매크로 문서 갈래입니다.
-- [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) · [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) — 실행과 열람 흔적입니다.
-- [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) — USB 갈래입니다.
-- [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) — 원격 접속 갈래입니다.
-- [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) — 첫 파일 뒤에 남긴 자동실행을 찾습니다.
+- [이 파일은 어디서 왔나](../activity/file-origin.md) — 파일 하나의 출처를 가리는 기본 순서입니다.
+- [다운로드 출처 표시](../../02-artifacts/filesystem/zone-identifier.md) — Zone.Identifier 스트림의 구조와 ZoneId 값입니다.
+- [방문·다운로드 기록 (크롬 계열)](../../02-artifacts/browsers/chrome-edge-whale/history.md) · [places.sqlite (파이어폭스)](../../02-artifacts/browsers/firefox/places-sqlite.md) — 받은 주소와 시각입니다.
+- [아웃룩](../../02-artifacts/mail/outlook/index.md) · [첨부 임시 폴더](../../02-artifacts/mail/outlook/olk-content-outlook.md) · [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) — 메일 첨부 갈래입니다.
+- [신뢰 문서 기록](../../02-artifacts/file-folder-usage/microsoft-office/trust-records.md) · [오피스 매크로](../../02-artifacts/embedded-metadata/vba-macro.md) · [오피스 경고](../../02-artifacts/event-logs/oalerts.md) — 매크로 문서 갈래입니다.
+- [프리페치](../../02-artifacts/execution/prefetch/index.md) · [AmCache](../../02-artifacts/execution/amcache-hve/index.md) · [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) — 실행과 열람 흔적입니다.
+- [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) — USB 갈래입니다.
+- [원격 데스크톱 침입 확인](rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](remote-access-tool-abuse.md) — 원격 접속 갈래입니다.
+- [악성코드 지속성(자동실행) 찾기](persistence.md) — 첫 파일 뒤에 남긴 자동실행을 찾습니다.
 
 ## 참고 문헌
 

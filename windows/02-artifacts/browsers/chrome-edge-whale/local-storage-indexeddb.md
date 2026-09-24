@@ -12,11 +12,11 @@
 - **세션 스토리지**는 탭 하나에 묶인 키와 값입니다. 이름과 달리 디스크의 `Session Storage` 폴더에도 저장됩니다.
 - **IndexedDB** 는 사이트가 쓰는 데이터베이스입니다. 객체, 배열, 파일(blob)까지 저장합니다. 웹 메일, 웹 메신저, 문서 편집기가 오프라인용 자료를 여기에 두는 경우가 많습니다.
 
-Teams·Discord·Slack 같은 Electron 앱과 WebView2 앱도 같은 코드를 씁니다. 그래서 같은 구조의 폴더가 앱 데이터 폴더 안에 생깁니다. 위치는 [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md)에서 다룹니다.
+Teams·Discord·Slack 같은 Electron 앱과 WebView2 앱도 같은 코드를 씁니다. 그래서 같은 구조의 폴더가 앱 데이터 폴더 안에 생깁니다. 위치는 [Electron·WebView2 앱 데이터 위치](../../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-아래 경로는 프로필 폴더 기준입니다. 버킷 (Storage Bucket) 은 Chromium 이 한 사이트의 저장소를 묶어 관리하는 단위입니다. 브라우저별 프로필 폴더 위치는 [프로필 폴더와 계열 브라우저 구분](/01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
+아래 경로는 프로필 폴더 기준입니다. 버킷 (Storage Bucket) 은 Chromium 이 한 사이트의 저장소를 묶어 관리하는 단위입니다. 브라우저별 프로필 폴더 위치는 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다.
 
 | 저장소 | 위치 | 형식 | 특징 |
 |---|---|---|---|
@@ -42,11 +42,11 @@ Chrome 115 부터 모든 사용자에게 분할 저장이 켜졌습니다(Google
 
 Chromium 소스에는 로컬 스토리지와 세션 스토리지를 SQLite 에 저장하는 코드가 있습니다. SQLite 방식의 폴더 이름은 `LocalStorage`·`SessionStorage` 로, 띄어쓰기가 없습니다. 2026년 9월의 Chromium 소스에서는 이 기능의 기본값이 꺼져 있습니다. 단계적으로 켜는 설정(새 DB 만 SQLite, 모두 SQLite 등)이 소스에 있습니다. IndexedDB 에도 SQLite 저장 코드가 있습니다.
 
-그래서 검체에서는 LevelDB 폴더와 SQLite 폴더를 모두 확인합니다. SQLite 파일 해석은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md)를 봅니다.
+그래서 검체에서는 LevelDB 폴더와 SQLite 폴더를 모두 확인합니다. SQLite 파일 해석은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md)를 봅니다.
 
 ## 구조
 
-LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번호 (Sequence Number), 압축 정리 (Compaction) 는 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md)에서 다룹니다. 이 페이지에서 알아야 할 점은 세 가지입니다.
+LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번호 (Sequence Number), 압축 정리 (Compaction) 는 [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md)에서 다룹니다. 이 페이지에서 알아야 할 점은 세 가지입니다.
 
 - 레코드마다 순서 번호와 상태(살아 있음·지움)가 붙습니다.
 - 같은 키의 레코드가 여러 개 남을 수 있습니다. 살아 있으면서 순서 번호가 가장 큰 레코드가 현재 값입니다.
@@ -73,7 +73,7 @@ DB 하나에 모든 사이트의 값이 들어 있습니다. 키의 첫 글자�
 | 사이트를 직접 연 경우 (퍼스트 파티) | `https://www.example.com` (끝에 `/` 가 없습니다) |
 | 다른 사이트 안에 끼워 넣은 경우 (제3자) | `https://widget.example.net/^0https://news.example.com` |
 
-`^0` 뒤는 최상위 사이트입니다. 그래서 제3자 저장 키에서 "어느 사이트 안에서 이 프레임이 열렸는지" 를 읽을 수 있습니다. 문자 인코딩 일반은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
+`^0` 뒤는 최상위 사이트입니다. 그래서 제3자 저장 키에서 "어느 사이트 안에서 이 프레임이 열렸는지" 를 읽을 수 있습니다. 문자 인코딩 일반은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
 
 ### 세션 스토리지
 
@@ -126,10 +126,10 @@ LevelDB 레코드에는 시각이 없습니다. 순서 번호로 앞뒤만 알 �
 | 앱이 넣은 시각 | 값 안 | 사이트가 정합니다 | 사이트마다 다릅니다. JavaScript `Date` 는 1970-01-01 UTC 부터 센 밀리초입니다 |
 | 파일 시스템 시각 | `.log`·`.ldb` 파일 | 파일이 생기거나 쓰일 때 | NTFS 시각 |
 
-- `META:` 값의 시각은 `base::Time::ToInternalValue()` 로 저장합니다(Chromium 소스 주석). CCL 파서는 이 값을 1601년 기준 마이크로초로 풉니다. 이 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)의 WebKit 시각과 같습니다.
+- `META:` 값의 시각은 `base::Time::ToInternalValue()` 로 저장합니다(Chromium 소스 주석). CCL 파서는 이 값을 1601년 기준 마이크로초로 풉니다. 이 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)의 WebKit 시각과 같습니다.
 - `last_modified` 는 저장 키 하나에 하나뿐입니다. 그 사이트의 마지막 쓰기만 남고 이전 시각은 덮어씁니다. 이전 `META:` 레코드가 지운 레코드로 남아 있으면 예전 시각도 볼 수 있습니다.
 - CCL 의 파서는 `META:` 레코드와 순서 번호가 이어지는 값 레코드를 한 번의 쓰기로 묶습니다. 이렇게 묶으면 값 레코드에 대략의 시각을 붙일 수 있습니다. 이 방법은 추정입니다. 보고서에는 추정이라고 밝힙니다.
-- 모든 시각은 UTC 입니다. 현지 시각 변환은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+- 모든 시각은 UTC 입니다. 현지 시각 변환은 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -137,7 +137,7 @@ LevelDB 레코드에는 시각이 없습니다. 순서 번호로 앞뒤만 알 �
 2. **살아 있는 레코드를 모두 현재 값으로 봅니다.** 같은 키에 살아 있는 레코드가 여러 개 있을 수 있습니다. 순서 번호가 가장 큰 것만 현재 값입니다.
 3. **원본 폴더를 LevelDB 라이브러리로 엽니다.** 라이브러리는 열 때 `.log` 를 새 `.ldb` 로 옮기고 압축 정리를 할 수 있습니다. 그러면 지운 레코드가 사라집니다. 항상 사본에서 작업합니다.
 4. **문자열 검색만 합니다.** `.ldb` 의 데이터는 Snappy 로 압축될 수 있습니다. 압축된 블록 안의 글자는 검색에 걸리지 않습니다. UTF-16LE 로 저장된 값도 한 바이트 문자 검색에 걸리지 않습니다.
-5. **출처가 있으면 방문했다고 봅니다.** 광고, 분석 스크립트, 위젯 프레임도 저장소에 씁니다. 방문 여부는 [방문·다운로드 기록](/02-artifacts/browsers/chrome-edge-whale/history.md)과 맞춰 봅니다.
+5. **출처가 있으면 방문했다고 봅니다.** 광고, 분석 스크립트, 위젯 프레임도 저장소에 씁니다. 방문 여부는 [방문·다운로드 기록](history.md)과 맞춰 봅니다.
 6. **`IndexedDB\` 폴더만 봅니다.** 분할 저장 이후 제3자와 추가 버킷의 IndexedDB 는 `WebStorage\` 아래에 있습니다. SQLite 방식이 켜진 브라우저는 `LocalStorage\`·`SessionStorage\` 에 씁니다.
 7. **세션 스토리지는 디스크에 없다고 봅니다.** 크롬 계열은 세션 스토리지도 `Session Storage\` 폴더에 씁니다.
 8. **값을 사이트가 쓴 그대로라고 봅니다.** 사용자는 개발자 도구에서 로컬 스토리지 값을 고치거나 지울 수 있습니다. 확장 프로그램도 페이지 스크립트로 값을 바꿀 수 있습니다.
@@ -145,14 +145,14 @@ LevelDB 레코드에는 시각이 없습니다. 순서 번호로 앞뒤만 알 �
 ### 지우기와 조작
 
 - **사이트 데이터 삭제**: 로컬 스토리지는 모든 사이트가 DB 하나를 같이 씁니다. LevelDB 는 지울 때 지움 레코드를 더하므로, 압축 정리 전까지 예전 레코드를 찾을 수 있습니다. 압축 정리가 언제 도는지는 미리 알 수 없습니다.
-- **폴더 삭제**: IndexedDB 는 사이트마다 폴더가 따로 있어서 폴더째 지워질 수 있습니다. 이때는 [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md), [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md), [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md)으로 찾습니다.
-- **시크릿 창**: 시크릿 창에서 쓴 웹 저장소는 이 폴더들에 남지 않습니다. 흐름은 [시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md)에서 다룹니다.
+- **폴더 삭제**: IndexedDB 는 사이트마다 폴더가 따로 있어서 폴더째 지워질 수 있습니다. 이때는 [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md), [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md)으로 찾습니다.
+- **시크릿 창**: 시크릿 창에서 쓴 웹 저장소는 이 폴더들에 남지 않습니다. 흐름은 [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번 — 로컬 스토리지 레코드 읽기
 
-아래는 Chromium 소스와 CCL 자료의 형식 설명으로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `.log` 파일에서는 레코드가 LevelDB 쓰기 묶음 (WriteBatch) 안에 길이 값과 함께 들어 있습니다. 그 겉포장은 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md)를 봅니다. 여기서는 키와 값만 떼어 봅니다.
+아래는 Chromium 소스와 CCL 자료의 형식 설명으로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `.log` 파일에서는 레코드가 LevelDB 쓰기 묶음 (WriteBatch) 안에 길이 값과 함께 들어 있습니다. 그 겉포장은 [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md)를 봅니다. 여기서는 키와 값만 떼어 봅니다.
 
 **값 레코드**
 
@@ -201,22 +201,22 @@ CCL 이 공개한 파이썬 라이브러리 `ccl_chromium_reader` 로 로컬 스
 - 결과에 순서 번호와 상태(살아 있음·지움)가 나오는지 봅니다.
 - `WebStorage\` 아래 버킷과 SQLite 폴더도 읽는지 봅니다.
 - IndexedDB 값의 V8 직렬화를 풀지 못하면 원시 바이트로 남기는지 봅니다.
-- 값 한두 개는 위 헥스 풀이와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 값 한두 개는 위 헥스 풀이와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md) | 그 출처를 실제로 방문한 시각. `META:` 시각과 가까운지 |
-| [쿠키 (Cookies)](/02-artifacts/browsers/chrome-edge-whale/cookies.md) | 같은 사이트의 쿠키와 그 생성·마지막 접근 시각 |
-| [캐시 (Cache)](/02-artifacts/browsers/chrome-edge-whale/cache.md) | 같은 사이트에서 받은 스크립트와 응답 |
-| [세션·탭 복원 (Sessions)](/02-artifacts/browsers/chrome-edge-whale/sessions.md) | 세션 스토리지가 속한 탭과 그 탭의 주소 |
-| [확장 프로그램 (Extensions)](/02-artifacts/browsers/chrome-edge-whale/extensions.md) | 값을 바꿀 수 있는 확장 프로그램이 있었는지 |
-| [Electron·WebView2 앱 데이터 위치](/01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) | 같은 구조로 남은 앱 데이터 ([팀즈](/02-artifacts/messengers/teams.md)·[디스코드](/02-artifacts/messengers/discord.md)·[슬랙](/02-artifacts/messengers/slack.md)) |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | `.log`·`.ldb` 파일과 IndexedDB 폴더가 생기고 지워진 시각 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 LevelDB 폴더 |
+| [방문·다운로드 기록 (History)](history.md) | 그 출처를 실제로 방문한 시각. `META:` 시각과 가까운지 |
+| [쿠키 (Cookies)](cookies.md) | 같은 사이트의 쿠키와 그 생성·마지막 접근 시각 |
+| [캐시 (Cache)](cache.md) | 같은 사이트에서 받은 스크립트와 응답 |
+| [세션·탭 복원 (Sessions)](sessions.md) | 세션 스토리지가 속한 탭과 그 탭의 주소 |
+| [확장 프로그램 (Extensions)](extensions.md) | 값을 바꿀 수 있는 확장 프로그램이 있었는지 |
+| [Electron·WebView2 앱 데이터 위치](../../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) | 같은 구조로 남은 앱 데이터 ([팀즈](../../messengers/teams.md)·[디스코드](../../messengers/discord.md)·[슬랙](../../messengers/slack.md)) |
+| [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | `.log`·`.ldb` 파일과 IndexedDB 폴더가 생기고 지워진 시각 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 LevelDB 폴더 |
 
-웹 사용 전체 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md)에서 다룹니다.
+웹 사용 전체 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md)에서 다룹니다.
 
 ## 실습
 

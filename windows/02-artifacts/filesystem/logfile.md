@@ -109,7 +109,7 @@
 
 - MFT 항목 머리 오프셋 8 에 `$LogFile` 순번(LSN)이 있습니다(참고 1).
 - 폴더 색인 INDX 머리 오프셋 8 에도 LSN 이 있습니다(참고 1).
-- 그래서 LSN 은 [$MFT](/02-artifacts/filesystem/mft.md)·[$I30](/02-artifacts/filesystem/i30.md)과 `$LogFile` 을 잇는 고리입니다.
+- 그래서 LSN 은 [$MFT](mft.md)·[$I30](i30.md)과 `$LogFile` 을 잇는 고리입니다.
 - 이 LSN 이 "그 항목을 마지막으로 바꾼 기록" 을 뜻한다는 설명은 이번 자료로 확인하지 못했습니다. 보고서에는 "항목에 적힌 LSN 과 같은 LSN 의 레코드가 있다" 까지만 씁니다.
 
 ### `$LogFile` 슬랙
@@ -145,22 +145,22 @@
 - 동작의 순서는 LSN 으로 잡습니다.
 - 동작의 시각은 같은 기간의 USN 레코드와 맞춰 좁힙니다. `$LogFile` 이 덮는 기간의 USN 레코드는 `$LogFile` 안에도 있습니다(참고 4). USN 레코드의 시각은 FILETIME(UTC)입니다(참고 1).
 - 남은 기간은 이렇게 잽니다. `$LogFile` 안에서 찾은 가장 이른 USN 레코드와 가장 늦은 USN 레코드의 시각을 적습니다. 그 사이가 이 검체에서 `$LogFile` 이 덮는 대략의 기간입니다.
-- 여러 기록을 한 시간표로 합치는 절차는 [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
+- 여러 기록을 한 시간표로 합치는 절차는 [파일시스템 타임라인](../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **기간이 짧습니다.** 시스템 드라이브는 몇 시간 분량만 남을 수 있습니다(참고 4). 사건 뒤에 PC 를 오래 쓰면 필요한 기록이 덮입니다. 수집이 늦어질수록 잃는 것이 많습니다.
-2. **실행 중인 볼륨에서는 계속 쓰입니다.** 수집하는 동안에도 새 트랜잭션이 옛 기록을 덮습니다. 수집 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md)을 봅니다.
+2. **실행 중인 볼륨에서는 계속 쓰입니다.** 수집하는 동안에도 새 트랜잭션이 옛 기록을 덮습니다. 수집 순서는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md)을 봅니다.
 3. **도구의 시각 칸을 동작 시각으로 읽습니다.** 그 값은 파일 시각입니다(참고 4). 위 "시각 해석" 을 봅니다.
 4. **상주 파일 내용을 기대합니다.** 요즘 Windows 에서는 상주 파일의 바뀐 내용이 남지 않습니다(참고 4).
 5. **슬랙의 조각을 온전한 레코드로 읽습니다.** 슬랙에는 머리가 잘린 트랜잭션이 섞여 있습니다(참고 4). 앞뒤 LSN 이 이어지는지 확인합니다.
 6. **크기 단위를 짐작합니다.** `chkdsk` 문서에는 단위가 없습니다(참고 3). 단위가 KB 라는 것은 도구 설명서의 예시에서 읽은 것입니다(참고 4).
-7. **원본 볼륨을 쓰기 가능하게 연결합니다.** `$LogFile` 은 장애 복구에 쓰는 파일입니다. 원본은 [쓰기 방지](/03-techniques/process-acquisition/evidence-acquisition/write-blocker.md) 상태로 다룹니다.
+7. **원본 볼륨을 쓰기 가능하게 연결합니다.** `$LogFile` 은 장애 복구에 쓰는 파일입니다. 원본은 [쓰기 방지](../../03-techniques/process-acquisition/evidence-acquisition/write-blocker.md) 상태로 다룹니다.
 
 ### 지우기와 조작
 
-- **파일을 지우고 흔적을 정리합니다.** 지운 파일의 이름이 폴더 색인 삭제 undo 와 이름 이력에 남을 수 있습니다(참고 4). 로그가 덮는 기간 안이어야 합니다. [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)와 [완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
-- **파일 시각을 바꿉니다.** 시각을 바꾼 동작이 로그 기간 안에 있었다면, undo 쪽에서 바뀌기 전 값을 찾아볼 수 있습니다. 판단 방법은 [시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)에서 다룹니다.
+- **파일을 지우고 흔적을 정리합니다.** 지운 파일의 이름이 폴더 색인 삭제 undo 와 이름 이력에 남을 수 있습니다(참고 4). 로그가 덮는 기간 안이어야 합니다. [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md)와 [완전삭제 도구를 썼나](../../04-scenarios/activity/anti-forensics/wiping-tools.md)를 봅니다.
+- **파일 시각을 바꿉니다.** 시각을 바꾼 동작이 로그 기간 안에 있었다면, undo 쪽에서 바뀌기 전 값을 찾아볼 수 있습니다. 판단 방법은 [시각 조작 탐지](../../03-techniques/analysis/timeline/timestomping.md)에서 다룹니다.
 - **로그 크기를 줄입니다.** `chkdsk /l` 로 크기를 줄이면 남는 기간이 짧아집니다. 검체의 `$LogFile` 크기가 같은 쓰임새의 다른 볼륨보다 눈에 띄게 작으면 크기를 바꾼 적이 있는지 따져 봅니다.
 
 ## 직접 분석해 보기
@@ -188,7 +188,7 @@
 
 1. 재시작 페이지 뒤에서 `52 43 52 44`(`RCRD`) 로 시작하는 페이지를 찾습니다.
 2. fix-up 을 적용하고 레코드 머리의 LSN 을 읽습니다.
-3. [$MFT](/02-artifacts/filesystem/mft.md) 에서 관심 있는 항목 머리 오프셋 8 의 LSN 을 읽습니다.
+3. [$MFT](mft.md) 에서 관심 있는 항목 머리 오프셋 8 의 LSN 을 읽습니다.
 4. 같은 LSN 의 레코드를 `$LogFile` 에서 찾습니다. 찾으면 그 레코드의 동작과 redo·undo 를 읽습니다.
 
 ### 실행 중인 시스템에서
@@ -204,17 +204,17 @@
 - 시각 칸이 무엇인지 확인합니다. 파일 시각인지, 동작 시각인지 설명서에서 찾습니다.
 - 슬랙과 USN 레코드를 따로 뽑는지 확인합니다.
 - MFT 항목 크기(1024·4096)를 볼륨에 맞게 두는지 확인합니다.
-- 레코드 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 레코드 몇 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | 항목 머리의 LSN, 지금 남은 이름과 시각. 로그가 보여 주는 바뀌기 전 값과 비교합니다 |
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 같은 파일 참조의 변경 이유와 시각. `$UsnJrnl` 이 훨씬 긴 기간을 담고, 세부 내용은 적습니다(참고 4) |
-| [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) | INDX 머리의 LSN, 색인 항목 추가·삭제 기록과 슬랙에 남은 옛 항목 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 볼륨에 남은 `$LogFile` |
-| [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) | 로그에서 되살린 데이터 런으로 삭제 파일을 되살리기 |
+| [마스터 파일 테이블 ($MFT)](mft.md) | 항목 머리의 LSN, 지금 남은 이름과 시각. 로그가 보여 주는 바뀌기 전 값과 비교합니다 |
+| [USN 변경 저널 ($UsnJrnl)](usnjrnl.md) | 같은 파일 참조의 변경 이유와 시각. `$UsnJrnl` 이 훨씬 긴 기간을 담고, 세부 내용은 적습니다(참고 4) |
+| [폴더 인덱스와 슬랙 ($I30)](i30.md) | INDX 머리의 LSN, 색인 항목 추가·삭제 기록과 슬랙에 남은 옛 항목 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 예전 시점의 볼륨에 남은 `$LogFile` |
+| [파일시스템 기반 복구](../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) | 로그에서 되살린 데이터 런으로 삭제 파일을 되살리기 |
 
 ## 실습
 

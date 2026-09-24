@@ -1,6 +1,6 @@
 # PDF 정보 사전과 XMP (PDF Info·XMP)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](/02-artifacts/embedded-metadata/document-metadata/index.md)
+> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
 
 ## 한 줄 요약
 
@@ -58,7 +58,7 @@ Word 가 내보낸 PDF 에서 두 곳은 이렇게 연결돼 있었습니다. (�
 | 트레일러와 교차 참조 스트림 사전 | `/Info 18 0 R` | 정보 사전 |
 
 - 객체 번호는 파일마다 다릅니다.
-- 파일 끝에 덧붙여 고친 PDF 는 같은 객체가 여러 번 나올 수 있습니다. 이 구조는 [PDF 증분 저장과 이전 판 복원 (Incremental Update)](/02-artifacts/embedded-metadata/document-metadata/incremental-update.md) 에서 다룹니다.
+- 파일 끝에 덧붙여 고친 PDF 는 같은 객체가 여러 번 나올 수 있습니다. 이 구조는 [PDF 증분 저장과 이전 판 복원 (Incremental Update)](incremental-update.md) 에서 다룹니다.
 - 값의 모양은 Windows 버전이 아니라 PDF 를 만든 프로그램과 PDF 판에 따라 달라집니다.
 
 ## 구조
@@ -112,7 +112,7 @@ Word 가 내보낸 PDF 의 트레일러 `/ID` 는 두 칸 모두 `<BB86ACA32FE25
 | 3 | `495D` | `5D 49` |
 | 4·5 | `BEF9-D0E101271BE9` | `BE F9 D0 E1 01 27 1B E9` |
 
-앞 세 부분은 바이트 순서를 뒤집어 (리틀 엔디언) 적었고, 뒤 두 부분은 그대로 적었습니다. GUID 바이트 순서는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+앞 세 부분은 바이트 순서를 뒤집어 (리틀 엔디언) 적었고, 뒤 두 부분은 그대로 적었습니다. GUID 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 ## 증거로서 의미
 
@@ -164,11 +164,11 @@ Word 가 내보낸 PDF 의 트레일러 `/ID` 는 두 칸 모두 `<BB86ACA32FE25
 
   두 곳을 모두 읽고 견줍니다. 한쪽만 보여 주는 도구 결과로 판단하지 않습니다.
 - **오프셋 표기가 두 가지입니다.** 정보 사전은 `+09'00'`, XMP 는 `+09:00` 이었습니다. (관찰) 둘 다 읽는지 도구를 확인합니다.
-- **내보내기에서 빠지는 값.** Word 의 PDF 내보내기는 작성자를 옮기지 않았습니다. (관찰) 원본 문서의 속성은 [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) 에서 따로 봅니다.
+- **내보내기에서 빠지는 값.** Word 의 PDF 내보내기는 작성자를 옮기지 않았습니다. (관찰) 원본 문서의 속성은 [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) 에서 따로 봅니다.
 - **PDF 2.0 파일.** 정보 사전의 `CreationDate`·`ModDate` 말고 나머지 키가 폐기로 표시돼 있습니다. 2.0 파일에서 정보 사전에 제목·작성자가 없어도 이상하지 않습니다.
 - **`Keywords` 는 글자열 하나입니다.** ExifTool 은 읽을 때 이 글자열을 목록으로 나눕니다. 쉼표나 세미콜론이 있으면 둘 가운데 더 많은 쪽으로 나누고, 없으면 공백으로 나눕니다. 도구 결과의 목록과 원래 글자열을 구분합니다.
-- **글자열 인코딩.** 글자열이 `FE FF` 로 시작하면 UTF-16BE 로 풉니다. (관찰) 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
-- **덧붙여 고친 파일.** 옛 정보 사전 객체가 파일 앞부분에 남아 있을 수 있습니다. [PDF 증분 저장과 이전 판 복원 (Incremental Update)](/02-artifacts/embedded-metadata/document-metadata/incremental-update.md) 을 봅니다.
+- **글자열 인코딩.** 글자열이 `FE FF` 로 시작하면 UTF-16BE 로 풉니다. (관찰) 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을 봅니다.
+- **덧붙여 고친 파일.** 옛 정보 사전 객체가 파일 앞부분에 남아 있을 수 있습니다. [PDF 증분 저장과 이전 판 복원 (Incremental Update)](incremental-update.md) 을 봅니다.
 
 ## 직접 분석해 보기
 
@@ -190,7 +190,7 @@ FE FF 00 4D 00 69 00 63 00 72 00 6F 00 73 00 6F 00 66 00 74
 
 1. 원본은 두고 사본을 만듭니다.
 2. 파일 끝의 트레일러나 교차 참조 스트림 사전에서 `/Info n 0 R` 을 찾습니다. `n` 이 정보 사전 객체 번호입니다.
-3. `n 0 obj` 로 시작하는 객체를 찾습니다. 같은 번호가 여러 번 나오면 증분 저장이 있었을 수 있습니다. [증분 저장 페이지](/02-artifacts/embedded-metadata/document-metadata/incremental-update.md) 의 절차로 넘어갑니다.
+3. `n 0 obj` 로 시작하는 객체를 찾습니다. 같은 번호가 여러 번 나오면 증분 저장이 있었을 수 있습니다. [증분 저장 페이지](incremental-update.md) 의 절차로 넘어갑니다.
 4. 카탈로그의 `/Metadata m 0 R` 을 따라 XMP 스트림을 찾습니다. 관찰한 파일에서는 `<?xpacket` 으로 시작하는 XML 이었습니다.
 5. 두 곳의 만든 시각·수정 시각·작성자·프로그램 이름을 표로 나란히 적습니다.
 6. 트레일러 `/ID` 첫 칸을 위 표처럼 GUID 로 바꿔 `xmpMM:DocumentID` 와 견줍니다.
@@ -211,20 +211,20 @@ if meta is not None:
 ```
 
 - ExifTool 로도 같은 파일을 읽어 봅니다. 정보 사전 날짜는 `CreateDate`·`ModifyDate` 라는 이름으로 나옵니다. XMP 값이 따로 나오는지, 어떤 이름으로 나오는지 확인합니다.
-- 두 도구 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+- 두 도구 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [PDF 증분 저장과 이전 판 복원 (Incremental Update)](/02-artifacts/embedded-metadata/document-metadata/incremental-update.md) | 덧붙여 고친 부분, 옛 정보 사전 |
-| [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) | PDF 로 내보내기 전 원본 문서의 작성자·시각 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 파일 시스템 생성·수정 시각과 `CreationDate`·`ModDate` 의 차이 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | PDF 를 내려받았는지 |
-| [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) | 내려받은 기록 |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | 오프셋이 그 PC 의 시간대와 맞는지 |
+| [PDF 증분 저장과 이전 판 복원 (Incremental Update)](incremental-update.md) | 덧붙여 고친 부분, 옛 정보 사전 |
+| [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) | PDF 로 내보내기 전 원본 문서의 작성자·시각 |
+| [마스터 파일 테이블](../../filesystem/mft.md) | 파일 시스템 생성·수정 시각과 `CreationDate`·`ModDate` 의 차이 |
+| [다운로드 출처 표시](../../filesystem/zone-identifier.md) | PDF 를 내려받았는지 |
+| [크롬 계열 브라우저](../../browsers/chrome-edge-whale/index.md) | 내려받은 기록 |
+| [시간대 설정](../../system-account/time-zone.md) | 오프셋이 그 PC 의 시간대와 맞는지 |
 
-시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 봅니다.
+시나리오로 이어서 보려면 [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) 와 [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) 를 봅니다.
 
 ## 실습
 

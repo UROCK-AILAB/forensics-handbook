@@ -16,23 +16,23 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| 계정 목록 | 로컬 계정은 [사용자 계정](/02-artifacts/system-account/sam.md) 에서, 프로필 폴더와 SID 의 짝은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 정리합니다. |
-| 도메인 가입 여부 | 도메인 계정은 PC 밖의 Active Directory 에도 기록이 있습니다. 작업 그룹·도메인 이름을 읽는 법은 [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) 에 있습니다. |
-| 시간대 | 세션 기록과 행위 기록을 한 줄로 세우려면 시간대가 필요합니다. [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 읽고, Bias 값은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 의 "먼저 확인할 것" 에 적은 대로 부호 있는 수로 읽습니다. |
-| 감사 정책 | 로그온·잠금 이벤트는 감사가 켜져 있어야 남습니다. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
-| 수집 범위 | SAM·SECURITY·SOFTWARE·SYSTEM 하이브, 사용자마다의 NTUSER.DAT·UsrClass.dat, Security 로그를 함께 확보합니다. 하이브 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다. |
+| 계정 목록 | 로컬 계정은 [사용자 계정](../../02-artifacts/system-account/sam.md) 에서, 프로필 폴더와 SID 의 짝은 [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 에서 정리합니다. |
+| 도메인 가입 여부 | 도메인 계정은 PC 밖의 Active Directory 에도 기록이 있습니다. 작업 그룹·도메인 이름을 읽는 법은 [레지스트리 속 비밀번호 정보](../../02-artifacts/credentials/sam-security/index.md) 에 있습니다. |
+| 시간대 | 세션 기록과 행위 기록을 한 줄로 세우려면 시간대가 필요합니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽고, Bias 값은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 적은 대로 부호 있는 수로 읽습니다. |
+| 감사 정책 | 로그온·잠금 이벤트는 감사가 켜져 있어야 남습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
+| 수집 범위 | SAM·SECURITY·SOFTWARE·SYSTEM 하이브, 사용자마다의 NTUSER.DAT·UsrClass.dat, Security 로그를 함께 확보합니다. 하이브 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다. |
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | SAM·프로필 목록 | 계정 이름과 SID, 프로필 폴더 | [사용자 계정](/02-artifacts/system-account/sam.md) · [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
-| 2 | 계정 생성·변경 이벤트 | 계정을 만들고 바꾼 시각 | [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) |
-| 3 | 로그온·로그오프 이벤트 | 그 시각 앞뒤로 열린 세션과 로그온 유형 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 4 | 잠금·해제·원격 세션 이벤트 | 세션 안에서 화면이 잠겼는지, 원격으로 이어졌는지 | [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md) · [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) |
-| 5 | 사용자 하이브의 실행 흔적 | 그 계정의 세션에서 실행한 프로그램 | [UserAssist](/02-artifacts/execution/userassist.md) · [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| 6 | 원격 제어 프로그램 흔적 | 화면을 다른 곳에서 조작했을 가능성 | [원격 제어 프로그램](/02-artifacts/network/remote-access-tools/index.md) |
-| 7 | 자동 로그온 설정 | 비밀번호 없이 그 계정으로 들어갈 수 있었는지 | [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) |
+| 1 | SAM·프로필 목록 | 계정 이름과 SID, 프로필 폴더 | [사용자 계정](../../02-artifacts/system-account/sam.md) · [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) |
+| 2 | 계정 생성·변경 이벤트 | 계정을 만들고 바꾼 시각 | [계정 생성·변경](../../02-artifacts/event-logs/account-management-events.md) |
+| 3 | 로그온·로그오프 이벤트 | 그 시각 앞뒤로 열린 세션과 로그온 유형 | [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) |
+| 4 | 잠금·해제·원격 세션 이벤트 | 세션 안에서 화면이 잠겼는지, 원격으로 이어졌는지 | [PC 사용 시간 재구성](system-usage-time.md) · [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) |
+| 5 | 사용자 하이브의 실행 흔적 | 그 계정의 세션에서 실행한 프로그램 | [UserAssist](../../02-artifacts/execution/userassist.md) · [BAM·DAM](../../02-artifacts/execution/background-activity-moderator.md) |
+| 6 | 원격 제어 프로그램 흔적 | 화면을 다른 곳에서 조작했을 가능성 | [원격 제어 프로그램](../../02-artifacts/network/remote-access-tools/index.md) |
+| 7 | 자동 로그온 설정 | 비밀번호 없이 그 계정으로 들어갈 수 있었는지 | [레지스트리 속 비밀번호 정보](../../02-artifacts/credentials/sam-security/index.md) |
 
 ## 계정은 SID 로 가립니다
 
@@ -48,7 +48,7 @@
 - 도메인 계정의 SID 는 Active Directory 사용자 개체의 objectSID 속성에 저장합니다[1].
 - 사용자가 다른 도메인으로 옮기면 새 SID 를 받습니다[1]. 옛 SID 는 SIDHistory 속성에 남습니다[1].
 
-**문자열 표기.** SID 는 `S-R-X-Y1-Y2-…-Yn` 으로 씁니다[1]. R 은 개정, X 는 식별자 기관, Y 는 하위 기관 값입니다[1]. 마지막 값 Yn 이 RID 이고, 그 앞 값들이 도메인 식별자입니다[1]. 문서의 예 `S-1-5-21-1004336348-1177238915-682003330-512` 에서 `21-1004336348-1177238915-682003330` 이 도메인 식별자, `512` 가 RID 입니다[1]. 바이트 단위 형식은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+**문자열 표기.** SID 는 `S-R-X-Y1-Y2-…-Yn` 으로 씁니다[1]. R 은 개정, X 는 식별자 기관, Y 는 하위 기관 값입니다[1]. 마지막 값 Yn 이 RID 이고, 그 앞 값들이 도메인 식별자입니다[1]. 문서의 예 `S-1-5-21-1004336348-1177238915-682003330-512` 에서 `21-1004336348-1177238915-682003330` 이 도메인 식별자, `512` 가 RID 입니다[1]. 바이트 단위 형식은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 **기록에서 자주 만나는 SID.**
 
@@ -70,21 +70,21 @@
 
 ## 계정과 프로필을 짝짓기
 
-- 프로필 폴더와 SID 의 짝은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 읽습니다.
+- 프로필 폴더와 SID 의 짝은 [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 에서 읽습니다.
 - 사용자 하이브(NTUSER.DAT)에 남은 기록은 그 SID 의 프로필에 속합니다. 이름이 아니라 SID 로 묶습니다.
 - 로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않습니다(현장 관찰).
 - 흔히 그 SID 의 NTUSER.DAT 파일 생성 시각($STANDARD_INFORMATION)으로 추정합니다(현장 관찰). NTUSER.DAT 가 없으면 OS 설치 시각을 씁니다(현장 관찰).
 - 이 값은 추정값입니다. 보고서에 추정값이라고 밝힙니다.
-- 계정 생성 이벤트가 남아 있으면 [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) 으로 확인합니다.
+- 계정 생성 이벤트가 남아 있으면 [계정 생성·변경](../../02-artifacts/event-logs/account-management-events.md) 으로 확인합니다.
 
 ## 그 시각의 세션 찾기
 
-- 로그온·로그오프 이벤트로 조사 시각 앞뒤에 열린 세션을 찾습니다. 한 세션의 시작과 끝을 잇는 법과 로그온 유형의 뜻은 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 에 있습니다.
-- 세션 안의 잠금·해제, 화면 보호기, 원격 세션 다시 연결·끊김 이벤트는 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md) 의 "로그온·잠금·원격 세션" 절에 정리했습니다.
+- 로그온·로그오프 이벤트로 조사 시각 앞뒤에 열린 세션을 찾습니다. 한 세션의 시작과 끝을 잇는 법과 로그온 유형의 뜻은 [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) 에 있습니다.
+- 세션 안의 잠금·해제, 화면 보호기, 원격 세션 다시 연결·끊김 이벤트는 [PC 사용 시간 재구성](system-usage-time.md) 의 "로그온·잠금·원격 세션" 절에 정리했습니다.
 - 같은 감사 하위 범주에는 5632·5633 도 있습니다[2]. 무선·유선 네트워크 인증 요청 이벤트입니다[2].
 - 5632·5633 의 계정은 사용자 계정일 수도, 컴퓨터 계정일 수도 있습니다[2].
-- 원격 데스크톱으로 들어온 세션은 [원격 데스크톱 이벤트](/02-artifacts/event-logs/rdp-event-logs/index.md) 와 [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) 을 따라 접속한 곳을 확인합니다.
-- 화면을 원격으로 넘겨받는 프로그램이 있었다면, PC 앞에서 연 세션이라도 PC 앞의 사람이 조작했다고 단정할 수 없습니다. [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) 를 봅니다.
+- 원격 데스크톱으로 들어온 세션은 [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) 와 [원격 데스크톱 침입 확인](../incident/rdp-intrusion.md) 을 따라 접속한 곳을 확인합니다.
+- 화면을 원격으로 넘겨받는 프로그램이 있었다면, PC 앞에서 연 세션이라도 PC 앞의 사람이 조작했다고 단정할 수 없습니다. [원격 제어 프로그램으로 누가 조작했나](../incident/remote-access-tool-abuse.md) 를 봅니다.
 
 ## 계정에서 사람으로
 
@@ -92,9 +92,9 @@ PC 안의 기록은 계정까지만 가리킵니다. 사람으로 좁히려면 �
 
 - **다른 사람도 들어갈 수 있었나.** 자동 로그온 설정이 있었다면 PC 를 켠 사람 누구나 그 계정으로 들어갈 수 있었습니다. Guest 처럼 비밀번호 없는 계정이 켜져 있었는지도 봅니다.
 - **같은 시간대에 다른 세션이 있었나.** 다른 계정의 세션이 함께 열려 있었으면 행위가 어느 세션에서 일어났는지부터 가립니다.
-- **세션 안에 그 사람만 쓰는 것이 있었나.** 같은 세션에서 개인 메일·메신저 계정에 로그인한 흔적이 있으면 사람을 좁히는 단서가 됩니다. [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 를 봅니다.
+- **세션 안에 그 사람만 쓰는 것이 있었나.** 같은 세션에서 개인 메일·메신저 계정에 로그인한 흔적이 있으면 사람을 좁히는 단서가 됩니다. [누구와 연락을 주고받았나](communication-reconstruction.md) 를 봅니다.
 - **PC 밖의 기록과 맞나.** 출입 기록, 근무 기록, 다른 기기의 기록처럼 PC 밖의 자료와 시각을 맞춰 봅니다.
-- **계정을 탈취당했을 가능성은 없나.** 낯선 곳에서 들어온 로그온이 있으면 [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) 을 봅니다.
+- **계정을 탈취당했을 가능성은 없나.** 낯선 곳에서 들어온 로그온이 있으면 [계정 탈취와 측면 이동](../incident/credential-theft-lateral-movement/index.md) 을 봅니다.
 
 ## 분석 흐름
 
@@ -106,7 +106,7 @@ PC 안의 기록은 계정까지만 가리킵니다. 사람으로 좁히려면 �
 6. 같은 시간대에 다른 계정의 세션이 있었는지 봅니다.
 7. 그 세션의 실행 흔적(UserAssist·BAM)과 개인 계정 로그인 흔적을 모읍니다.
 8. 자동 로그온 설정, 비밀번호 없는 계정, 원격 제어 프로그램 흔적을 확인합니다.
-9. 모든 시각을 UTC 로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 에 올리고 PC 밖의 기록과 맞춥니다.
+9. 모든 시각을 UTC 로 맞춰 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올리고 PC 밖의 기록과 맞춥니다.
 10. 보고서에는 계정을 두고 내린 결론과 사람을 두고 내린 결론을 나눠 씁니다.
 
 ## 흔한 오판
@@ -127,12 +127,12 @@ PC 안의 기록은 계정까지만 가리킵니다. 사람으로 좁히려면 �
 
 ## 함께 볼 페이지
 
-- [사용자 계정](/02-artifacts/system-account/sam.md) · [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) — 계정과 SID, 프로필 폴더입니다.
-- [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — SID 의 바이트 형식입니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) — 세션을 잇는 법과 로그온 유형입니다.
-- [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md) — 켜짐·꺼짐과 잠금·원격 세션 구간입니다.
-- [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) — 다른 곳에서 조작한 경우입니다.
-- [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) — 계정을 빼앗긴 경우입니다.
+- [사용자 계정](../../02-artifacts/system-account/sam.md) · [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) — 계정과 SID, 프로필 폴더입니다.
+- [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — SID 의 바이트 형식입니다.
+- [로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md) — 세션을 잇는 법과 로그온 유형입니다.
+- [PC 사용 시간 재구성](system-usage-time.md) — 켜짐·꺼짐과 잠금·원격 세션 구간입니다.
+- [원격 데스크톱 침입 확인](../incident/rdp-intrusion.md) · [원격 제어 프로그램으로 누가 조작했나](../incident/remote-access-tool-abuse.md) — 다른 곳에서 조작한 경우입니다.
+- [계정 탈취와 측면 이동](../incident/credential-theft-lateral-movement/index.md) — 계정을 빼앗긴 경우입니다.
 
 ## 참고 문헌
 

@@ -1,6 +1,6 @@
 # 비밀번호 복구 (Password Recovery)
 
-> 위치: [암호화 증거 다루기 (Encrypted Evidence)](/03-techniques/analysis/encrypted-evidence/index.md) > 비밀번호 복구
+> 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > 비밀번호 복구
 
 ## 한 줄 요약
 
@@ -12,9 +12,9 @@
 
 ## 언제 쓰나
 
-- [암호화 컨테이너 찾기](/03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md) 에서 찾은 암호화 볼륨을 열 비밀을 어디서도 구하지 못했을 때
-- [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) 의 복구 비밀번호가 보관처에 없을 때
-- [암호 걸린 문서·압축 파일](/03-techniques/analysis/encrypted-evidence/password-protected-files.md) 의 비밀번호를 사용자에게서도, 다른 기록에서도 얻지 못했을 때
+- [암호화 컨테이너 찾기](encrypted-container-detection.md) 에서 찾은 암호화 볼륨을 열 비밀을 어디서도 구하지 못했을 때
+- [BitLocker 볼륨 구조와 풀기](bitlocker.md) 의 복구 비밀번호가 보관처에 없을 때
+- [암호 걸린 문서·압축 파일](password-protected-files.md) 의 비밀번호를 사용자에게서도, 다른 기록에서도 얻지 못했을 때
 - 대입에 시간이 얼마나 걸릴지 미리 가늠해야 할 때
 
 ## 절차
@@ -23,9 +23,9 @@
 
 대입은 마지막 수단입니다. 비밀이 이미 어딘가에 있으면 대입할 까닭이 없습니다.
 
-- BitLocker 복구 비밀번호는 여러 곳에 남아 있을 수 있습니다. 보관처 목록은 [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) 를 봅니다.
-- EFS 는 사용자가 백업한 인증서와 키가 있을 수 있습니다. 백업 명령과 복구 에이전트 키는 [EFS 암호화 파일](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) 을 봅니다.
-- 사용자가 다른 곳에 저장해 둔 비밀번호도 후보가 됩니다. 저장 위치는 [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) 와 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 를 봅니다.
+- BitLocker 복구 비밀번호는 여러 곳에 남아 있을 수 있습니다. 보관처 목록은 [BitLocker 볼륨 구조와 풀기](bitlocker.md) 를 봅니다.
+- EFS 는 사용자가 백업한 인증서와 키가 있을 수 있습니다. 백업 명령과 복구 에이전트 키는 [EFS 암호화 파일](encrypting-file-system.md) 을 봅니다.
+- 사용자가 다른 곳에 저장해 둔 비밀번호도 후보가 됩니다. 저장 위치는 [자격 증명 관리자와 볼트](../../../02-artifacts/credentials/credential-manager-windows-vault.md) 와 [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) 를 봅니다.
 
 ### 2. 후보 목록을 만듭니다
 
@@ -38,7 +38,7 @@
 - 대입 도구는 파일 전체가 아니라 비밀번호를 검증하는 데 쓰는 부분만 읽습니다.
 - 이 부분을 도구가 읽을 수 있는 문자열로 뽑습니다. 이 문자열을 흔히 해시라고 부릅니다.
 - 형식마다 이 문자열을 뽑는 별도 도구가 있습니다. 도구 이름은 이번 자료로 확인하지 못해 적지 않습니다.
-- VeraCrypt 볼륨은 헤더 앞부분이 이 부분입니다. VeraCrypt 헤더 배치는 [암호화 컨테이너 찾기](/03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md) 를 봅니다.
+- VeraCrypt 볼륨은 헤더 앞부분이 이 부분입니다. VeraCrypt 헤더 배치는 [암호화 컨테이너 찾기](encrypted-container-detection.md) 를 봅니다.
 
 ### 4. 맞는 모드로 대입합니다
 
@@ -74,8 +74,8 @@
 - MS Office 2003 이하는 `oldoffice$0`·`oldoffice$1` 이 9700 계열, `oldoffice$3`·`oldoffice$4` 가 9800 계열입니다. 9710·9720·9810·9820 은 collider 모드입니다. collider 모드가 어떻게 동작하는지는 이번 자료로 확인하지 못했습니다.
 - MS Office 2016 이후 판의 모드는 이 목록에 따로 없었습니다. 어느 모드를 쓰는지는 확인하지 못했습니다.
 - TrueCrypt·VeraCrypt 는 해시(PBKDF2-HMAC-RIPEMD160·SHA512·Whirlpool 등)와 암호(AES·Serpent·Twofish 를 이어 쓴 것) 조합마다 모드가 나뉩니다. 두 범위 가운데 어느 쪽이 TrueCrypt 이고 어느 쪽이 VeraCrypt 인지는 이번에 확인하지 못했습니다.
-- DPAPI 마스터키 모드는 EFS 개인 키를 되살리는 일과 이어집니다. 보호 구조는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 를 봅니다.
-- NTLM 모드는 [NTLM 비밀번호 해시](/02-artifacts/credentials/sam-security/nt-hash.md) 와 이어집니다.
+- DPAPI 마스터키 모드는 EFS 개인 키를 되살리는 일과 이어집니다. 보호 구조는 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
+- NTLM 모드는 [NTLM 비밀번호 해시](../../../02-artifacts/credentials/sam-security/nt-hash.md) 와 이어집니다.
 
 ### 5. 사본에서 하고, 기록합니다
 
@@ -85,9 +85,9 @@
 
 ## 형식마다 걸리는 시간이 다른 까닭
 
-- BitLocker 복구 비밀번호는 키를 만들 때 같은 계산을 아주 여러 번 되풀이합니다. 그래서 대입이 느립니다. 되풀이 횟수는 [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) 에 있습니다.
-- 그 대신 복구 비밀번호는 형식이 정해져 있습니다. 그래서 대입 전에 형식에 맞지 않는 값을 걸러 낼 수 있습니다. 형식 규칙도 [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md) 에 있습니다.
-- VeraCrypt 볼륨은 서명이 없습니다. 그래서 어떤 해시·암호 조합인지 미리 알 수 없습니다. 조합마다 모드가 다르므로 조합을 바꿔 가며 시도해야 합니다. 서명이 없다는 점은 [암호화 컨테이너 찾기](/03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md) 에 있습니다.
+- BitLocker 복구 비밀번호는 키를 만들 때 같은 계산을 아주 여러 번 되풀이합니다. 그래서 대입이 느립니다. 되풀이 횟수는 [BitLocker 볼륨 구조와 풀기](bitlocker.md) 에 있습니다.
+- 그 대신 복구 비밀번호는 형식이 정해져 있습니다. 그래서 대입 전에 형식에 맞지 않는 값을 걸러 낼 수 있습니다. 형식 규칙도 [BitLocker 볼륨 구조와 풀기](bitlocker.md) 에 있습니다.
+- VeraCrypt 볼륨은 서명이 없습니다. 그래서 어떤 해시·암호 조합인지 미리 알 수 없습니다. 조합마다 모드가 다르므로 조합을 바꿔 가며 시도해야 합니다. 서명이 없다는 점은 [암호화 컨테이너 찾기](encrypted-container-detection.md) 에 있습니다.
 
 ## 도구
 
@@ -99,12 +99,12 @@
 | 문자열 추출 도구 | 형식마다 대입 도구가 읽을 문자열을 뽑습니다. 이름은 이번 자료로 확인하지 못했습니다 |
 | 헥스 편집기 | 볼륨 헤더 앞부분처럼 검증에 쓰는 자리를 직접 봅니다 |
 
-도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+도구마다 결과가 다르면 [도구 결과 교차 검증](../../reporting/tool-validation.md) 을 봅니다.
 
 ## 함정과 한계
 
 - **저장처를 확인하지 않고 대입부터 합니다.** 비밀이 텍스트 파일, 인쇄물, Active Directory, Microsoft 계정에 남아 있을 수 있습니다. 대입은 그다음입니다.
-- **형식이나 버전을 잘못 짚어 모드를 틀리게 고릅니다.** 실제 형식과 버전을 먼저 [암호 걸린 문서·압축 파일](/03-techniques/analysis/encrypted-evidence/password-protected-files.md) 에서 가립니다.
+- **형식이나 버전을 잘못 짚어 모드를 틀리게 고릅니다.** 실제 형식과 버전을 먼저 [암호 걸린 문서·압축 파일](password-protected-files.md) 에서 가립니다.
 - **2016 이후 오피스의 모드를 이 목록에서 찾습니다.** 이 목록에는 없습니다. 쓰는 도구의 최신 문서를 봅니다.
 - **TrueCrypt·VeraCrypt 를 한 모드로만 시도합니다.** 조합마다 모드가 다릅니다.
 - **찾지 못한 것을 "비밀번호가 없다" 로 적습니다.** 대입으로 못 찾은 것은 이번 방법과 이번 시간 안에 못 찾았다는 뜻일 뿐입니다.

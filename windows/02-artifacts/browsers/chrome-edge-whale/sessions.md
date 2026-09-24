@@ -16,11 +16,11 @@
 - 사용자가 닫은 탭을 다시 열면 그 사실도 `Tabs_` 파일에 명령으로 적힙니다.
 - 브라우저는 파일을 비우라는 요청 (truncate) 이 오면 새 파일을 만듭니다. `Tabs_` 는 항목 40개(`kEntriesPerReset`)마다 파일을 비우고 전부 다시 씁니다.
 
-이름이 비슷한 `Session Storage` 폴더는 다른 것입니다. 이 폴더에는 웹 페이지의 sessionStorage 값이 LevelDB 형식으로 들어 있습니다. 관찰한 PC 에서도 `Sessions` 와 따로 있었습니다. 이 폴더는 [웹 저장소](/02-artifacts/browsers/chrome-edge-whale/local-storage-indexeddb.md) 에서 다룹니다.
+이름이 비슷한 `Session Storage` 폴더는 다른 것입니다. 이 폴더에는 웹 페이지의 sessionStorage 값이 LevelDB 형식으로 들어 있습니다. 관찰한 PC 에서도 `Sessions` 와 따로 있었습니다. 이 폴더는 [웹 저장소](local-storage-indexeddb.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-세션 파일은 Windows 버전보다 브라우저 판에 따라 달라집니다. 브라우저별 `User Data` 위치와 Windows 버전별 폴더 위치는 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 에 있습니다.
+세션 파일은 Windows 버전보다 브라우저 판에 따라 달라집니다. 브라우저별 `User Data` 위치와 Windows 버전별 폴더 위치는 [크롬 계열 브라우저](index.md) 에 있습니다.
 
 ### 파일 위치 (프로필 폴더 기준)
 
@@ -99,7 +99,7 @@
 - 모든 레코드의 내용이 `v20`(`76 32 30`) 으로 시작했습니다 (관찰).
 - 레코드 수는 짝이 되는 평문 파일과 같았습니다(133=133, 207=207, 79=79) (관찰).
 - 레코드 길이는 짝이 되는 평문 레코드의 크기보다 모든 레코드에서 정확히 31바이트 길었습니다 (관찰).
-- 31바이트는 [쿠키](/02-artifacts/browsers/chrome-edge-whale/cookies.md) 페이지에 적은 `v20` 값의 덧붙는 길이(접두사·논스·태그)와 같습니다. 다만 쿠키와 같은 키(`app_bound_encrypted_key`)를 쓰는지는 확인하지 못했습니다.
+- 31바이트는 [쿠키](cookies.md) 페이지에 적은 `v20` 값의 덧붙는 길이(접두사·논스·태그)와 같습니다. 다만 쿠키와 같은 키(`app_bound_encrypted_key`)를 쓰는지는 확인하지 못했습니다.
 
 ### Session_ 명령 ID
 
@@ -182,7 +182,7 @@
 - string 은 int32 바이트 수 뒤에 바이트가 옵니다. 그 뒤를 4바이트 경계까지 채웁니다.
 - string16 은 int32 글자 수 뒤에 UTF-16LE 글자가 옵니다. 그 뒤를 4바이트 경계까지 채웁니다.
 - 이 규칙으로 주소·제목·timestamp·http_status_code(200) 까지 제자리에서 읽혔습니다.
-- 제목은 UTF-16LE 로 풀어야 합니다. 콘솔 기본 코드 페이지로 찍으면 한글이 깨졌습니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- 제목은 UTF-16LE 로 풀어야 합니다. 콘솔 기본 코드 페이지로 찍으면 한글이 깨졌습니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 - 탭마다 저장하는 탐색 항목 수의 상한은 확인하지 못했습니다.
 
 ### Edge 의 SessionRestoreLog
@@ -226,20 +226,20 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 - 탭에 주소가 있었다는 것은 그 페이지를 읽었다는 뜻이 아닙니다.
 - 기록이 없다고 그 페이지를 열지 않은 것은 아닙니다. 브라우저는 새 파일을 만들 때 내용을 비우고 다시 씁니다. 옛 파일은 몇 개만 남기고 지웁니다. `Tabs_` 는 상한을 넘은 오래된 항목을 지웁니다.
 - 마커 앞뒤가 "처음 상태" 와 "그 뒤 변경" 이라는 해석은 소스로 확인하지 못했습니다. 이 구분을 근거로 순서를 단정하지 않습니다.
-- 시크릿 창 (Incognito) 의 흔적은 [시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md) 에서 다룹니다.
+- 시크릿 창 (Incognito) 의 흔적은 [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 에서 다룹니다.
 
 보고서에는 "이 사이트를 보았다" 대신 이렇게 씁니다. "이 프로필의 `Session_<숫자>` 파일에 탭 ID 5 의 탐색 항목으로 A 주소가 있고, 같은 탭의 닫은 시각(ID 16)은 X(UTC) 이다."
 
 ## 시각 해석
 
-모든 시각 값은 1601-01-01 00:00 UTC 부터 센 마이크로초입니다. 현지 시각이 아닙니다. 0 은 값이 없다는 뜻으로 봅니다. 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+모든 시각 값은 1601-01-01 00:00 UTC 부터 센 마이크로초입니다. 현지 시각이 아닙니다. 0 은 값이 없다는 뜻으로 봅니다. 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 | 값 | 있는 곳 | 뜻 | 주의할 점 |
 |---|---|---|---|
 | 파일 이름의 숫자 | `Session_`·`Tabs_` 이름 | 파일을 만든 시각 | 앞 파일과 겹치면 1마이크로초를 더합니다 |
 | close_time | `Session_` ID 16·17 | 탭·창을 닫은 시각 | |
 | last_active_time | `Session_` ID 21 | 탭이 마지막으로 활성 상태였던 시각 | |
-| timestamp | 탐색 항목 11번째 값 | 탐색 항목에 붙은 시각 | 어떤 동작의 시각인지는 이 페이지에서 확인하지 못했습니다. [방문 기록](/02-artifacts/browsers/chrome-edge-whale/history.md) 의 방문 시각과 맞춰 본 뒤 씁니다 |
+| timestamp | 탐색 항목 11번째 값 | 탐색 항목에 붙은 시각 | 어떤 동작의 시각인지는 이 페이지에서 확인하지 못했습니다. [방문 기록](history.md) 의 방문 시각과 맞춰 본 뒤 씁니다 |
 | timestamp | `Tabs_` ID 4 | 항목을 닫은 시각 | 0 인 레코드도 있었습니다 (관찰) |
 | `logTime` | Edge `SessionRestoreLog` | 로그를 적은 시각 | 연도가 없습니다. UTC 로 보입니다 (관찰) |
 
@@ -247,18 +247,18 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 - `Tabs_` 는 항목 40개마다 파일을 새로 씁니다. 그래서 `Tabs_` 파일을 만든 시각이 처음 탭을 닫은 시각은 아닐 수 있습니다.
 - `SessionRestoreLog` 의 `logTime` 이 UTC 로 보이는 근거는 다음과 같습니다. 새 `Session_` 파일 이름의 시각(UTC 02:39:12)과 그 줄의 `logTime`(023912)이 같았습니다. 그 PC 의 시간대는 한국 표준시였습니다 (관찰).
 - `logTime` 에는 연도가 없으므로, 같은 줄에 나온 `Session_` 이름의 시각으로 연도를 채웁니다.
-- 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에서 다룹니다.
+- 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 - **`Session Storage` 폴더와 헷갈리지 않습니다.** 이름이 비슷하지만 웹 페이지의 저장소입니다.
-- **실행 중에는 최신 파일이 잠깁니다.** 브라우저가 열려 있는 동안 가장 최근 `Session_`·`Tabs_` 는 잠겨서 읽히지 않았습니다(Device or resource busy) (관찰). 라이브 수집은 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 절차를 따릅니다.
+- **실행 중에는 최신 파일이 잠깁니다.** 브라우저가 열려 있는 동안 가장 최근 `Session_`·`Tabs_` 는 잠겨서 읽히지 않았습니다(Device or resource busy) (관찰). 라이브 수집은 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 절차를 따릅니다.
 - **원본 프로필로 브라우저를 띄우지 않습니다.** 브라우저는 새 세션 파일을 만들고 옛 파일을 지우는 동작을 합니다. 원본을 열면 지금 남은 파일이 사라질 수 있습니다. 해시를 기록한 사본을 읽습니다.
 - **명령 ID 의 뜻은 파일마다 다릅니다.** `Session_` 과 `Tabs_` 는 ID 목록이 따로 있습니다. 같은 6 이라도 뜻이 다릅니다.
 - **판마다 ID 가 바뀝니다.** 옛 ID(1·5·10·11·22·26)는 지금 쓰지 않습니다. 한 판에 맞춘 파서가 다른 판 파일을 잘못 읽을 수 있습니다.
 - **옛 이름만 찾는 도구가 있습니다.** `Current Session` 같은 옛 이름만 찾는 도구는 요즘 판 프로필에서 아무것도 찾지 못합니다.
-- **암호화 파일은 그대로 읽을 수 없습니다.** 버전 5 파일은 키를 풀기 전에는 레코드 길이와 개수만 알 수 있습니다. 관찰한 Chrome 153 에는 평문 짝 파일이 함께 있었으므로 먼저 평문 폴더를 봅니다. 브라우저 암호화의 바탕은 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
-- **지운 파일도 찾아봅니다.** 옛 `Session_`·`Tabs_` 파일은 지워도 디스크에 남을 수 있습니다. [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 함께 씁니다.
+- **암호화 파일은 그대로 읽을 수 없습니다.** 버전 5 파일은 키를 풀기 전에는 레코드 길이와 개수만 알 수 있습니다. 관찰한 Chrome 153 에는 평문 짝 파일이 함께 있었으므로 먼저 평문 폴더를 봅니다. 브라우저 암호화의 바탕은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+- **지운 파일도 찾아봅니다.** 옛 `Session_`·`Tabs_` 파일은 지워도 디스크에 남을 수 있습니다. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 함께 씁니다.
 - **Whale 은 따로 확인합니다.** 이 페이지의 구조는 Chrome·Edge 에서 확인한 것입니다.
 
 ## 직접 분석해 보기
@@ -363,16 +363,16 @@ print('명령 ID별 개수', sorted(count.items()))
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문 기록 | 탐색 항목의 주소를 실제로 방문한 시각과 횟수 | [방문·다운로드 기록](/02-artifacts/browsers/chrome-edge-whale/history.md) |
-| 캐시 | 탭에 있던 페이지의 사본 | [캐시](/02-artifacts/browsers/chrome-edge-whale/cache.md) |
-| 쿠키 | 세션 복원 설정 때문에 남은 세션 쿠키 | [쿠키](/02-artifacts/browsers/chrome-edge-whale/cookies.md) |
-| 웹 저장소 | 이름이 비슷한 `Session Storage` 의 값 | [웹 저장소](/02-artifacts/browsers/chrome-edge-whale/local-storage-indexeddb.md) |
-| 확장 프로그램 | `Session_` ID 13(SetExtensionAppID)에 적힌 확장 앱 ID 가 어느 확장인지 | [확장 프로그램](/02-artifacts/browsers/chrome-edge-whale/extensions.md) |
-| $MFT·$UsnJrnl | 세션 파일을 만들고 지운 시각. 이름의 시각과 맞춰 봅니다 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 프리페치 | 브라우저를 실행한 시각 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 켜짐·꺼짐 이벤트 | Edge 로그의 직전 종료 형태와 PC 종료 기록 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
+| 방문 기록 | 탐색 항목의 주소를 실제로 방문한 시각과 횟수 | [방문·다운로드 기록](history.md) |
+| 캐시 | 탭에 있던 페이지의 사본 | [캐시](cache.md) |
+| 쿠키 | 세션 복원 설정 때문에 남은 세션 쿠키 | [쿠키](cookies.md) |
+| 웹 저장소 | 이름이 비슷한 `Session Storage` 의 값 | [웹 저장소](local-storage-indexeddb.md) |
+| 확장 프로그램 | `Session_` ID 13(SetExtensionAppID)에 적힌 확장 앱 ID 가 어느 확장인지 | [확장 프로그램](extensions.md) |
+| $MFT·$UsnJrnl | 세션 파일을 만들고 지운 시각. 이름의 시각과 맞춰 봅니다 | [마스터 파일 테이블](../../filesystem/mft.md), [USN 변경 저널](../../filesystem/usnjrnl.md) |
+| 프리페치 | 브라우저를 실행한 시각 | [프리페치](../../execution/prefetch/index.md) |
+| 켜짐·꺼짐 이벤트 | Edge 로그의 직전 종료 형태와 PC 종료 기록 | [켜짐·꺼짐](../../event-logs/power-on-off-events.md) |
 
-웹 사용 전체를 한 흐름으로 묶는 순서는 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다. 같은 파일 구조를 쓰는 다른 앱은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+웹 사용 전체를 한 흐름으로 묶는 순서는 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다. 같은 파일 구조를 쓰는 다른 앱은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 
 ## 실습
 

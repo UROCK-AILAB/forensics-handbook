@@ -15,7 +15,7 @@
 
 ## 위치와 버전별 차이
 
-- 세션 파일은 프로필 본 폴더와 그 아래 `sessionstore-backups` 폴더에 있습니다. 프로필 본 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 세션 파일은 프로필 본 폴더와 그 아래 `sessionstore-backups` 폴더에 있습니다. 프로필 본 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - `sessionstore.jsonlz4` 는 프로필 본 폴더 바로 아래에 있습니다.
 - `previous.jsonlz4`, `recovery.jsonlz4`, `recovery.baklz4`, `upgrade.jsonlz4-<빌드 ID>` 는 `sessionstore-backups` 안에 있습니다.
 - 아래 파일 이름과 역할은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 예전 출시판의 동작은 이 자료로 알 수 없습니다.
@@ -84,8 +84,8 @@
 
 ## 시각 해석
 
-- 세션 파일 안 시각 칸의 단위는 확인하지 못했습니다. 안의 시각을 쓰려면 먼저 같은 주소의 방문 시각과 맞춰 단위를 확인합니다. 방문 시각의 단위는 [방문·다운로드·즐겨찾기 (places.sqlite)](/02-artifacts/browsers/firefox/places-sqlite.md) 에서 다룹니다.
-- 파일 자체의 시각은 파일 시스템에서 읽습니다. [$MFT](/02-artifacts/filesystem/mft.md) 의 수정 시각은 파이어폭스가 그 파일을 마지막으로 쓴 때입니다.
+- 세션 파일 안 시각 칸의 단위는 확인하지 못했습니다. 안의 시각을 쓰려면 먼저 같은 주소의 방문 시각과 맞춰 단위를 확인합니다. 방문 시각의 단위는 [방문·다운로드·즐겨찾기 (places.sqlite)](places-sqlite.md) 에서 다룹니다.
+- 파일 자체의 시각은 파일 시스템에서 읽습니다. [$MFT](../../filesystem/mft.md) 의 수정 시각은 파이어폭스가 그 파일을 마지막으로 쓴 때입니다.
 - 파일마다 쓰는 때가 다르므로 수정 시각의 뜻도 다릅니다.
 
 | 파일 | 수정 시각이 가리키는 때 |
@@ -96,18 +96,18 @@
 | `upgrade.jsonlz4-<빌드 ID>` | 파이어폭스를 업그레이드한 무렵입니다. 파일 이름의 빌드 ID 로 어느 판으로 올렸는지 봅니다 |
 
 - 위 표는 소스가 밝힌 파일 역할에서 끌어낸 해석입니다. 검체에서 다른 기록과 맞춰 확인합니다.
-- `recovery.jsonlz4` 가 `sessionstore.jsonlz4` 보다 새것이면, 마지막 실행이 정상 종료로 끝나지 않았을 수 있습니다. 수집할 때까지 브라우저가 돌고 있었을 수도 있습니다. [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) 기록과 맞춰 봅니다.
-- 여러 시각을 한 시간 축에 놓을 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- `recovery.jsonlz4` 가 `sessionstore.jsonlz4` 보다 새것이면, 마지막 실행이 정상 종료로 끝나지 않았을 수 있습니다. 수집할 때까지 브라우저가 돌고 있었을 수도 있습니다. [켜짐·꺼짐](../../event-logs/power-on-off-events.md) 기록과 맞춰 봅니다.
+- 여러 시각을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **원본 프로필로 브라우저를 켜지 않습니다.** 파이어폭스는 시작할 때 세션 파일을 읽고 `previous.jsonlz4` 를 새로 씁니다. 그러면 옛 판이 사라집니다. 해시를 기록한 사본으로 분석합니다.
 - **한 파일만 보고 끝내지 않습니다.** 파일마다 다른 시점의 세션이 들어 있습니다. 모든 판을 풀어 비교합니다.
 - **두 폴더를 모두 봅니다.** `sessionstore.jsonlz4` 만 본 폴더에 있고 나머지 판은 `sessionstore-backups` 안에 있습니다. 한쪽만 뜨면 판을 놓칩니다.
-- **압축된 채로 검색하지 않습니다.** 압축 파일 안의 주소는 원래 글자 그대로 드러나지 않을 수 있습니다. 키워드 검색 전에 압축을 먼저 풉니다. [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 을 참고합니다.
+- **압축된 채로 검색하지 않습니다.** 압축 파일 안의 주소는 원래 글자 그대로 드러나지 않을 수 있습니다. 키워드 검색 전에 압축을 먼저 풉니다. [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) 을 참고합니다.
 - **옛 판은 압축하지 않은 파일을 씁니다.** 옛 검체에서 `.jsonlz4` 만 찾으면 `.js`·`.bak` 파일을 놓칩니다.
-- **갈아 쓴 옛 판을 따로 찾습니다.** 세션 파일은 자주 새로 씁니다. 옛 판은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 로 찾습니다.
-- **사생활 보호 창의 흔적은 따로 봅니다.** 사생활 보호 창의 탭이 세션 파일에 남는지 확인하지 못했습니다. [시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md) 를 참고합니다.
+- **갈아 쓴 옛 판을 따로 찾습니다.** 세션 파일은 자주 새로 씁니다. 옛 판은 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 로 찾습니다.
+- **사생활 보호 창의 흔적은 따로 봅니다.** 사생활 보호 창의 탭이 세션 파일에 남는지 확인하지 못했습니다. [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 를 참고합니다.
 
 ## 직접 분석해 보기
 
@@ -125,20 +125,20 @@
 4. 파일마다 뽑은 탭 목록을 나란히 놓습니다. 어느 한 판에만 있는 탭을 표시합니다.
 5. 도구가 시각을 보여 주면, 그 시각을 방문 기록의 같은 주소 시각과 맞춰 단위를 확인합니다.
 
-- 도구 두 개로 같은 파일을 풀어 결과를 맞춰 봅니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 참고합니다.
+- 도구 두 개로 같은 파일을 풀어 결과를 맞춰 봅니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 참고합니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문·다운로드·즐겨찾기 | 탭 주소의 방문 시각과 방문 유형을 봅니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| 캐시 | 탭에 열린 페이지의 자원을 실제로 받았는지 봅니다 | [캐시 (cache2)](/02-artifacts/browsers/firefox/cache2.md) |
-| 양식 기록 | 같은 시간대에 입력란에 무엇을 쳤는지 봅니다 | [양식 기록 (formhistory.sqlite)](/02-artifacts/browsers/firefox/formhistory-sqlite.md) |
-| $MFT·$UsnJrnl | 세션 파일을 쓰고 갈아 쓴 시각을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) |
-| 켜짐·꺼짐 | 비정상 종료 짐작을 시스템의 켜짐·꺼짐 기록과 맞춥니다 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
-| 크롬 계열 세션 파일 | 같은 시간대에 다른 브라우저로 무엇을 열어 두었는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) |
+| 방문·다운로드·즐겨찾기 | 탭 주소의 방문 시각과 방문 유형을 봅니다 | [places.sqlite](places-sqlite.md) |
+| 캐시 | 탭에 열린 페이지의 자원을 실제로 받았는지 봅니다 | [캐시 (cache2)](cache2.md) |
+| 양식 기록 | 같은 시간대에 입력란에 무엇을 쳤는지 봅니다 | [양식 기록 (formhistory.sqlite)](formhistory-sqlite.md) |
+| $MFT·$UsnJrnl | 세션 파일을 쓰고 갈아 쓴 시각을 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
+| 켜짐·꺼짐 | 비정상 종료 짐작을 시스템의 켜짐·꺼짐 기록과 맞춥니다 | [켜짐·꺼짐](../../event-logs/power-on-off-events.md) |
+| 크롬 계열 세션 파일 | 같은 시간대에 다른 브라우저로 무엇을 열어 두었는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

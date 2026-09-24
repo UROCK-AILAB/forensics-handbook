@@ -46,7 +46,7 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위
 - 항목이 들어 있는 키는 둘뿐이었습니다. CEBFF5CD 에는 72바이트 값이 202개, F4E57C4B 에는 24개 있었습니다.
 - 나머지 가운데 6개에는 `UEME_CTLSESSION`(1,612바이트) 값 하나만 있었습니다. B267E3AD 에는 값이 없었습니다.
 
-하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -95,7 +95,7 @@ F4E57C4B(바로 가기) 키의 항목은 `UEME_` 이름 두 개를 빼면 모두
 | `{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}` | 사용자 `AppData\Roaming\Microsoft\Windows\Start Menu\Programs` |
 | `{9E3995AB-1F9C-4F13-B827-48B24B6C7174}` | 사용자 `AppData\Roaming\Microsoft\Internet Explorer\Quick Launch\User Pinned` |
 
-알려진 폴더 ID 의 일반 구조는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+알려진 폴더 ID 의 일반 구조는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ### 값 데이터
 
@@ -144,13 +144,13 @@ Windows 11 PC 한 대의 CEBFF5CD 키에서 본 값은 아래와 같습니다. (
 - **탐색기를 거치지 않은 실행.** 명령줄 등 다른 방법으로 띄운 프로그램이 여기에 남는지는 이번에 연 자료로 확인하지 못했습니다. 항목이 없다고 실행하지 않은 것은 아닙니다.
 - **포커스 횟수·포커스 시간.** 확정되지 않은 해석입니다. 보고서에 사용 시간으로 쓰지 않습니다.
 - **실행 횟수 0 에 시각이 있는 항목의 뜻.** 이번에 확인하지 못했습니다. 이런 항목을 "한 번도 실행하지 않았다" 로도, "실행했다" 로도 단정하지 않습니다.
-- **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 보고서에는 "이 계정의 UserAssist 에 이 경로의 항목이 있고, 실행 횟수는 N, 마지막 실행 시각은 이 시각으로 기록돼 있다" 처럼 씁니다.
 
 ## 시각 해석
 
-- 시각은 FILETIME 이고 UTC 로 읽습니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 시각은 FILETIME 이고 UTC 로 읽습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - Version 3 은 오프셋 8, Version 5 는 오프셋 60 에서 시각을 읽습니다.
 - 시각이 0 이면 기록된 실행 시각이 없는 것입니다.
 - 시각은 마지막 실행 시각입니다. 같은 프로그램을 여러 번 띄웠다면 앞선 실행 시각은 여기에 없습니다.
@@ -162,9 +162,9 @@ Windows 11 PC 한 대의 CEBFF5CD 키에서 본 값은 아래와 같습니다. (
 - **알려진 폴더 GUID 를 경로로 풀어야 합니다.** 사용자 폴더 쪽 GUID 는 계정마다 실제 경로가 다릅니다. 위 표는 한 PC 에서 푼 결과입니다.
 - **Version 마다 오프셋이 다릅니다.** Version 3 표로 72바이트 값을 읽으면 엉뚱한 숫자가 나옵니다. 먼저 GUID 키의 `Version` 값을 봅니다.
 - **실행 횟수가 1 이상인 항목은 드뭅니다.** Windows 11 PC 한 대에서 202개 가운데 16개뿐이었습니다. 실행 횟수만 보고 항목을 거르면 대부분을 놓칩니다. (확인 범위: Win11 25H2 한 대)
-- **기록을 끄거나 가림을 풀 수 있습니다.** `Settings` 키의 `NoLog`=1 은 기록을 끄고, `NoEncrypt`=1 은 이름 가리기를 끕니다. 기본으로는 없는 키이므로, 있다면 누가 언제 만들었는지 봅니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
-- **값은 지울 수 있습니다.** 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다.
-- **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 함께 수집합니다. 반영 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- **기록을 끄거나 가림을 풀 수 있습니다.** `Settings` 키의 `NoLog`=1 은 기록을 끄고, `NoEncrypt`=1 은 이름 가리기를 끕니다. 기본으로는 없는 키이므로, 있다면 누가 언제 만들었는지 봅니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+- **값은 지울 수 있습니다.** 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다.
+- **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 함께 수집합니다. 반영 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -212,16 +212,16 @@ HRZR_PGYFRFFVBA                          →  UEME_CTLSESSION
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 바로가기 파일 | F4E57C4B 항목의 .lnk 가 가리키는 대상을 봅니다 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 점프리스트 | 같은 앱으로 연 파일을 봅니다 | [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 작업표시줄 사용 기록 | 같은 앱을 작업 표시줄에서 다룬 횟수를 봅니다 | [작업표시줄 사용 기록](/02-artifacts/execution/featureusage.md) |
-| BAM | 같은 계정의 최근 실행 시각을 봅니다 | [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| MUICache | 같은 계정이 쓰기 시작한 프로그램 이름을 봅니다 | [MUICache](/02-artifacts/execution/muicache.md) |
-| 심캐시 | 같은 경로의 파일이 시스템에 있었는지 봅니다 | [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md) |
-| 프리페치 | 실행 횟수와 여러 번의 실행 시각을 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 사용자 프로필 목록 | 하이브가 어느 계정의 것인지 확인합니다 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
+| 바로가기 파일 | F4E57C4B 항목의 .lnk 가 가리키는 대상을 봅니다 | [바로가기 파일](../file-folder-usage/lnk.md) |
+| 점프리스트 | 같은 앱으로 연 파일을 봅니다 | [점프리스트](../file-folder-usage/jump-lists.md) |
+| 작업표시줄 사용 기록 | 같은 앱을 작업 표시줄에서 다룬 횟수를 봅니다 | [작업표시줄 사용 기록](featureusage.md) |
+| BAM | 같은 계정의 최근 실행 시각을 봅니다 | [BAM·DAM](background-activity-moderator.md) |
+| MUICache | 같은 계정이 쓰기 시작한 프로그램 이름을 봅니다 | [MUICache](muicache.md) |
+| 심캐시 | 같은 경로의 파일이 시스템에 있었는지 봅니다 | [심캐시](shimcache-appcompatcache.md) |
+| 프리페치 | 실행 횟수와 여러 번의 실행 시각을 봅니다 | [프리페치](prefetch/index.md) |
+| 사용자 프로필 목록 | 하이브가 어느 계정의 것인지 확인합니다 | [사용자 프로필 목록](../system-account/profilelist.md) |
 
-실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에 있습니다.
+실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에 있습니다.
 
 ## 실습
 

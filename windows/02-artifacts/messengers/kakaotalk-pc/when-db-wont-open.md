@@ -1,6 +1,6 @@
 # 대화 DB가 안 열릴 때 남는 단서 (메모리·캐시·이미지)
 
-> 위치: [카카오톡 PC (KakaoTalk PC)](/02-artifacts/messengers/kakaotalk-pc/index.md) > 대화 DB가 안 열릴 때 남는 단서
+> 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 대화 DB가 안 열릴 때 남는 단서
 
 ## 한 줄 요약
 
@@ -24,8 +24,8 @@
 
 ## 위치와 버전별 차이
 
-- 파일 이름과 위치는 [설치 위치와 파일 구성](/02-artifacts/messengers/kakaotalk-pc/install-paths-files.md) 에 있습니다.
-- 버전 경계와 암호화 방식은 [대화 DB 암호화와 버전별 차이](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) 에 있습니다.
+- 파일 이름과 위치는 [설치 위치와 파일 구성](install-paths-files.md) 에 있습니다.
+- 버전 경계와 암호화 방식은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
 - 백업 파일은 관찰한 PC 한 대에서 본 것입니다. 모든 PC 에 늘 있다고 일반화하지 않습니다.
 
 ## 구조
@@ -34,7 +34,7 @@
 
 - 계정 폴더의 `chat_data\` 아래에 대화방별 `.backup` 파일이 있었습니다.
 - 이 파일들은 암호화하지 않은 평문 SQLite 였습니다.
-- 표 구성은 대화 DB 와 같았습니다. 칸 이름은 [대화 DB 암호화와 버전별 차이](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) 에 있습니다.
+- 표 구성은 대화 DB 와 같았습니다. 칸 이름은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
 - 이 PC 에서는 수십 개 방의 메시지 수만 건을 백업에서 열었습니다.
 
 (확인 범위: 카카오톡 PC 26.6.0.5208, Windows 11 한 대. 백업은 백업이 있는 방과 백업 시점까지만 담습니다)
@@ -42,7 +42,7 @@
 ### 이미지와 섬네일 (`.cng`)
 
 `.cng` 는 계정별 키 없이 기기 지문과 userId 만으로 풀리는 경우가 있습니다(논문, 관찰).
-자세한 내용은 [받은 파일·사진 폴더](/02-artifacts/messengers/kakaotalk-pc/received-files.md) 에 있습니다.
+자세한 내용은 [받은 파일·사진 폴더](received-files.md) 에 있습니다.
 
 ### `ActionLogDB.edb`
 
@@ -51,7 +51,7 @@
 - 25.7.2 이상에서 쓰는 현재 `ActionLogDB.edb` 는 SQLCipher 4 로 암호화합니다(논문).
 - 업데이트 때 이름이 바뀐 `<계정 폴더>_backup_<백업 시각>` 폴더의 사본은 같은 고정 패스프레이즈로 풀립니다(논문).
 - 고정 패스프레이즈 값은 이 위키에 옮기지 않습니다. 논문을 봅니다.
-- userId 가 든 표와 칸은 [계정·로그인 흔적](/02-artifacts/messengers/kakaotalk-pc/account-login.md) 에 있습니다.
+- userId 가 든 표와 칸은 [계정·로그인 흔적](account-login.md) 에 있습니다.
 
 ### `-wal` 과 `-shm`
 
@@ -60,15 +60,15 @@
 - `-shm` 은 `-wal` 안의 기록을 빨리 찾게 하는 색인입니다. 여러 프로세스가 공유 메모리로 씁니다.
 - 최근 메시지가 주 DB 가 아니라 `-wal` 에만 있을 수 있습니다(SQLite WAL 문서, 관찰). 그래서 세 파일을 함께 봅니다.
 - 암호화한 DB 의 `-wal` 이 평문인지 암호문인지는 이번 자료로 확인하지 못했습니다.
-- `-wal` 형식은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- `-wal` 형식은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 메모리 이미지
 
 - RAM 캡처, `hiberfil.sys`, `pagefile.sys` 같은 메모리 이미지에는 복호 키나 평문 잔재가 남아 있을 수 있습니다.
 - 이번 자료로 일반화할 만큼 확인하지는 못했습니다.
 - 이 페이지는 "그런 단서가 남을 수 있다" 까지만 적습니다.
-- 메모리 이미지를 다루는 법은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 에서, 암호문을 다루는 일반 절차는 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
-- RAM 은 PC 가 켜져 있을 때만 뜰 수 있습니다. 수집 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+- 메모리 이미지를 다루는 법은 [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) 에서, 암호문을 다루는 일반 절차는 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
+- RAM 은 PC 가 켜져 있을 때만 뜰 수 있습니다. 수집 순서는 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -91,13 +91,13 @@
 - 이 파일 이름의 값이 백업을 만든 시각인지, 어느 시간대 기준인지는 확인하지 못했습니다.
 - 백업 안 마지막 메시지 시각과 맞춰 봅니다.
 - `-wal` 의 기록은 주 DB 에 아직 합치지 않은 최근 변경입니다. 주 DB 보다 뒤의 시점을 담을 수 있습니다.
-- 메시지 시각 칸의 형식은 [대화 DB 암호화와 버전별 차이](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) 에서 다룹니다.
+- 메시지 시각 칸의 형식은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 - 백업이 평문이라고 "카카오톡은 원래 평문으로 저장한다" 고 일반화하지 않습니다. 저장 방식을 바꾸는 도중이거나 남은 파일일 수 있습니다.
 - 백업과 `-wal` 은 대화의 일부만 담습니다.
-- 원본이 아닌 사본에서 작업합니다. SQLite 도구가 DB 를 열고 닫으면서 `-wal` 을 주 DB 에 합칠 수 있습니다. 자세한 내용은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 원본이 아닌 사본에서 작업합니다. SQLite 도구가 DB 를 열고 닫으면서 `-wal` 을 주 DB 에 합칠 수 있습니다. 자세한 내용은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 - 키를 얻는 절차는 이 위키 범위 밖입니다.
 
 ## 직접 분석해 보기
@@ -105,7 +105,7 @@
 ### 헥스로 한 번
 
 `.backup` 파일의 첫 16바이트가 `SQLite format 3\0` 인지 봅니다.
-명세로 만든 헥스 예시와 한꺼번에 가리는 스크립트는 [대화 DB 암호화와 버전별 차이](/02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) 에 있습니다.
+명세로 만든 헥스 예시와 한꺼번에 가리는 스크립트는 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -126,11 +126,11 @@ SELECT COUNT(*), MIN(<시각 칸>), MAX(<시각 칸>) FROM <메시지 표>;
 
 | 함께 볼 것 | 알려 주는 것 |
 |---|---|
-| [받은 파일·사진 폴더](/02-artifacts/messengers/kakaotalk-pc/received-files.md) | `.cng` 이미지 |
-| [계정·로그인 흔적](/02-artifacts/messengers/kakaotalk-pc/account-login.md) | userId 와 기기 정보 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 이전 시점의 DB·백업 파일이 남아 있는지 |
-| [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) | 지운 백업 파일이나 DB 조각 |
-| [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) | 부분 단서로 연락 관계를 되짚는 흐름 |
+| [받은 파일·사진 폴더](received-files.md) | `.cng` 이미지 |
+| [계정·로그인 흔적](account-login.md) | userId 와 기기 정보 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 이전 시점의 DB·백업 파일이 남아 있는지 |
+| [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) | 지운 백업 파일이나 DB 조각 |
+| [누구와 연락을 주고받았나](../../../04-scenarios/activity/communication-reconstruction.md) | 부분 단서로 연락 관계를 되짚는 흐름 |
 
 ## 실습
 

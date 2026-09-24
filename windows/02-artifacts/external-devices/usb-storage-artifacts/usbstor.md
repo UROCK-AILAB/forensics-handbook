@@ -1,6 +1,6 @@
 # USB 저장장치 목록 (USBSTOR)
 
-> 상위 허브: [USB 저장장치 흔적 (USB Storage Artifacts)](/02-artifacts/external-devices/usb-storage-artifacts/index.md)
+> 상위 허브: [USB 저장장치 흔적 (USB Storage Artifacts)](index.md)
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@ SYSTEM 하이브의 `Enum\USBSTOR` 키에는 USB 대용량 저장장치 드라�
 - 플러그 앤 플레이 관리자 (PnP Manager) 는 장치마다 `Enum` 아래에 키를 만들고 이 정보를 적습니다.
 - 장치를 뺀 뒤에도 키는 남습니다. 다만 Windows 8.1 이후는 오래 안 보인 장치의 키를 스스로 지웁니다(아래 "함정과 한계").
 
-Microsoft 는 `Enum` 트리를 운영체제 부품만 쓰는 곳이라고 적었습니다. 트리의 배치도 바뀔 수 있다고 적었습니다. 그래서 키 이름과 값의 해석은 드라이버 문서와 분석가의 관찰에 기댑니다. USB 3 의 UASP 로 붙는 장치는 이 키에 남지 않습니다. → [USBSTOR 에 안 남는 장치](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md)
+Microsoft 는 `Enum` 트리를 운영체제 부품만 쓰는 곳이라고 적었습니다. 트리의 배치도 바뀔 수 있다고 적었습니다. 그래서 키 이름과 값의 해석은 드라이버 문서와 분석가의 관찰에 기댑니다. USB 3 의 UASP 로 붙는 장치는 이 키에 남지 않습니다. → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)
 
 ## 위치와 버전별 차이
 
@@ -24,7 +24,7 @@ Microsoft 는 `Enum` 트리를 운영체제 부품만 쓰는 곳이라고 적었
 | 키 | `ControlSet00X\Enum\USBSTOR\<장치 항목>\<인스턴스>` |
 | 실행 중인 시스템 | `HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR` |
 
-이미지에서 꺼낸 하이브에는 `CurrentControlSet` 이 없습니다. 어느 컨트롤셋을 볼지는 [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md)에서 다룹니다. 하이브 파일은 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를 봅니다.
+이미지에서 꺼낸 하이브에는 `CurrentControlSet` 이 없습니다. 어느 컨트롤셋을 볼지는 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)에서 다룹니다. 하이브 파일은 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를 봅니다.
 
 | Windows | USBSTOR 와 관련해 달라지는 점 | 근거 |
 |---|---|---|
@@ -71,7 +71,7 @@ Microsoft 문서의 하드웨어 ID 는 칸 사이에 구분자 없이 고정 �
 
 키 이름은 이 꼴과 다릅니다. 이 글을 쓰며 확인한 장치 두 개는 키 이름에 `&Ven_`·`&Prod_`·`&Rev_` 구분자가 있었습니다. 칸 끝을 채운 밑줄은 없었습니다. 같은 인스턴스 키의 `HardwareID` 값 첫 줄은 문서의 고정 길이 꼴이었습니다. (확인 범위: Windows 11 빌드 26200 한 대)
 
-이 문자열은 장치가 스스로 알린 값입니다. 상표 이름과 다를 수 있습니다. 관찰한 USB 메모리 하나는 제조사 칸에 `USB` 라고 적고, 상표와 모델은 제품 칸에 적었습니다. 실제 제조사는 [USB 장치 식별자 (Enum\USB VID·PID)](/02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md)의 VID 로 다시 확인합니다.
+이 문자열은 장치가 스스로 알린 값입니다. 상표 이름과 다를 수 있습니다. 관찰한 USB 메모리 하나는 제조사 칸에 `USB` 라고 적고, 상표와 모델은 제품 칸에 적었습니다. 실제 제조사는 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md)의 VID 로 다시 확인합니다.
 
 ### 인스턴스 키 이름
 
@@ -117,7 +117,7 @@ Microsoft 문서가 설명하는 인스턴스 ID 는 다음과 같습니다.
 | `Mfg`·`DeviceDesc` | 제조사, 장치 설명 | 관찰에서는 INF 의 일반 문자열("Standard disk drives", "Disk drive")이었습니다. 실제 제조사가 아닙니다. |
 | `Capabilities` | 장치 능력 플래그 | 0x10(UniqueID)이 켜져 있으면 버스가 준 인스턴스 ID 를 그대로 씁니다. |
 
-Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices 와 잇는 방법을 설명합니다. 관찰한 Windows 11 의 USBSTOR 인스턴스 키에는 이 값이 없었습니다. 복합 장치의 저장 인터페이스 키(`Enum\USB\...&MI_xx`)에 있었습니다. 잇는 방법은 [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md)에서 다룹니다.
+Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices 와 잇는 방법을 설명합니다. 관찰한 Windows 11 의 USBSTOR 인스턴스 키에는 이 값이 없었습니다. 복합 장치의 저장 인터페이스 키(`Enum\USB\...&MI_xx`)에 있었습니다. 잇는 방법은 [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md)에서 다룹니다.
 
 ### 하위 키
 
@@ -126,7 +126,7 @@ Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices
 | `Device Parameters` | 관찰에서는 아래에 `MediaChangeNotification` 과 `Partmgr` 가 있었습니다. `Partmgr` 에는 `DiskId`(GUID 문자열)·`Attributes`·`PartitionTableCache` 같은 값이 있었습니다. 이 값들의 뜻은 이 글에서 명세로 확인하지 못했습니다. |
 | `Properties` | 장치 속성입니다. `{83da6326-97a6-4088-9453-a1923f573b29}` 아래 `0064`~`0067` 에 설치·연결·해제 시각이 있습니다. `devpkey.h` 에서 `{540b947e-8b40-45bc-a8a2-6a0b894cbda2}` 의 4번 속성은 버스가 알린 장치 설명(`DEVPKEY_Device_BusReportedDeviceDesc`)입니다. 한 공개 플러그인은 `...\0004` 에서 장치 이름을 읽습니다. |
 
-시각 속성 읽는 법은 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
+시각 속성 읽는 법은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
 실행 중인 시스템에서는 관리자 권한으로도 `Properties` 키를 열 때 접근이 거부되었습니다. 하위 키 이름은 보였습니다. (확인 범위: Windows 11 빌드 26200 한 대) 하이브 사본을 떠서 읽으면 키 권한과 관계없이 읽힙니다.
 
@@ -141,7 +141,7 @@ Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices
 
 ### 증명하지 못하는 것
 
-- 누가 꽂았는지 알 수 없습니다. SYSTEM 하이브는 사용자별 파일이 아닙니다. 사용자는 [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md)로 좁힙니다.
+- 누가 꽂았는지 알 수 없습니다. SYSTEM 하이브는 사용자별 파일이 아닙니다. 사용자는 [사용자별 장치 연결 (MountPoints2)](mountpoints2.md)로 좁힙니다.
 - 주요 값에는 시각이 없습니다. 시각은 `Properties` 와 다른 흔적에서 얻습니다.
 - 몇 번 꽂았는지 알 수 없습니다.
 - 장치에 파일을 복사했는지, 장치의 파일을 열었는지 알 수 없습니다.
@@ -160,27 +160,27 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 
 | 시각 | 무엇이 바뀔 때 바뀌나 | 기준 |
 |---|---|---|
-| `Properties` 의 `0064`~`0067` 값 | 설치·처음 설치·마지막 연결·마지막 해제 때 | FILETIME, UTC. 자세한 내용은 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) |
+| `Properties` 의 `0064`~`0067` 값 | 설치·처음 설치·마지막 연결·마지막 해제 때 | FILETIME, UTC. 자세한 내용은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) |
 | 인스턴스 키의 마지막 기록 시각 | 이 키의 값이 바뀌거나 하위 키가 생기고 지워질 때 | UTC |
 | 장치 항목 키의 마지막 기록 시각 | 아래에 인스턴스 키가 새로 생기거나 지워질 때. 같은 모델의 다른 장치를 처음 꽂은 때가 한 예입니다. | UTC |
 | `USBSTOR` 키의 마지막 기록 시각 | 아래에 장치 항목 키가 새로 생기거나 지워질 때 | UTC |
 
-키 시각이 무엇에 따라 바뀌는지는 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
+키 시각이 무엇에 따라 바뀌는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
 - 2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다.
 - 이 글에서 확인한 두 장치는 한 번씩만 꽂은 장치였습니다. 인스턴스 키 시각은 속성의 설치 시각·마지막 연결 시각과 같았습니다. 그 뒤 PC 를 다시 켰지만 키 시각은 바뀌지 않았습니다. (확인 범위: Windows 11 빌드 26200 한 대) 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지는 이 관찰로 알 수 없습니다.
-- 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
-- Windows 8.1 이후는 바뀐 내용을 트랜잭션 로그에 먼저 씁니다. 하이브 파일만 보면 최근 연결이 빠질 수 있습니다. → [.LOG1·.LOG2](/01-foundations/database-log-formats/registry-hive/log1-log2.md)
+- 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
+- Windows 8.1 이후는 바뀐 내용을 트랜잭션 로그에 먼저 씁니다. 하이브 파일만 보면 최근 연결이 빠질 수 있습니다. → [.LOG1·.LOG2](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)
 
 ## 함정과 한계
 
 1. **Windows 가 스스로 지웁니다.** Cowen 은 Windows 8.1·10 에서 30일 넘게 안 보인 장치의 키가 지워진다고 보고했습니다. 지운 기록은 `setupapi.dev.log` 에 남습니다. 이 글에서 확인한 Windows 11 에서는 한 번의 정리에서 장치 16개가 지워졌습니다. 로그에서 이 정리는 `[Device and Driver Disk Cleanup Handler - {GUID}]` 구역으로 시작했습니다. 그 안에 장치마다 "`Device <장치 인스턴스 ID> was removed.`" 줄이 있었습니다. (확인 범위: Windows 11 빌드 26200 한 대) 키가 없을 때는 사용자가 지운 것인지 Windows 가 지운 것인지부터 가립니다.
-2. **UASP 장치는 USBSTOR 에 없습니다.** → [USBSTOR 에 안 남는 장치](/02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md)
+2. **UASP 장치는 USBSTOR 에 없습니다.** → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)
 3. **이름이 `Enum\USB` 쪽 일련번호와 똑같지 않을 수 있습니다.** 일련번호가 잘리거나 앞에 다른 문자열이 붙습니다(위 "인스턴스 키 이름").
 4. **제조사 칸과 `Mfg` 값으로 제조사를 정하지 않습니다.** 제조사 칸은 장치가 알린 문자열입니다. `Mfg` 는 드라이버 INF 의 일반 문자열입니다.
-5. **도구마다 시각 열이 다릅니다.** 한 공개 플러그인(RegistryPlugin.USBSTOR)은 소스상 "시각" 열에 장치 항목 키의 마지막 기록 시각을 넣습니다. 같은 플러그인은 `DiskId` 를 장치 항목 키 아래 첫 번째 인스턴스에서만 읽습니다. 그래서 한 장치 항목 아래 인스턴스가 여럿이면 `DiskId` 가 모두 같게 나옵니다. (2026-09 소스 기준) 속성 `0064`·`0065` 이름을 바꿔 적는 도구도 있습니다. 이 내용은 [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
+5. **도구마다 시각 열이 다릅니다.** 한 공개 플러그인(RegistryPlugin.USBSTOR)은 소스상 "시각" 열에 장치 항목 키의 마지막 기록 시각을 넣습니다. 같은 플러그인은 `DiskId` 를 장치 항목 키 아래 첫 번째 인스턴스에서만 읽습니다. 그래서 한 장치 항목 아래 인스턴스가 여럿이면 `DiskId` 가 모두 같게 나옵니다. (2026-09 소스 기준) 속성 `0064`·`0065` 이름을 바꿔 적는 도구도 있습니다. 이 내용은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 6. **컨트롤셋이 여럿이면 모두 봅니다.** 한쪽에만 남은 장치가 있을 수 있습니다.
-7. **누가 지운 경우에도 흔적이 남습니다.** 하이브 안의 [지워진 셀](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), 트랜잭션 로그, [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SYSTEM 하이브, `setupapi.dev.log`, [AmCache 장치 항목](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md)을 봅니다. Cowen 은 `SYSTEM\Setup\Upgrade\PnP\CurrentControlSet\Control\DeviceMigration\Devices\USBSTOR` 에도 장치가 남는다고 보고했습니다. 이 글에서 확인한 Windows 11 에는 `DeviceMigration\Devices` 키는 있었지만 그 아래에 `USBSTOR` 는 없었습니다.
+7. **누가 지운 경우에도 흔적이 남습니다.** 하이브 안의 [지워진 셀](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), 트랜잭션 로그, [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SYSTEM 하이브, `setupapi.dev.log`, [AmCache 장치 항목](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다. Cowen 은 `SYSTEM\Setup\Upgrade\PnP\CurrentControlSet\Control\DeviceMigration\Devices\USBSTOR` 에도 장치가 남는다고 보고했습니다. 이 글에서 확인한 Windows 11 에는 `DeviceMigration\Devices` 키는 있었지만 그 아래에 `USBSTOR` 는 없었습니다.
 
 ## 직접 분석해 보기
 
@@ -189,7 +189,7 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 1. SYSTEM 하이브와 `.LOG1`·`.LOG2` 를 사본으로 확보합니다.
 2. 하이브에서 ASCII 문자열 `Disk&Ven_`(`44 69 73 6B 26 56 65 6E 5F`)를 찾습니다. 장치 항목 키의 키 노드(`nk`) 셀이 걸립니다. 같은 문자열은 `DeviceClasses` 하위 키 이름에도 들어 있으니 셀의 서명을 확인합니다.
 3. 셀 맨 앞 4바이트 크기 칸의 부호를 봅니다. 음수는 쓰는 셀, 양수는 빈 셀입니다. 빈 셀에서 걸린 키는 지워진 키일 수 있습니다.
-4. 장치 항목 키의 하위 키 목록을 따라가 인스턴스 키의 `nk` 셀을 읽습니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
+4. 장치 항목 키의 하위 키 목록을 따라가 인스턴스 키의 `nk` 셀을 읽습니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 
 아래는 libregf 형식 명세로 만든 예시입니다. 검체에서 나온 값이 아닙니다. 인스턴스 키 이름은 `AB12CD34&0` 이라고 가정했습니다. 목록 위치를 가리키는 오프셋들도 지어낸 값입니다.
 
@@ -207,7 +207,7 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 1. 0x00 의 `a0 ff ff ff` 는 -96 입니다. 쓰는 중인 96바이트 셀입니다.
 2. 0x04 의 `6e 6b` 는 서명 `nk` 입니다.
 3. 0x06 의 `20 00` 은 플래그 0x0020 입니다. 키 이름이 ASCII 로 적혀 있다는 뜻입니다.
-4. 0x08 의 8바이트를 리틀 엔디언으로 읽으면 `0x01DA6E9BC41BE680` 입니다. FILETIME 으로 풀면 2024-03-05 01:23:45 UTC 입니다. 이 키의 마지막 기록 시각입니다. → [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
+4. 0x08 의 8바이트를 리틀 엔디언으로 읽으면 `0x01DA6E9BC41BE680` 입니다. FILETIME 으로 풀면 2024-03-05 01:23:45 UTC 입니다. 이 키의 마지막 기록 시각입니다. → [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
 5. 0x18 의 `02 00 00 00` 은 하위 키 2개입니다(`Device Parameters`·`Properties`).
 6. 0x28 의 `0c 00 00 00` 은 값 12개입니다.
 7. 0x4C 의 `0a 00` 은 키 이름 길이 10바이트입니다.
@@ -220,23 +220,23 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 - 레지스트리 뷰어(예: Registry Explorer)로 하이브 사본을 열고 `ControlSet00X\Enum\USBSTOR` 를 펼칩니다. 뷰어가 트랜잭션 로그를 반영해 여는지 확인합니다.
 - RegRipper 의 `usbstor` 플러그인은 장치 항목·인스턴스마다 이름, `FriendlyName`, `ParentIdPrefix`, 하위 키 시각, 속성 시각을 한 번에 냅니다.
 - 도구가 낸 "시각" 이 어느 키, 어느 값의 시각인지 소스나 설명서로 확인합니다.
-- 도구 결과와 원시 키가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 절차를 따릅니다.
+- 도구 결과와 원시 키가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 절차를 따릅니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 값 | 링크 |
 |---|---|---|
-| Enum\USB | VID·PID, USB 쪽 일련번호, `ContainerID` | [USB 장치 식별자 (Enum\USB VID·PID)](/02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md) |
-| 장치 속성·DeviceClasses | 설치·연결·해제 시각 | [연결·해제 시각](/02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md) |
-| MountedDevices | 인스턴스 ID 가 든 값, 드라이브 문자·볼륨 GUID | [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) |
-| MountPoints2 | 볼륨 GUID, 사용자 | [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) |
-| setupapi.dev.log | 처음 설치 기록, Windows 가 지운 기록 | [장치 설치 로그 (setupapi.dev.log)](/02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md) |
-| WPD·EMDMgmt | 볼륨 이름, 볼륨 시리얼 번호 | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) |
-| AmCache | `usbstor/` 로 시작하는 장치 항목 | [장치 항목 (InventoryDevicePnp)](/02-artifacts/execution/amcache-hve/inventorydevicepnp.md) |
-| 이벤트 로그 | 연결 시각 | [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
-| 셸백·바로가기 | 장치 안의 폴더·파일을 연 흔적 | [외부 장치 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md), [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) |
+| Enum\USB | VID·PID, USB 쪽 일련번호, `ContainerID` | [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) |
+| 장치 속성·DeviceClasses | 설치·연결·해제 시각 | [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) |
+| MountedDevices | 인스턴스 ID 가 든 값, 드라이브 문자·볼륨 GUID | [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) |
+| MountPoints2 | 볼륨 GUID, 사용자 | [사용자별 장치 연결 (MountPoints2)](mountpoints2.md) |
+| setupapi.dev.log | 처음 설치 기록, Windows 가 지운 기록 | [장치 설치 로그 (setupapi.dev.log)](setupapi-dev-log.md) |
+| WPD·EMDMgmt | 볼륨 이름, 볼륨 시리얼 번호 | [휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)](wpd-emdmgmt.md) |
+| AmCache | `usbstor/` 로 시작하는 장치 항목 | [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md) |
+| 이벤트 로그 | 연결 시각 | [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| 셸백·바로가기 | 장치 안의 폴더·파일을 연 흔적 | [외부 장치 탐색 흔적](../../file-folder-usage/shellbags/removable-network-zip.md), [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md) |
 
-전체 조사 순서는 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
+전체 조사 순서는 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
 
 ## 실습
 

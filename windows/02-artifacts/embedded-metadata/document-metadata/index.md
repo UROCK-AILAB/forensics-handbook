@@ -20,7 +20,7 @@
 
 - 이름 칸의 사람이 문서를 썼다는 것. 사용자 이름은 프로그램 설정값입니다.
 - 값이 처음 적힌 그대로라는 것. 파일 속 값은 다른 도구로 고쳐 쓸 수 있습니다.
-- 어떤 개수가 저장 횟수라는 것. RSID 개수와 `%%EOF` 개수는 저장 횟수와 맞지 않았습니다. 까닭은 [편집 흔적 식별자 (RSID)](/02-artifacts/embedded-metadata/document-metadata/rsid.md) 와 [PDF 증분 저장과 이전 판 복원](/02-artifacts/embedded-metadata/document-metadata/incremental-update.md) 에 있습니다.
+- 어떤 개수가 저장 횟수라는 것. RSID 개수와 `%%EOF` 개수는 저장 횟수와 맞지 않았습니다. 까닭은 [편집 흔적 식별자 (RSID)](rsid.md) 와 [PDF 증분 저장과 이전 판 복원](incremental-update.md) 에 있습니다.
 - 확장자가 실제 형식이라는 것. 확장자가 .doc 인 RTF 파일이 있었습니다. (관찰) 확장자보다 첫 바이트를 먼저 봅니다.
 
 ## 한눈에 보기
@@ -31,11 +31,11 @@
 
 | 형식 | 담는 틀 | 파일 첫 부분 | 메타데이터 위치 | 자세히 |
 |---|---|---|---|---|
-| docx 같은 OOXML | ZIP 파일 | ZIP | `docProps/core.xml`, `docProps/app.xml` | [오피스 문서 속성](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) |
-| .doc 같은 옛 오피스 | OLE 복합 파일 | `D0 CF 11 E0 A1 B1 1A E1` | `\005SummaryInformation`, `\005DocumentSummaryInformation` 스트림 | [옛 오피스 문서 속성](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) |
-| HWP 5.0 | OLE 복합 파일 | `D0 CF 11 E0 A1 B1 1A E1` | `\005HwpSummaryInformation` 스트림 | [한글 문서](/02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md) |
-| HWPX | ZIP 파일 | ZIP | `Contents/content.hpf` 의 metadata | [한글 문서](/02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md) |
-| PDF | PDF | `%PDF-` 뒤에 판 번호 (예: `%PDF-1.7`) | 트레일러가 가리키는 정보 사전 (Info), 카탈로그가 가리키는 XMP 스트림 | [PDF 정보 사전과 XMP](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) |
+| docx 같은 OOXML | ZIP 파일 | ZIP | `docProps/core.xml`, `docProps/app.xml` | [오피스 문서 속성](ooxml-docprops.md) |
+| .doc 같은 옛 오피스 | OLE 복합 파일 | `D0 CF 11 E0 A1 B1 1A E1` | `\005SummaryInformation`, `\005DocumentSummaryInformation` 스트림 | [옛 오피스 문서 속성](ole-summaryinformation.md) |
+| HWP 5.0 | OLE 복합 파일 | `D0 CF 11 E0 A1 B1 1A E1` | `\005HwpSummaryInformation` 스트림 | [한글 문서](hwp-hwpx.md) |
+| HWPX | ZIP 파일 | ZIP | `Contents/content.hpf` 의 metadata | [한글 문서](hwp-hwpx.md) |
+| PDF | PDF | `%PDF-` 뒤에 판 번호 (예: `%PDF-1.7`) | 트레일러가 가리키는 정보 사전 (Info), 카탈로그가 가리키는 XMP 스트림 | [PDF 정보 사전과 XMP](pdf-info-xmp.md) |
 
 - 시험 .doc 와 .hwp 는 모두 OLE 복합 파일 서명으로 시작했습니다. (관찰)
 - Word 가 내보낸 PDF 는 `%PDF-1.7` 로 시작했습니다. (관찰)
@@ -55,8 +55,8 @@
 | PDF XMP | Word 16 의 PDF 로 내보내기 | 현지 시각과 `+09:00` | 초 |
 
 - docx 와 hwpx 의 ZIP 항목 시각은 모두 1980-01-01 00:00:00 이었습니다. (관찰) ZIP 항목 시각으로는 저장 시각을 알 수 없습니다.
-- FILETIME 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
-- 현지 시각으로 적힌 값은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 과 함께 봅니다.
+- FILETIME 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 현지 시각으로 적힌 값은 [시간대 설정](../../system-account/time-zone.md) 과 함께 봅니다.
 
 ### 알려 주는 것
 
@@ -65,32 +65,32 @@
 | 작성자·마지막으로 저장한 사람 | docx `dc:creator`·`cp:lastModifiedBy`, .doc·hwp 속성 0x04·0x08, hwpx `creator`·`lastsaveby`, PDF `Author` | 형식별 페이지 |
 | 만든 시각·마지막으로 저장한 시각 | docx `dcterms:created`·`dcterms:modified`, .doc·hwp 속성 0x0C·0x0D, hwpx `CreatedDate`·`ModifiedDate`, PDF `CreationDate`·`ModDate` 와 `xmp:CreateDate`·`xmp:ModifyDate` | 형식별 페이지 |
 | 저장한 프로그램과 판 | docx `app.xml`, .doc 속성 0x12, hwp 속성 0x09, hwpx `version.xml`, PDF `Producer`·`Creator` | 형식별 페이지 |
-| 마지막으로 인쇄한 시각 | .doc·hwp 속성 0x0B | [옛 오피스 문서 속성](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md), [한글 문서](/02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md) |
-| 같은 편집 세션에 저장한 부분 | docx 의 RSID | [편집 흔적 식별자 (RSID)](/02-artifacts/embedded-metadata/document-metadata/rsid.md) |
-| 고치기 전 판 | PDF 끝에 덧붙은 부분, 한글의 `DocHistory` | [PDF 증분 저장과 이전 판 복원](/02-artifacts/embedded-metadata/document-metadata/incremental-update.md), [한글 문서](/02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md) |
-| 한쪽만 고친 흔적 | PDF 정보 사전과 XMP 의 어긋남 | [PDF 정보 사전과 XMP](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) |
+| 마지막으로 인쇄한 시각 | .doc·hwp 속성 0x0B | [옛 오피스 문서 속성](ole-summaryinformation.md), [한글 문서](hwp-hwpx.md) |
+| 같은 편집 세션에 저장한 부분 | docx 의 RSID | [편집 흔적 식별자 (RSID)](rsid.md) |
+| 고치기 전 판 | PDF 끝에 덧붙은 부분, 한글의 `DocHistory` | [PDF 증분 저장과 이전 판 복원](incremental-update.md), [한글 문서](hwp-hwpx.md) |
+| 한쪽만 고친 흔적 | PDF 정보 사전과 XMP 의 어긋남 | [PDF 정보 사전과 XMP](pdf-info-xmp.md) |
 
 ## 읽는 순서
 
-1. [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) — docx 의 `core.xml`·`app.xml` 을 읽습니다. Word 16 이 시각을 분 단위 UTC 로 적는 점을 다룹니다.
-2. [옛 오피스 문서 속성 (OLE SummaryInformation)](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) — .doc 의 속성 집합 스트림 구조와 속성 ID 표를 다룹니다. 한글 HWP 도 이 구조를 쓰므로 한글 문서보다 먼저 읽습니다.
-3. [편집 흔적 식별자 (RSID)](/02-artifacts/embedded-metadata/document-metadata/rsid.md) — docx 본문에 붙는 편집 세션 식별자를 읽습니다. RSID 개수를 저장 횟수로 읽을 수 없는 까닭도 다룹니다.
-4. [PDF 정보 사전과 XMP (PDF Info·XMP)](/02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md) — PDF 의 두 메타데이터 자리를 읽고 서로 맞춰 봅니다. 두 곳의 시각 표기 차이도 다룹니다.
-5. [PDF 증분 저장과 이전 판 복원 (Incremental Update)](/02-artifacts/embedded-metadata/document-metadata/incremental-update.md) — 파일 끝에 덧붙은 부분을 찾아 고치기 전 판을 되살립니다. `%%EOF` 개수를 편집 횟수로 읽지 않는 까닭도 다룹니다.
-6. [한글 문서 (HWP·HWPX)](/02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md) — HWP 5.0 의 문서 요약 스트림과 `FileHeader`, HWPX 의 `content.hpf` 를 읽습니다. 명세와 실제 파일이 다른 곳도 모았습니다.
+1. [오피스 문서 속성 (OOXML docProps)](ooxml-docprops.md) — docx 의 `core.xml`·`app.xml` 을 읽습니다. Word 16 이 시각을 분 단위 UTC 로 적는 점을 다룹니다.
+2. [옛 오피스 문서 속성 (OLE SummaryInformation)](ole-summaryinformation.md) — .doc 의 속성 집합 스트림 구조와 속성 ID 표를 다룹니다. 한글 HWP 도 이 구조를 쓰므로 한글 문서보다 먼저 읽습니다.
+3. [편집 흔적 식별자 (RSID)](rsid.md) — docx 본문에 붙는 편집 세션 식별자를 읽습니다. RSID 개수를 저장 횟수로 읽을 수 없는 까닭도 다룹니다.
+4. [PDF 정보 사전과 XMP (PDF Info·XMP)](pdf-info-xmp.md) — PDF 의 두 메타데이터 자리를 읽고 서로 맞춰 봅니다. 두 곳의 시각 표기 차이도 다룹니다.
+5. [PDF 증분 저장과 이전 판 복원 (Incremental Update)](incremental-update.md) — 파일 끝에 덧붙은 부분을 찾아 고치기 전 판을 되살립니다. `%%EOF` 개수를 편집 횟수로 읽지 않는 까닭도 다룹니다.
+6. [한글 문서 (HWP·HWPX)](hwp-hwpx.md) — HWP 5.0 의 문서 요약 스트림과 `FileHeader`, HWPX 의 `content.hpf` 를 읽습니다. 명세와 실제 파일이 다른 곳도 모았습니다.
 
 ## 함께 볼 페이지
 
-- [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md) — 문서 속 시각을 파일 시스템 시각, 사용 흔적과 함께 읽는 순서입니다.
-- [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) — 문서를 이 PC 에서 만들었는지, 밖에서 들여왔는지 가립니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 사용자 이름 칸을 사람과 잇기 전에 봅니다.
-- [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) — .doc 와 .hwp 를 담는 틀입니다.
-- [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) · [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — 코드 페이지와 UTF-16 글자열, FMTID 의 바이트 순서를 풉니다.
-- [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) — 파일 시스템 쪽 시각과 변경 기록입니다.
-- [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) — 이 PC 의 오피스가 문서를 다룬 기록입니다.
-- [오피스 매크로](/02-artifacts/embedded-metadata/vba-macro.md) · [사진 EXIF](/02-artifacts/embedded-metadata/exif.md) · [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) — 다른 파일 내장 메타데이터입니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 문서 속 시각을 다른 기록과 한 줄에 놓습니다.
-- [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) — 메타데이터를 지우거나 고친 흔적을 찾습니다.
+- [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md) — 문서 속 시각을 파일 시스템 시각, 사용 흔적과 함께 읽는 순서입니다.
+- [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) — 문서를 이 PC 에서 만들었는지, 밖에서 들여왔는지 가립니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) — 사용자 이름 칸을 사람과 잇기 전에 봅니다.
+- [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) — .doc 와 .hwp 를 담는 틀입니다.
+- [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) · [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — 코드 페이지와 UTF-16 글자열, FMTID 의 바이트 순서를 풉니다.
+- [마스터 파일 테이블](../../filesystem/mft.md) · [USN 변경 저널](../../filesystem/usnjrnl.md) — 파일 시스템 쪽 시각과 변경 기록입니다.
+- [오피스 사용 흔적](../../file-folder-usage/microsoft-office/index.md) — 이 PC 의 오피스가 문서를 다룬 기록입니다.
+- [오피스 매크로](../vba-macro.md) · [사진 EXIF](../exif.md) · [실행 파일 메타데이터](../pe-header-version-info-digital-signature.md) — 다른 파일 내장 메타데이터입니다.
+- [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) — 문서 속 시각을 다른 기록과 한 줄에 놓습니다.
+- [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) — 메타데이터를 지우거나 고친 흔적을 찾습니다.
 
 ## 참고 문헌
 

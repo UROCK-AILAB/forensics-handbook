@@ -4,15 +4,15 @@
 
 파일을 지워도 매체의 데이터는 대개 그대로 남습니다. OS 는 파일 위치를 가리키는 디렉터리 자료에 삭제 표시만 남깁니다. OS 는 그 공간을 빈 공간으로 보고 언제든 덮어쓸 수 있습니다. 파일시스템 기반 복구 (Undelete) 는 남은 디렉터리 자료에서 이름·크기·데이터 위치를 읽어 파일을 되살리는 방법입니다. 되살린 내용이 원래 파일의 것인지는 따로 확인합니다.
 
-이 페이지는 [삭제 데이터 복구 (Data Recovery)](/03-techniques/analysis/data-recovery/index.md) 의 하위 주제입니다. NTFS 와 FAT 계열(FAT12·FAT16·FAT32·exFAT)을 다룹니다. 구조 전체는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 와 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) 에 있습니다. 클러스터가 비어 있는지 판단하는 자리는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 정리했습니다.
+이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. NTFS 와 FAT 계열(FAT12·FAT16·FAT32·exFAT)을 다룹니다. 구조 전체는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 와 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md) 에 있습니다. 클러스터가 비어 있는지 판단하는 자리는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](unallocated-slack-space.md) 에 정리했습니다.
 
 ## 언제 쓰나
 
-- 지운 파일의 이름·크기·시각을 내용과 함께 되살려야 할 때 씁니다. [파일 카빙 (File Carving)](/03-techniques/analysis/data-recovery/file-carving.md) 결과에는 이런 정보가 붙지 않습니다.
-- 볼륨에 있다가 지워진 파일의 목록을 만들 때 씁니다. 조사 흐름은 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 에 있습니다.
-- 휴지통에 없는 파일을 찾을 때 씁니다. 휴지통에 남은 파일은 [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) 에서 먼저 봅니다.
+- 지운 파일의 이름·크기·시각을 내용과 함께 되살려야 할 때 씁니다. [파일 카빙 (File Carving)](file-carving.md) 결과에는 이런 정보가 붙지 않습니다.
+- 볼륨에 있다가 지워진 파일의 목록을 만들 때 씁니다. 조사 흐름은 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md) 에 있습니다.
+- 휴지통에 없는 파일을 찾을 때 씁니다. 휴지통에 남은 파일은 [휴지통](../../../02-artifacts/file-folder-usage/recycle-bin.md) 에서 먼저 봅니다.
 
-디렉터리 자료까지 없어졌거나 망가졌다면 이 방법을 쓸 수 없습니다. 그때는 파일 카빙이나 [레코드 카빙 (Record Carving)](/03-techniques/analysis/data-recovery/record-carving.md) 으로 넘어갑니다.
+디렉터리 자료까지 없어졌거나 망가졌다면 이 방법을 쓸 수 없습니다. 그때는 파일 카빙이나 [레코드 카빙 (Record Carving)](record-carving.md) 으로 넘어갑니다.
 
 ## 판단에 쓰는 값
 
@@ -39,7 +39,7 @@ NTFS 에서는 MFT 레코드를 쓰는 중인지 두 곳에서 봅니다. 하나
 - 다음 런부터는 앞 런을 기준으로 한 상대값입니다.
 - 위치 칸 크기가 0 인 런은 희소 (Sparse) 런입니다. 이 구간은 0 으로 채워 읽습니다.
 
-데이터가 레코드 안에 있는지 밖에 있는지(상주·비상주)는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
+데이터가 레코드 안에 있는지 밖에 있는지(상주·비상주)는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
 
 ### FAT12·FAT16·FAT32 — 디렉터리 항목
 
@@ -67,7 +67,7 @@ NTFS 에서는 MFT 레코드를 쓰는 중인지 두 곳에서 봅니다. 하나
 | 0xE5 | 할당 안 된 항목 |
 | 0x05 | 해제 대기 표시(DOS 3.0 부터 쓰지 않음). 또는 이름 첫 글자가 실제로 0xE5 일 때 대신 쓰는 값 |
 
-긴 이름 항목은 오프셋 0 이 순서 번호입니다. 아래 5비트가 번호입니다. FAT32 에서 시작 클러스터 값을 읽는 방법은 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) 에서 확인합니다.
+긴 이름 항목은 오프셋 0 이 순서 번호입니다. 아래 5비트가 번호입니다. FAT32 에서 시작 클러스터 값을 읽는 방법은 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md) 에서 확인합니다.
 
 ### FAT12·FAT16·FAT32 — FAT 표
 
@@ -104,13 +104,13 @@ exFAT 명세에는 파일을 지우는 절차가 정해져 있지 않습니다. 
 
 ### NTFS
 
-1. 원본의 해시를 구하고 이미지 사본에서 작업합니다. 이미지를 뜨는 법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md) 에 있습니다.
-2. $MFT 를 레코드 단위로 읽습니다. 레코드마다 fix-up 을 먼저 되돌립니다. fix-up 은 [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) 에서 설명합니다.
+1. 원본의 해시를 구하고 이미지 사본에서 작업합니다. 이미지를 뜨는 법은 [증거 획득](../../process-acquisition/evidence-acquisition/index.md) 에 있습니다.
+2. $MFT 를 레코드 단위로 읽습니다. 레코드마다 fix-up 을 먼저 되돌립니다. fix-up 은 [레코드 카빙](record-carving.md) 에서 설명합니다.
 3. 플래그 0x0001 이 꺼진 레코드를 고릅니다. $MFT 의 $BITMAP 에서 같은 레코드의 비트가 0 인지도 봅니다.
 4. 기본 레코드 참조가 0 이 아닌 레코드는 확장 레코드입니다. 기본 레코드와 묶은 뒤에 이름과 속성을 읽습니다.
-5. 이름은 $FILE_NAME 속성에서 읽습니다. 경로를 다시 세우는 법은 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
+5. 이름은 $FILE_NAME 속성에서 읽습니다. 경로를 다시 세우는 법은 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
 6. 데이터가 레코드 밖에 있으면 데이터 런을 풀어 클러스터 목록을 만듭니다.
-7. 목록의 클러스터가 지금 비할당인지 봅니다. 볼륨 비트맵을 읽는 법은 [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 있습니다.
+7. 목록의 클러스터가 지금 비할당인지 봅니다. 볼륨 비트맵을 읽는 법은 [비할당 영역과 슬랙](unallocated-slack-space.md) 에 있습니다.
 8. 지금 할당된 클러스터가 섞여 있으면 그 부분의 내용은 다른 파일의 것일 수 있다고 표시합니다.
 9. 파일을 뽑고 해시를 구합니다. 레코드 번호, 순번, 클러스터 범위, 희소 구간 처리 방식을 함께 적습니다.
 
@@ -175,7 +175,7 @@ exFAT 명세에는 파일을 지우는 절차가 정해져 있지 않습니다. 
 
 - 헥스 편집기로 위 값을 직접 읽어 도구 결과를 확인합니다.
 - 값의 뜻은 libyal 의 libfsntfs·libfsfat 형식 문서와 Microsoft 의 exFAT 명세를 기준으로 삼습니다.
-- 복구 도구 두 가지 이상의 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+- 복구 도구 두 가지 이상의 결과가 다르면 [도구 결과 교차 검증](../../reporting/tool-validation.md) 을 따릅니다.
 
 ## 함정과 한계
 
@@ -184,9 +184,9 @@ exFAT 명세에는 파일을 지우는 절차가 정해져 있지 않습니다. 
 - 희소 구간을 건너뛰고 뽑으면 뒤 내용이 앞으로 밀립니다. 0 으로 채웠는지 건너뛰었는지에 따라 크기와 해시가 다릅니다(현장 관찰). 어떻게 뽑았는지 적습니다.
 - FAT 의 연속 가정은 조각난 파일에서 틀립니다. 앞부분만 맞고 뒷부분은 다른 데이터일 수 있습니다.
 - 0xE5 항목의 첫 글자를 도구가 채워 넣었다면 원래 글자가 아닙니다.
-- 폴더 색인($I30)의 남는 공간은 [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 과 [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) 에서 다룹니다.
-- SSD 에서는 파일시스템 기록이 남아 있어도 데이터 자리가 이미 비워졌을 수 있습니다. [SSD TRIM과 복구 한계 (SSD·TRIM)](/03-techniques/analysis/data-recovery/ssd-trim.md) 를 봅니다.
-- 볼륨 섀도 복사본이 있으면 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 도 함께 봅니다.
+- 폴더 색인($I30)의 남는 공간은 [비할당 영역과 슬랙](unallocated-slack-space.md) 과 [폴더 인덱스와 슬랙](../../../02-artifacts/filesystem/i30.md) 에서 다룹니다.
+- SSD 에서는 파일시스템 기록이 남아 있어도 데이터 자리가 이미 비워졌을 수 있습니다. [SSD TRIM과 복구 한계 (SSD·TRIM)](ssd-trim.md) 를 봅니다.
+- 볼륨 섀도 복사본이 있으면 [섀도 복사본 활용](../volume-shadow-copy-analysis.md) 도 함께 봅니다.
 
 ## 결과를 어떻게 해석하나
 
@@ -200,19 +200,19 @@ exFAT 명세에는 파일을 지우는 절차가 정해져 있지 않습니다. 
 
 **증명하지 못하는 것**
 
-- 언제 지웠는지. FAT·exFAT 항목의 시각 칸은 만든·수정·접근 시각입니다. 지운 시점은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 같은 다른 기록과 맞춰 봅니다. NTFS 레코드의 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다.
+- 언제 지웠는지. FAT·exFAT 항목의 시각 칸은 만든·수정·접근 시각입니다. 지운 시점은 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) 같은 다른 기록과 맞춰 봅니다. NTFS 레코드의 시각은 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 에서 다룹니다.
 - 누가 지웠는지
-- 뽑은 내용이 원래 파일과 같은지. 지금 할당된 클러스터가 섞였거나 연속 가정을 썼다면 더 그렇습니다. 원래 파일의 해시를 알면 [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) 로 맞춰 봅니다.
+- 뽑은 내용이 원래 파일과 같은지. 지금 할당된 클러스터가 섞였거나 연속 가정을 썼다면 더 그렇습니다. 원래 파일의 해시를 알면 [해시셋 대조와 유사 해시](../hash-set-fuzzy-hash.md) 로 맞춰 봅니다.
 
 ### 시각 해석
 
-- FAT12·FAT16·FAT32 항목에는 시간대 칸이 없습니다. 어느 시간대 기준으로 적었는지는 항목만으로 알 수 없습니다. [시간대 설정](/02-artifacts/system-account/time-zone.md) 과 함께 봅니다.
+- FAT12·FAT16·FAT32 항목에는 시간대 칸이 없습니다. 어느 시간대 기준으로 적었는지는 항목만으로 알 수 없습니다. [시간대 설정](../../../02-artifacts/system-account/time-zone.md) 과 함께 봅니다.
 - FAT 의 마지막 접근 값은 날짜만 있습니다.
 - FAT 의 만든 시각에는 10ms 단위 값이 따로 있습니다.
 - exFAT 파일 항목(0x85)에는 시각이 셋 있습니다. CreateTimestamp(오프셋 8), LastModifiedTimestamp(12), LastAccessedTimestamp(16) 이고 각 4바이트입니다.
 - exFAT 는 만든 시각과 수정 시각에 10ms 증분 칸(오프셋 20·21)을 따로 둡니다.
 - exFAT 는 세 시각마다 UtcOffset 칸(오프셋 22·23·24)을 둡니다. UTC 와의 차이를 15분 단위로 적고, 최상위 비트가 켜져 있어야 값이 유효합니다.
-- 시각 값의 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 봅니다.
+- 시각 값의 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 봅니다.
 
 ### 보고서 문장 예
 

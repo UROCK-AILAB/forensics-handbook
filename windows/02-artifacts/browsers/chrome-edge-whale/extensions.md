@@ -17,7 +17,7 @@
 
 ## 위치와 버전별 차이
 
-확장 기록은 Windows 버전보다 브라우저 판에 따라 달라집니다. 브라우저별 `User Data` 위치와 Windows 버전별 폴더 위치는 [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) 에 있습니다.
+확장 기록은 Windows 버전보다 브라우저 판에 따라 달라집니다. 브라우저별 `User Data` 위치와 Windows 버전별 폴더 위치는 [크롬 계열 브라우저](index.md) 에 있습니다.
 
 ### 폴더와 파일 (프로필 폴더 기준, 관찰)
 
@@ -38,7 +38,7 @@
 - `ExtensionActivityEdge` 에는 `string_ids`, `url_ids`, `activitylog_edge_compressed`, `activitylog_edge_submissions`, `activitylog_edge_excluded_ids` 표가 있었습니다.
 - `activitylog_edge_compressed` 의 열은 `extension_id_x`, `time`, `action_type`, `api_name_x`, `args_x`, `page_url_x`, `page_title_x`, `arg_url_x`, `other_x` 입니다.
 - 관찰한 PC 에서는 이 표가 모두 0행이었습니다. 언제 기록하는지는 확인하지 못했습니다.
-- LevelDB 를 읽는 법은 [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) 에서, SQLite 를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- LevelDB 를 읽는 법은 [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md) 에서, SQLite 를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 판에 따른 차이
 
@@ -66,7 +66,7 @@ Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 �
 - 사용자가 브라우저 화면에서 그 확장을 지우면, 브라우저는 다시 자동으로 설치하지 않습니다.
 - 이 문서에는 관리자 정책으로 강제 설치하는 방법이 없습니다. 정책 레지스트리 경로와 Edge 의 외부 설치 경로는 이 페이지에서 확인하지 못했습니다.
 - 관찰한 PC 에는 HKLM 쪽 Chrome·Edge 의 `...\Extensions` 키가 없었습니다. `HKCU\SOFTWARE\Google\Chrome\Extensions` 와 `HKCU\SOFTWARE\Microsoft\Edge\Extensions` 는 있었지만 하위 키가 비어 있었습니다.
-- 레지스트리 파일을 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- 레지스트리 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -184,12 +184,12 @@ Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 �
 ## 시각 해석
 
 - `first_install_time`·`last_update_time` 은 숫자가 든 문자열(JSON string)입니다. 1601-01-01 00:00 UTC 부터 센 마이크로초로 읽으면 UTC 로 그럴듯한 값이 나왔습니다 (관찰). 현지 시각이 아닙니다.
-- 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 업데이트한 적이 없는 확장은 두 값이 같았습니다 (관찰).
 - 업데이트한 확장은 `last_update_time` 이 더 뒤였습니다. 이때 `path` 의 버전 폴더(`<버전>_0`)와 `manifest` 의 `version` 이 새 버전이었습니다 (관찰).
 - `lastpingday` 처럼 다른 시각으로 보이는 키도 있습니다. 이 페이지에서는 뜻을 확인하지 않았으므로 해석하지 않습니다.
 - 옛 도구가 `install_time` 만 읽으면 설치 시각이 비어 보입니다. 이때는 `first_install_time` 을 직접 봅니다.
-- 확장 폴더를 만든 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 따로 확인하고 `first_install_time` 과 맞춰 봅니다.
+- 확장 폴더를 만든 시각은 [마스터 파일 테이블](../../filesystem/mft.md) 에서 따로 확인하고 `first_install_time` 과 맞춰 봅니다.
 
 ## 함정과 한계
 
@@ -201,7 +201,7 @@ Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 �
 - **웹 스토어가 아닌 경로를 먼저 봅니다.** `location` 2·3·4·8 은 웹 스토어가 아닌 경로입니다. Chrome 에서 `location` 1 인데 `from_webstore` 가 false 인 확장도 따로 확인합니다. 관찰한 Chrome 에서는 `location` 1 이 모두 `from_webstore` true 였습니다.
 - **`disable_reasons` 는 값을 더하지 않고 목록으로 읽습니다.** 목록의 원소 하나가 이유 하나입니다.
 - **검증값으로 조작 여부를 가리지 못합니다.** `Secure Preferences` 의 검증값(MAC)을 어떻게 계산하는지 확인하지 못했습니다. 그래서 이 페이지는 검증값으로 설정 조작을 가리는 법을 다루지 않습니다.
-- **외부 설치 키는 지우면 사라집니다.** 키를 지우면 확장도 없어지므로, 조사 시점에 키가 없어도 외부 설치가 없었다고 단정하지 않습니다. [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 레지스트리를 봅니다.
+- **외부 설치 키는 지우면 사라집니다.** 키를 지우면 확장도 없어지므로, 조사 시점에 키가 없어도 외부 설치가 없었다고 단정하지 않습니다. [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 레지스트리를 봅니다.
 - **원본 프로필로 브라우저를 띄우지 않습니다.** 해시를 기록한 사본의 JSON 파일을 읽습니다.
 - **Whale 은 따로 확인합니다.** 이 페이지의 구조는 Chrome·Edge 에서 확인한 것입니다.
 
@@ -279,22 +279,22 @@ for ext_id, s in prefs.get('extensions', {}).get('settings', {}).items():
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문·다운로드 기록 | 설치 시각 무렵 확장 스토어나 배포 페이지를 연 기록 | [방문·다운로드 기록](/02-artifacts/browsers/chrome-edge-whale/history.md) |
-| 세션·탭 복원 | `Session_` ID 13(SetExtensionAppID)에 적힌 확장 앱 ID | [세션·탭 복원](/02-artifacts/browsers/chrome-edge-whale/sessions.md) |
-| 쿠키 | 확장이 보낸 요청이 만든 쿠키 | [쿠키](/02-artifacts/browsers/chrome-edge-whale/cookies.md) |
-| LevelDB | `Local Extension Settings\<확장 ID>\` 에 남은 값 | [LevelDB 저장소](/01-foundations/database-log-formats/leveldb.md) |
-| $MFT·$UsnJrnl | `Extensions\<확장 ID>\` 폴더를 만들고 지운 시각 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 레지스트리 | 외부 설치 키와 그 키의 마지막 기록 시각 | [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) |
-| 설치 프로그램 | 같은 시간대에 설치한 프로그램. 외부 설치 키를 넣은 프로그램을 찾습니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 확장 폴더의 코드 | 스크립트를 규칙으로 검사해 의심 코드를 찾습니다 | [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) |
+| 방문·다운로드 기록 | 설치 시각 무렵 확장 스토어나 배포 페이지를 연 기록 | [방문·다운로드 기록](history.md) |
+| 세션·탭 복원 | `Session_` ID 13(SetExtensionAppID)에 적힌 확장 앱 ID | [세션·탭 복원](sessions.md) |
+| 쿠키 | 확장이 보낸 요청이 만든 쿠키 | [쿠키](cookies.md) |
+| LevelDB | `Local Extension Settings\<확장 ID>\` 에 남은 값 | [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md) |
+| $MFT·$UsnJrnl | `Extensions\<확장 ID>\` 폴더를 만들고 지운 시각 | [마스터 파일 테이블](../../filesystem/mft.md), [USN 변경 저널](../../filesystem/usnjrnl.md) |
+| 레지스트리 | 외부 설치 키와 그 키의 마지막 기록 시각 | [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) |
+| 설치 프로그램 | 같은 시간대에 설치한 프로그램. 외부 설치 키를 넣은 프로그램을 찾습니다 | [설치 프로그램](../../system-account/uninstall.md) |
+| 확장 폴더의 코드 | 스크립트를 규칙으로 검사해 의심 코드를 찾습니다 | [의심 실행 파일 선별](../../../03-techniques/analysis/code-signing-yara.md) |
 
 조사 흐름은 아래 시나리오에서 다룹니다.
 
-- [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) — 악성 확장이 들어온 경로를 찾습니다.
-- [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) — 외부 설치나 정책으로 계속 다시 들어오는 확장을 찾습니다.
-- [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) — 확장을 포함해 웹 사용 전체를 묶습니다.
+- [악성코드는 어디서 들어왔나](../../../04-scenarios/incident/initial-access.md) — 악성 확장이 들어온 경로를 찾습니다.
+- [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) — 외부 설치나 정책으로 계속 다시 들어오는 확장을 찾습니다.
+- [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) — 확장을 포함해 웹 사용 전체를 묶습니다.
 
-같은 구조를 쓰는 다른 앱은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
+같은 구조를 쓰는 다른 앱은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 
 ## 실습
 

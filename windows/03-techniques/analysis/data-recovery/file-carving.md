@@ -4,13 +4,13 @@
 
 파일 카빙 (File Carving) 은 파일시스템의 메타정보 없이 원시 데이터만 분석해 파일을 되살리는 방법입니다. 파일 형식마다 정해진 서명으로 시작점을 찾고, 끝 표시나 파일 머리에 적힌 크기로 끝을 정합니다. 결과에는 파일 이름·시각·원래 경로가 없습니다.
 
-이 페이지는 [삭제 데이터 복구 (Data Recovery)](/03-techniques/analysis/data-recovery/index.md) 의 하위 주제입니다. 이름과 시각까지 되살릴 수 있는지는 먼저 [파일시스템 기반 복구 (Undelete: NTFS·FAT)](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 로 봅니다. 카빙할 데이터를 어디서 뽑는지는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 에 있습니다. 파일보다 작은 레코드 단위로 찾는 방법은 [레코드 카빙 (Record Carving)](/03-techniques/analysis/data-recovery/record-carving.md) 에서 다룹니다.
+이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 이름과 시각까지 되살릴 수 있는지는 먼저 [파일시스템 기반 복구 (Undelete: NTFS·FAT)](undelete-ntfs-fat.md) 로 봅니다. 카빙할 데이터를 어디서 뽑는지는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](unallocated-slack-space.md) 에 있습니다. 파일보다 작은 레코드 단위로 찾는 방법은 [레코드 카빙 (Record Carving)](record-carving.md) 에서 다룹니다.
 
 ## 언제 쓰나
 
 - 디렉터리 자료가 없거나 망가져서 파일시스템 기반 복구를 쓸 수 없을 때 씁니다.
 - 비할당 영역과 슬랙에서 뽑은 데이터에서 파일을 찾을 때 씁니다.
-- 메모리 덤프에서 파일을 찾을 때 씁니다. 최근 본 그림이나 대화처럼 디스크에 남지 않는 데이터를 얻을 수 있습니다. 메모리 이미지 다루는 법은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 에 있습니다.
+- 메모리 덤프에서 파일을 찾을 때 씁니다. 최근 본 그림이나 대화처럼 디스크에 남지 않는 데이터를 얻을 수 있습니다. 메모리 이미지 다루는 법은 [메모리 분석](../memory-forensics/index.md) 에 있습니다.
 
 ## 원리
 
@@ -48,7 +48,7 @@ Wikipedia 가 인용한 Garfinkel(2007) 연구는 형식별로 조각난 비율�
 4. 끝을 정합니다. 끝 표시가 있으면 끝 표시까지, 파일 머리에 크기가 있으면 그 크기까지 자릅니다.
 5. 되살린 파일마다 이미지 안 시작 오프셋과 끝을 정한 방법을 적습니다.
 6. 되살린 파일이 형식대로 열리는지 확인합니다. 서명만 맞고 파일이 아닌 결과를 여기서 거릅니다.
-7. 해시를 구해 알려진 파일과 맞춰 봅니다. 방법은 [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) 에 있습니다.
+7. 해시를 구해 알려진 파일과 맞춰 봅니다. 방법은 [해시셋 대조와 유사 해시](../hash-set-fuzzy-hash.md) 에 있습니다.
 
 ## 헥스로 한 번 따라가기
 
@@ -75,7 +75,7 @@ Wikipedia 가 인용한 Garfinkel(2007) 연구는 형식별로 조각난 비율�
 - Foremost
 - Scalpel: 2005년에 나온 오픈소스 도구입니다.
 
-도구마다 서명 목록과 끝을 정하는 방식이 다릅니다. 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 따릅니다.
+도구마다 서명 목록과 끝을 정하는 방식이 다릅니다. 결과가 다르면 [도구 결과 교차 검증](../../reporting/tool-validation.md) 을 따릅니다.
 
 ## 함정과 한계
 
@@ -84,7 +84,7 @@ Wikipedia 가 인용한 Garfinkel(2007) 연구는 형식별로 조각난 비율�
 - 조각난 파일도 일부는 되살릴 수 있습니다. 다만 뒷부분에 다른 파일의 내용이 섞여 나올 수 있습니다.
 - 서명이 맞아도 파일이 아닐 수 있습니다. 되살린 파일이 형식대로 열리는지 확인합니다.
 - 빈 공간과 슬랙에는 조각이 수천 개 들어 있을 수 있습니다. 도구 없이 손으로 뽑기 어렵습니다.
-- SSD 에서는 지운 데이터가 이미 비워졌을 수 있습니다. [SSD TRIM과 복구 한계 (SSD·TRIM)](/03-techniques/analysis/data-recovery/ssd-trim.md) 를 봅니다.
+- SSD 에서는 지운 데이터가 이미 비워졌을 수 있습니다. [SSD TRIM과 복구 한계 (SSD·TRIM)](ssd-trim.md) 를 봅니다.
 
 ## 결과를 어떻게 해석하나
 
@@ -100,7 +100,7 @@ Wikipedia 가 인용한 Garfinkel(2007) 연구는 형식별로 조각난 비율�
 - 누가 만들었고 누가 지웠는지
 - 되살린 결과가 원래 파일 전체와 같은지. 조각난 파일은 뒷부분이 다른 데이터일 수 있습니다.
 
-파일 안에 적힌 메타데이터는 내용과 함께 나옵니다. 사진이면 [사진 EXIF](/02-artifacts/embedded-metadata/exif.md), 문서면 [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 로 읽습니다. 이 값은 파일 안에 적힌 값이고 파일시스템 시각이 아닙니다.
+파일 안에 적힌 메타데이터는 내용과 함께 나옵니다. 사진이면 [사진 EXIF](../../../02-artifacts/embedded-metadata/exif.md), 문서면 [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) 로 읽습니다. 이 값은 파일 안에 적힌 값이고 파일시스템 시각이 아닙니다.
 
 보고서 문장 예: "이미지 오프셋 X 에서 시작하는 JPEG 형식 데이터를 카빙으로 되살렸다. 이 데이터에는 파일 이름과 파일시스템 시각이 없다. 되살린 파일 안의 EXIF 에는 시각 T 가 적혀 있다."
 

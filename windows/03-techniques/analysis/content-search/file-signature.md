@@ -5,14 +5,14 @@
 파일 앞부분의 고정 바이트인 시그니처 (Signature) 를 읽어 파일 형식을 판단합니다.
 확장자와 시그니처가 다르면 그 차이를 바이트 그대로 기록합니다.
 
-이 글은 [파일 내용 검색 (Content Search)](/03-techniques/analysis/content-search/index.md) 묶음의 한 편입니다.
+이 글은 [파일 내용 검색 (Content Search)](index.md) 묶음의 한 편입니다.
 형식을 알아야 그 파일을 펼칠지, 본문을 어떻게 뽑을지 정할 수 있습니다.
 
 ## 언제 쓰나
 
 - **확장자를 믿기 어려울 때** 씁니다. 확장자는 파일 이름의 일부라서 이름만 바꾸면 달라집니다.
 - **내용 검색 전에 처리 방법을 고를 때** 씁니다. ZIP 이면 펼치고, 이미지면 글자 인식으로 보냅니다.
-- **이름 없는 데이터 조각을 볼 때** 씁니다. 비할당 영역에서 파일을 되살리는 카빙도 시그니처와 파일 끝 표시를 씁니다. 카빙은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- **이름 없는 데이터 조각을 볼 때** 씁니다. 비할당 영역에서 파일을 되살리는 카빙도 시그니처와 파일 끝 표시를 씁니다. 카빙은 [삭제 데이터 복구](../data-recovery/index.md) 에서 다룹니다.
 
 ## 시그니처 표를 읽는 법
 
@@ -64,10 +64,10 @@ PDF 안에는 파일 끝 표시가 여러 개 있을 수 있습니다.
 Kessler 표는 카빙할 때 마지막 것을 잡으라고 적습니다.
 
 뒤쪽 네 형식의 안쪽 구조는 각 기반 페이지에 있습니다.
-[SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md), [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md), [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md), [바로가기 형식](/01-foundations/shell-document-formats/shell-link-lnk.md) 을 봅니다.
+[SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md), [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md), [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md), [바로가기 형식](../../../01-foundations/shell-document-formats/shell-link-lnk.md) 을 봅니다.
 
 HWP·ALZ·EGG 처럼 국내에서 많이 쓰는 형식은 이 페이지의 근거 자료에 시그니처가 없어 싣지 않았습니다.
-HWP 문서의 구조는 [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
+HWP 문서의 구조는 [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
 
 ## 시그니처 하나에 형식이 여럿일 때
 
@@ -82,13 +82,13 @@ OOXML 에는 따로 부헤더 (Sub-header) 가 없습니다.
 확장자를 .ZIP 으로 바꾸면 ZIP 으로 열립니다.
 그래서 시그니처만으로는 OOXML 과 일반 ZIP 을 가르기 어렵습니다.
 안쪽 항목을 펼쳐 봐야 합니다.
-방법은 [압축·복합 파일 펼치기](/03-techniques/analysis/content-search/archive-expansion.md) 에 있습니다.
+방법은 [압축·복합 파일 펼치기](archive-expansion.md) 에 있습니다.
 
 ### OLE 복합 파일 계열
 
 DOC·XLS·PPT 를 비롯한 여러 확장자가 같은 8바이트 `D0 CF 11 E0 A1 B1 1A E1` 을 씁니다.
 시그니처만으로는 이 확장자들을 가를 수 없습니다.
-안쪽 구조는 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
+안쪽 구조는 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
 
 CFB 는 시그니처 뒤의 칸까지 보면 한 번 더 확인할 수 있습니다.
 [MS-CFB] 명세에 따르면 복합 파일 헤더는 반드시 파일 맨 앞(오프셋 0)에 있습니다.
@@ -133,14 +133,14 @@ CFB 는 시그니처 뒤의 칸까지 보면 한 번 더 확인할 수 있습니
 ### 실행 파일
 
 EXE·DLL·SYS·SCR·CPL·OCX 는 모두 `4D 5A`(MZ)로 시작합니다.
-실행 파일의 종류와 정보는 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에서 봅니다.
+실행 파일의 종류와 정보는 [실행 파일 메타데이터](../../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 에서 봅니다.
 
 ## 절차
 
 1. 파일 앞부분을 읽습니다. 트레일러가 있는 형식이면 끝부분도 읽습니다.
 2. 시그니처 표와 맞춰 봅니다. 오프셋 0 이 아닌 곳에 시그니처가 있는 형식을 빠뜨리지 않습니다.
 3. 겹치는 시그니처면 뒤 칸을 더 봅니다. CFB 라면 위의 헤더 칸을 확인합니다.
-4. ZIP·CFB 처럼 다른 파일을 담는 형식이면 여기서 멈추지 않습니다. [압축·복합 파일 펼치기](/03-techniques/analysis/content-search/archive-expansion.md) 로 넘깁니다.
+4. ZIP·CFB 처럼 다른 파일을 담는 형식이면 여기서 멈추지 않습니다. [압축·복합 파일 펼치기](archive-expansion.md) 로 넘깁니다.
 5. 확장자와 비교해 "일치", "불일치", "판단 못 함" 셋으로 나눕니다.
 6. 판단 근거를 적습니다. 근거는 오프셋과 바이트 값입니다.
 
@@ -153,7 +153,7 @@ Windows Search 의 필터는 파일 이름 확장자·MIME 형식·CLSID 로 파
 두 사실로 미루어 보면, 확장자를 바꾼 파일은 바뀐 확장자의 필터로 처리될 가능성이 큽니다.
 이 동작을 직접 시험한 자료는 아닙니다.
 그렇다면 그 파일의 본문은 색인에 들어가지 않을 수 있습니다.
-필터를 찾는 순서는 [본문 추출과 글자 인식](/03-techniques/analysis/content-search/text-extraction-ocr.md) 에, 색인 자체는 [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 에 있습니다.
+필터를 찾는 순서는 [본문 추출과 글자 인식](text-extraction-ocr.md) 에, 색인 자체는 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 에 있습니다.
 
 ## 도구
 
@@ -168,7 +168,7 @@ Windows Search 의 필터는 파일 이름 확장자·MIME 형식·CLSID 로 파
 - **컨테이너 시그니처는 겉만 알려 줍니다.** ZIP 이라는 판단은 DOCX 인지 APK 인지를 말해 주지 않습니다.
 - **PDF 트레일러는 하나가 아닐 수 있습니다.** 카빙에서 첫 번째 `%%EOF` 에서 끊으면 파일 뒷부분을 잃습니다.
 - **앞부분이 덮어써진 파일은 시그니처가 없습니다.** "형식을 모른다" 는 "형식이 없다" 와 다릅니다.
-- **암호를 건 파일은 겉 형식만 보입니다.** 이런 파일은 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 로 넘깁니다.
+- **암호를 건 파일은 겉 형식만 보입니다.** 이런 파일은 [암호화 증거 다루기](../encrypted-evidence/index.md) 로 넘깁니다.
 
 ## 결과를 어떻게 해석하나
 
@@ -178,7 +178,7 @@ Windows Search 의 필터는 파일 이름 확장자·MIME 형식·CLSID 로 파
 
 시그니처는 이름을 언제 누가 바꿨는지 알려 주지 않습니다.
 그 시점은 파일 시스템 기록에서 따로 찾아봅니다.
-[마스터 파일 테이블](/02-artifacts/filesystem/mft.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md), [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 함께 봅니다.
+[마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md), [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md), [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) 를 함께 봅니다.
 
 ## 참고 문헌
 

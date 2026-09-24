@@ -1,6 +1,6 @@
 # 트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)
 
-> 위치: [레지스트리 하이브 구조 (Registry Hive)](/01-foundations/database-log-formats/registry-hive/index.md) > 트랜잭션 로그
+> 위치: [레지스트리 하이브 구조 (Registry Hive)](index.md) > 트랜잭션 로그
 
 ## 한 줄 요약
 
@@ -19,8 +19,8 @@ Microsoft 문서는 .log 파일을 "하이브의 키와 값 변경을 적은 트
 - `C:\Users\<사용자>\NTUSER.DAT` → `NTUSER.DAT.LOG1`, `NTUSER.DAT.LOG2`
 
 SYSTEM·SOFTWARE·SAM·SECURITY·DEFAULT·NTUSER.DAT·UsrClass.dat 가 모두 이 방식을 씁니다.
-하이브 형식을 빌려 쓰는 파일도 같습니다. [AmCache (Amcache.hve)](/02-artifacts/execution/amcache-hve/index.md) 와 부팅 설정 파일 BCD 가 그 예입니다.
-하이브별 위치는 [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
+하이브 형식을 빌려 쓰는 파일도 같습니다. [AmCache (Amcache.hve)](../../../02-artifacts/execution/amcache-hve/index.md) 와 부팅 설정 파일 BCD 가 그 예입니다.
+하이브별 위치는 [하이브 파일 종류와 위치](system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
 
 | Windows | 로그 파일 | 로그 형식 | 로그의 File type 값 |
 |---|---|---|---|
@@ -33,7 +33,7 @@ SYSTEM·SOFTWARE·SAM·SECURITY·DEFAULT·NTUSER.DAT·UsrClass.dat 가 모두 �
 - Vista 이후에도 .LOG 파일이 함께 보일 수 있습니다. 명세는 이것을 설치 이미지에서 따라온 쓰지 않는 파일일 수 있다고 설명합니다.
 - 이 글이 확인한 명세 문서와 libyal 문서는 Windows 10 까지를 다룹니다. Windows 11 도 새 형식을 쓰는 것으로 알려져 있지만 이 글의 참고 문헌으로 따로 확인하지는 않았습니다.
 
-같은 생각으로 만든 다른 형식도 있습니다. [ESE 트랜잭션 로그](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md), [SQLite WAL](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md), [NTFS $LogFile](/02-artifacts/filesystem/logfile.md) 이 그렇습니다.
+같은 생각으로 만든 다른 형식도 있습니다. [ESE 트랜잭션 로그](../extensible-storage-engine/edb-log-dirty-shutdown.md), [SQLite WAL](../sqlite/wal-journal-shm.md), [NTFS $LogFile](../../../02-artifacts/filesystem/logfile.md) 이 그렇습니다.
 세 가지 모두 하이브 로그와는 서로 다른 파일입니다.
 
 ## 로그를 먼저 쓰는 까닭과 "반영 안 된 변경"
@@ -55,7 +55,7 @@ Microsoft 문서는 레지스트리가 일정한 간격으로, 그리고 시스�
 
 ### 주 파일이 복구가 필요한지 가리기
 
-주 파일 머리 블록 (Base Block) 의 전체 구조는 [하이브 내부 구조 (regf·hbin·Cell)](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에 있습니다.
+주 파일 머리 블록 (Base Block) 의 전체 구조는 [하이브 내부 구조 (regf·hbin·Cell)](regf-hbin-cell.md) 에 있습니다.
 여기서는 로그와 관련된 칸만 봅니다. 숫자는 모두 리틀 엔디언입니다.
 
 | 오프셋 | 크기 | 칸 | 쓰임 |
@@ -197,7 +197,7 @@ SOFTWARE.LOG1, 오프셋 0x200 (명세로 만든 예시, 해시 자리는 ..)
 
 **5단계. 결과 사본을 읽습니다.**
 
-모든 항목을 적용한 사본은 보통 하이브처럼 읽습니다. 읽는 법은 [하이브 내부 구조](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에 있습니다.
+모든 항목을 적용한 사본은 보통 하이브처럼 읽습니다. 읽는 법은 [하이브 내부 구조](regf-hbin-cell.md) 에 있습니다.
 
 ## 포렌식에서 중요한 점
 
@@ -214,14 +214,14 @@ SOFTWARE.LOG1, 오프셋 0x200 (명세로 만든 예시, 해시 자리는 ..)
 중간 상태는 로그 항목 하나를 적용한 뒤, 복구가 끝나기 전의 하이브 모습입니다.
 Suhanov 는 이 방법으로 UserAssist 키 하나의 마지막 기록 시각을 세 개 얻은 예를 보였습니다.
 주 파일만 보면 그 키의 마지막 기록 시각은 하나뿐입니다.
-중간 상태에서 얻은 시각은 [타임라인](/03-techniques/analysis/timeline/super-timeline.md) 의 재료가 됩니다.
+중간 상태에서 얻은 시각은 [타임라인](../../../03-techniques/analysis/timeline/super-timeline.md) 의 재료가 됩니다.
 
 ### 지운 데이터와 옛 잔재
 
 로그 파일에는 이미 적용된 옛 항목이 남을 수 있습니다.
 옛 형식 로그에도 마지막 페이지 뒤에 예전 페이지 잔재가 남을 수 있습니다.
 이런 부분에는 주 파일에서 이미 덮어쓴 옛 셀이 들어 있을 수 있습니다.
-주 파일 안의 지운 셀을 찾는 법은 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 에 있습니다.
+주 파일 안의 지운 셀을 찾는 법은 [지워진 키·값 복구](deleted-keys-values.md) 에 있습니다.
 
 ### 수집 방법에 따라 로그 내용이 달라집니다
 
@@ -231,14 +231,14 @@ Suhanov 는 이 방법으로 UserAssist 키 하나의 마지막 기록 시각을
 - 켜진 PC 에서 수집 도구가 섀도 복사본을 만들면, 원래 PC 의 로그 내용도 이때 바뀔 수 있습니다.
 - `reg save` 같은 내보내기는 형식 옵션에 따라 할당된 키와 값만 옮깁니다. 이 경우 지운 데이터가 사라집니다.
 
-수집 절차는 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [실행 중 시스템 이미징](/03-techniques/process-acquisition/live-response/live-imaging.md) 에서 다룹니다.
-섀도 복사본 자체는 [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) 와 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
+수집 절차는 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [실행 중 시스템 이미징](../../../03-techniques/process-acquisition/live-response/live-imaging.md) 에서 다룹니다.
+섀도 복사본 자체는 [볼륨 섀도 복사본 구조](../../disk-volume/volume-shadow-copy.md) 와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
 
 ### 로그에서 나온 값을 증거로 쓸 때
 
 - **말해 주는 것**: 그 페이지 내용이 하이브의 어느 한 시점에 실제로 기록되었다는 것.
 - **말해 주는 것**: 항목 순번으로 본 기록의 앞뒤 순서.
-- **말해 주지 못하는 것**: 항목이 기록된 정확한 시각. 항목 머리에는 시각 칸이 없습니다. 시각은 페이지 안 키의 [마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md)(FILETIME, UTC)으로만 추정합니다.
+- **말해 주지 못하는 것**: 항목이 기록된 정확한 시각. 항목 머리에는 시각 칸이 없습니다. 시각은 페이지 안 키의 [마지막 기록 시각](last-write-time.md)(FILETIME, UTC)으로만 추정합니다.
 - **말해 주지 못하는 것**: 누가 그 값을 바꿨는지.
 
 보고서에는 "주 파일에는 없고, 트랜잭션 로그의 순번 N 항목을 적용한 상태에 이 값이 있다" 처럼 기록이 말하는 만큼만 씁니다.
@@ -253,7 +253,7 @@ Suhanov 는 이 방법으로 UserAssist 키 하나의 마지막 기록 시각을
 - **원본에 로그를 적용합니다.** 로그를 적용하면 새 하이브가 생깁니다. 원본 주 파일과 로그는 그대로 두고 사본에서 작업합니다. 원본과 결과 파일의 해시를 모두 적습니다.
 - **Vista 이후의 .LOG 만 봅니다.** 설치 이미지에서 따라온 쓰지 않는 파일일 수 있습니다.
 - **머리 블록 시각을 하이브의 마지막 기록 시각으로 씁니다.** 명세에 따르면 Windows 8.1 부터 머리 블록의 마지막 기록 시각 (Last written timestamp) 칸은 갱신되지 않습니다.
-- **다른 로그와 헷갈립니다.** NTFS 의 [$LogFile](/02-artifacts/filesystem/logfile.md) 은 파일 시스템 로그입니다. 트랜잭션 레지스트리 (TxR) 는 CLFS 파일에 따로 기록합니다. 둘 다 .LOG1·.LOG2 와 다른 것입니다.
+- **다른 로그와 헷갈립니다.** NTFS 의 [$LogFile](../../../02-artifacts/filesystem/logfile.md) 은 파일 시스템 로그입니다. 트랜잭션 레지스트리 (TxR) 는 CLFS 파일에 따로 기록합니다. 둘 다 .LOG1·.LOG2 와 다른 것입니다.
 
 ## 도구
 
@@ -268,7 +268,7 @@ Suhanov 는 이 방법으로 UserAssist 키 하나의 마지막 기록 시각을
 | 헥스 편집기 | 서명 `DIRT`·`HvLE` 를 찾아 위의 표대로 직접 읽습니다 |
 
 두 도구의 결과가 다르면 먼저 로그 적용 여부와 멈춘 순번을 비교합니다.
-검증 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+검증 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

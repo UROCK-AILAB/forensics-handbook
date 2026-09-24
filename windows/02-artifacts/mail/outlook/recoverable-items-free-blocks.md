@@ -1,6 +1,6 @@
 # 지운 메시지 복구 (Recoverable Items·Free Blocks)
 
-> 상위 허브: [아웃룩 (Outlook)](/02-artifacts/mail/outlook/index.md)
+> 상위 허브: [아웃룩 (Outlook)](index.md)
 
 ## 한 줄 요약
 
@@ -103,7 +103,7 @@ libpff 문서가 적은 표들입니다.
 | 32비트 (ANSI) | 200 (`0xC8`) | libpff 문서 |
 | 유니코드 | 248 (`0xF8`) | MS-PST 명세의 칸 크기를 더해 계산한 값 |
 
-헤더 안 ROOT 에는 "남은 데이터 공간 크기" 칸도 있습니다. 이 칸으로 빈 공간이 얼마나 되는지 봅니다. 칸 위치는 [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md)의 ROOT 표에 있습니다.
+헤더 안 ROOT 에는 "남은 데이터 공간 크기" 칸도 있습니다. 이 칸으로 빈 공간이 얼마나 되는지 봅니다. 칸 위치는 [데이터 파일 구조 (PST·OST)](pst-ost.md)의 ROOT 표에 있습니다.
 
 ## 증거로서 의미
 
@@ -135,19 +135,19 @@ libpff 문서가 적은 표들입니다.
 
 - 서버 쪽 보존 기간(기본 14일, 일정 120일)은 자동 삭제가 일어나는 기준입니다. 기간을 어느 시점부터 세는지 확인하지 못했으므로, "지운 지 며칠 지났으니 없다" 고 날짜를 계산해 단정하지 않습니다.
 - 보존 중에는 자동 삭제가 멈춥니다. 보존을 언제 걸고 풀었는지 관리자에게 확인합니다.
-- 빈 공간에서 찾은 조각 안의 시각 값은 메시지의 시각입니다. 지운 시각이 아닙니다. 형식은 UTC 기준 FILETIME 입니다([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
-- PST·OST 가 경고 한도에 닿으면 파일을 줄이는 압축 (compaction) 이 시작됩니다. 파일 크기가 줄어든 때는 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)에서 찾아봅니다.
+- 빈 공간에서 찾은 조각 안의 시각 값은 메시지의 시각입니다. 지운 시각이 아닙니다. 형식은 UTC 기준 FILETIME 입니다([시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
+- PST·OST 가 경고 한도에 닿으면 파일을 줄이는 압축 (compaction) 이 시작됩니다. 파일 크기가 줄어든 때는 [USN 변경 저널](../../filesystem/usnjrnl.md)에서 찾아봅니다.
 
 ## 함정과 한계
 
-1. **OST 에서 서버의 Recoverable Items 를 찾습니다.** 이 폴더는 서버 사서함의 비 IPM 쪽에 있습니다. OST 에 동기화되는지는 이번에 확인하지 못했습니다. 서버 쪽 자료는 eDiscovery·콘텐츠 검색으로 따로 요청합니다([PST와 OST 차이](/02-artifacts/mail/outlook/cached-mode-exchange.md)).
+1. **OST 에서 서버의 Recoverable Items 를 찾습니다.** 이 폴더는 서버 사서함의 비 IPM 쪽에 있습니다. OST 에 동기화되는지는 이번에 확인하지 못했습니다. 서버 쪽 자료는 eDiscovery·콘텐츠 검색으로 따로 요청합니다([PST와 OST 차이](cached-mode-exchange.md)).
 2. **Exchange Online 값을 온프레미스에 그대로 씁니다.** 이 페이지의 기간과 한도는 Exchange Online 문서의 값입니다. 온프레미스는 그 서버의 설정을 확인합니다.
 3. **보존 설정을 확인하지 않고 "14일이 지나 없다" 고 결론 냅니다.** 기간은 30일까지 늘릴 수 있습니다. 보존 중에는 자동 삭제가 멈춥니다. 한도에 닿으면 14일보다 먼저 지워질 수도 있습니다.
 4. **폴더째 지운 경우 폴더도 되살아난다고 봅니다.** 폴더 자체는 하드 삭제되어 보존 중에도 되살릴 수 없습니다. 안의 항목만 Deletions 로 갑니다. 되살린 항목의 원래 폴더 이름은 다른 기록으로 확인합니다.
 5. **파일 빈 공간 복구를 당연하게 약속합니다.** 빈 블록에 지운 메시지가 남는다는 설명은 일반론입니다. 압축이 빈 블록의 옛 내용을 지우는지도 확인하지 못했습니다. 검체마다 결과가 다를 수 있다고 보고서에 적습니다.
-6. **인코딩된 파일의 빈 공간을 글자로 검색합니다.** `bCryptMethod` 가 `0x01`·`0x02` 이면 블록 바이트가 원래 글자와 다릅니다. 빈 공간 조각도 그대로 검색하면 본문이 빠질 수 있습니다([데이터 파일 구조](/02-artifacts/mail/outlook/pst-ost.md)의 인코딩 표).
+6. **인코딩된 파일의 빈 공간을 글자로 검색합니다.** `bCryptMethod` 가 `0x01`·`0x02` 이면 블록 바이트가 원래 글자와 다릅니다. 빈 공간 조각도 그대로 검색하면 본문이 빠질 수 있습니다([데이터 파일 구조](pst-ost.md)의 인코딩 표).
 7. **상태 칸이 `0x00` 인데 할당표를 믿습니다.** 할당표가 틀렸다는 뜻입니다. 빈 공간 판단이 틀릴 수 있으므로 파일 전체를 따로 훑습니다.
-8. **도구의 "복구" 결과를 그대로 씁니다.** 공개 도구가 빈 블록·고아 항목에서 메시지를 되살리는지, 어떤 방법으로 하는지 이번에 확인하지 못했습니다. 도구마다 결과를 비교합니다([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+8. **도구의 "복구" 결과를 그대로 씁니다.** 공개 도구가 빈 블록·고아 항목에서 메시지를 되살리는지, 어떤 방법으로 하는지 이번에 확인하지 못했습니다. 도구마다 결과를 비교합니다([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 
 ## 직접 분석해 보기
 
@@ -155,7 +155,7 @@ libpff 문서가 적은 표들입니다.
 
 아래 순서는 libpff 문서와 MS-PST 명세의 칸 위치로 만든 것입니다.
 
-1. 헤더의 `wVer` 로 형식을 가립니다([데이터 파일 구조](/02-artifacts/mail/outlook/pst-ost.md)).
+1. 헤더의 `wVer` 로 형식을 가립니다([데이터 파일 구조](pst-ost.md)).
 2. 할당표 상태 칸을 읽습니다. ANSI 는 오프셋 200, 유니코드는 248 입니다. `0x02` 이면 3번으로 갑니다. `0x00` 이면 할당표를 믿지 않고 파일 전체를 훑습니다.
 3. ROOT 의 "남은 데이터 공간 크기" 칸을 읽습니다. 값이 클수록 볼 빈 공간이 많습니다.
 4. 오프셋 `0x4400` 의 페이지로 갑니다. 첫 데이터 할당표입니다. 페이지 형식 값이 `0x84` 인지 확인합니다. 페이지 안에서 이 값이 놓이는 자리는 libpff 문서의 페이지 절을 봅니다.
@@ -171,20 +171,20 @@ libpff 문서가 적은 표들입니다.
 - 서버 쪽: Microsoft 365 의 eDiscovery·콘텐츠 검색으로 Recoverable Items 를 검색합니다. 결과를 받을 때 어느 하위 폴더에서 나온 항목인지 함께 받습니다.
 - 파일 쪽: libpff 같은 공개 파서로 PST 를 연 결과와, 위 순서로 직접 뽑은 빈 공간 검색 결과를 비교합니다. 파서가 보여 주지 않는 메시지가 빈 공간에서 나오면, 그 조각을 원래 파일의 위치와 함께 기록합니다.
 
-빈 공간을 뽑아 검색하는 일반 절차는 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)와 [파일 내용 검색](/03-techniques/analysis/content-search/index.md)에서 다룹니다.
+빈 공간을 뽑아 검색하는 일반 절차는 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md)와 [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md) | 헤더 형식, ROOT 칸, 인코딩 |
-| [PST와 OST 차이 (Cached Mode·Exchange)](/02-artifacts/mail/outlook/cached-mode-exchange.md) | OST 에 서버 내용이 어디까지 들어오는지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 지우기 전 시점의 PST·OST. 지금 파일과 메시지 목록을 비교합니다 |
-| [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | PST·OST 가 크게 줄어든 때. 압축이나 파일 교체를 가늠합니다 |
-| [자동완성 목록 (NK2·Stream_Autocomplete)](/02-artifacts/mail/outlook/nk2-stream-autocomplete.md) | 지운 메일의 상대가 보낸 상대 목록에 남았는지 |
-| [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) | SubstrateHolds 에 남는 Teams 메시지와 PC 쪽 기록 |
+| [데이터 파일 구조 (PST·OST)](pst-ost.md) | 헤더 형식, ROOT 칸, 인코딩 |
+| [PST와 OST 차이 (Cached Mode·Exchange)](cached-mode-exchange.md) | OST 에 서버 내용이 어디까지 들어오는지 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 지우기 전 시점의 PST·OST. 지금 파일과 메시지 목록을 비교합니다 |
+| [USN 변경 저널](../../filesystem/usnjrnl.md) | PST·OST 가 크게 줄어든 때. 압축이나 파일 교체를 가늠합니다 |
+| [자동완성 목록 (NK2·Stream_Autocomplete)](nk2-stream-autocomplete.md) | 지운 메일의 상대가 보낸 상대 목록에 남았는지 |
+| [마이크로소프트 팀즈](../../messengers/teams.md) | SubstrateHolds 에 남는 Teams 메시지와 PC 쪽 기록 |
 
-지운 흔적을 모아 읽는 순서는 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)와 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)에서 다룹니다.
+지운 흔적을 모아 읽는 순서는 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)와 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md)에서 다룹니다.
 
 ## 실습
 

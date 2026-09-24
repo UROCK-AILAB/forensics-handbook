@@ -1,6 +1,6 @@
 # 하이브 내부 구조 (regf·hbin·Cell)
 
-상위 허브: [레지스트리 하이브 구조 (Registry Hive)](/01-foundations/database-log-formats/registry-hive/index.md)
+상위 허브: [레지스트리 하이브 구조 (Registry Hive)](index.md)
 
 ## 한 줄 요약
 
@@ -14,9 +14,9 @@
 
 | 파일 | 설명 | 자세히 |
 |---|---|---|
-| SYSTEM·SOFTWARE·SAM·SECURITY·DEFAULT·NTUSER.DAT·UsrClass.dat | 시스템 하이브와 사용자 하이브 | [하이브 파일 종류와 위치](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) |
-| Amcache.hve | 프로그램·파일 목록을 담은 하이브 | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| settings.dat | UWP 앱 설정 하이브 | [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) |
+| SYSTEM·SOFTWARE·SAM·SECURITY·DEFAULT·NTUSER.DAT·UsrClass.dat | 시스템 하이브와 사용자 하이브 | [하이브 파일 종류와 위치](system-software-sam-security-ntuser-dat-usrclass.md) |
+| Amcache.hve | 프로그램·파일 목록을 담은 하이브 | [AmCache](../../../02-artifacts/execution/amcache-hve/index.md) |
+| settings.dat | UWP 앱 설정 하이브 | [UWP 앱 데이터 구조](../../app-mail-data/packages-settings-dat.md) |
 | BCD | 부팅 설정 하이브입니다. 명세는 Windows 8.1 예로 `\Boot\BCD` 를 듭니다. | — |
 | 백업 사본·저장 파일 | RegBack 사본, RegSaveKey 계열 함수로 저장한 파일 | 명세는 백업 사본이 기본 파일과 같은 형식이라고 적습니다. |
 
@@ -125,7 +125,7 @@ libyal 문서는 두 번째 hbin 부터 시각 칸이 대개 0 이거나 잔여 
 |---|---|---|---|
 | 0 | 2 | 서명 | `nk` |
 | 2 | 2 | 플래그 | 아래 표 |
-| 4 | 8 | 마지막 기록 시각 | FILETIME (UTC). 해석은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 참고 |
+| 4 | 8 | 마지막 기록 시각 | FILETIME (UTC). 해석은 [키 마지막 기록 시각](last-write-time.md) 참고 |
 | 12 | 4 | 접근 비트 (Access Bits) | Windows 8 부터 씁니다. 그 전에는 예약 칸입니다. |
 | 16 | 4 | 부모 | 부모 nk 셀 오프셋. 루트 키에서는 뜻이 없습니다. |
 | 20 | 4 | 하위 키 수 | |
@@ -151,7 +151,7 @@ libyal 문서는 두 번째 hbin 부터 시각 칸이 대개 0 이거나 잔여 
 
 클래스 이름 (Class Name)은 키에 붙는 UTF-16LE 문자열입니다.
 대개 뜻이 없습니다.
-다만 명세는 Microsoft 가 Syskey 암호화 키를 클래스 이름에 넣었다고 적습니다([부트키 구하기](/02-artifacts/credentials/sam-security/system-boot-key.md)).
+다만 명세는 Microsoft 가 Syskey 암호화 키를 클래스 이름에 넣었다고 적습니다([부트키 구하기](../../../02-artifacts/credentials/sam-security/system-boot-key.md)).
 
 ### 하위 키 목록 (li·lf·lh·ri)
 
@@ -199,7 +199,7 @@ libyal 문서는 두 번째 hbin 부터 시각 칸이 대개 0 이거나 잔여 
 | 8 | 4 | 이전 (Blink) | 이전 `sk` 셀 오프셋 |
 | 12 | 4 | 참조 수 | 이 `sk` 를 가리키는 키 수 |
 | 16 | 4 | 설명자 크기 | |
-| 20 | … | 보안 설명자 | 소유자 SID 등. SID 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 참고 |
+| 20 | … | 보안 설명자 | 소유자 SID 등. SID 읽는 법은 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 참고 |
 
 `sk` 레코드는 서로 앞뒤로 이어진 목록을 이룹니다.
 권한이 같은 키 여러 개가 `sk` 하나를 함께 씁니다.
@@ -274,7 +274,7 @@ libyal 문서는 Windows 10 2004 에서 `RegSaveKeyEx` 로 저장할 때 표준 
 대문자 `SELECT` 로 해시를 구하면 0x5F0024A0 입니다.
 파일에는 리틀 엔디언으로 `A0 24 00 5F` 가 적힙니다.
 요소의 해시가 가리키는 nk 이름과 맞지 않으면 목록이나 셀이 손상됐을 수 있습니다.
-`Select` 키의 뜻은 [컨트롤셋 고르기](/01-foundations/database-log-formats/registry-hive/controlset-select.md) 를 봅니다.
+`Select` 키의 뜻은 [컨트롤셋 고르기](controlset-select.md) 를 봅니다.
 
 **5단계. 값 셀과 인라인 데이터 읽기**
 
@@ -294,7 +294,7 @@ E0 FF FF FF 76 6B 04 00 04 00 00 80 E4 FD FF FF
 이 예의 값은 시간대 설정 `Bias` 를 흉내 낸 것입니다.
 `Bias` 는 부호 있는 32비트로 읽어야 합니다(확인 범위: 압수 이미지에서 꺼낸 SYSTEM 하이브, 현장 관찰).
 UTC+9 는 -540 입니다.
-자세한 해석은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 봅니다.
+자세한 해석은 [시간대 설정](../../../02-artifacts/system-account/time-zone.md) 을 봅니다.
 
 ## 포렌식에서 중요한 점
 
@@ -305,7 +305,7 @@ UTC+9 는 -540 입니다.
 그래서 비할당 셀 안에 옛 `nk`·`vk` 레코드가 남아 있을 수 있습니다.
 붙어 있는 비할당 셀은 하나로 합쳐집니다.
 그래서 비할당 셀 하나에 옛 레코드 여러 개가 들어 있을 수 있습니다.
-되살리는 방법은 [지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 에서 다룹니다.
+되살리는 방법은 [지워진 키·값 복구](deleted-keys-values.md) 에서 다룹니다.
 
 ### 비정상 종료와 반영 안 된 변경
 
@@ -319,11 +319,11 @@ Windows 8.1 부터 쓰는 새 로그 형식에서는 변경이 로그 파일에 
 명세에 따르면 기본 파일 반영은 최대 1시간까지 미뤄질 수 있습니다.
 그래서 기본 파일만 읽으면 최근 변경을 놓칠 수 있습니다.
 하이브를 수집할 때는 `.LOG1`·`.LOG2` 를 함께 가져옵니다.
-로그 구조와 적용 방법은 [트랜잭션 로그와 반영 안 된 변경](/01-foundations/database-log-formats/registry-hive/log1-log2.md) 에서 다룹니다.
+로그 구조와 적용 방법은 [트랜잭션 로그와 반영 안 된 변경](log1-log2.md) 에서 다룹니다.
 
 ### 구조 안의 시각 칸
 
-모든 시각 칸은 FILETIME (UTC) 입니다([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
+모든 시각 칸은 FILETIME (UTC) 입니다([시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md)).
 
 | 위치 | 뜻 | 주의 |
 |---|---|---|
@@ -331,7 +331,7 @@ Windows 8.1 부터 쓰는 새 로그 형식에서는 변경이 로그 파일에 
 | 첫 hbin +20 | 위 시각의 백업 사본 | 두 번째 hbin 부터는 대개 뜻이 없습니다. |
 | 기본 블록 +168 | 마지막 재구성 시각 | Windows 8 부터. 재구성은 하이브가 잠겨 있지 않을 때 주 1회 일어납니다. 낮은 2비트는 재구성 종류를 나타냅니다. |
 | 기본 블록 +512 | offreg 저장 시각 | 176(옛 라이브러리는 168)에 `OfRg` 가 있을 때만 뜻이 있습니다. |
-| nk +4 | 키 마지막 기록 시각 | [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 참고 |
+| nk +4 | 키 마지막 기록 시각 | [키 마지막 기록 시각](last-write-time.md) 참고 |
 
 Windows 8 부터 nk 의 접근 비트는 키가 열린 적이 있는지 기록합니다.
 0x1 은 부팅 중 레지스트리 초기화 전에 열렸다는 뜻입니다.
@@ -343,28 +343,28 @@ Windows 8 부터 nk 의 접근 비트는 키가 열린 적이 있는지 기록�
 
 hbin 머리에는 서명, 자기 오프셋, 4096 배수 크기가 함께 들어 있습니다.
 이 세 가지로 디스크 비할당 영역이나 사본에서 찾은 hbin 조각의 순서를 맞춰 볼 수 있습니다.
-방법은 [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
-예전 시점의 하이브 전체가 필요하면 [볼륨 섀도 복사본](/01-foundations/disk-volume/volume-shadow-copy.md) 을 먼저 찾습니다.
+방법은 [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
+예전 시점의 하이브 전체가 필요하면 [볼륨 섀도 복사본](../../disk-volume/volume-shadow-copy.md) 을 먼저 찾습니다.
 
 ## 함정
 
 - **오프셋 기준을 헷갈림.** 하이브 안 오프셋은 hbin 데이터 기준입니다. 파일 오프셋으로 쓰려면 4096 을 더합니다.
 - **셀 표 오프셋을 셀 시작에서 셈.** nk·vk 표의 오프셋은 크기 칸 4바이트 뒤부터 셉니다.
 - **셀 크기를 부호 없이 읽음.** 부호 없이 읽으면 할당된 셀이 4GB 가까운 크기로 보입니다.
-- **확장 ASCII 이름을 코드 페이지로 읽음.** KEY_COMP_NAME 이름의 한 바이트는 U+0000~U+00FF 글자 하나입니다. CP949 로 읽으면 0x80 이상 글자가 깨집니다. 한글이 든 이름은 UTF-16LE 로 저장됩니다([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
+- **확장 ASCII 이름을 코드 페이지로 읽음.** KEY_COMP_NAME 이름의 한 바이트는 U+0000~U+00FF 글자 하나입니다. CP949 로 읽으면 0x80 이상 글자가 깨집니다. 한글이 든 이름은 UTF-16LE 로 저장됩니다([문자 인코딩](../../value-decoding/utf-16le-utf-8-cp949.md)).
 - **인라인 데이터를 오프셋으로 착각함.** 데이터 크기 칸의 최상위 비트를 먼저 확인합니다.
 - **REG_DWORD 부호.** 레지스트리 값을 문자열로 받는 도구는 REG_DWORD 를 부호 없는 10진으로 보여 주는 경우가 많습니다(확인 범위: 압수 이미지에서 꺼낸 하이브, 현장 관찰). 부호에 뜻이 있는 값은 원시 바이트로 확인합니다.
 - **정해진 형식 번호만 있다고 가정함.** 명세는 미리 정한 형식 밖의 번호도 허용한다고 적습니다. 도구가 모르는 형식 번호는 원시 바이트로 봅니다.
 - **기본 블록 시각을 하이브 수정 시각으로 씀.** Windows 8.1 부터 이 칸은 갱신되지 않습니다. 하이브가 언제 바뀌었는지는 키 시각과 파일 시스템 시각으로 따로 봅니다.
 - **hbin 영역 중간에서 멈춤.** libyal 문서는 Windows 8.1 SYSTEM 하이브의 hbin 데이터 끝부분이 0 으로 채워진 사례를 적습니다. 파서가 이 구간에서 오류로 멈추면 뒤 내용을 놓칠 수 있습니다.
-- **사용 중에 복사한 하이브.** libyal 문서는 사용 중에 복사한 하이브에서 값 레코드가 깨진 사례를 적습니다. 이런 값은 믿기 어렵습니다. 수집 방법은 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 을 봅니다.
+- **사용 중에 복사한 하이브.** libyal 문서는 사용 중에 복사한 하이브에서 값 레코드가 깨진 사례를 적습니다. 이런 값은 믿기 어렵습니다. 수집 방법은 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 을 봅니다.
 
 ## 도구
 
 하이브 구조를 직접 읽는 공개 도구와 라이브러리로는 libregf(libyal), yarp, regipy, python-registry, Registry Explorer 등이 있습니다.
 도구마다 더러운 하이브, 로그 적용, 비할당 셀을 다루는 방식이 다릅니다.
 결과 수가 다르면 헥스로 셀 몇 개를 직접 따라가 봅니다.
-여러 도구 결과를 맞춰 보는 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+여러 도구 결과를 맞춰 보는 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 참고 문헌
 

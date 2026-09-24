@@ -25,11 +25,11 @@
 
 - 옛 OneDrive 는 같은 정보를 `<UserCid>.dat` 와 `<UserCid>.dat.previous` 에 저장했습니다. 새 버전은 SQLite 로 바꿨습니다.
 - 어느 앱 버전에서 SQLite 로 바뀌었는지는 확인하지 못했습니다. 옛 검체에서 `.db` 가 없으면 `.dat` 파일을 찾습니다.
-- 계정마다 폴더가 따로 있으므로 DB 도 계정마다 하나씩 있습니다. 계정 폴더와 레지스트리 계정 키의 관계는 [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) 에서 다룹니다.
+- 계정마다 폴더가 따로 있으므로 DB 도 계정마다 하나씩 있습니다. 계정 폴더와 레지스트리 계정 키의 관계는 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
 
 ## 구조
 
-SQLite 파일과 WAL 을 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. 아래 표와 칸은 모두 관찰한 것입니다. 표와 칸의 설명은 따로 근거를 적은 것 말고는 이름으로 짐작한 뜻입니다.
+SQLite 파일과 WAL 을 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. 아래 표와 칸은 모두 관찰한 것입니다. 표와 칸의 설명은 따로 근거를 적은 것 말고는 이름으로 짐작한 뜻입니다.
 
 ### 표 목록
 
@@ -101,7 +101,7 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 
 - 두 계정 DB 모두 `scopeType` 3, `libraryType` 2 인 행이 있었습니다.
 - 개인 계정 DB 에만 `scopeType` 7, `libraryType` 3 인 행이 하나 더 있었습니다. 이 행이 무엇을 가리키는지는 확인하지 못했습니다.
-- SharePoint 라이브러리를 가르는 데 이 표를 쓰는 법은 [회사용 OneDrive와 SharePoint 동기화](/02-artifacts/cloud-notes/onedrive/business-tenant.md) 에서 다룹니다.
+- SharePoint 라이브러리를 가르는 데 이 표를 쓰는 법은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
 
 ### 활동 기록 성격의 표
 
@@ -154,7 +154,7 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 
 ## 시각 해석
 
-DB 의 시각 칸은 모두 Unix 초로 보였습니다 (관찰). 1970-01-01 00:00 UTC 부터 센 초이므로 변환하면 UTC 입니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+DB 의 시각 칸은 모두 Unix 초로 보였습니다 (관찰). 1970-01-01 00:00 UTC 부터 센 초이므로 변환하면 UTC 입니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 | 칸 | 언제의 시각인가 | 근거 |
 |---|---|---|
@@ -171,8 +171,8 @@ DB 의 시각 칸은 모두 Unix 초로 보였습니다 (관찰). 1970-01-01 00:
 ## 함정과 한계
 
 - **`-wal`·`-shm` 을 함께 뜹니다.** WAL 방식이므로 아직 본 DB 로 옮기지 않은 변경이 `-wal` 에 있을 수 있습니다. 주 파일만 뜨면 최근 변경을 놓칩니다.
-- **원본을 SQLite 로 바로 열지 않습니다.** 해시를 기록한 사본에서 작업합니다. 이유는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
-- **살아 있는 PC 에서 파일 해시를 맞춰 볼 때 조심합니다.** 자리표시자 (placeholder) 파일을 읽으면 내려받기 (hydration) 가 일어납니다. 로컬에 내용이 있는 파일만 읽고, 자리표시자는 건너뜁니다. 자리표시자의 구조는 [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) 에서 다룹니다.
+- **원본을 SQLite 로 바로 열지 않습니다.** 해시를 기록한 사본에서 작업합니다. 이유는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- **살아 있는 PC 에서 파일 해시를 맞춰 볼 때 조심합니다.** 자리표시자 (placeholder) 파일을 읽으면 내려받기 (hydration) 가 일어납니다. 로컬에 내용이 있는 파일만 읽고, 자리표시자는 건너뜁니다. 자리표시자의 구조는 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
 - **해시를 16진 문자열과 base64 로 혼동하지 않습니다.** DB 는 원시 바이트, Graph 는 base64 입니다. 20바이트 해시를 base64 로 바꾸면 28글자가 됩니다.
 - **해시가 없는 행이 있습니다.** 관찰한 PC 에서도 계정마다 9행이 비어 있었습니다.
 - **코드 값의 뜻을 짐작으로 채우지 않습니다.** `fileStatus`, `lastKnownPinState`, `scopeType`, `libraryType`, `irm*` 칸의 값은 뜻을 확인하지 못했습니다.
@@ -190,7 +190,7 @@ DB 의 시각 칸은 모두 Unix 초로 보였습니다 (관찰). 1970-01-01 00:
 Unix 초로 읽기:     2024-01-01 00:00:00 UTC
 ```
 
-레코드 머리와 형식 값을 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+레코드 머리와 형식 값을 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 **해시 칸.** `localHashDigest` 는 20바이트 BLOB 입니다. 아래는 자리만 표시한 예시입니다.
 
@@ -257,15 +257,15 @@ ORDER BY h.lastHydrationTime;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 계정·설정 레지스트리 | DB 가 어느 계정 것인지, 동기화 폴더가 어디인지 봅니다 | [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) |
-| 로그 | DB 의 시각 무렵에 앱이 올리기·내려받기를 했는지 봅니다 | [로그 (ODL·ODLGZ)](/02-artifacts/cloud-notes/onedrive/odl-odlgz.md) |
-| 마스터 파일 테이블 | `lastChange` 와 실제 파일의 수정 시각을 맞춰 봅니다 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| USN 변경 저널 | 동기화 폴더 안에서 파일이 생기고 지워진 순서를 봅니다 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 휴지통 | 동기화 폴더에서 지운 파일이 휴지통에 있는지 봅니다 | [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) |
-| 해시 대조 | QuickXorHash 로 다른 곳에서 찾은 파일과 맞춰 봅니다 | [해시셋 대조와 유사 해시](/03-techniques/analysis/hash-set-fuzzy-hash.md) |
-| 자리표시자 구조 | 온라인 전용 파일과 내려받은 파일을 가립니다 | [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) |
+| 계정·설정 레지스트리 | DB 가 어느 계정 것인지, 동기화 폴더가 어디인지 봅니다 | [계정·설정 레지스트리](accounts-settings.md) |
+| 로그 | DB 의 시각 무렵에 앱이 올리기·내려받기를 했는지 봅니다 | [로그 (ODL·ODLGZ)](odl-odlgz.md) |
+| 마스터 파일 테이블 | `lastChange` 와 실제 파일의 수정 시각을 맞춰 봅니다 | [마스터 파일 테이블](../../filesystem/mft.md) |
+| USN 변경 저널 | 동기화 폴더 안에서 파일이 생기고 지워진 순서를 봅니다 | [USN 변경 저널](../../filesystem/usnjrnl.md) |
+| 휴지통 | 동기화 폴더에서 지운 파일이 휴지통에 있는지 봅니다 | [휴지통](../../file-folder-usage/recycle-bin.md) |
+| 해시 대조 | QuickXorHash 로 다른 곳에서 찾은 파일과 맞춰 봅니다 | [해시셋 대조와 유사 해시](../../../03-techniques/analysis/hash-set-fuzzy-hash.md) |
+| 자리표시자 구조 | 온라인 전용 파일과 내려받은 파일을 가립니다 | [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) |
 
-자료 유출을 의심하는 사건에서 이 DB 를 쓰는 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
+자료 유출을 의심하는 사건에서 이 DB 를 쓰는 흐름은 [자료를 밖으로 빼돌렸나](../../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 

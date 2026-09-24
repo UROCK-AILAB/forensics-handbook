@@ -1,6 +1,6 @@
 # WAL과 롤백 저널 (-wal·-journal·-shm)
 
-> 위치: [SQLite 데이터베이스 (SQLite)](/01-foundations/database-log-formats/sqlite/index.md) > WAL과 롤백 저널
+> 위치: [SQLite 데이터베이스 (SQLite)](index.md) > WAL과 롤백 저널
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@ SQLite 는 주 파일을 고칠 때 같은 폴더에 보조 파일을 함께 씁
 DB 하나는 롤백 저널과 WAL 가운데 하나만 씁니다. 둘을 동시에 쓰지 않습니다.
 보조 파일은 늘 주 파일과 같은 폴더에 있습니다.
 이름은 주 파일 이름 뒤에 `-journal`·`-wal`·`-shm` 을 붙인 것입니다.
-주 파일 머리의 오프셋 18·19 값이 1 이면 롤백 저널 방식이고, 2 이면 WAL 방식입니다. 머리 전체는 [파일·페이지 구조](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에 있습니다.
+주 파일 머리의 오프셋 18·19 값이 1 이면 롤백 저널 방식이고, 2 이면 WAL 방식입니다. 머리 전체는 [파일·페이지 구조](b-tree-record-format.md) 에 있습니다.
 
 | 파일 | 쓰는 방식 | 담는 것 | 복구에 필요한가 |
 |---|---|---|---|
@@ -24,9 +24,9 @@ DB 하나는 롤백 저널과 WAL 가운데 하나만 씁니다. 둘을 동시�
 
 Windows 에서 만나는 예는 아래와 같습니다. (확인 범위: Windows 11 빌드 26200, 사용자 프로필 하나)
 
-- [윈도 알림 기록 (wpndatabase.db)](/02-artifacts/execution/wpndatabase-db.md) 옆에 `-wal`·`-shm` 이 있었습니다.
-- [윈도 타임라인 (ActivitiesCache.db)](/02-artifacts/file-folder-usage/activitiescache-db.md) 옆에도 `-wal`·`-shm` 이 있었습니다.
-- 크롬·엣지 프로필의 `History`·`Web Data`·`Login Data` 옆에는 `-journal` 이 있었습니다. 대부분 0바이트였습니다. 같은 폴더의 `DIPS` 는 `-wal` 을 썼습니다. ([방문·다운로드 기록 (History)](/02-artifacts/browsers/chrome-edge-whale/history.md))
+- [윈도 알림 기록 (wpndatabase.db)](../../../02-artifacts/execution/wpndatabase-db.md) 옆에 `-wal`·`-shm` 이 있었습니다.
+- [윈도 타임라인 (ActivitiesCache.db)](../../../02-artifacts/file-folder-usage/activitiescache-db.md) 옆에도 `-wal`·`-shm` 이 있었습니다.
+- 크롬·엣지 프로필의 `History`·`Web Data`·`Login Data` 옆에는 `-journal` 이 있었습니다. 대부분 0바이트였습니다. 같은 폴더의 `DIPS` 는 `-wal` 을 썼습니다. ([방문·다운로드 기록 (History)](../../../02-artifacts/browsers/chrome-edge-whale/history.md))
 
 어느 방식을 쓰는지는 앱과 앱 버전이 정합니다. 검체마다 폴더의 보조 파일과 주 파일 머리를 확인합니다.
 이 형식은 Windows 버전과 상관이 없습니다. SQLite 버전에 따라서는 아래가 달라집니다.
@@ -50,7 +50,7 @@ Windows 에서 만나는 예는 아래와 같습니다. (확인 범위: Windows 
 - WAL 설정만 DB 에 남습니다. 다른 설정은 DB 를 다시 열면 기본값 DELETE 로 돌아갑니다.
 - PERSIST 에서 `journal_size_limit` 를 정했으면 커밋 뒤 그 크기를 넘는 부분을 잘라 냅니다.
 
-같은 생각으로 만든 다른 형식으로 [레지스트리 .LOG1·.LOG2](/01-foundations/database-log-formats/registry-hive/log1-log2.md) 와 [ESE 트랜잭션 로그](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 가 있습니다.
+같은 생각으로 만든 다른 형식으로 [레지스트리 .LOG1·.LOG2](../registry-hive/log1-log2.md) 와 [ESE 트랜잭션 로그](../extensible-storage-engine/edb-log-dirty-shutdown.md) 가 있습니다.
 
 ## 구조
 
@@ -255,7 +255,7 @@ s0 = s1 = 0
 - 페이지 7 이 이렇게 되는 까닭이 있습니다. 초기화는 앞 세대 프레임을 주 파일에 모두 옮긴 뒤에만 일어납니다.
 - 주 파일의 판이 가장 옛 판이라는 것은 이 프레임들이 아직 옮겨지지 않았을 때만 맞습니다. `-shm` 의 nBackfill 이 0 보다 크면 그만큼은 주 파일에 이미 들어가 있습니다.
 - 주 파일에서 페이지 5 는 (5 − 1) × 4,096 = 0x4000 에서 시작합니다.
-- 판마다 셀을 비교하면 레코드가 생기고, 바뀌고, 지워진 순서를 알 수 있습니다. 페이지 안 셀을 읽는 법은 [파일·페이지 구조](/01-foundations/database-log-formats/sqlite/b-tree-record-format.md) 에 있습니다.
+- 판마다 셀을 비교하면 레코드가 생기고, 바뀌고, 지워진 순서를 알 수 있습니다. 페이지 안 셀을 읽는 법은 [파일·페이지 구조](b-tree-record-format.md) 에 있습니다.
 
 **5단계. 롤백 저널이면 이렇게 읽습니다.**
 
@@ -287,15 +287,15 @@ s0 = s1 = 0
 - `-wal` 에는 같은 페이지의 프레임이 여럿 있을 수 있습니다. 판마다 레코드 내용이 다릅니다.
 - 같은 `-wal` 안에서는 솔트-1 이 클수록 새 세대입니다. 솔트-1 이 같으면 파일 뒤쪽에 있는 프레임이 더 새것입니다. (Caithness, 2012)
 - 서로 다른 `-wal` 파일 사이의 순서는 솔트로 정할 수 없습니다. 새 파일은 솔트를 새 난수로 시작합니다.
-- 보안 삭제 (`secure_delete`) 가 켜진 앱이라도 옛 프레임과 저널에는 지우기 전 페이지가 남을 수 있습니다. 실험 결과는 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에 있습니다.
+- 보안 삭제 (`secure_delete`) 가 켜진 앱이라도 옛 프레임과 저널에는 지우기 전 페이지가 남을 수 있습니다. 실험 결과는 [파일 안에 남은 지운 레코드](freelist-freeblock.md) 에 있습니다.
 
 ### 남는 옛 기록
 
 - 초기화 뒤에도 새 프레임이 닿지 않은 뒤쪽 프레임은 파일에 남습니다. SQLite 는 쓰지 않지만 내용은 읽을 수 있습니다.
 - PERSIST 방식 저널과 매직이 0 인 저널에는 마지막 트랜잭션 전의 페이지가 남을 수 있습니다. SQLite 는 첫 바이트가 0x00 인 저널을 되돌리기에 쓰지 않습니다.
-- DELETE 방식은 쓰기 트랜잭션마다 `-journal` 을 만들고 지웁니다. 그래서 [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) 에 이 파일의 생성·삭제 기록이 남을 수 있습니다.
-- 지운 `-wal`·`-journal` 의 내용은 비할당 영역에 남을 수 있습니다. WAL 매직 `37 7F 06 82`·`37 7F 06 83` 과 저널 매직 `D9 D5 05 F9 20 A1 63 D7` 을 찾아봅니다. 방법은 [파일 카빙](/03-techniques/analysis/data-recovery/file-carving.md) 과 [레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md) 에 있습니다.
-- [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에는 예전 시점의 주 파일과 `-wal` 이 함께 들어 있을 수 있습니다.
+- DELETE 방식은 쓰기 트랜잭션마다 `-journal` 을 만들고 지웁니다. 그래서 [USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md) 에 이 파일의 생성·삭제 기록이 남을 수 있습니다.
+- 지운 `-wal`·`-journal` 의 내용은 비할당 영역에 남을 수 있습니다. WAL 매직 `37 7F 06 82`·`37 7F 06 83` 과 저널 매직 `D9 D5 05 F9 20 A1 63 D7` 을 찾아봅니다. 방법은 [파일 카빙](../../../03-techniques/analysis/data-recovery/file-carving.md) 과 [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) 에 있습니다.
+- [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에는 예전 시점의 주 파일과 `-wal` 이 함께 들어 있을 수 있습니다.
 
 ### 비정상 종료
 
@@ -307,14 +307,14 @@ s0 = s1 = 0
 - 일반 SQLite 프로그램으로 열면, 핫 저널은 주 파일로 되돌려집니다.
 - WAL 방식 DB 를 열었다 닫으면 체크포인트가 돌고 `-wal`·`-shm` 이 지워질 수 있습니다. 이때 주 파일 안의 옛 판이 덮이고 `-wal` 의 옛 프레임도 사라집니다.
 - SQLite 문서는 주 파일을 `-wal` 과 떼어 놓으면 커밋한 트랜잭션을 잃거나 DB 가 깨질 수 있다고 경고합니다.
-- 그래서 주 파일, `-journal`, `-wal`, `-shm` 을 같은 이름 그대로 함께 모읍니다. 파일마다 해시를 남기고 사본에서만 작업합니다. 방법은 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 에 있습니다.
+- 그래서 주 파일, `-journal`, `-wal`, `-shm` 을 같은 이름 그대로 함께 모읍니다. 파일마다 해시를 남기고 사본에서만 작업합니다. 방법은 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [해시로 무결성 검증](../../../03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 에 있습니다.
 - 디스크 이미지 속 `-shm` 은 마지막 상태와 다를 수 있습니다. SQLite 가 이 파일을 디스크에 강제로 쓰지 않기 때문입니다. mxFrame·nBackfill 은 참고로만 쓰고 `-wal` 로 다시 확인합니다.
 
 ### 증거로 쓸 때
 
 - **말해 주는 것**: 유효한 커밋 프레임까지의 페이지 내용이 DB 의 어느 한 시점에 커밋되었다는 것.
 - **말해 주는 것**: 솔트와 프레임 위치로 본 판의 앞뒤 순서.
-- **말해 주지 못하는 것**: 프레임이나 저널 기록을 쓴 시각. 머리에 시각 칸이 없습니다. 시각은 레코드 안의 값([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md))과 파일 시스템 시각([파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md))으로만 추정합니다.
+- **말해 주지 못하는 것**: 프레임이나 저널 기록을 쓴 시각. 머리에 시각 칸이 없습니다. 시각은 레코드 안의 값([시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md))과 파일 시스템 시각([파일 시각 네 가지와 변화 규칙](../../../03-techniques/analysis/timeline/macb-timestamp-rules.md))으로만 추정합니다.
 - **말해 주지 못하는 것**: 누가 지웠는지. 앱이 오래된 기록을 스스로 정리했을 수도 있습니다.
 
 보고서에는 "주 파일에는 없고, `-wal` 의 프레임 3(둘째 트랜잭션의 커밋 프레임)에 담긴 페이지 5 에 이 레코드가 있다" 처럼 기록이 말하는 만큼만 씁니다.
@@ -331,7 +331,7 @@ s0 = s1 = 0
 - **`-shm` 을 빅 엔디언으로 읽습니다.** 주 파일·`-wal` 과 달리 `-shm` 의 숫자는 쓰는 컴퓨터의 바이트 순서를 따릅니다. Windows 에서는 리틀 엔디언입니다. aSalt 두 값만 WAL 의 바이트 순서 그대로입니다.
 - **nBackfill 위치를 잘못 잡습니다.** SQLite 의 WAL 형식 문서 본문 한 곳은 nBackfill 을 오프셋 128 이라고 적습니다. 같은 문서의 표와 wal.c 구조체로는 96 입니다. 128 은 nBackfillAttempted 입니다.
 - **WAL 방식 DB 의 파일 변경 카운터(오프셋 24)로 트랜잭션 수를 셉니다.** WAL 방식에서는 이 값이 트랜잭션마다 오르지 않을 수 있습니다.
-- **암호화된 DB 의 프레임을 그대로 읽습니다.** 프레임 머리는 읽히지만 페이지 내용은 풀어야 합니다. [암호화된 SQLite (SQLCipher)](/01-foundations/database-log-formats/sqlite/sqlcipher.md) 를 봅니다.
+- **암호화된 DB 의 프레임을 그대로 읽습니다.** 프레임 머리는 읽히지만 페이지 내용은 풀어야 합니다. [암호화된 SQLite (SQLCipher)](sqlcipher.md) 를 봅니다.
 
 ## 도구
 
@@ -345,7 +345,7 @@ s0 = s1 = 0
 | 헥스 편집기와 짧은 스크립트 | 위 표대로 프레임을 나누고 검사합을 다시 계산합니다 |
 
 두 도구의 결과가 다르면 먼저 WAL 을 넣었는지, 어느 프레임까지 썼는지, 옛 세대 프레임을 넣었는지를 비교합니다.
-검증 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+검증 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ## 참고 문헌
 

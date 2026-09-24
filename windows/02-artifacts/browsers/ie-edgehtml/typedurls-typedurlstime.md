@@ -21,11 +21,11 @@ IE 주소창에 입력한 주소는 사용자 하이브(NTUSER.DAT)의 `TypedURL
 | `TypedURLs` | NTUSER.DAT | `HKCU\Software\Microsoft\Internet Explorer\TypedURLs` |
 | `TypedURLsTime` | NTUSER.DAT | `HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime` |
 
-- 공개 수집 정의(ForensicArtifacts)는 이 키를 `HKEY_USERS\{사용자 SID}\Software\Microsoft\Internet Explorer\TypedURLs\*` 로 적습니다. 사용자 SID 와 계정 이름을 잇는 방법은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 다룹니다.
+- 공개 수집 정의(ForensicArtifacts)는 이 키를 `HKEY_USERS\{사용자 SID}\Software\Microsoft\Internet Explorer\TypedURLs\*` 로 적습니다. 사용자 SID 와 계정 이름을 잇는 방법은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 다룹니다.
 - `TypedURLsTime` 은 Windows 8 에서 나온 값으로 소개됐습니다. 그보다 앞선 Windows 검체에는 이 키가 없을 수 있습니다.
 - Windows 11 25H2 PC 의 `TypedURLs` 키에는 `url1` 값 하나(REG_SZ)가 있었습니다. `TypedURLsTime` 키는 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
 
-하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -55,7 +55,7 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 ### 증명하지 못하는 것
 
 - 주소를 입력한 뒤 페이지가 실제로 열렸는지는 알 수 없습니다. 방문 기록과 맞춰 봐야 합니다.
-- 누가 키보드 앞에 있었는지는 알 수 없습니다. 하이브가 가리키는 것은 로그온한 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 누가 키보드 앞에 있었는지는 알 수 없습니다. 하이브가 가리키는 것은 로그온한 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - 값 번호의 순서가 입력 순서라는 해석과 키에 남는 최대 개수는 이번에 연 자료로 확인하지 못했습니다. 번호만 보고 "가장 최근 입력" 을 단정하지 않습니다.
 - 이 키는 IE 키 아래에 있습니다. 옛 엣지가 이 키를 쓰는지는 이번에 연 자료로 확인하지 못했습니다. 옛 엣지 사용 흔적으로 읽으려면 따로 근거가 필요합니다.
 
@@ -63,8 +63,8 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 
 ## 시각 해석
 
-- `TypedURLsTime` 값을 FILETIME 으로 바꿉니다. 변환 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 이 시각이 UTC 인지는 참고한 플러그인 설명에 적혀 있지 않습니다. 같은 주소가 [웹캐시 DB](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) 나 [index.dat](/02-artifacts/browsers/ie-edgehtml/index-dat.md) 방문 기록에 있으면 두 시각을 맞춰 봅니다.
+- `TypedURLsTime` 값을 FILETIME 으로 바꿉니다. 변환 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 이 시각이 UTC 인지는 참고한 플러그인 설명에 적혀 있지 않습니다. 같은 주소가 [웹캐시 DB](webcachev01-dat.md) 나 [index.dat](index-dat.md) 방문 기록에 있으면 두 시각을 맞춰 봅니다.
 - `TypedURLsTime` 이 없는 시스템에서는 입력 시각을 따로 알 수 없습니다.
 - `TypedURLs` 키의 마지막 기록 시각 (LastWrite) 을 가장 최근 입력 시각으로 보는 해석이 있습니다. 이 해석은 이번에 연 자료로 확인하지 못했습니다. 키의 마지막 기록 시각은 그 키가 바뀐 때를 말할 뿐, 어느 값이 바뀌었는지는 말하지 않습니다.
 
@@ -73,8 +73,8 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 - **IE 가 켜진 채로 수집하면 최근 입력이 빠질 수 있습니다.** IE 를 끝내기 전에는 새 항목이 키에 추가되지 않는다는 주의가 있습니다. 라이브 수집에서는 이 점을 기록해 둡니다.
 - **`TypedURLsTime` 이 없을 수 있습니다.** Windows 8 에서 소개된 키입니다. Windows 11 PC 한 대에서도 이 키가 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
 - **번호가 같은지 꼭 확인합니다.** 두 키의 값 개수가 다를 수 있습니다. 짝이 없는 값에 다른 번호의 시각을 붙이지 않습니다.
-- **값이 없다고 입력이 없었던 것은 아닙니다.** 값은 지우거나 덮일 수 있습니다. 이전 시점의 하이브를 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다.
-- **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 반영하는 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- **값이 없다고 입력이 없었던 것은 아닙니다.** 값은 지우거나 덮일 수 있습니다. 이전 시점의 하이브를 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다.
+- **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 반영하는 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -93,7 +93,7 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 3. 이 수는 1601-01-01 부터 센 100나노초 단위의 수입니다.
 4. 날짜로 바꾸면 2024-01-01 00:00:00 입니다.
 
-**`TypedURLs` 값의 문자열.** REG_SZ 문자열은 UTF-16LE 로 저장됩니다. `http://` 는 아래처럼 보입니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+**`TypedURLs` 값의 문자열.** REG_SZ 문자열은 UTF-16LE 로 저장됩니다. `http://` 는 아래처럼 보입니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 ```
 68 00 74 00 74 00 70 00 3A 00 2F 00 2F 00   h.t.t.p.:././.
@@ -110,15 +110,15 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 웹캐시 DB | 입력한 주소가 실제로 열려 방문 기록에 남았는지 봅니다 | [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) |
-| 옛 기록 파일 | IE 9 이전 시스템에서 같은 주소의 방문 기록을 봅니다 | [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) |
-| 저장 비밀번호 | 입력한 주소에 저장 비밀번호가 있는지 봅니다 | [저장 비밀번호 (IntelliForms)](/02-artifacts/browsers/ie-edgehtml/intelliforms.md) |
-| 탐색기 입력 기록 | 같은 계정이 탐색기 주소창에 입력한 경로를 봅니다 | [탐색기 입력 기록](/02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) |
-| 실행 창 명령 기록 | 실행 창에 주소를 넣어 연 흔적이 있는지 봅니다 | [실행 창 명령 기록](/02-artifacts/execution/runmru.md) |
-| 섀도 복사본 | 이전 시점 하이브에 지금은 없는 값이 있는지 봅니다 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 다른 브라우저 | 같은 주소를 다른 브라우저로 열었는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md), [파이어폭스](/02-artifacts/browsers/firefox/index.md) |
+| 웹캐시 DB | 입력한 주소가 실제로 열려 방문 기록에 남았는지 봅니다 | [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) |
+| 옛 기록 파일 | IE 9 이전 시스템에서 같은 주소의 방문 기록을 봅니다 | [옛 기록 파일 (index.dat)](index-dat.md) |
+| 저장 비밀번호 | 입력한 주소에 저장 비밀번호가 있는지 봅니다 | [저장 비밀번호 (IntelliForms)](intelliforms.md) |
+| 탐색기 입력 기록 | 같은 계정이 탐색기 주소창에 입력한 경로를 봅니다 | [탐색기 입력 기록](../../file-folder-usage/typedpaths-wordwheelquery.md) |
+| 실행 창 명령 기록 | 실행 창에 주소를 넣어 연 흔적이 있는지 봅니다 | [실행 창 명령 기록](../../execution/runmru.md) |
+| 섀도 복사본 | 이전 시점 하이브에 지금은 없는 값이 있는지 봅니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 다른 브라우저 | 같은 주소를 다른 브라우저로 열었는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md), [파이어폭스](../firefox/index.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

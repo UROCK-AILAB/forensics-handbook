@@ -1,6 +1,6 @@
 # 부트 섹터와 클러스터 (Boot Sector·Cluster)
 
-> 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md)
+> 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](index.md)
 
 ## 한 줄 요약
 
@@ -12,12 +12,12 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 
 | 쓰는 곳 | 부트 섹터에서 가져오는 값 |
 |---|---|
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | $MFT 시작 위치, MFT 레코드 크기 |
-| [데이터 런](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) | 클러스터 크기 (클러스터 번호를 바이트로 바꿀 때) |
-| [폴더 인덱스 ($I30)](/02-artifacts/filesystem/i30.md) | 인덱스 레코드 크기 |
-| [$Bitmap](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) | 클러스터 크기 (할당 표가 클러스터 단위) |
-| [LNK](/02-artifacts/file-folder-usage/lnk.md)·[프리페치](/02-artifacts/execution/prefetch/index.md) | 볼륨 일련번호의 아래 32비트 |
-| [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) | 클러스터 크기 (파일 끝 뒤에 남는 공간의 크기) |
+| [마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md) | $MFT 시작 위치, MFT 레코드 크기 |
+| [데이터 런](data-run-resident-non-resident.md) | 클러스터 크기 (클러스터 번호를 바이트로 바꿀 때) |
+| [폴더 인덱스 ($I30)](../../../02-artifacts/filesystem/i30.md) | 인덱스 레코드 크기 |
+| [$Bitmap](bitmap-secure-extend.md) | 클러스터 크기 (할당 표가 클러스터 단위) |
+| [LNK](../../../02-artifacts/file-folder-usage/lnk.md)·[프리페치](../../../02-artifacts/execution/prefetch/index.md) | 볼륨 일련번호의 아래 32비트 |
+| [비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md) | 클러스터 크기 (파일 끝 뒤에 남는 공간의 크기) |
 
 ## 구조
 
@@ -29,7 +29,7 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 - 클러스터 하나는 섹터 여러 개를 묶은 것입니다.
 - 논리 클러스터 번호 (LCN, Logical Cluster Number)는 볼륨의 첫 클러스터를 0 으로 센 번호입니다.
 - 가상 클러스터 번호 (VCN, Virtual Cluster Number)는 파일 안에서 첫 클러스터를 0 으로 센 번호입니다.
-- 파일의 VCN 을 볼륨의 LCN 으로 잇는 일은 [데이터 런](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)이 맡습니다.
+- 파일의 VCN 을 볼륨의 LCN 으로 잇는 일은 [데이터 런](data-run-resident-non-resident.md)이 맡습니다.
 - 클러스터 0 은 볼륨의 첫 바이트에서 시작합니다. 그래서 볼륨 안 바이트 오프셋은 "LCN × 클러스터 크기" 입니다.
 
 클러스터 크기의 범위는 Microsoft 명세(MS-FSA)에 이렇게 적혀 있습니다.
@@ -42,7 +42,7 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 | 최댓값 | Windows 10 1709 이상, Windows Server 2019 이상 | 2 MB |
 
 - libyal 명세는 Windows 10 1903 에서 128 KB~2 MB 클러스터를 쓰려면 파티션이 클러스터 크기에 맞춰 정렬돼 있어야 한다고 적었습니다.
-- NTFS 압축은 클러스터가 4 KB 이하인 볼륨에서만 됩니다(MS-FSA). 자세한 내용은 [압축·희소 파일](/01-foundations/disk-volume/ntfs/compressed-sparse.md)에 있습니다.
+- NTFS 압축은 클러스터가 4 KB 이하인 볼륨에서만 됩니다(MS-FSA). 자세한 내용은 [압축·희소 파일](compressed-sparse.md)에 있습니다.
 
 ### 부트 영역과 백업
 
@@ -141,11 +141,11 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 
 순서는 이렇습니다.
 
-1. 디스크 전체 이미지라면 파티션 시작 위치를 [파티션 표](/01-foundations/disk-volume/mbr-gpt.md)에서 구합니다. 이 예시에서는 2,048섹터, 곧 1,048,576바이트로 둡니다.
+1. 디스크 전체 이미지라면 파티션 시작 위치를 [파티션 표](../mbr-gpt.md)에서 구합니다. 이 예시에서는 2,048섹터, 곧 1,048,576바이트로 둡니다.
 2. 그 위치의 섹터에서 오프셋 0x03 의 `NTFS    ` 와 오프셋 0x1FE 의 `55 AA` 를 확인합니다.
 3. 섹터당 바이트와 클러스터당 섹터로 클러스터 크기를 구합니다.
 4. 이미지 안 절대 오프셋은 "파티션 시작 바이트 + LCN × 클러스터 크기" 입니다. 이 예시의 $MFT 는 1,048,576 + 3,221,225,472 = 3,222,274,048바이트에 있습니다.
-5. 그 자리에서 MFT 레코드 서명 `FILE` 을 확인합니다. 레코드 구조는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)에 있습니다.
+5. 그 자리에서 MFT 레코드 서명 `FILE` 을 확인합니다. 레코드 구조는 [MFT 레코드와 속성](file-record-attribute.md)에 있습니다.
 6. 백업 부트 섹터를 찾습니다. 이 예시에서는 볼륨 기준 209,715,199번 섹터(총 섹터 수와 같은 번호)입니다. 볼륨 안 오프셋은 209,715,199 × 512 = 107,374,181,888바이트입니다.
 7. 주 부트 섹터와 백업의 필드 값을 비교합니다.
 
@@ -158,7 +158,7 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 - 찾은 부트 섹터의 총 섹터 수로 볼륨이 어디서 끝나는지 알 수 있습니다.
 - 앞쪽 부트 섹터가 덮어써졌으면 볼륨 끝의 백업 부트 섹터를 찾습니다.
 - 백업 위치에서 "총 섹터 수 × 섹터 크기" 를 빼면 볼륨 시작 위치를 거꾸로 짐작할 수 있습니다. 백업 위치가 늘 같지는 않으므로 짐작한 자리의 부트 섹터나 `FILE` 서명으로 확인합니다.
-- 복구 절차 전체는 [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)에 있습니다.
+- 복구 절차 전체는 [파일시스템 기반 복구](../../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md)에 있습니다.
 
 ### 주 부트 섹터와 백업이 다를 때
 
@@ -172,8 +172,8 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 - 부트 섹터의 볼륨 일련번호 (Volume Serial Number)는 8바이트입니다.
 - Windows API 가 돌려주는 일련번호는 이 값의 아래 32비트입니다(libyal).
 - `vol`·`dir` 명령이 보여 주는 `XXXX-XXXX` 도 이 32비트 값입니다. 예시 값이면 `4D3C-2B1A` 로 보입니다.
-- [LNK](/02-artifacts/file-folder-usage/lnk.md)와 [프리페치](/02-artifacts/execution/prefetch/index.md)에 남는 볼륨 일련번호도 이 32비트 값입니다.
-- 그래서 LNK 대상 파일이 어느 볼륨에 있었는지를 부트 섹터 값과 맞춰 볼 수 있습니다. 외부 저장장치 조사에서도 같은 방식으로 씁니다([USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)).
+- [LNK](../../../02-artifacts/file-folder-usage/lnk.md)와 [프리페치](../../../02-artifacts/execution/prefetch/index.md)에 남는 볼륨 일련번호도 이 32비트 값입니다.
+- 그래서 LNK 대상 파일이 어느 볼륨에 있었는지를 부트 섹터 값과 맞춰 볼 수 있습니다. 외부 저장장치 조사에서도 같은 방식으로 씁니다([USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md)).
 - 일련번호는 포맷할 때 정해집니다. 다시 포맷한 볼륨은 값이 달라집니다.
 - 일련번호는 부트 섹터 안의 바이트 몇 개일 뿐이라 고칠 수 있습니다.
 - 일련번호가 같다는 사실만으로 같은 볼륨이라고 쓰지 않습니다. 볼륨 크기, 볼륨 이름 같은 다른 값과 함께 봅니다.
@@ -190,7 +190,7 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 - 마지막 클러스터에서 파일 끝 뒤에 남는 부분이 파일 슬랙 (File Slack)입니다.
 - 클러스터가 클수록 파일 하나에 생길 수 있는 슬랙도 커집니다.
 - MFT 레코드 안에 바로 들어가는 작은 파일(상주 데이터)은 클러스터를 받지 않습니다. 이런 파일에는 클러스터 슬랙이 없습니다.
-- 슬랙을 다루는 방법은 [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md)에 있습니다.
+- 슬랙을 다루는 방법은 [비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)에 있습니다.
 
 ### 부트 코드
 
@@ -205,14 +205,14 @@ NTFS 볼륨의 첫 섹터에는 섹터 크기, 클러스터 크기, $MFT 위치,
 4. **크기 필드를 부호 없는 숫자로 읽습니다.** `F6` 을 246클러스터로 읽으면 MFT 레코드 크기가 틀립니다. 512바이트 섹터에서 64 KB 보다 큰 클러스터는 0x0D 도 2의 거듭제곱 방식으로 적힙니다.
 5. **일련번호의 바이트 순서를 뒤집지 않습니다.** 0x48~0x4B 의 4바이트를 리틀 엔디언으로 읽어야 LNK·프리페치의 32비트 값과 맞습니다.
 6. **백업 부트 섹터가 늘 파티션 마지막 섹터라고 가정합니다.** 흔히 그렇지만 명세는 "언제나 그렇지는 않다" 고 적습니다. 총 섹터 수로 위치를 구하고 서명을 확인합니다.
-7. **NTFS 서명만 찾습니다.** BitLocker 로 암호화된 볼륨은 오프셋 0x03 에 `-FVE-FS-` 가 있습니다. FAT32 위의 BitLocker To Go 볼륨은 `MSWIN4.1` 을 씁니다(libbde). 이런 볼륨은 [BitLocker 볼륨 구조와 풀기](/03-techniques/analysis/encrypted-evidence/bitlocker.md)를 봅니다.
+7. **NTFS 서명만 찾습니다.** BitLocker 로 암호화된 볼륨은 오프셋 0x03 에 `-FVE-FS-` 가 있습니다. FAT32 위의 BitLocker To Go 볼륨은 `MSWIN4.1` 을 씁니다(libbde). 이런 볼륨은 [BitLocker 볼륨 구조와 풀기](../../../03-techniques/analysis/encrypted-evidence/bitlocker.md)를 봅니다.
 
 ## 도구
 
 - 헥스 편집기로 위 순서를 직접 따라갈 수 있습니다.
 - The Sleuth Kit 같은 공개 도구는 파티션 시작 위치(`mmls`)와 부트 섹터 값 요약(`fsstat`)을 보여 줍니다. `$Boot` 는 MFT 레코드 7번이므로 레코드 번호로 뽑을 수 있습니다.
-- 실행 중인 Windows 에서는 `fsutil fsinfo ntfsinfo` 가 일련번호, 섹터 수, 클러스터 수를 보여 줍니다. `fsutil fsinfo sectorinfo` 는 디스크의 섹터 크기를 보여 줍니다. 이 명령은 조사 대상 시스템에서 실행되므로 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 원칙에 따라 기록을 남깁니다.
-- 도구마다 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다.
+- 실행 중인 Windows 에서는 `fsutil fsinfo ntfsinfo` 가 일련번호, 섹터 수, 클러스터 수를 보여 줍니다. `fsutil fsinfo sectorinfo` 는 디스크의 섹터 크기를 보여 줍니다. 이 명령은 조사 대상 시스템에서 실행되므로 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 원칙에 따라 기록을 남깁니다.
+- 도구마다 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다.
 
 ## 참고 문헌
 

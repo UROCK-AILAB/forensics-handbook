@@ -27,7 +27,7 @@ Microsoft 문서가 적은 키는 네 개입니다.
 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` | 그 사용자 | 로그온할 때마다 |
 | `HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce` | 그 사용자 | 한 번 |
 
-- HKLM 과 HKCU 가 각각 어느 하이브 파일인지는 [하이브 파일 종류](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
+- HKLM 과 HKCU 가 각각 어느 하이브 파일인지는 [하이브 파일 종류](../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
 - 64비트 Windows 11 PC 한 대에서는 32비트 프로그램이 등록한 항목이 `HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run` 에 있었습니다. 이 경로를 빼먹으면 그 항목을 놓칩니다. (확인 범위: Win11 25H2 한 대)
 
 ### MITRE 가 더 적은 키
@@ -41,7 +41,7 @@ MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
 | `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce` | 위와 같습니다 |
 | `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run` | |
 
-`Load` 값과 `BootExecute` 값은 [기타 자동실행 위치](/02-artifacts/persistence/winlogon-ifeo-appinit-dlls.md) 에서 다룹니다.
+`Load` 값과 `BootExecute` 값은 [기타 자동실행 위치](winlogon-ifeo-appinit-dlls.md) 에서 다룹니다.
 
 같은 PC 에서 본 상태는 이렇습니다. (확인 범위: Win11 25H2 한 대)
 
@@ -134,27 +134,27 @@ StartupApproved\Run
 
 ### 증명하지 못하는 것
 
-- **실행됐나.** 등록되어 있다는 것만 알려 줍니다. 실행은 [프리페치](/02-artifacts/execution/prefetch/index.md), [AmCache](/02-artifacts/execution/amcache-hve/index.md), [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) 로 따로 확인합니다.
+- **실행됐나.** 등록되어 있다는 것만 알려 줍니다. 실행은 [프리페치](../execution/prefetch/index.md), [AmCache](../execution/amcache-hve/index.md), [프로세스 생성](../event-logs/4688.md), [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 로 따로 확인합니다.
 - **언제 등록했나.** 값 하나하나의 시각은 없습니다. 키 단위 시각은 아래 "시각 해석" 을 봅니다.
 - **등록된 적이 없나.** RunOnce 는 실행되면 값이 사라집니다. 그래서 사후 분석 때 값이 없다고 해서 등록된 적이 없다는 뜻은 아닙니다. 이 문장은 RunOnce 동작에서 끌어낸 해석입니다.
-- **누가 등록했나.** 값에는 등록한 프로세스를 적는 칸이 없습니다. 레지스트리를 바꾼 프로세스는 [Sysmon 레지스트리 이벤트](/02-artifacts/event-logs/sysmon/12-13-14.md) 가 켜져 있었을 때만 찾을 수 있습니다.
+- **누가 등록했나.** 값에는 등록한 프로세스를 적는 칸이 없습니다. 레지스트리를 바꾼 프로세스는 [Sysmon 레지스트리 이벤트](../event-logs/sysmon/12-13-14.md) 가 켜져 있었을 때만 찾을 수 있습니다.
 - **StartupApproved 플래그의 뜻.** 공식 문서로 확인하지 못했습니다. "사용자가 시작 앱을 껐다" 고 단정하지 않습니다.
 
 보고서에는 "수집 시점에 HKCU Run 키에 이 이름으로 이 명령줄이 등록되어 있다" 처럼 씁니다. 실행을 말하려면 "같은 경로의 실행 기록이 프리페치에 있다" 처럼 근거를 따로 적습니다.
 
 ## 시각 해석
 
-- Run 값에는 값마다 붙은 시각이 없습니다. 키 단위 시각이 무엇이 바뀔 때 바뀌는지는 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
+- Run 값에는 값마다 붙은 시각이 없습니다. 키 단위 시각이 무엇이 바뀔 때 바뀌는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 - 키 시각은 키 안의 어느 값이 바뀌었는지 말하지 않습니다. 값이 여러 개인 키에서는 그 시각을 특정 값의 등록 시각으로 쓰지 않습니다.
-- 시작프로그램 폴더의 파일은 파일 시스템 시각으로 언제 놓였는지 짐작합니다. 시각 속성은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 다룹니다.
-- StartupApproved 뒤 8바이트의 FILETIME 은 뜻을 확인하지 못했습니다. 시각 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 시작프로그램 폴더의 파일은 파일 시스템 시각으로 언제 놓였는지 짐작합니다. 시각 속성은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
+- StartupApproved 뒤 8바이트의 FILETIME 은 뜻을 확인하지 못했습니다. 시각 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 시스템은 Run 키 프로그램의 실행을 늦출 수 있습니다. 로그온 시각과 프로그램 실행 시각 사이에 틈이 있어도 이상하지 않습니다.
 
 ## 함정과 한계
 
 - **WOW6432Node 를 빼먹습니다.** 64비트 Windows 에서 32비트 프로그램의 항목은 그 아래에 있었습니다. (확인 범위: Win11 25H2 한 대)
-- **HKCU 는 사용자마다 따로 있습니다.** 로그온한 적 있는 모든 프로필의 사용자 하이브를 수집합니다. 프로필 목록은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 봅니다.
-- **RunOnce 는 흔적을 스스로 지웁니다.** 이전 시점 하이브를 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 지운 값이 하이브 안에 남는지는 [지운 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 에서 다룹니다.
+- **HKCU 는 사용자마다 따로 있습니다.** 로그온한 적 있는 모든 프로필의 사용자 하이브를 수집합니다. 프로필 목록은 [사용자 프로필 목록](../system-account/profilelist.md) 에서 봅니다.
+- **RunOnce 는 흔적을 스스로 지웁니다.** 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 지운 값이 하이브 안에 남는지는 [지운 키·값 복구](../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 에서 다룹니다.
 - **폴더 위치가 바뀔 수 있습니다.** `User Shell Folders` 값이 가리키는 폴더를 확인합니다.
 - **REG_EXPAND_SZ 는 펼치지 않은 원문입니다.** 환경 변수를 펼친 경로로 파일을 찾습니다.
 - **정상 항목이 많습니다.** 같은 조직의 다른 PC 나 설치 직후 상태와 비교하면 새 항목이 드러납니다. 명령줄이 표준이 아닌 폴더의 실행 파일이나 스크립트를 가리키면 먼저 봅니다.
@@ -175,7 +175,7 @@ StartupApproved\Run
 
 1. 문자열은 UTF-16LE 입니다. 한 글자가 2바이트입니다.
 2. `25 00` 은 '%' 입니다. 환경 변수가 펼쳐지지 않은 채 저장되어 있습니다.
-3. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+3. 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
 **StartupApproved 값 12바이트.**
 
@@ -195,21 +195,21 @@ StartupApproved\Run
 3. 같은 뷰어로 `Explorer\StartupApproved` 를 열어 Run 키의 값 이름과 맞춰 봅니다. 한쪽에만 있는 이름을 따로 적습니다.
 4. `User Shell Folders` 값이 가리키는 시작프로그램 폴더의 파일 목록과 파일 시각을 뽑습니다.
 5. 켜진 PC 에서는 `reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run` 처럼 읽기만 하는 명령으로 같은 값을 볼 수 있습니다.
-6. 명령줄이 가리키는 파일이 아직 있는지 확인하고, 있으면 서명을 봅니다. 방법은 [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) 에 있습니다.
+6. 명령줄이 가리키는 파일이 아직 있는지 확인하고, 있으면 서명을 봅니다. 방법은 [의심 실행 파일 선별](../../03-techniques/analysis/code-signing-yara.md) 에 있습니다.
 7. 도구 결과의 한 줄을 골라 위 풀이대로 값 데이터를 직접 한 번 읽어 봅니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| Sysmon 12·13·14 | Run 키 값을 만들거나 바꾼 프로세스와 시각 | [레지스트리 변경](/02-artifacts/event-logs/sysmon/12-13-14.md) |
-| 프리페치 | 명령줄이 가리키는 프로그램의 실행 횟수와 시각 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| AmCache | 같은 경로의 실행 파일 기록 | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| 4688·Sysmon 1 | 로그온 뒤 그 명령이 프로세스로 만들어졌나, 부모 프로세스는 무엇인가 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) |
-| 로그온 이벤트 | 그 계정이 언제 로그온했나 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
-| 서비스·예약 작업 | 같은 파일이 다른 자동실행 자리에도 등록되어 있나 | [서비스·드라이버](/02-artifacts/persistence/services-drivers.md), [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md) |
+| Sysmon 12·13·14 | Run 키 값을 만들거나 바꾼 프로세스와 시각 | [레지스트리 변경](../event-logs/sysmon/12-13-14.md) |
+| 프리페치 | 명령줄이 가리키는 프로그램의 실행 횟수와 시각 | [프리페치](../execution/prefetch/index.md) |
+| AmCache | 같은 경로의 실행 파일 기록 | [AmCache](../execution/amcache-hve/index.md) |
+| 4688·Sysmon 1 | 로그온 뒤 그 명령이 프로세스로 만들어졌나, 부모 프로세스는 무엇인가 | [프로세스 생성](../event-logs/4688.md), [Sysmon 이벤트 1](../event-logs/sysmon/1.md) |
+| 로그온 이벤트 | 그 계정이 언제 로그온했나 | [로그온·로그오프](../event-logs/logon-events/index.md) |
+| 서비스·예약 작업 | 같은 파일이 다른 자동실행 자리에도 등록되어 있나 | [서비스·드라이버](services-drivers.md), [예약 작업](scheduled-tasks/index.md) |
 
-MITRE 의 탐지 권고도 같은 방향입니다. Run·Startup 키에 새롭거나 이상한 실행 경로·스크립트가 생기는 변경을 보고, 표준이 아닌 폴더에서의 실행이나 이상한 부모-자식 프로세스와 엮어 봅니다. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에 있습니다.
+MITRE 의 탐지 권고도 같은 방향입니다. Run·Startup 키에 새롭거나 이상한 실행 경로·스크립트가 생기는 변경을 보고, 표준이 아닌 폴더에서의 실행이나 이상한 부모-자식 프로세스와 엮어 봅니다. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 

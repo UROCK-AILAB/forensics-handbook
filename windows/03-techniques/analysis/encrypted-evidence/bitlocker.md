@@ -1,6 +1,6 @@
 # BitLocker 볼륨 구조와 풀기 (BitLocker)
 
-> 위치: [암호화 증거 다루기 (Encrypted Evidence)](/03-techniques/analysis/encrypted-evidence/index.md) > BitLocker 볼륨 구조와 풀기
+> 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > BitLocker 볼륨 구조와 풀기
 
 ## 한 줄 요약
 
@@ -12,7 +12,7 @@ BitLocker 는 볼륨 전체를 암호화하는 Windows 기능입니다.
 
 ## 언제 쓰나
 
-- [암호화 컨테이너 찾기](/03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md) 에서 BitLocker 볼륨을 찾은 뒤
+- [암호화 컨테이너 찾기](encrypted-container-detection.md) 에서 BitLocker 볼륨을 찾은 뒤
 - 압수한 디스크를 분석 장비에 붙여 읽어야 할 때
 - 복구 비밀번호를 어디서 구할지 정해야 할 때
 - 볼륨 일부가 손상되어 보통 방법으로 풀리지 않을 때
@@ -26,7 +26,7 @@ Microsoft 문서는 BitLocker 드라이브를 새 컴퓨터로 옮기는 경우�
 ### 1. 볼륨과 버전을 가립니다
 
 - 볼륨 헤더의 서명과 점프 코드로 BitLocker 볼륨인지, Vista 인지 Windows 7 이상인지 가립니다.
-- 값은 [암호화 컨테이너 찾기](/03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md) 에 있습니다.
+- 값은 [암호화 컨테이너 찾기](encrypted-container-detection.md) 에 있습니다.
 
 ### 2. FVE 메타데이터 블록을 찾습니다
 
@@ -49,7 +49,7 @@ Windows 7 이상과 BitLocker To Go 는 원래 볼륨 헤더(볼륨 맨 앞 섹�
 옮긴 자리는 FVE 메타데이터에 적힙니다.
 libbde 문서는 옮긴 헤더가 흔히 8,192바이트(16섹터)라고 적습니다.
 그래서 BitLocker 볼륨의 첫 섹터를 NTFS 부트 섹터로 읽으면 안 됩니다.
-NTFS 부트 섹터의 구조는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 를 봅니다.
+NTFS 부트 섹터의 구조는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 를 봅니다.
 
 ### 3. 키 보호기를 확인합니다
 
@@ -114,12 +114,12 @@ AD DS 의 복구 정보 개체에는 아래 속성이 있습니다.
 - 개체 이름은 `<Object Creation Date and Time><Recovery GUID>` 꼴이고 길이는 63자로 정해져 있습니다.
 - AD 는 컴퓨터 개체의 복구 비밀번호 이력을 모두 남깁니다. 컴퓨터 개체를 지우지 않으면 옛 키도 자동으로 지워지지 않습니다.
 - 그래서 한 컴퓨터에 복구 정보 개체가 여러 개 있을 수 있습니다. 복구 화면에 나오는 GUID 와 `ms-FVE-RecoveryGuid` 가 같은 개체를 고릅니다.
-- 도메인 컨트롤러를 오프라인으로 분석한다면 [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md) 를 봅니다.
+- 도메인 컨트롤러를 오프라인으로 분석한다면 [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) 를 봅니다.
 
 ### 6. 풀고 기록합니다
 
 - 복구 비밀번호로 키를 만들 때는 솔트를 섞어 SHA-256 을 1,048,576번 반복합니다.
-- 그래서 복구 비밀번호를 대입으로 찾는 일은 느립니다. 대입이 필요하면 [비밀번호 복구](/03-techniques/analysis/encrypted-evidence/password-recovery.md) 를 봅니다.
+- 그래서 복구 비밀번호를 대입으로 찾는 일은 느립니다. 대입이 필요하면 [비밀번호 복구](password-recovery.md) 를 봅니다.
 - 복호는 증거 이미지의 사본이나 읽기 전용 연결에서 합니다.
 - 풀린 볼륨은 그 안의 파일 시스템에 맞춰 분석합니다.
 - 쓴 보호기, 비밀의 출처, 도구와 그 버전을 적습니다.
@@ -178,7 +178,7 @@ FVE 메타데이터 블록 앞부분 (명세로 만든 예시)
 | BitLocker Repair 도구 | 키 패키지로 손상된 드라이브의 중요한 부분을 다시 세웁니다 |
 | 헥스 편집기 | 위치 칸과 메타데이터 블록 서명을 직접 봅니다 |
 
-풀린 결과가 도구마다 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+풀린 결과가 도구마다 다르면 [도구 결과 교차 검증](../../reporting/tool-validation.md) 을 봅니다.
 
 ## 함정과 한계
 

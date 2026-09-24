@@ -27,14 +27,14 @@ SRUM (System Resource Usage Monitor) 은 앱·서비스·네트워크가 쓴 자
 
 실행 파일을 지워도 이 표의 행은 지워지지 않습니다. 행은 보관 기간이 지나야 정리됩니다.
 
-SRUM 전체 구조와 다른 표는 [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) 허브에서 다룹니다. AppId·UserId 를 문자열로 푸는 법은 [구조와 ID 매핑](/02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md)에서 다룹니다. 여기서는 이 표 하나를 읽고 해석하는 일만 다룹니다.
+SRUM 전체 구조와 다른 표는 [SRUM](index.md) 허브에서 다룹니다. AppId·UserId 를 문자열로 푸는 법은 [구조와 ID 매핑](srudbidmaptable.md)에서 다룹니다. 여기서는 이 표 하나를 읽고 해석하는 일만 다룹니다.
 
 ## 위치와 버전별 차이
 
 | 항목 | 값 |
 |---|---|
 | 파일 | `C:\Windows\System32\sru\SRUDB.dat` |
-| 형식 | [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) |
+| 형식 | [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) |
 | 표 이름 | `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` |
 | 제공자 등록 | SOFTWARE 하이브 `Microsoft\Windows NT\CurrentVersion\SRUM\Extensions` 아래. DLL 은 `%SystemRoot%\System32\appsruprov.dll` |
 | 이름 풀이 | AppId·UserId 는 같은 파일의 `SruDbIdMapTable` 에서 풉니다 |
@@ -56,7 +56,7 @@ GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니
 - 컴퓨터를 끌 때와 DPS 서비스를 멈출 때도 옮겨 적습니다.
 - 초기 버전은 옮기기 전의 값을 레지스트리에 두었습니다. 발표자는 Windows 10 1607 뒤로는 데스크톱에서 이 값이 메모리에만 있다고 관찰했습니다.
 
-기록 간격과 레지스트리 임시 저장은 [SRUM 해석 함정](/02-artifacts/execution/system-resource-usage-monitor/1.md)에서 자세히 다룹니다.
+기록 간격과 레지스트리 임시 저장은 [SRUM 해석 함정](1.md)에서 자세히 다룹니다.
 
 ### 보관 기간
 
@@ -67,7 +67,7 @@ GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니
 
 ## 구조
 
-이 표는 ESE 표 하나입니다. 페이지·B-트리·카탈로그를 읽는 법은 [파일 구조](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 아래 열 목록은 libyal 명세에서 옮겼습니다. 명세는 Windows 10 파일로 시험했습니다. 다른 버전의 검체는 카탈로그에서 열 구성을 먼저 확인합니다.
+이 표는 ESE 표 하나입니다. 페이지·B-트리·카탈로그를 읽는 법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 아래 열 목록은 libyal 명세에서 옮겼습니다. 명세는 Windows 10 파일로 시험했습니다. 다른 버전의 검체는 카탈로그에서 열 구성을 먼저 확인합니다.
 
 열은 모두 고정 크기입니다. ESE 레코드에서 고정 크기 열 값은 4바이트 머리글 뒤에 열 번호 순서로 붙어 있습니다. "위치" 칸은 이 규칙과 열 크기로 계산한 값입니다. 레코드 데이터의 첫 바이트(머리글 시작)부터 셉니다. 정수는 모두 부호 있는 리틀 엔디언입니다.
 
@@ -100,8 +100,8 @@ GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니
 - **한 행은 한 기록 구간의 양으로 읽습니다.** 공개 실험은 한 작업에 걸친 여러 행의 값을 더해 전체 양을 구했습니다. 작업이 기록 시점을 넘기면 값이 여러 행에 나뉩니다. 이 해석을 적은 공식 문서는 없습니다.
 - **사이클 값은 시간이 아닙니다.** 명세는 단위를 적지 않습니다. 이름대로 CPU 사이클 수라면 같은 값이라도 CPU 속도에 따라 걸린 시간이 다릅니다. 초로 바꾸지 말고 같은 PC 안에서 앱끼리 비교하는 데 씁니다.
 - **FaceTime 은 단위가 명세에 없습니다.** 보고서에 시간으로 적으려면 같은 Windows 버전의 시험 PC 에서 단위를 먼저 확인합니다(아래 실습).
-- **AppId 문자열은 여러 종류입니다.** 실행 파일 경로, 서비스, 스토어 앱이 섞여 있습니다. 푸는 법은 [구조와 ID 매핑](/02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md)을 봅니다.
-- **UserId 는 계정입니다.** `S-1-5-18` (SYSTEM) 같은 시스템 계정 행은 사람 계정의 활동이 아닙니다. SID 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md), 계정 이름 찾기는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)을 봅니다.
+- **AppId 문자열은 여러 종류입니다.** 실행 파일 경로, 서비스, 스토어 앱이 섞여 있습니다. 푸는 법은 [구조와 ID 매핑](srudbidmaptable.md)을 봅니다.
+- **UserId 는 계정입니다.** `S-1-5-18` (SYSTEM) 같은 시스템 계정 행은 사람 계정의 활동이 아닙니다. SID 읽는 법은 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md), 계정 이름 찾기는 [사용자 프로필 목록](../../system-account/profilelist.md)을 봅니다.
 
 ### 같은 파일의 앱 타임라인 표와 구분하기
 
@@ -131,13 +131,13 @@ GUID 가 거의 같은 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}` 표도 있습니
 
 ### 형식
 
-TimeStamp 열은 ESE 의 날짜·시각 열 (JET_coltypDateTime) 입니다. Microsoft 문서는 이 형식을 날 수를 담은 8바이트 실수로 적고, 변형 날짜 (Variant Date) 와 같다고 적습니다. 흔히 OLE 자동화 날짜 (OLE Automation Date) 라고 부릅니다. 0 은 1899-12-30 자정입니다. 정수 부분이 날이고 소수 부분이 하루 안의 시각입니다. 계산법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+TimeStamp 열은 ESE 의 날짜·시각 열 (JET_coltypDateTime) 입니다. Microsoft 문서는 이 형식을 날 수를 담은 8바이트 실수로 적고, 변형 날짜 (Variant Date) 와 같다고 적습니다. 흔히 OLE 자동화 날짜 (OLE Automation Date) 라고 부릅니다. 0 은 1899-12-30 자정입니다. 정수 부분이 날이고 소수 부분이 하루 안의 시각입니다. 계산법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 
 libesedb 명세는 이 열 형식을 FILETIME 으로 적고, 실수라는 설명과 맞춰 봐야 한다는 메모를 남겼습니다. SRUM 명세와 Microsoft 문서는 실수로 적습니다. 직접 파서를 짤 때는 실수로 읽습니다.
 
 ### 시간대
 
-값에는 시간대 정보가 없습니다. 두 명세도 시간대를 적지 않습니다. 공개 도구 가운데 srum-dump 는 이 값을 UTC 로 풀어 보여 줍니다. 검체에서는 알려진 사건과 한 번 맞춰 봅니다. 컴퓨터를 끌 때도 행을 적으므로, 종료 시각 무렵에 행이 몰려 있는지 봅니다([켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md)). 현지 시각으로 바꾸는 법은 [시간대 설정](/02-artifacts/system-account/time-zone.md)과 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+값에는 시간대 정보가 없습니다. 두 명세도 시간대를 적지 않습니다. 공개 도구 가운데 srum-dump 는 이 값을 UTC 로 풀어 보여 줍니다. 검체에서는 알려진 사건과 한 번 맞춰 봅니다. 컴퓨터를 끌 때도 행을 적으므로, 종료 시각 무렵에 행이 몰려 있는지 봅니다([켜짐·꺼짐](../../event-logs/power-on-off-events.md)). 현지 시각으로 바꾸는 법은 [시간대 설정](../../system-account/time-zone.md)과 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ### 행을 적은 때와 활동한 때
 
@@ -149,11 +149,11 @@ libesedb 명세는 이 열 형식을 FILETIME 으로 적고, 실수라는 설명
 
 ### 순서로 시계 변경 찾기
 
-AutoIncId 는 이름대로라면 행을 넣을 때마다 커지는 번호입니다. 그렇다면 AutoIncId 가 커질수록 TimeStamp 도 같거나 커야 합니다. 순서가 뒤집힌 곳은 시계 변경을 의심할 단서입니다. 이 규칙은 명세에 적힌 것이 아닙니다. 열 이름에서 나온 기대입니다. 확인은 [시간 변경 (4616·Kernel-General)](/02-artifacts/event-logs/4616-kernel-general.md)과 맞춰서 합니다.
+AutoIncId 는 이름대로라면 행을 넣을 때마다 커지는 번호입니다. 그렇다면 AutoIncId 가 커질수록 TimeStamp 도 같거나 커야 합니다. 순서가 뒤집힌 곳은 시계 변경을 의심할 단서입니다. 이 규칙은 명세에 적힌 것이 아닙니다. 열 이름에서 나온 기대입니다. 확인은 [시간 변경 (4616·Kernel-General)](../../event-logs/4616-kernel-general.md)과 맞춰서 합니다.
 
 ## 함정과 한계
 
-1. **TimeStamp 를 실행 시각으로 씁니다.** TimeStamp 는 행을 적은 때입니다. 실행 시각은 [프리페치](/02-artifacts/execution/prefetch/index.md)나 [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md)에서 찾습니다.
+1. **TimeStamp 를 실행 시각으로 씁니다.** TimeStamp 는 행을 적은 때입니다. 실행 시각은 [프리페치](../prefetch/index.md)나 [프로세스 생성 (4688)](../../event-logs/4688.md)에서 찾습니다.
 2. **행이 없으면 실행도 없었다고 봅니다.** 행이 빠지는 경우는 여럿입니다.
    - 짧게 돈 프로그램이 남지 않을 수 있습니다. 공개 실험(Windows 10 21H2)에서는 지우기 스크립트를 돌린 `python.exe` 의 행이 없었습니다. `cmd.exe` 의 행만 있었습니다.
    - 같은 파일의 앱 타임라인 표는 60초 갱신 때 실행 중이어야 남는다는 발표가 있습니다. 이 표에도 같은 규칙이 맞는지 확인한 자료는 찾지 못했습니다.
@@ -163,22 +163,22 @@ AutoIncId 는 이름대로라면 행을 넣을 때마다 커지는 번호입니�
 4. **사이클과 FaceTime 을 시간으로 바꿉니다.** 두 값 모두 명세에 단위가 없습니다. 시간으로 적으려면 시험으로 단위를 먼저 확인합니다.
 5. **`...FA89` 와 `...FA86` 을 헷갈립니다.** 끝자리 하나만 다른 푸시 알림 표입니다.
 6. **날짜 열을 FILETIME 으로 읽습니다.** 8바이트 실수를 정수로 읽으면 엉뚱한 날짜가 나옵니다.
-7. **손상된 파일을 한 가지 방법으로만 읽습니다.** 압수 이미지에서 꺼낸 `SRUDB.dat` 는 대부분 비정상 종료 (Dirty Shutdown) 상태였습니다(현장 관찰). 같은 손상 파일의 이 표를 도구마다 다르게 읽어 1,612 행과 1,742 행이 나온 일이 있습니다(현장 관찰, 손상 파일 한 건). B-트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. 두 가지 이상 방법으로 열어 행 수를 비교합니다. 비정상 종료 상태는 [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)에서 다룹니다.
+7. **손상된 파일을 한 가지 방법으로만 읽습니다.** 압수 이미지에서 꺼낸 `SRUDB.dat` 는 대부분 비정상 종료 (Dirty Shutdown) 상태였습니다(현장 관찰). 같은 손상 파일의 이 표를 도구마다 다르게 읽어 1,612 행과 1,742 행이 나온 일이 있습니다(현장 관찰, 손상 파일 한 건). B-트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. 두 가지 이상 방법으로 열어 행 수를 비교합니다. 비정상 종료 상태는 [트랜잭션 로그와 비정상 종료 상태](../../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)에서 다룹니다.
 8. **시스템 계정 행을 사람의 활동으로 씁니다.** UserId 가 시스템 계정이면 서비스 활동일 수 있습니다.
 
 ### 지우기와 조작
 
-- **`SRUDB.dat` 를 통째로 지웁니다.** DPS 가 돌아가는 동안에는 서비스가 이 파일을 씁니다. 그래서 지우려면 보통 서비스를 먼저 멈춥니다. 지운 흔적은 [$MFT](/02-artifacts/filesystem/mft.md)와 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)에 남을 수 있습니다. 옛 파일은 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
-- **DPS 를 멈추거나 끕니다.** 멈추는 순간 메모리의 값이 파일에 적힙니다. 그래서 정시가 아닌 시각에 행이 몰려 있으면 서비스 중지나 종료를 의심해 봅니다. 서비스를 꺼 두면 그 뒤로는 기록이 쌓이지 않을 것으로 보입니다. 다만 이 동작을 실험으로 확인한 자료는 찾지 못했습니다. 서비스 설정은 [서비스·드라이버](/02-artifacts/persistence/services-drivers.md)에서 확인합니다.
-- **행을 지우거나 고칩니다.** ESE 는 지운 레코드가 페이지에 남을 수 있습니다([파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md)). 고친 값은 파일 하나만 봐서는 가리기 어렵습니다. 섀도 복사본의 옛 `SRUDB.dat` 와 비교합니다.
-- **시스템 시각을 바꿉니다.** TimeStamp 도 바뀐 시계를 따를 것입니다. 위의 순서 검사를 합니다([시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md)).
-- **완전삭제 도구를 씁니다.** 위 3번처럼 쓴 양은 지운 양과 맞지 않을 수 있습니다. 도구의 행이 있다는 사실을 단서로 씁니다([완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)).
+- **`SRUDB.dat` 를 통째로 지웁니다.** DPS 가 돌아가는 동안에는 서비스가 이 파일을 씁니다. 그래서 지우려면 보통 서비스를 먼저 멈춥니다. 지운 흔적은 [$MFT](../../filesystem/mft.md)와 [$UsnJrnl](../../filesystem/usnjrnl.md)에 남을 수 있습니다. 옛 파일은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
+- **DPS 를 멈추거나 끕니다.** 멈추는 순간 메모리의 값이 파일에 적힙니다. 그래서 정시가 아닌 시각에 행이 몰려 있으면 서비스 중지나 종료를 의심해 봅니다. 서비스를 꺼 두면 그 뒤로는 기록이 쌓이지 않을 것으로 보입니다. 다만 이 동작을 실험으로 확인한 자료는 찾지 못했습니다. 서비스 설정은 [서비스·드라이버](../../persistence/services-drivers.md)에서 확인합니다.
+- **행을 지우거나 고칩니다.** ESE 는 지운 레코드가 페이지에 남을 수 있습니다([파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md)). 고친 값은 파일 하나만 봐서는 가리기 어렵습니다. 섀도 복사본의 옛 `SRUDB.dat` 와 비교합니다.
+- **시스템 시각을 바꿉니다.** TimeStamp 도 바뀐 시계를 따를 것입니다. 위의 순서 검사를 합니다([시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)).
+- **완전삭제 도구를 씁니다.** 위 3번처럼 쓴 양은 지운 양과 맞지 않을 수 있습니다. 도구의 행이 있다는 사실을 단서로 씁니다([완전삭제 도구를 썼나](../../../04-scenarios/activity/anti-forensics/wiping-tools.md)).
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-먼저 사본을 만듭니다. 원본을 도구로 열면 파일이 바뀔 수 있습니다(현장 관찰). 카탈로그에서 표 이름으로 이 표의 페이지를 찾습니다. 그다음 잎 페이지에서 레코드 하나를 꺼냅니다. 페이지 안에서 레코드를 찾는 법은 [파일 구조](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다.
+먼저 사본을 만듭니다. 원본을 도구로 열면 파일이 바뀔 수 있습니다(현장 관찰). 카탈로그에서 표 이름으로 이 표의 페이지를 찾습니다. 그다음 잎 페이지에서 레코드 하나를 꺼냅니다. 페이지 안에서 레코드를 찾는 법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다.
 
 아래는 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 레코드 데이터의 앞 48바이트만 보입니다. `..` 은 설명과 관계없어 줄인 바이트입니다.
 
@@ -211,25 +211,25 @@ libesedb 의 `esedbexport`, ESEDatabaseView, SrumECmd, srum-dump 같은 공개 �
 - TimeStamp 를 UTC 로 보여 주는지, 분석 PC 의 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 비정상 종료 상태의 파일을 어떻게 여는지 확인합니다. JET API 로 여는 도구는 같은 폴더의 트랜잭션 로그로 먼저 복구해야 합니다. 이미지 안의 로그가 끊겨 있으면 복구가 안 될 수 있습니다. 페이지를 직접 해석하는 도구는 로그 없이 읽습니다(현장 관찰).
 - 두 방법으로 연 결과의 행 수를 비교합니다. 발표자도 일부 공개 도구에서 파싱 오류를 겪었다고 적습니다.
-- 행 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 행 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
-B-트리가 망가져 도구가 행을 못 찾으면 레코드 단위로 긁어 볼 수 있습니다. 위 열 표의 위치와 TimeStamp 가 그럴듯한 날짜인지가 판별 기준이 됩니다([레코드 카빙](/03-techniques/analysis/data-recovery/record-carving.md)).
+B-트리가 망가져 도구가 행을 못 찾으면 레코드 단위로 긁어 볼 수 있습니다. 위 열 표의 위치와 TimeStamp 가 그럴듯한 날짜인지가 판별 기준이 됩니다([레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md)).
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| 같은 파일의 [구조와 ID 매핑](/02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md) | AppId·UserId 가 가리키는 앱 이름과 SID |
-| 같은 파일의 [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) | 같은 앱·같은 시간대에 보내고 받은 바이트 |
+| 같은 파일의 [구조와 ID 매핑](srudbidmaptable.md) | AppId·UserId 가 가리키는 앱 이름과 SID |
+| 같은 파일의 [네트워크 사용량](network-data-usage.md) | 같은 앱·같은 시간대에 보내고 받은 바이트 |
 | 같은 파일의 앱 타임라인 표 | 실행이 끝난 무렵 시각과 실행 시간 (Windows 10 · 11) |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | 같은 실행 파일의 최근 실행 시각이 이 표의 기록 구간 안에 드는지 |
-| [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 같은 경로의 실행 파일 정보와 해시 |
-| [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) | 사용자별 마지막 실행 시각. UserId 의 SID 와 맞는지 |
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) · [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) | 초 단위 시작 시각과 실행 계정 |
-| [$MFT](/02-artifacts/filesystem/mft.md) · [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | 그 시간대에 만들어지거나 바뀐 파일. 쓴 바이트 수가 크게 나온 구간에 무슨 파일이 생겼는지 |
-| [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) | 정시가 아닌 시각의 행이 종료 시각과 맞는지 |
+| [프리페치](../prefetch/index.md) | 같은 실행 파일의 최근 실행 시각이 이 표의 기록 구간 안에 드는지 |
+| [AmCache](../amcache-hve/index.md) | 같은 경로의 실행 파일 정보와 해시 |
+| [BAM·DAM](../background-activity-moderator.md) | 사용자별 마지막 실행 시각. UserId 의 SID 와 맞는지 |
+| [프로세스 생성 (4688)](../../event-logs/4688.md) · [Sysmon 이벤트 1](../../event-logs/sysmon/1.md) | 초 단위 시작 시각과 실행 계정 |
+| [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | 그 시간대에 만들어지거나 바뀐 파일. 쓴 바이트 수가 크게 나온 구간에 무슨 파일이 생겼는지 |
+| [켜짐·꺼짐](../../event-logs/power-on-off-events.md) | 정시가 아닌 시각의 행이 종료 시각과 맞는지 |
 
-여러 실행 기록을 합쳐 읽는 순서는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)에서 다룹니다. 자료를 모으고 압축한 흔적을 찾을 때는 [퇴사 전 자료를 모으고 압축했나](/04-scenarios/exfiltration/data-exfiltration/staging.md)를 봅니다.
+여러 실행 기록을 합쳐 읽는 순서는 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md)에서 다룹니다. 자료를 모으고 압축한 흔적을 찾을 때는 [퇴사 전 자료를 모으고 압축했나](../../../04-scenarios/exfiltration/data-exfiltration/staging.md)를 봅니다.
 
 ## 실습
 

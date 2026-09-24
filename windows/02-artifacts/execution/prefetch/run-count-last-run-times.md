@@ -13,7 +13,7 @@
 - 이 경로의 실행 파일이 몇 번 실행됐는지 (이 `.pf` 파일 기준)
 - 최근 실행 1번 또는 최대 8번의 시각
 
-`.pf` 파일이 무엇이고 어디 있는지는 [프리페치](/02-artifacts/execution/prefetch/index.md) 허브에서 다룹니다. 여기서는 두 값을 읽고 해석하는 일만 다룹니다.
+`.pf` 파일이 무엇이고 어디 있는지는 [프리페치](index.md) 허브에서 다룹니다. 여기서는 두 값을 읽고 해석하는 일만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -35,7 +35,7 @@
 - 명세는 Windows 10 1809 와 1903 파일로 시험했습니다. 변형 2 에 대한 설명은 1903 과 함께 추가됐습니다. 빌드 번호로 변형을 짐작하지 말고 0x54 의 값으로 가립니다.
 - 명세는 Windows 11 24H2 파일로도 시험했습니다. 버전 31 에 대한 설명은 이 시험과 함께 추가됐습니다.
 
-Windows 10 부터는 `.pf` 파일 전체가 MAM 형식으로 압축돼 있습니다. 파일이 `MAM` 으로 시작하면 먼저 압축을 풀어야 위 오프셋이 맞습니다. 판별과 압축 풀기는 [파일 구조와 버전](/02-artifacts/execution/prefetch/format-versions-mam.md)에서 다룹니다.
+Windows 10 부터는 `.pf` 파일 전체가 MAM 형식으로 압축돼 있습니다. 파일이 `MAM` 으로 시작하면 먼저 압축을 풀어야 위 오프셋이 맞습니다. 판별과 압축 풀기는 [파일 구조와 버전](format-versions-mam.md)에서 다룹니다.
 
 ## 구조 읽는 법
 
@@ -76,9 +76,9 @@ Windows 10 부터는 `.pf` 파일 전체가 MAM 형식으로 압축돼 있습니
 
 실행 횟수가 전체 횟수가 되지 못하는 까닭은 다음과 같습니다.
 
-- `.pf` 파일이 지워지거나 보관 한도로 정리되면 새 파일은 1 부터 다시 셉니다([프리페치 해석 함정](/02-artifacts/execution/prefetch/pitfalls.md)).
+- `.pf` 파일이 지워지거나 보관 한도로 정리되면 새 파일은 1 부터 다시 셉니다([프리페치 해석 함정](pitfalls.md)).
 - 프리페치가 꺼져 있던 동안의 실행은 세지 않습니다.
-- 같은 이름의 프로그램도 경로가 다르면 `.pf` 파일이 따로 생깁니다. 횟수도 따로 셉니다([경로 해시](/02-artifacts/execution/prefetch/path-hash.md)).
+- 같은 이름의 프로그램도 경로가 다르면 `.pf` 파일이 따로 생깁니다. 횟수도 따로 셉니다([경로 해시](path-hash.md)).
 - 사용자가 켠 실행과 서비스·예약 작업·다른 프로그램이 띄운 실행을 가리지 않습니다.
 
 NIST CFReDS Data Leakage Case 의 공개 풀이도 실행 횟수가 정확하지 않을 수 있다고 적습니다.
@@ -94,13 +94,13 @@ NIST CFReDS Data Leakage Case 의 공개 풀이도 실행 횟수가 정확하지
 
 ### UTC 와 현지 시각
 
-파일 안의 시각은 UTC 기준 FILETIME 입니다. 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정과 그 날짜의 일광 절약 시간 적용 여부를 씁니다([시간대 설정](/02-artifacts/system-account/time-zone.md), [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)). FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+파일 안의 시각은 UTC 기준 FILETIME 입니다. 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정과 그 날짜의 일광 절약 시간 적용 여부를 씁니다([시간대 설정](../../system-account/time-zone.md), [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)). FILETIME 계산은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 
 ### 몇 초 늦을 수 있습니다
 
 프리페치는 프로그램이 시작한 뒤 처음 약 10초 동안 읽는 파일을 지켜봅니다. 그다음에 `.pf` 파일을 씁니다. 그래서 기록된 시각이 실제 시작보다 최대 10초쯤 늦을 수 있다는 설명이 널리 쓰입니다. SANS ISC 글은 초 단위로 볼 때 10초를 빼라고 권합니다.
 
-이 차이는 형식 명세에 적힌 값이 아닙니다. 초 단위로 맞춰야 하면 [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md)이나 [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md)과 대조합니다. 보고서에는 "무렵" 으로 씁니다.
+이 차이는 형식 명세에 적힌 값이 아닙니다. 초 단위로 맞춰야 하면 [프로세스 생성 (4688)](../../event-logs/4688.md)이나 [Sysmon 이벤트 1](../../event-logs/sysmon/1.md)과 대조합니다. 보고서에는 "무렵" 으로 씁니다.
 
 ### 파일 안의 시각과 `.pf` 파일 자체의 시각
 
@@ -112,9 +112,9 @@ NIST CFReDS Data Leakage Case 의 공개 풀이도 실행 횟수가 정확하지
 | `.pf` 파일의 수정 시각 ($STANDARD_INFORMATION) | 파일이 마지막으로 쓰인 때 | 시각 조작 도구로 따로 바꿀 수 있습니다 |
 | `.pf` 파일의 생성 시각 | 이 `.pf` 파일이 처음 생긴 때. 첫 실행 무렵으로 봅니다 | 위와 같습니다 |
 
-정상이라면 파일 안의 첫 칸과 `.pf` 파일의 수정 시각은 가깝습니다. 둘이 크게 어긋나면 파일 시각 조작이나 파일 복사를 의심해 봅니다. 두 벌의 NTFS 시각은 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)에서 다룹니다.
+정상이라면 파일 안의 첫 칸과 `.pf` 파일의 수정 시각은 가깝습니다. 둘이 크게 어긋나면 파일 시각 조작이나 파일 복사를 의심해 봅니다. 두 벌의 NTFS 시각은 [두 벌의 시각](../../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)에서 다룹니다.
 
-실행 시각 8칸에 `.pf` 파일의 생성 시각을 더하면 실행 무렵을 최대 9개까지 얻습니다. 생성 시각을 첫 실행으로 볼 때의 함정은 [프리페치 해석 함정](/02-artifacts/execution/prefetch/pitfalls.md)에서 다룹니다.
+실행 시각 8칸에 `.pf` 파일의 생성 시각을 더하면 실행 무렵을 최대 9개까지 얻습니다. 생성 시각을 첫 실행으로 볼 때의 함정은 [프리페치 해석 함정](pitfalls.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -123,13 +123,13 @@ NIST CFReDS Data Leakage Case 의 공개 풀이도 실행 횟수가 정확하지
 3. **Windows 7 이전 파일에서 여러 시각을 찾습니다.** 버전 17·23 에는 실행 시각 칸이 하나뿐입니다. 이전 실행 시각은 다른 기록에서 찾아야 합니다.
 4. **도구가 현지 시각으로 바꿔 보여 줍니다.** 도구 설정에 따라 UTC 가 아닌 분석 PC 의 시각으로 나올 수 있습니다.
 5. **여러 `.pf` 파일의 횟수를 더합니다.** 이름이 같아도 경로가 다르면 다른 실행 파일일 수 있습니다. 더하기 전에 경로를 확인합니다.
-6. **수집한 사본의 파일 시각을 씁니다.** `.pf` 파일을 복사하는 방법에 따라 사본의 파일 시각이 바뀔 수 있습니다. 파일 시각은 원본 볼륨의 $MFT 에서 읽습니다([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
+6. **수집한 사본의 파일 시각을 씁니다.** `.pf` 파일을 복사하는 방법에 따라 사본의 파일 시각이 바뀔 수 있습니다. 파일 시각은 원본 볼륨의 $MFT 에서 읽습니다([마스터 파일 테이블](../../filesystem/mft.md)).
 
 ### 지우기와 조작
 
-- **`.pf` 파일을 지웁니다.** 횟수와 시각이 함께 사라집니다. 다음 실행 때 새 파일이 1 부터 셉니다. 지운 기록은 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)과 $MFT 에 남을 수 있습니다. 옛 파일은 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
-- **`.pf` 파일의 NTFS 시각만 바꿉니다.** 파일 안의 실행 시각은 그대로 남습니다. 두 시각을 비교하면 드러납니다([시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)).
-- **시스템 시각을 바꾼 뒤 실행합니다.** 파일 안의 시각도 틀린 시계를 따릅니다. 8칸의 순서가 뒤바뀌었는지 봅니다([시스템 시각을 바꿨나](/04-scenarios/activity/anti-forensics/system-time-change.md)).
+- **`.pf` 파일을 지웁니다.** 횟수와 시각이 함께 사라집니다. 다음 실행 때 새 파일이 1 부터 셉니다. 지운 기록은 [$UsnJrnl](../../filesystem/usnjrnl.md)과 $MFT 에 남을 수 있습니다. 옛 파일은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
+- **`.pf` 파일의 NTFS 시각만 바꿉니다.** 파일 안의 실행 시각은 그대로 남습니다. 두 시각을 비교하면 드러납니다([시각 조작 탐지](../../../03-techniques/analysis/timeline/timestomping.md)).
+- **시스템 시각을 바꾼 뒤 실행합니다.** 파일 안의 시각도 틀린 시계를 따릅니다. 8칸의 순서가 뒤바뀌었는지 봅니다([시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)).
 - **파일 안의 값을 고칩니다.** Windows 10 부터는 압축을 풀고 고친 뒤 다시 압축해야 합니다. 이렇게 고친 흔적은 파일 하나만 봐서는 가리기 어렵습니다. 아래 교차 검증으로 확인합니다.
 
 ## 직접 분석해 보기
@@ -178,21 +178,21 @@ libscca 의 `sccainfo`, PECmd, WinPrefetchView 같은 공개 도구가 두 값�
 
 - 시각을 UTC 로 보여 주는지, 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 도구가 그 형식 버전을 읽는지 확인합니다. libscca 이슈 #16 에는 Windows 11 24H2 의 `.pf` 파일(버전 31)을 지원하지 않는 형식이라며 열지 못했다는 보고가 올라와 있습니다. 새 버전의 파일은 도구가 못 읽거나 잘못 읽을 수 있습니다.
-- 파일 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 파일 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [$MFT](/02-artifacts/filesystem/mft.md) | `.pf` 파일의 생성·수정 시각과 파일 안의 시각. 실행 파일 자체의 시각 |
-| [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | `.pf` 파일이 다시 쓰인 기록. 저널이 남아 있는 기간이라면 8칸보다 오래된 갱신 시각도 찾을 수 있습니다. 이 시각은 파일이 쓰인 때입니다 |
-| [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 `.pf` 파일의 실행 횟수와 시각. 지금 파일과 비교하면 그사이 실행 횟수를 알 수 있습니다 |
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) · [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) | 초 단위 시작 시각과 실행한 사용자 |
-| [UserAssist](/02-artifacts/execution/userassist.md) · [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) | 사용자별 실행 기록. 프리페치 횟수와 뜻이 다르므로 숫자가 달라도 이상하지 않습니다 |
-| [앱별 자원 사용 (SRUM)](/02-artifacts/execution/system-resource-usage-monitor/application-resource-usage.md) | 실행 시각 무렵에 그 앱이 실제로 자원을 썼는지 |
-| [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 같은 경로의 실행 파일 정보와 해시 |
+| [$MFT](../../filesystem/mft.md) | `.pf` 파일의 생성·수정 시각과 파일 안의 시각. 실행 파일 자체의 시각 |
+| [$UsnJrnl](../../filesystem/usnjrnl.md) | `.pf` 파일이 다시 쓰인 기록. 저널이 남아 있는 기간이라면 8칸보다 오래된 갱신 시각도 찾을 수 있습니다. 이 시각은 파일이 쓰인 때입니다 |
+| [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 `.pf` 파일의 실행 횟수와 시각. 지금 파일과 비교하면 그사이 실행 횟수를 알 수 있습니다 |
+| [프로세스 생성 (4688)](../../event-logs/4688.md) · [Sysmon 이벤트 1](../../event-logs/sysmon/1.md) | 초 단위 시작 시각과 실행한 사용자 |
+| [UserAssist](../userassist.md) · [BAM·DAM](../background-activity-moderator.md) | 사용자별 실행 기록. 프리페치 횟수와 뜻이 다르므로 숫자가 달라도 이상하지 않습니다 |
+| [앱별 자원 사용 (SRUM)](../system-resource-usage-monitor/application-resource-usage.md) | 실행 시각 무렵에 그 앱이 실제로 자원을 썼는지 |
+| [AmCache](../amcache-hve/index.md) | 같은 경로의 실행 파일 정보와 해시 |
 
-여러 기록을 합쳐 읽는 순서는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)에서 다룹니다. 실행한 사람을 밝히는 일은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)를 봅니다.
+여러 기록을 합쳐 읽는 순서는 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md)에서 다룹니다. 실행한 사람을 밝히는 일은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md)를 봅니다.
 
 ## 실습
 

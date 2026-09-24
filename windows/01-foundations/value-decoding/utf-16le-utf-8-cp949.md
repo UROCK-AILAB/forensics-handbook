@@ -13,9 +13,9 @@ Windows 가 저장하는 문자열은 대부분 BOM 없는 UTF-16LE 입니다.
 | 쓰는 곳 | 인코딩 | 자세한 내용 |
 |---|---|---|
 | Windows 형식 전반의 유니코드 문자열 | 따로 정하지 않았으면 BOM 없는 UTF-16LE | 아래 "Windows 쪽 기본 규칙" |
-| NTFS 의 유니코드 문자열·파일 이름 | BOM 없는 UTF-16LE | [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) |
-| SECURITY 하이브의 작업그룹·도메인 이름 | 길이 칸 뒤의 UTF-16 (현장 관찰) | 아래 "길이 칸이 붙은 문자열", [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) |
-| 8비트 문자열 (LPSTR) | 코드 페이지 또는 UTF-8. 쓰는 쪽이 정함 | 코드 페이지 문자열이 남는 예는 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
+| NTFS 의 유니코드 문자열·파일 이름 | BOM 없는 UTF-16LE | [NTFS 구조](../disk-volume/ntfs/index.md) |
+| SECURITY 하이브의 작업그룹·도메인 이름 | 길이 칸 뒤의 UTF-16 (현장 관찰) | 아래 "길이 칸이 붙은 문자열", [레지스트리 속 비밀번호 정보](../../02-artifacts/credentials/sam-security/index.md) |
+| 8비트 문자열 (LPSTR) | 코드 페이지 또는 UTF-8. 쓰는 쪽이 정함 | 코드 페이지 문자열이 남는 예는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) |
 
 ## 구조
 
@@ -115,11 +115,11 @@ SECURITY 하이브 `Policy\PolPrDmN` 의 기본값도 비슷한 모양입니다(
 - 도메인에 가입한 PC 는 이름 뒤에 도메인 SID 가 붙습니다.
 - 그래서 길이 칸만큼만 이름으로 읽어야 합니다.
 
-붙어 있는 SID 를 푸는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
+붙어 있는 SID 를 푸는 법은 [윈도 식별자 형식](sid-guid-clsid-known-folder-id.md) 에 있습니다.
 
 NTFS `$FILE_NAME` 의 이름 길이 칸은 바이트 수가 아니라 글자 수입니다.
 끝 문자는 세지 않고, 이름 뒤에 끝 문자도 없습니다.
-칸의 오프셋은 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 봅니다.
+칸의 오프셋은 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 봅니다.
 
 ## 읽는 법
 
@@ -128,7 +128,7 @@ NTFS `$FILE_NAME` 의 이름 길이 칸은 바이트 수가 아니라 글자 수
 1. 형식 명세가 인코딩을 정해 두었는지 먼저 봅니다. Windows 형식의 유니코드 문자열은 따로 정하지 않았으면 UTF-16LE 입니다.
 2. 앞머리에 BOM 이 있는지 봅니다. `FF FE` 면 UTF-16LE, `EF BB BF` 면 UTF-8 입니다.
 3. 영문·숫자 구간에 한 바이트 걸러 `00` 이 있으면 UTF-16LE 로 읽어 봅니다.
-4. 8비트 문자열이면 압수 PC 의 코드 페이지를 확인합니다. `Control\Nls\CodePage` 의 `ACP`·`OEMCP` 값입니다. 이미지에서 어느 제어 집합을 볼지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+4. 8비트 문자열이면 압수 PC 의 코드 페이지를 확인합니다. `Control\Nls\CodePage` 의 `ACP`·`OEMCP` 값입니다. 이미지에서 어느 제어 집합을 볼지는 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
 5. 길이 칸이 있으면 바이트 수인지 글자 수인지 명세로 확인합니다. 그다음 그 길이만큼만 읽습니다.
 6. 결과가 깨져 보이면 다른 인코딩으로 다시 읽습니다.
 
@@ -165,7 +165,7 @@ C7 D1 B1 DB
 
 "한글" 한 단어도 세 인코딩의 바이트가 모두 다릅니다.
 그래서 한국어 키워드는 UTF-16LE·UTF-8·CP949 바이트열로 모두 찾아야 합니다.
-검색 절차는 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에서 다룹니다.
+검색 절차는 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에서 다룹니다.
 
 ### CP949 데이터에서 영문 검색은 헛걸릴 수 있습니다
 
@@ -212,7 +212,7 @@ bytes.fromhex('C7D1B1DB').decode('cp949')      # '한글'
 
 - **헥스 편집기** — 문자 표시 인코딩을 바꿔 가며 볼 수 있으면 편합니다. UTF-16LE 로 볼 때는 시작 위치의 짝·홀도 확인합니다.
 - **Microsoft 코드 페이지 번호 문서** — 도구가 요구하는 코드 페이지 번호나 이름을 찾을 때 씁니다.
-- **문자열 추출·키워드 검색 도구** — 여러 인코딩을 한 번에 찾는 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에서 다룹니다.
+- **문자열 추출·키워드 검색 도구** — 여러 인코딩을 한 번에 찾는 방법은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에서 다룹니다.
 
 ## 참고 문헌
 

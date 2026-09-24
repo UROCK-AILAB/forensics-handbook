@@ -15,7 +15,7 @@
 
 ### 기록이 생기는 계기
 
-Microsoft 문서는 `SHAddToRecentDocs` 함수를 "항목에 접근했다" 는 사실을 시스템에 알리는 함수로 설명합니다. 셸은 이 알림으로 가장 최근에 쓴 항목과 가장 자주 쓴 항목의 목록을 만듭니다. 탐색기에서 파일을 열 때와 공통 파일 대화상자로 열기·저장·새로 만들기를 할 때는 셸이 앱 대신 이 함수를 부릅니다. 함수가 불리는 조건은 [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) 에서 자세히 다룹니다.
+Microsoft 문서는 `SHAddToRecentDocs` 함수를 "항목에 접근했다" 는 사실을 시스템에 알리는 함수로 설명합니다. 셸은 이 알림으로 가장 최근에 쓴 항목과 가장 자주 쓴 항목의 목록을 만듭니다. 탐색기에서 파일을 열 때와 공통 파일 대화상자로 열기·저장·새로 만들기를 할 때는 셸이 앱 대신 이 함수를 부릅니다. 함수가 불리는 조건은 [바로가기 파일 (LNK)](lnk.md) 에서 자세히 다룹니다.
 
 RecentDocs 를 해석할 때 알아 둘 점은 다음과 같습니다.
 
@@ -34,7 +34,7 @@ RecentDocs 를 해석할 때 알아 둘 점은 다음과 같습니다.
 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs` | 확장자와 관계없는 최근 파일 목록 |
 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs\<확장자>` | 그 확장자의 최근 파일 목록 |
 
-- HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 그래서 어느 계정의 기록인지 가를 수 있습니다. 하이브 파일의 위치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 그래서 어느 계정의 기록인지 가를 수 있습니다. 하이브 파일의 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - winreg-kb 는 하위 키 이름의 예로 `.exe` 와 함께 `Folder` 를 듭니다. `Folder` 하위 키에 폴더만 모인다는 설명은 확인한 자료로 확정하지 못했습니다.
 - 뿌리 키와 하위 키가 항목을 몇 개까지 보관하는지는 확인한 자료에 없습니다.
 
@@ -50,7 +50,7 @@ Windows 11 에서 키가 비어 있던 PC 의 사정은 아래 "함정과 한계
 
 ## 구조
 
-MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 의 MRU 목록 설명을 따릅니다. 여기서는 RecentDocs 에만 해당하는 점을 적습니다.
+MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 의 MRU 목록 설명을 따릅니다. 여기서는 RecentDocs 에만 해당하는 점을 적습니다.
 
 ### 순서 값 MRUListEx
 
@@ -70,7 +70,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](/01-f
 | 0 | 가변 | 파일 이름. UTF-16LE 이고 끝 문자 (`00 00`) 까지 들어 있습니다 |
 | 이름 뒤 | 가변 | 파일 이름을 담은 셸 항목. 없으면 비어 있습니다 |
 
-셸 항목을 푸는 방법은 [셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
+셸 항목을 푸는 방법은 [셸 아이템](../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -102,7 +102,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](/01-f
 - 키의 마지막 기록 시각은 MRUListEx 첫 항목이 들어간 때와 가깝다고 보는 것이 보통입니다. 확인한 자료가 이 해석을 확정하지는 않습니다. 보고서에는 "키의 마지막 기록 시각" 으로 적고, 첫 항목과 이어 읽는 것은 추정이라고 밝힙니다.
 - 뿌리 키와 확장자 하위 키는 시각이 따로 있습니다. 확장자 하위 키의 시각은 그 확장자 목록이 마지막으로 바뀐 때입니다.
 - 두 번째 이후 항목의 시각은 이 키만으로 알 수 없습니다. 같은 파일의 바로가기 파일이나 점프리스트 시각을 찾아 맞춰 봅니다.
-- 키 시각의 성질은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+- 키 시각의 성질은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -112,20 +112,20 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](/01-f
    - `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced` 의 `Start_TrackDocs` 값이 0 이었습니다.
    - RecentDocs 키는 있었지만 값과 하위 키가 0개였습니다.
    - RecentDocs 키의 마지막 기록 시각은 사용자 프로필을 만든 날과 같았습니다.
-   - 같은 PC 에서 [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) 은 조사 당일에도 갱신됐습니다.
+   - 같은 PC 에서 [열기·저장 대화상자 기록](comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) 은 조사 당일에도 갱신됐습니다.
    - `%APPDATA%\Microsoft\Windows\Recent` 폴더에는 .lnk 파일이 0개였습니다.
 
    `Start_TrackDocs` 가 언제 0 이 됐는지는 알 수 없습니다. 그래서 "0 이라서 비었다" 는 인과를 이 관찰만으로 단정하지 못합니다. 설정 앱의 "최근에 연 항목 표시" 토글이 이 값과 같은 것인지도 확인하지 못했습니다. 빈 키를 만나면 이 값을 함께 적어 둡니다.
-4. **이 목록을 실행 기록으로 씁니다.** 실행 파일은 걸러집니다. 실행 여부는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 의 흔적으로 봅니다.
+4. **이 목록을 실행 기록으로 씁니다.** 실행 파일은 걸러집니다. 실행 여부는 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 의 흔적으로 봅니다.
 5. **끝 표시 뒤를 무시하거나 그대로 읽습니다.** plaso 는 MRUListEx 에서 -1 을 만나면 읽기를 멈춥니다. 끝 표시 뒤에 남은 번호는 보여 주지 않습니다. 도구마다 처리가 다를 수 있으므로 MRUListEx 길이와 값 개수가 맞지 않으면 원시 바이트를 직접 봅니다.
-6. **XP 하이브를 Vista 이후 틀로 읽습니다.** 2000·XP 의 항목 값은 문자열뿐입니다. 먼저 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 로 버전을 확인합니다.
+6. **XP 하이브를 Vista 이후 틀로 읽습니다.** 2000·XP 의 항목 값은 문자열뿐입니다. 먼저 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 버전을 확인합니다.
 
 ### 지우기와 조작
 
-- **정책으로 로그오프 때 지웁니다.** 정책 "Clear history of recently opened documents on exit" 의 값은 `Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` 키 (사용자 구성) 의 `ClearRecentDocsOnExit` 입니다. Microsoft 문서에 따르면 이 정책은 로그오프 때 최근 문서 바로가기를 지웁니다. 점프리스트의 최근·자주 항목도 지웁니다 ([점프리스트](/02-artifacts/file-folder-usage/jump-lists.md)). 프로그램 파일 메뉴 아래의 최근 파일 목록은 지우지 않습니다. 이 정책이 RecentDocs 레지스트리 키도 지우는지는 확인하지 못했습니다.
+- **정책으로 로그오프 때 지웁니다.** 정책 "Clear history of recently opened documents on exit" 의 값은 `Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` 키 (사용자 구성) 의 `ClearRecentDocsOnExit` 입니다. Microsoft 문서에 따르면 이 정책은 로그오프 때 최근 문서 바로가기를 지웁니다. 점프리스트의 최근·자주 항목도 지웁니다 ([점프리스트](jump-lists.md)). 프로그램 파일 메뉴 아래의 최근 파일 목록은 지우지 않습니다. 이 정책이 RecentDocs 레지스트리 키도 지우는지는 확인하지 못했습니다.
 - **메뉴만 숨깁니다.** 정책 "Remove Recent Items menu from Start Menu" (값 `NoRecentDocsMenu`) 를 켜도 바로가기는 계속 저장됩니다. 메뉴만 보이지 않습니다. 이 값이 켜져 있어도 기록이 없다고 보지 않습니다.
 - **기록을 남기지 않는 정책.** Microsoft 문서는 "Do not keep history of recently opened documents" 정책을 이름으로만 언급합니다. 이 정책의 값 이름과 동작은 확인하지 못했습니다.
-- **값이나 키를 지웁니다.** 지운 키와 값은 하이브 안 빈 공간이나 트랜잭션 로그에 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 옛 하이브는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+- **값이나 키를 지웁니다.** 지운 키와 값은 하이브 안 빈 공간이나 트랜잭션 로그에 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 옛 하이브는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -154,7 +154,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](/01-f
 
 4. 0x00 부터 2바이트씩 UTF-16LE 로 읽습니다. `plan.docx` 입니다.
 5. 0x12 의 `00 00` 이 끝 문자입니다.
-6. 0x14 부터는 셸 항목입니다. [셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md) 페이지대로 풉니다.
+6. 0x14 부터는 셸 항목입니다. [셸 아이템](../../01-foundations/shell-document-formats/shell-item-pidl.md) 페이지대로 풉니다.
 7. 이 키의 마지막 기록 시각을 따로 읽어 둡니다. 항목 값에는 시각이 없기 때문입니다.
 
 ### 공개 도구로 한 번
@@ -165,22 +165,22 @@ plaso 의 레지스트리 파서는 RecentDocs 키와 그 하위 키를 "문자�
 - 도구가 키 시각을 항목마다 붙여서 보여 주지 않는지 확인합니다.
 - 시각을 UTC 로 보여 주는지, 분석 PC 의 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 끝 표시 뒤에 남은 항목을 어떻게 처리하는지 확인합니다.
-- 키 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 키 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) | Recent 폴더에 같은 이름의 바로가기가 있는지. 바로가기에는 경로·볼륨·대상 시각이 남습니다 |
-| [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 어느 앱의 목록에 같은 파일이 있는지. 항목마다 갱신 시각이 있습니다 |
-| [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 공통 대화상자로 다룬 파일의 경로. RecentDocs 가 비어도 이쪽은 남을 수 있습니다 |
-| [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) | 오피스 앱이 따로 남긴 최근 파일 목록 |
-| [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) | 그 파일이 있던 폴더를 탐색기로 연 흔적 |
-| [윈도 타임라인](/02-artifacts/file-folder-usage/activitiescache-db.md) | 같은 파일을 연 활동 기록이 있는지 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) | 같은 이름의 파일이 어디에 있었고 언제 바뀌었는지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브의 목록. 지금 목록과 비교하면 사라진 항목이 드러납니다 |
+| [바로가기 파일 (LNK)](lnk.md) | Recent 폴더에 같은 이름의 바로가기가 있는지. 바로가기에는 경로·볼륨·대상 시각이 남습니다 |
+| [점프리스트](jump-lists.md) | 어느 앱의 목록에 같은 파일이 있는지. 항목마다 갱신 시각이 있습니다 |
+| [열기·저장 대화상자 기록](comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 공통 대화상자로 다룬 파일의 경로. RecentDocs 가 비어도 이쪽은 남을 수 있습니다 |
+| [오피스 사용 흔적](microsoft-office/index.md) | 오피스 앱이 따로 남긴 최근 파일 목록 |
+| [셸백](shellbags/index.md) | 그 파일이 있던 폴더를 탐색기로 연 흔적 |
+| [윈도 타임라인](activitiescache-db.md) | 같은 파일을 연 활동 기록이 있는지 |
+| [마스터 파일 테이블](../filesystem/mft.md) · [USN 변경 저널](../filesystem/usnjrnl.md) | 같은 이름의 파일이 어디에 있었고 언제 바뀌었는지 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브의 목록. 지금 목록과 비교하면 사라진 항목이 드러납니다 |
 
-여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 에서 다룹니다.
+여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](../../04-scenarios/activity/file-access.md) 에서 다룹니다.
 
 ## 실습
 

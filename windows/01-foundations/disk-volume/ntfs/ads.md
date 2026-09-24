@@ -10,11 +10,11 @@ Windows 와 앱은 평소에도 ADS 를 씁니다. 스트림이 있다는 것만
 
 | 스트림 이름 (예) | 붙는 곳 | 누가 만드나 | 자세히 |
 |---|---|---|---|
-| Zone.Identifier | 인터넷에서 받은 파일 | 파일을 내려받은 프로그램 | [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) |
-| WofCompressedData | Windows Overlay Filter (WOF) 로 압축한 파일 | Windows 10 이후 Windows | [압축·희소 파일 (Compressed·Sparse)](/01-foundations/disk-volume/ntfs/compressed-sparse.md) |
-| $J, $Max | $Extend\$UsnJrnl | NTFS | [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) |
-| $SDS | $Secure | NTFS | [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) |
-| $Bad | $BadClus | NTFS | [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) |
+| Zone.Identifier | 인터넷에서 받은 파일 | 파일을 내려받은 프로그램 | [다운로드 출처 표시 (Zone.Identifier)](../../../02-artifacts/filesystem/zone-identifier.md) |
+| WofCompressedData | Windows Overlay Filter (WOF) 로 압축한 파일 | Windows 10 이후 Windows | [압축·희소 파일 (Compressed·Sparse)](compressed-sparse.md) |
+| $J, $Max | $Extend\$UsnJrnl | NTFS | [USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md) |
+| $SDS | $Secure | NTFS | [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](bitmap-secure-extend.md) |
+| $Bad | $BadClus | NTFS | [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](bitmap-secure-extend.md) |
 | 아무 이름 | 아무 파일·폴더 | 사용자, 앱, 공격자 | 이 페이지의 "숨기는 데 쓰이는 경우" |
 
 ## 구조
@@ -28,14 +28,14 @@ Windows 와 앱은 평소에도 ADS 를 씁니다. 스트림이 있다는 것만
 - 한 레코드에 $DATA 속성이 여러 개 있을 수 있습니다. 이름만 서로 다르면 됩니다.
 - 스트림마다 할당 크기, 실제 크기, 유효 데이터 길이 (Valid Data Length, VDL) 가 따로 있습니다.
 - 압축·암호화·희소 상태도 스트림마다 따로 정해집니다.
-- 상주·비상주도 스트림마다 따로 정해집니다. 작은 ADS 는 MFT 레코드 안에 들어갑니다. 큰 ADS 는 데이터 런으로 클러스터를 가리킵니다. 방법은 [데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) 에 있습니다.
+- 상주·비상주도 스트림마다 따로 정해집니다. 작은 ADS 는 MFT 레코드 안에 들어갑니다. 큰 ADS 는 데이터 런으로 클러스터를 가리킵니다. 방법은 [데이터 런과 상주·비상주 데이터](data-run-resident-non-resident.md) 에 있습니다.
 - 속성이 레코드 하나에 다 들어가지 않으면 $ATTRIBUTE_LIST 로 확장 레코드에 나뉩니다. 이름 있는 $DATA 도 확장 레코드에 있을 수 있습니다.
 
 > 그림 자리: MFT 레코드 하나를 세로로 그린 그림. $STANDARD_INFORMATION, $FILE_NAME, 이름 없는 $DATA(기본 스트림), 이름이 "Zone.Identifier" 인 $DATA(ADS) 를 차례로 쌓고, 두 $DATA 머리글의 "이름 길이" 칸(0 과 15)을 강조한다.
 
 ### ADS 를 가려낼 때 보는 칸
 
-속성 머리글 전체는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md) 에 있습니다. 여기서는 ADS 를 가려내는 데 필요한 칸만 적습니다. 오프셋은 속성 시작 기준입니다.
+속성 머리글 전체는 [MFT 레코드와 속성](file-record-attribute.md) 에 있습니다. 여기서는 ADS 를 가려내는 데 필요한 칸만 적습니다. 오프셋은 속성 시작 기준입니다.
 
 | 오프셋 | 크기 | 뜻 |
 |---|---|---|
@@ -64,8 +64,8 @@ Windows 와 앱은 평소에도 ADS 를 씁니다. 스트림이 있다는 것만
 
 | 이름 | 속성 종류 | ADS 인가 |
 |---|---|---|
-| 폴더의 $I30 | $INDEX_ROOT·$INDEX_ALLOCATION | 아닙니다. 폴더 목록 인덱스입니다. [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) |
-| $EFS | $LOGGED_UTILITY_STREAM | 아닙니다. EFS 가 암호화 정보를 두는 곳입니다. [EFS 암호화 파일](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) |
+| 폴더의 $I30 | $INDEX_ROOT·$INDEX_ALLOCATION | 아닙니다. 폴더 목록 인덱스입니다. [폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md) |
+| $EFS | $LOGGED_UTILITY_STREAM | 아닙니다. EFS 가 암호화 정보를 두는 곳입니다. [EFS 암호화 파일](../../../03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) |
 | 확장 특성 (Extended Attributes, EA) | $EA·$EA_INFORMATION | 아닙니다. $DATA 가 아니므로 스트림 목록에 나오지 않습니다 |
 
 MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으로 묶습니다. 숨긴 자료를 찾을 때는 둘을 따로 확인해야 합니다.
@@ -114,11 +114,11 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 - 작은 ADS 를 새로 붙이자 $STANDARD_INFORMATION 의 수정·접근·MFT 변경 시각이 함께 바뀌었습니다. 만든 시각은 그대로였습니다 (확인 범위: Windows 11 25H2).
 - 그 ADS 를 지우자 MFT 변경 시각만 바뀌었습니다. 수정 시각은 그대로였습니다 (확인 범위: Windows 11 25H2).
 - 스트림이 언제 생겼는지는 변경 저널과 $LogFile 에서 찾습니다.
-- 두 벌의 시각이 각각 언제 바뀌는지는 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) 과 [파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md) 에 있습니다.
+- 두 벌의 시각이 각각 언제 바뀌는지는 [두 벌의 시각](standard-information-file-name.md) 과 [파일 시각 네 가지와 변화 규칙](../../../03-techniques/analysis/timeline/macb-timestamp-rules.md) 에 있습니다.
 
 ### 변경 저널에 남는 것
 
-[USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) 에는 이름 있는 스트림만 따로 가리키는 이유 코드가 있습니다.
+[USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md) 에는 이름 있는 스트림만 따로 가리키는 이유 코드가 있습니다.
 
 | 이유 코드 | 값 | 뜻 |
 |---|---|---|
@@ -133,10 +133,10 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 
 ### 지운 스트림
 
-- 파일을 지우면 MFT 레코드가 "비어 있음" 으로 표시됩니다. 레코드 안의 이름 있는 $DATA 속성도 레코드가 다시 쓰일 때까지 함께 남습니다. 복구 방법은 [파일시스템 기반 복구](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 에 있습니다.
+- 파일을 지우면 MFT 레코드가 "비어 있음" 으로 표시됩니다. 레코드 안의 이름 있는 $DATA 속성도 레코드가 다시 쓰일 때까지 함께 남습니다. 복구 방법은 [파일시스템 기반 복구](../../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) 에 있습니다.
 - 파일은 두고 스트림만 지우면 그 속성이 레코드에서 빠집니다.
-- 지운 스트림이 비상주였다면 쓰던 클러스터는 비할당 영역이 됩니다. [비할당 영역과 슬랙](/03-techniques/analysis/data-recovery/unallocated-slack-space.md) 을 봅니다.
-- 스트림을 지운 흔적은 변경 저널의 STREAM_CHANGE 기록, [$LogFile](/02-artifacts/filesystem/logfile.md), [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾습니다.
+- 지운 스트림이 비상주였다면 쓰던 클러스터는 비할당 영역이 됩니다. [비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md) 을 봅니다.
+- 스트림을 지운 흔적은 변경 저널의 STREAM_CHANGE 기록, [$LogFile](../../../02-artifacts/filesystem/logfile.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾습니다.
 
 ### 숨기는 데 쓰이는 경우
 
@@ -144,7 +144,7 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 - 파일 크기에는 기본 스트림 크기만 나옵니다. ADS 크기는 더해지지 않습니다.
 - MITRE ATT&CK 은 ADS 에 자료를 숨기는 것을 T1564.004 로 분류합니다.
 - MITRE 는 esentutl, expand 같은 Windows 기본 도구가 ADS 를 읽고 쓰는 데 쓰인다고 적습니다.
-- 명령줄에 `파일이름:스트림이름` 모양의 콜론이 있으면 단서가 됩니다. 명령줄은 [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) 이나 [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) 에 남을 수 있습니다.
+- 명령줄에 `파일이름:스트림이름` 모양의 콜론이 있으면 단서가 됩니다. 명령줄은 [프로세스 생성 (4688)](../../../02-artifacts/event-logs/4688.md) 이나 [Sysmon 이벤트 1](../../../02-artifacts/event-logs/sysmon/1.md) 에 남을 수 있습니다.
 - 보고서에는 기록이 말하는 만큼만 씁니다. 예: "이 파일에 이름이 X 인 ADS 가 있고, 크기는 N 바이트입니다."
 - 누가 왜 만들었는지는 변경 저널, 프로세스 기록 같은 다른 근거가 있을 때만 씁니다.
 
@@ -152,31 +152,31 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 
 - Windows 의 파일 복사 함수(CopyFileEx)는 ADS 도 함께 복사합니다.
 - PowerShell `Copy-Item` 으로 복사한 사본에 5,000바이트 ADS 가 비상주로 그대로 있었습니다 (확인 범위: Windows 11 25H2).
-- FAT 처럼 NTFS 가 아닌 파일시스템으로 옮기면 ADS 는 없어집니다. FAT 구조는 [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md) 에 있습니다.
-- 파일을 골라 모으는 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 은 수집 도구가 ADS 를 챙기는지 따로 확인해야 합니다.
-- [디스크 이미징](/03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 은 MFT 와 클러스터를 통째로 담습니다. 그래서 ADS 도 이미지에 남습니다.
-- 경로로 파일을 열면 기본 스트림이 열립니다. 그래서 경로로 연 파일의 해시는 기본 스트림만 계산한 값입니다. ADS 는 따로 해시해야 합니다. [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 을 함께 봅니다.
-- 같은 이유로 [키워드 검색](/03-techniques/analysis/content-search/keyword-search.md) 도 도구가 ADS 를 검색 대상에 넣는지 확인해야 합니다.
+- FAT 처럼 NTFS 가 아닌 파일시스템으로 옮기면 ADS 는 없어집니다. FAT 구조는 [FAT·exFAT 구조](../fat-exfat.md) 에 있습니다.
+- 파일을 골라 모으는 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 은 수집 도구가 ADS 를 챙기는지 따로 확인해야 합니다.
+- [디스크 이미징](../../../03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 은 MFT 와 클러스터를 통째로 담습니다. 그래서 ADS 도 이미지에 남습니다.
+- 경로로 파일을 열면 기본 스트림이 열립니다. 그래서 경로로 연 파일의 해시는 기본 스트림만 계산한 값입니다. ADS 는 따로 해시해야 합니다. [해시로 무결성 검증](../../../03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 을 함께 봅니다.
+- 같은 이유로 [키워드 검색](../../../03-techniques/analysis/content-search/keyword-search.md) 도 도구가 ADS 를 검색 대상에 넣는지 확인해야 합니다.
 
 ## 함정
 
 - **"ADS 를 붙여도 파일 시각은 안 바뀐다"** 는 옛 설명입니다. 2000년대 초 자료 중에 이렇게 쓴 것이 있습니다. Microsoft 문서는 어느 스트림이 바뀌어도 파일 시각이 바뀐다고 적습니다. Windows 11 25H2 에서도 바뀌었습니다.
 - **흔한 ADS 를 수상하다고 보고하지 않습니다.** Zone.Identifier 와 WofCompressedData 는 정상 동작으로 생깁니다.
 - **파일만 훑는 방법은 폴더의 ADS 를 놓칠 수 있습니다.** 폴더에도 이름 있는 $DATA 를 붙일 수 있습니다.
-- **기본 레코드만 읽는 도구는 확장 레코드에 있는 스트림을 놓칠 수 있습니다.** 확장 레코드는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md) 에 설명이 있습니다.
+- **기본 레코드만 읽는 도구는 확장 레코드에 있는 스트림을 놓칠 수 있습니다.** 확장 레코드는 [MFT 레코드와 속성](file-record-attribute.md) 에 설명이 있습니다.
 - **이름을 콜론으로 자를 때 조심합니다.** 스트림 이름이 `$DATA` 이거나 빈칸을 품고 있으면 이름 해석이 어긋날 수 있습니다.
 - **희소 표시가 기본 스트림 이야기가 아닐 수 있습니다.** 파일의 희소 속성 (FILE_ATTRIBUTE_SPARSE_FILE) 은 스트림 중 하나라도 희소였던 적이 있으면 켜집니다.
 - **$EFS 와 EA 는 스트림 목록에 나오지 않습니다.** 스트림 목록이 비었다고 레코드에 숨은 자료가 없다고 할 수 없습니다.
 
 ## 도구
 
-도구 이름은 예시입니다. 한 도구 결과만 믿지 말고 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 합니다.
+도구 이름은 예시입니다. 한 도구 결과만 믿지 말고 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 합니다.
 
 | 상황 | 방법 (예) |
 |---|---|
 | 실행 중인 시스템 | `dir /r`, PowerShell `-Stream`, `fsutil file layout`, Sysinternals Streams |
 | 디스크 이미지 | MFT 레코드의 $DATA 속성을 모두 나열하는 공개 파서. 예: The Sleuth Kit `istat` 로 속성 목록을 보고, `icat` 에 `레코드번호-128-속성번호` 를 줘 한 스트림만 꺼냄 |
-| MFT 전체 훑기 | MFT 를 표로 풀어 주는 공개 파서 (예: MFTECmd, analyzeMFT). 결과를 [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) 해석과 함께 봅니다 |
+| MFT 전체 훑기 | MFT 를 표로 풀어 주는 공개 파서 (예: MFTECmd, analyzeMFT). 결과를 [마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md) 해석과 함께 봅니다 |
 
 ## 참고 문헌
 

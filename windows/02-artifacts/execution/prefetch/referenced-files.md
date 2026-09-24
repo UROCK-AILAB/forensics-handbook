@@ -1,6 +1,6 @@
 # 참조 파일·폴더 목록 활용 (Referenced Files)
 
-> 상위 페이지: [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md)
+> 상위 페이지: [프리페치 (Prefetch)](index.md)
 
 ## 한 줄 요약
 
@@ -20,11 +20,11 @@ Microsoft 는 .pf 파일이 지난 실행들에서 시작할 때 읽은 페이�
 | 볼륨 정보 | 볼륨 정보 항목 (Volume Information Entry) | 볼륨 장치 경로, 볼륨 생성 시각, 볼륨 일련번호 |
 | 폴더 목록 | 디렉터리 문자열 (Directory Strings) | 볼륨마다 시작할 때 건드린 폴더 경로 |
 
-실행 횟수와 실행 시각은 [실행 횟수와 실행 시각 읽기](/02-artifacts/execution/prefetch/run-count-last-run-times.md) 에서 다룹니다.
+실행 횟수와 실행 시각은 [실행 횟수와 실행 시각 읽기](run-count-last-run-times.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-.pf 파일은 `C:\Windows\Prefetch\` 에 있습니다. 형식 버전과 압축은 [파일 구조와 버전](/02-artifacts/execution/prefetch/format-versions-mam.md) 에서 다룹니다. 아래 표는 참조 목록과 관련 있는 차이만 모았습니다.
+.pf 파일은 `C:\Windows\Prefetch\` 에 있습니다. 형식 버전과 압축은 [파일 구조와 버전](format-versions-mam.md) 에서 다룹니다. 아래 표는 참조 목록과 관련 있는 차이만 모았습니다.
 
 | 형식 버전 | Windows | 파일 목록 항목 크기 | 항목의 NTFS 파일 참조 칸 | 경로 앞부분 표기 |
 |---|---|---|---|---|
@@ -39,7 +39,7 @@ Microsoft 는 .pf 파일이 지난 실행들에서 시작할 때 읽은 페이�
 
 ## 구조
 
-전체 형식은 [파일 구조와 버전](/02-artifacts/execution/prefetch/format-versions-mam.md) 에 있습니다. 여기서는 참조 목록을 따라가는 데 필요한 칸만 적습니다. 값은 모두 리틀 엔디언입니다.
+전체 형식은 [파일 구조와 버전](format-versions-mam.md) 에 있습니다. 여기서는 참조 목록을 따라가는 데 필요한 칸만 적습니다. 값은 모두 리틀 엔디언입니다.
 
 **파일 정보 (File Information)** 는 파일 처음에서 84바이트(0x54) 뒤에 있습니다. 아래 위치는 파일 정보 시작 기준입니다. 칸에 담긴 오프셋 값은 파일 처음 기준입니다.
 
@@ -100,13 +100,13 @@ Microsoft 는 .pf 파일이 지난 실행들에서 시작할 때 읽은 페이�
 
 .pf 파일 이름에는 실행 파일 이름과 경로 해시만 있습니다. 전체 경로는 없습니다. 공개 파서 출력 예를 보면 CMD.EXE 의 .pf 파일 목록에 `\WINDOWS\SYSTEM32\CMD.EXE` 가 들어 있습니다. 이처럼 파일 목록에서 .pf 이름과 같은 실행 파일 항목을 찾으면 실행 위치를 알 수 있습니다.
 
-`\USERS\…\DOWNLOADS`, `…\TEMP`, `\PROGRAMDATA`, 시스템 볼륨이 아닌 볼륨처럼 프로그램을 보통 설치하지 않는 곳이면 먼저 살핍니다. 경로 해시로 이 경로를 검증하는 법은 [경로 해시로 실행 위치 구분하기](/02-artifacts/execution/prefetch/path-hash.md) 에 있습니다.
+`\USERS\…\DOWNLOADS`, `…\TEMP`, `\PROGRAMDATA`, 시스템 볼륨이 아닌 볼륨처럼 프로그램을 보통 설치하지 않는 곳이면 먼저 살핍니다. 경로 해시로 이 경로를 검증하는 법은 [경로 해시로 실행 위치 구분하기](path-hash.md) 에 있습니다.
 
 ### 2. 제자리가 아닌 DLL
 
 시스템 DLL 과 이름이 같은데 System32·SysWOW64 가 아닌 폴더에 있는 항목을 찾습니다. 프로그램 폴더에 넣은 가짜 DLL 을 먼저 읽게 만드는 DLL 검색 순서 가로채기 (DLL Search Order Hijacking) 흔적일 수 있습니다. TrustedSec 이 공개한 사례에서는 WSOCK32.DLL 이 시스템 폴더가 아니라 프로그램 폴더에서 올라왔습니다.
 
-플래그가 0x200 이면 명세상 실행 코드로 올린 파일입니다. 그 파일이 디스크에 남아 있으면 서명과 해시를 확인합니다 ([의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md)).
+플래그가 0x200 이면 명세상 실행 코드로 올린 파일입니다. 그 파일이 디스크에 남아 있으면 서명과 해시를 확인합니다 ([의심 실행 파일 선별](../../../03-techniques/analysis/code-signing-yara.md)).
 
 ### 3. 시작하면서 읽은 문서·데이터 파일
 
@@ -116,13 +116,13 @@ Microsoft 는 .pf 파일이 지난 실행들에서 시작할 때 읽은 페이�
 
 압축 도구나 동기화 도구는 시작하자마자 대상 파일과 폴더를 읽습니다. 그래서 이런 도구의 .pf 에는 대상 이름 일부가 남을 수 있습니다. The DFIR Journal 의 사례에서는 7-Zip 의 .pf 에 풀어 놓은 공격 도구 이름이 남았습니다. 같은 글의 rclone .pf 에는 빼돌린 폴더 아래 폴더 이름이 남았습니다.
 
-이 목록은 시작 뒤 짧은 시간의 표본입니다. 도구가 처리한 대상 전체가 아닙니다. 시나리오는 [퇴사 전 자료를 모으고 압축했나](/04-scenarios/exfiltration/data-exfiltration/staging.md) 에서 다룹니다.
+이 목록은 시작 뒤 짧은 시간의 표본입니다. 도구가 처리한 대상 전체가 아닙니다. 시나리오는 [퇴사 전 자료를 모으고 압축했나](../../../04-scenarios/exfiltration/data-exfiltration/staging.md) 에서 다룹니다.
 
 ### 5. 외부 저장장치
 
 볼륨 정보 항목이 둘 이상이면 프로그램이 시작할 때 다른 볼륨의 파일도 읽었다는 뜻입니다. 항목마다 볼륨 일련번호가 있습니다. Khatri 는 이 번호로 프로그램을 실행하거나 파일을 연 USB 메모리를 찾았다고 적었습니다.
 
-볼륨 일련번호는 포맷할 때 볼륨에 붙는 번호입니다. USB 장치 자체의 일련번호와는 다릅니다. 볼륨 일련번호를 장치와 잇는 방법은 [휴대용 장치·볼륨 이름 기록](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) 과 [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) 에 있습니다.
+볼륨 일련번호는 포맷할 때 볼륨에 붙는 번호입니다. USB 장치 자체의 일련번호와는 다릅니다. 볼륨 일련번호를 장치와 잇는 방법은 [휴대용 장치·볼륨 이름 기록](../../external-devices/usb-storage-artifacts/wpd-emdmgmt.md) 과 [바로가기 파일](../../file-folder-usage/lnk.md) 에 있습니다.
 
 Khatri 의 설명 (XP~7 기준) 으로는 FAT 볼륨이면 생성 시각이 비어 있습니다. 일련번호는 늘 채워집니다.
 
@@ -130,11 +130,11 @@ Windows 10 의 장치 경로는 `\VOLUME{16자리-8자리}` 꼴입니다. 공개
 
 ### 6. 사용자 폴더
 
-폴더 목록에 `\USERS\<이름>\` 이 있으면 프로그램이 그 프로필 아래를 건드린 것입니다. 이것은 실행한 계정을 가리키는 정황일 뿐입니다. 다른 계정의 폴더를 읽는 프로그램도 있습니다. 사람을 특정하는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+폴더 목록에 `\USERS\<이름>\` 이 있으면 프로그램이 그 프로필 아래를 건드린 것입니다. 이것은 실행한 계정을 가리키는 정황일 뿐입니다. 다른 계정의 폴더를 읽는 프로그램도 있습니다. 사람을 특정하는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 ### 7. 지금은 없는 파일
 
-목록 속 파일이 디스크에 없으면 나중에 지웠거나 옮겼을 수 있습니다. 버전 23 (Vista·7) 이면 항목의 NTFS 파일 참조로 $MFT 레코드를 찾습니다. 레코드의 순번이 파일 참조의 순번과 다르면 그 레코드는 이미 다른 파일이 다시 쓴 것입니다 ([MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)). 파일 이름은 [$MFT](/02-artifacts/filesystem/mft.md)·[$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 을 찾는 단서가 됩니다.
+목록 속 파일이 디스크에 없으면 나중에 지웠거나 옮겼을 수 있습니다. 버전 23 (Vista·7) 이면 항목의 NTFS 파일 참조로 $MFT 레코드를 찾습니다. 레코드의 순번이 파일 참조의 순번과 다르면 그 레코드는 이미 다른 파일이 다시 쓴 것입니다 ([MFT 레코드와 속성](../../../01-foundations/disk-volume/ntfs/file-record-attribute.md)). 파일 이름은 [$MFT](../../filesystem/mft.md)·[$UsnJrnl](../../filesystem/usnjrnl.md) 을 찾는 단서가 됩니다.
 
 ## 증거로서 의미
 
@@ -162,19 +162,19 @@ Windows 10 의 장치 경로는 `\VOLUME{16자리-8자리}` 꼴입니다. 공개
 - 참조 목록의 항목에는 시각 칸이 없습니다.
 - 목록 전체는 .pf 에 적힌 실행 시각들과 함께 볼 수 있습니다. 하지만 어느 실행에서 생긴 항목인지는 목록만으로 정할 수 없습니다.
 - 명세에 따르면 트레이스 체인 항목에는 최근 8번 실행 각각에서 그 블록을 썼는지 표시하는 비트가 있습니다. 파일 안에 여러 번의 실행 정보가 섞여 있을 수 있다는 뜻입니다.
-- 볼륨 생성 시각은 UTC FILETIME 입니다 ([시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)). 볼륨을 만든(포맷한) 때로 읽습니다.
+- 볼륨 생성 시각은 UTC FILETIME 입니다 ([시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)). 볼륨을 만든(포맷한) 때로 읽습니다.
 - 참조된 파일 자체의 시각($MFT·$UsnJrnl)이 .pf 의 실행 시각 가운데 하나와 몇 초 안에 붙어 있으면, 그 실행과 묶는 근거가 됩니다.
 
 ## 함정과 한계
 
 - **짧은 창.** 시작 뒤 최대 10초만 봅니다. 시작이 먼저 끝나면 더 짧아집니다. 한참 뒤에 연 문서는 남지 않습니다.
-- **드라이브 문자가 아닙니다.** 경로는 `\DEVICE\HARDDISKVOLUMEn` 이나 `\VOLUME{…}` 로 시작합니다. HARDDISKVOLUME 번호는 드라이브 문자와 다릅니다. 볼륨 일련번호를 실제 볼륨의 일련번호와 맞춰 봅니다 ([부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)).
+- **드라이브 문자가 아닙니다.** 경로는 `\DEVICE\HARDDISKVOLUMEn` 이나 `\VOLUME{…}` 로 시작합니다. HARDDISKVOLUME 번호는 드라이브 문자와 다릅니다. 볼륨 일련번호를 실제 볼륨의 일련번호와 맞춰 봅니다 ([부트 섹터와 클러스터](../../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)).
 - **대소문자.** 공개 도구 출력 예에서 폴더·파일 이름은 대문자로 적혀 있습니다. 원래 대소문자는 알 수 없습니다.
-- **엄격한 UTF-16 이 아닙니다.** 명세는 짝 없는 대리 문자 (U+D800 같은 값) 를 허용한다고 적습니다. 도구가 이런 글자를 바꾸거나 건너뛸 수 있으므로, 이상한 이름은 원시 바이트로 확인합니다 ([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
-- **압축.** Windows 10 이후 .pf 는 압축되어 있습니다. 이미지 전체를 키워드로 검색해도 .pf 속 경로는 걸리지 않습니다. 압축을 푼 뒤 검색합니다 ([윈도 압축 형식](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md)).
-- **.pf 가 여러 개.** 같은 실행 파일이라도 경로에 따라 .pf 가 따로 생깁니다. 참조 목록도 .pf 마다 다릅니다 ([경로 해시](/02-artifacts/execution/prefetch/path-hash.md)).
-- **안 남는 경우.** 프리페치가 꺼져 있거나 보관 개수 한도를 넘으면 목록이 없습니다 ([프리페치 해석 함정](/02-artifacts/execution/prefetch/pitfalls.md)).
-- **안티포렌식.** .pf 를 지우면 목록도 함께 사라집니다. 섀도 복사본이나 비할당 영역에 옛 .pf 가 남아 있을 수 있습니다 ([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md), [파일 카빙](/03-techniques/analysis/data-recovery/file-carving.md)). 실행 파일 이름을 바꾸면 .pf 이름은 바뀌지만, 목록 속 경로는 실제로 읽은 경로 그대로입니다.
+- **엄격한 UTF-16 이 아닙니다.** 명세는 짝 없는 대리 문자 (U+D800 같은 값) 를 허용한다고 적습니다. 도구가 이런 글자를 바꾸거나 건너뛸 수 있으므로, 이상한 이름은 원시 바이트로 확인합니다 ([문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
+- **압축.** Windows 10 이후 .pf 는 압축되어 있습니다. 이미지 전체를 키워드로 검색해도 .pf 속 경로는 걸리지 않습니다. 압축을 푼 뒤 검색합니다 ([윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md)).
+- **.pf 가 여러 개.** 같은 실행 파일이라도 경로에 따라 .pf 가 따로 생깁니다. 참조 목록도 .pf 마다 다릅니다 ([경로 해시](path-hash.md)).
+- **안 남는 경우.** 프리페치가 꺼져 있거나 보관 개수 한도를 넘으면 목록이 없습니다 ([프리페치 해석 함정](pitfalls.md)).
+- **안티포렌식.** .pf 를 지우면 목록도 함께 사라집니다. 섀도 복사본이나 비할당 영역에 옛 .pf 가 남아 있을 수 있습니다 ([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md), [파일 카빙](../../../03-techniques/analysis/data-recovery/file-carving.md)). 실행 파일 이름을 바꾸면 .pf 이름은 바뀌지만, 목록 속 경로는 실제로 읽은 경로 그대로입니다.
 
 ## 직접 분석해 보기
 
@@ -261,18 +261,18 @@ VERSION.DLL 은 원래 System32 에 있는 이름입니다. Temp 폴더에서 �
 
 ### 공개 도구로 한 번
 
-libscca 의 sccainfo 와 PECmd 는 파일 목록, 볼륨 정보, 폴더 목록을 모두 보여 줍니다. PECmd 는 기본값으로 temp·tmp 가 든 경로를 강조합니다. 두 도구의 파일 목록 개수와 이상한 글자 처리가 같은지 맞춰 봅니다 ([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+libscca 의 sccainfo 와 PECmd 는 파일 목록, 볼륨 정보, 폴더 목록을 모두 보여 줍니다. PECmd 는 기본값으로 temp·tmp 가 든 경로를 강조합니다. 두 도구의 파일 목록 개수와 이상한 글자 처리가 같은지 맞춰 봅니다 ([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [$MFT](/02-artifacts/filesystem/mft.md) | 목록 속 파일이 지금도 있는지, 파일 참조의 순번이 같은지 |
-| [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | 목록 속 파일이 실행 시각 근처에 만들어지거나 지워졌는지 |
-| [AmCache](/02-artifacts/execution/amcache-hve/index.md) | 실행 파일의 전체 경로와 해시 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 목록 속 문서를 사용자가 연 기록, 볼륨 일련번호 |
-| [휴대용 장치·볼륨 이름 기록](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | 외부 볼륨 일련번호와 장치 |
-| [Sysmon 이미지 로드](/02-artifacts/event-logs/sysmon/7-8-10.md) | 로그가 켜져 있었다면 DLL 을 실제로 올린 경로와 시각 |
+| [$MFT](../../filesystem/mft.md) | 목록 속 파일이 지금도 있는지, 파일 참조의 순번이 같은지 |
+| [$UsnJrnl](../../filesystem/usnjrnl.md) | 목록 속 파일이 실행 시각 근처에 만들어지거나 지워졌는지 |
+| [AmCache](../amcache-hve/index.md) | 실행 파일의 전체 경로와 해시 |
+| [바로가기 파일](../../file-folder-usage/lnk.md)·[점프리스트](../../file-folder-usage/jump-lists.md) | 목록 속 문서를 사용자가 연 기록, 볼륨 일련번호 |
+| [휴대용 장치·볼륨 이름 기록](../../external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | 외부 볼륨 일련번호와 장치 |
+| [Sysmon 이미지 로드](../../event-logs/sysmon/7-8-10.md) | 로그가 켜져 있었다면 DLL 을 실제로 올린 경로와 시각 |
 | Layout.ini (`C:\Windows\Prefetch\Layout.ini`) | Microsoft 설명으로는 앱 시작 때 참조한 파일·폴더 순서를 적는 파일입니다. Sysmain 서비스가 유휴 시간에 약 72시간마다 이 정보를 줍니다. 조각 모음을 쓰지 않는 시스템에는 주지 않는다고 설명합니다. |
 
 ## 실습

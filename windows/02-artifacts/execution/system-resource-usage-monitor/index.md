@@ -33,17 +33,17 @@ SRUM (System Resource Usage Monitor) 은 윈도가 앱과 사용자별 자원 �
 | 항목 | 내용 |
 |---|---|
 | DB 파일 | `C:\Windows\System32\sru\SRUDB.dat` |
-| 형식 | ESE (Extensible Storage Engine) 데이터베이스. 형식은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. |
+| 형식 | ESE (Extensible Storage Engine) 데이터베이스. 형식은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. |
 | 같은 폴더 | ESE 트랜잭션 로그와 체크포인트 파일 |
 | 확장 목록 | SOFTWARE 하이브 `Microsoft\Windows NT\CurrentVersion\SRUM\Extensions`. 표 이름으로 쓰는 GUID 와 그 표를 채우는 DLL 이 여기에 짝지어 있습니다. |
 | 사용자 정보 | 있습니다. `UserId` 를 SruDbIdMapTable 에서 찾으면 SID 가 나옵니다. |
-| 시각 형식 | 각 표의 `TimeStamp` 는 OLE Automation 날짜이고 UTC 입니다. 네트워크 연결 표의 `ConnectStartTime` 은 FILETIME 입니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. |
+| 시각 형식 | 각 표의 `TimeStamp` 는 OLE Automation 날짜이고 UTC 입니다. 네트워크 연결 표의 `ConnectStartTime` 은 FILETIME 입니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. |
 
 수집할 때 알아 둘 점입니다.
 
 - SRUDB.dat 와 SOFTWARE 하이브를 함께 모읍니다. SOFTWARE 하이브가 있어야 표 GUID 를 확장 이름과 DLL 로 풀 수 있습니다. 네트워크 식별 값을 무선 네트워크 이름(SSID)으로 맞출 때도 이 하이브를 씁니다(SANS ISC).
 - 켜져 있는 PC 에서는 운영체제가 SRUDB.dat 를 잠가 둡니다. 공개 도구 가운데에는 잠긴 파일을 볼륨 섀도 복사본에서 꺼내는 것도 있습니다(SANS ISC).
-- 압수 이미지에서 꺼낸 SRUDB.dat 는 대부분 비정상 종료 (dirty shutdown) 상태였습니다(현장 관찰). 이미지 안의 로그 사슬이 끊겨 로그로 복구하지 못한 경우도 있었습니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다. 원본을 열면 내용이 바뀔 수 있으므로 항상 사본에서 작업합니다. 자세한 내용은 [트랜잭션 로그와 비정상 종료 상태](/01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 에서 다룹니다.
+- 압수 이미지에서 꺼낸 SRUDB.dat 는 대부분 비정상 종료 (dirty shutdown) 상태였습니다(현장 관찰). 이미지 안의 로그 사슬이 끊겨 로그로 복구하지 못한 경우도 있었습니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다. 원본을 열면 내용이 바뀔 수 있으므로 항상 사본에서 작업합니다. 자세한 내용은 [트랜잭션 로그와 비정상 종료 상태](../../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 에서 다룹니다.
 - 손상된 SRUDB.dat 는 읽는 방식에 따라 행 수가 달랐습니다(현장 관찰). 같은 파일의 앱 사용량 표에서 도구마다 1,612행과 1,742행으로 갈렸습니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. 손상된 DB 는 두 가지 이상 방식으로 열어 결과를 비교합니다.
 
 ### Windows 버전에 따라 달라지는 점
@@ -55,7 +55,7 @@ SRUM 은 Windows 8 에서 처음 들어왔습니다. Windows 7 이전에는 SRUD
 | Windows 8, 옛 Windows 10 (2019년 자료 기준) | 레지스트리 | 한 시간마다, 그리고 시스템을 끌 때 | Magnet, Velociraptor(2019) |
 | 최근 Windows 10·11 | 메모리 (1단계 저장소, Tier1). 기본 60초마다 갱신합니다. 레지스트리는 쓰지 않습니다. | 2단계 저장소 (Tier2) 인 DB 에 기본 1시간마다 | WithSecure(2023) |
 
-WithSecure 발표 자료는 데스크톱 윈도에서 Windows 10 1607 뒤로 이 값이 메모리에만 머무는 것으로 보인다고 적습니다. 이 경계는 발표자의 관찰이고 Microsoft 문서로 확인한 것은 아닙니다. 검체마다 SOFTWARE 하이브의 `SRUM` 키 아래를 직접 확인합니다. 두 방식의 차이는 [SRUM 해석 함정](/02-artifacts/execution/system-resource-usage-monitor/1.md) 에서 다룹니다.
+WithSecure 발표 자료는 데스크톱 윈도에서 Windows 10 1607 뒤로 이 값이 메모리에만 머무는 것으로 보인다고 적습니다. 이 경계는 발표자의 관찰이고 Microsoft 문서로 확인한 것은 아닙니다. 검체마다 SOFTWARE 하이브의 `SRUM` 키 아래를 직접 확인합니다. 두 방식의 차이는 [SRUM 해석 함정](1.md) 에서 다룹니다.
 
 ### 표와 알려 주는 것
 
@@ -63,11 +63,11 @@ WithSecure 발표 자료는 데스크톱 윈도에서 Windows 10 1607 뒤로 이
 
 | 표 (GUID) | 알려 주는 것 | 기본 보존 기간 | 자세히 |
 |---|---|---|---|
-| SruDbIdMapTable | 다른 표의 `AppId`·`UserId` 숫자를 문자열로 푸는 사전입니다. `IdType` 이 3 이면 SID 가 들어 있고, 0~2 이면 UTF-16 문자열이 들어 있습니다. | — | [구조와 ID 매핑](/02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md) |
-| 앱별 자원 사용 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` | 앱·사용자별 CPU 사이클 시간과 디스크 읽기·쓰기 양. 포그라운드 (Foreground) 와 백그라운드 (Background) 로 나눠 남습니다. | 60일 | [앱별 자원 사용](/02-artifacts/execution/system-resource-usage-monitor/application-resource-usage.md) |
-| 네트워크 사용량 `{973F5D5C-1D90-4944-BE8E-24B94231A174}` | 앱·사용자·인터페이스별 보낸 바이트 (`BytesSent`) 와 받은 바이트 (`BytesRecvd`) | 60일 | [네트워크 사용량](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) |
-| 네트워크 연결 `{DD6636C4-8929-4683-974E-22C046A43763}` | 인터페이스·네트워크 프로필별 연결 시작 시각 (`ConnectStartTime`) 과 연결 시간 (`ConnectedTime`) | 60일 | [네트워크 연결 기록](/02-artifacts/execution/system-resource-usage-monitor/network-connectivity.md) |
-| 전원 사용 `{FEE4E14F-02A9-4550-B5CE-5FA2DA202E37}` 과 장기 표 `…}LT` | 배터리 충전량, 설계 용량, 완충 용량, 충방전 횟수 | 60일, 장기 표는 1,820일 | [전원·배터리 사용](/02-artifacts/execution/system-resource-usage-monitor/energy-usage.md) |
+| SruDbIdMapTable | 다른 표의 `AppId`·`UserId` 숫자를 문자열로 푸는 사전입니다. `IdType` 이 3 이면 SID 가 들어 있고, 0~2 이면 UTF-16 문자열이 들어 있습니다. | — | [구조와 ID 매핑](srudbidmaptable.md) |
+| 앱별 자원 사용 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` | 앱·사용자별 CPU 사이클 시간과 디스크 읽기·쓰기 양. 포그라운드 (Foreground) 와 백그라운드 (Background) 로 나눠 남습니다. | 60일 | [앱별 자원 사용](application-resource-usage.md) |
+| 네트워크 사용량 `{973F5D5C-1D90-4944-BE8E-24B94231A174}` | 앱·사용자·인터페이스별 보낸 바이트 (`BytesSent`) 와 받은 바이트 (`BytesRecvd`) | 60일 | [네트워크 사용량](network-data-usage.md) |
+| 네트워크 연결 `{DD6636C4-8929-4683-974E-22C046A43763}` | 인터페이스·네트워크 프로필별 연결 시작 시각 (`ConnectStartTime`) 과 연결 시간 (`ConnectedTime`) | 60일 | [네트워크 연결 기록](network-connectivity.md) |
+| 전원 사용 `{FEE4E14F-02A9-4550-B5CE-5FA2DA202E37}` 과 장기 표 `…}LT` | 배터리 충전량, 설계 용량, 완충 용량, 충방전 횟수 | 60일, 장기 표는 1,820일 | [전원·배터리 사용](energy-usage.md) |
 | App Timeline `{5C8CF1C7-7257-4F13-B223-970EF5939312}` | 1단계 저장소를 갱신할 때 돌고 있던 프로세스 | 7일 | 이 페이지 |
 | 그 밖의 표 | 푸시 알림 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA86}`, 에너지 추정 `{DA73FB89-2BEA-4DDC-86B8-6E048C6DA477}`, Tagged Energy `{B6D82AF1-F780-4E17-8077-6CB9AD8A6FC4}`, vfuprov `{7ACBBAA3-D029-4BE4-9A7A-0885927F1D8F}` | 60일·7일·3일·60일 | 이 페이지 |
 
@@ -75,26 +75,26 @@ WithSecure 발표 자료는 데스크톱 윈도에서 Windows 10 1607 뒤로 이
 
 ## 읽는 순서
 
-1. [구조와 ID 매핑 (SruDbIdMapTable)](/02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md) — SRUDB.dat 의 표 목록과 GUID 를 정리합니다. 각 표의 `AppId`·`UserId` 를 앱 이름과 SID 로 푸는 법도 다룹니다.
-2. [앱별 자원 사용 (Application Resource Usage)](/02-artifacts/execution/system-resource-usage-monitor/application-resource-usage.md) — 앱별 CPU 사이클 시간과 디스크 읽기·쓰기 양을 읽습니다. 이 값을 실행 흔적으로 쓸 수 있는 범위도 봅니다.
-3. [네트워크 사용량 (Network Data Usage)](/02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) — 앱별 송수신 바이트를 읽습니다. 반출 조사에서 이 값을 어디까지 말할 수 있는지 다룹니다.
-4. [네트워크 연결 기록 (Network Connectivity)](/02-artifacts/execution/system-resource-usage-monitor/network-connectivity.md) — 연결 시작 시각과 연결 시간을 읽습니다. 네트워크 프로필 번호를 이름으로 맞추는 법도 다룹니다.
-5. [전원·배터리 사용 (Energy Usage)](/02-artifacts/execution/system-resource-usage-monitor/energy-usage.md) — 배터리 충전량과 용량 값을 읽습니다. 몇 년 치가 남는 장기 표 (`LT`) 도 다룹니다.
-6. [SRUM 해석 함정 (1시간 단위 기록·레지스트리 임시 저장)](/02-artifacts/execution/system-resource-usage-monitor/1.md) — 시각이 한 시간 단위로 뭉치는 문제를 정리합니다. DB 에 아직 쓰지 않은 값이 어디에 머무는지, 손상된 DB 를 어떻게 읽는지도 다룹니다.
+1. [구조와 ID 매핑 (SruDbIdMapTable)](srudbidmaptable.md) — SRUDB.dat 의 표 목록과 GUID 를 정리합니다. 각 표의 `AppId`·`UserId` 를 앱 이름과 SID 로 푸는 법도 다룹니다.
+2. [앱별 자원 사용 (Application Resource Usage)](application-resource-usage.md) — 앱별 CPU 사이클 시간과 디스크 읽기·쓰기 양을 읽습니다. 이 값을 실행 흔적으로 쓸 수 있는 범위도 봅니다.
+3. [네트워크 사용량 (Network Data Usage)](network-data-usage.md) — 앱별 송수신 바이트를 읽습니다. 반출 조사에서 이 값을 어디까지 말할 수 있는지 다룹니다.
+4. [네트워크 연결 기록 (Network Connectivity)](network-connectivity.md) — 연결 시작 시각과 연결 시간을 읽습니다. 네트워크 프로필 번호를 이름으로 맞추는 법도 다룹니다.
+5. [전원·배터리 사용 (Energy Usage)](energy-usage.md) — 배터리 충전량과 용량 값을 읽습니다. 몇 년 치가 남는 장기 표 (`LT`) 도 다룹니다.
+6. [SRUM 해석 함정 (1시간 단위 기록·레지스트리 임시 저장)](1.md) — 시각이 한 시간 단위로 뭉치는 문제를 정리합니다. DB 에 아직 쓰지 않은 값이 어디에 머무는지, 손상된 DB 를 어떻게 읽는지도 다룹니다.
 
 ## 함께 볼 페이지
 
-- [ESE 데이터베이스 (Extensible Storage Engine)](/01-foundations/database-log-formats/extensible-storage-engine/index.md) · [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) — SRUDB.dat 를 직접 읽는 데 필요한 형식입니다.
-- [파일 안에 남은 지운 레코드 (Deleted Records)](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) — 보존 기간이 지나 지운 행을 찾을 때 봅니다.
-- [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — SruDbIdMapTable 의 SID 와 표 이름 GUID 를 읽습니다.
-- [하이브 파일 종류와 위치 (SYSTEM·SOFTWARE·SAM·SECURITY·NTUSER.DAT·UsrClass.dat)](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) — 함께 모을 SOFTWARE 하이브의 위치입니다.
-- [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md) · [AmCache (Amcache.hve)](/02-artifacts/execution/amcache-hve/index.md) · [BAM·DAM (Background Activity Moderator)](/02-artifacts/execution/background-activity-moderator.md) — 실행 시각과 실행 파일 정보를 더합니다.
-- [네트워크 목록 (NetworkList)](/02-artifacts/network/networklist.md) · [Wi-Fi 프로필 (WLAN Profiles)](/02-artifacts/network/wlan-profiles.md) — 연결한 네트워크의 이름과 처음·마지막 연결 시각을 맞춰 봅니다.
-- [VPN 연결 기록 (VPN Connections)](/02-artifacts/network/vpn-connections.md) — 송수신 양이 VPN 프로세스로 몰릴 때 봅니다.
-- [켜짐·꺼짐 (Power On·Off Events)](/02-artifacts/event-logs/power-on-off-events.md) — 기록이 비는 시간대가 PC 가 꺼져 있던 때인지 확인합니다.
-- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 보존 기간이 지난 옛 SRUDB.dat 를 꺼냅니다.
-- [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md) — 손상된 DB 를 여러 방식으로 읽고 비교합니다.
-- [어떤 프로그램을 언제 실행했나 (Program Execution)](/04-scenarios/activity/program-execution.md) · [자료를 밖으로 빼돌렸나 (Data Exfiltration)](/04-scenarios/exfiltration/data-exfiltration/index.md) · [PC 사용 시간 재구성 (System Usage Time)](/04-scenarios/activity/system-usage-time.md) — SRUM 을 다른 기록과 묶어 읽는 조사 흐름입니다.
+- [ESE 데이터베이스 (Extensible Storage Engine)](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) · [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) — SRUDB.dat 를 직접 읽는 데 필요한 형식입니다.
+- [파일 안에 남은 지운 레코드 (Deleted Records)](../../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) — 보존 기간이 지나 지운 행을 찾을 때 봅니다.
+- [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) — SruDbIdMapTable 의 SID 와 표 이름 GUID 를 읽습니다.
+- [하이브 파일 종류와 위치 (SYSTEM·SOFTWARE·SAM·SECURITY·NTUSER.DAT·UsrClass.dat)](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) — 함께 모을 SOFTWARE 하이브의 위치입니다.
+- [프리페치 (Prefetch)](../prefetch/index.md) · [AmCache (Amcache.hve)](../amcache-hve/index.md) · [BAM·DAM (Background Activity Moderator)](../background-activity-moderator.md) — 실행 시각과 실행 파일 정보를 더합니다.
+- [네트워크 목록 (NetworkList)](../../network/networklist.md) · [Wi-Fi 프로필 (WLAN Profiles)](../../network/wlan-profiles.md) — 연결한 네트워크의 이름과 처음·마지막 연결 시각을 맞춰 봅니다.
+- [VPN 연결 기록 (VPN Connections)](../../network/vpn-connections.md) — 송수신 양이 VPN 프로세스로 몰릴 때 봅니다.
+- [켜짐·꺼짐 (Power On·Off Events)](../../event-logs/power-on-off-events.md) — 기록이 비는 시간대가 PC 가 꺼져 있던 때인지 확인합니다.
+- [섀도 복사본 활용 (Volume Shadow Copy Analysis)](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 보존 기간이 지난 옛 SRUDB.dat 를 꺼냅니다.
+- [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) — 손상된 DB 를 여러 방식으로 읽고 비교합니다.
+- [어떤 프로그램을 언제 실행했나 (Program Execution)](../../../04-scenarios/activity/program-execution.md) · [자료를 밖으로 빼돌렸나 (Data Exfiltration)](../../../04-scenarios/exfiltration/data-exfiltration/index.md) · [PC 사용 시간 재구성 (System Usage Time)](../../../04-scenarios/activity/system-usage-time.md) — SRUM 을 다른 기록과 묶어 읽는 조사 흐름입니다.
 
 ## 참고 문헌
 

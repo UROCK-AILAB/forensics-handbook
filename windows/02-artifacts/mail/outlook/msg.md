@@ -1,6 +1,6 @@
 # 개별 메시지 파일 (MSG)
 
-> 상위 허브: [아웃룩 (Outlook)](/02-artifacts/mail/outlook/index.md)
+> 상위 허브: [아웃룩 (Outlook)](index.md)
 
 ## 한 줄 요약
 
@@ -17,21 +17,21 @@
 - 첨부마다의 정보와 내용
 - 첨부가 다른 메시지일 때는 그 메시지 전체
 
-속성의 번호와 값 형식은 [MAPI 속성](/01-foundations/app-mail-data/mapi-property.md)에서 다룹니다. 이 페이지는 속성이 파일 안 어디에 놓이는지를 다룹니다.
+속성의 번호와 값 형식은 [MAPI 속성](../../../01-foundations/app-mail-data/mapi-property.md)에서 다룹니다. 이 페이지는 속성이 파일 안 어디에 놓이는지를 다룹니다.
 
 `.msg` 는 사용자가 저장한 곳 어디에나 있을 수 있습니다. 정해진 폴더가 없으므로 확장자와 파일 형식으로 디스크 전체를 찾습니다.
 
 ## 위치와 버전별 차이
 
 - 파일 형식은 Windows 버전과 관계가 없습니다. 명세의 판이 기준입니다. 이 글은 최상위 구조 절(2.3)의 2025-05-20 갱신본을 봤습니다.
-- 문자열 속성이 ANSI 인지 유니코드인지에 따라 값의 형식 번호가 달라진다는 설명이 흔합니다. 이번에 명세 본문으로 확인하지 못했습니다. 문자열을 읽을 때는 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 함께 봅니다.
-- `.eml` 은 이름이 비슷하지만 다른 형식입니다. `.eml` 은 인터넷 메일 글자 형식입니다([인터넷 메일 형식](/01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md)).
+- 문자열 속성이 ANSI 인지 유니코드인지에 따라 값의 형식 번호가 달라진다는 설명이 흔합니다. 이번에 명세 본문으로 확인하지 못했습니다. 문자열을 읽을 때는 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 함께 봅니다.
+- `.eml` 은 이름이 비슷하지만 다른 형식입니다. `.eml` 은 인터넷 메일 글자 형식입니다([인터넷 메일 형식](../../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md)).
 
 ## 구조
 
 ### 바탕: OLE 복합 파일
 
-`.msg` 는 OLE 복합 파일 (Compound File) 구조를 씁니다. 명세 목차에도 "1.3.1 Compound Files" 절이 있습니다. 복합 파일은 파일 안에 폴더 같은 저장소와 파일 같은 스트림을 둡니다. 복합 파일 자체의 헤더와 디렉터리 읽는 법은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md)에서 다룹니다.
+`.msg` 는 OLE 복합 파일 (Compound File) 구조를 씁니다. 명세 목차에도 "1.3.1 Compound Files" 절이 있습니다. 복합 파일은 파일 안에 폴더 같은 저장소와 파일 같은 스트림을 둡니다. 복합 파일 자체의 헤더와 디렉터리 읽는 법은 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md)에서 다룹니다.
 
 ### 최상위에 들어가는 것
 
@@ -101,9 +101,9 @@
 
 ## 시각 해석
 
-- 메시지를 보내고 받은 시각은 파일 안의 속성 값입니다. 어떤 속성인지는 [MAPI 속성](/01-foundations/app-mail-data/mapi-property.md), 값을 바꾸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
-- 파일 시스템 시각은 `.msg` 파일이 그 볼륨에 생기고 바뀐 시각입니다. 메시지를 보낸 시각이 아닙니다([마스터 파일 테이블](/02-artifacts/filesystem/mft.md)).
-- 두 시각을 나란히 적으면 "언제 오간 메시지를 언제 파일로 두었는지" 를 따로 말할 수 있습니다. 복사한 파일이면 파일 시스템 시각은 복사한 때를 따를 수 있으므로 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)로 한 번 더 확인합니다.
+- 메시지를 보내고 받은 시각은 파일 안의 속성 값입니다. 어떤 속성인지는 [MAPI 속성](../../../01-foundations/app-mail-data/mapi-property.md), 값을 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- 파일 시스템 시각은 `.msg` 파일이 그 볼륨에 생기고 바뀐 시각입니다. 메시지를 보낸 시각이 아닙니다([마스터 파일 테이블](../../filesystem/mft.md)).
+- 두 시각을 나란히 적으면 "언제 오간 메시지를 언제 파일로 두었는지" 를 따로 말할 수 있습니다. 복사한 파일이면 파일 시스템 시각은 복사한 때를 따를 수 있으므로 [USN 변경 저널](../../filesystem/usnjrnl.md)로 한 번 더 확인합니다.
 - `.msg` 안의 시각 속성과 파일 시스템 시각이 어떻게 어긋나는지는 이번에 자료로 확인하지 못했습니다. 아래 실습으로 직접 비교해 봅니다.
 
 ## 함정과 한계
@@ -112,14 +112,14 @@
 2. **스트림 수로 다중값 속성의 값 개수를 셉니다.** 길이가 바뀌는 다중값 속성은 값이 N개면 스트림이 N+1개입니다. 스트림 수를 그대로 값 개수로 쓰면 하나가 많습니다.
 3. **포함된 메시지를 놓칩니다.** 첨부가 메시지이면 첨부 저장소 안에 메시지 한 통이 통째로 들어 있습니다. 도구가 안쪽 메시지의 수신자·첨부까지 풀어내는지 확인합니다.
 4. **이름 붙은 속성을 번호만 보고 해석합니다.** 이름 붙은 속성은 대응 저장소를 거쳐야 무슨 속성인지 압니다. 대응 저장소를 읽지 않은 도구는 뜻 없는 번호만 보여 줄 수 있습니다.
-5. **`.msg` 와 `.eml` 을 같은 방법으로 읽습니다.** `.eml` 은 글자 형식이고, `.msg` 는 복합 파일입니다. 글자 검색만으로 `.msg` 의 본문을 찾으면 유니코드 문자열을 놓칠 수 있습니다([파일 내용 검색](/03-techniques/analysis/content-search/index.md)).
+5. **`.msg` 와 `.eml` 을 같은 방법으로 읽습니다.** `.eml` 은 글자 형식이고, `.msg` 는 복합 파일입니다. 글자 검색만으로 `.msg` 의 본문을 찾으면 유니코드 문자열을 놓칠 수 있습니다([파일 내용 검색](../../../03-techniques/analysis/content-search/index.md)).
 6. **확인하지 못한 이름을 그대로 믿습니다.** 위 "저장소·스트림 이름" 표에서 수신자 저장소 말고는 명세 본문으로 확인하지 못했습니다. 검체의 실제 이름과 다르면 검체를 따릅니다.
 
 ## 직접 분석해 보기
 
 ### 원시 바이트로 한 번
 
-`.msg` 를 헥스로 읽는 첫 단계는 복합 파일의 헤더와 디렉터리를 읽는 일입니다. 그 방법은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md)에서 따라갑니다. 디렉터리 항목을 모두 적었다면 아래 순서로 맞춰 봅니다.
+`.msg` 를 헥스로 읽는 첫 단계는 복합 파일의 헤더와 디렉터리를 읽는 일입니다. 그 방법은 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md)에서 따라갑니다. 디렉터리 항목을 모두 적었다면 아래 순서로 맞춰 봅니다.
 
 1. 최상위에 속성 스트림이 정확히 1개 있는지 봅니다.
 2. 이름 붙은 속성 대응 저장소가 정확히 1개 있는지 봅니다. 그 안에 GUID·Entry·String 스트림이 있는지 봅니다.
@@ -160,19 +160,19 @@ for path in ole.listdir(streams=True, storages=True):
 
 - 뽑은 목록에서 위 1~6번을 맞춰 봅니다.
 - 메일 전용 파서를 쓰면 속성 값을 읽기 좋게 보여 줍니다. 그 결과의 수신자·첨부 수가 위에서 센 수와 같은지 확인합니다.
-- 포함된 메시지까지 풀어내는지, 이름 붙은 속성을 이름으로 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 포함된 메시지까지 풀어내는지, 이름 붙은 속성을 이름으로 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [데이터 파일 구조 (PST·OST)](/02-artifacts/mail/outlook/pst-ost.md) | PST·OST 안에 같은 메시지가 있는지. 속성 값을 서로 비교합니다 |
-| [첨부 임시 폴더 (OLK·Content.Outlook)](/02-artifacts/mail/outlook/olk-content-outlook.md) | 첨부를 연 흔적. `.msg` 가 첨부로 열린 적이 있는지 |
-| [메일 헤더 분석](/03-techniques/analysis/email-header-analysis.md) | 메시지에 인터넷 헤더가 들어 있으면 실제 전달 경로 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 그 `.msg` 를 연 기록 |
-| [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) | `.msg` 가 어디서 이 PC 로 들어왔는지 |
+| [데이터 파일 구조 (PST·OST)](pst-ost.md) | PST·OST 안에 같은 메시지가 있는지. 속성 값을 서로 비교합니다 |
+| [첨부 임시 폴더 (OLK·Content.Outlook)](olk-content-outlook.md) | 첨부를 연 흔적. `.msg` 가 첨부로 열린 적이 있는지 |
+| [메일 헤더 분석](../../../03-techniques/analysis/email-header-analysis.md) | 메시지에 인터넷 헤더가 들어 있으면 실제 전달 경로 |
+| [바로가기 파일](../../file-folder-usage/lnk.md) · [점프리스트](../../file-folder-usage/jump-lists.md) | 그 `.msg` 를 연 기록 |
+| [이 파일은 어디서 왔나](../../../04-scenarios/activity/file-origin.md) | `.msg` 가 어디서 이 PC 로 들어왔는지 |
 
-메일 기록을 합쳐 읽는 순서는 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md)에서 다룹니다.
+메일 기록을 합쳐 읽는 순서는 [누구와 연락을 주고받았나](../../../04-scenarios/activity/communication-reconstruction.md)에서 다룹니다.
 
 ## 실습
 

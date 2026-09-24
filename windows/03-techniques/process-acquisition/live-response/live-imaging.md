@@ -10,7 +10,7 @@
 - 암호화 볼륨이 잠금 해제된 채로 켜져 있을 때 씁니다. 아래 "암호화 볼륨" 을 봅니다.
 - 필요한 파일이 정해져 있고, 시스템 전체가 필요하지 않을 때 씁니다.
 
-NIST 는 어떤 파일이 필요한지, 얼마나 정확하고 완전해야 하는지, 시스템이 얼마나 중요한지 보고 정하라고 적습니다. 휘발성 데이터는 이미징보다 먼저 모읍니다. 순서는 [수집 순서와 원칙](/03-techniques/process-acquisition/live-response/order-of-volatility.md)에서 다룹니다. 끈 시스템의 디스크를 복사하는 일반 방법은 [증거 획득](/03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다.
+NIST 는 어떤 파일이 필요한지, 얼마나 정확하고 완전해야 하는지, 시스템이 얼마나 중요한지 보고 정하라고 적습니다. 휘발성 데이터는 이미징보다 먼저 모읍니다. 순서는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다. 끈 시스템의 디스크를 복사하는 일반 방법은 [증거 획득](../evidence-acquisition/index.md)에서 다룹니다.
 
 ## 켜진 시스템에서 복사할 때의 문제
 
@@ -58,7 +58,7 @@ Windows 에서 디스크와 볼륨은 `CreateFile` 함수로 직접 엽니다. �
 - 볼륨이 어느 물리 디스크의 어디에 있는지는 `IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS` 로 얻습니다.
 - 문서는 잘못 쓰면 OS 가 디스크를 못 읽게 될 수 있다고 경고합니다. 수집할 때는 읽기로만 엽니다.
 
-파티션이 디스크의 어디서 시작하는지 읽는 법은 [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md)에서 다룹니다.
+파티션이 디스크의 어디서 시작하는지 읽는 법은 [파티션 구조](../../../01-foundations/disk-volume/mbr-gpt.md)에서 다룹니다.
 
 ## 암호화 볼륨
 
@@ -76,7 +76,7 @@ BitLocker 가 켜진 PC 한 대에서 같은 자리를 두 경로로 읽었습�
 "-FVE-FS-"  → 2D 46 56 45 2D 46 53 2D
 ```
 
-볼륨 경로로 읽으면 풀린 내용이 나오고, 물리 디스크로 읽으면 암호문이 나왔습니다. 그래서 켜진 상태에서 볼륨 단위로 이미징하면 복호된 이미지를 얻습니다. 암호화된 증거를 다루는 법은 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md)에서, NTFS 부트 섹터는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md)에서 다룹니다.
+볼륨 경로로 읽으면 풀린 내용이 나오고, 물리 디스크로 읽으면 암호문이 나왔습니다. 그래서 켜진 상태에서 볼륨 단위로 이미징하면 복호된 이미지를 얻습니다. 암호화된 증거를 다루는 법은 [암호화 증거 다루기](../../analysis/encrypted-evidence/index.md)에서, NTFS 부트 섹터는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md)에서 다룹니다.
 
 ## 볼륨 섀도 복사본
 
@@ -96,7 +96,7 @@ BitLocker 가 켜진 PC 한 대에서 같은 자리를 두 경로로 읽었습�
 - 섀도 복사본을 만들면 차이 영역에 데이터를 씁니다. 차이 영역이 증거 볼륨에 있으면 그 볼륨이 바뀝니다.
 - 공간이 모자라면 새 복사본 때문에 기존의 오래된 섀도 복사본이 지워질 수 있습니다. 기존 섀도 복사본도 증거입니다.
 
-섀도 복사본의 저장 구조는 [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md)에서, 이미 있는 복사본을 분석하는 법은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다.
+섀도 복사본의 저장 구조는 [볼륨 섀도 복사본 구조](../../../01-foundations/disk-volume/volume-shadow-copy.md)에서, 이미 있는 복사본을 분석하는 법은 [섀도 복사본 활용](../../analysis/volume-shadow-copy-analysis.md)에서 다룹니다.
 
 ### 만드는 도구
 
@@ -111,8 +111,8 @@ BitLocker 가 켜진 PC 한 대에서 같은 자리를 두 경로로 읽었습�
 
 - RFC 3227 은 비트 복사 도구의 예로 `dd` 를, 체크섬 도구의 예로 `sha1sum` 을 듭니다. 둘 다 유닉스 명령입니다.
 - 어떤 도구든 위의 `\\.\PhysicalDriveX`, `\\.\X:` 경로를 읽기로 엽니다.
-- 이미지 파일 형식은 [증거 이미지·가상 디스크 형식](/01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md)에서 다룹니다.
-- 도구가 볼륨 끝까지 읽었는지는 볼륨 크기와 이미지 크기를 비교해 확인합니다. 결과를 검증하는 법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- 이미지 파일 형식은 [증거 이미지·가상 디스크 형식](../../../01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md)에서 다룹니다.
+- 도구가 볼륨 끝까지 읽었는지는 볼륨 크기와 이미지 크기를 비교해 확인합니다. 결과를 검증하는 법은 [도구 결과 교차 검증](../../reporting/tool-validation.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -124,7 +124,7 @@ BitLocker 가 켜진 PC 한 대에서 같은 자리를 두 경로로 읽었습�
 6. **파일 복사로 충분하다고 봅니다.** 논리 백업에는 지운 파일과 슬랙 공간이 없습니다. 파일 생성 시각이 바뀔 수도 있습니다.
 7. **어디서나 `vssadmin create shadow` 가 된다고 봅니다.** `vssadmin` 명령 참조 문서의 클라이언트 명령 목록에 없고, Windows 11 Home 한 대에서도 되지 않았습니다.
 8. **섀도 복사본을 만들어도 증거가 그대로라고 봅니다.** 차이 영역이 증거 볼륨에 있으면 그 볼륨에 데이터를 씁니다.
-9. **희소 스트림을 뽑은 방법을 적지 않습니다.** `$UsnJrnl:$J` 같은 희소 스트림은 빈 구간을 0 으로 채우느냐 건너뛰느냐에 따라 크기와 해시가 달라집니다 (확인 범위: 압수 이미지에서 추출). 켜진 시스템에서 파일 단위로 뽑을 때도 어떻게 뽑았는지 적습니다. 저널 자체는 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)에서 다룹니다.
+9. **희소 스트림을 뽑은 방법을 적지 않습니다.** `$UsnJrnl:$J` 같은 희소 스트림은 빈 구간을 0 으로 채우느냐 건너뛰느냐에 따라 크기와 해시가 달라집니다 (확인 범위: 압수 이미지에서 추출). 켜진 시스템에서 파일 단위로 뽑을 때도 어떻게 뽑았는지 적습니다. 저널 자체는 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md)에서 다룹니다.
 
 ## 결과를 어떻게 해석하나
 

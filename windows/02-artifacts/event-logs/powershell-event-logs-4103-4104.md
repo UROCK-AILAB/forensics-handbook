@@ -19,7 +19,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 - 켠 뒤 새로 뜬 PowerShell 세션부터 남습니다.
 - `Invoke-Expression` 처럼 실행 중에 만든 코드도 따로 스크립트 블록으로 남습니다.
 - 그래서 난독화하거나 암호화한 스크립트도 푼 뒤의 내용을 볼 수 있습니다. Microsoft 블로그의 예에서는 Base64·XOR 로 감춘 코드가 풀린 `Write-Host 'Pwnd'` 로 남았습니다.
-- 대화형 셸에 입력한 명령의 기록 파일은 [PowerShell 명령 기록 (ConsoleHost_history.txt)](/02-artifacts/execution/consolehost-history-txt.md)에서 다룹니다.
+- 대화형 셸에 입력한 명령의 기록 파일은 [PowerShell 명령 기록 (ConsoleHost_history.txt)](../execution/consolehost-history-txt.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -197,7 +197,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 - 실행할 때마다의 시각은 4105·4106 에서 봅니다. 따로 켜야 남습니다.
 - 400 의 메시지는 엔진이 사용 가능 (Available) 상태가 됐다는 뜻이고, 403 은 멈춤 (Stopped) 상태가 됐다는 뜻입니다.
 - 그래서 400 과 403 사이를 엔진이 떠 있던 구간으로 볼 수 있습니다. 이 판단은 메시지에서 이끈 해석입니다.
-- 시각 값 저장 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 시각 값 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -215,14 +215,14 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 
 - **자동 기록을 끕니다.** 정책을 Disabled 로 하거나 EnableScriptBlockLogging 을 0 으로 두면 자동 기록도 남지 않습니다. 이 값이 0 으로 설정돼 있으면 누가 언제 설정했는지 확인합니다.
 - **로그를 가짜 이벤트로 채웁니다.** Microsoft 블로그는 로그를 가짜 이벤트로 채워 이전 증거를 밀어내는 공격을 적었습니다. 이벤트를 빨리 다른 곳으로 모으라고 권합니다.
-- **로그를 지웁니다.** 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md)를 봅니다.
-- **레코드 일부만 남습니다.** 밀려나거나 지운 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
+- **로그를 지웁니다.** 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
+- **레코드 일부만 남습니다.** 밀려나거나 지운 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-4104 의 칸 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류와 배열은 [이진 XML 해석](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다. 여기서는 값 데이터 세 개만 봅니다.
+4104 의 칸 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류와 배열은 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다. 여기서는 값 데이터 세 개만 봅니다.
 
 아래 바이트는 설명을 위해 명세대로 만든 예시입니다. 검체에서 나온 값이 아닙니다. 스크립트가 세 조각으로 나뉘었고 그 가운데 첫 조각이라고 하겠습니다.
 
@@ -270,18 +270,18 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Windows PowerShell.evtx'; Id = 
 Get-WinEvent Microsoft-Windows-PowerShell/Operational | Where-Object Id -EQ 4104 | Unprotect-CmsMessage
 ```
 
-도구가 긴 ScriptBlockText 를 자르거나 조각을 따로 보여 주는지 확인합니다. 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+도구가 긴 ScriptBlockText 를 자르거나 조각을 따로 보여 주는지 확인합니다. 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [PowerShell 명령 기록 (ConsoleHost_history.txt)](/02-artifacts/execution/consolehost-history-txt.md) | 대화형으로 입력한 명령과 4104 내용 |
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) · [Sysmon 프로세스 생성 (이벤트 1)](/02-artifacts/event-logs/sysmon/1.md) | 4104 의 Execution ProcessID 와 같은 PID 의 `powershell.exe`, 부모 프로세스, 명령줄 |
-| [원격 명령 실행 이벤트 (WinRM·WMI-Activity)](/02-artifacts/event-logs/winrm-wmi-activity.md) | 원격 세션과 같은 시각의 4104 |
-| [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) | Operational 채널 크기와 로그가 덮는 기간 |
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | `powershell.exe` 실행 횟수와 시각 |
-| [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) | 원격 실행 흐름 안에서 4104 의 자리 |
+| [PowerShell 명령 기록 (ConsoleHost_history.txt)](../execution/consolehost-history-txt.md) | 대화형으로 입력한 명령과 4104 내용 |
+| [프로세스 생성 (4688)](4688.md) · [Sysmon 프로세스 생성 (이벤트 1)](sysmon/1.md) | 4104 의 Execution ProcessID 와 같은 PID 의 `powershell.exe`, 부모 프로세스, 명령줄 |
+| [원격 명령 실행 이벤트 (WinRM·WMI-Activity)](winrm-wmi-activity.md) | 원격 세션과 같은 시각의 4104 |
+| [감사 정책과 로그 설정](audit-policy-log-settings.md) | Operational 채널 크기와 로그가 덮는 기간 |
+| [프리페치](../execution/prefetch/index.md) | `powershell.exe` 실행 횟수와 시각 |
+| [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) | 원격 실행 흐름 안에서 4104 의 자리 |
 
 원격으로 실행한 PowerShell 도 도착 PC 의 이 로그에 남는다는 설명이 있지만, 이번에 확인하지 못했습니다.
 

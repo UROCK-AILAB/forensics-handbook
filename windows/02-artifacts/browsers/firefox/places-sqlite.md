@@ -14,14 +14,14 @@
 
 ## 위치와 버전별 차이
 
-- 위치는 프로필 본 폴더의 `places.sqlite` 입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 위치는 프로필 본 폴더의 `places.sqlite` 입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - Vista·7 의 실제 경로 예는 `C:\Users\%USERNAME%\AppData\Roaming\Mozilla\Firefox\Profiles\%PROFILE%.default\places.sqlite` 입니다.
 - Firefox 21 전에는 다운로드 기록이 `downloads.sqlite` 의 `moz_downloads` 표에 있었습니다. 이 표에는 `startTime`, `endTime`, `source`, `currBytes`, `maxBytes` 칸이 있었습니다. 옛 검체를 만나면 이 파일도 찾습니다.
 - 아래 표와 칸 이름은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 예전 출시판에 어느 칸이 있었는지는 이 자료로 알 수 없습니다. 칸이 몇 번 판부터 생겼는지도 확인하지 못했습니다.
 
 ## 구조
 
-저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 주요 표
 
@@ -102,17 +102,17 @@
 ## 시각 해석
 
 - `moz_historyvisits.visit_date` 는 1970년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 파이어폭스 소스는 이 단위를 PRTime 이라고 부릅니다. 소스 주석은 "PRTime is in MICROseconds since 1 Jan 1970" 이라고 적었습니다.
-- 현지 시각이 아닙니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- 현지 시각이 아닙니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 - `moz_places.last_visit_date`, `moz_bookmarks.dateAdded`·`lastModified`, `moz_annos.dateAdded`·`lastModified` 도 같은 단위로 알려져 있습니다. 다만 이번 조사에서 소스로 하나하나 확인하지는 못했습니다. 검체에서 다른 시각과 맞춰 확인합니다.
-- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **원본을 브라우저로 열지 않습니다.** 파이어폭스로 프로필을 열면 방문 기록이 바뀝니다. 해시를 기록한 사본으로 분석합니다.
-- **실행 중에는 WAL 을 함께 봅니다.** SQLite 는 아직 본 파일에 합치지 않은 변경을 `-wal` 파일에 둘 수 있습니다. 최근 방문이 `places.sqlite-wal` 에만 있을 수 있습니다. [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
+- **실행 중에는 WAL 을 함께 봅니다.** SQLite 는 아직 본 파일에 합치지 않은 변경을 `-wal` 파일에 둘 수 있습니다. 최근 방문이 `places.sqlite-wal` 에만 있을 수 있습니다. [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
 - **`moz_places` 에 방문 행이 없는 주소가 있습니다.** 즐겨찾기만 하고 방문한 적 없는 주소, 다른 페이지가 참조만 한 주소도 `moz_places` 에 남습니다. `moz_places` 행 수를 방문 횟수로 오해하지 않습니다.
-- **기록을 지우면 행이 표에서 사라집니다.** 지운 행의 조각이 SQLite 빈 공간이나 WAL 에 남을 수 있습니다. 옛 방문을 찾으려면 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
-- **사생활 보호 창은 방문 행을 남기지 않는 것으로 알려져 있습니다.** 이번 조사에서 소스로 확인하지는 못했습니다. [시크릿 모드로 무엇을 했나](/04-scenarios/activity/private-browsing.md) 를 참고합니다.
+- **기록을 지우면 행이 표에서 사라집니다.** 지운 행의 조각이 SQLite 빈 공간이나 WAL 에 남을 수 있습니다. 옛 방문을 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
+- **사생활 보호 창은 방문 행을 남기지 않는 것으로 알려져 있습니다.** 이번 조사에서 소스로 확인하지는 못했습니다. [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 를 참고합니다.
 
 ## 직접 분석해 보기
 
@@ -146,14 +146,14 @@ ORDER BY v.visit_date;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 쿠키 | 같은 도메인의 쿠키가 방문 시각 무렵에 생겼는지 봅니다 | [쿠키 (cookies.sqlite)](/02-artifacts/browsers/firefox/cookies-sqlite.md) |
-| 캐시 | 방문한 페이지의 응답을 실제로 받았는지 봅니다 | [캐시 (cache2)](/02-artifacts/browsers/firefox/cache2.md) |
-| 세션 복원 | 방문 시각에 열려 있던 탭을 봅니다 | [세션 복원 (sessionstore.jsonlz4)](/02-artifacts/browsers/firefox/sessionstore-jsonlz4.md) |
-| 양식 기록 | 같은 시간대에 어떤 양식에 무엇을 쳤는지 봅니다 | [양식 기록 (formhistory.sqlite)](/02-artifacts/browsers/firefox/formhistory-sqlite.md) |
-| $MFT | 다운로드한 파일이 디스크에 실제로 있는지, 그 시각을 봅니다 | [$MFT](/02-artifacts/filesystem/mft.md) |
-| 다른 브라우저 방문 기록 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 방문 기록](/02-artifacts/browsers/chrome-edge-whale/history.md) |
+| 쿠키 | 같은 도메인의 쿠키가 방문 시각 무렵에 생겼는지 봅니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
+| 캐시 | 방문한 페이지의 응답을 실제로 받았는지 봅니다 | [캐시 (cache2)](cache2.md) |
+| 세션 복원 | 방문 시각에 열려 있던 탭을 봅니다 | [세션 복원 (sessionstore.jsonlz4)](sessionstore-jsonlz4.md) |
+| 양식 기록 | 같은 시간대에 어떤 양식에 무엇을 쳤는지 봅니다 | [양식 기록 (formhistory.sqlite)](formhistory-sqlite.md) |
+| $MFT | 다운로드한 파일이 디스크에 실제로 있는지, 그 시각을 봅니다 | [$MFT](../../filesystem/mft.md) |
+| 다른 브라우저 방문 기록 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 방문 기록](../chrome-edge-whale/history.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

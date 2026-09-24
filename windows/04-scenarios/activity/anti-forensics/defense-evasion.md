@@ -1,8 +1,8 @@
 # 보안 프로그램을 끄거나 지웠나 (Defense Evasion)
 
-> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](/04-scenarios/activity/anti-forensics/index.md)
+> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
 
-보안 프로그램을 끄거나 설정을 바꾸면 그 일도 기록으로 남습니다. Windows 에 들어 있는 Microsoft Defender 바이러스 백신 (Microsoft Defender Antivirus) 은 실시간 보호 (Real-time protection) 가 꺼지거나 설정이 바뀔 때 운영 로그 (Operational log) 에 이벤트를 남깁니다[1]. 이 페이지는 이 운영 로그로 언제 무엇을 껐는지 찾고, 누가 했는지 좁히는 순서를 다룹니다. 탐지 이벤트 1116·1117 의 구조는 [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) 에서, 검사 로그와 격리 파일은 [디펜더 검사 로그·격리 파일](/02-artifacts/execution/mplog-detectionhistory-quarantine.md) 에서 다룹니다. 다른 보안 제품은 제품마다 기록이 달라 여기서 다루지 않습니다.
+보안 프로그램을 끄거나 설정을 바꾸면 그 일도 기록으로 남습니다. Windows 에 들어 있는 Microsoft Defender 바이러스 백신 (Microsoft Defender Antivirus) 은 실시간 보호 (Real-time protection) 가 꺼지거나 설정이 바뀔 때 운영 로그 (Operational log) 에 이벤트를 남깁니다[1]. 이 페이지는 이 운영 로그로 언제 무엇을 껐는지 찾고, 누가 했는지 좁히는 순서를 다룹니다. 탐지 이벤트 1116·1117 의 구조는 [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 에서, 검사 로그와 격리 파일은 [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) 에서 다룹니다. 다른 보안 제품은 제품마다 기록이 달라 여기서 다루지 않습니다.
 
 ## 조사 질문
 
@@ -17,8 +17,8 @@
 | 확인할 것 | 까닭 |
 |---|---|
 | Windows 버전 | 이벤트마다 어느 Windows 버전부터 남는지는 이번에 연 자료로 확인하지 못했습니다. 검체의 OS 버전을 적어 두고, 로그에 실제로 남은 이벤트 ID 부터 봅니다. |
-| 보안 프로그램 | 어떤 보안 프로그램을 설치했는지 [설치 프로그램](/02-artifacts/system-account/uninstall.md) 에서 먼저 봅니다. 이 페이지의 이벤트는 Microsoft Defender 바이러스 백신이 남기는 것입니다[1]. |
-| 시간대 | 이벤트 레코드의 기록 시각은 FILETIME 형식의 UTC 입니다[2]. 1151 상태 보고서의 시각도 UTC 입니다[1]. 현지 시각으로 옮길 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 먼저 읽습니다. |
+| 보안 프로그램 | 어떤 보안 프로그램을 설치했는지 [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 에서 먼저 봅니다. 이 페이지의 이벤트는 Microsoft Defender 바이러스 백신이 남기는 것입니다[1]. |
+| 시간대 | 이벤트 레코드의 기록 시각은 FILETIME 형식의 UTC 입니다[2]. 1151 상태 보고서의 시각도 UTC 입니다[1]. 현지 시각으로 옮길 때는 [시간대 설정](../../../02-artifacts/system-account/time-zone.md) 을 먼저 읽습니다. |
 | 사용자 | 1116 과 1013 에는 User 칸이 있습니다[1]. 5001·5007 같은 끄기·설정 이벤트에 계정 칸이 있는지는 이번 자료로 확인하지 못했습니다. 누가 했는지는 같은 시각의 로그온 세션과 실행 기록으로 좁힙니다. |
 | 수집 범위 | 로그 폴더(기본 위치 `C:\Windows\System32\winevt\Logs\`)[2] 전체를 확보합니다. Defender 운영 로그의 파일 이름은 이번 자료로 확인하지 못했으니 폴더째 확보합니다. SOFTWARE·SYSTEM 하이브, 프리패치, Defender 검사 로그와 격리 파일도 함께 확보합니다. |
 
@@ -31,11 +31,11 @@
 | 3 | 5013 | 변조 방지가 막은 설정 변경 | 이 페이지 아래 |
 | 4 | 5010·5012 | 악성·원치 않는 소프트웨어 검사와 바이러스 검사가 꺼진 때 | 이 페이지 아래 |
 | 5 | 5008·3002·5101 | 오류나 만료로 보호가 멈춘 기록 | 이 페이지 아래 |
-| 6 | 1116·1117·1118·1013 | 탐지, 조치, 조치 실패, 탐지 기록 지움 | [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) |
+| 6 | 1116·1117·1118·1013 | 탐지, 조치, 조치 실패, 탐지 기록 지움 | [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) |
 | 7 | 1150·1151 | 정상 동작 보고와 상태 보고서 | 이 페이지 아래 |
-| 8 | 보안 4624·4688, 프리패치, PowerShell 기록 | 그 시각의 로그온 세션과 실행한 프로그램·명령 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) · [프로세스 생성](/02-artifacts/event-logs/4688.md) · [프리패치](/02-artifacts/execution/prefetch/index.md) · [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) |
-| 9 | 서비스·프로그램 설치 기록 | 보안 프로그램의 서비스를 멈추거나 프로그램을 지웠는지 | [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) · [프로그램 설치·삭제 이벤트](/02-artifacts/event-logs/msiinstaller.md) |
-| 10 | Defender 검사 로그·격리 파일 | 탐지하고 격리한 파일 | [디펜더 검사 로그·격리 파일](/02-artifacts/execution/mplog-detectionhistory-quarantine.md) |
+| 8 | 보안 4624·4688, 프리패치, PowerShell 기록 | 그 시각의 로그온 세션과 실행한 프로그램·명령 | [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) · [프로세스 생성](../../../02-artifacts/event-logs/4688.md) · [프리패치](../../../02-artifacts/execution/prefetch/index.md) · [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) |
+| 9 | 서비스·프로그램 설치 기록 | 보안 프로그램의 서비스를 멈추거나 프로그램을 지웠는지 | [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) · [프로그램 설치·삭제 이벤트](../../../02-artifacts/event-logs/msiinstaller.md) |
+| 10 | Defender 검사 로그·격리 파일 | 탐지하고 격리한 파일 | [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) |
 
 ## Defender 운영 로그 찾기
 
@@ -90,7 +90,7 @@
 - 변조 방지가 켜져 있으면 이 조치들을 설정할 수 없습니다[1].
 - ThreatSeverityDefaultAction 이 None 이면 1116 이 남습니다[1]. 뒤따르는 1117 의 Action 이 Allow 이면 탐지는 했지만 치료하지 않았다는 뜻입니다[1].
 - 1013 (MALWAREPROTECTION_MALWARE_HISTORY_DELETE) 은 악성코드 탐지 기록을 지운 기록입니다[1]. Time 칸은 기록을 지운 때입니다[1]. User 칸도 있습니다[1].
-- 1116 의 다른 칸과 Detection Source 값은 [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) 에서 다룹니다.
+- 1116 의 다른 칸과 Detection Source 값은 [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 에서 다룹니다.
 
 Defender 는 악성코드를 탐지하면 악성코드가 바꿨을 수 있는 설정을 되돌립니다[1]. 문서가 드는 설정은 아래와 같습니다[1].
 
@@ -113,26 +113,26 @@ Defender 는 악성코드를 탐지하면 악성코드가 바꿨을 수 있는 �
 
 ## 서비스를 멈추거나 프로그램을 지운 흔적
 
-- 보안 프로그램의 서비스를 멈추거나 바꾼 흔적은 [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) 에서 찾습니다.
-- 프로그램을 지운 흔적은 [프로그램 설치·삭제 이벤트](/02-artifacts/event-logs/msiinstaller.md) 와 [설치 프로그램](/02-artifacts/system-account/uninstall.md) 에서 찾습니다.
-- 감사 정책을 바꿨는지는 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 봅니다.
+- 보안 프로그램의 서비스를 멈추거나 바꾼 흔적은 [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) 에서 찾습니다.
+- 프로그램을 지운 흔적은 [프로그램 설치·삭제 이벤트](../../../02-artifacts/event-logs/msiinstaller.md) 와 [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 에서 찾습니다.
+- 감사 정책을 바꿨는지는 [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 봅니다.
 - 이런 일에 남는 이벤트 ID 는 이번에 연 자료로 확인하지 못했습니다. 각 페이지의 설명을 따릅니다.
 - Defender 설정이 남는 레지스트리 위치도 이번 자료로 확인하지 못했습니다. 이 페이지는 이벤트 로그를 기준으로 합니다.
-- 로그를 지운 흔적은 [이벤트 로그를 지웠나 (Log Clearing)](/04-scenarios/activity/anti-forensics/log-clearing.md) 에서 다룹니다.
+- 로그를 지운 흔적은 [이벤트 로그를 지웠나 (Log Clearing)](log-clearing.md) 에서 다룹니다.
 
 ## 분석 흐름
 
-1. [설치 프로그램](/02-artifacts/system-account/uninstall.md) 에서 어떤 보안 프로그램이 있었는지 봅니다.
+1. [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 에서 어떤 보안 프로그램이 있었는지 봅니다.
 2. 로그 폴더에서 Defender 운영 로그를 채널 이름으로 찾습니다. 첫 레코드의 기록 시각을 적어 로그가 언제부터 남아 있는지 확인합니다.
 3. 5001 과 5000 을 짝지어 실시간 보호가 꺼져 있던 구간을 표로 만듭니다.
 4. 5004·5007 에서 바뀐 설정과 바뀌기 전후 값을 읽습니다. 5010·5012 로 검사 기능이 꺼진 기록도 봅니다.
 5. 5013 을 찾아 변조 방지가 막은 시도를 적습니다.
 6. 꺼진 구간 앞뒤에서 5008·3002·5101 을 찾습니다. 오류나 만료로 멈춘 구간을 따로 표시합니다.
 7. 1116·1117·1118 을 시각 순서로 놓습니다. 1117 의 Action 이 Allow·No action 인 탐지를 따로 봅니다. 1013 으로 탐지 기록을 지운 때도 찾습니다.
-8. 3~7 단계에서 찾은 시각마다 그 시각의 로그온 세션을 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 에서 찾습니다.
-9. 같은 무렵 실행한 프로그램과 명령을 [프로세스 생성](/02-artifacts/event-logs/4688.md)·[프리패치](/02-artifacts/execution/prefetch/index.md)·[PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 에서 찾습니다.
+8. 3~7 단계에서 찾은 시각마다 그 시각의 로그온 세션을 [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) 에서 찾습니다.
+9. 같은 무렵 실행한 프로그램과 명령을 [프로세스 생성](../../../02-artifacts/event-logs/4688.md)·[프리패치](../../../02-artifacts/execution/prefetch/index.md)·[PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 에서 찾습니다.
 10. 서비스 변경, 프로그램 삭제, 로그 지우기를 각 페이지를 따라 확인합니다.
-11. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 으로 정리합니다. 보호가 꺼진 구간과 탐지 기록을 한 타임라인에 놓습니다.
+11. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 으로 정리합니다. 보호가 꺼진 구간과 탐지 기록을 한 타임라인에 놓습니다.
 
 ## 흔한 오판
 
@@ -151,14 +151,14 @@ Defender 는 악성코드를 탐지하면 악성코드가 바꿨을 수 있는 �
 
 ## 함께 볼 페이지
 
-- [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) — 1116·1117 탐지·조치 이벤트의 구조입니다.
-- [디펜더 검사 로그·격리 파일](/02-artifacts/execution/mplog-detectionhistory-quarantine.md) — 이벤트 로그 밖에 남는 탐지·격리 기록입니다.
-- [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) · [프로그램 설치·삭제 이벤트](/02-artifacts/event-logs/msiinstaller.md) · [설치 프로그램](/02-artifacts/system-account/uninstall.md) — 보안 프로그램을 멈추거나 지운 흔적입니다.
-- [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) — 로그가 남는 조건입니다.
-- [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) · [프로세스 생성](/02-artifacts/event-logs/4688.md) · [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) — 보호를 끈 시각의 계정과 명령을 잇는 기록입니다.
-- [이벤트 로그를 지웠나 (Log Clearing)](/04-scenarios/activity/anti-forensics/log-clearing.md) — 보호를 끈 뒤 로그를 지웠는지 봅니다.
-- [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) · [랜섬웨어는 언제 어떻게 퍼졌나](/04-scenarios/incident/ransomware.md) — 침해 조사에서 보호가 꺼진 구간을 함께 봅니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 꺼진 구간과 탐지 기록을 한 줄로 정리합니다.
+- [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) — 1116·1117 탐지·조치 이벤트의 구조입니다.
+- [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) — 이벤트 로그 밖에 남는 탐지·격리 기록입니다.
+- [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) · [프로그램 설치·삭제 이벤트](../../../02-artifacts/event-logs/msiinstaller.md) · [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) — 보안 프로그램을 멈추거나 지운 흔적입니다.
+- [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) — 로그가 남는 조건입니다.
+- [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) · [프로세스 생성](../../../02-artifacts/event-logs/4688.md) · [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) — 보호를 끈 시각의 계정과 명령을 잇는 기록입니다.
+- [이벤트 로그를 지웠나 (Log Clearing)](log-clearing.md) — 보호를 끈 뒤 로그를 지웠는지 봅니다.
+- [악성코드는 어디서 들어왔나](../../incident/initial-access.md) · [랜섬웨어는 언제 어떻게 퍼졌나](../../incident/ransomware.md) — 침해 조사에서 보호가 꺼진 구간을 함께 봅니다.
+- [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) — 꺼진 구간과 탐지 기록을 한 줄로 정리합니다.
 
 ## 참고 문헌
 

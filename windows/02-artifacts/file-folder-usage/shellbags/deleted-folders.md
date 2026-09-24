@@ -1,6 +1,6 @@
 # 지운 폴더 흔적 찾기 (Deleted Folders)
 
-> 상위 페이지: [셸백 (ShellBags)](/02-artifacts/file-folder-usage/shellbags/index.md)
+> 상위 페이지: [셸백 (ShellBags)](index.md)
 
 ## 한 줄 요약
 
@@ -8,7 +8,7 @@
 
 ## 무엇이 남나 · 왜 남나
 
-탐색기가 폴더를 다루면 BagMRU 아래에 그 폴더의 셸 아이템 (Shell Item) 이 값으로 저장됩니다. 셸 아이템은 폴더 하나를 가리키는 작은 이진 구조입니다. 형식 전체는 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
+탐색기가 폴더를 다루면 BagMRU 아래에 그 폴더의 셸 아이템 (Shell Item) 이 값으로 저장됩니다. 셸 아이템은 폴더 하나를 가리키는 작은 이진 구조입니다. 형식 전체는 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
 
 이 값은 폴더와 따로 레지스트리에 저장됩니다. 그래서 폴더를 지워도 값은 남습니다. 4n6k 는 Windows 7 에서 `rd /s /q` 로 폴더를 지운 뒤 BagMRU 를 비교했습니다. 지우기 전과 뒤의 BagMRU 는 같았습니다. (확인 범위: Windows 7, 명령 프롬프트로 지운 경우. 탐색기로 지운 경우와 Windows 10·11 은 이 글에서 확인하지 못했습니다.)
 
@@ -27,7 +27,7 @@
 
 ## 위치와 버전별 차이
 
-셸백이 어느 하이브의 어느 키에 있는지는 [저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) 에서 다룹니다.
+셸백이 어느 하이브의 어느 키에 있는지는 [저장 위치와 구조](ntuser-usrclass-bagmru-bags.md) 에서 다룹니다.
 
 지운 폴더를 가르는 열쇠는 파일 참조입니다. 이 칸은 0xbeef0004 확장 블록 버전에 따라 있기도 하고 없기도 합니다. libfwsi 명세의 버전 표는 아래와 같습니다. 긴 이름 시작 위치는 명세의 칸 순서로 셈한 값입니다.
 
@@ -74,9 +74,9 @@ XP·2003 항목에는 파일 참조가 없습니다. 이때는 경로와 시각�
 
 명세는 이 칸이 늘 파일 참조인지 확실하지 않다고 적습니다. 그래서 번호만 믿지 않고 레코드 안의 이름을 함께 봅니다.
 
-FAT 날짜·시각은 날짜 2바이트 뒤에 시각 2바이트가 옵니다. 초는 2초 단위입니다. 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+FAT 날짜·시각은 날짜 2바이트 뒤에 시각 2바이트가 옵니다. 초는 2초 단위입니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
-**$MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER)** 에서는 두 칸만 씁니다. 나머지는 [MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 다룹니다.
+**$MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER)** 에서는 두 칸만 씁니다. 나머지는 [MFT 레코드와 속성](../../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 다룹니다.
 
 | 위치 | 크기 | 뜻 |
 |---|---|---|
@@ -98,7 +98,7 @@ Microsoft 문서는 순번을 이렇게 설명합니다.
 
 후보일 뿐입니다. 이름을 바꾼 폴더, 다른 곳으로 옮긴 폴더, 다른 볼륨에 있던 폴더도 여기 걸립니다.
 
-드라이브 문자로 시작하는 경로는 그 문자가 어느 볼륨이었는지 먼저 확인합니다. Cowen 은 셸백 경로에 볼륨 이름과 일련번호가 없다고 지적했습니다. 같은 문자를 쓴 다른 장치의 폴더일 수 있습니다. 장치를 가르는 법은 [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) 에서 다룹니다.
+드라이브 문자로 시작하는 경로는 그 문자가 어느 볼륨이었는지 먼저 확인합니다. Cowen 은 셸백 경로에 볼륨 이름과 일련번호가 없다고 지적했습니다. 같은 문자를 쓴 다른 장치의 폴더일 수 있습니다. 장치를 가르는 법은 [외부 장치·네트워크·압축 폴더 탐색 흔적](removable-network-zip.md) 에서 다룹니다.
 
 ### 2. 파일 참조로 레코드 열기
 
@@ -117,7 +117,7 @@ Microsoft 의 순번 설명을 따르면 결과를 아래처럼 가를 수 있�
 | 사용 중 | N | 모두 같음 | 폴더가 그대로 있습니다. 경로가 없다면 상위 폴더의 이름이나 위치가 바뀐 것입니다. |
 | 사용 중 | N | 이름만 다름 | 같은 볼륨에서 이름을 바꿨습니다. |
 | 사용 중 | N | 부모가 다름 | 같은 볼륨 안에서 옮겼습니다. |
-| 사용 중 | N | 이름이 `$R` 로 시작하고 부모가 `$Recycle.Bin` 아래 | 휴지통에 들어 있습니다 ([휴지통](/02-artifacts/file-folder-usage/recycle-bin.md)). |
+| 사용 중 | N | 이름이 `$R` 로 시작하고 부모가 `$Recycle.Bin` 아래 | 휴지통에 들어 있습니다 ([휴지통](../recycle-bin.md)). |
 | 사용 안 함 | N+1 | 같음 | 지운 뒤 아직 아무도 레코드를 다시 쓰지 않았습니다. |
 | 사용 안 함 | N+1 | 이름이 `$R` 로 시작 | 휴지통에 넣었다가 휴지통에서 지웠습니다. |
 | 사용 중 | N+1 이상 | 다름 | 지운 뒤 다른 파일이나 폴더가 레코드를 다시 썼습니다. |
@@ -134,9 +134,9 @@ Vista 이후 휴지통으로 보내면 폴더는 같은 볼륨의 `$Recycle.Bin`
 
 정리 도구로 BagMRU 를 지웠을 수 있습니다. 이때는 세 곳을 봅니다.
 
-- 하이브 안의 지운 키와 값 ([지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md))
-- 하이브 트랜잭션 로그 ([.LOG1·.LOG2](/01-foundations/database-log-formats/registry-hive/log1-log2.md))
-- 섀도 복사본 속 옛 UsrClass.dat·NTUSER.DAT ([섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md))
+- 하이브 안의 지운 키와 값 ([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md))
+- 하이브 트랜잭션 로그 ([.LOG1·.LOG2](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md))
+- 섀도 복사본 속 옛 UsrClass.dat·NTUSER.DAT ([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md))
 
 옛 하이브와 지금 하이브를 비교하면 셸백 항목이 사라진 때의 범위를 잡을 수 있습니다.
 
@@ -169,16 +169,16 @@ Vista 이후 휴지통으로 보내면 폴더는 같은 볼륨의 `$Recycle.Bin`
 - 셸 아이템 속 세 시각은 FAT 날짜·시각입니다. 명세는 UTC 라고 적습니다. 초는 2초 단위로만 적습니다.
 - 이 시각은 항목을 쓸 때 폴더에서 옮겨 적은 값입니다. 4n6k 는 처음 쓴 뒤로 바뀌지 않는다고 적었습니다. 같은 글에서 Metz 는 늘 그렇지는 않다고 지적했습니다.
 - 레코드가 다시 쓰이면 $MFT 에서 폴더의 옛 시각이 사라집니다. 셸백 속 생성 시각은 그 뒤에도 남습니다.
-- 탐색기는 Windows API 로 폴더 시각을 읽습니다. 이 API 가 돌려주는 시각은 $STANDARD_INFORMATION 값입니다. 비교할 때도 그 값과 맞춥니다 ([두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
-- BagMRU 키의 마지막 기록 시각은 지운 시각이 아닙니다. 4n6k 시험에서 폴더를 지워도 BagMRU 는 바뀌지 않았습니다. 키 시각이 언제 바뀌는지는 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) 에서 다룹니다.
+- 탐색기는 Windows API 로 폴더 시각을 읽습니다. 이 API 가 돌려주는 시각은 $STANDARD_INFORMATION 값입니다. 비교할 때도 그 값과 맞춥니다 ([두 벌의 시각](../../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
+- BagMRU 키의 마지막 기록 시각은 지운 시각이 아닙니다. 4n6k 시험에서 폴더를 지워도 BagMRU 는 바뀌지 않았습니다. 키 시각이 언제 바뀌는지는 [셸백 시각 해석](timestamps.md) 에서 다룹니다.
 
 지운 때는 셸백 밖에서 범위를 좁힙니다.
 
 | 경계 | 근거 |
 |---|---|
-| 이보다 뒤에 지움 | 셸백 항목이 생긴 때. 폴더는 그때 있었습니다. 항목이 생긴 때를 읽는 법은 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) 에 있습니다. |
+| 이보다 뒤에 지움 | 셸백 항목이 생긴 때. 폴더는 그때 있었습니다. 항목이 생긴 때를 읽는 법은 [셸백 시각 해석](timestamps.md) 에 있습니다. |
 | 이보다 앞에 지움 | 레코드를 다시 쓴 새 항목이 만들어진 때. 새 항목의 시각은 조작될 수 있으므로 다른 기록과 맞춰 봅니다. |
-| 지운 때 자체 | [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 의 지우기 기록, [$LogFile](/02-artifacts/filesystem/logfile.md), 휴지통 `$I` 파일의 지운 시각 |
+| 지운 때 자체 | [$UsnJrnl](../../filesystem/usnjrnl.md) 의 지우기 기록, [$LogFile](../../filesystem/logfile.md), 휴지통 `$I` 파일의 지운 시각 |
 
 ## 함정과 한계
 
@@ -186,11 +186,11 @@ Vista 이후 휴지통으로 보내면 폴더는 같은 볼륨의 `$Recycle.Bin`
 - **다른 볼륨으로 잘라 옮기기.** 원래 볼륨에서는 레코드가 비워집니다. 그래서 지운 것과 똑같이 보입니다. Cowen 은 같은 폴더를 여러 장치에 복사하면 항목의 파일 참조가 서로 다르다고 적었습니다. 생성 시각을 두 번째 근거로 씁니다.
 - **다른 볼륨의 $MFT 가 없으면 검증할 수 없습니다.** Carvey 는 외부 장치 폴더의 파일 참조는 그 장치의 $MFT 없이 검증할 수 없다고 적었습니다.
 - **같은 드라이브 문자.** 4n6k 시험에서는 다른 USB 장치에 같은 E: 를 붙이자 두 장치의 폴더가 같은 BagMRU 가지에 섞였습니다.
-- **지운 뒤에 열린 것처럼 보이는 시각.** 4n6k 시험에서 옛 도구 한 가지는 부모 키의 시각을 모든 자식 항목에 붙였습니다. 그래서 이미 지운 폴더가 지운 뒤에 다시 다뤄진 것처럼 나왔습니다. 그 도구는 뒤 버전에서 고쳐졌습니다. 쓰는 도구가 MRUListEx 첫 항목에만 시각을 붙이는지 확인합니다 ([MRU 목록 읽는 법](/01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md)).
+- **지운 뒤에 열린 것처럼 보이는 시각.** 4n6k 시험에서 옛 도구 한 가지는 부모 키의 시각을 모든 자식 항목에 붙였습니다. 그래서 이미 지운 폴더가 지운 뒤에 다시 다뤄진 것처럼 나왔습니다. 그 도구는 뒤 버전에서 고쳐졌습니다. 쓰는 도구가 MRUListEx 첫 항목에만 시각을 붙이는지 확인합니다 ([MRU 목록 읽는 법](../../../01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md)).
 - **같은 이름으로 다시 만든 폴더.** 지금 폴더의 파일 참조와 셸백 항목의 파일 참조를 비교합니다. 다시 만든 폴더를 탐색기로 열 때 기존 항목이 어떻게 바뀌는지는 이 글에서 확인하지 못했습니다.
 - **XP·2003.** 파일 참조 칸이 없습니다.
-- **셸백이 텅 빈 경우.** 4n6k 는 셸백 항목이 없는 것이 정리 도구를 쓴 정황일 수 있다고 적었습니다. 새로 만든 프로필도 비어 있으므로 다른 흔적과 함께 봅니다 ([완전삭제 도구를 썼나](/04-scenarios/activity/anti-forensics/wiping-tools.md)).
-- 그 밖의 일반 함정은 [셸백 해석 함정](/02-artifacts/file-folder-usage/shellbags/pitfalls.md) 에 있습니다.
+- **셸백이 텅 빈 경우.** 4n6k 는 셸백 항목이 없는 것이 정리 도구를 쓴 정황일 수 있다고 적었습니다. 새로 만든 프로필도 비어 있으므로 다른 흔적과 함께 봅니다 ([완전삭제 도구를 썼나](../../../04-scenarios/activity/anti-forensics/wiping-tools.md)).
+- 그 밖의 일반 함정은 [셸백 해석 함정](pitfalls.md) 에 있습니다.
 
 ## 직접 분석해 보기
 
@@ -233,7 +233,7 @@ Vista 이후 휴지통으로 보내면 폴더는 같은 볼륨의 `$Recycle.Bin`
 
 **2단계 — 경로 잇기.** 부모 키들의 값을 차례로 풀어 이어 붙입니다. 이 예에서는 `C:\Users\<사용자>\Desktop\Project_X` 가 나왔다고 합시다. 지금 파일시스템에는 이 경로가 없습니다.
 
-**3단계 — $MFT 레코드 열기.** 레코드 크기가 1,024바이트인 볼륨이라고 가정합니다. 레코드 크기는 부트 섹터에서 읽습니다 ([부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md)). 74565번 레코드는 $MFT 파일 안에서 74565 × 1,024 = 0x48D1400 에 있습니다. $MFT 가 조각나 있으면 데이터 런으로 실제 위치를 셈합니다 ([데이터 런](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)).
+**3단계 — $MFT 레코드 열기.** 레코드 크기가 1,024바이트인 볼륨이라고 가정합니다. 레코드 크기는 부트 섹터에서 읽습니다 ([부트 섹터와 클러스터](../../../01-foundations/disk-volume/ntfs/boot-sector-cluster.md)). 74565번 레코드는 $MFT 파일 안에서 74565 × 1,024 = 0x48D1400 에 있습니다. $MFT 가 조각나 있으면 데이터 런으로 실제 위치를 셈합니다 ([데이터 런](../../../01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md)).
 
 ```
 오프셋    00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
@@ -261,30 +261,30 @@ Vista 이후 휴지통으로 보내면 폴더는 같은 볼륨의 `$Recycle.Bin`
 2. 공개 $MFT 파서로 레코드 번호, 순번, 사용 중 여부, 이름, 부모 번호를 뽑습니다.
 3. 두 결과를 MFT 번호로 잇고 위 결과 표대로 가릅니다.
 4. 지운 키 복구를 지원하는 레지스트리 도구로 BagMRU 의 지운 키도 봅니다.
-5. 셸백 파서를 두 가지 이상 돌려 경로 수와 시각 붙이는 규칙이 같은지 봅니다 ([도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)).
+5. 셸백 파서를 두 가지 이상 돌려 경로 수와 시각 붙이는 규칙이 같은지 봅니다 ([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 
 ## 교차 검증
 
 | 아티팩트 | 맞춰 볼 것 |
 |---|---|
-| [$MFT](/02-artifacts/filesystem/mft.md) | 파일 참조가 가리키는 레코드의 상태, 순번, 이름, 부모 |
-| [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | 폴더 이름과 MFT 번호로 찾은 지우기·이름 바꾸기 기록과 시각 |
-| [$LogFile](/02-artifacts/filesystem/logfile.md) | 최근의 지우기 작업 |
-| [$I30](/02-artifacts/filesystem/i30.md) | 부모 폴더 색인 슬랙에 남은 폴더 이름 |
-| [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) | `$I` 파일의 원래 경로와 지운 시각 |
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md)·[점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 지운 폴더 안 파일을 연 기록 |
-| [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 같은 폴더를 가리키는 다른 셸 아이템 |
-| [지운 파일·옛 파일 흔적 찾기 (Windows Search)](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) | 색인에 남은 폴더 안 파일 이름 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 UsrClass.dat, 옛 $MFT |
+| [$MFT](../../filesystem/mft.md) | 파일 참조가 가리키는 레코드의 상태, 순번, 이름, 부모 |
+| [$UsnJrnl](../../filesystem/usnjrnl.md) | 폴더 이름과 MFT 번호로 찾은 지우기·이름 바꾸기 기록과 시각 |
+| [$LogFile](../../filesystem/logfile.md) | 최근의 지우기 작업 |
+| [$I30](../../filesystem/i30.md) | 부모 폴더 색인 슬랙에 남은 폴더 이름 |
+| [휴지통](../recycle-bin.md) | `$I` 파일의 원래 경로와 지운 시각 |
+| [바로가기 파일](../lnk.md)·[점프리스트](../jump-lists.md) | 지운 폴더 안 파일을 연 기록 |
+| [열기·저장 대화상자 기록](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 같은 폴더를 가리키는 다른 셸 아이템 |
+| [지운 파일·옛 파일 흔적 찾기 (Windows Search)](../windows-search/deleted-file-traces.md) | 색인에 남은 폴더 안 파일 이름 |
+| [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 UsrClass.dat, 옛 $MFT |
 
-시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 를 봅니다.
+시나리오로 이어서 보려면 [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md) 를 봅니다.
 
 ## 실습
 
 NIST CFReDS 의 Data Leakage Case 를 씁니다. PC 는 Windows 7 Ultimate SP1 이고 파일시스템은 NTFS 입니다. USB 메모리 두 개는 각각 exFAT 와 FAT32 입니다.
 
 1. 사용자 UsrClass.dat 의 셸백 경로 가운데 PC 이미지에 지금 없는 경로를 모두 뽑습니다.
-2. 1번 항목을 C: 경로와 다른 드라이브 문자 경로로 나눕니다. 다른 문자가 어느 장치였는지 USB 흔적으로 확인합니다 ([USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)).
+2. 1번 항목을 C: 경로와 다른 드라이브 문자 경로로 나눕니다. 다른 문자가 어느 장치였는지 USB 흔적으로 확인합니다 ([USB 저장장치 흔적](../../external-devices/usb-storage-artifacts/index.md)).
 3. C: 경로 항목의 파일 참조를 PC 의 $MFT 와 맞춥니다. 결과 표의 어느 줄에 해당하는지 적습니다.
 4. USB 경로 항목의 순번 칸을 봅니다. 두 USB 가 FAT 계열인데 순번이 어떻게 나오는지 확인합니다.
 5. 섀도 복사본이 있다면 옛 UsrClass.dat 와 지금 것을 비교합니다. 사라진 셸백 항목이 있나요?

@@ -13,7 +13,7 @@
 - SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 수 있습니다. 이 기능은 Microsoft 365 회사·학교 구독이나 SharePoint Server 2019 가 있어야 합니다.
 - 관리자는 그룹 정책으로 어느 조직 계정을 허용할지, 동기화 폴더를 어디에 둘지, 어느 라이브러리를 자동으로 받을지 정할 수 있습니다. 이런 정책 값에 테넌트 ID 가 들어갑니다.
 - 예전 회사용 동기화 앱은 `Groove.exe`, 새 동기화 앱은 `OneDrive.exe` 입니다. 같은 계정이면 새 앱이 예전 앱의 동기화를 넘겨받으려 합니다.
-- 자동 로그인 정책 `SilentAccountConfig` 를 켜면 Microsoft Entra ID 에 가입한 PC 에서 Windows 로그인 계정으로 OneDrive 를 자동 연결합니다. 다단계 인증이 필요한 사용자에게는 동작하지 않습니다. 자동 연결에 성공하면 남는 값은 [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) 에서 다룹니다.
+- 자동 로그인 정책 `SilentAccountConfig` 를 켜면 Microsoft Entra ID 에 가입한 PC 에서 Windows 로그인 계정으로 OneDrive 를 자동 연결합니다. 다단계 인증이 필요한 사용자에게는 동작하지 않습니다. 자동 연결에 성공하면 남는 값은 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -33,7 +33,7 @@
 
 ### 계정 키에서 조직을 가리키는 값
 
-`HKCU\Software\Microsoft\OneDrive\Accounts\Business1` 에서 본 값입니다 (관찰). 개인·회사 계정에 모두 있는 값은 [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) 에서 다룹니다.
+`HKCU\Software\Microsoft\OneDrive\Accounts\Business1` 에서 본 값입니다 (관찰). 개인·회사 계정에 모두 있는 값은 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
 
 | 값 | 형식 | 내용 |
 |---|---|---|
@@ -53,7 +53,7 @@
 
 - `HKCU\Software\SyncEngines\Providers\OneDrive\<범위 ID>` 의 `UrlNamespace` 는 `https://<테넌트>-my.sharepoint.com/personal/<사용자>/Documents/` 모양이었습니다 (관찰). 회사 계정의 개인 문서 라이브러리입니다.
 - `SyncRootManager` 의 `OneDrive!…` 키 가운데 회사 계정 키에만 `TenantName` 값이 있었습니다 (관찰).
-- 두 키의 나머지 값과 이어 읽는 법은 [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) 에 있습니다.
+- 두 키의 나머지 값과 이어 읽는 법은 [계정·설정 레지스트리](accounts-settings.md) 에 있습니다.
 
 ### 동기화 폴더 이름과 위치
 
@@ -77,7 +77,7 @@
 
 ### DB 에서 라이브러리 가르기
 
-회사 계정의 [동기화 DB](/02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md) 에는 라이브러리를 가를 칸이 있습니다. 아래는 칸 이름만 관찰한 것이고, 팀 사이트 라이브러리 행의 실제 값은 보지 못했습니다.
+회사 계정의 [동기화 DB](syncenginedatabase-db.md) 에는 라이브러리를 가를 칸이 있습니다. 아래는 칸 이름만 관찰한 것이고, 팀 사이트 라이브러리 행의 실제 값은 보지 못했습니다.
 
 | 표 | 칸 | 쓰임 |
 |---|---|---|
@@ -112,7 +112,7 @@
 
 ### 로그
 
-- 회사 계정 로그는 `logs\Business1` 에 따로 쌓입니다. 형식과 읽는 법은 [로그 (ODL·ODLGZ)](/02-artifacts/cloud-notes/onedrive/odl-odlgz.md) 에서 다룹니다.
+- 회사 계정 로그는 `logs\Business1` 에 따로 쌓입니다. 형식과 읽는 법은 [로그 (ODL·ODLGZ)](odl-odlgz.md) 에서 다룹니다.
 - 관찰한 PC 에서 목록 동기화 (ListSync) 로그인 `Nucleus-….odlgz` 는 `logs\ListSync\Business1` 에 있었습니다 (관찰).
 - `logs\Common` 의 `FileCoAuth-….odl` 은 이름으로 보아 오피스 파일 공동 작성 (co-authoring) 쪽 로그로 보입니다 (관찰). 이름으로 짐작한 뜻이고, 확인하지 못했습니다.
 
@@ -133,13 +133,13 @@
 - 라이브러리 폴더에 파일이 있다고 지금도 동기화 중이라는 뜻은 아닙니다. 동기화를 멈춰도 사본은 남습니다.
 - `TenantAutoMount` 로 받은 라이브러리의 파일은 온라인 전용일 수 있습니다. 목록에 있다고 내용이 PC 에 있었다는 뜻은 아닙니다.
 - 누가 파일을 만들고 고쳤는지는 확인하지 못했습니다. `createdBy`·`modifiedBy` 칸의 내용을 보지 않았습니다.
-- 정책 값이 있다고 지금도 그 정책이 걸려 있다는 뜻은 아닙니다. 이유는 [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) 의 정책 절에 있습니다.
+- 정책 값이 있다고 지금도 그 정책이 걸려 있다는 뜻은 아닙니다. 이유는 [계정·설정 레지스트리](accounts-settings.md) 의 정책 절에 있습니다.
 
 보고서에는 "회사 자료를 동기화했다" 대신 이렇게 씁니다. "사용자 A 의 `Accounts\Business1` 에 테넌트 ID X 가 있고, 동기화 DB 의 `od_ScopeInfo_Records` 에 `webURL` 이 Y 인 라이브러리 행이 있다."
 
 ## 시각 해석
 
-회사 계정 키와 DB 의 시각 형식은 개인 계정과 같습니다. [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) 와 [동기화 DB](/02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md) 의 "시각 해석" 을 따릅니다.
+회사 계정 키와 DB 의 시각 형식은 개인 계정과 같습니다. [계정·설정 레지스트리](accounts-settings.md) 와 [동기화 DB](syncenginedatabase-db.md) 의 "시각 해석" 을 따릅니다.
 
 ## 함정과 한계
 
@@ -191,15 +191,15 @@ FROM od_ScopeInfo_Records;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 계정·설정 레지스트리 | 개인·회사 계정에 모두 있는 값과 자동 연결 성공 표시를 봅니다 | [계정·설정 레지스트리](/02-artifacts/cloud-notes/onedrive/accounts-settings.md) |
-| 동기화 DB | 라이브러리별 파일 목록과 해시를 봅니다 | [동기화 DB](/02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md) |
-| 로그 | 회사 계정 로그와 목록 동기화 로그를 봅니다 | [로그 (ODL·ODLGZ)](/02-artifacts/cloud-notes/onedrive/odl-odlgz.md) |
-| 마이크로소프트 팀즈 | Teams 채널 라이브러리를 쓴 흔적을 봅니다 | [마이크로소프트 팀즈](/02-artifacts/messengers/teams.md) |
-| 오피스 사용 흔적 | 조직 라이브러리 경로의 문서를 연 기록을 봅니다 | [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) |
-| 바로가기 파일 | `%userprofile%\<조직 이름>` 아래 파일을 연 기록을 봅니다 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 사용자 프로필 목록 | `SyncRootManager` 키의 SID 가 누구인지 봅니다 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
+| 계정·설정 레지스트리 | 개인·회사 계정에 모두 있는 값과 자동 연결 성공 표시를 봅니다 | [계정·설정 레지스트리](accounts-settings.md) |
+| 동기화 DB | 라이브러리별 파일 목록과 해시를 봅니다 | [동기화 DB](syncenginedatabase-db.md) |
+| 로그 | 회사 계정 로그와 목록 동기화 로그를 봅니다 | [로그 (ODL·ODLGZ)](odl-odlgz.md) |
+| 마이크로소프트 팀즈 | Teams 채널 라이브러리를 쓴 흔적을 봅니다 | [마이크로소프트 팀즈](../../messengers/teams.md) |
+| 오피스 사용 흔적 | 조직 라이브러리 경로의 문서를 연 기록을 봅니다 | [오피스 사용 흔적](../../file-folder-usage/microsoft-office/index.md) |
+| 바로가기 파일 | `%userprofile%\<조직 이름>` 아래 파일을 연 기록을 봅니다 | [바로가기 파일](../../file-folder-usage/lnk.md) |
+| 사용자 프로필 목록 | `SyncRootManager` 키의 SID 가 누구인지 봅니다 | [사용자 프로필 목록](../../system-account/profilelist.md) |
 
-회사 자료를 개인 계정이나 다른 조직으로 옮겼는지 살피는 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
+회사 자료를 개인 계정이나 다른 조직으로 옮겼는지 살피는 흐름은 [자료를 밖으로 빼돌렸나](../../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 

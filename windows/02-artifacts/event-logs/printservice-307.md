@@ -16,7 +16,7 @@ Document %1, %2 owned by %3 on %4 was printed on %5 through port %6.  Size in by
 
 - 공급자 메타데이터에서 307 의 작업 분류 (Task) 는 "Printing a document" 입니다.
 - 키워드는 "Classic Spooler Event" 와 "Document Print Job" 입니다.
-- 인쇄 작업이 스풀 파일을 거쳐 프린터로 가는 흐름은 [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md)에서 다룹니다.
+- 인쇄 작업이 스풀 파일을 거쳐 프린터로 가는 흐름은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
 
 307 이 쓸모 있으려면 두 가지 설정을 먼저 봐야 합니다.
 
@@ -60,7 +60,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 - 마지막 키 이름 `Microsoft-Windows-PrintService/Operational` 에는 슬래시가 들어 있습니다. 슬래시까지가 키 이름 하나입니다.
 - 관찰 PC 에서 Operational 의 `Enabled` 는 0(꺼짐), 같은 위치의 `…/Admin` 은 1(켜짐) 이었습니다.
 - 같은 키의 `OwningPublisher` 값은 공급자 GUID `{747ef6fd-e535-4d16-b510-42c90f6873a1}` 였습니다.
-- 하이브 파일 위치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 라이브 시스템에서는 `wevtutil sl Microsoft-Windows-PrintService/Operational /e:true` 로 채널을 켤 수 있습니다. `wevtutil sl` 에 `/e`(`/enabled`) 옵션이 있는 것은 확인했습니다. 이 명령을 관찰 PC 에서 실행해 보지는 않았습니다. 앞으로의 인쇄를 기록하려고 미리 켜 두는 설정입니다. 조사 대상 PC 에서 켜면 증거 PC 의 설정을 바꾸게 됩니다.
 
@@ -142,7 +142,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 - 842 의 격리 모드 (isolation mode) 값은 메시지에 적혀 있습니다. 0 은 스풀러 안에서 불러옴, 1 은 공유 샌드박스, 2 는 격리 샌드박스입니다.
 - 805 에는 Copies 칸이 있습니다. 이 칸으로 복사 매수를 볼 수 있는지는 확인하지 못했습니다. 칸 이름만 확인했습니다.
 - 307 이 없는 작업 번호가 있으면 같은 번호의 308·309·310 도 찾아봅니다.
-- 도구가 메시지 문장을 푸는 방식은 [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
+- 도구가 메시지 문장을 푸는 방식은 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -165,10 +165,10 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 ## 시각 해석
 
 - 이벤트 시각은 `<TimeCreated SystemTime>` 에 있습니다. 끝에 Z 가 붙은 UTC 값입니다.
-- 현지 시각으로 바꾸는 법은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 다룹니다.
+- 현지 시각으로 바꾸는 법은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 - 307 의 시각이 인쇄가 끝난 시각인지, 스풀러가 작업을 프린터로 넘긴 시각인지는 확인하지 못했습니다. 보고서에는 "307 이 기록된 시각" 이라고만 씁니다.
 - 800(스풀), 801(인쇄), 805(렌더링), 842(인쇄 처리기) 에도 작업 번호 칸이 있습니다. 307 의 param1 과 같은 번호의 기록을 모아 시각 순으로 늘어놓아 봅니다. 두 번호가 같은 작업을 가리키는지는 이 글에서 확인하지 못했습니다.
-- 스풀 폴더 파일의 시각과 맞춰 보는 법은 [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md)에서 다룹니다.
+- 스풀 폴더 파일의 시각과 맞춰 보는 법은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -185,10 +185,10 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 
 ### 지우기와 조작
 
-- **로그를 지웁니다.** 지운 흔적은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)에서 찾습니다.
-- **채널을 끕니다.** 끈 뒤로는 307 이 남지 않습니다. 채널과 감사 설정을 함께 보는 법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+- **로그를 지웁니다.** 지운 흔적은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
+- **채널을 끕니다.** 끈 뒤로는 307 이 남지 않습니다. 채널과 감사 설정을 함께 보는 법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 - **로그를 덮어쓰게 합니다.** 관찰 PC 의 Operational 최대 크기는 약 1MB 였습니다. 꽉 차면 오래된 기록부터 덮어씁니다.
-- **스풀 파일을 지웁니다.** 이벤트와 스풀 파일은 따로 남습니다. 스풀 파일 쪽은 [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md)에서 다룹니다.
+- **스풀 파일을 지웁니다.** 이벤트와 스풀 파일은 따로 남습니다. 스풀 파일 쪽은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -198,7 +198,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 2. 같은 하이브에서 `Policies\Microsoft\Windows NT\Printers` 의 `ShowJobTitleInEventLogs` 를 봅니다. 값이 없거나 0 이면 문서 이름을 기대하지 않습니다.
 3. `Microsoft-Windows-PrintService%4Operational.evtx` 파일이 있는지, 가장 오래된 레코드가 언제인지 봅니다.
 
-하이브의 값은 조사한 때의 상태입니다. 인쇄한 때에도 같은 설정이었는지는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 하이브로 확인합니다.
+하이브의 값은 조사한 때의 상태입니다. 인쇄한 때에도 같은 설정이었는지는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 하이브로 확인합니다.
 
 ### 헥스로 한 번
 
@@ -211,8 +211,8 @@ param8 "3"      →  33 00
 param7 "12345"  →  31 00 32 00 33 00 34 00 35 00
 ```
 
-- 로그 파일의 빈 공간이나 손상된 영역에서 프린터 이름이나 사용자 이름을 찾을 때는 UTF-16LE 로 검색합니다. 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
-- 값이 EVTX 레코드 안에 저장되는 방식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 로그 파일의 빈 공간이나 손상된 영역에서 프린터 이름이나 사용자 이름을 찾을 때는 UTF-16LE 로 검색합니다. 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+- 값이 EVTX 레코드 안에 저장되는 방식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -238,19 +238,19 @@ Get-WinEvent -Path '.\Microsoft-Windows-PrintService%4Operational.evtx' -FilterX
 
 - 바이트 수와 쪽수를 숫자로 바꿔 두면 사용자별·프린터별 합계를 낼 수 있습니다.
 - 이벤트 뷰어의 "자세히 → XML 보기" 로 칸 원문을 볼 수 있습니다.
-- EvtxECmd, python-evtx 같은 공개 도구도 이 채널을 읽습니다. 도구의 풀이는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- EvtxECmd, python-evtx 같은 공개 도구도 이 채널을 읽습니다. 도구의 풀이는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 기록 | 무엇을 맞춰 보나 | 링크 |
 |---|---|---|
-| 스풀 파일과 프린터 목록 | 307 의 프린터가 설치돼 있었는지, 같은 때의 스풀 파일이 남았는지 | [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md) |
-| 바로가기 파일 | 인쇄한 즈음 작업 이름과 비슷한 이름의 문서를 열었는지 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 로그 설정 | 그 시기에 채널이 켜져 있었는지 | [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) |
-| 이벤트 로그 삭제 | 로그가 지워진 적이 있는지 | [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) |
-| 메시지 파일 | 도구가 문장을 제대로 풀었는지 | [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) |
+| 스풀 파일과 프린터 목록 | 307 의 프린터가 설치돼 있었는지, 같은 때의 스풀 파일이 남았는지 | [인쇄 흔적](../external-devices/print-spooler-spl-shd.md) |
+| 바로가기 파일 | 인쇄한 즈음 작업 이름과 비슷한 이름의 문서를 열었는지 | [바로가기 파일](../file-folder-usage/lnk.md) |
+| 로그 설정 | 그 시기에 채널이 켜져 있었는지 | [감사 정책과 로그 설정](audit-policy-log-settings.md) |
+| 이벤트 로그 삭제 | 로그가 지워진 적이 있는지 | [이벤트 로그 삭제](1102-104.md) |
+| 메시지 파일 | 도구가 문장을 제대로 풀었는지 | [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) |
 
-합쳐 읽는 순서는 [인쇄해서 가져갔나](/04-scenarios/exfiltration/data-exfiltration/print.md)에서 다룹니다.
+합쳐 읽는 순서는 [인쇄해서 가져갔나](../../04-scenarios/exfiltration/data-exfiltration/print.md)에서 다룹니다.
 
 ## 실습
 
@@ -264,7 +264,7 @@ Get-WinEvent -Path '.\Microsoft-Windows-PrintService%4Operational.evtx' -FilterX
 6. 프린터를 일시 중지하고 인쇄한 뒤 스풀 폴더를 봅니다. 파일 이름의 번호와 param1 이 같은지 비교하십시오.
 7. 같은 작업의 800·801·805·842·307 을 시각 순으로 늘어놓으십시오. 307 이 어느 단계 뒤에 남는지 보십시오.
 
-NIST CFReDS 같은 공개 검체를 풀 때는 먼저 SOFTWARE 하이브에서 채널의 `Enabled` 값을 봅니다. 0 이면 이 로그로 인쇄 여부를 정할 수 없습니다. 그 경우 어떤 기록으로 인쇄를 확인할지 [인쇄 흔적](/02-artifacts/external-devices/print-spooler-spl-shd.md)에서 골라 보십시오.
+NIST CFReDS 같은 공개 검체를 풀 때는 먼저 SOFTWARE 하이브에서 채널의 `Enabled` 값을 봅니다. 0 이면 이 로그로 인쇄 여부를 정할 수 없습니다. 그 경우 어떤 기록으로 인쇄를 확인할지 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 골라 보십시오.
 
 ## 참고 문헌
 

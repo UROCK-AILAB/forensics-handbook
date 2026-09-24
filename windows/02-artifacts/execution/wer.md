@@ -52,7 +52,7 @@
 | Windows 10 1607 이하 | 라이브 커널 보고서 설정 키가 `HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting` 입니다 |
 | Windows 10 1703 이상 | 라이브 커널 보고서 설정 키가 `HKLM\SYSTEM\CurrentControlSet\Control\CrashControl` 입니다 |
 
-- 오프라인 SYSTEM 하이브에는 `CurrentControlSet` 이 없습니다. 실제 쓰인 컨트롤셋을 고르는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+- 오프라인 SYSTEM 하이브에는 `CurrentControlSet` 이 없습니다. 실제 쓰인 컨트롤셋을 고르는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ## 구조
 
@@ -162,7 +162,7 @@
 - 프로그램 버전, 오류 모듈, 예외 코드를 알려 줍니다.
 - `LoadedModule[n]` 은 오류 순간에 그 프로세스가 불러온 모듈 목록입니다. 뜻밖의 DLL 이 들어 있는지 볼 수 있습니다.
 - 이벤트 1000 의 프로그램 시작 시각으로 그 프로세스가 언제 시작했는지 알 수 있습니다.
-- 덤프 파일은 오류 순간 프로세스의 메모리를 담습니다. 담는 범위는 `DumpType` 에 따릅니다. 읽는 법은 [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) 에서 다룹니다.
+- 덤프 파일은 오류 순간 프로세스의 메모리를 담습니다. 담는 범위는 `DumpType` 에 따릅니다. 읽는 법은 [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md) 에서 다룹니다.
 - 로컬 덤프 기본 폴더는 사용자 프로필 아래입니다. 덤프가 어느 프로필 폴더에 있는지로 사용자를 좁힐 수 있습니다.
 
 ### 증명하지 못하는 것
@@ -186,7 +186,7 @@
 
 관찰한 관계 칸은 (확인 범위: Win11 25H2 한 대) 입니다.
 
-- FILETIME 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+- FILETIME 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 - 보고서 파일은 이벤트 로그보다 오래 남을 수 있습니다. 관찰한 PC 에서는 Application 로그의 가장 오래된 이벤트보다 약 한 달 앞선 보고서가 `ReportArchive` 에 남아 있었습니다. (확인 범위: Win11 25H2 한 대)
 - 이벤트 로그가 돌아서 지워졌으면 `Report.wer` 의 `EventTime` 으로 사건 시각을 잡습니다.
 
@@ -199,7 +199,7 @@
 - **폴더 이름의 16진 값을 파일 해시로 쓰지 않습니다.** 폴더 이름의 16진 40자와 `TargetAppId` 가운데 값이 무엇인지 확인하지 못했습니다.
 - **PID 는 10진과 16진으로 다르게 적힙니다.** 덤프 이름은 10진, 이벤트 1000 은 16진입니다. 한쪽으로 바꿔 맞춥니다.
 - **설정 값을 원시 바이트로 확인합니다.** REG_DWORD 를 글자로 보여 주는 도구는 부호 없는 10진수로 보여 줍니다. 헷갈리면 원시 바이트를 봅니다.
-- **지우기와 끄기.** 사용자가 보고서 폴더와 덤프를 지울 수 있습니다. `Disabled`, `ExcludedApplications`, `DisableArchive` 로 기록을 막을 수도 있습니다. 설정 키의 값과 마지막 기록 시각을 함께 봅니다. 지운 보고서는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 찾습니다.
+- **지우기와 끄기.** 사용자가 보고서 폴더와 덤프를 지울 수 있습니다. `Disabled`, `ExcludedApplications`, `DisableArchive` 로 기록을 막을 수도 있습니다. 설정 키의 값과 마지막 기록 시각을 함께 봅니다. 지운 보고서는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [마스터 파일 테이블](../filesystem/mft.md) 에서 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -258,19 +258,19 @@ Get-ChildItem .\ReportArchive -Recurse -Filter Report.wer |
 
 - 결과의 `IntegratorReportIdentifier` 로 이벤트 1000·1001 의 Report Id 를 찾아 짝짓습니다.
 - 덤프 파일은 WinDbg 같은 공개 디버거로 엽니다.
-- 이벤트 로그 파일 구조는 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
+- 이벤트 로그 파일 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 프로그램 호환성 도우미 | `Abnormal process exit` 줄로 같은 비정상 종료 | [프로그램 호환성 도우미](/02-artifacts/execution/pca.md) |
-| AmCache | 같은 경로의 파일 정보 | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| 프리페치 | 실행 횟수와 실행 시각 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 프로세스 생성 이벤트 | 같은 프로세스가 뜬 시각과 부모 프로세스 | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| 메모리 분석 | 덤프 파일 읽기 | [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) |
+| 프로그램 호환성 도우미 | `Abnormal process exit` 줄로 같은 비정상 종료 | [프로그램 호환성 도우미](pca.md) |
+| AmCache | 같은 경로의 파일 정보 | [AmCache](amcache-hve/index.md) |
+| 프리페치 | 실행 횟수와 실행 시각 | [프리페치](prefetch/index.md) |
+| 프로세스 생성 이벤트 | 같은 프로세스가 뜬 시각과 부모 프로세스 | [프로세스 생성](../event-logs/4688.md) |
+| 메모리 분석 | 덤프 파일 읽기 | [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md) |
 
-실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에 있습니다. 악성 프로그램이 오류로 멈춘 흔적을 찾을 때는 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) 를 함께 봅니다.
+실행 흔적 전체를 엮는 흐름은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에 있습니다. 악성 프로그램이 오류로 멈춘 흔적을 찾을 때는 [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md) 를 함께 봅니다.
 
 ## 실습
 

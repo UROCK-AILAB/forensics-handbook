@@ -1,6 +1,6 @@
 # 파일 속성 되살리기 (PropertyStore)
 
-> 위치: [윈도 검색 색인 DB (Windows Search)](/02-artifacts/file-folder-usage/windows-search/index.md) > 파일 속성 되살리기
+> 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 파일 속성 되살리기
 
 ## 한 줄 요약
 
@@ -26,7 +26,7 @@
 | 8·10 | `Windows.edb` | `SystemIndex_PropertyStore` | 속성마다 칸이 하나 있습니다. 칸은 600개가 넘습니다. |
 | 11 | `Windows.db` | `SystemIndex_1_PropertyStore`, `SystemIndex_1_PropertyStore_Metadata` | 한 행에 (문서 번호, 속성 번호, 값) 이 하나씩 들어갑니다. |
 
-- 폴더 위치와 DB 파일 목록은 [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 에 있습니다.
+- 폴더 위치와 DB 파일 목록은 [위치와 형식](windows-edb-windows-db.md) 에 있습니다.
 - Windows 11 의 모양은 공개 도구 SIDR 의 소스 코드가 읽는 칸을 보고 적었습니다.
 
 ## 구조
@@ -110,10 +110,10 @@ libyal 문서가 적은 내용입니다.
 | `0x08` | 알 수 없음 |
 
 - LZXPRESS 허프만 데이터는 앞 2바이트가 풀었을 때의 크기입니다.
-- LZXPRESS 허프만 자체는 [윈도 압축 형식](/01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에서 다룹니다.
+- LZXPRESS 허프만 자체는 [윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에서 다룹니다.
 - 이 압축은 ESE 가 스스로 하는 긴 값 압축과 다릅니다. ESE 긴 값 압축 종류는 7비트 ASCII(1), 7비트 유니코드(2), XPRESS(3), XPRESS9(5), XPRESS10(6), LZ4(7) 입니다. Windows 10·11 의 ESENT 는 잘 줄어드는 값에 LZ4 를 고릅니다. (현장 관찰)
 - 그래서 한 값을 풀 때 ESE 긴 값 압축과 윈도 검색의 압축·난독화를 차례로 풀어야 할 수 있습니다.
-- ESE 긴 값은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
+- ESE 긴 값은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ### SQLite 판 (Windows 11)
 
@@ -142,7 +142,7 @@ SIDR 소스 코드가 읽는 칸을 기준으로 적습니다.
 
 - SIDR 은 `System.Link.TargetUrl` 이 `http` 로 시작하는 행을 인터넷 기록으로 나눕니다.
 - SIDR 은 `System.ItemType` 이 `ActivityHistoryItem` 인 행을 활동 기록으로 나눕니다.
-- 활동 기록 자체는 [윈도 타임라인](/02-artifacts/file-folder-usage/activitiescache-db.md) 에서 다룹니다.
+- 활동 기록 자체는 [윈도 타임라인](../activitiescache-db.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -157,9 +157,9 @@ SIDR 소스 코드가 읽는 칸을 기준으로 적습니다.
 **증명하지 못하는 것**
 
 - 활동 기록 행을 빼면, 행이 있다고 해서 사용자가 그 파일을 열었다는 뜻은 아닙니다. 색인은 사용자가 열지 않은 파일도 처리합니다.
-- 그 파일이 지금도 디스크에 있다는 뜻도 아닙니다. 이 문제는 [지운 파일·옛 파일 흔적 찾기](/02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md) 에서 다룹니다.
+- 그 파일이 지금도 디스크에 있다는 뜻도 아닙니다. 이 문제는 [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) 에서 다룹니다.
 - 수정·생성·접근 시각 칸이 지금 파일 시스템의 값과 같다고 볼 수 없습니다. 이 값이 색인 당시의 값을 옮겨 적은 것인지, 파일이 바뀌면 따라 바뀌는지는 확인한 자료가 없습니다.
-- `System_FileOwner` 로 기록을 사용자와 잇는 방법은 확인하지 못했습니다. [색인 해석 함정](/02-artifacts/file-folder-usage/windows-search/pitfalls.md) 에서 다룹니다.
+- `System_FileOwner` 로 기록을 사용자와 잇는 방법은 확인하지 못했습니다. [색인 해석 함정](pitfalls.md) 에서 다룹니다.
 
 보고서에는 표·칸·값을 그대로 적고, 시각의 뜻을 함께 적습니다.
 예: "Windows.edb 의 `SystemIndex_PropertyStore` 에 `WorkID` ○○ 행이 있습니다. 이 행의 `System_ItemPathDisplay` 는 `C:\Users\○○\Documents\계약서.docx` 입니다. `System_Search_GatherTime` 은 ○○ 입니다. 이 시각은 색인이 이 파일의 속성을 처리한 시각입니다." (번호·경로는 설명용 예시입니다.)
@@ -178,15 +178,15 @@ SIDR 소스 코드가 읽는 칸을 기준으로 적습니다.
 
 - GatherTime 은 사용자가 파일을 연 시각이 아닙니다.
 - GatherTime 은 색인이 그 파일을 처리한 시각입니다.
-- 처음 색인과 재구성 때 이 값이 어떻게 몰리는지는 [색인 해석 함정](/02-artifacts/file-folder-usage/windows-search/pitfalls.md) 에서 다룹니다.
+- 처음 색인과 재구성 때 이 값이 어떻게 몰리는지는 [색인 해석 함정](pitfalls.md) 에서 다룹니다.
 
 ### 파일 시각 칸
 
 - `System_DateModified`·`System_DateCreated`·`System_DateAccessed` 는 FILETIME 이진값입니다.
-- XP·7 은 이 값을 빅엔디언으로, Vista 는 리틀엔디언으로 저장합니다. 버전별 표는 [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 에 있습니다.
-- 이번에 연 자료에는 이 값이 UTC 인지 현지 시각인지 적혀 있지 않습니다. 같은 파일의 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 시각과 맞춰 확인합니다.
+- XP·7 은 이 값을 빅엔디언으로, Vista 는 리틀엔디언으로 저장합니다. 버전별 표는 [위치와 형식](windows-edb-windows-db.md) 에 있습니다.
+- 이번에 연 자료에는 이 값이 UTC 인지 현지 시각인지 적혀 있지 않습니다. 같은 파일의 [마스터 파일 테이블](../../filesystem/mft.md) 시각과 맞춰 확인합니다.
 - Windows 11 에서 SIDR 은 이름에 `Date`·`Time` 이 들어간 `StorageType` 12 속성을 FILETIME 으로 읽습니다. 이 규칙은 도구의 판단입니다. 명세로 확인한 규칙이 아닙니다.
-- FILETIME 을 푸는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- FILETIME 을 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -197,7 +197,7 @@ SIDR 소스 코드가 읽는 칸을 기준으로 적습니다.
 5. **긴 값 조각 경계를 틀리면 값이 조용히 망가집니다.** ESE 긴 값은 여러 조각으로 나뉘어 저장됩니다. 조각 경계를 잘못 계산한 파서가 오류 없이 6,000바이트 값을 11,158바이트로 낸 사례가 있습니다. (현장 관찰) 경로나 요약 글 끝이 이상하면 다른 도구로 다시 읽습니다.
 6. **Windows 11 의 칸 짝은 확인되지 않았습니다.** `ColumnId` 와 Metadata 의 `Id` 가 짝이라는 점은 확인하지 못했습니다. 도구 결과의 속성 이름이 값과 맞는지 몇 행을 골라 확인합니다.
 7. **속성이 이름뿐인 행이 있습니다.** 맞는 필터가 없는 파일은 `System.ItemName` 같은 최소한의 속성만 남습니다. 속성이 적다고 파일이 비어 있다는 뜻은 아닙니다.
-8. **Windows 11 DB 가 열리지 않을 수 있습니다.** `AesGcm1 SQLite3` 로 시작하는 파일은 [위치와 형식](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) 을 봅니다.
+8. **Windows 11 DB 가 열리지 않을 수 있습니다.** `AesGcm1 SQLite3` 로 시작하는 파일은 [위치와 형식](windows-edb-windows-db.md) 을 봅니다.
 
 ## 직접 분석해 보기
 
@@ -239,14 +239,14 @@ System_DateModified 칸 값, 8바이트 (명세로 만든 예시)
 
 ## 교차 검증
 
-- [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) — 색인의 경로·크기·시각을 지금 파일 시스템과 맞춰 봅니다.
-- [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) · [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) — 사용자가 파일을 열었다는 기록을 따로 찾습니다.
-- [윈도 타임라인](/02-artifacts/file-folder-usage/activitiescache-db.md) — 색인의 활동 기록 행과 맞춰 봅니다.
-- [인터넷 익스플로러·옛 엣지](/02-artifacts/browsers/ie-edgehtml/index.md) — 색인에 남은 주소를 브라우저 기록과 맞춰 봅니다.
-- [문서 메타데이터](/02-artifacts/embedded-metadata/document-metadata/index.md) · [사진 EXIF](/02-artifacts/embedded-metadata/exif.md) — 색인의 작성자·제목·찍은 날짜를 파일 안의 값과 맞춰 봅니다.
-- [아웃룩](/02-artifacts/mail/outlook/index.md) — 색인의 메일 속성을 편지함과 맞춰 봅니다.
-- [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — `System.ComputerName` 을 레지스트리의 컴퓨터 이름과 맞춰 봅니다.
-- [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) — 도구마다 행 수와 값이 다를 때 따릅니다.
+- [마스터 파일 테이블](../../filesystem/mft.md) — 색인의 경로·크기·시각을 지금 파일 시스템과 맞춰 봅니다.
+- [바로가기 파일](../lnk.md) · [점프리스트](../jump-lists.md) · [최근 문서](../recentdocs.md) — 사용자가 파일을 열었다는 기록을 따로 찾습니다.
+- [윈도 타임라인](../activitiescache-db.md) — 색인의 활동 기록 행과 맞춰 봅니다.
+- [인터넷 익스플로러·옛 엣지](../../browsers/ie-edgehtml/index.md) — 색인에 남은 주소를 브라우저 기록과 맞춰 봅니다.
+- [문서 메타데이터](../../embedded-metadata/document-metadata/index.md) · [사진 EXIF](../../embedded-metadata/exif.md) — 색인의 작성자·제목·찍은 날짜를 파일 안의 값과 맞춰 봅니다.
+- [아웃룩](../../mail/outlook/index.md) — 색인의 메일 속성을 편지함과 맞춰 봅니다.
+- [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) — `System.ComputerName` 을 레지스트리의 컴퓨터 이름과 맞춰 봅니다.
+- [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) — 도구마다 행 수와 값이 다를 때 따릅니다.
 
 ## 실습
 

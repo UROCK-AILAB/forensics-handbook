@@ -1,6 +1,6 @@
 # 애니데스크 (AnyDesk)
 
-> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](/02-artifacts/network/remote-access-tools/index.md)
+> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@ AnyDesk 의 흔적은 세 갈래입니다.
 - trace 로그: 사용자 화면 쪽 로그(`ad.trace`)와 서비스 로그(`ad_svc.trace`)가 따로 있습니다. 접속과 IP 는 두 로그에 같은 내용으로 남습니다.
 - 설정 파일 (`*.conf`): 설정 값, 무인 접속 비밀번호의 해시, 인증서가 들어 있습니다.
 
-설치할 때는 서비스, 프린터 드라이버, 시작 프로그램 바로가기가 함께 생깁니다. 채팅을 쓰면 채팅 파일도 남습니다. 받는 쪽과 거는 쪽이 무엇인지는 [허브](/02-artifacts/network/remote-access-tools/index.md)에서 정리합니다.
+설치할 때는 서비스, 프린터 드라이버, 시작 프로그램 바로가기가 함께 생깁니다. 채팅을 쓰면 채팅 파일도 남습니다. 받는 쪽과 거는 쪽이 무엇인지는 [허브](index.md)에서 정리합니다.
 
 ## 위치와 버전별 차이
 
@@ -51,7 +51,7 @@ AnyDesk 의 흔적은 세 갈래입니다.
 | `C:\Windows\inf\setupapi.dev.log` | 기본 AnyDesk 프린터 드라이버 설치 기록 |
 | 프로세스 명령줄 | 조용한 설치는 `--install`, `--start-with-win`, `--silent` 인자를 함께 씁니다. 명령줄로 비밀번호를 넣으면 `echo <비밀번호> \| anydesk.exe --set-password` 꼴이 됩니다 |
 
-Sigma 규칙 "Suspicious Application Installed" 는 28115 에서 AppID `prokzult ad` 를 찾습니다. 명령줄 두 꼴도 각각 Sigma 규칙이 있습니다. 서비스 설치 이벤트 자체는 [서비스 설치](/02-artifacts/event-logs/7045-4697.md)에서 다룹니다.
+Sigma 규칙 "Suspicious Application Installed" 는 28115 에서 AppID `prokzult ad` 를 찾습니다. 명령줄 두 꼴도 각각 Sigma 규칙이 있습니다. 서비스 설치 이벤트 자체는 [서비스 설치](../../event-logs/7045-4697.md)에서 다룹니다.
 
 ## 구조
 
@@ -128,8 +128,8 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 
 - 접속 목록의 시각은 분까지만 있습니다. 다른 기록과 맞출 때는 1분 폭으로 봅니다.
 - 접속 목록과 trace 로그의 시각이 UTC 인지는 공개 자료로 확인하지 못했습니다.
-- 28115 와 7045 의 기록 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
-- 설치 직후에 trace 로그 줄이 있으면, 그 시각을 7045 기록 시각과 견주어 trace 로그의 시간대를 가늠합니다. PC 의 시간대 설정은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 봅니다.
+- 28115 와 7045 의 기록 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 설치 직후에 trace 로그 줄이 있으면, 그 시각을 7045 기록 시각과 견주어 trace 로그의 시간대를 가늠합니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
 
 ## 함정과 한계
 
@@ -143,7 +143,7 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 
 ### 헥스로 한 번
 
-이 페이지의 파일은 모두 텍스트입니다. 헥스로 풀어야 할 이진 구조가 없어 헥스 예시를 싣지 않습니다. 파일 인코딩은 자료에 적혀 있지 않습니다. 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+이 페이지의 파일은 모두 텍스트입니다. 헥스로 풀어야 할 이진 구조가 없어 헥스 예시를 싣지 않습니다. 파일 인코딩은 자료에 적혀 있지 않습니다. 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -184,16 +184,16 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Shell-Core-Operational.evtx'; I
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 서비스 설치 (7045·4697) | "AnyDesk Service" 설치 시각과 ImagePath | [서비스 설치](/02-artifacts/event-logs/7045-4697.md) |
-| 프로세스 생성 · Sysmon 1 | 조용한 설치 인자, `--set-password` 명령줄 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| Sysmon 3 (네트워크 연결) | 들어온 연결은 AnyDesk.exe 의 `Initiated=false` 로 보입니다(Sigma 규칙) | [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 프리페치 | `ANYDESK.EXE-[A-F0-9]{8}.pf`. 실행 시각과 횟수 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 그 밖의 실행 흔적 | BAM·UserAssist·심캐시·AmCache·점프 목록 | [허브](/02-artifacts/network/remote-access-tools/index.md) |
-| 로그온 자동실행 | `StartUp\AnyDesk.lnk` | [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md) |
-| 설치 프로그램 | `Uninstall\AnyDesk` 키 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 사용자 프로필 목록 | 28115 의 SID 를 사용자 이름에 맞춤 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
+| 서비스 설치 (7045·4697) | "AnyDesk Service" 설치 시각과 ImagePath | [서비스 설치](../../event-logs/7045-4697.md) |
+| 프로세스 생성 · Sysmon 1 | 조용한 설치 인자, `--set-password` 명령줄 | [프로세스 생성](../../event-logs/4688.md), [Sysmon 로그](../../event-logs/sysmon/index.md) |
+| Sysmon 3 (네트워크 연결) | 들어온 연결은 AnyDesk.exe 의 `Initiated=false` 로 보입니다(Sigma 규칙) | [Sysmon 로그](../../event-logs/sysmon/index.md) |
+| 프리페치 | `ANYDESK.EXE-[A-F0-9]{8}.pf`. 실행 시각과 횟수 | [프리페치](../../execution/prefetch/index.md) |
+| 그 밖의 실행 흔적 | BAM·UserAssist·심캐시·AmCache·점프 목록 | [허브](index.md) |
+| 로그온 자동실행 | `StartUp\AnyDesk.lnk` | [로그온 자동실행](../../persistence/run-runonce-startup-folder.md) |
+| 설치 프로그램 | `Uninstall\AnyDesk` 키 | [설치 프로그램](../../system-account/uninstall.md) |
+| 사용자 프로필 목록 | 28115 의 SID 를 사용자 이름에 맞춤 | [사용자 프로필 목록](../../system-account/profilelist.md) |
 | DNS·프록시 기록 | 설치 때 `boot.net.anydesk.com:443`, 쓰는 중에는 `relay-[a-f0-9]{8}.net.anydesk.com:443`. User-Agent `AnyDesk/*` | — |
-| 메모리 | 이름 있는 파이프 `adprinterpipe` | [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) |
+| 메모리 | 이름 있는 파이프 `adprinterpipe` | [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) |
 
 ## 실습
 

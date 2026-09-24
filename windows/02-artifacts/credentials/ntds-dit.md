@@ -14,7 +14,7 @@
 - 백업 사본에도 같은 자격 정보가 들어 있을 수 있습니다.
 - DB 를 기본 경로가 아닌 곳에 둘 수도 있습니다. 실제 경로를 적어 두는 레지스트리 키와 값 이름은 이번 자료로 확인하지 못했습니다. 기본 경로에 없으면 볼륨 전체에서 `Ntds.dit` 를 찾습니다.
 
-ESE 저장 형식 자체는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 이 페이지는 NTDS.dit 에 무엇이 어떻게 담기고, 무엇을 증명하며, 복사 흔적이 어떻게 남는지를 다룹니다.
+ESE 저장 형식 자체는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 이 페이지는 NTDS.dit 에 무엇이 어떻게 담기고, 무엇을 증명하며, 복사 흔적이 어떻게 남는지를 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -53,7 +53,7 @@ ESE 저장 형식 자체는 [ESE 데이터베이스](/01-foundations/database-lo
 - 가변 필드는 필요한 만큼만 공간을 씁니다. 유니코드 한 글자는 16비트입니다.
 - 레코드는 DB 페이지를 넘을 수 없어 객체 하나가 8KB 로 제한됩니다 (Windows Server 2003 문서 기준. 이후 버전의 페이지 크기는 확인하지 못했습니다).
 - 긴 가변 값은 다른 페이지에 두고 그 자리에는 9바이트 참조만 남깁니다.
-- ESE 긴 값이 여러 조각으로 나뉘어 저장되는 점은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 경계 계산을 틀리면 오류 없이 값이 망가집니다.
+- ESE 긴 값이 여러 조각으로 나뉘어 저장되는 점은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 경계 계산을 틀리면 오류 없이 값이 망가집니다.
 
 ### 지운 객체
 
@@ -89,11 +89,11 @@ ESE 저장 형식 자체는 [ESE 데이터베이스](/01-foundations/database-lo
 - `whenCreated`·`whenChanged`·`lastLogonTimestamp`·`pwdLastSet`·`badPasswordTime` 같은 시각 속성이 어느 열에 어떤 형식으로 들어 있는지는 이번 자료로 확인하지 못했습니다.
 - `lastLogon` 은 DC 마다 따로이고 복제되지 않는다는 점, `lastLogonTimestamp` 는 복제되지만 지연이 있다는 점은 널리 알려졌으나 이번 자료로 확인하지 못했습니다. 그래서 이 값을 "마지막 로그온 시각"으로 단정하지 않고, 복제 지연을 함께 적습니다.
 - `NTDS.dit` 는 DC 가 켜져 있는 동안 계속 쓰는 파일입니다. 그래서 파일시스템 시각은 사건 시각의 근거로 약하다고 봅니다 (자료로 확인한 것이 아니라 추론입니다).
-- 시각 속성을 읽을 때는 일반화 시각 형식과 FILETIME 정수 형식을 구분합니다. 형식 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 시각 속성을 읽을 때는 일반화 시각 형식과 FILETIME 정수 형식을 구분합니다. 형식 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-1. **사본에서만 작업합니다.** 이미지에서 꺼낸 ESE DB 는 비정상 종료 (dirty) 상태가 많고, 로그 사슬이 끊겨 복구가 안 될 수 있습니다. 원본을 열면 상태가 바뀝니다. (확인 범위: `SRUDB.dat`·`WebCacheV01.dat`·`Windows.edb` 관찰. `NTDS.dit` 자체의 관찰은 없습니다.) 자세한 내용은 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 를 봅니다.
+1. **사본에서만 작업합니다.** 이미지에서 꺼낸 ESE DB 는 비정상 종료 (dirty) 상태가 많고, 로그 사슬이 끊겨 복구가 안 될 수 있습니다. 원본을 열면 상태가 바뀝니다. (확인 범위: `SRUDB.dat`·`WebCacheV01.dat`·`Windows.edb` 관찰. `NTDS.dit` 자체의 관찰은 없습니다.) 자세한 내용은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 를 봅니다.
 2. **읽는 방식마다 행 수가 다릅니다.** 손상된 ESE DB 는 읽는 방식에 따라 행 수가 달라집니다. 두 방식 이상으로 비교합니다. (확인 범위 위와 같습니다.)
 3. **SYSTEM 하이브를 빼먹습니다.** 해시를 풀려면 같은 DC 의 SYSTEM 하이브가 필요합니다. `NTDS.dit` 만 확보하면 해시를 풀지 못합니다.
 4. **백업본을 놓칩니다.** 배포용 사본 (`System32\Ntds.dit`) 과 백업본에도 자격 정보가 있을 수 있습니다.
@@ -108,24 +108,24 @@ ESE 저장 형식 자체는 [ESE 데이터베이스](/01-foundations/database-lo
 
 ### 헥스로 한 번
 
-- `NTDS.dit` 는 ESE 데이터베이스이므로 파일 첫 부분에 ESE 헤더가 옵니다. 헤더 구조와 헥스 읽기는 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 같은 사실을 두 페이지에 쓰지 않으려고 여기서는 링크만 합니다.
+- `NTDS.dit` 는 ESE 데이터베이스이므로 파일 첫 부분에 ESE 헤더가 옵니다. 헤더 구조와 헥스 읽기는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 같은 사실을 두 페이지에 쓰지 않으려고 여기서는 링크만 합니다.
 
 ### 공개 도구로 한 번
 
 - 오프라인 이미지에서는 ESE 를 읽는 공개 도구로 데이터 표를 엽니다. 표 이름과 열 이름부터 확인합니다.
 - 해시를 대상으로 하는 분석은 SYSTEM 하이브를 함께 처리하는 공개 도구로 합니다. 이 위키는 해시를 꺼내는 절차 자체는 다루지 않습니다.
 - 도구가 보여 준 시각이 UTC 인지, 어떤 시각 속성을 어떤 형식으로 풀었는지 확인합니다.
-- 결과 한두 개는 다른 도구와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 결과 한두 개는 다른 도구와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) | 저장 형식·긴 값 조각·비정상 종료 상태 |
-| [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) | 로컬 계정 해시와 도메인 계정 해시의 자리 차이 |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | 도메인 계정을 실제로 언제 썼는지 |
-| [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) | DB 를 섀도 복사로 빼낸 흔적 |
-| [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) | DB 를 노린 공격을 조사하는 흐름 |
+| [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) | 저장 형식·긴 값 조각·비정상 종료 상태 |
+| [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](sam-security/index.md) | 로컬 계정 해시와 도메인 계정 해시의 자리 차이 |
+| [로그온·로그오프](../event-logs/logon-events/index.md) | 도메인 계정을 실제로 언제 썼는지 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | DB 를 섀도 복사로 빼낸 흔적 |
+| [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md) | DB 를 노린 공격을 조사하는 흐름 |
 
 ### 탐지에서 보는 것
 

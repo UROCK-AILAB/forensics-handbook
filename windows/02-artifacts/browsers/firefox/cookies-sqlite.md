@@ -14,7 +14,7 @@
 
 ## 위치와 버전별 차이
 
-- 위치는 프로필 본 폴더의 `cookies.sqlite` 입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](/02-artifacts/browsers/firefox/profiles-ini-prefs-js.md) 에서 다룹니다.
+- 위치는 프로필 본 폴더의 `cookies.sqlite` 입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - 파일의 모양은 브라우저 버전을 따릅니다. 쿠키 코드는 스키마 버전을 mozStorage 의 `GetSchemaVersion`·`SetSchemaVersion` 으로 읽고 씁니다. 이 두 함수는 `PRAGMA user_version` 을 씁니다.
 - 아래 스키마와 칸은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 이때 스키마 버전 상수는 17 입니다.
 
@@ -36,12 +36,12 @@
 
 ## 구조
 
-저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+저장 형식은 SQLite 입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 저널 방식
 
 - 쿠키 DB 는 `PRAGMA journal_mode = WAL`, `synchronous = NORMAL` 로 씁니다.
-- 곧 최근 변경이 `cookies.sqlite-wal` 에 아직 합쳐지지 않은 채로 있을 수 있습니다. 본 파일만 열면 최근 쿠키를 놓칩니다. WAL·롤백 저널의 차이는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 곧 최근 변경이 `cookies.sqlite-wal` 에 아직 합쳐지지 않은 채로 있을 수 있습니다. 본 파일만 열면 최근 쿠키를 놓칩니다. WAL·롤백 저널의 차이는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### `moz_cookies` 의 칸
 
@@ -90,7 +90,7 @@
 
 ## 시각 해석
 
-파이어폭스의 쿠키 시각은 단위가 칸마다 다릅니다. 변환은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+파이어폭스의 쿠키 시각은 단위가 칸마다 다릅니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 | 칸 | 단위 | 주의할 점 |
 |---|---|---|
@@ -101,7 +101,7 @@
 
 - `creationTime` 과 `lastAccessed` 는 마이크로초입니다. 소스가 정의하는 PRTime 은 1970년 1월 1일 기준 마이크로초입니다.
 - `expiry` 는 스키마 15 부터 밀리초입니다. 스키마 14 이하의 파일에서는 초입니다. 같은 칸이 파일 버전에 따라 단위가 다르므로, 변환하기 전에 `PRAGMA user_version` 을 봅니다.
-- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 을 따릅니다.
+- 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
@@ -110,7 +110,7 @@
 - **`-wal` 파일을 함께 봅니다.** 쿠키 DB 는 WAL 방식입니다. 최근 쿠키가 본 파일에 아직 없을 수 있습니다.
 - **세션 쿠키는 파일에 없습니다.** 세션 쿠키는 파일에 쓰지 않습니다. 세션 쿠키만 쓰던 사이트는 이 파일에 흔적이 없습니다.
 - **`expiry` 단위를 스키마 버전으로 정합니다.** 스키마 버전을 보지 않고 `expiry` 를 초로 읽으면 밀리초 파일에서 엉뚱한 연도가 나옵니다.
-- **지운 쿠키는 표에서 사라집니다.** 조각이 SQLite 빈 공간이나 WAL 에 남을 수 있습니다. 옛 쿠키를 찾으려면 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md), 섀도 복사본, WAL, 메모리도 봅니다.
+- **지운 쿠키는 표에서 사라집니다.** 조각이 SQLite 빈 공간이나 WAL 에 남을 수 있습니다. 옛 쿠키를 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, WAL, 메모리도 봅니다.
 - **도구가 스키마 버전을 모를 수 있습니다.** 옛 도구는 빠진 칸(`updateTime` 등)을 못 보여 주거나, `expiry` 단위를 틀리게 변환할 수 있습니다. 결과가 이상하면 `PRAGMA user_version` 부터 봅니다.
 
 ## 직접 분석해 보기
@@ -154,13 +154,13 @@ ORDER BY creationTime;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 방문·다운로드·즐겨찾기 | 쿠키 생성 시각 무렵에 그 도메인이나 끼워 넣은 페이지를 연 기록이 있는지 봅니다 | [places.sqlite](/02-artifacts/browsers/firefox/places-sqlite.md) |
-| 캐시 | 같은 도메인의 응답을 받은 시각을 봅니다 | [캐시 (cache2)](/02-artifacts/browsers/firefox/cache2.md) |
-| 웹 저장소 | 같은 사이트가 로컬 저장소에도 흔적을 남겼는지 봅니다 | [웹 저장소 (storage 폴더)](/02-artifacts/browsers/firefox/storage.md) |
-| 저장 비밀번호 | 같은 사이트에 로그인 정보를 저장했는지 봅니다 | [저장 비밀번호 (logins.json·key4.db)](/02-artifacts/browsers/firefox/logins-json-key4-db.md) |
-| 다른 브라우저 쿠키 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 쿠키](/02-artifacts/browsers/chrome-edge-whale/cookies.md) |
+| 방문·다운로드·즐겨찾기 | 쿠키 생성 시각 무렵에 그 도메인이나 끼워 넣은 페이지를 연 기록이 있는지 봅니다 | [places.sqlite](places-sqlite.md) |
+| 캐시 | 같은 도메인의 응답을 받은 시각을 봅니다 | [캐시 (cache2)](cache2.md) |
+| 웹 저장소 | 같은 사이트가 로컬 저장소에도 흔적을 남겼는지 봅니다 | [웹 저장소 (storage 폴더)](storage.md) |
+| 저장 비밀번호 | 같은 사이트에 로그인 정보를 저장했는지 봅니다 | [저장 비밀번호 (logins.json·key4.db)](logins-json-key4-db.md) |
+| 다른 브라우저 쿠키 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 쿠키](../chrome-edge-whale/cookies.md) |
 
-웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 에 있습니다.
+웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 

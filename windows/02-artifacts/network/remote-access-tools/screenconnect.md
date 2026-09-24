@@ -1,6 +1,6 @@
 # 스크린커넥트 (ScreenConnect)
 
-> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](/02-artifacts/network/remote-access-tools/index.md)
+> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
 
 ## 한 줄 요약
 
@@ -69,7 +69,7 @@ The DFIR Report 가 공개한 사건에서는 이 방식으로 systeminfo, ipcon
 
 Sigma 규칙은 명령줄에 `e=Access&`, `y=Guest&`, `&p=`, `&c=`, `&k=` 가 모두 들어 있으면 ScreenConnect 설치 실행으로 봅니다. `c` 의 뜻은 이번 자료에 없습니다.
 
-The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분석가는 SYSTEM 하이브와 SYSTEM.LOG1 을 Registry Explorer 로 열어 서비스 명령줄 전체를 되살렸습니다. 하이브와 트랜잭션 로그 구조는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분석가는 SYSTEM 하이브와 SYSTEM.LOG1 을 Registry Explorer 로 열어 서비스 명령줄 전체를 되살렸습니다. 하이브와 트랜잭션 로그 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ### Application 이벤트 로그
 
@@ -112,7 +112,7 @@ The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분�
 **증명하지 못하는 것**
 
 - 명령 실행 이벤트만으로는 무슨 명령인지 모릅니다. 스크립트 파일, 4688, Sysmon 1 로 내용을 채웁니다.
-- 스크립트 파일이 실행 뒤에도 남는지는 이번 자료로 확인하지 못했습니다. 파일이 없으면 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)과 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)에서 이름과 시각을 찾습니다.
+- 스크립트 파일이 실행 뒤에도 남는지는 이번 자료로 확인하지 못했습니다. 파일이 없으면 [마스터 파일 테이블](../../filesystem/mft.md)과 [USN 변경 저널](../../filesystem/usnjrnl.md)에서 이름과 시각을 찾습니다.
 - 이벤트에 적힌 이름(Cloud Account Administrator 등)은 ScreenConnect 계정 이름입니다. 조작한 사람을 가리키지 않습니다.
 - 서버 쪽 Session.db 의 구조는 확인하지 못했습니다. 서버에서 세션 목록을 읽는 법은 이 페이지에서 다루지 않습니다.
 
@@ -120,7 +120,7 @@ The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분�
 
 ## 시각 해석
 
-- Application 이벤트와 7045 의 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- Application 이벤트와 7045 의 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 명령 실행 이벤트, 스크립트 파일의 생성 시각, cmd.exe 의 프로세스 생성 시각을 한 줄로 늘어놓습니다. 세 시각이 가까우면 같은 명령의 흔적으로 묶을 근거가 됩니다.
 - 세션 시작(Connected)과 끝(Disconnected) 사이에 있는 파일 전송·명령 실행 이벤트만 그 세션에 묶습니다.
 
@@ -136,7 +136,7 @@ The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분�
 
 ### 헥스로 한 번
 
-이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 스크립트입니다. ScreenConnect 만의 이진 구조는 이번 자료로 확인한 것이 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 스크립트입니다. ScreenConnect 만의 이진 구조는 이번 자료로 확인한 것이 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -162,12 +162,12 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\System.evtx'; Id = 7045 } |
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 서비스 설치 (7045·4697) | 클라이언트 서비스 설치 시각과 명령줄 | [서비스 설치](/02-artifacts/event-logs/7045-4697.md), [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) |
-| 프로세스 생성 (4688) · Sysmon 1 | ScreenConnect.ClientService.exe 가 띄운 cmd.exe 와 스크립트 경로 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| Sysmon 파일 생성 | ScreenConnect.WindowsClient.exe 가 `Documents\ConnectWiseControl\Temp\` 에 만든 파일 | [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| PowerShell 실행 기록 | `run.ps1` 로 실행한 PowerShell 명령 | [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) |
-| 마스터 파일 테이블 · USN 변경 저널 | 지워진 스크립트 파일의 이름과 시각 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md), [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 서버의 프로세스 생성 | 서버 프로세스 ScreenConnect.Service.exe 가 cmd.exe·csc.exe 를 띄우면 웹셸 실행으로 의심합니다(Sigma 규칙, 2024-02-26 작성) | [이벤트 로그 규칙 검색](/03-techniques/analysis/sigma-rules.md) |
+| 서비스 설치 (7045·4697) | 클라이언트 서비스 설치 시각과 명령줄 | [서비스 설치](../../event-logs/7045-4697.md), [서비스·드라이버](../../persistence/services-drivers.md) |
+| 프로세스 생성 (4688) · Sysmon 1 | ScreenConnect.ClientService.exe 가 띄운 cmd.exe 와 스크립트 경로 | [프로세스 생성](../../event-logs/4688.md), [Sysmon 로그](../../event-logs/sysmon/index.md) |
+| Sysmon 파일 생성 | ScreenConnect.WindowsClient.exe 가 `Documents\ConnectWiseControl\Temp\` 에 만든 파일 | [Sysmon 로그](../../event-logs/sysmon/index.md) |
+| PowerShell 실행 기록 | `run.ps1` 로 실행한 PowerShell 명령 | [PowerShell 실행 기록](../../event-logs/powershell-event-logs-4103-4104.md) |
+| 마스터 파일 테이블 · USN 변경 저널 | 지워진 스크립트 파일의 이름과 시각 | [마스터 파일 테이블](../../filesystem/mft.md), [USN 변경 저널](../../filesystem/usnjrnl.md) |
+| 서버의 프로세스 생성 | 서버 프로세스 ScreenConnect.Service.exe 가 cmd.exe·csc.exe 를 띄우면 웹셸 실행으로 의심합니다(Sigma 규칙, 2024-02-26 작성) | [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) |
 | DNS·프록시 기록 | `control.connectwise.com`, `*.connectwise.com`, `*.screenconnect.com`, `live.screenconnect.com`. The DFIR Report 사건의 중계 서버는 `instance-…-relay.screenconnect.com:443` 꼴이었습니다 | — |
 
 ## 실습

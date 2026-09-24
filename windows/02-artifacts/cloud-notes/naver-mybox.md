@@ -40,11 +40,11 @@
 
 - N드라이브가 MYBOX 로 바뀐 시기는 확인하지 못했습니다.
 - 한 PC 에 옛 이름과 새 이름 파일이 함께 있을 수 있다고 보고 둘 다 찾습니다.
-- MYBOX 가 클라우드 파일 API 로 동기화 루트를 등록하는지, 가상 드라이브를 쓰는지는 확인하지 못했습니다. 확인하는 법은 [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) 에 있습니다.
+- MYBOX 가 클라우드 파일 API 로 동기화 루트를 등록하는지, 가상 드라이브를 쓰는지는 확인하지 못했습니다. 확인하는 법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
 
 ## 구조
 
-아래 표와 칸은 모두 구현에서 본 이름입니다. 구현은 이 파일들을 표와 칸으로 읽었습니다. SQLite 파일인지는 검체에서 파일 머리로 먼저 확인합니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+아래 표와 칸은 모두 구현에서 본 이름입니다. 구현은 이 파일들을 표와 칸으로 읽었습니다. SQLite 파일인지는 검체에서 파일 머리로 먼저 확인합니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ### `sync_info.db` (구현)
 
@@ -101,7 +101,7 @@
 
 ### 증명하지 못하는 것
 
-- 프로세스 이름은 사람이 아닙니다. 누가 그 프로그램을 썼는지는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 의 흐름으로 따로 따집니다.
+- 프로세스 이름은 사람이 아닙니다. 누가 그 프로그램을 썼는지는 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 의 흐름으로 따로 따집니다.
 - `tb_io_log` 가 로컬 파일 변경을 적는지, 클라우드 올리기를 적는지는 확인하지 못했습니다. 그래서 이 표만으로 파일이 클라우드로 올라갔다고 쓰지 않습니다.
 - 구현의 해석(0·1·2 의 뜻, 옮기기와 이름 바꾸기 가르기)은 공개 자료로 확인한 것이 아닙니다. 보고서에는 원래 값을 함께 적습니다.
 - 동기화 목록에 있다고 그 파일 내용이 PC 에 있었다고 단정하지 않습니다.
@@ -114,9 +114,9 @@
 | `tb_io_log` 의 `io_date` | 문자열 날짜 | 구현은 값을 한국 시간(UTC+9) 그대로 저장했습니다. UTC 인지 현지 시각인지는 확인하지 못했습니다 |
 | 동기화 폴더별 표의 `file_time` | 확인 못 함 | 형식과 시간대를 확인하지 못했습니다 |
 
-- 숫자 시각은 자릿수로 단위를 먼저 가립니다. 방법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 숫자 시각은 자릿수로 단위를 먼저 가립니다. 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - `io_date` 의 시간대는 시험으로 확인합니다. 시험 PC 에서 시각을 적어 두고 동기화 폴더에 파일을 하나 만든 뒤, 새로 생긴 행의 `io_date` 와 비교합니다.
-- 검체 PC 의 시간대 설정은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 확인합니다.
+- 검체 PC 의 시간대 설정은 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 
 ## 함정과 한계
 
@@ -143,7 +143,7 @@ Unix 밀리초 (13자리):  1704067200000  = 0x18CC251F400
 
 - 10자리 값이면 초, 13자리 값이면 밀리초로 먼저 읽어 봅니다.
 - 바꾼 날짜가 앱을 깐 뒤의 날짜인지 확인합니다. 1970년 근처나 먼 미래로 나오면 단위를 잘못 고른 것입니다.
-- SQLite 가 정수를 레코드 안에 어떻게 저장하는지는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다. 헥스 편집기로 레코드를 직접 읽을 때는 그 페이지의 방법으로 값을 꺼낸 뒤 위처럼 자릿수를 봅니다.
+- SQLite 가 정수를 레코드 안에 어떻게 저장하는지는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다. 헥스 편집기로 레코드를 직접 읽을 때는 그 페이지의 방법으로 값을 꺼낸 뒤 위처럼 자릿수를 봅니다.
 
 ### 공개 도구로 한 번
 
@@ -175,14 +175,14 @@ SELECT tb_file_info FROM tb_sync_conf_info;
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 클라우드 동기화 공통 구조 | `SyncRootManager` 에 MYBOX 공급자 키가 있는지 봅니다 | [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) |
-| 설치 프로그램 | MYBOX 앱을 깔았는지, 언제 깔았는지 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 프리페치·AmCache | `process` 칸의 프로그램을 실행한 기록을 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md), [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| USN 변경 저널 | 같은 시각 무렵 같은 경로의 파일 변경 기록을 봅니다 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 휴지통 | `actoin` 1 행의 파일이 휴지통에 있는지 봅니다 | [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) |
-| 시간대 설정 | `io_date` 를 읽을 시간대를 정합니다 | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
+| 클라우드 동기화 공통 구조 | `SyncRootManager` 에 MYBOX 공급자 키가 있는지 봅니다 | [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) |
+| 설치 프로그램 | MYBOX 앱을 깔았는지, 언제 깔았는지 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
+| 프리페치·AmCache | `process` 칸의 프로그램을 실행한 기록을 봅니다 | [프리페치](../execution/prefetch/index.md), [AmCache](../execution/amcache-hve/index.md) |
+| USN 변경 저널 | 같은 시각 무렵 같은 경로의 파일 변경 기록을 봅니다 | [USN 변경 저널](../filesystem/usnjrnl.md) |
+| 휴지통 | `actoin` 1 행의 파일이 휴지통에 있는지 봅니다 | [휴지통](../file-folder-usage/recycle-bin.md) |
+| 시간대 설정 | `io_date` 를 읽을 시간대를 정합니다 | [시간대 설정](../system-account/time-zone.md) |
 
-반출 여부를 따지는 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 에, 지운 파일을 따라가는 흐름은 [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) 에 있습니다.
+반출 여부를 따지는 흐름은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에, 지운 파일을 따라가는 흐름은 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) 에 있습니다.
 
 ## 실습
 

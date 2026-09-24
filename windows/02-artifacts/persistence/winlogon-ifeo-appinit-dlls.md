@@ -125,7 +125,7 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 
 ### 증명하지 못하는 것
 
-- **실행됐나.** 설정만 알려 줍니다. 실행은 [프로세스 생성](/02-artifacts/event-logs/4688.md) 이나 [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) 에서 따로 봅니다.
+- **실행됐나.** 설정만 알려 줍니다. 실행은 [프로세스 생성](../event-logs/4688.md) 이나 [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 에서 따로 봅니다.
 - **AppInit DLL 이 올라갔나.** Secure Boot 가 켜진 Windows 8 이후 PC 에서는 AppInit_DLLs 에 값이 있어도 기능이 꺼져 있습니다. 그래서 값이 있다는 것은 "시도" 의 흔적이지 "실행" 의 증거가 아닙니다. 이 문장은 Microsoft 문서에서 끌어낸 해석입니다. 조사 대상 PC 의 Secure Boot 상태를 따로 확인해야 합니다.
 - **언제 설정했나.** 값에는 시각이 없습니다. 아래 "시각 해석" 을 봅니다.
 - **누가 설정했나.** 값에는 설정한 프로세스를 적는 칸이 없습니다.
@@ -134,10 +134,10 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 
 ## 시각 해석
 
-- 이 자리의 값에는 값마다 붙은 시각이 없습니다. 키 단위 시각은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
+- 이 자리의 값에는 값마다 붙은 시각이 없습니다. 키 단위 시각은 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 - Winlogon 키에는 값이 많습니다. 키 시각이 바뀌었어도 `Shell`·`Userinit` 이 바뀌었다는 뜻은 아닙니다.
 - IFEO 는 실행 파일 이름마다 하위 키가 따로 있습니다. `Debugger` 가 있는 하위 키의 시각은 그 키 안의 변경만 가리킵니다. 이 문장은 키 단위 시각의 성질에서 끌어낸 해석입니다.
-- 설정한 순간을 잡으려면 [Sysmon 레지스트리 이벤트](/02-artifacts/event-logs/sysmon/12-13-14.md) 가 켜져 있었는지 봅니다.
+- 설정한 순간을 잡으려면 [Sysmon 레지스트리 이벤트](../event-logs/sysmon/12-13-14.md) 가 켜져 있었는지 봅니다.
 
 ## 함정과 한계
 
@@ -176,24 +176,24 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 
 ### 공개 도구로 한 번
 
-1. HKLM 쪽 하이브와 사용자마다의 사용자 하이브를 하이브 로그와 함께 사본으로 뜹니다. 하이브 파일 종류는 [하이브 파일 종류](/01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
+1. HKLM 쪽 하이브와 사용자마다의 사용자 하이브를 하이브 로그와 함께 사본으로 뜹니다. 하이브 파일 종류는 [하이브 파일 종류](../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
 2. 레지스트리 뷰어로 위 표의 경로를 WOW6432Node 쪽까지 차례로 엽니다.
 3. Winlogon 의 `Shell`·`Userinit`, IFEO 하위 키의 `Debugger`·전역 플래그, `AppInit_DLLs`·`LoadAppInit_DLLs`, `BootExecute`, `Load` 를 한 표로 모읍니다.
 4. 각 값을 이 페이지의 기준 값과 맞춰 다른 것만 남깁니다.
 5. 켜진 PC 에서는 `reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options" /s /v Debugger` 처럼 읽기만 하는 명령으로 같은 값을 찾을 수 있습니다.
-6. 값이 가리키는 파일의 서명을 확인합니다. 방법은 [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) 에 있습니다.
+6. 값이 가리키는 파일의 서명을 확인합니다. 방법은 [의심 실행 파일 선별](../../03-techniques/analysis/code-signing-yara.md) 에 있습니다.
 
 ## 교차 검증
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| Sysmon 12·13·14 | 이 자리의 값을 만들거나 바꾼 프로세스와 시각 | [레지스트리 변경](/02-artifacts/event-logs/sysmon/12-13-14.md) |
-| Sysmon 7 | AppInit 이나 Notify DLL 이 실제로 올라갔나 | [이미지 로드·프로세스 접근](/02-artifacts/event-logs/sysmon/7-8-10.md) |
-| 4688·Sysmon 1 | winlogon.exe·userinit.exe 에서 이어진 프로세스, 디버거로 대신 뜬 프로세스 | [프로세스 생성](/02-artifacts/event-logs/4688.md), [Sysmon 이벤트 1](/02-artifacts/event-logs/sysmon/1.md) |
-| 로그온 자동실행 | Run·RunOnce·시작프로그램 폴더 | [로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md) |
-| 서비스·드라이버 | 부팅 때 도는 서비스와 드라이버 | [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) |
+| Sysmon 12·13·14 | 이 자리의 값을 만들거나 바꾼 프로세스와 시각 | [레지스트리 변경](../event-logs/sysmon/12-13-14.md) |
+| Sysmon 7 | AppInit 이나 Notify DLL 이 실제로 올라갔나 | [이미지 로드·프로세스 접근](../event-logs/sysmon/7-8-10.md) |
+| 4688·Sysmon 1 | winlogon.exe·userinit.exe 에서 이어진 프로세스, 디버거로 대신 뜬 프로세스 | [프로세스 생성](../event-logs/4688.md), [Sysmon 이벤트 1](../event-logs/sysmon/1.md) |
+| 로그온 자동실행 | Run·RunOnce·시작프로그램 폴더 | [로그온 자동실행](run-runonce-startup-folder.md) |
+| 서비스·드라이버 | 부팅 때 도는 서비스와 드라이버 | [서비스·드라이버](services-drivers.md) |
 
-MITRE 의 Winlogon 탐지 권고도 같은 방향입니다. `Shell`·`Userinit`·`Notify` 에 새 실행 파일이나 DLL 경로가 생기는 변경을 보고, winlogon.exe·userinit.exe 에서 이어지는 DLL 로드와 프로세스 생성과 엮어 봅니다. IFEO 는 이상한 프로세스 실행이나 높은 권한 토큰과 엮어 봅니다. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 에 있습니다.
+MITRE 의 Winlogon 탐지 권고도 같은 방향입니다. `Shell`·`Userinit`·`Notify` 에 새 실행 파일이나 DLL 경로가 생기는 변경을 보고, winlogon.exe·userinit.exe 에서 이어지는 DLL 로드와 프로세스 생성과 엮어 봅니다. IFEO 는 이상한 프로세스 실행이나 높은 권한 토큰과 엮어 봅니다. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 

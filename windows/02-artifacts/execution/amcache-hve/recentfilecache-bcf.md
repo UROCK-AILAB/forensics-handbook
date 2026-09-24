@@ -1,6 +1,6 @@
 # 구버전 실행 기록 (RecentFileCache.bcf)
 
-> 위치: [AmCache (Amcache.hve)](/02-artifacts/execution/amcache-hve/index.md) > 구버전 실행 기록
+> 위치: [AmCache (Amcache.hve)](index.md) > 구버전 실행 기록
 
 ## 한 줄 요약
 
@@ -36,7 +36,7 @@ Windows 에는 오래된 프로그램이 새 Windows 에서도 돌도록 호환�
 | 비우는 주체 | 예약 작업 `ProgramDataUpdater` |
 | 시각 | 파일 안에는 없습니다 |
 
-이 파일을 쓰는지는 Windows 버전보다 호환성 라이브러리(`%WinDir%\System32` 의 `ae` 로 시작하는 DLL) 버전을 따릅니다. 라이브러리 버전과 Amcache 형식의 관계는 [구조와 버전별 차이](/02-artifacts/execution/amcache-hve/structure-versions.md)에서 다룹니다. 이 파일에 필요한 부분만 추리면 다음과 같습니다.
+이 파일을 쓰는지는 Windows 버전보다 호환성 라이브러리(`%WinDir%\System32` 의 `ae` 로 시작하는 DLL) 버전을 따릅니다. 라이브러리 버전과 Amcache 형식의 관계는 [구조와 버전별 차이](structure-versions.md)에서 다룹니다. 이 파일에 필요한 부분만 추리면 다음과 같습니다.
 
 | 환경 | RecentFileCache.bcf | Amcache.hve | 근거 |
 |---|---|---|---|
@@ -77,7 +77,7 @@ Windows 에는 오래된 프로그램이 새 Windows 에서도 돌도록 호환�
 
 - 첫 항목은 0x14 에서 시작합니다.
 - 경로는 소문자로 적힙니다 (ANSSI).
-- UTF-16LE 를 읽는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에 있습니다.
+- UTF-16LE 를 읽는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에 있습니다.
 
 글자 수에 끝 표시가 들어가는지는 자료마다 다릅니다. libyal 명세는 들어간다고 적었습니다. ANSSI 는 들어가지 않는다고 적었습니다. 공개 파서 한 곳의 코드도 끝 표시를 빼고 셉니다. 이 코드는 글자 수 × 2 바이트를 읽은 뒤 2바이트를 더 건너뜁니다. 검체에서 직접 가리려면 글자 수 × 2 바이트 뒤를 봅니다. 거기에 `00 00` 이 있고, 그다음 4바이트가 다음 항목의 글자 수로 읽히면 끝 표시를 빼고 센 것입니다.
 
@@ -106,14 +106,14 @@ Windows 에는 오래된 프로그램이 새 Windows 에서도 돌도록 호환�
 
 | 알고 싶은 것 | 볼 곳 | 확인 수준 |
 |---|---|---|
-| 구간의 시작(마지막 비움) | 작업 스케줄러 로그에 남은 `ProgramDataUpdater` 실행 기록. [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md) 참고 | 작업이 파일을 비운다는 점은 확인된 사실입니다. 로그가 남아 있어야 쓸 수 있습니다 |
+| 구간의 시작(마지막 비움) | 작업 스케줄러 로그에 남은 `ProgramDataUpdater` 실행 기록. [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md) 참고 | 작업이 파일을 비운다는 점은 확인된 사실입니다. 로그가 남아 있어야 쓸 수 있습니다 |
 | 구간의 시작(보조) | `AEINV_PREVIOUS.xml` 의 NTFS 시각 | 추정입니다. 작업이 돌 때마다 이 파일을 새로 만들어 이름을 바꾸므로 실마리가 될 수 있습니다. 검증한 자료는 찾지 못했습니다 |
 | 구간의 끝 | 수집 시각 또는 이미지 확보 시각 | — |
 | 마지막으로 쓴 때 | RecentFileCache.bcf 자체의 NTFS 수정 시각 | 추정입니다. 항목이 붙거나 파일이 비워질 때 바뀔 것으로 봅니다 |
-| 항목이 붙은 때 | [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 에 남은 이 파일의 변경 기록 | 추정입니다. 기록이 남아 있으면 쓰인 시각을 좁힐 수 있습니다. 검증한 자료는 찾지 못했습니다 |
+| 항목이 붙은 때 | [$UsnJrnl](../../filesystem/usnjrnl.md) 에 남은 이 파일의 변경 기록 | 추정입니다. 기록이 남아 있으면 쓰인 시각을 좁힐 수 있습니다. 검증한 자료는 찾지 못했습니다 |
 
-- NTFS 시각은 UTC 입니다. $STANDARD_INFORMATION 과 $FILE_NAME 의 차이는 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)에서 다룹니다.
-- 0시 30분이 어느 시간대 기준인지는 작업 정의에서 확인합니다. 작업 정의 파일은 [작업 정의 파일](/02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md)에서 다룹니다.
+- NTFS 시각은 UTC 입니다. $STANDARD_INFORMATION 과 $FILE_NAME 의 차이는 [두 벌의 시각](../../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)에서 다룹니다.
+- 0시 30분이 어느 시간대 기준인지는 작업 정의에서 확인합니다. 작업 정의 파일은 [작업 정의 파일](../../persistence/scheduled-tasks/system32-tasks-xml.md)에서 다룹니다.
 - 컴퓨터가 꺼져 있었거나 쉬지 않았으면 작업이 밀립니다. 그러면 구간이 하루보다 길어질 수 있습니다.
 
 ## 함정과 한계
@@ -127,8 +127,8 @@ Windows 에는 오래된 프로그램이 새 Windows 에서도 돌도록 호환�
 3. **목록이 짧게 삽니다.** 작업이 매일 파일을 비우므로 수집이 늦으면 찾는 경로가 이미 사라졌을 수 있습니다. 빈 파일은 정상 상태일 수 있습니다. 빈 파일만으로 누가 지웠다고 보지 않습니다.
 4. **대소문자를 잃습니다.** 경로가 소문자로 적히므로 원래 파일 이름의 대소문자는 알 수 없습니다.
 5. **비워진 정보가 다른 파일로 옮겨 갈 수 있습니다.** 일부 시스템에서는 작업이 `AEINV_WER_{MachineId}_YYYYMMDD_HHmmss.xml` 도 씁니다. 이 파일의 Orphan 목록에는 RecentFileCache.bcf 에 있던 실행 파일 가운데 어느 프로그램에도 속하지 않는 것이 남습니다. 여기에는 SHA-1 과 파일의 만든 시각·수정 시각이 들어갑니다. 다만 한 경로에 대해 첫 실행 뒤 한 번만 적습니다. 그래서 같은 경로의 파일을 나중에 바꿔치기하면 갱신되지 않습니다. (ANSSI, 2019)
-6. **예전 판이 섀도 복사본에 있을 수 있습니다.** Windows 7 은 볼륨 섀도 복사본을 만듭니다. 섀도 복사본 안의 예전 RecentFileCache.bcf 에는 이미 비워진 경로가 남아 있을 수 있습니다. 방법은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다.
-7. **파일이 지워졌을 수 있습니다.** 파일이 아예 없으면 [$MFT](/02-artifacts/filesystem/mft.md) 와 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) 에서 이 파일의 삭제 흔적을 찾아봅니다.
+6. **예전 판이 섀도 복사본에 있을 수 있습니다.** Windows 7 은 볼륨 섀도 복사본을 만듭니다. 섀도 복사본 안의 예전 RecentFileCache.bcf 에는 이미 비워진 경로가 남아 있을 수 있습니다. 방법은 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다.
+7. **파일이 지워졌을 수 있습니다.** 파일이 아예 없으면 [$MFT](../../filesystem/mft.md) 와 [$UsnJrnl](../../filesystem/usnjrnl.md) 에서 이 파일의 삭제 흔적을 찾아봅니다.
 
 ## 직접 분석해 보기
 
@@ -154,23 +154,23 @@ Windows 에는 오래된 프로그램이 새 Windows 에서도 돌도록 호환�
 
 공개 도구의 예로 Eric Zimmerman 의 RecentFileCacheParser 가 있습니다. 이 도구는 서명을 확인한 뒤 0x14 부터 항목을 읽습니다. Velociraptor 의 `Windows.Forensics.RecentFileCache` 수집 규칙은 머리를 해석하지 않습니다. 이 규칙은 정규식으로 `드라이브 문자:` 로 시작하는 UTF-16 문자열을 찾습니다. 이 규칙의 설명은 항목 순서를 실행 흐름으로 봅니다. ANSSI 실험 결과와는 맞지 않으므로 순서는 참고로만 씁니다.
 
-읽는 방식이 서로 다르므로 두 가지 이상으로 읽고 항목 수를 맞춰 봅니다. 차이가 나면 헥스로 돌아가 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+읽는 방식이 서로 다르므로 두 가지 이상으로 읽고 항목 수를 맞춰 봅니다. 차이가 나면 헥스로 돌아가 확인합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [심캐시 (ShimCache·AppCompatCache)](/02-artifacts/execution/shimcache-appcompatcache.md) | 같은 호환성 장치의 다른 기록입니다. 더 오래 남습니다 |
-| [프리페치 (Prefetch)](/02-artifacts/execution/prefetch/index.md) | 실행 횟수와 마지막 실행 시각(Windows 7 은 1개)을 줍니다 |
-| [실행 파일 항목 (InventoryApplicationFile)](/02-artifacts/execution/amcache-hve/inventoryapplicationfile.md) | KB2952664 를 받은 Windows 7 이면 같은 파일의 SHA-1 등을 줍니다. 옛 형식 키는 [구조와 버전별 차이](/02-artifacts/execution/amcache-hve/structure-versions.md)에서 봅니다 |
-| [UserAssist](/02-artifacts/execution/userassist.md) | 탐색기로 띄운 프로그램을 사용자별로 줍니다 |
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | 실행 파일이 언제 생겼는지 봅니다. 새로 들어온 파일인지 가릴 수 있습니다 |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 내려받은 파일이면 출처를 봅니다 |
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 실행 파일이 생긴 때와 이 파일이 바뀐 때를 봅니다 |
-| [예약 작업 이벤트 (TaskScheduler·4698)](/02-artifacts/event-logs/taskscheduler-4698.md) | `ProgramDataUpdater` 가 언제 돌았는지 봅니다 |
-| [윈도 업데이트 기록 (Windows Update·CBS Log)](/02-artifacts/system-account/windows-update-cbs-log.md) | KB2952664 를 언제 받았는지 봅니다 |
+| [심캐시 (ShimCache·AppCompatCache)](../shimcache-appcompatcache.md) | 같은 호환성 장치의 다른 기록입니다. 더 오래 남습니다 |
+| [프리페치 (Prefetch)](../prefetch/index.md) | 실행 횟수와 마지막 실행 시각(Windows 7 은 1개)을 줍니다 |
+| [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) | KB2952664 를 받은 Windows 7 이면 같은 파일의 SHA-1 등을 줍니다. 옛 형식 키는 [구조와 버전별 차이](structure-versions.md)에서 봅니다 |
+| [UserAssist](../userassist.md) | 탐색기로 띄운 프로그램을 사용자별로 줍니다 |
+| [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md) | 실행 파일이 언제 생겼는지 봅니다. 새로 들어온 파일인지 가릴 수 있습니다 |
+| [다운로드 출처 표시 (Zone.Identifier)](../../filesystem/zone-identifier.md) | 내려받은 파일이면 출처를 봅니다 |
+| [USN 변경 저널 ($UsnJrnl)](../../filesystem/usnjrnl.md) | 실행 파일이 생긴 때와 이 파일이 바뀐 때를 봅니다 |
+| [예약 작업 이벤트 (TaskScheduler·4698)](../../event-logs/taskscheduler-4698.md) | `ProgramDataUpdater` 가 언제 돌았는지 봅니다 |
+| [윈도 업데이트 기록 (Windows Update·CBS Log)](../../system-account/windows-update-cbs-log.md) | KB2952664 를 언제 받았는지 봅니다 |
 
-조사 전체 흐름은 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md)에서 다룹니다.
+조사 전체 흐름은 [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md)에서 다룹니다.
 
 ## 실습
 

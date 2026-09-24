@@ -16,11 +16,11 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | PC 마다 버전과 빌드를 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 적습니다. |
-| 시간대와 시계 | PC 여러 대의 기록을 합칩니다. PC 마다 [시간대 설정](/02-artifacts/system-account/time-zone.md) 과 시계 오차를 적습니다. 맞추는 법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md) 에 있습니다. |
+| Windows 버전 | PC 마다 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 적습니다. |
+| 시간대와 시계 | PC 여러 대의 기록을 합칩니다. PC 마다 [시간대 설정](../../02-artifacts/system-account/time-zone.md) 과 시계 오차를 적습니다. 맞추는 법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md) 에 있습니다. |
 | 수집 범위 | 암호화된 PC 여러 대, 파일 서버, 도메인 컨트롤러를 봅니다. 각 PC 에서 $MFT, $UsnJrnl:$J, $LogFile, 이벤트 로그, 레지스트리 하이브를 확보합니다. 섀도 복사본이 남아 있는지도 적습니다. |
-| $UsnJrnl 추출 방법 | $UsnJrnl:$J 를 어떻게 뽑았는지 적습니다. 뽑는 방법에 따라 크기와 해시가 달라집니다(현장 관찰). 까닭은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에 있습니다. |
-| 감사 정책·Sysmon | 프로세스 생성 기록과 명령줄은 감사 정책과 Sysmon 설정에 따라 남기도 하고 안 남기도 합니다. 기록이 없다고 해서 명령이 없었다고 읽지 않습니다. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
+| $UsnJrnl 추출 방법 | $UsnJrnl:$J 를 어떻게 뽑았는지 적습니다. 뽑는 방법에 따라 크기와 해시가 달라집니다(현장 관찰). 까닭은 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에 있습니다. |
+| 감사 정책·Sysmon | 프로세스 생성 기록과 명령줄은 감사 정책과 Sysmon 설정에 따라 남기도 하고 안 남기도 합니다. 기록이 없다고 해서 명령이 없었다고 읽지 않습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
 
 ## MITRE 가 설명하는 암호화와 복구 방해
 
@@ -56,20 +56,20 @@
 - 공급자 Microsoft-Windows-Backup 의 524 는 Application 채널의 정보 이벤트입니다(관찰). 메시지는 "The system catalog has been deleted." 입니다(관찰).
 - `wbadmin delete catalog` 를 실행하면 524 가 남는지는 이번에 확인하지 못했습니다.
 - Microsoft-Windows-Windows Defender 운영 로그에는 실시간 보호 끄기(5001), 설정 변경(5007), 스파이웨어 검사 끄기(5010), 바이러스 검사 끄기(5012) 메시지가 정의돼 있습니다(관찰).
-- 디펜더 끄기·설정 변경 이벤트를 읽는 법은 [보안 프로그램을 끄거나 지웠나](/04-scenarios/activity/anti-forensics/defense-evasion.md) 에 있습니다.
+- 디펜더 끄기·설정 변경 이벤트를 읽는 법은 [보안 프로그램을 끄거나 지웠나](../activity/anti-forensics/defense-evasion.md) 에 있습니다.
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | $MFT·$UsnJrnl·$LogFile | 암호화된 파일과 랜섬노트가 생긴 시각, 이름 바꾸기·쓰기가 몰린 구간 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) · [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md) · [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md) |
-| 2 | 프로세스 생성 | 복구 방해 명령, 랜섬웨어 실행 명령줄 | [프로세스 생성](/02-artifacts/event-logs/4688.md) · [프로세스 생성 (Sysmon 1)](/02-artifacts/event-logs/sysmon/1.md) |
-| 3 | 보안 프로그램 기록 | 디펜더 끄기와 탐지 | [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) · [보안 프로그램을 끄거나 지웠나](/04-scenarios/activity/anti-forensics/defense-evasion.md) |
-| 4 | 이벤트 로그 삭제 | 로그를 지운 흔적 | [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) · [이벤트 로그를 지웠나](/04-scenarios/activity/anti-forensics/log-clearing.md) |
-| 5 | 섀도 복사본 | 남은 복사본과 그 안의 예전 파일 | [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) · [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 6 | 서비스 설치·예약 작업·공유 폴더 접근 | 원격 서비스·예약 작업·공유로 퍼뜨린 흔적 | [서비스 설치](/02-artifacts/event-logs/7045-4697.md) · [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md) · [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md) |
-| 7 | 측면 이동·자격 증명 탈취 | 암호화 앞 단계 | [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) · [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) |
-| 8 | 유출 흔적 | 암호화 전에 빼돌렸는지 | [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) |
+| 1 | $MFT·$UsnJrnl·$LogFile | 암호화된 파일과 랜섬노트가 생긴 시각, 이름 바꾸기·쓰기가 몰린 구간 | [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) · [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) · [NTFS 트랜잭션 로그](../../02-artifacts/filesystem/logfile.md) · [파일시스템 타임라인](../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md) |
+| 2 | 프로세스 생성 | 복구 방해 명령, 랜섬웨어 실행 명령줄 | [프로세스 생성](../../02-artifacts/event-logs/4688.md) · [프로세스 생성 (Sysmon 1)](../../02-artifacts/event-logs/sysmon/1.md) |
+| 3 | 보안 프로그램 기록 | 디펜더 끄기와 탐지 | [Windows Defender 탐지](../../02-artifacts/event-logs/1116-1117.md) · [보안 프로그램을 끄거나 지웠나](../activity/anti-forensics/defense-evasion.md) |
+| 4 | 이벤트 로그 삭제 | 로그를 지운 흔적 | [이벤트 로그 삭제](../../02-artifacts/event-logs/1102-104.md) · [이벤트 로그를 지웠나](../activity/anti-forensics/log-clearing.md) |
+| 5 | 섀도 복사본 | 남은 복사본과 그 안의 예전 파일 | [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) · [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 6 | 서비스 설치·예약 작업·공유 폴더 접근 | 원격 서비스·예약 작업·공유로 퍼뜨린 흔적 | [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) · [예약 작업 이벤트](../../02-artifacts/event-logs/taskscheduler-4698.md) · [공유 폴더 접근](../../02-artifacts/event-logs/5140-5145.md) |
+| 7 | 측면 이동·자격 증명 탈취 | 암호화 앞 단계 | [계정 탈취와 측면 이동](credential-theft-lateral-movement/index.md) · [다른 PC 에서 원격 실행했나](credential-theft-lateral-movement/psexec-wmi-winrm.md) |
+| 8 | 유출 흔적 | 암호화 전에 빼돌렸는지 | [자료를 밖으로 빼돌렸나](../exfiltration/data-exfiltration/index.md) |
 
 1 에서 시각의 기준점을 잡고, 2~6 으로 암호화 직전과 퍼진 방법을 봅니다. 7~8 은 그보다 앞선 단계입니다.
 
@@ -79,12 +79,12 @@ The DFIR Report 가 공개한 Hive 랜섬웨어 사례(2023-09-25)입니다[3]. 
 
 | 단계 | 사례의 내용[3] | 이 위키에서 볼 곳 |
 |---|---|---|
-| 초기 접근 | 메일 링크로 받은 실행 파일 | [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) |
-| 원격 관리 도구 설치 | 정상 원격 관리 도구 설치 | [원격 제어 프로그램으로 누가 조작했나](/04-scenarios/incident/remote-access-tool-abuse.md) |
+| 초기 접근 | 메일 링크로 받은 실행 파일 | [악성코드는 어디서 들어왔나](initial-access.md) |
+| 원격 관리 도구 설치 | 정상 원격 관리 도구 설치 | [원격 제어 프로그램으로 누가 조작했나](remote-access-tool-abuse.md) |
 | 발견 | systeminfo·nltest·AD 조회·3389 포트 훑기 | — |
-| 자격 증명 탈취 | LSASS 덤프(사용자 정의 Mimikatz, m2.exe) | [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) |
-| 측면 이동 | RDP·WMIEXEC·원격 서비스 | [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md) · [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) |
-| 유출 | Rclone 으로 SFTP 유출(약 1.5시간) | [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) |
+| 자격 증명 탈취 | LSASS 덤프(사용자 정의 Mimikatz, m2.exe) | [계정 탈취와 측면 이동](credential-theft-lateral-movement/index.md) |
+| 측면 이동 | RDP·WMIEXEC·원격 서비스 | [원격 데스크톱 침입 확인](rdp-intrusion.md) · [다른 PC 에서 원격 실행했나](credential-theft-lateral-movement/psexec-wmi-winrm.md) |
+| 유출 | Rclone 으로 SFTP 유출(약 1.5시간) | [자료를 밖으로 빼돌렸나](../exfiltration/data-exfiltration/index.md) |
 | 암호화 | 랜섬웨어 실행 | 이 페이지 |
 
 **측면 이동 흔적.**
@@ -112,12 +112,12 @@ The DFIR Report 가 공개한 Hive 랜섬웨어 사례(2023-09-25)입니다[3]. 
 
 ## 분석 흐름
 
-1. **암호화 시작·끝 시각을 잡습니다.** 암호화된 파일과 랜섬노트의 $MFT 시각을 봅니다. $UsnJrnl 에서 이름 바꾸기와 쓰기가 몰린 구간을 찾습니다. 순서는 [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md) 을 따릅니다.
+1. **암호화 시작·끝 시각을 잡습니다.** 암호화된 파일과 랜섬노트의 $MFT 시각을 봅니다. $UsnJrnl 에서 이름 바꾸기와 쓰기가 몰린 구간을 찾습니다. 순서는 [파일시스템 타임라인](../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md) 을 따릅니다.
 2. **암호화 직전을 봅니다.** 복구 방해 명령(vssadmin·wmic·bcdedit·wbadmin), 보안 프로그램 끄기(디펜더 5001·5007 등), 이벤트 로그 삭제를 찾습니다.
 3. **랜섬웨어 실행 파일과 실행 방법을 찾습니다.** 어느 계정이, 어느 경로의 파일을, 어떤 방법(손으로 실행·원격 서비스·예약 작업·그룹 정책)으로 실행했는지 적습니다. 어느 PC 에서 먼저 실행됐는지도 적습니다.
-4. **앞 단계를 거슬러 올라갑니다.** 측면 이동([다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) · [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md)), 자격 증명 탈취([계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md)), 지속성([악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md)), 초기 접근([악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md)) 순으로 봅니다.
-5. **유출 여부를 따로 봅니다.** 공개 사례에서는 암호화 전에 유출이 있었습니다[3]. [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 를 따릅니다.
-6. **PC 여러 대의 시각을 맞춥니다.** [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md) 에 올립니다. "처음 암호화된 PC" 와 "처음 침입한 PC" 를 따로 적습니다.
+4. **앞 단계를 거슬러 올라갑니다.** 측면 이동([다른 PC 에서 원격 실행했나](credential-theft-lateral-movement/psexec-wmi-winrm.md) · [원격 데스크톱 침입 확인](rdp-intrusion.md)), 자격 증명 탈취([계정 탈취와 측면 이동](credential-theft-lateral-movement/index.md)), 지속성([악성코드 지속성(자동실행) 찾기](persistence.md)), 초기 접근([악성코드는 어디서 들어왔나](initial-access.md)) 순으로 봅니다.
+5. **유출 여부를 따로 봅니다.** 공개 사례에서는 암호화 전에 유출이 있었습니다[3]. [자료를 밖으로 빼돌렸나](../exfiltration/data-exfiltration/index.md) 를 따릅니다.
+6. **PC 여러 대의 시각을 맞춥니다.** [여러 아티팩트 합친 타임라인](../../03-techniques/analysis/timeline/super-timeline.md) 에 올립니다. "처음 암호화된 PC" 와 "처음 침입한 PC" 를 따로 적습니다.
 
 ## 흔한 오판
 
@@ -135,12 +135,12 @@ The DFIR Report 가 공개한 Hive 랜섬웨어 사례(2023-09-25)입니다[3]. 
 
 ## 함께 볼 페이지
 
-- [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) · [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md) · [파일시스템 타임라인](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md) — 암호화 시각을 잡습니다.
-- [볼륨 섀도 복사본 구조](/01-foundations/disk-volume/volume-shadow-copy.md) · [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 남은 복사본을 봅니다.
-- [프로세스 생성](/02-artifacts/event-logs/4688.md) · [프로세스 생성 (Sysmon 1)](/02-artifacts/event-logs/sysmon/1.md) · [서비스 설치](/02-artifacts/event-logs/7045-4697.md) · [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md) · [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md) — 실행과 배포 방법을 봅니다.
-- [Windows Defender 탐지](/02-artifacts/event-logs/1116-1117.md) · [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md) · [보안 프로그램을 끄거나 지웠나](/04-scenarios/activity/anti-forensics/defense-evasion.md) · [이벤트 로그를 지웠나](/04-scenarios/activity/anti-forensics/log-clearing.md) — 암호화 직전의 방해 흔적입니다.
-- [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) · [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) · [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) — 암호화 앞 단계입니다.
-- [여러 아티팩트 합친 타임라인](/03-techniques/analysis/timeline/super-timeline.md) · [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md) — PC 여러 대의 시각을 맞춥니다.
+- [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) · [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) · [NTFS 트랜잭션 로그](../../02-artifacts/filesystem/logfile.md) · [파일시스템 타임라인](../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md) — 암호화 시각을 잡습니다.
+- [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) · [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 남은 복사본을 봅니다.
+- [프로세스 생성](../../02-artifacts/event-logs/4688.md) · [프로세스 생성 (Sysmon 1)](../../02-artifacts/event-logs/sysmon/1.md) · [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) · [예약 작업 이벤트](../../02-artifacts/event-logs/taskscheduler-4698.md) · [공유 폴더 접근](../../02-artifacts/event-logs/5140-5145.md) — 실행과 배포 방법을 봅니다.
+- [Windows Defender 탐지](../../02-artifacts/event-logs/1116-1117.md) · [이벤트 로그 삭제](../../02-artifacts/event-logs/1102-104.md) · [보안 프로그램을 끄거나 지웠나](../activity/anti-forensics/defense-evasion.md) · [이벤트 로그를 지웠나](../activity/anti-forensics/log-clearing.md) — 암호화 직전의 방해 흔적입니다.
+- [계정 탈취와 측면 이동](credential-theft-lateral-movement/index.md) · [다른 PC 에서 원격 실행했나](credential-theft-lateral-movement/psexec-wmi-winrm.md) · [자료를 밖으로 빼돌렸나](../exfiltration/data-exfiltration/index.md) — 암호화 앞 단계입니다.
+- [여러 아티팩트 합친 타임라인](../../03-techniques/analysis/timeline/super-timeline.md) · [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md) — PC 여러 대의 시각을 맞춥니다.
 
 ## 참고 문헌
 

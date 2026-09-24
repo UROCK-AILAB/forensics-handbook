@@ -49,7 +49,7 @@ Microsoft 는 활동 기록 (activity history) 을 이렇게 설명합니다.
 
 - `ConnectedDevicesPlatform` 폴더 아래에 계정마다 폴더가 하나씩 있습니다. 로컬 계정은 `L.<사용자>` 폴더, 그 밖의 계정은 AAD·MSA 이름 규칙의 폴더를 쓴다고 널리 설명됩니다. 확인한 kacos2000 README 에는 이 이름 규칙이 없습니다.
 - DB 옆에 `ActivitiesCache.db-wal` 과 `ActivitiesCache.db-shm` 이 함께 있습니다. 세 파일을 함께 수집합니다. 이유는 "구조" 에서 설명합니다.
-- 사용자 프로필 폴더 안이라 어느 Windows 사용자의 기록인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 확인합니다.
+- 사용자 프로필 폴더 안이라 어느 Windows 사용자의 기록인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
 Windows 11 25H2 PC 한 대에서 본 모습은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 
@@ -59,7 +59,7 @@ Windows 11 25H2 PC 한 대에서 본 모습은 다음과 같습니다. (확인 �
 - 두 폴더 모두 `ActivitiesCache.db`, `-wal`, `-shm` 세 파일이 있었습니다.
 - `ConnectedDevicesPlatform` 바로 아래에 `<폴더 이름>.cdp`, `<폴더 이름>.cdpresource`, `CDPGlobalSettings.cdp`, `Connected Devices Platform certificates.sst` 파일이 있었습니다.
 
-GUID 표기는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+GUID 표기는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ### Windows 버전에 따라 달라지는 점
 
@@ -71,7 +71,7 @@ GUID 표기는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid
 
 - Windows 11 에서 타임라인 화면이 없어졌다는 설명이 널리 쓰입니다. 확인한 Microsoft 문서에서는 그런 문장을 찾지 못했습니다.
 - 화면이 없어도 DB 는 남습니다. Windows 11 25H2 PC 한 대에서 16진수 이름 폴더의 DB 는 조사 당일에도 기록되고 있었습니다. 몇 분 사이에 `-wal` 크기가 4,152 바이트에서 935,272 바이트로 바뀌었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
-- 검체의 버전은 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 로 먼저 확인합니다.
+- 검체의 버전은 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 먼저 확인합니다.
 
 ## 구조
 
@@ -80,10 +80,10 @@ GUID 표기는 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid
 Windows 11 25H2 PC 한 대에서 본 형식은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 
 - 평범한 SQLite 파일이었습니다. 첫 16바이트가 `SQLite format 3` 과 `00` 이었습니다.
-- 같은 PC 의 [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) 처럼 헤더가 암호화돼 있지 않았습니다.
+- 같은 PC 의 [윈도 검색 색인 DB](windows-search/index.md) 처럼 헤더가 암호화돼 있지 않았습니다.
 - `journal_mode` 는 `wal` 이었습니다. 그래서 최근 기록이 `-wal` 파일에만 있을 수 있습니다.
 
-WAL 파일을 읽는 방법과 지운 행이 남는 자리는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+WAL 파일을 읽는 방법과 지운 행이 남는 자리는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 표
 
@@ -133,7 +133,7 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
 | | 암호화된 `Payload` 의 내용 |
 
 - 행이 없는 이유는 여러 가지입니다. 설정을 껐을 수 있고, 기록을 지웠을 수 있고, DB 가 그 유형을 모으지 않았을 수 있습니다.
-- 다른 기기의 행을 이 PC 의 행과 섞어 읽지 않습니다. 기기를 먼저 가른 뒤에 해석합니다. 사람을 가리는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 다른 기기의 행을 이 PC 의 행과 섞어 읽지 않습니다. 기기를 먼저 가른 뒤에 해석합니다. 사람을 가리는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 ### 보고서 문장
 
@@ -152,7 +152,7 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
 | `ExpirationTime` | Unix 초 | 정확한 뜻은 확인하지 못했습니다 |
 | `CreatedInCloud` | Unix 초 | 정확한 뜻은 확인하지 못했습니다. 값이 있는 행은 동기화를 거친 행일 수 있습니다 |
 
-- Unix 초는 1970-01-01 00:00:00 UTC 부터 센 초입니다. 그래서 풀어낸 값은 UTC 입니다. 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+- Unix 초는 1970-01-01 00:00:00 UTC 부터 센 초입니다. 그래서 풀어낸 값은 UTC 입니다. 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 - Windows 11 25H2 PC 한 대에서 `StartTime` 과 `LastModifiedTime` 은 INTEGER 로 저장돼 있었습니다. Unix 초로 풀면 그럴듯한 날짜가 나왔습니다. (확인 범위: Windows 11 25H2, PC 한 대)
 - 로컬 DB 의 보존 기간은 확인한 자료에 없습니다. Microsoft 문서의 30일은 클라우드에 올라간 활동 기록이 마지막 동기화 뒤 30일 안에 자동으로 지워진다는 설명입니다. 로컬 DB 의 보존 기간이 아닙니다.
 - 같은 PC 에서 `ExpirationTime` − `LastModifiedTime` 은 2,555~3,650일 (약 7~10년) 이었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
@@ -168,7 +168,7 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
 
    이 DB 에는 다른 기기에서 동기화돼 들어온 행이 섞여 있다고 보는 것이 맞습니다. 행을 `PlatformDeviceId` 로 먼저 나눕니다.
 2. **`-wal` 을 빼고 수집합니다.** 최근 기록이 `-wal` 에만 있을 수 있습니다. `ActivitiesCache.db`, `-wal`, `-shm` 세 파일을 함께 가져옵니다.
-3. **원본 DB 를 바로 엽니다.** 사본을 만든 뒤 사본을 엽니다. SQLite 도구가 WAL 을 합치면 파일이 바뀝니다. 자세한 내용은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+3. **원본 DB 를 바로 엽니다.** 사본을 만든 뒤 사본을 엽니다. SQLite 도구가 WAL 을 합치면 파일이 바뀝니다. 자세한 내용은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 4. **Windows 11 에서도 파일 열기 행을 기대합니다.** Windows 11 25H2 PC 한 대의 16진수 이름 폴더 DB 는 다음과 같았습니다. (확인 범위: Windows 11 25H2, PC 한 대)
    - `Activity` 711행, `ActivityOperation` 0행, `Activity_PackageId` 1,422행, `DataEncryptionKeys` 82행이었습니다.
    - `ActivityType` 은 11 (604행), 12 (21행), 15 (86행) 뿐이었습니다. 유형 5·6 행은 없었습니다.
@@ -186,9 +186,9 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
 
 ### 지우기와 조작
 
-- **설정에서 지웁니다.** 사용자는 설정 화면에서 기기에 저장된 활동 기록을 지울 수 있습니다. 지운 행은 DB 안의 빈 공간이나 `-wal` 에 남을 수 있습니다. 찾는 방법은 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- **설정에서 지웁니다.** 사용자는 설정 화면에서 기기에 저장된 활동 기록을 지울 수 있습니다. 지운 행은 DB 안의 빈 공간이나 `-wal` 에 남을 수 있습니다. 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 - **설정을 끕니다.** 수집할 때 "Store my activity history on this device" 설정 상태를 함께 적어 둡니다. 설정이 꺼져 있으면 행이 없는 것을 사용하지 않은 것으로 읽지 않습니다.
-- **DB 파일을 지웁니다.** 파일을 지운 흔적은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 과 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 봅니다. 지우기 전 DB 는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+- **DB 파일을 지웁니다.** 파일을 지운 흔적은 [마스터 파일 테이블](../filesystem/mft.md) 과 [USN 변경 저널](../filesystem/usnjrnl.md) 에서 봅니다. 지우기 전 DB 는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -249,21 +249,21 @@ kacos2000 의 WindowsTimeline 저장소에는 이 DB 의 표와 활동 종류를
 - 시각을 UTC 로 보여 주는지, 분석 PC 의 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 다른 기기의 행을 구분해 보여 주는지 확인합니다.
 - `Payload` 를 JSON 으로만 풀려다 암호화된 행을 빼 버리지 않는지 확인합니다.
-- 행 몇 개는 `sqlite3` 로 직접 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 행 몇 개는 `sqlite3` 로 직접 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) · [최근 문서](/02-artifacts/file-folder-usage/recentdocs.md) | 유형 5 행의 파일을 연 흔적이 이 PC 에도 있는지 |
-| [UserAssist](/02-artifacts/execution/userassist.md) · [프리페치](/02-artifacts/execution/prefetch/index.md) · [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) | 유형 5·6 행의 앱이 이 PC 에서 실행됐는지 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 앱 사용 시간. 유형 6 행과 비교합니다 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 유형 2 알림 행과 같은 알림이 있는지 |
-| [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) | 웹페이지를 연 활동과 방문 기록 |
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) · [사용자 계정](/02-artifacts/system-account/sam.md) | 계정 폴더가 어느 사용자의 것인지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 DB. 지금 DB 와 비교하면 지운 행이 드러납니다 |
+| [바로가기 파일](lnk.md) · [점프리스트](jump-lists.md) · [최근 문서](recentdocs.md) | 유형 5 행의 파일을 연 흔적이 이 PC 에도 있는지 |
+| [UserAssist](../execution/userassist.md) · [프리페치](../execution/prefetch/index.md) · [BAM·DAM](../execution/background-activity-moderator.md) | 유형 5·6 행의 앱이 이 PC 에서 실행됐는지 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 앱 사용 시간. 유형 6 행과 비교합니다 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 유형 2 알림 행과 같은 알림이 있는지 |
+| [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) | 웹페이지를 연 활동과 방문 기록 |
+| [사용자 프로필 목록](../system-account/profilelist.md) · [사용자 계정](../system-account/sam.md) | 계정 폴더가 어느 사용자의 것인지 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 DB. 지금 DB 와 비교하면 지운 행이 드러납니다 |
 
-여러 기록을 한 줄로 늘어놓는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md) 에서 다룹니다. 파일을 연 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 에서, 프로그램 실행을 좇는 순서는 [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 에서 다룹니다.
+여러 기록을 한 줄로 늘어놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다. 파일을 연 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](../../04-scenarios/activity/file-access.md) 에서, 프로그램 실행을 좇는 순서는 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에서 다룹니다.
 
 ## 실습
 

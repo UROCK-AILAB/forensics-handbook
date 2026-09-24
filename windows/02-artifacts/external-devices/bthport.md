@@ -18,7 +18,7 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 
 ## 위치와 버전별 차이
 
-하이브 파일 위치와 `ControlSet00X` 를 고르는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
+하이브 파일 위치와 `ControlSet00X` 를 고르는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 
 | 기록 | 하이브와 경로 | 주로 보는 것 |
 |---|---|---|
@@ -88,7 +88,7 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 | `DEVPKEY_Device_LastArrivalDate` | `{83DA6326-97A6-4088-9453-A1923F573B29}` 102 | FILETIME |
 
 - `Enum\BTHLE\Dev_<주소>\<인스턴스>\Properties` 키는 관리자 권한으로도 열리지 않았습니다(관찰 PC).
-- USB 장치는 이런 속성이 `Properties\{GUID}\<번호 16진 4자리>` 에 남습니다. 규칙은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md)에서 다룹니다.
+- USB 장치는 이런 속성이 `Properties\{GUID}\<번호 16진 4자리>` 에 남습니다. 규칙은 [USB 저장장치 흔적](usb-storage-artifacts/index.md)에서 다룹니다.
 - 같은 규칙이라면 블루투스 장치의 `LastConnectedTime` 은 `000B`, `InstallDate` 는 `0064`, `LastArrivalDate` 는 `0066` 에 있습니다. 블루투스 장치에서 이 위치를 직접 확인하지는 못했습니다.
 
 ## 증거로서 의미
@@ -142,10 +142,10 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 
 ### 읽는 법
 
-1. FILETIME 모양이라고 UTC 로 단정하지 않습니다. 값을 읽는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+1. FILETIME 모양이라고 UTC 로 단정하지 않습니다. 값을 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 2. 같은 주소의 페어링 이벤트 8 과 `InstallDate` 를 찾아 원시값과의 차이를 잽니다.
 3. 차이가 시간대 오프셋과 같으면 현지 시각으로 적힌 값으로 봅니다.
-4. 현지 시각이면 그 PC 의 시간대 설정(`TimeZoneInformation`)으로 UTC 로 바꿉니다. `Bias` 는 부호 있는 값으로 읽습니다. 자세한 내용은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 다룹니다.
+4. 현지 시각이면 그 PC 의 시간대 설정(`TimeZoneInformation`)으로 UTC 로 바꿉니다. `Bias` 는 부호 있는 값으로 읽습니다. 자세한 내용은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 5. 다른 Windows 판과 다른 PC 에서도 현지 시각인지는 확인하지 못했습니다. 검체마다 2~3번을 다시 합니다.
 
 ## 함정과 한계
@@ -160,7 +160,7 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 8. **이벤트 로그의 잡음.** 관찰 PC 의 System 로그에는 BTHUSB 이벤트 12(142건)와 18(53건)이 많았습니다. 12 는 "The local adapter returned an improper ACL data packet which was discarded." 입니다. 18 은 링크 키를 PC 어댑터에 저장할 수 없다는 메시지입니다. 페어링 성공은 8(2건)입니다.
 9. **꺼져 있거나 비어 있는 채널.** 관찰 PC 에서 `Microsoft-Windows-Bluetooth-BthLEPrepairing/Operational` 과 `Bluetooth-MTPEnum/Operational` 은 켜져 있었지만 0건이었습니다. `Bluetooth-Policy/Operational` 과 `Bluetooth-Bthmini/Operational` 은 꺼져 있었습니다.
 10. **로그 보존.** 오래된 페어링 이벤트는 System 로그에서 밀려났을 수 있습니다. 이벤트가 없으면 로그가 그 시점까지 남아 있는지 먼저 확인합니다.
-11. **지속성 확인.** `Radio Support` 의 `SupportDLL` 값이 있으면 그 DLL 이 무엇인지 봅니다. 자동실행 전반은 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md)를 봅니다.
+11. **지속성 확인.** `Radio Support` 의 `SupportDLL` 값이 있으면 그 DLL 이 무엇인지 봅니다. 자동실행 전반은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -204,15 +204,15 @@ PID         CD AB 00 00                    43981 = 0xABCD
 
 | 아티팩트 | 맞춰 볼 것 | 링크 |
 |---|---|---|
-| System 로그 BTHUSB 이벤트 8 | 페어링 시각(UTC), 콜론을 넣은 주소 | [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md) |
-| `Enum\BTHLE`·`Enum\BTHLEDevice` | 주소, VID·PID·리비전 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) (Enum 키와 장치 속성 읽는 법) |
-| 장치 속성 `InstallDate`·`LastArrivalDate` | 페어링 시각, 마지막 도착 시각 | [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) |
-| 시간대 설정 | 현지 시각을 UTC 로 바꿀 `Bias` | [시간대 설정](/02-artifacts/system-account/time-zone.md) |
-| 켜짐·꺼짐 기록 | `LastArrivalDate` 와 부팅 시각 | [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) |
-| 다른 외부 장치 연결 | 같은 시간대의 다른 장치 연결 | [외부 장치 연결 이벤트](/02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
+| System 로그 BTHUSB 이벤트 8 | 페어링 시각(UTC), 콜론을 넣은 주소 | [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) |
+| `Enum\BTHLE`·`Enum\BTHLEDevice` | 주소, VID·PID·리비전 | [USB 저장장치 흔적](usb-storage-artifacts/index.md) (Enum 키와 장치 속성 읽는 법) |
+| 장치 속성 `InstallDate`·`LastArrivalDate` | 페어링 시각, 마지막 도착 시각 | [USB 저장장치 흔적](usb-storage-artifacts/index.md) |
+| 시간대 설정 | 현지 시각을 UTC 로 바꿀 `Bias` | [시간대 설정](../system-account/time-zone.md) |
+| 켜짐·꺼짐 기록 | `LastArrivalDate` 와 부팅 시각 | [켜짐·꺼짐](../event-logs/power-on-off-events.md) |
+| 다른 외부 장치 연결 | 같은 시간대의 다른 장치 연결 | [외부 장치 연결 이벤트](../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
 
-- 여러 시각을 한 줄로 늘어놓는 방법은 [타임라인 작성](/03-techniques/analysis/timeline/index.md)을 봅니다. 시간대가 다른 시각을 섞을 때 특히 조심합니다.
-- 블루투스나 휴대폰으로 자료를 옮겼는지 묻는 흐름은 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다.
+- 여러 시각을 한 줄로 늘어놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)을 봅니다. 시간대가 다른 시각을 섞을 때 특히 조심합니다.
+- 블루투스나 휴대폰으로 자료를 옮겼는지 묻는 흐름은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md)에서 다룹니다.
 
 ## 실습
 

@@ -50,7 +50,7 @@ Microsoft 문서에 따르면 앱이 `SHAddToRecentDocs` 함수를 부르면 사
 | Vista 이후 (7·8·10·11) | `%APPDATA%\Microsoft\Windows\Recent` (예: `C:\Users\<사용자>\AppData\Roaming\Microsoft\Windows\Recent`) | KNOWNFOLDERID 의 기본 경로 (FOLDERID_Recent) |
 
 - 이 폴더는 사용자마다 따로 있습니다. 그래서 어느 프로필 폴더에서 나왔는지가 곧 어느 계정의 기록인지 알려 줍니다.
-- 같은 폴더 아래의 `AutomaticDestinations`·`CustomDestinations` 는 점프리스트입니다. 점프리스트 안에도 LNK 형식 데이터가 들어 있습니다([점프리스트](/02-artifacts/file-folder-usage/jump-lists.md)).
+- 같은 폴더 아래의 `AutomaticDestinations`·`CustomDestinations` 는 점프리스트입니다. 점프리스트 안에도 LNK 형식 데이터가 들어 있습니다([점프리스트](jump-lists.md)).
 - 폴더에 보관하는 LNK 개수에는 한도가 있습니다. 한도를 넘으면 오래된 LNK 가 밀려납니다. 한도를 149개로 적는 글이 많습니다. 새 버전에서는 다르다는 설명도 있어 이 숫자를 단정하지 않습니다.
 
 ### 그 밖에 LNK 가 있는 곳
@@ -61,27 +61,27 @@ Microsoft 문서에 따르면 앱이 `SHAddToRecentDocs` 함수를 부르면 사
 |---|---|---|
 | 바탕화면 | `%USERPROFILE%\Desktop`, 모든 사용자는 `%PUBLIC%\Desktop` | 사용자, 설치 프로그램 |
 | 시작 메뉴 프로그램 | `%APPDATA%\Microsoft\Windows\Start Menu\Programs`, 모든 사용자는 `%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs` | 설치 프로그램 |
-| 시작프로그램 | `%APPDATA%\Microsoft\Windows\Start Menu\Programs\StartUp`, 모든 사용자는 `%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp` | 사용자, 프로그램. 로그온 때 자동 실행됩니다([로그온 자동실행](/02-artifacts/persistence/run-runonce-startup-folder.md)) |
+| 시작프로그램 | `%APPDATA%\Microsoft\Windows\Start Menu\Programs\StartUp`, 모든 사용자는 `%ALLUSERSPROFILE%\Microsoft\Windows\Start Menu\Programs\StartUp` | 사용자, 프로그램. 로그온 때 자동 실행됩니다([로그온 자동실행](../persistence/run-runonce-startup-folder.md)) |
 | 고정 항목 | `%APPDATA%\Microsoft\Internet Explorer\Quick Launch\User Pinned` (Windows 7 부터) | 사용자가 고정할 때 |
 | 점프리스트 파일 안 | 최근 항목 폴더 아래 | 셸 (Windows 7 부터) |
 | 아무 곳 | 이동식 매체, 메일 첨부, 내려받기 폴더 | 공격자, 다른 PC |
 
-시작 메뉴 바로가기 목록은 AmCache 에도 따로 남습니다([바로가기 항목](/02-artifacts/execution/amcache-hve/inventoryapplicationshortcut.md)).
+시작 메뉴 바로가기 목록은 AmCache 에도 따로 남습니다([바로가기 항목](../execution/amcache-hve/inventoryapplicationshortcut.md)).
 
 ### 형식의 버전별 차이
 
 - 같은 형식을 적어도 Windows 95 부터 씁니다.
-- 위치 정보 (LinkInfo) 의 유니코드 경로 칸은 위치 정보의 머리 크기 칸 (LinkInfoHeaderSize) 이 0x24 이상일 때만 있습니다. 이 칸이 없으면 경로는 시스템 기본 코드 페이지 문자열로만 남습니다. 한국어 윈도에서 만든 LNK 라면 CP949 로 읽어야 한글 경로가 깨지지 않습니다([문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
+- 위치 정보 (LinkInfo) 의 유니코드 경로 칸은 위치 정보의 머리 크기 칸 (LinkInfoHeaderSize) 이 0x24 이상일 때만 있습니다. 이 칸이 없으면 경로는 시스템 기본 코드 페이지 문자열로만 남습니다. 한국어 윈도에서 만든 LNK 라면 CP949 로 읽어야 한글 경로가 깨지지 않습니다([문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)).
 - libyal 명세는 심 레이어 (0xA0000008), 속성 저장소 (0xA0000009), 알려진 폴더 (0xA000000B), 셸 아이템 목록 (0xA000000C) 블록을 Vista 이후 항목으로 적습니다.
 
 ## 구조
 
-형식은 [바로가기 형식 (Shell Link·LNK)](/01-foundations/shell-document-formats/shell-link-lnk.md)에서 자세히 다룹니다. 여기서는 포렌식에 쓰는 값이 어디 있는지만 정리합니다.
+형식은 [바로가기 형식 (Shell Link·LNK)](../../01-foundations/shell-document-formats/shell-link-lnk.md)에서 자세히 다룹니다. 여기서는 포렌식에 쓰는 값이 어디 있는지만 정리합니다.
 
 | 부분 | 있는 조건 | 포렌식에 쓰는 값 |
 |---|---|---|
 | 헤더 (ShellLinkHeader, 76바이트) | 항상 | 링크 플래그, 대상 속성, 대상의 생성·접근·수정 시각, 대상 크기 |
-| 대상 ID 목록 (LinkTargetIDList) | 플래그 0x1 | 대상 경로를 이루는 셸 아이템([셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md)) |
+| 대상 ID 목록 (LinkTargetIDList) | 플래그 0x1 | 대상 경로를 이루는 셸 아이템([셸 아이템](../../01-foundations/shell-document-formats/shell-item-pidl.md)) |
 | 위치 정보 (LinkInfo) | 플래그 0x2 | 드라이브 종류, 볼륨 일련번호, 볼륨 이름, 로컬 경로, 네트워크 공유 이름 |
 | 문자열 (StringData) | 플래그 0x4~0x40 | 설명, 상대 경로, 작업 폴더, 명령줄 인수, 아이콘 위치 |
 | 추가 블록 (ExtraData) | 블록마다 다름 | 추적 블록(기계 이름, Droid), 속성 저장소, 환경 변수 경로 등 |
@@ -101,7 +101,7 @@ Microsoft 문서에 따르면 앱이 `SHAddToRecentDocs` 함수를 부르면 사
 | 0x2C | 8 | 대상 수정 시각 (FILETIME, UTC) |
 | 0x34 | 4 | 대상 크기. 4GiB 를 넘으면 하위 32비트만 남습니다 |
 
-앞 20바이트는 모든 LNK 가 같습니다. 그래서 비할당 영역에서 LNK 를 찾을 때 이 20바이트를 서명으로 씁니다([파일 카빙](/03-techniques/analysis/data-recovery/file-carving.md)).
+앞 20바이트는 모든 LNK 가 같습니다. 그래서 비할당 영역에서 LNK 를 찾을 때 이 20바이트를 서명으로 씁니다([파일 카빙](../../03-techniques/analysis/data-recovery/file-carving.md)).
 
 링크 플래그에서 자주 보는 비트는 다음과 같습니다.
 
@@ -142,7 +142,7 @@ Microsoft 문서에 따르면 앱이 `SHAddToRecentDocs` 함수를 부르면 사
 | 0x20 | 32 | Droid. 볼륨 GUID 와 파일 GUID |
 | 0x40 | 32 | DroidBirth. 같은 꼴의 볼륨 GUID 와 파일 GUID. 파일이 처음 있던 자리의 값으로 흔히 설명합니다 |
 
-libyal 명세는 파일 GUID 를 대상 파일의 NTFS `$OBJECT_ID` 속성에서 찾을 수 있다고 적습니다([MFT 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md)). GUID 읽는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
+libyal 명세는 파일 GUID 를 대상 파일의 NTFS `$OBJECT_ID` 속성에서 찾을 수 있다고 적습니다([MFT 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md)). GUID 읽는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 
 > 그림 자리: LNK 파일을 헤더·대상 ID 목록·위치 정보·문자열·추가 블록으로 나누고, 각 부분에서 포렌식에 쓰는 값(대상 시각, 볼륨 일련번호, 기계 이름, Droid)을 화살표로 짚는 그림
 
@@ -177,15 +177,15 @@ libyal 명세는 파일 GUID 를 대상 파일의 NTFS `$OBJECT_ID` 속성에서
 | LNK 파일의 수정 시각 | $MFT (LNK 파일 자신) | 마지막으로 다시 쓰인 무렵. 마지막으로 연 무렵으로 흔히 읽습니다 | UTC |
 | 파일 GUID 의 시각 | 추적 블록 Droid (버전 1 UUID 일 때) | 그 GUID 를 만든 때 | UTC, 1582-10-15 부터 100나노초 단위 |
 
-대상 ID 목록의 셸 아이템에도 시각이 들어 있을 수 있습니다. 읽는 법은 [셸 아이템](/01-foundations/shell-document-formats/shell-item-pidl.md)에서 다룹니다.
+대상 ID 목록의 셸 아이템에도 시각이 들어 있을 수 있습니다. 읽는 법은 [셸 아이템](../../01-foundations/shell-document-formats/shell-item-pidl.md)에서 다룹니다.
 
 ### 헤더 시각은 대상의 시각입니다
 
 헤더 시각은 LNK 의 시각이 아닙니다. 대상 파일의 시각입니다. LNK 는 파일이므로 이 값은 LNK 가 마지막으로 쓰인 순간에 굳어 있습니다. 명세에 따르면 값이 0 이면 대상에 그 시각이 없었다는 뜻입니다.
 
-셸은 파일 시스템에서 이 시각을 읽어 옵니다. 그래서 NTFS 에서는 대개 대상의 $STANDARD_INFORMATION 시각과 맞춰 봅니다([두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md)). 대상이 아직 있다면 지금의 $MFT 시각과 비교합니다. 헤더의 수정 시각보다 지금의 수정 시각이 늦으면 LNK 를 쓴 뒤에 대상이 다시 바뀐 것입니다.
+셸은 파일 시스템에서 이 시각을 읽어 옵니다. 그래서 NTFS 에서는 대개 대상의 $STANDARD_INFORMATION 시각과 맞춰 봅니다([두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)). 대상이 아직 있다면 지금의 $MFT 시각과 비교합니다. 헤더의 수정 시각보다 지금의 수정 시각이 늦으면 LNK 를 쓴 뒤에 대상이 다시 바뀐 것입니다.
 
-접근 시각은 NTFS 설정에 따라 제때 바뀌지 않을 수 있습니다. 접근 시각 하나로 연 시각을 말하지 않습니다([파일 시각 네 가지와 변화 규칙](/03-techniques/analysis/timeline/macb-timestamp-rules.md)).
+접근 시각은 NTFS 설정에 따라 제때 바뀌지 않을 수 있습니다. 접근 시각 하나로 연 시각을 말하지 않습니다([파일 시각 네 가지와 변화 규칙](../../03-techniques/analysis/timeline/macb-timestamp-rules.md)).
 
 ### LNK 파일 자신의 시각
 
@@ -193,17 +193,17 @@ LNK 파일의 생성 시각을 "처음 연 때", 수정 시각을 "마지막으�
 
 - LNK 가 보관 한도로 밀려났다가 다시 만들어지면 생성 시각은 "처음 연 때" 가 아니라 "다시 만든 때" 입니다.
 - 사용자가 최근 항목을 지운 뒤 다시 열어도 같습니다.
-- 수집할 때 복사 방법에 따라 사본의 파일 시각이 바뀝니다. 파일 시각은 원본 볼륨의 [$MFT](/02-artifacts/filesystem/mft.md)에서 읽습니다.
+- 수집할 때 복사 방법에 따라 사본의 파일 시각이 바뀝니다. 파일 시각은 원본 볼륨의 [$MFT](../filesystem/mft.md)에서 읽습니다.
 
 ### 현지 시각으로 바꾸기
 
-모든 시각은 UTC 입니다. 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](/02-artifacts/system-account/time-zone.md), [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)). FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+모든 시각은 UTC 입니다. 현지 시각으로 바꿀 때는 그 PC 의 시간대 설정을 씁니다([시간대 설정](../system-account/time-zone.md), [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)). FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **LNK 시각과 대상 시각을 섞습니다.** 헤더의 세 시각은 대상 파일의 시각입니다. 사용자가 연 시각은 LNK 파일 자신의 NTFS 시각에서 찾습니다.
 2. **기계 이름을 이 PC 의 이름으로 읽습니다.** 명세는 MachineID 를 "대상이 마지막으로 있던 기계" 의 NetBIOS 이름으로 정의합니다. 파일 서버의 공유 폴더에 있던 대상이면 파일 서버 이름이 들어갈 수 있습니다.
-3. **MAC 주소 칸을 믿습니다.** 파일 GUID 가 버전 1 UUID 가 아니면 시각과 MAC 칸이 없습니다. 버전 1 이어도 노드 칸이 실제 어느 네트워크 카드인지는 다른 기록과 맞춰 봐야 합니다([네트워크 인터페이스 설정](/02-artifacts/network/tcp-ip-interfaces.md)).
+3. **MAC 주소 칸을 믿습니다.** 파일 GUID 가 버전 1 UUID 가 아니면 시각과 MAC 칸이 없습니다. 버전 1 이어도 노드 칸이 실제 어느 네트워크 카드인지는 다른 기록과 맞춰 봐야 합니다([네트워크 인터페이스 설정](../network/tcp-ip-interfaces.md)).
 4. **크기를 그대로 씁니다.** 헤더의 크기는 하위 32비트입니다. 4GiB 가 넘는 파일은 실제보다 작게 보입니다.
 5. **LNK 가 없으면 안 열었다고 봅니다.** 최근 항목에 오르지 않는 까닭은 여럿입니다. 앱이 함수를 부르지 않았을 수 있습니다. 파일 형식이 추적에서 빠졌을 수 있습니다. 보관 한도로 밀려났거나 사용자가 지웠을 수도 있습니다.
 6. **"열었다" 로 단정합니다.** 공용 파일 대화상자로 저장하거나 새로 만들어도 LNK 가 생깁니다. Windows 7 부터는 `open` 이외의 동사도 기록을 남길 수 있습니다.
@@ -213,10 +213,10 @@ LNK 파일의 생성 시각을 "처음 연 때", 수정 시각을 "마지막으�
 
 ### 지우기와 조작
 
-- **최근 항목을 비웁니다.** LNK 가 한꺼번에 사라집니다. 지운 기록은 [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md)과 $MFT 에 남을 수 있습니다. 옛 LNK 는 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다. 점프리스트·셸백·RecentDocs 를 함께 지우지 않았다면 그쪽에 흔적이 남아 있을 수 있습니다.
-- **대상 파일만 지웁니다.** LNK 는 그대로 남습니다. 지운 파일의 경로와 시각을 LNK 로 되살릴 수 있습니다([지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)).
-- **LNK 의 NTFS 시각만 바꿉니다.** 헤더 안의 대상 시각과 Droid 시각은 그대로 남습니다. 서로 비교하면 어긋남이 드러납니다([시각 조작 탐지](/03-techniques/analysis/timeline/timestomping.md)).
-- **공격용 LNK 를 만듭니다.** 대상을 명령 해석기로 두고 명령줄 인수 칸에 명령을 넣는 방식이 쓰입니다. 아이콘 위치 칸으로 문서처럼 보이게 꾸미기도 합니다. Windows API 로 만든 LNK 에는 만든 기계의 NetBIOS 이름, MAC 주소, 볼륨 일련번호가 남을 수 있습니다. Harlan Carvey 는 이 값으로 같은 공격자가 만든 LNK 를 더 찾아낸 사례를 적었습니다. 명세보다 긴 MachineID 칸처럼 만든 도구의 흔적이 남는 경우도 적었습니다([악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md)).
+- **최근 항목을 비웁니다.** LNK 가 한꺼번에 사라집니다. 지운 기록은 [$UsnJrnl](../filesystem/usnjrnl.md)과 $MFT 에 남을 수 있습니다. 옛 LNK 는 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다. 점프리스트·셸백·RecentDocs 를 함께 지우지 않았다면 그쪽에 흔적이 남아 있을 수 있습니다.
+- **대상 파일만 지웁니다.** LNK 는 그대로 남습니다. 지운 파일의 경로와 시각을 LNK 로 되살릴 수 있습니다([지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md)).
+- **LNK 의 NTFS 시각만 바꿉니다.** 헤더 안의 대상 시각과 Droid 시각은 그대로 남습니다. 서로 비교하면 어긋남이 드러납니다([시각 조작 탐지](../../03-techniques/analysis/timeline/timestomping.md)).
+- **공격용 LNK 를 만듭니다.** 대상을 명령 해석기로 두고 명령줄 인수 칸에 명령을 넣는 방식이 쓰입니다. 아이콘 위치 칸으로 문서처럼 보이게 꾸미기도 합니다. Windows API 로 만든 LNK 에는 만든 기계의 NetBIOS 이름, MAC 주소, 볼륨 일련번호가 남을 수 있습니다. Harlan Carvey 는 이 값으로 같은 공격자가 만든 LNK 를 더 찾아낸 사례를 적었습니다. 명세보다 긴 MachineID 칸처럼 만든 도구의 흔적이 남는 경우도 적었습니다([악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md)).
 
 ## 직접 분석해 보기
 
@@ -284,24 +284,24 @@ libyal 의 `lnkinfo`, LECmd 같은 공개 도구가 위 값을 풀어 보여 줍
 - 시각을 UTC 로 보여 주는지, 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 헤더의 대상 시각과 LNK 파일 자신의 시각을 어떤 이름으로 나누는지 확인합니다. 도구마다 부르는 이름이 다릅니다.
 - 파일 GUID 에서 시각과 MAC 을 풀어 주는지 확인합니다. 풀어 준다면 버전 1 인지 먼저 따지는지 봅니다.
-- LNK 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- LNK 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [$MFT](/02-artifacts/filesystem/mft.md) | LNK 파일 자신의 생성·수정 시각. 대상 파일이 남아 있다면 지금의 대상 시각 |
-| [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md) | LNK 가 다시 쓰이거나 지워진 기록. 대상 파일의 이름 바꾸기·삭제 |
-| [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 어느 앱으로 열었는지. 같은 대상의 LNK 형식 데이터 |
-| [최근 문서 (RecentDocs)](/02-artifacts/file-folder-usage/recentdocs.md) · [열기·저장 대화상자 기록](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 같은 파일 이름과 순서. 대화상자를 쓴 앱 |
-| [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) | 대상이 있던 폴더를 탐색한 흔적 |
-| [오피스 최근 파일](/02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md) | 오피스 문서라면 오피스가 따로 남긴 경로와 시각 |
-| [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) · [WPD·EMDMgmt](/02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | LNK 의 볼륨 일련번호·이름과 같은 매체가 연결된 기록 |
-| [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) | LNK 의 공유 이름과 드라이브 문자 |
-| [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 지워지거나 다시 쓰이기 전의 LNK |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 밖에서 받은 LNK 인지 |
+| [$MFT](../filesystem/mft.md) | LNK 파일 자신의 생성·수정 시각. 대상 파일이 남아 있다면 지금의 대상 시각 |
+| [$UsnJrnl](../filesystem/usnjrnl.md) | LNK 가 다시 쓰이거나 지워진 기록. 대상 파일의 이름 바꾸기·삭제 |
+| [점프리스트](jump-lists.md) | 어느 앱으로 열었는지. 같은 대상의 LNK 형식 데이터 |
+| [최근 문서 (RecentDocs)](recentdocs.md) · [열기·저장 대화상자 기록](comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) | 같은 파일 이름과 순서. 대화상자를 쓴 앱 |
+| [셸백](shellbags/index.md) | 대상이 있던 폴더를 탐색한 흔적 |
+| [오피스 최근 파일](microsoft-office/file-mru-place-mru.md) | 오피스 문서라면 오피스가 따로 남긴 경로와 시각 |
+| [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) · [WPD·EMDMgmt](../external-devices/usb-storage-artifacts/wpd-emdmgmt.md) | LNK 의 볼륨 일련번호·이름과 같은 매체가 연결된 기록 |
+| [공유 폴더·네트워크 드라이브](../network/network-shares-mapped-drives.md) | LNK 의 공유 이름과 드라이브 문자 |
+| [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 지워지거나 다시 쓰이기 전의 LNK |
+| [다운로드 출처 표시](../filesystem/zone-identifier.md) | 밖에서 받은 LNK 인지 |
 
-여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md)와 [USB 로 무엇을 가져갔나](/04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다. 계정 뒤의 사람을 밝히는 일은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)를 봅니다.
+여러 기록을 합쳐 읽는 순서는 [이 파일을 누가 언제 열었나](../../04-scenarios/activity/file-access.md)와 [USB 로 무엇을 가져갔나](../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다. 계정 뒤의 사람을 밝히는 일은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)를 봅니다.
 
 ## 실습
 

@@ -56,7 +56,7 @@
 - 인증서 안의 유효기간 시작 시각과, 인증서 파일·폴더의 파일시스템 시각이 어떤 관계인지는 이번 자료로 확인하지 못했습니다.
 - 파일·폴더의 생성 시각은 그 PC 에 인증서가 처음 놓인 때 (발급 또는 복사) 를 가리킬 수 있습니다. 복사로 옮긴 경우에는 발급 시각과 다릅니다. 그래서 폴더 시각을 발급 시각으로 단정하지 않습니다.
 - 인증서 사용 (로그인·이체) 시각이 이 폴더에 남는지는 확인하지 못했습니다. 사용 시각은 서비스 쪽 기록으로 봅니다.
-- 시각 형식 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+- 시각 형식 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -67,8 +67,8 @@
 
 ### 지우기와 조작
 
-- **인증서 파일을 지웁니다.** 지운 파일은 파일시스템에 흔적이 남을 수 있습니다. 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
-- **다른 매체로 옮깁니다.** 인증서는 외장 메모리·휴대전화로 옮길 수 있습니다. 이 PC 에 없다고 인증서가 없었다고 단정하지 않습니다. 외장 매체 연결 흔적은 [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) 에서 봅니다.
+- **인증서 파일을 지웁니다.** 지운 파일은 파일시스템에 흔적이 남을 수 있습니다. 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- **다른 매체로 옮깁니다.** 인증서는 외장 메모리·휴대전화로 옮길 수 있습니다. 이 PC 에 없다고 인증서가 없었다고 단정하지 않습니다. 외장 매체 연결 흔적은 [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) 에서 봅니다.
 
 ## 직접 분석해 보기
 
@@ -80,9 +80,9 @@
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | `NPKI` 폴더가 어느 사용자 계정 아래에 있는지 |
-| [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) | 인증서를 외장 매체로 옮긴 연결 흔적 |
-| [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) | 인증서 파일을 밖으로 뺀 흔적을 조사하는 흐름 |
+| [사용자 프로필 목록](../system-account/profilelist.md) | `NPKI` 폴더가 어느 사용자 계정 아래에 있는지 |
+| [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) | 인증서를 외장 매체로 옮긴 연결 흔적 |
+| [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) | 인증서 파일을 밖으로 뺀 흔적을 조사하는 흐름 |
 
 ## 참고 문헌
 

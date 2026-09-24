@@ -1,6 +1,6 @@
 # DRM 문서 판별 (Enterprise DRM)
 
-> 위치: [암호화 증거 다루기 (Encrypted Evidence)](/03-techniques/analysis/encrypted-evidence/index.md) > DRM 문서 판별
+> 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > DRM 문서 판별
 
 ## 한 줄 요약
 
@@ -17,8 +17,8 @@ DRM 문서 판별은 열리지 않는 문서를 세 갈래로 나누는 일입�
 
 ## 절차
 
-1. **실제 형식을 확인합니다.** 확장자가 아니라 파일 앞머리의 서명으로 가립니다. 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에 있습니다.
-2. **알려진 암호 표시부터 봅니다.** 오피스·ZIP·한글의 암호 표시는 [암호 걸린 문서·압축 파일](/03-techniques/analysis/encrypted-evidence/password-protected-files.md) 에 있습니다.
+1. **실제 형식을 확인합니다.** 확장자가 아니라 파일 앞머리의 서명으로 가립니다. 방법은 [파일 내용 검색](../content-search/index.md) 에 있습니다.
+2. **알려진 암호 표시부터 봅니다.** 오피스·ZIP·한글의 암호 표시는 [암호 걸린 문서·압축 파일](password-protected-files.md) 에 있습니다.
 3. **오피스 문서라면 `EncryptedPackage` 를 해석할 때 조심합니다.**
    - 암호 걸린 OOXML 은 OLE 파일 안의 `EncryptedPackage` 스트림에 들어갑니다.
    - 오피스에는 권한 관리 (IRM) 기능도 있습니다. IRM 으로 보호한 문서의 저장 구조는 이 페이지에서 다루지 않습니다.
@@ -30,13 +30,13 @@ DRM 문서 판별은 열리지 않는 문서를 세 갈래로 나누는 일입�
 6. **어느 표시와도 맞지 않으면 "형식 미상" 으로 분류합니다.**
    - 확장자는 문서인데 알려진 서명과 암호 표시가 하나도 맞지 않는 파일입니다.
    - 이런 파일을 DRM 문서라고 단정하지 않습니다.
-   - 같은 PC 에 문서 보안 프로그램을 설치하거나 실행한 흔적이 있는지 찾습니다. [설치 프로그램](/02-artifacts/system-account/uninstall.md), [서비스·드라이버](/02-artifacts/persistence/services-drivers.md), [어떤 프로그램을 언제 실행했나](/04-scenarios/activity/program-execution.md) 를 봅니다.
+   - 같은 PC 에 문서 보안 프로그램을 설치하거나 실행한 흔적이 있는지 찾습니다. [설치 프로그램](../../../02-artifacts/system-account/uninstall.md), [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md), [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) 를 봅니다.
 7. **기록합니다.** 파일마다 실제 형식, 켜진 비트나 표시, 분류(암호·DRM·형식 미상)를 적습니다.
 
 ### 한글 문서의 DRM 표시
 
 한컴의 HWP 5.0 명세는 `FileHeader` 스트림 첫 번째 속성에 DRM 관련 비트를 따로 둡니다.
-`FileHeader` 의 전체 구성과 암호·배포용 문서 비트는 [암호 걸린 문서·압축 파일](/03-techniques/analysis/encrypted-evidence/password-protected-files.md) 에 있습니다.
+`FileHeader` 의 전체 구성과 암호·배포용 문서 비트는 [암호 걸린 문서·압축 파일](password-protected-files.md) 에 있습니다.
 
 | 비트 | 뜻 |
 |---|---|
@@ -67,7 +67,7 @@ DRM 문서 판별은 열리지 않는 문서를 세 갈래로 나누는 일입�
 
 | 속성 값 (예시) | 켜진 비트 | 분류 |
 |---|---|---|
-| 0x00000003 | bit 0, bit 1 | 압축한 문서, 암호 설정 → [암호 걸린 문서·압축 파일](/03-techniques/analysis/encrypted-evidence/password-protected-files.md) |
+| 0x00000003 | bit 0, bit 1 | 압축한 문서, 암호 설정 → [암호 걸린 문서·압축 파일](password-protected-files.md) |
 | 0x00000011 | bit 0, bit 4 | 압축한 문서, DRM 보안 문서 |
 | 0x00000401 | bit 0, bit 10 | 압축한 문서, 공인 인증서 DRM 보안 문서 |
 | 0x00002001 | bit 0, bit 13 | 압축한 문서, 개인 정보 보안 문서 |
@@ -100,7 +100,7 @@ DRM 문서 판별은 열리지 않는 문서를 세 갈래로 나누는 일입�
 - **HWP 의 DRM 비트**: 문서를 저장할 당시 DRM 보안 문서로 표시되어 있었다는 뜻입니다. 누가 DRM 을 적용했는지, 어느 프로그램이 관여했는지는 비트가 말하지 않습니다.
 - **`DocOptions` 의 DRM 스트림**: 어떤 DRM 정보가 문서에 들어 있는지를 보여 줍니다. 스트림 안의 값 해석은 명세가 정의한 범위까지만 적습니다.
 - **형식 미상 파일**: "열 수 없었다" 와 "왜 열 수 없는지 확인하지 못했다" 를 나눠 씁니다.
-- **밖으로 나간 문서**: DRM 문서가 PC 밖으로 나갔는지 판단할 때는 [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) 를 함께 봅니다.
+- **밖으로 나간 문서**: DRM 문서가 PC 밖으로 나갔는지 판단할 때는 [자료를 밖으로 빼돌렸나](../../../04-scenarios/exfiltration/data-exfiltration/index.md) 를 함께 봅니다.
 
 보고서 문장 예:
 

@@ -16,11 +16,11 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | 심캐시 형식, UserAssist 키, 4688 의 칸이 버전마다 다릅니다. [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
-| 시간대 | 기록마다 시각 기준이 다릅니다. [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
-| 사용자 | 프리페치와 심캐시에는 사용자 정보가 없습니다. UserAssist 는 사용자 하이브(NTUSER.DAT)에 남습니다. [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 SID 와 프로필을 짝지어 둡니다. |
+| Windows 버전 | 심캐시 형식, UserAssist 키, 4688 의 칸이 버전마다 다릅니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
+| 시간대 | 기록마다 시각 기준이 다릅니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
+| 사용자 | 프리페치와 심캐시에는 사용자 정보가 없습니다. UserAssist 는 사용자 하이브(NTUSER.DAT)에 남습니다. [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 으로 SID 와 프로필을 짝지어 둡니다. |
 | 프리페치 설정 | `EnablePrefetcher` 값이 0 이면 프리페치 파일이 생기지 않습니다. |
-| 감사 정책 | 4688 은 프로세스 만들기 감사가 켜져 있을 때만 남습니다[1]. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
+| 감사 정책 | 4688 은 프로세스 만들기 감사가 켜져 있을 때만 남습니다[1]. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
 | Sysmon | Sysmon 은 따로 설치해야 생기는 로그입니다[2]. 설치 여부부터 봅니다. |
 | 수집 범위 | 프리페치 폴더, SYSTEM·SOFTWARE·사용자 하이브, AmCache 하이브, SRUDB.dat, `C:\Windows\appcompat\pca\` 폴더, 보안 로그, Sysmon 로그를 함께 확보합니다. |
 
@@ -41,18 +41,18 @@
 
 | 순서 | 아티팩트 | 알려 주는 것 | 실행을 증명하나 | 링크 |
 |---|---|---|---|---|
-| 1 | 프리페치 | 실행 횟수, 최근 실행 시각(Windows 8 이후 최대 8개), 실행 직후 읽은 파일 | 증명합니다. 사용자는 알려 주지 않습니다. | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| 2 | UserAssist | 사용자별 실행 횟수, 마지막 실행 시각 | 그 사용자 세션의 실행으로 읽습니다. GUID 의 뜻은 알려진 해석입니다. | [UserAssist](/02-artifacts/execution/userassist.md) |
-| 3 | BAM | SID 별 장치 경로와 FILETIME 으로 읽히는 값(관찰) | 값의 뜻을 문서로 확인하지 못했습니다. 다른 기록과 맞춰 씁니다. | [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| 4 | 프로그램 호환성 도우미 | 전체 경로와 시각(관찰) | 보조 기록으로 씁니다. | [프로그램 호환성 도우미](/02-artifacts/execution/pca.md) |
-| 5 | 보안 로그 4688 | 새 프로세스, 부모 프로세스, 명령줄, 권한 상승 여부 | 감사가 켜져 있으면 증명합니다. | [프로세스 생성](/02-artifacts/event-logs/4688.md) |
-| 6 | Sysmon 이벤트 1 | 명령줄, 파일 해시, ProcessGUID | 설치돼 있으면 증명합니다. | [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 7 | SRUM | 앱·사용자별 자원 사용량(1시간 단위) | 그 시간대에 앱이 자원을 쓴 기록입니다. | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| 8 | AmCache | 파일 경로, SHA-1 | 항목만으로는 증명하지 못합니다. | [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| 9 | 심캐시 | 경로, 파일의 마지막 수정 시각 | 항목만으로는 증명하지 못합니다. | [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md) |
+| 1 | 프리페치 | 실행 횟수, 최근 실행 시각(Windows 8 이후 최대 8개), 실행 직후 읽은 파일 | 증명합니다. 사용자는 알려 주지 않습니다. | [프리페치](../../02-artifacts/execution/prefetch/index.md) |
+| 2 | UserAssist | 사용자별 실행 횟수, 마지막 실행 시각 | 그 사용자 세션의 실행으로 읽습니다. GUID 의 뜻은 알려진 해석입니다. | [UserAssist](../../02-artifacts/execution/userassist.md) |
+| 3 | BAM | SID 별 장치 경로와 FILETIME 으로 읽히는 값(관찰) | 값의 뜻을 문서로 확인하지 못했습니다. 다른 기록과 맞춰 씁니다. | [BAM·DAM](../../02-artifacts/execution/background-activity-moderator.md) |
+| 4 | 프로그램 호환성 도우미 | 전체 경로와 시각(관찰) | 보조 기록으로 씁니다. | [프로그램 호환성 도우미](../../02-artifacts/execution/pca.md) |
+| 5 | 보안 로그 4688 | 새 프로세스, 부모 프로세스, 명령줄, 권한 상승 여부 | 감사가 켜져 있으면 증명합니다. | [프로세스 생성](../../02-artifacts/event-logs/4688.md) |
+| 6 | Sysmon 이벤트 1 | 명령줄, 파일 해시, ProcessGUID | 설치돼 있으면 증명합니다. | [Sysmon 로그](../../02-artifacts/event-logs/sysmon/index.md) |
+| 7 | SRUM | 앱·사용자별 자원 사용량(1시간 단위) | 그 시간대에 앱이 자원을 쓴 기록입니다. | [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) |
+| 8 | AmCache | 파일 경로, SHA-1 | 항목만으로는 증명하지 못합니다. | [AmCache](../../02-artifacts/execution/amcache-hve/index.md) |
+| 9 | 심캐시 | 경로, 파일의 마지막 수정 시각 | 항목만으로는 증명하지 못합니다. | [심캐시](../../02-artifacts/execution/shimcache-appcompatcache.md) |
 | 10 | 그 밖의 기록 | 아래 "그 밖의 흔적" 참고 | 기록마다 다릅니다. | 아래 링크 |
 
-프리페치·AmCache·SRUM 의 구조와 해석은 각 링크 페이지에 있습니다. 아래에서는 조사 순서에 필요한 부분만 다룹니다. SRUDB.dat 는 ESE 형식입니다. 압수 이미지에서 손상된 DB 를 다루는 법은 [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) 의 "먼저 확인할 것" 과 [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다.
+프리페치·AmCache·SRUM 의 구조와 해석은 각 링크 페이지에 있습니다. 아래에서는 조사 순서에 필요한 부분만 다룹니다. SRUDB.dat 는 ESE 형식입니다. 압수 이미지에서 손상된 DB 를 다루는 법은 [웹 사용 행위 재구성](web-activity.md) 의 "먼저 확인할 것" 과 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에 있습니다.
 
 ## 심캐시
 
@@ -137,7 +137,7 @@ UserAssist 는 사용자 하이브의 탐색기(Explorer) 키 아래에 남는 �
 - {CEBFF5CD…} 의 Count 키에는 값이 203개 있었습니다(관찰). 72바이트 값이 202개, 1,612바이트 값이 1개였습니다(관찰).
 - {F4E57C4B…} 의 Count 키에는 값이 25개 있었습니다(관찰). 72바이트 값이 24개, 1,612바이트 값이 1개였습니다(관찰).
 - 1,612바이트 값의 이름은 `HRZR_PGYFRFFVBA` 였습니다(관찰).
-- 값 이름 가운데 경로 앞부분이 `{…GUID…}\` 로 된 것이 있었습니다(관찰). 알려진 폴더 GUID 로 보입니다. 경로로 바꾸는 법은 [윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 봅니다.
+- 값 이름 가운데 경로 앞부분이 `{…GUID…}\` 로 된 것이 있었습니다(관찰). 알려진 폴더 GUID 로 보입니다. 경로로 바꾸는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 봅니다.
 - 스토어 앱 식별자(…!App) 형식의 값 이름도 있었습니다(관찰).
 - 명령줄로 띄운 실행이 UserAssist 에 남는지는 확인하지 못했습니다.
 
@@ -200,7 +200,7 @@ PCA 파일이 어느 Windows 버전부터 생겼는지는 확인하지 못했습
 
 **Mandatory Label.** S-1-16-4096 은 Low, S-1-16-8192 는 Medium, S-1-16-12288 은 High, S-1-16-16384 는 System, S-1-16-20480 은 Protected process 입니다[1].
 
-SubjectLogonId 는 로그온 이벤트와 이어 봅니다([로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md)). PowerShell 로 실행한 명령은 [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 에서 함께 봅니다.
+SubjectLogonId 는 로그온 이벤트와 이어 봅니다([로그온·로그오프](../../02-artifacts/event-logs/logon-events/index.md)). PowerShell 로 실행한 명령은 [PowerShell 실행 기록](../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 에서 함께 봅니다.
 
 ## Sysmon 이벤트 1
 
@@ -224,10 +224,10 @@ SubjectLogonId 는 로그온 이벤트와 이어 봅니다([로그온·로그오
 
 아래 기록은 이 페이지에서 세부를 다루지 않습니다. 조사 질문에 맞는 것을 골라 봅니다.
 
-- [MUICache](/02-artifacts/execution/muicache.md) · [작업표시줄 사용 기록](/02-artifacts/execution/featureusage.md) · [실행 창 명령 기록](/02-artifacts/execution/runmru.md)
-- [PowerShell 명령 기록](/02-artifacts/execution/consolehost-history-txt.md) · [PowerShell 실행 기록](/02-artifacts/event-logs/powershell-event-logs-4103-4104.md)
-- [윈도 오류 보고](/02-artifacts/execution/wer.md) · [디펜더 검사 로그·격리 파일](/02-artifacts/execution/mplog-detectionhistory-quarantine.md)
-- [서비스 설치](/02-artifacts/event-logs/7045-4697.md) · [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md)
+- [MUICache](../../02-artifacts/execution/muicache.md) · [작업표시줄 사용 기록](../../02-artifacts/execution/featureusage.md) · [실행 창 명령 기록](../../02-artifacts/execution/runmru.md)
+- [PowerShell 명령 기록](../../02-artifacts/execution/consolehost-history-txt.md) · [PowerShell 실행 기록](../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md)
+- [윈도 오류 보고](../../02-artifacts/execution/wer.md) · [디펜더 검사 로그·격리 파일](../../02-artifacts/execution/mplog-detectionhistory-quarantine.md)
+- [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) · [예약 작업 이벤트](../../02-artifacts/event-logs/taskscheduler-4698.md)
 
 ## 분석 흐름
 
@@ -239,15 +239,15 @@ SubjectLogonId 는 로그온 이벤트와 이어 봅니다([로그온·로그오
 6. PCA 파일에서 같은 경로를 찾아 시각을 적습니다.
 7. 4688 이나 Sysmon 이벤트 1 이 있으면 명령줄, 부모 프로세스, 해시, 계정을 봅니다. SubjectLogonId 로 로그온 세션을 잇습니다.
 8. SRUM 에서 그 시간대에 이 앱이 자원을 쓴 기록을 봅니다.
-9. AmCache·심캐시로 파일 경로·SHA-1·수정 시각을 확인합니다. 이 둘은 실행 증거가 아니라 파일 정보를 보태는 기록으로 씁니다. 실행 파일이 지금 없으면 이 경로와 해시로 찾습니다([지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)).
-10. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 에 올립니다.
-11. 자동실행으로 뜬 것인지는 [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) 로 확인합니다. 그 시각에 누가 PC 앞에 있었는지는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 로 좁힙니다.
+9. AmCache·심캐시로 파일 경로·SHA-1·수정 시각을 확인합니다. 이 둘은 실행 증거가 아니라 파일 정보를 보태는 기록으로 씁니다. 실행 파일이 지금 없으면 이 경로와 해시로 찾습니다([지운 파일의 흔적 찾기](deleted-file-traces.md)).
+10. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올립니다.
+11. 자동실행으로 뜬 것인지는 [악성코드 지속성(자동실행) 찾기](../incident/persistence.md) 로 확인합니다. 그 시각에 누가 PC 앞에 있었는지는 [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) 로 좁힙니다.
 
 ## 흔한 오판
 
 1. **AmCache 나 심캐시에 있으니 실행했다고 씁니다.** AmCache 항목이 있다고 실행했다는 뜻이 아닙니다. 심캐시 항목도 실행을 증명하지 못합니다.
 2. **심캐시 시각을 실행 시각으로 씁니다.** 그 시각은 파일의 마지막 수정 시각입니다[3].
-3. **최근 항목 바로가기로 실행을 말합니다.** 실행 파일은 최근 항목에서 걸러집니다. 바로가기 파일은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 에서 다룹니다.
+3. **최근 항목 바로가기로 실행을 말합니다.** 실행 파일은 최근 항목에서 걸러집니다. 바로가기 파일은 [이 파일을 누가 언제 열었나](file-access.md) 에서 다룹니다.
 4. **프리페치가 없으니 실행하지 않았다고 봅니다.** 프리페치는 꺼져 있을 수 있습니다. Windows 8 이후 보관 한도는 1,024개라서 오래된 파일이 밀려날 수 있습니다.
 5. **UserAssist GUID 의 뜻을 확정된 사실로 씁니다.** 두 GUID 의 뜻은 추정입니다[4].
 6. **BAM·PCA 시각을 문서로 확인된 실행 시각처럼 씁니다.** 이 페이지의 BAM·PCA 내용은 한 PC 에서 본 것입니다(관찰).
@@ -263,13 +263,13 @@ SubjectLogonId 는 로그온 이벤트와 이어 봅니다([로그온·로그오
 
 ## 함께 볼 페이지
 
-- [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) · [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) — 실행 기록의 구조입니다.
-- [심캐시](/02-artifacts/execution/shimcache-appcompatcache.md) · [UserAssist](/02-artifacts/execution/userassist.md) · [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) · [프로그램 호환성 도우미](/02-artifacts/execution/pca.md) — 레지스트리와 파일에 남는 실행 흔적입니다.
-- [프로세스 생성](/02-artifacts/event-logs/4688.md) · [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) — 이벤트 로그의 실행 기록입니다.
-- [악성코드 지속성(자동실행) 찾기](/04-scenarios/incident/persistence.md) — 자동으로 뜬 프로그램을 가립니다.
-- [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) — 실행 파일이 들어온 경로를 봅니다.
-- [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) — 실행 파일의 출처를 봅니다.
-- [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) — 계정에서 사람으로 좁힙니다.
+- [프리페치](../../02-artifacts/execution/prefetch/index.md) · [AmCache](../../02-artifacts/execution/amcache-hve/index.md) · [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) — 실행 기록의 구조입니다.
+- [심캐시](../../02-artifacts/execution/shimcache-appcompatcache.md) · [UserAssist](../../02-artifacts/execution/userassist.md) · [BAM·DAM](../../02-artifacts/execution/background-activity-moderator.md) · [프로그램 호환성 도우미](../../02-artifacts/execution/pca.md) — 레지스트리와 파일에 남는 실행 흔적입니다.
+- [프로세스 생성](../../02-artifacts/event-logs/4688.md) · [Sysmon 로그](../../02-artifacts/event-logs/sysmon/index.md) — 이벤트 로그의 실행 기록입니다.
+- [악성코드 지속성(자동실행) 찾기](../incident/persistence.md) — 자동으로 뜬 프로그램을 가립니다.
+- [악성코드는 어디서 들어왔나](../incident/initial-access.md) — 실행 파일이 들어온 경로를 봅니다.
+- [이 파일은 어디서 왔나](file-origin.md) — 실행 파일의 출처를 봅니다.
+- [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) — 계정에서 사람으로 좁힙니다.
 
 ## 참고 문헌
 

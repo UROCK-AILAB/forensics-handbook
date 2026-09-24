@@ -19,7 +19,7 @@ Windows 는 사용자가 저장한 웹·앱·네트워크 자격 증명을 사�
 - 저장된 자격 증명이 거부되고 새 자격 증명으로 접근이 되면 옛 것을 새 것으로 덮어씁니다.
 - Internet Explorer 10 은 로그인이 필요한 사이트의 자격 증명을 이 저장 영역에서 찾습니다.
 
-DPAPI 구조 자체는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다. 이 페이지는 볼트의 위치·구조·시각·탐지만 다룹니다.
+DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다. 이 페이지는 볼트의 위치·구조·시각·탐지만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -135,19 +135,19 @@ DPAPI 구조 자체는 [DPAPI 구조](/01-foundations/protection/data-protection
 - `LastWritten` 은 쓰기 때 넣은 값을 무시하고 시스템이 정합니다. 그래서 앱이 이 값을 마음대로 넣지는 못합니다. 다만 값은 그 컴퓨터의 시계를 따르므로, 시계가 틀렸으면 이 값도 틀립니다.
 - Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보입니다. 이 값이 디스크 파일 어느 칸에 있는지는 확인하지 못했습니다. 그래서 "마지막 사용"과 "마지막 고침"을 섞지 않습니다.
 - `.vcrd` 파일의 파일시스템 시각 (생성·수정) 이 저장·갱신 시점과 맞는지는 확인하지 못했습니다.
-- FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+- FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-1. **파일만 있고 열쇠가 없으면 못 읽습니다.** 볼트 파일은 DPAPI 로 감싸여 있다고 알려져 있습니다. 사용자 마스터키와 그 마스터키를 풀 재료 (로그온 비밀번호나 도메인 백업키) 가 함께 있어야 풉니다. 구조는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 를 봅니다.
-2. **덮어쓴 자격 증명은 사라집니다.** 저장된 자격 증명이 거부되고 새 자격 증명으로 접근이 되면, 자격 증명 관리자가 옛 값을 새 값으로 덮어씁니다. 이전 값은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 파일에서 찾아 봅니다.
+1. **파일만 있고 열쇠가 없으면 못 읽습니다.** 볼트 파일은 DPAPI 로 감싸여 있다고 알려져 있습니다. 사용자 마스터키와 그 마스터키를 풀 재료 (로그온 비밀번호나 도메인 백업키) 가 함께 있어야 풉니다. 구조는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
+2. **덮어쓴 자격 증명은 사라집니다.** 저장된 자격 증명이 거부되고 새 자격 증명으로 접근이 되면, 자격 증명 관리자가 옛 값을 새 값으로 덮어씁니다. 이전 값은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 파일에서 찾아 봅니다.
 3. **로밍 프로필을 놓칩니다.** 로밍이 켜진 계정은 자격 증명이 다른 컴퓨터에도 있을 수 있습니다. Roaming 폴더 쪽 경로는 이번 자료로 확인하지 못했으므로 사용자 프로필 전체를 훑습니다.
 4. **API 구조체 순서를 디스크 배치로 오해합니다.** 위 칸 순서는 API 가 돌려주는 순서입니다. 파일 바이트 배치가 같다고 단정하지 않습니다.
 5. **세션형은 디스크에 안 남을 수 있습니다.** `Persist` 가 1 (세션) 인 자격 증명은 로그오프하면 사라집니다. 디스크 이미지에 없다고 저장한 적이 없다고 보지 않습니다.
 
 ### 지우기와 조작
 
-- **자격 증명 관리자 UI 로 지웁니다.** 지운 `.vcrd` 파일이 볼트 폴더에서 사라져도 파일시스템에 흔적이 남을 수 있습니다. 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- **자격 증명 관리자 UI 로 지웁니다.** 지운 `.vcrd` 파일이 볼트 폴더에서 사라져도 파일시스템에 흔적이 남을 수 있습니다. 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 - **정책으로 저장을 막습니다.** "네트워크 액세스: 네트워크 인증을 위한 암호 및 자격 증명의 저장 허용 안 함" 정책을 켜면 도메인 인증용 자격 증명이 저장되지 않습니다. 스토어 앱의 자격 증명 저장은 관리자가 막을 수 없습니다.
 - **백업 파일로 빼돌립니다.** 자격 증명 관리자의 백업 기능으로 저장된 자격 증명을 파일로 내보낼 수 있습니다. 백업·복원 창은 `rundll32.exe keymgr.dll` 로도 띄웁니다 (MITRE ATT&CK T1555.004). 백업하면 이벤트 5376 이 남습니다 (아래).
 
@@ -174,18 +174,18 @@ DPAPI 구조 자체는 [DPAPI 구조](/01-foundations/protection/data-protection
 - 라이브 시스템에서는 Windows 에 들어 있는 `vaultcmd.exe` 로 저장된 자격 증명 목록을 봅니다.
 - 오프라인 이미지에서는 DPAPI 복호를 지원하는 공개 도구로 `.vpol`·`.vcrd` 를 풉니다. 사용자 마스터키를 풀 재료가 함께 있어야 합니다.
 - 도구가 보여 준 시각이 UTC 인지, 분석 PC 의 현지 시각인지 확인합니다.
-- 값 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 값 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) | 볼트 파일을 풀 마스터키와 그 재료 |
-| [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](/02-artifacts/credentials/sam-security/index.md) | 시스템·계정이 저장한 다른 비밀 |
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | 볼트가 어느 사용자 SID 아래에 있는지 |
-| [원격 데스크톱 접속 기록](/02-artifacts/network/rdp-client-mru.md) | 원격 호스트를 대상으로 하는 자격 증명과 접속 이력 (원격 데스크톱 자격 증명의 `TargetName` 형식은 확인하지 못했습니다) |
-| [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) | 저장된 자격 증명으로 실제 로그온했는지 |
-| [계정 탈취와 측면 이동](/04-scenarios/incident/credential-theft-lateral-movement/index.md) | 볼트를 노린 공격을 조사하는 흐름 |
+| [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) | 볼트 파일을 풀 마스터키와 그 재료 |
+| [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](sam-security/index.md) | 시스템·계정이 저장한 다른 비밀 |
+| [사용자 프로필 목록](../system-account/profilelist.md) | 볼트가 어느 사용자 SID 아래에 있는지 |
+| [원격 데스크톱 접속 기록](../network/rdp-client-mru.md) | 원격 호스트를 대상으로 하는 자격 증명과 접속 이력 (원격 데스크톱 자격 증명의 `TargetName` 형식은 확인하지 못했습니다) |
+| [로그온·로그오프](../event-logs/logon-events/index.md) | 저장된 자격 증명으로 실제 로그온했는지 |
+| [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md) | 볼트를 노린 공격을 조사하는 흐름 |
 
 ### 탐지에서 보는 것
 
@@ -201,7 +201,7 @@ MITRE ATT&CK T1555.004 는 다음을 탐지 대상으로 꼽습니다.
 - 이벤트 5376 (S) "Credential Manager credentials were backed up."
 - 채널 Security, 공급자 Microsoft-Windows-Security-Auditing, 하위 범주 Audit User Account Management, 성공만 (S), Task 13824.
 - 최소 OS 는 Windows Vista·Windows Server 2008. DC·멤버 서버·워크스테이션 모두에서 생깁니다.
-- 칸은 `SubjectUserSid`, `SubjectUserName`, `SubjectDomainName`, `SubjectLogonId` 입니다. `SubjectLogonId` 로 [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) 의 4624 와 이어 봅니다.
+- 칸은 `SubjectUserSid`, `SubjectUserName`, `SubjectDomainName`, `SubjectLogonId` 입니다. `SubjectLogonId` 로 [로그온·로그오프](../event-logs/logon-events/index.md) 의 4624 와 이어 봅니다.
 - Microsoft 는 사용자가 거의 쓰지 않는 동작이라 모든 5376 을 기록하도록 권합니다.
 
 ## 실습

@@ -17,15 +17,15 @@ LSA (Local Security Authority) 는 로그온 세션을 만들 때마다 로그�
 - 4624 는 접속을 받은 컴퓨터, 곧 세션이 만들어진 컴퓨터에 남습니다.
 - 4625 도 로그온을 시도한 대상 컴퓨터에 남습니다.
 - 레코드에는 숫자만 들어 있습니다. "Interactive" 같은 이름은 이벤트 뷰어나 분석 도구가 붙여 보여 줍니다.
-- 실패 코드와 세션 잇기는 각각 [로그온 실패와 실패 코드](/02-artifacts/event-logs/logon-events/4625.md), [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md)에서 다룹니다.
+- 실패 코드와 세션 잇기는 각각 [로그온 실패와 실패 코드](4625.md), [로그온 세션 잇기](logon-id-4624-4634-4647.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-세 이벤트 모두 보안 로그 `%SystemRoot%\System32\winevt\Logs\Security.evtx` 에 남습니다. 감사 정책을 확인하는 법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)을 봅니다. 로컬 PC 와 도메인 컨트롤러 가운데 어디에 남는지는 [기록이 남는 위치](/02-artifacts/event-logs/logon-events/pc.md)를 봅니다.
+세 이벤트 모두 보안 로그 `%SystemRoot%\System32\winevt\Logs\Security.evtx` 에 남습니다. 감사 정책을 확인하는 법은 [감사 정책과 로그 설정](../audit-policy-log-settings.md)을 봅니다. 로컬 PC 와 도메인 컨트롤러 가운데 어디에 남는지는 [기록이 남는 위치](pc.md)를 봅니다.
 
 | Windows | 로그온 성공 이벤트 | 로그온 유형과 관련된 차이 |
 |---|---|---|
-| XP·Server 2003 | 528 (로그온 성공), 540 (네트워크 로그온 성공) | 구형 EVT 형식입니다. 형식은 [구형 EVT 형식](/01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)을 봅니다 |
+| XP·Server 2003 | 528 (로그온 성공), 540 (네트워크 로그온 성공) | 구형 EVT 형식입니다. 형식은 [구형 EVT 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)을 봅니다 |
 | Vista·Server 2008 | 4624 이벤트 버전 0 | 4624·4625·4634 가 이때 생겼습니다 |
 | 8·Server 2012 | 4624 이벤트 버전 1 | 가장 수준 (Impersonation Level) 칸이 생겼습니다 |
 | 10 이후 | 4624 이벤트 버전 2 | "로그온 정보" 절이 생기고 로그온 유형이 그 절로 옮겨졌습니다. 제한된 관리 모드·가상 계정·상승된 토큰·연결된 로그온 ID·네트워크 계정 이름·네트워크 계정 도메인 칸이 생겼습니다 |
@@ -77,7 +77,7 @@ Microsoft 는 관리 도구마다 어떤 유형이 생기는지 표로 정리해
 | IIS 기본 인증 (IIS 6.0 이후) | 8 | 남음 |
 | IIS 통합 Windows 인증 | 3 | 남지 않음 |
 
-유형 3 이라도 위임 (Delegation) 이 켜져 있으면 Kerberos 티켓이 남습니다. LSA 시크릿은 [LSA 시크릿](/02-artifacts/credentials/sam-security/lsa-secrets.md)에서 다룹니다.
+유형 3 이라도 위임 (Delegation) 이 켜져 있으면 Kerberos 티켓이 남습니다. LSA 시크릿은 [LSA 시크릿](../../credentials/sam-security/lsa-secrets.md)에서 다룹니다.
 
 > 그림 자리: 출발 PC 와 대상 PC 두 대를 그리고, 원격 데스크톱·공유 폴더 접근·`runas /netonly` 가 각각 어느 PC 에 몇 번 유형으로 남는지 화살표로 보여 줍니다.
 
@@ -116,32 +116,32 @@ Microsoft 는 관리 도구마다 어떤 유형이 생기는지 표로 정리해
 
 ## 시각 해석
 
-- 이벤트 시각(`TimeCreated`)은 UTC 입니다. 레코드 안에 FILETIME 으로 저장됩니다. 형식은 [EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md)를 봅니다.
-- 이벤트 뷰어는 분석 PC 의 시간대로 바꿔 보여 줍니다. 보정은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+- 이벤트 시각(`TimeCreated`)은 UTC 입니다. 레코드 안에 FILETIME 으로 저장됩니다. 형식은 [EVTX 파일 구조](../../../01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md)를 봅니다.
+- 이벤트 뷰어는 분석 PC 의 시간대로 바꿔 보여 줍니다. 보정은 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 - 4624 의 시각은 이 컴퓨터에 세션이 만들어진 때입니다. 4634 의 시각은 세션이 사라진 때입니다.
 - 유형 7 의 4624 시각은 잠금을 푼 때입니다.
 - 유형 9 의 시각은 새 자격 증명 세션을 만든 때입니다. 상대 컴퓨터에 실제로 접속한 때가 아닙니다. 접속한 때는 상대 컴퓨터의 유형 3 기록에서 찾습니다.
 - 유형 3 세션의 길이는 사람이 자리에 있던 시간과 관계가 없습니다. 네트워크 자원에 접근할 때마다 세션이 생기고 끝날 수 있습니다.
 - 로그온 ID 는 한 번 부팅한 동안에만 고유합니다. 재부팅을 넘어 4624 와 4634 를 짝짓지 않습니다.
-- 시스템 시각을 바꾸면 이벤트 시각도 그 시계를 따릅니다. [시간 변경 (4616·Kernel-General)](/02-artifacts/event-logs/4616-kernel-general.md)을 함께 봅니다.
+- 시스템 시각을 바꾸면 이벤트 시각도 그 시계를 따릅니다. [시간 변경 (4616·Kernel-General)](../4616-kernel-general.md)을 함께 봅니다.
 
 ## 함정과 한계
 
-1. **유형 2 를 "사람이 앞에 있었다" 로 읽습니다.** RUNAS, 네트워크 KVM, 서버 원격 관리 카드도 유형 2 를 남깁니다. 자격 증명을 지정한 PsExec 도 대상에 유형 2 세션을 만듭니다. Microsoft 의 4634 문서 예시에는 `Window Manager\DWM-1` (S-1-5-90-1) 계정의 유형 2 기록이 나옵니다. 계정 SID 를 보고 시스템 계정을 먼저 걸러 냅니다([윈도 식별자 형식](/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)).
-2. **한 번 로그온을 4624 두 건으로 셉니다.** UAC 가 켜진 관리자 계정이 대화형으로 로그온하면 권한이 있는 세션과 없는 세션이 함께 생깁니다. 두 기록은 `TargetLinkedLogonId` 로 이어집니다. 자세한 내용은 [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md)를 봅니다.
-3. **유형 3 을 모두 사람의 접속으로 봅니다.** 유형 3 은 공유 폴더 접근, 원격 관리 도구, 스캐너가 모두 남깁니다. 계정 이름이 `$` 로 끝나는 컴퓨터 계정과 `ANONYMOUS LOGON` 도 많습니다. 원격 데스크톱에서 유형 3 과 10 이 함께 보이는 이유는 [RDP 해석 함정](/02-artifacts/event-logs/rdp-event-logs/1149-nla-3-10.md)에서 다룹니다.
+1. **유형 2 를 "사람이 앞에 있었다" 로 읽습니다.** RUNAS, 네트워크 KVM, 서버 원격 관리 카드도 유형 2 를 남깁니다. 자격 증명을 지정한 PsExec 도 대상에 유형 2 세션을 만듭니다. Microsoft 의 4634 문서 예시에는 `Window Manager\DWM-1` (S-1-5-90-1) 계정의 유형 2 기록이 나옵니다. 계정 SID 를 보고 시스템 계정을 먼저 걸러 냅니다([윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)).
+2. **한 번 로그온을 4624 두 건으로 셉니다.** UAC 가 켜진 관리자 계정이 대화형으로 로그온하면 권한이 있는 세션과 없는 세션이 함께 생깁니다. 두 기록은 `TargetLinkedLogonId` 로 이어집니다. 자세한 내용은 [로그온 세션 잇기](logon-id-4624-4634-4647.md)를 봅니다.
+3. **유형 3 을 모두 사람의 접속으로 봅니다.** 유형 3 은 공유 폴더 접근, 원격 관리 도구, 스캐너가 모두 남깁니다. 계정 이름이 `$` 로 끝나는 컴퓨터 계정과 `ANONYMOUS LOGON` 도 많습니다. 원격 데스크톱에서 유형 3 과 10 이 함께 보이는 이유는 [RDP 해석 함정](../rdp-event-logs/1149-nla-3-10.md)에서 다룹니다.
 4. **유형 8 을 "비밀번호가 평문으로 네트워크를 지나갔다" 로 읽습니다.** 유형 8 은 평문 비밀번호가 대상 컴퓨터의 인증 패키지에 넘어왔다는 뜻입니다. Microsoft 문서는 기본 인증 패키지가 자격 증명을 해시한 뒤 네트워크로 보낸다고 적습니다. 전송 구간이 평문이었는지는 프로토콜과 암호화 설정으로 따로 봅니다.
 5. **유형 9 의 계정 칸을 거꾸로 읽습니다.** 유형 9 는 로컬 신원을 그대로 둡니다. 그래서 새 로그온 계정 칸에는 원래 사용자가 남습니다. 바깥 연결에 쓸 계정은 `TargetOutboundUserName` 에 있습니다.
-6. **유형 9 를 곧바로 공격으로 봅니다.** 공개 탐지 규칙(Sigma)은 유형 9·`seclogo`·Negotiate 조합을 Mimikatz `sekurlsa::pth` 같은 해시 전달 (Pass-the-Hash) 동작과 맞는다고 봅니다. 같은 규칙은 `runas /netonly` 를 오탐 원인으로 적습니다. 판단은 [자격 증명을 빼냈나](/04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md)와 [다른 PC 에서 원격 실행했나](/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md)의 흐름을 따라 여러 기록으로 합니다.
+6. **유형 9 를 곧바로 공격으로 봅니다.** 공개 탐지 규칙(Sigma)은 유형 9·`seclogo`·Negotiate 조합을 Mimikatz `sekurlsa::pth` 같은 해시 전달 (Pass-the-Hash) 동작과 맞는다고 봅니다. 같은 규칙은 `runas /netonly` 를 오탐 원인으로 적습니다. 판단은 [자격 증명을 빼냈나](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md)와 [다른 PC 에서 원격 실행했나](../../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md)의 흐름을 따라 여러 기록으로 합니다.
 7. **도구가 붙인 이름만 봅니다.** 문서마다 표에 실린 번호가 다릅니다. 도구의 번호-이름 대응표도 다를 수 있습니다. 판단은 숫자 원값으로 합니다.
-8. **없다고 안 했다고 봅니다.** 로그온 감사가 꺼져 있으면 4624 가 없습니다. 보안 로그가 크기 한도에 닿으면 오래된 기록부터 덮어씁니다. 로그를 지운 흔적은 [이벤트 로그 삭제](/02-artifacts/event-logs/1102-104.md)에서 찾습니다. 지운 뒤 파일 안에 남은 레코드는 [파일 안에 남은 지운·손상 레코드](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
-9. **출발 PC 에서 유형 10 을 찾습니다.** 유형은 로그온을 받은 쪽에 남습니다. 원격 데스크톱으로 나간 기록은 출발 PC 의 [나간 접속 (RDPClient 1024·1102)](/02-artifacts/event-logs/rdp-event-logs/rdpclient-1024-1102.md)과 [원격 데스크톱 접속 기록](/02-artifacts/network/rdp-client-mru.md)에서 찾습니다.
+8. **없다고 안 했다고 봅니다.** 로그온 감사가 꺼져 있으면 4624 가 없습니다. 보안 로그가 크기 한도에 닿으면 오래된 기록부터 덮어씁니다. 로그를 지운 흔적은 [이벤트 로그 삭제](../1102-104.md)에서 찾습니다. 지운 뒤 파일 안에 남은 레코드는 [파일 안에 남은 지운·손상 레코드](../../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
+9. **출발 PC 에서 유형 10 을 찾습니다.** 유형은 로그온을 받은 쪽에 남습니다. 원격 데스크톱으로 나간 기록은 출발 PC 의 [나간 접속 (RDPClient 1024·1102)](../rdp-event-logs/rdpclient-1024-1102.md)과 [원격 데스크톱 접속 기록](../../network/rdp-client-mru.md)에서 찾습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-EVTX 레코드 안의 이벤트는 이진 XML 템플릿 (Binary XML Template) 과 값 배열로 저장됩니다. 저장 형식 전체는 [이진 XML 해석](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다. 여기서는 `LogonType` 값 하나만 찾아갑니다.
+EVTX 레코드 안의 이벤트는 이진 XML 템플릿 (Binary XML Template) 과 값 배열로 저장됩니다. 저장 형식 전체는 [이진 XML 해석](../../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다. 여기서는 `LogonType` 값 하나만 찾아갑니다.
 
 libevtx 형식 명세에 따르면 템플릿 인스턴스는 세 부분으로 이어집니다.
 
@@ -184,24 +184,24 @@ libevtx 형식 명세에 따르면 템플릿 인스턴스는 세 부분으로 �
 Get-WinEvent -Path .\Security.evtx -FilterXPath "*[System[EventID=4624] and EventData[Data[@Name='LogonType']='10']]"
 ```
 
-- python-evtx, EvtxECmd, Hayabusa, Chainsaw 같은 공개 도구도 `LogonType` 을 뽑아 줍니다. 도구가 보여 주는 이름이 위 번호표와 맞는지 한두 건을 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
-- 여러 기록을 규칙으로 훑는 방법은 [이벤트 로그 규칙 검색](/03-techniques/analysis/sigma-rules.md)을 봅니다.
+- python-evtx, EvtxECmd, Hayabusa, Chainsaw 같은 공개 도구도 `LogonType` 을 뽑아 줍니다. 도구가 보여 주는 이름이 위 번호표와 맞는지 한두 건을 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
+- 여러 기록을 규칙으로 훑는 방법은 [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md)을 봅니다.
 
 ## 교차 검증
 
 | 유형 | 함께 볼 기록 | 링크 |
 |---|---|---|
-| 2·7·11 | 잠금·해제, 사용자 로그오프 | [화면 잠금·해제](/02-artifacts/event-logs/logon-events/4800-4801.md), [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) |
-| 11 | 이 PC 에 저장된 도메인 캐시 자격 증명 | [도메인 캐시 자격증명](/02-artifacts/credentials/sam-security/mscache-v2.md) |
-| 3 | 출발 PC 의 명시적 자격 증명 기록, 도메인 컨트롤러의 인증 기록, 공유 폴더 접근 | [명시적 자격 증명·특수 권한](/02-artifacts/event-logs/logon-events/4648-4672.md), [도메인 인증 이벤트](/02-artifacts/event-logs/logon-events/4768-4769-4776.md), [공유 폴더 접근](/02-artifacts/event-logs/5140-5145.md) |
-| 3·8 | WinRM·WMI 원격 명령 | [원격 명령 실행 이벤트](/02-artifacts/event-logs/winrm-wmi-activity.md) |
-| 4 | 예약 작업 등록·실행 | [예약 작업 이벤트](/02-artifacts/event-logs/taskscheduler-4698.md), [예약 작업](/02-artifacts/persistence/scheduled-tasks/index.md) |
-| 5 | 서비스 설치 | [서비스 설치 (7045·4697)](/02-artifacts/event-logs/7045-4697.md), [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) |
-| 9 | 같은 PC 의 4648, 상대 PC 의 유형 3 | [명시적 자격 증명·특수 권한](/02-artifacts/event-logs/logon-events/4648-4672.md) |
-| 10·12 | 원격 데스크톱 인증·세션 기록 | [들어온 접속: 인증 단계](/02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md), [들어온 접속: 세션 단계](/02-artifacts/event-logs/rdp-event-logs/localsessionmanager-21-25-4778-4779.md) |
-| 모든 유형 | 같은 로그온 ID 의 특수 권한 부여, 세션 안에서 만든 프로세스 | [명시적 자격 증명·특수 권한](/02-artifacts/event-logs/logon-events/4648-4672.md), [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) |
+| 2·7·11 | 잠금·해제, 사용자 로그오프 | [화면 잠금·해제](4800-4801.md), [로그온 세션 잇기](logon-id-4624-4634-4647.md) |
+| 11 | 이 PC 에 저장된 도메인 캐시 자격 증명 | [도메인 캐시 자격증명](../../credentials/sam-security/mscache-v2.md) |
+| 3 | 출발 PC 의 명시적 자격 증명 기록, 도메인 컨트롤러의 인증 기록, 공유 폴더 접근 | [명시적 자격 증명·특수 권한](4648-4672.md), [도메인 인증 이벤트](4768-4769-4776.md), [공유 폴더 접근](../5140-5145.md) |
+| 3·8 | WinRM·WMI 원격 명령 | [원격 명령 실행 이벤트](../winrm-wmi-activity.md) |
+| 4 | 예약 작업 등록·실행 | [예약 작업 이벤트](../taskscheduler-4698.md), [예약 작업](../../persistence/scheduled-tasks/index.md) |
+| 5 | 서비스 설치 | [서비스 설치 (7045·4697)](../7045-4697.md), [서비스·드라이버](../../persistence/services-drivers.md) |
+| 9 | 같은 PC 의 4648, 상대 PC 의 유형 3 | [명시적 자격 증명·특수 권한](4648-4672.md) |
+| 10·12 | 원격 데스크톱 인증·세션 기록 | [들어온 접속: 인증 단계](../rdp-event-logs/1149-4624-10-4625.md), [들어온 접속: 세션 단계](../rdp-event-logs/localsessionmanager-21-25-4778-4779.md) |
+| 모든 유형 | 같은 로그온 ID 의 특수 권한 부여, 세션 안에서 만든 프로세스 | [명시적 자격 증명·특수 권한](4648-4672.md), [프로세스 생성 (4688)](../4688.md) |
 
-유형 2·4·5·8·9·10 세션이 있었던 PC 는 메모리에 자격 증명이 남았을 수 있습니다. 메모리 덤프가 있으면 [메모리 속 문자열·자격증명·암호 키](/03-techniques/analysis/memory-forensics/strings-credentials-keys.md)로 이어서 봅니다. 조사 흐름은 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md), [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md), [원격 데스크톱 침입 확인](/04-scenarios/incident/rdp-intrusion.md), [비밀번호 대입 공격이 있었나](/04-scenarios/incident/credential-theft-lateral-movement/brute-force.md)를 봅니다.
+유형 2·4·5·8·9·10 세션이 있었던 PC 는 메모리에 자격 증명이 남았을 수 있습니다. 메모리 덤프가 있으면 [메모리 속 문자열·자격증명·암호 키](../../../03-techniques/analysis/memory-forensics/strings-credentials-keys.md)로 이어서 봅니다. 조사 흐름은 [PC 사용 시간 재구성](../../../04-scenarios/activity/system-usage-time.md), [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md), [원격 데스크톱 침입 확인](../../../04-scenarios/incident/rdp-intrusion.md), [비밀번호 대입 공격이 있었나](../../../04-scenarios/incident/credential-theft-lateral-movement/brute-force.md)를 봅니다.
 
 ## 실습
 

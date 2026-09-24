@@ -28,7 +28,7 @@ TypedPaths 와 WordWheelQuery 는 사용자 하이브 NTUSER.DAT 의 `Explorer` 
 | TypedPaths | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\TypedPaths` |
 | WordWheelQuery | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\WordWheelQuery` |
 
-HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 하이브 파일의 위치는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 하이브 파일의 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ### 자료와 관찰이 다른 점
 
@@ -56,7 +56,7 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 | 순서 값 | 없음 (관찰한 PC) |
 | 시각 | 키의 마지막 기록 시각 하나 |
 
-- plaso 는 이 키를 `windows_typed_urls` 플러그인으로 읽습니다. 인터넷 익스플로러의 `HKCU\Software\Microsoft\Internet Explorer\TypedURLs` 를 읽는 플러그인과 같습니다 ([인터넷 익스플로러·옛 엣지](/02-artifacts/browsers/ie-edgehtml/index.md)).
+- plaso 는 이 키를 `windows_typed_urls` 플러그인으로 읽습니다. 인터넷 익스플로러의 `HKCU\Software\Microsoft\Internet Explorer\TypedURLs` 를 읽는 플러그인과 같습니다 ([인터넷 익스플로러·옛 엣지](../browsers/ie-edgehtml/index.md)).
 - 이 플러그인은 값 이름을 정규식 `^url[0-9]+$` (대소문자 무시) 로 고릅니다. 문자열이면서 비어 있지 않은 값만 씁니다.
 - 순서 값이 없으므로 순서는 값 이름의 번호에서 읽어야 합니다. 번호가 작을수록 최근인지는 확인하지 못했습니다.
 
@@ -70,7 +70,7 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 | `WordWheelQuery\{F9785269-…}` | `MRUListEx` | 8바이트 `00 00 00 00 FF FF FF FF`. 항목 1개 (값 `0`) 뒤에 끝 표시 |
 | `WordWheelQuery\{F9785269-…}` | `0` | REG_BINARY 10바이트. UTF-16LE 4글자와 `00 00` |
 
-- MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 의 MRU 목록 설명을 따릅니다. 첫 정수가 가장 최근 항목이고, 끝은 -1 입니다.
+- MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 의 MRU 목록 설명을 따릅니다. 첫 정수가 가장 최근 항목이고, 끝은 -1 입니다.
 - plaso 의 일반 문자열 플러그인은 `MRUListEx` 와 값 `0` 이 함께 있는 키를 골라, 이진 값을 UTF-16LE 로 읽습니다. 그래서 GUID 하위 키도 이 플러그인으로 읽힐 수 있습니다. 이 점은 플러그인의 키 선택 규칙에서 나온 추론입니다.
 
 ## 증거로서 의미
@@ -84,7 +84,7 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 | | 검색 결과로 무엇이 나왔는지. 결과를 열었는지 |
 
 - 기록이 말하는 것은 목록에 이 문자열이 있다는 것까지입니다. "직접 입력했다" 는 해석은 위에서 본 대로 확인이 필요합니다.
-- 경로를 입력한 뒤 그 폴더를 실제로 열었는지는 [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) 으로 확인합니다.
+- 경로를 입력한 뒤 그 폴더를 실제로 열었는지는 [셸백](shellbags/index.md) 으로 확인합니다.
 
 ### 보고서 문장
 
@@ -103,7 +103,7 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 - 값마다 시각이 없습니다. plaso 도 TypedPaths 기록의 시각으로 키의 마지막 기록 시각 하나만 씁니다.
 - WordWheelQuery 는 상위 키와 GUID 하위 키의 시각을 따로 읽습니다. 항목 값이 들어 있는 쪽은 관찰한 PC 에서 GUID 하위 키였습니다.
 - TypedPaths 는 순서 값이 없습니다. 그래서 키 시각을 어느 값에 이어야 하는지도 정해지지 않습니다. 실험으로 가장 최근 값의 번호를 확인한 뒤에만 이어 읽습니다.
-- 키 시각의 성질은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](/02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+- 키 시각의 성질은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -112,12 +112,12 @@ TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. M
 3. **도구가 거른 값을 놓칩니다.** plaso 는 이름이 `url` + 숫자가 아니거나, 문자열이 아니거나, 비어 있는 값을 건너뜁니다. 이런 값이 있는지 원시 키에서 확인합니다.
 4. **빈 키를 "쓰지 않았다" 로 읽습니다.** 설정이나 정리 도구가 기록을 막거나 지웠을 수 있습니다. `SearchSettings` 같은 설정 값을 함께 적어 둡니다. 다만 설정과 기록의 관계는 확인하지 못했습니다.
 5. **검색어를 행위로 읽습니다.** 검색어가 있다는 것과 그 검색으로 파일을 찾거나 열었다는 것은 다른 일입니다.
-6. **다른 입력 기록과 섞습니다.** 실행 창에 입력한 명령은 [실행 창 명령 기록](/02-artifacts/execution/runmru.md) 에, 인터넷 익스플로러 주소 입력은 [인터넷 익스플로러·옛 엣지](/02-artifacts/browsers/ie-edgehtml/index.md) 에 따로 남습니다. 어느 키에서 나온 값인지 보고서에 적습니다.
+6. **다른 입력 기록과 섞습니다.** 실행 창에 입력한 명령은 [실행 창 명령 기록](../execution/runmru.md) 에, 인터넷 익스플로러 주소 입력은 [인터넷 익스플로러·옛 엣지](../browsers/ie-edgehtml/index.md) 에 따로 남습니다. 어느 키에서 나온 값인지 보고서에 적습니다.
 
 ### 지우기와 조작
 
-- 값이나 키를 지우면 하이브 안 빈 공간이나 트랜잭션 로그에 흔적이 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
-- 옛 하이브는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다. 지금 목록과 비교하면 사라진 항목이 드러납니다.
+- 값이나 키를 지우면 하이브 안 빈 공간이나 트랜잭션 로그에 흔적이 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- 옛 하이브는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다. 지금 목록과 비교하면 사라진 항목이 드러납니다.
 - 이 키들을 끄는 정책이나 설정은 확인한 자료에 없습니다.
 
 ## 직접 분석해 보기
@@ -156,19 +156,19 @@ plaso 의 레지스트리 파서는 TypedPaths 를 `windows_typed_urls` 플러�
 - WordWheelQuery 의 하위 키까지 읽는지 확인합니다.
 - TypedPaths 의 값을 어떤 순서로 보여 주는지, 그 순서의 근거가 무엇인지 확인합니다.
 - 도구가 건너뛴 값이 없는지 원시 키와 개수를 맞춰 봅니다.
-- 시각을 UTC 로 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 시각을 UTC 로 보여 주는지 확인합니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) | TypedPaths 의 경로를 실제로 열었는지 |
-| [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) | 검색어에 맞는 파일이 색인에 있었는지 |
-| [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) | 입력하거나 검색한 뒤 그 경로의 파일을 열었는지 |
-| [공유 폴더·네트워크 드라이브](/02-artifacts/network/network-shares-mapped-drives.md) | 입력한 네트워크 경로가 연결한 공유와 맞는지 |
-| [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) | 입력한 드라이브 문자가 어느 장치였는지 |
-| [실행 창 명령 기록](/02-artifacts/execution/runmru.md) | 같은 경로를 실행 창으로도 입력했는지 |
-| [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브의 목록과 시각 |
+| [셸백](shellbags/index.md) | TypedPaths 의 경로를 실제로 열었는지 |
+| [윈도 검색 색인 DB](windows-search/index.md) | 검색어에 맞는 파일이 색인에 있었는지 |
+| [바로가기 파일 (LNK)](lnk.md) · [점프리스트](jump-lists.md) | 입력하거나 검색한 뒤 그 경로의 파일을 열었는지 |
+| [공유 폴더·네트워크 드라이브](../network/network-shares-mapped-drives.md) | 입력한 네트워크 경로가 연결한 공유와 맞는지 |
+| [USB 저장장치 흔적](../external-devices/usb-storage-artifacts/index.md) | 입력한 드라이브 문자가 어느 장치였는지 |
+| [실행 창 명령 기록](../execution/runmru.md) | 같은 경로를 실행 창으로도 입력했는지 |
+| [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 하이브의 목록과 시각 |
 
 ## 실습
 

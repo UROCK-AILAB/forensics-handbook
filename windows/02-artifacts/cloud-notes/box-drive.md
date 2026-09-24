@@ -35,7 +35,7 @@
 
 - 박스 드라이브 폴더의 파일이 모두 로컬에 있지는 않습니다. KAPE 설정 주석은 이 폴더를 모으면 on-demand 클라우드 파일까지 가져온다고 경고합니다.
 - 박스 드라이브가 Windows Cloud Files API 로 이 동작을 하는지, 자체 파일 시스템 드라이버를 쓰는지는 확인하지 못했습니다.
-- 검체에서는 SyncRootManager 키에 Box 공급자 이름으로 시작하는 항목이 있는지 봅니다. 키 위치와 읽는 법은 [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) 에 정리합니다.
+- 검체에서는 SyncRootManager 키에 Box 공급자 이름으로 시작하는 항목이 있는지 봅니다. 키 위치와 읽는 법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 정리합니다.
 
 ## 구조
 
@@ -44,7 +44,7 @@
 - 앞의 블로그는 박스 파일·캐시 파일·가상 파일 정보를 담은 DB 로 `streemfs.db` 를 듭니다.
 - 이 이름은 `streemsfs.db` 로 적힌 경우도 있습니다. 어느 철자가 맞는지 확인하지 못했습니다.
 - 검체에서는 메타데이터 폴더에서 `streem` 으로 시작하는 `.db` 파일을 찾습니다.
-- 파일 형식은 파일 머리로 가립니다. SQLite 머리이면 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 방법으로 읽습니다.
+- 파일 형식은 파일 머리로 가립니다. SQLite 머리이면 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 방법으로 읽습니다.
 
 ### 도구가 보여 주는 항목 묶음
 
@@ -77,7 +77,7 @@
 - 목록에 파일이 있다고 그 파일 내용이 이 PC 에 내려왔다는 뜻은 아닙니다. 박스 드라이브 폴더에는 로컬에 없는 파일도 보입니다.
 - "Item Last Access Date" 가 사용자가 파일을 연 때인지는 확인하지 못했습니다.
 - 묶음 이름에 "Local" 이 붙어 있지만, 사건을 누가 어느 기기에서 일으켰는지 가리는 칸은 확인하지 못했습니다.
-- 로그인 이름은 계정을 가리킵니다. 그 시각에 PC 앞에 앉은 사람은 따로 밝힙니다([그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md)).
+- 로그인 이름은 계정을 가리킵니다. 그 시각에 PC 앞에 앉은 사람은 따로 밝힙니다([그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
 
 보고서에는 "X 파일을 Box 에 올렸다" 대신 이렇게 씁니다. "박스 드라이브 메타데이터 DB 에 이름이 X 인 항목이 있고, 그 항목의 만든 시각 칸 값은 Y 이다. 이 칸이 서버 시각인지 로컬 시각인지는 확인하지 못했다."
 
@@ -85,7 +85,7 @@
 
 - 블로그는 Creation Date, Modification Date, Last Update Date, Logged Date 같은 시각 칸을 보여 줍니다.
 - DB 안에 시각이 어떤 단위·기준으로 저장되는지 확인하지 못했습니다. UTC 인지 현지 시각인지도 확인하지 못했습니다.
-- 값의 자릿수로 형식을 먼저 짐작합니다. 자릿수로 형식을 가리는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 값의 자릿수로 형식을 먼저 짐작합니다. 자릿수로 형식을 가리는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 짐작한 변환이 맞는지는 시각을 아는 사건(예: 조사 중 직접 만든 파일, 로그의 앱 시작 줄)과 맞춰 봅니다.
 - 파일 목록의 만든·고친 시각이 서버 쪽 값인지, 로컬 파일 시스템 값인지도 확인하지 못했습니다.
 
@@ -106,9 +106,9 @@
 이 글의 자료에는 DB 내부 구조가 없어서, 파일 형식과 문자열 위치를 가리는 데까지만 따라갑니다.
 
 1. 메타데이터 폴더를 하위 폴더째 사본으로 뜹니다. 분석은 사본에서만 합니다.
-2. `.db` 파일을 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다. 머리 구조는 [SQLite 데이터베이스](/01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
-3. 같은 이름으로 시작하는 `-wal`·`-journal`·`-shm` 파일이 있는지 봅니다. 있으면 함께 둡니다. 곁 파일의 뜻은 [WAL과 롤백 저널](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
-4. 사용자 파일 폴더 경로의 일부(예: 사용자 이름과 `Box`)를 UTF-8 과 UTF-16LE 로 각각 검색합니다. 어느 파일에 동기화 폴더 경로가 적혀 있는지 찾는 단계입니다. 인코딩 차이는 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
+2. `.db` 파일을 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다. 머리 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+3. 같은 이름으로 시작하는 `-wal`·`-journal`·`-shm` 파일이 있는지 봅니다. 있으면 함께 둡니다. 곁 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
+4. 사용자 파일 폴더 경로의 일부(예: 사용자 이름과 `Box`)를 UTF-8 과 UTF-16LE 로 각각 검색합니다. 어느 파일에 동기화 폴더 경로가 적혀 있는지 찾는 단계입니다. 인코딩 차이는 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 5. 조사 대상 파일 이름 하나를 같은 방법으로 검색해, 그 이름이 어느 DB 에 들어 있는지 확인합니다.
 
 ### 공개 도구로 한 번
@@ -122,13 +122,13 @@
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 클라우드 동기화 공통 구조 | Box 가 SyncRootManager 에 등록돼 있는지, 동기화 폴더가 어디인지 봅니다 | [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) |
-| 설치 프로그램 | 박스 드라이브·Box Sync 가 설치된 적이 있는지 봅니다 | [설치 프로그램](/02-artifacts/system-account/uninstall.md) |
-| 프리페치 | 박스 드라이브 실행 파일이 언제 실행됐는지 봅니다 | [프리페치](/02-artifacts/execution/prefetch/index.md) |
-| SRUM | 그 시간대에 박스 드라이브가 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) |
-| USN 변경 저널 | 사용자 파일 폴더에서 파일이 언제 생기고 이름이 바뀌었는지 봅니다 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 마스터 파일 테이블 | 사용자 파일 폴더 안 파일의 NTFS 시각을 봅니다 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| 자료 유출 시나리오 | 클라우드 저장소를 다른 흔적과 묶어 해석하는 순서를 봅니다 | [자료를 밖으로 빼돌렸나](/04-scenarios/exfiltration/data-exfiltration/index.md) |
+| 클라우드 동기화 공통 구조 | Box 가 SyncRootManager 에 등록돼 있는지, 동기화 폴더가 어디인지 봅니다 | [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) |
+| 설치 프로그램 | 박스 드라이브·Box Sync 가 설치된 적이 있는지 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
+| 프리페치 | 박스 드라이브 실행 파일이 언제 실행됐는지 봅니다 | [프리페치](../execution/prefetch/index.md) |
+| SRUM | 그 시간대에 박스 드라이브가 네트워크로 얼마나 주고받았는지 봅니다 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
+| USN 변경 저널 | 사용자 파일 폴더에서 파일이 언제 생기고 이름이 바뀌었는지 봅니다 | [USN 변경 저널](../filesystem/usnjrnl.md) |
+| 마스터 파일 테이블 | 사용자 파일 폴더 안 파일의 NTFS 시각을 봅니다 | [마스터 파일 테이블](../filesystem/mft.md) |
+| 자료 유출 시나리오 | 클라우드 저장소를 다른 흔적과 묶어 해석하는 순서를 봅니다 | [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) |
 
 ## 실습
 

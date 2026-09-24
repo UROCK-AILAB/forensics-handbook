@@ -15,7 +15,7 @@
 - **설치 시각**은 지금 윈도에서 생긴 기록의 출발점입니다. 이보다 이른 시각이 나오면 까닭을 따로 확인합니다.
 - **마지막 정상 종료 시각**은 PC 사용 시간을 재구성할 때 끝점 하나가 됩니다.
 
-조사 첫머리에 무엇을 확인하는지는 [포렌식 조사 절차](/03-techniques/process-acquisition/investigation-process.md)에서 다룹니다. 시간대는 따로 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 다룹니다.
+조사 첫머리에 무엇을 확인하는지는 [포렌식 조사 절차](../../03-techniques/process-acquisition/investigation-process.md)에서 다룹니다. 시간대는 따로 [시간대 설정](time-zone.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -28,11 +28,11 @@
 | 마지막 정상 종료 시각 | SYSTEM | `ControlSet00x\Control\Windows` | ShutdownTime |
 
 - 실행 중인 PC 에서 SOFTWARE 쪽 키는 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion` 으로 보입니다.
-- 하이브 파일이 디스크 어디에 있는지는 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 하이브 파일이 디스크 어디에 있는지는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ### ControlSet 번호 고르기
 
-SYSTEM 하이브의 경로에 나오는 `ControlSet00x` 의 x 자리는 정해진 번호가 아닙니다. SYSTEM 하이브의 `Select` 키에 있는 `Current` 값이 번호를 알려 줍니다. `Current` 가 1 이면 `ControlSet001` 을 읽습니다. 이 페이지와 [시간대 설정](/02-artifacts/system-account/time-zone.md)의 SYSTEM 경로는 모두 이 규칙을 따릅니다.
+SYSTEM 하이브의 경로에 나오는 `ControlSet00x` 의 x 자리는 정해진 번호가 아닙니다. SYSTEM 하이브의 `Select` 키에 있는 `Current` 값이 번호를 알려 줍니다. `Current` 가 1 이면 `ControlSet001` 을 읽습니다. 이 페이지와 [시간대 설정](time-zone.md)의 SYSTEM 경로는 모두 이 규칙을 따릅니다.
 
 ### 버전별 차이
 
@@ -89,16 +89,16 @@ SYSTEM 하이브의 경로에 나오는 `ControlSet00x` 의 x 자리는 정해�
 | InstallTime | 8바이트 FILETIME. 1601-01-01 부터 센 100나노초 | UTC | 설치 |
 | ShutdownTime | 8바이트 FILETIME | UTC | 정상 종료 |
 
-- 두 방식의 계산은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
-- 현지 시각으로 바꿀 때는 이 PC 의 [시간대 설정](/02-artifacts/system-account/time-zone.md)을 씁니다.
+- 두 방식의 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
+- 현지 시각으로 바꿀 때는 이 PC 의 [시간대 설정](time-zone.md)을 씁니다.
 - InstallDate 와 InstallTime 은 같은 설치 시각을 다른 정밀도로 적은 값입니다. 두 값이 초 단위까지 맞는지 확인합니다. 둘이 늘 맞는다는 규칙은 이 페이지가 기댄 자료에 없습니다. 어긋나면 먼저 도구가 형식을 바르게 읽었는지 봅니다.
-- 로컬 계정을 만든 시각은 레지스트리에 직접 없습니다. 추정할 자료가 모자라면 설치 시각을 대신 쓰기도 합니다. 추정 방법은 [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md)에서 다룹니다.
+- 로컬 계정을 만든 시각은 레지스트리에 직접 없습니다. 추정할 자료가 모자라면 설치 시각을 대신 쓰기도 합니다. 추정 방법은 [사용자 계정 (SAM)](sam.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **ControlSet 을 잘못 고릅니다.** `Select\Current` 를 보지 않고 `ControlSet001` 을 읽으면 다른 제어 세트의 값을 쓸 수 있습니다.
 2. **두 설치 시각의 형식을 바꿔 읽습니다.** InstallDate 를 FILETIME 으로 읽거나 InstallTime 을 Unix 초로 읽으면 터무니없는 날짜가 나옵니다.
-3. **설치 시각을 PC 를 처음 쓴 때로 씁니다.** 이 값은 지금 윈도의 설치 시각입니다. 다시 설치했거나 크게 갱신했을 때 어떤 값이 남는지는 이 값만으로 가리지 못합니다. [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md)과 맞춰 봅니다.
+3. **설치 시각을 PC 를 처음 쓴 때로 씁니다.** 이 값은 지금 윈도의 설치 시각입니다. 다시 설치했거나 크게 갱신했을 때 어떤 값이 남는지는 이 값만으로 가리지 못합니다. [윈도 업데이트 기록](windows-update-cbs-log.md)과 맞춰 봅니다.
 4. **ShutdownTime 을 마지막 사용 시각으로 씁니다.** 정상 종료 뒤에 PC 를 다시 켰다가 전원이 끊겼다면 그 사용은 이 값에 없습니다.
 5. **켜진 PC 에서 수집한 하이브를 그대로 읽습니다.** 수집 당시 PC 가 켜져 있었다면 ShutdownTime 은 그 전의 정상 종료 시각입니다.
 6. **도구가 현지 시각으로 바꿔 보여 줍니다.** 도구 설정에 따라 분석 PC 의 시간대로 바뀐 시각이 나올 수 있습니다.
@@ -106,14 +106,14 @@ SYSTEM 하이브의 경로에 나오는 `ControlSet00x` 의 x 자리는 정해�
 ### 지우기와 조작
 
 - 관리자 권한이 있으면 레지스트리 값을 고칠 수 있습니다. 키의 마지막 기록 시각(LastWrite)과 다른 기록을 함께 봅니다.
-- 옛 값은 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 속 하이브에 남아 있을 수 있습니다. 하이브 안의 빈 공간에 남은 옛 값을 찾는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+- 옛 값은 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 하이브에 남아 있을 수 있습니다. 하이브 안의 빈 공간에 남은 옛 값을 찾는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 컴퓨터 이름을 바꾸면 이 키에는 새 이름만 남습니다. 예전 이름은 다른 기록에서 찾습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 값 형식을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 하이브 파일에서 값 데이터를 찾아가는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+아래는 값 형식을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 하이브 파일에서 값 데이터를 찾아가는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ```
 InstallDate  (4바이트)  00 F1 53 65
@@ -150,20 +150,20 @@ RegRipper 의 `winver`·`compname`·`shutdown` 플러그인이 이 값들을 읽
 
 - 시각을 UTC 로 보여 주는지, 현지 시각으로 바꿔 보여 주는지 확인합니다.
 - 도구가 어느 ControlSet 을 읽었는지 확인합니다.
-- 값 하나쯤은 헥스로 읽은 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)을 봅니다.
+- 값 하나쯤은 헥스로 읽은 결과와 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [켜짐·꺼짐](/02-artifacts/event-logs/power-on-off-events.md) | 이벤트 로그의 종료 기록과 ShutdownTime. 정상 종료가 아닌 꺼짐도 여기서 찾습니다 |
-| [윈도 업데이트 기록](/02-artifacts/system-account/windows-update-cbs-log.md) | 설치 뒤의 갱신 이력. 지금 수정 번호(UBR)가 언제 적용됐는지 |
-| [시간대 설정](/02-artifacts/system-account/time-zone.md) | 설치·종료 시각을 현지 시각으로 바꿀 때 쓸 편차 |
-| [사용자 계정 (SAM)](/02-artifacts/system-account/sam.md) | 계정 기록의 시각이 설치 시각보다 뒤인지 |
-| [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) | 설치 시각 무렵에 생긴 파일이 있는지. 설치 시각보다 이른 생성 시각이 있는지 |
-| [네트워크 인터페이스 설정](/02-artifacts/network/tcp-ip-interfaces.md) | 컴퓨터 이름과 함께 이 PC 를 네트워크에서 가리키는 정보 |
+| [켜짐·꺼짐](../event-logs/power-on-off-events.md) | 이벤트 로그의 종료 기록과 ShutdownTime. 정상 종료가 아닌 꺼짐도 여기서 찾습니다 |
+| [윈도 업데이트 기록](windows-update-cbs-log.md) | 설치 뒤의 갱신 이력. 지금 수정 번호(UBR)가 언제 적용됐는지 |
+| [시간대 설정](time-zone.md) | 설치·종료 시각을 현지 시각으로 바꿀 때 쓸 편차 |
+| [사용자 계정 (SAM)](sam.md) | 계정 기록의 시각이 설치 시각보다 뒤인지 |
+| [마스터 파일 테이블](../filesystem/mft.md) | 설치 시각 무렵에 생긴 파일이 있는지. 설치 시각보다 이른 생성 시각이 있는지 |
+| [네트워크 인터페이스 설정](../network/tcp-ip-interfaces.md) | 컴퓨터 이름과 함께 이 PC 를 네트워크에서 가리키는 정보 |
 
-PC 를 켜고 끈 시간을 여러 기록으로 재구성하는 흐름은 [PC 사용 시간 재구성](/04-scenarios/activity/system-usage-time.md)에서 다룹니다.
+PC 를 켜고 끈 시간을 여러 기록으로 재구성하는 흐름은 [PC 사용 시간 재구성](../../04-scenarios/activity/system-usage-time.md)에서 다룹니다.
 
 ## 실습
 

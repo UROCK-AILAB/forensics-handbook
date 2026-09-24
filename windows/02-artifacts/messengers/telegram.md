@@ -28,7 +28,7 @@
 - 관찰 PC 에서는 실행 파일과 데이터가 같은 폴더에 있었습니다. (관찰)
 - 그 폴더에는 `Telegram.exe`, `Updater.exe`, `unins000.exe`·`unins000.dat`·`unins000.msg`, `log.txt`, `log_start0.txt`, `modules`, `tdata`, `tupdates` 가 있었습니다. (관찰)
 - 경로를 모를 때는 이름 `tdata` 폴더와 `Telegram.exe` 로 찾습니다.
-- 설치 기록은 [설치 프로그램](/02-artifacts/system-account/uninstall.md) 에서 확인합니다.
+- 설치 기록은 [설치 프로그램](../system-account/uninstall.md) 에서 확인합니다.
 
 파일을 쓰는 방식(요즘 방식·옛 방식)에 따라 파일 이름 끝 글자가 달라집니다. 아래 "파일 이름" 을 참고합니다.
 
@@ -79,7 +79,7 @@
 - AES 의 모드 이름은 이번에 본 자료에 없었습니다.
 - `key_datas` 가 로컬 키를 담는 파일인지는 이름으로 짐작만 했고 확인하지 못했습니다.
 
-해석: 로컬 암호를 걸지 않았으면 `tdata` 만으로 풀 수 있습니다. 로컬 암호를 걸었으면 그 암호가 있어야 합니다. 암호화된 증거를 다루는 방법은 [암호화 증거 다루기](/03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
+해석: 로컬 암호를 걸지 않았으면 `tdata` 만으로 풀 수 있습니다. 로컬 암호를 걸었으면 그 암호가 있어야 합니다. 암호화된 증거를 다루는 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
 
 ### 캐시
 
@@ -97,7 +97,7 @@
 
 | 항목 | 내용 |
 |---|---|
-| `user_data\wvbots\EBWebView` | 봇(미니 앱)용 WebView2 데이터 폴더로 보입니다. 용도는 확인하지 못했습니다. 읽는 법은 [크롬 계열 앱 공통 구조](/01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다 |
+| `user_data\wvbots\EBWebView` | 봇(미니 앱)용 WebView2 데이터 폴더로 보입니다. 용도는 확인하지 못했습니다. 읽는 법은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다 |
 | `emoji` | `cache_42_*`, `cache_56_*` 파일 |
 | `dumps`, `temp`, `tdummy`, `countries` | 뜻은 확인하지 못했습니다 |
 | `shortcuts-custom.json`, `shortcuts-default.json` | 단축키 설정 |
@@ -133,7 +133,7 @@
 
 - **대화 본문.** `tdata` 에는 대화 기록이 없습니다. (telegram-desktop-decrypt README)
 - **사용자가 캐시의 사진을 봤는지.** 캐시에 있다는 것은 앱이 받아 두었다는 뜻입니다. 사용자가 화면에서 봤다는 뜻은 아닙니다.
-- **누가 조작했는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **누가 조작했는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **로그에 없는 실행.** 로그를 돌려 쓰는 범위를 모르므로, 로그에 없다고 실행하지 않았다고 말할 수 없습니다.
 
 보고서에는 "피의자가 텔레그램으로 대화했다" 가 아니라 이렇게 씁니다. "A 계정의 `Telegram Desktop\log.txt` 에 이 시각 앱 실행 기록이 있다. 기록된 버전은 7001001, 실행 파일 폴더는 X 이다." 시각과 폴더는 검체에서 확인한 값으로 채웁니다.
@@ -147,8 +147,8 @@
 | 설정 파일의 파일 시스템 시각 | 앱이 파일을 다시 쓸 때 | UTC. 관찰 PC 에서 `settingss` 는 마지막 실행과 가까웠고, `key_datas` 는 그보다 일렀습니다. 각 파일 시각의 뜻은 확인하지 못했습니다 |
 | 캐시 파일의 파일 시스템 시각 | 캐시를 쓸 때 | UTC. 받은 때의 단서로 봅니다 |
 
-- 현지 시각인 로그와 UTC 인 파일 시각을 한 표에 놓을 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md) 으로 맞춥니다.
-- 파일 시스템 시각은 [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) 에서 봅니다.
+- 현지 시각인 로그와 UTC 인 파일 시각을 한 표에 놓을 때는 [시간대 설정](../system-account/time-zone.md) 으로 맞춥니다.
+- 파일 시스템 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 봅니다.
 
 ## 함정과 한계
 
@@ -158,7 +158,7 @@
 - **캐시도 `TDF$` 로 봅니다.** 캐시 파일은 `TDEF` 로 시작했습니다. 형식이 다릅니다.
 - **로그 시각을 UTC 로 봅니다.** 관찰 PC 에서 `log.txt` 는 현지 시각이었습니다.
 - **로컬 암호 유무를 짐작합니다.** 로컬 암호가 있으면 `tdata` 만으로는 풀리지 않습니다.
-- **폴더를 지웠다고 흔적이 없다고 봅니다.** 지운 파일은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 방법으로 찾습니다. 옛 시점은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 봅니다.
+- **폴더를 지웠다고 흔적이 없다고 봅니다.** 지운 파일은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 찾습니다. 옛 시점은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 봅니다.
 
 ## 직접 분석해 보기
 
@@ -192,20 +192,20 @@
 
 - 도구가 읽은 파일 목록과 `tdata` 의 파일 목록을 맞춰 봅니다.
 - 도구가 `s`·`0`·`1` 가운데 어느 파일을 읽었는지 적습니다.
-- 도구가 낸 버전 값과 헥스로 읽은 버전 칸을 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+- 도구가 낸 버전 값과 헥스로 읽은 버전 칸을 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
 | 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [프리페치](/02-artifacts/execution/prefetch/index.md) | `Telegram.exe` 실행 시각을 `log.txt` 와 맞춰 봅니다 |
-| [설치 프로그램](/02-artifacts/system-account/uninstall.md) | 설치·제거 기록을 봅니다 |
-| [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) | 앱이 네트워크를 쓴 시간대를 봅니다 |
-| [윈도 알림 기록](/02-artifacts/execution/wpndatabase-db.md) | 텔레그램 알림이 남았는지 봅니다 |
-| [다운로드 출처 표시](/02-artifacts/filesystem/zone-identifier.md) | 앱에서 저장한 파일에 출처 표시가 붙었는지 봅니다 |
-| [메모리 분석](/03-techniques/analysis/memory-forensics/index.md) | 대화가 디스크에 없으므로, 켜진 PC 라면 메모리에 화면의 대화가 남았는지 봅니다(해석) |
+| [프리페치](../execution/prefetch/index.md) | `Telegram.exe` 실행 시각을 `log.txt` 와 맞춰 봅니다 |
+| [설치 프로그램](../system-account/uninstall.md) | 설치·제거 기록을 봅니다 |
+| [SRUM](../execution/system-resource-usage-monitor/index.md) | 앱이 네트워크를 쓴 시간대를 봅니다 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 텔레그램 알림이 남았는지 봅니다 |
+| [다운로드 출처 표시](../filesystem/zone-identifier.md) | 앱에서 저장한 파일에 출처 표시가 붙었는지 봅니다 |
+| [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md) | 대화가 디스크에 없으므로, 켜진 PC 라면 메모리에 화면의 대화가 남았는지 봅니다(해석) |
 
-조사 전체 흐름은 [누구와 연락을 주고받았나](/04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다. 켜진 PC 를 다루는 순서는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다. 켜진 PC 를 다루는 순서는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 
 ## 실습
 

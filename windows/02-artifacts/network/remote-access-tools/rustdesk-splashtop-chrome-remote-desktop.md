@@ -1,6 +1,6 @@
 # 기타 원격 제어 도구 (RustDesk·Splashtop·Chrome Remote Desktop)
 
-> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](/02-artifacts/network/remote-access-tools/index.md)
+> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
 
 ## 한 줄 요약
 
@@ -14,7 +14,7 @@
 | Splashtop | 원격 지원 프로그램 | 전용 이벤트 로그 두 개, `SPLog.txt`, `FTCLog.txt`, 레지스트리 ClientInfo |
 | Chrome Remote Desktop | Google 의 원격 접속 서비스. 상시 접속과 일회성 지원 두 방식이 있습니다 | 서비스 이름 chromoting, 이벤트 ID 1~6 |
 
-서비스 설치 이벤트와 여러 도구에 공통으로 남는 실행 흔적은 [허브](/02-artifacts/network/remote-access-tools/index.md)에서 정리합니다.
+서비스 설치 이벤트와 여러 도구에 공통으로 남는 실행 흔적은 [허브](index.md)에서 정리합니다.
 
 ## RustDesk
 
@@ -172,9 +172,9 @@ Windows 에서는 호스트가 여러 프로세스로 돕니다. 이때는 호�
 
 ## 시각 해석
 
-- Splashtop 전용 이벤트 로그와 Chrome Remote Desktop 이벤트의 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- Splashtop 전용 이벤트 로그와 Chrome Remote Desktop 이벤트의 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - `SPLog.txt` 의 시각에는 연도가 없습니다(예: `Sep  1 11:40:53`). 연도는 파일 시각이나 같은 때의 다른 기록에서 채웁니다.
-- `SPLog.txt`, `FTCLog.txt`, RustDesk 로그의 시각이 UTC 인지는 이번 자료로 확인하지 못했습니다. 같은 파일 전송을 Remote Session 로그와 `FTCLog.txt` 에서 찾아 두 시각의 차이를 잽니다. PC 의 시간대 설정은 [시간대 설정](/02-artifacts/system-account/time-zone.md)에서 봅니다.
+- `SPLog.txt`, `FTCLog.txt`, RustDesk 로그의 시각이 UTC 인지는 이번 자료로 확인하지 못했습니다. 같은 파일 전송을 Remote Session 로그와 `FTCLog.txt` 에서 찾아 두 시각의 차이를 잽니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
 - Splashtop 공개 예시의 시각은 `[FTC] UploadRequest` 줄이 11:42:12, `FTCLog.txt` 줄이 11:42:14 입니다. 두 파일이 같은 시간대로 적힌 것으로 보입니다. 이 판단은 예시 두 줄을 비교해 추론한 것입니다.
 
 ## 함정과 한계
@@ -190,7 +190,7 @@ Windows 에서는 호스트가 여러 프로세스로 돕니다. 이때는 호�
 
 ### 헥스로 한 번
 
-이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 로그입니다. 도구마다의 이진 구조는 이번 자료로 확인한 것이 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 로그입니다. 도구마다의 이진 구조는 이번 자료로 확인한 것이 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -217,10 +217,10 @@ Get-ChildItem 'E:\case\winevt\Logs\*.evtx' | ForEach-Object {
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 서비스 설치 (7045·4697) | 세 도구의 서비스 설치 시각. Sigma 규칙이 SplashtopRemoteService, SSUService, chromoting 이름을 찾습니다 | [서비스 설치](/02-artifacts/event-logs/7045-4697.md), [이벤트 로그 규칙 검색](/03-techniques/analysis/sigma-rules.md) |
-| 서비스·드라이버 | Splashtop 서비스 키와 SafeBoot 키 | [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) |
-| 실행 흔적 | 프리페치, BAM, AmCache 등에 남은 실행 시각 | [프리페치](/02-artifacts/execution/prefetch/index.md), [AmCache](/02-artifacts/execution/amcache-hve/index.md), [BAM·DAM](/02-artifacts/execution/background-activity-moderator.md) |
-| 마스터 파일 테이블 | 전송된 파일이 받는 쪽 폴더에 생긴 시각 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
+| 서비스 설치 (7045·4697) | 세 도구의 서비스 설치 시각. Sigma 규칙이 SplashtopRemoteService, SSUService, chromoting 이름을 찾습니다 | [서비스 설치](../../event-logs/7045-4697.md), [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) |
+| 서비스·드라이버 | Splashtop 서비스 키와 SafeBoot 키 | [서비스·드라이버](../../persistence/services-drivers.md) |
+| 실행 흔적 | 프리페치, BAM, AmCache 등에 남은 실행 시각 | [프리페치](../../execution/prefetch/index.md), [AmCache](../../execution/amcache-hve/index.md), [BAM·DAM](../../execution/background-activity-moderator.md) |
+| 마스터 파일 테이블 | 전송된 파일이 받는 쪽 폴더에 생긴 시각 | [마스터 파일 테이블](../../filesystem/mft.md) |
 | DNS·프록시 기록 | Splashtop 은 `*.splashtop.com`(`api.splashtop.com`, `relay.splashtop.com` 포함). Chrome Remote Desktop 도메인은 위 표 | — |
 
 ## 실습

@@ -8,9 +8,9 @@
 
 - 어떤 동작이 셸백을 만드는지, Windows 버전마다 어떻게 다른지 모읍니다.
 - 셸백이 있을 때와 없을 때 각각 말할 수 없는 것을 정리합니다.
-- 키 위치와 구조는 [저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) 에 있습니다.
-- 시각 함정은 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) 에서 자세히 다룹니다. 이 페이지는 요약만 합니다.
-- USB·네트워크·ZIP 셸 아이템을 읽을 때의 함정은 [외부 장치·네트워크·압축 폴더 탐색 흔적](/02-artifacts/file-folder-usage/shellbags/removable-network-zip.md) 에 있습니다.
+- 키 위치와 구조는 [저장 위치와 구조](ntuser-usrclass-bagmru-bags.md) 에 있습니다.
+- 시각 함정은 [셸백 시각 해석](timestamps.md) 에서 자세히 다룹니다. 이 페이지는 요약만 합니다.
+- USB·네트워크·ZIP 셸 아이템을 읽을 때의 함정은 [외부 장치·네트워크·압축 폴더 탐색 흔적](removable-network-zip.md) 에 있습니다.
 
 이 페이지에서는 "열었다" 대신 "다뤘다 (interacted)" 라고 씁니다. 폴더를 고르기만 한 경우도 들어가는 말입니다. (4n6k 가 같은 뜻으로 이 말을 씁니다.)
 
@@ -70,39 +70,39 @@ XP 에서는 폴더를 열지 않아도 셸백이 생긴 경우가 있습니다.
 - **명령줄·스크립트.** 셸백은 탐색기 창의 보기 설정을 담는 곳입니다 (SANS 2011). 명령줄이나 스크립트로 폴더를 오가면 보통 셸백이 남지 않습니다.
 - **XP 의 이동식 장치.** Lo 의 실험에서 XP 는 이동식 장치 안 폴더에 셸백을 만들지 않았습니다. Vista~8.1 은 열고 닫을 때 만들었습니다.
 - **XP 의 빈 폴더.** 빈 폴더나 숨긴 항목이 있는 폴더(숨긴 항목을 안 보이게 설정한 경우)는 창을 닫거나 다른 폴더로 옮길 때 셸백이 생겼습니다. 그래서 실행 중인 시스템에서 수집할 때 창이 열려 있으면 아직 항목이 없을 수 있습니다. (Lo)
-- **하이브 한쪽만 본 경우.** Vista 이후 로컬 폴더는 UsrClass.dat, 네트워크 쪽은 NTUSER.DAT 에 남을 수 있습니다. 두 하이브를 다 읽습니다. 경로는 [저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) 에 있습니다.
-- **로그에만 있는 변경.** 가장 최근 변경은 하이브 본문이 아니라 `UsrClass.dat.LOG1`·`.LOG2` 에만 있을 수 있습니다. 하이브와 로그 파일을 함께 뽑습니다. ([트랜잭션 로그와 반영 안 된 변경](/01-foundations/database-log-formats/registry-hive/log1-log2.md))
-- **지운 기록.** 폴더를 지워도 셸백은 그대로 남습니다. 대신 셸백만 지우는 도구가 있습니다. (Lo) 지운 키는 하이브의 빈 공간에 남을 수 있습니다. ([지워진 키·값 복구](/01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [지운 폴더 흔적 찾기](/02-artifacts/file-folder-usage/shellbags/deleted-folders.md))
+- **하이브 한쪽만 본 경우.** Vista 이후 로컬 폴더는 UsrClass.dat, 네트워크 쪽은 NTUSER.DAT 에 남을 수 있습니다. 두 하이브를 다 읽습니다. 경로는 [저장 위치와 구조](ntuser-usrclass-bagmru-bags.md) 에 있습니다.
+- **로그에만 있는 변경.** 가장 최근 변경은 하이브 본문이 아니라 `UsrClass.dat.LOG1`·`.LOG2` 에만 있을 수 있습니다. 하이브와 로그 파일을 함께 뽑습니다. ([트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md))
+- **지운 기록.** 폴더를 지워도 셸백은 그대로 남습니다. 대신 셸백만 지우는 도구가 있습니다. (Lo) 지운 키는 하이브의 빈 공간에 남을 수 있습니다. ([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [지운 폴더 흔적 찾기](deleted-folders.md))
 
 ## 4. 경로 하나가 폴더 하나를 뜻하지 않는다
 
 - **같은 이름으로 다시 만든 폴더.** Lo 의 실험(XP~8.1)에서 폴더나 ZIP 파일을 지우고 같은 이름으로 다시 만들면, 새 것이 옛 셸백 정보를 이어받았습니다. 그래서 셸백 경로 하나가 서로 다른 두 폴더를 가리킬 수 있습니다.
-- **대조하는 법.** 셸 아이템 속 만든 시각과 NTFS 파일 참조(MFT 번호·순번)를 지금의 [$MFT](/02-artifacts/filesystem/mft.md) 와 맞춰 봅니다. libfwsi 명세는 이 파일 참조 칸이 늘 참조 값은 아닐 수 있다고 적었습니다. 칸 위치는 [셸 아이템 (Shell Item·PIDL)](/01-foundations/shell-document-formats/shell-item-pidl.md) 에 있습니다.
-- **드라이브 문자는 그때의 문자입니다.** 볼륨 셸 아이템에는 `E:\` 같은 이름이 들어 있습니다 (libfwsi). 같은 문자에 다른 장치가 붙었을 수 있습니다. 어느 장치였는지는 [드라이브 문자 매핑 (MountedDevices)](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md) 과 [사용자별 장치 연결 (MountPoints2)](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) 으로 가립니다.
+- **대조하는 법.** 셸 아이템 속 만든 시각과 NTFS 파일 참조(MFT 번호·순번)를 지금의 [$MFT](../../filesystem/mft.md) 와 맞춰 봅니다. libfwsi 명세는 이 파일 참조 칸이 늘 참조 값은 아닐 수 있다고 적었습니다. 칸 위치는 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에 있습니다.
+- **드라이브 문자는 그때의 문자입니다.** 볼륨 셸 아이템에는 `E:\` 같은 이름이 들어 있습니다 (libfwsi). 같은 문자에 다른 장치가 붙었을 수 있습니다. 어느 장치였는지는 [드라이브 문자 매핑 (MountedDevices)](../../external-devices/usb-storage-artifacts/mounteddevices.md) 과 [사용자별 장치 연결 (MountPoints2)](../../external-devices/usb-storage-artifacts/mountpoints2.md) 으로 가립니다.
 - **같은 폴더가 여러 가지에 남을 수 있습니다.** 2절에서 본 것처럼 "문서" 는 라이브러리로도, 실제 폴더로도 다룰 수 있습니다. 들어간 길이 다르면 BagMRU 트리의 다른 가지에 따로 남을 수 있습니다. 항목 수를 폴더 수로 세지 않습니다.
 
 ## 5. 시각 함정 요약
 
-자세한 규칙과 예는 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) 에 있습니다.
+자세한 규칙과 예는 [셸백 시각 해석](timestamps.md) 에 있습니다.
 
 | 시각 | 흔한 잘못 | 바르게 읽는 법 |
 |---|---|---|
 | 키 마지막 기록 시각 (FILETIME, UTC) | 그 키 아래 모든 자식 폴더의 마지막 사용 시각으로 읽습니다 | MRUListEx 맨 앞 자식 하나가 맨 앞에 올라온 때입니다 (4n6k) |
-| 루트 BagMRU 키 시각 | 바로 아래 항목(내 PC 등)을 방금 연 때로 읽습니다 | 이 키의 MRUListEx 나 NodeSlots 가 바뀌면 이 시각도 바뀝니다 (Lo). NodeSlots 는 어디서든 새 항목이 생길 때 바뀝니다 ([셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md)) |
+| 루트 BagMRU 키 시각 | 바로 아래 항목(내 PC 등)을 방금 연 때로 읽습니다 | 이 키의 MRUListEx 나 NodeSlots 가 바뀌면 이 시각도 바뀝니다 (Lo). NodeSlots 는 어디서든 새 항목이 생길 때 바뀝니다 ([셸백 시각 해석](timestamps.md)) |
 | 셸 아이템 속 만든·수정·접근 시각 (FAT 형식, 2초 단위) | 폴더를 연 때로 읽습니다 | 항목을 처음 만들 때 옮겨 적은 폴더 자신의 시각입니다. 그 뒤로 갱신되지 않습니다 (4n6k) |
 | 도구의 "처음 연 때·마지막 연 때" 열 | 레지스트리에 적힌 값으로 읽습니다 | 도구가 키 시각과 MRU 순서로 계산한 값입니다 |
 
 - 키 시각은 키 안의 값이 하나라도 바뀌면 바뀝니다. Lo 는 사용자 동작과 시스템 동작이 모두 이 값을 바꾼다고 적었습니다.
 - Carvey 는 셸 아이템 속 수정·접근 시각을 조심하라고 적었습니다. 폴더에 파일을 넣거나 빼는 일처럼 셸백과 상관없는 동작도 이 시각을 바꾸기 때문입니다. 그는 만든 시각이 가장 쓸모 있다고 봤습니다.
-- 키 시각은 API 로 바꿀 수 있습니다. 조작 흔적은 [키 마지막 기록 시각](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
+- 키 시각은 API 로 바꿀 수 있습니다. 조작 흔적은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 
 ## 6. 도구가 보여 주는 것과 레지스트리 내용이 다르다
 
 - 4n6k 는 2013년에 당시 공개 도구 하나가 MRU 맨 앞 여부를 따지지 않고 모든 형제 항목에 키 시각을 붙인다고 보고했습니다. 그 도구는 2014년 판에서 고쳐졌습니다 (4n6k UPDATE #04).
 - 같은 시기 일부 도구는 0x52 형식 셸 아이템과 MTP 장치 항목을 읽지 못하거나 결과에서 빠뜨렸습니다 (4n6k UPDATE #01·#03·#04).
 - libfwsi 명세에도 뜻이 밝혀지지 않은 칸과 형식이 남아 있습니다. 도구마다 모르는 셸 아이템을 건너뛰거나 경로 일부를 비워 둘 수 있습니다.
-- 보고서에는 도구 이름과 판을 적습니다. 공개 도구 두 가지 이상(예: RegRipper 의 shellbags 플러그인, ShellBags Explorer)으로 같은 하이브를 읽고 항목 수·경로·시각 열을 비교합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
-- 결과가 다른 항목은 원시 바이트로 직접 봅니다. 헥스로 읽는 법은 [저장 위치와 구조](/02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md) 와 [셸백 시각 해석](/02-artifacts/file-folder-usage/shellbags/timestamps.md) 에 있습니다.
+- 보고서에는 도구 이름과 판을 적습니다. 공개 도구 두 가지 이상(예: RegRipper 의 shellbags 플러그인, ShellBags Explorer)으로 같은 하이브를 읽고 항목 수·경로·시각 열을 비교합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 결과가 다른 항목은 원시 바이트로 직접 봅니다. 헥스로 읽는 법은 [저장 위치와 구조](ntuser-usrclass-bagmru-bags.md) 와 [셸백 시각 해석](timestamps.md) 에 있습니다.
 
 ## 7. 증거로서 의미 — 보고서에 쓸 때
 
@@ -119,7 +119,7 @@ XP 에서는 폴더를 열지 않아도 셸백이 생긴 경우가 있습니다.
 - 사람이 직접 했다는 사실. 탐색기 동작이나 명령으로 생긴 사례가 있습니다.
 - 지금 디스크의 같은 이름 폴더와 같은 폴더라는 사실.
 - 셸백이 없으니 그 폴더에 가지 않았다는 사실.
-- 그 계정을 쓴 사람이 누구인지. 계정과 사람을 잇는 법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에 있습니다.
+- 그 계정을 쓴 사람이 누구인지. 계정과 사람을 잇는 법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에 있습니다.
 
 ### 문장 예
 
@@ -130,7 +130,7 @@ XP 에서는 폴더를 열지 않아도 셸백이 생긴 경우가 있습니다.
 
 Lo 는 결론에서 사건 환경과 가까운 환경으로 실험하라고 권했습니다. 4n6k 의 Windows 11 단서처럼 새 버전은 동작이 다를 수 있습니다. 판단이 결과를 바꾸는 항목이면 아래처럼 직접 확인합니다.
 
-1. 검체와 같은 Windows 판·빌드를 가상 머신에 설치합니다. 판·빌드는 [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 확인합니다.
+1. 검체와 같은 Windows 판·빌드를 가상 머신에 설치합니다. 판·빌드는 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 확인합니다.
 2. 새 사용자 계정으로 로그온합니다. 기존 항목이 섞이지 않게 하려는 것입니다.
 3. 확인할 동작 하나만 합니다(예: 폴더 한 번 클릭). 동작한 시각을 UTC 로 적습니다.
 4. 가상 머신을 끄고 디스크에서 UsrClass.dat·NTUSER.DAT 와 각 `.LOG1`·`.LOG2` 를 꺼냅니다.
@@ -142,13 +142,13 @@ Lo 는 결론에서 사건 환경과 가까운 환경으로 실험하라고 권�
 
 | 확인할 것 | 볼 아티팩트 |
 |---|---|
-| 폴더 안 파일을 실제로 열었나 | [바로가기 파일 (LNK)](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md), [최근 문서 (RecentDocs)](/02-artifacts/file-folder-usage/recentdocs.md) |
-| 열기·저장 대화상자로 다뤘나 | [열기·저장 대화상자 기록 (ComDlg32)](/02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
-| 주소창에 경로를 직접 쳤나 | [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](/02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) |
-| 같은 폴더인가, 언제 생기고 지워졌나 | [$MFT](/02-artifacts/filesystem/mft.md), [$UsnJrnl](/02-artifacts/filesystem/usnjrnl.md), [$I30](/02-artifacts/filesystem/i30.md) |
-| 드라이브 문자가 어느 장치였나 | [MountedDevices](/02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md), [MountPoints2](/02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md) |
-| 셸백이 언제 처음 생겼나 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 UsrClass.dat 사본끼리 비교 |
-| 그 시각 누가 로그온해 있었나 | [로그온·로그오프 (Logon Events)](/02-artifacts/event-logs/logon-events/index.md) |
+| 폴더 안 파일을 실제로 열었나 | [바로가기 파일 (LNK)](../lnk.md), [점프리스트](../jump-lists.md), [최근 문서 (RecentDocs)](../recentdocs.md) |
+| 열기·저장 대화상자로 다뤘나 | [열기·저장 대화상자 기록 (ComDlg32)](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) |
+| 주소창에 경로를 직접 쳤나 | [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](../typedpaths-wordwheelquery.md) |
+| 같은 폴더인가, 언제 생기고 지워졌나 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md), [$I30](../../filesystem/i30.md) |
+| 드라이브 문자가 어느 장치였나 | [MountedDevices](../../external-devices/usb-storage-artifacts/mounteddevices.md), [MountPoints2](../../external-devices/usb-storage-artifacts/mountpoints2.md) |
+| 셸백이 언제 처음 생겼나 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 옛 UsrClass.dat 사본끼리 비교 |
+| 그 시각 누가 로그온해 있었나 | [로그온·로그오프 (Logon Events)](../../event-logs/logon-events/index.md) |
 
 ## 10. 실습
 

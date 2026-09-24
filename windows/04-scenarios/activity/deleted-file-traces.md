@@ -16,26 +16,26 @@
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | 휴지통 `$I` 형식과 변경 저널 레코드의 버전이 Windows 버전마다 다릅니다. [시스템 기본 정보](/02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
-| 시간대 | [시간대 설정](/02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
-| 사용자 | 휴지통은 SID 별 폴더에 남습니다. [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 으로 SID 와 사용자를 짝지어 둡니다. |
+| Windows 버전 | 휴지통 `$I` 형식과 변경 저널 레코드의 버전이 Windows 버전마다 다릅니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
+| 시간대 | [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
+| 사용자 | 휴지통은 SID 별 폴더에 남습니다. [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 으로 SID 와 사용자를 짝지어 둡니다. |
 | 저장 장치 | SSD 와 TRIM 설정에 따라 지운 자리를 되살리기 어려울 수 있습니다. 아래 "복구 가능성" 을 봅니다. |
-| 감사 정책·Sysmon | 4663 은 감사와 SACL 이 있어야 남습니다. Sysmon 23·26 은 Sysmon 이 설치돼 있어야 남습니다. [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
+| 감사 정책·Sysmon | 4663 은 감사와 SACL 이 있어야 남습니다. Sysmon 23·26 은 Sysmon 이 설치돼 있어야 남습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
 | 수집 범위 | 볼륨마다 $MFT, $UsnJrnl:$J, $LogFile, `$Recycle.Bin` 을 확보합니다. 사용자 하이브와 섀도 복사본도 함께 확보합니다. 비할당 영역까지 보려면 파일 사본이 아니라 디스크 이미지를 뜹니다. |
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 휴지통 (`$I`·`$R`) | 원래 경로, 크기, 휴지통으로 옮긴 시각, 내용 | [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) |
-| 2 | $MFT | 해제된 레코드의 이름·시각·순번 | [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) |
-| 3 | $UsnJrnl | 만들기·지우기·이름 바꾸기가 일어난 시각과 이유 | [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) |
-| 4 | $LogFile·폴더 인덱스 | 보조 기록(세부는 링크 페이지) | [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md) · [폴더 인덱스와 슬랙](/02-artifacts/filesystem/i30.md) |
+| 1 | 휴지통 (`$I`·`$R`) | 원래 경로, 크기, 휴지통으로 옮긴 시각, 내용 | [휴지통](../../02-artifacts/file-folder-usage/recycle-bin.md) |
+| 2 | $MFT | 해제된 레코드의 이름·시각·순번 | [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) |
+| 3 | $UsnJrnl | 만들기·지우기·이름 바꾸기가 일어난 시각과 이유 | [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) |
+| 4 | $LogFile·폴더 인덱스 | 보조 기록(세부는 링크 페이지) | [NTFS 트랜잭션 로그](../../02-artifacts/filesystem/logfile.md) · [폴더 인덱스와 슬랙](../../02-artifacts/filesystem/i30.md) |
 | 5 | 사용 흔적 | 지운 뒤에도 남는 경로·시각·파일 참조 | 아래 "지운 뒤에도 남는 기록" |
-| 6 | 보안 로그 4663 | 삭제 권한을 쓴 계정·프로세스 | [파일 접근 감사](/02-artifacts/event-logs/4656-4663-4660.md) |
-| 7 | Sysmon 23·26·28 | 지운 파일, 보관한 사본, 완전삭제를 막은 기록 | [Sysmon 로그](/02-artifacts/event-logs/sysmon/index.md) |
-| 8 | 섀도 복사본 | 지우기 전 시점의 파일과 기록 | [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 9 | 비할당 영역 | 되살릴 내용 | [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) |
+| 6 | 보안 로그 4663 | 삭제 권한을 쓴 계정·프로세스 | [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) |
+| 7 | Sysmon 23·26·28 | 지운 파일, 보관한 사본, 완전삭제를 막은 기록 | [Sysmon 로그](../../02-artifacts/event-logs/sysmon/index.md) |
+| 8 | 섀도 복사본 | 지우기 전 시점의 파일과 기록 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 9 | 비할당 영역 | 되살릴 내용 | [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) |
 
 휴지통과 파일 시스템 기록(1~3)을 먼저 봅니다. 이 셋으로 "있었나, 언제 없어졌나" 를 정합니다. 5~7 은 경로와 행위자를 보태고, 8~9 는 내용을 되살리는 데 씁니다.
 
@@ -47,7 +47,7 @@
 - 휴지통을 거치지 않는 삭제가 많습니다.
 - `$I` 는 있는데 `$R` 이 없다고 휴지통을 비웠다고 볼 수 없습니다. 복원한 뒤에도 `$I` 가 남습니다.
 
-`$I` 의 오프셋과 버전별 차이는 [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) 에 있습니다.
+`$I` 의 오프셋과 버전별 차이는 [휴지통](../../02-artifacts/file-folder-usage/recycle-bin.md) 에 있습니다.
 
 ## MFT 레코드
 
@@ -64,7 +64,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 - 0x0002 를 "폴더" 로 읽는 설명이 흔합니다. 문서에는 이름만 있습니다[1].
 - 칸은 MultiSectorHeader, Reserved1(8), SequenceNumber(2), Reserved2(2), FirstAttributeOffset(2), Flags(2), Reserved3(8), BaseFileRecordSegment(8), Reserved4(2), UpdateSequenceArray 순서입니다[1].
 - MultiSectorHeader 에는 "FILE" 서명과 업데이트 시퀀스 배열의 위치·크기가 있습니다[1].
-- 참고한 문서에는 MultiSectorHeader 의 크기가 없습니다. 그래서 이 페이지에는 칸의 오프셋을 적지 않습니다. 오프셋은 [파일 레코드와 속성](/01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 확인합니다.
+- 참고한 문서에는 MultiSectorHeader 의 크기가 없습니다. 그래서 이 페이지에는 칸의 오프셋을 적지 않습니다. 오프셋은 [파일 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 확인합니다.
 - 이 구조는 NTFS 주 버전 3, 부 버전 0 또는 1 에만 맞는다고 문서에 적혀 있습니다[1].
 
 **Flags 값 읽기.** 아래는 두 비트를 조합해 만든 예시 값입니다.
@@ -88,7 +88,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 - 이때 기본 레코드만 보면 8.3 짧은 이름만 보입니다(현장 관찰).
 - 그래서 긴 이름으로 찾아 나오지 않으면 BaseFileRecordSegment 로 확장 레코드를 기본 레코드에 묶어 다시 찾습니다.
 
-해제된 레코드에서 내용을 되살리는 절차는 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에 있습니다.
+해제된 레코드에서 내용을 되살리는 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 
 ## $UsnJrnl (변경 저널)
 
@@ -122,7 +122,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 | 0x00010000 | USN_REASON_HARD_LINK_CHANGE |
 | 0x80000000 | USN_REASON_CLOSE |
 
-(값은 [2] 에서 골랐습니다. 이름 있는 스트림과 관계있는 값은 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 에서, 나머지 값은 [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) 에서 봅니다.)
+(값은 [2] 에서 골랐습니다. 이름 있는 스트림과 관계있는 값은 [이 파일은 어디서 왔나](file-origin.md) 에서, 나머지 값은 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에서 봅니다.)
 
 값을 조합해 만든 예시로 읽는 법을 보입니다. Reason 이 0x80000200 이면 USN_REASON_FILE_DELETE(0x00000200)와 USN_REASON_CLOSE(0x80000000)가 함께 켜진 것입니다. Reason 이 0x00001000 이면 이름 바꾸기의 옛 이름 쪽 레코드입니다. 이때는 같은 파일 참조로 USN_REASON_RENAME_NEW_NAME 이 켜진 레코드를 찾아 새 이름과 새 부모 폴더를 확인합니다.
 
@@ -139,19 +139,19 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 - 빈 구간을 0 으로 채워 뽑으면 논리 크기(수 GB)만큼의 파일이 나옵니다(현장 관찰).
 - 빈 구간을 건너뛰어 뽑으면 실제 데이터만 남습니다(현장 관찰).
 - 두 방법은 크기와 해시가 다릅니다. 그래서 어떤 방법으로 뽑았는지 기록에 적습니다.
-- 희소 파일의 구조는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 봅니다.
+- 희소 파일의 구조는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 에서 봅니다.
 
 ## 지운 뒤에도 남는 기록
 
 | 기록 | 남는 것 | 링크 |
 |---|---|---|
-| 바로가기 파일·점프리스트 | 대상을 지운 뒤에도 대상 경로와 시각이 남습니다. | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) · [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 셸백 | 폴더를 지워도 남습니다. 항목의 NTFS 파일 참조를 지금 $MFT 와 맞추면 지웠는지·옮겼는지·이름만 바꿨는지 가를 수 있습니다. | [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) |
-| 윈도 검색 색인 | 지금 없는 파일의 기록이 남을 수 있습니다. | [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/index.md) |
-| 프리페치·AmCache | 지운 실행 파일의 경로와 SHA-1 이 남을 수 있습니다. | [프리페치](/02-artifacts/execution/prefetch/index.md) · [AmCache](/02-artifacts/execution/amcache-hve/index.md) |
-| 썸네일 캐시 | 미리 보기 그림(세부는 링크 페이지) | [썸네일 캐시](/02-artifacts/file-folder-usage/thumbcache-db-thumbs-db.md) |
-| 브라우저 기록 | 지운 방문 기록의 단서 | [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) |
-| ESE·레지스트리 | 지운 레코드, 지운 키와 값 | [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) · [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) |
+| 바로가기 파일·점프리스트 | 대상을 지운 뒤에도 대상 경로와 시각이 남습니다. | [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) · [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) |
+| 셸백 | 폴더를 지워도 남습니다. 항목의 NTFS 파일 참조를 지금 $MFT 와 맞추면 지웠는지·옮겼는지·이름만 바꿨는지 가를 수 있습니다. | [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) |
+| 윈도 검색 색인 | 지금 없는 파일의 기록이 남을 수 있습니다. | [윈도 검색 색인 DB](../../02-artifacts/file-folder-usage/windows-search/index.md) |
+| 프리페치·AmCache | 지운 실행 파일의 경로와 SHA-1 이 남을 수 있습니다. | [프리페치](../../02-artifacts/execution/prefetch/index.md) · [AmCache](../../02-artifacts/execution/amcache-hve/index.md) |
+| 썸네일 캐시 | 미리 보기 그림(세부는 링크 페이지) | [썸네일 캐시](../../02-artifacts/file-folder-usage/thumbcache-db-thumbs-db.md) |
+| 브라우저 기록 | 지운 방문 기록의 단서 | [웹 사용 행위 재구성](web-activity.md) |
+| ESE·레지스트리 | 지운 레코드, 지운 키와 값 | [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) · [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) |
 
 **윈도 검색 색인.**
 
@@ -172,8 +172,8 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 
 - 4663 의 접근 권한에 DELETE 가 있으면 삭제 권한을 썼다는 기록입니다[3].
 - 4663 은 SACL 이 걸린 개체에서만 남습니다[3].
-- 4663 의 다른 칸과 다른 이벤트와 잇는 법은 [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) 의 "보안 로그 4663" 절에 있습니다.
-- 개체 삭제 이벤트 4660 의 뜻과 칸은 [파일 접근 감사](/02-artifacts/event-logs/4656-4663-4660.md) 에서 봅니다.
+- 4663 의 다른 칸과 다른 이벤트와 잇는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "보안 로그 4663" 절에 있습니다.
+- 개체 삭제 이벤트 4660 의 뜻과 칸은 [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) 에서 봅니다.
 
 **Sysmon.**
 
@@ -186,7 +186,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 (표는 [4] 에서 옮겼습니다.)
 
 - 23 을 켜 둔 PC 에서는 볼륨 루트의 보관 폴더에서 지운 파일의 사본을 찾습니다.
-- 완전삭제 도구를 쓴 흔적은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
+- 완전삭제 도구를 쓴 흔적은 [증거를 없애려 했나](anti-forensics/index.md) 에서 다룹니다.
 
 ## 복구 가능성
 
@@ -194,8 +194,8 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 - 설정은 `fsutil behavior query DisableDeleteNotify` 로 확인합니다[5].
 - 저장 장치가 TRIM 을 지원하지 않으면 알림이 가지 않습니다[5].
 - 이 명령은 실행 중인 시스템에서 씁니다. 이미지만 있으면 저장 장치 종류를 먼저 적어 두고, 복구 결과와 함께 판단합니다.
-- 해제된 레코드로 되살리기, 카빙, 비할당 영역 검색은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
-- 지우기 전 시점의 파일은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+- 해제된 레코드로 되살리기, 카빙, 비할당 영역 검색은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+- 지우기 전 시점의 파일은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
 
 ## 분석 흐름
 
@@ -208,8 +208,8 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 7. 감사가 켜져 있었으면 4663 을 ObjectName 과 DELETE 권한으로 찾습니다. Sysmon 이 있으면 23·26·28 을 봅니다.
 8. 섀도 복사본에서 지우기 전 시점의 파일과 기록을 봅니다.
 9. 내용이 필요하면 저장 장치 종류와 TRIM 설정을 확인한 뒤 복구와 카빙을 시도합니다.
-10. 모든 시각을 UTC 하나로 맞춰 [타임라인](/03-techniques/analysis/timeline/index.md) 에 올립니다. 시각 값의 형식은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 확인합니다.
-11. 완전삭제 도구나 일괄 삭제 흔적이 보이면 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 로 이어 갑니다. 그 시각에 누가 PC 앞에 있었는지는 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 로 좁힙니다.
+10. 모든 시각을 UTC 하나로 맞춰 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올립니다. 시각 값의 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 확인합니다.
+11. 완전삭제 도구나 일괄 삭제 흔적이 보이면 [증거를 없애려 했나](anti-forensics/index.md) 로 이어 갑니다. 그 시각에 누가 PC 앞에 있었는지는 [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) 로 좁힙니다.
 
 ## 흔한 오판
 
@@ -229,14 +229,14 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 
 ## 함께 볼 페이지
 
-- [휴지통](/02-artifacts/file-folder-usage/recycle-bin.md) — `$I`·`$R` 의 구조입니다.
-- [마스터 파일 테이블](/02-artifacts/filesystem/mft.md) · [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) — 파일 레코드와 속성의 구조입니다.
-- [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md) · [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md) — 파일 시스템 변경 기록입니다.
-- [타임라인 작성](/03-techniques/analysis/timeline/index.md) — 파일 시스템 기록을 한 줄로 세웁니다.
-- [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) · [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) — 내용을 되살립니다.
-- [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) — 완전삭제 도구와 흔적 지우기를 봅니다.
-- [이 파일을 누가 언제 열었나](/04-scenarios/activity/file-access.md) — 지우기 전에 파일을 다룬 기록입니다.
-- [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) — 지운 파일이 들어온 길입니다.
+- [휴지통](../../02-artifacts/file-folder-usage/recycle-bin.md) — `$I`·`$R` 의 구조입니다.
+- [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) · [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) — 파일 레코드와 속성의 구조입니다.
+- [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) · [NTFS 트랜잭션 로그](../../02-artifacts/filesystem/logfile.md) — 파일 시스템 변경 기록입니다.
+- [타임라인 작성](../../03-techniques/analysis/timeline/index.md) — 파일 시스템 기록을 한 줄로 세웁니다.
+- [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) · [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 내용을 되살립니다.
+- [증거를 없애려 했나](anti-forensics/index.md) — 완전삭제 도구와 흔적 지우기를 봅니다.
+- [이 파일을 누가 언제 열었나](file-access.md) — 지우기 전에 파일을 다룬 기록입니다.
+- [이 파일은 어디서 왔나](file-origin.md) — 지운 파일이 들어온 길입니다.
 
 ## 참고 문헌
 

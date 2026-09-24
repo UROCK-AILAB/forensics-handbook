@@ -25,7 +25,7 @@
 
 - `_VBA_PROJECT_CUR` 아래 구성은 `vbaProject.bin` 의 루트와 같았습니다(관찰).
 - Word 97-2003 문서의 `Macros` 저장소는 olevba 문서에 이름만 나옵니다(참고 1). 이 페이지에서 실물로 보지 못했습니다.
-- `vbaProject.bin` 의 첫 8바이트는 `D0 CF 11 E0 A1 B1 1A E1` 이었습니다(관찰). OLE 복합 파일이라는 뜻입니다. 이 형식은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
+- `vbaProject.bin` 의 첫 8바이트는 `D0 CF 11 E0 A1 B1 1A E1` 이었습니다(관찰). OLE 복합 파일이라는 뜻입니다. 이 형식은 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
 
 ### OpenXML 의 서명 파트 (관찰)
 
@@ -73,7 +73,7 @@ Office 는 아래 순서로 매크로를 켤지 정합니다(참고 2).
 - 정책은 사용자 구성\정책\관리 템플릿 아래 앱마다 있습니다. Word 의 예는 `Microsoft Word 2016\Word Options\Security\Trust Center` 입니다.
 - 이 정책은 Microsoft 365 Apps for enterprise 에서만 쓸 수 있습니다.
 - 보안 센터의 매크로 설정 기본값은 "알림과 함께 모든 매크로 사용 안 함" 입니다.
-- 설정 값이 남는 레지스트리 경로는 참고 2 에 나오지 않습니다. 사용자별 매크로 설정 값은 [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) 에서 다룹니다.
+- 설정 값이 남는 레지스트리 경로는 참고 2 에 나오지 않습니다. 사용자별 매크로 설정 값은 [신뢰 문서 기록 (Trust Records)](../file-folder-usage/microsoft-office/trust-records.md) 에서 다룹니다.
 
 ## 구조
 
@@ -210,9 +210,9 @@ olevba 가 자동 실행 후보로 찾는 이름입니다.
 
 - 이 페이지에서 살펴본 VBA 스트림(`PROJECT`, `dir`, 모듈 스트림)에서는 코드를 쓴 시각이나 실행한 시각을 담은 칸을 찾지 못했습니다(관찰).
 - OpenXML 파일의 ZIP 항목 시각은 관찰한 파일에서 모두 1980-01-01 00:00:00 이었습니다(관찰). 이 값으로 작성 시각을 말하지 않습니다.
-- OLE 저장소 디렉터리 항목의 시각은 [OLE 복합 파일](/01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
-- 문서를 만든 시각·저장한 시각은 [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) 과 [옛 오피스 문서 속성 (OLE SummaryInformation)](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) 에서 봅니다.
-- 매크로를 켠 기록은 [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) 에서 봅니다. 그 값의 시각이 무엇을 뜻하는지도 그 페이지에서 다룹니다.
+- OLE 저장소 디렉터리 항목의 시각은 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
+- 문서를 만든 시각·저장한 시각은 [오피스 문서 속성 (OOXML docProps)](document-metadata/ooxml-docprops.md) 과 [옛 오피스 문서 속성 (OLE SummaryInformation)](document-metadata/ole-summaryinformation.md) 에서 봅니다.
+- 매크로를 켠 기록은 [신뢰 문서 기록 (Trust Records)](../file-folder-usage/microsoft-office/trust-records.md) 에서 봅니다. 그 값의 시각이 무엇을 뜻하는지도 그 페이지에서 다룹니다.
 - 사건 시점이 위 차단 표의 적용 시작보다 앞이면, 사용자가 예전 배너의 [콘텐츠 사용] 단추를 누를 수 있었습니다(참고 2).
 
 ## 함정과 한계
@@ -224,7 +224,7 @@ olevba 가 자동 실행 후보로 찾는 이름입니다.
 5. **OpenXML 파일에서 스톰핑 판정이 없으면 안심합니다.** ZIP 안의 `vbaProject.bin` 에 대해서는 "For now, VBA stomping cannot be detected for files in memory" 라는 경고만 내고 판정하지 않았습니다(관찰). `vbaProject.bin` 을 파일로 꺼내 다시 검사하면 판정하는지는 확인하지 않았습니다.
 6. **소스만 읽습니다.** 모듈 스트림에는 소스 앞에 P-code 영역이 있습니다(관찰). Office 가 어떤 조건에서 소스 대신 P-code 를 실행하는지는 확인하지 못했습니다.
 7. **웹 표시가 없으면 안에서 만든 파일이라고 봅니다.** 웹 표시는 NTFS 에 저장한 파일에만 붙고 FAT32 에는 붙지 않습니다(참고 2). 기본으로는 인터넷·제한된 사이트 영역에서 온 파일에만 붙습니다(참고 2). OneDrive·SharePoint 에서 [데스크톱 앱에서 열기] 로 연 파일, OneDrive 동기화 클라이언트가 내려받은 파일, OneDrive 와 동기화되는 알려진 폴더(바탕 화면·문서·사진·스크린샷·카메라 롤)의 파일에도 붙지 않습니다(참고 2).
-8. **ZoneId 가 있으면 모두 막혔다고 봅니다.** ZoneId 2(신뢰할 수 있는 사이트)는 기본으로 막지 않고, 3(인터넷)은 막습니다(참고 2). ZoneId 값 전체는 [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) 에서 다룹니다.
+8. **ZoneId 가 있으면 모두 막혔다고 봅니다.** ZoneId 2(신뢰할 수 있는 사이트)는 기본으로 막지 않고, 3(인터넷)은 막습니다(참고 2). ZoneId 값 전체는 [다운로드 출처 표시 (Zone.Identifier)](../filesystem/zone-identifier.md) 에서 다룹니다.
 9. **신뢰할 수 있는 위치의 파일을 같은 기준으로 봅니다.** 신뢰할 수 있는 위치에 저장한 파일은 웹 표시 검사를 건너뜁니다(참고 2).
 10. **네트워크 공유 파일을 로컬 파일처럼 봅니다.** IP 주소로 연 공유의 파일은, 그 공유가 신뢰할 수 있는 사이트나 로컬 인트라넷 영역에 없으면 매크로가 막힙니다(참고 2).
 11. **Excel 추가 기능을 문서와 같게 봅니다.** `.xla`·`.xlam` 은 웹 표시가 있으면 서명이나 게시자 신뢰로도 풀리지 않습니다. 2016년 MS16-088 이후 그렇습니다(참고 2).
@@ -232,10 +232,10 @@ olevba 가 자동 실행 후보로 찾는 이름입니다.
 
 ### 지우기와 조작
 
-- 사용자는 파일 속성 > 일반 탭의 [차단 해제] (Unblock) 로 웹 표시를 지울 수 있습니다. PowerShell `Unblock-File` 도 같습니다. 둘 다 ZoneId 값을 지웁니다(참고 2). 지운 흔적을 찾는 법은 [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) 에서 다룹니다.
+- 사용자는 파일 속성 > 일반 탭의 [차단 해제] (Unblock) 로 웹 표시를 지울 수 있습니다. PowerShell `Unblock-File` 도 같습니다. 둘 다 ZoneId 값을 지웁니다(참고 2). 지운 흔적을 찾는 법은 [다운로드 출처 표시 (Zone.Identifier)](../filesystem/zone-identifier.md) 에서 다룹니다.
 - 신뢰할 수 있는 위치로 옮긴 파일은 웹 표시 검사를 건너뜁니다(참고 2). 파일 경로가 신뢰할 수 있는 위치 안인지 확인합니다.
 - 소스와 P-code 가 다르면 소스만 읽는 도구로는 실제 코드를 놓칠 수 있습니다. olevba 판정 문구도 이 가능성을 적었습니다(관찰). P-code 를 함께 읽습니다.
-- 일부러 흔적을 지운 정황은 [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md) 에서 다른 흔적과 함께 봅니다.
+- 일부러 흔적을 지운 정황은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에서 다른 흔적과 함께 봅니다.
 
 ## 직접 분석해 보기
 
@@ -266,21 +266,21 @@ oletools 의 olevba 를 예로 듭니다(참고 1).
 - `olevba -a <파일>` 은 자동 실행 이름, 의심 키워드, IOC, 스톰핑 판정을 항목별로 보여 줍니다(관찰).
 - P-code 는 pcodedmp 로 읽습니다(oletools 소스).
 - 모든 작업은 사본에서 합니다. 판정은 코드를 직접 읽어 확인한 뒤에 씁니다.
-- 실행 중인 시스템에서는 `notepad <파일>:Zone.Identifier` 로 웹 표시를 열어 `[ZoneTransfer]` 절의 ZoneId 를 볼 수 있습니다(참고 2). 이미지에서 읽는 법은 [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) 를 봅니다.
+- 실행 중인 시스템에서는 `notepad <파일>:Zone.Identifier` 로 웹 표시를 열어 `[ZoneTransfer]` 절의 ZoneId 를 볼 수 있습니다(참고 2). 이미지에서 읽는 법은 [다운로드 출처 표시 (Zone.Identifier)](../filesystem/zone-identifier.md) 를 봅니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 파일에 웹 표시가 있는지, ZoneId 가 몇인지 |
-| [신뢰 문서 기록 (Trust Records)](/02-artifacts/file-folder-usage/microsoft-office/trust-records.md) | 사용자가 경고 단추를 눌렀는지, 매크로를 켰는지 |
-| [오피스 사용 흔적](/02-artifacts/file-folder-usage/microsoft-office/index.md) | 문서를 연 기록 |
-| [오피스 문서 속성 (OOXML docProps)](/02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md) · [옛 오피스 문서 속성 (OLE SummaryInformation)](/02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md) | 같은 문서의 작성자·저장 시각 |
-| [아웃룩](/02-artifacts/mail/outlook/index.md) | 문서가 메일 첨부로 들어왔는지 |
-| [프로세스 생성 (이벤트 1)](/02-artifacts/event-logs/sysmon/1.md) | 문서를 연 시각 뒤로 오피스 프로세스가 다른 프로세스를 만들었는지 |
-| [의심 실행 파일 선별](/03-techniques/analysis/code-signing-yara.md) | 여러 문서를 규칙으로 한꺼번에 선별하기 |
+| [다운로드 출처 표시 (Zone.Identifier)](../filesystem/zone-identifier.md) | 파일에 웹 표시가 있는지, ZoneId 가 몇인지 |
+| [신뢰 문서 기록 (Trust Records)](../file-folder-usage/microsoft-office/trust-records.md) | 사용자가 경고 단추를 눌렀는지, 매크로를 켰는지 |
+| [오피스 사용 흔적](../file-folder-usage/microsoft-office/index.md) | 문서를 연 기록 |
+| [오피스 문서 속성 (OOXML docProps)](document-metadata/ooxml-docprops.md) · [옛 오피스 문서 속성 (OLE SummaryInformation)](document-metadata/ole-summaryinformation.md) | 같은 문서의 작성자·저장 시각 |
+| [아웃룩](../mail/outlook/index.md) | 문서가 메일 첨부로 들어왔는지 |
+| [프로세스 생성 (이벤트 1)](../event-logs/sysmon/1.md) | 문서를 연 시각 뒤로 오피스 프로세스가 다른 프로세스를 만들었는지 |
+| [의심 실행 파일 선별](../../03-techniques/analysis/code-signing-yara.md) | 여러 문서를 규칙으로 한꺼번에 선별하기 |
 
-악성 문서가 들어온 경로를 좇는 순서는 [악성코드는 어디서 들어왔나](/04-scenarios/incident/initial-access.md) 에서 다룹니다. 파일의 출처를 좁히는 순서는 [이 파일은 어디서 왔나](/04-scenarios/activity/file-origin.md) 를 봅니다.
+악성 문서가 들어온 경로를 좇는 순서는 [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md) 에서 다룹니다. 파일의 출처를 좁히는 순서는 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 를 봅니다.
 
 ## 실습
 

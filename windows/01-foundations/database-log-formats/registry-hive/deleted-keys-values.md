@@ -6,7 +6,7 @@
 
 레지스트리 키나 값을 지우면 Windows 는 그 셀을 "빈 칸"으로 표시만 합니다. 이 페이지는 지운 키·값이 어디에 어떤 모양으로 남는지, 어떻게 찾고 검증하는지를 설명합니다.
 
-셀과 하이브 빈(Hive Bin)의 기본 구조는 [하이브 내부 구조 (regf·hbin·Cell)](/01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에서 설명합니다. 이 페이지는 지우기와 관련된 칸만 다룹니다.
+셀과 하이브 빈(Hive Bin)의 기본 구조는 [하이브 내부 구조 (regf·hbin·Cell)](regf-hbin-cell.md) 에서 설명합니다. 이 페이지는 지우기와 관련된 칸만 다룹니다.
 
 ## 이 원리가 쓰이는 곳
 
@@ -14,11 +14,11 @@
 
 | 상황 | 지워진 것 | 함께 볼 페이지 |
 |---|---|---|
-| 한 번만 실행되도록 등록된 프로그램 | RunOnce 값. Windows 는 기본적으로 명령을 실행하기 **전에** 이 값을 지웁니다(Microsoft Learn). | [로그온 자동실행 (Run·RunOnce·Startup Folder)](/02-artifacts/persistence/run-runonce-startup-folder.md) |
-| 자동실행을 등록했다가 지운 경우 | Run 값, 서비스 키 | [서비스·드라이버 (Services·Drivers)](/02-artifacts/persistence/services-drivers.md) |
-| 예약 작업을 목록에서 숨긴 경우 | TaskCache Tree 아래 SD 값 | [숨긴 예약 작업 찾기 (SD 값 삭제)](/02-artifacts/persistence/scheduled-tasks/sd.md) |
-| 장치 연결 기록을 지운 경우 | USBSTOR 아래 장치 키 | [USB 저장장치 목록 (USBSTOR)](/02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) |
-| 흔적을 없애려 한 정황 조사 | 여러 키·값 | [증거를 없애려 했나 (Anti-Forensics)](/04-scenarios/activity/anti-forensics/index.md) |
+| 한 번만 실행되도록 등록된 프로그램 | RunOnce 값. Windows 는 기본적으로 명령을 실행하기 **전에** 이 값을 지웁니다(Microsoft Learn). | [로그온 자동실행 (Run·RunOnce·Startup Folder)](../../../02-artifacts/persistence/run-runonce-startup-folder.md) |
+| 자동실행을 등록했다가 지운 경우 | Run 값, 서비스 키 | [서비스·드라이버 (Services·Drivers)](../../../02-artifacts/persistence/services-drivers.md) |
+| 예약 작업을 목록에서 숨긴 경우 | TaskCache Tree 아래 SD 값 | [숨긴 예약 작업 찾기 (SD 값 삭제)](../../../02-artifacts/persistence/scheduled-tasks/sd.md) |
+| 장치 연결 기록을 지운 경우 | USBSTOR 아래 장치 키 | [USB 저장장치 목록 (USBSTOR)](../../../02-artifacts/external-devices/usb-storage-artifacts/usbstor.md) |
+| 흔적을 없애려 한 정황 조사 | 여러 키·값 | [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md) |
 
 ## 구조: 지울 때 바뀌는 칸
 
@@ -51,8 +51,8 @@ Timothy Morgan 은 2008년에 Windows 2000·XP·Server 2003·Vista 에서 지우
 | 할당된 셀의 남는 공간 (Slack) | 목록이 줄어든 뒤 남은 옛 항목입니다. 목록은 커질 때 여유 있는 큰 셀로 옮겨지기도 합니다. 값 데이터 셀에서 데이터 크기 뒤에 남은 바이트도 여기에 들어갑니다. | 살아 있는 셀이라서 빈 셀만 훑으면 안 보입니다. |
 | 마지막 하이브 빈 뒤 (Remnant Data) | 기본 파일(Primary File)은 마지막 하이브 빈 뒤에 임의 크기의 남은 데이터를 가질 수 있습니다. 시작 위치는 4096 + 기본 블록(Base Block) 오프셋 40 의 "하이브 빈 데이터 크기" 입니다. | 하이브 빈 안만 보는 도구는 이 부분을 건너뜁니다. |
 | 할당됐지만 아무도 가리키지 않는 셀 | 위 Windows 10 이름 바꾸기 버그처럼 트리에서 끊긴 셀입니다. | 빈 셀이 아니라서 대부분의 도구가 찾지 않습니다. |
-| 트랜잭션 로그 (.LOG1·.LOG2) | 기본 파일에 아직 들어가지 않은 변경입니다. 지우기 직전 상태가 남아 있을 수 있습니다. | [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](/01-foundations/database-log-formats/registry-hive/log1-log2.md) |
-| 볼륨 섀도 복사본의 옛 하이브 | 지우기 전 시점의 하이브 전체입니다. | [섀도 복사본 활용 (Volume Shadow Copy Analysis)](/03-techniques/analysis/volume-shadow-copy-analysis.md) |
+| 트랜잭션 로그 (.LOG1·.LOG2) | 기본 파일에 아직 들어가지 않은 변경입니다. 지우기 직전 상태가 남아 있을 수 있습니다. | [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](log1-log2.md) |
+| 볼륨 섀도 복사본의 옛 하이브 | 지우기 전 시점의 하이브 전체입니다. | [섀도 복사본 활용 (Volume Shadow Copy Analysis)](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
 > 그림 자리: 합쳐진 빈 셀 하나 안에 옛 `nk`·값 목록·`vk`·데이터가 이어 붙어 있고, `nk` 의 부모 오프셋과 값 목록 오프셋이 각각 다른 셀을 가리키는 모습
 
@@ -119,7 +119,7 @@ Morgan 의 방법은 믿을 만한 구조부터, 연결 정보가 많은 구조�
 - Morgan 의 시험에서는 하위 키가 있던 키를 지울 때 그 키의 시각이 갱신됐습니다(Windows 2000 제외). 이 경우 그 시각은 지운 시각에 가깝습니다.
 - 하위 키가 없던 키는 지울 때 시각이 바뀌지 않았습니다. 이 경우 그 시각은 지우기 전 마지막으로 바뀐 시각입니다.
 - 값 레코드에는 시각 칸이 없습니다.
-- 시각이 바뀌는 규칙은 [키 마지막 기록 시각 (Last Write Time)](/01-foundations/database-log-formats/registry-hive/last-write-time.md) 을 봅니다. 부모 키 시각, 트랜잭션 로그, 섀도 복사본을 함께 보고 범위를 좁힙니다.
+- 시각이 바뀌는 규칙은 [키 마지막 기록 시각 (Last Write Time)](last-write-time.md) 을 봅니다. 부모 키 시각, 트랜잭션 로그, 섀도 복사본을 함께 보고 범위를 좁힙니다.
 
 ### 되살린 결과가 증명하는 것 / 증명하지 못하는 것
 
@@ -148,7 +148,7 @@ Morgan 의 방법은 믿을 만한 구조부터, 연결 정보가 많은 구조�
 - **정리·조각 모음 도구**: Morgan 은 레지스트리 조각 모음 도구가 빈 셀 대부분을 없앨 것으로 봤습니다.
 - **일부러 덮기**: Morgan 은 모든 키에 값을 하나씩 만들었다 지우면 되살릴 레코드 대부분이 덮일 것으로 봤습니다. 이 방법은 키 시각도 함께 바꿉니다.
 
-하이브 파일 자체가 지워졌다면 디스크에서 하이브 빈을 찾아 모읍니다. [레코드 카빙 (Record Carving)](/03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
+하이브 파일 자체가 지워졌다면 디스크에서 하이브 빈을 찾아 모읍니다. [레코드 카빙 (Record Carving)](../../../03-techniques/analysis/data-recovery/record-carving.md) 을 봅니다.
 
 ## 함정
 
@@ -158,7 +158,7 @@ Morgan 의 방법은 믿을 만한 구조부터, 연결 정보가 많은 구조�
 - **꾸며 넣은 구조**: Morgan 은 부모에서 자식으로 가는 확정된 연결이 없어서 낮은 권한 사용자도 지운 구조를 꾸며 넣을 수 있다고 지적했습니다. 예를 들어 값 데이터에 `nk` 모양 바이트를 넣고 그 값을 지우면, 도구가 그것을 지운 키로 보여 줄 수 있습니다.
 - **숨긴 데이터**: 빈 셀을 할당 상태로 바꾸면 데이터를 숨길 수 있습니다. 이런 셀은 트리에도 없고 빈 셀도 아닙니다. 아무도 가리키지 않는 할당 셀을 따로 검사해야 찾습니다.
 - **로그 반영 여부**: 로그를 반영하지 않은 하이브에는 가장 최근의 지우기가 아직 들어가지 않았을 수 있습니다. 로그를 반영하면 빈 셀이 새 내용으로 덮일 수 있습니다. 두 상태를 모두 봅니다.
-- **도구마다 다른 결과**: 남은 데이터를 건너뛰는 도구, 남는 공간을 보지 않는 도구, 부모를 모르는 값을 보여 주지 않는 도구가 있습니다. 두 가지 이상의 도구로 비교합니다. [도구 결과 교차 검증 (Tool Validation)](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- **도구마다 다른 결과**: 남은 데이터를 건너뛰는 도구, 남는 공간을 보지 않는 도구, 부모를 모르는 값을 보여 주지 않는 도구가 있습니다. 두 가지 이상의 도구로 비교합니다. [도구 결과 교차 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 도구
 

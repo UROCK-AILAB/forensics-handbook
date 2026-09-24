@@ -17,8 +17,8 @@
 
 - 폴더와 키가 있다는 것만으로 사용자가 IE 를 썼다고 단정하지 않습니다. 위 Windows 11 PC 에도 폴더와 키가 모두 있었습니다.
 - IE 와 옛 엣지는 같은 `WebCacheV01.dat` 를 씁니다. 그래서 이 파일의 기록을 IE 사용 흔적이라고 바로 단정하지 않습니다.
-- 기록은 Windows 계정 단위로 남습니다. 그 시각에 누가 키보드 앞에 있었는지는 남지 않습니다. 사람을 좁히는 법은 [그 시각에 PC 를 쓴 사람이 누구인가](/04-scenarios/activity/user-attribution.md) 에서 다룹니다.
-- 기록이 없다고 방문하지 않은 것은 아닙니다. 사용자가 지웠을 수 있습니다. 이전 시점의 파일은 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 꺼내 비교합니다.
+- 기록은 Windows 계정 단위로 남습니다. 그 시각에 누가 키보드 앞에 있었는지는 남지 않습니다. 사람을 좁히는 법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 기록이 없다고 방문하지 않은 것은 아닙니다. 사용자가 지웠을 수 있습니다. 이전 시점의 파일은 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 꺼내 비교합니다.
 
 ## 한눈에 보기
 
@@ -55,35 +55,35 @@ Microsoft 수명 주기 FAQ 의 표를 옮겼습니다. 검체의 Windows 판과
 
 | 알 수 있는 것 | 어디에 남나 | 쓰는 버전 | 자세히 |
 |---|---|---|---|
-| 방문 기록·캐시 목록·쿠키·내려받기 기록 | `WebCacheV*.dat` | IE 10 이후, 옛 엣지 | [웹캐시 DB](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) |
-| 같은 기록의 옛 형식 | 기록 종류별 폴더의 `index.dat` | IE 4~9 | [옛 기록 파일](/02-artifacts/browsers/ie-edgehtml/index-dat.md) |
-| 주소창에 입력한 주소와 입력 시각 | NTUSER.DAT 의 `Software\Microsoft\Internet Explorer\TypedURLs`·`TypedURLsTime` | 시각 키는 Windows 8 에서 소개됐습니다 | [주소창 입력 주소](/02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) |
-| 사이트별로 저장한 아이디·비밀번호 | NTUSER.DAT 의 `Software\Microsoft\Internet Explorer\IntelliForms\Storage2` | IE 7~9 | [저장 비밀번호](/02-artifacts/browsers/ie-edgehtml/intelliforms.md) |
-| 받아 둔 웹 자원 파일·쿠키 폴더 | `%LOCALAPPDATA%\Microsoft\Windows\INetCache\IE` (IE 10 이후), `…\Temporary Internet Files\Content.IE5` (IE 4~9), `INetCookies` | IE 4 이후 | [쿠키·캐시 폴더](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) |
-| 즐겨찾기 | `%USERPROFILE%\Favorites` 의 `.url` 파일(한 PC 에서 본 위치), 옛 엣지는 `spartan.edb` | IE, 옛 엣지 | [즐겨찾기](/02-artifacts/browsers/ie-edgehtml/favorites-url.md) |
+| 방문 기록·캐시 목록·쿠키·내려받기 기록 | `WebCacheV*.dat` | IE 10 이후, 옛 엣지 | [웹캐시 DB](webcachev01-dat.md) |
+| 같은 기록의 옛 형식 | 기록 종류별 폴더의 `index.dat` | IE 4~9 | [옛 기록 파일](index-dat.md) |
+| 주소창에 입력한 주소와 입력 시각 | NTUSER.DAT 의 `Software\Microsoft\Internet Explorer\TypedURLs`·`TypedURLsTime` | 시각 키는 Windows 8 에서 소개됐습니다 | [주소창 입력 주소](typedurls-typedurlstime.md) |
+| 사이트별로 저장한 아이디·비밀번호 | NTUSER.DAT 의 `Software\Microsoft\Internet Explorer\IntelliForms\Storage2` | IE 7~9 | [저장 비밀번호](intelliforms.md) |
+| 받아 둔 웹 자원 파일·쿠키 폴더 | `%LOCALAPPDATA%\Microsoft\Windows\INetCache\IE` (IE 10 이후), `…\Temporary Internet Files\Content.IE5` (IE 4~9), `INetCookies` | IE 4 이후 | [쿠키·캐시 폴더](inetcookies-inetcache.md) |
+| 즐겨찾기 | `%USERPROFILE%\Favorites` 의 `.url` 파일(한 PC 에서 본 위치), 옛 엣지는 `spartan.edb` | IE, 옛 엣지 | [즐겨찾기](favorites-url.md) |
 
 하위 페이지에서 다루지 않는 자리도 하나 있습니다. Vista 이후 IE 는 탭 복구용 폴더 `C:\Users\<사용자>\AppData\Local\Microsoft\Internet Explorer\Recovery` 를 씁니다. 이 폴더 안 파일의 형식은 이 허브의 하위 페이지에서 다루지 않습니다. 수집할 때는 이 폴더도 함께 모읍니다.
 
 ## 읽는 순서
 
-1. [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) — IE 10 이후와 옛 엣지의 방문 기록·캐시·쿠키·내려받기 기록을 ESE 데이터베이스에서 읽습니다. 잠긴 파일의 사본을 뜨는 법과 비정상 종료 상태를 다루는 법도 봅니다.
-2. [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) — IE 4~9 의 기록 파일을 머리글과 레코드 단위로 읽습니다. 파일 종류마다 두 시각의 뜻이 어떻게 다른지 봅니다.
-3. [주소창 입력 주소 (TypedURLs·TypedURLsTime)](/02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) — 사용자 하이브에서 주소창에 입력한 주소와 입력 시각을 짝지어 읽습니다.
-4. [저장 비밀번호 (IntelliForms)](/02-artifacts/browsers/ie-edgehtml/intelliforms.md) — IE 7~9 가 저장한 아이디·비밀번호를 사이트 주소와 DPAPI 로 푸는 흐름을 봅니다. HTTP 기본 인증 비밀번호가 들어가는 곳도 다룹니다.
-5. [쿠키·캐시 폴더 (INetCookies·INetCache)](/02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md) — 캐시 파일과 쿠키 폴더를 찾고, 어느 파일이 어느 주소에서 왔는지 기록 파일로 잇습니다.
-6. [즐겨찾기 (Favorites .url)](/02-artifacts/browsers/ie-edgehtml/favorites-url.md) — 즐겨찾기 폴더의 `.url` 파일을 글자로 읽고, 시각은 파일 시스템에서 가져옵니다. 옛 엣지의 즐겨찾기 자리도 봅니다.
+1. [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) — IE 10 이후와 옛 엣지의 방문 기록·캐시·쿠키·내려받기 기록을 ESE 데이터베이스에서 읽습니다. 잠긴 파일의 사본을 뜨는 법과 비정상 종료 상태를 다루는 법도 봅니다.
+2. [옛 기록 파일 (index.dat)](index-dat.md) — IE 4~9 의 기록 파일을 머리글과 레코드 단위로 읽습니다. 파일 종류마다 두 시각의 뜻이 어떻게 다른지 봅니다.
+3. [주소창 입력 주소 (TypedURLs·TypedURLsTime)](typedurls-typedurlstime.md) — 사용자 하이브에서 주소창에 입력한 주소와 입력 시각을 짝지어 읽습니다.
+4. [저장 비밀번호 (IntelliForms)](intelliforms.md) — IE 7~9 가 저장한 아이디·비밀번호를 사이트 주소와 DPAPI 로 푸는 흐름을 봅니다. HTTP 기본 인증 비밀번호가 들어가는 곳도 다룹니다.
+5. [쿠키·캐시 폴더 (INetCookies·INetCache)](inetcookies-inetcache.md) — 캐시 파일과 쿠키 폴더를 찾고, 어느 파일이 어느 주소에서 왔는지 기록 파일로 잇습니다.
+6. [즐겨찾기 (Favorites .url)](favorites-url.md) — 즐겨찾기 폴더의 `.url` 파일을 글자로 읽고, 시각은 파일 시스템에서 가져옵니다. 옛 엣지의 즐겨찾기 자리도 봅니다.
 
 ## 함께 볼 페이지
 
-- [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) — `WebCacheV*.dat` 와 `spartan.edb` 의 저장 형식입니다.
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) — `TypedURLs`·`IntelliForms` 가 들어 있는 NTUSER.DAT 의 구조입니다.
-- [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) — 저장 비밀번호를 풀 때 필요한 Windows 보호 구조입니다.
-- [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — WebCache 와 `index.dat` 의 시각 값을 바꾸는 법입니다.
-- [UWP 앱 데이터 구조](/01-foundations/app-mail-data/packages-settings-dat.md) — 옛 엣지 패키지 폴더의 짜임입니다.
-- [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) — HTTP 기본 인증 비밀번호가 들어가는 `Credentials` 폴더를 다룹니다.
-- [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md) — 지금의 Edge 는 크롬 계열입니다. 옛 엣지와 이름만 같고 기록 방식이 다릅니다.
-- [파이어폭스](/02-artifacts/browsers/firefox/index.md) — 구조가 다른 또 하나의 브라우저입니다.
-- [웹 사용 행위 재구성](/04-scenarios/activity/web-activity.md) — 여러 브라우저의 기록을 한 타임라인으로 묶는 순서입니다.
+- [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) — `WebCacheV*.dat` 와 `spartan.edb` 의 저장 형식입니다.
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) — `TypedURLs`·`IntelliForms` 가 들어 있는 NTUSER.DAT 의 구조입니다.
+- [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) — 저장 비밀번호를 풀 때 필요한 Windows 보호 구조입니다.
+- [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) — WebCache 와 `index.dat` 의 시각 값을 바꾸는 법입니다.
+- [UWP 앱 데이터 구조](../../../01-foundations/app-mail-data/packages-settings-dat.md) — 옛 엣지 패키지 폴더의 짜임입니다.
+- [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) — HTTP 기본 인증 비밀번호가 들어가는 `Credentials` 폴더를 다룹니다.
+- [크롬 계열 브라우저](../chrome-edge-whale/index.md) — 지금의 Edge 는 크롬 계열입니다. 옛 엣지와 이름만 같고 기록 방식이 다릅니다.
+- [파이어폭스](../firefox/index.md) — 구조가 다른 또 하나의 브라우저입니다.
+- [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) — 여러 브라우저의 기록을 한 타임라인으로 묶는 순서입니다.
 
 ## 참고 문헌
 

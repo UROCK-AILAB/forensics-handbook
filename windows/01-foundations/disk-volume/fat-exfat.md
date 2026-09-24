@@ -10,12 +10,12 @@ FAT (File Allocation Table) 파일시스템은 파일이 쓰는 클러스터를 
 
 | 쓰는 곳 | FAT 에서 가져오는 값 |
 |---|---|
-| [USB 저장장치 흔적](/02-artifacts/external-devices/usb-storage-artifacts/index.md) | 부트 섹터의 볼륨 일련번호와 볼륨 레이블. 다른 기록에 남은 값과 맞춰 봅니다. |
-| [파티션 구조](/01-foundations/disk-volume/mbr-gpt.md) | FAT 를 가리키는 파티션 종류 값과 파티션 시작 위치 |
-| [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) | 첫 바이트가 0xE5 인 지운 항목, 클러스터 사슬 |
-| [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md) | 지운 항목에 남은 이름·크기·날짜 |
-| [타임라인 작성](/03-techniques/analysis/timeline/index.md) | 만든 시각·수정 시각·마지막 접근 날짜 |
-| [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) | 이 페이지의 2바이트 날짜·시각 형식을 다른 시각 형식과 함께 정리합니다. |
+| [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) | 부트 섹터의 볼륨 일련번호와 볼륨 레이블. 다른 기록에 남은 값과 맞춰 봅니다. |
+| [파티션 구조](mbr-gpt.md) | FAT 를 가리키는 파티션 종류 값과 파티션 시작 위치 |
+| [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) | 첫 바이트가 0xE5 인 지운 항목, 클러스터 사슬 |
+| [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) | 지운 항목에 남은 이름·크기·날짜 |
+| [타임라인 작성](../../03-techniques/analysis/timeline/index.md) | 만든 시각·수정 시각·마지막 접근 날짜 |
+| [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) | 이 페이지의 2바이트 날짜·시각 형식을 다른 시각 형식과 함께 정리합니다. |
 
 ## 구조
 
@@ -130,7 +130,7 @@ SSA = 예약 섹터 수 + FAT 개수 × FAT 하나의 섹터 수 + ceil(32 × �
 클러스터의 첫 섹터 = SSA + (클러스터 번호 − 2) × 클러스터당 섹터 수
 ```
 
-- 이 식의 섹터 번호는 볼륨 기준입니다. 디스크 전체 이미지에서는 파티션 시작 위치를 더합니다([파티션 구조](/01-foundations/disk-volume/mbr-gpt.md)).
+- 이 식의 섹터 번호는 볼륨 기준입니다. 디스크 전체 이미지에서는 파티션 시작 위치를 더합니다([파티션 구조](mbr-gpt.md)).
 
 ### FAT 표 값
 
@@ -225,7 +225,7 @@ FAT 표에는 클러스터마다 항목이 하나 있습니다. 항목 값은 �
 | 0x1A | 2 | 첫 클러스터 | 늘 0 |
 | 0x1C | 4 | 글자 2개 | |
 
-- 글자 인코딩은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
+- 글자 인코딩은 [문자 인코딩](../value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
 
 ### exFAT
 
@@ -235,8 +235,8 @@ FAT 표에는 클러스터마다 항목이 하나 있습니다. 항목 값은 �
 - exFAT 의 BPB 는 섹터 오프셋 0x040~0x077 에 있습니다.
 - 0x00B~0x03F 는 보통 0 입니다. 그래서 FAT 의 BPB 표로 exFAT 부트 섹터를 읽으면 안 됩니다.
 - exFAT 는 FAT 표를 훑는 대신 빈 공간 비트맵으로 빈 클러스터를 찾습니다.
-- MBR 파티션 종류 값은 NTFS 와 같은 0x07 입니다([파티션 구조](/01-foundations/disk-volume/mbr-gpt.md)).
-- exFAT 의 디렉터리 항목 구조와 시각 칸은 이 페이지에서 다루지 않습니다. exFAT 에서 지운 파일을 찾는 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+- MBR 파티션 종류 값은 NTFS 와 같은 0x07 입니다([파티션 구조](mbr-gpt.md)).
+- exFAT 의 디렉터리 항목 구조와 시각 칸은 이 페이지에서 다루지 않습니다. exFAT 에서 지운 파일을 찾는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
 ## 읽는 법
 
@@ -309,7 +309,7 @@ FAT 표에는 클러스터마다 항목이 하나 있습니다. 항목 값은 �
 - DOS 3.0 이후는 지운 파일의 공간을 바로 다시 쓰지 않고, 안 쓴 공간부터 찾습니다.
 - 위 세 동작이 Windows 에서도 같은지는 이 페이지의 참고 자료로 확인하지 못했습니다.
 - 지운 파일의 클러스터 사슬을 따라가다 0 이 나오면 끝 표시처럼 다룹니다(Wikipedia 해설).
-- 되살리는 절차는 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+- 되살리는 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
 ### 긴 이름 항목의 흔적
 
@@ -334,7 +334,7 @@ FAT 표에는 클러스터마다 항목이 하나 있습니다. 항목 값은 �
 
 - 수정 시각은 2초 단위입니다. 만든 시각은 10 ms 단위까지 있습니다.
 - 마지막 접근은 날짜만 있습니다. 같은 날 안의 순서는 이 값으로 알 수 없습니다.
-- 시간대를 적는 칸이 없습니다. 다른 볼륨의 시각과 한 타임라인에 놓을 때는 [시간대 설정](/02-artifacts/system-account/time-zone.md)과 [타임라인 작성](/03-techniques/analysis/timeline/index.md)의 방법으로 기준을 맞춥니다.
+- 시간대를 적는 칸이 없습니다. 다른 볼륨의 시각과 한 타임라인에 놓을 때는 [시간대 설정](../../02-artifacts/system-account/time-zone.md)과 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)의 방법으로 기준을 맞춥니다.
 
 ### 볼륨 일련번호와 레이블
 
@@ -359,7 +359,7 @@ FAT 표에는 클러스터마다 항목이 하나 있습니다. 항목 값은 �
 
 - 헥스 편집기로 위 순서를 직접 따라갈 수 있습니다. 부트 섹터의 `55 AA` 와 0x003 의 OEM 이름에서 시작합니다.
 - 파일시스템을 읽는 공개 도구의 결과 가운데 몇 항목을 골라 헥스로 맞춰 봅니다. 특히 지운 항목의 첫 글자와 FAT32 첫 클러스터 번호를 확인합니다.
-- 두 도구의 결과가 다르면 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)의 방법을 씁니다.
+- 두 도구의 결과가 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)의 방법을 씁니다.
 
 ## 참고 문헌
 

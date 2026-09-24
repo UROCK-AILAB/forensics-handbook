@@ -28,7 +28,7 @@ IE 7~9 는 웹 폼에 입력한 아이디·비밀번호를 사용자 하이브�
 
 - 구조를 설명한 SecurityXploded 글이 다루는 범위는 IE 4~8, Windows XP·Vista·7 입니다.
 - 공개 복원 도구의 설명(참고 문헌 1)에는 IE 10·11 과 엣지 비밀번호를 다른 PC 의 드라이브에서 되살리려면 그 프로필의 마지막 로그온 비밀번호가 필요하다고 적혀 있습니다.
-- `Credentials` 폴더의 파일 구조는 [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) 에서 다룹니다.
+- `Credentials` 폴더의 파일 구조는 [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) 에서 다룹니다.
 
 ## 구조
 
@@ -49,7 +49,7 @@ IE 7~9 는 웹 폼에 입력한 아이디·비밀번호를 사용자 하이브�
 - 값 데이터는 DPAPI (Data Protection API) 의 `CryptProtectData` 함수로 암호화돼 있습니다.
 - 추가 엔트로피 (Additional Entropy) 로 사이트 주소 자체를 넣습니다. 형식은 값 이름을 만들 때와 같은 UTF-16 문자열이고, 끝의 0 까지 넣습니다.
 - 그래서 주소를 모르면 풀 수 없습니다. 방문 기록에 그 주소가 남아 있어야 되살릴 수 있습니다.
-- DPAPI 블롭과 마스터 키 구조는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+- DPAPI 블롭과 마스터 키 구조는 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
 풀어낸 데이터는 아래 순서로 이어집니다.
 
@@ -91,14 +91,14 @@ dwTotalSecrets 를 2 로 나누면 그 사이트에 저장한 쌍의 수가 나�
 
 - 저장 시점을 좁힐 때는 `Storage2` 키의 마지막 기록 시각 (LastWrite) 과 같은 주소의 방문 기록 시각을 함께 봅니다.
 - 키의 마지막 기록 시각은 키 안의 어느 값이 바뀌어도 바뀝니다. 그래서 특정 사이트를 저장한 시각으로 단정하지 않습니다.
-- 방문 기록 시각은 [웹캐시 DB](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) 와 [index.dat](/02-artifacts/browsers/ie-edgehtml/index-dat.md) 에서 읽습니다.
+- 방문 기록 시각은 [웹캐시 DB](webcachev01-dat.md) 와 [index.dat](index-dat.md) 에서 읽습니다.
 
 ## 함정과 한계
 
 - **주소가 한 글자만 달라도 해시가 다릅니다.** IE 가 해시 전에 주소를 소문자로 바꾸는지는 이번에 연 자료로 확인하지 못했습니다. 방문 기록에 남은 주소를 끝 `/` 유무, 대소문자, 경로 차이를 바꿔 가며 맞춰 봅니다.
-- **주소를 못 찾으면 풀 수 없습니다.** 방문 기록을 지웠다면 [섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 의 옛 방문 기록에서 주소 후보를 찾습니다.
-- **DPAPI 를 풀 열쇠가 필요합니다.** 다른 PC 의 드라이브나 이미지에서 풀려면 사용자의 마스터 키와 로그온 비밀번호가 필요합니다. 오프라인으로 푸는 절차는 [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
-- **IE 10 이후는 이 키가 비어 있을 수 있습니다.** 참고한 구조 설명은 IE 4~8 까지만 다룹니다. IE 10 이후 저장 위치는 이번에 연 자료로 확인하지 못했습니다. 빈 `IntelliForms` 키를 "저장 비밀번호 없음" 으로 단정하지 않고, [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) 도 함께 봅니다.
+- **주소를 못 찾으면 풀 수 없습니다.** 방문 기록을 지웠다면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 의 옛 방문 기록에서 주소 후보를 찾습니다.
+- **DPAPI 를 풀 열쇠가 필요합니다.** 다른 PC 의 드라이브나 이미지에서 풀려면 사용자의 마스터 키와 로그온 비밀번호가 필요합니다. 오프라인으로 푸는 절차는 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+- **IE 10 이후는 이 키가 비어 있을 수 있습니다.** 참고한 구조 설명은 IE 4~8 까지만 다룹니다. IE 10 이후 저장 위치는 이번에 연 자료로 확인하지 못했습니다. 빈 `IntelliForms` 키를 "저장 비밀번호 없음" 으로 단정하지 않고, [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) 도 함께 봅니다.
 - **HTTP 기본 인증 비밀번호는 레지스트리에 없습니다.** `Credentials` 폴더를 따로 수집해야 합니다.
 
 ## 직접 분석해 보기
@@ -153,13 +153,13 @@ $c = ($h | Measure-Object -Sum).Sum % 256
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 웹캐시 DB | IE 10 이후 방문 기록에서 해시에 넣을 주소 후보를 찾습니다 | [웹캐시 DB (WebCacheV01.dat)](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) |
-| 옛 기록 파일 | IE 9 이전 방문 기록에서 주소 후보를 찾습니다 | [옛 기록 파일 (index.dat)](/02-artifacts/browsers/ie-edgehtml/index-dat.md) |
-| 주소창 입력 주소 | 사용자가 직접 입력한 주소를 후보에 더합니다 | [주소창 입력 주소](/02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) |
-| 자격 증명 관리자와 볼트 | HTTP 기본 인증 비밀번호와 다른 웹 자격 증명을 봅니다 | [자격 증명 관리자와 볼트](/02-artifacts/credentials/credential-manager-windows-vault.md) |
-| DPAPI 구조 | 값 데이터를 풀 마스터 키를 찾습니다 | [DPAPI 구조](/01-foundations/protection/data-protection-api/index.md) |
-| 사용자 계정 | 오프라인 복호에 필요한 계정 정보를 봅니다 | [사용자 계정](/02-artifacts/system-account/sam.md) |
-| 다른 브라우저 | 같은 사이트의 비밀번호를 다른 브라우저에도 저장했는지 봅니다 | [크롬 계열 브라우저](/02-artifacts/browsers/chrome-edge-whale/index.md), [파이어폭스](/02-artifacts/browsers/firefox/index.md) |
+| 웹캐시 DB | IE 10 이후 방문 기록에서 해시에 넣을 주소 후보를 찾습니다 | [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) |
+| 옛 기록 파일 | IE 9 이전 방문 기록에서 주소 후보를 찾습니다 | [옛 기록 파일 (index.dat)](index-dat.md) |
+| 주소창 입력 주소 | 사용자가 직접 입력한 주소를 후보에 더합니다 | [주소창 입력 주소](typedurls-typedurlstime.md) |
+| 자격 증명 관리자와 볼트 | HTTP 기본 인증 비밀번호와 다른 웹 자격 증명을 봅니다 | [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) |
+| DPAPI 구조 | 값 데이터를 풀 마스터 키를 찾습니다 | [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) |
+| 사용자 계정 | 오프라인 복호에 필요한 계정 정보를 봅니다 | [사용자 계정](../../system-account/sam.md) |
+| 다른 브라우저 | 같은 사이트의 비밀번호를 다른 브라우저에도 저장했는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md), [파이어폭스](../firefox/index.md) |
 
 ## 실습
 

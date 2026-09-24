@@ -1,6 +1,6 @@
 # MFT 레코드와 속성 (FILE Record·Attribute)
 
-상위 페이지: [NTFS 구조 (NTFS)](/01-foundations/disk-volume/ntfs/index.md)
+상위 페이지: [NTFS 구조 (NTFS)](index.md)
 
 ## 한 줄 요약
 
@@ -12,28 +12,28 @@ Microsoft 문서에 따르면 NTFS 볼륨의 모든 파일은 MFT 에 항목이 
 
 | 아티팩트·기법 | 이 페이지와 닿는 부분 |
 |---|---|
-| [마스터 파일 테이블 ($MFT)](/02-artifacts/filesystem/mft.md) | 레코드를 모두 모아 둔 파일입니다. |
-| [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) | 폴더 레코드의 인덱스 속성(0x90·0xA0)에 들어 있습니다. 인덱스 항목마다 파일 참조 (File Reference) 가 있습니다. |
-| [USN 변경 저널 ($UsnJrnl)](/02-artifacts/filesystem/usnjrnl.md) | 기록마다 바뀐 파일과 부모 폴더의 파일 참조를 담습니다. |
-| [NTFS 트랜잭션 로그 ($LogFile)](/02-artifacts/filesystem/logfile.md) | 레코드 헤더의 LSN 이 이 로그의 기록 번호입니다. |
-| [다운로드 출처 표시 (Zone.Identifier)](/02-artifacts/filesystem/zone-identifier.md) | 이름이 붙은 `$DATA` 속성입니다. |
-| [참조 파일·폴더 목록 활용 (Referenced Files)](/02-artifacts/execution/prefetch/referenced-files.md) | 프리페치 파일 지표 항목(libyal 문서의 버전 23 형식)에 파일 참조 칸이 있습니다. |
-| [파일시스템 기반 복구 (Undelete)](/03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) | 사용 중 표시가 꺼진 레코드에서 파일을 되살립니다. |
-| [레코드 카빙 (Record Carving)](/03-techniques/analysis/data-recovery/record-carving.md) | `FILE` 서명으로 비할당 영역이나 페이지 파일에서 레코드를 찾습니다. |
+| [마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md) | 레코드를 모두 모아 둔 파일입니다. |
+| [폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md) | 폴더 레코드의 인덱스 속성(0x90·0xA0)에 들어 있습니다. 인덱스 항목마다 파일 참조 (File Reference) 가 있습니다. |
+| [USN 변경 저널 ($UsnJrnl)](../../../02-artifacts/filesystem/usnjrnl.md) | 기록마다 바뀐 파일과 부모 폴더의 파일 참조를 담습니다. |
+| [NTFS 트랜잭션 로그 ($LogFile)](../../../02-artifacts/filesystem/logfile.md) | 레코드 헤더의 LSN 이 이 로그의 기록 번호입니다. |
+| [다운로드 출처 표시 (Zone.Identifier)](../../../02-artifacts/filesystem/zone-identifier.md) | 이름이 붙은 `$DATA` 속성입니다. |
+| [참조 파일·폴더 목록 활용 (Referenced Files)](../../../02-artifacts/execution/prefetch/referenced-files.md) | 프리페치 파일 지표 항목(libyal 문서의 버전 23 형식)에 파일 참조 칸이 있습니다. |
+| [파일시스템 기반 복구 (Undelete)](../../../03-techniques/analysis/data-recovery/undelete-ntfs-fat.md) | 사용 중 표시가 꺼진 레코드에서 파일을 되살립니다. |
+| [레코드 카빙 (Record Carving)](../../../03-techniques/analysis/data-recovery/record-carving.md) | `FILE` 서명으로 비할당 영역이나 페이지 파일에서 레코드를 찾습니다. |
 
 ## 구조
 
 ### 레코드가 놓이는 자리
 
 - MFT 는 `$MFT` 라는 파일입니다. 0번 레코드가 `$MFT` 자신을 기록합니다.
-- `$MFT` 의 시작 위치와 레코드 크기는 부트 섹터에 적혀 있습니다. 읽는 법은 [부트 섹터와 클러스터](/01-foundations/disk-volume/ntfs/boot-sector-cluster.md) 에서 다룹니다.
+- `$MFT` 의 시작 위치와 레코드 크기는 부트 섹터에 적혀 있습니다. 읽는 법은 [부트 섹터와 클러스터](boot-sector-cluster.md) 에서 다룹니다.
 - 레코드 크기는 보통 1,024바이트입니다. 4K 네이티브 섹터 디스크처럼 4,096바이트인 볼륨도 있습니다.
 - 레코드 번호 N 은 `$MFT` 내용 안에서 "N × 레코드 크기" 위치에 있습니다.
-- `$MFT` 도 조각날 수 있습니다. 그래서 디스크 위 실제 위치는 0번 레코드의 `$DATA` 데이터 런으로 구합니다. 데이터 런은 [데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) 에서 다룹니다.
+- `$MFT` 도 조각날 수 있습니다. 그래서 디스크 위 실제 위치는 0번 레코드의 `$DATA` 데이터 런으로 구합니다. 데이터 런은 [데이터 런과 상주·비상주 데이터](data-run-resident-non-resident.md) 에서 다룹니다.
 - 파일을 지우면 그 레코드는 빈 칸으로 표시되고 나중에 다시 쓰입니다.
 - 한번 늘어난 `$MFT` 는 파일을 지워도 줄어들지 않습니다.
 
-0번부터 11번까지는 정해진 메타 파일이 차지합니다. 0번은 `$MFT`, 1번은 `$MFTMirr`, 2번은 `$LogFile`, 5번은 루트 폴더입니다. `$MFTMirr` 는 앞 레코드 4개의 백업입니다. 나머지 메타 파일은 [NTFS 메타 파일](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) 에서 다룹니다.
+0번부터 11번까지는 정해진 메타 파일이 차지합니다. 0번은 `$MFT`, 1번은 `$MFTMirr`, 2번은 `$LogFile`, 5번은 루트 폴더입니다. `$MFTMirr` 는 앞 레코드 4개의 백업입니다. 나머지 메타 파일은 [NTFS 메타 파일](bitmap-secure-extend.md) 에서 다룹니다.
 
 > 그림 자리: 1,024바이트 레코드 한 개 안에 헤더 → 고침 값 배열 → 속성 여러 개 → 끝 표시(0xFFFFFFFF) → 슬랙이 차례로 놓인 모습
 
@@ -124,30 +124,30 @@ Microsoft 문서에 따르면 NTFS 볼륨의 모든 파일은 MFT 에 항목이 
 | 56 | 8 | 유효 데이터 크기 |
 | 64 | 8 | 실제 할당 합계 (압축 속성에 있음) |
 
-Microsoft 문서에 따르면 세 크기 칸(40·48·56)은 첫 VCN 이 0 인 조각에서만 믿을 수 있습니다. 데이터 런의 풀이는 [데이터 런과 상주·비상주 데이터](/01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md) 에서 다룹니다.
+Microsoft 문서에 따르면 세 크기 칸(40·48·56)은 첫 VCN 이 0 인 조각에서만 믿을 수 있습니다. 데이터 런의 풀이는 [데이터 런과 상주·비상주 데이터](data-run-resident-non-resident.md) 에서 다룹니다.
 
 ### 속성 종류
 
 | 형식 번호 | 이름 | 내용 | 자세히 |
 |---|---|---|---|
-| 0x10 | `$STANDARD_INFORMATION` | 시각 4개, 파일 특성, 보안 번호 등입니다. 48 또는 72바이트입니다. | [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) |
+| 0x10 | `$STANDARD_INFORMATION` | 시각 4개, 파일 특성, 보안 번호 등입니다. 48 또는 72바이트입니다. | [두 벌의 시각](standard-information-file-name.md) |
 | 0x20 | `$ATTRIBUTE_LIST` | 속성이 여러 레코드에 흩어졌을 때의 목록입니다. | 아래 절 |
-| 0x30 | `$FILE_NAME` | 이름, 부모 폴더 참조, 시각 4개입니다. | [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) |
-| 0x40 | `$OBJECT_ID` | 링크 추적 서비스가 붙인 개체 식별자입니다. | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md) |
-| 0x50 | `$SECURITY_DESCRIPTOR` | 보안 설명자입니다. NTFS 3.0 이후에는 보통 `$Secure` 에 모아 둡니다. | [NTFS 메타 파일](/01-foundations/disk-volume/ntfs/bitmap-secure-extend.md) |
+| 0x30 | `$FILE_NAME` | 이름, 부모 폴더 참조, 시각 4개입니다. | [두 벌의 시각](standard-information-file-name.md) |
+| 0x40 | `$OBJECT_ID` | 링크 추적 서비스가 붙인 개체 식별자입니다. | [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md) |
+| 0x50 | `$SECURITY_DESCRIPTOR` | 보안 설명자입니다. NTFS 3.0 이후에는 보통 `$Secure` 에 모아 둡니다. | [NTFS 메타 파일](bitmap-secure-extend.md) |
 | 0x60 | `$VOLUME_NAME` | 볼륨 이름입니다. `$Volume` 에만 있습니다. | |
 | 0x70 | `$VOLUME_INFORMATION` | 볼륨 정보입니다. `$Volume` 에만 있습니다. | |
-| 0x80 | `$DATA` | 파일 내용입니다. 이름이 붙은 `$DATA` 는 대체 데이터 스트림입니다. | [ADS](/01-foundations/disk-volume/ntfs/ads.md) |
-| 0x90 | `$INDEX_ROOT` | 인덱스의 뿌리입니다. 작은 폴더는 항목이 모두 여기에 들어갑니다. | [$I30](/02-artifacts/filesystem/i30.md) |
-| 0xA0 | `$INDEX_ALLOCATION` | 큰 폴더의 인덱스 블록입니다. | [$I30](/02-artifacts/filesystem/i30.md) |
+| 0x80 | `$DATA` | 파일 내용입니다. 이름이 붙은 `$DATA` 는 대체 데이터 스트림입니다. | [ADS](ads.md) |
+| 0x90 | `$INDEX_ROOT` | 인덱스의 뿌리입니다. 작은 폴더는 항목이 모두 여기에 들어갑니다. | [$I30](../../../02-artifacts/filesystem/i30.md) |
+| 0xA0 | `$INDEX_ALLOCATION` | 큰 폴더의 인덱스 블록입니다. | [$I30](../../../02-artifacts/filesystem/i30.md) |
 | 0xB0 | `$BITMAP` | 인덱스 블록의 사용 표시입니다. | |
-| 0xC0 | `$REPARSE_POINT` | 리파스 포인트 데이터입니다. | [링크와 리파스 포인트](/01-foundations/disk-volume/ntfs/hard-link-junction-reparse-point.md) |
+| 0xC0 | `$REPARSE_POINT` | 리파스 포인트 데이터입니다. | [링크와 리파스 포인트](hard-link-junction-reparse-point.md) |
 | 0xD0 | `$EA_INFORMATION` | 확장 속성 정보입니다. | |
 | 0xE0 | `$EA` | 확장 속성입니다. | |
-| 0x100 | `$LOGGED_UTILITY_STREAM` | EFS 암호화 정보 등이 들어갑니다. | [EFS 암호화 파일](/03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) |
+| 0x100 | `$LOGGED_UTILITY_STREAM` | EFS 암호화 정보 등이 들어갑니다. | [EFS 암호화 파일](../../../03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) |
 | 0xFFFFFFFF | 끝 표시 | 속성 목록이 여기서 끝납니다. | |
 
-`$FILE_NAME` 의 이름공간 값은 0 POSIX, 1 Win32, 2 DOS(8.3 짧은 이름), 3 DOS 와 Win32 겸용입니다. 압축·희소 플래그의 뜻은 [압축·희소 파일](/01-foundations/disk-volume/ntfs/compressed-sparse.md) 에서 다룹니다.
+`$FILE_NAME` 의 이름공간 값은 0 POSIX, 1 Win32, 2 DOS(8.3 짧은 이름), 3 DOS 와 Win32 겸용입니다. 압축·희소 플래그의 뜻은 [압축·희소 파일](compressed-sparse.md) 에서 다룹니다.
 
 ### 속성 목록 ($ATTRIBUTE_LIST) 과 확장 레코드
 
@@ -178,7 +178,7 @@ Microsoft 문서에 따르면 세 크기 칸(40·48·56)은 첫 VCN 이 0 인 �
 |---|---|
 | 헤더 0x2C | NTFS 3.1(Windows XP 이후)에는 레코드 자신의 번호가 들어갑니다. NTFS 3.0(Windows 2000)에서는 쓰임이 알려지지 않았습니다. |
 | 속성 0x40·0xC0·0x100, 메타 파일 `$Secure` | libyal 문서는 NTFS 3.0 부터 있다고 적습니다. |
-| `$STANDARD_INFORMATION` 크기 | libyal 문서는 48 또는 72바이트라고 적습니다. 자세한 차이는 [두 벌의 시각](/01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다. |
+| `$STANDARD_INFORMATION` 크기 | libyal 문서는 48 또는 72바이트라고 적습니다. 자세한 차이는 [두 벌의 시각](standard-information-file-name.md) 에서 다룹니다. |
 | 레코드 슬랙 처리 | Windows 버전마다 다르다는 시험 결과가 있습니다. 아래 "레코드 슬랙" 절을 봅니다. |
 
 ## 읽는 법
@@ -273,7 +273,7 @@ Microsoft 문서에 따르면 세 크기 칸(40·48·56)은 첫 VCN 이 0 인 �
 | 상주 파일이 커져 비상주로 바뀜 | 슬랙이 0 으로 채워져 남는 것이 없습니다. | Windows 10 가상 머신 |
 | 작은 폴더에서 파일을 지우거나 옮김 | 폴더 레코드 슬랙에 인덱스 항목이 남습니다. 이름·크기·시각 4개를 읽을 수 있습니다. | Windows 10·11 을 포함한 시험한 모든 버전 |
 
-폴더 인덱스 항목의 해석은 [폴더 인덱스와 슬랙 ($I30)](/02-artifacts/filesystem/i30.md) 에서 다룹니다.
+폴더 인덱스 항목의 해석은 [폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md) 에서 다룹니다.
 
 ### 손상된 레코드
 
@@ -285,14 +285,14 @@ Microsoft 문서에 따르면 세 크기 칸(40·48·56)은 첫 VCN 이 0 인 �
 
 - 헤더의 LSN 은 레코드와 `$LogFile` 기록을 이어 줍니다.
 - 라이브 시스템이나 비정상 종료 뒤 확보한 이미지에서는 레코드와 `$LogFile` 이 서로 다른 시점을 보여 줄 수 있습니다.
-- 두 자료를 맞춰 보는 법은 [NTFS 트랜잭션 로그 ($LogFile)](/02-artifacts/filesystem/logfile.md) 에서 다룹니다.
+- 두 자료를 맞춰 보는 법은 [NTFS 트랜잭션 로그 ($LogFile)](../../../02-artifacts/filesystem/logfile.md) 에서 다룹니다.
 
 ### 흩어진 레코드 조각
 
 - `FILE` 서명은 비할당 영역, 페이지 파일, 섀도 복사본에서도 찾을 수 있습니다.
 - NTFS 3.1 레코드는 헤더 0x2C 에 자기 번호를 담습니다. 그래서 떨어져 나온 레코드도 원래 몇 번이었는지 알 수 있습니다.
 - `$FILE_NAME` 의 부모 참조를 따라가면 경로 일부를 다시 세울 수 있습니다.
-- 섀도 복사본 안의 `$MFT` 는 [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
+- 섀도 복사본 안의 `$MFT` 는 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
 
 ## 함정
 
@@ -307,7 +307,7 @@ Microsoft 문서에 따르면 세 크기 칸(40·48·56)은 첫 VCN 이 0 인 �
 
 ## 도구
 
-아래는 공개 도구의 예입니다. 확장 레코드와 슬랙을 다루는 방식은 도구마다 다릅니다. 중요한 레코드는 헥스로 한 번 확인하고 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 의 방법으로 맞춰 봅니다.
+아래는 공개 도구의 예입니다. 확장 레코드와 슬랙을 다루는 방식은 도구마다 다릅니다. 중요한 레코드는 헥스로 한 번 확인하고 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 의 방법으로 맞춰 봅니다.
 
 - The Sleuth Kit 의 `istat`: 레코드 하나의 헤더와 속성 목록을 보여 줍니다.
 - libfsntfs: 참고 문헌 1 의 형식 문서와 함께 배포되는 라이브러리입니다.

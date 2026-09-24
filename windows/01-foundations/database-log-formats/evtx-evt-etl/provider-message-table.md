@@ -4,7 +4,7 @@
 
 이벤트 뷰어에 보이는 설명 문장은 로그 파일 안에 없습니다. 레코드에는 문장의 빈자리(`%1`, `%2` …)에 들어갈 값만 있습니다. 문장 틀은 이벤트를 낸 공급자 (Provider) 의 메시지 파일 (Message File) 에 있습니다. 레지스트리로 메시지 파일을 찾고, 이벤트 식별자로 문장을 고르고, 레코드 값을 채워야 설명 문장이 됩니다.
 
-이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](/01-foundations/database-log-formats/evtx-evt-etl/index.md) 의 하위 주제입니다. 레코드 안의 값을 꺼내는 법은 [이진 XML 해석 (Binary XML·Template)](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md) 에 있습니다.
+이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 레코드 안의 값을 꺼내는 법은 [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) 에 있습니다.
 
 ## 이 내용이 쓰이는 때
 
@@ -61,7 +61,7 @@
 - 그 키의 ParameterFileName 은 `%SystemRoot%\system32\kernel32.dll` 이었습니다.
 - 그 키 아래에 하위 키 ChannelReferences 가 있었습니다.
 
-살아 있는 시스템에서는 `wevtutil gp <공급자 이름>` 으로 공급자 정보를 봅니다. 수집 절차는 [라이브 응답](/03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
+살아 있는 시스템에서는 `wevtutil gp <공급자 이름>` 으로 공급자 정보를 봅니다. 수집 절차는 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
 
 ### 경로 풀기
 
@@ -75,11 +75,11 @@
 | `C:\WINNT35` | NT 3.5x |
 | `C:\WTSRV` | NT 4.0 터미널 서버 |
 
-압수 이미지를 분석할 때는 분석 PC 의 환경 변수를 쓰지 않습니다. 이미지 안 SOFTWARE·SYSTEM 하이브의 값으로 경로를 풀고, 파일도 이미지 안에서 찾습니다. 오프라인 하이브를 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+압수 이미지를 분석할 때는 분석 PC 의 환경 변수를 쓰지 않습니다. 이미지 안 SOFTWARE·SYSTEM 하이브의 값으로 경로를 풀고, 파일도 이미지 안에서 찾습니다. 오프라인 하이브를 읽는 법은 [레지스트리 하이브 구조](../registry-hive/index.md) 에 있습니다.
 
 ### 메시지 파일의 종류
 
-- 메시지 파일은 `.rsrc` 섹션이 있는 PE/COFF 실행 파일입니다. 확장자는 `.exe`·`.dll`·`.dll.mui`·`.sys` 등입니다. PE 구조는 [실행 파일 메타데이터](/02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 를 봅니다.
+- 메시지 파일은 `.rsrc` 섹션이 있는 PE/COFF 실행 파일입니다. 확장자는 `.exe`·`.dll`·`.dll.mui`·`.sys` 등입니다. PE 구조는 [실행 파일 메타데이터](../../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) 를 봅니다.
 - 종류는 두 가지입니다. 메시지 테이블 (Message Table) 리소스가 든 파일과 MUI 리소스 파일입니다.
 - 둘 다 있으면 메시지 테이블을 먼저 쓰는 것으로 보입니다.
 - 언어 중립 MUI 파일에는 메시지 테이블이 없습니다. 문장은 언어별 파일에 있습니다. 예: `C:\Windows\System32\services.exe` → `C:\Windows\System32\en-US\services.exe.mui`.
@@ -109,7 +109,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 (0x4000 << 16) | 0x1b7c = 0x40001b7c
 ```
 
-- 메시지 식별자의 위 2비트는 severity 입니다. 0x40001b7c 는 `01`(정보), 0xc0001b7a 는 `11`(오류) 입니다. 비트 구조는 [EVTX 파일 구조](/01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md) 의 "이벤트 식별자와 수준" 에 있습니다.
+- 메시지 식별자의 위 2비트는 severity 입니다. 0x40001b7c 는 `01`(정보), 0xc0001b7a 는 `11`(오류) 입니다. 비트 구조는 [EVTX 파일 구조](file-header-chunk-record.md) 의 "이벤트 식별자와 수준" 에 있습니다.
 
 확인 PC 의 services.exe WEVT_TEMPLATE 에서 공급자 {555908d1-…} 의 정의를 읽었습니다(확인 범위: Windows 11 25H2 PC 한 대). 이 공급자의 이벤트 정의는 43개였고, 그 가운데 넷은 아래와 같습니다.
 
@@ -122,7 +122,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 - 7036 의 값은 위 Qualifiers 계산 결과와 같습니다.
 - 이 정의들의 키워드는 0x0080000000000000 이었습니다. libevtx 명세는 이 비트를 "Classic"(win:EventlogClassic) 으로 적습니다.
-- 7045 이벤트를 조사에 쓰는 법은 [서비스 설치](/02-artifacts/event-logs/7045-4697.md) 에 있습니다.
+- 7045 이벤트를 조사에 쓰는 법은 [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md) 에 있습니다.
 
 ### 자리 표시자
 
@@ -131,7 +131,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 - 문장의 자리 표시자가 이벤트 문자열보다 많으면, 채우지 못한 자리는 `%#` 그대로 보이는 것 같습니다.
 - 값이 `%%5` 처럼 적혀 있으면 매개변수 파일의 5번 메시지로 바꿉니다. 이를 매개변수 확장이라고 합니다.
   - 예: SCM 이벤트 7006 의 `%%5` → MsObjs.dll 의 5번 "Access is denied."
-  - 한 값에 `%%2080 %%2082 %%2084` 처럼 여러 개가 들어갈 수 있습니다(Security-Auditing 4720). 이 이벤트는 [계정 생성·변경](/02-artifacts/event-logs/account-management-events.md) 에서 다룹니다.
+  - 한 값에 `%%2080 %%2082 %%2084` 처럼 여러 개가 들어갈 수 있습니다(Security-Auditing 4720). 이 이벤트는 [계정 생성·변경](../../../02-artifacts/event-logs/account-management-events.md) 에서 다룹니다.
   - EVT 예: SCM 0xc0001b58 의 `%%1053` → kernel32.dll 의 1053번 "The service did not respond to the start or control request in a timely fashion."
 - 매개변수 파일은 공급자 키의 ParameterFileName 을 먼저 보고, 없으면 원본 키의 ParameterMessageFile 을 봅니다.
 - 매개변수 파일이 정해져 있지 않으면, Windows 10 의 이벤트 뷰어는 메시지 파일을 먼저 보고 다음에 MsObjs.dll·kernel32.dll 같은 기본 파일을 보는 것 같습니다.
@@ -187,7 +187,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 - 템플릿 정의는 `TEMP` 서명으로 시작합니다. 크기, 항목 설명자 수, 항목 이름 수, 항목 오프셋, 알 수 없는 값, GUID 16바이트, 이진 XML 조각, 항목 설명자, 항목 이름이 이어집니다.
 - 알 수 없는 값은 EventData 면 1, UserData 면 2 로 보입니다.
-- 이 이진 XML 은 EVTX 의 것과 조금 다릅니다. [이진 XML 해석](/01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md) 의 "함정" 을 봅니다.
+- 이 이진 XML 은 EVTX 의 것과 조금 다릅니다. [이진 XML 해석](binary-xml-template.md) 의 "함정" 을 봅니다.
 - 이 템플릿 GUID 가 EVTX 레코드 안의 템플릿 GUID 와 같은 값인지는 이 위키가 참고한 자료로 확인하지 못했습니다.
 
 확인 PC 에서 본 모습입니다(확인 범위: Windows 11 25H2 PC 한 대).
@@ -232,7 +232,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 - 메시지 파일이 이미지에 없으면 문장을 만들 수 없습니다. 그래도 레코드의 값은 남아 있으므로 값 목록을 그대로 보고합니다.
 - 분석 PC 의 레지스트리와 파일로 풀면 다른 버전이나 다른 언어의 문장이 나올 수 있습니다. 이미지 안의 것으로 풉니다.
 - 같은 메시지 식별자라도 어느 언어별 파일을 읽었는지에 따라 문장의 언어가 다릅니다.
-- 도구마다 문장이 다르면 어느 파일과 어느 레지스트리 값을 읽었는지부터 비교합니다. [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 을 봅니다.
+- 도구마다 문장이 다르면 어느 파일과 어느 레지스트리 값을 읽었는지부터 비교합니다. [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 함정
 

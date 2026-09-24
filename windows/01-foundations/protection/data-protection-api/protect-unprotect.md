@@ -1,6 +1,6 @@
 # DPAPI 동작 원리 (Protect·Unprotect)
 
-> 위치: [DPAPI 구조 (Data Protection API)](/01-foundations/protection/data-protection-api/index.md) > Protect·Unprotect 동작
+> 위치: [DPAPI 구조 (Data Protection API)](index.md) > Protect·Unprotect 동작
 
 ## 한 줄 요약
 
@@ -9,7 +9,7 @@ DPAPI 는 CryptProtectData 함수로 데이터를 암호로 감싸고, CryptUnpr
 같은 자격증명을 쓴 같은 사용자만, 대개 같은 컴퓨터에서만 다시 풀 수 있습니다.
 
 > 이 글은 DPAPI 가 데이터를 어떻게 감싸고 어떻게 푸는지를 설명합니다.
-> 열쇠 계층 전체 그림과 디스크에 남는 파일 목록은 [DPAPI 구조 허브](/01-foundations/protection/data-protection-api/index.md) 에 있습니다.
+> 열쇠 계층 전체 그림과 디스크에 남는 파일 목록은 [DPAPI 구조 허브](index.md) 에 있습니다.
 
 ## 두 함수가 하는 일
 
@@ -21,7 +21,7 @@ DPAPI 는 CryptProtectData 함수로 데이터를 암호로 감싸고, CryptUnpr
 - Microsoft 함수 문서가 적은 최소 지원 버전은 클라이언트 Windows XP, 서버 Windows Server 2003 입니다.
 - DPAPI 서비스 자체는 Windows 2000 부터 들어왔습니다.
 
-블롭 자체의 바이트 구조는 [DPAPI 블롭 구조](/01-foundations/protection/data-protection-api/dpapi-blob.md) 에서 다룹니다.
+블롭 자체의 바이트 구조는 [DPAPI 블롭 구조](dpapi-blob.md) 에서 다룹니다.
 
 ## CryptProtectData 매개변수
 
@@ -108,14 +108,14 @@ DPAPI 는 마스터키를 데이터 암호에 바로 쓰지 않습니다.
 역공학 자료가 정리한 복호 흐름은 다섯 단계입니다.
 
 1. 블롭에서 마스터키 GUID 를 꺼냅니다.
-2. 그 GUID 로 마스터키 파일을 찾아 salt 와 반복수를 얻습니다. 옛 암호로 암호화된 마스터키면 [CREDHIST](/01-foundations/protection/data-protection-api/credhist.md) 를 풀어 맞는 SHA-1 을 찾습니다.
+2. 그 GUID 로 마스터키 파일을 찾아 salt 와 반복수를 얻습니다. 옛 암호로 암호화된 마스터키면 [CREDHIST](credhist.md) 를 풀어 맞는 SHA-1 을 찾습니다.
 3. 그 SHA-1 과 salt·반복수로 Pre key 를 계산합니다.
 4. Pre key 로 마스터키를 풉니다.
 5. 마스터키와 블롭의 salt(추가 엔트로피가 있으면 그 값도)로 블롭키를 계산해 데이터를 풉니다.
 
-- 마스터키 파일의 구조와 salt·반복수 자리는 [마스터키 파일](/01-foundations/protection/data-protection-api/master-key-protect-sid.md) 에 있습니다.
-- SYSTEM·머신 계정은 암호가 없어 2단계가 다릅니다. [시스템 DPAPI 키](/01-foundations/protection/data-protection-api/dpapi-system.md) 를 봅니다.
-- 오프라인에서 이 다섯 단계를 밟는 데 필요한 재료와 절차는 [오프라인 복호 재료와 절차](/01-foundations/protection/data-protection-api/nt.md) 에 있습니다.
+- 마스터키 파일의 구조와 salt·반복수 자리는 [마스터키 파일](master-key-protect-sid.md) 에 있습니다.
+- SYSTEM·머신 계정은 암호가 없어 2단계가 다릅니다. [시스템 DPAPI 키](dpapi-system.md) 를 봅니다.
+- 오프라인에서 이 다섯 단계를 밟는 데 필요한 재료와 절차는 [오프라인 복호 재료와 절차](nt.md) 에 있습니다.
 
 ## 포렌식에서 중요한 점
 

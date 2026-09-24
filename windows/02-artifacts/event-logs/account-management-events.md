@@ -59,7 +59,7 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 
 ### 이 기록이 필요한 까닭
 
-로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않습니다. 레지스트리만으로는 다른 흔적으로 추정해야 합니다. 추정 방법은 [사용자 계정](/02-artifacts/system-account/sam.md)에서 다룹니다. 4720 이 남아 있으면 계정을 만든 때를 이벤트 기록 시각으로 바로 알 수 있습니다. 이 비교는 해석입니다.
+로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않습니다. 레지스트리만으로는 다른 흔적으로 추정해야 합니다. 추정 방법은 [사용자 계정](../system-account/sam.md)에서 다룹니다. 4720 이 남아 있으면 계정을 만든 때를 이벤트 기록 시각으로 바로 알 수 있습니다. 이 비교는 해석입니다.
 
 ## 위치와 버전별 차이
 
@@ -71,7 +71,7 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 - 4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다.
 - 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 칸을 더합니다. (확인 범위: Win11 25H2 한 대의 매니페스트)
 - 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 확인하지 못했습니다.
-- Windows XP · 2003 의 계정 이벤트는 이번에 확인하지 못했습니다. 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](/01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
+- Windows XP · 2003 의 계정 이벤트는 이번에 확인하지 못했습니다. 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
 
 ### 권장 설정
 
@@ -86,7 +86,7 @@ Microsoft 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두�
 - 이 값이 Windows 11 의 기본값인지는 확인하지 못했습니다.
 - 보안 로그에는 약 2일치만 남아 있었습니다. 그 안에 4720·4722·4724·4726·4732 는 0건이었고, 4738 은 4건이었습니다.
 
-감사 설정과 로그 크기를 확인하는 방법은 [감사 정책과 로그 설정](/02-artifacts/event-logs/audit-policy-log-settings.md)에서 다룹니다.
+감사 설정과 로그 크기를 확인하는 방법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ## 구조
 
@@ -112,7 +112,7 @@ Microsoft 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두�
 | Password Last Set | 도메인 관리 콘솔에서 손으로 만든 계정이면 보통 `<never>`. 문서는 로컬 계정을 따로 적지 않았습니다 |
 
 - New UAC Value 는 SAM 쪽 계정 플래그 값입니다. 액티브 디렉터리의 userAccountControl 과 정의가 다릅니다.
-- 로그온 ID 로 만든 계정의 세션을 잇는 방법은 [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md)에서 다룹니다.
+- 로그온 ID 로 만든 계정의 세션을 잇는 방법은 [로그온 세션 잇기](logon-events/logon-id-4624-4634-4647.md)에서 다룹니다.
 
 ### 메시지 번호
 
@@ -129,7 +129,7 @@ XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파�
 | `%%2090` | Account Locked |
 | `%%2093` | 'Trusted For Delegation' - Enabled |
 
-메시지 파일을 읽는 방법은 [공급자와 메시지 파일](/01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
+메시지 파일을 읽는 방법은 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
 ### Microsoft 예시
 
@@ -210,14 +210,14 @@ Microsoft 는 4720 에서 다음 값을 살피라고 권합니다.
 
 - 4720 의 기록 시각은 계정이 만들어진 때입니다. 4738 은 계정이 바뀐 때, 4732 는 구성원이 더해진 때입니다.
 - 4720 의 PasswordLastSet 칸은 이벤트 시각과 따로 적힌 값입니다. Microsoft 는 이 값이 미래 시각이면 살피라고 권합니다.
-- 레코드의 기록 시각을 저장하는 형식은 [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
-- 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
+- 레코드의 기록 시각을 저장하는 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 - 보안 로그는 크기 한도에 이르면 오래된 기록부터 밀려납니다. 한 PC 에서는 약 2일치만 남아 있었습니다. (확인 범위: Win11 25H2 한 대) 오래전에 만든 계정의 4720 은 남아 있지 않을 때가 많습니다.
 
 ## 함정과 한계
 
 1. **4732 의 TargetUserName 을 더해진 계정으로 읽습니다.** 이 칸은 그룹 이름입니다. 더해진 계정은 MemberSid 로 봅니다.
-2. **MemberName 이 `-` 라서 구성원을 모른다고 봅니다.** 로컬 그룹이면 MemberName 은 보통 `-` 입니다. MemberSid 를 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)이나 다른 이벤트의 SID 와 맞춥니다.
+2. **MemberName 이 `-` 라서 구성원을 모른다고 봅니다.** 로컬 그룹이면 MemberName 은 보통 `-` 입니다. MemberSid 를 [사용자 프로필 목록](../system-account/profilelist.md)이나 다른 이벤트의 SID 와 맞춥니다.
 3. **4735 하나를 그룹 조작으로 봅니다.** 4732 앞에는 아무것도 바뀌지 않은 4735 가 보통 먼저 보입니다.
 4. **4738 이 있으면 사람이 계정을 바꿨다고 봅니다.** 한 PC 의 4738 4건은 모두 Subject 가 S-1-5-18 (SYSTEM) 이었습니다. 대상은 RID 1001 계정이었습니다. `-` 가 아닌 속성 칸은 DisplayName 하나였고, Old·New UAC 는 `-` 였습니다. 사용자 조작 없이 SYSTEM 이 표시 이름을 바꾼 기록으로 보입니다. 원인은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
 5. **4720 과 함께 4722·4738 이 반드시 남는다고 봅니다.** 계정을 만들 때 4722·4738 이 함께 남는다는 설명이 있습니다. 4720 문서에는 이 내용이 없었습니다. 검체에서 직접 확인합니다.
@@ -229,8 +229,8 @@ Microsoft 는 4720 에서 다음 값을 살피라고 권합니다.
 
 - **계정을 지웁니다.** 감사가 켜져 있었다면 4726 이 남습니다. 계정이 SAM 에서 사라져도 이미 남은 4720·4726 은 보안 로그에 그대로 있습니다. 이 판단은 두 기록이 다른 곳에 저장된다는 점에서 나온 해석입니다.
 - **계정 이름을 바꿉니다.** 4781 에 옛 이름과 새 이름이 함께 남습니다. 여러 이벤트는 이름 대신 TargetSid 로 묶어 봅니다.
-- **로그를 지웁니다.** 보안 로그를 지우면 1102 가 남습니다. [이벤트 로그 삭제 (1102·104)](/02-artifacts/event-logs/1102-104.md)를 봅니다.
-- **레코드 일부만 남아 있습니다.** 지우거나 덮어쓴 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](/01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
+- **로그를 지웁니다.** 보안 로그를 지우면 1102 가 남습니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
+- **레코드 일부만 남아 있습니다.** 지우거나 덮어쓴 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -250,7 +250,7 @@ Microsoft 예시의 NewUacValue `0x15` 를 손으로 풀어 봅니다. 이 값�
 5. 4720 문서는 이 값의 비트 목록을 [MS-SAMR] USER_ACCOUNT Codes 로 안내합니다. 그 표에서 0x01 은 USER_ACCOUNT_DISABLED, 0x04 는 USER_PASSWORD_NOT_REQUIRED, 0x10 은 USER_NORMAL_ACCOUNT 입니다.
 6. 세 비트의 뜻이 세 문구와 하나씩 맞습니다.
 
-이 값은 SAM 쪽 플래그이므로 액티브 디렉터리 표로 풀지 않습니다. 같은 표에서 0x200 은 USER_DONT_EXPIRE_PASSWORD 입니다. SAM 하이브의 계정 플래그는 [사용자 계정](/02-artifacts/system-account/sam.md)에서 다룹니다.
+이 값은 SAM 쪽 플래그이므로 액티브 디렉터리 표로 풀지 않습니다. 같은 표에서 0x200 은 USER_DONT_EXPIRE_PASSWORD 입니다. SAM 하이브의 계정 플래그는 [사용자 계정](../system-account/sam.md)에서 다룹니다.
 
 > 그림 자리: 0x15 를 8비트 칸으로 펼치고, 켜진 비트 세 개에서 UserAccountControl 문구 세 개로 화살표를 그은 그림
 
@@ -284,20 +284,20 @@ auditpol /get /subcategory:{0CCE9235-69AE-11D9-BED3-505054503030} /r
 auditpol /get /subcategory:{0CCE9237-69AE-11D9-BED3-505054503030} /r
 ```
 
-도구가 `%%2080` 같은 번호를 문구로 바꿔 보여 주는지, 번호 그대로 보여 주는지 확인합니다. 레코드 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)에서 다룹니다.
+도구가 `%%2080` 같은 번호를 문구로 바꿔 보여 주는지, 번호 그대로 보여 주는지 확인합니다. 레코드 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [사용자 계정](/02-artifacts/system-account/sam.md) | 이벤트의 TargetSid 끝 값(RID)과 SAM 의 계정, 지금 남은 계정 플래그 |
-| [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) | 새 계정 SID 의 프로필 폴더가 생겼는지 |
-| [로그온 세션 잇기](/02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) | Subject 의 로그온 ID 와 같은 4624, 새 계정의 첫 로그온 |
-| [명시적 자격 증명·특수 권한 (4648·4672)](/02-artifacts/event-logs/logon-events/4648-4672.md) | 그룹에 더해진 계정이 그 뒤 특수 권한으로 로그온했는지 |
-| [프로세스 생성 (4688)](/02-artifacts/event-logs/4688.md) | 같은 로그온 ID 세션에서 계정을 만든 무렵 실행된 프로그램 |
-| [레지스트리 속 비밀번호 정보](/02-artifacts/credentials/sam-security/index.md) | 계정의 비밀번호 관련 값 |
+| [사용자 계정](../system-account/sam.md) | 이벤트의 TargetSid 끝 값(RID)과 SAM 의 계정, 지금 남은 계정 플래그 |
+| [사용자 프로필 목록](../system-account/profilelist.md) | 새 계정 SID 의 프로필 폴더가 생겼는지 |
+| [로그온 세션 잇기](logon-events/logon-id-4624-4634-4647.md) | Subject 의 로그온 ID 와 같은 4624, 새 계정의 첫 로그온 |
+| [명시적 자격 증명·특수 권한 (4648·4672)](logon-events/4648-4672.md) | 그룹에 더해진 계정이 그 뒤 특수 권한으로 로그온했는지 |
+| [프로세스 생성 (4688)](4688.md) | 같은 로그온 ID 세션에서 계정을 만든 무렵 실행된 프로그램 |
+| [레지스트리 속 비밀번호 정보](../credentials/sam-security/index.md) | 계정의 비밀번호 관련 값 |
 
-조사 순서는 [새 계정을 만들거나 권한을 올렸나](/04-scenarios/incident/credential-theft-lateral-movement/account-privilege.md)에서 다룹니다.
+조사 순서는 [새 계정을 만들거나 권한을 올렸나](../../04-scenarios/incident/credential-theft-lateral-movement/account-privilege.md)에서 다룹니다.
 
 ## 실습
 

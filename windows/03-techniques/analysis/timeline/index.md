@@ -11,7 +11,7 @@
 - 출처마다 시각 기준이 다릅니다. NTFS 는 UTC 로 적고, FAT 는 현지 시각으로 적습니다(참고 1). USN 저널과 이벤트 로그는 UTC 로 적습니다(참고 2, 참고 3). 한 기준으로 맞추지 않고 합치면 순서가 뒤바뀝니다.
 - 파일 하나에도 시각이 여러 개 있습니다. 칸마다 바뀌는 조건이 다릅니다.
 - 시각은 바뀔 수 있습니다. 누군가 파일 시각을 고치기도 하고 시스템 시계를 바꾸기도 합니다. 시스템 시계를 바꾸면 보안 로그에 4616 이 남습니다(참고 3).
-- 직접 기록이 없는 시각은 다른 시각으로 추정하기도 합니다(현장 관찰). 계정을 만든 시각이 그 예입니다. 그 SID 의 NTUSER.DAT 생성 시각($STANDARD_INFORMATION)으로 추정하고, 그 파일이 없으면 OS 설치 시각을 씁니다(현장 관찰). 이런 값은 보고서에 추정값이라고 밝힙니다. 계정 정보는 [사용자 계정](/02-artifacts/system-account/sam.md)과 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md)을 봅니다.
+- 직접 기록이 없는 시각은 다른 시각으로 추정하기도 합니다(현장 관찰). 계정을 만든 시각이 그 예입니다. 그 SID 의 NTUSER.DAT 생성 시각($STANDARD_INFORMATION)으로 추정하고, 그 파일이 없으면 OS 설치 시각을 씁니다(현장 관찰). 이런 값은 보고서에 추정값이라고 밝힙니다. 계정 정보는 [사용자 계정](../../../02-artifacts/system-account/sam.md)과 [사용자 프로필 목록](../../../02-artifacts/system-account/profilelist.md)을 봅니다.
 
 ## 한눈에 보기
 
@@ -33,43 +33,43 @@
 
 ## 읽는 순서
 
-1. [파일 시각 네 가지와 변화 규칙 (MACB·Timestamp Rules)](/03-techniques/analysis/timeline/macb-timestamp-rules.md) — M·A·C·B 네 글자와 NTFS 의 $SI·$FN 시각을 잇습니다. 접근 시각이 늦게 적히는 문제와 FAT 해상도를 다룹니다.
-2. [파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)](/03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md) — $MFT 의 마지막 상태와 $UsnJrnl:$J 의 변경 기록으로 파일 단위 시간표를 만듭니다. USN 레코드의 Reason 을 읽는 법을 다룹니다.
-3. [여러 아티팩트 합친 타임라인 (Super Timeline)](/03-techniques/analysis/timeline/super-timeline.md) — 파일시스템·레지스트리·이벤트 로그·브라우저의 시각을 한 표에 모읍니다. 출력 형식과 칸을 다룹니다.
-4. [시간대·시계 오차 보정 (Time Normalization)](/03-techniques/analysis/timeline/time-normalization.md) — 출처마다 다른 시각 기준을 UTC 로 맞춥니다. Bias 의 부호, 일광 절약 시간, 다른 컴퓨터에서 쓴 FAT 장치, 4616 을 다룹니다. 3번에서 출처를 합치기 전에 이 절차로 기준을 맞춥니다.
-5. [시각 조작 탐지 (Timestomping)](/03-techniques/analysis/timeline/timestomping.md) — $SI·$FN 비교와 USN 저널로 파일 시각을 일부러 바꾼 흔적을 찾습니다.
+1. [파일 시각 네 가지와 변화 규칙 (MACB·Timestamp Rules)](macb-timestamp-rules.md) — M·A·C·B 네 글자와 NTFS 의 $SI·$FN 시각을 잇습니다. 접근 시각이 늦게 적히는 문제와 FAT 해상도를 다룹니다.
+2. [파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)](filesystem-timeline-mft-usnjrnl-logfile.md) — $MFT 의 마지막 상태와 $UsnJrnl:$J 의 변경 기록으로 파일 단위 시간표를 만듭니다. USN 레코드의 Reason 을 읽는 법을 다룹니다.
+3. [여러 아티팩트 합친 타임라인 (Super Timeline)](super-timeline.md) — 파일시스템·레지스트리·이벤트 로그·브라우저의 시각을 한 표에 모읍니다. 출력 형식과 칸을 다룹니다.
+4. [시간대·시계 오차 보정 (Time Normalization)](time-normalization.md) — 출처마다 다른 시각 기준을 UTC 로 맞춥니다. Bias 의 부호, 일광 절약 시간, 다른 컴퓨터에서 쓴 FAT 장치, 4616 을 다룹니다. 3번에서 출처를 합치기 전에 이 절차로 기준을 맞춥니다.
+5. [시각 조작 탐지 (Timestomping)](timestomping.md) — $SI·$FN 비교와 USN 저널로 파일 시각을 일부러 바꾼 흔적을 찾습니다.
 
 ## 함께 볼 페이지
 
 시각을 담는 구조입니다.
 
-- [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md)
-- [FAT·exFAT 구조](/01-foundations/disk-volume/fat-exfat.md)
-- [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
-- [이벤트 로그 형식](/01-foundations/database-log-formats/evtx-evt-etl/index.md)
-- [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md)
+- [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md)
+- [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md)
+- [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)
+- [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)
+- [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)
 
 타임라인에 자주 들어가는 아티팩트입니다.
 
-- [마스터 파일 테이블](/02-artifacts/filesystem/mft.md)
-- [USN 변경 저널](/02-artifacts/filesystem/usnjrnl.md)
-- [NTFS 트랜잭션 로그](/02-artifacts/filesystem/logfile.md)
-- [시간대 설정](/02-artifacts/system-account/time-zone.md)
-- [시간 변경](/02-artifacts/event-logs/4616-kernel-general.md)
-- [프리페치](/02-artifacts/execution/prefetch/index.md)
+- [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md)
+- [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md)
+- [NTFS 트랜잭션 로그](../../../02-artifacts/filesystem/logfile.md)
+- [시간대 설정](../../../02-artifacts/system-account/time-zone.md)
+- [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md)
+- [프리페치](../../../02-artifacts/execution/prefetch/index.md)
 
 결과를 다루는 기법입니다.
 
-- [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md)
-- [분석 보고서 작성](/03-techniques/reporting/forensic-report.md)
-- [섀도 복사본 활용](/03-techniques/analysis/volume-shadow-copy-analysis.md)
+- [도구 결과 교차 검증](../../reporting/tool-validation.md)
+- [분석 보고서 작성](../../reporting/forensic-report.md)
+- [섀도 복사본 활용](../volume-shadow-copy-analysis.md)
 
 타임라인을 쓰는 조사 시나리오입니다.
 
-- [PC 사용 시간 재구성 (켜짐·꺼짐·로그온)](/04-scenarios/activity/system-usage-time.md)
-- [이 문서의 날짜를 믿을 수 있나](/04-scenarios/activity/document-date-verification.md)
-- [지운 파일의 흔적 찾기](/04-scenarios/activity/deleted-file-traces.md)
-- [증거를 없애려 했나](/04-scenarios/activity/anti-forensics/index.md)
+- [PC 사용 시간 재구성 (켜짐·꺼짐·로그온)](../../../04-scenarios/activity/system-usage-time.md)
+- [이 문서의 날짜를 믿을 수 있나](../../../04-scenarios/activity/document-date-verification.md)
+- [지운 파일의 흔적 찾기](../../../04-scenarios/activity/deleted-file-traces.md)
+- [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)
 
 ## 참고 문헌
 

@@ -1,6 +1,6 @@
 # 트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)
 
-> 위치: [ESE 데이터베이스 (Extensible Storage Engine)](/01-foundations/database-log-formats/extensible-storage-engine/index.md) > 트랜잭션 로그와 비정상 종료 상태
+> 위치: [ESE 데이터베이스 (Extensible Storage Engine)](index.md) > 트랜잭션 로그와 비정상 종료 상태
 
 ## 한 줄 요약
 
@@ -13,10 +13,10 @@ DB 를 깨끗하게 닫지 못하면 DB 파일 머리에 비정상 종료 (Dirty
 
 ESE DB 를 쓰는 아티팩트는 모두 같은 로그 방식을 씁니다.
 
-- [SRUM](/02-artifacts/execution/system-resource-usage-monitor/index.md) — SRUDB.dat
-- [웹캐시 DB](/02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) — WebCacheV01.dat
-- [윈도 검색 색인 DB](/02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) — Windows.edb
-- [액티브 디렉터리 DB](/02-artifacts/credentials/ntds-dit.md) — NTDS.dit
+- [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) — SRUDB.dat
+- [웹캐시 DB](../../../02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md) — WebCacheV01.dat
+- [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) — Windows.edb
+- [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) — NTDS.dit
 
 로그와 체크포인트 파일은 보통 DB 파일과 같은 폴더에 있습니다.
 다만 앱은 로그 폴더(JET_paramLogFilePath)와 체크포인트 폴더(JET_paramSystemPath)를 따로 정할 수 있습니다.
@@ -74,7 +74,7 @@ DB 파일에 쓰는 순서도 로그에 적은 순서와 다를 수 있습니다
 
 DB 는 엔진을 정상적으로 끝낼 때(JetTerm)만 깨끗하게 닫힙니다.
 
-같은 생각으로 만든 다른 형식으로 [레지스트리 .LOG1·.LOG2](/01-foundations/database-log-formats/registry-hive/log1-log2.md), [SQLite WAL](/01-foundations/database-log-formats/sqlite/wal-journal-shm.md), [NTFS $LogFile](/02-artifacts/filesystem/logfile.md) 이 있습니다.
+같은 생각으로 만든 다른 형식으로 [레지스트리 .LOG1·.LOG2](../registry-hive/log1-log2.md), [SQLite WAL](../sqlite/wal-journal-shm.md), [NTFS $LogFile](../../../02-artifacts/filesystem/logfile.md) 이 있습니다.
 
 ### 로그 크기와 순환 로깅
 
@@ -92,7 +92,7 @@ DB 는 엔진을 정상적으로 끝낼 때(JetTerm)만 깨끗하게 닫힙니�
 
 DB 파일 머리 (File Header) 는 첫 페이지에 있습니다.
 둘째 페이지에 머리의 사본이 있습니다. 첫 페이지가 망가졌으면 페이지 크기만큼 떨어진 곳의 사본과 비교합니다.
-머리 전체와 페이지 구조는 [파일 구조 (Page·B+Tree·Catalog)](/01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
+머리 전체와 페이지 구조는 [파일 구조 (Page·B+Tree·Catalog)](page-b-tree-catalog.md) 에 있습니다.
 여기서는 종료 상태와 로그에 관련된 칸만 봅니다. 숫자는 모두 리틀 엔디언입니다.
 
 | 오프셋 | 크기 | 칸 | 뜻 |
@@ -159,7 +159,7 @@ DB 상태 값은 다음과 같습니다.
 | 7 | 1 | 채움 바이트 |
 
 - 모든 칸이 0 이면 빈 값입니다.
-- 다른 시각 형식과의 차이는 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
+- 다른 시각 형식과의 차이는 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
 
 ### 로그 파일과 체크포인트 파일의 안쪽
 
@@ -253,7 +253,7 @@ ESE 는 엔진을 정상적으로 끝낼 때에만 DB 를 정상 종료 상태�
 - libyal 명세는 비정상 종료 DB 에서 가지 페이지 (Branch Page) 의 키가 가리키는 잎 페이지 (Leaf Page) 에 그 레코드가 없고, 다음 잎 페이지에 있는 경우를 적어 두었습니다.
 - 이런 곳을 도구가 어떻게 다루는지에 따라 결과가 달라집니다.
 - 현장 관찰로는 같은 손상 SRUDB.dat 의 앱 사용량 표에서 도구마다 1,612행과 1,742행처럼 결과가 달랐습니다. B+트리를 끝까지 따라가지 못한 쪽이 적게 냈습니다. (확인 범위: 현장 관찰)
-- 그래서 손상됐거나 비정상 종료된 DB 는 두 가지 이상 방식으로 열어 비교합니다. 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+- 그래서 손상됐거나 비정상 종료된 DB 는 두 가지 이상 방식으로 열어 비교합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ### 복구 전과 복구 후는 다른 증거입니다
 
@@ -262,13 +262,13 @@ ESE 는 엔진을 정상적으로 끝낼 때에만 DB 를 정상 종료 상태�
 - 끝나지 않은 트랜잭션은 복구 때 되돌려집니다.
 - 그래서 두 벌을 모두 남깁니다. 보고서에는 어느 쪽에서 나온 값인지 적습니다.
 
-지운 레코드를 DB 파일 안에서 찾는 법은 [파일 안에 남은 지운 레코드](/01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에 있습니다.
+지운 레코드를 DB 파일 안에서 찾는 법은 [파일 안에 남은 지운 레코드](deleted-records.md) 에 있습니다.
 
 ### 로그 사슬이 끊겼을 때
 
 - 체크포인트가 가리키는 세대부터 현재 로그까지 한 세대라도 빠지면 소프트 복구가 실패합니다.
 - 이때는 페이지 직접 해석으로 읽습니다. 보고서에는 로그에만 있던 변경을 반영하지 못했다고 적습니다.
-- [볼륨 섀도 복사본](/03-techniques/analysis/volume-shadow-copy-analysis.md) 안에 같은 폴더의 옛 DB·로그 묶음이 남아 있을 수 있습니다.
+- [볼륨 섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 안에 같은 폴더의 옛 DB·로그 묶음이 남아 있을 수 있습니다.
 - DB 와 로그는 반드시 같은 시점의 묶음으로 씁니다. 섀도 복사본의 DB 와 현재 볼륨의 로그를 섞지 않습니다.
 
 ### 수집
@@ -280,14 +280,14 @@ ESE 는 엔진을 정상적으로 끝낼 때에만 DB 를 정상 종료 상태�
 - `/vss` 는 스냅숏에서 복사만 하고 로그를 적용하지 않습니다. 이 사본에는 아직 DB 에 쓰이지 않은 기록이 빠질 수 있습니다.
 - `/vssrec` 은 로그를 적용해 복사합니다. 이 사본에서는 아직 정리되지 않은 지운 레코드가 사라질 수 있습니다.
 - 그래서 두 방식으로 두 벌을 떠 두는 방법이 있습니다.
-- 수집 절차는 [선별 수집](/03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [실행 중 시스템 이미징](/03-techniques/process-acquisition/live-response/live-imaging.md) 을 봅니다.
-- 원본에는 복구를 돌리지 않습니다. 원본·복구 전 사본·복구 후 사본의 해시를 모두 적습니다. [해시로 무결성 검증](/03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 을 봅니다.
+- 수집 절차는 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [실행 중 시스템 이미징](../../../03-techniques/process-acquisition/live-response/live-imaging.md) 을 봅니다.
+- 원본에는 복구를 돌리지 않습니다. 원본·복구 전 사본·복구 후 사본의 해시를 모두 적습니다. [해시로 무결성 검증](../../../03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 을 봅니다.
 
 ### 시각 해석
 
 - 머리의 일관 시각·붙인 시각·뗀 시각은 로그 시각 구조입니다. FILETIME 으로 읽으면 틀립니다.
 - 오프셋 6 바이트의 가장 낮은 비트가 1 이면 UTC 입니다.
-- 이 비트가 0 이면 명세만으로는 시간대를 알 수 없습니다. 다른 기록과 맞춰 봅니다. 방법은 [시간대·시계 오차 보정](/03-techniques/analysis/timeline/time-normalization.md) 에 있습니다.
+- 이 비트가 0 이면 명세만으로는 시간대를 알 수 없습니다. 다른 기록과 맞춰 봅니다. 방법은 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md) 에 있습니다.
 - 문서화된 칸은 초 단위까지입니다.
 - 붙인 시각은 엔진이 DB 를 붙인 때입니다. 사용자가 무엇을 한 때가 아닙니다.
 - DB 안 레코드의 시각(예: SRUM 의 기록 시각)은 각 아티팩트 페이지의 설명을 따릅니다.
@@ -297,7 +297,7 @@ ESE 는 엔진을 정상적으로 끝낼 때에만 DB 를 정상 종료 상태�
 - **말해 주는 것**: DB 파일을 복사한 시점에 DB 가 깨끗하게 닫혀 있지 않았다는 것.
 - **말해 주는 것**: 엔진이 DB 를 마지막으로 붙인 시각과 마지막으로 깨끗하게 뗀 시각.
 - **말해 주는 것**: 그때 쓰던 로그의 세대 번호.
-- **말해 주지 못하는 것**: 비정상 종료의 원인. 전원 차단, 켜진 상태 이미징, 프로세스 강제 종료를 상태 값만으로는 가리지 못합니다. [켜짐·꺼짐 이벤트](/02-artifacts/event-logs/power-on-off-events.md) 와 함께 봅니다.
+- **말해 주지 못하는 것**: 비정상 종료의 원인. 전원 차단, 켜진 상태 이미징, 프로세스 강제 종료를 상태 값만으로는 가리지 못합니다. [켜짐·꺼짐 이벤트](../../../02-artifacts/event-logs/power-on-off-events.md) 와 함께 봅니다.
 - **말해 주지 못하는 것**: 누가 PC 를 썼는지, 사용자가 무엇을 했는지.
 
 비정상 종료 상태를 그 자체로 조작 흔적으로 읽지 않습니다.

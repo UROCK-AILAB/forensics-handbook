@@ -11,9 +11,9 @@ NTFS 파일 압축은 LZNT1 을 쓰고, WOF 압축은 Xpress Huffman 이나 LZX 
 
 | 쓰는 곳 | 압축 형식 | 자세한 내용 |
 |---|---|---|
-| NTFS 파일 압축 | LZNT1 | [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) |
-| WOF 압축 (Windows Overlay Filter, Windows 10 부터) | Xpress Huffman 4K·8K·16K, 또는 LZX | [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) |
-| ESE 데이터베이스의 긴 값 압축 | XPRESS 등 여러 방식 (현장 관찰) | [ESE 데이터베이스](/01-foundations/database-log-formats/extensible-storage-engine/index.md) |
+| NTFS 파일 압축 | LZNT1 | [NTFS 구조](../disk-volume/ntfs/index.md) |
+| WOF 압축 (Windows Overlay Filter, Windows 10 부터) | Xpress Huffman 4K·8K·16K, 또는 LZX | [NTFS 구조](../disk-volume/ntfs/index.md) |
+| ESE 데이터베이스의 긴 값 압축 | XPRESS 등 여러 방식 (현장 관찰) | [ESE 데이터베이스](../database-log-formats/extensible-storage-engine/index.md) |
 
 libfsntfs 문서는 NTFS 속성 데이터 플래그의 압축 방식 값 1 이 LZNT1 이라고 적습니다.
 같은 문서는 WOF 압축 파일의 실제 데이터가 `WofCompressedData` 라는 대체 데이터 스트림에 있다고 적습니다.
@@ -22,8 +22,8 @@ LZX 는 이 페이지의 세 형식과 다른 알고리즘이라 여기서 다�
 아래 아티팩트도 Xpress 계열 압축을 쓴다고 알려져 있습니다.
 어느 변형을 쓰는지는 각 페이지에서 근거와 함께 다룹니다.
 
-- Windows 10 이후의 [프리페치](/02-artifacts/execution/prefetch/index.md)
-- 최대 절전 파일 (hiberfil.sys) — [메모리 분석](/03-techniques/analysis/memory-forensics/index.md)
+- Windows 10 이후의 [프리페치](../../02-artifacts/execution/prefetch/index.md)
+- 최대 절전 파일 (hiberfil.sys) — [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md)
 
 ## 구조
 
@@ -233,15 +233,15 @@ NTFS 는 압축 단위 안의 블록마다 2바이트 머리를 둡니다.
 그래서 손상된 압축 파일은 도구마다 다른 내용을 낼 수 있습니다.
 두 가지 이상의 방식으로 풀어 결과를 비교합니다.
 어떤 도구와 방식으로 뽑았는지 기록에 남깁니다.
-비교 방법은 [도구 결과 교차 검증](/03-techniques/reporting/tool-validation.md) 에 있습니다.
+비교 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 
 ### 압축된 내용은 디스크 검색에 보이지 않습니다
 
 압축된 데이터 안에서는 키워드가 원래 바이트로 보이지 않습니다.
 그래서 원시 디스크 검색만으로는 압축 파일의 내용을 찾지 못합니다.
 파일 시스템을 해석해 압축을 푼 뒤 검색해야 합니다.
-검색 방법은 [파일 내용 검색](/03-techniques/analysis/content-search/index.md) 에서, 지운 파일을 되살리는 방법은 [삭제 데이터 복구](/03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
-NTFS 압축 파일의 희소 구간과 뽑는 방식에 따른 해시 차이는 [NTFS 구조](/01-foundations/disk-volume/ntfs/index.md) 에서 다룹니다.
+검색 방법은 [파일 내용 검색](../../03-techniques/analysis/content-search/index.md) 에서, 지운 파일을 되살리는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+NTFS 압축 파일의 희소 구간과 뽑는 방식에 따른 해시 차이는 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 다룹니다.
 
 ## 함정
 

@@ -10,7 +10,7 @@ OneDrive 는 연결한 계정마다 사용자 레지스트리의 `HKCU\Software\
 
 - OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하나 만듭니다. 개인 계정은 `Personal`, 회사·학교 계정은 `Business1`, `Business2` … 입니다 (관찰).
 - 앱은 이 키에 계정을 알아보는 값, 동기화 폴더 경로, 여러 시각 값을 적습니다 (관찰).
-- 앱은 동기화 폴더를 Windows 클라우드 파일 기능에도 등록합니다. 그래서 같은 폴더가 `SyncEngines` 키와 `SyncRootManager` 키에 다시 나옵니다 (관찰). 이 등록 방식 전반은 [클라우드 동기화 공통 구조](/02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md) 에서 다룹니다.
+- 앱은 동기화 폴더를 Windows 클라우드 파일 기능에도 등록합니다. 그래서 같은 폴더가 `SyncEngines` 키와 `SyncRootManager` 키에 다시 나옵니다 (관찰). 이 등록 방식 전반은 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
 - 계정별 설정 파일은 레지스트리와 별도로 `%LOCALAPPDATA%\Microsoft\OneDrive\settings\` 아래 계정 폴더에 있습니다.
 - 관리자는 그룹 정책 (Group Policy) 으로 OneDrive 설정을 강제할 수 있습니다. 그룹 정책은 `Policies` 아래에 레지스트리 키를 써서 동작합니다.
 
@@ -26,7 +26,7 @@ OneDrive 는 연결한 계정마다 사용자 레지스트리의 `HKCU\Software\
 | `%LOCALAPPDATA%\Microsoft\OneDrive\settings\<Personal 또는 BusinessN>\` | 파일 | 계정별 ini 설정 파일과 DB |
 
 - `settings` 폴더는 회사 계정을 `Business1` 부터 `Business9` 까지 나눠 둡니다.
-- 하이브 파일을 읽는 법은 [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- 하이브 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - 값의 이름과 구성은 OneDrive 앱이 정합니다. 이 페이지의 값 목록은 OneDrive 26.168.0830.0006 에서 본 것이므로, 옛 버전에서는 없는 값이 있을 수 있습니다.
 
 `SyncRootManager` 키에는 Windows 버전에 따라 생기는 값이 있습니다. 동기화 앱은 아래 값을 동기화 루트 키에 적습니다.
@@ -72,7 +72,7 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `OneAuthAccountId`, `NamespaceRootId` | REG_SZ | 계정 관련 ID |
 | `UserFolder` | REG_SZ | 이 계정의 동기화 폴더 경로 |
 
-회사 계정에는 `DisplayName`, `UserName`, `PUID`, `ConfiguredTenantId`, `ServiceEndpointUri`, `SPOResourceId`, `TeamSiteSPOResourceId` 가 더 있었습니다. 이 값들은 [회사용 OneDrive와 SharePoint 동기화](/02-artifacts/cloud-notes/onedrive/business-tenant.md) 에서 다룹니다.
+회사 계정에는 `DisplayName`, `UserName`, `PUID`, `ConfiguredTenantId`, `ServiceEndpointUri`, `SPOResourceId`, `TeamSiteSPOResourceId` 가 더 있었습니다. 이 값들은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
 
 **시각 값**
 
@@ -165,12 +165,12 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 
 - `<cid>.ini` 의 파일 이름은 레지스트리 `Accounts\<계정>` 의 `cid` 값과 같았습니다. 회사 계정도 `ConfiguredTenantId` 가 아니라 `cid` 와 같았습니다.
 - 같은 폴더에는 `ClientPolicy.ini`, `ECSConfig.json`, `SurveyManagerState.json`, `SyncEngineDatabase.db`, `SafeDelete.db`, `SettingsDatabase.db`, `UXDatabase.db`, `OCSI.db`, `CxP.db`, `KFM.db` 등도 있었습니다.
-- `SyncEngineDatabase.db` 와 `SafeDelete.db` 는 [동기화 DB](/02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md) 에서 다룹니다.
-- UTF-16LE 파일을 읽는 법은 [문자 인코딩](/01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
+- `SyncEngineDatabase.db` 와 `SafeDelete.db` 는 [동기화 DB](syncenginedatabase-db.md) 에서 다룹니다.
+- UTF-16LE 파일을 읽는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 
 ### 정책 키
 
-그룹 정책은 레지스트리 키를 써서 동작합니다. 설정을 "구성 안 됨"으로 되돌려도 이미 쓴 키는 지워지지 않습니다. 아래는 개인 사용과 일반 동작에 관한 정책입니다. 회사 계정과 조직(테넌트)에 관한 정책은 [회사용 OneDrive와 SharePoint 동기화](/02-artifacts/cloud-notes/onedrive/business-tenant.md) 에 모았습니다.
+그룹 정책은 레지스트리 키를 써서 동작합니다. 설정을 "구성 안 됨"으로 되돌려도 이미 쓴 키는 지워지지 않습니다. 아래는 개인 사용과 일반 동작에 관한 정책입니다. 회사 계정과 조직(테넌트)에 관한 정책은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에 모았습니다.
 
 | 키와 값 | 뜻 |
 |---|---|
@@ -182,7 +182,7 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive` `FilesOnDemandEnabled` = 1 | 파일 주문형 (Files On-Demand) 을 켭니다 |
 
 - `LocalMassDeleteFileDeleteThreshold` 를 구성하지 않으면, 짧은 시간에 파일을 200개 넘게 지울 때 알림이 뜹니다.
-- 파일 주문형 옵션이 보이지 않으면 `HKLM\SYSTEM\CurrentControlSet\Services\CldFlt` 의 `Start` 가 2(AUTO_START)인지 봅니다. 이 드라이버가 Windows Cloud Files Filter Driver 입니다. 서비스 키 읽는 법은 [서비스·드라이버](/02-artifacts/persistence/services-drivers.md) 에 있습니다.
+- 파일 주문형 옵션이 보이지 않으면 `HKLM\SYSTEM\CurrentControlSet\Services\CldFlt` 의 `Start` 가 2(AUTO_START)인지 봅니다. 이 드라이버가 Windows Cloud Files Filter Driver 입니다. 서비스 키 읽는 법은 [서비스·드라이버](../../persistence/services-drivers.md) 에 있습니다.
 - 관찰한 PC 에는 두 정책 키가 모두 없었습니다 (관찰).
 
 ## 증거로서 의미
@@ -200,7 +200,7 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 
 ### 증명하지 못하는 것
 
-- 어떤 파일을 올렸거나 내려받았는지는 이 키로 알 수 없습니다. 파일 단위 기록은 [동기화 DB](/02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md) 와 [로그](/02-artifacts/cloud-notes/onedrive/odl-odlgz.md) 에 있습니다.
+- 어떤 파일을 올렸거나 내려받았는지는 이 키로 알 수 없습니다. 파일 단위 기록은 [동기화 DB](syncenginedatabase-db.md) 와 [로그](odl-odlgz.md) 에 있습니다.
 - 시각 값의 이름이 뜻을 보장하지 않습니다. 정확한 기록 조건은 확인하지 못했습니다.
 - `UserEmail` 은 OneDrive 에 로그인한 계정입니다. 그 시각에 PC 앞에 있던 사람을 알려 주지 않습니다.
 - 정책 값이 있다고 지금도 그 정책이 걸려 있다는 뜻은 아닙니다. "구성 안 됨"으로 되돌려도 키가 남기 때문입니다.
@@ -215,11 +215,11 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `Accounts\<계정>` 의 시각 값, 루트 키의 `PersonalUnlinkedTimeStamp` 등 | QWORD, Unix 초 | 1970-01-01 00:00 UTC 부터 센 초. 변환하면 UTC 입니다 (관찰) |
 | `FirstRunSignInOriginDateTime` | REG_SZ 에 적은 Unix 초 숫자 | 위와 같습니다 (관찰) |
 | `SyncEngines` 의 `LastModifiedTime` | REG_SZ 날짜 문자열 | 시간대 표시가 없습니다. OneDrive 시작 시각(UTC)과 맞아서 UTC 로 보입니다 (관찰). 공식 설명은 확인하지 못했습니다 |
-| 키의 마지막 기록 시각 | 하이브에 있는 키 단위 시각 | [레지스트리 하이브 구조](/01-foundations/database-log-formats/registry-hive/index.md) 를 참고합니다 |
+| 키의 마지막 기록 시각 | 하이브에 있는 키 단위 시각 | [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 를 참고합니다 |
 
 Unix 초라고 판단한 근거는 이렇습니다. 관찰한 PC 에서 `Accounts\Personal` 의 `LastSignInTime` 은 1790114532 였습니다. 이 값은 2026-09-22 22:02:12 UTC 입니다. 실행 중이던 OneDrive 프로세스의 시작 시각은 22:02:11 UTC 로, 1초 차이였습니다.
 
-Unix 초를 변환하는 법은 [시각 값 형식](/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+Unix 초를 변환하는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
@@ -229,7 +229,7 @@ Unix 초를 변환하는 법은 [시각 값 형식](/01-foundations/value-decodi
 - **회사 계정의 `UserName` 과 `UserEmail` 은 값이 달랐습니다 (관찰).** 보고서에는 어느 값을 썼는지 밝힙니다.
 - **ini 파일 이름은 테넌트 ID 가 아닙니다.** 회사 계정도 `cid` 로 파일 이름을 짓습니다 (관찰).
 - **`Collection` 으로 끝나는 루트 키 값 네 개는 내용을 보지 않았습니다.** 이름만으로 무엇이 들었는지 단정하지 않습니다.
-- **알려진 폴더 이동을 켠 PC 는 바탕 화면·문서 경로가 OneDrive 폴더 안으로 바뀝니다.** 다른 아티팩트의 경로를 읽을 때 [원드라이브 허브](/02-artifacts/cloud-notes/onedrive/index.md) 의 설명을 참고합니다.
+- **알려진 폴더 이동을 켠 PC 는 바탕 화면·문서 경로가 OneDrive 폴더 안으로 바뀝니다.** 다른 아티팩트의 경로를 읽을 때 [원드라이브 허브](index.md) 의 설명을 참고합니다.
 
 ## 직접 분석해 보기
 
@@ -253,7 +253,7 @@ OneDrive!S-1-5-21-…-1001!Business1|0123456789abcdef0123456789abcdef
 └ 제공자 ┘└── 사용자 SID ──┘└ 계정 ┘ └────── 32자리 범위 ID ──────┘
 ```
 
-- 사용자 SID 는 [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) 에서 사용자 이름으로 바꿉니다.
+- 사용자 SID 는 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 사용자 이름으로 바꿉니다.
 - 범위 ID 는 같은 사용자 `NTUSER.DAT` 의 `SyncEngines\Providers\OneDrive\<범위 ID>` 키와 맞춰 봅니다.
 
 ### 공개 도구로 한 번
@@ -275,13 +275,13 @@ reg query "HKCU\Software\Microsoft\OneDrive\Accounts" /s
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 동기화 DB | `cid` 와 범위 ID 가 같은 라이브러리에서 어떤 파일을 동기화했는지 봅니다 | [동기화 DB](/02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md) |
-| 로그 | 계정 키의 시각 무렵에 앱이 무엇을 했는지 봅니다 | [로그 (ODL·ODLGZ)](/02-artifacts/cloud-notes/onedrive/odl-odlgz.md) |
-| 회사 계정 값 | 테넌트 ID·SharePoint 주소로 어느 조직 계정인지 봅니다 | [회사용 OneDrive와 SharePoint 동기화](/02-artifacts/cloud-notes/onedrive/business-tenant.md) |
-| 사용자 프로필 목록 | `SyncRootManager` 의 SID 가 어느 사용자인지 봅니다 | [사용자 프로필 목록](/02-artifacts/system-account/profilelist.md) |
-| 바로가기 파일·점프리스트 | 동기화 폴더 경로 아래 파일을 연 기록을 찾습니다 | [바로가기 파일](/02-artifacts/file-folder-usage/lnk.md), [점프리스트](/02-artifacts/file-folder-usage/jump-lists.md) |
-| 셸백 | 동기화 폴더를 탐색기로 둘러본 기록을 봅니다 | [셸백](/02-artifacts/file-folder-usage/shellbags/index.md) |
-| 로그온 기록 | `LastSignInTime` 이 Windows 로그온 시각과 가까운지 봅니다 | [로그온·로그오프](/02-artifacts/event-logs/logon-events/index.md) |
+| 동기화 DB | `cid` 와 범위 ID 가 같은 라이브러리에서 어떤 파일을 동기화했는지 봅니다 | [동기화 DB](syncenginedatabase-db.md) |
+| 로그 | 계정 키의 시각 무렵에 앱이 무엇을 했는지 봅니다 | [로그 (ODL·ODLGZ)](odl-odlgz.md) |
+| 회사 계정 값 | 테넌트 ID·SharePoint 주소로 어느 조직 계정인지 봅니다 | [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) |
+| 사용자 프로필 목록 | `SyncRootManager` 의 SID 가 어느 사용자인지 봅니다 | [사용자 프로필 목록](../../system-account/profilelist.md) |
+| 바로가기 파일·점프리스트 | 동기화 폴더 경로 아래 파일을 연 기록을 찾습니다 | [바로가기 파일](../../file-folder-usage/lnk.md), [점프리스트](../../file-folder-usage/jump-lists.md) |
+| 셸백 | 동기화 폴더를 탐색기로 둘러본 기록을 봅니다 | [셸백](../../file-folder-usage/shellbags/index.md) |
+| 로그온 기록 | `LastSignInTime` 이 Windows 로그온 시각과 가까운지 봅니다 | [로그온·로그오프](../../event-logs/logon-events/index.md) |
 
 ## 실습
 
