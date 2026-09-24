@@ -33,3 +33,9 @@
   list-style: none;
   pointer-events: none;
 }
+
+// 메뉴 제목과 펼침 화살표 위에서는 손가락 커서(현재 쪽 링크는 주소가 없어 기본 커서가 나온다)
+.nav-list .nav-list-link,
+.nav-list .nav-list-expander {
+  cursor: pointer;
+}
