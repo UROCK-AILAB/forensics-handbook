@@ -20,6 +20,20 @@
         a.textContent = m[2];
       });
     }
+    /* 이미 펼쳐진 메뉴를 다시 누르면 이동하지 않고 접는다. 접힌 메뉴는 그대로 이동하며 펼쳐진다. */
+    var nav = document.getElementById('site-nav');
+    if (nav) {
+      nav.addEventListener('click', function (e) {
+        var a = e.target.closest ? e.target.closest('a.nav-list-link') : null;
+        if (!a) return;
+        var li = a.parentElement;
+        var ex = li.querySelector(':scope > .nav-list-expander');
+        if (ex && li.classList.contains('active')) {
+          e.preventDefault();
+          ex.click();
+        }
+      });
+    }
     /* 잘린 목차 제목은 마우스를 올리면 전체가 보인다. */
     document.querySelectorAll('.nav-list-link').forEach(function (a) {
       if (!a.title) a.title = a.textContent.trim();
