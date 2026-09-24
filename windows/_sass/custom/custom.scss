@@ -13,3 +13,11 @@
 .nav-list .nav-list-item .nav-list .nav-list-item .nav-list .nav-list-link {
   padding-left: 2.4rem;
 }
+
+// 왼쪽 위 사이트 제목도 한 줄로 두고, 목록을 가리지 않게 글자를 줄인다.
+.site-title {
+  font-size: 1.05rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
