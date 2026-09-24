@@ -21,3 +21,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+// 갈래 제목(기반 구조·아티팩트 사전…): 링크가 아닌 작은 구분 제목
+.nav-list .nav-section-title {
+  margin: 0;
+  padding: 1.2rem 1rem 0.25rem 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #6b7085;
+  list-style: none;
+  pointer-events: none;
+}
