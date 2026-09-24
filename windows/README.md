@@ -1,6 +1,7 @@
 ---
 title: 처음
 nav_order: 0
+permalink: /
 ---
 
 # Windows 디지털 포렌식 위키
