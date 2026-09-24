@@ -39,3 +39,30 @@
 .nav-list .nav-list-expander {
   cursor: pointer;
 }
+
+// 레이아웃: 목차를 화면 왼쪽 끝에 붙이고, 본문은 남은 폭을 채운다.
+// (테마 원본은 목차와 본문을 함께 가운데로 모으고 본문 폭을 50rem 으로 고정한다.)
+.side-bar {
+  @include mq(lg) {
+    width: $nav-width;
+    min-width: $nav-width;
+  }
+
+  & + .main {
+    @include mq(lg) {
+      margin-left: $nav-width;
+    }
+  }
+}
+
+.main {
+  @include mq(md) {
+    max-width: none;
+    margin-right: 0;
+  }
+}
+
+// 너무 넓은 화면에서 한 줄이 지나치게 길어지지 않게 상한만 둔다.
+.main-content-wrap {
+  max-width: 90rem;
+}
