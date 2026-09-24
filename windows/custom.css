@@ -1,0 +1,55 @@
+/* 왼쪽 목차: 넓히고, 번호를 숨기고, 한 줄로 고정한다(넘치면 …). */
+:root {
+    --sidebar-width: 340px;
+    --content-max-width: 860px;
+}
+
+.sidebar {
+    font-size: 0.92em;
+}
+
+.chapter li strong[aria-hidden="true"] {
+    display: none;
+}
+
+.chapter li.chapter-item {
+    margin-block-start: 0.2em;
+    line-height: 1.4em;
+}
+
+.chapter li a {
+    padding: 2px 0;
+}
+
+.chapter .section {
+    padding-inline-start: 14px;
+}
+
+.chapter-link-wrapper > a:not(.chapter-fold-toggle),
+.chapter-link-wrapper > span {
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 링크가 없는 그룹 이름 */
+.chapter li.chapter-item > .chapter-link-wrapper > span {
+    font-weight: 600;
+}
+
+.chapter li.part-title {
+    margin-block-start: 1.2em;
+}
+
+/* 링크가 없는 그룹 이름도 다른 글자와 같은 색으로 */
+.chapter li.chapter-item > .chapter-link-wrapper > span {
+    color: var(--sidebar-fg);
+}
+
+/* 표 첫 칸이 글자 하나씩 꺾이지 않게 */
+.content table td:first-child,
+.content table th:first-child {
+    min-width: 5.5em;
+}

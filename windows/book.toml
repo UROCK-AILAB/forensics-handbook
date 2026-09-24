@@ -1,0 +1,20 @@
+[book]
+title = "Windows 디지털 포렌식 위키"
+description = "Windows 시스템에 남는 흔적을 읽고 해석하는 한국어 포렌식 위키"
+language = "ko"
+src = "src"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/UROCK-AILAB/windows-forensics-wiki-ko"
+git-repository-icon = "fab-github"
+additional-css = ["custom.css"]
+additional-js = ["custom.js"]
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.search]
+limit-results = 20
