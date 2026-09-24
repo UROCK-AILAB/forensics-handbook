@@ -1,0 +1,6 @@
+<script>
+  // 잘린 목차 제목은 마우스를 올리면 전체가 보인다.
+  document.querySelectorAll('.nav-list-link').forEach(function (a) {
+    if (!a.title) a.title = a.textContent.trim();
+  });
+</script>

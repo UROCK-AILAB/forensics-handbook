@@ -1,6 +1,6 @@
 ---
 title: 처음
-nav_order: 0
+nav_order: -100
 permalink: /
 ---
 

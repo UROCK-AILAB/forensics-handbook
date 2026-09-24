@@ -1,0 +1,15 @@
+// 목차 제목은 한 줄로 고정하고, 넘치면 …으로 자른다.
+.nav-list .nav-list-item .nav-list-link {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 단계마다 들여쓰기를 줄여 제목 자리를 넓힌다.
+.nav-list .nav-list-item .nav-list .nav-list-link {
+  padding-left: 1.6rem;
+}
+
+.nav-list .nav-list-item .nav-list .nav-list-item .nav-list .nav-list-link {
+  padding-left: 2.4rem;
+}
