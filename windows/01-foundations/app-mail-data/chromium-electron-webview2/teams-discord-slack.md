@@ -17,7 +17,7 @@ Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대�
 
 | 앱 | 방식 | 근거 | 자세히 |
 |---|---|---|---|
-| VS Code | Electron | 관찰 | 이 위키에 따로 페이지 없음 |
+| VS Code | Electron | 관찰 | 이 핸드북에 따로 페이지 없음 |
 | 새 Teams | WebView2 (`EBWebView` 폴더) | 관찰 | [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) |
 | 클래식 Teams | 방식은 확인하지 못함. 위치만 문서로 확인 | Microsoft 문서 | [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) |
 | 새 Outlook | WebView2 (`EBWebView` 폴더) | 관찰 | [새 Outlook](../../../02-artifacts/mail/new-outlook.md) |

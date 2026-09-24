@@ -33,7 +33,7 @@ SruDbIdMapTable 의 한 행에는 번호 하나와 이름 하나가 짝지어 �
 
 libyal 명세가 적은 제공자와 표는 아래와 같습니다.
 
-| 표 이름 (GUID) | 제공자 DLL | 명세의 이름 | 이 위키 페이지 |
+| 표 이름 (GUID) | 제공자 DLL | 명세의 이름 | 이 핸드북 페이지 |
 |---|---|---|---|
 | `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` | appsruprov.dll | Application Resource Usage Provider | [앱별 자원 사용](application-resource-usage.md) |
 | `{973F5D5C-1D90-4944-BE8E-24B94231A174}` | nduprov.dll | Network Data Usage Monitor | [네트워크 사용량](network-data-usage.md) |

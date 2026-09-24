@@ -41,7 +41,7 @@ MITRE ATT&CK 은 자격 증명 빼내기를 T1003(OS Credential Dumping) 으로 
 | T1003.005 Cached Domain Credentials | 캐시된 도메인 자격 증명 | [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) |
 | T1003.006 DCSync | 도메인 컨트롤러에 복제를 요청해 얻는 해시 | [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) |
 
-- T1003.007·T1003.008 은 리눅스 대상이라 이 위키 범위 밖입니다[1].
+- T1003.007·T1003.008 은 리눅스 대상이라 이 핸드북 범위 밖입니다[1].
 - 하이브에서 부트키로 해시를 풀고 LSA 시크릿·캐시 자격 증명으로 이어지는 구조는 [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) 에 있습니다.
 
 ## 볼 아티팩트와 순서

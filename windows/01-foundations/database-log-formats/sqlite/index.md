@@ -41,7 +41,7 @@ SQLite 는 데이터베이스 하나를 파일 하나에 담는 형식이고, �
 | 윈도 타임라인 | `%LOCALAPPDATA%\ConnectedDevicesPlatform\` 아래 계정별 폴더의 `ActivitiesCache.db` | Windows 10 1803 이후. Windows 11 에서는 기능이 빠졌지만 파일은 남을 수 있음 | [타임라인](../../../02-artifacts/file-folder-usage/activitiescache-db.md) |
 | 윈도 검색 색인 | `%ProgramData%\Microsoft\Search\Data\Applications\Windows\` 의 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` | Windows 11 (Windows 10 까지는 ESE 형식) | [위치와 형식](../../../02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md) |
 | 스토어 앱 설치 목록 | `%ProgramData%\Microsoft\Windows\AppRepository\StateRepository-Machine.srd` | Windows 10·11 | [스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md) |
-| Recall | `%LOCALAPPDATA%\CoreAIPlatform.00\UKP\{GUID}\ukg.db` | Windows 11 에서 Recall 을 켠 PC | 캡처한 창과 앱 사용 기록 (이 위키에 따로 페이지 없음) |
+| Recall | `%LOCALAPPDATA%\CoreAIPlatform.00\UKP\{GUID}\ukg.db` | Windows 11 에서 Recall 을 켠 PC | 캡처한 창과 앱 사용 기록 (이 핸드북에 따로 페이지 없음) |
 | 클라우드·메모 앱 | 원드라이브 `SyncEngineDatabase.db`, 구글 드라이브 메타데이터 DB, 스티커 메모 `plum.sqlite` | 앱 버전을 따름 | [원드라이브 동기화 DB](../../../02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md), [구글 드라이브](../../../02-artifacts/cloud-notes/drivefs-backup-and-sync.md), [스티커 메모](../../../02-artifacts/cloud-notes/sticky-notes.md) |
 | 메신저 | 대화 DB. 암호화한 경우가 많음 | 앱 버전을 따름 | [시그널](../../../02-artifacts/messengers/signal.md), [카카오톡 대화 DB 암호화](../../../02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md) |
 

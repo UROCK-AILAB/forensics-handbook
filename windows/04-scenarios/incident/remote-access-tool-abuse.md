@@ -33,7 +33,7 @@ MITRE ATT&CK 은 이 기법을 T1219 Remote Access Tools 로 두며, 공격자�
 
 페이지가 드는 도구의 예에는 AnyDesk, PuTTY, TeamViewer, Ammyy Admin, VNC, ConnectWise Control, MeshCentral, LogMeIn, ngrok 등이 있습니다[1]. 원격 접속 모듈이 다른 소프트웨어 안에 들어 있기도 한데, 예를 들면 Google Chrome 의 원격 데스크톱입니다[1]. 설치 과정은 흔히 Windows 서비스로 지속성을 만듭니다[1].
 
-**탐지 사슬을 흔적으로 옮기기.** MITRE 는 탐지 사슬을 네 단계로 적습니다[1]. 아래 표는 각 단계를 받는 PC 의 흔적과 짝지은 것입니다. 짝지은 것은 이 위키의 정리입니다.
+**탐지 사슬을 흔적으로 옮기기.** MITRE 는 탐지 사슬을 네 단계로 적습니다[1]. 아래 표는 각 단계를 받는 PC 의 흔적과 짝지은 것입니다. 짝지은 것은 이 핸드북의 정리입니다.
 
 | 단계 (MITRE) | 받는 PC 에서 볼 흔적 | 링크 |
 |---|---|---|

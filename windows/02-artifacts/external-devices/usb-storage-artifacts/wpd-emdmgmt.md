@@ -131,7 +131,7 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 3. **볼륨 이름에 밑줄이 있을 때.** 볼륨 이름과 VSN 은 밑줄로 이어져 있습니다. 볼륨 이름이 `MY_DATA` 처럼 밑줄을 품으면 도구가 이름과 VSN 을 잘못 자를 수 있습니다. VSN 은 마지막 밑줄 뒤 숫자로 직접 읽습니다.
 4. **한 장치에 하위 키가 여럿.** 하위 키 이름에 볼륨 이름과 VSN 이 함께 들어갑니다. 그래서 장치를 다시 포맷하거나 이름을 바꾼 뒤 꽂으면 다른 하위 키가 생길 수 있습니다. 이 동작은 명세로 확인하지 못했습니다. 같은 일련번호로 하위 키가 여럿 있으면 각 VSN 을 따로 추적합니다.
 5. **`FriendlyName` 을 볼륨 이름으로 단정하는 실수.** 드라이브 문자가 들어 있을 수 있습니다.
-6. **속성 번호에 붙인 이름이 도구마다 다릅니다.** 한 공개 플러그인(`wpdbusenum`)은 0064 를 "First InstallDate", 0065 를 "InstallDate" 로 표시합니다(소스 기준). 이 위키의 [장치 항목](../../execution/amcache-hve/inventorydevicepnp.md) 페이지는 0064 를 `DEVPKEY_Device_InstallDate`, 0065 를 `DEVPKEY_Device_FirstInstallDate` 로 적었습니다. 도구 출력의 이름 대신 속성 번호로 확인합니다.
+6. **속성 번호에 붙인 이름이 도구마다 다릅니다.** 한 공개 플러그인(`wpdbusenum`)은 0064 를 "First InstallDate", 0065 를 "InstallDate" 로 표시합니다(소스 기준). 이 핸드북의 [장치 항목](../../execution/amcache-hve/inventorydevicepnp.md) 페이지는 0064 를 `DEVPKEY_Device_InstallDate`, 0065 를 `DEVPKEY_Device_FirstInstallDate` 로 적었습니다. 도구 출력의 이름 대신 속성 번호로 확인합니다.
 7. **지워진 하위 키.** 키가 없으면 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SOFTWARE 하이브를 봅니다.
 8. **스마트폰.** Microsoft 는 휴대전화도 WPD 장치로 설명합니다. MTP 로 연결한 스마트폰이 이 키들에 어떻게 남는지는 [스마트폰으로 옮겼나](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md)에서 다룹니다.
 

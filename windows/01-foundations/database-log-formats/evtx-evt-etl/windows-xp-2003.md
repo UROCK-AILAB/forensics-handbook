@@ -26,7 +26,7 @@ Windows 2000 의 SystemRoot 값은 `C:\WINNT` 로도 적혀 있으므로([공급
 
 기본 파일 이름은 AppEvent.Evt(응용 프로그램), SecEvent.Evt(보안), SysEvent.Evt(시스템) 입니다. 그 밖에 DFSR.Evt·DNSEvent.Evt·FwdEvents.Evt·HrwEvents.Evt·Internet.Evt·NTDS.Evt·NtFrs.Evt·ODiag.Evt·WindowsPowerShell.evt 등이 있습니다. 도메인 컨트롤러에는 Directory service 로그와 File Replication service 로그가, DNS 서버에는 DNS server 로그가 더 있습니다.
 
-이 위키의 확인 PC(Windows 11)에는 EVT 파일이 없어 직접 보지 못했으며, 이 페이지의 값은 모두 명세와 Microsoft 문서 기준입니다.
+이 핸드북의 확인 PC(Windows 11)에는 EVT 파일이 없어 직접 보지 못했으며, 이 페이지의 값은 모두 명세와 Microsoft 문서 기준입니다.
 
 ## 구조
 
@@ -197,7 +197,7 @@ Windows 2000 의 SystemRoot 값은 `C:\WINNT` 로도 적혀 있으므로([공급
 
 ### wrap 과 빈 틈
 
-wrap 한 로그에서는 가장 오래된 레코드가 덮여 사라지고, 파일 끝 레코드와 가장 오래된 레코드 사이에는 빈 틈이 생깁니다. 이 틈에 지운 옛 레코드의 바이트가 남는지는 이 위키가 참고한 자료로 확인하지 못했습니다. 틈을 헥스로 직접 보고, 서명 `LfLe` 와 크기 사본으로 조각인지 확인합니다.
+wrap 한 로그에서는 가장 오래된 레코드가 덮여 사라지고, 파일 끝 레코드와 가장 오래된 레코드 사이에는 빈 틈이 생깁니다. 이 틈에 지운 옛 레코드의 바이트가 남는지는 이 핸드북이 참고한 자료로 확인하지 못했습니다. 틈을 헥스로 직접 보고, 서명 `LfLe` 와 크기 사본으로 조각인지 확인합니다.
 
 
 ### 손상 사례 (libevt 명세)
