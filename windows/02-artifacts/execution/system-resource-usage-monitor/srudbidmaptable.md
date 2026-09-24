@@ -1,3 +1,10 @@
+---
+title: "구조와 ID 매핑"
+parent: "SRUM"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 980
+---
+
 # 구조와 ID 매핑 (SruDbIdMapTable)
 
 > 위치: [SRUM (System Resource Usage Monitor)](index.md) > 구조와 ID 매핑

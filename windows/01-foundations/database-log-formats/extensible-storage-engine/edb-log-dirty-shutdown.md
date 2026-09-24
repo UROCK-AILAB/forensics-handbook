@@ -1,3 +1,10 @@
+---
+title: "트랜잭션 로그와 비정상 종료 상태"
+parent: "ESE 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 230
+---
+
 # 트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)
 
 > 위치: [ESE 데이터베이스 (Extensible Storage Engine)](index.md) > 트랜잭션 로그와 비정상 종료 상태

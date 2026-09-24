@@ -1,3 +1,10 @@
+---
+title: "읽던 위치"
+parent: "오피스 사용 흔적"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1360
+---
+
 # 읽던 위치 (Reading Locations)
 
 > 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)

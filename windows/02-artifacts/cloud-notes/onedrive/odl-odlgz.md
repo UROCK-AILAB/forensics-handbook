@@ -1,3 +1,10 @@
+---
+title: "로그"
+parent: "원드라이브"
+grand_parent: "아티팩트 · 클라우드·노트"
+nav_order: 2200
+---
+
 # 로그 (ODL·ODLGZ)
 
 ## 한 줄 요약

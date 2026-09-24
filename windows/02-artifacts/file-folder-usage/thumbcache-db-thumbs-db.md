@@ -1,3 +1,9 @@
+---
+title: "썸네일 캐시"
+parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1250
+---
+
 # 썸네일 캐시 (thumbcache_*.db·Thumbs.db)
 
 ## 한 줄 요약

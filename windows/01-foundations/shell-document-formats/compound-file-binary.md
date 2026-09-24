@@ -1,3 +1,9 @@
+---
+title: "OLE 복합 파일"
+parent: "기반 · 셸·문서 형식"
+nav_order: 410
+---
+
 # OLE 복합 파일 (Compound File Binary)
 
 ## 한 줄 요약

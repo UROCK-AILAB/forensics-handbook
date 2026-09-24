@@ -1,3 +1,10 @@
+---
+title: "파일 형식 식별"
+parent: "파일 내용 검색"
+grand_parent: "기법 · 분석"
+nav_order: 3470
+---
+
 # 파일 형식 식별 (File Signature)
 
 ## 한 줄 요약

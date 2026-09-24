@@ -1,3 +1,10 @@
+---
+title: "키워드 검색"
+parent: "파일 내용 검색"
+grand_parent: "기법 · 분석"
+nav_order: 3500
+---
+
 # 키워드 검색 (Keyword Search)
 
 ## 한 줄 요약

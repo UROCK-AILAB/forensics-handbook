@@ -1,3 +1,10 @@
+---
+title: "인쇄해서 가져갔나"
+parent: "자료를 밖으로 빼돌렸나"
+grand_parent: "시나리오 · 정보 유출"
+nav_order: 3650
+---
+
 # 인쇄해서 가져갔나 (Print)
 
 > 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)

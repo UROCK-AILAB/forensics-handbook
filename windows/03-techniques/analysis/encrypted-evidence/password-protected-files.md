@@ -1,3 +1,10 @@
+---
+title: "암호 걸린 문서·압축 파일"
+parent: "암호화 증거 다루기"
+grand_parent: "기법 · 분석"
+nav_order: 3430
+---
+
 # 암호 걸린 문서·압축 파일 (Password-Protected Files)
 
 > 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > 암호 걸린 문서·압축 파일

@@ -1,3 +1,10 @@
+---
+title: "캐시 형식"
+parent: "크롬 계열 앱 공통 구조"
+grand_parent: "기반 · 앱·메일 데이터 구조"
+nav_order: 450
+---
+
 # 캐시 형식 (Blockfile·Simple Cache)
 
 > 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 캐시 형식

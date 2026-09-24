@@ -1,3 +1,10 @@
+---
+title: "저장 비밀번호 (logins.json·key4.db)"
+parent: "파이어폭스"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1740
+---
+
 # 저장 비밀번호 (logins.json·key4.db)
 
 ## 한 줄 요약

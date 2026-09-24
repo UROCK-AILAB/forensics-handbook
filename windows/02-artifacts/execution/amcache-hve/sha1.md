@@ -1,3 +1,10 @@
+---
+title: "AmCache 해석 함정"
+parent: "AmCache"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 930
+---
+
 # AmCache 해석 함정 (실행 증거가 아닌 경우·SHA1 계산 범위)
 
 ## 한 줄 요약

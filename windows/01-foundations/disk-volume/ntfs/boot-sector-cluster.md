@@ -1,3 +1,10 @@
+---
+title: "부트 섹터와 클러스터"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 30
+---
+
 # 부트 섹터와 클러스터 (Boot Sector·Cluster)
 
 > 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](index.md)

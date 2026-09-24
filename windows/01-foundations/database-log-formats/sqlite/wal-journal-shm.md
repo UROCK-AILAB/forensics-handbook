@@ -1,3 +1,10 @@
+---
+title: "WAL과 롤백 저널"
+parent: "SQLite 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 280
+---
+
 # WAL과 롤백 저널 (-wal·-journal·-shm)
 
 > 위치: [SQLite 데이터베이스 (SQLite)](index.md) > WAL과 롤백 저널

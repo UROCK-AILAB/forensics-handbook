@@ -1,3 +1,11 @@
+---
+title: "크롬 계열 앱 공통 구조"
+parent: "기반 · 앱·메일 데이터 구조"
+nav_order: 420
+has_children: true
+has_toc: false
+---
+
 # 크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)
 
 ## 한 줄 요약

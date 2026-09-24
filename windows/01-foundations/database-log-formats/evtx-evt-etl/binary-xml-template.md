@@ -1,3 +1,10 @@
+---
+title: "이진 XML 해석"
+parent: "이벤트 로그 형식"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 340
+---
+
 # 이진 XML 해석 (Binary XML·Template)
 
 ## 한 줄 요약

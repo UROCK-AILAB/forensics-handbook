@@ -1,3 +1,9 @@
+---
+title: "원격 데스크톱 침입 확인"
+parent: "시나리오 · 침해 사고"
+nav_order: 3700
+---
+
 # 원격 데스크톱 침입 확인 (RDP Intrusion)
 
 이 페이지는 누군가 원격 데스크톱 (Remote Desktop Protocol, RDP) 으로 이 PC 에 들어왔는지 확인하는 순서를 다룹니다. 로그온 실패가 몰렸는지, 같은 곳에서 성공 로그온으로 이어졌는지, 세션 안에서 무엇을 했는지를 차례로 봅니다. 이 PC 가 다른 PC 로 원격 데스크톱 접속을 나간 출발점인지도 가립니다. 이벤트마다의 칸과 뜻은 [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) 와 그 하위 페이지에 있습니다. 로그온 실패를 여러 건 묶어 대입 모양을 읽는 법은 [비밀번호 대입 공격이 있었나](credential-theft-lateral-movement/brute-force.md) 에 있습니다.

@@ -1,3 +1,11 @@
+---
+title: "자료를 밖으로 빼돌렸나"
+parent: "시나리오 · 정보 유출"
+nav_order: 3580
+has_children: true
+has_toc: false
+---
+
 # 자료를 밖으로 빼돌렸나 (Data Exfiltration)
 
 ## 한 줄 요약

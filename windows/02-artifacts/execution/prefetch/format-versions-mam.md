@@ -1,3 +1,10 @@
+---
+title: "파일 구조와 버전"
+parent: "프리페치"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 800
+---
+
 # 파일 구조와 버전 (Format Versions·MAM)
 
 > 위치: [프리페치 (Prefetch)](index.md) > 파일 구조와 버전

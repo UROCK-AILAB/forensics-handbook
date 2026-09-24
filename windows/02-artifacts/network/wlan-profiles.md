@@ -1,3 +1,9 @@
+---
+title: "Wi-Fi 프로필"
+parent: "아티팩트 · 네트워크"
+nav_order: 2320
+---
+
 # Wi-Fi 프로필 (WLAN Profiles)
 
 ## 한 줄 요약

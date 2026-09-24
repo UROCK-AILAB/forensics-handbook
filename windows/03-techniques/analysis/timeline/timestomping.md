@@ -1,3 +1,10 @@
+---
+title: "시각 조작 탐지"
+parent: "타임라인 작성"
+grand_parent: "기법 · 분석"
+nav_order: 3310
+---
+
 # 시각 조작 탐지 (Timestomping)
 
 상위 허브: [타임라인 작성 (Timeline)](index.md)

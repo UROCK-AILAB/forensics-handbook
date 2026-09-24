@@ -1,3 +1,10 @@
+---
+title: "파일시스템 기반 복구"
+parent: "삭제 데이터 복구"
+grand_parent: "기법 · 분석"
+nav_order: 3340
+---
+
 # 파일시스템 기반 복구 (Undelete: NTFS·FAT)
 
 ## 한 줄 요약

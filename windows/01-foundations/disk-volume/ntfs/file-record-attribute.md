@@ -1,3 +1,10 @@
+---
+title: "MFT 레코드와 속성"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 40
+---
+
 # MFT 레코드와 속성 (FILE Record·Attribute)
 
 상위 페이지: [NTFS 구조 (NTFS)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "전원·배터리 사용"
+parent: "SRUM"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 1020
+---
+
 # 전원·배터리 사용 (Energy Usage)
 
 > 상위 허브: [SRUM (System Resource Usage Monitor)](index.md)

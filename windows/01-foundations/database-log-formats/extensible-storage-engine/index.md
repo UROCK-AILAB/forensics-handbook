@@ -1,3 +1,11 @@
+---
+title: "ESE 데이터베이스"
+parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 210
+has_children: true
+has_toc: false
+---
+
 # ESE 데이터베이스 (Extensible Storage Engine)
 
 ## 한 줄 요약

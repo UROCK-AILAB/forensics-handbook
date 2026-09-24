@@ -1,3 +1,10 @@
+---
+title: "메모리 속 문자열·자격증명·암호 키"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3220
+---
+
 # 메모리 속 문자열·자격증명·암호 키 (Strings·Credentials·Keys)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "NTLM 비밀번호 해시"
+parent: "레지스트리 속 비밀번호 정보"
+grand_parent: "아티팩트 · 자격증명"
+nav_order: 2880
+---
+
 # NTLM 비밀번호 해시 (NT Hash)
 
 > 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > NTLM 비밀번호 해시

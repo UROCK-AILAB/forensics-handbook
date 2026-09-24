@@ -1,3 +1,11 @@
+---
+title: "타임라인 작성"
+parent: "기법 · 분석"
+nav_order: 3260
+has_children: true
+has_toc: false
+---
+
 # 타임라인 작성 (Timeline)
 
 ## 한 줄 요약

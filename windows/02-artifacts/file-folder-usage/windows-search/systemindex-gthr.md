@@ -1,3 +1,10 @@
+---
+title: "수집 기록"
+parent: "윈도 검색 색인 DB"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1290
+---
+
 # 수집 기록 (SystemIndex_Gthr)
 
 > 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 수집 기록

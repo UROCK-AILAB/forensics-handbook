@@ -1,3 +1,10 @@
+---
+title: "오프라인 복호 재료와 절차"
+parent: "DPAPI 구조"
+grand_parent: "기반 · 암호 보호"
+nav_order: 610
+---
+
 # 오프라인 복호 재료와 절차 (비밀번호·NT 해시·백업 키)
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > 오프라인 복호 재료와 절차

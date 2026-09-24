@@ -1,3 +1,10 @@
+---
+title: "마스터키 파일"
+parent: "DPAPI 구조"
+grand_parent: "기반 · 암호 보호"
+nav_order: 570
+---
+
 # 마스터키 파일 (Master Key·Protect\SID)
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > 마스터키 파일

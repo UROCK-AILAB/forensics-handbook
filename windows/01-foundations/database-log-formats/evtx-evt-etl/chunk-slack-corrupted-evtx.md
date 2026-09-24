@@ -1,3 +1,10 @@
+---
+title: "파일 안에 남은 지운·손상 레코드"
+parent: "이벤트 로그 형식"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 370
+---
+
 # 파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)
 
 ## 한 줄 요약

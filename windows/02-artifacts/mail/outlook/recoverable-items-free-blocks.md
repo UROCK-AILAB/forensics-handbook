@@ -1,3 +1,10 @@
+---
+title: "지운 메시지 복구"
+parent: "아웃룩"
+grand_parent: "아티팩트 · 메일"
+nav_order: 1890
+---
+
 # 지운 메시지 복구 (Recoverable Items·Free Blocks)
 
 > 상위 허브: [아웃룩 (Outlook)](index.md)

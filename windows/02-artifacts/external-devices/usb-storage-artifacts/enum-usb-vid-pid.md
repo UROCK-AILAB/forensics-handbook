@@ -1,3 +1,10 @@
+---
+title: "USB 장치 식별자"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1490
+---
+
 # USB 장치 식별자 (Enum\USB VID·PID)
 
 ## 한 줄 요약

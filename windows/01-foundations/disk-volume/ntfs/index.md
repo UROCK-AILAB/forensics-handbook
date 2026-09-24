@@ -1,3 +1,11 @@
+---
+title: "NTFS 구조"
+parent: "기반 · 디스크·볼륨"
+nav_order: 20
+has_children: true
+has_toc: false
+---
+
 # NTFS 구조 (NTFS)
 
 ## 한 줄 요약

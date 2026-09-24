@@ -1,3 +1,9 @@
+---
+title: "윈도 압축 형식"
+parent: "기반 · 값 읽는 법"
+nav_order: 530
+---
+
 # 윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)
 
 ## 한 줄 요약

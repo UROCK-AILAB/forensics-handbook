@@ -1,3 +1,10 @@
+---
+title: "USB 로 무엇을 가져갔나"
+parent: "자료를 밖으로 빼돌렸나"
+grand_parent: "시나리오 · 정보 유출"
+nav_order: 3590
+---
+
 # USB 로 무엇을 가져갔나 (USB)
 
 > 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)

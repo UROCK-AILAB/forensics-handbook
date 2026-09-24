@@ -1,3 +1,10 @@
+---
+title: "구형 EVT 형식"
+parent: "이벤트 로그 형식"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 360
+---
+
 # 구형 EVT 형식 (Windows XP·2003)
 
 ## 한 줄 요약

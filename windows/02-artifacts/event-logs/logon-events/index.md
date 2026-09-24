@@ -1,3 +1,11 @@
+---
+title: "로그온·로그오프"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2480
+has_children: true
+has_toc: false
+---
+
 # 로그온·로그오프 (Logon Events)
 
 ## 한 줄 요약

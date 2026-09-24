@@ -1,3 +1,10 @@
+---
+title: "웹메일·웹하드로 올렸나"
+parent: "자료를 밖으로 빼돌렸나"
+grand_parent: "시나리오 · 정보 유출"
+nav_order: 3640
+---
+
 # 웹메일·웹하드로 올렸나 (Web Upload)
 
 > 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)

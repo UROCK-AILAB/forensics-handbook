@@ -1,3 +1,10 @@
+---
+title: "애니데스크"
+parent: "원격 제어 프로그램"
+grand_parent: "아티팩트 · 네트워크"
+nav_order: 2390
+---
+
 # 애니데스크 (AnyDesk)
 
 > 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)

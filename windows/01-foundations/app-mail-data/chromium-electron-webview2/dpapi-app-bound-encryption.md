@@ -1,3 +1,10 @@
+---
+title: "쿠키·비밀번호 암호화"
+parent: "크롬 계열 앱 공통 구조"
+grand_parent: "기반 · 앱·메일 데이터 구조"
+nav_order: 460
+---
+
 # 쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)
 
 > 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 쿠키·비밀번호 암호화

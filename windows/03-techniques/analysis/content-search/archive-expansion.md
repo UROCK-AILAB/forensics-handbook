@@ -1,3 +1,10 @@
+---
+title: "압축·복합 파일 펼치기"
+parent: "파일 내용 검색"
+grand_parent: "기법 · 분석"
+nav_order: 3480
+---
+
 # 압축·복합 파일 펼치기 (Archive Expansion)
 
 ## 한 줄 요약

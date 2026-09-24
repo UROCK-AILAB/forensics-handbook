@@ -1,3 +1,10 @@
+---
+title: "지운 파일·옛 파일 흔적 찾기"
+parent: "윈도 검색 색인 DB"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1300
+---
+
 # 지운 파일·옛 파일 흔적 찾기
 
 > 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 지운 파일·옛 파일 흔적 찾기

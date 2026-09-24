@@ -1,3 +1,10 @@
+---
+title: "Sysmon 개념과 설정 확인"
+parent: "Sysmon 로그"
+grand_parent: "아티팩트 · 이벤트 로그"
+nav_order: 2790
+---
+
 # Sysmon 개념과 설정 확인 (Sysmon Config)
 
 ## 한 줄 요약

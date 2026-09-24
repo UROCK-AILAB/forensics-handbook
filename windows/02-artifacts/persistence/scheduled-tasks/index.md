@@ -1,3 +1,11 @@
+---
+title: "예약 작업"
+parent: "아티팩트 · 자동실행·지속성"
+nav_order: 710
+has_children: true
+has_toc: false
+---
+
 # 예약 작업 (Scheduled Tasks)
 
 ## 한 줄 요약

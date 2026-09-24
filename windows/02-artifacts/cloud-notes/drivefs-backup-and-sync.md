@@ -1,3 +1,9 @@
+---
+title: "구글 드라이브"
+parent: "아티팩트 · 클라우드·노트"
+nav_order: 2220
+---
+
 # 구글 드라이브 (DriveFS·Backup and Sync)
 
 ## 한 줄 요약

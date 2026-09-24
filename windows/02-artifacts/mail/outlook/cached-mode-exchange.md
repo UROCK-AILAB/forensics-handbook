@@ -1,3 +1,10 @@
+---
+title: "PST와 OST 차이"
+parent: "아웃룩"
+grand_parent: "아티팩트 · 메일"
+nav_order: 1880
+---
+
 # PST와 OST 차이 (Cached Mode·Exchange)
 
 > 상위 허브: [아웃룩 (Outlook)](index.md)

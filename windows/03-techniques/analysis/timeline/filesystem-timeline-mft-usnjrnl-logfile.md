@@ -1,3 +1,10 @@
+---
+title: "파일시스템 타임라인"
+parent: "타임라인 작성"
+grand_parent: "기법 · 분석"
+nav_order: 3280
+---
+
 # 파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)
 
 상위 허브: [타임라인 작성 (Timeline)](index.md)

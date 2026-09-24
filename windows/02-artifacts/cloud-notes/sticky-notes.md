@@ -1,3 +1,9 @@
+---
+title: "스티커 메모"
+parent: "아티팩트 · 클라우드·노트"
+nav_order: 2300
+---
+
 # 스티커 메모 (Sticky Notes)
 
 ## 한 줄 요약

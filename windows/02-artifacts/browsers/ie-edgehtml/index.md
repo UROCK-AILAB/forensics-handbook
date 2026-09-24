@@ -1,3 +1,11 @@
+---
+title: "인터넷 익스플로러·옛 엣지"
+parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1790
+has_children: true
+has_toc: false
+---
+
 # 인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)
 
 ## 한 줄 요약

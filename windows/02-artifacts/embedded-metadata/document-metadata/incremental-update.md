@@ -1,3 +1,10 @@
+---
+title: "PDF 증분 저장과 이전 판 복원"
+parent: "문서 메타데이터"
+grand_parent: "아티팩트 · 파일 내장 메타데이터"
+nav_order: 2980
+---
+
 # PDF 증분 저장과 이전 판 복원 (Incremental Update)
 
 > 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)

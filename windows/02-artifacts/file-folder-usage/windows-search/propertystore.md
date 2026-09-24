@@ -1,3 +1,10 @@
+---
+title: "파일 속성 되살리기"
+parent: "윈도 검색 색인 DB"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1280
+---
+
 # 파일 속성 되살리기 (PropertyStore)
 
 > 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 파일 속성 되살리기

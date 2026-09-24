@@ -1,3 +1,9 @@
+---
+title: "포렌식 조사 절차"
+parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3030
+---
+
 # 포렌식 조사 절차 (Investigation Process)
 
 ## 한 줄 요약

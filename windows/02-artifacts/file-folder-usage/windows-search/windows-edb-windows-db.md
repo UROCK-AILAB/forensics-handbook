@@ -1,3 +1,10 @@
+---
+title: "위치와 형식"
+parent: "윈도 검색 색인 DB"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1270
+---
+
 # 위치와 형식 (Windows.edb·Windows.db)
 
 > 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 위치와 형식

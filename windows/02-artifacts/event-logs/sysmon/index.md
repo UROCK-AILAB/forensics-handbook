@@ -1,3 +1,11 @@
+---
+title: "Sysmon 로그"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2780
+has_children: true
+has_toc: false
+---
+
 # Sysmon 로그 (Sysmon)
 
 ## 한 줄 요약

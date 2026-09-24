@@ -1,3 +1,10 @@
+---
+title: "즐겨찾기 (Favorites .url)"
+parent: "인터넷 익스플로러·옛 엣지"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1850
+---
+
 # 즐겨찾기 (Favorites .url)
 
 ## 한 줄 요약

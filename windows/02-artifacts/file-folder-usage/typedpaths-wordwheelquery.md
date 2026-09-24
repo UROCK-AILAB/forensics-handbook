@@ -1,3 +1,9 @@
+---
+title: "탐색기 입력 기록"
+parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1230
+---
+
 # 탐색기 입력 기록 (TypedPaths·WordWheelQuery)
 
 ## 한 줄 요약

@@ -1,3 +1,10 @@
+---
+title: "새 계정을 만들거나 권한을 올렸나"
+parent: "계정 탈취와 측면 이동"
+grand_parent: "시나리오 · 침해 사고"
+nav_order: 3760
+---
+
 # 새 계정을 만들거나 권한을 올렸나 (Account·Privilege)
 
 > 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "가상 머신·클라우드 디스크 확보"
+parent: "증거 획득"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3090
+---
+
 # 가상 머신·클라우드 디스크 확보 (VM·Cloud Disk)
 
 > 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)

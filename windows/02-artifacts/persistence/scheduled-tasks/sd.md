@@ -1,3 +1,10 @@
+---
+title: "숨긴 예약 작업 찾기"
+parent: "예약 작업"
+grand_parent: "아티팩트 · 자동실행·지속성"
+nav_order: 750
+---
+
 # 숨긴 예약 작업 찾기 (SD 값 삭제)
 
 > 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)

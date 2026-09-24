@@ -1,3 +1,11 @@
+---
+title: "오피스 사용 흔적"
+parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1330
+has_children: true
+has_toc: false
+---
+
 # 오피스 사용 흔적 (Microsoft Office)
 
 ## 한 줄 요약

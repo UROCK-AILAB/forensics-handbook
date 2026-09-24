@@ -1,3 +1,9 @@
+---
+title: "섀도 복사본 활용"
+parent: "기법 · 분석"
+nav_order: 3320
+---
+
 # 섀도 복사본 활용 (Volume Shadow Copy Analysis)
 
 > 위치: 분석 기법 > 분석

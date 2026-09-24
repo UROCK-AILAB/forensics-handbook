@@ -1,3 +1,9 @@
+---
+title: "BAM·DAM"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 950
+---
+
 # BAM·DAM (Background Activity Moderator)
 
 ## 한 줄 요약

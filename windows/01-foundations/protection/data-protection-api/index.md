@@ -1,3 +1,11 @@
+---
+title: "DPAPI 구조"
+parent: "기반 · 암호 보호"
+nav_order: 540
+has_children: true
+has_toc: false
+---
+
 # DPAPI 구조 (Data Protection API)
 
 ## 한 줄 요약

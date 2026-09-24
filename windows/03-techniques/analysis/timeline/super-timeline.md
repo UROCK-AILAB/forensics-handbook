@@ -1,3 +1,10 @@
+---
+title: "여러 아티팩트 합친 타임라인"
+parent: "타임라인 작성"
+grand_parent: "기법 · 분석"
+nav_order: 3290
+---
+
 # 여러 아티팩트 합친 타임라인 (Super Timeline)
 
 상위 허브: [타임라인 작성 (Timeline)](index.md)

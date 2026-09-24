@@ -1,3 +1,9 @@
+---
+title: "MAPI 속성"
+parent: "기반 · 앱·메일 데이터 구조"
+nav_order: 490
+---
+
 # MAPI 속성 (MAPI Property)
 
 ## 한 줄 요약

@@ -1,3 +1,10 @@
+---
+title: "코드 주입·숨긴 프로세스 탐지"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3210
+---
+
 # 코드 주입·숨긴 프로세스 탐지 (Injection·Rootkit)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

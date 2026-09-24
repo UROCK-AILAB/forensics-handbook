@@ -1,3 +1,10 @@
+---
+title: "파일·페이지 구조"
+parent: "SQLite 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 270
+---
+
 # 파일·페이지 구조 (B-tree·Record Format)
 
 상위 허브: [SQLite 데이터베이스 (SQLite)](index.md)

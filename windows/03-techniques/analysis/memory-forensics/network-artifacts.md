@@ -1,3 +1,10 @@
+---
+title: "메모리 속 네트워크 흔적"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3200
+---
+
 # 메모리 속 네트워크 흔적 (Network Artifacts)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

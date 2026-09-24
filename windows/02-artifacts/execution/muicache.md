@@ -1,3 +1,9 @@
+---
+title: "MUICache"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 1040
+---
+
 # MUICache (MUICache)
 
 ## 한 줄 요약

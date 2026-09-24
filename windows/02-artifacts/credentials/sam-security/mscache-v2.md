@@ -1,3 +1,10 @@
+---
+title: "도메인 캐시 자격증명"
+parent: "레지스트리 속 비밀번호 정보"
+grand_parent: "아티팩트 · 자격증명"
+nav_order: 2900
+---
+
 # 도메인 캐시 자격증명 (MSCache v2)
 
 > 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > 도메인 캐시 자격증명

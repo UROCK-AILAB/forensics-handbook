@@ -1,3 +1,10 @@
+---
+title: "셸백 해석 함정"
+parent: "셸백"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1200
+---
+
 # 셸백 해석 함정 (Pitfalls)
 
 ## 한 줄 요약

@@ -1,3 +1,11 @@
+---
+title: "원격 데스크톱 이벤트"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2570
+has_children: true
+has_toc: false
+---
+
 # 원격 데스크톱 이벤트 (RDP Event Logs)
 
 ## 한 줄 요약

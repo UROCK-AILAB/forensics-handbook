@@ -1,3 +1,10 @@
+---
+title: "디스크 이미징"
+parent: "증거 획득"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3050
+---
+
 # 디스크 이미징 (Disk Imaging)
 
 > 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)

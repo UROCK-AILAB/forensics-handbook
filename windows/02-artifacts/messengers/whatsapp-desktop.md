@@ -1,3 +1,9 @@
+---
+title: "왓츠앱 데스크톱"
+parent: "아티팩트 · 메신저"
+nav_order: 2040
+---
+
 # 왓츠앱 데스크톱 (WhatsApp Desktop)
 
 > 위치: 아티팩트 사전 > 메신저

@@ -1,3 +1,10 @@
+---
+title: "파일 시각 네 가지와 변화 규칙"
+parent: "타임라인 작성"
+grand_parent: "기법 · 분석"
+nav_order: 3270
+---
+
 # 파일 시각 네 가지와 변화 규칙 (MACB·Timestamp Rules)
 
 상위 허브: [타임라인 작성 (Timeline)](index.md)

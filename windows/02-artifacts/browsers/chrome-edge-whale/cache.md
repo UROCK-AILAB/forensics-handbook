@@ -1,3 +1,10 @@
+---
+title: "캐시 (Cache)"
+parent: "크롬 계열 브라우저"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1620
+---
+
 # 캐시 (Cache)
 
 > 상위 허브: [크롬 계열 브라우저 (Chrome·Edge·Whale 등)](index.md)

@@ -1,3 +1,11 @@
+---
+title: "USB 저장장치 흔적"
+parent: "아티팩트 · 외부 장치"
+nav_order: 1470
+has_children: true
+has_toc: false
+---
+
 # USB 저장장치 흔적 (USB Storage Artifacts)
 
 ## 한 줄 요약

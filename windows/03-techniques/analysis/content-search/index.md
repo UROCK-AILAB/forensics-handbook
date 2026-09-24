@@ -1,3 +1,11 @@
+---
+title: "파일 내용 검색"
+parent: "기법 · 분석"
+nav_order: 3460
+has_children: true
+has_toc: false
+---
+
 # 파일 내용 검색 (Content Search)
 
 ## 한 줄 요약

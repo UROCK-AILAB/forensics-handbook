@@ -1,3 +1,10 @@
+---
+title: "구버전 실행 기록"
+parent: "AmCache"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 920
+---
+
 # 구버전 실행 기록 (RecentFileCache.bcf)
 
 > 위치: [AmCache (Amcache.hve)](index.md) > 구버전 실행 기록

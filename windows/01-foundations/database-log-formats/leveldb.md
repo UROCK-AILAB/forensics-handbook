@@ -1,3 +1,9 @@
+---
+title: "LevelDB 저장소"
+parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 310
+---
+
 # LevelDB 저장소 (LevelDB)
 
 > 위치: 기반 구조 > 데이터베이스·로그 형식

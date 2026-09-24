@@ -1,3 +1,11 @@
+---
+title: "라이브 응답"
+parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3110
+has_children: true
+has_toc: false
+---
+
 # 라이브 응답 (Live Response)
 
 ## 한 줄 요약

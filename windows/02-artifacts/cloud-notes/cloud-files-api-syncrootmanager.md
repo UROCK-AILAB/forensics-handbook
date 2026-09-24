@@ -1,3 +1,9 @@
+---
+title: "클라우드 동기화 공통 구조"
+parent: "아티팩트 · 클라우드·노트"
+nav_order: 2160
+---
+
 # 클라우드 동기화 공통 구조 (Cloud Files API·SyncRootManager)
 
 ## 한 줄 요약

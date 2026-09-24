@@ -1,3 +1,9 @@
+---
+title: "해시셋 대조와 유사 해시"
+parent: "기법 · 분석"
+nav_order: 3520
+---
+
 # 해시셋 대조와 유사 해시 (Hash Set·Fuzzy Hash)
 
 > 위치: 분석 기법 > 분석

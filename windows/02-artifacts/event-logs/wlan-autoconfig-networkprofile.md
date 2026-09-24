@@ -1,3 +1,9 @@
+---
+title: "네트워크 연결 이벤트"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2690
+---
+
 # 네트워크 연결 이벤트 (WLAN-AutoConfig·NetworkProfile)
 
 ## 한 줄 요약

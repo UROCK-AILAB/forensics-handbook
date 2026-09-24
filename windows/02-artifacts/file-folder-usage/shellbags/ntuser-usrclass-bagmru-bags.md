@@ -1,3 +1,10 @@
+---
+title: "저장 위치와 구조"
+parent: "셸백"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1160
+---
+
 # 저장 위치와 구조 (NTUSER·UsrClass·BagMRU·Bags)
 
 ## 한 줄 요약

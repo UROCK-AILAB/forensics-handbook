@@ -1,3 +1,10 @@
+---
+title: "확장 프로그램 (Extensions)"
+parent: "크롬 계열 브라우저"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1680
+---
+
 # 확장 프로그램 (Extensions)
 
 ## 한 줄 요약

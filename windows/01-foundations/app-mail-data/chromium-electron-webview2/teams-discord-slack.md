@@ -1,3 +1,10 @@
+---
+title: "Electron·WebView2 앱 데이터 위치"
+parent: "크롬 계열 앱 공통 구조"
+grand_parent: "기반 · 앱·메일 데이터 구조"
+nav_order: 440
+---
+
 # Electron·WebView2 앱 데이터 위치 (Teams·Discord·Slack 등)
 
 > 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > Electron·WebView2 앱 데이터 위치

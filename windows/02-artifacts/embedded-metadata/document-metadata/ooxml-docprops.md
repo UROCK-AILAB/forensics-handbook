@@ -1,3 +1,10 @@
+---
+title: "오피스 문서 속성"
+parent: "문서 메타데이터"
+grand_parent: "아티팩트 · 파일 내장 메타데이터"
+nav_order: 2940
+---
+
 # 오피스 문서 속성 (OOXML docProps)
 
 > 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "경로 해시로 실행 위치 구분하기"
+parent: "프리페치"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 830
+---
+
 # 경로 해시로 실행 위치 구분하기 (Path Hash)
 
 > 상위 허브: [프리페치 (Prefetch)](index.md)

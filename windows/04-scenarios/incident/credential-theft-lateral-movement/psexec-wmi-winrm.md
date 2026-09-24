@@ -1,3 +1,10 @@
+---
+title: "다른 PC 에서 원격 실행했나"
+parent: "계정 탈취와 측면 이동"
+grand_parent: "시나리오 · 침해 사고"
+nav_order: 3750
+---
+
 # 다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)
 
 > 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)

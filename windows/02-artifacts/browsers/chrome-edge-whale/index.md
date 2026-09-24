@@ -1,3 +1,11 @@
+---
+title: "크롬 계열 브라우저"
+parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1590
+has_children: true
+has_toc: false
+---
+
 # 크롬 계열 브라우저 (Chrome·Edge·Whale 등)
 
 ## 한 줄 요약

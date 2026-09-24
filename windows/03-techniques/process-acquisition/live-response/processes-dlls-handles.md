@@ -1,3 +1,10 @@
+---
+title: "프로세스·DLL·핸들 수집"
+parent: "라이브 응답"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3130
+---
+
 # 프로세스·DLL·핸들 수집 (Processes·DLLs·Handles)
 
 ## 한 줄 요약

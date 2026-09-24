@@ -1,3 +1,9 @@
+---
+title: "NTFS 트랜잭션 로그"
+parent: "아티팩트 · 파일시스템"
+nav_order: 1430
+---
+
 # NTFS 트랜잭션 로그 ($LogFile)
 
 ## 한 줄 요약

@@ -1,3 +1,10 @@
+---
+title: "로그온 세션·클립보드·화면 수집"
+parent: "라이브 응답"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3150
+---
+
 # 로그온 세션·클립보드·화면 수집 (Sessions·Clipboard·Screen)
 
 ## 한 줄 요약

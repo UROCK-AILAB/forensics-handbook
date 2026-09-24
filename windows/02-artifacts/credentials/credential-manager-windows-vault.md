@@ -1,3 +1,9 @@
+---
+title: "자격 증명 관리자와 볼트"
+parent: "아티팩트 · 자격증명"
+nav_order: 2850
+---
+
 # 자격 증명 관리자와 볼트 (Credential Manager·Windows Vault)
 
 ## 한 줄 요약

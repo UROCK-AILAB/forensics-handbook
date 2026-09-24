@@ -1,3 +1,10 @@
+---
+title: "계정·로그인 흔적"
+parent: "카카오톡 PC"
+grand_parent: "아티팩트 · 메신저"
+nav_order: 2020
+---
+
 # 계정·로그인 흔적 (Account·Login)
 
 > 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 계정·로그인 흔적

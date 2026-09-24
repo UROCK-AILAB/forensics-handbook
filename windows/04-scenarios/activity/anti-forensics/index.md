@@ -1,3 +1,11 @@
+---
+title: "증거를 없애려 했나"
+parent: "시나리오 · 행위 재구성"
+nav_order: 3880
+has_children: true
+has_toc: false
+---
+
 # 증거를 없애려 했나 (Anti-Forensics)
 
 ## 한 줄 요약

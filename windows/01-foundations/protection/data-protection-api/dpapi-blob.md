@@ -1,3 +1,10 @@
+---
+title: "DPAPI 블롭 구조"
+parent: "DPAPI 구조"
+grand_parent: "기반 · 암호 보호"
+nav_order: 560
+---
+
 # DPAPI 블롭 구조 (DPAPI Blob)
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > DPAPI Blob

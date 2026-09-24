@@ -1,3 +1,9 @@
+---
+title: "시스템 기본 정보"
+parent: "아티팩트 · 시스템·계정"
+nav_order: 620
+---
+
 # 시스템 기본 정보 (OS Version·Computer Name·Install Date·Shutdown Time)
 
 ## 한 줄 요약

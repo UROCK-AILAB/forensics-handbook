@@ -1,3 +1,10 @@
+---
+title: "드라이브 문자 매핑"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1510
+---
+
 # 드라이브 문자 매핑 (MountedDevices)
 
 ## 한 줄 요약

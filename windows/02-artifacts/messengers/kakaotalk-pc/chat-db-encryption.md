@@ -1,3 +1,10 @@
+---
+title: "대화 DB 암호화와 버전별 차이"
+parent: "카카오톡 PC"
+grand_parent: "아티팩트 · 메신저"
+nav_order: 2000
+---
+
 # 대화 DB 암호화와 버전별 차이 (Chat DB Encryption)
 
 > 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 대화 DB 암호화와 버전별 차이

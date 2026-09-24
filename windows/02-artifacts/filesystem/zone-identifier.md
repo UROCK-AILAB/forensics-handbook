@@ -1,3 +1,9 @@
+---
+title: "다운로드 출처 표시"
+parent: "아티팩트 · 파일시스템"
+nav_order: 1460
+---
+
 # 다운로드 출처 표시 (Zone.Identifier)
 
 ## 한 줄 요약

@@ -1,3 +1,10 @@
+---
+title: "옛 작업 파일"
+parent: "예약 작업"
+grand_parent: "아티팩트 · 자동실행·지속성"
+nav_order: 740
+---
+
 # 옛 작업 파일 (.job·at)
 
 > 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)

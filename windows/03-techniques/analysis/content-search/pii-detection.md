@@ -1,3 +1,10 @@
+---
+title: "개인정보 탐지"
+parent: "파일 내용 검색"
+grand_parent: "기법 · 분석"
+nav_order: 3510
+---
+
 # 개인정보 탐지 (PII Detection)
 
 ## 한 줄 요약

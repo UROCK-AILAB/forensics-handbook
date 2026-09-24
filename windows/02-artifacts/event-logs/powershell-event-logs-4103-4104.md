@@ -1,3 +1,9 @@
+---
+title: "PowerShell 실행 기록"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2620
+---
+
 # PowerShell 실행 기록 (PowerShell Event Logs: 4103·4104)
 
 ## 한 줄 요약

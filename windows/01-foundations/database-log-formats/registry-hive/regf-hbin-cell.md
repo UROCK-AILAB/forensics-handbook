@@ -1,3 +1,10 @@
+---
+title: "하이브 내부 구조"
+parent: "레지스트리 하이브 구조"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 150
+---
+
 # 하이브 내부 구조 (regf·hbin·Cell)
 
 상위 허브: [레지스트리 하이브 구조 (Registry Hive)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "즐겨찾기 (Bookmarks)"
+parent: "크롬 계열 브라우저"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1670
+---
+
 # 즐겨찾기 (Bookmarks)
 
 ## 한 줄 요약

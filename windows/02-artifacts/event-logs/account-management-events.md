@@ -1,3 +1,9 @@
+---
+title: "계정 생성·변경"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2670
+---
+
 # 계정 생성·변경 (Account Management Events)
 
 ## 한 줄 요약

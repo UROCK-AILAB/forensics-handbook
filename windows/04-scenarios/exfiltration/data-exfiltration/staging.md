@@ -1,3 +1,10 @@
+---
+title: "퇴사 전 자료를 모으고 압축했나"
+parent: "자료를 밖으로 빼돌렸나"
+grand_parent: "시나리오 · 정보 유출"
+nav_order: 3660
+---
+
 # 퇴사 전 자료를 모으고 압축했나 (Staging)
 
 > 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)

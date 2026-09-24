@@ -1,3 +1,10 @@
+---
+title: "작업 캐시 레지스트리"
+parent: "예약 작업"
+grand_parent: "아티팩트 · 자동실행·지속성"
+nav_order: 730
+---
+
 # 작업 캐시 레지스트리 (TaskCache Tree·Tasks)
 
 > 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)

@@ -1,3 +1,9 @@
+---
+title: "시각 값 형식"
+parent: "기반 · 값 읽는 법"
+nav_order: 500
+---
+
 # 시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)
 
 ## 한 줄 요약

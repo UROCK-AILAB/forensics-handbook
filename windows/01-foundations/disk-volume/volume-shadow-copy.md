@@ -1,3 +1,9 @@
+---
+title: "볼륨 섀도 복사본 구조"
+parent: "기반 · 디스크·볼륨"
+nav_order: 120
+---
+
 # 볼륨 섀도 복사본 구조 (Volume Shadow Copy)
 
 > 위치: 기반 구조 > 디스크·볼륨

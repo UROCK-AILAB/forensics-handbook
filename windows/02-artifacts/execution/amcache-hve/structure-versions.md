@@ -1,3 +1,10 @@
+---
+title: "구조와 버전별 차이"
+parent: "AmCache"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 860
+---
+
 # 구조와 버전별 차이 (Structure·Versions)
 
 ## 한 줄 요약

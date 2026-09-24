@@ -1,3 +1,10 @@
+---
+title: "앱별 자원 사용"
+parent: "SRUM"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 990
+---
+
 # 앱별 자원 사용 (Application Resource Usage)
 
 ## 한 줄 요약

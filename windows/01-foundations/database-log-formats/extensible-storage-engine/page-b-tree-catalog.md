@@ -1,3 +1,10 @@
+---
+title: "파일 구조"
+parent: "ESE 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 220
+---
+
 # 파일 구조 (Page·B+Tree·Catalog)
 
 ## 한 줄 요약

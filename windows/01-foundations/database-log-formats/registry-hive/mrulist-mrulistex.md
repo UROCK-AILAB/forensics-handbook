@@ -1,3 +1,10 @@
+---
+title: "MRU 목록 읽는 법"
+parent: "레지스트리 하이브 구조"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 200
+---
+
 # MRU 목록 읽는 법 (MRUList·MRUListEx)
 
 > 위치: [레지스트리 하이브 구조](index.md) > MRU 목록 읽는 법

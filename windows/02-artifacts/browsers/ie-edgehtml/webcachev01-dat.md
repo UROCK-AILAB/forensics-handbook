@@ -1,3 +1,10 @@
+---
+title: "웹캐시 DB"
+parent: "인터넷 익스플로러·옛 엣지"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1800
+---
+
 # 웹캐시 DB (WebCacheV01.dat)
 
 ## 한 줄 요약

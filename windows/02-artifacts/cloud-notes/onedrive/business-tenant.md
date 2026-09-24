@@ -1,3 +1,10 @@
+---
+title: "회사용 OneDrive와 SharePoint 동기화"
+parent: "원드라이브"
+grand_parent: "아티팩트 · 클라우드·노트"
+nav_order: 2210
+---
+
 # 회사용 OneDrive와 SharePoint 동기화 (Business Tenant)
 
 ## 한 줄 요약

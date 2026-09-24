@@ -1,3 +1,9 @@
+---
+title: "WMI 영구 이벤트 구독"
+parent: "아티팩트 · 자동실행·지속성"
+nav_order: 760
+---
+
 # WMI 영구 이벤트 구독 (WMI Event Subscription)
 
 ## 한 줄 요약

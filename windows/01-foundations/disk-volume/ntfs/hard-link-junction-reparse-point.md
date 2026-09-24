@@ -1,3 +1,10 @@
+---
+title: "링크와 리파스 포인트"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 90
+---
+
 # 링크와 리파스 포인트 (Hard Link·Junction·Reparse Point)
 
 상위: [NTFS 구조 (NTFS)](index.md)

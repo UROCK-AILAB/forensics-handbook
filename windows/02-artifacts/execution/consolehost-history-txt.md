@@ -1,3 +1,9 @@
+---
+title: "PowerShell 명령 기록"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 1070
+---
+
 # PowerShell 명령 기록 (ConsoleHost_history.txt)
 
 ## 한 줄 요약

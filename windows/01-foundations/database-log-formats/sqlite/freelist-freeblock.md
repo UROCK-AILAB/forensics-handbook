@@ -1,3 +1,10 @@
+---
+title: "파일 안에 남은 지운 레코드 (Freelist·Freeblock)"
+parent: "SQLite 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 290
+---
+
 # 파일 안에 남은 지운 레코드 (Freelist·Freeblock)
 
 ## 한 줄 요약

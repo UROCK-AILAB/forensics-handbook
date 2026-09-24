@@ -1,3 +1,10 @@
+---
+title: "장치 설치 로그"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1530
+---
+
 # 장치 설치 로그 (setupapi.dev.log)
 
 ## 한 줄 요약

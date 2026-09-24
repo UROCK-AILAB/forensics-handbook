@@ -1,3 +1,9 @@
+---
+title: "윈도 알림 기록"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 1100
+---
+
 # 윈도 알림 기록 (wpndatabase.db)
 
 ## 한 줄 요약

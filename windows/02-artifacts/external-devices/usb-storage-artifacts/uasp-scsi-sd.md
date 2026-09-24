@@ -1,3 +1,10 @@
+---
+title: "USBSTOR 에 안 남는 장치"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1550
+---
+
 # USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)
 
 ## 한 줄 요약

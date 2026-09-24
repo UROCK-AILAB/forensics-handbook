@@ -1,3 +1,10 @@
+---
+title: "자동완성 목록"
+parent: "아웃룩"
+grand_parent: "아티팩트 · 메일"
+nav_order: 1920
+---
+
 # 자동완성 목록 (NK2·Stream_Autocomplete)
 
 > 상위 허브: [아웃룩 (Outlook)](index.md)

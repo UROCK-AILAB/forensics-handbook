@@ -1,3 +1,10 @@
+---
+title: "프로세스와 DLL 분석"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3190
+---
+
 # 프로세스와 DLL 분석 (Process Analysis)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "로그온 유형 해석"
+parent: "로그온·로그오프"
+grand_parent: "아티팩트 · 이벤트 로그"
+nav_order: 2490
+---
+
 # 로그온 유형 해석 (Logon Type)
 
 ## 한 줄 요약

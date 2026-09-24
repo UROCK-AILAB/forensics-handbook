@@ -1,3 +1,9 @@
+---
+title: "열기·저장 대화상자 기록"
+parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1220
+---
+
 # 열기·저장 대화상자 기록 (ComDlg32: OpenSavePidlMRU·LastVisitedPidlMRU·CIDSizeMRU)
 
 ## 한 줄 요약

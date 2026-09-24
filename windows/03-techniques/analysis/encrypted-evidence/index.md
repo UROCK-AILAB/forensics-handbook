@@ -1,3 +1,11 @@
+---
+title: "암호화 증거 다루기"
+parent: "기법 · 분석"
+nav_order: 3390
+has_children: true
+has_toc: false
+---
+
 # 암호화 증거 다루기 (Encrypted Evidence)
 
 ## 한 줄 요약

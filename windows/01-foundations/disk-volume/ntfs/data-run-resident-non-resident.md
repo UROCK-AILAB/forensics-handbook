@@ -1,3 +1,10 @@
+---
+title: "데이터 런과 상주·비상주 데이터"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 50
+---
+
 # 데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)
 
 > 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](index.md)

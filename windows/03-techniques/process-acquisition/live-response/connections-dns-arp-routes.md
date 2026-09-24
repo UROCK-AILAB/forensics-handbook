@@ -1,3 +1,10 @@
+---
+title: "네트워크 상태 수집"
+parent: "라이브 응답"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3140
+---
+
 # 네트워크 상태 수집 (Connections·DNS·ARP·Routes)
 
 ## 한 줄 요약

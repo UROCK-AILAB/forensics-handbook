@@ -1,3 +1,10 @@
+---
+title: "SSD TRIM과 복구 한계"
+parent: "삭제 데이터 복구"
+grand_parent: "기법 · 분석"
+nav_order: 3380
+---
+
 # SSD TRIM과 복구 한계 (SSD·TRIM)
 
 ## 한 줄 요약

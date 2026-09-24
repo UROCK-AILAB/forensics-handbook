@@ -1,3 +1,9 @@
+---
+title: "Windows 메일 앱"
+parent: "아티팩트 · 메일"
+nav_order: 1970
+---
+
 # Windows 메일 앱 (HxStore)
 
 > 위치: 아티팩트 사전 > 메일

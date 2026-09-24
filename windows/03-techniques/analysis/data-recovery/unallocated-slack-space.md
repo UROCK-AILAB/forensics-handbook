@@ -1,3 +1,10 @@
+---
+title: "비할당 영역과 슬랙"
+parent: "삭제 데이터 복구"
+grand_parent: "기법 · 분석"
+nav_order: 3350
+---
+
 # 비할당 영역과 슬랙 (Unallocated·Slack Space)
 
 ## 한 줄 요약

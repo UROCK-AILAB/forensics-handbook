@@ -1,3 +1,9 @@
+---
+title: "UserAssist"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 960
+---
+
 # UserAssist (UserAssist)
 
 ## 한 줄 요약

@@ -1,3 +1,10 @@
+---
+title: "자동 복구·저장 안 한 문서"
+parent: "오피스 사용 흔적"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1380
+---
+
 # 자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)
 
 > 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)

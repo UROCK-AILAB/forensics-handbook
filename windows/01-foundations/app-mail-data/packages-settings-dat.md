@@ -1,3 +1,9 @@
+---
+title: "UWP 앱 데이터 구조"
+parent: "기반 · 앱·메일 데이터 구조"
+nav_order: 470
+---
+
 # UWP 앱 데이터 구조 (Packages 폴더·settings.dat)
 
 ## 한 줄 요약

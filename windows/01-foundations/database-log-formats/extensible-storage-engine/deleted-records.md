@@ -1,3 +1,10 @@
+---
+title: "파일 안에 남은 지운 레코드 (Deleted Records)"
+parent: "ESE 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 250
+---
+
 # 파일 안에 남은 지운 레코드 (Deleted Records)
 
 ESE 데이터베이스에서 지운 행은 곧바로 사라지지 않고, 지움 표시, 페이지 안 빈 공간, B-트리에서 빠진 페이지의 모습으로 파일 안에 한동안 남습니다.

@@ -1,3 +1,11 @@
+---
+title: "원격 제어 프로그램"
+parent: "아티팩트 · 네트워크"
+nav_order: 2370
+has_children: true
+has_toc: false
+---
+
 # 원격 제어 프로그램 (Remote Access Tools)
 
 ## 한 줄 요약

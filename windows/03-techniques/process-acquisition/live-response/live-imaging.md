@@ -1,3 +1,10 @@
+---
+title: "실행 중 시스템 이미징"
+parent: "라이브 응답"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3160
+---
+
 # 실행 중 시스템 이미징 (Live Imaging)
 
 ## 한 줄 요약

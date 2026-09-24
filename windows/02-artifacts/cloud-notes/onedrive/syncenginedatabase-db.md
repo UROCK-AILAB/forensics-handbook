@@ -1,3 +1,10 @@
+---
+title: "동기화 DB"
+parent: "원드라이브"
+grand_parent: "아티팩트 · 클라우드·노트"
+nav_order: 2190
+---
+
 # 동기화 DB (SyncEngineDatabase.db)
 
 ## 한 줄 요약

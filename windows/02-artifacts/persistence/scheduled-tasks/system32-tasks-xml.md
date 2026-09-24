@@ -1,3 +1,10 @@
+---
+title: "작업 정의 파일"
+parent: "예약 작업"
+grand_parent: "아티팩트 · 자동실행·지속성"
+nav_order: 720
+---
+
 # 작업 정의 파일 (System32\Tasks XML)
 
 > 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)

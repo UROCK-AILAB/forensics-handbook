@@ -1,3 +1,10 @@
+---
+title: "본문 추출과 글자 인식"
+parent: "파일 내용 검색"
+grand_parent: "기법 · 분석"
+nav_order: 3490
+---
+
 # 본문 추출과 글자 인식 (Text Extraction·OCR)
 
 ## 한 줄 요약

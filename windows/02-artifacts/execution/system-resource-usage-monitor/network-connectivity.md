@@ -1,3 +1,10 @@
+---
+title: "네트워크 연결 기록"
+parent: "SRUM"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 1010
+---
+
 # 네트워크 연결 기록 (Network Connectivity)
 
 > 상위 허브: [SRUM (System Resource Usage Monitor)](index.md)

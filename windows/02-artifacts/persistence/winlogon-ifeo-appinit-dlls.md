@@ -1,3 +1,9 @@
+---
+title: "기타 자동실행 위치"
+parent: "아티팩트 · 자동실행·지속성"
+nav_order: 780
+---
+
 # 기타 자동실행 위치 (Winlogon·IFEO·AppInit_DLLs)
 
 ## 한 줄 요약

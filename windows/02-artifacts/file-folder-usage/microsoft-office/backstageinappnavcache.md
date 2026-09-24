@@ -1,3 +1,10 @@
+---
+title: "백스테이지 캐시"
+parent: "오피스 사용 흔적"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1370
+---
+
 # 백스테이지 캐시 (BackstageInAppNavCache)
 
 > 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)

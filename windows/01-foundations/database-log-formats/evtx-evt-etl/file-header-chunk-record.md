@@ -1,3 +1,10 @@
+---
+title: "EVTX 파일 구조"
+parent: "이벤트 로그 형식"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 330
+---
+
 # EVTX 파일 구조 (File Header·Chunk·Record)
 
 ## 한 줄 요약

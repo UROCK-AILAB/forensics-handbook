@@ -1,3 +1,10 @@
+---
+title: "옛 기록 파일"
+parent: "인터넷 익스플로러·옛 엣지"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1810
+---
+
 # 옛 기록 파일 (index.dat)
 
 ## 한 줄 요약

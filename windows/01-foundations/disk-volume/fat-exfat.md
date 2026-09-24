@@ -1,3 +1,9 @@
+---
+title: "FAT·exFAT 구조"
+parent: "기반 · 디스크·볼륨"
+nav_order: 110
+---
+
 # FAT·exFAT 구조 (FAT·exFAT)
 
 > 위치: 기반 구조 > 디스크·볼륨

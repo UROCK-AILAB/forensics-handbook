@@ -1,3 +1,11 @@
+---
+title: "카카오톡 PC"
+parent: "아티팩트 · 메신저"
+nav_order: 1980
+has_children: true
+has_toc: false
+---
+
 # 카카오톡 PC (KakaoTalk PC)
 
 ## 한 줄 요약

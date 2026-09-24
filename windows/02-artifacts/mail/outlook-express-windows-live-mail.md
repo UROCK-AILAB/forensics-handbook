@@ -1,3 +1,9 @@
+---
+title: "옛 윈도 메일 프로그램"
+parent: "아티팩트 · 메일"
+nav_order: 1960
+---
+
 # 옛 윈도 메일 프로그램 (Outlook Express·Windows Live Mail)
 
 > 위치: 아티팩트 사전 > 메일

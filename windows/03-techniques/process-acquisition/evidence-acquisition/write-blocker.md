@@ -1,3 +1,10 @@
+---
+title: "쓰기 방지"
+parent: "증거 획득"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3060
+---
+
 # 쓰기 방지 (Write Blocker)
 
 > 상위 허브: [증거 획득 (Evidence Acquisition)](index.md)

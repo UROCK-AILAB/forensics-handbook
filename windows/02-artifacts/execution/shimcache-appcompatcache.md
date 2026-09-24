@@ -1,3 +1,9 @@
+---
+title: "심캐시"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 940
+---
+
 # 심캐시 (ShimCache·AppCompatCache)
 
 ## 한 줄 요약

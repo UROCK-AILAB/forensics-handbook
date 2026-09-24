@@ -1,3 +1,10 @@
+---
+title: "최대 절전 파일"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3230
+---
+
 # 최대 절전 파일 (hiberfil.sys)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "도메인 백업 키"
+parent: "DPAPI 구조"
+grand_parent: "기반 · 암호 보호"
+nav_order: 600
+---
+
 # 도메인 백업 키 (Domain Backup Key)
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > 도메인 백업 키

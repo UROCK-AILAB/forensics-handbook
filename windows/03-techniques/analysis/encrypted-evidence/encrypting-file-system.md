@@ -1,3 +1,10 @@
+---
+title: "EFS 암호화 파일"
+parent: "암호화 증거 다루기"
+grand_parent: "기법 · 분석"
+nav_order: 3420
+---
+
 # EFS 암호화 파일 (Encrypting File System)
 
 > 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > EFS 암호화 파일

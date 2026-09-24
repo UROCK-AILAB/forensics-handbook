@@ -1,3 +1,10 @@
+---
+title: "휴대용 장치·볼륨 이름 기록"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1540
+---
+
 # 휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)
 
 ## 한 줄 요약

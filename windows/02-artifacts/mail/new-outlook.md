@@ -1,3 +1,9 @@
+---
+title: "새 Outlook"
+parent: "아티팩트 · 메일"
+nav_order: 1940
+---
+
 # 새 Outlook (New Outlook)
 
 > 위치: 아티팩트 사전 > 메일

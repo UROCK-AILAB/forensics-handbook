@@ -1,3 +1,10 @@
+---
+title: "장치 항목"
+parent: "AmCache"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 910
+---
+
 # 장치 항목 (InventoryDevicePnp)
 
 ## 한 줄 요약

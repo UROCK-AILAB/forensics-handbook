@@ -1,3 +1,10 @@
+---
+title: "DPAPI 동작 원리"
+parent: "DPAPI 구조"
+grand_parent: "기반 · 암호 보호"
+nav_order: 550
+---
+
 # DPAPI 동작 원리 (Protect·Unprotect)
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > Protect·Unprotect 동작

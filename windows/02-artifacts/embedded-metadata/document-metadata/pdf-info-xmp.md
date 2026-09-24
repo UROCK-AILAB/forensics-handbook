@@ -1,3 +1,10 @@
+---
+title: "PDF 정보 사전과 XMP"
+parent: "문서 메타데이터"
+grand_parent: "아티팩트 · 파일 내장 메타데이터"
+nav_order: 2970
+---
+
 # PDF 정보 사전과 XMP (PDF Info·XMP)
 
 > 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)

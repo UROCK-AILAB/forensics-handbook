@@ -1,3 +1,10 @@
+---
+title: "두 벌의 시각"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 60
+---
+
 # 두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)
 
 상위 허브: [NTFS 구조 (NTFS)](index.md)

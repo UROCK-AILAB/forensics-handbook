@@ -1,3 +1,10 @@
+---
+title: "설치 프로그램 항목"
+parent: "AmCache"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 880
+---
+
 # 설치 프로그램 항목 (InventoryApplication)
 
 ## 한 줄 요약

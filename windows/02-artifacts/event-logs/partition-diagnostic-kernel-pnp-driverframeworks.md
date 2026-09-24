@@ -1,3 +1,9 @@
+---
+title: "외부 장치 연결 이벤트"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2700
+---
+
 # 외부 장치 연결 이벤트 (Partition/Diagnostic·Kernel-PnP·DriverFrameworks)
 
 ## 한 줄 요약

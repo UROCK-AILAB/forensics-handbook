@@ -1,3 +1,11 @@
+---
+title: "이벤트 로그 형식"
+parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 320
+has_children: true
+has_toc: false
+---
+
 # 이벤트 로그 형식 (EVTX·EVT·ETL)
 
 ## 한 줄 요약

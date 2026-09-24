@@ -1,3 +1,10 @@
+---
+title: "실행 횟수와 실행 시각 읽기"
+parent: "프리페치"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 810
+---
+
 # 실행 횟수와 실행 시각 읽기 (Run Count·Last Run Times)
 
 ## 한 줄 요약

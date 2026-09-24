@@ -1,3 +1,10 @@
+---
+title: "스마트폰으로 옮겼나"
+parent: "자료를 밖으로 빼돌렸나"
+grand_parent: "시나리오 · 정보 유출"
+nav_order: 3600
+---
+
 # 스마트폰으로 옮겼나 (MTP·Phone Link)
 
 > 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)

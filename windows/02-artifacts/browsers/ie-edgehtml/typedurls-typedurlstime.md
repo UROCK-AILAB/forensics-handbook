@@ -1,3 +1,10 @@
+---
+title: "주소창 입력 주소"
+parent: "인터넷 익스플로러·옛 엣지"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1820
+---
+
 # 주소창 입력 주소 (TypedURLs·TypedURLsTime)
 
 ## 한 줄 요약

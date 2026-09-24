@@ -1,3 +1,10 @@
+---
+title: "비밀번호 대입 공격이 있었나"
+parent: "계정 탈취와 측면 이동"
+grand_parent: "시나리오 · 침해 사고"
+nav_order: 3730
+---
+
 # 비밀번호 대입 공격이 있었나 (Brute Force)
 
 > 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)

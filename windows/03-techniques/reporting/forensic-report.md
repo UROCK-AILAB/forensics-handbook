@@ -1,3 +1,9 @@
+---
+title: "분석 보고서 작성"
+parent: "기법 · 보고"
+nav_order: 3570
+---
+
 # 분석 보고서 작성 (Forensic Report)
 
 ## 한 줄 요약

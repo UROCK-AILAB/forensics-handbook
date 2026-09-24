@@ -1,3 +1,10 @@
+---
+title: "대체 데이터 스트림"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 70
+---
+
 # 대체 데이터 스트림 (ADS)
 
 ## 한 줄 요약

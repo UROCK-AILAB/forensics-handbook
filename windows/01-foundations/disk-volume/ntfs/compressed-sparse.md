@@ -1,3 +1,10 @@
+---
+title: "압축·희소 파일"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 80
+---
+
 # 압축·희소 파일 (Compressed·Sparse)
 
 ## 한 줄 요약

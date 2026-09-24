@@ -1,3 +1,11 @@
+---
+title: "레지스트리 속 비밀번호 정보"
+parent: "아티팩트 · 자격증명"
+nav_order: 2860
+has_children: true
+has_toc: false
+---
+
 # 레지스트리 속 비밀번호 정보 (SAM·SECURITY)
 
 ## 한 줄 요약

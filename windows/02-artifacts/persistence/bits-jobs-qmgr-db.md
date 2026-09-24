@@ -1,3 +1,9 @@
+---
+title: "BITS 전송 작업"
+parent: "아티팩트 · 자동실행·지속성"
+nav_order: 770
+---
+
 # BITS 전송 작업 (BITS Jobs·qmgr.db)
 
 ## 한 줄 요약

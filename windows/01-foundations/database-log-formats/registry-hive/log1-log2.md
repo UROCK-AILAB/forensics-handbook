@@ -1,3 +1,10 @@
+---
+title: "트랜잭션 로그와 반영 안 된 변경"
+parent: "레지스트리 하이브 구조"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 170
+---
+
 # 트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)
 
 > 위치: [레지스트리 하이브 구조 (Registry Hive)](index.md) > 트랜잭션 로그

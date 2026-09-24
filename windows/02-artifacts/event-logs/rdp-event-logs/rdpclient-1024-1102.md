@@ -1,3 +1,10 @@
+---
+title: "나간 접속"
+parent: "원격 데스크톱 이벤트"
+grand_parent: "아티팩트 · 이벤트 로그"
+nav_order: 2600
+---
+
 # 나간 접속 (RDPClient 1024·1102)
 
 ## 한 줄 요약

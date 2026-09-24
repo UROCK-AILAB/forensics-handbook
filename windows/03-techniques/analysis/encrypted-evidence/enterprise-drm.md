@@ -1,3 +1,10 @@
+---
+title: "DRM 문서 판별"
+parent: "암호화 증거 다루기"
+grand_parent: "기법 · 분석"
+nav_order: 3440
+---
+
 # DRM 문서 판별 (Enterprise DRM)
 
 > 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > DRM 문서 판별

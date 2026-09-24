@@ -1,3 +1,10 @@
+---
+title: "자동완성·폼 기록"
+parent: "크롬 계열 브라우저"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1660
+---
+
 # 자동완성·폼 기록 (Web Data·Autofill)
 
 ## 한 줄 요약

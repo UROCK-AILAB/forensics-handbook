@@ -1,3 +1,9 @@
+---
+title: "SSH·FTP 도구 흔적"
+parent: "아티팩트 · 네트워크"
+nav_order: 2430
+---
+
 # SSH·FTP 도구 흔적 (PuTTY·WinSCP·FileZilla·OpenSSH)
 
 > 이 페이지에서 "(확인 범위: 조사 PC)" 는 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 사실을 뜻합니다. 조사 PC 에는 PuTTY·WinSCP·FileZilla 가 설치돼 있지 않았습니다. 그래서 PuTTY·WinSCP 내용은 공식 문서와 공개 도구 소스로만 확인했습니다.

@@ -1,3 +1,10 @@
+---
+title: "개별 메시지 파일"
+parent: "아웃룩"
+grand_parent: "아티팩트 · 메일"
+nav_order: 1900
+---
+
 # 개별 메시지 파일 (MSG)
 
 > 상위 허브: [아웃룩 (Outlook)](index.md)

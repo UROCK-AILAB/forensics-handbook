@@ -1,3 +1,10 @@
+---
+title: "들어온 접속: 세션 단계"
+parent: "원격 데스크톱 이벤트"
+grand_parent: "아티팩트 · 이벤트 로그"
+nav_order: 2590
+---
+
 # 들어온 접속: 세션 단계 (LocalSessionManager 21~25·4778·4779)
 
 ## 한 줄 요약

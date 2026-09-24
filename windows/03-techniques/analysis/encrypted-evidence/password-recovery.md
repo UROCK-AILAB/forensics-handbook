@@ -1,3 +1,10 @@
+---
+title: "비밀번호 복구"
+parent: "암호화 증거 다루기"
+grand_parent: "기법 · 분석"
+nav_order: 3450
+---
+
 # 비밀번호 복구 (Password Recovery)
 
 > 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > 비밀번호 복구

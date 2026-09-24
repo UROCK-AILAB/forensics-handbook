@@ -1,3 +1,10 @@
+---
+title: "크래시 덤프"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3250
+---
+
 # 크래시 덤프 (MEMORY.DMP·Minidump)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

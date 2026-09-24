@@ -1,3 +1,10 @@
+---
+title: "BitLocker 볼륨 구조와 풀기"
+parent: "암호화 증거 다루기"
+grand_parent: "기법 · 분석"
+nav_order: 3410
+---
+
 # BitLocker 볼륨 구조와 풀기 (BitLocker)
 
 > 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > BitLocker 볼륨 구조와 풀기

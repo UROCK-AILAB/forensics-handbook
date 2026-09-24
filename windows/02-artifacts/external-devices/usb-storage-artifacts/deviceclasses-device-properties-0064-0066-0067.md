@@ -1,3 +1,10 @@
+---
+title: "연결·해제 시각"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1500
+---
+
 # 연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)
 
 ## 한 줄 요약

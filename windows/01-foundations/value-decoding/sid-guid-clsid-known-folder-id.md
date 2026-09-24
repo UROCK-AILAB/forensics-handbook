@@ -1,3 +1,9 @@
+---
+title: "윈도 식별자 형식"
+parent: "기반 · 값 읽는 법"
+nav_order: 510
+---
+
 # 윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)
 
 ## 한 줄 요약

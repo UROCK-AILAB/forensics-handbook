@@ -1,3 +1,9 @@
+---
+title: "도구 결과 교차 검증"
+parent: "기법 · 보고"
+nav_order: 3560
+---
+
 # 도구 결과 교차 검증 (Tool Validation)
 
 ## 한 줄 요약

@@ -1,3 +1,9 @@
+---
+title: "윈도 타임라인"
+parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1320
+---
+
 # 윈도 타임라인 (ActivitiesCache.db)
 
 ## 한 줄 요약

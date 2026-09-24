@@ -1,3 +1,9 @@
+---
+title: "카메라·마이크 사용 기록"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 1120
+---
+
 # 카메라·마이크 사용 기록 (CapabilityAccessManager)
 
 ## 한 줄 요약

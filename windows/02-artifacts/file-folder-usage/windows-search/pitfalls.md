@@ -1,3 +1,10 @@
+---
+title: "색인 해석 함정"
+parent: "윈도 검색 색인 DB"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1310
+---
+
 # 색인 해석 함정 (색인 범위·재구성)
 
 > 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 색인 해석 함정

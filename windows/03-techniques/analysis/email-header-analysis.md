@@ -1,3 +1,9 @@
+---
+title: "메일 헤더 분석"
+parent: "기법 · 분석"
+nav_order: 3550
+---
+
 # 메일 헤더 분석 (Email Header Analysis)
 
 > 위치: 분석 기법 > 분석

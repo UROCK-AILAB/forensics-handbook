@@ -1,3 +1,10 @@
+---
+title: "클라우드로 밖에 보냈나"
+parent: "자료를 밖으로 빼돌렸나"
+grand_parent: "시나리오 · 정보 유출"
+nav_order: 3630
+---
+
 # 클라우드로 밖에 보냈나 (Cloud)
 
 > 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)

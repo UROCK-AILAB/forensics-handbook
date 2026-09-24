@@ -1,3 +1,9 @@
+---
+title: "셸 아이템"
+parent: "기반 · 셸·문서 형식"
+nav_order: 390
+---
+
 # 셸 아이템 (Shell Item·PIDL)
 
 ## 한 줄 요약

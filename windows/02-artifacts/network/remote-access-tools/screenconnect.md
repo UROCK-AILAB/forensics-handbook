@@ -1,3 +1,10 @@
+---
+title: "스크린커넥트"
+parent: "원격 제어 프로그램"
+grand_parent: "아티팩트 · 네트워크"
+nav_order: 2400
+---
+
 # 스크린커넥트 (ScreenConnect)
 
 > 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)

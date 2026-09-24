@@ -1,3 +1,9 @@
+---
+title: "USN 변경 저널"
+parent: "아티팩트 · 파일시스템"
+nav_order: 1440
+---
+
 # USN 변경 저널 ($UsnJrnl)
 
 ## 한 줄 요약

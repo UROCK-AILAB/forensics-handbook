@@ -1,3 +1,9 @@
+---
+title: "네이버 MYBOX"
+parent: "아티팩트 · 클라우드·노트"
+nav_order: 2240
+---
+
 # 네이버 MYBOX (Naver MYBOX)
 
 ## 한 줄 요약

@@ -1,3 +1,10 @@
+---
+title: "완전삭제 도구를 썼나"
+parent: "증거를 없애려 했나"
+grand_parent: "시나리오 · 행위 재구성"
+nav_order: 3900
+---
+
 # 완전삭제 도구를 썼나 (Wiping Tools)
 
 > 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)

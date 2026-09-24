@@ -1,3 +1,9 @@
+---
+title: "인쇄 이벤트"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2770
+---
+
 # 인쇄 이벤트 (PrintService 307)
 
 ## 한 줄 요약

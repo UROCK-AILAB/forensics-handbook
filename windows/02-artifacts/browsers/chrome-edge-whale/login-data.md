@@ -1,3 +1,10 @@
+---
+title: "저장 비밀번호 (Login Data)"
+parent: "크롬 계열 브라우저"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1630
+---
+
 # 저장 비밀번호 (Login Data)
 
 > 상위 허브: [크롬 계열 브라우저 (Chrome·Edge·Whale 등)](index.md)

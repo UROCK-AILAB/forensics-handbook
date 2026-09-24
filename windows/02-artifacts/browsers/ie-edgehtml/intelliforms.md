@@ -1,3 +1,10 @@
+---
+title: "저장 비밀번호 (IntelliForms)"
+parent: "인터넷 익스플로러·옛 엣지"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1830
+---
+
 # 저장 비밀번호 (IntelliForms)
 
 ## 한 줄 요약

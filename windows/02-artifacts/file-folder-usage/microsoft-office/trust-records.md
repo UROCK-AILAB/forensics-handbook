@@ -1,3 +1,10 @@
+---
+title: "신뢰 문서 기록"
+parent: "오피스 사용 흔적"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1350
+---
+
 # 신뢰 문서 기록 (Trust Records)
 
 > 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)

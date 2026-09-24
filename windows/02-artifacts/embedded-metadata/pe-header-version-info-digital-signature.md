@@ -1,3 +1,9 @@
+---
+title: "실행 파일 메타데이터"
+parent: "아티팩트 · 파일 내장 메타데이터"
+nav_order: 3020
+---
+
 # 실행 파일 메타데이터 (PE Header·Version Info·Digital Signature)
 
 ## 한 줄 요약

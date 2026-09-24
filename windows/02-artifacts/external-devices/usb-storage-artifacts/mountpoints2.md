@@ -1,3 +1,10 @@
+---
+title: "사용자별 장치 연결"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1520
+---
+
 # 사용자별 장치 연결 (MountPoints2)
 
 ## 한 줄 요약

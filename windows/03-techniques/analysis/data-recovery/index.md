@@ -1,3 +1,11 @@
+---
+title: "삭제 데이터 복구"
+parent: "기법 · 분석"
+nav_order: 3330
+has_children: true
+has_toc: false
+---
+
 # 삭제 데이터 복구 (Data Recovery)
 
 ## 한 줄 요약

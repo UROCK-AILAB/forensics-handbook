@@ -1,3 +1,10 @@
+---
+title: "쿠키·캐시 폴더"
+parent: "인터넷 익스플로러·옛 엣지"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1840
+---
+
 # 쿠키·캐시 폴더 (INetCookies·INetCache)
 
 ## 한 줄 요약

@@ -1,3 +1,11 @@
+---
+title: "파이어폭스"
+parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1690
+has_children: true
+has_toc: false
+---
+
 # 파이어폭스 (Firefox)
 
 ## 한 줄 요약

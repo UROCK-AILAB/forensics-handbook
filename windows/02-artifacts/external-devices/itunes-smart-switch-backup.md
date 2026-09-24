@@ -1,3 +1,9 @@
+---
+title: "스마트폰 백업 파일"
+parent: "아티팩트 · 외부 장치"
+nav_order: 1580
+---
+
 # 스마트폰 백업 파일 (iTunes·Smart Switch Backup)
 
 ## 한 줄 요약

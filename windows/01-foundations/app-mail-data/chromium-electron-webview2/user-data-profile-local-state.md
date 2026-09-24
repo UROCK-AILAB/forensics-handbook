@@ -1,3 +1,10 @@
+---
+title: "프로필 폴더와 계열 브라우저 구분"
+parent: "크롬 계열 앱 공통 구조"
+grand_parent: "기반 · 앱·메일 데이터 구조"
+nav_order: 430
+---
+
 # 프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)
 
 > 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 프로필 폴더와 계열 브라우저 구분

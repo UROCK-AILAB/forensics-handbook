@@ -1,3 +1,9 @@
+---
+title: "사진 EXIF"
+parent: "아티팩트 · 파일 내장 메타데이터"
+nav_order: 3000
+---
+
 # 사진 EXIF (EXIF)
 
 ## 한 줄 요약

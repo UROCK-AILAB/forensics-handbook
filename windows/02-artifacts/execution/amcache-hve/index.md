@@ -1,3 +1,11 @@
+---
+title: "AmCache"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 850
+has_children: true
+has_toc: false
+---
+
 # AmCache (Amcache.hve)
 
 ## 한 줄 요약

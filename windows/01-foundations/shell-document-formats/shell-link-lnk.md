@@ -1,3 +1,9 @@
+---
+title: "바로가기 형식"
+parent: "기반 · 셸·문서 형식"
+nav_order: 400
+---
+
 # 바로가기 형식 (Shell Link·LNK)
 
 ## 한 줄 요약

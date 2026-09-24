@@ -1,3 +1,10 @@
+---
+title: "프로필 구조"
+parent: "파이어폭스"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1700
+---
+
 # 프로필 구조 (profiles.ini·prefs.js)
 
 ## 한 줄 요약

@@ -1,3 +1,9 @@
+---
+title: "의심 실행 파일 선별"
+parent: "기법 · 분석"
+nav_order: 3530
+---
+
 # 의심 실행 파일 선별 (Code Signing·YARA)
 
 > 위치: 분석 기법 > 분석

@@ -1,3 +1,11 @@
+---
+title: "레지스트리 하이브 구조"
+parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 130
+has_children: true
+has_toc: false
+---
+
 # 레지스트리 하이브 구조 (Registry Hive)
 
 ## 한 줄 요약

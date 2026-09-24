@@ -1,3 +1,11 @@
+---
+title: "SQLite 데이터베이스"
+parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 260
+has_children: true
+has_toc: false
+---
+
 # SQLite 데이터베이스 (SQLite)
 
 ## 한 줄 요약

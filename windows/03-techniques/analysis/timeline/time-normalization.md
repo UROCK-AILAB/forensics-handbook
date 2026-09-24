@@ -1,3 +1,10 @@
+---
+title: "시간대·시계 오차 보정"
+parent: "타임라인 작성"
+grand_parent: "기법 · 분석"
+nav_order: 3300
+---
+
 # 시간대·시계 오차 보정 (Time Normalization)
 
 상위 허브: [타임라인 작성 (Timeline)](index.md)

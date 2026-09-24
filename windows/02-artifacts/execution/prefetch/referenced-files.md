@@ -1,3 +1,10 @@
+---
+title: "참조 파일·폴더 목록 활용"
+parent: "프리페치"
+grand_parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 820
+---
+
 # 참조 파일·폴더 목록 활용 (Referenced Files)
 
 > 상위 페이지: [프리페치 (Prefetch)](index.md)

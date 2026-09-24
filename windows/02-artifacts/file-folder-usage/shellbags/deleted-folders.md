@@ -1,3 +1,10 @@
+---
+title: "지운 폴더 흔적 찾기"
+parent: "셸백"
+grand_parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1190
+---
+
 # 지운 폴더 흔적 찾기 (Deleted Folders)
 
 > 상위 페이지: [셸백 (ShellBags)](index.md)

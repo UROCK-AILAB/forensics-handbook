@@ -1,3 +1,10 @@
+---
+title: "보안 프로그램을 끄거나 지웠나"
+parent: "증거를 없애려 했나"
+grand_parent: "시나리오 · 행위 재구성"
+nav_order: 3930
+---
+
 # 보안 프로그램을 끄거나 지웠나 (Defense Evasion)
 
 > 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)

@@ -1,3 +1,10 @@
+---
+title: "암호화 컨테이너 찾기"
+parent: "암호화 증거 다루기"
+grand_parent: "기법 · 분석"
+nav_order: 3400
+---
+
 # 암호화 컨테이너 찾기 (Encrypted Container Detection)
 
 > 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > 암호화 컨테이너 찾기

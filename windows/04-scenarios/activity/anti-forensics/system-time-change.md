@@ -1,3 +1,10 @@
+---
+title: "시스템 시각을 바꿨나"
+parent: "증거를 없애려 했나"
+grand_parent: "시나리오 · 행위 재구성"
+nav_order: 3920
+---
+
 # 시스템 시각을 바꿨나 (System Time Change)
 
 > 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)

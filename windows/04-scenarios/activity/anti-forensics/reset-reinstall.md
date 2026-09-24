@@ -1,3 +1,10 @@
+---
+title: "PC 를 초기화하거나 윈도를 다시 깔았나"
+parent: "증거를 없애려 했나"
+grand_parent: "시나리오 · 행위 재구성"
+nav_order: 3910
+---
+
 # PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)
 
 > 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)

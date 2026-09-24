@@ -1,3 +1,10 @@
+---
+title: "레코드 카빙"
+parent: "삭제 데이터 복구"
+grand_parent: "기법 · 분석"
+nav_order: 3370
+---
+
 # 레코드 카빙 (Record Carving)
 
 ## 한 줄 요약

@@ -1,3 +1,11 @@
+---
+title: "SRUM"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 970
+has_children: true
+has_toc: false
+---
+
 # SRUM (System Resource Usage Monitor)
 
 ## 한 줄 요약

@@ -1,3 +1,11 @@
+---
+title: "계정 탈취와 측면 이동"
+parent: "시나리오 · 침해 사고"
+nav_order: 3720
+has_children: true
+has_toc: false
+---
+
 # 계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)
 
 ## 한 줄 요약

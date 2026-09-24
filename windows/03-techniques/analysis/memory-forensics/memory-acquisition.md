@@ -1,3 +1,10 @@
+---
+title: "메모리 덤프 확보"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3180
+---
+
 # 메모리 덤프 확보 (Memory Acquisition)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

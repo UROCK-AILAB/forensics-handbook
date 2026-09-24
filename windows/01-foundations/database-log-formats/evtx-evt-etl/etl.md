@@ -1,3 +1,10 @@
+---
+title: "ETW 추적 로그"
+parent: "이벤트 로그 형식"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 380
+---
+
 # ETW 추적 로그 (ETL)
 
 ## 한 줄 요약

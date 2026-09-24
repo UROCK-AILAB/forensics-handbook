@@ -1,3 +1,10 @@
+---
+title: "데이터 파일 구조"
+parent: "아웃룩"
+grand_parent: "아티팩트 · 메일"
+nav_order: 1870
+---
+
 # 데이터 파일 구조 (PST·OST)
 
 > 상위 허브: [아웃룩 (Outlook)](index.md)

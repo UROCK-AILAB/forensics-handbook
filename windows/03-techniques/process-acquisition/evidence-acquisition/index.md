@@ -1,3 +1,11 @@
+---
+title: "증거 획득"
+parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3040
+has_children: true
+has_toc: false
+---
+
 # 증거 획득 (Evidence Acquisition)
 
 ## 한 줄 요약

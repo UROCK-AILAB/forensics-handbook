@@ -1,3 +1,9 @@
+---
+title: "네트워크 목록"
+parent: "아티팩트 · 네트워크"
+nav_order: 2330
+---
+
 # 네트워크 목록 (NetworkList)
 
 ## 한 줄 요약

@@ -1,3 +1,10 @@
+---
+title: "수집 순서와 원칙"
+parent: "라이브 응답"
+grand_parent: "기법 · 조사 절차·증거 확보"
+nav_order: 3120
+---
+
 # 수집 순서와 원칙 (Order of Volatility)
 
 ## 한 줄 요약

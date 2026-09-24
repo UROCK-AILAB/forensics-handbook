@@ -1,3 +1,10 @@
+---
+title: "세션·탭 복원"
+parent: "크롬 계열 브라우저"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1640
+---
+
 # 세션·탭 복원 (Sessions)
 
 ## 한 줄 요약

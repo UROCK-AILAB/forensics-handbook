@@ -1,3 +1,10 @@
+---
+title: "USB 저장장치 목록"
+parent: "USB 저장장치 흔적"
+grand_parent: "아티팩트 · 외부 장치"
+nav_order: 1480
+---
+
 # USB 저장장치 목록 (USBSTOR)
 
 > 상위 허브: [USB 저장장치 흔적 (USB Storage Artifacts)](index.md)

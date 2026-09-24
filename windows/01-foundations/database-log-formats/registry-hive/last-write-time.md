@@ -1,3 +1,10 @@
+---
+title: "키 마지막 기록 시각"
+parent: "레지스트리 하이브 구조"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 160
+---
+
 # 키 마지막 기록 시각 (Last Write Time)
 
 ## 한 줄 요약

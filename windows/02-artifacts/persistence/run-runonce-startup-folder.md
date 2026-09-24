@@ -1,3 +1,9 @@
+---
+title: "로그온 자동실행"
+parent: "아티팩트 · 자동실행·지속성"
+nav_order: 690
+---
+
 # 로그온 자동실행 (Run·RunOnce·Startup Folder)
 
 ## 한 줄 요약

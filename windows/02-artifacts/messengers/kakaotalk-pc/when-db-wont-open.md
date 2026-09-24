@@ -1,3 +1,10 @@
+---
+title: "대화 DB가 안 열릴 때 남는 단서"
+parent: "카카오톡 PC"
+grand_parent: "아티팩트 · 메신저"
+nav_order: 2030
+---
+
 # 대화 DB가 안 열릴 때 남는 단서 (메모리·캐시·이미지)
 
 > 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 대화 DB가 안 열릴 때 남는 단서

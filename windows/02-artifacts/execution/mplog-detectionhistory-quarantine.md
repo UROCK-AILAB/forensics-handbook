@@ -1,3 +1,9 @@
+---
+title: "디펜더 검사 로그·격리 파일"
+parent: "아티팩트 · 프로그램 실행 흔적"
+nav_order: 1110
+---
+
 # 디펜더 검사 로그·격리 파일 (MPLog·DetectionHistory·Quarantine)
 
 ## 한 줄 요약

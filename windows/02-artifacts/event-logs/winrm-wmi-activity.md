@@ -1,3 +1,9 @@
+---
+title: "원격 명령 실행 이벤트"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2630
+---
+
 # 원격 명령 실행 이벤트 (WinRM·WMI-Activity)
 
 ## 한 줄 요약

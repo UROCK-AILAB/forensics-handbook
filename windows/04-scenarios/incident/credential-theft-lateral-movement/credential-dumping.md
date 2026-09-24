@@ -1,3 +1,10 @@
+---
+title: "자격 증명을 빼냈나"
+parent: "계정 탈취와 측면 이동"
+grand_parent: "시나리오 · 침해 사고"
+nav_order: 3740
+---
+
 # 자격 증명을 빼냈나 (Credential Dumping)
 
 > 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)

@@ -1,3 +1,9 @@
+---
+title: "감사 정책과 로그 설정"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2470
+---
+
 # 감사 정책과 로그 설정 (Audit Policy·Log Settings)
 
 ## 한 줄 요약

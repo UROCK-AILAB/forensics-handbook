@@ -1,3 +1,11 @@
+---
+title: "윈도 검색 색인 DB"
+parent: "아티팩트 · 파일·폴더 사용 흔적"
+nav_order: 1260
+has_children: true
+has_toc: false
+---
+
 # 윈도 검색 색인 DB (Windows Search)
 
 ## 한 줄 요약

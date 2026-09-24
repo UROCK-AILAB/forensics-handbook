@@ -1,3 +1,10 @@
+---
+title: "컨트롤셋 고르기"
+parent: "레지스트리 하이브 구조"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 190
+---
+
 # 컨트롤셋 고르기 (ControlSet·Select)
 
 > 위치: [레지스트리 하이브 구조](index.md) > 컨트롤셋 고르기

@@ -1,3 +1,10 @@
+---
+title: "NTFS 메타 파일"
+parent: "NTFS 구조"
+grand_parent: "기반 · 디스크·볼륨"
+nav_order: 100
+---
+
 # NTFS 메타 파일 ($Bitmap·$Secure·$Extend)
 
 > 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](index.md)

@@ -1,3 +1,10 @@
+---
+title: "암호화된 SQLite"
+parent: "SQLite 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 300
+---
+
 # 암호화된 SQLite (SQLCipher)
 
 > 위치: [SQLite 데이터베이스 (SQLite)](index.md) > 암호화된 SQLite

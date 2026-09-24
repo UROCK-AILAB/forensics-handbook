@@ -1,3 +1,10 @@
+---
+title: "긴 값과 압축 열"
+parent: "ESE 데이터베이스"
+grand_parent: "기반 · 데이터베이스·로그 형식"
+nav_order: 240
+---
+
 # 긴 값과 압축 열 (Long Value·Compressed Column)
 
 > 위치: [ESE 데이터베이스 (Extensible Storage Engine)](index.md) > 긴 값과 압축 열

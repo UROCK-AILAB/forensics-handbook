@@ -1,3 +1,10 @@
+---
+title: "쿠키 (cookies.sqlite)"
+parent: "파이어폭스"
+grand_parent: "아티팩트 · 인터넷·브라우저"
+nav_order: 1720
+---
+
 # 쿠키 (cookies.sqlite)
 
 ## 한 줄 요약

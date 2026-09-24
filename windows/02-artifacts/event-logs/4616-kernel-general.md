@@ -1,3 +1,9 @@
+---
+title: "시간 변경"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2710
+---
+
 # 시간 변경 (4616·Kernel-General)
 
 ## 한 줄 요약

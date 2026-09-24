@@ -1,3 +1,9 @@
+---
+title: "인쇄 흔적"
+parent: "아티팩트 · 외부 장치"
+nav_order: 1570
+---
+
 # 인쇄 흔적 (Print Spooler: SPL·SHD·프린터 목록)
 
 ## 한 줄 요약

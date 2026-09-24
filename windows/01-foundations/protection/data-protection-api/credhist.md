@@ -1,3 +1,10 @@
+---
+title: "비밀번호 변경 기록"
+parent: "DPAPI 구조"
+grand_parent: "기반 · 암호 보호"
+nav_order: 580
+---
+
 # 비밀번호 변경 기록 (CREDHIST)
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > CREDHIST

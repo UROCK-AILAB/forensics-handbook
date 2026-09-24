@@ -1,3 +1,10 @@
+---
+title: "받은 파일·사진 폴더"
+parent: "카카오톡 PC"
+grand_parent: "아티팩트 · 메신저"
+nav_order: 2010
+---
+
 # 받은 파일·사진 폴더 (Received Files)
 
 > 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 받은 파일·사진 폴더

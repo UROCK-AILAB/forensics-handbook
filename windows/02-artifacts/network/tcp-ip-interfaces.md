@@ -1,3 +1,9 @@
+---
+title: "네트워크 인터페이스 설정"
+parent: "아티팩트 · 네트워크"
+nav_order: 2340
+---
+
 # 네트워크 인터페이스 설정 (TCP/IP Interfaces)
 
 ## 한 줄 요약

@@ -1,3 +1,11 @@
+---
+title: "메모리 분석"
+parent: "기법 · 분석"
+nav_order: 3170
+has_children: true
+has_toc: false
+---
+
 # 메모리 분석 (Memory Forensics)
 
 ## 한 줄 요약

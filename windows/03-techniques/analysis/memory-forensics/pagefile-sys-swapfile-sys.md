@@ -1,3 +1,10 @@
+---
+title: "페이지 파일"
+parent: "메모리 분석"
+grand_parent: "기법 · 분석"
+nav_order: 3240
+---
+
 # 페이지 파일 (pagefile.sys·swapfile.sys)
 
 > 상위 허브: [메모리 분석 (Memory Forensics)](index.md)

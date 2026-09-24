@@ -1,3 +1,11 @@
+---
+title: "문서 메타데이터"
+parent: "아티팩트 · 파일 내장 메타데이터"
+nav_order: 2930
+has_children: true
+has_toc: false
+---
+
 # 문서 메타데이터 (Document Metadata)
 
 ## 한 줄 요약

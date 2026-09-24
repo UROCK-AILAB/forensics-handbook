@@ -1,3 +1,9 @@
+---
+title: "켜짐·꺼짐"
+parent: "아티팩트 · 이벤트 로그"
+nav_order: 2560
+---
+
 # 켜짐·꺼짐 (Power On·Off Events)
 
 ## 한 줄 요약

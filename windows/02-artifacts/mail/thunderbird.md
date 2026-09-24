@@ -1,3 +1,9 @@
+---
+title: "썬더버드"
+parent: "아티팩트 · 메일"
+nav_order: 1950
+---
+
 # 썬더버드 (Thunderbird)
 
 > 위치: 아티팩트 사전 > 메일
