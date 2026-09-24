@@ -1,0 +1,14 @@
+title: macOS 디지털 포렌식 핸드북
+description: macOS 시스템에 남는 흔적을 읽고 해석하는 한국어 포렌식 핸드북
+lang: ko
+remote_theme: just-the-docs/just-the-docs@v0.12.0
+search_enabled: true
+search:
+  button: true
+heading_anchors: true
+back_to_top: true
+back_to_top_text: 맨 위로
+color_scheme: light
+exclude:
+  - _work
+  - _manifest.json
