@@ -14,7 +14,7 @@ nav_order: 1600
 
 ## 먼저 확인할 것
 
-- **어떤 브라우저가 있나** — 관찰 기기에서 `dumpsys package` 의 Known Packages 아래 기본 브라우저 역할(Browser)은 `com.android.chrome` 이었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 기본 브라우저가 아닌 브라우저도 설치돼 있을 수 있으므로 [설치된 앱](../../02-artifacts/app-usage/packages/index.md) 에서 삼성 인터넷, Firefox, 네이버 앱 같은 브라우저 계열 패키지를 모두 뽑아 둡니다. 관찰 메모는 기본 앱이 아닌 패키지 이름을 가려 두어 관찰 기기에 삼성 인터넷이 있었는지는 알 수 없습니다.
+- **어떤 브라우저가 있나** — 관찰 기기에서 `dumpsys package` 의 Known Packages 아래 기본 브라우저 역할(Browser)은 `com.android.chrome` 이었습니다 (확인 범위: Android 16, One UI 8.5). 기본 브라우저가 아닌 브라우저도 설치돼 있을 수 있으므로 [설치된 앱](../../02-artifacts/app-usage/packages/index.md) 에서 삼성 인터넷, Firefox, 네이버 앱 같은 브라우저 계열 패키지를 모두 뽑아 둡니다. 관찰 메모는 기본 앱이 아닌 패키지 이름을 가려 두어 관찰 기기에 삼성 인터넷이 있었는지는 알 수 없습니다.
 - **시간대** — 파일마다 시각 기준이 다르고 대부분 UTC 기준 값이라, 현지 시각으로 옮기려면 기기 시간대가 필요합니다([시각 값](../../01-foundations/value-decoding/time-values.md), [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)).
 - **사용자와 계정** — 브라우저가 계정에 로그인돼 동기화를 쓰고 있었다면 다른 기기의 방문이 섞일 수 있습니다. 로그인된 계정은 [계정](../../02-artifacts/system-account/accounts/index.md) 에서 확인합니다.
 - **수집 범위** — 브라우저 프로필 파일은 앱 데이터 영역에 있어 adb 일반 권한으로는 보이지 않습니다. `History` 같은 SQLite 파일은 `-wal`·`-journal` 파일과 함께 확보해야 최근 기록을 놓치지 않습니다([SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)).
@@ -59,7 +59,7 @@ nav_order: 1600
 
 4. **다운로드를 잇습니다.** `downloads` 표에서 `target_path`(최종 저장 위치), `tab_url`(다운로드를 시작한 탭의 주소), `referrer`, `start_time`·`end_time`, `received_bytes`·`total_bytes`, `opened`(한 번이라도 열었으면 1) 칸을 읽습니다 [3]. `downloads_url_chains` 표의 `chain_index` 0 이 처음 요청한 주소이고 가장 큰 번호가 리다이렉트 뒤 최종 주소라서 [3], 사용자가 누른 링크와 실제로 파일이 온 서버를 나눠 볼 수 있습니다. 다운로드 행을 지우면 이 두 표의 같은 ID 행이 함께 지워집니다 [3].
 
-5. **기기에 남은 파일과 맞춥니다.** `target_path` 의 파일이 아직 있는지 확인하고, MediaStore 의 `is_download`, `download_uri`, `referer_uri` 칸 [8] 과 `owner_package_name`(이 파일을 넣은 패키지) [9] 을 함께 봅니다. 관찰 기기의 `/sdcard/Download` 에는 항목이 151개 있었고 그중 폴더 36개는 이름이 가려져 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 브라우저 기록에는 없는데 `Download` 폴더에 파일이 있다면 다른 앱이 받은 파일일 수 있습니다.
+5. **기기에 남은 파일과 맞춥니다.** `target_path` 의 파일이 아직 있는지 확인하고, MediaStore 의 `is_download`, `download_uri`, `referer_uri` 칸 [8] 과 `owner_package_name`(이 파일을 넣은 패키지) [9] 을 함께 봅니다. 관찰 기기의 `/sdcard/Download` 에는 항목이 151개 있었고 그중 폴더 36개는 이름이 가려져 있었습니다 (확인 범위: Android 16, One UI 8.5). 브라우저 기록에는 없는데 `Download` 폴더에 파일이 있다면 다른 앱이 받은 파일일 수 있습니다.
 
 6. **Firefox 계열이 있으면 따로 읽습니다.** `places.sqlite` 의 `moz_historyvisits` 표에는 `is_local` 칸이 있고, 스키마 주석은 이 기기에서 추가한 방문은 참, 동기화로 들어온 방문은 거짓이라고 적습니다 [6]. `moz_places` 표도 방문 횟수와 마지막 방문 시각을 로컬과 원격으로 나눠 둡니다 [6]. Chromium 계열 `History` 에서 동기화로 들어온 방문을 가르는 칸은 이번에 확인하지 못했으므로, Chrome·삼성 인터넷 기록은 계정 동기화가 켜져 있었는지와 함께 해석합니다.
 

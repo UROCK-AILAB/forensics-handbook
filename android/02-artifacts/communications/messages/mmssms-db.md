@@ -37,7 +37,7 @@ Google 메시지 앱은 자기 DB(bugle_db)를 따로 두고, RCS 대화 본문�
 | LG 기기 | sms.type 에 7·8·19 같은 확장 값을 씀. ALEAPP 는 lgeSiid 칸이 있을 때만 이 값을 풀지만, 제조사 문서 근거가 없어 검증되지 않은 뜻이라고 스스로 적음 | [3] |
 | 삼성 기기 | spam_sms 표가 있을 수 있고 ALEAPP 는 이 표를 sms 표와 같은 방식으로 읽음. 칸 구성과 언제 쓰이는지는 확인하지 못함 | [3] |
 
-adb 일반 권한으로 mmssms.db 를 읽을 수 있는지는 관찰하지 않았습니다. 관찰한 폰의 설정 값에는 문자 관련 이름의 키가 있지만 값은 가려져 있고 뜻도 공식 문서로 확인하지 못했습니다. settings secure 에는 `backup_enabled:com.android.providers.telephony`, `mms_backup_enabled`, `mms_backup_in_progress`, `mms_backup_last_completed` 가 있고, settings global 에는 `multi_sim_sms`, `multi_sim_sms_slot`, `multi_sim_psim_sms`, `multi_sim_existing_sms`, `sms_short_codes_content_url`, `sms_short_codes_metadata_url`, `cdma_cell_broadcast_sms` 가 있습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../system-account/settings.md) 페이지에 있습니다.
+adb 일반 권한으로 mmssms.db 를 읽을 수 있는지는 관찰하지 않았습니다. 관찰한 폰의 설정 값에는 문자 관련 이름의 키가 있지만 값은 가려져 있고 뜻도 공식 문서로 확인하지 못했습니다. settings secure 에는 `backup_enabled:com.android.providers.telephony`, `mms_backup_enabled`, `mms_backup_in_progress`, `mms_backup_last_completed` 가 있고, settings global 에는 `multi_sim_sms`, `multi_sim_sms_slot`, `multi_sim_psim_sms`, `multi_sim_existing_sms`, `sms_short_codes_content_url`, `sms_short_codes_metadata_url`, `cdma_cell_broadcast_sms` 가 있습니다 (확인 범위: Android 16, One UI 8.5). 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -232,7 +232,7 @@ MMS 첨부는 part._data 경로의 파일을 app_parts 폴더에서 찾아 맞�
 
 ## 교차 검증
 
-sms.person 과 addr.contact_id 는 연락처 ID 라서 [연락처 (contacts2.db)](../contacts.md) 와 맞춰 보고, 같은 상대와의 통화는 [통화 기록 (calllog.db)](../call-log.md) 에서 확인합니다. 문자가 들어온 시각은 알림 쪽 기록과도 맞춰 볼 수 있습니다. 관찰한 폰의 `dumpsys usagestats` 이벤트에는 `type=NOTIFICATION_INTERRUPTION ... channelId=CHANNEL_ID_SMS_MMS` 줄이 2개 있었지만 패키지가 가려져 있어 어느 앱의 알림인지는 알 수 없습니다. `dumpsys notification` 의 알림 기록에는 `android.title=<값> [length=##]`, `android.text=<값> [length=##]` 칸이 있는데, 이 알림이 문자 알림인지도 가려져 있어 알 수 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 기록들은 [앱 사용 기록 (usagestats)](../../app-usage/usagestats/index.md), [알림 기록 (Notification History)](../../app-usage/notification-history.md), [dumpsys 출력 (dumpsys)](../../logs/dumpsys.md) 페이지에 있습니다.
+sms.person 과 addr.contact_id 는 연락처 ID 라서 [연락처 (contacts2.db)](../contacts.md) 와 맞춰 보고, 같은 상대와의 통화는 [통화 기록 (calllog.db)](../call-log.md) 에서 확인합니다. 문자가 들어온 시각은 알림 쪽 기록과도 맞춰 볼 수 있습니다. 관찰한 폰의 `dumpsys usagestats` 이벤트에는 `type=NOTIFICATION_INTERRUPTION ... channelId=CHANNEL_ID_SMS_MMS` 줄이 2개 있었지만 패키지가 가려져 있어 어느 앱의 알림인지는 알 수 없습니다. `dumpsys notification` 의 알림 기록에는 `android.title=<값> [length=##]`, `android.text=<값> [length=##]` 칸이 있는데, 이 알림이 문자 알림인지도 가려져 있어 알 수 없습니다 (확인 범위: Android 16, One UI 8.5). 이 기록들은 [앱 사용 기록 (usagestats)](../../app-usage/usagestats/index.md), [알림 기록 (Notification History)](../../app-usage/notification-history.md), [dumpsys 출력 (dumpsys)](../../logs/dumpsys.md) 페이지에 있습니다.
 
 Google 메시지를 쓰는 기기라면 [RCS 메시지 (RCS)](rcs.md) 페이지의 bugle_db 와, 삼성 기기라면 [삼성 메시지 앱 (Samsung Messages)](samsung-messages.md) 페이지와 함께 봅니다. 문자를 중심으로 조사하는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../../04-scenarios/activity/communication.md) 와 [스미싱 흔적 (Smishing)](../../../04-scenarios/incident/smishing.md) 시나리오에 있습니다.
 

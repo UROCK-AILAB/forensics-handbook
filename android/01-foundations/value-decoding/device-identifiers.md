@@ -39,7 +39,7 @@ Android 8.0(API 26)부터 앱이 보는 `ANDROID_ID` 는 앱 서명 키와 사�
 | 8.0 이후 같은 서명 키로 재설치 | 바뀌지 않음 |
 | 8.0 이후 시스템 업데이트로 서명 키 변경 | 바뀌지 않음 |
 
-실제 기기의 settings secure 에는 `android_id` 키가 있었습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 값은 가려져 있었고, 이 키의 값과 앱마다 나뉜 Android ID 가 어떤 관계인지도 확인하지 못했습니다. 앱별 Android ID 를 저장하는 파일의 이름과 경로, 값의 길이와 표기 방식도 1차 자료로 확인하지 못했습니다.
+실제 기기의 settings secure 에는 `android_id` 키가 있었습니다(확인 범위: Android 16, One UI 8.5). 값은 가려져 있었고, 이 키의 값과 앱마다 나뉜 Android ID 가 어떤 관계인지도 확인하지 못했습니다. 앱별 Android ID 를 저장하는 파일의 이름과 경로, 값의 길이와 표기 방식도 1차 자료로 확인하지 못했습니다.
 
 ### IMEI 와 일련번호
 
@@ -47,7 +47,7 @@ Android 10(API 29)부터 IMEI 와 일련번호는 "재설정할 수 없는 식�
 
 ### MAC 주소
 
-Android 6 부터 MAC 주소는 시스템 앱만 읽을 수 있고, 서드파티 앱은 읽지 못합니다[2]. Android 11 이상을 대상으로 하는 앱에서는 Passpoint 망의 MAC 무작위화가 Passpoint 프로필 단위로 이뤄집니다[2]. 실제 기기의 settings global 에는 `non_persistent_mac_randomization_force_enabled` 키가 있었지만 값과 뜻은 확인하지 못했습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 무작위화된 주소가 접속 기록에 어떻게 남는지는 [와이파이 설정과 접속 기록](../../02-artifacts/network/wifi.md)에서 다룹니다.
+Android 6 부터 MAC 주소는 시스템 앱만 읽을 수 있고, 서드파티 앱은 읽지 못합니다[2]. Android 11 이상을 대상으로 하는 앱에서는 Passpoint 망의 MAC 무작위화가 Passpoint 프로필 단위로 이뤄집니다[2]. 실제 기기의 settings global 에는 `non_persistent_mac_randomization_force_enabled` 키가 있었지만 값과 뜻은 확인하지 못했습니다(확인 범위: Android 16, One UI 8.5). 무작위화된 주소가 접속 기록에 어떻게 남는지는 [와이파이 설정과 접속 기록](../../02-artifacts/network/wifi.md)에서 다룹니다.
 
 ### 광고 ID
 
@@ -59,7 +59,7 @@ Android 6 부터 MAC 주소는 시스템 앱만 읽을 수 있고, 서드파티 
 
 ## 읽는 법
 
-실제 기기에서 adb 일반 권한으로 읽었을 때 식별자와 관련된 칸은 아래처럼 보였습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 값은 모두 가려져 있어 칸 이름만 적습니다. 관찰 기록에 IMEI 와 광고 ID 의 값이나 칸은 나오지 않았습니다.
+실제 기기에서 adb 일반 권한으로 읽었을 때 식별자와 관련된 칸은 아래처럼 보였습니다(확인 범위: Android 16, One UI 8.5). 값은 모두 가려져 있어 칸 이름만 적습니다. 관찰 기록에 IMEI 와 광고 ID 의 값이나 칸은 나오지 않았습니다.
 
 | 출력 | 칸·키 | 알려 주는 것 |
 |---|---|---|

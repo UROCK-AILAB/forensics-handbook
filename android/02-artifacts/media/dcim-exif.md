@@ -24,9 +24,9 @@ nav_order: 650
 | 앱이 MediaStore 로 동영상을 넣을 수 있는 최상위 폴더 | DCIM, Movies, Pictures (기본값 Movies) | 현행 AOSP 기준 [2] |
 | EXIF 위치를 가리지 않고 읽는 조건 | ACCESS_MEDIA_LOCATION 권한 선언과 실행 중 요청(사용자 동의) | Android 10(API 29) 이상을 대상으로 하는 앱 [3] |
 | MediaStore 의 latitude·longitude 칸 | 문서상 폐기(deprecated), 항상 NULL | 현행 AOSP 기준 [1][2], 바뀐 버전은 확인 못 함 |
-| `/sdcard/DCIM` 아래 | Camera, Screenshots, media 와 가린 폴더 19개(항목 25개) | (확인 범위: SM-S937N, Android 16, One UI 8.5) |
+| `/sdcard/DCIM` 아래 | Camera, Screenshots, media 와 가린 폴더 19개(항목 25개) | (확인 범위: Android 16, One UI 8.5) |
 
-관찰한 기기의 `/sdcard` 최상위에는 DCIM, Pictures, Movies, Recordings 같은 표준 폴더와 가린 폴더 8개가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). DCIM 아래의 Screenshots 폴더는 AOSP 의 스크린샷 기본 위치와 달라서 [스크린샷과 화면 녹화](screenshots.md) 페이지에서 따로 다루고, DCIM/media 폴더가 무엇을 담는지는 확인하지 못했습니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
+관찰한 기기의 `/sdcard` 최상위에는 DCIM, Pictures, Movies, Recordings 같은 표준 폴더와 가린 폴더 8개가 있었습니다 (확인 범위: Android 16, One UI 8.5). DCIM 아래의 Screenshots 폴더는 AOSP 의 스크린샷 기본 위치와 달라서 [스크린샷과 화면 녹화](screenshots.md) 페이지에서 따로 다루고, DCIM/media 폴더가 무엇을 담는지는 확인하지 못했습니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -118,9 +118,9 @@ taken_utc 와 EXIF 의 현지 시각·시차로 계산한 UTC 가 맞지 않으�
 - [미디어 저장소 (MediaStore)](mediastore/index.md) — 같은 파일의 색인 행, 넣은 앱, 휴지통 상태를 봅니다.
 - [섬네일 캐시 (Thumbnails)](thumbnails.md) — 원본이 없어진 뒤에도 작은 사본이 남는지 봅니다.
 - [구글 포토 (Google Photos)](google-photos.md), [삼성 갤러리 (Samsung Gallery)](samsung-gallery.md) — 앱이 따로 적어 둔 촬영 시각·시차·위치와 비교합니다.
-- [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) — 관찰한 기기의 Battery History 에는 `+camera`·`-camera` 표시가 붙은 줄이 여러 개 있었고, 각 줄 앞에는 월-일 시:분:초.밀리초 꼴의 시각이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 표시가 카메라 사용의 시작과 끝을 뜻하는지는 출처로 확인하지 않았습니다.
+- [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) — 관찰한 기기의 Battery History 에는 `+camera`·`-camera` 표시가 붙은 줄이 여러 개 있었고, 각 줄 앞에는 월-일 시:분:초.밀리초 꼴의 시각이 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 표시가 카메라 사용의 시작과 끝을 뜻하는지는 출처로 확인하지 않았습니다.
 - [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 촬영 시각 무렵 카메라 앱이 앞에 떠 있었는지 봅니다.
-- [설정 값 (Settings)](../system-account/settings.md) — 관찰한 기기의 settings system 에는 camera_feedback_vibrate, csc_pref_camera_forced_shuttersound_key 키가 있었고 (확인 범위: SM-S937N, Android 16, One UI 8.5), 뜻은 확인하지 못했습니다.
+- [설정 값 (Settings)](../system-account/settings.md) — 관찰한 기기의 settings system 에는 camera_feedback_vibrate, csc_pref_camera_forced_shuttersound_key 키가 있었고 (확인 범위: Android 16, One UI 8.5), 뜻은 확인하지 못했습니다.
 - [이 사진은 언제 어디서 찍었나 (Photo Origin)](../../04-scenarios/activity/photo-origin.md) — 이 기록을 쓰는 조사 시나리오입니다.
 
 ## 실습

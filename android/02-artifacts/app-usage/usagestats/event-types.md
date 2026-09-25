@@ -102,9 +102,9 @@ UsageEvents 에는 조회하는 앱에게 일부 정보를 가리는 옵션이 �
 
 ## 기기에서 본 이벤트
 
-`dumpsys usagestats` 의 최근 이벤트 목록에서 본 이벤트 이름은 ACTIVITY_RESUMED, ACTIVITY_PAUSED, ACTIVITY_STOPPED, FOREGROUND_SERVICE_START, FOREGROUND_SERVICE_STOP, SCREEN_INTERACTIVE, SCREEN_NON_INTERACTIVE, KEYGUARD_SHOWN, KEYGUARD_HIDDEN, USER_INTERACTION, SHORTCUT_INVOCATION, NOTIFICATION_SEEN, NOTIFICATION_INTERRUPTION, STANDBY_BUCKET_CHANGED 입니다. 출력 가운데 요약해 본 부분에는 DEVICE_STARTUP, DEVICE_SHUTDOWN, CONFIGURATION_CHANGE 가 보이지 않았지만, 생략된 줄에 있는지는 알 수 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). NOTIFICATION_SEEN 과 NOTIFICATION_INTERRUPTION 은 SDK 에서는 시스템 전용이지만 dumpsys 에서는 이름 그대로 나왔습니다.
+`dumpsys usagestats` 의 최근 이벤트 목록에서 본 이벤트 이름은 ACTIVITY_RESUMED, ACTIVITY_PAUSED, ACTIVITY_STOPPED, FOREGROUND_SERVICE_START, FOREGROUND_SERVICE_STOP, SCREEN_INTERACTIVE, SCREEN_NON_INTERACTIVE, KEYGUARD_SHOWN, KEYGUARD_HIDDEN, USER_INTERACTION, SHORTCUT_INVOCATION, NOTIFICATION_SEEN, NOTIFICATION_INTERRUPTION, STANDBY_BUCKET_CHANGED 입니다. 출력 가운데 요약해 본 부분에는 DEVICE_STARTUP, DEVICE_SHUTDOWN, CONFIGURATION_CHANGE 가 보이지 않았지만, 생략된 줄에 있는지는 알 수 없습니다 (확인 범위: Android 16, One UI 8.5). NOTIFICATION_SEEN 과 NOTIFICATION_INTERRUPTION 은 SDK 에서는 시스템 전용이지만 dumpsys 에서는 이름 그대로 나왔습니다.
 
-이벤트 종류에 따라 줄에 찍히는 칸은 다음과 같았습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+이벤트 종류에 따라 줄에 찍히는 칸은 다음과 같았습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 이벤트 | dumpsys 줄의 칸 |
 |---|---|
@@ -116,9 +116,9 @@ UsageEvents 에는 조회하는 앱에게 일부 정보를 가리는 옵션이 �
 | SHORTCUT_INVOCATION | package, shortcutId, flags |
 | SCREEN_INTERACTIVE·NON_INTERACTIVE, KEYGUARD_SHOWN·HIDDEN | package, flags |
 
-dumpsys 에서는 대기 버킷과 이유가 standbyBucket 과 reason 으로 나뉘어 찍혔습니다. 화면과 잠금 화면 이벤트에도 package 칸에 값이 들어 있었습니다. NOTIFICATION_INTERRUPTION 의 channelId 로는 CHANNEL_ID_SMS_MMS, REMINDER_CHANNEL_ID_NOTIFICATION, CHR, BATTERY, SECURITY 같은 값이 보였고, SHORTCUT_INVOCATION 의 shortcutId 로는 AUTO_UPDATE 와 한글 문자열이 보였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+dumpsys 에서는 대기 버킷과 이유가 standbyBucket 과 reason 으로 나뉘어 찍혔습니다. 화면과 잠금 화면 이벤트에도 package 칸에 값이 들어 있었습니다. NOTIFICATION_INTERRUPTION 의 channelId 로는 CHANNEL_ID_SMS_MMS, REMINDER_CHANNEL_ID_NOTIFICATION, CHR, BATTERY, SECURITY 같은 값이 보였고, SHORTCUT_INVOCATION 의 shortcutId 로는 AUTO_UPDATE 와 한글 문자열이 보였습니다 (확인 범위: Android 16, One UI 8.5).
 
-액티비티 이벤트는 RESUMED, PAUSED, STOPPED 세 줄이 묶여 나오는 모양이었고, 같은 모양의 줄끼리 개수가 거의 같았습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 이 세 이벤트를 사용 시작과 끝으로 어떻게 읽을지, 시스템이 만든 이벤트를 사용자 조작과 어떻게 가를지는 [해석 함정](pitfalls.md) 페이지에서 다룹니다.
+액티비티 이벤트는 RESUMED, PAUSED, STOPPED 세 줄이 묶여 나오는 모양이었고, 같은 모양의 줄끼리 개수가 거의 같았습니다(확인 범위: Android 16, One UI 8.5). 이 세 이벤트를 사용 시작과 끝으로 어떻게 읽을지, 시스템이 만든 이벤트를 사용자 조작과 어떻게 가를지는 [해석 함정](pitfalls.md) 페이지에서 다룹니다.
 
 ## 함께 볼 페이지
 

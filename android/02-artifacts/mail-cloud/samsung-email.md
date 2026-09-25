@@ -122,7 +122,7 @@ ALEAPP 에는 삼성 이메일 전용 모듈이 없습니다 [1]. SQLite 뷰어�
 | [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) | 메일 시각 앞뒤로 앱을 앞에 띄운 기록 |
 | [알림 기록 (Notification History)](../app-usage/notification-history.md) | 새 메일 알림과 DB 의 메일이 맞는지 |
 
-관찰 기기의 `dumpsys account` 출력에는 계정 추가·삭제 동작을 적은 "Accounts History" 표가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 칸 뜻과 읽는 법은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 에 있습니다.
+관찰 기기의 `dumpsys account` 출력에는 계정 추가·삭제 동작을 적은 "Accounts History" 표가 있었습니다 (확인 범위: Android 16, One UI 8.5). 칸 뜻과 읽는 법은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 에 있습니다.
 
 ## 실습
 

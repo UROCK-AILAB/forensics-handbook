@@ -31,7 +31,7 @@ LockSettingsStorage 는 잠금과 관련된 값을 `locksettings` 표에 이름�
 
 `locksettings.db` 는 파일 이름만 소스에 있고 시스템 서비스의 데이터베이스 폴더에 만들어지는데, 그 폴더가 `/data/system/` 인지는 원문으로 확인하지 못했습니다. 현행 소스에는 `gesture.key`, `password.key`, `gatekeeper.pattern.key` 같은 옛 파일 이름이 나오지 않아서 [1], 옛 버전에서 이 파일들을 쓴 범위도 확인하지 못했습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 이 파일들을 읽을 수 있는지도 확인하지 못했습니다. CE·DE 영역의 차이는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에 있습니다.
 
-삼성 기기는 AOSP 에 없는 잠금 관련 settings 키를 더 씁니다. 관찰한 기기의 secure 표에는 다음 키가 있었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5)
+삼성 기기는 AOSP 에 없는 잠금 관련 settings 키를 더 씁니다. 관찰한 기기의 secure 표에는 다음 키가 있었습니다. (확인 범위: Android 16, One UI 8.5)
 
 ```
 lockscreen.disabled               lockscreen.options
@@ -46,7 +46,7 @@ remote_lock_setting               fmm_unlock_recovery
 active_unlock_*                   mandatory_biometrics_*
 ```
 
-system 표에는 `screen_off_timeout`, `db_lockscreen_is_smart_lock`, `lockscreen_sounds_enabled`, `lockscreen_wallpaper`, `lockstar_enabled` 가, global 표에는 `lock_sound`, `unlock_sound`, `trusted_sound` 가 있었습니다. 반대로 `lock_screen_owner_info` 와 `lock_pattern_autolock` 은 목록에 없었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 이 키들의 값이 무엇을 뜻하는지는 확인하지 못했습니다. settings 파일의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
+system 표에는 `screen_off_timeout`, `db_lockscreen_is_smart_lock`, `lockscreen_sounds_enabled`, `lockscreen_wallpaper`, `lockstar_enabled` 가, global 표에는 `lock_sound`, `unlock_sound`, `trusted_sound` 가 있었습니다. 반대로 `lock_screen_owner_info` 와 `lock_pattern_autolock` 은 목록에 없었습니다. (확인 범위: Android 16, One UI 8.5) 이 키들의 값이 무엇을 뜻하는지는 확인하지 못했습니다. settings 파일의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -108,9 +108,9 @@ LockSettingsStorage 소스에는 백업 대상으로 잠금 화면 소유자 정
 
 ## 라이브 기기에서 보는 잠금 해제 흔적
 
-`dumpsys user` 에는 사용자마다 `State: RUNNING_UNLOCKED` 와 `Unlock time: <값>` 줄이 있었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 이름으로 보면 사용자 저장 공간(CE 영역)이 잠금 해제된 상태와 그 시각의 단서입니다. 소스로 보면 `Unlock time` 은 부팅 뒤 흐른 시간(SystemClock.elapsedRealtime)으로 적고 출력할 때는 지금과의 차이를 "얼마 전" 모양으로 찍으며 [3], 사용자를 멈추거나 재부팅하면 0 으로 돌아갑니다. 이 값은 사용자 공간을 여는 단계(onUserUnlocking)에서만 적어서 [3], 화면 잠금을 풀 때마다 바뀌는 값으로 읽지 않습니다. 출력 전체 모양은 [사용자와 프로필 (Multi-user·users)](users-profiles.md) 페이지에 있습니다.
+`dumpsys user` 에는 사용자마다 `State: RUNNING_UNLOCKED` 와 `Unlock time: <값>` 줄이 있었습니다. (확인 범위: Android 16, One UI 8.5) 이름으로 보면 사용자 저장 공간(CE 영역)이 잠금 해제된 상태와 그 시각의 단서입니다. 소스로 보면 `Unlock time` 은 부팅 뒤 흐른 시간(SystemClock.elapsedRealtime)으로 적고 출력할 때는 지금과의 차이를 "얼마 전" 모양으로 찍으며 [3], 사용자를 멈추거나 재부팅하면 0 으로 돌아갑니다. 이 값은 사용자 공간을 여는 단계(onUserUnlocking)에서만 적어서 [3], 화면 잠금을 풀 때마다 바뀌는 값으로 읽지 않습니다. 출력 전체 모양은 [사용자와 프로필 (Multi-user·users)](users-profiles.md) 페이지에 있습니다.
 
-`dumpsys usagestats` 의 최근 이벤트에는 `KEYGUARD_HIDDEN` 이벤트가 있었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 이름으로 보아 잠금 화면이 사라진 때를 보여 주는 이벤트이고, 이벤트 형식과 보존 기간은 [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) 페이지에 있습니다.
+`dumpsys usagestats` 의 최근 이벤트에는 `KEYGUARD_HIDDEN` 이벤트가 있었습니다. (확인 범위: Android 16, One UI 8.5) 이름으로 보아 잠금 화면이 사라진 때를 보여 주는 이벤트이고, 이벤트 형식과 보존 기간은 [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) 페이지에 있습니다.
 
 ## 증거로서 의미
 
@@ -126,7 +126,7 @@ LockSettingsStorage 소스에는 백업 대상으로 잠금 화면 소유자 정
 
 ## 시각 해석
 
-`locksettings` 표의 칸에는 시각이 없어서 잠금을 언제 설정했는지는 이 표로 알 수 없습니다 [1]. settings 의 `biometrics_strong_enroll_timestamp` 는 이름에 시각이 들어 있지만 단위와 기준을 확인하지 못했습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) usagestats 이벤트의 시각 해석은 usagestats 페이지를, 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
+`locksettings` 표의 칸에는 시각이 없어서 잠금을 언제 설정했는지는 이 표로 알 수 없습니다 [1]. settings 의 `biometrics_strong_enroll_timestamp` 는 이름에 시각이 들어 있지만 단위와 기준을 확인하지 못했습니다. (확인 범위: Android 16, One UI 8.5) usagestats 이벤트의 시각 해석은 usagestats 페이지를, 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
 
 ## 함정과 한계
 

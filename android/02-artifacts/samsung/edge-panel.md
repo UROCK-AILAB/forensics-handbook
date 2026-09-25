@@ -18,7 +18,7 @@ nav_order: 1160
 
 ## 위치와 버전별 차이
 
-실제 폰에서 adb 일반 권한으로 설정 값의 키 이름을 읽었을 때, 이름에 `edge` 나 `cocktail` 이 들어간 키는 아래와 같았습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 값은 가려져 있고, 키의 뜻은 하나도 확인하지 못했습니다.
+실제 폰에서 adb 일반 권한으로 설정 값의 키 이름을 읽었을 때, 이름에 `edge` 나 `cocktail` 이 들어간 키는 아래와 같았습니다(확인 범위: Android 16, One UI 8.5). 값은 가려져 있고, 키의 뜻은 하나도 확인하지 못했습니다.
 
 | 영역 | 키 이름 |
 |---|---|
@@ -45,7 +45,7 @@ One UI 판에 따라 키 이름이나 저장 방식이 어떻게 달라지는지
 
 엣지 패널 앱의 파일을 확인하지 못해서 이 절에서 설명할 구조는 없습니다. 설정 값의 저장 형식은 [설정 값](../system-account/settings.md) 과 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 을 봅니다.
 
-앱 사용 기록에는 엣지 패널과 관련 있을 수 있는 이벤트 종류가 보입니다. 같은 폰의 `dumpsys usagestats` 출력에는 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED` 와 함께 `shortcutId` 칸이 붙은 `SHORTCUT_INVOCATION` 이벤트가 있었습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 엣지 패널에서 앱이나 바로가기를 띄운 일이 이 이벤트로 따로 구분되는지는 확인하지 못했습니다. 이벤트 종류의 뜻은 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 다룹니다.
+앱 사용 기록에는 엣지 패널과 관련 있을 수 있는 이벤트 종류가 보입니다. 같은 폰의 `dumpsys usagestats` 출력에는 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED` 와 함께 `shortcutId` 칸이 붙은 `SHORTCUT_INVOCATION` 이벤트가 있었습니다(확인 범위: Android 16, One UI 8.5). 엣지 패널에서 앱이나 바로가기를 띄운 일이 이 이벤트로 따로 구분되는지는 확인하지 못했습니다. 이벤트 종류의 뜻은 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 

@@ -53,7 +53,7 @@ Android 버전이나 One UI 버전에 따라 세 앱의 흔적이 어떻게 달�
 
 앱 폴더 안의 DB 이름, 표 이름, 칸 이름은 세 앱 모두 공개 자료로 확인하지 못했습니다. 앱 폴더를 확보했다면 파일마다 형식을 먼저 가려내고 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md) 같은 기반 구조 페이지를 따라 읽습니다. 처음 보는 앱 폴더를 훑는 순서는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md)에 있습니다.
 
-알림 쪽 칸은 관찰로 모양을 확인했습니다. 관찰 기기의 앱 사용 기록에서 NOTIFICATION_INTERRUPTION 이벤트 줄에는 package 칸과 함께 channelId 칸이 나왔고, dumpsys notification 출력의 NotificationRecord 에는 pkg, channel, android.title, android.text, when, mCreationTimeMs, mUpdateTimeMs 칸이 있었고, android.title·android.text 는 실제 글자 대신 [length=##] 모양으로 길이만 나왔습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 칸마다의 뜻과 보관 방식은 [알림 기록](../app-usage/notification-history.md)과 [앱 사용 기록](../app-usage/usagestats/index.md)에서 다룹니다.
+알림 쪽 칸은 관찰로 모양을 확인했습니다. 관찰 기기의 앱 사용 기록에서 NOTIFICATION_INTERRUPTION 이벤트 줄에는 package 칸과 함께 channelId 칸이 나왔고, dumpsys notification 출력의 NotificationRecord 에는 pkg, channel, android.title, android.text, when, mCreationTimeMs, mUpdateTimeMs 칸이 있었고, android.title·android.text 는 실제 글자 대신 [length=##] 모양으로 길이만 나왔습니다. (확인 범위: Android 16, One UI 8.5) 칸마다의 뜻과 보관 방식은 [알림 기록](../app-usage/notification-history.md)과 [앱 사용 기록](../app-usage/usagestats/index.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -67,7 +67,7 @@ Android 버전이나 One UI 버전에 따라 세 앱의 흔적이 어떻게 달�
 
 앱 내부 시각 칸의 기준은 세 앱 모두 확인하지 못했습니다. 숫자 모양으로 기준을 가늠하는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-관찰 기기의 dumpsys notification 출력에서 mCreationTimeMs 와 mUpdateTimeMs 는 값 뒤 괄호 안에 +#### 모양의 시간대 오프셋이 붙은 시각으로 출력됐습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 칸 이름대로라면 두 값은 알림이 처음 만들어진 시각과 마지막으로 바뀐 시각이고, 같은 알림을 주문 상태에 맞춰 고쳐 쓰는 앱이라면 두 값이 벌어질 수 있습니다. 이 세 앱이 알림을 고쳐 쓰는지 새로 띄우는지는 확인하지 못했으니, 검체에서 두 값을 나란히 적어 두고 판단합니다. 앱 사용 기록의 time 값이 어느 시간대 기준인지는 관찰 메모로 확인하지 못했으니 [시간대와 시각 설정](../system-account/time-zone.md)에서 기기의 시간대부터 확인합니다.
+관찰 기기의 dumpsys notification 출력에서 mCreationTimeMs 와 mUpdateTimeMs 는 값 뒤 괄호 안에 +#### 모양의 시간대 오프셋이 붙은 시각으로 출력됐습니다. (확인 범위: Android 16, One UI 8.5) 칸 이름대로라면 두 값은 알림이 처음 만들어진 시각과 마지막으로 바뀐 시각이고, 같은 알림을 주문 상태에 맞춰 고쳐 쓰는 앱이라면 두 값이 벌어질 수 있습니다. 이 세 앱이 알림을 고쳐 쓰는지 새로 띄우는지는 확인하지 못했으니, 검체에서 두 값을 나란히 적어 두고 판단합니다. 앱 사용 기록의 time 값이 어느 시간대 기준인지는 관찰 메모로 확인하지 못했으니 [시간대와 시각 설정](../system-account/time-zone.md)에서 기기의 시간대부터 확인합니다.
 
 ## 함정과 한계
 

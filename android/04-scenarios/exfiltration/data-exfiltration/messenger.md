@@ -15,9 +15,9 @@ nav_order: 1700
 
 ## 먼저 확인할 것
 
-메신저 DB 는 앱 데이터 폴더 안에 있습니다. 수집 방법에 따라 이 폴더가 수집본에 없을 수 있으니, 분석을 시작하기 전에 대상 앱의 데이터 폴더가 들어 있는지부터 봅니다. 실제 폰에서 adb 일반 셸 권한으로 읽어 본 범위는 dumpsys 출력, 설정 키, /sdcard 폴더 목록이었고 앱 데이터 폴더의 내용은 없었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 폴더 구조는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../../01-foundations/storage/app-data-layout.md)에, 수집 방법별 차이는 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)에 있습니다.
+메신저 DB 는 앱 데이터 폴더 안에 있습니다. 수집 방법에 따라 이 폴더가 수집본에 없을 수 있으니, 분석을 시작하기 전에 대상 앱의 데이터 폴더가 들어 있는지부터 봅니다. 실제 폰에서 adb 일반 셸 권한으로 읽어 본 범위는 dumpsys 출력, 설정 키, /sdcard 폴더 목록이었고 앱 데이터 폴더의 내용은 없었습니다 (확인 범위: Android 16, One UI 8.5). 폴더 구조는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../../01-foundations/storage/app-data-layout.md)에, 수집 방법별 차이는 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)에 있습니다.
 
-그다음 어떤 메신저가 설치돼 있었는지와 지금도 남아 있는지를 [설치된 앱 (packages.xml)](../../../02-artifacts/app-usage/packages/index.md)에서 확인합니다. 실제 폰에서는 시스템 앱 486개, 사용자가 설치한 앱 168개가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 앱이 여러 개면 조사 기간에 앞에 띄운 앱부터 좁힙니다.
+그다음 어떤 메신저가 설치돼 있었는지와 지금도 남아 있는지를 [설치된 앱 (packages.xml)](../../../02-artifacts/app-usage/packages/index.md)에서 확인합니다. 실제 폰에서는 시스템 앱 486개, 사용자가 설치한 앱 168개가 있었습니다 (확인 범위: Android 16, One UI 8.5). 앱이 여러 개면 조사 기간에 앞에 띄운 앱부터 좁힙니다.
 
 메신저 DB 의 시각은 대부분 유닉스 밀리초라서, 보고서에 현지 시각으로 옮기려면 기기의 시간대를 알아야 합니다. 값 읽는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../../01-foundations/value-decoding/time-values.md)에, 기기 시간대는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md)에 있습니다. 보안 폴더나 작업 프로필에 같은 메신저가 따로 깔려 있을 수 있어서 [사용자와 프로필 (Multi-user·users)](../../../02-artifacts/system-account/users-profiles.md)도 함께 봅니다.
 
@@ -73,9 +73,9 @@ ALEAPP 에는 telegramAndroid.py, signalAndroid.py, line.py, weChat.py, googleCh
 
 ## 알림과 앱 사용 기록으로 보강하기
 
-메신저 DB 를 얻지 못했거나 DB 의 시각을 다른 기록과 맞춰 보고 싶을 때는 시스템 쪽 기록을 씁니다. `dumpsys notification` 에는 알림마다 `NotificationRecord(pkg=..., user=..., id=..., key=...)` 줄과 `channel=`, `when=`, `seen=` 칸이 나왔고, `dumpsys usagestats` 에는 channelId 가 붙은 NOTIFICATION_INTERRUPTION 과 NOTIFICATION_SEEN 이벤트가 나왔습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 알림은 메시지를 받은 쪽의 흔적이라서 대화가 오간 시각대를 알려 주지만, 이 기기에서 무엇을 보냈는지까지 보여 주는지는 확인하지 못했습니다.
+메신저 DB 를 얻지 못했거나 DB 의 시각을 다른 기록과 맞춰 보고 싶을 때는 시스템 쪽 기록을 씁니다. `dumpsys notification` 에는 알림마다 `NotificationRecord(pkg=..., user=..., id=..., key=...)` 줄과 `channel=`, `when=`, `seen=` 칸이 나왔고, `dumpsys usagestats` 에는 channelId 가 붙은 NOTIFICATION_INTERRUPTION 과 NOTIFICATION_SEEN 이벤트가 나왔습니다 (확인 범위: Android 16, One UI 8.5). 알림은 메시지를 받은 쪽의 흔적이라서 대화가 오간 시각대를 알려 주지만, 이 기기에서 무엇을 보냈는지까지 보여 주는지는 확인하지 못했습니다.
 
-사용자가 공유 창에서 어느 메신저를 골랐는지 남는 기록은 이번 자료에서 찾지 못했습니다. system 설정 표에 `direct_share` 키가 있었으나 뜻은 확인하지 못했습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+사용자가 공유 창에서 어느 메신저를 골랐는지 남는 기록은 이번 자료에서 찾지 못했습니다. system 설정 표에 `direct_share` 키가 있었으나 뜻은 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5).
 
 ## 분석 흐름
 

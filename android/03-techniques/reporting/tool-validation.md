@@ -131,7 +131,7 @@ CFTT 시험은 도구가 주장한 지원 데이터 객체를 기준으로 하�
 
 소프트웨어·하드웨어 판이 너무 다양해서 모든 상황에서 도구가 기대대로 동작한다고 보장할 수 없고, 그래서 기관은 위험과 시험 비용을 저울질해야 합니다[3].
 
-시험 기기는 켜져 있는 동안 사용자 조작과 무관하게 기록을 계속 바꿉니다. 관찰 기기에서는 `dumpsys batterystats` 출력이 98027줄이었고 그 가운데 Battery History 에 상태 변화 줄이 수만 개 쌓여 있었으며, `dumpsys usagestats` 에도 `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `STANDBY_BUCKET_CHANGED` 같은 이벤트가 계속 기록돼 있었습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 같은 시험 기기를 두 번 수집해 비교할 때는 이런 기록이 바뀐다는 점을 감안하고, 전체 해시가 아니라 알려진 데이터 항목 단위로 대조합니다. 두 기록의 구조는 [배터리 사용 기록](../../02-artifacts/app-usage/batterystats.md)과 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
+시험 기기는 켜져 있는 동안 사용자 조작과 무관하게 기록을 계속 바꿉니다. 관찰 기기에서는 `dumpsys batterystats` 출력이 98027줄이었고 그 가운데 Battery History 에 상태 변화 줄이 수만 개 쌓여 있었으며, `dumpsys usagestats` 에도 `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `STANDBY_BUCKET_CHANGED` 같은 이벤트가 계속 기록돼 있었습니다(확인 범위: Android 16, One UI 8.5). 같은 시험 기기를 두 번 수집해 비교할 때는 이런 기록이 바뀐다는 점을 감안하고, 전체 해시가 아니라 알려진 데이터 항목 단위로 대조합니다. 두 기록의 구조는 [배터리 사용 기록](../../02-artifacts/app-usage/batterystats.md)과 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
 
 공개된 Android 기준 이미지(알려진 데이터 세트)의 이름과 출처는 이 핸드북에서 아직 확인하지 않았습니다. 기준 이미지가 없더라도 기관이 시험 기기에 알려진 데이터를 직접 채워 시험할 수 있고, SWGDE 도 실험실에서 만든 데이터가 중요한 조건을 겨냥하기 좋다고 적습니다[3].
 

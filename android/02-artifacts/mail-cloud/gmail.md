@@ -157,7 +157,7 @@ ALEAPP 의 GmailActive 모듈이 `Gmail.xml` 을 [1], Gmail - App Emails·Label 
 | [설치된 앱 (packages.xml)](../app-usage/packages/index.md) | 지메일 앱의 설치·업데이트 시점과 버전 |
 | [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) | 첨부 파일을 공용 폴더로 따로 저장한 흔적 |
 
-관찰 기기에서는 `dumpsys account` 출력에 계정마다 `Account {name=..., type=...}` 줄과 "Accounts History" 표가 있었고, 표에 계정 추가·삭제 동작이 기록되어 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 칸 뜻은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md), 첨부로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
+관찰 기기에서는 `dumpsys account` 출력에 계정마다 `Account {name=..., type=...}` 줄과 "Accounts History" 표가 있었고, 표에 계정 추가·삭제 동작이 기록되어 있었습니다 (확인 범위: Android 16, One UI 8.5). 칸 뜻은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md), 첨부로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 

@@ -27,7 +27,7 @@ ALEAPP 는 예전 이진 파일과 지금의 XML 파일을 아래 패턴으로 �
 
 `softap.conf` 는 형식 문서가 없는 이진 파일이고, ALEAPP 는 바이트 위치로 SSID 와 비밀번호를 뽑으며 파일 모양이 다르면 틀린 값이 나올 수 있다고 적어 두었습니다 [1]. 어느 Android 버전에서 이진 파일을 떠나 XML 로 옮겼는지는 확인하지 못했고, ALEAPP 가 이 모듈을 시험한 이미지는 Android 10~16 이며 모두 1행씩 나왔습니다 [1].
 
-관찰 기기에서 adb 일반 권한으로 본 핫스폿 관련 흔적은 아래와 같습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰 기기에서 adb 일반 권한으로 본 핫스폿 관련 흔적은 아래와 같습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 출처 | 보인 것 |
 |---|---|
@@ -36,7 +36,7 @@ ALEAPP 는 예전 이진 파일과 지금의 XML 파일을 아래 패턴으로 �
 | `dumpsys batterystats` 배터리 기록 | 줄에 `-wifi_ap` 표시 |
 | settings global | `tether_offload_disabled`, `tethered_config_state`, `tethering_data_warning_sim_slot_#`(슬롯별 2개) |
 
-settings secure 쪽에는 삼성 핫스폿 관련으로 보이는 키가 여러 개 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+settings secure 쪽에는 삼성 핫스폿 관련으로 보이는 키가 여러 개 있었습니다 (확인 범위: Android 16, One UI 8.5).
 
 ```
 wifi_ap_most_recent_password
@@ -79,7 +79,7 @@ ALEAPP 는 이 파일에서 SSID, `Passphrase`, `SecurityType` 세 값만 뽑습
 
 **증명하는 것**
 
-핫스폿 설정 파일은 확보 시점에 이 폰에 설정된 핫스폿 이름과 보안 방식을 알려 주고, 차단·허용 목록이 채워져 있다면 사용자가 특정 MAC 주소의 기기를 막거나 허용했다는 기록이 됩니다. [데이터 사용량 (netstats)](netstats.md) 에서 테더링으로 나간 데이터는 특수 UID -5(UID_TETHERING)로 잡히니 [2], 그 행이 있는 구간에 이 폰이 다른 기기에 데이터를 넘겨준 양을 볼 수 있습니다. `dumpsys wifi` 의 `CMD_SET_AP`·`CMD_AP_STOPPED` 줄은 핫스폿을 켜고 끄는 명령이 처리된 시각을 보여 줍니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+핫스폿 설정 파일은 확보 시점에 이 폰에 설정된 핫스폿 이름과 보안 방식을 알려 주고, 차단·허용 목록이 채워져 있다면 사용자가 특정 MAC 주소의 기기를 막거나 허용했다는 기록이 됩니다. [데이터 사용량 (netstats)](netstats.md) 에서 테더링으로 나간 데이터는 특수 UID -5(UID_TETHERING)로 잡히니 [2], 그 행이 있는 구간에 이 폰이 다른 기기에 데이터를 넘겨준 양을 볼 수 있습니다. `dumpsys wifi` 의 `CMD_SET_AP`·`CMD_AP_STOPPED` 줄은 핫스폿을 켜고 끄는 명령이 처리된 시각을 보여 줍니다 (확인 범위: Android 16, One UI 8.5).
 
 **증명하지 못하는 것**
 
@@ -87,7 +87,7 @@ ALEAPP 는 이 파일에서 SSID, `Passphrase`, `SecurityType` 세 값만 뽑습
 
 ## 시각 해석
 
-`dumpsys wifi` 상태 기계 기록의 시각은 `time=MM-DD HH:MM:SS.mmm` 모양이고 연도가 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 연도는 수집 날짜에서 거꾸로 짐작하고, 시간대는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 확인합니다. 관찰 기기의 WifiController 기록에는 `total records` 값이 따로 찍혔으니 (확인 범위: SM-S937N, Android 16, One UI 8.5), 출력에 보이는 `rec[#]` 줄 수와 이 값을 비교해 보이는 줄이 전체 기록의 일부인지 확인합니다. 기록을 몇 개까지 남기는지는 확인하지 못했고, 사건 시각의 줄이 없다고 핫스폿을 켜지 않았다고 결론 내리지 않습니다.
+`dumpsys wifi` 상태 기계 기록의 시각은 `time=MM-DD HH:MM:SS.mmm` 모양이고 연도가 없습니다 (확인 범위: Android 16, One UI 8.5). 연도는 수집 날짜에서 거꾸로 짐작하고, 시간대는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 확인합니다. 관찰 기기의 WifiController 기록에는 `total records` 값이 따로 찍혔으니 (확인 범위: Android 16, One UI 8.5), 출력에 보이는 `rec[#]` 줄 수와 이 값을 비교해 보이는 줄이 전체 기록의 일부인지 확인합니다. 기록을 몇 개까지 남기는지는 확인하지 못했고, 사건 시각의 줄이 없다고 핫스폿을 켜지 않았다고 결론 내리지 않습니다.
 
 netstats 의 UID -5 기록은 구간 시작 시각(유닉스 밀리초)과 구간 길이로 이루어져 있어서 몇 시 몇 분에 켰는지가 아니라 어느 1~2시간 구간에 사용량이 있었는지만 알려 줍니다. 구간 해석은 [데이터 사용량 (netstats)](netstats.md) 페이지를 따릅니다.
 
@@ -99,7 +99,7 @@ netstats 의 UID -5 기록은 구간 시작 시각(유닉스 밀리초)과 구�
 
 둘째, `softap.conf` 이진 파일은 공식 형식 문서가 없어서 도구가 틀린 값을 낼 수 있습니다 [1]. 도구 결과의 SSID 가 이상하면 헥스로 파일을 열어 글자가 실제로 어디 있는지 확인합니다.
 
-셋째, 배터리 기록의 `-wifi_ap` 표시는 핫스폿 켜짐 상태 표시로 보이지만 공식 문서로 뜻을 확인하지 못했습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 표시만으로 핫스폿을 켰다고 쓰지 말고 `dumpsys wifi` 기록이나 netstats UID -5 와 함께 씁니다. 배터리 기록 읽는 법은 [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) 페이지에 있습니다.
+셋째, 배터리 기록의 `-wifi_ap` 표시는 핫스폿 켜짐 상태 표시로 보이지만 공식 문서로 뜻을 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5). 이 표시만으로 핫스폿을 켰다고 쓰지 말고 `dumpsys wifi` 기록이나 netstats UID -5 와 함께 씁니다. 배터리 기록 읽는 법은 [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) 페이지에 있습니다.
 
 넷째, 연결 종류 번호 4 는 옛 `ConnectivityManager` 상수의 TYPE_MOBILE_DUN 이지만 [2], DUN 이 테더링용 연결이라는 설명은 이번 자료에 없었습니다. 이 번호를 테더링 사용량으로 읽지 말고, 테더링 몫은 UID -5 로 봅니다.
 
@@ -111,7 +111,7 @@ netstats 의 UID -5 기록은 구간 시작 시각(유닉스 밀리초)과 구�
 
 `WifiConfigStoreSoftAp.xml` 사본을 편집기로 열어 `SoftAp` 요소 아래 칸을 위 구조 표와 맞춰 읽습니다. 예전 `softap.conf` 는 이진 파일이라 헥스 편집기로 열고, 형식 문서가 없으니 SSID 로 짐작되는 글자열이 어디서 시작하는지 눈으로 찾아 도구가 뽑은 값과 같은지만 확인합니다. 형식을 모르는 파일에서 바이트 위치를 넘겨짚어 값을 만들지 않습니다.
 
-라이브 기기라면 `dumpsys wifi` 출력에서 핫스폿 명령 줄만 걸러 볼 수 있습니다. 아래 줄 모양은 관찰 기기에서 본 모양이고 (확인 범위: SM-S937N, Android 16, One UI 8.5), 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
+라이브 기기라면 `dumpsys wifi` 출력에서 핫스폿 명령 줄만 걸러 볼 수 있습니다. 아래 줄 모양은 관찰 기기에서 본 모양이고 (확인 범위: Android 16, One UI 8.5), 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
 
 ```
 adb shell dumpsys wifi | grep -E 'CMD_SET_AP|CMD_AP_STOPPED'

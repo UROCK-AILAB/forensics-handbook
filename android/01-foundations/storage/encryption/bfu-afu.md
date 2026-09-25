@@ -56,7 +56,7 @@ CE 영역은 사용자가 잠금을 푼 뒤 기기를 다시 시작할 때까지
 
 ## 기기에 남는 흔적
 
-adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 기본 사용자 블록의 `State:` 줄에 현재 상태 이름이 나오고, 같은 블록에 `Start time:`, `Unlock time:`, `Last logged in:` 칸이 있습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 관찰 기기에서는 이 줄이 `State: RUNNING_UNLOCKED` 였고, 다른 칸의 값은 가려서 확인하지 않았습니다.
+adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 기본 사용자 블록의 `State:` 줄에 현재 상태 이름이 나오고, 같은 블록에 `Start time:`, `Unlock time:`, `Last logged in:` 칸이 있습니다(확인 범위: Android 16, One UI 8.5). 관찰 기기에서는 이 줄이 `State: RUNNING_UNLOCKED` 였고, 다른 칸의 값은 가려서 확인하지 않았습니다.
 
 ```
 Current user: #
@@ -70,9 +70,9 @@ Users:
 
 위 출력은 관찰 메모에서 필요한 줄만 옮긴 것이고, `#` 와 `(가림)` 은 가린 자리입니다. `Unlock time` 은 이름으로 보아 잠금 해제 시각을 적는 칸이지만, 어떤 시계를 기준으로 어떤 형식으로 적는지는 확인하지 못했습니다. dumpsys 출력을 읽는 방법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
 
-앱 사용 기록의 이벤트에도 `KEYGUARD_SHOWN`·`KEYGUARD_HIDDEN` 줄이 있어서 잠금 화면이 나타나고 사라진 시각의 흔적이 남습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 이 이벤트의 해석은 [앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 다룹니다.
+앱 사용 기록의 이벤트에도 `KEYGUARD_SHOWN`·`KEYGUARD_HIDDEN` 줄이 있어서 잠금 화면이 나타나고 사라진 시각의 흔적이 남습니다(확인 범위: Android 16, One UI 8.5). 이 이벤트의 해석은 [앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 다룹니다.
 
-설정 값에는 재시작·잠금과 이름이 이어지는 키가 있습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 이름만 확인했고, 각 키가 무엇을 기록하는지는 공식 문서로 확인하지 못했습니다.
+설정 값에는 재시작·잠금과 이름이 이어지는 키가 있습니다(확인 범위: Android 16, One UI 8.5). 이름만 확인했고, 각 키가 무엇을 기록하는지는 공식 문서로 확인하지 못했습니다.
 
 - global: `boot_count`, `add_users_when_locked`
 - secure: `lockdown_in_power_menu`, `lock_screen_lock_after_timeout`, `theft_detection_lock_supported`, `remote_lock_setting`, `fmm_unlock_recovery`

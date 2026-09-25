@@ -28,7 +28,7 @@ nav_order: 960
 
 DB 파일 이름 뒤의 `*` 는 `-wal`·`-shm` 같은 딸린 파일까지 함께 잡으려는 것으로 보이지만, 도구의 의도를 확인하지는 않았습니다. 어느 쪽이든 DB 를 확보할 때는 딸린 파일을 같이 가져와야 최근 변경분을 잃지 않고, 그 이유는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. `shared_prefs` 아래 두 XML 은 앱 설정 파일이고, 읽는 법은 [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md)를 봅니다.
 
-마지막 줄 `*/WhatsApp/Media/*` 는 앞쪽 경로를 가리지 않고 찾는 패턴이라서, 받은 사진·파일이 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 어디에 있든 잡습니다. Android 11 이후 이 폴더가 `/sdcard/Android/media/com.whatsapp/WhatsApp/` 로 옮겨졌다는 이야기는 공식 자료로 확인하지 못했습니다. 관찰 기기의 `/sdcard/Android/media` 에는 앱 폴더가 5개 있었고, 이름이 보이는 것은 `com.google.android.gms` 와 `com.samsung.android.spay` 둘이며 나머지는 가려져 있어서 `com.whatsapp` 폴더가 있는지는 알 수 없습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+마지막 줄 `*/WhatsApp/Media/*` 는 앞쪽 경로를 가리지 않고 찾는 패턴이라서, 받은 사진·파일이 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 어디에 있든 잡습니다. Android 11 이후 이 폴더가 `/sdcard/Android/media/com.whatsapp/WhatsApp/` 로 옮겨졌다는 이야기는 공식 자료로 확인하지 못했습니다. 관찰 기기의 `/sdcard/Android/media` 에는 앱 폴더가 5개 있었고, 이름이 보이는 것은 `com.google.android.gms` 와 `com.samsung.android.spay` 둘이며 나머지는 가려져 있어서 `com.whatsapp` 폴더가 있는지는 알 수 없습니다(확인 범위: Android 16, One UI 8.5).
 
 | 항목 | 조사 시점에 확인한 것 | 확인 못 한 것 |
 |---|---|---|

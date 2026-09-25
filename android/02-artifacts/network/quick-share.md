@@ -29,11 +29,11 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 | 전송 기록 DB·표·칸 | 확인하지 못했습니다 | 확인하지 못했습니다 |
 | 전송 기술(BLE·Wi-Fi Direct 등) 목록 | 도움말에 없습니다 | 확인하지 못했습니다 |
 
-도움말은 파일 앱 화면 기준으로만 설명하므로, 받은 파일이 공용 저장 공간의 어느 폴더에 실제로 놓이는지는 검체에서 직접 찾아야 합니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 에 있습니다. 관찰한 기기의 `/sdcard/Download` 아래에는 항목 151 개와 폴더 36 개가 있었지만 폴더 이름을 가려 두어서 "Quick Share" 폴더가 있는지는 알 수 없습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+도움말은 파일 앱 화면 기준으로만 설명하므로, 받은 파일이 공용 저장 공간의 어느 폴더에 실제로 놓이는지는 검체에서 직접 찾아야 합니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 에 있습니다. 관찰한 기기의 `/sdcard/Download` 아래에는 항목 151 개와 폴더 36 개가 있었지만 폴더 이름을 가려 두어서 "Quick Share" 폴더가 있는지는 알 수 없습니다(확인 범위: Android 16, One UI 8.5).
 
 ## 구조
 
-전송 기록 파일의 구조는 확인하지 못했으므로, 관찰한 기기에서 이름이 파일 공유와 닿아 있어 보이는 설정 키와 서비스 등록 목록을 정리합니다. 값은 관찰 메모에서 가려져 있어서 뜻과 값 형식은 모두 확인하지 못했습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+전송 기록 파일의 구조는 확인하지 못했으므로, 관찰한 기기에서 이름이 파일 공유와 닿아 있어 보이는 설정 키와 서비스 등록 목록을 정리합니다. 값은 관찰 메모에서 가려져 있어서 뜻과 값 형식은 모두 확인하지 못했습니다(확인 범위: Android 16, One UI 8.5).
 
 | 설정 영역 | 키 이름 |
 |---|---|
@@ -43,13 +43,13 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 
 `quickshare_enabled` 와 `mcf_quick_share_visibility` 는 이름으로 보아 Quick Share 를 켰는지와 공개 범위에 닿아 있을 것으로 짐작하지만, 값을 보지 못했으므로 짐작에 그칩니다. `nearby_sharing_component` 가 어떤 구성 요소를 가리키는지, `mcf_` 로 시작하는 키들이 Quick Share 와 어떤 관계인지도 확인하지 못했습니다. 설정 값을 읽는 법과 파일 위치는 [설정 값](../system-account/settings.md) 에 있습니다.
 
-같은 기기의 `dumpsys bluetooth_manager` 출력에는 "Ble app registered:" 목록이 있고, 여기에 `com.samsung.android.mcfserver`, `com.samsung.android.mcfds`, `com.samsung.android.beaconmanager`, `com.samsung.android.mdx.kit` 가 보였습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). BLE 를 쓰려고 등록한 삼성 구성 요소라는 점까지는 출력으로 알 수 있지만, 이 가운데 어느 것이 Quick Share 를 맡는지는 확인하지 못했습니다. 블루투스 쪽 흔적은 [블루투스 장치](bluetooth.md) 에서 다룹니다.
+같은 기기의 `dumpsys bluetooth_manager` 출력에는 "Ble app registered:" 목록이 있고, 여기에 `com.samsung.android.mcfserver`, `com.samsung.android.mcfds`, `com.samsung.android.beaconmanager`, `com.samsung.android.mdx.kit` 가 보였습니다(확인 범위: Android 16, One UI 8.5). BLE 를 쓰려고 등록한 삼성 구성 요소라는 점까지는 출력으로 알 수 있지만, 이 가운데 어느 것이 Quick Share 를 맡는지는 확인하지 못했습니다. 블루투스 쪽 흔적은 [블루투스 장치](bluetooth.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-받은 파일이 검체에 남아 있으면 그 파일이 기기에 있었다는 사실과 파일 시스템·미디어 저장소의 시각을 알 수 있습니다. 앱 사용 기록에는 앱 화면이 앞에 나온 때(`ACTIVITY_RESUMED`)와 포그라운드 서비스가 시작·종료한 때(`FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`), 알림이 뜬 때(`NOTIFICATION_INTERRUPTION`, `channelId` 포함)가 남습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 보내는 화면을 벗어나면 전송 상태 알림이 뜨므로[1], 공유를 맡은 패키지를 찾아낸 뒤에는 그 패키지의 알림·서비스 이벤트가 전송 시점의 간접 흔적이 될 수 있습니다.
+받은 파일이 검체에 남아 있으면 그 파일이 기기에 있었다는 사실과 파일 시스템·미디어 저장소의 시각을 알 수 있습니다. 앱 사용 기록에는 앱 화면이 앞에 나온 때(`ACTIVITY_RESUMED`)와 포그라운드 서비스가 시작·종료한 때(`FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`), 알림이 뜬 때(`NOTIFICATION_INTERRUPTION`, `channelId` 포함)가 남습니다(확인 범위: Android 16, One UI 8.5). 보내는 화면을 벗어나면 전송 상태 알림이 뜨므로[1], 공유를 맡은 패키지를 찾아낸 뒤에는 그 패키지의 알림·서비스 이벤트가 전송 시점의 간접 흔적이 될 수 있습니다.
 
 **증명하지 못하는 것**
 
@@ -59,7 +59,7 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 
 ## 시각 해석
 
-전송 기록 자체의 시각 칸은 확인하지 못했으므로 둘레 흔적의 시각을 씁니다. 받은 파일은 파일 시스템 시각과 [미디어 저장소](../media/mediastore/index.md) 의 시각을, 앱 사용과 알림은 [앱 사용 기록](../app-usage/usagestats/index.md) 과 [알림 기록](../app-usage/notification-history.md) 의 시각을 봅니다. 관찰한 기기의 usagestats dump 는 시각이 `time="…"` 칸에 들어 있었지만 값이 가려져 있어 표시 형식과 시간대는 확인하지 못했습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에, 기기 시간대 확인은 [시간대와 시각 설정](../system-account/time-zone.md) 에 있습니다.
+전송 기록 자체의 시각 칸은 확인하지 못했으므로 둘레 흔적의 시각을 씁니다. 받은 파일은 파일 시스템 시각과 [미디어 저장소](../media/mediastore/index.md) 의 시각을, 앱 사용과 알림은 [앱 사용 기록](../app-usage/usagestats/index.md) 과 [알림 기록](../app-usage/notification-history.md) 의 시각을 봅니다. 관찰한 기기의 usagestats dump 는 시각이 `time="…"` 칸에 들어 있었지만 값이 가려져 있어 표시 형식과 시간대는 확인하지 못했습니다(확인 범위: Android 16, One UI 8.5). 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에, 기기 시간대 확인은 [시간대와 시각 설정](../system-account/time-zone.md) 에 있습니다.
 
 파일을 받은 시각과 파일 시스템에 찍힌 시각이 같은지, 원본 파일의 수정 시각을 넘겨받는지는 이번 자료로 확인하지 못했으니 한 가지 시각에 기대지 말고 여러 흔적을 맞춰 봅니다.
 
@@ -67,7 +67,7 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 
 가장 큰 함정은 이름입니다. Google 의 Quick Share(예전 Nearby Share)와 삼성의 Quick Share 는 이름은 같아도 설정과 기능이 다를 수 있다고 Google 도움말이 따로 적고 있으므로[1], 한쪽에서 알아낸 경로나 패키지를 다른 쪽 검체에 그대로 대입하지 않습니다. 설정 키 이름에 `quickshare`, `nearby` 가 들어 있다고 해서 그 키가 어느 쪽 기능의 것인지도 이름만으로는 알 수 없습니다.
 
-관찰한 기기에서 공유 앱의 패키지 이름은 가려져 있어서, usagestats 에 Quick Share 이벤트가 실제로 찍혔는지는 확인하지 못했습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 오래된 전송이라면 둘레 흔적도 남아 있지 않을 수 있으니, 앱 사용 기록이 얼마 동안 남는지는 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 확인합니다.
+관찰한 기기에서 공유 앱의 패키지 이름은 가려져 있어서, usagestats 에 Quick Share 이벤트가 실제로 찍혔는지는 확인하지 못했습니다(확인 범위: Android 16, One UI 8.5). 오래된 전송이라면 둘레 흔적도 남아 있지 않을 수 있으니, 앱 사용 기록이 얼마 동안 남는지는 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 확인합니다.
 
 받은 파일을 사용자가 지우거나 다른 폴더로 옮기면 Download 아래 흔적은 사라지거나 바뀝니다. 지운 파일을 찾는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를, 흔적을 없애려 한 정황을 판단하는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 를 봅니다.
 
@@ -75,7 +75,7 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 
 ### 출력 모양을 한 번 따라가기
 
-Quick Share 전송 기록의 파일 형식을 확인하지 못해서 헥스로 따라갈 대상은 아직 없습니다. 대신 관찰한 기기의 usagestats dump 에서 알림 이벤트 한 줄의 모양을 옮기면 아래와 같고, 값은 가려진 상태 그대로 둡니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+Quick Share 전송 기록의 파일 형식을 확인하지 못해서 헥스로 따라갈 대상은 아직 없습니다. 대신 관찰한 기기의 usagestats dump 에서 알림 이벤트 한 줄의 모양을 옮기면 아래와 같고, 값은 가려진 상태 그대로 둡니다(확인 범위: Android 16, One UI 8.5).
 
 ```text
 time="…" type=NOTIFICATION_INTERRUPTION package=<패키지> channelId=<값> flags=<값>
@@ -87,7 +87,7 @@ time="…" type=FOREGROUND_SERVICE_STOP package=<패키지> class=<패키지> fl
 
 ### 공개 도구로 한 번
 
-기기가 켜져 있고 adb 를 쓸 수 있다면 `adb shell settings list global`, `settings list secure`, `settings list system` 으로 위 표의 키를 확인하고, `adb shell dumpsys bluetooth_manager` 로 "Ble app registered:" 목록을, `adb shell dumpsys usagestats` 로 앱 사용 이벤트를 봅니다. 관찰한 기기에서는 이 출력들을 adb 일반 셸 권한으로 읽었습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). dumpsys 출력을 다루는 법은 [dumpsys 출력](../logs/dumpsys.md) 에 있고, 공유 앱의 데이터 폴더를 찾아 직접 여는 방법은 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md) 을 봅니다. 공개 분석 도구가 Quick Share 기록을 읽어 주는지는 이번 자료로 확인하지 못했습니다.
+기기가 켜져 있고 adb 를 쓸 수 있다면 `adb shell settings list global`, `settings list secure`, `settings list system` 으로 위 표의 키를 확인하고, `adb shell dumpsys bluetooth_manager` 로 "Ble app registered:" 목록을, `adb shell dumpsys usagestats` 로 앱 사용 이벤트를 봅니다. 관찰한 기기에서는 이 출력들을 adb 일반 셸 권한으로 읽었습니다(확인 범위: Android 16, One UI 8.5). dumpsys 출력을 다루는 법은 [dumpsys 출력](../logs/dumpsys.md) 에 있고, 공유 앱의 데이터 폴더를 찾아 직접 여는 방법은 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md) 을 봅니다. 공개 분석 도구가 Quick Share 기록을 읽어 주는지는 이번 자료로 확인하지 못했습니다.
 
 ## 교차 검증
 

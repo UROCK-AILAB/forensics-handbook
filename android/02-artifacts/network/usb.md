@@ -37,7 +37,7 @@ USB 연결은 방향이 둘입니다. 휴대폰을 PC 에 꽂으면 휴대폰이
 
 `usb_permissions.xml` 경로의 사용자 ID 폴더는 기기 사용자마다 따로 있으므로, 보안 폴더나 작업 프로필이 있는 기기라면 사용자 폴더를 모두 봅니다. 사용자 번호를 읽는 법은 [사용자와 프로필](../system-account/users-profiles.md) 에 있습니다.
 
-삼성 기기에서는 AOSP 에 없는 설정 키도 보입니다. 관찰한 기기의 Settings 에는 아래 키가 있었고, 값은 메모에서 가려져 있어 뜻을 확인하지 못했습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+삼성 기기에서는 AOSP 에 없는 설정 키도 보입니다. 관찰한 기기의 Settings 에는 아래 키가 있었고, 값은 메모에서 가려져 있어 뜻을 확인하지 못했습니다(확인 범위: Android 16, One UI 8.5).
 
 | 설정 영역 | 키 이름 | 확인한 뜻 |
 |---|---|---|
@@ -160,7 +160,7 @@ date -u -d @$((MS / 1000))
 
 | 함께 볼 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [배터리 사용 기록](../app-usage/batterystats.md) | 기록 첫 상태 줄에 `status=`, `health=`, `plug=` 칸과 `-otg` 표시가 보입니다(확인 범위: SM-S937N, Android 16, One UI 8.5). `plug=` 에 USB 가 어떻게 찍히는지는 확인하지 못했습니다 |
+| [배터리 사용 기록](../app-usage/batterystats.md) | 기록 첫 상태 줄에 `status=`, `health=`, `plug=` 칸과 `-otg` 표시가 보입니다(확인 범위: Android 16, One UI 8.5). `plug=` 에 USB 가 어떻게 찍히는지는 확인하지 못했습니다 |
 | [logcat](../logs/logcat.md) | "USB device attached: " 줄의 vendor·product ID 를 `usb_permissions.xml` 의 `vendor-id`·`product-id` 와 맞춰 봅니다 |
 | [와이파이 설정과 접속 기록](wifi.md) | `wifiAP` 의 BSSID 가 저장된 와이파이 네트워크 가운데 어느 것인지 찾습니다 |
 | [앱 사용 기록](../app-usage/usagestats/index.md) | USB 권한을 받은 앱을 언제 썼는지 봅니다 |

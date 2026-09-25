@@ -20,7 +20,7 @@ Android 기기와 이어진 계정의 서버 쪽 데이터를 어떻게 찾고 �
 
 ## 절차
 
-1. **기기에서 계정 목록을 적습니다.** 관찰한 폰의 `dumpsys account` 출력에는 계정마다 `Account {name=..., type=...}` 줄이 있고, 그 아래에 `Accounts History` 표가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 표의 칸과 관찰한 `Action_Type` 값은 아래와 같았습니다.
+1. **기기에서 계정 목록을 적습니다.** 관찰한 폰의 `dumpsys account` 출력에는 계정마다 `Account {name=..., type=...}` 줄이 있고, 그 아래에 `Accounts History` 표가 있었습니다 (확인 범위: Android 16, One UI 8.5). 표의 칸과 관찰한 `Action_Type` 값은 아래와 같았습니다.
 
    ```
    AccountId, Action_Type, timestamp, UID, TableName, Key
@@ -35,7 +35,7 @@ Android 기기와 이어진 계정의 서버 쪽 데이터를 어떻게 찾고 �
    ```
 
    어떤 클라우드 계정이 기기에 붙어 있고 언제 추가·삭제됐는지 볼 출발점이지만, 이 표를 얼마나 오래 보관하는지와 `timestamp` 가 어느 시간대 기준인지는 확인하지 못했습니다. 계정 흔적 전반은 [계정](../../02-artifacts/system-account/accounts/index.md) 페이지를 봅니다.
-2. **동기화·백업 설정을 적습니다.** 관찰한 폰의 설정에는 동기화, 삼성 클라우드, Smart Switch, 위치와 이름이 닿는 키가 아래처럼 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 값의 뜻은 확인하지 못했으니 키가 있다는 사실과 수집 당시 값까지만 기록합니다. 백업 관련 키는 [백업으로 수집](mobile-acquisition/backups.md) 페이지에 따로 정리했습니다.
+2. **동기화·백업 설정을 적습니다.** 관찰한 폰의 설정에는 동기화, 삼성 클라우드, Smart Switch, 위치와 이름이 닿는 키가 아래처럼 있었습니다 (확인 범위: Android 16, One UI 8.5). 값의 뜻은 확인하지 못했으니 키가 있다는 사실과 수집 당시 값까지만 기록합니다. 백업 관련 키는 [백업으로 수집](mobile-acquisition/backups.md) 페이지에 따로 정리했습니다.
 
    | 어디서 | 키 이름 | 이름이 닿는 기능 |
    |---|---|---|
@@ -45,7 +45,7 @@ Android 기기와 이어진 계정의 서버 쪽 데이터를 어떻게 찾고 �
    | settings global | `smartswitch_bnr_count`, `smartswitch_transfer_completed` | Smart Switch |
    | settings secure | `location_mode`, `gs_location_state` | 위치 |
 
-   공용 저장 공간의 `/sdcard/Android/media` 아래에는 `com.google.android.gms` 앱 폴더가 있었지만 (확인 범위: SM-S937N, Android 16, One UI 8.5), 안에 무엇이 있는지는 관찰하지 않았습니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
+   공용 저장 공간의 `/sdcard/Android/media` 아래에는 `com.google.android.gms` 앱 폴더가 있었지만 (확인 범위: Android 16, One UI 8.5), 안에 무엇이 있는지는 관찰하지 않았습니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
 3. **어느 서비스에 무엇이 있을지 정리합니다.** 1·2단계의 계정과 설정을 바탕으로 메일, 사진, 위치, 백업처럼 서버에 있을 법한 데이터를 서비스별로 적습니다. 기기에서 본 계정 목록으로 대상을 정하고 서버 데이터는 따로 얻는다는 흐름은, NIST 의 "기관 지침을 따른다" [1] 와 관찰을 묶은 해석입니다.
 4. **서버 쪽 데이터를 얻습니다.** 계정 소유자가 직접 내려받는 Google Takeout 이 한 방법이고, 그 밖의 법적 절차는 기관 지침을 따릅니다 [1]. 구체적인 법적 절차는 이 페이지에서 다루지 않습니다.
 5. **받은 묶음을 보존합니다.** 내려받은 파일은 곧바로 해시를 계산해 두고, 분할된 파일은 모두 함께 보관합니다. 해시 계산과 기록은 [결과물 형식과 해시](mobile-acquisition/formats-hash.md) 페이지를 봅니다.
@@ -84,7 +84,7 @@ Google 의 저장소(Takeout, Google 백업) 와 삼성의 저장소(삼성 클�
 |---|---|---|
 | Android 9 이상 | 화면 잠금을 설정한 기기에서는 앱 데이터 자동 백업을 화면 잠금 PIN·패턴·비밀번호로 종단간 암호화합니다 [5] | [백업으로 수집](mobile-acquisition/backups.md) |
 | Android 11 이하 / 12 이상 | 앱의 백업 규칙이 `fullBackupContent` 에서 `dataExtractionRules` 로 바뀌고, 12 이상에서는 클라우드 백업(cloud-backup) 과 기기 간 이전(device-transfer) 규칙을 따로 정합니다 [5] | [백업으로 수집](mobile-acquisition/backups.md) |
-| 삼성 One UI | Google 과 따로 삼성 클라우드·Smart Switch 저장소가 있고, 관찰한 폰에 Smart Switch 이름의 설정 키가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5) | [삼성 클라우드와 원드라이브](../../02-artifacts/mail-cloud/samsung-cloud-onedrive.md) |
+| 삼성 One UI | Google 과 따로 삼성 클라우드·Smart Switch 저장소가 있고, 관찰한 폰에 Smart Switch 이름의 설정 키가 있었습니다 (확인 범위: Android 16, One UI 8.5) | [삼성 클라우드와 원드라이브](../../02-artifacts/mail-cloud/samsung-cloud-onedrive.md) |
 
 ## 도구
 

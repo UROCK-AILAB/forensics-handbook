@@ -52,7 +52,7 @@ androidboot.veritymode
 
 ## 기기에서 보이는 흔적
 
-관찰 기기는 루팅하지 않았고 부트로더가 잠긴 상태였습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). adb 일반 셸 권한으로 읽은 설정 값의 global 표에는 개발자 옵션·adb·부팅 횟수와 이름이 이어지는 키가 있었고, 값은 가려서 확인하지 않았습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰 기기는 루팅하지 않았고 부트로더가 잠긴 상태였습니다(확인 범위: Android 16, One UI 8.5). adb 일반 셸 권한으로 읽은 설정 값의 global 표에는 개발자 옵션·adb·부팅 횟수와 이름이 이어지는 키가 있었고, 값은 가려서 확인하지 않았습니다(확인 범위: Android 16, One UI 8.5).
 
 ```
 development_settings_enabled

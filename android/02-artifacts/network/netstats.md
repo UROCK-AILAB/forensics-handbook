@@ -47,7 +47,7 @@ ALEAPP 는 폴더 위치와 상관없이 아래 패턴으로 찾고, UID 를 패
 
 ALEAPP 가 이 모듈을 시험한 이미지는 삼성을 포함한 Android 10~17 여러 기기이고, 이미지 하나에서 수천~수만 행이 나왔습니다 [1].
 
-관찰 기기의 설정 값에는 global 키 `netstats_enabled` 가 있었고, 모바일 데이터 관련 키로 `mobile_data`, `mobile_data_always_on`, `data_roaming`(유심 슬롯별 `data_roaming#` 포함), `preferred_network_mode` 가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 값은 가려져 있었고, 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
+관찰 기기의 설정 값에는 global 키 `netstats_enabled` 가 있었고, 모바일 데이터 관련 키로 `mobile_data`, `mobile_data_always_on`, `data_roaming`(유심 슬롯별 `data_roaming#` 포함), `preferred_network_mode` 가 있었습니다 (확인 범위: Android 16, One UI 8.5). 값은 가려져 있었고, 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 

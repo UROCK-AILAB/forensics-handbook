@@ -87,7 +87,7 @@ Android 프레임워크가 쓰는 플랫폼 SQLite 라이브러리는 빌드 파
 
 예외도 있습니다. SQLCipher 같은 암호화 SQLite 처럼 앱이 자기 SQLite 라이브러리를 따로 넣으면 이 컴파일 옵션을 따르지 않고, 앱이 PRAGMA 로 secure_delete 와 auto_vacuum 을 바꿀 수도 있습니다 [2][3]. auto_vacuum 은 테이블을 만들기 전에만 정할 수 있고 나중에 바꾸려면 VACUUM 이 필요해서, 기본값이 바뀌기 전에 만든 오래된 DB 는 NONE 일 수 있습니다 [2]. 어떤 앱이 어떤 설정을 쓰는지는 확인하지 못했으므로, 플랫폼 기본값만 보고 판단하지 말고 DB 머리말을 직접 읽어 확인합니다. 머리말 오프셋 52 가 0 이 아니면 auto-vacuum 이 켜진 DB 이고, 오프셋 64 로 incremental 인지 가립니다 [1]. secure_delete 는 파일 형식 문서의 머리말 칸 목록에서 해당 칸을 찾지 못해서, 파일만 보고 켜져 있었는지 판단할 수 없습니다.
 
-관찰한 폰의 `settings global` 에는 `sqlite_compatibility_wal_flags` 키가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 키 이름만 봤고, 이 키가 무엇을 조절하는지와 플랫폼의 기본 저널 모드는 확인하지 못했습니다.
+관찰한 폰의 `settings global` 에는 `sqlite_compatibility_wal_flags` 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 키 이름만 봤고, 이 키가 무엇을 조절하는지와 플랫폼의 기본 저널 모드는 확인하지 못했습니다.
 
 ## 절차
 

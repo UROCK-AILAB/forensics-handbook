@@ -15,8 +15,8 @@ nav_order: 1680
 
 ## 먼저 확인할 것
 
-- **자동 시각 설정**: 시각은 자동으로 맞추거나 사용자가 직접 정할 수 있고 [3], 관찰한 폰의 `settings global` 에는 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 키들의 공식 설명은 본문을 받지 못해 확인하지 못했고, 값이 수집 시점의 상태일 뿐 사건 당시 상태가 아니라는 점도 함께 적습니다.
-- **시간대**: 시간대 설정은 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다. 관찰한 폰의 `settings global` 키 목록에는 `time_zone` 키가 없었고, `settings system` 에는 삼성이 추가한 것으로 보이는 `TIME_DIFFERENCE`, `homecity_timezone` 키가 있었지만 뜻은 확인하지 못했습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+- **자동 시각 설정**: 시각은 자동으로 맞추거나 사용자가 직접 정할 수 있고 [3], 관찰한 폰의 `settings global` 에는 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 키들의 공식 설명은 본문을 받지 못해 확인하지 못했고, 값이 수집 시점의 상태일 뿐 사건 당시 상태가 아니라는 점도 함께 적습니다.
+- **시간대**: 시간대 설정은 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다. 관찰한 폰의 `settings global` 키 목록에는 `time_zone` 키가 없었고, `settings system` 에는 삼성이 추가한 것으로 보이는 `TIME_DIFFERENCE`, `homecity_timezone` 키가 있었지만 뜻은 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5).
 - **수집 시각**: 수집할 때 기기 시각과 믿을 만한 기준 시각을 함께 적어 두면, 수집 시점의 차이를 기준으로 삼을 수 있습니다. 수집 절차는 [조사 절차](../../../03-techniques/acquisition/investigation-process.md) 에 있습니다.
 
 ## 시각을 정하는 방식
@@ -58,7 +58,7 @@ UsageStatsService.java 에서는 `Intent.ACTION_TIME_CHANGED` 방송을 직접 �
 
 ### adb 일반 권한으로 보이는 줄
 
-관찰한 폰의 `dumpsys usagestats` 에는 "UsageStats RollOver history :" 절이 있었고, 그 안에 아래 모양의 줄이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 값은 가려서 보지 않았습니다.
+관찰한 폰의 `dumpsys usagestats` 에는 "UsageStats RollOver history :" 절이 있었고, 그 안에 아래 모양의 줄이 있었습니다 (확인 범위: Android 16, One UI 8.5). 값은 가려서 보지 않았습니다.
 
 ```
 User[#] Time changed. actualSystemTime:... expectedSystemTime:... actualRealtime:...          (5건)
@@ -67,7 +67,7 @@ User[#] rolloverStats by event Type:#/ init elapsed time:/ timeStamp:/ ExpiryDat
 
 `Time changed. actualSystemTime` 줄의 모양은 AOSP 소스의 로그 문자열 `Time changed in by ... seconds` 와 다르고, 소스 로그 문자열에는 actualSystemTime 같은 칸 이름이 없습니다 [1]. 다만 `actualSystemTime`, `expectedSystemTime`, `actualRealtime` 은 AOSP `checkAndGetTimeLocked()` 안의 변수 이름과 같아서 [1], 같은 판정 결과를 제조사가 따로 적은 기록일 수 있지만 확인하지 못했습니다. 이 줄은 실제 벽시계(actualSystemTime)와 서비스가 기대한 시각(expectedSystemTime)을 나란히 적는 모양이라서, 값이 보이는 기기라면 두 값의 차이로 시각이 얼마나 옮겨졌는지를 가늠할 수 있습니다(해석). 이 절이 몇 건까지, 언제까지 남는지는 확인하지 못했습니다.
 
-logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 모양이고, 보인 버퍼는 main, system, events, crash, radio 였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]: time=...` 줄, `dumpsys bluetooth_manager` 의 기록 줄도 같은 "월-일 시:분:초.밀리초" 모양이었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 연도가 없어서 해를 넘는 판단은 다른 기록과 맞춰야 합니다(해석). batterystats 에는 "Battery History" 첫 줄 가까이에 `RESET:TIME:` 줄이 있었지만, 시각이 바뀔 때 따로 줄이 생기는지는 관찰하지 않았습니다.
+logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 모양이고, 보인 버퍼는 main, system, events, crash, radio 였습니다 (확인 범위: Android 16, One UI 8.5). `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]: time=...` 줄, `dumpsys bluetooth_manager` 의 기록 줄도 같은 "월-일 시:분:초.밀리초" 모양이었습니다 (확인 범위: Android 16, One UI 8.5). 연도가 없어서 해를 넘는 판단은 다른 기록과 맞춰야 합니다(해석). batterystats 에는 "Battery History" 첫 줄 가까이에 `RESET:TIME:` 줄이 있었지만, 시각이 바뀔 때 따로 줄이 생기는지는 관찰하지 않았습니다.
 
 ## 분석 흐름
 
@@ -86,7 +86,7 @@ logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 
 
 **usagestats 파일 이름을 기록 시각으로 보는 경우.** 시각이 바뀌면 파일 이름에 차이를 더해 옮기고, 0보다 작아진 파일은 지웁니다 [2]. 파일이 없다는 것도 기록이 없었다는 뜻이 아닐 수 있습니다.
 
-**연도 없는 로그 시각에 수집 연도를 붙이는 경우.** logcat·batterystats·wifi 기록 줄에는 연도가 없어서 (확인 범위: SM-S937N, Android 16, One UI 8.5), 해가 바뀐 무렵의 기록이나 시각을 크게 옮긴 기록은 다른 기록으로 연도를 맞춥니다.
+**연도 없는 로그 시각에 수집 연도를 붙이는 경우.** logcat·batterystats·wifi 기록 줄에는 연도가 없어서 (확인 범위: Android 16, One UI 8.5), 해가 바뀐 무렵의 기록이나 시각을 크게 옮긴 기록은 다른 기록으로 연도를 맞춥니다.
 
 ## 보고서 문장 예
 

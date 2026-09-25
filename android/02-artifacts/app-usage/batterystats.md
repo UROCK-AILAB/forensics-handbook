@@ -24,7 +24,7 @@ nav_order: 500
 /data/system/battery-history/
 ```
 
-버퍼가 차면 새 파일을 열고, 파일 수가 최대치를 넘거나 저장 공간이 100MB 아래로 떨어지면 번호가 작은(오래된) 파일부터 지웁니다 [2]. 최대 파일 수와 버퍼 크기는 `BatteryStatsImpl.Constants` 의 `MAX_HISTORY_FILES`, `MAX_HISTORY_BUFFER` 로 정하지만 구체 값은 확인하지 못했습니다 [2]. 관찰 기기의 settings global 키에 `battery_stats_constants` 라는 이름이 있었는데, 이 키가 위 값을 바꾸는지는 확인하지 못했습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+버퍼가 차면 새 파일을 열고, 파일 수가 최대치를 넘거나 저장 공간이 100MB 아래로 떨어지면 번호가 작은(오래된) 파일부터 지웁니다 [2]. 최대 파일 수와 버퍼 크기는 `BatteryStatsImpl.Constants` 의 `MAX_HISTORY_FILES`, `MAX_HISTORY_BUFFER` 로 정하지만 구체 값은 확인하지 못했습니다 [2]. 관찰 기기의 settings global 키에 `battery_stats_constants` 라는 이름이 있었는데, 이 키가 위 값을 바꾸는지는 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5).
 
 `/data/system/` 은 시스템 영역이라 루팅되지 않은 기기에서 파일을 직접 복사하기 어렵고, 이 디렉터리 권한은 따로 확인하지 못했습니다. 대신 개발자 문서가 안내하는 두 가지 방법으로 텍스트를 받을 수 있습니다 [1].
 
@@ -34,26 +34,26 @@ nav_order: 500
 | 버그 리포트 (Android 7.0 이상) | `adb bugreport <경로>/bugreport.zip` | 압축 파일로 받음 |
 | 버그 리포트 (Android 6.0 이하) | `adb bugreport` | 텍스트 파일(`bugreport.txt`)로 받음 |
 
-관찰 기기에서는 adb 일반 셸 권한으로 `dumpsys batterystats` 를 읽을 수 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 버그 리포트의 짜임새는 [버그 리포트 (bugreport)](../logs/bugreport.md), dumpsys 일반은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에서 다룹니다.
+관찰 기기에서는 adb 일반 셸 권한으로 `dumpsys batterystats` 를 읽을 수 있었습니다 (확인 범위: Android 16, One UI 8.5). 버그 리포트의 짜임새는 [버그 리포트 (bugreport)](../logs/bugreport.md), dumpsys 일반은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에서 다룹니다.
 
 제조사 차이는 아래처럼 정리할 수 있습니다.
 
 | 기기 | 확인한 것 |
 |---|---|
 | AOSP | 디렉터리·확장자·파일 교체 규칙(소스 기준) [2] |
-| 삼성 One UI | 기록 줄에 `ap_temp=`, `pa_temp=`, `skin_temp=`, `txshare_event=`, `current_event=`, `misc_event=` 항목이 더 보임 (확인 범위: SM-S937N, Android 16, One UI 8.5) |
+| 삼성 One UI | 기록 줄에 `ap_temp=`, `pa_temp=`, `skin_temp=`, `txshare_event=`, `current_event=`, `misc_event=` 항목이 더 보임 (확인 범위: Android 16, One UI 8.5) |
 
 ## 구조
 
 `.bh` 파일의 바이너리 형식은 확인하지 못했습니다. 여기서는 `dumpsys batterystats` 텍스트 출력의 모양을 정리합니다.
 
-출력은 아래 모양의 머리줄로 시작합니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+출력은 아래 모양의 머리줄로 시작합니다 (확인 범위: Android 16, One UI 8.5).
 
 ```
 Battery History [Format: #] (##% used, ####KB used of ####KB, #### strings using ###KB):
 ```
 
-머리줄 괄호 안은 기록 버퍼를 얼마나 썼는지 보여 줍니다. 그 아래 기록 줄은 아래 모양이고, 맨 앞 `##-## ##:##:##.###` 은 연도 없이 월-일과 시각을 적은 칸입니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+머리줄 괄호 안은 기록 버퍼를 얼마나 썼는지 보여 줍니다. 그 아래 기록 줄은 아래 모양이고, 맨 앞 `##-## ##:##:##.###` 은 연도 없이 월-일과 시각을 적은 칸입니다 (확인 범위: Android 16, One UI 8.5).
 
 ```
   ##-## ##:##:##.### RESET:TIME: ...
@@ -64,7 +64,7 @@ Battery History [Format: #] (##% used, ####KB used of ####KB, #### strings using
   ##-## ##:##:##.### ### -job=...
 ```
 
-한 줄에는 그 순간 바뀐 항목만 적고, `+` 는 켜짐, `-` 는 꺼짐을 뜻합니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 관찰 기기에서 본 항목을 뜻에 따라 묶으면 다음과 같습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+한 줄에는 그 순간 바뀐 항목만 적고, `+` 는 켜짐, `-` 는 꺼짐을 뜻합니다 (확인 범위: Android 16, One UI 8.5). 관찰 기기에서 본 항목을 뜻에 따라 묶으면 다음과 같습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 묶음 | 항목 |
 |---|---|
@@ -91,7 +91,7 @@ Battery History [Format: #] (##% used, ####KB used of ####KB, #### strings using
 
 ## 시각 해석
 
-텍스트 출력의 기록 줄은 연도 없이 월-일과 시각만 찍혀 있습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 시각이 기기 현지 시각인지 UTC 인지는 확인하지 못했으니, 같은 시각대의 다른 기록(예: usagestats 의 화면 켜짐 이벤트)과 맞춰 보고 정합니다. 연도는 수집 날짜와 `RESET:TIME:` 줄의 값으로 판단합니다.
+텍스트 출력의 기록 줄은 연도 없이 월-일과 시각만 찍혀 있습니다 (확인 범위: Android 16, One UI 8.5). 이 시각이 기기 현지 시각인지 UTC 인지는 확인하지 못했으니, 같은 시각대의 다른 기록(예: usagestats 의 화면 켜짐 이벤트)과 맞춰 보고 정합니다. 연도는 수집 날짜와 `RESET:TIME:` 줄의 값으로 판단합니다.
 
 `.bh` 파일 이름의 숫자는 MonotonicClock 기준 밀리초이고 유닉스 벽시계 시각이 아닙니다 [2]. 파일 이름을 날짜로 바꾸면 엉뚱한 날짜가 나오니, 파일 이름 숫자는 파일끼리 순서를 정하는 데만 씁니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에서 다룹니다.
 

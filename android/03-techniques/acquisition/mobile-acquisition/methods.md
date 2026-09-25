@@ -52,7 +52,7 @@ NIST SP 800-101 Rev.1 은 2014년 문서라서 FBE 가 의무가 되기 전에 �
 
 ## 논리 수집 경로의 예
 
-adb 의 `adb pull` 은 기기의 파일·디렉터리를 하위 폴더까지 컴퓨터로 복사하지만 [2], 어떤 경로를 읽을 수 있는지는 셸 권한에 달려 있습니다. 루팅하지 않은 폰에서 adb 일반 셸 권한(UID 2000)으로 `/sdcard` 최상위 폴더 목록과 DCIM·Pictures·Download·Documents·Android 아래 항목 수를 읽을 수 있었고, `/sdcard/Android` 아래에는 data, media, obb 세 폴더가 보였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 같은 권한으로 `/sdcard/Android/data` 안의 앱별 폴더나 `/data/data`, `/data/system_ce` 아래 파일을 읽을 수 있는지는 확인하지 않았습니다.
+adb 의 `adb pull` 은 기기의 파일·디렉터리를 하위 폴더까지 컴퓨터로 복사하지만 [2], 어떤 경로를 읽을 수 있는지는 셸 권한에 달려 있습니다. 루팅하지 않은 폰에서 adb 일반 셸 권한(UID 2000)으로 `/sdcard` 최상위 폴더 목록과 DCIM·Pictures·Download·Documents·Android 아래 항목 수를 읽을 수 있었고, `/sdcard/Android` 아래에는 data, media, obb 세 폴더가 보였습니다 (확인 범위: Android 16, One UI 8.5). 같은 권한으로 `/sdcard/Android/data` 안의 앱별 폴더나 `/data/data`, `/data/system_ce` 아래 파일을 읽을 수 있는지는 확인하지 않았습니다.
 
 | 경로 | 얻는 것 | 자세히 |
 |---|---|---|
@@ -63,7 +63,7 @@ adb 의 `adb pull` 은 기기의 파일·디렉터리를 하위 폴더까지 컴
 
 ## 삼성 One UI 에서 볼 점
 
-삼성 기기에서 수집 방식마다 무엇이 달라지는지(보안 폴더, 녹스 등)는 이번에 확인한 출처가 없습니다. 관찰한 폰의 `dumpsys user` 출력에는 주 사용자(`isPrimary=true`) 말고도 사용자 번호가 세 자리인 두 번째 사용자(`isPrimary=false parentId=#`)가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 값이 가려져 있어 이 사용자가 보안 폴더인지 다른 프로필인지는 알 수 없습니다. 다만 사용자나 프로필이 여럿이면 `${user_id}` 마다 CE·DE 경로가 따로 있어서 [1], 주 사용자 경로만 수집하면 다른 프로필의 데이터가 빠집니다. 프로필 구조는 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md)과 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를 봅니다.
+삼성 기기에서 수집 방식마다 무엇이 달라지는지(보안 폴더, 녹스 등)는 이번에 확인한 출처가 없습니다. 관찰한 폰의 `dumpsys user` 출력에는 주 사용자(`isPrimary=true`) 말고도 사용자 번호가 세 자리인 두 번째 사용자(`isPrimary=false parentId=#`)가 있었습니다 (확인 범위: Android 16, One UI 8.5). 값이 가려져 있어 이 사용자가 보안 폴더인지 다른 프로필인지는 알 수 없습니다. 다만 사용자나 프로필이 여럿이면 `${user_id}` 마다 CE·DE 경로가 따로 있어서 [1], 주 사용자 경로만 수집하면 다른 프로필의 데이터가 빠집니다. 프로필 구조는 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md)과 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를 봅니다.
 
 ## 함정과 한계
 

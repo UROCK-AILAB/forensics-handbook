@@ -45,7 +45,7 @@ nav_order: 300
 
 ### 사용자 목록
 
-adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 관찰 기기에는 사용자가 둘 나옵니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 아래는 관찰 메모에서 필요한 줄만 옮긴 것이고, `#` 와 `<값>` 은 가린 자리입니다.
+adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 관찰 기기에는 사용자가 둘 나옵니다(확인 범위: Android 16, One UI 8.5). 아래는 관찰 메모에서 필요한 줄만 옮긴 것이고, `#` 와 `<값>` 은 가린 자리입니다.
 
 ```
 Users:
@@ -59,9 +59,9 @@ Users:
 
 둘째 사용자는 userid 가 세 자리이고 `parentId` 가 있어서 주 사용자에 딸린 프로필로 보입니다. 이 사용자가 보안 폴더인지 작업 프로필인지는 `Type` 값이 가려져 있어 확인하지 못했습니다.
 
-사용자 항목에는 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground`, `Has profile owner`, `Restrictions`, `Device policy restrictions`, `Effective restrictions`, `Can have profile`, `UserProperties`, `Ignore errors preparing storage` 칸이 있습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 이 가운데 `Has profile owner` 는 앞에서 말한 프로필 소유자가 있는지와 이름이 이어지고, 각 칸의 뜻과 시각 형식은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
+사용자 항목에는 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground`, `Has profile owner`, `Restrictions`, `Device policy restrictions`, `Effective restrictions`, `Can have profile`, `UserProperties`, `Ignore errors preparing storage` 칸이 있습니다(확인 범위: Android 16, One UI 8.5). 이 가운데 `Has profile owner` 는 앞에서 말한 프로필 소유자가 있는지와 이름이 이어지고, 각 칸의 뜻과 시각 형식은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
 
-`UserProperties` 아래에는 프로필이 주 사용자와 무엇을 나눠 쓰는지 이름으로 드러나는 칸이 있습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+`UserProperties` 아래에는 프로필이 주 사용자와 무엇을 나눠 쓰는지 이름으로 드러나는 칸이 있습니다(확인 범위: Android 16, One UI 8.5).
 
 ```
 mShowInLauncher
@@ -87,7 +87,7 @@ mItemsRestrictedOnHomeScreen
 
 ### 설정 값
 
-설정 값에는 보안 폴더와 이름이 이어지는 키가 표마다 하나씩 있었고, 값은 가려서 확인하지 않았습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+설정 값에는 보안 폴더와 이름이 이어지는 키가 표마다 하나씩 있었고, 값은 가려서 확인하지 않았습니다(확인 범위: Android 16, One UI 8.5).
 
 | 설정 표 | 키 |
 |---|---|
@@ -99,9 +99,9 @@ mItemsRestrictedOnHomeScreen
 
 ### 계정과 알림
 
-`dumpsys account` 는 사용자마다 `User UserInfo{...}:` 머리 아래에 계정 목록과 계정 변경 이력(Accounts History)을 보여 주고, 이력의 칸은 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 관찰 메모에는 사용자 머리가 한 번만 보이는데, 요약본이라 둘째 사용자 부분이 출력에 있었는지는 알 수 없습니다. 이력 해석은 [계정](../../02-artifacts/system-account/accounts/index.md) 페이지에서 다룹니다.
+`dumpsys account` 는 사용자마다 `User UserInfo{...}:` 머리 아래에 계정 목록과 계정 변경 이력(Accounts History)을 보여 주고, 이력의 칸은 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다(확인 범위: Android 16, One UI 8.5). 관찰 메모에는 사용자 머리가 한 번만 보이는데, 요약본이라 둘째 사용자 부분이 출력에 있었는지는 알 수 없습니다. 이력 해석은 [계정](../../02-artifacts/system-account/accounts/index.md) 페이지에서 다룹니다.
 
-`dumpsys notification` 의 알림 항목에는 `userId=` 칸이 있고, 관찰 기기에는 `userId=-#` 처럼 음수인 값도 있었습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 음수 userId 가 무엇을 뜻하는지는 확인하지 못했습니다.
+`dumpsys notification` 의 알림 항목에는 `userId=` 칸이 있고, 관찰 기기에는 `userId=-#` 처럼 음수인 값도 있었습니다(확인 범위: Android 16, One UI 8.5). 음수 userId 가 무엇을 뜻하는지는 확인하지 못했습니다.
 
 ## 포렌식에서 중요한 점
 

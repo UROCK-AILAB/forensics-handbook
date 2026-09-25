@@ -42,10 +42,10 @@ Android 는 한 기기에서 여러 사용자 공간을 나눠 씁니다. 사용
 | 헤드리스 시스템 사용자 | `ro.fw.mu.headless_system_user=true` 일 때이고, 문서는 Android 10 이후 자동차용으로 언급 | [2] |
 | 다중 사용자 켜기 | 기기 설정 `config_multiuserMaximumUsers`(1보다 크게), `config_enableMultiUserUI`(true) | [2] |
 | 휴대폰에 다중 사용자가 들어온 버전 | 확인하지 못함 | |
-| 삼성 기기의 두 번째 사용자 | 번호가 세 자리이고 parentId 가 붙은 프로필이 하나 있었음 | 확인 범위: SM-S937N, Android 16, One UI 8.5 |
+| 삼성 기기의 두 번째 사용자 | 번호가 세 자리이고 parentId 가 붙은 프로필이 하나 있었음 | 확인 범위: Android 16, One UI 8.5 |
 | 삼성 보안 폴더·앱 이중 실행이 쓰는 번호 범위 | 확인하지 못함 | |
 
-관찰한 삼성 기기의 settings 에는 global 표에 `add_users_when_locked`, `lock_add_profile`, `lock_remove_profile`, `lock_reset_profile`, `smartswitch_data_exist_securefolder` 키가, secure 표에 `hide_secure_folder_flag` 키가 있었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 이름으로 보면 잠금 상태에서 사용자 추가, 프로필 추가·삭제, 보안 폴더와 관련된 값이지만 값의 뜻은 확인하지 못했습니다.
+관찰한 삼성 기기의 settings 에는 global 표에 `add_users_when_locked`, `lock_add_profile`, `lock_remove_profile`, `lock_reset_profile`, `smartswitch_data_exist_securefolder` 키가, secure 표에 `hide_secure_folder_flag` 키가 있었습니다. (확인 범위: Android 16, One UI 8.5) 이름으로 보면 잠금 상태에서 사용자 추가, 프로필 추가·삭제, 보안 폴더와 관련된 값이지만 값의 뜻은 확인하지 못했습니다.
 
 ## 구조
 
@@ -76,7 +76,7 @@ android.os.usertype.system.HEADLESS
 
 ### 라이브 기기의 dumpsys user
 
-adb 일반 셸 권한으로 `dumpsys user` 를 실행하면 789줄이 나왔고, 앞부분 모양은 다음과 같습니다(값은 가려져 있고, 대표 줄만 옮겼습니다). (확인 범위: SM-S937N, Android 16, One UI 8.5)
+adb 일반 셸 권한으로 `dumpsys user` 를 실행하면 789줄이 나왔고, 앞부분 모양은 다음과 같습니다(값은 가려져 있고, 대표 줄만 옮겼습니다). (확인 범위: Android 16, One UI 8.5)
 
 ```
 Current user: #
@@ -107,7 +107,7 @@ Users:
     Flags: <값>
 ```
 
-`Created`·`Last logged in`·`Last logged in fingerprint`·`Last entered foreground` 는 xml 의 같은 이름 속성과 짝을 이루고, `State`·`Start time`·`Unlock time` 은 파일에 적지 않고 메모리에만 있는 현재 실행 상태를 보여 줍니다 [1]. 두 번째 사용자 줄의 `parentId` 가 첫 번째 사용자 번호를 가리켜서 이 사용자가 프로필이라는 점을 알 수 있습니다. `UserProperties` 아래 값들은 프로필이 부모와 미디어·자격 증명을 함께 쓰는지, 부모와 함께 시작하는지 같은 성격을 이름으로 보여 줍니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) `Unlock time` 을 잠금 해제 흔적으로 읽는 방법은 [잠금 화면 설정 (Lock Settings)](lock-settings.md) 페이지에 있습니다. dumpsys 를 뽑는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지를 봅니다.
+`Created`·`Last logged in`·`Last logged in fingerprint`·`Last entered foreground` 는 xml 의 같은 이름 속성과 짝을 이루고, `State`·`Start time`·`Unlock time` 은 파일에 적지 않고 메모리에만 있는 현재 실행 상태를 보여 줍니다 [1]. 두 번째 사용자 줄의 `parentId` 가 첫 번째 사용자 번호를 가리켜서 이 사용자가 프로필이라는 점을 알 수 있습니다. `UserProperties` 아래 값들은 프로필이 부모와 미디어·자격 증명을 함께 쓰는지, 부모와 함께 시작하는지 같은 성격을 이름으로 보여 줍니다. (확인 범위: Android 16, One UI 8.5) `Unlock time` 을 잠금 해제 흔적으로 읽는 방법은 [잠금 화면 설정 (Lock Settings)](lock-settings.md) 페이지에 있습니다. dumpsys 를 뽑는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지를 봅니다.
 
 ## 증거로서 의미
 
@@ -128,11 +128,11 @@ Users:
 
 `dumpsys user` 는 이 값들을 날짜로 찍지 않고 출력한 때로부터 얼마 전인지("... ago")로 찍고, 값이 0 이면 `<unknown>` 으로 찍습니다 [1]. 그래서 날짜로 바꾸려면 dumpsys 를 뽑은 시각을 함께 기록해 둬야 합니다. `Start time` 과 `Unlock time` 은 부팅 뒤 흐른 시간(SystemClock.elapsedRealtime)으로 적는 값이라 [1], 파일에 남지 않고 재부팅하면 사라집니다.
 
-관찰한 기기에서는 사용자 0 의 `Created:` 가 `<unknown>` 으로 나왔습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 소스로 보면 `created` 값이 0 이라는 뜻이지만 왜 0 인지는 확인하지 못해서, 사용자 0 의 생성 시각으로 기기를 처음 설정한 날을 말하지 않고 [초기화 흔적 (Factory Reset)](factory-reset.md) 페이지의 기록과 함께 봅니다. 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+관찰한 기기에서는 사용자 0 의 `Created:` 가 `<unknown>` 으로 나왔습니다. (확인 범위: Android 16, One UI 8.5) 소스로 보면 `created` 값이 0 이라는 뜻이지만 왜 0 인지는 확인하지 못해서, 사용자 0 의 생성 시각으로 기기를 처음 설정한 날을 말하지 않고 [초기화 흔적 (Factory Reset)](factory-reset.md) 페이지의 기록과 함께 봅니다. 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-사용자 번호마다 계정·앱 데이터·설정이 따로 있어서 다른 아티팩트를 읽을 때도 번호를 함께 적어야 합니다. 관찰한 기기의 `dumpsys account` 출력도 사용자마다 `User UserInfo{...}:` 로 시작하는 블록으로 나뉘었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 계정 쪽 해석은 [계정 (Accounts)](accounts/index.md) 페이지에 있습니다.
+사용자 번호마다 계정·앱 데이터·설정이 따로 있어서 다른 아티팩트를 읽을 때도 번호를 함께 적어야 합니다. 관찰한 기기의 `dumpsys account` 출력도 사용자마다 `User UserInfo{...}:` 로 시작하는 블록으로 나뉘었습니다. (확인 범위: Android 16, One UI 8.5) 계정 쪽 해석은 [계정 (Accounts)](accounts/index.md) 페이지에 있습니다.
 
 이미 지운 사용자가 목록 파일이나 다른 기록에 흔적을 남기는지는 이번 자료로 확인하지 못했습니다. `userlist.xml` 의 `nextSerialNumber` 값과 남아 있는 사용자들의 `serialNumber` 를 비교해 볼 수는 있지만, 번호가 비는 까닭을 소스로 확인하지 못해서 지운 사용자가 있었다는 근거로 쓰지 않습니다.
 

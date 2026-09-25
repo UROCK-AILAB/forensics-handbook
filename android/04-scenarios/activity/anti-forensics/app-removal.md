@@ -16,7 +16,7 @@ nav_order: 1660
 ## 먼저 확인할 것
 
 - **Android 버전**: Android 15(API 35)부터 앱을 완전히 지우지 않고 보관(archiving)할 수 있어서 [3], "목록에서 사라진 앱" 이 정말 지운 앱인지 버전부터 봅니다.
-- **관리 기기 여부**: 프로필 소유자(profile owner)가 있으면 usagestats 가 지운 앱의 데이터를 지우지 않습니다 [2]. 관찰한 폰의 `dumpsys user` 사용자 항목에는 `Has profile owner:` 칸이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 업무 프로필은 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 에 있습니다.
+- **관리 기기 여부**: 프로필 소유자(profile owner)가 있으면 usagestats 가 지운 앱의 데이터를 지우지 않습니다 [2]. 관찰한 폰의 `dumpsys user` 사용자 항목에는 `Has profile owner:` 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5). 업무 프로필은 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 에 있습니다.
 - **수집 시점**: usagestats 는 앱이 지워진 뒤 기록을 바로 지우지 않고 나중에 정리해서(아래 절), 앱을 지운 직후에 수집했는지가 결과를 가릅니다.
 - **수집 범위**: adb 일반 권한 출력만 있는지, 전체 파일 시스템 사본이 있는지 적어 둡니다.
 
@@ -30,7 +30,7 @@ nav_order: 1660
 
 ### 공용 저장 공간의 파일
 
-앱이 공용 저장 공간에 만든 미디어 파일은 앱을 지워도 기기에 남습니다("Even after your app is uninstalled, these files remain on the user's device.") [4]. 앱을 다시 설치하면 이전 설치가 만든 파일은 새 설치의 것으로 보지 않아서, 다시 설치한 앱은 READ_EXTERNAL_STORAGE 권한이 있어야 그 파일에 접근합니다 [4]. 공용 저장 공간에 주인 없는 앱 폴더나 파일이 남아 있으면 지운 앱의 흔적일 수 있습니다(해석). 관찰한 폰의 `/sdcard/Android/media` 아래에는 앱별 폴더가 있었지만, 지운 앱의 폴더가 남는지는 관찰하지 않았습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 폴더 구조는 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 에 있습니다.
+앱이 공용 저장 공간에 만든 미디어 파일은 앱을 지워도 기기에 남습니다("Even after your app is uninstalled, these files remain on the user's device.") [4]. 앱을 다시 설치하면 이전 설치가 만든 파일은 새 설치의 것으로 보지 않아서, 다시 설치한 앱은 READ_EXTERNAL_STORAGE 권한이 있어야 그 파일에 접근합니다 [4]. 공용 저장 공간에 주인 없는 앱 폴더나 파일이 남아 있으면 지운 앱의 흔적일 수 있습니다(해석). 관찰한 폰의 `/sdcard/Android/media` 아래에는 앱별 폴더가 있었지만, 지운 앱의 폴더가 남는지는 관찰하지 않았습니다 (확인 범위: Android 16, One UI 8.5). 폴더 구조는 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 에 있습니다.
 
 ### 보관(archiving)은 지운 것이 아님
 
@@ -56,7 +56,7 @@ nav_order: 1660
 
 ### adb 일반 권한으로 보이는 칸
 
-관찰한 폰의 출력에는 아래 칸이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰한 폰의 출력에는 아래 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 출력 | 칸·키 |
 |---|---|

@@ -29,7 +29,7 @@ adb pull /bugreports/bugreport-....zip
 
 `/bugreports` 가 실제 저장 폴더와 어떤 관계인지는 확인하지 못했습니다. 파일 이름은 `bugreport-BUILD_ID-DATE.zip` 형식이고, 문서의 예시는 `bugreport-foo-bar.xxx.YYYY-MM-DD-HH-MM-SS.zip` 입니다 [1]. 문서는 DATE 가 어느 시점의 시각인지 따로 적지 않았지만, 만든 시각으로 보입니다(추론). 같은 폴더에는 ZIP 말고도 `bugreport-...-dumpstate_log-....txt` 와 `dumpstate-stats.txt` 가 함께 보일 수 있습니다 [1].
 
-관찰 기기에서는 버그 리포트와 관련된 이름이 아래처럼 보였고, 각 값의 뜻은 확인하지 못했습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰 기기에서는 버그 리포트와 관련된 이름이 아래처럼 보였고, 각 값의 뜻은 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 보인 곳 | 이름 |
 |---|---|

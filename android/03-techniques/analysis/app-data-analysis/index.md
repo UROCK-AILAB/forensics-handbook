@@ -29,7 +29,7 @@ Android 기기에서 대화·사진·방문 기록 같은 사용자 행위는 �
 | 다른 앱의 앱 전용 폴더 | Android 10(API 29) 이상을 대상으로 하는 앱은 범위 지정 저장소(scoped storage)가 기본으로 적용되어 접근할 수 없음 | 앱 사이의 격리. [앱 샌드박스와 권한 (Sandbox·Permissions)](../../../01-foundations/security-model/sandbox-permissions.md) |
 | 앱을 지운 뒤 | 내부·외부의 앱 전용 폴더 파일이 지워짐 | 남는 흔적은 [지운 앱이 남긴 흔적](uninstalled-apps.md) |
 
-앱 전용 폴더 밖의 공용 저장소도 함께 봅니다. 관찰한 폰의 `/sdcard` 최상위에는 Alarms, Android, Audiobooks, DCIM, Documents, Download, Movies, Music, Notifications, Pictures, Podcasts, Recordings, Ringtones 와 함께 표준이 아닌 폴더 8개가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 공용 저장소의 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
+앱 전용 폴더 밖의 공용 저장소도 함께 봅니다. 관찰한 폰의 `/sdcard` 최상위에는 Alarms, Android, Audiobooks, DCIM, Documents, Download, Movies, Music, Notifications, Pictures, Podcasts, Recordings, Ringtones 와 함께 표준이 아닌 폴더 8개가 있었습니다 (확인 범위: Android 16, One UI 8.5). 공용 저장소의 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
 
 공개 도구 ALEAPP 의 `scripts/artifacts` 폴더에는 WhatsApp.py, SamsungNotes.py, chrome.py 같은 앱별 모듈과 packageInfo.py, usagestats.py, appops.py 같은 시스템 모듈이 함께 있습니다 [2]. 앱 전용 모듈이 없는 앱은 시스템 모듈의 결과를 패키지 이름으로 걸러 보는 데서 시작하고, 자세한 순서는 아래 첫 번째 페이지에 있습니다.
 

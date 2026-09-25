@@ -60,7 +60,7 @@ nav_order: 1650
 
 ### adb 일반 권한으로 보이는 칸
 
-실제 폰에서 adb 일반 권한으로 읽은 출력에는 아래 칸이 있었고, 값은 가려서 보지 않았습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+실제 폰에서 adb 일반 권한으로 읽은 출력에는 아래 칸이 있었고, 값은 가려서 보지 않았습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 출력 | 칸·키 |
 |---|---|
@@ -70,7 +70,7 @@ nav_order: 1650
 | `settings secure` | `user_setup_complete`, `rampart_is_reset_by_at_command` |
 | `dumpsys batterystats` | "Battery History" 첫 줄 가까이의 `RESET:TIME:` 줄 |
 
-관찰한 기기에서 주 사용자(`isPrimary=true`)의 `Created:` 는 `<unknown>` 으로 나왔고, 왜 그런지는 확인하지 못했습니다. 그래서 이 칸만으로 초기화 시점을 읽을 수 있다고 보지 않습니다. `boot_count` 가 초기화 이후의 부팅 횟수인지는 공식 문서 본문을 받지 못해 확인하지 못했고, `rampart_is_reset_by_at_command` 와 `lock_reset_profile` 은 삼성이 추가한 키로 보이지만 뜻은 확인하지 못했습니다. 같은 기기의 설치 앱 수는 시스템 앱 486개, 사용자가 설치한 앱 168개였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰한 기기에서 주 사용자(`isPrimary=true`)의 `Created:` 는 `<unknown>` 으로 나왔고, 왜 그런지는 확인하지 못했습니다. 그래서 이 칸만으로 초기화 시점을 읽을 수 있다고 보지 않습니다. `boot_count` 가 초기화 이후의 부팅 횟수인지는 공식 문서 본문을 받지 못해 확인하지 못했고, `rampart_is_reset_by_at_command` 와 `lock_reset_profile` 은 삼성이 추가한 키로 보이지만 뜻은 확인하지 못했습니다. 같은 기기의 설치 앱 수는 시스템 앱 486개, 사용자가 설치한 앱 168개였습니다 (확인 범위: Android 16, One UI 8.5).
 
 ## 분석 흐름
 
@@ -87,7 +87,7 @@ nav_order: 1650
 
 **`RESET:TIME:` 줄을 초기화로 읽는 경우.** batterystats 의 이 줄은 배터리 통계를 비운 시각이고, 초기화와 별개일 수 있습니다. 무엇이 이 통계 초기화를 일으키는지는 확인하지 못했습니다. 자세한 구조는 [배터리 사용 기록](../../../02-artifacts/app-usage/batterystats.md) 에 있습니다.
 
-**`Created:` 가 `<unknown>` 이라서 초기화가 없었다고 보는 경우.** 관찰한 기기에서도 주 사용자의 이 칸은 `<unknown>` 이었고 이유를 확인하지 못했으니, 이 칸의 값으로 초기화가 있었다 없었다를 가리지 않습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+**`Created:` 가 `<unknown>` 이라서 초기화가 없었다고 보는 경우.** 관찰한 기기에서도 주 사용자의 이 칸은 `<unknown>` 이었고 이유를 확인하지 못했으니, 이 칸의 값으로 초기화가 있었다 없었다를 가리지 않습니다 (확인 범위: Android 16, One UI 8.5).
 
 **초기화 사유 속 시각을 실제 시각으로 믿는 경우.** 사유에 붙는 시각은 기기 벽시계 기준이라서 [1] 기기 시각을 바꿔 둔 상태였다면 그만큼 어긋납니다.
 

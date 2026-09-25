@@ -98,11 +98,11 @@ SELECT last_updated, pk, apk_path FROM frosting
 
 `ownership` 질의에는 조건이 없어서 ALEAPP 결과에 모든 행이 나오고, 행 종류를 거르는 일은 분석가 몫입니다. [2] 이 표에 앱이 아닌 항목이 섞일 수 있다는 말은 짐작일 뿐이라 보고서에는 쓰지 않습니다.
 
-기기 쪽에서 볼 수 있는 흔적도 해석에 주의합니다. 관찰한 기기에서 `dumpsys package` 의 "Known Packages:" 절에 Verifier 역할로 com.android.vending 과 com.samsung.android.sm.devicesecurity 가, Installer 역할로 com.google.android.packageinstaller 가 올라 있었고, 같은 절에 "Developer verification service provider: com.google.android.verifier" 도 있었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 이 절은 역할을 맡은 패키지를 보여 줄 뿐이라서 개별 앱이 스토어로 들어왔다는 증거가 되지 않습니다.
+기기 쪽에서 볼 수 있는 흔적도 해석에 주의합니다. 관찰한 기기에서 `dumpsys package` 의 "Known Packages:" 절에 Verifier 역할로 com.android.vending 과 com.samsung.android.sm.devicesecurity 가, Installer 역할로 com.google.android.packageinstaller 가 올라 있었고, 같은 절에 "Developer verification service provider: com.google.android.verifier" 도 있었습니다. (확인 범위: Android 16, One UI 8.5) 이 절은 역할을 맡은 패키지를 보여 줄 뿐이라서 개별 앱이 스토어로 들어왔다는 증거가 되지 않습니다.
 
-설정 값에도 Play 스토어나 설치와 이름이 닮은 키가 있었습니다. global 에 `phone_play_store_availability`·`default_install_location`·`set_install_location`, secure 에 `install_non_market_apps`·`play_bio_auth_opt_in_displaye_in_suw`·`play_determined_choice_program`·`play_determined_dma_eligibility` 가 보였지만 값은 가려져 있었고 뜻과 값 형식도 확인하지 못했습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 키 이름만 보고 뜻을 단정하지 않고, 설정 값 읽는 법은 [설정 값](../system-account/settings.md)을 봅니다.
+설정 값에도 Play 스토어나 설치와 이름이 닮은 키가 있었습니다. global 에 `phone_play_store_availability`·`default_install_location`·`set_install_location`, secure 에 `install_non_market_apps`·`play_bio_auth_opt_in_displaye_in_suw`·`play_determined_choice_program`·`play_determined_dma_eligibility` 가 보였지만 값은 가려져 있었고 뜻과 값 형식도 확인하지 못했습니다. (확인 범위: Android 16, One UI 8.5) 키 이름만 보고 뜻을 단정하지 않고, 설정 값 읽는 법은 [설정 값](../system-account/settings.md)을 봅니다.
 
-`dumpsys usagestats` 이벤트에는 `type=SHORTCUT_INVOCATION ... shortcutId=AUTO_UPDATE` 줄이 4번 있었지만 패키지 이름이 가려져 있어 Play 스토어의 것인지 알 수 없습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 이 기기에서 adb 일반 권한으로 스토어의 databases 폴더를 읽었다는 관찰은 없으므로, 스토어 DB 를 그 방법으로 얻을 수 있다고 쓰지 않습니다.
+`dumpsys usagestats` 이벤트에는 `type=SHORTCUT_INVOCATION ... shortcutId=AUTO_UPDATE` 줄이 4번 있었지만 패키지 이름이 가려져 있어 Play 스토어의 것인지 알 수 없습니다. (확인 범위: Android 16, One UI 8.5) 이 기기에서 adb 일반 권한으로 스토어의 databases 폴더를 읽었다는 관찰은 없으므로, 스토어 DB 를 그 방법으로 얻을 수 있다고 쓰지 않습니다.
 
 ## 직접 분석해 보기
 

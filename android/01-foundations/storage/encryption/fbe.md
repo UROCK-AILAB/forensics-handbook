@@ -70,7 +70,7 @@ fileencryption=aes-256-xts:aes-256-cts:inlinecrypt_optimized
 
 ## 읽는 법
 
-FBE 를 쓰는 기기에서는 시스템 속성 `ro.crypto.state` 가 `encrypted`, `ro.crypto.type` 이 `file` 이어야 합니다 [1]. 라이브 기기라면 이 두 속성과 fstab 의 `fileencryption`·`metadata_encryption` 줄을 함께 보면 암호화 방식과 알고리즘을 확인할 수 있고, 확인한 값과 방법은 확보 기록에 남깁니다. 실제 폰(SM-S937N) 관찰에서는 이 속성을 읽지 않아서, 삼성 기기에서 값이 문서와 같게 나오는지는 확인하지 못했습니다.
+FBE 를 쓰는 기기에서는 시스템 속성 `ro.crypto.state` 가 `encrypted`, `ro.crypto.type` 이 `file` 이어야 합니다 [1]. 라이브 기기라면 이 두 속성과 fstab 의 `fileencryption`·`metadata_encryption` 줄을 함께 보면 암호화 방식과 알고리즘을 확인할 수 있고, 확인한 값과 방법은 확보 기록에 남깁니다. 실제 폰(Android 16 기기 ) 관찰에서는 이 속성을 읽지 않아서, 삼성 기기에서 값이 문서와 같게 나오는지는 확인하지 못했습니다.
 
 버전마다 달라진 점은 아래와 같습니다.
 

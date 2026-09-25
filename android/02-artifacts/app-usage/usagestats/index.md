@@ -24,7 +24,7 @@ usagestats 에는 두 층의 기록이 들어 있습니다. 하나는 개별 이
 |---|---|---|
 | `/data/system_ce/<사용자ID>/usagestats/` | 현행 AOSP 기준(옮긴 시점은 확인 못 함) | 구간별 개별 이벤트와 패키지별 누적 통계, 이름 대응표(`mappings`) |
 | `/data/system/usagestats/<사용자ID>/` | 예전 위치, 새 위치로 옮긴 뒤 지움 | 옮기기 전의 같은 기록 (`/data/system/usagestats/` 폴더 자체는 전체 사용자 공용 파일을 두는 곳으로 계속 씀) |
-| `dumpsys usagestats` 출력 | Android 16 에서 관찰 | 최근 몇 시간의 이벤트와 메모리의 일간 통계 (확인 범위: SM-S937N, Android 16, One UI 8.5) |
+| `dumpsys usagestats` 출력 | Android 16 에서 관찰 | 최근 몇 시간의 이벤트와 메모리의 일간 통계 (확인 범위: Android 16, One UI 8.5) |
 
 파일 형식은 버전 1~3이 XML, 4가 프로토콜 버퍼, 5가 패키지 이름을 번호로 바꿔 저장하는 프로토콜 버퍼 V2 이고, 현행 AOSP 의 기본은 버전 5입니다 [1]. 경로와 형식의 자세한 내용은 아래 "파일 구조" 페이지에 있습니다.
 

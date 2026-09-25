@@ -107,7 +107,7 @@ Virtual A/B 기기는 COW 이미지를 super 의 빈 공간에 둘 수 있어서
 | super 파티션 사용 | Android 10 이상으로 출시한 기기는 만듦 | 확인 못 함 |
 | super 안의 논리 파티션 목록 | system, vendor, product, system_ext, odm 가운데 | 확인 못 함 |
 
-SM-S937N (Android 16, One UI 8.5)의 기기 관찰 메모에는 파티션 목록이나 super 정보가 없어서, 이 기기의 super 구성은 이 페이지에서 말하지 않습니다.
+(Android 16, One UI 8.5)의 기기 관찰 메모에는 파티션 목록이나 super 정보가 없어서, 이 기기의 super 구성은 이 페이지에서 말하지 않습니다.
 
 ## 도구
 

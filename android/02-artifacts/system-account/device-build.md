@@ -24,13 +24,13 @@ nav_order: 310
 |---|---|---|
 | 이미지의 `*/system/build.prop`, `*/vendor/build.prop` | 제조사·브랜드·모델·기기 이름·Android 버전·SDK 번호 | ALEAPP Build 모듈이 찾는 경로 [2] |
 | 그 밖의 파티션(product, odm 등)의 build.prop | 파티션별 값 | 경로를 공식 문서로 확인하지 못함 |
-| `dumpsys package` 맨 앞 "Database versions:" | SDK 번호와 빌드 지문 두 개 | 관찰 (확인 범위: SM-S937N, Android 16, One UI 8.5) |
-| `dumpsys user` 의 "Last logged in fingerprint:" | 사용자가 마지막으로 로그인할 때의 빌드 지문 | 관찰 (확인 범위: SM-S937N, Android 16, One UI 8.5) |
-| settings 의 빌드·부팅 관련 키 | 키 이름만 확인, 값의 뜻은 확인하지 못함 | 관찰 (확인 범위: SM-S937N, Android 16, One UI 8.5) |
+| `dumpsys package` 맨 앞 "Database versions:" | SDK 번호와 빌드 지문 두 개 | 관찰 (확인 범위: Android 16, One UI 8.5) |
+| `dumpsys user` 의 "Last logged in fingerprint:" | 사용자가 마지막으로 로그인할 때의 빌드 지문 | 관찰 (확인 범위: Android 16, One UI 8.5) |
+| settings 의 빌드·부팅 관련 키 | 키 이름만 확인, 값의 뜻은 확인하지 못함 | 관찰 (확인 범위: Android 16, One UI 8.5) |
 
 ALEAPP 의 Build 모듈은 `*/vendor/build.prop` 와 `*/system/build.prop` 를 읽고, 두 파일에 같은 항목이 있으면 vendor 쪽 값을 보고합니다 [2]. 뽑는 키는 `ro.product.vendor.manufacturer`·`ro.product.system.manufacturer` 처럼 vendor 와 system 이 짝을 이루는 이름들이고, 버전은 `ro.vendor.build.version.release`, `ro.build.version.release`, `ro.system.build.version.release` 를, SDK 번호는 `ro.vendor.build.version.sdk`, `ro.build.version.sdk` 를 봅니다 [2]. build.prop 가 이미지 안 어느 경로들에 있는지는 이 경로 패턴 말고는 확인하지 못했습니다.
 
-라이브 기기에서 흔히 쓰는 `getprop` 출력은 이번 관찰 자료에 없어서, adb 일반 권한으로 속성이 모두 읽히는지는 확인하지 못했습니다. 대신 adb 일반 권한으로 읽은 `dumpsys package` 출력 맨 앞에 다음 모양의 줄이 있었습니다(값은 가려져 있습니다). (확인 범위: SM-S937N, Android 16, One UI 8.5)
+라이브 기기에서 흔히 쓰는 `getprop` 출력은 이번 관찰 자료에 없어서, adb 일반 권한으로 속성이 모두 읽히는지는 확인하지 못했습니다. 대신 adb 일반 권한으로 읽은 `dumpsys package` 출력 맨 앞에 다음 모양의 줄이 있었습니다(값은 가려져 있습니다). (확인 범위: Android 16, One UI 8.5)
 
 ```
 Database versions:
@@ -42,9 +42,9 @@ Database versions:
 
 `buildFingerprint` 와 `fingerprint` 가 각각 무엇을 가리키는지는 출처로 확인하지 못했습니다. `dumpsys user` 의 "Last logged in fingerprint:" 줄은 사용자 파일의 `lastLoggedInFingerprint` 속성과 짝을 이루고, 자세한 내용은 [사용자와 프로필 (Multi-user·users)](users-profiles.md) 페이지에 있습니다.
 
-settings 에서는 global 표에 `database_creation_buildid`, `boot_count`, `Phenotype_boot_count`, `device_name`, `default_device_name` 키가, system 표에 `IsFotaUpgrade` 키가 있었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) 이름으로 보면 설정 DB 를 만들 때의 빌드, 부팅 횟수, 사용자가 붙인 기기 이름, 무선 업데이트 여부와 관련된 듯하지만 값의 뜻은 확인하지 못했습니다. settings 파일 자체의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
+settings 에서는 global 표에 `database_creation_buildid`, `boot_count`, `Phenotype_boot_count`, `device_name`, `default_device_name` 키가, system 표에 `IsFotaUpgrade` 키가 있었습니다. (확인 범위: Android 16, One UI 8.5) 이름으로 보면 설정 DB 를 만들 때의 빌드, 부팅 횟수, 사용자가 붙인 기기 이름, 무선 업데이트 여부와 관련된 듯하지만 값의 뜻은 확인하지 못했습니다. settings 파일 자체의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
 
-삼성 기기는 One UI 버전을 따로 표시하지만, 그 값을 담은 삼성 전용 속성 이름은 확인하지 못했습니다. 관찰에 쓴 기기는 SM-S937N, Android 16(SDK 36), One UI 8.5, 보안 패치 2026-08-05 입니다. (확인 범위: SM-S937N, Android 16, One UI 8.5)
+삼성 기기는 One UI 버전을 따로 표시하지만, 그 값을 담은 삼성 전용 속성 이름은 확인하지 못했습니다. 관찰에 쓴 기기는 Android 16(SDK 36), One UI 8.5, 보안 패치 2026-08-05 입니다. (확인 범위: Android 16, One UI 8.5)
 
 ## 구조
 

@@ -16,10 +16,10 @@ Google Play 보호 기능(Play Protect)의 악성 앱 분류는 감시 앱(Stalk
 
 ## 먼저 확인할 것
 
-- **OS 버전과 제조사** — 이 페이지의 설정 키와 알림 칸은 관찰 기기 한 대에서 이름만 확인한 것입니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 다른 버전이나 제조사에서는 키가 없거나 이름이 다를 수 있으니 검체의 버전을 먼저 적어 둡니다. 사이드로드한 앱의 권한 제한처럼 버전마다 달라지는 보호 장치는 [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md) 에서 이어 봅니다.
-- **시간대** — 관찰 기기의 `dumpsys notification` 은 `mCreationTimeMs`, `mUpdateTimeMs`, `mVisibleSinceMs` 를 숫자가 아니라 한글이 섞인 날짜 문자열 뒤에 `+####` 모양의 시차를 붙여 찍었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 시차가 기기 시간대와 같은지는 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 에서 확인합니다.
-- **사용자와 프로필** — 관찰 기기의 알림 기록에는 줄마다 `uid=`, `userId=` 칸이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 감시 앱이 업무 프로필이나 다른 사용자 공간에 숨어 있을 수 있어서 사용자 ID 별로 나눠 봅니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
-- **수집 범위** — 관찰 결과는 adb 일반 셸 권한으로 받은 `dumpsys` 와 `settings` 출력입니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). `dumpsys notification` 은 받는 순간 떠 있는 알림 목록이라서 받기 전에 알림을 지우거나 앱을 끄지 않습니다. 앱 데이터까지 필요하면 확보 방식을 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 정합니다.
+- **OS 버전과 제조사** — 이 페이지의 설정 키와 알림 칸은 관찰 기기 한 대에서 이름만 확인한 것입니다 (확인 범위: Android 16, One UI 8.5). 다른 버전이나 제조사에서는 키가 없거나 이름이 다를 수 있으니 검체의 버전을 먼저 적어 둡니다. 사이드로드한 앱의 권한 제한처럼 버전마다 달라지는 보호 장치는 [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md) 에서 이어 봅니다.
+- **시간대** — 관찰 기기의 `dumpsys notification` 은 `mCreationTimeMs`, `mUpdateTimeMs`, `mVisibleSinceMs` 를 숫자가 아니라 한글이 섞인 날짜 문자열 뒤에 `+####` 모양의 시차를 붙여 찍었습니다 (확인 범위: Android 16, One UI 8.5). 이 시차가 기기 시간대와 같은지는 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 에서 확인합니다.
+- **사용자와 프로필** — 관찰 기기의 알림 기록에는 줄마다 `uid=`, `userId=` 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5). 감시 앱이 업무 프로필이나 다른 사용자 공간에 숨어 있을 수 있어서 사용자 ID 별로 나눠 봅니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
+- **수집 범위** — 관찰 결과는 adb 일반 셸 권한으로 받은 `dumpsys` 와 `settings` 출력입니다 (확인 범위: Android 16, One UI 8.5). `dumpsys notification` 은 받는 순간 떠 있는 알림 목록이라서 받기 전에 알림을 지우거나 앱을 끄지 않습니다. 앱 데이터까지 필요하면 확보 방식을 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 정합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -35,11 +35,11 @@ Google Play 보호 기능(Play Protect)의 악성 앱 분류는 감시 앱(Stalk
 
 ## 분석 흐름
 
-1. **감시에 쓰이는 권한을 쥔 앱부터 모읍니다.** 감시 앱은 접근성 서비스, 알림 리스너, 기기 관리자 같은 기능을 많이 쓰고, 관찰 기기의 settings secure 키 목록에는 이와 이어지는 `enabled_accessibility_services`, `accessibility_enabled`, `enabled_notification_listeners`, `autofill_service`, `credential_service`, `default_input_method` 가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 메모에는 키 이름만 있고 값의 형식은 없으니, 검체에서 값을 읽어 들어 있는 앱을 적되 값의 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 기준으로 따릅니다. 기본 제공 앱이 아닌 이름이 나오면 그 앱을 다음 단계의 대상으로 삼습니다.
+1. **감시에 쓰이는 권한을 쥔 앱부터 모읍니다.** 감시 앱은 접근성 서비스, 알림 리스너, 기기 관리자 같은 기능을 많이 쓰고, 관찰 기기의 settings secure 키 목록에는 이와 이어지는 `enabled_accessibility_services`, `accessibility_enabled`, `enabled_notification_listeners`, `autofill_service`, `credential_service`, `default_input_method` 가 있었습니다 (확인 범위: Android 16, One UI 8.5). 메모에는 키 이름만 있고 값의 형식은 없으니, 검체에서 값을 읽어 들어 있는 앱을 적되 값의 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 기준으로 따릅니다. 기본 제공 앱이 아닌 이름이 나오면 그 앱을 다음 단계의 대상으로 삼습니다.
 
-2. **기기 관리자 목록을 따로 확인합니다.** 관찰 기기의 settings 키 목록에서는 `device_admin` 류 키가 보이지 않았고 (확인 범위: SM-S937N, Android 16, One UI 8.5), 기기 관리자 목록이 어디에 저장되는지는 이번 조사에서 확인하지 못했습니다. 설정 키가 없다고 기기 관리자 앱이 없다고 보지 않고, 저장 위치와 읽는 법은 [기기 관리자와 접근성 권한](../../02-artifacts/credentials-security/device-admin-accessibility.md) 에서 봅니다. 삼성 자동 차단(Auto Blocker)의 최대 제한은 기기 관리자 앱과 업무 프로필을 막는데, 문서는 그 까닭을 "This protects against attacks that use these features to access or remotely control your phone." 이라고 적습니다 [2]. 자동 차단 전체 설명은 [악성 앱은 어디서 들어왔나](initial-access.md) 에 있습니다.
+2. **기기 관리자 목록을 따로 확인합니다.** 관찰 기기의 settings 키 목록에서는 `device_admin` 류 키가 보이지 않았고 (확인 범위: Android 16, One UI 8.5), 기기 관리자 목록이 어디에 저장되는지는 이번 조사에서 확인하지 못했습니다. 설정 키가 없다고 기기 관리자 앱이 없다고 보지 않고, 저장 위치와 읽는 법은 [기기 관리자와 접근성 권한](../../02-artifacts/credentials-security/device-admin-accessibility.md) 에서 봅니다. 삼성 자동 차단(Auto Blocker)의 최대 제한은 기기 관리자 앱과 업무 프로필을 막는데, 문서는 그 까닭을 "This protects against attacks that use these features to access or remotely control your phone." 이라고 적습니다 [2]. 자동 차단 전체 설명은 [악성 앱은 어디서 들어왔나](initial-access.md) 에 있습니다.
 
-3. **계속 떠 있는 알림을 찾습니다.** Play Protect 가 허용 조건으로 드는 항목에 계속 떠 있는 알림이 들어 있고 [1], 알림 목록에서 대상 앱의 알림이 보이는지 봅니다. 관찰 기기의 `dumpsys notification` 에서 NotificationRecord 한 건에는 `pkg=`, `uid=`, `userId=`, `opPkg=`, `flags=`, `importance=`, `mImportance=`, `mCreationTimeMs=`, `mUpdateTimeMs=`, `mVisibleSinceMs=` 가 찍혔고, `extras` 안에 `android.title` 과 `android.text` 가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 1단계에서 모은 앱의 `pkg=` 줄을 찾아 알림 제목·내용과 처음 만들어진 시각을 적습니다. `flags=` 에서 진행 중(ongoing) 알림을 가리키는 비트 값은 이번 조사에서 확인하지 못했으니 [알림 기록](../../02-artifacts/app-usage/notification-history.md) 페이지 기준으로 읽습니다. 관찰 기기에서는 `mImportance=MIN` 처럼 중요도가 찍힌 줄도 있었으니 (확인 범위: SM-S937N, Android 16, One UI 8.5) 이 값도 함께 적어 둡니다.
+3. **계속 떠 있는 알림을 찾습니다.** Play Protect 가 허용 조건으로 드는 항목에 계속 떠 있는 알림이 들어 있고 [1], 알림 목록에서 대상 앱의 알림이 보이는지 봅니다. 관찰 기기의 `dumpsys notification` 에서 NotificationRecord 한 건에는 `pkg=`, `uid=`, `userId=`, `opPkg=`, `flags=`, `importance=`, `mImportance=`, `mCreationTimeMs=`, `mUpdateTimeMs=`, `mVisibleSinceMs=` 가 찍혔고, `extras` 안에 `android.title` 과 `android.text` 가 있었습니다 (확인 범위: Android 16, One UI 8.5). 1단계에서 모은 앱의 `pkg=` 줄을 찾아 알림 제목·내용과 처음 만들어진 시각을 적습니다. `flags=` 에서 진행 중(ongoing) 알림을 가리키는 비트 값은 이번 조사에서 확인하지 못했으니 [알림 기록](../../02-artifacts/app-usage/notification-history.md) 페이지 기준으로 읽습니다. 관찰 기기에서는 `mImportance=MIN` 처럼 중요도가 찍힌 줄도 있었으니 (확인 범위: Android 16, One UI 8.5) 이 값도 함께 적어 둡니다.
 
 4. **들어온 경로와 시각을 세웁니다.** 대상 앱의 설치자, 설치를 요청한 패키지, 첫 설치 시각을 [악성 앱은 어디서 들어왔나](initial-access.md) 의 흐름대로 읽습니다. 설치 시각이 피해자가 폰을 다른 사람에게 맡긴 시간대와 겹치는지 보는 문제는 [그 시각에 폰을 쓴 사람이 누구인가](../activity/user-attribution.md) 에서 이어 갑니다.
 
@@ -55,7 +55,7 @@ Google Play 보호 기능(Play Protect)의 악성 앱 분류는 감시 앱(Stalk
 
 **부모 보호 앱이나 회사 관리 앱을 바로 불법 감시 앱으로 적는 것**도 조심합니다. 같은 분류 문서는 조건을 지킨 자녀 감시와 직원 감시를 허용합니다 [1]. 다만 조건을 지켰는지는 알림과 스토어 설명 같은 다른 근거로 따로 봅니다.
 
-**settings 키 목록에 없으니 그 기능을 쓰지 않았다고 보는 것**은 근거가 없습니다. 기기 관리자처럼 저장 위치를 확인하지 못한 기능이 있고, 관찰 기기에서도 `device_admin` 류 키는 보이지 않았습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+**settings 키 목록에 없으니 그 기능을 쓰지 않았다고 보는 것**은 근거가 없습니다. 기기 관리자처럼 저장 위치를 확인하지 못한 기능이 있고, 관찰 기기에서도 `device_admin` 류 키는 보이지 않았습니다 (확인 범위: Android 16, One UI 8.5).
 
 **`dumpsys notification` 에 알림이 없으니 앱이 알림을 띄운 적이 없다고 읽는 것**도 지나칩니다. 이 출력은 받는 순간의 상태이고, 지난 알림은 [알림 기록](../../02-artifacts/app-usage/notification-history.md) 쪽에서 따로 찾습니다.
 

@@ -34,7 +34,7 @@ logcat 로그는 파일이 아니라 `logd` 의 메모리 버퍼에 있습니다
 
 events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따로 다룹니다. developer.android.com 의 logcat 문서에는 `kernel` 버퍼가 없고 [1], logd 설정 `ro.logd.kernel` 은 "klogd 데몬 켜기" 로 적혀 있습니다 [3].
 
-관찰 기기의 버퍼 크기 목록에는 `main`, `system`, `crash`, `kernel` 네 줄이 나왔고 events·radio 는 이 목록에 없었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 어떤 명령으로 이 목록을 뽑았는지는 기록이 남아 있지 않아서, 목록에 없다는 사실만으로 events·radio 버퍼가 없다고 판단하지 않습니다. 같은 기기에서 adb 일반 셸 권한으로 main·system·events·crash·radio 다섯 버퍼의 줄을 읽을 수 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰 기기의 버퍼 크기 목록에는 `main`, `system`, `crash`, `kernel` 네 줄이 나왔고 events·radio 는 이 목록에 없었습니다 (확인 범위: Android 16, One UI 8.5). 어떤 명령으로 이 목록을 뽑았는지는 기록이 남아 있지 않아서, 목록에 없다는 사실만으로 events·radio 버퍼가 없다고 판단하지 않습니다. 같은 기기에서 adb 일반 셸 권한으로 main·system·events·crash·radio 다섯 버퍼의 줄을 읽을 수 있었습니다 (확인 범위: Android 16, One UI 8.5).
 
 버퍼 크기와 파일 저장은 logd 설정 속성으로 정합니다 [3].
 
@@ -58,13 +58,13 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 | 구분 | 확인한 것 |
 |---|---|
 | AOSP 공통 | 버퍼 종류, 출력 형식, 우선순위 문자 [1]. 옵션은 OS 버전마다 달라서 `adb logcat --help` 로 확인하라고 안내함 [1] |
-| 삼성 One UI | settings global 에 `activity_starts_logging_enabled`, `autofill_logging_level`, settings system 에 `samsung_errorlog_agree`, `show_message_logs` 키가 있음. 각 키의 뜻은 확인하지 못함 (확인 범위: SM-S937N, Android 16, One UI 8.5) |
+| 삼성 One UI | settings global 에 `activity_starts_logging_enabled`, `autofill_logging_level`, settings system 에 `samsung_errorlog_agree`, `show_message_logs` 키가 있음. 각 키의 뜻은 확인하지 못함 (확인 범위: Android 16, One UI 8.5) |
 
 삼성 전용 로그 수집 경로와 파일 위치는 확인하지 못했습니다. 설정 키를 읽는 방법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 에서 다룹니다.
 
 ## 구조
 
-기본 출력 형식은 `threadtime` 이고, 날짜·호출 시각·우선순위·태그·PID·TID 를 적습니다 [1]. 관찰 기기의 출력은 버퍼마다 시작 줄이 한 번 나오고 그 아래로 로그 줄이 이어지는 모양이었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+기본 출력 형식은 `threadtime` 이고, 날짜·호출 시각·우선순위·태그·PID·TID 를 적습니다 [1]. 관찰 기기의 출력은 버퍼마다 시작 줄이 한 번 나오고 그 아래로 로그 줄이 이어지는 모양이었습니다 (확인 범위: Android 16, One UI 8.5).
 
 ```
 --------- beginning of main
@@ -75,7 +75,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 ##-## ##:##:##.### <PID> <TID> F <태그>: <내용>
 ```
 
-맨 앞 칸은 월-일 시:분:초.밀리초이고 연도가 없습니다. 관찰 기기에서 줄을 확인한 버퍼와 수준은 main(I), system(D), events(I), crash(F), radio(D, I) 였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+맨 앞 칸은 월-일 시:분:초.밀리초이고 연도가 없습니다. 관찰 기기에서 줄을 확인한 버퍼와 수준은 main(I), system(D), events(I), crash(F), radio(D, I) 였습니다 (확인 범위: Android 16, One UI 8.5).
 
 수준 칸의 우선순위 문자는 낮은 것부터 아래 순서입니다 [1].
 

@@ -42,7 +42,7 @@ Echap 의 stalkerware-indicators 저장소는 Julien Voisin 과 Tek 이 관리�
 
 ### 앱 사용 기록
 
-관찰한 폰의 `dumpsys usagestats` 이벤트에는 아래 종류가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰한 폰의 `dumpsys usagestats` 이벤트에는 아래 종류가 있었습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 이벤트 종류 | 함께 나오는 칸 |
 |---|---|
@@ -54,17 +54,17 @@ Echap 의 stalkerware-indicators 저장소는 Julien Voisin 과 Tek 이 관리�
 | `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN` | — |
 | `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE` | — |
 
-같은 출력의 "In-memory daily stats" 에는 패키지마다 `totalTimeUsed`, `lastTimeUsed`, `totalTimeVisible`, `lastTimeVisible`, `lastTimeComponentUsed`, `totalTimeFS` 칸이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+같은 출력의 "In-memory daily stats" 에는 패키지마다 `totalTimeUsed`, `lastTimeUsed`, `totalTimeVisible`, `lastTimeVisible`, `lastTimeComponentUsed`, `totalTimeFS` 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5).
 
 화면에 한 번도 보이지 않았는데 포그라운드 서비스 시작·종료 이벤트만 되풀이되는 패키지는 살펴볼 후보로 삼을 수 있습니다. 이 판단은 출처로 뒷받침하지 못한 추론이라서, 후보를 고르는 데만 쓰고 결론의 근거로 쓰지 않습니다. 관찰한 출력에서 `time` 값은 한글이 섞인 현지 표기로 가려져 있어 기준을 확인하지 못했고, 이벤트의 시각과 보존 기간은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 봅니다.
 
 ### 알림 기록
 
-`dumpsys notification` 의 NotificationRecord 에는 `pkg`, `importance`, `key`, `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs` 칸이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 늘 떠 있는 알림을 띄우는 앱을 찾을 때 이 칸들로 패키지와 알림이 만들어진 때를 볼 수 있습니다. dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md), 지난 알림은 [알림 기록](../../../02-artifacts/app-usage/notification-history.md) 페이지에 있습니다.
+`dumpsys notification` 의 NotificationRecord 에는 `pkg`, `importance`, `key`, `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs` 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5). 늘 떠 있는 알림을 띄우는 앱을 찾을 때 이 칸들로 패키지와 알림이 만들어진 때를 볼 수 있습니다. dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md), 지난 알림은 [알림 기록](../../../02-artifacts/app-usage/notification-history.md) 페이지에 있습니다.
 
 ### 계정 기록
 
-`dumpsys account` 에는 "Accounts History" 절이 있고, 칸 순서는 `AccountId, Action_Type, timestamp, UID, TableName, Key` 였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 동작 값으로는 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 나왔습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 칸 이름으로 보면 UID 칸으로 어느 앱이 계정 동작을 불렀는지 좁혀 볼 수 있지만 이 칸의 뜻은 문서로 확인하지 못했고, 계정 기록의 해석은 [계정](../../../02-artifacts/system-account/accounts/index.md) 페이지에 있습니다.
+`dumpsys account` 에는 "Accounts History" 절이 있고, 칸 순서는 `AccountId, Action_Type, timestamp, UID, TableName, Key` 였습니다 (확인 범위: Android 16, One UI 8.5). 동작 값으로는 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 나왔습니다 (확인 범위: Android 16, One UI 8.5). 칸 이름으로 보면 UID 칸으로 어느 앱이 계정 동작을 불렀는지 좁혀 볼 수 있지만 이 칸의 뜻은 문서로 확인하지 못했고, 계정 기록의 해석은 [계정](../../../02-artifacts/system-account/accounts/index.md) 페이지에 있습니다.
 
 ## 도구
 

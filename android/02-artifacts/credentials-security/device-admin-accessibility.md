@@ -33,7 +33,7 @@ nav_order: 1250
 
 ### 접근성 서비스
 
-접근성 서비스는 장애 등으로 기기를 다루기 어려운 사용자를 돕는 앱이고, 백그라운드에서 돌며 화면 내용을 살피고 사용자 대신 앱과 상호작용합니다 [2]. TalkBack, Switch Access, 음성 제어가 대표적인 예입니다 [2]. 문서에 적힌 능력은 창 내용 관찰(접근성 트리), 스와이프·탭·멀티터치 같은 제스처 실행, 키 이벤트 처리, 버튼 누르기·스크롤 같은 동작 수행이고 [2], 사용자가 설정에서 직접 켜야 돌아갑니다 [2]. 어떤 앱이 켜 두었는지는 settings secure 의 접근성 키에 남습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+접근성 서비스는 장애 등으로 기기를 다루기 어려운 사용자를 돕는 앱이고, 백그라운드에서 돌며 화면 내용을 살피고 사용자 대신 앱과 상호작용합니다 [2]. TalkBack, Switch Access, 음성 제어가 대표적인 예입니다 [2]. 문서에 적힌 능력은 창 내용 관찰(접근성 트리), 스와이프·탭·멀티터치 같은 제스처 실행, 키 이벤트 처리, 버튼 누르기·스크롤 같은 동작 수행이고 [2], 사용자가 설정에서 직접 켜야 돌아갑니다 [2]. 어떤 앱이 켜 두었는지는 settings secure 의 접근성 키에 남습니다 (확인 범위: Android 16, One UI 8.5).
 
 ## 위치와 버전별 차이
 
@@ -50,7 +50,7 @@ nav_order: 1250
 
 기기 관리자 목록은 `device_policies.xml` 파일에 있고, 소스의 상수 이름은 `DEVICE_POLICIES_XML` 입니다 [4]. 파일은 사용자마다 따로 있고 어느 폴더에 두는지는 소스의 PolicyPathProvider 가 정합니다(현행 AOSP main) [4][5]. 기본값은 시스템 사용자(0 번)가 `/data/system`, 다른 사용자가 `/data/system/users/<사용자 번호>` 이고, 소스 주석에 따르면 기기 소유자 (Device Owner) 파일도 `/data/system` 에, 프로필 소유자 (Profile Owner) 파일은 사용자 폴더에 둡니다 [5]. 그래서 기본 사용자의 파일은 `/data/system/device_policies.xml` 이고, 제조사가 경로를 바꿨을 수 있으니 전체 파일 시스템 사본에서는 파일 이름으로도 한 번 찾습니다. 사용자와 프로필 구조는 [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md) 페이지에서 다룹니다.
 
-접근성 설정은 관찰 기기의 settings secure 에 아래 이름의 키로 있었고, 값은 관찰 메모에서 가려져 있습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+접근성 설정은 관찰 기기의 settings secure 에 아래 이름의 키로 있었고, 값은 관찰 메모에서 가려져 있습니다 (확인 범위: Android 16, One UI 8.5).
 
 ```
 accessibility_enabled
@@ -98,7 +98,7 @@ keep-profiles-running
 
 속성 이름으로는 `value`, `alias`, `id`, `permission-provider`, `name`, `disabled`, `setup-complete`, `provisioning-state`, `permission-policy`, `device-provisioning-config-applied`, `device-paired`, `new-user-disclaimer`, `factory-reset-flags`, `factory-reset-reason` 이 있습니다 [3]. `accepted-ca-certificate` 와 `owner-installed-ca-cert` 는 인증서 쪽 기록이라서 [설치된 인증서 (User Certificates)](user-certificates.md) 페이지에서 함께 봅니다. 파일이 텍스트 XML 로 열리지 않으면 [안드로이드 바이너리 XML (ABX)](../../01-foundations/data-formats/abx.md) 페이지를 봅니다.
 
-기기 소유자·프로필 소유자 정보는 위 폴더에 따로 저장되지만 [5], 그 파일 이름은 이번에 확인하지 못했습니다. 관찰 기기의 `dumpsys user` 에는 사용자마다 `Has profile owner`, `Device policy restrictions`, `Effective restrictions` 줄이 있었고, UserProperties 안에 `mInheritDevicePolicy` 칸이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 줄로 프로필 소유자 유무와 정책에서 나온 제한을 사용자 단위로 볼 수 있습니다. `dumpsys device_policy` 출력의 모양은 이번에 확인하지 못했습니다.
+기기 소유자·프로필 소유자 정보는 위 폴더에 따로 저장되지만 [5], 그 파일 이름은 이번에 확인하지 못했습니다. 관찰 기기의 `dumpsys user` 에는 사용자마다 `Has profile owner`, `Device policy restrictions`, `Effective restrictions` 줄이 있었고, UserProperties 안에 `mInheritDevicePolicy` 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 줄로 프로필 소유자 유무와 정책에서 나온 제한을 사용자 단위로 볼 수 있습니다. `dumpsys device_policy` 출력의 모양은 이번에 확인하지 못했습니다.
 
 ### 접근성 서비스 설정 XML
 
@@ -144,7 +144,7 @@ APK 안의 `<accessibility-service>` XML 에는 아래 속성이 올 수 있고,
 
 ### 설정 키와 dumpsys 로 한 번
 
-adb 일반 셸 권한으로 settings secure 목록과 `dumpsys user` 를 읽을 수 있고, 관찰 기기의 키 이름과 줄 모양도 이렇게 얻었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+adb 일반 셸 권한으로 settings secure 목록과 `dumpsys user` 를 읽을 수 있고, 관찰 기기의 키 이름과 줄 모양도 이렇게 얻었습니다 (확인 범위: Android 16, One UI 8.5).
 
 ```
 adb shell settings list secure

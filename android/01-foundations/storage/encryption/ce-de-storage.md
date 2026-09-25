@@ -62,7 +62,7 @@ CE 키는 합성 비밀번호 (Synthetic Password) 로 보호하고, AOSP 문서
 
 ## 사용자마다 따로 있는 CE·DE
 
-경로에 `${user_id}` 가 들어가는 것처럼 CE·DE 영역은 사용자마다 따로 있습니다. 관찰 기기의 `dumpsys user` 출력에는 기본 사용자(`isPrimary=true`) 말고도 사용자 ID 가 세 자리 이상이고 `isPrimary=false`, `parentId=#` 인 사용자가 하나 더 있었습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 이 사용자가 보안 폴더인지 다른 기능인지는 값이 가려져 있어 확인하지 못했고, 이런 사용자에게도 따로 CE·DE 영역이 있다고 보면 경로 표의 `${user_id}` 자리에 그 ID 가 들어갑니다. 여러 사용자와 프로필은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를, 보안 폴더는 [보안 폴더와 작업 프로필](../../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+경로에 `${user_id}` 가 들어가는 것처럼 CE·DE 영역은 사용자마다 따로 있습니다. 관찰 기기의 `dumpsys user` 출력에는 기본 사용자(`isPrimary=true`) 말고도 사용자 ID 가 세 자리 이상이고 `isPrimary=false`, `parentId=#` 인 사용자가 하나 더 있었습니다(확인 범위: Android 16, One UI 8.5). 이 사용자가 보안 폴더인지 다른 기능인지는 값이 가려져 있어 확인하지 못했고, 이런 사용자에게도 따로 CE·DE 영역이 있다고 보면 경로 표의 `${user_id}` 자리에 그 ID 가 들어갑니다. 여러 사용자와 프로필은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를, 보안 폴더는 [보안 폴더와 작업 프로필](../../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
 ## 함정
 

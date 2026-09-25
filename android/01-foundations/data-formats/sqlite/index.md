@@ -28,7 +28,7 @@ SQLite 데이터베이스는 표와 색인을 파일 하나에 담는 데이터�
 | 같은 폴더의 `이름-journal` | 현행 AOSP 의 WAL 이 아닐 때 기본 저널 모드는 TRUNCATE [4] | 거래가 바꾸기 전의 원래 페이지 |
 | 같은 폴더의 `이름-wal` | Android 9 에서 호환 WAL 도입 [5] | 커밋했지만 주 파일로 옮기지 않은 새 페이지, 같은 페이지의 옛 버전 프레임 |
 | 같은 폴더의 `이름-shm` | WAL 과 함께 생김 | WAL 에서 페이지를 찾는 일시 색인. 영구 상태는 아님 [1] |
-| settings global 의 `sqlite_compatibility_wal_flags` | Android 16 에서 키가 있음을 관찰, 값은 가려져 있어 모름 (확인 범위: SM-S937N, Android 16, One UI 8.5) | 호환 WAL 과 WAL 자르기 기준을 조정하는 설정 |
+| settings global 의 `sqlite_compatibility_wal_flags` | Android 16 에서 키가 있음을 관찰, 값은 가려져 있어 모름 (확인 범위: Android 16, One UI 8.5) | 호환 WAL 과 WAL 자르기 기준을 조정하는 설정 |
 
 ## 읽는 순서
 

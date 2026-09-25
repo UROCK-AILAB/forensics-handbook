@@ -36,7 +36,7 @@ nav_order: 1400
 
 3. **앱 사용 기록을 봅니다.** usagestats 에는 패키지 이름이 이벤트와 누적 통계로 남고, 기간별 보관 기준은 해당 페이지에 있습니다. 앱을 지웠을 때 그 앱의 기록이 함께 지워지는지는 확인하지 못했고, 기록 해석은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에 있습니다.
 
-4. **계정 기록을 봅니다.** 관찰한 폰의 `dumpsys account` 출력에는 "Accounts History" 절이 있었고, 칸은 `AccountId`, `Action_Type`, `timestamp`, `UID`, `TableName`, `Key` 였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 같은 폰에서 본 `Action_Type` 값은 아래와 같습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+4. **계정 기록을 봅니다.** 관찰한 폰의 `dumpsys account` 출력에는 "Accounts History" 절이 있었고, 칸은 `AccountId`, `Action_Type`, `timestamp`, `UID`, `TableName`, `Key` 였습니다 (확인 범위: Android 16, One UI 8.5). 같은 폰에서 본 `Action_Type` 값은 아래와 같습니다 (확인 범위: Android 16, One UI 8.5).
 
    ```
    action_account_add
@@ -49,15 +49,15 @@ nav_order: 1400
 
    `action_authenticator_remove` 는 이름으로 보면 인증기가 없어진 기록이지만, 인증기를 제공하던 앱을 지울 때 생기는 값인지는 확인하지 못했습니다. 계정 기록은 [계정 (Accounts)](../../../02-artifacts/system-account/accounts/index.md) 페이지에서 다룹니다.
 
-5. **오류 기록을 봅니다.** 관찰한 폰의 `settings secure` 에는 `dropbox:data_app_crash`, `dropbox:data_app_anr`, `dropbox:data_app_wtf` 처럼 DropBox 관련 키가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). DropBox 기록에 지운 앱의 이름이 남는지는 확인하지 못했고, ALEAPP 에는 이 기록을 읽는 androidDropbox.py 모듈이 있습니다 [6]. 오류 기록의 해석은 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../../../02-artifacts/app-usage/crash-records.md) 페이지에 있습니다.
+5. **오류 기록을 봅니다.** 관찰한 폰의 `settings secure` 에는 `dropbox:data_app_crash`, `dropbox:data_app_anr`, `dropbox:data_app_wtf` 처럼 DropBox 관련 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). DropBox 기록에 지운 앱의 이름이 남는지는 확인하지 못했고, ALEAPP 에는 이 기록을 읽는 androidDropbox.py 모듈이 있습니다 [6]. 오류 기록의 해석은 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../../../02-artifacts/app-usage/crash-records.md) 페이지에 있습니다.
 
-6. **공용 저장소 폴더를 봅니다.** 앱이 DCIM·Download·Pictures 같은 공용 저장소에 쓴 파일은 앱 전용 저장소가 아니고, 앱을 지울 때 앱 전용 저장소처럼 함께 지워진다는 문장은 공식 문서에서 확인하지 못했습니다. 관찰한 폰에서는 표준이 아닌 폴더가 `/sdcard/DCIM` 아래 19개, `/sdcard/Pictures` 아래 11개, `/sdcard/Download` 아래 36개 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이런 폴더 가운데 앱 이름을 딴 것이 있고 그 앱이 1단계 목록에 없으면, 지운 앱을 가리키는 단서로 적습니다. 공용 저장소 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md), 사진 파일은 [미디어 저장소 (MediaStore)](../../../02-artifacts/media/mediastore/index.md) 페이지를 봅니다.
+6. **공용 저장소 폴더를 봅니다.** 앱이 DCIM·Download·Pictures 같은 공용 저장소에 쓴 파일은 앱 전용 저장소가 아니고, 앱을 지울 때 앱 전용 저장소처럼 함께 지워진다는 문장은 공식 문서에서 확인하지 못했습니다. 관찰한 폰에서는 표준이 아닌 폴더가 `/sdcard/DCIM` 아래 19개, `/sdcard/Pictures` 아래 11개, `/sdcard/Download` 아래 36개 있었습니다 (확인 범위: Android 16, One UI 8.5). 이런 폴더 가운데 앱 이름을 딴 것이 있고 그 앱이 1단계 목록에 없으면, 지운 앱을 가리키는 단서로 적습니다. 공용 저장소 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md), 사진 파일은 [미디어 저장소 (MediaStore)](../../../02-artifacts/media/mediastore/index.md) 페이지를 봅니다.
 
 7. **찾은 흔적을 한 시간 축에 올립니다.** 스토어 DB 의 시각, usagestats 의 마지막 이벤트, 계정 기록의 시각을 나란히 놓으면 앱이 언제까지 쓰였는지 범위를 좁힐 수 있고, 방법은 [타임라인 작성 (Timeline)](../timeline/index.md) 에 있습니다.
 
 ## 도구
 
-ALEAPP 는 packageInfo, frosting, installedappsLibrary 결과를 "Installed Apps" 분류로 묶어 보여 줍니다 [3][4][5]. 폴더 목록에는 installedappsGass.py, installedappsVending.py, installSessions.py, packageRestrictions.py, packageUserStates.py 모듈도 있지만 [6], 각각 어떤 파일과 표를 읽는지는 열어 보지 않아 확인하지 못했습니다. 켜져 있는 기기에서는 관찰한 폰의 `dumpsys package` "Known Packages:" 절에 Uninstaller 역할의 값이 비어 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+ALEAPP 는 packageInfo, frosting, installedappsLibrary 결과를 "Installed Apps" 분류로 묶어 보여 줍니다 [3][4][5]. 폴더 목록에는 installedappsGass.py, installedappsVending.py, installSessions.py, packageRestrictions.py, packageUserStates.py 모듈도 있지만 [6], 각각 어떤 파일과 표를 읽는지는 열어 보지 않아 확인하지 못했습니다. 켜져 있는 기기에서는 관찰한 폰의 `dumpsys package` "Known Packages:" 절에 Uninstaller 역할의 값이 비어 있었습니다 (확인 범위: Android 16, One UI 8.5).
 
 ## 함정과 한계
 

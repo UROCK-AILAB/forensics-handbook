@@ -78,7 +78,7 @@ COW 연산에는 Copy, Replace, Zero, XOR (Android 13 이상)가 있고, 전체 
 3. Virtual A/B 기기라면 `/metadata/ota` 와 `/data/gsi/ota` 에 스냅샷 흔적이 있는지 보고, 병합 상태는 misc 파티션에 있다는 점을 기억해 둡니다.
 4. 두 슬롯의 빌드가 다르면 현재 슬롯의 빌드를 기준으로 삼고, 다른 슬롯은 업데이트 전후의 비교 자료로 둡니다.
 
-SM-S937N (Android 16, One UI 8.5)의 기기 관찰 메모에는 getprop 출력이나 슬롯·마운트 정보가 없어서, 이 기기가 어느 방식을 쓰는지와 현재 슬롯은 이 페이지에서 말하지 않습니다. 같은 메모의 설정 키 목록에는 settings global 의 `ota_disable_automatic_update`, `galaxy_system_update`, `galaxy_system_update_use_wifi_only` 와 settings system 의 `IsFotaUpgrade` 같은 업데이트 관련 키 이름이 있습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 키들의 값과 뜻은 확인하지 못했고 슬롯 상태를 알려 주는 값도 아니며, 설정 값 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
+(Android 16, One UI 8.5)의 기기 관찰 메모에는 getprop 출력이나 슬롯·마운트 정보가 없어서, 이 기기가 어느 방식을 쓰는지와 현재 슬롯은 이 페이지에서 말하지 않습니다. 같은 메모의 설정 키 목록에는 settings global 의 `ota_disable_automatic_update`, `galaxy_system_update`, `galaxy_system_update_use_wifi_only` 와 settings system 의 `IsFotaUpgrade` 같은 업데이트 관련 키 이름이 있습니다 (확인 범위: Android 16, One UI 8.5). 이 키들의 값과 뜻은 확인하지 못했고 슬롯 상태를 알려 주는 값도 아니며, 설정 값 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
@@ -95,7 +95,7 @@ successful 상태는 사용자 공간이 슬롯을 표시한 결과이고 사용
 | 항목 | AOSP 문서 | 삼성 갤럭시 (One UI) |
 |---|---|---|
 | A/B·Virtual A/B·비 A/B 가운데 무엇을 쓰나 | 기기마다 다름 | 확인 못 함 |
-| SM-S937N 의 슬롯 여부 | — | 확인 못 함 |
+| Android 16 기기의 슬롯 여부 | — | 확인 못 함 |
 | 슬롯 접미사 | `_a`·`_b` | 확인 못 함 |
 
 ## 도구

@@ -18,15 +18,15 @@ AOSP 의 시스템 UI(SystemUI)는 스크린샷을 `Pictures/Screenshots` 에 �
 
 | 항목 | AOSP (현행 기준) | 삼성 One UI (관찰) |
 |---|---|---|
-| 스크린샷 폴더 | `Pictures/Screenshots` [1] | `/sdcard/DCIM` 아래에 Screenshots 폴더가 있음 (확인 범위: SM-S937N, Android 16, One UI 8.5) |
+| 스크린샷 폴더 | `Pictures/Screenshots` [1] | `/sdcard/DCIM` 아래에 Screenshots 폴더가 있음 (확인 범위: Android 16, One UI 8.5) |
 | 스크린샷 파일 이름 | `Screenshot_연월일-시분초.확장자` [1] | 확인 못 함 |
 | 스크린샷 형식 | PNG 기본, 호출 쪽이 JPEG·WEBP 로 바꿀 수 있음 [1] | 형식 설정 키가 있음(아래) |
 | 화면 녹화 폴더 | Movies(동영상 기본 폴더) [2][3] | 확인 못 함 |
 | 화면 녹화 파일 이름 | `screen-yyyyMMdd-HHmmss.mp4` [2] | 확인 못 함 |
 
-관찰한 기기의 `/sdcard/Pictures` 목록은 가려져 있어서 `Pictures/Screenshots` 도 있었는지는 알 수 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 같은 기기의 `/sdcard` 최상위에는 Recordings 폴더가 있었지만, Android 문서는 Recordings/ 를 음성 녹음 폴더로 설명하고 Android 11 이하에는 없다고 적습니다 [5]. 화면 녹화 파일이 이 폴더에 들어가는지는 확인하지 못했습니다.
+관찰한 기기의 `/sdcard/Pictures` 목록은 가려져 있어서 `Pictures/Screenshots` 도 있었는지는 알 수 없습니다 (확인 범위: Android 16, One UI 8.5). 같은 기기의 `/sdcard` 최상위에는 Recordings 폴더가 있었지만, Android 문서는 Recordings/ 를 음성 녹음 폴더로 설명하고 Android 11 이하에는 없다고 적습니다 [5]. 화면 녹화 파일이 이 폴더에 들어가는지는 확인하지 못했습니다.
 
-관찰한 기기의 settings system 에는 스크린샷과 관련된 이름의 키가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 값은 가려져 있고 각 키의 공식 뜻은 삼성 문서로 확인하지 못했습니다.
+관찰한 기기의 settings system 에는 스크린샷과 관련된 이름의 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 값은 가려져 있고 각 키의 공식 뜻은 삼성 문서로 확인하지 못했습니다.
 
 ```text
 screenshot_current_save_dir
@@ -93,7 +93,7 @@ enable_smart_capture
 
 ## 함정과 한계
 
-- 이름 규칙만 보고 스크린샷을 찾으면 삼성 기기의 다른 이름·다른 폴더를 놓칠 수 있습니다. 관찰한 기기에서는 AOSP 기본 위치가 아닌 `DCIM/Screenshots` 가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+- 이름 규칙만 보고 스크린샷을 찾으면 삼성 기기의 다른 이름·다른 폴더를 놓칠 수 있습니다. 관찰한 기기에서는 AOSP 기본 위치가 아닌 `DCIM/Screenshots` 가 있었습니다 (확인 범위: Android 16, One UI 8.5).
 - 파일 이름과 EXIF 는 파일을 복사해도 그대로 따라가서, 다른 기기에서 찍은 스크린샷을 받은 파일과 이 기기에서 찍은 파일을 이름만으로 가를 수 없습니다. EXIF Software 의 빌드 표시값을 [기기 정보와 빌드](../system-account/device-build.md) 의 값과 맞춰 봅니다.
 - 이 페이지의 AOSP 동작은 현행 main 가지 소스 기준이고, 어느 Android 버전에서 바뀌었는지는 확인하지 못했습니다 [1][2].
 - 화면 녹화 temp 파일이 SystemUI 캐시에 남는지는 코드로 짐작한 것일 뿐이고, 그 폴더는 시스템 앱 전용이라 확보 방법에 따라 볼 수 없을 수 있습니다.

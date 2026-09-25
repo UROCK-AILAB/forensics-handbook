@@ -64,7 +64,7 @@ Android 14 부터는 본 파일과 예비 사본 둘 다에 fs-verity 보호가 
 
 ## 기기에서 보이는 설치·검증 흔적
 
-adb 일반 셸 권한으로 `dumpsys package` 를 읽으면 "Known Packages" 절에 역할별 담당 패키지가 나오고, 권한 화면을 맡는 패키지는 `Permission Controller:` 아래에 `com.google.android.permissioncontroller` 로 나옵니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 같은 절의 `Installer:` 는 `com.google.android.packageinstaller` 이고, `Verifier:` 아래에는 `com.android.vending` 과 `com.samsung.android.sm.devicesecurity` 가 함께 나옵니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+adb 일반 셸 권한으로 `dumpsys package` 를 읽으면 "Known Packages" 절에 역할별 담당 패키지가 나오고, 권한 화면을 맡는 패키지는 `Permission Controller:` 아래에 `com.google.android.permissioncontroller` 로 나옵니다(확인 범위: Android 16, One UI 8.5). 같은 절의 `Installer:` 는 `com.google.android.packageinstaller` 이고, `Verifier:` 아래에는 `com.android.vending` 과 `com.samsung.android.sm.devicesecurity` 가 함께 나옵니다(확인 범위: Android 16, One UI 8.5).
 
 ```
 Known Packages:
@@ -77,9 +77,9 @@ Known Packages:
     com.google.android.permissioncontroller
 ```
 
-위 출력은 관찰 메모에서 필요한 줄만 옮긴 것입니다. 관찰 기기에는 시스템 앱 486개와 사용자가 설치한 앱 168개가 있었고, 이 숫자는 한 번 관찰한 시점의 값입니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+위 출력은 관찰 메모에서 필요한 줄만 옮긴 것입니다. 관찰 기기에는 시스템 앱 486개와 사용자가 설치한 앱 168개가 있었고, 이 숫자는 한 번 관찰한 시점의 값입니다(확인 범위: Android 16, One UI 8.5).
 
-설정 값에는 앱 설치 출처와 설치 검증에 이름이 이어지는 키가 있고, 값은 가려서 확인하지 않았습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+설정 값에는 앱 설치 출처와 설치 검증에 이름이 이어지는 키가 있고, 값은 가려서 확인하지 않았습니다(확인 범위: Android 16, One UI 8.5).
 
 | 설정 표 | 키 |
 |---|---|

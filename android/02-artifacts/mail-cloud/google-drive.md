@@ -124,7 +124,7 @@ ALEAPP 의 DocList 모듈이 `EntryView` 를 읽어 표로 만들어 줍니다 [
 | [데이터 사용량 (netstats)](../network/netstats.md) | 그 시간대에 앱이 주고받은 데이터 양 |
 | [미디어 저장소 (MediaStore)](../media/mediastore/index.md) | 같은 이름이나 크기의 파일이 기기에 있는지 |
 
-관찰 기기의 settings global 에는 `master_sync_status`, `synced_account_name` 키가, settings system 에는 `sync_disabled_accounts_with_hash` 키가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이름으로 보아 계정 동기화와 관련된 키로 보이지만 값의 뜻은 확인하지 못했고, 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다. 클라우드로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
+관찰 기기의 settings global 에는 `master_sync_status`, `synced_account_name` 키가, settings system 에는 `sync_disabled_accounts_with_hash` 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 이름으로 보아 계정 동기화와 관련된 키로 보이지만 값의 뜻은 확인하지 못했고, 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다. 클라우드로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 

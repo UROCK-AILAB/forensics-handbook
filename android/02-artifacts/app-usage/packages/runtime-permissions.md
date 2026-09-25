@@ -80,7 +80,7 @@ flags 의 각 비트는 PackageManager 의 FLAG_PERMISSION_* 상수로 정의되
 
 비트 이름은 permissionFlagToString() 으로 바꾸고, 이 변환 목록에 없는 비트는 숫자로 찍습니다. SELECTED_LOCATION_ACCURACY 도 변환 목록에 없어서 숫자로 나옵니다 [1][3]. 설치 권한(install permissions)도 같은 꼴이고, 사용자 0 과 다를 때만 `, userId=` 와 사용자 번호가 붙습니다 [1].
 
-실제 폰의 "Known Packages:" 절에서 "Permission Controller:" 는 `com.google.android.permissioncontroller` 였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 관찰 메모에는 `runtime permissions:` 줄이 생략되어 있어서 실제 폰에서 권한 줄의 모양은 확인하지 못했습니다.
+실제 폰의 "Known Packages:" 절에서 "Permission Controller:" 는 `com.google.android.permissioncontroller` 였습니다 (확인 범위: Android 16, One UI 8.5). 관찰 메모에는 `runtime permissions:` 줄이 생략되어 있어서 실제 폰에서 권한 줄의 모양은 확인하지 못했습니다.
 
 ## 증거로서 의미
 

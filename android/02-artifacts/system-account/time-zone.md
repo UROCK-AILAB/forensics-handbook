@@ -32,7 +32,7 @@ Android 는 시각과 시간대를 따로 맞춥니다. 자동 시각 설정은 
 
 표는 모두 AOSP 시간 개요 문서에서 가져왔습니다 [1]. 자동 시각 키 `auto_time` 과 자동 시간대 키 `auto_time_zone` 은 Settings.Global 에 있습니다 [4]. 문서는 AOSP 기본값이 자동 시간대 켜짐이고, 다른 기기의 백업을 복원하면 `auto_time_zone` 값도 기본으로 복원된다고 적고 있어서 [1], 이 값이 사용자가 직접 고른 값이 아닐 수 있습니다.
 
-관찰한 삼성 기기에는 global 표에 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit`, `clockwork_auto_time`, `clockwork_auto_time_zone` 키가 있었습니다. system 표에는 `homecity_timezone`, `dualclock_menu_settings`, `TIME_DIFFERENCE`, `next_alarm_formatted` 키가 있었는데 이름으로 보아 삼성 듀얼 시계 기능과 관련된 듯하고 뜻은 확인하지 못했습니다. 반대로 `time_12_24` 와 `location_time_zone_detection_enabled` 는 목록에 없었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5) `auto_time_zone_explicit` 과 `clockwork_` 로 시작하는 키의 뜻도 확인하지 못했습니다. settings 파일의 위치와 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
+관찰한 삼성 기기에는 global 표에 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit`, `clockwork_auto_time`, `clockwork_auto_time_zone` 키가 있었습니다. system 표에는 `homecity_timezone`, `dualclock_menu_settings`, `TIME_DIFFERENCE`, `next_alarm_formatted` 키가 있었는데 이름으로 보아 삼성 듀얼 시계 기능과 관련된 듯하고 뜻은 확인하지 못했습니다. 반대로 `time_12_24` 와 `location_time_zone_detection_enabled` 는 목록에 없었습니다. (확인 범위: Android 16, One UI 8.5) `auto_time_zone_explicit` 과 `clockwork_` 로 시작하는 키의 뜻도 확인하지 못했습니다. settings 파일의 위치와 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
 
 시간대 ID 는 `persist.sys.timezone` 속성에, 그 값을 얼마나 믿을지는 `persist.sys.timezone_confidence` 속성에 적습니다 [5]. 부팅 때 `persist.sys.timezone` 이 비었거나 올바르지 않으면 시스템이 `GMT` 를 낮은 신뢰도로 넣어서 [5], 확보한 값이 `GMT` 라면 사용자가 고른 시간대가 아닐 수 있습니다. 이 속성이 이미지 안 어느 파일에 저장되는지와 시간대 데이터(tzdata)를 어떻게 업데이트하는지는 이번 자료로 확인하지 못했습니다.
 
@@ -46,13 +46,13 @@ Android 는 시각과 시간대를 따로 맞춥니다. 자동 시각 설정은 
 |---|---|---|
 | 사용자 xml·dumpsys user 의 생성·로그인 시각 | System.currentTimeMillis() 기반 유닉스 밀리초 | [2] |
 | `Build.TIME` | 유닉스 밀리초(`ro.build.date.utc` 는 유닉스 초) | [3] |
-| logcat 한 줄 | `MM-DD hh:mm:ss.mmm` 로 시작하고 연도·시간대가 없음 | 확인 범위: SM-S937N, Android 16, One UI 8.5 |
+| logcat 한 줄 | `MM-DD hh:mm:ss.mmm` 로 시작하고 연도·시간대가 없음 | 확인 범위: Android 16, One UI 8.5 |
 
 logcat 시각은 기기 시간대의 현지 시각으로 보이지만 출처로 확인하지 못했고, 연도가 없어서 해를 넘기는 로그는 다른 기록으로 해를 정해야 합니다. 기록별 자세한 시각 해석은 각 아티팩트 페이지와 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ### 시계가 바뀐 흔적
 
-관찰한 기기의 `dumpsys usagestats` 출력에는 "UsageStats RollOver history" 아래 다음 모양의 줄이 다섯 줄 있었습니다(값은 가려져 있습니다). (확인 범위: SM-S937N, Android 16, One UI 8.5)
+관찰한 기기의 `dumpsys usagestats` 출력에는 "UsageStats RollOver history" 아래 다음 모양의 줄이 다섯 줄 있었습니다(값은 가려져 있습니다). (확인 범위: Android 16, One UI 8.5)
 
 ```
 <날짜>:##:##.###User[#] Time changed. actualSystemTime:<값> expectedSystemTime:<값> actualRealtime:<값>
@@ -93,7 +93,7 @@ time_detector 와 time_zone_detector 의 dump 출력은 이번 관찰 자료에 
 
 ### 공개 도구로 한 번
 
-라이브 기기에서는 settings 목록에서 시각 관련 키를 추립니다. adb 일반 권한으로 settings 목록을 읽을 수 있었습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5)
+라이브 기기에서는 settings 목록에서 시각 관련 키를 추립니다. adb 일반 권한으로 settings 목록을 읽을 수 있었습니다. (확인 범위: Android 16, One UI 8.5)
 
 ```sh
 adb shell settings list global | grep -E 'auto_time|clockwork_auto_time'

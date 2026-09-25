@@ -26,7 +26,7 @@ nav_order: 670
 | 앱 휴지통 DB | `*/com.google.android.apps.photos/databases/local_trash.db` | ALEAPP 경로 패턴 [1] |
 | 앱 휴지통 파일 | `*/com.google.android.apps.photos/files/trash_files/*` | ALEAPP 경로 패턴 [1] |
 
-주 DB 파일 이름은 gphotos 뒤에 번호가 붙는 꼴이라 계정마다 파일이 따로 생기는 것으로 보이지만, 번호의 뜻은 확인하지 못했습니다. ALEAPP 는 Android 10·13·14·15·16 기기의 검체에서 이 DB 를 읽었고, 앱 버전 코드는 36652547 ~ 51832862 범위였습니다 [1]. 관찰한 기기는 기본 앱이 아닌 패키지를 가려서, 구글 포토 설치 여부는 관찰 메모로 알 수 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 앱 전용 폴더의 위치와 확보 조건은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에 있습니다.
+주 DB 파일 이름은 gphotos 뒤에 번호가 붙는 꼴이라 계정마다 파일이 따로 생기는 것으로 보이지만, 번호의 뜻은 확인하지 못했습니다. ALEAPP 는 Android 10·13·14·15·16 기기의 검체에서 이 DB 를 읽었고, 앱 버전 코드는 36652547 ~ 51832862 범위였습니다 [1]. 관찰한 기기는 기본 앱이 아닌 패키지를 가려서, 구글 포토 설치 여부는 관찰 메모로 알 수 없습니다 (확인 범위: Android 16, One UI 8.5). 앱 전용 폴더의 위치와 확보 조건은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에 있습니다.
 
 ## 구조
 

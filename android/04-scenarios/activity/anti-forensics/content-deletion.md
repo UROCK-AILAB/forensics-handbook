@@ -54,7 +54,7 @@ MediaStore 의 `DATE_EXPIRES` 칸 설명은 이번에 받은 문서에 없어서
 
 삼성 메시지 앱의 휴지통과 구글 메시지의 삭제 동작이 어디에 얼마 동안 남는지는 이번에 출처를 열지 않아 다루지 않습니다. 앱별 DB 구조는 [문자 (SMS·MMS·RCS)](../../../02-artifacts/communications/messages/index.md) 와 각 메신저 페이지에 있고, SQLite 에서 지운 행을 찾는 법은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 
-관찰한 폰의 설정 키 가운데 삭제·휴지통과 관련이 있어 보이는 것은 아래 둘이고, 둘 다 뜻은 확인하지 못했습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰한 폰의 설정 키 가운데 삭제·휴지통과 관련이 있어 보이는 것은 아래 둘이고, 둘 다 뜻은 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5).
 
 | 출력 | 키 |
 |---|---|
@@ -63,9 +63,9 @@ MediaStore 의 `DATE_EXPIRES` 칸 설명은 이번에 받은 문서에 없어서
 
 ## 지운 흔적을 보여 주는 다른 기록
 
-메시지를 지워도 그 메시지가 도착했을 때의 알림 기록은 따로 남을 수 있습니다(해석). 관찰한 폰의 `dumpsys usagestats` 이벤트에는 `NOTIFICATION_INTERRUPTION`(`channelId=CHANNEL_ID_SMS_MMS` 처럼 채널 ID 포함)과 `NOTIFICATION_SEEN` 이 있었고, `dumpsys notification` 출력에는 `deleteIntent=` 칸이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 알림이 사라진 뒤에도 알림 기록에 남는지는 확인하지 못했으니, 알림이 없다는 사실을 "메시지가 없었다" 로 읽지 않습니다. 알림 기록의 구조는 [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md) 에 있습니다.
+메시지를 지워도 그 메시지가 도착했을 때의 알림 기록은 따로 남을 수 있습니다(해석). 관찰한 폰의 `dumpsys usagestats` 이벤트에는 `NOTIFICATION_INTERRUPTION`(`channelId=CHANNEL_ID_SMS_MMS` 처럼 채널 ID 포함)과 `NOTIFICATION_SEEN` 이 있었고, `dumpsys notification` 출력에는 `deleteIntent=` 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5). 알림이 사라진 뒤에도 알림 기록에 남는지는 확인하지 못했으니, 알림이 없다는 사실을 "메시지가 없었다" 로 읽지 않습니다. 알림 기록의 구조는 [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md) 에 있습니다.
 
-관찰한 폰의 `/sdcard` 아래에는 Alarms, Android, Audiobooks, DCIM, Documents, Download, Movies, Music, Notifications, Pictures, Podcasts, Recordings, Ringtones 와 이름을 가린 폴더 8개가 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이 폴더들에 `.trashed-` 파일이 있었는지는 관찰하지 않았습니다.
+관찰한 폰의 `/sdcard` 아래에는 Alarms, Android, Audiobooks, DCIM, Documents, Download, Movies, Music, Notifications, Pictures, Podcasts, Recordings, Ringtones 와 이름을 가린 폴더 8개가 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 폴더들에 `.trashed-` 파일이 있었는지는 관찰하지 않았습니다.
 
 ## 볼 아티팩트와 순서
 

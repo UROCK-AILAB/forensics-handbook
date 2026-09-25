@@ -88,7 +88,7 @@ CREATE TABLE deleted_contacts (
 
 지운 연락처의 이름과 번호는 `deleted_contacts` 에 남지 않으므로, 원본 행까지 이미 지워졌다면 남은 조각은 SQLite 의 빈 페이지나 WAL 에서 찾아야 합니다. 원리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에, 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 
-삼성 기기에는 이름에 휴지통(trash bin)이 들어간 연락처 설정 키가 있어 삼성 연락처 앱의 휴지통 기능과 관련이 있어 보이지만, 그 기능이 지운 연락처를 어디에 얼마 동안 두는지는 확인하지 못했습니다. 시험 기기에서 settings 목록을 읽었을 때 연락처 관련 키 이름이 아래처럼 보였고, 값은 보지 못했습니다(확인 범위: SM-S937N, Android 16, One UI 8.5).
+삼성 기기에는 이름에 휴지통(trash bin)이 들어간 연락처 설정 키가 있어 삼성 연락처 앱의 휴지통 기능과 관련이 있어 보이지만, 그 기능이 지운 연락처를 어디에 얼마 동안 두는지는 확인하지 못했습니다. 시험 기기에서 settings 목록을 읽었을 때 연락처 관련 키 이름이 아래처럼 보였고, 값은 보지 못했습니다(확인 범위: Android 16, One UI 8.5).
 
 | 영역 | 키 |
 |---|---|
@@ -97,7 +97,7 @@ CREATE TABLE deleted_contacts (
 
 `contact_setting_trash_bin_on` 이 그 키이고, 켜짐·꺼짐 값의 뜻은 단정하지 않습니다. 설정 값 읽는 법은 [설정 값](../system-account/settings.md) 에 있습니다.
 
-같은 시험 기기의 `dumpsys user` 출력에는 사용자 프로필마다 `mUseParentsContacts` 칸이 있었고(확인 범위: SM-S937N, Android 16, One UI 8.5), 이름으로 보아 부모 사용자와 연락처를 함께 쓰는지를 나타내는 것으로 보입니다. 보안 폴더나 작업 프로필이 있는 기기는 연락처가 프로필마다 따로 있을 수 있으니 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 과 [사용자와 프로필](../system-account/users-profiles.md) 을 함께 봅니다.
+같은 시험 기기의 `dumpsys user` 출력에는 사용자 프로필마다 `mUseParentsContacts` 칸이 있었고(확인 범위: Android 16, One UI 8.5), 이름으로 보아 부모 사용자와 연락처를 함께 쓰는지를 나타내는 것으로 보입니다. 보안 폴더나 작업 프로필이 있는 기기는 연락처가 프로필마다 따로 있을 수 있으니 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 과 [사용자와 프로필](../system-account/users-profiles.md) 을 함께 봅니다.
 
 ## 직접 분석해 보기
 
@@ -136,7 +136,7 @@ ORDER BY contact_deleted_timestamp;
 | [카카오톡](../messengers/kakaotalk/index.md) | 메신저 친구 목록과 전화번호 |
 | [dumpsys 출력](../logs/dumpsys.md) | 알림마다 적힌 연락처 연관도 |
 
-시험 기기의 `dumpsys notification` 출력에는 알림마다 `mContactAffinity` 칸이 있었습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 이름으로 보아 알림을 보낸 상대가 연락처와 얼마나 가까운지를 나타내는 값으로 보이지만 계산 방법은 확인하지 못했습니다. 연락 관계를 정리하는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 에, 증거를 지우려 했는지 보는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+시험 기기의 `dumpsys notification` 출력에는 알림마다 `mContactAffinity` 칸이 있었습니다(확인 범위: Android 16, One UI 8.5). 이름으로 보아 알림을 보낸 상대가 연락처와 얼마나 가까운지를 나타내는 값으로 보이지만 계산 방법은 확인하지 못했습니다. 연락 관계를 정리하는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 에, 증거를 지우려 했는지 보는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 
 ## 실습
 

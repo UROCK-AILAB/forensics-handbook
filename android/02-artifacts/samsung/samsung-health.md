@@ -36,7 +36,7 @@ SDK 문서는 다른 앱이 삼성 헬스와 데이터를 주고받는 규칙을
 | 파일 시스템 전체 추출 | `SecureHealthData.db` (암호화된 상태) |
 | adb 일반 권한 | 데이터베이스는 못 읽고, 앱 사용 기록에서 삼성 헬스가 실행된 흔적만 볼 수 있음 |
 
-실제 폰에서 adb 일반 권한으로 살펴봤을 때는 설정 값에서 삼성 헬스와 관련된 키 이름을 찾지 못했습니다. `/sdcard/Android/media` 아래에는 앱 폴더가 5개 있었고, 이름이 보이는 폴더는 `com.google.android.gms` 와 `com.samsung.android.spay` 였습니다. 나머지 폴더는 이름을 가려 두어서 삼성 헬스 폴더가 그중에 있는지는 알 수 없습니다(확인 범위: SM-S937N, Android 16, One UI 8.5). 앱 사용 기록을 읽는 법은 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 다룹니다.
+실제 폰에서 adb 일반 권한으로 살펴봤을 때는 설정 값에서 삼성 헬스와 관련된 키 이름을 찾지 못했습니다. `/sdcard/Android/media` 아래에는 앱 폴더가 5개 있었고, 이름이 보이는 폴더는 `com.google.android.gms` 와 `com.samsung.android.spay` 였습니다. 나머지 폴더는 이름을 가려 두어서 삼성 헬스 폴더가 그중에 있는지는 알 수 없습니다(확인 범위: Android 16, One UI 8.5). 앱 사용 기록을 읽는 법은 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 다룹니다.
 
 ## 구조
 

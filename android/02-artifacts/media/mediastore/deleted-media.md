@@ -35,7 +35,7 @@ nav_order: 640
 
 스키마 단계 번호를 Android 버전으로 옮기는 문제는 [미디어 DB 구조](external-db.md) 페이지의 "스키마 버전" 절에 있습니다. 삼성 휴지통 제공자가 One UI 몇 버전부터 있는지, 요즘 삼성 갤러리가 local.db 의 trash 표 대신 이 제공자를 쓰는지는 확인하지 못했습니다.
 
-관찰한 기기의 `/sdcard/Android` 목록에는 data, media, obb 만 보였고 .Trash 는 보이지 않았습니다. 다만 이 목록이 점으로 시작하는 숨김 항목까지 나열한 결과인지 관찰 메모에 적혀 있지 않아서, 이 기기에 .Trash 가 없다고 결론 낼 수는 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 같은 기기의 global 설정에 contact_setting_trash_bin_on 키가 있었지만, 이름으로 보아 연락처 휴지통 설정이고 사진 휴지통과의 관계는 확인하지 못했습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+관찰한 기기의 `/sdcard/Android` 목록에는 data, media, obb 만 보였고 .Trash 는 보이지 않았습니다. 다만 이 목록이 점으로 시작하는 숨김 항목까지 나열한 결과인지 관찰 메모에 적혀 있지 않아서, 이 기기에 .Trash 가 없다고 결론 낼 수는 없습니다 (확인 범위: Android 16, One UI 8.5). 같은 기기의 global 설정에 contact_setting_trash_bin_on 키가 있었지만, 이름으로 보아 연락처 휴지통 설정이고 사진 휴지통과의 관계는 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5).
 
 ## 구조
 

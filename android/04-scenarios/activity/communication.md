@@ -17,7 +17,7 @@ nav_order: 1560
 - **OS 버전과 제조사** — 삼성 기기는 연락처 제공자의 패키지 이름이 다릅니다. 공개 도구 ALEAPP 는 통화 기록을 `*/com.android.providers.contacts/databases/calllog.db*` 와 `*/com.samsung.android.providers.contacts/databases/calllog.db*` 두 경로에서 찾고, 시험 표본 중 삼성 기기(Galaxy S10 Android 10, Galaxy S20 Android 13, Galaxy A53 Android 14 등)는 모두 삼성 쪽 경로였습니다 [1]. 문자와 메신저도 제조사·앱에 따라 저장 위치가 달라서, 검체의 제조사와 Android 버전, 기본 메시지 앱을 먼저 적어 둡니다.
 - **시간대** — 칸마다 시각 단위가 다르고 대부분 UTC 기준의 에포크 값이라, 현지 시각으로 바꾸려면 기기 시간대가 필요합니다([시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md), [시각 값](../../01-foundations/value-decoding/time-values.md)).
 - **사용자와 프로필** — 보안 폴더나 작업 프로필 안에서 쓴 앱은 따로 된 사용자 공간에 기록을 남길 수 있습니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
-- **수집 범위** — 통화 기록·문자·메신저 DB 는 앱 데이터 영역에 있어 adb 일반 권한으로 보이는 범위에 들어 있지 않습니다. 관찰 기기에서 일반 권한으로 볼 수 있던 것은 `dumpsys` 출력과 설정 키 이름, `/sdcard` 폴더 목록 정도였습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 어떤 방식으로 무엇까지 확보했는지를 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 기준으로 먼저 정리해 두어야 "기록이 없다" 와 "확보하지 못했다" 를 가를 수 있습니다.
+- **수집 범위** — 통화 기록·문자·메신저 DB 는 앱 데이터 영역에 있어 adb 일반 권한으로 보이는 범위에 들어 있지 않습니다. 관찰 기기에서 일반 권한으로 볼 수 있던 것은 `dumpsys` 출력과 설정 키 이름, `/sdcard` 폴더 목록 정도였습니다 (확인 범위: Android 16, One UI 8.5). 어떤 방식으로 무엇까지 확보했는지를 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 기준으로 먼저 정리해 두어야 "기록이 없다" 와 "확보하지 못했다" 를 가를 수 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -61,11 +61,11 @@ nav_order: 1560
 
 4. **메신저를 읽습니다.** 메신저는 앱마다 DB 가 다르므로 해당 앱 페이지를 따라갑니다. 예를 들어 카카오톡의 대화 DB 에는 대화 기록 표 `chat_logs` 와 대화방 표 `chat_rooms` 가 있고, 파일 전체가 아니라 메시지 본문 같은 일부 칸만 암호화돼 있습니다 [8]. 공개 도구도 `-wal`·`-shm`·`-journal` 파일을 본 파일과 함께 꺼내는데 [9], 최근 메시지가 아직 본 파일에 옮겨지지 않고 `-wal` 에만 있을 수 있어서 수집할 때 이 파일들을 빠뜨리지 않습니다. 이 핸드북은 암호화된 칸을 푸는 절차를 다루지 않고, 칸이 암호화돼 있어 그대로는 읽을 수 없다는 사실까지만 적습니다.
 
-5. **알림 흔적으로 빈자리를 메웁니다.** 앱 DB 가 없거나 대화가 지워진 경우에도 알림 기록이 남아 있을 수 있습니다. 알림 기록 파일은 ALEAPP 경로 패턴 `**/system_ce/*/notification_history/history/*` 아래 protobuf 이고 [12], 한 건마다 `package`, `channel_id`, `posted_time_ms`(밀리초), `title`, `text`, `conversation_id` 같은 칸이 있습니다 [11]. 다만 하루치만 남기고(`HISTORY_RETENTION_DAYS = 1`) 20분마다 디스크에 쓰기 때문에 [10] 오래된 사건에는 거의 쓰지 못합니다. 이 기능이 켜져 있었는지는 settings secure 의 `notification_history_enabled` 로 판단하고 [12], 관찰 기기에도 이 키 이름이 있었습니다(값은 가려짐) (확인 범위: SM-S937N, Android 16, One UI 8.5).
+5. **알림 흔적으로 빈자리를 메웁니다.** 앱 DB 가 없거나 대화가 지워진 경우에도 알림 기록이 남아 있을 수 있습니다. 알림 기록 파일은 ALEAPP 경로 패턴 `**/system_ce/*/notification_history/history/*` 아래 protobuf 이고 [12], 한 건마다 `package`, `channel_id`, `posted_time_ms`(밀리초), `title`, `text`, `conversation_id` 같은 칸이 있습니다 [11]. 다만 하루치만 남기고(`HISTORY_RETENTION_DAYS = 1`) 20분마다 디스크에 쓰기 때문에 [10] 오래된 사건에는 거의 쓰지 못합니다. 이 기능이 켜져 있었는지는 settings secure 의 `notification_history_enabled` 로 판단하고 [12], 관찰 기기에도 이 키 이름이 있었습니다(값은 가려짐) (확인 범위: Android 16, One UI 8.5).
 
-   `dumpsys usagestats` 에는 알림이 왔다는 사실만 남습니다. 관찰 기기에서는 `type=NOTIFICATION_INTERRUPTION ... channelId=CHANNEL_ID_SMS_MMS` 줄이 2번 나왔는데, 채널 이름으로 문자 알림이 왔다는 것은 볼 수 있지만 상대방과 본문은 이 줄에 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). `dumpsys notification` 에는 지금 떠 있는 알림의 `android.title`·`android.text` 칸이 보였고, 관찰 메모에서는 값 대신 `[length=##]` 로 가려져 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+   `dumpsys usagestats` 에는 알림이 왔다는 사실만 남습니다. 관찰 기기에서는 `type=NOTIFICATION_INTERRUPTION ... channelId=CHANNEL_ID_SMS_MMS` 줄이 2번 나왔는데, 채널 이름으로 문자 알림이 왔다는 것은 볼 수 있지만 상대방과 본문은 이 줄에 없습니다 (확인 범위: Android 16, One UI 8.5). `dumpsys notification` 에는 지금 떠 있는 알림의 `android.title`·`android.text` 칸이 보였고, 관찰 메모에서는 값 대신 `[length=##]` 로 가려져 있었습니다 (확인 범위: Android 16, One UI 8.5).
 
-6. **통화 녹음이 있는지 봅니다.** 관찰 기기의 `/sdcard` 최상위에는 `Recordings` 폴더가 있었고, settings system 에는 `record_calls_automatically_on_off`, `record_calls_automatically_type`, `record_call_storage_setting_value` 같은 통화 녹음 설정 키 이름이 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 폴더 안의 내용과 키 값의 뜻, 삼성 통화 녹음 파일의 이름 규칙은 확인하지 못했으므로, 녹음 파일을 찾았다면 파일 자체의 메타데이터와 통화 기록 시각을 나란히 놓아 맞춰 봅니다. 관찰 기기의 `dumpsys batterystats` 에는 `+audio`·`-audio` 줄도 있었지만, 오디오를 쓴 구간일 뿐 그것이 통화였는지는 이 줄만으로 알 수 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+6. **통화 녹음이 있는지 봅니다.** 관찰 기기의 `/sdcard` 최상위에는 `Recordings` 폴더가 있었고, settings system 에는 `record_calls_automatically_on_off`, `record_calls_automatically_type`, `record_call_storage_setting_value` 같은 통화 녹음 설정 키 이름이 있었습니다 (확인 범위: Android 16, One UI 8.5). 폴더 안의 내용과 키 값의 뜻, 삼성 통화 녹음 파일의 이름 규칙은 확인하지 못했으므로, 녹음 파일을 찾았다면 파일 자체의 메타데이터와 통화 기록 시각을 나란히 놓아 맞춰 봅니다. 관찰 기기의 `dumpsys batterystats` 에는 `+audio`·`-audio` 줄도 있었지만, 오디오를 쓴 구간일 뿐 그것이 통화였는지는 이 줄만으로 알 수 없습니다 (확인 범위: Android 16, One UI 8.5).
 
 7. **한 표로 합칩니다.** 통화·문자·메신저·알림을 상대 번호(또는 ID)와 시각 기준으로 한 표에 모읍니다. 이때 `calls.date`·`sms.date`·알림의 `posted_time_ms` 는 밀리초이고 `pdu.date` 는 초라서 단위를 먼저 맞추고, 칸마다 출처 파일과 원래 값을 함께 남깁니다. 여러 기록을 한 시간 축에 놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
@@ -81,7 +81,7 @@ nav_order: 1560
 
 **기록이 없는 기간을 "연락이 없었다" 로 단정하는 것**도 조심합니다. 통화 기록은 계정마다 500건 한도가 있고 [2], 알림 기록은 하루치뿐이며 [10], 메신저 대화는 사용자가 지우거나 앱을 다시 깔면 사라질 수 있습니다. 지운 기록을 찾는 흐름은 [지운 대화와 사진 찾기](deleted-content.md) 에 있습니다.
 
-**알림 이벤트를 메시지 본문의 증거로 쓰는 경우**도 있습니다. `NOTIFICATION_INTERRUPTION` 줄에는 앱과 채널만 있고 상대와 내용은 없습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+**알림 이벤트를 메시지 본문의 증거로 쓰는 경우**도 있습니다. `NOTIFICATION_INTERRUPTION` 줄에는 앱과 채널만 있고 상대와 내용은 없습니다 (확인 범위: Android 16, One UI 8.5).
 
 ## 보고서 문장 예
 

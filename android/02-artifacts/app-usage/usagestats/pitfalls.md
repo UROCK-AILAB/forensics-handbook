@@ -29,9 +29,9 @@ usagestats 이벤트는 사용자의 조작과 시스템의 동작이 섞인 기
 
 파일 안의 시각 칸은 구간 시작(파일 이름)으로부터의 밀리초 차이라서, 파일 이름을 더하지 않고 그대로 유닉스 밀리초로 읽으면 1970년 근처 시각이 나옵니다 [4]. 차이값은 구간 시작보다 최대 1시간 앞선 음수일 수도 있고 [4], 도구마다 음수를 다루는 방식이 다를 수 있어서 음수가 나온 이벤트는 두 도구 이상으로 맞춰 봅니다. ALEAPP 의 음수 처리와 계산 예시는 [파일 구조](structure.md) 페이지에 있습니다.
 
-파일 이름과 이벤트 시각은 모두 기기의 벽시계(System.currentTimeMillis)를 따르고 [1], 사용자가 기기 시각을 바꾸면 기록에도 그대로 반영됩니다. 서비스는 실제 시각과 기대한 시각이 2초(TIME_CHANGE_THRESHOLD_MILLIS)보다 벌어지면 시각이 바뀐 것으로 보고 `Time changed in by ... seconds` 로그를 남긴 다음 기준 시각을 다시 잡습니다 [2]. 이때 이미 저장된 파일과 이벤트를 어떻게 다루는지는 확인하지 못했습니다. 실제 폰의 `dumpsys usagestats` 출력에서는 "UsageStats RollOver history" 절에 `Time changed. actualSystemTime:... expectedSystemTime:...` 줄이 5건 있었고, 시각 변경의 흔적을 이 절에서 찾을 수 있습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 시각 조작을 의심하는 사건이라면 [시간대와 시각 설정](../../system-account/time-zone.md)과 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 페이지를 함께 봅니다.
+파일 이름과 이벤트 시각은 모두 기기의 벽시계(System.currentTimeMillis)를 따르고 [1], 사용자가 기기 시각을 바꾸면 기록에도 그대로 반영됩니다. 서비스는 실제 시각과 기대한 시각이 2초(TIME_CHANGE_THRESHOLD_MILLIS)보다 벌어지면 시각이 바뀐 것으로 보고 `Time changed in by ... seconds` 로그를 남긴 다음 기준 시각을 다시 잡습니다 [2]. 이때 이미 저장된 파일과 이벤트를 어떻게 다루는지는 확인하지 못했습니다. 실제 폰의 `dumpsys usagestats` 출력에서는 "UsageStats RollOver history" 절에 `Time changed. actualSystemTime:... expectedSystemTime:...` 줄이 5건 있었고, 시각 변경의 흔적을 이 절에서 찾을 수 있습니다 (확인 범위: Android 16, One UI 8.5). 시각 조작을 의심하는 사건이라면 [시간대와 시각 설정](../../system-account/time-zone.md)과 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 페이지를 함께 봅니다.
 
-ALEAPP 는 절대 유닉스 밀리초로 바꾼 뒤 UTC 로 보여 주지만 [6], `dumpsys usagestats` 는 시각을 한글이 섞인 날짜 문자열로 찍었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). dumpsys 가 어느 시간대 기준으로 찍는지는 확인하지 못했으니, 두 출력을 나란히 놓을 때는 시간대를 먼저 맞춥니다. 밀리초 값을 바꾸는 법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+ALEAPP 는 절대 유닉스 밀리초로 바꾼 뒤 UTC 로 보여 주지만 [6], `dumpsys usagestats` 는 시각을 한글이 섞인 날짜 문자열로 찍었습니다 (확인 범위: Android 16, One UI 8.5). dumpsys 가 어느 시간대 기준으로 찍는지는 확인하지 못했으니, 두 출력을 나란히 놓을 때는 시간대를 먼저 맞춥니다. 밀리초 값을 바꾸는 법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 이벤트 뜻을 넘겨짚는 함정
 
@@ -41,7 +41,7 @@ ALEAPP 는 절대 유닉스 밀리초로 바꾼 뒤 UTC 로 보여 주지만 [6]
 
 SCREEN_NON_INTERACTIVE 에는 화면이 꺼진 경우뿐 아니라 ambient 상태(항상 켜진 화면 등)도 들어갑니다 [1]. KEYGUARD_HIDDEN 은 소스 설명이 "보통(typically)" 잠금 해제 때 생긴다고 적었을 뿐이라서 [1], 잠금 해제와 같다고 단정하지 않습니다.
 
-FOREGROUND_SERVICE_START·STOP 은 앱의 서비스가 돈 기록이지 사용자가 화면에서 앱을 쓴 기록이 아닙니다 [1]. 실제 폰의 최근 이벤트 목록에서도 이 두 종류가 수백 건씩 나왔습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). STANDBY_BUCKET_CHANGED 도 시스템이 앱의 대기 등급을 바꾼 기록이고, 이유 값에는 PREDICTED, TIMEOUT, FORCED_BY_SYSTEM 같은 시스템 쪽 이유가 있습니다 [5].
+FOREGROUND_SERVICE_START·STOP 은 앱의 서비스가 돈 기록이지 사용자가 화면에서 앱을 쓴 기록이 아닙니다 [1]. 실제 폰의 최근 이벤트 목록에서도 이 두 종류가 수백 건씩 나왔습니다 (확인 범위: Android 16, One UI 8.5). STANDBY_BUCKET_CHANGED 도 시스템이 앱의 대기 등급을 바꾼 기록이고, 이유 값에는 PREDICTED, TIMEOUT, FORCED_BY_SYSTEM 같은 시스템 쪽 이유가 있습니다 [5].
 
 ## 빠지거나 겹치는 기록
 
@@ -53,11 +53,11 @@ FOREGROUND_SERVICE_START·STOP 은 앱의 서비스가 돈 기록이지 사용�
 
 버전 5 파일은 `mappings` 파일이 있어야 패키지·클래스 이름을 되살릴 수 있고, 구간 파일만 뽑으면 이름 대신 번호만 남습니다 [3][6]. 형식 버전을 올릴 때 이전 파일이 `backups/` 아래에 남을 수 있어 업그레이드 이전 기간 기록의 출처가 될 수 있지만 [3], 업그레이드 뒤에도 계속 남는지는 확인하지 못했습니다. 예전 경로(`/data/system/usagestats/<사용자ID>/`)의 기록은 새 경로로 옮긴 뒤 지우니 [2], 두 경로에 같은 기록이 함께 있다고 기대하지 않습니다. `/data/system/usagestats/` 폴더 자체는 공용 파일(`globalcomponentusage`)을 두는 곳으로 계속 쓰입니다 [2].
 
-제3자 앱이나 API 로 받은 결과는 호출한 앱에 따라 SHORTCUT_INVOCATION·LOCUS_ID_SET 이벤트가 빠지거나 알림 채널 ID·인스턴트 앱 이름이 가려질 수 있습니다 [1][2]. 가림 옵션은 [이벤트 종류](event-types.md) 페이지에 정리했습니다. `dumpsys usagestats` 는 서비스의 메모리 상태를 보여 주고 이벤트 목록도 "Last ## hour events" 처럼 최근 몇 시간만 담아서, 파일에 저장된 내용과 범위가 다릅니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+제3자 앱이나 API 로 받은 결과는 호출한 앱에 따라 SHORTCUT_INVOCATION·LOCUS_ID_SET 이벤트가 빠지거나 알림 채널 ID·인스턴트 앱 이름이 가려질 수 있습니다 [1][2]. 가림 옵션은 [이벤트 종류](event-types.md) 페이지에 정리했습니다. `dumpsys usagestats` 는 서비스의 메모리 상태를 보여 주고 이벤트 목록도 "Last ## hour events" 처럼 최근 몇 시간만 담아서, 파일에 저장된 내용과 범위가 다릅니다 (확인 범위: Android 16, One UI 8.5).
 
 ## 제조사 차이
 
-| 항목 | 현행 AOSP | SM-S937N, Android 16, One UI 8.5 관찰 |
+| 항목 | 현행 AOSP | Android 16, One UI 8.5 관찰 |
 |---|---|---|
 | 보관 한도와 저장 주기 | [파일 구조](structure.md) 페이지의 값 | 삼성이 바꿨는지 확인하지 못함 |
 | dumpsys 의 "UsageStats RollOver history" 절 | 소스에서 확인하지 못함 | 있음 |
@@ -76,7 +76,7 @@ AOSP 소스에서 찾지 못한 절이 dumpsys 에 보인다는 점에서 제조
 - 알림 이벤트는 [알림 기록 (Notification History)](../notification-history.md) 과 맞춰 봅니다.
 - 화면 상태와 포그라운드 서비스는 [배터리 사용 기록 (batterystats)](../batterystats.md) 과 맞춰 봅니다.
 - 마지막으로 연 앱 화면은 [최근 앱 화면 (Recents·Snapshots)](../recents-snapshots.md) 과 맞춰 봅니다.
-- 사용 시간 수치는 [디지털 웰빙 (Digital Wellbeing)](../digital-wellbeing.md) 과 나란히 보되, 두 수치가 어떻게 다른지는 출처로 확인하지 못했습니다. 관찰한 폰의 `dumpsys package` 에서는 "Wellbeing:" 역할 항목 값이 none 이었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5).
+- 사용 시간 수치는 [디지털 웰빙 (Digital Wellbeing)](../digital-wellbeing.md) 과 나란히 보되, 두 수치가 어떻게 다른지는 출처로 확인하지 못했습니다. 관찰한 폰의 `dumpsys package` 에서는 "Wellbeing:" 역할 항목 값이 none 이었습니다 (확인 범위: Android 16, One UI 8.5).
 - 여러 아티팩트를 한 시간 축에 놓는 방법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md), 사용 행위를 재구성하는 흐름은 [어떤 앱을 언제 썼나](../../../04-scenarios/activity/app-usage.md) 와 [폰 사용 시간 재구성](../../../04-scenarios/activity/usage-time.md) 시나리오에 있습니다.
 
 ## 참고 문헌

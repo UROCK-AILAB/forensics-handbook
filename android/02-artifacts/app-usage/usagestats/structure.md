@@ -137,7 +137,7 @@ event.mTimeStamp = beginTime + proto.readLong(EventObfuscatedProto.TIME_MS);
 
 ## 라이브 기기에서 보이는 모양 (dumpsys usagestats)
 
-adb 일반 셸 권한(UID 2000)으로 `dumpsys usagestats` 를 실행하면 파일이 아니라 서비스가 메모리에 든 최근 이벤트와 일간 통계를 글자로 보여 주고, 출력은 약 7,546줄이었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 값을 가린 출력의 모양은 다음과 같습니다.
+adb 일반 셸 권한(UID 2000)으로 `dumpsys usagestats` 를 실행하면 파일이 아니라 서비스가 메모리에 든 최근 이벤트와 일간 통계를 글자로 보여 주고, 출력은 약 7,546줄이었습니다 (확인 범위: Android 16, One UI 8.5). 값을 가린 출력의 모양은 다음과 같습니다.
 
 ```text
 user=#
@@ -157,7 +157,7 @@ user=#
     event aggregations
 ```
 
-맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 한글이 섞인 날짜 문자열이었습니다. "In-memory daily stats" 절에는 timeRange 가 4개 있었고 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙어 있었습니다 (확인 범위: SM-S937N, Android 16, One UI 8.5). 이벤트 줄에 나온 이벤트 이름과 칸은 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
+맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 한글이 섞인 날짜 문자열이었습니다. "In-memory daily stats" 절에는 timeRange 가 4개 있었고 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙어 있었습니다 (확인 범위: Android 16, One UI 8.5). 이벤트 줄에 나온 이벤트 이름과 칸은 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
 
 현행 AOSP 의 dumpsys usagestats 는 `--checkin`, `-c`, `flush`, `apptimelimit`, `file`, `database-info`, `appstandby`, `stats-directory`, `mappings`, `broadcast-response-stats`, `app-component-usage` 인자를 받습니다 [3]. 이 인자들을 adb 일반 권한으로 실행한 결과는 관찰하지 못했습니다.
 

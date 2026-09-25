@@ -70,7 +70,7 @@ Android 버전이나 One UI 버전에 따라 이 앱의 흔적이 어떻게 달�
 
 **헥스로 한 번.** 이 앱의 파일 형식을 설명한 공개 명세를 찾지 못해서 명세로 만든 헥스 예시를 싣지 않습니다. 앱 폴더를 확보했다면 파일마다 앞부분을 헥스로 열어 형식을 알려 주는 머리 바이트를 확인하고, 그 형식의 기반 구조 페이지로 넘어갑니다.
 
-**명령으로 한 번.** 앱 사용 기록을 쿠팡 쇼핑 앱 줄만 남기도록 거릅니다. 관찰 기기의 앱 사용 기록 줄은 package 칸 값 다음에 공백과 class 같은 다음 칸이 이어지는 모양이었고, dumpsys notification 출력의 NotificationRecord 줄도 pkg 칸 값 다음에 공백과 user 칸이 이어졌습니다. (확인 범위: SM-S937N, Android 16, One UI 8.5)
+**명령으로 한 번.** 앱 사용 기록을 쿠팡 쇼핑 앱 줄만 남기도록 거릅니다. 관찰 기기의 앱 사용 기록 줄은 package 칸 값 다음에 공백과 class 같은 다음 칸이 이어지는 모양이었고, dumpsys notification 출력의 NotificationRecord 줄도 pkg 칸 값 다음에 공백과 user 칸이 이어졌습니다. (확인 범위: Android 16, One UI 8.5)
 
 ```
 adb shell "dumpsys usagestats | grep 'package=com.coupang.mobile '"
