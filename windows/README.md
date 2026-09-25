@@ -10,7 +10,7 @@ Windows 시스템에 남는 흔적을 어떻게 읽고 해석하는지 정리한
 
 아티팩트가 어디에 있는지뿐만 아니라 그 기록이 왜 생기는지, 무엇을 증명하고 무엇은 증명하지 못하는지까지 설명합니다. 보고서에 어떻게 쓸 수 있는지도 함께 다룹니다.
 
-macOS에 남는 흔적은 [macOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-mac/)에서 다룹니다.
+macOS에 남는 흔적은 [macOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-mac/)에서, Android 기기에 남는 흔적은 [Android 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-android/)에서 다룹니다.
 
 ## 구성
 
