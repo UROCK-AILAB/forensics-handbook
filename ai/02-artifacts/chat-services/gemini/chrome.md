@@ -9,7 +9,7 @@ nav_order: 320
 
 Chrome 에 들어간 Gemini 는 도구 모음의 "Ask Gemini" 버튼으로 열고 현재 탭 내용을 써서 답하는 기능이라서, 대화는 계정의 활동 기록으로 가고 기기에는 Chrome 설정 파일 속 `glic` 로 시작하는 키 같은 흔적이 남을 수 있습니다.
 
-> 확인 날짜: 2026-09-25. Google Chrome 도움말, Gemini 개인정보 안내, Chromium 소스 두 파일(2026-09 main 브랜치)을 바탕으로 썼습니다. 이 핸드북은 기기의 Chrome 프로필에서 이 키들을 관찰하지 않았고, 키 이름은 Chrome 버전에 따라 바뀔 수 있습니다.
+> 확인 날짜: 2026-09-25. Google Chrome 도움말, Gemini 개인정보 안내, Chromium 소스 두 파일(2026-09 main 브랜치)을 바탕으로 썼습니다. 키 이름은 Chrome 버전에 따라 바뀔 수 있어서, 검체의 Chrome 버전에서 키가 실제로 있는지 확인합니다.
 
 ## 무엇이 남나 · 왜 생기나
 
@@ -30,9 +30,9 @@ Chromium 은 이 기능을 안에서 "glic" 라고 부르고, 설정 키 이름�
 | Preferences(관리 정책이 넣음) | `glic.spark_policy_settings`, `glic.actuation_on_web`, `glic.file_upload_allowed`, `glic.actuation_on_web_allowed_for_urls`, `glic.actuation_on_web_blocked_for_urls`, `glic.gemini_enterprise_settings` | 웹 조작 허용 범위, 파일 올리기 허용, 기업 설정 |
 | Preferences | `glic.partition_needs_cookie_sync`, `glic.local_storage_copied_to_main_partition` | 저장 공간 관련 상태 |
 
-표는 소스에 있는 키 가운데 일부만 골랐고, 오른쪽 칸은 키 이름에서 짐작한 뜻입니다. 소스에서 각 키를 언제 쓰고 바꾸는지까지 따라가 확인하지는 않았습니다. `glic.window.last_dimissed_time` 의 `dimissed` 는 소스에 적힌 철자 그대로입니다. 마지막 줄의 두 키는 Gemini 창이 따로 떨어진 저장 공간 (partition) 을 쓴 적이 있다는 뜻으로 보이지만, 그 저장 공간의 실제 폴더 위치는 확인하지 못했습니다.
+표는 소스에 있는 키 가운데 일부만 골랐고, 오른쪽 칸은 키 이름에서 짐작한 뜻입니다. 각 키를 언제 쓰고 바꾸는지는 시험용 프로필에서 설정을 바꿔 보며 확인합니다. `glic.window.last_dimissed_time` 의 `dimissed` 는 소스에 적힌 철자 그대로입니다. 마지막 줄의 두 키는 이름으로 짐작하면 Gemini 창이 따로 떨어진 저장 공간 (partition) 을 쓴 적이 있다는 뜻이고, 그 저장 공간의 폴더 위치는 검체의 프로필 폴더에서 확인합니다.
 
-기업 관리 정책도 있습니다. 정의 파일 `components/policy/resources/templates/policy_definitions/GenerativeAI/GeminiSettings.yaml` 은 제목이 "Settings for Gemini integration" 인 정수 선택형 정책이고, 0 은 허용(기본값), 1 은 사용 안 함입니다. 설정하지 않으면 GenAiDefaultSettings 정책을 따르고, 지원은 Windows·macOS Chrome 137, iOS 139, ChromeOS 144, Android 149 부터입니다. 정책이 화면에 드러나는 이름과 Windows 레지스트리 정책 경로는 이번 조사에서 확인하지 못했습니다.
+기업 관리 정책도 있습니다. 정의 파일 `components/policy/resources/templates/policy_definitions/GenerativeAI/GeminiSettings.yaml` 은 제목이 "Settings for Gemini integration" 인 정수 선택형 정책이고, 0 은 허용(기본값), 1 은 사용 안 함입니다. 설정하지 않으면 GenAiDefaultSettings 정책을 따르고, 지원은 Windows·macOS Chrome 137, iOS 139, ChromeOS 144, Android 149 부터입니다. Windows 에서 이 정책 값이 레지스트리 어디에 적히는지는 검체의 정책 키에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -42,7 +42,7 @@ Chromium 은 이 기능을 안에서 "glic" 라고 부르고, 설정 키 이름�
 
 ## 시각 해석
 
-소스에서 시각 값으로 정의된 키는 `glic.window.last_dimissed_time` 이고, 이름대로라면 Gemini 창을 마지막으로 닫은 때입니다. 이 값이 Preferences 파일에 어떤 형식으로 적히는지, UTC 인지 현지 시각인지는 기기에서 확인하지 못했습니다. 마지막 한 번만 남는 값이라서 이전 사용 시각은 여기서 알 수 없고, Preferences 파일은 다른 설정이 바뀔 때도 다시 쓰여서 파일 수정 시각을 Gemini 사용 시각으로 읽지 않습니다.
+소스에서 시각 값으로 정의된 키는 `glic.window.last_dimissed_time` 이고, 이름대로라면 Gemini 창을 마지막으로 닫은 때입니다. 이 값이 Preferences 파일에 어떤 형식으로 적히는지, UTC 인지 현지 시각인지는 검체에서 창을 닫은 시각과 맞춰 확인합니다. 마지막 한 번만 남는 값이라서 이전 사용 시각은 여기서 알 수 없고, Preferences 파일은 다른 설정이 바뀔 때도 다시 쓰여서 파일 수정 시각을 Gemini 사용 시각으로 읽지 않습니다.
 
 ## 함정과 한계
 
@@ -79,7 +79,7 @@ jq 로는 프로필 폴더의 Preferences 사본에서 `jq '.glic' Preferences` 
 
 ## 실습
 
-Gemini in Chrome 흔적을 담은 공개 검체는 이번 조사에서 확인하지 못했습니다. 시험용 계정과 Chrome 으로 아래 질문을 풀어 봅니다.
+시험용 계정과 Chrome 으로 검체를 직접 만들어 아래 질문을 풀어 봅니다.
 
 1. Gemini 를 한 번도 열지 않은 프로필과 한 번 연 프로필의 Preferences 에서 `glic` 객체는 어떻게 다릅니까?
 2. Gemini 창을 닫은 뒤 `glic.window.last_dimissed_time` 값은 어떤 형식으로 적히고, 창을 닫은 시각과 맞습니까?

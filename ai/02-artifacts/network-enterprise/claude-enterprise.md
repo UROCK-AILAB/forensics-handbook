@@ -1,7 +1,7 @@
 ---
 title: "Claude 기업용 감사 로그"
 parent: "아티팩트 · 네트워크·기업 기록"
-nav_order: 710
+nav_order: 790
 ---
 
 # Claude 기업용 감사 로그 (Audit Logs)
@@ -10,15 +10,15 @@ nav_order: 710
 
 Claude Enterprise 조직은 로그인, 구성원 초대, 프로젝트·대화·파일의 생성과 삭제 같은 활동을 최근 180일치 감사 로그로 내보낼 수 있고, 이 로그는 서버에만 있어서 PC 이미지가 아니라 조직의 Owner 에게서 받아야 합니다.
 
-확인 날짜는 2026-09이고, 근거는 Claude 도움말 센터의 "How to access audit logs" 문서(2026-06-15)입니다. PC 쪽 흔적은 이 핸드북의 기기 관찰(Windows 11, 2026-09)에서 확인했습니다.
+확인 날짜는 2026-09이고, 근거는 Claude 도움말 센터의 "How to access audit logs" 문서(2026-06-15)입니다. PC 쪽 흔적은 기기 관찰 결과입니다(확인 범위: Windows 11, 2026-09).
 
 ## 무엇을 기록하나 · 왜 생기나
 
 감사 로그는 조직 관리자가 계정과 데이터에 어떤 일이 있었는지 돌아보려고 남기는 기록이고, Enterprise 요금제 조직만 쓸 수 있습니다. 기록 대상은 대화 내용이 아니라 활동입니다. 누가 언제 로그인했는지, 누구를 초대하고 내보냈는지, SSO·도메인 설정을 언제 바꿨는지, 프로젝트·대화·파일을 언제 만들고 지웠는지가 남습니다.
 
-대화와 프로젝트의 제목과 내용은 감사 로그에 들어가지 않고 고유 식별자만 들어갑니다. 대화의 입력과 출력이 필요하면 Primary Owner 가 따로 하는 "데이터 내보내기" 로 가져가야 하고, 그 형식은 [계정 데이터 내보내기 형식](../../01-foundations/storage-model/data-export-formats.md)에서 다룹니다. 감사 로그와 데이터 내보내기는 서로 다른 자료라서, 조사에서는 둘을 따로 요청하고 식별자로 이어 붙입니다.
+대화와 프로젝트의 제목과 내용은 감사 로그에 들어가지 않고 고유 식별자만 들어갑니다. 대화의 입력과 출력이 필요하면 Primary Owner 가 따로 하는 "데이터 내보내기" 로 가져가야 하고, 그 형식은 [계정 데이터 내보내기 형식](../../01-foundations/storage-model/data-export-formats.md)에서 다룹니다. 감사 로그와 데이터 내보내기는 서로 다른 자료라서, 조사에서는 둘을 따로 요청하고 식별자로 이어 붙입니다. 조직 내보내기에서 대화를 사람별로 나누는 방법과 `users.json` 에 없는 사용자를 가려내는 방법은 [계정 데이터 내보내기](../chat-services/claude/export.md)에서 다룹니다[2].
 
-Team 요금제, Claude Code, API 콘솔의 감사 기록은 이 문서에 나오지 않아서 이 페이지에서 다루지 않습니다. Claude Code 가 기기에 남기는 기록은 [Claude Code](../dev-agents/claude-code/index.md) 페이지에 있습니다.
+Team 요금제, Claude Code, API 콘솔의 감사 기록은 이 도움말 문서의 범위 밖이라 이 페이지에서 다루지 않습니다. Claude Code 가 기기에 남기는 기록은 [Claude Code](../dev-agents/claude-code/index.md) 페이지에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -29,10 +29,10 @@ Team 요금제, Claude Code, API 콘솔의 감사 기록은 이 문서에 나오
 | 내보내는 곳 | **Organization settings → Data and Privacy** 의 "Export logs" |
 | 받는 방법 | 다운로드 링크가 이메일로 오고, 24시간 안에 받아야 함 |
 | 범위 | 최근 180일 |
-| 파일 형식 | 문서에 나오지 않음(CSV 인지 JSON 인지 확인하지 못함) |
+| 파일 형식 | 도움말에 없음. 받은 파일의 첫 바이트로 CSV 인지 JSON 인지 확인 |
 | 다른 경로 | 감사 로그 이벤트는 Compliance API 로도 제공됨. 고객 관리 암호화 키를 쓰는 Enterprise 조직은 "Export logs" 버튼을 쓸 수 없음 |
 
-문서 원문을 다시 열어 보니 "고객 관리 암호화 키" 조건은 Compliance API 쪽이 아니라 내보내기 버튼 쪽에 붙어 있었습니다. 고객 관리 암호화 키를 쓰는 Enterprise 조직은 "Export logs" 버튼으로 내보낼 수 없다고 적혀 있어서, 이런 조직에는 Compliance API 로 받은 자료를 요청합니다(확인 날짜 2026-09).
+도움말은 고객 관리 암호화 키를 쓰는 Enterprise 조직이 "Export logs" 버튼으로 내보낼 수 없다고 적었습니다[1]. 이런 조직에는 Compliance API 로 받은 자료를 요청합니다.
 
 감사 로그는 서버에만 있고 PC 이미지에서는 얻을 수 없습니다. PC 에서 볼 수 있는 Claude 데스크톱 앱의 `Network` 폴더(확인 범위: Windows 11, 2026-09)는 접속 흔적일 뿐 감사 로그가 아니고, 그 내용은 [AI 서비스 도메인과 네트워크 기록](network-traces.md)에서 다룹니다. 앱과 웹에 남는 흔적은 [Claude](../chat-services/claude/index.md) 페이지를 봅니다.
 
@@ -85,13 +85,13 @@ Team 요금제, Claude Code, API 콘솔의 감사 기록은 이 문서에 나오
 - **내용이 없다.** `conversation_created` 가 있어도 대화 내용은 들어 있지 않습니다. 데이터 내보내기와 함께 요청합니다.
 - **지우기.** 사용자가 대화나 프로젝트 문서를 지워도 `conversation_deleted`·`project_document_deleted` 이벤트가 남아서, 지운 시각 자체가 단서가 됩니다.
 - **조사 쪽 내보내기도 남는다.** 조직 데이터 내보내기는 `org_data_export_started`·`org_data_export_completed` 이벤트로 남습니다. 조사를 위해 Owner 가 한 내보내기를 조사 대상의 행동으로 잘못 읽지 않도록 요청 날짜와 요청한 사람을 따로 적어 둡니다. 감사 로그를 내보낸 일 자체가 이벤트로 남는지는 문서에 나오지 않습니다.
-- **IP 와 기기.** `ip_address` 는 VPN·회사 게이트웨이를 거치면 개인 기기를 가리키지 않습니다. `device_id` 가 PC 쪽 어떤 값과 이어지는지는 확인하지 못했습니다.
+- **IP 와 기기.** `ip_address` 는 VPN·회사 게이트웨이를 거치면 개인 기기를 가리키지 않습니다. `device_id` 가 PC 쪽 어떤 값과 이어지는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 직접 분석해 보기
 
 **헥스로 한 번.** 감사 로그는 서버에서 내보내는 자료라서 헥스로 따라갈 PC 파일이 없고, 내보낸 파일의 형식도 문서에 나오지 않았습니다. 받은 파일의 첫 몇 바이트를 헥스로 보고 텍스트 표(CSV)인지 JSON 인지부터 확인한 뒤 알맞은 도구로 엽니다.
 
-**공개 도구로 한 번.** 파일 형식을 확인하지 못해서 특정 도구 명령 대신 읽는 순서를 보입니다. 아래는 문서의 칸 이름으로 **만든 예시**이고 값은 모두 가짜입니다.
+**공개 도구로 한 번.** 파일 형식이 도움말에 없어서 특정 도구 명령 대신 읽는 순서를 보입니다. 아래는 문서의 칸 이름으로 **만든 예시**이고 값은 모두 가짜입니다.
 
 | `created_at` | `actor_info` | `event` | `entity_info` | `ip_address` | `client_platform` |
 |---|---|---|---|---|---|
@@ -112,7 +112,7 @@ Team 요금제, Claude Code, API 콘솔의 감사 기록은 이 문서에 나오
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에 Claude Enterprise 감사 로그가 들어 있는지는 확인하지 않았습니다. 시험용 Enterprise 조직이 있다면 아래 질문을 직접 풀어 봅니다.
+감사 로그는 조직이 서버에서 내보내는 자료라서 PC 이미지 검체로는 풀 수 없고, 시험용 Enterprise 조직에서 아래 질문을 풀어 봅니다.
 
 1. 감사 로그를 내보내고 파일 형식과 `created_at` 값의 시간대 표시를 확인합니다.
 2. 대화를 만들고 파일을 올린 뒤 지우고, 세 이벤트가 같은 `entity_info` 식별자로 이어지는지 봅니다.
@@ -122,3 +122,4 @@ Team 요금제, Claude Code, API 콘솔의 감사 기록은 이 문서에 나오
 ## 참고 문헌
 
 1. How to access audit logs (Audit Logs in Claude Enterprise) — Claude 도움말 센터 (2026-06-15) — https://support.claude.com/en/articles/9970975-how-to-access-audit-logs
+2. ukogan/claude-migration-assistant, `js/processing/admin-reader.js` — https://github.com/ukogan/claude-migration-assistant

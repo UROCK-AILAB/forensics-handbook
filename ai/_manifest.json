@@ -516,6 +516,24 @@
   "subpages": []
  },
  {
+  "title": "AI 컴패니언 앱 (Replika·Character.AI 등)",
+  "path": "02-artifacts/chat-services/companion-apps.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Meta AI 앱과 AI 안경 (Meta AI·Ray-Ban Meta)",
+  "path": "02-artifacts/chat-services/meta-ai-glasses.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
   "title": "ChatGPT 에이전트 모드 (ChatGPT Agent)",
   "path": "02-artifacts/agentic-services/chatgpt-agent.md",
   "kind": "page",
@@ -527,6 +545,15 @@
  {
   "title": "브라우저를 조작하는 AI (Browser Agents)",
   "path": "02-artifacts/agentic-services/browser-agents.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "에이전트형 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI 에이전트 브라우저 (Comet·Fellou 등)",
+  "path": "02-artifacts/agentic-services/ai-browsers.md",
   "kind": "page",
   "section": "아티팩트 사전",
   "group": "에이전트형 서비스",
@@ -819,6 +846,51 @@
   "subpages": []
  },
  {
+  "title": "Chatbox (Chatbox)",
+  "path": "02-artifacts/local-ai/chatbox.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Msty (Msty)",
+  "path": "02-artifacts/local-ai/msty.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Jan (Jan)",
+  "path": "02-artifacts/local-ai/jan.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "GPT4All (GPT4All)",
+  "path": "02-artifacts/local-ai/gpt4all.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AnythingLLM (AnythingLLM)",
+  "path": "02-artifacts/local-ai/anythingllm.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
   "title": "로컬 이미지 생성 도구 (Stable Diffusion WebUI·ComfyUI)",
   "path": "02-artifacts/local-ai/image-gen-local.md",
   "kind": "page",
@@ -929,6 +1001,15 @@
  {
   "title": "대화 내용 되살리기 (캐시·스냅숏·알림)",
   "path": "03-techniques/analysis/content-recovery.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "메모리에서 AI 흔적 찾기 (Memory Analysis)",
+  "path": "03-techniques/analysis/memory-analysis.md",
   "kind": "page",
   "section": "분석 기법",
   "group": "분석",

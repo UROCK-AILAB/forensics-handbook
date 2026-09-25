@@ -1,14 +1,14 @@
 ---
 title: "프롬프트 인젝션 사고 분석"
 parent: "기법 · 분석"
-nav_order: 810
+nav_order: 900
 ---
 
 # 프롬프트 인젝션 사고 분석 (Prompt Injection)
 
 AI 에이전트가 읽은 웹 페이지·파일·도구 출력 속에 섞인 글을 지시처럼 따라 사용자가 시키지 않은 일을 했다는 의심이 있을 때, 에이전트가 무엇을 읽었고 그 뒤 무엇을 했으며 누가 그 동작을 허용했는지를 기록으로 이어 보는 분석 방법입니다.
 
-> 확인 날짜: 2026-09. 이 페이지는 사고가 난 뒤 흔적을 해석하고 재발을 탐지하는 방법만 다루고, 지시를 숨겨 넣는 방법이나 문구는 쓰지 않습니다. 기기 쪽 키 이름은 Windows 11 PC 한 대의 AI 도구 폴더에서 확인했고 값은 보지 않았습니다(확인 범위: Windows 11, 2026-09). 그 PC 의 앱 버전은 확인하지 못했고, Claude Code 의 버전 번호는 문서 문장을 옮긴 것입니다. macOS·Linux 는 문서 근거만 씁니다.
+> 확인 날짜: 2026-09. 이 페이지는 사고가 난 뒤 흔적을 해석하고 재발을 탐지하는 방법만 다루고, 지시를 숨겨 넣는 방법이나 문구는 쓰지 않습니다. "확인 범위" 를 붙인 키 이름은 Windows 11 에서 관찰한 것이고, 앱 판에 따라 달라질 수 있어서 검체에서 다시 확인합니다. macOS·Linux 는 공식 문서와 논문에 적힌 내용만 씁니다.
 
 ## 언제 쓰나
 
@@ -18,11 +18,11 @@ AI 에이전트가 읽은 웹 페이지·파일·도구 출력 속에 섞인 글
 
 ### 1. 에이전트가 어디서 돌았는지 가립니다
 
-에이전트가 도는 곳에 따라 기록이 있는 곳이 다릅니다. Claude Code, Codex CLI, Gemini CLI, Cursor 처럼 사용자 PC 에서 도는 에이전트는 대화와 도구 실행 기록이 기기에 남습니다. 사용자의 실제 브라우저를 조작하는 에이전트(Claude in Chrome 확장 등)는 사람이 한 방문과 에이전트가 한 방문이 같은 브라우저 프로필에 섞입니다. 웹에서 돌린 Claude Code 클라우드 세션처럼 서비스 쪽 가상 머신에서 도는 에이전트는 기록 원본이 서버에만 있어서, 기기에서는 대화 화면에 접속한 흔적 말고는 기대하기 어렵습니다. 원격 MCP 서버(Streamable HTTP)의 로그도 PC 가 아니라 그 서버 쪽에 있습니다. 갈래별 흔적은 [브라우저를 조작하는 AI](../../02-artifacts/agentic-services/browser-agents.md)와 [ChatGPT 에이전트 모드](../../02-artifacts/agentic-services/chatgpt-agent.md)에 있습니다.
+에이전트가 도는 곳에 따라 기록이 있는 곳이 다릅니다. Claude Code, Codex CLI, Gemini CLI, Cursor 처럼 사용자 PC 에서 도는 에이전트는 대화와 도구 실행 기록이 기기에 남습니다. 사용자의 실제 브라우저를 조작하는 에이전트(Claude in Chrome 확장 등)는 사람이 한 방문과 에이전트가 한 방문이 같은 브라우저 프로필에 섞입니다. 웹에서 돌린 Claude Code 클라우드 세션처럼 서비스 쪽 가상 머신에서 도는 에이전트는 기록 원본이 서버에 있어서, 기기에서는 브라우저 방문 기록 같은 접속 흔적부터 확인하고 원본은 서비스 쪽에 요청합니다. 원격 MCP 서버(Streamable HTTP)의 로그도 PC 가 아니라 그 서버 쪽에 있습니다. 갈래별 흔적은 [브라우저를 조작하는 AI](../../02-artifacts/agentic-services/browser-agents.md)와 [ChatGPT 에이전트 모드](../../02-artifacts/agentic-services/chatgpt-agent.md)에 있습니다.
 
 ### 2. 문제의 동작을 기록에서 먼저 찾습니다
 
-거꾸로 따라가려면 출발점이 있어야 해서, 문제가 된 명령이나 파일 접근을 도구 기록에서 먼저 찾아 고정합니다. Claude Code 는 `~/.claude/projects/<프로젝트>/<세션>.jsonl` 에 모든 메시지, 도구 호출, 도구 결과를 담고, 이 PC 의 기록에서는 도구 호출이 `message.content[]` 의 `name`·`input`·`id` 로, 결과가 `tool_use_id`·`content`·`is_error` 와 `toolUseResult.stdout`·`stderr`·`success` 로 남아 있었습니다(확인 범위: Windows 11, 2026-09). 큰 도구 출력은 `.../<세션>/tool-results/` 에, 하위 에이전트 대화는 `.../<세션>/subagents/` 에 따로 쌓여서 이 폴더들도 함께 봅니다. Cursor 는 조직이 훅으로 기록을 남겼다면 훅 입력의 `tool_name`·`tool_input`·`tool_output`·`command` 가 단서가 되고, Codex CLI 는 OpenTelemetry 수집을 켠 조직이라면 `codex.tool_result` 이벤트가 수집 서버에 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md), [Cursor](../../02-artifacts/dev-agents/cursor.md), [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) 페이지에 있습니다.
+거꾸로 따라가려면 출발점이 있어야 해서, 문제가 된 명령이나 파일 접근을 도구 기록에서 먼저 찾아 고정합니다. Claude Code 는 `~/.claude/projects/<프로젝트>/<세션>.jsonl` 에 모든 메시지, 도구 호출, 도구 결과를 담습니다. 관찰한 기록에서는 도구 호출이 `message.content[]` 의 `name`·`input`·`id` 로, 결과가 `tool_use_id`·`content`·`is_error` 와 `toolUseResult.stdout`·`stderr`·`success` 로 남습니다(확인 범위: Windows 11, 2026-09). 큰 도구 출력은 `.../<세션>/tool-results/` 에, 하위 에이전트 대화는 `.../<세션>/subagents/` 에 따로 쌓여서 이 폴더들도 함께 봅니다. Cursor 는 조직이 훅으로 기록을 남겼다면 훅 입력의 `tool_name`·`tool_input`·`tool_output`·`command` 가 단서가 되고, Codex CLI 는 OpenTelemetry 수집을 켠 조직이라면 `codex.tool_result` 이벤트가 수집 서버에 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md), [Cursor](../../02-artifacts/dev-agents/cursor.md), [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) 페이지에 있습니다.
 
 ### 3. 그 동작 앞에서 에이전트가 읽은 입력을 찾습니다
 
@@ -32,9 +32,9 @@ AI 에이전트가 읽은 웹 페이지·파일·도구 출력 속에 섞인 글
 
 ### 4. 사용자가 시킨 일인지 가립니다
 
-같은 동작이라도 사용자가 입력으로 시켰는지, 도구 결과에만 있던 요청을 에이전트가 따랐는지에 따라 사건의 성격이 달라집니다. 사용자가 직접 입력한 프롬프트는 `~/.claude/history.jsonl` 의 `display` 칸에 시각·프로젝트 경로와 함께 남아서, 문제의 동작 앞에 그런 요청이 있었는지 비교합니다. 세션 기록 줄의 `promptSource`, `origin.kind`, `userType`, `entrypoint`, `isMeta` 키도 입력의 출처를 가리는 단서로 보이지만, 값의 뜻은 공식 문서로 확인하지 못했습니다(확인 범위: Windows 11, 2026-09).
+같은 동작이라도 사용자가 입력으로 시켰는지, 도구 결과에만 있던 요청을 에이전트가 따랐는지에 따라 사건의 성격이 달라집니다. 사용자가 직접 입력한 프롬프트는 `~/.claude/history.jsonl` 의 `display` 칸에 시각·프로젝트 경로와 함께 남아서, 문제의 동작 앞에 그런 요청이 있었는지 비교합니다. 세션 기록 줄에는 `promptSource`, `origin.kind`, `userType`, `entrypoint`, `isMeta` 키도 있습니다(확인 범위: Windows 11, 2026-09). 입력의 출처와 관련 있어 보이는 것은 키 이름에서 짐작한 것이라서, 값의 뜻은 같은 세션의 `history.jsonl` 입력과 줄마다 맞춰 보고 판단합니다.
 
-다음으로 그 동작을 누가 허용했는지 봅니다. 세션 기록에는 줄마다 `permissionMode` 가 있고(키 이름만 관찰), 문서가 밝힌 권한 모드는 `default`, `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions` 입니다. 사용자가 "다시 묻지 않기" 로 영구 허용한 Bash 명령과 WebFetch 도메인은 `.claude/settings.local.json` 에 allow 규칙으로 저장되고, 사용자 설정의 `permissions.allow` 에도 허용 목록이 있습니다. Claude 데스크톱 스토어 앱의 `claude_desktop_config.json` 에는 계정별 `preferences.bypassPermissionsGateByAccount`·`bypassPermissionsOptInByAccount` 값이 있었습니다(확인 범위: Windows 11, 2026-09). 조직이 Claude Code OpenTelemetry 를 켜 두었다면 `claude_code.tool_decision` 이벤트의 `source` 값(`config`, `hook`, `user_permanent`, `user_temporary`, `user_abort`, `user_reject`)으로 설정이 허용했는지 사람이 그 자리에서 허용했는지를 바로 가릅니다. Codex CLI 는 설정의 `sandbox_mode`·`approval_policy` 가 당시 허용 범위를 알려 주고, OpenTelemetry 를 켰다면 `codex.tool_decision` 이벤트가 승인·거부 결과를 남깁니다. 권한 설정의 우선순위와 파일 위치는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
+다음으로 그 동작을 누가 허용했는지 봅니다. 세션 기록에는 줄마다 `permissionMode` 키가 있고(확인 범위: Windows 11, 2026-09), 문서가 밝힌 권한 모드는 `default`, `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions` 입니다. 사용자가 "다시 묻지 않기" 로 영구 허용한 Bash 명령과 WebFetch 도메인은 `.claude/settings.local.json` 에 allow 규칙으로 저장되고, 사용자 설정의 `permissions.allow` 에도 허용 목록이 있습니다. Claude 데스크톱 스토어 앱의 `claude_desktop_config.json` 에는 계정별 `preferences.bypassPermissionsGateByAccount`·`bypassPermissionsOptInByAccount` 키가 있습니다(확인 범위: Windows 11, 2026-09). 조직이 Claude Code OpenTelemetry 를 켜 두었다면 `claude_code.tool_decision` 이벤트의 `source` 값(`config`, `hook`, `user_permanent`, `user_temporary`, `user_abort`, `user_reject`)으로 설정이 허용했는지 사람이 그 자리에서 허용했는지를 바로 가릅니다. Codex CLI 는 설정의 `sandbox_mode`·`approval_policy` 가 당시 허용 범위를 알려 주고, OpenTelemetry 를 켰다면 `codex.tool_decision` 이벤트가 승인·거부 결과를 남깁니다. 권한 설정의 우선순위와 파일 위치는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
 
 ### 5. 계속 남는 지시와 설정을 찾습니다
 
@@ -49,11 +49,13 @@ AI 에이전트가 읽은 웹 페이지·파일·도구 출력 속에 섞인 글
 | `~/.claude/projects/<프로젝트>/memory/` | 프로젝트별 자동 메모. 날짜 기준 자동 삭제에서 빠집니다 |
 | 서비스 계정의 메모리 기능 | 서버에 있으니 계정 내보내기나 사업자 요청으로 확인 |
 
-Claude Code 훅은 시작 때 고정되지 않고 설정 파일을 고치면 바로 반영되어서, 지금 보이는 훅 설정이 사고 당시와 같다고 보면 안 됩니다. 세션 기록의 `hookInfos[].command`, `attachment.hookEvent`, `attachment.hookName`, `attachment.exitCode` 키에는 실제로 돈 훅이 남아 있었으니(확인 범위: Windows 11, 2026-09), 설정 파일보다 이 기록을 먼저 봅니다. Cursor 확장이 `vscode.cursor.mcp.registerServer()` 로 등록한 MCP 서버는 설정 파일에 남지 않아서, `mcp.json` 에 없다고 그 서버를 쓰지 않았다고 단정하지 않습니다. MCP 설정의 구조는 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md)에 있습니다.
+Claude Code 훅은 시작 때 고정되지 않고 설정 파일을 고치면 바로 반영되어서, 지금 보이는 훅 설정이 사고 당시와 같다고 보면 안 됩니다. 세션 기록의 `hookInfos[].command`, `attachment.hookEvent`, `attachment.hookName`, `attachment.exitCode` 키에는 실제로 돈 훅이 남으니(확인 범위: Windows 11, 2026-09), 설정 파일보다 이 기록을 먼저 봅니다. Cursor 확장이 `vscode.cursor.mcp.registerServer()` 로 등록한 MCP 서버는 설정 파일에 남지 않아서, `mcp.json` 에 없다고 그 서버를 쓰지 않았다고 단정하지 않습니다. MCP 설정의 구조는 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md)에 있습니다.
 
 ### 6. 밖으로 나간 것을 확인합니다
 
-지시를 따른 결과가 외부 전송이나 비밀 값 노출이라면 나간 경로를 찾습니다. 로컬 stdio 방식 MCP 서버가 stderr 로 쓴 로그는 호스트 앱이 받아 두고, Claude Desktop 은 이 로그를 macOS `~/Library/Logs/Claude`, Windows `%APPDATA%\Claude\logs` 의 `mcp*.log` 에 남기며 서버 연결, 실행 오류, 주고받은 메시지를 담는다고 MCP 문서가 적습니다. 관찰한 Windows 스토어 앱에서는 `%APPDATA%\Claude\logs` 를 확인하지 못했고, 패키지 폴더의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래 `mcp-logs-<서버 이름>` 폴더에 JSONL 로그(줄 키 `cwd`·`debug`·`sessionId`·`timestamp`)가 있었습니다. 이 로그를 앱의 어느 구성 요소가 쓰는지는 확인하지 못했습니다. 세션 기록에는 MCP 서버 연결 실패·대기를 뜻하는 이름의 `attachment.failedMcpServers`·`pendingMcpServers` 키가 있었습니다(확인 범위: Windows 11, 2026-09).
+지시를 따른 결과가 외부 전송이나 비밀 값 노출이라면 나간 경로를 찾습니다. 로컬 stdio 방식 MCP 서버가 stderr 로 쓴 로그는 호스트 앱이 받아 두고, Claude Desktop 은 이 로그를 macOS `~/Library/Logs/Claude`, Windows `%APPDATA%\Claude\logs` 의 `mcp*.log` 에 남기며 서버 연결, 실행 오류, 주고받은 메시지를 담는다고 MCP 문서가 적습니다. Windows 스토어 앱은 앱 폴더가 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 에 있어서[agentsview], `logs` 폴더를 이 아래에서도 찾아봅니다. 같은 패키지 폴더의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래 `mcp-logs-<서버 이름>` 폴더에도 JSONL 로그(줄 키 `cwd`·`debug`·`sessionId`·`timestamp`)가 생깁니다(확인 범위: Windows 11, 2026-09). 세션 기록의 `attachment.failedMcpServers`·`pendingMcpServers` 키는 이름으로 보아 MCP 서버 연결 실패·대기를 담는 것으로 짐작되니(확인 범위: Windows 11, 2026-09), 값은 위 로그와 맞춰 보고 판단합니다.
+
+디스크 로그가 없으면 메모리가 남은 경로입니다. Satter 외(DFRWS USA 2026)는 Cursor 2.4.27 을 클라이언트로 두고, 날씨 도구 `get_current_weather` 를 네 번째 부를 때 응답에 키를 하나 더 붙여 지시문을 넣는 로컬 MCP 서버로 시험했습니다[논문 §8]. Composer 1 과 Gemini 3 Flash 는 지시를 따라 작업 공간의 `mcp.json` 내용을 날씨 도구를 다시 부르는 호출의 `country` 인자에 실어 보냈고, GPT 5.2 Low 와 Sonnet 4.5 는 거부했지만 거부 사실을 접힌 Thinking 안에만 적었습니다. 사용자 화면에는 "Listed test Read mcp.json" 한 줄과 다시 부른 도구 호출만 보였습니다. 논문의 MCPRecon 은 메모리에서 빠져나간 내용이 든 요청(메모리 오프셋, 도구 이름, 인자)을 되살렸지만, 지시문이 든 응답은 이미 덮어써져 되살리지 못했습니다. 그래서 도구 인자에 작업과 상관없는 파일 내용이 들어 있으면 그 자체를 유출의 근거로 삼고, 지시문이 든 응답이 메모리에 없다고 주입이 없었다고 보지 않습니다. 시험은 Ubuntu 24.04 가상 머신에서 했고, MCP 메시지에는 시각 칸이 없어서 순서는 `id` 와 메모리 위치로 짐작할 뿐입니다. 논문 안에서도 모델 이름(초록은 "Composer 1 and Gemini 3 Flash", 기여 목록은 "Gemini 3 Flash and Cursor 1")과 다시 부른 도구 이름(`get_weather_forecast`·`get_current_weather`)이 서로 다르게 적혀 있습니다. 메모리 수집과 분석은 [메모리에서 AI 흔적 찾기](memory-analysis.md)와 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md)에 있습니다.
 
 브라우저를 조작하는 에이전트라면 사용자 브라우저 프로필의 방문 기록과 다운로드를 봅니다. Claude Code 를 Chrome 과 연결하면 에이전트가 연 탭을 세션에 묶인 탭 그룹으로 모으고, 확장과의 중계에 `bridge.claudeusercontent.com` 을 쓰며, GIF 녹화나 스크린샷 파일을 남길 수 있어서 에이전트가 본 화면을 되짚는 자료가 됩니다. 네트워크 쪽은 Sysmon 이벤트 ID 22(DNS 질의)와 3(연결, 기본으로 꺼짐)이 프로세스별로 시각을 UTC 로 남깁니다([AI 서비스 도메인과 네트워크 기록](../../02-artifacts/network-enterprise/network-traces.md)).
 
@@ -61,13 +63,13 @@ Claude Code 훅은 시작 때 고정되지 않고 설정 파일을 고치면 바
 
 ### 7. 조직 서버 기록을 요청합니다
 
-Microsoft 365 Copilot 같은 조직용 서비스는 사용자 PC 가 아니라 테넌트 쪽에 기록이 있습니다. Purview 감사 기록의 `AccessedResources` 에는 Copilot 이 읽은 파일·메일·메시지와 함께 `XPIADetected` 칸이 있고, `Messages` 에는 `JailbreakDetected` 칸이 있습니다. 두 칸이 어떤 기준으로 채워지는지는 이 핸드북에서 확인하지 못했지만, 에이전트가 읽은 자원 목록과 판정 표시를 함께 볼 수 있는 곳입니다. 감사 기록에는 프롬프트·응답 본문이 없고 메시지 ID 만 있어서, 본문은 보존 정책이 켜져 있을 때 eDiscovery 로 찾습니다. 자세한 내용은 [Microsoft Purview로 본 Copilot 기록](../../02-artifacts/network-enterprise/purview-copilot.md)에 있습니다.
+Microsoft 365 Copilot 같은 조직용 서비스는 사용자 PC 가 아니라 테넌트 쪽에 기록이 있습니다. Purview 감사 기록의 `AccessedResources` 에는 Copilot 이 읽은 파일·메일·메시지와 함께 `XPIADetected` 칸이 있고, `Messages` 에는 `JailbreakDetected` 칸이 있습니다. 두 칸은 서비스가 내린 판정 표시라서 그대로 결론으로 쓰지 않고, 에이전트가 읽은 자원 목록과 나란히 놓고 봅니다. 감사 기록에는 프롬프트·응답 본문이 없고 메시지 ID 만 있어서, 본문은 보존 정책이 켜져 있을 때 eDiscovery 로 찾습니다. 자세한 내용은 [Microsoft Purview로 본 Copilot 기록](../../02-artifacts/network-enterprise/purview-copilot.md)에 있습니다.
 
 ### 8. 재발을 탐지할 기록을 겁니다
 
 조사가 끝나면 같은 일이 다시 일어났을 때 남을 기록을 정합니다. Cursor 훅은 `beforeReadFile`, `beforeShellExecution`, `beforeMCPExecution`, `afterAgentResponse` 같은 이벤트에서 파일 경로와 명령, 도구 입력을 받아 기록하거나 막을 수 있고, 종료 코드 2 는 차단, 0 은 성공이며 그 밖의 값은 기본으로 통과(fail open)입니다. Claude Code 훅도 `PreToolUse`, `UserPromptSubmit` 등에서 종료 코드 2 로 동작을 막고, 관리 정책의 `allowManagedHooksOnly` 로 관리 훅만 허용할 수 있습니다. OpenTelemetry 로 도구 결정과 결과를 조직 수집기로 보내면 PC 의 기록이 지워져도 사본이 남는데, 프롬프트·응답·도구 인자는 기본으로 가려지니 조직 정책에 맞춰 켤 항목을 정합니다.
 
-악성 코드 쪽 지표도 함께 봅니다. Google 위협 인텔리전스 그룹(GTIG)은 2025년 11월 보고서에서 기기에 깔린 AI CLI 도구에 프롬프트를 넣어 비밀 값을 더 찾는 자격 증명 탈취 코드(QUIETVAULT)와, LLM 기반 보안 분석을 피하려는 문구를 코드 안에 넣은 리버스 셸(FRUITSHELL)을 보고했습니다. 이 보고서 내용에서 뽑을 수 있는 탐지 지표는 표본 안의 자연어 프롬프트 문자열, AI API 로 나가는 연결, 평소와 다른 부모 프로세스가 AI CLI 를 실행하는 행위입니다. 보안 분석에 LLM 을 쓰는 조직이라면 분석 대상 파일 안의 문구가 분석 결과를 흔들 수 있다는 점도 탐지 설계에 넣습니다.
+악성 코드 쪽 지표도 함께 봅니다. Google 위협 인텔리전스 그룹(GTIG)은 2025년 11월 보고서에서 기기에 깔린 AI CLI 도구에 프롬프트를 넣어 비밀 값을 더 찾는 자격 증명 탈취 코드(QUIETVAULT)와, LLM 기반 보안 분석을 피하려는 문구를 코드 안에 넣은 리버스 셸(FRUITSHELL)을 보고했습니다. 보고서 내용을 바탕으로 이 핸드북이 짐작한 탐지 지표는 표본 안의 자연어 프롬프트 문자열, AI API 로 나가는 연결, 평소와 다른 부모 프로세스가 AI CLI 를 실행하는 행위입니다. 보안 분석에 LLM 을 쓰는 조직이라면 분석 대상 파일 안의 문구가 분석 결과를 흔들 수 있다는 점도 탐지 설계에 넣습니다.
 
 ## 도구
 
@@ -83,11 +85,11 @@ jq -c 'select(.message.content | type == "array") | {timestamp, uuid, parentUuid
 
 대화 기록은 무결성 보호가 없습니다. Claude Code 문서는 대화 기록과 입력 기록을 저장할 때 암호화하지 않고 OS 파일 권한이 유일한 보호라고 적어서, 같은 계정의 프로그램이나 사람이 고칠 수 있습니다. 조직 수집기나 서버 쪽 기록이 있으면 대조해 두고, 없으면 그 한계를 보고서에 적습니다.
 
-기록이 없는 까닭이 여럿입니다. `cleanupPeriodDays` 가 지난 세션은 지워지고, `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜면 처음부터 기록하지 않으며, 클라우드 세션이나 서버에서 도는 에이전트는 기기에 기록이 없습니다. 이 PC 의 `~/.codex` 처럼 설정과 스킬 파일만 있고 기록이 없는 폴더도 있어서, 폴더가 있다고 그 도구로 사고가 났다고 보지 않습니다(확인 범위: Windows 11, 2026-09).
+기록이 없는 까닭이 여럿입니다. `cleanupPeriodDays` 가 지난 세션은 지워지고, `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜면 처음부터 기록하지 않으며, 클라우드 세션이나 서버에서 도는 에이전트는 기기에 기록이 없습니다. `~/.codex` 처럼 설정과 스킬 파일만 있고 기록이 없는 폴더도 있어서, 폴더가 있다고 그 도구로 사고가 났다고 보지 않습니다(확인 범위: Windows 11, 2026-09).
 
 편집 되돌리기 사본은 일부만 잡습니다. Claude Code 체크포인트는 Claude 의 편집 도구로 바꾼 파일만 추적하고, Bash 명령으로 지우거나 옮긴 파일과 대부분의 하위 에이전트 편집은 잡지 않아서, 사본이 없는 변경은 명령 기록과 파일 시스템 흔적으로 따로 확인합니다.
 
-모델이 왜 그렇게 했는지는 기록이 직접 말해 주지 않습니다. 세션 기록에 `message.content[].thinking` 칸이 있었지만(확인 범위: Windows 11, 2026-09) 모델이 만든 글이라서 원인의 증명으로 쓰지 않고, "이 입력을 읽은 다음 이 동작이 있었다" 는 순서와 권한 기록으로 판단합니다.
+모델이 왜 그렇게 했는지는 기록이 직접 말해 주지 않습니다. 세션 기록에 `message.content[].thinking` 칸이 있지만(확인 범위: Windows 11, 2026-09) 모델이 만든 글이라서 원인의 증명으로 쓰지 않고, "이 입력을 읽은 다음 이 동작이 있었다" 는 순서와 권한 기록으로 판단합니다.
 
 ## 결과를 어떻게 해석하나
 
@@ -117,3 +119,5 @@ jq -c 'select(.message.content | type == "array") | {timestamp, uuid, parentUuid
 - Microsoft Learn — Sysmon. https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
 - Google Cloud Blog (GTIG), "GTIG AI Threat Tracker: Advances in Threat Actor Usage of AI Tools" (2025-11-06). https://cloud.google.com/blog/topics/threat-intelligence/threat-actor-usage-of-ai-tools
 - Wikipedia — ChatGPT Atlas. https://en.wikipedia.org/wiki/ChatGPT_Atlas
+- [논문] A. Satter, M. Salmon, L. Muhanna, T. T. Spinosa, T. Gharaibeh, I. Baggili, "With or Without Logs: Memory Forensic Reconstruction of Model Context Protocol (MCP) Activity in Agentic LLM Systems", DFRWS USA 2026. (§6.4, §7.3, §8) https://dfrws.org/presentation/with-or-without-logs-reconstructing-model-context-protocol-activity-from-volatile-memory/ — 도구: https://github.com/BiTLab-BaggiliTruthLab/MCPRecon
+- [agentsview] kenn-io/agentsview — `internal/parser/cowork_paths.go`. https://github.com/kenn-io/agentsview

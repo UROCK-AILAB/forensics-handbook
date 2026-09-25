@@ -9,7 +9,7 @@ nav_order: 290
 
 브라우저로 쓰는 Gemini 는 gemini.google.com 에서 돌아가고 대화는 계정의 Gemini 앱 활동 (Gemini Apps Activity) 에 저장되어서, 기기에는 방문 기록·쿠키·브라우저 저장소 같은 브라우저 쪽 흔적만 남을 수 있고 대화 원본은 서버에 있습니다.
 
-> 확인 날짜: 2026-09-25. Google 도움말(개인정보 안내, 활동 관리)을 바탕으로 썼습니다. 이 핸드북은 기기에서 Gemini 웹 판의 브라우저 저장소를 관찰하지 않았습니다. 그래서 방문 기록에 남는 대화 주소의 모양, 쿠키 이름, Local Storage·IndexedDB 키, 캐시에 대화 조각이 남는지는 적지 않았습니다.
+> 확인 날짜: 2026-09-25. Google 도움말(개인정보 안내, 활동 관리)을 바탕으로 썼습니다. 방문 기록에 남는 대화 주소의 모양, 쿠키 이름, Local Storage·IndexedDB 키, 캐시에 대화 조각이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 무엇이 남나 · 왜 생기나
 
@@ -24,17 +24,19 @@ nav_order: 290
 | `https://gemini.google.com/sharing` | 공개 링크 목록 ("Your Public Links") | 대화를 공개 링크로 만든 뒤 관리했는지 |
 | `https://gemini.google.com/gems/view` | Gems 관리 화면 ("Gems Manager") | 맞춤 Gem 을 만들거나 고쳤는지 |
 
-활동 목록은 gemini.google.com 안의 Settings & help → Activity 에서도 열 수 있어서, `myactivity.google.com` 방문 기록이 없다고 활동 화면을 열지 않았다고 볼 수는 없습니다. 연결된 앱 (Connected Apps) 설정도 따로 있지만 이번 조사에서 해당 도움말 본문을 열지 않아서 여기서는 다루지 않습니다.
+활동 목록은 gemini.google.com 안의 Settings & help → Activity 에서도 열 수 있어서, `myactivity.google.com` 방문 기록이 없다고 활동 화면을 열지 않았다고 볼 수는 없습니다.
 
 브라우저 쪽 흔적은 Gemini 만의 것이 아니고 어느 웹 서비스를 쓰든 브라우저가 똑같이 남기는 기록입니다.
 
-| 흔적 | 조사에서 쓰는 곳 | Gemini 쪽 확인 상태 |
-|---|---|---|
-| 방문 기록 | 위 주소를 연 시각과 횟수 | 대화 하나하나의 주소 모양은 확인하지 못함 |
-| 쿠키 | 그 브라우저 프로필에 Google 계정 로그인 흔적이 있었는지 | 쿠키 이름은 확인하지 못함 |
-| Local Storage·IndexedDB | 웹 앱이 브라우저에 남긴 데이터 | 키 이름, 대화 사본이 있는지 확인하지 못함 |
-| 캐시 | 받아 온 응답·그림 조각 | 대화 조각이 남는지 확인하지 못함 |
-| 다운로드 기록과 다운로드 폴더 | 생성한 이미지 등 내려받은 파일 | 해당 없음(브라우저 공통) |
+| 흔적 | 조사에서 쓰는 곳 |
+|---|---|
+| 방문 기록 | 위 주소를 연 시각과 횟수 |
+| 쿠키 | 그 브라우저 프로필에 Google 계정 로그인 흔적이 있었는지 |
+| Local Storage·IndexedDB | 웹 앱이 브라우저에 남긴 데이터 |
+| 캐시 | 받아 온 응답·그림 조각 |
+| 다운로드 기록과 다운로드 폴더 | 생성한 이미지 등 내려받은 파일 |
+
+이 가운데 대화 하나하나의 주소 모양, 쿠키 이름, 저장소 키 이름, 저장소와 캐시에 대화 사본이 남는지는 시험 계정으로 만든 검체에서 확인해야 합니다.
 
 ## 위치와 OS별 차이
 
@@ -63,7 +65,7 @@ nav_order: 290
 
 도움말은 활동을 지우면 화면에서 바로 지우고 저장 시스템에서 영구 삭제 절차를 시작한다고 안내합니다. 그래서 활동 목록에 없는 대화라도 한때 있었다가 지웠을 수 있고, 활동 저장을 꺼 둔 상태의 대화나 임시 채팅은 처음부터 목록에 나오지 않습니다. 목록이 비어 있다는 사실만으로 Gemini 를 쓰지 않았다고 쓰지 않습니다.
 
-`gemini.google.com` 방문은 Gemini 를 쓴 흔적이지만, Google 의 다른 서비스나 Workspace 안에서 Gemini 를 쓴 경우는 다른 흔적을 남깁니다([Google Workspace의 Gemini](../../office-integrations/workspace-gemini.md)). 브라우저 캐시나 저장소에서 대화 조각을 찾는 일반 방법은 [대화 내용 되살리기](../../../03-techniques/analysis/content-recovery.md)에 있지만, Gemini 웹 판에서 실제로 조각이 남는지는 확인하지 못했습니다.
+`gemini.google.com` 방문은 Gemini 를 쓴 흔적이지만, Google 의 다른 서비스나 Workspace 안에서 Gemini 를 쓴 경우는 다른 흔적을 남깁니다([Google Workspace의 Gemini](../../office-integrations/workspace-gemini.md)). 브라우저 캐시나 저장소에서 대화 조각을 찾는 일반 방법은 [대화 내용 되살리기](../../../03-techniques/analysis/content-recovery.md)에 있지만, Gemini 웹 판에서 조각이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 직접 분석해 보기
 
@@ -80,7 +82,7 @@ nav_order: 290
 
 ## 실습
 
-Gemini 흔적을 담은 공개 검체는 이번 조사에서 확인하지 못했습니다. 시험용 Google 계정으로 아래 질문을 직접 풀어 봅니다.
+시험용 Google 계정으로 검체를 만들어 아래 질문을 직접 풀어 봅니다.
 
 1. 웹 판에서 대화를 두 번 나눈 뒤 크롬 `History` 파일을 열면, 대화마다 다른 주소가 남습니까, 아니면 `gemini.google.com` 한 줄만 남습니까?
 2. 활동 화면에서 대화 하나를 지운 뒤, 방문 기록과 활동 목록에는 각각 무엇이 남습니까?

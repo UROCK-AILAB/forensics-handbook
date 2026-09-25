@@ -1,7 +1,7 @@
 ---
 title: "AI 서비스 도메인과 네트워크 기록"
 parent: "아티팩트 · 네트워크·기업 기록"
-nav_order: 690
+nav_order: 770
 ---
 
 # AI 서비스 도메인과 네트워크 기록 (DNS·Proxy·SNI)
@@ -36,7 +36,7 @@ Microsoft Purview 는 데이터 보호 기능이 알아보는 "지원 생성형 
 | 개발·로컬 도구 | `*.cursor.com`, `*.github.com/features/copilot`, `*.ollama.ai` |
 | 그 밖의 도구 | `*.notebooklm.cloud.google.com` |
 
-같은 목록에는 공식 서비스와 이름만 비슷한 제3자 사이트(예: `*.chatgpt4online.org`, `*.ai-claude.net`)도 들어 있습니다. 도메인에 서비스 이름이 들어 있다고 해서 공식 서비스를 썼다고 단정하지 않고, 목록에서 그 도메인이 어느 쪽인지 먼저 확인합니다. 각 서비스가 API 호출에 쓰는 도메인의 공식 목록은 이번에 공급사 문서로 확인하지 못해서 이 페이지에 적지 않습니다.
+같은 목록에는 공식 서비스와 이름만 비슷한 제3자 사이트(예: `*.chatgpt4online.org`, `*.ai-claude.net`)도 들어 있습니다. 도메인에 서비스 이름이 들어 있다고 해서 공식 서비스를 썼다고 단정하지 않고, 목록에서 그 도메인이 어느 쪽인지 먼저 확인합니다. 각 서비스가 API 호출에 쓰는 도메인은 이 목록과 따로 공급사 문서와 검체의 DNS 기록으로 확인합니다.
 
 ### 기기 안: Sysmon
 
@@ -47,7 +47,7 @@ Microsoft Purview 는 데이터 보호 기능이 알아보는 "지원 생성형 
 
 Sysmon 은 Sysinternals 도구라서 조직이 설치해 두지 않았으면 기록이 없고, 기본 설정으로 설치하면 네트워크 감시를 하지 않습니다. 이벤트 3 은 설정 파일로 켜야 남고, 설정 항목 `DnsLookup`(역방향 DNS 조회)은 기본값이 True 입니다. 이벤트 22 는 Windows 8.1 에 추가된 원격 측정을 쓰기 때문에 Windows 7 이하에서는 생기지 않습니다. 기록은 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 쌓이고, 2026-09-10 판 문서는 실행 환경을 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상으로 적습니다.
 
-Windows 기본 DNS Client 이벤트 로그의 이벤트 번호와 기본 활성 여부, `ipconfig /displaydns` 캐시의 보존 시간은 이번에 확인하지 못했습니다.
+Sysmon 이 없는 기기에서 Windows 기본 DNS Client 이벤트 로그를 볼 때는 그 로그가 켜져 있었는지와 어떤 이벤트 번호가 남았는지 검체에서 먼저 확인합니다.
 
 ### 네트워크 경계: Zeek `ssl.log`
 
@@ -55,7 +55,7 @@ Zeek 는 TLS 트래픽을 분석해 `ssl.log` 에 남기고, `server_name` 칸�
 
 ### 기기 안: 데스크톱 앱의 네트워크 폴더
 
-Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습니다(확인 범위: Windows 11, 2026-09). 앱 버전은 관찰 메모에 기록되지 않았고, 아래 경로의 `%USERPROFILE%\Packages` 는 관찰 메모의 표기를 그대로 옮긴 것입니다. 패키지 앱이 `AppData` 에 쓴 파일은 사용자·패키지별 전용 위치로 옮겨 저장되므로, 수집할 때는 경로를 짐작하지 말고 사용자 프로필에서 `LocalCache\Roaming\Claude` 가 들어 있는 패키지 폴더를 찾습니다. 자세한 위치는 [Claude](../chat-services/claude/windows.md) Windows 페이지에서 다룹니다.
+Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습니다(확인 범위: Windows 11, 2026-09). 앱 버전은 검체에서 따로 확인합니다. 패키지 앱이 `AppData` 에 쓴 파일은 사용자·패키지별 전용 위치로 옮겨 저장되므로(참고 문헌 4), 수집할 때는 아래 경로의 앞부분을 그대로 쓰지 말고 사용자 프로필 아래에서 `LocalCache\Roaming\Claude` 가 들어 있는 패키지 폴더를 찾습니다. 자세한 위치는 [Claude](../chat-services/claude/windows.md) Windows 페이지에서 다룹니다.
 
 ```
 %USERPROFILE%\Packages\<Claude 패키지>\LocalCache\Roaming\Claude\Network\
@@ -67,7 +67,7 @@ Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습
 %USERPROFILE%\Packages\<Claude 패키지>\LocalCache\Roaming\Claude\Partitions\<이름>\Network\Cookies
 ```
 
-크롬 계열 앱이 쓰는 이 폴더 구조와 `Network Persistent State`·`TransportSecurity` 가 담는 내용은 공통 원리라서 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다루고, 이 페이지에서는 되풀이하지 않습니다. ChatGPT·Copilot 데스크톱 앱의 네트워크 폴더와 macOS·Android·iOS 앱의 해당 위치는 이번에 확인하지 않았습니다. 앱별 저장 위치는 [ChatGPT](../chat-services/chatgpt/index.md), [Claude](../chat-services/claude/index.md), [Microsoft Copilot](../chat-services/copilot/index.md) 페이지를 봅니다.
+크롬 계열 앱이 쓰는 이 폴더 구조와 `Network Persistent State`·`TransportSecurity` 가 담는 내용은 공통 원리라서 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다루고, 이 페이지에서는 되풀이하지 않습니다. 다른 데스크톱 앱이나 macOS·Android·iOS 앱에서는 앱 폴더 안에 같은 `Network` 폴더가 있는지 검체에서 확인합니다. 앱별 저장 위치는 [ChatGPT](../chat-services/chatgpt/index.md), [Claude](../chat-services/claude/index.md), [Microsoft Copilot](../chat-services/copilot/index.md) 페이지를 봅니다.
 
 ## 구조
 
@@ -82,18 +82,18 @@ Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습
 | `established` | 연결이 성립했는지 |
 | `ja3`, `ja3s` | 클라이언트·서버 TLS 핸드셰이크의 지문. 기본 칸이 아니라 JA3·JA3S 패키지를 설치했을 때 붙는 칸 |
 
-TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypted Client Hello) 를 쓰는 연결은 `server_name` 이 비어서 Zeek 문서도 이런 연결의 `ssl.log` 에는 식별 정보가 없다고 설명합니다. 각 AI 서비스가 ECH 를 쓰는지는 확인하지 못했습니다.
+TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypted Client Hello) 를 쓰는 연결은 `server_name` 이 비어서 Zeek 문서도 이런 연결의 `ssl.log` 에는 식별 정보가 없다고 설명합니다. 조사하는 서비스의 연결에서 `server_name` 이 비어 있는지는 받은 `ssl.log` 에서 확인합니다.
 
 ### 앱의 `Cookies` DB
 
-`Partitions\<이름>\Network\Cookies` 를 SQLite 로 열었을 때 표 두 개가 보였습니다(확인 범위: Windows 11, 2026-09).
+`Partitions\<이름>\Network\Cookies` 를 SQLite 로 열면 표 두 개가 있습니다(확인 범위: Windows 11, 2026-09).
 
 | 표 | 칸 |
 |---|---|
 | `cookies` | `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` |
 | `meta` | `key`, `value` |
 
-칸 이름으로 보면 `host_key` 에는 쿠키를 설정한 도메인이, `creation_utc`·`last_access_utc`·`last_update_utc` 에는 쿠키를 만든 시각과 마지막으로 쓰고 바꾼 시각이 들어갑니다. 값을 읽는 방법과 `encrypted_value` 의 보호 방식은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다. 기본 `Network\Cookies` 는 관찰할 때 열리지 않았는데(OperationalError), 앱이 실행 중이라 파일을 잠갔을 가능성이 있습니다.
+칸 이름으로 보면 `host_key` 에는 쿠키를 설정한 도메인이, `creation_utc`·`last_access_utc`·`last_update_utc` 에는 쿠키를 만든 시각과 마지막으로 쓰고 바꾼 시각이 들어갑니다. 값을 읽는 방법과 `encrypted_value` 의 보호 방식은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -113,7 +113,7 @@ Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마�
 - **비슷한 이름의 도메인.** 지원 사이트 목록 자체에 공식 서비스를 흉내 낸 제3자 도메인이 섞여 있습니다. 도메인을 서비스 이름으로 바꿔 적을 때 공식 여부를 따로 적습니다.
 - **ECH 와 TLS 1.3.** ECH 를 쓰는 연결은 `server_name` 이 비고, TLS 1.3 에서는 인증서도 보이지 않습니다. 이런 연결은 DNS 기록이나 목적지 IP 와 묶어서 봐야 합니다.
 - **공유 도메인.** `*.bing.com/chat` 처럼 경로까지 붙은 항목은 DNS·SNI 에서 경로가 보이지 않아서 도메인만으로는 AI 기능을 썼는지 검색만 했는지 나누지 못합니다. `*.github.com/features/copilot` 도 같습니다.
-- **잠긴 파일.** 앱이 실행 중이면 `Cookies` 가 열리지 않을 수 있어서, `Cookies-journal` 과 함께 복사한 사본으로 봅니다. 기기에서 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
+- **원래 자리에서 열기.** 기본 `Network\Cookies` 를 원래 자리에서 SQLite 로 열면 OperationalError 가 났습니다(확인 범위: Windows 11, 2026-09). 그래서 `Cookies-journal` 과 함께 복사한 사본으로 봅니다. 기기에서 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
 - **지우기.** 사용자가 기기에서 앱 폴더를 지워도 기기 밖의 Zeek·프록시 기록과 이미 중앙으로 모은 이벤트 로그 사본은 그대로 남습니다. 기기 안 기록과 기기 밖 기록이 서로 맞지 않으면 그 차이를 지운 흔적의 단서로 적습니다.
 
 ## 직접 분석해 보기
@@ -151,11 +151,12 @@ ORDER BY last_access_utc;
 - [Microsoft Purview로 본 Copilot 기록](purview-copilot.md) — 조직 계정으로 Copilot 을 쓴 감사 기록
 - [Claude 기업용 감사 로그](claude-enterprise.md) — 같은 시간대의 로그인 기록과 `ip_address`
 - [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) — 브라우저 방문 기록으로 어느 페이지를 열었는지
+- [Ollama](../local-ai/ollama.md) — 로컬 Ollama 서버는 `server.log` 의 API 호출 줄마다 호출한 IP 를 남기고, 이 값은 보통 `127.0.0.1` 입니다(참고 문헌 5, Windows 11 24H2·Ollama 0.6.5 에서 시험). 다른 IP 가 보이면 네트워크 기록에서 그 IP 의 연결을 찾고, 지금 판은 로그 모양이 다를 수 있으므로 검체의 로그에서 확인합니다.
 - [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md) — 도메인 기록을 조사 질문에 쓰는 흐름
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에 AI 서비스 접속 기록이 들어 있는지는 확인하지 않았습니다. 시험용 PC 와 패킷 캡처 도구로 아래 질문을 직접 풀어 봅니다.
+공개 검체(NIST CFReDS 등)를 쓸 때는 AI 서비스 접속 기록이 들어 있는지 먼저 확인하고, 없으면 시험용 PC 와 패킷 캡처 도구로 아래 질문을 직접 풀어 봅니다.
 
 1. Sysmon 을 기본 설정으로 설치하고 AI 서비스에 접속한 뒤, 이벤트 22 와 이벤트 3 이 각각 남는지 확인합니다. 설정 파일로 이벤트 3 을 켠 뒤 다시 비교합니다.
 2. 브라우저와 데스크톱 앱으로 같은 서비스에 접속하고, 이벤트 22 의 프로세스로 두 접속을 나눌 수 있는지 봅니다.
@@ -168,3 +169,4 @@ ORDER BY last_access_utc;
 2. Sysmon — Sysinternals, Microsoft Learn (2026-09-10) — https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon
 3. ssl.log — Zeek documentation (master) — https://docs.zeek.org/en/master/logs/ssl.html
 4. Understanding how packaged desktop apps run on Windows — Microsoft Learn (2025-09-09, 갱신 2026-01-28) — https://learn.microsoft.com/en-us/windows/msix/desktop/desktop-to-uwp-behind-the-scenes
+5. Sungjo Jeong, Sangjin Lee, Jungheum Park, "LangurTrace: Forensic analysis of local LLM applications", Forensic Science International: Digital Investigation 54 (2025) 301987, §4.4 — https://doi.org/10.1016/j.fsidi.2025.301987

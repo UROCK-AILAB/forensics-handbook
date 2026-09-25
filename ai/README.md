@@ -107,11 +107,14 @@ AI 앱은 자주 바뀝니다. 각 페이지에 적힌 앱 버전과 확인 날�
 - [클로바X (CLOVA X)](02-artifacts/chat-services/clova-x.md)
 - [에이닷 (A.)](02-artifacts/chat-services/adot.md)
 - [그 밖의 서비스 (DeepSeek·Grok 등)](02-artifacts/chat-services/other-services.md)
+- [AI 컴패니언 앱 (Replika·Character.AI 등)](02-artifacts/chat-services/companion-apps.md)
+- [Meta AI 앱과 AI 안경 (Meta AI·Ray-Ban Meta)](02-artifacts/chat-services/meta-ai-glasses.md)
 
 ### 에이전트형 서비스
 
 - [ChatGPT 에이전트 모드 (ChatGPT Agent)](02-artifacts/agentic-services/chatgpt-agent.md)
 - [브라우저를 조작하는 AI (Browser Agents)](02-artifacts/agentic-services/browser-agents.md)
+- [AI 에이전트 브라우저 (Comet·Fellou 등)](02-artifacts/agentic-services/ai-browsers.md)
 
 ### 생성·음성·회의록
 
@@ -156,6 +159,11 @@ AI 앱은 자주 바뀝니다. 각 페이지에 적힌 앱 버전과 확인 날�
 
 - [Ollama (Ollama)](02-artifacts/local-ai/ollama.md)
 - [LM Studio (LM Studio)](02-artifacts/local-ai/lm-studio.md)
+- [Chatbox (Chatbox)](02-artifacts/local-ai/chatbox.md)
+- [Msty (Msty)](02-artifacts/local-ai/msty.md)
+- [Jan (Jan)](02-artifacts/local-ai/jan.md)
+- [GPT4All (GPT4All)](02-artifacts/local-ai/gpt4all.md)
+- [AnythingLLM (AnythingLLM)](02-artifacts/local-ai/anythingllm.md)
 - [로컬 이미지 생성 도구 (Stable Diffusion WebUI·ComfyUI)](02-artifacts/local-ai/image-gen-local.md)
 - [로컬 모델 파일 (GGUF·safetensors)](02-artifacts/local-ai/model-files.md)
 
@@ -180,6 +188,7 @@ AI 앱은 자주 바뀝니다. 각 페이지에 적힌 앱 버전과 확인 날�
 
 - [AI 사용 타임라인 (Timeline)](03-techniques/analysis/timeline.md)
 - [대화 내용 되살리기 (캐시·스냅숏·알림)](03-techniques/analysis/content-recovery.md)
+- [메모리에서 AI 흔적 찾기 (Memory Analysis)](03-techniques/analysis/memory-analysis.md)
 - [AI가 만든 글·이미지 판별의 한계 (Detection Limits)](03-techniques/analysis/detection-limits.md)
 - [프롬프트 인젝션 사고 분석 (Prompt Injection)](03-techniques/analysis/prompt-injection.md)
 
