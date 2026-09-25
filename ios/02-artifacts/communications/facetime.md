@@ -8,19 +8,19 @@ nav_order: 530
 
 ## 한 줄 요약
 
-FaceTime 통화는 내용이 종단 간 암호화되어 기기에서 찾을 흔적이 통화 기록의 행과 계정·설정 파일 같은 메타데이터이고, FaceTime 만의 통화 DB 는 관찰한 백업에서 보이지 않았습니다.
+FaceTime 통화는 내용이 종단 간 암호화되어 기기에서 찾을 흔적이 통화 기록의 행과 계정·설정 파일 같은 메타데이터이고, FaceTime 만의 통화 DB 는 로컬 백업에 없습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 FaceTime 영상·음성 통화는 전화 통화와 같은 통화 기록 데이터베이스(`CallHistory.storedata`)의 `ZCALLRECORD` 표에 한 행씩 남고, 통화 종류 칸 `ZCALLTYPE` 값으로 FaceTime 영상인지 음성인지 가립니다 [1]. 표 구조와 값 목록, 시각 해석은 [통화 기록](call-history.md) 에서 다루고, 이 페이지는 FaceTime 에서 달라지는 점과 통화 기록 밖의 흔적을 다룹니다.
 
-통화 내용 자체는 흔적으로 기대하기 어렵습니다. Apple 은 FaceTime 음성·영상 내용이 종단 간 암호화되어 보내는 사람과 받는 사람만 볼 수 있다고 설명합니다 [2]. 연결은 Apple 푸시 알림 서비스(APNs)로 시작하고, 두 기기가 서로의 신원 인증서를 확인해 세션마다 공유 비밀을 만든 뒤, STUN·ICE 로 되도록 기기끼리 바로(P2P) 잇습니다 [2]. 첫 연결은 Apple 서버가 기기 사이의 패킷을 중계해 이어 줍니다 [2]. 그룹 FaceTime 은 Apple 신원 서비스(IDS) 위에서 키를 정하고 전방 보안(forward secrecy)을 써서, 기기가 뚫려도 지난 통화 내용이 새지 않으며 참여자가 들어오면 새 미디어 키를 만듭니다 [2]. 그래서 조사에서는 "누구와, 언제, 얼마나" 를 보여 주는 메타데이터를 찾는 데 힘을 씁니다. 통화를 녹음했다면 이야기가 달라지는데, 이는 [음성 사서함과 통화 녹음](voicemail-recording.md) 에서 다룹니다.
+통화 내용 자체는 흔적으로 기대하기 어렵습니다. FaceTime 음성·영상 내용은 종단 간 암호화되어 보내는 사람과 받는 사람만 볼 수 있습니다 [2]. 연결은 Apple 푸시 알림 서비스(APNs)로 시작하고, 두 기기가 서로의 신원 인증서를 확인해 세션마다 공유 비밀을 만든 뒤, STUN·ICE 로 되도록 기기끼리 바로(P2P) 잇습니다 [2]. 첫 연결은 Apple 서버가 기기 사이의 패킷을 중계해 이어 줍니다 [2]. 그룹 FaceTime 은 Apple 신원 서비스(IDS) 위에서 키를 정하고 전방 보안(forward secrecy)을 써서, 기기가 뚫려도 지난 통화 내용이 새지 않으며 참여자가 들어오면 새 미디어 키를 만듭니다 [2]. 그래서 조사에서는 "누구와, 언제, 얼마나" 를 보여 주는 메타데이터를 찾는 데 힘을 씁니다. 통화를 녹음했다면 이야기가 달라지는데, 이는 [음성 사서함과 통화 녹음](voicemail-recording.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-통화 한 건의 기록은 통화 기록 DB 에 있고, 그 DB 의 위치와 백업 포함 여부는 [통화 기록](call-history.md) 에 정리되어 있습니다. 관찰한 로컬 백업에서는 FaceTime 전용 SQLite DB 가 보이지 않았고, 이름에 FaceTime 이 들어간 DB 는 팁 앱 쪽의 `AppDomainGroup-group.com.apple.tipsnext :: com.apple.facetime/.tipkit/tips-store.db` 하나뿐이었습니다.
+통화 한 건의 기록은 통화 기록 DB 에 있고, 그 DB 의 위치와 백업 포함 여부는 [통화 기록](call-history.md) 에 정리되어 있습니다. 로컬 백업에는 FaceTime 전용 SQLite DB 가 없고, 이름에 FaceTime 이 들어간 DB 는 팁 앱 쪽의 `AppDomainGroup-group.com.apple.tipsnext :: com.apple.facetime/.tipkit/tips-store.db` 하나뿐입니다.
 
-관찰한 백업에서 FaceTime 과 관련된 도메인은 다음과 같습니다.
+로컬 백업에서 FaceTime 과 관련된 도메인은 다음과 같습니다.
 
 | 도메인 | 비고 |
 |---|---|
@@ -31,7 +31,7 @@ FaceTime 영상·음성 통화는 전화 통화와 같은 통화 기록 데이�
 | `AppDomainPlugin-com.apple.mobilecal.FacetimeExtension` | 캘린더 확장 |
 | `AppDomainPlugin-com.apple.TelephonyUtilities.FaceTimeMessageStoreIntentsExtension` | FaceTime 메시지 저장소 관련 확장 |
 
-FaceTime 링크로 만든 통화의 기록이 어디에 남는지는 확인하지 못했고, `FaceTimeLinkTrampoline` 도메인이 있다는 것만 관찰했습니다. 번들 ID 와 도메인 이름의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
+FaceTime 링크로 만든 통화의 기록이 어디에 남는지는 공개 자료가 없어 검체에서 확인합니다. 번들 ID 와 도메인 이름의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
 
 버전 차이를 FaceTime 만 따로 정리할 자료는 없고, 통화 기록 표의 버전별 칸 변화는 [통화 기록](call-history.md) 을 봅니다.
 
@@ -39,11 +39,11 @@ FaceTime 링크로 만든 통화의 기록이 어디에 남는지는 확인하�
 
 ### 통화 기록 안의 FaceTime 행
 
-FaceTime 행을 읽을 때 [통화 기록](call-history.md) 의 칸 설명에 더해 볼 점은 두 가지입니다. 첫째, `ZFACE_TIME_DATA` 칸이 따로 있지만 [1] 무엇이 담기는지는 확인하지 못했으니 값이 있으면 원본 바이트를 그대로 보존해 둡니다. 둘째, 그룹 FaceTime 처럼 여럿이 한 통화는 `ZADDRESS` 한 칸으로 드러나지 않아서 참여자 표를 이어 읽어야 하며, 그 방법은 [통화 기록](call-history.md) 의 그룹 통화 설명을 따릅니다 [3]. 상대가 전화번호가 아닌 계정 주소(이메일)로 기록되는지는 확인하지 못했으니 검체의 `ZADDRESS` 값 모양을 직접 봅니다.
+FaceTime 행을 읽을 때 [통화 기록](call-history.md) 의 칸 설명에 더해 볼 점은 두 가지입니다. 첫째, `ZFACE_TIME_DATA` 칸이 따로 있지만 [1] 무엇이 담기는지 밝힌 공개 자료가 없으니 값이 있으면 원본 바이트를 그대로 보존해 둡니다. 둘째, 그룹 FaceTime 처럼 여럿이 한 통화는 `ZADDRESS` 한 칸으로 드러나지 않아서 참여자 표를 이어 읽어야 하며, 그 방법은 [통화 기록](call-history.md) 의 그룹 통화 설명을 따릅니다 [3]. 상대가 전화번호가 아닌 계정 주소(이메일)로 기록될 수도 있으니 검체의 `ZADDRESS` 값 모양을 직접 봅니다.
 
 ### 계정과 설정 파일
 
-관찰한 백업의 `HomeDomain :: Library/Preferences/` 아래에서 다음 키를 확인했습니다. 키 이름만 확인했고 값의 뜻은 확인하지 못했습니다.
+`HomeDomain :: Library/Preferences/` 아래에는 다음 키가 있습니다. 값의 뜻을 밝힌 공개 자료는 없습니다.
 
 | 파일 | 보인 키 |
 |---|---|
@@ -53,7 +53,7 @@ FaceTime 행을 읽을 때 [통화 기록](call-history.md) 의 칸 설명에 �
 | `com.apple.TelephonyUtilities.plist` | `FaceTimeNewCallersFilterMode` |
 | `com.apple.CallHistorySyncHelper.plist` | `CHFacetimeSearchableStatus` |
 
-`imservice.ids.FaceTime.plist` 는 이름과 키로 보아 FaceTime 이 쓰는 계정 목록이고, `facetime.bag.plist` 는 서버 설정 묶음(bag)의 캐시로 보이며, `facetimemessagestored.plist` 는 FaceTime 메시지 저장소의 설정으로 보입니다. 셋 다 뜻은 확인하지 못했으니 "FaceTime 계정이 설정되어 있었다" 같은 결론의 단서로만 쓰고, 계정 자체는 [애플 계정](../system-account/apple-account.md) 에서 확인합니다. 이 밖에 계정 목록에서 `com.apple.account.FaceTime` 이, 알림 설정 목록에서 `com.apple.facetime` 이, 설정 제한 목록에서 `deniedICCIDsForiMessageFaceTime` 키가 보였습니다.
+`imservice.ids.FaceTime.plist` 는 이름과 키로 보아 FaceTime 이 쓰는 계정 목록이고, `facetime.bag.plist` 는 서버 설정 묶음(bag)의 캐시로 보이며, `facetimemessagestored.plist` 는 FaceTime 메시지 저장소의 설정으로 보입니다. 셋 다 뜻이 밝혀지지 않았으니 "FaceTime 계정이 설정되어 있었다" 같은 결론의 단서로만 쓰고, 계정 자체는 [애플 계정](../system-account/apple-account.md) 에서 확인합니다. 이 밖에 계정 목록에는 `com.apple.account.FaceTime`, 알림 설정 목록에는 `com.apple.facetime`, 설정 제한 목록에는 `deniedICCIDsForiMessageFaceTime` 키가 있습니다.
 
 plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
@@ -71,10 +71,10 @@ FaceTime 행의 시각도 통화 기록의 `ZDATE` 로, Mac 절대 시각(2001-0
 
 ## 함정과 한계
 
-- **"FaceTime 앱 DB" 를 찾는 헛수고.** 관찰한 백업에는 FaceTime 전용 통화 DB 가 없었습니다. 통화 기록은 통화 기록 DB 에서 찾습니다.
+- **"FaceTime 앱 DB" 를 찾는 헛수고.** 로컬 백업에는 FaceTime 전용 통화 DB 가 없습니다. 통화 기록은 통화 기록 DB 에서 찾습니다.
 - **음성 통화 분류 누락.** FaceTime 음성 통화는 영상과 다른 `ZCALLTYPE` 값이라서 [1], 영상 값만 걸러 내면 음성 통화를 놓칩니다.
-- **서버 중계와 P2P.** 연결 방식은 보안 설계의 설명이고 [2], 특정 통화가 어느 경로로 이어졌는지는 기기 흔적에서 확인한 자료가 없습니다.
-- **통화 기록 수집 범위.** 관찰한 암호화하지 않은 백업에는 통화 기록 DB 자체가 없었습니다. FaceTime 행이 안 보이면 수집 범위부터 확인합니다.
+- **서버 중계와 P2P.** 연결 방식은 보안 설계의 설명이고 [2], 특정 통화가 어느 경로로 이어졌는지 기기 흔적에서 가리는 방법은 알려져 있지 않습니다.
+- **통화 기록 수집 범위.** 암호화하지 않은 백업에는 통화 기록 DB 자체가 빠질 수 있습니다. FaceTime 행이 안 보이면 수집 범위부터 확인합니다.
 
 ## 직접 분석해 보기
 

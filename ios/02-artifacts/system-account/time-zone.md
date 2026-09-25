@@ -12,28 +12,28 @@ nav_order: 300
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Apple 은 날짜와 시간을 자동으로 맞추려면 인터넷 연결과 최신 소프트웨어가 필요하고, 설정의 일반 → 날짜 및 시간에서 "자동으로 설정" 을 켜고, 설정의 개인정보 보호 및 보안 → 위치 서비스 → 시스템 서비스에서 "시간대 설정" 을 켜야 한다고 안내합니다[6]. 이렇게 켜 두면 기기가 현재 위치로 시간대를 정하고[6], 자동 설정은 모든 통신사·국가·지역에서 되지는 않을 수 있습니다[6]. 자동이 안 되는 곳에서는 "자동으로 설정" 을 끄고 도시를 입력해 시간대를 직접 바꿀 수 있습니다[6].
+날짜와 시간을 자동으로 맞추려면 인터넷 연결과 최신 소프트웨어가 필요하고, 설정의 일반 → 날짜 및 시간에서 "자동으로 설정" 을 켜고, 설정의 개인정보 보호 및 보안 → 위치 서비스 → 시스템 서비스에서 "시간대 설정" 을 켜야 합니다[6]. 이렇게 켜 두면 기기가 현재 위치로 시간대를 정하고[6], 자동 설정은 모든 통신사·국가·지역에서 되지는 않을 수 있습니다[6]. 자동이 안 되는 곳에서는 "자동으로 설정" 을 끄고 도시를 입력해 시간대를 직접 바꿀 수 있습니다[6].
 
-스크린 타임 암호가 켜져 있거나 기기 제한이 있는 회사 관리 프로파일이 설치되어 있으면 이 설정이 흐리게 보이고 고를 수 없다고 합니다[6]. 이 안내에서 끌어낸 해석으로는, 자동 설정이 켜진 기기는 사용자가 움직이는 대로 시간대가 바뀌니 시간대가 바뀐 기록이 곧 사용자가 손으로 바꾼 흔적은 아닙니다. 반대로 설정을 고를 수 없는 기기였다면 사용자가 바꿨다고 보기 어렵습니다. 이 둘은 [6] 의 설명에서 이끌어 낸 추론이고, 기기에서 실제로 어떻게 기록되는지 확인한 자료는 아닙니다.
+스크린 타임 암호가 켜져 있거나 기기 제한이 있는 회사 관리 프로파일이 설치되어 있으면 이 설정이 흐리게 보이고 고를 수 없습니다[6]. 그래서 자동 설정이 켜진 기기는 사용자가 움직이는 대로 시간대가 바뀌니, 시간대가 바뀐 기록이 곧 사용자가 손으로 바꾼 흔적은 아닙니다. 반대로 설정을 고를 수 없는 기기였다면 사용자가 바꿨다고 보기 어렵습니다. 다만 이 둘은 설정 동작에서 이끌어 낸 추론이고, 기기에 실제로 어떻게 기록되는지는 공개된 자료가 없어 검체로 확인해야 합니다.
 
-시간대 설정 말고도 여러 구성 요소가 "무엇을 할 때 시간대가 무엇이었는지" 를 자기 설정 파일에 적어 둡니다. 관찰한 백업에서는 App Store, 게임, 스크린 타임, chronod 의 설정 파일과 iCloud 백업 설정에 시간대 이름이나 GMT 와의 차이를 담는 키가 있었습니다.
+시간대 설정 말고도 여러 구성 요소가 "무엇을 할 때 시간대가 무엇이었는지" 를 자기 설정 파일에 적어 둡니다. 로컬 백업에서는 App Store, 게임, 스크린 타임, chronod 의 설정 파일과 iCloud 백업 설정에 시간대 이름이나 GMT 와의 차이를 담는 키가 있습니다.
 
 ## 위치와 버전별 차이
 
 ### 전체 파일 시스템 추출
 
-iOS 15 이미지를 분석한 글은 시간대와 시간대 설정을 아래 파일에서 읽었습니다[1]. 설정 파일 안의 키 이름(예: 자동 시간대가 켜져 있는지)은 이번 자료로 확인하지 못했습니다.
+iOS 15 전체 파일 시스템에서 시간대와 시간대 설정은 아래 파일에 있습니다[1]. 설정 파일 안의 키 이름(예: 자동 시간대가 켜져 있는지)은 공개된 자료가 없어 검체에서 확인합니다.
 
 | 알고 싶은 것 | 경로 |
 |---|---|
 | 현재 시간대 | `/private/var/db/timezone/localtime` |
 | 시간대 설정 | `/private/var/db/timed/Library/Preferences/com.apple.preferences.datetime.plist` |
 
-관찰한 로컬 백업에는 `/private/var/db/timed/` 나 `/private/var/db/timezone/` 에 해당하는 도메인 경로가 나오지 않았습니다. 그래서 로컬 백업만으로는 이 두 파일을 보지 못할 가능성이 높지만, 백업에 들어가지 않는다고 확인한 자료는 없습니다. 수집 방식별 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
+로컬 백업(iOS 27.0)에는 `/private/var/db/timed/` 나 `/private/var/db/timezone/` 에 해당하는 도메인 경로가 없습니다. 그래서 로컬 백업만으로는 이 두 파일을 보지 못할 가능성이 높지만, 백업에서 빠진다고 밝힌 공개 자료는 없습니다. 수집 방식별 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 ### 로컬 백업에 남는 시간대 흔적
 
-관찰한 백업에서 시간대를 담는 키는 아래와 같았습니다. 모두 `HomeDomain :: Library/Preferences/` 아래 파일이고 값은 보지 않았습니다.
+로컬 백업에서 시간대를 담는 키는 아래와 같습니다. 모두 `HomeDomain :: Library/Preferences/` 아래 파일입니다.
 
 | 파일 | 키 | 짝이 되는 시각 키 |
 |---|---|---|
@@ -43,7 +43,7 @@ iOS 15 이미지를 분석한 글은 시간대와 시간대 설정을 아래 파
 | `com.apple.chronod.plist` | `lastKnownTimes` 안의 `timeZoneSecondsFromGMT`, `world` | `lastEffectiveSignificantTimeChange` (datetime) |
 | `com.apple.mobile.ldbackup.plist` | `LastCloudBackupTZ` (str) | `LastCloudBackupDate` (int) |
 
-Forensafe 는 `/private/var/mobile/Library/Preferences/com.apple.AppStore.plist` 의 "마지막 부트스트랩 시간대와 부트스트랩 날짜" 로 기기가 마지막으로 시작되거나 재구성될 때 적용된 시간대를 알 수 있다고 적었습니다[5]. 글에 키 이름은 없었고, 위 표의 `lastBootstrapTimeZone`·`lastBootstrapDate` 가 그 자리라는 것은 관찰한 키 이름으로 맞춘 것입니다. "부트스트랩" 이 기기 시작을 뜻하는지 App Store 가 처음 준비되는 때를 뜻하는지는 [5] 의 설명 말고 다른 근거를 찾지 못했습니다. `LastCloudBackupTZ` 는 이름으로 보아 마지막 iCloud 백업 때의 시간대이고, 나머지 키도 이름으로 뜻을 짐작할 뿐입니다.
+`/private/var/mobile/Library/Preferences/com.apple.AppStore.plist` 의 마지막 부트스트랩 시간대와 부트스트랩 날짜로 기기가 마지막으로 시작되거나 재구성될 때 적용된 시간대를 알 수 있다는 해석이 있습니다[5]. 위 표의 `lastBootstrapTimeZone`·`lastBootstrapDate` 가 그 값으로 보입니다. "부트스트랩" 이 기기 시작을 뜻하는지 App Store 가 처음 준비되는 때를 뜻하는지는 다른 공개 자료가 없어 검체로 확인해야 합니다. `LastCloudBackupTZ` 는 이름으로 보아 마지막 iCloud 백업 때의 시간대이고, 나머지 키도 이름으로 뜻을 짐작할 뿐입니다.
 
 ### 앱 DB 안의 시간대 칸
 
@@ -58,15 +58,15 @@ Forensafe 는 `/private/var/mobile/Library/Preferences/com.apple.AppStore.plist`
 | `AppDomainGroup-group.com.apple.reminders :: Container_v#/Stores/Data-*.sqlite` | `ZREMCDREMINDER` | `ZTIMEZONE`, `ZDISPLAYDATETIMEZONE`, `ZDISPLAYDATEUPDATEDFORSECONDSFROMGMT` |
 | `HomeDomain :: Library/Calendar/Extras.db` | `ZALARM` | `ZENTITYTIMEZONE` |
 
-이런 칸은 사진을 찍거나 일정을 만든 그 순간의 시간대를 담는 것으로 보여서, 기기 설정 파일의 시간대가 하나뿐일 때도 여러 시점의 시간대를 모을 수 있습니다. 오프셋 칸의 단위(초인지 분인지)는 이번 자료로 확인하지 못했습니다. 사진은 [사진 보관함](../media/photos/index.md), 미리 알림과 일정은 [미리 알림과 캘린더](../mail-cloud/reminders-calendar.md) 에서 다룹니다.
+이런 칸은 사진을 찍거나 일정을 만든 그 순간의 시간대를 담는 것으로 보여서, 기기 설정 파일의 시간대가 하나뿐일 때도 여러 시점의 시간대를 모을 수 있습니다. 오프셋 칸의 단위(초인지 분인지)는 공개된 자료가 없어 검체의 값으로 확인합니다. 사진은 [사진 보관함](../media/photos/index.md), 미리 알림과 일정은 [미리 알림과 캘린더](../mail-cloud/reminders-calendar.md) 에서 다룹니다.
 
-iOS 15 와 iOS 27 사이에 시간대 파일 위치나 키 이름이 바뀌었는지는 이번 자료로 확인하지 못했습니다. 위 전체 파일 시스템 경로는 iOS 15 이미지[1], 백업 쪽 키는 iOS 27.0 백업 하나에서 본 것입니다.
+iOS 15 와 iOS 27 사이에 시간대 파일 위치나 키 이름이 바뀌었는지는 공개된 자료가 없습니다. 위 전체 파일 시스템 경로는 iOS 15[1], 백업 쪽 키는 iOS 27.0 기준입니다.
 
 ## 구조
 
-`com.apple.preferences.datetime.plist` 와 위 표의 설정 파일은 plist 입니다. 관찰한 설정 파일에서 시간대는 `LastTimeZoneName` 처럼 문자열 이름으로 적히거나, `timeZoneSecondsFromGMT` 처럼 이름으로 보아 GMT 와의 차이를 초로 적는 키로 나타났습니다. 서머타임이 있는 지역은 같은 시간대 이름이라도 계절마다 GMT 와의 차이가 달라서, 이름과 차이가 둘 다 있으면 함께 봅니다. plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+`com.apple.preferences.datetime.plist` 와 위 표의 설정 파일은 plist 입니다. 설정 파일에서 시간대는 `LastTimeZoneName` 처럼 문자열 이름으로 적히거나, `timeZoneSecondsFromGMT` 처럼 이름으로 보아 GMT 와의 차이를 초로 적는 키로 나타났습니다. 서머타임이 있는 지역은 같은 시간대 이름이라도 계절마다 GMT 와의 차이가 달라서, 이름과 차이가 둘 다 있으면 함께 봅니다. plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
-`/private/var/db/timezone/localtime` 의 파일 형식은 이번 자료로 확인하지 못했습니다[1].
+`/private/var/db/timezone/localtime` 의 파일 형식은 공개된 분석 자료가 없어 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -82,7 +82,7 @@ iOS 기록의 시각 값 가운데는 Mac 절대 시각이나 유닉스 시각�
 
 둘째, 보고서에는 UTC 값과 현지 시각을 둘 다 적고, 현지 시각을 만들 때 쓴 시간대와 그 근거(어느 파일의 어느 키)를 밝힙니다.
 
-셋째, 로그의 시간대를 먼저 확인합니다. [1] 은 시간대 설정이 시각을 맞추는 데 중요하다고 적으면서, 일부 로그 항목의 시각이 Cupertino(미국 태평양 시간대) 기준으로 적혀 있었다고 했습니다[1]. 어느 로그였는지는 확인하지 못했으니, 로그를 볼 때는 시각 문자열에 시간대 표시가 있는지, 없다면 어느 시간대 기준인지부터 확인합니다.
+셋째, 로그의 시간대를 먼저 확인합니다. iOS 15 이미지에서는 일부 로그 항목의 시각이 Cupertino(미국 태평양 시간대) 기준으로 적혀 있었습니다[1]. 어떤 로그가 그런지 정리된 자료가 없으니, 로그를 볼 때는 시각 문자열에 시간대 표시가 있는지, 없다면 어느 시간대 기준인지부터 확인합니다.
 
 넷째, 시간대가 바뀐 것과 시계가 바뀐 것을 나눕니다. 시간대를 바꾸면 UTC 값은 그대로이고 화면에 보이는 현지 시각만 달라지지만, 자동 설정을 끄고 날짜와 시각 자체를 바꾸면 그 뒤 기록의 UTC 값부터 틀어질 수 있습니다. 기기 시계를 손으로 바꾼 흔적은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 의 방법대로 서버에서 받은 시각이 들어간 기록과 맞춰 찾습니다.
 

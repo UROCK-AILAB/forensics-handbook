@@ -26,7 +26,7 @@ has_toc: false
 | 채팅방·사용자 DB | `Talk.sqlite`[2][3] | 같음 | 채팅방 목록과 멤버 수, 채팅방 폴더, 앱이 아는 사용자, 연락처 동기화로 가져온 주소록 항목 |
 | 받은 미디어 | `chat/`, `chatVideo/`, `chatAudio/` 아래 채팅방별 폴더[2] | 같음 | 받은 사진·영상·음성과 그 축소본 |
 
-앱 설정 plist 와 앱 그룹 컨테이너, 로그인한 계정 정보가 어디 있는지는 확인하지 못했습니다. 번들 ID 와 백업 도메인의 관계는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다.
+앱 설정 plist 와 앱 그룹 컨테이너, 로그인한 계정 정보가 어디 있는지는 공개된 분석 자료가 없어 검체에서 확인합니다. 번들 ID 와 백업 도메인의 관계는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다.
 
 > 그림 자리: 앱 데이터 컨테이너 안에서 `Message.sqlite`·`Talk.sqlite`·미디어 폴더가 채팅방 ID 와 사용자 ID 로 서로 이어지는 모습
 

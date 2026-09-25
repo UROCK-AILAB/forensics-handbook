@@ -29,7 +29,7 @@ nav_order: 1240
 
 로컬 백업에서는 GUID 폴더 대신 도메인 이름으로 나뉩니다. 앱 데이터는 `AppDomain-<번들 ID>`, 앱 그룹 공유 폴더는 `AppDomainGroup-<그룹 ID>`, 앱 확장은 `AppDomainPlugin-<번들 ID>` 도메인에 들어갑니다. 백업 폴더 자체의 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
-데이터 컨테이너 안의 표준 하위 폴더와 백업 포함 여부는 Apple 문서에 다음처럼 적혀 있습니다[1]. 이 문서는 보관 (archive) 문서라서 최신 iOS 에서도 규칙이 그대로인지는 이 문서만으로 알 수 없습니다.
+데이터 컨테이너 안의 표준 하위 폴더와 백업 포함 여부는 다음과 같습니다[1]. 근거가 보관 (archive) 문서라서 최신 iOS 에서도 규칙이 그대로인지는 검체에서 확인합니다.
 
 | 폴더 | 담는 것 | 백업 |
 |---|---|---|
@@ -69,7 +69,7 @@ nav_order: 1240
 
 4. **컨테이너 안을 정해진 순서로 봅니다.** 설정 파일부터 열면 앱이 무엇을 저장하는지 감이 잡힙니다. 앱 설정 파일은 백업에서 `AppDomain-<번들 ID> :: Library/Preferences/<번들 ID>.plist` 모양으로 있고(예: `AppDomain-com.apple.mobilesafari :: Library/Preferences/com.apple.mobilesafari.plist`), 읽는 법은 [속성 목록 파일](../../../01-foundations/data-formats/plist.md) 에 있습니다. 그다음 `Library/Application Support` 와 `Documents` 에서 SQLite 파일을 찾아 표 이름과 칸 이름으로 무엇을 기록하는지 가늠합니다. 이때 `-wal`, `-shm` 파일을 함께 가져와야 하고, 지운 행을 찾는 법까지 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다. 앱 그룹 공유 폴더와 앱 확장 도메인에도 본체와 다른 DB 가 있을 수 있어서 함께 봅니다. HTTP 캐시와 웹뷰 데이터는 [캐시와 웹뷰](cache-webkit.md) 에서 이어 봅니다.
 
-5. **앱 밖의 시스템 기록을 봅니다.** 앱 자신의 파일이 비어 있거나 암호화되어 있어도, 시스템이 남긴 기록에서 앱을 언제 설치하고 얼마나 썼는지가 드러납니다. digital-forensics.it 의 글은 다음 기록들을 앱 사용 흔적 후보로 꼽습니다[7].
+5. **앱 밖의 시스템 기록을 봅니다.** 앱 자신의 파일이 비어 있거나 암호화되어 있어도, 시스템이 남긴 기록에서 앱을 언제 설치하고 얼마나 썼는지가 드러납니다. 앱 사용 흔적을 찾을 기록은 다음과 같습니다[7].
 
    | 기록 | 알려 주는 것 | 자세히 |
    |---|---|---|
@@ -85,21 +85,21 @@ nav_order: 1240
    | SMS | 가입 문자, 2단계 인증 코드 | [메시지](../../../02-artifacts/communications/messages/index.md) |
    | 카메라 롤 | 앱 화면을 찍은 스크린숏 | [스크린샷과 화면 녹화](../../../02-artifacts/media/screenshots.md) |
 
-   이 가운데 Biome, KnowledgeC, 스크린 타임, netusage, Power Log 는 전체 파일 시스템 추출에서만 얻는다고 저자는 정리합니다[7]. 같은 글은 TCC.db 도 여기에 넣지만, 암호화하지 않은 로컬 백업에서 `HomeDomain :: Library/TCC/TCC.db` 가 보였습니다. 이 백업의 `access` 표에는 `service`, `client`, `client_type`, `auth_value`, `auth_reason`, `auth_version`, `csreq`, `policy_id`, `indirect_object_identifier_type`, `indirect_object_identifier`, `indirect_object_code_identity`, `flags`, `last_modified`, `pid`, `pid_version`, `boot_uuid`, `last_reminded`, `one_time_reprompt_eligible`, `reminder_count` 칸이 있고, `expired` 표에는 `expired_at` 칸이 있습니다. 앱별 통신량은 백업에서 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 의 `ZPROCESS` 표(`ZBUNDLENAME`, `ZPROCNAME`, `ZFIRSTTIMESTAMP`, `ZTIMESTAMP` 등)로 볼 수 있습니다. 구매 쪽은 `HomeDomain :: Library/com.apple.itunesstored/` 아래 `purchase_intents.sqlitedb` 의 `purchase_intents_table(product_identifier, app_bundle_id, timestamp, pid, product_name, app_name)` 처럼 번들 ID 칸이 있는 표가 보였지만, 각 칸의 뜻과 시각 기준은 확인하지 못했습니다.
+   이 가운데 Biome, KnowledgeC, 스크린 타임, netusage, Power Log 는 전체 파일 시스템 추출에서만 얻습니다[7]. TCC.db 도 여기에 넣는 정리가 있지만[7], 암호화하지 않은 로컬 백업에도 `HomeDomain :: Library/TCC/TCC.db` 가 들어 있을 수 있습니다. 백업에 든 TCC.db 의 `access` 표에는 `service`, `client`, `client_type`, `auth_value`, `auth_reason`, `auth_version`, `csreq`, `policy_id`, `indirect_object_identifier_type`, `indirect_object_identifier`, `indirect_object_code_identity`, `flags`, `last_modified`, `pid`, `pid_version`, `boot_uuid`, `last_reminded`, `one_time_reprompt_eligible`, `reminder_count` 칸이 있고, `expired` 표에는 `expired_at` 칸이 있습니다. 앱별 통신량은 백업에서 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 의 `ZPROCESS` 표(`ZBUNDLENAME`, `ZPROCNAME`, `ZFIRSTTIMESTAMP`, `ZTIMESTAMP` 등)로 볼 수 있습니다. 구매 쪽은 `HomeDomain :: Library/com.apple.itunesstored/` 아래 `purchase_intents.sqlitedb` 의 `purchase_intents_table(product_identifier, app_bundle_id, timestamp, pid, product_name, app_name)` 처럼 번들 ID 칸이 있는 표가 있습니다. 각 칸의 뜻과 시각 기준은 공개된 분석 자료가 없어 검체에서 확인해야 합니다.
 
 6. **시간순으로 모읍니다.** 앞에서 얻은 시각을 한 표에 모으면 설치, 첫 사용, 권한 허용, 통신, 삭제의 순서가 보입니다. Apple 기록은 대부분 Mac 절대 시각(2001-01-01 부터 센 초)을 쓰지만[7] 칸마다 기준이 다를 수 있어서, 변환은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 에서 칸별로 확인하고 모으는 법은 [타임라인 작성](../timeline/index.md) 을 따릅니다.
 
 ## 도구
 
-MVT 는 백업과 파일 시스템 덤프에서 설치 앱 목록, `DataUsage.sqlite`·`netusage.sqlite` 의 프로세스별 통신량 같은 기록을 뽑아 주고, 올바른 번들 ID 가 없는 프로세스는 눈여겨보라고 문서에 적어 두었습니다[2]. 표 구조를 직접 확인할 때는 `sqlite3` 명령줄 도구나 SQLite 브라우저로 `.schema` 부터 보고, plist 는 바이너리 plist 를 XML 로 바꿔 주는 도구로 엽니다. 도구 결과는 한 번은 원본 DB 에 직접 질의해서 맞춰 봅니다.
+MVT 는 백업과 파일 시스템 덤프에서 설치 앱 목록, `DataUsage.sqlite`·`netusage.sqlite` 의 프로세스별 통신량 같은 기록을 뽑아 줍니다. 올바른 번들 ID 가 없는 프로세스는 눈여겨볼 대상입니다[2]. 표 구조를 직접 확인할 때는 `sqlite3` 명령줄 도구나 SQLite 브라우저로 `.schema` 부터 보고, plist 는 바이너리 plist 를 XML 로 바꿔 주는 도구로 엽니다. 도구 결과는 한 번은 원본 DB 에 직접 질의해서 맞춰 봅니다.
 
 ## 함정과 한계
 
 `key_tab` 의 번호는 기기와 버전마다 같다는 보장이 없어서 번호가 아니라 key 이름으로 조인해야 하고[6], 위 질의도 이름으로 조인합니다. 컨테이너 폴더 이름은 설치할 때 무작위로 정해지는 값이라[8], 앱은 GUID 가 아니라 번들 ID 로 알아봅니다.
 
-로컬 백업에 들어가는 범위는 폴더마다 다르고 Apple 문서가 보관 문서라서[1], 백업에 없는 파일을 "기기에 없었다" 로 쓰지 않습니다. 반대로 저자가 전체 파일 시스템 추출에서만 얻는다고 한 TCC.db 가 이 백업에서는 보였듯이[7], 어떤 파일이 어느 수집 방법에 들어가는지는 버전과 백업 암호화 여부에 따라 달라질 수 있고 그 차이는 아직 확인하지 못했습니다.
+로컬 백업에 들어가는 범위는 폴더마다 다르고 그 규칙의 근거가 보관 문서라서[1], 백업에 없는 파일을 "기기에 없었다" 로 쓰지 않습니다. 반대로 전체 파일 시스템 추출에서만 얻는다고 알려진 TCC.db 가 로컬 백업에 들어 있기도 하듯이[7], 어떤 파일이 어느 수집 방법에 들어가는지는 버전과 백업 암호화 여부에 따라 달라질 수 있어서 검체에서 확인합니다.
 
-MVT 문서가 번들 ID 없는 프로세스를 눈여겨보라고 했어도[2] 그것만으로 악성이라고 단정하지 않고, [악성 코드·스파이웨어 흔적](../spyware-triage/index.md) 의 다른 기록과 함께 판단합니다.
+번들 ID 없는 프로세스라도[2] 그것만으로 악성이라고 단정하지 않고, [악성 코드·스파이웨어 흔적](../spyware-triage/index.md) 의 다른 기록과 함께 판단합니다.
 
 ## 결과를 어떻게 해석하나
 

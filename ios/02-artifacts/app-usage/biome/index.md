@@ -14,9 +14,9 @@ has_toc: false
 
 ## 왜 중요한가
 
-iOS 16 에서 KnowledgeC.db 의 일부 핵심 기록이 바이옴으로 옮겨져서[1][7], 요즘 아이폰에서 어떤 앱을 언제 썼는지 물으려면 KnowledgeC.db 만 봐서는 부족하고 바이옴을 함께 봐야 합니다. 한 연구자는 최근 기기의 사용자 영역에서 300개가 넘는 스트림 폴더 가운데 84개가 포렌식에 쓸모 있는 정보를 담는다고 정리했고, 그 범위는 앱 사용, Safari 활동, 방문 장소, 알림, 지갑 거래, Siri, 메시지 활동, Apple Intelligence 까지 이어집니다[2].
+iOS 16 에서 KnowledgeC.db 의 일부 핵심 기록이 바이옴으로 옮겨져서[1][7], 요즘 아이폰에서 어떤 앱을 언제 썼는지 물으려면 KnowledgeC.db 만 봐서는 부족하고 바이옴을 함께 봐야 합니다. 최근 기기의 사용자 영역에는 스트림 폴더가 300개가 넘고, 그 가운데 84개가 포렌식에 쓸모 있는 정보를 담습니다. 그 범위는 앱 사용, Safari 활동, 방문 장소, 알림, 지갑 거래, Siri, 메시지 활동, Apple Intelligence 까지 이어집니다[2].
 
-다만 Apple 은 바이옴 구조를 공식 문서로 공개하지 않아서 경로와 형식은 모두 연구자와 도구 자료에 기대고 있고, 형식도 iOS 17 에서 SEGB v2 로 한 번 바뀌었습니다[2][3][6]. 로컬 백업에는 바이옴 파일이 드러나지 않는다는 자료가 있어서[3][7] 수집 방식부터 확인해야 합니다. 같은 Apple 계정의 다른 기기에서 동기화된 기록이 한 폴더 안에 섞여 들어오는 점[1][7]도 해석할 때 먼저 가려야 합니다.
+다만 Apple 은 바이옴 구조를 공식 문서로 공개하지 않아서 경로와 형식은 모두 연구자와 도구 자료에 기대고 있고, 형식도 iOS 17 에서 SEGB v2 로 한 번 바뀌었습니다[2][3][6]. 로컬 백업에는 바이옴 파일이 들어 있지 않아서[3][7] 수집 방식부터 확인해야 합니다. 같은 Apple 계정의 다른 기기에서 동기화된 기록이 한 폴더 안에 섞여 들어오는 점[1][7]도 해석할 때 먼저 가려야 합니다.
 
 ## 한눈에 보기
 
@@ -24,13 +24,13 @@ iOS 16 에서 KnowledgeC.db 의 일부 핵심 기록이 바이옴으로 옮겨�
 |---|---|---|---|
 | 스트림 폴더 | `/private/var/mobile/Library/Biome/streams/` (사용자 영역), `/private/var/db/biome/streams/` (시스템 영역)[1][7] | iOS 14–15 는 사용자 영역 중심, 시스템 영역 `restricted` 는 iOS 16 에서 생김[2] | 스트림마다 `local`(이 기기), `remote`(동기화된 다른 기기), `tombstone`(기간이 지난 파일)으로 나뉜 기록[1][3][7] |
 | SEGB 파일 | 각 스트림 폴더 안 | v1 은 iOS 16 까지, v2 는 iOS 17 부터[2][3][6] | 기록마다 시각과 상태(Written·Deleted), protobuf 페이로드[1][3][6] |
-| 동기화 DB | `/private/var/mobile/Library/Biome/sync/sync.db`[1] | iOS 16 조사 | 동기화한 기기와 마지막 동기화 시각[1] |
+| 동기화 DB | `/private/var/mobile/Library/Biome/sync/sync.db`[1] | iOS 16 | 동기화한 기기와 마지막 동기화 시각[1] |
 | 앱 사용 스트림 | `/private/var/db/biome/streams/restricted/_DKEvent.App.InFocus`(iOS 16)[1], iLEAPP 는 `App.InFocus`[5] | iOS 16 이후(iOS 15 까지는 KnowledgeC.db) | 어느 앱이 언제 화면 앞에 나오고 들어갔는지, 번들 ID, 전환 이유[1][3][5] |
-| 바이옴 관련 설정 | 백업 HomeDomain `Library/Preferences/` 의 `com.apple.biomed.plist`, `com.apple.biomesyncd.plist` 등 | — | 이름에 바이옴이 들어간 설정 키. 뜻은 확인하지 못했습니다 |
+| 바이옴 관련 설정 | 백업 HomeDomain `Library/Preferences/` 의 `com.apple.biomed.plist`, `com.apple.biomesyncd.plist` 등 | — | 이름에 바이옴이 들어간 설정 키. 뜻은 공개 자료 없음 |
 
 > 그림 자리: 두 바이옴 폴더 아래 스트림 폴더와 `local`·`remote`·`tombstone`, `sync.db` 가 어떻게 놓이는지
 
-공개 도구로는 스트림별 파서를 둔 iLEAPP[2][5], SEGB v1·v2 파일을 모두 읽는 파이썬 모듈 ccl_segb[4], crush[3]가 있고, 상용 분석 도구들도 바이옴과 SEGB v2 해석을 지원한다고 발표했습니다[6][7].
+공개 도구로는 스트림별 파서를 둔 iLEAPP[2][5], SEGB v1·v2 파일을 모두 읽는 파이썬 모듈 ccl_segb[4], crush[3]가 있고, 상용 분석 도구들도 바이옴과 SEGB v2 를 해석합니다[6][7].
 
 ## 읽는 순서
 

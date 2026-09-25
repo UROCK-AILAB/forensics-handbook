@@ -15,9 +15,9 @@ nav_order: 1520
 
 ## 먼저 확인할 것
 
-지운 앱을 다룬 포렌식 자료 [1] 은 2019년 글이고, iOS 15 이후에도 경로와 동작이 같은지는 이 핸드북에서 확인하지 못했습니다. 검체의 iOS 버전에서 파일이 실제로 있는지부터 봅니다.
+지운 앱의 흔적을 다룬 공개 자료는 2019년 것이라 [1], iOS 15 이후에도 경로와 동작이 같은지는 검체에서 확인합니다. 검체의 iOS 버전에서 파일이 실제로 있는지부터 봅니다.
 
-수집 범위가 결과를 크게 가릅니다. 지운 앱을 가장 직접 보여 주는 `UninstalledApplications.plist` 는 전체 파일 시스템 이미지에서만 얻을 수 있다고 [1] 은 설명하고, 관찰한 로컬 백업에서도 이 파일과 `DAAP.sqlitedb` 는 보이지 않았습니다. 로컬 백업만 있다면 설치 목록과 홈 화면 배치를 비교하는 방법이 중심이 됩니다.
+수집 범위가 결과를 크게 가릅니다. 지운 앱을 가장 직접 보여 주는 `UninstalledApplications.plist` 는 전체 파일 시스템 이미지에서만 얻을 수 있고 [1], 로컬 백업에는 이 파일과 `DAAP.sqlitedb` 가 들어 있지 않을 수 있습니다. 로컬 백업만 있다면 설치 목록과 홈 화면 배치를 비교하는 방법이 중심이 됩니다.
 
 기기 이전 이력도 봅니다. `UninstalledApplications.plist` 는 기기마다 따로 있고 다른 기기로 옮겨지지 않아서 [1], 새 기기로 옮긴 경우 예전 기기에서 지운 앱은 이 파일에 없습니다. 복원·이전 흔적은 [초기화 (Erase All Content)](erase-reset.md) 에서 다룹니다.
 
@@ -25,15 +25,15 @@ nav_order: 1520
 
 | 순서 | 아티팩트 | 위치 | 알려 주는 것 | 자세히 |
 |---|---|---|---|---|
-| 1 | 지운 앱 목록 | `/private/var/installd/Library/MobileInstallation/UninstalledApplications.plist` | 번들 ID 와 그 앱을 마지막으로 지운 날짜가 들어 있고, 9개월 넘은 기록도 남아 있었습니다 [1] | [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md) |
+| 1 | 지운 앱 목록 | `/private/var/installd/Library/MobileInstallation/UninstalledApplications.plist` | 번들 ID 와 그 앱을 마지막으로 지운 날짜가 들어 있고, 9개월 넘은 기록도 남습니다 [1] | [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md) |
 | 2 | 앱 상태 DB | 기기 `/private/var/mobile/Library/FrontBoard/applicationstate.db`, 백업 HomeDomain `Library/FrontBoard/applicationState.db` | 설치된 앱을 기록하고, 앱을 정리하면 항목이 빠집니다 [1] | [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md) |
 | 3 | 홈 화면 배치 | `IconState.plist`(백업 HomeDomain `Library/SpringBoard/`) | 이 파일의 번들 ID 를 앱 상태 DB 와 비교해 정리한 앱과 완전히 설치된 앱을 가릅니다 [1] | [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md) |
 | 4 | 구입 앱 목록 | `/private/var/mobile/Library/Caches/com.apple.appstored/DAAP.sqlitedb` | Apple 계정 기준 구입 앱 목록이고(iOS 12 이후), 기기에 지금 없는 앱도 들어 있습니다 [1] | [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) |
 | 5 | 예전 구입 기록 | `/private/var/mobile/Library/Caches/com.apple.storeservices/AppPurchaseHistory.6.sqlitedb` | 예전 iOS 에서 4번과 비슷한 역할을 했습니다 [1] | [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) |
 
-[1] 은 이 밖에 Mobile Installation 로그, 스크린 타임, PowerLog, KnowledgeC, DataUsage.sqlite, netusage.sqlite, CallHistory.storedata 도 함께 볼 곳으로 듭니다. 이 파일들에 지운 앱이 어떻게 남는지는 이 핸드북에서 확인하지 못했고, 각 파일을 읽는 법은 [화면 사용 시간](../../../02-artifacts/app-usage/screen-time.md), [전원 로그](../../../02-artifacts/app-usage/powerlog.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 에서 다룹니다. 관찰한 백업에서는 KnowledgeC·바이옴·PowerLog·installd 로그가 보이지 않았습니다.
+이 밖에 Mobile Installation 로그, 스크린 타임, PowerLog, KnowledgeC, DataUsage.sqlite, netusage.sqlite, CallHistory.storedata 에도 지운 앱의 흔적이 남을 수 있습니다 [1]. 지운 앱이 이 파일들에 어떤 모양으로 남는지는 공개 자료가 적어 검체에서 확인합니다. 각 파일을 읽는 법은 [화면 사용 시간](../../../02-artifacts/app-usage/screen-time.md), [전원 로그](../../../02-artifacts/app-usage/powerlog.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 에서 다룹니다. 로컬 백업에는 KnowledgeC·바이옴·PowerLog·installd 로그가 들어 있지 않을 수 있습니다.
 
-관찰한 백업에서 앱 지우기와 관련될 만한 파일은 아래와 같습니다. 표 이름과 키 이름만 확인했고, 앱을 지운 뒤 값이 어떻게 바뀌는지는 확인하지 못했습니다.
+로컬 백업에서 앱 지우기와 관련될 만한 파일은 아래와 같습니다. 앱을 지운 뒤 값이 어떻게 바뀌는지는 공개 자료가 없어 검체에서 확인합니다.
 
 | 파일(백업) | 표·키 이름 |
 |---|---|
@@ -45,7 +45,7 @@ nav_order: 1520
 | WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZPROCESS`(`ZFIRSTTIMESTAMP`, `ZTIMESTAMP`, `ZBUNDLENAME`, `ZPROCNAME` 등) |
 | 백업 최상위 `Info.plist` | `Installed Applications` |
 
-`SystemAppInstallState.plist` 의 정수 값이 기본 앱을 지웠는지 나타내는지, 백업 `Info.plist` 의 `Installed Applications` 가 백업 시점의 설치 목록인지는 이름으로 짐작할 뿐이라서, 쓰기 전에 시험 기기로 확인합니다. 백업 파일 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+`SystemAppInstallState.plist` 의 정수 값이 기본 앱을 지웠는지 나타내는지, 백업 `Info.plist` 의 `Installed Applications` 가 백업 시점의 설치 목록인지는 공개 자료가 없어서, 쓰기 전에 시험 기기로 확인합니다. 백업 파일 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ## 분석 흐름
 
@@ -62,7 +62,7 @@ nav_order: 1520
 
 `UninstalledApplications.plist` 의 날짜를 처음 지운 날짜로 읽는 실수도 있습니다. 이 파일에는 그 앱을 마지막으로 지운 날짜가 들어 있어서 [1], 같은 앱을 여러 번 설치하고 지웠다면 앞선 삭제는 이 파일로 알 수 없습니다.
 
-로컬 백업에 `UninstalledApplications.plist` 가 없다고 앱을 지운 적이 없다고 보면 안 됩니다. 이 파일은 전체 파일 시스템 이미지에서만 얻을 수 있다고 [1] 이 설명합니다.
+로컬 백업에 `UninstalledApplications.plist` 가 없다고 앱을 지운 적이 없다고 보면 안 됩니다. 이 파일은 전체 파일 시스템 이미지에서만 얻을 수 있습니다 [1].
 
 앱을 지웠다는 기록은 삭제가 있었다는 사실까지만 말합니다. 앱을 지운 이유나 그 앱의 데이터를 없애려 한 의도는 이 기록으로 알 수 없습니다.
 

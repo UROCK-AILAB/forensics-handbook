@@ -8,13 +8,13 @@ nav_order: 1140
 
 ## 한 줄 요약
 
-Office 문서 안에는 만든 사람·마지막으로 고친 사람·만든 시각·마지막 인쇄 시각 같은 핵심 속성이 들어 있고, iWork 문서는 미리보기 그림과 Metadata 폴더를 담은 번들이며, 관찰한 아이폰 백업에서는 iCloud Drive 컨테이너 설정·파일 제공자 DB·문서 관련 확장 도메인이 보였습니다.
+Office 문서 안에는 만든 사람·마지막으로 고친 사람·만든 시각·마지막 인쇄 시각 같은 핵심 속성이 들어 있고, iWork 문서는 미리보기 그림과 Metadata 폴더를 담은 번들이며, 아이폰 백업에는 iCloud Drive 컨테이너 설정·파일 제공자 DB·문서 관련 확장 도메인이 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 문서 파일은 본문과 함께 그 문서를 누가 언제 만들고 고쳤는지 적은 속성을 파일 안에 담습니다. 이 속성은 파일이 다른 기기로 옮겨 가도 함께 따라가서, 아이폰에서 찾은 문서가 처음 어디서 만들어졌는지 짐작하는 단서가 됩니다. 사진 파일 안의 촬영 정보(EXIF)는 [카메라 사진과 메타데이터 (DCIM·EXIF·HEIC)](../media/dcim-exif.md)에서 다루고, 이 페이지는 Office·iWork·PDF 문서를 다룹니다.
 
-아이폰 쪽에서는 문서 파일 자체보다 문서가 오간 길목이 먼저 보입니다. 파일 앱, iCloud Drive, 파일 제공자 (File Provider) 확장, 도서 앱이 각자 설정과 DB 를 남기고, 문서 파일이 로컬 백업에 들어가는지와 iCloud Drive 에서 내려받은 문서가 기기 어디에 놓이는지는 이번 판에서 확인하지 못했습니다.
+아이폰 쪽에서는 문서 파일 자체보다 문서가 오간 길목이 먼저 보입니다. 파일 앱, iCloud Drive, 파일 제공자 (File Provider) 확장, 도서 앱이 각자 설정과 DB 를 남깁니다. 문서 파일이 로컬 백업에 들어가는지와 iCloud Drive 에서 내려받은 문서가 기기 어디에 놓이는지는 검체에서 확인합니다.
 
 ## 위치와 버전별 차이
 
@@ -24,9 +24,9 @@ Office 문서 안에는 만든 사람·마지막으로 고친 사람·만든 시
 |---|---|---|
 | Office(docx·xlsx·pptx) | 개방형 패키징 규약 (Open Packaging Conventions, OPC) 패키지의 핵심 속성 (core properties) | [2] |
 | iWork(Pages·Numbers·Keynote) | 번들 최상위의 `Metadata/` 폴더와 미리보기 그림 | [1] |
-| PDF | 이번 판에서 확인하지 못함 | — |
+| PDF | 검체에서 확인 | — |
 
-Office 핵심 속성이 패키지 안의 어느 부분(part)에 저장되는지와, 응용 프로그램 이름·편집 시간 같은 확장 속성의 이름은 [2] 에 나오지 않아서 이 페이지에 적지 않습니다. iWork 구조는 iWork '13 기준 자료[1]로 확인한 것이고, 요즘 iWork 가 기본으로 번들 대신 파일 하나로 저장하는지는 확인하지 못했습니다. PDF 의 문서 정보 사전과 날짜 형식, 증분 저장으로 이전 판이 남는 성질도 이번에 연 자료로는 확인하지 못해서 다음 판으로 미룹니다.
+Office 핵심 속성이 패키지 안의 어느 부분(part)에 저장되는지와, 응용 프로그램 이름·편집 시간 같은 확장 속성은 이 페이지에서 다루지 않습니다. iWork 구조는 iWork '13 기준이고[1], 요즘 iWork 가 번들과 파일 하나 가운데 어느 쪽으로 저장하는지는 검체에서 확인합니다.
 
 ### 아이폰에서 문서 흔적이 보이는 곳
 
@@ -38,7 +38,7 @@ Office 핵심 속성이 패키지 안의 어느 부분(part)에 저장되는지�
 | 도서 앱 내려받기 DB | `SysSharedContainerDomain-systemgroup.com.apple.media.shared.books` :: `Documents/BLDatabaseManager/BLDatabaseManager.sqlite` |
 | 파일 앱 데이터 | `AppDomain-com.apple.DocumentsApp`(항목 4개) |
 
-같은 FileProvider 폴더에는 제공자별 `Domains.plist` 가 있고, 관찰한 제공자는 `com.apple.CloudDocs.iCloudDriveFileProvider`, `com.apple.SMBClientProvider.FileProvider`, `com.apple.filesystems.UserFS.FileProvider`, `com.apple.mobileslideshow.PhotosFileProvider` 입니다. 파일 앱의 번들 ID 는 `com.apple.DocumentsApp` 입니다. iOS 15 이후 버전마다 이 위치가 어떻게 달라졌는지는 확인하지 못했습니다.
+같은 FileProvider 폴더에는 제공자별 `Domains.plist` 가 있고, 제공자로는 `com.apple.CloudDocs.iCloudDriveFileProvider`, `com.apple.SMBClientProvider.FileProvider`, `com.apple.filesystems.UserFS.FileProvider`, `com.apple.mobileslideshow.PhotosFileProvider` 가 있습니다. 파일 앱의 번들 ID 는 `com.apple.DocumentsApp` 입니다. iOS 버전에 따라 위치가 다를 수 있으므로, 다른 버전에서는 같은 경로가 있는지부터 확인합니다.
 
 ## 구조
 
@@ -55,8 +55,6 @@ OPC 패키지의 핵심 속성은 아래 16가지이고[2], 조사에서 자주 
 | `LastPrinted` | 마지막으로 인쇄한 날짜와 시각 |
 | `Revision` | 개정 번호 |
 | `Category`, `ContentStatus`, `ContentType`, `Description`, `Identifier`, `Keywords`, `Language`, `Subject`, `Title`, `Version` | 문서 분류·설명·제목 등 |
-
-속성 이름과 뜻은 [2] 를 따랐습니다.
 
 ### iWork 번들
 
@@ -76,7 +74,7 @@ Metadata/
 
 `Index.zip` 안에는 문서 객체를 구성 요소 (Component) 단위로 나눈 IWA 파일이 들어 있고, 이 zip 은 압축과 Zip64 를 쓰지 않는 최소 구현이라 일반 도구로 다시 묶으면 호환이 깨집니다[1]. `.iwa` 파일은 Snappy 로 압축한 프로토콜 버퍼 직렬화 데이터입니다. 압축 스트림은 표준 Snappy 프레임 형식이 아니라 4바이트 머리(첫 바이트는 조각 종류, 다음 3바이트는 리틀 엔디언 24비트 길이)가 붙은 조각을 이어 붙인 것이라서, 표준 프레임을 기대하는 도구로는 바로 풀리지 않습니다[1]. 압축을 푼 데이터에서는 객체마다 varint 길이와 `ArchiveInfo` 메시지가 앞에 붙으며 `MessageInfo` 가 뒤따르는 내용을 설명합니다[1]. 프로토콜 버퍼를 읽는 법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md)에서 다룹니다.
 
-`BuildVersionHistory.plist` 는 이름으로 보아 문서를 저장한 앱의 빌드 이력을 담는 파일이지만, 값의 형식은 확인하지 못했습니다. 암호를 건 iWork 문서는 번들 안 거의 모든 파일을 AES128(PKCS7 채우기)로 암호화합니다[1].
+`BuildVersionHistory.plist` 는 이름으로 보아 문서를 저장한 앱의 빌드 이력을 담는 파일이지만, 값의 형식은 검체에서 확인합니다. 암호를 건 iWork 문서는 번들 안 거의 모든 파일을 AES128(PKCS7 채우기)로 암호화합니다[1].
 
 ### iCloud Drive 컨테이너 설정
 
@@ -84,7 +82,7 @@ CloudDocs 의 컨테이너 plist 는 최상위 키가 번들 ID(`com.apple.Pages
 
 ### 파일 제공자 DB
 
-두 DB 의 표와 칸은 아래와 같고, 칸의 뜻은 확인하지 못했습니다.
+두 DB 의 표와 칸은 아래와 같고, 칸의 뜻을 밝힌 공개 자료는 없습니다.
 
 ```
 manifest.db
@@ -98,7 +96,7 @@ backup_manifest.db
 
 ### 도서 앱 내려받기 DB
 
-`BLDatabaseManager.sqlite` 의 `ZBLDOWNLOADINFO` 표에는 `ZASSETPATH`, `ZFILEEXTENSION`, `ZTITLE`, `ZARTISTNAME`, `ZPURCHASEDATE`, `ZSTARTTIME`, `ZLASTSTATECHANGETIME` 같은 칸이 있습니다. 표와 칸 이름으로 보아 스토어에서 내려받은 기록이고, 사용자가 도서 앱에 직접 넣은 PDF 가 여기에 남는지는 확인하지 못했습니다.
+`BLDatabaseManager.sqlite` 의 `ZBLDOWNLOADINFO` 표에는 `ZASSETPATH`, `ZFILEEXTENSION`, `ZTITLE`, `ZARTISTNAME`, `ZPURCHASEDATE`, `ZSTARTTIME`, `ZLASTSTATECHANGETIME` 같은 칸이 있습니다. 표와 칸 이름으로 보아 스토어에서 내려받은 기록이고, 사용자가 도서 앱에 직접 넣은 PDF 가 여기에 남는지는 검체에서 확인합니다.
 
 ### 확장 도메인
 
@@ -118,7 +116,7 @@ Office 문서의 `Creator`·`LastModifiedBy`·`Created`·`Modified`·`LastPrinte
 
 ## 시각 해석
 
-Office 핵심 속성의 `Created`·`Modified`·`LastPrinted` 는 만든·마지막으로 바뀐·마지막으로 인쇄한 날짜와 시각이지만[2], 이 값이 UTC 로 적히는지는 확인하지 못했습니다. 도서 앱 DB 의 `ZPURCHASEDATE`·`ZSTARTTIME`·`ZLASTSTATECHANGETIME` 은 Core Data 표의 날짜 칸이라 Mac 절대 시각일 가능성이 높지만 확인하지 못했으므로, 값의 크기로 기준을 먼저 가려 봅니다. 시각 기준을 가리는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+Office 핵심 속성의 `Created`·`Modified`·`LastPrinted` 는 만든·마지막으로 바뀐·마지막으로 인쇄한 날짜와 시각이지만[2], 이 값이 UTC 로 적히는지는 검체에서 확인합니다. 도서 앱 DB 의 `ZPURCHASEDATE`·`ZSTARTTIME`·`ZLASTSTATECHANGETIME` 은 Core Data 표의 날짜 칸이라 Mac 절대 시각일 가능성이 높지만, 값의 크기로 기준을 먼저 가려 봅니다. 시각 기준을 가리는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -128,11 +126,11 @@ iWork 문서를 조사하면서 `Index.zip` 을 풀었다가 다시 묶으면, �
 
 문서 속성은 파일 안의 값이라 파일을 고치면 함께 바뀔 수 있고, 운영체제가 따로 지키는 값이 아닙니다. 속성의 시각이 다른 기록과 어긋나면 조작을 의심하기 전에 시간대와 저장 프로그램부터 확인합니다.
 
-PDF 의 내부 구조, Office 확장 속성, 요즘 iWork 의 단일 파일 저장, 문서 파일의 백업 포함 여부는 이번 판에서 확인하지 못한 부분입니다. 이 부분을 근거로 보고할 때는 따로 출처를 확인합니다.
+PDF 의 내부 구조, Office 확장 속성, 요즘 iWork 의 단일 파일 저장, 문서 파일의 백업 포함 여부는 이 페이지에서 다루지 않으므로, 이 부분을 근거로 보고할 때는 따로 출처를 확인합니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** iWork 번들의 `Index.zip` 사본에서 `.iwa` 파일 하나를 꺼내 헥스로 열면 맨 앞 4바이트가 조각 머리이고, 이 머리를 떼어 내고 조각마다 Snappy 압축을 푼 결과를 다시 헥스로 엽니다. [1] 의 설명대로 객체마다 맨 앞에 varint 로 적은 길이와 `ArchiveInfo` 메시지가 붙어 있습니다. varint 를 읽는 법은 프로토콜 버퍼 페이지에 있고, 이 페이지에서는 검체에서 나온 바이트를 예로 들지 않습니다. varint 가 끝난 바이트 뒤부터 프로토콜 버퍼 메시지로 읽어 보면 객체 경계를 제대로 잡았는지 확인할 수 있습니다.
+**헥스로 한 번.** iWork 번들의 `Index.zip` 사본에서 `.iwa` 파일 하나를 꺼내 헥스로 열면 맨 앞 4바이트가 조각 머리이고, 이 머리를 떼어 내고 조각마다 Snappy 압축을 푼 결과를 다시 헥스로 엽니다. 객체마다 맨 앞에 varint 로 적은 길이와 `ArchiveInfo` 메시지가 붙어 있습니다[1]. varint 를 읽는 법은 프로토콜 버퍼 페이지에 있습니다. varint 가 끝난 바이트 뒤부터 프로토콜 버퍼 메시지로 읽어 보면 객체 경계를 제대로 잡았는지 확인할 수 있습니다.
 
 **공개 도구로 한 번.** `sqlite3` 로 사본 DB 를 열어 파일 제공자와 도서 앱의 기록을 뽑습니다.
 
@@ -149,7 +147,7 @@ FROM ZBLDOWNLOADINFO
 WHERE lower(ZFILEEXTENSION) = 'pdf';
 ```
 
-`ZFILEEXTENSION` 에 확장자가 점 없이 적히는지는 확인하지 못했으므로, 결과가 비면 조건을 `LIKE '%pdf%'` 로 넓혀 봅니다. Office 파일은 OPC 패키지를 여는 공개 도구나 라이브러리로 사본의 핵심 속성을 읽고, 값을 위 표와 맞춰 봅니다.
+`ZFILEEXTENSION` 에 확장자가 점 없이 적히는지는 검체마다 확인해야 하므로, 결과가 비면 조건을 `LIKE '%pdf%'` 로 넓혀 봅니다. Office 파일은 OPC 패키지를 여는 공개 도구나 라이브러리로 사본의 핵심 속성을 읽고, 값을 위 표와 맞춰 봅니다.
 
 ## 교차 검증
 

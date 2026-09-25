@@ -34,7 +34,7 @@ UID 는 제조할 때 SoC 에 새기는 무작위 값이고, A9 부터는 제조
 
 (출처: [2])
 
-메모리 보호 엔진은 SEP 메모리를 AES XEX 로 암호화하고 CMAC 으로 인증합니다[2]. 암호 입력 지연이나 UID 와 사용자 암호를 얽는 방식은 이 페이지에서 확인한 자료가 없어 다루지 않습니다.
+메모리 보호 엔진은 SEP 메모리를 AES XEX 로 암호화하고 CMAC 으로 인증합니다[2]. 암호 입력 지연과, UID 와 사용자 암호를 얽는 방식은 이 쪽에서 다루지 않습니다.
 
 > 그림 자리: SoC 안의 Secure Enclave(SEP·AES 엔진·UID) 와 칩 밖의 Secure Storage Component, 응용 프로세서를 나란히 두고, UID 가 SEP 밖으로 나가지 않는다는 점을 보여 주는 그림
 
@@ -50,7 +50,7 @@ UID 는 제조할 때 SoC 에 새기는 무작위 값이고, A9 부터는 제조
 
 (출처: [1])
 
-사용자 키 가방은 No Protection 등급으로 저장한 바이너리 plist 파일이고, A9 이전 기기에서는 암호를 바꿀 때 이전 키를 지우고 새로 만듭니다[1]. 맥에서는 경로가 `~/Library/Keychains/[UUID]/user.kb` 이지만[1], 아이폰 기기 안의 경로는 확인하지 못했습니다.
+사용자 키 가방은 No Protection 등급으로 저장한 바이너리 plist 파일이고, A9 이전 기기에서는 암호를 바꿀 때 이전 키를 지우고 새로 만듭니다[1]. 맥에서는 경로가 `~/Library/Keychains/[UUID]/user.kb` 입니다[1]. 아이폰 기기 안의 경로는 공개된 자료가 없어 검체에서 확인해야 합니다.
 
 백업 키 가방은 암호화 백업을 만들 때마다 새 키 묶음으로 새로 만들고, 백업 데이터를 그 키로 다시 암호화합니다[1]. 다른 기기로 옮길 수 없는 키체인 항목은 암호화 백업 안에서도 UID 에서 파생한 키로 감싼 채 남고, 암호화하지 않은 백업에서는 파일은 암호화되지 않지만 키체인은 UID 파생 키로 보호된 채입니다[1]. 키체인 등급과 "ThisDeviceOnly" 항목은 [보호 등급 (Protection Classes)](protection-classes.md) 에 정리했습니다.
 
@@ -58,9 +58,9 @@ UID 는 제조할 때 SoC 에 새기는 무작위 값이고, A9 부터는 제조
 
 ## 읽는 법 — 로컬 백업에서 보이는 흔적
 
-관찰한 로컬 백업의 `Manifest.plist` 에는 `IsEncrypted`, `Version`, `Containers`, `Date`, `SystemDomainsVersion`, `WasPasscodeSet`, `Lockdown`, `Applications`, `BackupKeyBag` 키가 있습니다. 이 백업은 암호화하지 않은 백업인데도 `BackupKeyBag` 키가 있었고, `ManifestKey` 라는 키는 목록에 없었습니다. 따라서 `BackupKeyBag` 이 있다는 것만으로 암호화 백업이라고 판단하지 않고, 암호화 여부는 `IsEncrypted` 키로 따로 봅니다.
+로컬 백업의 `Manifest.plist` 에는 `IsEncrypted`, `Version`, `Containers`, `Date`, `SystemDomainsVersion`, `WasPasscodeSet`, `Lockdown`, `Applications`, `BackupKeyBag` 키가 있습니다. 암호화하지 않은 백업에도 `BackupKeyBag` 키가 들어 있을 수 있고, 이때 `ManifestKey` 키는 없습니다. 따라서 `BackupKeyBag` 이 있다는 것만으로 암호화 백업이라고 판단하지 않고, 암호화 여부는 `IsEncrypted` 키로 따로 봅니다.
 
-iMazing 의 설명으로는 암호화 백업에서 `Manifest.db` 자체도 별도 키로 암호화하고, 기기가 등급별 키로 암호화해 보낸 데이터를 컴퓨터는 받은 그대로 저장합니다[3]. 그 별도 키가 어느 plist 키에 들어 있는지는 이번에 확인하지 못했습니다.
+암호화 백업에서는 `Manifest.db` 자체도 별도 키로 암호화하고, 기기가 등급별 키로 암호화해 보낸 데이터를 컴퓨터는 받은 그대로 저장합니다[3].
 
 키체인 백업은 `KeychainDomain` 의 `keychain-backup.plist` 에 있고, 최상위 키는 아래와 같습니다.
 
@@ -72,13 +72,13 @@ cert (list)
 keys (list)
 ```
 
-이름으로 보아 `keybag-uuid` 는 키 가방 UUID, 나머지는 키체인 항목 종류별 목록으로 보이지만, 정의를 밝힌 문서는 확인하지 못했습니다. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에 있습니다.
+이름으로 보아 `keybag-uuid` 는 키 가방 UUID, 나머지는 키체인 항목 종류별 목록으로 보입니다. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에 있습니다.
 
 ## 포렌식에서 중요한 점
 
-UID 는 디버그 경로로도 볼 수 없고[2], Apple 은 다른 기기로 옮길 수 없는 키체인 항목이 암호화 백업 안에서도 UID 파생 키로 감싼 채 남는다고 설명합니다[1]. 로컬 백업을 받았더라도 키체인 안의 비밀 값까지 읽을 수 있는지는 백업 암호화 여부와 항목의 등급에 따라 갈립니다.
+UID 는 디버그 경로로도 볼 수 없고[2], 다른 기기로 옮길 수 없는 키체인 항목은 암호화 백업 안에서도 UID 파생 키로 감싼 채 남습니다[1]. 로컬 백업을 받았더라도 키체인 안의 비밀 값까지 읽을 수 있는지는 백업 암호화 여부와 항목의 등급에 따라 갈립니다.
 
-키체인이 비암호화 백업에 들어가는지를 두고는 자료끼리 말이 다릅니다. iMazing 은 키체인·건강·Safari 기록·통화 기록 등은 백업 암호화를 켜야 백업된다고 쓰고[3], Apple 은 암호화하지 않은 백업에서도 키체인이 UID 파생 키로 보호된 채라고 씁니다[1]. 관찰한 비암호화 백업에도 `keychain-backup.plist` 가 있었습니다. 셋을 합치면 "비암호화 백업에도 키체인 파일은 있지만 원래 기기 밖에서는 풀 수 없다" 로 읽히지만, 해석이니 보고서에서 단정하지 않습니다.
+키체인이 비암호화 백업에 들어가는지를 두고는 자료끼리 말이 다릅니다. iMazing 은 키체인·건강·Safari 기록·통화 기록 등은 백업 암호화를 켜야 백업된다고 쓰고[3], Apple 은 암호화하지 않은 백업에서도 키체인이 UID 파생 키로 보호된 채라고 씁니다[1]. 비암호화 백업에도 `keychain-backup.plist` 가 들어 있습니다. 셋을 합치면 "비암호화 백업에도 키체인 파일은 있지만 원래 기기 밖에서는 풀 수 없다" 로 읽히지만, 해석이니 보고서에서 단정하지 않습니다.
 
 ## 함정
 

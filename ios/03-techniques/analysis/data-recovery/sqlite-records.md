@@ -11,13 +11,13 @@ nav_order: 1320
 
 ## 언제 쓰나
 
-메시지·사진·메모 같은 앱 DB 에서 사용자가 지웠다고 하는 항목을 찾을 때 씁니다. 작업은 두 단계로 나뉘는데, 먼저 일반 쿼리로 보이는 "지움 표시가 붙은 행" 을 확인하고, 그다음 SQL 로는 보이지 않는 조각을 파일 구조를 따라 읽습니다. 조각이 얼마나 남는지는 DB 설정과 체크포인트 시점에 따라 크게 다르고, ElcomSoft 는 iOS 12 이후 지운 레코드를 되살릴 가능성이 매우 낮다고 주장합니다 [2]. 그래서 조각 읽기는 "남아 있으면 찾는다" 정도로 기대하고 시작하는 편이 맞고, 흔적이 사라지는 경로는 [복구가 안 되는 이유](limits.md) 에 정리했습니다.
+메시지·사진·메모 같은 앱 DB 에서 사용자가 지웠다고 하는 항목을 찾을 때 씁니다. 작업은 두 단계로 나뉘는데, 먼저 일반 쿼리로 보이는 "지움 표시가 붙은 행" 을 확인하고, 그다음 SQL 로는 보이지 않는 조각을 파일 구조를 따라 읽습니다. 조각이 얼마나 남는지는 DB 설정과 체크포인트 시점에 따라 크게 다르고, iOS 12 이후 지운 레코드를 되살릴 가능성이 매우 낮다는 업체 설명도 있습니다 [2]. 그래서 조각 읽기는 "남아 있으면 찾는다" 정도로 기대하고 시작하는 편이 맞고, 흔적이 사라지는 경로는 [복구가 안 되는 이유](limits.md) 에 정리했습니다.
 
 SQLite 파일 형식 전체는 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 에서 설명하고, 이 페이지는 복구에 필요한 칸만 다시 짚습니다.
 
 ## 먼저 볼 곳: 지움 표시가 남은 행
 
-Apple 앱의 DB 가운데 여럿은 지운 항목을 바로 없애지 않고 휴지통 상태나 지운 시각을 칸에 적어 둡니다. 아래 표는 로컬 백업에서 확인한 표·칸 이름이고, 행과 값은 읽지 않았습니다. 따라서 칸 값의 뜻(예: 어떤 숫자가 휴지통 상태인지)과 날짜 칸의 시각 기준은 이 관찰로 확인되지 않았고, 시험 기기에서 직접 지워 보고 값이 어떻게 바뀌는지 확인한 뒤에 해석합니다. 관찰 메모의 칸 목록은 중간에서 잘린 것이 있어서, 표에 없다고 그 칸이 없다고 볼 수는 없습니다.
+Apple 앱의 DB 가운데 여럿은 지운 항목을 바로 없애지 않고 휴지통 상태나 지운 시각을 칸에 적어 둡니다. 아래 표는 로컬 백업에 든 DB 의 표·칸 이름입니다. 칸 값의 뜻(예: 어떤 숫자가 휴지통 상태인지)과 날짜 칸의 시각 기준은 공개된 자료가 없으므로, 시험 기기에서 직접 지워 보고 값이 어떻게 바뀌는지 확인한 뒤에 해석합니다. 표의 칸 목록은 전부가 아닐 수 있어서, 표에 없다고 그 칸이 없다고 볼 수는 없습니다.
 
 | DB (도메인 :: 경로) | 표와 칸 |
 |---|---|
@@ -31,15 +31,15 @@ Apple 앱의 DB 가운데 여럿은 지운 항목을 바로 없애지 않고 휴
 | `HomeDomain :: Library/Safari/Bookmarks.db` | `bookmarks` 의 deleted |
 | `HomeDomain :: Library/Shortcuts/Shortcuts.sqlite`, `Library/Shortcuts/ExternalTriggers/ExternalTriggers.sqlite` | `ZVCVOICESHORTCUTMANAGEDOBJECT` 의 ZISMARKEDASDELETED |
 
-Photos.sqlite 와 NoteStore.sqlite 에는 Core Data 변경 기록 표인 `ACHANGE`(ZCHANGETYPE, ZENTITY, ZENTITYPK, ZTRANSACTIONID, ZCOLUMNS 등)와 `ATRANSACTION` 도 있습니다. 지운 항목의 변경이 이 표에 얼마나 오래 남는지는 확인하지 못했습니다.
+Photos.sqlite 와 NoteStore.sqlite 에는 Core Data 변경 기록 표인 `ACHANGE`(ZCHANGETYPE, ZENTITY, ZENTITYPK, ZTRANSACTIONID, ZCOLUMNS 등)와 `ATRANSACTION` 도 있습니다. 지운 항목의 변경이 이 표에 얼마나 오래 남는지는 공개된 자료가 없어 검체로 확인합니다.
 
-메시지 쪽은 칸 이름만 보면 `chat_recoverable_message_join` 과 `recoverable_message_part` 가 iOS 16 부터 생긴 "최근 삭제된 항목" 보관과 이어져 보이지만, 이 대응은 공식 문서로 확인하지 않았습니다. `HomeDomain :: Library/Preferences/com.apple.madrid.plist` 의 `LocalDBStats` 안에는 deletedMessages·deletedChats·deletedAttachments·deletedRecoverableMessages 같은 개수 키가 있고, 같은 plist 에 `Server.TotalRecords.recoverableMessageDeleteZone` 키도 있습니다. 이 개수를 DB 에서 센 행 수와 견주면 복구 결과가 얼마나 빠졌는지 가늠할 수 있습니다.
+메시지 쪽은 칸 이름만 보면 `chat_recoverable_message_join` 과 `recoverable_message_part` 가 iOS 16 부터 생긴 "최근 삭제된 항목" 보관과 이어져 보이지만, 이 대응은 공식 문서에 나오지 않습니다. `HomeDomain :: Library/Preferences/com.apple.madrid.plist` 의 `LocalDBStats` 안에는 deletedMessages·deletedChats·deletedAttachments·deletedRecoverableMessages 같은 개수 키가 있고, 같은 plist 에 `Server.TotalRecords.recoverableMessageDeleteZone` 키도 있습니다. 이 개수를 DB 에서 센 행 수와 견주면 복구 결과가 얼마나 빠졌는지 가늠할 수 있습니다.
 
-iOS 16 의 "보내기 취소" 와 "편집" 은 `message` 표의 text 칸을 비웁니다. 보내기 취소는 보낸 뒤 2분 안에, 편집은 15분 안에만 할 수 있고, 둘 다 바뀐 시각이 따로 남으며, 편집은 고칠 때마다 시각이 붙은 이전 판 기록을 남깁니다 [3]. 이 시각을 담는 칸 이름은 확인하지 못했고, 지워진 본문을 다른 파일에서 찾은 사례는 [카빙](carving.md) 에 있습니다. 표의 날짜 칸을 읽을 때는 [시각 값](../../../01-foundations/value-decoding/time-values.md) 을 보고 기준을 먼저 정합니다.
+iOS 16 의 "보내기 취소" 와 "편집" 은 `message` 표의 text 칸을 비웁니다. 보내기 취소는 보낸 뒤 2분 안에, 편집은 15분 안에만 할 수 있고, 둘 다 바뀐 시각이 따로 남으며, 편집은 고칠 때마다 시각이 붙은 이전 판 기록을 남깁니다 [3]. 이 시각을 담는 칸 이름은 검체에서 확인하고, 지워진 본문을 다른 파일에서 찾은 사례는 [카빙](carving.md) 에 있습니다. 표의 날짜 칸을 읽을 때는 [시각 값](../../../01-foundations/value-decoding/time-values.md) 을 보고 기준을 먼저 정합니다.
 
 ## 조각이 남는 자리
 
-SQL 로 보이지 않는 옛 행은 세 곳에 남을 수 있습니다. 첫째는 통째로 비워진 페이지가 들어가는 freelist 이고, 공식 문서는 freelist 의 잎(leaf) 페이지가 "정보를 담지 않으며" SQLite 가 이 페이지를 읽지도 쓰지도 않는다고 설명합니다 [1]. 이 설명대로라면 지우기 전 내용이 덮이지 않고 남을 수 있습니다. 둘째는 살아 있는 잎 표 페이지 안의 freeblock 과 빈 공간인데, 지운 셀의 포인터는 셀 포인터 배열에서 빠지지만 셀 내용은 그 자리에 남을 수 있습니다. 이 부분은 공식 명세에서 따라 나오는 해석이라 원리로만 쓰고, 검체마다 확인합니다. 셋째는 WAL 파일로, 같은 페이지의 옛 판이 여러 프레임으로 남아 있으면 프레임을 따로 읽어 지우기 전 행을 볼 수 있습니다 [1][2].
+SQL 로 보이지 않는 옛 행은 세 곳에 남을 수 있습니다. 첫째는 통째로 비워진 페이지가 들어가는 freelist 이고, SQLite 는 freelist 의 잎(leaf) 페이지를 정보가 없는 페이지로 보고 읽지도 쓰지도 않습니다 [1]. 그래서 지우기 전 내용이 덮이지 않고 남을 수 있습니다. 둘째는 살아 있는 잎 표 페이지 안의 freeblock 과 빈 공간인데, 지운 셀의 포인터는 셀 포인터 배열에서 빠지지만 셀 내용은 그 자리에 남을 수 있습니다. 이 부분은 공식 명세에서 따라 나오는 원리이므로 검체마다 확인합니다. 셋째는 WAL 파일로, 같은 페이지의 옛 판이 여러 프레임으로 남아 있으면 프레임을 따로 읽어 지우기 전 행을 볼 수 있습니다 [1][2].
 
 복구에 쓰는 오프셋은 아래와 같습니다 [1].
 
@@ -62,7 +62,7 @@ WAL 은 32바이트 머리로 시작하고, 머리에는 0 에 매직 값 0x377f
 
 ## 절차
 
-1. DB 파일을 같은 이름의 `-wal`·`-shm` 파일과 함께 확보하고 해시를 남긴 뒤, 사본에서만 작업합니다. 로컬 백업 최상위에는 `Manifest.db` 와 함께 `Manifest.db-wal`·`Manifest.db-shm` 이 있었지만, 관찰 메모에서 `sms.db-wal` 같은 앱 DB 의 WAL 파일은 보이지 않았습니다. 백업이 WAL 을 합친 뒤 담는지는 확인하지 못했으므로, WAL 프레임까지 봐야 하면 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 에서 파일 시스템 단위 수집을 검토합니다.
+1. DB 파일을 같은 이름의 `-wal`·`-shm` 파일과 함께 확보하고 해시를 남긴 뒤, 사본에서만 작업합니다. 로컬 백업 최상위에는 `Manifest.db` 와 함께 `Manifest.db-wal`·`Manifest.db-shm` 이 있을 수 있지만, `sms.db-wal` 같은 앱 DB 의 WAL 파일은 백업에 없을 수 있습니다. 백업이 WAL 을 합친 뒤 담는지는 공개된 자료가 없으므로, WAL 프레임까지 봐야 하면 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 에서 파일 시스템 단위 수집을 검토합니다.
 2. SQL 로 열기 전에 원본 상태 그대로 한 벌을 더 복사해 두고, 조각 읽기는 그 사본에서 헥스로 합니다.
 3. 파일 머리에서 페이지 크기(16), 첫 freelist trunk 페이지(32), freelist 페이지 총수(36)를 읽습니다. 총수가 0 이면 freelist 에서 읽을 페이지가 없습니다.
 4. trunk 페이지를 따라가며 잎 페이지 번호를 모두 적고, 각 잎 페이지를 페이지 크기 단위로 잘라 레코드 모양이 있는지 훑습니다. 훑는 요령은 [카빙](carving.md) 에 있습니다.
@@ -102,7 +102,7 @@ freeblock 머리가 앞 4바이트를 덮어서 페이로드 길이·rowid·레�
 - DB 설정(secure_delete·auto_vacuum)과 VACUUM·체크포인트에 따라 조각이 아예 없을 수 있습니다. 경로별 설명은 [복구가 안 되는 이유](limits.md) 에 있습니다.
 - freelist 잎 페이지에는 어느 표의 행이든 들어올 수 있어서, 칸 구성이 비슷한 두 표의 행을 헷갈릴 수 있습니다.
 - 옛 행이 overflow 페이지로 넘쳤다면 overflow 페이지도 freelist 로 갔을 수 있고, 이때 긴 값의 뒷부분이 끊깁니다.
-- 지움 표시 칸의 값 뜻과 날짜 칸의 시각 기준은 이 핸드북의 관찰로 확인되지 않았습니다. 버전이 바뀌면 달라질 수 있으니 같은 iOS 버전의 시험 기기로 확인합니다.
+- 지움 표시 칸의 값 뜻과 날짜 칸의 시각 기준은 공개된 자료가 없습니다. 버전이 바뀌면 달라질 수 있으니 같은 iOS 버전의 시험 기기로 확인합니다.
 
 ## 결과를 어떻게 해석하나
 

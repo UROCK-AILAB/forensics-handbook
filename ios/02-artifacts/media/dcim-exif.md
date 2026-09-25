@@ -20,23 +20,23 @@ nav_order: 580
 
 ### 촬영 형식
 
-아이폰은 iOS 11 부터 사진을 고효율 이미지 파일 형식 (HEIF) 으로, 동영상을 고효율 비디오 코딩 (HEVC, H.265) 으로 저장할 수 있고, iPhone 7 이후 기기 등이 이 형식으로 찍을 수 있습니다[1]. 사용자는 설정 → 카메라 → 포맷에서 "고효율"(HEIF/HEVC)과 "호환성 우선"(JPEG 또는 H.264) 가운데 하나를 고릅니다[1]. 흔히 HEIF 사진을 HEIC 파일이라고 부르지만, 이번에 연 Apple 문서에는 `.HEIC`·`.MOV` 같은 확장자가 적혀 있지 않았습니다. 촬영 형식 설정이 어느 plist 키에 저장되는지도 확인하지 못했습니다.
+아이폰은 iOS 11 부터 사진을 고효율 이미지 파일 형식 (HEIF) 으로, 동영상을 고효율 비디오 코딩 (HEVC, H.265) 으로 저장할 수 있고, iPhone 7 이후 기기 등이 이 형식으로 찍을 수 있습니다[1]. 사용자는 설정 → 카메라 → 포맷에서 "고효율"(HEIF/HEVC)과 "호환성 우선"(JPEG 또는 H.264) 가운데 하나를 고릅니다[1]. 흔히 HEIF 사진을 HEIC 파일이라고 부릅니다. 저장되는 파일 확장자와 촬영 형식 설정이 들어가는 plist 키는 공개 자료가 없어 검체에서 확인합니다.
 
 ### 파일과 설정이 놓이는 곳
 
 | 대상 | 위치 | 출처 |
 |---|---|---|
 | 사진 보관함 DB | 기기: `/private/var/mobile/Media/PhotoData/Photos.sqlite` | [2] |
-| 사진 보관함 DB | 로컬 백업: CameraRollDomain :: `Media/PhotoData/Photos.sqlite` | 관찰 |
-| DCIM 폴더·파일 번호 | CameraRollDomain :: `Media/PhotoData/MISC/DCIM_APPLE.plist` | 관찰 |
-| iCloud 사진 동기화 상태 | CameraRollDomain :: `Media/PhotoData/CPL/syncstatus.plist` | 관찰 |
-| 카메라 앱 설정 | HomeDomain :: `Library/Preferences/com.apple.camera.plist` | 관찰 |
+| 사진 보관함 DB | 로컬 백업: CameraRollDomain :: `Media/PhotoData/Photos.sqlite` |  |
+| DCIM 폴더·파일 번호 | CameraRollDomain :: `Media/PhotoData/MISC/DCIM_APPLE.plist` |  |
+| iCloud 사진 동기화 상태 | CameraRollDomain :: `Media/PhotoData/CPL/syncstatus.plist` |  |
+| 카메라 앱 설정 | HomeDomain :: `Library/Preferences/com.apple.camera.plist` |  |
 
-같은 HomeDomain 의 `Library/Preferences` 에는 `com.apple.cameracapture.plist` 와 `com.apple.cameracaptured.plist` 도 있습니다. 관찰한 백업의 CameraRollDomain 에는 항목이 173개 있었지만 관찰 메모에는 DB 와 plist 경로만 있고 사진·동영상 파일의 경로는 없어서, 원본 사진 파일이 백업의 어느 경로로 들어가는지는 여기서 확인하지 못했습니다.
+같은 HomeDomain 의 `Library/Preferences` 에는 `com.apple.cameracapture.plist` 와 `com.apple.cameracaptured.plist` 도 있습니다. iOS 27.0 로컬 백업의 CameraRollDomain 에는 항목이 173개 있습니다. 원본 사진·동영상 파일이 이 도메인의 어느 경로로 들어가는지는 검체의 `Manifest.db` 에서 확인합니다.
 
 ### 표 이름과 도구 지원
 
-공개 도구 iLEAPP 의 photosMetadata 파서는 iOS 12·13 에서 자산 표를 `ZGENERICASSET` 으로, iOS 14 이상에서 `ZASSET` 으로 읽고, iOS 12~14 쿼리만 두어 그보다 새 버전에서는 행을 내지 않습니다[2]. Ph001 파서는 iOS 11~26 쿼리를 나눠 두었고 iOS 27 이상이면 "Unsupported version" 을 남깁니다[3]. 관찰한 iOS 27.0 기기의 자산 표는 `ZASSET` 이지만, 아래 값의 뜻이 iOS 27 에서도 같은지는 확인하지 못했습니다.
+자산 표는 iOS 12·13 에서 `ZGENERICASSET`, iOS 14 이상에서 `ZASSET` 입니다[2]. 공개 도구 iLEAPP 의 photosMetadata 파서는 iOS 12~14 쿼리만 두어 그보다 새 버전에서는 행을 내지 않고[2], Ph001 파서는 iOS 11~26 쿼리를 나눠 두었고 iOS 27 이상이면 "Unsupported version" 을 남깁니다[3]. iOS 27.0 의 자산 표도 `ZASSET` 이고, 아래 값의 뜻이 iOS 27 에서도 같은지는 검체에서 확인합니다.
 
 | 항목 | iOS 12~13 | iOS 14 이후 | 출처 |
 |---|---|---|---|
@@ -48,11 +48,11 @@ nav_order: 580
 
 ### 파일 이름과 위치
 
-`ZASSET.ZDIRECTORY` 와 `ZASSET.ZFILENAME` 이 기기 안에서 파일이 놓인 폴더와 이름을 가리킵니다[3][5]. 원래 파일 이름은 `ZADDITIONALASSETATTRIBUTES.ZORIGINALFILENAME` 과 `ZCLOUDMASTER.ZORIGINALFILENAME` 에 따로 들어 있어서[3], 저장된 이름과 처음 이름이 다른 파일을 가려낼 수 있습니다. 관찰한 `ZCLOUDMASTER` 에는 `ZORIGINALFILENAME`, `ZIMPORTEDBYBUNDLEIDENTIFIER`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTSESSIONID`, `ZCREATIONDATE`, `ZIMPORTDATE` 칸이 있고, `ZADDITIONALASSETATTRIBUTES` 에는 `ZIMPORTEDBY` 칸이 있습니다. `ZIMPORTEDBY` 의 값 표는 확인하지 못했습니다.
+`ZASSET.ZDIRECTORY` 와 `ZASSET.ZFILENAME` 이 기기 안에서 파일이 놓인 폴더와 이름을 가리킵니다[3][5]. 원래 파일 이름은 `ZADDITIONALASSETATTRIBUTES.ZORIGINALFILENAME` 과 `ZCLOUDMASTER.ZORIGINALFILENAME` 에 따로 들어 있어서[3], 저장된 이름과 처음 이름이 다른 파일을 가려낼 수 있습니다. iOS 27.0 의 `ZCLOUDMASTER` 에는 `ZORIGINALFILENAME`, `ZIMPORTEDBYBUNDLEIDENTIFIER`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTSESSIONID`, `ZCREATIONDATE`, `ZIMPORTDATE` 칸이 있고, `ZADDITIONALASSETATTRIBUTES` 에는 `ZIMPORTEDBY` 칸이 있습니다. `ZIMPORTEDBY` 의 값별 뜻은 공개 자료가 없어 검체에서 확인합니다.
 
-자산이 어느 경로로 들어왔는지는 `ZASSET.ZSAVEDASSETTYPE` 으로 가릅니다. iOS 12~16 쿼리를 다룬 Scott Koenig 의 글은 값 3 을 보통 `DCIM/***APPLE` 경로에 저장되는 로컬 보관함 자산으로 풀지만[6], 지금의 Ph001 파서는 같은 값 3 을 PhotoData 자산 또는 공유받은(Syndication) 자산으로 함께 적습니다[3]. 다른 값의 뜻과 출처마다 풀이가 다른 점은 [사진 보관함 (Photos Library)](photos/index.md)에서 다룹니다.
+자산이 어느 경로로 들어왔는지는 `ZASSET.ZSAVEDASSETTYPE` 으로 가릅니다. iOS 12~16 쿼리에서는 값 3 을 보통 `DCIM/***APPLE` 경로에 저장되는 로컬 보관함 자산으로 풀지만[6], 지금의 iLEAPP Ph001 파서는 같은 값 3 을 PhotoData 자산 또는 공유받은(Syndication) 자산으로 함께 적습니다[3]. 다른 값의 뜻과 출처마다 풀이가 다른 점은 [사진 보관함 (Photos Library)](photos/index.md)에서 다룹니다.
 
-`DCIM_APPLE.plist` 에는 `DCIMLastDirectoryNumber`(int) 와 `DCIMLastFileNumber`(int) 두 키가 있습니다. 키 이름으로 보아 카메라가 마지막으로 쓴 폴더 번호와 파일 번호로 보이지만, 이 뜻을 적은 자료는 확인하지 못했습니다.
+`DCIM_APPLE.plist` 에는 `DCIMLastDirectoryNumber`(int) 와 `DCIMLastFileNumber`(int) 두 키가 있습니다. 키 이름으로 보아 카메라가 마지막으로 쓴 폴더 번호와 파일 번호로 보입니다.
 
 ### 사진 종류
 
@@ -65,11 +65,11 @@ nav_order: 580
 | 101 | 슬로모션 동영상 |
 | 102 | 타임랩스 동영상 |
 
-`ZADDITIONALASSETATTRIBUTES.ZCAMERACAPTUREDEVICE` 가 1 이면 osxphotos 는 전면 카메라(셀카)로 읽고[4], 관찰 기기에도 이 칸이 있습니다.
+`ZADDITIONALASSETATTRIBUTES.ZCAMERACAPTUREDEVICE` 가 1 이면 전면 카메라(셀카)입니다[4]. iOS 27.0 에도 이 칸이 있습니다.
 
 ### 촬영 정보가 들어 있는 칸
 
-관찰 기기의 `ZEXTENDEDATTRIBUTES` 에는 카메라와 촬영 조건을 적는 칸이 모여 있습니다. 전체 41칸 가운데 한 칸은 가려져 있고, 이 표를 파일의 EXIF 에서 채운다는 설명은 자료로 확인하지 못했습니다.
+iOS 27.0 의 `ZEXTENDEDATTRIBUTES` 에는 카메라와 촬영 조건을 적는 칸이 모여 있습니다(전체 41칸). 이 표를 파일의 EXIF 에서 채우는지는 공개 자료가 없습니다.
 
 | 묶음 | 칸 |
 |---|---|
@@ -79,19 +79,19 @@ nav_order: 580
 | 동영상 | `ZCODEC`, `ZDURATION`, `ZFPS`, `ZBITRATE`, `ZSAMPLERATE`, `ZTRACKFORMAT` |
 | 그 밖 | `ZCAPTUREREASON`, `ZGENERATIVEAITYPE`, `ZCREDIT` |
 
-`ZADDITIONALASSETATTRIBUTES` 에는 원본 파일 쪽 값이 있습니다. 관찰 기기에는 `ZMEDIAMETADATA`, `ZEDITEDIPTCATTRIBUTES`, `ZORIGINALFILESIZE`, `ZORIGINALWIDTH`, `ZORIGINALHEIGHT`, `ZORIGINALORIENTATION` 과 파일 안 썸네일 위치를 적는 `ZEMBEDDEDTHUMBNAILOFFSET`·`ZEMBEDDEDTHUMBNAILLENGTH`·`ZEMBEDDEDTHUMBNAILWIDTH`·`ZEMBEDDEDTHUMBNAILHEIGHT` 칸이 있고, iLEAPP 는 `ZORIGINALFILESIZE` 를 원본 파일 크기로 뽑습니다[2].
+`ZADDITIONALASSETATTRIBUTES` 에는 원본 파일 쪽 값이 있습니다. iOS 27.0 에는 `ZMEDIAMETADATA`, `ZEDITEDIPTCATTRIBUTES`, `ZORIGINALFILESIZE`, `ZORIGINALWIDTH`, `ZORIGINALHEIGHT`, `ZORIGINALORIENTATION` 과 파일 안 썸네일 위치를 적는 `ZEMBEDDEDTHUMBNAILOFFSET`·`ZEMBEDDEDTHUMBNAILLENGTH`·`ZEMBEDDEDTHUMBNAILWIDTH`·`ZEMBEDDEDTHUMBNAILHEIGHT` 칸이 있고, `ZORIGINALFILESIZE` 는 원본 파일 크기입니다[2].
 
 ### 위치
 
-`ZASSET.ZLATITUDE`·`ZLONGITUDE` 가 -180.0 이면 위치가 없는 자산이라서 iLEAPP 는 빈칸으로 보여 줍니다[2]. 위치 값을 보조하는 칸으로 `ZADDITIONALASSETATTRIBUTES.ZSHIFTEDLOCATIONISVALID`·`ZREVERSELOCATIONDATAISVALID` 를 함께 읽고[2], 관찰 기기에는 이 둘과 함께 `ZGPSHORIZONTALACCURACY`, `ZLOCATIONHASH` 칸도 있습니다.
+`ZASSET.ZLATITUDE`·`ZLONGITUDE` 가 -180.0 이면 위치가 없는 자산입니다[2]. 위치 값을 보조하는 칸으로 `ZADDITIONALASSETATTRIBUTES.ZSHIFTEDLOCATIONISVALID`·`ZREVERSELOCATIONDATAISVALID` 가 있고[2], iOS 27.0 에는 이 둘과 함께 `ZGPSHORIZONTALACCURACY`, `ZLOCATIONHASH` 칸도 있습니다.
 
 ### 원본이 기기에 없는 경우
 
-iCloud 사진을 쓰면 DB 행은 있어도 원본 파일이 기기에 없을 수 있습니다. 관찰한 `ZCLOUDRESOURCE` 에는 `ZISLOCALLYAVAILABLE`, `ZFILEPATH`, `ZUNIFORMTYPEIDENTIFIER`, `ZLASTONDEMANDDOWNLOADDATE`, `ZPRUNEDAT` 칸이, `ZINTERNALRESOURCE` 에는 `ZLOCALAVAILABILITY`, `ZREMOTEAVAILABILITY`, `ZCOMPACTUTI`, `ZFINGERPRINT` 칸이 있습니다. iLEAPP 에는 원본이 기기에 없을 수 있는 "최적화" 자산을 뽑는 Ph051PossOptimizedAssetsIntResouData 파서가 있습니다[7]. `syncstatus.plist` 에는 `iCloudLibraryExists`, `initialSyncDate`, `lastSyncDate`, `cloudAssetCountPerType`(`public.image`, `public.movie`) 키가 있어서 iCloud 사진이 켜져 있었는지를 먼저 확인할 수 있습니다.
+iCloud 사진을 쓰면 DB 행은 있어도 원본 파일이 기기에 없을 수 있습니다. iOS 27.0 의 `ZCLOUDRESOURCE` 에는 `ZISLOCALLYAVAILABLE`, `ZFILEPATH`, `ZUNIFORMTYPEIDENTIFIER`, `ZLASTONDEMANDDOWNLOADDATE`, `ZPRUNEDAT` 칸이, `ZINTERNALRESOURCE` 에는 `ZLOCALAVAILABILITY`, `ZREMOTEAVAILABILITY`, `ZCOMPACTUTI`, `ZFINGERPRINT` 칸이 있습니다. iLEAPP 에는 원본이 기기에 없을 수 있는 "최적화" 자산을 뽑는 Ph051PossOptimizedAssetsIntResouData 파서가 있습니다[7]. `syncstatus.plist` 에는 `iCloudLibraryExists`, `initialSyncDate`, `lastSyncDate`, `cloudAssetCountPerType`(`public.image`, `public.movie`) 키가 있어서 iCloud 사진이 켜져 있었는지를 먼저 확인할 수 있습니다.
 
 ### 카메라 설정
 
-`com.apple.camera.plist` 에는 `CAMUserPreferenceCaptureMode`, `CAMUserPreferenceDesiredHDRMode`, `CAMUserPreferenceDesiredFlashMode`, `CAMUserPreferenceDesiredNightMode`, `CAMUserPreferenceTimerDuration` 같은 설정 키와 `CAMUserPreferencesLastWrittenSettingsDate`, `CAMUserPreferencesLastViewedSettingsInterfaceDate` 두 날짜 키가 있습니다. iLEAPP 에는 이 plist 를 읽는 Ph081comappleCameraPlist 파서가 있습니다[7]. 값의 뜻은 이번에 연 자료로 확인하지 못해서, 키 이름으로 짐작한 설정은 결론의 근거로 쓰지 않습니다. plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01-foundations/data-formats/plist.md)에 있습니다.
+`com.apple.camera.plist` 에는 `CAMUserPreferenceCaptureMode`, `CAMUserPreferenceDesiredHDRMode`, `CAMUserPreferenceDesiredFlashMode`, `CAMUserPreferenceDesiredNightMode`, `CAMUserPreferenceTimerDuration` 같은 설정 키와 `CAMUserPreferencesLastWrittenSettingsDate`, `CAMUserPreferencesLastViewedSettingsInterfaceDate` 두 날짜 키가 있습니다. iLEAPP 에는 이 plist 를 읽는 Ph081comappleCameraPlist 파서가 있습니다[7]. 값의 뜻은 공개 자료가 없으므로, 키 이름으로 짐작한 설정은 결론의 근거로 쓰지 않습니다. plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01-foundations/data-formats/plist.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -103,17 +103,17 @@ iCloud 사진을 쓰면 DB 행은 있어도 원본 파일이 기기에 없을 �
 
 ## 시각 해석
 
-Photos.sqlite 의 날짜 칸인 `ZASSET.ZDATECREATED`, `ZADDEDDATE`, `ZMODIFICATIONDATE`, `ZTRASHEDDATE`, `ZLASTSHAREDDATE` 와 `ZCLOUDMASTER.ZCREATIONDATE` 는 Mac 절대 시각이라서, iLEAPP 는 모두 978307200 을 더해 유닉스 시각으로 바꿉니다[3][5]. 바꾼 값은 UTC 이고, 현지 시각은 `ZTIMEZONENAME`·`ZTIMEZONEOFFSET` 을 함께 읽어 맞춥니다[3][2]. 관찰 기기의 `ZADDITIONALASSETATTRIBUTES` 에는 `ZTIMEZONEOFFSET` 과 함께 `ZINFERREDTIMEZONEOFFSET`, `ZDATECREATEDSOURCE` 칸도 있지만, 두 칸의 값이 무엇을 뜻하는지는 확인하지 못했습니다. 시각 형식 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+Photos.sqlite 의 날짜 칸인 `ZASSET.ZDATECREATED`, `ZADDEDDATE`, `ZMODIFICATIONDATE`, `ZTRASHEDDATE`, `ZLASTSHAREDDATE` 와 `ZCLOUDMASTER.ZCREATIONDATE` 는 Mac 절대 시각이라서, 978307200 을 더하면 유닉스 시각이 됩니다[3][5]. 바꾼 값은 UTC 이고, 현지 시각은 `ZTIMEZONENAME`·`ZTIMEZONEOFFSET` 을 함께 읽어 맞춥니다[3][2]. iOS 27.0 의 `ZADDITIONALASSETATTRIBUTES` 에는 `ZTIMEZONEOFFSET` 과 함께 `ZINFERREDTIMEZONEOFFSET`, `ZDATECREATEDSOURCE` 칸도 있습니다. 두 칸의 뜻은 공개 자료가 없어 검체에서 확인합니다. 시각 형식 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
-`ZADDITIONALASSETATTRIBUTES.ZEXIFTIMESTAMPSTRING` 은 EXIF 날짜를 문자열 그대로 담고 있어서 iLEAPP 도 바꾸지 않고 내보냅니다[3][2]. 이 문자열을 DB 의 UTC 값과 나란히 놓고, 둘의 차이를 시간대 칸으로 설명할 수 있는지 봅니다.
+`ZADDITIONALASSETATTRIBUTES.ZEXIFTIMESTAMPSTRING` 은 EXIF 날짜를 문자열 그대로 담고 있습니다[3][2]. 이 문자열을 DB 의 UTC 값과 나란히 놓고, 둘의 차이를 시간대 칸으로 설명할 수 있는지 봅니다.
 
-`ZDATECREATED` 는 촬영 시각, `ZADDEDDATE` 는 보관함에 들어온 시각으로 칸이 따로 있습니다[3]. 두 값이 가까우면 기기에서 찍어 바로 등록한 자산일 가능성이, 멀면 나중에 저장하거나 가져온 자산일 가능성이 있지만, 이 해석을 직접 적은 자료는 확인하지 못해서 `ZSAVEDASSETTYPE`·가져온 앱 칸과 함께 판단합니다.
+`ZDATECREATED` 는 촬영 시각, `ZADDEDDATE` 는 보관함에 들어온 시각으로 칸이 따로 있습니다[3]. 두 값이 가까우면 기기에서 찍어 바로 등록한 자산일 가능성이, 멀면 나중에 저장하거나 가져온 자산일 가능성이 있습니다. 이 해석만으로 정하지 말고 `ZSAVEDASSETTYPE`·가져온 앱 칸과 함께 판단합니다.
 
 ## 함정과 한계
 
-형식이 바뀌면 해시도 바뀝니다. USB 로 컴퓨터에 사진을 가져오면 JPEG 나 H.264 로 바뀔 수 있고, 설정 → 앱 → 사진에서 "원본 유지" 를 고르면 바뀌지 않습니다[1]. AirDrop·메시지·메일로 보낼 때도 받는 기기가 새 형식을 읽지 못하면 더 호환되는 형식으로 바꿔 보낼 수 있습니다[1]. 그래서 받은 쪽 파일과 원본의 형식·해시가 다르다는 사실만으로 다른 사진이라고 판단하지 않습니다. 관찰 기기의 HomeDomain :: `Library/Preferences/com.apple.mobilesms.compose.plist` 에 있는 `kCKMediaObjectManagerDefaultsUTITypes` 목록에는 `public.heics`, `public.heif`, `public.heif-standard`, `public.jpeg`, `public.png` 가 들어 있지만, 사진 앱이 아닌 메시지 쪽 키라서 보조 근거로만 씁니다.
+형식이 바뀌면 해시도 바뀝니다. USB 로 컴퓨터에 사진을 가져오면 JPEG 나 H.264 로 바뀔 수 있고, 설정 → 앱 → 사진에서 "원본 유지" 를 고르면 바뀌지 않습니다[1]. AirDrop·메시지·메일로 보낼 때도 받는 기기가 새 형식을 읽지 못하면 더 호환되는 형식으로 바꿔 보낼 수 있습니다[1]. 그래서 받은 쪽 파일과 원본의 형식·해시가 다르다는 사실만으로 다른 사진이라고 판단하지 않습니다. HomeDomain :: `Library/Preferences/com.apple.mobilesms.compose.plist` 에 있는 `kCKMediaObjectManagerDefaultsUTITypes` 목록에는 `public.heics`, `public.heif`, `public.heif-standard`, `public.jpeg`, `public.png` 가 들어 있지만, 사진 앱이 아닌 메시지 쪽 키라서 보조 근거로만 씁니다.
 
-값의 뜻은 대부분 공개 도구와 쿼리에서 왔고 Apple 이 공개한 명세가 아닙니다. `ZKINDSUBTYPE`·`ZCAMERACAPTUREDEVICE` 값은 macOS 도구 기준이고, `ZSAVEDASSETTYPE` 은 옛 쿼리와 새 쿼리의 풀이가 다릅니다[6][2]. 관찰 메모는 표마다 칸을 60개까지만 적어서 `ZDATECREATED`, `ZFILENAME`, `ZDIRECTORY`, `ZLATITUDE`, `ZUNIFORMTYPEIDENTIFIER`, `ZORIGINALFILENAME`(`ZADDITIONALASSETATTRIBUTES` 쪽), `ZEXIFTIMESTAMPSTRING` 은 iOS 27.0 기기에서 보지 못했고 출처로만 적었습니다. 새 버전 검체에서는 `PRAGMA table_info` 로 칸이 있는지부터 확인합니다.
+값의 뜻은 대부분 공개 도구와 쿼리에서 왔고 Apple 이 공개한 명세가 아닙니다. `ZKINDSUBTYPE`·`ZCAMERACAPTUREDEVICE` 값은 macOS 도구 기준이고, `ZSAVEDASSETTYPE` 은 옛 쿼리와 새 쿼리의 풀이가 다릅니다[6][2]. `ZDATECREATED`, `ZFILENAME`, `ZDIRECTORY`, `ZLATITUDE`, `ZUNIFORMTYPEIDENTIFIER`, `ZORIGINALFILENAME`(`ZADDITIONALASSETATTRIBUTES` 쪽), `ZEXIFTIMESTAMPSTRING` 은 공개 도구 쿼리에 나오는 칸 이름이라서, 새 버전 검체에서는 `PRAGMA table_info` 로 칸이 있는지부터 확인합니다.
 
 사진을 지우면 곧바로 행이 사라지지 않고 "최근 삭제된 항목" 표시가 남을 수 있고, 편집하면 편집 기록이 따로 남습니다. 이 두 흔적은 [사진 보관함 (Photos Library)](photos/index.md)에서 다룹니다.
 
@@ -129,7 +129,7 @@ C0 66 80 00 00 00 00 00   → -180.0
 
 레코드 헤더에서 칸의 형식 번호를 읽는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에 있습니다.
 
-그다음 WAL 을 함께 둔 사본을 sqlite3 로 열어 자산과 촬영 정보를 이어 봅니다. 표 연결은 `ZASSET.ZADDITIONALATTRIBUTES = ZADDITIONALASSETATTRIBUTES.Z_PK` 이고[3], `ZEXTENDEDATTRIBUTES` 는 관찰 기기에서 `ZASSET` 칸으로 자산을 가리킵니다. 출처로만 확인한 칸이 섞여 있어서 먼저 `PRAGMA table_info(ZASSET);` 로 칸 이름을 확인합니다.
+그다음 WAL 을 함께 둔 사본을 sqlite3 로 열어 자산과 촬영 정보를 이어 봅니다. 표 연결은 `ZASSET.ZADDITIONALATTRIBUTES = ZADDITIONALASSETATTRIBUTES.Z_PK` 이고[3], `ZEXTENDEDATTRIBUTES` 는 iOS 27.0 에서 `ZASSET` 칸으로 자산을 가리킵니다. 판마다 칸이 다를 수 있어서 먼저 `PRAGMA table_info(ZASSET);` 로 칸 이름을 확인합니다.
 
 ```sql
 SELECT a.Z_PK, a.ZDIRECTORY, a.ZFILENAME, a.ZKIND, a.ZKINDSUBTYPE, a.ZSAVEDASSETTYPE,

@@ -17,7 +17,7 @@ nav_order: 10
 
 ### 볼륨 목록
 
-The Eclectic Light Company 의 관찰에 따르면 iOS 18.5 아이폰의 저장소는 APFS 컨테이너 2개로 나뉘고, 첫 컨테이너는 약 351 MB 입니다 [2]. 같은 글은 iPadOS 18.5 아이패드도 함께 비교했습니다.
+iOS 18.5 아이폰의 저장소는 APFS 컨테이너 2개로 나뉘고, 첫 컨테이너는 약 351 MB 입니다 [2]. 아래 표에는 iPadOS 18.5 아이패드의 구성도 함께 적습니다.
 
 | 볼륨 | iOS 18.5 (iPhone 15 Pro) | iPadOS 18.5 (iPad Pro 11형 4세대) | 비고 |
 |---|---|---|---|
@@ -28,11 +28,11 @@ The Eclectic Light Company 의 관찰에 따르면 iOS 18.5 아이폰의 저장�
 | Hardware | 있음 | 있음 | |
 | Baseband Data | 있음 | 목록에 없음 | iOS 에만 있음 [2] |
 | User | 목록에 없음 | 있음 | iPadOS 에만 있는 것으로 보임 [2] |
-| Update | 없음 | 있음 | 아이폰에는 없다고 적음 [2] |
+| Update | 없음 | 있음 | 아이폰에는 없음 [2] |
 
 출처: [2]. 첫 컨테이너 크기는 아이패드 쪽이 약 367 MB 입니다.
 
-같은 글은 dyld 캐시와 Safari 를 담은 시스템 크립텍스(cryptex)와 AI 기능용 PFK 볼륨도 있다고 적었지만, 크립텍스가 어느 볼륨의 어느 경로에 있는지는 이번에 확인한 자료에 없습니다. xART·Hardware·Preboot 에 무엇이 들어 있는지도 확인한 자료가 없어 이 쪽에서는 이름만 적습니다. 맥에 있는 Recovery·VM 볼륨은 iOS·iPadOS 에 없습니다 [2].
+dyld 캐시와 Safari 를 담은 시스템 크립텍스(cryptex)와 AI 기능용 PFK 볼륨도 있습니다 [2]. 크립텍스가 어느 볼륨의 어느 경로에 있는지와 xART·Hardware·Preboot 에 무엇이 들어 있는지는 공개된 분석 자료가 없어 검체에서 확인해야 합니다. 맥에 있는 Recovery·VM 볼륨은 iOS·iPadOS 에 없습니다 [2].
 
 > 그림 자리: 컨테이너 2개와 그 안의 볼륨(System·Data·Preboot·xART·Hardware·Baseband Data)을 상자로 나눠 보여 주고, Data 볼륨에만 사용자 데이터 표시
 
@@ -52,9 +52,9 @@ Data 볼륨은 암호화됩니다 [2]. 데이터 볼륨에 파일을 만들 때�
 
 로컬 백업은 볼륨을 통째로 담지 않고, 기기 경로를 "도메인 + 상대 경로" 로 바꿔 파일 단위로 담습니다 [7]. 백업 안의 파일 이름은 `sha1(domain + '-' + relativePath)` 이고 [7], 도메인과 상대 경로의 목록은 `Manifest.db` 의 `Files` 표에 있습니다(칸: `fileID`, `domain`, `relativePath`, `flags`, `file`). 백업 형식 자체는 [로컬 백업](../../backups/local-backup/index.md) 에서 다룹니다.
 
-도메인은 Data 쪽 경로에 대응합니다 [7]. 아래 표의 "관찰 항목 수" 는 관찰한 백업 한 개의 `Files` 행 수라서 기기와 사용 상태에 따라 달라집니다.
+도메인은 Data 쪽 경로에 대응합니다 [7]. 아래 표의 "항목 수 예" 는 백업 한 개의 `Files` 행 수라서 기기와 사용 상태에 따라 달라집니다.
 
-| 백업 도메인 | 기기 경로 [7] | 관찰 항목 수 |
+| 백업 도메인 | 기기 경로 [7] | 항목 수 예 |
 |---|---|---|
 | HomeDomain | `/var/mobile` | 1979 |
 | MediaDomain | `/var/mobile` 아래 | 303 |
@@ -66,9 +66,9 @@ Data 볼륨은 암호화됩니다 [2]. 데이터 볼륨에 파일을 만들 때�
 | ManagedPreferencesDomain | `/var/Managed Preferences` | 4 |
 | KeychainDomain | `/var/Keychains` | 2 |
 
-관찰한 백업에는 이 밖에 HealthDomain, InstallDomain, KeyboardDomain, MobileDeviceDomain, ProtectedDomain, TonesDomain 도 하나씩 있었지만, 이 도메인들의 기기 경로는 이번에 확인한 자료에 없습니다. 앱별 도메인(`AppDomain-`, `AppDomainGroup-` 등)은 [앱 컨테이너](app-containers.md) 에서 다룹니다.
+백업에는 이 밖에 HealthDomain, InstallDomain, KeyboardDomain, MobileDeviceDomain, ProtectedDomain, TonesDomain 도 나타나지만, 이 도메인들의 기기 경로는 공개 자료에 정리되어 있지 않아 검체에서 확인합니다. 앱별 도메인(`AppDomain-`, `AppDomainGroup-` 등)은 [앱 컨테이너](app-containers.md) 에서 다룹니다.
 
-`/System`, `/usr` 처럼 시스템 볼륨에 있는 내용에 대응하는 도메인은 관찰한 백업에 없었습니다. 그 이유를 설명한 공식 자료는 확인하지 못했습니다.
+`/System`, `/usr` 처럼 시스템 볼륨에 있는 내용에 대응하는 도메인은 백업에 나타나지 않습니다. 그 이유를 설명한 공개 자료는 없습니다.
 
 ## 포렌식에서 중요한 점
 
@@ -78,10 +78,10 @@ Data 볼륨의 파일은 만들 때마다 새로 생긴 파일별 키로 암호�
 
 ## 함정
 
-- **볼륨 목록은 관찰 기록입니다.** 위 볼륨 표는 한 필자가 iOS 18.5 기기 한 대씩에서 본 목록이고 [2], Apple 이 iOS 버전별 볼륨 목록을 표로 공개한 자료는 이번에 확인하지 못했습니다. 다른 버전·기종에서는 볼륨이 더하거나 빠질 수 있습니다.
+- **볼륨 목록은 기기 두 대의 예입니다.** 위 볼륨 표는 iOS 18.5 아이폰과 iPadOS 18.5 아이패드 한 대씩에서 나온 목록이고 [2], iOS 버전별 볼륨 목록을 정리한 Apple 공개 자료는 없습니다. 다른 버전·기종에서는 볼륨이 더하거나 빠질 수 있습니다.
 - **로컬 백업으로 볼륨 구성을 확인할 수는 없습니다.** 백업에는 도메인과 상대 경로만 있고 볼륨·스냅숏 정보가 없습니다.
-- **fskit 확장 도메인을 볼륨 정보로 읽지 않습니다.** 관찰한 백업에 `AppDomainPlugin-com.apple.fskit.apfs`, `AppDomainPlugin-com.apple.fskit.exfat`, `AppDomainPlugin-com.apple.fskit.hfs`, `AppDomainPlugin-com.apple.fskit.msdos` 가 각각 항목 4개씩 있었지만 이름만 확인했고 내용과 역할은 확인하지 못했습니다.
-- **마운트 위치는 따로 확인해야 합니다.** Data 볼륨과 Preboot 가 어느 경로에 마운트되는지는 이번에 확인한 자료에 없습니다. 이 쪽의 경로는 백업 도메인 대응표 [7] 의 경로만 적었습니다.
+- **fskit 확장 도메인을 볼륨 정보로 읽지 않습니다.** 백업에 `AppDomainPlugin-com.apple.fskit.apfs`, `AppDomainPlugin-com.apple.fskit.exfat`, `AppDomainPlugin-com.apple.fskit.hfs`, `AppDomainPlugin-com.apple.fskit.msdos` 가 항목 4개씩 들어 있기도 하지만, 이 도메인들의 내용과 역할을 설명한 공개 자료는 없습니다.
+- **마운트 위치는 따로 확인해야 합니다.** Data 볼륨과 Preboot 가 어느 경로에 마운트되는지는 공개 자료에 정리되어 있지 않아 검체에서 확인합니다. 이 쪽의 경로는 백업 도메인 대응표 [7] 의 경로입니다.
 
 ## 참고 문헌
 

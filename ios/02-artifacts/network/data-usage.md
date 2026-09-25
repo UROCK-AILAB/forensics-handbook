@@ -12,7 +12,7 @@ nav_order: 680
 
 ## 무엇을 기록하나 · 왜 생기나
 
-이 DB 의 중심은 `ZPROCESS` 와 `ZLIVEUSAGE` 표입니다 [1]. `ZPROCESS` 는 앱·프로세스 식별자(`ZBUNDLENAME`, `ZPROCNAME`)를 담고, `ZFIRSTTIMESTAMP` 는 그 프로세스를 처음 기록한 때, `ZTIMESTAMP` 는 가장 최근 활동으로 보입니다 [1]. `ZLIVEUSAGE` 에는 셀룰러(휴대폰 망) 바이트 칸 `ZWWANIN`·`ZWWANOUT` 이 있고, iOS 11 무렵 자료에는 와이파이 바이트 칸 `ZWIFIIN`·`ZWIFIOUT` 도 있었지만 와이파이 칸은 비어 있어서 이 DB 로는 와이파이 사용량을 알 수 없다는 보고가 있습니다 [1][2].
+이 DB 의 중심은 `ZPROCESS` 와 `ZLIVEUSAGE` 표입니다 [1]. `ZPROCESS` 는 앱·프로세스 식별자(`ZBUNDLENAME`, `ZPROCNAME`)를 담고, `ZFIRSTTIMESTAMP` 는 그 프로세스를 처음 기록한 때, `ZTIMESTAMP` 는 가장 최근 활동으로 보입니다 [1]. `ZLIVEUSAGE` 에는 셀룰러(휴대폰 망) 바이트 칸 `ZWWANIN`·`ZWWANOUT` 이 있고, iOS 11 무렵에는 와이파이 바이트 칸 `ZWIFIIN`·`ZWIFIOUT` 도 있었지만 이 칸은 비어 있어서, 이 DB 로는 와이파이 사용량을 알 수 없습니다 [1][2].
 
 기록 단위가 앱이 아니라 프로세스라서, 사용자가 설치한 앱뿐만 아니라 확장(`ZEXTENSIONNAME`)이나 번들 ID 가 없는 프로세스도 목록에 나올 수 있습니다. 공개 도구 MVT 의 `Datausage` 모듈은 이 파일에서 프로세스별 네트워크 사용 이력을 뽑고 [2], 비슷한 기록을 담는 `netusage.sqlite` 를 읽는 `Netusage` 모듈은 올바른 번들 ID 가 없는 수상한 프로세스를 찾는 데 중점을 둡니다 [2].
 
@@ -29,7 +29,7 @@ nav_order: 680
 | `CellularUsage.db` | `WirelessDomain :: Library/Databases/CellularUsage.db` | |
 | `netusage.sqlite` | 기기 안 `/private/var/networkd/netusage.sqlite` | [1] |
 
-`netusage.sqlite` 는 iOS 11.1.2 로 시험한 자료에서 파일 시스템 추출로만 얻을 수 있었지만 [1], MVT 문서는 출처를 "Backup & Full filesystem dump" 로 적어서 [2] 두 자료가 어긋나므로 버전과 수집 조건에 따라 다를 수 있다고 봅니다. 관찰한 암호화하지 않은 백업에는 `netusage.sqlite` 가 없었습니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+`netusage.sqlite` 는 iOS 11.1.2 시험에서는 파일 시스템 추출로만 얻을 수 있었지만 [1], MVT 는 백업과 전체 파일 시스템 덤프 양쪽을 출처로 적습니다 [2]. 버전과 수집 조건에 따라 다를 수 있고, 암호화하지 않은 백업에는 `netusage.sqlite` 가 없을 수 있습니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전별 차이
 
@@ -39,11 +39,11 @@ nav_order: 680
 | `ZLIVEUSAGE` 의 앱 식별자 | `ZPROCESS` 를 거쳐 찾음 | `ZBUNDLENAME`, `ZPROCNAME` 이 직접 있음 |
 | 표 구성 | `ZPROCESS`, `ZLIVEUSAGE` 중심 | 진단용으로 보이는 표가 더 있음(아래) |
 
-iOS 15 ~ 18 사이의 칸 구성은 확인하지 못해서, 검체의 iOS 버전을 먼저 적고 칸 이름을 직접 확인합니다.
+iOS 15 ~ 18 사이의 칸 구성은 공개 자료가 없어서, 검체의 iOS 버전을 먼저 적고 칸 이름을 직접 확인합니다.
 
 ## 구조
 
-관찰한 iOS 27.0 백업의 표와 칸은 다음과 같습니다. `Z_PK`, `Z_ENT`, `Z_OPT` 칸과 `Z_METADATA`, `Z_MODELCACHE`, `Z_PRIMARYKEY` 표는 Core Data 가 만드는 틀이고, SQLite 자체를 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+iOS 27.0 백업의 표와 칸은 다음과 같습니다. `Z_PK`, `Z_ENT`, `Z_OPT` 칸과 `Z_METADATA`, `Z_MODELCACHE`, `Z_PRIMARYKEY` 표는 Core Data 가 만드는 틀이고, SQLite 자체를 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 | 표 | 칸 |
 |---|---|
@@ -57,17 +57,17 @@ iOS 15 ~ 18 사이의 칸 구성은 확인하지 못해서, 검체의 iOS 버전
 | `ZTSHOOTINGDATA` | `ZWITHCHECKUPEVENT`, `ZWITHEVENT`, `ZTIMESTAMP`, `ZPROVIDERS` |
 | `ZWIFIDATA` | 와이파이 접속 지점·신호·위치 칸 |
 
-`ZLIVEUSAGE` 의 `ZHASPROCESS` 는 이름으로 보아 `ZPROCESS` 의 행을 가리키는 칸이지만, 이 연결에 정식 외래 키 제약이 있는지는 확인하지 못했습니다. `ZPEER`·`ZEVENT`·`ZEVENTSCENE`·`ZCHECKUPEVENT`·`ZTSHOOTINGDATA` 는 칸 이름으로 보아 연결 문제를 진단하는 표로 보이고, `ZPEER` 에 주소·목적지 포트·도메인 이름(`ZFQDN`) 칸이, `ZEVENTSCENE` 에 위도·경도·속도 칸이 있지만 공개 자료로 칸의 뜻을 확인하지 못했습니다. `ZWIFIDATA` 의 칸 목록과 해석은 [와이파이 기록](wifi.md) 에서 다룹니다.
+`ZLIVEUSAGE` 의 `ZHASPROCESS` 는 이름으로 보아 `ZPROCESS` 의 행을 가리키는 칸이고, 정식 외래 키 제약이 있는지는 검체에서 확인합니다. `ZPEER`·`ZEVENT`·`ZEVENTSCENE`·`ZCHECKUPEVENT`·`ZTSHOOTINGDATA` 는 칸 이름으로 보아 연결 문제를 진단하는 표로 보이고, `ZPEER` 에 주소·목적지 포트·도메인 이름(`ZFQDN`) 칸이, `ZEVENTSCENE` 에 위도·경도·속도 칸이 있지만 칸의 뜻을 설명한 공개 자료는 없습니다. `ZWIFIDATA` 의 칸 목록과 해석은 [와이파이 기록](wifi.md) 에서 다룹니다.
 
-같은 도메인의 `CellularUsage.db` 에는 `bundle_info`(`ROWID`, `bundle_id`, `flags`), `bundle_uuid`(`ROWID`, `bundle_id`, `macho_uuid`), `subscriber_info` 표가 있고, `subscriber_info` 에는 `subscriber_id`, `subscriber_mdn`, `slot_id`, `last_update_time`, `home_budget`, `roaming_budget`, `user_entered_bill_end_dom`, `low_data_mode`, `smart_data_mode`, `privacy_proxy` 등의 칸이 있습니다. 칸 이름으로 보아 번들 ID 목록과 가입자(유심) 정보를 담는 DB 이지만, 값의 뜻은 확인하지 못했습니다.
+같은 도메인의 `CellularUsage.db` 에는 `bundle_info`(`ROWID`, `bundle_id`, `flags`), `bundle_uuid`(`ROWID`, `bundle_id`, `macho_uuid`), `subscriber_info` 표가 있고, `subscriber_info` 에는 `subscriber_id`, `subscriber_mdn`, `slot_id`, `last_update_time`, `home_budget`, `roaming_budget`, `user_entered_bill_end_dom`, `low_data_mode`, `smart_data_mode`, `privacy_proxy` 등의 칸이 있습니다. 칸 이름으로 보아 번들 ID 목록과 가입자(유심) 정보를 담는 DB 이지만, 값의 뜻을 설명한 공개 자료는 없습니다.
 
-`HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` 에는 `netUsageBaseline` 키가 있고 그 아래 키가 프로세스·번들 이름입니다. 이 목록의 용도는 확인하지 못했지만, DataUsage 에 나온 이름과 대조하는 보조 자료로 쓸 수 있습니다.
+`HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` 에는 `netUsageBaseline` 키가 있고 그 아래 키가 프로세스·번들 이름입니다. 이 목록의 용도는 알려져 있지 않지만, DataUsage 에 나온 이름과 대조하는 보조 자료로 쓸 수 있습니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-- `ZPROCESS` 에 어떤 번들 ID 나 프로세스 이름이 있으면, 그 프로세스가 이 기기에서 기록된 적이 있다는 사실을 보여 줍니다. 행이 언제 지워지는지는 확인하지 못해서, 지금의 설치 목록과 비교해 차이를 따로 적어 둡니다.
+- `ZPROCESS` 에 어떤 번들 ID 나 프로세스 이름이 있으면, 그 프로세스가 이 기기에서 기록된 적이 있다는 사실을 보여 줍니다. 행이 언제 지워지는지는 알려져 있지 않아서, 지금의 설치 목록과 비교해 차이를 따로 적어 둡니다.
 - `ZLIVEUSAGE` 의 `ZWWANIN`·`ZWWANOUT` 에 값이 있으면, 그 프로세스가 셀룰러 망으로 그만큼 주고받은 기록이 있다는 사실까지 말할 수 있습니다.
 - 번들 ID 가 없거나 이상한 프로세스 이름은 스파이웨어 점검에서 더 살펴볼 대상이 됩니다 [2].
 
@@ -81,15 +81,15 @@ iOS 15 ~ 18 사이의 칸 구성은 확인하지 못해서, 검체의 iOS 버전
 
 ## 시각 해석
 
-`ZPROCESS` 의 `ZFIRSTTIMESTAMP` 는 처음 기록한 때, `ZTIMESTAMP` 는 가장 최근 활동으로 보입니다 [1]. 표 모양이 Core Data 라서 시각 칸이 Mac 절대 시각(2001-01-01 UTC 기준 초)일 가능성이 크지만 원문으로 확인하지는 못해서, 값 몇 개를 다른 기록의 시각과 맞춰 기준을 확인한 뒤에 바꿉니다. 기준별 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`ZPROCESS` 의 `ZFIRSTTIMESTAMP` 는 처음 기록한 때, `ZTIMESTAMP` 는 가장 최근 활동으로 보입니다 [1]. 표 모양이 Core Data 라서 시각 칸이 Mac 절대 시각(2001-01-01 UTC 기준 초)일 가능성이 크지만 공개 자료로 정해진 것은 아니어서, 값 몇 개를 다른 기록의 시각과 맞춰 기준을 확인한 뒤에 바꿉니다. 기준별 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-바이트 칸은 순간 사용량이 아니라 쌓인 값일 수 있습니다. `ZLIVEUSAGE` 의 한 행이 어느 기간의 합인지, `ZBILLCYCLEEND` 가 요금 청구 주기의 끝을 뜻하는지는 확인하지 못해서, 행 하나의 `ZTIMESTAMP` 를 "그 시각에 그만큼 썼다" 로 읽지 않습니다.
+바이트 칸은 순간 사용량이 아니라 쌓인 값일 수 있습니다. `ZLIVEUSAGE` 의 한 행이 어느 기간의 합인지, `ZBILLCYCLEEND` 가 요금 청구 주기의 끝을 뜻하는지는 알려져 있지 않아서, 행 하나의 `ZTIMESTAMP` 를 "그 시각에 그만큼 썼다" 로 읽지 않습니다.
 
 ## 함정과 한계
 
-DataUsage.sqlite 는 백업에 들어가서 오래된 기록이 남는 편이고, 글쓴이 기기에서는 2013년 기록까지 있었습니다 [1]. 이전 기기의 백업으로 복원한 기기라면 지금 기기를 쓰기 전의 행이 섞여 있을 수 있으니 [초기화와 복원 흔적](../system-account/erase-restore.md) 을 함께 봅니다.
+DataUsage.sqlite 는 백업에 들어가서 오래된 기록이 남는 편이고, 몇 년 전 기록(2013년 기록이 남은 예가 있습니다)까지 남을 수 있습니다 [1]. 이전 기기의 백업으로 복원한 기기라면 지금 기기를 쓰기 전의 행이 섞여 있을 수 있으니 [초기화와 복원 흔적](../system-account/erase-restore.md) 을 함께 봅니다.
 
-칸 구성이 버전마다 다릅니다. iOS 11 자료의 칸 설명을 그대로 믿고 `ZWIFIIN` 을 찾으면 iOS 27.0 의 `ZLIVEUSAGE` 에서는 칸이 없어 질의가 실패합니다. 반대로 `ZDEMOLIVEUSAGE` 에는 와이파이 칸이 있지만 이 표가 무엇을 기록하는지는 확인하지 못했습니다.
+칸 구성이 버전마다 다릅니다. iOS 11 자료의 칸 설명을 그대로 믿고 `ZWIFIIN` 을 찾으면 iOS 27.0 의 `ZLIVEUSAGE` 에서는 칸이 없어 질의가 실패합니다. 반대로 `ZDEMOLIVEUSAGE` 에는 와이파이 칸이 있지만 이 표가 무엇을 기록하는지는 알려져 있지 않습니다.
 
 `netusage.sqlite` 는 수집 방식에 따라 없을 수 있어서, 로컬 백업만 받았다면 한쪽만 보고 있다는 점을 보고서에 적습니다. 수집 방식별 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 

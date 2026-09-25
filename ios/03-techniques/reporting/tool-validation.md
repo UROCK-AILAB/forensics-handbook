@@ -10,17 +10,17 @@ nav_order: 1410
 
 ## 언제 쓰나
 
-결론을 떠받치는 결과를 보고서에 싣기 전에 이 페이지를 봅니다. 도구가 새 버전이거나 검체가 새 iOS 버전일 때, 두 도구의 결과가 서로 다를 때, 도구가 "없음" 이라고 낸 결과를 결론에 쓰려 할 때도 여기서 확인합니다. NIST SP 800-101 Rev.1 은 도구를 검증하려면 여러 도구의 결과를 비교하라고 하고, 도구가 만든 보고서와 도구 화면에 보이는 데이터가 서로 맞는지도 반드시 확인하라고 적습니다.
+결론을 떠받치는 결과를 보고서에 싣기 전에 이 페이지를 봅니다. 도구가 새 버전이거나 검체가 새 iOS 버전일 때, 두 도구의 결과가 서로 다를 때, 도구가 "없음" 이라고 낸 결과를 결론에 쓰려 할 때도 여기서 확인합니다. 도구를 검증하려면 여러 도구의 결과를 비교하고, 도구가 만든 보고서와 도구 화면에 보이는 데이터가 서로 맞는지도 반드시 확인합니다.
 
 여기서 다루는 검증은 도구 하나를 통째로 인증하는 일이 아니라, 이번 사건 보고서에 쓸 항목 하나하나를 원본과 맞춰 보는 일입니다.
 
 ## 도구 결과가 어긋나는 곳
 
-도구끼리 결과가 다른 까닭은 대개 어느 항목을 뽑을지, 값을 어떤 기준으로 바꿀지, 찾지 못한 파일을 어떻게 다룰지가 도구마다 달라서입니다. 아래는 공개 자료에서 확인한 예이고, 검증할 때 먼저 의심해 볼 곳을 보여 줍니다.
+도구끼리 결과가 다른 까닭은 대개 어느 항목을 뽑을지, 값을 어떤 기준으로 바꿀지, 찾지 못한 파일을 어떻게 다룰지가 도구마다 달라서입니다. 아래는 검증할 때 먼저 의심해 볼 곳의 예입니다.
 
 | 어긋나는 곳 | 예 | 자세히 |
 |---|---|---|
-| 뽑는 항목의 범위 | iOS 15 이미지로 도구 세 개를 견준 글에서, MobileInstallation 로그를 한 상용 도구는 설치 성공 항목만, 다른 상용 도구는 설치·제거 항목 모두, iLEAPP 는 재부팅 관련 항목까지 뽑았습니다. | [설치된 앱](../../02-artifacts/app-usage/installed-apps.md) |
+| 뽑는 항목의 범위 | iOS 15 이미지로 도구 세 개를 견준 시험에서, MobileInstallation 로그를 한 상용 도구는 설치 성공 항목만, 다른 상용 도구는 설치·제거 항목 모두, iLEAPP 는 재부팅 관련 항목까지 뽑았습니다. | [설치된 앱](../../02-artifacts/app-usage/installed-apps.md) |
 | 지운 레코드 복원 | 지운 레코드 278개가 든 SQLite DB 27개로 시험한 연구에서 bring2lite 는 52.9% 를 되살렸고, FQLite 는 이 시험에서 전부 되살렸습니다. 이 연구는 FQLite 를 만든 사람들이 쓴 것이라, 결과도 검증 대상으로 봅니다. | [삭제 데이터 복구](../analysis/data-recovery/index.md) |
 | 시각 형식의 이름 | iLEAPP 가 "webkit 시각" 이라 부르는 변환은 값에 978307200 을 더하는 Mac 절대 시각 기준이고, 1601년 기준 형식이 아닙니다. 같은 이름이 도구마다 다른 기준을 가리킬 수 있습니다. | [시각 값](../../01-foundations/value-decoding/time-values.md) |
 | 시각 단위 추정 | iLEAPP 의 Unix 시각 변환 함수는 값의 크기로 초·밀리초·마이크로초·나노초를 가립니다. | [시각 값](../../01-foundations/value-decoding/time-values.md) |
@@ -28,9 +28,9 @@ nav_order: 1410
 | 한 칸에 섞인 단위 | iOS 11 부터 `sms.db` 의 시각 칸에 9자리(초)와 18자리(나노초) Mac 절대 값이 같은 칸 안에서도 섞여 들어갑니다. | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 말없이 빠지는 파일 | 백업에서 메시지 첨부는 `MediaDomain` 에 있고, 도메인을 잘못 넣어 파일 이름(fileID)을 계산하면 오류 없이 첨부를 모두 못 찾습니다. iLEAPP 의 메시지 모듈은 폴더로 된 묶음 첨부를 결과에 넣지 않고 처리 로그에 한 줄만 남기므로, 결과 화면만 보면 빠진 줄 모릅니다. | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 풀지 않은 값 | 통합 로그를 읽는 `macos-UnifiedLogs` 는 printf `%m` 같은 오류 코드를 글로 바꾸지 않고, 지원하지 않는 객체는 base64 로 남깁니다. | [통합 로그 형식](../../01-foundations/data-formats/unified-log.md) |
-| 문서와 다른 위치 | MVT 문서는 전체 파일 시스템에서 앱의 WebKit LocalStorage 를 앱 컨테이너의 `Library/WebKit/WebsiteData/LocalStorage/` 아래로 적지만, 관찰한 백업에서는 `Library/WebKit/WebsiteData/Default/` 아래 해시 폴더 두 단계 밑에 `LocalStorage/localstorage.sqlite` 가 있었습니다. | [앱 데이터 분석](../analysis/app-data-analysis/index.md) |
+| 문서와 다른 위치 | MVT 문서는 전체 파일 시스템에서 앱의 WebKit LocalStorage 를 앱 컨테이너의 `Library/WebKit/WebsiteData/LocalStorage/` 아래로 적지만, 백업에서는 `Library/WebKit/WebsiteData/Default/` 아래 해시 폴더 두 단계 밑에 `LocalStorage/localstorage.sqlite` 가 있습니다. | [앱 데이터 분석](../analysis/app-data-analysis/index.md) |
 
-iLEAPP 에 관한 내용은 조사 때 본 main 브랜치 코드 기준이라, 검증할 때는 실제로 쓴 버전의 코드를 다시 봅니다. 공개 연구의 해석도 검증 대상이고, 복원·이전 흔적을 다룬 한 글쓴이는 시험을 두 번만 했으니 중요한 사건이면 직접 재현 시험을 하라고 적었습니다.
+iLEAPP 에 관한 내용은 main 브랜치 코드 기준이라, 검증할 때는 실제로 쓴 버전의 코드를 다시 봅니다. 공개 연구의 해석도 검증 대상입니다. 복원·이전 흔적을 다룬 한 연구는 시험을 두 번만 한 결과라서, 중요한 사건이면 직접 재현 시험을 합니다.
 
 ## 절차
 
@@ -45,7 +45,7 @@ iLEAPP 에 관한 내용은 조사 때 본 main 브랜치 코드 기준이라, �
 
 ## 직접 확인해 보기
 
-아래는 로컬 백업 사본에서 메시지 DB 하나를 찾아 도구가 낸 행 수와 맞춰 보는 예입니다. 관찰한 백업에서 메시지 DB 는 `HomeDomain` 의 `Library/SMS/sms.db` 에 있었고 `Manifest.db` 의 `Files` 표 칸은 `fileID, domain, relativePath, flags, file` 이었습니다.
+아래는 로컬 백업 사본에서 메시지 DB 하나를 찾아 도구가 낸 행 수와 맞춰 보는 예입니다. 메시지 DB 는 `HomeDomain` 의 `Library/SMS/sms.db` 에 있고, `Manifest.db` 의 `Files` 표 칸은 `fileID, domain, relativePath, flags, file` 입니다.
 
 ```
 # 1) Manifest.db 를 -wal·-shm 까지 함께 복사한 사본에서 fileID 를 찾는다
@@ -92,9 +92,9 @@ sqlite3 :memory: "SELECT datetime(700000000 + 978307200, 'unixepoch');"
 
 **검증은 항목 단위입니다.** 한 항목이 원본과 맞았다고 그 도구의 다른 결과까지 믿을 근거가 생기지는 않습니다. 검증한 항목과 하지 않은 항목을 보고서에서 나눠 적습니다.
 
-**도구끼리 해시를 대조하기는 어렵습니다.** NIST 지침은 도구마다 보고 형식이 달라 도구 간 해시 대조가 어렵다고 적고, 해시가 어긋나면 항목 단위로 비교하라고 합니다. 해시 기록 방법은 [모바일 증거 확보](../acquisition/mobile-acquisition/index.md) 아래 페이지에서 다룹니다.
+**도구끼리 해시를 대조하기는 어렵습니다.** 도구마다 보고 형식이 달라 도구 간 해시 대조가 어렵고, 해시가 어긋나면 항목 단위로 비교합니다. 해시 기록 방법은 [모바일 증거 확보](../acquisition/mobile-acquisition/index.md) 아래 페이지에서 다룹니다.
 
-**새 iOS 버전에서는 위치부터 맞춰 봅니다.** 위 표의 LocalStorage 예처럼 문서나 도구가 기대하는 경로가 관찰한 백업과 다를 수 있어서, 도구가 읽는 경로·표·칸 이름이 검체에 실제로 있는지 먼저 확인합니다.
+**새 iOS 버전에서는 위치부터 맞춰 봅니다.** 위 표의 LocalStorage 예처럼 문서나 도구가 기대하는 경로가 실제 백업과 다를 수 있어서, 도구가 읽는 경로·표·칸 이름이 검체에 실제로 있는지 먼저 확인합니다.
 
 ## 결과를 어떻게 해석하나
 

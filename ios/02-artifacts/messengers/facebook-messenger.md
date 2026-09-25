@@ -14,30 +14,30 @@ nav_order: 880
 
 ## 위치와 버전별 차이
 
-아래 경로는 공개 도구 iLEAPP 가 전체 파일 시스템 추출에서 찾는 이름입니다 [1]. 두 앱 그룹 ID 는 iLEAPP 가 시험 표본의 컨테이너 메타데이터에서 읽은 값입니다 [1]. 앱 그룹 개념은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
+아래 경로는 전체 파일 시스템 추출 기준입니다 [1]. 두 앱 그룹 ID 는 컨테이너 메타데이터에 적힌 값입니다 [1]. 앱 그룹 개념은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
 
 | 앱 그룹 | 경로 | 내용 |
 |---|---|---|
 | `group.com.facebook.Messenger` | `lightspeed-userDatabases/*.db` | 메신저 앱의 대화함 DB [1] |
 | `group.com.facebook.Facebook` | `cask/<계정 ID>/FBMessagingMailboxCaskStore/<n>/fb-msys-<계정 ID>.db` | 페이스북 앱 쪽 대화함 사본 [1] |
-| 확인하지 못함 | `lightspeed-TAMStorage/media_bank/AdvancedCrypto/*/persistent/*.jpg` | 종단간 암호화 대화의 첨부 [1] |
+| 검체에서 확인 | `lightspeed-TAMStorage/media_bank/AdvancedCrypto/*/persistent/*.jpg` | 종단간 암호화 대화의 첨부 [1] |
 
 iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있었고, 그중 2개는 메신저 앱 자체가 없었습니다 [1]. 메신저 앱이 설치돼 있지 않다고 해서 메신저 대화가 기기에 없다고 판단하지 않습니다.
 
-메신저 앱의 번들 ID 와 로컬 백업의 도메인 이름은 이번 자료로 확인하지 못했습니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘어 있었지만, 관찰한 백업은 다른 회사 앱의 도메인 이름을 가려 두어 두 앱 그룹이 백업에 들어가는지는 확인하지 못했습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)).
+로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉩니다. 메신저 앱의 번들 ID 와 백업 도메인 이름, 두 앱 그룹이 백업에 들어가는지는 공개 자료가 없어 검체에서 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)).
 
 | 항목 | 확인된 범위 |
 |---|---|
 | 시험 표본 iOS | 12.4 ~ 26.6 [1] |
 | 시험 표본 메신저 앱 | 405.0 ~ 570.0.0 [1] |
 | 행이 나온 표본 | iOS 15.3.1, 16.5, 17.x, 18.x, 26.5.2 일부 [1] |
-| 버전별 표 차이 | 확인하지 못함 |
+| 버전별 표 차이 | 공개 자료 없음 |
 
 ## 구조
 
-대화함 DB 에서 도구가 읽는 표와 뷰는 다음과 같습니다 [1].
+대화함 DB 의 주요 표와 뷰는 다음과 같습니다 [1].
 
-| 표·뷰 | 도구가 읽는 칸과 알려진 쓰임 |
+| 표·뷰 | 주요 칸과 쓰임 |
 |---|---|
 | `thread_messages`(뷰) | `timestamp_ms` |
 | `threads` | `last_activity_timestamp_ms` |
@@ -54,7 +54,7 @@ iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있�
 | `client_attachment_store_keys` | `persisted_path` |
 | `mi_act_mapping_table` | — |
 
-"—" 는 도구가 읽는 표이지만 칸과 쓰임을 이번 자료로 확인하지 못한 것입니다.
+"—" 는 칸과 쓰임을 설명한 공개 자료가 없는 표입니다.
 
 `client_messages` 의 행은 `client_threads.transport_key` 가 `AdvancedCrypto` 인 종단간 암호화 대화였고, 시험 표본에서는 이 표의 본문이 평문으로 저장돼 있었습니다 [1]. 저장 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 를 봅니다.
 

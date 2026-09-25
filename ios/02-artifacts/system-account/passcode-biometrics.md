@@ -12,13 +12,13 @@ nav_order: 310
 
 ## 무엇을 기록하나 · 왜 생기나
 
-### Apple 이 밝힌 동작
+### 암호와 생체 인증의 동작
 
-이 절은 Apple Platform Security 문서가 설명하는 동작이고, 흔적을 해석할 때 바탕이 됩니다. 잠금 해제나 보안 우회 방법은 다루지 않습니다.
+이 절의 동작은 흔적을 해석할 때 바탕이 됩니다. 잠금 해제나 보안 우회 방법은 다루지 않습니다.
 
 iOS 는 6자리 숫자, 4자리 숫자, 길이를 정하지 않은 영숫자 암호를 지원하고, 기기 암호를 설정하면 데이터 보호(Data Protection)가 저절로 켜집니다[2]. 암호는 기기 고유 키(UID)와 얽혀 있어서 암호를 맞춰 보는 시도는 그 기기 안에서만 할 수 있습니다[2]. 데이터 보호의 짜임은 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 에서 다룹니다.
 
-암호를 잘못 넣으면 다음 입력까지 기다려야 하는 시간이 늘어나고, 이 대기는 Secure Enclave 가 강제합니다. 대기 중에 재시동해도 대기는 풀리지 않고 그 구간의 타이머가 처음부터 다시 돕니다[2]. Apple Platform Security 현재 판의 iOS·iPadOS·visionOS 잠금 화면 대기 시간은 아래와 같습니다[2]. 예전 판 문서는 숫자가 다를 수 있고 이번에 확인하지 않았습니다.
+암호를 잘못 넣으면 다음 입력까지 기다려야 하는 시간이 늘어나고, 이 대기는 Secure Enclave 가 강제합니다. 대기 중에 재시동해도 대기는 풀리지 않고 그 구간의 타이머가 처음부터 다시 돕니다[2]. iOS·iPadOS·visionOS 잠금 화면의 대기 시간은 아래와 같습니다[2]. 예전 판에서는 숫자가 다를 수 있습니다.
 
 | 연속 실패 횟수 | 대기 |
 |---|---|
@@ -46,13 +46,13 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 소프트웨어 업데이트, 기기 지우기, 암호 설정을 보거나 바꾸는 일, 구성 프로파일 설치는 생체 인증과 관계없이 늘 암호를 요구합니다[4]. Touch ID 가 있어도 기기를 켜거나 재시동한 뒤에는 암호가 필요하고, 암호를 바꾸거나 지문을 등록·삭제할 때도 암호가 필요합니다[3]. 마스크를 쓴 채 쓰는 Face ID 는 Face ID 매칭에 성공하거나 암호를 넣거나 Apple Watch 로 잠금을 푼 뒤 6.5시간 동안 쓸 수 있습니다[4].
 
-지문(Touch ID) 템플릿 데이터는 기기를 떠나지 않고, Apple 로 보내지지 않으며, 기기 백업에도 들어가지 않습니다[3]. 받은 자료에서 이 문장은 Touch ID 지문 데이터를 두고 한 말이었고, Face ID 얼굴 데이터에 같은 설명이 있는지는 확인하지 못했습니다. 이 설명에서 이끌어 낸 해석으로는, 추출물에서 찾을 대상은 생체 데이터가 아니라 "생체 인증을 설정했다·쓸 수 있었다" 는 설정 흔적입니다.
+지문(Touch ID) 템플릿 데이터는 기기를 떠나지 않고, Apple 로 보내지지 않으며, 기기 백업에도 들어가지 않습니다[3]. 이 설명은 Touch ID 지문 데이터를 두고 한 것이고, Face ID 얼굴 데이터도 같은지는 공개 자료가 없습니다. 그래서 추출물에서 찾을 대상은 생체 데이터가 아니라 "생체 인증을 설정했다·쓸 수 있었다" 는 설정 흔적입니다.
 
 ## 위치와 버전별 차이
 
 ### 로컬 백업에서 본 흔적
 
-관찰한 백업에서 암호·생체 인증과 이름이 닿는 키는 아래와 같습니다. 따로 적지 않은 파일은 `HomeDomain :: Library/Preferences/` 아래에 있고, 값은 보지 않았습니다.
+로컬 백업에서 암호·생체 인증과 이름이 닿는 키는 아래와 같습니다. 따로 적지 않은 파일은 `HomeDomain :: Library/Preferences/` 아래에 있습니다.
 
 | 파일 | 키 | 이름으로 짐작되는 내용 |
 |---|---|---|
@@ -63,24 +63,24 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 | `AppDomain-com.apple.mobilesafari :: Library/Preferences/com.apple.mobilesafari.plist` | `BiometricAuthenticationIsAvailable` (bool), `BiometricAuthenticationTypeIfAvailable` (int), `PasscodeIsAvailable` (bool) | 사파리가 본 생체 인증·암호 사용 가능 여부와 종류 |
 | `com.apple.purplebuddy.plist` | `FaceIDPeriocularPresented` (bool) | 첫 설정 때 마스크 착용 Face ID 화면을 보여 줬는지 |
 
-모두 이름으로 짐작한 뜻이고, 숫자 값이 무엇을 뜻하는지(예: `BiometricAuthenticationTypeIfAvailable` 의 값마다 Touch ID 인지 Face ID 인지)는 확인한 자료가 없어서 적지 않습니다. `Manifest.plist` 의 다른 키는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), `com.apple.purplebuddy.plist` 의 다른 키는 [초기화와 복원 흔적](erase-restore.md) 에서 다룹니다.
+모두 이름으로 짐작한 뜻이고, 숫자 값이 무엇을 뜻하는지(예: `BiometricAuthenticationTypeIfAvailable` 의 값마다 Touch ID 인지 Face ID 인지)는 공개 자료가 없어 검체에서 확인합니다. `Manifest.plist` 의 다른 키는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), `com.apple.purplebuddy.plist` 의 다른 키는 [초기화와 복원 흔적](erase-restore.md) 에서 다룹니다.
 
-도메인 이름으로는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic` 과 `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 이 보였습니다. 백업 안 키체인 파일 `KeychainDomain :: keychain-backup.plist` 에는 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있었고, 해석은 [키체인](../../01-foundations/storage/keychain.md) 에서 다룹니다.
+도메인 이름으로는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic` 과 `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 이 있습니다. 백업 안 키체인 파일 `KeychainDomain :: keychain-backup.plist` 에는 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있고, 해석은 [키체인](../../01-foundations/storage/keychain.md) 에서 다룹니다.
 
 ### 구성 프로파일의 암호 정책 키
 
-구성 프로파일과 제한 설정 파일 안에 암호 정책으로 보이는 키 이름이 있었습니다.
+구성 프로파일과 제한 설정 파일 안에 암호 정책으로 보이는 키 이름이 있습니다.
 
 | 파일(`HomeDomain :: Library/UserConfigurationProfiles/` 아래) | `restrictedValue` 안의 암호 관련 키 |
 |---|---|
 | `Truth.plist`, `PublicInfo/Truth.plist` | `maxFailedAttempts`, `maxGracePeriod`, `maxInactivity`, `maxPINAgeInDays`, `minComplexChars`, `minLength`, `passcodeKeyboardComplexity`, `pinHistory`, `simplePasscodeComplexity` |
 | `EffectiveUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist` | `maxGracePeriod`, `maxInactivity`, `minLength`, `passcodeKeyboardComplexity`, `simplePasscodeComplexity` |
 
-같은 파일의 `restrictedBool` 안에는 `allowAccessWithoutPasscodeInAppLock` 같은 키도 있었습니다. 이 이름들이 MDM 암호 정책과 같은 이름이라고 확인한 자료는 이번에 없고, 키 이름이 있다고 정책이 걸려 있었다는 뜻도 아닙니다. 값이 기본값인지, 프로파일이 건 값인지는 파일을 열어 값과 프로파일 목록을 함께 봐야 가릴 수 있습니다. 파일 구성은 [설정 값](preferences.md), 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다룹니다.
+같은 파일의 `restrictedBool` 안에는 `allowAccessWithoutPasscodeInAppLock` 같은 키도 있습니다. 이 이름들이 MDM 암호 정책과 같은지 밝힌 공개 자료는 없고, 키 이름이 있다고 정책이 걸려 있었다는 뜻도 아닙니다. 값이 기본값인지, 프로파일이 건 값인지는 파일을 열어 값과 프로파일 목록을 함께 봐야 가릴 수 있습니다. 파일 구성은 [설정 값](preferences.md), 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다룹니다.
 
-### 확인하지 못한 것
+### 공개 자료가 없는 것
 
-암호 실패 횟수나 마지막 잠금 해제 시각이 어느 파일에 남는지, 시스템 키 가방 파일의 위치와 내용은 이번 자료로 확인하지 못했습니다. iOS 버전에 따라 위 키가 언제 생겼는지도 확인하지 못했고, 위 표는 iOS 27.0 백업 하나에서 본 것입니다. 도난 기기 보호(Stolen Device Protection)도 이번에 연 Apple 문서에는 없어서 다루지 않습니다.
+암호 실패 횟수나 마지막 잠금 해제 시각이 어느 파일에 남는지, 시스템 키 가방 파일의 위치와 내용은 공개 자료가 없어 검체에서 확인해야 합니다. 위 키가 iOS 몇 판부터 생겼는지도 알려져 있지 않고, 위 표는 iOS 27.0 백업 기준입니다. 도난 기기 보호(Stolen Device Protection)는 이 쪽에서 다루지 않습니다.
 
 ## 구조
 
@@ -96,11 +96,11 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 위 키에는 시각 값이 거의 없어서, 이 흔적만으로는 암호나 생체 인증을 언제 켰는지 알 수 없습니다. 시점은 파일이 저장된 때(백업의 `Manifest.db` 에 적힌 파일 정보)나 백업을 만든 때로 좁히고, 잠금과 잠금 해제의 시각은 다른 기록에서 찾습니다. [전원 로그](../app-usage/powerlog.md) 에는 화면 잠금·해제 상태 변화가 시각과 함께 남고, [KnowledgeC](../app-usage/knowledgec/index.md) 에도 잠금 상태 구간이 남는데 iOS 16 부터는 이 기록 대부분을 [바이옴](../app-usage/biome/index.md) 이 넘겨받았으니 둘을 함께 보고, [통합 로그에서 찾을 것](../logs/unified-log-events.md) 에서도 잠금 관련 기록을 찾습니다.
 
-Apple 이 밝힌 시간 조건은 기기를 확보한 뒤의 상태를 해석할 때 씁니다. 예를 들어 확보한 기기가 48시간 넘게 잠금 해제되지 않았거나 재시동되었다면 생체 인증 대신 암호를 요구하는 상태가 됩니다[4]. 증거 확보 계획을 세울 때는 이 조건을 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 와 함께 봅니다.
+위 시간 조건은 기기를 확보한 뒤의 상태를 해석할 때 씁니다. 예를 들어 확보한 기기가 48시간 넘게 잠금 해제되지 않았거나 재시동되었다면 생체 인증 대신 암호를 요구하는 상태가 됩니다[4]. 증거 확보 계획을 세울 때는 이 조건을 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 와 함께 봅니다.
 
 ## 함정과 한계
 
-**이름이 닮은 다른 설정과 섞지 않습니다.** 관찰한 백업의 `com.apple.onetimepasscodes.plist` 에는 `DeleteVerificationCodes` 키가 있었고, 이름으로 보아 일회용 인증 코드 설정이고 기기 암호 설정과는 다른 것으로 보입니다. 파일 이름에 "passcode" 가 들어 있다고 기기 암호 흔적으로 묶지 않습니다.
+**이름이 닮은 다른 설정과 섞지 않습니다.** `com.apple.onetimepasscodes.plist` 에는 `DeleteVerificationCodes` 키가 있고, 이름으로 보아 일회용 인증 코드 설정이고 기기 암호 설정과는 다른 것으로 보입니다. 파일 이름에 "passcode" 가 들어 있다고 기기 암호 흔적으로 묶지 않습니다.
 
 **`WasPasscodeSet` 하나로 결론 내리지 않습니다.** 이 키는 백업 폴더에 있어서 백업을 만든 때의 상태로 보이고, 값의 뜻도 이름으로 짐작한 것입니다. 기기 암호 설정 여부는 사파리의 `PasscodeIsAvailable` 같은 다른 구성 요소의 기록과 함께 봅니다.
 

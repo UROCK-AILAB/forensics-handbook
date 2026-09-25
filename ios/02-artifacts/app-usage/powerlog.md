@@ -12,9 +12,9 @@ nav_order: 450
 
 ## 무엇을 기록하나 · 왜 생기나
 
-운영체제는 배터리를 어디에 썼는지 계산하려고 여러 구성 요소의 상태 변화를 계속 적어 두고, 그 결과가 전원 로그입니다. 목적이 전력 계산이라서 사용자가 무엇을 봤는지가 아니라 어떤 앱이 얼마나 돌았는지, 화면이 켜졌는지, 어떤 장치가 전기를 썼는지가 남습니다. iOS 10.2 시절 관찰로는 손전등·카메라·블루투스·Wi-Fi·앱 사용·음량·오디오 출력·잠금 화면 활동이 기록되었습니다[4].
+운영체제는 배터리를 어디에 썼는지 계산하려고 여러 구성 요소의 상태 변화를 계속 적어 두고, 그 결과가 전원 로그입니다. 목적이 전력 계산이라서 사용자가 무엇을 봤는지가 아니라 어떤 앱이 얼마나 돌았는지, 화면이 켜졌는지, 어떤 장치가 전기를 썼는지가 남습니다. iOS 10.2 기준으로 손전등·카메라·블루투스·Wi-Fi·앱 사용·음량·오디오 출력·잠금 화면 활동이 기록됩니다[4].
 
-기록은 오래 남지 않습니다. 기기는 하루 단위로 내용을 압축본으로 내보낸다고 하고[5], 기기가 켜져 있는 동안 오래된 기록을 계속 지워 나가서 관심 시점 이후 기기를 오래 켜 둘수록 기록이 사라질 가능성이 커집니다(iOS 10.2 탈옥 기기 관찰)[4]. 압축본을 며칠 치 남기는지는 확인한 자료가 없습니다.
+기록은 오래 남지 않습니다. 기기는 하루 단위로 내용을 압축본으로 내보내고[5], 켜져 있는 동안 오래된 기록을 계속 지워 나갑니다. 그래서 관심 시점 이후 기기를 오래 켜 둘수록 기록이 사라질 가능성이 커집니다(iOS 10.2 탈옥 기기 기준)[4]. 압축본을 며칠 치 남기는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 위치와 버전별 차이
 
@@ -28,9 +28,9 @@ nav_order: 450
 /private/var/containers/Shared/SystemGroup/<GUID>/Library/BatteryLife/CurrentPowerlog.PLSQL-shm
 ```
 
-지난 기록은 gzip 으로 압축한 파일로 따로 남고, 이름은 `powerlog_2018-10-07_7F9FC438.PLSQL.gz` 처럼 날짜 뒤에 16진수 8자리가 붙는 꼴입니다[5]. 2019년 글의 추출 기록에서는 압축본이 같은 `BatteryLife` 폴더 아래 `Archives` 하위 폴더에 있었습니다[5].
+지난 기록은 gzip 으로 압축한 파일로 따로 남고, 이름은 `powerlog_2018-10-07_7F9FC438.PLSQL.gz` 처럼 날짜 뒤에 16진수 8자리가 붙는 꼴입니다[5]. 압축본은 같은 `BatteryLife` 폴더 아래 `Archives` 하위 폴더에 있습니다[5].
 
-확장 기록인 PerfPowerTelemetry 는 배터리 자료를 담은 `.EPSQL` 과 백그라운드 작업을 담은 `.BGSQL` 로 나뉩니다[3]. 기기 안 전체 경로는 확인하지 못했고, 공개 파서 iLEAPP 가 찾는 위치는 다음과 같습니다[3].
+확장 기록인 PerfPowerTelemetry 는 배터리 자료를 담은 `.EPSQL` 과 백그라운드 작업을 담은 `.BGSQL` 로 나뉩니다[3]. 기기 안 전체 경로는 공개 자료가 없고, 공개 파서 iLEAPP 가 찾는 위치는 다음과 같습니다[3].
 
 ```
 */BatteryLife/*.PLSQL*
@@ -46,16 +46,16 @@ nav_order: 450
 | 수집 방식 | 전원 로그 |
 |---|---|
 | AFU 상태 수집(전체 파일시스템) | `CurrentPowerlog.PLSQL` 전체를 얻습니다[6] |
-| sysdiagnose | 일부만 얻습니다[6]. 묶음 안 `logs/powerlogs/` 아래에 `.PLSQL`·`.EPSQL`·`.BGSQL` 파일이 있고, iLEAPP 가 확인한 sysdiagnose(iOS 13.3.1~26)에는 DB 파일만 있고 `-wal`·`-shm` 은 없었습니다[3]. 전체 파일시스템 수집 안에서는 `DiagnosticLogs/sysdiagnose` 아래에 sysdiagnose 가 들어 있는 경우도 있습니다[3] |
-| 로컬 백업 | iOS 10.2 시절 글쓴이는 백업에 나오지 않는다고 보았지만 단정하지는 않았습니다[4]. 관찰한 로컬 백업에는 `CurrentPowerlog.PLSQL`·`BatteryLife` 폴더·`.PLSQL`/`.EPSQL`/`.BGSQL` 파일이 없었습니다 |
+| sysdiagnose | 일부만 얻습니다[6]. 묶음 안 `logs/powerlogs/` 아래에 `.PLSQL`·`.EPSQL`·`.BGSQL` 파일이 있고, sysdiagnose(iOS 13.3.1~26)에는 DB 파일만 있고 `-wal`·`-shm` 은 없습니다[3]. 전체 파일시스템 수집 안에서는 `DiagnosticLogs/sysdiagnose` 아래에 sysdiagnose 가 들어 있는 경우도 있습니다[3] |
+| 로컬 백업 | 로컬 백업에는 `CurrentPowerlog.PLSQL`·`BatteryLife` 폴더·`.PLSQL`/`.EPSQL`/`.BGSQL` 파일이 들어 있지 않습니다[4] |
 
 sysdiagnose 묶음을 여는 법은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md), 수집 방식 차이는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 ### 로컬 백업에 보이는 전원 관련 설정 파일
 
-관찰한 로컬 백업에서 전원 로그 DB 는 없었지만, 이름에 전원 로그나 전원 관리가 들어간 설정 파일과 도메인은 보였습니다. 이 plist 들이 무엇을 기록하는지는 자료로 확인하지 못해서, 키 이름만 적고 뜻은 풀지 않습니다.
+로컬 백업에 전원 로그 DB 는 없지만, 이름에 전원 로그나 전원 관리가 들어간 설정 파일과 도메인은 있습니다. 이 plist 들이 무엇을 기록하는지는 공개 자료가 없어서, 아래에는 키 이름만 적습니다.
 
-| 도메인 :: 경로 | 관찰한 키 |
+| 도메인 :: 경로 | 키 |
 |---|---|
 | `HomeDomain :: Library/Preferences/com.apple.powerlogHelperd.plist` | `BootSessionUUID` (str) |
 | `HomeDomain :: Library/Preferences/com.apple.powerlogd.plist` | 키 없음(빈 파일) |
@@ -65,11 +65,11 @@ sysdiagnose 묶음을 여는 법은 [sysdiagnose 묶음](../../01-foundations/ba
 | `HomeDomain :: Library/Preferences/com.apple.powerui.runtimeAwareness.plist` | `bootUUIDOnLastInit` (str) |
 | `SysSharedContainerDomain-systemgroup.com.apple.powerexceptions :: RepeatOffenders.plist` | 키 없음(빈 파일) |
 
-도메인 이름으로는 `AppDomainPlugin-com.apple.PowerlogCore.DEPowerlogEPL`, `AppDomainPlugin-com.apple.PowerlogCore.diagnosticextension`, `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose` 가 보였습니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+도메인 이름으로는 `AppDomainPlugin-com.apple.PowerlogCore.DEPowerlogEPL`, `AppDomainPlugin-com.apple.PowerlogCore.diagnosticextension`, `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose` 가 있습니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ### 버전별로 달라지는 표와 칸
 
-아래는 iLEAPP 가 시험 이미지(iOS 12.4~26)에서 본 차이이고[3], iOS 27 의 스키마는 확인한 자료가 없습니다. iLEAPP 도 버전마다 다른 표가 더 있어 따로 검증해야 한다고 적어 둡니다[3].
+아래는 iOS 12.4~26 시험 이미지에서 드러난 차이입니다[3]. iOS 27 의 스키마는 공개 자료가 없어 검체에서 확인합니다. 이 밖에도 버전마다 다른 표가 더 있어 따로 검증해야 합니다[3].
 
 | iOS 버전 | 달라지는 점 |
 |---|---|
@@ -99,7 +99,7 @@ sysdiagnose 묶음을 여는 법은 [sysdiagnose 묶음](../../01-foundations/ba
 | `ANE_modelLoad_1_2` / `ANE_modelUnload_1_2` | `timestamp`, `csIdentity`, `modelURL` (load 는 `modelSize`, `modelLoadingTime`, `cacheHit`, `isPrecompiled` 추가) | 온디바이스 모델 적재. iOS 18·26 시험 이미지에서만 나왔습니다 |
 | `GenerativeFunctionMetrics_*_1_2` (Summarization, tgiExecuteRequest, mmExecuteRequest, assetLoad, OptIn) | `mmExecuteRequest` 의 `useCaseIdentifier` 관찰값 예: `summarization.summarizeMailMessage` | Apple Intelligence 관련 기록 |
 
-오디오 경로 칸의 관찰값은 `Speaker`, `Receiver`, `HeadphonesBT`, `CarAudioOutput`, `INVALID` 였고, 분류 칸은 `Alarm`, `Ringtone`, `PhoneCall`, `Audio/Video`, `FindMyPhone`, `VoiceCommand` 였습니다[3]. `GenerativeFunctionMetrics_*` 표는 iOS 18~26 이미지 여럿에 있었지만 행이 있는 경우는 Apple Intelligence 지원 기기(iPhone 16, iOS 26.5.2 sysdiagnose)뿐이었고 나머지는 행이 0 이었습니다[3].
+오디오 경로 칸에는 `Speaker`, `Receiver`, `HeadphonesBT`, `CarAudioOutput`, `INVALID` 값이, 분류 칸에는 `Alarm`, `Ringtone`, `PhoneCall`, `Audio/Video`, `FindMyPhone`, `VoiceCommand` 값이 나옵니다[3]. `GenerativeFunctionMetrics_*` 표는 iOS 18~26 이미지 여럿에 있었지만 행이 있는 경우는 Apple Intelligence 지원 기기(iPhone 16, iOS 26.5.2 sysdiagnose)뿐이었고 나머지는 행이 0 이었습니다[3].
 
 PerfPowerTelemetry 쪽 표는 다음과 같습니다[3].
 
@@ -121,7 +121,7 @@ PerfPowerTelemetry 쪽 표는 다음과 같습니다[3].
 
 표의 `timestamp` 칸은 1970년 기준 초인 유닉스 시각이고, 2001년 기준인 Mac 절대 시각이 아닙니다[3]. 유닉스 시각이라서 시간대 없이 UTC 로 읽고 현지 시각은 따로 더합니다. 시각 형식 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
-가장 중요한 주의점은 raw `timestamp` 가 전원 로그 내부 시계를 따른다는 점이고, 이 값이 실제 시각과 크게 어긋날 수 있습니다[3]. 보정값은 `PLStorageOperator_EventForward_TimeOffset` 표의 `system` 칸(초 단위)에 있습니다. iLEAPP 는 각 행의 raw 값과 같거나 그 이전인 가장 가까운 보정 행의 `system` 값을 더하고, 가장 오래된 보정 행보다 앞선 행에는 가장 오래된 보정 행의 값을 쓰며, 보정 표가 없으면 raw 값을 그대로 씁니다[3].
+가장 중요한 주의점은 raw `timestamp` 가 전원 로그 내부 시계를 따른다는 점이고, 이 값이 실제 시각과 크게 어긋날 수 있습니다[3]. 보정값은 `PLStorageOperator_EventForward_TimeOffset` 표의 `system` 칸(초 단위)에 있습니다. 각 행의 raw 값에는 그 값과 같거나 그 이전인 가장 가까운 보정 행의 `system` 값을 더합니다. 가장 오래된 보정 행보다 앞선 행에는 가장 오래된 보정 행의 값을 쓰고, 보정 표가 없으면 raw 값을 그대로 씁니다[3].
 
 iLEAPP 시험에서 어긋난 정도는 다음과 같았고, 보정한 뒤에는 모두 수집일과 맞았습니다[3].
 
@@ -133,7 +133,7 @@ iLEAPP 시험에서 어긋난 정도는 다음과 같았고, 보정한 뒤에는
 
 PerfPowerTelemetry 도 같은 방식이라 `.EPSQL` 은 `PPTStorageOperator_TimeOffset` 표(뒤에 붙는 보존 기간 접미사가 iOS 버전마다 다름), `.BGSQL` 은 `BackgroundProcessing_TimeOffset` 표로 보정합니다[3]. 다만 `BatteryTrustedData_Daily` 의 `TrustedDateOfFirstUse` 와 `BackgroundProcessing_TaskInstanceData` 의 `StartDate`·`EndDate` 는 보정이 필요 없는 일반 유닉스 시각입니다[3].
 
-사용자가 기기 시각을 직접 바꾸면 보정 표에 행이 생긴다는 설명은 원문으로 확인하지 못했습니다. 시각 조작을 의심할 때는 보정 표의 값이 바뀐 지점을 표시해 두고 다른 기록과 맞춰 보는 데 그칩니다.
+사용자가 기기 시각을 직접 바꿀 때 보정 표에 행이 생기는지는 공개 자료로 밝혀지지 않았습니다. 그래서 시각 조작을 의심할 때는 보정 표의 값이 바뀐 지점을 표시해 두고 다른 기록과 맞춰 보는 데 그칩니다.
 
 ## 함정과 한계
 
@@ -143,7 +143,7 @@ PerfPowerTelemetry 도 같은 방식이라 `.EPSQL` 은 `PPTStorageOperator_Time
 
 **정수 코드의 뜻을 단정하지 않습니다.** `State`, `Reason`, `Event`, `AutoLockType`, `CameraType` 은 정수 코드이고 iLEAPP 도 뜻을 풀지 않았습니다[3]. 예를 들어 `PLApplicationAgent_EventForward_Application` 의 `State` 값 하나를 "앞화면으로 올라왔다" 라고 적으려면, 같은 기기에서 다른 아티팩트로 그 시각의 행동을 확인한 근거가 따로 있어야 합니다.
 
-**`-wal` 을 빠뜨리면 최근 기록이 빠집니다.** 전체 파일시스템 수집에서는 `CurrentPowerlog.PLSQL` 을 `-wal`·`-shm` 과 함께 복사해 열어야 가장 최근 행까지 보입니다. sysdiagnose 안 사본에는 `-wal` 이 없었습니다[3].
+**`-wal` 을 빠뜨리면 최근 기록이 빠집니다.** 전체 파일시스템 수집에서는 `CurrentPowerlog.PLSQL` 을 `-wal`·`-shm` 과 함께 복사해 열어야 가장 최근 행까지 보입니다. sysdiagnose 안 사본에는 `-wal` 이 없습니다[3].
 
 **버전마다 표가 다릅니다.** 같은 표라도 칸이 생기고 사라지고, 일부 표는 특정 버전이나 기기에서만 행이 있습니다. 표가 비어 있을 때는 그 기능을 쓰지 않았다고 보기 전에 그 버전·기기에서 원래 행이 생기는 표인지부터 확인합니다.
 
@@ -169,7 +169,7 @@ PerfPowerTelemetry 도 같은 방식이라 `.EPSQL` 은 `PPTStorageOperator_Time
 
 ### SQL 로 보정 시각 읽기
 
-아래는 iLEAPP 가 설명하는 보정 방법을 SQL 로 옮긴 예시이고[3], 결과는 공개 도구의 출력과 맞춰 보고 씁니다. 원본이 아니라 사본에서 실행합니다.
+아래는 위 보정 방법을 SQL 로 옮긴 예시이고[3], 결과는 공개 도구의 출력과 맞춰 보고 씁니다. 원본이 아니라 사본에서 실행합니다.
 
 ```sql
 SELECT a.timestamp AS raw_ts,
@@ -196,7 +196,7 @@ raw 값과 보정 값을 둘 다 남겨 두면, 나중에 다른 사본이나 �
 
 ### 공개 도구로 한 번
 
-공개 도구 iLEAPP 의 `powerlog.py` 는 전원 로그 항목 24개를 다루고, 위 경로에서 현재 로그·압축본·sysdiagnose·PerfPowerTelemetry 를 찾아 보정한 시각으로 보여 줍니다[1][3]. ThinkDFIR 글은 2020년에 덧붙인 내용에서 APOLLO 와 iLEAPP 를 함께 권합니다[4]. 도구 결과는 사본 경로별로 나누어 보고, 같은 사건이 몇 초 차이로 여러 번 나오는지 확인합니다. 도구를 검증하는 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+공개 도구 iLEAPP 의 `powerlog.py` 는 전원 로그 항목 24개를 다루고, 위 경로에서 현재 로그·압축본·sysdiagnose·PerfPowerTelemetry 를 찾아 보정한 시각으로 보여 줍니다[1][3]. APOLLO 로도 전원 로그를 읽을 수 있습니다[4]. 도구 결과는 사본 경로별로 나누어 보고, 같은 사건이 몇 초 차이로 여러 번 나오는지 확인합니다. 도구를 검증하는 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증
 

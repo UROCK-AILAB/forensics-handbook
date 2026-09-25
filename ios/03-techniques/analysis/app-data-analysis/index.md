@@ -14,7 +14,7 @@ has_toc: false
 
 서드파티 앱은 모두 샌드박스 안에서 돌고 다른 앱의 정보를 모으거나 바꾸지 못하게 설계되어 있으며, 앱마다 설치할 때 무작위로 정해지는 홈 디렉터리가 따로 있습니다[8]. 앱이 남긴 데이터는 먼저 그 앱의 컨테이너에서 찾고, 컨테이너 밖에서는 시스템이 따로 남긴 설치·사용·통신 기록을 찾습니다. 이 핸드북의 아티팩트 사전은 자주 만나는 앱을 앱별로 다루지만, 사건에서는 사전에 없는 앱이나 이미 지운 앱을 만나기도 합니다. 이때 앱 이름이 아니라 번들 ID 를 기준 키로 삼으면 삭제한 앱까지 여러 DB 에서 흔적을 찾을 수 있습니다[3].
 
-수집 방법에 따라 볼 수 있는 범위도 다릅니다. Apple 문서는 앱 컨테이너의 `Library/Caches` 와 `tmp/` 를 백업에서 뺀다고 적고 있고[1], Biome·KnowledgeC·Power Log 같은 기록은 전체 파일 시스템 추출에서만 얻는다는 정리도 있습니다[7]. 어떤 폴더가 어느 수집 방법에 들어가는지 알아야 "없다" 를 "안 모았다" 와 가를 수 있습니다.
+수집 방법에 따라 볼 수 있는 범위도 다릅니다. 앱 컨테이너의 `Library/Caches` 와 `tmp/` 는 백업에서 빠지고[1], Biome·KnowledgeC·Power Log 같은 기록은 전체 파일 시스템 추출에서만 얻습니다[7]. 어떤 폴더가 어느 수집 방법에 들어가는지 알아야 "없다" 를 "안 모았다" 와 가를 수 있습니다.
 
 ## 한눈에 보기
 
@@ -23,10 +23,10 @@ has_toc: false
 | 앱 데이터 컨테이너 (`/private/var/mobile/Containers/Data/Application/<GUID>`, 백업에서는 `AppDomain-<번들 ID>`) | 파일 시스템 경로[7], 백업 도메인 | 앱이 저장한 설정·DB·문서 |
 | 앱 그룹 공유 폴더 (`AppDomainGroup-<그룹 ID>`), 앱 확장 (`AppDomainPlugin-<번들 ID>`) | | 본체와 확장이 함께 쓰는 데이터 |
 | `Manifest.db` 의 `Files` 표 | | 로컬 백업 안에서 앱 파일을 찾는 목록 |
-| `applicationState.db` | iOS 11.2.1 에서 시험[6], 표 이름은 | 설치 상태, 일부 앱의 삭제 시각 |
+| `applicationState.db` | iOS 11.2.1 기준[6] | 설치 상태, 일부 앱의 삭제 시각 |
 | 앱 HTTP 캐시 `Cache.db` | 백업에 안 들어감(iOS 2.2 이후)[1] | 앱이 받아 저장한 HTTP 응답 |
 | WebKit `observations.db` | | 앱 안 웹뷰가 접속한 도메인 |
-| Mobile Installation 로그, `UninstalledApplications.plist` | 2019년 글[3] | 설치·삭제 시각 |
+| Mobile Installation 로그, `UninstalledApplications.plist` | 2019년 기준[3] | 설치·삭제 시각 |
 | Biome `_DKEvent.App.Install` | iOS 16[4] | 설치 시각, 보존 28일 |
 
 ## 읽는 순서

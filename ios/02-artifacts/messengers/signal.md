@@ -14,7 +14,7 @@ nav_order: 870
 
 ## 위치와 버전별 차이
 
-아래 이름은 공개 도구 iLEAPP 가 전체 파일 시스템 추출에서 찾는 것이고, 모두 앱 그룹 공유 폴더 아래에 있습니다 [1]. 앱 그룹 개념은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
+아래 경로는 전체 파일 시스템 추출 기준이고, 모두 앱 그룹 공유 폴더 아래에 있습니다 [1]. 앱 그룹 개념은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
 
 | 경로 | 내용 |
 |---|---|
@@ -23,19 +23,19 @@ nav_order: 870
 
 DB 를 여는 키는 iOS 키체인에 있습니다 [1]. 그래서 파일 시스템 추출만으로는 DB 를 읽을 수 없고, 같은 기기의 키체인을 따로 확보해야 도구가 복호해 읽습니다 [1]. 키체인의 구조와 보호 방식은 [키체인](../../01-foundations/storage/keychain.md) 에서 다룹니다.
 
-번들 ID·앱 그룹 ID 와 로컬 백업의 도메인 이름은 이번 자료로 확인하지 못했고, 시그널 대화가 로컬 백업이나 iCloud 백업에 들어가는지도 확인하지 못했습니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘어 있었지만, 관찰한 백업은 다른 회사 앱의 도메인 이름을 가려 두어 시그널 쪽은 알 수 없었습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)).
+번들 ID·앱 그룹 ID 와 로컬 백업의 도메인 이름, 시그널 대화가 로컬 백업이나 iCloud 백업에 들어가는지는 공개 자료가 없어 검체에서 확인합니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉩니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)).
 
-iLEAPP 시험 표본은 이름(abe_ios16, iphone11_ios17, dexter_ios18 등)으로 보아 iOS 16~18 기기에서 만든 것이지만, 표본의 시그널 앱 버전은 적어 두지 않았습니다 [1].
+iLEAPP 시험 표본은 이름(abe_ios16, iphone11_ios17, dexter_ios18 등)으로 보아 iOS 16~18 기기에서 만든 것이고, 표본의 시그널 앱 버전은 적혀 있지 않습니다 [1].
 
 | 항목 | 확인된 범위 |
 |---|---|
 | iOS | 16~18(표본 이름 기준) [1] |
-| 시그널 앱 | 기록 없음 |
-| 버전별 구조 차이 | 확인하지 못함 |
+| 시그널 앱 | 공개 자료 없음 |
+| 버전별 구조 차이 | 공개 자료 없음 |
 
 ## 구조
 
-복호한 `signal.sqlite` 에서 도구가 읽는 표와 칸은 다음과 같습니다(주요 칸만) [1].
+복호한 `signal.sqlite` 의 주요 표와 칸은 다음과 같습니다 [1].
 
 | 표 | 칸 |
 |---|---|
@@ -44,7 +44,7 @@ iLEAPP 시험 표본은 이름(abe_ios16, iphone11_ios17, dexter_ios18 등)으�
 | `model_SignalRecipient` | `recipientPhoneNumber`, `recipientUUID`, `pni` 등 |
 | `model_TSAttachment` | `albumMessageId`, `localRelativeFilePath`, `sourceFilename`, `contentType` |
 
-`recordType` 19 는 받은 메시지, 21 은 보낸 메시지이고, iLEAPP 는 시그널 iOS 공개 소스(SDSRecordType.swift)로 이 값을 확인했습니다 [1]. 보낸 메시지는 작성자 칸 대신 로그인한 계정을 작성자로 보고 표시합니다 [1].
+`recordType` 19 는 받은 메시지, 21 은 보낸 메시지입니다(시그널 iOS 공개 소스 SDSRecordType.swift) [1]. 보낸 메시지는 작성자 칸 대신 로그인한 계정을 작성자로 보고 표시합니다 [1].
 
 `model_TSInteraction` 의 다음 세 칸은 대화에서 사라진 내용을 설명할 때 씁니다 [1].
 
@@ -68,7 +68,7 @@ DB 를 복호하지 못해도 `Attachments/` 의 파일은 평문으로 읽을 �
 
 ## 시각 해석
 
-`model_TSInteraction` 에는 `timestamp`, `receivedAtTimestamp`, `serverTimestamp` 세 시각이 있고, 도구는 모두 Unix 시각으로 바꿉니다 [1]. 칸 이름으로 보면 각각 메시지 자체의 시각, 이 기기가 받은 시각, 서버 시각이지만, 단위가 밀리초인지와 각 칸이 정확히 언제 쓰이는지는 이번 자료로 확인하지 못했습니다. 한 행에서 세 값을 나란히 놓고 크기를 비교해 단위를 정하고, 보고서에는 어느 칸의 값인지 적습니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`model_TSInteraction` 에는 `timestamp`, `receivedAtTimestamp`, `serverTimestamp` 세 시각이 있고, 도구는 모두 Unix 시각으로 바꿉니다 [1]. 칸 이름으로 보면 각각 메시지 자체의 시각, 이 기기가 받은 시각, 서버 시각입니다. 단위가 밀리초인지와 각 칸이 정확히 언제 쓰이는지는 공개 자료가 없어 검체에서 확인합니다. 한 행에서 세 값을 나란히 놓고 크기를 비교해 단위를 정하고, 보고서에는 어느 칸의 값인지 적습니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 

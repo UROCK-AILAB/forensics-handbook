@@ -12,18 +12,18 @@ iOS 디스코드는 메시지를 서버 응답을 저장해 둔 캐시 형태로
 
 ## 무엇을 기록하나 · 왜 생기나
 
-앱이 서버에서 받아 온 응답과 화면에 보여 준 데이터를 캐시로 저장해 두는데, 그 안에 메시지 본문·보낸 사람·채널·시각·첨부 정보가 들어 있습니다[2]. iOS 15 기기로 도구를 비교한 시험에서는 메시지·사진·음성과 영상 통화·반응을 조사 대상으로 삼았습니다[1]. 폴더 이름에 쓰인 `com.hammerandchisel.discord` 는 앱 번들 ID 와 같은 이름으로 보이지만, 이번에 연 자료에는 이 값을 번들 ID 라고 적은 곳이 없었습니다[1][2].
+앱이 서버에서 받아 온 응답과 화면에 보여 준 데이터를 캐시로 저장해 두는데, 그 안에 메시지 본문·보낸 사람·채널·시각·첨부 정보가 들어 있습니다[2]. 분석 대상이 되는 흔적은 메시지·사진·음성과 영상 통화·반응입니다[1]. 폴더 이름에 쓰인 `com.hammerandchisel.discord` 는 앱 번들 ID 와 같은 이름으로 보입니다[1][2].
 
 ## 위치와 버전별 차이
 
-iOS 15 시험 글은 앱 데이터 컨테이너의 아래 두 파일을 조사 대상으로 적었습니다[1].
+앱 데이터 컨테이너의 아래 두 파일에 디스코드 데이터가 있습니다[1].
 
 ```
 /private/var/mobile/Containers/Data/Application/<GUID>/Library/Caches/com.hammerandchisel.discord/Cache.db
 /private/var/mobile/Containers/Data/Application/<GUID>/Documents/mmkv/mmkv.default
 ```
 
-iLEAPP 의 디스코드 분석기(2025-06-23 작성, 2026-08-21 갱신)는 아래 위치를 찾습니다[2].
+iLEAPP 의 디스코드 분석기는 아래 위치를 찾습니다[2].
 
 | 찾는 위치(파일 시스템 추출 기준) | 담긴 것 |
 |---|---|
@@ -32,17 +32,17 @@ iLEAPP 의 디스코드 분석기(2025-06-23 작성, 2026-08-21 갱신)는 아�
 | `*/Library/Caches/com.hackemist.SDImageCache/default/*` | 캐시된 이미지입니다 |
 | `*/activation_record.plist` | 도구가 함께 읽는 plist 입니다 |
 
-시험 글과 도구 모두 시험한 앱 버전을 밝히지 않았고[1][2], iOS 버전은 시험 글의 iOS 15 만 확인됩니다[1]. 캐시 구조는 앱 업데이트마다 바뀔 수 있어서 위 경로는 "도구가 찾는 위치" 로 보고 검체에서 직접 확인합니다.
+앱 버전별 차이는 공개 자료가 없고, 알려진 iOS 버전은 iOS 15 입니다[1]. 캐시 구조는 앱 업데이트마다 바뀔 수 있어서 위 경로는 "도구가 찾는 위치" 로 보고 검체에서 직접 확인합니다.
 
 ## 구조
 
 ### `a` 파일의 `messages0` 표
 
-`a` 는 확장자가 없지만 SQLite 파일이고, iLEAPP 는 `messages0` 표의 `data` 칸(blob)을 읽습니다[2]. `a` 파일을 담은 `@account…` 폴더 이름이 계정마다 달라서, 한 기기에 계정이 여럿이면 폴더도 여럿일 수 있습니다.
+`a` 는 확장자가 없지만 SQLite 파일이고, 메시지는 `messages0` 표의 `data` 칸(blob)에 들어 있습니다[2]. `a` 파일을 담은 `@account…` 폴더 이름이 계정마다 달라서, 한 기기에 계정이 여럿이면 폴더도 여럿일 수 있습니다.
 
 ### 메시지 필드
 
-iLEAPP 가 메시지에서 읽는 필드는 아래와 같습니다[2]. 서버 응답의 필드 이름이 그대로 쓰입니다.
+메시지의 주요 필드는 아래와 같습니다[2]. 서버 응답의 필드 이름이 그대로 쓰입니다.
 
 | 필드 | 담긴 것 |
 |---|---|
@@ -56,7 +56,7 @@ iLEAPP 가 메시지에서 읽는 필드는 아래와 같습니다[2]. 서버 �
 | `attachments` | `filename`, `url`, `proxy_url`, `width`, `height` 를 묶은 첨부 목록입니다 |
 | `embeds` | `url`, `description`, `author`, `footer` 를 묶은 링크 미리보기입니다 |
 
-iLEAPP 는 `author` 의 이름을 `global_name` 과 `globalName` 두 표기로 모두 찾고[2], 직접 파싱할 때도 둘 다 찾아봅니다.
+`author` 의 이름은 `global_name` 과 `globalName` 두 표기로 나올 수 있어서[2], 직접 파싱할 때 둘 다 찾아봅니다.
 
 ## 증거로서 의미
 
@@ -66,13 +66,13 @@ iLEAPP 는 `author` 의 이름을 `global_name` 과 `globalName` 두 표기로 �
 
 ## 시각 해석
 
-메시지의 시각 필드는 ISO 8601 문자열이고 끝의 `Z` 가 UTC 를 뜻합니다[2]. Mac 절대 시각이나 Unix 시각 같은 숫자가 아니라서 기준을 따로 맞출 필요는 없지만, 현지 시각으로 보려면 시간대를 따로 적용합니다. `timestamp` 는 보낸 시각, `edited_timestamp` 는 수정한 시각, `call.ended_timestamp` 는 통화가 끝난 시각이고, 모두 필드 이름대로 읽은 것입니다[2]. 이 값들은 레코드가 캐시에 저장된 시각과 다릅니다. 캐시 파일의 파일 시스템 시각은 앱이 캐시를 쓴 때를 가리킬 뿐이라서, 메시지를 보낸 시각으로 쓰지 않습니다. 시각 값 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+메시지의 시각 필드는 ISO 8601 문자열이고 끝의 `Z` 가 UTC 를 뜻합니다[2]. Mac 절대 시각이나 Unix 시각 같은 숫자가 아니라서 기준을 따로 맞출 필요는 없지만, 현지 시각으로 보려면 시간대를 따로 적용합니다. 필드 이름으로 보아 `timestamp` 는 보낸 시각, `edited_timestamp` 는 수정한 시각, `call.ended_timestamp` 는 통화가 끝난 시각입니다[2]. 이 값들은 레코드가 캐시에 저장된 시각과 다릅니다. 캐시 파일의 파일 시스템 시각은 앱이 캐시를 쓴 때를 가리킬 뿐이라서, 메시지를 보낸 시각으로 쓰지 않습니다. 시각 값 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 ## 함정과 한계
 
 iOS 15 시험에서는 지운 메시지를 시험한 도구 어느 것도 되살리지 못했고, 도구 하나는 메시지를 아예 파싱하지 못했습니다[1]. 그래서 도구 하나의 결과만으로 "메시지 없음" 이라고 쓰지 않고 캐시 파일을 직접 열어 확인합니다. 도구끼리 결과를 맞춰 보는 방법은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md)에 있습니다.
 
-`fsCachedData` 의 한 파일에는 여러 줄의 JSON 이 들어 있고[2], 메시지 수를 셀 때는 같은 `id` 가 여러 줄이나 파일에 겹쳐 있는지 먼저 확인합니다. `Cache.db` 와 `mmkv.default` 는 시험 글에서 조사 대상으로 적혔지만[1] 이번에 연 자료에는 그 안의 구조 설명이 없었습니다. iLEAPP 의 경로는 파일 시스템 추출 기준이고, 로컬 백업에 이 캐시 파일들이 들어가는지는 자료가 말하지 않았습니다. 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 먼저 파일이 있는지 확인합니다.
+`fsCachedData` 의 한 파일에는 여러 줄의 JSON 이 들어 있고[2], 메시지 수를 셀 때는 같은 `id` 가 여러 줄이나 파일에 겹쳐 있는지 먼저 확인합니다. `Cache.db` 와 `mmkv.default` 는 내부 구조를 설명한 공개 자료가 없어 검체로 확인해야 합니다[1]. iLEAPP 의 경로는 파일 시스템 추출 기준이고, 로컬 백업에 이 캐시 파일들이 들어가는지는 공개 자료가 없습니다. 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 먼저 파일이 있는지 확인합니다.
 
 ## 직접 분석해 보기
 

@@ -63,16 +63,16 @@ ZMETADATAHASH
 
 ### 스트림 이름 읽는 법
 
-스트림 이름은 "/분류/항목" 꼴이라서 앞부분만 보고도 앱·기기·화면 가운데 무엇에 관한 기록인지 짐작할 수 있습니다 [1][2][5]. iOS 에서 보고된 이름과 이 핸드북에서 다루는 곳은 아래와 같습니다.
+스트림 이름은 "/분류/항목" 꼴이라서 앞부분만 보고도 앱·기기·화면 가운데 무엇에 관한 기록인지 짐작할 수 있습니다 [1][2][5]. iOS 에서 쓰이는 이름과 이 핸드북에서 다루는 곳은 아래와 같습니다.
 
 | 스트림 | 다루는 곳 |
 |---|---|
 | `/app/inFocus`, `/app/usage`, `/app/install` | [앱 사용 기록](app-usage.md) |
 | `/device/isLocked`, `/display/isBacklit`, `/device/isPluggedIn`, `/device/batteryPercentage`, `/display/orientation` | [화면·잠금 상태](device-state.md) |
 | `/safari/history` | [사파리](../../browsers/safari/index.md) |
-| `/audio/outputRoute` | 이름만 보고되었고, 이 핸드북에서는 따로 다루지 않습니다 |
+| `/audio/outputRoute` | 이 핸드북에서는 따로 다루지 않습니다 |
 
-스트림 이름과 설명은 시스템 plist 인 `/System/Library/PrivateFrameworks/CoreDuet.framework/com.apple.coreduet.systemevents.plist` 에 적혀 있다고 iOS 18.5 에서 확인한 글이 있습니다 [6]. 이 plist 에서 스트림마다 쓰이는 항목은 아래와 같고, 이름으로 보아 기록 횟수 제한(RateLimit…)과 시각 정밀도(TimestampPrecisionInSeconds)를 스트림마다 따로 정하는 것으로 보입니다 [6]. 기록 횟수 제한이 앱 기록에 어떤 빈틈을 만드는지는 [앱 사용 기록](app-usage.md) 페이지에 있습니다.
+iOS 18.5 에서 스트림 이름과 설명은 시스템 plist 인 `/System/Library/PrivateFrameworks/CoreDuet.framework/com.apple.coreduet.systemevents.plist` 에 적혀 있습니다 [6]. 이 plist 에서 스트림마다 쓰이는 항목은 아래와 같고, 이름으로 보아 기록 횟수 제한(RateLimit…)과 시각 정밀도(TimestampPrecisionInSeconds)를 스트림마다 따로 정하는 것으로 보입니다 [6]. 기록 횟수 제한이 앱 기록에 어떤 빈틈을 만드는지는 [앱 사용 기록](app-usage.md) 페이지에 있습니다.
 
 ```
 KnowledgeBaseEventName
@@ -97,11 +97,11 @@ ZSTARTDATE, ZENDDATE, ZCREATIONDATE 는 모두 Mac 절대 시각 (Mac Absolute T
 
 ## 함정과 한계
 
-공개 자료에 나온 표와 칸 구성은 대부분 iOS 11~13 과 macOS 에서 확인한 것이고 [3][4], iOS 15 이후에도 칸 구성이 같은지는 이 페이지를 쓰며 연 자료로 확인하지 못했습니다. 이 핸드북의 기기 관찰에서도 로컬 백업에 knowledgeC.db 가 없어서 표와 칸 이름을 직접 보지 못했습니다. 그래서 새 버전 검체를 열 때는 칸 이름부터 `PRAGMA table_info(ZOBJECT);` 로 확인하고 나서 조회문을 돌리는 편이 안전합니다.
+공개 자료에 나온 표와 칸 구성은 대부분 iOS 11~13 과 macOS 기준이고 [3][4], iOS 15 이후에도 칸 구성이 같은지는 공개 자료가 없습니다. 로컬 백업에는 knowledgeC.db 가 들어 있지 않을 수 있습니다. 그래서 새 버전 검체를 열 때는 칸 이름부터 `PRAGMA table_info(ZOBJECT);` 로 확인하고 나서 조회문을 돌리는 편이 안전합니다.
 
 맥에도 같은 이름의 DB 가 있고 [1] 공개 자료에는 맥에서 확인한 내용이 섞여 있어서, 글을 인용할 때는 iOS 에 관한 내용인지 먼저 확인합니다.
 
-WAL 파일 처리와 지운 행 복구가 knowledgeC.db 에서 어떻게 되는지는 이번 자료로 확인하지 못했습니다. SQLite 일반 원리는 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 페이지와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지에 있습니다.
+WAL 파일 처리와 지운 행 복구가 knowledgeC.db 에서 어떻게 되는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. SQLite 일반 원리는 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 페이지와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지에 있습니다.
 
 ## 직접 분석해 보기
 

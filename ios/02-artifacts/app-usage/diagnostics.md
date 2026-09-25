@@ -19,7 +19,7 @@ nav_order: 440
 JetsamEvent_<날짜시각>.ips
 ```
 
-Apple 은 Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야 하는 보고서로 워치독(앱 실행이 느린 경우 등), 잘못된 코드 서명으로 난 충돌, 과열, jetsam(메모리 과다) 보고서를 듭니다[1]. 기기를 조사할 때는 이 종류들이 기기에 남아 있는지 따로 챙겨 봅니다.
+Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야 하는 보고서에는 워치독(앱 실행이 느린 경우 등), 잘못된 코드 서명으로 난 충돌, 과열, jetsam(메모리 과다) 보고서가 있습니다[1]. 기기를 조사할 때는 이 종류들이 기기에 남아 있는지 따로 챙겨 봅니다.
 
 충돌 보고서 밖에도 분석 데이터가 여럿 있습니다. MVT 는 네트워크·인증서 고정 (pinning)·TLS 실패 같은 분석 정보를 담은 SQLite, 프로세스별 데이터 사용 이력 plist, iOS 업데이트 이력을 담은 `.ips`, 종료할 때 SIGTERM 뒤에도 끝나지 않은 프로세스의 PID·경로를 담은 `shutdown.log` 를 읽습니다[3].
 
@@ -29,10 +29,12 @@ Apple 은 Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야
 
 | iOS | 충돌 보고서 형식 | 출처 |
 |---|---|---|
-| 버전 밝히지 않음 | 확장자는 흔히 `.crash`·`.ips`. iOS 14 이하 본문 형식은 이 페이지의 자료로 확인하지 못함 | [1] |
+| 버전 밝히지 않음 | 확장자는 흔히 `.crash`·`.ips`. iOS 14 이하 본문 형식은 검체에서 확인 | [1] |
 | 15 이후 | `.ips` 확장자의 JSON. iOS 15·macOS 12 부터 | [2] |
 
 ### MVT 가 읽는 분석 데이터
+
+MVT 모듈별 경로와 수집 방식은 다음과 같습니다[3].
 
 | 모듈 | 경로 | 담긴 것 | 얻는 수집 방식 |
 |---|---|---|---|
@@ -41,13 +43,13 @@ Apple 은 Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야
 | IOSVersionHistory | `private/var/db/analyticsd/Analytics-Journal-*.ips` | iOS 업데이트 이력 | 일반 백업, 전체 덤프 |
 | ShutdownLog | `private/var/db/diagnostics/shutdown.log` | 종료 때 끝나지 않은 프로세스의 PID·경로 | 암호화 백업, 전체 덤프 |
 
-위 표는 모두 [3] 에서 가져왔습니다. `shutdown.log` 를 읽는 법과 버전별 동작은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에서 다룹니다. 앱 충돌 보고서 `.ips` 가 기기 안 어느 폴더에 저장되는지는 이 페이지의 자료로 확인하지 못했고, 수집한 검체에서 `.ips` 파일을 이름으로 찾아 실제 경로를 적습니다.
+`shutdown.log` 를 읽는 법과 버전별 동작은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에서 다룹니다. 앱 충돌 보고서 `.ips` 가 기기 안 어느 폴더에 저장되는지는 수집한 검체에서 `.ips` 파일을 이름으로 찾아 실제 경로를 적습니다.
 
 ### 로컬 백업에 보이는 것
 
-관찰한 로컬 백업의 관찰 메모에는 `.ips` 파일도, `Logs/CrashReporter` 경로도 나오지 않았습니다. 그래서 백업에 충돌 보고서 본문이 들어가는지는 이 관찰로 판단할 수 없습니다. 진단과 이름이 닿는 설정 plist 와 도메인은 보였고, 값은 읽지 않았습니다.
+로컬 백업에는 `.ips` 파일도, `Logs/CrashReporter` 경로도 없을 수 있어서, 백업만 보고 충돌 보고서 본문이 없다고 판단하지 않습니다. 백업에는 진단과 이름이 닿는 설정 plist 와 도메인이 있습니다.
 
-| 도메인 :: 경로 | 관찰한 키 |
+| 도메인 :: 경로 | 키 |
 |---|---|
 | `RootDomain :: Library/Preferences/com.apple.CrashReporter.plist` | `ExcResourceDiagInfo_<프로세스 이름>` (datetime) 23개(`akd`, `bird`, `geod`, `cloudd` 등 시스템 프로세스), `patternMatchServiceCrashes.bootUUID` (str) |
 | `HomeDomain :: Library/Preferences/com.apple.ReportCrashService.plist` | `memoryExceptionProcesses.bootUUID` (str), `patternMatchServiceCrashes.bootUUID` (str) |
@@ -55,13 +57,13 @@ Apple 은 Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야
 | `HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` | `netUsageBaseline` 아래에 프로세스·번들 ID 이름이 키로 있음 |
 | `HomeDomain :: Library/Preferences/com.apple.analyticsagent.plist` | `AppUsageSyncTime` (float), `ODDAssistantLLMSiriDigestSyncTime` (float) |
 
-`com.apple.osanalyticshelper.plist` 의 키는 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에 정리되어 있습니다. `bbtrace.` 로 시작하는 키는 `CrashReporter.plist` 가 아니라 `WirelessDomain :: Library/Preferences/com.apple.AppleBasebandManager.plist` 아래에 있었습니다.
+`com.apple.osanalyticshelper.plist` 의 키는 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에 정리되어 있습니다. `bbtrace.` 로 시작하는 키는 `CrashReporter.plist` 가 아니라 `WirelessDomain :: Library/Preferences/com.apple.AppleBasebandManager.plist` 아래에 있습니다.
 
-도메인으로는 `SysSharedContainerDomain-systemgroup.com.apple.osanalytics`(항목 3개), `…ReportMemoryException`(항목 3개), `…powerexceptions`(항목 4개), `SysContainerDomain-com.apple.metrickitd`(항목 11개), `AppDomain-com.apple.DiagnosticsReporter`, `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`·`LowMemory`·`Panic`·`HangTracer` 가 보였습니다. 어느 키와 도메인도 뜻과 내용을 확인하지 못했습니다.
+관련 도메인으로는 `SysSharedContainerDomain-systemgroup.com.apple.osanalytics`(항목 3개), `…ReportMemoryException`(항목 3개), `…powerexceptions`(항목 4개), `SysContainerDomain-com.apple.metrickitd`(항목 11개), `AppDomain-com.apple.DiagnosticsReporter`, `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`·`LowMemory`·`Panic`·`HangTracer` 가 있습니다. 이 키와 도메인의 뜻과 내용을 밝힌 공개 자료는 없습니다.
 
 ## 구조
 
-iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 메타데이터, 나머지는 보고서 본문입니다[2]. 메타데이터의 `bug_type` 이 309 면 충돌 보고서, 288 이면 스택샷입니다[2].
+iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 메타데이터, 나머지는 보고서 본문입니다[2]. 메타데이터의 `bug_type` 이 309 면 충돌 보고서, 288 이면 스택샷입니다[2]. 부분별 키와 뜻은 다음과 같습니다[2].
 
 | 부분 | 키 | 뜻 |
 |---|---|---|
@@ -78,27 +80,27 @@ iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 
 | 본문 | `crashReporterKey` | 기기별 익명 식별자 |
 | 본문 | `incident`, `usedImages`, `threads`, `vmSummary` 등 | 그 밖의 키 |
 
-위 표는 모두 [2] 에서 가져왔습니다. `crashReporterKey` 는 같은 기기의 보고서끼리 값이 같고, 기기를 지우면 바뀝니다[2].
+`crashReporterKey` 는 같은 기기의 보고서끼리 값이 같고, 기기를 지우면 바뀝니다[2].
 
 ## 증거로서 의미
 
 **증명하는 것.** 보고서 한 건은 이 번들 ID·버전의 프로세스가 `procLaunch` 에 시작해 `captureTime` 에 충돌했고, 그때 OS 빌드와 기종이 무엇이었는지를 보여 줍니다[2]. `termination` 에는 어떤 프로세스가 끝냈는지가, `parentProc` 에는 부모 프로세스가 남습니다[2]. `crashReporterKey` 가 같은 보고서들은 같은 기기에서 나왔다고 볼 수 있고, 한 기기의 보고서들 사이에서 값이 바뀌면 그 사이에 기기를 지웠을 가능성을 살펴볼 근거가 됩니다[2]. `storeInfo.itemID` 로 앱을 스토어 항목과 이을 수 있습니다[2].
 
-**증명하지 못하는 것.** 충돌 보고서는 사용자가 무엇을 하다가 충돌했는지 알려 주지 않고, 앱이 충돌했다는 사실만으로 악성 행위나 공격이 있었다고 말할 수 없습니다. 보고서가 없다고 그 앱을 쓰지 않았다고 말할 수도 없습니다. 이름에 진단이 들어간 plist 키들은 뜻을 확인하지 못해서, 키가 있다는 사실 말고는 증거로 쓰지 않습니다.
+**증명하지 못하는 것.** 충돌 보고서는 사용자가 무엇을 하다가 충돌했는지 알려 주지 않고, 앱이 충돌했다는 사실만으로 악성 행위나 공격이 있었다고 말할 수 없습니다. 보고서가 없다고 그 앱을 쓰지 않았다고 말할 수도 없습니다. 이름에 진단이 들어간 plist 키들은 뜻이 밝혀지지 않아서, 키가 있다는 사실 말고는 증거로 쓰지 않습니다.
 
 보고서에는 "앱이 공격을 받았다" 대신 "번들 ID `com.example.app` 버전 이 값의 프로세스가 이 시각에 시작해 이 시각에 이 예외로 종료된 보고서가 있다" 처럼 씁니다.
 
 ## 시각 해석
 
-실행과 종료 시각은 본문의 `procLaunch` 와 `captureTime` 을 쓰고, 메타데이터의 `timestamp` 는 기록을 관리하려는 값이라 사건 시각으로 쓰지 않습니다[2]. 두 칸의 문자열 형식과 시간대 표기는 이 페이지의 자료로 확인하지 못했으니, 검체의 값 그대로 옮기고 시간대 표시가 있는지부터 확인합니다.
+실행과 종료 시각은 본문의 `procLaunch` 와 `captureTime` 을 쓰고, 메타데이터의 `timestamp` 는 기록을 관리하려는 값이라 사건 시각으로 쓰지 않습니다[2]. 두 칸의 문자열 형식과 시간대 표기는 검체에서 확인합니다. 값을 그대로 옮기고, 시간대 표시가 있는지부터 봅니다.
 
 `uptime` 은 부팅 뒤 흐른 초라서[2], `captureTime` 에서 `uptime` 을 빼면 그 보고서 기준으로 기기를 켠 무렵을 어림할 수 있습니다. 여러 보고서에서 어림한 부팅 시각이 크게 다르면 그 사이에 재부팅이 있었다는 뜻일 수 있고, 재부팅 기록은 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 과 맞춰 봅니다.
 
-백업 plist 의 `ExcResourceDiagInfo_…` 는 `datetime` 형이라 도구가 날짜로 풀어 주지만 무슨 시각인지는 확인하지 못했고, `analyticsagent.plist` 의 두 키는 `float` 형이라 기준점을 따로 확인해야 합니다. 시각 기준은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+백업 plist 의 `ExcResourceDiagInfo_…` 는 `datetime` 형이라 도구가 날짜로 풀어 주지만 무슨 시각인지는 알려져 있지 않고, `analyticsagent.plist` 의 두 키는 `float` 형이라 기준점을 따로 확인해야 합니다. 시각 기준은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-**메타데이터 시각을 사건 시각으로 쓰지 않습니다.** 첫 줄의 `timestamp` 는 기록 관리용이라고 Apple 이 밝혔습니다[2].
+**메타데이터 시각을 사건 시각으로 쓰지 않습니다.** 첫 줄의 `timestamp` 는 기록 관리용 값입니다[2].
 
 **`bug_type` 부터 봅니다.** 같은 `.ips` 확장자라도 309 는 충돌 보고서, 288 은 스택샷이고[2], iOS 업데이트 이력처럼 충돌과 관계없는 내용도 `.ips` 로 저장됩니다[3]. 확장자만 보고 모두 충돌로 세지 않습니다.
 

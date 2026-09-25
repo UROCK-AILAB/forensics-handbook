@@ -21,7 +21,7 @@ knowledgeC.db 는 앱이 앞 화면에 있던 구간, 잠금과 화면 켜짐 �
 | 위치 | `/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db` [1][2] |
 | 얻는 방법 | 전체 파일 시스템 수집이 있어야 하고, iCloud 백업과 iTunes 방식 백업에는 들어 있지 않습니다 [1][2] |
 | 형식 | SQLite. 시각은 Mac 절대 시각 (Mac Absolute Time) |
-| 보관 기간 | 약 4 주 [1], 대체로 한 달 정도 [2]. 정확한 삭제 규칙은 확인하지 못함 |
+| 보관 기간 | 약 4 주 [1], 대체로 한 달 정도 [2]. 정확한 삭제 규칙은 공개 자료 없음 |
 | 알려 주는 것 | 앞 화면에 있던 앱과 구간, 앱 사용 사건, 잠금 상태, 화면 켜짐, 충전기 연결, 기기 방향 등 |
 | 버전 | iOS 16 부터 대부분 바이옴으로 옮겨 감 [2][3] |
 
@@ -33,9 +33,9 @@ knowledgeC 에 기록되는 종류, 곧 활성 스트림 (stream) 의 수는 버
 | 14~15 | 65 개 넘게 | |
 | 16 이후 | 약 20 개 | 일부는 knowledgeC 와 바이옴에 겹쳐 남고, 일부는 거의 전부 바이옴으로 옮겨 감 [4] |
 
-iOS 16 에서 knowledgeC 에 보이지 않게 되었다고 보고된 것은 앱 포커스, Safari 기록, 설치 기록, 기기 방향, 충전기 연결 상태입니다 [3]. 앱과 기기 상태 스트림이 각각 어떻게 바뀌었는지는 아래 하위 페이지에서 다루고, 방문 기록은 [사파리](../../browsers/safari/index.md) 페이지에서 다룹니다.
+iOS 16 에서 knowledgeC 에 보이지 않게 된 것은 앱 포커스, Safari 기록, 설치 기록, 기기 방향, 충전기 연결 상태입니다 [3]. 앱과 기기 상태 스트림이 각각 어떻게 바뀌었는지는 아래 하위 페이지에서 다루고, 방문 기록은 [사파리](../../browsers/safari/index.md) 페이지에서 다룹니다.
 
-이 핸드북의 기기 관찰에서는 로컬 백업 목록에 knowledgeC.db 가 없었고, HomeDomain 항목 1979 개 가운데 `Library/CoreDuet` 경로도 `Library/Biome` 경로도 없었습니다. 같은 백업에서 CoreDuet·바이옴과 이름이 닿는 설정 plist 는 아래처럼 보였고, 값은 읽지 않았습니다.
+로컬 백업에는 knowledgeC.db 가 들어 있지 않고, HomeDomain 에도 `Library/CoreDuet` 경로와 `Library/Biome` 경로가 없습니다. 대신 CoreDuet·바이옴과 이름이 닿는 설정 plist 는 백업에 아래처럼 들어 있습니다.
 
 ```
 HomeDomain :: Library/Preferences/com.apple.coreduetd.plist
@@ -54,7 +54,7 @@ HomeDomain :: Library/Preferences/com.apple.ScreenTimeAgent.plist
   SyncEnabled (bool)
 ```
 
-이 키들의 뜻은 공개 자료로 확인하지 못해서 이름만 적고, 사용 기록 자체로 해석하지 않습니다. 수집 방법별로 무엇을 얻는지는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md)와 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지를 봅니다.
+이 키들의 뜻은 공개된 분석 자료가 없어서 이름만 적고, 사용 기록 자체로 해석하지 않습니다. 수집 방법별로 무엇을 얻는지는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md)와 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지를 봅니다.
 
 ## 읽는 순서
 

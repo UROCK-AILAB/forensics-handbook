@@ -19,16 +19,16 @@ BrowserState.db 의 `tabs` 표는 iOS 16 부터 닫은 뒤의 탭만 담습니�
 
 ## 위치와 버전별 차이
 
-세 DB 모두 기기의 `/private/var/mobile/Library/Safari/` 아래에 있습니다[1][3]. 관찰한 백업(암호화 안 함)에서는 세 DB 가 모두 보이지 않았고, 방문 기록처럼 암호화한 백업에만 들어가는 규칙 때문인지는 확인하지 못했습니다. 그 규칙은 [방문 기록 (History.db)](history.md)에서 다룹니다.
+세 DB 모두 기기의 `/private/var/mobile/Library/Safari/` 아래에 있습니다[1][3]. 암호화하지 않은 백업에는 세 DB 가 모두 들어가지 않습니다. 방문 기록이 암호화한 백업에만 들어가는 규칙은 [방문 기록 (History.db)](history.md)에서 다룹니다.
 
 | iOS 버전 | 달라지는 점 | 출처 |
 |---|---|---|
-| iOS 15 | SafariTabs.db, BrowserState.db, CloudTabs.db 세 DB 가 모두 있고, 시험한 도구 가운데 CloudTabs.db 를 읽는 도구는 거의 없었습니다 | [3] |
+| iOS 15 | SafariTabs.db, BrowserState.db, CloudTabs.db 세 DB 가 모두 있고, CloudTabs.db 를 읽는 도구는 드뭅니다 | [3] |
 | iOS 16 | BrowserState.db 는 닫은 뒤의 탭만 담고, iOS 15 에서 복원된 탭이 iOS 16 으로 옮겨집니다 | [2] |
 | iOS 18 이하 | `last_viewed_time` 이 Apple 절대 시각입니다 | [1] |
 | iOS 26 이상 | `last_viewed_time` 이 UNIX 시각입니다 | [1] |
 
-iLEAPP 의 탭 코드는 iOS 12.4, 13.3.1, 14.3, 15.0.2, 16.1.1~16.5, 17.1~17.6.1, 18.0~18.7.8 에서 시험했다고 적고 있어서[1], iOS 26·27 검체에서는 결과를 직접 대조합니다. 탭 그룹이 SafariTabs.db 안에 어떻게 저장되는지, 예전 파일 이름으로 나오는 `LastSession.plist`·`RecentlyClosedTabs.plist`[4] 가 어느 버전까지 쓰였는지는 확인하지 못했습니다.
+iLEAPP 의 탭 모듈은 iOS 12.4, 13.3.1, 14.3, 15.0.2, 16.1.1~16.5, 17.1~17.6.1, 18.0~18.7.8 에서 시험되어[1], iOS 26·27 검체에서는 결과를 직접 대조합니다. 탭 그룹이 SafariTabs.db 안에 어떻게 저장되는지, 예전 파일 이름으로 나오는 `LastSession.plist`·`RecentlyClosedTabs.plist`[4] 가 어느 버전까지 쓰였는지는 공개 자료가 없어 검체로 확인합니다.
 
 ## 구조
 
@@ -39,7 +39,7 @@ iLEAPP 의 탭 코드는 iOS 12.4, 13.3.1, 14.3, 15.0.2, 16.1.1~16.5, 17.1~17.6.
 | CloudTabs.db `cloud_tabs` | `system_fields`, `title`, `url`, `device_uuid`, `tab_uuid` | [1] |
 | CloudTabs.db `cloud_tab_devices` | `device_uuid`, `device_name` | [1] |
 
-CloudTabs.db 의 두 표는 `device_uuid` 로 이어지고, iLEAPP 는 이 칸으로 탭에 기기 이름을 붙입니다[1]. 위 칸은 iLEAPP 가 읽는 것만 적은 것이라 검체에서 두 표의 칸 목록을 한 번 더 봅니다. SafariTabs.db 의 `bookmarks` 표는 [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks-reading-list.md)의 Bookmarks.db `bookmarks` 표와 칸 이름이 여럿 겹치지만, 같은 구조를 쓰는지는 확인하지 못했습니다.
+CloudTabs.db 의 두 표는 `device_uuid` 로 이어지고, iLEAPP 는 이 칸으로 탭에 기기 이름을 붙입니다[1]. 위 칸은 iLEAPP 가 읽는 것만 적은 것이라 검체에서 두 표의 칸 목록을 한 번 더 봅니다. SafariTabs.db 의 `bookmarks` 표는 [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks-reading-list.md)의 Bookmarks.db `bookmarks` 표와 칸 이름이 여럿 겹치지만, 같은 구조인지는 검체에서 비교합니다.
 
 SafariTabs.db 의 두 BLOB 칸 안에는 이진 plist 가 들어 있습니다.
 
@@ -50,7 +50,7 @@ SafariTabs.db 의 두 BLOB 칸 안에는 이진 plist 가 들어 있습니다.
 
 `SessionState` 키 안에는 또 다른 이진 plist 가 들어 있고, 앞 4바이트를 떼어야 plist 로 읽힙니다[2].
 
-사파리 설정 plist 에도 탭과 이어진 이름의 키가 있습니다. 값의 뜻은 확인하지 못했습니다.
+사파리 설정 plist 에도 탭과 이어진 이름의 키가 있습니다. 값의 뜻을 밝힌 공개 자료는 없습니다.
 
 | 위치 | 키 |
 |---|---|
@@ -67,12 +67,12 @@ SafariTabs.db 의 두 BLOB 칸 안에는 이진 plist 가 들어 있습니다.
 
 ## 시각 해석
 
-BrowserState.db 의 `last_viewed_time` 은 iOS 18 이하에서 Apple 절대 시각, iOS 26 이상에서 UNIX 시각입니다[1]. iLEAPP 는 버전을 보지 않고 값이 978307200 보다 크면 UNIX 로, 아니면 978307200 을 더해 Apple 절대 시각으로 바꿉니다[1]. `last_modified`, `date_closed`, `LastVisitTime`, `DateLastViewed` 의 기준은 이번 자료로 따로 확인하지 못해서, 같은 방식으로 자릿수를 본 뒤 결과가 수집 시각보다 앞인지 확인하고 씁니다. 두 기준을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에 있습니다.
+BrowserState.db 의 `last_viewed_time` 은 iOS 18 이하에서 Apple 절대 시각, iOS 26 이상에서 UNIX 시각입니다[1]. iLEAPP 는 버전을 보지 않고 값이 978307200 보다 크면 UNIX 로, 아니면 978307200 을 더해 Apple 절대 시각으로 바꿉니다[1]. `last_modified`, `date_closed`, `LastVisitTime`, `DateLastViewed` 의 기준은 공개 자료에 따로 없어서, 같은 방식으로 자릿수를 본 뒤 결과가 수집 시각보다 앞인지 확인하고 씁니다. 두 기준을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
 ## 함정과 한계
 
-- 암호화하지 않은 백업에는 세 DB 가 없었으므로, 탭을 보려면 다른 수집 방식이 필요한지 먼저 따집니다. 수집 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다.
-- iOS 15 시험에서 CloudTabs.db 를 읽는 도구가 거의 없었다는 결과가 있어서[3], 도구 결과에 다른 기기 탭이 없다고 DB 가 비었다고 보지 않습니다.
+- 암호화하지 않은 백업에는 세 DB 가 없으므로, 탭을 보려면 다른 수집 방식이 필요한지 먼저 따집니다. 수집 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다.
+- iOS 15 도구 비교에서 CloudTabs.db 를 읽는 도구가 거의 없었으므로[3], 도구 결과에 다른 기기 탭이 없다고 DB 가 비었다고 보지 않습니다.
 - `SessionState` 는 앞 4바이트를 떼지 않으면 plist 로 열리지 않아서[2], 도구 결과에 이 값이 비어 있으면 직접 꺼내 확인합니다.
 
 ## 직접 분석해 보기

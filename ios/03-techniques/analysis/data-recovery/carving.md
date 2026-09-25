@@ -11,14 +11,14 @@ nav_order: 1330
 
 ## 언제 쓰나
 
-PC 에서는 지운 파일의 블록이 빈 공간에 남아 있어서, JPEG 머리 같은 시그니처로 원시 디스크를 훑으면 파일을 되살리기도 합니다. 아이폰은 데이터 볼륨에 파일을 만들 때마다 파일별 키를 새로 만들고, 하드웨어 AES 엔진이 플래시에 쓰는 순간 그 키로 암호화합니다 [2]. 그래서 원시 플래시나 볼륨을 시그니처로 훑으면 파일별 키 없이는 암호문만 보게 되고, ElcomSoft 도 지운 사용자 파일을 되살리는 도구는 없다고 적었습니다 [1]. 키가 어떻게 사라지는지는 [복구가 안 되는 이유](limits.md) 에 정리했습니다.
+PC 에서는 지운 파일의 블록이 빈 공간에 남아 있어서, JPEG 머리 같은 시그니처로 원시 디스크를 훑으면 파일을 되살리기도 합니다. 아이폰은 데이터 볼륨에 파일을 만들 때마다 파일별 키를 새로 만들고, 하드웨어 AES 엔진이 플래시에 쓰는 순간 그 키로 암호화합니다 [2]. 그래서 원시 플래시나 볼륨을 시그니처로 훑으면 파일별 키 없이는 암호문만 보게 되고, 지운 사용자 파일을 되살리는 도구도 없습니다 [1]. 키가 어떻게 사라지는지는 [복구가 안 되는 이유](limits.md) 에 정리했습니다.
 
 카빙이 실제로 쓸모 있는 곳은 수집 과정에서 이미 풀린 파일의 안쪽입니다. 대표적인 대상은 아래와 같습니다.
 
 - SQLite 파일의 freelist 페이지, 페이지 안의 freeblock 과 빈 공간, WAL 프레임을 레코드 구조(varint·serial type)로 훑는 경우 [3]. 이 자리들이 무엇인지는 [SQLite 레코드 되살리기](sqlite-records.md) 에 있습니다.
-- 검색 색인 DB. SQLite 공식 문서는 secure_delete 를 켜도 FTS3·FTS5 같은 가상 표의 그림자 표에는 흔적이 남을 수 있다고 적었고 [4], 이 설명대로라면 본 표에서 지운 내용이 색인 쪽에 남아 있을 수 있습니다.
-- 사용 기록 DB 와 스트림. D20 Forensics 는 iOS 16 기기 두 대로 시험해, 보내기 취소한 메시지 본문을 KnowledgeC.db 에서 일반 파싱이 아닌 키워드 검색·카빙으로 찾았고 바이옴 AppIntent 스트림(`/private/var/mobile/Library/Biome/streams/public/AppIntent/local`)과 DuetExpertCenter 알림 이벤트 스트림(`/private/var/mobile/Library/DuetExpertCenter/streams/UserNotificationEvents/local/`)에서도 찾았다고 보고했습니다 [5]. 이 경로는 전체 파일 시스템 기준이고, 로컬 백업에 들어가는지는 확인하지 못했습니다.
-- 사진 메타데이터. ElcomSoft 는 미디어를 추출할 때 본 DB 에 합쳐지지 않은 WAL 파일도 함께 받으면 사진 메타데이터 일부를 되살릴 수 있다고 주장합니다 [1].
+- 검색 색인 DB. secure_delete 를 켜도 FTS3·FTS5 같은 가상 표의 그림자 표에는 흔적이 남을 수 있어서 [4], 본 표에서 지운 내용이 색인 쪽에 남아 있을 수 있습니다.
+- 사용 기록 DB 와 스트림. iOS 16 기기 두 대로 한 시험에서, 보내기 취소한 메시지 본문이 KnowledgeC.db 에서 일반 파싱이 아닌 키워드 검색·카빙으로 나왔고 바이옴 AppIntent 스트림(`/private/var/mobile/Library/Biome/streams/public/AppIntent/local`)과 DuetExpertCenter 알림 이벤트 스트림(`/private/var/mobile/Library/DuetExpertCenter/streams/UserNotificationEvents/local/`)에서도 나왔습니다 [5]. 이 경로는 전체 파일 시스템 기준이고, 로컬 백업에 들어가는지는 검체에서 확인합니다.
+- 사진 메타데이터. 미디어를 추출할 때 본 DB 에 합쳐지지 않은 WAL 파일도 함께 받으면 사진 메타데이터 일부를 되살릴 수 있다는 설명이 있습니다 [1].
 
 ## 절차
 

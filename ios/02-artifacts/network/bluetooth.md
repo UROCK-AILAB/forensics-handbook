@@ -14,15 +14,15 @@ nav_order: 670
 
 블루투스 기록은 세 파일에 나뉘어 있습니다. `com.apple.MobileBluetooth.ledevices.paired.db` 는 기기와 페어링한 저전력(Bluetooth Low Energy) 장치를, `com.apple.MobileBluetooth.ledevices.other.db` 는 기기가 감지했거나 범위 안에 들어온 저전력 장치를 기록하고, `com.apple.MobileBluetooth.devices.plist` 는 페어링한 장치와 그 장치를 마지막으로 감지한 시각을 기록합니다 [1]. 이어폰·워치·차량처럼 사용자가 연결해 쓰는 장치뿐만 아니라, 페어링하지 않았지만 근처에 있던 저전력 장치까지 남을 수 있어서 "그 시각 그 장치 근처에 있었나" 를 묻는 단서가 됩니다.
 
-차량 연결을 다룬 사례에서는 `devices.plist` 의 `LastSeenTime` 이 차량과 블루투스 연결이 끊긴 시각을 나타냈다고 보고했습니다 [1]. 다만 이 글은 시험한 iOS 버전을 밝히지 않았습니다 [1].
+차량 연결 사례에서는 `devices.plist` 의 `LastSeenTime` 이 차량과 블루투스 연결이 끊긴 시각이었습니다 [1]. 이 사례의 iOS 버전은 밝혀져 있지 않습니다 [1].
 
-관찰한 로컬 백업에는 이 세 파일 말고도 연결 종류별 횟수·시간으로 보이는 키가 든 `com.apple.MobileBluetooth.debug.plist` 가 있었습니다.
+로컬 백업에는 이 세 파일 말고도 연결 종류별 횟수·시간으로 보이는 키가 든 `com.apple.MobileBluetooth.debug.plist` 가 있습니다.
 
 ## 위치와 버전별 차이
 
 ### 기기 안 경로
 
-아래 경로는 공개 자료에 나온 것이고 [1], `<GUID>` 는 기기마다 다른 시스템 그룹 폴더 이름입니다.
+기기 안 경로는 아래와 같고 [1], `<GUID>` 는 기기마다 다른 시스템 그룹 폴더 이름입니다.
 
 ```
 /private/var/containers/Shared/SystemGroup/<GUID>/Library/Database/com.apple.MobileBluetooth.ledevices.paired.db
@@ -30,9 +30,9 @@ nav_order: 670
 /private/var/containers/Shared/SystemGroup/<GUID>/Library/Preferences/com.apple.MobileBluetooth.devices.plist
 ```
 
-### 로컬 백업에서 본 위치
+### 로컬 백업 안의 위치
 
-암호화하지 않은 로컬 백업에서는 세 파일이 모두 `SysSharedContainerDomain-systemgroup.com.apple.bluetooth` 도메인(항목 7개)에 있었습니다.
+암호화하지 않은 로컬 백업에서도 세 파일은 모두 `SysSharedContainerDomain-systemgroup.com.apple.bluetooth` 도메인에 들어 있습니다.
 
 | 도메인 :: 상대 경로 | 형식 |
 |---|---|
@@ -43,7 +43,7 @@ nav_order: 670
 | `HomeDomain :: Library/Preferences/com.apple.bluetooth.plist` | plist |
 | `HomeDomain :: Library/Preferences/com.apple.bluetoothuserd.plist` | plist |
 
-위 표는 모두 입니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+위 표는 iOS 27.0 기준입니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전
 
@@ -52,11 +52,11 @@ nav_order: 670
 | 밝히지 않음 | 세 파일의 역할, `devices.plist` 시각이 현지 시각이라는 점, WAL 을 함께 파싱해야 한다는 점 | [1] |
 | 27.0 | 두 DB 의 표·칸 이름, `devices.plist`·`debug.plist` 키 이름 | |
 
-iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 확인하지 못해서, 검체의 iOS 버전을 먼저 적고 칸 이름을 직접 확인합니다.
+iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 공개 자료가 없어서, 검체의 iOS 버전을 먼저 적고 칸 이름을 직접 확인합니다.
 
 ## 구조
 
-### 두 DB (관찰)
+### 두 DB
 
 `ledevices.paired.db` 에는 `PairedDevices`, `CustomProperties`, `_SqliteDatabaseProperties` 표가 있고, `ledevices.other.db` 에는 `PairedDevices` 대신 `OtherDevices` 표가 있습니다. `PairedDevices` 와 `OtherDevices` 의 칸은 같습니다.
 
@@ -68,17 +68,17 @@ iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 확인하지 못해�
 
 
 
-`Uuid` 로 장치 표와 `CustomProperties` 를 이어 볼 수 있을 것으로 보이지만, 두 표의 관계와 `JSON` 칸 내용은 확인하지 못했습니다. `Address` 와 `ResolvedAddress` 가 따로 있어서 두 값이 다를 수 있다는 점만 칸 구성으로 알 수 있고, `NameOrigin`·`Tags`·`iCloudIdentifier` 값의 뜻은 공개 자료로 확인하지 못했습니다. SQLite 파일을 읽는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+`Uuid` 로 장치 표와 `CustomProperties` 를 이어 볼 수 있을 것으로 보이지만, 두 표의 관계와 `JSON` 칸 내용은 공개된 분석 자료가 없어 검체로 확인해야 합니다. `Address` 와 `ResolvedAddress` 가 따로 있어서 두 값이 다를 수 있다는 점만 칸 구성으로 알 수 있고, `NameOrigin`·`Tags`·`iCloudIdentifier` 값의 뜻을 설명한 공개 자료는 없습니다. SQLite 파일을 읽는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
-### devices.plist (관찰)
+### devices.plist
 
-`com.apple.MobileBluetooth.devices.plist` 는 장치 주소를 키로 한 사전이고, 장치 항목 안에서 `Name`, `DefaultName`, `DeviceClass`, `LastSeenTime`, `EncryptionKeySize`, `EncryptionMode`, `CarPlayType`, `AppleDevFeatures`, `CaseInfoColor`, `CaseInfoVersion`, `DoubleTapAction`, `UserNameKey` 와 `ServiceHID`, `ServiceMAP`, `ServicePhoneBook`, `ServiceAACP`, `ServiceGATT`, `ServiceWiAP` 같은 서비스 키, `LastHandsfreeVersion`, `LastAVRCPVersion` 같은 프로필 판 키가 보였습니다.
+`com.apple.MobileBluetooth.devices.plist` 는 장치 주소를 키로 한 사전이고, 장치 항목 안에서 `Name`, `DefaultName`, `DeviceClass`, `LastSeenTime`, `EncryptionKeySize`, `EncryptionMode`, `CarPlayType`, `AppleDevFeatures`, `CaseInfoColor`, `CaseInfoVersion`, `DoubleTapAction`, `UserNameKey` 와 `ServiceHID`, `ServiceMAP`, `ServicePhoneBook`, `ServiceAACP`, `ServiceGATT`, `ServiceWiAP` 같은 서비스 키, `LastHandsfreeVersion`, `LastAVRCPVersion` 같은 프로필 판 키가 있습니다.
 
-한 장치 항목에는 `CarPlayType` 과 `ServicePhoneBook`·`ServiceMAP`·`LastHandsfreeVersion` 이 함께 있어서 차량이나 핸즈프리 장치로 보이지만, 값은 보지 않았습니다. 키 이름으로 장치 종류를 짐작할 수는 있어도, 보고서에는 `Name`·`DeviceClass` 값과 함께 "이런 키가 있는 장치" 로 적습니다.
+`CarPlayType` 과 `ServicePhoneBook`·`ServiceMAP`·`LastHandsfreeVersion` 이 함께 있는 장치 항목은 차량이나 핸즈프리 장치로 보입니다. 키 이름으로 장치 종류를 짐작할 수는 있어도, 보고서에는 `Name`·`DeviceClass` 값과 함께 "이런 키가 있는 장치" 로 적습니다.
 
-### debug.plist 와 그 밖의 plist (관찰)
+### debug.plist 와 그 밖의 plist
 
-`com.apple.MobileBluetooth.debug.plist` 는 연결 종류마다 사전을 두고, 사전마다 `BtConnectionTypeCounter`, `BtConnectionTypeDuration`, `BtConnectionTypeStartTimeStamp` 키가 있습니다. 보인 연결 종류 이름은 `HID`, `HFP`, `SENSOR`, `WIRELESSIAP`, `NETSHARING`, `PASSIVEMULTISTREAM`, `IDLE`, `LEGATTCLIENT`, `MAP`, `BRAILLE` 등이고, `LeDeviceCache` 아래에는 `WipeNameOrigin` 키가 있습니다. 키 이름으로 보아 연결 종류별 횟수·지속 시간·시작 시각이지만, 장치별 기록이 아니라 종류별로 모인 값이라서 특정 장치와 바로 잇지 않습니다.
+`com.apple.MobileBluetooth.debug.plist` 는 연결 종류마다 사전을 두고, 사전마다 `BtConnectionTypeCounter`, `BtConnectionTypeDuration`, `BtConnectionTypeStartTimeStamp` 키가 있습니다. 연결 종류 이름은 `HID`, `HFP`, `SENSOR`, `WIRELESSIAP`, `NETSHARING`, `PASSIVEMULTISTREAM`, `IDLE`, `LEGATTCLIENT`, `MAP`, `BRAILLE` 등이고, `LeDeviceCache` 아래에는 `WipeNameOrigin` 키가 있습니다. 키 이름으로 보아 연결 종류별 횟수·지속 시간·시작 시각이지만, 장치별 기록이 아니라 종류별로 모인 값이라서 특정 장치와 바로 잇지 않습니다.
 
 `com.apple.bluetooth.plist` 에는 `deviceLastRebootTime`, `lastNowPlayedTime` 키가, `com.apple.bluetoothuserd.plist` 에는 `lastLaunchBootSessionUUID`, `CKPerBootTasks`, `CKStartupTime`, `LastOSLaunchVersion`, `CC_OncePerBootBackingData` 키가 있습니다. 두 파일 모두 장치 목록이 아니라 서비스 상태로 보입니다.
 
@@ -101,7 +101,7 @@ iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 확인하지 못해�
 
 ## 시각 해석
 
-공개 자료는 `devices.plist` 의 시각 값을 UTC 가 아니라 기기 현지 시각으로 저장한다고 보고했고 [1], 차량 사례에서 `LastSeenTime` 은 연결이 끊긴 시각이었습니다 [1]. `LastSeenTime` 숫자가 유닉스 시각인지 Mac 절대 시각인지는 원문에서 확인하지 못했습니다. 두 DB 의 `LastSeenTime`·`LastConnectionTime` 과 `debug.plist` 의 `BtConnectionTypeStartTimeStamp` 도 기준과 시간대를 확인하지 못했습니다.
+`devices.plist` 의 시각 값은 UTC 가 아니라 기기 현지 시각으로 저장되고 [1], 차량 사례에서 `LastSeenTime` 은 연결이 끊긴 시각이었습니다 [1]. `LastSeenTime` 숫자가 유닉스 시각인지 Mac 절대 시각인지는 공개 자료에 나와 있지 않습니다. 두 DB 의 `LastSeenTime`·`LastConnectionTime` 과 `debug.plist` 의 `BtConnectionTypeStartTimeStamp` 도 기준과 시간대가 알려져 있지 않습니다.
 
 그래서 숫자를 찾으면 자릿수로 기준을 가려 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 바꾸고, 현지 시각이라면 수집 당시 기기 시간대를 [시간대와 시각 설정](../system-account/time-zone.md) 에서 확인한 뒤 UTC 로 맞춥니다. 시간대를 옮겨 다닌 기기라면 현지 시각 값은 기록한 순간의 시간대를 따로 알아야 해서 해석이 더 어렵습니다. 이름이 `Last` 로 시작하는 칸은 가장 최근 값 하나로 보여서, 새 연결이 생기면 이전 값이 남지 않을 수 있습니다.
 
@@ -111,9 +111,9 @@ iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 확인하지 못해�
 
 공개 자료가 시험한 iOS 버전을 밝히지 않아서 [1], 다른 버전의 검체에서는 표·칸 이름을 직접 확인합니다. `devices.plist` 가 현지 시각이라는 보고를 다른 파일에 그대로 넓혀 쓰지도 않습니다.
 
-KnowledgeC·바이옴에 블루투스 연결을 담는 스트림이 있는지, 있다면 이름이 무엇인지는 이번에 확인하지 못했습니다. 연결 순간을 더 촘촘하게 보려면 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 을 살펴봅니다.
+KnowledgeC·바이옴에 블루투스 연결을 담는 스트림이 있는지, 있다면 이름이 무엇인지는 검체에서 확인합니다. 연결 순간을 더 촘촘하게 보려면 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 을 살펴봅니다.
 
-페어링을 지운 장치가 목록에서 바로 빠지는지, 지운 흔적이 어디에 남는지는 확인하지 못했습니다. 장치 목록이 비어 있을 때 지우기를 의심한다면 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 확인합니다.
+페어링을 지운 장치가 목록에서 바로 빠지는지, 지운 흔적이 어디에 남는지는 공개된 분석 자료가 없습니다. 장치 목록이 비어 있을 때 지우기를 의심한다면 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 확인합니다.
 
 ## 직접 분석해 보기
 

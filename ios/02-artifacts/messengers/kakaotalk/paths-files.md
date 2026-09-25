@@ -13,7 +13,7 @@ nav_order: 800
 
 ## 무엇을 기록하나 · 왜 생기나
 
-카카오톡의 번들 ID 는 `com.iwilab.KakaoTalk` 이고[3], 앱이 쓰는 파일은 이 앱의 데이터 컨테이너 안에 모입니다. 공개 도구 두 가지가 읽는 파일은 모두 `Library/PrivateDocuments/` 아래에 있고[2][3], 메시지는 `Message.sqlite` 에, 채팅방·사용자·연락처는 `Talk.sqlite` 에 들어 있습니다[2][3]. 받은 사진·영상·음성은 DB 밖의 폴더에 파일로 남습니다[2].
+카카오톡의 번들 ID 는 `com.iwilab.KakaoTalk` 이고[3], 앱이 쓰는 파일은 이 앱의 데이터 컨테이너 안에 모입니다. 카카오톡 DB 파일은 모두 `Library/PrivateDocuments/` 아래에 있고[2][3], 메시지는 `Message.sqlite` 에, 채팅방·사용자·연락처는 `Talk.sqlite` 에 들어 있습니다[2][3]. 받은 사진·영상·음성은 DB 밖의 폴더에 파일로 남습니다[2].
 
 각 파일의 안쪽은 하위 페이지에서 나눠 다룹니다. 표와 칸, 암호화는 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에, 미디어 폴더는 [받은 파일 (Received Files)](received-files.md)에, 사용자와 연락처 표는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
 
@@ -21,7 +21,7 @@ nav_order: 800
 
 ### 기기 안의 위치
 
-iLEAPP 는 앱 데이터 컨테이너의 루트를 `.../Data/Application/<UUID>/` 로 묶고[2], 그 아래에서 아래 경로를 찾습니다[2].
+앱 데이터 컨테이너의 루트는 `.../Data/Application/<UUID>/` 이고[2], 파일은 그 아래 다음 경로에 있습니다[2].
 
 ```
 */Library/PrivateDocuments/Message.sqlite*
@@ -35,13 +35,13 @@ iLEAPP 는 앱 데이터 컨테이너의 루트를 `.../Data/Application/<UUID>/
 
 ### 로컬 백업 안의 위치
 
-아이튠즈(로컬) 백업에서 카카오톡 파일은 `AppDomain-com.iwilab.KakaoTalk` 도메인에 들어가고, 상대 경로는 기기와 같은 `Library/PrivateDocuments/Message.sqlite`, `Library/PrivateDocuments/Talk.sqlite` 입니다[3]. 백업의 `Manifest.db` 에는 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)가 있어서, 이 표에서 `domain` 과 `relativePath` 로 파일을 찾습니다[3]. 관찰한 백업에서는 Apple 이 아닌 앱의 도메인 161개를 이름을 가린 채 기록해서, 카카오톡 도메인과 그 안의 파일 목록은 직접 확인하지 않았습니다. 백업 파일 ID 를 구하는 방법과 백업 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에 있습니다.
+아이튠즈(로컬) 백업에서 카카오톡 파일은 `AppDomain-com.iwilab.KakaoTalk` 도메인에 들어가고, 상대 경로는 기기와 같은 `Library/PrivateDocuments/Message.sqlite`, `Library/PrivateDocuments/Talk.sqlite` 입니다[3]. 백업의 `Manifest.db` 에는 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)가 있어서, 이 표에서 `domain` 과 `relativePath` 로 파일을 찾습니다[3]. 백업 파일 ID 를 구하는 방법과 백업 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에 있습니다.
 
-로컬 백업만으로 DB 와 미디어 파일을 꺼내 분석한 공개 도구가 있지만[3], 암호화 백업이어야 이 파일들이 들어가는지는 확인하지 못했습니다.
+로컬 백업만으로 DB 와 미디어 파일을 꺼내 분석할 수 있습니다[3]. 암호화 백업이어야 이 파일들이 들어가는지는 공개 자료에 없어서 검체로 확인합니다.
 
 ### 버전별 차이
 
-공개 도구 두 가지 모두 시험한 iOS 버전과 카카오톡 앱 버전을 적어 두지 않아서[2][3], 경로가 버전에 따라 달라지는지는 확인하지 못했습니다. 앱 버전에 따라 `Talk.sqlite` 의 칸 구성이 다른 사례는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
+시험한 iOS 버전과 카카오톡 앱 버전을 밝힌 공개 자료가 없어서, 경로가 버전에 따라 달라지는지는 검체에서 확인합니다. 앱 버전에 따라 `Talk.sqlite` 의 칸 구성이 다른 사례는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
 
 ## 구조
 
@@ -54,9 +54,9 @@ iLEAPP 는 앱 데이터 컨테이너의 루트를 `.../Data/Application/<UUID>/
 | 받은 영상 | `chatVideo/` 아래 채팅방별 폴더 | 영상 파일[2] |
 | 받은 음성 | `chatAudio/` 아래 채팅방별 폴더 | 음성 파일[2] |
 
-`Message.sqlite` 와 `Talk.sqlite` 는 흔한 이름이라 다른 앱의 파일과 헷갈릴 수 있습니다. iLEAPP 는 `Message` 표에 `sentAt`·`chatId`·`serverLogId`·`clientMsgId` 칸이 있는지, `Talk.sqlite` 에 `ZCHAT`·`ZUSER` 표가 있는지를 보고 카카오톡 파일인지 가립니다[2]. 경로만 보고 고른 파일도 같은 방법으로 한 번 더 확인하는 편이 안전합니다.
+`Message.sqlite` 와 `Talk.sqlite` 는 흔한 이름이라 다른 앱의 파일과 헷갈릴 수 있습니다. `Message` 표에 `sentAt`·`chatId`·`serverLogId`·`clientMsgId` 칸이 있는지, `Talk.sqlite` 에 `ZCHAT`·`ZUSER` 표가 있는지를 보면 카카오톡 파일인지 가릴 수 있습니다[2]. 경로만 보고 고른 파일도 같은 방법으로 한 번 더 확인하는 편이 안전합니다.
 
-카카오톡 설정 plist 가 있는지, 앱 그룹 컨테이너를 쓰는지, 카카오 서버로 올리는 대화 백업 기능이 기기에 파일을 남기는지는 이번에 연 자료로 확인하지 못했습니다.
+카카오톡 설정 plist 가 있는지, 앱 그룹 컨테이너를 쓰는지, 카카오 서버로 올리는 대화 백업 기능이 기기에 파일을 남기는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -66,7 +66,7 @@ iLEAPP 는 앱 데이터 컨테이너의 루트를 `.../Data/Application/<UUID>/
 
 ## 함정과 한계
 
-WAL 파일을 빠뜨리면 메시지가 크게 빠집니다. iLEAPP 개발 기록에 따르면 `Message.sqlite` 는 행 내용 대부분이 DB 본체가 아니라 `-wal` 파일에 있었습니다[2]. DB 본체만 복사해 열면 메시지가 거의 없는 것처럼 보일 수 있어서, `-wal`·`-shm` 을 같은 폴더에 함께 두고 엽니다. WAL 이 합쳐지는 방식은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
+WAL 파일을 빠뜨리면 메시지가 크게 빠집니다. `Message.sqlite` 는 행 내용 대부분이 DB 본체가 아니라 `-wal` 파일에 있는 경우가 있습니다[2]. DB 본체만 복사해 열면 메시지가 거의 없는 것처럼 보일 수 있어서, `-wal`·`-shm` 을 같은 폴더에 함께 두고 엽니다. WAL 이 합쳐지는 방식은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
 원본 파일을 바로 SQLite 도구로 열면 WAL 이 본체에 합쳐져 원본이 바뀔 수 있습니다. 먼저 세 파일을 함께 사본으로 떠 놓고 사본을 엽니다.
 

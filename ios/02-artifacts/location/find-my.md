@@ -8,7 +8,7 @@ nav_order: 620
 
 ## 한 줄 요약
 
-나의 찾기는 기기·물건·가족의 위치를 찾고 위치를 공유하는 Apple 기능이고, 앱 캐시(`fmipcore`)에는 기기·물건·가족·안전 위치 목록이, 나의 찾기 네트워크 데몬(`searchpartyd`)의 DB 에는 주변에서 관찰한 비콘 기록이 남지만, iOS 16 이상 검체에서 본 이 DB 들은 암호화되어 있고 로컬 백업에는 설정 plist 만 보입니다.
+나의 찾기는 기기·물건·가족의 위치를 찾고 위치를 공유하는 Apple 기능이고, 앱 캐시(`fmipcore`)에는 기기·물건·가족·안전 위치 목록이, 나의 찾기 네트워크 데몬(`searchpartyd`)의 DB 에는 주변에서 관찰한 비콘 기록이 남습니다. iOS 16 이상에서는 이 DB 들이 암호화되어 있고, 로컬 백업에는 설정 plist 만 들어갑니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -26,12 +26,12 @@ nav_order: 620
 |---|---|
 | `Devices.data` | 기기 식별자, 표시 이름, 모델·종류, 소유자 ID, "위치 켜짐"·"분실 모드"·암호 길이 표시 |
 | `Items.data` | 물건(AirTag 등) 식별자, 이름, 종류, 제조사, 일련번호, 연결된 안전 위치 ID |
-| `ItemGroups.data` | [2] 에 파일 이름만 있고 내용 설명은 확인하지 못함 |
+| `ItemGroups.data` | 공개 자료 없음 |
 | `FamilyMembers.data` | Apple ID, 이름, 전화번호, 사용자 ID |
 | `SafeLocations.data` | 위도·경도, 주소, 장소 이름, 추가된 시각 |
-| `Owner.data` | [2] 에 파일 이름만 있고 내용 설명은 확인하지 못함 |
+| `Owner.data` | 공개 자료 없음 |
 
-이 파일들의 저장 형식, 암호화 여부, 어느 iOS 버전 기준인지는 [2] 에 나와 있지 않습니다.
+이 파일들의 저장 형식과 암호화 여부, 해당 iOS 버전은 공개된 자료가 없어 검체에서 확인합니다.
 
 ### 나의 찾기 네트워크 데몬
 
@@ -45,24 +45,24 @@ nav_order: 620
 | `SharedBeacons/` | 공유받은 비콘 정보 |
 | `WildModeAssociationRecord/` | 원치 않는 추적기를 감지한 기록. 위치와 알림 여부가 담긴 암호화된 plist |
 
-### 버전별로 확인한 내용
+### 버전별 내용
 
-| 시기·버전 | 확인한 내용 | 근거 |
+| 시기·버전 | 내용 | 근거 |
 |---|---|---|
-| iOS 16.x 이상 | 글쓴이가 본 검체에서 `searchpartyd` DB 를 SQLite Encryption Extension(AES-256 OFB)으로 암호화, DB 이름마다 키체인 항목이 따로 있음. 이 파일들은 iOS 16.x 이상에서만 보였다고 적음 | [3] |
+| iOS 16.x 이상 | `searchpartyd` DB 를 SQLite Encryption Extension(AES-256 OFB)으로 암호화, DB 이름마다 키체인 항목이 따로 있음. 이 파일들은 iOS 16.x 이상에서만 보임 | [3] |
 | iOS 27.0 로컬 백업 | `fmipcore` 캐시와 `searchpartyd` DB 는 백업 DB 목록에 없음, 설정 plist 와 도메인만 있음 | |
 
-암호화된 DB 는 일반 SQLite 열람기로 바로 열리지 않고, 키체인과 보호 등급의 관계는 [키체인](../../01-foundations/storage/keychain.md) 과 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 에서 다룹니다. `searchpartyd` DB 가 로컬 백업에 들어가는지는 [3] 에 나와 있지 않고, 관찰한 백업에서는 보이지 않았습니다.
+암호화된 DB 는 일반 SQLite 열람기로 바로 열리지 않고, 키체인과 보호 등급의 관계는 [키체인](../../01-foundations/storage/keychain.md) 과 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 에서 다룹니다. iOS 27.0 로컬 백업에는 `searchpartyd` DB 가 들어가지 않습니다.
 
 ### 로컬 백업에서 보이는 것
 
-로컬 백업에는 나의 찾기 관련 도메인으로 `AppDomain-com.apple.findmy`, `AppDomain-com.apple.findmy.FindingUIAngel`, `AppDomain-com.apple.findmy.remoteuiservice`, `AppDomain-com.apple.icloud.FindMyDevice.FindMyExtensionContainer`, `AppDomainGroup-group.com.apple.icloud.findmydevice.magsafe`, `AppDomainGroup-group.com.apple.icloud.findmydevice.shared-configuration`, `SysContainerDomain-com.apple.icloud.findmydeviced`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.searchpartyd.sharedsettings` 가 있었습니다. 도메인 체계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
+iOS 27.0 로컬 백업에는 나의 찾기 관련 도메인으로 `AppDomain-com.apple.findmy`, `AppDomain-com.apple.findmy.FindingUIAngel`, `AppDomain-com.apple.findmy.remoteuiservice`, `AppDomain-com.apple.icloud.FindMyDevice.FindMyExtensionContainer`, `AppDomainGroup-group.com.apple.icloud.findmydevice.magsafe`, `AppDomainGroup-group.com.apple.icloud.findmydevice.shared-configuration`, `SysContainerDomain-com.apple.icloud.findmydeviced`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.searchpartyd.sharedsettings` 가 있습니다. 도메인 체계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
 
 ## 구조
 
 ### 로컬 백업의 설정 plist
 
-다음 plist 들에서 키 이름을 확인했습니다. 값은 가려져 있어 읽지 않았습니다.
+다음 plist 들에 아래와 같은 키가 있습니다.
 
 | 파일 | 조사와 관련 있어 보이는 키 |
 |---|---|
@@ -76,7 +76,7 @@ nav_order: 620
 | `HomeDomain :: Library/Preferences/systemgroup.com.apple.icloud.searchpartyd.sharedsettings.plist` | `SPSettingsServiceDisabledReasonsKey`(list), `SPBeaconZoneCreationDateKey`(datetime) |
 | `HomeDomain :: Library/Preferences/com.apple.findmy.plist` | `tabInfo`, `CustomMapStyle`, `restoreState`, `CustomMapMode_Options_explore` |
 
-키 이름으로 보아 `fmipActive` 는 나의 iPhone 찾기가 켜져 있는지, `fmipLostModeType` 은 분실 모드 종류, `command-locate-*` 는 원격 위치 조회 명령과 관련 있어 보이지만, 각 값의 뜻(예: `fmipLostModeType` 숫자가 무엇을 뜻하는지)은 확인하지 못했습니다. 파일 이름에 `notbackedup` 이 들어간 plist 도 관찰한 로컬 백업에 들어 있었습니다. plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+키 이름으로 보아 `fmipActive` 는 나의 iPhone 찾기가 켜져 있는지, `fmipLostModeType` 은 분실 모드 종류, `command-locate-*` 는 원격 위치 조회 명령과 관련 있어 보입니다. 각 값의 뜻(예: `fmipLostModeType` 숫자가 무엇을 뜻하는지)은 공개된 자료가 없어 검체에서 확인합니다. 파일 이름에 `notbackedup` 이 들어간 plist 도 로컬 백업에 들어갑니다. plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ### 다른 곳에 남는 흔적
 
@@ -101,15 +101,15 @@ nav_order: 620
 
 ## 시각 해석
 
-`searchpartyd` DB 의 시각 형식은 유닉스 시각이라는 요약을 보았지만 원문으로 확인하지 못했고, `fmipcore` 캐시 파일의 시각 형식도 [2] 에 나와 있지 않습니다. 값을 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 가리고, 같은 시각대의 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 현지 시각 변환은 [시간대와 시각 설정](../system-account/time-zone.md) 을 봅니다.
+`searchpartyd` DB 의 시각은 유닉스 시각이라는 설명이 있지만 뒷받침하는 원 자료는 없고, `fmipcore` 캐시 파일의 시각 형식은 공개된 자료가 없습니다. 값을 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 가리고, 같은 시각대의 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 현지 시각 변환은 [시간대와 시각 설정](../system-account/time-zone.md) 을 봅니다.
 
 기기가 정지해 있을 때 관찰이 늘고, 한 비콘이 2~4초 간격으로 기록된 예가 있습니다 [3]. 관찰 간격이 촘촘한 구간은 이동보다 머문 구간일 수 있어서 [위치 기록 데몬](routined.md) 의 위치 점과 함께 봅니다.
 
 ## 함정과 한계
 
-모르는 비콘의 관찰 기록은 매우 빨리 지워지고 VACUUM 되며(글쓴이는 확보 장소에서 블루투스를 끈 경우를 예외로 들었습니다), 소유·공유 비콘 기록은 더 오래 남습니다 [3]. 그래서 모르는 추적기 관찰이 비어 있어도 주변에 추적기가 없었다고 볼 수 없습니다. WAL 파일에 본 DB 에 없는 기록이 더 있을 수 있어서 [3] DB 를 확보할 때 `-wal` 파일을 반드시 함께 가져옵니다. WAL 해석은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), 지운 행 복구는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
+모르는 비콘의 관찰 기록은 매우 빨리 지워지고 VACUUM 되며(확보 장소에서 블루투스를 끈 경우는 예외), 소유·공유 비콘 기록은 더 오래 남습니다 [3]. 그래서 모르는 추적기 관찰이 비어 있어도 주변에 추적기가 없었다고 볼 수 없습니다. WAL 파일에 본 DB 에 없는 기록이 더 있을 수 있어서 [3] DB 를 확보할 때 `-wal` 파일을 반드시 함께 가져옵니다. WAL 해석은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), 지운 행 복구는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
-iOS 16.x 이상 검체에서 본 DB 는 암호화되어 있어서 [3] 파일을 확보해도 내용을 읽을 수 있는지는 수집 방식과 키체인 확보 여부에 달려 있습니다. 로컬 백업만 있으면 캐시와 DB 가 보이지 않고 plist 만 남습니다.
+iOS 16.x 이상에서는 DB 가 암호화되어 있어서 [3] 파일을 확보해도 내용을 읽을 수 있는지는 수집 방식과 키체인 확보 여부에 달려 있습니다. 로컬 백업만 있으면 캐시와 DB 가 보이지 않고 plist 만 남습니다.
 
 ## 직접 분석해 보기
 

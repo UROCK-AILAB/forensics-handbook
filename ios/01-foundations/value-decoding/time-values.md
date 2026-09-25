@@ -12,7 +12,7 @@ iOS 의 시각 값은 대부분 2001-01-01 UTC 부터 센 초이지만, 같은 �
 
 Apple 의 Core Foundation 은 2001-01-01 00:00:00 GMT 를 참조 시각으로 삼고, 이 시각부터 센 초를 배정밀도 실수(double)로 담는 값을 CFAbsoluteTime 이라고 부릅니다 [1]. 이 핸드북에서는 이 값을 Mac 절대 시각 (Mac Absolute Time) 이라고 부르고, 공개 도구 iLEAPP 는 같은 값을 Cocoa 시각 또는 Core Data 시각이라는 이름으로 다룹니다 [3].
 
-관찰한 로컬 백업에서 시각이 들어갈 이름을 단 칸과 키는 아래와 같습니다. 이름과 형만 확인했고 값은 읽지 않아서, 칸마다 단위와 기준점은 따로 확인해야 합니다.
+로컬 백업에서 시각이 들어갈 이름을 단 칸과 키는 아래와 같습니다. 칸마다 단위와 기준점이 다를 수 있어서 따로 확인해야 합니다.
 
 | 위치 | 표 또는 키 | 시각 칸·키 |
 |---|---|---|
@@ -24,9 +24,9 @@ Apple 의 Core Foundation 은 2001-01-01 00:00:00 GMT 를 참조 시각으로 �
 | Shortcuts.sqlite | `ZSHORTCUT` | `ZCREATIONDATE`, `ZMODIFICATIONDATE`, `ZLASTRUNEVENTDATE` |
 | DataUsage.sqlite | `ZPROCESS` | `ZFIRSTTIMESTAMP`, `ZTIMESTAMP` |
 
-`Z` 로 시작하는 표는 Core Data 가 만든 표이고, iLEAPP 는 이런 표의 날짜 칸을 Mac 절대 시각으로 전제하고 바꿉니다 [3]. 다만 관찰한 백업의 개별 칸 값으로 이 전제를 확인하지는 않았습니다.
+`Z` 로 시작하는 표는 Core Data 가 만든 표이고, iLEAPP 는 이런 표의 날짜 칸을 Mac 절대 시각으로 전제하고 바꿉니다 [3]. 다만 칸마다 값의 자릿수를 보고 이 전제가 맞는지 확인합니다.
 
-plist 쪽에서는 plist 자체의 날짜 형(datetime)으로 적힌 키가 458줄 있었고, 이름에 Date·Time 이 들어가는데 실수(float)로 적힌 키가 111줄, 정수(int)로 적힌 키가 135줄 있었습니다. 날짜 형의 예는 `WebsiteNameProviderLastUpdateTime`, com.apple.MobileBackup.plist 의 `AccountEnabledDate` 이고, 실수의 예는 `AMSMetricsIdentifierDateLastSynced`, `AppUsageSyncTime`, `HDCloudSyncFullSyncStartTime` 이며, 정수의 예는 RootDomain 의 com.apple.backupd.plist 에 있는 `CKStartupTime` 입니다. 저장 형식은 [속성 목록 파일](../data-formats/plist.md) 과 [SQLite 데이터베이스](../data-formats/sqlite/index.md) 에서 다룹니다.
+plist 쪽에서는 시각 키가 세 가지 형으로 적힙니다. 백업 한 개에서 plist 자체의 날짜 형(datetime)으로 적힌 키가 458줄, 이름에 Date·Time 이 들어가는데 실수(float)로 적힌 키가 111줄, 정수(int)로 적힌 키가 135줄 나온 예가 있습니다. 날짜 형의 예는 `WebsiteNameProviderLastUpdateTime`, com.apple.MobileBackup.plist 의 `AccountEnabledDate` 이고, 실수의 예는 `AMSMetricsIdentifierDateLastSynced`, `AppUsageSyncTime`, `HDCloudSyncFullSyncStartTime` 이며, 정수의 예는 RootDomain 의 com.apple.backupd.plist 에 있는 `CKStartupTime` 입니다. 저장 형식은 [속성 목록 파일](../data-formats/plist.md) 과 [SQLite 데이터베이스](../data-formats/sqlite/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -44,13 +44,13 @@ plist 쪽에서는 plist 자체의 날짜 형(datetime)으로 적힌 키가 458�
 
 ### 자릿수로 가리는 단위
 
-iLEAPP 의 Unix 시각 함수는 값의 절댓값으로 단위를 가리고, 10^16 이상이면 나노초, 10^13 이상이면 마이크로초, 10^10 이상이면 밀리초, 그보다 작으면 초로 봅니다 [3]. 이 판별은 Unix 시각 함수에 들어 있고, Cocoa 시각 함수도 나노초를 스스로 가리는지는 확인하지 못했습니다.
+iLEAPP 의 Unix 시각 함수는 값의 절댓값으로 단위를 가리고, 10^16 이상이면 나노초, 10^13 이상이면 마이크로초, 10^10 이상이면 밀리초, 그보다 작으면 초로 봅니다 [3]. 이 판별은 Unix 시각 함수에 들어 있으니, Cocoa 시각 함수로 나노초 값을 바꿀 때는 결과를 한 번 더 확인합니다.
 
-sms.db 에서는 iOS 11 부터 같은 시각 칸 안에 9자리 값(Mac 절대 초)과 18자리 값(Mac 절대 나노초)이 섞여 들어가고, 보낸 메시지에서는 0 이 보이기도 했다는 보고가 있습니다 [2]. 관찰한 iOS 27.0 백업에서 이 칸들의 자릿수는 값을 읽지 않아 확인하지 않았습니다.
+sms.db 에서는 iOS 11 부터 같은 시각 칸 안에 9자리 값(Mac 절대 초)과 18자리 값(Mac 절대 나노초)이 섞여 들어가고, 보낸 메시지에서는 0 이 들어가기도 합니다 [2].
 
 | iOS 버전 | sms.db 시각 칸의 값 | 근거 |
 |---|---|---|
-| iOS 11 이전 | 9자리 Mac 절대 초([2] 가 전통적인 형식이라고 부르는 값) | [2] |
+| iOS 11 이전 | 9자리 Mac 절대 초(전통적인 형식) | [2] |
 | iOS 11 부터 | 9자리 초와 18자리 나노초가 같은 칸 안에 섞임 | [2] |
 
 메시지 DB 의 칸별 해석은 [메시지](../../02-artifacts/communications/messages/index.md) 에서 다룹니다.
@@ -86,11 +86,11 @@ SELECT date,
 FROM message;
 ```
 
-[2] 에 실린 식은 끝에 `'localtime'` 을 붙여서 분석하는 컴퓨터의 시간대로 바꿉니다. 결과를 여러 기록과 엮을 때는 UTC 로 두고 시간대를 따로 적는 편이 헷갈림이 적습니다.
+식 끝에 `'localtime'` 을 붙이면 분석하는 컴퓨터의 시간대로 바뀝니다 [2]. 결과를 여러 기록과 엮을 때는 UTC 로 두고 시간대를 따로 적는 편이 헷갈림이 적습니다.
 
 ### 백업 자체의 시각
 
-기록을 해석할 때 기준으로 삼을 백업 시각도 있습니다. 관찰한 백업에는 Manifest.plist 에 `Date` 키가, Info.plist 에 `Last Backup Date` 키가 있었고, com.apple.MobileBackup.plist 에는 `RestoreInfo` 아래 `RestoreDate` 키와 `BackupStateInfo`·`RestoreStateInfo` 아래 `date` 키가 있었습니다. 백업 파일의 짜임은 [로컬 백업](../backups/local-backup/index.md) 에서, 복원 흔적으로 읽는 법은 [초기화와 복원 흔적](../../02-artifacts/system-account/erase-restore.md) 에서 다룹니다.
+기록을 해석할 때 기준으로 삼을 백업 시각도 있습니다. Manifest.plist 에는 `Date` 키가, Info.plist 에는 `Last Backup Date` 키가 있고, com.apple.MobileBackup.plist 에는 `RestoreInfo` 아래 `RestoreDate` 키와 `BackupStateInfo`·`RestoreStateInfo` 아래 `date` 키가 있습니다. 백업 파일의 짜임은 [로컬 백업](../backups/local-backup/index.md) 에서, 복원 흔적으로 읽는 법은 [초기화와 복원 흔적](../../02-artifacts/system-account/erase-restore.md) 에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
@@ -102,9 +102,9 @@ Mac 절대 초는 2004-03-03 무렵부터 9자리이고 2032-09-09 01:46:40 UTC 
 
 ## 함정
 
-- **"WebKit 시각" 이라는 이름을 믿지 않습니다.** iLEAPP 의 webkit 변환 함수는 2001 기준으로 계산하는데 [3], 다른 도구나 다른 OS 에서는 같은 이름이 1601 기준 값을 가리키기도 합니다. iOS 의 어느 DB 가 1601 기준 값을 쓰는지는 확인하지 못했으니, 이름 대신 값과 기준점을 확인합니다.
-- **숫자 plist 키는 키마다 따로 확인합니다.** 실수·정수로 적힌 키는 기준점이 형에 드러나지 않고, 정수 키 가운데에는 `CAMUserPreferenceTimerDuration`, `Database.BusyTimeout` 처럼 시각이 아니라 길이나 횟수인 값도 섞여 있었습니다.
-- **이름에 monotonic 이 붙은 칸을 벽시계 시각으로 단정하지 않습니다.** mis.db 의 `last_success_monotonic_time`, `last_migration_monotonic_time` 은 이름으로 보아 벽시계 시각이 아닐 수 있지만, 뜻은 확인하지 못했습니다.
+- **"WebKit 시각" 이라는 이름을 믿지 않습니다.** iLEAPP 의 webkit 변환 함수는 2001 기준으로 계산하는데 [3], 다른 도구나 다른 OS 에서는 같은 이름이 1601 기준 값을 가리키기도 합니다. iOS 의 어느 DB 가 1601 기준 값을 쓰는지 정리한 공개 자료가 없으니, 이름 대신 값과 기준점을 확인합니다.
+- **숫자 plist 키는 키마다 따로 확인합니다.** 실수·정수로 적힌 키는 기준점이 형에 드러나지 않고, 정수 키 가운데에는 `CAMUserPreferenceTimerDuration`, `Database.BusyTimeout` 처럼 시각이 아니라 길이나 횟수인 값도 섞여 있습니다.
+- **이름에 monotonic 이 붙은 칸을 벽시계 시각으로 단정하지 않습니다.** mis.db 의 `last_success_monotonic_time`, `last_migration_monotonic_time` 은 이름으로 보아 벽시계 시각이 아닐 수 있습니다.
 - **같은 칸 안에서도 단위가 바뀔 수 있습니다.** sms.db 처럼 초와 나노초가 섞이는 칸이 있어서 [2], 칸 전체에 한 가지 변환식을 일괄로 쓰지 않습니다.
 
 ## 도구

@@ -19,13 +19,13 @@ has_toc: false
 | 구조 | 위치 | iOS 버전 | 알려 주는 것 | 자세히 |
 |---|---|---|---|---|
 | System 볼륨(SSV) | 시스템 볼륨 | iOS 15 이상 SSV | 운영체제 파일, 서명 검사 대상 | [볼륨 구성](volumes.md) |
-| Data 볼륨 | 사용자 데이터 볼륨(암호화) | 관찰: iOS 18.5 | 사용자·앱 데이터 전부, 파일별 키 암호화 | [볼륨 구성](volumes.md) |
-| 번들·데이터 컨테이너 | `/private/var/containers/Bundle/Application/`, `/private/var/mobile/Containers/Data/Application/` | 2020·2021년 글 기준 | 앱 실행 파일과 앱별 데이터 | [앱 컨테이너](app-containers.md) |
-| 앱 그룹 컨테이너 | `/private/var/mobile/Containers/Shared/AppGroup/` | 2020·2021년 글 기준 | 앱과 확장이 함께 쓰는 데이터 | [앱 컨테이너](app-containers.md) |
+| Data 볼륨 | 사용자 데이터 볼륨(암호화) | iOS 18.5 | 사용자·앱 데이터 전부, 파일별 키 암호화 | [볼륨 구성](volumes.md) |
+| 번들·데이터 컨테이너 | `/private/var/containers/Bundle/Application/`, `/private/var/mobile/Containers/Data/Application/` | 2020·2021년 기준 | 앱 실행 파일과 앱별 데이터 | [앱 컨테이너](app-containers.md) |
+| 앱 그룹 컨테이너 | `/private/var/mobile/Containers/Shared/AppGroup/` | 2020·2021년 기준 | 앱과 확장이 함께 쓰는 데이터 | [앱 컨테이너](app-containers.md) |
 | 시스템 스냅숏 | 루트(/)의 `com.apple.os.update-` 스냅숏 | iOS 15.0, 18.3.2 예 | 시스템 볼륨의 한 시점 모습 | [시스템 스냅숏과 업데이트](snapshots-updates.md) |
-| 업데이트 흔적 | 백업 도메인의 설정 파일(plist) | 관찰: iOS 27.0 | 이전·현재 OS 버전 키, 업데이트 관련 키 | [시스템 스냅숏과 업데이트](snapshots-updates.md) |
+| 업데이트 흔적 | 백업 도메인의 설정 파일(plist) | iOS 27.0 | 이전·현재 OS 버전 키, 업데이트 관련 키 | [시스템 스냅숏과 업데이트](snapshots-updates.md) |
 
-버전 칸은 각 하위 페이지의 출처가 확인한 범위이고, Apple 이 iOS 버전별로 파일 시스템 구조를 표로 공개한 자료는 이번에 확인하지 못했습니다.
+버전 칸은 각 하위 페이지의 자료가 다루는 범위이고, 다른 버전에서는 구조가 다를 수 있습니다.
 
 > 그림 자리: 볼륨(System·Data) → Data 볼륨 안의 컨테이너(Bundle·Data·AppGroup) → 로컬 백업 도메인(AppDomain·AppDomainGroup)으로 이어지는 대응 관계
 

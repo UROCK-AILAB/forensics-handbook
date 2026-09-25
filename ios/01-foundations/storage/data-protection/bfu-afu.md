@@ -25,9 +25,9 @@ nav_order: 60
 
 (출처: [1]. Class D 칸은 "등급 키가 UID 로만 보호된다" 는 [1] 의 설명을 바탕으로 한 해석입니다)
 
-Class B 는 잠긴 동안에도 파일을 쓸 수 있게 만든 등급이라서 이 표의 틀에 그대로 들어맞지 않고, 상태별 동작을 이 표에 넣지 않았습니다.
+Class B 는 잠긴 동안에도 파일을 쓸 수 있게 만든 등급이라서 이 표의 틀에 그대로 들어맞지 않습니다. 동작은 [보호 등급 (Protection Classes)](protection-classes.md) 에 있습니다.
 
-제3자 앱 데이터는 앱이 따로 정하지 않으면 Class C 입니다[1]. 이 기본값을 바탕으로 보면 앱 데이터 대부분은 BFU 냐 AFU 냐에 따라 풀리는지가 갈린다고 볼 수 있지만, 앱마다 등급을 달리 정했을 수 있으니 해석으로만 씁니다.
+제3자 앱 데이터는 앱이 따로 정하지 않으면 Class C 입니다[1]. 그래서 앱 데이터 대부분은 BFU 냐 AFU 냐에 따라 풀리는지가 갈릴 가능성이 높지만, 앱마다 등급을 달리 정했을 수 있습니다.
 
 키체인도 같은 방식으로 나뉩니다. `AfterFirstUnlock` 등급 항목은 AFU 에서 쓸 수 있고, `WhenUnlocked` 등급 항목은 잠금이 풀려 있는 동안에만 쓸 수 있습니다[3].
 
@@ -35,12 +35,12 @@ Class B 는 잠긴 동안에도 파일을 쓸 수 있게 만든 등급이라서 
 
 ## 비활성 재부팅 (Inactivity Reboot)
 
-iOS 18 에서는 잠긴 채 72시간(3일)이 지나면 기기가 스스로 재부팅해 BFU 로 돌아가고, 잠금을 풀 때마다 이 타이머가 새로 시작합니다[2]. 기기가 Wi-Fi 에 연결돼 있어도 재부팅합니다[2]. 처음 들어온 버전은 직접 분석한 버전과 전해 들은 버전이 달라서 아래처럼 나눠 둡니다.
+iOS 18 에서는 잠긴 채 72시간(3일)이 지나면 기기가 스스로 재부팅해 BFU 로 돌아가고, 잠금을 풀 때마다 이 타이머가 새로 시작합니다[2]. 기기가 Wi-Fi 에 연결돼 있어도 재부팅합니다[2]. 처음 들어온 버전은 코드 분석으로 드러난 버전과 문답으로만 전해진 버전이 다릅니다.
 
 | iOS 버전 | 내용 |
 |---|---|
-| iOS 18.0 | 7일 타이머로 처음 들어왔고 나중에 3일로 줄었다고 [2] 의 문답 절에 적혀 있음. 글쓴이가 18.0 을 직접 분석했다는 설명은 없음 |
-| iOS 18.1·18.2 베타 | Jiska Classen 이 분석 이벤트 문자열에서 기능을 확인함 |
+| iOS 18.0 | 7일 타이머로 처음 들어왔고 나중에 3일로 줄었다는 설명이 [2] 의 문답 절에 있음. 18.0 을 직접 분석한 공개 자료는 없음 |
+| iOS 18.1·18.2 베타 | 분석 이벤트 문자열에 기능이 들어 있음 |
 | iOS 18.2 | 분석 이벤트 문자열이 `inactivity_reboot` 에서 `inactivity_reboot_enabled` 로 바뀜 |
 
 (출처: [2])
@@ -57,11 +57,11 @@ iOS 18 에서는 잠긴 채 72시간(3일)이 지나면 기기가 스스로 재�
 
 (출처: [2])
 
-압수한 뒤 획득하기 전에 기기가 BFU 로 돌아갔는지 판단할 때 이 흔적을 봅니다. 획득 기록에 BFU 상태로 적혀 있으면, 압수 시점에 이미 BFU 였는지 보관 중에 비활성 재부팅이 일어났는지를 이 로그와 NVRAM 변수로 가려 볼 수 있습니다. 다만 어떤 획득 방식에서 이 로그를 볼 수 있는지는 확인하지 못했습니다. 통합 로그에서 찾는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events.md) 에, 획득 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
+압수한 뒤 획득하기 전에 기기가 BFU 로 돌아갔는지 판단할 때 이 흔적을 봅니다. 획득 기록에 BFU 상태로 적혀 있으면, 압수 시점에 이미 BFU 였는지 보관 중에 비활성 재부팅이 일어났는지를 이 로그와 NVRAM 변수로 가려 볼 수 있습니다. 어떤 획득 방식에서 이 로그를 볼 수 있는지는 공개 자료가 없어 검체로 확인해야 합니다. 통합 로그에서 찾는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events.md) 에, 획득 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
 
 ## 백업과 설정에서 보이는 이름
 
-관찰한 로컬 백업에는 잠금·키 가방과 관련된 이름을 단 키가 몇 개 있습니다. 뜻을 밝힌 문서는 확인하지 못했으니, 아래 표는 어디에 어떤 이름이 있는지까지만 알려 줍니다.
+로컬 백업에는 잠금·키 가방과 관련된 이름을 단 키가 몇 개 있습니다. 뜻을 밝힌 공개 자료는 없으니, 아래 표는 어디에 어떤 이름이 있는지까지만 알려 줍니다.
 
 | 파일 | 키(형식) | 이름으로 짐작되는 것 |
 |---|---|---|
@@ -71,7 +71,7 @@ iOS 18 에서는 잠긴 채 72시간(3일)이 지나면 기기가 스스로 재�
 
 이 가운데 `WasPasscodeSet` 은 백업 당시 암호 설정 여부로 보이지만, 백업 시점의 값일 뿐 수집 시점의 BFU·AFU 상태를 알려 주지는 않습니다.
 
-관찰한 백업에서는 `HomeDomain` 의 `Library/UserConfigurationProfiles/EffectiveUserSettings.plist` 와 `Library/UserConfigurationProfiles/Truth.plist` 의 `restrictedValue` 안에 `maxGracePeriod`, `maxInactivity`, `maxFailedAttempts`, `minLength`, `passcodeKeyboardComplexity` 같은 암호 정책 이름이 보입니다. `maxInactivity` 는 이름이 비슷해도 비활성 재부팅과 같은 것이라는 근거가 없으니 섞어 해석하지 않습니다. 프로필 흔적은 [구성 프로파일과 MDM (Configuration Profiles·MDM)](../../../02-artifacts/credentials-security/configuration-profiles.md) 에서, 암호 설정 흔적은 [암호와 Face ID 설정 흔적 (Passcode·Biometrics)](../../../02-artifacts/system-account/passcode-biometrics.md) 에서 다룹니다.
+로컬 백업의 `HomeDomain` 에 있는 `Library/UserConfigurationProfiles/EffectiveUserSettings.plist` 와 `Library/UserConfigurationProfiles/Truth.plist` 의 `restrictedValue` 안에 `maxGracePeriod`, `maxInactivity`, `maxFailedAttempts`, `minLength`, `passcodeKeyboardComplexity` 같은 암호 정책 이름이 보입니다. `maxInactivity` 는 이름이 비슷해도 비활성 재부팅과 같은 것이라는 근거가 없으니 섞어 해석하지 않습니다. 프로필 흔적은 [구성 프로파일과 MDM (Configuration Profiles·MDM)](../../../02-artifacts/credentials-security/configuration-profiles.md) 에서, 암호 설정 흔적은 [암호와 Face ID 설정 흔적 (Passcode·Biometrics)](../../../02-artifacts/system-account/passcode-biometrics.md) 에서 다룹니다.
 
 ## 함정
 

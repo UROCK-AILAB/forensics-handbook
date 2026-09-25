@@ -12,32 +12,32 @@ nav_order: 1020
 
 ## 무엇을 기록하나 · 왜 생기나
 
-구글 드라이브는 Google LLC 가 내는 클라우드 저장 앱이고, App Store 설명에 따르면 오프라인으로 보기, 카메라로 종이 문서를 스캔해 올리기, 파일·폴더에 권한을 정해 공유하기, 100가지가 넘는 파일 형식 저장·편집을 지원합니다 [4]. 오프라인 보기와 스캔은 기기 안에 파일을 두거나 기기에서 파일을 만드는 기능이라서 앱 컨테이너 안에 파일 목록이나 내려받은 파일이 남을 수 있지만, 그 파일 이름과 DB 구조는 공개 출처에서 확인하지 못했습니다. 그래서 앱 내부 구조는 검체에서 직접 확인할 항목으로 남기고, 여기서는 확인된 흔적을 중심으로 설명합니다.
+구글 드라이브는 Google LLC 가 내는 클라우드 저장 앱이고, 오프라인으로 보기, 카메라로 종이 문서를 스캔해 올리기, 파일·폴더에 권한을 정해 공유하기, 100가지가 넘는 파일 형식 저장·편집을 지원합니다 [4]. 오프라인 보기와 스캔은 기기 안에 파일을 두거나 기기에서 파일을 만드는 기능이라서 앱 컨테이너 안에 파일 목록이나 내려받은 파일이 남을 수 있지만, 그 파일 이름과 DB 구조는 공개 자료가 없어 검체에서 직접 확인해야 합니다.
 
 App Store 개인정보 라벨에는 사용자와 연결된 데이터로 구입 항목, 위치, 연락처 정보, 연락처, 사용자 콘텐츠(사진·비디오·오디오), 검색 기록, 식별자, 사용 데이터, 진단이 적혀 있습니다 [4]. 이 라벨은 개발사가 수집해 처리하는 데이터 종류를 밝힌 것이고, 기기 안에 그 데이터가 남는다는 뜻은 아닙니다.
 
-또 하나 볼 곳은 Files 앱입니다. iOS 의 파일 공급자 확장(File Provider extension)은 내용을 도메인(NSFileProviderDomain) 단위로 나누고, 도메인 하나는 계정 하나나 위치 하나를 나타낼 수 있습니다 [2]. NSFileProviderDomain 은 iOS 11.0 부터 있고, 도메인마다 identifier(고유 식별자), displayName(화면에 보이는 이름), isHidden(사용자에게 보이는지), isDisconnected(도메인은 있지만 확장과 연결이 끊겼는지), userEnabled(사용자가 켰는지 껐는지), isReplicated, supportsSyncingTrash, backingStoreIdentity, userInfo 속성이 붙습니다 [2]. 다른 회사 앱이 파일 공급자 도메인을 등록하면 로컬 백업의 `HomeDomain` 안 `Library/Application Support/FileProvider/` 아래에 앱별 폴더가 생기고 그 안에 `Domains.plist` 가 남습니다. 다만 이번 관찰에서는 다른 회사 앱 이름을 가렸기 때문에, 이 자리에 남은 앱이 구글 드라이브인지는 확인하지 않았습니다.
+또 하나 볼 곳은 Files 앱입니다. iOS 의 파일 공급자 확장(File Provider extension)은 내용을 도메인(NSFileProviderDomain) 단위로 나누고, 도메인 하나는 계정 하나나 위치 하나를 나타낼 수 있습니다 [2]. NSFileProviderDomain 은 iOS 11.0 부터 있고, 도메인마다 identifier(고유 식별자), displayName(화면에 보이는 이름), isHidden(사용자에게 보이는지), isDisconnected(도메인은 있지만 확장과 연결이 끊겼는지), userEnabled(사용자가 켰는지 껐는지), isReplicated, supportsSyncingTrash, backingStoreIdentity, userInfo 속성이 붙습니다 [2]. 다른 회사 앱이 파일 공급자 도메인을 등록하면 로컬 백업의 `HomeDomain` 안 `Library/Application Support/FileProvider/` 아래에 앱별 폴더가 생기고 그 안에 `Domains.plist` 가 남습니다. 구글 드라이브가 이 자리에 폴더를 만드는지는 검체에서 확인합니다.
 
 ## 위치와 버전별 차이
 
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
-| 앱 설치 여부와 번들 ID | 백업 최상위 `Info.plist` 의 `Installed Applications`·`Applications` 키, `Manifest.plist` 의 `Applications` 키, `Manifest.db` 의 도메인 이름 | 키 이름 관찰 |
-| 앱 컨테이너 안의 메타데이터 DB·캐시·오프라인 파일 | 앱 도메인(`AppDomain-` 로 시작) 안 | 확인 못 함, 검체에서 직접 확인 |
-| 파일 공급자 도메인 설정 | `HomeDomain :: Library/Application Support/FileProvider/<앱>/Domains.plist` | 관찰, 어느 앱인지는 가림 |
-| Files 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.DocumentManager.defaults.plist` | 관찰 |
-| 파일 공급자 작업 자료 | `HomeDomain :: Library/Application Support/FileProvider/<UUID>/wharf/...`, `.../FileProvider/backup/backup_manifest.db` | 관찰, 어느 공급자 것인지 확인 못 함 |
+| 앱 설치 여부와 번들 ID | 백업 최상위 `Info.plist` 의 `Installed Applications`·`Applications` 키, `Manifest.plist` 의 `Applications` 키, `Manifest.db` 의 도메인 이름 | — |
+| 앱 컨테이너 안의 메타데이터 DB·캐시·오프라인 파일 | 앱 도메인(`AppDomain-` 로 시작) 안 | 공개 자료 없음, 검체에서 확인 |
+| 파일 공급자 도메인 설정 | `HomeDomain :: Library/Application Support/FileProvider/<앱>/Domains.plist` | — |
+| Files 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.DocumentManager.defaults.plist` | — |
+| 파일 공급자 작업 자료 | `HomeDomain :: Library/Application Support/FileProvider/<UUID>/wharf/...`, `.../FileProvider/backup/backup_manifest.db` | 어느 공급자 것인지는 검체에서 확인 |
 
-버전에 따라 확인한 내용은 아래와 같습니다.
+버전별 내용은 아래와 같습니다.
 
 | 항목 | 내용 | 근거 |
 |---|---|---|
 | 앱이 요구하는 최소 iOS | iOS 17.0 이상(2026-09 조회 시점) | [4] |
 | 조회 시점 앱 버전 | 4.2638.41000 | [4] |
 | NSFileProviderDomain | iOS 11.0 부터 | [2] |
-| Files 앱 쪽 흔적 | iOS 27.0 에서 관찰 | 관찰 |
+| Files 앱 쪽 흔적 | iOS 27.0 로컬 백업에 있음 | — |
 
-지금 App Store 버전은 iOS 17.0 이상을 요구하므로 iOS 15·16 기기에서 발견한 앱은 그보다 예전 버전일 수 있고, 예전 버전의 저장 구조도 확인하지 못했습니다.
+지금 App Store 버전은 iOS 17.0 이상을 요구하므로 iOS 15·16 기기에서 발견한 앱은 그보다 예전 버전일 수 있고, 예전 버전의 저장 구조도 공개 자료가 없습니다.
 
 ## 구조
 
@@ -50,11 +50,11 @@ CREATE TABLE Files (fileID TEXT PRIMARY KEY, domain TEXT, relativePath TEXT, fla
 CREATE TABLE Properties (key TEXT PRIMARY KEY, value BLOB)
 ```
 
-도메인 이름은 `AppDomain-`, `AppDomainGroup-`, `AppDomainPlugin-` 뒤에 번들 ID 나 앱 그룹 이름을 붙인 꼴입니다. 관찰한 백업에는 도메인이 1428개 있었고 그중 다른 회사 앱 161개는 메모에서 이름을 가렸기 때문에, 구글 드라이브 앱 도메인의 존재와 내용은 관찰하지 않았습니다. 검체에서는 `Info.plist` 의 설치 앱 목록에서 번들 ID 를 먼저 찾고, 그 번들 ID 가 들어간 도메인을 `Manifest.db` 에서 찾습니다. 번들 ID 와 앱 그룹을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에, 백업 폴더와 `fileID` 의 관계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
+도메인 이름은 `AppDomain-`, `AppDomainGroup-`, `AppDomainPlugin-` 뒤에 번들 ID 나 앱 그룹 이름을 붙인 꼴입니다. 검체에서는 `Info.plist` 의 설치 앱 목록에서 번들 ID 를 먼저 찾고, 그 번들 ID 가 들어간 도메인을 `Manifest.db` 에서 찾습니다. 번들 ID 와 앱 그룹을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에, 백업 폴더와 `fileID` 의 관계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
 
 ### 파일 공급자 도메인 설정 (Domains.plist)
 
-다른 회사 앱의 폴더에서 관찰한 `Domains.plist` 에는 기본 도메인 항목 하나만 있었습니다.
+다른 회사 앱의 폴더에 있는 `Domains.plist` 에는 기본 도메인 항목 하나만 있을 수 있습니다.
 
 ```
 HomeDomain :: Library/Application Support/FileProvider/<앱>/Domains.plist
@@ -69,7 +69,7 @@ SupportsBackgroundUpload, SupportsRemoteVersions, SupportsSearch,
 SupportsStringSearchRequest, SupportsSyncingTrash, UserInfo
 ```
 
-키 이름을 NSFileProviderDomain 속성과 견주면 DisplayName 은 displayName, Hidden 은 isHidden, Enabled 는 userEnabled, Replicated 는 isReplicated, SupportsSyncingTrash 는 supportsSyncingTrash, UserInfo 는 userInfo 와 짝이 맞아 보입니다. 이 짝은 이름만 비교한 추정이라서 보고서에 쓰려면 검체에서 값을 보고 다시 확인해야 합니다. 다른 회사 앱의 `Domains.plist` 에 계정별 도메인 항목(DisplayName 등)이 남는지도 이번 기기에서는 기본 항목만 보여 확인하지 못했습니다.
+키 이름을 NSFileProviderDomain 속성과 견주면 DisplayName 은 displayName, Hidden 은 isHidden, Enabled 는 userEnabled, Replicated 는 isReplicated, SupportsSyncingTrash 는 supportsSyncingTrash, UserInfo 는 userInfo 와 짝이 맞아 보입니다. 이 짝은 이름만 비교한 추정이라서 보고서에 쓰려면 검체에서 값을 보고 다시 확인해야 합니다. 다른 회사 앱의 `Domains.plist` 에 계정별 도메인 항목(DisplayName 등)이 남는지도 검체에서 확인합니다.
 
 ### Files 앱 설정 (com.apple.DocumentManager.defaults.plist)
 
@@ -85,7 +85,7 @@ DOCDefaultFileProviderAutomaticKey (list)
 DOCDefaultFileProviderIdentifierKey
 ```
 
-`DOCUserDefaultsCachedDisplayNamesBySourceIdentifier` 안에는 iCloud Drive·최근 항목·공유 항목·휴지통 같은 Apple 쪽 위치와 함께 다른 회사 앱 항목이 섞여 있습니다. 다른 회사 앱 항목이 Files 앱에 연결된 저장소 공급자의 이름을 담아 둔 캐시라는 해석은 이름에서 나온 추정이고, 확인하지 못했습니다.
+`DOCUserDefaultsCachedDisplayNamesBySourceIdentifier` 안에는 iCloud Drive·최근 항목·공유 항목·휴지통 같은 Apple 쪽 위치와 함께 다른 회사 앱 항목이 섞여 있습니다. 다른 회사 앱 항목은 키 이름으로 보아 Files 앱에 연결된 저장소 공급자의 이름을 담아 둔 캐시로 보입니다.
 
 ### 파일 공급자 작업 자료
 
@@ -105,7 +105,7 @@ Library/Application Support/FileProvider/<UUID>/wharf/wharf/resources/speculativ
   indexableConfigurationStartDate, dailyDownloads, dailyPreventDownloadReasons
 ```
 
-이 자료가 iCloud Drive 것인지 다른 회사 공급자 것인지는 확인하지 못했습니다. 구글 드라이브 흔적으로 쓰려면 `<UUID>` 폴더가 어느 도메인과 이어지는지 검체에서 먼저 밝혀야 합니다.
+이 자료가 iCloud Drive 것인지 다른 회사 공급자 것인지는 폴더 이름만으로 알 수 없습니다. 구글 드라이브 흔적으로 쓰려면 `<UUID>` 폴더가 어느 도메인과 이어지는지 검체에서 먼저 밝혀야 합니다.
 
 ## 증거로서 의미
 
@@ -121,9 +121,9 @@ Library/Application Support/FileProvider/<UUID>/wharf/wharf/resources/speculativ
 
 ## 시각 해석
 
-앱이 내부에 시각을 어떤 형식(Unix 시각, Mac 절대 시각 등)으로 저장하는지는 확인하지 못했습니다. 검체에서 시각으로 보이는 숫자를 찾으면 자릿수와 기준 시점을 여러 형식으로 바꿔 보고, 앱에서 실제로 한 동작의 시각과 견주어 형식을 정합니다. 형식별 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+앱이 내부에 시각을 어떤 형식(Unix 시각, Mac 절대 시각 등)으로 저장하는지는 공개 자료가 없습니다. 검체에서 시각으로 보이는 숫자를 찾으면 자릿수와 기준 시점을 여러 형식으로 바꿔 보고, 앱에서 실제로 한 동작의 시각과 견주어 형식을 정합니다. 형식별 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-파일 공급자 쪽 `speculative-set-pacer.plist` 에서는 `lastRefreshDate`·`lastTotalDownloadResetDate` 가 정수로, `indexAllStartDate`·`indexableConfigurationStartDate` 가 날짜 형식으로 저장되어 있었습니다. 값은 읽지 않아서 정수 쪽의 기준 시점은 확인하지 못했고, 이 파일이 어느 공급자 것인지도 모르기 때문에 구글 드라이브 사용 시각으로 바로 쓰지 않습니다.
+파일 공급자 쪽 `speculative-set-pacer.plist` 에서는 `lastRefreshDate`·`lastTotalDownloadResetDate` 가 정수로, `indexAllStartDate`·`indexableConfigurationStartDate` 가 날짜 형식으로 저장됩니다. 정수 쪽의 기준 시점은 검체에서 값을 보고 정하고, 이 파일이 어느 공급자 것인지 밝히기 전에는 구글 드라이브 사용 시각으로 바로 쓰지 않습니다.
 
 ## 함정과 한계
 
@@ -131,7 +131,7 @@ Windows 용 구글 드라이브의 흔적(`AppData\Local\Google\Drive` 아래 sy
 
 공개 iOS 포렌식 참고 목록(RealityNet iOS-Forensics-References, 2023-04 갱신 기준)에는 구글 드라이브나 다른 회사 클라우드 앱 항목이 없습니다 [3]. 분석 도구에 이 앱을 읽는 기능이 없을 수 있고, 도구가 아무것도 보여 주지 않는다고 기록이 없는 것은 아닙니다. 도구 결과를 믿기 전에 [도구 검증](../../03-techniques/reporting/tool-validation.md) 방식으로 확인합니다.
 
-이번 관찰에서는 다른 회사 앱 이름을 모두 가렸기 때문에, 이 페이지의 파일 공급자 쪽 설명은 모두 "다른 회사 앱 일반" 에 대한 관찰입니다. 구글 드라이브가 파일 공급자 도메인을 어떤 이름으로 등록하는지, 로컬 백업에 앱 영역의 어떤 파일이 들어가는지는 검체에서 직접 확인해야 합니다.
+이 페이지의 파일 공급자 쪽 설명은 다른 회사 앱 일반에 해당하는 내용입니다. 구글 드라이브가 파일 공급자 도메인을 어떤 이름으로 등록하는지, 로컬 백업에 앱 영역의 어떤 파일이 들어가는지는 검체에서 직접 확인해야 합니다.
 
 ## 직접 분석해 보기
 

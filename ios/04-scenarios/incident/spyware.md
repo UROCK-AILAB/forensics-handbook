@@ -12,7 +12,7 @@ nav_order: 1620
 
 ## 의심 계기
 
-가장 분명한 계기는 Apple 위협 알림 (threat notification)입니다. Apple 은 이 알림을 잠금 화면과 설정 앱, Apple 계정 이메일, account.apple.com 배너로 보냅니다. 알림은 링크를 누르거나 파일을 열거나 앱·프로파일을 설치하거나 암호를 입력하라고 요구하지 않고, iMessage 나 SMS 로 오지도 않습니다 [6]. 그래서 문자로 온 "위협 알림" 은 오히려 [스미싱 흔적](smishing.md)으로 따로 봅니다. Apple 은 알림을 받은 사람에게 차단 모드를 켜고 Access Now Digital Security Helpline 같은 전문 지원을 받으라고 권합니다 [6]. 차단 모드가 무엇을 막는지는 [악성 코드는 어디서 들어왔나](initial-access.md)에 정리했습니다.
+가장 분명한 계기는 Apple 위협 알림 (threat notification)입니다. Apple 은 이 알림을 잠금 화면과 설정 앱, Apple 계정 이메일, account.apple.com 배너로 보냅니다. 알림은 링크를 누르거나 파일을 열거나 앱·프로파일을 설치하거나 암호를 입력하라고 요구하지 않고, iMessage 나 SMS 로 오지도 않습니다 [6]. 그래서 문자로 온 "위협 알림" 은 오히려 [스미싱 흔적](smishing.md)으로 따로 봅니다. 알림을 받았다면 차단 모드를 켜고 Access Now Digital Security Helpline 같은 전문 지원을 받습니다 [6]. 차단 모드가 무엇을 막는지는 [악성 코드는 어디서 들어왔나](initial-access.md)에 정리했습니다.
 
 사용자가 "업데이트가 이상하게 되지 않는다" 고 말하면 그 진술도 적어 둡니다. Triangulation 은 설정 파일을 바꿔 iOS 업데이트를 막았고 [1], 어떤 파일인지는 위 초기 침투 페이지에 있습니다.
 
@@ -20,12 +20,12 @@ nav_order: 1620
 
 스파이웨어 조사에서는 기기를 만지기 전에 보존 순서를 정합니다. 재부팅이나 업데이트 한 번으로 사라지는 기록이 있어서, 수집보다 먼저 전원을 끄거나 업데이트하면 안 됩니다.
 
-1. **재부팅하지 않은 상태에서 sysdiagnose 를 받습니다.** sysdiagnose 안의 `shutdown.log` 는 재부팅할 때 끝나지 않고 남은 프로세스를 PID 와 경로로 적습니다. Pegasus·Reign·Predator 는 `/private/var/db/` 아래 경로에서, Predator 는 `/private/var/tmp/` 에서 실행된 흔적이 남았습니다 [4]. iOS 18 이하에서는 이 파일이 누적되지만 iOS 26 부터는 재부팅마다 덮어써서, iOS 26 이후 기기를 재부팅하면 예전 기록이 사라집니다. iVerify 는 iOS 26 으로 올리기 전에 sysdiagnose 를 받아 두라고 권합니다 [5]. iOS 27 에서도 덮어쓰는지는 여기서 인용한 자료로 확인하지 못했습니다. 파일 구성은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md)과 [sysdiagnose 안의 로그](../../02-artifacts/logs/sysdiagnose-logs.md)에 있습니다.
+1. **재부팅하지 않은 상태에서 sysdiagnose 를 받습니다.** sysdiagnose 안의 `shutdown.log` 는 재부팅할 때 끝나지 않고 남은 프로세스를 PID 와 경로로 적습니다. Pegasus·Reign·Predator 는 `/private/var/db/` 아래 경로에서, Predator 는 `/private/var/tmp/` 에서 실행된 흔적이 남았습니다 [4]. iOS 18 이하에서는 이 파일이 누적되지만 iOS 26 부터는 재부팅마다 덮어써서, iOS 26 이후 기기를 재부팅하면 예전 기록이 사라집니다. 그래서 iOS 26 으로 올리기 전에 sysdiagnose 를 받아 둡니다 [5]. iOS 27 에서도 덮어쓰는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 파일 구성은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md)과 [sysdiagnose 안의 로그](../../02-artifacts/logs/sysdiagnose-logs.md)에 있습니다.
 2. **암호화 백업을 받습니다.** 통화 기록, Safari 방문 기록, interactionC, Analytics 같은 기록은 암호화 백업에서만 나옵니다 [2]. 암호화하지 않은 백업만 받았다면 보고서에 그 범위를 적습니다.
 3. **가능하면 전체 파일 시스템을 받습니다.** MVT 는 로컬 백업, sysdiagnose, 전체 파일 시스템을 모두 입력으로 받습니다 [2]. 수집 방법의 선택은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)를 따릅니다.
-4. **재부팅 이력을 적습니다.** Amnesty 는 조사 결과로 보아 Pegasus 가 iOS 기기에서 더는 지속성을 유지하지 않는 것 같다고 적었습니다 [3]. 알림을 받은 뒤 사용자가 재부팅했는지, 몇 번 했는지를 물어 둡니다.
+4. **재부팅 이력을 적습니다.** Pegasus 는 iOS 기기에서 더는 지속성을 유지하지 않는 것으로 보입니다 [3]. 알림을 받은 뒤 사용자가 재부팅했는지, 몇 번 했는지를 물어 둡니다.
 
-그다음 OS 버전과 시간대를 확인합니다. Amnesty 가 보고한 Pegasus 공격은 2014년부터 2021년 7월까지에 걸쳐 있고, 2021년 7월에는 모든 패치를 적용한 iOS 14.6 의 iPhone 12 에서도 무클릭 공격이 성공했다고 적었습니다 [3]. 최신 버전이라는 사실만으로 감염 가능성을 지우지 않습니다. 시각은 UTC 로 맞추고, 진술 속 현지 시각은 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)을 보고 바꿉니다.
+그다음 OS 버전과 시간대를 확인합니다. 공개된 Pegasus 공격은 2014년부터 2021년 7월까지에 걸쳐 있고, 2021년 7월에는 모든 패치를 적용한 iOS 14.6 의 iPhone 12 에서도 무클릭 공격이 성공했습니다 [3]. 최신 버전이라는 사실만으로 감염 가능성을 지우지 않습니다. 시각은 UTC 로 맞추고, 진술 속 현지 시각은 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)을 보고 바꿉니다.
 
 ## 볼 아티팩트와 순서
 
@@ -41,28 +41,28 @@ nav_order: 1620
 
 1. **`shutdown.log` 에서 낯선 경로를 찾습니다.** 재부팅 때 남은 프로세스 가운데 `/private/var/db/` 나 `/private/var/tmp/` 아래에서 실행된 것이 있는지 봅니다 [4]. 덮어쓰는 버전이라면 파일에 마지막 재부팅 한 번의 기록만 있다는 점을 함께 적습니다.
 
-2. **데이터 사용량 표 둘을 견줍니다.** 관찰한 백업에서는 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에 다음 두 표가 있었습니다.
+2. **데이터 사용량 표 둘을 견줍니다.** `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에는 다음 두 표가 있습니다.
 
    ```
    ZPROCESS:   ZFIRSTTIMESTAMP, ZTIMESTAMP, ZBUNDLENAME, ZPROCNAME …
    ZLIVEUSAGE: ZTIMESTAMP, ZWWANIN, ZWWANOUT, ZBUNDLENAME, ZPROCNAME …
    ```
 
-   Amnesty 는 `ZPROCESS` 에서 악성 프로세스 이름이 지워졌는데 `ZLIVEUSAGE` 에는 사용량 행이 남아 있는 불일치를 찾았고, 깨끗한 기기에서는 이런 불일치를 보지 못했다고 적었습니다 [3]. MVT 의 Datausage 모듈은 유효한 번들 ID 가 없는 프로세스를 따로 표시합니다 [2]. 두 표에서 번들 ID 없이 프로세스 이름만 있는 행과, 사용량 행은 있는데 대응하는 프로세스 행이 없는 경우를 골라 시각순으로 놓습니다.
+   Pegasus 에 감염된 기기에서는 `ZPROCESS` 에서 악성 프로세스 이름이 지워졌는데 `ZLIVEUSAGE` 에는 사용량 행이 남아 있는 불일치가 나타났고, 깨끗한 기기에서는 이런 불일치가 나타나지 않았습니다 [3]. MVT 의 Datausage 모듈은 유효한 번들 ID 가 없는 프로세스를 따로 표시합니다 [2]. 두 표에서 번들 ID 없이 프로세스 이름만 있는 행과, 사용량 행은 있는데 대응하는 프로세스 행이 없는 경우를 골라 시각순으로 놓습니다.
 
-3. **프로세스 이름을 대조합니다.** Amnesty 가 Pegasus 에서 찾은 이름에는 `bh`, `roleaccountd`, `stagingd`, `msgacntd` 등이 있고, 정상 프로세스와 비슷하게 지은 이름(`aggregated` 와 비슷한 `aggregatenotd` 등)도 있었습니다 [3]. Triangulation 에서 데이터 사용량 기록에 나온 프로세스는 [악성 코드는 어디서 들어왔나](initial-access.md)에 정리했습니다. 이름만 보고 판단하지 말고, 같은 이름이 정상 기기에도 나오는지 견줘 봅니다.
+3. **프로세스 이름을 대조합니다.** Pegasus 가 쓴 프로세스 이름에는 `bh`, `roleaccountd`, `stagingd`, `msgacntd` 등이 있고, 정상 프로세스와 비슷하게 지은 이름(`aggregated` 와 비슷한 `aggregatenotd` 등)도 있었습니다 [3]. Triangulation 에서 데이터 사용량 기록에 나온 프로세스는 [악성 코드는 어디서 들어왔나](initial-access.md)에 정리했습니다. 이름만 보고 판단하지 말고, 같은 이름이 정상 기기에도 나오는지 견줘 봅니다.
 
-4. **공개 지표와 대조합니다.** MVT 는 `mvt download-iocs` 로 STIX2 지표를 내려받고, AmnestyTech/investigations 와 mvt-project/mvt-indicators 저장소에 공개 지표가 있습니다 [7]. Securelist 는 Triangulation 의 명령 서버 도메인 15개를 공개했습니다 [1]. 대조 절차는 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md)을 따릅니다.
+4. **공개 지표와 대조합니다.** MVT 는 `mvt download-iocs` 로 STIX2 지표를 내려받고, AmnestyTech/investigations 와 mvt-project/mvt-indicators 저장소에 공개 지표가 있습니다 [7]. Triangulation 의 명령 서버 도메인 15개는 [1] 에 공개돼 있습니다. 대조 절차는 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md)을 따릅니다.
 
-5. **백업에 없는 기록을 적어 둡니다.** 네트워크 사용량 DB `netusage.sqlite` 는 백업에 들어가지 않는다고 Amnesty 가 적었고 [3], 관찰한 백업에도 없었습니다. `com.apple.identityservices.idstatuscache.plist` 도 MVT 가 iOS 14.7 이전 백업에만 있다고 적었고 [2], 관찰한 백업에 없었습니다. 이런 기록이 필요하면 전체 파일 시스템 수집을 검토합니다.
+5. **백업에 없는 기록을 적어 둡니다.** 네트워크 사용량 DB `netusage.sqlite` 는 백업에 들어가지 않습니다 [3]. `com.apple.identityservices.idstatuscache.plist` 는 iOS 14.7 이전 백업에만 있습니다 [2]. 이런 기록이 필요하면 전체 파일 시스템 수집을 검토합니다.
 
-6. **가까운 사람의 감시를 따로 봅니다.** 공개된 스토커웨어 지표는 주로 Android 용이라서 [7], iOS 에서는 지표 대조보다 계정·구성 프로파일·앱 권한·위치 공유를 점검하는 쪽이 중심이 됩니다. Apple 은 iOS 16 이상에서 이런 공유와 접근을 점검하는 안전 점검 (Safety Check)을 안내합니다 [8]. 관찰한 백업에는 권한 기록 `HomeDomain :: Library/TCC/TCC.db` 가 있었습니다. 계정 쪽 흔적은 [계정 탈취 흔적](account-takeover.md)에서 봅니다.
+6. **가까운 사람의 감시를 따로 봅니다.** 공개된 스토커웨어 지표는 주로 Android 용이라서 [7], iOS 에서는 지표 대조보다 계정·구성 프로파일·앱 권한·위치 공유를 점검하는 쪽이 중심이 됩니다. iOS 16 이상에는 이런 공유와 접근을 점검하는 안전 점검 (Safety Check)이 있습니다 [8]. 권한 기록은 백업의 `HomeDomain :: Library/TCC/TCC.db` 에 있습니다. 계정 쪽 흔적은 [계정 탈취 흔적](account-takeover.md)에서 봅니다.
 
 ## 흔한 오판
 
-- **재부팅해서 증상이 사라졌으니 괜찮다고 봅니다.** Pegasus 는 재부팅 뒤 지속하지 않는 것으로 보였고 [3], iOS 26 이후에는 재부팅으로 `shutdown.log` 의 예전 기록도 사라집니다 [5]. 증상이 사라진 것과 흔적이 없는 것은 다릅니다.
+- **재부팅해서 증상이 사라졌으니 괜찮다고 봅니다.** Pegasus 는 재부팅 뒤 지속하지 않는 것으로 보이고 [3], iOS 26 이후에는 재부팅으로 `shutdown.log` 의 예전 기록도 사라집니다 [5]. 증상이 사라진 것과 흔적이 없는 것은 다릅니다.
 - **지표에 걸리지 않았으니 감염이 없다고 씁니다.** Triangulation 은 처음 메시지와 첨부를 스스로 지웠습니다 [1]. 지표 대조 결과는 "공개 지표와 일치하는 기록을 찾지 못했다" 까지만 말합니다.
-- **공개 사례에 나온 설정 파일이 있으니 감염이라고 봅니다.** Triangulation 이 바꾼 `com.apple.imservice.ids.FaceTime.plist` 는 관찰한 정상 백업에도 있었습니다. 파일이 있다는 것보다 수정 시각과 다른 흔적의 시각이 겹치는지를 봅니다.
+- **공개 사례에 나온 설정 파일이 있으니 감염이라고 봅니다.** Triangulation 이 바꾼 `com.apple.imservice.ids.FaceTime.plist` 는 정상 기기 백업에도 있습니다. 파일이 있다는 것보다 수정 시각과 다른 흔적의 시각이 겹치는지를 봅니다.
 - **스토커웨어 지표에 걸리지 않았으니 감시가 없다고 봅니다.** 공개 지표는 주로 Android 용입니다 [7].
 
 ## 보고서 문장 예

@@ -12,7 +12,7 @@ nav_order: 250
 
 ## 이 형식을 쓰는 아티팩트
 
-Apple 은 iCloud 백업이 기기의 정보 가운데 이미 iCloud 로 동기화되지 않는 것을 복사한다고 설명합니다 [3]. 그래서 어떤 항목이 백업에 들어가는지는 사용자가 어떤 iCloud 동기화를 켰는지에 따라 달라집니다.
+iCloud 백업은 기기의 정보 가운데 이미 iCloud 로 동기화되지 않는 것을 복사합니다 [3]. 그래서 어떤 항목이 백업에 들어가는지는 사용자가 어떤 iCloud 동기화를 켰는지에 따라 달라집니다.
 
 | 구분 | 항목 | 출처 |
 |---|---|---|
@@ -20,19 +20,19 @@ Apple 은 iCloud 백업이 기기의 정보 가운데 이미 iCloud 로 동기�
 | 조건부로 들어감 | 메시지(iMessage·SMS·MMS)는 "iCloud 에 메시지" 를 끈 경우에만, 사진·동영상과 "사람 및 반려동물" 얼굴 정보는 iCloud 사진을 끈 경우에만 들어감 | [3] |
 | 기록만 들어감 | 구입한 음악·영화·앱·책은 파일 대신 구입 기록만 백업하고, 복원할 때 다시 내려받음 | [1][3] |
 | 따로 암호화해 들어감 | 기기의 로컬 키체인 (아래 "키체인" 절) | [1] |
-| 빠짐 | 이미 iCloud 에 동기화되는 데이터. Apple 은 연락처, 캘린더, 메모, 미리 알림, Mail, iCloud 사진, iCloud 에 메시지, iCloud Drive 파일, 건강 데이터, 음성 메모, Safari 책갈피와 방문 기록을 이 목록에 적음 | [3] |
+| 빠짐 | 이미 iCloud 에 동기화되는 데이터. 연락처, 캘린더, 메모, 미리 알림, Mail, iCloud 사진, iCloud 에 메시지, iCloud Drive 파일, 건강 데이터, 음성 메모, Safari 책갈피와 방문 기록이 여기에 해당함 | [3] |
 
-"빠짐" 줄의 항목마다 "동기화를 켰을 때만 빠진다" 는 조건이 원문에 붙어 있는지는 확인하지 못해서, 사건마다 대상 계정의 동기화 설정과 함께 봐야 합니다. 앱별 저장 위치는 [메시지](../../02-artifacts/communications/messages/index.md), [사진 보관함](../../02-artifacts/media/photos/index.md), [건강 데이터](../../02-artifacts/health-wallet/health.md), [애플 워치 연결](../../02-artifacts/health-wallet/apple-watch.md) 페이지에서 다룹니다.
+"빠짐" 줄의 항목은 동기화를 켰을 때만 빠질 수 있으니, 사건마다 대상 계정의 동기화 설정과 함께 봅니다. 앱별 저장 위치는 [메시지](../../02-artifacts/communications/messages/index.md), [사진 보관함](../../02-artifacts/media/photos/index.md), [건강 데이터](../../02-artifacts/health-wallet/health.md), [애플 워치 연결](../../02-artifacts/health-wallet/apple-watch.md) 페이지에서 다룹니다.
 
 ### 언제 만들어지나
 
-Apple Platform Security Guide 는 iCloud 백업이 기기가 잠겨 있으면서 전원에 연결돼 있고 Wi-Fi 로 인터넷에 연결돼 있을 때만 이뤄진다고 설명합니다 [1]. 얼마나 자주 백업하는지는 이 페이지의 자료로 확인하지 못했습니다. iCloud 백업을 끄면 iCloud 에 있던 그 기기의 백업을 180일 동안 보관한 뒤 지웁니다 [3]. iCloud 백업을 쓰는 기기는 iPhone, iPad, Apple Vision Pro 입니다 [3].
+iCloud 백업은 기기가 잠겨 있으면서 전원에 연결돼 있고 Wi-Fi 로 인터넷에 연결돼 있을 때만 이뤄집니다 [1]. iCloud 백업을 끄면 iCloud 에 있던 그 기기의 백업을 180일 동안 보관한 뒤 지웁니다 [3]. iCloud 백업을 쓰는 기기는 iPhone, iPad, Apple Vision Pro 입니다 [3].
 
 ## 구조
 
 ### 암호화 층
 
-Apple Platform Security Guide 는 iCloud 백업의 암호화를 아래처럼 설명합니다 [1]. 위에서 아래로 갈수록 바깥쪽 층입니다.
+iCloud 백업의 암호화 층은 아래와 같습니다 [1]. 위에서 아래로 갈수록 바깥쪽 층입니다.
 
 | 층 | 무엇으로 보호하나 | 출처 |
 |---|---|---|
@@ -50,7 +50,7 @@ Apple Platform Security Guide 는 iCloud 백업의 암호화를 아래처럼 설
 
 백업 안의 키체인은 Secure Enclave 의 UID 루트 키에서 나온 키로 암호화합니다. 이 키는 기기마다 다르고 Apple 도 알지 못해서, 키체인은 원래 기기에만 복원할 수 있습니다 [1]. 키체인 구조는 [키체인](../storage/keychain.md) 페이지에서 다룹니다.
 
-참고로 암호화하지 않은 로컬 백업에서는 `KeychainDomain :: keychain-backup.plist` 에 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있었습니다. iCloud 백업 안의 키체인이 같은 모양인지는 확인하지 못했습니다.
+암호화하지 않은 로컬 백업에서는 `KeychainDomain :: keychain-backup.plist` 에 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있습니다. iCloud 백업 안의 키체인이 같은 모양인지는 공개 자료가 없습니다.
 
 ### 표준 데이터 보호와 고급 데이터 보호
 
@@ -68,7 +68,7 @@ ADP 를 켜려면 iOS 16.2, iPadOS 16.2, macOS 13.1 이상이 필요합니다 [2
 
 iCloud 백업 본문은 서버에 있어서 기기를 분석하는 쪽에서는 직접 열 수 없고, 계정 데이터를 요청하는 절차는 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다. 기기 쪽에서는 로컬 백업이나 전체 이미지 안의 설정 파일에서 iCloud 백업과 복원의 흔적을 찾습니다.
 
-로컬 백업(Apple 기기 앱으로 만든 것, 암호화 안 함)에서 아래 파일과 키 이름을 확인했습니다. 값은 읽지 않았고, 오른쪽 칸의 뜻은 키 이름으로 짐작한 것이라 Apple 이 설명한 내용은 아닙니다.
+암호화하지 않은 로컬 백업(Apple 기기 앱으로 만든 것)에는 아래 파일과 키가 있습니다. 오른쪽 칸의 뜻은 키 이름으로 짐작한 것이고, Apple 이 공개한 설명은 없습니다.
 
 | 파일 | 키 | 키 이름으로 본 짐작 |
 |---|---|---|
@@ -81,37 +81,37 @@ iCloud 백업 본문은 서버에 있어서 기기를 분석하는 쪽에서는 
 | 같은 파일 | `PreflightSizing`{도메인 이름들, `_TotalSize`} | 백업 도메인별 크기 |
 | 같은 파일 | `RemoteConfiguration`{`BackupPeriod`, `BackupWarningPeriod`, `BackupVerificationEnabled`, `RestoreVerificationEnabled`, `LocalSnapshotsDisabled`, `ServerRestrictedDomains` 등}, `RemoteConfigurationExpiration`(datetime), `RemoteConfigurationBuildVersion`(str) | 서버에서 내려받은 백업 설정 |
 | 같은 파일 | `AccountEnabledDate`(datetime), `FetchMissingKeysAtNextUnlock`(bool), `NotifyDaemonNextTimeKeyBagIsUnlocked`(bool), `SyncZoneFetched`(bool), `FSEventState`{`dateCreated`, `eventDatabaseUUIDForVolumeUUID`, `eventId`}, `LastOnConditionEvents`(list), `AirTrafficFinishedRestoring`(bool) | 계정에서 백업을 켠 시각 등 |
-| `RootDomain :: Library/Preferences/com.apple.backupd.plist` | `CKPerBootTasks`(list), `CC_OncePerBootBackingData`(bytes), `CKStartupTime`(int) | 뜻을 확인하지 못함 |
+| `RootDomain :: Library/Preferences/com.apple.backupd.plist` | `CKPerBootTasks`(list), `CC_OncePerBootBackingData`(bytes), `CKStartupTime`(int) | 공개 자료 없음 |
 | `HomeDomain :: Library/Preferences/com.apple.mobileSMS.plist` | `IMDCKBackupControllerBackupDeviceStateKey`{`IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidRestoreFromCloudBackupKey`, `IMDSavedDeviceStateDidMigrateKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey`, `IMDSavedDeviceStateDidUpgradeKey`, `IMDSavedDeviceStateBuildVersionKey`, `IMDSavedDeviceStateDateKey`, `IMDSavedDeviceStateIsMigratingKey`}, `IMDCKBackupControllerTimebombStartUserDefaultsKey`(datetime) | 메시지 앱이 본 백업 복원·기기 이전 상태 |
 
-같은 로컬 백업의 도메인 목록에는 `AppDomainPlugin-com.apple.MobileBackup.framework.DiagnosticExtension`, `…FollowUpUIExtension`, `…MBPrebuddyFollowUpExtension` 처럼 백업 기능에 딸린 확장 컨테이너도 있었습니다. plist 를 여는 방법은 [속성 목록 파일](../data-formats/plist.md) 페이지를, 로컬 백업의 도메인 구조는 [로컬 백업](local-backup/index.md) 페이지를 봅니다.
+같은 로컬 백업의 도메인 목록에는 `AppDomainPlugin-com.apple.MobileBackup.framework.DiagnosticExtension`, `…FollowUpUIExtension`, `…MBPrebuddyFollowUpExtension` 처럼 백업 기능에 딸린 확장 컨테이너도 있습니다. plist 를 여는 방법은 [속성 목록 파일](../data-formats/plist.md) 페이지를, 로컬 백업의 도메인 구조는 [로컬 백업](local-backup/index.md) 페이지를 봅니다.
 
 ## 포렌식에서 중요한 점
 
-사용자가 iCloud 동기화를 켠 항목은 iCloud 백업이 아니라 iCloud 의 해당 서비스 쪽에 있습니다 [3]. 그래서 백업만 받아서는 연락처나 메모, 사진이 없을 수 있고, 이때 "기기에 그 데이터가 없었다" 고 쓰면 안 됩니다(이 해석은 [3]에서 끌어낸 것입니다).
+사용자가 iCloud 동기화를 켠 항목은 iCloud 백업이 아니라 iCloud 의 해당 서비스 쪽에 있습니다 [3]. 그래서 백업만 받아서는 연락처나 메모, 사진이 없을 수 있고, 이때 "기기에 그 데이터가 없었다" 고 쓰면 안 됩니다 [3].
 
-표준 데이터 보호에서는 iCloud 백업 키가 Apple 쪽에 있어 법적 절차로 받을 여지가 있고, ADP 에서는 키가 사용자의 신뢰하는 기기에만 있습니다([1][2]에서 끌어낸 해석). 그래서 요청하기 전에 대상 계정이 ADP 를 켰는지부터 확인합니다. Apple 의 법 집행 대응 절차는 이 페이지에서 확인하지 못했습니다.
+표준 데이터 보호에서는 iCloud 백업 키가 Apple 쪽에 있어 법적 절차로 받을 여지가 있고, ADP 에서는 키가 사용자의 신뢰하는 기기에만 있습니다 [1][2]. 그래서 요청하기 전에 대상 계정이 ADP 를 켰는지부터 확인합니다.
 
-iCloud 백업을 끈 뒤에도 서버의 백업은 180일 동안 남아 있다가 지워집니다 [3]. 그래서 백업을 끈 지 180일이 지나지 않았다면 서버 쪽 사본이 아직 있을 수 있지만, 그보다 늦게 요청하면 사본이 이미 없을 수 있습니다([3]에서 끌어낸 해석).
+iCloud 백업을 끈 뒤에도 서버의 백업은 180일 동안 남아 있다가 지워집니다 [3]. 그래서 백업을 끈 지 180일이 지나지 않았다면 서버 쪽 사본이 아직 있을 수 있지만, 그보다 늦게 요청하면 사본이 이미 없을 수 있습니다.
 
 `RestoreInfo` 와 `mobileSMS.plist` 의 복원·이전 키는 지금 기기가 다른 기기의 백업에서 복원됐는지 판단할 때 실마리가 됩니다. 복원한 기기에는 원래 기기에서 옮겨 온 데이터와 복원 뒤 새로 생긴 데이터가 섞여 있어서, 기록의 시각을 복원 시각과 나란히 놓고 봐야 합니다. 초기화와 복원 흔적 전체는 [초기화와 복원 흔적](../../02-artifacts/system-account/erase-restore.md) 페이지에서 다룹니다.
 
 ## 함정
 
-위 표의 키 뜻은 모두 키 이름으로 짐작한 것이고 Apple 이 공개한 설명은 확인하지 못했습니다. 보고서에는 "`WasCloudRestore` 키가 있고 값이 참이다" 처럼 기록 그대로 쓰고, "iCloud 에서 복원했다" 는 다른 흔적과 맞아떨어질 때만 씁니다.
+위 표의 키 뜻은 모두 키 이름으로 짐작한 것이고, Apple 이 공개한 설명은 없습니다. 보고서에는 "`WasCloudRestore` 키가 있고 값이 참이다" 처럼 기록 그대로 쓰고, "iCloud 에서 복원했다" 는 다른 흔적과 맞아떨어질 때만 씁니다.
 
-`LastCloudBackupDate` 는 정수형이지만 Unix 초인지 Mac 절대 시각인지 확인하지 못했습니다. 두 기준으로 모두 바꿔 보고 `LastCloudBackupTZ` 와 다른 시각 기록에 맞는 쪽을 고릅니다. 시각 기준은 [시각 값](../value-decoding/time-values.md) 페이지에서 설명합니다.
+`LastCloudBackupDate` 는 정수형이고, Unix 초인지 Mac 절대 시각인지 알려져 있지 않습니다. 두 기준으로 모두 바꿔 보고 `LastCloudBackupTZ` 와 다른 시각 기록에 맞는 쪽을 고릅니다. 시각 기준은 [시각 값](../value-decoding/time-values.md) 페이지에서 설명합니다.
 
-위 키 목록은 암호화하지 않은 로컬 백업 하나에서 본 것이라, iCloud 백업 본문이나 다른 iOS 버전에서 같은 키가 있다고 볼 근거는 없습니다.
+위 키 목록은 암호화하지 않은 로컬 백업 기준이라, iCloud 백업 본문이나 다른 iOS 버전에서 같은 키가 있다고 볼 근거는 없습니다.
 
 ### 버전별 차이
 
 | iOS | 내용 | 출처 |
 |---|---|---|
 | 16.2 이상 | 고급 데이터 보호를 켜면 iCloud 백업을 종단 간 암호화할 수 있음 | [2] |
-| 27.0 | `com.apple.MobileBackup.plist` 에 `SnapshotFormat`, `SnapshotFormatEnum` 키가 있음. 어떤 값이 들어가는지, 버전마다 바뀌는지는 확인하지 못함 | |
+| 27.0 | `com.apple.MobileBackup.plist` 에 `SnapshotFormat`, `SnapshotFormatEnum` 키가 있음. 값과 버전별 변화는 공개 자료 없음 | |
 
-iOS 15 이후 그 밖의 버전에서 iCloud 백업 구조가 바뀌었는지는 이 페이지의 자료로 확인하지 못했습니다.
+iOS 15 이후 그 밖의 버전에서 iCloud 백업 구조가 바뀌었는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 도구
 

@@ -11,7 +11,7 @@ Core Data 는 Apple 앱이 데이터를 객체 단위로 저장할 때 쓰는 �
 
 ## 이 형식을 쓰는 아티팩트
 
-관찰한 로컬 백업의 Apple 영역 DB 131개 가운데 52개에 Core Data 관리 표(`Z_PRIMARYKEY`·`Z_METADATA`·`Z_MODELCACHE`)가 있었고, 52개 모두 칸 이름이 같았습니다. 예를 들면 아래 저장소들입니다(도메인 :: 경로, `#` 은 가린 숫자).
+iOS 27.0 로컬 백업 하나를 보면 Apple 영역 DB 131개 가운데 52개에 Core Data 관리 표(`Z_PRIMARYKEY`·`Z_METADATA`·`Z_MODELCACHE`)가 있고, 52개 모두 칸 이름이 같습니다. 예를 들면 아래 저장소들입니다(도메인 :: 경로, `#` 은 가린 숫자).
 
 ```
 AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite
@@ -24,7 +24,7 @@ SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd :: Library/local.sql
 여러 앱의 .tipkit/tips-store.db
 ```
 
-`CameraRollDomain :: Media/PhotoData/Photos.sqlite` 도 `Z_PK`·`Z_ENT`·`Z_OPT` 칸을 쓰는 Core Data 저장소이지만, 관찰 메모에서 표 목록이 잘려 `Z_PRIMARYKEY` 가 있는지는 관찰로 확인하지 못했습니다. 반대로 `HomeDomain :: Library/SMS/sms.db` 에는 Core Data 표가 없고 `ROWID` 칸을 쓰는 일반 SQLite DB 입니다. 각 앱의 표 내용은 [메모](../../../02-artifacts/mail-cloud/notes.md), [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md), [사진 보관함](../../../02-artifacts/media/photos/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md) 페이지에서 다룹니다.
+`CameraRollDomain :: Media/PhotoData/Photos.sqlite` 도 `Z_PK`·`Z_ENT`·`Z_OPT` 칸을 쓰는 Core Data 저장소이고, `Z_PRIMARYKEY` 가 있는지는 검체에서 확인합니다. 반대로 `HomeDomain :: Library/SMS/sms.db` 에는 Core Data 표가 없고 `ROWID` 칸을 쓰는 일반 SQLite DB 입니다. 각 앱의 표 내용은 [메모](../../../02-artifacts/mail-cloud/notes.md), [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md), [사진 보관함](../../../02-artifacts/media/photos/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md) 페이지에서 다룹니다.
 
 ## 구조
 
@@ -45,7 +45,7 @@ SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd :: Library/local.sql
 | 표 | 칸 | 뜻 |
 |---|---|---|
 | `Z_PRIMARYKEY` | `Z_ENT`, `Z_NAME`, `Z_SUPER`, `Z_MAX` | 엔터티 목록. `Z_NAME` 은 모델의 엔터티 이름(대소문자 구분), `Z_SUPER` 는 부모 엔터티의 `Z_ENT`(없으면 0), `Z_MAX` 는 그 엔터티에 마지막으로 쓴 `Z_PK` |
-| `Z_METADATA` | `Z_VERSION`, `Z_UUID`, `Z_PLIST` | `Z_UUID` 는 이 저장소 파일의 UUID, `Z_PLIST` 는 저장소 메타데이터 plist. `Z_VERSION` 은 늘 1 이고 용도는 출처도 추정으로만 적었다 |
+| `Z_METADATA` | `Z_VERSION`, `Z_UUID`, `Z_PLIST` | `Z_UUID` 는 이 저장소 파일의 UUID, `Z_PLIST` 는 저장소 메타데이터 plist. `Z_VERSION` 은 늘 1 이고, 용도는 추정만 있다[1] |
 | `Z_MODELCACHE` | `Z_CONTENT` | 현재 데이터에 맞는 데이터 모델의 캐시 |
 
 `Z_PLIST` 는 plist 라서 [속성 목록 파일](../plist.md)의 방법으로 풉니다.
@@ -56,17 +56,17 @@ SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd :: Library/local.sql
 
 ### 영구 이력 추적 표
 
-영구 이력 추적(persistent history tracking)을 켜면 변경 기록을 담는 표 세 개가 생깁니다. 출처 문서는 이 표들을 `Z_ATRANSACTIONSTRING`·`Z_ATRANSACTION`·`Z_ACHANGE` 로 적었지만, 관찰한 기기에서는 앞에 `Z_` 가 없는 이름이었습니다.
+영구 이력 추적(persistent history tracking)을 켜면 변경 기록을 담는 표 세 개가 생깁니다. 이 표들은 `Z_ATRANSACTIONSTRING`·`Z_ATRANSACTION`·`Z_ACHANGE` 로 소개되어 있지만[1], iOS 27.0 기기에서는 앞에 `Z_` 가 없는 이름입니다.
 
-| 표(관찰 이름) | 관찰한 칸 | 뜻 |
+| 표(iOS 27.0 이름) | 칸 | 뜻 |
 |---|---|---|
 | `ACHANGE` | `Z_PK`, `Z_ENT`, `Z_OPT`, `ZCHANGETYPE`, `ZENTITY`, `ZENTITYPK`, `ZTRANSACTIONID`, `ZCOLUMNS` | 변경 한 건. `ZCHANGETYPE` 은 0 추가, 1 수정, 2 삭제 |
 | `ATRANSACTION` | `Z_PK`, `Z_ENT`, `Z_OPT`, `ZAUTHORTS`, `ZBUNDLEIDTS`, `ZCONTEXTNAMETS`, `ZTIMESTAMP`, `ZAUTHOR`, `ZBUNDLEID`, `ZCONTEXTNAME`, `ZQUERYGEN`, `ZPROCESSID` 로 시작하는 칸 두 개 | 트랜잭션 한 건. `ZTIMESTAMP` 는 생성 시각 |
 | `ATRANSACTIONSTRING` | `Z_PK`, `Z_ENT`, `Z_OPT`, `ZNAME` | 작성자 등 문자열 |
 
-관찰한 DB 가운데 `ACHANGE` 표가 있는 DB 는 38개였고, `NoteStore.sqlite` 와 `Photos.sqlite` 에도 있었습니다.
+같은 백업에서 `ACHANGE` 표가 있는 DB 는 38개이고, `NoteStore.sqlite` 와 `Photos.sqlite` 에도 있습니다.
 
-이 밖에 `ANSCKEVENT`, `ANSCKEXPORTEDOBJECT`, `ANSCKMIRROREDRELATIONSHIP`, `ANSCKMETADATAENTRY` 처럼 `ANSCK` 로 시작하는 표가 DB 세 개에 있었습니다(`HomeDomain :: Library/Accessibility/com.apple.RTTTranscripts.sqlite`, `HomeDomain :: Library/Accessibility/com.apple.personalaudio.sqlite`, `HomeDomain :: Library/ContactsMetadata/CNContactMetadata.db`). 이 표들의 용도는 검체에서 확인합니다.
+이 밖에 `ANSCKEVENT`, `ANSCKEXPORTEDOBJECT`, `ANSCKMIRROREDRELATIONSHIP`, `ANSCKMETADATAENTRY` 처럼 `ANSCK` 로 시작하는 표가 DB 세 개에 있습니다(`HomeDomain :: Library/Accessibility/com.apple.RTTTranscripts.sqlite`, `HomeDomain :: Library/Accessibility/com.apple.personalaudio.sqlite`, `HomeDomain :: Library/ContactsMetadata/CNContactMetadata.db`). 이 표들의 용도는 검체에서 확인합니다.
 
 ## 읽는 법
 
@@ -76,7 +76,7 @@ SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd :: Library/local.sql
 SELECT Z_ENT, Z_NAME, Z_SUPER, Z_MAX FROM Z_PRIMARYKEY ORDER BY Z_ENT;
 ```
 
-엔터티 표의 `Z_ENT` 값을 이 목록과 맞추면 한 표 안에 여러 자식 엔터티의 행이 섞여 있어도 행마다 어느 엔터티인지 가를 수 있습니다. 이력 추적 표가 있다면 삭제 기록을 트랜잭션과 이어 봅니다. 아래 질의는 관계 칸 규칙에 따라 `ZTRANSACTIONID` 가 `ATRANSACTION` 의 `Z_PK` 를 담는다고 보고 짠 것이고, 시각은 초 단위라고 가정해 변환합니다.
+엔터티 표의 `Z_ENT` 값을 이 목록과 맞추면 한 표 안에 여러 자식 엔터티의 행이 섞여 있어도 행마다 어느 엔터티인지 가를 수 있습니다. 이력 추적 표가 있다면 삭제 기록을 트랜잭션과 이어 봅니다. 아래 질의에서는 관계 칸 규칙대로 `ZTRANSACTIONID` 를 `ATRANSACTION` 의 `Z_PK` 로 보고, 시각을 초 단위로 보고 변환합니다.
 
 ```
 SELECT c.Z_PK, c.ZENTITY, c.ZENTITYPK, t.ZTIMESTAMP,
@@ -89,19 +89,19 @@ WHERE c.ZCHANGETYPE = 2;
 
 ## 시각 해석
 
-Core Data 계열 시각은 2001-01-01 00:00:00 GMT 부터 센 초(Mac 절대 시각, CFAbsoluteTime)이고 유닉스 시각과 978307200초 차이가 나며, 일부 값은 나노초 단위입니다. 기준이 GMT 라서 변환한 값은 UTC 이고, 현지 시각으로 바꿀 때는 기기 시간대를 따로 확인합니다. Core Data 날짜 속성이 SQLite 칸에 어떤 자료형으로 들어가는지는 관찰 메모에 자료형이 없어 확인하지 못했습니다. 여러 시각 기준을 바꾸는 법은 [시각 값](../../value-decoding/time-values.md)에 정리했습니다.
+Core Data 계열 시각은 2001-01-01 00:00:00 GMT 부터 센 초(Mac 절대 시각, CFAbsoluteTime)이고 유닉스 시각과 978307200초 차이가 나며, 일부 값은 나노초 단위입니다. 기준이 GMT 라서 변환한 값은 UTC 이고, 현지 시각으로 바꿀 때는 기기 시간대를 따로 확인합니다. Core Data 날짜 속성이 SQLite 칸에 어떤 자료형으로 들어가는지는 검체에서 확인합니다. 여러 시각 기준을 바꾸는 법은 [시각 값](../../value-decoding/time-values.md)에 정리했습니다.
 
 ## 포렌식에서 중요한 점
 
 Core Data 저장소는 iOS 7 부터 기본이 WAL 방식이라 `-wal` 을 함께 봐야 하고, 자세한 내용은 [WAL과 저널](wal-journal.md)에 있습니다. 지운 행이 SQLite 빈 공간에 남는 방식은 일반 SQLite 와 같아서 [지운 레코드 되살리기](freelist-freeblock.md)를 따릅니다.
 
-`ACHANGE` 에서 `ZCHANGETYPE` 이 2 인 행은 원래 행이 지워진 뒤에도 `ZENTITY`·`ZENTITYPK` 로 무엇이 지워졌는지 가리킬 수 있습니다. 다만 이력이 얼마나 오래 남는지는 확인하지 못했고, 이 행은 "이 엔터티의 이 번호 행을 지운 변경이 기록되어 있다"까지만 말해 줍니다.
+`ACHANGE` 에서 `ZCHANGETYPE` 이 2 인 행은 원래 행이 지워진 뒤에도 `ZENTITY`·`ZENTITYPK` 로 무엇이 지워졌는지 가리킬 수 있습니다. 다만 이력이 얼마나 오래 남는지는 검체마다 확인해야 하고, 이 행은 "이 엔터티의 이 번호 행을 지운 변경이 기록되어 있다"까지만 말해 줍니다.
 
-`Z_PRIMARYKEY` 의 `Z_MAX` 가 표에 남은 가장 큰 `Z_PK` 보다 크면 그 사이 번호의 행이 지워졌을 수 있다는 단서가 됩니다. 이 판단은 `Z_MAX` 의 정의에서 끌어낸 추론이고 출처가 직접 적은 내용이 아니라서, 보고서에는 추론이라고 밝히고 이력 표나 빈 공간 복원 결과와 함께 씁니다. `Z_OPT` 는 행을 고친 횟수의 단서일 뿐 언제 고쳤는지는 알려 주지 않습니다.
+`Z_PRIMARYKEY` 의 `Z_MAX` 가 표에 남은 가장 큰 `Z_PK` 보다 크면 그 사이 번호의 행이 지워졌을 수 있다는 단서가 됩니다. 이 판단은 `Z_MAX` 의 정의에서 끌어낸 추론이라서, 보고서에는 추론이라고 밝히고 이력 표나 빈 공간 복원 결과와 함께 씁니다. `Z_OPT` 는 행을 고친 횟수의 단서일 뿐 언제 고쳤는지는 알려 주지 않습니다.
 
 ## 함정
 
-이력 추적 표는 출처 문서와 관찰 기기의 이름이 달랐으니, 표 이름만으로 찾지 말고 `ZCHANGETYPE`·`ZENTITYPK` 같은 칸 이름으로도 찾습니다. `Z_PK` 는 엔터티마다 따로 세는 번호라서 `Z_PK` 하나만으로 행을 특정하지 말고 `Z_ENT` 와 짝지어 씁니다. `Z_PK` 가 SQLite 의 rowid 와 같은 값인지는 확인하지 못했으니, 빈 공간에서 되살린 레코드의 rowid 를 `Z_PK` 로 바로 읽지 않습니다. 모델의 엔터티 이름(`Z_NAME`)은 대소문자를 구분하지만 표 이름은 대문자라서, 이름을 맞출 때 대소문자 차이를 감안합니다.
+이력 추적 표는 이름 앞에 `Z_` 가 붙기도 하고 붙지 않기도 하니, 표 이름만으로 찾지 말고 `ZCHANGETYPE`·`ZENTITYPK` 같은 칸 이름으로도 찾습니다. `Z_PK` 는 엔터티마다 따로 세는 번호라서 `Z_PK` 하나만으로 행을 특정하지 말고 `Z_ENT` 와 짝지어 씁니다. `Z_PK` 가 SQLite 의 rowid 와 같은 값이라는 보장이 없으니, 빈 공간에서 되살린 레코드의 rowid 를 `Z_PK` 로 바로 읽지 않습니다. 모델의 엔터티 이름(`Z_NAME`)은 대소문자를 구분하지만 표 이름은 대문자라서, 이름을 맞출 때 대소문자 차이를 감안합니다.
 
 ## 도구
 

@@ -12,9 +12,9 @@ nav_order: 770
 
 ## 무엇을 기록하나 · 왜 생기나
 
-크롬은 사용자 데이터 폴더 (User Data Directory) 에 프로필 데이터를 모아 두고, 그 안에는 방문 기록·북마크·쿠키 같은 파일이 들어갑니다. 프로필은 사용자 데이터 폴더 아래 하위 폴더에 저장하고, 보통 이름이 `Default` 입니다 [2]. 크로미움 공식 문서에 따르면 iOS 에서는 이 폴더를 앱 샌드박스의 `Application Support` 안에 두고, 크롬은 `Library/Application Support/Google/Chrome`, 크로미움은 `Library/Application Support/Chromium` 을 씁니다 [2].
+크롬은 사용자 데이터 폴더 (User Data Directory) 에 프로필 데이터를 모아 두고, 그 안에는 방문 기록·북마크·쿠키 같은 파일이 들어갑니다. 프로필은 사용자 데이터 폴더 아래 하위 폴더에 저장하고, 보통 이름이 `Default` 입니다 [2]. iOS 에서는 이 폴더를 앱 샌드박스의 `Application Support` 안에 두고, 크롬은 `Library/Application Support/Google/Chrome`, 크로미움은 `Library/Application Support/Chromium` 을 씁니다 [2].
 
-화면을 그리는 엔진에는 따로 정해진 규칙이 있습니다. App Store 심사 지침 2.5.6 은 웹을 탐색하는 앱이 알맞은 WebKit 프레임워크와 WebKit JavaScript 를 쓰도록 정하고 있고, EU·일본용 앱은 다른 브라우저 엔진을 쓰는 권한 (entitlement) 을 신청할 수 있습니다 [6]. 이 규칙은 엔진에 관한 것이고, 크롬의 기록 파일이 크로미움 형식으로 `Application Support` 에 있다는 것은 크로미움 문서와 MVT 가 알려 주는 별개의 사실입니다 [2][4]. 사파리 `History.db` 와는 파일도 표도 다르니 크롬 기록은 크롬 컨테이너를 따로 열어 봅니다. 사파리는 [사파리 (Safari)](safari/index.md) 에서 다룹니다.
+화면을 그리는 엔진에는 따로 정해진 규칙이 있습니다. App Store 심사 지침 2.5.6 은 웹을 탐색하는 앱이 알맞은 WebKit 프레임워크와 WebKit JavaScript 를 쓰도록 정하고 있고, EU·일본용 앱은 다른 브라우저 엔진을 쓰는 권한 (entitlement) 을 신청할 수 있습니다 [6]. 이 규칙은 엔진에 관한 것이고, 크롬의 기록 파일은 엔진과 상관없이 크로미움 형식으로 `Application Support` 에 있습니다 [2][4]. 사파리 `History.db` 와는 파일도 표도 다르니 크롬 기록은 크롬 컨테이너를 따로 열어 봅니다. 사파리는 [사파리 (Safari)](safari/index.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -26,7 +26,7 @@ private/var/mobile/Containers/Data/Application/*/Library/Application Support/Goo
 
 `*` 자리는 앱마다 붙는 컨테이너 UUID 입니다. 번들 ID 와 컨테이너의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 설명합니다.
 
-로컬 백업에서는 도메인이 `AppDomain-com.google.chrome.ios`, 상대 경로가 `Library/Application Support/Google/Chrome/Default/History` 입니다. MVT 는 이 파일을 백업 파일 ID `faf971ce92c3ac508c018dce1bef2a8b8e9838f1` 로 찾는데 [4], 이 값은 `AppDomain-com.google.chrome.ios-Library/Application Support/Google/Chrome/Default/History` 문자열의 SHA-1 과 같습니다(이 핸드북에서 직접 계산해 맞춰 봄). 백업 파일 ID 를 만드는 규칙은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
+로컬 백업에서는 도메인이 `AppDomain-com.google.chrome.ios`, 상대 경로가 `Library/Application Support/Google/Chrome/Default/History` 입니다. 이 파일의 백업 파일 ID 는 `faf971ce92c3ac508c018dce1bef2a8b8e9838f1` 이고 [4], 이 값은 `AppDomain-com.google.chrome.ios-Library/Application Support/Google/Chrome/Default/History` 문자열의 SHA-1 입니다. 백업 파일 ID 를 만드는 규칙은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
 
 iLEAPP 의 `chrome.py` 는 `History` 에서 방문 기록·방문·검색·내려받기·키워드 검색어를, `Web Data` 에서 자동 완성 항목과 프로필을 읽고, 그 밖에 다음 파일도 읽습니다 [1].
 
@@ -40,15 +40,15 @@ Network Action Predictor
 Offline Pages/metadata/OfflinePages.db
 ```
 
-이 스크립트는 `*/Chrome/Default/History*` 같은 경로 패턴으로 파일을 찾고, 안드로이드·데스크톱과 함께 쓰는 공용 스크립트라서 `app_sbrowser`·`app_opera`·`Chromium` 경로도 같이 봅니다 [1]. 이 파일들이 아이폰 크롬 컨테이너에 모두 생기는지, 로컬 백업에 모두 들어가는지는 확인하지 못했습니다. MVT 가 백업 파일 ID 로 `History` 를 찾으니 `History` 는 백업에 들어간다고 볼 수 있지만 [4], 암호화하지 않은 백업에도 들어가는지는 확인하지 못했습니다.
+이 스크립트는 `*/Chrome/Default/History*` 같은 경로 패턴으로 파일을 찾고, 안드로이드·데스크톱과 함께 쓰는 공용 스크립트라서 `app_sbrowser`·`app_opera`·`Chromium` 경로도 같이 봅니다 [1]. 이 파일들이 아이폰 크롬 컨테이너에 모두 생기는지, 로컬 백업에 모두 들어가는지는 공개 자료가 없어 검체에서 확인합니다. `History` 는 백업 파일 ID 가 있으니 백업에 들어가지만 [4], 암호화하지 않은 백업에도 들어가는지는 검체에서 확인합니다.
 
-아이폰 크롬의 캐시 폴더, 탭·세션 저장 파일, 컨테이너 안에 WebKit 데이터 폴더(`Library/WebKit/WebsiteData` 등)가 따로 생기는지도 확인하지 못했습니다. WebKit 을 쓰는 앱에 생길 수 있는 파일은 [네이버 앱](naver.md) 에 정리했습니다. 이 핸드북이 읽은 백업에서는 다른 회사 앱 이름을 가려서 크롬 설치 여부를 알 수 없었고, 그래서 위 경로는 관찰로 확인한 값이 아닙니다.
+아이폰 크롬의 캐시 폴더, 탭·세션 저장 파일, 컨테이너 안에 WebKit 데이터 폴더(`Library/WebKit/WebsiteData` 등)가 따로 생기는지도 공개 자료가 없어 검체에서 확인합니다. WebKit 을 쓰는 앱에 생길 수 있는 파일은 [네이버 앱](naver.md) 에 정리했습니다.
 
-iOS 버전별 차이는 확인한 자료가 없습니다. 엔진 쪽 차이는 지역에 따라 갈리는데, EU·일본에서 크롬이 실제로 다른 엔진(Blink)을 쓰는지는 확인하지 못했습니다.
+iOS 버전별 차이를 다룬 공개 자료는 없습니다. 엔진 쪽 차이는 지역에 따라 갈리고, EU·일본에서 크롬이 실제로 다른 엔진(Blink)을 쓰는지도 공개 자료가 없습니다.
 
 ## 구조
 
-`History` 는 SQLite 파일이고 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 방식으로 읽습니다. iLEAPP·MVT 가 읽는 표와 칸은 다음과 같습니다.
+`History` 는 SQLite 파일이고 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 방식으로 읽습니다. 주요 표와 칸은 다음과 같습니다.
 
 | 파일 | 표 | 칸 |
 |---|---|---|
@@ -63,19 +63,19 @@ iOS 버전별 차이는 확인한 자료가 없습니다. 엔진 쪽 차이는 �
 
 `urls` 는 주소마다 한 줄이고 `visits` 는 방문마다 한 줄이라서, 방문 시각을 주소와 함께 보려면 `visits.url` 과 `urls.id` 를 이어 붙입니다. MVT 는 `urls.id`, `urls.url`, `visits.id`, `visits.visit_time`, `visits.from_visit` 를 이렇게 이어 `visit_time` 순으로 뽑습니다 [4]. 검색어는 `keyword_search_terms.url_id` 를 `urls.id` 와 이어 붙여 어느 검색 결과 주소에서 나온 검색어인지 봅니다 [1].
 
-`Login Data` 의 `password_value` 가 아이폰에서 암호화돼 있는지, 키가 어디 있는지는 확인하지 못했습니다. 저장된 암호 전반은 [저장된 암호](../credentials-security/saved-passwords.md) 를 봅니다.
+`Login Data` 의 `password_value` 가 아이폰에서 암호화돼 있는지, 키가 어디 있는지는 공개 자료가 없어 검체에서 확인합니다. 저장된 암호 전반은 [저장된 암호](../credentials-security/saved-passwords.md) 를 봅니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `visits` 줄은 그 크롬 프로필에 그 주소를 연 방문 기록이 남아 있다는 것을 보여 주고, `visit_time` 으로 그 시각을 알 수 있습니다. `keyword_search_terms` 는 검색어 문자열을, `downloads` 는 내려받기를 시작한 시각을 알려 줍니다. `Login Data` 의 `username_value` 와 `date_created` 로는 저장한 계정 이름과 저장한 시각을 봅니다.
 
-**증명하지 못하는 것.** 방문 기록 한 줄만으로는 사람이 화면을 봤는지, 누가 폰을 들고 있었는지 알 수 없습니다. 구글 계정 동기화를 켜면 다른 기기에서 방문한 기록이 이 파일에 섞이는지, 섞인다면 구분하는 칸이 있는지는 확인하지 못했습니다. 그래서 "이 아이폰에서 방문했다" 고 쓰기 전에 아래 교차 검증 표의 기기 쪽 흔적과 맞춰 봐야 합니다. 시크릿 모드로 본 사이트는 이 파일에 남지 않습니다(아래 함정 참고).
+**증명하지 못하는 것.** 방문 기록 한 줄만으로는 사람이 화면을 봤는지, 누가 폰을 들고 있었는지 알 수 없습니다. 구글 계정 동기화를 켜면 다른 기기에서 방문한 기록이 이 파일에 섞이는지, 섞인다면 구분하는 칸이 있는지는 공개 자료로 알려져 있지 않습니다. 그래서 "이 아이폰에서 방문했다" 고 쓰기 전에 아래 교차 검증 표의 기기 쪽 흔적과 맞춰 봐야 합니다. 시크릿 모드로 본 사이트는 이 파일에 남지 않습니다(아래 함정 참고).
 
 보고서에는 "이 사이트에 접속했다" 보다 "크롬 방문 기록에 이 시각에 이 주소를 연 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
 ## 시각 해석
 
-크롬 시각은 1601-01-01 부터 센 마이크로초이고, `last_visit_time`, `visit_time`, `start_time`, `last_access_utc`, `date_created`(`logins`) 가 이 기준을 씁니다 [1]. iLEAPP 는 다음 식으로 바꿉니다 [1].
+크롬 시각은 1601-01-01 부터 센 마이크로초이고, `last_visit_time`, `visit_time`, `start_time`, `last_access_utc`, `date_created`(`logins`) 가 이 기준을 씁니다 [1]. SQLite 에서는 다음 식으로 바꿉니다 [1].
 
 ```sql
 datetime(visit_time/1000000 + strftime('%s','1601-01-01'), 'unixepoch')
@@ -89,9 +89,9 @@ datetime(visit_time/1000000 + strftime('%s','1601-01-01'), 'unixepoch')
 
 ## 함정과 한계
 
-시크릿 (Incognito) 모드 세션이 끝나면 크롬은 사이트 데이터와 방문한 사이트 기록을 남기지 않습니다. 다만 시크릿 중에 저장한 북마크와 내려받은 파일은 시크릿을 나가도 남습니다 [5]. 그래서 방문 기록에 없는 사이트의 북마크나 내려받은 파일이 있으면 시크릿 사용을 의심해 볼 수 있지만, 시크릿을 썼다는 흔적(설정 키 등)이 기기에 남는지는 확인하지 못했습니다. 크롬에는 시크릿 탭 잠금 설정도 있어서, 켜 두면 크롬을 떠날 때 시크릿 탭을 잠그고 다시 볼 때 Face ID·Touch ID·암호 같은 기기 인증을 요구합니다 [5].
+시크릿 (Incognito) 모드 세션이 끝나면 크롬은 사이트 데이터와 방문한 사이트 기록을 남기지 않습니다. 다만 시크릿 중에 저장한 북마크와 내려받은 파일은 시크릿을 나가도 남습니다 [5]. 그래서 방문 기록에 없는 사이트의 북마크나 내려받은 파일이 있으면 시크릿 사용을 의심해 볼 수 있지만, 시크릿을 썼다는 흔적(설정 키 등)이 기기에 남는지는 공개 자료가 없어 검체에서 확인합니다. 크롬에는 시크릿 탭 잠금 설정도 있어서, 켜 두면 크롬을 떠날 때 시크릿 탭을 잠그고 다시 볼 때 Face ID·Touch ID·암호 같은 기기 인증을 요구합니다 [5].
 
-iLEAPP 코드 주석에는 자동 완성 프로필에 대해 "iOS 시험 자료가 모두 비어 있다" 는 말이 있습니다 [1]. 아이폰 크롬에서 `Web Data` 가 얼마나 채워지는지는 불확실하니, 빈 표를 "사용자가 지웠다" 로 읽지 않습니다.
+iLEAPP 의 iOS 시험 자료에서는 자동 완성 프로필이 모두 비어 있었습니다 [1]. 아이폰 크롬에서 `Web Data` 가 얼마나 채워지는지는 불확실하니, 빈 표를 "사용자가 지웠다" 로 읽지 않습니다.
 
 공용 스크립트가 여러 브라우저 경로를 함께 찾기 때문에, 도구 결과에서 어느 앱 컨테이너의 파일인지 경로로 한 번 더 확인합니다 [1].
 

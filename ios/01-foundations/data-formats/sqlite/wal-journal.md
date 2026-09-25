@@ -11,15 +11,15 @@ SQLite 는 쓰는 도중 문제가 생겨도 DB 가 깨지지 않도록 본 파�
 
 ## 이 형식을 쓰는 아티팩트
 
-곁 파일은 본 파일과 같은 폴더에 본 파일 이름 뒤에 `-journal`, `-wal`, `-shm` 을 붙인 이름으로 생깁니다. Apple 은 iOS 7 과 OS X Mavericks 부터 Core Data SQLite 저장소의 기본 저널 방식을 WAL 로 바꿨고, 이때부터 Core Data 는 본 저장소 파일을 건드리지 않고 같은 위치의 `-wal` 에 트랜잭션을 덧붙입니다. Apple 문서는 본 파일만 복사하면 데이터가 빠지거나 어긋날 수 있다고 적고, 본 파일과 `-wal` 을 한 묶음으로 다루라고 권합니다.
+곁 파일은 본 파일과 같은 폴더에 본 파일 이름 뒤에 `-journal`, `-wal`, `-shm` 을 붙인 이름으로 생깁니다. Apple 은 iOS 7 과 OS X Mavericks 부터 Core Data SQLite 저장소의 기본 저널 방식을 WAL 로 바꿨고, 이때부터 Core Data 는 본 저장소 파일을 건드리지 않고 같은 위치의 `-wal` 에 트랜잭션을 덧붙입니다[3]. 본 파일만 복사하면 데이터가 빠지거나 어긋날 수 있으니, 본 파일과 `-wal` 을 한 묶음으로 다룹니다[3].
 
 | 대상 | 기본 저널 방식 | 근거 |
 |---|---|---|
-| Core Data SQLite 저장소, iOS 7 이후 | WAL | Apple QA1809 |
-| Core Data 를 쓰지 않는 SQLite DB | 앱이 정하고, SQLite 자체 기본값은 DELETE | SQLite pragma 문서 |
-| 로컬 백업의 `Manifest.db` | 최상위에 `Manifest.db-wal`, `Manifest.db-shm` 이 함께 있음 | 관찰 |
+| Core Data SQLite 저장소, iOS 7 이후 | WAL | [3] |
+| Core Data 를 쓰지 않는 SQLite DB | 앱이 정하고, SQLite 자체 기본값은 DELETE | [4] |
+| 로컬 백업의 `Manifest.db` | 최상위에 `Manifest.db-wal`, `Manifest.db-shm` 이 함께 있음 | |
 
-iOS 앱 DB 가 대부분 WAL 방식인지는 전수로 확인하지 못했고, 로컬 백업에 앱 DB 의 `-wal` 이 따로 들어가는지도 관찰 메모에 목록이 없어 확인하지 못했습니다.
+iOS 앱 DB 가 모두 WAL 방식이라고 단정할 수는 없으니, 앱 DB 의 저널 방식과 로컬 백업에 앱 DB 의 `-wal` 이 따로 들어가는지는 검체에서 확인합니다.
 
 ## 저널 방식 (journal_mode)
 

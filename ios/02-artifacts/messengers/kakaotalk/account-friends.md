@@ -17,7 +17,7 @@ nav_order: 830
 
 ## 위치와 버전별 차이
 
-두 표 모두 `Library/PrivateDocuments/Talk.sqlite` 안에 있습니다[2]. `ZCONTACT` 의 `ZRAWPHONENUMBER`·`ZCONTACTID` 칸은 오래된 스키마에는 없어서[2], 앱 버전에 따라 칸 구성이 다릅니다. 아래 표의 "새 스키마"·"오래된 스키마" 는 iLEAPP 가 본 두 표본을 가리킵니다[2]. 어느 앱 버전부터 이 칸이 생겼는지와 iOS 버전별 차이는 확인하지 못했습니다.
+두 표 모두 `Library/PrivateDocuments/Talk.sqlite` 안에 있습니다[2]. `ZCONTACT` 의 `ZRAWPHONENUMBER`·`ZCONTACTID` 칸은 오래된 스키마에는 없어서[2], 앱 버전에 따라 칸 구성이 다릅니다. 아래 표의 "새 스키마"·"오래된 스키마" 는 iLEAPP 가 본 두 표본을 가리킵니다[2]. 어느 앱 버전부터 이 칸이 생겼는지와 iOS 버전별 차이는 공개 자료가 없어 검체에서 확인합니다.
 
 | 칸 | 새 스키마 | 오래된 스키마 |
 |---|---|---|
@@ -36,13 +36,13 @@ ZPHONENUMBER, ZFRIENDTYPE, ZBLOCKTYPE, ZUSERTYPE, ZHIDDEN, ZFAVORITE, ZPHOTOURL
 | 칸 | 읽는 법 |
 |---|---|
 | `ZID` | 사용자 ID 이고, `Message.userId` 와 잇는 값입니다[2][3] |
-| `ZNAME`, `ZNICKNAME`, `ZCUSTOMNAME` | 이름이 세 칸에 따로 저장되고 실제로 값이 달랐습니다. 셋을 모두 봅니다[2] |
+| `ZNAME`, `ZNICKNAME`, `ZCUSTOMNAME` | 이름이 세 칸에 따로 저장되고 값이 서로 다를 수 있습니다. 셋을 모두 봅니다[2] |
 | `ZPHONENUMBER` | 암호문이고, 그 행 자신의 `ZID` 로 만든 키로 풀립니다[2] |
 | `ZFRIENDTYPE`, `ZBLOCKTYPE`, `ZUSERTYPE` | 정수이지만 값의 뜻은 공개되지 않았습니다[2] |
 | `ZSTATUSMESSAGE`, `ZEMAIL` | 시험 기기 두 대에서는 비어 있었습니다[2] |
 | `ZHIDDEN`, `ZFAVORITE` | 시험 기기 두 대에서는 0 이었습니다[2] |
 | `ZPHOTOURL` | 프로필 사진의 원격 주소이고, 도구는 이 주소를 열지 않습니다[2] |
-| `ZACCOUNTID` | 칸 이름은 확인했지만 이번에 연 자료에 값 설명은 없었습니다 |
+| `ZACCOUNTID` | 값의 뜻을 설명한 공개 자료가 없습니다 |
 
 `ZPHONENUMBER` 는 시험 기기 두 대 모두 값이 있는 6행이 전부 풀렸습니다[2]. 암호화 방식은 메시지 본문과 같은 계열이고, 방식은 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에서 다룹니다.
 
@@ -56,7 +56,7 @@ ZNAME, ZPHONENUMBER, ZORIGINALPHONENUMBER, ZRAWPHONENUMBER, ZCONTACTID, ZUSER
 
 ### 내 계정 ID
 
-기기 주인의 카카오톡 ID 를 어디서 정하는지는 출처끼리 어긋납니다. 한 공개 도구는 `ZFRIENDTYPE = 1` 인 행의 `ZID` 를 내 ID 로 쓰고[3], 그 ID 와 `Message.userId` 가 같으면 보낸 메시지로 봅니다[3]. iLEAPP 는 `ZFRIENDTYPE` 의 뜻이 밝혀지지 않았다고 적습니다[2]. 그래서 이 방법은 한 도구의 가정으로만 다루고, 보고서에 쓸 때는 다른 근거와 함께 씁니다. 로그인한 카카오 계정(이메일)이나 기기 등록 정보가 plist·키체인 가운데 어디에 있는지는 확인하지 못했습니다. 키체인 자체는 [키체인 (iOS Keychain)](../../../01-foundations/storage/keychain.md)에서 다룹니다.
+기기 주인의 카카오톡 ID 를 어디서 정하는지는 출처끼리 어긋납니다. 한 공개 도구는 `ZFRIENDTYPE = 1` 인 행의 `ZID` 를 내 ID 로 쓰고[3], 그 ID 와 `Message.userId` 가 같으면 보낸 메시지로 봅니다[3]. iLEAPP 는 `ZFRIENDTYPE` 의 뜻이 밝혀지지 않았다고 적습니다[2]. 그래서 이 방법은 한 도구의 가정으로만 다루고, 보고서에 쓸 때는 다른 근거와 함께 씁니다. 로그인한 카카오 계정(이메일)이나 기기 등록 정보가 plist·키체인 가운데 어디에 있는지는 공개된 분석 자료가 없어 검체에서 확인합니다. 키체인 자체는 [키체인 (iOS Keychain)](../../../01-foundations/storage/keychain.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -66,11 +66,11 @@ ZNAME, ZPHONENUMBER, ZORIGINALPHONENUMBER, ZRAWPHONENUMBER, ZCONTACTID, ZUSER
 
 ## 시각 해석
 
-이번에 연 자료에서는 `ZUSER`·`ZCONTACT` 의 시각 칸을 확인하지 못했습니다. 사용자가 언제 친구가 되었는지는 이 두 표만으로 말할 수 없고, 그 사용자와 처음 주고받은 메시지 시각을 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에서 찾아 봅니다.
+`ZUSER`·`ZCONTACT` 에는 공개 자료로 알려진 시각 칸이 없습니다. 사용자가 언제 친구가 되었는지는 이 두 표만으로 말할 수 없고, 그 사용자와 처음 주고받은 메시지 시각을 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에서 찾아 봅니다.
 
 ## 함정과 한계
 
-이름 칸이 셋이라서 도구가 어느 칸을 보고서에 썼는지 확인해야 합니다. 같은 사람이 도구마다 다른 이름으로 나올 수 있고, 칸마다 누가 정한 이름인지는 이번에 연 자료에 설명이 없어서 보고서에는 칸 이름을 함께 적습니다.
+이름 칸이 셋이라서 도구가 어느 칸을 보고서에 썼는지 확인해야 합니다. 같은 사람이 도구마다 다른 이름으로 나올 수 있고, 칸마다 누가 정한 이름인지는 공개된 설명이 없어서 보고서에는 칸 이름을 함께 적습니다.
 
 시험 기기 두 대에서는 `ZSTATUSMESSAGE`·`ZEMAIL` 이 비어 있고 `ZHIDDEN`·`ZFAVORITE` 가 0 이었지만[2], 다른 기기에서 값이 있다면 그 뜻은 새로 확인합니다. `ZPHOTOURL` 은 원격 주소라서 열면 서버에 접속 기록이 남을 수 있으니, 사건 기록 없이 열지 않습니다.
 
@@ -95,7 +95,7 @@ FROM ZCONTACT c
 LEFT JOIN ZUSER u ON u.ZID = c.ZUSER;
 ```
 
-두 번째 질의는 `ZCONTACT.ZUSER` 에 사용자 ID 가 들어간다는 기록[2]에 따라 `ZUSER.ZID` 와 잇습니다. 짝이 맞지 않으면 두 칸의 값 형식을 먼저 비교합니다.
+`ZCONTACT.ZUSER` 에는 사용자 ID 가 들어가므로[2], 두 번째 질의는 이 칸을 `ZUSER.ZID` 와 잇습니다. 짝이 맞지 않으면 두 칸의 값 형식을 먼저 비교합니다.
 
 ### 공개 도구로 한 번
 

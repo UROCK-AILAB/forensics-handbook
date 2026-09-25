@@ -12,7 +12,7 @@ nav_order: 890
 
 ## 무엇을 기록하나 · 왜 생기나
 
-앱이 DM 대화방과 메시지를 기기 안에 저장해 두는 곳이 `DirectSQLiteDatabase` 폴더의 DB 입니다[1][2]. 공개 도구 iLEAPP 는 이 DB 에서 주고받은 메시지와 음성·영상 통화 기록 두 가지를 뽑고[1], 다른 공개 분석 글은 글 메시지·미디어 메시지(미디어 URL 포함)·통화 기록 세 가지로 나눠 보여 줍니다[2]. 도구는 보고서를 대화 보고서와 통화 보고서 둘로 만들지만 대화 보고서에 반응과 공유한 미디어도 함께 싣습니다[1]. 도구가 읽는 대상은 DB 에 지금 남아 있는 메시지이고[1], 이번에 연 자료에는 지운 메시지를 되살렸다는 내용이 없습니다.
+앱이 DM 대화방과 메시지를 기기 안에 저장해 두는 곳이 `DirectSQLiteDatabase` 폴더의 DB 입니다[1][2]. 이 DB 에는 글 메시지, 미디어 메시지(미디어 URL 포함), 음성·영상 통화 기록이 남고, 메시지에 단 반응과 공유한 미디어 정보도 함께 들어 있습니다[1][2]. 공개 도구는 DB 에 지금 남아 있는 메시지만 읽어서[1], 지운 메시지는 도구 결과에 나오지 않습니다.
 
 ## 위치와 버전별 차이
 
@@ -26,18 +26,18 @@ DB 가 어느 컨테이너에 있는지는 자료마다 다릅니다. iLEAPP 는
 /private/var/mobile/Containers/Shared/AppGroup/<App_GUID>/Library/Application Support/DirectSQLiteDatabase/****.db
 ```
 
-두 컨테이너를 모두 찾아보고, 폴더 안의 `.db` 파일과 함께 `-wal`·`-shm` 파일도 가져옵니다. 컨테이너 종류와 앱 그룹은 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다. 두 자료 모두 시험한 iOS 버전과 앱 버전을 밝히지 않아서[1][2], 버전마다 위치나 표가 어떻게 달라지는지는 확인하지 못했습니다. 앱 업데이트마다 바뀔 수 있어서 위 경로는 "도구가 찾는 위치" 로 보고 검체에서 직접 확인합니다.
+두 컨테이너를 모두 찾아보고, 폴더 안의 `.db` 파일과 함께 `-wal`·`-shm` 파일도 가져옵니다. 컨테이너 종류와 앱 그룹은 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다. iOS 버전과 앱 버전에 따라 위치나 표가 어떻게 달라지는지는 공개 자료가 없습니다. 앱 업데이트마다 바뀔 수 있어서 위 경로는 "도구가 찾는 위치" 로 보고 검체에서 직접 확인합니다.
 
 ## 구조
 
 ### 표와 칸
 
-iLEAPP 가 읽는 표와 칸은 아래와 같습니다[1].
+주요 표와 칸은 아래와 같습니다[1].
 
 | 표 | 칸 | 읽는 법 |
 |---|---|---|
 | `THREADS` | `THREAD_ID` | 대화방 ID 입니다 |
-| `THREADS` | `VIEWER_ID` | 칸 이름은 확인했지만 자료에 값 설명은 없습니다 |
+| `THREADS` | `VIEWER_ID` | 값을 설명한 공개 자료가 없습니다 |
 | `THREADS` | `METADATA` | 대화방 정보가 NSKeyedArchiver 로 들어 있고 참여자 목록을 여기서 찾습니다 |
 | `MESSAGES` | `MESSAGE_ID` | 메시지 ID 입니다 |
 | `MESSAGES` | `THREAD_ID` | `THREADS.THREAD_ID` 와 이어 어느 대화방의 메시지인지 찾습니다 |
@@ -45,7 +45,7 @@ iLEAPP 가 읽는 표와 칸은 아래와 같습니다[1].
 
 ### `ARCHIVE` 안의 키
 
-`ARCHIVE` 를 풀면 객체 그래프가 나오고, iLEAPP 는 아래 키를 따라가 값을 꺼냅니다[1]. 키 이름은 도구 소스에 적힌 그대로입니다.
+`ARCHIVE` 를 풀면 객체 그래프가 나오고, 아래 키를 따라가면 값을 꺼낼 수 있습니다[1].
 
 | 키 | 담긴 것 |
 |---|---|
@@ -68,11 +68,11 @@ iLEAPP 가 읽는 표와 칸은 아래와 같습니다[1].
 
 ## 시각 해석
 
-iLEAPP 는 `serverTimestamp` 를 plist 의 날짜 값으로 읽어 UTC 로 바꿔 보고합니다[1]. 이 값이 서버에서 붙은 시각인지 기기 시계로 붙은 시각인지는 자료가 설명하지 않아서, 기기 시계가 틀려 있던 사건이라면 다른 흔적과 맞춰 봅니다. `ARCHIVE` 안에서 날짜가 어떤 기준의 숫자로 저장되는지는 이번에 연 자료가 직접 밝히지 않았습니다. 그래서 도구가 보여 준 시각을 쓰기 전에 원래 값을 한 번 꺼내 보고, [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)의 방법으로 기준을 맞춰 봅니다. 현지 시각은 UTC 로 바꾼 뒤에 시간대를 따로 적용합니다.
+`serverTimestamp` 는 plist 의 날짜 값이고, UTC 로 바꿔 읽습니다[1]. 이 값이 서버에서 붙은 시각인지 기기 시계로 붙은 시각인지는 공개 자료가 없어서, 기기 시계가 틀려 있던 사건이라면 다른 흔적과 맞춰 봅니다. `ARCHIVE` 안에서 날짜가 어떤 기준의 숫자로 저장되는지도 공개 자료가 없습니다. 그래서 도구가 보여 준 시각을 쓰기 전에 원래 값을 한 번 꺼내 보고, [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)의 방법으로 기준을 맞춰 봅니다. 현지 시각은 UTC 로 바꾼 뒤에 시간대를 따로 적용합니다.
 
 ## 함정과 한계
 
-DB 위치를 한 곳만 보면 놓칠 수 있습니다. 자료끼리 앱 데이터 컨테이너와 앱 그룹 컨테이너로 갈리고[1][2], iLEAPP 는 `*.db*` 로 이름을 가리지 않고 찾아서[1] 폴더 안에 DB 가 여러 개면 모두 봐야 합니다. iLEAPP 의 경로는 파일 시스템 추출 기준이고, 로컬 백업에 이 파일이 들어가는지는 자료가 말하지 않았습니다. 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 먼저 파일이 있는지 확인합니다.
+DB 위치를 한 곳만 보면 놓칠 수 있습니다. 자료끼리 앱 데이터 컨테이너와 앱 그룹 컨테이너로 갈리고[1][2], iLEAPP 는 `*.db*` 로 이름을 가리지 않고 찾아서[1] 폴더 안에 DB 가 여러 개면 모두 봐야 합니다. iLEAPP 의 경로는 파일 시스템 추출 기준이고, 로컬 백업에 이 파일이 들어가는지는 공개 자료가 없습니다. 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 먼저 파일이 있는지 확인합니다.
 
 키 이름에 클래스 이름이 붙어 있어서(`IGDirect…`) 앱이 내부 클래스를 바꾸면 도구가 값을 못 찾고 빈칸으로 보고할 수 있습니다. 빈 본문을 "내용 없는 메시지" 로 읽기 전에 `ARCHIVE` 를 직접 풀어 확인합니다. 지운 메시지를 SQLite 빈 공간이나 WAL 에서 찾는 일반적인 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)와 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에 있습니다.
 

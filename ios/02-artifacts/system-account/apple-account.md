@@ -12,9 +12,9 @@ nav_order: 280
 
 ## 무엇을 기록하나 · 왜 생기나
 
-`Accounts3.sqlite` 는 기기의 계정 정보를 담는 데이터베이스입니다[7][8]. 포렌식 도구 개발사 Forensafe 는 여기서 계정을 추가한 시각, 사용자 이름, 계정 종류, 계정 ID, 계정 설명, 계정을 소유한 번들 ID, 부모 계정, 계정 자격 증명 종류를 뽑는다고 적었습니다[7]. 계정 종류를 따로 뽑는 것처럼 한 DB 에 여러 종류의 계정이 함께 들어가서, 사용자가 기기에 어떤 계정을 붙여 두었는지 한 번에 훑어볼 수 있습니다.
+`Accounts3.sqlite` 는 기기의 계정 정보를 담는 데이터베이스입니다[7][8]. 여기서는 계정을 추가한 시각, 사용자 이름, 계정 종류, 계정 ID, 계정 설명, 계정을 소유한 번들 ID, 부모 계정, 계정 자격 증명 종류를 읽을 수 있습니다[7]. 계정 종류가 따로 적히는 것처럼 한 DB 에 여러 종류의 계정이 함께 들어가서, 사용자가 기기에 어떤 계정을 붙여 두었는지 한 번에 훑어볼 수 있습니다.
 
-애플 계정의 상태는 이 DB 말고도 기능별 설정 파일에 따로 남습니다. 관찰한 백업에서는 애플 계정 정보 캐시, 인증(AuthKit), 나의 찾기, App Store·미디어 서비스, 메시지·페이스타임 등록 쪽 설정 파일이 각각 있었습니다.
+애플 계정의 상태는 이 DB 말고도 기능별 설정 파일에 따로 남습니다. 로컬 백업에는 애플 계정 정보 캐시, 인증(AuthKit), 나의 찾기, App Store·미디어 서비스, 메시지·페이스타임 등록 쪽 설정 파일이 각각 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -23,16 +23,16 @@ nav_order: 280
 | 수집 방식 | 경로 | 근거 |
 |---|---|---|
 | 전체 파일 시스템 추출 | `/private/var/mobile/Library/Accounts/Accounts3.sqlite` | [7][8] |
-| 로컬 백업 | `HomeDomain :: Library/Accounts/Accounts#.sqlite` (`#` 은 가린 숫자) | 관찰 |
-| 로컬 백업의 사본 | `HomeDomain :: Library/Accounts/VerifiedBackup/Accounts#.sqlite` | 관찰 |
+| 로컬 백업 | `HomeDomain :: Library/Accounts/Accounts#.sqlite` (`#` 은 숫자) | |
+| 로컬 백업의 사본 | `HomeDomain :: Library/Accounts/VerifiedBackup/Accounts#.sqlite` | |
 
-백업 쪽 `HomeDomain :: Library/Accounts/` 는 이름으로 보아 전체 파일 시스템 경로 `/private/var/mobile/Library/Accounts/` 와 맞습니다. `VerifiedBackup` 폴더의 사본은 표와 칸 구성이 원본과 같았지만, 언제 왜 만들어지는지는 확인하지 못했습니다. 두 파일의 내용이 다르면 서로 다른 시점의 상태일 수 있으니 따로 읽어 비교합니다.
+백업 쪽 `HomeDomain :: Library/Accounts/` 는 이름으로 보아 전체 파일 시스템 경로 `/private/var/mobile/Library/Accounts/` 와 맞습니다. `VerifiedBackup` 폴더의 사본은 표와 칸 구성이 원본과 같고, 언제 왜 만들어지는지 밝힌 공개 자료는 없습니다. 두 파일의 내용이 다르면 서로 다른 시점의 상태일 수 있으니 따로 읽어 비교합니다.
 
 ### 애플 계정 쪽 설정 파일
 
-관찰한 백업에서 애플 계정과 관계있어 보이는 설정 파일은 아래와 같습니다. 따로 적지 않은 파일은 모두 `HomeDomain :: Library/Preferences/` 아래에 있습니다.
+로컬 백업에서 애플 계정과 관계있어 보이는 설정 파일은 아래와 같습니다. 따로 적지 않은 파일은 모두 `HomeDomain :: Library/Preferences/` 아래에 있습니다.
 
-| 파일 | 관찰한 키 |
+| 파일 | 키 |
 |---|---|
 | `com.apple.appleaccount.informationcache.plist` | `AAAccountFullName` (str), `AAIsAccountSignedIn` (bool), `AAPrimaryAccountSignInState` (int), `AAProfilePictureCacheURL` (str) |
 | `com.apple.appleaccount.plist` | `com.apple.corecdp.bootSessionID` (str), `AACustodianInfo` 안의 `preflightResults` |
@@ -43,9 +43,9 @@ nav_order: 280
 | `com.apple.icloud.findmydeviced.FMIPAccounts.plist` | `addTime` (float), `osVersion` (str), `versionHistory` (list), `lowBatteryLocate` (bool), `dsid` (str), `enableContext` (int) |
 | `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed :: Library/Preferences/FMIPStateInfo.plist` | `fmipActive` (bool), `fmipLostModeType` (int) |
 
-`com.apple.appleaccount.informationcache.plist` 는 `AppDomain-com.apple.findmy` 와 `AppDomain-com.apple.podcasts` 의 `Library/Preferences/` 에도 있었고 그쪽에는 `AAProfilePictureCacheURL` 키만 있었습니다. `com.apple.AuthKit.plist` 도 App Store, 음악, 지갑, 나의 찾기, 게임, 메일, 메모, 팟캐스트 같은 여러 앱 도메인에 같은 이름으로 있었습니다. 나의 찾기 계정 파일은 `SysContainerDomain-com.apple.icloud.findmydeviced :: Library/Preferences/` 아래에도 같은 이름으로 있었습니다.
+`com.apple.appleaccount.informationcache.plist` 는 `AppDomain-com.apple.findmy` 와 `AppDomain-com.apple.podcasts` 의 `Library/Preferences/` 에도 있고 그쪽에는 `AAProfilePictureCacheURL` 키만 있습니다. `com.apple.AuthKit.plist` 도 App Store, 음악, 지갑, 나의 찾기, 게임, 메일, 메모, 팟캐스트 같은 여러 앱 도메인에 같은 이름으로 있습니다. 나의 찾기 계정 파일은 `SysContainerDomain-com.apple.icloud.findmydeviced :: Library/Preferences/` 아래에도 같은 이름으로 있습니다.
 
-스토어와 메시지 쪽에는 다음 파일이 있었습니다.
+스토어와 메시지 쪽에는 다음 파일이 있습니다.
 
 ```
 HomeDomain :: Library/Preferences/com.apple.AppleMediaServices.plist
@@ -61,15 +61,15 @@ HomeDomain :: Library/Preferences/com.apple.imservice.ids.iMessage.plist
 HomeDomain :: Library/Preferences/com.apple.imservice.ids.FaceTime.plist
 ```
 
-RealityNet 목록은 스토어 DB 를 `/mobile/Library/com.apple.itunesstored/itunesstored2.sqlitedb` 로 적었습니다[8]. 스토어 구매 기록은 [앱 스토어 기록](../app-usage/app-store.md), 메시지·페이스타임 등록은 [메시지](../communications/messages/index.md) 와 [페이스타임](../communications/facetime.md) 에서 다룹니다.
+전체 파일 시스템 추출에서 스토어 DB 는 `/mobile/Library/com.apple.itunesstored/itunesstored2.sqlitedb` 에 있습니다[8]. 스토어 구매 기록은 [앱 스토어 기록](../app-usage/app-store.md), 메시지·페이스타임 등록은 [메시지](../communications/messages/index.md) 와 [페이스타임](../communications/facetime.md) 에서 다룹니다.
 
-관련 도메인 이름으로는 `AppDomain-com.apple.AppleIDSetupUIService`, `AppDomain-com.apple.AuthKitUIService`, `AppDomainPlugin-com.apple.AuthKitUI.AKSecondFactorAlert`, `AppDomainPlugin-com.apple.AuthKitUI.AKLocationSignInAlert`, `AppDomainPlugin-com.apple.AppleAccountIntents` 가 보였습니다.
+관련 도메인 이름으로는 `AppDomain-com.apple.AppleIDSetupUIService`, `AppDomain-com.apple.AuthKitUIService`, `AppDomainPlugin-com.apple.AuthKitUI.AKSecondFactorAlert`, `AppDomainPlugin-com.apple.AuthKitUI.AKLocationSignInAlert`, `AppDomainPlugin-com.apple.AppleAccountIntents` 가 있습니다.
 
-이번 자료로는 iOS 15~27 사이에 파일 이름이나 표 구성이 어떻게 바뀌었는지 확인하지 못했습니다. 백업에서 파일 이름의 숫자를 가렸으니, 검체에서는 `Library/Accounts/` 아래 `Accounts` 로 시작하는 `.sqlite` 파일을 모두 찾아 어느 번호가 쓰이는지 확인합니다.
+iOS 15~27 사이에 파일 이름이나 표 구성이 어떻게 바뀌었는지는 공개 자료가 없어 검체에서 확인합니다. 파일 이름의 숫자도 판마다 다를 수 있으니, `Library/Accounts/` 아래 `Accounts` 로 시작하는 `.sqlite` 파일을 모두 찾아 어느 번호가 쓰이는지 확인합니다.
 
 ## 구조
 
-관찰한 `Accounts#.sqlite` 의 표와 칸은 아래와 같습니다. 이름을 가린 표가 다섯 개 더 있었고, `Z_METADATA`, `Z_MODELCACHE`, `Z_PRIMARYKEY` 도 있었습니다. 표와 칸 이름이 `Z` 로 시작하고 `Z_PK`, `Z_ENT`, `Z_OPT` 가 붙는 모양은 Core Data 가 만드는 DB 와 닮았지만, 이를 확인한 출처는 없습니다.
+`Accounts#.sqlite` 의 표와 칸은 아래와 같습니다. 이 밖에 표가 다섯 개 더 있고, `Z_METADATA`, `Z_MODELCACHE`, `Z_PRIMARYKEY` 도 있습니다. 표와 칸 이름이 `Z` 로 시작하고 `Z_PK`, `Z_ENT`, `Z_OPT` 가 붙는 모양으로 보아 Core Data 가 만든 DB 로 보입니다.
 
 | 표 | 칸 |
 |---|---|
@@ -80,9 +80,9 @@ RealityNet 목록은 스토어 DB 를 `/mobile/Library/com.apple.itunesstored/it
 | `ZCREDENTIALITEM` | `Z_PK`, `Z_ENT`, `Z_OPT`, `ZPERSISTENT`, `ZEXPIRATIONDATE`, `ZACCOUNTIDENTIFIER`, `ZSERVICENAME` |
 | `ZACCESSOPTIONSKEY`, `ZDATACLASS` | `Z_PK`, `Z_ENT`, `Z_OPT`, `ZNAME`, `ZENUMVALUE` |
 
-Forensafe 는 뽑는 항목만 적었고 표와 칸 이름은 적지 않았습니다[7]. 그래서 아래 대응은 칸 이름으로 짐작한 것이고, 검체에서 값을 보고 확인한 뒤에 씁니다.
+계정 DB 에서 읽는 항목[7]이 어느 칸에 있는지 밝힌 공개 자료는 없습니다. 아래 대응은 칸 이름으로 짐작한 것이니, 검체에서 값을 보고 확인한 뒤에 씁니다.
 
-| Forensafe 가 적은 항목[7] | 짐작되는 칸 |
+| 항목[7] | 짐작되는 칸 |
 |---|---|
 | 사용자 이름 | `ZACCOUNT.ZUSERNAME` |
 | 계정 설명 | `ZACCOUNT.ZACCOUNTDESCRIPTION` |
@@ -93,9 +93,9 @@ Forensafe 는 뽑는 항목만 적었고 표와 칸 이름은 적지 않았습�
 | 계정 종류 | `ZACCOUNT.ZACCOUNTTYPE` 이 가리키는 `ZACCOUNTTYPE` 행의 `ZACCOUNTTYPEDESCRIPTION`·`ZIDENTIFIER` |
 | 추가 시각 | `ZACCOUNT.ZDATE` |
 
-`ZACCOUNTPROPERTY` 는 `ZOWNER`, `ZKEY`, `ZVALUE` 칸 이름으로 보아 계정마다 딸린 속성을 키와 값으로 늘어놓는 표로 보입니다. `ZCREDENTIALITEM` 에는 `ZACCOUNTIDENTIFIER`, `ZSERVICENAME`, `ZEXPIRATIONDATE` 칸이 있지만, 비밀번호 같은 자격 증명 값이 이 DB 에 있는지는 확인하지 못했습니다. 저장된 비밀번호와 토큰은 [키체인](../../01-foundations/storage/keychain.md) 과 [저장된 암호](../credentials-security/saved-passwords.md) 에서 다룹니다.
+`ZACCOUNTPROPERTY` 는 `ZOWNER`, `ZKEY`, `ZVALUE` 칸 이름으로 보아 계정마다 딸린 속성을 키와 값으로 늘어놓는 표로 보입니다. `ZCREDENTIALITEM` 에는 `ZACCOUNTIDENTIFIER`, `ZSERVICENAME`, `ZEXPIRATIONDATE` 칸이 있지만, 비밀번호 같은 자격 증명 값이 이 DB 에 들어 있는지 밝힌 공개 자료는 없습니다. 저장된 비밀번호와 토큰은 [키체인](../../01-foundations/storage/keychain.md) 과 [저장된 암호](../credentials-security/saved-passwords.md) 에서 다룹니다.
 
-`com.apple.accountsd.plist` 의 `AuthenticationPluginCache` 안에는 계정 종류를 나타내는 식별자가 들어 있었습니다.
+`com.apple.accountsd.plist` 의 `AuthenticationPluginCache` 안에는 계정 종류를 나타내는 식별자가 들어 있습니다.
 
 ```
 Kerberos
@@ -121,23 +121,23 @@ com.apple.account.iTunesStore.sandbox
 
 **증명하는 것.** 수집 시점에 `ZACCOUNT` 에 행이 있으면 그 사용자 이름과 계정 종류의 계정이 기기에 등록되어 있었다는 기록이 됩니다. 소유 번들 ID 로는 어느 앱이나 시스템 기능이 그 계정을 쓰는지 보고, 부모 계정 칸으로는 한 계정 아래 딸린 하위 계정을 묶어 볼 수 있습니다. 보고서에는 "이 기기의 계정 DB 에 이 사용자 이름의 이 종류 계정 행이 있고, 추가 시각 칸 값은 이렇다" 처럼 씁니다.
 
-**증명하지 못하는 것.** 계정 행은 기기에 계정이 설정되어 있었다는 사실만 보여 주고, 그 계정을 누가 만들었는지, 누가 비밀번호를 넣었는지, 서버 쪽에서 계정이 지금도 살아 있는지는 말해 주지 않습니다. `AAIsAccountSignedIn`, `AAPrimaryAccountSignInState`, `fmipActive` 같은 키는 이름으로 보아 로그인·나의 찾기 상태를 담지만, 값의 뜻을 확인한 자료가 없으니 값 하나로 "로그인되어 있었다" 고 단정하지 않습니다. `dsid` 도 애플 계정 식별 번호로 흔히 풀이되지만 이번 자료로 확인하지 못했습니다.
+**증명하지 못하는 것.** 계정 행은 기기에 계정이 설정되어 있었다는 사실만 보여 주고, 그 계정을 누가 만들었는지, 누가 비밀번호를 넣었는지, 서버 쪽에서 계정이 지금도 살아 있는지는 말해 주지 않습니다. `AAIsAccountSignedIn`, `AAPrimaryAccountSignInState`, `fmipActive` 같은 키는 이름으로 보아 로그인·나의 찾기 상태를 담지만, 값의 뜻을 밝힌 공개 자료가 없으니 값 하나로 "로그인되어 있었다" 고 단정하지 않습니다. `dsid` 도 애플 계정 식별 번호로 흔히 풀이되지만, 이를 뒷받침하는 공개 자료는 없습니다.
 
 ## 시각 해석
 
-`ZACCOUNT` 의 `ZDATE`, `ZLASTCREDENTIALRENEWALREJECTIONDATE` 와 `ZCREDENTIALITEM` 의 `ZEXPIRATIONDATE` 가 시각 칸으로 보입니다. Forensafe 는 "계정 추가 시각" 을 뽑는다고 했지만 어느 칸에서 어떤 형식으로 읽는지는 적지 않았고[7], `ZDATE` 가 2001-01-01 기준 Mac 절대 시각인지도 이번 자료로 확인하지 못했습니다. 값의 자릿수를 보고 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 기준을 가린 뒤, 계정을 추가한 때로 알려진 다른 기록과 한 번 맞춰 보고 씁니다.
+`ZACCOUNT` 의 `ZDATE`, `ZLASTCREDENTIALRENEWALREJECTIONDATE` 와 `ZCREDENTIALITEM` 의 `ZEXPIRATIONDATE` 가 시각 칸으로 보입니다. 계정 추가 시각[7]이 어느 칸에 어떤 형식으로 적히는지, `ZDATE` 가 2001-01-01 기준 Mac 절대 시각인지는 공개 자료가 없어 검체에서 확인합니다. 값의 자릿수를 보고 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 기준을 가린 뒤, 계정을 추가한 때로 알려진 다른 기록과 한 번 맞춰 보고 씁니다.
 
-설정 파일 쪽에서는 `com.apple.appleaccountd.plist` 의 `lastCloudSyncTimestampKey` 가 날짜(datetime) 형이고, `com.apple.icloud.findmydeviced.FMIPAccounts.plist` 의 `addTime` 은 실수(float) 형이었습니다. 실수로 적힌 시각은 Mac 절대 시각인지 유닉스 시각인지 키마다 따로 가려야 합니다. 시간대 없이 적힌 값은 UTC 로 두고, 현지 시각은 [시간대와 시각 설정](time-zone.md) 에서 기기 시간대를 확인한 뒤 따로 더합니다.
+설정 파일 쪽에서는 `com.apple.appleaccountd.plist` 의 `lastCloudSyncTimestampKey` 가 날짜(datetime) 형이고, `com.apple.icloud.findmydeviced.FMIPAccounts.plist` 의 `addTime` 은 실수(float) 형입니다. 실수로 적힌 시각은 Mac 절대 시각인지 유닉스 시각인지 키마다 따로 가려야 합니다. 시간대 없이 적힌 값은 UTC 로 두고, 현지 시각은 [시간대와 시각 설정](time-zone.md) 에서 기기 시간대를 확인한 뒤 따로 더합니다.
 
 ## 함정과 한계
 
 **플러그인 목록을 계정 목록으로 읽지 않습니다.** `AuthenticationPluginCache` 의 Google, Exchange, Yahoo 같은 이름은 지원하는 계정 종류이지 사용자가 추가한 계정이 아닙니다. 실제로 추가한 계정은 `ZACCOUNT` 의 행으로 확인합니다.
 
-**같은 이름의 파일이 여러 도메인에 있습니다.** `com.apple.AuthKit.plist` 와 `com.apple.appleaccount.informationcache.plist` 는 여러 앱 도메인에 같은 이름으로 있고, 도메인마다 키 구성이 달랐습니다. 파일 이름만 적지 말고 도메인까지 함께 적어야 다른 사람이 같은 파일을 찾을 수 있습니다.
+**같은 이름의 파일이 여러 도메인에 있습니다.** `com.apple.AuthKit.plist` 와 `com.apple.appleaccount.informationcache.plist` 는 여러 앱 도메인에 같은 이름으로 있고, 도메인마다 키 구성이 다릅니다. 파일 이름만 적지 말고 도메인까지 함께 적어야 다른 사람이 같은 파일을 찾을 수 있습니다.
 
 **사본이 두 벌입니다.** `Accounts#.sqlite` 와 `VerifiedBackup/Accounts#.sqlite` 의 내용이 다를 수 있으니, 어느 파일에서 읽은 행인지 밝혀 둡니다. SQLite 의 `-wal` 파일이 함께 있으면 같이 복사해 열어야 최근 변경이 보이고, 이 처리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
-**지우기와 조작.** 계정을 기기에서 지우면 `ZACCOUNT` 의 행도 없어질 것으로 보이지만 확인한 자료는 없습니다. 지운 행이 SQLite 빈 페이지나 `-wal` 에 남는지 보는 법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다. 계정이 바뀐 흔적을 조사할 때는 [계정 탈취 흔적](../../04-scenarios/incident/account-takeover.md) 의 흐름을 따릅니다.
+**지우기와 조작.** 계정을 기기에서 지우면 `ZACCOUNT` 의 행도 없어질 것으로 보입니다. 지운 행이 SQLite 빈 페이지나 `-wal` 에 남는지 보는 법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다. 계정이 바뀐 흔적을 조사할 때는 [계정 탈취 흔적](../../04-scenarios/incident/account-takeover.md) 의 흐름을 따릅니다.
 
 ## 직접 분석해 보기
 

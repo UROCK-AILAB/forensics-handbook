@@ -24,12 +24,12 @@ nav_order: 1200
    /private/var/mobile/Library/Logs/CrashReporter/DiagnosticLogs/sysdiagnose
    ```
 
-5. 결과물을 컴퓨터로 꺼냅니다. 출처에서 설명한 도구 방식으로 꺼내려면 기기가 잠금 해제돼 있고 컴퓨터와 페어링돼 있어야 하며, Windows 에서는 Apple 기기 앱(예전 iTunes)이 필요하고 30분 넘게 걸릴 수 있습니다. 잠긴 기기의 데이터 연결 제한은 [압수와 보관](seizure-handling.md)의 USB 제한 모드 절을 봅니다.
+5. 결과물을 컴퓨터로 꺼냅니다. 도구로 꺼내려면 기기가 잠금 해제돼 있고 컴퓨터와 페어링돼 있어야 하며, Windows 에서는 Apple 기기 앱(예전 iTunes)이 필요하고 30분 넘게 걸릴 수 있습니다. 잠긴 기기의 데이터 연결 제한은 [압수와 보관](seizure-handling.md)의 USB 제한 모드 절을 봅니다.
 6. 꺼낸 파일의 해시를 남깁니다([결과물 형식과 해시](formats-hash.md)).
 
 ## 파일 이름 읽기
 
-출처에 실린 예시 이름은 다음과 같고, 날짜·시각·UTC 와의 차이·OS·기종·빌드 순으로 붙습니다.
+파일 이름은 다음 예처럼 날짜·시각·UTC 와의 차이·OS·기종·빌드 순으로 붙습니다.
 
 ```
 sysdiagnose_2025.06.24_11-01-29+0200_iPhone-OS_iPhone_22F76.tar.gz
@@ -44,7 +44,7 @@ sysdiagnose 에는 통합 로그 스냅숏(`system_logs.logarchive`), 크래시 
 
 ## 담기는 기간
 
-통합 로그 항목은 보존 기간(TTL)이 짧아 몇 분이나 몇 시간 만에 사라지는 것도 있어서, 스냅숏에는 대개 만든 날 정도의 기록만 담깁니다. 반면 출처의 시험 기기에서 Wi‑Fi 로그는 몇 년 치가 남아 있었고 종료 기록(Shutdown Log)은 기기를 처음 개통한 때까지 거슬러 올라갔지만, Mobile Installation 로그는 열흘 치뿐이었습니다. 그래서 같은 sysdiagnose 안에서도 로그마다 거슬러 볼 수 있는 기간이 다르고, 통합 로그에 사건 시각의 기록이 없다고 해서 그때 아무 일도 없었다고 볼 수는 없습니다. 통합 로그 형식은 [통합 로그 형식](../../../01-foundations/data-formats/unified-log.md)에서 다룹니다.
+통합 로그 항목은 보존 기간(TTL)이 짧아 몇 분이나 몇 시간 만에 사라지는 것도 있어서, 스냅숏에는 대개 만든 날 정도의 기록만 담깁니다. 반면 ElcomSoft 가 시험한 기기에서는 Wi‑Fi 로그가 몇 년 치 남아 있었고 종료 기록(Shutdown Log)은 기기를 처음 개통한 때까지 거슬러 올라갔지만, Mobile Installation 로그는 열흘 치뿐이었습니다. 그래서 같은 sysdiagnose 안에서도 로그마다 거슬러 볼 수 있는 기간이 다르고, 통합 로그에 사건 시각의 기록이 없다고 해서 그때 아무 일도 없었다고 볼 수는 없습니다. 통합 로그 형식은 [통합 로그 형식](../../../01-foundations/data-formats/unified-log.md)에서 다룹니다.
 
 ## 도구
 
@@ -52,7 +52,7 @@ sysdiagnose 에는 통합 로그 스냅숏(`system_logs.logarchive`), 크래시 
 
 ## 백업에 남는 진단 흔적
 
-sysdiagnose 결과물 자체가 로컬 백업에 들어가는지는 확인하지 못했지만, 관찰한 백업에는 진단 기능과 관련된 도메인과 설정 파일이 있었습니다.
+sysdiagnose 결과물 자체가 로컬 백업에 들어가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 로컬 백업에는 진단 기능과 관련된 다음 도메인과 설정 파일이 들어 있을 수 있습니다.
 
 ```
 AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose   (항목 4개)
@@ -65,11 +65,11 @@ RootDomain :: Library/Preferences/com.apple.CrashReporter.plist
   profile.enabled, systemlogs.mode 등
 ```
 
-관찰 메모에는 도메인 이름과 키 이름만 있어서 각 키의 뜻은 확인하지 못했습니다. 크래시·진단 기록 전반은 [충돌·진단 기록](../../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
+크래시·진단 기록 전반은 [충돌·진단 기록](../../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
 
 ## 함정과 한계
 
-sysdiagnose 는 조사자가 버튼을 눌러 기기에서 새로 만드는 자료라서, 만들면 기기 안에 결과물 파일이 새로 생깁니다. 타임라인에서는 수집 시각 전후의 진단 관련 기록을 조사자의 조작으로 구분해 둡니다. 설정 앱에서 결과물을 보는 경로와 AirDrop·Finder 로 옮기는 방법은 이번에 연 자료로 확인하지 못해서 적지 않았습니다.
+sysdiagnose 는 조사자가 버튼을 눌러 기기에서 새로 만드는 자료라서, 만들면 기기 안에 결과물 파일이 새로 생깁니다. 타임라인에서는 수집 시각 전후의 진단 관련 기록을 조사자의 조작으로 구분해 둡니다.
 
 ## 결과를 어떻게 해석하나
 

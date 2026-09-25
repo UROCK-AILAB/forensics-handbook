@@ -12,17 +12,17 @@ nav_order: 660
 
 ## 무엇을 기록하나 · 왜 생기나
 
-아이폰은 한 번 들어간 와이파이 네트워크를 알려진 네트워크(Known Networks) 목록에 적어 둡니다. 공개 도구 iLEAPP 가 이 목록에서 읽는 키를 보면 네트워크 이름 `SSID`, 숨은 네트워크 표시 `Hidden`, 추가 경위로 보이는 `AddReason`, 번들 ID `BundleID` 와 함께 추가·갱신·발견·접속 시각 키가 있고, 접속 시각은 사용자가 들어간 때(`JoinedByUserAt`)와 시스템이 들어간 때(`JoinedBySystemAt`)로 키가 나뉩니다 [1]. 접속 지점(AP)마다 채널, 마지막 연결 시각, 위도·경도·정확도 키도 읽어서 [1], 네트워크 이름뿐만 아니라 어느 곳의 공유기에 붙었는지까지 살펴볼 수 있습니다.
+아이폰은 한 번 들어간 와이파이 네트워크를 알려진 네트워크(Known Networks) 목록에 적어 둡니다. 이 목록에는 네트워크 이름 `SSID`, 숨은 네트워크 표시 `Hidden`, 추가 경위로 보이는 `AddReason`, 번들 ID `BundleID` 와 함께 추가·갱신·발견·접속 시각 키가 있고, 접속 시각은 사용자가 들어간 때(`JoinedByUserAt`)와 시스템이 들어간 때(`JoinedBySystemAt`)로 키가 나뉩니다 [1]. 접속 지점(AP)마다 채널, 마지막 연결 시각, 위도·경도·정확도 키도 있어서 [1], 네트워크 이름뿐만 아니라 어느 곳의 공유기에 붙었는지까지 살펴볼 수 있습니다.
 
-iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있고, 기기는 네트워크마다 다른 Wi-Fi 주소로 자신을 알립니다 [2]. iLEAPP 는 네트워크별 개인 MAC 주소 목록에서 쓰고 있는 주소 값과 주소를 만든 시각 등을 읽습니다 [1]. 공유기나 사내 무선망 기록에 남은 MAC 주소를 기기와 맞춰 볼 때 이 목록이 다리 역할을 합니다.
+iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있고, 기기는 네트워크마다 다른 Wi-Fi 주소로 자신을 알립니다 [2]. 네트워크별 개인 MAC 주소 목록에는 쓰고 있는 주소 값과 주소를 만든 시각 등이 들어 있습니다 [1]. 공유기나 사내 무선망 기록에 남은 MAC 주소를 기기와 맞춰 볼 때 이 목록이 다리 역할을 합니다.
 
-관찰한 로컬 백업에는 지운 네트워크로 보이는 목록과, 와이파이 접속 지점·신호 세기·위치 칸이 한 표에 모인 데이터 사용량 DB 의 `ZWIFIDATA` 표도 있었습니다. 백업에 알려진 네트워크 목록이 없을 때 이 두 가지가 그 빈자리를 일부 메웁니다.
+로컬 백업에는 지운 네트워크로 보이는 목록과, 와이파이 접속 지점·신호 세기·위치 칸이 한 표에 모인 데이터 사용량 DB 의 `ZWIFIDATA` 표도 들어 있습니다. 백업에 알려진 네트워크 목록이 없을 때 이 두 가지가 그 빈자리를 일부 메웁니다.
 
 ## 위치와 버전별 차이
 
 ### 공개 자료에 나온 파일
 
-iLEAPP 는 아래 네 파일 이름으로 와이파이 기록을 찾습니다 [1]. 기기 안 정확한 경로는 이 페이지에서 원문으로 확인하지 못해서 파일 이름만 적습니다.
+와이파이 기록은 아래 네 파일 이름으로 찾습니다 [1]. 기기 안 경로는 검체에서 파일 이름으로 찾아 확인합니다.
 
 | 파일 이름 | 담는 것 | 근거 |
 |---|---|---|
@@ -31,11 +31,11 @@ iLEAPP 는 아래 네 파일 이름으로 와이파이 기록을 찾습니다 [1
 | `com.apple.wifi-networks.plist.backup` | iLEAPP 가 함께 찾는 사본 | [1] |
 | `com.apple.wifi-private-mac-networks.plist` | 네트워크별 개인 MAC 주소 | [1] |
 
-### 로컬 백업에서 본 파일
+### 로컬 백업에 있는 파일
 
-암호화하지 않은 로컬 백업에서는 아래 파일을 보았고, `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi.plist` 는 보이지 않았습니다. 알려진 네트워크 목록이 암호화한 백업에는 들어가는지는 공식 자료로 확인하지 못했습니다.
+암호화하지 않은 로컬 백업(iOS 27.0)에는 아래 파일이 있고, `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi.plist` 는 없을 수 있습니다. 알려진 네트워크 목록이 암호화한 백업에 들어가는지는 공식 자료가 없습니다.
 
-| 도메인 :: 상대 경로 | 관찰한 내용 |
+| 도메인 :: 상대 경로 | 내용 |
 |---|---|
 | `HomeDomain :: Library/Preferences/com.apple.wifi.removed-networks.plist` | 지운 네트워크로 보이는 항목 5개 |
 | `HomeDomain :: Library/Preferences/com.apple.wifi.nearby-recommended-networks.plist` | 키가 비어 있음 |
@@ -45,14 +45,14 @@ iLEAPP 는 아래 네 파일 이름으로 와이파이 기록을 찾습니다 [1
 | `RootDomain :: Library/Preferences/com.apple.wifid.plist` | `joinPMAssertionResetTimestamp`, `joinPMAssertionTimeUsedKey` 키 |
 | `WirelessDomain :: Library/Databases/DataUsage.sqlite` | `ZWIFIDATA` 표 |
 
-위 표는 모두 입니다. 공개 자료의 `com.apple.wifi-private-mac-networks.plist` 와 관찰한 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르고, 두 파일이 같은 역할인지는 확인하지 못했습니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있었지만 안의 내용은 보지 않았습니다. 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+공개 자료의 `com.apple.wifi-private-mac-networks.plist` 와 백업의 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르고, 두 파일이 같은 역할인지는 공개 자료가 없습니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있습니다. 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전별 차이
 
 | iOS | 달라지는 점 | 근거 |
 |---|---|---|
 | 12.4 ~ 18.x | iLEAPP 스크립트가 이 범위의 표본을 기준으로 만들어졌고, 버전마다 plist 구조가 다름 | [1] |
-| 14 전후(정확한 버전 미확인) | 예전 `com.apple.wifi.plist` 에서 `com.apple.wifi.known-networks.plist` 로 바뀐 것으로 흔히 말하지만 확인하지 못함 | — |
+| 14 전후 | 예전 `com.apple.wifi.plist` 에서 `com.apple.wifi.known-networks.plist` 로 바뀐 것으로 흔히 알려져 있음(공개 자료 없음) | — |
 | 14 이상 | 개인 Wi-Fi 주소 사용 가능 | [2] |
 | 18 이상 | 개인 Wi-Fi 주소 설정이 끔·고정·순환 세 가지 | [2] |
 | 27.0 | 암호화하지 않은 백업에 알려진 네트워크 목록 없음, 지운 네트워크 목록 있음 | |
@@ -63,7 +63,7 @@ plist 를 읽는 방법은 [속성 목록 파일](../../01-foundations/data-form
 
 ### 알려진 네트워크 (새 형식)
 
-| 무리 | iLEAPP 가 읽는 키 [1] |
+| 무리 | 키 [1] |
 |---|---|
 | 네트워크 항목 | `SSID`, `AddReason`, `BundleID`, `Hidden`, `AddedAt`, `UpdatedAt`, `JoinedBySystemAt`, `JoinedByUserAt`, `LastDiscoveredAt` |
 | `__OSSpecific__` 아래 | `BSSID`, `networkUsage`, `CarPlayNetwork`, `WiFiNetworkPasswordModificationDate`, `prevJoined` |
@@ -74,11 +74,11 @@ plist 를 읽는 방법은 [속성 목록 파일](../../01-foundations/data-form
 
 ### 알려진 네트워크 (예전 형식)
 
-예전 `com.apple.wifi.plist` 의 네트워크 목록에서 iLEAPP 가 읽는 키는 `SSID_STR`, `BSSID`, `networkUsage`, `80211D_IE`(그 안의 `IE_KEY_80211D_COUNTRY_CODE`), `enabled`, `CarPlayNetwork`, `CARPLAY_NETWORK`, `Hidden`, `WPS_PROB_RESP_IE`, `CaptiveProfile`(`CaptiveNetwork`, `UserPortalURL`), `lastUpdated`, `lastAutoJoined`, `lastJoined`, `WiFiNetworkPasswordModificationDate`, `prevJoined` 입니다 [1]. 새 형식과 키 이름이 달라서, 파서가 두 형식을 모두 읽는지 먼저 확인합니다.
+예전 `com.apple.wifi.plist` 의 네트워크 목록에 있는 키는 `SSID_STR`, `BSSID`, `networkUsage`, `80211D_IE`(그 안의 `IE_KEY_80211D_COUNTRY_CODE`), `enabled`, `CarPlayNetwork`, `CARPLAY_NETWORK`, `Hidden`, `WPS_PROB_RESP_IE`, `CaptiveProfile`(`CaptiveNetwork`, `UserPortalURL`), `lastUpdated`, `lastAutoJoined`, `lastJoined`, `WiFiNetworkPasswordModificationDate`, `prevJoined` 입니다 [1]. 새 형식과 키 이름이 달라서, 파서가 두 형식을 모두 읽는지 먼저 확인합니다.
 
 ### 개인 MAC 주소 목록
 
-iLEAPP 는 이 목록에서 `SSID_STR`, `BSSID`, `lastUpdated`, `lastJoined`, `addedAt`, `PresentInKnownNetworks`, `LinkDownTimestamp`, `MacGenerationTimeStamp`, `FirstJoinWithNewMacTimestamp` 와 `PRIVATE_MAC_ADDRESS` 아래의 `PRIVATE_MAC_ADDRESS_IN_USE`, `PRIVATE_MAC_ADDRESS_VALUE`, `PRIVATE_MAC_ADDRESS_VALID` 를 읽습니다 [1]. `PresentInKnownNetworks` 라는 키 이름으로 보아, 알려진 네트워크 목록에서 빠진 네트워크도 이 목록에는 남을 수 있습니다.
+이 목록에는 `SSID_STR`, `BSSID`, `lastUpdated`, `lastJoined`, `addedAt`, `PresentInKnownNetworks`, `LinkDownTimestamp`, `MacGenerationTimeStamp`, `FirstJoinWithNewMacTimestamp` 와 `PRIVATE_MAC_ADDRESS` 아래의 `PRIVATE_MAC_ADDRESS_IN_USE`, `PRIVATE_MAC_ADDRESS_VALUE`, `PRIVATE_MAC_ADDRESS_VALID` 키가 있습니다 [1]. `PresentInKnownNetworks` 라는 키 이름으로 보아, 알려진 네트워크 목록에서 빠진 네트워크도 이 목록에는 남을 수 있습니다.
 
 iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
@@ -88,13 +88,13 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 | 고정(Fixed) | 개인 주소를 쓰되 바꾸지 않음 | WPA2 이상 보안의 네트워크 |
 | 순환(Rotating) | 2주마다 다른 개인 주소로 바꿈 | 보안이 약하거나 없는 네트워크 |
 
-### 지운 네트워크 목록 (관찰)
+### 지운 네트워크 목록
 
-`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 꼴이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다. 파일 이름과 `RemovedAt` 키로 보아 사용자가 지운 네트워크의 목록으로 보이지만, 어떤 조작이 이 목록에 항목을 더하는지는 확인하지 못했습니다.
+`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 꼴이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다. 파일 이름과 `RemovedAt` 키로 보아 사용자가 지운 네트워크의 목록으로 보이지만, 어떤 조작이 이 목록에 항목을 더하는지는 공개 자료가 없습니다.
 
-### 데이터 사용량 DB 의 ZWIFIDATA 표 (관찰)
+### 데이터 사용량 DB 의 ZWIFIDATA 표
 
-`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 칸(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 3칸은 이름을 가렸습니다. 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준은 공개 자료로 확인하지 못했습니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
+`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 칸(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 그 밖에 칸 3개가 더 있습니다. 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준은 공개 자료가 없습니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -103,7 +103,7 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 - 알려진 네트워크 목록에 어떤 SSID 가 있으면, 수집 시점에 그 기기가 그 네트워크를 저장해 두고 있었다는 사실을 보여 줍니다.
 - `JoinedByUserAt`·`JoinedBySystemAt`·`LastAssociatedAt` 같은 키에 값이 있으면, 그 시각에 해당 네트워크나 접속 지점에 붙은 기록이 있다는 사실까지 말할 수 있습니다.
 - `BSSList` 나 `ZWIFIDATA` 에 위도·경도가 있으면, 기기가 그 접속 지점과 함께 그 위치 값을 적어 둔 기록이 있다는 뜻입니다.
-- 지운 네트워크 목록에 항목이 있으면, 그 SSID 가 알려진 네트워크에서 빠진 기록으로 볼 수 있습니다(관찰 기준의 해석).
+- 지운 네트워크 목록에 항목이 있으면, 그 SSID 가 알려진 네트워크에서 빠진 기록으로 볼 수 있습니다.
 
 **증명하지 못하는 것**
 
@@ -116,9 +116,9 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
 ## 시각 해석
 
-알려진 네트워크 목록의 시각 키는 이름대로 읽으면 추가(`AddedAt`), 갱신(`UpdatedAt`), 마지막 발견(`LastDiscoveredAt`), 사용자 접속(`JoinedByUserAt`), 시스템 접속(`JoinedBySystemAt`) 시각이고, 접속 지점마다 마지막 연결(`LastAssociatedAt`)과 위치를 잰 시각(`LocationTimestamp`)이 따로 있습니다 [1]. 이 키들이 UTC 인지 현지 시각인지, plist 날짜형인지 숫자형인지는 원문으로 확인하지 못했습니다. plist 날짜형이면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽고, 숫자면 자릿수로 기준을 가려 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 바꿉니다.
+알려진 네트워크 목록의 시각 키는 이름대로 읽으면 추가(`AddedAt`), 갱신(`UpdatedAt`), 마지막 발견(`LastDiscoveredAt`), 사용자 접속(`JoinedByUserAt`), 시스템 접속(`JoinedBySystemAt`) 시각이고, 접속 지점마다 마지막 연결(`LastAssociatedAt`)과 위치를 잰 시각(`LocationTimestamp`)이 따로 있습니다 [1]. 이 키들이 UTC 인지 현지 시각인지, plist 날짜형인지 숫자형인지는 공개 자료가 없어 검체에서 확인합니다. plist 날짜형이면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽고, 숫자면 자릿수로 기준을 가려 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 바꿉니다.
 
-`Last` 로 시작하는 키는 가장 최근 값 하나만 담는 것으로 보여서, 그 네트워크에 처음 붙은 때나 중간의 접속 이력은 이 목록에 없을 수 있습니다. 지운 네트워크 목록의 `RemovedAt` 과 `ZWIFIDATA` 의 `ZTIMESTAMP`·`ZTIMEAT` 도 시각 기준을 확인하지 못해서, 같은 접속을 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 봅니다.
+`Last` 로 시작하는 키는 가장 최근 값 하나만 담는 것으로 보여서, 그 네트워크에 처음 붙은 때나 중간의 접속 이력은 이 목록에 없을 수 있습니다. 지운 네트워크 목록의 `RemovedAt` 과 `ZWIFIDATA` 의 `ZTIMESTAMP`·`ZTIMEAT` 도 시각 기준이 알려져 있지 않아서, 같은 접속을 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 봅니다.
 
 ## 함정과 한계
 

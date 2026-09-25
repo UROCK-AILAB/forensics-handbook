@@ -11,9 +11,9 @@ SQLite 는 행을 지워도 바이트를 곧바로 없애지 않아서, 페이�
 
 ## 이 형식을 쓰는 아티팩트
 
-iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고, 페이지·셀·레코드 구조는 [페이지와 레코드](b-tree-record.md)를 먼저 보면 됩니다. iOS 의 `sms.db` 같은 DB 에서 실제로 얼마나 되살아나는지와 iOS 버전별 차이는 확인하지 못했습니다. 지운 대화·사진을 찾는 조사 전체 흐름은 [지운 대화와 사진 찾기](../../../04-scenarios/activity/deleted-content.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고, 페이지·셀·레코드 구조는 [페이지와 레코드](b-tree-record.md)를 먼저 보면 됩니다. iOS 의 `sms.db` 같은 DB 에서 얼마나 되살아나는지와 iOS 버전별 차이는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 지운 대화·사진을 찾는 조사 전체 흐름은 [지운 대화와 사진 찾기](../../../04-scenarios/activity/deleted-content.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
-앱이 직접 만든 삭제 기록 표는 SQLite 빈 공간과 다른 층입니다. 예를 들어 `sms.db` 에는 `deleted_messages`(`ROWID`, `guid`)와 `chat_recoverable_message_join`(`chat_id`, `message_id`, `delete_date`, `ck_sync_state`) 같은 표가 있고, 이런 표는 SQL 로 그대로 읽히는 살아 있는 행입니다. 두 표의 칸이 무엇을 뜻하는지는 이 페이지에서 확인하지 않았으니 [메시지](../../../02-artifacts/communications/messages/index.md) 페이지를 따릅니다.
+앱이 직접 만든 삭제 기록 표는 SQLite 빈 공간과 다른 층입니다. 예를 들어 `sms.db` 에는 `deleted_messages`(`ROWID`, `guid`)와 `chat_recoverable_message_join`(`chat_id`, `message_id`, `delete_date`, `ck_sync_state`) 같은 표가 있고, 이런 표는 SQL 로 그대로 읽히는 살아 있는 행입니다. 두 표의 칸이 무엇을 뜻하는지는 [메시지](../../../02-artifacts/communications/messages/index.md) 페이지에서 다룹니다.
 
 ## 구조 — 지운 데이터가 남는 자리
 
@@ -48,7 +48,7 @@ iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고,
 
 통째로 빈 페이지는 freelist 에 들어갑니다. 파일 헤더 오프셋 32 가 첫 트렁크 페이지, 36 이 freelist 페이지 총수입니다. 트렁크 페이지는 4바이트 정수 배열로, 다음 트렁크 페이지 번호, 잎 포인터 수 L, 잎 페이지 번호 L 개가 차례로 들어 있습니다.
 
-규격은 freelist 잎 페이지가 "정보를 담지 않는다"고 적고, SQLite 는 입출력을 줄이려고 잎 페이지를 읽지도 쓰지도 않습니다. 그래서 비워진 페이지의 옛 내용이 그대로 남을 수 있고, 잎 페이지의 옛 모습이 b-tree 페이지였다면 [페이지와 레코드](b-tree-record.md)의 방법으로 셀을 풀어 볼 수 있습니다.
+freelist 잎 페이지는 정보를 담지 않는 페이지라서, SQLite 는 입출력을 줄이려고 잎 페이지를 읽지도 쓰지도 않습니다[1]. 그래서 비워진 페이지의 옛 내용이 그대로 남을 수 있고, 잎 페이지의 옛 모습이 b-tree 페이지였다면 [페이지와 레코드](b-tree-record.md)의 방법으로 셀을 풀어 볼 수 있습니다.
 
 ### 복원 여지를 줄이는 설정
 
@@ -60,7 +60,7 @@ iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고,
 | secure_delete = 1 | 지운 내용을 0 으로 덮어쓴다 | 파일에 기록되지 않음 |
 | secure_delete = FAST | 입출력이 늘지 않을 때만 덮어써서, b-tree 페이지의 옛 내용은 지우지만 freelist 페이지에는 흔적을 남긴다 | 파일에 기록되지 않음 |
 
-auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 실행해야 하고, FULL 로 켜져 있으면 빈 페이지를 파일 끝으로 모아 잘라 내서 freelist 쪽 복원 여지가 줄어듭니다. 이 설정은 페이지 단위로만 정리하니, 살아 있는 페이지 안의 freeblock 까지 지우지는 않습니다. secure_delete 기본값은 컴파일 옵션 `SQLITE_SECURE_DELETE` 로 정해지며 보통 꺼져 있지만, iOS 시스템 SQLite 의 secure_delete·auto_vacuum 기본값과 컴파일 옵션은 확인하지 못했습니다.
+auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 실행해야 하고, FULL 로 켜져 있으면 빈 페이지를 파일 끝으로 모아 잘라 내서 freelist 쪽 복원 여지가 줄어듭니다. 이 설정은 페이지 단위로만 정리하니, 살아 있는 페이지 안의 freeblock 까지 지우지는 않습니다. secure_delete 기본값은 컴파일 옵션 `SQLITE_SECURE_DELETE` 로 정해지며 보통 꺼져 있습니다. iOS 시스템 SQLite 의 secure_delete·auto_vacuum 기본값과 컴파일 옵션은 공개된 자료가 없습니다.
 
 ## 읽는 법
 
@@ -98,7 +98,7 @@ auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 �
 
 secure_delete 는 파일 헤더에 기록되는 설정이 아니라서, 분석 컴퓨터에서 복사본을 열고 `PRAGMA secure_delete;` 를 실행하면 기기가 아니라 분석 컴퓨터 SQLite 의 값이 나옵니다.
 
-도구마다 결과 차이가 큽니다. FQLite 를 만든 연구진이 2021년에 공개 시험용 말뭉치의 27개 DB 에 든 지운 레코드 278개로 비교했을 때 bring2lite 는 52.9% 를 되살렸고, FQLite 는 이 시험에서 모두 되살렸습니다. 한 도구의 결과만으로 "되살릴 것이 없다"고 결론 내리지 말고, [도구 검증](../../../03-techniques/reporting/tool-validation.md)의 방법으로 알려진 결과가 있는 DB 에 먼저 돌려 봅니다.
+도구마다 결과 차이가 큽니다. FQLite 를 만든 연구진의 2021년 시험(공개 시험용 말뭉치의 27개 DB, 지운 레코드 278개)에서 bring2lite 는 52.9% 를 되살렸고, FQLite 는 모두 되살렸습니다[3]. 한 도구의 결과만으로 "되살릴 것이 없다"고 결론 내리지 말고, [도구 검증](../../../03-techniques/reporting/tool-validation.md)의 방법으로 알려진 결과가 있는 DB 에 먼저 돌려 봅니다.
 
 ## 도구
 

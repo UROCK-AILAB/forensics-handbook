@@ -26,7 +26,7 @@ Apple 의 Core Foundation 은 참조 시각인 2001-01-01 00:00:00 GMT 부터 �
 ## 절차
 
 1. **시각 칸과 키를 목록으로 적습니다.** 기록마다 파일(백업 도메인과 경로), 표나 키 이름, 저장된 형을 한 줄씩 적어 두면 나중에 어떤 값을 어떻게 바꿨는지 되짚을 수 있습니다.
-2. **저장된 형을 확인합니다.** plist 에서 `datetime` 형은 plist 의 날짜 형식이라 도구가 날짜로 풀어 보여 주지만, `float` 형은 숫자만 들어 있어 기준점을 따로 확인해야 합니다. 예를 들어 `com.apple.ScreenTimeAgent.plist` 의 `UsageGenesisDate` 는 `datetime` 형이고, `com.apple.AppStore.plist` 의 `lastBootstrapDate` 는 `float` 형입니다. `lastBootstrapDate` 가 Mac 절대 초인지는 확인하지 못했으므로, 기준점을 모르는 숫자는 바꾸지 않고 원래 값으로 남겨 둡니다. plist 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../../01-foundations/data-formats/plist.md)에 있습니다.
+2. **저장된 형을 확인합니다.** plist 에서 `datetime` 형은 plist 의 날짜 형식이라 도구가 날짜로 풀어 보여 주지만, `float` 형은 숫자만 들어 있어 기준점을 따로 확인해야 합니다. 예를 들어 `com.apple.ScreenTimeAgent.plist` 의 `UsageGenesisDate` 는 `datetime` 형이고, `com.apple.AppStore.plist` 의 `lastBootstrapDate` 는 `float` 형입니다. `lastBootstrapDate` 의 기준점은 공개 자료에 나와 있지 않으므로, 기준점을 모르는 숫자는 바꾸지 않고 원래 값으로 남겨 둡니다. plist 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../../01-foundations/data-formats/plist.md)에 있습니다.
 3. **자릿수로 단위를 가립니다.** 같은 칸 안에서도 초와 나노초가 섞일 수 있어서(아래 "sms.db 에서 섞이는 단위") 칸 단위가 아니라 행 단위로 판단합니다.
 4. **UTC 로 바꾸고 원래 값을 함께 남깁니다.** 변환한 시각 옆에 원래 숫자와 적용한 식을 같이 적어야 다른 분석가가 같은 결과를 다시 만들 수 있습니다.
 5. **시간대는 따로 적습니다.** 기록에 시간대 칸이 있으면 그 값을 별도 열로 옮기고, 없으면 시간대를 모른다고 적습니다(아래 "시간대가 함께 남는 곳").
@@ -34,9 +34,9 @@ Apple 의 Core Foundation 은 참조 시각인 2001-01-01 00:00:00 GMT 부터 �
 
 ## sms.db 에서 섞이는 단위
 
-iOS 11 부터 메시지 DB(`sms.db`)의 시각 칸에 길이가 다른 Mac 절대 값이 섞여 들어가고, 같은 칸 안에서도 섞입니다. 9자리 값은 전통적인 Mac 절대 초이고, 18자리 값은 나노초 단위라서 10^9 로 나눠야 초가 되며, 보낸 메시지에서는 0 이 보이기도 했습니다. 글쓴이는 이 혼재를 `chat` 표와 `chat_message_join` 표에서 봤고, 18자리 값 가운데에는 끝자리가 00 으로 채워지지 않은 것도 있었다고 적었습니다 [2].
+iOS 11 부터 메시지 DB(`sms.db`)의 시각 칸에 길이가 다른 Mac 절대 값이 섞여 들어가고, 같은 칸 안에서도 섞입니다. 9자리 값은 전통적인 Mac 절대 초이고, 18자리 값은 나노초 단위라서 10^9 로 나눠야 초가 되며, 보낸 메시지에서는 0 이 들어가기도 합니다. 이 혼재는 `chat` 표와 `chat_message_join` 표에 나타나고, 18자리 값 가운데에는 끝자리가 00 으로 채워지지 않은 것도 있습니다 [2].
 
-같은 글에 실린 변환식은 다음과 같습니다(원문 그대로) [2].
+두 길이를 함께 바꾸는 식은 다음과 같습니다 [2].
 
 ```sql
 case when LENGTH(chat_message_join.message_date)=18 then datetime(chat_message_join.message_date/1000000000+978307200,'unixepoch','localtime') when LENGTH(chat_message_join.message_date)=9 then datetime(chat_message_join.message_date +978307200,'unixepoch','localtime') else 'N/A' END
@@ -44,7 +44,7 @@ case when LENGTH(chat_message_join.message_date)=18 then datetime(chat_message_j
 
 이 식은 `'localtime'` 을 붙여서 분석하는 PC 의 시간대로 바꿔 보여 줍니다. 여러 기록을 한 줄에 세울 때는 `'localtime'` 을 빼고 UTC 로 받은 뒤, 기기의 시간대는 5단계처럼 따로 적는 편이 뒤섞이지 않습니다.
 
-iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서는 시각이 들어갈 칸 이름을 다음과 같이 확인했습니다. 값은 읽지 않았으므로 이 버전에서 각 칸이 초인지 나노초인지는 확인하지 못했고, 행마다 자릿수를 보고 판단합니다.
+iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서 시각이 들어가는 칸은 다음과 같습니다. 이 버전에서 각 칸이 초인지 나노초인지는 행마다 자릿수를 보고 판단합니다.
 
 | 표 | 시각 칸 |
 |---|---|
@@ -58,7 +58,7 @@ iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서는 시각이 들어
 
 ## 시간대가 함께 남는 곳
 
-몇몇 DB 와 plist 에는 시각 옆에 시간대 칸이나 키가 따로 있습니다. 아래는 iOS 27.0 백업에서 이름을 확인한 곳이고, 값은 읽지 않았습니다. 각 칸의 저장 기준(Mac 절대 초인지 등)과 정확한 쓰임새는 확인하지 못했으므로, 이름만 보고 값을 해석하지 말고 해당 아티팩트 페이지와 실제 값으로 확인합니다.
+몇몇 DB 와 plist 에는 시각 옆에 시간대 칸이나 키가 따로 있습니다. 아래는 iOS 27.0 백업에 있는 곳입니다. 각 칸의 저장 기준(Mac 절대 초인지 등)과 정확한 쓰임새는 공개된 설명이 없으므로, 이름만 보고 값을 해석하지 말고 해당 아티팩트 페이지와 실제 값으로 확인합니다.
 
 | 파일(도메인 :: 경로) | 표 또는 키 | 시간대·시각 칸 |
 |---|---|---|
@@ -73,7 +73,7 @@ iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서는 시각이 들어
 | `HomeDomain :: Library/Preferences/com.apple.ScreenTimeAgent.plist` | 키 | `LastTimeZoneName` (str), `UsageGenesisDate` (datetime), `LastViewedAllActivityDate` (datetime) |
 | `HomeDomain :: Library/Preferences/com.apple.chronod.plist` | 키 | `lastKnownTimes` 안의 `timeZoneSecondsFromGMT`, `world` |
 
-사진 쪽 표는 사건마다 시간대가 붙어 있어서 사건 단위로 현지 시각을 맞출 수 있는 후보이지만, plist 키는 성격이 다릅니다. `com.apple.AppStore.plist` 에서 읽는 마지막 부트스트랩 시간대와 그 시간대를 적용한 날짜는 수집 시점의 설정을 찍어 둔 값이지 시각마다 쌓인 사건 기록이 아니라고 설명한 글이 있습니다 [3]. 이런 키로 과거의 모든 사건에 같은 시간대를 씌우면 안 되고, 시간대 설정 기록 자체는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md)에서 다룹니다. 사진의 시각 해석은 [사진 보관함 (Photos Library)](../../../02-artifacts/media/photos/index.md), 미리 알림과 캘린더는 [미리 알림과 캘린더 (Reminders·Calendar)](../../../02-artifacts/mail-cloud/reminders-calendar.md)에 있습니다.
+사진 쪽 표는 사건마다 시간대가 붙어 있어서 사건 단위로 현지 시각을 맞출 수 있는 후보이지만, plist 키는 성격이 다릅니다. `com.apple.AppStore.plist` 에서 읽는 마지막 부트스트랩 시간대와 그 시간대를 적용한 날짜는 수집 시점의 설정을 찍어 둔 값이지 시각마다 쌓인 사건 기록이 아닙니다 [3]. 이런 키로 과거의 모든 사건에 같은 시간대를 씌우면 안 되고, 시간대 설정 기록 자체는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md)에서 다룹니다. 사진의 시각 해석은 [사진 보관함 (Photos Library)](../../../02-artifacts/media/photos/index.md), 미리 알림과 캘린더는 [미리 알림과 캘린더 (Reminders·Calendar)](../../../02-artifacts/mail-cloud/reminders-calendar.md)에 있습니다.
 
 ## 직접 해 보기
 
@@ -95,7 +95,7 @@ Mac 절대 초 `700000000.0` 을 IEEE 754 double 로, 바이트 순서를 big-en
 
 ## 함정과 한계
 
-변환식에 `'localtime'` 같은 수정자가 들어 있으면 결과는 기기의 시간대가 아니라 분석 PC 의 시간대로 나오고, PC 를 바꾸면 같은 식이 다른 결과를 냅니다. 한 칸 안에 초와 나노초가 섞이는 경우가 있어서 칸 하나에 식 하나만 걸면 일부 행이 틀어지고, 0 이 들어간 행을 그대로 바꾸면 2001-01-01 이라는 가짜 시각이 타임라인 맨 앞에 끼어듭니다. plist 의 `float` 키처럼 기준점을 확인하지 못한 숫자는 Mac 절대 초라고 짐작해서 바꾸지 않습니다. 이 페이지의 칸·키 이름은 iOS 27.0 백업 하나에서 이름만 확인한 것이라, 다른 버전에서는 이름이 다를 수 있습니다.
+변환식에 `'localtime'` 같은 수정자가 들어 있으면 결과는 기기의 시간대가 아니라 분석 PC 의 시간대로 나오고, PC 를 바꾸면 같은 식이 다른 결과를 냅니다. 한 칸 안에 초와 나노초가 섞이는 경우가 있어서 칸 하나에 식 하나만 걸면 일부 행이 틀어지고, 0 이 들어간 행을 그대로 바꾸면 2001-01-01 이라는 가짜 시각이 타임라인 맨 앞에 끼어듭니다. plist 의 `float` 키처럼 기준점이 알려지지 않은 숫자는 Mac 절대 초라고 짐작해서 바꾸지 않습니다. 이 페이지의 칸·키 이름은 iOS 27.0 백업 기준이라, 다른 버전에서는 이름이 다를 수 있습니다.
 
 ## 결과를 어떻게 해석하나
 

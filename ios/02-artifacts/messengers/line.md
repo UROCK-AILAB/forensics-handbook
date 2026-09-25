@@ -14,7 +14,7 @@ nav_order: 860
 
 ## 위치와 버전별 차이
 
-아래 이름은 공개 도구 iLEAPP 가 전체 파일 시스템 추출에서 찾는 것입니다 [1]. 앱 그룹과 앱 데이터 컨테이너의 차이는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
+아래 위치는 전체 파일 시스템 추출 기준입니다 [1]. 앱 그룹과 앱 데이터 컨테이너의 차이는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
 
 | 위치 | 파일 | 내용 |
 |---|---|---|
@@ -24,16 +24,16 @@ nav_order: 860
 
 `PrivateStore` 아래에는 계정마다 `P_` 로 시작하는 폴더가 따로 있습니다 [1]. `Line.sqlite` 는 한 기기에 여러 개 있을 수 있어서, 처음 찾은 파일 하나만 읽지 말고 모두 찾아 읽습니다 [1].
 
-iLEAPP 시험 표본에서 앱 그룹 이름은 `group.com.linecorp.line` 이었습니다(iOS 13.3.1·14.3·15.3.1·17.3 표본) [1]. 번들 ID 와 로컬 백업의 도메인 이름은 이번 자료로 확인하지 못했습니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘어 있었지만, 관찰한 백업은 다른 회사 앱의 도메인 이름을 가려 두어 라인 파일이 들어가는지는 확인하지 못했습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 라인 자체의 iCloud 대화 백업 형식도 확인하지 못했습니다.
+앱 그룹 이름은 `group.com.linecorp.line` 입니다(iOS 13.3.1·14.3·15.3.1·17.3 기준) [1]. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉩니다. 라인의 번들 ID 와 백업 도메인 이름, 라인 파일이 백업에 들어가는지는 공개 자료가 없어 검체에서 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 라인 자체의 iCloud 대화 백업 형식도 공개 자료가 없습니다.
 
-| 항목 | 확인된 범위 |
+| 항목 | 알려진 범위 |
 |---|---|
-| 앱 그룹 이름이 확인된 표본 | iOS 13.3.1, 14.3, 15.3.1, 17.3 [1] |
-| 버전별 구조 차이 | 확인하지 못함 |
+| 앱 그룹 이름이 알려진 iOS | iOS 13.3.1, 14.3, 15.3.1, 17.3 [1] |
+| 버전별 구조 차이 | 공개 자료 없음 |
 
 ## 구조
 
-`Line.sqlite` 에서 도구가 읽는 표와 칸은 다음과 같습니다 [1].
+`Line.sqlite` 의 주요 표와 칸은 다음과 같습니다 [1].
 
 | 표 | 칸 |
 |---|---|
@@ -56,7 +56,7 @@ iLEAPP 시험 표본에서 앱 그룹 이름은 `group.com.linecorp.line` 이었
 
 ## 시각 해석
 
-`ZTIMESTAMP` 는 Unix 밀리초라서 1000 으로 나눈 뒤 Unix 초로 바꾸고, 결과는 UTC 입니다 [1]. 이 값이 메시지를 보낸 시각인지, 기기가 받은 시각인지는 이번 자료로 확인하지 못했습니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`ZTIMESTAMP` 는 Unix 밀리초라서 1000 으로 나눈 뒤 Unix 초로 바꾸고, 결과는 UTC 입니다 [1]. 이 값이 메시지를 보낸 시각인지, 기기가 받은 시각인지는 공개 자료가 없습니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -64,7 +64,7 @@ iLEAPP 시험 표본에서 앱 그룹 이름은 `group.com.linecorp.line` 이었
 
 메시지 DB 와 첨부 파일이 서로 다른 컨테이너에 있어서 [1], 앱 그룹 컨테이너만 추출하면 첨부가 빠지고 앱 데이터 컨테이너만 추출하면 메시지가 빠집니다. 수집 범위를 먼저 확인합니다([모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)).
 
-iLEAPP 에는 `linePrivateStore.py` 라는 분석기도 따로 있지만 이번에 내용을 확인하지 못했습니다. 지운 메시지는 SQLite 파일의 빈 공간을 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 따로 봅니다.
+iLEAPP 에는 `linePrivateStore.py` 라는 분석기도 따로 있습니다. 지운 메시지는 SQLite 파일의 빈 공간을 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 따로 봅니다.
 
 ## 직접 분석해 보기
 

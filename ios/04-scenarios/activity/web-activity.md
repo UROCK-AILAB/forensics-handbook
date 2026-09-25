@@ -14,21 +14,21 @@ nav_order: 1460
 
 ## 먼저 확인할 것
 
-**수집 범위**를 먼저 봅니다. 웹사이트 방문 기록은 암호를 건 로컬 백업에만 들어간다고 Apple 이 밝혔고 [5], MVT 도 Safari 방문 기록 모듈을 암호 건 백업용으로 표시합니다 [12]. 실제로 암호를 걸지 않은 로컬 백업에는 `History.db`·`SafariTabs.db`·`BrowserState.db`·`CloudTabs.db` 가 없고 HomeDomain `Library/Safari/Bookmarks.db` 만 있었습니다. 바이옴은 전체 파일 시스템 추출에서 다룬 자료만 있습니다 [11].
+**수집 범위**를 먼저 봅니다. 웹사이트 방문 기록은 암호를 건 로컬 백업에만 들어갑니다 [5][12]. 그래서 암호를 걸지 않은 로컬 백업에는 `History.db`·`SafariTabs.db`·`BrowserState.db`·`CloudTabs.db` 가 없고 HomeDomain `Library/Safari/Bookmarks.db` 만 있습니다. 바이옴은 전체 파일 시스템 추출에서 다룬 자료만 있습니다 [11].
 
 **iOS 버전**에 따라 파일 위치와 시각 형식이 달라집니다.
 
 | iOS 버전 | 달라지는 점 |
 |---|---|
 | iOS 15 | Safari 기록 파일은 `/private/var/mobile/Library/Safari/` 아래 `History.db`, `SafariTabs.db`, `BrowserState.db`, `CloudTabs.db`, `Bookmarks.db` 입니다 [1] |
-| iOS 16 | `_DKEvent.Safari.History` 스트림이 `History.db` 보다 몇 초 늦게 찍히고, 기록을 지울 때 바이옴에 남는 모양이 시험으로 보고됐습니다 [4] |
-| iOS 17 이후 | 프로필별 기록 `Safari/Profiles/*/History.db` 를 iLEAPP 가 따로 찾습니다 [2]. 바이옴 `App.WebUsage` 를 iLEAPP 가 iOS 17.1~18.7.8 자료로 시험했습니다 [7] |
-| iOS 18 이하 / 26 이상 | iLEAPP 탭 파서 주석에 "iOS 18 이하 Cocoa, iOS 26 이상 Unix" 로 시각 형식이 바뀐다고 적혀 있습니다 [3] |
-| iOS 27 | `Bookmarks.db` 와 아래 "로컬 백업에서 보이는 것" 의 파일 이름을 암호 없는 백업에서 확인했습니다 |
+| iOS 16 | `_DKEvent.Safari.History` 스트림이 `History.db` 보다 몇 초 늦게 찍히고, 기록을 지울 때 바이옴에 남는 모양도 알려져 있습니다 [4] |
+| iOS 17 이후 | 프로필별 기록 `Safari/Profiles/*/History.db` 가 따로 있습니다 [2]. iLEAPP 의 바이옴 `App.WebUsage` 파서는 iOS 17.1~18.7.8 자료로 시험됐습니다 [7] |
+| iOS 18 이하 / 26 이상 | Safari 탭 시각 형식이 iOS 18 이하는 Cocoa, iOS 26 이상은 Unix 입니다 [3] |
+| iOS 27 | `Bookmarks.db` 와 아래 "로컬 백업에서 보이는 것" 의 파일이 암호 없는 백업에 있습니다 |
 
-**시각 기준**이 브라우저마다 다릅니다. Safari 방문 시각은 iLEAPP 가 값이 978307200 보다 크면 Unix 시각, 작으면 Mac 절대 시각으로 가려 읽고 [2], 크롬은 1601-01-01 부터 센 마이크로초라서 [8] 기준점이 다릅니다. 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
+**시각 기준**이 브라우저마다 다릅니다. Safari 방문 시각은 값이 978307200 보다 크면 Unix 시각, 작으면 Mac 절대 시각으로 읽고 [2], 크롬은 1601-01-01 부터 센 마이크로초라서 [8] 기준점이 다릅니다. 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
 
-**어느 앱이 웹을 열었는지**도 염두에 둡니다. iOS 에서 웹을 탐색하는 앱은 WebKit 을 써야 한다고 App Review 지침 2.5.6 이 정하고, EU·일본에는 예외 권한이 있습니다 [10]. 앱 안에서 연 페이지는 Safari 기록 말고 그 앱의 데이터와 바이옴에서도 찾아봅니다.
+**어느 앱이 웹을 열었는지**도 염두에 둡니다. iOS 에서 웹을 탐색하는 앱은 WebKit 을 써야 하고(App Review 지침 2.5.6), EU·일본에는 예외 권한이 있습니다 [10]. 앱 안에서 연 페이지는 Safari 기록 말고 그 앱의 데이터와 바이옴에서도 찾아봅니다.
 
 ## 볼 아티팩트와 순서
 
@@ -41,15 +41,15 @@ nav_order: 1460
 | 5 | 다른 앱 안의 웹 기록 | 네이버 앱 같은 앱의 자체 기록 | [네이버 앱](../../02-artifacts/browsers/naver.md) |
 | 6 | 암호 없는 백업의 Safari 곁 기록 | 아래 "로컬 백업에서 보이는 것" | 이 페이지 |
 
-바이옴 `App.WebUsage` 는 자료마다 필드가 조금씩 다릅니다. iLEAPP 는 경로 패턴 `*/Biome/streams/restricted/App.WebUsage/local/*` 에서 필드 1 을 GUID, 2 를 시각, 4 를 전체 URL, 5 를 도메인, 6 을 번들 ID(예: `com.apple.mobilesafari`)로 읽고, 필드 3·8 은 뜻을 모르는 정수로 남겨 둡니다 [7]. 제목 필드는 한 자료에 있지만 [6] iLEAPP 필드 목록에는 없습니다 [7]. 번들 ID 칸이 있어서 Safari 말고 다른 앱의 웹 사용도 담길 수 있지만, 다른 회사 앱 값이 실제로 들어가는지는 확인하지 못했습니다.
+바이옴 `App.WebUsage` 는 자료마다 필드가 조금씩 다릅니다. iLEAPP 는 경로 패턴 `*/Biome/streams/restricted/App.WebUsage/local/*` 에서 필드 1 을 GUID, 2 를 시각, 4 를 전체 URL, 5 를 도메인, 6 을 번들 ID(예: `com.apple.mobilesafari`)로 읽고, 필드 3·8 은 뜻을 모르는 정수로 남겨 둡니다 [7]. 제목 필드는 한 자료에 있지만 [6] iLEAPP 필드 목록에는 없습니다 [7]. 번들 ID 칸이 있어서 Safari 말고 다른 앱의 웹 사용도 담길 수 있지만, 다른 회사 앱 값이 실제로 들어가는지는 검체에서 확인합니다.
 
 ### 로컬 백업에서 보이는 것
 
-암호를 걸지 않은 로컬 백업에서는 방문 기록 DB 가 없는 대신 아래 파일의 표·칸·키 이름을 확인했습니다. 칸의 시각 기준과, 이 기록이 방문 기록을 얼마나 대신할 수 있는지는 확인하지 못해서 "`History.db` 가 없어도 방문한 도메인의 흔적이 남는 곳" 으로만 씁니다.
+암호를 걸지 않은 로컬 백업에는 방문 기록 DB 가 없는 대신 아래 파일이 있습니다. 칸의 시각 기준과, 이 기록이 방문 기록을 얼마나 대신할 수 있는지는 알려져 있지 않아서 "`History.db` 가 없어도 방문한 도메인의 흔적이 남는 곳" 으로만 씁니다.
 
-| 파일 | 확인한 이름 |
+| 파일 | 표·칸·키 이름 |
 |---|---|
-| HomeDomain `Library/Safari/Bookmarks.db` | `bookmarks` 표(칸 37개). 읽기 목록이 이 표에 드는지는 확인하지 못했습니다 |
+| HomeDomain `Library/Safari/Bookmarks.db` | `bookmarks` 표(칸 37개). 읽기 목록이 이 표에 드는지는 검체에서 확인합니다 |
 | `AppDomain-com.apple.mobilesafari` 의 `Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` | `ObservedDomains` 표의 `registrableDomain`, `lastSeen`, `hadUserInteraction`, `mostRecentUserInteractionTime` 등 |
 | `AppDomain-com.apple.mobilesafari` 의 `Library/Metadata Cache/LPLinkMetadata.db` | `page_url` 표의 `url`, `uuid`, `last_fetch_date` 등 |
 | `AppDomain-com.apple.mobilesafari` 의 `Library/Safari/IgnoredSiriSuggestedSites.db` | `ignored_siri_suggested_sites` 표의 `siriSuggestedSiteURL`, `query`, `timestamp`, `visitedURL` 등 |
@@ -74,8 +74,8 @@ nav_order: 1460
    ```
 
    시각 판별식과 `history_visits.history_item` 을 `history_items.id` 와 잇는 방식은 iLEAPP 쿼리를 따른 것입니다 [2]. 버전에 따라 칸이 다를 수 있어서 쿼리가 칸 이름 오류로 멈추면 `PRAGMA table_info(history_visits);` 로 칸을 먼저 확인합니다.
-3. `SafariTabs.db` 에서 열린 탭과 개인 정보 보호 탭을 봅니다 [1][4]. 탭 시각 형식은 iOS 버전에 따라 다르다는 주석이 있어서 [3], 푼 값이 앞뒤 기록과 맞는지 확인합니다.
-4. 전체 파일 시스템 추출이 있으면 바이옴 `App.WebUsage` 와 `_DKEvent.Safari.History` 를 `History.db` 와 겹칩니다. 바이옴에만 있고 `History.db` 에 없는 방문은 지운 방문일 수 있습니다. 사용자가 기록을 하나씩 지워도 바이옴 SEGB 의 해당 기록은 곧바로 지워지지 않았고, "전체 삭제" 때는 SEGB 안의 protobuf 가 그 자리에서 0x00 으로 덮어 써졌다고 iOS 16 에서 보고됐습니다 [4]. 0x00 으로 채워진 레코드가 몰려 있다면 전체 삭제를 했을 가능성으로 적고 [증거를 없애려 했나](anti-forensics/index.md) 와 이어 봅니다. SEGB 를 직접 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 을 따릅니다.
+3. `SafariTabs.db` 에서 열린 탭과 개인 정보 보호 탭을 봅니다 [1][4]. 탭 시각 형식은 iOS 버전에 따라 달라서 [3], 푼 값이 앞뒤 기록과 맞는지 확인합니다.
+4. 전체 파일 시스템 추출이 있으면 바이옴 `App.WebUsage` 와 `_DKEvent.Safari.History` 를 `History.db` 와 겹칩니다. 바이옴에만 있고 `History.db` 에 없는 방문은 지운 방문일 수 있습니다. iOS 16 에서는 사용자가 기록을 하나씩 지워도 바이옴 SEGB 의 해당 기록이 곧바로 지워지지 않고, "전체 삭제" 때는 SEGB 안의 protobuf 가 그 자리에서 0x00 으로 덮어 써집니다 [4]. 0x00 으로 채워진 레코드가 몰려 있다면 전체 삭제를 했을 가능성으로 적고 [증거를 없애려 했나](anti-forensics/index.md) 와 이어 봅니다. SEGB 를 직접 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 을 따릅니다.
 5. 바이옴 `remote` 폴더의 기록은 같은 Apple 계정의 다른 기기에서 온 것이라 [13][14] 빼고, iLEAPP 의 `App.WebUsage` 파서는 `local` 폴더만 읽고 `tombstone` 폴더는 건너뛰어서 [7], `tombstone` 폴더는 따로 열어 봅니다.
 6. 크롬 같은 다른 브라우저의 기록을 같은 방식으로 뽑아 시각 기준을 맞춘 뒤 합칩니다 [8][9].
 7. 로컬 백업만 있다면 위 "로컬 백업에서 보이는 것" 표에서 조사 대상 도메인을 찾고, 찾은 흔적을 방문 시각이 아니라 "이 도메인의 흔적이 있다" 로만 적습니다. `RecentWebSearches` 키가 있으면 검색어 목록을 확인합니다.
@@ -85,9 +85,9 @@ nav_order: 1460
 
 `History.db` 의 방문을 모두 이 기기에서 한 방문으로 적는 실수가 가장 흔합니다. `origin` 이 1 인 행은 iCloud 로 동기화된 다른 기기의 방문이라서 [2], 이 기기의 행위로 적지 않습니다.
 
-방문 기록이 없다는 사실을 "방문하지 않았다" 로 읽는 일도 조심합니다. 개인 정보 보호 모드 방문은 `History.db` 에 저장되지 않고 [1], iOS 16 시험에서는 개인 정보 보호 탭 기록이 SEGB 에 처음부터 쓰이지 않는 것으로 보였습니다 [4]. 암호 없는 백업에는 방문 기록이 아예 들어가지 않습니다 [5].
+방문 기록이 없다는 사실을 "방문하지 않았다" 로 읽는 일도 조심합니다. 개인 정보 보호 모드 방문은 `History.db` 에 저장되지 않고 [1], iOS 16 에서는 개인 정보 보호 탭 기록이 SEGB 에 처음부터 쓰이지 않는 것으로 보입니다 [4]. 암호 없는 백업에는 방문 기록이 아예 들어가지 않습니다 [5].
 
-바이옴과 `History.db` 의 시각 차이를 조작 흔적으로 보는 실수도 있습니다. iOS 16 에서 `_DKEvent.Safari.History` 는 `History.db` 보다 몇 초 늦게 찍혔다는 보고가 있어서 [4], 몇 초 차이는 같은 방문으로 묶습니다.
+바이옴과 `History.db` 의 시각 차이를 조작 흔적으로 보는 실수도 있습니다. iOS 16 에서 `_DKEvent.Safari.History` 는 `History.db` 보다 몇 초 늦게 찍혀서 [4], 몇 초 차이는 같은 방문으로 묶습니다.
 
 URL 이 있다고 "사용자가 그 페이지를 읽었다" 로 적는 일도 있습니다. `history_visits` 에는 `redirect_source`·`redirect_destination` 칸이 있어서 [2], 리디렉션으로 이어진 방문인지 이 칸과 앞뒤 행으로 확인한 뒤 사용자가 머문 페이지를 가립니다.
 

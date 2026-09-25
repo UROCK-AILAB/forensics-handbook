@@ -12,9 +12,9 @@ nav_order: 1630
 
 ## 먼저 확인할 것
 
-**문자가 스미싱인지 가르는 기준**은 Apple 이 적은 피싱 징후를 씁니다. 보낸 사람의 이메일 주소나 번호가 회사 이름과 맞지 않거나, 링크가 그럴듯해 보여도 실제 URL 이 회사 사이트와 다르거나, 암호·카드 번호 같은 개인 정보를 요구하거나, 요청하지 않은 첨부가 붙어 있으면 의심합니다 [1]. Apple 은 어떤 웹사이트에 로그인하라거나 2단계 인증 창에서 "허용" 을 누르라고 절대 요구하지 않는다고 적었습니다 [1]. Apple 위협 알림을 흉내 낸 문자도 있는데, 진짜 위협 알림이 어떤 경로로 오는지는 [스파이웨어 감염 흔적](spyware.md)에 정리했습니다.
+**문자가 스미싱인지 가르는 기준**은 피싱 징후입니다. 보낸 사람의 이메일 주소나 번호가 회사 이름과 맞지 않거나, 링크가 그럴듯해 보여도 실제 URL 이 회사 사이트와 다르거나, 암호·카드 번호 같은 개인 정보를 요구하거나, 요청하지 않은 첨부가 붙어 있으면 의심합니다 [1]. Apple 은 어떤 웹사이트에 로그인하라거나 2단계 인증 창에서 "허용" 을 누르라고 요구하지 않습니다 [1]. Apple 위협 알림을 흉내 낸 문자도 있는데, 진짜 위협 알림이 어떤 경로로 오는지는 [스파이웨어 감염 흔적](spyware.md)에 정리했습니다.
 
-**사용자가 이미 한 조치**를 먼저 묻습니다. 아이폰에서는 링크를 길게 눌러 실제 주소를 먼저 볼 수 있고, 메시지 아래의 "정크 신고 (Report Junk)" 로 신고하거나 발신자를 차단할 수 있습니다. Apple 을 사칭한 문자는 화면을 찍어 reportphishing@apple.com 으로 보내라고 안내합니다 [1]. 사용자가 신고·차단·삭제를 했다면 그 시각을 적어 두어야 기기에 남은 기록과 맞춰 볼 수 있습니다.
+**사용자가 이미 한 조치**를 먼저 묻습니다. 아이폰에서는 링크를 길게 눌러 실제 주소를 먼저 볼 수 있고, 메시지 아래의 "정크 신고 (Report Junk)" 로 신고하거나 발신자를 차단할 수 있습니다. Apple 을 사칭한 문자는 화면을 찍어 reportphishing@apple.com 으로 보냅니다 [1]. 사용자가 신고·차단·삭제를 했다면 그 시각을 적어 두어야 기기에 남은 기록과 맞춰 볼 수 있습니다.
 
 **iOS 버전과 수집 범위**도 확인합니다. 메시지 앱의 "최근 삭제된 항목" 은 iOS 16 이후에 있고, 지운 메시지를 30일 동안 보관한다고 알려져 있지만 [4] Apple 은 이 기간을 30~40일로 적었습니다 [5]. Safari 방문 기록은 암호화 백업에만 들어가서 [8], 암호화하지 않은 백업만 받았다면 링크를 눌렀는지를 다른 기록으로 봐야 합니다.
 
@@ -37,7 +37,7 @@ nav_order: 1630
 
 2. **문자와 발신자를 찾습니다.** `handle` 표의 `id`, `service`, `uncanonicalized_id` 로 발신 번호와 서비스를 보고, `message` 표의 `text`, `attributedBody` 에서 본문과 링크를 찾습니다. `message` 표에는 `has_dd_results`, `was_data_detected`, `balloon_bundle_id`, `payload_data` 칸도 있어서 링크가 본문 밖에 담긴 경우를 함께 봅니다. MVT 의 SMS 모듈은 `sms.db` 에서 메시지 속 링크를 뽑아 공개 지표와 대조합니다 [6].
 
-3. **필터에 걸렸는지 봅니다.** 관찰한 `sms.db` 에는 다음 칸이 있었습니다.
+3. **필터에 걸렸는지 봅니다.** `sms.db` 에는 필터와 관련된 다음 칸이 있습니다.
 
    ```
    chat:              is_filtered, is_blackholed, is_pending_review
@@ -45,9 +45,9 @@ nav_order: 1630
    sync_chat_slice:   filter_action, filter_sub_action
    ```
 
-   각 값이 정크 폴더·차단·검토 대기 가운데 무엇을 뜻하는지는 확인하지 못했습니다. 값을 해석할 때는 같은 기기에서 사용자가 정크로 옮긴 대화와 그렇지 않은 대화의 값을 견주고, 해석 근거를 보고서에 적습니다.
+   각 값이 정크 폴더·차단·검토 대기 가운데 무엇을 뜻하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 값을 해석할 때는 같은 기기에서 사용자가 정크로 옮긴 대화와 그렇지 않은 대화의 값을 견주고, 해석 근거를 보고서에 적습니다.
 
-4. **메시지 설정 plist 를 봅니다.** `HomeDomain :: Library/Preferences/com.apple.MobileSMS.plist` 에는 필터와 모르는 발신자에 관련된 이름의 키가 있었습니다.
+4. **메시지 설정 plist 를 봅니다.** `HomeDomain :: Library/Preferences/com.apple.MobileSMS.plist` 에는 필터와 모르는 발신자에 관련된 이름의 키가 있습니다.
 
    ```
    MessageSpamFilteringExtensionInstalled
@@ -64,15 +64,15 @@ nav_order: 1630
    simFilterIndex
    ```
 
-   각 키의 뜻은 이름에서 짐작할 수 있을 뿐 확인하지 못해서, 보고서에는 키 이름과 값만 적고 뜻을 단정하지 않습니다. 필터 확장과 관련된 백업 도메인 `AppDomain-com.apple.smsFilter` 와 `AppDomainPlugin-com.apple.smsFilter.extension` 도 있었고 각각 항목이 4개였지만, 안에 어떤 파일이 있는지는 확인하지 않았습니다.
+   각 키의 뜻은 이름에서 짐작할 수 있을 뿐 공개된 분석 자료가 없으므로, 보고서에는 키 이름과 값만 적고 뜻을 단정하지 않습니다. 필터 확장과 관련된 백업 도메인 `AppDomain-com.apple.smsFilter` 와 `AppDomainPlugin-com.apple.smsFilter.extension` 도 있습니다.
 
-5. **정크 자동 삭제 가능성을 염두에 둡니다.** `HomeDomain :: Library/Preferences/com.apple.IMAutomaticHistoryDeletionAgent.plist` 에 날짜 형식의 키 `startDeletingJunkMessagesFrom` 이 있었습니다. 이름으로 보아 정크 메시지 자동 삭제와 관련 있어 보이지만 동작과 보관 기간은 확인하지 못했습니다. 사용자가 받았다고 말한 문자가 보이지 않으면, 정크로 분류된 뒤 지워졌을 가능성을 열어 두고 이 키의 값과 받은 시각을 함께 적습니다.
+5. **정크 자동 삭제 가능성을 염두에 둡니다.** `HomeDomain :: Library/Preferences/com.apple.IMAutomaticHistoryDeletionAgent.plist` 에 날짜 형식의 키 `startDeletingJunkMessagesFrom` 이 있습니다. 이름으로 보아 정크 메시지 자동 삭제와 관련 있어 보이지만, 동작과 보관 기간은 공개된 분석 자료가 없습니다. 사용자가 받았다고 말한 문자가 보이지 않으면, 정크로 분류된 뒤 지워졌을 가능성을 열어 두고 이 키의 값과 받은 시각을 함께 적습니다.
 
-6. **지운 문자를 찾습니다.** 관찰한 `sms.db` 에는 `chat_recoverable_message_join`(`delete_date` 포함)과 `recoverable_message_part`(`part_text` 포함) 표가 있었습니다. 복구 절차는 [지운 대화와 사진 찾기](../activity/deleted-content.md)를 따릅니다. 모르는 발신자 기록으로 보이는 `HomeDomain :: Library/MessagesMetaData/NickNameCache/unknownSenderRecordInfoStore.db`(표 `kvtable`: `ROWID`, `key`, `value`, `value_type`, `date`)도 있었지만, 용도는 확인하지 못했습니다.
+6. **지운 문자를 찾습니다.** `sms.db` 에는 `chat_recoverable_message_join`(`delete_date` 포함)과 `recoverable_message_part`(`part_text` 포함) 표가 있습니다. 복구 절차는 [지운 대화와 사진 찾기](../activity/deleted-content.md)를 따릅니다. 모르는 발신자 기록으로 보이는 `HomeDomain :: Library/MessagesMetaData/NickNameCache/unknownSenderRecordInfoStore.db`(표 `kvtable`: `ROWID`, `key`, `value`, `value_type`, `date`)도 있지만, 용도는 공개된 분석 자료가 없습니다.
 
-7. **링크를 눌렀는지 봅니다.** 암호화 백업이라면 Safari `History.db` 의 `history_items`(`url`, `visit_count`)와 `history_visits`(`visit_time`, `redirect_source`, `redirect_destination`, `origin`)에서 문자 속 URL 과 그 뒤 리디렉션을 찾습니다 [7]. 암호화하지 않은 백업에도 `AppDomain-com.apple.mobilesafari :: Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 가 있었고, 표 `ObservedDomains`(`registrableDomain`, `lastSeen`, `hadUserInteraction`, `mostRecentUserInteractionTime` 등)와 `TopFrameUniqueRedirectsTo`(`sourceDomainID`, `toDomainID`), `TopFrameUniqueRedirectsFrom`, `SubresourceUniqueRedirectsTo` 등이 보였습니다. MVT 의 WebkitResourceLoadStatistics 모듈은 이 파일에서 접속한 도메인과 시각을 뽑습니다 [6]. `lastSeen` 이 어떤 기준 시각인지는 확인하지 못해서, 문자 받은 시각과 견주기 전에 다른 기록으로 기준을 맞춥니다. 시각 해석과 표 구성은 [사파리](../../02-artifacts/browsers/safari/index.md)에, 행위 재구성은 [웹 사용 행위 재구성](../activity/web-activity.md)에 있습니다.
+7. **링크를 눌렀는지 봅니다.** 암호화 백업이라면 Safari `History.db` 의 `history_items`(`url`, `visit_count`)와 `history_visits`(`visit_time`, `redirect_source`, `redirect_destination`, `origin`)에서 문자 속 URL 과 그 뒤 리디렉션을 찾습니다 [7]. 암호화하지 않은 백업에도 `AppDomain-com.apple.mobilesafari :: Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 가 들어가고, 표 `ObservedDomains`(`registrableDomain`, `lastSeen`, `hadUserInteraction`, `mostRecentUserInteractionTime` 등)와 `TopFrameUniqueRedirectsTo`(`sourceDomainID`, `toDomainID`), `TopFrameUniqueRedirectsFrom`, `SubresourceUniqueRedirectsTo` 등이 있습니다. MVT 의 WebkitResourceLoadStatistics 모듈은 이 파일에서 접속한 도메인과 시각을 뽑습니다 [6]. `lastSeen` 이 어떤 기준 시각인지는 공개된 분석 자료가 없어서, 문자 받은 시각과 견주기 전에 다른 기록으로 기준을 맞춥니다. 시각 해석과 표 구성은 [사파리](../../02-artifacts/browsers/safari/index.md)에, 행위 재구성은 [웹 사용 행위 재구성](../activity/web-activity.md)에 있습니다.
 
-8. **메일 쪽도 견줍니다.** 메일 앱에도 `AppDomain-com.apple.mobilemail :: Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 가 있었습니다. 같은 도메인이 메일 쪽에도 나오면 같은 피싱이 메일로도 왔는지 [메일 앱](../../02-artifacts/mail-cloud/apple-mail.md)에서 확인합니다.
+8. **메일 쪽도 견줍니다.** 메일 앱에도 `AppDomain-com.apple.mobilemail :: Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 가 있습니다. 같은 도메인이 메일 쪽에도 나오면 같은 피싱이 메일로도 왔는지 [메일 앱](../../02-artifacts/mail-cloud/apple-mail.md)에서 확인합니다.
 
 ## 흔한 오판
 

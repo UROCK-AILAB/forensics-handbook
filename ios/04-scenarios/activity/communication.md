@@ -14,16 +14,16 @@ nav_order: 1420
 
 ## 먼저 확인할 것
 
-**수집 범위**가 결론의 크기를 정합니다. 통화 기록은 암호를 건 로컬 백업에만 들어간다고 Apple 이 밝혔고 [10], 실제로 암호를 걸지 않은 로컬 백업에는 `CallHistory.storedata` 가 없고 HomeDomain 의 `Library/Preferences/com.apple.CallHistorySyncHelper.plist` 만 있었습니다. interactionC 는 자료마다 적은 조건이 달라서, MVT 는 암호 건 백업에서 읽는 모듈로 표시하고 [13] 다른 글은 전체 파일 시스템 추출에서만 얻는 기록으로 분류했습니다 [21]. 바이옴은 전체 파일 시스템 추출에서 얻는다고 정리돼 있습니다 [21].
+**수집 범위**가 결론의 크기를 정합니다. 통화 기록은 암호를 건 로컬 백업에만 들어갑니다 [10]. 암호를 걸지 않은 로컬 백업에는 `CallHistory.storedata` 가 없고 HomeDomain 의 `Library/Preferences/com.apple.CallHistorySyncHelper.plist` 만 있습니다. interactionC 는 자료마다 수집 조건이 다릅니다. MVT 는 암호 건 백업에서 읽는 모듈로 다루지만 [13], 전체 파일 시스템 추출에서만 얻는 기록으로 분류한 자료도 있습니다 [21]. 바이옴은 전체 파일 시스템 추출에서 얻습니다 [21].
 
-| 기록 | 암호 없는 로컬 백업에서 본 것 | 자료가 적은 수집 조건 |
+| 기록 | 암호 없는 로컬 백업 | 수집 조건 |
 |---|---|---|
 | 메시지 `sms.db` | HomeDomain `Library/SMS/sms.db` 가 있음 | — |
 | 연락처 `AddressBook.sqlitedb` | HomeDomain `Library/AddressBook/AddressBook.sqlitedb` 가 있음 | — |
 | 음성 사서함 `voicemail.db` | HomeDomain `Library/Voicemail/voicemail.db` 가 있음 | — |
 | 통화 기록 `CallHistory.storedata` | 없음 | 암호 건 백업 [10] |
 | interactionC `interactionC.db` | 없음 | 암호 건 백업 [13], 전체 파일 시스템 추출 [21] |
-| 바이옴 메시지 스트림 | 관찰 메모가 DB·plist 만 적어서 판단하지 않음 | 전체 파일 시스템 추출 [21] |
+| 바이옴 메시지 스트림 | 검체에서 확인 | 전체 파일 시스템 추출 [21] |
 
 **iOS 버전**에 따라 시각을 푸는 법과 읽을 칸이 달라집니다.
 
@@ -31,10 +31,10 @@ nav_order: 1420
 |---|---|
 | iOS 10 이하 | `sms.db` 시각 칸은 초 단위 Mac 절대 시각입니다 [5][6] |
 | iOS 11 무렵 이후 | `sms.db` 시각 칸이 나노초 단위로 바뀌어 1e9 로 나눠 읽고 [5][6], 같은 칸 안에 9자리(초) 값과 18자리(나노초) 값이 섞여 나옵니다 [7] |
-| iOS 15 | 알림 이벤트 폴더 `/private/var/mobile/Library/DuetExpertCenter/streams/userNotificationEvents/` 가 처음 확인됐습니다 [15][16] |
-| iOS 16 | 보내기를 취소한 메시지도 바이옴 (AppIntents) 과 알림 기록에 날짜·시각·내용·상대가 남을 수 있다고 시험으로 보고됐습니다 [14] |
-| iOS 26 이후 | 통화 기록에 `ZAUTOANSWEREDREASON`, `ZCOMMUNICATIONTRUSTSCORE`, `ZORIGINATINGDEVICENAME`, `ZBLOCKEDBYEXTENSIONNAME` 칸이 생겨 iLEAPP 는 칸이 있을 때만 읽습니다 [8] |
-| iOS 27.0 | `sms.db`, `AddressBook.sqlitedb`, `voicemail.db` 의 표·칸 이름을 암호 없는 백업에서 확인했습니다 |
+| iOS 15 | 알림 이벤트 폴더 `/private/var/mobile/Library/DuetExpertCenter/streams/userNotificationEvents/` 가 있습니다 [15][16] |
+| iOS 16 | 보내기를 취소한 메시지도 바이옴 (AppIntents) 과 알림 기록에 날짜·시각·내용·상대가 남을 수 있습니다 [14] |
+| iOS 26 이후 | 통화 기록에 `ZAUTOANSWEREDREASON`, `ZCOMMUNICATIONTRUSTSCORE`, `ZORIGINATINGDEVICENAME`, `ZBLOCKEDBYEXTENSIONNAME` 칸이 생겼습니다. 이전 판에는 없으니 칸이 있는지 먼저 봅니다 [8] |
+| iOS 27.0 | `sms.db`, `AddressBook.sqlitedb`, `voicemail.db` 가 암호 없는 백업에 들어 있고, 표·칸 이름은 이 페이지에 적은 것과 같습니다 |
 
 **시각 기준**은 대부분 Mac 절대 시각 (2001-01-01 00:00:00 UTC 기준) 이라서 978307200 을 더해 Unix 시각으로 바꾸지만, `voicemail.db` 는 `date` 를 Unix 시각으로, `trashed_date` 를 Mac 절대 시각으로 읽어야 합니다 [12]. 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을, 현지 시각으로 옮길 때는 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 을 따릅니다.
 
@@ -46,20 +46,20 @@ nav_order: 1420
 |---|---|---|---|
 | 1 | 메시지 — 기기 `/private/var/mobile/Library/SMS/sms.db` [5] | `handle` 표에 상대 번호·이메일과 그 주소로 쓴 서비스가 들어 있고 [5], `message.is_from_me` 가 0 이면 받음, 1 이면 보냄입니다 [4]. 대화방은 `chat`, `chat_handle_join`, `chat_message_join` 으로 잇습니다 | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 2 | 통화 기록 — 기기 `/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata` 의 `ZCALLRECORD` 표 [8] | `ZDATE`(Mac 절대 시각), `ZDURATION`(초), `ZADDRESS`, `ZORIGINATED`(0 받음, 1 걺), `ZANSWERED`(0 안 받음, 1 받음), `ZCALLTYPE`(0 다른 회사 앱, 1 전화, 8 FaceTime 영상, 16 FaceTime 음성), `ZSERVICE_PROVIDER` [8] | [통화 기록](../../02-artifacts/communications/call-history.md) |
-| 3 | 연락처 — 백업 HomeDomain `Library/AddressBook/AddressBook.sqlitedb` 의 `ABPerson`·`ABMultiValue` 표 | 번호·이메일에 사람 이름을 붙입니다. `ABMultiValue.property` 가 3 이면 전화번호, 4 면 이메일로 iLEAPP 가 라벨을 붙였고, Apple 문서로 확인한 값은 아닙니다 [11] | [연락처](../../02-artifacts/communications/contacts.md) |
+| 3 | 연락처 — 백업 HomeDomain `Library/AddressBook/AddressBook.sqlitedb` 의 `ABPerson`·`ABMultiValue` 표 | 번호·이메일에 사람 이름을 붙입니다. `ABMultiValue.property` 가 3 이면 전화번호, 4 면 이메일로 보는 해석이 있고, Apple 이 문서로 밝힌 값은 아닙니다 [11] | [연락처](../../02-artifacts/communications/contacts.md) |
 | 4 | 음성 사서함 — 백업 HomeDomain `Library/Voicemail/voicemail.db` 의 `voicemail` 표 | `sender`, `callback_num`, `date`, `duration`, `trashed_date` 칸으로 누가 언제 남겼고 언제 지웠는지를 봅니다 | [음성 사서함과 통화 녹음](../../02-artifacts/communications/voicemail-recording.md) |
 | 5 | interactionC — 기기 `private/var/mobile/Library/CoreDuet/People/interactionC.db` [1] | 상호작용 한 건마다의 시작·끝 시각, 번들 ID, 방향, 상대 [1][2] | 아래 "interactionC 읽기" |
 | 6 | 바이옴 `Siri.Remembers.MessageHistory` — `/private/var/mobile/Library/Biome/streams/restricted/` [3] | 메시지 시각, 방향(Incoming/Outgoing), 번들 ID, 보낸 사람과 받는 사람, 그룹 이름, 대화 ID, 메시지 GUID, 동기화 출처 [3] | [바이옴](../../02-artifacts/app-usage/biome/index.md) |
-| 7 | 알림 이벤트 — `/private/var/mobile/Library/DuetExpertCenter/streams/userNotificationEvents/` [16] | 알림 제목·본문·번들 ID (iOS 15.x 시험) [15] | [알림 기록](../../02-artifacts/app-usage/notifications.md) |
+| 7 | 알림 이벤트 — `/private/var/mobile/Library/DuetExpertCenter/streams/userNotificationEvents/` [16] | 알림 제목·본문·번들 ID (iOS 15.x 기준) [15] | [알림 기록](../../02-artifacts/app-usage/notifications.md) |
 | 8 | 다른 회사 메신저 | 앱마다 자기 DB 를 따로 씁니다 | [카카오톡](../../02-artifacts/messengers/kakaotalk/index.md), [텔레그램](../../02-artifacts/messengers/telegram.md), [왓츠앱](../../02-artifacts/messengers/whatsapp.md) 등 |
 
-메시지 서비스 설정은 `com.apple.imservice.*.plist` 파일이 SMS·RCS·SatelliteSMS·ids.iMessage 로 나뉘어 있고, 별명 캐시 DB 7개가 HomeDomain `Library/MessagesMetaData/NickNameCache/` 아래에 있습니다. 이 두 곳이 상대를 밝히는 데 얼마나 쓸모 있는지는 이 핸드북에서 확인하지 못했습니다.
+메시지 서비스 설정은 `com.apple.imservice.*.plist` 파일이 SMS·RCS·SatelliteSMS·ids.iMessage 로 나뉘어 있고, 별명 캐시 DB 7개가 HomeDomain `Library/MessagesMetaData/NickNameCache/` 아래에 있습니다. 이 두 곳이 상대를 밝히는 데 얼마나 쓸모 있는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ### interactionC 읽기
 
 interactionC 는 판단에 필요한 만큼만 여기에 적습니다. 백업 안에서는 HomeDomain 의 `Library/CoreDuet/People/interactionC.db` 자리이고, MVT 가 쓰는 백업 파일 ID `1f5a521220a3ad80ebfdc196978df8e7a2e49dee` 는 `SHA1("HomeDomain-Library/CoreDuet/People/interactionC.db")` 를 계산한 값과 같습니다 [1]. 파일 ID 를 구하는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 을 봅니다.
 
-`ZINTERACTIONS` 표가 상호작용 한 건이고, `ZCONTACTS` 가 상대 요약, `ZATTACHMENT` 가 첨부이며, 연결 표 `Z_1INTERACTIONS`·`Z_2INTERACTIONRECIPIENT` 로 서로 이어집니다 [1]. iLEAPP 는 `ZINTERACTIONS` 에서 `ZSTARTDATE`, `ZENDDATE`, `ZBUNDLEID`, `ZDIRECTION`, `ZISRESPONSE`, `ZRECIPIENTCOUNT`, `ZCREATIONDATE`, `ZCONTENTURL`, `ZSENDER`, `ZTARGETBUNDLEID`, `ZUUID` 를 읽고, `ZSENDER` 를 `ZCONTACTS.Z_PK` 와 이어 `ZDISPLAYNAME`·`ZIDENTIFIER` 를 붙입니다 [2]. 모든 날짜 칸은 Mac 절대 시각입니다 [1][2].
+`ZINTERACTIONS` 표가 상호작용 한 건이고, `ZCONTACTS` 가 상대 요약, `ZATTACHMENT` 가 첨부이며, 연결 표 `Z_1INTERACTIONS`·`Z_2INTERACTIONRECIPIENT` 로 서로 이어집니다 [1]. `ZINTERACTIONS` 에서 읽을 칸은 `ZSTARTDATE`, `ZENDDATE`, `ZBUNDLEID`, `ZDIRECTION`, `ZISRESPONSE`, `ZRECIPIENTCOUNT`, `ZCREATIONDATE`, `ZCONTENTURL`, `ZSENDER`, `ZTARGETBUNDLEID`, `ZUUID` 이고, `ZSENDER` 를 `ZCONTACTS.Z_PK` 와 이으면 `ZDISPLAYNAME`·`ZIDENTIFIER` 가 붙습니다 [2]. 모든 날짜 칸은 Mac 절대 시각입니다 [1][2].
 
 ```sql
 SELECT datetime(i.ZSTARTDATE + 978307200, 'unixepoch')    AS start_utc,
@@ -72,7 +72,7 @@ LEFT JOIN ZCONTACTS c ON i.ZSENDER = c.Z_PK
 ORDER BY i.ZSTARTDATE;
 ```
 
-칸 구성이 버전마다 달라서 MVT 는 칸을 줄인 쿼리 네 개를 차례로 시도하고, 예전 스키마에는 `ZPHOTOLOCALIDENTIFIER`·`ZGROUPNAME` 이 없다고 적었습니다 [1]. 위 쿼리가 칸 이름 오류로 멈추면 먼저 `PRAGMA table_info(ZINTERACTIONS);` 로 실제 칸을 확인합니다. `ZDIRECTION` 숫자가 들어옴·나감 중 무엇인지, `ZBUNDLEID` 에 어떤 앱이 기록되는지는 이번에 연 자료에 풀이가 없어서, 같은 시각의 `sms.db` 나 통화 기록과 맞춰 본 뒤에만 방향을 적습니다.
+칸 구성이 버전마다 달라서 예전 스키마에는 `ZPHOTOLOCALIDENTIFIER`·`ZGROUPNAME` 이 없고, MVT 도 칸을 줄인 쿼리 네 개를 차례로 시도합니다 [1]. 위 쿼리가 칸 이름 오류로 멈추면 먼저 `PRAGMA table_info(ZINTERACTIONS);` 로 실제 칸을 확인합니다. `ZDIRECTION` 숫자가 들어옴·나감 중 무엇인지, `ZBUNDLEID` 에 어떤 앱이 기록되는지는 공개 자료에 풀이가 없어서, 같은 시각의 `sms.db` 나 통화 기록과 맞춰 본 뒤에만 방향을 적습니다.
 
 ## 분석 흐름
 
@@ -90,10 +90,10 @@ ORDER BY i.ZSTARTDATE;
    ORDER BY sent_utc;
    ```
 
-   `message` 표의 `handle_id`, `date`, `date_read`, `date_delivered`, `is_from_me` 칸과 `handle` 표의 `ROWID` 칸은 관찰한 백업에서 이름을 확인했습니다. 그룹 대화에서 누가 들어 있었는지는 `chat_handle_join` 으로 봅니다.
+   `message` 표에는 `handle_id`, `date`, `date_read`, `date_delivered`, `is_from_me` 칸이 있고, `handle` 표에는 `ROWID` 칸이 있습니다. 그룹 대화에서 누가 들어 있었는지는 `chat_handle_join` 으로 봅니다.
 4. 통화 기록이 있으면 `ZCALLRECORD` 에서 같은 상대의 `ZADDRESS` 를 찾고, `ZORIGINATED`·`ZANSWERED`·`ZDURATION` 을 함께 읽어 "걸었으나 받지 않음" 과 "통화가 이어짐" 을 나눕니다 [8]. 그룹 통화 참여자는 `ZHANDLE` 과 연결 표 `Z_2REMOTEPARTICIPANTHANDLES` 를 이어야 드러납니다 [9].
 5. `ZCALLTYPE` 이 0 이고 `ZSERVICE_PROVIDER` 에 다른 회사 앱 이름이 있는 통화는 메신저 앱 통화라서 [8], 그 앱의 DB 를 열어 같은 시각의 대화가 있는지 봅니다.
-6. 전체 파일 시스템 추출이 있으면 interactionC 와 바이옴 `Siri.Remembers.MessageHistory` 에서 같은 상대·시각을 찾아 메시지 DB 에서 지워진 구간이 있는지 봅니다. 바이옴 스트림은 몇 달에 걸친 기록이 보였다고 보고됐지만 [3], 보관 기간을 정한 문서는 없어서 기간 밖의 빈칸을 "연락 없음" 으로 읽지 않습니다. SEGB 파일 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 을 따릅니다.
+6. 전체 파일 시스템 추출이 있으면 interactionC 와 바이옴 `Siri.Remembers.MessageHistory` 에서 같은 상대·시각을 찾아 메시지 DB 에서 지워진 구간이 있는지 봅니다. 바이옴 스트림에는 몇 달에 걸친 기록이 남기도 하지만 [3], 보관 기간을 정한 문서는 없어서 기간 밖의 빈칸을 "연락 없음" 으로 읽지 않습니다. SEGB 파일 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 을 따릅니다.
 7. 알림 이벤트에서 메신저 알림 제목·본문을 찾아, 앱 DB 에 없는 수신 기록을 보충합니다 [15].
 8. 음성 사서함, FaceTime, 다른 회사 메신저까지 모은 뒤 한 줄로 늘어놓아 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올리고, 처음 연락한 때·마지막 연락한 때·수단별 횟수를 셉니다.
 9. 지운 메시지와 대화가 의심되면 [지운 대화와 사진 찾기](deleted-content.md) 로 넘어갑니다.

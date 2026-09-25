@@ -13,7 +13,7 @@ iOS 15 까지 KnowledgeC.db 에 있던 앱 전경 사용 기록(`/app/inFocus`)�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJECT` 표에서 `ZSTREAMNAME` 이 `/app/inFocus` 인 행이었습니다[1][3]. iOS 16 에서 이 기록이 바이옴 스트림으로 옮겨졌고[1][7], iOS 16 KnowledgeC.db 의 `ZSTREAMNAME` 칸에서 `app/inFocus` 값이 사라졌다는 보고가 있습니다[1]. KnowledgeC.db 파일 자체는 iOS 16 에도 남아 있어서[1][7], 파일이 있다고 앱 사용 기록까지 거기 있다고 보면 안 됩니다. 한 상용 도구 개발사는 "Application Focus" 기록을 바이옴에서 되살렸다고 소개했습니다[7].
+iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJECT` 표에서 `ZSTREAMNAME` 이 `/app/inFocus` 인 행이었습니다[1][3]. iOS 16 에서 이 기록이 바이옴 스트림으로 옮겨졌고[1][7], iOS 16 KnowledgeC.db 의 `ZSTREAMNAME` 칸에는 `app/inFocus` 값이 없습니다[1]. KnowledgeC.db 파일 자체는 iOS 16 에도 남아 있어서[1][7], 파일이 있다고 앱 사용 기록까지 거기 있다고 보면 안 됩니다. 상용 도구 가운데에는 바이옴에서 "Application Focus" 기록을 읽어 보여 주는 것도 있습니다[7].
 
 스트림 폴더 구조와 SEGB 형식은 [저장 위치와 스트림 (Streams)](streams.md)에서 다루고, 이 페이지는 앱 사용 스트림의 위치와 기록 내용, 해석만 다룹니다.
 
@@ -25,13 +25,13 @@ iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJE
 | 16 | `/private/var/db/biome/streams/restricted/_DKEvent.App.InFocus` | SEGB v1 | [1][3][6] |
 | 17–26 | iOS 16 과 같은 위치 | SEGB v2 | [2][6] |
 
-iLEAPP 는 2026-09-03 에 고친 파서에서 `*/[Bb]iome/streams/restricted/App.InFocus/local/*` 와 `*/[Bb]iome/streams/restricted/App.InFocus/remote/*` 두 경로 규칙으로 이 스트림을 찾습니다[5]. `[Bb]` 로 대소문자를 모두 받아서 `/private/var/db/biome` 과 `/private/var/mobile/Library/Biome` 양쪽을 잡습니다. 스트림 이름이 `_DKEvent.App.InFocus` 인 경우와 `App.InFocus` 인 경우가 각각 어느 iOS 버전, 어느 영역에 해당하는지는 이번 자료로 정확히 가르지 못해서, 검체에서는 두 이름을 모두 찾아봅니다. iOS 27 에서의 위치도 확인하지 못했습니다.
+iLEAPP 파서는 `*/[Bb]iome/streams/restricted/App.InFocus/local/*` 와 `*/[Bb]iome/streams/restricted/App.InFocus/remote/*` 두 경로 규칙으로 이 스트림을 찾습니다[5]. `[Bb]` 로 대소문자를 모두 받아서 `/private/var/db/biome` 과 `/private/var/mobile/Library/Biome` 양쪽을 잡습니다. 스트림 이름이 `_DKEvent.App.InFocus` 인 경우와 `App.InFocus` 인 경우가 각각 어느 iOS 버전, 어느 영역에 해당하는지는 공개 자료로 가려지지 않았으므로, 검체에서는 두 이름을 모두 찾아봅니다. iOS 27 에서의 위치도 검체에서 확인합니다.
 
-관찰한 백업의 HomeDomain `Library/Preferences/com.apple.appstored.plist` 에는 `AppUsageBiomeStartDate` (datetime) 라는 키가 있지만, 이 키가 `App.InFocus` 와 관련이 있는지는 확인하지 못했고 `App.InFocus` SEGB 파일은 관찰 기록에 없습니다. 바이옴을 얻으려면 어떤 수집이 필요한지는 [저장 위치와 스트림 (Streams)](streams.md)의 수집 범위 절에 있습니다.
+로컬 백업의 HomeDomain `Library/Preferences/com.apple.appstored.plist` 에는 `AppUsageBiomeStartDate` (datetime) 라는 키가 있습니다. 이 키와 `App.InFocus` 의 관계는 밝혀지지 않았고, 로컬 백업에는 `App.InFocus` SEGB 파일이 들어 있지 않습니다. 바이옴을 얻으려면 어떤 수집이 필요한지는 [저장 위치와 스트림 (Streams)](streams.md)의 수집 범위 절에 있습니다.
 
 ## 구조
 
-기록 하나의 페이로드는 프로토콜 버퍼이고, 공개된 해석이 두 가지 있습니다. 두 해석의 필드 번호가 서로 달라서 다른 스트림(스키마)을 읽은 결과로 보이지만, 그 까닭은 이번 자료로 확인하지 못했습니다.
+기록 하나의 페이로드는 프로토콜 버퍼이고, 공개된 해석이 두 가지 있습니다. 두 해석의 필드 번호가 서로 달라서 다른 스트림(스키마)을 읽은 결과로 보입니다.
 
 crush 자료는 `/app/inFocus` 기록을 SEGB v1·v2 공통으로 아래처럼 읽습니다[3]. 경로 표기는 `$` 가 페이로드 전체이고 점 뒤 숫자가 필드 번호입니다.
 
@@ -56,7 +56,7 @@ iLEAPP 는 `App.InFocus` 스트림을 아래처럼 읽습니다[5].
 
 iLEAPP 결과표의 칸은 `Timestamp`, `Start Time`, `SEGB State`, `Bundle ID`, `Action`, `Sync Origin`, `Filename`, `Offset` 입니다[5]. `SEGB State` 로 Written·Deleted 를, `Sync Origin` 으로 `local`·`remote` 를 가르고, `Filename` 과 `Offset` 으로 원본 파일의 기록 위치까지 되짚을 수 있습니다.
 
-iLEAPP 해석대로라면 앱이 앞에 나올 때와 뒤로 갈 때마다 기록이 하나씩 생기고, 사용 구간은 Foreground 기록과 그 뒤의 Background 기록을 짝지어 만들게 됩니다. 이 짝짓기 방식은 출처에 적혀 있지 않아서, 구간을 계산했다면 보고서에 분석가가 짝지은 결과라고 밝힙니다.
+iLEAPP 해석대로라면 앱이 앞에 나올 때와 뒤로 갈 때마다 기록이 하나씩 생기고, 사용 구간은 Foreground 기록과 그 뒤의 Background 기록을 짝지어 만들게 됩니다. 이 짝짓기 방식은 공개된 방법이 아니므로, 구간을 계산했다면 보고서에 분석가가 짝지은 결과라고 밝힙니다.
 
 ## 증거로서 의미
 
@@ -68,17 +68,17 @@ iLEAPP 해석대로라면 앱이 앞에 나올 때와 뒤로 갈 때마다 기�
 
 ## 시각 해석
 
-SEGB 기록 헤더의 시각은 2001-01-01 00:00 UTC 부터 센 초를 double 로 적은 Mac 절대 시각이고[1][3], iLEAPP 는 기록 시각을 UTC 로 둡니다[5]. crush 자료는 페이로드 안의 시각도 Cocoa 시각으로 자동 변환된다고 적었습니다[3]. 헤더 시각과 페이로드 시각(crush 해석의 시작·끝·기록 시각, iLEAPP 해석의 필드 4)은 서로 다른 값이라서, 보고할 때는 어느 칸의 시각인지 밝힙니다. 현지 시각은 [시간대와 시각 설정 (Time Zone)](../../system-account/time-zone.md)에서 기기 시간대를 확인한 뒤 바꾸고, 단위 변환은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)을 따릅니다.
+SEGB 기록 헤더의 시각은 2001-01-01 00:00 UTC 부터 센 초를 double 로 적은 Mac 절대 시각이고[1][3], iLEAPP 는 기록 시각을 UTC 로 둡니다[5]. crush 는 페이로드 안의 시각도 Cocoa 시각으로 자동 변환합니다[3]. 헤더 시각과 페이로드 시각(crush 해석의 시작·끝·기록 시각, iLEAPP 해석의 필드 4)은 서로 다른 값이라서, 보고할 때는 어느 칸의 시각인지 밝힙니다. 현지 시각은 [시간대와 시각 설정 (Time Zone)](../../system-account/time-zone.md)에서 기기 시간대를 확인한 뒤 바꾸고, 단위 변환은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)을 따릅니다.
 
-iOS 16 에서 관찰된 전환 이유 값에는 `com.apple.SpringBoard.transitionReason.homescreen`, `com.apple.SpringBoard.transitionReason.externalrequest`, `com.apple.SpringBoard.transitionReason.appswitcher`, `com.apple.SpringBoard.transitionReason.spotlight` 가 있습니다[1]. 상용 도구 자료도 "SpringBoard 홈 화면에서 Safari 로 전환" 같은 정보를 보여 준다고 적었습니다[7].
+iOS 16 의 전환 이유 값에는 `com.apple.SpringBoard.transitionReason.homescreen`, `com.apple.SpringBoard.transitionReason.externalrequest`, `com.apple.SpringBoard.transitionReason.appswitcher`, `com.apple.SpringBoard.transitionReason.spotlight` 가 있습니다[1]. 상용 도구에서도 "SpringBoard 홈 화면에서 Safari 로 전환" 같은 정보를 볼 수 있습니다[7].
 
-보존 기간은 iOS 16 조사에서 스트림 메타데이터의 `maxAge` 가 2,419,200초(28일)였고[1], iOS 17 이후 값은 확인하지 못했습니다.
+보존 기간은 iOS 16 에서 스트림 메타데이터의 `maxAge` 가 2,419,200초(28일)입니다[1]. iOS 17 이후 값은 검체의 메타데이터에서 확인합니다.
 
 ## 함정과 한계
 
-도구 결과에서 `remote` 기록을 걸러내지 않으면 다른 기기의 사용이 이 기기의 사용처럼 타임라인에 섞입니다[5][7]. iLEAPP 는 `tombstone` 폴더 파일을 건너뛰고[5], `tombstone` 안 파일을 해석하는 방법은 이번 자료로 확인하지 못해서, 도구가 보여 주지 않는 기록이 폴더에 남아 있을 수 있습니다.
+도구 결과에서 `remote` 기록을 걸러내지 않으면 다른 기기의 사용이 이 기기의 사용처럼 타임라인에 섞입니다[5][7]. iLEAPP 는 `tombstone` 폴더 파일을 건너뛰고[5], `tombstone` 안 파일을 해석하는 방법은 공개 자료가 없어서, 도구가 보여 주지 않는 기록이 폴더에 남아 있을 수 있습니다.
 
-필드 3 의 Foreground·Background 표시는 iLEAPP 스스로 해석이라고 밝혔고[5], crush 와 iLEAPP 의 필드 번호도 다릅니다[3][5]. 그래서 도구 한 가지 결과만 옮기지 말고 필드 번호와 원본 값을 함께 기록합니다. 기록에는 번들 ID 만 남아서 앱 이름은 [설치된 앱 (Installed Apps·applicationState.db)](../installed-apps.md) 같은 다른 기록과 맞춰 바꾸는데, 이 절차는 이번 자료에 나온 방법이 아닙니다. 번들 ID 를 읽는 법은 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에 있습니다.
+필드 3 의 Foreground·Background 표시는 iLEAPP 스스로 해석이라고 밝혔고[5], crush 와 iLEAPP 의 필드 번호도 다릅니다[3][5]. 그래서 도구 한 가지 결과만 옮기지 말고 필드 번호와 원본 값을 함께 기록합니다. 기록에는 번들 ID 만 남아서 앱 이름은 [설치된 앱 (Installed Apps·applicationState.db)](../installed-apps.md) 같은 다른 기록과 맞춰 바꿉니다. 번들 ID 를 읽는 법은 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에 있습니다.
 
 ## 직접 분석해 보기
 

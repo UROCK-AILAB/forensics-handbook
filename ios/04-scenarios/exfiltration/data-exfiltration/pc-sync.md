@@ -26,18 +26,18 @@ nav_order: 1600
 | 1 | 컴퓨터의 백업 폴더 `Info.plist` | 어느 기기의 백업인지, 마지막 백업 날짜 | [기기 식별자 (UDID·ECID·일련번호)](../../../01-foundations/value-decoding/device-identifiers.md) |
 | 2 | 백업 폴더 `Manifest.plist`·`Manifest.db` | 암호화 여부, 백업에 든 도메인과 파일 목록 | [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md) |
 | 3 | 기기의 `com.apple.MobileBackup.plist` | 백업 상태와 복원 이력의 키 | [초기화와 복원 흔적 (Erase·Restore)](../../../02-artifacts/system-account/erase-restore.md) |
-| 4 | 기기의 `com.apple.mobile.ldpair.plist` | 뜻을 확인하지 못함 | [설정 값 (Preferences)](../../../02-artifacts/system-account/preferences.md) |
+| 4 | 기기의 `com.apple.mobile.ldpair.plist` | 공개 자료 없음 | [설정 값 (Preferences)](../../../02-artifacts/system-account/preferences.md) |
 
 ### 컴퓨터에 남은 백업 폴더
 
-관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 것이고, 최상위에 `Info.plist`, `Manifest.db`(`-shm`·`-wal` 함께), `Manifest.plist`, `Status.plist` 파일이 있었습니다. 두 plist 의 키는 아래와 같습니다.
+Windows 의 Apple 기기 앱으로 만든 백업은 최상위에 `Info.plist`, `Manifest.db`(`-shm`·`-wal` 함께), `Manifest.plist`, `Status.plist` 파일이 있습니다. 두 plist 의 키는 아래와 같습니다.
 
 | 파일 | 키 |
 |---|---|
 | `Info.plist` | Applications, Build Version, Device Name, Devices Version, Display Name, GUID, IMEI, Installed Applications, Last Backup Date, MEID, Product Name, Product Type, Product Version, Serial Number, Target Identifier, Target Type, Unique Identifier, Windows OS Version, iTunes Files, iTunes Settings, 이름을 가린 키 하나 |
 | `Manifest.plist` | IsEncrypted, Version, Containers, Date, SystemDomainsVersion, WasPasscodeSet, Lockdown, Applications, BackupKeyBag |
 
-`Info.plist` 의 Serial Number·Unique Identifier·Product Type·Product Version 을 조사 대상 기기의 값과 맞추면 이 백업이 그 기기의 것인지 가릴 수 있고, 식별자 읽는 법은 [기기 식별자 (UDID·ECID·일련번호)](../../../01-foundations/value-decoding/device-identifiers.md) 에 있습니다. Windows OS Version 키는 Windows 에서 만든 백업이라서 들어간 것으로 보이지만, Mac 에서 만든 백업에 이 키가 없는지는 확인하지 못했습니다. Last Backup Date 와 `Manifest.plist` 의 Date 가 어떤 시각을 담는지, 어느 시간대 기준인지는 이 페이지의 자료로 확인하지 못했으니 원래 값을 함께 적습니다.
+`Info.plist` 의 Serial Number·Unique Identifier·Product Type·Product Version 을 조사 대상 기기의 값과 맞추면 이 백업이 그 기기의 것인지 가릴 수 있고, 식별자 읽는 법은 [기기 식별자 (UDID·ECID·일련번호)](../../../01-foundations/value-decoding/device-identifiers.md) 에 있습니다. Windows OS Version 키는 Windows 에서 만든 백업이라서 들어간 것으로 보입니다. Last Backup Date 와 `Manifest.plist` 의 Date 가 어떤 시각을 담는지, 어느 시간대 기준인지 밝힌 공개 자료가 없으니 원래 값을 함께 적습니다.
 
 `Manifest.db` 의 Files 표에는 fileID, domain, relativePath, flags, file 칸이 있습니다. domain·relativePath 로 백업에 든 파일 목록을 뽑으면 이 백업으로 컴퓨터에 옮겨진 자료의 범위를 볼 수 있습니다.
 
@@ -45,13 +45,13 @@ nav_order: 1600
 SELECT domain, relativePath, flags FROM Files ORDER BY domain, relativePath;
 ```
 
-컴퓨터 쪽 페어링 기록(lockdown 폴더)의 위치와 형식, 사진 앱으로 사진을 PC 로 가져간 흔적이 기기에 남는지는 이 페이지의 자료로 확인하지 못했습니다. 컴퓨터 쪽 분석은 그 운영체제의 포렌식 자료를 따릅니다.
+컴퓨터 쪽 페어링 기록(lockdown 폴더)의 위치와 형식은 그 운영체제의 포렌식 자료를 따릅니다. 사진 앱으로 사진을 PC 로 가져간 흔적이 기기에 남는지는 공개 자료가 없어 검체로 확인해야 합니다.
 
 ### 기기에 남는 설정 파일
 
-기기 쪽에서는 `HomeDomain :: Library/Preferences/com.apple.MobileBackup.plist` 를 봅니다. 이 파일의 BackupStateInfo 에는 date, isCloud, state, progress, errors, backupAttemptCount 같은 하위 키가 있고, RestoreInfo 에는 BackupBuildVersion, DeviceBuildVersion, RestoreDate, WasCloudRestore 가 있습니다. 로컬 백업을 했을 때도 BackupStateInfo 에 기록이 남는지는 확인하지 못했습니다. RestoreInfo 는 이 기기가 백업에서 복원된 이력을 보여 주고, 해석은 [초기화와 복원 흔적 (Erase·Restore)](../../../02-artifacts/system-account/erase-restore.md) 을 따릅니다.
+기기 쪽에서는 `HomeDomain :: Library/Preferences/com.apple.MobileBackup.plist` 를 봅니다. 이 파일의 BackupStateInfo 에는 date, isCloud, state, progress, errors, backupAttemptCount 같은 하위 키가 있고, RestoreInfo 에는 BackupBuildVersion, DeviceBuildVersion, RestoreDate, WasCloudRestore 가 있습니다. 로컬 백업을 했을 때도 BackupStateInfo 에 기록이 남는지는 검체에서 확인합니다. RestoreInfo 는 이 기기가 백업에서 복원된 이력을 보여 주고, 해석은 [초기화와 복원 흔적 (Erase·Restore)](../../../02-artifacts/system-account/erase-restore.md) 을 따릅니다.
 
-`HomeDomain :: Library/Preferences/com.apple.mobile.ldpair.plist` 에는 가려진 실수형 키 하나만 있었고, 파일 이름이 페어링을 떠올리게 하지만 무엇을 기록하는지는 확인하지 못했습니다.
+`HomeDomain :: Library/Preferences/com.apple.mobile.ldpair.plist` 에는 실수형 키 하나가 있습니다. 파일 이름이 페어링을 떠올리게 하지만 무엇을 기록하는지 밝힌 공개 자료가 없습니다.
 
 ## 분석 흐름
 
@@ -66,7 +66,7 @@ SELECT domain, relativePath, flags FROM Files ORDER BY domain, relativePath;
 
 컴퓨터에 이 기기의 백업이 있다는 사실은 기기 자료가 그 컴퓨터로 복사된 적이 있다는 뜻이지만, 그 컴퓨터를 쓴 사람이 누구인지는 따로 입증합니다.
 
-신뢰한 컴퓨터 목록은 설정 → 일반 → 전송 또는 재설정 → 재설정 → "위치 및 개인정보 보호 재설정" 으로 지울 수 있습니다[1]. 그래서 기기에 신뢰 관계가 보이지 않아도 컴퓨터에 연결한 적이 없다고 쓰지 않습니다. 이 재설정이 기기에 흔적을 남기는지는 확인하지 못했습니다.
+신뢰한 컴퓨터 목록은 설정 → 일반 → 전송 또는 재설정 → 재설정 → "위치 및 개인정보 보호 재설정" 으로 지울 수 있습니다[1]. 그래서 기기에 신뢰 관계가 보이지 않아도 컴퓨터에 연결한 적이 없다고 쓰지 않습니다. 이 재설정이 기기에 흔적을 남기는지는 공개 자료가 없어 검체로 확인해야 합니다.
 
 암호화하지 않은 백업과 암호화한 백업은 담긴 항목이 다릅니다[2]. 백업에 어떤 자료가 없다고 해서 그 자료를 옮기지 않았다고 쓰기 전에 `Manifest.plist` 의 IsEncrypted 부터 확인합니다.
 

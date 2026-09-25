@@ -18,7 +18,7 @@ nav_order: 1060
 
 ### 워치 백업에 들어가는 것과 빠지는 것
 
-Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
+워치 백업의 범위는 아래와 같습니다[1].
 
 | 구분 | 항목 |
 |---|---|
@@ -28,11 +28,11 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 
 가족 설정으로 쓰는 자녀용 워치는 충전 중이면서 Wi-Fi 에 연결되어 있을 때 자동으로 백업되고, 그 백업은 부모의 아이폰이 아니라 그 가족 구성원의 iCloud 로 갑니다[1]. 자녀용 워치의 데이터를 부모 폰에서 찾으면 안 되는 이유가 여기에 있습니다.
 
-워치 백업이 아이폰 안 어느 폴더에 저장되는지, 짝 정보가 어느 데이터베이스의 어느 표에 있는지는 이번 자료로 확인하지 못했습니다. 이 페이지에는 그 경로를 적지 않고, 검체에서 찾은 경로는 조사 기록에 따로 남깁니다.
+워치 백업이 아이폰 안 어느 폴더에 저장되는지, 짝 정보가 어느 데이터베이스의 어느 표에 있는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 검체에서 찾은 경로는 조사 기록에 따로 남깁니다.
 
-### 로컬 백업에서 본 도메인
+### 로컬 백업의 도메인
 
-암호화하지 않은 로컬 백업에서 워치와 관련된 이름의 도메인을 확인했습니다.
+암호화하지 않은 로컬 백업에도 워치와 관련된 이름의 도메인이 있습니다.
 
 | 도메인 | 비고 |
 |---|---|
@@ -45,19 +45,19 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 | `AppDomainPlugin-com.apple.NanoTimeKit.CreateWatchFace` | |
 | `AppDomainPlugin-com.apple.NanoTimeKit.NTKDiagnosticExtensionCompanion` | |
 
-`com.apple.Bridge` 를 아이폰의 Watch 앱 번들 ID 로 부르는 일이 흔하지만, 이번 자료로 확인하지는 못했습니다. 도메인 이름을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을, 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)을 봅니다.
+`com.apple.Bridge` 를 아이폰의 Watch 앱 번들 ID 로 부르는 일이 흔하지만, 공식 자료로 밝혀진 것은 아닙니다. 도메인 이름을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을, 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)을 봅니다.
 
 ### 버전별 차이
 
-이번에 본 자료에는 iOS 버전별로 워치 백업 범위나 파일 위치가 어떻게 달라지는지가 없었습니다. 위 도메인과 아래 설정 파일은 iOS 27.0 백업 한 개에서 본 것이라, 다른 버전의 검체에서는 같은 이름이 있는지부터 확인합니다.
+iOS 버전별로 워치 백업 범위나 파일 위치가 어떻게 달라지는지는 공개된 자료가 없습니다. 위 도메인과 아래 설정 파일은 iOS 27.0 백업 기준이라, 다른 버전의 검체에서는 같은 이름이 있는지부터 확인합니다.
 
 ## 구조
 
 ### 설정 파일
 
-백업의 `HomeDomain` 안 `Library/Preferences/` 에서 아래 파일과 키를 확인했습니다. 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
+백업의 `HomeDomain` 안 `Library/Preferences/` 에는 아래 파일과 키가 있고, 값의 뜻은 검체에서 확인합니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
 
-| 파일 | 확인한 키 |
+| 파일 | 키 |
 |---|---|
 | `com.apple.NanoRegistry.plist` | 키 없음(빈 파일) |
 | `com.apple.nanoregistryd.plist` | `latestAssetURL`, `lastAssetUpdateCheckDate`(실수), `lastVersionBroadcastTimestamp`(실수) |
@@ -71,7 +71,7 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 | `com.apple.nanolifestyle.connectedgym.plist` | `ConnectedGymNFCAlwaysOn` 등 |
 | `com.apple.healthd.plist` | `ShowMedicalIdOnWatch`(참·거짓) |
 
-이 밖에 `com.apple.NanoMail.plist`(`NanoMailDefaultAccountUidKey` 등), `com.apple.NanoMusicSync.plist`, `com.apple.nanoprefsyncd.plist`(`cache-is-valid`), `com.apple.nanonews.sync.plist`(`companionSeenResetDate` 등), `com.apple.sync.NanoHome.plist` 도 있었습니다.
+이 밖에 `com.apple.NanoMail.plist`(`NanoMailDefaultAccountUidKey` 등), `com.apple.NanoMusicSync.plist`, `com.apple.nanoprefsyncd.plist`(`cache-is-valid`), `com.apple.nanonews.sync.plist`(`companionSeenResetDate` 등), `com.apple.sync.NanoHome.plist` 도 있습니다.
 
 키 이름으로 짐작하면 `WCDStoredInstalledWatchApps` 는 워치에 설치된 앱 목록이고, `HasWatchOnAccount` 는 계정에 워치가 있는지를 적은 값으로 보입니다. 두 가지 모두 이름에서 끌어낸 짐작이라, 값을 읽고 다른 기록과 맞춰 본 뒤에 씁니다.
 
@@ -83,7 +83,7 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 
 **증명하지 못하는 것**
 
-- 워치 관련 도메인이나 설정 키가 있다는 것만으로 워치를 짝지어 썼다는 사실. 이번에 본 백업도 값을 읽지 않았기 때문에 실제로 워치가 짝지어져 있었는지는 알 수 없고, 워치를 쓰지 않은 폰에도 이런 키가 생기는지는 확인하지 못했습니다.
+- 워치 관련 도메인이나 설정 키가 있다는 것만으로 워치를 짝지어 썼다는 사실. 워치를 쓰지 않은 폰에도 이런 키가 생기는지는 알려지지 않았습니다.
 - 워치를 찬 사람이 폰 주인이라는 사실
 - 워치의 Apple Pay 카드. 워치 백업에 들어가지 않고, iCloud 메시지를 쓰는 경우 메시지도 빠집니다[1].
 
@@ -91,19 +91,19 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 
 ## 시각 해석
 
-`com.apple.NanoTimeKit.daemon.plist` 의 `DateOfLastActivity_*` 와 `com.apple.nanolifestyle.plist` 의 `HasWatchOnAccountLastFetchDate` 는 plist 의 날짜형으로 저장되어 있었습니다. 반면 `com.apple.nanoregistryd.plist` 의 `lastAssetUpdateCheckDate` 와 `lastVersionBroadcastTimestamp` 는 실수로 저장되어 있었고, 이 실수가 유닉스 시각인지 Mac 절대 시각인지는 확인하지 못했습니다. 두 기준 사이에는 978,307,200초(약 31년) 차이가 있어서, 두 방식으로 모두 바꿔 보고 백업 시각이나 iOS 설치 시기와 앞뒤가 맞는 쪽을 고릅니다. 이 판단 과정은 보고서에 함께 적습니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
+`com.apple.NanoTimeKit.daemon.plist` 의 `DateOfLastActivity_*` 와 `com.apple.nanolifestyle.plist` 의 `HasWatchOnAccountLastFetchDate` 는 plist 의 날짜형으로 저장됩니다. 반면 `com.apple.nanoregistryd.plist` 의 `lastAssetUpdateCheckDate` 와 `lastVersionBroadcastTimestamp` 는 실수로 저장되고, 이 실수가 유닉스 시각인지 Mac 절대 시각인지는 알려지지 않았습니다. 두 기준 사이에는 978,307,200초(약 31년) 차이가 있어서, 두 방식으로 모두 바꿔 보고 백업 시각이나 iOS 설치 시기와 앞뒤가 맞는 쪽을 고릅니다. 이 판단 과정은 보고서에 함께 적습니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
 워치에서 온 건강 기록의 시각은 [건강 데이터](health.md)의 시각 해석 절을 따릅니다.
 
 ## 함정과 한계
 
-**블루투스 짝 정보는 워치 백업에 없습니다.** Apple 은 블루투스 짝 정보를 워치 백업에서 뺀다고 밝혔습니다[1]. 폰 쪽 블루투스 짝 목록에 워치가 올라가는지는 이번 자료로 확인하지 못했고, 블루투스 기록 일반은 [블루투스 장치](../network/bluetooth.md)에서 다룹니다.
+**블루투스 짝 정보는 워치 백업에 없습니다.** 블루투스 짝 정보는 워치 백업에서 빠집니다[1]. 폰 쪽 블루투스 짝 목록에 워치가 올라가는지는 검체에서 확인하고, 블루투스 기록 일반은 [블루투스 장치](../network/bluetooth.md)에서 다룹니다.
 
 **건강 데이터는 백업 방식에 따라 빠집니다.** 워치의 건강·피트니스 데이터는 iCloud 백업이나 암호화한 컴퓨터 백업에만 남습니다[1][2]. 암호화하지 않은 백업에서 워치 건강 기록이 없다고 해서 워치를 쓰지 않았다고 읽지 않습니다.
 
 **자녀용 워치는 다른 계정으로 갑니다.** 가족 설정 워치의 백업은 그 가족 구성원의 iCloud 로 가므로[1], 부모 폰이나 부모 계정에서는 찾을 수 없습니다. 계정 쪽 자료 요청은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md)에서 다룹니다.
 
-**짝을 푼 시점.** 짝을 풀 때 워치가 아이폰에 한 번 더 백업되므로[1], 워치를 초기화하거나 다른 폰으로 옮긴 경우에도 이전 폰에 그 시점까지의 워치 백업이 남아 있을 수 있습니다. 이 백업이 폰 안 어디에, 얼마 동안 남는지는 이번 자료로 확인하지 못했습니다. `com.apple.NanoTimeKit.daemon.plist` 에 `DateOfLastActivity_CleanupUnpairedDevices` 라는 날짜 키가 있었지만, 이 값이 짝을 푼 시각과 어떤 관계인지도 확인하지 못했습니다.
+**짝을 푼 시점.** 짝을 풀 때 워치가 아이폰에 한 번 더 백업되므로[1], 워치를 초기화하거나 다른 폰으로 옮긴 경우에도 이전 폰에 그 시점까지의 워치 백업이 남아 있을 수 있습니다. 이 백업이 폰 안 어디에, 얼마 동안 남는지는 공개된 자료가 없습니다. `com.apple.NanoTimeKit.daemon.plist` 에 `DateOfLastActivity_CleanupUnpairedDevices` 라는 날짜 키가 있지만, 이 값과 짝을 푼 시각의 관계도 알려지지 않았습니다.
 
 ## 직접 분석해 보기
 

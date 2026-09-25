@@ -18,7 +18,7 @@ nav_order: 510
 
 ## 위치와 버전별 차이
 
-기기 안에서는 `/private/var/mobile/Library/AddressBook/` 아래에 있고, iLEAPP 는 `AddressBook*.sqlitedb` 이름으로 찾습니다 [1]. 로컬 백업에서는 다음 파일로 보였습니다.
+기기 안에서는 `/private/var/mobile/Library/AddressBook/` 아래에 있고, iLEAPP 는 `AddressBook*.sqlitedb` 이름으로 찾습니다 [1]. 로컬 백업에서는 다음 파일에 있습니다.
 
 | 백업 경로 | 내용 |
 |---|---|
@@ -28,15 +28,15 @@ nav_order: 510
 | `AppDomain-com.apple.MobileAddressBook :: Library/Application Support/CNDuplication/ManagedDuplicateStore.sqlite` | 중복 연락처 관련으로 보이는 DB |
 | `HomeDomain :: Library/AddressBook/Family/family.plist` | 키 `Mappings`, `Generation` |
 
-연락처 앱의 백업 도메인 이름은 `AppDomain-com.apple.MobileAddressBook` 이었습니다. 번들 ID 와 도메인의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
+연락처 앱의 백업 도메인 이름은 `AppDomain-com.apple.MobileAddressBook` 입니다. 번들 ID 와 도메인의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
 
-버전별 차이를 표로 정리할 만큼 확인한 자료는 없습니다. iLEAPP 는 `ABStore` 표도 읽는데 [1], 관찰한 iOS 27.0 백업의 표 목록에는 `ABStore` 가 없었습니다. 다만 관찰 과정에서 이 DB 를 끝까지 열지 못한 오류가 기록되어 있어서, 표가 정말 없어진 것인지 목록이 덜 읽힌 것인지는 가리지 못했습니다.
+버전별 차이를 표로 정리한 공개 자료는 없습니다. iLEAPP 는 `ABStore` 표도 읽지만 [1], iOS 27.0 백업에서는 이 표가 목록에 보이지 않을 수 있습니다. 이 DB 는 끝까지 열리지 않고 오류가 나기도 해서, 표가 없으면 표가 정말 없어진 것인지 목록이 덜 읽힌 것인지부터 가립니다.
 
 ## 구조
 
 ### AddressBook.sqlitedb
 
-관찰한 표는 `ABAccount`, `ABGroup`, `ABGroupChanges`, `ABGroupMembers`, `ABMultiValue`, `ABMultiValueEntry`, `ABMultiValueEntryKey`, `ABMultiValueLabel`, `ABPerson`, `ABPersonChanges` 입니다. 분석의 뼈대는 아래 네 표입니다.
+표는 `ABAccount`, `ABGroup`, `ABGroupChanges`, `ABGroupMembers`, `ABMultiValue`, `ABMultiValueEntry`, `ABMultiValueEntryKey`, `ABMultiValueLabel`, `ABPerson`, `ABPersonChanges` 입니다. 분석의 뼈대는 아래 네 표입니다.
 
 | 표 | 주요 칸 | 역할 |
 |---|---|---|
@@ -47,7 +47,7 @@ nav_order: 510
 
 `ABPerson` 에는 이 밖에도 발음·정렬용 칸과 `MemojiMetadata`, `Wallpaper`, `WallpaperMetadata`, `SensitiveContentConfiguration`, `ImageSyncFailedTime` 같은 사진·포스터 관련 칸까지 약 60개가 있습니다.
 
-`ABMultiValue.property` 는 값의 종류를 숫자로 적는데, iLEAPP 는 다음처럼 읽습니다 [1].
+`ABMultiValue.property` 는 값의 종류를 숫자로 적고, iLEAPP 는 다음처럼 읽습니다 [1].
 
 | property | 종류 |
 |---|---|
@@ -59,11 +59,11 @@ nav_order: 510
 | 23 | 관계 이름 |
 | 46 | 프로필 |
 
-iLEAPP 작성자는 이 숫자를 밝힌 Apple 문서를 찾지 못했고 DB 의 라벨과 맞춰 정했다고 적었습니다 [1]. 검체마다 라벨과 함께 보고 맞는지 확인합니다.
+이 숫자를 밝힌 Apple 문서는 없고, 위 표는 iLEAPP 가 DB 의 라벨과 맞춰 정한 값입니다 [1]. 검체마다 라벨과 함께 보고 맞는지 확인합니다.
 
-라벨은 `_$!<Mobile>!$_` 처럼 앞뒤를 `_$!<` 와 `>!$_` 로 감싼 형태로 저장되어 iLEAPP 가 이 표시를 벗겨 "Mobile" 로 보여 줍니다 [1]. 사용자가 직접 만든 라벨도 같은 모양인지는 확인하지 못했습니다.
+라벨은 `_$!<Mobile>!$_` 처럼 앞뒤를 `_$!<` 와 `>!$_` 로 감싼 형태로 저장되어 iLEAPP 가 이 표시를 벗겨 "Mobile" 로 보여 줍니다 [1]. 사용자가 직접 만든 라벨도 같은 모양인지는 공개 자료가 없어 검체에서 확인합니다.
 
-`ABPersonChanges` 와 `ABGroupChanges` 는 이름과 칸(`record`, `type`, `sequence_number` 등)으로 보아 변경을 추적하는 표로 보이지만, 무엇이 언제 들어가고 언제 비워지는지는 확인하지 못했습니다. `ABAccount` 와 `StoreID`, `ExternalIdentifier` 칸으로 보아 연락처가 여러 계정 저장소에서 올 수 있는 구조이지만, 실제 동작을 설명한 자료는 이번에 확인하지 못했습니다.
+`ABPersonChanges` 와 `ABGroupChanges` 는 이름과 칸(`record`, `type`, `sequence_number` 등)으로 보아 변경을 추적하는 표로 보입니다. 무엇이 언제 들어가고 언제 비워지는지는 공개 자료가 없어 검체에서 확인합니다. `ABAccount` 와 `StoreID`, `ExternalIdentifier` 칸으로 보아 연락처가 여러 계정 저장소에서 올 수 있는 구조입니다.
 
 ### AddressBookImages.sqlitedb
 
@@ -71,15 +71,15 @@ iLEAPP 작성자는 이 숫자를 밝힌 Apple 문서를 찾지 못했고 DB 의
 
 ### CNContactMetadata.db 와 그 밖의 파일
 
-`CNContactMetadata.db` 에는 `ZCNCONTACTIMAGE`(`ZCONTACTIDENTIFIER`, `ZIMAGEDATA`, `ZDELETIONDATE`, `ZLASTUSEDDATE` 등)와 `ZCNCONTACTPOSTER`(`ZCONTACTIDENTIFIER`, `ZPOSTERDATA`, `ZCONTENTISSENSITIVE`, `ZDELETIONDATE`, `ZLASTUSEDDATE` 등) 표가 있고, CloudKit 동기화 표(`ANSCK` 로 시작하는 표)도 여럿 있습니다. 칸 이름으로 보아 연락처 사진과 연락처 포스터의 기록이지만 `ZDELETIONDATE` 가 언제 채워지는지는 확인하지 못했습니다.
+`CNContactMetadata.db` 에는 `ZCNCONTACTIMAGE`(`ZCONTACTIDENTIFIER`, `ZIMAGEDATA`, `ZDELETIONDATE`, `ZLASTUSEDDATE` 등)와 `ZCNCONTACTPOSTER`(`ZCONTACTIDENTIFIER`, `ZPOSTERDATA`, `ZCONTENTISSENSITIVE`, `ZDELETIONDATE`, `ZLASTUSEDDATE` 등) 표가 있고, CloudKit 동기화 표(`ANSCK` 로 시작하는 표)도 여럿 있습니다. 칸 이름으로 보아 연락처 사진과 연락처 포스터의 기록으로 보이고, `ZDELETIONDATE` 가 언제 채워지는지는 검체에서 확인합니다.
 
-`ManagedDuplicateStore.sqlite` 에는 `ZDUPLICATESET`(`ZISIGNORED`, `ZPRIMARYID`, `ZSIGNATURE` 등)과 `ZDUPLICATECOHORT` 표가 있고, 같은 이름의 파일이 `AppDomain-com.apple.mobilephone` 아래에도 있었습니다. 이름으로 보아 중복 연락처를 묶는 데 쓰는 것으로 보이지만 용도는 확인하지 못했습니다. 설정 파일 가운데 `com.apple.contacts.sharedProfile.plist` 에는 `LastBannerInteractionDate`, `LastBannerRevealDate` 키가 있었습니다.
+`ManagedDuplicateStore.sqlite` 에는 `ZDUPLICATESET`(`ZISIGNORED`, `ZPRIMARYID`, `ZSIGNATURE` 등)과 `ZDUPLICATECOHORT` 표가 있고, 같은 이름의 파일이 `AppDomain-com.apple.mobilephone` 아래에도 있습니다. 이름으로 보아 중복 연락처를 묶는 데 쓰는 것으로 보입니다. 설정 파일 가운데 `com.apple.contacts.sharedProfile.plist` 에는 `LastBannerInteractionDate`, `LastBannerRevealDate` 키가 있습니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 기기의 연락처 저장소에 이 이름과 이 번호가 한 사람으로 묶여 있었다는 사실과, 그 연락처를 만든 시각·마지막으로 고친 시각이 기록되어 있다는 사실을 보여 줍니다 [1]. 통화 기록이나 메시지의 번호에 이름을 붙여 읽을 근거가 됩니다.
 
-**증명하지 못하는 것.** 연락처에 이름이 있다고 그 번호의 실제 사용자가 그 사람이라는 뜻은 아니고, 사용자가 붙인 이름일 뿐입니다. 연락처가 이 기기에서 직접 입력되었는지, 계정 동기화로 들어왔는지도 이 표만으로는 가리지 못합니다. 지운 연락처가 어떻게 처리되는지 확인한 자료가 없어서, 연락처에 없다고 사용자가 그 사람을 몰랐다고 쓸 수도 없습니다.
+**증명하지 못하는 것.** 연락처에 이름이 있다고 그 번호의 실제 사용자가 그 사람이라는 뜻은 아니고, 사용자가 붙인 이름일 뿐입니다. 연락처가 이 기기에서 직접 입력되었는지, 계정 동기화로 들어왔는지도 이 표만으로는 가리지 못합니다. 지운 연락처가 어떻게 처리되는지 알려져 있지 않아서, 연락처에 없다고 사용자가 그 사람을 몰랐다고 쓸 수도 없습니다.
 
 보고서에는 "이 기기의 연락처에 번호 X 가 '홍길동' 이라는 이름으로 저장되어 있고, 그 연락처의 생성 시각은 T 로 기록되어 있다" 처럼 씁니다.
 
@@ -87,13 +87,13 @@ iLEAPP 작성자는 이 숫자를 밝힌 Apple 문서를 찾지 못했고 DB 의
 
 `CreationDate` 와 `ModificationDate` 는 Mac 절대 시각, 곧 2001-01-01 00:00:00 UTC 부터 흐른 초로 읽습니다 [1]. 값은 UTC 이고 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다. `ModificationDate` 는 마지막으로 고친 한 시각만 남아서 무엇을 고쳤는지는 알려 주지 않습니다.
 
-`Birthday` 는 iLEAPP 가 다른 함수로 따로 바꿀 만큼 다른 값이라서 [1], 두 시각 칸과 같은 방식으로 읽으면 안 됩니다. 저장 형식은 이번에 확인하지 못했습니다. 계정 동기화로 들어온 연락처에서 생성 시각이 무엇을 뜻하는지(이 기기에 처음 들어온 때인지, 원래 만든 때인지)도 확인하지 못했으니, 생성 시각을 "사용자가 입력한 시각" 으로 단정하지 않습니다.
+`Birthday` 는 iLEAPP 가 다른 함수로 따로 바꿀 만큼 다른 값이라서 [1], 두 시각 칸과 같은 방식으로 읽으면 안 됩니다. 저장 형식은 검체에서 확인합니다. 계정 동기화로 들어온 연락처에서 생성 시각이 무엇을 뜻하는지(이 기기에 처음 들어온 때인지, 원래 만든 때인지)도 밝혀지지 않았으니, 생성 시각을 "사용자가 입력한 시각" 으로 단정하지 않습니다.
 
 ## 함정과 한계
 
 - **번호 표기 차이.** 연락처의 번호와 통화 기록의 번호가 국가 번호·하이픈·공백 때문에 글자 그대로는 맞지 않을 수 있으니, 숫자만 남기고 끝자리 기준으로 맞춰 본 뒤 맞춘 방법을 보고서에 적습니다.
 - **property 숫자.** 종류 번호는 도구 작성자가 라벨로 맞춘 값입니다 [1].
-- **열리지 않는 DB.** 관찰에서도 이 DB 를 끝까지 읽지 못한 오류가 났습니다. 표 목록이 비거나 오류가 나면 WAL 파일을 함께 복사했는지, 사본이 온전한지부터 봅니다. SQLite 의 WAL 과 손상 처리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+- **열리지 않는 DB.** 이 DB 는 끝까지 읽히지 않고 오류가 나기도 합니다. 표 목록이 비거나 오류가 나면 WAL 파일을 함께 복사했는지, 사본이 온전한지부터 봅니다. SQLite 의 WAL 과 손상 처리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 - **사진 DB 누락.** 사진은 다른 파일에 있어서 `AddressBook.sqlitedb` 만 수집하면 빠집니다.
 
 ## 직접 분석해 보기

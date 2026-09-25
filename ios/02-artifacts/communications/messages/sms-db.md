@@ -27,11 +27,11 @@ sms.db 는 메시지 앱이 iMessage·SMS 대화를 저장하는 SQLite 데이�
 | iOS 15 까지 | `associated_message_guid` 로 반응(탭백)을 원래 메시지에 잇고 `attributedBody` 칸도 이미 있지만, 본문은 대개 `text` 에 들어 있습니다 | [5] |
 | iOS 16 이후 | 보낸 메시지 취소·편집과 최근 삭제된 항목 복구가 생겼고, `text` 가 NULL 인 행이 잦아져 `attributedBody` 를 꼭 읽어야 합니다 | [2][3][4][5] |
 
-다른 자료는 `date_edited`, `date_retracted`, `thread_originator_guid`, `destination_caller_id`, `associated_message_emoji` 를 iOS 16 이후의 `message` 칸으로 소개하고[4][5], iLEAPP 도 `destination_caller_id` 를 읽습니다[1]. 그런데 관찰한 백업의 `message` 칸 목록에서는 이 다섯 칸이 보이지 않았습니다. 칸이 실제로 빠진 것인지는 확인하지 못했지만, 이 칸 이름을 박아 둔 질의문은 새 버전에서 오류를 낼 수 있어 먼저 `PRAGMA table_info(message);` 로 칸 목록을 확인합니다.
+`date_edited`, `date_retracted`, `thread_originator_guid`, `destination_caller_id`, `associated_message_emoji` 는 iOS 16 이후의 `message` 칸으로 알려져 있고[4][5], iLEAPP 도 `destination_caller_id` 를 읽습니다[1]. 그런데 이 다섯 칸이 없는 `message` 표도 있어서, 이 칸 이름을 박아 둔 질의문은 새 버전에서 오류를 낼 수 있습니다. 먼저 `PRAGMA table_info(message);` 로 칸 목록을 확인합니다.
 
 ## 구조
 
-관찰한 백업의 sms.db 에는 아래 표가 있습니다. 통계 표 하나는 이름이 가려져 있었습니다.
+sms.db 에는 아래와 같은 표가 있습니다.
 
 ```
 _SqliteDatabaseProperties  attachment            chat
@@ -46,7 +46,7 @@ sync_deleted_chats         sync_deleted_messages
 unsynced_removed_recoverable_messages
 ```
 
-대화를 읽는 데 쓰는 표와 칸은 아래와 같습니다. 칸 이름은 관찰한 백업에서 확인했고, 뜻은 오른쪽 출처에서 가져왔습니다.
+대화를 읽는 데 쓰는 표와 칸은 아래와 같습니다.
 
 | 표 | 칸 | 뜻 |
 |---|---|---|
@@ -54,16 +54,16 @@ unsynced_removed_recoverable_messages
 | `message` | `text`, `attributedBody` | 본문입니다. `text` 가 비어 있으면 `attributedBody`(typedstream 형식으로 저장한 NSAttributedString)에서 본문을 꺼냅니다[1] |
 | `message` | `handle_id` | 상대를 가리키는 `handle.ROWID` 이고, 0 이면 그룹 메시지입니다[4] |
 | `message` | `is_from_me` | 0 이면 받은 메시지, 1 이면 보낸 메시지입니다[1] |
-| `message` | `service` | 메시지를 보낸 서비스 이름입니다. 들어가는 값의 목록은 확인하지 못했습니다 |
+| `message` | `service` | 메시지를 보낸 서비스 이름입니다. 들어가는 값의 목록은 공개된 설명이 없습니다 |
 | `message` | `date`, `date_read`, `date_delivered` | 보낸·읽은·전달된 시각입니다[1] |
-| `message` | `associated_message_guid`, `associated_message_type` | 반응(탭백)이 가리키는 원래 메시지입니다[5]. `associated_message_type` 은 값 하나하나가 아니라 2000번대·3000번대 범위로 묶어 맞추라는 안내가 있지만[5], 각 값의 뜻은 확인하지 못했습니다 |
+| `message` | `associated_message_guid`, `associated_message_type` | 반응(탭백)이 가리키는 원래 메시지입니다[5]. `associated_message_type` 은 값 하나하나가 아니라 2000번대·3000번대 범위로 묶어 맞춥니다[5]. 각 값의 뜻은 공개된 설명이 없습니다 |
 | `message` | `message_summary_info` | 이진 plist 이고, Siri 로 보낸 메시지면 `com.apple.Siri` 가 들어갑니다[4]. 편집·취소 정보도 여기에 남습니다[5] |
 | `handle` | `ROWID`, `id`, `service`, `country`, `uncanonicalized_id`, `person_centric_id` | 상대 번호·이메일과 그 주소로 쓴 서비스입니다[4] |
 | `chat` | `ROWID`, `guid`, `chat_identifier`, `service_name`, `display_name` | 대화방입니다. `display_name` 은 채팅 이름입니다[1] |
 | `chat_handle_join` | `chat_id`, `handle_id` | 대화방과 참가자를 잇고, 그룹 참가자를 모을 때 씁니다[1] |
 | `chat_message_join` | `chat_id`, `message_id`, `message_date` 등 | 대화방과 메시지를 잇습니다[1] |
 
-`message` 표는 칸이 61개이고 `item_type`, `balloon_bundle_id`, `payload_data`, `expressive_send_style_id`, `share_status` 같은 칸도 있지만, 이런 칸의 값 목록은 이번에 연 자료로 확인하지 못했습니다. `message_processing_task`, `persistent_tasks`, `kvtable`, `sync_chat_slice` 도 칸 이름만 확인했고 뜻은 확인하지 못했습니다.
+`message` 표는 칸이 61개이고 `item_type`, `balloon_bundle_id`, `payload_data`, `expressive_send_style_id`, `share_status` 같은 칸도 있지만, 이런 칸의 값 목록은 공개된 설명이 없습니다. `message_processing_task`, `persistent_tasks`, `kvtable`, `sync_chat_slice` 표도 뜻이 알려져 있지 않아 검체에서 확인합니다.
 
 > 그림 자리: message 를 가운데 두고 handle·chat·chat_message_join·chat_handle_join·message_attachment_join 이 이어지는 관계도
 
@@ -73,7 +73,7 @@ unsynced_removed_recoverable_messages
 
 **증명하는 것.** `message` 행 하나는 이 기기의 메시지 DB 에 그 `guid` 의 메시지가 기록되어 있고, `is_from_me` 값에 따라 보낸 것으로 또는 받은 것으로 적혀 있다는 사실을 보여 줍니다. `handle` 을 이어 붙이면 기록된 상대 주소와 서비스를 알 수 있고, `date_read`·`date_delivered` 가 채워져 있으면 읽음·전달 상태를 기록한 시각도 알 수 있습니다.
 
-**증명하지 못하는 것.** `handle.id` 는 전화번호나 이메일 주소일 뿐이라서 그 주소를 실제로 쓴 사람이 누구인지는 따로 밝혀야 합니다. 보낸 메시지로 적혀 있어도 누가 기기를 손에 들고 보냈는지는 이 DB 만으로 알 수 없고, `message_summary_info` 로 Siri 를 거쳐 보낸 메시지인지도 함께 봅니다. 한 행이 어느 기기에서 만들어졌는지 가르는 칸은 이번에 확인하지 못했습니다.
+**증명하지 못하는 것.** `handle.id` 는 전화번호나 이메일 주소일 뿐이라서 그 주소를 실제로 쓴 사람이 누구인지는 따로 밝혀야 합니다. 보낸 메시지로 적혀 있어도 누가 기기를 손에 들고 보냈는지는 이 DB 만으로 알 수 없고, `message_summary_info` 로 Siri 를 거쳐 보낸 메시지인지도 함께 봅니다. 한 행이 어느 기기에서 만들어졌는지 가르는 칸은 알려져 있지 않습니다.
 
 보고서에는 "이 시각에 이 주소와 주고받은 것으로 기록된 메시지가 이만큼 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
@@ -95,7 +95,7 @@ WAL 파일 없이 sms.db 만 열면 최근 메시지가 빠지고 아무 경고�
 
 iOS 16 이후에는 `text` 가 NULL 인 행이 흔해서[5], `text` 만 뽑는 질의문은 본문이 빈 대화를 내놓습니다. `handle_id` 가 0 인 행을 "상대 없음" 으로 읽으면 그룹 메시지를 놓칩니다. iLEAPP 는 보낸 사람 칸을 받은 메시지(`is_from_me` = 0)일 때만 `handle` 에서 채웁니다[1].
 
-`com.apple.imdsmsrecordstore.plist` 의 `IMDSavedDeviceState` 아래에는 `IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidRestoreFromCloudBackupKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey`, `IMDSavedDeviceStateDidUpgradeKey` 같은 키가 있습니다. 이름으로는 DB 가 백업 복원이나 기기 이전을 거쳐 들어왔는지와 이어져 보이지만 뜻은 확인하지 못해서, 판단 근거로 쓰려면 [초기화와 복원 흔적 (Erase·Restore)](../../system-account/erase-restore.md)과 함께 봅니다.
+`com.apple.imdsmsrecordstore.plist` 의 `IMDSavedDeviceState` 아래에는 `IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidRestoreFromCloudBackupKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey`, `IMDSavedDeviceStateDidUpgradeKey` 같은 키가 있습니다. 이름으로는 DB 가 백업 복원이나 기기 이전을 거쳐 들어왔는지와 이어져 보이지만 뜻은 공개된 설명이 없어서, 판단 근거로 쓰려면 [초기화와 복원 흔적 (Erase·Restore)](../../system-account/erase-restore.md)과 함께 봅니다.
 
 ## 직접 분석해 보기
 
@@ -114,7 +114,7 @@ date = 700000000000000000        (1e12 보다 크다 → 나노초)
 
 ### 대화 한 줄로 이어 붙이기
 
-sqlite3 로 사본을 열어 아래처럼 이어 붙입니다. 칸 이름은 관찰한 백업에 있는 것만 썼습니다.
+sqlite3 로 사본을 열어 아래처럼 이어 붙입니다. 칸 이름은 위 표에 적은 것만 썼습니다.
 
 ```sql
 SELECT

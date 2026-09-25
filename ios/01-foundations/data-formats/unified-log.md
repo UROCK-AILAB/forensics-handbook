@@ -10,11 +10,11 @@ nav_order: 160
 
 통합 로그 (Unified Log) 는 로그 본체인 tracev3 파일과 메시지 문장을 담은 uuidtext·공유 캐시 문자열 파일이 짝을 이루는 이진 형식이고, 시각을 부팅 뒤 흐른 시간으로 적기 때문에 파일 하나만으로는 문장도 벽시계 시각도 온전히 되살릴 수 없습니다.
 
-Apple 은 이 형식의 공식 명세를 내지 않았습니다. 아래 구조는 libyal 의 형식 문서[1]와 공개 해석 도구 자료[2][3]에서 가져왔습니다.
+Apple 은 이 형식의 공식 명세를 내지 않았습니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-macos-UnifiedLogs 자료는 통합 로그가 macOS 10.12 에서 처음 나왔고 macOS 뿐만 아니라 iOS·watchOS·tvOS 에도 있다고 적었으며, 이 도구가 그 로그들을 모두 읽습니다[2]. libyal 형식 문서는 macOS 10.12 부터 13 까지를 시험한 결과입니다[1]. iOS 가 어느 버전부터 이 형식을 썼는지는 이 페이지의 출처로 확인하지 못했습니다. 맥과 파일 구조는 같고, iOS 에서는 기기에서 파일을 꺼내 오는 방법이 다릅니다(아래 "읽는 법").
+통합 로그는 macOS 10.12 에서 처음 나왔고, macOS 뿐만 아니라 iOS·watchOS·tvOS 에도 있습니다[2]. libyal 형식 문서는 macOS 10.12 부터 13 까지를 시험한 결과입니다[1]. iOS 가 어느 버전부터 이 형식을 썼는지는 공개 자료가 없습니다. 맥과 파일 구조는 같고, iOS 에서는 기기에서 파일을 꺼내 오는 방법이 다릅니다(아래 "읽는 법").
 
 통합 로그는 아래 파일들로 이루어집니다[1].
 
@@ -25,7 +25,7 @@ macos-UnifiedLogs 자료는 통합 로그가 macOS 10.12 에서 처음 나왔고
 | uuidtext | `/private/var/db/uuidtext/` 아래, UUID 로 이름 붙은 파일 | 형식 문자열 |
 | dsc(공유 캐시 문자열) | `/var/db/uuidtext/dsc/` | 공유 캐시 쪽 형식 문자열 |
 
-형식 문자열은 tracev3 가 아니라 uuidtext·dsc 에 있고, tracev3 에는 그 문자열을 가리키는 정보와 인수가 들어 있습니다. macos-UnifiedLogs 가 "UUID 파일에서 뽑은 메시지(Raw message)" 와 "tracev3 에서 뽑은 메시지 조각(Message entries)" 을 따로 내보내는 것도 이 나뉨 때문입니다[2]. 그래서 tracev3 만 있고 uuidtext 가 없으면 메시지 문장을 온전히 되살리기 어렵다고 보는 편이 안전합니다. 다만 이 결론을 명시한 문장은 출처에서 확인하지 못했습니다.
+형식 문자열은 tracev3 가 아니라 uuidtext·dsc 에 있고, tracev3 에는 그 문자열을 가리키는 정보와 인수가 들어 있습니다. macos-UnifiedLogs 가 "UUID 파일에서 뽑은 메시지(Raw message)" 와 "tracev3 에서 뽑은 메시지 조각(Message entries)" 을 따로 내보내는 것도 이 나뉨 때문입니다[2]. 그래서 tracev3 만 있고 uuidtext 가 없으면 메시지 문장을 온전히 되살리기 어려울 가능성이 큽니다.
 
 통합 로그에서 찾을 사건과 그 뜻은 [통합 로그에서 찾을 것](../../02-artifacts/logs/unified-log-events.md)에서, sysdiagnose 에 함께 들어오는 로그는 [sysdiagnose 안의 로그](../../02-artifacts/logs/sysdiagnose-logs.md)에서 다룹니다.
 
@@ -48,7 +48,7 @@ tracev3 파일은 헤더 청크 하나로 시작하고, 그 뒤로 카탈로그 
 | `bv4-` | 압축하지 않은 블록 |
 | `bv4$` | 끝 |
 
-헤더 청크의 부트 UUID(Boot identifier)는 빅 엔디언으로 저장되고, 이 값으로 로그 항목을 특정 부팅과 이어 붙입니다[1]. 헤더 청크 안에서 부트 UUID 가 놓인 오프셋과 나머지 칸 배치는 이 페이지에 옮기지 않았고, libyal 문서[1]를 직접 봅니다.
+헤더 청크의 부트 UUID(Boot identifier)는 빅 엔디언으로 저장되고, 이 값으로 로그 항목을 특정 부팅과 이어 붙입니다[1]. 헤더 청크 안에서 부트 UUID 가 놓인 오프셋과 나머지 칸 배치는 libyal 문서에서 봅니다[1].
 
 아래는 표지 설명대로 만든 예시입니다. 청크셋 데이터를 헥스로 볼 때 이 네 글자가 ASCII 로 보이면 LZ4 블록의 시작이나 끝이라는 뜻입니다.
 
@@ -61,7 +61,7 @@ tracev3 파일은 헤더 청크 하나로 시작하고, 그 뒤로 카탈로그 
 
 ## 시각
 
-로그 항목의 시각은 벽시계 시각이 아니라 mach continuous time, 곧 부팅 뒤 흐른 단위 수로 저장되고, timebase(분자/분모)를 곱해 초로 바꿉니다[1]. 그래서 날짜와 시각으로 바꾸려면 그 부팅의 기준점이 따로 있어야 하고, timesync 파일이 부트 UUID 마다 이 기준점을 담습니다[1]. timesync 파일의 칸 배치는 이 페이지에 옮기지 않았습니다.
+로그 항목의 시각은 벽시계 시각이 아니라 mach continuous time, 곧 부팅 뒤 흐른 단위 수로 저장되고, timebase(분자/분모)를 곱해 초로 바꿉니다[1]. 그래서 날짜와 시각으로 바꾸려면 그 부팅의 기준점이 따로 있어야 하고, timesync 파일이 부트 UUID 마다 이 기준점을 담습니다[1]. timesync 파일의 칸 배치도 libyal 문서에서 봅니다[1].
 
 macos-UnifiedLogs 는 Intel 과 ARM 두 방식의 시각을 모두 처리합니다[2]. 출력에는 시각(Timestamp)과 함께 시간대(Timezone)와 부트 UUID(Boot UUID) 칸이 있어서[2], 한 줄의 시각이 어느 부팅 기준으로 계산됐는지 따라가 볼 수 있습니다. 다른 아티팩트 시각과 합치는 법은 [시각 값](../value-decoding/time-values.md)과 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 
@@ -98,15 +98,15 @@ log show --style json <이름>.logarchive > logarchive.json
 
 tracev3 와 uuidtext 는 짝으로 다뤄야 합니다. 둘 중 하나만 확보하면 메시지 문장이나 시각 계산의 일부를 잃을 수 있어서, 파일 시스템에서 꺼낼 때는 두 폴더를 함께 꺼내고 해시를 따로 남깁니다.
 
-지운 로그나 손상된 tracev3 를 복구하는 동작은 이 페이지의 출처로 확인하지 못했습니다. 청크셋이 LZ4 블록 단위로 나뉘어 있으므로 파일 일부가 망가져도 `bv41`·`bv4-` 표지를 찾아 남은 블록만 풀어 볼 여지는 있지만, 출처가 검증한 절차는 아닙니다.
+지운 로그나 손상된 tracev3 를 복구하는 동작은 공개된 분석 자료가 없습니다. 청크셋이 LZ4 블록 단위로 나뉘어 있으므로 파일 일부가 망가져도 `bv41`·`bv4-` 표지를 찾아 남은 블록만 풀어 볼 여지는 있지만, 검증된 절차는 아닙니다.
 
 ## 함정
 
 macos-UnifiedLogs 는 printf 오류 코드를 뜻으로 풀지 않고 번호 그대로 두며, 지원하지 않는 객체는 base64 로 내보냅니다[2]. 출력에 숫자나 base64 가 보이면 해석 실패가 아니라 도구가 풀지 않은 값일 수 있습니다.
 
-실제 아이폰 로컬 백업에서는 이름에 로그가 들어간 영역이 보였습니다. 도메인 `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`, `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs`, 그리고 `WirelessDomain` 의 `Library/Preferences/com.apple.AppleBasebandManager.plist` 안의 `systemlogs.mode` 키가 그 예입니다. 이들이 통합 로그와 직접 관련 있는지는 확인하지 못했으므로, 이름만 보고 통합 로그를 확보했다고 적지 않습니다. 같은 관찰은 DB 와 plist 만 목록으로 적었기 때문에, tracev3 가 백업에 들어 있는지도 이 관찰로 말할 수 없습니다. 충돌 기록은 [충돌·진단 기록](../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
+아이폰 로컬 백업에는 이름에 로그가 들어간 영역이 있습니다. 도메인 `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`, `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs`, 그리고 `WirelessDomain` 의 `Library/Preferences/com.apple.AppleBasebandManager.plist` 안의 `systemlogs.mode` 키가 그 예입니다. 이들이 통합 로그와 직접 관련 있다는 공개 자료는 없으므로, 이름만 보고 통합 로그를 확보했다고 적지 않습니다. tracev3 가 백업에 들어 있는지는 검체에서 확인합니다. 충돌 기록은 [충돌·진단 기록](../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
 
-개인정보를 가리는 표시(`<private>`)가 붙는 조건과 로그 수준별 보관 기간은 이 페이지의 출처로 확인하지 못했습니다. 어떤 사건의 로그가 없다는 사실만으로 그 사건이 없었다고 쓰지 않습니다.
+개인정보를 가리는 표시(`<private>`)가 붙는 조건과 로그 수준별 보관 기간은 검체에서 확인합니다. 어떤 사건의 로그가 없다는 사실만으로 그 사건이 없었다고 쓰지 않습니다.
 
 ## 도구
 

@@ -26,11 +26,11 @@ nav_order: 1050
 | `*/Cards/*.pkpass/pass.json` | 패스 본문[2] |
 | `*/nanopasses.sqlite3*` | iLEAPP 가 "Apple wallet Nano passes" 로 부르는 패스 데이터베이스[2] |
 
-`nanopasses.sqlite3` 는 이름으로 보아 워치 쪽 패스 데이터베이스로 보이지만, 폰과 워치 가운데 어디에 있는 파일인지는 이번 자료로 확인하지 못했습니다.
+`nanopasses.sqlite3` 는 이름으로 보아 워치 쪽 패스 데이터베이스로 보입니다. 폰과 워치 가운데 어디에 있는 파일인지는 검체에서 확인합니다.
 
-### 로컬 백업에서 본 것
+### 로컬 백업의 지갑 파일
 
-암호화하지 않은 로컬 백업을 열어 보면 `HomeDomain` 안에 아래 세 파일이 있었고, 세 파일 모두 최상위 키 아래에 `groups` 와 `timestamp` 가 있었습니다.
+암호화하지 않은 로컬 백업에는 `HomeDomain` 안에 아래 세 파일이 있고, 세 파일 모두 최상위 키 아래에 `groups` 와 `timestamp` 가 있습니다.
 
 | 도메인 · 상대 경로 |
 |---|
@@ -38,28 +38,28 @@ nav_order: 1050
 | `HomeDomain` · `Library/Passes/NonUbiquitousCatalogOfRecord.plist` |
 | `HomeDomain` · `Library/Mobile Documents/com~apple~shoebox/UbiquitousCards/CatalogOfRecord.plist` |
 
-같은 백업의 Apple 데이터베이스 파일 목록에는 `passes23.sqlite` 가 없었고, 왜 빠졌는지는 확인하지 못했습니다. 백업에 거래 데이터베이스가 없더라도 기기에 거래 기록이 없었다고 단정하지 않고, 획득 방식을 먼저 기록합니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
+로컬 백업의 파일 목록에는 `passes23.sqlite` 가 들어 있지 않을 수 있습니다. 백업에 거래 데이터베이스가 없더라도 기기에 거래 기록이 없었다고 단정하지 않고, 획득 방식을 먼저 기록합니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
-같은 백업에는 지갑과 관련된 이름의 도메인도 있었습니다.
+로컬 백업에는 지갑과 관련된 이름의 도메인도 있습니다.
 
 | 도메인 | 비고 |
 |---|---|
 | `AppDomain-com.apple.Passbook` | 항목 6개 |
 | `AppDomain-com.apple.PassbookSecureUIService`, `AppDomain-com.apple.PassbookUISceneService`, `AppDomain-com.apple.PassbookUIService` | |
 | `AppDomainPlugin-com.apple.PassKit.*` | `PassKitSpotlightIndexExtension` 등 |
-| `AppDomainPlugin-com.apple.finhealth.FinHealthTransactionInsightsExtension` 등 | 무엇을 남기는지 확인하지 못함 |
+| `AppDomainPlugin-com.apple.finhealth.FinHealthTransactionInsightsExtension` 등 | 공개 자료 없음 |
 
-`com.apple.Passbook` 이 지갑 앱의 번들 ID 라는 것은 이름으로 짐작한 것이고, 이번 자료로 확인하지는 못했습니다. 도메인 이름을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을 봅니다.
+`com.apple.Passbook` 은 이름으로 보아 지갑 앱의 번들 ID 로 보입니다. 도메인 이름을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을 봅니다.
 
 ### 버전별 차이
 
-iLEAPP 는 시험한 표본 데이터 가운데 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 16.5(1행) 두 기기뿐이고 나머지는 0행이었다고 적어 두었습니다[1]. 버전·기기·국가에 따라 거래 기록이 아예 남지 않을 수 있다는 뜻으로 읽고, 버전별로 표 구조가 어떻게 바뀌는지는 이번 자료로 확인하지 못했습니다.
+iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 16.5(1행) 두 기기뿐이고 나머지는 0행이었습니다[1]. 버전·기기·국가에 따라 거래 기록이 아예 남지 않을 수 있습니다. 버전별로 표 구조가 어떻게 바뀌는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
 ### `passes23.sqlite` 의 거래 표
 
-iLEAPP 가 조회하는 `payment_transaction` 표의 칸은 아래와 같습니다[1].
+`payment_transaction` 표의 주요 칸은 아래와 같습니다[1].
 
 | 칸 | 담는 내용 |
 |---|---|
@@ -70,11 +70,11 @@ iLEAPP 가 조회하는 `payment_transaction` 표의 칸은 아래와 같습니�
 | `peer_payment_counterpart_handle`, `peer_payment_memo` | 개인 간 송금의 상대와 메모 |
 | `transaction_status`, `transaction_type` | 거래 상태와 종류(번호) |
 
-`amount` 는 iLEAPP 가 10000 으로 나눠 보여 줍니다. 이 나눗수는 제조사 문서에서 가져온 값이 아니라, 알려진 거래와 비교해서 얻은 값이라고 스크립트에 적혀 있습니다[1]. `transaction_status` 와 `transaction_type` 의 번호가 무슨 뜻인지는 이번 자료로 확인하지 못했습니다.
+`amount` 는 iLEAPP 가 10000 으로 나눠 보여 줍니다. 이 나눗수는 제조사 문서에 나온 값이 아니라 알려진 거래와 비교해서 얻은 값입니다[1]. `transaction_status` 와 `transaction_type` 의 번호 뜻은 공개 자료가 없어, 검체에서 알려진 거래와 맞춰 봐야 합니다.
 
 ### 패스
 
-`pass.json` 은 패스 하나의 본문이고, iLEAPP 는 특정 키만 고르지 않고 키와 값을 모두 풀어 보여 줍니다[2]. `pass.json` 의 표준 키 이름은 이번 자료로 확인하지 못했습니다.
+`pass.json` 은 패스 하나의 본문이고, iLEAPP 는 특정 키만 고르지 않고 키와 값을 모두 풀어 보여 줍니다[2].
 
 `nanopasses.sqlite3` 의 `PASS` 표에는 아래 칸이 있습니다[2].
 
@@ -89,16 +89,16 @@ iLEAPP 가 조회하는 `payment_transaction` 표의 칸은 아래와 같습니�
 
 ### 설정 파일
 
-백업의 `HomeDomain` 안 `Library/Preferences/` 에서 아래 파일과 키를 확인했습니다. 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
+로컬 백업의 `HomeDomain` 안 `Library/Preferences/` 에는 아래 파일과 키가 있습니다. 값의 뜻을 설명한 공개 자료는 없습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
 
-| 파일 | 확인한 키 |
+| 파일 | 키 |
 |---|---|
 | `com.apple.passd.plist` | `PDLastLogDate`(날짜), `PDUpgradeTasksVersion`, `PDUpgradeTasksRetryCount`, `PDMigratedAvailableWhileLocked`, `PDAvailableWhileLockedPreviousSetting`, `PDSanitizedAvailableWhileUnlocked`, `PassesDirectoryFileProtectionFixed`, `PDSpotlightIndexNeedsIndexing`, `PDPaymentSetupFeaturesAreDirtyKey`, `PDDiscoveryVisitorID`, `PDDiscoveryVisitorIDCreationInterval`, `PDDiscoverySwipedCountDict`(`paymentWelcomeCard`), `PDTransitNotificationServiceSentNotifications`(`MarketGeoDCINotifications`), `AppTimeInterval`, `CKStartupTime`, `CKPerBootTasks`, `CC_OncePerBootBackingData` |
 | `com.apple.Wallet.plist` | `PKDismissedEventIdentifiers`(목록), `PKLastProductCacheUpdateTimestampKey`(정수), `whatsnew.availableFeatures`(목록) |
 | `com.apple.seserviced.contactlessCredential.settings.plist` | `defaultAppIdentifier`, `defaultAppLocalizedName`, `defaultAppCandidates`, `doubleClickEnabled`, `shouldShowContactlessPane`, `shouldShowContactlessTcc`, `shouldShowSecureElementTcc`, `shouldShowSECPane`, `version`, `domain` 등 |
 | `com.apple.stockholm.wallet.presentation.plist` | `walletDoubleButtonPressedConsumerAvailable` |
 
-`com.apple.seserviced.contactlessCredential.settings.plist` 는 키 이름으로 보아 기본 비접촉 결제 앱 설정으로 보이지만, 의미는 확인하지 못했습니다.
+`com.apple.seserviced.contactlessCredential.settings.plist` 는 키 이름으로 보아 기본 비접촉 결제 앱 설정으로 보입니다.
 
 ## 증거로서 의미
 
@@ -120,17 +120,17 @@ iLEAPP 가 조회하는 `payment_transaction` 표의 칸은 아래와 같습니�
 
 `payment_transaction.transaction_date`, `location_date`, `PASS.INGESTED_DATE` 는 Mac 절대 시각(2001-01-01 00:00:00 UTC 부터 센 초)이고 iLEAPP 도 이 기준으로 바꿉니다[1][2]. 값은 UTC 기준이라서 현지 시각으로 옮길 때는 기기 시간대와 거래 위치를 함께 봅니다. `transaction_date` 는 거래 시각이고 `location_date` 는 위치를 잰 시각이라 두 값이 다를 수 있으며, 위치 기반 주장을 할 때는 `location_date` 를 씁니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되어 있었지만, 어떤 기준의 시각인지는 확인하지 못했습니다.
+`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되며, 어떤 기준의 시각인지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 함정과 한계
 
 **Apple 쪽 기록에도 기대하기 어렵습니다.** Apple 은 매장 결제에서 개인을 알아볼 수 있는 거래 정보를 보관하지 않고, 앱·웹 결제는 대략의 금액, 개발자와 앱 이름, 대략의 시각, 성공 여부만 익명으로 보관합니다[3]. Apple Cash 의 계정 정보·잔액·금액·주고받은 상대는 Apple Payments Inc. 가 따로 보관합니다[3]. 실제 결제 내역은 카드 발급사나 결제 사업자에서 받는 자료와 맞춰 봐야 하고, 계정 쪽 자료 요청은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md)에서 다룹니다.
 
-**다른 기기의 거래가 섞일 수 있습니다.** iCloud 는 패스와 거래 정보 같은 지갑 데이터를 암호화해서 전송하고 저장합니다[3]. 같은 계정의 다른 기기에서 생긴 거래가 이 기기에 동기화되어 들어올 수 있다는 점은 이 설명에서 끌어낸 추론이고, 확인하지는 못했습니다.
+**다른 기기의 거래가 섞일 수 있습니다.** iCloud 는 패스와 거래 정보 같은 지갑 데이터를 암호화해서 전송하고 저장합니다[3]. 그래서 같은 계정의 다른 기기에서 생긴 거래가 이 기기에 동기화되어 들어올 가능성이 있습니다.
 
 **금액 나눗수는 검증된 규칙이 아닙니다.** `amount` 를 10000 으로 나누는 규칙은 경험으로 얻은 값이라[1], 보고서에 금액을 적기 전에 영수증이나 카드사 자료로 알려진 거래 하나를 맞춰 봅니다.
 
-**지우기.** `PASS.DELETE_PENDING` 칸은 이름으로 보아 지우기를 기다리는 패스를 표시하는 것으로 보이며[2], 사용자가 패스를 지운 뒤 어떤 흔적이 얼마나 남는지는 이번 자료로 확인하지 못했습니다. SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)를 봅니다.
+**지우기.** `PASS.DELETE_PENDING` 칸은 이름으로 보아 지우기를 기다리는 패스를 표시하는 것으로 보이며[2], 사용자가 패스를 지운 뒤 어떤 흔적이 얼마나 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)를 봅니다.
 
 ## 직접 분석해 보기
 

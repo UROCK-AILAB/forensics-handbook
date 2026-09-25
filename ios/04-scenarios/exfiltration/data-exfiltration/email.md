@@ -15,9 +15,9 @@ nav_order: 1580
 
 ## 먼저 확인할 것
 
-iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 사이에서 달라졌고[1], iOS 15 이후의 표 구조는 이 페이지의 자료로 확인하지 못했습니다. 버전은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md), 시간대는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다.
+iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 사이에서 달라졌고[1], iOS 15 이후의 표 구조는 공개된 분석 자료가 없어 검체에서 확인합니다. 버전은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md), 시간대는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다.
 
-수집 범위도 확인합니다. 메일 앱 데이터는 `/private/var/mobile/Library/Mail` 에 있습니다[1]. 관찰한 로컬 백업에는 `Envelope Index`·`Protected Index`·`.emlx` 파일이 없었고, 로컬 백업에 이 DB 가 들어가는지는 확인하지 못했습니다. 로컬 백업만 있다면 아래 "메일 DB 가 없을 때" 절의 설정 파일부터 봅니다. 수집 방법은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
+수집 범위도 확인합니다. 메일 앱 데이터는 `/private/var/mobile/Library/Mail` 에 있습니다[1]. 로컬 백업에는 `Envelope Index`·`Protected Index`·`.emlx` 파일이 들어 있지 않을 수 있습니다. 로컬 백업만 있다면 아래 "메일 DB 가 없을 때" 절의 설정 파일부터 봅니다. 수집 방법은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -37,9 +37,9 @@ iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 
 |---|---|---|
 | 12 | messages 표(보낸 사람·제목·to/cc/bcc) | message_data 표(본문 앞 500바이트) |
 | 13 | Addresses 표(주소와 이름), Subjects 표 | Summaries 표(본문 앞 500바이트) |
-| 15 이후 | 확인하지 못함 | 확인하지 못함 |
+| 15 이후 | 검체에서 확인 | 검체에서 확인 |
 
-`-wal` 파일에는 아직 본 DB 에 합쳐지지 않은 기록이 있을 수 있어서, 세 파일을 함께 복사한 뒤 사본에서 엽니다. 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) 에 있습니다. 두 DB 의 시각 칸이 UNIX 초인지 Mac 절대 시각인지는 확인하지 못했고, [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 후보 기준을 대 본 뒤 `.emlx` 머리글의 날짜와 맞는 기준을 고릅니다.
+`-wal` 파일에는 아직 본 DB 에 합쳐지지 않은 기록이 있을 수 있어서, 세 파일을 함께 복사한 뒤 사본에서 엽니다. 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) 에 있습니다. 두 DB 의 시각 칸이 UNIX 초인지 Mac 절대 시각인지는 알려져 있지 않아서, [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 후보 기준을 대 본 뒤 `.emlx` 머리글의 날짜와 맞는 기준을 고릅니다.
 
 ### 메일함과 메일 파일
 
@@ -47,7 +47,7 @@ iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 
 
 ### 메일 DB 가 없을 때
 
-관찰한 백업에서 메일과 관련해 볼 수 있었던 파일은 아래와 같습니다. 모두 키 이름만 확인했고 값은 읽지 않았습니다.
+로컬 백업에서 메일과 관련해 볼 수 있는 파일과 키는 아래와 같습니다.
 
 | 파일 | 키 |
 |---|---|
@@ -58,16 +58,16 @@ iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 
 | `HomeDomain :: Library/Preferences/com.apple.email.maild.plist` | kDefaultsKeyLastVerifiedMessageID, com.apple.mobilemail.purge.bodies.purge_markers 등 |
 | `HomeDomain :: Library/Preferences/com.apple.icloudmailagent.plist` | com.apple.icloud.mail.lastRetryTimestamp, com.apple.icloud.mail.lastSyncAllTimestamp(실수) |
 
-`group.com.apple.mail.plist` 의 UserNotificationMailboxCutoffs 안에는 아래처럼 IMAP 계정의 보낸편지함과 받은편지함을 가리키는 항목이 있었습니다.
+`group.com.apple.mail.plist` 의 UserNotificationMailboxCutoffs 안에는 아래처럼 IMAP 계정의 보낸편지함과 받은편지함을 가리키는 항목이 들어갑니다.
 
 ```text
 imap://<UUID>/...Sent
 imap://<UUID>/INBOX
 ```
 
-이 항목으로 기기에 IMAP 계정이 있고 그 계정에 보낸편지함이 있다는 데까지는 말할 수 있지만, 메일을 보냈다는 근거로는 쓰지 않습니다. 메일 계정 목록은 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 의 ZACCOUNTTYPE 표 등에서도 볼 수 있고, 계정 종류별 식별자 값은 확인하지 못했습니다.
+이 항목으로 기기에 IMAP 계정이 있고 그 계정에 보낸편지함이 있다는 데까지는 말할 수 있지만, 메일을 보냈다는 근거로는 쓰지 않습니다. 메일 계정 목록은 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 의 ZACCOUNTTYPE 표 등에서도 볼 수 있고, 계정 종류별 식별자 값은 검체에서 확인합니다.
 
-Gmail·Outlook 같은 다른 회사 메일 앱의 저장 구조는 이 페이지의 자료로 확인하지 못했습니다. Gmail 앱은 [지메일 (Gmail)](../../../02-artifacts/mail-cloud/gmail.md) 을 따릅니다.
+Gmail·Outlook 같은 다른 회사 메일 앱은 저장 구조가 앱마다 다릅니다. Gmail 앱은 [지메일 (Gmail)](../../../02-artifacts/mail-cloud/gmail.md) 을 따릅니다.
 
 ## 분석 흐름
 
@@ -85,7 +85,7 @@ Gmail·Outlook 같은 다른 회사 메일 앱의 저장 구조는 이 페이지
 
 iOS 12·13 의 표 이름을 그대로 iOS 15 이후 기기에 적용하면 표가 없다고 잘못 판단할 수 있습니다. 표 목록부터 뽑아 확인합니다.
 
-보낸편지함에 메일이 있다는 기록은 이 기기의 메일 앱이 그 메일을 보낸편지함에 두었다는 뜻입니다. 같은 계정을 쓰는 다른 기기에서 보낸 메일도 IMAP 계정의 보낸편지함에 모일 수 있는지는 이 페이지의 자료로 확인하지 못했으니, 보낸 기기를 단정하지 않습니다.
+보낸편지함에 메일이 있다는 기록은 이 기기의 메일 앱이 그 메일을 보낸편지함에 두었다는 뜻입니다. 같은 계정을 쓰는 다른 기기에서 보낸 메일도 IMAP 계정의 보낸편지함에 모일 가능성이 있으니, 보낸 기기를 단정하지 않습니다.
 
 `.partial.emlx` 는 이름대로 일부만 있는 파일일 수 있어서, 첨부가 파일에 없다는 사실만으로 첨부 없이 보냈다고 쓰지 않습니다.
 

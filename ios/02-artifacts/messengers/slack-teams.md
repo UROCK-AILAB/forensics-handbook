@@ -18,14 +18,14 @@ nav_order: 920
 
 ### 슬랙
 
-번들 ID 는 `com.tinyspeck.chatlyio` 입니다[1]. 공개 도구 iLEAPP 는 옛 구조와 새 구조를 모두 찾습니다[2]. 어느 앱 버전부터 새 구조로 바뀌었는지는 자료에 없어서 아래 표는 구조 기준으로 나눴습니다.
+번들 ID 는 `com.tinyspeck.chatlyio` 입니다[1]. DB 는 옛 구조와 새 구조 두 가지가 있습니다[2]. 어느 앱 버전부터 새 구조로 바뀌었는지는 공개 자료가 없어서 아래 표는 구조 기준으로 나눕니다.
 
 | 구조 | 찾는 위치(파일 시스템 추출 기준) | 표 |
 |---|---|---|
 | 옛 구조 | `*/mobile/Containers/Data/Application/*/Library/Application Support/Slack/*/*/main_db*` | 접두어 `ZSLK` 또는 `ZSLKDEPRECATED` |
 | 새 구조 | `*/mobile/Containers/Shared/AppGroup/*/*/ModelDatabase/db.sqlite*` | `ZCOREDATAMESSAGE` 등 |
 
-옛 구조를 처음 소개한 2018년 글은 경로를 아래처럼 적고, `<DB-ID>` 폴더 이름이 워크스페이스 식별자라고 설명합니다[1]. 새 구조는 앱 데이터 컨테이너가 아니라 앱 그룹 컨테이너에 있어서[2] 찾는 곳이 다릅니다. 컨테이너 종류는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다.
+옛 구조의 전체 경로는 아래와 같고, `<DB-ID>` 폴더 이름이 워크스페이스 식별자입니다[1]. 새 구조는 앱 데이터 컨테이너가 아니라 앱 그룹 컨테이너에 있어서[2] 찾는 곳이 다릅니다. 컨테이너 종류는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다.
 
 ```
 /private/var/mobile/Containers/Data/Application/<UUID>/Library/Application Support/Slack/<DB-ID>/Database/main_db
@@ -33,20 +33,20 @@ nav_order: 920
 
 ### 팀즈
 
-번들 ID 는 이번에 연 자료에 없었습니다. iLEAPP 는 앱 그룹 컨테이너에서 DB 와 내려받은 이미지를 찾습니다[3].
+DB 와 내려받은 이미지는 앱 그룹 컨테이너에 있습니다[3].
 
 ```
 */mobile/Containers/Shared/AppGroup/*/SkypeSpacesDogfood/*/Skype*.sqlite*
 */mobile/Containers/Shared/AppGroup/*/SkypeSpacesDogfood/Downloads/*/Images/*
 ```
 
-`SkypeSpacesDogfood` 는 폴더 이름 그대로이고, 개인용과 업무용을 합친 새 팀즈에서도 같은 이름을 쓰는지는 확인하지 못했습니다. 두 앱 모두 자료가 시험한 iOS 버전을 밝히지 않아서, iOS 버전에 따른 차이는 확인하지 못했습니다.
+`SkypeSpacesDogfood` 는 폴더 이름 그대로입니다. 개인용과 업무용을 합친 새 팀즈에서도 같은 이름을 쓰는지, 두 앱이 iOS 버전에 따라 달라지는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
 ### 슬랙 표
 
-iLEAPP 가 읽는 표와 칸은 아래와 같습니다[2]. 옛 구조 표 이름의 `…` 자리에 `ZSLK` 나 `ZSLKDEPRECATED` 가 붙습니다.
+주요 표와 칸은 아래와 같습니다[2]. 옛 구조 표 이름의 `…` 자리에 `ZSLK` 나 `ZSLKDEPRECATED` 가 붙습니다.
 
 | 옛 구조 표 | 새 구조 표 | 읽는 칸 |
 |---|---|---|
@@ -56,7 +56,7 @@ iLEAPP 가 읽는 표와 칸은 아래와 같습니다[2]. 옛 구조 표 이름
 | `…FILE` | | `ZTITLE`, `ZSIZE`, `ZPERMALINKURL`, `ZPRIVATEDOWNLOADURL` |
 | `…TEAM` | | `ZNAME`, `ZDOMAIN`, `ZAUTHUSERID`, `ZTSID` |
 
-슬랙 ID 는 첫 글자로 종류를 알 수 있어서, 사용자는 `U`, 채널은 `C`, 1:1 대화(DM)는 `D` 로 시작합니다[1]. 메시지의 `ZUSERID` 를 사용자 표의 `ZTSID` 와 이어 이름을 찾습니다. 2018년 글 기준으로 `main_db` 의 표는 21개였습니다[1].
+슬랙 ID 는 첫 글자로 종류를 알 수 있어서, 사용자는 `U`, 채널은 `C`, 1:1 대화(DM)는 `D` 로 시작합니다[1]. 메시지의 `ZUSERID` 를 사용자 표의 `ZTSID` 와 이어 이름을 찾습니다. 2018년 당시 `main_db` 의 표는 21개였습니다[1].
 
 ### 팀즈 표
 
@@ -68,9 +68,9 @@ iLEAPP 가 읽는 표와 칸은 아래와 같습니다[2]. 옛 구조 표 이름
 | `ZDEVICECONTACTHASH` | `ZDISPLAYNAME`, `ZEMAIL`, `ZPHONENUMBER` |
 | `ZMESSAGEPROPERTIES` | `ZPROPERTIES` |
 
-위 표는 iLEAPP 가 읽는 칸입니다[3]. 메시지는 `ZSMESSAGE.ZTHREADID = ZTHREAD.ZTSID` 로 대화방과 잇고, `ZCONTENT` 는 HTML 이라서 이모지도 `itemtype="http://schema.skype.com/Emoji"` 가 붙은 img 태그로 들어 있습니다[3]. `ZDEVICECONTACTHASH` 는 기기 연락처와 관련된 표입니다[3].
+메시지는 `ZSMESSAGE.ZTHREADID = ZTHREAD.ZTSID` 로 대화방과 잇고, `ZCONTENT` 는 HTML 이라서 이모지도 `itemtype="http://schema.skype.com/Emoji"` 가 붙은 img 태그로 들어 있습니다[3]. `ZDEVICECONTACTHASH` 는 기기 연락처와 관련된 표입니다[3].
 
-통화 기록과 위치 공유는 `ZMESSAGEPROPERTIES.ZPROPERTIES` 에 plist 로 들어 있고, `ZSMESSAGE.ZTSID` 로 메시지와 잇습니다[3]. iLEAPP 가 이 plist 를 풀 때 NSKeyedArchiver 해석 모듈(`nska_deserialize`)을 쓰는데[3], 원리는 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01-foundations/data-formats/plist.md)에 있습니다.
+통화 기록과 위치 공유는 `ZMESSAGEPROPERTIES.ZPROPERTIES` 에 plist 로 들어 있고, `ZSMESSAGE.ZTSID` 로 메시지와 잇습니다[3]. 이 plist 는 NSKeyedArchiver 형식이고[3], 원리는 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01-foundations/data-formats/plist.md)에 있습니다.
 
 | plist 키 | 안의 키 |
 |---|---|
@@ -79,7 +79,7 @@ iLEAPP 가 읽는 표와 칸은 아래와 같습니다[2]. 옛 구조 표 이름
 
 ## 증거로서 의미
 
-**증명하는 것.** 슬랙 메시지 행은 이 기기의 슬랙 DB 에 어느 채널(또는 대화)에서 어떤 사용자 ID 가 보낸 것으로 기록된 메시지가 이 시각과 함께 남아 있다는 사실을 보여 주고, 파일 표로 공유된 파일의 제목·크기·링크를 알 수 있습니다[2]. 팀즈에서는 `ZTS_ISSENTBYME` 로 이 계정이 보낸 메시지를 가를 수 있고, `call-log` 로 통화의 방향·종류·상태와 시작·연결·종료 시각을, `cards` 로 공유된 위치와 만료 시각을 볼 수 있습니다[3]. `ZTS_ISSENTBYME` 의 뜻은 칸 이름대로 읽은 것입니다.
+**증명하는 것.** 슬랙 메시지 행은 이 기기의 슬랙 DB 에 어느 채널(또는 대화)에서 어떤 사용자 ID 가 보낸 것으로 기록된 메시지가 이 시각과 함께 남아 있다는 사실을 보여 주고, 파일 표로 공유된 파일의 제목·크기·링크를 알 수 있습니다[2]. 팀즈에서는 `ZTS_ISSENTBYME` 로 이 계정이 보낸 메시지를 가를 수 있고, `call-log` 로 통화의 방향·종류·상태와 시작·연결·종료 시각을, `cards` 로 공유된 위치와 만료 시각을 볼 수 있습니다[3]. `ZTS_ISSENTBYME` 의 뜻은 칸 이름에서 나온 것이라, 보낸 것이 분명한 메시지와 한 번 맞춰 봅니다.
 
 **증명하지 못하는 것.** 파일 표의 링크는 파일이 공유됐다는 기록일 뿐이라서, 이 기기에서 그 파일을 열거나 내려받았는지는 따로 확인해야 합니다. 팀즈의 위치 카드는 위치를 공유한 메시지의 기록이지 그 시각에 이 기기가 그 자리에 있었다는 기록이 아닙니다. 두 앱 모두 기기에 받아 둔 사본만 보이기 때문에, 행이 없다고 대화가 없었다고 볼 수 없습니다.
 
@@ -98,9 +98,9 @@ iLEAPP 가 읽는 표와 칸은 아래와 같습니다[2]. 옛 구조 표 이름
 
 Core Data 표라서 시각이 Mac 절대 시각이라고 넘겨짚으면 슬랙 시각이 31년 가까이 어긋납니다. 슬랙은 앱 버전에 따라 표 접두어와 DB 위치가 바뀌므로[2], 한 경로만 보면 DB 를 놓칠 수 있어 두 구조를 모두 찾아봅니다.
 
-2018년 글은 슬랙의 `Library/Caches/com.tinyspeck.chatlyio/Cache.db` 네트워크 캐시의 `cfurl_cache_blob_data` 표에 로그인 정보가 평문으로 보였다고 적습니다[1]. 지금 버전에서도 그런지는 확인하지 못했지만, 캐시 파일에 민감한 값이 남을 수 있다고 보고 증거를 다룰 때 접근을 제한합니다. 같은 글은 이미지 캐시가 `Library/Application Support/Library/Caches/default/com.hackemist.SDWebImageCache.default/` 에 있다고 적는데[1], 이 경로도 2018년 기준입니다. 팀즈의 내려받은 이미지는 CacheFile plist 가 이미지 URL 과 로컬 경로를 이어 줍니다[3].
+2018년 당시 슬랙의 `Library/Caches/com.tinyspeck.chatlyio/Cache.db` 네트워크 캐시의 `cfurl_cache_blob_data` 표에 로그인 정보가 평문으로 남았습니다[1]. 지금 버전에서도 그런지는 검체에서 확인하고, 캐시 파일에 민감한 값이 남을 수 있다고 보고 증거를 다룰 때 접근을 제한합니다. 이미지 캐시는 2018년 기준으로 `Library/Application Support/Library/Caches/default/com.hackemist.SDWebImageCache.default/` 에 있었습니다[1]. 팀즈의 내려받은 이미지는 CacheFile plist 가 이미지 URL 과 로컬 경로를 이어 줍니다[3].
 
-iLEAPP 경로는 파일 시스템 추출 기준이고, 로컬 백업에 이 파일들이 들어가는지는 자료가 말하지 않았습니다. 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 먼저 파일이 있는지 확인합니다. 지운 메시지를 찾는 일반적인 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)에 있습니다.
+위 경로는 파일 시스템 추출 기준이고, 로컬 백업에 이 파일들이 들어가는지는 공개 자료가 없습니다. 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 먼저 파일이 있는지 확인합니다. 지운 메시지를 찾는 일반적인 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)에 있습니다.
 
 ## 직접 분석해 보기
 

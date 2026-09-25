@@ -12,9 +12,9 @@ nav_order: 430
 
 ## 무엇을 기록하나 · 왜 생기나
 
-알림 기록은 앱을 열어 보지 않고도 알림 문구와 받은 시각을 보여 주는 흔적입니다. iOS 12 조사에서는 `DeliveredNotifications.plist` 에 알림이 만들어진 시각(`AppNotificationCreationDate`), 알림 문구, 전달 시각과 함께 방해 금지 무시·소리·CarPlay 표시 같은 설정 값이 있었고, 같은 폴더의 `AttachmentList.plist` 에 첨부 목록이 `file://` 경로로, `Attachments` 폴더에 첨부 파일 자체가 있었습니다[1].
+알림 기록은 앱을 열어 보지 않고도 알림 문구와 받은 시각을 보여 주는 흔적입니다. iOS 12 에서는 `DeliveredNotifications.plist` 에 알림이 만들어진 시각(`AppNotificationCreationDate`), 알림 문구, 전달 시각과 함께 방해 금지 무시·소리·CarPlay 표시 같은 설정 값이 있고, 같은 폴더의 `AttachmentList.plist` 에 첨부 목록이 `file://` 경로로, `Attachments` 폴더에 첨부 파일 자체가 있습니다[1].
 
-iOS 15 조사에서는 알림 이벤트 파일에 GUID, 제목, 부제목, 본문, 번들 ID(주·보조), 선택적 문맥 칸, Apple ID 연락처 정보, 시각 4개가 있었습니다[2]. 두 조사 모두 알림의 본문 문구가 기록에 들어 있었다고 적어서[1][2], 앱 안 DB 를 얻지 못한 경우에도 알림 기록에서 문구를 찾아볼 수 있습니다.
+iOS 15 에서는 알림 이벤트 파일에 GUID, 제목, 부제목, 본문, 번들 ID(주·보조), 선택적 문맥 칸, Apple ID 연락처 정보, 시각 4개가 있습니다[2]. 두 버전 모두 알림의 본문 문구가 기록에 들어 있어서[1][2], 앱 안 DB 를 얻지 못한 경우에도 알림 기록에서 문구를 찾아볼 수 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -24,8 +24,8 @@ iOS 15 조사에서는 알림 이벤트 파일에 GUID, 제목, 부제목, 본�
 |---|---|---|
 | 12 | 앱 번들 ID 별 하위 폴더 안의 `DeliveredNotifications.plist`, `AttachmentList.plist`, `Attachments/` | [1] |
 | 15 | `DuetExpertCenter/streams/userNotificationEvents/local` 의 이벤트 파일 | [2] |
-| 16 이후 | 한 연구자의 버전별 정리에서 `DuetExpertCenter/streams/` 아래에 `userNotificationEvents` 가 계속 있고, 17~26 은 위치가 같고 형식만 SEGB v2 | [3] |
-| 27.0 로컬 백업 | 아래 "로컬 백업에 보이는 것" 참고 | 관찰 |
+| 16 이후 | `DuetExpertCenter/streams/` 아래에 `userNotificationEvents` 가 계속 있음. 17~26 은 위치가 같고 형식만 SEGB v2 | [3] |
+| 27.0 로컬 백업 | 아래 "로컬 백업에 보이는 것" 참고 | |
 
 ```
 /private/var/mobile/Library/UserNotifications/<번들 ID>/DeliveredNotifications.plist   (iOS 12)
@@ -33,11 +33,11 @@ iOS 15 조사에서는 알림 이벤트 파일에 GUID, 제목, 부제목, 본�
 /private/var/mobile/Library/DuetExpertCenter/streams/userNotificationEvents/local    (iOS 15)
 ```
 
-iOS 15 이벤트 파일을 조사한 저자는 이 파일을 iOS 15.x 에서만 보았고 시험 자료가 적었다고 밝혔습니다[2]. 이 스트림이 로컬 백업에 들어가는지와 며칠 치를 남기는지는 확인한 자료가 없습니다. 바이옴 (Biome) 스트림 폴더 전반은 [바이옴](biome/index.md) 에서 다룹니다.
+iOS 15 이벤트 파일의 구조는 iOS 15.x 의 적은 시험 자료로 밝힌 것입니다[2]. 이 스트림이 로컬 백업에 들어가는지와 며칠 치를 남기는지는 공개 자료가 없어 검체에서 확인합니다. 바이옴 (Biome) 스트림 폴더 전반은 [바이옴](biome/index.md) 에서 다룹니다.
 
 ### 로컬 백업에 보이는 것
 
-관찰한 로컬 백업에는 `HomeDomain :: Library/UserNotifications/` 아래 `Library.plist` 가 있었고, 하위 폴더마다 다음 plist 들이 있었습니다.
+로컬 백업에는 `HomeDomain :: Library/UserNotifications/` 아래 `Library.plist` 가 있고, 하위 폴더마다 다음 plist 들이 있습니다.
 
 ```
 HomeDomain :: Library/UserNotifications/Library.plist
@@ -48,17 +48,17 @@ HomeDomain :: Library/UserNotifications/<UUID>/Schedule.plist
 HomeDomain :: Library/UserNotifications/<UUID>/Topics.plist
 ```
 
-iOS 12 에서는 하위 폴더 이름이 번들 ID 였지만[1], 이 백업에서는 하위 폴더 이름이 UUID 꼴이라 관찰 메모에서 가려졌고, 이 plist 들의 키 이름도 가려져 있습니다. `DeliveredNotifications.plist` 와 `AttachmentList.plist` 는 관찰 메모에 나오지 않아서, 백업에서 빠지는 것인지 기기에 없는 것인지는 판단할 수 없습니다.
+iOS 12 에서는 하위 폴더 이름이 번들 ID 였지만[1], iOS 27.0 로컬 백업에서는 하위 폴더 이름이 UUID 꼴입니다. 백업에 `DeliveredNotifications.plist` 와 `AttachmentList.plist` 가 없을 때, 백업에서 빠진 것인지 기기에 없는 것인지는 백업만으로 가를 수 없습니다.
 
-알림과 이름이 닿는 설정 파일도 있었습니다.
+알림과 이름이 닿는 설정 파일도 있습니다.
 
-| 도메인 :: 경로 | 관찰한 키 |
+| 도메인 :: 경로 | 키 |
 |---|---|
 | `HomeDomain :: Library/BulletinBoard/VersionedSectionInfo.plist` | `sectionInfo` 아래에 번들 ID 가 키로 들어 있음(`com.apple.MobileSMS`, `com.apple.ScreenTimeNotifications`, `com.apple.findmy` 등과 다른 회사 앱), `sectionInfoVersionNumber` (int) |
 | `HomeDomain :: Library/BulletinBoard/ClearedSections.plist` | 키 없음(빈 plist) |
 | `HomeDomain :: Library/Preferences/com.apple.usernotifications.plist` | `BundleLibrarianVacuumInitialComplete` (bool) |
 
-`VersionedSectionInfo.plist` 가 앱별 알림 설정을 담는지는 확인하지 못했지만, 번들 ID 가 키로 들어 있어서 알림과 관련된 앱 목록을 모을 때 후보로 씁니다. 이 밖에 `AppDomainPlugin-com.apple.UserNotificationsServer.UserNotificationsThumbnailProvider`, `com.apple.MobileSMS.MessagesNotificationExtension` 처럼 알림 확장 도메인도 많았습니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+`VersionedSectionInfo.plist` 가 앱별 알림 설정을 담는지는 알려져 있지 않지만, 번들 ID 가 키로 들어 있어서 알림과 관련된 앱 목록을 모을 때 후보로 씁니다. 이 밖에 `AppDomainPlugin-com.apple.UserNotificationsServer.UserNotificationsThumbnailProvider`, `com.apple.MobileSMS.MessagesNotificationExtension` 처럼 알림 확장 도메인도 많습니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -68,15 +68,15 @@ iOS 12 에서는 하위 폴더 이름이 번들 ID 였지만[1], 이 백업에�
 
 ## 증거로서 의미
 
-**증명하는 것.** 기록이 남아 있으면, 어떤 번들 ID 의 앱이 이런 제목과 본문의 알림을 이 시각에 만들거나 전달했다는 사실을 보여 줍니다[1][2]. iOS 12 에서는 첨부 목록과 첨부 파일까지 남아서[1] 알림으로 받은 사진 같은 파일이 기기에 있었다는 근거도 됩니다. 앱을 지운 뒤에도 알림 기록은 6일 넘게 남았다는 보고가 있어서[4], 지금 설치되어 있지 않은 앱이 그 기간에 있었다는 흔적으로 쓸 수 있습니다.
+**증명하는 것.** 기록이 남아 있으면, 어떤 번들 ID 의 앱이 이런 제목과 본문의 알림을 이 시각에 만들거나 전달했다는 사실을 보여 줍니다[1][2]. iOS 12 에서는 첨부 목록과 첨부 파일까지 남아서[1] 알림으로 받은 사진 같은 파일이 기기에 있었다는 근거도 됩니다. 앱을 지운 뒤에도 알림 기록은 6일 넘게 남을 수 있어서[4], 지금 설치되어 있지 않은 앱이 그 기간에 있었다는 흔적으로 쓸 수 있습니다.
 
-**증명하지 못하는 것.** 알림이 기기에 왔다는 사실은 사용자가 그 알림을 보거나 읽었다는 뜻이 아니고, 알림을 눌러 앱을 열었다는 뜻도 아닙니다. 알림 문구가 원래 메시지 전체와 같은지는 확인한 자료가 없어서, 앱 DB 의 본문과 따로 맞춰 봅니다. 기록이 없다고 알림이 오지 않았다고 말할 수도 없는데, 알림을 지웠을 때 기록이 사라지는지는 참고한 글이 다루지 않았습니다[1].
+**증명하지 못하는 것.** 알림이 기기에 왔다는 사실은 사용자가 그 알림을 보거나 읽었다는 뜻이 아니고, 알림을 눌러 앱을 열었다는 뜻도 아닙니다. 알림 문구가 원래 메시지 전체와 같은지는 알려져 있지 않아서, 앱 DB 의 본문과 따로 맞춰 봅니다. 기록이 없다고 알림이 오지 않았다고 말할 수도 없습니다. 알림을 지웠을 때 기록이 사라지는지도 알려져 있지 않습니다.
 
 보고서에는 "이 메시지를 읽었다" 대신 "번들 ID `com.example.app` 의 알림 기록에 이 시각, 이 제목과 본문이 있다" 처럼 씁니다.
 
 ## 시각 해석
 
-iOS 15 이벤트 파일 안의 시각은 Apple 절대 시각(Cocoa 시각, 2001-01-01 00:00:00 UTC 부터 센 초)을 8바이트 리틀 엔디언으로 저장합니다[2]. 파일 이름도 변형된 Cocoa 시각이라, 1,000,000 으로 나눈 값을 Cocoa 시각으로 바꿉니다[2]. 기록 하나에 시각이 4개 있지만[2] 각 시각이 무엇을 뜻하는지는 원문으로 가르지 못했으니, 보고서에는 몇 번째 시각인지 밝혀 적습니다.
+iOS 15 이벤트 파일 안의 시각은 Apple 절대 시각(Cocoa 시각, 2001-01-01 00:00:00 UTC 부터 센 초)을 8바이트 리틀 엔디언으로 저장합니다[2]. 파일 이름도 변형된 Cocoa 시각이라, 1,000,000 으로 나눈 값을 Cocoa 시각으로 바꿉니다[2]. 기록 하나에 시각이 4개 있지만[2] 각 시각이 무엇을 뜻하는지는 밝혀지지 않았으니, 보고서에는 몇 번째 시각인지 밝혀 적습니다.
 
 아래는 명세로 만든 예시이고 특정 검체의 파일 이름이 아닙니다.
 
@@ -86,17 +86,17 @@ iOS 15 이벤트 파일 안의 시각은 Apple 절대 시각(Cocoa 시각, 2001-
 + 2001-01-01    2023-03-08 20:26:40 UTC
 ```
 
-iOS 12 plist 의 `AppNotificationCreationDate` 는 알림이 만들어진 시각이고 전달 시각은 따로 있습니다[1]. 두 값이 다를 때 그 차이가 무엇을 뜻하는지는 원문이 설명하지 않아서, 두 시각을 모두 적어 둡니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+iOS 12 plist 의 `AppNotificationCreationDate` 는 알림이 만들어진 시각이고 전달 시각은 따로 있습니다[1]. 두 값이 다를 때 그 차이가 무엇을 뜻하는지는 알려져 있지 않아서, 두 시각을 모두 적어 둡니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-**버전마다 파일이 다릅니다.** iOS 12 의 plist 와 iOS 15 의 이벤트 파일은 형식과 위치가 모두 다르고[1][2], iOS 15 이벤트 파일은 한 저자가 적은 시험 자료로 본 결과입니다[2]. iOS 27.0 백업에서는 두 파일 이름이 모두 관찰 메모에 나오지 않았습니다. 검체의 iOS 버전을 먼저 확인하고, 그 버전에 어느 파일이 있는지부터 찾습니다.
+**버전마다 파일이 다릅니다.** iOS 12 의 plist 와 iOS 15 의 이벤트 파일은 형식과 위치가 모두 다르고[1][2], iOS 15 이벤트 파일 구조는 적은 시험 자료로 밝힌 것입니다[2]. iOS 27.0 로컬 백업에는 두 파일이 모두 없을 수 있습니다. 검체의 iOS 버전을 먼저 확인하고, 그 버전에 어느 파일이 있는지부터 찾습니다.
 
-**이름만 보고 해석하지 않습니다.** `ClearedSections.plist` 는 이름에 "지움" 이 들어가지만 관찰한 백업에서는 빈 plist 였고, 무엇을 기록하는 파일인지 확인하지 못했습니다. 이 파일이 비어 있다고 알림을 지운 적이 없다고 쓰지 않습니다.
+**이름만 보고 해석하지 않습니다.** `ClearedSections.plist` 는 이름에 "지움" 이 들어가지만 빈 plist 일 수 있고, 무엇을 기록하는 파일인지 알려져 있지 않습니다. 이 파일이 비어 있다고 알림을 지운 적이 없다고 쓰지 않습니다.
 
 **App Store 서비스의 푸시 표와 헷갈리지 않습니다.** `itunesstored_private.sqlitedb` 에도 `ZPUSHNOTIFICATION`(`ZCLIENT`, `ZUSERINFO`)·`ZPUSHNOTIFICATIONCLIENT` 표가 있지만, 이름만으로는 앱 알림 기록과 같은 것인지 알 수 없습니다. 이 DB 는 [앱 스토어 기록](app-store.md) 에서 다룹니다.
 
-**지우기와 조작.** 앱을 지워도 알림 기록은 한동안 남는다는 보고가 있지만[4], 보관 기간이 지나면 사라질 수 있습니다. 앱 삭제와 기록 공백을 함께 볼 때는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름을 따릅니다.
+**지우기와 조작.** 앱을 지워도 알림 기록은 한동안 남지만[4], 보관 기간이 지나면 사라질 수 있습니다. 앱 삭제와 기록 공백을 함께 볼 때는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름을 따릅니다.
 
 ## 직접 분석해 보기
 

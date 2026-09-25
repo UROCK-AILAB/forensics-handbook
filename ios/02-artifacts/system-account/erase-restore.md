@@ -14,26 +14,26 @@ nav_order: 320
 
 iOS 는 파일 시스템 키를 감싸는 키를 지울 수 있는 저장소 (Effaceable Storage) 에 두고, 이 키는 기밀성을 더하려는 것이 아니라 빨리 지우려고 있습니다[1]. 사용자가 "모든 콘텐츠 및 설정 지우기" 를 하거나 기기 관리(MDM)·Microsoft Exchange ActiveSync·iCloud 에서 원격 지우기 명령을 보내면 이 키를 지우고, 그 순간 모든 파일을 암호학적으로 읽을 수 없게 됩니다[1]. 키를 감싸는 키는 지울 때마다 바뀌고, A9 이후 칩에서는 Secure Enclave 가 엔트로피와 재사용 방지 (anti-replay) 장치로 지우기를 보장합니다[1]. 키 구조는 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 에서 다룹니다.
 
-이 설명대로라면 초기화 전 사용자 데이터는 복구할 대상이 아니고, 분석할 수 있는 것은 "초기화가 있었다" 는 흔적과 그 뒤 설정 과정의 흔적입니다(공식 문서를 바탕으로 한 해석입니다). 초기화된 기기가 처음 켜지면 설정 지원 (Setup Assistant, 내부 이름 Purple Buddy) 이 언어·국가 선택부터 복원 방법 선택까지 사용자를 이끄는데, 이 과정에서 설정 파일에 단계별 표시와 시각이 쌓입니다. 사용자가 새 기기로 설정하지 않고 iCloud 백업·컴퓨터 백업·다른 기기에서 데이터를 옮기면 복원 방법과 복원 시각을 담은 기록도 따로 생깁니다.
+그래서 초기화 전 사용자 데이터는 복구할 대상이 아니고, 분석할 수 있는 것은 "초기화가 있었다" 는 흔적과 그 뒤 설정 과정의 흔적입니다. 초기화된 기기가 처음 켜지면 설정 지원 (Setup Assistant, 내부 이름 Purple Buddy) 이 언어·국가 선택부터 복원 방법 선택까지 사용자를 이끄는데, 이 과정에서 설정 파일에 단계별 표시와 시각이 쌓입니다. 사용자가 새 기기로 설정하지 않고 iCloud 백업·컴퓨터 백업·다른 기기에서 데이터를 옮기면 복원 방법과 복원 시각을 담은 기록도 따로 생깁니다.
 
 조사에서는 두 질문에 답하려고 이 흔적을 봅니다. 하나는 "기기를 언제 초기화했나" 이고, 다른 하나는 "지금 기기의 데이터가 어디서 왔나(새로 시작했나, 백업에서 되살렸나, 다른 기기에서 옮겼나)" 입니다. 증거 인멸을 의심하는 사건이면 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 와 함께 봅니다.
 
 ## 위치와 버전별 차이
 
-흔적마다 볼 수 있는 추출 방식이 다릅니다. 아래 표의 "자료가 시험한 iOS" 는 참고 문헌 저자가 시험한 버전이고, 그 뒤 버전에서도 같은지는 확인하지 못했습니다. "로컬 백업" 칸은 실제 로컬 백업에서 파일과 키 이름이 보였는지만 적었습니다.
+흔적마다 볼 수 있는 추출 방식이 다릅니다. 아래 표의 "자료가 시험한 iOS" 는 참고 문헌에서 시험한 버전이라, 그 뒤 버전은 검체에서 확인합니다. "로컬 백업" 칸은 그 파일이 로컬 백업에 들어 있는지를 나타냅니다.
 
 | 흔적 | 기기 경로 | 자료가 시험한 iOS | 로컬 백업 |
 |---|---|---|---|
-| `.obliterated` | `/private/var/root/.obliterated` | 13.7·14.2[2] | 보이지 않음 |
-| containermanagerd 로그 | `/private/var/root/Library/Logs/MobileContainerManager/containermanagerd.log.0` (`.1`, `.2`) | 13.7·14.2[2] | 보이지 않음 |
+| `.obliterated` | `/private/var/root/.obliterated` | 13.7·14.2[2] | 없음 |
+| containermanagerd 로그 | `/private/var/root/Library/Logs/MobileContainerManager/containermanagerd.log.0` (`.1`, `.2`) | 13.7·14.2[2] | 없음 |
 | 설정 지원 설정 | `/private/var/mobile/Library/Preferences/com.apple.purplebuddy.plist` | 13.7·14.2[2], 15.1·16.7.5[3] | HomeDomain `Library/Preferences/com.apple.purplebuddy.plist` |
-| Lockdown 기록 | `/private/var/root/Library/Lockdown/data_ark.plist` | 버전 명시 없음(2021년 글)[4] | 보이지 않음 |
+| Lockdown 기록 | `/private/var/root/Library/Lockdown/data_ark.plist` | 버전 명시 없음(2021년 글)[4] | 없음 |
 | 백업·복원 설정 | `*/Library/Preferences/com.apple.MobileBackup.plist`[3] | 15.1·16.7.5[3] | HomeDomain `Library/Preferences/com.apple.MobileBackup.plist` |
-| 이전 설정 | `/private/var/mobile/Library/Preferences/com.apple.migration.plist` | 버전 명시 없음(2021년 글)[4] | 보이지 않음 |
+| 이전 설정 | `/private/var/mobile/Library/Preferences/com.apple.migration.plist` | 버전 명시 없음(2021년 글)[4] | 없음 |
 | 사진 보관함 이전 기록 | `Photos.sqlite` 의 `ZMIGRATIONHISTORY` 표 | 15.1·16.7.5[3] | CameraRollDomain `Media/PhotoData/Photos.sqlite` 에 표가 있음 |
-| OS 업데이트 기록 | `/private/var/mobile/MobileSoftwareUpdate/restore.log` | 버전 명시 없음(2021년 글)[5] | 보이지 않음 |
+| OS 업데이트 기록 | `/private/var/mobile/MobileSoftwareUpdate/restore.log` | 버전 명시 없음(2021년 글)[5] | 없음 |
 
-관찰한 로컬 백업에는 `.obliterated`, MobileContainerManager 로그, `data_ark.plist`, `restore.log` 가 나오지 않았습니다. 이 넷은 관찰 범위에서 보면 전체 파일 시스템 추출에서만 볼 수 있고, 추출 방식별 차이는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 와 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+`.obliterated`, MobileContainerManager 로그, `data_ark.plist`, `restore.log` 는 로컬 백업에 들어 있지 않을 수 있어서 전체 파일 시스템 추출에서 찾습니다. 추출 방식별 차이는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 와 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -43,29 +43,29 @@ iOS 는 파일 시스템 키를 감싸는 키를 지울 수 있는 저장소 (Ef
 
 `containermanagerd.log.0`·`.1`·`.2` 는 번호가 돌아가는 로그로, `.0` 이 가장 새 것이고 숫자가 클수록 오래된 것입니다[2]. 초기화 뒤 첫 부팅에서는 이 로그에 이전 OS 빌드 정보가 없다는 "Upgrade from NULL" 기록이 남습니다[2]. 초기화한 기기는 시간대가 미국 태평양 시간(UTC-8)으로 돌아가서 첫 부팅 직후 줄은 이 시간대로 찍히다가 설정 과정에서 기기 시간대로 바뀌고, 시간대가 바뀌는 지점을 직접 확인해야 합니다[2]. `/private/var/db/diagnostics/logd.0.log` 에 시간대 변경과 종료 기록이 있어 이 보정을 맞춰 볼 때 씁니다[2].
 
-초기화 뒤 새로 만드는 DB 의 생성 시각도 참고가 되고, [2] 는 `/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb` 와 `/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata` 를 예로 듭니다. 이때는 생성 시각만 뜻이 있고, 수정 시각은 초기화와 관계없습니다[2].
+초기화 뒤 새로 만드는 DB 의 생성 시각도 참고가 되고, `/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb` 와 `/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata` 가 그 예입니다[2]. 이때는 생성 시각만 뜻이 있고, 수정 시각은 초기화와 관계없습니다[2].
 
 ### 설정 지원 — `com.apple.purplebuddy.plist`
 
-설정 지원이 단계를 지나며 값을 적는 파일입니다. 관찰한 로컬 백업에서 확인한 키 가운데 초기화·복원과 관계있는 것은 아래와 같습니다. 파일 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 을 봅니다.
+설정 지원이 단계를 지나며 값을 적는 파일입니다. 키 가운데 초기화·복원과 관계있는 것은 아래와 같습니다. 파일 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 을 봅니다.
 
-| 키 | 형식 | 자료에서 밝힌 뜻 |
+| 키 | 형식 | 뜻 |
 |---|---|---|
-| `GuessedCountry` | list | 초기화 뒤 처음 성공적으로 부팅한 때, 곧 "국가 또는 지역 선택" 단계 무렵을 보여 줍니다[2]. [3] 은 설정을 처음 시작한 시각일 뿐 설정을 끝냈다는 뜻은 아니라고 봅니다[3] |
+| `GuessedCountry` | list | 초기화 뒤 처음 성공적으로 부팅한 때, 곧 "국가 또는 지역 선택" 단계 무렵을 보여 줍니다[2]. 설정을 처음 시작한 시각일 뿐 설정을 끝냈다는 뜻은 아닙니다[3] |
 | `SetupLastExit` | datetime | [4] 는 설정 지원을 끝낸 시각으로 보고, [2] 는 사용자가 설정 화면에서 마지막으로 무언가 바꾼 시각을 반영해 믿기 어렵다고 봅니다[2][4] |
-| `SetupState` | str | 설정 방법. "SetupUsingAssistant"(기기 간 이전 또는 로컬 백업), "RestoredFromCloudBackup"(iCloud 복원)[4], "RestoredFromDevice"(기기 간 이전)[3]. iCloud 복원 값을 [2] 는 "RestoredFromiCloudBackup" 으로 적어서 자료마다 표기가 다릅니다 |
+| `SetupState` | str | 설정 방법. "SetupUsingAssistant"(기기 간 이전 또는 로컬 백업), "RestoredFromCloudBackup"(iCloud 복원)[4], "RestoredFromDevice"(기기 간 이전)[3]. iCloud 복원 값을 "RestoredFromiCloudBackup" 으로 적은 자료도 있어서[2] 자료마다 표기가 다릅니다 |
 | `lastPrepareLaunchSentinel` | list | 설정 완료 표시로 쓸 수 있습니다[3] |
-| `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion` | bool·int | 관찰만 했고, 뜻을 밝힌 자료는 찾지 못했습니다 |
+| `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion` | bool·int | 공개 자료 없음 |
 
-`Language`, `Locale`, `UserChoseLanguage`, `PrivacyPresented`, `ScreenTimePresented`, `AutoUpdatePresented` 처럼 설정 화면을 보여 줬는지 적는 키도 함께 있습니다. 같은 계열로 `com.apple.SetupAssistant.plist`(`CKPerBootTasks`, `CKStartupTime`), `com.apple.setupassistant.privacypane.plist`(`HasSeenPrivacy`, `LastSeenPrivacyVersion`), `com.apple.keyboard.plist` 의 `BuddySetupDone` 도 보였지만, 이 키로 초기화·복원을 판단한 자료는 찾지 못했습니다.
+`Language`, `Locale`, `UserChoseLanguage`, `PrivacyPresented`, `ScreenTimePresented`, `AutoUpdatePresented` 처럼 설정 화면을 보여 줬는지 적는 키도 함께 있습니다. 같은 계열로 `com.apple.SetupAssistant.plist`(`CKPerBootTasks`, `CKStartupTime`), `com.apple.setupassistant.privacypane.plist`(`HasSeenPrivacy`, `LastSeenPrivacyVersion`), `com.apple.keyboard.plist` 의 `BuddySetupDone` 도 있지만, 이 키로 초기화·복원을 판단하는 공개 자료는 없습니다.
 
 ### 첫 설정 완료와 복원 방법 — `data_ark.plist`
 
-Lockdown 폴더의 `data_ark.plist` 에서 `FirstPurpleBuddyCompletion` 은 설정 지원을 처음 끝낸 시각이고 Unix 밀리초로 적습니다[4]. `com.apple.purplebuddy-SetupState` 와 `com.apple.purplebuddy-RestoreState` 는 복원 방법을 나타내며, 값으로 RestoredFromDevice(기기 간), RestoredFromiTunesBackup(컴퓨터 백업), RestoredFromiCloudBackup(iCloud 백업)이 나옵니다[4]. 컴퓨터 백업으로 복원했으면 그 백업을 만든 컴퓨터 이름도 남는다고 하지만[4], 어떤 키에 남는지는 확인하지 못했습니다. Lockdown 폴더의 다른 기록은 [기기 정보](device-info.md) 에서 다룹니다.
+Lockdown 폴더의 `data_ark.plist` 에서 `FirstPurpleBuddyCompletion` 은 설정 지원을 처음 끝낸 시각이고 Unix 밀리초로 적습니다[4]. `com.apple.purplebuddy-SetupState` 와 `com.apple.purplebuddy-RestoreState` 는 복원 방법을 나타내며, 값으로 RestoredFromDevice(기기 간), RestoredFromiTunesBackup(컴퓨터 백업), RestoredFromiCloudBackup(iCloud 백업)이 나옵니다[4]. 컴퓨터 백업으로 복원했으면 그 백업을 만든 컴퓨터 이름도 남고[4], 어느 키에 남는지는 검체에서 확인합니다. Lockdown 폴더의 다른 기록은 [기기 정보](device-info.md) 에서 다룹니다.
 
 ### 백업에서 복원한 기록 — `com.apple.MobileBackup.plist`
 
-관찰한 로컬 백업에서는 HomeDomain `Library/Preferences/com.apple.MobileBackup.plist` 에 들어 있고, 복원과 관계있는 키는 아래와 같습니다.
+로컬 백업에서는 HomeDomain `Library/Preferences/com.apple.MobileBackup.plist` 에 들어 있고, 복원과 관계있는 키는 아래와 같습니다.
 
 ```
 RestoreInfo: {BackupBuildVersion, DeviceBuildVersion, RestoreDate, WasCloudRestore}
@@ -77,15 +77,15 @@ BackupStateInfo: {backupAttemptCount, date, errors, estimatedTimeRemaining, isBa
 AccountEnabledDate (datetime)
 ```
 
-`RestoreInfo` 에 복원 방법 정보가 들어 있고, 그 안의 `WasCloudRestore` 가 참이면 iCloud 복원입니다[3]. `BackupBuildVersion` 은 백업한 쪽 OS 빌드, `DeviceBuildVersion` 은 복원받은 기기의 빌드로 보이지만 이름에서 짐작한 것이고, `RestoreDate` 의 저장 형식도 확인하지 못했습니다.
+`RestoreInfo` 에 복원 방법 정보가 들어 있고, 그 안의 `WasCloudRestore` 가 참이면 iCloud 복원입니다[3]. `BackupBuildVersion` 은 백업한 쪽 OS 빌드, `DeviceBuildVersion` 은 복원받은 기기의 빌드로 보입니다. `RestoreDate` 의 저장 형식은 공개 자료가 없어 검체에서 확인합니다.
 
-기기 간 이전(빠른 시작)을 하면 `DeviceTransferInfo` 가 생기고, 그 안에 `FileTransferStartDate`, `SourceDeviceBuildVersion`, `SourceDeviceUDID`(원래 기기 식별자), `BuildVersion` 이 들어갑니다[3]. 관찰한 백업에는 `DeviceTransferInfo` 가 없었는데, 이 기기가 기기 간 이전을 하지 않아서인지 키 구성이 바뀌어서인지는 알 수 없습니다. 식별자 읽는 법은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
+기기 간 이전(빠른 시작)을 하면 `DeviceTransferInfo` 가 생기고, 그 안에 `FileTransferStartDate`, `SourceDeviceBuildVersion`, `SourceDeviceUDID`(원래 기기 식별자), `BuildVersion` 이 들어갑니다[3]. `DeviceTransferInfo` 가 없으면 기기 간 이전을 하지 않았거나 판에 따라 키 구성이 달라졌을 수 있습니다. 식별자 읽는 법은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
 
 ### 다른 기기에서 옮긴 기록 — `com.apple.migration.plist` 와 `ZMIGRATIONHISTORY`
 
-`com.apple.migration.plist` 에는 `RestoredBackupProductType`(원래 기기 모델 ID), `BackupDeviceUUID`(어디서 온 값인지 원문도 밝히지 못한 식별자), `Reason`(대상 기기 UDID 와 복원 일시)이 남습니다[4]. 관찰한 백업에는 이 파일이 없었고 대신 `AppDomain-com.apple.Migration` 도메인이 있었지만, 그 내용은 확인하지 못했습니다.
+`com.apple.migration.plist` 에는 `RestoredBackupProductType`(원래 기기 모델 ID), `BackupDeviceUUID`(어디서 온 값인지 밝혀지지 않은 식별자), `Reason`(대상 기기 UDID 와 복원 일시)이 남습니다[4]. 로컬 백업에는 이 파일 대신 `AppDomain-com.apple.Migration` 도메인이 있을 수 있고, 그 내용을 밝힌 공개 자료는 없습니다.
 
-사진 보관함 DB 인 `Photos.sqlite` 의 `ZMIGRATIONHISTORY` 표도 이전 과정을 적습니다[3]. `ZMIGRATIONDATE` 는 이전 시각, `ZOSVERSION` 은 iOS 빌드이고, `ZORIGIN` 은 3 이면 다른 기기에서 온 데이터, 2 면 출처를 알 수 없는 이전이라고 저자가 제한된 시험을 바탕으로 적었습니다[3]. `ZSOURCEMODELVERSION` 은 비어 있는 행이 있고, 그 뜻은 자료에서 분명하지 않습니다. 관찰한 백업의 표에는 다음 칸이 있었습니다.
+사진 보관함 DB 인 `Photos.sqlite` 의 `ZMIGRATIONHISTORY` 표도 이전 과정을 적습니다[3]. `ZMIGRATIONDATE` 는 이전 시각, `ZOSVERSION` 은 iOS 빌드입니다. `ZORIGIN` 은 제한된 시험에서 3 이면 다른 기기에서 온 데이터, 2 면 출처를 알 수 없는 이전이었습니다[3]. `ZSOURCEMODELVERSION` 은 비어 있는 행이 있고, 그 뜻을 밝힌 공개 자료는 없습니다. 표의 칸은 다음과 같습니다.
 
 ```
 Z_PK, Z_ENT, Z_OPT, ZCPLENABLED, ZFORCEREBUILDREASON, ZINDEX, ZMIGRATIONTYPE, ZMODELVERSION, ZORIGIN,
@@ -93,15 +93,15 @@ ZSOURCEMODELVERSION, ZINITIALSYNCDATE, ZMIGRATIONDATE, ZDEVICEUNIQUEID, ZFRAMEWO
 ZOSVERSION, ZSTOREUUID, ZGLOBALKEYVALUES
 ```
 
-[3] 의 저자는 시험을 두 번만 했으니 중요한 사건이면 직접 재현해 보라고 적었습니다[3]. 보관함 전체 구조는 [사진 보관함](../media/photos/index.md) 에서 다룹니다.
+이 해석은 두 번의 시험에서 나온 것이라[3], 중요한 사건이면 직접 재현해 봅니다. 보관함 전체 구조는 [사진 보관함](../media/photos/index.md) 에서 다룹니다.
 
 ### OS 업데이트 기록 — `restore.log`
 
-`restore.log` 에는 "data = " 뒤에 JSON 조각이 들어 있고, 칸은 `eventTime`(Unix 시각), `originalOSVersion`(이전 빌드), `currentOSVersion`(이후 빌드), `event`(대부분 "updateFinished"), `deviceClass`, `deviceModel`, `batteryIsCharging` 입니다[5]. 파일 이름에 restore 가 들어 있지만 업데이트 기록이고, 초기화도 기록하는지는 원문도 밝히지 않았습니다[5]. 관찰한 백업에는 이 파일이 없었고 RootDomain `Library/Preferences/com.apple.MobileSoftwareUpdate.plist` 는 키가 비어 있었습니다.
+`restore.log` 에는 "data = " 뒤에 JSON 조각이 들어 있고, 칸은 `eventTime`(Unix 시각), `originalOSVersion`(이전 빌드), `currentOSVersion`(이후 빌드), `event`(대부분 "updateFinished"), `deviceClass`, `deviceModel`, `batteryIsCharging` 입니다[5]. 파일 이름에 restore 가 들어 있지만 업데이트 기록이고, 초기화도 기록하는지는 알려져 있지 않습니다[5]. 로컬 백업에는 이 파일이 들어 있지 않을 수 있고, RootDomain `Library/Preferences/com.apple.MobileSoftwareUpdate.plist` 는 키가 비어 있을 수 있습니다.
 
-### 관찰만 된 복원·이전 표시
+### 뜻이 밝혀지지 않은 복원·이전 표시
 
-아래 키는 이름으로 보아 복원·이전과 관계있어 보이지만, 해석한 자료를 찾지 못해 관찰 사실만 적습니다.
+아래 키는 이름으로 보아 복원·이전과 관계있어 보이지만, 뜻을 밝힌 공개 자료가 없어 키 이름만 적습니다.
 
 | 파일(HomeDomain) | 키 |
 |---|---|
@@ -110,9 +110,9 @@ ZOSVERSION, ZSTOREUUID, ZGLOBALKEYVALUES
 | `Library/Preferences/com.apple.appstored.plist` | `LastOSInstallDate`, `LastOSBuildVersion`, `PerformedPostRestoreUpdate`, `RestoreInstallsFailedWithCodeSigError` |
 | `Library/Preferences/com.apple.accountsd.plist` | `LastMigrationSystemVersion`, `LastSystemVersion` |
 | `Library/DeviceRegistry.state/GlobalState.plist` | `restoreTracker.identifier`, `restoreTracker.state` |
-| `Library/Preferences/com.apple.icloud.findmydeviced.postwipe.plist` | 파일은 있지만 키가 없었습니다 |
+| `Library/Preferences/com.apple.icloud.findmydeviced.postwipe.plist` | 파일은 있고 키는 비어 있을 수 있음 |
 
-`com.apple.icloud.findmydeviced.postwipe.plist` 는 이름으로 보아 원격 지우기와 관계있어 보이지만 확인하지 못했습니다. Safari 쪽에도 설정 지원 전용 웹 데이터 `AppDomain-com.apple.mobilesafari` `Library/WebKit/com.apple.purplebuddy/WebsiteData/ResourceLoadStatistics/observations.db` 가 있었지만, 해석 자료는 찾지 못했습니다.
+`com.apple.icloud.findmydeviced.postwipe.plist` 는 이름으로 보아 원격 지우기와 관계있어 보입니다. Safari 쪽에도 설정 지원 전용 웹 데이터 `AppDomain-com.apple.mobilesafari` `Library/WebKit/com.apple.purplebuddy/WebsiteData/ResourceLoadStatistics/observations.db` 가 있고, 이를 해석한 공개 자료는 없습니다.
 
 ## 증거로서 의미
 
@@ -126,7 +126,7 @@ ZOSVERSION, ZSTOREUUID, ZGLOBALKEYVALUES
 **증명하지 못하는 것**
 
 - 지우기를 누른 시각 자체는 알려 주지 않습니다. 남는 시각은 초기화 뒤 첫 부팅이나 설정 단계 시각입니다[2].
-- 누가, 어떤 방법(직접·iCloud·MDM·Exchange)으로 지웠는지 구별하지 못합니다. 네 방법 모두 같은 키 삭제를 쓰고[1], 기기 안에서 방법을 구별하는 흔적은 확인하지 못했습니다. 원격 지우기 쪽은 [나의 찾기](../location/find-my.md), [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md), [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에서 기기 밖 기록과 맞춰 봅니다.
+- 누가, 어떤 방법(직접·iCloud·MDM·Exchange)으로 지웠는지 구별하지 못합니다. 네 방법 모두 같은 키 삭제를 쓰고[1], 기기 안에서 방법을 구별하는 흔적은 알려져 있지 않습니다. 원격 지우기 쪽은 [나의 찾기](../location/find-my.md), [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md), [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에서 기기 밖 기록과 맞춰 봅니다.
 - 초기화 전에 어떤 데이터가 있었는지는 알려 주지 않고, 그 데이터를 되살릴 수도 없습니다[1].
 - 초기화를 증거 인멸 목적으로 했다는 뜻은 담기지 않습니다. 보고서에는 "이 시각 무렵 초기화 뒤 첫 부팅 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
@@ -138,11 +138,11 @@ ZOSVERSION, ZSTOREUUID, ZGLOBALKEYVALUES
 |---|---|---|
 | `.obliterated` 생성 시각 | 초기화 뒤 첫 부팅[2] | 파일 시스템 시각 |
 | containermanagerd 로그 줄 | 초기화 뒤 첫 부팅[2] | 첫 부팅 무렵 UTC-8, 설정 뒤 기기 시간대[2] |
-| `GuessedCountry` | 국가 또는 지역 선택 무렵[2] | [2] 는 기기 현지 시각으로 봄(원문 재확인 못 함) |
-| `SetupLastExit` | 설정 지원 종료[4] 또는 설정 화면에서 마지막으로 바꾼 때[2] | plist 날짜형(기준은 확인하지 못함) |
+| `GuessedCountry` | 국가 또는 지역 선택 무렵[2] | 기기 현지 시각[2] |
+| `SetupLastExit` | 설정 지원 종료[4] 또는 설정 화면에서 마지막으로 바꾼 때[2] | plist 날짜형(기준은 검체에서 확인) |
 | `FirstPurpleBuddyCompletion` | 설정 지원을 처음 끝낸 때[4] | Unix 밀리초[4] |
-| `RestoreInfo` 의 `RestoreDate` | 복원(이름에서 짐작) | 확인하지 못함 |
-| `ZMIGRATIONDATE` | 사진 보관함 이전[3] | [3] 은 UTC 로 적음. Mac 절대 시각인지는 확인하지 못함 |
+| `RestoreInfo` 의 `RestoreDate` | 복원(이름에서 짐작) | 검체에서 확인 |
+| `ZMIGRATIONDATE` | 사진 보관함 이전[3] | UTC[3]. Mac 절대 시각인지는 검체에서 확인 |
 | `restore.log` 의 `eventTime` | OS 업데이트 완료[5] | Unix 시각[5] |
 
 `.obliterated` 와 containermanagerd 로그가 가리키는 순간은 지우기를 누른 때가 아니라 그 뒤 첫 부팅이라서[2], 보고서에는 "초기화 뒤 첫 부팅 시각" 으로 적습니다. 첫 부팅 무렵 기록이 UTC-8 로 찍힐 수 있어서[2], 시간대가 설정되기 전후의 줄을 섞어 읽지 않도록 [시간대와 시각 설정](time-zone.md) 기록과 `logd.0.log` 의 시간대 변경 기록으로 맞춰 봅니다[2].
@@ -153,9 +153,9 @@ iCloud 백업으로 복원한 기기는 이전 기기의 설정값이 되살아�
 
 `SetupLastExit` 는 자료마다 해석이 갈려서[2][4] 단독 근거로 쓰지 않습니다. `restore.log` 는 이름과 달리 업데이트 기록이라서[5] 초기화 기록으로 읽지 않습니다. `ZMIGRATIONHISTORY` 해석은 두 번의 시험에서 나온 것이라[3] 사건에 쓰려면 같은 iOS 버전 기기로 재현해 보는 편이 안전합니다.
 
-로컬 백업만 확보한 경우에는 `.obliterated`, containermanagerd 로그, `data_ark.plist`, `restore.log` 를 볼 수 없었습니다. 백업 안의 `AddressBook.sqlitedb` 는 HomeDomain `Library/AddressBook/AddressBook.sqlitedb` 로 들어 있지만, 백업 파일의 생성 시각은 원본 기기의 생성 시각과 다를 수 있어서 [2] 의 생성 시각 방법을 백업에 그대로 쓸 수 있는지는 확인하지 못했습니다.
+로컬 백업만 확보한 경우에는 `.obliterated`, containermanagerd 로그, `data_ark.plist`, `restore.log` 를 보지 못할 수 있습니다. 백업 안의 `AddressBook.sqlitedb` 는 HomeDomain `Library/AddressBook/AddressBook.sqlitedb` 로 들어 있지만, 백업 파일의 생성 시각은 원본 기기의 생성 시각과 다를 수 있습니다. 생성 시각 방법[2]을 백업에 그대로 쓸 수 있는지는 공개 자료가 없어 검체에서 확인합니다.
 
-자료가 시험한 버전은 iOS 13.7·14.2[2], 15.1·16.7.5[3] 이고, iOS 17 이후에도 키의 뜻이 같은지는 확인하지 못했습니다. iOS 27.0 백업에서는 키 이름만 확인했습니다. 컴퓨터로 펌웨어를 다시 설치해 복원한 경우 위 흔적이 어떻게 달라지는지도 확인하지 못했습니다.
+자료가 시험한 버전은 iOS 13.7·14.2[2], 15.1·16.7.5[3] 이라, iOS 17 이후에도 키의 뜻이 같은지는 검체에서 확인합니다. iOS 27.0 백업에도 같은 이름의 키가 있습니다. 컴퓨터로 펌웨어를 다시 설치해 복원한 경우 위 흔적이 어떻게 달라지는지는 공개 자료가 없습니다.
 
 ## 직접 분석해 보기
 
@@ -174,7 +174,7 @@ iCloud 백업으로 복원한 기기는 이전 기기의 설정값이 되살아�
 1. 로컬 백업이면 `Manifest.db` 에서 HomeDomain `Library/Preferences/com.apple.purplebuddy.plist` 와 `com.apple.MobileBackup.plist` 의 파일 해시 이름을 찾아 꺼냅니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 을 봅니다.
 2. macOS 의 `plutil -p` 나 Python 표준 라이브러리 `plistlib` 로 두 파일을 열어 `GuessedCountry`, `SetupState`, `SetupLastExit`, `RestoreInfo` 를 확인합니다.
 3. `sqlite3` 로 `Photos.sqlite` 를 열고 `ZMIGRATIONHISTORY` 의 `ZMIGRATIONDATE`, `ZORIGIN`, `ZSOURCEMODELVERSION`, `ZOSVERSION` 을 봅니다. DB 다루는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 를 봅니다.
-4. 전체 파일 시스템 추출본이면 `.obliterated` 의 생성 시각, `containermanagerd.log.*`, `data_ark.plist`, `restore.log` 를 차례로 봅니다. iLEAPP 같은 공개 파서도 이 가운데 일부를 읽어 주고, `restore.log` 파서는 [5] 의 저자가 iLEAPP 용으로 만들었습니다[5]. 도구 결과는 위 2~3단계의 직접 확인과 맞춰 봅니다.
+4. 전체 파일 시스템 추출본이면 `.obliterated` 의 생성 시각, `containermanagerd.log.*`, `data_ark.plist`, `restore.log` 를 차례로 봅니다. iLEAPP 같은 공개 파서도 이 가운데 일부를 읽어 주고, iLEAPP 에는 `restore.log` 파서도 있습니다[5]. 도구 결과는 위 2~3단계의 직접 확인과 맞춰 봅니다.
 
 ## 교차 검증
 

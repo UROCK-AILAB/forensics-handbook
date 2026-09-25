@@ -21,11 +21,11 @@ nav_order: 1470
 | iOS 12 이후 | 스크린 타임 DB 가 생깁니다 [3] | 앱별 사용 시간과 들어 올림 횟수를 한 시간 단위로 모읍니다 [3][4] |
 | iOS 15 이하 | knowledgeC.db 의 `/app/inFocus`·`/display/isBacklit`·`/device/isLocked` 스트림이 중심입니다 [1][2] | 보관 기간은 약 4주입니다 [1] |
 | iOS 16 이후 | 앱 초점·Safari 기록·설치 기록·기기 방향·충전 상태 등이 바이옴으로 옮겨 갔습니다 [2] | knowledgeC.db 파일은 남지만 iOS 15 보다 기록이 크게 줄고 여러 범주가 빠졌습니다 [2] |
-| iOS 17 이후 | 버전별 세부 변화는 이 핸드북에서 확인하지 못했습니다 | 검체의 실제 폴더와 공개 도구의 해석을 대조합니다 |
+| iOS 17 이후 | 버전별 세부 변화는 공개 자료가 없습니다 | 검체의 실제 폴더와 공개 도구의 해석을 대조합니다 |
 
-**수집 범위**도 확인합니다. knowledgeC.db 는 물리 추출이나 탈옥 기기에서만 얻을 수 있었고 iTunes 식 백업에서는 본 적이 없다고 2018년 글의 저자가 적었으며 [1], 스크린 타임 DB 도 표준 iOS 백업에는 들어 있지 않아 전체 파일 시스템 추출이 필요하다고 Magnet 이 적었습니다 [3]. 바이옴이 로컬 백업에 들어가는지는 이 핸드북에서 확인하지 못했습니다. 손에 있는 자료가 로컬 백업뿐이라면 아래 표의 1~3번은 없을 수 있다고 보고, 필요한 추출 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 고릅니다.
+**수집 범위**도 확인합니다. 2018년 기준으로 knowledgeC.db 는 물리 추출이나 탈옥 기기에서만 얻을 수 있었고 iTunes 식 백업에는 들어 있지 않았습니다 [1]. 스크린 타임 DB 도 표준 iOS 백업에는 들어 있지 않아 전체 파일 시스템 추출이 필요합니다 [3]. 바이옴이 로컬 백업에 들어가는지는 공개 자료가 없어 검체로 확인합니다. 손에 있는 자료가 로컬 백업뿐이라면 아래 표의 1~3번은 없을 수 있다고 보고, 필요한 추출 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 고릅니다.
 
-**시각 기준**은 knowledgeC.db 와 바이옴 모두 Mac 절대 시각 (2001-01-01 기준) 이라서 Unix 시각으로 바꾸려면 978307200 을 더합니다 [1][2]. 스크린 타임 DB 의 시각 형식은 이번에 연 두 출처 모두 밝히지 않았습니다. 푼 값을 현지 시각으로 옮기기 전에 기기의 시간대를 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 에서 확인하고, 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
+**시각 기준**은 knowledgeC.db 와 바이옴 모두 Mac 절대 시각 (2001-01-01 기준) 이라서 Unix 시각으로 바꾸려면 978307200 을 더합니다 [1][2]. 스크린 타임 DB 의 시각 형식은 공개 자료에 나와 있지 않아 검체에서 확인합니다. 푼 값을 현지 시각으로 옮기기 전에 기기의 시간대를 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 에서 확인하고, 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
 
 **스크린 타임 동기화** 여부도 미리 봅니다. 스크린 타임은 기본값으로 기기 사이에 동기화되지 않지만 사용자가 켤 수 있고, 켜면 가족 공유 계정의 기기 사용 기록이 함께 보여서 손에 없는 기기의 앱 사용까지 보일 수 있습니다 [3].
 
@@ -34,13 +34,13 @@ nav_order: 1470
 | 순서 | 아티팩트 | 알려 주는 것 | 자세히 |
 |---|---|---|---|
 | 1 | knowledgeC.db (iOS 15 이하에서 중심) — 기기 경로 `/private/var/mobile/Library/CoreDuet/Knowledge/` [1] | `ZOBJECT` 표의 스트림별 시작·끝 시각. `/display/isBacklit` 은 화면 켜짐·꺼짐, `/device/isLocked` 는 잠금 상태, `/app/inFocus` 는 앞에 떠 있던 앱이고, `/device/isPluggedIn`·`/device/batteryPercentage` 가 충전과 배터리를 보여 줍니다 [1] | [KnowledgeC](../../02-artifacts/app-usage/knowledgec/index.md) |
-| 2 | 바이옴 (iOS 16 이후) — `/private/var/mobile/Library/Biome`, `/private/var/db/biome` 아래 `streams/public`, `streams/restricted` [2] | 앱 초점 기록이 `_DKEvent.App.inFocus` 폴더에서 보인다고 보고됐습니다 (iOS 16 기준) [2]. 잠금·화면 켜짐에 해당하는 스트림 이름은 이 핸드북에서 확인하지 못했습니다 | [바이옴](../../02-artifacts/app-usage/biome/index.md), [SEGB 형식](../../01-foundations/data-formats/segb.md) |
+| 2 | 바이옴 (iOS 16 이후) — `/private/var/mobile/Library/Biome`, `/private/var/db/biome` 아래 `streams/public`, `streams/restricted` [2] | 앱 초점 기록은 `_DKEvent.App.inFocus` 폴더에 있습니다 (iOS 16 기준) [2]. 잠금·화면 켜짐에 해당하는 스트림 이름은 공개 자료가 없습니다 | [바이옴](../../02-artifacts/app-usage/biome/index.md), [SEGB 형식](../../01-foundations/data-formats/segb.md) |
 | 3 | 스크린 타임 DB — `/private/var/mobile/Library/Application Support/com.apple.remotemanagementd/RMAdminStore-Local.sqlite` [3][4] | 앱 이름과 사용 시간(초), 기기를 들어 올린 횟수와 시각, 앱별 알림 수, 한 시간 단위 구간과 그 시작 시각 [3][4] | [화면 사용 시간](../../02-artifacts/app-usage/screen-time.md) |
-| 4 | 스크린 타임 설정 — 백업의 HomeDomain `Library/Preferences/com.apple.ScreenTimeAgent.plist` | `ScreenTimeEnabled`, `SyncEnabled`, `UsageGenesisDate`, `LastViewedAllActivityDate`, `LastTimeZoneName`, `AutomaticSyncEnableOccurred` 같은 키 이름이 있습니다. 각 키 값의 뜻은 문서로 확인하지 못했습니다 | [화면 사용 시간](../../02-artifacts/app-usage/screen-time.md), [설정 값](../../02-artifacts/system-account/preferences.md) |
-| 5 | 앱별 데이터 사용량 — 백업의 WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZPROCESS` 표에 `ZFIRSTTIMESTAMP`, `ZTIMESTAMP`, `ZBUNDLENAME`, `ZPROCNAME` 칸이, `ZLIVEUSAGE` 표에 `ZTIMESTAMP`, `ZWWANIN`, `ZWWANOUT` 칸이 있습니다. 이 시각을 앱의 첫·마지막 통신 시각으로 읽어도 되는지와 시각 기준은 확인하지 못했습니다 | [앱별 데이터 사용량](../../02-artifacts/network/data-usage.md) |
+| 4 | 스크린 타임 설정 — 백업의 HomeDomain `Library/Preferences/com.apple.ScreenTimeAgent.plist` | `ScreenTimeEnabled`, `SyncEnabled`, `UsageGenesisDate`, `LastViewedAllActivityDate`, `LastTimeZoneName`, `AutomaticSyncEnableOccurred` 같은 키 이름이 있습니다. 각 키 값의 뜻을 설명한 공개 문서는 없습니다 | [화면 사용 시간](../../02-artifacts/app-usage/screen-time.md), [설정 값](../../02-artifacts/system-account/preferences.md) |
+| 5 | 앱별 데이터 사용량 — 백업의 WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZPROCESS` 표에 `ZFIRSTTIMESTAMP`, `ZTIMESTAMP`, `ZBUNDLENAME`, `ZPROCNAME` 칸이, `ZLIVEUSAGE` 표에 `ZTIMESTAMP`, `ZWWANIN`, `ZWWANOUT` 칸이 있습니다. 이 시각을 앱의 첫·마지막 통신 시각으로 읽어도 되는지와 시각 기준은 검체에서 확인합니다 | [앱별 데이터 사용량](../../02-artifacts/network/data-usage.md) |
 | 6 | 백업을 만든 시각 — `Manifest.plist` 의 `Date`, `Info.plist` 의 `Last Backup Date` | 수집 시점을 적어 두는 기준점 | [로컬 백업](../../01-foundations/backups/local-backup/index.md) |
 
-백업에는 스크린 타임과 관련된 도메인 `AppDomainGroup-group.com.apple.ScreenTime`, `SysSharedContainerDomain-systemgroup.com.apple.DeviceActivity` 와 설정 파일 `com.apple.ScreenTimeSettingsAgent.plist` 도 보이지만, 그 안에 사용 기록 DB 가 있는지는 확인하지 못했습니다.
+백업에는 스크린 타임과 관련된 도메인 `AppDomainGroup-group.com.apple.ScreenTime`, `SysSharedContainerDomain-systemgroup.com.apple.DeviceActivity` 와 설정 파일 `com.apple.ScreenTimeSettingsAgent.plist` 도 있습니다. 그 안에 사용 기록 DB 가 있는지는 검체에서 확인합니다.
 
 ## 분석 흐름
 
@@ -59,10 +59,10 @@ nav_order: 1470
    ```
 
    SQLite 의 `datetime(..., 'unixepoch')` 는 결과를 UTC 로 내놓아서, 현지 시각은 따로 시간대를 더해 씁니다.
-4. iOS 16 이후라면 바이옴의 앱 초점 스트림에서 같은 구간을 만들고, knowledgeC.db 에 남은 기록과 겹쳐 봅니다. 잠금·화면 켜짐에 해당하는 바이옴 스트림은 이름을 확인하지 못해서, 공개 도구가 붙인 이름을 그대로 믿지 말고 시험 기기에서 화면을 켜고 끄며 어느 스트림에 기록이 생기는지 대조합니다. SEGB 파일을 직접 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 과 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 를 봅니다.
+4. iOS 16 이후라면 바이옴의 앱 초점 스트림에서 같은 구간을 만들고, knowledgeC.db 에 남은 기록과 겹쳐 봅니다. 잠금·화면 켜짐에 해당하는 바이옴 스트림은 이름이 공개되지 않아서, 공개 도구가 붙인 이름을 그대로 믿지 말고 시험 기기에서 화면을 켜고 끄며 어느 스트림에 기록이 생기는지 대조합니다. SEGB 파일을 직접 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 과 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 를 봅니다.
 5. 화면이 켜진 구간, 잠금이 풀린 구간, 앱이 앞에 떠 있던 구간을 한 줄 위에 올려 겹치는 부분을 찾습니다. 세 구간이 겹치는 부분이 "기기를 조작하고 있었을 가능성이 높은 구간" 이고, 화면만 켜져 있던 부분은 따로 표시합니다.
 6. 전체 파일 시스템 추출이 있다면 스크린 타임 DB 의 한 시간 단위 사용 시간과 들어 올림 횟수를 5번 결과와 비교합니다. 동기화가 켜져 있었다면 도구가 보여 주는 Device ID·Platform 항목 [4] 으로 이 기기의 기록만 남긴 뒤에 합계를 냅니다.
-7. 충전 연결(`/device/isPluggedIn`)과 배터리 잔량(`/device/batteryPercentage`) [1], 데이터 사용량 DB 의 시각 칸을 보조 근거로 붙입니다. 데이터 사용량 DB 의 시각 뜻은 확인하지 못해서 주된 근거로 쓰지 않습니다.
+7. 충전 연결(`/device/isPluggedIn`)과 배터리 잔량(`/device/batteryPercentage`) [1], 데이터 사용량 DB 의 시각 칸을 보조 근거로 붙입니다. 데이터 사용량 DB 의 시각 뜻이 알려져 있지 않아서 주된 근거로 쓰지 않습니다.
 8. 확정한 구간을 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올리고, 같은 시각의 통화·메시지·위치 기록과 맞춰 봅니다.
 
 ## 흔한 오판

@@ -11,7 +11,7 @@ knowledgeC.db 의 /app/inFocus 스트림은 어떤 앱이 언제부터 언제까
 
 ## 무엇을 기록하나
 
-/app/inFocus 는 앱이 앞 화면(포커스, focus) 상태로 바뀐 사건을 적는 스트림이고, 시스템 plist 의 설명에 따르면 번들 ID 와 바뀐 이유가 함께 들어갑니다 [6]. APOLLO 의 조회 방식으로 보면 ZVALUESTRING 에 번들 ID 가 들어가고, ZSTARTDATE 부터 ZENDDATE 까지가 앞 화면에 있던 구간이며, 두 값의 차이가 사용한 초입니다 [3].
+/app/inFocus 는 앱이 앞 화면(포커스, focus) 상태로 바뀐 사건을 적는 스트림이고, 번들 ID 와 바뀐 이유가 함께 들어갑니다 [6]. ZVALUESTRING 에 번들 ID 가 들어가고, ZSTARTDATE 부터 ZENDDATE 까지가 앞 화면에 있던 구간이며, 두 값의 차이가 사용한 초입니다 [3].
 
 /app/inFocus 행에는 ZSTRUCTUREDMETADATA 표를 통해 부가 정보가 붙습니다 [3].
 
@@ -21,26 +21,26 @@ knowledgeC.db 의 /app/inFocus 스트림은 어떤 앱이 언제부터 언제까
 | `Z_DKAPPLICATIONMETADATAKEY__EXTENSIONCONTAININGBUNDLEIDENTIFIER` | 확장 기능이 들어 있는 앱의 번들 ID |
 | `Z_DKAPPLICATIONMETADATAKEY__EXTENSIONHOSTIDENTIFIER` | 확장 기능을 띄운 쪽(호스트)의 ID |
 
-실행 이유 칸에 어떤 값이 오는지는 이번 자료에 나오지 않아서, 값을 볼 때는 그대로 옮겨 적고 뜻을 짐작해 붙이지 않습니다.
+실행 이유 칸에 어떤 값이 오는지는 공개된 자료가 없어서, 값을 볼 때는 그대로 옮겨 적고 뜻을 짐작해 붙이지 않습니다.
 
-/app/usage 는 시스템 plist 에 "앱 사용 사건" 으로 설명되어 있습니다 [6]. APOLLO 의 /app/usage 모듈은 ZOBJECT 에 ZSOURCE 의 ZDEVICEID(기기 ID)를 붙이고, 그 밖에 Z_4EVENT 표(`ZOBJECT.Z_PK = Z_4EVENT.Z_11EVENT`)와 ZCUSTOMMETADATA 표(`Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK`)를 더 이어 ZCUSTOMMETADATA 의 ZNAME·ZDOUBLEVALUE 칸을 함께 봅니다 [4]. 기기 ID 칸이 있어서 한 DB 안에 기기가 여럿 나오는지 가를 때 쓸 수 있고, 식별자 종류는 [기기 식별자](../../../01-foundations/value-decoding/device-identifiers.md) 페이지에 정리했습니다. Z_4EVENT·Z_11EVENT 같은 표·칸 이름의 숫자 부분이 iOS 버전에 따라 달라지는지는 확인하지 못해서, 표 이름은 검체에서 `.tables` 로 먼저 확인합니다. /app/inFocus 와 /app/usage 가 각각 무엇을 더 담는지, 두 스트림의 차이도 이번 자료로 확인하지 못했습니다.
+/app/usage 는 앱 사용 사건을 적는 스트림입니다 [6]. /app/usage 를 읽을 때는 ZOBJECT 에 ZSOURCE 의 ZDEVICEID(기기 ID)를 붙이고, 그 밖에 Z_4EVENT 표(`ZOBJECT.Z_PK = Z_4EVENT.Z_11EVENT`)와 ZCUSTOMMETADATA 표(`Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK`)를 더 이어 ZCUSTOMMETADATA 의 ZNAME·ZDOUBLEVALUE 칸을 함께 봅니다 [4]. 기기 ID 칸이 있어서 한 DB 안에 기기가 여럿 나오는지 가를 때 쓸 수 있고, 식별자 종류는 [기기 식별자](../../../01-foundations/value-decoding/device-identifiers.md) 페이지에 정리했습니다. Z_4EVENT·Z_11EVENT 같은 표·칸 이름의 숫자 부분은 iOS 버전에 따라 달라질 수 있어서, 표 이름은 검체에서 `.tables` 로 먼저 확인합니다. /app/inFocus 와 /app/usage 가 각각 무엇을 더 담는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 /app/install 은 iOS 에 있던 설치 기록 스트림이고 [1], 설치 이력은 [설치된 앱](../installed-apps.md) 페이지에서 함께 다룹니다.
 
 ## 위치와 버전별 차이
 
-앱 기록은 iOS 16 에서 크게 바뀝니다. /app/inFocus 는 iOS 16 부터 knowledgeC 대신 바이옴 (Biome) 의 `/private/var/db/biome/streams/restricted/_DKEvent.App.inFocus` 폴더에 있는 바이너리 파일에 남고, 같은 버전에서 설치 기록도 knowledgeC 에서 보이지 않게 되었다는 보고가 있습니다 [2]. iOS 17 이후에는 바이옴 ScreenTime.AppUsage 스트림에 SEGB 시각, 번들 ID, 이벤트가 남고 보관 기간은 28 일입니다 [5].
+앱 기록은 iOS 16 에서 크게 바뀝니다. /app/inFocus 는 iOS 16 부터 knowledgeC 대신 바이옴 (Biome) 의 `/private/var/db/biome/streams/restricted/_DKEvent.App.inFocus` 폴더에 있는 바이너리 파일에 남고, 같은 버전에서 설치 기록도 knowledgeC 에서 보이지 않게 되었습니다 [2]. iOS 17 이후에는 바이옴 ScreenTime.AppUsage 스트림에 SEGB 시각, 번들 ID, 이벤트가 남고 보관 기간은 28 일입니다 [5].
 
 | iOS | /app/inFocus | /app/usage | /app/install |
 |---|---|---|---|
 | 11~13 | knowledgeC. APOLLO 모듈 대상 버전 (iOS 11·12·13) [3] | knowledgeC. APOLLO 모듈 대상 버전 (iOS 12·13) [4] | knowledgeC 에 있음 [1] |
-| 14~15 | 칸 구성이 같은지 확인하지 못함 | 확인하지 못함 | 확인하지 못함 |
-| 16 | 바이옴 _DKEvent.App.inFocus 로 옮겨 감 [2] | knowledgeC 에 계속 남는지 확인하지 못함 | knowledgeC 에서 사라졌다는 보고 [2] |
-| 17 이후 | 바이옴 ScreenTime.AppUsage 스트림 함께 확인 [5] | 확인하지 못함 | 확인하지 못함 |
+| 14~15 | 칸 구성은 검체에서 확인 | 공개 자료 없음 | 공개 자료 없음 |
+| 16 | 바이옴 _DKEvent.App.inFocus 로 옮겨 감 [2] | knowledgeC 에 계속 남는지 검체에서 확인 | knowledgeC 에서 사라짐 [2] |
+| 17 이후 | 바이옴 ScreenTime.AppUsage 스트림 함께 확인 [5] | 공개 자료 없음 | 공개 자료 없음 |
 
 바이옴 쪽 경로와 파일 읽는 법은 [바이옴](../biome/index.md) 허브에 있습니다.
 
-로컬 백업에는 knowledgeC.db 가 없지만(허브 참고), 앱 사용과 이름이 닿는 설정 키와 영역은 보입니다. `HomeDomain :: Library/Preferences/com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageNextPostTargetDate` 키(둘 다 datetime 형)가 있고, 백업 영역 목록에 `AppDomain-com.apple.ScreenTimeUnlock`, `AppDomain-com.apple.ScreenTimeWidgetApplication`, `AppDomainGroup-group.com.apple.ScreenTime` 이 있습니다. 이 키의 뜻과, 이 영역에 앱 사용 기록이 들어 있는지는 공개 자료로 확인하지 못했습니다. 화면 사용 시간 기능의 기록은 [화면 사용 시간](../screen-time.md) 페이지에서 다룹니다.
+로컬 백업에는 knowledgeC.db 가 없지만(허브 참고), 앱 사용과 이름이 닿는 설정 키와 영역은 보입니다. `HomeDomain :: Library/Preferences/com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageNextPostTargetDate` 키(둘 다 datetime 형)가 있고, 백업 영역 목록에 `AppDomain-com.apple.ScreenTimeUnlock`, `AppDomain-com.apple.ScreenTimeWidgetApplication`, `AppDomainGroup-group.com.apple.ScreenTime` 이 있습니다. 이 키의 뜻과, 이 영역에 앱 사용 기록이 들어 있는지는 공개된 분석 자료가 없습니다. 화면 사용 시간 기능의 기록은 [화면 사용 시간](../screen-time.md) 페이지에서 다룹니다.
 
 ## 구조
 
@@ -81,7 +81,7 @@ ORDER BY ZOBJECT.ZSTARTDATE;
 
 ## 함정과 한계
 
-공개된 조회문과 칸 설명은 iOS 11~13 과 macOS 를 대상으로 적힌 것이라서 [3][4], iOS 15 이후 검체에 그대로 돌리면 칸이 없다는 오류가 나거나 결과가 비어 나올 수 있고, 그럴 때는 도구가 틀렸다고 보기 전에 칸 이름부터 확인합니다. 기록 횟수 제한 때문에 빠른 앱 전환이 빠질 수 있다는 점 [6], 그리고 iOS 16 이후 /app/usage 가 knowledgeC 에 계속 기록되는지 확인되지 않았다는 점도 결과를 읽을 때 함께 적어 둡니다.
+공개된 조회문과 칸 설명은 iOS 11~13 과 macOS 를 대상으로 적힌 것이라서 [3][4], iOS 15 이후 검체에 그대로 돌리면 칸이 없다는 오류가 나거나 결과가 비어 나올 수 있고, 그럴 때는 도구가 틀렸다고 보기 전에 칸 이름부터 확인합니다. 기록 횟수 제한 때문에 빠른 앱 전환이 빠질 수 있다는 점 [6], 그리고 iOS 16 이후 /app/usage 가 knowledgeC 에 계속 기록되는지 공개 자료로 밝혀지지 않았다는 점도 결과를 읽을 때 함께 적어 둡니다.
 
 ## 직접 분석해 보기
 

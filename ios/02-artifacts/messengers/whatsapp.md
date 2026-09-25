@@ -14,7 +14,7 @@ nav_order: 850
 
 ## 위치와 버전별 차이
 
-아래 파일은 모두 앱 그룹 공유 폴더 아래에 있고, 경로는 공개 도구 iLEAPP 가 전체 파일 시스템 추출에서 찾는 이름입니다 [1]. 앱 그룹 개념은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
+아래 파일은 모두 앱 그룹 공유 폴더 아래에 있고, 전체 파일 시스템 추출에서 찾을 수 있습니다 [1]. 앱 그룹 개념은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
 
 | 파일 | 내용 |
 |---|---|
@@ -25,9 +25,9 @@ nav_order: 850
 
 `CallHistory.sqlite` 는 Apple 기본 통화 기록 DB 와 파일 이름이 같으니, 경로로 어느 쪽인지 구분합니다 [1]. Apple 쪽은 [통화 기록](../communications/call-history.md) 에서 다룹니다.
 
-번들 ID `net.whatsapp.WhatsApp` 는 iLEAPP 시험 표본 설명(iOS 12.4 표본)에 나옵니다 [1]. 앱 그룹 ID 와 로컬 백업의 도메인 이름은 이번 자료로 확인하지 못했습니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘어 있었지만, 관찰한 백업은 다른 회사 앱의 도메인 이름을 가려 두어 왓츠앱 파일이 들어가는지는 확인하지 못했습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 왓츠앱 자체의 iCloud 채팅 백업 형식도 확인하지 못했습니다.
+번들 ID 는 `net.whatsapp.WhatsApp` 입니다 [1]. 앱 그룹 ID 와 로컬 백업의 도메인 이름은 공개된 분석 자료가 없어 검체에서 확인합니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘므로, 왓츠앱 파일이 어느 도메인에 들어갔는지는 백업의 도메인 목록에서 찾습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 왓츠앱 자체의 iCloud 채팅 백업 형식은 공개된 분석 자료가 없습니다.
 
-iLEAPP 는 iOS 12.4 부터 iOS 18.7.8(왓츠앱 26.14.76)까지의 시험 표본으로 분석기를 확인했고, 통화 기록 DB 에서 표본마다 칸과 표가 다르다고 적어 두었습니다 [1].
+iLEAPP 의 시험 표본(iOS 12.4 부터 iOS 18.7.8·왓츠앱 26.14.76 까지)에서는 통화 기록 DB 의 칸과 표가 표본마다 다릅니다 [1].
 
 | 표본 | 차이 |
 |---|---|
@@ -38,7 +38,7 @@ iLEAPP 는 iOS 12.4 부터 iOS 18.7.8(왓츠앱 26.14.76)까지의 시험 표본
 
 ## 구조
 
-**대화 DB(`ChatStorage.sqlite`).** 도구가 읽는 표와 칸은 다음과 같습니다 [1].
+**대화 DB(`ChatStorage.sqlite`).** 주요 표와 칸은 다음과 같습니다 [1].
 
 | 표 | 칸 |
 |---|---|
@@ -46,9 +46,9 @@ iLEAPP 는 iOS 12.4 부터 iOS 18.7.8(왓츠앱 26.14.76)까지의 시험 표본
 | `ZWAMEDIAITEM` | `ZMESSAGE`, `ZLONGITUDE`, `ZLATITUDE`, `ZMEDIALOCALPATH`, `ZXMPPTHUMBPATH`, `ZMETADATA` |
 | `ZWACHATSESSION` | `Z_PK`, `ZCONTACTJID` |
 
-`ZISFROMME` 가 1 이면 이 기기의 계정이 보낸 메시지입니다 [1]. 위도·경도는 `ZMESSAGETYPE` 이 5 인 위치 메시지 행에서만 쓰고, 다른 `ZMESSAGETYPE` 값의 뜻은 공개된 근거를 찾지 못했습니다 [1]. 도구는 `ZMEDIAITEM`·`ZCHATSESSION` 으로 메시지를 첨부 행과 대화 행에 이어 읽고, `ZMEDIALOCALPATH` 로 `Message/Media/` 아래 실제 파일을 찾습니다 [1].
+`ZISFROMME` 가 1 이면 이 기기의 계정이 보낸 메시지입니다 [1]. 위도·경도는 `ZMESSAGETYPE` 이 5 인 위치 메시지 행에서만 쓰고, 다른 `ZMESSAGETYPE` 값의 뜻은 공개된 근거가 없습니다 [1]. `ZMEDIAITEM`·`ZCHATSESSION` 은 메시지를 첨부 행과 대화 행에 잇고, `ZMEDIALOCALPATH` 는 `Message/Media/` 아래 실제 파일을 가리킵니다 [1].
 
-`ZMETADATA` 는 프로토콜 버퍼 (Protocol Buffers) 이진 값입니다 [1]. 필드 17 은 전달 횟수, 필드 21 은 전달한 사람 ID 로 보이지만, 관찰로 짐작한 것이고 공식 근거는 없습니다 [1]. 읽는 법은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
+`ZMETADATA` 는 프로토콜 버퍼 (Protocol Buffers) 이진 값입니다 [1]. 필드 17 은 전달 횟수, 필드 21 은 전달한 사람 ID 라는 해석이 있지만 공식 근거는 없습니다 [1]. 읽는 법은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
 
 **연락처 DB(`ContactsV2.sqlite`).** `ZWAADDRESSBOOKCONTACT` 표에 `ZFULLNAME`, `ZABOUTTEXT`, `ZABOUTTIMESTAMP`, `ZPHONENUMBER`, `ZPHONENUMBERLABEL`, `ZWHATSAPPID`, `ZIDENTIFIER` 칸이 있습니다 [1].
 
