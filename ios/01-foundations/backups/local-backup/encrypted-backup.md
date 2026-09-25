@@ -13,7 +13,7 @@ nav_order: 240
 
 ## 이 형식을 쓰는 아티팩트
 
-Apple 은 암호 건 백업에만 저장된 암호, Wi-Fi 설정, 웹사이트 방문 기록, 건강 데이터, 통화 기록이 들어간다고 안내하고, Face ID·Touch ID·기기 암호 데이터는 암호 건 백업에도 들어가지 않는다고 적습니다 [1]. 그래서 [저장된 암호](../../../02-artifacts/credentials-security/saved-passwords.md), [와이파이 기록](../../../02-artifacts/network/wifi.md) 의 Wi-Fi 설정, [사파리](../../../02-artifacts/browsers/safari/index.md) 의 방문 기록, [건강 데이터](../../../02-artifacts/health-wallet/health.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 을 로컬 백업에서 보려면 암호 건 백업이어야 합니다. 관찰한 암호 없는 백업에도 사파리 앱 도메인(`AppDomain-com.apple.mobilesafari`)은 들어 있었으니(확인 범위: iOS 27.0), 앱 데이터 전체가 빠지는 것은 아닙니다.
+Apple 은 암호 건 백업에만 저장된 암호, Wi-Fi 설정, 웹사이트 방문 기록, 건강 데이터, 통화 기록이 들어간다고 안내하고, Face ID·Touch ID·기기 암호 데이터는 암호 건 백업에도 들어가지 않는다고 적습니다 [1]. 그래서 [저장된 암호](../../../02-artifacts/credentials-security/saved-passwords.md), [와이파이 기록](../../../02-artifacts/network/wifi.md) 의 Wi-Fi 설정, [사파리](../../../02-artifacts/browsers/safari/index.md) 의 방문 기록, [건강 데이터](../../../02-artifacts/health-wallet/health.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 을 로컬 백업에서 보려면 암호 건 백업이어야 합니다. 관찰한 암호 없는 백업에도 사파리 앱 도메인(`AppDomain-com.apple.mobilesafari`)은 들어 있었으니, 앱 데이터 전체가 빠지는 것은 아닙니다.
 
 스파이웨어 흔적을 검사하는 MVT(Mobile Verification Toolkit) 문서도 로컬 백업을 만들 때 "로컬 백업 암호화" 를 켜라고 안내합니다 [4].
 
@@ -54,9 +54,9 @@ DPIC 의 1000만 번은 Apple 문서 [3] 의 PBKDF2 반복 횟수와 맞습니�
 
 ## 읽는 법
 
-암호가 걸렸는지는 Manifest.plist 의 IsEncrypted 키로 판단합니다 [5]. 관찰한 백업에도 이 키가 있었습니다(확인 범위: iOS 27.0).
+암호가 걸렸는지는 Manifest.plist 의 IsEncrypted 키로 판단합니다 [5]. 관찰한 백업에도 이 키가 있었습니다.
 
-관찰한 백업은 암호를 걸지 않은 백업이었는데, Manifest.plist 에 BackupKeyBag 키는 있었고 ManifestKey 키는 없었습니다(확인 범위: iOS 27.0). 그래서 BackupKeyBag 키가 있다는 것만으로 암호 건 백업이라고 보지 않습니다. 암호 건 백업의 Manifest.plist 모양은 이번에 관찰하지 못했고, ManifestKey 가 생긴다는 내용은 보고 [2] 에 따른 것입니다.
+관찰한 백업은 암호를 걸지 않은 백업이었는데, Manifest.plist 에 BackupKeyBag 키는 있었고 ManifestKey 키는 없었습니다. 그래서 BackupKeyBag 키가 있다는 것만으로 암호 건 백업이라고 보지 않습니다. 암호 건 백업의 Manifest.plist 모양은 이번에 관찰하지 못했고, ManifestKey 가 생긴다는 내용은 보고 [2] 에 따른 것입니다.
 
 | 확인할 것 | 암호 없는 백업 | 암호 건 백업 |
 |---|---|---|
@@ -65,15 +65,15 @@ DPIC 의 1000만 번은 Apple 문서 [3] 의 PBKDF2 반복 횟수와 맞습니�
 | Manifest.plist 의 ManifestKey | 없었음(관찰) | 생김(iOS 10.2 베타 보고 [2]) |
 | Manifest.db | SQLite 로 바로 열림(관찰) | 파일 전체가 암호화돼 도메인·경로 목록을 볼 수 없음 [2] |
 
-Manifest.plist 에는 WasPasscodeSet 키도 있었습니다(확인 범위: iOS 27.0). 이름으로 보면 기기 암호 설정 여부를 담는 것 같지만 값의 뜻은 확인하지 못했으니, 기기 암호에 관한 판단은 [암호와 Face ID 설정 흔적](../../../02-artifacts/system-account/passcode-biometrics.md) 의 다른 기록과 맞춰 봅니다. Info.plist·Status.plist 가 암호 건 백업에서도 평문으로 남는지는 이번에 확인하지 못했으니 실제 파일로 확인합니다.
+Manifest.plist 에는 WasPasscodeSet 키도 있었습니다. 이름으로 보면 기기 암호 설정 여부를 담는 것 같지만 값의 뜻은 확인하지 못했으니, 기기 암호에 관한 판단은 [암호와 Face ID 설정 흔적](../../../02-artifacts/system-account/passcode-biometrics.md) 의 다른 기록과 맞춰 봅니다. Info.plist·Status.plist 가 암호 건 백업에서도 평문으로 남는지는 이번에 확인하지 못했으니 실제 파일로 확인합니다.
 
 ### 키체인 백업 파일
 
-관찰한 백업의 `KeychainDomain` 에는 `keychain-backup.plist` 가 있었고, 최상위 키는 keybag-uuid, genp, inet, cert, keys 였습니다(확인 범위: iOS 27.0). 암호를 걸지 않은 백업에서도 이 파일이 들어오지만, Apple 설명 [3] 대로 키체인은 UID 에서 나온 키로 보호되어 파일이 있어도 그 안 항목을 바로 읽을 수는 없습니다. 각 항목이 어떤 상태로 들어 있는지는 이 설명 말고는 확인하지 못했습니다.
+관찰한 백업의 `KeychainDomain` 에는 `keychain-backup.plist` 가 있었고, 최상위 키는 keybag-uuid, genp, inet, cert, keys 였습니다. 암호를 걸지 않은 백업에서도 이 파일이 들어오지만, Apple 설명 [3] 대로 키체인은 UID 에서 나온 키로 보호되어 파일이 있어도 그 안 항목을 바로 읽을 수는 없습니다. 각 항목이 어떤 상태로 들어 있는지는 이 설명 말고는 확인하지 못했습니다.
 
 ### 건강 도메인
 
-관찰한 암호 없는 백업에도 `HealthDomain` 항목이 2개 있었습니다(확인 범위: iOS 27.0). 그 두 항목이 무엇인지는 확인하지 못했습니다. Apple 은 건강 데이터가 암호 건 백업에만 들어간다고 안내하니 [1], 도메인 이름이 보인다고 해서 건강 기록이 백업에 들어 있다고 보지 않습니다. 도메인 목록은 [도메인과 파일 이름](domains-fileid.md) 에 있습니다.
+관찰한 암호 없는 백업에도 `HealthDomain` 항목이 2개 있었습니다. 그 두 항목이 무엇인지는 확인하지 못했습니다. Apple 은 건강 데이터가 암호 건 백업에만 들어간다고 안내하니 [1], 도메인 이름이 보인다고 해서 건강 기록이 백업에 들어 있다고 보지 않습니다. 도메인 목록은 [도메인과 파일 이름](domains-fileid.md) 에 있습니다.
 
 ## 포렌식에서 중요한 점
 
@@ -84,7 +84,7 @@ Manifest.plist 에는 WasPasscodeSet 키도 있었습니다(확인 범위: iOS 2
 ## 함정
 
 - 암호 없는 백업에서 저장된 암호·통화 기록 같은 데이터가 보이지 않는다고 기기에 그 데이터가 없었다고 보고하지 않습니다. 백업 종류 때문에 빠진 것일 수 있습니다 [1].
-- BackupKeyBag 키는 암호 없는 백업에도 있었습니다(확인 범위: iOS 27.0). 암호 여부는 IsEncrypted 로 판단합니다.
+- BackupKeyBag 키는 암호 없는 백업에도 있었습니다. 암호 여부는 IsEncrypted 로 판단합니다.
 - ManifestKey·DPWT·DPSL·DPIC 는 iOS 10.2 베타 시절 보고 [2] 에서 나온 이름입니다. 최신 iOS 에서 이름과 길이가 같은지는 실제 암호 건 백업으로 확인합니다.
 - 두 단계로 PBKDF2 를 거친다는 설명이나, 파일마다 개별 키와 보호 등급이 Files.file 칸에 들어 있다는 설명도 보이지만 이번에 원문으로 확인하지 못해 여기서는 사실로 적지 않습니다.
 

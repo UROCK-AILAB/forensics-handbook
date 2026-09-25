@@ -30,7 +30,7 @@ nav_order: 1050
 
 ### 로컬 백업에서 본 것
 
-암호화하지 않은 로컬 백업을 열어 보면 `HomeDomain` 안에 아래 세 파일이 있었고, 세 파일 모두 최상위 키 아래에 `groups` 와 `timestamp` 가 있었습니다(확인 범위: iOS 27.0).
+암호화하지 않은 로컬 백업을 열어 보면 `HomeDomain` 안에 아래 세 파일이 있었고, 세 파일 모두 최상위 키 아래에 `groups` 와 `timestamp` 가 있었습니다.
 
 | 도메인 · 상대 경로 |
 |---|
@@ -38,9 +38,9 @@ nav_order: 1050
 | `HomeDomain` · `Library/Passes/NonUbiquitousCatalogOfRecord.plist` |
 | `HomeDomain` · `Library/Mobile Documents/com~apple~shoebox/UbiquitousCards/CatalogOfRecord.plist` |
 
-같은 백업의 Apple 데이터베이스 파일 목록에는 `passes23.sqlite` 가 없었고(확인 범위: iOS 27.0), 왜 빠졌는지는 확인하지 못했습니다. 백업에 거래 데이터베이스가 없더라도 기기에 거래 기록이 없었다고 단정하지 않고, 획득 방식을 먼저 기록합니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
+같은 백업의 Apple 데이터베이스 파일 목록에는 `passes23.sqlite` 가 없었고, 왜 빠졌는지는 확인하지 못했습니다. 백업에 거래 데이터베이스가 없더라도 기기에 거래 기록이 없었다고 단정하지 않고, 획득 방식을 먼저 기록합니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
-같은 백업에는 지갑과 관련된 이름의 도메인도 있었습니다(확인 범위: iOS 27.0).
+같은 백업에는 지갑과 관련된 이름의 도메인도 있었습니다.
 
 | 도메인 | 비고 |
 |---|---|
@@ -89,7 +89,7 @@ iLEAPP 가 조회하는 `payment_transaction` 표의 칸은 아래와 같습니�
 
 ### 설정 파일
 
-백업의 `HomeDomain` 안 `Library/Preferences/` 에서 아래 파일과 키를 확인했습니다(확인 범위: iOS 27.0). 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
+백업의 `HomeDomain` 안 `Library/Preferences/` 에서 아래 파일과 키를 확인했습니다. 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
 
 | 파일 | 확인한 키 |
 |---|---|
@@ -120,7 +120,7 @@ iLEAPP 가 조회하는 `payment_transaction` 표의 칸은 아래와 같습니�
 
 `payment_transaction.transaction_date`, `location_date`, `PASS.INGESTED_DATE` 는 Mac 절대 시각(2001-01-01 00:00:00 UTC 부터 센 초)이고 iLEAPP 도 이 기준으로 바꿉니다[1][2]. 값은 UTC 기준이라서 현지 시각으로 옮길 때는 기기 시간대와 거래 위치를 함께 봅니다. `transaction_date` 는 거래 시각이고 `location_date` 는 위치를 잰 시각이라 두 값이 다를 수 있으며, 위치 기반 주장을 할 때는 `location_date` 를 씁니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되어 있었지만(확인 범위: iOS 27.0), 어떤 기준의 시각인지는 확인하지 못했습니다.
+`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되어 있었지만, 어떤 기준의 시각인지는 확인하지 못했습니다.
 
 ## 함정과 한계
 

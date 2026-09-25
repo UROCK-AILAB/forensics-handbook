@@ -40,7 +40,7 @@ knowledgeC.db 의 /app/inFocus 스트림은 어떤 앱이 언제부터 언제까
 
 바이옴 쪽 경로와 파일 읽는 법은 [바이옴](../biome/index.md) 허브에 있습니다.
 
-로컬 백업에는 knowledgeC.db 가 없지만(허브 참고), 앱 사용과 이름이 닿는 설정 키와 영역은 보입니다. `HomeDomain :: Library/Preferences/com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageNextPostTargetDate` 키(둘 다 datetime 형)가 있고, 백업 영역 목록에 `AppDomain-com.apple.ScreenTimeUnlock`, `AppDomain-com.apple.ScreenTimeWidgetApplication`, `AppDomainGroup-group.com.apple.ScreenTime` 이 있습니다 (확인 범위: iOS 27.0). 이 키의 뜻과, 이 영역에 앱 사용 기록이 들어 있는지는 공개 자료로 확인하지 못했습니다. 화면 사용 시간 기능의 기록은 [화면 사용 시간](../screen-time.md) 페이지에서 다룹니다.
+로컬 백업에는 knowledgeC.db 가 없지만(허브 참고), 앱 사용과 이름이 닿는 설정 키와 영역은 보입니다. `HomeDomain :: Library/Preferences/com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageNextPostTargetDate` 키(둘 다 datetime 형)가 있고, 백업 영역 목록에 `AppDomain-com.apple.ScreenTimeUnlock`, `AppDomain-com.apple.ScreenTimeWidgetApplication`, `AppDomainGroup-group.com.apple.ScreenTime` 이 있습니다. 이 키의 뜻과, 이 영역에 앱 사용 기록이 들어 있는지는 공개 자료로 확인하지 못했습니다. 화면 사용 시간 기능의 기록은 [화면 사용 시간](../screen-time.md) 페이지에서 다룹니다.
 
 ## 구조
 

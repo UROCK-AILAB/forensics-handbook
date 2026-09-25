@@ -14,7 +14,7 @@ nav_order: 270
 
 기종 이름, 일련번호, UDID, Wi-Fi·블루투스 MAC 주소, iOS 버전과 빌드, 기기 이름, 전화번호와 ICCID, 마지막 백업 날짜가 기기 곳곳의 파일에 따로 적혀 있습니다[1]. 기기 이름은 컴퓨터와 기기를 짝짓고 기기 정보를 넘겨주는 lockdownd 쪽 폴더(`Lockdown`)에 있고, 기종 이름은 네트워크 구성 파일에, 전화번호와 ICCID 는 통신 설정 파일에 있는 식으로 기록을 쓰는 구성 요소가 저마다 다릅니다[1].
 
-컴퓨터로 로컬 백업을 만들면 기기 정보 가운데 일부가 기기 밖 백업 폴더에도 남습니다. 관찰한 백업의 `Info.plist` 에는 기기 이름, 기종, iOS 버전, 빌드, 일련번호, IMEI, MEID, 고유 식별자, 마지막 백업 날짜를 담는 키가 있었습니다 (확인 범위: iOS 27.0).
+컴퓨터로 로컬 백업을 만들면 기기 정보 가운데 일부가 기기 밖 백업 폴더에도 남습니다. 관찰한 백업의 `Info.plist` 에는 기기 이름, 기종, iOS 버전, 빌드, 일련번호, IMEI, MEID, 고유 식별자, 마지막 백업 날짜를 담는 키가 있었습니다.
 
 조사에서 기기 정보를 가장 먼저 보는 까닭은 두 가지입니다. iOS 버전을 알아야 다른 아티팩트의 경로와 DB 표 구성을 버전에 맞게 고를 수 있고, 식별자를 알아야 압수한 기기와 추출물·백업이 같은 기기에서 나왔는지 맞춰 볼 수 있습니다. 식별자 하나하나를 읽는 법은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
 
@@ -42,7 +42,7 @@ nav_order: 270
 
 ### 로컬 백업
 
-관찰한 로컬 백업에서는 기기 정보를 아래 자리에서 볼 수 있었습니다 (확인 범위: iOS 27.0). 값은 읽지 않았고 파일과 키 이름만 확인했습니다.
+관찰한 로컬 백업에서는 기기 정보를 아래 자리에서 볼 수 있었습니다. 값은 읽지 않았고 파일과 키 이름만 확인했습니다.
 
 | 알고 싶은 것 | 백업 안 위치 | 키 |
 |---|---|---|
@@ -59,7 +59,7 @@ nav_order: 270
 
 ### 여러 설정 파일에 흩어진 버전 기록
 
-iOS 버전이나 빌드를 적는 키는 `Info.plist` 말고도 여러 설정 파일에 있었습니다 (확인 범위: iOS 27.0). 모두 `HomeDomain :: Library/Preferences/` 아래 파일이고, `MCMeta.plist` 만 `HomeDomain :: Library/UserConfigurationProfiles/PublicInfo/` 아래에 있습니다.
+iOS 버전이나 빌드를 적는 키는 `Info.plist` 말고도 여러 설정 파일에 있었습니다. 모두 `HomeDomain :: Library/Preferences/` 아래 파일이고, `MCMeta.plist` 만 `HomeDomain :: Library/UserConfigurationProfiles/PublicInfo/` 아래에 있습니다.
 
 | 파일 | 키 |
 |---|---|
@@ -73,15 +73,15 @@ iOS 버전이나 빌드를 적는 키는 `Info.plist` 말고도 여러 설정 �
 
 구성 요소마다 자기가 마지막으로 돈 버전을 따로 적는 것으로 보여서, 값을 나란히 놓으면 업데이트 뒤 어느 구성 요소가 아직 옛 버전 값을 남기고 있는지 볼 수 있을 것 같습니다. 다만 이 키들로 업데이트 이력을 재구성할 수 있다고 확인한 자료는 없으니, 보고서에는 "이 키에 이 버전이 적혀 있다" 까지만 씁니다.
 
-같은 `com.apple.springboard.plist` 에는 `SBLastKnownShutdownDate` (datetime) 와 `SBLastRestoreIdentifier` (str) 키가 있고, `com.apple.centaurid.plist` 에는 `SystemBootUUID` 와 `RestoreVersion` 키가 있었습니다 (확인 범위: iOS 27.0). 이름으로는 마지막 종료 시각, 복원 식별자, 부팅 식별자로 읽히지만 뜻을 확인한 자료는 없습니다.
+같은 `com.apple.springboard.plist` 에는 `SBLastKnownShutdownDate` (datetime) 와 `SBLastRestoreIdentifier` (str) 키가 있고, `com.apple.centaurid.plist` 에는 `SystemBootUUID` 와 `RestoreVersion` 키가 있었습니다. 이름으로는 마지막 종료 시각, 복원 식별자, 부팅 식별자로 읽히지만 뜻을 확인한 자료는 없습니다.
 
 ## 구조
 
 기기 정보를 담는 파일은 대부분 plist 이고, 일련번호가 있다는 `consolidated.db` 는 이름으로 보아 SQLite 데이터베이스입니다. plist 는 키와 값의 사전이라서 원하는 키 이름을 찾아 값을 읽으면 되고, 이진 plist 와 XML plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md), SQLite 는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
-`SystemConfiguration/preferences.plist` 의 최상위 키는 `Sets`, `NetworkServices`, `CurrentSet`, `__VERSION__`, `Model`, `System` 이었고, `System` 안에는 `Network` 와 `System` 이 있었습니다 (확인 범위: iOS 27.0). 네트워크 구성 파일이라서 기종 이름은 이 가운데 `Model` 하나뿐이고 나머지는 네트워크 설정입니다.
+`SystemConfiguration/preferences.plist` 의 최상위 키는 `Sets`, `NetworkServices`, `CurrentSet`, `__VERSION__`, `Model`, `System` 이었고, `System` 안에는 `Network` 와 `System` 이 있었습니다. 네트워크 구성 파일이라서 기종 이름은 이 가운데 `Model` 하나뿐이고 나머지는 네트워크 설정입니다.
 
-백업 `Manifest.plist` 에도 `Lockdown` 이라는 키가 있었지만 (확인 범위: iOS 27.0), 그 안의 하위 키와 lockdownd 와의 관계는 확인하지 못했습니다.
+백업 `Manifest.plist` 에도 `Lockdown` 이라는 키가 있었지만, 그 안의 하위 키와 lockdownd 와의 관계는 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -91,13 +91,13 @@ iOS 버전이나 빌드를 적는 키는 `Info.plist` 말고도 여러 설정 �
 
 ## 시각 해석
 
-기기 정보에서 시각으로 쓰는 값은 많지 않습니다. `Info.plist` 의 `Last Backup Date` 는 이름으로 보아 백업을 만든 때이고, `com.apple.mobile.ldbackup.plist` 의 `LastCloudBackupDate` 는 정수(int) 형, `com.apple.springboard.plist` 의 `SBLastKnownShutdownDate` 는 날짜(datetime) 형이었습니다 (확인 범위: iOS 27.0). 정수로 적힌 시각은 기준 시점과 단위를 자릿수로 가려야 하고, 그 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다. 현지 시각으로 바꿀 때 쓰는 기기 시간대는 [시간대와 시각 설정](time-zone.md) 에서 봅니다.
+기기 정보에서 시각으로 쓰는 값은 많지 않습니다. `Info.plist` 의 `Last Backup Date` 는 이름으로 보아 백업을 만든 때이고, `com.apple.mobile.ldbackup.plist` 의 `LastCloudBackupDate` 는 정수(int) 형, `com.apple.springboard.plist` 의 `SBLastKnownShutdownDate` 는 날짜(datetime) 형이었습니다. 정수로 적힌 시각은 기준 시점과 단위를 자릿수로 가려야 하고, 그 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다. 현지 시각으로 바꿀 때 쓰는 기기 시간대는 [시간대와 시각 설정](time-zone.md) 에서 봅니다.
 
 ## 함정과 한계
 
-**"Lockdown" 이 두 가지를 가리킵니다.** 기기와 컴퓨터를 짝짓는 lockdownd 의 폴더(`/private/var/root/Library/Lockdown/`)와 잠금 모드(Lockdown Mode)는 서로 다른 기능입니다. 관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.lockdownmoded.plist` (키 `LDMExemptCNHistoryToken`) 는 이름으로 보아 잠금 모드 쪽 파일이고 (확인 범위: iOS 27.0), lockdownd 와 관계없다고 확인한 자료는 없지만 두 쪽을 섞어 해석하지 않습니다.
+**"Lockdown" 이 두 가지를 가리킵니다.** 기기와 컴퓨터를 짝짓는 lockdownd 의 폴더(`/private/var/root/Library/Lockdown/`)와 잠금 모드(Lockdown Mode)는 서로 다른 기능입니다. 관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.lockdownmoded.plist` (키 `LDMExemptCNHistoryToken`) 는 이름으로 보아 잠금 모드 쪽 파일이고, lockdownd 와 관계없다고 확인한 자료는 없지만 두 쪽을 섞어 해석하지 않습니다.
 
-**파일 이름이 자료마다 다릅니다.** [1] 은 마지막 백업 날짜 파일을 `com.apple.ldbackup.plist` 로 적었지만, 관찰한 백업에서는 `com.apple.mobile.ldbackup.plist` 로 나왔습니다 (확인 범위: iOS 27.0). `LastBuildInfo.plist` 의 경로도 자료마다 다르니, 경로 하나로 찾아서 없다고 결론 내리지 않고 파일 이름으로 추출물 전체를 검색합니다.
+**파일 이름이 자료마다 다릅니다.** [1] 은 마지막 백업 날짜 파일을 `com.apple.ldbackup.plist` 로 적었지만, 관찰한 백업에서는 `com.apple.mobile.ldbackup.plist` 로 나왔습니다. `LastBuildInfo.plist` 의 경로도 자료마다 다르니, 경로 하나로 찾아서 없다고 결론 내리지 않고 파일 이름으로 추출물 전체를 검색합니다.
 
 **수집 방식에 따라 보이는 파일이 다릅니다.** 로컬 백업만 있으면 Lockdown 폴더의 기록을 보지 못할 수 있습니다. 그럴 때는 `Info.plist` 와 백업 안 설정 파일로 확인한 범위를 적고, 전체 파일 시스템 추출에서만 나오는 정보는 확인하지 못했다고 씁니다.
 

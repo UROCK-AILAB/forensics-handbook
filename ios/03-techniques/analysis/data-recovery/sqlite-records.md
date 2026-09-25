@@ -17,7 +17,7 @@ SQLite 파일 형식 전체는 [SQLite 데이터베이스](../../../01-foundatio
 
 ## 먼저 볼 곳: 지움 표시가 남은 행
 
-Apple 앱의 DB 가운데 여럿은 지운 항목을 바로 없애지 않고 휴지통 상태나 지운 시각을 칸에 적어 둡니다. 아래 표는 로컬 백업에서 확인한 표·칸 이름이고(확인 범위: iOS 27.0), 행과 값은 읽지 않았습니다. 따라서 칸 값의 뜻(예: 어떤 숫자가 휴지통 상태인지)과 날짜 칸의 시각 기준은 이 관찰로 확인되지 않았고, 시험 기기에서 직접 지워 보고 값이 어떻게 바뀌는지 확인한 뒤에 해석합니다. 관찰 메모의 칸 목록은 중간에서 잘린 것이 있어서, 표에 없다고 그 칸이 없다고 볼 수는 없습니다.
+Apple 앱의 DB 가운데 여럿은 지운 항목을 바로 없애지 않고 휴지통 상태나 지운 시각을 칸에 적어 둡니다. 아래 표는 로컬 백업에서 확인한 표·칸 이름이고, 행과 값은 읽지 않았습니다. 따라서 칸 값의 뜻(예: 어떤 숫자가 휴지통 상태인지)과 날짜 칸의 시각 기준은 이 관찰로 확인되지 않았고, 시험 기기에서 직접 지워 보고 값이 어떻게 바뀌는지 확인한 뒤에 해석합니다. 관찰 메모의 칸 목록은 중간에서 잘린 것이 있어서, 표에 없다고 그 칸이 없다고 볼 수는 없습니다.
 
 | DB (도메인 :: 경로) | 표와 칸 |
 |---|---|
@@ -31,9 +31,9 @@ Apple 앱의 DB 가운데 여럿은 지운 항목을 바로 없애지 않고 휴
 | `HomeDomain :: Library/Safari/Bookmarks.db` | `bookmarks` 의 deleted |
 | `HomeDomain :: Library/Shortcuts/Shortcuts.sqlite`, `Library/Shortcuts/ExternalTriggers/ExternalTriggers.sqlite` | `ZVCVOICESHORTCUTMANAGEDOBJECT` 의 ZISMARKEDASDELETED |
 
-Photos.sqlite 와 NoteStore.sqlite 에는 Core Data 변경 기록 표인 `ACHANGE`(ZCHANGETYPE, ZENTITY, ZENTITYPK, ZTRANSACTIONID, ZCOLUMNS 등)와 `ATRANSACTION` 도 있습니다(확인 범위: iOS 27.0). 지운 항목의 변경이 이 표에 얼마나 오래 남는지는 확인하지 못했습니다.
+Photos.sqlite 와 NoteStore.sqlite 에는 Core Data 변경 기록 표인 `ACHANGE`(ZCHANGETYPE, ZENTITY, ZENTITYPK, ZTRANSACTIONID, ZCOLUMNS 등)와 `ATRANSACTION` 도 있습니다. 지운 항목의 변경이 이 표에 얼마나 오래 남는지는 확인하지 못했습니다.
 
-메시지 쪽은 칸 이름만 보면 `chat_recoverable_message_join` 과 `recoverable_message_part` 가 iOS 16 부터 생긴 "최근 삭제된 항목" 보관과 이어져 보이지만, 이 대응은 공식 문서로 확인하지 않았습니다. `HomeDomain :: Library/Preferences/com.apple.madrid.plist` 의 `LocalDBStats` 안에는 deletedMessages·deletedChats·deletedAttachments·deletedRecoverableMessages 같은 개수 키가 있고, 같은 plist 에 `Server.TotalRecords.recoverableMessageDeleteZone` 키도 있습니다(확인 범위: iOS 27.0). 이 개수를 DB 에서 센 행 수와 견주면 복구 결과가 얼마나 빠졌는지 가늠할 수 있습니다.
+메시지 쪽은 칸 이름만 보면 `chat_recoverable_message_join` 과 `recoverable_message_part` 가 iOS 16 부터 생긴 "최근 삭제된 항목" 보관과 이어져 보이지만, 이 대응은 공식 문서로 확인하지 않았습니다. `HomeDomain :: Library/Preferences/com.apple.madrid.plist` 의 `LocalDBStats` 안에는 deletedMessages·deletedChats·deletedAttachments·deletedRecoverableMessages 같은 개수 키가 있고, 같은 plist 에 `Server.TotalRecords.recoverableMessageDeleteZone` 키도 있습니다. 이 개수를 DB 에서 센 행 수와 견주면 복구 결과가 얼마나 빠졌는지 가늠할 수 있습니다.
 
 iOS 16 의 "보내기 취소" 와 "편집" 은 `message` 표의 text 칸을 비웁니다. 보내기 취소는 보낸 뒤 2분 안에, 편집은 15분 안에만 할 수 있고, 둘 다 바뀐 시각이 따로 남으며, 편집은 고칠 때마다 시각이 붙은 이전 판 기록을 남깁니다 [3]. 이 시각을 담는 칸 이름은 확인하지 못했고, 지워진 본문을 다른 파일에서 찾은 사례는 [카빙](carving.md) 에 있습니다. 표의 날짜 칸을 읽을 때는 [시각 값](../../../01-foundations/value-decoding/time-values.md) 을 보고 기준을 먼저 정합니다.
 
@@ -62,7 +62,7 @@ WAL 은 32바이트 머리로 시작하고, 머리에는 0 에 매직 값 0x377f
 
 ## 절차
 
-1. DB 파일을 같은 이름의 `-wal`·`-shm` 파일과 함께 확보하고 해시를 남긴 뒤, 사본에서만 작업합니다. 로컬 백업 최상위에는 `Manifest.db` 와 함께 `Manifest.db-wal`·`Manifest.db-shm` 이 있었지만, 관찰 메모에서 `sms.db-wal` 같은 앱 DB 의 WAL 파일은 보이지 않았습니다(확인 범위: iOS 27.0). 백업이 WAL 을 합친 뒤 담는지는 확인하지 못했으므로, WAL 프레임까지 봐야 하면 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 에서 파일 시스템 단위 수집을 검토합니다.
+1. DB 파일을 같은 이름의 `-wal`·`-shm` 파일과 함께 확보하고 해시를 남긴 뒤, 사본에서만 작업합니다. 로컬 백업 최상위에는 `Manifest.db` 와 함께 `Manifest.db-wal`·`Manifest.db-shm` 이 있었지만, 관찰 메모에서 `sms.db-wal` 같은 앱 DB 의 WAL 파일은 보이지 않았습니다. 백업이 WAL 을 합친 뒤 담는지는 확인하지 못했으므로, WAL 프레임까지 봐야 하면 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 에서 파일 시스템 단위 수집을 검토합니다.
 2. SQL 로 열기 전에 원본 상태 그대로 한 벌을 더 복사해 두고, 조각 읽기는 그 사본에서 헥스로 합니다.
 3. 파일 머리에서 페이지 크기(16), 첫 freelist trunk 페이지(32), freelist 페이지 총수(36)를 읽습니다. 총수가 0 이면 freelist 에서 읽을 페이지가 없습니다.
 4. trunk 페이지를 따라가며 잎 페이지 번호를 모두 적고, 각 잎 페이지를 페이지 크기 단위로 잘라 레코드 모양이 있는지 훑습니다. 훑는 요령은 [카빙](carving.md) 에 있습니다.

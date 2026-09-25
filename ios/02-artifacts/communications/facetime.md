@@ -18,9 +18,9 @@ FaceTime 영상·음성 통화는 전화 통화와 같은 통화 기록 데이�
 
 ## 위치와 버전별 차이
 
-통화 한 건의 기록은 통화 기록 DB 에 있고, 그 DB 의 위치와 백업 포함 여부는 [통화 기록](call-history.md) 에 정리되어 있습니다. 관찰한 로컬 백업에서는 FaceTime 전용 SQLite DB 가 보이지 않았고, 이름에 FaceTime 이 들어간 DB 는 팁 앱 쪽의 `AppDomainGroup-group.com.apple.tipsnext :: com.apple.facetime/.tipkit/tips-store.db` 하나뿐이었습니다 (확인 범위: iOS 27.0).
+통화 한 건의 기록은 통화 기록 DB 에 있고, 그 DB 의 위치와 백업 포함 여부는 [통화 기록](call-history.md) 에 정리되어 있습니다. 관찰한 로컬 백업에서는 FaceTime 전용 SQLite DB 가 보이지 않았고, 이름에 FaceTime 이 들어간 DB 는 팁 앱 쪽의 `AppDomainGroup-group.com.apple.tipsnext :: com.apple.facetime/.tipkit/tips-store.db` 하나뿐이었습니다.
 
-관찰한 백업에서 FaceTime 과 관련된 도메인은 다음과 같습니다 (확인 범위: iOS 27.0).
+관찰한 백업에서 FaceTime 과 관련된 도메인은 다음과 같습니다.
 
 | 도메인 | 비고 |
 |---|---|
@@ -43,7 +43,7 @@ FaceTime 행을 읽을 때 [통화 기록](call-history.md) 의 칸 설명에 �
 
 ### 계정과 설정 파일
 
-관찰한 백업의 `HomeDomain :: Library/Preferences/` 아래에서 다음 키를 확인했습니다 (확인 범위: iOS 27.0). 키 이름만 확인했고 값의 뜻은 확인하지 못했습니다.
+관찰한 백업의 `HomeDomain :: Library/Preferences/` 아래에서 다음 키를 확인했습니다. 키 이름만 확인했고 값의 뜻은 확인하지 못했습니다.
 
 | 파일 | 보인 키 |
 |---|---|
@@ -53,7 +53,7 @@ FaceTime 행을 읽을 때 [통화 기록](call-history.md) 의 칸 설명에 �
 | `com.apple.TelephonyUtilities.plist` | `FaceTimeNewCallersFilterMode` |
 | `com.apple.CallHistorySyncHelper.plist` | `CHFacetimeSearchableStatus` |
 
-`imservice.ids.FaceTime.plist` 는 이름과 키로 보아 FaceTime 이 쓰는 계정 목록이고, `facetime.bag.plist` 는 서버 설정 묶음(bag)의 캐시로 보이며, `facetimemessagestored.plist` 는 FaceTime 메시지 저장소의 설정으로 보입니다. 셋 다 뜻은 확인하지 못했으니 "FaceTime 계정이 설정되어 있었다" 같은 결론의 단서로만 쓰고, 계정 자체는 [애플 계정](../system-account/apple-account.md) 에서 확인합니다. 이 밖에 계정 목록에서 `com.apple.account.FaceTime` 이, 알림 설정 목록에서 `com.apple.facetime` 이, 설정 제한 목록에서 `deniedICCIDsForiMessageFaceTime` 키가 보였습니다 (확인 범위: iOS 27.0).
+`imservice.ids.FaceTime.plist` 는 이름과 키로 보아 FaceTime 이 쓰는 계정 목록이고, `facetime.bag.plist` 는 서버 설정 묶음(bag)의 캐시로 보이며, `facetimemessagestored.plist` 는 FaceTime 메시지 저장소의 설정으로 보입니다. 셋 다 뜻은 확인하지 못했으니 "FaceTime 계정이 설정되어 있었다" 같은 결론의 단서로만 쓰고, 계정 자체는 [애플 계정](../system-account/apple-account.md) 에서 확인합니다. 이 밖에 계정 목록에서 `com.apple.account.FaceTime` 이, 알림 설정 목록에서 `com.apple.facetime` 이, 설정 제한 목록에서 `deniedICCIDsForiMessageFaceTime` 키가 보였습니다.
 
 plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
@@ -71,10 +71,10 @@ FaceTime 행의 시각도 통화 기록의 `ZDATE` 로, Mac 절대 시각(2001-0
 
 ## 함정과 한계
 
-- **"FaceTime 앱 DB" 를 찾는 헛수고.** 관찰한 백업에는 FaceTime 전용 통화 DB 가 없었습니다 (확인 범위: iOS 27.0). 통화 기록은 통화 기록 DB 에서 찾습니다.
+- **"FaceTime 앱 DB" 를 찾는 헛수고.** 관찰한 백업에는 FaceTime 전용 통화 DB 가 없었습니다. 통화 기록은 통화 기록 DB 에서 찾습니다.
 - **음성 통화 분류 누락.** FaceTime 음성 통화는 영상과 다른 `ZCALLTYPE` 값이라서 [1], 영상 값만 걸러 내면 음성 통화를 놓칩니다.
 - **서버 중계와 P2P.** 연결 방식은 보안 설계의 설명이고 [2], 특정 통화가 어느 경로로 이어졌는지는 기기 흔적에서 확인한 자료가 없습니다.
-- **통화 기록 수집 범위.** 관찰한 암호화하지 않은 백업에는 통화 기록 DB 자체가 없었습니다 (확인 범위: iOS 27.0). FaceTime 행이 안 보이면 수집 범위부터 확인합니다.
+- **통화 기록 수집 범위.** 관찰한 암호화하지 않은 백업에는 통화 기록 DB 자체가 없었습니다. FaceTime 행이 안 보이면 수집 범위부터 확인합니다.
 
 ## 직접 분석해 보기
 

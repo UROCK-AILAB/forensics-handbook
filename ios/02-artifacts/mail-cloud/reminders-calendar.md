@@ -12,7 +12,7 @@ nav_order: 1010
 
 ## 무엇을 기록하나 · 왜 생기나
 
-캘린더 DB 에는 사용자가 만든 일정뿐 아니라 초대받은 일정, 구독한 캘린더, 생일 일정, 일정의 장소·참석자·첨부까지 들어가고, 공개 도구 iLEAPP 는 이 DB 에서 `calendarEvents`, `calendarBirthdays`, `calendarList` 세 보고서를 만듭니다 [1]. 관찰한 DB 에는 일정 표 말고도 변경 기록 표(`CalendarItemChanges`, `CalendarChanges` 등 이름이 `Changes` 로 끝나는 표)와 공유 캘린더 변경으로 보이는 `ResourceChange` 표가 있어서, 수집 시점의 상태에 더해 바뀐 흔적도 찾아볼 수 있습니다(확인 범위: iOS 27.0).
+캘린더 DB 에는 사용자가 만든 일정뿐 아니라 초대받은 일정, 구독한 캘린더, 생일 일정, 일정의 장소·참석자·첨부까지 들어가고, 공개 도구 iLEAPP 는 이 DB 에서 `calendarEvents`, `calendarBirthdays`, `calendarList` 세 보고서를 만듭니다 [1]. 관찰한 DB 에는 일정 표 말고도 변경 기록 표(`CalendarItemChanges`, `CalendarChanges` 등 이름이 `Changes` 로 끝나는 표)와 공유 캘린더 변경으로 보이는 `ResourceChange` 표가 있어서, 수집 시점의 상태에 더해 바뀐 흔적도 찾아볼 수 있습니다.
 
 미리 알림 DB 에는 할 일의 제목·메모·마감일·완료 여부·완료 시각과 목록, 공유 목록 정보가 들어 있습니다 [2]. iLEAPP 는 iOS 13.3.1 부터 18.0 까지 이 DB 를 시험했고, iOS 버전에 따라 경로와 표가 달라진다고 적었습니다 [2].
 
@@ -22,12 +22,12 @@ nav_order: 1010
 
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
-| 캘린더 DB | `HomeDomain :: Library/Calendar/Calendar.sqlitedb` | [1] 경로 패턴 `*/Calendar.sqlitedb*`, 관찰(확인 범위: iOS 27.0) |
-| 캘린더 알림 보조 DB | `HomeDomain :: Library/Calendar/Extras.db` | 관찰(확인 범위: iOS 27.0) |
-| 캘린더 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.mobilecal.plist` | 관찰(확인 범위: iOS 27.0) |
-| 미리 알림 DB | `AppDomainGroup-group.com.apple.reminders :: Container_v#/Stores/Data-<UUID>.sqlite`, `Data-local.sqlite` (`#` 은 가린 숫자) | [2], 관찰(확인 범위: iOS 27.0) |
-| 미리 알림 앱 그룹 설정 | `AppDomainGroup-group.com.apple.reminders :: Library/Preferences/group.com.apple.reminders.plist` | 관찰(확인 범위: iOS 27.0) |
-| 미리 알림 데몬 설정 | `HomeDomain :: Library/Preferences/com.apple.remindd.plist` | 관찰(확인 범위: iOS 27.0) |
+| 캘린더 DB | `HomeDomain :: Library/Calendar/Calendar.sqlitedb` | [1] 경로 패턴 `*/Calendar.sqlitedb*`, 관찰 |
+| 캘린더 알림 보조 DB | `HomeDomain :: Library/Calendar/Extras.db` | 관찰 |
+| 캘린더 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.mobilecal.plist` | 관찰 |
+| 미리 알림 DB | `AppDomainGroup-group.com.apple.reminders :: Container_v#/Stores/Data-<UUID>.sqlite`, `Data-local.sqlite` (`#` 은 가린 숫자) | [2], 관찰 |
+| 미리 알림 앱 그룹 설정 | `AppDomainGroup-group.com.apple.reminders :: Library/Preferences/group.com.apple.reminders.plist` | 관찰 |
+| 미리 알림 데몬 설정 | `HomeDomain :: Library/Preferences/com.apple.remindd.plist` | 관찰 |
 
 미리 알림은 iOS 버전에 따라 위치와 표가 달라집니다.
 
@@ -36,17 +36,17 @@ nav_order: 1010
 | 13·14·15 | `*/Container_v1/Stores/*.sqlite*` | `ZREMCDOBJECT` 를 `Z_PRIMARYKEY` 로 개체 종류를 가려 읽음. 미리 알림 개체 번호(`Z_ENT`)가 13·14·15 에서 23, 24, 28 로 바뀜 | [2] |
 | 16 | `*/Container_v1/Stores/*.sqlite*` | `ZREMCDREMINDER` | [2] |
 | 17 이상 | 미리 알림 앱 그룹 컨테이너 | `ZREMCDREMINDER` | [2] |
-| 27.0 | `AppDomainGroup-group.com.apple.reminders :: Container_v#/Stores/` | `ZREMCDREMINDER`·`ZREMCDOBJECT` 등이 함께 있음 | 확인 범위: iOS 27.0 |
+| 27.0 | `AppDomainGroup-group.com.apple.reminders :: Container_v#/Stores/` | `ZREMCDREMINDER`·`ZREMCDOBJECT` 등이 함께 있음 | 관찰 |
 
 iLEAPP 는 iOS 16 이상이면 `ZREMCDREMINDER` 를, 그 전 버전이면 `ZREMCDOBJECT` 를 읽고, iOS 17 부터는 DB 가 `Library/Reminders/Container_v1` 이 아니라 앱 그룹 컨테이너에 있다고 적었습니다 [2]. 관찰한 iOS 27.0 DB 에는 두 표가 함께 있었으므로, 검체에서는 버전과 상관없이 두 표가 모두 있는지 먼저 봅니다. 미리 알림이 캘린더 DB 에서 떨어져 나온 iOS 버전(iOS 13 으로 알려짐)은 이번 자료로 확인하지 못했습니다.
 
-관찰한 백업의 관련 도메인은 캘린더 쪽이 `AppDomain-com.apple.mobilecal`(항목 4개)과 `AppDomainPlugin-com.apple.mobilecal.CalendarIntentsExtension`·`CalendarWidgetExtension`·`FacetimeExtension`, `AppDomainPlugin-com.apple.eventkit.CalendarDiagnosticExtension` 등이고, 미리 알림 쪽이 `AppDomain-com.apple.reminders`(7개), `AppDomainGroup-group.com.apple.reminders`(24개), `AppDomainPlugin-com.apple.reminders.` 로 시작하는 확장 5개 등이었습니다(확인 범위: iOS 27.0).
+관찰한 백업의 관련 도메인은 캘린더 쪽이 `AppDomain-com.apple.mobilecal`(항목 4개)과 `AppDomainPlugin-com.apple.mobilecal.CalendarIntentsExtension`·`CalendarWidgetExtension`·`FacetimeExtension`, `AppDomainPlugin-com.apple.eventkit.CalendarDiagnosticExtension` 등이고, 미리 알림 쪽이 `AppDomain-com.apple.reminders`(7개), `AppDomainGroup-group.com.apple.reminders`(24개), `AppDomainPlugin-com.apple.reminders.` 로 시작하는 확장 5개 등이었습니다.
 
 ## 구조
 
 ### 캘린더 DB (Calendar.sqlitedb)
 
-관찰한 DB 의 표 가운데 분석에 쓸 만한 것은 아래와 같습니다(확인 범위: iOS 27.0).
+관찰한 DB 의 표 가운데 분석에 쓸 만한 것은 아래와 같습니다.
 
 ```
 CalendarItem, Calendar, Store, Location, Participant, Identity, Alarm, AlarmCache,
@@ -56,7 +56,7 @@ CalendarItemChanges, CalendarChanges, AlarmChanges, ParticipantChanges, Recurren
 ClientCursor, ClientSequence
 ```
 
-일정 한 건은 `CalendarItem` 한 행이고, 주요 칸은 아래와 같습니다(확인 범위: iOS 27.0).
+일정 한 건은 `CalendarItem` 한 행이고, 주요 칸은 아래와 같습니다.
 
 ```
 CalendarItem (일부)
@@ -69,11 +69,11 @@ created_by_id, modified_by_id, travel_time
 
 iLEAPP 는 `CalendarItem` 을 중심으로 `Location`(`title`, `address`, `latitude`, `longitude`), `Calendar`(`title`, `color`, `store_id`, `self_identity_email`, `owner_identity_email`, `sharing_status`, `notes`), `Store`(`name`), `Participant`(`email`, `identity_id`, `entity_type`, `status`), `Identity`(`display_name`, `address`), `Attachment`·`AttachmentFile`(`filename`, `file_size`), `Sharee`(`owner_id`, `access_level`, `identity_id`)를 이어 읽습니다 [1]. 즉 일정 → 캘린더 → 저장소(계정) 순서로 올라가면 그 일정이 어느 계정의 어느 캘린더에 있었는지 알 수 있고, 참석자·공유 대상은 `Identity` 로 이름과 주소를 붙입니다.
 
-iLEAPP 는 `CalendarItem` 에 `conference_url_detected` 칸이 있으면 그 칸을, 없으면 `conference_url` 칸을 읽습니다 [1]. 관찰한 `CalendarItem` 에는 두 칸이 모두 없었고, 따로 `Conference` 표(`url` 칸 포함)가 있었습니다(확인 범위: iOS 27.0). 화상 회의 주소를 찾을 때는 버전에 따라 두 곳을 모두 봅니다.
+iLEAPP 는 `CalendarItem` 에 `conference_url_detected` 칸이 있으면 그 칸을, 없으면 `conference_url` 칸을 읽습니다 [1]. 관찰한 `CalendarItem` 에는 두 칸이 모두 없었고, 따로 `Conference` 표(`url` 칸 포함)가 있었습니다. 화상 회의 주소를 찾을 때는 버전에 따라 두 곳을 모두 봅니다.
 
-`CalendarItem` 에 `due_date`, `completion_date`, `priority` 칸이 있는 점은 옛 iOS 에서 미리 알림을 이 DB 에 함께 저장하던 흔적으로 보이지만 확인하지 못했습니다(확인 범위: iOS 27.0).
+`CalendarItem` 에 `due_date`, `completion_date`, `priority` 칸이 있는 점은 옛 iOS 에서 미리 알림을 이 DB 에 함께 저장하던 흔적으로 보이지만 확인하지 못했습니다.
 
-그 밖에 관찰한 표와 칸은 아래와 같습니다(확인 범위: iOS 27.0). `ResourceChange` 는 공유 캘린더의 변경 알림 기록으로, `SuggestedEventInfo` 는 메일·메시지에서 찾아낸 일정 제안과 관련 있는 표로 보이지만 둘 다 확인하지 못했습니다.
+그 밖에 관찰한 표와 칸은 아래와 같습니다. `ResourceChange` 는 공유 캘린더의 변경 알림 기록으로, `SuggestedEventInfo` 는 메일·메시지에서 찾아낸 일정 제안과 관련 있는 표로 보이지만 둘 다 확인하지 못했습니다.
 
 ```
 ResourceChange: change_type, timestamp, changed_properties, create_count, update_count,
@@ -84,11 +84,11 @@ Store (일부): name, type, creator_bundle_id, last_sync_start, last_sync_end, o
 Location (일부): title, address, latitude, longitude, mapkit_handle, radius
 ```
 
-`Extras.db` 에는 `ZALARM`(`ZALARMID`, `ZENTITYID`, `ZFIRETIME`, `ZACKNOWLEDGEDDATE`, `ZENTITYDATE`, `ZENTITYURI` 등)과 `ZSETTING`(`ZKEY`, `ZVALUE`) 표가 있었고, 캘린더 앱 설정에는 `LastViewedDate`(float), `LastViewedOccurrenceDate`(datetime), `LastViewedOccurrenceUID`(str), `LastSuspendTime`(float), `defaultCalendarID`(str), `defaultCalendarChangedTimestamp`(int), `LastViewType`(int), `LastReminderMigrationCleanupVersion`(int) 같은 키가 있었습니다(확인 범위: iOS 27.0).
+`Extras.db` 에는 `ZALARM`(`ZALARMID`, `ZENTITYID`, `ZFIRETIME`, `ZACKNOWLEDGEDDATE`, `ZENTITYDATE`, `ZENTITYURI` 등)과 `ZSETTING`(`ZKEY`, `ZVALUE`) 표가 있었고, 캘린더 앱 설정에는 `LastViewedDate`(float), `LastViewedOccurrenceDate`(datetime), `LastViewedOccurrenceUID`(str), `LastSuspendTime`(float), `defaultCalendarID`(str), `defaultCalendarChangedTimestamp`(int), `LastViewType`(int), `LastReminderMigrationCleanupVersion`(int) 같은 키가 있었습니다.
 
 ### 미리 알림 DB (Data-*.sqlite)
 
-관찰한 미리 알림 DB 는 `Data-<UUID>.sqlite` 와 `Data-local.sqlite` 두 개였습니다(확인 범위: iOS 27.0). 앞쪽은 계정(iCloud 등)별 DB, 뒤쪽은 기기 로컬 계정 DB 로 보이지만 확인하지 못했습니다. 두 DB 모두 `ZREMCDREMINDER`, `ZREMCDBASELIST`, `ZREMCDOBJECT`, `ZREMCDBASESECTION`, `ZREMCDSAVEDATTACHMENT`, `ZREMCDHASHTAGLABEL`, `ZREMCDTEMPLATE`, `ZREMCKSHAREDENTITYSYNCACTIVITY`, `ZREMCKCLOUDSTATE`, `ACHANGE`, `ATRANSACTION` 같은 표를 담고 있었습니다(확인 범위: iOS 27.0).
+관찰한 미리 알림 DB 는 `Data-<UUID>.sqlite` 와 `Data-local.sqlite` 두 개였습니다. 앞쪽은 계정(iCloud 등)별 DB, 뒤쪽은 기기 로컬 계정 DB 로 보이지만 확인하지 못했습니다. 두 DB 모두 `ZREMCDREMINDER`, `ZREMCDBASELIST`, `ZREMCDOBJECT`, `ZREMCDBASESECTION`, `ZREMCDSAVEDATTACHMENT`, `ZREMCDHASHTAGLABEL`, `ZREMCDTEMPLATE`, `ZREMCKSHAREDENTITYSYNCACTIVITY`, `ZREMCKCLOUDSTATE`, `ACHANGE`, `ATRANSACTION` 같은 표를 담고 있었습니다.
 
 ```
 ZREMCDREMINDER (일부)
@@ -101,11 +101,11 @@ ZNAME, ZCOLOR, ZSHAREDOWNERNAME, ZSHAREDOWNERADDRESS, ZSHARINGSTATUS,
 ZLASTUSERACCESSDATE, ZMARKEDFORDELETION
 ```
 
-칸 이름으로 보아 `ZREMCDREMINDER.ZLIST` 는 `ZREMCDBASELIST` 의 목록 행을, `ZPARENTREMINDER` 는 상위 할 일을 가리키고, 검체에서 몇 행을 앱 화면과 맞춰 확인한 뒤 이어 읽습니다. 두 DB 의 칸 목록은 조금 달라서, 예를 들어 `ZTITLEDOCUMENT`·`ZUSERACTIVITY` 칸은 `Data-local.sqlite` 쪽에만 있었습니다(확인 범위: iOS 27.0).
+칸 이름으로 보아 `ZREMCDREMINDER.ZLIST` 는 `ZREMCDBASELIST` 의 목록 행을, `ZPARENTREMINDER` 는 상위 할 일을 가리키고, 검체에서 몇 행을 앱 화면과 맞춰 확인한 뒤 이어 읽습니다. 두 DB 의 칸 목록은 조금 달라서, 예를 들어 `ZTITLEDOCUMENT`·`ZUSERACTIVITY` 칸은 `Data-local.sqlite` 쪽에만 있었습니다.
 
-`ZREMCDOBJECT` 에는 `ZLATITUDE`, `ZLONGITUDE`, `ZPROXIMITY`, `ZALARM`, `ZTRIGGER`, `ZASSIGNEE`, `ZORIGINATOR` 칸이 있고, 위치 기반 알림과 담당자 지정에 관련 있어 보이지만 확인하지 못했습니다. 공유 목록 활동으로 보이는 `ZREMCKSHAREDENTITYSYNCACTIVITY` 에는 `ZACTIVITYTYPERAWVALUE`, `ZACTIVITYDATE`, `ZAUTHORUSERRECORDIDSTRING`, `ZSHAREDENTITYNAME` 칸이 있었습니다(확인 범위: iOS 27.0).
+`ZREMCDOBJECT` 에는 `ZLATITUDE`, `ZLONGITUDE`, `ZPROXIMITY`, `ZALARM`, `ZTRIGGER`, `ZASSIGNEE`, `ZORIGINATOR` 칸이 있고, 위치 기반 알림과 담당자 지정에 관련 있어 보이지만 확인하지 못했습니다. 공유 목록 활동으로 보이는 `ZREMCKSHAREDENTITYSYNCACTIVITY` 에는 `ZACTIVITYTYPERAWVALUE`, `ZACTIVITYDATE`, `ZAUTHORUSERRECORDIDSTRING`, `ZSHAREDENTITYNAME` 칸이 있었습니다.
 
-앱 그룹 설정 `group.com.apple.reminders.plist` 에는 `firstTimeAppForegroundingDate`(datetime), `lastAppForegroundingDates`(list), `activitySessionBeginTime`(datetime), `activitySessionId`(str), `lastSeenWelcomeScreenVersion`(int)이, `com.apple.remindd.plist` 에는 `CloudKitAccountStatus`, `lastExtraneousAlarmsCollectorExecutionDate`(datetime), `analyticsActivityLastExecutionDate`(datetime), `spotlightIndexVersion`(str) 같은 키가 있었습니다(확인 범위: iOS 27.0). `firstTimeAppForegroundingDate` 와 `lastAppForegroundingDates` 는 이름으로 보아 미리 알림 앱을 처음·최근에 앞으로 띄운 시각이지만, 동작은 확인하지 못했습니다.
+앱 그룹 설정 `group.com.apple.reminders.plist` 에는 `firstTimeAppForegroundingDate`(datetime), `lastAppForegroundingDates`(list), `activitySessionBeginTime`(datetime), `activitySessionId`(str), `lastSeenWelcomeScreenVersion`(int)이, `com.apple.remindd.plist` 에는 `CloudKitAccountStatus`, `lastExtraneousAlarmsCollectorExecutionDate`(datetime), `analyticsActivityLastExecutionDate`(datetime), `spotlightIndexVersion`(str) 같은 키가 있었습니다. `firstTimeAppForegroundingDate` 와 `lastAppForegroundingDates` 는 이름으로 보아 미리 알림 앱을 처음·최근에 앞으로 띄운 시각이지만, 동작은 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -123,9 +123,9 @@ ZLASTUSERACCESSDATE, ZMARKEDFORDELETION
 
 캘린더의 시각 칸은 Mac 절대 시각(2001-01-01 UTC 기준 초)이고, iLEAPP 는 `datetime('2001-01-01', 칸 || ' seconds')` 로 바꿉니다 [1]. 미리 알림도 같은 기준이며, iLEAPP 는 값에 978307200 을 더해 Unix 시각으로 만든 뒤 UTC 로 바꿉니다 [2]. 두 방식은 같은 결과를 냅니다.
 
-캘린더에는 `start_tz`·`end_tz`, 미리 알림에는 `ZTIMEZONE` 칸이 따로 있습니다(확인 범위: iOS 27.0). 저장된 값은 UTC 기준으로 바꾸고, 사용자가 본 현지 시각은 이 시간대 칸으로 다시 계산해서 둘을 함께 적습니다. 종일 일정(`all_day`)이 어느 시간대 기준으로 저장되는지는 확인하지 못해서, UTC 로 바꾼 날짜가 화면과 하루 어긋나 보이면 `start_tz` 를 함께 보고 판단합니다. 시간대 해석은 [시간대와 시각 설정](../system-account/time-zone.md) 과 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+캘린더에는 `start_tz`·`end_tz`, 미리 알림에는 `ZTIMEZONE` 칸이 따로 있습니다. 저장된 값은 UTC 기준으로 바꾸고, 사용자가 본 현지 시각은 이 시간대 칸으로 다시 계산해서 둘을 함께 적습니다. 종일 일정(`all_day`)이 어느 시간대 기준으로 저장되는지는 확인하지 못해서, UTC 로 바꾼 날짜가 화면과 하루 어긋나 보이면 `start_tz` 를 함께 보고 판단합니다. 시간대 해석은 [시간대와 시각 설정](../system-account/time-zone.md) 과 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-`creation_date`·`last_modified`(캘린더), `ZCREATIONDATE`·`ZLASTMODIFIEDDATE`(미리 알림)는 이름으로 보아 항목을 만들고 고친 시각이지만, 동기화로 다른 기기에서 받은 항목이 이 기기에 들어온 시각인지 원래 만든 시각인지는 확인하지 못했습니다. `com.apple.mobilecal.plist` 의 `LastViewedDate`·`LastSuspendTime` 은 float 로, `defaultCalendarChangedTimestamp` 는 int 로 저장되어 있었고, 기준 시점은 확인하지 못했습니다(확인 범위: iOS 27.0).
+`creation_date`·`last_modified`(캘린더), `ZCREATIONDATE`·`ZLASTMODIFIEDDATE`(미리 알림)는 이름으로 보아 항목을 만들고 고친 시각이지만, 동기화로 다른 기기에서 받은 항목이 이 기기에 들어온 시각인지 원래 만든 시각인지는 확인하지 못했습니다. `com.apple.mobilecal.plist` 의 `LastViewedDate`·`LastSuspendTime` 은 float 로, `defaultCalendarChangedTimestamp` 는 int 로 저장되어 있었고, 기준 시점은 확인하지 못했습니다.
 
 ## 함정과 한계
 

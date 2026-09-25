@@ -28,7 +28,7 @@ nav_order: 1410
 | 한 칸에 섞인 단위 | iOS 11 부터 `sms.db` 의 시각 칸에 9자리(초)와 18자리(나노초) Mac 절대 값이 같은 칸 안에서도 섞여 들어갑니다. | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 말없이 빠지는 파일 | 백업에서 메시지 첨부는 `MediaDomain` 에 있고, 도메인을 잘못 넣어 파일 이름(fileID)을 계산하면 오류 없이 첨부를 모두 못 찾습니다. iLEAPP 의 메시지 모듈은 폴더로 된 묶음 첨부를 결과에 넣지 않고 처리 로그에 한 줄만 남기므로, 결과 화면만 보면 빠진 줄 모릅니다. | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 풀지 않은 값 | 통합 로그를 읽는 `macos-UnifiedLogs` 는 printf `%m` 같은 오류 코드를 글로 바꾸지 않고, 지원하지 않는 객체는 base64 로 남깁니다. | [통합 로그 형식](../../01-foundations/data-formats/unified-log.md) |
-| 문서와 다른 위치 | MVT 문서는 전체 파일 시스템에서 앱의 WebKit LocalStorage 를 앱 컨테이너의 `Library/WebKit/WebsiteData/LocalStorage/` 아래로 적지만, 관찰한 백업에서는 `Library/WebKit/WebsiteData/Default/` 아래 해시 폴더 두 단계 밑에 `LocalStorage/localstorage.sqlite` 가 있었습니다. (확인 범위: iOS 27.0) | [앱 데이터 분석](../analysis/app-data-analysis/index.md) |
+| 문서와 다른 위치 | MVT 문서는 전체 파일 시스템에서 앱의 WebKit LocalStorage 를 앱 컨테이너의 `Library/WebKit/WebsiteData/LocalStorage/` 아래로 적지만, 관찰한 백업에서는 `Library/WebKit/WebsiteData/Default/` 아래 해시 폴더 두 단계 밑에 `LocalStorage/localstorage.sqlite` 가 있었습니다. | [앱 데이터 분석](../analysis/app-data-analysis/index.md) |
 
 iLEAPP 에 관한 내용은 조사 때 본 main 브랜치 코드 기준이라, 검증할 때는 실제로 쓴 버전의 코드를 다시 봅니다. 공개 연구의 해석도 검증 대상이고, 복원·이전 흔적을 다룬 한 글쓴이는 시험을 두 번만 했으니 중요한 사건이면 직접 재현 시험을 하라고 적었습니다.
 
@@ -45,7 +45,7 @@ iLEAPP 에 관한 내용은 조사 때 본 main 브랜치 코드 기준이라, �
 
 ## 직접 확인해 보기
 
-아래는 로컬 백업 사본에서 메시지 DB 하나를 찾아 도구가 낸 행 수와 맞춰 보는 예입니다. 관찰한 백업에서 메시지 DB 는 `HomeDomain` 의 `Library/SMS/sms.db` 에 있었고 `Manifest.db` 의 `Files` 표 칸은 `fileID, domain, relativePath, flags, file` 이었습니다. (확인 범위: iOS 27.0)
+아래는 로컬 백업 사본에서 메시지 DB 하나를 찾아 도구가 낸 행 수와 맞춰 보는 예입니다. 관찰한 백업에서 메시지 DB 는 `HomeDomain` 의 `Library/SMS/sms.db` 에 있었고 `Manifest.db` 의 `Files` 표 칸은 `fileID, domain, relativePath, flags, file` 이었습니다.
 
 ```
 # 1) Manifest.db 를 -wal·-shm 까지 함께 복사한 사본에서 fileID 를 찾는다

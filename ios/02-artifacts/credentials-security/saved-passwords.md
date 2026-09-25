@@ -30,7 +30,7 @@ iOS 18·iPadOS 18·macOS Sequoia·visionOS 2 부터 암호 앱이 암호와 패�
 
 ### 로컬 백업에서 볼 곳
 
-관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 암호화하지 않은 로컬 백업이었고, 아래 항목은 모두 이 백업에서 이름만 확인했습니다(확인 범위: iOS 27.0).
+관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 암호화하지 않은 로컬 백업이었고, 아래 항목은 모두 이 백업에서 이름만 확인했습니다.
 
 | 백업 위치 | 알려 주는 것 |
 |---|---|
@@ -49,7 +49,7 @@ iOS 18·iPadOS 18·macOS Sequoia·visionOS 2 부터 암호 앱이 암호와 패�
 
 ### keychain-backup.plist
 
-관찰한 백업에서 최상위 키는 아래 다섯 개였습니다(확인 범위: iOS 27.0).
+관찰한 백업에서 최상위 키는 아래 다섯 개였습니다.
 
 ```
 keybag-uuid (str)
@@ -61,11 +61,11 @@ keys (list)
 
 Apple 개발자 문서는 키체인 항목 종류(item class)로 일반 암호 `kSecClassGenericPassword`, 인터넷 암호 `kSecClassInternetPassword`, 인증서 `kSecClassCertificate`, 키 `kSecClassKey`, 인증서와 개인 키를 묶은 신원 `kSecClassIdentity` 를 둡니다 [4]. 목록 이름 `genp`·`inet`·`cert`·`keys` 는 앞의 네 종류와 이름이 같은 꼴이지만, 짧은 이름과 상수가 짝을 이룬다는 표는 원문에서 확인하지 못했습니다. `keybag-uuid` 는 이름으로 보아 키 가방 (keybag)의 식별자이고, 키 가방은 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 페이지에서 다룹니다. Safari 와 암호 앱의 암호가 `genp` 와 `inet` 가운데 어느 쪽에 들어가는지도 확인하지 못했습니다.
 
-관찰한 백업은 암호화하지 않은 백업이었는데도 `keychain-backup.plist` 가 들어 있었습니다(확인 범위: iOS 27.0). 백업 암호를 걸었는지에 따라 키체인이 어떻게 보호되고 어떤 항목이 백업에 들어가는지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)과 [키체인](../../01-foundations/storage/keychain.md) 페이지에서 다룹니다.
+관찰한 백업은 암호화하지 않은 백업이었는데도 `keychain-backup.plist` 가 들어 있었습니다. 백업 암호를 걸었는지에 따라 키체인이 어떻게 보호되고 어떤 항목이 백업에 들어가는지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)과 [키체인](../../01-foundations/storage/keychain.md) 페이지에서 다룹니다.
 
 ### 암호 앱 설정 plist
 
-`com.apple.Passwords.plist` 의 키는 아래와 같았고, 이름을 가린 키가 2개 더 있었습니다(확인 범위: iOS 27.0).
+`com.apple.Passwords.plist` 의 키는 아래와 같았고, 이름을 가린 키가 2개 더 있었습니다.
 
 ```
 WBSPrivacyProxyAvailabilitySubscriberTier (bool)
@@ -81,11 +81,11 @@ WBSPrivacyProxyAvailabilityAccountType (int)
 WBSPasswordWarningTopFraudTargetsLastUpdate (datetime)
 ```
 
-키는 설정값과 갱신 시각뿐이고 저장된 암호 목록은 이 plist 에 없습니다(확인 범위: iOS 27.0). `WBSSecurityRecommendationsBiomeDonationLastDate` 는 이름으로 보아 보안 권장 사항을 [바이옴](../app-usage/biome/index.md)에 넘긴 마지막 시각이고, `shouldShowAppOnboardingView` 는 첫 실행 안내 화면을 띄울지 정하는 값으로 보이지만 둘 다 정의 문서로 확인하지 못했습니다.
+키는 설정값과 갱신 시각뿐이고 저장된 암호 목록은 이 plist 에 없습니다. `WBSSecurityRecommendationsBiomeDonationLastDate` 는 이름으로 보아 보안 권장 사항을 [바이옴](../app-usage/biome/index.md)에 넘긴 마지막 시각이고, `shouldShowAppOnboardingView` 는 첫 실행 안내 화면을 띄울지 정하는 값으로 보이지만 둘 다 정의 문서로 확인하지 못했습니다.
 
 ### 유출 암호 경고로 보이는 키
 
-`com.apple.mobilesafari.plist` 에는 아래 키가 있었습니다(확인 범위: iOS 27.0).
+`com.apple.mobilesafari.plist` 에는 아래 키가 있었습니다.
 
 ```
 lastPasswordWarningManagerUpdate (datetime)
@@ -94,11 +94,11 @@ lastPasswordWarningManagerUpdateHashes (list)
 PasscodeIsAvailable (bool)
 ```
 
-이름으로 보아 유출 암호 경고를 마지막으로 검사한 시각과 새 경고가 생겼는지를 적은 값이지만, 정의 문서는 찾지 못했습니다. `com.apple.Safari.PasswordBreachAgent.plist` 에서는 mobilesafari 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate` 하나가, HomeDomain 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate`·`WBSPasswordWarningTopFraudTargetsLastUpdate` 가 보였습니다(확인 범위: iOS 27.0). 이 키들과 [1]이 설명한 유출 암호 검사가 어떻게 이어지는지는 확인하지 못했습니다.
+이름으로 보아 유출 암호 경고를 마지막으로 검사한 시각과 새 경고가 생겼는지를 적은 값이지만, 정의 문서는 찾지 못했습니다. `com.apple.Safari.PasswordBreachAgent.plist` 에서는 mobilesafari 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate` 하나가, HomeDomain 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate`·`WBSPasswordWarningTopFraudTargetsLastUpdate` 가 보였습니다. 이 키들과 [1]이 설명한 유출 암호 검사가 어떻게 이어지는지는 확인하지 못했습니다.
 
 ### 뜻을 확인하지 못한 항목
 
-아래 항목은 이름이 암호·자격 증명과 관련되어 보이지만 뜻을 확인하지 못했고, 모두 관찰한 백업에서 이름만 확인했습니다(확인 범위: iOS 27.0).
+아래 항목은 이름이 암호·자격 증명과 관련되어 보이지만 뜻을 확인하지 못했고, 모두 관찰한 백업에서 이름만 확인했습니다.
 
 | 위치 | 키·항목 | 비고 |
 |---|---|---|
@@ -132,7 +132,7 @@ iCloud 키체인이 승인된 기기 모두에 암호를 맞추고 공유 그룹
 
 ## 함정과 한계
 
-암호를 걸지 않은 백업에서도 키체인 백업 파일은 보이지만(확인 범위: iOS 27.0), 파일이 있다는 사실과 안의 항목을 읽을 수 있다는 사실은 별개입니다. 백업 암호를 걸었는지는 Manifest.plist 로 먼저 확인하고, 어떤 항목이 암호 건 백업에만 들어가는지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 페이지를 따릅니다. 기기에만 묶인(ThisDeviceOnly) 항목은 백업으로 복사될 때 늘 기기 UID 로 보호되어 다른 기기에 복원하면 쓸 수 없고 [3], 동기화 규칙까지 포함한 자세한 내용은 [키체인](../../01-foundations/storage/keychain.md) 페이지에 있습니다. 그래서 백업에서 읽지 못한 항목이 기기에도 없었다고 보지 않습니다.
+암호를 걸지 않은 백업에서도 키체인 백업 파일은 보이지만, 파일이 있다는 사실과 안의 항목을 읽을 수 있다는 사실은 별개입니다. 백업 암호를 걸었는지는 Manifest.plist 로 먼저 확인하고, 어떤 항목이 암호 건 백업에만 들어가는지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 페이지를 따릅니다. 기기에만 묶인(ThisDeviceOnly) 항목은 백업으로 복사될 때 늘 기기 UID 로 보호되어 다른 기기에 복원하면 쓸 수 없고 [3], 동기화 규칙까지 포함한 자세한 내용은 [키체인](../../01-foundations/storage/keychain.md) 페이지에 있습니다. 그래서 백업에서 읽지 못한 항목이 기기에도 없었다고 보지 않습니다.
 
 관리 기기에서는 구성 프로파일의 `allowedSafariPasswordAutoFillDomains` 처럼 암호 자동 완성과 관련되어 보이는 제한 키가 있어서, 자동 완성이 일부 도메인에서만 됐다면 [구성 프로파일과 MDM](configuration-profiles.md) 페이지의 제한 설정도 확인합니다. 이 키의 뜻은 정의 문서로 확인하지 못했습니다.
 

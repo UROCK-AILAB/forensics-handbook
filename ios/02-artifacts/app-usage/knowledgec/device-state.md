@@ -31,7 +31,7 @@ APOLLO 의 knowledge_device_locked 모듈이 대상으로 적은 버전은 iOS 1
 
 같은 글은 유선이든 무선이든 충전할 때 기록이 생기므로 "isCharging" 이 더 맞는 이름일 수 있다는 Ian Whiffin 의 의견을 소개하고 [5], 충전 중이었다는 뜻으로 읽을지 꽂혀 있었다는 뜻으로 읽을지는 검체에서 다른 기록과 맞춰 보고 정합니다. 바이옴 쪽 경로와 파일 읽는 법은 [바이옴](../biome/index.md) 허브에 있습니다.
 
-로컬 백업의 `Manifest.plist` 에는 `WasPasscodeSet` 키가 있습니다 (확인 범위: iOS 27.0). 잠금과 이름이 닿지만 knowledgeC 기록과 직접 관계는 없고, 값의 해석도 이번 자료로 확인하지 못했습니다. 암호 설정 흔적은 [암호와 Face ID 설정 흔적](../../system-account/passcode-biometrics.md) 페이지에서, 백업 파일 구성은 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지에서 다룹니다.
+로컬 백업의 `Manifest.plist` 에는 `WasPasscodeSet` 키가 있습니다. 잠금과 이름이 닿지만 knowledgeC 기록과 직접 관계는 없고, 값의 해석도 이번 자료로 확인하지 못했습니다. 암호 설정 흔적은 [암호와 Face ID 설정 흔적](../../system-account/passcode-biometrics.md) 페이지에서, 백업 파일 구성은 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지에서 다룹니다.
 
 ## 구조
 

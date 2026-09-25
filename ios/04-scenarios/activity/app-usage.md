@@ -14,7 +14,7 @@ nav_order: 1430
 
 ## 먼저 확인할 것
 
-**수집 범위**를 가장 먼저 봅니다. KnowledgeC, 바이옴 (Biome), 전원 로그 (PowerLog) 는 전체 파일 시스템 추출에서만 얻는다고 정리돼 있고 [14], knowledgeC.db 는 iCloud·iTunes 백업에 없다고 적은 자료도 있습니다 [15]. 실제로 암호를 걸지 않은 로컬 백업의 DB 목록에는 `knowledgeC.db` 와 `CurrentPowerlog.PLSQL` 이 없었습니다 (확인 범위: iOS 27.0). 그래서 로컬 백업만 있다면 앱을 쓴 시각을 직접 적은 기록은 얻기 어렵고, 남는 시각 근거는 아래 표의 앱별 데이터 사용량 DB 정도라는 점을 처음부터 알고 시작합니다. 이 판단은 관찰한 백업의 파일 목록에서 끌어낸 것입니다.
+**수집 범위**를 가장 먼저 봅니다. KnowledgeC, 바이옴 (Biome), 전원 로그 (PowerLog) 는 전체 파일 시스템 추출에서만 얻는다고 정리돼 있고 [14], knowledgeC.db 는 iCloud·iTunes 백업에 없다고 적은 자료도 있습니다 [15]. 실제로 암호를 걸지 않은 로컬 백업의 DB 목록에는 `knowledgeC.db` 와 `CurrentPowerlog.PLSQL` 이 없었습니다. 그래서 로컬 백업만 있다면 앱을 쓴 시각을 직접 적은 기록은 얻기 어렵고, 남는 시각 근거는 아래 표의 앱별 데이터 사용량 DB 정도라는 점을 처음부터 알고 시작합니다. 이 판단은 관찰한 백업의 파일 목록에서 끌어낸 것입니다.
 
 **iOS 버전**에 따라 앞 화면 기록이 있는 곳이 다릅니다.
 
@@ -38,12 +38,12 @@ nav_order: 1430
 | 5 | 바이옴 `ScreenTime.AppUsage` — 같은 폴더 [4] | 번들 ID 와 이벤트, 보관 28일 [4] | [화면 사용 시간](../../02-artifacts/app-usage/screen-time.md) |
 | 6 | 화면 사용 시간 DB — `/private/var/mobile/Library/Application Support/com.apple.remotemanagementd/RMAdminStore-Local.sqlite` 의 `ZUSAGETIMEDITEM`·`ZUSAGECOUNTEDITEM` 표 [10] | 앱별 사용 시간 합계. 가족 공유로 묶인 다른 기기의 앱 사용도 보일 수 있습니다 [11] | [화면 사용 시간](../../02-artifacts/app-usage/screen-time.md) |
 | 7 | 전원 로그 `PLAppTimeService_Aggregate_AppRunTime` [8] | 앱별 앞 화면·백그라운드 실행 시간을 표본 구간 단위로 모은 값이라서 한 번 한 번의 실행 시각은 아닙니다 [8] | [전원 로그](../../02-artifacts/app-usage/powerlog.md) |
-| 8 | 앱별 데이터 사용량 — 백업 WirelessDomain `Library/Databases/DataUsage.sqlite` (확인 범위: iOS 27.0) | `ZPROCESS` 의 `ZFIRSTTIMESTAMP` 는 그 프로세스를 처음 기록한 때, `ZTIMESTAMP` 는 가장 최근 활동으로 보입니다 [13] | [앱별 데이터 사용량](../../02-artifacts/network/data-usage.md) |
-| 9 | 백업에서 보이는 앱 상태 — HomeDomain `Library/FrontBoard/applicationState.db`, `Library/SpringBoard/IconState.plist`, 백업 `Info.plist` 의 `Installed Applications` 키 (확인 범위: iOS 27.0) | 수집 시점에 어떤 앱이 있었고 홈 화면 어디에 놓였는지 | [설치된 앱](../../02-artifacts/app-usage/installed-apps.md) |
+| 8 | 앱별 데이터 사용량 — 백업 WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZPROCESS` 의 `ZFIRSTTIMESTAMP` 는 그 프로세스를 처음 기록한 때, `ZTIMESTAMP` 는 가장 최근 활동으로 보입니다 [13] | [앱별 데이터 사용량](../../02-artifacts/network/data-usage.md) |
+| 9 | 백업에서 보이는 앱 상태 — HomeDomain `Library/FrontBoard/applicationState.db`, `Library/SpringBoard/IconState.plist`, 백업 `Info.plist` 의 `Installed Applications` 키 | 수집 시점에 어떤 앱이 있었고 홈 화면 어디에 놓였는지 | [설치된 앱](../../02-artifacts/app-usage/installed-apps.md) |
 
 앱을 띄운 경로는 `com.apple.SpringBoard.transitionReason.homescreen`, `…externalrequest`, `…appswitcher`, `…spotlight` 같은 값으로 남는다고 iOS 16 에서 보고됐습니다 [3]. 사용자가 홈 화면에서 직접 눌렀는지, 다른 앱의 요청으로 열렸는지를 가르는 데 쓸 수 있지만, 값 전체의 목록은 이번에 연 자료에 없습니다.
 
-암호 없는 로컬 백업에는 이 밖에도 앱 사용과 이름이 닿아 있는 설정 파일이 보입니다 (확인 범위: iOS 27.0). HomeDomain `Library/Preferences/com.apple.ScreenTimeAgent.plist` 에 `ScreenTimeEnabled`, `UsageGenesisDate`, `LastTimeZoneName` 키가, `com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageLaunchesIntervalStartDate` 같은 날짜 키가, `com.apple.mt.lastLaunch.plist` 의 `launches` 아래에 번들 ID 이름의 키가 있습니다. 각 값의 뜻은 문서로 확인하지 못해서, 앱을 쓴 시각의 근거로 쓰기 전에 시험 기기에서 앱을 띄우고 값이 어떻게 바뀌는지 먼저 대조합니다.
+암호 없는 로컬 백업에는 이 밖에도 앱 사용과 이름이 닿아 있는 설정 파일이 보입니다. HomeDomain `Library/Preferences/com.apple.ScreenTimeAgent.plist` 에 `ScreenTimeEnabled`, `UsageGenesisDate`, `LastTimeZoneName` 키가, `com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageLaunchesIntervalStartDate` 같은 날짜 키가, `com.apple.mt.lastLaunch.plist` 의 `launches` 아래에 번들 ID 이름의 키가 있습니다. 각 값의 뜻은 문서로 확인하지 못해서, 앱을 쓴 시각의 근거로 쓰기 전에 시험 기기에서 앱을 띄우고 값이 어떻게 바뀌는지 먼저 대조합니다.
 
 ## 분석 흐름
 
@@ -77,7 +77,7 @@ nav_order: 1430
 
 전원 로그의 앱 실행 시간을 실행 시각으로 쓰는 실수도 있습니다. `PLAppTimeService_Aggregate_AppRunTime` 은 표본 구간마다 모은 값이라서 [8], 그 구간 안 어느 때에 앱을 썼는지는 말하지 않습니다.
 
-데이터 사용량 DB 에 행이 없다고 앱을 쓰지 않았다고 읽는 일도 있습니다. 관찰한 백업의 `ZLIVEUSAGE` 에는 셀룰러 칸 `ZWWANIN`·`ZWWANOUT` 만 있고 Wi-Fi 칸 `ZWIFIIN`·`ZWIFIOUT` 이 없었습니다 (확인 범위: iOS 27.0). iLEAPP 도 Wi-Fi 칸이 없을 때는 셀룰러 칸만 읽는 쿼리를 씁니다 [9]. 거꾸로 이 DB 는 백업에 들어가 오래된 기록이 남기도 해서, 글쓴이의 기기에 2013년 기록이 있었다는 보고가 있습니다 [13].
+데이터 사용량 DB 에 행이 없다고 앱을 쓰지 않았다고 읽는 일도 있습니다. 관찰한 백업의 `ZLIVEUSAGE` 에는 셀룰러 칸 `ZWWANIN`·`ZWWANOUT` 만 있고 Wi-Fi 칸 `ZWIFIIN`·`ZWIFIOUT` 이 없었습니다. iLEAPP 도 Wi-Fi 칸이 없을 때는 셀룰러 칸만 읽는 쿼리를 씁니다 [9]. 거꾸로 이 DB 는 백업에 들어가 오래된 기록이 남기도 해서, 글쓴이의 기기에 2013년 기록이 있었다는 보고가 있습니다 [13].
 
 ## 보고서 문장 예
 

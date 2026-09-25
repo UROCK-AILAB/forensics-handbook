@@ -13,7 +13,7 @@ nav_order: 560
 
 ## 무엇을 기록하나 · 왜 생기나
 
-사용자가 앨범을 만들거나 공유 앨범에 참여하면 사진 앱은 그 앨범을 `ZGENERICALBUM` 에 행으로 적고, 어떤 자산이 어느 앨범에 들어 있는지는 연결 표에 따로 적습니다[2][5]. 공유 앨범은 여러 사람이 사진을 올리고 댓글을 다는 곳이라서, 앨범 행 말고도 소유자 이름, 초대받은 사람, 댓글과 반응, 새 항목 피드가 표로 남습니다(확인 범위: iOS 27.0). 누구와 사진을 나눴는지, 누가 어떤 사진을 올렸는지를 묻는 조사에서 이 표들을 봅니다.
+사용자가 앨범을 만들거나 공유 앨범에 참여하면 사진 앱은 그 앨범을 `ZGENERICALBUM` 에 행으로 적고, 어떤 자산이 어느 앨범에 들어 있는지는 연결 표에 따로 적습니다[2][5]. 공유 앨범은 여러 사람이 사진을 올리고 댓글을 다는 곳이라서, 앨범 행 말고도 소유자 이름, 초대받은 사람, 댓글과 반응, 새 항목 피드가 표로 남습니다. 누구와 사진을 나눴는지, 누가 어떤 사진을 올렸는지를 묻는 조사에서 이 표들을 봅니다.
 
 Apple 은 공유 앨범의 동작을 이렇게 안내합니다[1]. 공유 앨범을 지우면 내 기기와 구독자 기기 모두에서 자동으로 사라지고 앨범 안의 사진도 영구히 지워지며, 소유자는 누구의 사진·동영상·댓글이든 지울 수 있지만 구독자는 자기가 올린 것만 지울 수 있습니다. "공개 웹사이트" 를 켜면 누구나 웹 브라우저로 앨범을 볼 수 있습니다.
 
@@ -28,13 +28,13 @@ Photos.sqlite 의 기본 구조와 `ZASSET` 은 [사진 DB 구조 (Photos.sqlite
 | iOS 16 이후 | iCloud 공유 사진 보관함(Shared Photo Library)이 생겼고, iLEAPP 는 Ph31~33 파서로 읽습니다 | [4] |
 | iOS 27·iPadOS 27 이후 | 공유 앨범이 원본 해상도 공유, 새 필터·정렬, 이모지 반응, 다른 사람을 앨범에 초대하는 새 방법을 지원하고, Apple 계정이나 Apple 기기가 없어도 웹으로 참여해 사진을 올릴 수 있습니다 | [1] |
 
-iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공유 앨범" 을 켜서 씁니다[1]. 관찰 기기에서는 `ZSHAREPOST` 와 `ZCOLLECTIONSHAREMIGRATIONATTRIBUTES` 표도 보였지만(확인 범위: iOS 27.0), 두 표의 뜻은 이번에 연 자료로 확인하지 못했고 iOS 27 의 공유 앨범 변경과 이어지는지도 알 수 없습니다.
+iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공유 앨범" 을 켜서 씁니다[1]. 관찰 기기에서는 `ZSHAREPOST` 와 `ZCOLLECTIONSHAREMIGRATIONATTRIBUTES` 표도 보였지만, 두 표의 뜻은 이번에 연 자료로 확인하지 못했고 iOS 27 의 공유 앨범 변경과 이어지는지도 알 수 없습니다.
 
 ## 구조
 
 ### 앨범 표 (ZGENERICALBUM)
 
-관찰 기기의 `ZGENERICALBUM` 에는 아래 칸이 있었습니다(확인 범위: iOS 27.0). 칸 목록은 60개에서 끊겨 있어 다른 칸이 더 있을 수 있습니다.
+관찰 기기의 `ZGENERICALBUM` 에는 아래 칸이 있었습니다. 칸 목록은 60개에서 끊겨 있어 다른 칸이 더 있을 수 있습니다.
 
 | 묶음 | 칸 |
 |---|---|
@@ -73,11 +73,11 @@ iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공�
 | 26.1 | `Z_33ASSETS` |
 | 27.0(개발자 베타 기준) | `Z_34ASSETS` |
 
-iOS 버전별 번호는 확인하지 못했고, 관찰 기기에서도 숫자가 든 표 이름을 가려서 번호를 보지 못했습니다(확인 범위: iOS 27.0). 검체마다 `sqlite_master` 에서 표 이름을 먼저 찾습니다.
+iOS 버전별 번호는 확인하지 못했고, 관찰 기기에서도 숫자가 든 표 이름을 가려서 번호를 보지 못했습니다. 검체마다 `sqlite_master` 에서 표 이름을 먼저 찾습니다.
 
 ### 공유 앨범의 활동 표
 
-공유 앨범의 댓글·피드·초대는 아래 표에 있었습니다(확인 범위: iOS 27.0).
+공유 앨범의 댓글·피드·초대는 아래 표에 있었습니다.
 
 | 표 | 관찰한 칸(일부) |
 |---|---|
@@ -89,17 +89,17 @@ iOS 버전별 번호는 확인하지 못했고, 관찰 기기에서도 숫자가
 
 ### 링크 공유와 참여자 (ZSHARE·ZSHAREPARTICIPANT)
 
-`ZSHARE` 는 iCloud 링크 공유 등에 쓰이고, 공개 도구는 `ZSTATUS`, `ZCREATIONDATE`, `ZSTARTDATE`, `ZENDDATE`, `ZEXPIRYDATE`, `ZTITLE`, `ZSHAREURL`, `ZASSETCOUNT`, `ZUUID`, `ZPUBLICPERMISSION` 칸을 읽습니다[2]. 관찰 기기의 `ZSHARE` 에서는 `ZCOLLECTIONSHAREKIND`, `ZSCOPETYPE`, `ZSCOPEIDENTIFIER`, `ZTITLE`, `ZCREATIONDATE`, `ZACCEPTANCEDATE`, `ZEXPIRYDATE`, `ZTRASHEDSTATE`, `ZTRASHEDDATE`, `ZPUBLICURLSTATE`, `ZALLOWSANONYMOUSPUBLICACCESS` 를 봤고, `ZSHAREURL` 은 칸 목록이 60개에서 끊겨 보이지 않았습니다(확인 범위: iOS 27.0).
+`ZSHARE` 는 iCloud 링크 공유 등에 쓰이고, 공개 도구는 `ZSTATUS`, `ZCREATIONDATE`, `ZSTARTDATE`, `ZENDDATE`, `ZEXPIRYDATE`, `ZTITLE`, `ZSHAREURL`, `ZASSETCOUNT`, `ZUUID`, `ZPUBLICPERMISSION` 칸을 읽습니다[2]. 관찰 기기의 `ZSHARE` 에서는 `ZCOLLECTIONSHAREKIND`, `ZSCOPETYPE`, `ZSCOPEIDENTIFIER`, `ZTITLE`, `ZCREATIONDATE`, `ZACCEPTANCEDATE`, `ZEXPIRYDATE`, `ZTRASHEDSTATE`, `ZTRASHEDDATE`, `ZPUBLICURLSTATE`, `ZALLOWSANONYMOUSPUBLICACCESS` 를 봤고, `ZSHAREURL` 은 칸 목록이 60개에서 끊겨 보이지 않았습니다.
 
-참여자는 `ZSHAREPARTICIPANT` 에 있고, 관찰 기기에서 `ZEMAILADDRESS`, `ZPHONENUMBER`, `ZPARTICIPANTROLE`, `ZACCEPTANCESTATUS`, `ZISCURRENTUSER`, `ZCONTRIBUTEDASSETSCOUNT`, `ZSUBSCRIPTIONDATE` 칸을 봤습니다(확인 범위: iOS 27.0).
+참여자는 `ZSHAREPARTICIPANT` 에 있고, 관찰 기기에서 `ZEMAILADDRESS`, `ZPHONENUMBER`, `ZPARTICIPANTROLE`, `ZACCEPTANCESTATUS`, `ZISCURRENTUSER`, `ZCONTRIBUTEDASSETSCOUNT`, `ZSUBSCRIPTIONDATE` 칸을 봤습니다.
 
 ### 공유 사진 보관함
 
-iCloud 공유 사진 보관함은 iOS 16 이후 기능이고[4], `ZASSET` 에는 `ZACTIVELIBRARYSCOPEPARTICIPATIONSTATE` 와 `ZLIBRARYSCOPESHARESTATE` 칸이 있었습니다(확인 범위: iOS 27.0). 두 칸의 값 뜻은 확인하지 못했습니다.
+iCloud 공유 사진 보관함은 iOS 16 이후 기능이고[4], `ZASSET` 에는 `ZACTIVELIBRARYSCOPEPARTICIPATIONSTATE` 와 `ZLIBRARYSCOPESHARESTATE` 칸이 있었습니다. 두 칸의 값 뜻은 확인하지 못했습니다.
 
 ### 사진 앱 설정
 
-CameraRollDomain 의 `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist` 에는 `HasSignificantRegularAlbumCount`, `HasSignificantSharedAlbumActivities` 같은 키가 있었습니다(확인 범위: iOS 27.0). 이름으로 보아 앨범 수와 공유 앨범 활동이 많은지를 적은 값이지만, 뜻과 기준은 확인하지 못했습니다.
+CameraRollDomain 의 `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist` 에는 `HasSignificantRegularAlbumCount`, `HasSignificantSharedAlbumActivities` 같은 키가 있었습니다. 이름으로 보아 앨범 수와 공유 앨범 활동이 많은지를 적은 값이지만, 뜻과 기준은 확인하지 못했습니다.
 
 ## 증거로서 의미
 

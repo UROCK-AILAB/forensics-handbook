@@ -49,7 +49,7 @@ nav_order: 1640
 
 ## 분석 흐름
 
-1. **계정 DB 에서 모르는 계정을 찾습니다.** 기기에서는 `/private/var/mobile/Library/Accounts/Accounts3.sqlite` 에 있고 [4], 로컬 백업에서는 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 와 `HomeDomain :: Library/Accounts/VerifiedBackup/Accounts#.sqlite` 로 보였습니다(`#` 은 숫자를 가린 것, 확인 범위: iOS 27.0). 관찰한 표와 칸은 다음과 같습니다(확인 범위: iOS 27.0).
+1. **계정 DB 에서 모르는 계정을 찾습니다.** 기기에서는 `/private/var/mobile/Library/Accounts/Accounts3.sqlite` 에 있고 [4], 로컬 백업에서는 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 와 `HomeDomain :: Library/Accounts/VerifiedBackup/Accounts#.sqlite` 로 보였습니다(`#` 은 숫자를 가린 것). 관찰한 표와 칸은 다음과 같습니다.
 
    ```
    ZACCOUNT:        ZACTIVE, ZAUTHENTICATED, ZACCOUNTTYPE, ZPARENTACCOUNT, ZDATE,
@@ -61,9 +61,9 @@ nav_order: 1640
 
    Forensafe 는 이 DB 에서 계정을 추가한 시각, 사용자 이름, 계정 종류 등을 뽑는다고 적었습니다 [4]. `ZDATE` 가 그 추가 시각인지와 어떤 기준 시각인지는 확인하지 못해서, 사용자가 계정을 추가했다고 기억하는 시각과 먼저 맞춰 봅니다. 사용자가 모르는 `ZUSERNAME` 의 메일·클라우드 계정이 있으면 탈취한 쪽이 추가했을 가능성을 두고 조사하되, 사용자가 잊은 계정일 수도 있어서 진술로 확인합니다.
 
-2. **Apple 계정 상태를 봅니다.** `HomeDomain :: Library/Preferences/com.apple.appleaccount.informationcache.plist` 에 `AAAccountFullName`, `AAIsAccountSignedIn`, `AAPrimaryAccountSignInState`, `AAProfilePictureCacheURL` 키가 있었습니다(확인 범위: iOS 27.0). 이름과 로그인 상태가 사용자 진술과 다른지 봅니다.
+2. **Apple 계정 상태를 봅니다.** `HomeDomain :: Library/Preferences/com.apple.appleaccount.informationcache.plist` 에 `AAAccountFullName`, `AAIsAccountSignedIn`, `AAPrimaryAccountSignInState`, `AAProfilePictureCacheURL` 키가 있었습니다. 이름과 로그인 상태가 사용자 진술과 다른지 봅니다.
 
-3. **분실 모드와 나의 찾기 계정을 봅니다.** Apple 은 남이 기기를 분실 모드로 바꾼 것을 탈취 징후로 듭니다 [1]. 관찰한 백업에는 다음 파일이 있었습니다(확인 범위: iOS 27.0).
+3. **분실 모드와 나의 찾기 계정을 봅니다.** Apple 은 남이 기기를 분실 모드로 바꾼 것을 탈취 징후로 듭니다 [1]. 관찰한 백업에는 다음 파일이 있었습니다.
 
    | 파일 | 보인 키 이름 |
    |---|---|
@@ -74,11 +74,11 @@ nav_order: 1640
 
 4. **보내지 않았다는 메시지를 봅니다.** `sms.db` 의 `message.is_from_me` 가 1 인 행이 보낸 메시지이고 [5], 사용자가 보내지 않았다고 말한 메시지와 시각·상대를 맞춰 봅니다. 이 값은 사용자 쪽에서 보낸 메시지라는 것까지만 말하고, 누가 보냈는지는 말하지 않습니다. 누가 기기를 쓰고 있었는지는 [그 시각에 폰을 쓴 사람이 누구인가](../activity/user-attribution.md)를 따릅니다.
 
-5. **2단계 인증 화면의 흔적을 적어 둡니다.** 관찰한 백업에는 `AppDomainPlugin-com.apple.AuthKitUI.AKSecondFactorAlert`, `AKSecondFactorEntryAlert`, `AKLocationSignInAlert`, `AKFollowUpServerUIExtension` 플러그인 도메인과 `AppDomain-com.apple.AuthKitUIService` 도메인이 있었습니다(확인 범위: iOS 27.0). 이름으로 보아 2단계 인증 알림 화면과 관련 있어 보이지만, 안의 파일에 로그인 시도 기록이 남는지는 확인하지 못했습니다.
+5. **2단계 인증 화면의 흔적을 적어 둡니다.** 관찰한 백업에는 `AppDomainPlugin-com.apple.AuthKitUI.AKSecondFactorAlert`, `AKSecondFactorEntryAlert`, `AKLocationSignInAlert`, `AKFollowUpServerUIExtension` 플러그인 도메인과 `AppDomain-com.apple.AuthKitUIService` 도메인이 있었습니다. 이름으로 보아 2단계 인증 알림 화면과 관련 있어 보이지만, 안의 파일에 로그인 시도 기록이 남는지는 확인하지 못했습니다.
 
-6. **프로파일과 MDM 등록을 봅니다.** 도난 기기 보호가 켜져 있으면 MDM 등록에 1시간 보안 지연이 걸립니다 [3]. 관찰한 백업에는 `SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles :: Library/ConfigurationProfiles/MCProfileEvents.plist` 가 있었습니다(확인 범위: iOS 27.0). 사용자가 모르는 프로파일 설치나 MDM 등록이 있는지 [구성 프로파일과 MDM](../../02-artifacts/credentials-security/configuration-profiles.md)에서 봅니다.
+6. **프로파일과 MDM 등록을 봅니다.** 도난 기기 보호가 켜져 있으면 MDM 등록에 1시간 보안 지연이 걸립니다 [3]. 관찰한 백업에는 `SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles :: Library/ConfigurationProfiles/MCProfileEvents.plist` 가 있었습니다. 사용자가 모르는 프로파일 설치나 MDM 등록이 있는지 [구성 프로파일과 MDM](../../02-artifacts/credentials-security/configuration-profiles.md)에서 봅니다.
 
-7. **저장된 암호가 어디 있는지 적습니다.** 백업에는 `KeychainDomain :: keychain-backup.plist`(키 `keybag-uuid`, `genp`, `inet`, `cert`, `keys`)와 `HomeDomain :: Library/Preferences/com.apple.Safari.PasswordBreachAgent.plist` 가 있었습니다(확인 범위: iOS 27.0). 암호화하지 않은 백업에서 키체인 항목을 읽을 수 있는지와 암호 유출 경고 plist 의 키·동작은 확인하지 못했습니다. 구조는 [키체인](../../01-foundations/storage/keychain.md)과 [저장된 암호](../../02-artifacts/credentials-security/saved-passwords.md)에 있습니다.
+7. **저장된 암호가 어디 있는지 적습니다.** 백업에는 `KeychainDomain :: keychain-backup.plist`(키 `keybag-uuid`, `genp`, `inet`, `cert`, `keys`)와 `HomeDomain :: Library/Preferences/com.apple.Safari.PasswordBreachAgent.plist` 가 있었습니다. 암호화하지 않은 백업에서 키체인 항목을 읽을 수 있는지와 암호 유출 경고 plist 의 키·동작은 확인하지 못했습니다. 구조는 [키체인](../../01-foundations/storage/keychain.md)과 [저장된 암호](../../02-artifacts/credentials-security/saved-passwords.md)에 있습니다.
 
 ## 흔한 오판
 

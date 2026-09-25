@@ -13,7 +13,7 @@ nav_order: 480
 
 ## 무엇을 기록하나 · 왜 생기나
 
-MMS 와 iMessage 로 오간 파일은 기기의 `/private/var/mobile/Library/SMS/Attachments` 폴더에 모입니다[3]. 파일 하나마다 `attachment` 표에 한 행이 생기고, `message_attachment_join` 의 `message_id`·`attachment_id` 가 그 행을 메시지에 잇습니다[1](확인 범위: iOS 27.0). `message` 표에도 첨부가 있는 메시지를 표시하는 캐시 칸 `cache_has_attachments` 가 있습니다(확인 범위: iOS 27.0).
+MMS 와 iMessage 로 오간 파일은 기기의 `/private/var/mobile/Library/SMS/Attachments` 폴더에 모입니다[3]. 파일 하나마다 `attachment` 표에 한 행이 생기고, `message_attachment_join` 의 `message_id`·`attachment_id` 가 그 행을 메시지에 잇습니다[1]. `message` 표에도 첨부가 있는 메시지를 표시하는 캐시 칸 `cache_has_attachments` 가 있습니다.
 
 메시지 본문에서는 첨부 자리에 U+FFFC(OBJECT REPLACEMENT CHARACTER) 한 글자가 들어가서, 사진만 보낸 메시지는 본문이 이 글자 하나뿐일 수 있습니다[2]. 사진은 사용자가 설정을 바꾸지 않았다면 HEIC 로 저장됩니다[2].
 
@@ -27,13 +27,13 @@ MMS 와 iMessage 로 오간 파일은 기기의 `/private/var/mobile/Library/SMS
 ~/Library/SMS/Attachments/ab/11/<첨부 GUID>/IMG_4471.HEIC
 ```
 
-로컬 백업에서는 sms.db 가 HomeDomain 에 있는 것과 달리 첨부 파일은 MediaDomain 에 있습니다[2]. 백업 파일 ID 는 `SHA1("도메인-상대경로")` 로 구하고[2], 첨부는 `filename` 앞의 `~/` 를 떼고 `MediaDomain-Library/SMS/Attachments/...` 를 넣어 계산합니다[2]. 도메인을 HomeDomain 으로 잘못 넣으면 오류 없이 모든 첨부를 못 찾습니다[2]. 관찰한 백업에서는 MediaDomain 에 항목이 303개 있다는 것까지만 확인했고, 그 안의 첨부 경로 목록은 확인하지 않았습니다(확인 범위: iOS 27.0). 백업 구조 자체는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
+로컬 백업에서는 sms.db 가 HomeDomain 에 있는 것과 달리 첨부 파일은 MediaDomain 에 있습니다[2]. 백업 파일 ID 는 `SHA1("도메인-상대경로")` 로 구하고[2], 첨부는 `filename` 앞의 `~/` 를 떼고 `MediaDomain-Library/SMS/Attachments/...` 를 넣어 계산합니다[2]. 도메인을 HomeDomain 으로 잘못 넣으면 오류 없이 모든 첨부를 못 찾습니다[2]. 관찰한 백업에서는 MediaDomain 에 항목이 303개 있다는 것까지만 확인했고, 그 안의 첨부 경로 목록은 확인하지 않았습니다. 백업 구조 자체는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
 이번에 연 자료로는 iOS 버전에 따라 첨부 폴더 구조가 달라진다는 내용을 확인하지 못했습니다.
 
 ## 구조
 
-관찰한 백업의 `attachment` 표에는 칸이 26개 있습니다(확인 범위: iOS 27.0).
+관찰한 백업의 `attachment` 표에는 칸이 26개 있습니다.
 
 ```
 ROWID, guid, created_date, start_date, filename, uti, mime_type,
@@ -53,7 +53,7 @@ sensitivity_analysis
 | `uti`, `mime_type`, `total_bytes`, `is_outgoing` | 칸 이름은 확인했지만 이번에 연 자료에 값 설명은 없었습니다 |
 | `is_sticker`, `sticker_user_info`, `is_commsafety_sensitive`, `sensitivity_analysis` | 칸 이름만 확인했고 값의 뜻은 확인하지 못했습니다 |
 
-첨부 관련 설정 키는 아래 plist 에서 보였습니다(확인 범위: iOS 27.0). 키 이름만 확인했고 값과 뜻은 확인하지 못했습니다. `DidMakeAllAttachmentsClassC` 의 "ClassC" 가 데이터 보호 등급 C 를 뜻하는지도 확인하지 못했고, 데이터 보호 등급 자체는 [데이터 보호 (Data Protection)](../../../01-foundations/storage/data-protection/index.md)에서 다룹니다.
+첨부 관련 설정 키는 아래 plist 에서 보였습니다. 키 이름만 확인했고 값과 뜻은 확인하지 못했습니다. `DidMakeAllAttachmentsClassC` 의 "ClassC" 가 데이터 보호 등급 C 를 뜻하는지도 확인하지 못했고, 데이터 보호 등급 자체는 [데이터 보호 (Data Protection)](../../../01-foundations/storage/data-protection/index.md)에서 다룹니다.
 
 | 파일(HomeDomain, `Library/Preferences/`) | 키 |
 |---|---|

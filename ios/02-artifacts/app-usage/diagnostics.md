@@ -45,7 +45,7 @@ Apple 은 Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야
 
 ### 로컬 백업에 보이는 것
 
-관찰한 로컬 백업의 관찰 메모에는 `.ips` 파일도, `Logs/CrashReporter` 경로도 나오지 않았습니다 (확인 범위: iOS 27.0). 그래서 백업에 충돌 보고서 본문이 들어가는지는 이 관찰로 판단할 수 없습니다. 진단과 이름이 닿는 설정 plist 와 도메인은 보였고, 값은 읽지 않았습니다 (확인 범위: iOS 27.0).
+관찰한 로컬 백업의 관찰 메모에는 `.ips` 파일도, `Logs/CrashReporter` 경로도 나오지 않았습니다. 그래서 백업에 충돌 보고서 본문이 들어가는지는 이 관찰로 판단할 수 없습니다. 진단과 이름이 닿는 설정 plist 와 도메인은 보였고, 값은 읽지 않았습니다.
 
 | 도메인 :: 경로 | 관찰한 키 |
 |---|---|
@@ -55,9 +55,9 @@ Apple 은 Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야
 | `HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` | `netUsageBaseline` 아래에 프로세스·번들 ID 이름이 키로 있음 |
 | `HomeDomain :: Library/Preferences/com.apple.analyticsagent.plist` | `AppUsageSyncTime` (float), `ODDAssistantLLMSiriDigestSyncTime` (float) |
 
-`com.apple.osanalyticshelper.plist` 의 키는 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에 정리되어 있습니다. `bbtrace.` 로 시작하는 키는 `CrashReporter.plist` 가 아니라 `WirelessDomain :: Library/Preferences/com.apple.AppleBasebandManager.plist` 아래에 있었습니다 (확인 범위: iOS 27.0).
+`com.apple.osanalyticshelper.plist` 의 키는 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에 정리되어 있습니다. `bbtrace.` 로 시작하는 키는 `CrashReporter.plist` 가 아니라 `WirelessDomain :: Library/Preferences/com.apple.AppleBasebandManager.plist` 아래에 있었습니다.
 
-도메인으로는 `SysSharedContainerDomain-systemgroup.com.apple.osanalytics`(항목 3개), `…ReportMemoryException`(항목 3개), `…powerexceptions`(항목 4개), `SysContainerDomain-com.apple.metrickitd`(항목 11개), `AppDomain-com.apple.DiagnosticsReporter`, `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`·`LowMemory`·`Panic`·`HangTracer` 가 보였습니다 (확인 범위: iOS 27.0). 어느 키와 도메인도 뜻과 내용을 확인하지 못했습니다.
+도메인으로는 `SysSharedContainerDomain-systemgroup.com.apple.osanalytics`(항목 3개), `…ReportMemoryException`(항목 3개), `…powerexceptions`(항목 4개), `SysContainerDomain-com.apple.metrickitd`(항목 11개), `AppDomain-com.apple.DiagnosticsReporter`, `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`·`LowMemory`·`Panic`·`HangTracer` 가 보였습니다. 어느 키와 도메인도 뜻과 내용을 확인하지 못했습니다.
 
 ## 구조
 
@@ -94,7 +94,7 @@ iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 
 
 `uptime` 은 부팅 뒤 흐른 초라서[2], `captureTime` 에서 `uptime` 을 빼면 그 보고서 기준으로 기기를 켠 무렵을 어림할 수 있습니다. 여러 보고서에서 어림한 부팅 시각이 크게 다르면 그 사이에 재부팅이 있었다는 뜻일 수 있고, 재부팅 기록은 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 과 맞춰 봅니다.
 
-백업 plist 의 `ExcResourceDiagInfo_…` 는 `datetime` 형이라 도구가 날짜로 풀어 주지만 무슨 시각인지는 확인하지 못했고, `analyticsagent.plist` 의 두 키는 `float` 형이라 기준점을 따로 확인해야 합니다 (확인 범위: iOS 27.0). 시각 기준은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+백업 plist 의 `ExcResourceDiagInfo_…` 는 `datetime` 형이라 도구가 날짜로 풀어 주지만 무슨 시각인지는 확인하지 못했고, `analyticsagent.plist` 의 두 키는 `float` 형이라 기준점을 따로 확인해야 합니다. 시각 기준은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 

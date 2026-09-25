@@ -14,9 +14,9 @@ Apple 은 포렌식용 공식 명세를 내지 않았습니다. 바이너리 pli
 
 ## 이 형식을 쓰는 아티팩트
 
-실제 아이폰 로컬 백업을 보면 plist 가 어디에나 있습니다. 백업 폴더 맨 위에는 `Info.plist`, `Manifest.plist`, `Status.plist` 가 있고, Apple 영역에서 이름을 적어 둔 plist 1,006개 가운데 728개가 `Library/Preferences/` 아래에 있습니다 (확인 범위: iOS 27.0). 백업 최상위 파일의 키와 뜻은 [로컬 백업](../backups/local-backup/index.md)에서, 앱과 시스템 설정 plist 의 해석은 [설정 값](../../02-artifacts/system-account/preferences.md)에서 다룹니다.
+실제 아이폰 로컬 백업을 보면 plist 가 어디에나 있습니다. 백업 폴더 맨 위에는 `Info.plist`, `Manifest.plist`, `Status.plist` 가 있고, Apple 영역에서 이름을 적어 둔 plist 1,006개 가운데 728개가 `Library/Preferences/` 아래에 있습니다. 백업 최상위 파일의 키와 뜻은 [로컬 백업](../backups/local-backup/index.md)에서, 앱과 시스템 설정 plist 의 해석은 [설정 값](../../02-artifacts/system-account/preferences.md)에서 다룹니다.
 
-같은 관찰에서 plist 1,006개를 백업 도메인별로 나누면 아래와 같습니다 (확인 범위: iOS 27.0).
+같은 관찰에서 plist 1,006개를 백업 도메인별로 나누면 아래와 같습니다.
 
 | 도메인 | plist 수 | 도메인 | plist 수 |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Apple 은 포렌식용 공식 명세를 내지 않았습니다. 바이너리 pli
 | WirelessDomain | 14 | KeychainDomain | 1 |
 | CameraRollDomain | 10 | | |
 
-키 값의 형식도 여러 가지가 섞여 있습니다. 같은 백업에서 키마다 붙은 형식을 세면 int 1,024개, bool 955개, str 772개, list 459개, datetime 458개, bytes 360개, float 309개였고, 사전(dict) 형식 값도 있었습니다 (확인 범위: iOS 27.0). 이 가운데 bytes 형식 값이 분석에서 특히 중요합니다. `com.apple.ap.AppStore.plist` 의 `AppStoreSLPContentSnapshot`, `com.apple.Fitness.plist` 의 `OnboardingCoordinatorCriteria`, `com.apple.biomesyncd.plist` 의 `CC_OncePerBootBackingData`, `com.apple.siriinferenced.plist` 의 `appIntentsBiomeBookmark`·`appIntentsTranscriptBiomeBookmark` 가 bytes 형식이었습니다 (확인 범위: iOS 27.0). 값을 읽지 않았기 때문에 이 bytes 안이 NSKeyedArchiver 인지, 바이너리 plist 인지, [프로토콜 버퍼](protobuf.md)인지는 알 수 없습니다. 같은 관찰은 각 plist 가 XML 인지 바이너리인지도 기록하지 않았습니다.
+키 값의 형식도 여러 가지가 섞여 있습니다. 같은 백업에서 키마다 붙은 형식을 세면 int 1,024개, bool 955개, str 772개, list 459개, datetime 458개, bytes 360개, float 309개였고, 사전(dict) 형식 값도 있었습니다. 이 가운데 bytes 형식 값이 분석에서 특히 중요합니다. `com.apple.ap.AppStore.plist` 의 `AppStoreSLPContentSnapshot`, `com.apple.Fitness.plist` 의 `OnboardingCoordinatorCriteria`, `com.apple.biomesyncd.plist` 의 `CC_OncePerBootBackingData`, `com.apple.siriinferenced.plist` 의 `appIntentsBiomeBookmark`·`appIntentsTranscriptBiomeBookmark` 가 bytes 형식이었습니다. 값을 읽지 않았기 때문에 이 bytes 안이 NSKeyedArchiver 인지, 바이너리 plist 인지, [프로토콜 버퍼](protobuf.md)인지는 알 수 없습니다. 같은 관찰은 각 plist 가 XML 인지 바이너리인지도 기록하지 않았습니다.
 
 plist 는 파일 밖의 다른 아티팩트에도 쓰입니다. iOS 16 을 조사한 자료에 따르면 [바이옴](../../02-artifacts/app-usage/biome/index.md) 스트림 폴더의 메타데이터 파일이 NSKeyedArchiver 형식 plist 이고, 보관 기간인 `maxAge` 값(흔히 2,419,200초, 곧 28일)을 담습니다[2].
 
@@ -123,7 +123,7 @@ NSKeyedArchiver 안에는 참조가 돌고 돌아 자기 자신으로 돌아오�
 
 ## 함정
 
-같은 종류의 시각 정보가 plist 마다 다른 형식으로 저장됩니다. `com.apple.appstored.plist` 의 `AppUsageBiomeStartDate` 는 datetime 형식이었고, `com.apple.siriinferenced.plist` 의 `BiomeEventLastBackFill` 과 `com.apple.lighthouse.pnr.PnROnDeviceWorker.plist` 의 `com.apple.biome.self.processedstreamLastBookmarkTrackTime` 은 float 형식이었습니다 (확인 범위: iOS 27.0). float 로 저장된 시각이 어느 시점을 기준으로 센 값인지는 키마다 따로 확인해야 하고, 이 페이지의 출처로는 확인하지 못했습니다. 기준 시점이 다른 값들을 가려내는 법은 [시각 값](../value-decoding/time-values.md)에서 다룹니다.
+같은 종류의 시각 정보가 plist 마다 다른 형식으로 저장됩니다. `com.apple.appstored.plist` 의 `AppUsageBiomeStartDate` 는 datetime 형식이었고, `com.apple.siriinferenced.plist` 의 `BiomeEventLastBackFill` 과 `com.apple.lighthouse.pnr.PnROnDeviceWorker.plist` 의 `com.apple.biome.self.processedstreamLastBookmarkTrackTime` 은 float 형식이었습니다. float 로 저장된 시각이 어느 시점을 기준으로 센 값인지는 키마다 따로 확인해야 하고, 이 페이지의 출처로는 확인하지 못했습니다. 기준 시점이 다른 값들을 가려내는 법은 [시각 값](../value-decoding/time-values.md)에서 다룹니다.
 
 bytes 형식 값을 그냥 넘기면 안쪽에 겹쳐 든 plist·NSKeyedArchiver·protobuf 를 놓칩니다. 도구가 bytes 를 16진수나 base64 로만 보여 주면 그 값을 따로 꺼내 앞 8바이트를 다시 확인합니다.
 

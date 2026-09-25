@@ -28,15 +28,15 @@ nav_order: 1080
 | 시리 지표 DB | 백업 `AppDomainGroup-group.com.apple.feedbacklogger` 아래 | iOS 27.0 백업에서 확인 |
 | 앱 인텐트 목록 | 백업 `SysContainerDomain-com.apple.linkd` 아래 | iOS 27.0 백업에서 확인 |
 
-iOS 27.0 에서 만든 암호화하지 않은 로컬 백업에는 `AppDomainGroup-group.com.apple.siri.inference` 도메인이 있었지만 `siriremembers` 파일은 관찰 메모에 없었고, 바이옴 `streams` 경로도 없었습니다(확인 범위: iOS 27.0). 두 기록이 로컬 백업에 들어가는지는 가리지 못했으니, 사용 기록까지 보려면 파일시스템 추출을 전제로 계획합니다. 수집 범위를 정하는 법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
+iOS 27.0 에서 만든 암호화하지 않은 로컬 백업에는 `AppDomainGroup-group.com.apple.siri.inference` 도메인이 있었지만 `siriremembers` 파일은 관찰 메모에 없었고, 바이옴 `streams` 경로도 없었습니다. 두 기록이 로컬 백업에 들어가는지는 가리지 못했으니, 사용 기록까지 보려면 파일시스템 추출을 전제로 계획합니다. 수집 범위를 정하는 법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
 
-같은 백업에는 `AppDomain-com.apple.siri`, `AppDomainGroup-group.com.apple.assistant.shared`, `AppDomainGroup-group.com.apple.siri.sirisuggestions`, `AppDomainGroup-group.com.apple.SiriTTS`, `AppDomain-com.apple.DictationExperience`, `AppDomain-com.apple.SystemVoiceAssistant` 도메인도 있었고 각각 항목이 3~4개였지만, 안에 든 파일은 관찰 메모에 없습니다(확인 범위: iOS 27.0).
+같은 백업에는 `AppDomain-com.apple.siri`, `AppDomainGroup-group.com.apple.assistant.shared`, `AppDomainGroup-group.com.apple.siri.sirisuggestions`, `AppDomainGroup-group.com.apple.SiriTTS`, `AppDomain-com.apple.DictationExperience`, `AppDomain-com.apple.SystemVoiceAssistant` 도메인도 있었고 각각 항목이 3~4개였지만, 안에 든 파일은 관찰 메모에 없습니다.
 
 ## 구조
 
 ### 설정 plist
 
-아래 키는 모두 iOS 27.0 백업에서 이름과 값 종류만 확인했습니다(확인 범위: iOS 27.0). 값의 뜻, 예를 들어 옵트인 상태 숫자가 무엇을 가리키는지나 "Linwood" 가 무엇인지는 확인하지 못했습니다.
+아래 키는 모두 iOS 27.0 백업에서 이름과 값 종류만 확인했습니다. 값의 뜻, 예를 들어 옵트인 상태 숫자가 무엇을 가리키는지나 "Linwood" 가 무엇인지는 확인하지 못했습니다.
 
 | 파일 (`HomeDomain :: Library/Preferences/`) | 주요 키 |
 |---|---|
@@ -49,9 +49,9 @@ iOS 27.0 에서 만든 암호화하지 않은 로컬 백업에는 `AppDomainGrou
 | `.GlobalPreferences.plist` | `com.apple.gms.enhancedSiri.lastUpdated`(datetime), `com.apple.gms.enhancedSiri.reasons`(list) |
 | `com.apple.Accessibility.plist` | `HomeButtonAssistantPreference`(int) |
 
-"시리야" 음성 등록과 이어져 보이는 기록도 있습니다. `AppDomainPlugin-com.apple.SiriSetup.SiriSetupSettingsIntents :: Library/Preferences/com.apple.voicetrigger.notbackedup.plist` 에 `EnrollmentId Voice Profile iCloud Enrollment`(str) 와 이름이 가려진 datetime 키가 하나 있고, `AppDomainGroup-group.com.apple.tipsnext :: tips-device-profile.plist` 의 `deviceCapabilities` 에는 `SiriEnabled`, `HeySiriAvailable`, `HeySiriEnabled`, `HeySiriEverUsed`, `SiriLanguageMatchesSystemLanguage` 키가 있습니다(확인 범위: iOS 27.0). 앞의 plist 가 음성 등록과 관련이 있는지는 확인하지 못했습니다.
+"시리야" 음성 등록과 이어져 보이는 기록도 있습니다. `AppDomainPlugin-com.apple.SiriSetup.SiriSetupSettingsIntents :: Library/Preferences/com.apple.voicetrigger.notbackedup.plist` 에 `EnrollmentId Voice Profile iCloud Enrollment`(str) 와 이름이 가려진 datetime 키가 하나 있고, `AppDomainGroup-group.com.apple.tipsnext :: tips-device-profile.plist` 의 `deviceCapabilities` 에는 `SiriEnabled`, `HeySiriAvailable`, `HeySiriEnabled`, `HeySiriEverUsed`, `SiriLanguageMatchesSystemLanguage` 키가 있습니다. 앞의 plist 가 음성 등록과 관련이 있는지는 확인하지 못했습니다.
 
-사용 빈도를 짐작하게 하는 키도 있습니다. `AppDomainPlugin-com.apple.siri.SiriSuggestionsLightHousePlugin :: Library/Preferences/com.apple.siri.DialogEngine.plist` 에는 `SiriAutoComplete`{count, timestamp} 와 이름이 가려진 {count, timestamp} 항목들이 있고, `AppDomainGroup-group.com.apple.siri.userfeedbacklearning :: Segment/SegmentStore.plist` 에는 `activitySegment`(str), `segmentFlags`(list), `membershipCheckedAt`(datetime), `assistantFirstEnabled`{longTermEnabled} 가 있습니다(확인 범위: iOS 27.0). plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 을, 설정 plist 전반은 [설정 값](../system-account/preferences.md) 을 봅니다.
+사용 빈도를 짐작하게 하는 키도 있습니다. `AppDomainPlugin-com.apple.siri.SiriSuggestionsLightHousePlugin :: Library/Preferences/com.apple.siri.DialogEngine.plist` 에는 `SiriAutoComplete`{count, timestamp} 와 이름이 가려진 {count, timestamp} 항목들이 있고, `AppDomainGroup-group.com.apple.siri.userfeedbacklearning :: Segment/SegmentStore.plist` 에는 `activitySegment`(str), `segmentFlags`(list), `membershipCheckedAt`(datetime), `assistantFirstEnabled`{longTermEnabled} 가 있습니다. plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 을, 설정 plist 전반은 [설정 값](../system-account/preferences.md) 을 봅니다.
 
 ### siriremembers DB
 
@@ -73,7 +73,7 @@ iOS 27.0 에서 만든 암호화하지 않은 로컬 백업에는 `AppDomainGrou
 
 ### 시리 지표 DB
 
-`AppDomainGroup-group.com.apple.feedbacklogger` 아래에 `com.apple.siri.ODDIMetricsExtension/data.sqlite`, `com.apple.siri.metrics.MetricsExtension/data.sqlite`, `com.apple.siri.metrics.SiriAttentionAndInvocationExtension/data.sqlite`, `com.apple.siri.telemetry/data.sqlite`, `com.apple.siriknowledged/data.sqlite` 등 이름이 비슷한 DB 가 9개 있었고, 표는 모두 같았습니다(확인 범위: iOS 27.0).
+`AppDomainGroup-group.com.apple.feedbacklogger` 아래에 `com.apple.siri.ODDIMetricsExtension/data.sqlite`, `com.apple.siri.metrics.MetricsExtension/data.sqlite`, `com.apple.siri.metrics.SiriAttentionAndInvocationExtension/data.sqlite`, `com.apple.siri.telemetry/data.sqlite`, `com.apple.siriknowledged/data.sqlite` 등 이름이 비슷한 DB 가 9개 있었고, 표는 모두 같았습니다.
 
 ```
 batchStatus: batchId, timestampRefId, status, processedAttempts, dateCreated, dateUploaded, dateLastProcessed
@@ -85,15 +85,15 @@ records: batchId, payload, dateCreated
 
 ### 앱 인텐트 목록과 그 밖의 자리
 
-`SysContainerDomain-com.apple.linkd :: database/linkd.metadatastore.sqlite` 에는 `assistantAppEntity`, `assistantIntent`, `assistantIntentNegativePhrases`, `assistantSuggestionPhrases`(bundleIdentifier, actionAndBundleIdentifier, assistantSuggestionPhrase), `appShortcuts`, `examplePhrases` 표가 있고, 같은 도메인의 `index/appintents.sqlite` 에는 `assistant_entity`, `assistant_intent`, `assistant_intent_negative_phrases`, `assistant_suggestion_phrases` 표가 있습니다(확인 범위: iOS 27.0). 앱이 시리에 알린 동작과 문구 목록으로 보이며, 사용 기록인지는 확인하지 못했습니다.
+`SysContainerDomain-com.apple.linkd :: database/linkd.metadatastore.sqlite` 에는 `assistantAppEntity`, `assistantIntent`, `assistantIntentNegativePhrases`, `assistantSuggestionPhrases`(bundleIdentifier, actionAndBundleIdentifier, assistantSuggestionPhrase), `appShortcuts`, `examplePhrases` 표가 있고, 같은 도메인의 `index/appintents.sqlite` 에는 `assistant_entity`, `assistant_intent`, `assistant_intent_negative_phrases`, `assistant_suggestion_phrases` 표가 있습니다. 앱이 시리에 알린 동작과 문구 목록으로 보이며, 사용 기록인지는 확인하지 못했습니다.
 
-사파리의 `AppDomain-com.apple.mobilesafari :: Library/Safari/IgnoredSiriSuggestedSites.db` 에는 `ignored_siri_suggested_sites`(id, siriSuggestedSiteURL, query, profile, timestamp, visitedURL, ignoreCount) 표가 있고, 시계 앱 DB 의 `ZMTCDALARM`, `ZMTCDTIMER` 표에는 `ZSIRICONTEXT` 칸이 있습니다(확인 범위: iOS 27.0).
+사파리의 `AppDomain-com.apple.mobilesafari :: Library/Safari/IgnoredSiriSuggestedSites.db` 에는 `ignored_siri_suggested_sites`(id, siriSuggestedSiteURL, query, profile, timestamp, visitedURL, ignoreCount) 표가 있고, 시계 앱 DB 의 `ZMTCDALARM`, `ZMTCDTIMER` 표에는 `ZSIRICONTEXT` 칸이 있습니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-설정 plist 는 키 이름으로 보아 수집 시점에 시리와 받아쓰기가 켜져 있었는지, 어떤 언어와 목소리를 골랐는지, iCloud 동기화를 켰는지를 보여 줍니다. `Cloud Sync Enabled Modification Date` 는 이름으로 보아 그 설정이 마지막으로 바뀐 때로 읽히지만, 이를 설명한 자료는 찾지 못했습니다(확인 범위: iOS 27.0). `siriremembers` 의 `intents` 행은 그 시각에 어떤 앱으로 누구와 메시지·통화·미디어 인텐트가 있었다는 기록이고 [1], `Siri.UI` 의 짝 기록은 시리 화면이 그 시각에 떴다가 어떤 이유로 닫혔다는 기록입니다 [2]. 둘을 같은 시각대에 놓으면 "이 시간대에 시리 화면이 열려 있었고, 같은 무렵 이 앱으로 이 상대에게 보내는 메시지 인텐트가 기록되어 있다" 처럼 쓸 수 있습니다.
+설정 plist 는 키 이름으로 보아 수집 시점에 시리와 받아쓰기가 켜져 있었는지, 어떤 언어와 목소리를 골랐는지, iCloud 동기화를 켰는지를 보여 줍니다. `Cloud Sync Enabled Modification Date` 는 이름으로 보아 그 설정이 마지막으로 바뀐 때로 읽히지만, 이를 설명한 자료는 찾지 못했습니다. `siriremembers` 의 `intents` 행은 그 시각에 어떤 앱으로 누구와 메시지·통화·미디어 인텐트가 있었다는 기록이고 [1], `Siri.UI` 의 짝 기록은 시리 화면이 그 시각에 떴다가 어떤 이유로 닫혔다는 기록입니다 [2]. 둘을 같은 시각대에 놓으면 "이 시간대에 시리 화면이 열려 있었고, 같은 무렵 이 앱으로 이 상대에게 보내는 메시지 인텐트가 기록되어 있다" 처럼 쓸 수 있습니다.
 
 **증명하지 못하는 것**
 
@@ -110,7 +110,7 @@ records: batchId, payload, dateCreated
 | 수집 시각 float 키 | 기준을 확인하지 못함 | — |
 | 지표 DB 의 `dateCreated` 등 | 기준을 확인하지 못함 | — |
 
-수집 시각 float 키는 `com.apple.siri.PostSiriEngagement.plist` 의 `PostSiriEngagementMetricsCollectorLastCollectedTime`, `com.apple.lighthouse.siri.IFTranscriptIngestor.plist` 의 `IntelligenceFlow.IFRequestTelemetryLastCollectionEndTime`, `com.apple.siri.cache.manager.plist` 의 `LLMCache.CacheManagerTelemetryLastLogCollectionEndTime`, `com.apple.analyticsagent.plist` 의 `ODDAssistantLLMSiriDigestSyncTime` 입니다(확인 범위: iOS 27.0). 이 값들은 지표를 모은 때로 보이며 사용자가 시리를 쓴 때와 같다고 볼 근거가 없습니다.
+수집 시각 float 키는 `com.apple.siri.PostSiriEngagement.plist` 의 `PostSiriEngagementMetricsCollectorLastCollectedTime`, `com.apple.lighthouse.siri.IFTranscriptIngestor.plist` 의 `IntelligenceFlow.IFRequestTelemetryLastCollectionEndTime`, `com.apple.siri.cache.manager.plist` 의 `LLMCache.CacheManagerTelemetryLastLogCollectionEndTime`, `com.apple.analyticsagent.plist` 의 `ODDAssistantLLMSiriDigestSyncTime` 입니다. 이 값들은 지표를 모은 때로 보이며 사용자가 시리를 쓴 때와 같다고 볼 근거가 없습니다.
 
 `Siri.UI` 에서 화면이 떠 있던 시간은 기록을 시각순으로 정렬해 세션 식별자(필드 2)로 묶고, 나타남 기록과 닫힘 기록의 시각 차로 잽니다 [2]. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에, 현지 시각으로 바꿀 때 볼 자리는 [시간대와 시각 설정](../system-account/time-zone.md) 에 있습니다.
 

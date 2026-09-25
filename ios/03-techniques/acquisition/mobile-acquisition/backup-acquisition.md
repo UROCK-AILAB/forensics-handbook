@@ -21,7 +21,7 @@ nav_order: 1190
 | Windows (Apple 기기 앱, Microsoft Store 판 iTunes) | `%USERPROFILE%` 에서 시작 |
 | Windows (예전 iTunes) | `%AppData%` 에서 시작 |
 
-Apple 지원 문서는 Windows 에서 찾아 들어갈 시작 폴더까지만 적고 그 아래 전체 경로는 적지 않아서, 실제 사건에서는 시작 폴더 아래를 직접 확인합니다. Finder 나 Apple 기기 앱에서 백업을 오른쪽 클릭하면 삭제, 보관(Archive), 위치 보기를 할 수 있습니다. 관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 것이었고, Info.plist 에 `Windows OS Version` 키가 있었습니다. (확인 범위: iOS 27.0)
+Apple 지원 문서는 Windows 에서 찾아 들어갈 시작 폴더까지만 적고 그 아래 전체 경로는 적지 않아서, 실제 사건에서는 시작 폴더 아래를 직접 확인합니다. Finder 나 Apple 기기 앱에서 백업을 오른쪽 클릭하면 삭제, 보관(Archive), 위치 보기를 할 수 있습니다. 관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 것이었고, Info.plist 에 `Windows OS Version` 키가 있었습니다.
 
 ## 절차
 
@@ -33,7 +33,7 @@ Apple 지원 문서는 Windows 에서 찾아 들어갈 시작 폴더까지만 �
 
 ## 백업 폴더 구조
 
-관찰한 백업 폴더의 최상위에는 아래 파일과, 해시 이름으로 된 하위 폴더들이 있었습니다. (확인 범위: iOS 27.0)
+관찰한 백업 폴더의 최상위에는 아래 파일과, 해시 이름으로 된 하위 폴더들이 있었습니다.
 
 ```
 Info.plist
@@ -58,7 +58,7 @@ SHA-1: 2f771621fd3c627d0db75fe173f3dae8ce50e98b
 
 ## Manifest.db
 
-관찰한 `Manifest.db` 의 표와 색인은 다음과 같았습니다. (확인 범위: iOS 27.0)
+관찰한 `Manifest.db` 의 표와 색인은 다음과 같았습니다.
 
 ```
 CREATE TABLE Files (fileID TEXT PRIMARY KEY, domain TEXT, relativePath TEXT, flags INTEGER, file BLOB)
@@ -72,7 +72,7 @@ CREATE INDEX FilesDomainsRelativePathIdx ON Files(domain, relativePath)
 
 ## Manifest.plist 와 Info.plist
 
-`Manifest.plist` 는 백업의 암호화 여부와 키백(keybag)을 담고, `Info.plist` 는 기기 정보, 소프트웨어 버전, 설치 앱을 담습니다. 관찰한 두 파일의 키 이름은 아래와 같았고 값은 읽지 않았습니다. (확인 범위: iOS 27.0)
+`Manifest.plist` 는 백업의 암호화 여부와 키백(keybag)을 담고, `Info.plist` 는 기기 정보, 소프트웨어 버전, 설치 앱을 담습니다. 관찰한 두 파일의 키 이름은 아래와 같았고 값은 읽지 않았습니다.
 
 ```
 Manifest.plist
@@ -91,9 +91,9 @@ Info.plist
 
 ## 백업 안에서 먼저 볼 흔적
 
-관찰한 백업에서는 암호화하지 않았는데도 `KeychainDomain` 에 항목이 2개 있었고, 그 안의 `keychain-backup.plist` 에 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있었습니다. (확인 범위: iOS 27.0) 이 파일 내용을 풀어 읽을 수 있는지는 확인하지 못했고, 키체인 구조는 [키체인](../../../01-foundations/storage/keychain.md)에서 다룹니다.
+관찰한 백업에서는 암호화하지 않았는데도 `KeychainDomain` 에 항목이 2개 있었고, 그 안의 `keychain-backup.plist` 에 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있었습니다. 이 파일 내용을 풀어 읽을 수 있는지는 확인하지 못했고, 키체인 구조는 [키체인](../../../01-foundations/storage/keychain.md)에서 다룹니다.
 
-기기가 예전에 백업에서 복원된 적이 있는지는 수집한 자료의 출처를 판단할 때 중요합니다. 관찰한 백업에서는 두 plist 에 복원 관련 키가 있었습니다. (확인 범위: iOS 27.0)
+기기가 예전에 백업에서 복원된 적이 있는지는 수집한 자료의 출처를 판단할 때 중요합니다. 관찰한 백업에서는 두 plist 에 복원 관련 키가 있었습니다.
 
 ```
 HomeDomain :: Library/Preferences/com.apple.MobileBackup.plist

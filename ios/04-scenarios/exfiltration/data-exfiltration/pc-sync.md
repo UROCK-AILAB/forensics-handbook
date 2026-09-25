@@ -30,7 +30,7 @@ nav_order: 1600
 
 ### 컴퓨터에 남은 백업 폴더
 
-관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 것이고, 최상위에 `Info.plist`, `Manifest.db`(`-shm`·`-wal` 함께), `Manifest.plist`, `Status.plist` 파일이 있었습니다(확인 범위: iOS 27.0). 두 plist 의 키는 아래와 같습니다(확인 범위: iOS 27.0).
+관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 것이고, 최상위에 `Info.plist`, `Manifest.db`(`-shm`·`-wal` 함께), `Manifest.plist`, `Status.plist` 파일이 있었습니다. 두 plist 의 키는 아래와 같습니다.
 
 | 파일 | 키 |
 |---|---|
@@ -39,7 +39,7 @@ nav_order: 1600
 
 `Info.plist` 의 Serial Number·Unique Identifier·Product Type·Product Version 을 조사 대상 기기의 값과 맞추면 이 백업이 그 기기의 것인지 가릴 수 있고, 식별자 읽는 법은 [기기 식별자 (UDID·ECID·일련번호)](../../../01-foundations/value-decoding/device-identifiers.md) 에 있습니다. Windows OS Version 키는 Windows 에서 만든 백업이라서 들어간 것으로 보이지만, Mac 에서 만든 백업에 이 키가 없는지는 확인하지 못했습니다. Last Backup Date 와 `Manifest.plist` 의 Date 가 어떤 시각을 담는지, 어느 시간대 기준인지는 이 페이지의 자료로 확인하지 못했으니 원래 값을 함께 적습니다.
 
-`Manifest.db` 의 Files 표에는 fileID, domain, relativePath, flags, file 칸이 있습니다(확인 범위: iOS 27.0). domain·relativePath 로 백업에 든 파일 목록을 뽑으면 이 백업으로 컴퓨터에 옮겨진 자료의 범위를 볼 수 있습니다.
+`Manifest.db` 의 Files 표에는 fileID, domain, relativePath, flags, file 칸이 있습니다. domain·relativePath 로 백업에 든 파일 목록을 뽑으면 이 백업으로 컴퓨터에 옮겨진 자료의 범위를 볼 수 있습니다.
 
 ```sql
 SELECT domain, relativePath, flags FROM Files ORDER BY domain, relativePath;
@@ -49,9 +49,9 @@ SELECT domain, relativePath, flags FROM Files ORDER BY domain, relativePath;
 
 ### 기기에 남는 설정 파일
 
-기기 쪽에서는 `HomeDomain :: Library/Preferences/com.apple.MobileBackup.plist` 를 봅니다. 이 파일의 BackupStateInfo 에는 date, isCloud, state, progress, errors, backupAttemptCount 같은 하위 키가 있고, RestoreInfo 에는 BackupBuildVersion, DeviceBuildVersion, RestoreDate, WasCloudRestore 가 있습니다(확인 범위: iOS 27.0). 로컬 백업을 했을 때도 BackupStateInfo 에 기록이 남는지는 확인하지 못했습니다. RestoreInfo 는 이 기기가 백업에서 복원된 이력을 보여 주고, 해석은 [초기화와 복원 흔적 (Erase·Restore)](../../../02-artifacts/system-account/erase-restore.md) 을 따릅니다.
+기기 쪽에서는 `HomeDomain :: Library/Preferences/com.apple.MobileBackup.plist` 를 봅니다. 이 파일의 BackupStateInfo 에는 date, isCloud, state, progress, errors, backupAttemptCount 같은 하위 키가 있고, RestoreInfo 에는 BackupBuildVersion, DeviceBuildVersion, RestoreDate, WasCloudRestore 가 있습니다. 로컬 백업을 했을 때도 BackupStateInfo 에 기록이 남는지는 확인하지 못했습니다. RestoreInfo 는 이 기기가 백업에서 복원된 이력을 보여 주고, 해석은 [초기화와 복원 흔적 (Erase·Restore)](../../../02-artifacts/system-account/erase-restore.md) 을 따릅니다.
 
-`HomeDomain :: Library/Preferences/com.apple.mobile.ldpair.plist` 에는 가려진 실수형 키 하나만 있었고(확인 범위: iOS 27.0), 파일 이름이 페어링을 떠올리게 하지만 무엇을 기록하는지는 확인하지 못했습니다.
+`HomeDomain :: Library/Preferences/com.apple.mobile.ldpair.plist` 에는 가려진 실수형 키 하나만 있었고, 파일 이름이 페어링을 떠올리게 하지만 무엇을 기록하는지는 확인하지 못했습니다.
 
 ## 분석 흐름
 

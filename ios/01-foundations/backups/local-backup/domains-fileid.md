@@ -36,7 +36,7 @@ fileID = sha1(domain + "-" + relativePath)
 
 ### 도메인 이름의 짜임
 
-관찰한 백업의 도메인은 모두 1428개였고, 그중 Apple 기본 영역이 1267개, 설치한 앱 등 나머지가 161개였습니다(확인 범위: iOS 27.0). Apple 기본 영역 1267개를 이름 앞부분으로 나누면 아래와 같습니다.
+관찰한 백업의 도메인은 모두 1428개였고, 그중 Apple 기본 영역이 1267개, 설치한 앱 등 나머지가 161개였습니다. Apple 기본 영역 1267개를 이름 앞부분으로 나누면 아래와 같습니다.
 
 | 이름 앞부분 | 도메인 수 | 이름 예 |
 |---|---|---|
@@ -51,7 +51,7 @@ fileID = sha1(domain + "-" + relativePath)
 
 ### 고정 도메인
 
-관찰한 백업의 고정 도메인 15개와 Manifest.db 에 올라 있던 항목 수입니다(확인 범위: iOS 27.0). 항목 수는 기기와 사용 상태에 따라 달라지니 도메인이 무엇을 담는지 가늠하는 데만 씁니다.
+관찰한 백업의 고정 도메인 15개와 Manifest.db 에 올라 있던 항목 수입니다. 항목 수는 기기와 사용 상태에 따라 달라지니 도메인이 무엇을 담는지 가늠하는 데만 씁니다.
 
 | 도메인 | 항목 수 | 관찰한 대표 파일 |
 |---|---|---|
@@ -73,7 +73,7 @@ fileID = sha1(domain + "-" + relativePath)
 
 `KeychainDomain` 의 키체인 백업 파일과 `HealthDomain` 항목을 어떻게 해석하는지는 [암호 건 백업](encrypted-backup.md) 에서 다룹니다.
 
-기기 안의 백업 설정 파일(`com.apple.MobileBackup.plist`)의 PreflightSizing 아래에는 NetworkDomain 이라는 이름도 나오지만, 같은 백업의 Manifest.db 도메인 목록에는 NetworkDomain 이 없었습니다(확인 범위: iOS 27.0). 설정 파일에 도메인 이름이 있다고 해서 그 도메인이 백업에 들어 있다고 보지 않습니다. 이 설정 파일은 [백업 폴더 구조](structure.md) 에서 다룹니다.
+기기 안의 백업 설정 파일(`com.apple.MobileBackup.plist`)의 PreflightSizing 아래에는 NetworkDomain 이라는 이름도 나오지만, 같은 백업의 Manifest.db 도메인 목록에는 NetworkDomain 이 없었습니다. 설정 파일에 도메인 이름이 있다고 해서 그 도메인이 백업에 들어 있다고 보지 않습니다. 이 설정 파일은 [백업 폴더 구조](structure.md) 에서 다룹니다.
 
 각 도메인이 기기 안의 어느 폴더에 대응하는지는 이번에 연 자료로 확인하지 못해 적지 않습니다. 도메인 안의 위치는 relativePath 로 판단합니다.
 

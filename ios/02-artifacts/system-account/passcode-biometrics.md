@@ -52,7 +52,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 ### 로컬 백업에서 본 흔적
 
-관찰한 백업에서 암호·생체 인증과 이름이 닿는 키는 아래와 같습니다 (확인 범위: iOS 27.0). 따로 적지 않은 파일은 `HomeDomain :: Library/Preferences/` 아래에 있고, 값은 보지 않았습니다.
+관찰한 백업에서 암호·생체 인증과 이름이 닿는 키는 아래와 같습니다. 따로 적지 않은 파일은 `HomeDomain :: Library/Preferences/` 아래에 있고, 값은 보지 않았습니다.
 
 | 파일 | 키 | 이름으로 짐작되는 내용 |
 |---|---|---|
@@ -65,11 +65,11 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 모두 이름으로 짐작한 뜻이고, 숫자 값이 무엇을 뜻하는지(예: `BiometricAuthenticationTypeIfAvailable` 의 값마다 Touch ID 인지 Face ID 인지)는 확인한 자료가 없어서 적지 않습니다. `Manifest.plist` 의 다른 키는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), `com.apple.purplebuddy.plist` 의 다른 키는 [초기화와 복원 흔적](erase-restore.md) 에서 다룹니다.
 
-도메인 이름으로는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic` 과 `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 이 보였습니다 (확인 범위: iOS 27.0). 백업 안 키체인 파일 `KeychainDomain :: keychain-backup.plist` 에는 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있었고, 해석은 [키체인](../../01-foundations/storage/keychain.md) 에서 다룹니다.
+도메인 이름으로는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic` 과 `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 이 보였습니다. 백업 안 키체인 파일 `KeychainDomain :: keychain-backup.plist` 에는 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있었고, 해석은 [키체인](../../01-foundations/storage/keychain.md) 에서 다룹니다.
 
 ### 구성 프로파일의 암호 정책 키
 
-구성 프로파일과 제한 설정 파일 안에 암호 정책으로 보이는 키 이름이 있었습니다 (확인 범위: iOS 27.0).
+구성 프로파일과 제한 설정 파일 안에 암호 정책으로 보이는 키 이름이 있었습니다.
 
 | 파일(`HomeDomain :: Library/UserConfigurationProfiles/` 아래) | `restrictedValue` 안의 암호 관련 키 |
 |---|---|
@@ -100,7 +100,7 @@ Apple 이 밝힌 시간 조건은 기기를 확보한 뒤의 상태를 해석할
 
 ## 함정과 한계
 
-**이름이 닮은 다른 설정과 섞지 않습니다.** 관찰한 백업의 `com.apple.onetimepasscodes.plist` 에는 `DeleteVerificationCodes` 키가 있었고 (확인 범위: iOS 27.0), 이름으로 보아 일회용 인증 코드 설정이고 기기 암호 설정과는 다른 것으로 보입니다. 파일 이름에 "passcode" 가 들어 있다고 기기 암호 흔적으로 묶지 않습니다.
+**이름이 닮은 다른 설정과 섞지 않습니다.** 관찰한 백업의 `com.apple.onetimepasscodes.plist` 에는 `DeleteVerificationCodes` 키가 있었고, 이름으로 보아 일회용 인증 코드 설정이고 기기 암호 설정과는 다른 것으로 보입니다. 파일 이름에 "passcode" 가 들어 있다고 기기 암호 흔적으로 묶지 않습니다.
 
 **`WasPasscodeSet` 하나로 결론 내리지 않습니다.** 이 키는 백업 폴더에 있어서 백업을 만든 때의 상태로 보이고, 값의 뜻도 이름으로 짐작한 것입니다. 기기 암호 설정 여부는 사파리의 `PasscodeIsAvailable` 같은 다른 구성 요소의 기록과 함께 봅니다.
 

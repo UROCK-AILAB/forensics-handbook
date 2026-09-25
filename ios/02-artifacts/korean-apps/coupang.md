@@ -72,7 +72,7 @@ SQLite 파일을 여는 법과 함께 복사할 파일은 [SQLite 데이터베�
 
 **공개 도구로 한 번**
 
-iLEAPP 에 전용 분석기가 없어서[2] 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표를 봅니다(칸 이름 확인 범위: iOS 27.0).
+iLEAPP 에 전용 분석기가 없어서[2] 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표를 봅니다.
 
 ```sql
 SELECT domain, COUNT(*) AS files

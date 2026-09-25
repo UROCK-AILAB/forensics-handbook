@@ -70,7 +70,7 @@ iOS 당근 앱의 DB 이름, 표와 칸, 채팅 사진 캐시 위치는 이번�
 
 **공개 도구로 한 번**
 
-iLEAPP 에 전용 분석기가 없어서[2] 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표를 봅니다(칸 이름 확인 범위: iOS 27.0).
+iLEAPP 에 전용 분석기가 없어서[2] 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표를 봅니다.
 
 ```sql
 SELECT fileID, relativePath, flags

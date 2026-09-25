@@ -23,11 +23,11 @@ nav_order: 1260
 | `UninstalledApplications.plist`, `IconState.plist`, Mobile Installation 로그, `DAAP.sqlitedb` | 2019년 글[3]. `DAAP.sqlitedb` 는 iOS 12 에서 추가 |
 | Biome `_DKEvent.App.Install`, `AppLaunch` 스트림 | iOS 16[4] |
 | 삭제 뒤 남는 기록 목록 | 2023년 글[7] |
-| 백업에 보이는 파일과 표 이름 | 로컬 백업, 암호화 안 함 (확인 범위: iOS 27.0) |
+| 백업에 보이는 파일과 표 이름 | 로컬 백업, 암호화 안 함 |
 
 ## 절차
 
-1. **찾을 번들 ID 를 모읍니다.** 앱을 지워도 번들 ID 를 기준으로 여러 DB 에서 흔적을 찾을 수 있어서[3], 먼저 사용 기록에 나오는 번들 ID 를 모아 지금 설치된 앱 목록과 비교합니다. 예를 들어 로컬 백업의 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 의 `ZPROCESS` 표에는 `ZBUNDLENAME` 칸이 있어서 (확인 범위: iOS 27.0) 지금은 없는 번들 ID 가 나오는지 볼 수 있습니다. 다만 앱을 지운 뒤에도 이 표의 행이 남는지는 확인하지 못했습니다.
+1. **찾을 번들 ID 를 모읍니다.** 앱을 지워도 번들 ID 를 기준으로 여러 DB 에서 흔적을 찾을 수 있어서[3], 먼저 사용 기록에 나오는 번들 ID 를 모아 지금 설치된 앱 목록과 비교합니다. 예를 들어 로컬 백업의 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 의 `ZPROCESS` 표에는 `ZBUNDLENAME` 칸이 있어서 지금은 없는 번들 ID 가 나오는지 볼 수 있습니다. 다만 앱을 지운 뒤에도 이 표의 행이 남는지는 확인하지 못했습니다.
 
    ```sql
    SELECT DISTINCT ZBUNDLENAME, ZPROCNAME
@@ -47,15 +47,15 @@ nav_order: 1260
    WHERE k.key = '_UninstallDate';
    ```
 
-   `value` 칸의 바이너리 plist 는 [속성 목록 파일](../../../01-foundations/data-formats/plist.md) 의 방법으로 풀고, 안의 시각은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 에서 기준을 확인합니다. iOS 27.0 백업에서도 네 표의 이름과 칸은 같았지만 (확인 범위: iOS 27.0), `_UninstallDate` key 가 지금도 쓰이는지는 확인하지 못했습니다.
+   `value` 칸의 바이너리 plist 는 [속성 목록 파일](../../../01-foundations/data-formats/plist.md) 의 방법으로 풀고, 안의 시각은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 에서 기준을 확인합니다. iOS 27.0 백업에서도 네 표의 이름과 칸은 같았지만, `_UninstallDate` key 가 지금도 쓰이는지는 확인하지 못했습니다.
 
-3. **오프로드와 삭제를 나눕니다.** 앱을 오프로드 (offload) 하면 `applicationState.db` 의 항목이 지워집니다[3]. 그래서 이 DB 에 항목이 없다는 사실만으로는 삭제와 오프로드를 가를 수 없고, `IconState.plist` 를 함께 봅니다. D20 Forensics 는 이 파일에는 있는데 `applicationState.db` 에는 없는 번들 ID 를 오프로드한 앱으로 보았습니다[3]. 관찰한 로컬 백업에서는 `IconState.plist` 가 보이지 않았고, 비슷한 이름의 `HomeDomain :: Library/ControlCenter/ControlsIconState.plist` 는 제어 센터용 다른 파일입니다 (확인 범위: iOS 27.0).
+3. **오프로드와 삭제를 나눕니다.** 앱을 오프로드 (offload) 하면 `applicationState.db` 의 항목이 지워집니다[3]. 그래서 이 DB 에 항목이 없다는 사실만으로는 삭제와 오프로드를 가를 수 없고, `IconState.plist` 를 함께 봅니다. D20 Forensics 는 이 파일에는 있는데 `applicationState.db` 에는 없는 번들 ID 를 오프로드한 앱으로 보았습니다[3]. 관찰한 로컬 백업에서는 `IconState.plist` 가 보이지 않았고, 비슷한 이름의 `HomeDomain :: Library/ControlCenter/ControlsIconState.plist` 는 제어 센터용 다른 파일입니다.
 
-4. **설치 로그를 봅니다.** Mobile Installation 로그는 컨테이너를 만들고 지운 기록을 담고, 보통 `0.log`, `1.log` 두 개만 남습니다[3]. 이 로그는 설치 시각을 보여 주고, 앱을 지운 지 6일이 넘어도 남는 흔적에 들어갑니다[7]. 로그 파일의 정확한 경로와 로그 문장의 모양, 시각 형식은 확인하지 못했습니다. 로컬 백업에서는 `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인(항목 5개)이 보였지만 안의 파일 이름과 내용은 확인하지 않았습니다 (확인 범위: iOS 27.0).
+4. **설치 로그를 봅니다.** Mobile Installation 로그는 컨테이너를 만들고 지운 기록을 담고, 보통 `0.log`, `1.log` 두 개만 남습니다[3]. 이 로그는 설치 시각을 보여 주고, 앱을 지운 지 6일이 넘어도 남는 흔적에 들어갑니다[7]. 로그 파일의 정확한 경로와 로그 문장의 모양, 시각 형식은 확인하지 못했습니다. 로컬 백업에서는 `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인(항목 5개)이 보였지만 안의 파일 이름과 내용은 확인하지 않았습니다.
 
 5. **`UninstalledApplications.plist` 를 봅니다.** 이 파일은 `private/var/installd/Library/MobileInstallation/` 에 있고 번들 ID 와 마지막으로 삭제한 날짜를 담습니다. D20 Forensics 의 관찰로는 적어도 9개월 동안 남았고, 유료 앱을 사거나 App Store 에 결제 수단을 연결한 뒤에만 채워지는 것으로 보였습니다[3].
 
-6. **구매 기록을 봅니다.** 구매 기록은 설치 여부가 아니라 구매 사실을 보여 줍니다. `DAAP.sqlitedb` 는 `private/var/mobile/Library/Caches/com.apple.appstored/` 에 있고 iOS 12 에서 추가되었으며, 설치한 앱이 아니라 구매한 앱을 Apple ID·가족 구매까지 포함해 기록합니다[3]. 예전 iOS 버전에서는 `private/var/mobile/Library/Caches/com.apple.storeservices/AppPurchaseHistory.6.sqlitedb` 를 봅니다[3]. `storeUser.db` 는 여러 기기에 걸친 구매 기록을 담고 앱을 지운 뒤에도 남습니다[7]. 로컬 백업의 `HomeDomain :: Library/com.apple.itunesstored/` 아래 `purchase_intents.sqlitedb` 에도 `app_bundle_id` 칸이 있는 표가 있지만 (확인 범위: iOS 27.0), 칸의 뜻은 확인하지 못했습니다. 구매 기록 전체는 [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) 에서 다룹니다.
+6. **구매 기록을 봅니다.** 구매 기록은 설치 여부가 아니라 구매 사실을 보여 줍니다. `DAAP.sqlitedb` 는 `private/var/mobile/Library/Caches/com.apple.appstored/` 에 있고 iOS 12 에서 추가되었으며, 설치한 앱이 아니라 구매한 앱을 Apple ID·가족 구매까지 포함해 기록합니다[3]. 예전 iOS 버전에서는 `private/var/mobile/Library/Caches/com.apple.storeservices/AppPurchaseHistory.6.sqlitedb` 를 봅니다[3]. `storeUser.db` 는 여러 기기에 걸친 구매 기록을 담고 앱을 지운 뒤에도 남습니다[7]. 로컬 백업의 `HomeDomain :: Library/com.apple.itunesstored/` 아래 `purchase_intents.sqlitedb` 에도 `app_bundle_id` 칸이 있는 표가 있지만, 칸의 뜻은 확인하지 못했습니다. 구매 기록 전체는 [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) 에서 다룹니다.
 
 7. **사용 기록에서 앱을 찾습니다.** 설치·구매 기록으로 앱이 있었다는 것을 확인했으면, 사용 기록으로 언제 썼는지를 봅니다. 저자들이 꼽은 기록은 다음과 같습니다.
 
@@ -83,7 +83,7 @@ nav_order: 1260
 
 `key_tab` 의 번호와 `_UninstallDate` 는 iOS 11.2.1 에서 시험한 결과이고[6] 모든 지운 앱에 삭제 시각이 남지도 않습니다. `UninstalledApplications.plist` 도 유료 구매나 결제 수단 연결 뒤에만 채워지는 것으로 보였기 때문에[3], 이 파일에 앱이 없다고 해서 그 앱을 지운 적이 없다고 쓰지 않습니다.
 
-관찰한 iOS 27.0 로컬 백업에서 `HomeDomain :: Library/Preferences/com.apple.mobile.installation.plist` 에는 `ExtensionDataContainerParentIDUpdateVersion` 키 하나만 있었고 앱 목록은 없었습니다. `HomeDomain :: Library/Preferences/com.apple.MobileStore.appremoval.plist` 는 파일은 있었지만 키가 비어 있었고, 이 파일의 용도는 확인하지 못했습니다 (확인 범위: iOS 27.0). 이름만 보고 삭제 기록으로 해석하지 않습니다.
+관찰한 iOS 27.0 로컬 백업에서 `HomeDomain :: Library/Preferences/com.apple.mobile.installation.plist` 에는 `ExtensionDataContainerParentIDUpdateVersion` 키 하나만 있었고 앱 목록은 없었습니다. `HomeDomain :: Library/Preferences/com.apple.MobileStore.appremoval.plist` 는 파일은 있었지만 키가 비어 있었고, 이 파일의 용도는 확인하지 못했습니다. 이름만 보고 삭제 기록으로 해석하지 않습니다.
 
 Biome 의 두 스트림은 보존 기간이 28일이라[4] 오래전에 지운 앱은 Biome 에 흔적이 없을 수 있습니다. 앱을 지우면 앱의 데이터 컨테이너도 함께 지워진다고 흔히 말하지만, 참고한 Apple 문서에서는 이 문장을 확인하지 못했습니다. 컨테이너가 없다는 것은 수집 시점에 없었다는 사실로만 씁니다.
 

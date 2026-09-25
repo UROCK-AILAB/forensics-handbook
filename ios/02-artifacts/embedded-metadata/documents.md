@@ -8,7 +8,7 @@ nav_order: 1140
 
 ## 한 줄 요약
 
-Office 문서 안에는 만든 사람·마지막으로 고친 사람·만든 시각·마지막 인쇄 시각 같은 핵심 속성이 들어 있고, iWork 문서는 미리보기 그림과 Metadata 폴더를 담은 번들이며, 관찰한 아이폰 백업에서는 iCloud Drive 컨테이너 설정·파일 제공자 DB·문서 관련 확장 도메인이 보였습니다(확인 범위: iOS 27.0).
+Office 문서 안에는 만든 사람·마지막으로 고친 사람·만든 시각·마지막 인쇄 시각 같은 핵심 속성이 들어 있고, iWork 문서는 미리보기 그림과 Metadata 폴더를 담은 번들이며, 관찰한 아이폰 백업에서는 iCloud Drive 컨테이너 설정·파일 제공자 DB·문서 관련 확장 도메인이 보였습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -30,15 +30,15 @@ Office 핵심 속성이 패키지 안의 어느 부분(part)에 저장되는지�
 
 ### 아이폰에서 문서 흔적이 보이는 곳
 
-| 대상 | 위치 | 확인 범위 |
-|---|---|---|
-| iCloud Drive 컨테이너 설정 | HomeDomain :: `Library/Application Support/CloudDocs/session/containers/` 아래 `com.apple.Pages.plist`, `com.apple.Numbers.plist`, `com.apple.Keynote.plist`, `iCloud.com.apple.DocumentsApp.plist` | iOS 27.0 |
-| 파일 제공자 목록 DB | HomeDomain :: `Library/Application Support/FileProvider/<UUID>/wharf/wharf/directoryManifest/manifest.db` | iOS 27.0 |
-| 파일 제공자 백업 목록 DB | HomeDomain :: `Library/Application Support/FileProvider/backup/backup_manifest.db` | iOS 27.0 |
-| 도서 앱 내려받기 DB | `SysSharedContainerDomain-systemgroup.com.apple.media.shared.books` :: `Documents/BLDatabaseManager/BLDatabaseManager.sqlite` | iOS 27.0 |
-| 파일 앱 데이터 | `AppDomain-com.apple.DocumentsApp`(항목 4개) | iOS 27.0 |
+| 대상 | 위치 |
+|---|---|
+| iCloud Drive 컨테이너 설정 | HomeDomain :: `Library/Application Support/CloudDocs/session/containers/` 아래 `com.apple.Pages.plist`, `com.apple.Numbers.plist`, `com.apple.Keynote.plist`, `iCloud.com.apple.DocumentsApp.plist` |
+| 파일 제공자 목록 DB | HomeDomain :: `Library/Application Support/FileProvider/<UUID>/wharf/wharf/directoryManifest/manifest.db` |
+| 파일 제공자 백업 목록 DB | HomeDomain :: `Library/Application Support/FileProvider/backup/backup_manifest.db` |
+| 도서 앱 내려받기 DB | `SysSharedContainerDomain-systemgroup.com.apple.media.shared.books` :: `Documents/BLDatabaseManager/BLDatabaseManager.sqlite` |
+| 파일 앱 데이터 | `AppDomain-com.apple.DocumentsApp`(항목 4개) |
 
-같은 FileProvider 폴더에는 제공자별 `Domains.plist` 가 있고, 관찰한 제공자는 `com.apple.CloudDocs.iCloudDriveFileProvider`, `com.apple.SMBClientProvider.FileProvider`, `com.apple.filesystems.UserFS.FileProvider`, `com.apple.mobileslideshow.PhotosFileProvider` 입니다(확인 범위: iOS 27.0). 파일 앱의 번들 ID 는 `com.apple.DocumentsApp` 입니다. iOS 15 이후 버전마다 이 위치가 어떻게 달라졌는지는 확인하지 못했습니다.
+같은 FileProvider 폴더에는 제공자별 `Domains.plist` 가 있고, 관찰한 제공자는 `com.apple.CloudDocs.iCloudDriveFileProvider`, `com.apple.SMBClientProvider.FileProvider`, `com.apple.filesystems.UserFS.FileProvider`, `com.apple.mobileslideshow.PhotosFileProvider` 입니다. 파일 앱의 번들 ID 는 `com.apple.DocumentsApp` 입니다. iOS 15 이후 버전마다 이 위치가 어떻게 달라졌는지는 확인하지 못했습니다.
 
 ## 구조
 
@@ -80,11 +80,11 @@ Metadata/
 
 ### iCloud Drive 컨테이너 설정
 
-CloudDocs 의 컨테이너 plist 는 최상위 키가 번들 ID(`com.apple.Pages`, `com.apple.iWork.Pages` 등)이고, 그 아래에 `BRContainerDocumentTypes`, `BRContainerExportedTypes`, `BRContainerFormatVersionNumber`, `BRContainerName`, `BRContainerVersionNumber`, `BRContainerIsDocumentScopePublic` 같은 키가 있으며, 파일에 따라 `BRContainerImportedTypes`, `BRContainerIconGeneratorVersionNumber`, `BRContainerLocalizedNames` 가 더 있습니다(확인 범위: iOS 27.0). 이 plist 는 앱별 iCloud Drive 컨테이너 설정이고 개별 문서 목록이 아닙니다. iCloud Drive 의 문서 목록 DB 는 [아이클라우드 드라이브 (iCloud Drive)](../mail-cloud/icloud-drive.md)에서 다룹니다.
+CloudDocs 의 컨테이너 plist 는 최상위 키가 번들 ID(`com.apple.Pages`, `com.apple.iWork.Pages` 등)이고, 그 아래에 `BRContainerDocumentTypes`, `BRContainerExportedTypes`, `BRContainerFormatVersionNumber`, `BRContainerName`, `BRContainerVersionNumber`, `BRContainerIsDocumentScopePublic` 같은 키가 있으며, 파일에 따라 `BRContainerImportedTypes`, `BRContainerIconGeneratorVersionNumber`, `BRContainerLocalizedNames` 가 더 있습니다. 이 plist 는 앱별 iCloud Drive 컨테이너 설정이고 개별 문서 목록이 아닙니다. iCloud Drive 의 문서 목록 DB 는 [아이클라우드 드라이브 (iCloud Drive)](../mail-cloud/icloud-drive.md)에서 다룹니다.
 
 ### 파일 제공자 DB
 
-두 DB 의 표와 칸은 아래와 같고, 칸의 뜻은 확인하지 못했습니다(확인 범위: iOS 27.0).
+두 DB 의 표와 칸은 아래와 같고, 칸의 뜻은 확인하지 못했습니다.
 
 ```
 manifest.db
@@ -98,11 +98,11 @@ backup_manifest.db
 
 ### 도서 앱 내려받기 DB
 
-`BLDatabaseManager.sqlite` 의 `ZBLDOWNLOADINFO` 표에는 `ZASSETPATH`, `ZFILEEXTENSION`, `ZTITLE`, `ZARTISTNAME`, `ZPURCHASEDATE`, `ZSTARTTIME`, `ZLASTSTATECHANGETIME` 같은 칸이 있습니다(확인 범위: iOS 27.0). 표와 칸 이름으로 보아 스토어에서 내려받은 기록이고, 사용자가 도서 앱에 직접 넣은 PDF 가 여기에 남는지는 확인하지 못했습니다.
+`BLDatabaseManager.sqlite` 의 `ZBLDOWNLOADINFO` 표에는 `ZASSETPATH`, `ZFILEEXTENSION`, `ZTITLE`, `ZARTISTNAME`, `ZPURCHASEDATE`, `ZSTARTTIME`, `ZLASTSTATECHANGETIME` 같은 칸이 있습니다. 표와 칸 이름으로 보아 스토어에서 내려받은 기록이고, 사용자가 도서 앱에 직접 넣은 PDF 가 여기에 남는지는 확인하지 못했습니다.
 
 ### 확장 도메인
 
-`com.apple.PDFKit.PDFImporter` 같은 PDFKit 확장과 `com.apple.quicklook.thumbnail.iWorkExtension` 이 `AppDomainPlugin-` 도메인으로 있습니다(확인 범위: iOS 27.0). 이 도메인은 백업에 그 확장의 도메인이 있다는 사실만 보여 주고, 사용자가 PDF 나 iWork 문서를 열었다는 뜻은 아닙니다.
+`com.apple.PDFKit.PDFImporter` 같은 PDFKit 확장과 `com.apple.quicklook.thumbnail.iWorkExtension` 이 `AppDomainPlugin-` 도메인으로 있습니다. 이 도메인은 백업에 그 확장의 도메인이 있다는 사실만 보여 주고, 사용자가 PDF 나 iWork 문서를 열었다는 뜻은 아닙니다.
 
 ## 증거로서 의미
 

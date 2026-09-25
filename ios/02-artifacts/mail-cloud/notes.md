@@ -22,26 +22,26 @@ iCloud 에 동기화하는 메모는 표준 보호에서 서버 저장 시 암�
 
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
-| 현재 메모 DB | `AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite` | 관찰(확인 범위: iOS 27.0) |
-| 손글씨·그림 관련으로 보이는 DB | `AppDomainGroup-group.com.apple.notes :: Accounts/<UUID>/Paper/Bundles/<UUID>.bundle/Database/data.sqlite` | 관찰(확인 범위: iOS 27.0), 용도는 확인 못 함 |
-| 옛 메모 DB | `HomeDomain :: Library/Notes/notes.sqlite` | 관찰(확인 범위: iOS 27.0), 행이 있는지는 읽지 않음 |
-| 메모 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.mobilenotes.plist` | 관찰(확인 범위: iOS 27.0) |
-| 메모 앱 그룹 설정 | `AppDomainGroup-group.com.apple.notes :: Library/Preferences/group.com.apple.notes.plist` | 관찰(확인 범위: iOS 27.0) |
+| 현재 메모 DB | `AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite` | 관찰 |
+| 손글씨·그림 관련으로 보이는 DB | `AppDomainGroup-group.com.apple.notes :: Accounts/<UUID>/Paper/Bundles/<UUID>.bundle/Database/data.sqlite` | 관찰, 용도는 확인 못 함 |
+| 옛 메모 DB | `HomeDomain :: Library/Notes/notes.sqlite` | 관찰, 행이 있는지는 읽지 않음 |
+| 메모 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.mobilenotes.plist` | 관찰 |
+| 메모 앱 그룹 설정 | `AppDomainGroup-group.com.apple.notes :: Library/Preferences/group.com.apple.notes.plist` | 관찰 |
 
-맥에서는 같은 DB 가 `~/Library/Group Containers/group.com.apple.notes/NoteStore.sqlite` 에 있습니다 [1]. 관찰한 백업에서 메모 관련 도메인은 `AppDomain-com.apple.mobilenotes`(항목 5개), `AppDomainGroup-group.com.apple.notes`(85개), `AppDomainGroup-group.com.apple.notes.import`(3개)와 `AppDomainPlugin-com.apple.mobilenotes.` 로 시작하는 확장 도메인 7개(EditorExtension, IntentsExtension, NotesAppMigrationExtension, QuickLookExtension, SharingExtension, SpotlightIndexExtension, WidgetExtension)였습니다(확인 범위: iOS 27.0).
+맥에서는 같은 DB 가 `~/Library/Group Containers/group.com.apple.notes/NoteStore.sqlite` 에 있습니다 [1]. 관찰한 백업에서 메모 관련 도메인은 `AppDomain-com.apple.mobilenotes`(항목 5개), `AppDomainGroup-group.com.apple.notes`(85개), `AppDomainGroup-group.com.apple.notes.import`(3개)와 `AppDomainPlugin-com.apple.mobilenotes.` 로 시작하는 확장 도메인 7개(EditorExtension, IntentsExtension, NotesAppMigrationExtension, QuickLookExtension, SharingExtension, SpotlightIndexExtension, WidgetExtension)였습니다.
 
 | iOS | 내용 | 근거 |
 |---|---|---|
 | 9 이전 | 옛 형식 DB, 본문 평문 | [1] |
 | 9 ~ 26 | `NoteStore.sqlite`, 공개 파서 지원 범위 | [1] |
 | 16 부터 | 기기 암호로 메모 잠금 가능, 공개 파서는 이 방식을 아직 풀지 못함 | [1] |
-| 27.0 | `NoteStore.sqlite` 와 옛 `notes.sqlite` 가 로컬 백업에 함께 있음 | 확인 범위: iOS 27.0 |
+| 27.0 | `NoteStore.sqlite` 와 옛 `notes.sqlite` 가 로컬 백업에 함께 있음 | 관찰 |
 
 ## 구조
 
 ### NoteStore.sqlite 의 표
 
-관찰한 `NoteStore.sqlite` 에는 아래 표가 있었습니다(확인 범위: iOS 27.0).
+관찰한 `NoteStore.sqlite` 에는 아래 표가 있었습니다.
 
 ```
 ZICCLOUDSYNCINGOBJECT, ZICNOTEDATA, ZICLOCATION, ZICINVITATION, ZICNOTEPARTICIPANT,
@@ -49,7 +49,7 @@ ZICASSETSIGNATURE, ZICCLOUDSTATE, ZICSEARCHINDEXSTATE, ZICSERVERCHANGETOKEN,
 ACHANGE, ATRANSACTION, ATRANSACTIONSTRING, Z_METADATA, Z_MODELCACHE, Z_PRIMARYKEY
 ```
 
-`ZICCLOUDSYNCINGOBJECT` 는 칸 이름으로 보아 메모·첨부·계정과 관련된 행이 함께 들어 있는 표이고, 관찰한 칸 가운데 분석에 쓸 만한 것은 아래와 같습니다(확인 범위: iOS 27.0).
+`ZICCLOUDSYNCINGOBJECT` 는 칸 이름으로 보아 메모·첨부·계정과 관련된 행이 함께 들어 있는 표이고, 관찰한 칸 가운데 분석에 쓸 만한 것은 아래와 같습니다.
 
 ```
 ZICCLOUDSYNCINGOBJECT (일부)
@@ -61,19 +61,19 @@ ZTYPE, ZFILESIZE, ZHASCHECKLIST, ZNEEDSTRANSCRIPTION, ZHASMARKUPDATA
 
 관찰 메모에서 이 표의 칸 여러 개가 가려져 있어서, 제목·만든 날짜·고친 날짜 칸 이름(`ZTITLE1`, `ZCREATIONDATE1` 등으로 알려짐)은 확인하지 못했습니다. 검체에서는 `PRAGMA table_info(ZICCLOUDSYNCINGOBJECT);` 로 칸 목록을 먼저 뽑고, 이름에 `TITLE`·`DATE` 가 들어간 칸을 찾습니다. `ZLOCKEDNOTESMODE` 가 잠금 방식(별도 암호와 기기 암호)을 나타내는지도 확인하지 못했습니다.
 
-본문 표 `ZICNOTEDATA` 의 칸은 `Z_PK`, `Z_ENT`, `Z_OPT`, `ZNOTE`, `ZCRYPTOINITIALIZATIONVECTOR`, `ZCRYPTOTAG`, `ZDATA` 입니다(확인 범위: iOS 27.0). 칸 이름으로 보아 `ZNOTE` 는 `ZICCLOUDSYNCINGOBJECT` 의 메모 행을 가리키고, `ZCRYPTOINITIALIZATIONVECTOR`·`ZCRYPTOTAG` 는 잠근 메모의 AES-GCM 암호화 [2] 에 쓰는 값으로 보이지만 확인하지 못했습니다.
+본문 표 `ZICNOTEDATA` 의 칸은 `Z_PK`, `Z_ENT`, `Z_OPT`, `ZNOTE`, `ZCRYPTOINITIALIZATIONVECTOR`, `ZCRYPTOTAG`, `ZDATA` 입니다. 칸 이름으로 보아 `ZNOTE` 는 `ZICCLOUDSYNCINGOBJECT` 의 메모 행을 가리키고, `ZCRYPTOINITIALIZATIONVECTOR`·`ZCRYPTOTAG` 는 잠근 메모의 AES-GCM 암호화 [2] 에 쓰는 값으로 보이지만 확인하지 못했습니다.
 
 ### 위치·공유 관련 표
 
-위치로 보이는 값은 `ZICLOCATION` 표의 `ZLATITUDE`, `ZLONGITUDE`, `ZPLACEMARKDATA`, `ZPLACEUPDATED`, `ZATTACHMENT` 칸에 있고, `ZATTACHMENT` 로 첨부 행과 이어지는 것으로 보입니다(확인 범위: iOS 27.0). 공유와 관련된 표로는 `ZICINVITATION`(`ZCREATIONDATE`, `ZMODIFICATIONDATE`, `ZRECEIVEDDATE`, `ZTITLE`, `ZSNIPPET`, `ZSHAREURL`, `ZSERVERSHAREDATA` 등)과 `ZICNOTEPARTICIPANT`(`ZNOTE`, `ZPARTICIPANTID`, `ZUSERID`)가 있습니다(확인 범위: iOS 27.0). 공유한 메모에서는 만든 날짜·고친 날짜 같은 메타데이터가 암호화되지 않고, 공유 메모는 사용자 암호 기반 종단 간 암호화가 아니라 CloudKit 암호화 데이터 형식과 CloudKit 키 관리를 씁니다 [2].
+위치로 보이는 값은 `ZICLOCATION` 표의 `ZLATITUDE`, `ZLONGITUDE`, `ZPLACEMARKDATA`, `ZPLACEUPDATED`, `ZATTACHMENT` 칸에 있고, `ZATTACHMENT` 로 첨부 행과 이어지는 것으로 보입니다. 공유와 관련된 표로는 `ZICINVITATION`(`ZCREATIONDATE`, `ZMODIFICATIONDATE`, `ZRECEIVEDDATE`, `ZTITLE`, `ZSNIPPET`, `ZSHAREURL`, `ZSERVERSHAREDATA` 등)과 `ZICNOTEPARTICIPANT`(`ZNOTE`, `ZPARTICIPANTID`, `ZUSERID`)가 있습니다. 공유한 메모에서는 만든 날짜·고친 날짜 같은 메타데이터가 암호화되지 않고, 공유 메모는 사용자 암호 기반 종단 간 암호화가 아니라 CloudKit 암호화 데이터 형식과 CloudKit 키 관리를 씁니다 [2].
 
 ### Paper 번들 DB
 
-`Accounts/<UUID>/Paper/Bundles/<UUID>.bundle/Database/data.sqlite` 에는 `Assets`(`Id`, `RetainCount`, `Data`)와 `Reference`(`Id`, `Version`, `RetainCount`, `ChildRetainCounts`, `Data`) 표가 있었습니다(확인 범위: iOS 27.0). 경로 이름으로 보아 손글씨나 그림 데이터와 관련이 있어 보이지만 확인하지 못했습니다.
+`Accounts/<UUID>/Paper/Bundles/<UUID>.bundle/Database/data.sqlite` 에는 `Assets`(`Id`, `RetainCount`, `Data`)와 `Reference`(`Id`, `Version`, `RetainCount`, `ChildRetainCounts`, `Data`) 표가 있었습니다. 경로 이름으로 보아 손글씨나 그림 데이터와 관련이 있어 보이지만 확인하지 못했습니다.
 
 ### 옛 메모 DB (notes.sqlite)
 
-관찰한 백업에는 옛 형식 DB 도 남아 있었고, 표와 칸은 아래와 같습니다(확인 범위: iOS 27.0). 안에 행이 있는지는 읽지 않았습니다.
+관찰한 백업에는 옛 형식 DB 도 남아 있었고, 표와 칸은 아래와 같습니다. 안에 행이 있는지는 읽지 않았습니다.
 
 ```
 HomeDomain :: Library/Notes/notes.sqlite (일부)
@@ -83,11 +83,11 @@ ZNOTEATTACHMENT: ZNOTE, ZFILENAME, ZMIMETYPE
 ZACCOUNT, ZSTORE, ZNOTECHANGE
 ```
 
-IMAP 메일 계정에 메모를 저장하는 계정 유형 `com.apple.account.IMAPNotes` 가 `com.apple.accountsd.plist` 의 플러그인 목록에 있었습니다(확인 범위: iOS 27.0). 메일 계정에 저장한 메모가 이 옛 DB 로 가는지는 확인하지 못했습니다.
+IMAP 메일 계정에 메모를 저장하는 계정 유형 `com.apple.account.IMAPNotes` 가 `com.apple.accountsd.plist` 의 플러그인 목록에 있었습니다. 메일 계정에 저장한 메모가 이 옛 DB 로 가는지는 확인하지 못했습니다.
 
 ### 설정 plist
 
-`com.apple.mobilenotes.plist` 에는 `LastVacuumDate`(float), `lastBackgroundedState`(`currentNoteLastViewedDate`, `currentNoteContainerViewMode` 등이 든 사전), `didShowMoveToRecentyDeletedFolderAlert`(bool), `DidMigrateLocalAccount`(bool), `DidChooseToMigrateLocalAccount`(bool), `ReindexOnLaunch`(bool), `hasShownWelcomeScreen`(bool)이 있었습니다(확인 범위: iOS 27.0). `group.com.apple.notes.plist` 에는 `CloudKitAccountStatus`(int), `IntialCloudKitSyncCompleted`(bool, 철자 그대로), `AccountDevicesCache-<UUID>`(bytes), `AccountDevicesCacheDate-<UUID>`(datetime), `CloudConfigurationPath`(str)가 있었고, `HomeDomain` 의 같은 이름 plist 에도 비슷한 키가 있었습니다(확인 범위: iOS 27.0).
+`com.apple.mobilenotes.plist` 에는 `LastVacuumDate`(float), `lastBackgroundedState`(`currentNoteLastViewedDate`, `currentNoteContainerViewMode` 등이 든 사전), `didShowMoveToRecentyDeletedFolderAlert`(bool), `DidMigrateLocalAccount`(bool), `DidChooseToMigrateLocalAccount`(bool), `ReindexOnLaunch`(bool), `hasShownWelcomeScreen`(bool)이 있었습니다. `group.com.apple.notes.plist` 에는 `CloudKitAccountStatus`(int), `IntialCloudKitSyncCompleted`(bool, 철자 그대로), `AccountDevicesCache-<UUID>`(bytes), `AccountDevicesCacheDate-<UUID>`(datetime), `CloudConfigurationPath`(str)가 있었고, `HomeDomain` 의 같은 이름 plist 에도 비슷한 키가 있었습니다.
 
 `lastBackgroundedState` 안의 `currentNoteLastViewedDate` 는 이름으로 보아 앱을 뒤로 보낼 때 열려 있던 메모를 마지막으로 본 시각이지만, 값의 형식과 동작은 확인하지 못했습니다.
 
@@ -107,7 +107,7 @@ IMAP 메일 계정에 메모를 저장하는 계정 유형 `com.apple.account.IM
 
 `NoteStore.sqlite` 의 날짜 칸은 Mac 절대 시각(2001-01-01 UTC 기준 초)으로 알려져 있지만, 이번 자료로는 확인하지 못했습니다. 검체에서는 값에 978307200 을 더해 Unix 시각으로 바꾼 결과가 그럴듯한지 보고, 메모 앱 화면에 보이는 날짜와 견주어 확인합니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-`com.apple.mobilenotes.plist` 의 `LastVacuumDate` 는 float 로, `group.com.apple.notes.plist` 의 `AccountDevicesCacheDate-<UUID>` 는 plist 날짜형으로 저장되어 있었습니다(확인 범위: iOS 27.0).
+`com.apple.mobilenotes.plist` 의 `LastVacuumDate` 는 float 로, `group.com.apple.notes.plist` 의 `AccountDevicesCacheDate-<UUID>` 는 plist 날짜형으로 저장되어 있었습니다.
 
 ## 함정과 한계
 

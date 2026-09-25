@@ -25,15 +25,15 @@ nav_order: 680
 | `DataUsage.sqlite` | 기기 안 `/private/var/wireless/Library/Databases/DataUsage.sqlite` | [1][2] |
 | `DataUsage.sqlite` | 백업 안 `/wireless/Library/Databases/DataUsage.sqlite` | [1] |
 | `DataUsage-watch.sqlite` | 백업 안 `/wireless/Library/Databases/DataUsage-watch.sqlite` | [1] |
-| `DataUsage.sqlite` | `WirelessDomain :: Library/Databases/DataUsage.sqlite` | (확인 범위: iOS 27.0) |
-| `CellularUsage.db` | `WirelessDomain :: Library/Databases/CellularUsage.db` | (확인 범위: iOS 27.0) |
+| `DataUsage.sqlite` | `WirelessDomain :: Library/Databases/DataUsage.sqlite` | |
+| `CellularUsage.db` | `WirelessDomain :: Library/Databases/CellularUsage.db` | |
 | `netusage.sqlite` | 기기 안 `/private/var/networkd/netusage.sqlite` | [1] |
 
-`netusage.sqlite` 는 iOS 11.1.2 로 시험한 자료에서 파일 시스템 추출로만 얻을 수 있었지만 [1], MVT 문서는 출처를 "Backup & Full filesystem dump" 로 적어서 [2] 두 자료가 어긋나므로 버전과 수집 조건에 따라 다를 수 있다고 봅니다. 관찰한 암호화하지 않은 백업에는 `netusage.sqlite` 가 없었습니다 (확인 범위: iOS 27.0). 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+`netusage.sqlite` 는 iOS 11.1.2 로 시험한 자료에서 파일 시스템 추출로만 얻을 수 있었지만 [1], MVT 문서는 출처를 "Backup & Full filesystem dump" 로 적어서 [2] 두 자료가 어긋나므로 버전과 수집 조건에 따라 다를 수 있다고 봅니다. 관찰한 암호화하지 않은 백업에는 `netusage.sqlite` 가 없었습니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전별 차이
 
-| 항목 | iOS 11 무렵 [1] | iOS 27.0 (확인 범위: iOS 27.0) |
+| 항목 | iOS 11 무렵 [1] | iOS 27.0 |
 |---|---|---|
 | `ZLIVEUSAGE` 의 와이파이 칸 | `ZWIFIIN`, `ZWIFIOUT` 있음(값 비어 있음) | 없음 |
 | `ZLIVEUSAGE` 의 앱 식별자 | `ZPROCESS` 를 거쳐 찾음 | `ZBUNDLENAME`, `ZPROCNAME` 이 직접 있음 |
@@ -43,7 +43,7 @@ iOS 15 ~ 18 사이의 칸 구성은 확인하지 못해서, 검체의 iOS 버전
 
 ## 구조
 
-관찰한 iOS 27.0 백업의 표와 칸은 다음과 같습니다 (확인 범위: iOS 27.0). `Z_PK`, `Z_ENT`, `Z_OPT` 칸과 `Z_METADATA`, `Z_MODELCACHE`, `Z_PRIMARYKEY` 표는 Core Data 가 만드는 틀이고, SQLite 자체를 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+관찰한 iOS 27.0 백업의 표와 칸은 다음과 같습니다. `Z_PK`, `Z_ENT`, `Z_OPT` 칸과 `Z_METADATA`, `Z_MODELCACHE`, `Z_PRIMARYKEY` 표는 Core Data 가 만드는 틀이고, SQLite 자체를 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 | 표 | 칸 |
 |---|---|
@@ -59,9 +59,9 @@ iOS 15 ~ 18 사이의 칸 구성은 확인하지 못해서, 검체의 iOS 버전
 
 `ZLIVEUSAGE` 의 `ZHASPROCESS` 는 이름으로 보아 `ZPROCESS` 의 행을 가리키는 칸이지만, 이 연결에 정식 외래 키 제약이 있는지는 확인하지 못했습니다. `ZPEER`·`ZEVENT`·`ZEVENTSCENE`·`ZCHECKUPEVENT`·`ZTSHOOTINGDATA` 는 칸 이름으로 보아 연결 문제를 진단하는 표로 보이고, `ZPEER` 에 주소·목적지 포트·도메인 이름(`ZFQDN`) 칸이, `ZEVENTSCENE` 에 위도·경도·속도 칸이 있지만 공개 자료로 칸의 뜻을 확인하지 못했습니다. `ZWIFIDATA` 의 칸 목록과 해석은 [와이파이 기록](wifi.md) 에서 다룹니다.
 
-같은 도메인의 `CellularUsage.db` 에는 `bundle_info`(`ROWID`, `bundle_id`, `flags`), `bundle_uuid`(`ROWID`, `bundle_id`, `macho_uuid`), `subscriber_info` 표가 있고, `subscriber_info` 에는 `subscriber_id`, `subscriber_mdn`, `slot_id`, `last_update_time`, `home_budget`, `roaming_budget`, `user_entered_bill_end_dom`, `low_data_mode`, `smart_data_mode`, `privacy_proxy` 등의 칸이 있습니다 (확인 범위: iOS 27.0). 칸 이름으로 보아 번들 ID 목록과 가입자(유심) 정보를 담는 DB 이지만, 값의 뜻은 확인하지 못했습니다.
+같은 도메인의 `CellularUsage.db` 에는 `bundle_info`(`ROWID`, `bundle_id`, `flags`), `bundle_uuid`(`ROWID`, `bundle_id`, `macho_uuid`), `subscriber_info` 표가 있고, `subscriber_info` 에는 `subscriber_id`, `subscriber_mdn`, `slot_id`, `last_update_time`, `home_budget`, `roaming_budget`, `user_entered_bill_end_dom`, `low_data_mode`, `smart_data_mode`, `privacy_proxy` 등의 칸이 있습니다. 칸 이름으로 보아 번들 ID 목록과 가입자(유심) 정보를 담는 DB 이지만, 값의 뜻은 확인하지 못했습니다.
 
-`HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` 에는 `netUsageBaseline` 키가 있고 그 아래 키가 프로세스·번들 이름입니다 (확인 범위: iOS 27.0). 이 목록의 용도는 확인하지 못했지만, DataUsage 에 나온 이름과 대조하는 보조 자료로 쓸 수 있습니다.
+`HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` 에는 `netUsageBaseline` 키가 있고 그 아래 키가 프로세스·번들 이름입니다. 이 목록의 용도는 확인하지 못했지만, DataUsage 에 나온 이름과 대조하는 보조 자료로 쓸 수 있습니다.
 
 ## 증거로서 의미
 
@@ -89,7 +89,7 @@ iOS 15 ~ 18 사이의 칸 구성은 확인하지 못해서, 검체의 iOS 버전
 
 DataUsage.sqlite 는 백업에 들어가서 오래된 기록이 남는 편이고, 글쓴이 기기에서는 2013년 기록까지 있었습니다 [1]. 이전 기기의 백업으로 복원한 기기라면 지금 기기를 쓰기 전의 행이 섞여 있을 수 있으니 [초기화와 복원 흔적](../system-account/erase-restore.md) 을 함께 봅니다.
 
-칸 구성이 버전마다 다릅니다. iOS 11 자료의 칸 설명을 그대로 믿고 `ZWIFIIN` 을 찾으면 iOS 27.0 의 `ZLIVEUSAGE` 에서는 칸이 없어 질의가 실패합니다 (확인 범위: iOS 27.0). 반대로 `ZDEMOLIVEUSAGE` 에는 와이파이 칸이 있지만 이 표가 무엇을 기록하는지는 확인하지 못했습니다.
+칸 구성이 버전마다 다릅니다. iOS 11 자료의 칸 설명을 그대로 믿고 `ZWIFIIN` 을 찾으면 iOS 27.0 의 `ZLIVEUSAGE` 에서는 칸이 없어 질의가 실패합니다. 반대로 `ZDEMOLIVEUSAGE` 에는 와이파이 칸이 있지만 이 표가 무엇을 기록하는지는 확인하지 못했습니다.
 
 `netusage.sqlite` 는 수집 방식에 따라 없을 수 있어서, 로컬 백업만 받았다면 한쪽만 보고 있다는 점을 보고서에 적습니다. 수집 방식별 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 

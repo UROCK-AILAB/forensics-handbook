@@ -24,7 +24,7 @@ nav_order: 1480
 
 ## 볼 아티팩트와 순서
 
-아래 3~5번의 키와 칸은 관찰한 백업에서 이름만 확인했고 (확인 범위: iOS 27.0), 값의 뜻은 문서로 확인하지 못했습니다.
+아래 3~5번의 키와 칸은 관찰한 백업에서 이름만 확인했고, 값의 뜻은 문서로 확인하지 못했습니다.
 
 | 순서 | 아티팩트 | 알려 주는 것 | 자세히 |
 |---|---|---|---|
@@ -33,10 +33,10 @@ nav_order: 1480
 | 3 | 암호 설정 흔적 — `Manifest.plist` 의 `WasPasscodeSet` | 이름으로 보아 백업 당시 암호가 설정돼 있었는지와 관련된 키로 짐작하지만 확인하지 못했습니다 | [로컬 백업](../../01-foundations/backups/local-backup/index.md), [암호와 Face ID 설정 흔적](../../02-artifacts/system-account/passcode-biometrics.md) |
 | 4 | 생체 인증 이름이 붙은 설정 키 — AppDomain-com.apple.mobilesafari `Library/Preferences/com.apple.mobilesafari.plist` 의 `BiometricAuthenticationIsAvailable`(bool)·`BiometricAuthenticationTypeIfAvailable`(int)·`PasscodeIsAvailable`(bool), HomeDomain `Library/Preferences/com.apple.AppleMediaServices.plist` 의 `AMSDeviceBiometricsState`(int)·`AMSDeviceBiometricsIdentities`(list) | 생체 인증을 쓸 수 있는 상태였는지와 관련된 이름입니다. 지문 자료는 백업에 넣지 않고 Face ID 등록 자료는 Secure Enclave 에 보관한다는 [2] 에 비추어 보면 이 키들로 누구의 얼굴·지문인지는 알 수 없습니다 | [암호와 Face ID 설정 흔적](../../02-artifacts/system-account/passcode-biometrics.md) |
 | 5 | 첫 잠금 해제·부팅 이름이 붙은 키 — HomeDomain `Library/Preferences/com.apple.NanoRegistry.NRLaunchNotificationController.volatile.plist` 의 `com.apple.mobile.keybagd.first_unlock.enabled`(int), `__BOOTTIME`(float) | 부팅 시각이나 첫 잠금 해제와 관련될 수 있는 이름이지만, 그렇게 써도 되는지는 확인하지 못했습니다 | [설정 값](../../02-artifacts/system-account/preferences.md) |
-| 6 | 메시지 DB — HomeDomain `Library/SMS/sms.db` 의 `message` 표 `is_from_me` 칸 (확인 범위: iOS 27.0) | 이름으로 보아 이 기기 쪽에서 보낸 메시지인지와 관련된 칸이지만, 이 조사 묶음에서 뜻을 따로 확인하지는 않았으니 [메시지](../../02-artifacts/communications/messages/index.md) 의 설명과 대조합니다 | [메시지](../../02-artifacts/communications/messages/index.md) |
-| 7 | 사진 DB — CameraRollDomain `Media/PhotoData/Photos.sqlite` 의 `ZEXTENDEDATTRIBUTES` 표 `ZCAMERAMAKE`, `ZCAMERAMODEL`, `ZLENSMODEL`, `ZDATECREATED` 칸 (확인 범위: iOS 27.0) | 촬영 기기 정보로 보이는 칸이지만, 이 칸으로 "이 기기에서 찍은 사진" 을 가를 수 있는지는 확인하지 못했습니다 | [이 사진은 언제 어디서 찍었나](photo-origin.md) |
+| 6 | 메시지 DB — HomeDomain `Library/SMS/sms.db` 의 `message` 표 `is_from_me` 칸 | 이름으로 보아 이 기기 쪽에서 보낸 메시지인지와 관련된 칸이지만, 이 조사 묶음에서 뜻을 따로 확인하지는 않았으니 [메시지](../../02-artifacts/communications/messages/index.md) 의 설명과 대조합니다 | [메시지](../../02-artifacts/communications/messages/index.md) |
+| 7 | 사진 DB — CameraRollDomain `Media/PhotoData/Photos.sqlite` 의 `ZEXTENDEDATTRIBUTES` 표 `ZCAMERAMAKE`, `ZCAMERAMODEL`, `ZLENSMODEL`, `ZDATECREATED` 칸 | 촬영 기기 정보로 보이는 칸이지만, 이 칸으로 "이 기기에서 찍은 사진" 을 가를 수 있는지는 확인하지 못했습니다 | [이 사진은 언제 어디서 찍었나](photo-origin.md) |
 
-백업에는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic`, `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 도메인도 이름으로 보입니다 (확인 범위: iOS 27.0). 두 도메인 안에 인증 기록이 있는지는 확인하지 못해서, 이름만 보고 "생체 인증 로그" 라고 부르지 않습니다.
+백업에는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic`, `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 도메인도 이름으로 보입니다. 두 도메인 안에 인증 기록이 있는지는 확인하지 못해서, 이름만 보고 "생체 인증 로그" 라고 부르지 않습니다.
 
 ## 분석 흐름
 

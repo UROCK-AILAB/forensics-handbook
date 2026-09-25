@@ -25,7 +25,7 @@ nav_order: 850
 
 `CallHistory.sqlite` 는 Apple 기본 통화 기록 DB 와 파일 이름이 같으니, 경로로 어느 쪽인지 구분합니다 [1]. Apple 쪽은 [통화 기록](../communications/call-history.md) 에서 다룹니다.
 
-번들 ID `net.whatsapp.WhatsApp` 는 iLEAPP 시험 표본 설명(iOS 12.4 표본)에 나옵니다 [1]. 앱 그룹 ID 와 로컬 백업의 도메인 이름은 이번 자료로 확인하지 못했습니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘어 있었지만(확인 범위: iOS 27.0), 관찰한 백업은 다른 회사 앱의 도메인 이름을 가려 두어 왓츠앱 파일이 들어가는지는 확인하지 못했습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 왓츠앱 자체의 iCloud 채팅 백업 형식도 확인하지 못했습니다.
+번들 ID `net.whatsapp.WhatsApp` 는 iLEAPP 시험 표본 설명(iOS 12.4 표본)에 나옵니다 [1]. 앱 그룹 ID 와 로컬 백업의 도메인 이름은 이번 자료로 확인하지 못했습니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘어 있었지만, 관찰한 백업은 다른 회사 앱의 도메인 이름을 가려 두어 왓츠앱 파일이 들어가는지는 확인하지 못했습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 왓츠앱 자체의 iCloud 채팅 백업 형식도 확인하지 못했습니다.
 
 iLEAPP 는 iOS 12.4 부터 iOS 18.7.8(왓츠앱 26.14.76)까지의 시험 표본으로 분석기를 확인했고, 통화 기록 DB 에서 표본마다 칸과 표가 다르다고 적어 두었습니다 [1].
 

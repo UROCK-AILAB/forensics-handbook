@@ -34,9 +34,9 @@ App Store 의 개인정보 항목에서 개발사는 추적에 쓰는 데이터�
 
 ### 로컬 백업에서 찾기
 
-관찰한 로컬 백업에서는 다른 회사 앱 이름을 가려 두었기 때문에 네이버 지도 도메인을 확인할 수 없었습니다 (확인 범위: iOS 27.0). 번들 ID 를 모르는 상태라서, `Manifest.db` 의 `Files` 표에서 도메인 이름에 `naver` 나 `nhn` 이 들어간 것을 모두 뽑아 후보로 삼고, 후보마다 안의 파일을 열어 지도 앱의 것인지 확인합니다.
+관찰한 로컬 백업에서는 다른 회사 앱 이름을 가려 두었기 때문에 네이버 지도 도메인을 확인할 수 없었습니다. 번들 ID 를 모르는 상태라서, `Manifest.db` 의 `Files` 표에서 도메인 이름에 `naver` 나 `nhn` 이 들어간 것을 모두 뽑아 후보로 삼고, 후보마다 안의 파일을 열어 지도 앱의 것인지 확인합니다.
 
-위치 권한 기록 `RootDomain :: Library/Caches/locationd/clients.plist` 에는 `icom.nhncorp.NaverSearch:` 항목이 보였지만 (확인 범위: iOS 27.0), 이 항목은 네이버 앱(검색)의 것이고 네이버 지도가 아닙니다. 번들 ID 가 비슷해 보인다고 같은 앱으로 섞지 않고, 네이버 앱은 [네이버 앱](../browsers/naver.md) 에서 따로 다룹니다.
+위치 권한 기록 `RootDomain :: Library/Caches/locationd/clients.plist` 에는 `icom.nhncorp.NaverSearch:` 항목이 보였지만, 이 항목은 네이버 앱(검색)의 것이고 네이버 지도가 아닙니다. 번들 ID 가 비슷해 보인다고 같은 앱으로 섞지 않고, 네이버 앱은 [네이버 앱](../browsers/naver.md) 에서 따로 다룹니다.
 
 앱 영역 폴더(`Documents/`, `Library/`, `Library/Caches`, `tmp/`)마다 백업에 들어가는 범위가 다르다는 점과 파일 시스템 전체 추출에서 GUID 폴더를 앱과 잇는 방법은 [카카오맵](kakaomap.md) 과 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명하고, 네이버 지도에도 같은 방법을 씁니다.
 
@@ -44,7 +44,7 @@ App Store 의 개인정보 항목에서 개발사는 추적에 쓰는 데이터�
 
 앱 안 파일의 이름, 형식, 표·칸 이름, 암호화 여부는 공개 자료와 기기 관찰 어느 쪽으로도 확인하지 못했습니다. 찾은 파일은 머리 부분으로 형식을 먼저 가리고, SQLite 면 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), plist 면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 읽는 법을 따릅니다.
 
-앱 밖에서는 두 가지 공통 흔적을 볼 수 있습니다. 첫째, `clients.plist` 에는 앱별 항목이 있고 키에 `Authorization`, `LocationTimeStopped` 등이 있어서 (확인 범위: iOS 27.0) 네이버 지도 항목을 찾으면 위치 권한과 위치 사용 흔적을 짐작할 수 있습니다. 이 파일은 [위치 기록 데몬](routined.md) 에서 다룹니다. 둘째, 앱이 위치를 요청한 기록은 [전원 로그](../app-usage/powerlog.md) 에 앱·서비스별로 남습니다 [2].
+앱 밖에서는 두 가지 공통 흔적을 볼 수 있습니다. 첫째, `clients.plist` 에는 앱별 항목이 있고 키에 `Authorization`, `LocationTimeStopped` 등이 있어서 네이버 지도 항목을 찾으면 위치 권한과 위치 사용 흔적을 짐작할 수 있습니다. 이 파일은 [위치 기록 데몬](routined.md) 에서 다룹니다. 둘째, 앱이 위치를 요청한 기록은 [전원 로그](../app-usage/powerlog.md) 에 앱·서비스별로 남습니다 [2].
 
 ## 증거로서 의미
 

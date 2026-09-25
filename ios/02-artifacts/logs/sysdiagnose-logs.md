@@ -50,7 +50,7 @@ UUIDToBinaryLocations plist 는 UUID 만 적힌 기록을 읽을 때 실행 파�
 
 ### 로컬 백업에 보이는 진단 흔적
 
-관찰한 로컬 백업에는 sysdiagnose 와 같은 계열의 진단 확장 도메인이 여럿 있었습니다 (확인 범위: iOS 27.0). 이 도메인들에 sysdiagnose 묶음이 들어 있다는 근거는 없고, 항목이 4개씩이라 확장 컨테이너의 빈 틀로 보이지만 추론입니다. 백업에서 `.ips` 파일이나 `shutdown.log` 는 관찰 메모에 나오지 않았습니다.
+관찰한 로컬 백업에는 sysdiagnose 와 같은 계열의 진단 확장 도메인이 여럿 있었습니다. 이 도메인들에 sysdiagnose 묶음이 들어 있다는 근거는 없고, 항목이 4개씩이라 확장 컨테이너의 빈 틀로 보이지만 추론입니다. 백업에서 `.ips` 파일이나 `shutdown.log` 는 관찰 메모에 나오지 않았습니다.
 
 | 도메인 | 항목 수 |
 |---|---|
@@ -60,7 +60,7 @@ UUIDToBinaryLocations plist 는 UUID 만 적힌 기록을 읽을 때 실행 파�
 | `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` | 5 |
 | `SysSharedContainerDomain-systemgroup.com.apple.sharedpclogging` | 3 |
 
-진단 관련 설정 파일에는 다음 키가 있었습니다 (확인 범위: iOS 27.0). 값은 읽지 않았고, 키의 뜻은 자료로 확인하지 못해 풀지 않습니다.
+진단 관련 설정 파일에는 다음 키가 있었습니다. 값은 읽지 않았고, 키의 뜻은 자료로 확인하지 못해 풀지 않습니다.
 
 | 도메인 :: 경로 | 관찰한 키 |
 |---|---|
@@ -115,7 +115,7 @@ Shutdown.log 의 버퍼 비우기 시각은 UNIX 시각이라서[1] 1970-01-01 U
 - **만든 시점의 사진.** 묶음은 만든 순간의 상태이고, 통합 로그는 저장 한도가 있어[5] 오래된 기록이 빠질 수 있습니다. 보존 기간은 확인한 자료가 없습니다.
 - **재부팅이 있어야 하는 기록.** Shutdown.log 는 재부팅할 때만 쌓여서[1], 오래 재부팅하지 않은 기기에서는 관심 기간의 기록이 없을 수 있습니다.
 - **하위 경로.** 공개 도구가 읽는 파일 이름은 알지만 묶음 안의 하위 경로는 출처에 없어서[2], 도구가 파일을 찾지 못하면 이름으로 직접 찾아봅니다.
-- **로컬 백업과 혼동.** 로컬 백업의 진단 확장 도메인은 이름만 sysdiagnose 와 비슷하고, 묶음이 들어 있다는 근거는 없습니다 (확인 범위: iOS 27.0).
+- **로컬 백업과 혼동.** 로컬 백업의 진단 확장 도메인은 이름만 sysdiagnose 와 비슷하고, 묶음이 들어 있다는 근거는 없습니다.
 
 ## 직접 분석해 보기
 
@@ -152,7 +152,7 @@ EC-DIGIT-CSIRC 의 sysdiagnose 도구는 묶음 전체를 읽어, 설치 앱 목
 | [설치된 앱](../app-usage/installed-apps.md) | 묶음의 앱 설치 로그와 설치 앱 목록 |
 | [전원 로그](../app-usage/powerlog.md) | 묶음 안 powerlogs DB 의 앱 실행 시간대 |
 | [와이파이 기록](../network/wifi.md) | 묶음의 Wi-Fi 파일과 기기에 저장한 네트워크 |
-| [설정 값](../system-account/preferences.md) | 관찰한 로컬 백업의 `HomeDomain :: Library/Preferences/com.apple.springboard.plist` 에 `SBLastKnownShutdownDate` (datetime) 키가 있었습니다 (확인 범위: iOS 27.0). 이름으로 보아 마지막 종료 시각일 수 있지만 뜻은 확인하지 못했고, Shutdown.log 의 마지막 재부팅 시각과 비교해 볼 후보입니다 |
+| [설정 값](../system-account/preferences.md) | 관찰한 로컬 백업의 `HomeDomain :: Library/Preferences/com.apple.springboard.plist` 에 `SBLastKnownShutdownDate` (datetime) 키가 있었습니다. 이름으로 보아 마지막 종료 시각일 수 있지만 뜻은 확인하지 못했고, Shutdown.log 의 마지막 재부팅 시각과 비교해 볼 후보입니다 |
 
 감염 의심 기기에서 이 파일들을 보는 순서는 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md), 여러 기록을 한 시간 축에 놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 

@@ -50,19 +50,19 @@ nav_order: 620
 | 시기·버전 | 확인한 내용 | 근거 |
 |---|---|---|
 | iOS 16.x 이상 | 글쓴이가 본 검체에서 `searchpartyd` DB 를 SQLite Encryption Extension(AES-256 OFB)으로 암호화, DB 이름마다 키체인 항목이 따로 있음. 이 파일들은 iOS 16.x 이상에서만 보였다고 적음 | [3] |
-| iOS 27.0 로컬 백업 | `fmipcore` 캐시와 `searchpartyd` DB 는 백업 DB 목록에 없음, 설정 plist 와 도메인만 있음 | (확인 범위: iOS 27.0) |
+| iOS 27.0 로컬 백업 | `fmipcore` 캐시와 `searchpartyd` DB 는 백업 DB 목록에 없음, 설정 plist 와 도메인만 있음 | |
 
-암호화된 DB 는 일반 SQLite 열람기로 바로 열리지 않고, 키체인과 보호 등급의 관계는 [키체인](../../01-foundations/storage/keychain.md) 과 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 에서 다룹니다. `searchpartyd` DB 가 로컬 백업에 들어가는지는 [3] 에 나와 있지 않고, 관찰한 백업에서는 보이지 않았습니다 (확인 범위: iOS 27.0).
+암호화된 DB 는 일반 SQLite 열람기로 바로 열리지 않고, 키체인과 보호 등급의 관계는 [키체인](../../01-foundations/storage/keychain.md) 과 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 에서 다룹니다. `searchpartyd` DB 가 로컬 백업에 들어가는지는 [3] 에 나와 있지 않고, 관찰한 백업에서는 보이지 않았습니다.
 
 ### 로컬 백업에서 보이는 것
 
-로컬 백업에는 나의 찾기 관련 도메인으로 `AppDomain-com.apple.findmy`, `AppDomain-com.apple.findmy.FindingUIAngel`, `AppDomain-com.apple.findmy.remoteuiservice`, `AppDomain-com.apple.icloud.FindMyDevice.FindMyExtensionContainer`, `AppDomainGroup-group.com.apple.icloud.findmydevice.magsafe`, `AppDomainGroup-group.com.apple.icloud.findmydevice.shared-configuration`, `SysContainerDomain-com.apple.icloud.findmydeviced`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.searchpartyd.sharedsettings` 가 있었습니다 (확인 범위: iOS 27.0). 도메인 체계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
+로컬 백업에는 나의 찾기 관련 도메인으로 `AppDomain-com.apple.findmy`, `AppDomain-com.apple.findmy.FindingUIAngel`, `AppDomain-com.apple.findmy.remoteuiservice`, `AppDomain-com.apple.icloud.FindMyDevice.FindMyExtensionContainer`, `AppDomainGroup-group.com.apple.icloud.findmydevice.magsafe`, `AppDomainGroup-group.com.apple.icloud.findmydevice.shared-configuration`, `SysContainerDomain-com.apple.icloud.findmydeviced`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed`, `SysSharedContainerDomain-systemgroup.com.apple.icloud.searchpartyd.sharedsettings` 가 있었습니다. 도메인 체계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
 
 ## 구조
 
 ### 로컬 백업의 설정 plist
 
-다음 plist 들에서 키 이름을 확인했습니다. 값은 가려져 있어 읽지 않았습니다 (확인 범위: iOS 27.0).
+다음 plist 들에서 키 이름을 확인했습니다. 값은 가려져 있어 읽지 않았습니다.
 
 | 파일 | 조사와 관련 있어 보이는 키 |
 |---|---|
@@ -76,11 +76,11 @@ nav_order: 620
 | `HomeDomain :: Library/Preferences/systemgroup.com.apple.icloud.searchpartyd.sharedsettings.plist` | `SPSettingsServiceDisabledReasonsKey`(list), `SPBeaconZoneCreationDateKey`(datetime) |
 | `HomeDomain :: Library/Preferences/com.apple.findmy.plist` | `tabInfo`, `CustomMapStyle`, `restoreState`, `CustomMapMode_Options_explore` |
 
-키 이름으로 보아 `fmipActive` 는 나의 iPhone 찾기가 켜져 있는지, `fmipLostModeType` 은 분실 모드 종류, `command-locate-*` 는 원격 위치 조회 명령과 관련 있어 보이지만, 각 값의 뜻(예: `fmipLostModeType` 숫자가 무엇을 뜻하는지)은 확인하지 못했습니다. 파일 이름에 `notbackedup` 이 들어간 plist 도 관찰한 로컬 백업에 들어 있었습니다 (확인 범위: iOS 27.0). plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+키 이름으로 보아 `fmipActive` 는 나의 iPhone 찾기가 켜져 있는지, `fmipLostModeType` 은 분실 모드 종류, `command-locate-*` 는 원격 위치 조회 명령과 관련 있어 보이지만, 각 값의 뜻(예: `fmipLostModeType` 숫자가 무엇을 뜻하는지)은 확인하지 못했습니다. 파일 이름에 `notbackedup` 이 들어간 plist 도 관찰한 로컬 백업에 들어 있었습니다. plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ### 다른 곳에 남는 흔적
 
-위치 권한 기록 `RootDomain :: Library/Caches/locationd/clients.plist` 에는 `icom.apple.findmy:` 항목이 있고 키에 `Authorization`, `LocationTimeStopped`, `ReceivingLocationInformationTimeStopped` 등이 있습니다 (확인 범위: iOS 27.0). 이 파일 전체는 [위치 기록 데몬](routined.md) 에서 다룹니다. 푸시 설정 `HomeDomain :: Library/Preferences/com.apple.apsd.plist` 의 `APSPersistentTopics` 목록에는 `com.apple.icloud.searchpartyd.aps`, `com.apple.icloud.findmydeviced.aps-production`, `com.apple.icloud.fmfd.aps`, `com.apple.findmy.push.com.apple.findmy.container` 가 있습니다 (확인 범위: iOS 27.0).
+위치 권한 기록 `RootDomain :: Library/Caches/locationd/clients.plist` 에는 `icom.apple.findmy:` 항목이 있고 키에 `Authorization`, `LocationTimeStopped`, `ReceivingLocationInformationTimeStopped` 등이 있습니다. 이 파일 전체는 [위치 기록 데몬](routined.md) 에서 다룹니다. 푸시 설정 `HomeDomain :: Library/Preferences/com.apple.apsd.plist` 의 `APSPersistentTopics` 목록에는 `com.apple.icloud.searchpartyd.aps`, `com.apple.icloud.findmydeviced.aps-production`, `com.apple.icloud.fmfd.aps`, `com.apple.findmy.push.com.apple.findmy.container` 가 있습니다.
 
 ## 증거로서 의미
 
@@ -109,7 +109,7 @@ nav_order: 620
 
 모르는 비콘의 관찰 기록은 매우 빨리 지워지고 VACUUM 되며(글쓴이는 확보 장소에서 블루투스를 끈 경우를 예외로 들었습니다), 소유·공유 비콘 기록은 더 오래 남습니다 [3]. 그래서 모르는 추적기 관찰이 비어 있어도 주변에 추적기가 없었다고 볼 수 없습니다. WAL 파일에 본 DB 에 없는 기록이 더 있을 수 있어서 [3] DB 를 확보할 때 `-wal` 파일을 반드시 함께 가져옵니다. WAL 해석은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), 지운 행 복구는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
-iOS 16.x 이상 검체에서 본 DB 는 암호화되어 있어서 [3] 파일을 확보해도 내용을 읽을 수 있는지는 수집 방식과 키체인 확보 여부에 달려 있습니다. 로컬 백업만 있으면 캐시와 DB 가 보이지 않고 plist 만 남습니다 (확인 범위: iOS 27.0).
+iOS 16.x 이상 검체에서 본 DB 는 암호화되어 있어서 [3] 파일을 확보해도 내용을 읽을 수 있는지는 수집 방식과 키체인 확보 여부에 달려 있습니다. 로컬 백업만 있으면 캐시와 DB 가 보이지 않고 plist 만 남습니다.
 
 ## 직접 분석해 보기
 
@@ -128,7 +128,7 @@ FROM ObservedAdvertisement
 ORDER BY 스캔_시각_칸;
 ```
 
-로컬 백업이면 `Manifest.db` 의 `Files` 표에서 위 도메인들의 파일 목록을 뽑아 plist 를 꺼내고, `plutil` 같은 plist 도구로 키와 값을 확인합니다. `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다 (확인 범위: iOS 27.0).
+로컬 백업이면 `Manifest.db` 의 `Files` 표에서 위 도메인들의 파일 목록을 뽑아 plist 를 꺼내고, `plutil` 같은 plist 도구로 키와 값을 확인합니다. `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다.
 
 ```sql
 SELECT fileID, domain, relativePath

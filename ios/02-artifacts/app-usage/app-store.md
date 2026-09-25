@@ -27,13 +27,13 @@ nav_order: 420
 | 번들 폴더의 `iTunesMetadata.plist`·`BundleMetadata.plist` | iOS 15 이미지로 도구를 비교한 글[1] |
 | MVT 의 설치 출처 판단 | 일반 백업과 전체 덤프[2] |
 | 충돌 보고서의 `storeInfo.itemID` | iOS 15 부터 쓰는 JSON 형식 충돌 보고서[3] |
-| App Store 서비스 DB·plist 의 이름과 칸 | 로컬 백업, 암호화 안 함 (확인 범위: iOS 27.0) |
+| App Store 서비스 DB·plist 의 이름과 칸 | 로컬 백업, 암호화 안 함 |
 
-MVT 는 백업에서는 `Info.plist`, 파일 시스템 덤프에서는 `iTunesMetadata.plist` 를 쓴다고 나눠 적었고[2], 관찰한 로컬 백업의 메모에도 `iTunesMetadata.plist`·`BundleMetadata.plist` 는 나오지 않았습니다 (확인 범위: iOS 27.0). 그래서 번들 폴더의 메타데이터 plist 는 파일 시스템 추출에서 찾습니다. 수집 방식 차이는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
+MVT 는 백업에서는 `Info.plist`, 파일 시스템 덤프에서는 `iTunesMetadata.plist` 를 쓴다고 나눠 적었고[2], 관찰한 로컬 백업의 메모에도 `iTunesMetadata.plist`·`BundleMetadata.plist` 는 나오지 않았습니다. 그래서 번들 폴더의 메타데이터 plist 는 파일 시스템 추출에서 찾습니다. 수집 방식 차이는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 ### 로컬 백업에 보이는 DB
 
-관찰한 로컬 백업의 `HomeDomain :: Library/com.apple.itunesstored/` 아래에는 DB 가 네 개 있었습니다 (확인 범위: iOS 27.0). 첫 DB 이름의 `#` 은 관찰 메모에서 숫자를 가린 자리입니다.
+관찰한 로컬 백업의 `HomeDomain :: Library/com.apple.itunesstored/` 아래에는 DB 가 네 개 있었습니다. 첫 DB 이름의 `#` 은 관찰 메모에서 숫자를 가린 자리입니다.
 
 | DB | 표(주요 칸) |
 |---|---|
@@ -46,7 +46,7 @@ MVT 는 백업에서는 `Info.plist`, 파일 시스템 덤프에서는 `iTunesMe
 
 ### 로컬 백업에 보이는 설정 plist
 
-값은 읽지 않고 키 이름과 형만 보았습니다 (확인 범위: iOS 27.0).
+값은 읽지 않고 키 이름과 형만 보았습니다.
 
 | 도메인 :: 경로 | 관찰한 키 |
 |---|---|
@@ -55,7 +55,7 @@ MVT 는 백업에서는 `Info.plist`, 파일 시스템 덤프에서는 `iTunesMe
 | `AppDomain-com.apple.AppStore :: Library/Preferences/com.apple.ap.AppStore.plist` | `AppStoreSLPContentSnapshot` (bytes) |
 | `SysContainerDomain-com.apple.appstored :: Library/katana-subscription-cache.plist` | `allInfo` |
 
-`AppDomain-com.apple.AppStore` 도메인에는 항목이 18개, `SysContainerDomain-com.apple.appstored` 에는 4개 있었고, `AppDomainPlugin-com.apple.AppStoreDaemon.ASDAskPermissionExtension`, `…ASDUserNotificationExtension`, `…AppStoreEventServiceExtension`, `AppDomain-com.apple.AskPermissionUI` 같은 관련 도메인도 보였습니다 (확인 범위: iOS 27.0). `com.apple.appstored.plist` 키 이름은 업데이트 확인, OS 설치, 앱 정리 유예 같은 사건을 떠올리게 하지만 어느 키의 뜻도 확인하지 못했습니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 는 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+`AppDomain-com.apple.AppStore` 도메인에는 항목이 18개, `SysContainerDomain-com.apple.appstored` 에는 4개 있었고, `AppDomainPlugin-com.apple.AppStoreDaemon.ASDAskPermissionExtension`, `…ASDUserNotificationExtension`, `…AppStoreEventServiceExtension`, `AppDomain-com.apple.AskPermissionUI` 같은 관련 도메인도 보였습니다. `com.apple.appstored.plist` 키 이름은 업데이트 확인, OS 설치, 앱 정리 유예 같은 사건을 떠올리게 하지만 어느 키의 뜻도 확인하지 못했습니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 는 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ## 구조
 
@@ -71,7 +71,7 @@ MVT 는 백업에서는 `Info.plist`, 파일 시스템 덤프에서는 `iTunesMe
 
 ## 시각 해석
 
-DB 에는 `ZDATE`, `ZPURCHASEDATE`, `ZORIGINALPURCHASEDATE`, `ZINSERTDATE`, `ZLASTQUEUECHECKDATE`, `timestamp`, `local_timestamp` 같은 시각 칸이 있지만 (확인 범위: iOS 27.0) 기준점과 단위는 확인하지 못했습니다. `install_attribution_*` 표에는 `timestamp` 와 `local_timestamp` 가 나란히 있는데, 두 칸이 어떻게 다른지도 확인하지 못했습니다. 값을 풀 때는 유닉스 시각과 Mac 절대 시각(2001-01-01 기준)으로 각각 바꿔 보고, 수집일이나 다른 기록과 맞는 쪽을 근거와 함께 적습니다.
+DB 에는 `ZDATE`, `ZPURCHASEDATE`, `ZORIGINALPURCHASEDATE`, `ZINSERTDATE`, `ZLASTQUEUECHECKDATE`, `timestamp`, `local_timestamp` 같은 시각 칸이 있지만 기준점과 단위는 확인하지 못했습니다. `install_attribution_*` 표에는 `timestamp` 와 `local_timestamp` 가 나란히 있는데, 두 칸이 어떻게 다른지도 확인하지 못했습니다. 값을 풀 때는 유닉스 시각과 Mac 절대 시각(2001-01-01 기준)으로 각각 바꿔 보고, 수집일이나 다른 기록과 맞는 쪽을 근거와 함께 적습니다.
 
 설정 plist 의 `datetime` 형은 plist 날짜 형식이라 도구가 날짜로 풀어 주지만, `AppStore.plist` 의 `lastBootstrapDate` 는 `float` 형이라 기준점을 따로 확인해야 합니다. 같은 파일의 `lastBootstrapTimeZone` (str) 은 시간대와 관련된 값으로 보이지만 뜻은 확인하지 못했습니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md), 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 다룹니다.
 

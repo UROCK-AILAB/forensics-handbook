@@ -57,7 +57,7 @@ nav_order: 80
 
 ### 로컬 백업 안의 키체인
 
-로컬 백업에서는 키체인이 `KeychainDomain` 의 `keychain-backup.plist` 로 들어가고, 관찰한 백업에서 이 도메인의 항목은 2개였습니다(확인 범위: iOS 27.0). `keychain-backup.plist` 의 최상위 키는 아래와 같습니다(확인 범위: iOS 27.0).
+로컬 백업에서는 키체인이 `KeychainDomain` 의 `keychain-backup.plist` 로 들어가고, 관찰한 백업에서 이 도메인의 항목은 2개였습니다. `keychain-backup.plist` 의 최상위 키는 아래와 같습니다.
 
 ```
 keybag-uuid (str)
@@ -67,7 +67,7 @@ cert (list)
 keys (list)
 ```
 
-`genp`·`inet`·`cert`·`keys` 는 기기 안 데이터베이스의 표 이름과 같은 이름의 목록이지만 `idnt` 키는 관찰되지 않았고(확인 범위: iOS 27.0), `keybag-uuid` 가 어느 키 가방을 가리키는지는 확인하지 못했습니다. 백업 폴더 전체의 짜임은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../backups/local-backup/index.md) 에서 다룹니다.
+`genp`·`inet`·`cert`·`keys` 는 기기 안 데이터베이스의 표 이름과 같은 이름의 목록이지만 `idnt` 키는 관찰되지 않았고, `keybag-uuid` 가 어느 키 가방을 가리키는지는 확인하지 못했습니다. 백업 폴더 전체의 짜임은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전별 차이
 
@@ -77,7 +77,7 @@ keys (list)
 | 12 | `kSecAttrAccessibleAlways`, `kSecAttrAccessibleAlwaysThisDeviceOnly` 사용 중단(deprecated) | [4] |
 | 13.5 | 접근 그룹 와일드카드 제거 | [5][6] |
 | 15 | 구성 프로파일 항목의 기본 등급이 바뀌는 기준점(그 전에 설치한 항목은 "항상") | [1] |
-| 27.0 | 로컬 백업의 `keychain-backup.plist` 최상위 키가 위와 같음 | 관찰(확인 범위: iOS 27.0) |
+| 27.0 | 로컬 백업의 `keychain-backup.plist` 최상위 키가 위와 같음 | 관찰 |
 
 iOS 15 이후 `keychain-2.db` 의 스키마가 어떻게 바뀌었는지, iOS 17 부터 27 사이에 차이가 있는지는 이번 출처로 확인하지 못했습니다. [5] 도 Always 계열 두 등급이 사용 중단됐다고 적지만 버전은 밝히지 않았습니다.
 
@@ -92,7 +92,7 @@ iOS 15 이후 `keychain-2.db` 의 스키마가 어떻게 바뀌었는지, iOS 17
 | 암호 없는 로컬 백업 | `keychain-backup.plist` | 항목이 기기 고유 하드웨어 키(UID)로 암호화된 채라서 같은 기기에만 복원할 수 있음[2][6] |
 | iCloud 백업 | 키체인 사본이 들어 있을 수도, 없을 수도 있음. 들어 있으면 기기 고유 키로 감싼 항목 | 원래 기기에만 복원됨[6] |
 
-로컬 백업이라면 먼저 `Manifest.plist` 의 `IsEncrypted` 키로 어느 줄에 해당하는지 확인하고, 같은 파일에는 `WasPasscodeSet`·`BackupKeyBag` 키도 있습니다(확인 범위: iOS 27.0). 관찰한 백업은 암호화하지 않은 백업이었으니, `keychain-backup.plist` 가 들어 있어도 기기 밖에서 항목 내용을 읽을 수 없는 경우에 해당합니다. 이 판단은 [2] 와 [6] 을 합쳐 끌어낸 것입니다. Apple 은 암호화하지 않은 백업에서도 키체인만은 UID 에서 나온 키로 보호된 채 남고, 그래서 백업 암호를 설정했을 때만 키체인 항목이 새 기기로 옮겨진다고 설명합니다[2]. 암호화 백업이라도 다른 기기로 옮기지 않는 (nonmigratory) 항목은 UID 에서 나온 키로 감싼 채 남아 원래 기기에만 복원됩니다[2].
+로컬 백업이라면 먼저 `Manifest.plist` 의 `IsEncrypted` 키로 어느 줄에 해당하는지 확인하고, 같은 파일에는 `WasPasscodeSet`·`BackupKeyBag` 키도 있습니다. 관찰한 백업은 암호화하지 않은 백업이었으니, `keychain-backup.plist` 가 들어 있어도 기기 밖에서 항목 내용을 읽을 수 없는 경우에 해당합니다. 이 판단은 [2] 와 [6] 을 합쳐 끌어낸 것입니다. Apple 은 암호화하지 않은 백업에서도 키체인만은 UID 에서 나온 키로 보호된 채 남고, 그래서 백업 암호를 설정했을 때만 키체인 항목이 새 기기로 옮겨진다고 설명합니다[2]. 암호화 백업이라도 다른 기기로 옮기지 않는 (nonmigratory) 항목은 UID 에서 나온 키로 감싼 채 남아 원래 기기에만 복원됩니다[2].
 
 iCloud 키체인 항목은 이미 클라우드에 있어 iCloud 백업에는 들어가지 않고[6], iCloud 키체인을 복구할 때 쓰는 백업 키체인은 비대칭 키(Curve25519)를 쓰는 iCloud 백업 키 가방이 보호합니다[2]. 기기에서 가져올 수 없는 계정 쪽 자료는 [클라우드 데이터 (iCloud·계정 데이터 요청)](../../03-techniques/acquisition/cloud-data.md) 에서 다룹니다. 수집 방식 자체는 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 를 봅니다.
 
@@ -104,7 +104,7 @@ iCloud 키체인 항목은 이미 클라우드에 있어 iCloud 백업에는 들
 
 지운 키체인 항목을 되살릴 수 있는지, 비정상 종료 뒤 데이터베이스가 어떻게 남는지는 이번 출처가 다루지 않았습니다. `keychain-2.db` 도 SQLite 파일이라 일반적인 복구 방법은 [SQLite 데이터베이스 (SQLite)](../data-formats/sqlite/index.md) 를 따르지만, 되살린 행도 메타데이터와 비밀 값이 암호문이라는 점은 같습니다.
 
-로컬 백업에는 키체인 주변 설정으로 보이는 파일과 키가 더 있습니다. 아래는 관찰한 백업에서 이름만 읽은 것이고(확인 범위: iOS 27.0), 각 키가 무엇을 뜻하는지와 값의 의미는 확인하지 못했습니다.
+로컬 백업에는 키체인 주변 설정으로 보이는 파일과 키가 더 있습니다. 아래는 관찰한 백업에서 이름만 읽은 것이고, 각 키가 무엇을 뜻하는지와 값의 의미는 확인하지 못했습니다.
 
 | 도메인 :: 경로 | 관찰한 키·칸 이름 |
 |---|---|
@@ -118,7 +118,7 @@ iCloud 키체인 항목은 이미 클라우드에 있어 iCloud 백업에는 들
 | HomeDomain :: `Library/Preferences/com.apple.NanoRegistry.NRLaunchNotificationController.volatile.plist` | `com.apple.mobile.keybagd.first_unlock.enabled`, `com.apple.security.secureobjectsync.viewschanged.enabled` |
 | AppDomainGroup-group.com.apple.notes :: `NoteStore.sqlite` | `ZICCLOUDSYNCINGOBJECT` 표의 `ZHASMISSINGKEYCHAINITEM` 칸 |
 
-이 밖에 `AppDomainPlugin-com.apple.security.AKSDiagnosticExtension` 도메인도 있었습니다(항목 4개, 확인 범위: iOS 27.0). `cloudkeychainproxy` 파일은 이름으로 보아 iCloud 키체인 동기화 쪽 설정으로 보이지만 확인한 설명은 없으니, 보고서에는 "이런 이름의 키가 있다" 까지만 씁니다. 파일 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../data-formats/plist.md) 에서 다룹니다.
+이 밖에 `AppDomainPlugin-com.apple.security.AKSDiagnosticExtension` 도메인도 있었습니다(항목 4개). `cloudkeychainproxy` 파일은 이름으로 보아 iCloud 키체인 동기화 쪽 설정으로 보이지만 확인한 설명은 없으니, 보고서에는 "이런 이름의 키가 있다" 까지만 씁니다. 파일 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../data-formats/plist.md) 에서 다룹니다.
 
 ## 함정
 

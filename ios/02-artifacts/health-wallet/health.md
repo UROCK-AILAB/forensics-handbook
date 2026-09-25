@@ -33,9 +33,9 @@ iLEAPP 는 `healthdb_secure.sqlite` 를 먼저 열고 `healthdb.sqlite` 를 붙�
 
 건강 데이터는 Finder(macOS 10.15 이후) 또는 iTunes 로 만든 **암호화한** 로컬 백업에만 들어갑니다[2][3]. 백업을 암호화하지 않으면 건강 데이터가 빠지고, 이 점은 획득 방식을 고를 때부터 따져야 합니다. 로컬 백업의 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
-암호화하지 않은 백업을 실제로 열어 보면 `HealthDomain` 도메인이 있고 항목은 2개였지만, 어떤 파일인지는 기록하지 않았습니다. 같은 백업의 Apple 데이터베이스 파일 목록에는 `healthdb*.sqlite` 가 없었습니다(확인 범위: iOS 27.0). 암호화하지 않은 백업이라 빠진 것으로 보이며, 이 판단은 위 두 공식 문서를 근거로 한 추론입니다. 따라서 건강 데이터베이스가 백업에 없다는 사실만으로 기기에 건강 기록이 없었다고 읽으면 안 됩니다.
+암호화하지 않은 백업을 실제로 열어 보면 `HealthDomain` 도메인이 있고 항목은 2개였지만, 어떤 파일인지는 기록하지 않았습니다. 같은 백업의 Apple 데이터베이스 파일 목록에는 `healthdb*.sqlite` 가 없었습니다. 암호화하지 않은 백업이라 빠진 것으로 보이며, 이 판단은 위 두 공식 문서를 근거로 한 추론입니다. 따라서 건강 데이터베이스가 백업에 없다는 사실만으로 기기에 건강 기록이 없었다고 읽으면 안 됩니다.
 
-같은 백업에는 건강 앱과 관련된 앱 도메인도 있었습니다(확인 범위: iOS 27.0).
+같은 백업에는 건강 앱과 관련된 앱 도메인도 있었습니다.
 
 | 도메인 |
 |---|
@@ -99,7 +99,7 @@ iLEAPP 는 `healthdb_secure.sqlite` 를 먼저 열고 `healthdb.sqlite` 를 붙�
 
 ### 설정 파일
 
-건강 데이터베이스와 따로, 백업의 `HomeDomain` 안 `Library/Preferences/` 에 건강 관련 설정 파일이 있었습니다(확인 범위: iOS 27.0). 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 설정 파일 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
+건강 데이터베이스와 따로, 백업의 `HomeDomain` 안 `Library/Preferences/` 에 건강 관련 설정 파일이 있었습니다. 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 설정 파일 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
 
 | 파일 | 확인한 키 |
 |---|---|
@@ -150,7 +150,7 @@ iLEAPP 는 `healthdb_secure.sqlite` 를 먼저 열고 `healthdb.sqlite` 를 붙�
 
 **번호의 뜻은 버전마다 확인합니다.** `data_type` 번호와 수면 값의 뜻은 iLEAPP 기준이고, iOS 버전마다 같은지는 확인하지 못했습니다. 새 버전 검체에서는 알려진 기록(예: 조사관이 직접 입력한 몸무게)으로 번호를 한 번 맞춰 봅니다.
 
-**지우기·조작.** `com.apple.healthd.plist` 에 `HDDatabasePruningLastAttemptDateKey` 라는 날짜 키가 있었지만(확인 범위: iOS 27.0), 이 키가 무엇을 지운 시각인지는 확인하지 못했습니다. 사용자가 건강 기록을 지웠을 때 데이터베이스에 어떤 흔적이 남는지도 이번 자료로는 확인하지 못했고, SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)를 봅니다.
+**지우기·조작.** `com.apple.healthd.plist` 에 `HDDatabasePruningLastAttemptDateKey` 라는 날짜 키가 있었지만, 이 키가 무엇을 지운 시각인지는 확인하지 못했습니다. 사용자가 건강 기록을 지웠을 때 데이터베이스에 어떤 흔적이 남는지도 이번 자료로는 확인하지 못했고, SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)를 봅니다.
 
 ## 직접 분석해 보기
 

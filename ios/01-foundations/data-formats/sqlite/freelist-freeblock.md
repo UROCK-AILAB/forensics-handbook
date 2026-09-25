@@ -13,7 +13,7 @@ SQLite 는 행을 지워도 바이트를 곧바로 없애지 않아서, 페이�
 
 iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고, 페이지·셀·레코드 구조는 [페이지와 레코드](b-tree-record.md)를 먼저 보면 됩니다. iOS 의 `sms.db` 같은 DB 에서 실제로 얼마나 되살아나는지와 iOS 버전별 차이는 확인하지 못했습니다. 지운 대화·사진을 찾는 조사 전체 흐름은 [지운 대화와 사진 찾기](../../../04-scenarios/activity/deleted-content.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
-앱이 직접 만든 삭제 기록 표는 SQLite 빈 공간과 다른 층입니다. 예를 들어 `sms.db` 에는 `deleted_messages`(`ROWID`, `guid`)와 `chat_recoverable_message_join`(`chat_id`, `message_id`, `delete_date`, `ck_sync_state`) 같은 표가 있고(확인 범위: iOS 27.0), 이런 표는 SQL 로 그대로 읽히는 살아 있는 행입니다. 두 표의 칸이 무엇을 뜻하는지는 이 페이지에서 확인하지 않았으니 [메시지](../../../02-artifacts/communications/messages/index.md) 페이지를 따릅니다.
+앱이 직접 만든 삭제 기록 표는 SQLite 빈 공간과 다른 층입니다. 예를 들어 `sms.db` 에는 `deleted_messages`(`ROWID`, `guid`)와 `chat_recoverable_message_join`(`chat_id`, `message_id`, `delete_date`, `ck_sync_state`) 같은 표가 있고, 이런 표는 SQL 로 그대로 읽히는 살아 있는 행입니다. 두 표의 칸이 무엇을 뜻하는지는 이 페이지에서 확인하지 않았으니 [메시지](../../../02-artifacts/communications/messages/index.md) 페이지를 따릅니다.
 
 ## 구조 — 지운 데이터가 남는 자리
 

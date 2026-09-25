@@ -17,7 +17,7 @@ nav_order: 1560
 
 iOS 버전과 기기에 설정된 시간대를 먼저 적어 둡니다. 버전은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md), 시간대는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 에서 확인합니다. 시각 값은 DB 마다 기준을 따로 확인하고, 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
 
-수집 범위도 확인합니다. 로컬 백업이면 기본 메시지 DB 는 `HomeDomain :: Library/SMS/sms.db` 로, 앱별 데이터 사용량 DB 는 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 로 보입니다(확인 범위: iOS 27.0). 같은 백업에서 다른 회사 앱의 도메인은 이름을 가려서 읽었기 때문에, 카카오톡·WhatsApp 같은 앱이 백업의 어느 경로에 들어가는지는 이 페이지에서 확인하지 못했습니다.
+수집 범위도 확인합니다. 로컬 백업이면 기본 메시지 DB 는 `HomeDomain :: Library/SMS/sms.db` 로, 앱별 데이터 사용량 DB 는 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 로 보입니다. 같은 백업에서 다른 회사 앱의 도메인은 이름을 가려서 읽었기 때문에, 카카오톡·WhatsApp 같은 앱이 백업의 어느 경로에 들어가는지는 이 페이지에서 확인하지 못했습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -30,9 +30,9 @@ iOS 버전과 기기에 설정된 시간대를 먼저 적어 둡니다. 버전�
 
 ### 기본 메시지 앱
 
-대화 DB 의 전체 구조와 첨부 파일이 저장되는 경로, 시각 기준은 [메시지 (iMessage·SMS)](../../../02-artifacts/communications/messages/index.md) 에 있습니다. 유출을 가릴 때는 그중 첨부와 방향에 관한 칸만 골라 봅니다. 관찰한 백업의 `sms.db` 에서 attachment 표에는 is_outgoing, transfer_name, filename, mime_type, uti, total_bytes, created_date, start_date, transfer_state, original_guid 칸이 있고, message 표에는 is_from_me, is_sent, is_delivered, date, date_delivered, date_read, service, account_guid, share_status, share_direction 칸이 있습니다(확인 범위: iOS 27.0). 메시지와 첨부는 message_attachment_join 표로, 대화와 메시지는 chat_message_join 표로 잇습니다(확인 범위: iOS 27.0).
+대화 DB 의 전체 구조와 첨부 파일이 저장되는 경로, 시각 기준은 [메시지 (iMessage·SMS)](../../../02-artifacts/communications/messages/index.md) 에 있습니다. 유출을 가릴 때는 그중 첨부와 방향에 관한 칸만 골라 봅니다. 관찰한 백업의 `sms.db` 에서 attachment 표에는 is_outgoing, transfer_name, filename, mime_type, uti, total_bytes, created_date, start_date, transfer_state, original_guid 칸이 있고, message 표에는 is_from_me, is_sent, is_delivered, date, date_delivered, date_read, service, account_guid, share_status, share_direction 칸이 있습니다. 메시지와 첨부는 message_attachment_join 표로, 대화와 메시지는 chat_message_join 표로 잇습니다.
 
-share_status·share_direction 칸은 이름만 보면 공유 방향과 관련이 있어 보이지만 값의 뜻은 확인하지 못했습니다. 같은 백업의 `com.apple.sharingd.plist` 에 `SFCollaborationUserDefaults.com.apple.MobileSMS` 키가 있고, `HomeDomain :: Library/Application Support/CloudDocs/session/containers/iCloud.com.apple.MobileSMS.plist` 라는 메시지용 iCloud 컨테이너 설정 파일도 있습니다(확인 범위: iOS 27.0). 두 파일 모두 무엇을 기록하는지는 확인하지 못했으니 보고서에 근거로 쓰지 않습니다.
+share_status·share_direction 칸은 이름만 보면 공유 방향과 관련이 있어 보이지만 값의 뜻은 확인하지 못했습니다. 같은 백업의 `com.apple.sharingd.plist` 에 `SFCollaborationUserDefaults.com.apple.MobileSMS` 키가 있고, `HomeDomain :: Library/Application Support/CloudDocs/session/containers/iCloud.com.apple.MobileSMS.plist` 라는 메시지용 iCloud 컨테이너 설정 파일도 있습니다. 두 파일 모두 무엇을 기록하는지는 확인하지 못했으니 보고서에 근거로 쓰지 않습니다.
 
 ### 다른 회사 메신저
 
@@ -42,7 +42,7 @@ WhatsApp 은 대화 DB 가 `ChatStorage.sqlite` 이고, 메시지는 ZWAMESSAGE 
 
 ### 앱 DB 를 읽지 못할 때
 
-앱 DB 가 암호화되어 있거나 수집 범위에 들어오지 않았으면 `DataUsage.sqlite` 로 그 앱의 셀룰러 송신량과 시각을 봅니다[1]. ZLIVEUSAGE 표의 ZWWANOUT 칸이 셀룰러 송신량이고 단위는 바이트이며, ZPROCESS 표의 ZFIRSTTIMESTAMP 는 그 프로세스를 처음 본 때, ZTIMESTAMP 는 가장 최근 활동을 가리킵니다[1]. 시각은 Mac 절대 시각입니다[1]. 관찰한 백업의 ZLIVEUSAGE 표에는 ZKIND, ZMETADATA, ZTAG, ZHASPROCESS, ZBILLCYCLEEND, ZTIMESTAMP, ZWWANIN, ZWWANOUT, ZBUNDLENAME, ZPROCNAME 칸이, ZPROCESS 표에는 ZFIRSTTIMESTAMP, ZTIMESTAMP, ZBUNDLENAME, ZEXTENSIONNAME, ZPROCNAME 칸이 있습니다(확인 범위: iOS 27.0). 표 구조와 읽는 법은 [앱별 데이터 사용량 (DataUsage.sqlite)](../../../02-artifacts/network/data-usage.md) 에 있습니다.
+앱 DB 가 암호화되어 있거나 수집 범위에 들어오지 않았으면 `DataUsage.sqlite` 로 그 앱의 셀룰러 송신량과 시각을 봅니다[1]. ZLIVEUSAGE 표의 ZWWANOUT 칸이 셀룰러 송신량이고 단위는 바이트이며, ZPROCESS 표의 ZFIRSTTIMESTAMP 는 그 프로세스를 처음 본 때, ZTIMESTAMP 는 가장 최근 활동을 가리킵니다[1]. 시각은 Mac 절대 시각입니다[1]. 관찰한 백업의 ZLIVEUSAGE 표에는 ZKIND, ZMETADATA, ZTAG, ZHASPROCESS, ZBILLCYCLEEND, ZTIMESTAMP, ZWWANIN, ZWWANOUT, ZBUNDLENAME, ZPROCNAME 칸이, ZPROCESS 표에는 ZFIRSTTIMESTAMP, ZTIMESTAMP, ZBUNDLENAME, ZEXTENSIONNAME, ZPROCNAME 칸이 있습니다. 표 구조와 읽는 법은 [앱별 데이터 사용량 (DataUsage.sqlite)](../../../02-artifacts/network/data-usage.md) 에 있습니다.
 
 ## 분석 흐름
 
@@ -67,7 +67,7 @@ WhatsApp 은 대화 DB 가 `ChatStorage.sqlite` 이고, 메시지는 ZWAMESSAGE 
 
 첨부 행이 있다는 사실만으로 받은 사람이 파일을 저장하거나 열었다고 쓰지 않습니다. 보낸 쪽 기기의 기록은 보낸 쪽에서 일어난 일까지만 말합니다.
 
-`DataUsage.sqlite` 는 Wi-Fi 사용량을 기록하지 않습니다[1]. 그래서 셀룰러 송신량이 적거나 0 이어도 그 앱이 Wi-Fi 로 많이 보냈을 수 있고, Wi-Fi·셀룰러를 모두 담는 `netusage.sqlite` 는 파일 시스템 추출에서만 얻습니다[1]. 관찰한 로컬 백업에도 `netusage.sqlite` 는 없었습니다(확인 범위: iOS 27.0).
+`DataUsage.sqlite` 는 Wi-Fi 사용량을 기록하지 않습니다[1]. 그래서 셀룰러 송신량이 적거나 0 이어도 그 앱이 Wi-Fi 로 많이 보냈을 수 있고, Wi-Fi·셀룰러를 모두 담는 `netusage.sqlite` 는 파일 시스템 추출에서만 얻습니다[1]. 관찰한 로컬 백업에도 `netusage.sqlite` 는 없었습니다.
 
 복원을 거친 기기는 옛 기기의 사용량 기록까지 이어져서, 2013년 기록이 남은 예가 있습니다[1]. ZFIRSTTIMESTAMP 가 조사 대상 기기의 구입 시기보다 이르면 복원 이력을 [초기화와 복원 흔적 (Erase·Restore)](../../../02-artifacts/system-account/erase-restore.md) 에서 확인합니다.
 

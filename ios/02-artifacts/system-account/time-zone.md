@@ -16,7 +16,7 @@ Apple 은 날짜와 시간을 자동으로 맞추려면 인터넷 연결과 최�
 
 스크린 타임 암호가 켜져 있거나 기기 제한이 있는 회사 관리 프로파일이 설치되어 있으면 이 설정이 흐리게 보이고 고를 수 없다고 합니다[6]. 이 안내에서 끌어낸 해석으로는, 자동 설정이 켜진 기기는 사용자가 움직이는 대로 시간대가 바뀌니 시간대가 바뀐 기록이 곧 사용자가 손으로 바꾼 흔적은 아닙니다. 반대로 설정을 고를 수 없는 기기였다면 사용자가 바꿨다고 보기 어렵습니다. 이 둘은 [6] 의 설명에서 이끌어 낸 추론이고, 기기에서 실제로 어떻게 기록되는지 확인한 자료는 아닙니다.
 
-시간대 설정 말고도 여러 구성 요소가 "무엇을 할 때 시간대가 무엇이었는지" 를 자기 설정 파일에 적어 둡니다. 관찰한 백업에서는 App Store, 게임, 스크린 타임, chronod 의 설정 파일과 iCloud 백업 설정에 시간대 이름이나 GMT 와의 차이를 담는 키가 있었습니다 (확인 범위: iOS 27.0).
+시간대 설정 말고도 여러 구성 요소가 "무엇을 할 때 시간대가 무엇이었는지" 를 자기 설정 파일에 적어 둡니다. 관찰한 백업에서는 App Store, 게임, 스크린 타임, chronod 의 설정 파일과 iCloud 백업 설정에 시간대 이름이나 GMT 와의 차이를 담는 키가 있었습니다.
 
 ## 위치와 버전별 차이
 
@@ -29,11 +29,11 @@ iOS 15 이미지를 분석한 글은 시간대와 시간대 설정을 아래 파
 | 현재 시간대 | `/private/var/db/timezone/localtime` |
 | 시간대 설정 | `/private/var/db/timed/Library/Preferences/com.apple.preferences.datetime.plist` |
 
-관찰한 로컬 백업에는 `/private/var/db/timed/` 나 `/private/var/db/timezone/` 에 해당하는 도메인 경로가 나오지 않았습니다 (확인 범위: iOS 27.0). 그래서 로컬 백업만으로는 이 두 파일을 보지 못할 가능성이 높지만, 백업에 들어가지 않는다고 확인한 자료는 없습니다. 수집 방식별 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
+관찰한 로컬 백업에는 `/private/var/db/timed/` 나 `/private/var/db/timezone/` 에 해당하는 도메인 경로가 나오지 않았습니다. 그래서 로컬 백업만으로는 이 두 파일을 보지 못할 가능성이 높지만, 백업에 들어가지 않는다고 확인한 자료는 없습니다. 수집 방식별 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 ### 로컬 백업에 남는 시간대 흔적
 
-관찰한 백업에서 시간대를 담는 키는 아래와 같았습니다 (확인 범위: iOS 27.0). 모두 `HomeDomain :: Library/Preferences/` 아래 파일이고 값은 보지 않았습니다.
+관찰한 백업에서 시간대를 담는 키는 아래와 같았습니다. 모두 `HomeDomain :: Library/Preferences/` 아래 파일이고 값은 보지 않았습니다.
 
 | 파일 | 키 | 짝이 되는 시각 키 |
 |---|---|---|
@@ -47,7 +47,7 @@ Forensafe 는 `/private/var/mobile/Library/Preferences/com.apple.AppStore.plist`
 
 ### 앱 DB 안의 시간대 칸
 
-시각과 함께 시간대를 적는 칸이 있는 앱 DB 도 있었습니다 (확인 범위: iOS 27.0).
+시각과 함께 시간대를 적는 칸이 있는 앱 DB 도 있었습니다.
 
 | DB | 표 | 칸 |
 |---|---|---|
@@ -64,7 +64,7 @@ iOS 15 와 iOS 27 사이에 시간대 파일 위치나 키 이름이 바뀌었�
 
 ## 구조
 
-`com.apple.preferences.datetime.plist` 와 위 표의 설정 파일은 plist 입니다. 관찰한 설정 파일에서 시간대는 `LastTimeZoneName` 처럼 문자열 이름으로 적히거나, `timeZoneSecondsFromGMT` 처럼 이름으로 보아 GMT 와의 차이를 초로 적는 키로 나타났습니다 (확인 범위: iOS 27.0). 서머타임이 있는 지역은 같은 시간대 이름이라도 계절마다 GMT 와의 차이가 달라서, 이름과 차이가 둘 다 있으면 함께 봅니다. plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+`com.apple.preferences.datetime.plist` 와 위 표의 설정 파일은 plist 입니다. 관찰한 설정 파일에서 시간대는 `LastTimeZoneName` 처럼 문자열 이름으로 적히거나, `timeZoneSecondsFromGMT` 처럼 이름으로 보아 GMT 와의 차이를 초로 적는 키로 나타났습니다. 서머타임이 있는 지역은 같은 시간대 이름이라도 계절마다 GMT 와의 차이가 달라서, 이름과 차이가 둘 다 있으면 함께 봅니다. plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 `/private/var/db/timezone/localtime` 의 파일 형식은 이번 자료로 확인하지 못했습니다[1].
 

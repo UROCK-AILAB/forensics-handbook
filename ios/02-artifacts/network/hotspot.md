@@ -16,7 +16,7 @@ nav_order: 710
 
 인스턴트 핫스폿 (Instant Hotspot)은 같은 Apple 계정으로 로그인했거나 가족 공유로 묶인 기기끼리 쓰는 방식입니다 [4]. 제공 기기는 아이폰이나 셀룰러 아이패드여야 하고 요금제에 개인용 핫스폿이 들어 있어야 하며, 두 기기 모두 Wi-Fi 와 블루투스를 켠 채 가까이 있어야 합니다 [4]. 인스턴트 핫스폿으로 붙을 때는 제공 기기에서 "Allow Others to Join" 을 켜지 않아도 되고, 같은 Apple 계정 기기와 가족 구성원의 기기는 Wi-Fi 암호를 묻지 않습니다 [4]. 접속 기기에는 "Auto-Join Hotspot" 설정이 있어 Ask to Join(물어봄)과 Automatic(자동) 중에서 고르고, 가족 공유 기기에 대해서는 Automatic(자동으로 붙음)과 Ask for Approval(허락을 물음) 중에서 고릅니다 [4].
 
-접속 기기가 핫스폿에 Wi-Fi 로 붙으면 일반 무선 공유기(AP)에 붙을 때와 같은 파일에 네트워크 기록과 연결 시각이 남습니다 [1]. 제공 기기에서는 앱별 데이터 사용량 DB 에 핫스폿을 켠 흔적이 남을 때가 있고 [1], 로컬 백업에는 핫스폿 설정과 관련된 이름의 plist 도 들어 있습니다(확인 범위: iOS 27.0).
+접속 기기가 핫스폿에 Wi-Fi 로 붙으면 일반 무선 공유기(AP)에 붙을 때와 같은 파일에 네트워크 기록과 연결 시각이 남습니다 [1]. 제공 기기에서는 앱별 데이터 사용량 DB 에 핫스폿을 켠 흔적이 남을 때가 있고 [1], 로컬 백업에는 핫스폿 설정과 관련된 이름의 plist 도 들어 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -27,21 +27,21 @@ nav_order: 710
 | `/private/var/preferences/com.apple.wifi.known-networks.plist` | 처음 연결, 연결 끝, 자동 재연결, 사용자 재연결 시각 | [1] |
 | `/private/var/preferences/SystemConfiguration/com.apple.wifi-private-mac-networks.plist` | 처음 연결, 연결 끝, 가장 최근 연결 시각 | [1] |
 | `/var/mobile/Library/Preferences/com.apple.networkserviceproxy.plist` | 네트워크 세션의 시작·끝 시각 | [1] |
-| 백업 `HomeDomain :: Library/Preferences/com.apple.networkserviceproxy.plist` | 위 파일의 백업 속 위치 | 관찰(확인 범위: iOS 27.0) |
-| 백업 `HomeDomain :: Library/Preferences/com.apple.wifi.removed-networks.plist` | 지운 Wi-Fi 네트워크 목록 | 관찰(확인 범위: iOS 27.0) |
+| 백업 `HomeDomain :: Library/Preferences/com.apple.networkserviceproxy.plist` | 위 파일의 백업 속 위치 | 관찰 |
+| 백업 `HomeDomain :: Library/Preferences/com.apple.wifi.removed-networks.plist` | 지운 Wi-Fi 네트워크 목록 | 관찰 |
 
-관찰한 백업은 암호화하지 않은 로컬 백업이었고, 이 백업에는 `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi-private-mac-networks.plist` 가 보이지 않았습니다(확인 범위: iOS 27.0). 그 대신 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-class-d-private-mac-networks.plist`(키 이름을 가린 list 하나)와 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-networks.plist`(비어 있음)가 보였습니다(확인 범위: iOS 27.0). 앞의 두 파일이 로컬 백업에 들어가는지, 암호화 백업이면 달라지는지는 확인하지 못했으니 파일 시스템 추출본과 백업을 나눠서 봐야 합니다.
+관찰한 백업은 암호화하지 않은 로컬 백업이었고, 이 백업에는 `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi-private-mac-networks.plist` 가 보이지 않았습니다. 그 대신 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-class-d-private-mac-networks.plist`(키 이름을 가린 list 하나)와 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-networks.plist`(비어 있음)가 보였습니다. 앞의 두 파일이 로컬 백업에 들어가는지, 암호화 백업이면 달라지는지는 확인하지 못했으니 파일 시스템 추출본과 백업을 나눠서 봐야 합니다.
 
 ### 제공 기기(핫스폿을 켠 아이폰)
 
 | 경로 | 알려 주는 것 | 출처 |
 |---|---|---|
-| `/private/var/wireless/Library/Databases/DataUsage.sqlite` (백업 `WirelessDomain :: Library/Databases/DataUsage.sqlite`) | ZPROCESS 표의 지운 레코드로 핫스폿을 켠 흔적 | [1][2], 백업 위치는 관찰(확인 범위: iOS 27.0) |
+| `/private/var/wireless/Library/Databases/DataUsage.sqlite` (백업 `WirelessDomain :: Library/Databases/DataUsage.sqlite`) | ZPROCESS 표의 지운 레코드로 핫스폿을 켠 흔적 | [1][2], 백업 위치는 관찰 |
 | `/private/var/networkd/netusage.sqlite` | 프로세스별 Wi-Fi·WWAN 송수신량(핫스폿과의 관계는 확인하지 못함) | [2] |
-| 백업 `HomeDomain :: Library/Preferences/com.apple.MobileInternetSharing.plist` | 핫스폿 상태로 보이는 키(뜻은 확인하지 못함) | 관찰(확인 범위: iOS 27.0) |
-| 백업 `HomeDomain :: Library/Preferences/com.apple.Preferences.plist` | `PersonalHotspotDiabled` 키(뜻은 확인하지 못함) | 관찰(확인 범위: iOS 27.0) |
+| 백업 `HomeDomain :: Library/Preferences/com.apple.MobileInternetSharing.plist` | 핫스폿 상태로 보이는 키(뜻은 확인하지 못함) | 관찰 |
+| 백업 `HomeDomain :: Library/Preferences/com.apple.Preferences.plist` | `PersonalHotspotDiabled` 키(뜻은 확인하지 못함) | 관찰 |
 
-netusage.sqlite 는 파일 시스템 추출에서만 얻을 수 있고 [2], 관찰한 로컬 백업에도 보이지 않았습니다(확인 범위: iOS 27.0).
+netusage.sqlite 는 파일 시스템 추출에서만 얻을 수 있고 [2], 관찰한 로컬 백업에도 보이지 않았습니다.
 
 ### 버전별로 확인된 범위
 
@@ -70,7 +70,7 @@ netusage.sqlite 는 파일 시스템 추출에서만 얻을 수 있고 [2], 관�
 
 ### 접속 기기: networkserviceproxy.plist
 
-`NSPServiceStatusManagerInfo` 값 안에는 plist 가 한 번 더 들어 있고, 그 안에서 `PrivacyProxyNetworkStatusTimeNetworkStartTime`(n번째 세션 시작)과 `PrivacyProxyNetworkStatusTimeNetworkEndTime`(n번째 세션 끝)을 찾습니다 [1]. [1]의 시험에서는 네 번 연결했을 때 1~3번째 세션의 시작·끝만 보였고 마지막 네 번째 세션의 시각은 확인되지 않았습니다. 관찰한 백업에서 이 파일의 최상위 키는 다음과 같았습니다(확인 범위: iOS 27.0).
+`NSPServiceStatusManagerInfo` 값 안에는 plist 가 한 번 더 들어 있고, 그 안에서 `PrivacyProxyNetworkStatusTimeNetworkStartTime`(n번째 세션 시작)과 `PrivacyProxyNetworkStatusTimeNetworkEndTime`(n번째 세션 끝)을 찾습니다 [1]. [1]의 시험에서는 네 번 연결했을 때 1~3번째 세션의 시작·끝만 보였고 마지막 네 번째 세션의 시각은 확인되지 않았습니다. 관찰한 백업에서 이 파일의 최상위 키는 다음과 같았습니다.
 
 ```
 NSPRebootFetchCount (int)
@@ -83,7 +83,7 @@ NSPRebootFetchLastDate (datetime)
 
 ### 접속 기기: removed-networks.plist
 
-지운 네트워크는 SSID 별 항목으로 남고, 항목 안에 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다(확인 범위: iOS 27.0).
+지운 네트워크는 SSID 별 항목으로 남고, 항목 안에 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다.
 
 ```
 wifi.network.ssid.<SSID>: {RemovedAt, SSID, SupportedSecurityTypes}
@@ -91,19 +91,19 @@ wifi.network.ssid.<SSID>: {RemovedAt, SSID, SupportedSecurityTypes}
 
 ### 제공 기기: DataUsage.sqlite
 
-DataUsage.sqlite 의 표 구조와 사용량 해석은 [앱별 데이터 사용량](data-usage.md) 페이지에서 다룹니다. 핫스폿과 관련해서는 ZPROCESS 표를 보고, 관찰한 백업에서 칸 이름은 아래와 같았습니다(확인 범위: iOS 27.0).
+DataUsage.sqlite 의 표 구조와 사용량 해석은 [앱별 데이터 사용량](data-usage.md) 페이지에서 다룹니다. 핫스폿과 관련해서는 ZPROCESS 표를 보고, 관찰한 백업에서 칸 이름은 아래와 같았습니다.
 
 ```
 ZPROCESS: Z_PK, Z_ENT, Z_OPT, ZFIRSTTIMESTAMP, ZTIMESTAMP, ZBUNDLENAME, ZEXTENSIONNAME, ZPROCNAME
 ```
 
-ZTIMESTAMP 는 가장 최근 활동, ZFIRSTTIMESTAMP 는 처음 쓴 때입니다 [2]. [1]은 ZPROCESS 에서 지워진 레코드의 ZTIMESTAMP 값이 있으면 핫스폿이 켜졌던 것으로 봅니다. [1]의 판본에 따라 칸 이름이 "ZTIMESTMAP" 로 적혀 보일 수 있지만, 관찰한 백업의 칸 이름은 ZTIMESTAMP 였습니다(확인 범위: iOS 27.0). 핫스폿 트래픽이 ZPROCNAME 에 어떤 프로세스 이름으로 잡히는지는 확인하지 못했습니다.
+ZTIMESTAMP 는 가장 최근 활동, ZFIRSTTIMESTAMP 는 처음 쓴 때입니다 [2]. [1]은 ZPROCESS 에서 지워진 레코드의 ZTIMESTAMP 값이 있으면 핫스폿이 켜졌던 것으로 봅니다. [1]의 판본에 따라 칸 이름이 "ZTIMESTMAP" 로 적혀 보일 수 있지만, 관찰한 백업의 칸 이름은 ZTIMESTAMP 였습니다. 핫스폿 트래픽이 ZPROCNAME 에 어떤 프로세스 이름으로 잡히는지는 확인하지 못했습니다.
 
-DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], 관찰한 백업의 ZLIVEUSAGE 표에도 Wi-Fi 칸 없이 ZWWANIN·ZWWANOUT 만 있었습니다(확인 범위: iOS 27.0).
+DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], 관찰한 백업의 ZLIVEUSAGE 표에도 Wi-Fi 칸 없이 ZWWANIN·ZWWANOUT 만 있었습니다.
 
 ### 뜻을 확인하지 못한 항목
 
-아래 항목은 이름이 핫스폿·네트워크 공유와 관련되어 보이지만 값의 뜻을 확인하지 못했습니다. 모두 관찰한 백업에서 이름만 확인했습니다(확인 범위: iOS 27.0).
+아래 항목은 이름이 핫스폿·네트워크 공유와 관련되어 보이지만 값의 뜻을 확인하지 못했습니다. 모두 관찰한 백업에서 이름만 확인했습니다.
 
 | 위치 | 키·항목 | 비고 |
 |---|---|---|
@@ -137,11 +137,11 @@ known-networks, private-mac-networks, networkserviceproxy 의 시각 값은 CFAb
 
 핫스폿 네트워크와 일반 AP 를 plist 키 하나로 가려내는 방법은 확인하지 못했습니다. 지금은 네트워크 이름이 제공 기기 이름과 맞는지, 연결 시각이 다른 흔적과 맞는지를 함께 보고 판단해야 합니다.
 
-[1]은 접속 기기 쪽 흔적을 기기 안의 경로로 적었고, 관찰한 로컬 백업에서는 known-networks 와 private-mac-networks 파일이 보이지 않았습니다(확인 범위: iOS 27.0). 로컬 백업만 받았다면 접속 흔적이 없다고 결론 내리기 전에 수집 범위부터 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)).
+[1]은 접속 기기 쪽 흔적을 기기 안의 경로로 적었고, 관찰한 로컬 백업에서는 known-networks 와 private-mac-networks 파일이 보이지 않았습니다. 로컬 백업만 받았다면 접속 흔적이 없다고 결론 내리기 전에 수집 범위부터 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)).
 
 제공 기기의 핵심 흔적은 지운 레코드라서 SQLite 여유 공간이나 WAL 에서 복구해야 합니다. 복구 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지를 봅니다.
 
-사용자가 Wi-Fi 네트워크 목록에서 네트워크를 지우면 관찰한 백업처럼 `com.apple.wifi.removed-networks.plist` 에 `RemovedAt` 이 붙은 항목이 생길 수 있지만(확인 범위: iOS 27.0), 지운 네트워크 중 핫스폿이 들어가는지는 확인하지 못했습니다. 핫스폿 기본 주소 대역, 통합 로그에서 핫스폿 켜기·클라이언트 접속을 찾을 프로세스 이름, KnowledgeC·바이옴에 핫스폿 상태가 남는지도 확인하지 못했으니 이런 내용을 보고서에 쓸 때는 직접 검증한 결과만 씁니다.
+사용자가 Wi-Fi 네트워크 목록에서 네트워크를 지우면 관찰한 백업처럼 `com.apple.wifi.removed-networks.plist` 에 `RemovedAt` 이 붙은 항목이 생길 수 있지만, 지운 네트워크 중 핫스폿이 들어가는지는 확인하지 못했습니다. 핫스폿 기본 주소 대역, 통합 로그에서 핫스폿 켜기·클라이언트 접속을 찾을 프로세스 이름, KnowledgeC·바이옴에 핫스폿 상태가 남는지도 확인하지 못했으니 이런 내용을 보고서에 쓸 때는 직접 검증한 결과만 씁니다.
 
 ## 직접 분석해 보기
 

@@ -50,7 +50,7 @@ Apple 플랫폼 보안 문서에 따르면 아이폰은 잠긴 뒤 1시간이 �
 
 ## 함정과 한계
 
-USB 제한 모드와 잠금 모드(Lockdown Mode)는 서로 다른 기능입니다. 관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.lockdownmoded.plist` 에는 `LDMExemptCNHistoryToken` 키가 있었는데(확인 범위: iOS 27.0), 파일 이름으로 보아 잠금 모드 쪽 설정으로 읽히고 USB 제한 모드와는 관계가 없습니다. 이 파일의 정확한 용도는 공식 자료로 확인하지 못했습니다.
+USB 제한 모드와 잠금 모드(Lockdown Mode)는 서로 다른 기능입니다. 관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.lockdownmoded.plist` 에는 `LDMExemptCNHistoryToken` 키가 있었는데, 파일 이름으로 보아 잠금 모드 쪽 설정으로 읽히고 USB 제한 모드와는 관계가 없습니다. 이 파일의 정확한 용도는 공식 자료로 확인하지 못했습니다.
 
 NIST SP 800-101 Rev.1 은 모바일 기기 전반을 다루는 오래된 지침이라 USB 제한 모드 같은 iOS 세부 동작은 다루지 않습니다. 이 기능이 처음 들어간 iOS 버전, 데이터 연결이 막힌 상태에서도 충전은 되는지, 오래 잠긴 기기가 스스로 재시동하는지는 이번에 연 자료로 확인하지 못해서 여기에 적지 않습니다.
 

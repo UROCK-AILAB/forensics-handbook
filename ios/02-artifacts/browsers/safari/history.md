@@ -27,7 +27,7 @@ iCloud 로 방문 기록을 맞추는 설정이면 다른 기기에서 본 페�
 | 프로필별 방문 기록 | `Safari/Profiles/*/History.db` | iLEAPP 가 iOS 17 이후용으로 찾는 경로입니다[1] |
 | 로컬 백업 | 관찰한 백업(암호화 안 함)에는 없음 | Apple 은 웹 사이트 기록이 암호화한 백업에만 들어간다고 안내합니다[4] |
 
-관찰한 백업은 암호화하지 않은 백업이었고 History.db 가 목록에 없었습니다(확인 범위: iOS 27.0). Apple 지원 문서는 저장된 암호, Wi-Fi 설정, 건강 데이터, 통화 기록과 함께 "웹 사이트 기록(Website history)" 을 암호화한 백업에만 들어가는 항목으로 듭니다[4]. 그래서 백업으로 방문 기록을 보려면 백업 암호를 건 백업이 필요하고, 백업 형식은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
+관찰한 백업은 암호화하지 않은 백업이었고 History.db 가 목록에 없었습니다. Apple 지원 문서는 저장된 암호, Wi-Fi 설정, 건강 데이터, 통화 기록과 함께 "웹 사이트 기록(Website history)" 을 암호화한 백업에만 들어가는 항목으로 듭니다[4]. 그래서 백업으로 방문 기록을 보려면 백업 암호를 건 백업이 필요하고, 백업 형식은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
 ## 구조
 
@@ -38,7 +38,7 @@ iCloud 로 방문 기록을 맞추는 설정이면 다른 기기에서 본 페�
 
 `history_visits.history_item` 은 `history_items.id` 를 가리키고, iLEAPP 도 이 조건으로 두 표를 잇습니다[1]. `redirect_source` 와 `redirect_destination` 은 URL 이 아니라 다른 방문의 `id` 를 가리키고, iLEAPP 는 이 id 를 URL 로 바꿔 보여 줍니다[1]. visit id 는 DB 하나 안에서만 유일해서[1], 기본 DB 와 프로필 DB 를 합칠 때 id 가 겹쳐도 같은 방문이 아닙니다. 삭제 흔적을 담는 표나 iCloud 동기화용 표가 따로 있는지는 이번에 연 자료로 확인하지 못했습니다.
 
-방문 기록과 이어진 이름의 설정 파일도 백업에 남습니다(확인 범위: iOS 27.0).
+방문 기록과 이어진 이름의 설정 파일도 백업에 남습니다.
 
 | 위치 | 키 |
 |---|---|
@@ -91,7 +91,7 @@ ORDER BY v.visit_time;
 
 지금 열려 있거나 닫은 탭은 [탭과 세션 (Tabs)](tabs.md)에서, 저장해 둔 주소는 [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks-reading-list.md)에서 맞춰 봅니다. 바이옴의 사파리 스트림은 [바이옴 (Biome)](../../app-usage/biome/index.md)에서 다룹니다.
 
-History.db 가 없는 암호화 안 한 백업에서도 아래 DB 는 보였습니다(확인 범위: iOS 27.0). 모두 AppDomain-com.apple.mobilesafari 아래이고 PerSitePreferences.db 만 AppDomainGroup-group.com.apple.safari 아래에 있으며, 각 칸의 시각 기준과 뜻은 확인하지 못했습니다.
+History.db 가 없는 암호화 안 한 백업에서도 아래 DB 는 보였습니다. 모두 AppDomain-com.apple.mobilesafari 아래이고 PerSitePreferences.db 만 AppDomainGroup-group.com.apple.safari 아래에 있으며, 각 칸의 시각 기준과 뜻은 확인하지 못했습니다.
 
 | 파일 | 표(칸) |
 |---|---|

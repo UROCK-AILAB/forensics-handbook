@@ -41,7 +41,7 @@ nav_order: 1620
 
 1. **`shutdown.log` 에서 낯선 경로를 찾습니다.** 재부팅 때 남은 프로세스 가운데 `/private/var/db/` 나 `/private/var/tmp/` 아래에서 실행된 것이 있는지 봅니다 [4]. 덮어쓰는 버전이라면 파일에 마지막 재부팅 한 번의 기록만 있다는 점을 함께 적습니다.
 
-2. **데이터 사용량 표 둘을 견줍니다.** 관찰한 백업에서는 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에 다음 두 표가 있었습니다(확인 범위: iOS 27.0).
+2. **데이터 사용량 표 둘을 견줍니다.** 관찰한 백업에서는 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에 다음 두 표가 있었습니다.
 
    ```
    ZPROCESS:   ZFIRSTTIMESTAMP, ZTIMESTAMP, ZBUNDLENAME, ZPROCNAME …
@@ -54,15 +54,15 @@ nav_order: 1620
 
 4. **공개 지표와 대조합니다.** MVT 는 `mvt download-iocs` 로 STIX2 지표를 내려받고, AmnestyTech/investigations 와 mvt-project/mvt-indicators 저장소에 공개 지표가 있습니다 [7]. Securelist 는 Triangulation 의 명령 서버 도메인 15개를 공개했습니다 [1]. 대조 절차는 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md)을 따릅니다.
 
-5. **백업에 없는 기록을 적어 둡니다.** 네트워크 사용량 DB `netusage.sqlite` 는 백업에 들어가지 않는다고 Amnesty 가 적었고 [3], 관찰한 백업에도 없었습니다(확인 범위: iOS 27.0). `com.apple.identityservices.idstatuscache.plist` 도 MVT 가 iOS 14.7 이전 백업에만 있다고 적었고 [2], 관찰한 백업에 없었습니다(확인 범위: iOS 27.0). 이런 기록이 필요하면 전체 파일 시스템 수집을 검토합니다.
+5. **백업에 없는 기록을 적어 둡니다.** 네트워크 사용량 DB `netusage.sqlite` 는 백업에 들어가지 않는다고 Amnesty 가 적었고 [3], 관찰한 백업에도 없었습니다. `com.apple.identityservices.idstatuscache.plist` 도 MVT 가 iOS 14.7 이전 백업에만 있다고 적었고 [2], 관찰한 백업에 없었습니다. 이런 기록이 필요하면 전체 파일 시스템 수집을 검토합니다.
 
-6. **가까운 사람의 감시를 따로 봅니다.** 공개된 스토커웨어 지표는 주로 Android 용이라서 [7], iOS 에서는 지표 대조보다 계정·구성 프로파일·앱 권한·위치 공유를 점검하는 쪽이 중심이 됩니다. Apple 은 iOS 16 이상에서 이런 공유와 접근을 점검하는 안전 점검 (Safety Check)을 안내합니다 [8]. 관찰한 백업에는 권한 기록 `HomeDomain :: Library/TCC/TCC.db` 가 있었습니다(확인 범위: iOS 27.0). 계정 쪽 흔적은 [계정 탈취 흔적](account-takeover.md)에서 봅니다.
+6. **가까운 사람의 감시를 따로 봅니다.** 공개된 스토커웨어 지표는 주로 Android 용이라서 [7], iOS 에서는 지표 대조보다 계정·구성 프로파일·앱 권한·위치 공유를 점검하는 쪽이 중심이 됩니다. Apple 은 iOS 16 이상에서 이런 공유와 접근을 점검하는 안전 점검 (Safety Check)을 안내합니다 [8]. 관찰한 백업에는 권한 기록 `HomeDomain :: Library/TCC/TCC.db` 가 있었습니다. 계정 쪽 흔적은 [계정 탈취 흔적](account-takeover.md)에서 봅니다.
 
 ## 흔한 오판
 
 - **재부팅해서 증상이 사라졌으니 괜찮다고 봅니다.** Pegasus 는 재부팅 뒤 지속하지 않는 것으로 보였고 [3], iOS 26 이후에는 재부팅으로 `shutdown.log` 의 예전 기록도 사라집니다 [5]. 증상이 사라진 것과 흔적이 없는 것은 다릅니다.
 - **지표에 걸리지 않았으니 감염이 없다고 씁니다.** Triangulation 은 처음 메시지와 첨부를 스스로 지웠습니다 [1]. 지표 대조 결과는 "공개 지표와 일치하는 기록을 찾지 못했다" 까지만 말합니다.
-- **공개 사례에 나온 설정 파일이 있으니 감염이라고 봅니다.** Triangulation 이 바꾼 `com.apple.imservice.ids.FaceTime.plist` 는 관찰한 정상 백업에도 있었습니다(확인 범위: iOS 27.0). 파일이 있다는 것보다 수정 시각과 다른 흔적의 시각이 겹치는지를 봅니다.
+- **공개 사례에 나온 설정 파일이 있으니 감염이라고 봅니다.** Triangulation 이 바꾼 `com.apple.imservice.ids.FaceTime.plist` 는 관찰한 정상 백업에도 있었습니다. 파일이 있다는 것보다 수정 시각과 다른 흔적의 시각이 겹치는지를 봅니다.
 - **스토커웨어 지표에 걸리지 않았으니 감시가 없다고 봅니다.** 공개 지표는 주로 Android 용입니다 [7].
 
 ## 보고서 문장 예

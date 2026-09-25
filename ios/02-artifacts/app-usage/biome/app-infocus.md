@@ -27,7 +27,7 @@ iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJE
 
 iLEAPP 는 2026-09-03 에 고친 파서에서 `*/[Bb]iome/streams/restricted/App.InFocus/local/*` 와 `*/[Bb]iome/streams/restricted/App.InFocus/remote/*` 두 경로 규칙으로 이 스트림을 찾습니다[5]. `[Bb]` 로 대소문자를 모두 받아서 `/private/var/db/biome` 과 `/private/var/mobile/Library/Biome` 양쪽을 잡습니다. 스트림 이름이 `_DKEvent.App.InFocus` 인 경우와 `App.InFocus` 인 경우가 각각 어느 iOS 버전, 어느 영역에 해당하는지는 이번 자료로 정확히 가르지 못해서, 검체에서는 두 이름을 모두 찾아봅니다. iOS 27 에서의 위치도 확인하지 못했습니다.
 
-관찰한 백업의 HomeDomain `Library/Preferences/com.apple.appstored.plist` 에는 `AppUsageBiomeStartDate` (datetime) 라는 키가 있지만, 이 키가 `App.InFocus` 와 관련이 있는지는 확인하지 못했고 `App.InFocus` SEGB 파일은 관찰 기록에 없습니다(확인 범위: iOS 27.0). 바이옴을 얻으려면 어떤 수집이 필요한지는 [저장 위치와 스트림 (Streams)](streams.md)의 수집 범위 절에 있습니다.
+관찰한 백업의 HomeDomain `Library/Preferences/com.apple.appstored.plist` 에는 `AppUsageBiomeStartDate` (datetime) 라는 키가 있지만, 이 키가 `App.InFocus` 와 관련이 있는지는 확인하지 못했고 `App.InFocus` SEGB 파일은 관찰 기록에 없습니다. 바이옴을 얻으려면 어떤 수집이 필요한지는 [저장 위치와 스트림 (Streams)](streams.md)의 수집 범위 절에 있습니다.
 
 ## 구조
 

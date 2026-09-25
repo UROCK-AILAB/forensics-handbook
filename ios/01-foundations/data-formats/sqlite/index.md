@@ -12,11 +12,11 @@ iOS 의 메시지·메모·사진 보관함 같은 주요 기록은 SQLite 파�
 
 ## 왜 중요한가
 
-관찰한 로컬 백업에서 Apple 영역의 DB 파일만 131개였고, 백업 파일 목록인 `Manifest.db` 도 WAL 곁 파일을 둔 SQLite 였습니다(확인 범위: iOS 27.0).
+관찰한 로컬 백업에서 Apple 영역의 DB 파일만 131개였고, 백업 파일 목록인 `Manifest.db` 도 WAL 곁 파일을 둔 SQLite 였습니다.
 
 SQL 질의는 커밋된 살아 있는 행만 보여 주고, 본 파일만 따로 열면 `-wal` 에 있는 최신 변경마저 빠집니다. 지운 행의 흔적은 페이지 안 빈 블록(freeblock)·빈 페이지 목록(freelist)·할당되지 않은 영역에 남을 수 있어서, 파일 구조를 알아야 이 부분까지 읽을 수 있습니다. 도구 결과만 믿기도 어려운데, 공개 시험용 SQLite 포렌식 말뭉치(Nemetz 외, 2018)는 DB 77개로 되어 있고 그중 27개에 지운 레코드가 들어 있는데, 2018년에 도구 6종을 비교했을 때 77개를 모두 읽은 도구는 없었고 가장 나은 도구가 66개를 읽었습니다.
 
-SQLite 파일인지는 확장자가 아니라 파일 앞 16바이트로 가립니다. 관찰한 백업에는 `.sqlite`, `.db`, `.sqlitedb` 처럼 확장자가 여러 가지였고(예: `HomeDomain :: Library/com.apple.itunesstored/itunesstored_private.sqlitedb`, 확인 범위: iOS 27.0), SQLite 파일은 확장자와 상관없이 `SQLite format 3\000`(헥스 `53 51 4c 69 74 65 20 66 6f 72 6d 61 74 20 33 00`)으로 시작합니다.
+SQLite 파일인지는 확장자가 아니라 파일 앞 16바이트로 가립니다. 관찰한 백업에는 `.sqlite`, `.db`, `.sqlitedb` 처럼 확장자가 여러 가지였고(예: `HomeDomain :: Library/com.apple.itunesstored/itunesstored_private.sqlitedb`), SQLite 파일은 확장자와 상관없이 `SQLite format 3\000`(헥스 `53 51 4c 69 74 65 20 66 6f 72 6d 61 74 20 33 00`)으로 시작합니다.
 
 ## 한눈에 보기
 

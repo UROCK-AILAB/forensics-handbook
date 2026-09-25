@@ -20,7 +20,7 @@ nav_order: 520
 
 ### 음성 사서함
 
-기기 안에서는 `/private/var/mobile/Library/Voicemail/` 폴더이고, iLEAPP 는 이 폴더에서 `voicemail.db`, `*.amr`, `*.transcript` 를 찾습니다 [1]. 로컬 백업에서는 `HomeDomain :: Library/Voicemail/voicemail.db` 로 보였습니다 (확인 범위: iOS 27.0). 관찰은 DB 와 plist 의 이름만 다뤄서 같은 백업에 `.amr`·`.transcript` 파일이 들어 있었는지는 확인하지 못했습니다.
+기기 안에서는 `/private/var/mobile/Library/Voicemail/` 폴더이고, iLEAPP 는 이 폴더에서 `voicemail.db`, `*.amr`, `*.transcript` 를 찾습니다 [1]. 로컬 백업에서는 `HomeDomain :: Library/Voicemail/voicemail.db` 로 보였습니다. 관찰은 DB 와 plist 의 이름만 다뤄서 같은 백업에 `.amr`·`.transcript` 파일이 들어 있었는지는 확인하지 못했습니다.
 
 | 구분 | 내용 | 출처 |
 |---|---|---|
@@ -28,17 +28,17 @@ nav_order: 520
 | `map` 표가 있는 구성 | `voicemail.label` 과 `map.label` 로 `map`(`ROWID`, `account`, `label`)을 이어 붙여 어느 계정(회선)의 메시지인지 읽고, `callback_num` 대신 `receiver` 를 보여 줍니다 | [1] |
 | iOS 27.0 관찰 | `voicemail`, `deleted`, `map`, `sqlite_sequence`, `_SqliteDatabaseProperties` 표가 있습니다 | 관찰 |
 
-`map` 표가 어느 iOS 부터 생겼는지는 확인하지 못했습니다. 라이브 음성 사서함(Live Voicemail)이 남긴 메시지가 이 DB 에 어떻게 기록되는지도 확인하지 못했으며, 관찰한 설정 파일에 `ShowLiveVoicemailOnboarding` 키가 있다는 것만 알 수 있었습니다 (확인 범위: iOS 27.0).
+`map` 표가 어느 iOS 부터 생겼는지는 확인하지 못했습니다. 라이브 음성 사서함(Live Voicemail)이 남긴 메시지가 이 DB 에 어떻게 기록되는지도 확인하지 못했으며, 관찰한 설정 파일에 `ShowLiveVoicemailOnboarding` 키가 있다는 것만 알 수 있었습니다.
 
 ### 통화 녹음
 
-Apple 은 iOS 18 부터 전화와 FaceTime 음성 통화를 녹음할 수 있다고 밝혔고 [2], 그 밖의 저장 위치·안내 방식은 이번에 연 Apple 페이지에 없었습니다. 관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.TelephonyUtilities.plist` 에는 `StartRecordingDisclosureUtterance`, `EndRecordingDisclosureUtterance`, `StartRecordingBeepChecksum` 키가 있었는데 (확인 범위: iOS 27.0), 이름으로 보아 녹음 시작·끝의 안내 문구와 알림음에 관련된 설정으로 보이지만 뜻은 확인하지 못했습니다.
+Apple 은 iOS 18 부터 전화와 FaceTime 음성 통화를 녹음할 수 있다고 밝혔고 [2], 그 밖의 저장 위치·안내 방식은 이번에 연 Apple 페이지에 없었습니다. 관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.TelephonyUtilities.plist` 에는 `StartRecordingDisclosureUtterance`, `EndRecordingDisclosureUtterance`, `StartRecordingBeepChecksum` 키가 있었는데, 이름으로 보아 녹음 시작·끝의 안내 문구와 알림음에 관련된 설정으로 보이지만 뜻은 확인하지 못했습니다.
 
 ## 구조
 
 ### voicemail.db
 
-`voicemail` 표와 `deleted` 표의 칸은 똑같이 `ROWID`, `remote_uid`, `date`, `token`, `sender`, `callback_num`, `duration`, `expiration`, `trashed_date`, `flags`, `receiver`, `label`, `uuid` 입니다 (확인 범위: iOS 27.0). iLEAPP 가 쓰는 칸의 뜻은 다음과 같습니다 [1].
+`voicemail` 표와 `deleted` 표의 칸은 똑같이 `ROWID`, `remote_uid`, `date`, `token`, `sender`, `callback_num`, `duration`, `expiration`, `trashed_date`, `flags`, `receiver`, `label`, `uuid` 입니다. iLEAPP 가 쓰는 칸의 뜻은 다음과 같습니다 [1].
 
 | 칸 | 뜻 |
 |---|---|
@@ -57,7 +57,7 @@ iLEAPP 는 `trashed_date` 가 0 이고 `flags` 가 75 이면 "삭제됨", `trash
 
 ### 음성 사서함 곁의 설정 파일
 
-관찰한 백업에서 다음 키를 확인했습니다 (확인 범위: iOS 27.0). 값의 뜻은 확인하지 못했습니다.
+관찰한 백업에서 다음 키를 확인했습니다. 값의 뜻은 확인하지 못했습니다.
 
 | 파일 | 보인 키 |
 |---|---|
@@ -70,7 +70,7 @@ iLEAPP 는 `trashed_date` 가 0 이고 `flags` 가 75 이면 "삭제됨", `trash
 
 ### 통화 녹음의 단서
 
-통화 녹음 파일이 어디에 저장되는지는 확인하지 못했습니다. 메모 앱의 음성 녹음은 iOS 18 에서 메모 안에 오디오 개체로 들어가고 받아쓰기 글과 사용자가 바꾼 파일 이름이 메모 DB 의 `ZICCLOUDSYNCINGOBJECT` 표에 남는다는 분석이 있지만, 이 분석은 메모 앱에서 직접 녹음한 경우를 다루고 통화 녹음을 따로 구분하지 않았습니다 [3]. 통화 녹음도 같은 구조인지는 검체에서 확인할 가설로 다룹니다. 메모 DB 는 백업에서 `AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite` 로 보였고 `ZICCLOUDSYNCINGOBJECT` 표에 `ZNEEDSTRANSCRIPTION`, `ZFILESIZE` 칸이 있었습니다 (확인 범위: iOS 27.0). 메모 DB 의 구조는 [메모](../mail-cloud/notes.md) 에서 다룹니다.
+통화 녹음 파일이 어디에 저장되는지는 확인하지 못했습니다. 메모 앱의 음성 녹음은 iOS 18 에서 메모 안에 오디오 개체로 들어가고 받아쓰기 글과 사용자가 바꾼 파일 이름이 메모 DB 의 `ZICCLOUDSYNCINGOBJECT` 표에 남는다는 분석이 있지만, 이 분석은 메모 앱에서 직접 녹음한 경우를 다루고 통화 녹음을 따로 구분하지 않았습니다 [3]. 통화 녹음도 같은 구조인지는 검체에서 확인할 가설로 다룹니다. 메모 DB 는 백업에서 `AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite` 로 보였고 `ZICCLOUDSYNCINGOBJECT` 표에 `ZNEEDSTRANSCRIPTION`, `ZFILESIZE` 칸이 있었습니다. 메모 DB 의 구조는 [메모](../mail-cloud/notes.md) 에서 다룹니다.
 
 ## 증거로서 의미
 

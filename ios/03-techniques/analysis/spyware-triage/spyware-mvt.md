@@ -13,15 +13,15 @@ MVT(Mobile Verification Toolkit)로 백업·sysdiagnose·전체 파일 시스템
 
 Apple 위협 알림을 받았거나, 언론인·활동가처럼 국가·용병형 스파이웨어의 표적이 될 만한 사람이 감염을 의심할 때 씁니다. 위협 알림이 어떤 경로로 오는지는 [악성 코드·스파이웨어 흔적](index.md) 허브에 정리했습니다. 구성 프로파일·권한·위치 요청 기록은 [구성 프로파일과 설정으로 찾기](profiles-settings.md) 가, 가까운 사람이 설치한 감시 앱은 [감시 앱 흔적](stalkerware.md) 이 맡습니다.
 
-이 페이지에서 "(확인 범위: iOS 27.0)" 가 붙은 경로와 이름은 암호화하지 않은 로컬 백업에서 이름만 확인한 것이고, 값은 보지 않았습니다.
+이 페이지에서 "" 가 붙은 경로와 이름은 암호화하지 않은 로컬 백업에서 이름만 확인한 것이고, 값은 보지 않았습니다.
 
 ## 절차
 
-1. **자료를 모읍니다.** mvt-ios 는 로컬 백업, 전체 파일 시스템 추출, sysdiagnose 를 모두 입력으로 받습니다 [1]. 백업은 가능하면 암호화 백업으로 받습니다. MVT 문서는 모듈마다 "Backup (encrypted)" 표시를 달아 두었고, 통화 기록(Calls), Safari 방문 기록(SafariHistory), SafariBrowserState, InteractionC, Analytics, ShutdownLog 는 백업에서는 암호화 백업일 때만 나온다고 적었습니다 [1]. 받은 백업이 암호화됐는지는 `Manifest.plist` 의 `IsEncrypted` 키로 확인합니다 (확인 범위: iOS 27.0). sysdiagnose 는 기기를 재부팅하거나 iOS 를 올리기 전에 받습니다. 그 까닭은 아래 shutdown.log 절에 있고, 받는 법은 [sysdiagnose 묶음](../../../01-foundations/backups/sysdiagnose.md) 에 있습니다.
+1. **자료를 모읍니다.** mvt-ios 는 로컬 백업, 전체 파일 시스템 추출, sysdiagnose 를 모두 입력으로 받습니다 [1]. 백업은 가능하면 암호화 백업으로 받습니다. MVT 문서는 모듈마다 "Backup (encrypted)" 표시를 달아 두었고, 통화 기록(Calls), Safari 방문 기록(SafariHistory), SafariBrowserState, InteractionC, Analytics, ShutdownLog 는 백업에서는 암호화 백업일 때만 나온다고 적었습니다 [1]. 받은 백업이 암호화됐는지는 `Manifest.plist` 의 `IsEncrypted` 키로 확인합니다. sysdiagnose 는 기기를 재부팅하거나 iOS 를 올리기 전에 받습니다. 그 까닭은 아래 shutdown.log 절에 있고, 받는 법은 [sysdiagnose 묶음](../../../01-foundations/backups/sysdiagnose.md) 에 있습니다.
 
 2. **지표를 준비합니다.** MVT 가 읽는 지표는 STIX2 형식 파일(.stix2 또는 .json)이고, `--iocs` 로 여러 개를 넣을 수 있습니다 [2]. `mvt download-iocs` 로 공개 지표를 받고, `MVT_STIX2` 환경 변수에 콜론으로 구분한 경로를 넣어 두면 실행할 때마다 자동으로 불러옵니다 [2]. 공개 지표 저장소로는 AmnestyTech/investigations(Pegasus, Predator 등), mvt-project/mvt-indicators, Te-k/stalkerware-indicators(주로 Android 스토커웨어)가 있습니다 [2].
 
-3. **모듈 결과를 봅니다.** 지표에 걸린 항목부터 보고, 걸린 것이 없어도 아래 모듈의 결과는 따로 훑습니다. 표는 MVT 문서의 모듈 가운데 이 페이지에서 쓰는 것만 골랐고, 전체 목록은 [1] 의 표에 있습니다. 마지막 칸은 관찰한 백업(암호화 안 함)에서 해당 파일을 찾았는지입니다 (확인 범위: iOS 27.0).
+3. **모듈 결과를 봅니다.** 지표에 걸린 항목부터 보고, 걸린 것이 없어도 아래 모듈의 결과는 따로 훑습니다. 표는 MVT 문서의 모듈 가운데 이 페이지에서 쓰는 것만 골랐고, 전체 목록은 [1] 의 표에 있습니다. 마지막 칸은 관찰한 백업(암호화 안 함)에서 해당 파일을 찾았는지입니다.
 
    | 모듈 | 읽는 파일 (MVT 문서) [1] | 알려 주는 것 [1] | 관찰한 백업 |
    |---|---|---|---|
@@ -39,9 +39,9 @@ Apple 위협 알림을 받았거나, 언론인·활동가처럼 국가·용병�
    | Manifest | 백업의 `Manifest.db` | 파일 경로의 도메인 이름을 지표와 대조 | `Files`, `Properties` 표 있음 |
    | CacheFiles | `*Cache.db` | HTTP 요청·응답 | 파일별 확인 안 함 |
 
-   `OSAnalyticsADDaily` 파일에는 최상위 키 `netUsageBaseline` 아래에 프로세스·번들 ID 이름이 키로 들어 있었습니다 (확인 범위: iOS 27.0).
+   `OSAnalyticsADDaily` 파일에는 최상위 키 `netUsageBaseline` 아래에 프로세스·번들 ID 이름이 키로 들어 있었습니다.
 
-4. **프로세스 기록의 불일치를 봅니다.** Amnesty 는 2021년 Pegasus 조사에서 `DataUsage.sqlite` 와 `netusage.sqlite` 의 프로세스 기록을 핵심 근거로 썼습니다 [3]. 악성 프로세스의 이름은 `ZPROCESS` 표에서 지워졌는데 `ZLIVEUSAGE` 표의 대응 행은 남아 있었고, Amnesty 는 깨끗한 아이폰에서는 이런 불일치를 보지 못했다고 적었습니다 [3]. 그래서 `ZLIVEUSAGE` 행 가운데 `ZPROCESS` 에 짝이 없는 행을 찾습니다. 2021년 보고서는 `ZLIVEUSAGE` 가 `ZPROCESS` 를 프로세스 ID 로 가리킨다고 설명했지만 [3], 관찰한 iOS 27.0 백업의 `ZLIVEUSAGE` 에는 `ZHASPROCESS` 와 함께 `ZBUNDLENAME`, `ZPROCNAME` 칸도 있었습니다 (확인 범위: iOS 27.0). 두 표를 잇는 칸이 `ZHASPROCESS` 인지는 확인하지 못했고, 표 구조는 [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md) 에서 다룹니다.
+4. **프로세스 기록의 불일치를 봅니다.** Amnesty 는 2021년 Pegasus 조사에서 `DataUsage.sqlite` 와 `netusage.sqlite` 의 프로세스 기록을 핵심 근거로 썼습니다 [3]. 악성 프로세스의 이름은 `ZPROCESS` 표에서 지워졌는데 `ZLIVEUSAGE` 표의 대응 행은 남아 있었고, Amnesty 는 깨끗한 아이폰에서는 이런 불일치를 보지 못했다고 적었습니다 [3]. 그래서 `ZLIVEUSAGE` 행 가운데 `ZPROCESS` 에 짝이 없는 행을 찾습니다. 2021년 보고서는 `ZLIVEUSAGE` 가 `ZPROCESS` 를 프로세스 ID 로 가리킨다고 설명했지만 [3], 관찰한 iOS 27.0 백업의 `ZLIVEUSAGE` 에는 `ZHASPROCESS` 와 함께 `ZBUNDLENAME`, `ZPROCNAME` 칸도 있었습니다. 두 표를 잇는 칸이 `ZHASPROCESS` 인지는 확인하지 못했고, 표 구조는 [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md) 에서 다룹니다.
 
    Amnesty 가 의심 프로세스로 든 이름은 `bh`, `roleaccountd`, `stagingd`, `msgacntd`, `gatekeeperd`, `PDPDialogs`, `rolexd` 이고, 정상 iOS 프로세스와 이름이 비슷한 `aggregatenotd`(정상은 `aggregated`), `ckkeyrollfd`(`ckkeyrolld`), `launchafd`(`launchd`)도 있었습니다 [3]. 악성 실행 파일은 `/private/var/db/com.apple.xpc.roleaccountd.staging/` 에 있었습니다 [3]. Amnesty 는 그 밖에 Safari 방문 기록(전체 리디렉션 경로는 남지 않음), Favicon 캐시, SessionResourceLog, `com.apple.identityservices.idstatuscache.plist`(앱이 조회한 Apple ID 기록), `com.apple.CrashReporter.plist`, WebKit IndexedDB·LocalStorage 폴더, `/private/var/wireless/Library/Caches/com.apple.coretelephony/Cache.db` 도 썼습니다 [3]. `com.apple.CrashReporter.plist` 는 감염 뒤에 쓰인 것으로 보았고, 충돌 보고를 끄려는 목적으로 추정했습니다 [3].
 
@@ -69,11 +69,11 @@ MVT 의 mvt-ios 가 백업·전체 파일 시스템 추출·sysdiagnose 를 모�
 
 지표 대조는 알려진 지표만 찾습니다. 걸린 것이 없으면 "쓴 지표와 일치하는 항목이 없다" 까지만 말할 수 있고, 감염이 없었다는 결론으로 넘어가지 않습니다. 정상 프로세스와 비슷한 이름은 몇 글자만 달라서 이름만 훑으면 놓치기 쉽습니다.
 
-암호화하지 않은 백업에서는 Safari 방문 기록처럼 암호화 백업에만 들어가는 기록이 빠집니다 [1]. 관찰한 백업(암호화 안 함)에는 `History.db` 가 없었고 `observations.db` 는 있었습니다 (확인 범위: iOS 27.0). `netusage.sqlite` 는 출처끼리 말이 다릅니다. Amnesty 는 iTunes 백업에 없다고 적었고 [3], MVT 문서 표는 Backup 에도 적용된다고 표시하며 [1], 관찰한 백업에는 없었습니다 (확인 범위: iOS 27.0). `com.apple.identityservices.idstatuscache.plist` 도 관찰한 백업에 없었고, MVT 문서의 "백업은 iOS 14.7 이전" 과 맞습니다 [1].
+암호화하지 않은 백업에서는 Safari 방문 기록처럼 암호화 백업에만 들어가는 기록이 빠집니다 [1]. 관찰한 백업(암호화 안 함)에는 `History.db` 가 없었고 `observations.db` 는 있었습니다. `netusage.sqlite` 는 출처끼리 말이 다릅니다. Amnesty 는 iTunes 백업에 없다고 적었고 [3], MVT 문서 표는 Backup 에도 적용된다고 표시하며 [1], 관찰한 백업에는 없었습니다. `com.apple.identityservices.idstatuscache.plist` 도 관찰한 백업에 없었고, MVT 문서의 "백업은 iOS 14.7 이전" 과 맞습니다 [1].
 
 Amnesty 조사는 2016년부터 iOS 14.6(2021년 7월)까지이고, iOS 14.6 까지 패치한 iPhone 12 에서도 무클릭 공격 흔적을 찾았습니다 [3]. Amnesty 는 Pegasus 가 더는 재부팅 뒤 지속하지 않는 것으로 본다고 적었고, 재부팅하면 실행 파일을 비휘발 저장소에서 찾을 수 없습니다 [3]. 실행 파일을 찾지 못해도 프로세스 기록과 shutdown.log 는 따로 확인합니다. shutdown.log 는 사용자가 재부팅해야 기록이 생기고 [4], iOS 26 부터는 재부팅마다 덮어써집니다 [5].
 
-`DataUsage.sqlite` 의 `ZTIMESTAMP` 가 Mac 절대 시각인지는 확인하지 못했습니다. 관찰한 표는 `Z_PK`, `Z_ENT`, `Z_OPT` 칸과 `Z_METADATA` 표가 있는 Core Data 형식이었습니다 (확인 범위: iOS 27.0). 시각을 보고서에 쓰기 전에 [시각 값](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 기준을 확인합니다. `RootDomain :: Library/Preferences/com.apple.osanalyticshelper.plist` 의 `stability-monitor.` 로 시작하는 키도 관찰했지만 (확인 범위: iOS 27.0), 탐지에 어떻게 쓰는지는 확인하지 못했습니다.
+`DataUsage.sqlite` 의 `ZTIMESTAMP` 가 Mac 절대 시각인지는 확인하지 못했습니다. 관찰한 표는 `Z_PK`, `Z_ENT`, `Z_OPT` 칸과 `Z_METADATA` 표가 있는 Core Data 형식이었습니다. 시각을 보고서에 쓰기 전에 [시각 값](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 기준을 확인합니다. `RootDomain :: Library/Preferences/com.apple.osanalyticshelper.plist` 의 `stability-monitor.` 로 시작하는 키도 관찰했지만, 탐지에 어떻게 쓰는지는 확인하지 못했습니다.
 
 ## 결과를 어떻게 해석하나
 

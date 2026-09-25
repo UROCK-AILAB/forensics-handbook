@@ -47,7 +47,7 @@ NIST SP 800-101 Rev.1 은 미국 법무부 자료를 인용해 보고서 항목�
 
 ## 기기 식별 정보 옮겨 적기
 
-로컬 백업 최상위의 `Info.plist` 와 `Manifest.plist` 에서 아래 키를 찾을 수 있었습니다. (확인 범위: iOS 27.0) 보고서 항목과 키는 키 이름으로 짝지은 것이고, 각 키 값의 뜻과 형식은 [기기 정보](../../02-artifacts/system-account/device-info.md)와 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md)에서 확인합니다.
+로컬 백업 최상위의 `Info.plist` 와 `Manifest.plist` 에서 아래 키를 찾을 수 있었습니다. 보고서 항목과 키는 키 이름으로 짝지은 것이고, 각 키 값의 뜻과 형식은 [기기 정보](../../02-artifacts/system-account/device-info.md)와 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md)에서 확인합니다.
 
 | 보고서 항목 | 옮겨 올 키 | 파일 |
 |---|---|---|

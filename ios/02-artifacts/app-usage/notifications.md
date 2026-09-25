@@ -37,7 +37,7 @@ iOS 15 이벤트 파일을 조사한 저자는 이 파일을 iOS 15.x 에서만 
 
 ### 로컬 백업에 보이는 것
 
-관찰한 로컬 백업에는 `HomeDomain :: Library/UserNotifications/` 아래 `Library.plist` 가 있었고, 하위 폴더마다 다음 plist 들이 있었습니다 (확인 범위: iOS 27.0).
+관찰한 로컬 백업에는 `HomeDomain :: Library/UserNotifications/` 아래 `Library.plist` 가 있었고, 하위 폴더마다 다음 plist 들이 있었습니다.
 
 ```
 HomeDomain :: Library/UserNotifications/Library.plist
@@ -48,9 +48,9 @@ HomeDomain :: Library/UserNotifications/<UUID>/Schedule.plist
 HomeDomain :: Library/UserNotifications/<UUID>/Topics.plist
 ```
 
-iOS 12 에서는 하위 폴더 이름이 번들 ID 였지만[1], 이 백업에서는 하위 폴더 이름이 UUID 꼴이라 관찰 메모에서 가려졌고, 이 plist 들의 키 이름도 가려져 있습니다 (확인 범위: iOS 27.0). `DeliveredNotifications.plist` 와 `AttachmentList.plist` 는 관찰 메모에 나오지 않아서, 백업에서 빠지는 것인지 기기에 없는 것인지는 판단할 수 없습니다.
+iOS 12 에서는 하위 폴더 이름이 번들 ID 였지만[1], 이 백업에서는 하위 폴더 이름이 UUID 꼴이라 관찰 메모에서 가려졌고, 이 plist 들의 키 이름도 가려져 있습니다. `DeliveredNotifications.plist` 와 `AttachmentList.plist` 는 관찰 메모에 나오지 않아서, 백업에서 빠지는 것인지 기기에 없는 것인지는 판단할 수 없습니다.
 
-알림과 이름이 닿는 설정 파일도 있었습니다 (확인 범위: iOS 27.0).
+알림과 이름이 닿는 설정 파일도 있었습니다.
 
 | 도메인 :: 경로 | 관찰한 키 |
 |---|---|
@@ -58,7 +58,7 @@ iOS 12 에서는 하위 폴더 이름이 번들 ID 였지만[1], 이 백업에�
 | `HomeDomain :: Library/BulletinBoard/ClearedSections.plist` | 키 없음(빈 plist) |
 | `HomeDomain :: Library/Preferences/com.apple.usernotifications.plist` | `BundleLibrarianVacuumInitialComplete` (bool) |
 
-`VersionedSectionInfo.plist` 가 앱별 알림 설정을 담는지는 확인하지 못했지만, 번들 ID 가 키로 들어 있어서 알림과 관련된 앱 목록을 모을 때 후보로 씁니다. 이 밖에 `AppDomainPlugin-com.apple.UserNotificationsServer.UserNotificationsThumbnailProvider`, `com.apple.MobileSMS.MessagesNotificationExtension` 처럼 알림 확장 도메인도 많았습니다 (확인 범위: iOS 27.0). 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+`VersionedSectionInfo.plist` 가 앱별 알림 설정을 담는지는 확인하지 못했지만, 번들 ID 가 키로 들어 있어서 알림과 관련된 앱 목록을 모을 때 후보로 씁니다. 이 밖에 `AppDomainPlugin-com.apple.UserNotificationsServer.UserNotificationsThumbnailProvider`, `com.apple.MobileSMS.MessagesNotificationExtension` 처럼 알림 확장 도메인도 많았습니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -90,11 +90,11 @@ iOS 12 plist 의 `AppNotificationCreationDate` 는 알림이 만들어진 시각
 
 ## 함정과 한계
 
-**버전마다 파일이 다릅니다.** iOS 12 의 plist 와 iOS 15 의 이벤트 파일은 형식과 위치가 모두 다르고[1][2], iOS 15 이벤트 파일은 한 저자가 적은 시험 자료로 본 결과입니다[2]. iOS 27.0 백업에서는 두 파일 이름이 모두 관찰 메모에 나오지 않았습니다 (확인 범위: iOS 27.0). 검체의 iOS 버전을 먼저 확인하고, 그 버전에 어느 파일이 있는지부터 찾습니다.
+**버전마다 파일이 다릅니다.** iOS 12 의 plist 와 iOS 15 의 이벤트 파일은 형식과 위치가 모두 다르고[1][2], iOS 15 이벤트 파일은 한 저자가 적은 시험 자료로 본 결과입니다[2]. iOS 27.0 백업에서는 두 파일 이름이 모두 관찰 메모에 나오지 않았습니다. 검체의 iOS 버전을 먼저 확인하고, 그 버전에 어느 파일이 있는지부터 찾습니다.
 
-**이름만 보고 해석하지 않습니다.** `ClearedSections.plist` 는 이름에 "지움" 이 들어가지만 관찰한 백업에서는 빈 plist 였고 (확인 범위: iOS 27.0), 무엇을 기록하는 파일인지 확인하지 못했습니다. 이 파일이 비어 있다고 알림을 지운 적이 없다고 쓰지 않습니다.
+**이름만 보고 해석하지 않습니다.** `ClearedSections.plist` 는 이름에 "지움" 이 들어가지만 관찰한 백업에서는 빈 plist 였고, 무엇을 기록하는 파일인지 확인하지 못했습니다. 이 파일이 비어 있다고 알림을 지운 적이 없다고 쓰지 않습니다.
 
-**App Store 서비스의 푸시 표와 헷갈리지 않습니다.** `itunesstored_private.sqlitedb` 에도 `ZPUSHNOTIFICATION`(`ZCLIENT`, `ZUSERINFO`)·`ZPUSHNOTIFICATIONCLIENT` 표가 있지만 (확인 범위: iOS 27.0), 이름만으로는 앱 알림 기록과 같은 것인지 알 수 없습니다. 이 DB 는 [앱 스토어 기록](app-store.md) 에서 다룹니다.
+**App Store 서비스의 푸시 표와 헷갈리지 않습니다.** `itunesstored_private.sqlitedb` 에도 `ZPUSHNOTIFICATION`(`ZCLIENT`, `ZUSERINFO`)·`ZPUSHNOTIFICATIONCLIENT` 표가 있지만, 이름만으로는 앱 알림 기록과 같은 것인지 알 수 없습니다. 이 DB 는 [앱 스토어 기록](app-store.md) 에서 다룹니다.
 
 **지우기와 조작.** 앱을 지워도 알림 기록은 한동안 남는다는 보고가 있지만[4], 보관 기간이 지나면 사라질 수 있습니다. 앱 삭제와 기록 공백을 함께 볼 때는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름을 따릅니다.
 

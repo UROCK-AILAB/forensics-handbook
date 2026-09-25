@@ -24,10 +24,10 @@ Apple 은 용병형 스파이웨어가 언론인·활동가·정치인·외교�
 
 | 흔적 | 위치 | iOS 버전 | 알려 주는 것 | 자세히 |
 |---|---|---|---|---|
-| 구성 프로파일 기록 | 백업 `SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles` | 관찰 (확인 범위: iOS 27.0) | 설치된 프로파일 목록, 제한 설정 | [Profiles·Settings](profiles-settings.md) |
-| 앱 권한 | 백업 `HomeDomain :: Library/TCC/TCC.db` | 관찰 (확인 범위: iOS 27.0) | 마이크·카메라·위치 권한의 허용·거부 | [Profiles·Settings](profiles-settings.md) |
-| 위치를 요청한 앱 | 백업 `RootDomain :: Library/Caches/locationd/clients.plist` | 관찰 (확인 범위: iOS 27.0) | 위치 서비스를 요청한 앱 | [Profiles·Settings](profiles-settings.md) |
-| 프로세스별 셀룰러 사용량 | 백업 `WirelessDomain :: Library/Databases/DataUsage.sqlite` | 관찰 (확인 범위: iOS 27.0). Amnesty 사례는 iOS 14.6 까지 [2] | 프로세스 이름과 사용량, 표 사이 불일치 | [MVT](spyware-mvt.md) |
+| 구성 프로파일 기록 | 백업 `SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles` | 관찰 | 설치된 프로파일 목록, 제한 설정 | [Profiles·Settings](profiles-settings.md) |
+| 앱 권한 | 백업 `HomeDomain :: Library/TCC/TCC.db` | 관찰 | 마이크·카메라·위치 권한의 허용·거부 | [Profiles·Settings](profiles-settings.md) |
+| 위치를 요청한 앱 | 백업 `RootDomain :: Library/Caches/locationd/clients.plist` | 관찰 | 위치 서비스를 요청한 앱 | [Profiles·Settings](profiles-settings.md) |
+| 프로세스별 셀룰러 사용량 | 백업 `WirelessDomain :: Library/Databases/DataUsage.sqlite` | 관찰. Amnesty 사례는 iOS 14.6 까지 [2] | 프로세스 이름과 사용량, 표 사이 불일치 | [MVT](spyware-mvt.md) |
 | shutdown.log | sysdiagnose | iOS 18 이하는 누적, iOS 26 부터 재부팅마다 덮어씀 [3] | 재부팅 때 남아 있던 프로세스의 경로 | [MVT](spyware-mvt.md) |
 | IDStatusCache | `com.apple.identityservices.idstatuscache.plist` | 백업에서는 iOS 14.7 이전만 [1] | 앱이 조회한 Apple ID 기록 [2] | [MVT](spyware-mvt.md) |
 | 안전 확인 | 설정 → 개인정보 보호 및 보안 → 안전 확인 | iOS 16 이상 [5] | 사람·앱과의 공유, 연결 기기, 앱 권한 | [Stalkerware](stalkerware.md) |

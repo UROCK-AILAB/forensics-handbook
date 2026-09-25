@@ -22,13 +22,13 @@ App Store 개인정보 라벨에는 사용자와 연결된 데이터로 식별�
 
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
-| 앱 설치 여부와 번들 ID | 백업 최상위 `Info.plist` 의 `Installed Applications`·`Applications` 키, `Manifest.db` 의 도메인 이름 | 키 이름 관찰(확인 범위: iOS 27.0) |
+| 앱 설치 여부와 번들 ID | 백업 최상위 `Info.plist` 의 `Installed Applications`·`Applications` 키, `Manifest.db` 의 도메인 이름 | 키 이름 관찰 |
 | 번들 ID | 공개 출처에서 확인 못 함 | 검체의 설치 앱 목록에서 확인 |
 | 앱 컨테이너 안의 DB·plist·캐시 | 앱 도메인(`AppDomain-` 로 시작) 안 | 확인 못 함, 검체에서 직접 확인 |
 | 자동 올리기 기록 | 확인 못 함 | 기기 안에 남는지부터 확인 못 함 |
 | Files 앱 쪽 흔적 | `HomeDomain` 의 `Library/Application Support/FileProvider/` 아래 | 앱이 Files 앱 공급자로 등록되었을 때만 해당, MYBOX 로 관찰한 것은 아님 |
 
-관찰한 백업에는 도메인이 1428개 있었고 그중 다른 회사 앱 161개는 메모에서 이름을 가렸기 때문에, MYBOX 앱 도메인의 존재와 내용은 관찰하지 않았습니다(확인 범위: iOS 27.0).
+관찰한 백업에는 도메인이 1428개 있었고 그중 다른 회사 앱 161개는 메모에서 이름을 가렸기 때문에, MYBOX 앱 도메인의 존재와 내용은 관찰하지 않았습니다.
 
 | 항목 | 내용 | 근거 |
 |---|---|---|

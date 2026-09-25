@@ -48,7 +48,7 @@ auto_vacuum 은 표를 만들기 전에만 켤 수 있고 나중에 바꾸려면
 
 ## 이유 4: 수집 방식
 
-로컬 백업은 `Manifest.db` 의 `Files` 표(fileID, domain, relativePath, flags, file)가 보여 주듯 파일 단위로 담깁니다(확인 범위: iOS 27.0). 그래서 논리 백업에는 플래시의 빈 공간이 들어가지 않고, 복구는 백업에 든 파일 안쪽에서만 할 수 있습니다. 백업이 암호화됐는지는 `Manifest.plist` 의 `IsEncrypted` 키로 드러납니다(확인 범위: iOS 27.0). 백업 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md), 수집 방식 선택은 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 를 봅니다.
+로컬 백업은 `Manifest.db` 의 `Files` 표(fileID, domain, relativePath, flags, file)가 보여 주듯 파일 단위로 담깁니다. 그래서 논리 백업에는 플래시의 빈 공간이 들어가지 않고, 복구는 백업에 든 파일 안쪽에서만 할 수 있습니다. 백업이 암호화됐는지는 `Manifest.plist` 의 `IsEncrypted` 키로 드러납니다. 백업 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md), 수집 방식 선택은 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 를 봅니다.
 
 ## TRIM 과 플래시 정리
 
