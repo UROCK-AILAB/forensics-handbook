@@ -12,11 +12,11 @@ has_toc: false
 
 ## 왜 중요한가
 
-키체인 접근 (Keychain Access) 앱의 사용 설명서는 이 앱이 암호, 패스키, 인증 코드와 인증서를 다룬다고 설명합니다 [4]. 파일 기반 키체인은 풀 수단이 없어도 항목의 계정·서비스·서버 같은 메타데이터가 보여서 [3], 사용자가 어떤 서비스에 쓸 계정을 저장해 두었는지 알 수 있고, 비밀 값은 푸는 수단이 있을 때만 볼 수 있습니다.
+키체인 접근 (Keychain Access) 앱은 암호, 패스키, 인증 코드와 인증서를 다룹니다 [4]. 파일 기반 키체인은 풀 수단이 없어도 항목의 계정·서비스·서버 같은 메타데이터가 보여서 [3], 사용자가 어떤 서비스에 쓸 계정을 저장해 두었는지 알 수 있고, 비밀 값은 푸는 수단이 있을 때만 볼 수 있습니다.
 
 두 구현은 파일 형식, 보호 방식, 접근 제어가 모두 달라서 한쪽만 보면 항목을 놓칩니다. macOS의 키체인 API는 옛 Mac OS에서 온 Keychain, Mac OS X부터 있던 SecKeychain, iOS에서 와서 Mac OS X 10.6부터 쓸 수 있는 SecItem 세 가지입니다 [1]. Keychain과 SecKeychain API는 늘 파일 기반 키체인을 쓰고, SecItem은 기본으로 파일 기반 키체인을 쓰다가 `kSecUseDataProtectionKeychain` 이나 `kSecAttrSynchronizable` 을 true로 주면 데이터 보호 키체인을 씁니다 [1].
 
-Apple은 파일 기반 키체인이 폐기로 가는 중이지만 공식으로 폐기하지는 않았다고 적고, `SecKeychainCreate` 는 macOS 12 SDK에서 폐기(deprecated)했습니다 [1]. iCloud 키체인 같은 새 기능은 데이터 보호 키체인에서만 되고 [1], 그래서 iCloud 키체인으로 동기화한 암호는 로그인 키체인 파일이 아니라 데이터 보호 키체인에서 찾습니다.
+파일 기반 키체인은 폐기로 가는 중이지만 공식으로 폐기되지는 않았고, `SecKeychainCreate` 는 macOS 12 SDK에서 폐기(deprecated)됐습니다 [1]. iCloud 키체인 같은 새 기능은 데이터 보호 키체인에서만 되고 [1], 그래서 iCloud 키체인으로 동기화한 암호는 로그인 키체인 파일이 아니라 데이터 보호 키체인에서 찾습니다.
 
 ## 한눈에 보기
 
@@ -24,7 +24,7 @@ Apple은 파일 기반 키체인이 폐기로 가는 중이지만 공식으로 �
 |---|---|---|---|
 | 로그인 키체인 | 파일 기반 | `/Users/<사용자>/Library/Keychains/login.keychain-db` [3] | 사용자가 저장한 계정·서비스·서버, 인증서와 키, 항목의 날짜 속성 |
 | System 키체인 | 파일 기반 | `/Library/Keychains/System.keychain` [3] | 네트워크 자격 증명과 PKI 인증서 [5] |
-| Local Items 또는 iCloud Keychain | 데이터 보호 | 이 핸드북의 근거 자료로 확인하지 못함 | 로그인한 사용자의 암호·인증서·키, iCloud 키체인으로 동기화한 항목 |
+| Local Items 또는 iCloud Keychain | 데이터 보호 | 검체에서 확인 | 로그인한 사용자의 암호·인증서·키, iCloud 키체인으로 동기화한 항목 |
 
 | macOS 버전 | 달라진 점 |
 |---|---|

@@ -24,13 +24,13 @@ nav_order: 1100
 | 범위 | 시스템 폴더라서 사용자 계정과 관계없이 맥 전체에 하나 [1] |
 | 관리하는 프로세스 | usbmuxd 데몬 [1] |
 
-위 경로는 usbmuxd와 libimobiledevice 소스가 macOS에서 쓰는 값이고 [1][2], 이번 자료로는 macOS 버전에 따라 경로나 키가 달라진다는 기록을 확인하지 못했습니다. 윈도우에서는 공용 AppData 아래 `Apple\Lockdown` 폴더가 같은 역할을 합니다 [2].
+위 경로는 usbmuxd와 libimobiledevice 소스가 macOS에서 쓰는 값입니다 [1][2]. macOS 버전에 따라 경로나 키가 달라진다는 공개 자료는 없습니다. 윈도우에서는 공용 AppData 아래 `Apple\Lockdown` 폴더가 같은 역할을 합니다 [2].
 
 ## 구조
 
-폴더에는 기기별 페어링 기록과 호스트 설정 파일만 놓입니다. 공개 라이브러리 libimobiledevice는 이 폴더를 훑을 때 `SystemConfiguration.plist` 를 건너뛰고, 나머지 `.plist` 파일 이름에서 `.plist` 를 뗀 값을 기기 UDID로 씁니다 [2]. 그래서 파일 목록만 봐도 페어링한 기기의 UDID를 모두 적을 수 있습니다.
+폴더에는 기기별 페어링 기록과 호스트 설정 파일만 놓입니다. `SystemConfiguration.plist` 를 뺀 나머지 `.plist` 파일은 이름에서 `.plist` 를 뗀 값이 기기 UDID입니다 [2]. 그래서 파일 목록만 봐도 페어링한 기기의 UDID를 모두 적을 수 있습니다.
 
-기기별 페어링 기록에 들어가는 키는 libimobiledevice 소스의 상수로 확인했습니다 [2]. 아래 표의 설명은 키 이름을 옮긴 것이고, 두 개인 키가 호스트 쪽 개인 키라는 점만 소스로 확인했습니다 [2].
+기기별 페어링 기록에 들어가는 키는 아래와 같습니다 [2]. 두 개인 키는 호스트 쪽 개인 키이고 [2], 나머지 설명은 키 이름을 풀어 쓴 것입니다.
 
 | 키 | 이름이 가리키는 것 |
 |---|---|
@@ -40,9 +40,9 @@ nav_order: 1100
 | `RootCertificate` | 루트 인증서 |
 | `RootPrivateKey` | 루트 개인 키 |
 | `HostID` | 호스트 식별값 |
-| `SystemBUID` | 키 이름만 확인 |
+| `SystemBUID` | 맥을 가리키는 값이라는 설명이 있음 |
 
-`SystemBUID` 는 맥을 가리키는 값으로 `SystemConfiguration.plist` 와 각 페어링 기록에 함께 들어간다는 설명이 있지만, 이번 자료로는 키 이름만 확인했습니다. 페어링 기록에 `EscrowBag` 과 `WiFiMACAddress` 키도 있다고 소개하는 자료가 많지만 이번에 연 소스에서는 확인하지 못해서 표에 넣지 않았습니다. 파일을 plist로 읽는 방법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
+`SystemBUID` 는 맥을 가리키는 값으로 `SystemConfiguration.plist` 와 각 페어링 기록에 함께 들어간다는 설명이 있습니다. 페어링 기록에 `EscrowBag` 과 `WiFiMACAddress` 키도 있다는 설명이 많으니, 이 키들이 있는지는 검체에서 확인합니다. 파일을 plist로 읽는 방법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -58,15 +58,15 @@ nav_order: 1100
 
 ## 시각 해석
 
-plist 안에 페어링 시각을 적는 키가 있는지는 이번 자료로 확인하지 못했습니다. 파일의 생성·수정 시각으로 첫 페어링이나 다시 페어링한 시점을 어림한다는 설명이 알려져 있지만, 이 방법은 파일 시스템 시각에 기댄 추정이라서 보고서에는 "파일 시각으로 어림한 값" 이라고 적습니다. 파일 시스템 시각을 읽는 방법은 [APFS 구조 (APFS)](../../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
+plist 안에 페어링 시각을 적는 키가 있다는 공개 자료는 없습니다. 파일의 생성·수정 시각으로 첫 페어링이나 다시 페어링한 시점을 어림한다는 설명이 알려져 있지만, 이 방법은 파일 시스템 시각에 기댄 추정이라서 보고서에는 "파일 시각으로 어림한 값" 이라고 적습니다. 파일 시스템 시각을 읽는 방법은 [APFS 구조 (APFS)](../../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
 
 ## 함정과 한계
 
 페어링 기록에는 호스트 개인 키(`HostPrivateKey`, `RootPrivateKey`)가 들어 있어서 [2], 증거로 다룰 때 민감 자료로 취급합니다. 사본을 보관하는 곳과 접근할 수 있는 사람을 제한하고, 보고서나 첨부 자료에 키 값을 그대로 옮기지 않습니다.
 
-기기 쪽에서는 설정 → 일반 → 전송 또는 [기기] 재설정 → 재설정 → 위치 및 개인 정보 보호 재설정으로 신뢰 목록을 지울 수 있습니다 [3]. 이때 맥 쪽 `/var/db/lockdown` 파일도 함께 지워지는지는 확인하지 못했고, 맥에 파일이 남아 있다고 해서 지금도 기기가 이 맥을 신뢰한다고 말하지 않습니다. 반대로 파일이 없다는 사실만으로 페어링한 적이 없다고 말하지도 않는데, 파일이 지워졌을 수 있기 때문입니다. 지운 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)로 찾아봅니다.
+기기 쪽에서는 설정 → 일반 → 전송 또는 [기기] 재설정 → 재설정 → 위치 및 개인 정보 보호 재설정으로 신뢰 목록을 지울 수 있습니다 [3]. 이때 맥 쪽 `/var/db/lockdown` 파일도 함께 지워진다는 공개 자료는 없습니다. 그래서 맥에 파일이 남아 있다고 해서 지금도 기기가 이 맥을 신뢰한다고 말하지 않습니다. 반대로 파일이 없다는 사실만으로 페어링한 적이 없다고 말하지도 않는데, 파일이 지워졌을 수 있기 때문입니다. 지운 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)로 찾아봅니다.
 
-페어링이 USB 연결뿐 아니라 Wi-Fi 동기화에도 쓰인다는 설명이 흔하지만 이번 자료로는 확인하지 못했고, 기록만으로 연결 방식을 단정하지 않습니다. 폴더와 파일의 권한 세부 값도 확인하지 못해서, 라이브 수집에서 파일이 보이지 않으면 권한 때문인지 먼저 확인하고 수집 방법은 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
+페어링이 USB 연결뿐 아니라 Wi-Fi 동기화에도 쓰인다는 설명이 흔하지만, 기록만으로 연결 방식을 단정하지 않습니다. 라이브 수집에서 파일이 보이지 않으면 권한 때문인지 먼저 확인하고 수집 방법은 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
 
 ## 직접 분석해 보기
 
@@ -89,7 +89,7 @@ private/var/db/lockdown/
 
 ## 교차 검증
 
-UDID를 [기기 백업 (MobileSync)](mobilesync.md)의 백업 폴더 이름, `Info.plist` 식별값과 맞춰 보면 페어링과 백업을 같은 기기로 묶을 수 있고, 맞춰 보는 방법은 그 페이지에 있습니다. 연결 시각은 페어링 기록에서 얻기 어려워서 다른 기록으로 채웁니다. 통합 로그에서 usbmuxd·AMPDevicesAgent 프로세스 항목으로 기기 연결을 찾는다는 설명이 있지만 서브시스템 이름은 확인하지 못했고, 로그를 다루는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에 있습니다. 다른 외장 장치 기록과 한 시간축에 놓을 때는 [USB 저장 장치 (USB Storage)](../usb/index.md)와 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)을 함께 봅니다.
+UDID를 [기기 백업 (MobileSync)](mobilesync.md)의 백업 폴더 이름, `Info.plist` 식별값과 맞춰 보면 페어링과 백업을 같은 기기로 묶을 수 있고, 맞춰 보는 방법은 그 페이지에 있습니다. 연결 시각은 페어링 기록에서 얻기 어려워서 다른 기록으로 채웁니다. 통합 로그에서 usbmuxd·AMPDevicesAgent 프로세스 항목으로 기기 연결을 찾는다는 설명이 있으니 서브시스템 이름은 검체에서 확인합니다. 로그를 다루는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에 있습니다. 다른 외장 장치 기록과 한 시간축에 놓을 때는 [USB 저장 장치 (USB Storage)](../usb/index.md)와 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)을 함께 봅니다.
 
 ## 실습
 

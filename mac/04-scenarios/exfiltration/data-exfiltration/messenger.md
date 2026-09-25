@@ -15,9 +15,9 @@ nav_order: 2490
 
 먼저 어떤 메신저를 썼는지 확인합니다. [설치한 앱과 영수증](../../../02-artifacts/system-account/installed-apps-receipts.md)과 [어떤 앱을 언제 썼나](../../activity/app-usage.md)로 사용한 앱을 좁히고, 메시지 앱이 아닌 메신저는 저장 위치와 구조가 앱마다 달라서 각 페이지를 따릅니다. [카카오톡](../../../02-artifacts/messengers/kakaotalk.md), [텔레그램](../../../02-artifacts/messengers/telegram.md), [슬랙](../../../02-artifacts/messengers/slack.md), [팀즈](../../../02-artifacts/messengers/teams.md), [디스코드](../../../02-artifacts/messengers/discord.md), [위챗](../../../02-artifacts/messengers/wechat.md), [라인](../../../02-artifacts/messengers/line.md), [왓츠앱](../../../02-artifacts/messengers/whatsapp.md), [시그널](../../../02-artifacts/messengers/signal.md) 페이지가 있습니다.
 
-메시지 앱의 데이터베이스는 `~/Library/Messages/chat.db`(SQLite)이고, 첨부 파일은 `~/Library/Messages/Attachments/` 아래에 있습니다. 데이터베이스 경로는 ForensicArtifacts 정의와 mac_apt에 모두 있고, 첨부 폴더는 mac_apt가 함께 내보내는 폴더입니다 [1][2]. 둘 다 사용자 홈 아래에 있어서 사용자마다 따로 보고, 데이터베이스와 첨부 폴더를 함께 수집해야 첨부 기록과 실제 파일을 맞춰 볼 수 있습니다.
+메시지 앱의 데이터베이스는 `~/Library/Messages/chat.db`(SQLite)이고, 첨부 파일은 `~/Library/Messages/Attachments/` 아래에 있습니다 [1][2]. 둘 다 사용자 홈 아래에 있어서 사용자마다 따로 보고, 데이터베이스와 첨부 폴더를 함께 수집해야 첨부 기록과 실제 파일을 맞춰 볼 수 있습니다.
 
-시각 기준도 먼저 정해 둡니다. mac_apt는 `message` 표의 `date`·`date_read`·`date_delivered`를 맥 절대 시각(2001-01-01 기준)으로 읽습니다 [2]. mac_apt는 값의 절댓값이 32비트 범위(0xFFFFFFFF)를 넘으면 나노초 단위로 보고 10억으로 나눈 뒤 바꾸고, 주석에 이 형식을 하이 시에라 (High Sierra)에서 보았다고 적습니다 [2]. 어느 버전부터 나노초로 바뀌었는지는 확인하지 못해서, 검체마다 값의 자릿수를 보고 단위를 정합니다([맥의 시각 값](../../../01-foundations/value-decoding/mac-time-values.md)). 맥의 시간대는 [시간대와 시계 설정](../../../02-artifacts/system-account/time-zone.md)에서 확인합니다.
+시각 기준도 먼저 정해 둡니다. `message` 표의 `date`·`date_read`·`date_delivered`는 맥 절대 시각(2001-01-01 기준)입니다 [2]. 값의 절댓값이 32비트 범위(0xFFFFFFFF)를 넘으면 나노초 단위이므로 10억으로 나눈 뒤 바꾸고, 이 나노초 형식은 하이 시에라 (High Sierra)에서 나타납니다 [2]. 어느 버전부터 나노초로 바뀌었는지는 알려져 있지 않아서, 검체마다 값의 자릿수를 보고 단위를 정합니다([맥의 시각 값](../../../01-foundations/value-decoding/mac-time-values.md)). 맥의 시간대는 [시간대와 시계 설정](../../../02-artifacts/system-account/time-zone.md)에서 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -29,7 +29,7 @@ nav_order: 2490
 | 4 | `~/Library/Messages/Attachments/` | 첨부 파일 사본 | [메시지](../../../02-artifacts/messengers/imessage/index.md) |
 | 5 | 원본 파일의 최근 항목과 FSEvents | 첨부하기 전에 원본 파일을 다룬 흔적 | [최근 항목](../../../02-artifacts/file-folder-usage/recent-items/index.md), [파일 시스템 이벤트](../../../02-artifacts/filesystem/fsevents/index.md) |
 
-표 사이 연결은 mac_apt 조회문을 따르면 아래와 같습니다 [2].
+표 사이 연결은 아래와 같습니다 [2].
 
 | 연결 | 이어 주는 칸 |
 |---|---|
@@ -63,14 +63,14 @@ nav_order: 2490
    ```
 
 3. `date` 값을 사람이 읽는 시각(UTC)으로 바꿉니다. 값이 초 단위라면 `datetime('2001-01-01', '+' || m.date || ' seconds')`로 바꾸고, 32비트 범위를 넘는 나노초 값이라면 `datetime('2001-01-01', '+' || (m.date / 1000000000) || ' seconds')`처럼 먼저 10억으로 나눕니다.
-4. `attachment.filename`이 가리키는 경로로 `~/Library/Messages/Attachments/` 아래 사본을 찾고, 조사 대상 원본 파일과 해시·내용을 비교합니다. 이 폴더 아래 하위 폴더 규칙은 확인하지 못해서, 경로는 `filename` 값을 그대로 따라갑니다.
+4. `attachment.filename`이 가리키는 경로로 `~/Library/Messages/Attachments/` 아래 사본을 찾고, 조사 대상 원본 파일과 해시·내용을 비교합니다. 이 폴더 아래 하위 폴더 규칙은 공개된 분석 자료가 없어서, 경로는 `filename` 값을 그대로 따라갑니다.
 5. 원본 파일을 맥 쪽 최근 항목과 FSEvents에서 찾고, 메시지를 보낸 시각 전후로 그 파일을 다룬 흔적이 있는지 [타임라인](../../../03-techniques/analysis/timeline/index.md)에 올려 봅니다.
 
 ## 흔한 오판
 
-- **`text` 칸만 보고 본문이 없다고 보는 경우.** mac_apt는 `text`가 비어 있으면(NULL) 바이너리 칸인 `attributedBody`에서 문자열을 꺼내 읽고, 주석에 `text`가 비어 있는 경우가 많다고 적습니다 [2]. 그래서 `text`가 비면 `attributedBody`를 함께 봅니다.
+- **`text` 칸만 보고 본문이 없다고 보는 경우.** `text`가 비어 있는(NULL) 경우가 많고, 이때 본문 문자열은 바이너리 칸인 `attributedBody`에 들어 있습니다 [2]. 그래서 `text`가 비면 `attributedBody`를 함께 봅니다.
 - **첨부 폴더에 있는 파일을 보낸 파일로 보는 경우.** 폴더만 보고 방향을 정하지 않고, `attachment.filename`을 따라 이어진 메시지의 `is_from_me`로 정합니다.
-- **`service` 값을 짐작해 적는 경우.** 이 칸으로 아이메시지와 SMS를 가르지만 실제 값 문자열은 이 핸드북에서 확인하지 못해서, 검체의 값을 그대로 옮겨 적습니다.
+- **`service` 값을 짐작해 적는 경우.** 이 칸으로 아이메시지와 SMS를 가르지만 실제 값 문자열은 공개된 분석 자료가 없어서, 검체의 값을 그대로 옮겨 적습니다.
 - **`date_delivered`·`date_read`로 상대가 파일을 받거나 열었다고 쓰는 경우.** 칸 이름으로 뜻을 짐작할 수 있을 뿐이고, 값의 뜻은 테스트 기기에서 확인한 뒤에 씁니다([도구 검증](../../../03-techniques/reporting/tool-validation.md)).
 - **받은 첨부의 격리 속성을 보낸 흔적으로 보는 경우.** 메시지 첨부로 받은 파일에 붙는 격리 속성은 받는 쪽 흔적이고, 설명은 [격리 속성과 다운로드 기록](../../../02-artifacts/filesystem/quarantine/index.md) 페이지에 있습니다.
 

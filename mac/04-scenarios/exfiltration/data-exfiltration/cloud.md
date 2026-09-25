@@ -9,7 +9,7 @@ nav_order: 2470
 
 ## 조사 질문
 
-이 맥에서 아이클라우드 드라이브 (iCloud Drive)나 드롭박스 같은 클라우드 저장소로 자료를 올렸는지 묻습니다. 아이클라우드 드라이브는 맥 안에 동기화 목록 데이터베이스를 남기고, 파일 버전마다 어느 기기와 이어지는지 적혀 있어 다른 경로보다 기록이 구체적인 편입니다. 제3자 클라우드는 앱마다 저장 방식이 달라서, 이 페이지는 공개 자료로 확인한 폴더 위치와 동작만 다루고 앱별 내용은 각 아티팩트 페이지로 넘깁니다. 경로마다 공통으로 쓰는 판단 원칙은 [자료를 밖으로 빼돌렸나](index.md) 허브에 있습니다.
+이 맥에서 아이클라우드 드라이브 (iCloud Drive)나 드롭박스 같은 클라우드 저장소로 자료를 올렸는지 묻습니다. 아이클라우드 드라이브는 맥 안에 동기화 목록 데이터베이스를 남기고, 파일 버전마다 어느 기기와 이어지는지 적혀 있어 다른 경로보다 기록이 구체적인 편입니다. 제3자 클라우드는 앱마다 저장 방식이 달라서, 이 페이지는 폴더 위치와 동작만 다루고 앱별 내용은 각 아티팩트 페이지로 넘깁니다. 경로마다 공통으로 쓰는 판단 원칙은 [자료를 밖으로 빼돌렸나](index.md) 허브에 있습니다.
 
 ## 먼저 확인할 것
 
@@ -17,12 +17,12 @@ nav_order: 2470
 
 OS 버전은 제3자 클라우드 폴더 위치와 이어집니다. 드롭박스의 파일 공급자 (File Provider)판은 macOS 12.5 이상이 필요하고, 이 판에서는 드롭박스 폴더가 `~/Library/CloudStorage/` 아래로 옮겨졌으며 파인더 사이드바에서 "즐겨찾기"가 아닌 "위치"에 나타납니다 [3]. 그보다 낮은 버전이나 예전 판을 쓴 맥은 폴더 위치가 다를 수 있어서, OS 버전을 [OS 버전과 설치 기록](../../../02-artifacts/system-account/os-version-install-history.md)에서 먼저 확인합니다.
 
-| 항목 | 확인된 버전 조건 | 출처 |
+| 항목 | 버전 조건 | 출처 |
 |---|---|---|
 | 드롭박스 파일 공급자판 | macOS 12.5 이상, 폴더는 `~/Library/CloudStorage/` 아래 | [3] |
-| 아이클라우드 드라이브 데이터베이스 | 버전 경계는 공개 자료로 확인하지 못함 | — |
+| 아이클라우드 드라이브 데이터베이스 | 공개 자료 없음 | — |
 
-수집 범위도 따로 챙깁니다. ForensicArtifacts 정의에는 드롭박스·구글 드라이브·원드라이브·박스 항목이 없어서 [1], 이 정의만 쓰는 도구로 모으면 해당 폴더가 자동 수집에서 빠질 수 있습니다(필자 해석). `~/Library/CloudStorage/`와 `~/Library/Application Support/CloudDocs/`를 수집 목록에 직접 넣었는지 확인합니다.
+수집 범위도 따로 챙깁니다. ForensicArtifacts 정의에는 드롭박스·구글 드라이브·원드라이브·박스 항목이 없어서 [1], 이 정의만 쓰는 도구로 모으면 해당 폴더가 자동 수집에서 빠질 수 있습니다. `~/Library/CloudStorage/`와 `~/Library/Application Support/CloudDocs/`를 수집 목록에 직접 넣었는지 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -33,28 +33,28 @@ OS 버전은 제3자 클라우드 폴더 위치와 이어집니다. 드롭박스
 | 3 | `~/Library/CloudStorage/` 아래 폴더 | 파일 공급자판 드롭박스 등의 동기화 폴더 | [파일 공급자](../../../02-artifacts/cloud-apps/file-provider.md), [드롭박스](../../../02-artifacts/cloud-apps/dropbox.md) |
 | 4 | 최근 항목과 FSEvents | 동기화 폴더로 파일을 옮기거나 연 흔적 | [최근 항목](../../../02-artifacts/file-folder-usage/recent-items/index.md), [파일 시스템 이벤트](../../../02-artifacts/filesystem/fsevents/index.md) |
 
-구글 드라이브와 원드라이브의 데이터베이스·로그 위치는 이 페이지에서 확인하지 못해서 [구글 드라이브](../../../02-artifacts/cloud-apps/google-drive.md)와 [원드라이브](../../../02-artifacts/cloud-apps/onedrive.md) 페이지로 넘깁니다.
+구글 드라이브와 원드라이브의 데이터베이스·로그 위치는 [구글 드라이브](../../../02-artifacts/cloud-apps/google-drive.md)와 [원드라이브](../../../02-artifacts/cloud-apps/onedrive.md) 페이지에서 다룹니다.
 
 ### 아이클라우드 드라이브 데이터베이스에서 쓰는 칸
 
-두 파일은 SQLite 데이터베이스이고, mac_apt는 여기서 `server_items`, `client_items`, `app_libraries`(rowid, app_library_name), `devices`(key, name) 표를 읽습니다. mac_apt는 `devices` 표를 `server.db`에서 읽고, 여기서 얻은 기기 목록을 두 파일의 항목에 함께 씁니다 [2]. 표 전체 구조는 [아이클라우드 드라이브](../../../02-artifacts/cloud-apps/icloud-drive.md) 페이지에 있고, 유출 조사에 쓰는 칸만 추리면 아래와 같습니다.
+두 파일은 SQLite 데이터베이스이고, 분석에 쓰는 표는 `server_items`, `client_items`, `app_libraries`(rowid, app_library_name), `devices`(key, name)입니다. `devices` 표는 `server.db`에 있고, 이 기기 목록은 두 파일의 항목에 함께 쓰입니다 [2]. 표 전체 구조는 [아이클라우드 드라이브](../../../02-artifacts/cloud-apps/icloud-drive.md) 페이지에 있고, 유출 조사에 쓰는 칸만 추리면 아래와 같습니다.
 
 | 칸 | 쓰임 |
 |---|---|
 | `item_filename` | 파일 이름 |
 | `item_id`, `item_parent_id` | 부모 항목의 `item_id`를 따라 올라가 폴더 경로를 다시 만듭니다 |
-| `item_birthtime`, `item_lastusedtime`, `version_mtime` | 시각. mac_apt는 유닉스 시각(1970 기준)으로 읽습니다 |
+| `item_birthtime`, `item_lastusedtime`, `version_mtime` | 시각. 유닉스 시각(1970 기준)입니다 |
 | `version_device` | `devices.key`와 이어져 기기 이름(`devices.name`)을 얻습니다 |
 | `version_name`, `version_size` | 버전 정보 |
-| `item_sharing_options` | mac_apt는 값이 0이면 공유하지 않은 것으로, 0이 아니면 공유한 것으로 봅니다(`item_is_shared`). 0이 아닌 값의 비트 뜻은 확인하지 못했습니다 |
-| `item_type` | 항목 종류. mac_apt는 0을 폴더, 1을 파일, 그 밖의 값을 알 수 없음으로 읽습니다 |
+| `item_sharing_options` | 0이면 공유하지 않은 것, 0이 아니면 공유한 것입니다(mac_apt 출력의 `item_is_shared`). 0이 아닌 값의 비트 뜻은 공개 자료 없음 |
+| `item_type` | 항목 종류. 0은 폴더, 1은 파일이고, 그 밖의 값은 뜻이 알려져 있지 않습니다 |
 
 `client_items`에는 이 밖에 `app_library_rowid`가 있습니다 [2].
 
 ## 분석 흐름
 
 1. 이 맥에 로그인한 아이클라우드 계정과 설치된 클라우드 앱을 정리합니다([설치한 앱과 영수증](../../../02-artifacts/system-account/installed-apps-receipts.md)).
-2. `client.db`와 `server.db`를 사본으로 열고, 어느 파일에 어느 표가 있는지 표 목록(`.tables`)으로 먼저 확인합니다. mac_apt는 `server_items`와 `devices`를 `server.db`에서, `client_items`와 `app_libraries`를 `client.db`에서 읽습니다 [2]. SQLite를 여는 주의점은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 페이지를 따릅니다.
+2. `client.db`와 `server.db`를 사본으로 열고, 어느 파일에 어느 표가 있는지 표 목록(`.tables`)으로 먼저 확인합니다. `server_items`와 `devices`는 `server.db`에, `client_items`와 `app_libraries`는 `client.db`에 있습니다 [2]. SQLite를 여는 주의점은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 페이지를 따릅니다.
 3. 조사 대상 파일 이름으로 `server_items`·`client_items`를 찾고, `version_device`를 `devices` 표와 이어 기기 이름을 붙입니다. `server.db`를 열었을 때의 예입니다.
 
    ```sql
@@ -71,17 +71,17 @@ OS 버전은 제3자 클라우드 폴더 위치와 이어집니다. 드롭박스
    WHERE s.item_filename LIKE '%대상파일이름%';
    ```
 
-4. `item_parent_id`를 부모의 `item_id`로 따라 올라가 폴더 경로를 다시 만듭니다. mac_apt는 `length(item_parent_id) < 16`인 행을 최상위로 봅니다 [2].
+4. `item_parent_id`를 부모의 `item_id`로 따라 올라가 폴더 경로를 다시 만듭니다. `length(item_parent_id) < 16`인 행이 최상위 항목입니다 [2].
 5. 제3자 클라우드는 `~/Library/CloudStorage/` 아래 동기화 폴더에서 대상 파일을 찾고, 그 파일이 폴더로 들어온 흔적을 FSEvents와 최근 항목에서 찾습니다.
 6. 계정·데이터베이스 시각·파일 접근 시각을 한 기준으로 바꿔 [타임라인](../../../03-techniques/analysis/timeline/index.md)에 올립니다. 시각 기준은 [맥의 시각 값](../../../01-foundations/value-decoding/mac-time-values.md)을 참고합니다.
 
 ## 흔한 오판
 
-- **동기화 폴더에 파일이 있으니 이 맥이 올렸다고 보는 경우.** 같은 계정의 다른 기기가 올린 파일도 동기화로 내려오기 때문에, 아이클라우드 드라이브라면 `version_device`가 어느 기기와 이어지는지 먼저 봅니다(필자 해석).
-- **로컬 폴더에 내용이 없으니 파일이 없었다고 보는 경우.** 드롭박스 파일 공급자판에서 "오프라인에서 사용 가능"으로 지정하지 않은 파일은 디스크 공간이 모자라면 자동으로 온라인 전용이 될 수 있습니다 [3]. 필자 해석으로는 로컬 폴더에 파일 자리만 있고 내용은 없을 수 있습니다.
+- **동기화 폴더에 파일이 있으니 이 맥이 올렸다고 보는 경우.** 같은 계정의 다른 기기가 올린 파일도 동기화로 내려오기 때문에, 아이클라우드 드라이브라면 `version_device`가 어느 기기와 이어지는지 먼저 봅니다.
+- **로컬 폴더에 내용이 없으니 파일이 없었다고 보는 경우.** 드롭박스 파일 공급자판에서 "오프라인에서 사용 가능"으로 지정하지 않은 파일은 디스크 공간이 모자라면 자동으로 온라인 전용이 될 수 있습니다 [3]. 이때 로컬 폴더에는 파일 자리만 있고 내용은 없을 수 있습니다.
 - **`~/Library/CloudStorage/` 아래에 없으니 드롭박스를 쓰지 않았다고 보는 경우.** 드롭박스 폴더를 외장 드라이브로 옮기는 기능이 일부 사용자에게 배포되고 있습니다(2025년 3월 기준) [3].
 - **자동 수집 결과에 클라우드 폴더가 없으니 쓰지 않았다고 보는 경우.** ForensicArtifacts 정의에 제3자 클라우드 항목이 없습니다 [1].
-- **`item_sharing_options` 값으로 공유 대상까지 말하는 경우.** mac_apt는 이 값이 0인지 아닌지로 공유 여부만 판단하고 [2], 0이 아닌 값의 비트 뜻은 확인하지 못했습니다.
+- **`item_sharing_options` 값으로 공유 대상까지 말하는 경우.** 이 값으로는 0인지 아닌지에 따른 공유 여부만 알 수 있고 [2], 0이 아닌 값의 비트 뜻은 알려져 있지 않습니다.
 
 ## 보고서 문장 예
 

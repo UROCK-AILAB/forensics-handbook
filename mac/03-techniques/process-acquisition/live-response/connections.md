@@ -13,7 +13,7 @@ nav_order: 2000
 
 원격 접속이나 자료 유출이 의심될 때, 지금 이 맥이 어디와 연결돼 있고 어떤 프로세스가 그 연결을 쥐고 있는지 볼 때 씁니다. 라우팅 테이블과 연결 목록은 RFC 3227 휘발성 순서의 2단계에 들어가고 [1], 순서 전체는 [휘발성 순서 (Order of Volatility)](order-of-volatility.md)에 있습니다.
 
-연결을 끊을지는 이 목록을 뜬 다음에 정합니다. RFC 3227은 네트워크만 끊어도 공격자가 심어 둔 데드맨 스위치 (dead man switch)가 증거를 지울 수 있다고 경고하고 [1], 이 위험과 피해가 번질 위험을 함께 따져 결정한 뒤 그 시각과 까닭을 수집 기록에 남깁니다.
+연결을 끊을지는 이 목록을 뜬 다음에 정합니다. 네트워크만 끊어도 공격자가 심어 둔 데드맨 스위치 (dead man switch)가 증거를 지울 수 있으므로 [1], 이 위험과 피해가 번질 위험을 함께 따져 결정한 뒤 그 시각과 까닭을 수집 기록에 남깁니다.
 
 ## 절차
 
@@ -42,7 +42,7 @@ nav_order: 2000
    netstat -s
    ```
 
-5. 의심 주소나 포트가 나오면 좁혀 봅니다. `-i` 뒤에 `[46][protocol][@hostname|hostaddr][:service|port]` 꼴로 조건을 붙이고 [2], 아래 줄은 man 페이지의 예를 옮긴 것입니다.
+5. 의심 주소나 포트가 나오면 좁혀 봅니다. `-i` 뒤에 `[46][protocol][@hostname|hostaddr][:service|port]` 꼴로 조건을 붙입니다 [2].
 
    ```
    lsof -nP -iTCP:25
@@ -74,9 +74,9 @@ nav_order: 2000
 
 ## 함정과 한계
 
-`netstat` man 페이지에는 소켓을 가진 PID나 프로세스 이름을 보여 주는 옵션 설명이 없어서 [3], 연결과 프로세스를 잇는 일은 `lsof -i` 로 합니다. `-v` 가 PID 칸을 더하는지는 확인하지 못했으니 기대지 않습니다. `lsof` 를 root 없이 돌리면 자기 프로세스의 소켓만 나와서 [2] 목록이 비어 보여도 연결이 없다는 뜻이 아닙니다.
+`netstat` 에는 소켓을 가진 PID나 프로세스 이름을 보여 주는 옵션이 문서화돼 있지 않아서 [3], 연결과 프로세스를 잇는 일은 `lsof -i` 로 합니다. `-v` 가 PID 칸을 더하는지도 문서에 없으니 기대지 않습니다. `lsof` 를 root 없이 돌리면 자기 프로세스의 소켓만 나와서 [2] 목록이 비어 보여도 연결이 없다는 뜻이 아닙니다.
 
-ARP 캐시, DNS 설정, 인터페이스 설정을 보는 명령은 이 페이지의 참고 문헌으로 옵션과 출력을 확인하지 못해서 싣지 않았습니다. 디스크에 남은 설정은 [네트워크 인터페이스와 설정 (SystemConfiguration)](../../../02-artifacts/network/network-interfaces.md)과 [hosts와 DNS 설정 (hosts·DNS)](../../../02-artifacts/network/hosts-dns.md)에서 봅니다.
+디스크에 남은 네트워크 설정은 [네트워크 인터페이스와 설정 (SystemConfiguration)](../../../02-artifacts/network/network-interfaces.md)과 [hosts와 DNS 설정 (hosts·DNS)](../../../02-artifacts/network/hosts-dns.md)에서 봅니다.
 
 ## 결과를 어떻게 해석하나
 

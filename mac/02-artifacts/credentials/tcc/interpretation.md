@@ -13,7 +13,7 @@ TCC.db `access` 표의 한 행은 `service`(자료 종류)와 `client`(앱)의 �
 
 파일과 표의 구조는 [권한 DB 구조](tcc-db.md)에 있고, 이 페이지는 그 칸에 들어가는 값을 풉니다. macOS 10.15 이하에서는 `allowed` 칸 하나로 허용 여부만 남지만, macOS 11부터는 `auth_value`로 상태를 여러 단계로 나누고 `auth_reason`으로 그 상태를 누가 정했는지까지 남깁니다 [1][2][4].
 
-Apple은 이 값들의 공식 정의를 공개하지 않았습니다. 아래 이름은 Jamf Aftermath 소스의 대응표에서 가져왔고 [4], 서비스 설명과 도입 버전은 Apple이 GitHub에 올린 기기 관리 프로파일 (PPPC) 스키마에서 가져왔습니다 [3].
+Apple은 이 값들의 공식 정의를 공개하지 않았습니다. 아래 이름은 Jamf Aftermath 소스의 대응표에 있는 이름이고 [4], 서비스 설명과 도입 버전은 Apple 기기 관리 프로파일 (PPPC) 스키마의 내용입니다 [3].
 
 ## 권한 상태 값
 
@@ -26,9 +26,9 @@ macOS 10.15 이하의 `allowed` 칸은 0이면 허용 안 됨, 1이면 허용입
 | 2 | allowed | 허용 |
 | 3 | limited | 제한된 허용 |
 | 4 | addOnly | 추가만 허용 |
-| 5 | singleBootAllowed | 소스 주석은 "allowed for a unique boot_uuid", 한 번의 부팅 동안만 허용 |
+| 5 | singleBootAllowed | 한 번의 부팅(boot_uuid) 동안만 허용 |
 
-3(limited)과 4(addOnly)가 어느 서비스에서 쓰이는지는 확인한 자료가 없습니다. 사진 추가 권한으로 보이는 `kTCCServicePhotosAdd`라는 서비스 이름은 있지만 [4], 두 값과 어떻게 이어지는지는 확인하지 못했습니다.
+3(limited)과 4(addOnly)가 어느 서비스에서 쓰이는지는 공개 자료가 없습니다. 사진 추가 권한으로 보이는 `kTCCServicePhotosAdd`라는 서비스 이름이 있지만 [4], 두 값과의 관계는 알려져 있지 않아 검체에서 확인합니다.
 
 mac_apt와 APOLLO는 0(거부)과 2(허용)만 이름으로 풀고 나머지 값은 빈칸으로 둡니다 [1][2]. 그래서 도구 출력만 보면 1·3·4·5인 행의 상태가 사라진 것처럼 보이고, 원본 값을 SQL로 따로 확인해야 합니다.
 
@@ -52,11 +52,11 @@ macOS 11 이상의 `auth_reason` 값은 아래와 같습니다 [4]. 오른쪽 �
 | 11 | entitled | 권한 선언(entitlement)에 따름 |
 | 12 | appTypePolicy | 앱 종류 정책 |
 
-최신 macOS에서 12보다 큰 값이 생겼는지는 확인한 자료가 없습니다. 표에 없는 값이 나오면 이름을 짐작해 붙이지 말고 숫자 그대로 보고합니다.
+최신 macOS에서 12보다 큰 값이 생겼는지는 공개 자료가 없습니다. 표에 없는 값이 나오면 이름을 짐작해 붙이지 말고 숫자 그대로 보고합니다.
 
 ## 서비스 이름
 
-`service` 칸 값은 `kTCCService`로 시작하는 문자열입니다 [4]. 아래 표의 우리말 뜻은 Aftermath 소스가 서비스마다 붙인 영어 이름을 옮긴 것이고, 소스 주석은 이 대응을 TCC.framework의 Localizable.strings와 rainforest.engineering 글에서 모았다고 적고 있습니다 [4]. 괄호 안 설명과 도입 버전은 PPPC 스키마를 따랐습니다 [3]. PPPC 프로파일 키 이름은 `kTCCService`를 뗀 형태입니다 [3].
+`service` 칸 값은 `kTCCService`로 시작하는 문자열입니다 [4]. 아래 표의 우리말 뜻은 Aftermath 소스가 서비스마다 붙인 영어 이름을 옮긴 것이고, 이 대응은 TCC.framework의 Localizable.strings와 rainforest.engineering 글에서 모은 것입니다 [4]. 괄호 안 설명과 도입 버전은 PPPC 스키마의 내용입니다 [3]. PPPC 프로파일 키 이름은 `kTCCService`를 뗀 형태입니다 [3].
 
 | `service` 값 | 뜻 | PPPC 도입 |
 |---|---|---|
@@ -74,15 +74,15 @@ macOS 11 이상의 `auth_reason` 값은 아래와 같습니다 [4]. 오른쪽 �
 | `kTCCServiceDeveloperTool` | 개발자 도구 | PPPC 스키마에 없음 |
 | `kTCCServiceEndpointSecurityClient` | Endpoint Security 클라이언트 | PPPC 스키마에 없음 |
 
-PPPC 스키마에는 이 밖에도 10.14에 `AddressBook`·`Calendar`·`Reminders`·`Photos`·`Camera`·`Microphone`이, 10.15에 `MediaLibrary`·`FileProviderPresence`·`SpeechRecognition`이, 11.0에 `BluetoothAlways`가 실려 있습니다 [3]. Aftermath 대응표에는 `kTCCServiceSystemPolicyDeveloperFiles`, `kTCCServiceUserAvailability`, `kTCCServiceContactsFull`, `kTCCServiceContactsLimited`, `kTCCServiceLocation`, `kTCCServiceFileProviderDomain`(iCloud Drive 접근), `kTCCServiceMotion`, `kTCCServiceFocusStatus`, `kTCCServiceGameCenterFriends`, `kTCCServiceWillow`(홈 데이터), `kTCCServicePhotosAdd`, `kTCCServicePrototype3Rights`, `kTCCServiceSiri`, `kTCCServiceLiverpool`(위치), `kTCCServiceUbiquity`(iCloud), `kTCCServiceShareKit`(공유)도 있습니다 [4]. 이 가운데 어느 서비스를 먼저 검토할지는 [권한 변경 흔적](changes.md)의 탐지 절에서 다룹니다.
+이 밖에 PPPC로 다룰 수 있는 서비스는 10.14에 `AddressBook`·`Calendar`·`Reminders`·`Photos`·`Camera`·`Microphone`이, 10.15에 `MediaLibrary`·`FileProviderPresence`·`SpeechRecognition`이, 11.0에 `BluetoothAlways`가 있습니다 [3]. 서비스 이름으로는 `kTCCServiceSystemPolicyDeveloperFiles`, `kTCCServiceUserAvailability`, `kTCCServiceContactsFull`, `kTCCServiceContactsLimited`, `kTCCServiceLocation`, `kTCCServiceFileProviderDomain`(iCloud Drive 접근), `kTCCServiceMotion`, `kTCCServiceFocusStatus`, `kTCCServiceGameCenterFriends`, `kTCCServiceWillow`(홈 데이터), `kTCCServicePhotosAdd`, `kTCCServicePrototype3Rights`, `kTCCServiceSiri`, `kTCCServiceLiverpool`(위치), `kTCCServiceUbiquity`(iCloud), `kTCCServiceShareKit`(공유)도 쓰입니다 [4]. 이 가운데 어느 서비스를 먼저 검토할지는 [권한 변경 흔적](changes.md)의 탐지 절에서 다룹니다.
 
 PPPC 도입 버전은 MDM 프로파일로 그 권한을 다룰 수 있게 된 버전이라서, 그 서비스가 TCC.db에 처음 나타난 버전과 같다고 단정하지 않습니다.
 
 ## client와 나머지 칸
 
-`client`는 권한을 받은 앱을 가리킵니다. `client_type`이 0이면 번들 ID, 1이면 절대 경로라는 설명이 널리 퍼져 있지만 확인한 자료가 없고, PPPC 스키마의 `IdentifierType` 값이 `bundleID`와 `path` 두 가지라서 그런 대응이 있으리라 짐작할 수 있을 뿐입니다 [3]. 그래서 `client` 값이 `/`로 시작하는 경로인지, 번들 ID 모양인지를 직접 보고 가립니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
+`client`는 권한을 받은 앱을 가리킵니다. `client_type`이 0이면 번들 ID, 1이면 절대 경로라는 설명이 널리 퍼져 있지만 이를 뒷받침하는 공개 자료는 없습니다. PPPC 스키마의 `IdentifierType` 값이 `bundleID`와 `path` 두 가지라서 그런 대응이 있을 가능성은 있습니다 [3]. 그래서 `client` 값이 `/`로 시작하는 경로인지, 번들 ID 모양인지를 직접 보고 가립니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
 
-`indirect_object_identifier`는 AppleEvents 권한에서 이벤트를 받는 쪽 앱을 가리키는 칸으로 보입니다. PPPC에서 AppleEvents만 받는 프로세스를 적는 `AEReceiverIdentifier`를 따로 두는 것과 맞지만 [3], 칸 뜻 자체는 확인한 자료가 없습니다.
+`indirect_object_identifier`는 AppleEvents 권한에서 이벤트를 받는 쪽 앱을 가리키는 칸으로 보입니다. PPPC에서 AppleEvents만 받는 프로세스를 적는 `AEReceiverIdentifier`를 따로 두는 것과 맞지만 [3], 칸 뜻 자체를 밝힌 공개 자료는 없습니다.
 
 ## 증거로서 의미
 
@@ -94,7 +94,7 @@ PPPC 도입 버전은 MDM 프로파일로 그 권한을 다룰 수 있게 된 �
 
 도구 출력의 빈칸은 값이 없다는 뜻이 아닐 수 있어서, 앞의 권한 상태 값 절에서 본 것처럼 빈칸이 보이면 원본 값을 확인합니다.
 
-`auth_value`와 `auth_reason`의 이름은 도구 작성자가 소스에 적은 대응이라서, 보고서에는 숫자 값과 함께 "Jamf Aftermath 소스의 대응표에 따르면"처럼 출처를 적습니다. 서비스 목록도 확인한 자료에 있는 이름까지라서, 새 macOS에서 처음 보는 `kTCCService` 이름이 나오면 뜻을 짐작하지 말고 이름 그대로 옮깁니다.
+`auth_value`와 `auth_reason`의 이름은 도구 작성자가 소스에 적은 대응이라서, 보고서에는 숫자 값과 함께 "Jamf Aftermath 소스의 대응표에 따르면"처럼 출처를 적습니다. 서비스 목록도 공개 자료에 나온 이름까지라서, 새 macOS에서 처음 보는 `kTCCService` 이름이 나오면 뜻을 짐작하지 말고 이름 그대로 옮깁니다.
 
 macOS 10.15 이하의 `allowed` 값(1=허용)과 macOS 11 이상의 `auth_value` 값(2=허용)은 숫자가 달라서, 두 구조의 결과를 한 표에 섞을 때는 먼저 이름으로 바꾼 뒤 합칩니다.
 

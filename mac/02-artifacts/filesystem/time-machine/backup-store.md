@@ -23,14 +23,14 @@ Apple은 백업 디스크 형식으로 APFS와 APFS(암호화)를 권하지만, 
 | 머신 디렉터리 | 한 컴퓨터의 백업을 모두 담는 디렉터리 [1] | 백업 디스크의 루트가 머신 디렉터리 노릇을 함 [1] |
 | 백업 하나의 이름 | 시각 형식, 예: `2011-07-03-123456` [1] | `com.apple.TimeMachine.YYYY-MM-DD-HHMMSS.backup`, 예: `com.apple.TimeMachine.2011-07-03-123456.backup` [1] |
 | 백업 하나의 모습 | 파일·폴더·하드 링크로 짠 디렉터리 [4] | 읽기 전용 합성 스냅숏 (synthetic snapshot) [4] |
-| 진행 중인 백업 | 이번 자료로 확인하지 못함 | 이름에 `.inprogress` 확장자가 붙음 [5] |
-| 백업 사이 변화량 계산 | `tmutil calculatedrift`로 계산 [1] | 매뉴얼에 HFS 한정으로 적혀 있어 쓰지 않음 [1] |
+| 진행 중인 백업 | 공개 자료 없음 | 이름에 `.inprogress` 확장자가 붙음 [5] |
+| 백업 사이 변화량 계산 | `tmutil calculatedrift`로 계산 [1] | HFS 전용 명령이라 쓰지 않음 [1] |
 
-OS X 10.11부터 타임 머신이 백업에 복사한 파일의 체크섬을 기록하고 그 전 버전이 복사한 파일은 거슬러 계산하지 않는데 [1], 체크섬 값을 어디에 어떤 형식으로 두는지는 이번 자료로 확인하지 못했습니다. APFS 백업의 동작은 [5]가 Big Sur와 Monterey에서, [2]가 Sonoma와 Sequoia에서 관찰한 내용이고, APFS 백업이 정확히 어느 버전부터인지는 여기서 단정하지 않습니다.
+OS X 10.11부터 타임 머신이 백업에 복사한 파일의 체크섬을 기록하고 그 전 버전이 복사한 파일은 거슬러 계산하지 않습니다 [1]. 체크섬 값을 어디에 어떤 형식으로 두는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. APFS 백업의 동작은 Big Sur·Monterey [5]와 Sonoma·Sequoia [2] 기준이고, APFS 백업이 어느 버전부터 쓰였는지는 공개 자료로 정해지지 않았습니다.
 
 로컬 스냅숏은 백업하는 APFS 볼륨에 남는 볼륨 스냅숏이고 [1], 보통 24시간 뒤에 지워집니다 [4]. 이름은 `com.apple.TimeMachine.YYYY-MM-DD-HHMMSS.local` 형식이고(예: `com.apple.TimeMachine.2011-07-03-123456.local`) [1][5], 백업 디스크 쪽 이름과 끝의 `.local` / `.backup`만 다릅니다.
 
-백업 대상은 연결한 디스크뿐 아니라 AirPort Time Capsule이나 SMB·AFP로 타임 머신을 지원하는 NAS일 수도 있고, Apple은 둘 중 SMB를 권합니다 [3]. 네트워크 백업이 어떤 디스크 이미지 이름과 구조로 남는지는 이번 자료로 확인하지 못했고, 디스크 이미지 형식 일반은 [디스크 이미지 형식 (DMG·Sparsebundle)](../../../01-foundations/disk-volume/dmg-sparsebundle.md)에서 다룹니다.
+백업 대상은 연결한 디스크뿐 아니라 AirPort Time Capsule이나 SMB·AFP로 타임 머신을 지원하는 NAS일 수도 있고, Apple은 둘 중 SMB를 권합니다 [3]. 네트워크 백업이 어떤 디스크 이미지 이름과 구조로 남는지는 공개된 분석 자료가 없어 검체에서 확인하고, 디스크 이미지 형식 일반은 [디스크 이미지 형식 (DMG·Sparsebundle)](../../../01-foundations/disk-volume/dmg-sparsebundle.md)에서 다룹니다.
 
 ## 구조
 
@@ -56,13 +56,13 @@ macOS는 백업 저장장치의 스냅숏을 숨은 폴더 `/Volumes/.timemachin
 
 ## 시각 해석
 
-백업 이름과 로컬 스냅숏 이름에 든 `YYYY-MM-DD-HHMMSS`는 백업을 만든 시각이고, `tmutil listlocalsnapshotdates`도 로컬 스냅숏 생성 날짜를 같은 형식으로 보여 줍니다 [1]. 이 시각이 현지 시각인지 UTC인지는 이번 자료로 확인하지 못해서, 같은 백업을 가리키는 로그 기록이나 설정 파일의 날짜와 맞춰 본 뒤에 시간대를 정합니다. 백업 안 파일의 수정 시각은 원래 파일의 값이라서 백업 이름의 시각과 따로 읽고, 두 값을 섞어 "이때 고쳤다" 고 쓰지 않습니다. 맥 시각 값의 여러 형식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
+백업 이름과 로컬 스냅숏 이름에 든 `YYYY-MM-DD-HHMMSS`는 백업을 만든 시각이고, `tmutil listlocalsnapshotdates`도 로컬 스냅숏 생성 날짜를 같은 형식으로 보여 줍니다 [1]. 이 시각이 현지 시각인지 UTC인지는 공개 자료로 정해지지 않아서, 같은 백업을 가리키는 로그 기록이나 설정 파일의 날짜와 맞춰 본 뒤에 시간대를 정합니다. 백업 안 파일의 수정 시각은 원래 파일의 값이라서 백업 이름의 시각과 따로 읽고, 두 값을 섞어 "이때 고쳤다" 고 쓰지 않습니다. 맥 시각 값의 여러 형식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
 
 ## 함정과 한계
 
-APFS 백업 디스크의 스냅숏은 다른 곳으로 복사하거나 옮길 방법이 없다고 적혀 있어서(2022년 글 기준) [4], 파일 몇 개만 골라 복사하면 스냅숏 구조를 잃습니다. 필자 판단으로는 백업 디스크 전체를 이미징하는 쪽이 현실적이고, 절차는 [맥 증거 확보 (Acquisition)](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)를 따릅니다.
+APFS 백업 디스크의 스냅숏은 다른 곳으로 복사하거나 옮길 방법이 없어서(2022년 기준) [4], 파일 몇 개만 골라 복사하면 스냅숏 구조를 잃습니다. 그래서 백업 디스크 전체를 이미징하는 쪽이 현실적이고, 절차는 [맥 증거 확보 (Acquisition)](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)를 따릅니다.
 
-안티포렌식 쪽에서는 지우는 단위를 봅니다. APFS 백업은 항목 하나를 지울 수 없어서 [4] 백업을 통째로 지운 흔적은 백업 이름의 시각 순서가 비는 자리로 드러날 수 있고(필자 판단), 로컬 스냅숏은 `tmutil deletelocalsnapshots`로 지우거나 `tmutil thinlocalsnapshots`로 공간을 회수할 수 있습니다 [1]. 다만 로컬 스냅숏은 보통 24시간 뒤에 저절로 지워지니 [4] 로컬 스냅숏이 적다는 사실만으로 누가 지웠다고 보지 않고, 백업 디스크의 백업 목록과 로그를 함께 봅니다.
+안티포렌식 쪽에서는 지우는 단위를 봅니다. APFS 백업은 항목 하나를 지울 수 없어서 [4] 백업을 통째로 지운 흔적은 백업 이름의 시각 순서가 비는 자리로 드러날 가능성이 있고, 로컬 스냅숏은 `tmutil deletelocalsnapshots`로 지우거나 `tmutil thinlocalsnapshots`로 공간을 회수할 수 있습니다 [1]. 다만 로컬 스냅숏은 보통 24시간 뒤에 저절로 지워지니 [4] 로컬 스냅숏이 적다는 사실만으로 누가 지웠다고 보지 않고, 백업 디스크의 백업 목록과 로그를 함께 봅니다.
 
 `tmutil`의 여러 명령은 root 권한과 전체 디스크 접근 권한(Full Disk Access)이 있어야 돌아갑니다 [1]. 증거 원본에 지우기·솎기 명령을 쓰면 증거가 바뀌니, 원본 디스크에는 조회 명령만 씁니다.
 

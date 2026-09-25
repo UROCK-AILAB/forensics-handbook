@@ -15,7 +15,7 @@ FSEvents 레코드의 플래그 칸은 4바이트짜리 비트 묶음이고, 한
 
 ## 디스크 값 대조표
 
-libyal 문서 [1]는 플래그를 little-endian 정수로 읽은 값으로 적고, FSEventsParser [2]는 같은 4바이트를 빅엔디언(`>I`)으로 읽은 값으로 적습니다. 그래서 두 표의 16진수는 바이트 순서만 뒤집혀 있고, 아래 표는 필자가 바이트를 뒤집어 한 줄씩 맞춰 본 결과입니다.
+libyal 문서 [1]는 플래그를 little-endian 정수로 읽은 값으로 적고, FSEventsParser [2]는 같은 4바이트를 빅엔디언(`>I`)으로 읽은 값으로 적습니다. 그래서 두 표의 16진수는 바이트 순서만 뒤집혀 있고, 아래 표는 바이트를 뒤집어 두 값을 한 줄씩 맞춘 것입니다.
 
 | 디스크 값 (LE) [1] | libyal 이름 [1] | FSEventsParser 값 (BE) · 이름 [2] |
 |---|---|---|
@@ -33,7 +33,7 @@ libyal 문서 [1]는 플래그를 little-endian 정수로 읽은 값으로 적�
 | 0x00000800 | FSE_DOCID_CREATED (설명 없음) | 0x00080000 NOT_USED |
 | 0x00001000 | DocumentRevision (FSE_DOCID_CHANGED) | 0x00100000 DocumentRevisioning |
 | 0x00002000 | Unmount acknowledgment required (FSE_UNMOUNT_PENDING) | 0x00200000 NOT_USED |
-| 0x00004000 | ItemCloned (FSE_CLONE) | 0x00400000 ItemCloned (코드 주석 "macOS HighSierra") |
+| 0x00004000 | ItemCloned (FSE_CLONE) | 0x00400000 ItemCloned (macOS High Sierra) |
 | 0x00010000 | FSE_MODE_CLONE | 0x00000100 NOT_USED |
 | 0x00020000 | FSE_TRUNCATED_PATH | 0x00000200 NOT_USED |
 | 0x00040000 | FSE_REMOTE_DIR_EVENT | 0x00000400 NOT_USED |
@@ -76,9 +76,9 @@ FSE_CREATE_DIR           7     FSE_ACTIVITY          15
 FSE_CHOWN                8
 ```
 
-디스크 값 0x1~0x4000은 이 번호 n을 `1<<n` 으로 옮긴 값과 하나하나 맞고(필자 대조), 예를 들어 FSE_CLONE은 14번이라 디스크 값 0x4000이 됩니다 [1][4].
+디스크 값 0x1~0x4000은 이 번호 n을 `1<<n` 으로 옮긴 값과 하나하나 맞고, 예를 들어 FSE_CLONE은 14번이라 디스크 값 0x4000이 됩니다 [1][4].
 
-이벤트 종류 번호와 따로 붙는 수식 비트는 사정이 다릅니다. 커널 헤더는 FSE_MODE_HLINK를 `1U<<31`, FSE_MODE_LAST_HLINK를 `1U<<30`, FSE_REMOTE_DIR_EVENT를 `1U<<29`, FSE_TRUNCATED_PATH를 `1U<<28`, FSE_MODE_CLONE을 `1U<<27` 로 정의하는데, 이 값은 위 대조표의 디스크 값과 다릅니다 [4]. libyal 문서는 디스크 값 0x00100000 같은 비트에 커널과 같은 이름을 붙였을 뿐이라서 [1], 커널 헤더의 숫자로 디스크 값을 풀면 틀립니다.
+이벤트 종류 번호와 따로 붙는 수식 비트는 사정이 다릅니다. 커널 헤더는 FSE_MODE_HLINK를 `1U<<31`, FSE_MODE_LAST_HLINK를 `1U<<30`, FSE_REMOTE_DIR_EVENT를 `1U<<29`, FSE_TRUNCATED_PATH를 `1U<<28`, FSE_MODE_CLONE을 `1U<<27` 로 정의하는데, 이 값은 위 대조표의 디스크 값과 다릅니다 [4]. 디스크 값 0x00100000 같은 비트는 커널과 이름만 같을 뿐이라서 [1], 커널 헤더의 숫자로 디스크 값을 풀면 틀립니다.
 
 ## 공개 API 이름과 섞지 않기
 
@@ -92,9 +92,9 @@ ItemIsHardlink, ItemIsLastHardlink, ItemIsSymlink, ItemModified,
 ItemRemoved, ItemRenamed, ItemXattrMod, OwnEvent, ItemCloned
 ```
 
-이름은 디스크 대조표와 비슷해 보이지만, 참고한 Apple 문서에는 상수의 숫자 값과 상수별 도입 버전이 나와 있지 않았습니다 [5]. 디스크 값을 API 상수 값으로 풀지 말고 위 대조표로 풉니다.
+이름은 디스크 대조표와 비슷해 보이지만, 이 API 문서에는 상수의 숫자 값과 상수별 도입 버전이 나와 있지 않습니다 [5]. 디스크 값을 API 상수 값으로 풀지 말고 위 대조표로 풉니다.
 
-API 쪽 플래그 가운데 몇 개는 기록이 빠지거나 합쳐졌다는 뜻이라서 알아 둘 만합니다. Apple 문서는 한 디렉터리와 그 하위 디렉터리에서 거의 동시에 일어난 이벤트가 하나로 합쳐지면 MustScanSubDirs가 붙고, 그 경로를 하위까지 다시 살펴야 한다고 설명합니다 [3]. KernelDropped와 UserDropped는 커널과 데몬 사이 통신 오류로 이벤트가 빠졌다는 뜻이고, 이때 MustScanSubDirs도 함께 켜집니다 [3]. 위 디스크 대조표에는 이 세 이름에 해당하는 칸이 없습니다. 기록이 합쳐지거나 빠지는 일이 해석에 주는 영향은 [해석 함정 (Pitfalls)](pitfalls.md)에서 다룹니다.
+API 쪽 플래그 가운데 몇 개는 기록이 빠지거나 합쳐졌다는 뜻이라서 알아 둘 만합니다. 한 디렉터리와 그 하위 디렉터리에서 거의 동시에 일어난 이벤트가 하나로 합쳐지면 MustScanSubDirs가 붙고, 그 경로는 하위까지 다시 살펴야 합니다 [3]. KernelDropped와 UserDropped는 커널과 데몬 사이 통신 오류로 이벤트가 빠졌다는 뜻이고, 이때 MustScanSubDirs도 함께 켜집니다 [3]. 위 디스크 대조표에는 이 세 이름에 해당하는 칸이 없습니다. 기록이 합쳐지거나 빠지는 일이 해석에 주는 영향은 [해석 함정 (Pitfalls)](pitfalls.md)에서 다룹니다.
 
 ## 증거로서 의미
 

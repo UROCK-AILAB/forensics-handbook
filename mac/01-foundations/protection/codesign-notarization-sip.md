@@ -114,9 +114,9 @@ SSV 는 macOS 11 Big Sur 에서 도입한 읽기 전용 시스템 볼륨입니�
 
 ## 포렌식에서 중요한 점
 
-**시스템 볼륨과 데이터 볼륨을 나눠 봅니다.** SSV 가 켜져 있으면 봉인이 맞지 않는 시스템으로는 시동되지 않아서, macOS 11 이후 시스템 볼륨에 변조 흔적이 남아 있을 여지는 거의 없고 사용자와 공격자의 흔적은 주로 데이터 볼륨 쪽에 쌓입니다. 다만 보안 수준을 낮춰 SSV 를 끈 맥이라면 이 전제가 무너지므로 SSV·SIP 가 켜져 있었는지부터 따집니다. 이 부분은 공식 문서의 사실에서 끌어낸 해석이고, 두 볼륨이 어떻게 이어져 보이는지는 [볼륨 그룹과 펌링크](../disk-volume/volume-group-firmlinks.md) 페이지에서 다룹니다. 이미지를 확보할 때 두 볼륨을 모두 담는 방법은 [맥 증거 확보](../../03-techniques/process-acquisition/evidence-acquisition/index.md) 를 봅니다.
+**시스템 볼륨과 데이터 볼륨을 나눠 봅니다.** SSV 가 켜져 있으면 봉인이 맞지 않는 시스템으로는 시동되지 않아서, macOS 11 이후 시스템 볼륨에 변조 흔적이 남아 있을 여지는 거의 없고 사용자와 공격자의 흔적은 주로 데이터 볼륨 쪽에 쌓입니다. 다만 보안 수준을 낮춰 SSV 를 끈 맥이라면 이 전제가 무너지므로 SSV·SIP 가 켜져 있었는지부터 따집니다 [6]. 두 볼륨이 어떻게 이어져 보이는지는 [볼륨 그룹과 펌링크](../disk-volume/volume-group-firmlinks.md) 페이지에서 다룹니다. 이미지를 확보할 때 두 볼륨을 모두 담는 방법은 [맥 증거 확보](../../03-techniques/process-acquisition/evidence-acquisition/index.md) 를 봅니다.
 
-**SIP 보호 경로의 이상한 파일은 SIP 가 꺼졌던 흔적일 수 있습니다.** SIP 가 켜진 시스템에서는 `/System`·`/usr`(`/usr/local` 은 빼고)·`/bin`·`/sbin` 에 서드파티가 새 파일을 만들 수 없어서, 이 경로에서 macOS 가 설치하지 않은 파일이 보이면 SIP 가 꺼진 적이 있는지 확인할 근거가 됩니다(macOS 11 이후라면 SSV 도 함께 꺼졌는지 봅니다). 반대로 `/Applications`·`/Library`·`/usr/local` 은 서드파티가 쓸 수 있는 곳이라 지속성 항목과 악성 파일을 찾을 때 먼저 볼 자리로 남습니다. 두 문장 모두 공식 문서에 직접 적힌 결론이 아니라 보호 경로 목록에서 끌어낸 해석이고, 실제 탐색 순서는 [악성 코드 지속성 찾기](../../04-scenarios/incident/persistence.md) 와 [권한 상승과 TCC 우회 흔적](../../04-scenarios/incident/privilege-tcc-bypass.md) 을 따릅니다.
+**SIP 보호 경로의 이상한 파일은 SIP 가 꺼졌던 흔적일 수 있습니다.** SIP 가 켜진 시스템에서는 `/System`·`/usr`(`/usr/local` 은 빼고)·`/bin`·`/sbin` 에 서드파티가 새 파일을 만들 수 없어서, 이 경로에서 macOS 가 설치하지 않은 파일이 보이면 SIP 가 꺼진 적이 있는지 확인할 근거가 됩니다(macOS 11 이후라면 SSV 도 함께 꺼졌는지 봅니다). 반대로 `/Applications`·`/Library`·`/usr/local` 은 서드파티가 쓸 수 있는 곳이라 지속성 항목과 악성 파일을 찾을 때 먼저 볼 자리로 남습니다 [1]. 실제 탐색 순서는 [악성 코드 지속성 찾기](../../04-scenarios/incident/persistence.md) 와 [권한 상승과 TCC 우회 흔적](../../04-scenarios/incident/privilege-tcc-bypass.md) 을 따릅니다.
 
 **서명·공증이 증명하는 범위는 좁습니다.**
 

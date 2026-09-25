@@ -10,9 +10,9 @@ LevelDB는 폴더 하나에 든 파일 묶음으로 키·값 데이터베이스 
 
 ## 이 형식을 쓰는 아티팩트
 
-ccl_chromium_reader README는 Chrome·Chromium과 "Chrome 비슷한" 앱(README는 Electron 앱을 예로 듦)의 저장소를 읽는 패키지라고 스스로를 소개하고, LevelDB와 함께 IndexedDB, Web Storage(Local Storage·Session Storage)를 지원 목록에 둡니다 [4]. 크롬 프로필 폴더의 위치와 브라우저 기록 전반은 [크롬·엣지·웨일 (Chromium 계열)](../../02-artifacts/browsers/chromium/index.md)에서 다룹니다.
+Chrome·Chromium 과 Electron 앱 같은 Chromium 기반 앱의 저장소는 ccl_chromium_reader 로 읽을 수 있고, 이 도구는 LevelDB 와 함께 IndexedDB, Web Storage(Local Storage·Session Storage)를 읽습니다 [4]. 크롬 프로필 폴더의 위치와 브라우저 기록 전반은 [크롬·엣지·웨일 (Chromium 계열)](../../02-artifacts/browsers/chromium/index.md)에서 다룹니다.
 
-CCL의 IndexedDB 글은 크롬 프로필의 `IndexedDB` 폴더 안에서 origin마다 `https_archive.org_0.indexeddb.leveldb` 처럼 "호스트의 구분 문자를 밑줄로 바꾼 이름_데이터베이스 번호.indexeddb.leveldb" 폴더를 두고, 값에 파일이 들어 있으면 `https_docs.google.com_0.indexeddb.blob` 처럼 같은 이름에 `.indexeddb.blob` 이 붙은 폴더를 함께 둔다고 적습니다 [5]. CCL의 Web Storage 글은 Local Storage를 프로필 아래 `Local Storage\leveldb` 에, Session Storage를 `Session Storage` 에 둔다고 적는데, 이 경로는 Windows 기준이라서 [6] macOS 검체에서는 크롬 프로필 폴더 안에서 같은 이름의 폴더를 찾아 확인합니다. 사파리·파이어폭스가 IndexedDB를 어떤 형식으로 저장하는지도 확인하지 못했으니, 두 브라우저는 [사파리 (Safari)](../../02-artifacts/browsers/safari/index.md)와 [파이어폭스 (Firefox)](../../02-artifacts/browsers/firefox.md)에서 따로 봅니다. 채팅 앱처럼 브라우저 엔진을 품은 앱이 macOS 어디에 LevelDB를 두는지도 앱마다 해당 페이지에서 확인합니다.
+크롬 프로필의 `IndexedDB` 폴더 안에는 origin마다 `https_archive.org_0.indexeddb.leveldb` 처럼 "호스트의 구분 문자를 밑줄로 바꾼 이름_데이터베이스 번호.indexeddb.leveldb" 폴더가 있고, 값에 파일이 들어 있으면 `https_docs.google.com_0.indexeddb.blob` 처럼 같은 이름에 `.indexeddb.blob` 이 붙은 폴더가 함께 있습니다 [5]. Local Storage는 프로필 아래 `Local Storage\leveldb` 에, Session Storage는 `Session Storage` 에 있습니다. 이 경로는 Windows 기준이라서 [6] macOS 검체에서는 크롬 프로필 폴더 안에서 같은 이름의 폴더를 찾아 확인합니다. 사파리·파이어폭스의 IndexedDB는 [사파리 (Safari)](../../02-artifacts/browsers/safari/index.md)와 [파이어폭스 (Firefox)](../../02-artifacts/browsers/firefox.md)에서 따로 봅니다. 채팅 앱처럼 브라우저 엔진을 품은 앱이 macOS 어디에 LevelDB를 두는지도 앱마다 해당 페이지에서 확인합니다.
 
 ## 구조
 
@@ -31,7 +31,7 @@ LevelDB 데이터베이스 하나는 폴더 하나 안의 파일 묶음입니다
 
 `.log` 파일이 약 4MB(기본값)가 되면 정렬 테이블로 바뀌고 새 로그 파일이 생깁니다 [1]. 로그에서 만든 테이블은 level-0이고, level-0 파일이 4개를 넘으면 level-1과 합치며 level-1은 2MB마다 새 파일을 만듭니다 [1]. level-L(L≥1)의 합계가 10^L MB를 넘으면 다음 레벨로 합칩니다 [1]. 삭제 표시는 더 오래된 테이블에 있는 옛 값을 가리려고 남는 항목이고 [1], 합치기가 덮어쓴 옛 값을 버리며 겹치는 더 높은 레벨이 없으면 삭제 표시도 버립니다 [1].
 
-데이터베이스를 다시 열 때마다 번호가 새로 붙은 MANIFEST가 생기고, 복구는 CURRENT를 읽고 → MANIFEST를 읽고 → 오래된 파일을 정리하고 → 로그 내용을 새 level-0 테이블로 옮기고 → 새 로그를 시작하는 순서로 진행합니다 [1]. 합치기나 복구가 끝날 때마다 현재 로그가 아닌 로그 파일과 어느 레벨에도 속하지 않는 테이블 파일을 지우는데, 문서는 이 정리를 RemoveObsoleteFiles라고 부릅니다 [1].
+데이터베이스를 다시 열 때마다 번호가 새로 붙은 MANIFEST가 생기고, 복구는 CURRENT를 읽고 → MANIFEST를 읽고 → 오래된 파일을 정리하고 → 로그 내용을 새 level-0 테이블로 옮기고 → 새 로그를 시작하는 순서로 진행합니다 [1]. 합치기나 복구가 끝날 때마다 현재 로그가 아닌 로그 파일과 어느 레벨에도 속하지 않는 테이블 파일을 지우고, 이 정리를 RemoveObsoleteFiles 라고 합니다 [1].
 
 ### `.log` 파일
 
@@ -51,7 +51,7 @@ LevelDB 데이터베이스 하나는 폴더 하나 안의 파일 묶음입니다
 | 3 | MIDDLE. 가운데 조각 |
 | 4 | LAST. 마지막 조각 |
 
-블록 끝에 6바이트 이하가 남으면 그 자리에서는 기록을 시작하지 않고 0으로 채우며(trailer), 정확히 7바이트가 남으면 데이터가 0바이트인 FIRST 기록을 씁니다 [2]. 로그 형식 자체에는 압축이 없고 [2], MANIFEST도 이 로그 형식으로 씁니다 [1]. 로그 기록의 데이터 안에 순번·개수·키와 값·삭제 표시가 어떤 모양으로 들어가는지는 이 페이지의 참고 문헌에 없습니다.
+블록 끝에 6바이트 이하가 남으면 그 자리에서는 기록을 시작하지 않고 0으로 채우며(trailer), 정확히 7바이트가 남으면 데이터가 0바이트인 FIRST 기록을 씁니다 [2]. 로그 형식 자체에는 압축이 없고 [2], MANIFEST도 이 로그 형식으로 씁니다 [1].
 
 ### `.ldb` 테이블 파일
 
@@ -64,7 +64,7 @@ LevelDB 데이터베이스 하나는 폴더 하나 안의 파일 묶음입니다
 | 3 | 두 핸들 뒤를 0으로 채워 여기까지 40바이트를 맞춤 |
 | 4 | magic, fixed64 LE = `0xdb4775248b80fb57` |
 
-Footer 전체는 40 + 8 = 48바이트입니다 [3]. 데이터 블록과 메타 블록은 선택적으로 압축하는데, 압축 종류를 어떻게 표시하는지는 이 문서에 없고 [3], ccl_chromium_reader는 Snappy 압축 풀기를 지원 목록에 둡니다 [4]. filter 메타 블록은 metaindex에 `filter.이름` 으로 등록하고 2KB 단위로 만듭니다 [3].
+Footer 전체는 40 + 8 = 48바이트입니다 [3]. 데이터 블록과 메타 블록은 선택적으로 압축하고 [3], ccl_chromium_reader는 Snappy 압축을 풀 수 있습니다 [4]. filter 메타 블록은 metaindex에 `filter.이름` 으로 등록하고 2KB 단위로 만듭니다 [3].
 
 ## 읽는 법
 
@@ -97,13 +97,13 @@ Footer 전체는 40 + 8 = 48바이트입니다 [3]. 데이터 블록과 메타 �
 
 ### 지우거나 덮어쓴 값
 
-LevelDB는 값을 지워도 그 자리를 바로 지우지 않고 삭제 표시를 새로 쓰며, 덮어쓴 옛 값과 삭제 표시는 합치기를 해야 버려집니다 [1]. 그래서 지우거나 덮어쓴 값이 합치기 전까지 `.log` 나 옛 `.ldb` 에 남아 있을 수 있는데, 이 해석은 LevelDB 설계 문서에서 이끌어낸 것이고 실측 근거는 확인하지 못했습니다. ccl_chromium_reader README는 LevelDB 모듈이 "살아 있는 기록과 삭제된/옛 버전 기록을 가리지 않고 모두" 내보낸다고 적고 있어서 [4], 이 도구의 결과에는 지금은 없는 값도 섞여 나올 수 있습니다. 결과를 보고서에 옮길 때는 기록마다 삭제 표시인지, 같은 키의 더 새 기록이 있는지를 확인해 "지금 값" 과 "예전 값" 을 나눠 적습니다.
+LevelDB는 값을 지워도 그 자리를 바로 지우지 않고 삭제 표시를 새로 쓰며, 덮어쓴 옛 값과 삭제 표시는 합치기를 해야 버려집니다 [1]. 그래서 지우거나 덮어쓴 값이 합치기 전까지 `.log` 나 옛 `.ldb` 에 남아 있을 수 있습니다. ccl_chromium_reader의 LevelDB 모듈은 살아 있는 기록과 삭제된·옛 버전 기록을 가리지 않고 모두 내보내서 [4], 이 도구의 결과에는 지금은 없는 값도 섞여 나올 수 있습니다. 결과를 보고서에 옮길 때는 기록마다 삭제 표시인지, 같은 키의 더 새 기록이 있는지를 확인해 "지금 값" 과 "예전 값" 을 나눠 적습니다.
 
-합치기나 복구가 끝나면 쓸모없어진 로그·테이블 파일을 지우니 [1], 그 파일들은 파일 시스템에서는 사라졌어도 비할당 영역에 남아 있을 수 있습니다. 테이블 파일은 끝 8바이트 magic으로, 로그 파일은 32KB 블록과 7바이트 기록 헤더 규칙으로 조각을 알아볼 수 있습니다. 이 방법은 형식에서 이끌어낸 것이고 복구율은 확인하지 못했으며, 일반 절차는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)에 있습니다.
+합치기나 복구가 끝나면 쓸모없어진 로그·테이블 파일을 지우니 [1], 그 파일들은 파일 시스템에서는 사라졌어도 비할당 영역에 남아 있을 수 있습니다. 테이블 파일은 끝 8바이트 magic으로, 로그 파일은 32KB 블록과 7바이트 기록 헤더 규칙으로 조각을 알아볼 수 있습니다. 일반 절차는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)에 있습니다.
 
 ### 원본을 열면 바뀐다
 
-데이터베이스를 여는 과정 자체가 복구 순서를 밟아 로그를 새 테이블로 옮기고 새 로그와 새 MANIFEST를 만들며 오래된 파일을 지웁니다 [1]. LevelDB 라이브러리로 원본 폴더를 그대로 열면 남아 있던 옛 로그와 옛 테이블이 사라질 수 있다는 뜻이라서, 폴더 전체를 사본으로 떠서 사본만 열고, 원본의 파일 목록과 크기·해시는 열기 전에 기록해 둡니다. 이 주의는 문서의 복구 순서에서 이끌어낸 것입니다.
+데이터베이스를 여는 과정 자체가 복구 순서를 밟아 로그를 새 테이블로 옮기고 새 로그와 새 MANIFEST를 만들며 오래된 파일을 지웁니다 [1]. LevelDB 라이브러리로 원본 폴더를 그대로 열면 남아 있던 옛 로그와 옛 테이블이 사라질 수 있다는 뜻이라서, 폴더 전체를 사본으로 떠서 사본만 열고, 원본의 파일 목록과 크기·해시는 열기 전에 기록해 둡니다.
 
 ### 손상과 비정상 종료
 
@@ -111,11 +111,11 @@ LevelDB는 값을 지워도 그 자리를 바로 지우지 않고 삭제 표시�
 
 ### 시각이 없다
 
-테이블 형식에는 기록 시각 칸이 없고 [3], LevelDB 자체에 벽시계 시각이 있다는 근거는 확인하지 못했습니다. 기록 사이의 앞뒤는 LevelDB 순번(sequence number)으로 따질 수 있지만 순번은 시각이 아닙니다. README는 Local Storage 기록을 LevelDB 순번으로 "batch" 와 연결하면 5~60초 안의 대략적인 시각을 얻을 수 있다고 적습니다 [4]. 이 시각은 LevelDB가 아니라 Local Storage가 `META:` 키의 protobuf 값에 적어 두는 batch 기록 시각이고, 크롬이 기록마다 5초를 기다렸다 쓰고 호스트마다 한 시간에 60번까지만 쓰기 때문에 스크립트가 값을 저장한 때와 데이터베이스에 들어간 때가 5~60초 벌어질 수 있다고 CCL 글이 설명합니다 [6]. 이런 시각은 대략값이라고 밝혀 쓰고, 파일 시스템 시각이나 브라우저 기록처럼 다른 시각과 맞춰 봅니다. 여러 시각을 한 시간축에 놓는 방법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
+테이블 형식에는 기록 시각 칸이 없습니다 [3]. 기록 사이의 앞뒤는 LevelDB 순번(sequence number)으로 따질 수 있지만 순번은 시각이 아닙니다. Local Storage 기록은 LevelDB 순번으로 "batch" 와 연결하면 5~60초 안의 대략적인 시각을 얻을 수 있습니다 [4]. 이 시각은 LevelDB가 아니라 Local Storage가 `META:` 키의 protobuf 값에 적어 두는 batch 기록 시각입니다. 크롬은 기록마다 5초를 기다렸다 쓰고 호스트마다 한 시간에 60번까지만 쓰기 때문에, 스크립트가 값을 저장한 때와 데이터베이스에 들어간 때가 5~60초 벌어질 수 있습니다 [6]. 이런 시각은 대략값이라고 밝혀 쓰고, 파일 시스템 시각이나 브라우저 기록처럼 다른 시각과 맞춰 봅니다. 여러 시각을 한 시간축에 놓는 방법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 
 ### Chromium 계열의 IndexedDB·Web Storage
 
-IndexedDB 한 인스턴스 안에는 데이터베이스가 여러 개 있고, 데이터베이스마다 object store가 여러 개 있으며 object store 번호는 1부터 셉니다 [4]. README는 데이터베이스를 번호가 아니라 이름과 origin으로 찾도록 권하고, 예시 origin 표기로 `file__0@1` 을 씁니다 [4]. 값은 V8 직렬화와 Blink 직렬화를 거쳐 저장되고, README는 Blink 호스트 객체 일부는 아직 해석하지 못할 수 있다고 적습니다 [4]. 기록 값에 FileInfo가 있으면 파일 데이터는 `.blob` 폴더에 따로 있어서 ccl_chromium_reader는 그 파일을 따라가 읽으니 [4], IndexedDB를 확보할 때는 `.leveldb` 폴더와 `.blob` 폴더를 함께 가져옵니다. Session Storage는 호스트별로 기록을 읽고 기록마다 LevelDB 순번을 함께 줍니다 [4].
+IndexedDB 한 인스턴스 안에는 데이터베이스가 여러 개 있고, 데이터베이스마다 object store가 여러 개 있으며 object store 번호는 1부터 셉니다 [4]. 데이터베이스는 번호가 아니라 이름과 origin으로 찾는 편이 낫고, origin은 `file__0@1` 처럼 적습니다 [4]. 값은 V8 직렬화와 Blink 직렬화를 거쳐 저장되고, Blink 호스트 객체 일부는 ccl_chromium_reader가 아직 해석하지 못할 수 있습니다 [4]. 기록 값에 FileInfo가 있으면 파일 데이터는 `.blob` 폴더에 따로 있어서 ccl_chromium_reader는 그 파일을 따라가 읽으니 [4], IndexedDB를 확보할 때는 `.leveldb` 폴더와 `.blob` 폴더를 함께 가져옵니다. Session Storage는 호스트별로 기록을 읽고 기록마다 LevelDB 순번을 함께 줍니다 [4].
 
 ## 함정
 

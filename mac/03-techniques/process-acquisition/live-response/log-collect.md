@@ -64,9 +64,9 @@ nav_order: 2010
 
 `--last`, `--size`, `--start`, `--predicate` 로 범위를 줄이면 그 밖의 기록은 아카이브에 들어가지 않고, 나중에 다른 시간대나 프로세스를 봐야 할 때 되돌릴 수 없습니다. 범위를 줄였다면 준 옵션을 그대로 수집 기록에 적어 둡니다.
 
-로그를 지우는 `log erase` 명령에는 `--all` 과 `--uuidtext` 옵션이 있고 [1], `log config` 로 로그 수준을 바꿀 수도 있습니다 [1]. 이 두 명령을 쓴 뒤 어떤 흔적이 남는지는 참고 문헌으로 확인하지 못했고, 1단계의 설정 확인과 2단계의 요약은 이런 가능성을 따질 때 비교할 자료로 남깁니다. 지우기를 의심하는 조사 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에 있습니다.
+로그를 지우는 `log erase` 명령에는 `--all` 과 `--uuidtext` 옵션이 있고 [1], `log config` 로 로그 수준을 바꿀 수도 있습니다 [1]. 이 두 명령을 쓴 뒤 어떤 흔적이 남는지는 공개된 분석 자료가 없으므로, 1단계의 설정 확인과 2단계의 요약을 이런 가능성을 따질 때 비교할 자료로 남깁니다. 지우기를 의심하는 조사 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에 있습니다.
 
-`log collect` 에 root 말고 [전체 디스크 접근 권한 (Full Disk Access)](full-disk-access.md)이 따로 필요한지는 확인하지 못했습니다. 같은 macOS 버전의 시험용 맥에서 미리 돌려 보고, 결과 아카이브에 빠진 기간이 없는지 `log stats` 요약과 맞춰 봅니다.
+`log collect` 에 root 말고 [전체 디스크 접근 권한 (Full Disk Access)](full-disk-access.md)이 따로 필요한지는 공개 자료에 나와 있지 않습니다. 같은 macOS 버전의 시험용 맥에서 미리 돌려 보고, 결과 아카이브에 빠진 기간이 없는지 `log stats` 요약과 맞춰 봅니다.
 
 ## 결과를 어떻게 해석하나
 

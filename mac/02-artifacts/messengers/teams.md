@@ -44,13 +44,13 @@ macOS 버전에 따라 폴더 위치가 달라지는지는 이번 자료로 확�
 
 ## 시각 해석
 
-캐시를 지운 뒤 다시 켜면 Teams가 캐시 파일을 다시 만들어서 [1], 캐시 폴더와 파일의 생성 시각은 앱을 설치한 시각이 아니라 마지막으로 캐시가 다시 만들어진 시각일 수 있습니다(필자 판단). 설치 시각은 [설치한 앱과 영수증 (Applications·Receipts)](../system-account/installed-apps-receipts.md)에서 따로 확인하고, 폴더가 언제 지워지고 다시 생겼는지는 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 봅니다.
+캐시를 지운 뒤 다시 켜면 Teams가 캐시 파일을 다시 만들어서 [1], 캐시 폴더와 파일의 생성 시각은 앱을 설치한 시각이 아니라 마지막으로 캐시가 다시 만들어진 시각일 수 있습니다. 설치 시각은 [설치한 앱과 영수증 (Applications·Receipts)](../system-account/installed-apps-receipts.md)에서 따로 확인하고, 폴더가 언제 지워지고 다시 생겼는지는 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 봅니다.
 
 진단 로그 안의 시각이 UTC인지 현지 시각인지는 이번 자료로 확인되지 않았습니다. 같은 시각의 다른 기록, 예를 들어 [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md)에서 얻은 앱 실행 시각과 몇 건을 맞춰 보고 정합니다. 파일 시스템 시각을 읽는 법은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)에 있습니다.
 
 ## 함정과 한계
 
-Microsoft가 캐시 삭제를 문제 해결 방법으로 공식 안내하는 만큼 [1], 캐시가 지워진 흔적을 곧바로 증거 인멸로 읽지 않습니다. 다만 캐시를 지우면 진단 로그도 함께 지워지니 [1], 사용자가 캐시를 지운 적이 있다면 그 이전 기간의 로그가 비어 있을 수 있습니다(필자 판단). 로그가 비는 기간이 있으면 그 무렵 폴더가 지워진 흔적을 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)와 [휴지통 (.Trash)](../file-folder-usage/trash.md)에서 찾고, 지운 까닭을 판단하는 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)에서 봅니다.
+Microsoft가 캐시 삭제를 문제 해결 방법으로 공식 안내하는 만큼 [1], 캐시가 지워진 흔적을 곧바로 증거 인멸로 읽지 않습니다. 다만 캐시를 지우면 진단 로그도 함께 지워지니 [1], 사용자가 캐시를 지운 적이 있다면 그 이전 기간의 로그가 비어 있을 수 있습니다. 로그가 비는 기간이 있으면 그 무렵 폴더가 지워진 흔적을 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)와 [휴지통 (.Trash)](../file-folder-usage/trash.md)에서 찾고, 지운 까닭을 판단하는 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)에서 봅니다.
 
 지워진 캐시의 이전 판은 [타임 머신 (Time Machine)](../filesystem/time-machine/index.md)과 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)에서 찾을 수 있습니다.
 

@@ -18,7 +18,7 @@ OS 버전과 함께 설치된 브라우저와 버전을 확인합니다([설치�
 
 시간대는 [시간대와 시계 설정](../../02-artifacts/system-account/time-zone.md)에서 확인합니다. 시각 기준이 브라우저마다 달라서 사파리는 맥 절대 시각(2001-01-01 기준), 크롬 계열은 1601-01-01 UTC 기준 마이크로초, 파이어폭스는 1970 기준 마이크로초(PRTime)를 씁니다 [1][6][11]. 모두 한 기준으로 바꿔 적어 둡니다([맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md)).
 
-수집 범위에서는 SQLite 본 파일과 함께 `-wal` 파일을 떴는지 확인합니다. ForensicArtifacts 정의는 브라우저 기록의 WAL 파일도 수집 대상으로 두고 있어서 [13], 본 파일만 뜨면 최근 기록이 빠질 수 있습니다([맥 증거 확보](../../03-techniques/process-acquisition/evidence-acquisition/index.md)).
+수집 범위에서는 SQLite 본 파일과 함께 `-wal` 파일을 떴는지 확인합니다. 브라우저 기록은 WAL 파일도 함께 수집해야 해서 [13], 본 파일만 뜨면 최근 기록이 빠질 수 있습니다([맥 증거 확보](../../03-techniques/process-acquisition/evidence-acquisition/index.md)).
 
 ## 볼 아티팩트와 순서
 
@@ -33,19 +33,19 @@ OS 버전과 함께 설치된 브라우저와 버전을 확인합니다([설치�
 | 7 | 격리 이벤트 DB와 파일의 격리 속성 | 받은 파일의 URL·referrer·받은 앱 | [격리 속성과 다운로드 기록](../../02-artifacts/filesystem/quarantine/index.md) |
 | 8 | 통합 로그 `mDNSResponder` 기록 | DNS 조회 | [통합 로그에서 찾을 것](../../02-artifacts/logs/unified-log-events/index.md) |
 
-크롬 사용자 데이터 폴더는 크롬이 `~/Library/Application Support/Google/Chrome`, 엣지가 `~/Library/Application Support/Microsoft Edge`, 브레이브가 `~/Library/Application Support/BraveSoftware/Brave-Browser` 이고 [5][13], 파이어폭스 기록은 `~/Library/Application Support/Firefox/Profiles/` 아래 프로필 폴더의 `places.sqlite` 입니다 [10]. 웨일의 맥 경로는 확인하지 못했습니다.
+크롬 사용자 데이터 폴더는 크롬이 `~/Library/Application Support/Google/Chrome`, 엣지가 `~/Library/Application Support/Microsoft Edge`, 브레이브가 `~/Library/Application Support/BraveSoftware/Brave-Browser` 이고 [5][13], 파이어폭스 기록은 `~/Library/Application Support/Firefox/Profiles/` 아래 프로필 폴더의 `places.sqlite` 입니다 [10]. 웨일의 맥 경로는 공개 자료가 없어 검체에서 확인합니다.
 
-1~3번으로 방문 기록의 뼈대를 세우고, 4~5번으로 받은 파일과 탭 상태를 붙입니다. 6~8번은 브라우저 기록이 비었거나 지워졌을 때 보강하는 자료입니다. knowledgeC `/safari/history` 는 macOS 10.13 에서 관찰된 스트림이고 [9], mac_apt 가 해석하는 바이옴 스트림 `App.WebUsage`·`Safari.*` 가 macOS 에 실제로 있는지는 확인하지 못했습니다 [12]. 통합 로그의 DNS 기록은 서브시스템 `com.apple.mDNSResponder` 로 찾고, 비공개 데이터 설정이 꺼져 있으면 호스트 이름이 가려져 나옵니다 [14].
+1~3번으로 방문 기록의 뼈대를 세우고, 4~5번으로 받은 파일과 탭 상태를 붙입니다. 6~8번은 브라우저 기록이 비었거나 지워졌을 때 보강하는 자료입니다. knowledgeC `/safari/history` 는 macOS 10.13 에 있는 스트림입니다 [9]. mac_apt 가 해석하는 바이옴 스트림 `App.WebUsage`·`Safari.*` 는 macOS 에 실제로 있는지 검체에서 확인합니다 [12]. 통합 로그의 DNS 기록은 서브시스템 `com.apple.mDNSResponder` 로 찾고, 비공개 데이터 설정이 꺼져 있으면 호스트 이름이 가려져 나옵니다 [14].
 
 ### 크롬 기록에서 검색어와 입력을 읽기
 
 크롬 `urls` 표에는 `url`·`title`·`visit_count`·`typed_count`·`last_visit_time`·`hidden` 칸이 있습니다. `visit_count` 는 방문 횟수, `typed_count` 는 사용자가 URL 을 직접 친 횟수, `last_visit_time` 은 마지막 방문 시각, `hidden` 은 일부 조회에서 뺄 URL 을 표시합니다 [2]. `keyword_search_terms` 표는 검색 엔진 ID(`keyword_id`), `urls.id` 를 가리키는 `url_id`, 실제 검색어 `term`, 소문자로 바꾸고 공백을 정리한 `normalized_term` 을 담아서 [2], `keyword_search_terms.url_id = urls.id` 로 이으면 검색어와 검색 결과 페이지 방문이 한 줄로 묶입니다.
 
-`visits` 표에는 방문마다 `visit_time`, 이전 방문 `from_visit`, 새 탭을 연 방문 `opener_visit`, 방문 경로 `transition`, 머문 시간 `visit_duration` 이 있습니다 [7]. `transition` 의 하위 8비트는 LINK 0, TYPED 1, AUTO_BOOKMARK 2, FORM_SUBMIT 7, RELOAD 8, KEYWORD 9 같은 핵심 종류이고, 그 위 비트에 FROM_ADDRESS_BAR(0x02000000), CLIENT_REDIRECT(0x40000000), SERVER_REDIRECT(0x80000000) 같은 한정자가 붙습니다 [8]. 방문 출처 값 이름에 SOURCE_SYNCED 가 있어서 다른 기기에서 동기화된 방문을 가릴 수 있지만, 숫자 값은 확인하지 못했습니다 [7].
+`visits` 표에는 방문마다 `visit_time`, 이전 방문 `from_visit`, 새 탭을 연 방문 `opener_visit`, 방문 경로 `transition`, 머문 시간 `visit_duration` 이 있습니다 [7]. `transition` 의 하위 8비트는 LINK 0, TYPED 1, AUTO_BOOKMARK 2, FORM_SUBMIT 7, RELOAD 8, KEYWORD 9 같은 핵심 종류이고, 그 위 비트에 FROM_ADDRESS_BAR(0x02000000), CLIENT_REDIRECT(0x40000000), SERVER_REDIRECT(0x80000000) 같은 한정자가 붙습니다 [8]. 방문 출처 값 SOURCE_SYNCED 로 다른 기기에서 동기화된 방문을 가릴 수 있고, 이 값의 숫자는 소스 코드에서 확인합니다 [7].
 
 ### 사파리 기록을 읽기
 
-사파리 `History.db` 는 URL 하나에 한 행인 `history_items` 와 방문마다 한 행인 `history_visits` 로 나뉘고, `history_visits.history_item = history_items.id` 로 잇습니다. 리디렉션은 `redirect_source`·`redirect_destination` 칸으로 따라갑니다 [3]. `history_tombstones` 표(`start_time`, `end_time`, `url`, `generation`)도 있지만 기록 지우기의 흔적인지와 시각 기준은 확인하지 못했습니다 [3]. 설정 plist 의 `RecentWebSearches` 에는 최근 검색어(`SearchString`)와 시각(`Date`)이 남습니다(요세미티 이후) [1].
+사파리 `History.db` 는 URL 하나에 한 행인 `history_items` 와 방문마다 한 행인 `history_visits` 로 나뉘고, `history_visits.history_item = history_items.id` 로 잇습니다. 리디렉션은 `redirect_source`·`redirect_destination` 칸으로 따라갑니다 [3]. `history_tombstones` 표(`start_time`, `end_time`, `url`, `generation`)도 있지만 기록 지우기의 흔적인지와 시각 기준은 공개된 분석 자료가 없어 검체로 확인해야 합니다 [3]. 설정 plist 의 `RecentWebSearches` 에는 최근 검색어(`SearchString`)와 시각(`Date`)이 남습니다(요세미티 이후) [1].
 
 ## 분석 흐름
 
@@ -57,9 +57,6 @@ OS 버전과 함께 설치된 브라우저와 버전을 확인합니다([설치�
 6. 다운로드 기록과 격리 이벤트 DB를 붙여 방문 뒤 무엇을 받았는지 봅니다(자세한 방법은 [이 파일은 어디서 왔나](file-origin.md)).
 7. 브라우저 기록에 빈 구간이 있으면 knowledgeC, 통합 로그 DNS 기록, 탭·세션 파일로 채울 수 있는지 봅니다.
 8. 모든 결과를 [타임라인](../../03-techniques/analysis/timeline/index.md)에 올리고, 같은 시간대의 [어떤 앱을 언제 썼나](app-usage.md) 결과와 맞춰 브라우저가 실제로 앞에 있었는지 확인합니다.
-
-3~8단계의 순서는 공개 자료의 절차가 아니라 필자가 정리한 방법입니다.
-
 ## 흔한 오판
 
 - **방문 기록 한 줄을 "사용자가 이 사이트를 찾아 들어갔다"로 쓰는 경우.** 리디렉션과 자동 로드도 방문으로 남습니다. `transition`·방문 종류와 `typed_count` 를 확인한 만큼만 씁니다 [2][8][11].

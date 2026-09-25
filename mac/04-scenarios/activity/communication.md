@@ -32,7 +32,7 @@ nav_order: 2350
 
 ### 메시지 (chat.db)
 
-mac_apt 의 메시지 플러그인은 `message`, `message_attachment_join`, `attachment`, `chat_message_join`, `chat`, `handle` 표를 이어서 읽습니다 [1]. 연락 상대와 방향·시각을 뽑는 데 쓰는 칸은 아래와 같습니다.
+메시지 기록은 `message`, `message_attachment_join`, `attachment`, `chat_message_join`, `chat`, `handle` 표를 이어서 읽습니다 [1]. 연락 상대와 방향·시각을 뽑는 데 쓰는 칸은 아래와 같습니다.
 
 | 표 | 칸 [1] | 쓰임 |
 |---|---|---|
@@ -45,11 +45,11 @@ mac_apt 의 메시지 플러그인은 `message`, `message_attachment_join`, `att
 | `chat` | `chat_identifier` | 대화방 식별자 |
 | `attachment` | `filename`, `transfer_name`, `total_bytes` | 첨부 경로·이름·크기 |
 
-`destination_caller_id` 칸은 데이터베이스 버전에 따라 없을 수 있어서, mac_apt 도 칸이 있을 때만 쿼리에 넣습니다 [1]. `account` 와 `destination_caller_id` 에 어느 계정으로 주고받았는지가 담기지만, 두 칸 값의 정확한 뜻은 이번 근거 자료로 확인하지 못했습니다.
+`destination_caller_id` 칸은 데이터베이스 버전에 따라 없을 수 있어서, 칸이 있을 때만 쿼리에 넣습니다 [1]. `account` 와 `destination_caller_id` 에 어느 계정으로 주고받았는지가 담기지만, 두 칸 값의 정확한 뜻은 공개된 자료가 없어 검체에서 확인합니다.
 
 방향을 읽을 때는 도구가 보여 주는 화살표보다 `is_from_me` 칸 값 자체를 봅니다. mac_apt 는 `is_from_me` 가 0 이면 `->`, 1 이면 `<-` 로 바꿔 보여 주는데 [1], 이 화살표는 도구마다 정하는 표시일 뿐이라서 보고서에는 "`is_from_me` 값이 1 인 메시지" 처럼 칸 값으로 적고, 같은 검체에서 방향을 알고 있는 메시지 하나로 값의 뜻을 확인해 둡니다.
 
-`date`, `date_delivered`, `date_read` 는 맥 절대 시각 (Mac Absolute Time)이고, mac_apt 는 이 값을 2001-01-01 을 기준으로 바꿉니다 [1][2]. 변환 함수는 값의 절댓값이 `0xFFFFFFFF` 보다 크면 나노초로 보고 10^9 로 나눈 뒤 더하고, 그렇지 않으면 초로 봅니다 [2]. 같은 칸에 초 단위와 나노초 단위가 섞여 있을 수 있다는 뜻이지만, 단위가 바뀐 macOS 버전은 확인하지 못했습니다. 나노초 값이라면 아래처럼 바꿉니다.
+`date`, `date_delivered`, `date_read` 는 맥 절대 시각 (Mac Absolute Time)이라 2001-01-01 을 기준으로 바꿉니다 [1][2]. 값의 절댓값이 `0xFFFFFFFF` 보다 크면 나노초로 보고 10^9 로 나눈 뒤 더하고, 그렇지 않으면 초로 봅니다 [2]. 같은 칸에 초 단위와 나노초 단위가 섞여 있을 수 있고, 단위가 바뀐 macOS 버전은 공개된 자료가 없어 값 크기로 가립니다. 나노초 값이라면 아래처럼 바꿉니다.
 
 ```sql
 -- 명세로 만든 예시 쿼리. date 가 나노초 단위일 때
@@ -63,19 +63,19 @@ ORDER BY date;
 
 ### 통화 기록 (CallHistory.storedata)
 
-APOLLO 모듈은 `CallHistory.storedata` 의 `ZCALLRECORD` 표를 읽고, 모듈이 적은 대상 버전은 iOS 8~14 와 macOS 10.13, 10.14, 10.15, 10.16 입니다 [3]. 그 뒤 버전에서도 같은 구조인지는 이 모듈로 확인할 수 없어서, 검체에서 표와 칸이 실제로 있는지 먼저 봅니다. 파일의 전체 경로는 [페이스타임과 통화 기록 (FaceTime·CallHistory)](../../02-artifacts/messengers/facetime-callhistory.md)에서 확인합니다.
+통화 기록은 `CallHistory.storedata` 의 `ZCALLRECORD` 표에 있고, 이 구조가 알려진 버전은 iOS 8~14 와 macOS 10.13, 10.14, 10.15, 10.16 입니다 [3]. 그 뒤 버전은 검체에서 표와 칸이 실제로 있는지 먼저 봅니다. 파일의 전체 경로는 [페이스타임과 통화 기록 (FaceTime·CallHistory)](../../02-artifacts/messengers/facetime-callhistory.md)에서 확인합니다.
 
 | 칸 [3] | 내용 |
 |---|---|
 | `ZDATE` | 통화 시각. 맥 절대 시각(2001-01-01 기준 초) |
 | `ZADDRESS` | 상대 번호·주소 |
 | `ZDURATION` | 통화 시간(초) |
-| `ZANSWERED`, `ZORIGINATED`, `ZCALLTYPE` | 칸 이름으로는 응답·발신·통화 종류. 값의 뜻은 확인하지 못함 |
+| `ZANSWERED`, `ZORIGINATED`, `ZCALLTYPE` | 칸 이름으로는 응답·발신·통화 종류. 값의 뜻은 검체에서 확인 |
 | `ZSERVICE_PROVIDER` | 서비스 제공자 |
 | `ZISO_COUNTRY_CODE`, `ZLOCATION` | 국가 코드, 위치 |
 | `ZDISCONNECTED_CAUSE` | 끊긴 원인(macOS 10.13 이상) |
 
-모듈은 `DATETIME(ZDATE+978307200,'UNIXEPOCH')` 로 시각을 바꿉니다 [3]. `ZCALLTYPE`·`ZORIGINATED`·`ZANSWERED` 값이 수신·발신이나 페이스타임 음성·영상을 어떻게 가르는지와, 버전에 따라 `ZADDRESS` 가 평문인지 암호화된 값인지는 확인하지 못했습니다. 그래서 이 세 칸은 값을 그대로 적고, 값의 뜻은 같은 검체에서 알고 있는 통화로 맞춰 본 뒤에만 풀어 씁니다.
+시각은 `DATETIME(ZDATE+978307200,'UNIXEPOCH')` 로 바꿉니다 [3]. `ZCALLTYPE`·`ZORIGINATED`·`ZANSWERED` 값이 수신·발신이나 페이스타임 음성·영상을 어떻게 가르는지와, 버전에 따라 `ZADDRESS` 가 평문인지 암호화된 값인지는 공개된 자료가 없습니다. 그래서 이 세 칸은 값을 그대로 적고, 값의 뜻은 같은 검체에서 알고 있는 통화로 맞춰 본 뒤에만 풀어 씁니다.
 
 ## 분석 흐름
 
@@ -92,11 +92,11 @@ APOLLO 모듈은 `CallHistory.storedata` 의 `ZCALLRECORD` 표를 읽고, 모듈
 
 ## 흔한 오판
 
-맥에 있는 메시지를 모두 이 맥에서 주고받았다고 보는 경우가 많습니다. 메시지와 통화 기록은 같은 계정을 쓰는 다른 Apple 기기와 관련될 수 있지만, 어느 기록이 어느 기기에서 생겼는지는 이번 근거 자료로 가릴 수 없었습니다. 그래서 "이 맥의 데이터베이스에 기록이 있다" 까지만 말하고, 기기 연결은 [연속성과 유니버설 클립보드 (Continuity·Handoff)](../../02-artifacts/cloud-apps/continuity.md)와 [아이폰·아이패드 연결 (iOS Devices)](../../02-artifacts/external-devices/ios-devices/index.md)에서 따로 확인합니다.
+맥에 있는 메시지를 모두 이 맥에서 주고받았다고 보는 경우가 많습니다. 메시지와 통화 기록은 같은 계정을 쓰는 다른 Apple 기기와 관련될 수 있지만, 어느 기록이 어느 기기에서 생겼는지는 이 데이터베이스만으로 가리기 어렵습니다. 그래서 "이 맥의 데이터베이스에 기록이 있다" 까지만 말하고, 기기 연결은 [연속성과 유니버설 클립보드 (Continuity·Handoff)](../../02-artifacts/cloud-apps/continuity.md)와 [아이폰·아이패드 연결 (iOS Devices)](../../02-artifacts/external-devices/ios-devices/index.md)에서 따로 확인합니다.
 
 도구 화면의 화살표나 "보냄·받음" 표시를 그대로 옮기는 것도 흔한 실수입니다. 표시 방식은 도구가 정하는 것이라서, 보고서에는 `is_from_me` 처럼 원래 칸 값을 함께 적습니다.
 
-`ZDURATION` 이 0 인 통화나 `date_read` 가 비어 있는 메시지를 "통화하지 않았다", "읽지 않았다" 로 단정하지 않습니다. 칸 값의 뜻을 이번 근거 자료로 모두 확인하지 못해서 값 그대로 적고, 의미는 다른 기록과 맞춰 본 뒤에 씁니다.
+`ZDURATION` 이 0 인 통화나 `date_read` 가 비어 있는 메시지를 "통화하지 않았다", "읽지 않았다" 로 단정하지 않습니다. 칸 값의 뜻이 모두 밝혀져 있지 않아서 값 그대로 적고, 의미는 다른 기록과 맞춰 본 뒤에 씁니다.
 
 ## 보고서 문장 예
 

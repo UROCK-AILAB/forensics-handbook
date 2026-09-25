@@ -13,7 +13,7 @@ nav_order: 1110
 
 맥에서 기기를 백업하면 `Backup/` 아래에 기기 UDID 이름의 폴더가 기기마다 하나 생기고, 그 안에 `Info.plist`, `Status.plist`, `Manifest.plist` 가 놓입니다 [2]. `Info.plist` 에는 기기 정보와 설치된 앱 목록이, `Manifest.db` 에는 백업한 파일과 기기 안 원래 경로의 대응이 들어가고 [2][3], 파일 내용은 같은 폴더 아래 하위 폴더에 따로 저장됩니다 [4].
 
-맥에서는 Finder에서 기기를 고른 뒤 일반 탭의 백업 관리로 백업을 다루고, 이 화면에서 백업을 지우거나 보관(Archive)하거나 Finder에서 위치를 열 수 있습니다 [1]. 같은 문서의 Apple Devices 앱은 윈도우 PC에서 쓰는 앱입니다 [1]. 보관하면 별도 사본 폴더가 생기지만 그 폴더의 이름 규칙은 이번 자료로 확인하지 못했습니다.
+맥에서는 Finder에서 기기를 고른 뒤 일반 탭의 백업 관리로 백업을 다루고, 이 화면에서 백업을 지우거나 보관(Archive)하거나 Finder에서 위치를 열 수 있습니다 [1]. Apple Devices 앱은 윈도우 PC에서 쓰는 앱입니다 [1]. 보관하면 별도 사본 폴더가 생깁니다.
 
 ## 위치와 버전별 차이
 
@@ -25,7 +25,7 @@ nav_order: 1110
 | 관리 화면 | Finder → 기기 선택 → 일반 → 백업 관리 [1] |
 | macOS 버전 | 10.15 Catalina 이후 Finder, 10.14 Mojave 이전 iTunes [6] |
 
-Apple 지원 문서는 macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave 이전에는 iTunes로 백업하라고 안내하고 [6], 백업 위치로는 위 경로 하나만 안내합니다 [1]. 윈도우에서는 Apple Devices 앱과 Microsoft Store판 iTunes가 `%USERPROFILE%` 아래에, 예전 iTunes가 `%AppData%` 아래에 백업을 둡니다 [1].
+macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave 이전에는 iTunes로 백업하고 [6], 백업 위치는 위 경로 하나입니다 [1]. 윈도우에서는 Apple Devices 앱과 Microsoft Store판 iTunes가 `%USERPROFILE%` 아래에, 예전 iTunes가 `%AppData%` 아래에 백업을 둡니다 [1].
 
 ## 구조
 
@@ -44,7 +44,7 @@ Apple 지원 문서는 macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave
 
 ### Info.plist
 
-libimobiledevice 소스가 쓰는 키 이름은 아래와 같습니다 [2]. 묶음은 키 이름을 기준으로 나눈 것이고, 소스가 나눈 것은 아닙니다.
+`Info.plist` 의 키 이름은 아래와 같습니다 [2]. 묶음은 키 이름을 기준으로 나눈 것입니다.
 
 | 묶음 | 키 |
 |---|---|
@@ -57,7 +57,7 @@ libimobiledevice 소스가 쓰는 키 이름은 아래와 같습니다 [2]. 묶�
 
 ### Status.plist와 Manifest.plist
 
-`Status.plist` 의 `SnapshotState` 값이 `finished` 면 백업이 끝까지 완료된 것입니다 [2]. 이 파일에 `IsFullBackup`, `Date`, `UUID`, `Version`, `BackupState` 같은 키가 더 있다고 소개하는 자료도 있지만 이번 자료로는 확인하지 못했습니다.
+`Status.plist` 의 `SnapshotState` 값이 `finished` 면 백업이 끝까지 완료된 것입니다 [2]. 이 파일에 `IsFullBackup`, `Date`, `UUID`, `Version`, `BackupState` 같은 키가 더 있다는 설명도 있습니다.
 
 `Manifest.plist` 의 `IsEncrypted` 는 백업이 암호화됐는지를 알려 주고 [2], 암호화 백업이면 `BackupKeyBag` 과 `ManifestKey` 가 함께 들어갑니다 [4]. `ManifestKey` 는 앞 4바이트 보호 클래스 값(리틀 엔디언 정수) 뒤에 키 자료가 이어지는 구조이고, 암호화 백업에서는 `Manifest.db` 도 이 키로 암호화돼 있어서 풀기 전에는 SQLite로 열리지 않습니다 [4]. 기기 쪽에서 백업 암호화가 켜져 있는지는 lockdown 도메인 `com.apple.mobile.backup` 의 `WillEncrypt` 키로 조회합니다 [2].
 
@@ -69,7 +69,7 @@ libimobiledevice 소스가 쓰는 키 이름은 아래와 같습니다 [2]. 묶�
 |---|---|
 | `fileID` | 백업 폴더 안에 저장된 실제 파일의 이름. 16진수 소문자 40글자 [4] |
 | `domain`, `relativePath` | 기기 안 원래 위치를 나타내는 두 값 [3] |
-| `flags` | `1` 이면 일반 파일(공개 도구가 파일을 꺼낼 때 쓰는 조건). 다른 값의 뜻은 확인하지 못함 |
+| `flags` | `1` 이면 일반 파일(공개 도구가 파일을 꺼낼 때 쓰는 조건). 다른 값의 뜻은 공개 자료 없음 |
 | `file` | NSKeyedArchiver 형식의 바이너리 plist로 된 파일 메타데이터. `EncryptionKey`(암호화 백업), `ProtectionClass`, `Size`, `LastModified` 등이 들어감 [4] |
 
 실제 파일은 백업 폴더 아래 `fileID` 앞 두 글자 이름의 하위 폴더에 `fileID` 이름으로 저장됩니다 [4]. SQLite를 읽는 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에, plist를 읽는 방법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다.
@@ -88,21 +88,21 @@ libimobiledevice 소스가 쓰는 키 이름은 아래와 같습니다 [2]. 묶�
 
 ## 시각 해석
 
-마지막 백업 시점은 `Info.plist` 의 `Last Backup Date` 로 확인합니다 [2][1]. libimobiledevice는 백업할 때 호스트 시계의 현재 시각을 plist 날짜형으로 이 키에 적고 [2], plist 날짜형은 시간대 없이 UTC 기준으로 저장되므로 값은 기기가 아니라 백업한 컴퓨터의 시계를 따릅니다(Finder도 같은 방식인지는 소스로 확인하지 못함). `Manifest.db` 의 `file` 칸 안에 든 `LastModified` 는 공개 도구가 유닉스 초 값으로 그대로 파일 수정 시각에 쓰고 [4], 기기 안 파일의 수정 시각이지 백업 시각이 아닙니다. `Birth` 같은 다른 시각 키는 이번 자료로 확인하지 못했습니다. 도구가 보여 주는 날짜를 그대로 옮기지 말고 원본 값의 형식과 기준 시간대를 확인한 뒤 보고서에 적고, 값을 푸는 방법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에, 맥의 시간대 설정은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)에 있습니다.
+마지막 백업 시점은 `Info.plist` 의 `Last Backup Date` 로 확인합니다 [2][1]. libimobiledevice는 백업할 때 호스트 시계의 현재 시각을 plist 날짜형으로 이 키에 적고 [2], plist 날짜형은 시간대 없이 UTC 기준으로 저장되므로 값은 기기가 아니라 백업한 컴퓨터의 시계를 따릅니다. Finder로 만든 백업도 같은 방식인지는 검체에서 확인합니다. `Manifest.db` 의 `file` 칸 안에 든 `LastModified` 는 유닉스 초 값이고 [4], 기기 안 파일의 수정 시각이지 백업 시각이 아닙니다. 도구가 보여 주는 날짜를 그대로 옮기지 말고 원본 값의 형식과 기준 시간대를 확인한 뒤 보고서에 적고, 값을 푸는 방법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에, 맥의 시간대 설정은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)에 있습니다.
 
 ## 함정과 한계
 
-백업을 열기 전에 `Manifest.plist` 의 `IsEncrypted` 값부터 확인하고 [2], 암호화된 백업이면 [암호화된 증거 다루기 (Encrypted Evidence)](../../../03-techniques/analysis/encrypted-evidence/index.md)를 따릅니다. 키백의 반복 횟수 같은 세부 값은 이번 자료에 나오지 않았습니다.
+백업을 열기 전에 `Manifest.plist` 의 `IsEncrypted` 값부터 확인하고 [2], 암호화된 백업이면 [암호화된 증거 다루기 (Encrypted Evidence)](../../../03-techniques/analysis/encrypted-evidence/index.md)를 따릅니다.
 
-백업 관리 화면에서 백업을 지울 수 있어서 [1], 백업 폴더가 없다는 사실만으로 백업한 적이 없다고 말하지 않습니다. 지운 폴더의 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)로 찾아봅니다. 보관한 백업은 별도 사본 폴더로 남는데 [1] 이름 규칙을 확인하지 못했으니, `Backup/` 아래에 UDID가 아닌 이름의 폴더가 있으면 안의 `Info.plist` 를 열어 어느 기기의 백업인지 확인합니다.
+백업 관리 화면에서 백업을 지울 수 있어서 [1], 백업 폴더가 없다는 사실만으로 백업한 적이 없다고 말하지 않습니다. 지운 폴더의 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)로 찾아봅니다. 보관한 백업은 별도 사본 폴더로 남으니 [1], `Backup/` 아래에 UDID가 아닌 이름의 폴더가 있으면 안의 `Info.plist` 를 열어 어느 기기의 백업인지 확인합니다.
 
 백업은 사용자 홈마다 따로 있어서 [1], 맥에 계정이 여러 개라면 모든 홈을 봅니다. 계정 목록은 [사용자 계정 (Local Accounts)](../../system-account/user-accounts/index.md)에서 확인합니다.
 
-`fileID` 가 16진수 40글자라서 SHA-1 값의 길이와 맞기는 하지만 [4], `domain` 과 `relativePath` 를 이은 문자열의 SHA-1이라는 설명, 두 글자 하위 폴더 구조와 `Manifest.db` 가 iOS 10부터 예전 `Manifest.mbdb` 를 대신했다는 설명이 알려져 있지만 이번 자료로는 확인하지 못했습니다. 오래된 백업을 만나면 이 페이지의 구조를 전제하지 말고 폴더 구성부터 확인합니다. `flags` 의 `1` 이외 값도 뜻을 확인하지 못했으니, 도구가 이 값을 어떻게 걸러 내는지는 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)의 방법으로 확인합니다.
+`fileID` 는 16진수 40글자로 SHA-1 값의 길이와 같고 [4], `domain` 과 `relativePath` 를 이은 문자열의 SHA-1이라는 설명이 있습니다. 두 글자 하위 폴더 구조와 `Manifest.db` 가 iOS 10부터 예전 `Manifest.mbdb` 를 대신했다는 설명도 있습니다. 오래된 백업을 만나면 이 페이지의 구조를 전제하지 말고 폴더 구성부터 확인합니다. `flags` 의 `1` 이외 값은 뜻을 밝힌 공개 자료가 없으니, 도구가 이 값을 어떻게 걸러 내는지는 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)의 방법으로 확인합니다.
 
 ## 직접 분석해 보기
 
-헥스로 볼 때는 `Manifest.plist` 의 `ManifestKey` 값을 따라가 봅니다. 앞 4바이트가 보호 클래스 값이고 공개 도구는 이를 리틀 엔디언 부호 있는 정수로 읽으며, 그 뒤로 키 자료가 이어집니다 [4]. `Manifest.db` 는 헥스로 열어 첫 바이트가 SQLite 파일 머리인지 확인하는데, 암호화 백업이라면 머리가 보이지 않는 것이 정상입니다 [4]. 머리 구조는 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에 있습니다.
+헥스로 볼 때는 `Manifest.plist` 의 `ManifestKey` 값을 따라가 봅니다. 앞 4바이트가 보호 클래스 값(리틀 엔디언 부호 있는 정수)이고, 그 뒤로 키 자료가 이어집니다 [4]. `Manifest.db` 는 헥스로 열어 첫 바이트가 SQLite 파일 머리인지 확인하는데, 암호화 백업이라면 머리가 보이지 않는 것이 정상입니다 [4]. 머리 구조는 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에 있습니다.
 
 암호화하지 않은 백업이라면 SQLite 도구로 `Files` 표를 읽어 원래 경로와 저장 위치를 이어 볼 수 있습니다 [4].
 

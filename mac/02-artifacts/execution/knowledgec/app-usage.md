@@ -13,7 +13,7 @@ knowledgeC.db의 `/app/inFocus` 와 `/app/usage` 스트림은 어느 GUI 앱이 
 
 `/app/inFocus` 는 어느 앱이 그 시각에 앞에 나와 쓰이고 있었는지를 기록합니다. `ZSTARTDATE` 는 앱이 앞으로 온 때이고 `ZENDDATE` 는 뒤로 간 때라서, 둘의 차이가 그 구간의 사용 시간(초)이 됩니다 [1][4]. 앱은 `ZVALUESTRING` 에 번들 ID로 들어 있어서 앱 이름을 알려면 번들 ID를 설치된 앱과 맞춰 봅니다.
 
-`/app/usage` 는 APOLLO가 "Application Usage" 라는 이름으로 뽑는 스트림이고, 시작·끝·번들 ID·사용 시간과 함께 `ZSOURCE.ZDEVICEID` 와 ZCUSTOMMETADATA 표의 이름·값을 같이 보여 줍니다 [3]. `/app/inFocus` 와 무엇을 기준으로 구간을 다르게 끊는지 설명한 자료는 찾지 못해서, 두 스트림이 모두 있으면 같은 시간대를 나란히 놓고 비교해 봅니다.
+`/app/usage` 는 시작·끝·번들 ID·사용 시간을 담고, `ZSOURCE.ZDEVICEID` 와 ZCUSTOMMETADATA 표의 이름·값을 함께 이어 읽을 수 있습니다 [3]. `/app/inFocus` 와 무엇을 기준으로 구간을 다르게 끊는지는 공개 자료가 없으므로, 두 스트림이 모두 있으면 같은 시간대를 나란히 놓고 비교해 봅니다.
 
 `/app/activity` 는 앱 안에서 무엇을 했는지를 남기고, ZSTRUCTUREDMETADATA 표의 활동 종류(`…ACTIVITYTYPE`)와 제목(`…TITLE`) 칸에 보고 있던 항목이나 편집하던 항목이 들어갑니다 [1]. `/safari/history` 는 `ZVALUESTRING` 에 URL을 남깁니다 [1].
 
@@ -48,9 +48,9 @@ APOLLO 목록은 iOS 번호와 macOS 번호를 섞어 쓰고 macOS 쪽은 10.16�
 
 ## 함정과 한계
 
-블로그 글이 macOS 10.13에서 본 바로는 ZOBJECT에 약 4주치 기록이 들어 있었고 [1], 보관 정책을 밝힌 문서가 아니라 관찰이라서 10.15 이후에도 같은지는 확인하지 못했습니다. 사건이 수집 시점보다 한참 전이라면 기록이 이미 사라졌을 수 있으니, 기록이 없다는 것을 "앱을 쓰지 않았다" 로 읽지 않습니다.
+macOS 10.13에서는 ZOBJECT에 약 4주치 기록이 들어 있었습니다 [1]. 공개된 보관 정책이 없으므로 10.15 이후 버전은 검체에서 확인합니다. 사건이 수집 시점보다 한참 전이라면 기록이 이미 사라졌을 수 있으니, 기록이 없다는 것을 "앱을 쓰지 않았다" 로 읽지 않습니다.
 
-`/app/inFocus` 의 LAUNCHREASON 칸에 어떤 값이 들어가고 무엇을 뜻하는지는 참고 자료에 없어서, 값을 그대로 옮겨 적되 "이렇게 실행됐다" 는 해석은 붙이지 않습니다. ZCUSTOMMETADATA의 이름·값도 설명한 자료가 없기는 마찬가지입니다.
+`/app/inFocus` 의 LAUNCHREASON 칸에 어떤 값이 들어가고 무엇을 뜻하는지는 공개 자료가 없으므로, 값을 그대로 옮겨 적되 "이렇게 실행됐다" 는 해석은 붙이지 않습니다. ZCUSTOMMETADATA의 이름·값도 공개된 설명이 없습니다.
 
 ## 직접 분석해 보기
 
@@ -74,7 +74,7 @@ WHERE ZOBJECT.ZSTREAMNAME = '/app/inFocus'
 ORDER BY ZOBJECT.ZSTARTDATE;
 ```
 
-`/app/usage` 는 Z_4EVENT와 ZCUSTOMMETADATA를 더 붙여야 해서 연결 방법은 [표와 스트림 구조](structure.md)를 따릅니다. 공개 도구 APOLLO에는 이 페이지의 스트림에 맞는 `knowledge_app_inFocus.txt`, `knowledge_app_usage.txt` 모듈이 있고, 내용은 열어 보지 않았지만 `knowledge_app_activity.txt`, `knowledge_app_intents.txt`, `knowledge_safari_browsing.txt` 라는 모듈도 저장소에 있습니다 [2].
+`/app/usage` 는 Z_4EVENT와 ZCUSTOMMETADATA를 더 붙여야 해서 연결 방법은 [표와 스트림 구조](structure.md)를 따릅니다. 공개 도구 APOLLO에는 이 페이지의 스트림에 맞는 `knowledge_app_inFocus.txt`, `knowledge_app_usage.txt` 모듈이 있고, 같은 저장소에 `knowledge_app_activity.txt`, `knowledge_app_intents.txt`, `knowledge_safari_browsing.txt` 모듈도 있습니다 [2].
 
 저장된 시각 값 하나를 손으로 푸는 예시는 [표와 스트림 구조](structure.md)에 있습니다.
 

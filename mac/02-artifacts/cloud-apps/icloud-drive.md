@@ -10,7 +10,7 @@ iCloud Drive는 사용자 홈의 `CloudDocs` 폴더 아래 SQLite DB 두 개에 
 
 ## 무엇을 기록하나 · 왜 생기나
 
-iCloud Drive는 여러 기기가 같은 파일을 나눠 쓰도록 동기화하는 서비스라서, 맥은 동기화할 항목의 목록과 판(버전) 정보를 로컬 DB에 두고 관리합니다. 공개 도구 mac_apt의 `iCloud.py` 플러그인은 이 DB에서 기기 목록, 서버 쪽 항목, 클라이언트 쪽 항목, 앱 보관함 목록을 읽어 표로 내놓습니다 [1].
+iCloud Drive는 여러 기기가 같은 파일을 나눠 쓰도록 동기화하는 서비스라서, 맥은 동기화할 항목의 목록과 판(버전) 정보를 로컬 DB에 두고 관리합니다. 이 DB에는 기기 목록, 서버 쪽 항목, 클라이언트 쪽 항목, 앱 보관함 목록이 들어 있고, 공개 도구 mac_apt의 `iCloud.py` 플러그인으로 읽을 수 있습니다 [1].
 
 계정 자체의 흔적과 iCloud 데이터 보호 방식 전반은 [아이클라우드 계정 (iCloud Account)](icloud-account.md)에서 다루고, 이 페이지는 iCloud Drive에만 해당하는 내용을 다룹니다.
 
@@ -21,11 +21,11 @@ iCloud Drive는 여러 기기가 같은 파일을 나눠 쓰도록 동기화하�
 ~/Library/Application Support/CloudDocs/session/db/client.db
 ```
 
-두 파일 모두 SQLite DB이고 사용자 홈 안에 있어서 사용자마다 따로 봅니다 [1]. 파일 이름으로 보아 `server.db` 는 서버 쪽 상태를, `client.db` 는 이 맥의 로컬 상태를 담는 것으로 추정할 수 있지만, 이 구분을 문서로 확인하지는 못했습니다.
+두 파일 모두 SQLite DB이고 사용자 홈 안에 있어서 사용자마다 따로 봅니다 [1]. 파일 이름으로 보아 `server.db` 는 서버 쪽 상태를, `client.db` 는 이 맥의 로컬 상태를 담는 것으로 보입니다.
 
-ForensicArtifacts 정의(macos.yaml)에는 CloudDocs 항목이 없어서 [2], 이 정의만 쓰는 수집 도구로 자동 수집하면 두 DB가 빠질 수 있습니다(필자 해석). 수집 목록에 이 경로를 직접 넣었는지 확인합니다.
+ForensicArtifacts 정의(macos.yaml)에는 CloudDocs 항목이 없어서 [2], 이 정의만 쓰는 수집 도구로 자동 수집하면 두 DB가 빠질 수 있습니다. 수집 목록에 이 경로를 직접 넣었는지 확인합니다.
 
-macOS 10.15 Catalina 이후 버전마다 이 DB의 표 구성이 달라진다는 자료는 찾지 못했습니다. 아래 표와 칸은 mac_apt 플러그인 코드가 읽는 이름이라서, 검체에서는 `.schema` 로 실제 칸과 먼저 맞춰 봅니다. 10.15부터는 앱이 iCloud Drive 안 파일에 접근하려면 사용자 동의가 필요하고 [3], 그 동의 기록은 [개인 정보 보호 권한 (TCC)](../credentials/tcc/index.md)에서 봅니다.
+macOS 10.15 Catalina 이후 버전마다 이 DB의 표 구성이 달라지는지는 공개된 자료가 없습니다. 아래 표와 칸은 mac_apt 플러그인이 읽는 이름이라서, 검체에서는 `.schema` 로 실제 칸과 먼저 맞춰 봅니다. 10.15부터는 앱이 iCloud Drive 안 파일에 접근하려면 사용자 동의가 필요하고 [3], 그 동의 기록은 [개인 정보 보호 권한 (TCC)](../credentials/tcc/index.md)에서 봅니다.
 
 ## 구조
 
@@ -36,13 +36,13 @@ macOS 10.15 Catalina 이후 버전마다 이 DB의 표 구성이 달라진다는
 | `client_items` | `rowid`, `item_id`, `item_filename`, `item_parent_id`, `item_birthtime`, `item_lastusedtime`, `version_device`, `app_library_rowid`, `version_name`, `version_size`, `version_mtime`, `item_type`, `item_sharing_options` |
 | `app_libraries` | `rowid`, `app_library_name` |
 
-mac_apt는 두 DB를 열어 이 네 표를 읽습니다 [1]. 표 이름으로 보아 `server_items` 는 `server.db` 에, `client_items` 와 `app_libraries` 는 `client.db` 에 있을 것으로 보이지만, 표마다 어느 파일에 있는지는 검체에서 `.tables` 로 확인합니다.
+두 DB에는 이 네 표가 있습니다 [1]. 표 이름으로 보아 `server_items` 는 `server.db` 에, `client_items` 와 `app_libraries` 는 `client.db` 에 있을 것으로 보이지만, 표마다 어느 파일에 있는지는 검체에서 `.tables` 로 확인합니다.
 
-항목 하나에는 자기 이름(`item_filename`)과 부모 항목 번호(`item_parent_id`)만 있고 전체 경로는 없습니다. mac_apt는 `item_parent_id` 를 따라 부모를 거슬러 오르는 재귀 쿼리로 경로를 조립하고, 가장 깊이 올라간 결과를 그 항목의 경로로 고릅니다 [1]. `server_items` 와 `client_items` 모두 같은 방법으로 경로를 만듭니다 [1].
+항목 하나에는 자기 이름(`item_filename`)과 부모 항목 번호(`item_parent_id`)만 있고 전체 경로는 없습니다. 경로는 `item_parent_id` 를 따라 부모를 거슬러 오르는 재귀 쿼리로 조립하고, 가장 깊이 올라간 결과를 그 항목의 경로로 씁니다 [1]. `server_items` 와 `client_items` 모두 같은 방법으로 경로를 만듭니다 [1].
 
-`version_device` 는 그 판을 만든 기기를 가리키는 값이고, mac_apt는 이 값을 `devices.key` 와 맞춰 기기 이름으로 바꾼 칸(`version_device_name`)을 출력에 더합니다 [1]. `client_items.app_library_rowid` 는 `app_libraries.rowid` 와 이어져서, 그 항목이 어느 앱 보관함에 속하는지 알려 줍니다 [1].
+`version_device` 는 그 판을 만든 기기를 가리키는 값이고, `devices.key` 와 맞추면 기기 이름이 나옵니다(mac_apt 출력에서는 `version_device_name` 칸) [1]. `client_items.app_library_rowid` 는 `app_libraries.rowid` 와 이어져서, 그 항목이 어느 앱 보관함에 속하는지 알려 줍니다 [1].
 
-`item_type` 과 `item_sharing_options` 는 숫자로 남고, mac_apt는 이를 `item_type_str` 과 `item_is_shared` 로 바꿔 보여 줍니다 [1]. 숫자값마다 무엇을 뜻하는지(파일·폴더 등)와 공유 옵션의 비트 뜻은 이번 자료로 확인하지 못해서, 도구가 붙인 글자를 그대로 보고서에 옮기기 전에 그 변환표의 근거를 확인합니다.
+`item_type` 과 `item_sharing_options` 는 숫자로 남고, mac_apt 출력에서는 `item_type_str` 과 `item_is_shared` 로 바뀌어 나옵니다 [1]. 숫자값마다 무엇을 뜻하는지(파일·폴더 등)와 공유 옵션의 비트 뜻은 공개된 문서가 없어서, 도구가 붙인 글자를 그대로 보고서에 옮기기 전에 그 변환표의 근거를 확인합니다.
 
 mac_apt 출력 표 이름은 `iCloudDevices`, `iCloudServerItems`, `iCloudClientItems` 이고, `iCloudClientItems` 에서는 판 수정 시각 칸이 원문 철자 그대로 `verion_mtime` 으로 나옵니다 [1]. 출력 칸을 검색할 때 이 철자를 알아 둡니다.
 
@@ -50,28 +50,28 @@ mac_apt 출력 표 이름은 `iCloudDevices`, `iCloudServerItems`, `iCloudClient
 
 **증명하는 것.** DB에 행이 있으면 이 이름의 항목이 이 사용자의 iCloud Drive 동기화 목록에 올라 있었다는 기록이 있다는 뜻입니다 [1]. `version_device` 가 가리키는 기기 이름은 그 판을 어느 기기에서 만들었는지 알려 주는 기록이고, 같은 계정에 묶인 다른 기기의 이름을 이 맥에서 확인하는 실마리가 됩니다 [1].
 
-**증명하지 못하는 것.** DB에 행이 있다고 그 파일 내용이 이 맥 디스크에 있다고 단정하지 않습니다. 행의 존재만으로 이 맥의 사용자가 그 파일을 열었다고도 단정하지 않고, `item_lastusedtime` 이 어떤 동작에서 갱신되는지는 이번 자료로 확인하지 못했습니다. 파일 열람은 [이 파일을 누가 언제 열었나 (File Access)](../../04-scenarios/activity/file-access.md)의 흐름으로 다른 흔적과 맞춰 봅니다.
+**증명하지 못하는 것.** DB에 행이 있다고 그 파일 내용이 이 맥 디스크에 있다고 단정하지 않습니다. 행의 존재만으로 이 맥의 사용자가 그 파일을 열었다고도 단정하지 않고, `item_lastusedtime` 이 어떤 동작에서 갱신되는지는 공개된 자료가 없습니다. 파일 열람은 [이 파일을 누가 언제 열었나 (File Access)](../../04-scenarios/activity/file-access.md)의 흐름으로 다른 흔적과 맞춰 봅니다.
 
 ### 서버 쪽에 남는 것
 
 표준 데이터 보호에서 iCloud Drive는 전송 중과 서버에서 암호화되고 키는 Apple이 보관하며, 고급 데이터 보호를 켜면 종단간 암호화로 바뀝니다 [4]. 표준 보호일 때 iCloud Drive처럼 인증 뒤에 쓸 수 있는 CloudKit 서비스 키는 Apple 데이터센터의 HSM에 있습니다 [3].
 
-고급 데이터 보호를 켜도 iCloud Drive에서 Apple이 키를 쥔 메타데이터가 남고, 문서는 이를 "The raw byte checksums of the file content and the file name" 과 "Type of file, when it was created, last modified, or last opened" 로 적습니다 [4]. 공유에도 예외가 있어서, 공유 폴더에서 Keynote·Numbers·Pages 문서를 열거나 함께 편집하면 그 문서의 암호화 키가 Apple 서버로 올라가고, "anyone with a link" 로 공유한 항목은 표준 보호가 됩니다 [3]. 공유마다 제목과 대표 섬네일이 표준 보호로 저장될 수도 있습니다 [3].
+고급 데이터 보호를 켜도 iCloud Drive에서 Apple이 키를 쥔 메타데이터가 남고, 여기에는 파일 내용과 파일 이름의 원시 바이트 체크섬, 파일 종류, 만든 때·마지막으로 고친 때·마지막으로 연 때가 들어갑니다 [4]. 공유에도 예외가 있어서, 공유 폴더에서 Keynote·Numbers·Pages 문서를 열거나 함께 편집하면 그 문서의 암호화 키가 Apple 서버로 올라가고, "anyone with a link" 로 공유한 항목은 표준 보호가 됩니다 [3]. 공유마다 제목과 대표 섬네일이 표준 보호로 저장될 수도 있습니다 [3].
 
 보고서에는 "`client.db` 에 이 이름의 항목이 이 앱 보관함 아래 있고, 이 판은 이 이름의 기기에서 만들어졌다는 기록이 있다" 처럼 DB가 보여 주는 만큼만 씁니다.
 
 ## 시각 해석
 
-mac_apt는 `item_birthtime`, `item_lastusedtime`, `version_mtime` 을 모두 유닉스 시각(초)으로 읽어서 [1], 1970-01-01 UTC 기준으로 바꾸고 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)을 보고 따로 맞춥니다. 칸 이름으로 보아 `item_birthtime` 은 항목이 생긴 때, `version_mtime` 은 그 판의 수정 시각, `item_lastusedtime` 은 마지막으로 쓴 때로 읽히지만, 각 값이 정확히 어떤 동작에서 바뀌는지는 문서로 확인하지 못했습니다. 이 칸들을 타임라인에 넣을 때는 칸 이름을 그대로 적고 "파일을 열었다" 같은 행위로 바꿔 쓰지 않습니다.
+`item_birthtime`, `item_lastusedtime`, `version_mtime` 은 모두 유닉스 시각(초)이라서 [1], 1970-01-01 UTC 기준으로 바꾸고 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)을 보고 따로 맞춥니다. 칸 이름으로 보아 `item_birthtime` 은 항목이 생긴 때, `version_mtime` 은 그 판의 수정 시각, `item_lastusedtime` 은 마지막으로 쓴 때로 읽히지만, 각 값이 정확히 어떤 동작에서 바뀌는지는 공개된 문서가 없습니다. 이 칸들을 타임라인에 넣을 때는 칸 이름을 그대로 적고 "파일을 열었다" 같은 행위로 바꿔 쓰지 않습니다.
 
-`version_mtime` 은 판을 만든 기기(`version_device`)에서 정한 시각일 수 있어서, 다른 기기의 시계가 틀렸다면 이 맥의 다른 기록과 어긋날 수 있다는 점도 함께 적어 둡니다(필자 해석).
+`version_mtime` 은 판을 만든 기기(`version_device`)에서 정한 시각일 수 있어서, 다른 기기의 시계가 틀렸다면 이 맥의 다른 기록과 어긋날 수 있다는 점도 함께 적어 둡니다.
 
 ## 함정과 한계
 
 - **두 DB.** 서버 쪽 항목과 클라이언트 쪽 항목이 다른 DB에 있어서 [1], 한쪽만 보면 목록이 비어 보일 수 있습니다.
 - **경로는 조립한 값.** 전체 경로는 DB에 없고 부모를 따라 조립한 결과입니다 [1]. 부모 행이 지워졌거나 끊겼으면 경로가 중간에서 멈추고, 이때는 조립이 멈춘 곳을 그대로 적습니다.
 - **자동 수집에서 빠짐.** ForensicArtifacts 정의에 CloudDocs 항목이 없습니다 [2].
-- **확인하지 못한 변환표.** `item_type`, `item_sharing_options` 의 숫자 뜻은 도구의 변환표에 기댑니다.
+- **근거가 공개되지 않은 변환표.** `item_type`, `item_sharing_options` 의 숫자 뜻은 도구의 변환표에 기댑니다.
 - **공유의 예외.** 고급 데이터 보호를 켜도 공유 폴더에서 열거나 함께 편집한 iWork 문서의 키는 Apple 서버로 올라가고, 링크 공유는 표준 보호가 됩니다 [3]. 서버 쪽 자료 요청 범위를 정할 때 이 예외를 함께 봅니다.
 - **지운 행.** 동기화 목록에서 빠진 행은 SQLite 파일의 빈 공간을 살펴야 하고, 그 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 

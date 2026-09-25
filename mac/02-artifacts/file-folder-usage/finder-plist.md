@@ -10,15 +10,15 @@ nav_order: 870
 
 ## 무엇을 기록하나 · 왜 생기나
 
-파인더 설정 파일 (Finder plist)은 이름 그대로 파인더의 설정 파일이지만, 포렌식에서는 설정값보다 사용자가 최근에 한 동작이 남는 키가 더 쓸모 있습니다. 공개 도구 mac_apt 의 `RECENTITEMS` 플러그인은 이 파일에서 최근 폴더(`FXRecentFolders`), "폴더로 이동" 입력칸의 마지막 값과 입력 기록(`GoToField`, `GoToFieldHistory`), 최근 이동·복사 대상(`RecentMoveAndCopyDestinations`), "서버에 연결"에 마지막으로 쓴 주소(`FXConnectToLastURL`), 열기·저장 창의 마지막 폴더를 읽습니다 [1]. 같은 플러그인은 바탕화면에 나타났던 볼륨의 아이콘 위치(`FXDesktopVolumePositions`), 최근 파일 검색(`SGTRecentFileSearches`), 여러 항목 이름 바꾸기의 마지막 설정(`BulkRename` 으로 시작하는 키)도 함께 읽습니다 [1].
+파인더 설정 파일 (Finder plist)은 이름 그대로 파인더의 설정 파일이지만, 포렌식에서는 설정값보다 사용자가 최근에 한 동작이 남는 키가 더 쓸모 있습니다. 이 파일에는 최근 폴더(`FXRecentFolders`), "폴더로 이동" 입력칸의 마지막 값과 입력 기록(`GoToField`, `GoToFieldHistory`), 최근 이동·복사 대상(`RecentMoveAndCopyDestinations`), "서버에 연결"에 마지막으로 쓴 주소(`FXConnectToLastURL`), 열기·저장 창의 마지막 폴더가 남습니다 [1]. 바탕화면에 나타났던 볼륨의 아이콘 위치(`FXDesktopVolumePositions`), 최근 파일 검색(`SGTRecentFileSearches`), 여러 항목 이름 바꾸기의 마지막 설정(`BulkRename` 으로 시작하는 키)도 함께 남습니다 [1].
 
 이 키들은 사용자가 파인더에서 무언가를 했을 때 파인더가 적어 두는 값이라서, 앱 실행 기록이나 파일 시스템 기록과는 다른 쪽에서 사용자 동작을 보여 줍니다. 최근 폴더·서버·열기 창 쪽 키는 [최근 항목 (Shared File Lists)](recent-items/index.md)에서 최근 항목 기록과 함께 자세히 다루고, 이 페이지는 파일 전체를 한 번에 훑는 길잡이와 다른 쪽에서 다루지 않는 이름 바꾸기 키를 중심으로 씁니다.
 
-휴지통 30일 자동 비우기도 파인더 설정 › 고급의 "30일 후 휴지통에서 항목 제거(Remove items from the Trash after 30 days)"에서 켜고 끕니다 [3]. 이 설정이 어느 키로 저장되는지는 확인하지 못했고, 이 설정이 휴지통 해석에 어떤 영향을 주는지는 [휴지통 (.Trash)](trash.md)에서 다룹니다. 보기 방식이나 숨김 파일 표시 같은 화면 설정 키도 이 페이지 출처로 확인하지 못해서 적지 않습니다.
+휴지통 30일 자동 비우기도 파인더 설정 › 고급의 "30일 후 휴지통에서 항목 제거(Remove items from the Trash after 30 days)"에서 켜고 끕니다 [3]. 이 설정이 휴지통 해석에 어떤 영향을 주는지는 [휴지통 (.Trash)](trash.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-파인더 기록은 한 파일에 다 모여 있지 않고, mac_apt 는 아래 세 파일을 함께 읽습니다 [1].
+파인더 기록은 한 파일에 다 모여 있지 않고 아래 세 파일에 나뉘어 있습니다 [1].
 
 | 파일 | 위치 | 이 페이지와 관련된 키 |
 |---|---|---|
@@ -26,13 +26,13 @@ nav_order: 870
 | 전역 설정 | `~/Library/Preferences/.GlobalPreferences.plist` | `SGTRecentFileSearches`, `NSNavRecentPlaces` |
 | 사이드바 목록 | `~/Library/Preferences/com.apple.sidebarlists.plist` | `systemitems` › `VolumesList`, `favoriteservers` › `CustomListItems` |
 
-세 파일 모두 사용자 홈 아래에 있어서, 계정이 여럿이면 계정마다 따로 읽습니다. ForensicArtifacts 정의(`macos.yaml`)에는 `com.apple.finder.plist` 를 따로 가리키는 항목이 없었으므로 [2], 그 정의로 수집 목록을 짤 때는 이 파일을 따로 챙깁니다.
+세 파일 모두 사용자 홈 아래에 있어서, 계정이 여럿이면 계정마다 따로 읽습니다. ForensicArtifacts 정의(`macos.yaml`)에는 `com.apple.finder.plist` 를 따로 가리키는 항목이 없으므로 [2], 그 정의로 수집 목록을 짤 때는 이 파일을 따로 챙깁니다.
 
-키마다 어느 macOS 버전부터 있고 어느 버전에서 없어졌는지는 확인하지 못했습니다. 버전 차이로 확인한 것은 `FXRecentFolders` 항목 하나뿐인데, 항목에 `file-bookmark`(북마크 데이터)가 없으면 mac_apt 는 `file-data` 안의 `_CFURLAliasData`(별칭 데이터)를 읽고, 소스 주석은 이 모양을 "아마 macOS 10.9 미만" 이라고만 적었습니다 [1]. 10.15 Catalina 이후 버전끼리 키가 어떻게 다른지를 표로 정리할 근거는 이번 출처에 없습니다.
+키마다 어느 macOS 버전부터 있고 어느 버전에서 없어졌는지는 공개 자료가 없어 검체에서 확인합니다. 알려진 버전 차이는 `FXRecentFolders` 항목 하나입니다. 옛 항목에는 `file-bookmark`(북마크 데이터) 대신 `file-data` 안에 `_CFURLAliasData`(별칭 데이터)가 들어 있고, macOS 10.9 미만에서 만든 항목으로 보는 해석이 있습니다 [1].
 
 ## 구조
 
-파일은 속성 목록 파일이라서 최상위 사전(dict)에 키가 나란히 들어 있고, 파일 형식 자체는 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다룹니다. mac_apt 가 읽는 키를 기록하는 동작별로 묶으면 아래와 같습니다 [1].
+파일은 속성 목록 파일이라서 최상위 사전(dict)에 키가 나란히 들어 있고, 파일 형식 자체는 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다룹니다. 주요 키를 기록하는 동작별로 묶으면 아래와 같습니다 [1].
 
 | 키 | 기록하는 동작 | 값의 모양 |
 |---|---|---|
@@ -50,7 +50,7 @@ nav_order: 870
 
 ### 여러 항목 이름 바꾸기 키
 
-파인더에서 여러 파일을 골라 한꺼번에 이름을 바꾸면, 그때 넣은 설정이 `BulkRename` 으로 시작하는 키에 남습니다 [1]. mac_apt 가 읽는 키는 아래 여덟 개이고, 오른쪽 풀이는 출처가 밝힌 뜻이 아니라 키 이름으로 짐작한 것입니다.
+파인더에서 여러 파일을 골라 한꺼번에 이름을 바꾸면, 그때 넣은 설정이 `BulkRename` 으로 시작하는 키에 남습니다 [1]. 키는 아래 여덟 개이고, 오른쪽 풀이는 키 이름으로 짐작한 뜻입니다.
 
 | 키 | 키 이름으로 짐작한 뜻 |
 |---|---|
@@ -67,7 +67,7 @@ nav_order: 870
 
 ### 바탕화면 볼륨 키
 
-`FXDesktopVolumePositions` 는 볼륨마다 키가 하나라서 키 이름 앞쪽만 모아도 이 계정의 바탕화면에 나타났던 볼륨 이름 목록이 나옵니다 [1]. mac_apt 는 키 이름에서 마지막 `_` 뒤 값을 16진 실수 표기(`float.fromhex`)로 읽어 정수로 바꾼 뒤 2001-01-01 기준 맥 절대 시각으로 읽고 "볼륨 생성 날짜(VolumeCreationDate)" 라고 적지만 [1], 이 값을 볼륨 생성 시각으로 본다는 Apple 자료는 찾지 못했습니다. 이 해석을 쓸 때는 도구의 해석이라고 함께 밝힙니다.
+`FXDesktopVolumePositions` 는 볼륨마다 키가 하나라서 키 이름 앞쪽만 모아도 이 계정의 바탕화면에 나타났던 볼륨 이름 목록이 나옵니다 [1]. mac_apt 는 키 이름에서 마지막 `_` 뒤 값을 16진 실수 표기(`float.fromhex`)로 읽어 정수로 바꾼 뒤 2001-01-01 기준 맥 절대 시각으로 읽고 "볼륨 생성 날짜(VolumeCreationDate)" 라고 적습니다 [1]. 이 값을 볼륨 생성 시각으로 본다는 Apple 공식 자료는 없으므로, 이 해석을 쓸 때는 도구의 해석이라고 함께 밝힙니다.
 
 ## 증거로서 의미
 
@@ -79,14 +79,14 @@ nav_order: 870
 
 ## 시각 해석
 
-mac_apt 가 읽는 키 가운데 시각으로 풀리는 값은 `FXDesktopVolumePositions` 키 이름 뒤쪽의 16진 값 하나이고, 앞 절에서 본 대로 이 값을 볼륨 생성 시각으로 보는 해석은 도구의 해석입니다 [1]. 2001-01-01 기준 맥 절대 시각을 UTC 로 바꾸는 방법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, `file-bookmark` 안에 든 날짜는 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)에서 다룹니다.
+위 키 가운데 시각으로 풀리는 값은 `FXDesktopVolumePositions` 키 이름 뒤쪽의 16진 값 하나이고, 앞 절에서 본 대로 이 값을 볼륨 생성 시각으로 보는 해석은 도구의 해석입니다 [1]. 2001-01-01 기준 맥 절대 시각을 UTC 로 바꾸는 방법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, `file-bookmark` 안에 든 날짜는 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)에서 다룹니다.
 
 그 밖의 키에는 시각이 없어서, 파일 시스템이 적은 이 plist 파일의 수정 시각을 함께 봅니다. 다만 수정 시각은 파일 전체를 마지막으로 쓴 때일 뿐이라서 어느 키가 그때 바뀌었는지는 알려 주지 않습니다.
 
 ## 함정과 한계
 
 - **한 파일만 읽는 경우.** 최근 파일 검색(`SGTRecentFileSearches`)은 `.GlobalPreferences.plist` 에도 있고, 볼륨·서버 목록은 사이드바 목록 파일에도 있어서 [1], 파인더 설정 파일 하나만 보면 기록이 빠집니다.
-- **배열 순서를 시간순으로 읽는 경우.** 배열 키의 항목 순서가 최근 순서인지는 이 페이지 출처로 확인하지 못했습니다. 순서만 보고 "먼저 갔다·나중에 갔다" 를 말하지 않습니다.
+- **배열 순서를 시간순으로 읽는 경우.** 배열 키의 항목 순서가 최근 순서인지는 공개 자료가 없습니다. 순서만 보고 "먼저 갔다·나중에 갔다" 를 말하지 않습니다.
 - **옛 모양의 최근 폴더 항목.** `file-bookmark` 가 없는 항목은 별칭 데이터로 읽어야 해서 [1], 북마크만 푸는 도구는 이런 항목을 건너뛸 수 있습니다.
 - **도구의 해석을 사실처럼 옮기는 경우.** 볼륨 키의 16진 값을 "볼륨 생성 시각" 이라고 단정하지 않습니다 [1].
 - **지우기와 조작.** 설정 파일을 지우거나 값을 바꾸면 이 기록은 사라지거나 달라지고, 파일 안에는 그런 일이 있었다는 표시가 따로 남지 않습니다. 키가 비어 있다고 그 동작을 하지 않았다고 말할 수 없으며, 예전 값은 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)의 방법으로 스냅숏이나 백업 속 같은 파일과 견줘 찾습니다.

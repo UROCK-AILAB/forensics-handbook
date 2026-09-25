@@ -6,19 +6,19 @@ nav_order: 1460
 
 # 왓츠앱 (WhatsApp)
 
-왓츠앱은 iOS 에서 메시지·통화·연락처를 `ChatStorage.sqlite`, `CallHistory.sqlite`, `ContactsV2.sqlite` 같은 코어 데이터 SQLite 파일에 나눠 적고 시각은 2001-01-01 UTC 기준 초로 적으며, 맥 앱도 같은 이름의 DB를 쓴다고 알려져 있지만 맥 경로와 스키마가 같은지는 확인하지 못했습니다.
+왓츠앱은 iOS 에서 메시지·통화·연락처를 `ChatStorage.sqlite`, `CallHistory.sqlite`, `ContactsV2.sqlite` 같은 코어 데이터 SQLite 파일에 나눠 적고 시각은 2001-01-01 UTC 기준 초로 적으며, 맥 앱도 같은 이름의 DB를 쓴다고 알려져 있습니다. 맥 경로와 스키마가 iOS 와 같은지는 검체에서 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-이 페이지의 표·칸 설명은 iOS 추출물을 분석하는 공개 도구 iLEAPP 의 왓츠앱 코드로 확인한 것입니다 [1]. iLEAPP 는 iOS 앱 그룹 컨테이너에서 대화 DB(`ChatStorage.sqlite`), 연락처 DB(`ContactsV2.sqlite`), 통화 기록 DB(`CallHistory.sqlite`)와 첨부 미디어 폴더를 찾아 읽습니다 [1]. 메시지 한 건마다 보낸 시각, 내가 보낸 것인지 여부, 본문, 상대 식별자, 첨부 파일 경로, 메시지 종류가 한 행에 남고, 통화 한 건마다 시각·길이·결과가 남습니다 [1].
+이 페이지의 표·칸 설명은 iOS 기준입니다. iOS 왓츠앱은 앱 그룹 컨테이너에 대화 DB(`ChatStorage.sqlite`), 연락처 DB(`ContactsV2.sqlite`), 통화 기록 DB(`CallHistory.sqlite`)와 첨부 미디어 폴더를 둡니다 [1]. 메시지 한 건마다 보낸 시각, 내가 보낸 것인지 여부, 본문, 상대 식별자, 첨부 파일 경로, 메시지 종류가 한 행에 남고, 통화 한 건마다 시각·길이·결과가 남습니다 [1].
 
-맥 앱이 이 DB를 어디에 두는지, iOS 와 스키마가 같은지는 이 페이지의 출처로 확인하지 못했습니다. 그래서 맥 검체에서 같은 이름의 DB를 찾으면 아래 표·칸 목록을 그대로 믿지 말고, 표 목록부터 열어 iOS 쪽 설명과 맞는지 확인한 뒤에 씁니다. 왓츠앱 데스크톱이 예전에 일렉트론 (Electron) 앱이었다는 설명도 흔하지만 확인하지 못했습니다.
+맥 앱이 이 DB를 어디에 두는지, iOS 와 스키마가 같은지는 공개된 분석 자료가 없습니다. 그래서 맥 검체에서 같은 이름의 DB를 찾으면 아래 표·칸 목록을 그대로 믿지 말고, 표 목록부터 열어 iOS 쪽 설명과 맞는지 확인한 뒤에 씁니다. 왓츠앱 데스크톱이 예전에 일렉트론 (Electron) 앱이었다는 설명도 흔하지만, 공개 자료로 뒷받침되지 않아 검체의 앱 번들로 확인합니다.
 
 ForensicArtifacts 의 메신저 정의 파일(`instant_messaging.yaml`)에는 왓츠앱 항목이 없습니다 [2].
 
 ## 위치와 버전별 차이
 
-iLEAPP 가 iOS 에서 찾는 파일 패턴은 아래와 같습니다 [1].
+iOS 에서 파일이 놓이는 경로 패턴은 아래와 같습니다 [1].
 
 | 기록 | iOS 경로 패턴 [1] |
 |---|---|
@@ -27,31 +27,31 @@ iLEAPP 가 iOS 에서 찾는 파일 패턴은 아래와 같습니다 [1].
 | 통화 기록 | `*/mobile/Containers/Shared/AppGroup/*/CallHistory.sqlite*` |
 | 첨부 미디어 | `*/mobile/Containers/Shared/AppGroup/*/Message/Media/*/*/*/*` |
 
-패턴 끝의 `*` 는 `-wal`·`-shm` 같은 짝 파일까지 함께 잡으려는 것으로 보입니다(iLEAPP 코드에서 읽은 판단) [1].
+패턴 끝의 `*` 는 `-wal`·`-shm` 같은 짝 파일까지 함께 잡으려는 것으로 보입니다 [1].
 
-맥 쪽 경로는 두 가지 후보가 있고, 둘 다 이 페이지의 출처로 확인하지 못했습니다.
+맥 쪽 경로는 두 가지 후보가 있고, 둘 다 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 | 맥 앱 | 후보 위치 | 확인 정도 |
 |---|---|---|
-| 새 앱(아이패드 앱을 맥으로 옮긴 카탈리스트판) | `~/Library/Group Containers/group.net.whatsapp.WhatsApp.shared/ChatStorage.sqlite` | 확인되지 않음 |
-| 옛 데스크톱 앱(일렉트론판으로 알려짐) | `~/Library/Application Support/WhatsApp/` | 확인되지 않음 |
+| 새 앱(아이패드 앱을 맥으로 옮긴 카탈리스트판) | `~/Library/Group Containers/group.net.whatsapp.WhatsApp.shared/ChatStorage.sqlite` | 검체에서 확인 |
+| 옛 데스크톱 앱(일렉트론판으로 알려짐) | `~/Library/Application Support/WhatsApp/` | 검체에서 확인 |
 
-한 맥에 두 앱을 차례로 썼다면 두 후보 폴더가 함께 남을 수 있으니 둘 다 찾아봅니다. macOS 10.15 Catalina 이후 맥 버전에 따라 경로가 바뀐다는 자료는 찾지 못했습니다.
+한 맥에 두 앱을 차례로 썼다면 두 후보 폴더가 함께 남을 수 있으니 둘 다 찾아봅니다. macOS 10.15 Catalina 이후 맥 버전에 따라 경로가 바뀐다는 공개 자료는 없습니다.
 
 ## 구조
 
-아래 표·칸은 iOS `ChatStorage.sqlite`, `CallHistory.sqlite`, `ContactsV2.sqlite` 를 iLEAPP 가 읽는 방식에서 확인한 것입니다 [1]. 맥 검체에서는 같은 이름의 표가 있는지부터 봅니다.
+아래 표·칸은 iOS 의 `ChatStorage.sqlite`, `CallHistory.sqlite`, `ContactsV2.sqlite` 기준입니다 [1]. 맥 검체에서는 같은 이름의 표가 있는지부터 봅니다.
 
-| DB | 표 | iLEAPP 가 읽는 칸 | 담는 것 |
+| DB | 표 | 주요 칸 | 담는 것 |
 |---|---|---|---|
 | `ChatStorage.sqlite` | `ZWAMESSAGE` | `ZMESSAGEDATE`, `ZISFROMME`, `ZTEXT`, `ZFROMJID`, `ZTOJID`, `ZMEDIALOCALPATH`, `ZMESSAGETYPE` | 메시지 한 건당 한 행. 시각, 보낸 쪽 여부, 본문, 상대 식별자, 첨부 파일 경로, 종류 [1] |
-| `ChatStorage.sqlite` | `ZWAMEDIAITEM`, `ZWACHATSESSION` | (메시지와 이어 붙여 읽음) | 첨부 항목과 대화방. iLEAPP 는 `ZWAMESSAGE` 와 이어 붙여 읽음 [1] |
+| `ChatStorage.sqlite` | `ZWAMEDIAITEM`, `ZWACHATSESSION` | (메시지와 이어 붙여 읽음) | 첨부 항목과 대화방. `ZWAMESSAGE` 와 이어 붙여 읽음 [1] |
 | `CallHistory.sqlite` | `ZWACDCALLEVENT`, `ZWACDCALLEVENTPARTICIPANT` | `ZDATE`, `ZDURATION`, `ZOUTCOME` | 통화 한 건과 참여자 [1] |
 | `ContactsV2.sqlite` | `ZWAADDRESSBOOKCONTACT` | `ZFULLNAME`, `ZPHONENUMBER`, `ZWHATSAPPID` | 연락처 이름·전화번호·왓츠앱 식별자 [1] |
 
-표끼리 어떤 칸으로 이어지는지는 이 페이지에 옮기지 않았고, iLEAPP 코드의 질의를 따라가 확인합니다 [1].
+표끼리 어떤 칸으로 이어지는지는 iLEAPP 의 `whatsApp.py` 분석기 질의에서 볼 수 있습니다 [1].
 
-값의 뜻이 확인된 칸은 두 가지입니다. `ZMESSAGETYPE` 이 5인 행에서만 iLEAPP 가 위치 좌표를 뽑고 [1], 다른 값의 뜻은 확인하지 못했습니다. 통화 결과 `ZOUTCOME` 은 아래처럼 읽습니다 [1].
+값의 뜻이 알려진 칸은 두 가지입니다. `ZMESSAGETYPE` 이 5인 행에는 위치 좌표가 들어 있고 [1], 다른 값의 뜻은 공개된 분석 자료가 없습니다. 통화 결과 `ZOUTCOME` 은 아래처럼 읽습니다 [1].
 
 | `ZOUTCOME` 값 | 뜻 |
 |---|---|
@@ -65,28 +65,28 @@ iLEAPP 가 iOS 에서 찾는 파일 패턴은 아래와 같습니다 [1].
 
 **증명하는 것.** `ZWAMESSAGE` 한 행은 그 기기의 왓츠앱 DB에 그 시각·그 상대와 주고받은 메시지 기록이 남아 있다는 뜻이고, `ZISFROMME` 로 그 기기 쪽 계정이 보낸 것인지 받은 것인지를 가릅니다 [1]. `ZMEDIALOCALPATH` 가 있으면 첨부 파일이 어느 경로로 저장됐는지 알 수 있어서 실제 파일이 남아 있는지 찾아볼 수 있고, 통화 기록의 `ZOUTCOME` 으로 통화가 이어졌는지, 받지 못했는지, 거절했는지를 가릅니다 [1].
 
-**증명하지 못하는 것.** 메시지 기록은 누가 키보드 앞에 있었는지, 받은 메시지를 사람이 읽었는지를 말하지 않습니다. 맥 앱은 휴대폰 계정과 이어 쓰는 앱이라는 설명이 흔하지만, 맥 DB의 한 행이 맥에서 쓴 것인지 휴대폰에서 쓴 것인지를 가르는 칸은 확인하지 못했습니다. 첨부 경로가 있어도 파일이 지금 디스크에 있다는 뜻은 아니고, 연락처 이름(`ZFULLNAME`)은 기기 주소록에서 온 이름일 수 있어서 상대의 실제 신원과 같다고 볼 수 없습니다. 보고서에는 "피조사자가 이 사람에게 메시지를 보냈다" 보다 "이 계정의 왓츠앱 DB에 이 상대 식별자로 보낸 쪽 표시(`ZISFROMME`)가 붙은 메시지 기록이 이 시각(UTC)에 있다" 처럼 기록이 말하는 만큼만 씁니다.
+**증명하지 못하는 것.** 메시지 기록은 누가 키보드 앞에 있었는지, 받은 메시지를 사람이 읽었는지를 말하지 않습니다. 맥 앱은 휴대폰 계정과 이어 쓰는 앱이라는 설명이 흔하지만, 맥 DB의 한 행이 맥에서 쓴 것인지 휴대폰에서 쓴 것인지를 가르는 칸은 공개된 자료가 없습니다. 첨부 경로가 있어도 파일이 지금 디스크에 있다는 뜻은 아니고, 연락처 이름(`ZFULLNAME`)은 기기 주소록에서 온 이름일 수 있어서 상대의 실제 신원과 같다고 볼 수 없습니다. 보고서에는 "피조사자가 이 사람에게 메시지를 보냈다" 보다 "이 계정의 왓츠앱 DB에 이 상대 식별자로 보낸 쪽 표시(`ZISFROMME`)가 붙은 메시지 기록이 이 시각(UTC)에 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
 ## 시각 해석
 
-`ZMESSAGEDATE` 같은 시각 칸은 코어 데이터 (Cocoa) 시각, 곧 맥 절대 시각이라 2001-01-01 00:00:00 UTC 기준 초이고, iLEAPP 는 `convert_cocoa_core_data_ts_to_utc()` 로 UTC 시각으로 바꿉니다 [1]. 통화 기록의 `ZDATE` 도 같은 함수로 바꾸고, 통화가 끝난 시각은 `ZDATE` 에 `ZDURATION` 을 더해 구합니다 [1]. 유닉스 시각과 기준점이 31년 가까이 달라서, 유닉스 시각으로 잘못 읽으면 1990년대 날짜가 나옵니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 있고, 현지 시각으로 옮길 때는 먼저 UTC 로 바꾼 뒤 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)에서 확인한 시간대를 적용합니다.
+`ZMESSAGEDATE` 같은 시각 칸은 코어 데이터 (Cocoa) 시각, 곧 맥 절대 시각이라 2001-01-01 00:00:00 UTC 기준 초입니다 [1]. 통화 기록의 `ZDATE` 도 기준이 같고, 통화가 끝난 시각은 `ZDATE` 에 `ZDURATION` 을 더해 구합니다 [1]. 유닉스 시각과 기준점이 31년 가까이 달라서, 유닉스 시각으로 잘못 읽으면 1990년대 날짜가 나옵니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 있고, 현지 시각으로 옮길 때는 먼저 UTC 로 바꾼 뒤 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)에서 확인한 시간대를 적용합니다.
 
-| 칸 | 기준·단위 | 확인 정도 |
+| 칸 | 기준·단위 | 적용 범위 |
 |---|---|---|
-| `ZWAMESSAGE.ZMESSAGEDATE` | 2001-01-01 UTC, 초 | 확인(iOS) [1] |
-| `ZWACDCALLEVENT.ZDATE` | 2001-01-01 UTC, 초 | 확인(iOS) [1] |
-| `ZWACDCALLEVENT.ZDURATION` | 통화 길이, 초. iLEAPP 는 `ZDATE` 에 더해 끝난 시각을 구하고 `time(ZDURATION, 'unixepoch')` 로 시:분:초로 보여 줍니다 | 확인(iOS) [1] |
+| `ZWAMESSAGE.ZMESSAGEDATE` | 2001-01-01 UTC, 초 | iOS [1] |
+| `ZWACDCALLEVENT.ZDATE` | 2001-01-01 UTC, 초 | iOS [1] |
+| `ZWACDCALLEVENT.ZDURATION` | 통화 길이, 초. `ZDATE` 에 더하면 끝난 시각이 되고, `time(ZDURATION, 'unixepoch')` 로 시:분:초로 바꿔 볼 수 있습니다 | iOS [1] |
 
 맥 DB에서 같은 칸을 찾더라도 기준이 같은지는 실물 값의 크기로 한 번 더 확인합니다.
 
 ## 함정과 한계
 
 - **iOS 설명을 맥에 그대로 옮기는 경우.** 이 페이지의 표·칸은 iOS 기준이라서 [1], 맥 DB가 같은 스키마인지 확인하기 전에는 "iOS 와 같은 이름의 DB" 까지만 씁니다.
-- **WAL 파일을 빼먹는 경우.** iLEAPP 패턴이 짝 파일까지 잡는 것처럼 [1], `ChatStorage.sqlite` 만 복사하면 최근 메시지가 빠질 수 있습니다. WAL 동작은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
+- **WAL 파일을 빼먹는 경우.** 위치 패턴이 짝 파일까지 잡는 것처럼 [1], `ChatStorage.sqlite` 만 복사하면 최근 메시지가 빠질 수 있습니다. WAL 동작은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 - **DB를 하나만 보는 경우.** 메시지·통화·연락처가 서로 다른 DB에 있어서 [1], 대화 DB만 보면 통화 기록과 상대 이름을 놓칩니다.
 - **두 맥 앱을 섞는 경우.** 새 앱과 옛 앱의 후보 폴더가 함께 남아 있을 수 있어서, 폴더마다 어느 앱의 기록인지 따로 적습니다.
 - **수집 정의에 빠져 있는 경우.** ForensicArtifacts 메신저 정의에 왓츠앱이 없어서 [2], 정의만 믿고 수집하면 왓츠앱 폴더가 빠질 수 있습니다.
-- **지우기와 조작.** 지운 메시지 행이 WAL 이나 DB의 빈 공간에 남을 수 있다는 점은 SQLite 일반론이고, 왓츠앱에서 직접 확인한 자료는 이 페이지 출처에 없습니다. 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)를, 기록을 없애려 한 정황은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)를 봅니다.
+- **지우기와 조작.** 지운 메시지 행이 WAL 이나 DB의 빈 공간에 남을 수 있다는 점은 SQLite 일반론이고, 왓츠앱을 대상으로 한 공개 분석 자료는 없습니다. 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)를, 기록을 없애려 한 정황은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -94,7 +94,7 @@ iLEAPP 가 iOS 에서 찾는 파일 패턴은 아래와 같습니다 [1].
 
 ### 헥스로 한 번
 
-아래 값은 명세에 맞춰 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. SQLite 레코드에서 칸 값을 꺼내는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따르고, 여기서는 꺼낸 `ZMESSAGEDATE` 값을 시각으로 바꾸는 단계만 따라갑니다. 이 칸이 정수로 저장되는지 실수로 저장되는지는 확인하지 못해서 두 경우를 함께 적습니다.
+아래 값은 명세에 맞춰 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. SQLite 레코드에서 칸 값을 꺼내는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따르고, 여기서는 꺼낸 `ZMESSAGEDATE` 값을 시각으로 바꾸는 단계만 따라갑니다. 이 칸이 정수로 저장되는지 실수로 저장되는지는 공개 자료가 없어 두 경우를 함께 적습니다.
 
 ```
 정수로 적힌 경우 (4바이트 빅 엔디언, 예시)

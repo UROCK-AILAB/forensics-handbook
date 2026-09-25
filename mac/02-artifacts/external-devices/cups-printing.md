@@ -18,21 +18,21 @@ CUPS 는 이와 별도로 접근 로그 (access_log), 오류 로그 (error_log),
 
 ## 위치와 버전별 차이
 
-| 기록 | 위치 | 확인 여부 | 출처 |
+| 기록 | 위치 | 비고 | 출처 |
 |---|---|---|---|
-| 스풀 폴더(제어 파일·데이터 파일) | `/private/var/spool/cups` | mac_apt 이 읽는 경로로 확인. CUPS 의 `RequestRoot` 기본값도 `/var/spool/cups` | [3][6] |
-| CUPS 설정 파일 폴더 | `/private/etc/cups/` (`cupsd.conf`, `cups-files.conf` 등) | CUPS 의 `ServerRoot` 기본값 `/etc/cups` 로 확인. 프린터 목록 파일 이름(`printers.conf`)은 확인이 필요함 | [6] |
-| 로그 | `/private/var/log/cups/` 아래 `access_log`, `error_log`, `page_log` | CUPS 의 `AccessLog`·`ErrorLog`·`PageLog` 기본값으로 확인. macOS 에 깔린 값이 같은지는 확인이 필요함 | [6] |
+| 스풀 폴더(제어 파일·데이터 파일) | `/private/var/spool/cups` | mac_apt 이 읽는 경로. CUPS 의 `RequestRoot` 기본값도 `/var/spool/cups` | [3][6] |
+| CUPS 설정 파일 폴더 | `/private/etc/cups/` (`cupsd.conf`, `cups-files.conf` 등) | CUPS 의 `ServerRoot` 기본값 `/etc/cups`. 프린터 목록 파일 이름(`printers.conf`)은 검체에서 확인 | [6] |
+| 로그 | `/private/var/log/cups/` 아래 `access_log`, `error_log`, `page_log` | CUPS 의 `AccessLog`·`ErrorLog`·`PageLog` 기본값. macOS 에 깔린 값은 검체의 `cups-files.conf` 로 확인 | [6] |
 
-mac_apt 의 인쇄 작업 플러그인 코드에는 macOS 버전에 따라 다르게 읽는 부분이 없습니다 [3]. 그래서 이 핸드북이 주로 다루는 macOS 10.15 Catalina 이후에서 스풀 폴더 구조가 버전마다 다른지는 이 코드로 드러나지 않고, 버전별 차이를 확인한 자료도 없습니다.
+mac_apt 의 인쇄 작업 플러그인은 macOS 버전에 따라 다르게 읽지 않습니다 [3]. macOS 10.15 Catalina 이후 스풀 폴더 구조가 버전마다 다른지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-로그와 스풀 폴더의 위치는 cupsd.conf 가 아니라 `cups-files.conf` 의 `AccessLog`·`ErrorLog`·`PageLog`·`RequestRoot` 가 정하고, 위 표의 경로는 CUPS 문서에 적힌 기본값입니다 [6]. 맥에서는 `/etc`·`/var` 가 `/private` 아래를 가리키므로 표에는 `/private` 로 적었습니다. `PageLog` 에 빈 이름을 적으면 page_log 를 만들지 않는데 [6], macOS 에 깔린 cups-files.conf 가 이 값을 어떻게 두는지는 확인이 필요합니다. 그래서 검체에서는 cups-files.conf 부터 열어 로그와 스풀 위치가 기본과 다른지, page_log 가 꺼져 있지 않은지 봅니다.
+로그와 스풀 폴더의 위치는 cupsd.conf 가 아니라 `cups-files.conf` 의 `AccessLog`·`ErrorLog`·`PageLog`·`RequestRoot` 가 정하고, 위 표의 경로는 CUPS 기본값입니다 [6]. 맥에서는 `/etc`·`/var` 가 `/private` 아래를 가리키므로 표의 경로는 `/private` 로 시작합니다. `PageLog` 에 빈 이름을 적으면 page_log 를 만들지 않습니다 [6]. 그래서 검체에서는 cups-files.conf 부터 열어 로그와 스풀 위치가 기본과 다른지, page_log 가 꺼져 있지 않은지 봅니다.
 
 ## 구조
 
 ### 스풀 폴더의 작업 파일
 
-mac_apt 은 스풀 폴더에서 이름이 `c` 로 시작하고 크기가 0보다 큰 파일을 제어 파일로, 이름이 `d` 로 시작하고 크기가 0보다 큰 파일을 데이터 파일로 봅니다 [3]. 데이터 파일은 이름의 `d` 뒤부터 `-` 앞까지를 작업 번호로 읽어 제어 파일과 짝을 짓습니다 [3]. 파일 이름이 제어 파일은 `c00001`, 데이터 파일은 `d00001-001` 처럼 `c`·`d` 뒤에 다섯 자리 작업 번호가 붙는 꼴이라는 설명이 있지만, 이번에 확인한 것은 앞 글자와 `-` 까지입니다.
+스풀 폴더에서 이름이 `c` 로 시작하는 파일이 제어 파일, `d` 로 시작하는 파일이 데이터 파일입니다. mac_apt 은 크기가 0 인 파일은 건너뜁니다 [3]. 데이터 파일 이름의 `d` 뒤부터 `-` 앞까지가 작업 번호라서, 이 번호로 제어 파일과 짝을 짓습니다 [3]. 파일 이름이 제어 파일은 `c00001`, 데이터 파일은 `d00001-001` 처럼 `c`·`d` 뒤에 다섯 자리 작업 번호가 붙는 꼴이라는 설명도 있으니, 자릿수는 검체에서 확인합니다.
 
 제어 파일에는 인쇄 표준 프로토콜인 IPP (Internet Printing Protocol)의 속성이 담기고, mac_apt 은 그중 아래 속성을 꺼냅니다 [3].
 
@@ -56,11 +56,11 @@ mac_apt 은 스풀 폴더에서 이름이 `c` 로 시작하고 크기가 0보다
 | `printer-uri` | PrinterURI | 프린터 주소 |
 | `job-uuid` | Job UUID | 작업 UUID |
 
-mac_apt 출력에는 이 밖에 데이터 파일 경로를 적는 Cached_File 칸과 읽은 파일을 적는 Source 칸이 있습니다 [3]. 뜻 칸은 속성 이름과 mac_apt 출력 칸 이름에서 읽은 것이고, `com.apple.print.JobInfo.PMApplicationName` 이 인쇄를 요청한 앱 이름이라는 점은 mac_apt 코드로 확인했습니다 [3]. 제어 파일 안에서 각 속성이 몇 번째 바이트에 어떻게 배치되는지는 이번 자료로 확인하지 못했습니다.
+mac_apt 출력에는 이 밖에 데이터 파일 경로를 적는 Cached_File 칸과 읽은 파일을 적는 Source 칸이 있습니다 [3]. `com.apple.print.JobInfo.PMApplicationName` 은 인쇄를 요청한 앱 이름이고 [3], 뜻 칸의 나머지 값은 속성 이름과 출력 칸 이름을 풀어 쓴 것입니다. 제어 파일 안의 바이트 배치는 검체에서 헥스로 확인합니다.
 
 ### 보존 설정 (cupsd.conf)
 
-인쇄가 끝난 작업 파일을 얼마나 남길지는 cupsd.conf 의 지시어가 정합니다. CUPS 문서에 적힌 기본값은 아래와 같습니다 [4].
+인쇄가 끝난 작업 파일을 얼마나 남길지는 cupsd.conf 의 지시어가 정합니다. 기본값은 아래와 같습니다 [4].
 
 | 지시어 | 뜻 | 기본값 |
 |---|---|---|
@@ -71,11 +71,11 @@ mac_apt 출력에는 이 밖에 데이터 파일 경로를 적는 Cached_File �
 | `MaxLogSize` | 로그 파일이 이 크기를 넘으면 교체. 0이면 교체 안 함 | `1048576` (1MB) |
 | `LogLevel` | error_log 기록 수준 | `warn` |
 
-두 기본값을 겹쳐 읽으면, 기본 설정에서는 문서 사본인 데이터 파일이 인쇄 뒤 약 하루가 지나면 사라지고 이력인 제어 파일은 작업 수 한도까지 남는다고 볼 수 있습니다 [4]. 이 해석은 CUPS 기본값에서 끌어낸 것이고, macOS 에 실제로 깔린 cupsd.conf 값이 CUPS 기본값과 같은지는 확인이 필요합니다. 검체에서는 설정 파일부터 열어 이 지시어들이 바뀌어 있는지 봅니다.
+두 기본값대로라면 문서 사본인 데이터 파일은 인쇄 뒤 약 하루가 지나면 사라지고, 이력인 제어 파일은 작업 수 한도까지 남습니다 [4]. macOS 에 깔린 cupsd.conf 값은 CUPS 기본값과 다를 수 있으니, 검체에서는 설정 파일부터 열어 이 지시어들이 바뀌어 있는지 봅니다.
 
 ### 로그 형식
 
-CUPS 문서가 정한 세 로그의 형식은 아래와 같습니다 [5].
+세 로그의 형식은 아래와 같습니다 [5].
 
 ```
 access_log : host group user date-time "method resource version" status bytes ipp-operation ipp-status
@@ -87,13 +87,13 @@ page_log   : printer user job-id date-time total num-sheets job-billing job-orig
 
 **증명하는 것.** 제어 파일이 남아 있으면 작업 이름, 요청한 계정 이름, 보낸 프린터, 요청한 앱, 작업을 만든·처리한·마친 시각, 부수, 인쇄를 마친 용지 수를 그 파일로 말할 수 있습니다 [3]. 짝이 되는 데이터 파일이 남아 있으면 인쇄한 문서의 사본을 직접 볼 수 있어서, 작업 이름만 보고 짐작하지 않고 내용까지 확인할 수 있습니다 [3]. 스풀 파일이 없어도 page_log 가 남아 있으면 프린터·사용자·작업 번호·시각·매수·작업 이름을 로그로 확인할 수 있습니다 [5].
 
-**증명하지 못하는 것.** `job-originating-user-name` 은 요청한 계정 이름이고, 그 계정을 쓴 사람이 누구인지는 따로 따져야 합니다([그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)). 작업 상태와 인쇄를 마친 용지 수는 인쇄 시스템이 기록한 값이라, 종이가 실제로 나왔는지나 누가 가져갔는지는 말해 주지 않습니다. 작업 이름이 문서 파일 이름과 같다는 보장은 확인한 자료에 없고, 데이터 파일이 없으면 무엇을 인쇄했는지는 이름으로만 짐작하게 됩니다.
+**증명하지 못하는 것.** `job-originating-user-name` 은 요청한 계정 이름이고, 그 계정을 쓴 사람이 누구인지는 따로 따져야 합니다([그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)). 작업 상태와 인쇄를 마친 용지 수는 인쇄 시스템이 기록한 값이라, 종이가 실제로 나왔는지나 누가 가져갔는지는 말해 주지 않습니다. 작업 이름이 문서 파일 이름과 같다는 보장은 없고, 데이터 파일이 없으면 무엇을 인쇄했는지는 이름으로만 짐작하게 됩니다.
 
 보고서에는 "이 문서를 인쇄해 가져갔다" 가 아니라 "이 시각에 이 계정이 이 앱에서 이 이름의 작업을 이 프린터로 보냈고, 인쇄 시스템이 몇 장을 마쳤다고 기록했다" 처럼 씁니다.
 
 ## 시각 해석
 
-제어 파일의 `time-at-creation`, `time-at-processing`, `time-at-completed` 는 mac_apt 이 `ReadUnixTime` 으로 바꾸는 값이라, 유닉스 시각(1970-01-01 기준 초)으로 다룹니다 [3]. 유닉스 시각은 시간대와 상관없는 UTC 기준 값이라, 현지 시각으로 보려면 검체의 시간대 설정([시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md))을 적용해 바꿉니다. 시각 값을 바꾸는 방식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
+제어 파일의 `time-at-creation`, `time-at-processing`, `time-at-completed` 는 유닉스 시각(1970-01-01 기준 초)입니다 [3]. 유닉스 시각은 시간대와 상관없는 UTC 기준 값이라, 현지 시각으로 보려면 검체의 시간대 설정([시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md))을 적용해 바꿉니다. 시각 값을 바꾸는 방식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
 
 로그의 date-time 은 `[DD/MON/YYYY:HH:MM:SS +ZZZZ]` 꼴로, 사람이 읽는 시각 뒤에 UTC 와의 시간대 차이가 함께 적힙니다 [5]. 타임라인에 넣을 때는 이 차이를 빼서 UTC 로 맞춘 뒤 제어 파일의 시각과 나란히 놓습니다.
 
@@ -109,7 +109,7 @@ page_log   : printer user job-id date-time total num-sheets job-billing job-orig
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 스풀 폴더의 제어 파일 하나를 헥스 편집기로 엽니다. 속성의 바이트 배치는 확인하지 못해서 오프셋으로 따라가지는 않고, 글자 칸에서 `job-name`, `job-originating-user-name`, `com.apple.print.JobInfo.PMApplicationName` 같은 속성 이름을 찾아 그 가까이에 문서 이름·계정 이름·앱 이름이 보이는지 확인합니다. 같은 작업 번호의 데이터 파일은 첫 바이트를 보고, 제어 파일의 `document-format` 값과 맞는 형식인지 견줍니다.
+**헥스로 한 번.** 스풀 폴더의 제어 파일 하나를 헥스 편집기로 엽니다. 글자 칸에서 `job-name`, `job-originating-user-name`, `com.apple.print.JobInfo.PMApplicationName` 같은 속성 이름을 찾아 그 가까이에 문서 이름·계정 이름·앱 이름이 보이는지 확인합니다. 같은 작업 번호의 데이터 파일은 첫 바이트를 보고, 제어 파일의 `document-format` 값과 맞는 형식인지 견줍니다.
 
 로그 쪽은 CUPS 문서의 예시로 칸을 나눠 봅니다. 아래 두 줄은 명세에 실린 예시이고 검체에서 나온 값이 아닙니다 [5].
 

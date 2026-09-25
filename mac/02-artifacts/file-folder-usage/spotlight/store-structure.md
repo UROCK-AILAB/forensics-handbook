@@ -13,7 +13,7 @@ nav_order: 840
 
 스포트라이트는 파일 시스템의 내용과 앱 데이터를 검색하려고 색인을 만들고 [2], 색인 저장소에는 항목마다 식별자·부모 식별자·마지막 갱신 시각과 속성 값 묶음이 레코드로 들어 있습니다 [1]. 속성 값 하나하나의 뜻은 [메타데이터 속성 (kMDItem)](metadata-attributes.md)에서 다루고, 이 페이지는 그 값이 파일 안에 어떻게 들어 있는지를 다룹니다.
 
-형식 명세는 Joachim Metz가 정리한 libyal 문서(0.0.3, 2024년 1월)이고, 명세가 시험한 버전은 Mac OS X 10.7 Lion부터 macOS 13 Ventura까지입니다 [1]. macOS 14 이후에 형식이 바뀌었는지는 이번에 연 자료로 확인하지 못했습니다.
+공개된 형식 명세는 Mac OS X 10.7 Lion부터 macOS 13 Ventura까지를 다룹니다 [1]. macOS 14 이후에 형식이 바뀌었는지는 공개 자료가 없어 검체에서 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
@@ -22,13 +22,13 @@ nav_order: 840
 | 구분 | 경로 | 버전·비고 |
 |---|---|---|
 | 볼륨 단위 | `/.Spotlight-V100/Store-V2/<UUID>/` | [1][2][3] |
-| 볼륨 단위(옛 형식) | `/.Spotlight-V100/Store-V1/Stores/` | mac_apt가 함께 보는 경로 [3] |
+| 볼륨 단위(옛 형식) | `/.Spotlight-V100/Store-V1/Stores/` | [3] |
 | 데이터 볼륨 | `/System/Volumes/Data/.Spotlight-V100/Store-V2/` | [3] |
-| 부트 볼륨 | `/private/var/db/Spotlight-V100/BootVolume/Store-V2/<UUID>/` | mac_apt 주석은 10.15 Catalina의 읽기 전용 볼륨용이라고 적음 [1][3] |
-| 프리부트 | `/private/var/db/Spotlight-V100/Preboot` | mac_apt 주석은 13 Ventura의 Preboot 볼륨용이라고 적음 [3] |
+| 부트 볼륨 | `/private/var/db/Spotlight-V100/BootVolume/Store-V2/<UUID>/` | 10.15 Catalina의 읽기 전용 볼륨용 [1][3] |
+| 프리부트 | `/private/var/db/Spotlight-V100/Preboot` | 13 Ventura의 Preboot 볼륨용 [3] |
 | 사용자 단위 | `~/Library/Metadata/CoreSpotlight/index.spotlightV3/` | 10.13 이후 [1][2][3] |
-| 사용자 단위(보호 등급별) | `~/Library/Metadata/CoreSpotlight/NSFileProtectionComplete/index.spotlightV3/` 외 2개(아래) | mac_apt 주석은 12 이후라고 적음 [3] |
-| 도움말(helpd) 색인 | `~/Library/Caches/com.apple.helpd/index.spotlightV3/` [1], `~/Library/Caches/com.apple.helpd/` 아래 보호 등급 폴더 세 곳의 `index.spotlightV3/` [3] | 보호 등급 폴더는 mac_apt 주석이 12 이후라고 적음 [3] |
+| 사용자 단위(보호 등급별) | `~/Library/Metadata/CoreSpotlight/NSFileProtectionComplete/index.spotlightV3/` 외 2개(아래) | 12 이후 [3] |
+| 도움말(helpd) 색인 | `~/Library/Caches/com.apple.helpd/index.spotlightV3/` [1], `~/Library/Caches/com.apple.helpd/` 아래 보호 등급 폴더 세 곳의 `index.spotlightV3/` [3] | 보호 등급 폴더는 12 이후 [3] |
 
 macOS 12 이후 보호 등급별 하위 폴더는 아래 세 곳입니다 [3].
 
@@ -42,7 +42,7 @@ macOS 12 이후 보호 등급별 하위 폴더는 아래 세 곳입니다 [3].
 
 ## 파일 구성
 
-저장소 폴더의 주 파일은 `store.db` 와 `.store.db` 이고 [1], spotlight_parser 설명에는 확장자 없이 `store`, `.store` 로도 적혀 있습니다 [2]. 명세는 두 파일을 함께 적을 뿐 어떻게 다른지는 설명하지 않고, 헤더 플래그 가운데 일부가 `.store.db` 에서만 보였다고 적습니다 [1]. mac_apt는 `.store.db` 를 처리할 때 `store.db` 에 없거나 바뀐 항목만 따로 출력하는데 [3], 도구의 동작으로는 `.store.db` 에 `store.db` 보다 새 항목이 들어 있을 수 있다는 데까지만 확인됩니다.
+저장소 폴더의 주 파일은 `store.db` 와 `.store.db` 이고 [1], 확장자 없이 `store`, `.store` 로 있기도 합니다 [2]. 두 파일이 어떻게 다른지는 알려져 있지 않고, 헤더 플래그 가운데 일부는 `.store.db` 에서만 보입니다 [1]. mac_apt는 `.store.db` 를 처리할 때 `store.db` 에 없거나 바뀐 항목만 따로 출력합니다 [3]. 이 동작으로 보아 `.store.db` 에 `store.db` 보다 새 항목이 들어 있을 수 있습니다.
 
 macOS 10.15부터는 데이터베이스 스트림 맵 파일이 함께 생기고, 파일 이름의 `#` 자리에 들어가는 번호가 내용을 나눕니다 [1].
 
@@ -61,7 +61,7 @@ dbStr-#.map.offsets
 | 4 | 메타데이터 목록 |
 | 5 | 지역화 문자열 |
 
-spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요하니 폴더를 통째로 수집하라고 권합니다 [2]. 수집 방법은 [맥 증거 확보 (Acquisition)](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다.
+iOS 색인을 읽으려면 dbStr 파일이 꼭 필요하므로 폴더를 통째로 수집합니다 [2]. 수집 방법은 [맥 증거 확보 (Acquisition)](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다.
 
 ## 구조
 
@@ -83,7 +83,7 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 | 56 | 4 | 알 수 없는 표 블록 번호 |
 | 60 | 4 | 메타데이터 목록 표 블록 번호 |
 | 64 | 4 | 지역화 문자열 표 블록 번호 |
-| 324 | 256 | 경로(명세에 뜻 설명 없음) |
+| 324 | 256 | 경로(뜻이 알려지지 않음) |
 
 ### 맵 페이지 헤더 (20바이트)
 
@@ -93,7 +93,7 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 | 4 | 4 | 페이지 크기 |
 | 8 | 4 | 맵 값 개수 |
 
-두 시그니처가 어떻게 다른지는 명세에 설명이 없습니다 [1].
+두 시그니처가 어떻게 다른지는 알려져 있지 않습니다 [1].
 
 ### 속성 표 페이지 헤더 (20바이트)
 
@@ -118,7 +118,7 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 
 ### 압축 표시
 
-페이지 내용이 `\x78` 로 시작하면 zlib+DEFLATE이고, LZ4는 블록 앞머리 4바이트로 구분해서 `bv41` 은 압축한 블록, `bv4-` 는 압축하지 않은 블록, `bv4$` 는 스트림 끝입니다 [1]. LZ4 블록 헤더는 12바이트이고 0에 `bv41`(4바이트), 4에 압축 풀린 크기(4바이트), 8에 LZ4 압축 크기(4바이트)가 옵니다 [1]. spotlight_parser는 LZFSE 라이브러리도 요구하지만 [2] 어느 페이지가 LZFSE인지는 이번 자료로 확인하지 못했습니다. 각 압축 형식은 [압축 형식 (LZFSE·LZ4·zlib)](../../../01-foundations/value-decoding/compression.md)에서 설명합니다.
+페이지 내용이 `\x78` 로 시작하면 zlib+DEFLATE이고, LZ4는 블록 앞머리 4바이트로 구분해서 `bv41` 은 압축한 블록, `bv4-` 는 압축하지 않은 블록, `bv4$` 는 스트림 끝입니다 [1]. LZ4 블록 헤더는 12바이트이고 0에 `bv41`(4바이트), 4에 압축 풀린 크기(4바이트), 8에 LZ4 압축 크기(4바이트)가 옵니다 [1]. spotlight_parser는 LZFSE 라이브러리도 요구하므로 [2] LZFSE로 압축한 페이지도 있을 수 있습니다. 어느 페이지인지는 공개 자료가 없어 검체에서 확인합니다. 각 압축 형식은 [압축 형식 (LZFSE·LZ4·zlib)](../../../01-foundations/value-decoding/compression.md)에서 설명합니다.
 
 ### 데이터 레코드 (종류 0x09 안)
 
@@ -132,7 +132,7 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 | 뒤이어 | 가변 | 마지막 갱신 시각(1970-01-01 기준 마이크로초, UTC로 가정) |
 | 뒤이어 | 가변 | 속성 배열 |
 
-플래그 0x01은 식별자가 0인 레코드에서 보이고, 0x02·0x10·0x20·0x40은 명세 표에 값만 있고 뜻은 적혀 있지 않습니다 [1]. 레코드에는 전체 경로가 없어서 mac_apt는 부모 식별자를 따라 올라가며 경로를 다시 만듭니다(`RecursiveGetFullPath`) [3]. 부트 볼륨 저장소는 이 식별자와 부모 식별자가 big-endian이라고 mac_apt 코드 주석에 적혀 있습니다 [3].
+플래그 0x01은 식별자가 0인 레코드에서 보이고, 0x02·0x10·0x20·0x40은 뜻이 알려져 있지 않습니다 [1]. 레코드에는 전체 경로가 없어서 부모 식별자를 따라 올라가며 경로를 다시 만듭니다(mac_apt의 `RecursiveGetFullPath`) [3]. 부트 볼륨 저장소는 이 식별자와 부모 식별자가 big-endian입니다 [3].
 
 ### 메타데이터 속성 형식 항목 (종류 0x11)
 
@@ -169,7 +169,7 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 
 ## 시각 해석
 
-한 저장소 안에 기준이 다른 시각 두 가지가 섞여 있습니다 [1]. 속성 값 가운데 값 형식이 0x0c인 날짜는 2001-01-01 기준 초를 64비트 실수로 적은 Cocoa 시각(맥 절대 시각)이고, 레코드 앞머리의 마지막 갱신 시각은 1970-01-01 기준 마이크로초라서 유닉스 시각입니다. 명세는 레코드 갱신 시각을 UTC로 가정한다고 적고 있고 [1], mac_apt는 이 값을 UTC 문자열로 바꿔 출력합니다 [3]. 두 기준을 섞어 계산하면 31년가량 어긋나거나 단위가 백만 배 달라지니, 값을 읽을 때 어느 칸에서 나온 값인지 먼저 확인합니다. 두 시각 체계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 자세히 다룹니다.
+한 저장소 안에 기준이 다른 시각 두 가지가 섞여 있습니다 [1]. 속성 값 가운데 값 형식이 0x0c인 날짜는 2001-01-01 기준 초를 64비트 실수로 적은 Cocoa 시각(맥 절대 시각)이고, 레코드 앞머리의 마지막 갱신 시각은 1970-01-01 기준 마이크로초라서 유닉스 시각입니다. 레코드 갱신 시각은 UTC로 읽습니다 [1][3]. 두 기준을 섞어 계산하면 31년가량 어긋나거나 단위가 백만 배 달라지니, 값을 읽을 때 어느 칸에서 나온 값인지 먼저 확인합니다. 두 시각 체계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 자세히 다룹니다.
 
 레코드 갱신 시각은 색인 항목이 마지막으로 갱신된 때를 가리키고, 파일을 연 시각이나 고친 시각과 같은 뜻이 아닙니다. 사용과 관련된 날짜는 속성 값 쪽에 따로 있고, 그 뜻은 [메타데이터 속성 (kMDItem)](metadata-attributes.md)에서 설명합니다.
 
@@ -181,13 +181,13 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 
 ### 증명하지 못하는 것
 
-레코드 갱신 시각만으로는 사용자가 무엇을 했는지 말할 수 없습니다. 레코드 갱신은 색인 쪽 동작이라서 누가 파일을 열었다거나 고쳤다는 뜻으로 읽지 않습니다. 파일이 지금 디스크에 없는데 색인에만 남아 있는 경우가 있을 수 있지만, 지운 파일의 항목이 언제까지 남는지는 이번에 연 자료로 확인하지 못해서 "지운 뒤에도 반드시 남는다" 고 쓰지 않습니다.
+레코드 갱신 시각만으로는 사용자가 무엇을 했는지 말할 수 없습니다. 레코드 갱신은 색인 쪽 동작이라서 누가 파일을 열었다거나 고쳤다는 뜻으로 읽지 않습니다. 파일이 지금 디스크에 없는데 색인에만 남아 있는 경우가 있을 수 있지만, 지운 파일의 항목이 언제까지 남는지는 공개 자료가 없으므로 "지운 뒤에도 반드시 남는다" 고 보지 않습니다.
 
 ## 함정과 한계
 
 `store.db` 와 `.store.db` 의 차이가 밝혀지지 않았고, 도구마다 두 파일을 다루는 방식도 다를 수 있습니다. mac_apt처럼 `.store.db` 에서 새로 생기거나 바뀐 항목만 뽑는 도구를 쓰면 두 파일에 똑같이 있는 항목은 한 번만 보입니다 [3]. 명세의 확인 범위가 Ventura까지라서 [1] 그 뒤 버전의 검체는 도구 결과가 비거나 일부만 나오는지 먼저 확인합니다.
 
-사용자 단위 CoreSpotlight 색인은 보호 등급 이름이 붙은 폴더로 나뉘어 있어서 [3], 한 폴더만 수집하면 나머지 등급의 색인을 놓칩니다. mac_apt는 `NSFileProtectionComplete` 와 `NSFileProtectionCompleteUnlessOpen` 폴더의 `.store.db` 는 암호화돼 있을 것으로 보고 시그니처가 맞지 않으면 건너뜁니다 [3]. 이 폴더에서 `8tsd` 시그니처가 보이지 않으면 파일이 망가졌다고 단정하지 말고 보호 등급에 따른 암호화부터 의심합니다. 부트 볼륨 저장소는 식별자 바이트 순서가 다르다는 도구 주석이 있으니 [3] 직접 파싱할 때 따로 처리합니다.
+사용자 단위 CoreSpotlight 색인은 보호 등급 이름이 붙은 폴더로 나뉘어 있어서 [3], 한 폴더만 수집하면 나머지 등급의 색인을 놓칩니다. mac_apt는 `NSFileProtectionComplete` 와 `NSFileProtectionCompleteUnlessOpen` 폴더의 `.store.db` 는 암호화돼 있을 것으로 보고 시그니처가 맞지 않으면 건너뜁니다 [3]. 이 폴더에서 `8tsd` 시그니처가 보이지 않으면 파일이 망가졌다고 단정하지 말고 보호 등급에 따른 암호화부터 의심합니다. 부트 볼륨 저장소는 식별자 바이트 순서가 다르므로 [3] 직접 파싱할 때 따로 처리합니다.
 
 색인은 `mdutil` 명령으로 켜고 끄고 지울 수 있습니다 [4].
 
@@ -200,13 +200,13 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 | `-p` | 네트워크 장치 캐시 비움 |
 | `-v` | 자세히 출력 |
 
-`-E` 나 `-i off` 는 색인 흔적을 없애는 동작이라서, 저장소가 비었거나 색인이 꺼져 있으면 그 자체를 확인할 사항으로 봅니다. 다만 이 명령을 실행한 흔적이 어디에 남는지는 이번 자료로 확인하지 못했고, 다른 흔적과 함께 보는 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+`-E` 나 `-i off` 는 색인 흔적을 없애는 동작이라서, 저장소가 비었거나 색인이 꺼져 있으면 그 자체를 확인할 사항으로 봅니다. 이 명령을 실행한 흔적이 어디에 남는지는 공개 자료가 없어 검체에서 확인해야 하고, 다른 흔적과 함께 보는 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 바이트는 실제 검체가 아니라 명세 [1]에 맞춰 만든 예시입니다. `FL` 은 플래그, `MO`·`MS`·`PS` 는 맵 오프셋·맵 크기·페이지 크기, `B2`~`B5` 는 속성 값·알 수 없는 표·목록·지역화 문자열 표의 블록 번호 자리이고, `??` 는 명세가 설명하지 않는 칸입니다.
+아래 바이트는 실제 검체가 아니라 명세 [1]에 맞춰 만든 예시입니다. `FL` 은 플래그, `MO`·`MS`·`PS` 는 맵 오프셋·맵 크기·페이지 크기, `B2`~`B5` 는 속성 값·알 수 없는 표·목록·지역화 문자열 표의 블록 번호 자리이고, `??` 는 뜻이 알려지지 않은 칸입니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -237,7 +237,7 @@ spotlight_parser 설명은 iOS 색인을 읽으려면 dbStr 파일이 꼭 필요
 
 ### 공개 도구로 한 번
 
-spotlight_parser(Yogesh Khatri, GPL v3)는 Python 3.7 이상에서 돌고 lz4와 pyliblzfse 라이브러리가 필요하며, 결과를 텍스트로 냅니다 [2]. 이 도구의 설명은 SQLite 출력 같은 기능이 필요하면 mac_apt를 쓰라고 권합니다 [2]. mac_apt의 SPOTLIGHT 플러그인은 사용자·볼륨·iOS 색인을 읽고 [3], 위 표의 경로들을 스스로 찾아 들어가며 부모 식별자로 전체 경로를 다시 만듭니다.
+spotlight_parser(Yogesh Khatri, GPL v3)는 Python 3.7 이상에서 돌고 lz4와 pyliblzfse 라이브러리가 필요하며, 결과를 텍스트로 냅니다 [2]. SQLite 출력 같은 기능이 필요하면 mac_apt를 씁니다 [2]. mac_apt의 SPOTLIGHT 플러그인은 사용자·볼륨·iOS 색인을 읽고 [3], 위 표의 경로들을 스스로 찾아 들어가며 부모 식별자로 전체 경로를 다시 만듭니다.
 
 ## 교차 검증
 

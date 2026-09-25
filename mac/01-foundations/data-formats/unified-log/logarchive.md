@@ -17,11 +17,13 @@ nav_order: 260
 
 ## 만들기
 
-`log collect` 는 시스템 로그를 `.logarchive` 로 모으고, 만든 아카이브는 나중에 `log` 명령이나 Console 앱으로 봅니다 [1]. Mandiant 글은 아래처럼 sudo를 붙여 실행했습니다 [2]. root 권한이 꼭 필요한지는 참고 문헌에서 확인하지 못했습니다.
+`log collect` 는 시스템 로그를 `.logarchive` 로 모으고, 만든 아카이브는 나중에 `log` 명령이나 Console 앱으로 봅니다 [1]. 아래처럼 sudo를 붙여 실행합니다 [2].
 
 ```
 sudo log collect --output ~/system_logs.logarchive
 ```
+
+주요 옵션은 아래와 같습니다 [1].
 
 | 옵션 | 뜻 |
 |---|---|
@@ -31,7 +33,7 @@ sudo log collect --output ~/system_logs.logarchive
 | `--size` | 모을 양의 대략적인 한도. 숫자 뒤에 `k`·`m`. 실제로는 더 커질 수 있음 |
 | `--device`, `--device-name`, `--device-udid` | 연결된 기기에서 모음 |
 
-옵션은 SS64 설명에서 가져왔습니다 [1]. 날짜는 `YYYY-MM-DD`, `YYYY-MM-DD HH:MM:SS`, `YYYY-MM-DD HH:MM:SSZZZZZ` 세 가지 형식으로 적습니다 [1]. `--last` 나 `--size` 로 범위를 줄이면 그 밖의 로그는 아카이브에 들어가지 않아서, 보고서에 수집 명령과 옵션을 그대로 적어 둡니다.
+날짜는 `YYYY-MM-DD`, `YYYY-MM-DD HH:MM:SS`, `YYYY-MM-DD HH:MM:SSZZZZZ` 세 가지 형식으로 적습니다 [1]. `--last` 나 `--size` 로 범위를 줄이면 그 밖의 로그는 아카이브에 들어가지 않아서, 보고서에 수집 명령과 옵션을 그대로 적어 둡니다.
 
 ## 구조
 
@@ -46,7 +48,7 @@ sudo log collect --output ~/system_logs.logarchive
 | `Extra` | logd에 관한 메타데이터. Mandiant 파서 기준으로 읽는 데 꼭 필요하지 않음 |
 | `Info.plist` | logd에 관한 메타데이터. Mandiant 파서 기준으로 읽는 데 꼭 필요하지 않음 |
 
-폴더마다 든 파일의 구조는 [tracev3 파일 구조 (tracev3)](tracev3.md)와 [UUID 텍스트와 공유 캐시 (uuidtext·dsc)](uuidtext-dsc.md)에 있습니다. `Info.plist` 안의 키 이름은 참고 문헌에서 확인하지 못했습니다.
+폴더마다 든 파일의 구조는 [tracev3 파일 구조 (tracev3)](tracev3.md)와 [UUID 텍스트와 공유 캐시 (uuidtext·dsc)](uuidtext-dsc.md)에 있습니다.
 
 ## 읽기
 
@@ -80,17 +82,17 @@ predicate 조건에는 `eventMessage`, `eventType`, `messageType`, `process`, `p
 
 ### 프로그램으로 읽기 (OSLogStore)
 
-macOS 10.15부터는 `OSLogStore` 로 로그를 프로그램에서 읽을 수 있습니다 [4]. `init(url:)` 로 아카이브를 열고 `local()` 로 현재 맥의 저장소를 열며, `position(date:)` 같은 메서드로 시작 위치를 잡은 뒤 `getEntries(with:at:matching:)` 에 NSPredicate를 넘겨 항목을 받습니다 [4]. 받은 항목은 `OSLogEntryLog`, `OSLogEntrySignpost`, `OSLogEntryActivity`, `OSLogEntryBoundary` 가운데 하나입니다 [4]. `local()` 에 어떤 권한이 필요한지는 참고 문헌에서 확인하지 못했습니다.
+macOS 10.15부터는 `OSLogStore` 로 로그를 프로그램에서 읽을 수 있습니다 [4]. `init(url:)` 로 아카이브를 열고 `local()` 로 현재 맥의 저장소를 열며, `position(date:)` 같은 메서드로 시작 위치를 잡은 뒤 `getEntries(with:at:matching:)` 에 NSPredicate를 넘겨 항목을 받습니다 [4]. 받은 항목은 `OSLogEntryLog`, `OSLogEntrySignpost`, `OSLogEntryActivity`, `OSLogEntryBoundary` 가운데 하나입니다 [4].
 
 ### 맥이 아닌 곳에서 읽기
 
-Mandiant의 공개 파서 macos-unifiedlogs에 든 `unifiedlog_iterator` 는 로그 아카이브를 JSONL·CSV로 바꾸고 라이브 시스템도 읽습니다 [3]. 이 도구는 오류 코드를 사람이 읽는 문장으로 바꾸지 않고 숫자 그대로 내고, 지원하지 않는 사용자 정의 객체는 base64로 냅니다 [3]. Mandiant 글은 macOS 10.12~12에서 시험했다고 적었습니다 [2]. 도구 결과를 `log show` 결과와 맞춰 보는 법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
+Mandiant의 공개 파서 macos-unifiedlogs에 든 `unifiedlog_iterator` 는 로그 아카이브를 JSONL·CSV로 바꾸고 라이브 시스템도 읽습니다 [3]. 이 도구는 오류 코드를 사람이 읽는 문장으로 바꾸지 않고 숫자 그대로 내고, 지원하지 않는 사용자 정의 객체는 base64로 냅니다 [3]. Mandiant는 이 파서를 macOS 10.12~12에서 시험했습니다 [2]. 도구 결과를 `log show` 결과와 맞춰 보는 법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 증거로서 의미
 
 아카이브로 알 수 있는 범위는 수집한 시점에 저장소와 메모리에 남아 있던 로그까지입니다. 용량 한도로 이미 지워진 로그는 아카이브에도 없고, `--last`·`--size` 로 범위를 줄였다면 그만큼 빠집니다.
 
-`log erase` 는 로그 데이터를 지우는 명령이고, 옵션 없이 쓰면 주 저장소와 아직 기록 중인 로그를, `--all` 을 붙이면 TTL 로그와 fault·error 내용까지 지웁니다 [1]. 그래서 로그가 있어야 할 기간에 공백이 보이면 이 명령을 쓴 흔적일 가능성도 따져 봅니다. 공백만으로 삭제를 단정할 방법은 참고 문헌에서 확인하지 못했고, 용량 한도에 따른 정상 삭제와 가려 보려면 다른 기록과 맞춰 봐야 합니다. 그 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+`log erase` 는 로그 데이터를 지우는 명령이고, 옵션 없이 쓰면 주 저장소와 아직 기록 중인 로그를, `--all` 을 붙이면 TTL 로그와 fault·error 내용까지 지웁니다 [1]. 그래서 로그가 있어야 할 기간에 공백이 보이면 이 명령을 쓴 흔적일 가능성도 따져 봅니다. 공백만으로는 삭제를 단정하지 않고, 용량 한도에 따른 정상 삭제와 가려 보려면 다른 기록과 맞춰 봐야 합니다. 그 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 함정
 

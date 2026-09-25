@@ -26,13 +26,13 @@ nav_order: 820
 | `com.apple.LSSharedFileList.FavoriteVolumes.sfl2` | 즐겨찾기 볼륨 |
 | `…FavoriteItems`, `…FavoriteServers`, `…iCloudItems` | 사이드바 즐겨찾기, 즐겨찾는 서버, iCloud |
 
-`.sfl3` 판으로는 `com.apple.LSSharedFileList.RecentDocuments.sfl3` 와 `com.apple.LSSharedFileList.FavoriteVolumes.sfl3` 가 공개 도구 자료에 나옵니다 [4][5]. 나머지 목록도 같은 규칙으로 이름이 붙는 것으로 보이지만 따로 확인하지는 못했습니다. 버전별 확장자 변화는 허브 [최근 항목 (Shared File Lists)](index.md)에, 파일 안 구조와 북마크 푸는 법은 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 있습니다.
+`.sfl3` 판 파일로는 `com.apple.LSSharedFileList.RecentDocuments.sfl3` 와 `com.apple.LSSharedFileList.FavoriteVolumes.sfl3` 가 있습니다 [4][5]. 나머지 목록도 같은 규칙으로 이름이 붙는 것으로 보입니다. 버전별 확장자 변화는 허브 [최근 항목 (Shared File Lists)](index.md)에, 파일 안 구조와 북마크 푸는 법은 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 있습니다.
 
 ### 최근 서버를 읽는 법
 
-서버 항목도 북마크를 담고 있고, 북마크의 URL 칸(0x1003)이 `file:///` 가 아니라 `smb://`·`afp://`·`ftp://` 같은 값이면 mac_apt 는 그 URL 을 서버 주소로 씁니다 [1][3]. 그래서 RecentServers 뿐 아니라 RecentDocuments 항목에서도 URL 이 파일 밖을 가리키면 네트워크 공유 위의 문서였다는 단서가 됩니다. 서버 연결 자체의 기록은 [공유 폴더 연결 기록 (SMB·AFP)](../../network/network-shares.md)에서 봅니다.
+서버 항목도 북마크를 담고 있고, 북마크의 URL 칸(0x1003)이 `file:///` 가 아니라 `smb://`·`afp://`·`ftp://` 같은 값이면 그 URL 이 서버 주소입니다 [1][3]. 그래서 RecentServers 뿐 아니라 RecentDocuments 항목에서도 URL 이 파일 밖을 가리키면 네트워크 공유 위의 문서였다는 단서가 됩니다. 서버 연결 자체의 기록은 [공유 폴더 연결 기록 (SMB·AFP)](../../network/network-shares.md)에서 봅니다.
 
-RecentHosts 항목에는 북마크가 없어서 이름 말고는 읽을 칸이 적습니다 [2]. mac_apt 코드 주석에 따르면 10.10(Yosemite) 전의 RecentServers 는 옛 별칭 형식(`Alias`)을 썼고 Yosemite 부터 `Bookmark` 를 씁니다 [1]. 옛 Alias 안의 날짜를 mac_apt 는 HFS 시각을 읽는 함수로 풀며 [1], HFS 시각의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
+RecentHosts 항목에는 북마크가 없어서 이름 말고는 읽을 칸이 적습니다 [2]. 10.10(Yosemite) 전의 RecentServers 는 옛 별칭 형식(`Alias`)을 썼고 Yosemite 부터 `Bookmark` 를 씁니다 [1]. 옛 Alias 안의 날짜는 HFS 시각이며 [1], HFS 시각의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
 
 ### 10.10 이하의 `com.apple.recentitems.plist`
 
@@ -74,7 +74,7 @@ RecentHosts 항목에는 북마크가 없어서 이름 말고는 읽을 칸이 �
 
 ### 그 밖에 함께 읽히는 기록
 
-mac_apt 는 `~/.ssh/known_hosts` 와 `known_hosts.old` 의 호스트 이름을 파일 수정 시각과 함께 최근 항목으로 내고 [1], 이 파일의 해석은 [SSH 키와 접속 목록 (SSH Keys·known_hosts)](../../credentials/ssh-keys.md)에서 다룹니다. macMRU 는 `~/Library/Application Support/com.apple.spotlight.Shortcuts` 의 항목(`DISPLAY_NAME`, `LAST_USED`, `URL`)도 함께 읽는데 [2], 지금 macOS 에서도 같은 경로인지는 확인하지 못했습니다. 스포트라이트 쪽 기록은 [스포트라이트 (Spotlight)](../spotlight/index.md)를 봅니다.
+mac_apt 는 `~/.ssh/known_hosts` 와 `known_hosts.old` 의 호스트 이름을 파일 수정 시각과 함께 최근 항목으로 내고 [1], 이 파일의 해석은 [SSH 키와 접속 목록 (SSH Keys·known_hosts)](../../credentials/ssh-keys.md)에서 다룹니다. `~/Library/Application Support/com.apple.spotlight.Shortcuts` 에도 항목(`DISPLAY_NAME`, `LAST_USED`, `URL`)이 남는데 [2], 지금 macOS 에서도 같은 경로인지는 검체에서 확인합니다. 스포트라이트 쪽 기록은 [스포트라이트 (Spotlight)](../spotlight/index.md)를 봅니다.
 
 ## 증거로서 의미
 
@@ -84,19 +84,19 @@ mac_apt 는 `~/.ssh/known_hosts` 와 `known_hosts.old` 의 호스트 이름을 �
 
 ## 시각 해석
 
-SFL 항목과 파인더 plist 항목에는 "연 시각" 이나 "연결한 시각" 칸이 있다는 근거가 이번 자료에 없습니다. 북마크 안 시각의 뜻과 어림하는 법은 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 이 페이지의 기록에서 시각으로 쓸 만한 값은 아래 정도이고, 모두 "그 대상을 쓴 시각" 과는 다른 값입니다.
+SFL 항목과 파인더 plist 항목에는 "연 시각" 이나 "연결한 시각" 칸이 있다는 근거가 공개 자료에 없습니다. 북마크 안 시각의 뜻과 어림하는 법은 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 이 페이지의 기록에서 시각으로 쓸 만한 값은 아래 정도이고, 모두 "그 대상을 쓴 시각" 과는 다른 값입니다.
 
 | 값 | 뜻 | 기준 |
 |---|---|---|
 | 목록 파일·plist 의 수정 시각 | 파일이 마지막으로 바뀐 때 | 파일 시스템 시각 |
 | `FXDesktopVolumePositions` 키 이름의 16진수 | mac_apt 가 볼륨 생성 시각으로 읽는 값 [1] | 맥 절대 시각(도구 해석) |
 | `known_hosts` 수정 시각 | 파일이 마지막으로 바뀐 때 [1] | 파일 시스템 시각 |
-| Spotlight Shortcuts `LAST_USED` | 항목의 마지막 사용 값 [2] | 이번 자료로 기준을 확인하지 못함 |
+| Spotlight Shortcuts `LAST_USED` | 항목의 마지막 사용 값 [2] | 공개 자료 없음 |
 
 ## 함정과 한계
 
 - 같은 사실이 여러 곳에 겹쳐 남습니다. 파인더에서 서버에 연결하면 RecentServers 와 `FXConnectToLastURL` 에 함께 보일 수 있고, 두 곳의 값이 다르면 어느 쪽이 더 나중에 바뀌었는지 파일 수정 시각으로 따집니다.
-- 10.12 이하의 `com.apple.sidebarlists.plist`, 10.10 이하의 `com.apple.recentitems.plist` 처럼 이전 버전 파일이 업그레이드한 뒤에도 남아 있을 수 있어서, 검체의 macOS 버전과 파일 형식이 맞지 않으면 예전 기록일 가능성을 먼저 봅니다. 이는 버전별 경로 차이에서 나온 필자 판단입니다.
+- 10.12 이하의 `com.apple.sidebarlists.plist`, 10.10 이하의 `com.apple.recentitems.plist` 처럼 이전 버전 파일이 업그레이드한 뒤에도 남아 있을 수 있어서, 검체의 macOS 버전과 파일 형식이 맞지 않으면 예전 기록일 가능성을 먼저 봅니다.
 - RecentHosts 는 북마크가 없어서 경로·볼륨으로 교차 확인하기 어렵습니다 [2].
 - `.GlobalPreferences.plist` 의 볼륨 이름 추정과 `FXDesktopVolumePositions` 의 시각은 mac_apt 가 정한 해석이라서, 보고서에는 도구 이름과 해석 근거를 함께 적습니다 [1].
 

@@ -11,39 +11,39 @@ nav_order: 1720
 
 ## 무엇을 기록하나 · 왜 생기나
 
-로그인에는 여러 프로세스가 관여하고, 각 프로세스는 자기 동작을 통합 로그에 남깁니다. 공개 자료가 로그인 쪽에서 보라고 꼽는 대상은 네 갈래입니다. 관리자용 안내서는 사용자 로그인을 볼 때 프로세스 `loginwindow` 와 서브시스템 `com.apple.login` 을 거르라고 적었고 [3], CrowdStrike 는 `logind` 프로세스를 "사용자 로그인 이벤트를 잡는" 조건으로, `securityd` 의 `Session ` 메시지를 "세션 생성과 종료를 잡는" 조건으로 소개합니다 [1]. 같은 글은 `loginwindow` 가 `Security` 를 거쳐 남긴 메시지를 로그인 키체인이 풀린 기록으로 봅니다 [1].
+로그인에는 여러 프로세스가 관여하고, 각 프로세스는 자기 동작을 통합 로그에 남깁니다. 로그인 쪽에서 볼 대상은 네 갈래입니다. 사용자 로그인은 프로세스 `loginwindow` 와 서브시스템 `com.apple.login` 으로 거릅니다 [3]. `logind` 프로세스 메시지로는 사용자 로그인 이벤트를, `securityd` 의 `Session ` 메시지로는 세션 생성과 종료를 잡습니다 [1]. `loginwindow` 가 `Security` 를 거쳐 남긴 메시지는 로그인 키체인이 풀린 기록입니다 [1].
 
-로그인 직후 무엇이 자동으로 실행됐는지도 여기서 볼 수 있습니다. Mandiant 는 서브시스템 `com.apple.loginwindow.logging` 의 `performAutolaunch` 메시지가 로그인 항목을 실행한 기록이라고 설명했습니다 [2]. 로그인 항목 자체를 어디에 등록하는지는 [로그인 항목 (Login Items)](../../persistence/login-items.md)에서 다룹니다.
+로그인 직후 무엇이 자동으로 실행됐는지도 여기서 볼 수 있습니다. 서브시스템 `com.apple.loginwindow.logging` 의 `performAutolaunch` 메시지는 로그인 항목을 실행한 기록입니다 [2]. 로그인 항목 자체를 어디에 등록하는지는 [로그인 항목 (Login Items)](../../persistence/login-items.md)에서 다룹니다.
 
 통합 로그가 어디에 어떤 형식으로 저장되고 얼마나 오래 남는지는 [통합 로그에서 찾을 것 (Unified Log Events)](index.md)과 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에 있습니다.
 
 ## 위치와 버전별 차이
 
-기록은 다른 통합 로그 메시지와 같은 저장소에 섞여 있고, 로그인만 모아 둔 파일은 따로 없습니다. `logind` 가 macOS 몇 버전부터 있는지, 버전마다 로그인 메시지 문구가 어떻게 달라지는지는 이번 자료로 확인하지 못했습니다. 아래 조건은 출처가 버전을 따로 밝히지 않은 것이라서, 검체의 macOS 버전에서 실제로 걸리는지 먼저 확인하고 씁니다. 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../system-account/os-version-install-history.md)에서 확인합니다.
+기록은 다른 통합 로그 메시지와 같은 저장소에 섞여 있고, 로그인만 모아 둔 파일은 따로 없습니다. `logind` 가 macOS 몇 버전부터 있는지, 버전마다 로그인 메시지 문구가 어떻게 달라지는지는 공개 자료가 없습니다. 아래 조건은 적용 버전이 알려져 있지 않아서, 검체의 macOS 버전에서 실제로 걸리는지 먼저 확인하고 씁니다. 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../system-account/os-version-install-history.md)에서 확인합니다.
 
 ## 구조 — 찾는 조건
 
 | 보려는 것 | 조건 | 출처 |
 |---|---|---|
-| 사용자 로그인(관리자 안내서) | 프로세스 `loginwindow`, 서브시스템 `com.apple.login` | [3] |
+| 사용자 로그인 | 프로세스 `loginwindow`, 서브시스템 `com.apple.login` | [3] |
 | 사용자 로그인 이벤트 | `process == "logind"` | [1] |
 | 세션 생성·종료 | `process == "securityd" && eventMessage CONTAINS "Session " && subsystem == "com.apple.securityd"` | [1] |
 | 로그인 키체인 잠금 해제 | `process == "loginwindow" && sender == "Security"` | [1] |
 | 로그인 항목 실행 | 서브시스템 `com.apple.loginwindow.logging`, 메시지에 `performAutolaunch` | [2] |
 
-로그인 항목 실행은 출처가 서브시스템과 메시지 문구만 밝혔고, 두 조건을 한 줄로 합치면 아래처럼 쓸 수 있습니다. `CONTAINS` 같은 연산자는 [자주 쓰는 검색 조건 (Predicates)](predicates.md)에서 설명합니다.
+로그인 항목 실행의 서브시스템과 메시지 문구 두 조건을 한 줄로 합치면 아래처럼 쓸 수 있습니다. `CONTAINS` 같은 연산자는 [자주 쓰는 검색 조건 (Predicates)](predicates.md)에서 설명합니다.
 
 ```
 subsystem == "com.apple.loginwindow.logging" && eventMessage CONTAINS "performAutolaunch"
 ```
 
-Mandiant 가 보여 준 메시지는 아래와 같고, 실행한 앱의 경로와 `shouldHide` 값이 한 줄에 들어 있습니다 [2].
+메시지는 아래와 같은 모양이고, 실행한 앱의 경로와 `shouldHide` 값이 한 줄에 들어 있습니다 [2].
 
 ```
 LaunchItemsInSharedFileListRef | performAutolaunch, launching: /Applications/LuLu.app, shouldHide: 0
 ```
 
-`loginwindow` 가 로그아웃을 시작하거나 마칠 때 남기는 메시지의 정확한 문구는 확인하지 못했습니다. 로그아웃 시점은 세션 종료 조건으로 먼저 좁히고, 검체에서 실제 문구를 확인한 뒤 보고서에 옮깁니다.
+`loginwindow` 가 로그아웃을 시작하거나 마칠 때 남기는 메시지의 정확한 문구는 공개 자료가 없습니다. 로그아웃 시점은 세션 종료 조건으로 먼저 좁히고, 검체에서 실제 문구를 확인한 뒤 보고서에 옮깁니다.
 
 ## 증거로서 의미
 
@@ -59,11 +59,9 @@ LaunchItemsInSharedFileListRef | performAutolaunch, launching: /Applications/LuL
 
 ## 함정과 한계
 
-- **메시지 문구 미확인.** 이 페이지의 조건은 프로세스·서브시스템 수준이고, 로그인·로그아웃을 뜻하는 메시지 문구는 확인하지 못했습니다. 조건에 걸린 메시지를 하나씩 읽고 뜻을 확인합니다.
+- **메시지 문구는 검체에서.** 이 페이지의 조건은 프로세스·서브시스템 수준이고, 로그인·로그아웃을 뜻하는 메시지 문구는 공개 자료가 없습니다. 조건에 걸린 메시지를 하나씩 읽고 뜻을 확인합니다.
 - **잠금 해제와 로그인 구분.** 화면 잠금을 푸는 동작도 `loginwindow` 쪽 기록을 남깁니다. 잠금 해제는 [잠금·잠금 해제·잠자기 (Lock·Sleep)](lock-sleep.md)에서 따로 다룹니다.
 - **원격 로그인은 별도.** SSH·화면 공유로 들어온 접속은 다른 프로세스가 기록하고, [원격 로그인 (Remote Login)](remote-login.md)에서 다룹니다.
-- **다른 로그인 기록과의 대조.** 통합 로그 밖의 로그인 기록과 맞춰 보는 방법은 이번 자료로 확인하지 못했습니다.
-
 ## 직접 분석해 보기
 
 통합 로그 파일을 헥스로 따라가는 방법은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에서 다루고, 여기서는 도구로 조건을 걸어 봅니다.

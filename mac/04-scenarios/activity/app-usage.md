@@ -14,11 +14,11 @@ nav_order: 2290
 
 ## 먼저 확인할 것
 
-OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-version-install-history.md)에서 먼저 확인합니다. 흔적마다 확인된 macOS 범위가 달라서, 버전에 따라 먼저 열어 볼 곳이 바뀝니다. 아래 표는 이 핸드북이 출처로 확인한 범위만 적은 것입니다.
+OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-version-install-history.md)에서 먼저 확인합니다. 흔적마다 확인된 macOS 범위가 달라서, 버전에 따라 먼저 열어 볼 곳이 바뀝니다. 표에 없는 버전은 검체에서 확인합니다.
 
 | 흔적 | 확인된 macOS 범위 |
 |---|---|
-| knowledgeC `/app/inFocus` | 10.13 ~ 10.16 (APOLLO 모듈의 버전 목록) [2] |
+| knowledgeC `/app/inFocus` | 10.13 ~ 10.16 [2] |
 | knowledgeC `/app/usage` | 10.14 ~ 10.16 [2] |
 | 화면 사용 시간 DB | 10.15, 10.16 [2] |
 | 전원 로그 앱 정보 | 10.15, 10.16 [2] |
@@ -26,9 +26,9 @@ OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-v
 | 충돌 보고서 `.ips` JSON 형식 | 12 이상 [13] |
 | 기본 셸 zsh | 10.15 이상 [14] |
 | 앱 번들의 `com.apple.provenance` | 13 Ventura 이상 [9] |
-| RunningBoard 앱 실행 로그 | 15.6, 26.5.2 에서 관찰 [16][17] |
+| RunningBoard 앱 실행 로그 | 15.6, 26.5.2 [16][17] |
 
-macOS 11 이후 knowledgeC 에 앱 기록이 계속 쌓이는지, 바이옴 (Biome)이 macOS 에서 어느 버전부터 쓰였는지는 이 핸드북이 확인하지 못했습니다. 그래서 검체마다 두 곳을 모두 열어 보고 어느 쪽에 기록이 있는지부터 봅니다.
+macOS 11 이후 knowledgeC 에 앱 기록이 계속 쌓이는지와 바이옴 (Biome)이 macOS 에서 어느 버전부터 쓰였는지는 공개된 자료가 없어서, 검체마다 두 곳을 모두 열어 보고 어느 쪽에 기록이 있는지부터 봅니다.
 
 시간대는 [시간대와 시계 설정](../../02-artifacts/system-account/time-zone.md)에서 확인합니다. knowledgeC·바이옴·화면 사용 시간 DB·격리 이벤트 DB는 맥 절대 시각을 쓰고, 앱 번들의 격리 속성은 유닉스 시각을 16진 문자열로 적고, 전원 로그는 유닉스 시각에 보정 표를 따로 씁니다 [1][2][8]. 통합 로그 시각은 timesync 정보로 벽시계 시각으로 바꿔야 해서 [5], 모든 시각을 한 기준으로 바꿔 적어 두어야 뒤에서 대조할 수 있습니다([맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md)).
 
@@ -51,7 +51,7 @@ macOS 11 이후 knowledgeC 에 앱 기록이 계속 쌓이는지, 바이옴 (Bio
 | 11 | 충돌 보고서 `.ips` | `procPath`·`parentProc`·`procLaunch`·`captureTime` | [충돌·진단 보고서](../../02-artifacts/execution/diagnostic-reports.md) |
 | 12 | `~/.zsh_history` | 터미널에서 친 명령 | [터미널 명령 기록](../../02-artifacts/execution/shell-history.md) |
 
-1~3번은 앱을 쓴 구간을 시각과 함께 알려 주는 흔적이라 먼저 보고, 4~6번은 특정 앱이 언제 들어와 처음 실행됐는지 좁힐 때 봅니다. 7~12번은 앞의 흔적이 비어 있거나 보관 기간이 지났을 때 보강하는 자료입니다. 바이옴 경로는 mac_apt 코드에서 조합하면 `~/Library/Biome/streams/restricted/App.InFocus/local/` 이고 [7], 스포트라이트 검색 기록은 macOS 14 이후 `~/Library/Group Containers/group.com.apple.spotlight/` 아래에 있습니다 [12]. 화면 사용 시간 DB와 전원 로그의 전체 경로는 이 핸드북이 확인하지 못했습니다.
+1~3번은 앱을 쓴 구간을 시각과 함께 알려 주는 흔적이라 먼저 보고, 4~6번은 특정 앱이 언제 들어와 처음 실행됐는지 좁힐 때 봅니다. 7~12번은 앞의 흔적이 비어 있거나 보관 기간이 지났을 때 보강하는 자료입니다. 바이옴 경로는 `~/Library/Biome/streams/restricted/App.InFocus/local/` 이고 [7], 스포트라이트 검색 기록은 macOS 14 이후 `~/Library/Group Containers/group.com.apple.spotlight/` 아래에 있습니다 [12].
 
 ## 분석 흐름
 
@@ -61,30 +61,30 @@ macOS 11 이후 knowledgeC 에 앱 기록이 계속 쌓이는지, 바이옴 (Bio
 4. 통합 로그를 서브시스템으로 좁혀 실행 요청과 실행 과정을 찾습니다(아래 절).
 5. 앱 저장 상태의 창 제목, 최근 앱 목록, 스포트라이트 검색 기록, 충돌 보고서로 앱 안에서 무엇을 열었는지와 실행 흔적을 보강합니다.
 6. 터미널에서 띄운 명령은 1~3단계의 흔적에 남지 않아서, 셸 기록과 통합 로그로 따로 찾습니다.
-7. `/display/isBacklit`(0 꺼짐, 1 켜짐)와 `/device/isLocked`(macOS 10.15부터, 0 해제, 1 잠김) 스트림을 1단계 구간과 겹쳐 봅니다 [2]. 화면이 켜져 있고 잠겨 있지 않던 구간인지로 사람이 앞에 있었을 가능성을 가늠할 수 있고, 이 판단은 필자가 정리한 방법입니다. 모든 시각은 한 [타임라인](../../03-techniques/analysis/timeline/index.md)에 올립니다.
+7. `/display/isBacklit`(0 꺼짐, 1 켜짐)와 `/device/isLocked`(macOS 10.15부터, 0 해제, 1 잠김) 스트림을 1단계 구간과 겹쳐 봅니다 [2]. 화면이 켜져 있고 잠겨 있지 않던 구간인지로 사람이 앞에 있었을 가능성을 가늠할 수 있습니다. 모든 시각은 한 [타임라인](../../03-techniques/analysis/timeline/index.md)에 올립니다.
 
 ### 통합 로그에서 앱 실행 과정 찾기
 
-하워드 오클리 (Howard Oakley)는 macOS 26.5.2 Tahoe 에서 파인더로 앱을 더블클릭해 연 과정을 로그로 따라갔습니다. 파인더가 LaunchServices 에 요청하고, LaunchServices 가 RunningBoard 를 거쳐 실행을 요청하고, AMFI 평가·게이트키퍼 평가·TCC 확인·공증 티켓 확인을 차례로 거친 뒤 launchd 가 실제 프로세스를 띄우는 순서였고, 이 과정에 서브시스템 `com.apple.launchservices` 와 `com.apple.runningboard` 가 나옵니다 [17]. 단계마다 찍히는 메시지 문구는 이 핸드북이 원문과 한 글자씩 대조하지 못해서, 여기서는 단계 순서까지만 적습니다.
+macOS 26.5.2 Tahoe 에서 파인더로 앱을 더블클릭해 열면, 파인더가 LaunchServices 에 요청하고, LaunchServices 가 RunningBoard 를 거쳐 실행을 요청하고, AMFI 평가·게이트키퍼 평가·TCC 확인·공증 티켓 확인을 차례로 거친 뒤 launchd 가 실제 프로세스를 띄웁니다. 이 과정에 서브시스템 `com.apple.launchservices` 와 `com.apple.runningboard` 가 나옵니다 [17]. 단계마다 찍히는 메시지 문구는 판마다 다를 수 있어 검체에서 확인합니다.
 
-macOS 15.6 을 관찰한 글에서 오클리는 `com.apple.runningboard` 로 거른 뒤, 새로 뜬 앱은 "constructed job", 앱 생명 주기 사건은 "acquiring assertion", 앱 확장은 "extension overlay" 문구로 찾으라고 권합니다 [16]. 같은 글에 나온 메시지 예는 다음과 같습니다.
+macOS 15.6 에서는 `com.apple.runningboard` 로 거른 뒤, 새로 뜬 앱은 "constructed job", 앱 생명 주기 사건은 "acquiring assertion", 앱 확장은 "extension overlay" 문구로 찾습니다 [16]. 메시지 예는 다음과 같습니다.
 
 ```
 Acquiring assertion targeting app application.co.eclecticlight.Cormorant.10809046.10809052(501)
 ```
 
-같은 글에서 4분 동안 앱을 쓰는 사이 로그 항목이 5만 건 넘게 생겼다고 적었습니다 [16]. 넓게 뽑으면 양이 너무 많아서 서브시스템과 번들 ID로 먼저 좁히는 편이 낫습니다. 이 메시지들이 어떤 로그 수준으로 남아 얼마 동안 보관되는지, macOS 10.15 ~ 14 에서도 같은 서브시스템과 문구를 쓰는지는 확인하지 못했습니다. 그래서 두 관찰 버전 밖의 검체에서는 테스트 기기로 먼저 재현해 봅니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
+macOS 15.6 에서 4분 동안 앱을 쓰는 사이 로그 항목이 5만 건 넘게 생겼습니다 [16]. 넓게 뽑으면 양이 너무 많아서 서브시스템과 번들 ID로 먼저 좁히는 편이 낫습니다. 이 메시지들의 로그 수준과 보관 기간, macOS 10.15 ~ 14 에서도 같은 서브시스템과 문구를 쓰는지는 공개된 자료가 없어서, 15.6·26.5.2 밖의 검체에서는 테스트 기기로 먼저 재현해 봅니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
 
 로그인할 때 로그인 항목이 자동으로 실행된 기록은 서브시스템 `com.apple.loginwindow.logging` 의 `performAutolaunch` 메시지로 찾습니다 [15]. 이 기록과 겹치는 실행이라면 사용자가 직접 띄운 것이 아닐 수 있어서, [로그인 항목](../../02-artifacts/persistence/login-items.md)과 함께 봅니다.
 
 ## 흔한 오판
 
-- **knowledgeC·바이옴에 없으면 실행하지 않았다고 보는 경우.** knowledgeC 앱 기록에는 GUI 앱만 남고 터미널에서 띄운 명령이나 백그라운드 프로세스는 남지 않습니다 [1]. 보관 기간도 knowledgeC 는 약 4주(macOS 10.13 관찰), 바이옴은 대부분 28일(iOS 관찰)이라 조사 기간이 길면 앞부분이 비어 있을 수 있고, macOS 최신판의 보관 기간은 확인하지 못했습니다 [1][6].
-- **다른 기기의 기록을 이 맥의 사용으로 세는 경우.** 바이옴 `remote/` 폴더 기록은 다른 기기의 사건입니다 [6]. 화면 사용 시간 DB에는 기기 종류를 적는 칸 `ZCOREDEVICE.ZPLATFORM`(1 macOS, 2 iOS, 4 Apple Watch)이 있어서 다른 기기 기록이 섞일 여지가 있지만, 실제로 섞이는지는 확인하지 못했습니다 [3]. 행마다 기기 칸을 확인합니다.
-- **최근 앱 목록의 순서를 실행 시각으로 읽는 경우.** `.sfl2` 항목에 앱을 연 시각을 적는 칸이 있다는 근거는 찾지 못했습니다 [11].
+- **knowledgeC·바이옴에 없으면 실행하지 않았다고 보는 경우.** knowledgeC 앱 기록에는 GUI 앱만 남고 터미널에서 띄운 명령이나 백그라운드 프로세스는 남지 않습니다 [1]. 보관 기간도 knowledgeC 는 약 4주(macOS 10.13 기준), 바이옴은 대부분 28일(iOS 기준)이라 조사 기간이 길면 앞부분이 비어 있을 수 있습니다 [1][6]. macOS 최신판의 보관 기간은 검체에서 확인합니다.
+- **다른 기기의 기록을 이 맥의 사용으로 세는 경우.** 바이옴 `remote/` 폴더 기록은 다른 기기의 사건입니다 [6]. 화면 사용 시간 DB에는 기기 종류를 적는 칸 `ZCOREDEVICE.ZPLATFORM`(1 macOS, 2 iOS, 4 Apple Watch)이 있어서 다른 기기 기록이 섞일 수 있습니다 [3]. 행마다 기기 칸을 확인합니다.
+- **최근 앱 목록의 순서를 실행 시각으로 읽는 경우.** `.sfl2` 항목에는 앱을 연 시각을 적는 칸이 알려져 있지 않습니다 [11].
 - **앱 저장 상태 폴더의 시각을 앱을 연 시각으로 쓰는 경우.** 이 폴더에서 얻는 시각은 `windows.plist` 파일의 수정 시각뿐입니다 [11].
 - **셸 기록의 명령에 시각을 붙이는 경우.** 기본 `/etc/zshrc` 는 `EXTENDED_HISTORY` 를 켜지 않아서 `.zsh_history` 에는 명령 순서만 남고 시각이 없습니다. 기본값은 `HISTSIZE=2000`, `SAVEHIST=1000` 입니다 [14].
-- **`App.InFocus` 상태 값을 명세로 읽는 경우.** 상태 값 0과 1의 뜻은 iLEAPP·mac_apt 저자의 해석이고 Apple 문서로 확인한 값이 아닙니다 [6][7].
+- **`App.InFocus` 상태 값을 명세로 읽는 경우.** 상태 값 0과 1의 뜻은 iLEAPP·mac_apt 의 해석이고, Apple 이 공개한 명세는 없습니다 [6][7].
 - **격리 속성이 있으면 실행했다고 보는 경우.** 격리 속성은 앱을 받은 기록이고, 사용자가 열어 승인했는지는 0x40 비트로 따로 봅니다 [8][10].
 
 ## 보고서 문장 예

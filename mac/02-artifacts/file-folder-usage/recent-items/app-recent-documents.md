@@ -13,7 +13,7 @@ nav_order: 810
 
 시스템 전체의 최근 문서 목록과 별도로, 앱마다 자기 최근 문서 목록이 있습니다. 목록 파일 이름이 앱의 번들 ID 라서 파일 이름만으로 어느 앱의 목록인지 알 수 있고, 항목마다 대상 문서의 북마크가 들어 있어서 문서 경로와 볼륨을 읽을 수 있습니다 [1][2]. 번들 ID 를 앱 이름으로 바꾸는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)에서 다룹니다.
 
-Apple 개발 문서의 NSDocumentController 에는 "Managing the Open Recent Menu" 묶음으로 아래 API 가 있습니다 [4].
+NSDocumentController 에는 Open Recent 메뉴를 다루는 아래 API 가 있습니다 [4].
 
 | API | 설명 |
 |---|---|
@@ -23,7 +23,7 @@ Apple 개발 문서의 NSDocumentController 에는 "Managing the Open Recent Men
 | `noteNewRecentDocument(_:)` | 문서에 맞는 Open Recent 항목을 추가하거나 바꿈 |
 | `recentDocumentURLs` | 최근 문서 URL 목록 |
 
-이 API 가 아래 `ApplicationRecentDocuments` 폴더의 파일에 기록된다는 Apple 문서 근거는 이번에 찾지 못했고, 문서 기반 앱이 문서를 열 때 자동으로 목록에 넣는지도 이 문서에는 적혀 있지 않습니다 [4]. 그래서 API 와 파일의 관계는 확정된 사실이 아니라 이름과 쓰임이 맞아떨어진다는 정도로만 봅니다.
+이 API 가 아래 `ApplicationRecentDocuments` 폴더의 파일에 기록된다는 공식 문서는 없고, 문서 기반 앱이 문서를 열 때 자동으로 목록에 넣는지도 공개되어 있지 않습니다 [4]. API 와 파일은 이름과 쓰임이 맞아떨어질 뿐, 둘의 관계가 확정된 것은 아닙니다.
 
 ## 위치와 버전별 차이
 
@@ -32,7 +32,7 @@ Apple 개발 문서의 NSDocumentController 에는 "Managing the Open Recent Men
 | 10.10 이하(그 전후 앱 포함) | `~/Library/Preferences/<번들 ID>.LSSharedFileList.plist` | [1][2][3] |
 | 10.11 이상 | `~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/<번들 ID>.sfl` | [2] |
 | 10.13 이상 | 같은 폴더의 `<번들 ID>.sfl2` | [2] |
-| `.sfl3` 를 쓰는 버전 | 같은 폴더(mac_apt 가 `.sfl3` 에도 같은 경로를 씀). 파일 이름 규칙은 확인하지 못함 | [1] |
+| `.sfl3` 를 쓰는 버전 | 같은 폴더(mac_apt 가 `.sfl3` 에도 같은 경로를 씀). 파일 이름 규칙은 공개 자료 없음 | [1] |
 
 `.sfl3` 가 쓰이기 시작한 버전과 폴더 전체의 버전별 변화는 허브 [최근 항목 (Shared File Lists)](index.md)의 표에 모았습니다. 옛 plist 방식은 ForensicArtifacts 정의에도 `*.LSSharedFileList.plist` 라는 이름(MacOSApplicationsRecentItems)으로 올라 있습니다 [3].
 
@@ -52,14 +52,14 @@ mac_apt 는 `~/Library/Preferences` 폴더에서 이름에 `lssharedfilelist` �
 
 ### Apple 이 아닌 앱의 최근 파일 기록
 
-Microsoft Office 처럼 자기 방식으로 최근 파일을 따로 기록하는 앱도 있고, macMRU 는 아래 두 가지를 함께 읽습니다 [2].
+Microsoft Office 처럼 자기 방식으로 최근 파일을 따로 기록하는 앱도 있습니다. Office 의 기록 위치는 아래와 같습니다 [2].
 
 | 앱 | 위치 | 키 |
 |---|---|---|
 | MS Office 2016 | `~/Library/Containers/com.microsoft.<앱>/Data/Library/Preferences/com.microsoft.<앱>.securebookmarks.plist` | 항목마다 `kBookmarkDataKey`(북마크), `kUUIDKey` |
 | MS Office 2011 | `~/Library/Preferences/com.microsoft.office.plist` | `14\File MRU\MSWD`(Word), `14\File MRU\XCEL`(Excel), `14\File MRU\PPT3`(PowerPoint) |
 
-지금 쓰이는 Office 버전에서도 경로와 키가 같은지는 이번에 확인하지 못했습니다. 검체의 Office 버전을 먼저 확인하고, 경로가 다르면 컨테이너 폴더 안에서 `securebookmarks` 이름의 파일을 찾아봅니다.
+지금 쓰이는 Office 버전에서도 경로와 키가 같은지는 공개 자료가 없어 검체에서 확인합니다. 검체의 Office 버전을 먼저 확인하고, 경로가 다르면 컨테이너 폴더 안에서 `securebookmarks` 이름의 파일을 찾아봅니다.
 
 ## 증거로서 의미
 
@@ -69,11 +69,11 @@ Microsoft Office 처럼 자기 방식으로 최근 파일을 따로 기록하는
 
 ## 시각 해석
 
-항목에 "문서를 연 시각" 칸이 있다는 근거는 이번 자료에 없습니다. 북마크 안의 대상 생성 시각·북마크 생성 시각과 목록 파일의 수정 시각을 어떻게 읽는지는 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 앱별 목록은 파일 하나가 앱 하나라서, 목록 파일의 수정 시각을 그 앱의 목록이 마지막으로 바뀐 때로 좁혀 읽을 수 있습니다. 다만 무엇이 바뀌었는지(추가·순서 변경·삭제)는 파일 시각만으로 알 수 없습니다.
+항목에 "문서를 연 시각" 칸이 있다는 근거는 공개 자료에 없습니다. 북마크 안의 대상 생성 시각·북마크 생성 시각과 목록 파일의 수정 시각을 어떻게 읽는지는 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 앱별 목록은 파일 하나가 앱 하나라서, 목록 파일의 수정 시각을 그 앱의 목록이 마지막으로 바뀐 때로 좁혀 읽을 수 있습니다. 다만 무엇이 바뀌었는지(추가·순서 변경·삭제)는 파일 시각만으로 알 수 없습니다.
 
 ## 함정과 한계
 
-- 앱의 "최근 사용 항목 지우기" 를 누르면 목록이 비는 동작은 `clearRecentDocuments(_:)` 설명과 맞습니다 [4]. 목록을 지운 뒤 파일 안이나 디스크에 예전 항목의 흔적이 남는지는 이번에 확인하지 못했습니다.
+- 앱의 "최근 사용 항목 지우기" 를 누르면 목록이 비는 동작은 `clearRecentDocuments(_:)` 설명과 맞습니다 [4]. 목록을 지운 뒤 파일 안이나 디스크에 예전 항목의 흔적이 남는지는 공개 자료가 없어 검체에서 확인합니다.
 - 빈 목록 파일은 지금 목록이 비어 있다는 것만 보여 주고, 지워서 빈 것인지 처음부터 비었는지는 이 파일만으로 가릴 수 없습니다.
 - 파일 이름은 번들 ID 만 담고 있어서, 파일 이름만으로 어느 버전의 앱이 쓴 항목인지는 알 수 없습니다.
 - Office 의 `securebookmarks.plist` 처럼 앱 컨테이너 안에 최근 파일을 따로 두는 앱이 있어서, `com.apple.sharedfilelist` 폴더만 보면 빠지는 기록이 생깁니다 [2].

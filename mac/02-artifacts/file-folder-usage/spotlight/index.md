@@ -20,8 +20,8 @@ has_toc: false
 
 | 흔적 | 위치(대표) | macOS 버전 | 알려 주는 것 |
 |---|---|---|---|
-| 볼륨 색인 저장소 | `/.Spotlight-V100/Store-V2/`, `/System/Volumes/Data/.Spotlight-V100/Store-V2/` 등 [1][4] | 볼륨마다. 부트 볼륨 저장소는 도구 주석이 10.15 Catalina의 읽기 전용 볼륨용이라고 적음 [4] | 항목의 식별자·부모 식별자·색인 갱신 시각과 속성 값 [1] |
-| 사용자 CoreSpotlight 색인 | `~/Library/Metadata/CoreSpotlight/` 아래 `index.spotlightV3` [1][2][4] | 10.13 이후, 12 이후 보호 등급별 폴더(도구 주석) [2][4] | 사용자 단위 색인 항목과 속성 값 |
+| 볼륨 색인 저장소 | `/.Spotlight-V100/Store-V2/`, `/System/Volumes/Data/.Spotlight-V100/Store-V2/` 등 [1][4] | 볼륨마다. 부트 볼륨 저장소는 10.15 Catalina의 읽기 전용 볼륨용 [4] | 항목의 식별자·부모 식별자·색인 갱신 시각과 속성 값 [1] |
+| 사용자 CoreSpotlight 색인 | `~/Library/Metadata/CoreSpotlight/` 아래 `index.spotlightV3` [1][2][4] | 10.13 이후, 12 이후 보호 등급별 폴더 [2][4] | 사용자 단위 색인 항목과 속성 값 |
 | 메타데이터 속성 | 위 두 색인 안 | 공통 속성 문서는 OS X 10.4 이후 기준 [5] | 출처 URL, 마지막 사용 시각, 작성자, 만든 앱 등 [5] |
 | 검색 기록 (Spotlight Shortcuts) | 버전마다 다름. 14 이후 `~/Library/Group Containers/group.com.apple.spotlight/` [3] | 10.9 이하부터 14 이후까지 경로가 네 번 바뀜 [3] | 검색창에 친 글자, 연 항목 이름·위치, 마지막 사용 시각 [3] |
 

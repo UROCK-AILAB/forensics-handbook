@@ -25,13 +25,13 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 | 이전 볼륨 기록 | `/private/var/db/volinfo.database` (`/var/db/volinfo.database`) | 이전에 붙었던 볼륨의 파일 소유권 정보 | [1] |
 | 마운트된 디스크 이미지 | `hdiutil info` (살아 있는 맥에서 실행) | 지금 마운트된 DMG 목록 | [1] |
 
-키 이름은 DiskArbitration 소스의 main 브랜치에서 가져왔고, 어느 macOS 버전부터 어느 키가 있었는지는 이 소스로 정해지지 않습니다. `volinfo.database` 가 어느 macOS 버전에 있고 파일 형식이 무엇인지도 확인한 자료가 없어서, 검체에서는 파일이 있는지와 첫 바이트가 어떤 형식인지부터 봅니다.
+키 이름은 DiskArbitration 소스의 main 브랜치 기준이라, 어느 macOS 버전부터 어느 키가 있었는지는 이 소스로 정해지지 않습니다. `volinfo.database` 가 어느 macOS 버전에 있고 파일 형식이 무엇인지는 공개된 분석 자료가 없어서, 검체에서는 파일이 있는지와 첫 바이트가 어떤 형식인지부터 봅니다.
 
 ## 구조
 
 ### 디스크 설명 키
 
-소스에 정의된 키를 묶음별로 옮기면 아래와 같습니다 [2]. 뜻을 적은 칸은 소스 설명·예시로 확인했거나 키 이름 그대로인 것만 채웠고, 나머지는 이름만 옮겼습니다.
+소스에 정의된 키를 묶음별로 나누면 아래와 같습니다 [2]. "분석에 쓰는 점" 칸이 빈 키는 소스에 뜻 설명이 없고 이름만으로도 뜻이 분명하지 않은 것입니다.
 
 | 묶음 | 키 | 분석에 쓰는 점 |
 |---|---|---|
@@ -49,13 +49,13 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 | 기타 | `DAAppearanceTime` | 디스크가 나타난 시각 |
 | 기타 | `DARepairRunning`, FSKit 쪽 접두사 `FS` | |
 
-이 목록에 USB 시리얼 번호를 담는 키는 없습니다 [2]. 장치를 시리얼 번호로 특정하려면 이 키가 아닌 다른 기록을 찾아야 한다는 뜻으로 읽습니다.
+이 목록에 USB 시리얼 번호를 담는 키는 없습니다 [2]. 장치를 시리얼 번호로 특정하려면 이 키가 아닌 다른 기록을 찾아야 합니다.
 
-이 키 묶음이 통째로 디스크에 저장되는 파일은 조사한 자료에서 찾지 못했습니다. 그래서 키 목록은 "어느 파일을 열면 나온다" 가 아니라, 로그·도구 출력·보고서에 나온 값을 읽을 때 쓰는 이름표로 봅니다.
+이 키 묶음을 통째로 디스크에 저장하는 파일은 공개 자료에 나오지 않습니다. 그래서 키 목록은 "어느 파일을 열면 나온다" 가 아니라, 로그·도구 출력·보고서에 나온 값을 읽을 때 쓰는 이름표로 봅니다.
 
 ### volinfo.database
 
-ForensicArtifacts 정의는 `/private/var/db/volinfo.database` 를 "Information of file ownership of (previously) attached volumes." 로 설명합니다 [1]. 이전에 이 맥에 붙었던 볼륨에 대해 파일 소유권 정보가 남는다는 뜻이고, 담기는 칸(볼륨 UUID가 들어가는지 등)과 파일 형식은 확인하지 못했습니다. 볼륨을 식별하는 값이 들어 있으면 [볼륨 UUID로 장치 잇기 (Volume UUID)](volume-uuid.md)의 대조에 씁니다.
+`/private/var/db/volinfo.database` 에는 이전에 이 맥에 붙었던 볼륨의 파일 소유권 정보가 남습니다 [1]. 담기는 칸(볼륨 UUID가 들어가는지 등)과 파일 형식은 공개된 분석 자료가 없어 검체에서 확인합니다. 볼륨을 식별하는 값이 들어 있으면 [볼륨 UUID로 장치 잇기 (Volume UUID)](volume-uuid.md)의 대조에 씁니다.
 
 ## 증거로서 의미
 
@@ -65,11 +65,11 @@ ForensicArtifacts 정의는 `/private/var/db/volinfo.database` 를 "Information 
 
 ## 시각 해석
 
-`DAAppearanceTime` 은 디스크가 나타난 시각을 담는 키지만, 이 값이 2001-01-01 기준(맥 절대 시각)인지는 확인하지 못했습니다. 이 값을 날짜로 바꿀 때는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)의 방식 몇 가지로 풀어 보고, 같은 순간의 통합 로그 시각과 맞는 쪽을 고릅니다. 연결 시각의 기준은 [통합 로그의 연결 기록](unified-log.md)에서 잡는 편이 확실합니다.
+`DAAppearanceTime` 은 디스크가 나타난 시각을 담는 키지만, 이 값이 2001-01-01 기준(맥 절대 시각)인지는 알려진 자료가 없습니다. 이 값을 날짜로 바꿀 때는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)의 방식 몇 가지로 풀어 보고, 같은 순간의 통합 로그 시각과 맞는 쪽을 고릅니다. 연결 시각의 기준은 [통합 로그의 연결 기록](unified-log.md)에서 잡는 편이 확실합니다.
 
 ## 함정과 한계
 
-키 이름은 main 브랜치 소스에서 가져온 것이라 오래된 macOS에는 없는 키가 섞여 있을 수 있습니다. `DAVolumeUUID` 와 `DAMediaUUID` 는 서로 다른 키라서, 보고서에 UUID를 적을 때는 어느 키의 값인지 밝힙니다.
+키 이름은 main 브랜치 소스 기준이라 오래된 macOS에는 없는 키가 섞여 있을 수 있습니다. `DAVolumeUUID` 와 `DAMediaUUID` 는 서로 다른 키라서, 보고서에 UUID를 적을 때는 어느 키의 값인지 밝힙니다.
 
 `hdiutil info` 는 살아 있는 맥에서 지금 마운트된 것만 보여 주는 명령이라 [1], 이미지로 확보한 디스크에서는 쓸 수 없고 이미 떼어 낸 이미지도 나오지 않습니다. 디스크 이미지 형식 자체는 [디스크 이미지 형식 (DMG·Sparsebundle)](../../../01-foundations/disk-volume/dmg-sparsebundle.md)에서 다룹니다.
 

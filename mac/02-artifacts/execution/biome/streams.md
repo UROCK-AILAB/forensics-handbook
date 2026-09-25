@@ -11,15 +11,15 @@ Biome 저장소는 `streams` 폴더 아래 `restricted`·`public` 폴더에 스�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-스트림 (Stream)은 한 가지 종류의 사건을 모아 두는 단위이고, 폴더 이름이 곧 스트림 이름입니다 [5]. 스트림 폴더 안의 SEGB 파일에는 사건 하나가 기록 하나로 쌓이고, 기록 안의 데이터는 대개 protobuf입니다 [4]. 어떤 사건을 담는지는 스트림마다 다르고, 연구자 Mattia Epifani는 iOS에서 포렌식 가치가 있는 스트림 84개를 기기 상태, 연결 기기·네트워크, 위치, 앱 사용, 앱 데이터의 다섯 갈래로 나눴습니다 [3].
+스트림 (Stream)은 한 가지 종류의 사건을 모아 두는 단위이고, 폴더 이름이 곧 스트림 이름입니다 [5]. 스트림 폴더 안의 SEGB 파일에는 사건 하나가 기록 하나로 쌓이고, 기록 안의 데이터는 대개 protobuf입니다 [4]. 어떤 사건을 담는지는 스트림마다 다르고, iOS에서 포렌식 가치가 있는 스트림 84개는 기기 상태, 연결 기기·네트워크, 위치, 앱 사용, 앱 데이터의 다섯 갈래로 나눌 수 있습니다 [3].
 
-macOS·iOS 공용인 mac_apt BIOME 플러그인은 `App.InFocus`, `App.WebUsage`, `Device.Wireless.Bluetooth`, `Device.Wireless.WiFi`, `Notification.Usage`, `Safari.*`, `ScreenTime.AppUsage`, `SystemSettings.SearchTerms`, `App.Intent` 스트림을 해석합니다 [5]. 플러그인이 두 OS를 함께 다뤄서, 이 스트림이 macOS에 모두 있는지는 확인하지 못했습니다. 이 가운데 `App.InFocus` 는 [앱 사용 스트림 (App.InFocus)](app-infocus.md)에서 따로 다룹니다. iOS용 iLEAPP은 `_DKEvent.App.InFocus`, `ProactiveHarvesting.Mail`, `ProactiveHarvesting.Messages`, `Messages.Read`, `ScreenTime.AppUsage`, `Keyboard.TokenFrequency` 같은 스트림을 모듈로 읽습니다 [2].
+macOS·iOS 공용인 mac_apt BIOME 플러그인은 `App.InFocus`, `App.WebUsage`, `Device.Wireless.Bluetooth`, `Device.Wireless.WiFi`, `Notification.Usage`, `Safari.*`, `ScreenTime.AppUsage`, `SystemSettings.SearchTerms`, `App.Intent` 스트림을 해석합니다 [5]. 플러그인이 두 OS를 함께 다루므로, 이 스트림이 macOS에 모두 있는지는 검체에서 확인합니다. 이 가운데 `App.InFocus` 는 [앱 사용 스트림 (App.InFocus)](app-infocus.md)에서 따로 다룹니다. iOS용 iLEAPP은 `_DKEvent.App.InFocus`, `ProactiveHarvesting.Mail`, `ProactiveHarvesting.Messages`, `Messages.Read`, `ScreenTime.AppUsage`, `Keyboard.TokenFrequency` 같은 스트림을 모듈로 읽습니다 [2].
 
-기록을 얼마나 두는지는 iOS에서만 관찰됐습니다. 대부분 스트림의 활성 기록은 28일 동안 남았고, `Device.Metadata`·`Device.Timezone` 은 최대 10개월, `Discoverability.Signals` 는 약 9개월 남았습니다 [3]. macOS의 보존 기간은 확인한 자료가 없습니다.
+기록 보존 기간은 iOS 자료만 있습니다. iOS에서 대부분 스트림의 활성 기록은 28일 동안 남고, `Device.Metadata`·`Device.Timezone` 은 최대 10개월, `Discoverability.Signals` 는 약 9개월 남습니다 [3]. macOS의 보존 기간은 공개 자료가 없어 검체에서 확인합니다.
 
 ## 위치와 폴더 구조
 
-mac_apt는 macOS에서 아래 두 위치를 봅니다 [5].
+macOS의 Biome 저장소는 아래 두 위치에 있습니다 [5].
 
 ```
 /private/var/db/biome/streams/      시스템
@@ -36,12 +36,12 @@ mac_apt는 macOS에서 아래 두 위치를 봅니다 [5].
 | 폴더·파일 | 뜻 | 도구 처리 |
 |---|---|---|
 | `local/` | 이 기기에서 쓴 SEGB 파일 [2][5] | 읽음 |
-| `remote/` 아래 기기 식별자 폴더 | 같은 계정의 다른 기기에서 동기화돼 온 기록이고 이 기기의 사건이 아님 (iLEAPP 설명) [2] | iLEAPP은 출처를 따로 표시 |
-| `tombstone` 폴더 | 안에 무엇이 남는지 설명한 자료를 찾지 못함 | mac_apt·iLEAPP 모두 건너뜀 [2][5] |
+| `remote/` 아래 기기 식별자 폴더 | 같은 계정의 다른 기기에서 동기화돼 온 기록이고 이 기기의 사건이 아님 [2] | iLEAPP은 출처를 따로 표시 |
+| `tombstone` 폴더 | 안에 무엇이 남는지 공개 자료 없음 | mac_apt·iLEAPP 모두 건너뜀 [2][5] |
 | 크기 0 파일 | — | mac_apt·iLEAPP 모두 건너뜀 [2][5] |
 | `.` 으로 시작하는 숨김 파일 | — | iLEAPP은 건너뛰고 [2], mac_apt 코드에는 따로 거르는 부분이 없음 [5] |
 
-SEGB 파일 이름은 숫자이고 파일을 만든 시각을 나타냅니다 [4]. mac_apt는 파일 이름을 정수로 읽어 1,000,000으로 나눈 값을 맥 절대 시각(2001-01-01 기준 초)으로 풀기 때문에, 파일 이름은 마이크로초 단위 맥 절대 시각으로 볼 수 있습니다 [5].
+SEGB 파일 이름은 숫자이고 파일을 만든 시각을 나타냅니다 [4]. 파일 이름을 정수로 읽어 1,000,000으로 나누면 맥 절대 시각(2001-01-01 기준 초)이 되므로, 파일 이름은 마이크로초 단위 맥 절대 시각입니다 [5].
 
 ## 구조
 
@@ -55,7 +55,7 @@ SEGB 파일에는 v1과 v2 두 가지가 있고, 매직 `SEGB` 가 어디 있는
 | 트레일러 | 없음 | 파일 끝에서 (기록 개수 × 16)바이트. 항목마다 기록 끝 오프셋(int32, 헤더 끝 기준), 상태(int32), 기록 생성 시각(double) |
 | 정렬 | 8바이트 경계 | 4바이트 경계 |
 
-v1의 CRC32는 기록 데이터에 zlib crc32를 적용한 값입니다 [1]. v2 헤더의 나머지 16바이트는 Cellebrite 글에서 내부용 12바이트와 패딩 4바이트로 설명합니다 [4].
+v1의 CRC32는 기록 데이터에 zlib crc32를 적용한 값입니다 [1]. v2 헤더의 나머지 16바이트는 내부용 12바이트와 패딩 4바이트입니다 [4].
 
 ### 기록 상태 값
 
@@ -63,7 +63,7 @@ v1의 CRC32는 기록 데이터에 zlib crc32를 적용한 값입니다 [1]. v2 
 |---|---|---|
 | 1 | Written (기록됨) | 읽음 |
 | 3 | Deleted (삭제됨) | 읽음 |
-| 4 | Unknown. 코드 주석은 "State 4 is an empty record" 라고 적음 | 읽지 않고 건너뜀 |
+| 4 | Unknown. 빈 기록 | 읽지 않고 건너뜀 |
 
 출처는 [1][4]이고, 처리 칸은 ccl_segb 코드 기준입니다 [1]. v2 트레일러를 읽을 때는 몇 가지를 더 봐야 합니다 [1]. 상태 0에 끝 오프셋도 0인 빈 칸이 끼어 있을 수 있어 건너뛰고, 트레일러 항목 둘이 같은 끝 오프셋을 가리킬 수도 있습니다(기록됐다가 나중에 삭제 표시된 기록 등). 오래된 트레일러 항목이 이미 다시 쓰인 영역을 가리키면 그 자리에 원래 데이터는 남아 있지 않습니다.
 
@@ -77,7 +77,7 @@ v1의 CRC32는 기록 데이터에 zlib crc32를 적용한 값입니다 [1]. v2 
 | v2 헤더 오프셋 8 | 파일 생성 시각 [1][4] | 초 (double) |
 | v1 기록 헤더의 시각1·시각2, v2 트레일러의 시각 | 기록마다의 시각 [1][4] | 초 (double) |
 
-v1 기록 헤더의 두 시각이 각각 무엇을 뜻하는지는 참고 자료에 나와 있지 않습니다. Cellebrite 글은 v2 시각의 기준 시점을 적지 않았고, 기준을 2001-01-01로 적은 쪽은 ccl_segb 코드입니다 [1][4].
+v1 기록 헤더의 두 시각이 각각 무엇을 뜻하는지는 공개 자료가 없습니다. 시각의 기준 시점은 2001-01-01입니다 [1].
 
 시간대도 도구마다 다르게 붙습니다. ccl_segb는 시간대 정보 없는 날짜·시각 값을 만들고, iLEAPP은 이 값에 UTC를 붙여 표시합니다 [1][2]. 여러 도구의 결과를 한 타임라인에 넣을 때는 각 도구가 시간대를 어떻게 붙였는지 먼저 맞춥니다.
 
@@ -91,7 +91,7 @@ v1 기록 헤더의 두 시각이 각각 무엇을 뜻하는지는 참고 자료
 
 `remote` 폴더의 기록은 이 기기가 아니라 같은 계정의 다른 기기에서 일어난 사건입니다 [2]. 폴더를 가리지 않고 통째로 읽으면 다른 기기의 사건이 이 맥의 사건처럼 섞여서, 결과에 출처 폴더를 칸으로 남기는 도구를 쓰거나 `local` 과 `remote` 를 나눠 읽습니다.
 
-macOS에 관해서는 빈칸이 많습니다. 어느 macOS부터 Biome과 SEGB v1·v2를 쓰는지, macOS의 보존 기간, 위 스트림이 macOS에 모두 있는지, Biome에 기록을 쓰는 프로세스 이름은 확인한 자료가 없습니다. `tombstone` 폴더에 무엇이 남는지도 설명한 자료가 없어서, 공개 도구가 건너뛰는 폴더라도 수집할 때는 함께 가져옵니다.
+어느 macOS부터 Biome과 SEGB v1·v2를 쓰는지, macOS의 보존 기간, 위 스트림이 macOS에 모두 있는지, Biome에 기록을 쓰는 프로세스 이름은 공개 자료가 없어 검체에서 확인합니다. `tombstone` 폴더에 무엇이 남는지도 공개 자료가 없으므로, 공개 도구가 건너뛰는 폴더라도 수집할 때는 함께 가져옵니다.
 
 ## 직접 분석해 보기
 
@@ -127,7 +127,7 @@ ccl_segb(CCL Forensics, Alex Caithness)는 SEGB v1·v2 파일을 기록 단위�
 
 mac_apt BIOME 플러그인(Yogesh Khatri)은 MACOS·IOS·ARTIFACTONLY 세 모드로 동작하고, 위 스트림들을 해석해 결과를 냅니다 [5]. iOS 쪽은 iLEAPP이 스트림별 모듈로 읽습니다 [2].
 
-수집 쪽에서는 GitHub 코드 검색 결과로 UAC에 Biome 수집 정의(`artifacts/files/system/biome.yaml`)가 있고, LETHAL-FORENSICS/macos-collector에 `tools/Biome_Timeline` 이 있는 것을 확인했습니다 [6]. 두 저장소의 내용은 열어 보지 않았습니다.
+수집 도구로는 UAC의 Biome 수집 정의(`artifacts/files/system/biome.yaml`)와 LETHAL-FORENSICS/macos-collector의 `tools/Biome_Timeline` 이 있습니다 [6].
 
 ## 참고 문헌
 

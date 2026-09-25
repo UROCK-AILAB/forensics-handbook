@@ -13,9 +13,9 @@ NSKeyedArchiver는 앱의 객체를 plist로 바꿔 저장하는 방식이고, �
 
 NSKeyedArchiver는 객체를 XML이나 바이너리 plist로 바꿔 저장하고, 출력 형식의 기본값은 바이너리입니다 [1]. 그래서 파일 머리만 보면 여느 바이너리 plist와 같고, 최상위 사전에 아래 키 네 개가 있으면 이 형식으로 봅니다. 바이너리 plist 자체의 구조는 [XML·바이너리 plist (XML·bplist00)](xml-binary.md)에서 다룹니다.
 
-어떤 macOS 파일이 이 형식을 쓰는지, 경로와 버전별 목록은 이 페이지의 참고 문헌으로 확인하지 못해서 적지 않고, 각 아티팩트 페이지에서 다룹니다.
+이 형식을 쓰는 macOS 파일의 경로와 버전은 각 아티팩트 페이지에서 다룹니다.
 
-이 페이지의 설명은 Apple이 공개한 swift-corelibs-foundation(리눅스 등에서 쓰는 공개 Foundation) 소스를 기준으로 합니다 [1][2]. 소스 주석에 "OS X only encodes the mapped name" 처럼 macOS 동작에 맞춘 흔적이 있지만 [1], macOS의 Foundation과 모든 세부가 같다고 확인한 것은 아니라서, 검체에서 다른 모습이 보이면 관찰로 적고 확인 범위를 밝힙니다.
+아래 구조는 Apple이 공개한 swift-corelibs-foundation(리눅스 등에서 쓰는 공개 Foundation) 소스 기준입니다 [1][2]. 이 소스는 일부 macOS 동작을 따르지만 [1], macOS의 Foundation과 세부가 다를 수 있습니다. 검체에서 다른 모습이 보이면 macOS 버전과 함께 적습니다.
 
 ## 구조
 
@@ -28,7 +28,7 @@ NSKeyedArchiver는 객체를 XML이나 바이너리 plist로 바꿔 저장하고
 | `$objects` | 보관한 객체를 모두 담은 배열 |
 | `$top` | 최상위 인코딩 사전. 키마다 객체 참조(uid)를 담음 |
 
-`$top` 안의 키는 보통 `root` 이고, `archivedData(withRootObject:)` 같은 함수가 이 키(`NSKeyedArchiveRootObjectKey`)를 씁니다 [1]. 앱이 `encode(_:forKey:)` 로 직접 인코딩했다면 그 키 이름이 `$top` 에 들어가서 `root` 가 없을 수도 있습니다 [1]. 소스에는 `NSKeyedArchiverSystemVersion = 2000` 이라는 상수도 있지만 쓰임은 확인하지 못했습니다 [1].
+`$top` 안의 키는 보통 `root` 이고, `archivedData(withRootObject:)` 같은 함수가 이 키(`NSKeyedArchiveRootObjectKey`)를 씁니다 [1]. 앱이 `encode(_:forKey:)` 로 직접 인코딩했다면 그 키 이름이 `$top` 에 들어가서 `root` 가 없을 수도 있습니다 [1]. `NSKeyedArchiverSystemVersion = 2000` 이라는 상수도 있지만 쓰임은 알려져 있지 않습니다 [1].
 
 ### 참조(uid)와 `$null`
 
@@ -38,7 +38,7 @@ NSKeyedArchiver는 객체를 XML이나 바이너리 plist로 바꿔 저장하고
 
 ### 객체 사전과 클래스 정보
 
-클래스 객체 하나는 `$objects` 안의 사전 하나로 저장되고, 이 사전의 `$class` 키는 클래스 정보 사전을 가리키는 uid입니다 [1]. 클래스 정보 사전에는 클래스 이름 `$classname`, 자기 클래스부터 부모 클래스까지 이름을 늘어놓은 배열 `$classes` 가 들어가고, `$classhints` 가 붙기도 합니다 [1]. 클래스 이름을 다른 이름으로 매핑해 둔 경우 macOS는 매핑된 이름 하나만 `$classname` 에 적는다고 소스 주석에 적혀 있습니다 [1].
+클래스 객체 하나는 `$objects` 안의 사전 하나로 저장되고, 이 사전의 `$class` 키는 클래스 정보 사전을 가리키는 uid입니다 [1]. 클래스 정보 사전에는 클래스 이름 `$classname`, 자기 클래스부터 부모 클래스까지 이름을 늘어놓은 배열 `$classes` 가 들어가고, `$classhints` 가 붙기도 합니다 [1]. 클래스 이름을 다른 이름으로 매핑해 둔 경우 macOS는 매핑된 이름 하나만 `$classname` 에 적습니다 [1].
 
 객체 사전의 나머지 키는 앱이 인코딩할 때 준 키 이름이고, 여기에는 두 가지 규칙이 있습니다 [1].
 
@@ -49,7 +49,7 @@ NSKeyedArchiver는 객체를 XML이나 바이너리 plist로 바꿔 저장하고
 
 NSDictionary는 키 배열을 `NS.keys` 에, 값 배열을 `NS.objects` 에 uid 배열로 담고, 두 배열에서 같은 순번끼리 짝을 짓습니다 [2]. 디코더는 `NS.key.0`, `NS.object.0`, `NS.key.1` 처럼 번호 붙은 옛 방식 키도 읽습니다 [2]. 배열을 인코딩할 때는 원소마다 uid를 만들어 uid 배열로 넣습니다 [1].
 
-NSArray·NSString·NSDate·NSData 같은 다른 클래스가 어떤 키 이름을 쓰는지, NSDate에 어떤 기준의 시각을 넣는지는 이 페이지의 참고 문헌으로 확인하지 못했습니다. 이런 클래스는 검체에서 본 키를 관찰로 적고, 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)과 대조해 판단합니다.
+NSArray·NSString·NSDate·NSData 같은 다른 클래스가 어떤 키 이름을 쓰는지, NSDate에 어떤 기준의 시각을 넣는지는 공개 자료가 없습니다. 이런 클래스는 검체에서 본 키를 그대로 적고, 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)과 대조해 판단합니다.
 
 ## 읽는 법
 
@@ -86,11 +86,11 @@ $objects  = [
 - **`$$` 키**: 앱 키가 `$` 로 시작하면 `$` 가 하나 더 붙어 있습니다 [1]. 보고서에는 앞의 `$` 하나를 뗀 원래 키 이름을 쓰고, 원본에 적힌 모양도 함께 남깁니다.
 - **uid와 정수**: uid는 일반 정수와 다른 형식(표식 `0x8n`)입니다 [3]. 형식을 가리지 않고 값만 보여 주는 도구에서는 uid가 평범한 숫자로 보여서, 참조 번호를 설정값으로 잘못 읽을 수 있습니다.
 - **번호 붙은 옛 키**: 사전이 `NS.keys`·`NS.objects` 대신 `NS.key.0`·`NS.object.0` 모양으로 들어 있을 수 있습니다 [2].
-- **구현 차이**: 이 페이지는 공개 Foundation 소스 기준입니다 [1][2]. macOS가 만든 아카이브에서 다른 키가 보이면 관찰로 적습니다.
+- **구현 차이**: 위 구조는 공개 Foundation 소스 기준입니다 [1][2]. macOS가 만든 아카이브에서는 다른 키가 보일 수 있으니, 보이는 대로 macOS 버전과 함께 적습니다.
 
 ## 도구
 
-NSKeyedArchiver 파일도 plist라서 plist를 읽는 도구로 열 수 있고, 그 뒤에 위 순서대로 uid를 따라가면 됩니다. 이 형식을 풀어 주는 공개 도구의 이름과 기능은 이 페이지의 참고 문헌으로 확인하지 못해서 적지 않고, 어떤 도구를 쓰든 결과에서 한두 객체를 골라 `$objects` 번호를 손으로 따라가 맞춰 봅니다. 검증 방법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)을 따릅니다.
+NSKeyedArchiver 파일도 plist라서 plist를 읽는 도구로 열 수 있고, 그 뒤에 위 순서대로 uid를 따라가면 됩니다. 어떤 도구를 쓰든 결과에서 한두 객체를 골라 `$objects` 번호를 손으로 따라가 맞춰 봅니다. 검증 방법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)을 따릅니다.
 
 ## 참고 문헌
 

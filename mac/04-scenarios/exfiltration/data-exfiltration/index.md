@@ -14,24 +14,24 @@ has_toc: false
 
 정보 유출 사건에서는 "자료가 나갔는가"와 "어느 길로 나갔는가"를 함께 묻고, 길마다 흔적이 남는 곳이 달라서 한 길만 보면 다른 길을 놓칩니다. 그래서 아래 표로 길마다 먼저 볼 곳을 잡고, 하위 페이지에서 길 하나씩 조사 순서를 따라갑니다.
 
-길을 가리지 않고 쓰는 판단 원칙이 하나 있습니다. "파일이 나갔다"는 사실은 흔적 하나로 증명하기 어려워서, 파일을 다룬 흔적(최근 항목·FSEvents), 경로 흔적(장치·앱·서버 기록), 두 흔적의 시각 세 가지가 서로 맞는지로 판단합니다. 이 원칙은 공개 자료에서 확인한 절차가 아니라 필자가 정리한 방법이고, 하위 페이지의 분석 흐름도 이 원칙을 따릅니다. 흔적이 없을 때 지웠다고 곧바로 보지 않고, 지운 흔적은 [증거를 없애려 했나](../../activity/anti-forensics/index.md)의 방법으로 따로 찾습니다. 기록이 말하는 만큼만 보고서에 쓰는 방법은 [포렌식 보고서](../../../03-techniques/reporting/forensic-report.md)에 있습니다.
+길을 가리지 않고 쓰는 판단 원칙이 하나 있습니다. "파일이 나갔다"는 사실은 흔적 하나로 증명하기 어려워서, 파일을 다룬 흔적(최근 항목·FSEvents), 경로 흔적(장치·앱·서버 기록), 두 흔적의 시각 세 가지가 서로 맞는지로 판단합니다. 하위 페이지의 분석 흐름도 이 원칙을 따릅니다. 흔적이 없을 때 지웠다고 곧바로 보지 않고, 지운 흔적은 [증거를 없애려 했나](../../activity/anti-forensics/index.md)의 방법으로 따로 찾습니다. 기록이 말하는 만큼만 보고서에 쓰는 방법은 [포렌식 보고서](../../../03-techniques/reporting/forensic-report.md)에 있습니다.
 
-수집할 때도 주의할 점이 있습니다. ForensicArtifacts 정의(macos.yaml)에는 CUPS 인쇄, 에어드롭, 드롭박스·구글 드라이브·원드라이브·박스, 사파리 다운로드 항목이 없습니다 [1]. 수집 도구가 이 정의만 쓴다면 이 흔적들이 자동 수집에서 빠질 수 있어서(필자 해석), 수집 목록에 들어 있는지 직접 확인합니다([맥 증거 확보](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)).
+수집할 때도 주의할 점이 있습니다. ForensicArtifacts 정의(macos.yaml)에는 CUPS 인쇄, 에어드롭, 드롭박스·구글 드라이브·원드라이브·박스, 사파리 다운로드 항목이 없습니다 [1]. 수집 도구가 이 정의만 쓴다면 이 흔적들이 자동 수집에서 빠질 수 있으므로, 수집 목록에 들어 있는지 직접 확인합니다([맥 증거 확보](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)).
 
 ## 한눈에 보기
 
 | 길 | 먼저 볼 위치 | macOS 버전 | 알려 주는 것 |
 |---|---|---|---|
-| USB | 통합 로그의 DiskArbitration 메시지, `/private/var/db/volinfo.database`, `~/Library/Preferences/com.apple.sidebarlists.plist` [1] | 확인 필요 | 외부 볼륨이 연결된 시각과 볼륨 |
-| 에어드롭 | 받는 쪽은 받은 파일(기본은 다운로드 폴더) [2]. 보내는 쪽 전용 기록은 확인하지 못함 | OS X 10.11 이상 맥 [3] | 받은 파일 |
+| USB | 통합 로그의 DiskArbitration 메시지, `/private/var/db/volinfo.database`, `~/Library/Preferences/com.apple.sidebarlists.plist` [1] | 검체에서 확인 | 외부 볼륨이 연결된 시각과 볼륨 |
+| 에어드롭 | 받는 쪽은 받은 파일(기본은 다운로드 폴더) [2]. 보내는 쪽 전용 기록은 공개 자료 없음 | OS X 10.11 이상 맥 [3] | 받은 파일 |
 | 클라우드 | `~/Library/Application Support/CloudDocs/session/db/client.db`·`server.db` [4], `~/Library/CloudStorage/` 아래 드롭박스 폴더 [5] | 파일 공급자판 드롭박스는 macOS 12.5 이상 [5] | 동기화 항목과 올린 기기 |
-| 메일 | `~/Library/Mail/V[0-9]/...`, `~/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/*` [1] | 확인 필요 | 보낸 메일과 첨부 |
-| 메신저 | `~/Library/Messages/chat.db`, `~/Library/Messages/Attachments/` [1][6] | 확인 필요 | 보낸 메시지와 첨부 |
-| 웹 업로드 | 업로드 전용 기록은 확인하지 못함. 브라우저 방문 기록과 파일 접근 흔적으로 정황을 모음 | 확인 필요 | 업로드 사이트 방문과 같은 시간대의 파일 접근 |
-| 아이폰 | `~/Library/Preferences/com.apple.iPod.plist`, `~/Library/Application Support/MobileSync/Backup/*` [1][7] | 확인 필요 | 연결된 기기와 마지막 연결 시각 |
-| 인쇄 | 스풀 폴더 `/var/spool/cups`(제어 파일 c·데이터 파일 d), 로그 폴더 `/var/log/cups/` [8][9] | 확인 필요 | 인쇄 작업·요청 계정·인쇄한 앱·시각 |
+| 메일 | `~/Library/Mail/V[0-9]/...`, `~/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/*` [1] | 검체에서 확인 | 보낸 메일과 첨부 |
+| 메신저 | `~/Library/Messages/chat.db`, `~/Library/Messages/Attachments/` [1][6] | 검체에서 확인 | 보낸 메시지와 첨부 |
+| 웹 업로드 | 업로드 전용 기록은 공개 자료 없음. 브라우저 방문 기록과 파일 접근 흔적으로 정황을 모음 | 검체에서 확인 | 업로드 사이트 방문과 같은 시간대의 파일 접근 |
+| 아이폰 | `~/Library/Preferences/com.apple.iPod.plist`, `~/Library/Application Support/MobileSync/Backup/*` [1][7] | 검체에서 확인 | 연결된 기기와 마지막 연결 시각 |
+| 인쇄 | 스풀 폴더 `/var/spool/cups`(제어 파일 c·데이터 파일 d), 로그 폴더 `/var/log/cups/` [8][9] | 검체에서 확인 | 인쇄 작업·요청 계정·인쇄한 앱·시각 |
 
-버전 칸에서 경계를 확인한 항목은 에어드롭과 드롭박스 두 가지뿐이고, 나머지는 검체의 OS 버전에서 실제 위치를 확인합니다([OS 버전과 설치 기록](../../../02-artifacts/system-account/os-version-install-history.md)).
+버전 경계가 알려진 항목은 에어드롭과 드롭박스 두 가지이고, 나머지는 검체의 OS 버전에서 실제 위치를 확인합니다([OS 버전과 설치 기록](../../../02-artifacts/system-account/os-version-install-history.md)).
 
 ## 읽는 순서
 

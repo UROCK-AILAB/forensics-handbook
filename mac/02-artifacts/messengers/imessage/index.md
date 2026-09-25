@@ -12,7 +12,7 @@ has_toc: false
 
 ## 왜 중요한가
 
-공개 도구 imessage-exporter는 iMessage·RCS·SMS·MMS를 다룬다고 밝히고 [1], 이 서비스들의 메시지가 한 DB에 함께 들어 있어서 맥 한 대에서 여러 경로의 대화를 한꺼번에 볼 수 있습니다. 메시지마다 보낸 쪽 표시와 시각, 반응·답장·편집 기록이 따로 남고, 첨부 파일은 DB의 첨부 행과 디스크의 파일을 짝지어 원본까지 확인할 수 있습니다.
+iMessage·RCS·SMS·MMS 메시지가 한 DB에 함께 들어 있어서 [1] 맥 한 대에서 여러 경로의 대화를 한꺼번에 볼 수 있습니다. 메시지마다 보낸 쪽 표시와 시각, 반응·답장·편집 기록이 따로 남고, 첨부 파일은 DB의 첨부 행과 디스크의 파일을 짝지어 원본까지 확인할 수 있습니다.
 
 지운 메시지도 곧바로 사라지지 않습니다. 앱은 지운 메시지를 최근 삭제 폴더(Recently Deleted)에 최대 30일 남기고 [4], 그 뒤에도 SQLite의 빈 공간과 WAL 파일, 상대 기기와 백업에 흔적이 남을 수 있습니다. 반대로 Messages in iCloud를 켜면 다른 기기에서 지운 것이 이 맥에도 반영되고, "Keep messages" 설정은 기간 지난 대화를 사용자가 손대지 않아도 지우기 때문에 [4], 메시지가 없다는 사실을 해석할 때는 이런 동작을 함께 따져야 합니다.
 
@@ -20,13 +20,13 @@ has_toc: false
 
 | 자료 | 위치 | macOS 버전 | 알려 주는 것 |
 |---|---|---|---|
-| 대화 DB | `~/Library/Messages/chat.db` [2] | 버전별 경로 차이는 확인한 자료 없음 | 대화방, 상대 주소, 메시지 본문, 보낸 쪽, 시각, 서비스 이름 |
-| 첨부 파일 | `~/Library/Messages/Attachments/` 아래 하위 폴더 [3] | 확인한 자료 없음 | 주고받은 파일 원본과 DB의 첨부 행 |
-| 스티커 | `~/Library/Messages/StickerCache/` 아래 하위 폴더 [3] | 확인한 자료 없음 | 스티커 이미지 |
-| 최근 삭제 표 | `chat.db` 안 `chat_recoverable_message_join` [2] | 맥 도입 버전은 확인 못 함 | 지운 뒤 30일 안에 되살릴 수 있는 메시지 [4] |
+| 대화 DB | `~/Library/Messages/chat.db` [2] | 버전별 경로 차이는 공개 자료 없음 | 대화방, 상대 주소, 메시지 본문, 보낸 쪽, 시각, 서비스 이름 |
+| 첨부 파일 | `~/Library/Messages/Attachments/` 아래 하위 폴더 [3] | 공개 자료 없음 | 주고받은 파일 원본과 DB의 첨부 행 |
+| 스티커 | `~/Library/Messages/StickerCache/` 아래 하위 폴더 [3] | 공개 자료 없음 | 스티커 이미지 |
+| 최근 삭제 표 | `chat.db` 안 `chat_recoverable_message_join` [2] | 맥 도입 버전은 공개 자료 없음 | 지운 뒤 30일 안에 되살릴 수 있는 메시지 [4] |
 | 편집·보내기 취소 | `chat.db` 안 plist 칸 `message_summary_info` [2] | macOS 13 이후, iMessage만 [5] | 편집 전 내용과 보내기 취소 정보 |
 
-iOS 백업에도 같은 형식의 메시지 DB가 들어 있고 [2], 백업 안 파일 이름은 [대화 DB (chat.db)](chat-db.md)에 적었습니다.
+iOS 백업에도 같은 형식의 메시지 DB가 들어 있고 [2], 백업 안 파일 이름은 [대화 DB (chat.db)](chat-db.md)에 있습니다.
 
 ## 읽는 순서
 

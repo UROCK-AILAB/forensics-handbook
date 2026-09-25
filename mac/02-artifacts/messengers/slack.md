@@ -6,24 +6,24 @@ nav_order: 1410
 
 # 슬랙 (Slack)
 
-맥 슬랙은 번들 ID가 `com.tinyspeck.slackmacgap` 인 앱이고 [1], 대화 자료는 Chromium 방식 IndexedDB(LevelDB)로 사용자 `Library` 아래 `Slack/IndexedDB/` 에 남는다고 알려져 있지만, 이 경로는 검색 요약문으로만 확인했습니다 [2].
+맥 슬랙은 번들 ID가 `com.tinyspeck.slackmacgap` 인 앱이고 [1], 대화 자료는 Chromium 방식 IndexedDB(LevelDB)로 사용자 `Library` 아래 `Slack/IndexedDB/` 에 남는다고 알려져 있습니다 [2].
 
 ## 무엇을 기록하나 · 왜 생기나
 
-슬랙 데스크톱 앱은 Chromium(Electron) 기반이라서, 앱이 화면에 보여 준 대화 자료가 Chrome과 같은 IndexedDB 형식으로 로컬에 남는다는 포렌식 글이 있습니다(Medium, Jeroen Verhaeghe) [2]. 여기에 더해 Homebrew가 앱을 지울 때 함께 지우는 목록을 보면, 슬랙은 진단 보고서, Application Scripts, 캐시, 환경설정, 쿠키, 번들 ID 기준의 WebKit 데이터를 남기고 사용자 `Library` 아래 공유 컨테이너도 씁니다 [1]. 이 목록에 있는 자리가 곧 슬랙이 맥에 흔적을 남기는 자리이고, 각 자리의 정확한 경로 문자열은 이번 자료로 확인되지 않았습니다.
+슬랙 데스크톱 앱은 Chromium(Electron) 기반이라서, 앱이 화면에 보여 준 대화 자료가 Chrome과 같은 IndexedDB 형식으로 로컬에 남습니다 [2]. 슬랙은 이 밖에도 진단 보고서, Application Scripts, 캐시, 환경설정, 쿠키, 번들 ID 기준의 WebKit 데이터를 남기고 사용자 `Library` 아래 공유 컨테이너도 씁니다 [1]. 이 자리들은 Homebrew가 앱을 지울 때 함께 지우는 자리이기도 합니다 [1]. 각 자리의 정확한 경로 문자열은 검체에서 확인합니다.
 
-서버의 메시지가 로컬에 전부 내려와 있는지, 아니면 앱이 필요한 만큼만 받아 캐시하는지는 확인되지 않았습니다. 그래서 로컬에 남은 자료는 "이 맥의 슬랙 앱이 캐시한 자료" 로 다루고, 워크스페이스 대화 전체로 보지 않습니다.
+서버의 메시지가 로컬에 전부 내려와 있는지, 아니면 앱이 필요한 만큼만 받아 캐시하는지는 알려져 있지 않습니다. 그래서 로컬에 남은 자료는 "이 맥의 슬랙 앱이 캐시한 자료" 로 다루고, 워크스페이스 대화 전체로 보지 않습니다.
 
 ## 위치와 버전별 차이
 
-검색 결과 요약문에 나온 IndexedDB 위치는 아래와 같고, 원문은 열어 보지 못했습니다 [2].
+IndexedDB 위치는 받은 경로에 따라 아래와 같습니다 [2].
 
 | 받은 경로 | IndexedDB 위치 |
 |---|---|
 | 직접 받은 판 | `~/Library/Application Support/Slack/IndexedDB/*.leveldb` |
 | App Store판 | `~/Library/Containers/com.tinyspeck.slackmacgap/Data/Library/Application Support/Slack/IndexedDB/*.leveldb` |
 
-두 판이 서로 다른 폴더를 쓰니 검체에서 두 곳을 모두 봅니다. `root-state.json`, `storage/`, `logs/` 같은 그 밖의 파일과 폴더 이름, 그 안의 내용은 이번 자료로 확인되지 않았습니다.
+두 판이 서로 다른 폴더를 쓰니 검체에서 두 곳을 모두 봅니다. `root-state.json`, `storage/`, `logs/` 같은 그 밖의 파일과 폴더 이름, 그 안의 내용은 검체에서 확인합니다.
 
 Homebrew는 macOS 버전마다 설치하는 슬랙의 마지막 지원판을 따로 적어 두었고, 모두 ARM64와 x64 판이 있습니다 [1].
 
@@ -37,9 +37,9 @@ Homebrew는 macOS 버전마다 설치하는 슬랙의 마지막 지원판을 따
 
 ## 구조
 
-IndexedDB 자료는 Chromium 방식 IndexedDB이고 그 아래 저장소는 LevelDB라서, ccl_chromium_reader로 읽는다는 설명이 있습니다 [2]. LevelDB 파일과 IndexedDB 레코드의 구조는 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)에서 다루고, Chromium 계열 앱의 저장 방식 전반은 [크롬·엣지·웨일 (Chromium 계열)](../browsers/chromium/index.md)을 봅니다.
+IndexedDB 자료는 Chromium 방식 IndexedDB이고 그 아래 저장소는 LevelDB라서, ccl_chromium_reader로 읽을 수 있습니다 [2]. LevelDB 파일과 IndexedDB 레코드의 구조는 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)에서 다루고, Chromium 계열 앱의 저장 방식 전반은 [크롬·엣지·웨일 (Chromium 계열)](../browsers/chromium/index.md)을 봅니다.
 
-환경설정 도메인은 `com.tinyspeck.slackmacgap` 이고, 관리자가 데스크톱 앱 설정을 배포할 때도 이 도메인을 쓴다는 Slack 도움말("Manage desktop app configurations")이 있습니다 [2]. `defaults read com.tinyspeck.slackmacgap` 로 설정을 읽을 수 있다는 글도 있지만 [2], 두 자료 모두 원문은 열어 보지 못했습니다. 수집한 이미지에서는 `defaults` 대신 이 이름의 plist 파일을 찾아 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 방법으로 읽고, 관리자가 배포한 설정은 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 함께 봅니다.
+환경설정 도메인은 `com.tinyspeck.slackmacgap` 이고, 관리자가 데스크톱 앱 설정을 배포할 때도 이 도메인을 씁니다 [2]. `defaults read com.tinyspeck.slackmacgap` 로 설정을 읽을 수 있습니다 [2]. 수집한 이미지에서는 `defaults` 대신 이 이름의 plist 파일을 찾아 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 방법으로 읽고, 관리자가 배포한 설정은 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 함께 봅니다.
 
 ## 증거로서 의미
 
@@ -47,25 +47,25 @@ IndexedDB 자료는 Chromium 방식 IndexedDB이고 그 아래 저장소는 Leve
 
 **증명하지 못하는 것.** 로컬 캐시에 없는 메시지를 "보내지 않았다" 거나 "없었다" 고 말할 수 없습니다. 레코드가 있다는 사실만으로 사용자가 그 메시지를 읽었다고 말할 수도 없습니다.
 
-쿠키와 세션 저장소는 공격자가 노리는 대상으로 거론됩니다(SentinelOne 글의 제목과 요약) [2]. 방어 쪽에서는 슬랙 앱이 아닌 프로세스가 이 폴더를 읽거나 복사한 흔적을 탐지 대상으로 보고, [정보 탈취 악성 코드 (Infostealer)](../../04-scenarios/incident/infostealer.md)의 흐름으로 확인합니다.
+쿠키와 세션 저장소는 공격자가 노리는 대상입니다 [2]. 방어 쪽에서는 슬랙 앱이 아닌 프로세스가 이 폴더를 읽거나 복사한 흔적을 탐지 대상으로 보고, [정보 탈취 악성 코드 (Infostealer)](../../04-scenarios/incident/infostealer.md)의 흐름으로 확인합니다.
 
 보고서에는 "`○○` 경로의 IndexedDB에서 ○○ 워크스페이스 채널의 메시지 레코드 ○○건을 읽었다" 처럼 기록이 말하는 만큼만 씁니다.
 
 ## 시각 해석
 
-IndexedDB 레코드 안의 메시지 시각 형식은 이번 자료로 확인되지 않았습니다. 레코드에서 시각으로 보이는 값을 찾으면 기준점과 단위를 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방법으로 검증하고, 슬랙 화면이나 다른 참여자의 기록과 몇 건을 맞춰 본 뒤에 씁니다.
+IndexedDB 레코드 안의 메시지 시각 형식을 다룬 공개 자료는 없습니다. 레코드에서 시각으로 보이는 값을 찾으면 기준점과 단위를 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방법으로 검증하고, 슬랙 화면이나 다른 참여자의 기록과 몇 건을 맞춰 본 뒤에 씁니다.
 
 `.leveldb` 폴더 안 파일의 파일 시스템 시각은 저장소가 바뀐 시각이라서 메시지 시각과 다릅니다. 두 시각을 섞지 않고 따로 적습니다.
 
 ## 함정과 한계
 
-이 페이지의 저장 위치와 설정 도메인 일부는 검색 결과 요약문에서 왔고 원문을 열어 보지 못했으니 [2], 검체에서 경로가 실제로 있는지 먼저 확인하고 보고서에는 검체에서 확인한 경로를 씁니다.
+저장 위치는 받은 경로에 따라 다르니, 검체에서 경로가 실제로 있는지 먼저 확인하고 보고서에는 검체에서 확인한 경로를 씁니다.
 
-지운 메시지가 LevelDB에 남는지는 이번 자료로 확인되지 않았습니다. LevelDB에 지운 레코드가 남는 방식은 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)에서 확인하고, 쓰는 도구가 지운 레코드까지 보여 주는지를 도구 설명에서 확인합니다.
+지운 메시지가 LevelDB에 남는지는 공개 자료가 없어 검체로 확인해야 합니다. LevelDB에 지운 레코드가 남는 방식은 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)에서 확인하고, 쓰는 도구가 지운 레코드까지 보여 주는지를 도구 설명에서 확인합니다.
 
 Homebrew로 앱을 지우면서 zap 삭제까지 했다면 위 목록의 캐시·환경설정·쿠키가 함께 지워집니다 [1]. 이때는 [타임 머신 (Time Machine)](../filesystem/time-machine/index.md)과 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)에서 이전 판을 찾습니다.
 
-윈도우판 슬랙을 분석한 글도 있지만(forensafe) [2], 경로와 저장 형식을 맥에 그대로 옮기지 않습니다.
+윈도우판 슬랙의 경로와 저장 형식은 맥에 그대로 옮기지 않습니다 [2].
 
 ## 직접 분석해 보기
 

@@ -27,10 +27,10 @@ macOS 13부터 BTM이 로그인 항목과 실행 에이전트·데몬을 관리�
 
 | macOS | 파일 이름 [3] |
 |---|---|
-| 13.0 | `BackgroundItems-v*.btm` (번호는 README에 적히지 않음) |
+| 13.0 | `BackgroundItems-v*.btm` (번호는 검체에서 확인) |
 | 13.1 | `BackgroundItems-v7.btm` |
 
-DumpBTM README의 다른 곳에는 `BackgroundItems-v4.btm` 이라는 이름도 나오고 [3], macOS 13.2 이후의 번호는 이 페이지의 출처로 확인하지 못했습니다. DumpBTM은 그 폴더에서 `.btm` 으로 끝나는 파일 목록의 마지막 것을 골라 읽으므로 [4], 수집할 때는 폴더 안의 `.btm` 파일을 모두 가져오고 어느 파일을 분석했는지 기록합니다.
+`BackgroundItems-v4.btm` 이라는 이름도 쓰였고 [3], macOS 13.2 이후의 번호는 검체에서 확인합니다. DumpBTM은 그 폴더에서 `.btm` 으로 끝나는 파일 목록의 마지막 것을 골라 읽으므로 [4], 수집할 때는 폴더 안의 `.btm` 파일을 모두 가져오고 어느 파일을 분석했는지 기록합니다.
 
 ## 구조
 
@@ -43,9 +43,9 @@ DumpBTM README의 다른 곳에는 `BackgroundItems-v4.btm` 이라는 이름도 
 | `itemsByUserIdentifier` | 키는 사용자 UUID, 값은 `ItemRecord` 배열 |
 | `mdmPayloadsByIdentifier` | MDM 페이로드 |
 
-사용자 UUID는 UID가 아니라서 따로 풀어야 하고, DumpBTM은 Open Directory에서 GUID 속성(kODAttributeTypeGUID)으로 사용자를 찾아 UniqueID를 읽습니다 [4]. 디스크 이미지에서는 [사용자 계정 (Local Accounts)](../../system-account/user-accounts/index.md)의 계정 기록과 맞춰 풀고, UUID와 UID의 차이는 [식별자 읽기 (UUID·UID·GUID)](../../../01-foundations/value-decoding/uuid-uid.md)에 있습니다.
+사용자 UUID는 UID가 아니라서 따로 풀어야 하고, Open Directory에서 GUID 속성(kODAttributeTypeGUID)으로 사용자를 찾아 UniqueID를 읽으면 풀립니다 [4]. 디스크 이미지에서는 [사용자 계정 (Local Accounts)](../../system-account/user-accounts/index.md)의 계정 기록과 맞춰 풀고, UUID와 UID의 차이는 [식별자 읽기 (UUID·UID·GUID)](../../../01-foundations/value-decoding/uuid-uid.md)에 있습니다.
 
-`ItemRecord` 하나가 등록 항목 하나이고, 속성은 아래와 같습니다 [4]. 내용 칸 가운데 [4]에 따로 설명이 없는 것은 속성 이름을 풀어 옮긴 것입니다.
+`ItemRecord` 하나가 등록 항목 하나이고, 속성은 아래와 같습니다 [4].
 
 | 속성 | 내용 |
 |---|---|
@@ -77,7 +77,7 @@ DumpBTM README의 다른 곳에는 `BackgroundItems-v4.btm` 이라는 이름도 
 | 0x10000 | legacy |
 | 0x80000 | curated |
 
-표에 없는 비트(0x1 등)의 뜻은 확인하지 못했습니다. 그런 비트가 켜져 있으면 값을 그대로 적고 뜻을 짐작하지 않습니다.
+표에 없는 비트(0x1 등)는 뜻이 공개되지 않았으므로, 켜져 있으면 값을 그대로 적고 뜻을 짐작하지 않습니다.
 
 ### disposition 비트
 
@@ -99,7 +99,7 @@ disposition 0x3     = 0x1 (enabled) + 0x2 (allowed), 0x4 꺼짐 (visible), 0x8 �
 
 ## MDM 규칙
 
-Apple 문서는 MDM의 `com.apple.servicemanagement` 페이로드에 들어가는 규칙을 아래처럼 적고, 규칙마다 종류(`RuleType`)와 값(`RuleValue`), 선택 항목 `Comment` 가 있습니다 [1].
+MDM의 `com.apple.servicemanagement` 페이로드에 들어가는 규칙은 아래와 같고, 규칙마다 종류(`RuleType`)와 값(`RuleValue`), 선택 항목 `Comment` 가 있습니다 [1].
 
 | RuleType | 맞추는 대상 [1] |
 |---|---|
@@ -109,7 +109,7 @@ Apple 문서는 MDM의 `com.apple.servicemanagement` 페이로드에 들어가�
 | `Label` | plist `Label` 과 정확히 일치 |
 | `LabelPrefix` | plist `Label` 앞부분 |
 
-BTM 파일의 `mdmPayloadsByIdentifier` 에 페이로드가 들어 있으면 관리 규칙이 걸린 맥이라서, 항목의 상태를 사용자가 한 일로 읽기 전에 규칙과 먼저 맞춰 봅니다(필자 해석). 프로파일 자체는 [구성 프로파일 (Configuration Profiles·MDM)](../configuration-profiles.md)에서 확인합니다.
+BTM 파일의 `mdmPayloadsByIdentifier` 에 페이로드가 들어 있으면 관리 규칙이 걸린 맥이라서, 항목의 상태를 사용자가 한 일로 읽기 전에 규칙과 먼저 맞춰 봅니다. 프로파일 자체는 [구성 프로파일 (Configuration Profiles·MDM)](../configuration-profiles.md)에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -119,15 +119,15 @@ BTM 파일의 `mdmPayloadsByIdentifier` 에 페이로드가 들어 있으면 관
 
 ## 시각 해석
 
-DumpBTM이 읽는 `ItemRecord` 속성에는 시각 필드가 없습니다 [4]. 그래서 이 기록만으로는 항목이 언제 등록됐는지, 사용자가 언제 알림을 처리했는지를 말할 수 없습니다. 파일의 다른 곳에 시각 정보가 있는지는 이 페이지의 출처로 확인하지 못했으므로, 시기는 `.btm` 파일의 파일 시스템 시각, 항목이 가리키는 plist와 실행 파일의 시각, 통합 로그 같은 다른 기록으로 좁힙니다. 여러 기록을 한 시간축에 놓는 방법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에 있습니다.
+DumpBTM이 읽는 `ItemRecord` 속성에는 시각 필드가 없습니다 [4]. 그래서 이 기록만으로는 항목이 언제 등록됐는지, 사용자가 언제 알림을 처리했는지를 말할 수 없습니다. 파일의 다른 곳에 시각 정보가 있는지는 공개 자료가 없으므로, 시기는 `.btm` 파일의 파일 시스템 시각, 항목이 가리키는 plist와 실행 파일의 시각, 통합 로그 같은 다른 기록으로 좁힙니다. 여러 기록을 한 시간축에 놓는 방법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에 있습니다.
 
 ## 함정과 한계
 
-`sfltool resetbtm` 은 로그인·백그라운드 항목 데이터를 초기화하는 명령이라서 [1], 라이브 시스템에서 수집하기 전에 실행하면 기록을 스스로 지우게 됩니다(필자 해석, [1]의 설명에서 도출). 반대로 조사 대상 맥에 이 명령을 실행한 흔적이 있으면 기록이 초기화됐을 가능성을 염두에 두고 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)를 함께 봅니다.
+`sfltool resetbtm` 은 로그인·백그라운드 항목 데이터를 초기화하는 명령이라서 [1], 라이브 시스템에서 수집하기 전에 실행하면 기록을 스스로 지우게 됩니다. 반대로 조사 대상 맥에 이 명령을 실행한 흔적이 있으면 기록이 초기화됐을 가능성을 염두에 두고 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)를 함께 봅니다.
 
-DumpBTM은 `/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Resources/backgroundtaskmanagementd` 를 dlopen해 클래스 정의를 얻은 뒤 파일을 풀기 때문에 macOS 위에서 도는 도구입니다 [4]. macOS가 아닌 분석 환경에서 일반 plist 도구로 풀었을 때 어떤 모습인지는 확인하지 못했고, 다른 도구로 푼 결과는 macOS 위의 DumpBTM이나 `sfltool dumpbtm` 결과와 맞춰 봅니다.
+DumpBTM은 `/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Resources/backgroundtaskmanagementd` 를 dlopen해 클래스 정의를 얻은 뒤 파일을 풀기 때문에 macOS 위에서 도는 도구입니다 [4]. macOS가 아닌 분석 환경에서 일반 plist 도구 같은 다른 도구로 푼 결과는 macOS 위의 DumpBTM이나 `sfltool dumpbtm` 결과와 맞춰 봅니다.
 
-파일 버전이 macOS 업데이트에 따라 바뀌므로, 위 구조가 모든 버전에 그대로 맞는다고 가정하지 않습니다. 구조를 확인한 범위는 DumpBTM 소스(2023-01-20)까지입니다.
+파일 버전이 macOS 업데이트에 따라 바뀌므로, 위 구조가 모든 버전에 그대로 맞는다고 가정하지 않습니다. 위 구조는 DumpBTM 소스(2023-01-20) 기준입니다.
 
 ## 직접 분석해 보기
 
@@ -139,7 +139,7 @@ sfltool dumpbtm
 
 **공개 도구.** DumpBTM은 `sfltool dumpbtm` 의 오픈소스판이고 [3], 파일을 읽으려면 전체 디스크 접근 권한이 필요합니다 [3]. 수집한 `.btm` 파일을 분석용 macOS에서 풀어 항목마다 `type`·`disposition` 을 위 표로 해석하고, agent·daemon 항목의 `url` 을 이미지 속 plist와 맞춰 봅니다.
 
-**로그.** Apple 문서는 Console에서 `subsystem:backgroundtaskmanagement` 와 `category:mcx` 로 거르는 예를 들고, 터미널에서는 서브시스템을 `com.apple.backgroundtaskmanagement`, 범주를 `mcx` 로 거르는 `log stream` 예를 듭니다 [1]. 이 예는 MDM 규칙이 적용되는지 확인하는 용도이고, 등록·승인 때 남는 로그 문구는 이 페이지의 출처로 확인하지 못했습니다. 로그 형식은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에 있습니다. Apple 문서는 도우미가 어느 앱에 딸렸는지 적은 귀속 (attribution) 정보가 `/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/Resources/attributions.plist` 에 있다고 적습니다 [1].
+**로그.** Console에서는 `subsystem:backgroundtaskmanagement` 와 `category:mcx` 로 거르고, 터미널에서는 서브시스템을 `com.apple.backgroundtaskmanagement`, 범주를 `mcx` 로 거르는 `log stream` 을 씁니다 [1]. 이 필터는 MDM 규칙이 적용되는지 확인하는 용도이고, 등록·승인 때 남는 로그 문구는 검체에서 확인합니다. 로그 형식은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에 있습니다. 도우미가 어느 앱에 딸렸는지 적은 귀속 (attribution) 정보는 `/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/Resources/attributions.plist` 에 있습니다 [1].
 
 ## 교차 검증
 

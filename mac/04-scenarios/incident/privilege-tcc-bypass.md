@@ -19,7 +19,7 @@ OS 버전에 따라 TCC 데이터베이스의 `access` 표 구조가 다릅니�
 | 10.15 Catalina 이하 | `last_modified`, `service`, `client`, `client_type`, `allowed`, `prompt_count`, `indirect_object_identifier` | `allowed` 0=거부, 1=허용 |
 | 11 Big Sur 이상 | `last_modified`, `service`, `client`, `client_type`, `auth_value`, `auth_reason`, `indirect_object_identifier` | `auth_value` 0=거부, 2=허용 |
 
-출처는 mac_apt TCC 플러그인입니다 [2]. `auth_value` 의 1 과 3, `auth_reason` 값마다의 뜻, `client_type` 값의 뜻은 이 출처로 확인하지 못해서 [개인 정보 보호 권한](../../02-artifacts/credentials/tcc/index.md) 페이지를 따릅니다.
+`auth_value` 의 1 과 3, `auth_reason` 값마다의 뜻, `client_type` 값의 뜻은 [개인 정보 보호 권한](../../02-artifacts/credentials/tcc/index.md) 페이지를 따릅니다.
 
 TCC 데이터베이스는 사용자별 파일과 시스템 파일 두 가지라서 둘 다 수집합니다 [2].
 
@@ -66,19 +66,19 @@ SQLite 를 여는 주의점은 [SQLite 데이터베이스](../../01-foundations/
 1. OS 버전과 사용자 목록을 정리하고, 시스템 TCC 데이터베이스와 사용자마다의 TCC 데이터베이스를 모두 사본으로 확보합니다.
 2. 칸 이름으로 버전 갈래를 정하고, 허용된 행만 추려 `last_modified` 순으로 정렬합니다.
 3. 조사 시간대, 곧 [악성 코드는 어디서 들어왔나](initial-access.md) 에서 정한 유입 시각 이후에 바뀐 행을 먼저 봅니다.
-4. 각 행의 `client` 가 번들 ID 모양인지 경로 모양인지 나눠 보고, 실행 파일을 찾아 서명과 번들 정보를 확인합니다. `client_type` 값의 뜻은 확인하지 못해서 이 단계의 기준으로 쓰지 않습니다.
-5. 수상한 행을 가립니다. `client` 가 `/tmp` 나 `/Users/Shared` 같은 곳의 경로이거나, 서명 없는 도구에 `kTCCServiceSystemPolicyAllFiles` 가 허용된 행은 수상하게 봅니다(필자 판단).
+4. 각 행의 `client` 가 번들 ID 모양인지 경로 모양인지 나눠 보고, 실행 파일을 찾아 서명과 번들 정보를 확인합니다. `client_type` 값은 이 단계의 기준으로 쓰지 않습니다.
+5. 수상한 행을 가립니다. `client` 가 `/tmp` 나 `/Users/Shared` 같은 곳의 경로이거나, 서명 없는 도구에 `kTCCServiceSystemPolicyAllFiles` 가 허용된 행은 수상하게 봅니다.
 6. 관리자 권한 쪽을 확인합니다. 관리자 그룹 구성과 새 계정은 [사용자 계정](../../02-artifacts/system-account/user-accounts/index.md) 에서, 관리자 권한 사용 기록은 [통합 로그에서 찾을 것](../../02-artifacts/logs/unified-log-events/index.md) 에서 봅니다.
-7. 권한 상승 앞 단계로 사용자 암호를 받아 낸 흔적이 있는지 봅니다. 가짜 암호 창으로 받은 암호를 확인하는 동작은 [정보 탈취 악성 코드](infostealer.md) 에 정리했고, 필자 해석으로는 이 동작을 권한 상승 앞 단계로 봅니다.
+7. 권한 상승 앞 단계로 사용자 암호를 받아 낸 흔적이 있는지 봅니다. 가짜 암호 창으로 받은 암호를 확인하는 동작은 [정보 탈취 악성 코드](infostealer.md) 에 정리했습니다. 이 동작은 권한 상승 앞 단계로 볼 수 있습니다.
 8. TCC 행의 시각, 계정 변경, 실행 기록을 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올립니다.
 
 ## 흔한 오판
 
 - **사용자 TCC 데이터베이스에 전체 디스크 접근 행이 없으니 그 권한이 없었다고 보는 경우.** 전체 디스크 접근은 시스템 쪽 파일에만 기록됩니다 [1].
 - **`auth_value` 1 을 허용으로 읽는 경우.** 10.15 이하의 `allowed` 는 1 이 허용이지만, 11 이상의 `auth_value` 는 2 가 허용입니다 [2]. 두 칸의 값 체계가 달라서 칸 이름부터 확인합니다.
-- **`last_modified` 를 권한을 처음 준 시각으로 쓰는 경우.** 필자 해석으로는 칸 이름대로 그 행이 마지막으로 바뀐 시각이라서, 처음 허용한 시각으로 단정하지 않습니다.
+- **`last_modified` 를 권한을 처음 준 시각으로 쓰는 경우.** 칸 이름으로 보아 그 행이 마지막으로 바뀐 시각일 가능성이 커서, 처음 허용한 시각으로 단정하지 않습니다.
 - **mac_apt 결과에 없으니 권한이 없었다고 보는 경우.** mac_apt 는 기기 관리로 내려준 권한 파일을 읽지 않습니다 [2].
-- **수상한 경로의 허용 행을 곧바로 우회로 쓰는 경우.** 사용자가 직접 허용했을 수도 있어서, 같은 행의 `auth_reason` 값의 뜻을 [개인 정보 보호 권한](../../02-artifacts/credentials/tcc/index.md) 페이지에서 확인한 뒤에 씁니다. 5단계의 기준은 필자 판단이라 보고서에는 판단 근거와 함께 적습니다.
+- **수상한 경로의 허용 행을 곧바로 우회로 쓰는 경우.** 사용자가 직접 허용했을 수도 있어서, 같은 행의 `auth_reason` 값의 뜻을 [개인 정보 보호 권한](../../02-artifacts/credentials/tcc/index.md) 페이지에서 확인한 뒤에 씁니다. 5단계의 기준은 정해진 규칙이 아니라 판단이므로 보고서에는 판단 근거와 함께 적습니다.
 - **시스템 TCC 데이터베이스 경로를 폴더 없이 적는 경우.** 개요 글 가운데 `/Library/Application Support/com.apple.TCC.db` 처럼 폴더 이름이 빠진 표기가 있는데 [1], 도구가 실제로 읽는 경로는 `com.apple.TCC` 폴더 안의 `TCC.db` 입니다 [2].
 
 ## 보고서 문장 예

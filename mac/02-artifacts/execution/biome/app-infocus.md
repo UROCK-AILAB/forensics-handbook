@@ -11,30 +11,30 @@ nav_order: 720
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Apple의 "System Events" plist는 이 사건을 "Event capturing an Applications transition to focal application state. Includes bundle identifier and reason for transition." 이라고 설명합니다 [2]. 앱이 초점을 받는 상태로 바뀌는 순간을 잡는 사건이고, 번들 ID와 바뀐 이유가 함께 들어간다는 뜻입니다. 연구자 Mattia Epifani는 이 스트림이 knowledgeC 시절의 `_DKEvent.App.InFocus` 와 비슷해 보인다고 평가했습니다 [2]. `_DK` 접두어는 Duet Knowledge(CoreDuet Knowledge)를 뜻하고 Apple의 비공개 CoreDuet 프레임워크와 관련됩니다 [2].
+이 사건은 앱이 초점을 받는 상태로 바뀌는 순간을 잡고, 번들 ID와 바뀐 이유를 함께 담습니다 [2]. 이 스트림이 knowledgeC 시절의 `_DKEvent.App.InFocus` 와 비슷하다는 해석이 있습니다 [2]. `_DK` 접두어는 Duet Knowledge(CoreDuet Knowledge)를 뜻하고 Apple의 비공개 CoreDuet 프레임워크와 관련됩니다 [2].
 
 스트림 폴더 구조, SEGB 파일 안에서 기록과 상태 값을 찾는 법은 [저장 위치와 스트림 (Streams)](streams.md)에서 다루고, 이 페이지는 기록 안의 데이터와 그 해석을 다룹니다.
 
 ## 위치와 버전별 차이
 
-iLEAPP은 아래 두 자리의 파일을 읽습니다 [1].
+스트림 파일은 아래 두 자리에 있습니다 [1].
 
 ```
 .../Biome/streams/restricted/App.InFocus/local/*
 .../Biome/streams/restricted/App.InFocus/remote/*
 ```
 
-macOS 사용자 기준으로는 `~/Library/Biome/streams/restricted/App.InFocus/local/` 이 되고, 이 경로는 mac_apt 코드가 조합하는 경로입니다 [3]. 실제 macOS 검체에서 이 자리를 확인한 자료는 찾지 못했고, 시스템 쪽(`/private/var/db/biome`)에도 이 스트림이 있는지 확인하지 못했습니다.
+macOS 사용자 기준으로는 `~/Library/Biome/streams/restricted/App.InFocus/local/` 이 됩니다 [3]. 시스템 쪽(`/private/var/db/biome`)에도 이 스트림이 있는지는 검체에서 확인합니다.
 
-버전별로는 iOS 표본에서 관찰한 차이만 있습니다 [1].
+버전별 차이는 iLEAPP 표본 이미지(iOS)에서 아래처럼 나타납니다 [1].
 
 | 대상 | App.InFocus | `_DKEvent.App.InFocus` |
 |---|---|---|
 | iOS 16.x (iLEAPP 표본 이미지 3개) | 0행 | 행 있음 |
 | iOS 17 이후 (iLEAPP 표본) | 행 있음 | 자료 없음 |
-| macOS | 확인 못 함 | 확인 못 함 |
+| macOS | 공개 자료 없음 | 공개 자료 없음 |
 
-기록 보존 기간은 iOS에서 28일로 관찰됐고 [2], 다른 스트림과의 비교는 [저장 위치와 스트림 (Streams)](streams.md)에 있습니다.
+iOS에서 기록은 28일 동안 남고 [2], 다른 스트림과의 비교는 [저장 위치와 스트림 (Streams)](streams.md)에 있습니다.
 
 ## 구조
 
@@ -49,13 +49,13 @@ macOS 사용자 기준으로는 `~/Library/Biome/streams/restricted/App.InFocus/
 | 9 | str | 이름 없이 형식만 지정 | CFBundleShortVersionString (앱 버전 문자열) |
 | 10 | str | 이름 없이 형식만 지정 | CFBundleVersion (앱 버전 문자열) |
 
-— 는 참고 자료에서 그 도구의 해석을 확인하지 못한 칸입니다. 필드 3의 이름 붙임은 두 도구가 비슷하지만, iLEAPP은 Foreground·Background라는 이름이 스트림 이름에서 나온 해석이라고 스스로 밝힙니다 [1]. Apple이 이 값의 뜻을 공개한 자료는 찾지 못했습니다. 필드 6은 iLEAPP이 번들 ID로, mac_apt가 `product_name` 으로 부르는 같은 칸이라서, 두 도구의 결과를 합칠 때 칸 이름이 달라도 같은 값인지 확인합니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
+— 는 그 도구의 해석이 공개되지 않은 칸입니다. 필드 3의 이름 붙임은 두 도구가 비슷하지만, Foreground·Background라는 이름은 스트림 이름에서 나온 iLEAPP의 해석입니다 [1]. 이 값의 뜻을 밝힌 Apple 공식 자료는 없습니다. 필드 6은 iLEAPP이 번들 ID로, mac_apt가 `product_name` 으로 부르는 같은 칸이라서, 두 도구의 결과를 합칠 때 칸 이름이 달라도 같은 값인지 확인합니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `local` 폴더에 기록이 있으면, 이 기기의 App.InFocus 스트림에 그 번들 ID와 상태 값이 그 시각으로 기록됐다는 사실을 보여 줍니다. 필드 9·10이 채워져 있으면 mac_apt 해석으로 기록 당시 앱의 버전 문자열도 함께 볼 수 있습니다 [3].
 
-**증명하지 못하는 것.** 상태 값 1이 "사용자가 앱을 앞에 띄웠다" 는 뜻인지는 도구 저자의 해석이고 [1][3], macOS에서 App.InFocus로 앱 실행을 증명한 실험·검증 자료는 찾지 못했습니다. 기록이 사용자 폴더에 있어도 그 시각에 앱을 조작한 사람이 누구인지는 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md)처럼 다른 자료로 따집니다. `remote` 폴더의 기록은 같은 계정의 다른 기기에서 일어난 사건이라서 이 맥에서 앱을 썼다는 근거가 되지 않습니다 [1].
+**증명하지 못하는 것.** 상태 값 1이 "사용자가 앱을 앞에 띄웠다" 는 뜻인지는 도구 저자의 해석이고 [1][3], macOS에서 App.InFocus로 앱 실행을 증명한 공개 검증 자료는 없습니다. 기록이 사용자 폴더에 있어도 그 시각에 앱을 조작한 사람이 누구인지는 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md)처럼 다른 자료로 따집니다. `remote` 폴더의 기록은 같은 계정의 다른 기기에서 일어난 사건이라서 이 맥에서 앱을 썼다는 근거가 되지 않습니다 [1].
 
 보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "사용자 폴더의 Biome App.InFocus 스트림 `local` 파일에, 번들 ID `com.example.app` 에 대해 상태 값 1(iLEAPP 해석 Foreground)인 기록이 있고, 기록 안의 시작 시각은 2024-09-02 19:59:50(UTC로 해석)이다" 처럼 씁니다. 날짜와 번들 ID는 아래 헥스 예시의 값입니다.
 
@@ -76,7 +76,7 @@ macOS 사용자 기준으로는 `~/Library/Biome/streams/restricted/App.InFocus/
 
 삭제 표시된 기록은 iLEAPP 결과에는 시각만 있는 행으로 나오고 mac_apt 결과에는 나오지 않아서, 같은 파일이라도 두 도구의 행 수가 다를 수 있습니다. 자세한 내용은 [저장 위치와 스트림 (Streams)](streams.md)의 "함정과 한계" 절에 있습니다.
 
-위 버전 표처럼 iOS 16.x 표본에서는 App.InFocus가 0행이었지만 같은 이미지의 `_DKEvent.App.InFocus` 에는 행이 있었습니다 [1]. 한 스트림이 비었다고 앱 사용 기록이 없다고 단정하지 않고, 아래 교차 검증 자료를 함께 봅니다. knowledgeC의 `/app/inFocus` 와 macOS에서 어떻게 대응하는지는 확인한 자료가 없습니다.
+위 버전 표처럼 iOS 16.x 표본에서는 App.InFocus가 0행이었지만 같은 이미지의 `_DKEvent.App.InFocus` 에는 행이 있었습니다 [1]. 한 스트림이 비었다고 앱 사용 기록이 없다고 단정하지 않고, 아래 교차 검증 자료를 함께 봅니다. knowledgeC의 `/app/inFocus` 와 macOS에서 어떻게 대응하는지는 공개 자료가 없습니다.
 
 ## 직접 분석해 보기
 
@@ -118,7 +118,7 @@ iLEAPP의 App.InFocus 모듈은 결과를 Timestamp, Start Time, SEGB State, Bun
 | 7.2.3 | 전환 (transition) |
 | 8 | 쓰기 시각 (double) |
 
-`ScreenTime.AppUsage` 스트림에도 앱 사용 흔적이 남습니다. mac_apt는 필드 1을 상태(0 = Out of focus, 1 = In focus), 필드 3을 번들 ID로 읽습니다 [3]. iLEAPP은 이 스트림의 사건 코드 뜻이 문서화돼 있지 않다며 저장된 값을 그대로 보고하고, 기록 안의 시각 필드는 믿을 수 없어서 SEGB 기록 시각을 씁니다 [1].
+`ScreenTime.AppUsage` 스트림에도 앱 사용 흔적이 남습니다. mac_apt는 필드 1을 상태(0 = Out of focus, 1 = In focus), 필드 3을 번들 ID로 읽습니다 [3]. 이 스트림의 사건 코드 뜻은 문서화돼 있지 않고 기록 안의 시각 필드는 믿기 어려워서, iLEAPP은 저장된 값을 그대로 보고하고 SEGB 기록 시각을 씁니다 [1].
 
 그 밖에 함께 볼 자료는 아래와 같습니다.
 

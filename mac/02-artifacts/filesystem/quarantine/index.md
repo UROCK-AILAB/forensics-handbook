@@ -14,9 +14,9 @@ has_toc: false
 
 파일이 어디서 들어왔는지는 악성 코드의 침입 경로를 찾을 때나 자료가 들어온 경위를 따질 때 먼저 묻는 질문이고, 격리 기록은 그 답을 두 곳에 나눠 남깁니다. 파일에 붙는 확장 속성 `com.apple.quarantine` 에는 받은 앱 이름과 격리 시각이 들어 있고, 사용자별 SQLite DB `QuarantineEventsV2` 에는 받은 파일 URL·원래 페이지 URL·격리 이유가 한 행씩 남습니다 [1][2]. 확장 속성의 마지막 칸인 UUID가 DB의 `LSQuarantineEventIdentifier` 와 같은 값이라서, 파일에서 출발해 다운로드 출처까지 따라갈 수 있습니다 [1][2].
 
-격리 속성은 Gatekeeper가 앱을 처음 열 때 무엇을 확인할지 정하는 기준이기도 합니다. Gatekeeper는 격리 속성에 격리 플래그가 서 있는 앱에만 첫 실행 확인을 더 요구하고, 격리 속성이 없는 앱은 공증 확인만 거친 뒤 사용자 조치 없이 실행됩니다 [6]. Apple은 Gatekeeper가 인터넷에서 받은 소프트웨어를 처음 열 때 사용자 승인을 요청하고, 처음 열 때는 어떤 경로로 들어왔든 모든 소프트웨어를 알려진 악성 코드인지 검사한다고 설명합니다 [4]. 격리 속성이 남아 있는지와 플래그가 어떻게 바뀌었는지는 사용자가 앱을 열면서 어떤 확인을 거쳤는지 따져 볼 단서가 됩니다.
+격리 속성은 Gatekeeper가 앱을 처음 열 때 무엇을 확인할지 정하는 기준이기도 합니다. Gatekeeper는 격리 속성에 격리 플래그가 서 있는 앱에만 첫 실행 확인을 더 요구하고, 격리 속성이 없는 앱은 공증 확인만 거친 뒤 사용자 조치 없이 실행됩니다 [6]. Gatekeeper는 인터넷에서 받은 소프트웨어를 처음 열 때 사용자 승인을 요청하고, 처음 열 때는 어떤 경로로 들어왔든 모든 소프트웨어를 알려진 악성 코드인지 검사합니다 [4]. 격리 속성이 남아 있는지와 플래그가 어떻게 바뀌었는지는 사용자가 앱을 열면서 어떤 확인을 거쳤는지 따져 볼 단서가 됩니다.
 
-사용자가 System Settings의 Privacy & Security에서 "Open Anyway" 를 누르면 그 앱은 보안 설정의 예외로 저장되고, 그 뒤로는 더블클릭으로 열 수 있습니다 [5]. 로컬에서 빌드해 ad hoc 서명한 앱은 격리되지 않아서 예전처럼 실행됩니다 [6]. 격리 판단이 통합 로그의 어느 서브시스템에 남는지는 확인하지 못했고, 로그 쪽은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에서 다룹니다.
+사용자가 System Settings의 Privacy & Security에서 "Open Anyway" 를 누르면 그 앱은 보안 설정의 예외로 저장되고, 그 뒤로는 더블클릭으로 열 수 있습니다 [5]. 로컬에서 빌드해 ad hoc 서명한 앱은 격리되지 않아서 예전처럼 실행됩니다 [6]. 통합 로그 쪽은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에서 다룹니다.
 
 ## 한눈에 보기
 
@@ -26,7 +26,7 @@ has_toc: false
 | `com.apple.provenance` | 격리를 통과한 앱의 확장 속성(macOS 13 Ventura부터) | ExecPolicy DB의 행을 가리키는 키 [3] | 그 자체로는 번들 ID·cdhash(ExecPolicy DB에서 찾음) |
 | 격리 이벤트 DB `QuarantineEventsV2` | `~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2` | 받은 앱, 받은 파일 URL, 원래 페이지 URL, 격리 이유, 격리 시각(맥 절대 시각) [2] | 파일을 열었는지, 파일이 지금도 있는지 |
 
-격리·Gatekeeper 쪽에서 버전마다 달라진 점 가운데 출처로 확인한 것은 아래와 같고, 다른 버전의 변화는 확인하지 못했습니다.
+격리·Gatekeeper 쪽에서 버전마다 달라진 점은 아래와 같습니다.
 
 | macOS 버전 | 달라진 점 |
 |---|---|

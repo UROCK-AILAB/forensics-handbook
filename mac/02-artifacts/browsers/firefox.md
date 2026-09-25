@@ -14,11 +14,11 @@ nav_order: 1270
 
 다운로드 기록은 옛 버전에서 `downloads.sqlite` 에 따로 쌓였고, 이후 버전에서는 `places.sqlite` 로 옮겨졌습니다 [1][4]. 지금 버전에서는 파일을 받으면 방문 기록에 다운로드 종류(값 7)의 방문이 한 행 남습니다 [3]. 쿠키는 `cookies.sqlite` 에, 부가 기능과 확장 목록은 `addons.json`·`extensions.json` 에 들어 있습니다 [4].
 
-이 밖에도 양식 자동 완성(`formhistory.sqlite`), 파비콘(`favicons.sqlite`), 열린 탭과 창을 되살리는 세션 파일(`sessionstore.jsonlz4`), 저장된 비밀번호(`logins.json`)와 그 키(`key4.db`) 같은 파일이 프로필 폴더에 있다고 널리 알려져 있지만, 이 페이지의 출처로는 확인하지 못해서 구조를 적지 않습니다. 저장된 비밀번호를 사고 대응에서 어떻게 다루는지는 [저장된 암호 (Passwords·iCloud Keychain)](../credentials/saved-passwords.md)에서 다룹니다.
+이 밖에도 양식 자동 완성(`formhistory.sqlite`), 파비콘(`favicons.sqlite`), 열린 탭과 창을 되살리는 세션 파일(`sessionstore.jsonlz4`), 저장된 비밀번호(`logins.json`)와 그 키(`key4.db`) 같은 파일도 프로필 폴더에 있다고 알려져 있고, 이 파일들의 구조는 이 페이지에서 다루지 않습니다. 저장된 비밀번호를 사고 대응에서 어떻게 다루는지는 [저장된 암호 (Passwords·iCloud Keychain)](../credentials/saved-passwords.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-프로필 파일은 사용자 홈의 `Library/Application Support/Firefox/Profiles` 아래 프로필 폴더마다 따로 있고 [1][4], 캐시는 같은 이름의 프로필 폴더를 `Library/Caches` 아래에 따로 만들어 둡니다 [1][4]. ForensicArtifacts 정의는 프로필 폴더 이름을 와일드카드로 잡아 모든 프로필을 훑습니다 [4].
+프로필 파일은 사용자 홈의 `Library/Application Support/Firefox/Profiles` 아래 프로필 폴더마다 따로 있고 [1][4], 캐시는 같은 이름의 프로필 폴더를 `Library/Caches` 아래에 따로 만들어 둡니다 [1][4]. 수집할 때는 프로필 폴더 이름을 와일드카드로 잡아 모든 프로필을 훑습니다 [4].
 
 | 기록 | 위치 | 알려 주는 것 |
 |---|---|---|
@@ -29,14 +29,14 @@ nav_order: 1270
 | 캐시 (Firefox 32 이후) | `~/Library/Caches/Firefox/Profiles/*/cache2/` 와 그 아래 `entries/`, `doomed/` [1][4] | 내려받아 둔 웹 콘텐츠 |
 | 캐시 (옛 형식) | `~/Library/Caches/Firefox/Profiles/*/Cache/` [1] | 옛 버전의 캐시 |
 
-ForensicArtifacts 정의는 프로필 폴더 이름으로 `*.default` 와 `*.default-*` 두 패턴을 함께 적고 있어서 [4], 이름 끝에 `.default` 만 붙은 폴더와 `.default-` 뒤에 글자가 더 붙은 폴더를 모두 찾아야 합니다. 한 계정 안에 프로필 폴더가 여러 개 있으면 기록 묶음도 그만큼 여러 개입니다.
+프로필 폴더 이름에는 `*.default` 와 `*.default-*` 두 패턴이 있어서 [4], 이름 끝에 `.default` 만 붙은 폴더와 `.default-` 뒤에 글자가 더 붙은 폴더를 모두 찾아야 합니다. 한 계정 안에 프로필 폴더가 여러 개 있으면 기록 묶음도 그만큼 여러 개입니다.
 
-macOS 10.15 Catalina 이후 맥 버전에 따라 이 경로가 바뀐다는 자료는 찾지 못했고, 출처에 나오는 변화는 모두 파이어폭스 버전에 따른 것입니다.
+알려진 경로 변화는 macOS 버전이 아니라 모두 파이어폭스 버전에 따른 것입니다.
 
 | 파이어폭스 버전 | 바뀐 점 |
 |---|---|
 | Firefox 3부터 | 방문 기록을 `places.sqlite` 에 저장 [1] |
-| Firefox 21 이하 | 출처 [1]은 이 범위까지 다운로드 기록이 `downloads.sqlite` 에 있다고 적고, 그 뒤로는 `places.sqlite` 로 옮겨졌다고 적음 [1]. 정확한 전환 버전은 이 페이지 출처로 확정하지 못함 |
+| Firefox 21 이하 | 다운로드 기록이 `downloads.sqlite` 에 있고, 그 뒤로는 `places.sqlite` 로 옮겨짐 [1]. 정확한 전환 버전은 공개 자료 없음 |
 | Firefox 32부터 | 캐시 폴더가 `Cache/` 에서 `cache2/` 로 바뀜 [1] |
 | 최근 버전 | `moz_places`·`moz_origins` 뒤쪽 칸(`alt_frecency`, `recalc_alt_frecency` 등)은 2026-09 무렵 소스 기준이라 오래된 DB에는 없을 수 있음 [2] |
 
@@ -54,12 +54,12 @@ macOS 10.15 Catalina 이후 맥 버전에 따라 이 경로가 바뀐다는 자�
 | `moz_origins` | `id`, `prefix`, `host`, `frecency`, `block_until_ms`, `block_pages_until_ms` | `prefix` 와 `host` 로 나눈 출처 단위 행 [2] |
 | `moz_annos`, `moz_anno_attributes` | `place_id`, `anno_attribute_id`, `content`, `dateAdded`, `lastModified` / `id`, `name` | 페이지에 붙은 주석과 주석 이름 [2] |
 | `moz_items_annos` | `moz_annos` 와 같고 `place_id` 대신 `item_id` | `item_id` 가 가리키는 항목에 붙은 주석 [2] |
-| `moz_inputhistory` | `place_id`, `input`, `use_count` | 입력 글자(`input`)와 사용 횟수. 주소창 입력과 고른 결과라고 알려져 있지만 뜻풀이는 확인하지 못함 [2] |
+| `moz_inputhistory` | `place_id`, `input`, `use_count` | 입력 글자(`input`)와 사용 횟수. 주소창 입력과 고른 결과로 알려져 있음 [2] |
 | `moz_keywords` | `id`, `keyword`, `place_id`, `post_data` | 키워드 [2] |
-| `moz_bookmarks_deleted` | `guid`, `dateRemoved` | 칸 이름으로 보아 지운 북마크의 `guid` 와 지운 시각. 뜻과 시각 단위는 확인하지 못함 [2] |
+| `moz_bookmarks_deleted` | `guid`, `dateRemoved` | 칸 이름으로 보아 지운 북마크의 `guid` 와 지운 시각. 시각 단위는 검체에서 확인 [2] |
 | `moz_places_metadata` | `place_id`, `referrer_place_id`, `created_at`, `updated_at`, `total_view_time`, `typing_time`, `key_presses`, `scrolling_time`, `scrolling_distance`, `document_type`, `search_query_id` | 칸 이름으로 보아 페이지를 본 시간과 입력·스크롤 양 [2] |
 
-`moz_places_metadata` 의 시간 칸 단위와 이 표가 들어온 버전은 확인하지 못했으므로, 보고서에 옮길 때는 실물 값의 크기를 보고 단위를 따로 확인합니다. `from_visit` 는 칸 이름대로 바로 앞 방문의 `id` 로 보고 방문 흐름을 이어 붙이는 데 흔히 쓰지만, 이 풀이는 소스의 칸 이름에서 읽은 것입니다 [2]. 다운로드한 파일의 저장 경로가 `moz_annos` 에 `downloads/destinationFileURI` 같은 이름으로 남는다고 알려져 있지만 이 페이지 출처로는 확인하지 못했습니다.
+`moz_places_metadata` 의 시간 칸 단위와 이 표가 들어온 버전은 공개 자료가 없어서, 보고서에 옮길 때는 실물 값의 크기를 보고 단위를 따로 확인합니다. `from_visit` 는 칸 이름대로 바로 앞 방문의 `id` 로 보고 방문 흐름을 이어 붙이는 데 흔히 쓰지만, 칸 이름에서 나온 풀이입니다 [2]. 다운로드한 파일의 저장 경로가 `moz_annos` 에 `downloads/destinationFileURI` 같은 이름으로 남는다고 알려져 있어서, 검체의 `moz_annos` 에서 확인합니다.
 
 방문 종류는 `moz_historyvisits.visit_type` 에 숫자로 들어갑니다 [3].
 
@@ -75,13 +75,13 @@ macOS 10.15 Catalina 이후 맥 버전에 따라 이 경로가 바뀐다는 자�
 | 8 | `TRANSITION_FRAMED_LINK` | 링크를 따라가 프레임 안에서 방문 |
 | 9 | `TRANSITION_RELOAD` | 새로 고침 |
 
-2026-09 무렵 소스에는 1부터 9까지만 정의돼 있고 [3], 표에 없는 값이 나오면 그 DB를 만든 파이어폭스 버전의 소스를 따로 봅니다. 값 4 방문은 DB에 쓰지 않고 메모리에만 둔다는 이야기가 있지만 이 페이지 출처로는 확인하지 못했으므로, 실물 DB에 값 4 행이 있는지 직접 세어 봅니다.
+2026-09 무렵 소스에는 1부터 9까지만 정의돼 있고 [3], 표에 없는 값이 나오면 그 DB를 만든 파이어폭스 버전의 소스를 따로 봅니다. 값 4 방문은 DB에 쓰지 않고 메모리에만 둔다는 이야기가 있어서, 실물 DB에 값 4 행이 있는지 직접 세어 봅니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `moz_historyvisits` 한 행은 그 프로필의 파이어폭스가 그 시각에 그 URL을 방문 기록으로 남겼다는 뜻이고, 방문 종류로 그 방문이 어떻게 일어났는지를 가릅니다. 값 2(`TYPED`)는 주소창에 직접 입력했거나 자동 완성 결과를 고른 방문이고 값 1(`LINK`)은 링크를 따라간 방문이라서 [3], 사용자가 그 주소를 알고 찾아갔는지를 따질 때 근거가 됩니다. 다만 값 2에는 방문 기록 사이드바나 방문 기록 메뉴에서 눌러 연 방문도 들어가므로 [3], 값 2만으로 주소를 손으로 쳤다고 단정하지는 않습니다. 값 7(`DOWNLOAD`)은 그 URL에서 다운로드가 일어났다는 기록이고 [3], 북마크 행은 그 URL을 북마크에 넣은 기록입니다.
 
-**증명하지 못하는 것.** 값 5·6은 서버가 보낸 리디렉션이라 사용자 행위가 아니고 [3], 값 4는 페이지 안의 이미지나 iframe 을 불러온 기록이라서 사용자가 그 URL을 직접 열었다는 근거가 되지 못합니다. 방문 기록은 누가 키보드 앞에 있었는지, 사용자가 화면을 실제로 읽었는지를 말하지 않으므로, 사람을 특정하려면 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)의 방법으로 다른 기록과 맞춰 봅니다. 다운로드 방문도 파일이 지금 디스크에 있다거나 실행됐다는 뜻은 아닙니다. 기록이 없다고 해서 방문하지 않았다고 말할 수도 없는데, 기록을 지웠거나 다른 프로필·다른 브라우저를 썼을 수 있고, 비공개 창 (Private Browsing) 방문이 이 DB에 남는지는 이 페이지 출처로 확인하지 못했습니다. 비공개 창 쪽은 [개인 정보 보호 브라우징으로 무엇을 했나 (Private Browsing)](../../04-scenarios/activity/private-browsing.md)에서 다룹니다.
+**증명하지 못하는 것.** 값 5·6은 서버가 보낸 리디렉션이라 사용자 행위가 아니고 [3], 값 4는 페이지 안의 이미지나 iframe 을 불러온 기록이라서 사용자가 그 URL을 직접 열었다는 근거가 되지 못합니다. 방문 기록은 누가 키보드 앞에 있었는지, 사용자가 화면을 실제로 읽었는지를 말하지 않으므로, 사람을 특정하려면 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)의 방법으로 다른 기록과 맞춰 봅니다. 다운로드 방문도 파일이 지금 디스크에 있다거나 실행됐다는 뜻은 아닙니다. 기록이 없다고 해서 방문하지 않았다고 말할 수도 없는데, 기록을 지웠거나 다른 프로필·다른 브라우저를 썼을 수 있고, 비공개 창 (Private Browsing) 방문이 이 DB에 남는지는 검체에서 따로 확인합니다. 비공개 창 쪽은 [개인 정보 보호 브라우징으로 무엇을 했나 (Private Browsing)](../../04-scenarios/activity/private-browsing.md)에서 다룹니다.
 
 보고서에는 "피조사자가 이 사이트에 접속했다" 보다 "이 계정의 파이어폭스 프로필에 이 URL을 방문 종류 2(주소창 입력·자동 완성·기록 목록 선택)로 연 방문 기록이 이 시각(UTC)에 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
@@ -89,24 +89,24 @@ macOS 10.15 Catalina 이후 맥 버전에 따라 이 경로가 바뀐다는 자�
 
 파이어폭스의 PRTime 은 1970-01-01 기준 **마이크로초**입니다 [3]. 유닉스 시각과 기준점은 같지만 단위가 초가 아니라 마이크로초이고, 같은 기준으로 밀리초를 쓰는 자바스크립트 Date 와도 단위가 다릅니다 [3]. `moz_historyvisits.visit_date` 는 1970-01-01 UTC 기준 마이크로초라서 [1], 현지 시각으로 옮길 때는 먼저 UTC 로 바꾼 뒤 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)에서 확인한 시간대를 적용합니다.
 
-| 칸 | 기준·단위 | 확인 정도 |
+| 칸 | 기준·단위 | 비고 |
 |---|---|---|
-| `moz_historyvisits.visit_date` | 1970-01-01 UTC, 마이크로초 | 확인 [1] |
-| `moz_places.last_visit_date` | PRTime(마이크로초)으로 알려짐 | 칸 이름만 확인 [2] |
-| `moz_bookmarks.dateAdded`, `lastModified` | PRTime(마이크로초)으로 알려짐 | 칸 이름만 확인 [2] |
-| `moz_annos.dateAdded`, `lastModified` | PRTime(마이크로초)으로 알려짐 | 칸 이름만 확인 [2] |
-| `moz_origins.block_until_ms`, `block_pages_until_ms` | 이름상 밀리초 | 칸 이름만 확인, 뜻은 확인 못 함 [2] |
+| `moz_historyvisits.visit_date` | 1970-01-01 UTC, 마이크로초 | [1] |
+| `moz_places.last_visit_date` | PRTime(마이크로초)으로 알려짐 | 단위는 검체에서 확인 [2] |
+| `moz_bookmarks.dateAdded`, `lastModified` | PRTime(마이크로초)으로 알려짐 | 단위는 검체에서 확인 [2] |
+| `moz_annos.dateAdded`, `lastModified` | PRTime(마이크로초)으로 알려짐 | 단위는 검체에서 확인 [2] |
+| `moz_origins.block_until_ms`, `block_pages_until_ms` | 이름상 밀리초 | 뜻은 공개 자료 없음 [2] |
 
 방문 한 번이 `moz_historyvisits` 한 행이라서 방문마다 `visit_date` 가 하나씩 있고 [2], `moz_places.last_visit_date` 는 URL 한 행에 하나뿐인 값이라 방문 흐름을 따질 때는 `visit_date` 를 씁니다. PRTime 은 2001 기준 맥 절대 시각과도, 크롬 계열의 1601 기준 시각과도 다르므로 [1][3], 사파리·크롬 기록과 한 타임라인에 놓을 때는 기준을 먼저 맞춥니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 정리돼 있습니다.
 
 ## 함정과 한계
 
-- **WAL 파일을 빼먹는 경우.** ForensicArtifacts 정의는 `places.sqlite-wal`, `cookies.sqlite-wal` 도 수집 대상으로 적고 있어서 [4], 본 DB만 복사하면 최근 기록이 빠질 수 있습니다. WAL 이 어떻게 동작하는지는 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
+- **WAL 파일을 빼먹는 경우.** `places.sqlite-wal`, `cookies.sqlite-wal` 도 수집 대상이라서 [4], 본 DB만 복사하면 최근 기록이 빠질 수 있습니다. WAL 이 어떻게 동작하는지는 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 - **캐시 위치를 놓치는 경우.** 캐시는 프로필 폴더가 아니라 `~/Library/Caches/Firefox/Profiles/` 아래에 있어서 [1][4], `Application Support` 쪽만 수집하면 캐시가 통째로 빠집니다.
 - **프로필이 여러 개인 경우.** 폴더 이름 패턴이 두 가지라서 [4] 한 패턴만 찾으면 다른 프로필을 놓칩니다.
 - **버전마다 다른 스키마.** 칸 목록은 최근 소스 기준이라 오래된 DB에는 일부 칸이 없고 [2], 옛 버전의 다운로드 기록은 `places.sqlite` 가 아닌 `downloads.sqlite` 에 있습니다 [1][4].
 - **리디렉션과 안쪽 콘텐츠 방문.** 방문 종류 5·6 행, 그리고 DB에 남아 있다면 4 행까지 사용자 방문으로 세면 방문 수가 부풀려집니다 [3].
-- **지우기와 조작.** 사용자가 기록을 지우거나 파이어폭스가 오래된 기록을 정리한 뒤에도 WAL 이나 DB의 빈 공간에 흔적이 남을 수 있다는 점은 SQLite 일반론이고, 파이어폭스에서 직접 확인한 자료는 이 페이지 출처에 없습니다. 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)를, 기록을 없애려 한 정황을 판단하는 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)를 봅니다.
+- **지우기와 조작.** 사용자가 기록을 지우거나 파이어폭스가 오래된 기록을 정리한 뒤에도 WAL 이나 DB의 빈 공간에 흔적이 남을 수 있다는 점은 SQLite 일반론이라서, 파이어폭스 DB에서 어디까지 남는지는 검체에서 확인합니다. 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)를, 기록을 없애려 한 정황을 판단하는 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)를 봅니다.
 
 ## 직접 분석해 보기
 
@@ -125,7 +125,7 @@ visit_date 를 8바이트 빅 엔디언으로 적은 모양 (예시)
 1970-01-01 00:00:00 UTC + 1700000000 초 = 2023-11-14 22:13:20 UTC
 ```
 
-같은 수를 초로 읽으면 말이 안 되는 먼 미래가 나오고, 맥 절대 시각이나 1601 기준으로 읽어도 엉뚱한 날짜가 나옵니다. 자릿수가 16자리 안팎이면 마이크로초를 먼저 의심합니다. 출처 [1]은 같은 계산을 파이썬으로 `datetime(1970,1,1) + timedelta(microseconds=값)` 처럼 적고 있습니다.
+같은 수를 초로 읽으면 말이 안 되는 먼 미래가 나오고, 맥 절대 시각이나 1601 기준으로 읽어도 엉뚱한 날짜가 나옵니다. 자릿수가 16자리 안팎이면 마이크로초를 먼저 의심합니다. 파이썬으로는 `datetime(1970,1,1) + timedelta(microseconds=값)` 처럼 계산합니다 [1].
 
 ### 공개 도구로 한 번
 
@@ -157,7 +157,7 @@ FROM moz_bookmarks AS b
 JOIN moz_places AS p ON p.id = b.fk;
 ```
 
-첫 번째 질의 결과에서 `from_visit` 가 다른 행의 `id` 와 이어지는지 따라가면, 어떤 페이지에서 어떤 링크를 눌러 다음 페이지로 갔는지 흐름을 이어 볼 수 있습니다. `dateAdded`·`lastModified` 는 단위를 확인하지 못한 칸이라서 결과를 그대로 두고 값의 크기를 먼저 봅니다.
+첫 번째 질의 결과에서 `from_visit` 가 다른 행의 `id` 와 이어지는지 따라가면, 어떤 페이지에서 어떤 링크를 눌러 다음 페이지로 갔는지 흐름을 이어 볼 수 있습니다. `dateAdded`·`lastModified` 는 단위를 검체에서 확인해야 하는 칸이라서 결과를 그대로 두고 값의 크기를 먼저 봅니다.
 
 ## 교차 검증
 

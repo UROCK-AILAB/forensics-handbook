@@ -20,20 +20,20 @@ HISTSIZE=2000
 SAVEHIST=1000
 ```
 
-기록 파일은 기본으로 홈 폴더의 `.zsh_history` 이고, `ZDOTDIR` 을 설정하면 그 폴더의 `.zsh_history` 로 바뀝니다 [2]. 셸은 메모리에 2000줄, 파일에 1000줄까지 기록을 둡니다 [2]. 같은 파일은 `setopt` 으로 `COMBINING_CHARS` 와 `BEEP` 만 켜고 `EXTENDED_HISTORY` 는 켜지 않아서 [2], 기본 설정의 `.zsh_history` 에는 명령마다 시각이 없다고 읽습니다(필자 해석). 사용자의 `~/.zshrc` 나 터미널 앱용 설정에서 옵션을 켜면 시각이 남을 수 있습니다.
+기록 파일은 기본으로 홈 폴더의 `.zsh_history` 이고, `ZDOTDIR` 을 설정하면 그 폴더의 `.zsh_history` 로 바뀝니다 [2]. 셸은 메모리에 2000줄, 파일에 1000줄까지 기록을 둡니다 [2]. 같은 파일은 `setopt` 으로 `COMBINING_CHARS` 와 `BEEP` 만 켜고 `EXTENDED_HISTORY` 는 켜지 않아서 [2], 기본 설정의 `.zsh_history` 에는 명령마다 시각이 없는 것으로 보입니다. 사용자의 `~/.zshrc` 나 터미널 앱용 설정에서 옵션을 켜면 시각이 남을 수 있습니다.
 
-`/etc/zshrc` 는 마지막 줄에서 `/etc/zshrc_$TERM_PROGRAM` 이 있으면 읽고, macOS 의 터미널 앱에서는 이 이름이 `/etc/zshrc_Apple_Terminal` 이 됩니다 [2]. 이 파일이 세션별 기록을 따로 두는지 같은 내용은 확인하지 못했고, Apple 공개 zsh 저장소의 파일 목록에도 이 파일은 없었습니다 [2]. 셸 내장 `log` 명령을 끄는 `disable log` 줄도 있어서 [2], 기록에 남은 `log` 는 `/usr/bin/log` 를 부른 명령으로 읽습니다.
+`/etc/zshrc` 는 마지막 줄에서 `/etc/zshrc_$TERM_PROGRAM` 이 있으면 읽고, macOS 의 터미널 앱에서는 이 이름이 `/etc/zshrc_Apple_Terminal` 이 됩니다 [2]. 이 파일은 Apple 공개 zsh 저장소에 없어서 [2], 세션별 기록을 따로 두는지 같은 내용은 검체의 파일을 열어 확인합니다. 셸 내장 `log` 명령을 끄는 `disable log` 줄도 있어서 [2], 기록에 남은 `log` 는 `/usr/bin/log` 를 부른 명령으로 읽습니다.
 
 ## 위치와 버전별 차이
 
 | macOS 버전 | 기본 셸 [1] | 기록 파일 |
 |---|---|---|
-| 10.14 Mojave 이하 | bash | bash 기록 파일의 기본 동작은 이 페이지에서 확인하지 못함 |
+| 10.14 Mojave 이하 | bash | 검체에서 확인 |
 | 10.15 Catalina 이후 | zsh (새로 만든 계정) | `${ZDOTDIR:-$HOME}/.zsh_history` [2] |
 
-10.15 로 업그레이드한 기존 계정의 셸이 bash 로 그대로 남는지는 확인하지 못했습니다. 셸은 `chsh -s` 로 바꾸고, 쓸 수 있는 셸은 `/etc/shells` 에 적힌 `/bin/zsh`, `/bin/bash`, `/bin/csh`, `/bin/dash`, `/bin/ksh`, `/bin/sh`, `/bin/tcsh` 입니다 [1]. 그래서 계정마다 실제 로그인 셸을 먼저 확인하고, 그 셸의 기록 파일을 찾습니다. 계정의 셸 설정은 [사용자 계정 (Local Accounts)](../system-account/user-accounts/index.md)에서 다룹니다. zsh 가 기본인 맥에서 bash 를 띄우면 "기본 대화형 셸이 이제 zsh" 라는 안내가 나오고, `BASH_SILENCE_DEPRECATION_WARNING=1` 을 내보내면 이 안내가 꺼집니다 [1]. 사용자 설정 파일에서 이 변수를 찾으면 그 사용자가 bash 를 계속 썼다는 단서로 봅니다(필자 해석).
+셸은 `chsh -s` 로 바꾸고, 쓸 수 있는 셸은 `/etc/shells` 에 적힌 `/bin/zsh`, `/bin/bash`, `/bin/csh`, `/bin/dash`, `/bin/ksh`, `/bin/sh`, `/bin/tcsh` 입니다 [1]. 업그레이드한 계정이나 셸을 바꾼 계정이 있을 수 있으므로, 계정마다 실제 로그인 셸을 먼저 확인하고, 그 셸의 기록 파일을 찾습니다. 계정의 셸 설정은 [사용자 계정 (Local Accounts)](../system-account/user-accounts/index.md)에서 다룹니다. zsh 가 기본인 맥에서 bash 를 띄우면 "기본 대화형 셸이 이제 zsh" 라는 안내가 나오고, `BASH_SILENCE_DEPRECATION_WARNING=1` 을 내보내면 이 안내가 꺼집니다 [1]. 사용자 설정 파일에서 이 변수를 찾으면 그 사용자가 bash 를 계속 썼다는 단서가 됩니다.
 
-제목의 bash_sessions 는 터미널 앱이 bash 세션마다 기록을 따로 두는 폴더(`~/.bash_sessions/`)로 알려져 있지만, 이번에 연 자료로 그 동작과 파일 이름, 이를 정하는 `/etc/bashrc_Apple_Terminal` 의 내용을 확인하지 못했습니다. zsh 쪽의 세션별 기록 폴더도 마찬가지입니다. 검체에서 이런 폴더가 보이면 파일을 열어 형식을 직접 확인하고, 확인한 만큼만 씁니다.
+제목의 bash_sessions 는 터미널 앱이 bash 세션마다 기록을 따로 두는 폴더(`~/.bash_sessions/`)로 알려져 있습니다. 그 동작과 파일 이름, 이를 정하는 `/etc/bashrc_Apple_Terminal` 의 내용은 공개 자료가 없고, zsh 쪽의 세션별 기록 폴더도 마찬가지입니다. 검체에서 이런 폴더가 보이면 파일을 열어 형식을 직접 확인합니다.
 
 ## 구조
 
@@ -71,13 +71,13 @@ SAVEHIST=1000
 
 `EXTENDED_HISTORY` 형식의 시작 시각은 유닉스 시각(1970-01-01 UTC 기준 초)이라서 [3] UTC 로 바꾼 뒤, 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)을 보고 바꿉니다. 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다. 걸린 시간 값은 `INC_APPEND_HISTORY_TIME` 이 켜져 있을 때 정확히 남습니다 [3].
 
-시각이 없는 형식이면 파일의 수정 시각이 마지막으로 기록을 쓴 때를 대략 알려 줍니다(필자 해석). `INC_APPEND_HISTORY` 설명으로 보면 옵션을 켜지 않은 zsh 는 셸이 끝날 때 기록을 파일에 쓰고 [3], 그렇다면 수정 시각은 마지막 세션이 끝난 무렵으로 읽을 수 있습니다(필자 해석, 실제 동작은 확인하지 못함).
+시각이 없는 형식이면 파일의 수정 시각이 마지막으로 기록을 쓴 때를 대략 알려 줄 수 있습니다. 옵션을 켜지 않은 zsh 는 셸이 끝날 때 기록을 파일에 쓰므로 [3], 수정 시각은 마지막 세션이 끝난 무렵일 가능성이 있습니다.
 
 ## 함정과 한계
 
 - **공백으로 시작한 명령.** `HIST_IGNORE_SPACE` 가 켜져 있으면 공백으로 시작한 명령은 파일에 없을 수 있습니다 [3].
 - **줄 수 한도.** 기본 `SAVEHIST=1000` 이라서 [2] 파일에는 최근 1000줄 안팎만 남는다고 보고, 오래된 명령은 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)로 지난 파일을 찾아 봅니다.
-- **셸 종료 때 쓰기.** `INC_APPEND_HISTORY`·`SHARE_HISTORY` 가 꺼져 있으면 셸이 끝날 때 파일에 써서 [3], 창을 강제로 닫거나 셸이 비정상으로 끝난 세션의 명령은 파일에 없을 수 있습니다(필자 해석, 실제 동작은 확인하지 못함).
+- **셸 종료 때 쓰기.** `INC_APPEND_HISTORY`·`SHARE_HISTORY` 가 꺼져 있으면 셸이 끝날 때 파일에 써서 [3], 창을 강제로 닫거나 셸이 비정상으로 끝난 세션의 명령은 파일에 없을 수 있습니다.
 - **옛 줄이 사라짐.** `HIST_SAVE_NO_DUPS` 가 켜져 있으면 같은 명령의 옛 줄이 빠져서 [3], 처음 친 시각을 이 파일로 알 수 없습니다.
 - **파일 위치 이동.** `ZDOTDIR` 을 설정하면 기록 파일이 홈 폴더가 아닌 곳에 생깁니다 [2]. 홈 폴더에 `.zsh_history` 가 없으면 설정 파일에서 `ZDOTDIR`·`HISTFILE` 을 먼저 찾습니다.
 - **지우거나 고치기 쉬움.** 기록 파일은 사용자가 지우거나 고칠 수 있는 텍스트 파일입니다. 파일이 비어 있거나 없으면 그 자체를 조사 거리로 보고, 지운 흔적은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 순서로 찾습니다.

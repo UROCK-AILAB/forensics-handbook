@@ -13,7 +13,7 @@ TCC.db는 앱이 어떤 개인 정보 자료에 접근해도 되는지를 적어
 
 앱이 카메라·마이크·보호 폴더 같은 자료에 접근하려 하면 개인 정보 보호 권한 (TCC)이 허용 여부를 가리고, 그 결과가 TCC.db에 남습니다. 파일에는 어떤 앱(client)이 어떤 자료 종류(service)에 접근을 요청했고 허용됐는지 거부됐는지가 행마다 적혀 있습니다 [1][2]. 사용자가 알림창에 답하거나 설정에서 직접 바꾼 결과뿐 아니라 시스템이나 MDM이 정한 결과도 같은 표에 들어가고, 누가 정했는지는 [권한 기록 해석](interpretation.md)에서 다룹니다.
 
-Apple은 TCC.db 형식을 공개하지 않았습니다. 아래 구조는 공개 포렌식 도구 mac_apt·APOLLO·Aftermath의 소스가 읽는 방식으로 확인한 것이라서, 도구가 읽지 않는 칸과 표는 이 페이지에서 뜻을 정하지 않습니다.
+Apple은 TCC.db 형식을 공개하지 않았습니다. 아래 구조는 공개 포렌식 도구 mac_apt·APOLLO·Aftermath의 소스가 읽는 방식에서 나온 것이라서, 도구가 읽지 않는 칸과 표는 뜻이 알려져 있지 않습니다.
 
 ## 위치와 버전별 차이
 
@@ -24,9 +24,9 @@ TCC.db는 두 곳에 있습니다 [2][4].
 | 사용자별 | `~/Library/Application Support/com.apple.TCC/TCC.db` | 사용자 홈마다 하나씩 있고, 그 사용자에게 적용되는 권한이 남습니다 |
 | 시스템 전체 | `/Library/Application Support/com.apple.TCC/TCC.db` | mac_apt는 이 파일의 기록에 사용자 이름을 "System"으로 붙입니다 [2] |
 
-전체 디스크 접근 (Full Disk Access)처럼 모든 사용자에게 걸리는 권한은 시스템 쪽 TCC.db에 남는다고 Huntress가 설명합니다 [1]. 그래서 한 앱의 권한을 확인할 때는 사용자별 파일과 시스템 파일을 모두 열어 봅니다. mac_apt는 크기가 0인 TCC.db를 건너뛰고 [2] 결과에 아무것도 남기지 않으므로, 도구 출력에 행이 없으면 파일이 없었는지 비어 있었는지를 원본에서 확인해 기록해 둡니다.
+전체 디스크 접근 (Full Disk Access)처럼 모든 사용자에게 걸리는 권한은 시스템 쪽 TCC.db에 남습니다 [1]. 그래서 한 앱의 권한을 확인할 때는 사용자별 파일과 시스템 파일을 모두 열어 봅니다. mac_apt는 크기가 0인 TCC.db를 건너뛰고 [2] 결과에 아무것도 남기지 않으므로, 도구 출력에 행이 없으면 파일이 없었는지 비어 있었는지를 원본에서 확인해 기록해 둡니다.
 
-`access` 표 구조는 macOS 11을 기준으로 두 갈래로 나뉩니다. mac_apt는 `PRAGMA table_info("access")`로 칸 이름을 읽어 `allowed` 칸이 있으면 macOS 10.15 이하, `auth_value` 칸이 있으면 macOS 11 이상으로 판단하고 [2], APOLLO도 macOS 10.14·10.15(iOS 12·13)에는 `allowed`를 읽는 쿼리를, macOS 10.16(=11)·iOS 14에는 `auth_value`를 읽는 쿼리를 씁니다 [3].
+`access` 표 구조는 macOS 11을 기준으로 두 갈래로 나뉩니다. macOS 10.15 이하에는 `allowed` 칸이, macOS 11 이상에는 `auth_value` 칸이 있습니다. mac_apt는 `PRAGMA table_info("access")`로 칸 이름을 읽어 구조를 가리고 [2], APOLLO는 macOS 10.14·10.15(iOS 12·13)에는 `allowed`를 읽는 쿼리를, macOS 10.16(=11)·iOS 14에는 `auth_value`를 읽는 쿼리를 씁니다 [3].
 
 | macOS | 권한 값 칸 | 함께 읽는 칸 | 판별 기준 |
 |---|---|---|---|
@@ -49,9 +49,9 @@ TCC.db는 두 곳에 있습니다 [2][4].
 | `auth_reason` | 없음 | 읽음 | 그 상태가 된 사유 |
 | `indirect_object_identifier` | 읽음 | 읽음 | 권한에 딸린 다른 대상으로 보이는 값(뜻은 해석 페이지) |
 
-`last_modified`는 mac_apt와 APOLLO가 모두 `DATETIME(last_modified, 'UNIXEPOCH')`로 바꾸고 Aftermath 소스 주석도 "in epoch time"이라고 적고 있어서 [2][3][4], 2001년 기준인 맥 절대 시각이 아니라 유닉스 시각으로 읽습니다. 이 시각을 타임라인에서 어떻게 쓰는지는 [권한 변경 흔적](changes.md)에서 다룹니다.
+`last_modified`는 2001년 기준인 맥 절대 시각이 아니라 유닉스 시각이고, mac_apt와 APOLLO도 `DATETIME(last_modified, 'UNIXEPOCH')`로 바꿔 읽습니다 [2][3][4]. 이 시각을 타임라인에서 어떻게 쓰는지는 [권한 변경 흔적](changes.md)에서 다룹니다.
 
-macOS 11 이상에서 `prompt_count` 칸이 아예 없어졌는지, 도구가 읽지 않을 뿐인지는 확인한 자료가 없습니다. `access` 표에는 도구들이 읽지 않는 칸이 더 있고, `access` 말고 다른 표도 있다고 알려져 있지만, 이번에 확인한 자료로는 그 이름과 뜻을 정할 수 없어서 이 페이지에 적지 않습니다.
+macOS 11 이상에서 `prompt_count` 칸이 아예 없어졌는지, 도구가 읽지 않을 뿐인지는 공개 자료가 없어 검체의 칸 목록으로 확인합니다. `access` 표에는 도구들이 읽지 않는 칸이 더 있고 `access` 말고 다른 표도 있다고 알려져 있지만, 그 이름과 뜻을 밝힌 공개 자료는 없습니다.
 
 ## 증거로서 의미
 
@@ -61,11 +61,11 @@ TCC.db 한 행은 수집 시점에 어느 범위(한 사용자 또는 시스템 
 
 ## 함정과 한계
 
-Huntress 글은 TCC DB가 암호화돼 있다고 쓰지만 [1], mac_apt·APOLLO·Aftermath는 모두 TCC.db를 일반 SQLite로 바로 엽니다 [2][3][4]. 이 핸드북은 암호화 주장을 따르지 않고 일반 SQLite로 다룹니다.
+Huntress 글은 TCC DB가 암호화돼 있다고 쓰지만 [1], mac_apt·APOLLO·Aftermath는 모두 TCC.db를 일반 SQLite로 바로 엽니다 [2][3][4]. 따라서 TCC.db는 일반 SQLite로 열어 읽으면 됩니다.
 
 macOS 버전만 보고 쿼리를 고르면 어긋날 수 있어서, mac_apt처럼 칸 이름으로 구조를 먼저 판별합니다. 도구마다 출력하는 칸도 다른데, mac_apt는 10.15 이하에서 Prompt_Count를, 11 이상에서 Auth_Reason을 내보내고, 11 이상에서도 출력 칸 이름은 Allowed이지만 그 값은 `auth_value`에서 0과 2만 풀어 낸 것입니다 [2]. Aftermath는 `client`·`auth_value`·`auth_reason`·`service`·`last_modified`만 읽습니다 [4]. 도구 출력만 보고 칸이 없다고 판단하지 말고 원본 파일에서 칸 목록을 확인합니다.
 
-TCC.db가 무결성 보호 (SIP)로 보호되는지, 살아 있는 맥에서 읽으려면 전체 디스크 접근 권한이 필요한지는 확인한 자료가 없습니다. 살아 있는 시스템에서 파일을 복사할 때는 [라이브 대응](../../../03-techniques/process-acquisition/live-response/index.md)의 절차를 따르고, 복사가 실패하면 그 사실과 오류를 함께 적어 둡니다.
+TCC.db가 무결성 보호 (SIP)로 보호되는지, 살아 있는 맥에서 읽으려면 전체 디스크 접근 권한이 필요한지는 분석하는 맥에서 복사해 보며 확인합니다. 살아 있는 시스템에서 파일을 복사할 때는 [라이브 대응](../../../03-techniques/process-acquisition/live-response/index.md)의 절차를 따르고, 복사가 실패하면 그 사실과 오류를 함께 적어 둡니다.
 
 ## 직접 분석해 보기
 

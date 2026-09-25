@@ -26,7 +26,7 @@ kext는 장치 드라이버나 보안 제품처럼 커널 수준의 기능이 �
 | `/System/Library/Extensions/*` | kext 파일 | [4] |
 | `/usr/sbin/kextstat` | 적재된 kext 목록을 보는 명령 | [4] |
 
-macOS 11 이후 적재된 kext 목록을 보는 다른 명령이 `kextstat` 을 대신하는지, 시스템 확장의 상태가 어느 파일에 저장되는지, kext 승인 기록이 어느 DB에 남는지는 이 페이지의 출처로 확인하지 못했습니다. 인텔 맥에서 보조 커널 컬렉션 파일이 데이터 볼륨의 정확히 어느 경로에 있는지도 확인하지 못했습니다.
+macOS 11 이후 적재된 kext 목록을 보는 다른 명령이 `kextstat` 을 대신하는지, 시스템 확장의 상태가 어느 파일에 저장되는지, kext 승인 기록이 어느 DB에 남는지, 인텔 맥에서 보조 커널 컬렉션 파일이 데이터 볼륨의 어느 경로에 있는지는 조사 대상 버전의 검체에서 확인합니다.
 
 ### 버전별 차이
 
@@ -40,7 +40,7 @@ macOS 11 이후 적재된 kext 목록을 보는 다른 명령이 `kextstat` 을 
 
 ### macOS 11 이후 kext를 올리는 조건
 
-macOS 11 이후 kext는 AuxKC에 합쳐져야 올라가고, AuxKC를 다시 만들려면 사용자 승인과 재시동이 필요하며 보안 부팅을 "보안 수준 낮춤 (Reduced Security)" 으로 설정해야 합니다 [2]. Apple 보안 안내는 이 조건을 Apple 실리콘 맥을 설명하는 절에 적어 두었고, 인텔 맥에도 같은 조건이 걸리는지는 이 페이지의 출처로 확인하지 못했습니다. Apple 실리콘 맥에서는 시동할 때 전원 버튼을 눌러 복구 모드(1TR)로 들어간 뒤 Reduced Security로 낮추고 커널 확장을 허용하는 확인란을 켜야 kext를 쓸 수 있습니다 [2].
+macOS 11 이후 kext는 AuxKC에 합쳐져야 올라가고, AuxKC를 다시 만들려면 사용자 승인과 재시동이 필요하며 보안 부팅을 "보안 수준 낮춤 (Reduced Security)" 으로 설정해야 합니다 [2]. 이 조건은 Apple 실리콘 맥의 조건이고 [2], 인텔 맥에도 같은 조건이 걸리는지는 검체에서 확인합니다. Apple 실리콘 맥에서는 시동할 때 전원 버튼을 눌러 복구 모드(1TR)로 들어간 뒤 Reduced Security로 낮추고 커널 확장을 허용하는 확인란을 켜야 kext를 쓸 수 있습니다 [2].
 
 AuxKC가 어디에 기록되는지도 하드웨어마다 다릅니다. Apple 실리콘에서는 AuxKC의 측정값이 LocalPolicy에 서명되어 들어가고, 이전 하드웨어(인텔)에서는 AuxKC가 데이터 볼륨에 있었습니다 [2]. LocalPolicy에는 AuxKC Image4 구조의 SHA-384 해시와 kext 영수증 (receipt)이 들어갑니다 [2].
 
@@ -62,11 +62,11 @@ MDM 페이로드 `com.apple.system-extension-policy` 는 macOS 10.15 이후 쓸 
 | `NonRemovableSystemExtensions` | 사전 | SIP가 켜져 있으면 끄거나 지울 수 없는 확장 | 15+ |
 | `NonRemovableFromUISystemExtensions` | 사전 | 시스템 설정·Finder에서 끄거나 지울 수 없는 확장 | 15+ |
 
-확장 종류 값은 `DriverExtension`, `NetworkExtension`, `EndpointSecurityExtension` 입니다 [3]. Apple은 MDM으로 특정 확장, 특정 개발자의 확장, 특정 종류의 확장을 사용자 조작 없이 허용할 수 있고, 구성을 지워서 확장을 내릴 수도 있다고 적습니다 [1]. 팀 ID를 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
+확장 종류 값은 `DriverExtension`, `NetworkExtension`, `EndpointSecurityExtension` 입니다 [3]. MDM으로 특정 확장, 특정 개발자의 확장, 특정 종류의 확장을 사용자 조작 없이 허용할 수 있고, 구성을 지워서 확장을 내릴 수도 있습니다 [1]. 팀 ID를 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** kext 폴더에 서드파티 kext가 있으면 그 kext가 디스크에 설치돼 있었다는 뜻이고, 파일의 서명으로 개발자 팀 ID를 말할 수 있습니다. Apple 실리콘 맥에 서드파티 kext가 적재돼 있었다면 누군가 보안 수준을 낮췄다는 뜻이고, 그 주체는 1TR에서 사람이 한 조작이거나 MDM입니다(필자 해석, [1][2]에서 도출). 시스템 확장 페이로드의 `AllowedSystemExtensions`·`AllowedSystemExtensionTypes`·`AllowedTeamIdentifiers` 에 든 확장은 사용자 조작 없이 올라올 수 있는 상태였다고 읽고, `AllowUserOverrides` 값으로 그 밖의 확장을 사용자가 따로 승인할 수 있었는지를 가립니다(필자 해석, [1][3]에서 도출).
+**증명하는 것.** kext 폴더에 서드파티 kext가 있으면 그 kext가 디스크에 설치돼 있었다는 뜻이고, 파일의 서명으로 개발자 팀 ID를 말할 수 있습니다. Apple 실리콘 맥에 서드파티 kext가 적재돼 있었다면 누군가 보안 수준을 낮췄다는 뜻이고, 그 주체는 1TR에서 사람이 한 조작이거나 MDM일 가능성이 큽니다 [1][2]. 시스템 확장 페이로드의 `AllowedSystemExtensions`·`AllowedSystemExtensionTypes`·`AllowedTeamIdentifiers` 에 든 확장은 사용자 조작 없이 올라올 수 있는 상태였다고 읽을 수 있고, `AllowUserOverrides` 값으로 그 밖의 확장을 사용자가 따로 승인할 수 있었는지를 가립니다 [1][3].
 
 **증명하지 못하는 것.** kext 파일이 폴더에 있다는 사실은 적재됐다는 뜻이 아닙니다. 보안 수준이 낮아져 있다는 사실만으로 누가, 어떤 목적으로 낮췄는지는 알 수 없고, 보안 제품이나 장치 드라이버처럼 정상적인 이유로 낮춘 맥도 있습니다. 페이로드가 허용한다는 사실도 그 확장이 실제로 설치돼 돌았다는 뜻은 아닙니다.
 
@@ -74,7 +74,7 @@ MDM 페이로드 `com.apple.system-extension-policy` 는 macOS 10.15 이후 쓸 
 
 ## 시각 해석
 
-kext가 언제 설치되고 언제 AuxKC에 들어갔는지, 보안 수준을 언제 낮췄는지를 직접 알려 주는 시각 기록은 이 페이지의 출처로 확인하지 못했습니다. 그래서 설치 시기는 kext 파일의 파일 시스템 시각과 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 좁히고, 적재 여부와 시기는 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)의 커널 확장 관련 기록과 재시동 시각을 함께 놓아 봅니다. macOS 11 이후 kext는 재시동해야 올라가므로 [2], kext 파일이 생긴 뒤 첫 재시동 시각이 적재 시기를 좁히는 기준이 됩니다(필자 해석). 재시동 시각은 [전원·잠자기 기록 (pmset)](../logs/power-events.md)에서 확인합니다.
+kext가 언제 설치되고 언제 AuxKC에 들어갔는지, 보안 수준을 언제 낮췄는지는 파일 밖의 기록으로 좁힙니다. 설치 시기는 kext 파일의 파일 시스템 시각과 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 좁히고, 적재 여부와 시기는 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)의 커널 확장 관련 기록과 재시동 시각을 함께 놓아 봅니다. macOS 11 이후 kext는 재시동해야 올라가므로 [2], kext 파일이 생긴 뒤 첫 재시동 시각이 적재 시기를 좁히는 기준이 됩니다. 재시동 시각은 [전원·잠자기 기록 (pmset)](../logs/power-events.md)에서 확인합니다.
 
 ## 함정과 한계
 

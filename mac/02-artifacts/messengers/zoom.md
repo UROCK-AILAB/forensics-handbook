@@ -8,13 +8,13 @@ nav_order: 1480
 
 ## 한 줄 요약
 
-줌 맥 앱은 `/Applications/zoom.us.app` 에 설치되고 번들 ID `us.zoom.xos` 이름으로 사용자 홈의 `Library` 곳곳에 폴더와 파일을 남기고, 이 흔적은 설치 여부와 사용 흔적을 확인하는 출발점이 되지만 회의 내용과 대화 DB의 구조는 아직 공개 자료로 확인되지 않았습니다.
+줌 맥 앱은 `/Applications/zoom.us.app` 에 설치되고 번들 ID `us.zoom.xos` 이름으로 사용자 홈의 `Library` 곳곳에 폴더와 파일을 남기고, 이 흔적은 설치 여부와 사용 흔적을 확인하는 출발점이 됩니다. 회의 내용과 대화 DB의 구조는 공개된 분석 자료가 없습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-줌은 화상 회의 앱입니다. 삭제 목록으로 보면 앱 번들과 함께 업데이터·데몬 같은 백그라운드 항목이 시스템 영역에 생기고, 사용자 홈 아래에는 데이터·설정·캐시·쿠키·로그 폴더가 생깁니다. 이 페이지가 정리하는 경로는 Homebrew 의 줌 설치 정의 파일이 앱을 지울 때 치우는 경로 목록[1]과 2020년 3월 Objective-See 의 줌 4.6.8 분석 글[2]에서 가져왔습니다. 삭제 목록은 경로가 있다는 근거일 뿐이고 각 경로 안에 무엇이 들어 있는지는 알려 주지 않아서, 이 페이지는 경로를 확인된 사실로 쓰고 내용물은 확인된 만큼만 씁니다.
+줌은 화상 회의 앱입니다. 삭제 목록으로 보면 앱 번들과 함께 업데이터·데몬 같은 백그라운드 항목이 시스템 영역에 생기고, 사용자 홈 아래에는 데이터·설정·캐시·쿠키·로그 폴더가 생깁니다. 아래 경로 대부분은 Homebrew 의 줌 설치 정의 파일이 앱을 지울 때 치우는 경로 목록에 들어 있고[1], 앱 번들 구조와 설치 방식은 줌 4.6.8 을 기준으로 합니다[2]. 삭제 목록은 경로가 있다는 것만 알려 주고, 각 경로 안에 무엇이 들어 있는지는 알려 주지 않습니다.
 
-분석가가 이 흔적으로 답할 수 있는 질문은 "이 맥에 줌이 설치된 적이 있나", "어느 사용자 계정에서 실행했나", "카메라·마이크를 쓸 수 있게 설정돼 있었나" 정도이고, "누구와 무슨 회의를 했나" 는 아래에서 설명하듯 확인되지 않은 영역이 많습니다.
+분석가가 이 흔적으로 답할 수 있는 질문은 "이 맥에 줌이 설치된 적이 있나", "어느 사용자 계정에서 실행했나", "카메라·마이크를 쓸 수 있게 설정돼 있었나" 정도이고, "누구와 무슨 회의를 했나" 는 아래에서 설명하듯 이 흔적만으로 답하기 어렵습니다.
 
 ## 위치와 버전별 차이
 
@@ -40,7 +40,7 @@ nav_order: 1480
 | 브라우저 플러그인 | `/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin`, `~/Library/Internet Plug-Ins/ZoomUsPlugIn.plugin` | [1] |
 | 업데이터 폴더 | `~/Library/Application Support/ZoomUpdater` | [1] |
 
-라벨 세 개의 plist 가 `/Library/LaunchDaemons` 와 `/Library/LaunchAgents` 중 어디에 있는지와 파일 이름은 확인되지 않았습니다. 검체에서는 두 폴더를 모두 열어 라벨이 같은 항목을 찾고, 읽는 법은 [실행 에이전트·데몬](../persistence/launchd/index.md)을 따릅니다.
+라벨 세 개의 plist 가 `/Library/LaunchDaemons` 와 `/Library/LaunchAgents` 중 어디에 있는지와 파일 이름은 공개된 자료에 없습니다. 검체에서는 두 폴더를 모두 열어 라벨이 같은 항목을 찾고, 읽는 법은 [실행 에이전트·데몬](../persistence/launchd/index.md)을 따릅니다.
 
 ### 사용자 데이터
 
@@ -68,20 +68,20 @@ nav_order: 1480
 
 ### 버전별 차이
 
-macOS 10.15 Catalina 이후 버전마다 경로나 DB 가 달라지는지는 확인되지 않았고, 표로 정리할 근거 자료도 없습니다. 줌 앱 버전 쪽에서는 자료 시점에 따라 설치 패키지 이름이 다릅니다.
+macOS 10.15 Catalina 이후 버전마다 경로나 DB 가 달라지는지는 공개된 자료가 없습니다. 줌 앱 버전에 따라서는 설치 패키지 이름이 다릅니다.
 
 | 자료 시점 | 줌 버전 | 설치 패키지 이름 | 출처 |
 |---|---|---|---|
 | 2020년 3월 | 4.6.8 | `Zoom.pkg` | [2] |
-| 2026년 9월 조회 | 7.2.1.88329 (Homebrew 정의 표기) | `zoomusInstallerFull.pkg` | [1] |
+| 2026년 9월 | 7.2.1.88329 (Homebrew 정의 표기) | `zoomusInstallerFull.pkg` | [1] |
 
 ## 구조
 
 앱 번들 안에서는 실행 파일 `Contents/MacOS/zoom.us` 와 라이브러리가 들어 있는 `/Applications/zoom.us.app/Contents/Frameworks` 폴더가 확인됩니다[2]. 줌 4.6.8 의 앱 서명 권한 (entitlement) 목록에는 `com.apple.security.device.audio-input`, `com.apple.security.device.camera`, `com.apple.security.automation.apple-events` 가 들어 있어서 앱이 마이크·카메라를 쓰고 다른 앱에 Apple 이벤트를 보낼 수 있게 서명돼 있다는 점을 알 수 있습니다[2]. 같은 목록에는 `com.apple.security.cs.disable-library-validation` 과 `com.apple.security.cs.disable-executable-page-protection` 도 있는데[2], 앞의 것이 있으면 서명이 다른 라이브러리도 앱 안으로 읽어 들일 수 있어서 `Contents/Frameworks` 의 파일 변조를 따로 확인해야 합니다. 서명과 권한 목록을 읽는 법은 [앱 번들 정보](../embedded-metadata/app-bundle.md)와 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md)에 있습니다.
 
-사용자 데이터 폴더 `~/Library/Application Support/zoom.us` 의 속 구조는 이번 자료로 확인하지 못했습니다. 이 폴더 아래 `data` 하위 폴더에 `zoomus.enc.db`, `zoommeeting.enc.db` 같은 이름의 대화·회의 DB 가 있다고 흔히 알려져 있지만 확인되지 않았고, DB 암호화 방식(SQLCipher 여부)과 키를 키체인의 어느 항목에 두는지, 표·칸 이름, 시각 값의 기준도 모두 확인되지 않았습니다. 검체에서 이 폴더를 만나면 파일 머리를 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 형식과 먼저 대조해 평문 SQLite 인지부터 가리고, 암호화돼 있으면 [암호화된 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md)의 절차로 넘어갑니다.
+사용자 데이터 폴더 `~/Library/Application Support/zoom.us` 의 속 구조는 공개된 분석 자료가 없습니다. 이 폴더 아래 `data` 하위 폴더에 `zoomus.enc.db`, `zoommeeting.enc.db` 같은 이름의 대화·회의 DB 가 있다고 흔히 알려져 있지만, 이 파일 이름과 DB 암호화 방식(SQLCipher 여부), 키를 키체인의 어느 항목에 두는지, 표·칸 이름, 시각 값의 기준은 모두 검체로 확인해야 합니다. 검체에서 이 폴더를 만나면 파일 머리를 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 형식과 먼저 대조해 평문 SQLite 인지부터 가리고, 암호화돼 있으면 [암호화된 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md)의 절차로 넘어갑니다.
 
-`~/Documents/Zoom` 과 `~/Desktop/Zoom` 은 로컬 녹화 저장 폴더로 알려져 있지만 확인되지 않았고, 녹화 파일 이름과 하위 폴더 이름 규칙도 확인되지 않았습니다. 설정 plist 는 이름이 와일드카드로만 확인돼 있어서 개별 파일 이름과 키는 검체에서 직접 열어 보고, 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)을 따릅니다. 앱 로그 폴더의 파일 이름·형식·보존 기간과, 통합 로그 (Unified Log)에서 줌이 쓰는 서브시스템 이름도 확인되지 않았습니다.
+`~/Documents/Zoom` 과 `~/Desktop/Zoom` 은 로컬 녹화 저장 폴더로 알려져 있지만, 이 용도와 녹화 파일 이름·하위 폴더 이름 규칙은 검체에서 확인합니다. 설정 plist 는 이름이 와일드카드로만 알려져 있어서 개별 파일 이름과 키는 검체에서 직접 열어 보고, 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)을 따릅니다. 앱 로그 폴더의 파일 이름·형식·보존 기간과, 통합 로그 (Unified Log)에서 줌이 쓰는 서브시스템 이름도 공개된 자료가 없습니다.
 
 > 그림 자리: 줌 설치 후 시스템 영역(앱 번들·PrivilegedHelperTools·launchd)과 사용자 홈(Application Support·Preferences·Caches·Logs)에 생기는 경로를 한 장에 나눠 보여 주는 트리
 
@@ -93,33 +93,33 @@ macOS 10.15 Catalina 이후 버전마다 경로나 DB 가 달라지는지는 확
 
 ### 증명하지 못하는 것
 
-이 경로들만으로는 어떤 회의에 들어갔는지, 누구와 대화했는지, 회의를 녹화했는지를 말할 수 없습니다. 대화·회의 DB 와 녹화 파일의 형식이 확인되지 않았기 때문이고, 확인되지 않은 파일 이름에 기대어 "녹화했다", "대화했다" 고 쓰지 않습니다. 서명 권한에 카메라·마이크가 있다는 점도 앱이 그 장치를 쓸 수 있게 만들어졌다는 뜻일 뿐이고, 사용자가 접근을 승인했는지나 실제로 켰는지는 [개인 정보 보호 권한](../credentials/tcc/index.md) 같은 다른 기록으로 확인합니다. TCC 데이터베이스에 줌의 `client` 값이 `us.zoom.xos` 로 남는지와, 카메라·마이크를 켠 시각이 통합 로그에 남는지는 확인되지 않았습니다.
+이 경로들만으로는 어떤 회의에 들어갔는지, 누구와 대화했는지, 회의를 녹화했는지를 말할 수 없습니다. 대화·회의 DB 와 녹화 파일의 형식이 알려져 있지 않기 때문이고, 흔히 거론되는 파일 이름에 기대어 "녹화했다", "대화했다" 고 쓰지 않습니다. 서명 권한에 카메라·마이크가 있다는 점도 앱이 그 장치를 쓸 수 있게 만들어졌다는 뜻일 뿐이고, 사용자가 접근을 승인했는지나 실제로 켰는지는 [개인 정보 보호 권한](../credentials/tcc/index.md) 같은 다른 기록으로 확인합니다. TCC 데이터베이스에 줌의 `client` 값이 `us.zoom.xos` 로 남는지와, 카메라·마이크를 켠 시각이 통합 로그에 남는지는 검체에서 확인합니다.
 
 보고서에는 "이 계정의 홈에 줌 사용자 데이터 폴더가 있고, 폴더의 만든 시각은 이때다" 처럼 기록이 보여 주는 만큼만 씁니다.
 
 ## 시각 해석
 
-줌 고유 기록의 시각 기준(유닉스 초인지 밀리초인지, UTC 인지 현지 시각인지)은 DB·로그 모두 확인되지 않았습니다. 지금 확실히 쓸 수 있는 시각은 위 경로들의 파일 시스템 시각이고, 앱 번들이나 사용자 데이터 폴더의 만든 시각과 바뀐 시각을 [APFS 구조](../../01-foundations/disk-volume/apfs/index.md)에서 읽어 설치·첫 실행·마지막 사용 시점의 범위를 잡습니다. 값 변환과 UTC·현지 시각 구분은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 보고서에는 [시간대와 시계 설정](../system-account/time-zone.md)을 함께 적습니다. 폴더의 바뀐 시각은 안쪽 파일이 새로 생기거나 지워질 때도 움직일 수 있어서, 폴더 시각 하나를 곧바로 "마지막 회의 시각" 으로 읽지 않습니다.
+줌 고유 기록의 시각 기준(유닉스 초인지 밀리초인지, UTC 인지 현지 시각인지)은 DB·로그 모두 공개된 자료가 없습니다. 확실히 쓸 수 있는 시각은 위 경로들의 파일 시스템 시각이고, 앱 번들이나 사용자 데이터 폴더의 만든 시각과 바뀐 시각을 [APFS 구조](../../01-foundations/disk-volume/apfs/index.md)에서 읽어 설치·첫 실행·마지막 사용 시점의 범위를 잡습니다. 값 변환과 UTC·현지 시각 구분은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 보고서에는 [시간대와 시계 설정](../system-account/time-zone.md)을 함께 적습니다. 폴더의 바뀐 시각은 안쪽 파일이 새로 생기거나 지워질 때도 움직일 수 있어서, 폴더 시각 하나를 곧바로 "마지막 회의 시각" 으로 읽지 않습니다.
 
-`~/Library/Logs/zoominstall.log` 안의 시각 형식과 기준도 확인되지 않았습니다. 로그를 열어 시각이 보이면 파일 시스템 시각과 영수증 정보를 나란히 놓고 서로 맞는지 봅니다.
+`~/Library/Logs/zoominstall.log` 안의 시각 형식과 기준도 공개된 자료가 없습니다. 로그를 열어 시각이 보이면 파일 시스템 시각과 영수증 정보를 나란히 놓고 서로 맞는지 봅니다.
 
 ## 함정과 한계
 
-첫째, 이 페이지의 경로 대부분은 Homebrew 의 삭제 목록에서 왔습니다[1]. 목록은 "지울 때 치우는 곳" 이라서 모든 경로가 한 검체에 동시에 생긴다는 보장은 없고, 줌 버전과 사용한 기능(줌 전화, iCloud 연동, 앱 확장)에 따라 일부만 있을 수 있습니다.
+첫째, 위 경로 대부분은 Homebrew 의 삭제 목록에 있는 경로입니다[1]. 목록은 "지울 때 치우는 곳" 이라서 모든 경로가 한 검체에 동시에 생긴다는 보장은 없고, 줌 버전과 사용한 기능(줌 전화, iCloud 연동, 앱 확장)에 따라 일부만 있을 수 있습니다.
 
-둘째, 줌 4.6.8 을 표준 사용자 계정으로 설치할 때 설치 도우미 스크립트에 `/Applications/zoom.us.app` 과 함께 사용자 홈의 `~/Applications/zoom.us.app` 경로가 넘어간 기록이 있습니다[2]. 설치 방식에 따라 앱이 사용자 홈 쪽에 놓일 수 있다는 뜻이지만 어느 조건에서 그곳에 남는지는 확인되지 않았으므로, 시스템 앱 폴더만 보고 "줌 없음" 으로 판단하지 않고 두 곳을 모두 봅니다.
+둘째, 줌 4.6.8 을 표준 사용자 계정으로 설치할 때 설치 도우미 스크립트에 `/Applications/zoom.us.app` 과 함께 사용자 홈의 `~/Applications/zoom.us.app` 경로가 넘어갑니다[2]. 설치 방식에 따라 앱이 사용자 홈 쪽에 놓일 수 있다는 뜻이지만 어느 조건에서 그곳에 남는지는 알려져 있지 않으므로, 시스템 앱 폴더만 보고 "줌 없음" 으로 판단하지 않고 두 곳을 모두 봅니다.
 
 셋째, 삭제 목록이 곧 흔적을 지우는 목록이기도 합니다. 누군가 이 목록대로 앱과 데이터를 지웠다면 위 경로가 한꺼번에 사라지고, 그래도 [파일 시스템 이벤트](../filesystem/fsevents/index.md), [타임 머신](../filesystem/time-machine/index.md) 백업, APFS 스냅숏에는 지우기 전 경로가 남아 있을 수 있습니다. 모든 경로가 없다는 사실만으로 설치된 적이 없다고 결론 내리지 않고, [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)의 순서로 지운 흔적을 찾습니다.
 
-넷째, 2020년 3월 Objective-See 글은 줌 4.6.8 의 설치 방식과 라이브러리 로드에 관한 보안 문제를 다룹니다[2]. 침해 사고를 조사할 때는 설치 도우미와 앱 번들 안 `Contents/Frameworks` 폴더의 파일이 변조되지 않았는지 코드 서명 검증으로 확인하고, 검증 방법은 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md)와 [악성 코드 흔적 분석](../../03-techniques/analysis/malware-triage/index.md)을 따릅니다.
+넷째, 줌 4.6.8 에는 설치 방식과 라이브러리 로드에 관한 보안 문제가 있었습니다[2]. 침해 사고를 조사할 때는 설치 도우미와 앱 번들 안 `Contents/Frameworks` 폴더의 파일이 변조되지 않았는지 코드 서명 검증으로 확인하고, 검증 방법은 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md)와 [악성 코드 흔적 분석](../../03-techniques/analysis/malware-triage/index.md)을 따릅니다.
 
-다섯째, 흔히 인용되는 DB 이름(`zoomus.enc.db` 등)과 녹화 폴더 설명은 이 페이지가 연 자료로는 확인되지 않았습니다. 보고서에 쓰려면 해당 검체와 줌 버전에서 직접 확인한 결과를 근거로 삼습니다.
+다섯째, 흔히 인용되는 DB 이름(`zoomus.enc.db` 등)과 녹화 폴더 설명은 공개된 분석 자료가 없습니다. 보고서에 쓰려면 해당 검체와 줌 버전에서 직접 확인한 결과를 근거로 삼습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-줌 DB 와 설정 파일의 내부 구조가 확인되지 않아서 이 페이지는 줌 고유 형식의 헥스 예시를 싣지 않습니다. 대신 검체에서 만난 파일이 어떤 형식인지 가리는 데 헥스를 씁니다. `~/Library/Preferences` 의 줌 plist 는 첫 바이트를 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)의 머리와 대조해 바이너리 plist 인지 XML 인지 가리고, `~/Library/Application Support/zoom.us` 아래 파일은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)의 머리와 대조합니다. 머리가 SQLite 와 맞지 않고 바이트가 고르게 흩어져 보이면 암호화됐을 가능성을 기록해 두지만, 어떤 방식인지는 확인되지 않았으므로 추정으로 적습니다.
+줌 DB 와 설정 파일의 내부 구조는 공개된 자료가 없어, 여기서는 줌 고유 형식의 헥스 예시 대신 검체에서 만난 파일이 어떤 형식인지 가리는 데 헥스를 씁니다. `~/Library/Preferences` 의 줌 plist 는 첫 바이트를 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)의 머리와 대조해 바이너리 plist 인지 XML 인지 가리고, `~/Library/Application Support/zoom.us` 아래 파일은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)의 머리와 대조합니다. 머리가 SQLite 와 맞지 않고 바이트가 고르게 흩어져 보이면 암호화됐을 가능성을 기록해 두지만, 어떤 방식인지는 알 수 없으므로 보고서에는 추정으로 적습니다.
 
 ### 공개 도구로 한 번
 
@@ -140,7 +140,7 @@ ls -la ~/Library/Application\ Support/zoom.us ~/Library/Caches/us.zoom.xos ~/Lib
 | 함께 볼 아티팩트 | 확인할 것 |
 |---|---|
 | [설치한 앱과 영수증](../system-account/installed-apps-receipts.md) | 영수증 `us.zoom.pkg.videomeeting` 과 설치 시점 |
-| [설치 로그](../logs/install-log.md) | 줌 설치 기록이 남는지 (확인되지 않음, 검체에서 확인) |
+| [설치 로그](../logs/install-log.md) | 줌 설치 기록이 남는지 (검체에서 확인) |
 | [격리 속성과 다운로드 기록](../filesystem/quarantine/index.md) | 설치 패키지를 내려받은 출처와 시각 |
 | [실행 에이전트·데몬](../persistence/launchd/index.md) | `us.zoom.` 라벨 항목과 plist 위치 |
 | [KnowledgeC](../execution/knowledgec/index.md), [바이옴](../execution/biome/index.md) | 번들 ID `us.zoom.xos` 로 앱을 쓴 시간대 |

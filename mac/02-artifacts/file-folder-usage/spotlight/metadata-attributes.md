@@ -13,7 +13,7 @@ nav_order: 850
 
 메타데이터 속성 (Metadata Attribute)은 파일의 이름·종류·시각·작성자처럼 파일을 설명하는 값에 붙인 이름이고, 스포트라이트 색인은 이 이름과 값을 짝으로 저장합니다 [1][2]. 이름은 `kMDItemWhereFroms`, `kMDItemLastUsedDate` 처럼 `kMDItem` 으로 시작합니다 [2][3]. 값이 색인 파일 안에 어떤 형식으로 들어 있는지는 [색인 저장소 구조 (.Spotlight-V100·store.db)](store-structure.md)에서 다루고, 이 페이지는 속성마다 무엇을 뜻하는지를 다룹니다.
 
-Apple은 공통 속성의 뜻을 두 문서에 적어 두었습니다. 하나는 2014년 7월 15일에 마지막으로 고친 보관 문서 "Spotlight Metadata Attributes Reference" 이고 적용 범위를 "OS X v10.4 and later" 로 적고 있으며 [3], 다른 하나는 현행 개발자 문서 "Common Metadata Attribute Keys" 입니다 [4]. 아래 표의 형식 칸은 Apple 문서의 CF 형식 이름입니다.
+아래 공통 속성은 OS X 10.4 이후에 쓰입니다 [3][4]. 표의 형식 칸은 CF 형식 이름입니다.
 
 ## 주요 속성 (Apple 문서에 있는 것)
 
@@ -75,13 +75,13 @@ kMDItemPhysicalSize        kMDItemLogicalSize         kMDItemAlternateNames
 kMDItemMediaTypes
 ```
 
-현행 Apple 문서 "Common Metadata Attribute Keys" 에도 `kMDItemDateAdded`, `kMDItemUseCount`, `kMDItemUsedDates`, `kMDItemDownloadedDate` 는 없습니다 [4]. 형식 명세 [1]은 `kMDItemUsedDates` 를 날짜·시각 값의 배열로, `kMDItemDownloadedDate` 를 날짜·시각 값(값 형식 0x0c)으로 적지만 무엇이 값을 더하거나 바꾸는지는 설명하지 않습니다. 그래서 이 속성들이 언제 갱신되는지, 예를 들어 무엇이 `kMDItemUseCount` 를 올리는지나 `kMDItemUsedDates` 에 날짜가 어떤 단위로 쌓이는지는 이번에 연 자료로 확인하지 못했습니다. 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 쓰려면 알려진 동작을 재현해서 값이 어떻게 바뀌는지 먼저 확인합니다. 재현 시험은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)의 방법을 따릅니다.
+현행 Apple 문서 "Common Metadata Attribute Keys" 에도 `kMDItemDateAdded`, `kMDItemUseCount`, `kMDItemUsedDates`, `kMDItemDownloadedDate` 는 없습니다 [4]. `kMDItemUsedDates` 는 날짜·시각 값의 배열이고, `kMDItemDownloadedDate` 는 날짜·시각 값(값 형식 0x0c)입니다 [1]. 이 속성들이 언제 갱신되는지, 예를 들어 무엇이 `kMDItemUseCount` 를 올리는지나 `kMDItemUsedDates` 에 날짜가 어떤 단위로 쌓이는지는 공개된 설명이 없습니다. 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 쓰려면 알려진 동작을 재현해서 값이 어떻게 바뀌는지 먼저 확인합니다. 재현 시험은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)의 방법을 따릅니다.
 
 ## 시각 해석
 
 색인 안의 날짜 값은 2001-01-01 기준 초를 64비트 실수로 적은 Cocoa 시각입니다 [1]. 같은 저장소의 레코드 갱신 시각은 기준이 다른 유닉스 마이크로초라서, 두 값을 구분하는 법은 [색인 저장소 구조 (.Spotlight-V100·store.db)](store-structure.md)의 시각 해석 절에서 봅니다. 시각 체계 자체는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 설명합니다.
 
-속성마다 바뀌는 때가 다릅니다. `kMDItemLastUsedDate` 는 LaunchServices가 파일을 열 때 갱신되고 [3][4], `kMDItemAttributeChangeDate` 는 메타데이터 속성이 바뀔 때 갱신됩니다 [3][4]. `kMDItemContentCreationDate`·`kMDItemContentModificationDate` 는 내용 쪽 시각이고 `kMDItemFSCreationDate`·`kMDItemFSContentChangeDate` 는 파일 시스템 쪽 시각입니다 [3]. 두 쪽 값이 각각 어떤 동작에 따라 바뀌는지는 이번 자료에 더 자세히 나와 있지 않아서, 문서 날짜를 따질 때는 [이 문서의 날짜를 믿을 수 있나 (Document Date)](../../../04-scenarios/activity/document-date.md)의 절차로 여러 값을 함께 봅니다.
+속성마다 바뀌는 때가 다릅니다. `kMDItemLastUsedDate` 는 LaunchServices가 파일을 열 때 갱신되고 [3][4], `kMDItemAttributeChangeDate` 는 메타데이터 속성이 바뀔 때 갱신됩니다 [3][4]. `kMDItemContentCreationDate`·`kMDItemContentModificationDate` 는 내용 쪽 시각이고 `kMDItemFSCreationDate`·`kMDItemFSContentChangeDate` 는 파일 시스템 쪽 시각입니다 [3]. 두 쪽 값이 각각 어떤 동작에 따라 바뀌는지는 자세히 알려져 있지 않아서, 문서 날짜를 따질 때는 [이 문서의 날짜를 믿을 수 있나 (Document Date)](../../../04-scenarios/activity/document-date.md)의 절차로 여러 값을 함께 봅니다.
 
 ## 증거로서 의미
 
@@ -91,19 +91,19 @@ kMDItemMediaTypes
 
 ### 증명하지 못하는 것
 
-Apple 문서가 `kMDItemLastUsedDate` 의 갱신 조건으로 드는 것은 LaunchServices가 파일을 여는 경우뿐이라서 [3][4], 다른 방법으로 파일을 읽은 일도 이 값에 반영되는지는 문서로 확인되지 않습니다. 이 값은 누가 열었는지도 말해 주지 않아서, 사용자 단위 색인인지 볼륨 단위 색인인지와 로그인 기록을 함께 보고, 그 절차는 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md)에 있습니다. 작성자·앱 이름 같은 값만으로 실제 작성자를 단정하지도 않습니다. 보고서에는 "이 색인 항목에 마지막 사용 시각이 이 값으로 기록돼 있다" 처럼 기록이 말하는 만큼만 씁니다.
+`kMDItemLastUsedDate` 의 갱신 조건으로 알려진 것은 LaunchServices가 파일을 여는 경우뿐이라서 [3][4], 다른 방법으로 파일을 읽은 일도 이 값에 반영되는지는 알 수 없습니다. 이 값은 누가 열었는지도 말해 주지 않아서, 사용자 단위 색인인지 볼륨 단위 색인인지와 로그인 기록을 함께 보고, 그 절차는 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md)에 있습니다. 작성자·앱 이름 같은 값만으로 실제 작성자를 단정하지도 않습니다. 보고서에는 "이 색인 항목에 마지막 사용 시각이 이 값으로 기록돼 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
 ## 함정과 한계
 
-Apple 문서에는 `kMDItemPath` 는 쿼리·정렬에 못 쓰고 `kMDItemTextContent` 는 앱이 값을 직접 읽지 못한다는 제약이 적혀 있습니다 [3][4]. 이 제약은 앱이 쿼리할 때의 이야기이고, 색인 파일을 직접 파싱하는 도구가 이 값들을 뽑는지는 도구마다 다를 수 있습니다. 그래서 도구 결과에 본문 텍스트가 없다고 색인에 없다고 단정하지 않고, 도구가 그 속성을 뽑는지 먼저 확인합니다.
+`kMDItemPath` 는 쿼리·정렬에 못 쓰고, `kMDItemTextContent` 는 앱이 값을 직접 읽지 못합니다 [3][4]. 이 제약은 앱이 쿼리할 때의 이야기이고, 색인 파일을 직접 파싱하는 도구가 이 값들을 뽑는지는 도구마다 다를 수 있습니다. 그래서 도구 결과에 본문 텍스트가 없다고 색인에 없다고 단정하지 않고, 도구가 그 속성을 뽑는지 먼저 확인합니다.
 
-도구가 뽑는 속성 가운데 앞에 밑줄이 붙은 `_kMDItem` 속성과 Apple 문서에 없는 속성은 뜻을 문서로 확인할 수 없습니다. 같은 이름의 속성이 볼륨 단위 색인과 사용자 단위 CoreSpotlight 색인에서 같은 뜻인지도 이번 자료로 확인하지 못했습니다.
+도구가 뽑는 속성 가운데 앞에 밑줄이 붙은 `_kMDItem` 속성과 Apple 문서에 없는 속성은 뜻을 문서로 확인할 수 없습니다. 같은 이름의 속성이 볼륨 단위 색인과 사용자 단위 CoreSpotlight 색인에서 같은 뜻인지도 공개 자료가 없어 검체로 확인해야 합니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 8바이트는 실제 검체가 아니라 명세 [1]의 날짜 형식(값 형식 0x0c, 64비트 실수, Cocoa 시각)에 맞춰 만든 예시입니다.
+아래 8바이트는 실제 검체가 아니라 날짜 형식(값 형식 0x0c, 64비트 실수, Cocoa 시각)에 맞춰 만든 예시입니다 [1].
 
 ```
 00 00 00 80 93 DC C4 41
@@ -115,7 +115,7 @@ Apple 문서에는 `kMDItemPath` 는 쿼리·정렬에 못 쓰고 `kMDItemTextCo
 
 ### 공개 도구로 한 번
 
-mac_apt의 SPOTLIGHT 플러그인은 사용자·볼륨·iOS 색인을 읽어 항목마다 위 속성들을 뽑아 주고 [2], spotlight_parser(Yogesh Khatri)는 같은 색인을 텍스트로 풀어 줍니다 [5]. 두 도구의 결과에서 같은 항목의 같은 속성을 골라 값이 같은지 대조하면 파서 차이로 생긴 오류를 걸러 낼 수 있습니다.
+mac_apt의 SPOTLIGHT 플러그인은 사용자·볼륨·iOS 색인을 읽어 항목마다 위 속성들을 뽑아 주고 [2], spotlight_parser는 같은 색인을 텍스트로 풀어 줍니다 [5]. 두 도구의 결과에서 같은 항목의 같은 속성을 골라 값이 같은지 대조하면 파서 차이로 생긴 오류를 걸러 낼 수 있습니다.
 
 ## 교차 검증
 

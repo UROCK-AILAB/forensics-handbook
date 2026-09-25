@@ -10,7 +10,7 @@ nav_order: 1510
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Apple 개발자 문서는 이 프레임워크를 "An extension other apps use to access files and folders managed by your app and synced with a remote storage." 라고 설명합니다 [1]. 클라우드 저장소 앱이 파일 공급자 확장(extension)을 만들어 두면, 다른 앱은 그 확장을 거쳐 원격 저장소와 동기화되는 파일과 폴더에 접근합니다 [1].
+클라우드 저장소 앱이 파일 공급자 확장(extension)을 만들어 두면, 다른 앱은 그 확장을 거쳐 원격 저장소와 동기화되는 파일과 폴더에 접근합니다 [1].
 
 파일 공급자 자체가 하나의 기록 파일은 아니지만, 이 방식이 쓰이면 동기화 폴더의 자리와 파일이 로컬에 놓이는 방식이 바뀌어서 여러 클라우드 앱 아티팩트를 읽는 바탕이 됩니다. 제3자 앱이 이 방식으로 옮긴 예로, 드롭박스의 File Provider판은 폴더를 `~/Library/CloudStorage/` 로 옮겼습니다 [2]. 그 밖의 드롭박스 변화는 [드롭박스 (Dropbox)](dropbox.md)에서 다룹니다.
 
@@ -20,13 +20,13 @@ Apple 개발자 문서는 이 프레임워크를 "An extension other apps use to
 |---|---|---|
 | File Provider 프레임워크 | macOS 10.15+, iOS·iPadOS 11.0+, Mac Catalyst 11.0+, visionOS 1.0+ [1] | 확장 종류에 따라 다름 |
 | `NSFileProviderReplicatedExtension` (복제형) | macOS 11+, iOS 16+ [1] | 시스템 [1] |
-| `NSFileProviderExtension` (복제형이 아닌 것) | 문서에 표시된 제공 OS는 iOS 11+ [1] | 확장 [1] |
+| `NSFileProviderExtension` (복제형이 아닌 것) | iOS 11+ [1] | 확장 [1] |
 
-복제형 확장에서는 시스템이 로컬 사본을 관리하고 확장은 로컬과 원격 사이의 동기화만 맡으며, 문서는 이를 "The system manages the content accessed through the File Provider extension." 이라고 적습니다 [1]. 복제형이 아닌 확장은 로컬 사본과 원격 파일의 자리표시자 (placeholder)를 확장이 직접 만들고 관리합니다 [1]. 표에 적힌 제공 OS로 보면 맥에서는 macOS 11부터 복제형을 쓸 수 있고, 복제형이 아닌 확장은 문서 표시로는 맥 지원 여부를 확인할 수 없어서, 앱마다 어느 확장을 쓰는지는 앱 자료로 따로 확인합니다.
+복제형 확장에서는 시스템이 로컬 사본을 관리하고 확장은 로컬과 원격 사이의 동기화만 맡습니다 [1]. 복제형이 아닌 확장은 로컬 사본과 원격 파일의 자리표시자 (placeholder)를 확장이 직접 만들고 관리합니다 [1]. 표에 적힌 제공 OS로 보면 맥에서는 macOS 11부터 복제형을 쓸 수 있고, 복제형이 아닌 확장은 제공 OS에 macOS가 적혀 있지 않아서, 앱마다 어느 확장을 쓰는지는 앱 자료로 따로 확인합니다.
 
-동기화 폴더는 `~/Library/CloudStorage/` 아래에 놓이는 예가 있지만 [2], 그 아래 폴더 이름을 앱마다 어떻게 짓는지는 이번 자료로 확인하지 못했습니다. 파일 공급자를 관리하는 시스템 데몬의 상태 DB 위치와 통합 로그 서브시스템도 확인하지 못해서 이 페이지에 적지 않았습니다.
+동기화 폴더는 `~/Library/CloudStorage/` 아래에 놓이는 예가 있지만 [2], 그 아래 폴더 이름 규칙은 앱마다 다를 수 있어 검체에서 확인합니다. 파일 공급자를 관리하는 시스템 데몬의 상태 DB 위치와 통합 로그 서브시스템은 공개된 분석 자료가 없습니다.
 
-ForensicArtifacts 정의(macos.yaml)에는 File Provider나 CloudStorage 항목이 없어서 [3], 이 정의만 쓰는 도구로 자동 수집하면 `~/Library/CloudStorage/` 가 빠질 수 있습니다(필자 해석).
+ForensicArtifacts 정의(macos.yaml)에는 File Provider나 CloudStorage 항목이 없어서 [3], 이 정의만 쓰는 도구로 자동 수집하면 `~/Library/CloudStorage/` 가 빠질 수 있습니다.
 
 ## 구조
 
@@ -36,7 +36,7 @@ APFS inode 플래그 가운데 `INODE_IS_SYNC_ROOT`(0x200000)는 fileproviderd �
 
 ### 접근 권한
 
-파일 공급자와 관련된 TCC 서비스 이름으로 `kTCCServiceFileProviderDomain` 과 `kTCCServiceFileProviderPresence` 가 있고, 앞의 것은 공개 도구 Aftermath의 대응표에 "iCloud Drive 접근" 으로 적혀 있으며 뒤의 것은 PPPC 스키마 기준 macOS 10.15에서 추가됐습니다. 권한 DB를 읽는 법과 각 서비스의 해석은 [개인 정보 보호 권한 (TCC)](../credentials/tcc/index.md)에서 다룹니다.
+파일 공급자와 관련된 TCC 서비스 이름으로 `kTCCServiceFileProviderDomain` 과 `kTCCServiceFileProviderPresence` 가 있고, 앞의 것은 iCloud Drive 접근 권한으로 풀이되고, 뒤의 것은 macOS 10.15에서 추가됐습니다. 권한 DB를 읽는 법과 각 서비스의 해석은 [개인 정보 보호 권한 (TCC)](../credentials/tcc/index.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -48,14 +48,14 @@ APFS inode 플래그 가운데 `INODE_IS_SYNC_ROOT`(0x200000)는 fileproviderd �
 
 ## 시각 해석
 
-파일 공급자에 고유한 시각 값은 이번 자료로 확인하지 못했습니다. 동기화 폴더 안 파일의 파일 시스템 시각은 로컬 사본이 만들어지고 바뀐 때를 보여 줄 수 있지만, 그 사본을 시스템이 관리하는 구조라서 [1] 내려받기나 동기화가 시각에 어떤 영향을 주는지는 검체에서 확인한 범위만 씁니다. 시각을 읽는 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 폴더 안 변경의 흐름은 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)와 맞춰 봅니다.
+파일 공급자에 고유한 시각 값은 알려진 것이 없습니다. 동기화 폴더 안 파일의 파일 시스템 시각은 로컬 사본이 만들어지고 바뀐 때를 보여 줄 수 있지만, 그 사본을 시스템이 관리하는 구조라서 [1] 내려받기나 동기화가 시각에 어떤 영향을 주는지는 검체에서 확인한 범위만 씁니다. 시각을 읽는 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 폴더 안 변경의 흐름은 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)와 맞춰 봅니다.
 
 ## 함정과 한계
 
-- **내용이 없는 파일.** 이름만 있고 내용이 내려오지 않은 파일은 이미징할 때 내용 없이 들어올 수 있습니다. 이런 파일의 크기·확장 속성·플래그가 어떻게 보이는지는 이번 자료로 확인하지 못해서, 해시를 계산하기 전에 파일마다 내용이 있는지 먼저 봅니다.
+- **내용이 없는 파일.** 이름만 있고 내용이 내려오지 않은 파일은 이미징할 때 내용 없이 들어올 수 있습니다. 이런 파일의 크기·확장 속성·플래그가 어떻게 보이는지는 공개 자료가 없어서, 해시를 계산하기 전에 파일마다 내용이 있는지 먼저 봅니다.
 - **옛 위치와 새 위치.** 같은 앱이라도 파일 공급자 방식으로 바뀌기 전과 뒤에 폴더 자리가 다를 수 있습니다 [2]. 옛 위치에 남은 파일과 새 위치의 파일을 따로 봅니다.
 - **자동 수집에서 빠짐.** ForensicArtifacts 정의에 이 경로가 없습니다 [3].
-- **확인하지 못한 데몬 기록.** 파일 공급자 데몬의 상태 DB와 로그는 이 페이지에서 다루지 않았습니다. 도구가 이런 기록을 보여 주면 그 경로와 뜻의 근거를 먼저 확인합니다.
+- **데몬 기록.** 파일 공급자 데몬의 상태 DB와 로그는 공개된 분석 자료가 없습니다. 도구가 이런 기록을 보여 주면 그 경로와 뜻의 근거를 먼저 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -81,7 +81,7 @@ ls -laR "/Volumes/evidence/Users/사용자/Library/CloudStorage/" > cloudstorage
 xattr -l "/Volumes/evidence/Users/사용자/Library/CloudStorage/폴더/파일"
 ```
 
-나열한 목록은 수집 당시의 모습으로 보존하고, 파일마다 내용이 있는지는 해시 계산이나 파일 열기로 확인한 결과만 적습니다. 확장 속성의 이름과 값이 무엇을 뜻하는지는 확인한 자료가 없어서, 뽑은 값은 그대로 기록만 해 둡니다.
+나열한 목록은 수집 당시의 모습으로 보존하고, 파일마다 내용이 있는지는 해시 계산이나 파일 열기로 확인한 결과만 적습니다. 확장 속성의 이름과 값이 무엇을 뜻하는지는 공개된 자료가 없어서, 뽑은 값은 그대로 기록만 해 둡니다.
 
 ## 교차 검증
 

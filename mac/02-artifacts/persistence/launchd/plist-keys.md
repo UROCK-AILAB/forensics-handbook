@@ -11,11 +11,11 @@ nav_order: 580
 
 ## 무엇을 기록하나
 
-plist 한 개가 launchd 작업(job) 하나이고, 키 목록과 뜻은 launchd.plist(5) man 페이지 [1]를 기준으로 삼습니다. Apple의 보관 문서 [2]는 2016년 9월에 마지막으로 고친 문서라서 필수 키 표 정도만 함께 봅니다. 파일이 놓이는 폴더와 도메인은 [위치와 적용 범위 (Locations)](locations.md)에, plist 형식 자체는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다.
+plist 한 개가 launchd 작업(job) 하나이고, 아래 키 목록과 뜻은 launchd.plist(5) man 페이지 기준입니다 [1]. 파일이 놓이는 폴더와 도메인은 [위치와 적용 범위 (Locations)](locations.md)에, plist 형식 자체는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다.
 
 ## 무엇을 실행하나
 
-아래 표와 다음 절의 표에서 형식 칸의 — 는 이 페이지의 출처에서 형식을 확인하지 못한 키입니다.
+아래 표와 다음 절의 표에서 형식 칸의 — 는 공개 문서에 형식이 따로 나와 있지 않은 키입니다.
 
 | 키 | 형식 | 뜻 [1] |
 |---|---|---|
@@ -32,9 +32,9 @@ plist 한 개가 launchd 작업(job) 하나이고, 키 목록과 뜻은 launchd.
 
 Apple 보관 문서의 표는 `Label` 과 `ProgramArguments` 를 필수로, `inetdCompatibility` 를 inetd에서 띄우는 작업일 때만 필수로 적습니다 [2]. man 페이지는 `Program` 이나 `BundleProgram` 만 있어도 되는 것으로 적고 있어서, 실제 파일에서는 세 키 가운데 어느 것이 있는지 모두 확인합니다.
 
-실제로 실행되는 파일을 가릴 때는 `Program` 과 `ProgramArguments` 의 관계를 조심합니다. man 페이지는 `Program` 이 없을 때만 `ProgramArguments` 의 첫 요소를 실행 파일로 쓴다고 적습니다 [1]. 그래서 `Program` 이 있으면 그 경로가 실행 파일이고, `ProgramArguments` 의 첫 요소는 프로세스에 넘기는 argv[0] 문자열일 뿐입니다. 그래서 두 키가 모두 있고 값이 다르면 `Program` 쪽을 실행 파일로 적고, `ProgramArguments[0]` 은 프로세스 목록에 보일 이름으로 따로 적습니다. `EnableGlobbing` 이 true면 인자의 와일드카드가 실행 전에 펼쳐지므로 [1], plist에 적힌 문자열과 실제로 넘어간 인자가 다를 수 있습니다.
+실제로 실행되는 파일을 가릴 때는 `Program` 과 `ProgramArguments` 의 관계를 조심합니다. `ProgramArguments` 의 첫 요소는 `Program` 이 없을 때만 실행 파일로 쓰입니다 [1]. 그래서 `Program` 이 있으면 그 경로가 실행 파일이고, `ProgramArguments` 의 첫 요소는 프로세스에 넘기는 argv[0] 문자열일 뿐입니다. 두 키가 모두 있고 값이 다르면 `Program` 쪽을 실행 파일로 적고, `ProgramArguments[0]` 은 프로세스 목록에 보일 이름으로 따로 적습니다. `EnableGlobbing` 이 true면 인자의 와일드카드가 실행 전에 펼쳐지므로 [1], plist에 적힌 문자열과 실제로 넘어간 인자가 다를 수 있습니다.
 
-`StandardOutPath` 에 적힌 파일은 없으면 새로 만들어지고, 소유자는 `UserName`·`GroupName` 을, 권한은 `Umask` 를 따릅니다 [1]. 이 출력 파일은 작업이 돌면서 남긴 흔적이 될 수 있어서 경로를 따라가 확인할 만합니다(필자 해석).
+`StandardOutPath` 에 적힌 파일은 없으면 새로 만들어지고, 소유자는 `UserName`·`GroupName` 을, 권한은 `Umask` 를 따릅니다 [1]. 이 출력 파일은 작업이 돌면서 남긴 흔적이 될 수 있어서 경로를 따라가 확인합니다.
 
 ## 언제 실행하나
 

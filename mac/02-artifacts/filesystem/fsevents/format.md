@@ -15,7 +15,7 @@ fseventsd 데몬은 볼륨에서 일어난 파일 시스템 변경 알림을 모
 
 ## 위치
 
-공개 분석 도구 FSEventsParser는 아래 두 경로에서 이벤트 파일을 찾습니다 [2].
+이벤트 파일은 아래 두 경로에 있습니다 [2].
 
 ```
 /.fseventsd
@@ -24,13 +24,13 @@ fseventsd 데몬은 볼륨에서 일어난 파일 시스템 변경 알림을 모
 
 두 번째 경로는 시스템 볼륨과 데이터 볼륨이 나뉜 구조에서 데이터 볼륨 쪽 위치이고, 이 구조는 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../../../01-foundations/disk-volume/volume-group-firmlinks.md)에서 설명합니다. 이벤트 파일은 Mac 본체뿐 아니라 Mac에 꽂았던 외장 저장 장치에서도 나옵니다 [5].
 
-같은 폴더의 `fseventsd-uuid` 파일은 이벤트 파일이 아니라서 FSEventsParser는 이 파일을 건너뜁니다 [2].
+같은 폴더의 `fseventsd-uuid` 파일은 이벤트 파일이 아니므로 분석에서 뺍니다 [2].
 
 ## 파일 구조
 
 이벤트 파일 하나는 여러 멤버로 된 GZIP 파일이고, 압축을 풀면 디스크 로그 스트림(페이지)이 하나 이상 나옵니다 [1]. 숫자는 모두 little-endian으로 저장하고, 경로 문자열은 확장 ASCII(단일·다중 바이트)이며 NULL 바이트로 끝납니다 [1]. 기록된 경로는 앞에 `/` 가 붙지 않아서 `private/var/log/asl` 처럼 보입니다 [2].
 
-GZIP 헤더에는 수정 시각 칸이 있지만, plaso 코드 주석은 fseventsd가 파일을 쓸 때 이 칸을 채우지 않는 것으로 보인다고 적고 있습니다 [4]. 코드 주석에 적힌 관찰이라서 명세로 확정된 사실은 아닙니다.
+GZIP 헤더에는 수정 시각 칸이 있지만, fseventsd가 파일을 쓸 때 이 칸을 채우지 않는 것으로 보인다는 해석이 있습니다 [4].
 
 ### 페이지 헤더 (12바이트)
 
@@ -50,7 +50,7 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 |---|---|---|---|---|
 | 1 | `1SLD` | 12바이트 | 이벤트 ID 8 + 플래그 4 | Mac OS X 10.5 ~ macOS 10.12 [1][4] |
 | 2 | `2SLD` | 20바이트 | 이벤트 ID 8 + 플래그 4 + 노드 ID 8 | macOS 10.13 High Sierra [1][2][4] |
-| 3 | `3SLD` | 24바이트 | 이벤트 ID 8 + 플래그 4 + 노드 ID 8 + UID 4 | macOS 14 Sonoma (FSEventsParser 코드 주석 기준) [2] |
+| 3 | `3SLD` | 24바이트 | 이벤트 ID 8 + 플래그 4 + 노드 ID 8 + UID 4 | macOS 14 Sonoma [2] |
 
 고정 부분 안의 자리와 FSEventsParser가 읽는 형식은 아래와 같습니다 [2].
 
@@ -63,11 +63,11 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 
 플래그 칸은 디스크에 little-endian으로 들어 있지만 FSEventsParser는 빅엔디언으로 읽어서, 같은 값이 도구마다 다른 16진수로 보입니다. 그 대조표는 [이벤트 플래그 읽기 (Flags)](flags.md)에 있습니다.
 
-노드 ID는 High Sierra에서 추가된 파일 시스템 노드 ID이고, 버전 1 레코드에는 이 칸이 없어서 도구 결과에서 비어 보입니다 [5]. UID 칸은 FSEventsParser 코드 주석에 "UID introduced with Sonoma" 라고만 적혀 있고 [2], 어떤 UID인지 밝힌 문서는 참고 문헌에 없어서 사용자 계정으로 단정하지 않습니다.
+노드 ID는 High Sierra에서 추가된 파일 시스템 노드 ID이고, 버전 1 레코드에는 이 칸이 없어서 도구 결과에서 비어 보입니다 [5]. UID 칸은 Sonoma에서 생겼고 [2], 어떤 UID인지 밝힌 공개 자료가 없어서 사용자 계정으로 단정하지 않습니다.
 
 ### 이벤트 ID
 
-이벤트 ID는 64비트 값이고 시간 순서대로 매겨집니다 [3][5]. Apple 문서는 이벤트 ID가 2^64에 가까워지면 처음으로 되돌아가고, 이때 API 쪽에서 `kFSEventStreamEventFlagEventIdsWrapped` 플래그로 알린다고 설명합니다 [3]. 이벤트 ID는 순서를 알려 줄 뿐 시각이 아니고, 다른 컴퓨터에서 쓰던 디스크를 붙였을 때 ID가 어떻게 이어지는지는 [해석 함정 (Pitfalls)](pitfalls.md)에서 다룹니다.
+이벤트 ID는 64비트 값이고 시간 순서대로 매겨집니다 [3][5]. 이벤트 ID가 2^64에 가까워지면 처음으로 되돌아가고, 이때 API 쪽에서 `kFSEventStreamEventFlagEventIdsWrapped` 플래그로 알립니다 [3]. 이벤트 ID는 순서를 알려 줄 뿐 시각이 아니고, 다른 컴퓨터에서 쓰던 디스크를 붙였을 때 ID가 어떻게 이어지는지는 [해석 함정 (Pitfalls)](pitfalls.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -86,7 +86,7 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 
 1. 0x00~0x03의 `32 53 4C 44` 는 서명 `2SLD` 라서 고정 부분이 20바이트인 버전 2 레코드가 이어집니다.
 2. 0x08~0x0B는 페이지 크기이고 uint32 LE로 읽습니다.
-3. 0x0C부터 NULL(0x1B)까지가 경로 `Users/xxx/a.txt` 이고(사용자 이름 자리는 `xxx` 로 가렸습니다), 앞에 `/` 가 없습니다.
+3. 0x0C부터 NULL(0x1B)까지가 경로 `Users/xxx/a.txt` 이고(`xxx` 는 사용자 이름 자리입니다), 앞에 `/` 가 없습니다.
 4. 0x1C~0x23의 `56 34 12 00 00 00 00 00` 은 이벤트 ID이고 LE로 읽으면 0x123456(1193046)입니다.
 5. 0x24~0x27의 `01 00 80 00` 은 플래그이고 LE로 읽으면 0x00800001입니다. 이 값을 푸는 법은 [이벤트 플래그 읽기 (Flags)](flags.md)에 있습니다.
 6. 0x28~0x2F의 `DE BC 0A 00 00 00 00 00` 은 노드 ID이고 LE로 읽으면 0xABCDE(703710)입니다.
@@ -96,7 +96,7 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 
 FSEventsParser(Nicole Ibrahim, 버전 4.1, Apache 2.0)는 `1SLD`·`2SLD`·`3SLD` 를 모두 읽고, `.fseventsd` 폴더를 통째로 넣을 수도 있고 dfVFS로 디스크 이미지를 바로 넣을 수도 있습니다 [2]. 결과 칸은 `id`, `node_id`, `fs_uid`, `fullpath`, `type`, `flags`, `approx_dates_plus_minus_one_day`, `source`, `source_modified_time` 이고, 상세 출력에는 `id_hex`, `filename`, `mask`, `dls_version`, `record_end_offset` 이 더 붙습니다 [2]. 폴더를 복사해서 넣을 때는 파일 수정 시각을 보존해야 날짜 추정이 동작하고, 그 이유는 [해석 함정 (Pitfalls)](pitfalls.md)에 있습니다.
 
-plaso에는 `fseventsd` 파서가 있고, 코드 설명은 `1SLD` 와 `2SLD` 만 언급합니다 [4].
+plaso의 `fseventsd` 파서는 `1SLD` 와 `2SLD` 만 다룹니다 [4].
 
 이벤트 파일이 GZIP 형식이라서 비할당 영역에서 GZIP을 카빙하면 지워진 이벤트 파일을 찾을 수 있습니다 [5]. 카빙 방법은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서, 카빙한 결과를 읽을 때의 주의점은 [해석 함정 (Pitfalls)](pitfalls.md)에서 다룹니다.
 

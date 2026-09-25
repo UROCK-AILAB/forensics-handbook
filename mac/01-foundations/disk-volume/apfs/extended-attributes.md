@@ -13,7 +13,7 @@ APFS에서 확장 속성 (extended attribute, xattr)은 파일 시스템 트리 
 
 ## 이 구조를 쓰는 곳
 
-실제 이미지에서는 `com.apple.quarantine` 과 `com.apple.metadata:kMDItemWhereFroms` 같은 속성 이름이 관찰됐고 [2], 이 두 값의 해석은 [격리 속성과 다운로드 기록 (Quarantine)](../../../02-artifacts/filesystem/quarantine/index.md)과 [다운로드 출처 속성 (kMDItemWhereFroms)](../../../02-artifacts/filesystem/where-froms.md)에서 다룹니다. 파일 시스템도 이 레코드를 자기 용도로 써서 심볼릭 링크의 대상 경로와 펌링크의 대상을 확장 속성에 적습니다 [1]. 펌링크가 두 볼륨을 잇는 방식은 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../volume-group-firmlinks.md)에 있습니다.
+실제 이미지에는 `com.apple.quarantine` 과 `com.apple.metadata:kMDItemWhereFroms` 같은 속성이 붙어 있고 [2], 이 두 값의 해석은 [격리 속성과 다운로드 기록 (Quarantine)](../../../02-artifacts/filesystem/quarantine/index.md)과 [다운로드 출처 속성 (kMDItemWhereFroms)](../../../02-artifacts/filesystem/where-froms.md)에서 다룹니다. 파일 시스템도 이 레코드를 자기 용도로 써서 심볼릭 링크의 대상 경로와 펌링크의 대상을 확장 속성에 적습니다 [1]. 펌링크가 두 볼륨을 잇는 방식은 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../volume-group-firmlinks.md)에 있습니다.
 
 투명 압축 파일은 압축 정보를 `com.apple.decmpfs` 속성에 두고 [2][3], 압축 데이터 자체도 이 속성이나 `com.apple.ResourceFork` 속성에 들어갑니다 [2]. 압축 헤더와 방식 번호는 [복제·희소·압축 파일 (Clone·Sparse·Compression)](clone-sparse-compression.md)에서 설명합니다.
 
@@ -44,7 +44,7 @@ APFS에서 확장 속성 (extended attribute, xattr)은 파일 시스템 트리 
 
 ### 파일 시스템이 쓰는 이름
 
-[1]이 정의한 파일 시스템 전용 이름은 아래 셋입니다.
+파일 시스템 전용 이름은 아래 셋입니다 [1].
 
 | 이름 | 뜻 |
 |---|---|
@@ -52,13 +52,13 @@ APFS에서 확장 속성 (extended attribute, xattr)은 파일 시스템 트리 
 | `com.apple.fs.firmlink` | 펌링크의 대상 |
 | `com.apple.fs.cow-exempt-file-count` | copy-on-write 예외 파일(`INODE_SNAPSHOT_COW_EXEMPTION`)의 수 |
 
-ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로 표시하고 [1], 실제 이미지에서는 `com.apple.system.Security` 라는 속성 이름이 관찰됐습니다 [2]. Finder 정보는 아이노드 확장 필드 `INO_EXT_TYPE_FINDER_INFO` (32바이트)에 들어가는데 [1], [2]가 관찰한 이름 목록에는 `com.apple.FinderInfo` 속성도 나옵니다 [2]. 두 곳이 어떤 관계인지는 참고 문헌으로 확인하지 못했습니다.
+ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로 표시하고 [1], 실제 이미지에는 `com.apple.system.Security` 속성이 나타납니다 [2]. Finder 정보는 아이노드 확장 필드 `INO_EXT_TYPE_FINDER_INFO` (32바이트)에 들어가는데 [1], 실제 이미지에는 `com.apple.FinderInfo` 속성도 나타납니다 [2]. 두 곳의 관계를 설명한 공개 자료가 없어 검체에서 확인합니다.
 
-### 실제 이미지에서 관찰된 이름
+### 실제 이미지에 나오는 이름
 
-[2]는 실제 이미지에서 본 속성 이름을 아래처럼 적었지만 값의 형식과 뜻은 적지 않았습니다. 오른쪽 칸은 이 핸드북에서 이어 볼 곳이고, 빈칸은 값의 형식을 참고 문헌으로 확인하지 못한 이름입니다.
+실제 이미지에는 아래 속성 이름이 나옵니다 [2]. 오른쪽 칸은 이 핸드북에서 이어 볼 곳이고, 빈칸은 값의 형식을 설명한 공개 자료가 없는 이름입니다.
 
-| 관찰된 이름 [2] | 이어 볼 곳 |
+| 이름 [2] | 이어 볼 곳 |
 |---|---|
 | `com.apple.decmpfs` | [복제·희소·압축 파일 (Clone·Sparse·Compression)](clone-sparse-compression.md) |
 | `com.apple.ResourceFork` | 같은 곳(리소스 포크에 담는 압축) |
@@ -97,7 +97,7 @@ ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로
 2. 레코드마다 이름을 바이트 그대로 읽고, 값의 `flags` 로 데이터 위치를 가립니다.
 3. `XATTR_DATA_EMBEDDED` 이면 `xdata_len` 만큼 읽습니다.
 4. `XATTR_DATA_STREAM` 이면 `j_xattr_dstream_t` 의 `xattr_obj_id` 와 `j_dstream_t` 의 `size` 를 적어 두고, 본문은 그 데이터 스트림의 익스텐트를 따라가 `size` 만큼 읽습니다.
-5. 읽은 값은 이름에 맞는 아티팩트 페이지의 방법으로 풉니다. 형식을 확인하지 못한 이름은 원본 바이트를 그대로 보존해 둡니다.
+5. 읽은 값은 이름에 맞는 아티팩트 페이지의 방법으로 풉니다. 형식이 알려지지 않은 이름은 원본 바이트를 그대로 보존해 둡니다.
 
 ## 포렌식에서 중요한 점
 
@@ -105,7 +105,7 @@ ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로
 
 심볼릭 링크의 대상 경로는 `com.apple.fs.symlink` 속성에 들어 있으므로 [1], 이미지를 마운트하지 않고 트리만 읽을 때도 링크가 가리키던 경로를 이 레코드에서 확인할 수 있습니다.
 
-데이터 스트림에 담긴 속성의 물리 익스텐트는 `owning_obj_id` 에 xattr 레코드의 ID를 적습니다 [1]. 이 정의대로라면 익스텐트 참조 레코드만 남은 블록을 만났을 때 그 블록이 파일 본문이 아니라 큰 속성 값의 일부였는지 가릴 단서가 되고, 이 점은 [1]의 정의에서 끌어낸 해석입니다.
+데이터 스트림에 담긴 속성의 물리 익스텐트는 `owning_obj_id` 에 xattr 레코드의 ID를 적습니다 [1]. 그래서 익스텐트 참조 레코드만 남은 블록을 만났을 때 그 블록이 파일 본문이 아니라 큰 속성 값의 일부였는지 가릴 단서가 될 수 있습니다.
 
 압축 파일은 내용이 데이터 포크가 아니라 확장 속성이나 리소스 포크 속성에 들어가므로 [2], 파일 본문만 읽는 방식으로는 내용을 놓칩니다. 자세한 영향은 [복제·희소·압축 파일 (Clone·Sparse·Compression)](clone-sparse-compression.md)과 [콘텐츠 검색 (Content Search)](../../../03-techniques/analysis/content-search.md)에서 다룹니다.
 
@@ -113,9 +113,9 @@ ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로
 
 레코드 안에 넣을 수 있는 최대 크기는 APFS 명세에서 3804바이트이지만 [1], xnu의 `decmpfs.h` 에 있는 `MAX_DECMPFS_XATTR_SIZE` 는 3802입니다 [3]. 두 값은 서로 다른 헤더에 정의된 상수라서, 압축 속성의 한도를 APFS 레코드 한도로 옮겨 적지 않습니다.
 
-[2]는 `j_xattr_dstream_t` 를 48바이트로 적으면서 구조 표에는 "8 | 48"처럼 적어 두 표기가 어긋납니다. [1]의 구조체로 계산하면 `xattr_obj_id` 8바이트와 `j_dstream_t` 40바이트를 합쳐 48바이트이고, 이 페이지는 [1]을 따랐습니다.
+[2]는 `j_xattr_dstream_t` 를 48바이트로 적으면서 구조 표에는 "8 | 48"처럼 적어 두 표기가 어긋납니다. [1]의 구조체로 계산하면 `xattr_obj_id` 8바이트와 `j_dstream_t` 40바이트를 합쳐 48바이트입니다.
 
-속성 이름은 대소문자 비구분 파일 시스템에서도 대소문자를 구분하는 것으로 보인다고 [2]가 적고 있어서, 이름을 찾을 때는 바이트 그대로 비교합니다. Finder 정보처럼 확장 필드와 속성 두 곳에 나타나는 값은 한쪽만 보고 없다고 판단하지 않습니다.
+속성 이름은 대소문자 비구분 파일 시스템에서도 대소문자를 구분하는 것으로 보인다는 해석이 있어서 [2], 이름을 찾을 때는 바이트 그대로 비교합니다. Finder 정보처럼 확장 필드와 속성 두 곳에 나타나는 값은 한쪽만 보고 없다고 판단하지 않습니다.
 
 ## 도구
 

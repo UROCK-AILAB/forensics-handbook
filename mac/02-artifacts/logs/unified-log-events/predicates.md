@@ -11,7 +11,7 @@ nav_order: 1760
 
 ## 무엇을 하나 · 왜 필요한가
 
-통합 로그는 하루에도 메시지가 아주 많이 쌓이고, 원하는 사건만 보려면 어느 프로세스가 어느 서브시스템으로 남긴 메시지인지를 조건으로 걸어야 합니다. `log` 도구의 man 페이지는 `--predicate` 로 조건을 주는 방법을 설명하고, 서브시스템 하나만 보거나 서브시스템과 카테고리를 함께 거는 예를 싣고 있습니다 [1].
+통합 로그는 하루에도 메시지가 아주 많이 쌓이고, 원하는 사건만 보려면 어느 프로세스가 어느 서브시스템으로 남긴 메시지인지를 조건으로 걸어야 합니다. 서브시스템 하나만 보거나 서브시스템과 카테고리를 함께 거는 조건은 아래처럼 `--predicate` 에 줍니다 [1].
 
 ```
 log show --predicate 'subsystem == "com.example.my_subsystem"'
@@ -22,7 +22,7 @@ log show --predicate '(subsystem == "com.example.my_subsystem") && (category == 
 
 ## 구조 — 조건에 쓰는 키
 
-man 페이지가 조건에 쓸 수 있다고 밝힌 키는 `eventType`, `eventMessage`, `messageType`, `process`, `processImagePath`, `sender`, `senderImagePath`, `subsystem`, `category` 입니다 [1]. 이 가운데 `eventType` 과 `messageType` 은 정해진 값 가운데 하나를 받습니다 [1].
+조건에 쓸 수 있는 키는 `eventType`, `eventMessage`, `messageType`, `process`, `processImagePath`, `sender`, `senderImagePath`, `subsystem`, `category` 입니다 [1]. 이 가운데 `eventType` 과 `messageType` 은 정해진 값 가운데 하나를 받습니다 [1].
 
 | 키 | 값 |
 |---|---|
@@ -31,13 +31,13 @@ man 페이지가 조건에 쓸 수 있다고 밝힌 키는 `eventType`, `eventMe
 
 ## 연산자
 
-man 페이지의 조건 절에는 `==`, `!=`, `ENDSWITH`, `contains[cd]`, `IN { }`, `&&`, `||` 가 나옵니다 [1]. 탐지 규칙을 공개한 자료들은 이 밖에 `AND`, `CONTAINS`(포함), `CONTAINS[c]`(대소문자를 가리지 않는 포함), `BEGINSWITH`(시작 문자열)도 씁니다 [2][3]. 예를 들어 잠금 해제 실패 조건은 세 조건을 `AND` 로 잇고, 경로는 `BEGINSWITH` 로, 메시지는 `CONTAINS[c]` 로 거릅니다 [2].
+조건에는 `==`, `!=`, `ENDSWITH`, `contains[cd]`, `IN { }`, `&&`, `||` 를 씁니다 [1]. 이 밖에 `AND`, `CONTAINS`(포함), `CONTAINS[c]`(대소문자를 가리지 않는 포함), `BEGINSWITH`(시작 문자열)도 쓸 수 있습니다 [2][3]. 예를 들어 잠금 해제 실패 조건은 세 조건을 `AND` 로 잇고, 경로는 `BEGINSWITH` 로, 메시지는 `CONTAINS[c]` 로 거릅니다 [2].
 
 ```
 processImagePath BEGINSWITH "/System/Library/CoreServices" AND process == "loginwindow" AND eventMessage CONTAINS[c] "INCORRECT"
 ```
 
-man 페이지에는 "SHORTHAND-BASED FILTERING" 절도 있어서, `--predicate` 에 `p`(process)·`s`(subsystem)·`c`(category) 같은 줄인 키와 `:`(포함), `:^`(시작), `endswith`, `~/regex/` 같은 줄임 연산자를 쓸 수 있다고 적었습니다 [1]. 다만 이 줄임 문법이 macOS 몇 버전부터 되는지는 확인하지 못했습니다. 보고서나 절차서에 남길 조건은 `==`, `CONTAINS` 같은 위의 연산자로 씁니다.
+`--predicate` 에는 `p`(process)·`s`(subsystem)·`c`(category) 같은 줄인 키와 `:`(포함), `:^`(시작), `endswith`, `~/regex/` 같은 줄임 연산자도 쓸 수 있습니다(man 페이지의 "SHORTHAND-BASED FILTERING" 절) [1]. 다만 이 줄임 문법이 macOS 몇 버전부터 되는지는 알려져 있지 않으니, 보고서나 절차서에 남길 조건은 `==`, `CONTAINS` 같은 위의 연산자로 씁니다.
 
 ## 아카이브에 조건 걸기
 
@@ -49,7 +49,7 @@ log show --archive <경로> --start "<시작 시각>" --end "<끝 시각>" --pre
 
 시각 문자열의 정확한 형식은 man 페이지로 확인하고 씁니다. 출력은 `--style` 로 `default`, `compact`, `json`, `ndjson`, `syslog` 중에서 고를 수 있고 [1], JSON 계열로 뽑으면 다른 도구에 넘기기 쉽습니다. `--timezone` 으로 출력 시간대를 정할 수 있으니 [1] 보고서에는 어느 시간대로 뽑았는지 함께 적습니다.
 
-`--info` 와 `--debug` 를 줘야 해당 수준의 메시지가 출력에 나옵니다 [1]. 다만 Apple 은 Debug 수준 메시지를 디스크에 남기지 않는다고 설명해서 [4], 사후 분석에서는 이 옵션을 줘도 그 메시지가 나오지 않습니다. 로그 수준별로 디스크에 남는 범위는 [허브](index.md)에 정리돼 있습니다.
+`--info` 와 `--debug` 를 줘야 해당 수준의 메시지가 출력에 나옵니다 [1]. 다만 Debug 수준 메시지는 디스크에 남지 않아서 [4], 사후 분석에서는 이 옵션을 줘도 그 메시지가 나오지 않습니다. 로그 수준별로 디스크에 남는 범위는 [허브](index.md)에 정리돼 있습니다.
 
 자주 쓰는 조건은 `~/.logrc` 의 `predicate:` 절에 별칭으로 적어 둘 수 있고, 같은 파일에 기본 인자도 정할 수 있습니다 [1]. 분석용 맥에 별칭을 두면 편하지만, 절차서에는 별칭 대신 조건 전문을 적어 다른 분석가가 그대로 따라 할 수 있게 합니다.
 
@@ -65,7 +65,7 @@ log show --archive <경로> --start "<시작 시각>" --end "<끝 시각>" --pre
 | SSH·화면 공유 | `sshd`, `screensharingd` | [원격 로그인 (Remote Login)](remote-login.md) |
 | 프로세스 실행 | — | [통합 로그의 프로세스 실행 기록 (Process Events)](../../execution/unified-log-process.md) |
 
-이 허브에 주제 페이지가 없는 조건 가운데 공개 자료에 나온 것은 아래와 같습니다. 해석은 오른쪽 페이지에서 다룹니다.
+이 허브에 주제 페이지가 없는 조건은 아래와 같습니다. 해석은 오른쪽 페이지에서 다룹니다.
 
 | 목적 | 조건 | 출처 | 함께 볼 페이지 |
 |---|---|---|---|
@@ -82,7 +82,7 @@ log show --archive <경로> --start "<시작 시각>" --end "<끝 시각>" --pre
 - **따옴표.** 조건 전체는 셸의 작은따옴표로, 조건 안의 문자열은 큰따옴표로 감쌉니다. 공개 자료의 예시 중에는 따옴표가 어긋난 것도 있어서 [3], 옮겨 쓴 조건은 실제 맥에서 한 번 돌려 확인합니다.
 - **버전.** 공개 자료의 조건은 대부분 적용 버전을 밝히지 않습니다. 검체의 macOS 버전에서 결과가 비면 조건부터 의심합니다.
 - **가려진 값.** 동적 문자열은 기본값으로 `<private>` 로 가려지고([허브](index.md)), `eventMessage CONTAINS` 로 가려진 부분의 문자열을 찾으면 걸리지 않을 수 있습니다.
-- **권한.** `sudo` 없이 `log show` 를 돌릴 때 보이는 범위가 달라지는지는 확인하지 못했습니다. 라이브 시스템에서 돌릴 때는 권한을 기록에 남깁니다.
+- **권한.** `sudo` 없이 `log show` 를 돌릴 때 보이는 범위가 달라지는지는 공개 자료가 없습니다. 라이브 시스템에서 돌릴 때는 권한을 기록에 남깁니다.
 - **메시지 확인.** 공개 자료의 조건은 대부분 프로세스·서브시스템 수준에서 거르는 데 그쳐서, 걸린 메시지를 읽어 뜻을 확인하는 단계를 건너뛰지 않습니다.
 
 ## 직접 분석해 보기

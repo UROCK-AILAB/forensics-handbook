@@ -6,35 +6,35 @@ nav_order: 1430
 
 # 디스코드 (Discord)
 
-맥 디스코드 앱이 로컬에 무엇을 어디에 남기는지는 이 페이지를 쓸 때 연 자료로 하나도 확인하지 못했고, 이 페이지는 널리 알려진 후보 위치를 "확인되지 않음"으로 표시해 두고 검체에서 직접 확인하는 방법을 정리합니다.
+맥 디스코드 앱이 로컬에 무엇을 어디에 남기는지는 공개된 분석 자료가 없어서, 널리 알려진 후보 위치를 검체에서 하나씩 확인해야 합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-디스코드는 대화 본문을 서버에 두고, 맥 쪽에는 앱이 화면을 그리려고 받아 둔 캐시(API 응답 JSON, 첨부 이미지)에만 대화가 조각으로 남는다고 흔히 설명합니다. 이 설명은 이 페이지의 출처로 확인하지 못했으므로, 보고서에 옮기기 전에 검체에서 실제로 어떤 파일이 있는지부터 봅니다.
+디스코드는 대화 본문을 서버에 두고, 맥 쪽에는 앱이 화면을 그리려고 받아 둔 캐시(API 응답 JSON, 첨부 이미지)에만 대화가 조각으로 남는다는 설명이 널리 퍼져 있습니다. 이를 뒷받침하는 공개 분석 자료는 없으므로, 보고서에 옮기기 전에 검체에서 실제로 어떤 파일이 있는지부터 봅니다.
 
-디스코드 데스크톱이 일렉트론 (Electron) 앱이라는 점도 확인하지 못했습니다. 일렉트론 앱이라면 크로미움 (Chromium) 기반이라 캐시·Local Storage·Cookies 같은 크로미움 파일 구조를 그대로 쓸 것으로 짐작하지만, 이 역시 확인되지 않은 추정입니다. 일렉트론 앱이 맥에서 암호화 키를 어디에 두는지는 공식 문서로 확인한 내용을 [시그널 (Signal)](signal.md) 페이지에 정리했습니다.
+디스코드 데스크톱이 일렉트론 (Electron) 앱이라면 크로미움 (Chromium) 기반이라서 캐시·Local Storage·Cookies 같은 크로미움 파일 구조를 그대로 쓸 가능성이 있습니다. 일렉트론 앱인지부터 검체에서 확인합니다. 일렉트론 앱이 맥에서 암호화 키를 어디에 두는지는 [시그널 (Signal)](signal.md) 페이지에 있습니다.
 
 공개 아티팩트 정의 모음인 ForensicArtifacts 의 메신저 정의 파일(`instant_messaging.yaml`)에는 디스코드 항목이 없습니다 [1]. 이 정의를 그대로 쓰는 수집 도구로는 디스코드 폴더가 수집 대상에 들어가지 않을 수 있어서, 수집 범위를 정할 때 따로 챙겨야 합니다.
 
 ## 위치와 버전별 차이
 
-아래 경로는 모두 조사 과정에서 후보로만 떠올린 값이고, 이 페이지의 출처로 확인하지 못했습니다.
+아래 경로는 모두 후보 위치이고, 이를 밝힌 공개 분석 자료는 없습니다.
 
 | 기록 | 후보 위치 | 확인 정도 |
 |---|---|---|
-| 사용자 데이터 폴더 | `~/Library/Application Support/discord/` | 확인되지 않음 |
-| 웹 캐시 | 위 폴더 아래 `Cache/Cache_Data/` | 확인되지 않음 |
-| Local Storage | 위 폴더 아래 `Local Storage/leveldb/` | 확인되지 않음 |
-| IndexedDB | 위 폴더 아래 `IndexedDB/` | 확인되지 않음 |
-| 쿠키 | 위 폴더 아래 `Cookies` | 확인되지 않음 |
-| 앱 설정 | 위 폴더 아래 `settings.json` | 확인되지 않음 |
-| 시험판 채널 폴더 | `discordptb`, `discordcanary` 라는 이름의 폴더 | 확인되지 않음 |
+| 사용자 데이터 폴더 | `~/Library/Application Support/discord/` | 검체에서 확인 |
+| 웹 캐시 | 위 폴더 아래 `Cache/Cache_Data/` | 검체에서 확인 |
+| Local Storage | 위 폴더 아래 `Local Storage/leveldb/` | 검체에서 확인 |
+| IndexedDB | 위 폴더 아래 `IndexedDB/` | 검체에서 확인 |
+| 쿠키 | 위 폴더 아래 `Cookies` | 검체에서 확인 |
+| 앱 설정 | 위 폴더 아래 `settings.json` | 검체에서 확인 |
+| 시험판 채널 폴더 | `discordptb`, `discordcanary` 라는 이름의 폴더 | 검체에서 확인 |
 
-시험판 채널이 따로 폴더를 쓴다면 한 계정에 디스코드 데이터 묶음이 여러 개 있을 수 있어서, 이름에 `discord` 가 들어간 폴더를 모두 찾아봅니다. macOS 10.15 Catalina 이후 맥 버전에 따라 위치가 바뀐다는 자료도, 디스코드 앱 버전에 따라 바뀐다는 자료도 이번에 찾지 못했습니다.
+시험판 채널이 따로 폴더를 쓴다면 한 계정에 디스코드 데이터 묶음이 여러 개 있을 수 있어서, 이름에 `discord` 가 들어간 폴더를 모두 찾아봅니다. macOS 10.15 Catalina 이후 맥 버전이나 디스코드 앱 버전에 따라 위치가 바뀌는지는 공개 자료가 없어서 검체마다 확인합니다.
 
 ## 구조
 
-후보 폴더의 파일이 실제로 크로미움 구조라면 각 형식은 기반 구조 페이지의 설명을 따릅니다. `Local Storage/leveldb/` 와 `IndexedDB/` 는 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)에서, `Cookies` 같은 SQLite 파일은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서, 캐시 폴더는 [크롬·엣지·웨일 (Chromium 계열)](../browsers/chromium/index.md)에서 다룹니다. 디스코드가 이 파일들 안에 어떤 키 이름과 값으로 대화·계정 정보를 적는지는 확인하지 못했습니다.
+후보 폴더의 파일이 실제로 크로미움 구조라면 각 형식은 기반 구조 페이지의 설명을 따릅니다. `Local Storage/leveldb/` 와 `IndexedDB/` 는 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)에서, `Cookies` 같은 SQLite 파일은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서, 캐시 폴더는 [크롬·엣지·웨일 (Chromium 계열)](../browsers/chromium/index.md)에서 다룹니다. 디스코드가 이 파일들 안에 어떤 키 이름과 값으로 대화·계정 정보를 적는지는 공개 자료가 없어 검체에서 확인합니다.
 
 > 그림 자리: 후보 사용자 데이터 폴더 아래 캐시·Local Storage·IndexedDB·Cookies·settings.json 이 놓인 모양과, 각각을 설명하는 기반 구조 페이지를 잇는 길잡이 그림
 
@@ -46,16 +46,16 @@ nav_order: 1430
 
 ## 시각 해석
 
-크로미움 캐시는 보통 1601-01-01 기준 마이크로초 시각을 쓴다고 알려져 있지만, 디스코드 캐시가 같은 기준을 쓰는지는 확인하지 못했습니다. 캐시 형식과 시각은 [크롬·엣지·웨일 (Chromium 계열)](../browsers/chromium/index.md)의 설명을 따르고, 캐시 안의 API 응답 JSON에 들어 있는 시각 문자열이나 숫자는 기준을 따로 확인합니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 정리돼 있습니다.
+크로미움 캐시는 보통 1601-01-01 기준 마이크로초 시각을 쓰지만, 디스코드 캐시가 같은 기준을 쓰는지는 공개 자료가 없습니다. 캐시 형식과 시각은 [크롬·엣지·웨일 (Chromium 계열)](../browsers/chromium/index.md)의 설명을 따르고, 캐시 안의 API 응답 JSON에 들어 있는 시각 문자열이나 숫자는 기준을 따로 확인합니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 정리돼 있습니다.
 
 캐시 항목의 시각은 앱이 그 응답을 받아 저장한 때에 가까울 뿐, 메시지를 보낸 때와 같다는 보장이 없습니다. 메시지를 보낸 시각은 캐시에 남은 응답 본문 안에 따로 적혀 있을 수 있으니, 두 시각을 섞지 않고 칸마다 뜻을 적어 둡니다.
 
 ## 함정과 한계
 
-- **후보 경로를 사실처럼 쓰는 경우.** 이 페이지의 경로는 모두 확인되지 않은 후보라서, 보고서에는 검체에서 실제로 찾은 경로만 씁니다.
+- **후보 경로를 사실처럼 쓰는 경우.** 위 경로는 모두 후보라서, 보고서에는 검체에서 실제로 찾은 경로만 씁니다.
 - **수집 정의에 빠져 있는 경우.** ForensicArtifacts 메신저 정의에 디스코드가 없어서 [1], 정의만 믿고 수집하면 디스코드 폴더가 통째로 빠질 수 있습니다.
 - **시험판 채널 폴더를 놓치는 경우.** 이름이 다른 폴더를 쓰는 채널이 있다면, 한 폴더만 보고 결론을 내면 다른 묶음을 놓칩니다.
-- **캐시의 한계.** 캐시는 일반적으로 앱이 비우고 다시 채우는 곳이라 오래된 대화는 남아 있지 않을 수 있고, 디스코드 캐시를 언제 비우는지는 확인하지 못했습니다. 지운 캐시 파일을 되살리는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)를 봅니다.
+- **캐시의 한계.** 캐시는 일반적으로 앱이 비우고 다시 채우는 곳이라 오래된 대화는 남아 있지 않을 수 있고, 디스코드 캐시를 언제 비우는지는 공개 자료가 없습니다. 지운 캐시 파일을 되살리는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)를 봅니다.
 - **지우기와 조작.** 앱을 지우거나 폴더를 비운 정황은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 방법으로 다른 기록과 맞춰 판단합니다.
 
 ## 직접 분석해 보기

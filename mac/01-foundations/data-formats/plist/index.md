@@ -14,14 +14,14 @@ has_toc: false
 
 앱 설정(기본 설정, defaults)은 사용자 홈의 `Library/Preferences` 아래에 앱마다 plist 파일로 저장되고 [4], 앱이 객체를 통째로 보관하는 NSKeyedArchiver 형식도 결과를 plist로 씁니다 [3]. 그래서 설정값 하나를 확인하든 앱이 남긴 기록을 풀든 plist를 읽는 일이 먼저이고, 다른 아티팩트 페이지도 이 형식을 안다고 보고 설명합니다.
 
-이 묶음은 형식을 읽는 법뿐만 아니라 값을 해석할 때의 주의점까지 다룹니다. Apple 문서는 defaults 값을 쓰면 메모리의 값이 먼저 바뀌고 디스크에는 비동기로 쓴다고 설명합니다 [5]. 게다가 앱은 여러 도메인 가운데 앞 순서 도메인의 값을 쓰기 때문에 [4][5], 파일 하나의 내용만 보고 그 순간의 설정이라고 단정하지 않습니다. 또 defaults는 값을 암호화하지 않고 저장하기 때문에 [5], 앱이 넣어 둔 값을 그대로 읽을 수 있습니다.
+이 묶음은 형식을 읽는 법뿐만 아니라 값을 해석할 때의 주의점까지 다룹니다. defaults 값을 쓰면 메모리의 값이 먼저 바뀌고 디스크에는 비동기로 씁니다 [5]. 게다가 앱은 여러 도메인 가운데 앞 순서 도메인의 값을 쓰기 때문에 [4][5], 파일 하나의 내용만 보고 그 순간의 설정이라고 단정하지 않습니다. 또 defaults는 값을 암호화하지 않고 저장하기 때문에 [5], 앱이 넣어 둔 값을 그대로 읽을 수 있습니다.
 
 ## 한눈에 보기
 
 | 구분 | 알아보는 법 | 위치·버전 | 알려 주는 것 |
 |---|---|---|---|
 | XML plist | Apple DTD를 따르는 XML 문서 [2] | 아티팩트마다 다름. 날짜는 UTC 초 단위 문자열 [2] | 사전·배열·문자열·숫자·날짜·데이터 값 |
-| 바이너리 plist | 첫 8바이트 `bplist00` [1][2] | 구조는 옛 공개판 CF 소스 기준이고, macOS 10.15 이후 구현과 같은지는 확인하지 못함 [1] | XML과 같은 값. 날짜는 2001-01-01 00:00:00 GMT 기준 초(float64) [1][6] |
+| 바이너리 plist | 첫 8바이트 `bplist00` [1][2] | 구조는 옛 공개판 CF 소스 기준이고, macOS 10.15 이후 구현과 같은지는 공개 자료 없음 [1] | XML과 같은 값. 날짜는 2001-01-01 00:00:00 GMT 기준 초(float64) [1][6] |
 | NSKeyedArchiver | 최상위 키 `$archiver`·`$version`·`$objects`·`$top` [3] | plist 안의 한 방식이라 위치는 아티팩트마다 다름. 기본 출력은 바이너리 [3] | 앱 객체의 클래스 이름과 저장한 값 |
 | 기본 설정(defaults) | 번들 ID 이름의 plist [4] | `$HOME/Library/Preferences/` 아래 [4] | 앱별 설정값. 휘발 도메인의 값은 남지 않음 [4][5] |
 
@@ -36,7 +36,7 @@ has_toc: false
 - [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md) — plist 날짜 값을 바꿀 때
 - [번들 ID와 팀 ID (Bundle ID·Team ID)](../../value-decoding/bundle-team-id.md) — 설정 파일 이름의 번들 ID를 읽을 때
 - [SQLite 데이터베이스 (SQLite)](../sqlite/index.md) — 또 하나의 주요 저장 형식
-- [키체인 (Keychain)](../../protection/keychain/index.md) — Apple 문서가 민감한 정보를 두라고 안내하는 곳
+- [키체인 (Keychain)](../../protection/keychain/index.md) — 민감한 정보를 두는 곳
 - [구성 프로파일 (Configuration Profiles·MDM)](../../../02-artifacts/persistence/configuration-profiles.md) — 관리 기기의 설정을 볼 때
 - [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md) — 실행 중인 시스템에서 설정 파일을 수집할 때
 - [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md) — 지워진 plist를 카빙할 때

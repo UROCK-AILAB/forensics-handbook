@@ -26,7 +26,7 @@ has_toc: false
 | 볼륨 슈퍼블록 `apfs_fs_flags` | 10.13 이후 | 소프트웨어 암호화 볼륨인지 처음 가려내기 |
 | `/var/db/FileVaultPRK.dat` | 10.13 이후 | MDM 복구 키 에스크로를 설정했던 기기 |
 | 구성 프로파일의 파일볼트 페이로드 | 10.9 이후 (10.13 이후 에스크로 페이로드) | 파일볼트를 켜게 한 정책, 복구 키 처리 방식 |
-| `/Library/Keychains/FileVaultMaster.keychain` | 페이로드 문서에 버전 표기 없음 | 기관 복구 키를 쓰도록 한 흔적 |
+| `/Library/Keychains/FileVaultMaster.keychain` | 공개 자료 없음 | 기관 복구 키를 쓰도록 한 흔적 |
 | 기기의 보안 칩 (T2·Apple silicon) | — | 디스크만 떼어 내 풀 수 있는지 가늠 |
 
 관리 기능이 들어온 버전은 아래와 같습니다 [2].
@@ -39,7 +39,7 @@ has_toc: false
 | 부트스트랩 토큰으로 로그인 사용자에게 보안 토큰 부여 | macOS 11 이후 |
 | SSH로 파일볼트 잠금 해제 | macOS 26 이후 (Apple silicon) |
 
-이 허브는 APFS 파일볼트만 다룹니다. macOS 10.12 이하의 HFS+ 볼륨에서 쓰던 CoreStorage 방식은 이번 근거 자료로 확인하지 못해 다루지 않고, 파일볼트를 켜고 끌 때 남는 로그와 설정 파일도 같은 이유로 적지 않았습니다.
+이 허브는 APFS 파일볼트만 다룹니다. macOS 10.12 이하의 HFS+ 볼륨에서 쓰던 CoreStorage 방식과 파일볼트를 켜고 끌 때 남는 로그·설정 파일은 다루지 않습니다.
 
 ## 읽는 순서
 

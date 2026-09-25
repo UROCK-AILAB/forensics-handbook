@@ -13,7 +13,7 @@ T2 칩이 든 인텔 맥과 Apple silicon 맥은 파일볼트(FileVault)를 꺼 
 
 현장에서 맥에 손대기 전에 이 페이지로 방법을 정합니다. 확보 절차 전체의 흐름은 [맥 증거 확보 (Acquisition)](index.md)에서, 조사 전체의 순서는 [조사 절차 (Investigation Process)](../investigation-process.md)에서 봅니다.
 
-Apple 문서는 올바른 자격 증명이나 복구 키가 없으면 저장 장치를 떼어 다른 컴퓨터에 연결해도 내장 APFS 볼륨이 암호화된 채로 보호된다고 적습니다 [1]. 이 설명에 비추어 보면, 디스크를 떼어 쓰기 방지 장치에 물린 뒤 이미징하는 전통 방식으로는 이 맥들에서 풀린 데이터를 얻기 어렵습니다. Apple 문서에 그대로 적힌 문장이 아니라 [1]에서 끌어낸 판단입니다.
+올바른 자격 증명이나 복구 키가 없으면 저장 장치를 떼어 다른 컴퓨터에 연결해도 내장 APFS 볼륨은 암호화된 채로 보호됩니다 [1]. 그래서 디스크를 떼어 쓰기 방지 장치에 물린 뒤 이미징하는 전통 방식으로는 이 맥들에서 풀린 데이터를 얻기 어렵습니다.
 
 ## 먼저 알아 둘 전제 — 볼륨 암호화
 
@@ -24,7 +24,7 @@ Apple silicon 맥과 T2 맥은 파일볼트 키를 전부 보안 영역(Secure E
 | 파일볼트 꺼짐 | 암호화돼 있음 | 보안 영역 안의 하드웨어 UID만 |
 | 파일볼트 켜짐 | 암호화돼 있음 | 사용자 암호와 하드웨어 UID를 합친 값 |
 
-Apple은 파일볼트가 꺼진 상태를 "the volume is still encrypted but the volume encryption key is protected only by the hardware UID in the Secure Enclave." 라고 설명합니다 [1]. 파일볼트를 켤 때는 재사용 방지(anti-replay) 장치가 있어서 하드웨어 UID만으로 만든 옛 키로는 볼륨을 풀 수 없고, 볼륨을 지우면 보안 영역이 그 볼륨의 암호화 키를 안전하게 삭제합니다 [1]. 지운 볼륨은 이미징해도 복구를 기대하기 어렵다고 판단합니다. [1]은 macOS 10.15 Catalina와 macOS 11 Big Sur 이후의 시스템·데이터 볼륨 암호화를 언급하지만, 버전별 세부 차이는 이번에 확인하지 못했습니다. 키 구조 자체는 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md), 볼륨 배치는 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../../../01-foundations/disk-volume/volume-group-firmlinks.md)에서 다룹니다.
+파일볼트가 꺼져 있어도 볼륨은 암호화돼 있고, 볼륨 암호화 키는 보안 영역 안의 하드웨어 UID로만 보호됩니다 [1]. 파일볼트를 켤 때는 재사용 방지(anti-replay) 장치가 있어서 하드웨어 UID만으로 만든 옛 키로는 볼륨을 풀 수 없고, 볼륨을 지우면 보안 영역이 그 볼륨의 암호화 키를 안전하게 삭제합니다 [1]. 지운 볼륨은 이미징해도 복구를 기대하기 어렵다고 판단합니다. 시스템·데이터 볼륨 암호화는 macOS 10.15 Catalina와 macOS 11 Big Sur 이후 판에 해당하는 내용이고 [1], 버전별 세부 차이는 판마다 다를 수 있어 검체의 macOS 버전에 맞춰 확인합니다. 키 구조 자체는 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md), 볼륨 배치는 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../../../01-foundations/disk-volume/volume-group-firmlinks.md)에서 다룹니다.
 
 ## 칩에 따라 다른 부팅 제한
 
@@ -37,7 +37,7 @@ Apple은 파일볼트가 꺼진 상태를 "the volume is still encrypted but the
 | 외부 매체 부팅 | 기본값은 허용하지 않음. 이 유틸리티에서 바꿀 수 있음 | 그 OS 버전을 먼저 recoveryOS에서 인증된 재시작으로 개인화(personalize)해야 함 |
 | 그 밖의 장벽 | 펌웨어 암호를 켜 두면 다른 디스크로 부팅할 수 없음 | recoveryOS에 들어가려면 전원 버튼을 길게 눌러야 해서 맥 앞에 있는 사람만 할 수 있음 |
 
-T2 맥에서 외부 부팅으로 이미징하려면 관리자 인증을 거쳐 이 설정을 바꿔야 하고, 펌웨어 암호가 걸려 있으면 그 길이 막힌다고 판단합니다 [4]. Apple silicon 맥은 모든 부팅을 로컬에서 처리하고 [5], 서드파티 부팅 매체(리눅스 기반 포렌식 매체 등)를 쓸 수 있는지는 이번에 확인한 자료로 답하지 못했습니다. 서명과 SIP의 관계는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../../01-foundations/protection/codesign-notarization-sip.md)에서 봅니다.
+T2 맥에서 외부 부팅으로 이미징하려면 관리자 인증을 거쳐 이 설정을 바꿔야 하고, 펌웨어 암호가 걸려 있으면 그 길이 막힌다고 판단합니다 [4]. Apple silicon 맥은 모든 부팅을 로컬에서 처리하고 [5], 서드파티 부팅 매체(리눅스 기반 포렌식 매체 등)를 쓸 수 있는지는 공개된 자료가 없어 같은 기종의 시험용 맥에서 확인해야 합니다. 서명과 SIP의 관계는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../../01-foundations/protection/codesign-notarization-sip.md)에서 봅니다.
 
 ## 절차
 
@@ -59,7 +59,7 @@ T2 맥에서 외부 부팅으로 이미징하려면 관리자 인증을 거쳐 �
 
 켜진 맥을 조사하려고 재시작하거나 끄는 순간 2단계의 기회가 사라집니다. 대상 디스크 모드는 켜진 상태에서도 시동 디스크 설정으로 재시작해 들어갈 수 있지만 [2], 재시작하면 잠금이 풀린 상태를 잃는다는 점을 먼저 따져 봅니다.
 
-T2 맥에서 Startup Security Utility 설정을 바꾸면 그 사실이 맥 어디에 흔적으로 남는지는 확인한 자료가 없습니다. 조사 중에 설정을 바꿨다면 바꾼 항목과 시각을 보관 기록에 적어, 나중에 그 변화를 사용자 행위로 오해하지 않게 합니다.
+T2 맥에서 Startup Security Utility 설정을 바꾸면 그 사실이 맥 어디에 흔적으로 남는지는 공개된 분석 자료가 없습니다. 조사 중에 설정을 바꿨다면 바꾼 항목과 시각을 보관 기록에 적어, 나중에 그 변화를 사용자 행위로 오해하지 않게 합니다.
 
 Apple silicon 맥에서 SIP를 끄려면 LocalPolicy 서명 키에 접근할 수 있는 사용자의 인증이 필요하고, kext를 쓰려면 Reduced Security로 낮춘 뒤 Auxiliary Kernel Collection으로 합쳐 재시작해야 합니다 [5]. 커널 확장이 필요한 수집 도구는 이 조건에 걸린다고 판단합니다. 커널 확장의 흔적은 [커널·시스템 확장 (KEXT·System Extension)](../../../02-artifacts/persistence/kext-system-extension.md)에서 봅니다.
 

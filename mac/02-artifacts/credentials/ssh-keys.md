@@ -10,7 +10,7 @@ nav_order: 1850
 
 ## 무엇을 기록하나 · 왜 생기나
 
-SSH 클라이언트(ssh)는 접속할 때 사용자 설정 파일과 시스템 설정 파일을 읽고, 처음 보는 서버의 호스트 키를 사용자 호스트 키 목록에 더합니다. 더하기 전에 사용자에게 물을지는 `StrictHostKeyChecking` 설정이 정하고, 기본값 `ask` 에서는 물어본 뒤에 더합니다 [1]. sshd 매뉴얼은 `~/.ssh/known_hosts` 를 "사용자가 로그인한 적 있는 호스트 가운데 시스템 목록에 없는 호스트"의 호스트 키 목록이라고 설명합니다 [2]. 개인 키 파일은 사용자가 키를 만들거나 다른 곳에서 복사해 둘 때 생기고, ssh는 설정에서 따로 지정하지 않으면 정해진 이름의 키 파일을 찾아 씁니다 [1].
+SSH 클라이언트(ssh)는 접속할 때 사용자 설정 파일과 시스템 설정 파일을 읽고, 처음 보는 서버의 호스트 키를 사용자 호스트 키 목록에 더합니다. 더하기 전에 사용자에게 물을지는 `StrictHostKeyChecking` 설정이 정하고, 기본값 `ask` 에서는 물어본 뒤에 더합니다 [1]. `~/.ssh/known_hosts` 에는 사용자가 로그인한 적 있는 호스트 가운데 시스템 목록에 없는 호스트의 호스트 키가 모입니다 [2]. 개인 키 파일은 사용자가 키를 만들거나 다른 곳에서 복사해 둘 때 생기고, ssh는 설정에서 따로 지정하지 않으면 정해진 이름의 키 파일을 찾아 씁니다 [1].
 
 Apple이 넣은 OpenSSH에는 키의 암호문구(passphrase)를 키체인에 저장하는 기능이 덧붙어 있어서, 암호문구의 흔적이 `~/.ssh/` 밖의 키체인에 남을 수 있습니다 [1][3][4].
 
@@ -27,9 +27,9 @@ Apple이 넣은 OpenSSH에는 키의 암호문구(passphrase)를 키체인에 �
 | 개인 키 | `~/.ssh/id_rsa`, `~/.ssh/id_ecdsa`, `~/.ssh/id_ecdsa_sk`, `~/.ssh/id_ed25519`, `~/.ssh/id_ed25519_sk`, `~/.ssh/id_mldsa44_ed25519` | `IdentityFile` 의 기본값. ssh-add를 인자 없이 실행해도 이 6개 파일을 에이전트에 넣으려 함 | [1][3] |
 | 들어오는 쪽 공개 키 | `~/.ssh/authorized_keys` | 이 사용자로 로그인할 때 쓸 수 있는 공개 키(ECDSA, Ed25519, RSA) 목록 | [2] |
 
-이름이 `_sk` 로 끝나는 키는 보안 키(FIDO 인증 장치)에 기반한 ECDSA·Ed25519 키입니다 [1]. 위 매뉴얼은 Xcode에 들어 있는 man page를 모은 사이트에서 읽었고, 어느 Xcode·macOS 판에서 뽑았는지는 사이트에 적혀 있지 않습니다. 기본 키 파일 목록에 `id_mldsa44_ed25519` 가 들어 있어 꽤 최근 OpenSSH를 기준으로 한 매뉴얼로 보이며, 오래된 macOS에서는 기본값이 이 표와 다를 수 있어서 검체의 OpenSSH 판에 맞춰 다시 확인합니다.
+이름이 `_sk` 로 끝나는 키는 보안 키(FIDO 인증 장치)에 기반한 ECDSA·Ed25519 키입니다 [1]. 위 기본값은 기본 키 파일 목록에 `id_mldsa44_ed25519` 가 들어 있는 최근 OpenSSH 기준으로 보입니다. 오래된 macOS에서는 기본값이 이 표와 다를 수 있어서 검체의 OpenSSH 판에 맞춰 다시 확인합니다.
 
-macOS 쪽에서 확인한 변화는 키체인과 ssh-agent에 관한 것뿐입니다.
+macOS 판에 따라 키체인과 ssh-agent 동작이 아래처럼 바뀌었습니다.
 
 | macOS | 바뀐 점 | 출처 |
 |---|---|---|
@@ -37,7 +37,7 @@ macOS 쪽에서 확인한 변화는 키체인과 ssh-agent에 관한 것뿐입�
 | 10.12.2 | OpenSSH 7.3p1. 의도한 기본값이 아니었던 `UseKeychain` 이 꺼지고, 저장하려면 `UseKeychain yes` 를 직접 써야 함. 키를 ssh-agent에 저절로 넣지 않게 바뀌었고(upstream과 같은 동작), 다시 켜려면 `AddKeysToAgent yes` | [4] |
 | 그 뒤 판 | ssh-add의 키체인 옵션이 `--apple-use-keychain`·`--apple-load-keychain` 이라는 이름으로 있고, `-K` 는 FIDO 인증 장치의 상주 키(resident key)를 불러오는 옵션으로 뜻이 달라짐 | [3] |
 
-두 키체인 옵션이 처음 나온 macOS 판과 10.15 Catalina 이후 판마다 들어 있는 OpenSSH 판은 이번 자료로 확인하지 못했습니다.
+두 키체인 옵션이 처음 나온 macOS 판과 10.15 Catalina 이후 판마다 들어 있는 OpenSSH 판은 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
@@ -53,7 +53,7 @@ known_hosts는 한 줄에 호스트 키 하나를 적는 텍스트 파일이고,
 | 4 | 키 | base64로 적은 공개 키 |
 | 5 | 주석 | 없어도 됨 |
 
-표준이 아닌 포트로 접속한 서버는 호스트 이름 칸에 `[호스트]:포트` 처럼 대괄호로 감싼 뒤 콜론과 포트를 붙여 적습니다 [2]. 호스트 이름을 해시로 저장한 줄은 이름과 주소를 숨기고 `|` 문자로 시작하고, 한 줄에 해시된 이름은 하나만 올 수 있으며 와일드카드와 부정(`!`)을 쓸 수 없습니다 [2]. 해시 칸의 세부 구조와 해시된 줄을 호스트 이름과 맞춰 보는 도구 사용법은 이번 자료로 확인하지 못했습니다.
+표준이 아닌 포트로 접속한 서버는 호스트 이름 칸에 `[호스트]:포트` 처럼 대괄호로 감싼 뒤 콜론과 포트를 붙여 적습니다 [2]. 호스트 이름을 해시로 저장한 줄은 이름과 주소를 숨기고 `|` 문자로 시작하고, 한 줄에 해시된 이름은 하나만 올 수 있으며 와일드카드와 부정(`!`)을 쓸 수 없습니다 [2].
 
 ### known_hosts가 채워지는 방식을 정하는 설정
 
@@ -66,13 +66,13 @@ known_hosts에 어떤 줄이 어떻게 생기는지는 클라이언트 설정에
 | `UpdateHostKeys` | `yes` (`UserKnownHostsFile` 을 바꾸지 않았고 `VerifyHostKeyDNS` 를 켜지 않았을 때) | 인증 뒤 서버가 알려 주는 다른 호스트 키도 받아 넣음 | 한 호스트에 키 종류별 줄이 한꺼번에 여럿 생길 수 있음 |
 | `CheckHostIP` | `no` | `yes` 면 known_hosts에서 호스트 IP 주소도 확인 | 기본값에서는 IP 주소 줄이 따로 생기지 않을 수 있음 |
 
-"해석할 때 볼 점" 칸은 매뉴얼의 동작 설명에서 끌어낸 것이고, 실제 검체로 확인한 결과가 아닙니다. macOS의 `/etc/ssh/ssh_config` 가 이 값들을 기본값과 다르게 켜 두는지도 확인하지 못해서, 검체의 시스템 설정 파일을 직접 읽어 봅니다.
+macOS의 `/etc/ssh/ssh_config` 가 이 값들을 기본값과 다르게 켜 두었을 수 있어서, 검체의 시스템 설정 파일을 직접 읽어 봅니다.
 
 ### config 파일
 
 `Host` 와 `Match` 는 뒤따르는 설정을 맞는 호스트나 조건에만 적용하고, `Host *` 는 모든 호스트에 걸리는 기본값입니다 [1]. `Include` 는 다른 설정 파일을 불러오고 glob 와일드카드와 환경 변수를 쓸 수 있어서 [1], config를 볼 때는 불러온 파일까지 모두 모아 읽습니다.
 
-키체인과 에이전트에 관한 설정은 두 가지입니다. `UseKeychain` 은 macOS에서 키를 쓸 때 사용자 키체인에서 암호문구를 찾을지를 정하고, 기본값은 `no` 이며 `PKCS11Provider` 와 함께 쓸 수 없습니다 [1]. `AddKeysToAgent` 는 `yes`, `ask`, `confirm`, `no` 가운데 하나나 시간 간격을 값으로 받고 기본값은 `no` 입니다 [1]. TN2449는 호스트 하나에 키 파일과 키체인 사용을 지정하는 예로 아래 블록을 보여 주고, 호환용으로 `IgnoreUnknown UseKeychain` 을 먼저 적은 뒤 `UseKeychain yes` 를 쓰는 예도 함께 적었습니다 [4].
+키체인과 에이전트에 관한 설정은 두 가지입니다. `UseKeychain` 은 macOS에서 키를 쓸 때 사용자 키체인에서 암호문구를 찾을지를 정하고, 기본값은 `no` 이며 `PKCS11Provider` 와 함께 쓸 수 없습니다 [1]. `AddKeysToAgent` 는 `yes`, `ask`, `confirm`, `no` 가운데 하나나 시간 간격을 값으로 받고 기본값은 `no` 입니다 [1]. 호스트 하나에 키 파일과 키체인 사용을 지정하면 아래 블록처럼 되고, 호환을 위해 `IgnoreUnknown UseKeychain` 을 먼저 적은 뒤 `UseKeychain yes` 를 쓰기도 합니다 [4].
 ```
 Host server.example.com
     IdentityFile ~/.ssh/id_rsa
@@ -81,7 +81,7 @@ Host server.example.com
 
 ### authorized_keys 한 줄
 
-authorized_keys는 한 줄에 공개 키 하나를 적고, 칸은 옵션, 키 종류, base64 키, 주석 순서로 공백으로 나뉩니다 [2]. 매뉴얼이 받아들이는 키 종류는 아래와 같습니다 [2].
+authorized_keys는 한 줄에 공개 키 하나를 적고, 칸은 옵션, 키 종류, base64 키, 주석 순서로 공백으로 나뉩니다 [2]. 받아들이는 키 종류는 아래와 같습니다 [2].
 
 ```
 sk-ecdsa-sha2-nistp256@openssh.com
@@ -92,7 +92,7 @@ ssh-mldsa44-ed25519@openssh.com
 ssh-rsa
 ```
 
-옵션 칸에는 `from=`, `command=`, `environment=`, `expiry-time=`, `no-port-forwarding`, `permitopen=`, `no-pty`, `restrict`, `cert-authority`, `principals=`, `agent-forwarding`, `port-forwarding`, `pty`, `user-rc`, `X11-forwarding`, `tunnel=`, `permitlisten=`, `no-agent-forwarding`, `no-X11-forwarding`, `no-user-rc`, `no-touch-required`, `verify-required` 가 올 수 있습니다 [2]. 침입을 판단할 때 눈여겨볼 `from=`·`command=`·`restrict` 의 뜻은 [SSH 접속 기록 (SSH)](../network/remote-access/ssh.md)에 있습니다. 주석 칸에 흔히 무엇이 들어가는지는 이번 자료로 확인하지 못해서, 주석만 보고 키를 만든 사람이나 기기를 단정하지 않습니다.
+옵션 칸에는 `from=`, `command=`, `environment=`, `expiry-time=`, `no-port-forwarding`, `permitopen=`, `no-pty`, `restrict`, `cert-authority`, `principals=`, `agent-forwarding`, `port-forwarding`, `pty`, `user-rc`, `X11-forwarding`, `tunnel=`, `permitlisten=`, `no-agent-forwarding`, `no-X11-forwarding`, `no-user-rc`, `no-touch-required`, `verify-required` 가 올 수 있습니다 [2]. 침입을 판단할 때 눈여겨볼 `from=`·`command=`·`restrict` 의 뜻은 [SSH 접속 기록 (SSH)](../network/remote-access/ssh.md)에 있습니다. 주석만 보고 키를 만든 사람이나 기기를 단정하지 않습니다.
 
 ### ssh-agent와 키체인
 
@@ -100,7 +100,7 @@ ssh-add는 에이전트에 키를 넣고 빼는 명령이고, Apple 판에는 �
 
 에이전트와는 `SSH_AUTH_SOCK` 에 적힌 UNIX 도메인 소켓 경로로 통하고, `-l` 은 에이전트에 든 키의 지문 목록을, `-L` 은 공개 키 목록을 보여 줍니다 [3]. `-D` 는 모두 지우고, `-t` 는 에이전트에 넣는 키의 최대 수명을 정하고, `-c` 는 키를 쓸 때마다 확인을 받게 합니다 [3].
 
-키체인에 저장된 SSH 암호문구가 어떤 종류의 항목으로, 어떤 서비스·계정 이름으로 남는지는 TN2449에도 적혀 있지 않고 이번 자료로도 확인하지 못했습니다. 그 항목이 파일 기반 login 키체인과 데이터 보호 키체인 가운데 어디에 들어가는지도 확인하지 못했고, 두 키체인의 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에 있습니다.
+키체인에 저장된 SSH 암호문구가 어떤 종류의 항목으로, 어떤 서비스·계정 이름으로 남는지, 파일 기반 login 키체인과 데이터 보호 키체인 가운데 어디에 들어가는지는 공개 자료가 없어 검체에서 확인합니다. 두 키체인의 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -124,15 +124,15 @@ known_hosts 줄 형식에는 시각 칸도 횟수 칸도 없어서 [2], 줄 하�
 
 이 페이지의 파일들은 줄마다 시각을 적지 않아서, 시각은 파일 시스템의 생성·수정 시각에 기대게 됩니다. 수정 시각이 어느 줄의 변화인지 알려 주지 않는다는 점과 줄이 늘어난 시점을 좁히는 방법은 [SSH 접속 기록 (SSH)](../network/remote-access/ssh.md)의 시각 해석에 있고, 파일 시각이 무엇을 뜻하는지는 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)에 있습니다.
 
-개인 키 파일의 생성 시각을 키를 만든 시각으로 읽어도 되는지는 이번 자료로 확인하지 못했습니다. 키 파일은 다른 기기에서 복사하거나 백업에서 되살릴 수도 있어서, 파일 시각은 "이 맥의 이 경로에 파일이 생긴 시각" 으로만 적고 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)와 셸 기록으로 그 전후를 맞춰 봅니다.
+개인 키 파일의 생성 시각을 키를 만든 시각으로 곧바로 읽지 않습니다. 키 파일은 다른 기기에서 복사하거나 백업에서 되살릴 수도 있어서, 파일 시각은 "이 맥의 이 경로에 파일이 생긴 시각" 으로만 적고 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)와 셸 기록으로 그 전후를 맞춰 봅니다.
 
 ## 함정과 한계
 
-매뉴얼의 기본값은 판마다 달라질 수 있습니다. 이 페이지가 인용한 매뉴얼은 판이 적혀 있지 않은 최근 OpenSSH 기준으로 보여서, 기본값을 근거로 판단하기 전에 검체의 `/etc/ssh/ssh_config` 와 `~/.ssh/config`, 그리고 `Include` 로 불러온 파일을 모두 읽고 실제로 적힌 값을 먼저 봅니다 [1].
+OpenSSH 기본값은 판마다 달라질 수 있고, 이 페이지의 기본값은 최근 OpenSSH 기준으로 보입니다. 그래서 기본값을 근거로 판단하기 전에 검체의 `/etc/ssh/ssh_config` 와 `~/.ssh/config`, 그리고 `Include` 로 불러온 파일을 모두 읽고 실제로 적힌 값을 먼저 봅니다 [1].
 
-셸 기록에서 `ssh-add -K` 를 보면 판에 따라 뜻이 다르다는 점에 주의합니다. 매뉴얼의 판에서는 FIDO 장치의 상주 키를 불러오는 옵션이지만 예전 macOS의 `-K` 와는 뜻이 달라서 [3], 명령을 친 시점의 macOS 판을 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)에서 확인한 뒤에 해석합니다.
+셸 기록에서 `ssh-add -K` 를 보면 판에 따라 뜻이 다르다는 점에 주의합니다. 최근 판에서는 FIDO 장치의 상주 키를 불러오는 옵션이지만 예전 macOS의 `-K` 와는 뜻이 달라서 [3], 명령을 친 시점의 macOS 판을 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)에서 확인한 뒤에 해석합니다.
 
-ssh 클라이언트 접속이 통합 로그에 남는지, 남는다면 어떤 서브시스템 이름으로 남는지는 이번 자료로 확인하지 못했습니다. known_hosts·authorized_keys·config는 평범한 텍스트 파일이라 줄을 지우거나 파일째 지우기 쉬워서, 줄이 없다고 접속하지 않았다고 읽지 않고 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 방법으로 예전 사본과 삭제 흔적을 찾습니다.
+ssh 클라이언트 접속이 통합 로그에 남는지, 남는다면 어떤 서브시스템 이름으로 남는지는 공개 자료가 없어 검체에서 확인합니다. known_hosts·authorized_keys·config는 평범한 텍스트 파일이라 줄을 지우거나 파일째 지우기 쉬워서, 줄이 없다고 접속하지 않았다고 읽지 않고 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 방법으로 예전 사본과 삭제 흔적을 찾습니다.
 
 ## 직접 분석해 보기
 

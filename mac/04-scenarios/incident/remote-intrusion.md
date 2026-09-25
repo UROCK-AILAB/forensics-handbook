@@ -12,7 +12,7 @@ nav_order: 2560
 
 ## 먼저 확인할 것
 
-OS 버전과 출처 범위부터 적어 둡니다. 이 페이지의 SSH 파일 위치와 동작은 macOS 12 판 sshd(8) 매뉴얼로 확인했고 [1], 다른 버전에서 달라지는 점은 확인하지 못했습니다. 원격 로그인과 원격 관리가 켜져 있었는지 확인하는 방법은 [원격 접속](../../02-artifacts/network/remote-access/index.md) 페이지에 있습니다.
+OS 버전부터 적어 둡니다. 이 페이지의 SSH 파일 위치와 동작은 macOS 12 판 sshd(8) 매뉴얼 기준이고 [1], 다른 버전은 검체에서 확인합니다. 원격 로그인과 원격 관리가 켜져 있었는지 확인하는 방법은 [원격 접속](../../02-artifacts/network/remote-access/index.md) 페이지에 있습니다.
 
 사용자와 수집 범위도 정합니다. SSH 공개키 목록과 로그인 스크립트는 사용자 홈의 `~/.ssh/` 아래에 따로 있고, 서버 설정과 호스트 키는 `/etc/ssh/` 아래에 있어서 [1], 모든 사용자 홈과 `/etc/` 를 함께 수집합니다. 화면 공유 클라이언트 기록은 사용자 컨테이너 안에 있습니다 [2]. 라이브 대응이 가능하면 `sshd -T` 로 설정 파일을 검사해 기본값까지 반영한 유효 설정을 출력해 저장해 둡니다 [1]. 시각은 [시간대와 시계 설정](../../02-artifacts/system-account/time-zone.md) 에서 정한 기준으로 맞춥니다.
 
@@ -32,15 +32,15 @@ OS 버전과 출처 범위부터 적어 둡니다. 이 페이지의 SSH 파일 �
 
 | 경로 | 담긴 것 |
 |---|---|
-| `~/.ssh/authorized_keys` | 공개키 인증 목록. 줄마다 `restrict`, `no-pty`, `no-port-forwarding` 같은 제한 옵션이 붙을 수 있습니다 |
-| `/etc/ssh/sshd_config` | sshd 설정 |
-| `~/.ssh/rc` | 사용자가 로그인할 때 실행되는 스크립트. 설정의 `PermitUserRC` 가 켜져 있을 때 실행됩니다 |
-| `/etc/ssh/sshrc` | 로그인 때 실행되는 시스템 쪽 스크립트. 사용자의 `~/.ssh/rc` 가 없을 때 실행됩니다 |
-| `~/.ssh/environment` | 사용자 환경 변수 파일. 설정의 `PermitUserEnvironment` 가 켜져 있을 때만 읽고, 기본값은 꺼져 있습니다 |
-| `/etc/nologin` | 이 파일이 있으면 root 외 사용자의 로그인을 막습니다 |
-| `/etc/ssh/ssh_host_ecdsa_key`, `ssh_host_ed25519_key`, `ssh_host_rsa_key` 등과 짝이 되는 `.pub` | 호스트 키. 개인키는 root 만 읽습니다 |
+| `~/.ssh/authorized_keys` | 공개키 인증 목록. 줄마다 `restrict`, `no-pty`, `no-port-forwarding` 같은 제한 옵션이 붙을 수 있습니다 [1] |
+| `/etc/ssh/sshd_config` | sshd 설정 [1] |
+| `~/.ssh/rc` | 사용자가 로그인할 때 실행되는 스크립트. 설정의 `PermitUserRC` 가 켜져 있을 때 실행됩니다 [1] |
+| `/etc/ssh/sshrc` | 로그인 때 실행되는 시스템 쪽 스크립트. 사용자의 `~/.ssh/rc` 가 없을 때 실행됩니다 [1] |
+| `~/.ssh/environment` | 사용자 환경 변수 파일. 설정의 `PermitUserEnvironment` 가 켜져 있을 때만 읽고, 기본값은 꺼져 있습니다 [1] |
+| `/etc/nologin` | 이 파일이 있으면 root 외 사용자의 로그인을 막습니다 [1] |
+| `/etc/ssh/ssh_host_ecdsa_key`, `ssh_host_ed25519_key`, `ssh_host_rsa_key` 등과 짝이 되는 `.pub` | 호스트 키. 개인키는 root 만 읽습니다 [1] |
 
-출처는 모두 sshd(8) 매뉴얼입니다 [1]. `~/.ssh/rc` 와 `/etc/ssh/sshrc` 는 로그인할 때마다 실행되는 자리라서, 침입 흔적이면서 동시에 지속성 자리로 봅니다(필자 해석). 지속성 전체 목록은 [악성 코드 지속성 찾기](persistence.md) 에 있습니다.
+`~/.ssh/rc` 와 `/etc/ssh/sshrc` 는 로그인할 때마다 실행되는 자리라서, 침입 흔적이면서 동시에 지속성 자리로도 볼 수 있습니다. 지속성 전체 목록은 [악성 코드 지속성 찾기](persistence.md) 에 있습니다.
 
 ### 화면 공유 클라이언트 기록
 
@@ -50,7 +50,7 @@ OS 버전과 출처 범위부터 적어 둡니다. 이 페이지의 SSH 파일 �
 ~/Library/Containers/com.apple.ScreenSharing/Data/Library/Preferences/com.apple.ScreenSharing.plist
 ```
 
-mac_apt 는 이 파일의 `connectionsStore` 아래를 아래처럼 읽습니다 [2].
+이 파일의 `connectionsStore` 아래에는 아래 키가 있습니다 [2].
 
 | 키 | 담긴 것 |
 |---|---|
@@ -58,7 +58,7 @@ mac_apt 는 이 파일의 `connectionsStore` 아래를 아래처럼 읽습니다
 | `connectionDetails` | 호스트 UUID 마다 `networkAddress`, `address`, `username`, `displayName` |
 | `sessionMetadatas` | 호스트 UUID 마다 `lastConnectedDate` |
 
-`lastConnectedDate` 는 plist 날짜형이고 mac_apt 는 이 값을 그대로 문자열로 바꿉니다 [2]. 이 출처에서는 시간대 기준을 확인하지 않아서, plist 날짜형을 읽는 기준은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md) 을 따릅니다.
+`lastConnectedDate` 는 plist 날짜형입니다 [2]. plist 날짜형을 읽는 기준은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md) 을 따릅니다.
 
 ## 분석 흐름
 
@@ -73,9 +73,9 @@ mac_apt 는 이 파일의 `connectionsStore` 아래를 아래처럼 읽습니다
 ## 흔한 오판
 
 - **`authorized_keys` 에 모르는 키가 있으니 그 키로 들어왔다고 쓰는 경우.** 이 파일은 로그인할 수 있게 등록한 목록이고, 실제 로그인은 인증 기록으로 따로 확인합니다.
-- **`sshd_config` 파일만 보고 적용된 설정을 단정하는 경우.** 파일에 적지 않은 항목은 기본값이 쓰이고, 기본값까지 반영한 유효 설정은 `sshd -T` 가 출력합니다 [1]. 이 명령은 그 시점의 설정 파일을 다시 읽으므로, 이미 돌고 있던 sshd 가 읽은 설정과는 다를 수 있습니다(필자 해석). 이미지로만 조사할 때는 파일 내용이 곧 적용 설정이라고 쓰지 않고, 파일에 적힌 설정이라고 씁니다.
+- **`sshd_config` 파일만 보고 적용된 설정을 단정하는 경우.** 파일에 적지 않은 항목은 기본값이 쓰이고, 기본값까지 반영한 유효 설정은 `sshd -T` 가 출력합니다 [1]. 이 명령은 그 시점의 설정 파일을 다시 읽으므로, 이미 돌고 있던 sshd 가 읽은 설정과는 다를 수 있습니다. 이미지로만 조사할 때는 파일 내용이 곧 적용 설정이라고 쓰지 않고, 파일에 적힌 설정이라고 씁니다.
 - **화면 공유 plist 를 들어온 접속 기록으로 읽는 경우.** 이 plist 는 이 맥이 클라이언트로 다른 컴퓨터에 접속한 기록입니다 [2]. 이 맥으로 들어온 화면 공유는 서버 쪽 기록에서 찾습니다.
-- **호스트 키가 만들어진 시각을 원격 로그인을 처음 켠 때로 쓰는 경우.** 그렇게 해석하는 경우가 있지만 이 페이지의 출처로는 확인하지 못해서 근거로 쓰지 않습니다.
+- **호스트 키가 만들어진 시각을 원격 로그인을 처음 켠 때로 쓰는 경우.** 그렇게 해석하는 경우가 있지만, 이 시각만으로 원격 로그인을 켠 때를 단정하지 않고 검체의 다른 기록과 맞춰 봅니다.
 - **`/etc/nologin` 이 있으니 아무도 로그인하지 못했다고 보는 경우.** 이 파일은 root 외 로그인만 막습니다 [1]. 파일이 언제 생겼는지와 root 로그인 기록을 함께 봅니다.
 
 ## 보고서 문장 예

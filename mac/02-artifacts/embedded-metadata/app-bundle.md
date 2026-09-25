@@ -20,11 +20,11 @@ nav_order: 1890
 
 | 항목 | 내용 | 출처 |
 |---|---|---|
-| 번들 폴더 구조와 `Info.plist` 키 | Apple 보관 문서의 설명을 따름. 문서가 보관 상태라서 최신 Xcode 가 더 넣는 키는 확인 못 함 | [1] |
+| 번들 폴더 구조와 `Info.plist` 키 | Apple 보관 문서 기준. 최신 Xcode 가 더 넣는 키는 빠져 있음 | [1] |
 | 리소스 봉투 버전 1 | macOS 10.9 Mavericks 이전 방식. `Resources` 폴더 파일만 기록 | [2] |
 | 리소스 봉투 버전 2 | macOS 10.9 Mavericks 부터. 사실상 모든 파일, 안에 든 코드의 서명, 심볼릭 링크까지 기록 | [2] |
 | macOS 10.15 Catalina 이후 공증 요구 | [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md), [격리 속성과 다운로드 기록](../filesystem/quarantine/index.md)에서 다룸 | — |
-| 10.15 이후 버전마다 `Info.plist`·서명 구조가 달라지는 점 | 확인 못 함 | — |
+| 10.15 이후 버전마다 `Info.plist`·서명 구조가 달라지는 점 | 공개 자료 없음 | — |
 
 이 핸드북이 주로 다루는 macOS 10.15 Catalina 이후에는 리소스 봉투 버전 2가 기준이 되고, 버전 1 서명은 정의상 약한 서명으로 취급하며 리소스 규칙으로 서명을 약하게 만드는 방법도 더는 허용하지 않습니다 [2].
 
@@ -43,11 +43,11 @@ nav_order: 1890
 | `PlugIns/` | 앱 기능을 넓히는 적재형 번들 |
 | `SharedSupport/` | 앱 실행에 영향이 없는 부가 리소스 |
 
-서명 정보를 담는 파일이 번들 안 어느 경로에 놓이는지, 공증 티켓을 번들 안 어디에 붙이는지는 이번에 본 자료에 경로가 적혀 있지 않아서 이 페이지에 쓰지 않습니다.
+서명 정보를 담는 파일과 공증 티켓이 번들 안 어느 경로에 놓이는지는 검체의 번들을 열어 확인합니다.
 
 ### Info.plist 키
 
-`Info.plist` 는 속성 목록 파일이고, 파일 형식을 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다룹니다. Apple 보관 문서는 아래 키를 거의 반드시 넣어야 하는 키로 듭니다 [1].
+`Info.plist` 는 속성 목록 파일이고, 파일 형식을 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다룹니다. 아래 키는 거의 반드시 넣어야 하는 키입니다 [1].
 
 | 키 | 뜻 |
 |---|---|
@@ -74,7 +74,7 @@ nav_order: 1890
 
 ### 코드 서명과 리소스 봉투
 
-리소스 봉투는 번들 안 파일 목록이고, 버전 2에서는 사실상 모든 파일을 기록하면서 안에 든 코드는 그 코드의 서명을 기록하고 심볼릭 링크도 기록합니다 [2]. 봉투가 파일마다 어떤 값을 어떤 형식으로 적는지, 서명이 실행 파일 안 어디에 들어가는지는 이번 자료로 확인하지 못했습니다.
+리소스 봉투는 번들 안 파일 목록이고, 버전 2에서는 사실상 모든 파일을 기록하면서 안에 든 코드는 그 코드의 서명을 기록하고 심볼릭 링크도 기록합니다 [2].
 
 안에 든 코드는 정해진 위치에 둡니다 [2].
 
@@ -102,21 +102,21 @@ nav_order: 1890
 
 ## 시각 해석
 
-이 페이지에서 다룬 `Info.plist` 키에는 시각을 적는 키가 없습니다 [1]. 번들이 이 맥에 언제 놓였고 언제 바뀌었는지는 번들 폴더와 그 안 파일의 파일 시스템 시각으로 보고, 그 값은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다. 서명에 서명 시각이 들어가는지, `codesign` 출력에서 어떤 줄로 보이는지는 이번 자료로 확인하지 못했고, 출력 칸 설명은 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md)을 봅니다.
+이 페이지에서 다룬 `Info.plist` 키에는 시각을 적는 키가 없습니다 [1]. 번들이 이 맥에 언제 놓였고 언제 바뀌었는지는 번들 폴더와 그 안 파일의 파일 시스템 시각으로 보고, 그 값은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다. `codesign` 출력 칸 설명은 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md)을 봅니다.
 
 `CFBundleVersion` 은 빌드마다 커지는 값이라서 [1] 같은 앱의 번들 여럿을 빌드 순서로 늘어놓는 데는 쓸 수 있지만, 그 빌드가 언제 만들어졌는지는 알려 주지 않습니다.
 
 ## 함정과 한계
 
-**이름과 번들 ID 는 흉내 낼 수 있습니다.** 필자 해석으로는 `CFBundleIdentifier` 가 알려진 앱을 흉내 내거나, `CFBundleExecutable` 이 가리키는 파일과 `MacOS/` 안 실제 파일이 서로 다르면 살펴볼 만한 번들입니다. 이 판단의 근거가 되는 공식 문장은 찾지 못해서 단정하지 않고, 서명의 지정 요구 사항과 함께 봅니다.
+**이름과 번들 ID 는 흉내 낼 수 있습니다.** `CFBundleIdentifier` 가 알려진 앱을 흉내 내거나, `CFBundleExecutable` 이 가리키는 파일과 `MacOS/` 안 실제 파일이 서로 다르면 살펴볼 만한 번들입니다. 다만 이것만으로 단정하지 말고 서명의 지정 요구 사항과 함께 봅니다.
 
-**서명 오류 문구는 조사 단서입니다.** TN2206 은 `code object is not signed at all` 을 안에 든 코드가 서명되지 않았거나 서명이 틀렸을 때 나오는 문구로, `sealed resource(s) missing or invalid` 를 번들 맨 위에 파일이나 폴더를 두지 말고 모두 `Contents` 안에 두라는 안내와 함께 설명합니다 [2]. 필자 해석으로는 조사 중에 두 번째 문구를 만나면 서명한 뒤 번들 안 파일이 더해지거나 바뀌었을 가능성을 떠올리고, 어떤 파일이 목록과 어긋나는지를 확인합니다.
+**서명 오류 문구는 조사 단서입니다.** `code object is not signed at all` 은 안에 든 코드가 서명되지 않았거나 서명이 틀렸을 때 나오는 문구입니다. `sealed resource(s) missing or invalid` 는 리소스 봉투와 관련된 문구이고, 번들 맨 위에 파일이나 폴더를 두지 말고 모두 `Contents` 안에 두어야 합니다 [2]. 조사 중에 두 번째 문구를 만나면 서명한 뒤 번들 안 파일이 더해지거나 바뀌었을 가능성을 떠올리고, 어떤 파일이 목록과 어긋나는지를 확인합니다.
 
-**서명 검사 결과는 검사하는 맥에 따라 달라질 수 있습니다.** `spctl` 은 Gatekeeper 정책으로 검사하는 명령이라서 [2], 분석용 맥의 정책 설정이 결과에 끼어들 수 있다고 필자는 봅니다. 검사한 맥의 macOS 버전과 명령 출력을 그대로 보고서에 남깁니다.
+**서명 검사 결과는 검사하는 맥에 따라 달라질 수 있습니다.** `spctl` 은 Gatekeeper 정책으로 검사하는 명령이라서 [2], 분석용 맥의 정책 설정이 결과에 끼어들 수 있습니다. 검사한 맥의 macOS 버전과 명령 출력을 그대로 보고서에 남깁니다.
 
 **보관 문서의 한계.** 키 설명은 Apple 보관 문서를 따르고 [1], 최신 Xcode 가 넣는 키는 이 페이지에서 다루지 않습니다. 표에 없는 키가 보여도 이상 징후로 단정하지 않습니다. 코드 서명 자료 [2]도 보관 문서이고 iOS 서명과 공증·스테이플은 다루지 않습니다.
 
-**실행 경로와 번들 경로가 다를 수 있습니다.** Gatekeeper 는 무해한 앱에 악성 플러그인을 끼워 배포하는 일을 막으려고 받은 앱을 무작위 이름의 읽기 전용 위치에서 열기도 하고 [3], 필자 해석으로는 그래서 실행 기록에 남은 경로가 번들이 실제로 놓인 경로와 다를 수 있습니다. 이 동작은 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md)에서 다룹니다.
+**실행 경로와 번들 경로가 다를 수 있습니다.** Gatekeeper 는 무해한 앱에 악성 플러그인을 끼워 배포하는 일을 막으려고 받은 앱을 무작위 이름의 읽기 전용 위치에서 열기도 합니다 [3]. 그래서 실행 기록에 남은 경로가 번들이 실제로 놓인 경로와 다를 수 있습니다. 이 동작은 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -141,7 +141,7 @@ macOS 에 기본으로 들어 있는 `codesign` 과 `spctl` 로 서명을 읽습
 
 1. 번들 안 `Info.plist` 를 속성 목록 도구로 열어 위 키 표의 값을 적습니다.
 2. `codesign -dvvvv /path/to/code` 로 서명 정보를 자세히 봅니다 [2]. 출력의 `Sealed Resources version=2` 같은 줄에서 리소스 봉투 버전을 확인합니다 [2].
-3. `codesign -d -r- /path/to/code` 로 지정 요구 사항을 봅니다. TN2206 의 예에서는 `# designated => identifier "com.apple.md5" and anchor apple` 처럼 나옵니다 [2].
+3. `codesign -d -r- /path/to/code` 로 지정 요구 사항을 봅니다. 예를 들면 `# designated => identifier "com.apple.md5" and anchor apple` 처럼 나옵니다 [2].
 4. `codesign --verify --deep --strict --verbose=2 Foo.app` 으로 안에 든 코드까지 서명을 검사하고, 오류 문구가 나오면 그대로 적습니다 [2].
 5. `spctl -a -t exec -vv Foo.app` 으로 Gatekeeper 정책 검사를 하고, 통과하면 `Foo.app: accepted` 와 `source=Developer ID` 가 나옵니다 [2].
 6. 위 안에 든 코드 위치 표의 폴더를 하나씩 열어, 각 코드도 같은 방법으로 검사합니다.

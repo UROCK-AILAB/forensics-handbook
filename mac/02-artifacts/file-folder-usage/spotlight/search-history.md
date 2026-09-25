@@ -11,21 +11,21 @@ nav_order: 860
 
 ## 무엇을 기록하나 · 왜 생기나
 
-스포트라이트 검색창에서 글자를 치고 결과를 골라 앱이나 문서를 열면, 친 글자와 연 항목이 이 파일에 남습니다. 공개 도구 mac_apt의 SPOTLIGHTSHORTCUTS 플러그인은 이 파일을 "Gets user typed data in the spotlight bar, used to launch applications and documents" 라고 설명합니다 [1]. 볼륨 색인이 파일의 속성을 담는다면 이 파일은 사용자가 직접 친 검색어를 담는 점이 다르고, 색인 쪽은 [색인 저장소 구조 (.Spotlight-V100·store.db)](store-structure.md)에서 다룹니다.
+스포트라이트 검색창에서 글자를 치고 결과를 골라 앱이나 문서를 열면, 친 글자와 연 항목이 이 파일에 남습니다 [1]. 볼륨 색인이 파일의 속성을 담는다면 이 파일은 사용자가 직접 친 검색어를 담는 점이 다르고, 색인 쪽은 [색인 저장소 구조 (.Spotlight-V100·store.db)](store-structure.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-파일은 사용자 홈 아래에 있고, mac_apt 코드에 적힌 경로와 주석을 버전별로 정리하면 아래와 같습니다 [1].
+파일은 사용자 홈 아래에 있고, macOS 버전별 경로는 아래와 같습니다 [1].
 
 | macOS | 경로 |
 |---|---|
 | 10.9 이하 | `~/Library/Preferences/com.apple.spotlight.plist` (키 `UserShortcuts` 아래) |
 | 10.10 ~ 10.14 | `~/Library/Application Support/com.apple.spotlight.Shortcuts` |
 | 10.15 | `~/Library/Application Support/com.apple.spotlight/com.apple.spotlight.Shortcuts` |
-| 11 ~ 13(코드 주석에 물음표가 붙어 있음) | `~/Library/Application Support/com.apple.spotlight/com.apple.spotlight.Shortcuts.v3` |
+| 11 ~ 13(버전 범위는 확정되지 않음) | `~/Library/Application Support/com.apple.spotlight/com.apple.spotlight.Shortcuts.v3` |
 | 14 이후 | `~/Library/Group Containers/group.com.apple.spotlight/com.apple.spotlight.Shortcuts.v3` |
 
-10.9 이하는 스포트라이트 설정 plist 안의 `UserShortcuts` 키 아래에 기록이 들어 있습니다 [1]. macOS 15와 26에서 경로가 또 바뀌었는지는 이번 자료로 확인하지 못해서, 그 버전의 검체는 위 경로에 파일이 없으면 비슷한 이름의 파일을 찾아보고 찾은 경로를 확인 범위와 함께 적어 둡니다. 검체 버전의 경로만 보지 말고 표의 다른 경로에도 파일이 있는지 함께 확인합니다.
+10.9 이하는 스포트라이트 설정 plist 안의 `UserShortcuts` 키 아래에 기록이 들어 있습니다 [1]. macOS 15와 26에서 경로가 또 바뀌었는지는 공개 자료가 없으니, 그 버전의 검체는 위 경로에 파일이 없으면 비슷한 이름의 파일을 찾아보고 찾은 경로를 확인 범위와 함께 적어 둡니다. 검체 버전의 경로만 보지 말고 표의 다른 경로에도 파일이 있는지 함께 확인합니다.
 
 ## 구조
 
@@ -39,7 +39,7 @@ nav_order: 860
 | `IDENTIFIER` | 식별자 |
 | `PATH` | 10.9 이하에서 `URL` 대신 쓰는 키 |
 
-`IDENTIFIER` 값이 번들 ID인지는 이번 자료로 확인하지 못했습니다. 번들 ID처럼 보이는 값이 나오면 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)를 참고해 설치된 앱과 맞춰 봅니다. plist를 읽는 법 자체는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
+`IDENTIFIER` 값이 번들 ID인지는 알려져 있지 않습니다. 번들 ID처럼 보이는 값이 나오면 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)를 참고해 설치된 앱과 맞춰 봅니다. plist를 읽는 법 자체는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -49,15 +49,15 @@ nav_order: 860
 
 ### 증명하지 못하는 것
 
-키 하나(친 글자)에 항목 하나가 붙는 구조이지만, 같은 글자로 여러 번 열었을 때 앞 기록이 덮이는지, 열었던 횟수가 어딘가에 남는지는 이번 자료로 확인하지 못했습니다. 따라서 이 파일로 "이 시각에 마지막으로 열었다는 기록이 있다" 까지는 말할 수 있어도 사용 횟수나 처음 쓴 때는 말하지 않습니다. 계정에 로그인한 사람이 누구였는지도 이 파일만으로는 알 수 없습니다. 보고서에는 "이 계정의 스포트라이트 검색 기록에 입력 글자 'saf' 로 Safari를 연 항목이 있고 마지막 사용 시각이 이 값으로 적혀 있다" 처럼 기록이 말하는 만큼만 씁니다.
+키 하나(친 글자)에 항목 하나가 붙는 구조이지만, 같은 글자로 여러 번 열었을 때 앞 기록이 덮이는지, 열었던 횟수가 어딘가에 남는지는 알려져 있지 않습니다. 따라서 이 파일로 "이 시각에 마지막으로 열었다는 기록이 있다" 까지는 말할 수 있어도 사용 횟수나 처음 쓴 때는 말하지 않습니다. 계정에 로그인한 사람이 누구였는지도 이 파일만으로는 알 수 없습니다. 보고서에는 "이 계정의 스포트라이트 검색 기록에 입력 글자 'saf' 로 Safari를 연 항목이 있고 마지막 사용 시각이 이 값으로 적혀 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
 ## 시각 해석
 
-`LAST_USED` 는 mac_apt가 따로 변환하지 않고 plist 값을 그대로 쓰면서 출력 칸 형식만 날짜로 정해 둡니다 [1]. 그래서 plist 날짜 형식일 가능성이 높지만 이번 자료로 확정하지는 못했으니, 파일을 직접 풀어서 값의 형식부터 확인합니다. plist의 날짜 형식과 맥에서 쓰는 시각 체계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 설명합니다. 이 값은 마지막으로 쓴 시각이라서, 그 전에 언제 열었는지는 이 값으로 알 수 없습니다.
+`LAST_USED` 는 mac_apt가 따로 변환하지 않고 plist 값을 그대로 쓰면서 출력 칸 형식만 날짜로 정해 둡니다 [1]. 그래서 plist 날짜 형식일 가능성이 높지만 확정된 것은 아니니, 파일을 직접 풀어서 값의 형식부터 확인합니다. plist의 날짜 형식과 맥에서 쓰는 시각 체계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 설명합니다. 이 값은 마지막으로 쓴 시각이라서, 그 전에 언제 열었는지는 이 값으로 알 수 없습니다.
 
 ## 함정과 한계
 
-키가 친 글자 그대로라서, 사용자가 문장 전체를 쳤는지 결과를 고르기 직전까지 친 앞부분만 남는지가 해석에 영향을 줍니다. 이 점은 이번 자료로 확인하지 못했으니 짧은 키를 보고 사용자가 그 글자만 쳤다고 단정하지 않습니다.
+키가 친 글자 그대로라서, 사용자가 문장 전체를 쳤는지 결과를 고르기 직전까지 친 앞부분만 남는지가 해석에 영향을 줍니다. 이 점은 알려져 있지 않으니 짧은 키를 보고 사용자가 그 글자만 쳤다고 단정하지 않습니다.
 
 버전마다 파일 이름이 달라서, 한 경로만 보고 파일이 없다고 결론을 내리면 기록을 놓칩니다. 파일이 아예 없거나 비어 있으면 사용자가 스포트라이트로 무엇을 연 일이 없었다고 볼 수도 있지만 파일이 지워졌을 수도 있으니, [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)에서 이 경로의 변경 기록을 함께 봅니다.
 
@@ -65,7 +65,7 @@ nav_order: 860
 
 ### plist 구조로 한 번
 
-아래는 실제 검체가 아니라 mac_apt 코드 [1]가 읽는 키 구조에 맞춰 만든 예시입니다. 값의 형식을 확인하지 못한 칸은 괄호로 두었습니다.
+아래는 실제 검체가 아니라 키 구조 [1]에 맞춰 만든 예시입니다. 형식이 알려지지 않은 값은 괄호로 두었습니다.
 
 ```
 {

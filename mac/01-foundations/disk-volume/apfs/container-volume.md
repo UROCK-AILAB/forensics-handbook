@@ -19,7 +19,7 @@ APFS가 두 층(컨테이너 층과 파일 시스템 층)으로 나뉜다는 점
 
 GPT에서 APFS 파티션의 유형 UUID는 `7C3457EF-0000-11AA-AA11-00306543ECAC` 입니다 [1]. 파티션 표 읽는 법은 [파티션 구조 (GPT·APFS 파티션)](../gpt-partitions.md)에 있습니다.
 
-파티션의 블록 0에는 컨테이너 슈퍼블록 `nx_superblock_t` 의 사본이 있고, 깨끗이 언마운트했는지에 따라 이 사본은 최신일 수도 있고 옛것일 수도 있습니다 [1]. Apple은 블록 0 사본을 체크포인트를 찾는 데에만 쓰고 나머지 정보는 체크포인트에 있는 최신 슈퍼블록에서 읽으라고 적고 있습니다 [1].
+파티션의 블록 0에는 컨테이너 슈퍼블록 `nx_superblock_t` 의 사본이 있고, 깨끗이 언마운트했는지에 따라 이 사본은 최신일 수도 있고 옛것일 수도 있습니다 [1]. 블록 0 사본은 체크포인트를 찾는 데에만 쓰고, 나머지 정보는 체크포인트에 있는 최신 슈퍼블록에서 읽습니다 [1].
 
 블록 크기는 최소·기본이 4096바이트이고 최대가 65536바이트이며, 컨테이너는 1048576바이트보다 작을 수 없습니다 [1]. 한 컨테이너에 들어가는 볼륨은 최대 100개(`NX_MAX_FILE_SYSTEMS`)이지만, 실제 상한 `nx_max_file_systems` 는 컨테이너 크기를 512 MiB로 나눠 올림한 값이라서 1.3 GiB 컨테이너라면 3개입니다 [1].
 
@@ -27,7 +27,7 @@ GPT에서 APFS 파티션의 유형 UUID는 `7C3457EF-0000-11AA-AA11-00306543ECAC
 
 ## 컨테이너 슈퍼블록
 
-매직은 `NX_MAGIC` = `'BSXN'` 이고 리틀 엔디언으로 저장해서 헥스 덤프에는 "NXSB"로 보입니다 [1]. 필드 이름과 뜻은 [1]을 따랐고, [1]에는 바이트 오프셋이 없어서 오프셋은 [3]에서 가져왔습니다. [3]은 이 구조체의 크기를 4096바이트로 적습니다 [3].
+매직은 `NX_MAGIC` = `'BSXN'` 이고 리틀 엔디언으로 저장해서 헥스 덤프에는 "NXSB"로 보입니다 [1]. 구조체 크기는 4096바이트이고, 필드와 오프셋은 아래와 같습니다 [1][3].
 
 | 오프셋 | 크기 | 필드 | 뜻 |
 |---|---|---|---|
@@ -36,7 +36,7 @@ GPT에서 APFS 파티션의 유형 UUID는 `7C3457EF-0000-11AA-AA11-00306543ECAC
 | 36 | 4 | `nx_block_size` | 논리 블록 크기 |
 | 40 | 8 | `nx_block_count` | 블록 수 |
 | 48 / 56 / 64 | 8씩 | `nx_features` / `nx_readonly_compatible_features` / `nx_incompatible_features` | 기능 플래그 |
-| 72 | 16 | `nx_uuid` | 컨테이너 UUID. [3]은 빅 엔디언 저장으로 적음 |
+| 72 | 16 | `nx_uuid` | 컨테이너 UUID. 빅 엔디언으로 저장 [3] |
 | 88 | 8 | `nx_next_oid` | 다음에 쓸 가상·임시 객체 ID |
 | 96 | 8 | `nx_next_xid` | 다음 트랜잭션 ID |
 | 104~148 | | `nx_xp_desc_*`, `nx_xp_data_*` | 체크포인트 영역의 위치와 크기 |
@@ -55,7 +55,7 @@ GPT에서 APFS 파티션의 유형 UUID는 `7C3457EF-0000-11AA-AA11-00306543ECAC
 
 104~148번 칸의 뜻과 가상 객체 ID를 실제 블록으로 바꾸는 방법은 [객체와 체크포인트 (Object·Checkpoint)](object-checkpoint.md)에 있습니다.
 
-`nx_newest_mounted_version` 에는 Apple 구현이 이 컨테이너를 마운트한 가장 새 소프트웨어 버전이 aaaaaaa.bbb.ccc.ddd.eee 모양의 고정소수점 10진수로 적힙니다 [1]. 이 값을 macOS 버전 번호와 어떻게 맞대는지는 참고 문헌으로 확인하지 못해서, 값을 macOS 버전으로 바꿔 보고서에 쓰지 않습니다.
+`nx_newest_mounted_version` 에는 Apple 구현이 이 컨테이너를 마운트한 가장 새 소프트웨어 버전이 aaaaaaa.bbb.ccc.ddd.eee 모양의 고정소수점 10진수로 적힙니다 [1]. 이 값과 macOS 버전 번호의 대응은 공개 자료에 없어서, 값을 macOS 버전으로 바꿔 보고서에 쓰지 않습니다.
 
 `nx_counters` 의 0번 `NX_CNTR_OBJ_CKSUM_SET` 은 쓸 때 체크섬을 계산한 횟수이고, 1번 `NX_CNTR_OBJ_CKSUM_FAIL` 은 읽을 때 체크섬이 틀린 횟수입니다 [1]. 컨테이너 플래그 `NX_CRYPTO_SW` (0x4)가 켜져 있으면 소프트웨어 암호화를 쓰는 컨테이너입니다 [1].
 
@@ -63,7 +63,7 @@ Fusion 드라이브는 `NX_INCOMPAT_FUSION` (0x100)으로 표시하고, `nx_fusi
 
 ## 볼륨 슈퍼블록
 
-볼륨 슈퍼블록 `apfs_superblock_t` 의 매직은 `APFS_MAGIC` = `'BSPA'` 이고 헥스 덤프에는 "APSB"로 보입니다 [1]. [3]은 크기를 1056바이트로 적고, 객체 형식 값이 보통 0x0000000d(가상)이지만 스냅숏에 딸린 볼륨 슈퍼블록은 0x4000000d(물리)라고 적습니다 [3].
+볼륨 슈퍼블록 `apfs_superblock_t` 의 매직은 `APFS_MAGIC` = `'BSPA'` 이고 헥스 덤프에는 "APSB"로 보입니다 [1]. 크기는 1056바이트이고, 객체 형식 값은 보통 0x0000000d(가상)이지만 스냅숏에 딸린 볼륨 슈퍼블록은 0x4000000d(물리)입니다 [3].
 
 | 오프셋 | 크기 | 필드 | 뜻 |
 |---|---|---|---|
@@ -97,13 +97,13 @@ Fusion 드라이브는 `NX_INCOMPAT_FUSION` (0x100)으로 표시하고, `nx_fusi
 
 시각 칸의 단위와 증거로서의 뜻은 [APFS의 시각 네 가지 (Create·Modify·Change·Access)](timestamps.md)에서, 스냅숏 관련 칸은 [스냅숏 (Snapshots)](snapshots.md)에서, clone 관련 칸은 [복제·희소·압축 파일 (Clone·Sparse·Compression)](clone-sparse-compression.md)에서 다룹니다.
 
-`apfs_formatted_by` 는 볼륨을 만들 때 한 번만 쓰고, `apfs_modified_by` 는 볼륨을 고친 구현을 8개까지 적는 배열입니다 [1]. 두 칸 모두 `apfs_modified_by_t` 구조(48바이트)이고, 32바이트 `id` 에 프로그램 이름과 버전 문자열이, 그 뒤 8바이트 `timestamp` 와 8바이트 `last_xid` 가 들어 있습니다 [1][3]. [1]에 따르면 배열의 0번이 가장 새 항목이고, 볼륨을 고칠 때마다 한 칸씩 밀고 0번에 새로 적되 같은 구현이 이미 마지막 항목이면 그대로 둘 수도 있습니다 [1]. [3]은 순서를 "옛것에서 새것?"으로 물음표를 달아 적었지만, 이 페이지는 [1]을 따릅니다.
+`apfs_formatted_by` 는 볼륨을 만들 때 한 번만 쓰고, `apfs_modified_by` 는 볼륨을 고친 구현을 8개까지 적는 배열입니다 [1]. 두 칸 모두 `apfs_modified_by_t` 구조(48바이트)이고, 32바이트 `id` 에 프로그램 이름과 버전 문자열이, 그 뒤 8바이트 `timestamp` 와 8바이트 `last_xid` 가 들어 있습니다 [1][3]. 배열의 0번이 가장 새 항목이고, 볼륨을 고칠 때마다 한 칸씩 밀고 0번에 새로 적되 같은 구현이 이미 마지막 항목이면 그대로 둘 수도 있습니다 [1]. libyal 문서는 순서를 "옛것에서 새것?"으로 물음표를 달아 적었지만 [3], 순서는 명세 [1]를 기준으로 읽습니다.
 
 `apfs_total_blocks_alloced` 는 블록을 할당할 때만 늘고 해제할 때는 그대로이며, `apfs_total_blocks_freed` 는 그 반대입니다 [1].
 
 ## 볼륨 역할
 
-`apfs_role` 에는 볼륨의 역할이 하나만 적힙니다 [1]. 아래 표는 macOS에 해당하는 역할만 추렸고, 0x0040 이상 세 값은 [1]의 `n << 6` 정의(`APFS_VOLUME_ENUM_SHIFT` = 6)로 계산한 16진수입니다.
+`apfs_role` 에는 볼륨의 역할이 하나만 적힙니다 [1]. 아래 표는 macOS에 해당하는 역할만 추렸고, 0x0040 이상 세 값은 `n << 6` 정의(`APFS_VOLUME_ENUM_SHIFT` = 6)로 계산한 16진수입니다 [1].
 
 | 상수 | 값 | 뜻 |
 |---|---|---|
@@ -132,18 +132,20 @@ macOS 10.15 이상에서 시동용 APFS 컨테이너에는 볼륨이 적어도 �
 | System | | 시동 파일과 macOS 기본 앱(`/System/Applications`). 기본값으로 어떤 프로세스도 쓸 수 없음 |
 | Data | | 사용자 폴더 데이터, 사용자가 설치한 앱, `/Applications`, `/Library`, `/Users`, `/Volumes`, `/usr/local`, `/private`, `/var`, `/tmp` 등 |
 
-표의 내용은 [2]에서 가져왔습니다. 시스템 볼륨을 하나 더 만들 때마다 Data 볼륨도 하나씩 생기고, Preboot·VM·Recovery는 함께 씁니다 [2]. 한 컨테이너에 macOS를 둘 이상 설치했다면 System·Data 쌍이 여럿 보이는 까닭이 여기에 있습니다.
+시스템 볼륨을 하나 더 만들 때마다 Data 볼륨도 하나씩 생기고, Preboot·VM·Recovery는 함께 씁니다 [2]. 한 컨테이너에 macOS를 둘 이상 설치했다면 System·Data 쌍이 여럿 보이는 까닭이 여기에 있습니다.
 
 | macOS | 시스템 볼륨 |
 |---|---|
 | 10.15 | 읽기 전용 시스템 볼륨을 처음 도입하고 System과 Data를 나눔 [2][4] |
 | 11 이상 | 서명된 시스템 볼륨 (Signed System Volume, SSV). 시스템 볼륨을 스냅숏으로 잡고 그 스냅숏에서 부팅함 [2][4] |
 
-System과 Data 볼륨의 `apfs_volume_group_id` 값이 같으면 한 볼륨 그룹이고, `APFS_FEATURE_VOLGRP_SYSTEM_INO_SPACE` (0x10)는 두 볼륨을 사용자에게 하나처럼 보이게 마운트하는 기능으로 macOS 10.15 이상에서 씁니다 [1]. 이 기능이 켜지면 Data 볼륨은 `UNIFIED_ID_SPACE_MARK` (0x0800000000000000) 미만의 아이노드 번호를, System 볼륨은 그 이상의 번호를 쓰고, 예약 번호도 System 쪽은 이 값을 더한 번호라서 System 볼륨의 루트는 0x0800000000000002입니다 [1]. [1]에는 `SYSTEM_OBJ_ID_MARK` (0x0fffffff00000000)도 "볼륨 그룹에서 이 값 이상이면 시스템 볼륨 객체"라고 나오지만, 두 상수가 어떻게 다른지는 설명이 없습니다. 볼륨 그룹을 이어 주는 펌링크는 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../volume-group-firmlinks.md)에서 다룹니다.
+System과 Data 볼륨의 `apfs_volume_group_id` 값이 같으면 한 볼륨 그룹이고, `APFS_FEATURE_VOLGRP_SYSTEM_INO_SPACE` (0x10)는 두 볼륨을 사용자에게 하나처럼 보이게 마운트하는 기능으로 macOS 10.15 이상에서 씁니다 [1]. 이 기능이 켜지면 Data 볼륨은 `UNIFIED_ID_SPACE_MARK` (0x0800000000000000) 미만의 아이노드 번호를, System 볼륨은 그 이상의 번호를 쓰고, 예약 번호도 System 쪽은 이 값을 더한 번호라서 System 볼륨의 루트는 0x0800000000000002입니다 [1]. `SYSTEM_OBJ_ID_MARK` (0x0fffffff00000000)도 볼륨 그룹에서 이 값 이상이면 시스템 볼륨 객체라는 뜻으로 정의되어 있지만 [1], 두 상수가 어떻게 다른지는 명세에 설명이 없습니다. 볼륨 그룹을 이어 주는 펌링크는 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../volume-group-firmlinks.md)에서 다룹니다.
 
-[1]은 봉인 (sealed) 볼륨의 조건으로 역할이 SYSTEM이고, `APFS_INCOMPAT_SEALED_VOLUME` (0x20)가 켜져 있고, `apfs_integrity_meta_oid` 와 `apfs_fext_tree_oid` 가 0이 아니고, 파일 시스템 B-트리에 `BTREE_HASHED`·`BTREE_NOHEADER` 가 켜져 있을 것을 듭니다 [1]. SSV는 SHA-256 해시를 메타데이터 트리에 저장하고 루트 노드의 해시를 "seal"이라 부르며, Apple 실리콘에서는 부트로더가, T2 인텔 Mac에서는 커널이 루트 파일 시스템을 마운트하기 전에 seal을 검증합니다 [4]. 사용자가 보안 수준을 낮추고 SSV를 끄지 않는 한 부팅할 때마다 검증하고, FileVault가 켜진 상태에서는 SSV를 끌 수 없습니다 [4].
+봉인 (sealed) 볼륨은 역할이 SYSTEM이고, `APFS_INCOMPAT_SEALED_VOLUME` (0x20)가 켜져 있고, `apfs_integrity_meta_oid` 와 `apfs_fext_tree_oid` 가 0이 아니고, 파일 시스템 B-트리에 `BTREE_HASHED`·`BTREE_NOHEADER` 가 켜져 있어야 합니다 [1]. SSV는 SHA-256 해시를 메타데이터 트리에 저장하고 루트 노드의 해시를 "seal"이라 부르며, Apple 실리콘에서는 부트로더가, T2 인텔 Mac에서는 커널이 루트 파일 시스템을 마운트하기 전에 seal을 검증합니다 [4]. 사용자가 보안 수준을 낮추고 SSV를 끄지 않는 한 부팅할 때마다 검증하고, FileVault가 켜진 상태에서는 SSV를 끌 수 없습니다 [4].
 
 ## 볼륨 플래그와 기능 플래그
+
+볼륨 플래그와 기능 플래그 값은 다음과 같습니다 [1].
 
 | 필드 | 플래그 | 값 | 뜻 |
 |---|---|---|---|
@@ -160,11 +162,11 @@ System과 Data 볼륨의 `apfs_volume_group_id` 값이 같으면 한 볼륨 그�
 | | `APFS_FEATURE_STRICTATIME` | 0x8 | 읽을 때마다 접근 시각 갱신 |
 | | `APFS_FEATURE_VOLGRP_SYSTEM_INO_SPACE` | 0x10 | 볼륨 그룹을 하나처럼 마운트 |
 
-표의 값은 모두 [1]에서 가져왔습니다. macOS에는 대소문자를 구분하는 변형과 구분하지 않는 변형이 있고 구분하지 않는 쪽이 기본입니다 [5]. 이름 정규화는 [유니코드 정규화 (NFD·NFC)](../../value-decoding/unicode-normalization.md)에서, 접근 시각 규칙은 [APFS의 시각 네 가지 (Create·Modify·Change·Access)](timestamps.md)에서 다룹니다.
+macOS에는 대소문자를 구분하는 변형과 구분하지 않는 변형이 있고 구분하지 않는 쪽이 기본입니다 [5]. 이름 정규화는 [유니코드 정규화 (NFD·NFC)](../../value-decoding/unicode-normalization.md)에서, 접근 시각 규칙은 [APFS의 시각 네 가지 (Create·Modify·Change·Access)](timestamps.md)에서 다룹니다.
 
 ## 암호화 구조
 
-[1]은 소프트웨어 암호화만 설명합니다. 하드웨어 암호화는 이를 지원하는 기기의 내장 저장소(T2 칩 Mac 등)에 쓰고 이때 내장 저장소에는 커널만 접근할 수 있으며, 소프트웨어 암호화는 외장 저장소와 하드웨어 암호화를 지원하지 않는 내장 저장소에 씁니다 [1].
+공개된 명세에는 소프트웨어 암호화 구조만 나옵니다 [1]. 하드웨어 암호화는 이를 지원하는 기기의 내장 저장소(T2 칩 Mac 등)에 쓰고 이때 내장 저장소에는 커널만 접근할 수 있으며, 소프트웨어 암호화는 외장 저장소와 하드웨어 암호화를 지원하지 않는 내장 저장소에 씁니다 [1].
 
 키는 사용자 암호(또는 개인·기관 복구 키)로 KEK를 풀고, KEK로 VEK를 풀고, VEK로 파일 시스템 트리와 파일 데이터를 복호하는 순서로 이어집니다 [1]. 컨테이너 키백은 `nx_keylocker` 가 가리키고 볼륨별로 감싼 VEK와 볼륨 키백 위치를 담으며, 볼륨 키백에는 사용자 암호와 복구 키로 감싼 KEK 사본들과 암호 힌트(`KB_TAG_VOLUME_PASSPHRASE_HINT`)가 들어 있을 수 있습니다 [1]. 파일 데이터는 VEK를 AES-XTS 키로, `crypto_id` 를 tweak로 써서 복호합니다 [1]. 키 계층의 자세한 내용은 [파일볼트 (FileVault)](../../protection/filevault/index.md)에, 암호화된 이미지를 다루는 절차는 [암호화된 증거 다루기 (Encrypted Evidence)](../../../03-techniques/analysis/encrypted-evidence/index.md)에 있습니다.
 
@@ -207,7 +209,7 @@ System과 Data 볼륨의 `apfs_volume_group_id` 값이 같으면 한 볼륨 그�
 
 ## 포렌식에서 중요한 점
 
-`apfs_modified_by` 배열에는 볼륨을 고친 구현의 이름·버전 문자열과 시각, 마지막 트랜잭션 ID가 8개까지 남습니다 [1]. 이 정의대로라면 증거를 확보하면서 볼륨을 읽기·쓰기로 마운트한 도구나 다른 macOS 버전도 이 배열에 올라갈 수 있고, 이 점은 [1]의 정의에서 끌어낸 해석입니다. 배열에 없는 구현이라도 볼륨을 고치지 않았다고 단정할 수는 없는데, 칸이 8개뿐이고 같은 구현이 이어서 고치면 새로 적지 않을 수 있기 때문입니다 [1].
+`apfs_modified_by` 배열에는 볼륨을 고친 구현의 이름·버전 문자열과 시각, 마지막 트랜잭션 ID가 8개까지 남습니다 [1]. 이 정의로 보아 증거를 확보하면서 볼륨을 읽기·쓰기로 마운트한 도구나 다른 macOS 버전도 이 배열에 올라갈 수 있습니다. 배열에 없는 구현이라도 볼륨을 고치지 않았다고 단정할 수는 없는데, 칸이 8개뿐이고 같은 구현이 이어서 고치면 새로 적지 않을 수 있기 때문입니다 [1].
 
 블록 0의 슈퍼블록 사본은 옛것일 수 있어서 [1], 볼륨 목록이나 카운터를 이 사본만 보고 적으면 확보 시점의 상태와 다를 수 있습니다. 체크포인트 영역에 남은 옛 슈퍼블록을 과거 상태로 읽는 방법은 [지운 파일과 옛 체크포인트 (Deleted Files·Old Checkpoints)](deleted-files.md)에서 다룹니다.
 
@@ -215,13 +217,13 @@ System과 Data 볼륨의 `apfs_volume_group_id` 값이 같으면 한 볼륨 그�
 
 ## 함정
 
-[3]은 어떤 포렌식 도구로 만든 컨테이너에서 컨테이너 키백이 하드웨어 암호화돼 있거나 무작위 데이터인데 볼륨은 암호화되지 않은 경우를 관찰했다고 적습니다 [3]. 키백 모양만 보고 볼륨이 암호화됐다고 판단하지 말고 볼륨 플래그를 함께 봅니다.
+어떤 포렌식 도구로 만든 컨테이너에서는 컨테이너 키백이 하드웨어 암호화돼 있거나 무작위 데이터인데 볼륨은 암호화되지 않은 경우가 있습니다 [3]. 키백 모양만 보고 볼륨이 암호화됐다고 판단하지 말고 볼륨 플래그를 함께 봅니다.
 
-`nx_uuid` 는 [3]이 빅 엔디언으로 저장한다고 적은 칸이라서, 다른 숫자 칸처럼 뒤집어 읽으면 UUID가 틀어집니다 [3]. UUID 표기법은 [식별자 읽기 (UUID·UID·GUID)](../../value-decoding/uuid-uid.md)를 봅니다.
+`nx_uuid` 는 빅 엔디언으로 저장하는 칸이라서, 다른 숫자 칸처럼 뒤집어 읽으면 UUID가 틀어집니다 [3]. UUID 표기법은 [식별자 읽기 (UUID·UID·GUID)](../../value-decoding/uuid-uid.md)를 봅니다.
 
 System과 Data는 서로 다른 볼륨이라서 같은 경로처럼 보이는 파일이 실제로는 다른 볼륨에 있을 수 있고, 볼륨 그룹에서는 아이노드 번호의 범위로 어느 볼륨인지 구별합니다 [1].
 
-기준 명세 [1]은 2020-06-22 판이라서 macOS 11의 봉인 볼륨 필드까지 들어 있지만, macOS 12 이후에 바뀐 점은 이 명세로 확인하지 못했습니다.
+기준 명세 [1]은 2020-06-22 판이라서 macOS 11의 봉인 볼륨 필드까지만 들어 있고, macOS 12 이후에 바뀐 점은 담겨 있지 않습니다.
 
 ## 도구
 

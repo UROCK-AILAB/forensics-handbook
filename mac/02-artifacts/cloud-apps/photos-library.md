@@ -26,21 +26,19 @@ iCloud 사진 (iCloud Photos) 을 쓰면 다른 기기에서 찍은 사진도 �
 /Users/<사용자>/Pictures/Photos Library.photoslibrary/database/Photos.sqlite
 ```
 
-원문 경로에는 사용자 이름 자리가 비어 있고, 보관함 이름의 띄어쓰기 "Photos Library" 는 Apple 문서의 이름 표기를 따른 것입니다. `.photoslibrary` 확장자는 이 경로에만 나오고 Apple 문서[4][5]에는 확장자 언급이 없습니다. 이 패키지가 Finder에서 파일 하나처럼 보이는 폴더인지, 보관함을 외장 디스크에 둘 수 있는지와 그때 필요한 파일 시스템은 이번 조사에서 확인되지 않았습니다.
-
-한 맥에 보관함이 여러 개 있을 수 있고, Option 키를 누른 채 사진 앱을 열면 다른 보관함을 고를 수 있습니다[4]. 기본 위치 하나만 보면 다른 보관함을 놓칠 수 있어서, 디스크 전체에서 `.photoslibrary` 이름을 찾아보는 편이 안전합니다(이 판단은 [4]에서 끌어낸 것입니다).
+한 맥에 보관함이 여러 개 있을 수 있고, Option 키를 누른 채 사진 앱을 열면 다른 보관함을 고를 수 있습니다[4]. 기본 위치 하나만 보면 다른 보관함을 놓칠 수 있어서, 디스크 전체에서 `.photoslibrary` 이름을 찾아보는 편이 안전합니다.
 
 ### 시스템 사진 보관함
 
 여러 보관함 가운데 하나를 시스템 사진 보관함 (System Photo Library) 으로 정하고, 사진 > 설정(또는 환경설정) > 일반 탭의 "시스템 사진 보관함으로 사용(Use as System Photo Library)" 버튼으로 지정합니다[5]. iCloud 사진과 공유 앨범 (Shared Albums) 은 시스템 사진 보관함에서만 쓸 수 있고[5], 다른 앱이 사진 선택기로 보관함에 접근하려면 이 보관함이 시스템 사진 보관함이어야 합니다[4].
 
-새 보관함을 시스템 사진 보관함으로 지정한 뒤 iCloud 사진을 켜면, 새 보관함의 사진·비디오가 iCloud 사진에 있던 것과 합쳐지고 iCloud의 사진·비디오가 모두 기기로 다시 내려옵니다[5]. 한 보관함 안에 이 맥에서 찍거나 가져오지 않은 사진이 섞여 있을 수 있다는 뜻으로 읽을 수 있습니다(이 판단은 [5]에서 끌어낸 것입니다). 어느 보관함이 시스템 사진 보관함인지 적어 두는 plist 파일과 키는 확인되지 않았습니다.
+새 보관함을 시스템 사진 보관함으로 지정한 뒤 iCloud 사진을 켜면, 새 보관함의 사진·비디오가 iCloud 사진에 있던 것과 합쳐지고 iCloud의 사진·비디오가 모두 기기로 다시 내려옵니다[5]. 그래서 한 보관함 안에 이 맥에서 찍거나 가져오지 않은 사진이 섞여 있을 수 있습니다. 어느 보관함이 시스템 사진 보관함인지 적어 두는 plist 파일과 키는 공개 자료가 없어 검체에서 확인합니다.
 
 ### 사진 앱 버전별 차이
 
 사진 5(macOS 10.15 Catalina) 부터 데이터베이스는 `database/Photos.sqlite`, 원본 파일 폴더는 `originals` 이고, 사진 4 이하는 `database/photos.db` 와 `Masters` 를 씁니다[2]. 사진·비디오 한 건씩을 담는 자산 표 이름은 사진 5에서 `ZGENERICASSET`, 사진 6(Big Sur) 이후 `ZASSET` 입니다[1].
 
-공개 도구 osxphotos 는 데이터베이스의 모델 버전 숫자로 사진 앱 버전을 가르고, 그 소스에 적힌 범위와 macOS 대응은 다음과 같습니다[1].
+데이터베이스의 모델 버전 숫자로 사진 앱 버전을 가를 수 있고, 범위와 macOS 대응은 다음과 같습니다[1].
 
 | 사진 앱 | macOS | 모델 버전 범위 (osxphotos 상수) | 자산 표 |
 |---|---|---|---|
@@ -56,7 +54,7 @@ iCloud 사진 (iCloud Photos) 을 쓰면 다른 기기에서 찍은 사진도 �
 | 사진 11.1 | 26.1 | 19320–19999 | `ZASSET` |
 | 사진 12 | 27 이후 | 270000000–270999999 | `ZASSET` |
 
-macOS 대응은 osxphotos 소스의 상수 옆 주석을 옮긴 것입니다. 모델 버전 숫자가 데이터베이스 안의 어느 표·칸에 있는지도 확인되지 않았습니다.
+모델 버전 숫자가 데이터베이스 안의 어느 표·칸에 있는지는 공개 자료가 없어 검체에서 확인합니다.
 
 공유 앨범 사진과 그 파생본 (derivatives) 이 들어가는 폴더도 버전에 따라 이름이 바뀝니다[1].
 
@@ -65,38 +63,38 @@ macOS 대응은 osxphotos 소스의 상수 옆 주석을 옮긴 것입니다. �
 | 사진 5 | `resources/cloudsharing/data` | `resources/cloudsharing/resources/derivatives/masters` |
 | 사진 8 | `scopes/cloudsharing/data` | `scopes/cloudsharing/resources/derivatives/masters` |
 
-iCloud 공유 사진 보관함 (iCloud Shared Photo Library) 전용 폴더·칸, 섬네일과 편집본 폴더의 이름과 구조는 확인되지 않았습니다.
+iCloud 공유 사진 보관함 (iCloud Shared Photo Library) 전용 폴더·칸, 섬네일과 편집본 폴더의 이름과 구조는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
-`Photos.sqlite` 에서 조사에 자주 쓰는 표는 자산 표(`ZGENERICASSET`/`ZASSET`), 부가 속성 표 `ZADDITIONALASSETATTRIBUTES`, 앨범 표 `ZGENERICALBUM`, 그리고 `ZDETECTEDFACE`, `ZPERSON`, `ZKEYWORD`, `ZMOMENT`, `ZSHARE`, `ZFILESYSTEMVOLUME` 입니다[2]. 여기 적은 표의 역할은 표 이름에서 읽은 것이고, 표 구조를 설명한 공식 문서는 확인되지 않았습니다. SQLite 파일 자체의 구조와 WAL 처리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다루고, `Photos.sqlite` 가 WAL 모드로 동작하는지는 이번 조사에서 확인되지 않았습니다.
+`Photos.sqlite` 에서 조사에 자주 쓰는 표는 자산 표(`ZGENERICASSET`/`ZASSET`), 부가 속성 표 `ZADDITIONALASSETATTRIBUTES`, 앨범 표 `ZGENERICALBUM`, 그리고 `ZDETECTEDFACE`, `ZPERSON`, `ZKEYWORD`, `ZMOMENT`, `ZSHARE`, `ZFILESYSTEMVOLUME` 입니다[2]. Apple 은 표 구조를 공개하지 않아서, 표의 역할은 표 이름으로 짐작하는 정도입니다. SQLite 파일 자체의 구조와 WAL 처리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다루고, `Photos.sqlite` 가 WAL 모드로 동작하는지는 옆에 `-wal` 파일이 있는지로 검체에서 확인합니다.
 
 ### 자산 표에서 볼 칸
 
-osxphotos 가 자산 표에서 읽는 칸 가운데 조사에 쓸 만한 것은 아래와 같습니다[2]. 뜻 칸의 내용은 osxphotos 동작으로 확인한 것과 칸 이름에서 읽은 것을 나눠 적었습니다.
+자산 표에서 조사에 쓸 만한 칸은 아래와 같습니다[2]. 뜻 칸에 참고 문헌 번호가 붙은 것은 공개 도구가 그 값을 쓰는 방식이고, 번호가 없는 것은 칸 이름으로 짐작한 뜻입니다.
 
 | 칸 | 뜻 |
 |---|---|
 | `Z_PK`, `ZUUID` | 행 번호와 자산 식별자 |
 | `ZDIRECTORY`, `ZFILENAME` | 원본 파일 경로 = 보관함 / `originals` / `ZDIRECTORY` / `ZFILENAME` [2] |
 | `ZDATECREATED`, `ZADDEDDATE`, `ZMODIFICATIONDATE` | 시각 칸 (아래 "시각 해석" 참고) |
-| `ZTRASHEDSTATE`, `ZTRASHEDDATE` | osxphotos 는 `ZTRASHEDSTATE` 가 `1` 이면 최근 삭제된 항목에 있다고 봅니다[2] |
-| `ZHIDDEN`, `ZFAVORITE` | 숨김·즐겨찾기. osxphotos 는 두 값을 그대로 숨김·즐겨찾기 여부로 씁니다[2] |
-| `ZKIND`, `ZKINDSUBTYPE`, `ZUNIFORMTYPEIDENTIFIER` | 파일 종류. osxphotos 는 `ZKIND` 가 `0` 이면 사진, `1` 이면 비디오로 봅니다[1][2] |
-| `ZLATITUDE`, `ZLONGITUDE` | 위치 (위치 없는 사진의 기본값은 확인되지 않음) |
-| `ZHASADJUSTMENTS`, `ZADJUSTMENTTIMESTAMP` | 편집 여부와 편집 시각으로 읽히는 칸 (확인되지 않음) |
-| `ZCLOUDASSETGUID`, `ZCLOUDBATCHPUBLISHDATE`, `ZCLOUDOWNERHASHEDPERSONID` | iCloud 관련 칸 (뜻은 확인되지 않음) |
-| `ZSAVEDASSETTYPE` | 촬영·가져오기·iCloud 내려받기를 구분하는 값으로 보이지만 값의 뜻은 확인되지 않음 |
+| `ZTRASHEDSTATE`, `ZTRASHEDDATE` | `ZTRASHEDSTATE` 가 `1` 이면 최근 삭제된 항목에 있습니다[2] |
+| `ZHIDDEN`, `ZFAVORITE` | 숨김·즐겨찾기 여부[2] |
+| `ZKIND`, `ZKINDSUBTYPE`, `ZUNIFORMTYPEIDENTIFIER` | 파일 종류. `ZKIND` 가 `0` 이면 사진, `1` 이면 비디오입니다[1][2] |
+| `ZLATITUDE`, `ZLONGITUDE` | 위치 (위치 없는 사진의 기본값은 검체에서 확인) |
+| `ZHASADJUSTMENTS`, `ZADJUSTMENTTIMESTAMP` | 편집 여부와 편집 시각으로 보이는 칸 |
+| `ZCLOUDASSETGUID`, `ZCLOUDBATCHPUBLISHDATE`, `ZCLOUDOWNERHASHEDPERSONID` | iCloud 관련 칸 (값의 뜻은 공개 자료 없음) |
+| `ZSAVEDASSETTYPE` | 촬영·가져오기·iCloud 내려받기를 구분하는 값으로 보임 (값의 뜻은 공개 자료 없음) |
 
 그 밖에 `ZVISIBILITYSTATE`, `ZMOMENT`, `ZMOMENTSHARE`, `ZHEIGHT`, `ZWIDTH`, `ZORIENTATION`, `ZAVALANCHEUUID`, `ZAVALANCHEPICKTYPE`, `ZCUSTOMRENDEREDVALUE`, `ZSPATIALTYPE` 칸이 있습니다[2].
 
 ### 부가 속성 표에서 볼 칸
 
-`ZADDITIONALASSETATTRIBUTES` 에는 `ZORIGINALFILENAME`, `ZTITLE`, `ZMASTERFINGERPRINT`, `ZTIMEZONEOFFSET`, `ZINFERREDTIMEZONEOFFSET`, `ZTIMEZONENAME`, `ZCAMERACAPTUREDEVICE`, `ZREVERSELOCATIONDATA`, `ZORIGINALRESOURCECHOICE`, `ZORIGINALHEIGHT`, `ZORIGINALWIDTH`, `ZORIGINALORIENTATION`, `ZORIGINALFILESIZE`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTEDBYBUNDLEIDENTIFIER` 칸이 있습니다[2]. 칸 이름으로 보면 `ZORIGINALFILENAME` 은 가져올 때의 원래 파일 이름이고 `ZFILENAME` 은 보관함 안에 저장한 이름이며, `ZIMPORTEDBYBUNDLEIDENTIFIER`·`ZIMPORTEDBYDISPLAYNAME` 은 어느 앱이 가져왔는지를 나타내는 것으로 읽힙니다. 다만 이 뜻과 실제 값 예시는 문서로 확인되지 않았고, 번들 ID 읽는 법은 [번들 ID와 팀 ID](../../01-foundations/value-decoding/bundle-team-id.md) 페이지를 봅니다. `ZMASTERFINGERPRINT` 는 원본을 가리키는 식별값으로 보이지만 계산 방식은 확인되지 않았습니다.
+`ZADDITIONALASSETATTRIBUTES` 에는 `ZORIGINALFILENAME`, `ZTITLE`, `ZMASTERFINGERPRINT`, `ZTIMEZONEOFFSET`, `ZINFERREDTIMEZONEOFFSET`, `ZTIMEZONENAME`, `ZCAMERACAPTUREDEVICE`, `ZREVERSELOCATIONDATA`, `ZORIGINALRESOURCECHOICE`, `ZORIGINALHEIGHT`, `ZORIGINALWIDTH`, `ZORIGINALORIENTATION`, `ZORIGINALFILESIZE`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTEDBYBUNDLEIDENTIFIER` 칸이 있습니다[2]. 칸 이름으로 보면 `ZORIGINALFILENAME` 은 가져올 때의 원래 파일 이름이고 `ZFILENAME` 은 보관함 안에 저장한 이름이며, `ZIMPORTEDBYBUNDLEIDENTIFIER`·`ZIMPORTEDBYDISPLAYNAME` 은 어느 앱이 가져왔는지를 나타내는 것으로 보입니다. 번들 ID 읽는 법은 [번들 ID와 팀 ID](../../01-foundations/value-decoding/bundle-team-id.md) 페이지를 봅니다. `ZMASTERFINGERPRINT` 는 원본을 가리키는 식별값으로 보이고, 계산 방식은 공개 자료가 없습니다.
 
 ### 앨범 종류 값
 
-osxphotos 는 `ZGENERICALBUM` 의 `ZKIND` 칸 값으로 앨범 종류를 구분하고, 그 상수는 아래와 같습니다[1][2].
+`ZGENERICALBUM` 의 `ZKIND` 칸 값으로 앨범 종류를 가를 수 있습니다[1][2].
 
 | 값 | 앨범 종류 |
 |---|---|
@@ -109,17 +107,17 @@ osxphotos 는 `ZGENERICALBUM` 의 `ZKIND` 칸 값으로 앨범 종류를 구분�
 
 ## 증거로서 의미
 
-**증명하는 것.** 자산 표에 행이 있으면 그 사진·비디오가 이 보관함에 등록된 적이 있다는 기록이고, `ZDIRECTORY`·`ZFILENAME` 으로 원본 파일을 찾아 내용과 대조할 수 있습니다. `ZTRASHEDSTATE` 가 `1` 이면 osxphotos 기준으로 최근 삭제된 항목에 들어 있는 상태이고, `ZTRASHEDDATE` 가 그 시점을 말해 줄 후보입니다. 가져오기 세션 앨범(`1506`)과 공유 앨범(`1505`) 기록은 사진이 어떤 경로로 보관함에 모였는지 좁히는 데 쓸 수 있습니다.
+**증명하는 것.** 자산 표에 행이 있으면 그 사진·비디오가 이 보관함에 등록된 적이 있다는 기록이고, `ZDIRECTORY`·`ZFILENAME` 으로 원본 파일을 찾아 내용과 대조할 수 있습니다. `ZTRASHEDSTATE` 가 `1` 이면 최근 삭제된 항목에 들어 있는 상태이고, `ZTRASHEDDATE` 가 그 시점을 말해 줄 후보입니다. 가져오기 세션 앨범(`1506`)과 공유 앨범(`1505`) 기록은 사진이 어떤 경로로 보관함에 모였는지 좁히는 데 쓸 수 있습니다.
 
-**증명하지 못하는 것.** iCloud 사진을 켠 보관함에서는 행이 있어도 이 맥에서 찍거나 가져왔다고 단정할 수 없고, 휴지통 상태도 이 맥에서 지웠다는 뜻이 아닙니다. 한 기기에서 지운 사진은 iCloud 사진을 쓰는 모든 곳에서 지워지기 때문입니다[6]. 또 저장 공간 최적화 (Optimize Mac Storage) 를 고른 맥에는 공간을 아낀 버전만 남고 원본은 iCloud에 있어서[6], 행이 있는데 `originals` 에 원본이 없을 수 있습니다(이 판단은 [6]에서 끌어낸 것입니다). 원본 다운로드 (Download Originals to this Mac) 를 고르면 원본이 iCloud와 맥 양쪽에 있습니다[6]. 이 두 설정이 어느 plist 키에 기록되는지는 확인되지 않았습니다. 보고서에는 "이 맥의 보관함에 이 시각을 추가 시각으로 하는 자산 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+**증명하지 못하는 것.** iCloud 사진을 켠 보관함에서는 행이 있어도 이 맥에서 찍거나 가져왔다고 단정할 수 없고, 휴지통 상태도 이 맥에서 지웠다는 뜻이 아닙니다. 한 기기에서 지운 사진은 iCloud 사진을 쓰는 모든 곳에서 지워지기 때문입니다[6]. 또 저장 공간 최적화 (Optimize Mac Storage) 를 고른 맥에는 공간을 아낀 버전만 남고 원본은 iCloud에 있어서[6], 행이 있는데 `originals` 에 원본이 없을 수 있습니다. 원본 다운로드 (Download Originals to this Mac) 를 고르면 원본이 iCloud와 맥 양쪽에 있습니다[6]. 이 두 설정이 기록되는 plist 키는 공개 자료가 없어 검체에서 확인합니다. 보고서에는 "이 맥의 보관함에 이 시각을 추가 시각으로 하는 자산 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
 ## 시각 해석
 
-`ZDATECREATED` 같은 날짜 칸은 2001-01-01을 기준으로 한 값이고, osxphotos 도 2001-01-01에 `timedelta` 를 더해 바꿉니다[2]. 곧 맥 절대 시각 (Mac Absolute Time) 이며, 바꾸는 법은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md) 페이지에 있습니다.
+`ZDATECREATED` 같은 날짜 칸은 2001-01-01을 기준으로 한 값입니다[2]. 곧 맥 절대 시각 (Mac Absolute Time) 이며, 바꾸는 법은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md) 페이지에 있습니다.
 
-osxphotos 는 촬영 시각을 현지 시각으로 보여 줄 때 부가 속성 표의 `ZTIMEZONEOFFSET`(과 `ZTIMEZONENAME`) 을 씁니다[2]. 날짜 칸 자체가 UTC 기준인지는 확인되지 않았으니, 보고서에 적을 때는 원래 값과 적용한 시간대 오프셋을 함께 적습니다. 칸마다 무엇이 바뀔 때 바뀌는지도 문서로 확인되지 않았고, 칸 이름으로 읽은 뜻은 아래와 같습니다.
+촬영 시각을 현지 시각으로 바꿀 때는 부가 속성 표의 `ZTIMEZONEOFFSET`(과 `ZTIMEZONENAME`) 을 씁니다[2]. 날짜 칸 자체가 UTC 기준인지는 공개 자료가 없으니, 보고서에 적을 때는 원래 값과 적용한 시간대 오프셋을 함께 적습니다. 칸마다 무엇이 바뀔 때 값이 바뀌는지도 공개 문서가 없고, 칸 이름으로 짐작한 뜻은 아래와 같습니다.
 
-| 칸 | 칸 이름으로 읽은 뜻 (확인되지 않음) |
+| 칸 | 칸 이름으로 짐작한 뜻 |
 |---|---|
 | `ZDATECREATED` | 촬영(생성) 시각 |
 | `ZADDEDDATE` | 보관함에 들어온 시각 |
@@ -132,9 +130,9 @@ osxphotos 는 촬영 시각을 현지 시각으로 보여 줄 때 부가 속성 
 
 - **보관함이 하나라고 가정하는 실수.** 한 맥에 보관함이 여러 개 있을 수 있고[4], iCloud 사진은 시스템 사진 보관함에서만 동작합니다[5]. 보관함마다 따로 분석하고 어느 쪽이 iCloud와 연결됐는지 따져 봅니다.
 - **버전에 맞지 않는 표 이름.** Catalina 보관함에는 `ZASSET` 이 없고 `ZGENERICASSET` 이 있어서[1], 다른 버전용 쿼리를 그대로 돌리면 결과가 비거나 오류가 납니다.
-- **최근 삭제된 항목 기간.** iCloud 사진 문서는 지운 항목을 최근 삭제된 항목에서 30일 동안 되살릴 수 있고 그 뒤에는 영구 삭제된다고 설명합니다[6]. iCloud 사진을 끈 맥에서도 기간이 같은지, 영구 삭제 뒤 데이터베이스 행이 남는지, `originals` 파일이 언제 지워지는지는 확인되지 않았습니다. 지운 레코드와 파일을 되살리는 일반 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 페이지를 봅니다.
-- **칸 이름만 보고 뜻을 단정하는 실수.** 이 페이지의 칸 설명 대부분은 공개 도구 소스와 칸 이름에 기댄 것이고, Apple이 구조를 공개한 문서는 확인되지 않았습니다. 중요한 결론은 실제 보관함에서 사진을 넣고 지워 보는 식으로 검증한 뒤 씁니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
-- **확인되지 않은 부분.** 얼굴 인식·장면 분석을 하는 프로세스와 그 결과 데이터베이스, 사진 앱 관련 통합 로그 서브시스템, 사진 권한이 TCC로 제한되는지와 그 서비스 이름, 사진 4 이하 `photos.db` 표 구조는 이번 조사 범위에서 확인하지 못했습니다.
+- **최근 삭제된 항목 기간.** 지운 항목은 최근 삭제된 항목에서 30일 동안 되살릴 수 있고, 그 뒤에는 영구 삭제됩니다[6]. iCloud 사진을 끈 맥에서도 기간이 같은지, 영구 삭제 뒤 데이터베이스 행이 남는지, `originals` 파일이 언제 지워지는지는 공개 자료가 없어 검체에서 확인합니다. 지운 레코드와 파일을 되살리는 일반 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 페이지를 봅니다.
+- **칸 이름만 보고 뜻을 단정하는 실수.** Apple 은 이 데이터베이스 구조를 공개하지 않았고, 칸의 뜻 대부분은 공개 도구 소스와 칸 이름에서 짐작한 것입니다. 중요한 결론은 실제 보관함에서 사진을 넣고 지워 보는 식으로 검증한 뒤 씁니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
+- **공개 자료가 없는 부분.** 얼굴 인식·장면 분석을 하는 프로세스와 그 결과 데이터베이스, 사진 앱 관련 통합 로그 서브시스템, 사진 권한이 TCC로 제한되는지와 그 서비스 이름, 사진 4 이하 `photos.db` 표 구조는 공개 자료가 없어 검체에서 확인해야 합니다.
 
 ## 직접 분석해 보기
 
@@ -164,7 +162,7 @@ FROM ZASSET
 ORDER BY ZADDEDDATE;
 ```
 
-부가 속성 표는 `ZADDITIONALASSETATTRIBUTES.ZASSET` 이 자산 표의 `Z_PK` 를 가리키는 방식으로 이어지고, osxphotos 도 이 조건으로 조인합니다[2]. 원래 파일 이름과 가져온 앱까지 함께 보려면 아래처럼 잇습니다.
+부가 속성 표는 `ZADDITIONALASSETATTRIBUTES.ZASSET` 이 자산 표의 `Z_PK` 를 가리키는 방식으로 이어집니다[2]. 원래 파일 이름과 가져온 앱까지 함께 보려면 아래처럼 잇습니다.
 
 ```
 SELECT a.Z_PK, a.ZFILENAME, b.ZORIGINALFILENAME,
@@ -173,7 +171,7 @@ FROM ZASSET a
 JOIN ZADDITIONALASSETATTRIBUTES b ON b.ZASSET = a.Z_PK;
 ```
 
-공개 도구 osxphotos 는 이 페이지의 표·칸 이름과 버전 판별을 가져온 도구라서, 쿼리 결과와 osxphotos 가 보여 주는 값을 맞춰 보면 서로를 검증하는 데 쓸 수 있습니다.
+공개 도구 osxphotos 로 같은 사본을 읽어 쿼리 결과와 맞춰 보면, 두 결과로 서로를 검증할 수 있습니다[1][2].
 
 ## 교차 검증
 

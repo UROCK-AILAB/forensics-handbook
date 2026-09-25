@@ -36,13 +36,13 @@ APFS 는 아이노드 값 (j_inode_val_t) 안에 시각 네 개를 두고, 디�
 
 ### 확장 속성
 
-날짜와 관련된 확장 속성으로 `com.apple.metadata:kMDItemDownloadedDate`, `com.apple.metadata:kMDItemWhereFroms`, `com.apple.quarantine`, `com.apple.lastuseddate#PS` 가 알려져 있습니다 [1]. 격리 속성 값의 두 번째 칸은 유닉스 시각을 16진수로 적은 값이고, 읽는 법은 [격리 속성과 다운로드 기록 (Quarantine)](../../02-artifacts/filesystem/quarantine/index.md)에 있습니다. `com.apple.lastuseddate#PS` 의 내부 형식은 확인하지 못해서, 이 속성은 있는지만 적고 값을 풀어 쓰지 않습니다.
+날짜와 관련된 확장 속성으로 `com.apple.metadata:kMDItemDownloadedDate`, `com.apple.metadata:kMDItemWhereFroms`, `com.apple.quarantine`, `com.apple.lastuseddate#PS` 가 알려져 있습니다 [1]. 격리 속성 값의 두 번째 칸은 유닉스 시각을 16진수로 적은 값이고, 읽는 법은 [격리 속성과 다운로드 기록 (Quarantine)](../../02-artifacts/filesystem/quarantine/index.md)에 있습니다. `com.apple.lastuseddate#PS` 의 내부 형식은 공개된 분석 자료가 없어서, 이 속성은 있는지만 보고서에 적습니다.
 
 ### 스포트라이트 메타데이터
 
-Apple 문서가 정의한 날짜·출처 속성은 아래와 같고, 모두 OS X 10.4 에 도입됐습니다 [2].
+날짜·출처와 관련된 스포트라이트 속성은 아래와 같고, 모두 OS X 10.4 에 도입됐습니다 [2].
 
-| 속성 | Apple 설명 [2] | 형 |
+| 속성 | 설명 [2] | 형 |
 |---|---|---|
 | `kMDItemContentCreationDate` | 내용이 만들어진 날짜·시각 | CFDate |
 | `kMDItemContentModificationDate` | 내용이 수정된 날짜·시각 | CFDate |
@@ -51,11 +51,11 @@ Apple 문서가 정의한 날짜·출처 속성은 아래와 같고, 모두 OS X
 | `kMDItemLastUsedDate` | 마지막으로 쓴 날짜. LaunchServices 가 파일을 열 때마다 자동으로 갱신 | CFDate |
 | `kMDItemWhereFroms` | 얻은 곳(다운로드 URL, 메일로 받은 파일이면 보낸 사람 주소·제목 등) | CFString 배열 |
 
-`kMDItemContentCreationDate` 는 내용 쪽 속성이고 `kMDItemFSCreationDate` 는 파일 시스템 쪽 속성이라서 서로 다른 값입니다 [2]. 복사하거나 내려받은 뒤 두 값이 어떻게 갈리는지는 확인하지 못해서, 두 값이 다르면 "다르다" 는 사실만 적고 어느 쪽이 맞는지는 다른 층과 맞춰 판단합니다. `kMDItemDateAdded`, `kMDItemUseCount`, `kMDItemUsedDates` 는 이번에 본 Apple 문서에 정의가 없어서 [2] 이 페이지에서 뜻을 풀지 않습니다. 스포트라이트 저장소를 읽는 법은 [스포트라이트 (Spotlight)](../../02-artifacts/file-folder-usage/spotlight/index.md)에 있습니다.
+`kMDItemContentCreationDate` 는 내용 쪽 속성이고 `kMDItemFSCreationDate` 는 파일 시스템 쪽 속성이라서 서로 다른 값입니다 [2]. 복사하거나 내려받은 뒤 두 값이 어떻게 갈리는지는 공개된 분석 자료가 없어서, 두 값이 다르면 "다르다" 는 사실만 적고 어느 쪽이 맞는지는 다른 층과 맞춰 판단합니다. `kMDItemDateAdded`, `kMDItemUseCount`, `kMDItemUsedDates` 는 Apple 문서에 정의가 없습니다 [2]. 스포트라이트 저장소를 읽는 법은 [스포트라이트 (Spotlight)](../../02-artifacts/file-folder-usage/spotlight/index.md)에 있습니다.
 
 ### 문서 안 메타데이터
 
-Office·PDF·iWork 문서는 파일 안에도 만든 날짜·고친 날짜를 적지만, 이번 근거 자료로 그 칸을 확인하지 못해서 [문서 메타데이터 (iWork·Office)](../../02-artifacts/embedded-metadata/iwork-office.md)를 따릅니다. 문서 안 날짜는 문서를 저장한 앱이 적는 값이라서 파일 시스템 날짜와 따로 움직일 수 있다는 점만 이 페이지에서 짚어 둡니다.
+Office·PDF·iWork 문서는 파일 안에도 만든 날짜·고친 날짜를 적고, 그 칸을 읽는 법은 [문서 메타데이터 (iWork·Office)](../../02-artifacts/embedded-metadata/iwork-office.md)에 있습니다. 문서 안 날짜는 문서를 저장한 앱이 적는 값이라서 파일 시스템 날짜와 따로 움직일 수 있습니다.
 
 ### 시각 기준 맞추기
 

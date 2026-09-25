@@ -17,14 +17,14 @@ OS 버전에 따라 로그인·백그라운드 항목을 다루는 방식이 크
 | macOS 버전 | 달라지는 점 | 출처 |
 |---|---|---|
 | 10.9 Mavericks 이후 | StartupItems 가 없어졌습니다 | [1] |
-| Mojave 까지 | LoginHook·LogoutHook 이 동작한다고 글쓴이가 적었습니다 | [1] |
+| Mojave 까지 | LoginHook·LogoutHook 이 동작합니다 | [1] |
 | 10.15 Catalina 이후 | cron 을 쓰려면 사용자 허용이 필요합니다 | [1] |
 | 12 이하 | 도우미 설치 스크립트가 plist 를 정해진 폴더에 직접 넣습니다 | [2] |
 | 13 Ventura 이후 | BTM 이 로그인·백그라운드 항목을 관리합니다 | [2] |
 
-`rc.common` 과 `launchd.conf` 는 더는 동작하지 않아서 [1], 요즘 맥에서 이 파일이 보여도 자동 실행 자리로 세지 않습니다. cron 허용이 어느 개인 정보 보호 권한 항목에 남는지는 확인하지 못했습니다.
+`rc.common` 과 `launchd.conf` 는 더는 동작하지 않아서 [1], 요즘 맥에서 이 파일이 보여도 자동 실행 자리로 세지 않습니다. cron 허용이 남는 개인 정보 보호 권한 항목은 검체에서 확인합니다.
 
-수집 범위는 사용자 폴더와 시스템 폴더를 모두 챙깁니다. 실행 에이전트만 해도 사용자별 폴더와 모든 사용자용 폴더가 따로 있고 [1], 예약 작업과 emond 는 `/etc/`, `/var/`, `/private/var/db/` 아래에 있어서, 사용자 홈만 모은 수집본으로는 여러 자리를 놓칩니다. 라이브 대응이 가능하면 `sfltool dumpbtm` 출력을 먼저 저장해 둡니다. 이 명령은 로그인·백그라운드 항목의 현재 상태와 적재된 `servicemanagement` 페이로드 UUID 를 출력합니다 [2]. 같은 도구의 `sfltool resetbtm` 은 로그인·백그라운드 항목 데이터를 초기화해서 [2], 조사 중에는 실행하지 않습니다(필자 판단). 라이브 수집 절차는 [라이브 대응](../../03-techniques/process-acquisition/live-response/index.md) 에 있습니다.
+수집 범위는 사용자 폴더와 시스템 폴더를 모두 챙깁니다. 실행 에이전트만 해도 사용자별 폴더와 모든 사용자용 폴더가 따로 있고 [1], 예약 작업과 emond 는 `/etc/`, `/var/`, `/private/var/db/` 아래에 있어서, 사용자 홈만 모은 수집본으로는 여러 자리를 놓칩니다. 라이브 대응이 가능하면 `sfltool dumpbtm` 출력을 먼저 저장해 둡니다. 이 명령은 로그인·백그라운드 항목의 현재 상태와 적재된 `servicemanagement` 페이로드 UUID 를 출력합니다 [2]. 같은 도구의 `sfltool resetbtm` 은 로그인·백그라운드 항목 데이터를 초기화해서 [2], 조사 중에는 실행하지 않습니다. 라이브 수집 절차는 [라이브 대응](../../03-techniques/process-acquisition/live-response/index.md) 에 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -56,13 +56,13 @@ OS 버전에 따라 로그인·백그라운드 항목을 다루는 방식이 크
 
 예약 작업 가운데 periodic 은 `/etc/periodic/` 아래 daily·weekly·monthly 폴더에 있고, 설정을 덮어쓰는 파일로 `/etc/defaults/periodic.conf` 와 `/etc/periodic.conf` 가 있습니다 [1]. at 작업은 `/var/at/jobs/` 안에 이름이 'a' 로 시작하는 파일로 남습니다 [1].
 
-LoginHook·LogoutHook 은 `com.apple.loginwindow` 환경 설정에 있어서 라이브 환경에서는 root 로 `sudo defaults read com.apple.loginwindow` 를 실행해 확인합니다 [1]. emond 는 정상 용도로 거의 쓰이지 않아서, `/private/var/db/emondClients` 에 항목이 있으면 수상하게 봅니다 [1]. emond 가 없어진 버전은 확인하지 못했습니다.
+LoginHook·LogoutHook 은 `com.apple.loginwindow` 환경 설정에 있어서 라이브 환경에서는 root 로 `sudo defaults read com.apple.loginwindow` 를 실행해 확인합니다 [1]. emond 는 정상 용도로 거의 쓰이지 않아서, `/private/var/db/emondClients` 에 항목이 있으면 수상하게 봅니다 [1]. emond 가 어느 버전까지 남아 있는지는 검체에서 확인합니다.
 
-폴더 동작 (Folder Actions) 은 파일로 찾기보다 실행 중인 `osascript` 프로세스 가운데 명령줄 인수에 `ScriptMonitor` 가 들어간 것을 찾습니다 [1]. 메일 규칙은 `SyncedRules.plist` 에서 AppleScript 를 실행하는 규칙을 찾고, 아이클라우드로 동기화된 사본도 있어서 함께 봅니다 [1]. 경로의 `V6` 는 메일 버전마다 바뀌는데, 버전별 대응은 확인하지 못했습니다.
+폴더 동작 (Folder Actions) 은 파일로 찾기보다 실행 중인 `osascript` 프로세스 가운데 명령줄 인수에 `ScriptMonitor` 가 들어간 것을 찾습니다 [1]. 메일 규칙은 `SyncedRules.plist` 에서 AppleScript 를 실행하는 규칙을 찾고, 아이클라우드로 동기화된 사본도 있어서 함께 봅니다 [1]. 경로의 `V6` 는 메일 버전마다 바뀌어서, 검체의 `~/Library/Mail/` 아래 폴더 이름을 먼저 확인합니다.
 
 ### macOS 13 이후 BTM 로그
 
-Apple 문서는 BTM 활동 로그를 볼 때 통합 로그의 서브시스템 `com.apple.backgroundtaskmanagement`, 범주 `mcx` 로 거르라고 안내합니다 [2]. 문서의 예는 실시간으로 보는 `log stream` 이라서, 수집본의 로그 아카이브에서는 같은 조건으로 아래처럼 추립니다.
+BTM 활동 로그는 통합 로그의 서브시스템 `com.apple.backgroundtaskmanagement`, 범주 `mcx` 로 거릅니다 [2]. 실시간으로 볼 때는 `log stream` 을 쓰고, 수집본의 로그 아카이브에서는 같은 조건으로 아래처럼 추립니다.
 
 ```
 log show --archive system_logs.logarchive \
@@ -85,9 +85,9 @@ log show --archive system_logs.logarchive \
 
 - **LaunchAgents 폴더에 수상한 plist 가 없으니 지속성이 없다고 보는 경우.** 자동 실행 자리는 이 밖에도 여럿 있고 [1], macOS 13 이후는 BTM 이 항목을 관리합니다 [2]. 지속성을 만들지 않고 한 번 훔치고 끝내는 악성 코드도 있어서, 그런 경우는 [정보 탈취 악성 코드](infostealer.md) 흐름으로 봅니다.
 - **커널 확장부터 뒤지는 경우.** 커널 확장은 악성 코드가 즐겨 쓰는 방법이 아닙니다 [1]. 사용자·관리자 쪽 실행 에이전트·데몬 폴더를 먼저 봅니다.
-- **`/System/Library/` 쪽 항목까지 똑같이 의심하는 경우.** 이 두 폴더는 SIP 보호 대상이라 [1], 일반 조사에서는 사용자·관리자 쪽 폴더부터 봅니다. SIP 가 꺼진 맥이면 이 전제가 흔들린다는 점은 필자 해석이고, SIP 는 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md) 에서 다룹니다.
+- **`/System/Library/` 쪽 항목까지 똑같이 의심하는 경우.** 이 두 폴더는 SIP 보호 대상이라 [1], 일반 조사에서는 사용자·관리자 쪽 폴더부터 봅니다. SIP 가 꺼진 맥에서는 이 전제가 흔들릴 수 있습니다. SIP 는 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md) 에서 다룹니다.
 - **구성 프로파일을 모두 조직이 설치한 것으로 보는 경우.** 사용자를 속여 직접 설치하게 한 사례가 있습니다 [1]. 조직의 기기 관리 목록과 대조합니다.
-- **메일 규칙이 이 맥에서 만들어졌다고 보는 경우.** 규칙은 아이클라우드로 동기화된 사본도 있어서 [1], 필자 해석으로는 같은 계정의 다른 기기에서 만든 규칙일 수 있습니다.
+- **메일 규칙이 이 맥에서 만들어졌다고 보는 경우.** 규칙은 아이클라우드로 동기화된 사본도 있어서 [1], 같은 계정의 다른 기기에서 만든 규칙일 수 있습니다.
 - **plist 가 있으니 실행되었다고 쓰는 경우.** 등록은 실행 조건을 적어 둔 것이고, 실행 여부는 로그와 프로세스 기록으로 따로 확인합니다.
 
 ## 보고서 문장 예

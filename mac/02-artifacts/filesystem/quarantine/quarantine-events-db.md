@@ -23,11 +23,11 @@ nav_order: 990
 
 사용자 홈 폴더마다 하나씩 있는 확장자 없는 SQLite 파일이고, 기록은 `LSQuarantineEvent` 표에 있습니다 [1][2]. 계정마다 따로 있으니 이미지에 있는 사용자 홈 폴더를 모두 확인합니다.
 
-옛 이름 `QuarantineEvents`(V1) 파일이 언제까지 쓰였는지, macOS 10.15 Catalina 이후 버전마다 칸이 달라지는지는 확인하지 못했습니다. 아래 칸 목록은 mac_apt 격리 플러그인이 읽는 칸 기준입니다 [2].
+옛 이름 `QuarantineEvents`(V1) 파일이 언제까지 쓰였는지, macOS 10.15 Catalina 이후 버전마다 칸이 달라지는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 아래 칸 목록은 mac_apt 격리 플러그인이 읽는 칸 기준입니다 [2].
 
 ## 구조
 
-`LSQuarantineEvent` 표의 칸입니다. "공개 API 키" 는 공개 문서에서 짝이 맞는다고 확인한 것만 적었습니다 [3]. "mac_apt 출력" 은 공개 도구 결과를 읽을 때 쓰는 이름이고, mac_apt는 여기에 `User`·`Source` 칸을 더해 출력합니다 [2].
+`LSQuarantineEvent` 표의 칸입니다. "공개 API 키" 가 빈 칸은 공개 문서에 짝이 되는 키가 없는 칸입니다 [3]. "mac_apt 출력" 은 공개 도구 결과를 읽을 때 쓰는 이름이고, mac_apt는 여기에 `User`·`Source` 칸을 더해 출력합니다 [2].
 
 | 칸 | 공개 API 키 | 뜻 | mac_apt 출력 |
 |---|---|---|---|
@@ -36,12 +36,12 @@ nav_order: 990
 | `LSQuarantineAgentBundleIdentifier` | `kLSQuarantineAgentBundleIdentifierKey` | 파일을 받은 앱의 번들 ID | AgentBundleID |
 | `LSQuarantineAgentName` | `kLSQuarantineAgentNameKey` | 파일을 받은 앱 이름 | AgentName |
 | `LSQuarantineDataURLString` | `kLSQuarantineDataURLKey` | 실제로 받은 파일의 URL | DataUrl |
-| `LSQuarantineSenderName` | | 확인 못 함(아래 참고) | SenderName |
-| `LSQuarantineSenderAddress` | | 확인 못 함(아래 참고) | SenderAddress |
+| `LSQuarantineSenderName` | | 공개 자료 없음(아래 참고) | SenderName |
+| `LSQuarantineSenderAddress` | | 공개 자료 없음(아래 참고) | SenderAddress |
 | `LSQuarantineTypeNumber` | `kLSQuarantineTypeKey` | 격리 이유 | TypeNumber |
-| `LSQuarantineOriginTitle` | | 확인 못 함 | OriginTitle |
+| `LSQuarantineOriginTitle` | | 공개 자료 없음 | OriginTitle |
 | `LSQuarantineOriginURLString` | `kLSQuarantineOriginURLKey` | 파일을 올려 둔 원래 페이지의 URL | OriginUrl |
-| `LSQuarantineOriginAlias` | | 확인 못 함 | OriginAlias |
+| `LSQuarantineOriginAlias` | | 공개 자료 없음 | OriginAlias |
 
 `LSQuarantineDataURLString` 과 `LSQuarantineOriginURLString` 은 다른 값입니다. 앞쪽은 실제로 받은 파일의 주소이고, 뒤쪽은 그 파일을 올려 둔 원래 페이지의 주소입니다 [3].
 
@@ -58,15 +58,15 @@ nav_order: 990
 | `kLSQuarantineTypeCalendarEventAttachment` | 캘린더 이벤트 첨부 |
 | `kLSQuarantineTypeOtherAttachment` | 그 밖의 첨부 |
 
-DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 …)와 위 상수가 어떻게 짝지어지는지는 확인하지 못했습니다. 숫자만 보고 격리 이유를 적지 않고, 같은 검체 안에서 URL·받은 앱과 함께 보며 판단합니다.
+DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 …)와 위 상수의 대응은 공개 문서에 없습니다. 숫자만 보고 격리 이유를 적지 않고, 같은 검체 안에서 URL·받은 앱과 함께 보며 판단합니다.
 
-`LSQuarantineSenderName`·`LSQuarantineSenderAddress` 는 이름으로 보아 메일·메시지 첨부를 보낸 사람을 적는 칸으로 보이지만, 어떤 조건에서 채워지는지는 확인하지 못했습니다.
+`LSQuarantineSenderName`·`LSQuarantineSenderAddress` 는 이름으로 보아 메일·메시지 첨부를 보낸 사람을 적는 칸으로 보이지만, 어떤 조건에서 채워지는지는 공개 자료가 없어 검체로 확인해야 합니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 이 사용자 계정의 DB에 이 시각, 이 앱이 이 URL의 파일을 받아 격리한 기록이 있다는 점입니다. `LSQuarantineEventIdentifier` 가 파일의 격리 속성 UUID와 같으면 그 파일과 이 다운로드 기록이 같은 이벤트라고 이을 수 있습니다 [1][2]. `LSQuarantineOriginURLString` 이 채워져 있으면 그 파일을 올려 둔 원래 페이지도 알 수 있습니다 [3].
 
-**증명하지 못하는 것.** 받은 파일이 지금도 디스크에 있는지, 사용자가 그 파일을 열거나 실행했는지는 이 DB로 알 수 없습니다. DB가 그 사용자 홈 폴더에 있다는 점은 계정을 알려 주지만, 그 시각에 키보드 앞에 있던 사람까지 알려 주지는 않습니다. 파일을 지웠을 때 행이 남는지, 브라우저 기록을 지울 때 이 DB도 함께 지워지는지는 확인하지 못해서, 행이 없다는 점만으로 받은 적이 없다고 보지 않습니다.
+**증명하지 못하는 것.** 받은 파일이 지금도 디스크에 있는지, 사용자가 그 파일을 열거나 실행했는지는 이 DB로 알 수 없습니다. DB가 그 사용자 홈 폴더에 있다는 점은 계정을 알려 주지만, 그 시각에 키보드 앞에 있던 사람까지 알려 주지는 않습니다. 파일을 지웠을 때 행이 남는지, 브라우저 기록을 지울 때 이 DB도 함께 지워지는지는 공개 자료가 없으므로, 행이 없다는 점만으로 받은 적이 없다고 보지 않습니다.
 
 보고서에는 "이 사용자의 격리 이벤트 DB에 이 시각(UTC)에 이 앱이 이 URL의 파일을 받은 기록이 있고, 이 파일의 격리 속성과 UUID가 같다" 처럼 씁니다.
 
@@ -78,9 +78,9 @@ DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 
 
 ## 함정과 한계
 
-- **격리 이유 숫자.** `LSQuarantineTypeNumber` 와 공개 상수의 대응표를 확인하지 못했습니다. 도구가 숫자를 글자로 바꿔 보여 주면 도구가 어떤 표를 썼는지 확인합니다.
+- **격리 이유 숫자.** `LSQuarantineTypeNumber` 와 공개 상수의 대응표는 공개돼 있지 않습니다. 도구가 숫자를 글자로 바꿔 보여 주면 도구가 어떤 표를 썼는지 확인합니다.
 - **사용자마다 따로.** DB가 홈 폴더마다 있어서 한 계정만 보면 다른 계정에서 받은 기록을 놓칩니다.
-- **지운 기록.** 행 삭제와 파일 삭제가 어떻게 이어지는지 확인하지 못했습니다. 지운 행을 찾으려면 SQLite 파일의 빈 공간을 살펴야 하고, 그 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+- **지운 기록.** 행 삭제와 파일 삭제가 어떻게 이어지는지는 공개 자료가 없어 검체에서 확인합니다. 지운 행을 찾으려면 SQLite 파일의 빈 공간을 살펴야 하고, 그 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 - **UUID 없이 찾기.** 파일의 격리 속성이 없어졌다면 `LSQuarantineDataURLString` 의 파일 이름과 시각으로 행을 찾을 수 있지만, 같은 이름의 파일을 여러 번 받았을 수 있어서 한 행으로 단정하지 않습니다.
 
 ## 직접 분석해 보기

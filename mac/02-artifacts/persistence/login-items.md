@@ -12,9 +12,9 @@ nav_order: 600
 
 ## 무엇을 기록하나 · 왜 생기나
 
-사용자가 로그인 때 열고 싶은 앱을 등록하거나 앱이 스스로 로그인 항목으로 자리를 잡으면, macOS는 그 목록을 파일에 적어 두고, 목록에 든 항목은 사용자가 로그인할 때마다 다시 열리며 악성 코드가 자리를 잡는 방법으로도 쓰입니다. Phil Stokes는 macOS 악성 코드의 지속성 방법을 정리하면서 로그인 항목을 한 갈래로 다루고, 그 저장 파일로 `backgrounditems.btm` 을 듭니다 [1].
+사용자가 로그인 때 열고 싶은 앱을 등록하거나 앱이 스스로 로그인 항목으로 자리를 잡으면, macOS는 그 목록을 파일에 적어 두고, 목록에 든 항목은 사용자가 로그인할 때마다 다시 열리며 악성 코드가 자리를 잡는 방법으로도 쓰입니다. 로그인 항목을 저장하는 파일로는 `backgrounditems.btm` 이 있습니다 [1].
 
-공개 아티팩트 정의 모음인 ForensicArtifacts는 로그인 항목과 로그인 창 설정 파일 여러 개를 "User login items property list (plist) file." 이라는 설명 아래 `MacOSUserLoginItemsPlistFile` 한 항목으로 묶습니다 [2]. 이 묶음에는 로그인 창 plist도 들어 있는데, 같은 plist에 로그인 훅 (LoginHook)·로그아웃 훅 (LogoutHook)도 저장되고 `sudo defaults read com.apple.loginwindow` 로 확인합니다 [1]. 훅은 로그인 항목과 동작이 달라서 [그 밖의 지속성 위치 (Login Hook·Authorization Plugin·Emond)](other-persistence.md)에서 따로 다루고, 로그인 창의 다른 설정은 [로그인 창 설정 (loginwindow)](../system-account/loginwindow.md)에 있습니다.
+공개 아티팩트 정의 모음인 ForensicArtifacts에서는 로그인 항목 파일과 로그인 창 설정 파일 여러 개가 `MacOSUserLoginItemsPlistFile` 한 항목으로 묶여 있습니다 [2]. 이 묶음에 든 로그인 창 plist에는 로그인 훅 (LoginHook)·로그아웃 훅 (LogoutHook)도 저장되고 `sudo defaults read com.apple.loginwindow` 로 확인합니다 [1]. 훅은 로그인 항목과 동작이 달라서 [그 밖의 지속성 위치 (Login Hook·Authorization Plugin·Emond)](other-persistence.md)에서 따로 다루고, 로그인 창의 다른 설정은 [로그인 창 설정 (loginwindow)](../system-account/loginwindow.md)에 있습니다.
 
 macOS 13 이후에는 백그라운드 작업 관리 (Background Task Management, BTM)가 로그인 항목을 실행 에이전트·데몬과 함께 관리하고, 등록 기록의 구조와 `sfltool dumpbtm`, 시스템 설정의 로그인 항목 화면, MDM 규칙은 [실행 에이전트·데몬 (LaunchAgents·LaunchDaemons)](launchd/index.md) 아래의 백그라운드 작업 관리 페이지에서 다룹니다. 이 페이지는 그 밖의 파일 위치와 해석을 다룹니다.
 
@@ -33,20 +33,20 @@ macOS 13 이후에는 백그라운드 작업 관리 (Background Task Management,
 
 `~` 로 시작하는 경로는 사용자마다 하나씩 있어서, 이미지에서는 모든 사용자 홈을 돌며 같은 경로를 찾습니다. 사용자 목록은 [사용자 계정 (Local Accounts)](../system-account/user-accounts/index.md)에서 먼저 뽑아 둡니다.
 
-버전별 차이는 출처가 많이 밝히지 않습니다. ForensicArtifacts는 위 경로를 한 항목으로 묶을 뿐 경로마다 쓰이는 macOS 버전을 적지 않고 [2], 예전 plist에서 `backgrounditems.btm` 으로, 다시 시스템 BTM 저장소로 넘어간 시점도 이 페이지의 출처로는 확인하지 못했습니다.
+경로마다 쓰이는 macOS 버전과, 예전 plist에서 `backgrounditems.btm` 으로, 다시 시스템 BTM 저장소로 넘어간 시점은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-| macOS | 이 페이지에서 확인한 것 |
+| macOS | 내용 |
 |---|---|
-| 버전 밝히지 않음 | 위 표의 경로 전부가 로그인 항목 관련 파일로 적힘 [2] |
+| 버전 구분 없음 | 위 표의 경로 전부가 로그인 항목 관련 파일로 적힘 [2] |
 | 13 이후 | BTM이 로그인 항목을 관리함 (자세한 내용은 [실행 에이전트·데몬](launchd/index.md) 아래 백그라운드 작업 관리 페이지) |
 
-어느 파일이 조사 대상 버전에서 실제로 쓰이는지 모르는 상태라서, 수집할 때는 위 경로를 가리지 않고 모두 가져오고 파일마다 있고 없음과 시각을 적어 둡니다.
+어느 파일이 조사 대상 버전에서 실제로 쓰이는지는 버전마다 다를 수 있어서, 수집할 때는 위 경로를 가리지 않고 모두 가져오고 파일마다 있고 없음과 시각을 적어 둡니다.
 
 ## 구조
 
-ForensicArtifacts는 위 파일을 모두 plist 파일로 분류합니다 [2]. plist를 읽는 일반 원리(XML과 바이너리 형식, 바이너리 plist의 오브젝트 테이블, NSKeyedArchiver로 묶은 데이터)는 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에 있습니다.
+위 파일은 모두 plist 파일입니다 [2]. plist를 읽는 일반 원리(XML과 바이너리 형식, 바이너리 plist의 오브젝트 테이블, NSKeyedArchiver로 묶은 데이터)는 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에 있습니다.
 
-각 파일 안에서 어떤 키에 항목이 들어가는지는 이 페이지의 출처로 확인하지 못했습니다. `com.apple.loginitems.plist` 안의 키 이름과 `com.apple.loginwindow` plist에서 로그인 때 다시 여는 앱 목록이 들어가는 키도 확인하지 못했기 때문에, 키 이름을 짐작해 찾지 말고 파일 전체를 풀어 경로·번들 ID·앱 이름이 보이는 값을 모두 적습니다. 값 안에 파일 참조 데이터가 들어 있으면 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 방법으로 풀고, 번들 ID와 팀 ID는 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)를 참고합니다.
+각 파일 안에서 어떤 키에 항목이 들어가는지(`com.apple.loginitems.plist` 안의 키 이름, `com.apple.loginwindow` plist에서 로그인 때 다시 여는 앱 목록이 들어가는 키)는 공개된 분석 자료가 없어서, 키 이름을 짐작해 찾지 말고 파일 전체를 풀어 경로·번들 ID·앱 이름이 보이는 값을 모두 적습니다. 값 안에 파일 참조 데이터가 들어 있으면 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 방법으로 풀고, 번들 ID와 팀 ID는 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)를 참고합니다.
 
 ## 증거로서 의미
 
@@ -58,7 +58,7 @@ ForensicArtifacts는 위 파일을 모두 plist 파일로 분류합니다 [2]. p
 
 ## 시각 해석
 
-로그인 항목 파일 안에 등록 시각이 들어 있는지, 들어 있다면 어떤 기준의 시각인지는 이 페이지의 출처로 확인하지 못했습니다. 그래서 등록 시기는 파일 밖의 기록으로 좁힙니다. 목록 파일 자체의 파일 시스템 시각은 목록이 마지막으로 바뀐 때를 알려 줄 뿐 어느 항목이 그때 들어갔는지까지는 알려 주지 않고, 항목이 가리키는 앱의 설치 시각과 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)의 변경 기록을 함께 놓으면 범위가 좁아집니다. 여러 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 확인합니다.
+로그인 항목 파일 안에 등록 시각이 들어 있는지, 들어 있다면 어떤 기준의 시각인지는 검체에서 확인하고, 등록 시기는 파일 밖의 기록으로 좁힙니다. 목록 파일 자체의 파일 시스템 시각은 목록이 마지막으로 바뀐 때를 알려 줄 뿐 어느 항목이 그때 들어갔는지까지는 알려 주지 않고, 항목이 가리키는 앱의 설치 시각과 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)의 변경 기록을 함께 놓으면 범위가 좁아집니다. 여러 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 확인합니다.
 
 ## 함정과 한계
 
@@ -66,13 +66,13 @@ ForensicArtifacts는 위 파일을 모두 plist 파일로 분류합니다 [2]. p
 
 로그인 창 plist에는 로그인 항목 말고도 로그인 훅 같은 다른 설정이 함께 들어 있어서 [1], 이 plist에서 찾은 스크립트 경로를 로그인 항목으로 적으면 실행 방식과 실행 계정을 잘못 설명하게 됩니다. 훅인지 로그인 항목인지는 키 이름으로 먼저 가립니다.
 
-지우기 쪽에서 보면, 목록은 수집한 시점의 상태만 보여 주기 때문에 목록에 없다는 사실이 과거에도 없었다는 뜻은 아닙니다. 지난 상태는 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)로 확인합니다. 로그인 항목을 넣고 빼는 동작이 통합 로그에 어떤 서브시스템·문구로 남는지는 이 페이지의 출처로 확인하지 못했습니다.
+지우기 쪽에서 보면, 목록은 수집한 시점의 상태만 보여 주기 때문에 목록에 없다는 사실이 과거에도 없었다는 뜻은 아닙니다. 지난 상태는 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)로 확인합니다. 로그인 항목을 넣고 빼는 동작이 통합 로그에 어떤 서브시스템·문구로 남는지는 검체의 통합 로그에서 확인합니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-목록 파일을 헥스 편집기로 열어 앞머리로 XML plist인지 바이너리 plist인지 가린 뒤, [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)의 순서대로 오브젝트를 따라갑니다. 키 이름을 모르는 상태라서, 먼저 `.app` 이나 `/Applications/` 처럼 앱 경로에 흔히 들어가는 문자열을 검색해 값의 위치를 잡고 그 값이 어느 키·어느 배열에 딸려 있는지 거슬러 올라가면 파일마다 목록이 들어 있는 자리를 찾을 수 있습니다. 이 방법은 plist 형식을 바탕으로 한 설명이고 특정 검체에서 나온 값이 아닙니다.
+목록 파일을 헥스 편집기로 열어 앞머리로 XML plist인지 바이너리 plist인지 가린 뒤, [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)의 순서대로 오브젝트를 따라갑니다. 키 이름을 모를 때는 먼저 `.app` 이나 `/Applications/` 처럼 앱 경로에 흔히 들어가는 문자열을 검색해 값의 위치를 잡고 그 값이 어느 키·어느 배열에 딸려 있는지 거슬러 올라가면 파일마다 목록이 들어 있는 자리를 찾을 수 있습니다. 이 방법은 plist 형식을 바탕으로 한 설명이고 특정 검체에서 나온 값이 아닙니다.
 
 ### 공개 도구로 한 번
 
