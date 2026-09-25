@@ -6,7 +6,7 @@ nav_order: 370
 
 # 설정 값 (Settings Global·Secure·System)
 
-Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되고, 조사에서 어떤 키를 먼저 보는지를 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 실제 폰에서 본 모양에는 확인 범위를 붙였습니다.
+Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되고, 조사에서 어떤 키를 먼저 보는지를 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
 
 ## 한 줄 요약
 
@@ -39,9 +39,9 @@ Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되�
 | 파일 형식 | 글자 XML 또는 ABX. 소스가 Xml.resolveSerializer 로 기기 설정에 따라 형식을 고르고, ALEAPP 도 ABX 를 따로 읽음 | [2][3] |
 | ABX 가 기본이 된 버전 | 확인하지 못함 | |
 | 뿌리 태그가 없는 파일 | ALEAPP 가 Android 11 파일에서 따로 처리 | [3] |
-| 키 개수 | global 596개, secure 464개, system 582개 | 확인 범위: Android 16, One UI 8.5 |
+| 키 개수 | global 596개, secure 464개, system 582개 | 관찰 |
 
-삼성 기기에는 AOSP 소문자 키 사이에 대문자로 쓴 키, `SEM_` 으로 시작하는 키, 삼성 기능 이름이 들어간 키가 섞여 있었습니다. 예를 들어 global 에 `Phenotype_boot_count`, `Phenotype_flags`, `SPEN_INPUT_MODE_DEX`, `STANDARD_BOLD_FONT`, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `SUPPORT_BG_AD_RESTRICTION_BY_AI`, `rampart_blocked_adb_cmd`, `rampart_blocked_unknown_apps`, system 에 `IsFotaUpgrade`, `PowerbuttonTapping`, `SEM_VIBRATION_NOTIFICATION_INTENSITY` 가 있었습니다. (확인 범위: Android 16, One UI 8.5) 이런 제조사 키의 뜻은 공개 문서로 확인하지 못해서 이름만 보고 해석하지 않습니다.
+삼성 기기에는 AOSP 소문자 키 사이에 대문자로 쓴 키, `SEM_` 으로 시작하는 키, 삼성 기능 이름이 들어간 키가 섞여 있었습니다. 예를 들어 global 에 `Phenotype_boot_count`, `Phenotype_flags`, `SPEN_INPUT_MODE_DEX`, `STANDARD_BOLD_FONT`, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `SUPPORT_BG_AD_RESTRICTION_BY_AI`, `rampart_blocked_adb_cmd`, `rampart_blocked_unknown_apps`, system 에 `IsFotaUpgrade`, `PowerbuttonTapping`, `SEM_VIBRATION_NOTIFICATION_INTENSITY` 가 있었습니다. 이런 제조사 키의 뜻은 공개 문서로 확인하지 못해서 이름만 보고 해석하지 않습니다.
 
 ## 구조
 
@@ -66,7 +66,7 @@ config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태�
 
 ## 조사에 쓸 만한 키
 
-관찰한 기기에 다음 키들이 실제로 있었습니다. (확인 범위: Android 16, One UI 8.5) 이번 자료로는 키가 있다는 사실만 확인했고 값의 뜻은 확인하지 못해서, 아래 "볼 거리" 는 키 이름에서 짐작한 방향일 뿐입니다.
+관찰한 기기에 다음 키들이 실제로 있었습니다. 이번 자료로는 키가 있다는 사실만 확인했고 값의 뜻은 확인하지 못해서, 아래 "볼 거리" 는 키 이름에서 짐작한 방향일 뿐입니다.
 
 | 표 | 키 | 볼 거리(이름에서 짐작) |
 |---|---|---|
@@ -122,7 +122,7 @@ ALEAPP 주석에는 settings 파일에 제어 문자나 이스케이프하지 �
 
 ### 공개 도구로 한 번
 
-라이브 기기에서는 adb 일반 권한으로 세 표의 키와 값을 뽑을 수 있었습니다. (확인 범위: Android 16, One UI 8.5)
+라이브 기기에서는 adb 일반 권한으로 세 표의 키와 값을 뽑을 수 있었습니다.
 
 ```sh
 adb shell settings list global > settings_global.txt

@@ -16,7 +16,7 @@ Android 의 계정 목록은 시스템 서비스 AccountManagerService 가 관�
 
 계정 목록을 보면 이 기기에서 어떤 서비스 계정이 쓰였는지 알 수 있어서, 클라우드에 따로 요청할 데이터를 정하거나 앱 데이터의 주인을 가리는 출발점이 됩니다. DE 파일에는 이름·종류와 함께 앱별 권한 부여·가시성, 최대 64줄의 계정 추가·삭제 기록(`debug_table`)이 들어가서 계정을 언제 넣고 뺐는지를 제한된 범위에서 되짚을 수 있습니다 [1]. CE 파일에는 비밀번호와 인증 토큰 같은 민감한 값이 들어가고, 사용자가 잠금을 푼 뒤에야 열립니다 [1][2].
 
-계정 DB 와 따로, 계정과 동기화 대상의 조합마다 동기화 설정과 마지막 성공·실패 시각이 `/data/system/sync/` 아래 파일에 남습니다 [4]. 라이브 기기에서는 adb 일반 셸 권한의 `dumpsys account` 로 계정 목록과 변경 기록(Accounts History)을 볼 수 있었습니다. (확인 범위: Android 16, One UI 8.5)
+계정 DB 와 따로, 계정과 동기화 대상의 조합마다 동기화 설정과 마지막 성공·실패 시각이 `/data/system/sync/` 아래 파일에 남습니다 [4]. 라이브 기기에서는 adb 일반 셸 권한의 `dumpsys account` 로 계정 목록과 변경 기록(Accounts History)을 볼 수 있었습니다.
 
 ## 한눈에 보기
 
@@ -26,7 +26,7 @@ Android 의 계정 목록은 시스템 서비스 AccountManagerService 가 관�
 | `/data/system_ce/<사용자ID>/accounts_ce.db` | 현행 AOSP 기준 | 비밀번호·인증 토큰·부가 값(잠금 해제 뒤에 열림) |
 | `accounts.db` | Android N 이전(상수 이름 기준) | 두 파일로 나뉘기 전의 한 파일, 경로는 확인 못 함 |
 | `/data/system/sync/` (`accounts.xml`, `status`, `stats`) | 현행 AOSP 기준 | 계정·동기화 대상별 설정과 마지막 동기화 상태 |
-| `dumpsys account` 출력 | Android 16 에서 관찰 | 사용자별 계정 목록과 Accounts History (확인 범위: Android 16, One UI 8.5) |
+| `dumpsys account` 출력 | Android 16 에서 관찰 | 사용자별 계정 목록과 Accounts History |
 | `settings` 의 계정 관련 키 | Android 16 에서 관찰 | 구글·삼성 계정, 동의, 기기 이전과 관련된 이름의 키(뜻은 대부분 확인 못 함) |
 
 계정 DB 두 파일의 전체 경로는 ALEAPP 가 찾는 경로 패턴에서 읽어 냈고, 자세한 근거는 아래 "계정 DB 구조" 페이지에 있습니다.

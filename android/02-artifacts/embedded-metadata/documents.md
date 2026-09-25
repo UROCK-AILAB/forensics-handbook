@@ -24,8 +24,8 @@ OOXML 형식은 Microsoft Office 2007 에서 들어왔고 DOCX, PPTX, XLSX, VSDX
 
 | 폴더 | 관찰 내용 | 범위 |
 |---|---|---|
-| `/sdcard/Documents` | 항목 2개(모두 이름을 가린 폴더) | (확인 범위: Android 16, One UI 8.5) |
-| `/sdcard/Download` | 항목 151개, 그 가운데 이름을 가린 폴더 36개 | (확인 범위: Android 16, One UI 8.5) |
+| `/sdcard/Documents` | 항목 2개(모두 이름을 가린 폴더) | |
+| `/sdcard/Download` | 항목 151개, 그 가운데 이름을 가린 폴더 36개 | |
 
 공용 저장 공간의 폴더 구성은 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md), 앱 데이터 폴더는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. MediaStore 가 PDF·Office 파일 안의 작성자 같은 값을 읽어 칸에 넣는지는 확인하지 못했고, 삼성 내 파일 앱이나 모바일 문서 편집 앱이 문서를 저장하거나 고칠 때 작성 프로그램 칸에 어떤 값을 남기는지도 확인하지 못했습니다.
 

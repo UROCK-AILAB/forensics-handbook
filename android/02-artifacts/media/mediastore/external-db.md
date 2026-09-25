@@ -25,7 +25,7 @@ external.db 가 기기 안 어느 폴더에 있는지, 그리고 MediaProvider �
 
 삼성 기기에는 AOSP external.db 와 별도로 삼성 미디어 제공자의 DB 가 있습니다. ALEAPP 는 경로 패턴 `*/com.samsung.android.providers.media/databases/media.db*` 로 이 DB 를 찾고, Android 10·11·13·14·15 삼성 검체에서 읽었다고 적습니다 [3]. 두 DB 는 표 구조가 달라서 아래 "삼성 media.db" 절에 따로 정리합니다.
 
-사용자와 프로필이 여럿이면 DB 도 여럿일 수 있습니다. ALEAPP 설명에 따르면 검체 cookbook_a11 과 samsungs20_a13 에서는 user/150 아래에 두 번째 media.db 가 있었고, `system/users/150.xml` 이 사용자 150 을 "Secure Folder" 라는 관리 프로필로 기록했습니다 [3]. 관찰한 기기의 `dumpsys user` 출력에도 두 번째 사용자(isPrimary=false, parentId 있음)가 있었고 첫 사용자의 UserProperties 에는 mMediaSharedWithParent=false 칸이 보였지만, 그 사용자가 보안 폴더인지는 값이 가려져 알 수 없었습니다 (확인 범위: Android 16, One UI 8.5). 프로필 구조는 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+사용자와 프로필이 여럿이면 DB 도 여럿일 수 있습니다. ALEAPP 설명에 따르면 검체 cookbook_a11 과 samsungs20_a13 에서는 user/150 아래에 두 번째 media.db 가 있었고, `system/users/150.xml` 이 사용자 150 을 "Secure Folder" 라는 관리 프로필로 기록했습니다 [3]. 관찰한 기기의 `dumpsys user` 출력에도 두 번째 사용자(isPrimary=false, parentId 있음)가 있었고 첫 사용자의 UserProperties 에는 mMediaSharedWithParent=false 칸이 보였지만, 그 사용자가 보안 폴더인지는 값이 가려져 알 수 없었습니다. 프로필 구조는 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
 adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는 관찰 메모에 없어서 확인하지 못했습니다.
 
@@ -96,7 +96,7 @@ adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는
 
 출처는 모두 현행 AOSP 의 DatabaseHelper 입니다 [1]. 이 가운데 해석에 자주 쓰는 칸의 뜻은 다음과 같습니다.
 
-**경로와 폴더.** `_data` 는 파일의 전체 경로이고 한 DB 안에서 겹치지 않습니다. bucket_id 는 부모 폴더 경로를 소문자로 바꾼 문자열의 hashCode() 값이고, bucket_display_name 은 부모 폴더 이름이며 최상위 폴더에 있는 파일이면 NULL 입니다 [5]. is_download 는 경로가 `/storage/<볼륨>/(<사용자ID>/)Download/` 아래일 때 1 로 채우는 업그레이드 단계가 있습니다(정규식 PATTERN_DOWNLOADS_FILE) [1][5]. 관찰한 기기의 `/sdcard/DCIM` 아래에는 Camera, Screenshots, media 와 가린 폴더 19개가 있었는데 (확인 범위: Android 16, One UI 8.5), 이런 폴더 이름이 relative_path 와 bucket_display_name 에 그대로 나타납니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
+**경로와 폴더.** `_data` 는 파일의 전체 경로이고 한 DB 안에서 겹치지 않습니다. bucket_id 는 부모 폴더 경로를 소문자로 바꾼 문자열의 hashCode() 값이고, bucket_display_name 은 부모 폴더 이름이며 최상위 폴더에 있는 파일이면 NULL 입니다 [5]. is_download 는 경로가 `/storage/<볼륨>/(<사용자ID>/)Download/` 아래일 때 1 로 채우는 업그레이드 단계가 있습니다(정규식 PATTERN_DOWNLOADS_FILE) [1][5]. 관찰한 기기의 `/sdcard/DCIM` 아래에는 Camera, Screenshots, media 와 가린 폴더 19개가 있었는데, 이런 폴더 이름이 relative_path 와 bucket_display_name 에 그대로 나타납니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
 
 **소유 앱.** owner_package_name 은 이 미디어를 넣은 패키지 이름이고, 소유를 확실히 알 수 없으면 NULL 일 수 있습니다. Android 14(UPSIDE_DOWN_CAKE)부터는 앱이 이 칸을 조회할 때 패키지 가시성에 따라 결과가 제한됩니다 [2]. 그래서 앱을 거쳐 조회한 결과와 DB 파일을 직접 읽은 결과가 다를 수 있습니다. 패키지 이름을 앱과 맞추는 법은 [패키지 이름과 UID](../../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
 

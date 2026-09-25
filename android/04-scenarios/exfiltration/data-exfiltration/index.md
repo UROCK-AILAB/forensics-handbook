@@ -32,9 +32,9 @@ has_toc: false
 | PC 연결 | 삼성 내 파일 `*/com.sec.android.app.myfiles/databases/OperationHistory.db*` [8] | 경로 풀이가 Android 10~12 에서만 맞고 13·14 값은 풀지 못함 [8] | 파일 복사·이동 같은 작업 기록 |
 | 근거리 공유 | 블루투스 `*/bt_config.conf` [3] | 전체 경로의 버전별 차이는 확인 못 함 | 짝지은 기기의 MAC 주소·이름·시각(유닉스 초) |
 | 근거리 공유 | Nearby 캐시 `*/nearby-fast-pair/...`, `*/nearby-discovery/...`(LevelDB) [4] | Google Play 서비스 캐시 | 주변에서 발견한 액세서리·기기(전송 기록 아님) |
-| 공통 | `dumpsys account` 의 Accounts History | (확인 범위: Android 16, One UI 8.5) | 계정을 붙이고 뗀 기록(`action_account_add`, `action_account_remove` 등) |
-| 공통 | `dumpsys usagestats` | (확인 범위: Android 16, One UI 8.5) | 앱을 앞에 띄우고 내린 순서(`ACTIVITY_RESUMED` 등) |
-| 공통 | 설정 값(global·secure·system) | 삼성 전용 키가 섞여 있음(확인 범위: Android 16, One UI 8.5) | 기능이 켜졌는지(`adb_enabled`, `quickshare_enabled`, `backup_enabled` 등) |
+| 공통 | `dumpsys account` 의 Accounts History | | 계정을 붙이고 뗀 기록(`action_account_add`, `action_account_remove` 등) |
+| 공통 | `dumpsys usagestats` | | 앱을 앞에 띄우고 내린 순서(`ACTIVITY_RESUMED` 등) |
+| 공통 | 설정 값(global·secure·system) | 삼성 전용 키가 섞여 있음 | 기능이 켜졌는지(`adb_enabled`, `quickshare_enabled`, `backup_enabled` 등) |
 
 카카오톡 전용 ALEAPP 모듈은 목록에 없고, 삼성 이메일·Quick Share 전송 기록·블루투스 파일 전송(OPP)을 이름으로 내건 모듈도 목록에서 보이지 않습니다 [1]. 이 앱들은 공개 도구의 결과만으로 판단하지 말고 [앱 데이터 분석](../../../03-techniques/analysis/app-data-analysis/index.md)처럼 데이터를 직접 열어 봅니다.
 

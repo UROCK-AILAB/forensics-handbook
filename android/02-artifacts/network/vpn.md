@@ -45,7 +45,7 @@ VPN 흔적은 한 파일에 모여 있지 않고 항상 켜짐 VPN 설정 값, �
 
 어느 Android 버전부터 이 구조였는지는 확인하지 못했습니다. 저장 이름에 사용자 ID 가 들어가니 사용자가 여럿인 기기에서는 [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md) 에서 사용자 번호를 먼저 확인합니다.
 
-관찰 기기에서 adb 일반 권한으로 본 settings secure 키 목록에는 `vpn` 이 들어간 키가 하나도 없었습니다 (확인 범위: Android 16, One UI 8.5). 키 목록에는 그 기기에 실제로 저장된 키만 나오니, 그 기기에서 항상 켜짐 VPN 을 지정한 적이 없어서일 수 있습니다. 같은 목록에 `lockdown_in_power_menu` 라는 키가 있었지만 (확인 범위: Android 16, One UI 8.5), 이름에 lockdown 이 들어 있다는 것 말고는 VPN 잠금 설정과 같은 것이라는 근거가 없어서 VPN 흔적으로 보지 않습니다. `dumpsys connectivity` 와 `dumpsys vpn_management` 출력은 관찰하지 못했습니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
+관찰 기기에서 adb 일반 권한으로 본 settings secure 키 목록에는 `vpn` 이 들어간 키가 하나도 없었습니다. 키 목록에는 그 기기에 실제로 저장된 키만 나오니, 그 기기에서 항상 켜짐 VPN 을 지정한 적이 없어서일 수 있습니다. 같은 목록에 `lockdown_in_power_menu` 라는 키가 있었지만, 이름에 lockdown 이 들어 있다는 것 말고는 VPN 잠금 설정과 같은 것이라는 근거가 없어서 VPN 흔적으로 보지 않습니다. `dumpsys connectivity` 와 `dumpsys vpn_management` 출력은 관찰하지 못했습니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -79,7 +79,7 @@ VPN 설정이나 사용량 기록은 VPN 너머에서 어느 사이트에 접속
 
 둘째, 키 문자열을 짐작하지 않습니다. 상수 이름과 실제 설정 키 문자열은 다를 수 있으니, 설정 목록 전체를 받아 `vpn` 이 들어간 키를 찾는 쪽이 안전합니다.
 
-셋째, 이름이 비슷한 키에 속지 않습니다. 관찰 기기의 `lockdown_in_power_menu` 처럼 lockdown 이 들어간 키가 VPN 과 관련 있다는 근거는 없습니다 (확인 범위: Android 16, One UI 8.5).
+셋째, 이름이 비슷한 키에 속지 않습니다. 관찰 기기의 `lockdown_in_power_menu` 처럼 lockdown 이 들어간 키가 VPN 과 관련 있다는 근거는 없습니다.
 
 넷째, 항상 켜짐 VPN 은 사용자가 아니라 회사 기기 관리 정책이 지정했을 수도 있습니다. 기기 관리 주체가 있는지는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](../credentials-security/device-admin-accessibility.md) 과 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 에서 확인합니다.
 
@@ -89,7 +89,7 @@ VPN 설정이나 사용량 기록은 VPN 너머에서 어느 사이트에 접속
 
 ### 설정 값으로 한 번
 
-기기가 켜져 있고 adb 를 쓸 수 있는 상황이라면 secure 설정 목록 전체를 받아 VPN 관련 키가 있는지 찾습니다. 관찰 기기에서는 이 방법으로 본 목록에 `vpn` 이 들어간 키가 없었습니다 (확인 범위: Android 16, One UI 8.5).
+기기가 켜져 있고 adb 를 쓸 수 있는 상황이라면 secure 설정 목록 전체를 받아 VPN 관련 키가 있는지 찾습니다. 관찰 기기에서는 이 방법으로 본 목록에 `vpn` 이 들어간 키가 없었습니다.
 
 ```
 adb shell settings list secure | grep -i vpn

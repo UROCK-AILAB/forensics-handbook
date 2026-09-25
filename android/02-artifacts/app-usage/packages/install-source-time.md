@@ -41,9 +41,9 @@ installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그
 
 ### 기기에서 본 설치 관련 앱과 설정 키
 
-`dumpsys package` 의 "Known Packages:" 절에서 Installer 는 `com.google.android.packageinstaller`, Verifier 는 `com.android.vending` 과 `com.samsung.android.sm.devicesecurity`, "Developer verification service provider" 는 `com.google.android.verifier` 였습니다 (확인 범위: Android 16, One UI 8.5). 설치자 칸의 값을 이 목록과 맞춰 보면 기기에 지정된 설치 프로그램이 설치를 맡았는지 가릴 수 있습니다.
+`dumpsys package` 의 "Known Packages:" 절에서 Installer 는 `com.google.android.packageinstaller`, Verifier 는 `com.android.vending` 과 `com.samsung.android.sm.devicesecurity`, "Developer verification service provider" 는 `com.google.android.verifier` 였습니다. 설치자 칸의 값을 이 목록과 맞춰 보면 기기에 지정된 설치 프로그램이 설치를 맡았는지 가릴 수 있습니다.
 
-설정 값 가운데 settings secure 에 `install_non_market_apps` 키가, settings global 에 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `default_install_location`, `set_install_location`, `upload_apk_enable` 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 관찰 메모에는 값이 가려져 있고 각 키의 뜻도 확인하지 못했습니다. 설정 값을 읽는 방법은 [설정 값](../../system-account/settings.md) 페이지를 봅니다.
+설정 값 가운데 settings secure 에 `install_non_market_apps` 키가, settings global 에 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `default_install_location`, `set_install_location`, `upload_apk_enable` 키가 있었습니다. 관찰 메모에는 값이 가려져 있고 각 키의 뜻도 확인하지 못했습니다. 설정 값을 읽는 방법은 [설정 값](../../system-account/settings.md) 페이지를 봅니다.
 
 ## 설치 시각 칸
 

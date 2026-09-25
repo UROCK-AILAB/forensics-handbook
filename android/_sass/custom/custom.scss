@@ -77,3 +77,10 @@
     justify-content: center;
   }
 }
+
+// 쪽 아래 마지막 수정 날짜(git 기록의 마지막 커밋 날짜)
+.last-modified {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: #6b7085;
+}

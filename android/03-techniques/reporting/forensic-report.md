@@ -60,9 +60,9 @@ Android 빌드 정보는 Build 클래스의 필드 이름과 그 필드가 읽�
 
 `Build.FINGERPRINT` 의 설명문은 이 값을 쪼개 해석하려 하지 말라고 적고 있어서, 보고서에는 문자열 전체를 그대로 옮깁니다[4]. 이 속성이 비어 있으면 AOSP 는 `ro.product.brand/ro.product.name/ro.product.device:ro.build.version.release/ro.build.id/ro.build.version.incremental:ro.build.type/ro.build.tags` 꼴로 값을 조립합니다[4]. `Build.TIME` 은 속성 값에 1000 을 곱해 만들기 때문에, 속성 `ro.build.date.utc` 는 초 단위이고 필드는 밀리초 단위입니다[4]. 속성 값과 필드 값을 나란히 적을 때는 이 차이를 함께 밝힙니다.
 
-`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 칸과 `buildFingerprint`, `fingerprint` 칸이 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다(확인 범위: Android 16, One UI 8.5). 두 fingerprint 칸의 뜻이 어떻게 다른지는 확인하지 못해서, 보고서에 옮길 때는 칸 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
+`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 칸과 `buildFingerprint`, `fingerprint` 칸이 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다. 두 fingerprint 칸의 뜻이 어떻게 다른지는 확인하지 못해서, 보고서에 옮길 때는 칸 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
 
-관찰 기기를 예로 들면 대상 목록의 기기 부분은 다음처럼 적을 수 있습니다(확인 범위: Android 16, One UI 8.5). 일련번호와 IMEI 같은 식별자는 이 예에서 뺐습니다.
+관찰 기기를 예로 들면 대상 목록의 기기 부분은 다음처럼 적을 수 있습니다. 일련번호와 IMEI 같은 식별자는 이 예에서 뺐습니다.
 
 ```
 모델: Android 16 기기
@@ -76,7 +76,7 @@ OS: Android 16 (SDK 36), One UI 8.5
 
 ### 시각 기준 밝히기
 
-Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대가 찍히지 않은 것이 많습니다. 관찰 기기에서 본 시각 모양은 다음과 같습니다(확인 범위: Android 16, One UI 8.5).
+Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대가 찍히지 않은 것이 많습니다. 관찰 기기에서 본 시각 모양은 다음과 같습니다.
 
 | 출처 | 시각 모양 | 연도·시간대 |
 |---|---|---|
@@ -88,7 +88,7 @@ Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대
 
 연도와 시간대가 없는 기록을 보고서에 옮길 때는 연도를 무엇으로 정했는지, 어느 시간대로 읽었는지를 함께 적습니다. logcat 의 기본 출력이 기기 현지 시각인지는 이 핸드북에서 확인하지 않았습니다. 줄 형식은 [logcat](../../02-artifacts/logs/logcat.md)에, 시각 값을 푸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-기기 시각이 바뀐 흔적이 있으면 그것도 보고서에 적습니다. 관찰 기기의 `dumpsys usagestats` 에는 "UsageStats RollOver history" 아래 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄이 있었습니다(확인 범위: Android 16, One UI 8.5). 이 줄이 사용자가 시각을 바꿀 때 찍히는지 네트워크로 맞출 때 찍히는지는 확인하지 못해서, 이 줄 하나로 시각 조작을 단정하지 않습니다. 수집 시점의 자동 시간 설정은 `settings global` 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키에서 봅니다(확인 범위: Android 16, One UI 8.5). 키의 뜻은 [설정 값](../../02-artifacts/system-account/settings.md)과 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에, 이벤트 기록 자체는 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
+기기 시각이 바뀐 흔적이 있으면 그것도 보고서에 적습니다. 관찰 기기의 `dumpsys usagestats` 에는 "UsageStats RollOver history" 아래 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄이 있었습니다. 이 줄이 사용자가 시각을 바꿀 때 찍히는지 네트워크로 맞출 때 찍히는지는 확인하지 못해서, 이 줄 하나로 시각 조작을 단정하지 않습니다. 수집 시점의 자동 시간 설정은 `settings global` 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키에서 봅니다. 키의 뜻은 [설정 값](../../02-artifacts/system-account/settings.md)과 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에, 이벤트 기록 자체는 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
 
 ### 무결성 값 적기
 

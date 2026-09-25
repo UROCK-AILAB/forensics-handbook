@@ -31,9 +31,9 @@ ALEAPP 는 `system_ce` 아래의 세 하위 디렉터리를 찾고, `system_ce` 
 | 기기 | 최근 앱 화면을 맡는 쪽 | 확인한 것 |
 |---|---|---|
 | AOSP | 확인하지 못함 | 경로와 파일 구성(ALEAPP 기준) [1] |
-| 삼성 One UI | `com.sec.android.app.launcher` (One UI 홈) | 역할 패키지 이름만 확인 (확인 범위: Android 16, One UI 8.5) |
+| 삼성 One UI | `com.sec.android.app.launcher` (One UI 홈) | 역할 패키지 이름만 확인 |
 
-관찰 기기의 `dumpsys package` 출력에서 "Known Packages" 의 `Recents:` 역할은 `com.sec.android.app.launcher` 가 맡고 있었습니다 (확인 범위: Android 16, One UI 8.5). 최근 앱 화면을 그리는 앱이 삼성 홈이라는 뜻이지만, 삼성 기기에서 스냅샷 경로와 형식이 AOSP 와 다른지는 확인하지 못했습니다.
+관찰 기기의 `dumpsys package` 출력에서 "Known Packages" 의 `Recents:` 역할은 `com.sec.android.app.launcher` 가 맡고 있었습니다. 최근 앱 화면을 그리는 앱이 삼성 홈이라는 뜻이지만, 삼성 기기에서 스냅샷 경로와 형식이 AOSP 와 다른지는 확인하지 못했습니다.
 
 ## 구조
 
@@ -90,7 +90,7 @@ ALEAPP 가 태스크 XML 에서 읽는 속성은 다음과 같습니다 [1]. 파
 
 둘째, 앱이 화면 보안 플래그(`FLAG_SECURE`)를 쓰면 스냅샷이 남지 않거나 가려진다는 설명이 흔하지만 이번에 확인하지 못했습니다. 은행·메신저 앱의 스냅샷이 비어 있다면 이 가능성을 열어 두고, 스냅샷이 없다는 사실만으로 앱을 안 썼다고 결론 내리지 않습니다.
 
-셋째, 삼성 One UI 는 최근 앱 화면을 홈 앱이 맡습니다 (확인 범위: Android 16, One UI 8.5). AOSP 경로에서 아무것도 안 나오면 경로가 다를 가능성을 먼저 따집니다.
+셋째, 삼성 One UI 는 최근 앱 화면을 홈 앱이 맡습니다. AOSP 경로에서 아무것도 안 나오면 경로가 다를 가능성을 먼저 따집니다.
 
 넷째, 스냅샷 이미지를 증거로 제시할 때는 원본 파일의 해시를 함께 남기고, 저해상도 판과 고해상도 판이 둘 다 있으면 둘 다 보존합니다.
 

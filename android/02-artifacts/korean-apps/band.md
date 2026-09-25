@@ -25,7 +25,7 @@ Play 의 "데이터 보안" 칸에는 제3자와 공유할 수 있는 데이터 
 
 앱 안에 남는 기록은 확인하지 못했습니다. 글·댓글·채팅·가입한 밴드 목록이 기기 안의 DB 에 쌓이는지, 화면을 열 때마다 서버에서 받아 오는지를 알려 주는 공개 자료를 찾지 못했고, 사진·동영상을 저장할 때 공용 저장 공간의 어느 폴더를 쓰는지도 확인하지 못했습니다.
 
-앱 바깥의 시스템 기록은 앱 이름과 상관없이 모든 사용자 앱에 대해 쌓입니다. 관찰 기기의 앱 사용 기록(dumpsys usagestats)에서는 사용자가 설치한 앱마다 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED, NOTIFICATION_INTERRUPTION·NOTIFICATION_SEEN, SHORTCUT_INVOCATION, USER_INTERACTION, STANDBY_BUCKET_CHANGED, FOREGROUND_SERVICE_START·FOREGROUND_SERVICE_STOP 이벤트가 package 칸과 함께 나왔고, 현재 알림 목록(dumpsys notification)의 NotificationRecord 에는 pkg, channel, android.title, android.text, when, mCreationTimeMs, mUpdateTimeMs 칸이 있었고, 제목·본문은 실제 글자 대신 [length=##] 처럼 길이만 찍혔습니다. (확인 범위: Android 16, One UI 8.5) 관찰 메모는 기본 앱이 아닌 패키지 이름을 모두 가려 두어서, 관찰 기기에 밴드가 깔려 있었는지는 알 수 없습니다. 각 기록의 칸 뜻은 [앱 사용 기록](../app-usage/usagestats/index.md)과 [알림 기록](../app-usage/notification-history.md)에서 다룹니다.
+앱 바깥의 시스템 기록은 앱 이름과 상관없이 모든 사용자 앱에 대해 쌓입니다. 관찰 기기의 앱 사용 기록(dumpsys usagestats)에서는 사용자가 설치한 앱마다 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED, NOTIFICATION_INTERRUPTION·NOTIFICATION_SEEN, SHORTCUT_INVOCATION, USER_INTERACTION, STANDBY_BUCKET_CHANGED, FOREGROUND_SERVICE_START·FOREGROUND_SERVICE_STOP 이벤트가 package 칸과 함께 나왔고, 현재 알림 목록(dumpsys notification)의 NotificationRecord 에는 pkg, channel, android.title, android.text, when, mCreationTimeMs, mUpdateTimeMs 칸이 있었고, 제목·본문은 실제 글자 대신 [length=##] 처럼 길이만 찍혔습니다. 관찰 메모는 기본 앱이 아닌 패키지 이름을 모두 가려 두어서, 관찰 기기에 밴드가 깔려 있었는지는 알 수 없습니다. 각 기록의 칸 뜻은 [앱 사용 기록](../app-usage/usagestats/index.md)과 [알림 기록](../app-usage/notification-history.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -39,7 +39,7 @@ Play 의 "데이터 보안" 칸에는 제3자와 공유할 수 있는 데이터 
 
 앱 비공개 폴더의 구조와 사용자별 폴더는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md)에서, 그 폴더를 어떤 권한으로 읽을 수 있는지는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md)에서 다룹니다.
 
-공용 저장 공간 쪽은 관찰 기기의 /sdcard 최상위와 DCIM·Pictures·Download 아래에 표준 이름이 아닌 폴더가 여럿 있었지만, 관찰 메모가 이름을 가려서 어느 앱이 만든 폴더인지는 알 수 없었습니다. /sdcard/Android/media 아래에는 com.google.android.gms 처럼 패키지 이름을 그대로 폴더 이름으로 쓴 앱별 폴더가 있었습니다. (확인 범위: Android 16, One UI 8.5) 밴드가 이런 폴더를 만드는지는 확인하지 못했으니, 검체에서 com.nhn.android.band 이름의 폴더가 있는지 직접 찾아봅니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md)에서 다룹니다.
+공용 저장 공간 쪽은 관찰 기기의 /sdcard 최상위와 DCIM·Pictures·Download 아래에 표준 이름이 아닌 폴더가 여럿 있었지만, 관찰 메모가 이름을 가려서 어느 앱이 만든 폴더인지는 알 수 없었습니다. /sdcard/Android/media 아래에는 com.google.android.gms 처럼 패키지 이름을 그대로 폴더 이름으로 쓴 앱별 폴더가 있었습니다. 밴드가 이런 폴더를 만드는지는 확인하지 못했으니, 검체에서 com.nhn.android.band 이름의 폴더가 있는지 직접 찾아봅니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md)에서 다룹니다.
 
 Android 버전이나 One UI 버전에 따라 이 앱의 흔적이 어떻게 달라지는지 보여 주는 자료는 찾지 못해서 버전별 표를 싣지 않습니다.
 
@@ -59,7 +59,7 @@ Android 버전이나 One UI 버전에 따라 이 앱의 흔적이 어떻게 달�
 
 앱 내부 시각 칸의 기준(유닉스 밀리초인지 다른 기준인지)은 확인하지 못했습니다. 숫자 모양을 보고 기준을 가늠하는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
-시스템 쪽 기록에서는 관찰 기기의 dumpsys notification 출력에서 mCreationTimeMs·mUpdateTimeMs 가 값 뒤 괄호 안에 +#### 모양의 시간대 오프셋이 붙은 시각으로 출력됐습니다. (확인 범위: Android 16, One UI 8.5) 앱 사용 기록의 time 값이 어느 시간대 기준인지는 관찰 메모로 확인하지 못했으니, 기기의 시간대 설정을 [시간대와 시각 설정](../system-account/time-zone.md)에서 먼저 확인하고 맞춥니다.
+시스템 쪽 기록에서는 관찰 기기의 dumpsys notification 출력에서 mCreationTimeMs·mUpdateTimeMs 가 값 뒤 괄호 안에 +#### 모양의 시간대 오프셋이 붙은 시각으로 출력됐습니다. 앱 사용 기록의 time 값이 어느 시간대 기준인지는 관찰 메모로 확인하지 못했으니, 기기의 시간대 설정을 [시간대와 시각 설정](../system-account/time-zone.md)에서 먼저 확인하고 맞춥니다.
 
 ## 함정과 한계
 

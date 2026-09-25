@@ -21,8 +21,8 @@ nav_order: 610
 | 음성 사서함 기록 | `calllog.db` 의 `calls` 표, `type` = 4 인 행[1][2] | 삼성 기기에서 같은 표를 쓰는지 |
 | 음성 사서함 상태 | 같은 데이터베이스의 `voicemail_status` 표[1] | 칸 목록 |
 | 음성 사서함 파일 | `voicemail-data` 라는 비공개 폴더에 확장자 없이 저장[2] | 실제 기기 경로, 음성 형식 |
-| 통화 녹음 설정 | 삼성 녹음 관련 settings 키가 있음(확인 범위: Android 16, One UI 8.5) | 각 키 값의 뜻 |
-| 통화 녹음 파일 | `/sdcard` 최상위에 `Recordings` 폴더가 있음(확인 범위: Android 16, One UI 8.5) | 하위 폴더, 파일 형식, 파일 이름 규칙 |
+| 통화 녹음 설정 | 삼성 녹음 관련 settings 키가 있음 | 각 키 값의 뜻 |
+| 통화 녹음 파일 | `/sdcard` 최상위에 `Recordings` 폴더가 있음 | 하위 폴더, 파일 형식, 파일 이름 규칙 |
 
 음성 사서함 파일을 만드는 코드는 `mContext.getDir(DATA_DIRECTORY, Context.MODE_PRIVATE)` 이고, `DATA_DIRECTORY` 값은 `"voicemail-data"` 입니다[2]. `getDir` 는 앱 데이터 폴더 안에 이름 앞에 `app_` 을 붙인 폴더를 만드는 함수라서, 파일은 연락처 제공자(com.android.providers.contacts) 데이터 폴더의 `app_voicemail-data` 폴더에 있을 것으로 보지만 기기에서 확인하지는 못했습니다. 앱 데이터 폴더 구조는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 에, `/sdcard` 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 에 있습니다.
 
@@ -62,7 +62,7 @@ IS_OMTP_VOICEMAIL, DISPLAY_NAME, SIZE
 
 제공자가 음성 사서함 행을 지울 때는 연결된 음성 파일을 `file.delete()` 로 먼저 지웁니다[2]. 소스 주석은 행을 먼저 지우면 파일을 찾을 길이 없어지기 때문이라고 설명합니다[2]. 그러므로 지운 음성 사서함은 행과 파일이 함께 사라지고, 되살리려면 SQLite 쪽 흔적과 파일 시스템 쪽 흔적을 따로 찾아야 합니다. 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 
-통화 녹음은 제조사와 One UI 판에 따라 다를 수 있는데, 이번에 확인한 것은 시험 기기의 settings 키 이름뿐입니다(확인 범위: Android 16, One UI 8.5). 값은 보지 못했고 뜻은 이름으로 짐작만 할 수 있습니다.
+통화 녹음은 제조사와 One UI 판에 따라 다를 수 있는데, 이번에 확인한 것은 시험 기기의 settings 키 이름뿐입니다. 값은 보지 못했고 뜻은 이름으로 짐작만 할 수 있습니다.
 
 | 영역 | 녹음 관련 키 |
 |---|---|
@@ -71,7 +71,7 @@ IS_OMTP_VOICEMAIL, DISPLAY_NAME, SIZE
 
 이름으로 보아 자동 녹음 켜짐·꺼짐, 자동 녹음 대상, 저장 위치를 정하는 키로 보이지만 값의 뜻은 확인하지 못했습니다. `add_info_com_sec_android_app_voicenote` 라는 이름으로 보아 삼성 음성 녹음 앱(com.sec.android.app.voicenote)이 관련될 수 있으나 이것도 확인하지 못했습니다. 설정 값 읽는 법은 [설정 값](../system-account/settings.md) 에 있습니다.
 
-같은 기기에서 통화 중 AI 기능과 관련 있어 보이는 키도 보였습니다(확인 범위: Android 16, One UI 8.5).
+같은 기기에서 통화 중 AI 기능과 관련 있어 보이는 키도 보였습니다.
 
 | 영역 | 키 |
 |---|---|
@@ -115,7 +115,7 @@ ORDER BY date;
 | [앱 사용 기록](../app-usage/usagestats/index.md) | 녹음 앱·전화 앱이 화면에 올라온 시각 |
 | [구글 백업](../mail-cloud/google-backup.md), [삼성 클라우드와 원드라이브](../mail-cloud/samsung-cloud-onedrive.md) | 기기에서 지운 녹음이 백업에 남았는지 |
 
-시험 기기의 `dumpsys batterystats` 이력에는 `+audio`·`-audio` 표시가 있었습니다(확인 범위: Android 16, One UI 8.5). 오디오를 쓰기 시작하고 멈춘 구간을 보여 주는 흔적이지만 통화 녹음과 곧바로 이어지는지는 확인하지 못했으므로, 통화 기록의 시각과 겹치는지를 보는 보조 자료로만 씁니다. 연락 관계를 정리하는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 에 있습니다.
+시험 기기의 `dumpsys batterystats` 이력에는 `+audio`·`-audio` 표시가 있었습니다. 오디오를 쓰기 시작하고 멈춘 구간을 보여 주는 흔적이지만 통화 녹음과 곧바로 이어지는지는 확인하지 못했으므로, 통화 기록의 시각과 겹치는지를 보는 보조 자료로만 씁니다. 연락 관계를 정리하는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 에 있습니다.
 
 ## 실습
 

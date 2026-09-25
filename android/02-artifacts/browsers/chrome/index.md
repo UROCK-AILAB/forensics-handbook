@@ -14,7 +14,7 @@ Chrome for Android(패키지 com.android.chrome)는 앱 데이터 폴더의 `app
 
 ## 왜 중요한가
 
-관찰한 기기에서는 `dumpsys package` 출력의 "Known Packages" 아래 "Browser:" 항목에 com.android.chrome 이 나와 기본 브라우저 역할을 Chrome 이 맡고 있었습니다 (확인 범위: Android 16, One UI 8.5). 웹에서 무엇을 찾고, 어디에 들어가고, 무엇을 받았는지를 묻는 사건이면 기본 브라우저가 무엇인지 먼저 확인하고, Chrome 이라면 이 앱의 파일부터 봅니다.
+관찰한 기기에서는 `dumpsys package` 출력의 "Known Packages" 아래 "Browser:" 항목에 com.android.chrome 이 나와 기본 브라우저 역할을 Chrome 이 맡고 있었습니다. 웹에서 무엇을 찾고, 어디에 들어가고, 무엇을 받았는지를 묻는 사건이면 기본 브라우저가 무엇인지 먼저 확인하고, Chrome 이라면 이 앱의 파일부터 봅니다.
 
 한 앱 안에서도 파일마다 시각 기준이 다르다는 점을 먼저 알아 두어야 합니다. History 와 Cookies 는 1601-01-01 UTC 부터의 마이크로초이고 [1][2], Web Data 의 자동 완성 시각은 ALEAPP 가 유닉스 초로 읽으며 [3], 탭 상태 파일의 시각 칸은 이름이 …Millis 인 long 값이지만 기준 에포크를 확인하지 못했습니다 [4]. 각 페이지의 "시각 해석" 절에서 칸마다 따로 다룹니다.
 

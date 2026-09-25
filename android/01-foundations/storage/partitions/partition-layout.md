@@ -90,7 +90,7 @@ super 안의 논리 파티션이 어느 장치 경로로 나타나는지는 이 
 
 이미지나 수집 보고서에서 파티션 목록을 받으면 먼저 이름을 위의 세 묶음에 나눠 넣습니다. userdata 와 metadata 는 사용자 데이터를 풀 때 짝으로 필요하고, system·vendor 쪽은 빌드를 확인하고 검증 부팅 정보와 대조할 때 봅니다. init_boot 가 있으면 ramdisk 를 boot 와 따로 두는 Android 13 이후 방식이고, 목록에 system·vendor 가 없고 super 만 있으면 동적 파티션을 쓰는 기기입니다. 이름에 `_a`·`_b` 가 붙어 있으면 두 벌 가운데 어느 쪽이 현재 슬롯이었는지를 [A/B 슬롯](ab-slots.md)의 방법으로 확인합니다.
 
-루팅하지 않은 기기에서 adb 일반 권한으로 얻는 출력에도 파티션 배치의 흔적이 보입니다. `dumpsys package` 의 Libraries 목록에는 `/system/framework` 와 `/system_ext/framework` 아래의 jar 경로가 나옵니다 (확인 범위: Android 16, One UI 8.5). 같은 기기의 관찰 메모에는 파티션 목록이나 마운트 정보가 없어서, 이 기기의 실제 파티션 구성은 이 페이지에서 말하지 않습니다.
+루팅하지 않은 기기에서 adb 일반 권한으로 얻는 출력에도 파티션 배치의 흔적이 보입니다. `dumpsys package` 의 Libraries 목록에는 `/system/framework` 와 `/system_ext/framework` 아래의 jar 경로가 나옵니다. 같은 기기의 관찰 메모에는 파티션 목록이나 마운트 정보가 없어서, 이 기기의 실제 파티션 구성은 이 페이지에서 말하지 않습니다.
 
 ## 포렌식에서 중요한 점
 

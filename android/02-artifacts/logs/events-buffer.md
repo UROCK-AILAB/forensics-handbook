@@ -20,7 +20,7 @@ events 버퍼는 logcat 문서에서 "해석된 바이너리 시스템 이벤트
 
 events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있고, `adb logcat -b events` 로 읽습니다 [1]. 태그 번호를 이름과 칸으로 바꾸는 태그 사전 파일은 기기의 `/system/etc` 아래에 설치되고, logcat 이 해석할 때 이 사전을 씁니다 [5]. 사전 파일의 정확한 이름은 확인하지 못했습니다.
 
-관찰 기기에서는 adb 일반 셸 권한으로 events 버퍼의 줄을 읽을 수 있었지만, 같은 기기의 버퍼 크기 목록에는 events 가 나오지 않았습니다 (확인 범위: Android 16, One UI 8.5). 목록에 빠진 이유는 확인하지 못했습니다.
+관찰 기기에서는 adb 일반 셸 권한으로 events 버퍼의 줄을 읽을 수 있었지만, 같은 기기의 버퍼 크기 목록에는 events 가 나오지 않았습니다. 목록에 빠진 이유는 확인하지 못했습니다.
 
 태그 이름은 Android 버전에 따라 다릅니다. source.android.com 의 버그 리포트 문서에는 `am_focused_activity` 가 나오지만 [3], 현재 AOSP main 의 ActivityManager 태그 파일에는 이 태그가 없고 [4], 화면 전환 태그는 WindowManager 태그 파일에 `wm_` 으로 시작하는 이름으로 있습니다 [6]. 태그가 옮겨 간 Android 버전은 확인하지 못했으니, 검체를 읽을 때는 그 기기의 태그 사전과 실제 출력으로 이름을 확인합니다.
 
@@ -37,7 +37,7 @@ events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있�
 
 ### 줄 모양
 
-이벤트 로그 한 줄은 "timestamp PID TID log-level tag tag-values" 순서입니다 [3]. 관찰 기기의 출력은 아래 모양이었고, 확인한 수준은 I 였으며 연도는 없었습니다 (확인 범위: Android 16, One UI 8.5).
+이벤트 로그 한 줄은 "timestamp PID TID log-level tag tag-values" 순서입니다 [3]. 관찰 기기의 출력은 아래 모양이었고, 확인한 수준은 I 였으며 연도는 없었습니다.
 
 ```
 --------- beginning of events
@@ -144,7 +144,7 @@ events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있�
 
 ## 시각 해석
 
-events 줄의 시각 칸은 다른 logcat 버퍼와 같은 방식으로 찍히고, 관찰 기기에서는 연도 없이 월-일 시:분:초.밀리초였습니다 (확인 범위: Android 16, One UI 8.5). 시간대를 확인하는 방법과 수식어는 [logcat (logcat)](logcat.md) 의 시각 해석 절을 따릅니다.
+events 줄의 시각 칸은 다른 logcat 버퍼와 같은 방식으로 찍히고, 관찰 기기에서는 연도 없이 월-일 시:분:초.밀리초였습니다. 시간대를 확인하는 방법과 수식어는 [logcat (logcat)](logcat.md) 의 시각 해석 절을 따릅니다.
 
 칸 값 안의 시간은 태그 사전의 단위 코드로 읽습니다. `wm_activity_launch_time` 의 time 칸은 밀리초 단위의 걸린 시간이고 [6], 시각이 아닙니다. 단위 코드 `s` 는 단조 시간 기준 초라서 [5] 벽시계 시각으로 바꾸지 않습니다.
 

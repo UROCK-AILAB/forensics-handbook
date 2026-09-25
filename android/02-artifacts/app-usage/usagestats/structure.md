@@ -7,7 +7,7 @@ nav_order: 460
 
 # 파일 구조 (usagestats)
 
-앱 사용 기록(usagestats)이 디스크에 어떤 폴더와 파일로 남는지, 파일 안의 칸과 시각을 어떻게 읽는지 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 어느 Android 출시 버전에서 바뀌었는지는 대부분 확인하지 못했습니다. 실제 폰에서 본 모양에는 확인 범위를 붙였습니다.
+앱 사용 기록(usagestats)이 디스크에 어떤 폴더와 파일로 남는지, 파일 안의 칸과 시각을 어떻게 읽는지 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 이전 Android 버전에서는 다를 수 있습니다.
 
 ## 한 줄 요약
 
@@ -137,7 +137,7 @@ event.mTimeStamp = beginTime + proto.readLong(EventObfuscatedProto.TIME_MS);
 
 ## 라이브 기기에서 보이는 모양 (dumpsys usagestats)
 
-adb 일반 셸 권한(UID 2000)으로 `dumpsys usagestats` 를 실행하면 파일이 아니라 서비스가 메모리에 든 최근 이벤트와 일간 통계를 글자로 보여 주고, 출력은 약 7,546줄이었습니다 (확인 범위: Android 16, One UI 8.5). 값을 가린 출력의 모양은 다음과 같습니다.
+adb 일반 셸 권한(UID 2000)으로 `dumpsys usagestats` 를 실행하면 파일이 아니라 서비스가 메모리에 든 최근 이벤트와 일간 통계를 글자로 보여 주고, 출력은 약 7,546줄이었습니다. 값을 가린 출력의 모양은 다음과 같습니다.
 
 ```text
 user=#
@@ -157,7 +157,7 @@ user=#
     event aggregations
 ```
 
-맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 한글이 섞인 날짜 문자열이었습니다. "In-memory daily stats" 절에는 timeRange 가 4개 있었고 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙어 있었습니다 (확인 범위: Android 16, One UI 8.5). 이벤트 줄에 나온 이벤트 이름과 칸은 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
+맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 한글이 섞인 날짜 문자열이었습니다. "In-memory daily stats" 절에는 timeRange 가 4개 있었고 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙어 있었습니다. 이벤트 줄에 나온 이벤트 이름과 칸은 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
 
 현행 AOSP 의 dumpsys usagestats 는 `--checkin`, `-c`, `flush`, `apptimelimit`, `file`, `database-info`, `appstandby`, `stats-directory`, `mappings`, `broadcast-response-stats`, `app-component-usage` 인자를 받습니다 [3]. 이 인자들을 adb 일반 권한으로 실행한 결과는 관찰하지 못했습니다.
 

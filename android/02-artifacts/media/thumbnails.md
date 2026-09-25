@@ -29,7 +29,7 @@ nav_order: 660
 
 MediaProvider 는 섬네일을 항상 기본 외부 저장소(external_primary)에 저장한다고 소스 주석에 적어 두어서 [1], SD 카드 같은 다른 볼륨의 사진이라도 섬네일은 기본 볼륨 쪽에 생깁니다. 예전 방식의 `/sdcard/DCIM/.thumbnails` 폴더가 어느 버전까지 쓰였는지는 이번에 연 자료로 확인하지 못했고, 섬네일 폴더가 어느 버전부터 `Pictures/.thumbnails` 로 바뀌었는지도 확인하지 못했습니다.
 
-관찰한 기기의 `/sdcard/Pictures` 목록에는 항목 39개와 가린 폴더 11개만 나와 있고, `.thumbnails` 가 있었는지나 숨김 항목까지 나열했는지는 관찰 메모에 없습니다 (확인 범위: Android 16, One UI 8.5). 같은 기기의 dumpsys package 라이브러리 목록에는 `SemAudioThumbnail` (`/system/framework/SemAudioThumbnail.jar`)이 있었는데 (확인 범위: Android 16, One UI 8.5), 이름으로 보아 삼성의 오디오 섬네일 라이브러리로 보이지만 역할은 확인하지 못했습니다. 삼성 갤러리의 자체 섬네일 캐시 경로와 형식도 확인하지 못했습니다.
+관찰한 기기의 `/sdcard/Pictures` 목록에는 항목 39개와 가린 폴더 11개만 나와 있고, `.thumbnails` 가 있었는지나 숨김 항목까지 나열했는지는 관찰 메모에 없습니다. 같은 기기의 dumpsys package 라이브러리 목록에는 `SemAudioThumbnail` (`/system/framework/SemAudioThumbnail.jar`)이 있었는데, 이름으로 보아 삼성의 오디오 섬네일 라이브러리로 보이지만 역할은 확인하지 못했습니다. 삼성 갤러리의 자체 섬네일 캐시 경로와 형식도 확인하지 못했습니다.
 
 ## 구조
 

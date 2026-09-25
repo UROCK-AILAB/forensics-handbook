@@ -65,7 +65,7 @@ MVT 는 `--virustotal` 옵션으로 APK 해시를 VirusTotal 에 조회할 수 �
 
 ## 설치와 검증을 맡은 앱
 
-`dumpsys package` 의 "Known Packages:" 절은 기기에서 역할별로 맡은 패키지를 보여 줍니다. 관찰한 폰에서는 설치·검증 역할을 포함해 아래 줄이 있었습니다 (확인 범위: Android 16, One UI 8.5).
+`dumpsys package` 의 "Known Packages:" 절은 기기에서 역할별로 맡은 패키지를 보여 줍니다. 관찰한 폰에서는 설치·검증 역할을 포함해 아래 줄이 있었습니다.
 
 | 역할 | 패키지 |
 |---|---|
@@ -77,7 +77,7 @@ MVT 는 `--virustotal` 옵션으로 APK 해시를 VirusTotal 에 조회할 수 �
 | Browser | `com.android.chrome` |
 | Recents | `com.sec.android.app.launcher` |
 
-같은 출력의 "Verifiers:" 절에는 "Required:" 줄이 두 개 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 표는 기기 전체에서 누가 그 역할을 맡는지를 알려 줄 뿐이고, 후보 앱 하나를 어느 앱이 설치했는지는 알려 주지 않습니다. 패키지별 설치 시각과 설치한 앱이 dumpsys 출력에 어떤 모양으로 나오는지는 확인하지 못했고, 앱이 어디서 들어왔는지 따라가는 흐름은 [악성 앱은 어디서 들어왔나](../../../04-scenarios/incident/initial-access.md) 와 [구글 플레이 기록](../../../02-artifacts/app-usage/play-store.md) 페이지에 있습니다.
+같은 출력의 "Verifiers:" 절에는 "Required:" 줄이 두 개 있었습니다. 이 표는 기기 전체에서 누가 그 역할을 맡는지를 알려 줄 뿐이고, 후보 앱 하나를 어느 앱이 설치했는지는 알려 주지 않습니다. 패키지별 설치 시각과 설치한 앱이 dumpsys 출력에 어떤 모양으로 나오는지는 확인하지 못했고, 앱이 어디서 들어왔는지 따라가는 흐름은 [악성 앱은 어디서 들어왔나](../../../04-scenarios/incident/initial-access.md) 와 [구글 플레이 기록](../../../02-artifacts/app-usage/play-store.md) 페이지에 있습니다.
 
 ## 함정과 한계
 

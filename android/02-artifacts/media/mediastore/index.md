@@ -28,7 +28,7 @@ has_toc: false
 | 삼성 휴지통 제공자와 삼성 갤러리의 휴지통 DB | ALEAPP 검체 Android 10·13·14·15 (삼성) | 원래 경로, 지운 앱, 지운 시각 |
 | 공용 저장 공간의 `.trashed-` 파일 | 현행 AOSP 기준 | 휴지통에 들어간 파일 본체와 만료 시각 |
 
-관찰한 기기의 `/sdcard` 최상위에는 Alarms, Android, Audiobooks, DCIM, Documents, Download, Movies, Music, Notifications, Pictures, Podcasts, Recordings, Ringtones 와 가린 폴더 8개가 있었습니다 (확인 범위: Android 16, One UI 8.5). external.db 가 기기 안 어느 경로에 있는지, adb 일반 셸 권한으로 그 파일을 읽을 수 있는지는 확인하지 못했습니다.
+관찰한 기기의 `/sdcard` 최상위에는 Alarms, Android, Audiobooks, DCIM, Documents, Download, Movies, Music, Notifications, Pictures, Podcasts, Recordings, Ringtones 와 가린 폴더 8개가 있었습니다. external.db 가 기기 안 어느 경로에 있는지, adb 일반 셸 권한으로 그 파일을 읽을 수 있는지는 확인하지 못했습니다.
 
 ## 읽는 순서
 

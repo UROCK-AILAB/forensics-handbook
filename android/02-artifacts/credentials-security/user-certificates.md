@@ -74,7 +74,7 @@ user:7651b327.0
 
 ### 기기 관리자·설정 쪽 기록
 
-기기 관리자 정책 파일 `device_policies.xml` 에는 `accepted-ca-certificate`, `owner-installed-ca-cert` 라는 태그 이름이 있습니다 [3]. 관리자 앱이 설치한 CA 와 사용자가 확인한 CA 를 적는 곳으로 보이지만 뜻은 소스 주석으로 확인하지 못했고, 파일 자체는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](device-admin-accessibility.md) 페이지에서 다룹니다. 관찰 기기의 settings secure 에는 `config_update_certificate` 키가 있었지만 뜻은 모르고, 키 이름만 확인했습니다 (확인 범위: Android 16, One UI 8.5).
+기기 관리자 정책 파일 `device_policies.xml` 에는 `accepted-ca-certificate`, `owner-installed-ca-cert` 라는 태그 이름이 있습니다 [3]. 관리자 앱이 설치한 CA 와 사용자가 확인한 CA 를 적는 곳으로 보이지만 뜻은 소스 주석으로 확인하지 못했고, 파일 자체는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](device-admin-accessibility.md) 페이지에서 다룹니다. 관찰 기기의 settings secure 에는 `config_update_certificate` 키가 있었지만 뜻은 모르고, 키 이름만 확인했습니다.
 
 VPN·Wi-Fi 에 쓰는 사용자 인증서(클라이언트 인증서와 개인 키)가 어디에 어떤 모양으로 남는지는 이 페이지에서 확인하지 않았습니다. 설정 쪽 흔적은 [VPN 설정 (VPN)](../network/vpn.md) 과 [와이파이 설정과 접속 기록 (WifiConfigStore)](../network/wifi.md), 키 저장소는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
 

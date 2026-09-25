@@ -40,14 +40,14 @@ DropBox 의 기본 보존 상수는 `DEFAULT_AGE_SECONDS = 3 * 86400`, `DEFAULT_
 
 세 디렉터리 모두 시스템 영역이라 adb 일반 권한으로 바로 읽기 어렵고, 개발자 문서도 `/data/anr` 를 adb 로 직접 읽는 예에 `adb root` 를 씁니다 [3]. 일반 기기에서는 `adb bugreport` 나 개발자 옵션의 "버그 신고" 로 받습니다 [3]. 버그 리포트 짜임새는 [버그 리포트 (bugreport)](../logs/bugreport.md) 페이지에서 다룹니다. adb 일반 권한으로 `dumpsys dropbox` 를 읽을 수 있는지는 관찰 메모에 없어서 확인하지 못했습니다.
 
-삼성 기기에서 오류 로그를 따로 모으는 위치가 더 있는지는 확인하지 못했습니다. 관찰 기기에서 본 관련 설정 키는 아래와 같고, 키 이름만 확인했습니다 (확인 범위: Android 16, One UI 8.5).
+삼성 기기에서 오류 로그를 따로 모으는 위치가 더 있는지는 확인하지 못했습니다. 관찰 기기에서 본 관련 설정 키는 아래와 같고, 키 이름만 확인했습니다.
 
 | 설정 영역 | 키 이름 |
 |---|---|
 | secure | `dropbox:data_app_anr`, `dropbox:data_app_crash`, `dropbox:data_app_wtf` |
 | secure | `anr_show_background` |
 
-AOSP 코드는 DropBox 태그를 켜고 끄는 값을 Global 설정의 `dropbox:<태그>` 키에서 `enabled`·`disabled` 로 읽는다고 되어 있는데 [1], 관찰 기기에서는 같은 이름의 키가 secure 목록에 보였고 그 이유는 모릅니다 (확인 범위: Android 16, One UI 8.5). 설정 값 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
+AOSP 코드는 DropBox 태그를 켜고 끄는 값을 Global 설정의 `dropbox:<태그>` 키에서 `enabled`·`disabled` 로 읽는다고 되어 있는데 [1], 관찰 기기에서는 같은 이름의 키가 secure 목록에 보였고 그 이유는 모릅니다. 설정 값 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -62,7 +62,7 @@ DropBox 의 파일 하나는 항목 하나이고, 이름은 `태그@시각` 에 
 | `.gz` 추가 | 압축한 항목 (예: `.txt.gz`) |
 | `.lost` | 내용이 지워지고 이름만 남은 항목 |
 
-`.lost` 파일은 내용 없이 "이 태그의 항목이 이 시각에 있었다" 는 사실만 남깁니다 [1]. 태그 이름의 전체 목록과 뜻은 확인하지 못했고, 관찰 기기의 설정 키에서 `data_app_anr`, `data_app_crash`, `data_app_wtf` 세 개만 확인했습니다 (확인 범위: Android 16, One UI 8.5).
+`.lost` 파일은 내용 없이 "이 태그의 항목이 이 시각에 있었다" 는 사실만 남깁니다 [1]. 태그 이름의 전체 목록과 뜻은 확인하지 못했고, 관찰 기기의 설정 키에서 `data_app_anr`, `data_app_crash`, `data_app_wtf` 세 개만 확인했습니다.
 
 ### tombstone 내용
 
@@ -79,7 +79,7 @@ tombstone 은 `tombstone_06` 처럼 번호 붙은 파일이고, 사람이 읽는
 
 ### logcat crash 버퍼
 
-관찰 기기의 logcat 에는 `main`, `system`, `crash`, `kernel` 버퍼가 있었고, crash 버퍼 한 줄은 아래 모양이었습니다 (확인 범위: Android 16, One UI 8.5).
+관찰 기기의 logcat 에는 `main`, `system`, `crash`, `kernel` 버퍼가 있었고, crash 버퍼 한 줄은 아래 모양이었습니다.
 
 ```
 [crash] ##-## ##:##:##.### <PID> <TID> F <태그>: <내용>
@@ -99,7 +99,7 @@ logcat 형식 전반은 [logcat (logcat)](../logs/logcat.md) 페이지에서 다
 
 ## 시각 해석
 
-DropBox 파일 이름의 시각은 항목을 만들 때 `System.currentTimeMillis()` 로 얻은 값이라 [1] 유닉스 에포크 밀리초(UTC 기준)이고, 벽시계 값이라서 기기 시계를 바꾸면 그 뒤 파일 이름 시각도 따라 바뀝니다. logcat crash 버퍼 줄의 시각은 연도가 없는 월-일 시각이라 (확인 범위: Android 16, One UI 8.5), 연도는 수집 날짜로 채우고 연말·연초에 걸친 기록은 특히 조심합니다. tombstone 과 ANR 파일 안 시각의 형식은 확인하지 못했습니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+DropBox 파일 이름의 시각은 항목을 만들 때 `System.currentTimeMillis()` 로 얻은 값이라 [1] 유닉스 에포크 밀리초(UTC 기준)이고, 벽시계 값이라서 기기 시계를 바꾸면 그 뒤 파일 이름 시각도 따라 바뀝니다. logcat crash 버퍼 줄의 시각은 연도가 없는 월-일 시각이라, 연도는 수집 날짜로 채우고 연말·연초에 걸친 기록은 특히 조심합니다. tombstone 과 ANR 파일 안 시각의 형식은 확인하지 못했습니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 함정과 한계
 

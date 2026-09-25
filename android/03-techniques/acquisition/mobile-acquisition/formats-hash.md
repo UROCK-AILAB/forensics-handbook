@@ -7,7 +7,7 @@ nav_order: 1350
 
 # 결과물 형식과 해시 (Extraction Formats·Hash)
 
-수집으로 얻은 결과물이 어떤 형식으로 나오는지, 분석 도구가 어떤 형식을 받는지, 결과물이 바뀌지 않았다는 것을 해시로 어떻게 보여 주는지 정리합니다. adb backup 파일 형식은 현행 AOSP 소스(frameworks/base 의 main 가지)로 확인한 내용이라 이전 버전의 파일과 다를 수 있고, 실제 폰에서 본 내용에는 확인 범위를 붙였습니다.
+수집으로 얻은 결과물이 어떤 형식으로 나오는지, 분석 도구가 어떤 형식을 받는지, 결과물이 바뀌지 않았다는 것을 해시로 어떻게 보여 주는지 정리합니다. adb backup 파일 형식은 현행 AOSP 소스(frameworks/base 의 main 가지)로 확인한 내용이라 이전 버전의 파일과 다를 수 있고,
 
 ## 한 줄 요약
 
@@ -80,9 +80,9 @@ adb backup 파일은 글자로 된 머리 몇 줄로 시작하고, 그 뒤에 �
 
 ## 수집 당시 상태 기록
 
-결과물과 함께 수집 당시 기기가 어떤 빌드였는지와 수집 날짜·시간대를 적어 둡니다. 관찰한 폰의 `dumpsys package` 출력에는 Database versions 절에 `buildFingerprint`, `fingerprint`, `sdkVersion` 칸이 있어서 수집 당시 빌드를 기록할 때 쓸 수 있습니다 (확인 범위: Android 16, One UI 8.5). 빌드 정보를 읽는 법은 [기기 정보와 빌드](../../../02-artifacts/system-account/device-build.md) 페이지에 있습니다.
+결과물과 함께 수집 당시 기기가 어떤 빌드였는지와 수집 날짜·시간대를 적어 둡니다. 관찰한 폰의 `dumpsys package` 출력에는 Database versions 절에 `buildFingerprint`, `fingerprint`, `sdkVersion` 칸이 있어서 수집 당시 빌드를 기록할 때 쓸 수 있습니다. 빌드 정보를 읽는 법은 [기기 정보와 빌드](../../../02-artifacts/system-account/device-build.md) 페이지에 있습니다.
 
-logcat 시각에는 연도가 없었으니 (확인 범위: Android 16, One UI 8.5), logcat 을 결과물에 넣을 때는 수집한 날짜와 시간대를 따로 적어 둡니다. 이 권고는 기기 시각을 기준 시계와 비교해 기록하라는 NIST 권고 [4]와 관찰을 합쳐 끌어낸 것이고, 화면 시각을 기록하는 절차는 [압수와 보관](seizure-handling.md) 페이지에 있습니다. 시각 값을 바꾸는 법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
+logcat 시각에는 연도가 없었으니, logcat 을 결과물에 넣을 때는 수집한 날짜와 시간대를 따로 적어 둡니다. 이 권고는 기기 시각을 기준 시계와 비교해 기록하라는 NIST 권고 [4]와 관찰을 합쳐 끌어낸 것이고, 화면 시각을 기록하는 절차는 [압수와 보관](seizure-handling.md) 페이지에 있습니다. 시각 값을 바꾸는 법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
 
 ## 함정과 한계
 

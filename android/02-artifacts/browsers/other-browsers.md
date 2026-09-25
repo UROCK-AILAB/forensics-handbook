@@ -53,7 +53,7 @@ nav_order: 890
 | 쿠키 스키마 16(Firefox 142)부터 | cookies.sqlite 의 expiry 단위가 초에서 밀리초로 바뀜 [3] |
 | 옛 Firefox DB | `moz_places_metadata_search_queries` 표가 없어 ALEAPP 가 검색어 추출을 건너뜀 [3] |
 
-관찰한 기기에서 웨일이나 Firefox 가 깔려 있는지는 관찰 메모에서 패키지 이름이 가려져 확인하지 못했습니다. 기본 브라우저 역할은 com.android.chrome 이었습니다 (확인 범위: Android 16, One UI 8.5). 루팅하지 않은 기기에서 adb 일반 권한으로 두 앱의 데이터 폴더를 읽을 수 있는지도 확인하지 못했고, 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
+관찰한 기기에서 웨일이나 Firefox 가 깔려 있는지는 관찰 메모에서 패키지 이름이 가려져 확인하지 못했습니다. 기본 브라우저 역할은 com.android.chrome 이었습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 두 앱의 데이터 폴더를 읽을 수 있는지도 확인하지 못했고, 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 
 ## 구조
 
@@ -134,7 +134,7 @@ is_local 이 0 인 행은 동기화로 들어온 방문이라서 이 기기의 �
 
 ## 교차 검증
 
-- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 관찰 기기의 `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 칸이 있고 ACTIVITY_RESUMED·ACTIVITY_PAUSED 같은 종류가 보였습니다 (확인 범위: Android 16, One UI 8.5). package= 가 org.mozilla.firefox 나 com.naver.whale 인 줄의 시각이 방문 시각과 겹치는지 봅니다.
+- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 관찰 기기의 `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 칸이 있고 ACTIVITY_RESUMED·ACTIVITY_PAUSED 같은 종류가 보였습니다. package= 가 org.mozilla.firefox 나 com.naver.whale 인 줄의 시각이 방문 시각과 겹치는지 봅니다.
 - [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) — mozac_downloads_database 의 저장 폴더 칸과 파일 이름으로 받은 파일이 실제로 남아 있는지 봅니다.
 - [설치된 앱 (packages.xml)](../app-usage/packages/index.md) — 설치 시각과 버전을 확인합니다. Tor Browser 가 깔려 있었는지도 여기서 봅니다.
 - [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) — 삭제 흔적 표 말고도 SQLite 빈 공간에 지운 행이 남는지 봅니다.

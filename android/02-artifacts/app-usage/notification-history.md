@@ -12,7 +12,7 @@ nav_order: 520
 
 ## 무엇을 기록하나 · 왜 생기나
 
-사용자가 설정에서 알림 기록을 켜 두면, 시스템은 이미 지나간 알림을 다시 볼 수 있도록 알림 내용을 파일에 적어 둡니다. 알림 기록이 켜져 있는지는 설정 값 `notification_history_enabled` 로 판단하고, ALEAPP 는 사용자별 `settings_secure.xml` 에서 이 값을 읽습니다 [3]. 관찰 기기의 settings secure 키 목록에도 `notification_history_enabled` 가 있었고 값은 가려져 있었습니다 (확인 범위: Android 16, One UI 8.5). 설정 파일을 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
+사용자가 설정에서 알림 기록을 켜 두면, 시스템은 이미 지나간 알림을 다시 볼 수 있도록 알림 내용을 파일에 적어 둡니다. 알림 기록이 켜져 있는지는 설정 값 `notification_history_enabled` 로 판단하고, ALEAPP 는 사용자별 `settings_secure.xml` 에서 이 값을 읽습니다 [3]. 관찰 기기의 settings secure 키 목록에도 `notification_history_enabled` 가 있었고 값은 가려져 있었습니다. 설정 파일을 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
 
 기록에는 알림마다 패키지, 채널, UID, 사용자 번호, 게시 시각, 제목, 본문, 아이콘 정보가 들어갑니다 [2]. 메신저 알림이라면 본문에 메시지 앞부분이 들어가기 때문에, 앱 DB 에서 메시지를 지운 뒤에도 알림 기록에는 남아 있을 수 있습니다.
 
@@ -39,7 +39,7 @@ ALEAPP 는 아래 경로 패턴으로 기록 파일을 찾습니다 [3].
 | 기기 | 확인한 것 |
 |---|---|
 | AOSP | 파일 위치 규칙, 보관 기간, 쓰기 주기, proto 구조(현행 소스 기준) [1][2] |
-| 삼성 One UI | 설정 키 `notification_history_enabled` 의 존재만 확인 (확인 범위: Android 16, One UI 8.5). 삼성의 알림 기록 화면이 AOSP 저장소를 그대로 쓰는지는 확인하지 못함 |
+| 삼성 One UI | 설정 키 `notification_history_enabled` 의 존재만 확인. 삼성의 알림 기록 화면이 AOSP 저장소를 그대로 쓰는지는 확인하지 못함 |
 
 기술 매체는 이 기능이 Android 11 에서 들어왔고 기본으로 꺼져 있다고 소개합니다 [4]. 공식 문서로는 확인하지 못했으니, 검체에서는 `notification_history_enabled` 값을 직접 읽어 판단합니다.
 
@@ -95,7 +95,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 ## 라이브 기기에서 보이는 모양 (dumpsys notification)
 
-`dumpsys notification` 은 파일에 저장된 기록이 아니라 지금 떠 있는 알림(`NotificationRecord`)을 보여 줍니다. 관찰 기기에서 본 칸은 다음과 같습니다 (확인 범위: Android 16, One UI 8.5).
+`dumpsys notification` 은 파일에 저장된 기록이 아니라 지금 떠 있는 알림(`NotificationRecord`)을 보여 줍니다. 관찰 기기에서 본 칸은 다음과 같습니다.
 
 | 묶음 | 칸 |
 |---|---|
@@ -106,7 +106,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 | 반응 통계 | `stats=` 안의 `posttimeToFirstClickMs`, `posttimeToDismissMs`, `airtimeCount`, `airtimeMs` 등 |
 | 시각 | `when=`, `mRankingTimeMs=`, `mCreationTimeMs=`, `mVisibleSinceMs=`, `mUpdateTimeMs=` |
 
-관찰 기기 출력에서 제목과 본문은 실제 글자 대신 `[length=##]` 처럼 길이만 찍혔습니다 (확인 범위: Android 16, One UI 8.5). 이 출력에 알림 기록 파일의 내용이 함께 나오는지는 관찰 메모에 없어서 확인하지 못했습니다. dumpsys 전반은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에서 다룹니다.
+관찰 기기 출력에서 제목과 본문은 실제 글자 대신 `[length=##]` 처럼 길이만 찍혔습니다. 이 출력에 알림 기록 파일의 내용이 함께 나오는지는 관찰 메모에 없어서 확인하지 못했습니다. dumpsys 전반은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -144,7 +144,7 @@ ALEAPP 의 notificationHistory 모듈이 기록 파일을 풀어 알림 목록�
 | [문자 (SMS·MMS·RCS)](../communications/messages/index.md) | 문자 알림 본문과 문자 DB 의 메시지가 맞는지 |
 | [카카오톡 (KakaoTalk)](../messengers/kakaotalk/index.md) 등 메신저 | 알림 본문에만 있고 앱 DB 에는 없는 메시지가 있는지 |
 
-관찰 기기의 usagestats 에는 NOTIFICATION_INTERRUPTION(`channelId=` 칸 포함)과 NOTIFICATION_SEEN 이벤트가 있어서 (확인 범위: Android 16, One UI 8.5), 알림 기록 파일이 없을 때 어느 앱의 알림이 언제 울렸는지를 보조로 알려 줍니다. 대화 상대를 재구성하는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 와 [지운 대화와 사진 찾기 (Deleted Content)](../../04-scenarios/activity/deleted-content.md) 에서 다룹니다.
+관찰 기기의 usagestats 에는 NOTIFICATION_INTERRUPTION(`channelId=` 칸 포함)과 NOTIFICATION_SEEN 이벤트가 있어서, 알림 기록 파일이 없을 때 어느 앱의 알림이 언제 울렸는지를 보조로 알려 줍니다. 대화 상대를 재구성하는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 와 [지운 대화와 사진 찾기 (Deleted Content)](../../04-scenarios/activity/deleted-content.md) 에서 다룹니다.
 
 ## 실습
 

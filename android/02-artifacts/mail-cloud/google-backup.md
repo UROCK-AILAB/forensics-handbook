@@ -56,7 +56,7 @@ nav_order: 1130
 | 11 이하 | 백업 규칙을 매니페스트의 `android:fullBackupContent` 로 줌 | [2] |
 | 12(API 31) 이상 | 규칙을 `android:dataExtractionRules` 로 주고, 안에서 `cloud-backup` 과 `device-transfer` 를 따로 적음. 테스트 문서의 D2D 앱당 2GB 값도 이 버전부터 | [2][3] |
 | 12(API 31) 이상 대상 앱 | 일부 제조사 기기에서 `android:allowBackup="false"` 가 클라우드 백업만 끄고 기기 간 전송은 끄지 않음 | [2] |
-| 삼성 One UI | 구글 백업과 따로 삼성 클라우드와 스마트스위치가 있음. 시험 기기에서 스마트스위치 관련 설정 키 이름을 확인함(확인 범위: Android 16, One UI 8.5). One UI 에서 구글 백업 메뉴의 위치와 이름은 확인하지 못함 | 기기 관찰 |
+| 삼성 One UI | 구글 백업과 따로 삼성 클라우드와 스마트스위치가 있음. 시험 기기에서 스마트스위치 관련 설정 키 이름을 확인함. One UI 에서 구글 백업 메뉴의 위치와 이름은 확인하지 못함 | 기기 관찰 |
 
 도움말은 설정 → Google 서비스 → 모든 서비스 에서 백업을 관리하라고 안내하고, 일부 단계는 Android 9 이상에서만 된다고 적혀 있습니다[4]. 삼성 클라우드 쪽은 [삼성 클라우드와 원드라이브](samsung-cloud-onedrive.md) 에서 다룹니다.
 
@@ -78,7 +78,7 @@ AOSP 의 `UserBackupManagerService` 가 상태 폴더 안에 두는 파일·폴�
 
 ### 설정 키
 
-소스는 Settings.Secure 의 `BACKUP_TRANSPORT`, `BACKUP_AUTO_RESTORE`(기본값 1 로 읽음), `USER_SETUP_COMPLETE` 키를 참조합니다[5]. 시험 기기에서 settings 목록을 읽었을 때 아래 키 이름이 보였고, 값은 가려져 있어 보지 못했습니다(확인 범위: Android 16, One UI 8.5).
+소스는 Settings.Secure 의 `BACKUP_TRANSPORT`, `BACKUP_AUTO_RESTORE`(기본값 1 로 읽음), `USER_SETUP_COMPLETE` 키를 참조합니다[5]. 시험 기기에서 settings 목록을 읽었을 때 아래 키 이름이 보였고, 값은 가려져 있어 보지 못했습니다.
 
 | 영역 | 키 이름 | 비고 |
 |---|---|---|
@@ -119,7 +119,7 @@ com.google.android.gms/.backup.migrate.service.D2dTransport  기기 간 전송 (
 
 자동 백업은 사용자가 백업을 켜 두었고, 마지막 백업 뒤 24시간 이상 지났고, 기기가 유휴 상태이고, Wi-Fi 에 연결되어 있을 때(모바일 데이터 백업을 켜지 않은 경우) 실행됩니다[2]. 문서는 실제로는 대개 매일 밤 이 조건이 맞는다고 설명하고, 네트워크에 한 번도 연결하지 않으면 백업이 전혀 되지 않을 수도 있다고 적습니다[2]. 그래서 백업이 일어난 시각은 사용자가 무언가를 조작한 시각이 아니라 이 조건이 맞은 시각으로 읽습니다. 도움말은 백업이 끝나기까지 최대 24시간 걸릴 수 있다고 안내합니다[4].
 
-`mms_backup_last_completed` 는 이름으로 보아 MMS 백업이 끝난 시각일 수 있지만 값의 단위와 기준(UTC 인지 현지 시각인지)은 확인하지 못했습니다. 시험 기기의 `dumpsys account` 에서 Accounts History 의 `timestamp` 칸은 날짜와 시:분:초 모양으로 보였지만(확인 범위: Android 16, One UI 8.5) 시간대는 확인하지 못했습니다. 복원한 앱의 파일 시각이 새 기기에 설치한 시각 근처로 모일 가능성이 있지만 확인하지 못했으니, 보고서에 쓰기 전에 시험 기기로 복원해 보고 확인합니다. 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 봅니다.
+`mms_backup_last_completed` 는 이름으로 보아 MMS 백업이 끝난 시각일 수 있지만 값의 단위와 기준(UTC 인지 현지 시각인지)은 확인하지 못했습니다. 시험 기기의 `dumpsys account` 에서 Accounts History 의 `timestamp` 칸은 날짜와 시:분:초 모양으로 보였지만 시간대는 확인하지 못했습니다. 복원한 앱의 파일 시각이 새 기기에 설치한 시각 근처로 모일 가능성이 있지만 확인하지 못했으니, 보고서에 쓰기 전에 시험 기기로 복원해 보고 확인합니다. 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 봅니다.
 
 ## 함정과 한계
 
@@ -127,9 +127,9 @@ com.google.android.gms/.backup.migrate.service.D2dTransport  기기 간 전송 (
 
 앱이 백업에서 빠졌는지는 설정 키로 알 수 없고 앱 매니페스트를 봐야 합니다. `allowBackup`, `fullBackupContent`, `dataExtractionRules` 값으로 그 앱 데이터가 백업에 들어갈 수 있었는지 판단하는데, Android 12 이상 대상 앱은 일부 제조사 기기에서 `allowBackup="false"` 여도 기기 간 전송은 막히지 않는다는 점을 함께 따집니다[2]. 매니페스트를 읽는 법은 [APK 정보](../embedded-metadata/apk.md) 에 있습니다.
 
-이름에 backup 이 들어간 설정 키가 모두 구글 백업 흔적은 아닙니다. 시험 기기의 global 영역에는 `dc_backup_animator_duration_scale` 같은 키가, system 영역에는 `backup_dark_mode`, `backup_screen_off_timeout` 같은 키가 있었는데(확인 범위: Android 16, One UI 8.5), 이름만 보고 구글 백업과 묶지 않습니다. 삼성 기기라면 스마트스위치로 옮긴 흔적(`smartswitch_*`, `IS_SMARTSWITCH_*`)과 구글 백업 복원을 구분해서 적어야 합니다.
+이름에 backup 이 들어간 설정 키가 모두 구글 백업 흔적은 아닙니다. 시험 기기의 global 영역에는 `dc_backup_animator_duration_scale` 같은 키가, system 영역에는 `backup_dark_mode`, `backup_screen_off_timeout` 같은 키가 있었는데, 이름만 보고 구글 백업과 묶지 않습니다. 삼성 기기라면 스마트스위치로 옮긴 흔적(`smartswitch_*`, `IS_SMARTSWITCH_*`)과 구글 백업 복원을 구분해서 적어야 합니다.
 
-logcat 버퍼는 짧게 유지되는 것으로 알려져 있지만 이번 자료로 확인하지는 않았으므로, 백업 로그가 필요하면 기기를 받자마자 먼저 떠 둡니다. `/sdcard/Android/media` 아래에 `com.google.android.gms` 폴더가 있었지만(확인 범위: Android 16, One UI 8.5) 백업과 관련이 있는지는 확인하지 못했습니다. 흔히 "기기를 오래 쓰지 않으면 57일 뒤 백업이 지워진다" 고 말하지만 이번에 연 문서에는 이 내용이 없어 쓰지 않습니다.
+logcat 버퍼는 짧게 유지되는 것으로 알려져 있지만 이번 자료로 확인하지는 않았으므로, 백업 로그가 필요하면 기기를 받자마자 먼저 떠 둡니다. `/sdcard/Android/media` 아래에 `com.google.android.gms` 폴더가 있었지만 백업과 관련이 있는지는 확인하지 못했습니다. 흔히 "기기를 오래 쓰지 않으면 57일 뒤 백업이 지워진다" 고 말하지만 이번에 연 문서에는 이 내용이 없어 쓰지 않습니다.
 
 증거 기기에서 `bmgr enable`, `bmgr backupnow`, `bmgr run` 같은 명령은 쓰지 않습니다. 테스트 문서에 나오는 개발자용 명령이고[3], 실행하면 기기의 백업 상태가 바뀝니다. 읽기 명령인 `bmgr list transports` 만 씁니다.
 
@@ -137,14 +137,14 @@ logcat 버퍼는 짧게 유지되는 것으로 알려져 있지만 이번 자료
 
 **헥스로 한 번.** `ancestral`, `fb-schedule` 같은 상태 파일은 소스에 기록 버전 상수만 보이고 바이트 배치를 적은 자료를 이번에 열지 못해서, 이 페이지에는 헥스 예시를 싣지 않습니다. 전체 파일 시스템 이미지에서 상태 폴더를 찾았다면 형식을 짐작하기 전에 파일 첫 바이트부터 헥스 편집기로 보고, 앞쪽에 버전 값 1 로 읽히는 필드가 있는지부터 소스 상수와 맞춰 봅니다. 저장 형식이 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 이나 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 인지도 이 단계에서 가립니다.
 
-**공개 도구로 한 번.** adb 일반 권한으로 읽을 수 있는 것부터 봅니다. 시험 기기에서는 settings 목록과 `dumpsys account` 를 일반 셸 권한으로 읽을 수 있었습니다(확인 범위: Android 16, One UI 8.5). 전송 경로 목록은 테스트 문서의 읽기 명령으로 봅니다[3].
+**공개 도구로 한 번.** adb 일반 권한으로 읽을 수 있는 것부터 봅니다. 시험 기기에서는 settings 목록과 `dumpsys account` 를 일반 셸 권한으로 읽을 수 있었습니다. 전송 경로 목록은 테스트 문서의 읽기 명령으로 봅니다[3].
 
 ```text
 adb shell bmgr list transports
 adb logcat -d | grep -E "BackupManagerService|PFTBT|Backup"
 ```
 
-settings 에서는 위 "설정 키" 표의 이름을 찾아 값을 적고, `dumpsys account` 에서는 Accounts History 표의 `action_account_add`, `action_account_remove` 행을 찾아 계정이 언제 붙고 떨어졌는지 적습니다(Action_Type 값 확인 범위: Android 16, One UI 8.5). 계정 기록을 읽는 자세한 방법은 [계정](../system-account/accounts/index.md) 과 [dumpsys 출력](../logs/dumpsys.md) 에 있습니다. ALEAPP 같은 공개 도구가 이 흔적을 파싱하는지는 확인하지 못했습니다.
+settings 에서는 위 "설정 키" 표의 이름을 찾아 값을 적고, `dumpsys account` 에서는 Accounts History 표의 `action_account_add`, `action_account_remove` 행을 찾아 계정이 언제 붙고 떨어졌는지 적습니다. 계정 기록을 읽는 자세한 방법은 [계정](../system-account/accounts/index.md) 과 [dumpsys 출력](../logs/dumpsys.md) 에 있습니다. ALEAPP 같은 공개 도구가 이 흔적을 파싱하는지는 쓰는 도구의 판에서 확인합니다.
 
 ## 교차 검증
 

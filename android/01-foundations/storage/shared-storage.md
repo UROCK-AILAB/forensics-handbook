@@ -46,13 +46,13 @@ AOSP 저장소 문서는 공용 저장 공간의 표준 위치로 `/sdcard` 와 
 
 볼륨 이름도 두 가지를 구분합니다. `VOLUME_EXTERNAL` 은 모든 공용 저장 볼륨을 합쳐 보여 주는 읽기 전용 합성 볼륨이고, `VOLUME_EXTERNAL_PRIMARY` 는 읽고 쓸 수 있는 주 공용 저장 볼륨입니다.
 
-관찰 기기의 `/sdcard` 최상위에는 `Alarms`, `Android`, `Audiobooks`, `DCIM`, `Documents`, `Download`, `Movies`, `Music`, `Notifications`, `Pictures`, `Podcasts`, `Recordings`, `Ringtones` 이 있었고, 이름을 가린 표준 밖 폴더가 8개 더 있었습니다(확인 범위: Android 16, One UI 8.5). Android 16 기기에서 `Recordings` 가 보인 것은 공식 문서의 "Android 11 이하에는 없음" 과 어긋나지 않습니다. 스크린샷은 `DCIM/Screenshots` 에 있었고, `DCIM` 아래에는 `Camera`, `Screenshots`, `media` 와 표준 밖 폴더 19개를 합쳐 항목 25개가 있었습니다(확인 범위: Android 16, One UI 8.5). `DCIM/media` 의 용도와 다른 제조사 기기의 스크린샷 폴더는 확인하지 못했습니다.
+관찰 기기의 `/sdcard` 최상위에는 `Alarms`, `Android`, `Audiobooks`, `DCIM`, `Documents`, `Download`, `Movies`, `Music`, `Notifications`, `Pictures`, `Podcasts`, `Recordings`, `Ringtones` 이 있었고, 이름을 가린 표준 밖 폴더가 8개 더 있었습니다. Android 16 기기에서 `Recordings` 가 보인 것은 공식 문서의 "Android 11 이하에는 없음" 과 어긋나지 않습니다. 스크린샷은 `DCIM/Screenshots` 에 있었고, `DCIM` 아래에는 `Camera`, `Screenshots`, `media` 와 표준 밖 폴더 19개를 합쳐 항목 25개가 있었습니다. `DCIM/media` 의 용도와 다른 제조사 기기의 스크린샷 폴더는 확인하지 못했습니다.
 
 > 그림 자리: `/sdcard` 최상위 표준 폴더와 각 폴더가 들어가는 MediaStore 모음을 선으로 이은 그림
 
 ### Android 폴더 (data·media·obb)
 
-관찰 기기의 `/sdcard/Android` 아래에는 `data`, `media`, `obb` 세 폴더가 있었습니다(확인 범위: Android 16, One UI 8.5). 세 폴더는 성격이 서로 다릅니다.
+관찰 기기의 `/sdcard/Android` 아래에는 `data`, `media`, `obb` 세 폴더가 있었습니다. 세 폴더는 성격이 서로 다릅니다.
 
 | 폴더 | 성격 |
 |---|---|
@@ -60,7 +60,7 @@ AOSP 저장소 문서는 공용 저장 공간의 표준 위치로 `/sdcard` 와 
 | `Android/media/<패키지>` | 공식 문서가 공용 저장 공간의 일부라고 적는 폴더입니다 |
 | `Android/obb` | Android 11 을 대상으로 하는 앱은 문서 선택 화면으로 사용자에게 `Android/data` 와 이 폴더 안의 파일을 고르게 할 수 없습니다 |
 
-관찰 기기의 `Android/media` 아래에는 앱 폴더가 5개로 적혔고, 이름이 보인 것은 `com.google.android.gms` 와 `com.samsung.android.spay` 였습니다(확인 범위: Android 16, One UI 8.5). adb 일반 셸 권한으로 `Android/data` 와 `Android/obb` 안을 나열할 수 있는지는 관찰하지 않았습니다.
+관찰 기기의 `Android/media` 아래에는 앱 폴더가 5개로 적혔고, 이름이 보인 것은 `com.google.android.gms` 와 `com.samsung.android.spay` 였습니다. adb 일반 셸 권한으로 `Android/data` 와 `Android/obb` 안을 나열할 수 있는지는 관찰하지 않았습니다.
 
 ### 버전별 접근 규칙
 
@@ -79,7 +79,7 @@ AOSP 저장소 문서는 공용 저장 공간의 표준 위치로 `/sdcard` 와 
 
 ### 사용자가 여럿인 기기
 
-공용 저장 공간도 사용자마다 따로 있습니다(`/storage/emulated/<userId>`, `/data/media/<userid>`). 관찰 기기의 `dumpsys user` 출력에는 사용자가 두 명이었고 `UserProperties` 아래 `mMediaSharedWithParent=false` 가 두 번 보였습니다(확인 범위: Android 16, One UI 8.5). 칸 이름으로 보아 부모 사용자와 공용 저장 공간을 나눠 쓰지 않는다는 뜻으로 읽을 수 있지만, 이 칸의 뜻을 설명한 문서는 확인하지 못했습니다. 사용자 목록은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
+공용 저장 공간도 사용자마다 따로 있습니다(`/storage/emulated/<userId>`, `/data/media/<userid>`). 관찰 기기의 `dumpsys user` 출력에는 사용자가 두 명이었고 `UserProperties` 아래 `mMediaSharedWithParent=false` 가 두 번 보였습니다. 칸 이름으로 보아 부모 사용자와 공용 저장 공간을 나눠 쓰지 않는다는 뜻으로 읽을 수 있지만, 이 칸의 뜻을 설명한 문서는 확인하지 못했습니다. 사용자 목록은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
 
 ## 읽는 법
 
@@ -89,7 +89,7 @@ AOSP 저장소 문서는 공용 저장 공간의 표준 위치로 `/sdcard` 와 
 4. 파일 목록은 MediaStore 기록과 맞춰 봅니다. 폴더에는 없는데 MediaStore 에 남은 행, 폴더에는 있는데 MediaStore 에 없는 파일이 모두 단서가 됩니다.
 5. `Android/data/<패키지>` 는 앱 데이터로 분류해 해당 앱의 내부 폴더와 함께 봅니다.
 
-관찰 기기에서는 adb 일반 셸 권한으로 `/sdcard` 최상위와 `DCIM`, `Pictures`, `Download`, `Documents`, `Android`, `Android/media` 의 목록을 읽었습니다(확인 범위: Android 16, One UI 8.5). 이때 `Pictures` 에는 항목 39개(폴더 11개), `Download` 에는 151개(폴더 36개), `Documents` 에는 2개(폴더 2개)가 있었습니다. 수집 방식 전반은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
+관찰 기기에서는 adb 일반 셸 권한으로 `/sdcard` 최상위와 `DCIM`, `Pictures`, `Download`, `Documents`, `Android`, `Android/media` 의 목록을 읽었습니다. 이때 `Pictures` 에는 항목 39개(폴더 11개), `Download` 에는 151개(폴더 36개), `Documents` 에는 2개(폴더 2개)가 있었습니다. 수집 방식 전반은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 
 ## 포렌식에서 중요한 점
 
@@ -114,7 +114,7 @@ AOSP 저장소 문서는 공용 저장 공간의 표준 위치로 `/sdcard` 와 
 
 ## 함정
 
-- **스크린샷 폴더를 한 곳으로 가정하기.** 관찰 기기의 스크린샷은 `DCIM/Screenshots` 에 있었습니다(확인 범위: Android 16, One UI 8.5). 제조사와 버전마다 다를 수 있어서 `Pictures` 아래도 함께 봅니다.
+- **스크린샷 폴더를 한 곳으로 가정하기.** 관찰 기기의 스크린샷은 `DCIM/Screenshots` 에 있었습니다. 제조사와 버전마다 다를 수 있어서 `Pictures` 아래도 함께 봅니다.
 - **`Android/media` 를 앱 전용 폴더로 보기.** `Android/data` 와 이름이 비슷하지만 공용 저장 공간에 속하는 폴더입니다.
 - **모든 파일 접근 권한이면 다 읽는다고 보기.** 이 권한으로도 다른 앱의 `Android/data` 는 읽지 못합니다.
 - **폴더에 없으면 없던 파일로 보기.** `IS_TRASHED` 상태의 파일, MediaStore 에만 남은 행이 있을 수 있습니다. 휴지통 파일의 실제 이름 규칙과 보관 기간, 삼성 갤러리 휴지통 위치는 이 페이지에서 확인하지 못했고 [삼성 갤러리](../../02-artifacts/media/samsung-gallery.md) 페이지에 맡깁니다.

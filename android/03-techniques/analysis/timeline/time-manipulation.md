@@ -13,7 +13,7 @@ nav_order: 1440
 
 ## 언제 쓰나
 
-타임라인에서 시각이 거꾸로 가거나 크게 비는 구간이 보일 때, 사용자가 시계를 바꿔 기록 시각을 흐렸다는 의심이 있을 때, 또는 보고서에 쓸 시각이 기기 벽시계 기준이라 그 시계를 믿을 수 있는지 밝혀야 할 때 씁니다. 이 페이지는 시계가 바뀐 뒤 시스템에 남는 흔적과 그 해석만 다룹니다. 값을 UTC 로 옮기는 방법은 [시각 정규화](time-normalization.md), 바뀐 구간을 표시해 가며 기록을 엮는 방법은 [여러 기록 엮기](correlation.md) 에 있습니다. 소스로 확인한 동작은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 실제 폰에서 본 내용에는 확인 범위를 붙였습니다.
+타임라인에서 시각이 거꾸로 가거나 크게 비는 구간이 보일 때, 사용자가 시계를 바꿔 기록 시각을 흐렸다는 의심이 있을 때, 또는 보고서에 쓸 시각이 기기 벽시계 기준이라 그 시계를 믿을 수 있는지 밝혀야 할 때 씁니다. 이 페이지는 시계가 바뀐 뒤 시스템에 남는 흔적과 그 해석만 다룹니다. 값을 UTC 로 옮기는 방법은 [시각 정규화](time-normalization.md), 바뀐 구간을 표시해 가며 기록을 엮는 방법은 [여러 기록 엮기](correlation.md) 에 있습니다. 소스로 확인한 동작은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
 
 ## 시각이 바뀌는 경로
 
@@ -78,7 +78,7 @@ NTP 서비스의 상태는 `adb shell cmd network_time_update_service dump` 로 
 
 ### 앱 사용 기록의 "Time changed." 줄
 
-앱 사용 기록 서비스는 실제 시각과 기대한 시각이 일정 기준 이상 어긋나면 시각이 바뀐 것으로 보고 로그를 남기고, 그 기준은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에 있습니다. 관찰한 폰의 `dumpsys usagestats` 에는 "UsageStats RollOver history" 절에 아래 모양의 줄이 5건 있었습니다 (확인 범위: Android 16, One UI 8.5).
+앱 사용 기록 서비스는 실제 시각과 기대한 시각이 일정 기준 이상 어긋나면 시각이 바뀐 것으로 보고 로그를 남기고, 그 기준은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에 있습니다. 관찰한 폰의 `dumpsys usagestats` 에는 "UsageStats RollOver history" 절에 아래 모양의 줄이 5건 있었습니다.
 
 ```
 <<한글>>:##:##.###User[#] Time changed. actualSystemTime:<<한글>> expectedSystemTime:<<한글>> actualRealtime:<<한글>>
@@ -88,7 +88,7 @@ NTP 서비스의 상태는 `adb shell cmd network_time_update_service dump` 로 
 
 ### 그 밖의 기록
 
-관찰한 폰의 `dumpsys batterystats` 기록 맨 앞에는 `RESET:TIME:` 줄이 있었지만 (확인 범위: Android 16, One UI 8.5), 배터리 기록이 시각 변경을 따로 표시하는 방식은 확인하지 못했습니다. `settings global` 에는 `auto_time`, `auto_time_zone` 키가 있었고 (같은 범위) 수집 시점의 자동 맞춤 설정을 알려 주지만, 이 값이 언제 바뀌었는지 남는 기록은 확인하지 못했습니다. 설정 키를 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md), 시간대 설정의 의미는 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 페이지에 있습니다.
+관찰한 폰의 `dumpsys batterystats` 기록 맨 앞에는 `RESET:TIME:` 줄이 있었지만, 배터리 기록이 시각 변경을 따로 표시하는 방식은 확인하지 못했습니다. `settings global` 에는 `auto_time`, `auto_time_zone` 키가 있었고 (같은 범위) 수집 시점의 자동 맞춤 설정을 알려 주지만, 이 값이 언제 바뀌었는지 남는 기록은 확인하지 못했습니다. 설정 키를 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md), 시간대 설정의 의미는 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 페이지에 있습니다.
 
 ### 기록 사이의 모순
 

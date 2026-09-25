@@ -27,7 +27,7 @@ has_toc: false
 | 메시지·사진 지우기 | `.trashed-` 파일 이름, MediaStore, 알림 기록 | 미디어 휴지통은 Android 11 이상 | 휴지통으로 보낸 무렵, 메시지가 도착했던 흔적 |
 | 시각 바꾸기 | `dumpsys usagestats` 의 시각 변경 줄, 자동 시각 설정, 연도 없는 로그 줄 | 자동 시각 출처와 설정 이름이 버전마다 다름 | 기기 시각이 옮겨진 흔적과 그 크기 |
 
-초기화·삭제·시각 변경을 볼 때 쓰는 adb 일반 권한 출력은 `dumpsys user`, `dumpsys package`, `dumpsys usagestats`, `dumpsys batterystats`, `settings global/secure/system` 이었고 (확인 범위: Android 16, One UI 8.5), 칸마다의 뜻은 각 하위 페이지에 있습니다.
+초기화·삭제·시각 변경을 볼 때 쓰는 adb 일반 권한 출력은 `dumpsys user`, `dumpsys package`, `dumpsys usagestats`, `dumpsys batterystats`, `settings global/secure/system` 이었고, 칸마다의 뜻은 각 하위 페이지에 있습니다.
 
 > 그림 자리: 네 행위를 가로로 놓고, 각 행위에서 "없어지는 것" 과 "남는 흔적" 을 위아래로 나눠 보여 주는 표 그림
 

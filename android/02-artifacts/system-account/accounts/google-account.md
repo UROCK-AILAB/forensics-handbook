@@ -7,7 +7,7 @@ nav_order: 340
 
 # 구글 계정 흔적 (Google Account)
 
-구글 계정이 기기에 남기는 시스템 쪽 흔적을 정리합니다. 계정 DB 의 표 구조는 [계정 DB 구조 (accounts_ce.db·accounts_de.db)](accounts-db.md) 페이지에 있고, 이 페이지는 그 위에 더해 볼 동기화 기록과 설정 키, 패키지를 다룹니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 실제 폰에서 본 모양에는 확인 범위를 붙였습니다.
+구글 계정이 기기에 남기는 시스템 쪽 흔적을 정리합니다. 계정 DB 의 표 구조는 [계정 DB 구조 (accounts_ce.db·accounts_de.db)](accounts-db.md) 페이지에 있고, 이 페이지는 그 위에 더해 볼 동기화 기록과 설정 키, 패키지를 다룹니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
 
 ## 한 줄 요약
 
@@ -63,7 +63,7 @@ nav_order: 340
 
 ## 설정 키와 패키지 (관찰)
 
-`settings` 세 영역에서 구글이나 계정·동기화와 관련된 이름의 키를 봤습니다. 값은 가려져 있어서 키가 있다는 사실만 확인했습니다. (확인 범위: Android 16, One UI 8.5)
+`settings` 세 영역에서 구글이나 계정·동기화와 관련된 이름의 키를 봤습니다. 값은 가려져 있어서 키가 있다는 사실만 확인했습니다.
 
 | 영역 | 키 | 확인한 것 |
 |---|---|---|
@@ -71,7 +71,7 @@ nav_order: 340
 | global | `gms_checkin_timeout_min`, `master_sync_status`, `synced_account_name` | 키 이름만. `synced_account_name` 이 구글 계정을 가리키는지 삼성 계정을 가리키는지 확인 못 함 |
 | system | `contact_default_account`, `sync_disabled_accounts_with_hash` | 키 이름만. 뜻은 확인 못 함 |
 
-`dumpsys package` 의 Known Packages 에는 Setup Wizard 로 `com.google.android.setupwizard`, Configurator 로 `com.google.android.gms`, Verifier 로 `com.android.vending` 이 보였고, `/sdcard/Android/media/` 아래에는 `com.google.android.gms` 폴더가 있었습니다. (확인 범위: Android 16, One UI 8.5) 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../settings.md) 페이지에 있습니다.
+`dumpsys package` 의 Known Packages 에는 Setup Wizard 로 `com.google.android.setupwizard`, Configurator 로 `com.google.android.gms`, Verifier 로 `com.android.vending` 이 보였고, `/sdcard/Android/media/` 아래에는 `com.google.android.gms` 폴더가 있었습니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../settings.md) 페이지에 있습니다.
 
 ## 증거로서 의미
 

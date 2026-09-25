@@ -54,7 +54,7 @@ ALEAPP 의 Network Action Predictor 모듈 설명에 따르면 2026-09-11 에 �
 
 Android 16 표본이 Pixel 기기라서, 삼성 기기가 아닌 폰에서도 삼성 인터넷 파일이 나올 수 있다는 점을 알 수 있습니다 [1].
 
-관찰한 기기에서는 `dumpsys package` 출력의 "Known Packages" 아래 "Browser:" 항목에 com.android.chrome 이 나와 기본 브라우저 역할을 Chrome 이 맡고 있었고, settings global·secure·system 키 이름 가운데 "sbrowser" 나 "samsung_internet" 이 들어간 키는 없었습니다 (확인 범위: Android 16, One UI 8.5). 삼성 인터넷이 이 기기에 깔려 있는지는 관찰 메모에서 패키지 이름이 가려져 확인하지 못했습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 삼성 인터넷의 앱 데이터 폴더를 읽을 수 있는지도 확인하지 못했고, 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
+관찰한 기기에서는 `dumpsys package` 출력의 "Known Packages" 아래 "Browser:" 항목에 com.android.chrome 이 나와 기본 브라우저 역할을 Chrome 이 맡고 있었고, settings global·secure·system 키 이름 가운데 "sbrowser" 나 "samsung_internet" 이 들어간 키는 없었습니다. 삼성 인터넷이 이 기기에 깔려 있는지는 관찰 메모에서 패키지 이름이 가려져 확인하지 못했습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 삼성 인터넷의 앱 데이터 폴더를 읽을 수 있는지도 확인하지 못했고, 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 
 ## 구조
 
@@ -100,8 +100,8 @@ sqlite3 History "SELECT count(*) FROM urls; SELECT count(*) FROM visits; SELECT 
 ## 교차 검증
 
 - [크롬 (Chrome for Android)](chrome/index.md) — 같은 기기에 Chrome 과 삼성 인터넷이 함께 있으면 두 기록을 나눠 보고, 기본 브라우저가 무엇인지는 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 의 `dumpsys package` "Known Packages" 에서 확인합니다.
-- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 관찰 기기의 `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 칸이 있고 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED 같은 종류가 보였습니다 (확인 범위: Android 16, One UI 8.5). package= 가 com.sec.android.app.sbrowser 인 줄의 시각이 방문 시각 앞뒤에 있는지 맞춰 봅니다.
-- [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) — downloads 표에 적힌 파일이 /sdcard 의 Download 폴더에 실제로 있는지 봅니다. 관찰 기기의 Download 폴더에는 항목이 151개 있었지만 어느 브라우저가 받은 파일인지는 관찰 메모로 알 수 없었습니다 (확인 범위: Android 16, One UI 8.5).
+- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 관찰 기기의 `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 칸이 있고 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED 같은 종류가 보였습니다. package= 가 com.sec.android.app.sbrowser 인 줄의 시각이 방문 시각 앞뒤에 있는지 맞춰 봅니다.
+- [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) — downloads 표에 적힌 파일이 /sdcard 의 Download 폴더에 실제로 있는지 봅니다. 관찰 기기의 Download 폴더에는 항목이 151개 있었지만 어느 브라우저가 받은 파일인지는 관찰 메모로 알 수 없었습니다.
 - [설치된 앱 (packages.xml)](../app-usage/packages/index.md) — 삼성 인터넷의 설치·업데이트 시각과 버전을 확인합니다.
 - [저장된 암호 (Google 비밀번호 관리자·Samsung Pass)](../credentials-security/saved-passwords.md) — Login Data 를 볼 때 함께 봅니다.
 - [웹 사용 행위 재구성 (Web Activity)](../../04-scenarios/activity/web-activity.md), [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)

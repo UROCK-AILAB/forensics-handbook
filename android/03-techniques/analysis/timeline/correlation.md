@@ -23,7 +23,7 @@ UTC 로 옮긴 여러 기록을 한 시간 축에 올리되, 부팅 경계와 �
 
 | 기록 | 함께 적히는 값 | 근거 |
 |---|---|---|
-| `dumpsys usagestats` 의 "UsageStats RollOver history" 절, `rolloverStats` 줄 | `realTime:`, `systemTime:` | 관찰 (확인 범위: Android 16, One UI 8.5) |
+| `dumpsys usagestats` 의 "UsageStats RollOver history" 절, `rolloverStats` 줄 | `realTime:`, `systemTime:` | 관찰 |
 | 같은 절의 "Time changed." 줄 | `actualSystemTime`, `expectedSystemTime`, `actualRealtime` | 관찰 (같은 범위). 뜻은 [시각 조작 흔적](time-manipulation.md) 참고 |
 | 알람 관리자 서비스의 마지막 시각 변경 기록 | 변경 때의 벽시계와 그때의 부팅 기준 시각 | 현행 AOSP 기준. [시각 조작 흔적](time-manipulation.md) 참고 |
 | logcat 을 두 형식으로 뽑은 결과 | `-v monotonic`(마지막 부팅 이후 CPU 초)와 `-v epoch`(1970-01-01 부터 초) | [2] |
@@ -41,21 +41,21 @@ logcat 은 같은 줄을 `-v monotonic` 과 `-v epoch` 로 한 번씩 뽑으면 
 ## 절차
 
 1. **정규화를 먼저 끝냅니다.** 기록마다 시계 종류, 원래 표기, 옮긴 UTC 시각이 한 줄에 있어야 엮을 수 있습니다. 방법은 [시각 정규화](time-normalization.md) 에 있습니다.
-2. **부팅 경계를 찾습니다.** 부팅 기준 값은 부팅마다 0부터 다시 세서 [1], 경계를 모르면 서로 다른 부팅의 값을 한 줄에 섞게 됩니다. 관찰한 폰의 `dumpsys bluetooth_manager` 에는 `Enable log:` 아래에 아래 같은 줄이 있었습니다 (확인 범위: Android 16, One UI 8.5). 부팅 무렵 시스템이 블루투스를 켠 기록으로 읽히지만, 이 시각이 부팅 시각과 얼마나 가까운지는 확인하지 못했습니다. `settings global` 에는 `boot_count` 키가 있었지만 (같은 범위) 이 값으로 부팅 시점을 알 수 있는지도 확인하지 못했습니다.
+2. **부팅 경계를 찾습니다.** 부팅 기준 값은 부팅마다 0부터 다시 세서 [1], 경계를 모르면 서로 다른 부팅의 값을 한 줄에 섞게 됩니다. 관찰한 폰의 `dumpsys bluetooth_manager` 에는 `Enable log:` 아래에 아래 같은 줄이 있었습니다. 부팅 무렵 시스템이 블루투스를 켠 기록으로 읽히지만, 이 시각이 부팅 시각과 얼마나 가까운지는 확인하지 못했습니다. `settings global` 에는 `boot_count` 키가 있었지만 (같은 범위) 이 값으로 부팅 시점을 알 수 있는지도 확인하지 못했습니다.
 
    ```
    ##-## ##:##:##.### 	Package [android] requested to [Enable]. 	Reason is SYSTEM_BOOT
    ```
 
 3. **뼈대 기록을 고릅니다.** 연도가 있고 벽시계 기준이 분명한 기록을 뼈대로 삼고 나머지를 붙입니다. 앱 사용 기록의 원본 이벤트 시각은 유닉스 밀리초라서 뼈대로 쓰기 좋고, 자세한 내용은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에 있습니다.
-4. **연도가 빠진 줄을 채웁니다.** 관찰한 폰에서는 logcat 기본 형식, `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]` 줄, `dumpsys bluetooth_manager` 의 `Enable log:` 줄이 모두 `MM-DD HH:MM:SS.mmm` 모양이라 연도가 없었습니다 (확인 범위: Android 16, One UI 8.5). 수집한 시각이나 같은 사건이 연도와 함께 남은 다른 기록으로 연도를 채우고, 수집이 1월 초라면 12월 날짜 줄은 전년도일 수 있다는 점을 따져 봅니다. 채운 연도는 원래 값과 구별되게 "추정" 으로 표시합니다.
+4. **연도가 빠진 줄을 채웁니다.** 관찰한 폰에서는 logcat 기본 형식, `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]` 줄, `dumpsys bluetooth_manager` 의 `Enable log:` 줄이 모두 `MM-DD HH:MM:SS.mmm` 모양이라 연도가 없었습니다. 수집한 시각이나 같은 사건이 연도와 함께 남은 다른 기록으로 연도를 채우고, 수집이 1월 초라면 12월 날짜 줄은 전년도일 수 있다는 점을 따져 봅니다. 채운 연도는 원래 값과 구별되게 "추정" 으로 표시합니다.
 5. **같은 사건을 여러 기록에서 맞춰 봅니다.** 아래 "같은 사건이 남는 곳" 표의 짝을 찾아 두 기록의 시각 차이를 적어 두면, 한쪽 기록만 있는 구간에서 시각을 얼마나 믿을 수 있는지 가늠할 수 있습니다.
 6. **기록마다 보관 범위를 표시합니다.** logcat 은 main·system·crash·radio·events 버퍼를 돌려 쓰는 순환 버퍼이고 [2], 앱 사용 기록의 이벤트는 며칠만 남습니다([앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 참고). 어떤 기록이 비어 있는 구간이 보관 범위 밖이라면 "그때 아무 일도 없었다" 는 뜻이 아닙니다.
 7. **벽시계가 바뀐 구간을 따로 표시합니다.** 변경 시점을 찾는 방법은 [시각 조작 흔적](time-manipulation.md) 에 있고, 그 앞뒤 구간의 벽시계 기록은 따로 묶어 순서를 다시 확인합니다.
 
 ## 같은 사건이 남는 곳
 
-관찰한 폰의 출력에서 칸 이름으로 짝을 찾은 표입니다 (확인 범위: Android 16, One UI 8.5). 값이 가려진 출력이라서 짝끼리 시각이 실제로 얼마나 맞는지는 확인하지 못했고, 칸마다 무엇을 사건으로 치는지도 조금씩 다를 수 있어서 같은 밀리초를 기대하지 않습니다.
+관찰한 폰의 출력에서 칸 이름으로 짝을 찾은 표입니다. 값이 가려진 출력이라서 짝끼리 시각이 실제로 얼마나 맞는지는 확인하지 못했고, 칸마다 무엇을 사건으로 치는지도 조금씩 다를 수 있어서 같은 밀리초를 기대하지 않습니다.
 
 | 사건 | 앱 사용 기록 (`dumpsys usagestats`) | 다른 기록 |
 |---|---|---|

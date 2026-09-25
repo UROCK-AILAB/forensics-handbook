@@ -26,7 +26,7 @@ Google 메시지 앱(com.google.android.apps.messaging)은 mmssms.db 와 별개�
 | Google 메시지 DB | `*/com.google.android.apps.messaging/databases/bugle_db` (ALEAPP 경로 패턴) | 대화·참여자·메시지 조각 [1] |
 | 같은 DB 의 부속 파일 | 같은 폴더의 `bugle_db-wal`, `bugle_db-shm`, `bugle_db-journal` 이 있을 수 있음 | ALEAPP 가 이 셋을 따로 거름 [1] |
 | 삼성 IMS 서비스 | com.sec.imsservice 앱 데이터 폴더의 `shared_prefs/saved_impu.xml`, `files/*.log` | SIM 과 IMS 식별자, 등록·망·SIM 상태 [2] |
-| 기기 설정 | settings system 의 `rcs_user_setting` 과 번호가 붙은 `rcs_user_setting#` | 값은 가려져 있고 뜻은 공식 문서로 확인하지 못함 (확인 범위: Android 16, One UI 8.5) |
+| 기기 설정 | settings system 의 `rcs_user_setting` 과 번호가 붙은 `rcs_user_setting#` | 값은 가려져 있고 뜻은 공식 문서로 확인하지 못함 |
 
 앱 데이터 폴더의 전체 경로 구성은 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. ALEAPP 공개 표본 13개 가운데 Pixel·Poco 이미지에는 com.sec.imsservice 로그가 없었습니다 [2].
 

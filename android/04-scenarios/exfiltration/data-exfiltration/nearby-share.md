@@ -15,7 +15,7 @@ Quick Share, 블루투스 파일 전송처럼 가까운 기기로 자료를 직�
 
 ## 먼저 확인할 것
 
-블루투스 설정 파일과 Google Play 서비스의 Nearby 캐시는 시스템 폴더나 앱 데이터 폴더에 있어서, 수집본에 그 폴더가 들어 있는지부터 봅니다. `dumpsys bluetooth_manager` 와 설정 키는 adb 일반 셸 권한으로 읽을 수 있었습니다 (확인 범위: Android 16, One UI 8.5). 상대 기기를 확보할 수 있는지도 먼저 정해 둡니다. 받은 쪽 기기의 수신 폴더와 기록이 이 기기의 기록보다 직접적인 경우가 많습니다.
+블루투스 설정 파일과 Google Play 서비스의 Nearby 캐시는 시스템 폴더나 앱 데이터 폴더에 있어서, 수집본에 그 폴더가 들어 있는지부터 봅니다. `dumpsys bluetooth_manager` 와 설정 키는 adb 일반 셸 권한으로 읽을 수 있었습니다. 상대 기기를 확보할 수 있는지도 먼저 정해 둡니다. 받은 쪽 기기의 수신 폴더와 기록이 이 기기의 기록보다 직접적인 경우가 많습니다.
 
 시각 단위가 기록마다 다릅니다. 블루투스 설정 파일은 유닉스 초이고 Nearby 캐시는 유닉스 밀리초라서, 한 타임라인에 올리기 전에 단위를 맞춥니다. 단위별 읽는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
@@ -46,13 +46,13 @@ LinkKey = (값 생략)
 
 블루투스 파일 전송(OPP) 기록 DB 의 표와 칸은 AOSP 소스를 열지 못해 확인하지 못했습니다. 이 페이지에서 블루투스 기록은 "이 주소의 기기와 짝지었다" 는 데까지만 말하고, 파일을 보냈는지는 전송 기록이나 상대 기기에서 확인합니다.
 
-`dumpsys bluetooth_manager` 에는 Bluetooth Status(enabled, state, address, name, time since enabled), 블루투스를 켜 달라고 한 패키지와 이유가 적힌 Enable log, "Ble app registered" 목록, 기능 플래그 목록이 나왔고, 출력은 16,690줄이었습니다 (확인 범위: Android 16, One UI 8.5). BLE 에 등록한 앱 목록에는 com.samsung.android.mcfserver, com.samsung.android.mcfds, com.samsung.android.beaconmanager, com.samsung.android.mdx.kit 가 있었습니다 (확인 범위: 같음). 이 출력은 수집 시점의 상태라서 과거의 전송을 보여 주지는 않지만, 블루투스를 언제부터 켜 두었는지와 어떤 앱이 BLE 를 쓰고 있었는지를 적어 둘 수 있습니다.
+`dumpsys bluetooth_manager` 에는 Bluetooth Status(enabled, state, address, name, time since enabled), 블루투스를 켜 달라고 한 패키지와 이유가 적힌 Enable log, "Ble app registered" 목록, 기능 플래그 목록이 나왔고, 출력은 16,690줄이었습니다. BLE 에 등록한 앱 목록에는 com.samsung.android.mcfserver, com.samsung.android.mcfds, com.samsung.android.beaconmanager, com.samsung.android.mdx.kit 가 있었습니다. 이 출력은 수집 시점의 상태라서 과거의 전송을 보여 주지는 않지만, 블루투스를 언제부터 켜 두었는지와 어떤 앱이 BLE 를 쓰고 있었는지를 적어 둘 수 있습니다.
 
-실제 폰의 설정 표에서 확인한 블루투스 키는 global 표의 `bluetooth_on`, `bluetooth_btsnoop_default_mode`, `bluetooth_disabled_profiles` 와 secure 표의 `bluetooth_address`, `bluetooth_name`, `bluetooth_automatic_turn_on`, `bluetooth_le_broadcast_name` 입니다 (확인 범위: Android 16, One UI 8.5). `bluetooth_btsnoop_default_mode` 는 HCI 기록(btsnoop) 모드 키인데, 값이 가려져 켜져 있었는지는 확인하지 못했습니다.
+실제 폰의 설정 표에서 확인한 블루투스 키는 global 표의 `bluetooth_on`, `bluetooth_btsnoop_default_mode`, `bluetooth_disabled_profiles` 와 secure 표의 `bluetooth_address`, `bluetooth_name`, `bluetooth_automatic_turn_on`, `bluetooth_le_broadcast_name` 입니다. `bluetooth_btsnoop_default_mode` 는 HCI 기록(btsnoop) 모드 키인데, 값이 가려져 켜져 있었는지는 확인하지 못했습니다.
 
 ## Quick Share·Nearby
 
-실제 폰에서 확인한 Quick Share 관련 키는 다음과 같습니다 (확인 범위: Android 16, One UI 8.5). 값은 가려져 있었고, 누구에게 보이도록 했는지 같은 값의 뜻은 확인하지 못했습니다.
+실제 폰에서 확인한 Quick Share 관련 키는 다음과 같습니다. 값은 가려져 있었고, 누구에게 보이도록 했는지 같은 값의 뜻은 확인하지 못했습니다.
 
 | 표 | 키 |
 |---|---|
@@ -70,7 +70,7 @@ Google Play 서비스에는 Nearby 캐시가 두 가지 있고, 둘 다 LevelDB 
 
 ALEAPP 에는 파일 공유 앱 모듈 shareit.py 와 Xender.py 가 있으나 내용은 열어 보지 않았습니다 [1]. 이런 앱이 설치돼 있었다면 [설치된 앱 (packages.xml)](../../../02-artifacts/app-usage/packages/index.md)과 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md)으로 사용 시각대를 먼저 좁힙니다.
 
-와이파이 다이렉트(P2P) 연결 기록의 위치는 확인하지 못했습니다. `dumpsys wifi` 에는 핫스팟(SoftAp) 관련 줄(CMD_SET_AP, CMD_AP_STOPPED 등)이 보였고, secure 표에는 `autohotspot_saved_nearby_state`, `autohotspot_family_sharing_nearby_saved_state` 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 핫스팟 기록은 [테더링과 핫스폿 (Tethering·Hotspot)](../../../02-artifacts/network/tethering-hotspot.md) 페이지에서 다룹니다.
+와이파이 다이렉트(P2P) 연결 기록의 위치는 확인하지 못했습니다. `dumpsys wifi` 에는 핫스팟(SoftAp) 관련 줄(CMD_SET_AP, CMD_AP_STOPPED 등)이 보였고, secure 표에는 `autohotspot_saved_nearby_state`, `autohotspot_family_sharing_nearby_saved_state` 키가 있었습니다. 핫스팟 기록은 [테더링과 핫스폿 (Tethering·Hotspot)](../../../02-artifacts/network/tethering-hotspot.md) 페이지에서 다룹니다.
 
 ## 분석 흐름
 

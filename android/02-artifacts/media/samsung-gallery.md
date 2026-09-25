@@ -25,7 +25,7 @@ nav_order: 680
 | 숨긴 앨범 DB | `*/sec/gallery/secured/databases/secured.db` 의 files 표 | ALEAPP 경로 패턴, 사례 1건 [2] |
 | 숨긴 앨범 미디어 | `*/data/sec_pass/*` | ALEAPP 경로 패턴, 사례 1건 [2] |
 
-ALEAPP 는 Android 10·13·14·14·15 삼성 기기 검체에서 휴지통 모듈을 시험했고, 앱 버전 코드는 1450000033(Android 13), 1500100001(Android 14), 1550500003(Android 15) 이었습니다 [1]. 관찰한 기기의 dumpsys package 요약에는 삼성 갤러리 패키지 정보가 나오지 않아서, 설치 버전은 관찰 메모로 알 수 없습니다 (확인 범위: Android 16, One UI 8.5). 숨긴 앨범이 One UI 몇 버전부터 있는지, sec_pass 의 전체 경로가 어느 파티션·사용자 폴더 아래인지, 암호화돼 있는지는 확인하지 못했습니다. 앱 전용 폴더의 위치는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
+ALEAPP 는 Android 10·13·14·14·15 삼성 기기 검체에서 휴지통 모듈을 시험했고, 앱 버전 코드는 1450000033(Android 13), 1500100001(Android 14), 1550500003(Android 15) 이었습니다 [1]. 관찰한 기기의 dumpsys package 요약에는 삼성 갤러리 패키지 정보가 나오지 않아서, 설치 버전은 관찰 메모로 알 수 없습니다. 숨긴 앨범이 One UI 몇 버전부터 있는지, sec_pass 의 전체 경로가 어느 파티션·사용자 폴더 아래인지, 암호화돼 있는지는 확인하지 못했습니다. 앱 전용 폴더의 위치는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
 
 ## 구조
 

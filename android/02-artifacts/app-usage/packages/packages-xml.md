@@ -104,7 +104,7 @@ ft 는 패키지 설정의 getLastModifiedTime() 값이고 dumpsys 에서는 `ti
 
 ## 라이브 기기에서 보이는 모양 (dumpsys package)
 
-`dumpsys package` 맨 앞 "Database versions:" 아래 "Internal:" 절은 `packages.xml` 의 `<version>` 값을 찍습니다 [1]. 실제 폰에서는 "Internal:" 아래에 `sdkVersion=`, `sdkVersionFull=`, `databaseVersion=` 이 한 줄에, `buildFingerprint=`, `fingerprint=` 가 다음 줄에 보였고 "External:" 아래에는 값이 없었습니다 (확인 범위: Android 16, One UI 8.5). `sdkVersionFull` 은 현행 AOSP main 의 Settings.java 에서 찾지 못해서, 제조사가 넣은 칸인지 다른 버전의 코드인지 확인하지 못했습니다.
+`dumpsys package` 맨 앞 "Database versions:" 아래 "Internal:" 절은 `packages.xml` 의 `<version>` 값을 찍습니다 [1]. 실제 폰에서는 "Internal:" 아래에 `sdkVersion=`, `sdkVersionFull=`, `databaseVersion=` 이 한 줄에, `buildFingerprint=`, `fingerprint=` 가 다음 줄에 보였고 "External:" 아래에는 값이 없었습니다. `sdkVersionFull` 은 현행 AOSP main 의 Settings.java 에서 찾지 못해서, 제조사가 넣은 칸인지 다른 버전의 코드인지 확인하지 못했습니다.
 
 현행 AOSP 기준으로 패키지마다 찍히는 줄의 이름은 `appId=`, `pkg=`, `codePath=`, `versionCode=`, `timeStamp=`, `lastUpdateTime=`, `installerPackageName=` 등이고, 권한은 `declared permissions:`, `requested permissions:`, `install permissions:`, `runtime permissions:` 절로 나뉩니다 [1]. 관찰 메모에는 패키지별 줄이 생략되어 있어서 실제 폰에서 이 줄들이 어떻게 찍히는지는 확인하지 못했습니다. dumpsys 의 시각은 `yyyy-MM-dd HH:mm:ss` 꼴이라 밀리초가 잘리고 시간대 표시가 없어서 [1], 정밀한 시각은 파일의 16진수 값으로 확인합니다. 출력을 뽑는 방법은 [dumpsys 출력](../../logs/dumpsys.md) 페이지를 봅니다.
 

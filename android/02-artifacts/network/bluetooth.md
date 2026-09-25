@@ -28,7 +28,7 @@ ALEAPP 는 파일 이름만으로 찾습니다 [1].
 
 ALEAPP 가 이 모듈을 시험한 이미지에서 짝지은 기기 행은 0~4개였고, Android 16 Pixel 8 Pro 이미지는 0행이었으며, 어댑터 구역의 키는 9~14개였습니다 [1]. 기기 행이 0개인 검체도 있다는 뜻이니, 결과가 비었을 때는 짝지은 기기가 정말 없었는지와 파일 모양이 파서 기대와 달랐는지를 나눠서 확인합니다. Android 버전이나 제조사마다 파일 위치가 어떻게 다른지는 확인하지 못했습니다.
 
-관찰 기기에서 adb 일반 권한으로 받은 `dumpsys bluetooth_manager` 출력은 약 16,690줄이었고, 앞부분 모양은 아래와 같았습니다 (확인 범위: Android 16, One UI 8.5).
+관찰 기기에서 adb 일반 권한으로 받은 `dumpsys bluetooth_manager` 출력은 약 16,690줄이었고, 앞부분 모양은 아래와 같았습니다.
 
 | 부분 | 나온 칸이나 줄 모양 |
 |---|---|
@@ -37,9 +37,9 @@ ALEAPP 가 이 모듈을 시험한 이미지에서 짝지은 기기 행은 0~4�
 | 그 밖의 줄 | `Bluetooth crashed # times`, `Ble app registered: {...}` |
 | BluetoothManagerService | `mEnable`, `mQuietEnable`, `mEnableExternal`, `mQuietEnableExternal`, 그 뒤 기능 플래그 목록(`Flag dump`) |
 
-Enable log 에는 블루투스를 켜 달라는 요청이 요청한 패키지와 이유와 함께 남았고, 끄기 요청 줄의 모양은 관찰 메모에 없었습니다 (확인 범위: Android 16, One UI 8.5). `Ble app registered` 줄에는 BLE 를 쓰려고 등록한 패키지 목록(`com.samsung.android.mcfserver`, `com.samsung.android.beaconmanager` 등)이 나왔습니다 (확인 범위: Android 16, One UI 8.5). 짝지은 기기 목록이 이 출력에 나오는지는 뒷부분을 확인하지 못해서 모릅니다. `dumpsys` 를 받고 읽는 법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
+Enable log 에는 블루투스를 켜 달라는 요청이 요청한 패키지와 이유와 함께 남았고, 끄기 요청 줄의 모양은 관찰 메모에 없었습니다. `Ble app registered` 줄에는 BLE 를 쓰려고 등록한 패키지 목록(`com.samsung.android.mcfserver`, `com.samsung.android.beaconmanager` 등)이 나왔습니다. 짝지은 기기 목록이 이 출력에 나오는지는 뒷부분을 확인하지 못해서 모릅니다. `dumpsys` 를 받고 읽는 법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
 
-같은 기기의 설정 값에도 블루투스 관련 키가 있었습니다 (확인 범위: Android 16, One UI 8.5).
+같은 기기의 설정 값에도 블루투스 관련 키가 있었습니다.
 
 | 설정 영역 | 키 |
 |---|---|
@@ -79,7 +79,7 @@ ALEAPP 가 기기 구역에서 읽는 키는 세 개입니다 [1].
 
 **증명하는 것**
 
-`LinkKey` 가 있는 기기 구역은 그 MAC 주소의 기기와 짝을 맺은 설정이 확보 시점에 이 폰에 남아 있었다는 뜻이고, `Name` 으로 그 기기가 어떤 이름으로 보였는지 알 수 있습니다. 차량이나 특정 사무실 장비처럼 주인이 분명한 기기의 MAC 주소가 나오면, 그 기기와 짝을 맺은 적이 있다는 기록이 됩니다. `dumpsys bluetooth_manager` 의 Enable log 는 블루투스를 켜 달라고 요청한 패키지와 이유를 알려 줍니다 (확인 범위: Android 16, One UI 8.5).
+`LinkKey` 가 있는 기기 구역은 그 MAC 주소의 기기와 짝을 맺은 설정이 확보 시점에 이 폰에 남아 있었다는 뜻이고, `Name` 으로 그 기기가 어떤 이름으로 보였는지 알 수 있습니다. 차량이나 특정 사무실 장비처럼 주인이 분명한 기기의 MAC 주소가 나오면, 그 기기와 짝을 맺은 적이 있다는 기록이 됩니다. `dumpsys bluetooth_manager` 의 Enable log 는 블루투스를 켜 달라고 요청한 패키지와 이유를 알려 줍니다.
 
 **증명하지 못하는 것**
 
@@ -89,7 +89,7 @@ ALEAPP 가 기기 구역에서 읽는 키는 세 개입니다 [1].
 
 ALEAPP 는 `Timestamp` 값을 정수 유닉스 초로 보고 UTC 로 바꾸며, 이 칸을 "First Connected Timestamp" 라고 부릅니다 [1]. 공개 분석 글 하나는 Android 11 시험 이미지에서 이 값이 시험 기록에 적힌 처음 연결 시각과 맞았다고 적었지만 [2], 짝을 다시 맺거나 설정이 바뀔 때 값이 새로 쓰이는지는 AOSP 소스로 확인하지 못했습니다. 보고서에는 도구가 붙인 이름을 옮기지 말고 "설정 파일의 이 기기 구역에 기록된 시각" 처럼 씁니다. 값을 읽는 일반 방법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
-`dumpsys bluetooth_manager` Enable log 의 시각은 `MM-DD HH:MM:SS.mmm` 모양이고 연도가 없습니다 (확인 범위: Android 16, One UI 8.5). 연도는 수집 날짜에서 거꾸로 짐작하고, 시간대는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 확인한 뒤 씁니다. Bluetooth Status 의 `time since enabled` 는 이름으로 보아 켜진 뒤 흐른 시간이라서, 수집 시각에서 빼면 마지막으로 켜진 시각을 가늠할 수 있지만 값의 단위와 모양은 관찰 메모에 없어 직접 확인해야 합니다.
+`dumpsys bluetooth_manager` Enable log 의 시각은 `MM-DD HH:MM:SS.mmm` 모양이고 연도가 없습니다. 연도는 수집 날짜에서 거꾸로 짐작하고, 시간대는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 확인한 뒤 씁니다. Bluetooth Status 의 `time since enabled` 는 이름으로 보아 켜진 뒤 흐른 시간이라서, 수집 시각에서 빼면 마지막으로 켜진 시각을 가늠할 수 있지만 값의 단위와 모양은 관찰 메모에 없어 직접 확인해야 합니다.
 
 ## 함정과 한계
 
@@ -101,7 +101,7 @@ ALEAPP 는 `Timestamp` 값을 정수 유닉스 초로 보고 UTC 로 바꾸며, 
 
 넷째, 설정 값과 `dumpsys` 는 수집 순간의 상태입니다. `bluetooth_on` 값이나 Bluetooth Status 의 `state` 는 확보할 때 켜져 있었는지를 알려 줄 뿐이고, 사건 시각의 상태는 아닙니다.
 
-다섯째, 관찰 기기 설정에 `bluetooth_btsnoop_default_mode` 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 이름으로 보아 블루투스 통신 기록(btsnoop) 설정과 관련된 키로 보이지만 값과 뜻을 확인하지 못했으니, 이 키가 있다는 사실만으로 통신 기록 파일이 있다고 쓰지 않습니다.
+다섯째, 관찰 기기 설정에 `bluetooth_btsnoop_default_mode` 키가 있었습니다. 이름으로 보아 블루투스 통신 기록(btsnoop) 설정과 관련된 키로 보이지만 값과 뜻을 확인하지 못했으니, 이 키가 있다는 사실만으로 통신 기록 파일이 있다고 쓰지 않습니다.
 
 ## 직접 분석해 보기
 

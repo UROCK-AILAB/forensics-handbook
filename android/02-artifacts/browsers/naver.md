@@ -35,7 +35,7 @@ WebView 줄은 따로 설명이 필요합니다. ALEAPP 는 `app_webview/Default
 
 Android 버전이나 앱 버전에 따라 파일 배치가 어떻게 달라지는지는 파일 자체를 확인하지 못해 정리할 수 없습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 이 앱의 데이터 폴더를 읽을 수 있는지도 확인하지 못했고, 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 
-관찰한 기기의 settings system 키 이름에는 `naver_sports_state` 와 `support_nowbar_naver_sports` 가 있었습니다 (확인 범위: Android 16, One UI 8.5). 키 이름만 보였고 값은 가려져 있었으며, 이 키를 One UI 의 Now Bar 기능이 쓰는지 네이버 앱이 쓰는지, 값이 무엇을 뜻하는지는 확인하지 못했습니다. 네이버 앱이 이 기기에 깔려 있는지도 관찰 메모에서 패키지 이름이 가려져 확인하지 못했습니다. 설정 값 전반은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지를 봅니다.
+관찰한 기기의 settings system 키 이름에는 `naver_sports_state` 와 `support_nowbar_naver_sports` 가 있었습니다. 키 이름만 보였고 값은 가려져 있었으며, 이 키를 One UI 의 Now Bar 기능이 쓰는지 네이버 앱이 쓰는지, 값이 무엇을 뜻하는지는 확인하지 못했습니다. 네이버 앱이 이 기기에 깔려 있는지도 관찰 메모에서 패키지 이름이 가려져 확인하지 못했습니다. 설정 값 전반은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지를 봅니다.
 
 ## 구조
 
@@ -74,7 +74,7 @@ WebView 파일은 ALEAPP 결과에 패키지 이름으로 섞여 나오기 때�
 
 ## 교차 검증
 
-- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 관찰 기기의 `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 칸이 있었고, ACTIVITY_RESUMED·ACTIVITY_PAUSED 같은 화면 전환 이벤트와 shortcutId= 칸이 붙은 SHORTCUT_INVOCATION 이벤트가 보였습니다 (확인 범위: Android 16, One UI 8.5). package= 가 com.nhn.android.search 인 줄로 앱이 화면에 떠 있던 시간대를 잡습니다.
+- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 관찰 기기의 `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 칸이 있었고, ACTIVITY_RESUMED·ACTIVITY_PAUSED 같은 화면 전환 이벤트와 shortcutId= 칸이 붙은 SHORTCUT_INVOCATION 이벤트가 보였습니다. package= 가 com.nhn.android.search 인 줄로 앱이 화면에 떠 있던 시간대를 잡습니다.
 - [설치된 앱 (packages.xml)](../app-usage/packages/index.md) — 설치·업데이트 시각과 버전을 확인합니다.
 - [알림 기록 (Notification History)](../app-usage/notification-history.md) — 앱이 보낸 알림 제목과 시각을 봅니다.
 - [네이버 지도 (NAVER Map)](../location/naver-map.md), [네이버 MYBOX (MYBOX)](../mail-cloud/mybox.md), [네이버 밴드 (BAND)](../korean-apps/band.md) — 같은 회사의 다른 앱을 쓴 기록이 있으면 시간대를 함께 맞춰 봅니다.

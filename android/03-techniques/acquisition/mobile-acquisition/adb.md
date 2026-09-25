@@ -7,7 +7,7 @@ nav_order: 1330
 
 # ADB로 볼 수 있는 것 (ADB)
 
-안드로이드 디버그 브리지 (Android Debug Bridge, adb) 로 기기에서 무엇을 읽을 수 있는지, 쓰려면 어떤 조건이 필요한지, 쓰고 나면 기기에 어떤 흔적이 남는지를 정리합니다. 공식 문서와 현행 AOSP 소스(frameworks/base 의 main 가지)로 확인한 내용은 그대로 쓰고, 실제 폰에서 루팅하지 않고 부트로더도 잠긴 채 adb 일반 셸 권한(UID 2000)으로 읽은 내용에는 확인 범위를 붙였습니다. 잠금을 풀거나 보안을 우회하는 방법은 다루지 않습니다.
+안드로이드 디버그 브리지 (Android Debug Bridge, adb) 로 기기에서 무엇을 읽을 수 있는지, 쓰려면 어떤 조건이 필요한지, 쓰고 나면 기기에 어떤 흔적이 남는지를 정리합니다. 공식 문서와 현행 AOSP 소스(frameworks/base 의 main 가지)로 확인한 내용은 그대로 쓰고, 기기 출력 예시는 루팅하지 않고 부트로더가 잠긴 기기에서 adb 일반 셸 권한(UID 2000)으로 읽은 것입니다. 잠금을 풀거나 보안을 우회하는 방법은 다루지 않습니다.
 
 ## 한 줄 요약
 
@@ -29,7 +29,7 @@ adb 는 기기와 통신하는 명령줄 도구이고, 컴퓨터에서 명령을
 
 ## 켜면 남는 흔적
 
-관찰한 폰의 설정에는 adb 와 개발자 옵션에 관련된 이름의 키가 아래처럼 있었습니다 (확인 범위: Android 16, One UI 8.5). 각 값의 뜻은 출처로 확인하지 않았습니다.
+관찰한 폰의 설정에는 adb 와 개발자 옵션에 관련된 이름의 키가 아래처럼 있었습니다. 각 값의 뜻은 출처로 확인하지 않았습니다.
 
 | 어디서 | 키 이름 |
 |---|---|
@@ -49,7 +49,7 @@ secure 쪽 `rampart_` 키는 삼성 기능과 관련 있어 보이지만 어떤 
 
 ## 일반 셸 권한으로 읽은 것
 
-아래는 모두 루팅하지 않고 부트로더가 잠긴 폰에서 adb 일반 셸로 읽은 출력입니다 (확인 범위: Android 16, One UI 8.5). 줄 수는 읽은 때의 값이라 기기와 시점에 따라 달라집니다.
+아래는 모두 루팅하지 않고 부트로더가 잠긴 폰에서 adb 일반 셸로 읽은 출력입니다. 줄 수는 읽은 때의 값이라 기기와 시점에 따라 달라집니다.
 
 | 출력 | 크기 | 담긴 것 | 자세히 |
 |---|---|---|---|
@@ -65,9 +65,9 @@ secure 쪽 `rampart_` 키는 삼성 기능과 관련 있어 보이지만 어떤 
 | `/sdcard` | — | 폴더 목록 | [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) |
 | logcat | — | main, system, crash, kernel 버퍼의 크기와, main, system, events, crash, radio 버퍼의 로그 | [logcat](../../../02-artifacts/logs/logcat.md) |
 
-`dumpsys account` 의 "Accounts History" 표에는 AccountId, Action_Type, timestamp, UID, TableName, Key 칸이 있었고, 동작 값으로 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 보였습니다 (확인 범위: Android 16, One UI 8.5).
+`dumpsys account` 의 "Accounts History" 표에는 AccountId, Action_Type, timestamp, UID, TableName, Key 칸이 있었고, 동작 값으로 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 보였습니다.
 
-dumpsys 와 logcat 은 지금 메모리에 있는 상태를 보여 주어서 저장된 파일과 범위가 다르고, usagestats 출력이 "Last ## hour events" 처럼 최근 몇 시간만 담는 것이 그 예입니다 (확인 범위: Android 16, One UI 8.5). 같은 일반 셸 권한으로 `/data/data` 나 `/data/system_ce` 같은 보호 경로를 읽을 수 있는지는 확인하지 않았습니다. dumpsys 출력을 읽는 법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지에 있습니다.
+dumpsys 와 logcat 은 지금 메모리에 있는 상태를 보여 주어서 저장된 파일과 범위가 다르고, usagestats 출력이 "Last ## hour events" 처럼 최근 몇 시간만 담는 것이 그 예입니다. 같은 일반 셸 권한으로 `/data/data` 나 `/data/system_ce` 같은 보호 경로를 읽을 수 있는지는 확인하지 않았습니다. dumpsys 출력을 읽는 법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지에 있습니다.
 
 ## 버그 리포트 받기
 

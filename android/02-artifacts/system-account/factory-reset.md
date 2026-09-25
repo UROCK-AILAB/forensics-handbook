@@ -36,8 +36,8 @@ bootstat 폴더는 권한이 0700 이고 소유자가 system 이라서 [3], adb 
 | `/data/misc/recovery` 로 옮기는 동작 | `/cache` 파티션이 없는 기기에서만 옮깁니다. `/cache` 가 있으면 `--force-persist` 옵션이 있을 때만 옮깁니다. [4] |
 | FRP secret 확인 강제 | 기능 플래그로 켜고, 소스에 "Upgrading from Android 14 or lower" 처리가 있어 Android 15 부터의 동작으로 보입니다(추론). 정확한 도입 버전은 확인하지 못했습니다. [6] |
 | 앱마다 다른 Android ID | Android 8.0(API 26)부터입니다. [5] |
-| `setup_wizard_has_run` (system) | AOSP 에 있는 키지만 관찰 기기의 settings system 키 목록에는 없었습니다(확인 범위: Android 16, One UI 8.5). |
-| 삼성·구글이 더한 설정 키 | `setup_skipped`, `setup_type`, `smartswitch_*`, `quick_start_*`, `rampart_is_reset_by_at_command` 같은 키가 관찰 기기에 있습니다(확인 범위: Android 16, One UI 8.5). 뜻은 확인하지 못했습니다. |
+| `setup_wizard_has_run` (system) | AOSP 에 있는 키지만 관찰 기기의 settings system 키 목록에는 없었습니다. |
+| 삼성·구글이 더한 설정 키 | `setup_skipped`, `setup_type`, `smartswitch_*`, `quick_start_*`, `rampart_is_reset_by_at_command` 같은 키가 관찰 기기에 있습니다. 뜻은 확인하지 못했습니다. |
 
 ## 구조
 
@@ -114,13 +114,13 @@ PersistentDataBlockService 는 persistent 파티션을 읽고 씁니다. 소스 
 | `last_setup_shown` | secure | 설정 마법사가 마지막으로 보인 버전 | 있음 |
 | `android_id` | secure | 앱 서명 키·사용자·기기 조합마다 다른 64비트 값이고, 초기화하거나 APK 서명 키가 바뀌면 달라질 수 있음 | 있음 |
 
-관찰 기기 칸은 키 이름만 확인했고 값은 가려져 있습니다(확인 범위: Android 16, One UI 8.5). `boot_count` 의 소스 문구는 "초기화 이후" 라고 말하지 않으며, 초기화 때 0 부터 다시 세는지는 확인하지 못했습니다. Android ID 의 성질은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
+관찰 기기 칸은 키 이름만 확인했고 값은 가려져 있습니다. `boot_count` 의 소스 문구는 "초기화 이후" 라고 말하지 않으며, 초기화 때 0 부터 다시 세는지는 확인하지 못했습니다. Android ID 의 성질은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
 
-관찰 기기에는 이름으로 보아 초기 설정과 관련된 키가 더 있습니다. global 에 `setup_skipped`, `setup_type`, `euicc_factory_reset_timeout_millis`, `lock_reset_profile`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `quick_start_flow_type`, `quick_start_source_manufacturer`, `previous_version_pda` 가 있고, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `rampart_is_reset_by_at_command` 가 있습니다(확인 범위: Android 16, One UI 8.5). 이름만 보면 초기 설정 중 다른 기기에서 옮기기나 AT 명령으로 한 초기화를 가리키는 것처럼 읽히지만, 뜻을 확인한 자료가 없어 추측에 그칩니다.
+관찰 기기에는 이름으로 보아 초기 설정과 관련된 키가 더 있습니다. global 에 `setup_skipped`, `setup_type`, `euicc_factory_reset_timeout_millis`, `lock_reset_profile`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `quick_start_flow_type`, `quick_start_source_manufacturer`, `previous_version_pda` 가 있고, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `rampart_is_reset_by_at_command` 가 있습니다. 이름만 보면 초기 설정 중 다른 기기에서 옮기기나 AT 명령으로 한 초기화를 가리키는 것처럼 읽히지만, 뜻을 확인한 자료가 없어 추측에 그칩니다.
 
 ### adb 로 보이는 칸
 
-루트 없이 adb 일반 셸로도 아래 칸을 볼 수 있습니다(확인 범위: Android 16, One UI 8.5). 값은 관찰 메모에서 가려져 있어 모양만 적습니다.
+루트 없이 adb 일반 셸로도 아래 칸을 볼 수 있습니다. 값은 관찰 메모에서 가려져 있어 모양만 적습니다.
 
 ```
 dumpsys user

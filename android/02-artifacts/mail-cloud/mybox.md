@@ -28,7 +28,7 @@ Android 버전이나 One UI 버전에 따른 차이, 앱 버전에 따른 차이
 
 ## 함정과 한계
 
-첫째, 관찰 기기의 설정 값에는 네이버 이름이 들어간 키로 `naver_sports_state`, `support_nowbar_naver_sports`, `key_now_bar_com_nhn_android_search` 가 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 키들은 MYBOX 와 관계가 없고, 마지막 키는 네이버 검색 앱의 패키지 이름이 키에 들어간 모양입니다. 설정에 네이버 키가 있다고 MYBOX 를 썼다는 근거로 삼으면 안 됩니다.
+첫째, 관찰 기기의 설정 값에는 네이버 이름이 들어간 키로 `naver_sports_state`, `support_nowbar_naver_sports`, `key_now_bar_com_nhn_android_search` 가 있었습니다. 이 키들은 MYBOX 와 관계가 없고, 마지막 키는 네이버 검색 앱의 패키지 이름이 키에 들어간 모양입니다. 설정에 네이버 키가 있다고 MYBOX 를 썼다는 근거로 삼으면 안 됩니다.
 
 둘째, 다른 자료나 도구가 MYBOX 의 경로나 표를 보여 주더라도 검체에서 직접 확인하고 쓰고, 도구 출력은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 방법으로 원본과 맞춰 봅니다.
 

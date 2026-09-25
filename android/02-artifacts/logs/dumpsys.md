@@ -14,7 +14,7 @@ dumpsys 출력 (dumpsys) 은 기기에서 돌고 있는 시스템 서비스가 �
 
 dumpsys 는 원래 개발자가 시스템 서비스의 상태를 확인하려고 쓰는 도구입니다 [1]. 서비스마다 출력 형식이 제각각이고, 문서가 예로 드는 서비스만 해도 입력(input), 그래픽(gfxinfo), 네트워크 통계(netstats), 배터리(batterystats), 프로세스 통계(procstats), 메모리(meminfo) 로 다양합니다 [1].
 
-포렌식에서는 시스템 영역 파일을 루팅 없이 꺼내기 어려운 기기에서 서비스가 내놓는 기록을 텍스트로 받을 수 있다는 점이 쓸모 있고, 관찰 기기에서도 아래 절의 서비스들을 adb 일반 셸 권한으로 읽을 수 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 페이지는 dumpsys 로 무엇이 나오는지까지만 다루고, 서비스별 해석은 각 아티팩트 페이지로 넘깁니다.
+포렌식에서는 시스템 영역 파일을 루팅 없이 꺼내기 어려운 기기에서 서비스가 내놓는 기록을 텍스트로 받을 수 있다는 점이 쓸모 있고, 관찰 기기에서도 아래 절의 서비스들을 adb 일반 셸 권한으로 읽을 수 있었습니다. 이 페이지는 dumpsys 로 무엇이 나오는지까지만 다루고, 서비스별 해석은 각 아티팩트 페이지로 넘깁니다.
 
 ## 위치와 버전별 차이
 
@@ -40,7 +40,7 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
 
 ## 구조
 
-관찰 기기에서 adb 일반 셸로 아래 서비스의 출력을 받았고, 줄 수와 눈에 띄는 모양은 다음과 같았습니다 (확인 범위: Android 16, One UI 8.5).
+관찰 기기에서 adb 일반 셸로 아래 서비스의 출력을 받았고, 줄 수와 눈에 띄는 모양은 다음과 같았습니다.
 
 | 서비스 | 줄 수 | 눈에 띄는 모양 | 해석 페이지 |
 |---|---|---|---|
@@ -57,7 +57,7 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
 
 ### 이벤트 줄 (usagestats)
 
-`dumpsys usagestats` 는 `Last ## hour events (timeRange="...")` 머리 아래에 이벤트를 한 줄씩 적습니다 (확인 범위: Android 16, One UI 8.5).
+`dumpsys usagestats` 는 `Last ## hour events (timeRange="...")` 머리 아래에 이벤트를 한 줄씩 적습니다.
 
 ```
   Last ## hour events (timeRange="..." )
@@ -65,11 +65,11 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
     time="..." type=SCREEN_INTERACTIVE package=<값> flags=<값>
 ```
 
-관찰 기기에서 본 type 은 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED`, `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE`, `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN`, `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN`, `SHORTCUT_INVOCATION`, `USER_INTERACTION`, `STANDBY_BUCKET_CHANGED` 였습니다 (확인 범위: Android 16, One UI 8.5). 앞의 세 가지 ACTIVITY 줄에는 `instanceId`, `taskRootPackage`, `taskRootClass` 칸이 더 붙고, `NOTIFICATION_INTERRUPTION` 에는 `channelId`, `SHORTCUT_INVOCATION` 에는 `shortcutId`, `STANDBY_BUCKET_CHANGED` 에는 `standbyBucket`, `reason` 칸이 붙습니다.
+관찰 기기에서 본 type 은 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED`, `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE`, `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN`, `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN`, `SHORTCUT_INVOCATION`, `USER_INTERACTION`, `STANDBY_BUCKET_CHANGED` 였습니다. 앞의 세 가지 ACTIVITY 줄에는 `instanceId`, `taskRootPackage`, `taskRootClass` 칸이 더 붙고, `NOTIFICATION_INTERRUPTION` 에는 `channelId`, `SHORTCUT_INVOCATION` 에는 `shortcutId`, `STANDBY_BUCKET_CHANGED` 에는 `standbyBucket`, `reason` 칸이 붙습니다.
 
 ### 변경 이력 표 (account)
 
-`dumpsys account` 는 계정 목록 아래에 변경 이력을 쉼표로 나눈 표로 적습니다 (확인 범위: Android 16, One UI 8.5).
+`dumpsys account` 는 계정 목록 아래에 변경 이력을 쉼표로 나눈 표로 적습니다.
 
 ```
   Accounts: ##
@@ -79,15 +79,15 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
   ##,action_account_add,...,#####,accounts,##
 ```
 
-관찰 기기에서 본 Action_Type 에는 `action_account_add`, `action_account_remove`, `action_called_account_remove` 등이 있었습니다 (확인 범위: Android 16, One UI 8.5).
+관찰 기기에서 본 Action_Type 에는 `action_account_add`, `action_account_remove`, `action_called_account_remove` 등이 있었습니다.
 
 ### 사용자 상태 (user)
 
-`dumpsys user` 는 사용자마다 `UserInfo{...} serialNo= isPrimary=` 줄과 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground` 칸을 적습니다 (확인 범위: Android 16, One UI 8.5). 관찰 기기의 주 사용자는 `State: RUNNING_UNLOCKED` 였고 `Created:` 칸은 `<unknown>` 으로 나왔습니다 (확인 범위: Android 16, One UI 8.5).
+`dumpsys user` 는 사용자마다 `UserInfo{...} serialNo= isPrimary=` 줄과 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground` 칸을 적습니다. 관찰 기기의 주 사용자는 `State: RUNNING_UNLOCKED` 였고 `Created:` 칸은 `<unknown>` 으로 나왔습니다.
 
 ### 그 밖의 서비스
 
-`dumpsys package` 에는 `Database versions:` 아래 `sdkVersion=`, `databaseVersion=`, `buildFingerprint=` 칸과, 시스템·설치 관리자·검증기·브라우저 같은 역할별 기본 패키지를 적은 `Known Packages:` 목록이 있습니다 (확인 범위: Android 16, One UI 8.5). `dumpsys notification` 의 `NotificationRecord(...)` 아래에는 `uid`, `userId`, `opPkg`, `icon`, `flags`, `originalFlags`, `pri`, `key`, `seen`, `groupKey` 칸이 이어집니다 (확인 범위: Android 16, One UI 8.5).
+`dumpsys package` 에는 `Database versions:` 아래 `sdkVersion=`, `databaseVersion=`, `buildFingerprint=` 칸과, 시스템·설치 관리자·검증기·브라우저 같은 역할별 기본 패키지를 적은 `Known Packages:` 목록이 있습니다. `dumpsys notification` 의 `NotificationRecord(...)` 아래에는 `uid`, `userId`, `opPkg`, `icon`, `flags`, `originalFlags`, `pri`, `key`, `seen`, `groupKey` 칸이 이어집니다.
 
 ## 증거로서 의미
 
@@ -101,7 +101,7 @@ dumpsys 는 서비스의 현재 상태를 뽑기 때문에 부르는 시점에 �
 
 ## 시각 해석
 
-시각 형식은 서비스마다 다릅니다. 관찰 기기에서 `usagestats` 의 `time=` 값과 `account` 이력의 시각은 한글이 섞인 사람이 읽는 형식이었고, `batterystats` 기록 줄은 연도 없이 월-일과 시각만 찍혀 있었습니다 (확인 범위: Android 16, One UI 8.5). 사람이 읽는 형식은 기기 언어 설정을 따를 수 있으니(추론), 파싱하기 전에 몇 줄을 눈으로 보고 형식과 시간대를 정합니다. 시간대 판단은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md), 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+시각 형식은 서비스마다 다릅니다. 관찰 기기에서 `usagestats` 의 `time=` 값과 `account` 이력의 시각은 한글이 섞인 사람이 읽는 형식이었고, `batterystats` 기록 줄은 연도 없이 월-일과 시각만 찍혀 있었습니다. 사람이 읽는 형식은 기기 언어 설정을 따를 수 있으니(추론), 파싱하기 전에 몇 줄을 눈으로 보고 형식과 시간대를 정합니다. 시간대 판단은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md), 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -109,7 +109,7 @@ dumpsys 는 서비스의 현재 상태를 뽑기 때문에 부르는 시점에 �
 
 둘째, `-t` 의 기본 시간 제한은 10초입니다 [1]. `package` 나 `batterystats` 처럼 수만~수십만 줄이 나오는 서비스는 출력이 끝까지 왔는지 마지막 줄을 확인합니다.
 
-셋째, 일부 서비스 출력에는 그 서비스가 자세한 로그를 켰는지 알려 주는 줄이 있습니다. 관찰 기기의 `dumpsys wifi` 에는 `Verbose logging is off` 와 `mVerboseLoggingLevel` 줄이, `dumpsys bluetooth_manager` 에는 `Enable log:` 줄이 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 설정이 평소와 다르다면 누가 언제 바꿨는지 다른 기록과 맞춰 봅니다.
+셋째, 일부 서비스 출력에는 그 서비스가 자세한 로그를 켰는지 알려 주는 줄이 있습니다. 관찰 기기의 `dumpsys wifi` 에는 `Verbose logging is off` 와 `mVerboseLoggingLevel` 줄이, `dumpsys bluetooth_manager` 에는 `Enable log:` 줄이 있었습니다. 이 설정이 평소와 다르다면 누가 언제 바꿨는지 다른 기록과 맞춰 봅니다.
 
 넷째, 출력에는 계정 이름, 알림 내용, 패키지 목록 같은 개인 정보가 많이 들어 있습니다. 조사 범위를 벗어난 부분은 보고서에 옮기지 않습니다.
 

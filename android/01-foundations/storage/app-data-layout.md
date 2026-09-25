@@ -57,7 +57,7 @@ nav_order: 130
 
 ### 사용자가 여럿인 기기
 
-관찰 기기의 `dumpsys user` 출력에는 주 사용자(`isPrimary=true`) 말고도 `parentId` 가 붙은 두 번째 사용자가 있었고, 사용자 번호는 가려져 있어서 그 사용자의 앱 폴더가 `/data/user/` 아래 몇 번인지는 알 수 없습니다(확인 범위: Android 16, One UI 8.5). 두 번째 사용자가 보안 폴더인지도 이 관찰로는 확인하지 못했습니다. 같은 기기에 설치된 앱은 시스템 앱 486개, 사용자가 설치한 앱 168개였습니다(확인 범위: Android 16, One UI 8.5). 사용자 목록을 읽는 법은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md), 보안 폴더와 작업 프로필은 [보안 폴더와 작업 프로필](../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+관찰 기기의 `dumpsys user` 출력에는 주 사용자(`isPrimary=true`) 말고도 `parentId` 가 붙은 두 번째 사용자가 있었고, 사용자 번호는 가려져 있어서 그 사용자의 앱 폴더가 `/data/user/` 아래 몇 번인지는 알 수 없습니다. 두 번째 사용자가 보안 폴더인지도 이 관찰로는 확인하지 못했습니다. 같은 기기에 설치된 앱은 시스템 앱 486개, 사용자가 설치한 앱 168개였습니다. 사용자 목록을 읽는 법은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md), 보안 폴더와 작업 프로필은 [보안 폴더와 작업 프로필](../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
 ## 읽는 법
 

@@ -6,7 +6,7 @@ nav_order: 1290
 
 # 조사 절차 (Investigation Process)
 
-Android 기기를 손에 넣은 때부터 보고서를 낼 때까지의 흐름을 한 장에 정리합니다. 뼈대는 NIST SP 800-101 Rev.1 의 네 단계를 따르고, 각 단계의 세부 조치는 따로 정리한 페이지로 이어집니다. 실제 폰에서 본 출력 모양에는 확인 범위를 붙였습니다.
+Android 기기를 손에 넣은 때부터 보고서를 낼 때까지의 흐름을 한 장에 정리합니다. 뼈대는 NIST SP 800-101 Rev.1 의 네 단계를 따르고, 각 단계의 세부 조치는 따로 정리한 페이지로 이어집니다.
 
 ## 한 줄 요약
 
@@ -47,7 +47,7 @@ NIST 는 Android 처럼 암호화를 지원하는 기기가 잠금이 풀린 채
 
 수집은 기기를 식별하는 데서 시작합니다. 기기 종류와 운영체제에 따라 사본을 만드는 경로와 도구가 정해지기 때문입니다 [1]. 제조사, 모델, 통신사로 식별하고, 알 수 없으면 앞·뒤·옆을 사진으로 찍어 두면 나중에 모델과 당시 상태(화면 잠금 여부 등)를 알아내는 데 도움이 됩니다 [1]. 제조사 라벨을 떼거나 운영체제·앱을 바꿔 정체를 숨긴 기기도 있으니 사례마다 따로 봅니다 [1].
 
-수집 도구를 연결하기 전에는 기기의 지금 상태를 먼저 적어 둡니다. 조사자가 비행기 모드를 켜거나 개발자 옵션을 여는 순간 설정 값에 조사자의 조작이 섞이니, 수집 전 상태를 남겨 두어야 원래 상태와 조사자가 바꾼 부분을 나눌 수 있다는 해석입니다. 관찰한 폰에서 adb 일반 셸 권한으로 읽어 기록지에 옮길 만한 칸은 아래와 같았습니다 (확인 범위: Android 16, One UI 8.5). 값이 가려진 채로 관찰했고 각 값의 정확한 뜻은 출처로 확인하지 못했으니, 이름만 보고 값을 해석하지 않습니다.
+수집 도구를 연결하기 전에는 기기의 지금 상태를 먼저 적어 둡니다. 조사자가 비행기 모드를 켜거나 개발자 옵션을 여는 순간 설정 값에 조사자의 조작이 섞이니, 수집 전 상태를 남겨 두어야 원래 상태와 조사자가 바꾼 부분을 나눌 수 있다는 해석입니다. 관찰한 폰에서 adb 일반 셸 권한으로 읽어 기록지에 옮길 만한 칸은 아래와 같았습니다. 값이 가려진 채로 관찰했고 각 값의 정확한 뜻은 출처로 확인하지 못했으니, 이름만 보고 값을 해석하지 않습니다.
 
 | 기록할 것 | 어디서 읽나 | 칸·키 이름 |
 |---|---|---|
@@ -59,9 +59,9 @@ NIST 는 Android 처럼 암호화를 지원하는 기기가 잠금이 풀린 채
 | 식별자 | settings secure | `android_id` |
 | 원격 잠금·도난 방지·기기 찾기 | settings secure | `remote_lock_setting`, `theft_detection_lock_supported`, `theft_protection_default_on`, `fmm_offline_find_support`, `fmm_community_finding`, `lock_screen_lock_after_timeout` |
 
-`dumpsys user` 에는 주 사용자(`isPrimary=true`) 말고 `isPrimary=false` 이고 `parentId` 가 붙은 두 번째 사용자도 보였습니다 (확인 범위: Android 16, One UI 8.5). 이 사용자가 무엇인지는 확인하지 못했지만, 사용자가 여럿이면 상태를 사용자마다 따로 적어야 합니다. 여러 사용자와 보안 폴더는 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 과 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+`dumpsys user` 에는 주 사용자(`isPrimary=true`) 말고 `isPrimary=false` 이고 `parentId` 가 붙은 두 번째 사용자도 보였습니다. 이 사용자가 무엇인지는 확인하지 못했지만, 사용자가 여럿이면 상태를 사용자마다 따로 적어야 합니다. 여러 사용자와 보안 폴더는 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 과 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
-`dumpsys usagestats` 의 이벤트 목록은 `Last ## hour events` 라는 제목 아래 최근 몇 시간 치만 나왔습니다 (확인 범위: Android 16, One UI 8.5). 이런 메모리 쪽 상태는 시간이 지나면 바뀌니 먼저 떠 둡니다. 다만 무엇부터 떠야 하는지 휘발성 순서를 정한 출처는 이 페이지에서 확인하지 않았습니다.
+`dumpsys usagestats` 의 이벤트 목록은 `Last ## hour events` 라는 제목 아래 최근 몇 시간 치만 나왔습니다. 이런 메모리 쪽 상태는 시간이 지나면 바뀌니 먼저 떠 둡니다. 다만 무엇부터 떠야 하는지 휘발성 순서를 정한 출처는 이 페이지에서 확인하지 않았습니다.
 
 상태를 적은 뒤에는 사건에 맞는 수집 방식을 고릅니다. 방식별 차이는 [수집 방식 비교](mobile-acquisition/methods.md), adb 를 쓰는 조건과 켤 때 남는 흔적은 [ADB로 볼 수 있는 것](mobile-acquisition/adb.md), 결과물 해시와 수집 날짜·시간대 기록은 [결과물 형식과 해시](mobile-acquisition/formats-hash.md) 페이지에 있습니다. 서버에만 있는 데이터는 [클라우드 데이터](cloud-data.md) 페이지를 봅니다.
 
@@ -100,13 +100,13 @@ NIST 는 미국 법무부 자료를 인용해 보고서에 넣을 항목을 아�
 | Android 12 이상을 대상으로 만든 앱 | adb backup 에 앱 데이터가 빠지고, 매니페스트에 `android:debuggable=true` 를 둔 앱만 예외입니다 [5] | [백업으로 수집](mobile-acquisition/backups.md) |
 | Android 17 기기 | Google Play 서비스 v26.19(2026년 5월) 릴리스 노트에 따르면 원격 잠금(Remote Lock) 과 도난 감지 잠금(Theft Detection Lock) 이 기본으로 켜집니다 [2] | [압수와 보관](mobile-acquisition/seizure-handling.md) |
 | Google Play 서비스 v26.22(2026년 6월) | 기기 초기 설정에 Find Hub 설정이 들어가 원격으로 기기 위치를 찾을 수 있습니다 [2] | [압수와 보관](mobile-acquisition/seizure-handling.md) |
-| 삼성 One UI 8.5 (관찰) | settings secure 에 원격 잠금·도난 방지·기기 찾기와 이름이 닿는 키가 있고, `dumpsys user` 에 두 번째 사용자가 보였습니다 (확인 범위: Android 16, One UI 8.5) | [설정 값](../../02-artifacts/system-account/settings.md) |
+| 삼성 One UI 8.5 (관찰) | settings secure 에 원격 잠금·도난 방지·기기 찾기와 이름이 닿는 키가 있고, `dumpsys user` 에 두 번째 사용자가 보였습니다 | [설정 값](../../02-artifacts/system-account/settings.md) |
 
 원격 잠금과 도난 방지 기능이 기본으로 켜지는 흐름은, 원격으로도 공장 초기화를 할 수 있어 통신을 끊어야 한다는 NIST 의 설명 [1] 과 겹쳐 봐야 할 변화입니다. 삼성 One UI 에만 있는 절차상 차이(보안 폴더, Knox 등) 는 이 페이지에서 출처로 확인하지 못했습니다.
 
 ## 도구
 
-절차 문서에는 특정 도구가 정해져 있지 않고, NIST 도 도구마다 사건 파일 형식이 다르다는 점만 짚습니다 [1]. 수집 전 상태를 적을 때 쓴 `dumpsys` 와 `settings` 출력은 adb 일반 셸 권한으로 읽을 수 있었고 (확인 범위: Android 16, One UI 8.5), 읽는 조건은 [ADB로 볼 수 있는 것](mobile-acquisition/adb.md), 출력 모양은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 과 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다. 어떤 도구를 쓰든 결과를 믿기 전에 [도구 검증](../reporting/tool-validation.md) 을 거칩니다.
+절차 문서에는 특정 도구가 정해져 있지 않고, NIST 도 도구마다 사건 파일 형식이 다르다는 점만 짚습니다 [1]. 수집 전 상태를 적을 때 쓴 `dumpsys` 와 `settings` 출력은 adb 일반 셸 권한으로 읽을 수 있었고, 읽는 조건은 [ADB로 볼 수 있는 것](mobile-acquisition/adb.md), 출력 모양은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 과 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다. 어떤 도구를 쓰든 결과를 믿기 전에 [도구 검증](../reporting/tool-validation.md) 을 거칩니다.
 
 ## 함정과 한계
 

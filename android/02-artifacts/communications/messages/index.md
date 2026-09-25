@@ -16,7 +16,7 @@ Android 의 SMS·MMS 는 시스템 제공자 패키지 com.android.providers.tel
 
 문자는 누구와 언제 연락했는지를 보여 주는 기본 기록이고, 스미싱처럼 문자로 시작하는 사고에서는 첫 흔적이 되기도 합니다. mmssms.db 한 파일에 SMS(sms 표)와 MMS(pdu·part·addr 표)가 함께 들어 있고 두 종류가 threads 표의 대화 번호(thread_id)를 같이 쓰기 때문에 [1][2], 이 DB 하나로 대화 흐름을 상당 부분 되살릴 수 있습니다. 다만 MMS 첨부 파일은 DB 밖의 app_parts 폴더에 따로 있고 part 표의 _data 칸이 그 경로를 가리키니 [2][3], DB 와 폴더를 함께 확보해야 합니다.
 
-시스템 문자 DB 만 보고 끝내면 빠지는 기록이 있습니다. Google 메시지 앱은 bugle_db 를 따로 두고 ALEAPP 도 이 DB 를 별도 모듈로 읽으며, ALEAPP 공개 표본에서는 Pixel 뿐 아니라 삼성 기기 이미지(samsunga53_a14, samsungs20_a13)에도 bugle_db 가 있었습니다 [4]. 반대로 삼성 메시지 앱 자체 DB 의 경로와 표 이름은 공개 자료로 확인하지 못했습니다 [6]. 기본 문자 앱이 무엇인지 기록하는 위치도 확인하지 못했고, 관찰한 폰의 settings secure 키 464개 가운데 `sms_default_application` 키는 없었습니다 (확인 범위: Android 16, One UI 8.5).
+시스템 문자 DB 만 보고 끝내면 빠지는 기록이 있습니다. Google 메시지 앱은 bugle_db 를 따로 두고 ALEAPP 도 이 DB 를 별도 모듈로 읽으며, ALEAPP 공개 표본에서는 Pixel 뿐 아니라 삼성 기기 이미지(samsunga53_a14, samsungs20_a13)에도 bugle_db 가 있었습니다 [4]. 반대로 삼성 메시지 앱 자체 DB 의 경로와 표 이름은 공개 자료로 확인하지 못했습니다 [6]. 기본 문자 앱이 무엇인지 기록하는 위치도 확인하지 못했고, 관찰한 폰의 settings secure 키 464개 가운데 `sms_default_application` 키는 없었습니다.
 
 ## 한눈에 보기
 

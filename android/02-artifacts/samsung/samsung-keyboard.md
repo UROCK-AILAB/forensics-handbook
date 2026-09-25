@@ -38,7 +38,7 @@ nav_order: 1170
 
 어느 One UI 판이나 키보드 판에서 스키마가 바뀌었는지는 확인하지 못했습니다.
 
-실제 폰에서 adb 일반 권한으로 설정 값의 키 이름을 읽었을 때, 키보드와 클립보드에 관련된 삼성 쪽 이름으로 보이는 키는 아래와 같았습니다(확인 범위: Android 16, One UI 8.5). 값은 가려져 있어서 이 폰의 기본 키보드가 삼성 키보드인지는 알 수 없고, 키의 뜻도 확인하지 못했습니다. 기본 입력기를 가리키는 것으로 보이는 공통 키(`default_input_method` 등)는 [지보드 입력 기록](../google-services/gboard.md) 에 정리했습니다.
+실제 폰에서 adb 일반 권한으로 설정 값의 키 이름을 읽었을 때, 키보드와 클립보드에 관련된 삼성 쪽 이름으로 보이는 키는 아래와 같았습니다. 값은 가려져 있어서 이 폰의 기본 키보드가 삼성 키보드인지는 알 수 없고, 키의 뜻도 확인하지 못했습니다. 기본 입력기를 가리키는 것으로 보이는 공통 키(`default_input_method` 등)는 [지보드 입력 기록](../google-services/gboard.md) 에 정리했습니다.
 
 ```
 settings secure : sip_keyboard_type_mouse_id_list, sip_voice_input_use_side_key,

@@ -109,7 +109,7 @@ start_time, end_time, last_access_time 은 1601-01-01 UTC 부터의 마이크로
 
 다운로드 행을 지우면(RemoveDownload) downloads 행과 함께 downloads_url_chains, downloads_slices 의 같은 번호 행도 지워집니다 [1]. 기록만 지우고 실제 파일은 남는지, 반대로 파일만 지우면 기록이 어떻게 바뀌는지는 확인하지 못했습니다. 기록과 파일 둘 중 하나만 있는 경우를 찾았다면 둘을 따로 적고, 지운 행의 흔적은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)와 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md) 페이지를 봅니다.
 
-Chrome 의 기본 저장 위치가 공용 저장 공간의 `Download` 폴더인지, 받은 파일을 미디어 저장소(MediaStore)의 Downloads 에 등록하는지는 이번에 확인하지 못했고, 경로는 target_path 에 적힌 값을 그대로 따라갑니다. 관찰 기기의 `/sdcard/Download` 에는 항목이 151개, 그 가운데 폴더가 36개 있었지만 이름은 가려서 어느 앱이 만든 것인지는 알 수 없었습니다 (확인 범위: Android 16, One UI 8.5). 공용 저장 공간은 여러 앱이 함께 쓰는 곳이라, 그 폴더에 파일이 있다는 것만으로 Chrome 이 받았다고 말하지 않습니다. 폴더 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md), 파일 등록 기록은 [미디어 저장소 (MediaStore)](../../media/mediastore/index.md) 페이지를 봅니다.
+Chrome 의 기본 저장 위치가 공용 저장 공간의 `Download` 폴더인지, 받은 파일을 미디어 저장소(MediaStore)의 Downloads 에 등록하는지는 이번에 확인하지 못했고, 경로는 target_path 에 적힌 값을 그대로 따라갑니다. 관찰 기기의 `/sdcard/Download` 에는 항목이 151개, 그 가운데 폴더가 36개 있었지만 이름은 가려서 어느 앱이 만든 것인지는 알 수 없었습니다. 공용 저장 공간은 여러 앱이 함께 쓰는 곳이라, 그 폴더에 파일이 있다는 것만으로 Chrome 이 받았다고 말하지 않습니다. 폴더 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md), 파일 등록 기록은 [미디어 저장소 (MediaStore)](../../media/mediastore/index.md) 페이지를 봅니다.
 
 ## 직접 분석해 보기
 

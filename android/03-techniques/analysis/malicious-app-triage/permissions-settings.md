@@ -27,12 +27,12 @@ Android Developers 문서는 권한을 설치 시 권한 (install-time permissio
 |---|---|---|
 | 설치 시·런타임·특수 권한 구분 | 문서에 버전 표기 없음 | [1] |
 | 제한된 설정 (Restricted settings) | 일부 단계는 Android 13 이상에서만 동작 | [2] |
-| 아래 표의 공통 설정 키 | 키 이름만 관찰 (확인 범위: Android 16, One UI 8.5) | 기기 관찰 |
-| `rampart_`·`appprotection_` 계열 키 | 삼성 기기에서 키 이름만 관찰 (확인 범위: Android 16, One UI 8.5) | 기기 관찰 |
+| 아래 표의 공통 설정 키 | 키 이름만 관찰 | 기기 관찰 |
+| `rampart_`·`appprotection_` 계열 키 | 삼성 기기에서 키 이름만 관찰 | 기기 관찰 |
 
 ## 절차
 
-1. **읽을 수 있는 범위를 정합니다.** 루팅하지 않은 폰에서 adb 일반 셸 권한(UID 2000)으로 dumpsys 와 settings 출력을 읽었고, /data/system 아래 파일은 읽지 않았습니다 (확인 범위: Android 16, One UI 8.5). 파일 시스템 수집본이 있으면 2단계까지, 없으면 3단계부터 진행합니다. 수집 방법은 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
+1. **읽을 수 있는 범위를 정합니다.** 루팅하지 않은 폰에서 adb 일반 셸 권한(UID 2000)으로 dumpsys 와 settings 출력을 읽었고, /data/system 아래 파일은 읽지 않았습니다. 파일 시스템 수집본이 있으면 2단계까지, 없으면 3단계부터 진행합니다. 수집 방법은 [모바일 증거 확보](../../acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 2. **권한 부여 기록을 뽑습니다.** 수집본의 packages.xml 에서 앱마다 받은 권한과 부여 여부를 꺼냅니다. 아래 "packages.xml 의 권한 기록" 을 봅니다.
 3. **민감한 설정 키를 확인합니다.** 접근성·알림 접근·입력기·출처를 알 수 없는 앱 설치처럼 앱에 넓은 권한을 주는 설정 키를 먼저 읽습니다. 아래 "살펴볼 설정 키" 를 봅니다.
 4. **제한된 설정이 풀린 앱이 있는지 봅니다.** 아래 "제한된 설정" 을 봅니다.
@@ -55,7 +55,7 @@ Protection 칸 값의 표기, 이 파일의 전체 경로, Android 버전에 따
 
 ## 살펴볼 설정 키
 
-관찰한 폰의 settings 출력에서 악성 앱 분석과 관련 있는 키를 이름으로 묶으면 아래와 같습니다 (확인 범위: Android 16, One UI 8.5). 키 이름만 확인했고 값은 가려져 있어서, 각 키의 값 형식과 정확한 뜻은 확인하지 못했습니다.
+관찰한 폰의 settings 출력에서 악성 앱 분석과 관련 있는 키를 이름으로 묶으면 아래와 같습니다. 키 이름만 확인했고 값은 가려져 있어서, 각 키의 값 형식과 정확한 뜻은 확인하지 못했습니다.
 
 | 묶음 | 이름공간 | 키 |
 |---|---|---|
@@ -70,7 +70,7 @@ Protection 칸 값의 표기, 이 파일의 전체 경로, Android 버전에 따
 | 앱 검증 | global | `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `art_verifier_verify_debuggable` |
 | 초기 설정 | global | `device_provisioned` |
 
-삼성 폰에는 `rampart_` 로 시작하는 키가 secure 에 `rampart_main_switch_enabled`, `rampart_blocked_unknown_apps`, `rampart_blocked_adb_cmd`, `rampart_blocked_at_cmd`, `rampart_blocked_commands`, `rampart_blocked_keystring`, `rampart_enabled_message_guard`, `rampart_is_reset_by_at_command`, `rampart_misc_settings`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled`, `rampart_strict_protection_switch_enabled` 가 있었고, global 에 `rampart_boot_complete_count`, system 에 `rampart_suw_main_on` 이 있었습니다 (확인 범위: Android 16, One UI 8.5). 키 이름으로 보면 삼성 자동 차단 (Auto Blocker) 기능의 설정으로 보이지만, 문서로 확인하지 못한 추정입니다. 같은 폰의 secure 에는 `appprotection_auto_scan_updated`, `appprotection_package_uid`, `appprotection_permission_function_agree_or_disagree`, `appprotection_permission_function_background_auto_scan_agreed`, `appprotection_permission_function_install_auto_scan_agreed`, `appprotection_permission_function_usage`, `appprotection_permission_scloud_function_usage`, `appprotection_permission_scloud_usage_user_decided` 도 있었는데, 어느 삼성 기능의 키인지는 확인하지 못했습니다.
+삼성 폰에는 `rampart_` 로 시작하는 키가 secure 에 `rampart_main_switch_enabled`, `rampart_blocked_unknown_apps`, `rampart_blocked_adb_cmd`, `rampart_blocked_at_cmd`, `rampart_blocked_commands`, `rampart_blocked_keystring`, `rampart_enabled_message_guard`, `rampart_is_reset_by_at_command`, `rampart_misc_settings`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled`, `rampart_strict_protection_switch_enabled` 가 있었고, global 에 `rampart_boot_complete_count`, system 에 `rampart_suw_main_on` 이 있었습니다. 키 이름으로 보면 삼성 자동 차단 (Auto Blocker) 기능의 설정으로 보이지만, 문서로 확인하지 못한 추정입니다. 같은 폰의 secure 에는 `appprotection_auto_scan_updated`, `appprotection_package_uid`, `appprotection_permission_function_agree_or_disagree`, `appprotection_permission_function_background_auto_scan_agreed`, `appprotection_permission_function_install_auto_scan_agreed`, `appprotection_permission_function_usage`, `appprotection_permission_scloud_function_usage`, `appprotection_permission_scloud_usage_user_decided` 도 있었는데, 어느 삼성 기능의 키인지는 확인하지 못했습니다.
 
 접근성 설정은 먼저 봅니다. Google 도움말은 접근성 설정에 접근한 앱이 화면 내용을 읽고 사용자 대신 다른 앱을 조작할 수 있다고 적습니다 [2]. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md), 접근성 서비스와 기기 관리자 기록 자체는 [기기 관리자와 접근성 권한](../../../02-artifacts/credentials-security/device-admin-accessibility.md) 페이지에 있습니다.
 
@@ -82,7 +82,7 @@ Google 도움말에 따르면 앱을 설치하면 일부 기기 설정이 제한
 
 ## 사용자와 기기 관리
 
-`dumpsys user` 출력에는 사용자마다 "Has profile owner:", "Restrictions:", "Device policy restrictions:", "Effective restrictions:" 칸이 있었습니다 (확인 범위: Android 16, One UI 8.5). 칸 이름대로라면 프로필 소유자 (profile owner) 가 있는지와 기기 정책으로 걸린 제한을 알려 주는 칸이라서, 관리 앱이 들어온 기기인지 가늠할 때 봅니다. 같은 출력에는 주 사용자 말고 `parentId=` 가 붙은 두 번째 사용자 정보도 있었는데, 값이 가려져 보안 폴더인지 작업 프로필인지는 알 수 없었습니다 (확인 범위: Android 16, One UI 8.5). 프로필 사용자가 있으면 권한과 설정을 사용자별로 따로 봐야 하고, 자세한 내용은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 과 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에 있습니다. 기기 관리자 목록을 따로 뽑는 방법은 이 페이지의 출처로 확인하지 못했습니다.
+`dumpsys user` 출력에는 사용자마다 "Has profile owner:", "Restrictions:", "Device policy restrictions:", "Effective restrictions:" 칸이 있었습니다. 칸 이름대로라면 프로필 소유자 (profile owner) 가 있는지와 기기 정책으로 걸린 제한을 알려 주는 칸이라서, 관리 앱이 들어온 기기인지 가늠할 때 봅니다. 같은 출력에는 주 사용자 말고 `parentId=` 가 붙은 두 번째 사용자 정보도 있었는데, 값이 가려져 보안 폴더인지 작업 프로필인지는 알 수 없었습니다. 프로필 사용자가 있으면 권한과 설정을 사용자별로 따로 봐야 하고, 자세한 내용은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 과 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에 있습니다. 기기 관리자 목록을 따로 뽑는 방법은 이 페이지의 출처로 확인하지 못했습니다.
 
 ## 도구
 

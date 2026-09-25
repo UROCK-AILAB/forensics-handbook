@@ -17,7 +17,7 @@ nav_order: 1730
 
 PC 쪽 기록이 있는지부터 봅니다. PC 가 기기를 어떻게 기억하는지는 PC 운영체제의 기록이라서 이 핸드북 범위 밖이지만, 기기 쪽 기록만으로는 복사 여부를 말하기 어려워서 PC 를 함께 조사할 수 있는지에 따라 결론을 어디까지 낼 수 있는지가 달라집니다.
 
-기기 쪽에서는 수집 범위를 확인합니다. 아래 기록 가운데 ADB 인증 파일, Phone Link DB, 내 파일 작업 기록은 시스템 폴더나 앱 데이터 폴더에 있어서 수집본에 그 폴더가 들어 있어야 합니다. 설정 키와 logcat 은 adb 일반 셸 권한으로 읽을 수 있었습니다 (확인 범위: Android 16, One UI 8.5). 연결 시각을 현지 시각으로 옮기려면 기기 시간대가 필요하고, 이는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 페이지에 있습니다.
+기기 쪽에서는 수집 범위를 확인합니다. 아래 기록 가운데 ADB 인증 파일, Phone Link DB, 내 파일 작업 기록은 시스템 폴더나 앱 데이터 폴더에 있어서 수집본에 그 폴더가 들어 있어야 합니다. 설정 키와 logcat 은 adb 일반 셸 권한으로 읽을 수 있었습니다. 연결 시각을 현지 시각으로 옮기려면 기기 시간대가 필요하고, 이는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 페이지에 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -45,7 +45,7 @@ ALEAPP 시험에서 키 23개 가운데 20개에 이름 주석이 있었고, 그
 
 adbd 가 실제 인증에 쓰는 파일은 시각이 없는 일반 텍스트 목록 `adb_keys`(data/misc/adb/adb_keys)이고, `adb_temp_keys.xml` 은 오래 쓰지 않은 키를 정리하고 무선 디버깅 접속 지점을 관리하는 데 쓴다고 ALEAPP 가 AOSP 주석을 인용해 적었습니다 [2]. 한 행은 "그 PC 의 개인 키를 가진 호스트를 인증해 두었다" 는 뜻이지 파일이 옮겨졌다는 뜻이 아닙니다 [2]. ALEAPP 시험 이미지 가운데 삼성 기기 samsungs20_a13·samsunga53_a14·s20fe_a13 에서는 1행씩 나왔습니다 [2]. ALEAPP 목록에는 adb_hosts.py 모듈도 있으나 내용은 열어 보지 않았습니다 [1].
 
-실제 폰의 global 설정 표에는 `adb_enabled`, `adb_wifi_enabled`, `adb_allowed_connection_time` 키가 있었고, secure 표에는 삼성의 `rampart_blocked_adb_cmd`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled` 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). `adb_allowed_connection_time` 의 단위와 rampart 로 시작하는 키의 뜻은 확인하지 못했습니다.
+실제 폰의 global 설정 표에는 `adb_enabled`, `adb_wifi_enabled`, `adb_allowed_connection_time` 키가 있었고, secure 표에는 삼성의 `rampart_blocked_adb_cmd`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled` 키가 있었습니다. `adb_allowed_connection_time` 의 단위와 rampart 로 시작하는 키의 뜻은 확인하지 못했습니다.
 
 ## 휴대폰과 연결(Phone Link)
 
@@ -55,7 +55,7 @@ Microsoft 의 휴대폰과 연결은 기기 쪽 앱 com.microsoft.appmanager 로
 
 ## USB 파일 전송과 삼성 기능
 
-USB 선으로 파일을 옮기는 MTP 연결에 대해서는, PC 가 복사해 간 파일 목록이나 USB 연결 시각을 기기가 어디에 남기는지 이번 자료에서 찾지 못했습니다. USB 연결 흔적은 [USB 연결 기록 (USB)](../../../02-artifacts/network/usb.md) 페이지에서 다룹니다. 실제 폰에서 확인한 관련 키 이름은 다음과 같고, 값은 가려져 있었고 뜻도 확인하지 못했습니다 (확인 범위: Android 16, One UI 8.5).
+USB 선으로 파일을 옮기는 MTP 연결에 대해서는, PC 가 복사해 간 파일 목록이나 USB 연결 시각을 기기가 어디에 남기는지 이번 자료에서 찾지 못했습니다. USB 연결 흔적은 [USB 연결 기록 (USB)](../../../02-artifacts/network/usb.md) 페이지에서 다룹니다. 실제 폰에서 확인한 관련 키 이름은 다음과 같고, 값은 가려져 있었고 뜻도 확인하지 못했습니다.
 
 | 표 | 키 | 기능 |
 |---|---|---|
@@ -67,7 +67,7 @@ USB 선으로 파일을 옮기는 MTP 연결에 대해서는, PC 가 복사해 �
 | global | `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe` | Smart Switch |
 | system | `hwrs_storageshare_running`, `hwrs_storageshare_setting`, `hwrs_camerashare_setting` | 이름으로 보아 저장소·카메라 공유 |
 
-logcat 에는 main, system, crash, kernel 버퍼가 있었고 줄마다 연도 없는 `MM-DD HH:MM:SS.mmm` 시각이 붙었습니다 (확인 범위: Android 16, One UI 8.5). USB 연결과 관련된 로그 태그는 확인하지 못했고, logcat 의 보관 범위와 읽는 법은 [logcat (logcat)](../../../02-artifacts/logs/logcat.md) 페이지에 있습니다.
+logcat 에는 main, system, crash, kernel 버퍼가 있었고 줄마다 연도 없는 `MM-DD HH:MM:SS.mmm` 시각이 붙었습니다. USB 연결과 관련된 로그 태그는 확인하지 못했고, logcat 의 보관 범위와 읽는 법은 [logcat (logcat)](../../../02-artifacts/logs/logcat.md) 페이지에 있습니다.
 
 ## 삼성 내 파일 작업 기록
 

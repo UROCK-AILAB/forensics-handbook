@@ -13,13 +13,13 @@ nav_order: 1380
 
 ## 언제 쓰나
 
-공개 도구에 전용 모듈이 없는 앱을 만났을 때 씁니다. 관찰한 폰에는 시스템 앱이 486개, 사용자가 설치한 앱이 168개 있었고 (확인 범위: Android 16, One UI 8.5), 도구에 앱별 모듈이 없으면 분석가가 앱 폴더를 직접 열어 봐야 합니다. 이 페이지는 그런 앱 하나를 처음부터 따라가는 순서를 다룹니다. 캐시와 WebView 폴더는 [캐시와 웹뷰](cache-webview.md), 이미 지운 앱은 [지운 앱이 남긴 흔적](uninstalled-apps.md) 페이지에서 따로 다룹니다.
+공개 도구에 전용 모듈이 없는 앱을 만났을 때 씁니다. 관찰한 폰에는 시스템 앱이 486개, 사용자가 설치한 앱이 168개 있었고, 도구에 앱별 모듈이 없으면 분석가가 앱 폴더를 직접 열어 봐야 합니다. 이 페이지는 그런 앱 하나를 처음부터 따라가는 순서를 다룹니다. 캐시와 WebView 폴더는 [캐시와 웹뷰](cache-webview.md), 이미 지운 앱은 [지운 앱이 남긴 흔적](uninstalled-apps.md) 페이지에서 따로 다룹니다.
 
 ## 절차
 
 1. **설치 기록으로 정체를 확인합니다.** 먼저 패키지 이름이 기기의 설치 기록에 있는지, 언제 설치·갱신됐는지, 무엇이 설치했는지를 봅니다. 공개 도구 ALEAPP 의 packageInfo 모듈은 `*/system/packages.xml` 을 읽어 `<package>` 요소의 `name`, `ft`, `it`, `ut`, `installOriginator`, `installer`, `codePath`, `publicFlags`, `privateFlags` 속성을 뽑고, `it` 를 설치 시각(Install Time), `ut` 를 갱신 시각(Update Time)으로 보여 줍니다 [2]. 이 도구는 `ft` 를 포함한 세 시각 속성을 모두 16진수 문자열로 적힌 유닉스 밀리초로 보고 UTC 로 바꾸며 [2], 밀리초 값을 옮기는 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다. `ft` 의 뜻과 두 플래그 칸의 비트 뜻은 확인하지 못했습니다. 파일이 일반 XML 이 아니라 바이너리 XML 일 수 있어서 ALEAPP 도 먼저 형식을 검사한 뒤 읽고 [2], 형식 설명은 [안드로이드 바이너리 XML (ABX)](../../../01-foundations/data-formats/abx.md), 이 기록 자체의 해석은 [설치된 앱 (packages.xml)](../../../02-artifacts/app-usage/packages/index.md) 페이지에 있습니다.
 
-2. **켜져 있는 기기라면 dumpsys package 로 한 번 더 봅니다.** 관찰한 폰에서 `dumpsys package` 출력은 약 192,000줄이었고, 맨 앞의 "Database versions:" 절 뒤에 역할별 담당 패키지를 적은 "Known Packages:" 절과 공유 라이브러리를 `이름 -> (so|jar) 경로` 모양으로 적은 "Libraries:" 절이 이어졌습니다 (확인 범위: Android 16, One UI 8.5). 같은 폰의 "Known Packages:" 절에서 본 값 가운데 설치 경로를 가리는 데 쓸 만한 것은 아래와 같습니다 (확인 범위: Android 16, One UI 8.5).
+2. **켜져 있는 기기라면 dumpsys package 로 한 번 더 봅니다.** 관찰한 폰에서 `dumpsys package` 출력은 약 192,000줄이었고, 맨 앞의 "Database versions:" 절 뒤에 역할별 담당 패키지를 적은 "Known Packages:" 절과 공유 라이브러리를 `이름 -> (so|jar) 경로` 모양으로 적은 "Libraries:" 절이 이어졌습니다. 같은 폰의 "Known Packages:" 절에서 본 값 가운데 설치 경로를 가리는 데 쓸 만한 것은 아래와 같습니다.
 
    | 역할 | 관찰한 패키지 |
    |---|---|
@@ -45,7 +45,7 @@ nav_order: 1380
 
    백업이 허용된 앱이면 기기 밖에도 사본이 있을 수 있어서 [구글 백업 (Google Backup)](../../../02-artifacts/mail-cloud/google-backup.md) 쪽도 확인 대상에 넣습니다. 매니페스트와 서명을 읽는 법은 [APK 정보 (AndroidManifest·서명)](../../../02-artifacts/embedded-metadata/apk.md) 페이지에 있습니다.
 
-4. **앱 폴더의 윤곽을 잡습니다.** 앱은 일반 파일을 `filesDir`, 캐시를 `cacheDir`, 따로 만든 하위 폴더를 `getDir()` 로 얻은 곳에 두고, 외부 저장소에는 `getExternalFilesDir()` 로 얻은 앱 전용 폴더를 씁니다 [1]. 이 폴더들의 성격과 Android 버전별 차이는 허브 [앱 데이터 분석](index.md) 의 표에 정리했고, 실제 경로 배치는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. 공용 저장소도 함께 봅니다. 관찰한 폰의 `/sdcard/Android` 아래에는 `data`, `media`, `obb` 세 폴더가 있었고, `media` 아래에는 `com.google.android.gms`, `com.samsung.android.spay` 처럼 패키지 이름으로 된 폴더가 있었습니다 (확인 범위: Android 16, One UI 8.5). 공용 저장소 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md) 페이지를 봅니다.
+4. **앱 폴더의 윤곽을 잡습니다.** 앱은 일반 파일을 `filesDir`, 캐시를 `cacheDir`, 따로 만든 하위 폴더를 `getDir()` 로 얻은 곳에 두고, 외부 저장소에는 `getExternalFilesDir()` 로 얻은 앱 전용 폴더를 씁니다 [1]. 이 폴더들의 성격과 Android 버전별 차이는 허브 [앱 데이터 분석](index.md) 의 표에 정리했고, 실제 경로 배치는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. 공용 저장소도 함께 봅니다. 관찰한 폰의 `/sdcard/Android` 아래에는 `data`, `media`, `obb` 세 폴더가 있었고, `media` 아래에는 `com.google.android.gms`, `com.samsung.android.spay` 처럼 패키지 이름으로 된 폴더가 있었습니다. 공용 저장소 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md) 페이지를 봅니다.
 
 5. **파일 형식을 가립니다.** 앱 폴더의 파일은 SQLite, 설정 XML, 프로토콜 버퍼, LevelDB 처럼 형식이 정해진 것이 많아서 형식부터 가리면 읽을 방법이 정해집니다. SQLite 는 본 파일 옆에 `-wal`, `-journal` 같은 부속 파일이 붙고, ALEAPP 도 `library.db*`, `frosting.db*`, `History*` 처럼 별표 패턴으로 부속 파일까지 함께 찾습니다 [4][5][6]. 파일을 옮기거나 내보낼 때도 부속 파일을 같이 확보하고, 부속 파일의 역할은 SQLite 페이지를 봅니다. 형식별 읽는 법은 아래 페이지에 있습니다.
 
@@ -74,7 +74,7 @@ packages.xml 이 일반 XML 도 바이너리 XML 도 아닌 경우가 있고(암
 
 Android 버전에 따라 앱 전용 저장소의 암호화와 접근 범위가 달라집니다(허브 [앱 데이터 분석](index.md) 의 표). 확보한 자료에 앱 폴더가 없으면 수집 방식이 그 영역에 닿지 못한 것인지부터 확인하고, 수집 방식별 범위는 [모바일 증거 확보 (Acquisition)](../../acquisition/mobile-acquisition/index.md), 암호화는 [저장 공간 암호화 (Encryption)](../../../01-foundations/storage/encryption/index.md) 페이지를 봅니다.
 
-관찰한 폰의 `settings global` 에는 `default_install_location`, `set_install_location`, `package_verifier_user_consent`, `verifier_timeout_samsung` 같은 키가, `settings secure` 에는 `install_non_market_apps`, `appprotection_permission_function_install_auto_scan_agreed` 같은 키가 있었습니다 (확인 범위: Android 16, One UI 8.5). 이름만 보면 설치 경로와 검증에 관련된 키로 보이지만 값과 뜻은 확인하지 못했고, 뜻을 확인하기 전에는 판단 근거로 쓰지 않습니다. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
+관찰한 폰의 `settings global` 에는 `default_install_location`, `set_install_location`, `package_verifier_user_consent`, `verifier_timeout_samsung` 같은 키가, `settings secure` 에는 `install_non_market_apps`, `appprotection_permission_function_install_auto_scan_agreed` 같은 키가 있었습니다. 이름만 보면 설치 경로와 검증에 관련된 키로 보이지만 값과 뜻은 확인하지 못했고, 뜻을 확인하기 전에는 판단 근거로 쓰지 않습니다. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
 
 앱 폴더의 하위 폴더 이름과 파일 이름은 앱이 정해서, 이름만 보고 내용을 짐작하지 않습니다. 앱 판이 바뀌면 DB 구조도 바뀔 수 있어서, 분석한 앱의 버전을 함께 적어 둡니다.
 

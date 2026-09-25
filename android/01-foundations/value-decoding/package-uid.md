@@ -12,7 +12,7 @@ Android 는 앱을 `com.android.chrome` 같은 패키지 이름으로 부르고 
 
 ## 이 형식을 쓰는 아티팩트
 
-앱마다 UID 를 따로 받는 구조와 그 보안상 의미는 [앱 샌드박스와 권한](../security-model/sandbox-permissions.md)에서 다루고, 이 페이지는 값을 읽는 방법만 다룹니다. 아래 칸 이름은 실제 기기에서 본 출력의 모양입니다(확인 범위: Android 16, One UI 8.5).
+앱마다 UID 를 따로 받는 구조와 그 보안상 의미는 [앱 샌드박스와 권한](../security-model/sandbox-permissions.md)에서 다루고, 이 페이지는 값을 읽는 방법만 다룹니다. 아래 칸 이름은 실제 기기에서 본 출력의 모양입니다.
 
 | 기록 | 패키지 이름이 남는 칸 | UID·사용자가 남는 칸 | 자세히 |
 |---|---|---|---|
@@ -24,7 +24,7 @@ Android 는 앱을 `com.android.chrome` 같은 패키지 이름으로 부르고 
 | 공용 저장 공간 | `/sdcard/Android/media` 아래 폴더 이름 | 없음 | [공용 저장 공간](../storage/shared-storage.md) |
 | settings secure | `appprotection_package_uid` 키(뜻은 확인 필요) | 같은 키 | [설정 값](../../02-artifacts/system-account/settings.md) |
 
-실제 기기에서 `/sdcard/Android/media` 아래에는 `com.google.android.gms`, `com.samsung.android.spay` 처럼 패키지 이름을 그대로 쓴 폴더가 있었고, 설치 패키지는 시스템 앱 486개와 사용자가 설치한 앱 168개였습니다(확인 범위: Android 16, One UI 8.5).
+실제 기기에서 `/sdcard/Android/media` 아래에는 `com.google.android.gms`, `com.samsung.android.spay` 처럼 패키지 이름을 그대로 쓴 폴더가 있었고, 설치 패키지는 시스템 앱 486개와 사용자가 설치한 앱 168개였습니다.
 
 ## 구조
 
@@ -102,11 +102,11 @@ UID 1010123 을 읽는 예 (식으로 만든 예시)
   → 앱 ID 10123 을 쓰는 패키지를 패키지 관리자 기록에서 찾음
 ```
 
-실제 기기의 dumpsys user 에는 주 사용자 `UserInfo{#:xxx:#c##} serialNo=# isPrimary=true` 와 함께 `UserInfo{###:xxx:#####} serialNo=### isPrimary=false parentId=#` 처럼 부모가 있는 세 자리 ID 의 프로필이 하나 더 있었습니다(확인 범위: Android 16, One UI 8.5). 이 프로필에 속한 앱의 UID 는 식대로라면 여덟 자리가 됩니다. 이 프로필이 삼성 보안 폴더인지는 확인하지 못했고, 프로필을 가려내는 방법은 [보안 폴더와 작업 프로필](../security-model/secure-folder-work-profile.md)에서 다룹니다.
+실제 기기의 dumpsys user 에는 주 사용자 `UserInfo{#:xxx:#c##} serialNo=# isPrimary=true` 와 함께 `UserInfo{###:xxx:#####} serialNo=### isPrimary=false parentId=#` 처럼 부모가 있는 세 자리 ID 의 프로필이 하나 더 있었습니다. 이 프로필에 속한 앱의 UID 는 식대로라면 여덟 자리가 됩니다. 이 프로필이 삼성 보안 폴더인지는 확인하지 못했고, 프로필을 가려내는 방법은 [보안 폴더와 작업 프로필](../security-model/secure-folder-work-profile.md)에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
-UID 는 기록을 남긴 쪽이 앱인지 시스템인지를 가르는 첫 단서입니다. 실제 기기의 dumpsys account "Accounts History" 에서는 같은 계정 제거 동작(`action_account_remove`)에도 `UID` 칸에 4자리 값과 5자리 값이 모두 나왔습니다(확인 범위: Android 16, One UI 8.5). 범위 표로 보면 4자리는 시스템 쪽이고 5자리는 사용자 0 의 앱 범위라서[1], 계정 변경을 앱이 직접 요청했는지 시스템 구성 요소가 처리했는지 나눠 보는 출발점이 됩니다. 기록 하나가 사람의 조작을 뜻하는지는 이 칸만으로 정하지 않고 다른 기록과 함께 봅니다.
+UID 는 기록을 남긴 쪽이 앱인지 시스템인지를 가르는 첫 단서입니다. 실제 기기의 dumpsys account "Accounts History" 에서는 같은 계정 제거 동작(`action_account_remove`)에도 `UID` 칸에 4자리 값과 5자리 값이 모두 나왔습니다. 범위 표로 보면 4자리는 시스템 쪽이고 5자리는 사용자 0 의 앱 범위라서[1], 계정 변경을 앱이 직접 요청했는지 시스템 구성 요소가 처리했는지 나눠 보는 출발점이 됩니다. 기록 하나가 사람의 조작을 뜻하는지는 이 칸만으로 정하지 않고 다른 기록과 함께 봅니다.
 
 UID 2000 은 adb 와 디버그 셸 사용자에게 정해진 번호입니다[1]. 이 핸드북의 기기 관찰도 adb 셸에서 UID 2000 으로 읽었습니다. 기록에 UID 2000 이 남아 있다면 adb 나 셸을 거친 동작일 수 있어서, 조사 대상 기간에 개발자 옵션이나 adb 연결 흔적이 있는지 함께 확인합니다. 조사자가 수집하면서 남긴 기록과 섞이지 않도록 수집 시각도 따로 적어 둡니다.
 
@@ -120,9 +120,9 @@ UID 2000 은 adb 와 디버그 셸 사용자에게 정해진 번호입니다[1].
 
 UID 와 패키지의 대응은 수집한 시점의 패키지 관리자 기록으로 확인한 결과입니다. 과거 기록에 남은 UID 가 그때도 같은 패키지였다고 단정하지 않고, 앱을 지운 뒤 같은 번호가 다른 앱에 다시 쓰이는지도 이 페이지에서 확인하지 못했습니다. 공유 UID(sharedUserId)로 여러 패키지가 UID 하나를 함께 쓰는 동작도 1차 자료로 확인하지 못해서, UID 하나에 패키지가 여럿 나오면 따로 확인합니다.
 
-dumpsys notification 레코드의 `userId` 칸에는 `-#` 처럼 음수가 찍힌 레코드가 있었습니다(확인 범위: Android 16, One UI 8.5). 음수는 사용자 번호 범위에 들어가지 않으니, 이 값을 특정 사용자로 옮겨 적지 않고 뜻을 확인한 뒤에 씁니다.
+dumpsys notification 레코드의 `userId` 칸에는 `-#` 처럼 음수가 찍힌 레코드가 있었습니다. 음수는 사용자 번호 범위에 들어가지 않으니, 이 값을 특정 사용자로 옮겨 적지 않고 뜻을 확인한 뒤에 씁니다.
 
-역할별 기본 패키지는 제조사 앱이 함께 끼어 있어 한 역할에 둘 이상이 나올 수 있습니다. 실제 기기의 dumpsys package "Known Packages" 절은 아래와 같았습니다(확인 범위: Android 16, One UI 8.5).
+역할별 기본 패키지는 제조사 앱이 함께 끼어 있어 한 역할에 둘 이상이 나올 수 있습니다. 실제 기기의 dumpsys package "Known Packages" 절은 아래와 같았습니다.
 
 | 역할 | 패키지 |
 |---|---|

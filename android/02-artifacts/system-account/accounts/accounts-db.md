@@ -7,7 +7,7 @@ nav_order: 330
 
 # 계정 DB 구조 (accounts_ce.db·accounts_de.db)
 
-기기에 등록된 계정 목록을 담는 SQLite 파일 두 개의 위치와 표, 시각, 변경 기록을 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 어느 Android 출시 버전에서 바뀌었는지는 대부분 확인하지 못했습니다. 실제 폰에서 본 모양에는 확인 범위를 붙였습니다.
+기기에 등록된 계정 목록을 담는 SQLite 파일 두 개의 위치와 표, 시각, 변경 기록을 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 이전 Android 버전에서는 다를 수 있습니다.
 
 ## 한 줄 요약
 
@@ -80,7 +80,7 @@ action_called_account_session_finish
 
 ## 라이브 기기에서 본 모양 (dumpsys account)
 
-adb 일반 셸 권한으로 `dumpsys account` 를 실행하면 사용자별 계정 목록과 "Accounts History" 가 나옵니다. 출력은 415줄이었고 모양은 다음과 같습니다(값은 가려져 있고, 대표 줄만 옮겼습니다). (확인 범위: Android 16, One UI 8.5)
+adb 일반 셸 권한으로 `dumpsys account` 를 실행하면 사용자별 계정 목록과 "Accounts History" 가 나옵니다. 출력은 415줄이었고 모양은 다음과 같습니다(값은 가려져 있고, 대표 줄만 옮겼습니다).
 
 ```
 User UserInfo{#:<이름>:#c##}:
@@ -96,9 +96,9 @@ User UserInfo{#:<이름>:#c##}:
     ServiceInfo: <값>
 ```
 
-History 머리줄의 순서는 `debug_table` 의 `_id, action_type, time, caller_uid, table_name, primary_key` 와 맞습니다. 이 기기에서 나온 action 은 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 였고, TableName 은 모두 `accounts` 였고, `action_called_account_add` 줄만 AccountId 가 음수였습니다. History 줄을 모두 더하면 64줄이라 MAX_DEBUG_DB_SIZE 와 같았고, "Accounts History" 와 머리줄이 두 번 나온 까닭(사용자별인지 DB 별인지)은 확인하지 못했습니다. (확인 범위: Android 16, One UI 8.5)
+History 머리줄의 순서는 `debug_table` 의 `_id, action_type, time, caller_uid, table_name, primary_key` 와 맞습니다. 이 기기에서 나온 action 은 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 였고, TableName 은 모두 `accounts` 였고, `action_called_account_add` 줄만 AccountId 가 음수였습니다. History 줄을 모두 더하면 64줄이라 MAX_DEBUG_DB_SIZE 와 같았고, "Accounts History" 와 머리줄이 두 번 나온 까닭(사용자별인지 DB 별인지)은 확인하지 못했습니다.
 
-계정 줄은 19개였고, type 이 패키지 이름 모양인 줄과 그렇지 않은 줄이 섞여 있었습니다. 계정 이름 뒤에 괄호로 소속(회사명)이 붙은 줄도 하나 있었는데, 어느 앱의 표기인지와 DB 의 `name` 칸에도 같은 모양으로 들어가는지는 확인하지 못했습니다. (확인 범위: Android 16, One UI 8.5) dumpsys 를 뽑는 방법은 [dumpsys 출력 (dumpsys)](../../logs/dumpsys.md) 페이지에 있습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 DB 파일 자체를 읽을 수 있는지는 확인하지 못했습니다.
+계정 줄은 19개였고, type 이 패키지 이름 모양인 줄과 그렇지 않은 줄이 섞여 있었습니다. 계정 이름 뒤에 괄호로 소속(회사명)이 붙은 줄도 하나 있었는데, 어느 앱의 표기인지와 DB 의 `name` 칸에도 같은 모양으로 들어가는지는 확인하지 못했습니다. dumpsys 를 뽑는 방법은 [dumpsys 출력 (dumpsys)](../../logs/dumpsys.md) 페이지에 있습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 DB 파일 자체를 읽을 수 있는지는 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -116,7 +116,7 @@ History 머리줄의 순서는 `debug_table` 의 `_id, action_type, time, caller
 
 `accounts.last_password_entry_time_millis_epoch` 는 이름대로 유닉스 에포크 밀리초이고, ALEAPP 도 유닉스 밀리초를 UTC 로 바꿔 보여 줍니다 [1][3]. 기본값이 0이라서 0이면 값이 한 번도 채워지지 않은 상태이고, 어떤 동작 때 이 값을 새로 쓰는지는 소스로 확인하지 못했습니다. 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
-`debug_table.time` 은 칸 형식이 DATETIME 이고 AccountManagerService 에 `SimpleDateFormat("yyyy-MM-dd HH:mm:ss")` 가 있어서 사람이 읽는 문자열로 들어갑니다 [1][2]. 받은 소스 부분에는 이 형식에 시간대를 따로 주는 코드가 없었고, 자바 기본 동작대로라면 기기의 기본 시간대(현지 시각)가 됩니다. 기록을 쓰는 함수 본문은 직접 보지 못해서 현지 시각인지 UTC 인지는 확인하지 못했습니다. ALEAPP 는 이 문자열을 사람이 읽는 형식에서 UTC 로 바꿔 보여 주는데 [3], 문자열이 현지 시각이라면 시간대 차이만큼 어긋날 수 있으니 [시간대와 시각 설정 (Time Zone)](../time-zone.md) 과 다른 기록의 시각을 맞춰 보고 정합니다. dumpsys 의 History 줄도 시각이 `<날짜> ##:##:##` 모양으로 초 단위까지만 있고 밀리초는 없었습니다. (확인 범위: Android 16, One UI 8.5)
+`debug_table.time` 은 칸 형식이 DATETIME 이고 AccountManagerService 에 `SimpleDateFormat("yyyy-MM-dd HH:mm:ss")` 가 있어서 사람이 읽는 문자열로 들어갑니다 [1][2]. 받은 소스 부분에는 이 형식에 시간대를 따로 주는 코드가 없었고, 자바 기본 동작대로라면 기기의 기본 시간대(현지 시각)가 됩니다. 기록을 쓰는 함수 본문은 직접 보지 못해서 현지 시각인지 UTC 인지는 확인하지 못했습니다. ALEAPP 는 이 문자열을 사람이 읽는 형식에서 UTC 로 바꿔 보여 주는데 [3], 문자열이 현지 시각이라면 시간대 차이만큼 어긋날 수 있으니 [시간대와 시각 설정 (Time Zone)](../time-zone.md) 과 다른 기록의 시각을 맞춰 보고 정합니다. dumpsys 의 History 줄도 시각이 `<날짜> ##:##:##` 모양으로 초 단위까지만 있고 밀리초는 없었습니다.
 
 ## 함정과 한계
 

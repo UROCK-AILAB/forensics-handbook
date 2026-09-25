@@ -32,7 +32,7 @@ nav_order: 1580
 
 ## 분석 흐름
 
-1. **파일이 놓인 자리를 봅니다.** 관찰 기기의 `/sdcard/DCIM` 아래에는 `Camera`, `Screenshots`, `media` 와 이름이 가려진 폴더들이 있었고, 스크린샷이 AOSP 기본 위치로 알려진 `Pictures/Screenshots` 가 아니라 `DCIM/Screenshots` 에 있었습니다 (확인 범위: Android 16, One UI 8.5). 같은 기기의 `/sdcard/Download` 에는 항목이 151개, `Pictures` 에는 39개 있었는데 (확인 범위: Android 16, One UI 8.5), 받은 사진은 이렇게 `DCIM/Camera` 밖에 쌓일 수 있습니다. 폴더는 출발점일 뿐이라서 사용자가 파일을 옮기면 자리도 바뀝니다. 파일 이름에 날짜가 들어 있어도 이름은 사용자가 바꿀 수 있고 다른 기기에서 받은 파일일 수도 있으므로, 이름의 날짜를 촬영 시각의 근거로 쓰지 않습니다.
+1. **파일이 놓인 자리를 봅니다.** 관찰 기기의 `/sdcard/DCIM` 아래에는 `Camera`, `Screenshots`, `media` 와 이름이 가려진 폴더들이 있었고, 스크린샷이 AOSP 기본 위치로 알려진 `Pictures/Screenshots` 가 아니라 `DCIM/Screenshots` 에 있었습니다. 같은 기기의 `/sdcard/Download` 에는 항목이 151개, `Pictures` 에는 39개 있었는데, 받은 사진은 이렇게 `DCIM/Camera` 밖에 쌓일 수 있습니다. 폴더는 출발점일 뿐이라서 사용자가 파일을 옮기면 자리도 바뀝니다. 파일 이름에 날짜가 들어 있어도 이름은 사용자가 바꿀 수 있고 다른 기기에서 받은 파일일 수도 있으므로, 이름의 날짜를 촬영 시각의 근거로 쓰지 않습니다.
 
 2. **EXIF 시각 태그를 읽습니다.** 촬영 시각은 `DateTimeOriginal`(0x9003)에 "원본 이미지를 찍은 날짜·시각" 으로 적히고, 그 시간대는 `OffsetTimeOriginal`(0x9011)에, 초 아래 자리는 `SubSecTimeOriginal`(0x9291)에 따로 적힙니다 [1]. 도구마다 태그 이름이 달라 보고서에서 혼동하기 쉬운 두 태그가 있어 아래처럼 같이 적습니다 [1].
 
@@ -56,7 +56,7 @@ nav_order: 1580
 
 7. **위치는 원본 파일에서 읽습니다.** MediaStore 의 `latitude`·`longitude` 칸은 폐기돼 항상 NULL 이고 [4], MediaProvider 는 자신이 아닌 앱이 이 칸에 값을 넣으려 하면 NULL 로 바꿉니다 [5]. Android 10 이상에서 앱이 EXIF 위치를 가리지 않은 채 읽으려면 `ACCESS_MEDIA_LOCATION` 권한과 사용자 동의가 필요하므로 [6], 앱을 거쳐 뽑은 사본에 좌표가 없다고 해서 원본에도 없다고 단정하지 않습니다.
 
-8. **촬영 순간의 보조 흔적을 겹칩니다.** 관찰 기기의 `dumpsys batterystats` 이력에는 `+camera`·`-camera` 가 붙은 줄과 `+gps`·`-gps` 줄이 있었고, 줄 앞 시각은 연도 없는 `MM-DD HH:MM:SS.mmm` 모양이었습니다 (확인 범위: Android 16, One UI 8.5). camera 줄이 카메라 하드웨어 사용 구간을 뜻하는지는 출처로 확인하지 못했고 gps 줄에는 좌표가 없으므로, EXIF 시각 근처에 이런 줄이 있는지를 보조 근거로만 씁니다.
+8. **촬영 순간의 보조 흔적을 겹칩니다.** 관찰 기기의 `dumpsys batterystats` 이력에는 `+camera`·`-camera` 가 붙은 줄과 `+gps`·`-gps` 줄이 있었고, 줄 앞 시각은 연도 없는 `MM-DD HH:MM:SS.mmm` 모양이었습니다. camera 줄이 카메라 하드웨어 사용 구간을 뜻하는지는 출처로 확인하지 못했고 gps 줄에는 좌표가 없으므로, EXIF 시각 근처에 이런 줄이 있는지를 보조 근거로만 씁니다.
 
 ## 흔한 오판
 

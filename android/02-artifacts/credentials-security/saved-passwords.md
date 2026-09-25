@@ -14,7 +14,7 @@ nav_order: 1240
 
 Chromium 계열 브라우저는 사용자가 로그인 정보를 저장하면 사이트 주소, 아이디, 비밀번호 입력란 이름과 값, 만든 시각, 마지막으로 쓴 시각을 `logins` 표에 한 줄로 적습니다 [2]. 같은 DB 에는 유출·피싱·약한·재사용 비밀번호 표시를 담는 `insecure_credentials` 표와 로그인에 붙인 메모를 담는 `password_notes` 표도 있어서, 비밀번호 한 건을 두고 브라우저가 경고를 붙였는지, 사용자가 메모를 남겼는지까지 볼 수 있습니다 [2].
 
-Android 쪽에는 이와 따로 자동 완성 서비스 (Autofill Service) 와 자격 증명 제공자 (Credential Provider) 를 고르는 설정이 있고, 관찰 기기에서는 이 설정이 settings secure 의 키로 남아 있었습니다 (확인 범위: Android 16, One UI 8.5). Google 비밀번호 관리자와 Samsung Pass 가 실제 비밀번호를 어느 파일에 어떤 모양으로 두는지는 이번 조사에서 확인하지 못했습니다. 그래서 이 페이지는 확인한 두 가지, 곧 브라우저 DB 구조와 설정 키를 중심으로 쓰고, 확인하지 못한 부분은 그렇다고 밝힙니다.
+Android 쪽에는 이와 따로 자동 완성 서비스 (Autofill Service) 와 자격 증명 제공자 (Credential Provider) 를 고르는 설정이 있고, 관찰 기기에서는 이 설정이 settings secure 의 키로 남아 있었습니다. Google 비밀번호 관리자와 Samsung Pass 가 실제 비밀번호를 어느 파일에 어떤 모양으로 두는지는 이번 조사에서 확인하지 못했습니다. 그래서 이 페이지는 확인한 두 가지, 곧 브라우저 DB 구조와 설정 키를 중심으로 쓰고, 확인하지 못한 부분은 그렇다고 밝힙니다.
 
 ## 위치와 버전별 차이
 
@@ -36,15 +36,15 @@ app_webview/Default    WebView
 | Chromium 계열 브라우저 | `Login Data`·`Login Data For Account` 파일 이름, 표와 칸 [2] | Android 에서의 전체 경로, `password_value` 가 암호화돼 있는지 |
 | 삼성 인터넷 | ALEAPP 가 찾는 프로필 폴더 `app_sbrowser/Default` [1] | 저장 비밀번호 파일 |
 | Google 비밀번호 관리자 | 없음 | 저장 파일 위치, Chrome 이 저장 비밀번호를 이쪽으로 옮기는지, 옮긴 뒤 `Login Data` 에 무엇이 남는지 |
-| Samsung Pass | 관찰 기기 settings secure 에 `fingerprint_webpass` 키가 있음 (확인 범위: Android 16, One UI 8.5) | 패키지 이름, 저장 경로, DB 구조, 암호화 방식 |
+| Samsung Pass | 관찰 기기 settings secure 에 `fingerprint_webpass` 키가 있음 | 패키지 이름, 저장 경로, DB 구조, 암호화 방식 |
 
-관찰 기기의 `dumpsys package` 출력에서 Known Packages 목록의 `Browser:` 항목에는 com.android.chrome 이 있었습니다 (확인 범위: Android 16, One UI 8.5). 이 항목으로 시스템이 브라우저 역할에 어느 패키지를 두었는지 알 수 있지만, 사용자가 다른 브라우저에 비밀번호를 저장했을 가능성까지 지워 주지는 않습니다.
+관찰 기기의 `dumpsys package` 출력에서 Known Packages 목록의 `Browser:` 항목에는 com.android.chrome 이 있었습니다. 이 항목으로 시스템이 브라우저 역할에 어느 패키지를 두었는지 알 수 있지만, 사용자가 다른 브라우저에 비밀번호를 저장했을 가능성까지 지워 주지는 않습니다.
 
 Android 버전이나 One UI 버전에 따라 저장 위치가 어떻게 바뀌었는지는 확인하지 못했습니다.
 
 ### 자동 완성·자격 증명 설정 키
 
-관찰 기기에서 자동 완성과 자격 증명에 관련된 이름의 키는 아래와 같았습니다. 값은 관찰 메모에서 가려져 있어 키 이름만 확인했습니다 (확인 범위: Android 16, One UI 8.5).
+관찰 기기에서 자동 완성과 자격 증명에 관련된 이름의 키는 아래와 같았습니다. 값은 관찰 메모에서 가려져 있어 키 이름만 확인했습니다.
 
 | 설정 영역 | 키 |
 |---|---|
@@ -90,7 +90,7 @@ Android 버전이나 One UI 버전에 따라 저장 위치가 어떻게 바뀌�
 
 저장된 줄은 그 기기에서 사람이 직접 입력했다는 증거가 아닙니다. 계정 저장소 파일(`Login Data For Account`)과 동기화 표가 따로 있으니, 같은 계정의 다른 기기에서 넘어온 항목일 수 있는지 먼저 따져 봅니다. 마지막 사용 시각은 브라우저가 그 값을 채우거나 쓴 기록이지 로그인에 성공했다는 기록이 아니고, 저장된 비밀번호가 지금도 맞는지도 알려 주지 않습니다. 브라우저 DB 에 흔적이 없어도 Google 비밀번호 관리자나 Samsung Pass 에 저장돼 있을 수 있어서, 한 곳이 비었다고 "저장된 비밀번호가 없다" 고 쓰면 안 됩니다.
 
-`dumpsys account` 의 Accounts History 에 `action_clear_password` 줄이 보일 수 있지만, 이 줄은 AccountManager 계정 기록이고 브라우저나 비밀번호 관리자의 저장 암호와는 다른 것입니다 (확인 범위: Android 16, One UI 8.5). 이 기록은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다.
+`dumpsys account` 의 Accounts History 에 `action_clear_password` 줄이 보일 수 있지만, 이 줄은 AccountManager 계정 기록이고 브라우저나 비밀번호 관리자의 저장 암호와는 다른 것입니다. 이 기록은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다.
 
 ## 시각 해석
 
@@ -135,7 +135,7 @@ ORDER BY l.date_created;
 
 ### 설정 키 한 번
 
-adb 일반 셸 권한으로도 설정 키 목록을 읽을 수 있고, 관찰 기기의 키 이름도 이렇게 얻었습니다 (확인 범위: Android 16, One UI 8.5).
+adb 일반 셸 권한으로도 설정 키 목록을 읽을 수 있고, 관찰 기기의 키 이름도 이렇게 얻었습니다.
 
 ```
 adb shell settings list secure

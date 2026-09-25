@@ -51,9 +51,9 @@ XML 파일에는 형식 버전이 적혀 있고, 현행 버전은 3 입니다 [3
 | 2 | 무결성 정보(Integrity) 추가 |
 | 3 | 자격 증명 암호화 추가, 무결성 정보 제거 |
 
-관찰 기기에서 `dumpsys wifi` 출력은 약 10,850줄이었고, 설정 상태(`WifiState`, `AirplaneModeOn`, `ScanAlwaysAvailable`, `WifiStateApm`, `WifiStateBt`, `SatelliteModeOn` 등)와 지원 기능 목록(`SupportedFeatures`), 상태 기계 기록(`WifiController`, `WifiClientModeManager`, `WifiClientModeImpl` 의 `rec[#]: time=... what=CMD_...` 줄)이 나왔습니다 (확인 범위: Android 16, One UI 8.5). `WifiClientModeManager` 기록에는 `RequestorWs: WorkSource{... com.android.settings}` 처럼 Wi-Fi 클라이언트 모드를 켜 달라고 요청한 앱이 함께 찍혔고, 이 줄은 특정 네트워크에 붙은 기록이 아니라 모드 전환 명령(`CMD_START`, `CMD_SWITCH_TO_CONNECT_MODE`) 기록입니다 (확인 범위: Android 16, One UI 8.5). 저장된 네트워크 목록이 이 출력에 나오는지, adb 일반 권한으로 `WifiConfigStore.xml` 을 직접 읽을 수 있는지는 확인하지 못했습니다. `dumpsys` 를 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
+관찰 기기에서 `dumpsys wifi` 출력은 약 10,850줄이었고, 설정 상태(`WifiState`, `AirplaneModeOn`, `ScanAlwaysAvailable`, `WifiStateApm`, `WifiStateBt`, `SatelliteModeOn` 등)와 지원 기능 목록(`SupportedFeatures`), 상태 기계 기록(`WifiController`, `WifiClientModeManager`, `WifiClientModeImpl` 의 `rec[#]: time=... what=CMD_...` 줄)이 나왔습니다. `WifiClientModeManager` 기록에는 `RequestorWs: WorkSource{... com.android.settings}` 처럼 Wi-Fi 클라이언트 모드를 켜 달라고 요청한 앱이 함께 찍혔고, 이 줄은 특정 네트워크에 붙은 기록이 아니라 모드 전환 명령(`CMD_START`, `CMD_SWITCH_TO_CONNECT_MODE`) 기록입니다. 저장된 네트워크 목록이 이 출력에 나오는지, adb 일반 권한으로 `WifiConfigStore.xml` 을 직접 읽을 수 있는지는 확인하지 못했습니다. `dumpsys` 를 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
 
-같은 기기의 설정 값에는 Wi-Fi 관련 키가 여러 개 있었습니다 (확인 범위: Android 16, One UI 8.5). global 쪽에는 `wifi_on`, `wifi_scan_always_enabled`, `wifi_wakeup_enabled`, `wifi_networks_available_notification_on`, `wifi_sleep_policy`, `network_avoid_bad_wifi`, `wifi_migration_completed`, `SecureWifiBackupExist`, `adb_wifi_enabled`, `auto_wifi`, `sem_auto_wifi_added_removed_list`, `sem_auto_wifi_control_enabled` 와 `sem_wifi_` 로 시작하는 키 여러 개가 있었고, secure 쪽에는 `wifi_saved_state`, `wifi_apm_state`, `sem_wifi_turn_off_by_autowifi`, `sec_wifi_mlo_link_count` 가 있었습니다. 값은 가려져 있었고 키마다 값이 무슨 뜻인지는 공식 문서로 확인하지 못했으며, 특히 `sem_auto_wifi_added_removed_list` 에 어떤 형식으로 무엇이 들어가는지는 모릅니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
+같은 기기의 설정 값에는 Wi-Fi 관련 키가 여러 개 있었습니다. global 쪽에는 `wifi_on`, `wifi_scan_always_enabled`, `wifi_wakeup_enabled`, `wifi_networks_available_notification_on`, `wifi_sleep_policy`, `network_avoid_bad_wifi`, `wifi_migration_completed`, `SecureWifiBackupExist`, `adb_wifi_enabled`, `auto_wifi`, `sem_auto_wifi_added_removed_list`, `sem_auto_wifi_control_enabled` 와 `sem_wifi_` 로 시작하는 키 여러 개가 있었고, secure 쪽에는 `wifi_saved_state`, `wifi_apm_state`, `sem_wifi_turn_off_by_autowifi`, `sec_wifi_mlo_link_count` 가 있었습니다. 값은 가려져 있었고 키마다 값이 무슨 뜻인지는 공식 문서로 확인하지 못했으며, 특히 `sem_auto_wifi_added_removed_list` 에 어떤 형식으로 무엇이 들어가는지는 모릅니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -105,7 +105,7 @@ ALEAPP 는 `semCreationTime`, `semUpdateTime`, `LastConnectedTime` 세 칸을 �
 
 삼성 `configs` 표의 `CREATION_TIME` 은 TEXT 칸이고 ALEAPP 는 유닉스 시각으로 바꾸지만, 초인지 밀리초인지는 모듈 코드만으로 확인하지 못했습니다 [2]. 값이 13자리 안팎이면 밀리초, 10자리 안팎이면 초일 가능성이 높으니 자릿수부터 보고 바꿉니다. `wifigeofence.db` 의 `time`·`time_major` 칸 단위도 확인하지 못했습니다. 값을 읽는 일반 방법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
-`dumpsys wifi` 상태 기계 기록의 시각은 `time=MM-DD HH:MM:SS.mmm` 모양이고 연도가 없습니다 (확인 범위: Android 16, One UI 8.5). 출력에 시간대도 적혀 있지 않으니, 연도는 수집 날짜에서 거꾸로 짐작하고 시간대는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 확인한 뒤 보고서에 씁니다.
+`dumpsys wifi` 상태 기계 기록의 시각은 `time=MM-DD HH:MM:SS.mmm` 모양이고 연도가 없습니다. 출력에 시간대도 적혀 있지 않으니, 연도는 수집 날짜에서 거꾸로 짐작하고 시간대는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 확인한 뒤 보고서에 씁니다.
 
 ## 함정과 한계
 
@@ -157,7 +157,7 @@ ALEAPP 의 `wifiProfiles` 모듈이 XML 두 위치를 찾아 네트워크 표를
 | 함께 볼 기록 | 맞춰 볼 것 |
 |---|---|
 | [데이터 사용량 (netstats)](netstats.md) | Wi-Fi 연결 종류로 데이터가 오간 시간대가 있는지 |
-| [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) | 관찰 기기 배터리 기록에 `+wifi_scan`·`-wifi_scan` 표시가 있었고 (확인 범위: Android 16, One UI 8.5), 이 표시가 있는 시간대와 연결 시각이 어울리는지 |
+| [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) | 관찰 기기 배터리 기록에 `+wifi_scan`·`-wifi_scan` 표시가 있었고, 이 표시가 있는 시간대와 연결 시각이 어울리는지 |
 | [위치 캐시 (Cached Locations)](../location/cached-locations.md) | `wifigeofence.db` 좌표와 같은 시간대 위치 기록이 맞는지 |
 | [테더링과 핫스폿 (Tethering·Hotspot)](tethering-hotspot.md) | 폰이 네트워크에 붙은 쪽인지, 네트워크를 내어 준 쪽인지 |
 | [설치된 앱 (packages.xml)](../app-usage/packages/index.md) | `CreatorUid`·`LastUpdateUid` 가 어느 앱인지 |
