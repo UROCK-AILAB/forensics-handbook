@@ -10,8 +10,6 @@ Linux 서버와 데스크톱에 어떤 흔적이 남는지, 그 흔적을 어떻
 
 침해 사고는 Linux 서버에서 일어나는 경우가 많습니다. 그래서 로그인·명령 실행·지속성·로그를 중심에 두고, 파일 시스템(ext4·XFS)과 컨테이너까지 다룹니다. 배포판마다 경로가 다른 곳은 Debian·Ubuntu 계열과 RHEL·Fedora 계열로 나눠 적었습니다.
 
-다른 OS 와 AI 서비스는 [Windows](https://urock-ailab.github.io/forensics-handbook-windows/)·[macOS](https://urock-ailab.github.io/forensics-handbook-mac/)·[Android](https://urock-ailab.github.io/forensics-handbook-android/)·[iOS](https://urock-ailab.github.io/forensics-handbook-ios/)·[AI 서비스](https://urock-ailab.github.io/forensics-handbook-ai/) 핸드북에서 다룹니다.
-
 ## 구성
 
 핸드북은 네 갈래로 나뉩니다.
