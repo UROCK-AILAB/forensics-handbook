@@ -12,7 +12,7 @@ iPhone에 남는 흔적을 어떻게 읽고 해석하는지 정리한 한국어 
 
 Windows에 남는 흔적은 [Windows 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-windows/)에서, macOS에 남는 흔적은 [macOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-mac/)에서, Android 기기에 남는 흔적은 [Android 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-android/)에서 다룹니다.
 
-ChatGPT·Claude 같은 AI 서비스를 쓰면 남는 흔적은 [AI 서비스 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-ai/)에서 다룹니다.
+ChatGPT·Claude 같은 AI 서비스를 쓰면 남는 흔적은 [AI 서비스 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-ai/)에서 다룹니다. Linux 서버와 데스크톱에 남는 흔적은 [Linux 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-linux/)에서 다룹니다.
 
 ## 구성
 
