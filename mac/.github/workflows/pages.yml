@@ -21,6 +21,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # 쪽마다 마지막 수정 날짜를 git 기록에서 읽으려면 전체 기록이 필요하다
+      - name: 쪽마다 마지막 수정 날짜 넣기(git 기록, 저장소 파일은 그대로 둠)
+        run: |
+          git ls-files '*.md' | while IFS= read -r f; do
+            d=$(git log -1 --format=%cs -- "$f")
+            if [ -n "$d" ] && [ "$(head -1 "$f")" = "---" ]; then sed -i "1a last_modified_date: $d" "$f"; fi
+          done
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
