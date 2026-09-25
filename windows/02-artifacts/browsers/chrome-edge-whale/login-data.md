@@ -37,13 +37,12 @@ nav_order: 1630
 | 파일 | 뜻 |
 |---|---|
 | `<User Data>\<프로필>\Login Data` | 프로필 저장소입니다 |
-| `<User Data>\<프로필>\Login Data For Account` | 계정 저장소 (Account Store) 입니다. Chromium 소스는 이 파일을 프로필 저장소와 따로 엽니다 |
+| `<User Data>\<프로필>\Login Data For Account` | 계정 저장소 (Account Store) 입니다. 브라우저는 이 파일을 프로필 저장소와 따로 엽니다[1] |
 | `Login Data-journal`, `Login Data For Account-journal` | 각 파일의 롤백 저널입니다 |
 | `<User Data>\Local State` | 비밀번호 값을 푸는 키가 들어 있는 JSON 파일입니다 |
 
 - `<User Data>` 는 Chrome 이 `%LOCALAPPDATA%\Google\Chrome\User Data`, Edge 가 `%LOCALAPPDATA%\Microsoft\Edge\User Data` 입니다. 다른 계열 브라우저의 경로와 `<프로필>` 폴더 이름(`Default`, `Profile 1` …)은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에 있습니다.
-- 파일 네 개의 이름은 Chromium 소스(`password_manager_constants.cc`)에 그대로 적혀 있습니다.
-- 두 브라우저 모두 `Login Data For Account` 파일이 있었지만 행은 0개였습니다. `-wal` 파일은 없었습니다 (Windows 11 25H2, Chrome 153·Edge 151 기준).
+- Windows 11 25H2 의 Chrome 153·Edge 151 에는 `Login Data For Account` 파일이 있었지만 행은 0개였습니다. `-wal` 파일은 없었습니다.
 
 ### Windows 버전보다 브라우저 버전이 중요합니다
 
@@ -57,10 +56,10 @@ nav_order: 1630
 
 - 첫 줄의 바이트는 DPAPI 블롭 머리입니다. 블롭 구조는 [DPAPI 블롭 구조](../../../01-foundations/protection/data-protection-api/dpapi-blob.md)에서 봅니다.
 - Chrome 80 은 `v10` 으로 시작하지 않는 값을 옛 DPAPI 방식으로 풉니다. 그래서 오래 쓴 프로필에는 옛 방식 값이 남아 있을 수 있습니다.
-- Google 은 Chrome 127 에서 App-Bound 암호화를 쿠키부터 적용했습니다. 비밀번호와 결제 정보에는 뒤에 넓히겠다고 밝혔습니다. 비밀번호에 `v20` 이 붙기 시작한 버전은 이 글에서 확인하지 못했습니다.
-- 관찰한 PC 에서는 Chrome·Edge 모두 저장 비밀번호가 전부 `v20` 이었습니다. `Local State` 에는 `encrypted_key`(`DPAPI` 로 시작)와 `app_bound_encrypted_key`(`APPB` 로 시작)가 함께 있었습니다.
+- Chrome 127 은 App-Bound 암호화를 쿠키부터 적용했고, 비밀번호와 결제 정보에는 뒤에 넓힐 계획이었습니다[5]. 비밀번호에 `v20` 이 붙기 시작한 버전은 공개 자료가 없으므로 검체의 접두사로 확인합니다.
+- Windows 11 25H2 의 Chrome 153·Edge 151 에서는 저장 비밀번호가 전부 `v20` 이었습니다. `Local State` 에는 `encrypted_key`(`DPAPI` 로 시작)와 `app_bound_encrypted_key`(`APPB` 로 시작)가 함께 있었습니다.
 
-새 브라우저라도 `v20` 을 쓰지 않는 경우가 있습니다. Chromium 소스는 아래 조건이면 App-Bound 암호화를 켜지 않고 `v10` 으로 저장합니다.
+새 브라우저라도 `v20` 을 쓰지 않는 경우가 있습니다. 아래 조건이면 브라우저는 App-Bound 암호화를 켜지 않고 `v10` 으로 저장합니다[3].
 
 - 브라우저를 시스템 전체가 아니라 사용자 한 명에게만 설치했습니다.
 - 명령줄이나 정책으로 `User Data` 위치를 바꿨습니다.
@@ -71,7 +70,7 @@ nav_order: 1630
 
 ### 스키마 버전
 
-`meta` 표의 `version` 이 스키마 버전입니다. 현재 Chromium 소스는 43 이고 `last_compatible_version` 은 40 이며, 관찰한 Chrome 153·Edge 151 도 같은 값이었습니다. 열이 추가된 주요 버전은 다음과 같습니다.
+`meta` 표의 `version` 이 스키마 버전입니다. 현재 판은 43 이고 `last_compatible_version` 은 40 입니다[1]. Chrome 153·Edge 151 도 같은 값입니다. 열이 추가된 주요 버전은 다음과 같습니다.
 
 | 스키마 버전 | 바뀐 점 |
 |---|---|
@@ -87,11 +86,11 @@ nav_order: 1630
 
 ## 구조
 
-파일은 평범한 SQLite 데이터베이스입니다. 페이지 크기는 2048바이트입니다 (Chromium 소스, 관찰도 같음). 페이지·레코드를 읽는 법은 [파일·페이지 구조 (B-tree·Record Format)](../../../01-foundations/database-log-formats/sqlite/b-tree-record-format.md)에서 다룹니다.
+파일은 평범한 SQLite 데이터베이스입니다. 페이지 크기는 2048바이트입니다[1]. 페이지·레코드를 읽는 법은 [파일·페이지 구조 (B-tree·Record Format)](../../../01-foundations/database-log-formats/sqlite/b-tree-record-format.md)에서 다룹니다.
 
 ### logins 표의 주요 열
 
-현재 소스 기준으로 열이 32개 있습니다. 분석에 쓰는 열만 추렸습니다.
+현재 판에는 열이 32개 있습니다[1]. 분석에 쓰는 열만 추렸습니다.
 
 | 열 | 형식 | 뜻 |
 |---|---|---|
@@ -126,7 +125,7 @@ nav_order: 1630
 
 ### 암호문 길이로 비밀번호 길이 알기
 
-`v10`·`v20` 값의 모양은 "접두사 3바이트 + 논스 12바이트 + 암호문 + 인증 태그 16바이트" 입니다 (Chromium 소스). GCM 방식은 암호문 길이가 평문 길이와 같고 브라우저는 비밀번호를 UTF-8 로 바꿔서 암호화하므로, `password_value` 길이에서 31 을 빼면 복호화 없이 비밀번호의 UTF-8 바이트 수를 알 수 있습니다. 관찰한 PC 의 `v20` 값 2,000여 개에서 이 계산이 0 이하로 나온 행은 없었습니다.
+`v10`·`v20` 값의 모양은 "접두사 3바이트 + 논스 12바이트 + 암호문 + 인증 태그 16바이트" 입니다[3]. GCM 방식은 암호문 길이가 평문 길이와 같고 브라우저는 비밀번호를 UTF-8 로 바꿔서 암호화하므로, `password_value` 길이에서 31 을 빼면 복호화 없이 비밀번호의 UTF-8 바이트 수를 알 수 있습니다. Chrome 153·Edge 151 의 `v20` 값 2,000여 개에서 이 계산이 0 이하로 나온 행은 없었습니다.
 
 옛 DPAPI 방식 값은 블롭 안에 여러 칸이 더 있어서 이 계산을 쓰지 않습니다.
 
@@ -141,12 +140,12 @@ nav_order: 1630
 | `meta` | `key`, `value` | 스키마 버전 |
 | `sqlite_sequence` | `name`, `seq` | `logins` 에서 지금까지 쓴 가장 큰 `id` |
 
-관찰한 Edge 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다.
+Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다.
 
 - `logins_edge_extended`: `id`, `source`, `strength_alert_status`, `password_nickname`
 - `breached`: `url`, `username`, `status`, `last_checked_time`, `hashed_password` 등
 
-`meta` 에도 `edge_breached_table_version`, `logins_edge_extended_table_version` 키가 더 있었습니다. 이 칸들의 뜻은 공개 문서로 확인하지 못했습니다.
+`meta` 에도 `edge_breached_table_version`, `logins_edge_extended_table_version` 키가 더 있었습니다. 이 칸들의 뜻을 설명한 공개 자료는 없습니다.
 
 ## 증거로서 의미
 
@@ -170,21 +169,21 @@ nav_order: 1630
 
 시각 열은 모두 **1601-01-01 00:00 UTC 부터 센 마이크로초** 입니다. 흔히 WebKit 시각 (WebKit/Chrome Time) 이라고 부릅니다. Chromium 의 SQLite 계층이 이 형식으로 저장합니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각으로 바꿀 때는 [시간대 설정](../../system-account/time-zone.md)을 씁니다.
 
-| 열 | 바뀌는 때 (Chromium 소스 주석) | 동기화로 옮겨 가나 |
+| 열 | 바뀌는 때 | 동기화로 옮겨 가나 |
 |---|---|---|
 | `date_created` | 브라우저가 이 항목을 저장한 때 | 옮겨 갑니다 |
 | `date_last_used` | 이 항목으로 폼 제출이 성공한 마지막 때. 처음 값은 `date_created` 입니다 | 옮겨 갑니다 |
-| `date_last_filled` | 사이트에 이 항목을 채워 넣은 마지막 때. 제출 성공과 상관없습니다 | 동기화 명세에서 찾지 못했습니다 |
+| `date_last_filled` | 사이트에 이 항목을 채워 넣은 마지막 때. 제출 성공과 상관없습니다 | 공개 자료 없음 |
 | `date_password_modified` | 비밀번호 값을 마지막으로 바꾼 때. 옛 항목은 비어 있을 수 있습니다 | 옮겨 갑니다 |
 | `date_received` | 공유로 받은 때 | |
 | `stats.update_time` | 닫은 횟수 행을 고친 때 | |
 | `insecure_credentials.create_time` | 점검 결과 행을 만든 때 | |
 
 - 값이 0 이면 "비어 있음" 입니다. 1601-01-01 로 바꾸지 않습니다.
-- `date_password_modified` 가 비어 있으면 `date_last_used` 나 `date_created` 로 대신 보라고 소스 주석에 적혀 있습니다.
-- 동기화 명세에는 "Chrome 이 아닌 사용처(예: Google Play 서비스)는 `date_last_used` 를 고치지 않을 수 있다" 고 적혀 있습니다. 휴대폰에서 쓴 기록은 여기에 안 남을 수 있습니다.
+- `date_password_modified` 가 비어 있으면 `date_last_used` 나 `date_created` 로 대신 봅니다[1].
+- Chrome 이 아닌 사용처(예: Google Play 서비스)는 `date_last_used` 를 고치지 않을 수 있습니다[2]. 휴대폰에서 쓴 기록은 여기에 안 남을 수 있습니다.
 
-관찰한 PC 의 값은 소스 주석과 달랐습니다. 열이 있다고 값이 채워진다고 보면 안 됩니다.
+실제 값은 위 설명과 다를 수 있습니다. Windows 11 25H2 의 Chrome 153·Edge 151 에서는 아래와 같았습니다. 열이 있다고 값이 채워진다고 보면 안 됩니다.
 
 - Chrome·Edge 모두 `date_last_filled` 가 모든 행에서 0 이었습니다.
 - Chrome 은 `date_last_used` 가 0 인 행이 대부분이었습니다. 이 행들은 대부분 `password_type` 4(가져옴)였습니다.
@@ -196,7 +195,7 @@ nav_order: 1630
 1. **복호화를 못 해서 분석을 멈춥니다.** 사이트·아이디·시각·횟수는 평문입니다. 비밀번호 길이도 암호문 길이로 압니다.
 2. **`date_created` 를 이 PC 에서 저장한 시각으로 씁니다.** 동기화로 들어온 행은 처음 저장한 기기의 값을 그대로 가져옵니다. 가져오기(`password_type` 4)로 들어온 행도 이 PC 에서 폼을 쓴 기록이 아닙니다. 같은 `date_created` 근처에 행이 한꺼번에 많으면 가져오기나 동기화를 먼저 의심합니다.
 3. **`times_used` 를 로그인 횟수로 단정합니다.** 브라우저가 폼 제출로 판단한 횟수입니다. 동기화로 다른 기기의 횟수가 합쳐져 옵니다.
-4. **"저장 안 함" 행을 저장된 계정으로 셉니다.** 관찰한 차단 행은 `username_value` 와 `password_value` 가 비어 있었습니다. 동기화 명세도 차단 항목은 아이디·비밀번호가 비어 있다고 적습니다.
+4. **"저장 안 함" 행을 저장된 계정으로 셉니다.** 차단 행은 `username_value` 와 `password_value` 가 비어 있습니다[2].
 5. **`Login Data` 하나만 봅니다.** 프로필마다 파일이 따로 있습니다. `Login Data For Account` 도 따로 봅니다. 한 PC 에 계열 브라우저가 여럿이면 각각 봅니다.
 6. **`v20` 을 `v10` 처럼 풀려고 합니다.** 키가 다른 곳에 있고 감싼 방식도 다릅니다. 오프라인에서는 사용자 DPAPI 말고 [시스템 DPAPI 키](../../../01-foundations/protection/data-protection-api/dpapi-system.md)도 필요합니다. 절차는 [쿠키·비밀번호 암호화](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)를 따릅니다.
 7. **`Local State` 를 빼고 수집합니다.** `Login Data` 만 가져오면 `v10`·`v20` 값을 풀 키가 없습니다. 사용자 폴더의 DPAPI 마스터키도 함께 가져옵니다 ([마스터키 파일](../../../01-foundations/protection/data-protection-api/master-key-protect-sid.md)).

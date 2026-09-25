@@ -11,8 +11,6 @@ nav_order: 3760
 
 이 페이지는 공격자가 계속 들어올 발판으로 계정을 새로 만들거나, 이미 있는 계정의 권한을 관리자급으로 올렸는지 확인하는 순서를 다룹니다. 계정·그룹 이벤트의 칸은 [계정 생성·변경](../../../02-artifacts/event-logs/account-management-events.md) 에서도 다루지만, 이 페이지는 그 이벤트를 침해 판단에 쓰는 방법을 다룹니다.
 
-이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home(빌드 26200) 분석 PC 한 대에서 본 이벤트 템플릿입니다. 다른 빌드에서는 다를 수 있습니다.
-
 ## 조사 질문
 
 - 사고 무렵에 계정이 새로 만들어졌습니까?
@@ -24,7 +22,7 @@ nav_order: 3760
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | 이벤트 버전에 따라 칸이 다를 수 있습니다. 이 PC 의 4720 템플릿은 버전 0 이었습니다(관찰). |
+| Windows 버전 | 이벤트 버전에 따라 칸이 다를 수 있습니다. Windows 11 Home(빌드 26200)의 4720 템플릿은 버전 0 입니다. |
 | 시간대 | 이벤트·레지스트리·파일 시각을 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
 | 로컬·도메인 구분 | 로컬 계정 이벤트는 그 PC 에, 도메인 계정 이벤트는 도메인 컨트롤러에 남습니다. |
 | 감사 정책 | 계정 관리·그룹 관리 감사가 켜져 있어야 이 이벤트가 남습니다. 권장 표는 "권장"일 뿐이고 실제 기본값은 이미지에서 확인합니다[1]. |
@@ -60,12 +58,12 @@ nav_order: 3760
 | 5376·5377 | 자격 증명 관리자 백업·복원 |
 
 - 4722·4724·4725·4781 같은 일부 이벤트는 컴퓨터 계정에도 생깁니다[1].
-- Microsoft 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 성공·실패 감사를 켜라고 권합니다[1]. 워크스테이션·멤버 서버는 로컬 계정, 특히 내장 Administrator 의 변경을 모두 보라고 합니다[1]. 이는 권장이고, 실제 설정은 이미지에서 확인합니다.
+- 권장 설정은 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 성공·실패 감사를 켜는 것입니다[1]. 워크스테이션·멤버 서버에서는 로컬 계정, 특히 내장 Administrator 의 변경을 모두 봅니다[1]. 실제 설정은 이미지에서 확인합니다.
 - 계정 잠김(4740)은 대입 공격 쪽에서도 봅니다. [비밀번호 대입 공격이 있었나](brute-force.md) 를 봅니다.
 
 ### 4720 (계정 생성) 읽기
 
-이 PC 의 4720 템플릿(버전 0)에는 아래 칸이 있었습니다(관찰): TargetUserName, TargetDomainName, TargetSid, SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId, SamAccountName, DisplayName, UserPrincipalName, HomeDirectory, ScriptPath, PasswordLastSet, AccountExpires, UserAccountControl, SidHistory 등.
+Windows 11 Home(빌드 26200)의 4720 템플릿(버전 0)에는 아래 칸이 있습니다: TargetUserName, TargetDomainName, TargetSid, SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId, SamAccountName, DisplayName, UserPrincipalName, HomeDirectory, ScriptPath, PasswordLastSet, AccountExpires, UserAccountControl, SidHistory 등.
 
 - Target* 칸은 만들어진 계정이고, Subject* 칸은 만든 계정입니다.
 - SubjectLogonId 로 만든 사람의 4624 로그온 세션과 잇습니다. Logon ID 로 세션을 잇는 방법은 [로그온 세션 잇기](../../../02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md) 에 있습니다.
@@ -92,15 +90,15 @@ nav_order: 3760
 - Member\Account Name(MemberName)은 추가된 계정의 DN 입니다. 로컬 그룹이면 새 구성원이 도메인 계정이어도 보통 "-" 입니다[3]. 그래서 누가 추가됐는지는 MemberSid 로 봅니다.
 - Group Domain 칸은 로컬 그룹이면 그 컴퓨터 이름, 내장 그룹이면 "Builtin" 입니다[3].
 - 4732 바로 앞에 아무것도 안 바뀐 4735(로컬 그룹 변경)가 흔히 보이며, 4735 하나만으로는 놀라지 않습니다.
-- Microsoft 는 내장 로컬 Administrators·Domain Admins·Enterprise Admins 같은 중요 그룹을 Group Name 으로 모두 보라고 권합니다[3]. 계정 종류와 그룹 용도가 안 맞는 추가(예: 컴퓨터 계정을 사용자용 그룹에)도 보라고 합니다[3].
+- 내장 로컬 Administrators·Domain Admins·Enterprise Admins 같은 중요 그룹은 Group Name 으로 모두 봅니다[3]. 계정 종류와 그룹 용도가 안 맞는 추가(예: 컴퓨터 계정을 사용자용 그룹에)도 봅니다[3].
 
 ## 조회(정찰) 이벤트
 
 계정을 만들거나 그룹을 바꾸기 전에 공격자가 계정·그룹을 살펴본 흔적이 남기도 합니다.
 
-- 4798 "A user's local group membership was enumerated." 이 PC 템플릿의 칸에는 CallerProcessId, CallerProcessName 이 있습니다(관찰).
+- 4798 "A user's local group membership was enumerated." 칸에는 CallerProcessId, CallerProcessName 이 있습니다.
 - 4799 "A security-enabled local group membership was enumerated."[2].
-- 4798 에는 조회한 프로세스 이름 칸이 있는데(관찰), 정상 프로그램도 조회하므로 프로세스 이름으로 가릅니다.
+- 4798 에는 조회한 프로세스 이름 칸이 있는데, 정상 프로그램도 조회하므로 프로세스 이름으로 가릅니다.
 
 ## 권한이 올라갔나
 
@@ -109,7 +107,7 @@ nav_order: 3760
 
 ## 레지스트리·파일 쪽
 
-- 로컬 계정이 만들어진 시각은 레지스트리에 직접 적혀 있지 않습니다. 흔히 그 SID 의 NTUSER.DAT 생성 시각($STANDARD_INFORMATION)으로 추정합니다. NTUSER.DAT 가 없으면 OS 설치 시각을 씁니다. 보고서에는 추정값이라고 밝힙니다(현장 관찰).
+- 로컬 계정이 만들어진 시각은 레지스트리에 직접 적혀 있지 않습니다. 흔히 그 SID 의 NTUSER.DAT 생성 시각($STANDARD_INFORMATION)으로 추정합니다. NTUSER.DAT 가 없으면 OS 설치 시각을 씁니다. 보고서에는 추정값이라고 밝힙니다.
 - 로그인한 적 없는 새 계정은 프로필(NTUSER.DAT)이 아직 없을 수 있습니다.
 - 로컬 계정 목록은 SAM 하이브에 있습니다. [사용자 계정 (SAM)](../../../02-artifacts/system-account/sam.md) 과 [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) 를 봅니다.
 

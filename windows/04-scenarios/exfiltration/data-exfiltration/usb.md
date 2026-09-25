@@ -11,7 +11,7 @@ nav_order: 3590
 
 USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었는지는 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 허브에서 다룹니다. 이 페이지는 그 연결 기록에 이벤트 로그와 파일을 연 흔적을 이어 붙이는 순서를 다룹니다.
 
-이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 것입니다. 다른 빌드나 다른 PC 에서는 다를 수 있습니다.
+아래 이벤트 로그 설정과 칸 구성은 Windows 11 Home 25H2(빌드 26200.9457) 기준이며, 다른 빌드에서는 다를 수 있습니다.
 
 ## 조사 질문
 
@@ -47,9 +47,9 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 
 ### Partition/Diagnostic 1006
 
-로그 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Partition%4Diagnostic.evtx` 이고 켜져 있었습니다(관찰). 최대 크기는 16MB 이고 순환 (Circular) 방식이어서, 가득 차면 오래된 이벤트부터 덮어씁니다(관찰). 이 로그의 이벤트는 모두 ID 1006, 이벤트 버전 7 이었습니다(관찰).
+로그 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Partition%4Diagnostic.evtx` 이고, 이 빌드에서는 켜져 있습니다. 최대 크기는 16MB 이고 순환 (Circular) 방식이어서, 가득 차면 오래된 이벤트부터 덮어씁니다. 이 로그의 이벤트는 모두 ID 1006, 이벤트 버전 7 입니다.
 
-공급자 설명문이 "For internal use only." 였는데(관찰) 칸의 뜻은 이름으로 읽고 다른 기록과 맞춰 확인합니다. 버전 7 의 1006 에는 칸이 85개 있었고(관찰), 조사에 쓰는 칸은 아래와 같습니다.
+공급자 설명문이 "For internal use only." 라서 칸의 뜻은 이름으로 읽고 다른 기록과 맞춰 확인합니다. 버전 7 의 1006 에는 칸이 85개 있고, 조사에 쓰는 칸은 아래와 같습니다.
 
 | 묶음 | 칸 이름 |
 |---|---|
@@ -71,17 +71,17 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 | 15 | FileBackedVirtual | 파일 기반 가상 디스크 (VHD 등) |
 | 17 | Nvme | NVMe |
 
-표의 이름은 앞의 `BusType` 을 뺀 것이고, 문서의 열거 이름은 `BusTypeMaxReserved` 처럼 앞에 `BusType` 이 붙습니다[1]. 이 값들은 문서의 C 열거 선언 순서로 센 것이며, 문서가 숫자를 직접 적은 값은 0x00 과 BusTypeMaxReserved(0x7F) 둘뿐입니다[1].
+표의 이름은 앞의 `BusType` 을 뺀 것이고, 실제 열거 이름은 `BusTypeMaxReserved` 처럼 앞에 `BusType` 이 붙습니다[1]. 표의 값은 C 열거 선언 순서로 센 것이며, 선언에 숫자가 직접 적힌 값은 0x00 과 BusTypeMaxReserved(0x7F) 둘뿐입니다[1].
 
-이 PC 의 1006 에는 BusType 7·17·15 가 있었습니다(관찰). 그래서 USB 연결은 BusType 이 7 인 이벤트부터 보고, 그다음 SerialNumber·Model 칸으로 장치마다 묶습니다. UASP 장치처럼 USBSTOR 에 남지 않는 저장장치도 있는데, 이런 장치는 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 허브의 읽는 순서를 따라 따로 확인합니다.
+1006 에는 USB(7) 말고도 NVMe(17), 파일 기반 가상 디스크(15) 같은 BusType 이 함께 남습니다. 그래서 USB 연결은 BusType 이 7 인 이벤트부터 보고, 그다음 SerialNumber·Model 칸으로 장치마다 묶습니다. UASP 장치처럼 USBSTOR 에 남지 않는 저장장치도 있는데, 이런 장치는 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 허브의 읽는 순서를 따라 따로 확인합니다.
 
-**볼륨 시리얼 번호는 기대하지 않습니다.** 이 PC 의 버전 7 에는 이름에 Vbr 이 든 칸이 없었습니다(관찰). 공급자 메타데이터에도 1006 은 버전 7 하나만 있었습니다(관찰). 이 PC 에서는 1006 으로 볼륨 시리얼 번호를 얻지 못합니다. 다른 빌드의 검체는 이벤트 버전부터 확인합니다.
+**볼륨 시리얼 번호는 기대하지 않습니다.** 버전 7 에는 이름에 Vbr 이 든 칸이 없습니다. 이 빌드의 공급자 메타데이터에는 1006 이 버전 7 하나뿐이어서, 1006 으로 볼륨 시리얼 번호를 얻지 못합니다. 다른 빌드의 검체는 이벤트 버전부터 확인합니다.
 
-**PartitionCount 0 인 이벤트.** BusType 이 7 인 1006 가운데 PartitionCount 가 0 인 이벤트가 적지 않았습니다(관찰). 이 이벤트가 연결 때 남는지 해제 때 남는지는 확인하지 못했는데, 이 값 하나로 연결과 해제를 가르지 않고 아래 Kernel-PnP 이벤트와 장치 속성 시각에 맞춰 봅니다.
+**PartitionCount 0 인 이벤트.** BusType 이 7 인 1006 가운데 PartitionCount 가 0 인 이벤트도 적지 않게 남습니다. 이 이벤트가 연결 때 남는지 해제 때 남는지는 공개된 설명이 없습니다. 이 값 하나로 연결과 해제를 가르지 않고 아래 Kernel-PnP 이벤트와 장치 속성 시각에 맞춰 봅니다.
 
 ### Kernel-PnP/Configuration 400·410
 
-`Microsoft-Windows-Kernel-PnP/Configuration` 로그는 켜져 있었고, 최대 크기는 1MB 이며 순환 방식이었습니다(관찰). 이 PC 에서 가장 오래된 이벤트는 약 3개월 전 것이었습니다(관찰). 크기가 작아서 오래된 연결은 새 이벤트에 밀려 사라집니다.
+`Microsoft-Windows-Kernel-PnP/Configuration` 로그는 이 빌드에서 켜져 있고, 최대 크기는 1MB 이며 순환 방식입니다. 크기가 작아서 가장 오래된 이벤트가 약 3개월 전 것일 수 있고, 오래된 연결은 새 이벤트에 밀려 사라집니다.
 
 | ID | 메시지 틀 | 주로 보는 칸 |
 |---|---|---|
@@ -90,13 +90,13 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 | 420 | "Device %1 was deleted." | |
 | 430 | "Device %1 requires further installation." | |
 
-(메시지 틀과 칸 이름은 공급자 템플릿에서 읽었습니다. 관찰)
+(메시지 틀과 칸 이름은 공급자 템플릿에 정의된 것입니다.)
 
-410 의 DeviceInstanceId 에 `USBSTOR\Disk&Ven_…&Prod_…&Rev_…\<시리얼>` 모양의 값이 있었습니다(관찰). 이 값은 USBSTOR 키 경로와 같은 모양이라서 끝의 시리얼 부분으로 USBSTOR 인스턴스와 바로 잇습니다. 같은 연결 때 `STORAGE\Volume\…` 장치의 400·410 도 남았습니다(관찰).
+410 의 DeviceInstanceId 에 `USBSTOR\Disk&Ven_…&Prod_…&Rev_…\<시리얼>` 모양의 값이 남습니다. 이 값은 USBSTOR 키 경로와 같은 모양이라서 끝의 시리얼 부분으로 USBSTOR 인스턴스와 바로 잇습니다. 같은 연결 때 `STORAGE\Volume\…` 장치의 400·410 도 남습니다.
 
 ### DriverFrameworks-UserMode/Operational
 
-이 로그는 이 PC 에서 꺼져 있었는데(관찰) 검체에서 켜져 있는지부터 봅니다. 2003 의 메시지 틀은 "The UMDF Host Process (%1) has been asked to load drivers for device %2." 이고 칸은 LifetimeId 와 InstanceId 인데(관찰), 켜져 있다면 InstanceId 칸에서 장치를 찾습니다. 2100·2102 는 PnP·전원 작업을 적는 이벤트이며 칸은 LifetimeId, InstanceId, MajorCode, MinorCode, Argument1~4, Status 입니다(관찰).
+이 로그는 꺼져 있을 수 있으므로 검체에서 켜져 있는지부터 봅니다. 2003 의 메시지 틀은 "The UMDF Host Process (%1) has been asked to load drivers for device %2." 이고 칸은 LifetimeId 와 InstanceId 입니다. 로그가 켜져 있다면 InstanceId 칸에서 장치를 찾습니다. 2100·2102 는 PnP·전원 작업을 적는 이벤트이며 칸은 LifetimeId, InstanceId, MajorCode, MinorCode, Argument1~4, Status 입니다.
 
 ## 장치 안의 파일을 열었나
 
@@ -138,7 +138,7 @@ USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었
 | 64 | birth droid 볼륨 식별자 |
 | 80 | birth droid 파일 식별자 |
 
-droid 값은 NTFS $OBJECT_ID 의 GUID 입니다[2]. FAT·exFAT 에는 $OBJECT_ID 가 없는데, 장치가 이 파일 시스템일 때 이 블록이 어떻게 남는지는 확인하지 못했습니다. 이 블록이 비어 있어도 이상하게 보지 않습니다.
+droid 값은 NTFS $OBJECT_ID 의 GUID 입니다[2]. FAT·exFAT 에는 $OBJECT_ID 가 없는데, 장치가 이 파일 시스템일 때 이 블록이 어떻게 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 이 블록이 비어 있어도 이상하게 보지 않습니다.
 
 ## 분석 흐름
 
@@ -158,9 +158,9 @@ droid 값은 NTFS $OBJECT_ID 의 GUID 입니다[2]. FAT·exFAT 에는 $OBJECT_ID
 1. **연결 기록을 복사 증거로 씁니다.** 연결 기록은 장치가 붙었다는 것만 보여 줍니다. 까닭은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 의 "증명하지 못하는 것" 에 있습니다.
 2. **원본 파일의 마지막 접근 시각 하나로 복사를 단정합니다.** 윈도에는 "파일을 USB 로 복사했다" 는 전용 기록이 없습니다. 파일에 접근한 기록은 파일 접근 감사를 켜 두었을 때만 4663 으로 남습니다.
 3. **BusType 15·17 을 USB 로 봅니다.** 15 는 VHD 같은 파일 기반 가상 디스크이고, 17 은 NVMe 입니다[1]. VHD 를 연결한 기록을 USB 장치로 보고하지 않습니다.
-4. **로그에 없으면 연결도 없었다고 봅니다.** Kernel-PnP/Configuration 은 1MB 순환 로그였습니다(관찰). DriverFrameworks-UserMode 로그는 꺼져 있었습니다(관찰). 이벤트가 없다는 것은 그 기간 기록이 남지 않았다는 뜻일 수 있습니다.
-5. **PartitionCount 0 을 해제 기록으로 단정합니다.** 뜻을 확인하지 못한 값입니다. 다른 시각과 맞춰서만 씁니다.
-6. **시간대 Bias 를 부호 없이 읽습니다.** Bias 는 REG_DWORD 로 저장되지만 부호 있는 32비트로 읽어야 합니다(현장 관찰). UTC+9 는 -540 입니다. 부호 없이 읽으면 4294966756 이 나옵니다.
+4. **로그에 없으면 연결도 없었다고 봅니다.** Kernel-PnP/Configuration 은 1MB 순환 로그입니다. DriverFrameworks-UserMode 로그는 꺼져 있을 수 있습니다. 이벤트가 없다는 것은 그 기간 기록이 남지 않았다는 뜻일 수 있습니다.
+5. **PartitionCount 0 을 해제 기록으로 단정합니다.** 뜻이 공개되지 않은 값입니다. 다른 시각과 맞춰서만 씁니다.
+6. **시간대 Bias 를 부호 없이 읽습니다.** Bias 는 REG_DWORD 로 저장되지만 부호 있는 32비트로 읽어야 합니다. UTC+9 는 -540 입니다. 부호 없이 읽으면 4294966756 이 나옵니다.
 7. **드라이브 문자 하나로 장치를 잇습니다.** 드라이브 문자는 다른 장치에 다시 쓰입니다. 볼륨 시리얼 번호와 시각을 함께 맞춥니다.
 
 ## 보고서 문장 예

@@ -25,7 +25,7 @@ nav_order: 2670
 - 로컬 그룹 구성원 조회
 - 자격 증명 관리자 백업·복원
 
-Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
+이 하위 범주의 이벤트 양은 적습니다(Low)[2].
 
 | ID | 뜻 | 성공 (S) · 실패 (F) |
 |---|---|---|
@@ -61,32 +61,28 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 | 전역 그룹 | | 4728 | 4729 | | | |
 | 유니버설 그룹 | | 4756 | 4757 | | | |
 
-4732 말고 다른 그룹 이벤트의 감사 하위 범주는 이번에 문서로 확인하지 않았습니다.
-
 ### 이 기록이 필요한 까닭
 
-로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않아서 다른 흔적으로 추정해야 합니다. 추정 방법은 [사용자 계정](../system-account/sam.md)에서 다룹니다. 4720 이 남아 있으면 계정을 만든 때를 이벤트 기록 시각으로 바로 알 수 있습니다. 이 비교는 해석입니다.
+로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않아서 다른 흔적으로 추정해야 합니다. 추정 방법은 [사용자 계정](../system-account/sam.md)에서 다룹니다. 4720 이 남아 있으면 계정을 만든 때를 이벤트 기록 시각으로 바로 알 수 있습니다.
 
 ## 위치와 버전별 차이
 
 | 이벤트 | 감사 하위 범주 | 최소 Windows | 이벤트 버전 |
 |---|---|---|---|
-| 4720 | Audit User Account Management | Windows Vista · Windows Server 2008 | 0. 한 PC 의 매니페스트에도 버전 0 하나뿐이었습니다 |
+| 4720 | Audit User Account Management | Windows Vista · Windows Server 2008 | 0. 매니페스트에도 버전 0 하나뿐입니다 |
 | 4732 | Audit Security Group Management | Windows Vista · Windows Server 2008 | 문서는 0. 매니페스트에는 버전 1 도 있습니다 |
 
 4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다. 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 칸을 더합니다 (Windows 11 25H2 기준). 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 판마다 다를 수 있습니다.
 
-Windows XP · 2003 의 계정 이벤트는 이번에 확인하지 못했습니다. 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
+Windows XP · 2003 의 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
 
 ### 권장 설정
 
-Microsoft 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 Audit User Account Management 의 성공과 실패를 켜라고 권합니다. 워크스테이션과 멤버 서버에서는 로컬 계정의 모든 변경을, 특히 기본 제공 Administrator 계정의 변경을 살피라고 적었습니다.
+도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 Audit User Account Management 의 성공과 실패를 켜 둡니다[2]. 워크스테이션과 멤버 서버에서는 로컬 계정의 모든 변경, 특히 기본 제공 Administrator 계정의 변경을 살핍니다[2].
 
-### 한 PC 의 설정
+### 켜져 있어도 비어 있는 로그
 
-한 PC 에서 읽은 결과는 다음과 같습니다.
-
-User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Group Management `{0CCE9237-69AE-11D9-BED3-505054503030}` 는 둘 다 성공 (Success) 이었습니다. 이 값이 Windows 11 의 기본값인지는 확인하지 못했습니다. 보안 로그에는 약 2일치만 남아 있었고, 그 안에 4720·4722·4724·4726·4732 는 0건, 4738 은 4건이었습니다.
+User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Group Management `{0CCE9237-69AE-11D9-BED3-505054503030}` 가 둘 다 성공 (Success) 으로 켜져 있어도, 보안 로그에 약 2일치만 남아 있으면 4720·4722·4724·4726·4732 가 한 건도 없고 4738 만 몇 건 남기도 합니다.
 
 감사 설정과 로그 크기를 확인하는 방법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
@@ -118,7 +114,7 @@ User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Gr
 
 ### 메시지 번호
 
-XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파일의 문구를 가리킵니다. 한 PC 의 msobjs.dll 메시지 표에서 읽은 문구는 다음과 같습니다.
+XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파일의 문구를 가리킵니다. msobjs.dll 메시지 표의 문구는 다음과 같습니다.
 
 | 번호 | 문구 |
 |---|---|
@@ -135,7 +131,7 @@ XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파�
 
 ### Microsoft 예시
 
-Microsoft 문서의 4720 예시 가운데 일부입니다. 문서가 보여 주는 예시이며 검체에서 나온 값이 아닙니다. 예시의 새 계정은 도메인 계정입니다.
+[1] 에 실린 4720 예시 가운데 일부입니다. 검체에서 나온 값이 아닙니다. 예시의 새 계정은 도메인 계정입니다.
 
 | 항목 | 값 |
 |---|---|
@@ -147,11 +143,11 @@ Microsoft 문서의 4720 예시 가운데 일부입니다. 문서가 보여 주�
 | NewUacValue | `0x15` |
 | UserAccountControl | `%%2080 %%2082 %%2084` |
 
-예시 XML 의 LogonHours 값 `%%1793` 은 메시지 표에서 `<value not set>` 입니다. 문서는 새 도메인 계정이면 Logon Hours 가 `<value not set>`, 새 로컬 계정이면 "All" 이라고 적었습니다. 도메인 계정 예시이므로 설명과 맞습니다. Logon Hours 값을 읽을 때는 로컬 계정인지 도메인 계정인지 먼저 가립니다.
+예시 XML 의 LogonHours 값 `%%1793` 은 메시지 표에서 `<value not set>` 입니다. 새 도메인 계정이면 Logon Hours 가 `<value not set>`, 새 로컬 계정이면 "All" 입니다[1]. 도메인 계정 예시이므로 설명과 맞습니다. Logon Hours 값을 읽을 때는 로컬 계정인지 도메인 계정인지 먼저 가립니다.
 
 ### 다른 사용자 계정 이벤트의 칸
 
-아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다.
+아래 표는 공급자 매니페스트의 칸 목록입니다.
 
 | ID | 칸 |
 |---|---|
@@ -173,7 +169,7 @@ Microsoft 문서의 4720 예시 가운데 일부입니다. 문서가 보여 주�
 | SubjectUserSid · SubjectUserName · SubjectDomainName · SubjectLogonId | 구성원을 더한 계정 | |
 | PrivilegeList | 권한 | |
 
-구성원 하나마다 4732 가 따로 생기고, 그 앞에는 아무것도 바뀌지 않은 4735 "A security-enabled local group was changed." 가 보통 먼저 보입니다. Microsoft 문서 예시의 4732 는 Version 0, Task 13826, Keywords `0x8020000000000000` 입니다.
+구성원 하나마다 4732 가 따로 생기고, 그 앞에는 아무것도 바뀌지 않은 4735 "A security-enabled local group was changed." 가 보통 먼저 보입니다. [3] 예시의 4732 는 Version 0, Task 13826, Keywords `0x8020000000000000` 입니다.
 
 ## 증거로서 의미
 
@@ -187,7 +183,7 @@ Microsoft 문서의 4720 예시 가운데 일부입니다. 문서가 보여 주�
 
 ### 살펴볼 값
 
-Microsoft 는 4720 에서 다음 값을 살피라고 권합니다.
+4720 에서는 다음 값을 살핍니다[1].
 
 - SAM Account Name 이 비었거나 `-` 입니다.
 - Password Last Set 이 미래 시각입니다.
@@ -197,7 +193,7 @@ Microsoft 는 4720 에서 다음 값을 살피라고 권합니다.
 - SID History 가 `-` 가 아닙니다.
 - 'Don't Expire Password' 가 켜져 있습니다.
 
-4732 에서는 기본 제공 로컬 Administrators 그룹, Domain Admins, Enterprise Admins 같은 중요 그룹에 구성원이 더해지는지 살피라고 권합니다.
+4732 에서는 기본 제공 로컬 Administrators 그룹, Domain Admins, Enterprise Admins 같은 중요 그룹에 구성원이 더해지는지 살핍니다[3].
 
 ### 보고서 문장
 
@@ -209,25 +205,25 @@ Microsoft 는 4720 에서 다음 값을 살피라고 권합니다.
 ## 시각 해석
 
 - 4720 의 기록 시각은 계정이 만들어진 때이고, 4738 은 계정이 바뀐 때, 4732 는 구성원이 더해진 때입니다.
-- 4720 의 PasswordLastSet 칸은 이벤트 시각과 따로 적힌 값이며, Microsoft 는 이 값이 미래 시각이면 살피라고 권합니다.
+- 4720 의 PasswordLastSet 칸은 이벤트 시각과 따로 적힌 값이며, 이 값이 미래 시각이면 살펴봅니다[1].
 - 레코드의 기록 시각을 저장하는 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
-- 보안 로그는 크기 한도에 이르면 오래된 기록부터 밀려납니다. 한 PC 에서는 약 2일치만 남아 있었습니다. 오래전에 만든 계정의 4720 은 남아 있지 않을 때가 많습니다.
+- 보안 로그는 크기 한도에 이르면 오래된 기록부터 밀려나서 약 2일치만 남기도 합니다. 오래전에 만든 계정의 4720 은 남아 있지 않을 때가 많습니다.
 
 ## 함정과 한계
 
 1. **4732 의 TargetUserName 을 더해진 계정으로 읽습니다.** 이 칸은 그룹 이름입니다. 더해진 계정은 MemberSid 로 봅니다.
 2. **MemberName 이 `-` 라서 구성원을 모른다고 봅니다.** 로컬 그룹이면 MemberName 은 보통 `-` 입니다. MemberSid 를 [사용자 프로필 목록](../system-account/profilelist.md)이나 다른 이벤트의 SID 와 맞춥니다.
 3. **4735 하나를 그룹 조작으로 봅니다.** 4732 앞에는 아무것도 바뀌지 않은 4735 가 보통 먼저 보입니다.
-4. **4738 이 있으면 사람이 계정을 바꿨다고 봅니다.** 한 PC 의 4738 4건은 모두 Subject 가 S-1-5-18 (SYSTEM) 이었습니다. 대상은 RID 1001 계정이었습니다. `-` 가 아닌 속성 칸은 DisplayName 하나였고, Old·New UAC 는 `-` 였습니다. 사용자 조작 없이 SYSTEM 이 표시 이름을 바꾼 기록으로 보입니다. 원인은 확인하지 못했습니다.
-5. **4720 과 함께 4722·4738 이 반드시 남는다고 봅니다.** 계정을 만들 때 4722·4738 이 함께 남는다는 설명이 있습니다. 4720 문서에는 이 내용이 없었습니다. 검체에서 직접 확인합니다.
+4. **4738 이 있으면 사람이 계정을 바꿨다고 봅니다.** Subject 가 S-1-5-18 (SYSTEM) 인 4738 도 있습니다. RID 1001 계정을 대상으로, `-` 가 아닌 속성 칸이 DisplayName 하나뿐이고 Old·New UAC 가 `-` 인 4738 이 4건 남는 경우가 있습니다. 사용자 조작 없이 SYSTEM 이 표시 이름을 바꾼 기록으로 보입니다.
+5. **4720 과 함께 4722·4738 이 반드시 남는다고 봅니다.** 계정을 만들 때 4722·4738 이 함께 남는다는 설명이 있습니다. [1] 에는 이 내용이 없으므로 검체에서 직접 확인합니다.
 6. **New UAC Value 를 액티브 디렉터리 기준으로 풉니다.** 이 값은 SAM 쪽 계정 플래그입니다. userAccountControl 과 정의가 다릅니다.
 7. **컴퓨터 계정의 기록을 사용자 계정으로 읽습니다.** 4722·4725·4724·4781 같은 이벤트는 컴퓨터 계정에도 생깁니다. TargetSid 와 TargetUserName 으로 어떤 계정인지 먼저 가립니다.
 8. **분석 PC 의 매니페스트를 검체에 그대로 씁니다.** 검체의 Windows 버전이 다르면 이벤트 버전과 칸 구성이 다를 수 있습니다. 레코드의 Version 값을 먼저 봅니다.
 
 ### 지우기와 조작
 
-- **계정을 지웁니다.** 감사가 켜져 있었다면 4726 이 남습니다. 계정이 SAM 에서 사라져도 이미 남은 4720·4726 은 보안 로그에 그대로 있습니다. 이 판단은 두 기록이 다른 곳에 저장된다는 점에서 나온 해석입니다.
+- **계정을 지웁니다.** 감사가 켜져 있었다면 4726 이 남습니다. 계정이 SAM 에서 사라져도 이미 남은 4720·4726 은 보안 로그에 그대로 있습니다. 두 기록은 다른 곳에 저장되기 때문입니다.
 - **계정 이름을 바꿉니다.** 4781 에 옛 이름과 새 이름이 함께 남습니다. 여러 이벤트는 이름 대신 TargetSid 로 묶어 봅니다.
 - **로그를 지웁니다.** 보안 로그를 지우면 1102 가 남습니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
 - **레코드 일부만 남아 있습니다.** 지우거나 덮어쓴 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
@@ -247,7 +243,7 @@ Microsoft 예시의 NewUacValue `0x15` 를 손으로 풀어 봅니다. 이 값�
 2. 세 비트의 값은 0x01, 0x04, 0x10 입니다.
 3. 같은 예시의 UserAccountControl 에는 `%%2080 %%2082 %%2084` 세 문구가 있습니다.
 4. 메시지 표에서 세 문구는 Account Disabled, 'Password Not Required' - Enabled, 'Normal Account' - Enabled 입니다.
-5. 4720 문서는 이 값의 비트 목록을 [MS-SAMR] USER_ACCOUNT Codes 로 안내합니다. 그 표에서 0x01 은 USER_ACCOUNT_DISABLED, 0x04 는 USER_PASSWORD_NOT_REQUIRED, 0x10 은 USER_NORMAL_ACCOUNT 입니다.
+5. 이 값의 비트 목록은 [MS-SAMR] USER_ACCOUNT Codes 에 있습니다[4]. 그 표에서 0x01 은 USER_ACCOUNT_DISABLED, 0x04 는 USER_PASSWORD_NOT_REQUIRED, 0x10 은 USER_NORMAL_ACCOUNT 입니다.
 6. 세 비트의 뜻이 세 문구와 하나씩 맞습니다.
 
 이 값은 SAM 쪽 플래그이므로 액티브 디렉터리 표로 풀지 않습니다. 같은 표에서 0x200 은 USER_DONT_EXPIRE_PASSWORD 입니다. SAM 하이브의 계정 플래그는 [사용자 계정](../system-account/sam.md)에서 다룹니다.
@@ -305,7 +301,7 @@ auditpol /get /subcategory:{0CCE9237-69AE-11D9-BED3-505054503030} /r
 
 1. 위 `auditpol` 명령으로 두 하위 범주의 설정을 봅니다. 꺼져 있으면 `/set ... /success:enable /failure:enable` 로 켭니다.
 2. 로컬 계정을 하나 만듭니다. 4720 의 속성 칸을 위 "흔한 값" 표와 비교합니다.
-3. 같은 시각 무렵에 4722·4738 이 함께 남는지 봅니다. 이 페이지가 확인하지 못한 점입니다.
+3. 같은 시각 무렵에 4722·4738 이 함께 남는지 봅니다.
 4. 그 계정을 Administrators 그룹에 넣습니다. 4735 와 4732 가 어떤 순서로 남는지, MemberName 이 `-` 인지 봅니다.
 5. 계정 이름을 바꾸고 4781 을, 계정을 지우고 4726 을 봅니다. 모든 이벤트를 TargetSid 로 묶어 봅니다.
 6. 새 계정으로 한 번 로그온한 뒤 NTUSER.DAT 의 생성 시각과 4720 의 시각을 비교합니다.

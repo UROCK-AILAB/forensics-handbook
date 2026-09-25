@@ -18,14 +18,14 @@ has_toc: false
 
 프로필 폴더는 Windows 사용자 폴더 아래 있어서 어느 Windows 계정의 기록인지 알 수 있습니다. 한 계정 안에도 파이어폭스 프로필이 여러 개일 수 있고, 프로필마다 기록이 따로 쌓입니다.
 
-지운 흔적을 따로 담는 표도 있습니다. 즐겨찾기의 `moz_bookmarks_deleted`, 양식 기록의 `moz_deleted_formhistory` 가 그 예입니다. 다만 이 표에 어떤 조건에서 행이 들어가는지는 이번 조사에서 확인하지 못했습니다. 표가 비어 있다고 지운 항목이 없다고 보지 않습니다.
+지운 흔적을 따로 담는 표도 있습니다. 즐겨찾기의 `moz_bookmarks_deleted`, 양식 기록의 `moz_deleted_formhistory` 가 그 예입니다. 다만 표가 비어 있다고 지운 항목이 없다고 보지 않습니다.
 
 증명하지 못하는 것도 분명합니다.
 
 - 기록은 Windows 계정과 파이어폭스 프로필 단위로 남을 뿐, 그 시각에 누가 키보드 앞에 있었는지는 남지 않습니다.
 - 방문 기록은 페이지를 불러왔다는 기록입니다. 사용자가 그 페이지를 읽었는지, 거기서 무엇을 했는지는 방문 기록만으로 알 수 없습니다.
 - 사용자는 기록을 지울 수 있으므로 기록이 없다는 것만으로 방문하지 않았다고 단정하지 않습니다.
-- 사생활 보호 창 (Private Browsing) 에서 한 일이 각 파일에 어떻게 남는지는 이번 조사에서 소스로 확인하지 못했습니다. [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 를 참고합니다.
+- 사생활 보호 창 (Private Browsing) 에서 한 일이 각 파일에 어떻게 남는지는 [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 를 참고합니다.
 
 ## 한눈에 보기
 
@@ -44,7 +44,7 @@ has_toc: false
 
 ### Windows 버전에 따라 달라지는 점
 
-아래 경로 예는 Forensics Wiki 에서 확인한 것입니다.
+Windows 판별 경로 예는 아래와 같습니다[2].
 
 | Windows 판 | 본 폴더 경로 예 | 로컬 폴더 경로 예 |
 |---|---|---|
@@ -62,8 +62,8 @@ Windows 판보다 파이어폭스 판에 따른 차이가 더 큽니다.
 | 32 | 로그인 파일이 `signons.sqlite` 에서 `logins.json` 으로 바뀌었습니다 | [저장 비밀번호](logins-json-key4-db.md) |
 | 58.0.2 | 키 파일이 `key3.db` 에서 `key4.db` 로 바뀌었습니다 | [저장 비밀번호](logins-json-key4-db.md) |
 | 75.0·144.0 | `key4.db` 와 `logins.json` 의 암호 방식이 바뀌었습니다 | [저장 비밀번호](logins-json-key4-db.md) |
-| 확인 못 함 | 쿠키 스키마 15 부터 만료 시각이 초에서 밀리초로 바뀌었습니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
-| 확인 못 함 | 세션 파일이 압축하지 않은 `.js`·`.bak` 에서 LZ4 압축 파일로 바뀌었습니다 | [세션 복원](sessionstore-jsonlz4.md) |
+| 공개 자료 없음 | 쿠키 스키마 15 부터 만료 시각이 초에서 밀리초로 바뀌었습니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
+| 공개 자료 없음 | 세션 파일이 압축하지 않은 `.js`·`.bak` 에서 LZ4 압축 파일로 바뀌었습니다 | [세션 복원](sessionstore-jsonlz4.md) |
 
 ### 알려 주는 것
 
@@ -75,11 +75,11 @@ Windows 판보다 파이어폭스 판에 따른 차이가 더 큽니다.
 | 받아 둔 웹 자원 | `cache2\` (로컬 폴더) | 캐시 전용 형식 | [캐시](cache2.md) |
 | 사이트별로 저장한 로그인 | `logins.json`·`key4.db` | JSON·SQLite | [저장 비밀번호](logins-json-key4-db.md) |
 | 열려 있던 창과 탭 | `sessionstore.jsonlz4`, `sessionstore-backups\` | LZ4 로 압축한 JSON | [세션 복원](sessionstore-jsonlz4.md) |
-| 사이트가 브라우저에 넣어 둔 값 | `storage\` | 확인하지 못함 | [웹 저장소](storage.md) |
+| 사이트가 브라우저에 넣어 둔 값 | `storage\` | 검체에서 확인 | [웹 저장소](storage.md) |
 | 입력란에 친 값 | `formhistory.sqlite` | SQLite | [양식 기록](formhistory-sqlite.md) |
 | 설치한 추가 기능 | `extensions.json` | JSON | [확장 프로그램](extensions-json.md) |
 
-시각 형식도 먼저 알아 둡니다. 파이어폭스의 SQLite 파일 속 시각은 대부분 1970년 1월 1일 0시 (UTC) 부터 센 마이크로초입니다. 파이어폭스 소스는 이 단위를 PRTime 이라고 부릅니다. 예외도 있습니다. 쿠키의 만료 시각은 스키마 15 부터 밀리초이고, `extensions.json` 의 날짜도 밀리초입니다. 크롬 계열과 기준일이 다르므로 두 브라우저의 시각을 같은 식으로 바꾸지 않습니다. 바꾸는 법은 [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+시각 형식도 먼저 알아 둡니다. 파이어폭스의 SQLite 파일 속 시각은 대부분 1970년 1월 1일 0시 (UTC) 부터 센 마이크로초입니다. 파이어폭스에서는 이 단위를 PRTime 이라고 부릅니다[4]. 예외도 있습니다. 쿠키의 만료 시각은 스키마 15 부터 밀리초이고, `extensions.json` 의 날짜도 밀리초입니다. 크롬 계열과 기준일이 다르므로 두 브라우저의 시각을 같은 식으로 바꾸지 않습니다. 바꾸는 법은 [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 읽는 순서
 

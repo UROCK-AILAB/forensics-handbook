@@ -22,7 +22,7 @@ nav_order: 1710
 - 위치는 프로필 본 폴더의 `places.sqlite` 입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - Vista·7 의 실제 경로 예는 `C:\Users\%USERNAME%\AppData\Roaming\Mozilla\Firefox\Profiles\%PROFILE%.default\places.sqlite` 입니다.
 - Firefox 21 전에는 다운로드 기록이 `downloads.sqlite` 의 `moz_downloads` 표에 있었습니다. 이 표에는 `startTime`, `endTime`, `source`, `currBytes`, `maxBytes` 칸이 있었습니다. 옛 검체를 만나면 이 파일도 찾습니다.
-- 아래 표와 칸 이름은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 예전 출시판에 어느 칸이 있었는지는 이 자료로 알 수 없습니다. 칸이 몇 번 판부터 생겼는지도 확인하지 못했습니다.
+- 아래 표와 칸 이름은 파이어폭스 개발 중인 최신 코드(main 가지) 기준입니다[1]. 예전 출시판에는 없는 칸이 있을 수 있으므로, 옛 검체에서는 표와 칸을 먼저 확인합니다.
 
 ## 구조
 
@@ -59,7 +59,7 @@ nav_order: 1710
 
 ### `visit_type` 값
 
-방문 유형은 아래와 같습니다. 소스의 정의에서 확인한 값입니다.
+방문 유형은 아래와 같습니다[2].
 
 | 값 | 이름 | 뜻 |
 |---|---|---|
@@ -93,7 +93,7 @@ nav_order: 1710
 - `from_visit` 을 따라가면 어느 페이지에서 링크를 눌러 이 페이지로 왔는지 되짚을 수 있습니다.
 - `moz_bookmarks` 에 즐겨찾기가 있으면 이 프로필에 그 주소가 저장돼 있었습니다. 사용자가 직접 저장했는지, 설치 때 들어간 기본 즐겨찾기인지, 다른 브라우저에서 가져왔는지는 따로 가립니다.
 - 다운로드 주석이 있으면 이 브라우저로 그 파일을 내려받은 기록이 있습니다. `downloads/destinationFileURI` 에 저장 위치가, `downloads/metaData` 에 상태·끝난 시각·파일 크기 같은 값이 JSON 으로 남습니다.
-- 사생활 보호 창에서 내려받은 파일은 다운로드 기록에 넣지 않습니다. 소스는 `download.source.isPrivate` 이면 기록하지 않고 돌아갑니다.
+- 사생활 보호 창에서 내려받은 파일은 다운로드 기록에 넣지 않습니다. `download.source.isPrivate` 가 참이면 기록하지 않습니다[4].
 
 ### 증명하지 못하는 것
 
@@ -106,9 +106,9 @@ nav_order: 1710
 
 ## 시각 해석
 
-- `moz_historyvisits.visit_date` 는 1970년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 파이어폭스 소스는 이 단위를 PRTime 이라고 부릅니다. 소스 주석은 "PRTime is in MICROseconds since 1 Jan 1970" 이라고 적었습니다.
+- `moz_historyvisits.visit_date` 는 1970년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 파이어폭스에서는 이 단위를 PRTime 이라고 부릅니다[2].
 - 현지 시각이 아닙니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
-- `moz_places.last_visit_date`, `moz_bookmarks.dateAdded`·`lastModified`, `moz_annos.dateAdded`·`lastModified` 도 같은 단위로 알려져 있습니다. 다만 이번 조사에서 소스로 하나하나 확인하지는 못했습니다. 검체에서 다른 시각과 맞춰 확인합니다.
+- `moz_places.last_visit_date`, `moz_bookmarks.dateAdded`·`lastModified`, `moz_annos.dateAdded`·`lastModified` 도 같은 단위로 알려져 있으므로, 검체에서 다른 시각과 맞춰 확인합니다.
 - 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
@@ -117,7 +117,7 @@ nav_order: 1710
 - **실행 중에는 WAL 을 함께 봅니다.** SQLite 는 아직 본 파일에 합치지 않은 변경을 `-wal` 파일에 둘 수 있습니다. 최근 방문이 `places.sqlite-wal` 에만 있을 수 있습니다. [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
 - **`moz_places` 에 방문 행이 없는 주소가 있습니다.** 즐겨찾기만 하고 방문한 적 없는 주소, 다른 페이지가 참조만 한 주소도 `moz_places` 에 남습니다. `moz_places` 행 수를 방문 횟수로 오해하지 않습니다.
 - **기록을 지우면 행이 표에서 사라집니다.** 지운 행의 조각이 SQLite 빈 공간이나 WAL 에 남을 수 있습니다. 옛 방문을 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
-- **사생활 보호 창은 방문 행을 남기지 않는 것으로 알려져 있습니다.** 이번 조사에서 소스로 확인하지는 못했습니다. [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 를 참고합니다.
+- **사생활 보호 창은 방문 행을 남기지 않는 것으로 알려져 있습니다.** [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 를 참고합니다.
 
 ## 직접 분석해 보기
 

@@ -31,7 +31,7 @@ nav_order: 120
 
 ### 공급자와 시험 범위
 
-- 이 페이지는 libvshadow 문서를 따릅니다. 이 문서는 "Microsoft Software Shadow Copy provider 1.0" (GUID b5946137-7b9f-4925-af80-51abd60b20d5) 을 다룹니다.
+- 이 페이지의 구조는 "Microsoft Software Shadow Copy provider 1.0" (GUID b5946137-7b9f-4925-af80-51abd60b20d5) 공급자의 것입니다.
 - 이 공급자는 16 KiB 블록 단위로 저장합니다.
 - 여러 볼륨을 같은 순간에 찍은 섀도 복사본은 한 세트 (Set) 로 묶을 수 있습니다.
 - 날짜·시각은 UTC 기준 FILETIME 입니다. 형식은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md)에 있습니다.
@@ -183,7 +183,7 @@ VSS 는 GUID 3808876b-c176-4e48-b7ae-04046e6cc752 로 자기 파일을 표시합
 
 ### 블록 설명자 하나 풀기
 
-> 아래 바이트는 명세(libvshadow 문서)대로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+> 아래 바이트는 명세대로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
@@ -268,12 +268,12 @@ Windows 8·Server 2012 부터 있는 범위 스냅숏 (Scoped Snapshot) 은 업�
 7. **섹터 크기의 배수가 아닌 크기로 읽습니다.** 섀도 복사본 장치는 섹터 크기의 배수로만 읽을 수 있습니다.
 8. **Windows 2003 R2 카탈로그에서 0x03 항목을 찾습니다.** 이 버전에는 없습니다.
 9. **저장소 GUID 와 섀도 복사본 ID 를 섞어 적습니다.** 두 값은 다른 칸에 있습니다. 보고서에는 어느 칸의 값인지 밝힙니다.
-10. **시험 범위 밖의 Windows 에서 나온 결과를 그대로 믿습니다.** libvshadow 문서는 Windows 2012·10 을 아직 시험하지 않았다고 적었습니다. 두 도구로 맞춰 봅니다.
+10. **시험 범위 밖의 Windows 에서 나온 결과를 그대로 믿습니다.** Windows 2012·10 은 libvshadow 문서의 시험 범위 밖입니다. 두 도구로 맞춰 봅니다.
 
 ## 도구
 
 - 헥스 편집기로 볼륨 헤더 (0x1E00), 카탈로그, 블록 목록을 직접 따라갈 수 있습니다.
-- libyal 의 libvshadow 는 이 페이지가 참고한 VSS 형식 문서를 공개한 오픈 소스 라이브러리입니다. 저장소가 쓰지 않는 블록을 0 으로 채운다는 점을 알고 씁니다.
+- libyal 의 libvshadow 는 섀도 복사본을 읽는 오픈 소스 라이브러리이고, VSS 형식 문서도 함께 공개합니다. 저장소가 쓰지 않는 블록을 0 으로 채운다는 점을 알고 씁니다.
 - 실행 중인 Windows 에서 섀도 복사본을 찾고 붙이는 방법은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 다룹니다. 조사 대상 시스템에서 명령을 실행하면 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 원칙에 따라 기록을 남깁니다.
 - 두 도구의 결과가 다르면 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)의 방법으로 헥스와 맞춰 봅니다.
 

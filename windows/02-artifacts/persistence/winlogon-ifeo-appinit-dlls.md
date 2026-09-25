@@ -17,48 +17,48 @@ Run 키 말고도 로그온, 프로그램 시작, DLL 로드에 끼어드는 레
 - `Winlogon\Userinit` 는 사용자가 로그온할 때 실행되는 사용자 초기화 프로그램 userinit.exe 를 가리킵니다.
 - `Winlogon\Shell` 은 사용자가 로그온할 때 실행되는 시스템 셸 explorer.exe 를 가리킵니다.
 - `Winlogon\Notify` 는 Winlogon 이벤트를 처리하는 알림 패키지 DLL 을 가리킵니다.
-- MITRE ATT&CK 는 이 자리를 쓰는 수법을 T1547.004(Winlogon Helper DLL) 로 분류합니다.
+- 이 자리를 쓰는 수법은 MITRE ATT&CK 의 T1547.004(Winlogon Helper DLL) 에 해당합니다[3].
 
 ### IFEO (Image File Execution Options)
 
-이미지 파일 실행 옵션 (Image File Execution Options, IFEO) 키 아래에는 실행 파일 이름마다 하위 키를 둘 수 있습니다. 하위 키에 `Debugger` 값을 넣으면 그 프로그램이 만들어질 때 지정한 디버거가 대신 실행되고, 대상 프로그램은 디버거의 인자로 넘어갑니다. MITRE ATT&CK 는 이 자리를 쓰는 수법을 T1546.012(Image File Execution Options Injection) 로 분류합니다.
+이미지 파일 실행 옵션 (Image File Execution Options, IFEO) 키 아래에는 실행 파일 이름마다 하위 키를 둘 수 있습니다. 하위 키에 `Debugger` 값을 넣으면 그 프로그램이 만들어질 때 지정한 디버거가 대신 실행되고, 대상 프로그램은 디버거의 인자로 넘어갑니다. 이 자리를 쓰는 수법은 MITRE ATT&CK 의 T1546.012(Image File Execution Options Injection) 에 해당합니다[4].
 
-MITRE 는 조용한 프로세스 종료 (silent process exit) 감시도 같은 수법으로 적습니다. 관련 값은 `SilentProcessExit` 키 아래 `ReportingMode`·`MonitorProcess` 값과, IFEO 하위 키의 `GlobalFlag` 에 켠 플래그 512(0x200, FLG_MONITOR_SILENT_PROCESS_EXIT) 이고, 레지스트리를 직접 고치거나 GFlags(gflags.exe) 로 설정합니다.
+조용한 프로세스 종료 (silent process exit) 감시도 같은 수법에 쓰입니다[4]. 관련 값은 `SilentProcessExit` 키 아래 `ReportingMode`·`MonitorProcess` 값과, IFEO 하위 키의 `GlobalFlag` 에 켠 플래그 512(0x200, FLG_MONITOR_SILENT_PROCESS_EXIT) 이고, 레지스트리를 직접 고치거나 GFlags(gflags.exe) 로 설정합니다.
 
 ### AppInit_DLLs
 
-AppInit_DLLs 는 사용자가 지정한 DLL 을 모든 대화형 응용 프로그램의 주소 공간에 올리게 하는 장치입니다. 정상 앱은 거의 쓰지 않지만 많은 악성코드가 API 를 가로채는 데 씁니다. Microsoft 는 이 장치를 쓰지 말라고 권하고, Windows 8 데스크톱 앱 인증 요건은 AppInit_DLLs 로 임의 DLL 을 올려 Win32 API 를 가로채는 것을 금지합니다.
+AppInit_DLLs 는 사용자가 지정한 DLL 을 모든 대화형 응용 프로그램의 주소 공간에 올리게 하는 장치입니다. 정상 앱은 거의 쓰지 않지만 많은 악성코드가 API 를 가로채는 데 씁니다. Microsoft 는 이 장치를 쓰지 말라고 권하고, Windows 8 데스크톱 앱 인증 요건은 AppInit_DLLs 로 임의 DLL 을 올려 Win32 API 를 가로채는 것을 금지합니다[2].
 
 ### BootExecute·Load
 
-- MITRE ATT&CK 는 T1547.001 에서 이 두 값도 자동실행 자리로 적습니다.
+- 이 두 값도 T1547.001 의 자동실행 자리에 들어갑니다[1].
 - `BootExecute` 는 `HKLM\System\CurrentControlSet\Control\Session Manager` 의 값입니다. 기본값은 `autocheck autochk *` 입니다.
 - `Load` 는 `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` 의 값입니다.
 
 ## 위치와 버전별 차이
 
-| 무엇 | 경로 | 출처 |
+| 무엇 | 경로 | 근거 |
 |---|---|---|
-| Winlogon (컴퓨터) | `HKLM\Software[\Wow6432Node]\Microsoft\Windows NT\CurrentVersion\Winlogon\` | MITRE T1547.004 |
-| Winlogon (사용자) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\` | MITRE T1547.004 |
-| IFEO | `HKLM\SOFTWARE\{Wow6432Node}\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\<실행 파일 이름>` | MITRE T1546.012 |
-| 조용한 종료 감시 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SilentProcessExit\<실행 파일 이름>` | MITRE T1546.012, Microsoft 디버거 문서 |
-| AppInit_DLLs | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows` (`AppInit_DLLs`·`LoadAppInit_DLLs`) | Win11 25H2 PC 한 대에서 확인 |
-| AppInit_DLLs (32비트) | `HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows NT\CurrentVersion\Windows` | Win11 25H2 PC 한 대에서 확인 |
-| BootExecute | `HKLM\System\CurrentControlSet\Control\Session Manager` | MITRE T1547.001 |
-| Load | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | MITRE T1547.001 |
+| Winlogon (컴퓨터) | `HKLM\Software[\Wow6432Node]\Microsoft\Windows NT\CurrentVersion\Winlogon\` | [3] |
+| Winlogon (사용자) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\` | [3] |
+| IFEO | `HKLM\SOFTWARE\{Wow6432Node}\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\<실행 파일 이름>` | [4] |
+| 조용한 종료 감시 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SilentProcessExit\<실행 파일 이름>` | [4][5] |
+| AppInit_DLLs | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows` (`AppInit_DLLs`·`LoadAppInit_DLLs`) | Win11 25H2 PC 한 대의 값 |
+| AppInit_DLLs (32비트) | `HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows NT\CurrentVersion\Windows` | Win11 25H2 PC 한 대의 값 |
+| BootExecute | `HKLM\System\CurrentControlSet\Control\Session Manager` | [1] |
+| Load | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | [1] |
 
-- AppInit_DLLs 의 Microsoft 문서에는 레지스트리 경로가 적혀 있지 않습니다. 표의 경로는 PC 한 대에서 본 것입니다.
-- MITRE 페이지는 Notify 가 어느 Windows 버전에서 없어졌는지 적지 않습니다.
+- AppInit_DLLs 의 레지스트리 경로는 공식 문서에 없습니다. 표의 경로는 PC 한 대의 값이므로 검체에서 확인합니다.
+- Notify 가 어느 Windows 버전까지 쓰였는지는 검체의 Windows 버전으로 확인합니다.
 
 ### AppInit_DLLs 의 버전별 차이
 
 | Windows | 동작 |
 |---|---|
-| Windows 7·Server 2008 R2 | 별도 백서에 동작이 정리되어 있다고만 Microsoft 문서가 적습니다 |
+| Windows 7·Server 2008 R2 | 동작은 Microsoft 의 별도 백서에 정리되어 있습니다[2] |
 | Windows 8 이후, Secure Boot 켜짐 | AppInit_DLLs 기능이 꺼집니다 |
 
-서명을 요구하는 설정(`RequireSignedAppInit_DLLs`)이 Windows 7 에서 생겼다는 설명은 이번에 연 자료로 확인하지 못했습니다.
+서명을 요구하는 설정(`RequireSignedAppInit_DLLs`)이 Windows 7 에서 생겼다는 설명이 있습니다. 검체의 Windows 버전에서 이 값이 있는지 확인합니다.
 
 ## 구조
 
@@ -75,7 +75,7 @@ Windows 11 PC 한 대에서 본 값은 아래와 같습니다.
 - 같은 PC 에는 `Winlogon\Notify` 키가 없었습니다.
 - 하위 키로는 `AlternateShells`, `GPExtensions`(27개), `ShellPrograms`, `UserDefaults`, `AutoLogonChecked`, `VolatileUserMgrKey` 가 있었습니다.
 - Winlogon 키에는 `DefaultUserName`·`LastUsedUsername` 같은 계정 이름 값도 있었습니다.
-- `Userinit` 에 쉼표로 여러 프로그램을 이어 붙일 수 있다는 설명이 있지만, 이번에 연 자료로는 확인하지 못했습니다. 끝 쉼표가 왜 붙는지도 확인하지 못했습니다.
+- `Userinit` 에 쉼표로 여러 프로그램을 이어 붙일 수 있다는 설명이 있습니다. 끝 쉼표가 왜 붙는지는 공식 문서가 없습니다.
 
 ### IFEO 하위 키
 
@@ -83,15 +83,13 @@ Windows 11 PC 한 대에서 본 모습입니다.
 
 - IFEO 하위 키가 59개 있었습니다.
 - `Debugger` 값이 있는 키는 0개였습니다.
-- `GlobalFlag` 값이 있는 키도 0개였습니다. 전역 플래그는 IFEO 하위 키의 `GlobalFlag` 값에 들어갑니다(Microsoft 디버거 문서).
+- `GlobalFlag` 값이 있는 키도 0개였습니다. 전역 플래그는 IFEO 하위 키의 `GlobalFlag` 값에 들어갑니다[5].
 - 하위 키에 흔히 있는 값은 `MitigationOptions`(47개 키), `ImageExpansionMitigation`(5), `DisableExceptionChainValidation`(3), `CFGOptions`(2) 등이었습니다.
 - 즉 IFEO 하위 키가 있다는 것만으로는 이상하지 않습니다. `Debugger` 나 전역 플래그 같은 값을 봐야 합니다.
-- WOW6432Node 쪽 IFEO 도 하위 키가 59개로 같았습니다. 두 경로가 같은 키를 공유하는지는 확인하지 못했습니다.
+- WOW6432Node 쪽 IFEO 도 하위 키가 59개로 같았습니다. 두 경로가 같은 키를 공유하는지는 검체에서 확인합니다.
 - `SilentProcessExit` 키는 없었습니다.
 
-`SilentProcessExit` 의 동작은 Microsoft 디버거 문서에 있습니다.
-
-Windows 7 부터 쓸 수 있고, 감시 대상은 IFEO 하위 키 `GlobalFlag` 에 0x200 이 켜진 프로그램입니다. 대상이 ExitProcess 로 스스로 끝나거나 다른 프로세스가 TerminateProcess 로 끝낼 때만 반응하며, 마지막 스레드가 끝나는 보통 종료에는 반응하지 않습니다.
+`SilentProcessExit` 감시는 Windows 7 부터 쓸 수 있고, 감시 대상은 IFEO 하위 키 `GlobalFlag` 에 0x200 이 켜진 프로그램입니다. 대상이 ExitProcess 로 스스로 끝나거나 다른 프로세스가 TerminateProcess 로 끝낼 때만 반응하며, 마지막 스레드가 끝나는 보통 종료에는 반응하지 않습니다[5].
 
 프로그램별 설정은 `SilentProcessExit\<실행 파일 이름>` 키에 있습니다. `ReportingMode` 에 0x1 비트가 켜져 있으면 `MonitorProcess` 에 적힌 명령줄을 실행하고, 0x2 는 덤프 생성, 0x4 는 팝업 알림입니다. 감시 대상이 이렇게 끝나면 Application 로그에 원본 "Process Exit Monitor" 항목이 남습니다. 그래서 이 키가 있고 `MonitorProcess` 에 프로그램 경로가 있으면 살펴볼 대상으로 둡니다.
 
@@ -104,7 +102,7 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 | HKLM ...\Windows | 빈 문자열 (REG_SZ) | 0 (REG_DWORD) | 없음 |
 | HKLM\SOFTWARE\WOW6432Node\...\Windows | 빈 문자열 | 0 | 없음 |
 
-- User32.dll 을 올리는 프로세스만 해당된다는 설명, `LoadAppInit_DLLs`=1 이어야 동작한다는 설명, DLL 목록의 구분자가 무엇인지는 이번에 연 자료로 확인하지 못했습니다.
+- User32.dll 을 올리는 프로세스만 해당된다는 설명과 `LoadAppInit_DLLs`=1 이어야 동작한다는 설명이 있습니다. 이 두 설명과 DLL 목록의 구분자는 검체에서 확인합니다.
 
 ### BootExecute·Load 값
 
@@ -123,7 +121,7 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 ### 증명하지 못하는 것
 
 - **실행됐나.** 설정만 알려 줍니다. 실행은 [프로세스 생성](../event-logs/4688.md) 이나 [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 에서 따로 봅니다.
-- **AppInit DLL 이 올라갔나.** Secure Boot 가 켜진 Windows 8 이후 PC 에서는 AppInit_DLLs 에 값이 있어도 기능이 꺼져 있습니다. 그래서 값이 있다는 것은 "시도" 의 흔적이지 "실행" 의 증거가 아닙니다. 이 문장은 Microsoft 문서에서 끌어낸 해석입니다. 조사 대상 PC 의 Secure Boot 상태를 따로 확인해야 합니다.
+- **AppInit DLL 이 올라갔나.** Secure Boot 가 켜진 Windows 8 이후 PC 에서는 AppInit_DLLs 에 값이 있어도 기능이 꺼져 있습니다. 그래서 값이 있다는 것은 "시도" 의 흔적이지 "실행" 의 증거가 아닙니다[2]. 조사 대상 PC 의 Secure Boot 상태를 따로 확인해야 합니다.
 - **언제 설정했나.** 값에는 시각이 없습니다. 아래 "시각 해석" 을 봅니다.
 - **누가 설정했나.** 값에는 설정한 프로세스를 적는 칸이 없습니다.
 
@@ -133,16 +131,16 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 
 - 이 자리의 값에는 값마다 붙은 시각이 없습니다. 키 단위 시각은 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 - Winlogon 키에는 값이 많습니다. 키 시각이 바뀌었어도 `Shell`·`Userinit` 이 바뀌었다는 뜻은 아닙니다.
-- IFEO 는 실행 파일 이름마다 하위 키가 따로 있습니다. `Debugger` 가 있는 하위 키의 시각은 그 키 안의 변경만 가리킵니다. 이 문장은 키 단위 시각의 성질에서 끌어낸 해석입니다.
+- IFEO 는 실행 파일 이름마다 하위 키가 따로 있습니다. `Debugger` 가 있는 하위 키의 시각은 그 키 안의 변경만 가리킵니다.
 - 설정한 순간을 잡으려면 [Sysmon 레지스트리 이벤트](../event-logs/sysmon/12-13-14.md) 가 켜져 있었는지 봅니다.
 
 ## 함정과 한계
 
 - **WOW6432Node 를 빼먹습니다.** Winlogon·IFEO·AppInit_DLLs 모두 WOW6432Node 쪽 경로가 따로 있습니다.
-- **HKCU 쪽 Winlogon 도 봅니다.** MITRE 는 HKCU 경로도 적습니다. 사용자 하이브마다 확인합니다.
+- **HKCU 쪽 Winlogon 도 봅니다.** Winlogon 경로는 HKCU 에도 있습니다[3]. 사용자 하이브마다 확인합니다.
 - **`Userinit` 끝의 쉼표를 이상 신호로 보지 않습니다.** Windows 11 PC 한 대의 정상 값에도 쉼표가 붙어 있었습니다. 쉼표 뒤에 다른 경로가 이어지는지를 봅니다.
 - **IFEO 하위 키는 원래 많습니다.** 보안 완화 설정이 흔합니다. `Debugger`·전역 플래그 값을 봅니다.
-- **보안 제품 이름의 IFEO 키를 먼저 봅니다.** MITRE 는 IFEO 경로 아래 변경, 특히 보안 제품 실행 파일을 대상으로 한 변경을 보라고 권합니다.
+- **보안 제품 이름의 IFEO 키를 먼저 봅니다.** IFEO 경로 아래 변경, 특히 보안 제품 실행 파일을 대상으로 한 변경을 먼저 봅니다[4].
 - **AppInit_DLLs 의 뜻은 Secure Boot 상태에 따라 갈립니다.** 값만 보고 DLL 이 올라갔다고 쓰지 않습니다.
 - **Winlogon 에는 계정 이름 값이 있습니다.** 보고서에 옮길 때 필요한 범위만 적습니다.
 
@@ -190,7 +188,7 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 | 로그온 자동실행 | Run·RunOnce·시작프로그램 폴더 | [로그온 자동실행](run-runonce-startup-folder.md) |
 | 서비스·드라이버 | 부팅 때 도는 서비스와 드라이버 | [서비스·드라이버](services-drivers.md) |
 
-MITRE 의 Winlogon 탐지 권고도 같은 방향입니다. `Shell`·`Userinit`·`Notify` 에 새 실행 파일이나 DLL 경로가 생기는 변경을 보고, winlogon.exe·userinit.exe 에서 이어지는 DLL 로드와 프로세스 생성과 엮어 봅니다. IFEO 는 이상한 프로세스 실행이나 높은 권한 토큰과 엮어 봅니다. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
+Winlogon 은 `Shell`·`Userinit`·`Notify` 에 새 실행 파일이나 DLL 경로가 생기는 변경을 보고, winlogon.exe·userinit.exe 에서 이어지는 DLL 로드와 프로세스 생성과 엮어 봅니다[3]. IFEO 는 이상한 프로세스 실행이나 높은 권한 토큰과 엮어 봅니다[4]. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 

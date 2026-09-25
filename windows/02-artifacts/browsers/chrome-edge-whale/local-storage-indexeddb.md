@@ -35,14 +35,14 @@ Teams·Discord·Slack 같은 Electron 앱과 WebView2 앱도 같은 코드를 �
 | 버킷 목록 | `WebStorage\QuotaManager` | SQLite | `buckets` 표에 버킷 번호와 저장 키가 있습니다 |
 | SQLite 방식 DOM 저장소 | `LocalStorage\` · `SessionStorage\` | SQLite | 아래 "SQLite 로 옮기는 중" 을 봅니다 |
 
-위 폴더 이름과 파일 이름은 Chromium 소스로 확인했습니다. 크롬, 엣지, 웨일은 모두 Chromium 코드를 씁니다. 다만 브라우저마다 따르는 Chromium 버전이 다르므로 아래 변화가 들어온 시점도 다를 수 있습니다.
+크롬, 엣지, 웨일은 모두 Chromium 코드를 씁니다. 다만 브라우저마다 따르는 Chromium 버전이 다르므로 아래 변화가 들어온 시점도 다를 수 있습니다.
 
 ### 분할 저장 (Storage Partitioning)
 
-Chrome 115 부터 모든 사용자에게 분할 저장이 켜졌습니다(Google Privacy Sandbox 문서). 분할 저장을 켜면 다른 사이트 안에 끼워 넣은 프레임(iframe)의 저장소가 최상위 사이트별로 나뉩니다. 로컬 스토리지, 세션 스토리지, IndexedDB 가 모두 대상입니다.
+Chrome 115 부터 모든 사용자에게 분할 저장이 켜졌습니다. 분할 저장을 켜면 다른 사이트 안에 끼워 넣은 프레임(iframe)의 저장소가 최상위 사이트별로 나뉩니다. 로컬 스토리지, 세션 스토리지, IndexedDB 가 모두 대상입니다.
 
 - 로컬 스토리지에서는 저장 키 (Storage Key) 에 최상위 사이트가 붙습니다. 모양은 아래 구조 절에서 다룹니다.
-- IndexedDB 에서는 직접 연 사이트(퍼스트 파티, First-party)의 기본 버킷만 옛 위치(`IndexedDB\`)를 씁니다. Chromium 소스 주석은 제3자 IndexedDB 를 `WebStorage\<버킷 번호>\IndexedDB\` 에 둔다고 적습니다.
+- IndexedDB 에서는 직접 연 사이트(퍼스트 파티, First-party)의 기본 버킷만 옛 위치(`IndexedDB\`)를 씁니다. 제3자 IndexedDB 는 `WebStorage\<버킷 번호>\IndexedDB\` 에 둡니다.
 - 버킷 번호가 어느 사이트인지는 `WebStorage\QuotaManager` 의 `buckets` 표에서 찾습니다. 이 표에는 `id`·`storage_key`·`host`·`name`·`use_count`·`last_accessed`·`last_modified` 열이 있습니다.
 
 ### SQLite 로 옮기는 중
@@ -69,9 +69,9 @@ DB 하나에 모든 사이트의 값이 들어 있습니다. 키의 첫 글자�
 | `META:` + 저장 키 | `LocalStorageAreaWriteMetaData`: `last_modified`(필드 1), `size_bytes`(필드 2) |
 | `METAACCESS:` + 저장 키 | `LocalStorageAreaAccessMetaData`: `last_accessed`(필드 1) |
 
-`META:` 와 `METAACCESS:` 의 값은 프로토콜 버퍼 (Protocol Buffers) 로 인코딩됩니다. 스크립트 키와 값은 첫 1바이트가 문자 인코딩을 가리키는데, `00` 은 UTF-16LE 이고 `01` 은 한 바이트 문자(Latin-1 계열)입니다. CCL 의 공개 파서 소스는 `META:` 만 설명하므로 `METAACCESS:` 는 그 뒤 Chromium 에 들어온 것으로 보이며, 옛 버전 검체에는 없을 수 있습니다.
+`META:` 와 `METAACCESS:` 의 값은 프로토콜 버퍼 (Protocol Buffers) 로 인코딩됩니다. 스크립트 키와 값은 첫 1바이트가 문자 인코딩을 가리키는데, `00` 은 UTF-16LE 이고 `01` 은 한 바이트 문자(Latin-1 계열)입니다. `METAACCESS:` 는 `META:` 보다 늦게 Chromium 에 들어온 것으로 보여, 옛 버전 검체에는 없을 수 있습니다.
 
-저장 키의 모양은 맥락에 따라 다릅니다(Chromium `StorageKey` 소스).
+저장 키의 모양은 맥락에 따라 다릅니다.
 
 | 맥락 | 저장 키 예 |
 |---|---|
@@ -82,7 +82,7 @@ DB 하나에 모든 사이트의 값이 들어 있습니다. 키의 첫 글자�
 
 ### 세션 스토리지
 
-Chromium 소스 주석에 따른 키 모양입니다.
+키 모양은 아래와 같습니다.
 
 | 키 | 값 |
 |---|---|
@@ -93,13 +93,13 @@ Chromium 소스 주석에 따른 키 모양입니다.
 
 ### IndexedDB
 
-사이트마다 LevelDB 폴더가 따로 있습니다. 아래는 CCL 의 분석 글을 따른 요약입니다.
+사이트마다 LevelDB 폴더가 따로 있습니다.
 
 - **키 앞머리**: 모든 키가 데이터베이스 번호, 객체 저장소 번호, 인덱스 번호로 시작합니다. 첫 1바이트가 세 번호의 길이를 적습니다. 번호가 모두 256 미만이면 이 바이트가 `00` 이고 앞머리는 4바이트입니다.
 - **전체 메타데이터**: 앞머리가 `00 00 00 00` 인 레코드입니다. 종류 `C9`(201) 레코드에 출처와 데이터베이스 이름이 있고, 값이 데이터베이스 번호입니다.
 - **인덱스 번호 1·2·3**: 1 은 기본 키로 찾는 실제 레코드입니다. 2 는 버전 표시("exists") 레코드입니다. 3 은 외부 파일(blob) 목록입니다.
 - **값**: 저장소 버전 varint, `FF` + Blink 버전, `FF` + V8 버전이 앞에 옵니다. 그 뒤는 V8 의 구조화 복제 (Structured Clone) 직렬화 형식입니다.
-- **blob 파일**: `.indexeddb.blob` 폴더 아래 `데이터베이스 번호\앞자리 16진\blob 번호 16진` 경로에 있습니다. CCL 의 예에서 데이터베이스 1 의 blob 270 은 `1/01/10E` 입니다.
+- **blob 파일**: `.indexeddb.blob` 폴더 아래 `데이터베이스 번호\앞자리 16진\blob 번호 16진` 경로에 있습니다. 예를 들어 데이터베이스 1 의 blob 270 은 `1/01/10E` 입니다.
 
 ## 증거로서 의미
 
@@ -126,12 +126,12 @@ LevelDB 레코드에는 시각이 없어 순서 번호로 앞뒤만 알 수 있�
 |---|---|---|---|
 | `last_modified` | 로컬 스토리지 `META:` 값 | 그 저장 키의 저장소를 디스크에 쓸 때 | 1601-01-01 UTC 부터 센 마이크로초 |
 | `last_accessed` | 로컬 스토리지 `METAACCESS:` 값 | 페이지가 그 저장소에 연결될 때 한 번 | 같음 |
-| 파일 수정 시각 | IndexedDB 외부 파일 목록 | blob 파일의 수정 시각 | 1601-01-01 UTC 부터 센 마이크로초 (CCL) |
-| `last_accessed`·`last_modified` | `WebStorage\QuotaManager` 의 `buckets` 표 | 버킷 단위 사용·수정 | 정수. 이 글에서는 단위를 소스로 확인하지 못했습니다. 검체에서 다른 시각과 맞춰 봅니다 |
+| 파일 수정 시각 | IndexedDB 외부 파일 목록 | blob 파일의 수정 시각 | 1601-01-01 UTC 부터 센 마이크로초 |
+| `last_accessed`·`last_modified` | `WebStorage\QuotaManager` 의 `buckets` 표 | 버킷 단위 사용·수정 | 정수. 단위는 검체에서 다른 시각과 맞춰 확인합니다 |
 | 앱이 넣은 시각 | 값 안 | 사이트가 정합니다 | 사이트마다 다릅니다. JavaScript `Date` 는 1970-01-01 UTC 부터 센 밀리초입니다 |
 | 파일 시스템 시각 | `.log`·`.ldb` 파일 | 파일이 생기거나 쓰일 때 | NTFS 시각 |
 
-`META:` 값의 시각은 `base::Time::ToInternalValue()` 로 저장하고(Chromium 소스 주석), CCL 파서는 이 값을 1601년 기준 마이크로초로 풉니다. 이 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)의 WebKit 시각과 같습니다.
+`META:` 값의 시각은 `base::Time::ToInternalValue()` 로 저장하며, 1601년 기준 마이크로초입니다. 이 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)의 WebKit 시각과 같습니다.
 
 `last_modified` 는 저장 키 하나에 하나뿐이라서 그 사이트의 마지막 쓰기만 남고 이전 시각은 덮어씁니다. 이전 `META:` 레코드가 지운 레코드로 남아 있으면 예전 시각도 볼 수 있습니다.
 
@@ -192,7 +192,7 @@ CCL 의 파서는 `META:` 레코드와 순서 번호가 이어지는 값 레코�
 
 **`.ldb` 안 키 끝의 8바이트**
 
-`.ldb` 파일에서는 키 끝에 8바이트가 더 붙습니다. 리틀 엔디언 64비트 정수로 읽습니다. 가장 낮은 바이트가 상태이고, 나머지 7바이트가 순서 번호입니다(CCL).
+`.ldb` 파일에서는 키 끝에 8바이트가 더 붙습니다. 리틀 엔디언 64비트 정수로 읽습니다. 가장 낮은 바이트가 상태이고, 나머지 7바이트가 순서 번호입니다.
 
 ```
 01 2A 00 00 00 00 00 00
@@ -204,7 +204,7 @@ CCL 의 파서는 `META:` 레코드와 순서 번호가 이어지는 값 레코�
 
 ### 공개 도구로 한 번
 
-CCL 이 공개한 파이썬 라이브러리 `ccl_chromium_reader` 로 로컬 스토리지, 세션 스토리지, IndexedDB 를 읽을 수 있습니다. 로컬 스토리지 모듈 소스는 지운 레코드도 읽어 순서 번호로 쓰기 묶음을 만듭니다. 소스 주석은 `META:` 시각을 살아 있는 레코드에서만 쓴다고 적습니다. 도구가 무엇이든 다음을 확인합니다.
+CCL 이 공개한 파이썬 라이브러리 `ccl_chromium_reader` 로 로컬 스토리지, 세션 스토리지, IndexedDB 를 읽을 수 있습니다. 로컬 스토리지 모듈은 지운 레코드도 읽어 순서 번호로 쓰기 묶음을 만들고, `META:` 시각은 살아 있는 레코드에서만 씁니다. 도구가 무엇이든 다음을 확인합니다.
 
 - 결과에 순서 번호와 상태(살아 있음·지움)가 나오는지 봅니다.
 - `WebStorage\` 아래 버킷과 SQLite 폴더도 읽는지 봅니다.

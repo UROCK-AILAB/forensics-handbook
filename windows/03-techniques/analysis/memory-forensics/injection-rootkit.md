@@ -22,11 +22,10 @@ nav_order: 3210
 
 ## 코드 주입이란
 
-MITRE ATT&CK 은 이 기법을 T1055 코드 주입 (Process Injection) 으로 정리합니다 [1].
-아래는 ATT&CK 문서(버전 2.0, 마지막 수정 2026-05-12) 에서 확인한 내용입니다.
+이 기법은 MITRE ATT&CK 의 T1055 코드 주입 (Process Injection) 입니다 [1].
 
-전술은 Stealth 와 Privilege Escalation 으로 적혀 있고, 플랫폼은 Linux·Windows·macOS 입니다 [1].
-ATT&CK 은 주입한 코드가 정상 프로세스 이름 아래에서 돌기 때문에 보안 제품의 탐지를 피할 수 있다고 설명합니다 [1].
+전술은 Stealth 와 Privilege Escalation 이고, 플랫폼은 Linux·Windows·macOS 입니다 [1].
+주입한 코드는 정상 프로세스 이름 아래에서 돌기 때문에 보안 제품의 탐지를 피할 수 있습니다 [1].
 
 하위 기법은 아래와 같습니다 [1].
 
@@ -45,9 +44,9 @@ ATT&CK 은 주입한 코드가 정상 프로세스 이름 아래에서 돌기 �
 | T1055.014 | VDSO Hijacking |
 | T1055.015 | ListPlanting |
 
-.009 (Proc Memory) 는 하위 기법 문서에 플랫폼이 Linux 로만 적혀 있습니다 [3]. .008·.014 도 이름으로 보아 Linux 쪽 기법이지만 문서에서 플랫폼을 따로 확인하지는 않았습니다.
+.009 (Proc Memory) 의 플랫폼은 Linux 뿐입니다 [3]. .008·.014 도 이름으로 보아 Linux 쪽 기법으로 보입니다.
 
-ATT&CK 은 탐지할 때 아래를 보라고 합니다 [1].
+탐지할 때는 아래를 봅니다 [1].
 
 - 메모리를 다루는 API 호출: VirtualAllocEx, WriteProcessMemory
 - 의심스러운 스레드 생성: CreateRemoteThread
@@ -58,8 +57,8 @@ ATT&CK 은 탐지할 때 아래를 보라고 합니다 [1].
 
 ## 플러그인
 
-Volatility 3 문서의 Windows 플러그인 목록에서 아래 이름을 확인했습니다 [2].
-왼쪽 칸의 묶음은 플러그인 이름을 보고 나눈 것입니다.
+Volatility 3 의 Windows 플러그인 가운데 아래를 씁니다 [2].
+왼쪽 칸의 묶음은 플러그인 이름으로 나눈 것입니다.
 같은 플러그인이 windows.malfind 와 windows.malware.malfind 처럼 두 이름으로 나오기도 합니다. 이 점은 [프로세스와 DLL 분석](process-analysis.md) 의 "플러그인 이름 읽는 법" 에 있습니다.
 
 | 찾는 것 | 플러그인 [2] |
@@ -74,7 +73,7 @@ Volatility 3 문서의 Windows 플러그인 목록에서 아래 이름을 확인
 
 ## 알려진 동작
 
-아래는 널리 알려진 설명입니다. 이 글의 참고 문헌으로는 확인하지 못했습니다. 쓰는 버전의 도움말이나 소스 코드로 확인하고 씁니다.
+아래는 널리 알려진 설명입니다. 판마다 다를 수 있으므로 쓰는 버전의 도움말이나 소스 코드로 확인하고 씁니다.
 
 - windows.malfind 는 실행할 수 있고 쓸 수 있으면서 파일에 매핑되지 않은 메모리 영역을 찾는다고 알려져 있습니다. 그 영역 앞부분에 실행 파일 머리(MZ)나 코드가 있는지 보여 준다고 알려져 있습니다.
 - 루트킷 (Rootkit) 은 커널 구조를 고쳐 자신을 감추는 악성코드를 흔히 이르는 말입니다.

@@ -20,7 +20,7 @@ NTFS 는 복구 가능한 파일시스템으로 설계돼, 볼륨 구조를 바�
 
 ### 레코드에 남는 동작
 
-해석 도구 설명서는 redo·undo 에 들어 있는 동작을 아래 이름으로 나눕니다(참고 4). 뜻이 설명서에 적힌 것만 풀었습니다.
+redo·undo 에 들어 있는 동작은 아래 이름으로 나뉩니다(참고 4).
 
 | 동작 이름 | 뜻 (참고 4) |
 |---|---|
@@ -33,7 +33,7 @@ NTFS 는 복구 가능한 파일시스템으로 설계돼, 볼륨 구조를 바�
 | DeleteIndexEntryRoot · DeleteIndexEntryAllocation | 폴더 색인에서 항목을 뺍니다 |
 | WriteEndOfIndexBuffer | 색인 버퍼 끝을 씁니다 |
 
-설명서가 해석하는 동작은 이 밖에도 더 있습니다. DeleteAttribute, UpdateNonResidentValue, SetIndexEntryVcnRoot, SetIndexEntryVcnAllocation, UpdateFileNameRoot, UpdateFileNameAllocation, SetBitsInNonresidentBitMap, ClearBitsInNonresidentBitMap, OpenNonresidentAttribute, OpenAttributeTableDump, AttributeNamesDump, DirtyPageTableDump, TransactionTableDump, UpdateRecordDataRoot, UpdateRecordDataAllocation, CompensationLogRecord 입니다(참고 4).
+동작은 이 밖에도 더 있습니다. DeleteAttribute, UpdateNonResidentValue, SetIndexEntryVcnRoot, SetIndexEntryVcnAllocation, UpdateFileNameRoot, UpdateFileNameAllocation, SetBitsInNonresidentBitMap, ClearBitsInNonresidentBitMap, OpenNonresidentAttribute, OpenAttributeTableDump, AttributeNamesDump, DirtyPageTableDump, TransactionTableDump, UpdateRecordDataRoot, UpdateRecordDataAllocation, CompensationLogRecord 입니다(참고 4).
 
 ### 레코드에서 얻는 것
 
@@ -49,11 +49,11 @@ NTFS 는 복구 가능한 파일시스템으로 설계돼, 볼륨 구조를 바�
 
 MFT 항목 2번 `$LogFile` 입니다(참고 1). 크기는 `chkdsk /l:<크기>` 로 바꾸고, 크기를 빼고 `/l` 만 주면 지금 크기를 보여 줍니다. NTFS 에서만 씁니다(참고 3).
 
-`chkdsk` 문서에는 크기 단위가 적혀 있지 않습니다. 해석 도구 설명서는 `chkdsk D: /L:2097152` 를 2GB 로 설명하므로(참고 4), 이 설명대로면 단위는 KB 입니다. 같은 설명서는 흔한 크기를 "65 MB 파일" 로 적었습니다(참고 4). Windows 기본 크기와 최소 크기는 이 페이지에서 확인하지 못했으니 검체의 `$LogFile` 크기를 직접 봅니다.
+`chkdsk` 문서에는 크기 단위가 적혀 있지 않습니다(참고 3). 해석 도구 설명서는 `chkdsk D: /L:2097152` 를 2GB 로 설명하므로(참고 4), 이 설명대로면 단위는 KB 입니다. 흔한 크기는 65MB 입니다(참고 4). Windows 기본 크기와 최소 크기는 검체의 `$LogFile` 크기로 직접 확인합니다.
 
 ### 얼마나 남나
 
-크기가 클수록 오래 남습니다(참고 4). 자주 쓰는 시스템 드라이브는 몇 시간 분량만 남기 쉽고, 백업용 외장 디스크나 보조 디스크는 더 오래 남습니다(참고 4). 같은 설명서는 시스템 볼륨에서 일주일 분량이면 기대 이상이라고도 적었습니다(참고 4). 정리하면 몇 시간에서 며칠이고 볼륨 쓰임새에 따라 크게 다르므로, 검체마다 남은 기간을 직접 잽니다(아래 "시각 해석").
+크기가 클수록 오래 남습니다(참고 4). 자주 쓰는 시스템 드라이브는 몇 시간 분량만 남기 쉽고, 백업용 외장 디스크나 보조 디스크는 더 오래 남습니다(참고 4). 시스템 볼륨에서 일주일 분량이 남는 일은 드뭅니다(참고 4). 곧 몇 시간에서 며칠이고 볼륨 쓰임새에 따라 크게 다르므로, 검체마다 남은 기간을 직접 잽니다(아래 "시각 해석").
 
 ### Windows 버전별 차이
 
@@ -62,8 +62,8 @@ MFT 항목 2번 `$LogFile` 입니다(참고 1). 크기는 `chkdsk /l:<크기>` �
 | XP·Server 2003 (NT 5.x) | 상주 `$DATA` 의 바뀐 내용 전체가 UpdateResidentValue 의 redo·undo 에 남습니다(참고 4) |
 | 요즘 Windows | 내용은 남지 않습니다. 바뀌었다는 사실만 남습니다(참고 4) |
 
-- libyal 문서는 재시작 페이지 머리의 주 버전 값으로 -1(베타), 0(전환), 1(update sequence 지원) 만 적었습니다(참고 1). 이 표에 없는 값이 나올 수 있으므로, 값이 다르면 오류로 단정하지 않습니다.
-- `fsutil fsinfo ntfsinfo` 는 LFS 버전을 보여 줍니다. 한 PC 에서는 2.0 이었습니다. 이 값과 재시작 페이지 머리의 버전 칸이 어떻게 이어지는지는 확인하지 못했습니다.
+- 재시작 페이지 머리의 주 버전 값으로 알려진 것은 -1(베타), 0(전환), 1(update sequence 지원) 입니다(참고 1). 이 밖의 값이 나올 수 있으므로, 값이 다르면 오류로 단정하지 않습니다.
+- `fsutil fsinfo ntfsinfo` 는 LFS 버전(예: 2.0)을 보여 줍니다. 이 값과 재시작 페이지 머리의 버전 칸이 어떻게 이어지는지는 공개 자료가 없습니다.
 
 ## 구조
 
@@ -75,7 +75,7 @@ MFT 항목 2번 `$LogFile` 입니다(참고 1). 크기는 `chkdsk /l:<크기>` �
 |---|---|
 | `RSTR` | 재시작 페이지 |
 | `RCRD` | 레코드 페이지 |
-| `CHKD` | 이 서명의 뜻은 이번 자료에 적혀 있지 않습니다 |
+| `CHKD` | 뜻은 공개 자료 없음 |
 
 - RCRD 페이지는 보통 0x1000(4096)바이트입니다(참고 4).
 - 페이지 머리에도 fix-up 위치와 개수가 있습니다(참고 1). MFT 항목처럼 fix-up 을 적용한 뒤 읽습니다.
@@ -102,15 +102,15 @@ MFT 항목 2번 `$LogFile` 입니다(참고 1). 크기는 `chkdsk /l:<크기>` �
 | 8 | 8 | 이전 LSN |
 | 16 | 8 | undo 다음 LSN |
 
-- 그 뒤에 데이터 길이, 클라이언트 ID, 레코드 종류, 트랜잭션 ID, 플래그가 이어집니다(참고 1). 이 칸들의 오프셋은 이번 자료의 표에 없습니다.
+- 그 뒤에 데이터 길이, 클라이언트 ID, 레코드 종류, 트랜잭션 ID, 플래그가 이어집니다(참고 1). 이 칸들의 오프셋은 검체와 해석 도구로 확인합니다.
 - 클라이언트 데이터는 64비트 경계에서 시작합니다(참고 1).
-- libyal 이 정리한 레코드 머리 칸에는 시각 칸이 없습니다(참고 1). 이 표는 일부만 정리된 것입니다.
+- 정리된 레코드 머리 칸에는 시각 칸이 없습니다(참고 1). 다만 이 표는 일부 칸만 담고 있습니다.
 
 ### LSN 으로 이어지는 곳
 
 MFT 항목 머리 오프셋 8 에 `$LogFile` 순번(LSN)이 있고, 폴더 색인 INDX 머리 오프셋 8 에도 LSN 이 있습니다(참고 1). 그래서 LSN 은 [$MFT](mft.md)·[$I30](i30.md)과 `$LogFile` 을 잇는 고리입니다.
 
-이 LSN 이 "그 항목을 마지막으로 바꾼 기록" 을 뜻한다는 설명은 이번 자료로 확인하지 못했습니다. 보고서에는 "항목에 적힌 LSN 과 같은 LSN 의 레코드가 있다" 까지만 씁니다.
+이 LSN 이 "그 항목을 마지막으로 바꾼 기록" 을 뜻한다는 공개 설명은 없습니다. 보고서에는 "항목에 적힌 LSN 과 같은 LSN 의 레코드가 있다" 까지만 씁니다.
 
 ### `$LogFile` 슬랙
 
@@ -138,7 +138,7 @@ RCRD 페이지에서 마지막 트랜잭션 뒤부터 페이지 끝까지 빈 �
 
 ## 시각 해석
 
-libyal 이 정리한 레코드 머리 칸에는 시각이 없고(참고 1), 레코드마다 기록 시각 칸이 있는지는 확인하지 못했습니다. 해석 도구가 내보내는 시각은 redo·undo 안에서 해석한 파일 시각으로, 생성·수정·MFT 수정·접근 시각입니다(참고 4). 곧 도구 결과의 시각 칸은 대개 "그 동작이 파일에 써 넣은 시각 값" 이며 "그 동작이 일어난 시각" 과 다를 수 있습니다.
+정리된 레코드 머리 칸에는 시각이 없고(참고 1), 레코드마다 기록 시각 칸이 있는지 알려 주는 공개 자료도 없습니다. 해석 도구가 내보내는 시각은 redo·undo 안에서 해석한 파일 시각으로, 생성·수정·MFT 수정·접근 시각입니다(참고 4). 곧 도구 결과의 시각 칸은 대개 "그 동작이 파일에 써 넣은 시각 값" 이며 "그 동작이 일어난 시각" 과 다를 수 있습니다.
 
 동작의 순서는 LSN 으로 잡고, 동작의 시각은 같은 기간의 USN 레코드와 맞춰 좁힙니다. `$LogFile` 이 덮는 기간의 USN 레코드는 `$LogFile` 안에도 있고(참고 4), USN 레코드의 시각은 FILETIME(UTC)입니다(참고 1). 남은 기간은 `$LogFile` 안에서 찾은 가장 이른 USN 레코드와 가장 늦은 USN 레코드의 시각을 적어서 잽니다. 그 사이가 이 검체에서 `$LogFile` 이 덮는 대략의 기간입니다.
 

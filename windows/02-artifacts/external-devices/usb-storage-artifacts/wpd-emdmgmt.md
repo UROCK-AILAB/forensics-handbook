@@ -15,15 +15,15 @@ SOFTWARE 하이브의 `Windows Portable Devices\Devices` 키와 `EMDMgmt` 키에
 
 ### WPD
 
-휴대용 장치 (Windows Portable Devices, WPD) 는 PC 가 연결된 장치와 데이터를 주고받게 하는 Windows 구성 요소이고, Microsoft 는 WPD 가 다루는 장치로 음악 플레이어, 저장장치, 휴대전화, 카메라를 듭니다.
+휴대용 장치 (Windows Portable Devices, WPD) 는 PC 가 연결된 장치와 데이터를 주고받게 하는 Windows 구성 요소입니다. WPD 가 다루는 장치에는 음악 플레이어, 저장장치, 휴대전화, 카메라가 있습니다[1].
 
-USB 저장장치를 꽂으면 그 볼륨이 WPD 장치로도 한 번 더 등록됩니다. Windows 10 관찰 사례에서 Amcache 에 WPD 클래스 항목이 따로 생긴 것이 그 흔적입니다([장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)). 이때 SOFTWARE 하이브의 `Windows Portable Devices\Devices` 아래에 장치마다 하위 키가 생기고, 값 `FriendlyName` 에는 사람이 보는 이름이 들어갑니다. SANS 가 2009년에 낸 Windows Vista 용 USB 분석 안내서는 이 키에서 일련번호로 장치를 찾아 드라이브 문자와 볼륨 이름을 확인하라고 적었습니다.
+USB 저장장치를 꽂으면 그 볼륨이 WPD 장치로도 한 번 더 등록됩니다. Windows 10 에서는 Amcache 에 WPD 클래스 항목이 따로 생기는 것이 그 흔적입니다([장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)). 이때 SOFTWARE 하이브의 `Windows Portable Devices\Devices` 아래에 장치마다 하위 키가 생기고, 값 `FriendlyName` 에는 사람이 보는 이름이 들어갑니다. Windows Vista 에서는 이 키에서 일련번호로 장치를 찾아 드라이브 문자와 볼륨 이름을 확인할 수 있습니다[4].
 
 ### EMDMgmt
 
-EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스트는 USB 메모리 같은 플래시 장치를 디스크 캐시로 쓰는 기능이고 Windows Vista 에서 처음 나왔습니다. "EMD" 는 흔히 외부 메모리 장치 (External Memory Device) 의 줄임말로 풀이하지만, 이 풀이를 공식 문서로 확인하지는 못했습니다.
+EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스트는 USB 메모리 같은 플래시 장치를 디스크 캐시로 쓰는 기능이고 Windows Vista 에서 처음 나왔습니다. "EMD" 는 흔히 외부 메모리 장치 (External Memory Device) 의 줄임말로 풀이하지만, 공식 문서에는 이 풀이가 없습니다.
 
-플래시 장치를 꽂으면 레디부스트 서비스가 장치 성능을 검사하고 검사 결과를 `EMDMgmt` 아래에 적습니다(Russinovich). 사용자가 그 장치를 레디부스트용으로 쓰지 않아도 하위 키는 생깁니다(Cowen, Vista·7 기준). USB 메모리뿐만 아니라 eSATA·FireWire 장치와 시스템 디스크가 아닌 로컬 디스크도 남는다고 Cowen 이 적었습니다. 그래서 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
+플래시 장치를 꽂으면 레디부스트 서비스가 장치 성능을 검사하고 검사 결과를 `EMDMgmt` 아래에 적습니다[2]. 사용자가 그 장치를 레디부스트용으로 쓰지 않아도 하위 키는 생깁니다(Vista·7 기준)[5]. USB 메모리뿐만 아니라 eSATA·FireWire 장치와 시스템 디스크가 아닌 로컬 디스크도 남습니다[5]. 그래서 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -39,11 +39,11 @@ EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스�
 |---|---|---|---|
 | XP | SANS 의 XP 용 안내서는 이 키를 쓰지 않습니다. | 없습니다. 레디부스트가 Vista 에서 처음 나왔습니다. | SANS, Russinovich |
 | Vista | 볼륨 이름과 드라이브 문자를 찾는 위치로 쓰였습니다. | 레디부스트와 함께 생깁니다. | SANS, Russinovich |
-| 7 | 이 글의 자료로 판별 차이를 따로 확인하지 못했습니다. | 시스템 디스크가 SSD 이고 성능 기준을 넘으면 레디부스트를 끕니다. 이때 키가 비어 있을 수 있습니다. | Microsoft(E7 블로그), Cowen |
-| 8 이후 (10·11) | 한 공개 플러그인은 2019~2020년 갱신판에서 `Enum\SWD\WPDBUSENUM` 을 읽습니다. | 이 글의 자료로 확인하지 못했습니다. 검체에서 키가 있는지부터 봅니다. | RegRipper 소스 |
+| 7 | 공개 자료 없음. | 시스템 디스크가 SSD 이고 성능 기준을 넘으면 레디부스트를 끕니다. 이때 키가 비어 있을 수 있습니다. | Microsoft(E7 블로그), Cowen |
+| 8 이후 (10·11) | 한 공개 플러그인은 2019~2020년 갱신판에서 `Enum\SWD\WPDBUSENUM` 을 읽습니다. | 공개 자료가 없어 검체에서 키가 있는지부터 봅니다. | RegRipper 소스 |
 
 - 같은 플러그인 소스에는 예전 경로 `Enum\WpdBusEnumRoot` 가 주석으로 남아 있습니다.
-- 어느 판에서 경로가 바뀌었는지는 확인하지 못했습니다. SYSTEM 하이브에서는 두 경로를 모두 찾아봅니다.
+- 어느 판에서 경로가 바뀌었는지는 공개 자료가 없으므로 SYSTEM 하이브에서는 두 경로를 모두 찾아봅니다.
 
 ## 구조
 
@@ -51,21 +51,21 @@ EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스�
 
 장치 하나가 하위 키 하나이고, 하위 키 이름에는 제조사·모델·리비전·일련번호가 `#` 로 구분되어 들어 있습니다. 한 공개 플러그인(RegRipper `portdev`)은 이름을 `##` 또는 `??` 뒤에서 자른 다음 `#` 로 나눠 둘째 조각을 장치 이름으로, 셋째 조각을 일련번호로 읽습니다.
 
-값 `FriendlyName` 에는 볼륨 이름이나 드라이브 문자가 들어갑니다. SANS 안내서는 여기서 두 가지를 모두 찾으라고 적었고 초기 플러그인은 이 값을 드라이브 문자로 출력하는데, 어떤 경우에 둘 중 무엇이 들어가는지 정한 명세는 찾지 못했습니다.
-- 이 키에는 볼륨 이름이 없는데 Amcache 의 WPD 항목에는 있던 사례가 있습니다. 이 키가 비어 있으면 [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다.
+값 `FriendlyName` 에는 볼륨 이름이나 드라이브 문자가 들어갑니다[4]. 어떤 경우에 둘 중 무엇이 들어가는지 정한 명세는 없고, 초기 플러그인은 이 값을 드라이브 문자로 출력합니다[6].
+- 이 키에 볼륨 이름이 없어도 Amcache 의 WPD 항목에는 있을 수 있습니다. 이 키가 비어 있으면 [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다.
 
 ### Enum\SWD\WPDBUSENUM
 
 - 장치 인스턴스 ID (Device Instance ID) 하나가 하위 키 하나입니다.
 - 공개 플러그인(RegRipper `wpdbusenum`)은 `FriendlyName`·`DeviceDesc`·`Mfg` 값을 읽습니다.
 - `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 속성 번호 0064~0067 에는 설치·연결·해제 시각이 있습니다. 뜻은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
-- SOFTWARE 쪽 `FriendlyName` 과 이 키의 `FriendlyName` 이 늘 같은지는 확인하지 못했습니다. 검체에서 두 값을 맞춰 봅니다.
+- SOFTWARE 쪽 `FriendlyName` 과 이 키의 `FriendlyName` 이 늘 같은지는 공개 자료가 없어 검체에서 두 값을 맞춰 봅니다.
 
 > 그림 자리: USBSTOR 일련번호 하나가 WPD Devices 하위 키 이름, SWD\WPDBUSENUM 인스턴스 키 이름, EMDMgmt 하위 키 이름에 모두 들어 있고, EMDMgmt 끝의 볼륨 일련번호가 LNK 파일의 볼륨 일련번호와 이어지는 모습
 
 ### EMDMgmt 하위 키 이름
 
-USB 저장장치의 하위 키 이름은 아래 모양입니다. 공개 플러그인(RegRipper `emdmgmt`)이 이름을 자르는 규칙에서 옮긴 것입니다.
+USB 저장장치의 하위 키 이름은 아래 모양입니다[6].
 
 ```
 _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}<볼륨 이름>_<볼륨 일련번호(10진)>
@@ -85,7 +85,7 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 
 - `_??_USBSTOR` 로 시작하지 않는 하위 키도 있습니다. 공개 플러그인은 이 경우 이름을 밑줄로 나눈 마지막 두 조각을 볼륨 이름과 VSN 으로 읽습니다.
 - 값 `LastTestedTime` 은 8바이트입니다. 공개 플러그인은 이 값을 FILETIME 으로 풉니다.
-- 나머지 값은 레디부스트가 잰 검사 결과입니다. 값 이름별 뜻은 이 글에서 명세로 확인하지 못했습니다.
+- 나머지 값은 레디부스트가 잰 검사 결과입니다. 값 이름별 뜻은 공개된 명세가 없습니다.
 
 ## 증거로서 의미
 
@@ -94,7 +94,7 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 - EMDMgmt 에 하위 키가 있으면 볼륨 이름·VSN 이 그 값인 볼륨이 이 PC 에 연결된 적이 있습니다.
 - 하위 키가 `_??_USBSTOR` 형식이면 그 볼륨이 어느 장치(제조사·모델·일련번호)에 있었는지도 함께 알 수 있습니다.
 - VSN 은 LNK 파일과 점프리스트에도 적힙니다. 그래서 사용자가 연 파일이 어느 USB 장치에 있었는지 이을 수 있습니다.
-- Cowen 은 MountPoints2 말고는 이 키가 장치와 LNK 속 VSN·볼륨 이름을 잇는 유일한 키라고 적었습니다(2013년 글).
+- MountPoints2 말고는 이 키가 장치와 LNK 속 VSN·볼륨 이름을 잇는 유일한 키라는 설명이 있습니다[5].
 - WPD 키에서는 장치 일련번호와 볼륨 이름(또는 드라이브 문자)의 짝을 얻습니다.
 - 두 키는 SOFTWARE 하이브에 있습니다. SYSTEM 하이브의 USB 흔적만 정리한 경우 이 키들은 남아 있을 수 있습니다.
 
@@ -116,9 +116,9 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 
 | 시각 | 무엇이 바뀔 때 바뀌나 | 기준 |
 |---|---|---|
-| EMDMgmt 하위 키 마지막 기록 시각 | 여러 하위 키의 시각이 같거나 가까운 경우가 많습니다. 연결·해제가 아닌 다른 동작도 이 시각을 바꾼다고 봅니다(RegRipper 소스 주석). | UTC, FILETIME ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
-| `LastTestedTime` 값 | 이름으로는 마지막 검사 때로 보이지만 명세는 없습니다. 관심 시간대와 크게 떨어진 경우가 많다고 보고됐습니다. 값이 0 일 수 있습니다. | 공개 플러그인은 FILETIME·UTC 로 풉니다. |
-| WPD Devices 하위 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 공개된 설명을 찾지 못했습니다. | UTC, FILETIME |
+| EMDMgmt 하위 키 마지막 기록 시각 | 여러 하위 키의 시각이 같거나 가까운 경우가 많습니다. 연결·해제가 아닌 다른 동작도 이 시각을 바꿉니다[6]. | UTC, FILETIME ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
+| `LastTestedTime` 값 | 이름으로는 마지막 검사 때로 보이지만 명세는 없습니다. 관심 시간대와 크게 떨어진 경우가 많습니다. 값이 0 일 수 있습니다. | 공개 플러그인은 FILETIME·UTC 로 풉니다. |
+| WPD Devices 하위 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 공개된 설명이 없습니다. | UTC, FILETIME |
 | SWD\WPDBUSENUM 장치 속성 0064~0067 | [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다. | UTC, FILETIME |
 
 - 이 페이지의 두 키에서 나온 시각은 연결 시각으로 쓰지 않습니다.
@@ -126,14 +126,14 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 
 ## 함정과 한계
 
-1. **EMDMgmt 가 비어 있다고 지운 흔적으로 보는 실수.** Microsoft 는 시스템 디스크가 SSD 이고 성능 기준을 넘으면 Windows 7 이 레디부스트를 끈다고 밝혔습니다. Cowen 은 이 때문에 초보 분석가가 증거 인멸로 오판하기 쉽다고 적었습니다. 레디부스트 서비스를 첫 장치 연결 전에 꺼 둔 경우도 키가 비어 있을 수 있습니다(Cowen). Windows 8 이후 동작은 이 글에서 확인하지 못했습니다.
-2. **VSN 을 10진 그대로 쓰는 실수.** LNK 도구와 `dir` 은 16진으로 보여 줍니다. 16진으로 바꿀 때 앞자리 0 을 채워 8자리로 맞춥니다. 한 공개 플러그인(`emdmgmt`)은 8자리가 안 되면 0 을 채우지 않고, 가운데 `-` 도 넣지 않은 채 그대로 냅니다(소스 기준).
+1. **EMDMgmt 가 비어 있다고 지운 흔적으로 보는 실수.** Windows 7 은 시스템 디스크가 SSD 이고 성능 기준을 넘으면 레디부스트를 끕니다[3]. 이 때문에 빈 키를 증거 인멸로 오판하기 쉽습니다[5]. 레디부스트 서비스를 첫 장치 연결 전에 꺼 둔 경우도 키가 비어 있을 수 있습니다[5]. Windows 8 이후 동작은 공개 자료가 없어 검체에서 확인합니다.
+2. **VSN 을 10진 그대로 쓰는 실수.** LNK 도구와 `dir` 은 16진으로 보여 줍니다. 16진으로 바꿀 때 앞자리 0 을 채워 8자리로 맞춥니다. 한 공개 플러그인(`emdmgmt`)은 8자리가 안 되면 0 을 채우지 않고, 가운데 `-` 도 넣지 않은 채 그대로 냅니다.
 3. **볼륨 이름에 밑줄이 있을 때.** 볼륨 이름과 VSN 은 밑줄로 이어져 있습니다. 볼륨 이름이 `MY_DATA` 처럼 밑줄을 품으면 도구가 이름과 VSN 을 잘못 자를 수 있습니다. VSN 은 마지막 밑줄 뒤 숫자로 직접 읽습니다.
-4. **한 장치에 하위 키가 여럿.** 하위 키 이름에 볼륨 이름과 VSN 이 함께 들어갑니다. 그래서 장치를 다시 포맷하거나 이름을 바꾼 뒤 꽂으면 다른 하위 키가 생길 수 있습니다. 이 동작은 명세로 확인하지 못했습니다. 같은 일련번호로 하위 키가 여럿 있으면 각 VSN 을 따로 추적합니다.
+4. **한 장치에 하위 키가 여럿.** 하위 키 이름에 볼륨 이름과 VSN 이 함께 들어갑니다. 그래서 장치를 다시 포맷하거나 이름을 바꾼 뒤 꽂으면 다른 하위 키가 생길 수 있습니다. 이 동작은 명세에 없습니다. 같은 일련번호로 하위 키가 여럿 있으면 각 VSN 을 따로 추적합니다.
 5. **`FriendlyName` 을 볼륨 이름으로 단정하는 실수.** 드라이브 문자가 들어 있을 수 있습니다.
-6. **속성 번호에 붙인 이름이 도구마다 다릅니다.** 한 공개 플러그인(`wpdbusenum`)은 0064 를 "First InstallDate", 0065 를 "InstallDate" 로 표시합니다(소스 기준). 이 핸드북의 [장치 항목](../../execution/amcache-hve/inventorydevicepnp.md) 페이지는 0064 를 `DEVPKEY_Device_InstallDate`, 0065 를 `DEVPKEY_Device_FirstInstallDate` 로 적었습니다. 도구 출력의 이름 대신 속성 번호로 확인합니다.
+6. **속성 번호에 붙인 이름이 도구마다 다릅니다.** 한 공개 플러그인(`wpdbusenum`)은 0064 를 "First InstallDate", 0065 를 "InstallDate" 로 표시합니다. 이 핸드북의 [장치 항목](../../execution/amcache-hve/inventorydevicepnp.md) 페이지는 0064 를 `DEVPKEY_Device_InstallDate`, 0065 를 `DEVPKEY_Device_FirstInstallDate` 로 적었습니다. 도구 출력의 이름 대신 속성 번호로 확인합니다.
 7. **지워진 하위 키.** 키가 없으면 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SOFTWARE 하이브를 봅니다.
-8. **스마트폰.** Microsoft 는 휴대전화도 WPD 장치로 설명합니다. MTP 로 연결한 스마트폰이 이 키들에 어떻게 남는지는 [스마트폰으로 옮겼나](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md)에서 다룹니다.
+8. **스마트폰.** 휴대전화도 WPD 장치입니다[1]. MTP 로 연결한 스마트폰이 이 키들에 어떻게 남는지는 [스마트폰으로 옮겼나](../../../04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -193,7 +193,7 @@ VSN 이 디스크에 놓인 모양 (리틀 엔디언) CD AB 34 12               
 | 셸백 | 외부 장치의 폴더를 탐색했나 | [외부 장치·네트워크·압축 폴더 탐색 흔적](../../file-folder-usage/shellbags/removable-network-zip.md) |
 | 이벤트 로그 | 연결 이벤트 | [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
 
-- 사용자가 장치를 레디부스트용으로 쓰기로 하면 장치 루트에 `ReadyBoost.sfcache` 파일이 생깁니다(Russinovich, Vista 기준 설명). USB 이미지가 있으면 이 파일이 있는지 봅니다.
+- 사용자가 장치를 레디부스트용으로 쓰기로 하면 장치 루트에 `ReadyBoost.sfcache` 파일이 생깁니다(Vista 기준)[2]. USB 이미지가 있으면 이 파일이 있는지 봅니다.
 - 전체 흐름은 [USB 로 무엇을 가져갔나](../../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
 
 ## 실습

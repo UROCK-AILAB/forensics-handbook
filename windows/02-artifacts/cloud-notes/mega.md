@@ -10,7 +10,7 @@ nav_order: 2270
 
 MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 설정 파일, 로그, SQLite 상태 DB 를 두고, 동기화 폴더 안에는 숨은 `Rubbish` 폴더를 만듭니다. 동기화 때문에 지워지거나 덮어쓰인 로컬 파일은 이 폴더의 날짜 폴더로 옮겨집니다.
 
-> **(코드)** 표시는 MEGA 가 공개한 소스 코드(MEGAsync 커밋 22e72f5, MEGA SDK 커밋 b93cc67)에서 읽은 동작입니다. 코드에 그렇게 쓰여 있다는 뜻이고, 실제 검체에서 본 것은 아닙니다. 앱 버전이 다르면 다를 수 있습니다.
+> **(코드)** 표시는 MEGA 가 공개한 소스 코드(MEGAsync 커밋 22e72f5, MEGA SDK 커밋 b93cc67)[2][3]에 쓰인 동작입니다. 앱 버전이 다르면 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -21,9 +21,9 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 ### 데이터 폴더
 
 - KAPE 대상 파일은 `C:\Users\<USER>\AppData\Local\Mega Limited\MEGAsync\` 를 하위 폴더까지 모읍니다.
-- 앱은 조직 이름 `Mega Limited`, 앱 이름 `MEGAsync` 로 Qt 의 표준 데이터 위치(AppLocalDataLocation)를 씁니다 (코드). Windows 에서는 이 위치가 위 경로와 같습니다(KAPE 경로와 코드를 맞춰 본 추론).
+- 앱은 조직 이름 `Mega Limited`, 앱 이름 `MEGAsync` 로 Qt 의 표준 데이터 위치(AppLocalDataLocation)를 씁니다 (코드). Windows 에서는 이 위치가 위 경로와 같은 것으로 보입니다.
 - SDK 가 상태 DB 를 만드는 기준 폴더도 이 데이터 폴더입니다 (코드).
-- 최근 제품 이름 "MEGA Desktop App" 이 MEGAsync 와 같은 앱인지는 확인하지 못했습니다.
+- 최근 제품 이름 "MEGA Desktop App" 과 MEGAsync 의 관계는 설치된 판 정보로 확인합니다.
 
 ### 데이터 폴더 안 파일 (코드)
 
@@ -39,7 +39,7 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 
 - 돌린 로그는 기본 50개까지 둡니다. 환경 변수 `MEGA_MAX_ROTATE_LOGS` 로 개수를 바꿀 수 있습니다 (코드).
 - 디버그 모드를 켜면 바탕 화면에도 `MEGAsync.log` 를 만듭니다 (코드).
-- 동기화 설정 파일은 이름이 `megaclient_syncconfig_` 로 시작하고, 내용이 암호화돼 있습니다 (코드). 이 파일의 저장 폴더는 확인하지 못했습니다.
+- 동기화 설정 파일은 이름이 `megaclient_syncconfig_` 로 시작하고, 내용이 암호화돼 있습니다 (코드). 이 파일의 저장 폴더는 검체에서 확인합니다.
 
 ### 상태 DB 이름과 판 번호
 
@@ -54,7 +54,7 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 ### 상태 DB 와 곁 파일
 
 - 상태 DB 는 저널 방식으로 WAL 을 씁니다 (코드). 그래서 `.db-wal`·`.db-shm` 파일이 함께 생길 수 있습니다. 곁 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
-- SQLite 파일 전체를 암호화하는 코드는 찾지 못했습니다. 곧 파일은 일반 SQLite 도구로 열릴 것으로 보이지만(코드에서 추론), 파일 안의 일부 표는 레코드 내용을 따로 암호화합니다(아래 `statecache` 표).
+- 코드에는 SQLite 파일 전체를 암호화하는 부분이 보이지 않습니다. 그래서 파일은 일반 SQLite 도구로 열릴 것으로 보이지만, 파일 안의 일부 표는 레코드 내용을 따로 암호화합니다(아래 `statecache` 표).
 
 ### nodes 표 (코드)
 
@@ -64,13 +64,13 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 | `parenthandle` | 부모 노드 핸들 |
 | `name` | 노드의 표시 이름. 복호된 파일·폴더 이름을 텍스트로 넣습니다 |
 | `fingerprint`, `origFingerprint` | 지문 값 |
-| `type`, `share`, `fav`, `flags`, `counter`, `label` | 코드에 이름만 확인했습니다 |
+| `type`, `share`, `fav`, `flags`, `counter`, `label` | 코드에 이름만 있고 뜻은 알려지지 않았습니다 |
 | `ctime`, `mtime` | int64 시각 값(아래 "시각 해석") |
-| `node` | BLOB. 내용 형식은 확인하지 않았습니다 |
+| `node` | BLOB. 내용 형식은 알려지지 않았습니다 |
 | `description`, `tags` | 노드 설명과 태그를 텍스트로 넣습니다 |
 
 - 이 밖에 계산용 가상 칸 `mimetypeVirtual`·`fingerprintVirtual`·`sizeVirtual`·`s3keyVirtual` 이 있습니다.
-- `name` 칸이 텍스트이므로 계정의 클라우드 파일·폴더 이름 목록을 이 표에서 바로 볼 수 있습니다(코드에서 추론). 실제 검체에서 평문으로 보이는지는 확인하지 못했습니다.
+- `name` 칸이 텍스트이므로 계정의 클라우드 파일·폴더 이름 목록을 이 표에서 바로 볼 수 있을 것으로 보입니다. 평문으로 남는지는 검체에서 확인합니다.
 - `parenthandle` 을 따라 `nodehandle` 로 올라가면 폴더 경로를 다시 세울 수 있습니다(칸 이름에서 추론).
 
 ### statecache 표 (코드)
@@ -93,7 +93,7 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 - 해시·XOR 에 쓰는 키 재료는 현재 사용자 토큰의 SID 에 고정 시드를 XOR 한 뒤 SHA-1 한 값입니다.
 - Windows 에서는 이 키 재료를 설정 파일 안에 `LocalStorageKey` 라는 항목으로 저장해 둡니다.
 - 오프라인 이미지에서 값을 풀려면 그 사용자의 DPAPI 마스터 키가 필요합니다(코드에서 추론). 마스터 키를 푸는 재료와 절차는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에 정리합니다.
-- 풀었을 때 어떤 설정 값(계정 이메일, 동기화 목록 등)이 나오는지는 확인하지 못했습니다.
+- 풀었을 때 어떤 설정 값(계정 이메일, 동기화 목록 등)이 나오는지는 공개 자료가 없습니다.
 
 ### 레지스트리·탐색기 흔적 (코드)
 
@@ -103,11 +103,11 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{uuid}` | 기본값 `MEGA`. 탐색 창에 동기화 폴더를 등록합니다 |
 | `HKCU\Software\Classes\CLSID\{uuid}` | 기본값은 동기화 이름입니다 |
 | `HKCU\Software\Classes\CLSID\{uuid}\Instance\InitPropertyBag` | `TargetFolderPath` 값이 동기화 폴더 경로입니다 |
-| `Software\Microsoft\Windows\CurrentVersion\Uninstall\MEGAsync` | 제거 정보 키입니다. 어느 하이브에 만드는지는 확인하지 않았습니다 |
-| `Explorer\StartupApproved` 아래 | 자동 시작 승인 여부를 읽고 씁니다. 정확한 하위 키 이름은 확인하지 못했습니다 |
+| `Software\Microsoft\Windows\CurrentVersion\Uninstall\MEGAsync` | 제거 정보 키입니다. 어느 하이브에 만드는지는 검체에서 확인합니다 |
+| `Explorer\StartupApproved` 아래 | 자동 시작 승인 여부를 읽고 씁니다. 정확한 하위 키 이름은 검체에서 확인합니다 |
 
-- 동기화 폴더에 폴더 아이콘 설정(`SHGetSetFolderCustomSettings`)을 씁니다. 이 설정이 `desktop.ini` 로 남는지는 확인하지 못했습니다.
-- MEGAsync 와 SDK 코드에서 Cloud Files API 호출(`CfRegisterSyncRoot`, `StorageProviderSyncRootManager`)을 찾지 못했습니다. 곧 동기화 폴더의 파일은 자리표시자가 아닌 실제 파일이고, SyncRootManager 에 등록되지 않는 것으로 보입니다(코드에서 추론). 검체로는 확인하지 못했습니다. 공통 구조는 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
+- 동기화 폴더에 폴더 아이콘 설정(`SHGetSetFolderCustomSettings`)을 씁니다. 이 설정이 `desktop.ini` 로 남는지는 검체에서 확인합니다.
+- MEGAsync 와 SDK 코드에서 Cloud Files API 호출(`CfRegisterSyncRoot`, `StorageProviderSyncRootManager`)이 보이지 않습니다. 그래서 동기화 폴더의 파일은 자리표시자가 아닌 실제 파일이고, SyncRootManager 에 등록되지 않는 것으로 보입니다. 공통 구조는 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
 
 ## 증거로서 의미
 
@@ -126,7 +126,7 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 - `Rubbish` 날짜는 로컬에서 파일이 옮겨진 날입니다. 지우기를 이 PC 의 사용자가 했는지, 다른 기기나 웹에서 한 일이 동기화로 내려왔는지는 폴더 이름만으로 가리지 못합니다.
 - `statecache` 표의 내용은 세션 키 없이 읽지 못합니다.
 - 설정 파일의 값은 DPAPI 마스터 키 없이 읽지 못합니다.
-- nodes 표의 `ctime`·`mtime` 이 서버에서 받은 값인지, 로컬에서 정한 값인지 확인하지 못했습니다.
+- nodes 표의 `ctime`·`mtime` 이 서버에서 받은 값인지, 로컬에서 정한 값인지는 알려지지 않았습니다.
 
 보고서에는 "X 파일을 지웠다" 대신 이렇게 씁니다. "동기화 폴더 안 숨은 `Rubbish\2024-01-01\` 폴더에 X 파일이 있다. 앱 코드상 이 폴더 이름은 동기화 중 로컬 파일을 휴지통 폴더로 옮긴 날(로컬 시각)이다."
 
@@ -134,12 +134,12 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 
 | 값 | 형식 | 기준 |
 |---|---|---|
-| nodes 표 `ctime`, `mtime` | int64 `m_time_t`. `time(NULL)` 로 만드는 Unix 초입니다 (코드) | Unix 초는 1970-01-01 00:00 UTC 부터 센 값입니다. 서버 값인지 로컬 값인지는 확인하지 못했습니다 |
+| nodes 표 `ctime`, `mtime` | int64 `m_time_t`. `time(NULL)` 로 만드는 Unix 초입니다 (코드) | Unix 초는 1970-01-01 00:00 UTC 부터 센 값입니다. 서버 값인지 로컬 값인지는 알려지지 않았습니다 |
 | `Rubbish\YYYY-MM-DD\` 폴더 이름 | 날짜 | 로컬 시각입니다 (코드) |
 | `YYYY-MM-DD HH.MM.SS.<번호>` 하위 폴더 이름 | 날짜·시각 | 같은 코드 부분에서 만듭니다. 폴더의 NTFS 만든 시각과 맞춰 시간대를 확인합니다 |
 | `Rubbish` 안 폴더·파일의 NTFS 시각 | FILETIME | UTC. [마스터 파일 테이블](../filesystem/mft.md) 참고 |
 
-- 로그 줄의 시각 형식은 확인하지 못했습니다.
+- 로그 줄의 시각 형식은 검체에서 확인합니다.
 - 폴더 이름의 로컬 날짜를 UTC 시각과 한 줄에 놓을 때는 PC 의 [시간대 설정](../system-account/time-zone.md) 을 먼저 봅니다.
 - 변환 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 

@@ -14,7 +14,7 @@ has_toc: false
 
 ## 왜 중요한가
 
-PST 에는 메일·연락처·일정·작업·메모·업무일지가 들어 있어서 누구와 언제 무엇을 주고받았는지 되짚는 바탕 자료가 됩니다. Microsoft 지원 문서는 POP·IMAP 계정이 모든 Outlook 정보를 PST 에 담는다고 적습니다. Exchange·Microsoft 365 계정은 캐시된 Exchange 모드 (Cached Exchange Mode) 에서 서버 사서함의 사본을 PC 의 OST 에 두지만, 자동 보관 (AutoArchive) 을 쓰면 PST 가 생길 수 있습니다.
+PST 에는 메일·연락처·일정·작업·메모·업무일지가 들어 있어서 누구와 언제 무엇을 주고받았는지 되짚는 바탕 자료가 됩니다. POP·IMAP 계정은 모든 Outlook 정보를 PST 에 담습니다. Exchange·Microsoft 365 계정은 캐시된 Exchange 모드 (Cached Exchange Mode) 에서 서버 사서함의 사본을 PC 의 OST 에 두지만, 자동 보관 (AutoArchive) 을 쓰면 PST 가 생길 수 있습니다.
 
 지운 메시지는 서버 사서함의 숨은 폴더나 데이터 파일 안의 빈 공간에 남을 수 있습니다. 데이터 파일 밖에도 따로 저장한 `.msg` 파일, 첨부를 열 때 생긴다고 알려진 사본, 메일을 보낸 상대의 자동완성 목록, 레지스트리의 Outlook 설정 같은 흔적이 있어서 데이터 파일이 없어도 단서를 찾을 수 있습니다.
 
@@ -22,7 +22,7 @@ PST 에는 메일·연락처·일정·작업·메모·업무일지가 들어 있
 
 ### 클래식 Outlook 과 새 Outlook
 
-이 허브는 클래식 Outlook 을 다룹니다. 새 Outlook (Outlook for Windows) 은 캐시된 Exchange 모드를 쓰지 않으며, 사서함과 PST 사이에서 메일을 옮기고, 복사하고, 지우고, 끌어 놓을 수 있고 사서함을 PST 로 내보낼 수도 있습니다. 새 Outlook 이 자기 메일을 PC 어디에 어떤 형식으로 두는지는 이번에 확인하지 못했습니다. [새 Outlook](../new-outlook.md) 페이지를 봅니다.
+이 허브는 클래식 Outlook 을 다룹니다. 새 Outlook (Outlook for Windows) 은 캐시된 Exchange 모드를 쓰지 않으며, 사서함과 PST 사이에서 메일을 옮기고, 복사하고, 지우고, 끌어 놓을 수 있고 사서함을 PST 로 내보낼 수도 있습니다. 새 Outlook 이 메일을 PC 어디에 어떤 형식으로 두는지는 [새 Outlook](../new-outlook.md) 페이지를 봅니다.
 
 검체를 열면 먼저 어느 Outlook 을 썼는지 확인합니다. 클래식 Outlook 이 없는 PC 에는 이 허브의 흔적 대부분이 없을 수 있습니다.
 
@@ -35,16 +35,16 @@ PST 에는 메일·연락처·일정·작업·메모·업무일지가 들어 있
 | 흔적 | 어디에 있나 | 판에 따른 차이 | 알려 주는 것 | 자세히 |
 |---|---|---|---|---|
 | PST | 새 PST 기본 위치는 Outlook 2016 이후 `Documents\Outlook Files\`, 앞선 판 `AppData\Local\Microsoft\Outlook\` (Windows 10 기준) | ANSI·유니코드·4KB 형식 | 메일·연락처·일정 같은 항목과 첨부 | [데이터 파일 구조](pst-ost.md) |
-| OST | 공식 자료로 확인하지 못함 | 캐시된 Exchange 모드에서만 생김. 새 Outlook 에는 이 모드가 없음 | 서버 사서함의 사본 | [PST와 OST 차이](cached-mode-exchange.md) |
+| OST | 공식 자료 없음. 검체에서 확인 | 캐시된 Exchange 모드에서만 생김. 새 Outlook 에는 이 모드가 없음 | 서버 사서함의 사본 | [PST와 OST 차이](cached-mode-exchange.md) |
 | Recoverable Items 폴더 | 서버 사서함의 숨은 영역. PC 에는 없음 | 하위 페이지는 Exchange Online 기준 | 지운 항목, 보존 중 고친 항목 | [지운 메시지 복구](recoverable-items-free-blocks.md) |
 | 데이터 파일의 빈 공간 | PST·OST 안 | 형식마다 페이지 크기가 다름 | 지운 데이터가 남았을 수 있는 자리 | [지운 메시지 복구](recoverable-items-free-blocks.md) |
 | `.msg` | 사용자가 저장한 곳. 정해진 폴더 없음 | Windows 버전과 관계없음 | 메시지 한 통과 그 수신자·첨부 | [개별 메시지 파일](msg.md) |
-| 첨부 임시 폴더 | 공식 자료로 확인하지 못함 | Windows 판에 따라 다르다는 설명이 흔함 | 첨부 사본 | [첨부 임시 폴더](olk-content-outlook.md) |
+| 첨부 임시 폴더 | 공식 자료 없음. 검체에서 확인 | Windows 판에 따라 다르다는 설명이 흔함 | 첨부 사본 | [첨부 임시 폴더](olk-content-outlook.md) |
 | 자동완성 목록 | Outlook 2007 이전 `%APPDATA%\Microsoft\Outlook` 의 `.nk2`, 2010 이후 기본 메시지 저장소 안의 숨은 메시지 | 판에 따라 저장 방식이 다름 | 메일을 보낸 상대의 주소와 표시 이름 | [자동완성 목록](nk2-stream-autocomplete.md) |
 | 레지스트리 설정 | NTUSER.DAT 의 `Software\Microsoft\Office\<버전>\Outlook` | 버전 번호 `11.0`~`16.0` | Outlook 판, 데이터 파일·목록 한도, 계정 | [계정·프로필 레지스트리](outlook-profiles.md) |
 
 - PST 기본 위치는 새 파일을 만들 때의 값입니다. 검체에서는 확장자와 헤더 시그니처로 디스크 전체를 찾습니다.
-- OST 위치, 첨부 임시 폴더, 프로필 키의 자리는 흔한 설명만 있고 이번에 공식 자료로 확인하지 못했습니다. 각 하위 페이지는 흔한 설명과 확인한 사실을 나눠 적습니다.
+- OST 위치, 첨부 임시 폴더, 프로필 키의 자리는 공식 자료가 없고 흔한 설명만 있습니다. 각 하위 페이지는 흔한 설명과 공식 자료가 있는 사실을 나눠 적습니다.
 
 ### 먼저 확인할 것
 

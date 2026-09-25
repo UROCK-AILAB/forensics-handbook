@@ -55,7 +55,7 @@ has_toc: false
 
 ### Windows 버전에 따라 달라지는 점
 
-폴더를 가리키는 셸 아이템에는 확장 블록 (Extension Block) 이 붙습니다. 만든 시각과 접근 시각은 서명이 `0xbeef0004` 인 확장 블록에 들어 있습니다. 이 블록의 버전은 Windows 버전에 따라 다릅니다. 아래 표는 libfwsi 명세를 따릅니다.
+폴더를 가리키는 셸 아이템에는 확장 블록 (Extension Block) 이 붙습니다. 만든 시각과 접근 시각은 서명이 `0xbeef0004` 인 확장 블록에 들어 있습니다. 이 블록의 버전은 Windows 버전에 따라 다릅니다.
 
 | Windows 버전 | 셸백이 있는 하이브 | `0xbeef0004` 블록 버전 | NTFS 파일 참조 칸 |
 |---|---|---|---|
@@ -64,8 +64,8 @@ has_toc: false
 | 2008 · 7 · 8.0 | UsrClass.dat · NTUSER.DAT | 8 | 있음 |
 | 8.1 · 10 | UsrClass.dat · NTUSER.DAT | 9 | 있음 |
 
-- libfwsi 명세는 파일 참조 칸에 늘 파일 참조가 들어가는지는 아직 확인되지 않았다고 적습니다.
-- Windows 11 의 블록 버전 값은 libfwsi 명세에 따로 적혀 있지 않습니다.
+- 파일 참조 칸에 늘 파일 참조가 들어가는지는 아직 확실하지 않습니다.
+- Windows 11 의 블록 버전 값은 공개 자료가 없어 검체에서 확인합니다.
 - 셸 아이템의 형식은 문서로 공개되지 않았습니다. 형식 설명은 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
 
 ### 시각 값
@@ -76,7 +76,7 @@ has_toc: false
 | 폴더 만든 시각·접근 시각 | `0xbeef0004` 확장 블록 | FAT 날짜·시각, 2초 단위 | 위와 같음 |
 | 키 마지막 기록 시각 | BagMRU 아래 각 하위 키 | FILETIME, UTC | 그 키의 값(MRUListEx·NodeSlots 등)이 바뀔 때 |
 
-- libfwsi 명세는 셸 아이템의 FAT 날짜·시각을 UTC 로 적습니다.
+- 셸 아이템의 FAT 날짜·시각은 UTC 입니다.
 - 키 시각을 읽는 법은 [키 마지막 기록 시각 (Last Write Time)](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 
 ### 알려 주는 것

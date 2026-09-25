@@ -10,9 +10,7 @@ nav_order: 2300
 
 스티커 메모는 Windows 에 딸려 오는 메모 앱입니다. Windows 10 1607 이후 스토어 앱은 메모를 패키지 폴더의 `plum.sqlite` 에 두고, 그 전 앱은 `StickyNotes.snt` 에 둡니다. `plum.sqlite` 의 `Note` 표에는 메모 본문과 만든·고친·지운 시각이 들어 있습니다.
 
-> **(관찰)** 표시는 Windows 11 빌드 26200 PC 한 대에서 직접 본 내용입니다. 이 PC 에는 스티커 메모 패키지 6.1.4.0 이 깔려 있었고, 앱을 쓴 적이 없어 DB 가 없었습니다.
->
-> **(설치 파일 문자열)** 표시는 그 패키지의 DLL 안에서 본 문자열입니다. 앱이 이 이름을 쓴다는 강한 단서이지만, 메모가 든 검체 DB 로 확인한 것은 아닙니다.
+> 아래 표·칸 이름 가운데 "설치 파일" 에서 나왔다고 적은 것은 스티커 메모 패키지(6.1.4.0) DLL 안에 든 문자열입니다. 앱이 이 이름을 쓴다는 강한 단서이지만, 메모가 든 DB 에서 나온 이름은 아니므로 검체에서 `.schema` 로 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -25,29 +23,29 @@ nav_order: 2300
 | 7, 8, 10 1511 이하 | `StickyNotes.snt` | `C:\Users\<USER>\AppData\Roaming\Microsoft\StickyNotes\` 또는 `…\Microsoft\Sticky Notes\` |
 | 10 1607 이후 | `plum.sqlite` (+ `plum.sqlite-wal`, `plum.sqlite-shm`) | `C:\Users\<USER>\AppData\Local\Packages\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe\LocalState\` |
 
-- 옛 파일의 폴더 이름 철자가 자료마다 다릅니다. KAPE 대상 파일은 공백 없는 `StickyNotes` 를, 한 포렌식 블로그의 예시는 공백 있는 `Sticky Notes` 를 씁니다. 검체에서 두 이름을 모두 찾습니다.
-- KAPE 대상 파일은 `Microsoft.MicrosoftStickyNotes*\LocalState\` 아래를 `plum.sqlite*` 로 모읍니다. 그래서 `-wal`·`-shm` 까지 함께 들어옵니다.
+- 옛 파일의 폴더 이름 철자가 자료마다 다릅니다. KAPE 대상 파일은 공백 없는 `StickyNotes` 를[1], 한 포렌식 블로그의 예시는 공백 있는 `Sticky Notes` 를 씁니다[3]. 검체에서 두 이름을 모두 찾습니다.
+- KAPE 대상 파일은 `Microsoft.MicrosoftStickyNotes*\LocalState\` 아래를 `plum.sqlite*` 로 모읍니다[1]. 그래서 `-wal`·`-shm` 까지 함께 들어옵니다.
 - KAPE 대상 파일은 옛 파일을 공백 없는 `StickyNotes` 폴더에서만 찾습니다. `Sticky Notes` 폴더는 따로 모읍니다.
-- OneNote 앱 안에 들어간 새 스티커 메모가 어디에 저장되는지는 확인하지 못했습니다. [원노트](onenote.md) 쪽도 함께 봅니다.
+- OneNote 앱 안에 들어간 새 스티커 메모의 저장 위치는 공개된 분석 자료가 없어 검체로 확인해야 합니다. [원노트](onenote.md) 쪽도 함께 봅니다.
 
-### 패키지 폴더 (관찰)
+### 패키지 폴더
 
-- 관찰한 PC 에는 패키지 `Microsoft.MicrosoftStickyNotes` 6.1.4.0 이 깔려 있었습니다.
-- 패키지 폴더 안에는 `AC`, `AppData`, `LocalCache`, `LocalState`, `RoamingState`, `Settings`, `SystemAppData`, `TempState` 가 있었습니다.
-- `Settings` 에는 `settings.dat`, `settings.dat.LOG1`, `settings.dat.LOG2` 가 있었습니다. 이 폴더의 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에 있습니다.
-- 앱을 쓴 적이 없어 `LocalState` 는 비어 있었습니다.
+- 패키지 이름은 `Microsoft.MicrosoftStickyNotes` 입니다(Windows 11 빌드 26200 에서는 6.1.4.0).
+- 패키지 폴더 안에는 `AC`, `AppData`, `LocalCache`, `LocalState`, `RoamingState`, `Settings`, `SystemAppData`, `TempState` 가 있습니다.
+- `Settings` 에는 `settings.dat`, `settings.dat.LOG1`, `settings.dat.LOG2` 가 있습니다. 이 폴더의 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에 있습니다.
+- 앱을 쓴 적이 없으면 `LocalState` 는 비어 있습니다.
 
 ## 구조
 
 ### plum.sqlite 판정
 
-- SQLECmd 맵은 `Note`, `Media`, `Insight`, `User`, `Stroke` 다섯 표가 모두 있으면 스티커 메모 DB 로 판정합니다.
+- SQLECmd 맵은 `Note`, `Media`, `Insight`, `User`, `Stroke` 다섯 표가 모두 있으면 스티커 메모 DB 로 판정합니다[2].
 - 메모는 `Note` 표에 들어갑니다.
 - SQLite 파일 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
 ### Note 표
 
-두 자료에 나오는 칸을 합쳤습니다. "맵" 은 SQLECmd 맵이 읽는 칸, "설치 파일" 은 설치 파일 안 표 옮기기(마이그레이션) SQL 에 나오는 칸입니다.
+아래 표에서 "맵" 은 SQLECmd 맵[2]이 읽는 칸, "설치 파일" 은 설치 파일 안 표 옮기기(마이그레이션) SQL 에 나오는 칸입니다.
 
 | 칸 | 맵 | 설치 파일 | 내용 |
 |---|---|---|---|
@@ -61,14 +59,16 @@ nav_order: 2300
 | `DeletedAt` | ○ | ○ | 지운 시각 |
 | `IsOpen` | ○ | | 열림 여부 (0/1) |
 | `IsAlwaysOnTop` | ○ | | 항상 위 여부 (0/1) |
-| `LastServerVersion` | ○ | | 서버 판 번호로 보입니다(이름에서 추론) |
-| `Type`, `Revision`, `SyncRevision`, `CreationNoteIdAnchor` | | ○ | 이름만 확인했습니다 |
-| `CreatedById`, `UpdatedById`, `DeletedById` | | ○ | 만든·고친·지운 주체 ID 로 보입니다(이름에서 추론) |
+| `LastServerVersion` | ○ | | 서버 판 번호로 보입니다 |
+| `Type`, `Revision`, `SyncRevision`, `CreationNoteIdAnchor` | | ○ | 뜻은 공개 자료 없음 |
+| `CreatedById`, `UpdatedById`, `DeletedById` | | ○ | 만든·고친·지운 주체 ID 로 보입니다 |
 
 - 두 자료의 칸 목록이 다릅니다. 앱 판에 따라 칸이 늘거나 줄 수 있습니다. 검체에서 `.schema Note` 로 확인합니다.
-- 설치 파일에 `UPDATE Note SET Theme='Yellow' WHERE Theme IS NULL` 이 있습니다 (설치 파일 문자열). 테마가 비어 있던 옛 메모를 노란색으로 채운다는 뜻입니다.
+- 설치 파일에 `UPDATE Note SET Theme='Yellow' WHERE Theme IS NULL` 이 있습니다. 테마가 비어 있던 옛 메모를 노란색으로 채운다는 뜻입니다.
 
-### 다른 표 (설치 파일 문자열)
+### 다른 표
+
+설치 파일 안 문자열에 나오는 표와 칸입니다.
 
 | 표 | 칸 |
 |---|---|
@@ -78,63 +78,62 @@ nav_order: 2300
 | `User` | — |
 | `Insight` | — |
 
-- `Media` 표는 SQLECmd 맵의 판정 조건에 나옵니다. 칸은 확인하지 못했습니다.
-- `Stroke` 는 이름으로 보아 펜 입력 획을 담는 것으로 보입니다. 확인하지 못했습니다.
-- `UpgradedNote` 는 이름으로 보아 옛 메모를 새 메모로 옮긴 기록으로 보입니다. `OldNoteId` 와 `NewNoteId` 가 짝을 이룹니다. 확인하지 못했습니다.
+- `Media` 표는 SQLECmd 맵의 판정 조건에 나옵니다[2]. 칸은 검체에서 확인합니다.
+- `Stroke` 는 이름으로 보아 펜 입력 획을 담는 것으로 보입니다.
+- `UpgradedNote` 는 이름으로 보아 옛 메모를 새 메모로 옮긴 기록으로 보입니다. `OldNoteId` 와 `NewNoteId` 가 짝을 이룹니다.
 
 ### 저널과 곁 파일
 
-- 설치 파일에 `PRAGMA journal_mode=WAL` 이 있습니다 (설치 파일 문자열). 그래서 `plum.sqlite-wal`·`plum.sqlite-shm` 이 생깁니다.
+- 설치 파일에 `PRAGMA journal_mode=WAL` 이 있습니다. 그래서 `plum.sqlite-wal`·`plum.sqlite-shm` 이 생깁니다.
 - 아직 본 파일에 반영되지 않은 변경이 `-wal` 에 남아 있을 수 있으며, 뜻과 읽는 법은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에 있습니다.
 
 ### 본문(Text)
 
-- `Text` 칸의 형식은 확인하지 못했습니다.
-- 앱 판에 따라 평문인지 서식 문서인지가 다를 수 있습니다. 검체에서 값을 원문 그대로 보고 형식을 정합니다.
+- 앱 판에 따라 `Text` 칸이 평문인지 서식 문서인지가 다를 수 있습니다. 검체에서 값을 원문 그대로 보고 형식을 정합니다.
 
 ### 옛 형식(.snt)과 업그레이드
 
-- 한 포렌식 블로그는 옛 앱에서 "Note Text" 와 "Modification Date" 두 가지를 뽑습니다.
-- `.snt` 의 내부 형식은 이 글의 자료로 확인하지 못했습니다. 파일 머리가 OLE 복합 파일 머리이면 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 방법으로 엽니다.
-- 업그레이드 모듈 `Microsoft.Notes.Upgrade.dll` 에 `Legacy`, `ThresholdNotes.snt`, `Version`, `Metafile`, `_text.rtf`, `_ink.bin` 문자열이 있습니다 (설치 파일 문자열).
-- 앱이 옛 메모를 옮겨 올 때 쓰는 이름으로 보입니다. 정확한 경로와 각 문자열의 뜻은 확인하지 못했습니다. 패키지 폴더에서 이 이름들을 찾아봅니다.
+- 옛 앱의 파일에서는 메모 본문(Note Text)과 고친 날짜(Modification Date)를 뽑을 수 있습니다[3].
+- `.snt` 의 내부 형식은 검체의 파일 머리로 먼저 가립니다. 파일 머리가 OLE 복합 파일 머리이면 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 방법으로 엽니다.
+- 업그레이드 모듈 `Microsoft.Notes.Upgrade.dll` 에 `Legacy`, `ThresholdNotes.snt`, `Version`, `Metafile`, `_text.rtf`, `_ink.bin` 문자열이 있습니다.
+- 앱이 옛 메모를 옮겨 올 때 쓰는 이름으로 보입니다. 정확한 경로와 각 문자열의 뜻은 패키지 폴더에서 이 이름들을 찾아 확인합니다.
 
 ### 동기화 흔적
 
 - 설치 파일과 맵에 `RemoteId`, `ChangeKey`, `LastServerVersion`, `SyncState` 같은 이름이 나옵니다.
-- 메모가 Microsoft 계정으로 서버와 동기화된다는 단서입니다(이름에서 추론).
-- 어느 서비스와 동기화하는지, 서버 쪽에 무엇이 남는지는 확인하지 못했습니다.
+- 이름으로 보아 메모가 Microsoft 계정으로 서버와 동기화되는 것으로 보입니다.
+- 어느 서비스와 동기화하는지, 서버 쪽에 무엇이 남는지는 알려져 있지 않습니다.
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
 - `Note` 행으로 메모 본문과 만든·고친 시각을 알 수 있습니다.
-- `DeletedAt` 에 값이 있는 행은 지운 메모가 행으로 남아 있는 것으로 보입니다(칸 이름에서 추론).
-- `IsOpen`, `WindowPosition` 으로 메모 창의 열림 여부와 창 위치 값을 알 수 있습니다. 이 값이 어느 때 기준인지는 확인하지 못했습니다.
-- 패키지 폴더는 있는데 `LocalState` 에 `plum.sqlite` 가 없으면 앱을 연 적이 없을 수 있습니다(관찰에서 추론).
+- `DeletedAt` 에 값이 있는 행은 지운 메모가 행으로 남아 있는 것으로 보입니다.
+- `IsOpen`, `WindowPosition` 으로 메모 창의 열림 여부와 창 위치 값을 알 수 있습니다. 이 값이 어느 때 기준인지는 알려져 있지 않습니다.
+- 패키지 폴더는 있는데 `LocalState` 에 `plum.sqlite` 가 없으면 앱을 연 적이 없을 수 있습니다.
 
 ### 증명하지 못하는 것
 
-- 패키지 폴더가 있다고 앱을 썼다는 뜻은 아닙니다. Windows 에 기본으로 깔리는 앱입니다(관찰).
-- 메모가 DB 에 있다고 이 PC 에서 쓴 메모라는 뜻은 아닙니다. 서버 동기화로 내려온 메모일 수 있습니다(추론).
-- 지운 메모가 얼마나 오래 행으로 남는지는 확인하지 못했습니다. `DeletedAt` 행이 없다고 지운 메모가 없었던 것은 아닙니다.
-- 시각 값이 UTC 인지 현지 시각인지 확인하지 못했습니다.
-- `Theme` 가 `Yellow` 라도 사용자가 고른 색이 아닐 수 있습니다. 표를 옮길 때 테마가 비어 있던 메모는 앱이 노란색으로 채웁니다(설치 파일 문자열).
+- 패키지 폴더가 있다고 앱을 썼다는 뜻은 아닙니다. Windows 에 기본으로 깔리는 앱입니다.
+- 메모가 DB 에 있다고 이 PC 에서 쓴 메모라는 뜻은 아닙니다. 서버 동기화로 내려온 메모일 수 있습니다.
+- 지운 메모가 얼마나 오래 행으로 남는지는 알려져 있지 않습니다. `DeletedAt` 행이 없다고 지운 메모가 없었던 것은 아닙니다.
+- 시각 값이 UTC 인지 현지 시각인지는 검체로 확인해야 합니다.
+- `Theme` 가 `Yellow` 라도 사용자가 고른 색이 아닐 수 있습니다. 표를 옮길 때 테마가 비어 있던 메모는 앱이 노란색으로 채웁니다.
 
 보고서에는 "사용자가 X 라고 적었다" 대신 이렇게 씁니다. "`plum.sqlite` 의 `Note` 표에 본문이 X 인 행이 있고, `CreatedAt` 값을 .NET 틱으로 보고 바꾸면 Y 이다. 이 값이 UTC 인지는 검체의 다른 시각과 맞춰 확인했다."
 
 ## 시각 해석
 
-- SQLECmd 맵은 `CreatedAt`·`UpdatedAt`·`DeletedAt` 을 아래 식으로 바꿉니다.
+- SQLECmd 맵은 `CreatedAt`·`UpdatedAt`·`DeletedAt` 을 아래 식으로 바꿉니다[2].
 
 ```sql
 datetime((값 / 10000000) - 62135596800, 'unixepoch')
 ```
 
 - 곧 맵은 이 값을 .NET 틱으로 봅니다. .NET 틱은 0001-01-01 부터 센 100나노초 단위입니다.
-- 62135596800 은 0001-01-01 과 1970-01-01 사이 초 수입니다(파이썬으로 계산해 확인).
-- 맵은 `'unixepoch'` 로만 바꾸므로 값을 UTC 로 다룹니다. 저장값이 실제로 UTC 인지는 확인하지 못했습니다.
+- 62135596800 은 0001-01-01 과 1970-01-01 사이 초 수입니다.
+- 맵은 `'unixepoch'` 로만 바꾸므로 값을 UTC 로 다룹니다. 저장값이 실제로 UTC 인지는 검체로 확인합니다.
 - 아래는 식으로 만든 계산 예시입니다. 검체 값이 아닙니다.
 
 | 값 (10진) | 값 (16진) | 변환 결과 |
@@ -151,7 +150,7 @@ datetime((값 / 10000000) - 62135596800, 'unixepoch')
 - **패키지 폴더를 사용 증거로 쓰지 않습니다.** 기본 설치 앱입니다.
 - **칸 목록이 판마다 다릅니다.** 맵과 설치 파일의 칸이 서로 다릅니다.
 - **`Theme` 값을 사용자의 선택으로 단정하지 않습니다.**
-- **OneNote 안의 새 스티커 메모는 이 글의 범위 밖입니다.** 저장 위치를 확인하지 못했습니다.
+- **OneNote 안의 새 스티커 메모는 저장 위치가 따로 있을 수 있습니다.** 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 - **지운 메모가 파일 빈 공간에 남을 수 있습니다.** `DeletedAt` 행이 없어도 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 방법으로 찾아봅니다.
 
 ## 직접 분석해 보기

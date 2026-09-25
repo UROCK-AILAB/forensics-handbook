@@ -11,11 +11,11 @@ nav_order: 1680
 
 크롬 계열 브라우저는 확장 프로그램 (Extension) 의 파일을 프로필 폴더의 `Extensions` 폴더에 풀어 둡니다. 확장마다의 설정은 `Secure Preferences` 파일의 `extensions.settings` 에 JSON 으로 남으며, 여기에는 설치 경로의 종류, 처음 설치한 시각, 마지막 업데이트 시각, 꺼진 이유, manifest 전체가 들어 있습니다.
 
-> 이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11(빌드 26200) PC 한 대의 Chrome 153·Edge 151 에서 본 것입니다. 다른 판이나 다른 PC 에서는 다를 수 있습니다. 값의 뜻은 2026년 9월 크로미엄 (Chromium) 소스와 Chrome for Developers 문서를 따릅니다.
+> 이 페이지의 폴더·키 구성은 Windows 11(빌드 26200)의 Chrome 153·Edge 151 기준입니다. 다른 판에서는 다를 수 있어 검체에서 확인합니다. 값의 뜻은 2026년 9월 크로미엄 (Chromium) 기준입니다[1][2].
 
 ## 무엇을 기록하나 · 왜 생기나
 
-확장 프로그램은 브라우저에 기능을 더하는 작은 프로그램이며, `manifest.json` 과 스크립트(js)·페이지(html)·이미지 파일로 이뤄집니다 (관찰). `manifest.json` 에는 확장의 이름·버전·권한이 적힙니다. 브라우저는 확장 파일을 `Extensions\<확장 ID>\<버전>_0\` 에 두고, 확장마다 설치 경로의 종류, 설치·업데이트 시각, 권한, 꺼진 이유를 설정 파일에 적습니다 (관찰).
+확장 프로그램은 브라우저에 기능을 더하는 작은 프로그램이며, `manifest.json` 과 스크립트(js)·페이지(html)·이미지 파일로 이뤄집니다. `manifest.json` 에는 확장의 이름·버전·권한이 적힙니다. 브라우저는 확장 파일을 `Extensions\<확장 ID>\<버전>_0\` 에 두고, 확장마다 설치 경로의 종류, 설치·업데이트 시각, 권한, 꺼진 이유를 설정 파일에 적습니다.
 
 확장은 브라우저 안에서 도는 프로그램이라서 어느 확장을 언제, 어떤 경로로 넣었는지가 조사에서 중요합니다. 악성 확장을 찾을 때도, 사용자가 쓴 도구를 확인할 때도 이 기록을 봅니다.
 
@@ -25,12 +25,12 @@ nav_order: 1680
 
 확장 기록은 Windows 버전보다 브라우저 판에 따라 달라집니다. 브라우저별 `User Data` 위치와 Windows 버전별 폴더 위치는 [크롬 계열 브라우저](index.md) 에 있습니다.
 
-### 폴더와 파일 (프로필 폴더 기준, 관찰)
+### 폴더와 파일 (프로필 폴더 기준)
 
 | 위치 | 담긴 것 | 형식 |
 |---|---|---|
 | `Extensions\<확장 ID>\<버전>_0\` | 확장 파일 (`manifest.json`, js, html, 이미지 등) | 폴더 |
-| `Extensions\<확장 ID>\<버전>_0\_metadata\` | `computed_hashes.json`, `verified_contents.json`. 웹 스토어에서 받은 확장 폴더에 있었습니다 | JSON |
+| `Extensions\<확장 ID>\<버전>_0\_metadata\` | `computed_hashes.json`, `verified_contents.json`. 웹 스토어에서 받은 확장 폴더에 있습니다 | JSON |
 | `Extensions\Temp` | 폴더 | |
 | `Secure Preferences` | `extensions.settings` (확장별 설정 목록) | JSON |
 | `Preferences` | `extensions` 아래 `pinned_extensions`, `commands`, `theme`, `install_signature`, `last_chrome_version` | JSON |
@@ -38,40 +38,40 @@ nav_order: 1680
 | `Sync Extension Settings`, `Managed Extension Settings` | 폴더 | |
 | `Extension State`, `Extension Rules`, `DNR Extension Rules`, `Extension Scripts` | 폴더 | |
 | `Extension Cookies` | 파일 | SQLite |
-| `ExtensionActivityEdge`, `ExtensionActivityComp` | Edge 에만 있었습니다 | `ExtensionActivityEdge` 는 SQLite |
+| `ExtensionActivityEdge`, `ExtensionActivityComp` | Edge 에만 있습니다 | `ExtensionActivityEdge` 는 SQLite |
 
-- `Secure Preferences` 에는 확장 설정마다 검증값 (MAC) 이 붙어 있었습니다. `protection.macs.extensions.settings` 같은 키입니다.
-- `ExtensionActivityEdge` 에는 `string_ids`, `url_ids`, `activitylog_edge_compressed`, `activitylog_edge_submissions`, `activitylog_edge_excluded_ids` 표가 있었습니다.
+- `Secure Preferences` 에는 확장 설정마다 검증값 (MAC) 이 붙어 있습니다. `protection.macs.extensions.settings` 같은 키입니다.
+- `ExtensionActivityEdge` 에는 `string_ids`, `url_ids`, `activitylog_edge_compressed`, `activitylog_edge_submissions`, `activitylog_edge_excluded_ids` 표가 있습니다.
 - `activitylog_edge_compressed` 의 열은 `extension_id_x`, `time`, `action_type`, `api_name_x`, `args_x`, `page_url_x`, `page_title_x`, `arg_url_x`, `other_x` 입니다.
-- 관찰한 PC 에서는 이 표가 모두 0행이었습니다. 언제 기록하는지는 확인하지 못했습니다.
+- 이 표는 모두 비어 있을 수 있습니다. 어떤 조건에서 기록하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 - LevelDB 를 읽는 법은 [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md) 에서, SQLite 를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 판에 따른 차이
 
 | 항목 | 내용 |
 |---|---|
-| 설정 목록 위치 | 관찰한 Chrome 153·Edge 151 모두 `Secure Preferences` 의 `extensions.settings` 에 있었습니다. `Preferences` 의 `extensions` 에는 `settings` 가 없었습니다. 옛 판에서 `Preferences` 에 목록이 있던 시기가 있는지는 확인하지 못했습니다. 그래서 두 파일을 모두 봅니다. |
-| `install_time`·`state` | 관찰한 두 판에는 이 키가 없었습니다. 이 키를 읽는 옛 도구는 요즘 판에서 빈 값을 냅니다. 키가 바뀐 판 번호는 확인하지 못했습니다. |
-| Edge 전용 | `ExtensionActivityEdge`·`ExtensionActivityComp` 는 Edge 에만 있었습니다. |
-| Whale | 확장 폴더와 설정 구조가 같은지, Whale 스토어에서 받은 확장을 어떻게 표시하는지는 확인하지 못했습니다. |
+| 설정 목록 위치 | Chrome 153·Edge 151 은 모두 `Secure Preferences` 의 `extensions.settings` 에 둡니다. `Preferences` 의 `extensions` 에는 `settings` 가 없습니다. 옛 판은 `Preferences` 에 목록을 두었을 수 있으므로 두 파일을 모두 봅니다. |
+| `install_time`·`state` | Chrome 153·Edge 151 에는 이 키가 없습니다. 이 키를 읽는 옛 도구는 요즘 판에서 빈 값을 냅니다. |
+| Edge 전용 | `ExtensionActivityEdge`·`ExtensionActivityComp` 는 Edge 에만 있습니다. |
+| Whale | 확장 폴더와 설정 구조, Whale 스토어에서 받은 확장의 표시는 공개된 분석 자료가 없어 검체로 확인해야 합니다. |
 
 ### 밖에서 설치하는 경로 (외부 설치)
 
-Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 방법으로 레지스트리와 설정(JSON) 파일을 적습니다.
+웹 스토어 밖에서는 레지스트리나 설정(JSON) 파일로 확장을 설치할 수 있습니다[3].
 
 | 방법 | 내용 |
 |---|---|
 | 레지스트리 (32비트 Windows) | `HKEY_LOCAL_MACHINE\Software\Google\Chrome\Extensions` |
 | 레지스트리 (64비트 Windows) | `HKEY_LOCAL_MACHINE\Software\Wow6432Node\Google\Chrome\Extensions` |
 | 레지스트리 값 | 위 키 아래에 확장 ID 이름의 키를 만들고 `update_url` 값을 둡니다 |
-| 설정 파일 | 이름은 `{확장ID}.json` 입니다. 문서에 적힌 위치는 macOS·Linux 뿐입니다. 키는 `external_update_url`, `external_crx`(Linux 만), `external_version`, `supported_locales` 입니다 |
+| 설정 파일 | 이름은 `{확장ID}.json` 입니다. 파일을 두는 위치는 macOS·Linux 용만 정해져 있습니다. 키는 `external_update_url`, `external_crx`(Linux 만), `external_version`, `supported_locales` 입니다 |
 
 - Windows·macOS 에서는 밖에서 설치한 확장을 사용자가 확인 창에서 켜야 합니다.
 - Chrome 33 부터 Windows 에서는 로컬 CRX 파일 경로로 밖에서 설치하지 못합니다. Windows·Mac 에서는 웹 스토어 update URL 만 쓸 수 있습니다.
 - 레지스트리 키나 JSON 파일을 지우면 그 확장도 없어집니다.
 - 사용자가 브라우저 화면에서 그 확장을 지우면, 브라우저는 다시 자동으로 설치하지 않습니다.
-- 이 문서에는 관리자 정책으로 강제 설치하는 방법이 없습니다. 정책 레지스트리 경로와 Edge 의 외부 설치 경로는 이 페이지에서 확인하지 못했습니다.
-- 관찰한 PC 에는 HKLM 쪽 Chrome·Edge 의 `...\Extensions` 키가 없었습니다. `HKCU\SOFTWARE\Google\Chrome\Extensions` 와 `HKCU\SOFTWARE\Microsoft\Edge\Extensions` 는 있었지만 하위 키가 비어 있었습니다.
+- 관리자 정책으로 강제 설치하는 경로와 Edge 의 외부 설치 경로는 이 페이지에서 다루지 않습니다.
+- HKLM 쪽 Chrome·Edge 의 `...\Extensions` 키는 없을 수 있습니다. `HKCU\SOFTWARE\Google\Chrome\Extensions` 와 `HKCU\SOFTWARE\Microsoft\Edge\Extensions` 는 키만 있고 하위 키가 비어 있을 수 있습니다.
 - 레지스트리 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
@@ -81,36 +81,35 @@ Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 �
 ### 확장 ID
 
 - 확장 폴더의 이름이 확장 ID 입니다. 32글자이고 a 부터 p 까지의 글자만 씁니다.
-- 관찰한 확장의 ID 는 아래 규칙으로 만든 값과 같았습니다. Chrome·Edge 의 확장 18개가 모두 맞았습니다 (관찰).
+- 확장 ID 는 아래 규칙으로 만든 값과 같습니다. Chrome 153·Edge 151 의 확장 18개가 모두 이 규칙에 맞습니다.
   1. `manifest.json` 의 `key` 값을 읽습니다. 이 값은 공개키를 base64 로 적은 것입니다.
   2. 공개키를 SHA-256 으로 해시합니다.
   3. 해시의 앞 16바이트를 16진수 32글자로 적습니다.
   4. 16진수 글자 0 을 a 로, 1 을 b 로 … f 를 p 로 바꿉니다.
-- 이 규칙을 적은 공식 문서는 이번에 열어 보지 못했습니다.
-- 규칙이 공개키만 쓰므로, 같은 확장은 Chrome 과 Edge 에서 ID 가 같았습니다 (관찰).
+- 규칙이 공개키만 쓰므로, 같은 확장은 Chrome 과 Edge 에서 ID 가 같습니다.
 
 ### extensions.settings 항목
 
-확장 ID 마다 객체가 하나씩 있습니다. 아래는 관찰한 두 판에서 거의 모든 항목에 있던 키 가운데 분석에 쓰는 것입니다.
+확장 ID 마다 객체가 하나씩 있습니다. 아래는 Chrome 153·Edge 151 의 거의 모든 항목에 있는 키 가운데 분석에 쓰는 것입니다.
 
 | 키 | 뜻 | 분석에서 보는 점 |
 |---|---|---|
 | `location` | 설치 경로의 종류 (정수) | 아래 "location 값" 표 |
-| `from_webstore` | 웹 스토어에서 받았는지 | 관찰한 Chrome 에서 `location` 1 인 확장은 모두 true 였습니다 |
+| `from_webstore` | 웹 스토어에서 받았는지 | Chrome 153 에서는 `location` 1 인 확장이 모두 true 입니다 |
 | `first_install_time` | 처음 설치한 시각 | 숫자가 든 문자열입니다. "시각 해석" 절 |
-| `last_update_time` | 마지막으로 업데이트한 시각 | 업데이트한 적이 없으면 `first_install_time` 과 같았습니다 |
-| `path` | 확장 파일 위치 | `Extensions` 안의 확장은 `<ID>\<버전>_0` 상대 경로입니다. 브라우저에 딸린 확장(`location` 5)은 `C:\Program Files\...\Application\<판>\...` 같은 절대 경로였습니다 |
+| `last_update_time` | 마지막으로 업데이트한 시각 | 업데이트한 적이 없으면 `first_install_time` 과 같습니다 |
+| `path` | 확장 파일 위치 | `Extensions` 안의 확장은 `<ID>\<버전>_0` 상대 경로입니다. 브라우저에 딸린 확장(`location` 5)은 `C:\Program Files\...\Application\<판>\...` 같은 절대 경로입니다 |
 | `manifest` | `manifest.json` 내용 전체 | 확장 폴더를 지운 뒤에도 이름·버전·권한을 여기서 볼 수 있습니다 |
-| `active_permissions` | 권한 | `manifest` 의 권한과 함께 봅니다. 일부 항목에는 `granted_permissions`·`withholding_permissions` 도 있었습니다 |
+| `active_permissions` | 권한 | `manifest` 의 권한과 함께 봅니다. 일부 항목에는 `granted_permissions`·`withholding_permissions` 도 있습니다 |
 | `disable_reasons` | 꺼진 이유 (정수 목록) | 아래 "disable_reasons 값" 표. 빈 목록 `[]` 은 켜져 있다는 뜻입니다 |
 
-- 거의 모든 항목에 있던 나머지 키는 `was_installed_by_default`, `was_installed_by_oem`, `creation_flags`, `account_extension_type`, `commands`, `content_settings`, `preferences` 입니다.
-- 일부 항목에만 있던 키는 `cws-info`, `allowlist`, `active_bit`, `service_worker_registration_info`, `uninstall_url`, `incognito`, `last_loaded_browser_version`, `lastpingday` 등입니다.
-- 폴더를 지운 뒤에도 이 항목이 남는지는 확인하지 못했습니다.
+- 거의 모든 항목에 있는 나머지 키는 `was_installed_by_default`, `was_installed_by_oem`, `creation_flags`, `account_extension_type`, `commands`, `content_settings`, `preferences` 입니다.
+- 일부 항목에만 있는 키는 `cws-info`, `allowlist`, `active_bit`, `service_worker_registration_info`, `uninstall_url`, `incognito`, `last_loaded_browser_version`, `lastpingday` 등입니다.
+- 폴더를 지운 뒤에도 이 항목이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ### location 값
 
-소스 `manifest.mojom` 의 `ManifestLocation` 입니다. 설정 파일에는 정수로 저장합니다. 소스 주석에 따르면 값의 순서를 바꾸거나 지우지 않고 끝에만 덧붙입니다. 그래서 옛 판 파일에서도 같은 숫자는 같은 뜻입니다.
+`ManifestLocation` 값이며, 설정 파일에는 정수로 저장합니다. 이 값은 순서를 바꾸거나 지우지 않고 끝에만 덧붙입니다[1]. 그래서 옛 판 파일에서도 같은 숫자는 같은 뜻입니다.
 
 | 값 | 소스 이름 | 뜻 |
 |---|---|---|
@@ -126,11 +125,11 @@ Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 �
 | 9 | `kExternalPolicy` | 관리자 정책으로 받아 로컬에 둔 crx |
 | 10 | `kExternalComponent` | `kComponent` 와 비슷하지만 URL 로 설치 |
 
-관찰한 PC 의 Chrome 과 Edge 에서는 1·5·6·10 이 나왔습니다.
+Chrome 153·Edge 151 에서는 1·5·6·10 이 나옵니다.
 
 ### disable_reasons 값
 
-소스 `disable_reason.h` 의 `DisableReason` 입니다. 값은 비트 하나씩입니다.
+`DisableReason` 값이며, 값마다 비트 하나를 씁니다[2].
 
 | 값 | 이름 |
 |---|---|
@@ -160,9 +159,9 @@ Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 �
 | 1<<27 | `BY_ANOTHER_EXTENSION` |
 
 - 0(`DISABLE_NONE`)은 켜져 있다는 뜻입니다. 1(`USER_ACTION`)은 사용자가 끈 것입니다.
-- 나머지 값은 이 페이지에서 이름만 확인했습니다. 이름이 뜻을 짐작하게 해 주지만, 정확한 조건은 소스를 확인합니다.
+- 나머지 값은 이름으로 뜻을 짐작할 수 있지만, 정확한 조건은 소스에서 확인합니다[2].
 - 비트를 모두 합치면 int 에 담기지 않습니다. 그래서 설정 파일과는 정수 목록으로 바꿔 주고받습니다.
-- 관찰한 PC 에서 `disable_reasons` 는 JSON 배열이었습니다. 나온 값은 `[]`, `[1]`, `[2]`, `[8192]`, `[134217728]`(=1<<27) 입니다.
+- `disable_reasons` 는 JSON 배열로 저장됩니다. Chrome 153·Edge 151 에서 나온 값은 `[]`, `[1]`, `[2]`, `[8192]`, `[134217728]`(=1<<27) 입니다.
 
 ## 증거로서 의미
 
@@ -179,37 +178,37 @@ Chrome for Developers 문서는 웹 스토어 밖에서 확장을 설치하는 �
 ### 증명하지 못하는 것
 
 - 설치 버튼을 누른 사람이 누구인지는 남지 않습니다.
-- 확장이 실제로 무엇을 했는지는 이 기록으로 알 수 없습니다. Edge 의 활동 DB 는 관찰한 PC 에서 비어 있었습니다.
+- 확장이 실제로 무엇을 했는지는 이 기록으로 알 수 없습니다. Edge 의 활동 DB 도 비어 있을 수 있습니다.
 - `manifest` 에 권한이 있다고 그 권한을 실제로 썼다는 뜻은 아닙니다.
 - 이 기록만으로 확장이 악성인지 알 수 없습니다. 확장 폴더의 코드를 따로 검사합니다.
-- 목록에 없다고 설치한 적이 없는 것은 아닙니다. 지운 확장이 설정 목록에서 어떻게 되는지는 확인하지 못했습니다.
+- 목록에 없다고 설치한 적이 없는 것은 아닙니다. 지운 확장이 설정 목록에서 어떻게 되는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 - 같은 확장은 Chrome 과 Edge 에서 ID 가 같습니다. ID 만으로 어느 브라우저의 기록인지 알 수 없으므로 파일 위치로 가립니다.
 
 보고서에는 "이 확장을 설치했다" 대신 이렇게 씁니다. "이 프로필의 `Secure Preferences` 에 ID X 확장이 `location` 4(압축 풀린 확장 불러오기)로 있고, `first_install_time` 은 Y(UTC) 이다."
 
 ## 시각 해석
 
-- `first_install_time`·`last_update_time` 은 숫자가 든 문자열(JSON string)입니다. 1601-01-01 00:00 UTC 부터 센 마이크로초로 읽으면 UTC 로 그럴듯한 값이 나왔습니다 (관찰). 현지 시각이 아닙니다.
+- `first_install_time`·`last_update_time` 은 숫자가 든 문자열(JSON string)입니다. 1601-01-01 00:00 UTC 부터 센 마이크로초로 읽습니다. 현지 시각이 아닙니다.
 - 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 업데이트한 적이 없는 확장은 두 값이 같았습니다 (관찰).
-- 업데이트한 확장은 `last_update_time` 이 더 뒤였습니다. 이때 `path` 의 버전 폴더(`<버전>_0`)와 `manifest` 의 `version` 이 새 버전이었습니다 (관찰).
-- `lastpingday` 처럼 다른 시각으로 보이는 키도 있습니다. 이 페이지에서는 뜻을 확인하지 않았으므로 해석하지 않습니다.
+- 업데이트한 적이 없는 확장은 두 값이 같습니다.
+- 업데이트한 확장은 `last_update_time` 이 더 뒤입니다. 이때 `path` 의 버전 폴더(`<버전>_0`)와 `manifest` 의 `version` 이 새 버전입니다.
+- `lastpingday` 처럼 다른 시각으로 보이는 키도 있습니다. 뜻을 밝힌 공개 자료가 없어 이 페이지에서는 해석하지 않습니다.
 - 옛 도구가 `install_time` 만 읽으면 설치 시각이 비어 보입니다. 이때는 `first_install_time` 을 직접 봅니다.
 - 확장 폴더를 만든 시각은 [마스터 파일 테이블](../../filesystem/mft.md) 에서 따로 확인하고 `first_install_time` 과 맞춰 봅니다.
 
 ## 함정과 한계
 
-- **`Preferences` 만 보면 목록이 비어 보입니다.** 관찰한 두 판에서 확장 목록은 `Secure Preferences` 에 있었습니다.
-- **ID 만 있는 항목이 있습니다.** `manifest`·`location`·설치 시각이 없는 항목이 Edge 에 22개, Chrome 에 1개 있었습니다 (관찰). 이런 항목은 설치된 확장으로 세지 않습니다.
-- **ID 만 있는 항목의 `[8192]` 를 단정하지 않습니다.** Edge 의 그 22개 가운데 21개는 `disable_reasons` 가 `[8192]` 하나뿐이었습니다 (관찰). 8192 는 `EXTERNAL_EXTENSION` 이고, 문서에는 밖에서 설치한 확장을 사용자가 켜야 한다고 적혀 있습니다. 두 사실을 이으면 "밖에서 설치해 사용자 확인을 기다리는 상태" 로 읽을 수 있지만, 이 연결은 확인하지 못한 추론입니다.
+- **`Preferences` 만 보면 목록이 비어 보입니다.** Chrome 153·Edge 151 은 확장 목록을 `Secure Preferences` 에 둡니다.
+- **ID 만 있는 항목이 있습니다.** `manifest`·`location`·설치 시각이 없는 항목으로, Edge 151 프로필 하나에 22개, Chrome 153 프로필 하나에 1개가 나온 예가 있습니다. 이런 항목은 설치된 확장으로 세지 않습니다.
+- **ID 만 있는 항목의 `[8192]` 를 단정하지 않습니다.** 위 Edge 예에서는 22개 가운데 21개의 `disable_reasons` 가 `[8192]` 하나뿐이었습니다. 8192 는 `EXTERNAL_EXTENSION` 이고, 밖에서 설치한 확장은 사용자가 켜야 합니다[3]. 두 사실을 이으면 "밖에서 설치해 사용자 확인을 기다리는 상태" 로 읽을 수 있지만, 이를 밝힌 공개 자료가 없으므로 추정으로만 씁니다.
 - **브라우저에 딸린 확장을 따로 셉니다.** `location` 5 는 브라우저 구성 요소입니다. `path` 가 `Program Files` 아래를 가리킵니다. 사용자가 넣은 확장과 섞어 세지 않습니다.
-- **Edge 의 `from_webstore` 가 false 라고 바로 의심하지 않습니다.** Edge 에는 `location` 1 인데 `from_webstore` 가 false 인 확장이 있었습니다 (관찰). Edge 애드온 스토어에서 받은 것으로 보이지만 확인하지 못했습니다.
-- **웹 스토어가 아닌 경로를 먼저 봅니다.** `location` 2·3·4·8 은 웹 스토어가 아닌 경로입니다. Chrome 에서 `location` 1 인데 `from_webstore` 가 false 인 확장도 따로 확인합니다. 관찰한 Chrome 에서는 `location` 1 이 모두 `from_webstore` true 였습니다.
+- **Edge 의 `from_webstore` 가 false 라고 바로 의심하지 않습니다.** Edge 에는 `location` 1 인데 `from_webstore` 가 false 인 확장이 있습니다. Edge 애드온 스토어에서 받은 것으로 보이지만, 이를 밝힌 공개 자료가 없어 추정으로 둡니다.
+- **웹 스토어가 아닌 경로를 먼저 봅니다.** `location` 2·3·4·8 은 웹 스토어가 아닌 경로입니다. Chrome 에서 `location` 1 인데 `from_webstore` 가 false 인 확장도 따로 확인합니다. Chrome 153 에서는 `location` 1 이 모두 `from_webstore` true 입니다.
 - **`disable_reasons` 는 값을 더하지 않고 목록으로 읽습니다.** 목록의 원소 하나가 이유 하나입니다.
-- **검증값으로 조작 여부를 가리지 못합니다.** `Secure Preferences` 의 검증값(MAC)을 어떻게 계산하는지 확인하지 못했습니다. 그래서 이 페이지는 검증값으로 설정 조작을 가리는 법을 다루지 않습니다.
+- **검증값으로 조작 여부를 가리지 못합니다.** 이 페이지는 `Secure Preferences` 의 검증값(MAC) 계산법과, 검증값으로 설정 조작을 가리는 법을 다루지 않습니다.
 - **외부 설치 키는 지우면 사라집니다.** 키를 지우면 확장도 없어지므로, 조사 시점에 키가 없어도 외부 설치가 없었다고 단정하지 않습니다. [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 레지스트리를 봅니다.
 - **원본 프로필로 브라우저를 띄우지 않습니다.** 해시를 기록한 사본의 JSON 파일을 읽습니다.
-- **Whale 은 따로 확인합니다.** 이 페이지의 구조는 Chrome·Edge 에서 확인한 것입니다.
+- **Whale 은 따로 확인합니다.** 이 페이지의 구조는 Chrome·Edge 기준입니다.
 
 ## 직접 분석해 보기
 

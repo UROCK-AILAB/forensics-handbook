@@ -37,9 +37,9 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 
 
 
-- Microsoft 의 WMI 추적 문서는 이벤트 원본을 "Microsoft-Windows-WMI" 라고 적습니다. 조사한 PC 의 공급자 이름은 Microsoft-Windows-WMI-Activity 였습니다.
+- WMI 추적 문서에는 이벤트 원본이 "Microsoft-Windows-WMI" 로 적혀 있지만[2], Windows 11 (빌드 26200) 의 실제 공급자 이름은 Microsoft-Windows-WMI-Activity 입니다.
 - WMI-Activity 의 Trace 채널은 기본으로 꺼져 있습니다. `wevtutil sl Microsoft-Windows-WMI-Activity/Trace /e:true` 로 켭니다.
-- Trace 채널의 Event 1·2·3 에는 GroupOperationID, OperationId, Operation, User, Namespace, ProviderName, Path 가 있다고 문서에 적혀 있습니다.
+- Trace 채널의 Event 1·2·3 에는 GroupOperationID, OperationId, Operation, User, Namespace, ProviderName, Path 가 있습니다[2].
 - 다른 채널의 크기와 켜짐은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### WinRM 기본 동작과 버전
@@ -55,7 +55,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 
 ### 레지스트리에 남는 WinRM 설정
 
-조사한 PC 의 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN` 입니다. (Windows 11 빌드 26200, 클라이언트 기준)
+Windows 11 빌드 26200 클라이언트 PC 한 대의 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN` 키 내용입니다.
 
 - 하위 키: AutoRestartList, CertMapping, Client, Listener, Plugin, SafeClientList, Service, WinRS
 - `Listener\*+HTTP` 키에 Port 5985, uriprefix `wsman` 이 있었습니다.
@@ -63,14 +63,14 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 - `Plugin` 아래에 Event Forwarding Plugin, Microsoft.PowerShell, Microsoft.PowerShell.Workflow, Microsoft.PowerShell32, WMI Provider 가 있었습니다.
 - Microsoft.PowerShell 플러그인의 ConfigXML 에는 `Filename="%windir%\system32\pwrshplugin.dll"`, PSVersion 5.1 이 있었습니다.
 - 그런데 WinRM 서비스는 수동·중지 상태였습니다. 리스너 키가 있다고 원격 요청을 받고 있었다고 볼 수는 없습니다.
-- TrustedHosts 가 레지스트리 어디에 저장되는지는 확인하지 못했습니다. `WSMAN\Client` 키에는 값이 없었습니다.
+- `WSMAN\Client` 키에는 값이 없었습니다. TrustedHosts 가 레지스트리 어디에 저장되는지는 검체에서 확인합니다.
 - `C:\Windows\System32` 에 `wsmprovhost.exe`·`winrshost.exe` 가, `C:\Windows\System32\wbem` 에 `WmiPrvSE.exe` 가 있었습니다.
 
 ## 구조
 
 ### WinRM/Operational 이벤트
 
-아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다. "보이는 쪽" 은 메시지 문구로 가른 해석입니다. 실제 원격 실행으로 확인하지 않았습니다.
+아래 메시지와 칸은 Windows 11 빌드 26200 의 공급자 메타데이터에 있는 정의입니다. "보이는 쪽" 은 메시지 문구로 가른 해석이므로 실제 원격 실행 기록과 맞춰 봅니다.
 
 | ID | 메시지 | 칸 | 보이는 쪽 |
 |---|---|---|---|
@@ -90,7 +90,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 | 44 | The WinRM protocol handler started to create a session at the following destination: %1. | destination | WMI 를 WinRM 으로 부를 때로 보임 |
 | 47 | …operation of type %1 to the server. The operation accesses class %3 under the %2 namespace. | — | WMI 를 WinRM 으로 부를 때로 보임 |
 
-이 공급자 메타데이터에는 80·81·82·143·166·168·169 정의가 없었고 Operational·Analytic·Debug 채널 모두 같았으며, 다른 자료가 적은 80·143·166 은 이 빌드에서 확인하지 못했습니다.
+이 빌드의 공급자 메타데이터에는 Operational·Analytic·Debug 채널 모두 80·81·82·143·166·168·169 정의가 없습니다. 다른 자료에 나오는 80·143·166 은 검체의 빌드에 정의가 있는지 먼저 봅니다.
 
 ### WMI-Activity/Operational 이벤트
 
@@ -109,14 +109,14 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 - 5857 의 칸은 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다.
 - 5861 은 영구 이벤트 구독과 관련된 이벤트입니다. [WMI 영구 이벤트 구독](../persistence/wmi-event-subscription.md)에서 다룹니다.
 
-조사한 PC 에서 본 값입니다. 컴퓨터 이름과 사용자는 가렸습니다.
+Windows 11 빌드 26200 PC 에 남은 값의 예입니다. 컴퓨터 이름과 사용자는 가렸습니다.
 
 | 이벤트 | 값 |
 |---|---|
 | 5857 | ProviderName CIMWin32, Code 0x0, HostProcess `wmiprvse.exe`, ProviderPath `%systemroot%\system32\wbem\cimwin32.dll`, Security UserID S-1-5-20 (NETWORK SERVICE), Level 0 |
 | 5858 | ClientMachine [컴퓨터 이름], User [컴퓨터 이름]\[사용자], ClientProcessId, Operation `Start IWbemServices::ExecQuery - root\CIMV2 : SELECT * FROM Win32_ComputerSystem`, ResultCode 0x80041032, Security UserID S-1-5-18 |
 
-5858 의 Operation 칸에는 네임스페이스와 WQL 쿼리 원문이 들어 있어서, 실패한 호출만이라도 누가 (User), 어느 컴퓨터에서 (ClientMachine), 어떤 프로세스로 (ClientProcessId), 무엇을 물었는지 볼 수 있습니다. 5858 이 실패한 작업만 남는지, 원격 호출일 때 ClientMachine 에 출발 PC 이름이 들어가는지는 확인하지 못했습니다.
+5858 의 Operation 칸에는 네임스페이스와 WQL 쿼리 원문이 들어 있어서, 실패한 호출만이라도 누가 (User), 어느 컴퓨터에서 (ClientMachine), 어떤 프로세스로 (ClientProcessId), 무엇을 물었는지 볼 수 있습니다. 5858 이 실패한 작업만 남기는지, 원격 호출일 때 ClientMachine 에 출발 PC 이름이 들어가는지는 아래 실습 5번처럼 재현해 확인합니다.
 
 ## 증거로서 의미
 
@@ -139,18 +139,18 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 
 - 세션을 여는 쪽과 받는 쪽의 기록은 서로 다른 PC 에 있으므로 두 PC 의 시계가 맞는지 먼저 확인합니다. 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 - 145 의 메시지는 작업 시작, 132·142 의 메시지는 작업 성공·실패입니다. 같은 operationName 의 145 와 132·142 사이를 작업 시간으로 볼 수 있습니다. 이 판단은 메시지에서 이끈 해석입니다.
-- 두 로그는 1MB 라 덮는 기간이 짧습니다. 조사한 PC 에서 WinRM 로그 1,984건은 가장 오래된 기록이 약 40일 전이었습니다. WMI-Activity 로그는 약 하루 치만 있었습니다 (5858 1,080건, 5857 112건).
+- 두 로그는 1MB 라 덮는 기간이 짧습니다. 예를 들어 WinRM 로그 1,984건이 약 40일 치, WMI-Activity 로그 (5858 1,080건, 5857 112건) 가 약 하루 치만 남은 PC 가 있습니다.
 - 시각 값 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
-1. **WinRM 로그의 기록을 모두 원격 실행으로 읽습니다.** 조사한 PC 에서 254 (Activity Transfer)·161·142·145 가 각 약 496건 있었습니다. 모두 SYSTEM 권한 프로세스 하나가 로컬 리스너 설정 (`http://schemas.microsoft.com/wbem/wsman/1/config/listener`) 을 되풀이해 조회하다 실패한 기록이었습니다. 원격 실행과 상관없는 잡음입니다.
+1. **WinRM 로그의 기록을 모두 원격 실행으로 읽습니다.** 254 (Activity Transfer)·161·142·145 가 각각 약 496건씩 쌓인 PC 가 있습니다. 모두 SYSTEM 권한 프로세스 하나가 로컬 리스너 설정 (`http://schemas.microsoft.com/wbem/wsman/1/config/listener`) 을 되풀이해 조회하다 실패한 기록으로, 원격 실행과 상관없는 잡음입니다.
 2. **보이는 쪽을 단정합니다.** 위 표의 "보이는 쪽" 은 메시지 문구로 가른 해석입니다. 실제 기록으로 확인한 뒤 보고서에 씁니다.
-3. **다른 자료의 이벤트 ID 를 그대로 찾습니다.** 조사한 빌드에는 80·143·166 정의가 없었습니다. 검체의 Windows 버전에서 공급자 메타데이터를 확인합니다.
+3. **다른 자료의 이벤트 ID 를 그대로 찾습니다.** Windows 11 빌드 26200 에는 80·143·166 정의가 없습니다. 검체의 Windows 버전에서 공급자 메타데이터를 확인합니다.
 4. **오류 문장을 영어로 찾습니다.** 161 의 authFailureMessage 에는 한국어 오류 문장이 그대로 저장돼 있었습니다.
 5. **오류 코드의 진법을 섞습니다.** 142 의 errorCode 는 10진수 (2150858770) 로 들어 있었습니다. 5858 의 ResultCode 는 16진 (0x80041032) 이었습니다. 같은 진법으로 바꾼 뒤 비교합니다.
 6. **WMI 값을 EventData 에서 찾습니다.** WMI-Activity 이벤트는 UserData 아래에 있습니다. EventData 만 읽는 도구는 빈 값을 보여 줄 수 있습니다.
-7. **리스너 키를 원격 허용의 증거로 씁니다.** 조사한 PC 에는 리스너 키와 allow_remote_requests = 1 이 있었지만 서비스는 수동·중지였습니다.
+7. **리스너 키를 원격 허용의 증거로 씁니다.** 리스너 키와 allow_remote_requests = 1 이 있어도 서비스가 수동·중지일 수 있습니다.
 
 ### 지우기와 조작
 
@@ -164,7 +164,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 
 142 의 errorCode 는 10진수로 보입니다. 오류 코드 표와 맞춰 보려면 16진으로 바꿉니다.
 
-아래는 조사한 PC 에서 본 10진 값 2150858770 을 바꿔 본 예시입니다. 바이트는 32비트 값을 리틀 엔디언으로 적으면 이렇게 된다는 설명용입니다. 이벤트 레코드 안의 실제 저장 형식을 보여 주는 것이 아닙니다.
+아래는 142 의 errorCode 10진 값 2150858770 을 바꾼 예시입니다. 바이트는 32비트 값을 리틀 엔디언으로 적으면 이렇게 된다는 설명용입니다. 이벤트 레코드 안의 실제 저장 형식을 보여 주는 것이 아닙니다.
 
 ```
 12 80 33 80
@@ -227,7 +227,7 @@ reg unload HKLM\CASE_SW
 
 1. 받을 쪽 가상 머신에서 `winrm quickconfig` 를 실행합니다. 서비스 상태, `WSMAN\Listener` 키, `winrm enumerate winrm/config/listener` 결과를 비교합니다.
 2. 다른 가상 머신에서 원격 세션을 한 번 열고 `hostname` 같은 명령을 실행합니다. 두 PC 의 WinRM/Operational 에 어떤 ID 가 남는지 적습니다. 위 표의 "보이는 쪽" 해석이 맞는지 확인합니다.
-3. 받는 쪽에서 원격 세션을 처리한 프로세스를 4688 로 확인합니다. `wsmprovhost.exe` 라는 설명이 있지만 이 페이지는 확인하지 못했습니다.
+3. 받는 쪽에서 원격 세션을 처리한 프로세스를 4688 로 확인합니다. 원격 세션은 `wsmprovhost.exe` 가 처리한다는 설명이 있으니, 이 프로세스가 뜨는지 봅니다.
 4. 틀린 비밀번호로 한 번 접속해 봅니다. 161·162·164 가운데 무엇이 남는지 봅니다.
 5. 원격 WMI 로 성공하는 조회와 실패하는 조회를 한 번씩 합니다. 5858 이 실패한 것만 남는지, ClientMachine 에 어느 컴퓨터 이름이 들어가는지 봅니다.
 6. WMI-Activity/Trace 채널을 켜고 5번을 되풀이합니다. Trace 의 Event 1·2·3 을 봅니다.

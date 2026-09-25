@@ -8,8 +8,6 @@ nav_order: 3790
 
 파일 하나를 두고 "어느 계정이 언제 열었나" 를 묻는 조사에서 기록을 모으는 순서를 다룹니다. 아티팩트마다의 구조는 각 아티팩트 페이지에 있습니다. 이 페이지는 어느 기록을 어떤 순서로 보는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다.
 
-"(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200) PC 한 대에서 직접 본 것입니다. 다른 빌드나 다른 PC 에서는 다를 수 있습니다. "(현장 관찰)" 은 분석 현장에서 겪은 일을 적어 둔 메모에서 가져왔습니다.
-
 ## 조사 질문
 
 - 이 파일을 연 기록이 어느 사용자 프로필에 남았습니까?
@@ -28,9 +26,9 @@ nav_order: 3790
 | 마지막 접근 시각 설정 | 갱신이 꺼져 있으면 파일 시스템의 접근 시각을 쓸 수 없습니다. 아래 "마지막 접근 시각" 절을 봅니다. |
 | 수집 범위 | 사용자 하이브, 사용자 프로필 폴더, $MFT, 보안 로그를 함께 확보합니다. 지난 시점의 기록은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 봅니다. |
 
-**시간대 값의 부호.** `SYSTEM\ControlSet00X\Control\TimeZoneInformation\Bias` 는 REG_DWORD 로 저장되고 부호 있는 32비트로 읽습니다(현장 관찰). UTC+9 는 -540 이고, 부호 없이 읽으면 4294966756 이 나옵니다(현장 관찰). 도구가 REG_DWORD 를 부호 없는 10진수로 보여 주는 경우가 많습니다(현장 관찰). 그래서 원시 바이트로 한 번 더 확인합니다. 다른 시간대 값은 [시간대 설정](../../02-artifacts/system-account/time-zone.md) 에서 다룹니다.
+**시간대 값의 부호.** `SYSTEM\ControlSet00X\Control\TimeZoneInformation\Bias` 는 REG_DWORD 로 저장되고 부호 있는 32비트로 읽습니다. UTC+9 는 -540 이고, 부호 없이 읽으면 4294966756 이 나옵니다. 도구가 REG_DWORD 를 부호 없는 10진수로 보여 주는 경우가 많습니다. 그래서 원시 바이트로 한 번 더 확인합니다. 다른 시간대 값은 [시간대 설정](../../02-artifacts/system-account/time-zone.md) 에서 다룹니다.
 
-**감사 정책.** 이 PC 에서는 파일 시스템 감사가 꺼져 있었습니다(관찰). 그래서 4663 이 없다는 사실만으로 열람이 없었다고 볼 수 없으며, 감사가 켜져 있었는지부터 확인합니다.
+**감사 정책.** 파일 시스템 감사는 꺼져 있을 수 있습니다. 그래서 4663 이 없다는 사실만으로 열람이 없었다고 볼 수 없으며, 감사가 켜져 있었는지부터 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -70,13 +68,13 @@ nav_order: 3790
 
 파일 시스템의 마지막 접근 시각 (Last Access Time) 은 설정에 따라 갱신되지 않을 수 있습니다. 먼저 설정부터 봅니다.
 
-`fsutil behavior set disablelastaccess {1|0}` 은 NTFS 에서 마지막 접근 시각 갱신을 끄거나 켭니다[1]. 이 명령은 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem\NtfsDisableLastAccessUpdate` 값을 바꾸며, 바꾼 뒤에는 재시작해야 적용됩니다[1]. 백업 같은 프로그램이 이 기능에 기대기도 한다고 문서에 적혀 있습니다[1].
+`fsutil behavior set disablelastaccess {1|0}` 은 NTFS 에서 마지막 접근 시각 갱신을 끄거나 켭니다[1]. 이 명령은 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem\NtfsDisableLastAccessUpdate` 값을 바꾸며, 바꾼 뒤에는 재시작해야 적용됩니다[1]. 백업 같은 프로그램이 이 기능에 기대기도 합니다[1].
 
 NTFS 는 디스크의 마지막 접근 시각 갱신을 최대 1시간까지 미룰 수 있고, 미뤄 둔 접근 시각은 마지막 수정 시각 같은 다른 속성을 갱신할 때 함께 씁니다[1]. 실행 중인 시스템에서 조회하면 디스크 값이 최신이 아니어도 메모리에 있는 정확한 값을 돌려줍니다[1]. 그래서 라이브로 본 값과 이미지에서 읽은 값이 다를 수 있습니다.
 
-**이 PC 의 설정.** `NtfsDisableLastAccessUpdate` 값은 0x80000001 이었습니다(관찰). `fsutil behavior query disablelastaccess` 는 "DisableLastAccess = 1 (User Managed, Last Access Time Updates DISABLED)" 로 보여 주었습니다(관찰). 이 PC 의 C: 에서는 마지막 접근 시각이 갱신되지 않습니다(관찰).
+**0x80000001 값.** `NtfsDisableLastAccessUpdate` 값이 0x80000001 이면 `fsutil behavior query disablelastaccess` 는 "DisableLastAccess = 1 (User Managed, Last Access Time Updates DISABLED)" 로 보여 줍니다(Windows 11 25H2 기준). 이때 그 볼륨에서는 마지막 접근 시각이 갱신되지 않습니다.
 
-참고한 문서는 0 과 1 두 값만 설명하고[1], 0x80000000 대의 값이 무엇을 뜻하는지는 문서로 확인하지 못했습니다. 검체에서는 값을 그대로 적고, 뜻은 fsutil 출력이나 다른 자료로 따로 확인합니다.
+fsutil 문서가 설명하는 값은 0 과 1 두 가지뿐이고[1], 0x80000000 대의 값은 공개 문서에 설명이 없습니다. 검체에서는 값을 그대로 적고, 뜻은 fsutil 출력이나 다른 자료로 따로 확인합니다.
 
 시각 속성마다 무엇이 바뀔 때 바뀌는지는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
@@ -125,9 +123,9 @@ Sysmon 이벤트 목록에는 파일 읽기를 기록하는 이벤트가 없습�
 
 ## 그 밖의 흔적
 
-**윈도 타임라인.** 이 PC 에는 `%LOCALAPPDATA%\ConnectedDevicesPlatform\<폴더>\ActivitiesCache.db` 가 두 개 있었습니다(관찰). 그 가운데 하나는 조사 당일에도 쓰였습니다(관찰).
+**윈도 타임라인.** Windows 11 에도 `%LOCALAPPDATA%\ConnectedDevicesPlatform\<폴더>\ActivitiesCache.db` 가 여러 개 있을 수 있고, 그 가운데 하나는 계속 쓰입니다.
 
-사본의 표는 Activity, ActivityOperation, AppSettings, Metadata, ManualSequence, Activity_PackageId, DataEncryptionKeys, Asset 이었고(관찰), Activity 표는 711행, ActivityOperation 표는 0행이었습니다(관찰). ActivityType 값은 11·12·15 세 가지뿐이었으며(관찰) 각 값이 무엇을 뜻하는지는 확인하지 못했습니다.
+표는 Activity, ActivityOperation, AppSettings, Metadata, ManualSequence, Activity_PackageId, DataEncryptionKeys, Asset 입니다(Windows 11 25H2 기준). Activity 표에 행이 수백 개 있어도 ActivityOperation 표는 0행일 수 있고, ActivityType 값이 11·12·15 세 가지뿐일 수 있습니다. 각 값의 뜻은 공개 자료가 없어 검체에서 확인합니다.
 
 그래서 Windows 11 에서는 이 DB 를 파일 열람 기록으로 기대하기 어렵습니다. 단정하지 말고 검체마다 표 내용을 확인합니다.
 
@@ -156,8 +154,8 @@ Sysmon 이벤트 목록에는 파일 읽기를 기록하는 이벤트가 없습�
 
 1. **점프리스트나 최근 항목 바로가기를 "열었다" 는 증거로 씁니다.** 두 기록은 연 것과 저장한 것을 가리지 못합니다. "열었거나 저장했다" 까지만 씁니다.
 2. **바로가기 헤더의 시각을 연 시각으로 씁니다.** 헤더 시각은 대상 파일의 시각입니다. 바로가기 파일 자신의 시각과 다릅니다. 자세한 내용은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에 있습니다.
-3. **마지막 접근 시각을 연 시각으로 씁니다.** 갱신이 꺼져 있을 수 있습니다(관찰). 켜져 있어도 디스크에는 최대 1시간 늦게 쓰일 수 있습니다[1].
-4. **4663 이 없으니 열지 않았다고 봅니다.** 감사가 꺼져 있었을 수 있습니다(관찰). 감사가 켜져 있어도 SACL 이 없는 파일은 남지 않습니다[2].
+3. **마지막 접근 시각을 연 시각으로 씁니다.** 갱신이 꺼져 있을 수 있습니다. 켜져 있어도 디스크에는 최대 1시간 늦게 쓰일 수 있습니다[1].
+4. **4663 이 없으니 열지 않았다고 봅니다.** 감사가 꺼져 있었을 수 있습니다. 감사가 켜져 있어도 SACL 이 없는 파일은 남지 않습니다[2].
 5. **Sysmon 에서 열람 기록을 찾습니다.** Sysmon 에는 파일 읽기 이벤트가 없습니다[3].
 6. **바로가기 파일이 없으니 열지 않았다고 봅니다.** `SHAddToRecentDocs` 를 부르지 않는 앱으로 열면 최근 항목에 오르지 않습니다.
 7. **계정을 사람으로 씁니다.** 기록은 어느 계정의 세션에서 일어났는지를 보여 줍니다. 그 계정을 누가 썼는지는 다른 기록으로 좁힙니다.

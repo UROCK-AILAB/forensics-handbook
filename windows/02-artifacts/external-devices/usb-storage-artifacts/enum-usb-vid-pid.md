@@ -33,7 +33,7 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 - `MI_zz` 의 `zz` 는 인터페이스 번호입니다.
 - 키 이름을 비교할 때는 대소문자를 가리지 않습니다.
 
-Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고 구조가 바뀔 수 있다고 밝히므로 값 이름과 하위 키는 검체의 Windows 버전에서 직접 확인합니다.
+`Enum` 트리는 운영체제 전용이고 구조가 바뀔 수 있으므로 값 이름과 하위 키는 검체의 Windows 버전에서 직접 확인합니다.
 
 | 항목 | Windows 버전 | 비고 |
 |---|---|---|
@@ -46,11 +46,11 @@ Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고 구조가 바뀔
 
 ### 키 이름 (장치 ID)
 
-키 이름의 VID·PID 는 장치 설명자의 `idVendor`·`idProduct` 에서 옵니다. Microsoft 문서는 USB 장치 ID 를 `USB\VID_v(4)&PID_d(4)&REV_r(4)` 형식으로 설명하지만, 같은 문서 모음의 예시에서 장치 인스턴스 ID 는 `USB\VID_045E&PID_0840\0C33CG9212501N0` 처럼 개정 번호 (REV) 없이 쓰입니다. `Enum\USB` 아래 키 이름도 REV 가 빠진 `VID_vvvv&PID_pppp` 형태이며, 개정 번호는 인스턴스 키의 `HardwareID` 값에서 확인합니다.
+키 이름의 VID·PID 는 장치 설명자의 `idVendor`·`idProduct` 에서 옵니다. USB 장치 ID 는 `USB\VID_v(4)&PID_d(4)&REV_r(4)` 형식이지만, 장치 인스턴스 ID 는 `USB\VID_045E&PID_0840\0C33CG9212501N0` 처럼 개정 번호 (REV) 없이 쓰입니다. `Enum\USB` 아래 키 이름도 REV 가 빠진 `VID_vvvv&PID_pppp` 형태이며, 개정 번호는 인스턴스 키의 `HardwareID` 값에서 확인합니다.
 
 ### 인스턴스 ID — 일련번호인지 먼저 가린다
 
-인스턴스 ID 는 버스 드라이버가 알려 줍니다. Microsoft 는 버스가 지원하면 인스턴스 ID 에 일련번호가 들어가고 아니면 위치 정보가 들어간다고 설명하며, USB 에서는 두 가지 모양으로 나타납니다.
+인스턴스 ID 는 버스 드라이버가 알려 줍니다. 버스가 지원하면 인스턴스 ID 에 일련번호가 들어가고, 아니면 위치 정보가 들어갑니다. USB 에서는 두 가지 모양으로 나타납니다.
 
 | 모양 | 예 (Microsoft 문서의 예시) | 뜻 |
 |---|---|---|
@@ -78,9 +78,9 @@ Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고 구조가 바뀔
 | 하위 키 `Properties` | — | 장치 속성이 들어 있습니다. 설치·연결·해제 시각도 여기 있습니다. |
 | 하위 키 `Device Parameters` | — | 드라이버별 설정이 들어갑니다. |
 
-`DeviceDesc`·`Mfg` 는 장치가 스스로 보낸 제품 이름과 다를 수 있습니다. 공용 드라이버를 쓰는 장치에는 `USB Composite Device`, `(Standard USB Host Controller)` 같은 일반 문자열만 남으므로 (Microsoft 문서의 예시) 상표 이름을 찾으려면 USBSTOR 쪽 문자열과 함께 봅니다.
+`DeviceDesc`·`Mfg` 는 장치가 스스로 보낸 제품 이름과 다를 수 있습니다. 공용 드라이버를 쓰는 장치에는 `USB Composite Device`, `(Standard USB Host Controller)` 같은 일반 문자열만 남으므로 상표 이름을 찾으려면 USBSTOR 쪽 문자열과 함께 봅니다.
 
-`CompatibleIDs` 는 `USB\Class_cc&SubClass_ss&Prot_pp` 형태이고, Windows 10 이후에는 `USB\DevClass_...`, `USB\COMPAT_VID_...` 형태도 함께 보입니다 (Microsoft 문서의 예시). 자주 보는 클래스 코드는 아래와 같으며, 코드 뜻은 USB-IF 의 클래스 코드표를 따릅니다.
+`CompatibleIDs` 는 `USB\Class_cc&SubClass_ss&Prot_pp` 형태이고, Windows 10 이후에는 `USB\DevClass_...`, `USB\COMPAT_VID_...` 형태도 함께 보입니다. 자주 보는 클래스 코드는 아래와 같으며, 코드 뜻은 USB-IF 의 클래스 코드표를 따릅니다.
 
 | 코드 | 뜻 |
 |---|---|
@@ -95,7 +95,7 @@ Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고 구조가 바뀔
 ### 복합 장치 (Composite Device)
 
 인터페이스가 여러 개인 장치를 복합 장치라고 합니다. Windows 는 복합 장치에 USB 공용 부모 드라이버 (USB generic parent driver) 를 붙이고, 이 드라이버는 인터페이스마다 `VID_vvvv&PID_pppp&MI_zz` 키를 따로 만듭니다. 부모 키의 `Service` 는 보통 `usbccgp` 이며, 스마트폰, 웹캠, 무선 키보드·마우스 수신기가 흔히 복합 장치로 잡힙니다.
-인터페이스 키의 인스턴스 ID 는 시스템이 만든 값인 경우가 많습니다. 관찰로 알게 된 것이고, 모든 장치에서 그런지는 확인하지 않았습니다.
+인터페이스 키의 인스턴스 ID 는 시스템이 만든 값인 경우가 많습니다.
 그래서 인터페이스 키와 부모 키는 일련번호가 아니라 `ContainerID` 로 잇습니다.
 
 ## 증거로서 의미
@@ -133,8 +133,8 @@ Microsoft 는 `Enum` 트리를 운영체제 전용으로 두고 구조가 바뀔
 3. **일련번호가 같다고 반드시 같은 장치는 아닙니다.** 값싼 장치 가운데에는 여러 개가 같은 일련번호를 보고하는 제품이 있습니다.
 4. **USB 일련번호와 볼륨 일련번호 (Volume Serial Number) 는 다른 값입니다.** 볼륨 일련번호는 포맷할 때 파일시스템이 정합니다. 볼륨 일련번호는 [WPD·EMDMgmt](wpd-emdmgmt.md) 와 [LNK](../../file-folder-usage/lnk.md) 에서 봅니다.
 5. **VID 로 상표를 바로 단정하지 않습니다.** 저장장치는 컨트롤러 칩 제조사의 VID 를 그대로 쓰는 경우가 있습니다. 공개 VID·PID 목록 (예: Linux USB ID 목록 `usb.ids`) 은 여러 사람이 모아 만든 목록이며 공식 등록부가 아닙니다.
-6. **외부 장치만 있는 것이 아닙니다.** 루트 허브 (`ROOT_HUB20`, `ROOT_HUB30`) 와 노트북 내장 웹캠·블루투스 어댑터 같은 내부 장치도 `Enum\USB` 에 있습니다. Microsoft 문서에 따르면 PC 안에 붙은 것으로 판단한 장치는 PC 본체의 컨테이너 ID 를 물려받습니다. 여러 장치가 같은 `ContainerID` 를 나눠 쓰면 내장 장치인지 확인합니다.
-7. **`ContainerID` 로 다른 PC 의 기록을 잇지 않습니다.** Microsoft 문서는 USB 장치의 컨테이너 ID 가 일련번호의 해시이거나 무작위 값이라고 설명합니다. 무작위 값이면 PC 마다 달라집니다. 같은 PC 안에서 노드를 묶는 데만 씁니다.
+6. **외부 장치만 있는 것이 아닙니다.** 루트 허브 (`ROOT_HUB20`, `ROOT_HUB30`) 와 노트북 내장 웹캠·블루투스 어댑터 같은 내부 장치도 `Enum\USB` 에 있습니다. PC 안에 붙은 것으로 판단한 장치는 PC 본체의 컨테이너 ID 를 물려받습니다. 여러 장치가 같은 `ContainerID` 를 나눠 쓰면 내장 장치인지 확인합니다.
+7. **`ContainerID` 로 다른 PC 의 기록을 잇지 않습니다.** USB 장치의 컨테이너 ID 는 일련번호의 해시이거나 무작위 값입니다. 무작위 값이면 PC 마다 달라집니다. 같은 PC 안에서 노드를 묶는 데만 씁니다.
 8. **지운 흔적이 다른 곳에 남습니다.** 흔적 정리 도구는 `Enum\USB`·USBSTOR 키를 지울 수 있습니다. 지운 키는 하이브 안 빈 공간, 트랜잭션 로그, 섀도 복사본에 남아 있을 수 있습니다. → [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md), [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)
 
 ## 직접 분석해 보기

@@ -8,29 +8,28 @@ nav_order: 1040
 
 ## 한 줄 요약
 
-NirSoft 에 따르면 사용자가 새 프로그램을 쓰기 시작할 때 Windows 가 실행 파일의 버전 정보에서 앱 이름을 꺼내 `MuiCache` 키에 경로와 함께 남깁니다. Vista 이후 이 키는 `Software\Classes` 아래에 있습니다. Windows 11 PC 한 대에서 하이브 파일은 NTUSER.DAT 가 아니라 UsrClass.dat 였습니다.
+사용자가 새 프로그램을 쓰기 시작할 때 Windows 가 실행 파일의 버전 정보에서 앱 이름을 꺼내 `MuiCache` 키에 경로와 함께 남깁니다[2]. Vista 이후 이 키는 `Software\Classes` 아래에 있습니다[1]. 그래서 하이브 파일은 NTUSER.DAT 가 아니라 UsrClass.dat 입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-libyal 은 이 키를 다국어 사용자 인터페이스 캐시 (Multilingual User Interface (MUI) cache) 로 부릅니다. NirSoft 의 설명에 따르면 새 응용 프로그램을 쓰기 시작할 때마다 Windows 가 실행 파일의 버전 리소스에서 앱 이름을 꺼내 나중에 쓰려고 `MuiCache` 키에 저장합니다. 항목을 지워도 그 프로그램을 다시 실행하면 항목이 다시 생긴다고 NirSoft 는 적습니다. 사용자 하이브에 있으므로 계정마다 따로 남습니다. 실행 파일의 버전 리소스는 [실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
+이 키의 이름은 다국어 사용자 인터페이스 캐시 (Multilingual User Interface (MUI) cache) 입니다[1]. 새 응용 프로그램을 쓰기 시작할 때마다 Windows 가 실행 파일의 버전 리소스에서 앱 이름을 꺼내 나중에 쓰려고 `MuiCache` 키에 저장합니다[2]. 항목을 지워도 그 프로그램을 다시 실행하면 항목이 다시 생깁니다[2]. 사용자 하이브에 있으므로 계정마다 따로 남습니다. 실행 파일의 버전 리소스는 [실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
 | Windows | 경로 | 하이브 파일 |
 |---|---|---|
 | XP·2003 | `HKCU\Software\Microsoft\Windows\ShellNoRoam\MUICache` | NTUSER.DAT |
-| Vista 이후 | `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache` | UsrClass.dat (Win11 25H2 한 대에서 확인) |
+| Vista 이후 | `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache` | UsrClass.dat (Windows 11 25H2 기준) |
 
-- 두 경로는 libyal 과 NirSoft 가 같게 적습니다.
-- Windows 11 PC 한 대에서 같은 키가 `HKEY_USERS\<SID>_Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로도 열렸습니다. 두 경로의 값 수(218)가 같았습니다.
-- 같은 PC 의 하이브 목록에서 `<SID>_Classes` 의 파일은 `C:\Users\<user>\AppData\Local\Microsoft\Windows\UsrClass.dat` 였습니다. 오프라인에서는 UsrClass.dat 를 열고 `Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로 들어갑니다.
-- 같은 PC 에는 XP 용 `ShellNoRoam\MUICache` 키가 없었습니다.
+- 켜진 PC 에서는 같은 키가 `HKEY_USERS\<SID>_Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로도 열립니다. 같은 키라서 두 경로의 값 수가 같습니다.
+- 하이브 목록에서 `<SID>_Classes` 의 파일은 `C:\Users\<user>\AppData\Local\Microsoft\Windows\UsrClass.dat` 입니다. 오프라인에서는 UsrClass.dat 를 열고 `Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로 들어갑니다.
+- Windows 11 25H2 에는 XP 용 `ShellNoRoam\MUICache` 키가 없습니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
-아래는 Windows 11 PC 한 대에서 본 값의 형태입니다.
+Windows 11 25H2 에서 값은 아래 형태입니다.
 
 ```
 MuiCache
@@ -39,29 +38,29 @@ MuiCache
     <전체 경로>.ApplicationCompany      REG_SZ      <회사 이름>
 ```
 
-- 값 이름은 실행 파일의 전체 경로 뒤에 `.FriendlyAppName` 이나 `.ApplicationCompany` 를 붙인 형태였습니다.
-- 값 수는 `.FriendlyAppName` 120개, `.ApplicationCompany` 97개, `LangID` 하나였습니다.
-- `.FriendlyAppName` 경로의 확장자는 .exe 116개, .dll 3개, .bat 1개였습니다.
-- `LangID` 는 REG_BINARY `12 04` 였습니다. 리틀 엔디언으로 읽으면 0x0412 입니다. Microsoft 의 언어 ID 표 [MS-LCID] 에서 0x0412 는 한국어(ko-KR)입니다. 이 값이 앱 이름의 언어를 뜻하는지는 확인하지 못했습니다.
+- 값 이름은 실행 파일의 전체 경로 뒤에 `.FriendlyAppName` 이나 `.ApplicationCompany` 를 붙인 형태입니다.
+- 값 수의 예: `.FriendlyAppName` 120개, `.ApplicationCompany` 97개, `LangID` 하나.
+- `.FriendlyAppName` 경로에는 .exe 말고 .dll·.bat 도 섞입니다 (예: .exe 116개, .dll 3개, .bat 1개).
+- `LangID` 는 REG_BINARY 입니다 (예: `12 04`). 리틀 엔디언으로 읽으면 0x0412 이고, 0x0412 는 한국어(ko-KR) 언어 ID 입니다[3]. 이 값이 앱 이름의 언어를 뜻하는지는 공개 자료가 없습니다.
 - 값마다 붙은 시각은 없습니다. 시간 정보는 키 전체의 마지막 기록 시각 하나뿐입니다.
 
 ### 앱 이름과 파일 버전 정보 비교
 
-같은 PC 에서 `.FriendlyAppName` 을 파일의 버전 정보와 맞춰 보았습니다.
+`.FriendlyAppName` 을 파일의 버전 정보와 맞춰 보면 아래와 같습니다 (Windows 11 25H2, `.FriendlyAppName` 120개인 하이브 기준).
 
 | 비교 | 결과 |
 |---|---|
-| 파일이 아직 있는 `.FriendlyAppName` 74개 | 49개는 파일의 FileDescription 과 같았습니다 |
-| 같은 74개 가운데 | 16개는 달랐습니다. Windows 기본 프로그램에는 현지화된 한국어 이름이 들어 있었습니다(예: explorer.exe 는 'Windows 탐색기', 파일의 FileDescription 은 'Windows Explorer') |
-| 같은 74개 가운데 | 9개는 파일의 FileDescription 이 비어 있었습니다. 이때는 확장자를 뺀 파일 이름이 들어 있었습니다 |
-| `.ApplicationCompany` 62개 | 58개는 파일의 CompanyName 과 같았습니다 |
-| `.FriendlyAppName` 120개 | 46개는 그 경로에 파일이 더는 없었습니다 |
+| 파일이 아직 있는 `.FriendlyAppName` 74개 | 49개는 파일의 FileDescription 과 같습니다 |
+| 같은 74개 가운데 | 16개는 다릅니다. Windows 기본 프로그램에는 현지화된 한국어 이름이 들어 있습니다(예: explorer.exe 는 'Windows 탐색기', 파일의 FileDescription 은 'Windows Explorer') |
+| 같은 74개 가운데 | 9개는 파일의 FileDescription 이 비어 있습니다. 이때는 확장자를 뺀 파일 이름이 들어 있습니다 |
+| `.ApplicationCompany` 62개 | 58개는 파일의 CompanyName 과 같습니다 |
+| `.FriendlyAppName` 120개 | 46개는 그 경로에 파일이 더는 없습니다 |
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
-- 이 계정의 MuiCache 에 이 경로와 앱 이름이 있습니다. NirSoft 의 설명대로라면 이 계정으로 이 프로그램을 쓰기 시작한 적이 있습니다.
+- 이 계정의 MuiCache 에 이 경로와 앱 이름이 있습니다. 이 계정으로 이 프로그램을 쓰기 시작한 적이 있다고 볼 수 있습니다[2].
 - 지금은 없는 프로그램도 경로와 이름이 남습니다. 지우거나 옮긴 프로그램의 흔적을 찾을 수 있습니다.
 - 값 이름에 전체 경로가 들어 있으므로, 그때 프로그램이 어느 폴더에 있었는지 알 수 있습니다.
 
@@ -69,7 +68,7 @@ MuiCache
 
 - **언제 썼나.** 값마다 시각이 없습니다.
 - **몇 번 썼나.** 횟수 칸이 없습니다.
-- **실행했나, 보기만 했나.** 이 캐시가 실행의 증거인지, 탐색기에서 파일을 보기만 해도 생기는지는 이번에 연 자료로 확인하지 못했습니다. "실행했다" 고 쓰려면 다른 실행 흔적으로 받칩니다.
+- **실행했나, 보기만 했나.** 이 캐시가 실행의 증거인지, 탐색기에서 파일을 보기만 해도 생기는지는 공개 자료가 없습니다. "실행했다" 고 쓰려면 다른 실행 흔적으로 받칩니다.
 - **지금 그 경로의 파일이 그때와 같은 파일인가.** 경로와 이름만 남고 해시는 없습니다.
 - **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
@@ -77,17 +76,17 @@ MuiCache
 
 ## 시각 해석
 
-값에는 시각이 없고 키의 마지막 기록 시각 (LastWrite) 이 하나 있을 뿐입니다. 이 시각은 키 안의 어떤 값이 마지막으로 바뀐 때를 말할 뿐, 어느 값인지는 말하지 않습니다. 값이 놓인 순서로 쓴 순서를 짐작하는 근거는 이번에 연 자료에 없으므로 순서로 시간 순서를 단정하지 않습니다.
+값에는 시각이 없고 키의 마지막 기록 시각 (LastWrite) 이 하나 있을 뿐입니다. 이 시각은 키 안의 어떤 값이 마지막으로 바뀐 때를 말할 뿐, 어느 값인지는 말하지 않습니다. 값이 놓인 순서로 쓴 순서를 짐작하는 근거는 공개 자료에 없으므로 순서로 시간 순서를 단정하지 않습니다.
 
 시각이 필요하면 같은 경로를 [BAM·DAM](background-activity-moderator.md), [UserAssist](userassist.md), [프리페치](prefetch/index.md) 에서 찾습니다.
 
 ## 함정과 한계
 
-- **NTUSER.DAT 만 수집하면 놓칩니다.** Windows 11 PC 한 대에서 이 키는 UsrClass.dat 에 있었습니다. 사용자 프로필마다 두 하이브를 함께 수집합니다.
+- **NTUSER.DAT 만 수집하면 놓칩니다.** Vista 이후 이 키는 UsrClass.dat 에 있습니다. 사용자 프로필마다 두 하이브를 함께 수집합니다.
 - **앱 이름이 파일의 FileDescription 과 다를 수 있습니다.** 현지화된 이름이 들어가거나, 파일 이름이 대신 들어갈 수 있습니다. 앱 이름으로 파일을 찾을 때는 경로를 기준으로 삼습니다.
-- **.exe 만 있지 않습니다.** Windows 11 PC 한 대에는 .dll·.bat 경로도 있었습니다.
+- **.exe 만 있지 않습니다.** .dll·.bat 경로도 들어갑니다.
 - **XP 와 Vista 이후의 경로가 다릅니다.** 검체 버전에 맞는 경로를 봅니다.
-- **항목은 지울 수 있습니다.** 다만 NirSoft 에 따르면 다시 실행하면 다시 생깁니다. 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+- **항목은 지울 수 있습니다.** 다만 다시 실행하면 다시 생깁니다[2]. 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 - **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 함께 수집합니다.
 
 ## 직접 분석해 보기

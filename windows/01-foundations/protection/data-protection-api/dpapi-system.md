@@ -23,15 +23,14 @@ SYSTEM 계정과 머신 계정은 사람이 정한 암호가 없지만, 무선 �
 
 ## 구조
 
-DPAPI_SYSTEM 은 machine key 와 user key 두 부분으로 나뉘고, 각 부분은 20바이트(16진수로 적으면 40자)입니다. 머신 계정이 만든 마스터키는 이 machine key 로 풉니다. 공개 복호 코드(impacket 의 DPAPI_SYSTEM)도 이 값을 Version, MachineKey, UserKey 순으로 읽습니다.
+DPAPI_SYSTEM 은 machine key 와 user key 두 부분으로 나뉘고, 각 부분은 20바이트(16진수로 적으면 40자)입니다. 머신 계정이 만든 마스터키는 이 machine key 로 풉니다. 값은 Version, MachineKey, UserKey 순으로 놓입니다[4].
 
 ## 위치
 
 머신·SYSTEM 계정의 마스터키는 사용자 프로필이 아니라 시스템 폴더 아래에 있습니다.
 
-- 널리 알려진 경로는 `%WINDIR%\System32\Microsoft\Protect\S-1-5-18\` 와 그 아래 `User\` 입니다.
-- 이 정확한 경로는 이 글의 참고 문헌으로 확정하지 못했습니다.
-- 한 공개 자료는 systemprofile 과 ServiceProfiles(LocalService) 아래의 `...\Microsoft\Credentials` 맥락을 언급합니다.
+- 널리 알려진 경로는 `%WINDIR%\System32\Microsoft\Protect\S-1-5-18\` 와 그 아래 `User\` 입니다. 정확한 경로는 검체에서 확인합니다.
+- systemprofile 과 ServiceProfiles(LocalService) 아래의 `...\Microsoft\Credentials` 도 같은 맥락에서 쓰입니다[3].
 - 폴더 이름의 S-1-5-18 은 로컬 SYSTEM 계정의 SID 입니다. [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 을 봅니다.
 
 ## SYSTEM 이 만든 블롭 알아보기
@@ -55,7 +54,7 @@ SYSTEM 계정이 만든 마스터키 파일은 푸터의 credHist GUID 가 0x00 
 
 ## 옛 버전의 위험한 모드
 
-Windows 2000 레거시 모드에서는 마스터키를 로컬 LSA 시크릿에 백업할 수 있었습니다. 이 모드를 켜면 LSA·마스터키·보호 데이터를 함께 훔쳐 마음대로 풀 수 있고, 관리자가 레지스트리를 고쳐야 켜집니다. 이 설명은 2001년 문서(Windows XP 기준)에 있습니다. 뒤 버전에도 이 모드가 남아 있는지는 이 글의 참고 문헌으로 확인하지 못했습니다.
+Windows 2000 레거시 모드에서는 마스터키를 로컬 LSA 시크릿에 백업할 수 있었습니다. 이 모드를 켜면 LSA·마스터키·보호 데이터를 함께 훔쳐 마음대로 풀 수 있고, 관리자가 레지스트리를 고쳐야 켜집니다(Windows XP 기준)[1]. 뒤 버전에도 이 모드가 남아 있는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 도구
 

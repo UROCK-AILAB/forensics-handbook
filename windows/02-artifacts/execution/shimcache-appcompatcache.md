@@ -8,18 +8,18 @@ nav_order: 940
 
 ## 한 줄 요약
 
-SYSTEM 하이브의 `AppCompatCache` 값에 실행 파일 경로와 그 파일의 마지막 수정 시각이 목록으로 남습니다. 이 시각은 실행 시각이 아닙니다. Windows 8 이후의 항목이 실행을 뜻하는지는 아직 확인하지 못했습니다.
+SYSTEM 하이브의 `AppCompatCache` 값에 실행 파일 경로와 그 파일의 마지막 수정 시각이 목록으로 남습니다. 이 시각은 실행 시각이 아닙니다. Windows 8 이후의 항목이 실행을 뜻하는지는 밝혀져 있지 않습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-- Mandiant 는 심캐시를 Microsoft 가 Windows XP 부터 만든 캐시로 설명합니다. 실행한 프로그램의 호환성 문제를 추적하려는 캐시입니다.
-- 여러 자료가 이 캐시를 응용 프로그램 호환성 데이터베이스 (Application Compatibility Database) 의 일부로 소개합니다. libyal 은 이 설명에 근거가 없다고 적습니다.
+- 심캐시는 Microsoft 가 Windows XP 부터 둔 캐시로, 실행한 프로그램의 호환성 문제를 추적하는 데 씁니다[2].
+- 여러 자료가 이 캐시를 응용 프로그램 호환성 데이터베이스 (Application Compatibility Database) 의 일부로 소개하지만, libyal 은 이 설명에 근거가 없다고 봅니다[1].
 - "Application Compatibility Cache" 와 "Shim Cache" 가 정확히 어떻게 다른지는 알려져 있지 않고 자료마다 두 이름을 섞어 쓰므로, 이 페이지에서는 심캐시로 부릅니다.
 - 항목마다 파일 경로와 파일의 마지막 수정 시각이 들어 있고, Windows 버전에 따라 파일 크기나 플래그도 들어 있습니다.
 - 캐시를 다루는 DLL 로 apphelp.dll(AppHelp·호환성 DB)과 kernel32.dll(기본 캐시 관리)이 알려져 있습니다.
-- libyal 은 관련 키로 `HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags` 를 듭니다.
+- 관련 키로 `HKLM\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags` 가 있습니다[1].
 
-Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
+항목이 생기는 조건은 아래와 같습니다[2].
 
 - 파일을 실행하면 항목이 생깁니다. XP 이후 모든 버전이 그렇습니다.
 - 이미 있는 파일의 메타데이터가 바뀐 뒤 다시 실행하면 새 항목이 생깁니다.
@@ -33,19 +33,19 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 | XP | `HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatibility` |
 | 2003 이후 | `HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache` 키의 `AppCompatCache` 값 |
 
-- Windows 2000 의 하위 키가 뒤 버전의 `AppCompatCache` 값과 목적이 같은지는 libyal 도 불분명하다고 적습니다.
-- 오프라인 하이브에는 `CurrentControlSet` 이 없습니다. `ControlSet00X` 아래에서 찾습니다. Mandiant 도 오프라인 경로를 `SYSTEM\ControlSet00X\...` 로 적습니다.
-- 어느 `ControlSet00X` 가 현재 것인지는 `SYSTEM\Select` 의 `Current` 값으로 고른다는 설명이 흔합니다. 이 설명은 이번에 연 자료로 확인하지 못했습니다.
-- Windows 11 PC 한 대의 `Select` 값은 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다.
-- 같은 PC 의 `AppCompatCache` 키에는 값이 셋 있었습니다. `AppCompatCache`(REG_BINARY, 214,066바이트), `CacheMainSdb`(REG_BINARY, 6,512바이트), `SdbTime`(REG_BINARY, 96바이트)입니다.
+- Windows 2000 의 하위 키가 뒤 버전의 `AppCompatCache` 값과 목적이 같은지는 밝혀져 있지 않습니다[1].
+- 오프라인 하이브에는 `CurrentControlSet` 이 없습니다. `SYSTEM\ControlSet00X\...` 아래에서 찾습니다[2].
+- 어느 `ControlSet00X` 가 현재 것인지는 흔히 `SYSTEM\Select` 의 `Current` 값으로 고릅니다. 검체의 `Select` 값을 함께 봅니다.
+- 예를 들어 Windows 11 25H2 에서 `Select` 값이 Current=1, Default=1, LastKnownGood=1, Failed=0 이면 `ControlSet001` 이 현재 것입니다.
+- Windows 11 25H2 의 `AppCompatCache` 키에는 `AppCompatCache`·`CacheMainSdb`·`SdbTime` 세 값이 있고, 모두 REG_BINARY 입니다. 아래 예에서 크기는 214,066·6,512·96바이트입니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
-값 하나는 헤더와 항목 목록으로 이루어지고, 헤더 크기와 서명은 Windows 버전마다 다릅니다. 아래 표는 libyal 의 정리이며 최대 항목 수는 libyal 도 추정으로 적은 값입니다.
+값 하나는 헤더와 항목 목록으로 이루어지고, 헤더 크기와 서명은 Windows 버전마다 다릅니다. 최대 항목 수는 추정값입니다[1].
 
-| Windows | 헤더 크기 | 서명 | 항목 수 위치 | 최대 항목 수(추정) |
+| Windows | 헤더 크기 | 서명 | 항목 수 위치 | 최대 항목 수 |
 |---|---|---|---|---|
 | XP 32비트 | 400바이트 | `ef be ad de` (0xDEADBEEF) | 오프셋 4 | 92 |
 | 2003 (64비트 XP 포함) | 8바이트 | `fe 0f dc ba` (0xBADC0FFE) | 오프셋 4 | 512 |
@@ -86,38 +86,38 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 | 그다음 | 4 | Data 크기 |
 | 그다음 | Data 크기 | Data |
 
-- libyal 의 Windows 10 항목 표에는 Insertion flags·Shim flags 칸이 없습니다.
-- libyal 은 Insertion flags 의 0x00000002 를 CSRSS 가 실행한 표시로 적습니다. 다만 이 해석을 확정하지 않은 값으로 표시해 둡니다.
+- Windows 10 항목에는 Insertion flags·Shim flags 칸이 없습니다[1].
+- Insertion flags 의 0x00000002 는 CSRSS 가 실행한 표시라는 해석이 있지만, 확정된 값은 아닙니다[1].
 
 > 그림 자리: Windows 10 형식의 헤더 52바이트 뒤로 `10ts` 항목이 이어지는 모습. 항목 데이터 크기로 다음 항목을 찾는 화살표
 
-### Windows 11 25H2 에서 본 모습
+### Windows 11 25H2 의 예
 
-아래는 모두 Windows 11 PC 한 대에서 본 것입니다.
+아래 값은 Windows 11 25H2 의 한 예입니다.
 
-- 헤더 첫 4바이트는 0x34(52)였습니다. Creators Update 이후 형식과 같습니다.
-- 헤더 오프셋 16 의 값은 22 였습니다.
-- libyal 이 항목 수라고 적은 헤더 오프셋 40 의 값은 0 이었습니다.
-- 그래서 `10ts` 항목을 처음부터 끝까지 따라가며 셌습니다. 항목은 904개였고, 마지막 항목이 값 끝(214,066바이트)에 정확히 닿았습니다.
-- 경로가 `C:\` 로 시작하는 항목은 689개였습니다. `\\?\` 로 시작하는 항목은 4개였습니다.
-- 나머지 211개는 패키지 앱 항목으로 보였습니다. 경로 칸이 탭으로 나뉜 7칸(끝 탭 포함)이었고, 시각은 모두 0 이었습니다.
-- 첫 패키지 앱 항목의 칸은 16진 숫자 칸 세 개, `8664`, 패키지 이름, 게시자 ID 순이었습니다. 각 칸의 뜻은 확인하지 못했습니다.
-- 확장자는 .exe 656개, 확장자 없음 22개, .tmp 9개, .com 3개, .dll 2개, .scr 1개였습니다.
-- 항목의 Data 크기는 72·84·36·24·60·48바이트 등으로 제각각이었습니다.
+- 헤더 첫 4바이트는 0x34(52)입니다. Creators Update 이후 형식과 같습니다.
+- 헤더 오프셋 16 의 값은 22 입니다.
+- 항목 수 자리인 헤더 오프셋 40 의 값은 0 입니다[1].
+- `10ts` 항목을 처음부터 끝까지 따라가며 세면 904개이고, 마지막 항목이 값 끝(214,066바이트)에 정확히 닿습니다.
+- 경로가 `C:\` 로 시작하는 항목은 689개, `\\?\` 로 시작하는 항목은 4개입니다.
+- 나머지 211개는 패키지 앱 항목으로 보입니다. 경로 칸이 탭으로 나뉜 7칸(끝 탭 포함)이고, 시각은 모두 0 입니다.
+- 첫 패키지 앱 항목의 칸은 16진 숫자 칸 세 개, `8664`, 패키지 이름, 게시자 ID 순입니다. 각 칸의 뜻은 공개 자료에 없습니다.
+- 확장자는 .exe 656개, 확장자 없음 22개, .tmp 9개, .com 3개, .dll 2개, .scr 1개입니다.
+- 항목의 Data 크기는 72·84·36·24·60·48바이트 등으로 제각각입니다.
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
-- 항목의 경로에 파일이 있었던 적이 있습니다. 지금은 없는 파일도 남습니다. Windows 11 PC 한 대에서 `C:\` 경로 항목 689개 가운데 259개는 그 경로에 파일이 더는 없었습니다.
+- 항목의 경로에 파일이 있었던 적이 있습니다. 지금은 없는 파일도 남습니다. 위 Windows 11 25H2 의 예에서는 `C:\` 경로 항목 689개 가운데 259개의 경로에 파일이 더는 없습니다.
 - 항목의 시각은 그 파일의 마지막 수정 시각입니다. 지금 파일의 수정 시각과 다르면 그 사이에 파일이 바뀌었을 수 있습니다.
-- Vista·7·Server 2008·Server 2012 에서는 항목마다 실행 표시 (Process Execution Flag) 가 있다고 Mandiant 는 설명합니다. 프로세스를 만들 때 CSRSS 가 이 표시를 켭니다. 표시가 켜져 있으면 실행한 항목입니다.
-- XP·2003 에는 이 표시가 없습니다. Mandiant 는 이 두 버전의 항목을 시스템에 있었고 한 번은 실행됐을 가능성이 높은 파일로 봅니다.
+- Vista·7·Server 2008·Server 2012 에서는 항목마다 실행 표시 (Process Execution Flag) 가 있습니다[2]. 프로세스를 만들 때 CSRSS 가 이 표시를 켭니다. 표시가 켜져 있으면 실행한 항목입니다.
+- XP·2003 에는 이 표시가 없습니다. 이 두 버전의 항목은 시스템에 있었고 한 번은 실행됐을 가능성이 높은 파일로 보는 해석이 있습니다[2].
 
 ### 증명하지 못하는 것
 
-- **실행 시각.** 항목의 시각은 수정 시각입니다. Mandiant 도 "it is not indicative of the file execution time" 이라고 적습니다.
-- **Windows 8·10·11 항목의 실행 여부.** 이번에 연 자료로 확인하지 못했습니다. Mandiant 글은 8·10·2012 R2 를 다루지 않습니다. libyal 의 Windows 10 항목 표에는 플래그 칸이 없습니다. "Windows 10 이후 심캐시만으로는 실행을 증명하지 못한다" 는 설명이 흔하지만 이 설명도 확인하지 못했습니다. 실행을 말하려면 다른 아티팩트로 받칩니다.
+- **실행 시각.** 항목의 시각은 수정 시각이며 실행 시각을 뜻하지 않습니다[2].
+- **Windows 8·10·11 항목의 실행 여부.** 이 버전의 항목이 실행을 뜻하는지 밝힌 공개 분석 자료가 없고, Windows 10 항목에는 플래그 칸이 없습니다[1]. "Windows 10 이후 심캐시만으로는 실행을 증명하지 못한다" 는 설명이 흔합니다. 실행을 말하려면 다른 아티팩트로 받칩니다.
 - **탐색만 한 파일과 실행한 파일의 구분 (Vista~2012).** 실행 표시가 꺼진 항목은 폴더를 탐색하다 생겼을 수 있습니다.
 - **누가 실행했나.** 항목에 사용자 칸이 없습니다. SYSTEM 하이브는 사용자마다 나뉘지 않습니다.
 - **몇 번 실행했나.** 항목에 실행 횟수 칸이 없습니다.
@@ -131,18 +131,18 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 - 예외가 하나 있습니다. PsExec 는 원격 PC 에 PSEXESVC.exe 를 새로 만들므로 이 항목의 수정 시각은 파일을 만든 시각과 같고, 결과적으로 실행 무렵의 시각이 됩니다.
 - XP 항목에는 마지막 갱신 시각 칸이 따로 있습니다(오프셋 544).
 - 목록은 위에서 아래로 최근 사용 순 큐입니다. 맨 위가 가장 최근 항목입니다. 시각은 수정 시각이라서 목록 순서와 시각 순서가 다를 수 있습니다.
-- Windows 11 PC 한 대에서 시각이 1970-01-01 00:00:00(UTC)인 항목이 있었습니다. 패키지 앱 항목의 시각은 모두 0 이었습니다. 이런 값은 타임라인에 그대로 넣지 말고 파일 쪽 시각과 맞춰 봅니다.
-- 같은 PC 에서 `C:\` 경로 항목 689개 가운데 404개는 지금 파일의 수정 시각과 값이 정확히 같았습니다. 26개는 달랐습니다.
-- `AppCompatCache` 키의 마지막 기록 시각은 캐시가 쓰인 시각이 아닐 수 있습니다. 같은 키에 `CacheMainSdb`·`SdbTime` 값도 있기 때문입니다. Windows 11 PC 한 대에서 이 키의 마지막 기록 시각은 마지막 부팅 두 시간 뒤였습니다.
+- 위 Windows 11 25H2 의 예에는 시각이 1970-01-01 00:00:00(UTC)인 항목이 있고, 패키지 앱 항목의 시각은 모두 0 입니다. 이런 값은 타임라인에 그대로 넣지 말고 파일 쪽 시각과 맞춰 봅니다.
+- 같은 예에서 `C:\` 경로 항목 689개 가운데 404개는 지금 파일의 수정 시각과 값이 정확히 같고, 26개는 다릅니다.
+- `AppCompatCache` 키의 마지막 기록 시각은 캐시가 쓰인 시각이 아닐 수 있습니다. 같은 키에 `CacheMainSdb`·`SdbTime` 값도 있기 때문입니다. 위 Windows 11 25H2 의 예에서 이 키의 마지막 기록 시각은 마지막 부팅 두 시간 뒤입니다.
 
 ## 함정과 한계
 
 - **수정 시각을 실행 시각으로 읽는 오해.** 가장 흔한 오판입니다. 실행 시각은 [프리페치](prefetch/index.md) 나 [프로세스 생성](../event-logs/4688.md) 이벤트에서 찾습니다.
-- **최근 항목이 빠질 수 있습니다.** Mandiant 는 이 캐시가 "somewhat volatile" 하니 되도록 빨리 보존하라고 적습니다. 캐시를 메모리에 두었다가 종료나 재부팅 때만 레지스트리에 쓴다는 설명도 흔합니다. 이 설명은 이번에 연 자료로 확인하지 못했습니다. 켜진 PC 는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md) 도 함께 검토합니다.
-- **헤더의 항목 수를 믿지 않습니다.** Windows 11 PC 한 대에서 헤더의 항목 수 칸은 0 이었지만 실제 항목은 904개였습니다. 항목을 끝까지 따라가며 셉니다.
+- **최근 항목이 빠질 수 있습니다.** 이 캐시는 휘발성이 있으므로 되도록 빨리 보존합니다[2]. 캐시를 메모리에 두었다가 종료나 재부팅 때만 레지스트리에 쓴다는 설명도 흔합니다. 켜진 PC 는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md) 도 함께 검토합니다.
+- **헤더의 항목 수를 믿지 않습니다.** 위 Windows 11 25H2 의 예에서 헤더의 항목 수 칸은 0 이지만 실제 항목은 904개입니다. 항목을 끝까지 따라가며 셉니다.
 - **32비트와 64비트의 항목 크기가 다릅니다.** 2003·Vista·7 형식은 운영체제의 비트 수에 맞는 표로 읽습니다.
 - **XP 경로 칸에 이전 데이터가 남습니다.** 528바이트 경로 칸의 남는 자리에 앞 항목의 글자가 남을 수 있습니다. 문자열 끝의 NUL 뒤는 버립니다.
-- **실행 파일만 있지 않습니다.** Windows 11 PC 한 대에는 .tmp·.dll·.scr 과 확장자 없는 항목도 있었습니다.
+- **실행 파일만 있지 않습니다.** 위 Windows 11 25H2 의 예에도 .tmp·.dll·.scr 과 확장자 없는 항목이 있습니다.
 - **캐시를 비우는 명령이 있습니다.** Vista 이후에는 `Rundll32.exe apphelp.dll,ShimFlushCache`, XP·2003 에서는 `Rundll32.exe kernel32.dll,BaseFlushAppcompatCache` 입니다. Vista 형식은 캐시가 비면 헤더만 남습니다. 항목이 없거나 너무 적으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 명령 실행 흔적은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 찾습니다.
 
 ## 직접 분석해 보기

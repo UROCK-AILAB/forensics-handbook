@@ -8,7 +8,7 @@ nav_order: 3770
 
 이 페이지는 랜섬웨어 사고에서 암호화가 언제 시작해 어디로 퍼졌는지, 그 앞에 어떤 단계가 있었는지를 거슬러 찾는 순서를 다룹니다. 암호화 시각을 먼저 잡습니다. 그다음 복구 방해와 보안 프로그램 끄기, 랜섬웨어 실행 방법, 측면 이동, 초기 접근 순으로 올라갑니다. 단계마다의 세부는 각 시나리오·아티팩트 페이지에 있습니다.
 
-"(관찰)" 을 붙인 내용은 Windows 11 Home(빌드 26200) 분석 PC 한 대에서 이벤트 공급자 정의를 직접 조회한 것입니다. 한 대에서 본 것이므로 기본값으로 일반화하지 않습니다.
+아래 "관련 이벤트 정의" 는 Windows 11 Home(빌드 26200) 의 이벤트 공급자 정의 기준입니다. 다른 빌드의 기본값과는 다를 수 있습니다.
 
 ## 조사 질문
 
@@ -25,10 +25,10 @@ nav_order: 3770
 | Windows 버전 | PC 마다 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 적습니다. |
 | 시간대와 시계 | PC 여러 대의 기록을 합칩니다. PC 마다 [시간대 설정](../../02-artifacts/system-account/time-zone.md) 과 시계 오차를 적습니다. 맞추는 법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md) 에 있습니다. |
 | 수집 범위 | 암호화된 PC 여러 대, 파일 서버, 도메인 컨트롤러를 봅니다. 각 PC 에서 $MFT, $UsnJrnl:$J, $LogFile, 이벤트 로그, 레지스트리 하이브를 확보합니다. 섀도 복사본이 남아 있는지도 적습니다. |
-| $UsnJrnl 추출 방법 | $UsnJrnl:$J 를 어떻게 뽑았는지 적습니다. 뽑는 방법에 따라 크기와 해시가 달라집니다(현장 관찰). 까닭은 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에 있습니다. |
+| $UsnJrnl 추출 방법 | $UsnJrnl:$J 를 어떻게 뽑았는지 적습니다. 뽑는 방법에 따라 크기와 해시가 달라집니다. 까닭은 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에 있습니다. |
 | 감사 정책·Sysmon | 프로세스 생성 기록과 명령줄은 감사 정책과 Sysmon 설정에 따라 남기도 하고 안 남기도 합니다. 기록이 없다고 해서 명령이 없었다고 읽지 않습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
 
-## MITRE 가 설명하는 암호화와 복구 방해
+## 암호화와 복구 방해 기법
 
 **T1486 Data Encrypted for Impact.**
 
@@ -36,13 +36,13 @@ nav_order: 3770
 
 퍼뜨릴 때는 유효 계정 (Valid Accounts), 운영체제 자격 증명 덤프 (OS Credential Dumping), SMB·Windows 관리 공유 (SMB/Windows Admin Shares) 같은 다른 기법을 씁니다[1]. 바탕 화면 바꾸기 같은 내부 훼손이나, 연결된 프린터로 랜섬노트를 뿌리는 일도 듭니다[1].
 
-탐지 문장은 드문 확장자로 파일 쓰기가 짧은 시간에 몰리는 모양을 보라고 하며, 뒤이어 랜섬노트 생성, 레지스트리 변경, 섀도 복사본 삭제가 나옵니다[1]. 이때 vssadmin·wbadmin·cipher·PowerShell 같은 명령줄 도구를 흔히 씁니다[1].
+탐지할 때는 드문 확장자로 파일 쓰기가 짧은 시간에 몰리는 모양을 보고, 뒤이은 랜섬노트 생성, 레지스트리 변경, 섀도 복사본 삭제를 함께 봅니다[1]. 이때 vssadmin·wbadmin·cipher·PowerShell 같은 명령줄 도구를 흔히 씁니다[1].
 
 **T1490 Inhibit System Recovery.**
 
-공격자는 망가진 시스템을 되살리는 데 쓰는 기본 데이터와 서비스를 지우거나 끕니다[2]. 탐지 문장은 기본 유틸리티(vssadmin·wbadmin·diskshadow·bcdedit·REAgentC·wmic)를 섀도 복사본 삭제, 복구 끄기, 백업 카탈로그 삭제 인자로 부르는 프로세스 사슬을 보라고 하지만, MITRE 페이지에는 윈도 이벤트 ID 나 레지스트리 키가 없습니다[2].
+공격자는 망가진 시스템을 되살리는 데 쓰는 기본 데이터와 서비스를 지우거나 끕니다[2]. 탐지할 때는 기본 유틸리티(vssadmin·wbadmin·diskshadow·bcdedit·REAgentC·wmic)를 섀도 복사본 삭제, 복구 끄기, 백업 카탈로그 삭제 인자로 부르는 프로세스 사슬을 봅니다[2]. T1490 항목에는 짝지은 윈도 이벤트 ID 나 레지스트리 키가 없습니다[2].
 
-**명령줄에서 찾을 모양.** 아래 명령은 MITRE T1490 페이지에 적힌 것입니다[2]. 프로세스 생성 기록(4688·Sysmon 1)의 명령줄에서 이 모양을 찾습니다. "하는 일" 열은 명령과 인자를 보고 이 핸드북이 붙인 설명입니다.
+**명령줄에서 찾을 모양.** T1490 에 쓰이는 명령은 아래와 같습니다[2]. 프로세스 생성 기록(4688·Sysmon 1)의 명령줄에서 이 모양을 찾습니다. "하는 일" 열은 명령과 인자를 보고 이 핸드북이 붙인 설명입니다.
 
 | 명령줄 | 하는 일 |
 |---|---|
@@ -54,11 +54,11 @@ nav_order: 3770
 | `bcdedit /set {default} recoveryenabled no` | 복구 끄기 |
 | REAgentC | Windows 복구 환경 (WinRE) 끄기 |
 
-**분석 PC 에서 본 관련 이벤트 정의.**
+**관련 이벤트 정의.**
 
-공급자 Microsoft-Windows-Backup 의 524 는 Application 채널의 정보 이벤트이고, 메시지는 "The system catalog has been deleted." 입니다(관찰). `wbadmin delete catalog` 를 실행하면 524 가 남는지는 이번에 확인하지 못했습니다.
+공급자 Microsoft-Windows-Backup 의 524 는 Application 채널의 정보 이벤트이고, 메시지는 "The system catalog has been deleted." 입니다. `wbadmin delete catalog` 를 실행했을 때 524 가 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-Microsoft-Windows-Windows Defender 운영 로그에는 실시간 보호 끄기(5001), 설정 변경(5007), 스파이웨어 검사 끄기(5010), 바이러스 검사 끄기(5012) 메시지가 정의돼 있습니다(관찰). 디펜더 끄기·설정 변경 이벤트를 읽는 법은 [보안 프로그램을 끄거나 지웠나](../activity/anti-forensics/defense-evasion.md) 에 있습니다.
+Microsoft-Windows-Windows Defender 운영 로그에는 실시간 보호 끄기(5001), 설정 변경(5007), 스파이웨어 검사 끄기(5010), 바이러스 검사 끄기(5012) 메시지가 정의돼 있습니다. 디펜더 끄기·설정 변경 이벤트를 읽는 법은 [보안 프로그램을 끄거나 지웠나](../activity/anti-forensics/defense-evasion.md) 에 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -77,7 +77,7 @@ Microsoft-Windows-Windows Defender 운영 로그에는 실시간 보호 끄기(5
 
 ## 공개 사례: 침입부터 암호화까지
 
-The DFIR Report 가 공개한 Hive 랜섬웨어 사례(2023-09-25)입니다[3]. 첫 접근에서 랜섬웨어 실행까지 61시간이 걸렸습니다[3].
+The DFIR Report 의 Hive 랜섬웨어 사례입니다[3]. 첫 접근에서 랜섬웨어 실행까지 61시간이 걸렸습니다[3].
 
 | 단계 | 사례의 내용[3] | 이 핸드북에서 볼 곳 |
 |---|---|---|
@@ -97,7 +97,7 @@ WMIEXEC 는 wmiprvse.exe 가 부모인 `cmd.exe /Q /c … 1> \\127.0.0.1\{공유
 
 관리자 비밀번호가 바뀌고 약 1시간 뒤 랜섬웨어가 실행됐습니다[3]. 공격자는 비콘과 cmd.exe 에서 랜섬웨어를 손으로 실행했고, 인자는 `-u {자격 증명}` 모양이었습니다[3]. 또 gpme.msc 로 그룹 정책 개체를 만들고 예약 작업을 넣었지만, 작업을 사용자 구성에 넣어 도메인 전체 배포는 실패했고 손으로 실행한 곳만 암호화됐습니다[3].
 
-랜섬웨어 파일은 `C:\windows_x64_encrypt.exe` 와 `C:\ProgramData\windows_x64_encrypt.exe` 에 있었고, 공격자는 그룹 정책 배포용으로 네트워크 공유에도 같은 파일을 두었습니다[3]. 보고서에 적힌 복구 방해 명령은 아래와 같으며, 위 MITRE 표의 명령과 모양이 같습니다[3].
+랜섬웨어 파일은 `C:\windows_x64_encrypt.exe` 와 `C:\ProgramData\windows_x64_encrypt.exe` 에 있었고, 공격자는 그룹 정책 배포용으로 네트워크 공유에도 같은 파일을 두었습니다[3]. 이 사례의 복구 방해 명령은 아래와 같고, 위 표의 명령과 모양이 같습니다[3].
 
 ```
 "C:\Windows\System32\wbem\WMIC.exe" shadowcopy delete
@@ -106,7 +106,7 @@ WMIEXEC 는 wmiprvse.exe 가 부모인 `cmd.exe /Q /c … 1> \\127.0.0.1\{공유
 "C:\Windows\System32\bcdedit.exe" /set {default} bootstatuspolicy ignoreallfailures
 ```
 
-보고서가 든 랜섬노트 경로의 예는 `C:\Users\Default\HOW_TO_DECRYPT.txt` 이고, 증거로 쓴 이벤트는 4688, 7045, 5145, Sysmon 1·8·10·11·13·17·18·23, PowerShell 4104 입니다[3].
+이 사례의 랜섬노트 경로 예는 `C:\Users\Default\HOW_TO_DECRYPT.txt` 이고, 흔적이 남은 이벤트는 4688, 7045, 5145, Sysmon 1·8·10·11·13·17·18·23, PowerShell 4104 입니다[3].
 
 ## 분석 흐름
 
@@ -122,9 +122,9 @@ WMIEXEC 는 wmiprvse.exe 가 부모인 `cmd.exe /Q /c … 1> \\127.0.0.1\{공유
 1. **암호화 시각을 침입 시각으로 씁니다.** 공개 사례에서는 첫 접근과 랜섬웨어 실행 사이가 61시간이었습니다[3].
 2. **암호화된 PC 를 시작점으로 봅니다.** 공격자는 관리 공유와 유효 계정으로 다른 PC 에서 퍼뜨립니다[1][3].
 3. **섀도 복사본이 없으니 원래 꺼져 있었다고 봅니다.** 복구 방해 명령으로 지웠을 수 있습니다[2]. 명령 실행 흔적을 찾습니다.
-4. **파일 수정 시각을 암호화 시각으로 씁니다.** 랜섬웨어가 파일 시각을 어떻게 남기는지는 이번 자료로 확인하지 못했습니다. 그래서 $MFT 시각 하나로 정하지 않습니다. $UsnJrnl 과 $LogFile 로 교차 확인합니다.
+4. **파일 수정 시각을 암호화 시각으로 씁니다.** 랜섬웨어가 파일 시각을 어떻게 남기는지는 검체에서 확인해야 합니다. $MFT 시각 하나로 정하지 않고 $UsnJrnl 과 $LogFile 로 교차 확인합니다.
 5. **유출은 없었다고 봅니다.** 암호화 전에 유출한 사례가 있습니다[3].
-6. **$UsnJrnl 의 가장 오래된 기록 앞에는 아무 일도 없었다고 봅니다.** 대량 암호화가 저널의 오래된 기록을 밀어내는지는 이번 자료로 확인하지 못했습니다. 저널에 남은 가장 오래된 기록의 시각을 먼저 적고, 그보다 앞선 일은 다른 기록으로 봅니다.
+6. **$UsnJrnl 의 가장 오래된 기록 앞에는 아무 일도 없었다고 봅니다.** 대량 암호화가 저널의 오래된 기록을 밀어내는지는 검체에서 확인해야 합니다. 저널에 남은 가장 오래된 기록의 시각을 먼저 적고, 그보다 앞선 일은 다른 기록으로 봅니다.
 
 ## 보고서 문장 예
 

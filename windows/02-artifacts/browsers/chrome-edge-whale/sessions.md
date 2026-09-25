@@ -11,17 +11,17 @@ nav_order: 1640
 
 크롬 계열 브라우저는 창과 탭의 상태를 프로필 폴더의 `Sessions` 폴더에 SNSS 형식으로 적습니다. `Session_<숫자>` 파일에는 열려 있던 탭과 탭마다의 뒤로 가기 목록이 남습니다. `Tabs_<숫자>` 파일에는 최근에 닫은 탭과 창이 남습니다. 파일 이름의 숫자는 그 파일을 만든 시각입니다.
 
-> 이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11(빌드 26200) PC 한 대의 Chrome 153·Edge 151 에서 본 것입니다. 다른 판이나 다른 PC 에서는 다를 수 있습니다. 표시가 없는 내용은 2026년 9월 크로미엄 (Chromium) 소스 기준입니다.
+> 명령 ID 와 구조는 2026년 9월 크로미엄 (Chromium) 소스 기준입니다. 폴더 구성과 레코드 수 같은 예는 Windows 11(빌드 26200)의 Chrome 153·Edge 151 기준이며, 판이 다르면 달라질 수 있으므로 검체에서 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 브라우저를 다시 켤 때 창과 탭을 되살리려고 이 파일을 씁니다. `Session_` 파일은 세션 복원 (Session Restore) 에 쓰고, `Tabs_` 파일은 탭 복원 서비스 (Tab Restore Service) 가 최근에 닫은 탭과 창을 다시 열 때 씁니다.
 
-파일 안에는 명령 (Command) 이라는 레코드가 차례로 이어집니다. 명령 하나에는 "이 탭은 이 창에 있다", "이 탭의 탐색 항목은 이것이다", "이 탭을 이 시각에 닫았다" 같은 사실이 하나씩 들어갑니다. 탐색 항목 (Navigation Entry) 은 탭 안에서 연 페이지 하나이고 주소와 제목이 함께 적힙니다. 한 탭의 탐색 항목은 순번 0, 1, 2… 로 차례로 있어서 탭마다 뒤로 가기 목록을 되살릴 수 있습니다 (관찰).
+파일 안에는 명령 (Command) 이라는 레코드가 차례로 이어집니다. 명령 하나에는 "이 탭은 이 창에 있다", "이 탭의 탐색 항목은 이것이다", "이 탭을 이 시각에 닫았다" 같은 사실이 하나씩 들어갑니다. 탐색 항목 (Navigation Entry) 은 탭 안에서 연 페이지 하나이고 주소와 제목이 함께 적힙니다. 한 탭의 탐색 항목은 순번 0, 1, 2… 로 차례로 있어서 탭마다 뒤로 가기 목록을 되살릴 수 있습니다.
 
 사용자가 닫은 탭을 다시 열면 그 사실도 `Tabs_` 파일에 명령으로 적힙니다. 브라우저는 파일을 비우라는 요청 (truncate) 이 오면 새 파일을 만들며, `Tabs_` 는 항목 40개(`kEntriesPerReset`)마다 파일을 비우고 전부 다시 씁니다.
 
-이름이 비슷한 `Session Storage` 폴더는 다른 것입니다. 이 폴더에는 웹 페이지의 sessionStorage 값이 LevelDB 형식으로 들어 있고, 관찰한 PC 에서도 `Sessions` 와 따로 있었습니다. 이 폴더는 [웹 저장소](local-storage-indexeddb.md) 에서 다룹니다.
+이름이 비슷한 `Session Storage` 폴더는 다른 것입니다. 이 폴더에는 웹 페이지의 sessionStorage 값이 LevelDB 형식으로 들어 있고, `Sessions` 와 따로 있습니다. 이 폴더는 [웹 저장소](local-storage-indexeddb.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -31,25 +31,25 @@ nav_order: 1640
 
 | 위치 | 담긴 것 | 있는 곳 |
 |---|---|---|
-| `Sessions\Session_<숫자>` | 열려 있는 창·탭 | Chrome·Edge (관찰) |
-| `Sessions\Tabs_<숫자>` | 최근에 닫은 탭·창 | Chrome·Edge (관찰) |
-| `Sessions_Encrypted\Session_<숫자>`, `Tabs_<숫자>` | `Sessions` 와 같은 구성의 암호화 파일 | Chrome 153 에만 있었습니다 (관찰) |
-| `EdgeSessions\SessionRestoreLog` | 세션 복원 과정을 한 줄씩 적은 글자 파일 | Edge 에만 있었습니다 (관찰) |
+| `Sessions\Session_<숫자>` | 열려 있는 창·탭 | Chrome·Edge |
+| `Sessions\Tabs_<숫자>` | 최근에 닫은 탭·창 | Chrome·Edge |
+| `Sessions_Encrypted\Session_<숫자>`, `Tabs_<숫자>` | `Sessions` 와 같은 구성의 암호화 파일 | Chrome 153 에 있습니다 |
+| `EdgeSessions\SessionRestoreLog` | 세션 복원 과정을 한 줄씩 적은 글자 파일 | Edge 에만 있습니다 |
 
-크로미엄 소스에는 평문 폴더 상수(`kSessionsDirectory`)와 암호화 폴더 상수(`kEncryptedSessionsDirectory`)가 따로 있습니다. 관찰한 Chrome 153 에는 `Sessions` 와 `Sessions_Encrypted` 가 함께 있었고 두 폴더의 파일 구성(Session_ 3개, Tabs_ 3개)이 같았지만, Edge 151 에는 `Sessions_Encrypted` 가 없었습니다.
+크로미엄 소스에는 평문 폴더 상수(`kSessionsDirectory`)와 암호화 폴더 상수(`kEncryptedSessionsDirectory`)가 따로 있습니다[1]. Chrome 153 에는 `Sessions` 와 `Sessions_Encrypted` 가 함께 있고 두 폴더의 파일 구성(예: Session_ 3개, Tabs_ 3개)이 같습니다. Edge 151 에는 `Sessions_Encrypted` 가 없습니다.
 
 ### 판에 따른 차이
 
 | 항목 | 내용 |
 |---|---|
-| 옛 파일 이름 | 옛 판은 프로필 폴더 바로 아래에 `Current Session`·`Last Session`·`Current Tabs`·`Last Tabs` 를 두었습니다. 현재 소스에는 이 이름이 나오지 않습니다. `Sessions` 폴더로 바뀐 판 번호는 확인하지 못했습니다. |
-| SNSS 버전 | 현재 소스는 버전 1·2·4 를 더 이상 지원하지 않습니다. 평문 파일은 버전 3, 암호화 파일은 버전 5 입니다. |
-| 암호화 폴더 | `Sessions_Encrypted` 가 어느 판부터 생겼는지는 확인하지 못했습니다. 앞으로 평문 `Sessions` 를 없앨지도 확인하지 못했습니다. |
-| Whale | Whale 이 같은 폴더와 형식을 쓰는지는 확인하지 못했습니다. |
+| 옛 파일 이름 | 옛 판은 프로필 폴더 바로 아래에 `Current Session`·`Last Session`·`Current Tabs`·`Last Tabs` 를 두었습니다. 현재 판은 이 이름을 쓰지 않습니다. `Sessions` 폴더로 바뀐 판 번호는 공개 자료가 없으므로, 검체에서 어느 쪽 이름이 있는지 봅니다. |
+| SNSS 버전 | 현재 판은 버전 1·2·4 를 더 이상 지원하지 않습니다. 평문 파일은 버전 3, 암호화 파일은 버전 5 입니다[1]. |
+| 암호화 폴더 | `Sessions_Encrypted` 가 생긴 판과, 앞으로 평문 `Sessions` 를 없앨지는 공개 자료가 없습니다. 검체에서 두 폴더가 모두 있는지 봅니다. |
+| Whale | Whale 이 같은 폴더와 형식을 쓰는지는 공개 자료가 없으므로 검체에서 확인합니다. |
 
 ### 폴더에 남는 파일 수
 
-옛 세션 파일을 지우는 함수(`DeleteLastSessionFiles`)는 가장 최근의 지난 파일 하나만 남기고, 마커가 온전한 파일은 "지난 것" 과 "그 앞 것" 두 개까지 기억합니다. 마커는 아래 "구조" 절에서 다룹니다. 관찰한 PC 에는 Chrome 에 `Session_`·`Tabs_` 가 3개씩, Edge 에 2개씩 있었습니다.
+옛 세션 파일을 지우는 함수(`DeleteLastSessionFiles`)는 가장 최근의 지난 파일 하나만 남기고, 마커가 온전한 파일은 "지난 것" 과 "그 앞 것" 두 개까지 기억합니다. 마커는 아래 "구조" 절에서 다룹니다. 예를 들어 Chrome 153 에 `Session_`·`Tabs_` 가 3개씩, Edge 151 에 2개씩 남은 경우가 있습니다.
 
 ## 구조
 
@@ -57,13 +57,13 @@ nav_order: 1640
 
 ### 파일 이름
 
-이름의 숫자는 1601-01-01 00:00 UTC 부터 센 마이크로초입니다. 새 파일 이름의 시각이 앞 파일보다 같거나 작으면 브라우저는 1마이크로초를 더해 이름이 겹치지 않게 합니다. 평문 파일과 짝이 되는 암호화 파일은 이름의 숫자가 몇 마이크로초에서 몇 밀리초 달랐습니다 (관찰).
+이름의 숫자는 1601-01-01 00:00 UTC 부터 센 마이크로초입니다. 새 파일 이름의 시각이 앞 파일보다 같거나 작으면 브라우저는 1마이크로초를 더해 이름이 겹치지 않게 합니다. 평문 파일과 짝이 되는 암호화 파일은 이름의 숫자가 몇 마이크로초에서 몇 밀리초 다릅니다.
 
 ### 파일 머리
 
 | 오프셋 | 크기 | 뜻 |
 |---|---|---|
-| 0 | 4 | 서명 (int32). 상수 값은 `0x53534E53` 입니다. 파일에는 `53 4E 53 53`("SNSS") 순서로 적혀 있습니다 (관찰). |
+| 0 | 4 | 서명 (int32). 상수 값은 `0x53534E53` 입니다. 파일에는 `53 4E 53 53`("SNSS") 순서로 적혀 있습니다. |
 | 4 | 4 | 버전 (int32) |
 
 정수는 리틀 엔디언으로 적힙니다. 서명 상수가 파일 첫머리에 낮은 바이트부터 적혀 있는 것으로 알 수 있습니다.
@@ -71,8 +71,8 @@ nav_order: 1640
 | 버전 | 소스 이름 | 뜻 |
 |---|---|---|
 | 1·2·4 | — | 더 이상 지원하지 않습니다 |
-| 3 | `kFileVersionWithMarker` | 평문입니다. `Sessions` 폴더의 파일이 이 버전이었습니다 (관찰) |
-| 5 | `kFileVersionEncryptedWithOSCrypt` | 레코드를 암호화합니다. `Sessions_Encrypted` 폴더의 파일이 이 버전이었습니다 (관찰) |
+| 3 | `kFileVersionWithMarker` | 평문입니다. `Sessions` 폴더의 파일이 이 버전입니다 |
+| 5 | `kFileVersionEncryptedWithOSCrypt` | 레코드를 암호화합니다. `Sessions_Encrypted` 폴더의 파일이 이 버전입니다 |
 
 ### 레코드 — 평문 (버전 3)
 
@@ -84,23 +84,23 @@ nav_order: 1640
 | 1 | 명령 ID (uint8) |
 | 크기 − 1 | 내용 |
 
-소스에서 크기와 ID 의 자료형 이름은 `SessionCommand::size_type`·`id_type` 이고, 각각의 바이트 수는 관찰로 확인했습니다. 예를 들어 크기가 25 이면 ID 1바이트와 내용 24바이트입니다. 이 규칙으로 읽으면 관찰한 파일 세 개 모두 파일 끝에서 정확히 맞아떨어졌습니다.
+크기와 ID 의 자료형은 `SessionCommand::size_type`·`id_type` 이고, 각각 2바이트와 1바이트입니다. 예를 들어 크기가 25 이면 ID 1바이트와 내용 24바이트입니다. 이 규칙으로 읽으면 레코드가 파일 끝에서 정확히 맞아떨어집니다.
 
-명령 ID 255 는 초기 상태를 다 썼다는 표시인 마커(`kInitialStateMarkerCommandId`)이고, 브라우저는 파일을 읽을 때 이 마커까지 읽어 파일이 온전한지 확인합니다(`ReadToMarker`). 관찰한 `Session_` 파일 하나에서 마커는 레코드 133개 중 61번째에 한 번 있었고 내용은 비어 있었습니다. 마커 앞은 파일을 만들 때 쓴 전체 상태이고 마커 뒤는 그 뒤에 덧붙인 변경으로 보이지만, 이 해석은 소스로 확인하지 못했습니다.
+명령 ID 255 는 초기 상태를 다 썼다는 표시인 마커(`kInitialStateMarkerCommandId`)이고, 브라우저는 파일을 읽을 때 이 마커까지 읽어 파일이 온전한지 확인합니다(`ReadToMarker`). `Session_` 파일에서 마커는 한 번 나오고 내용은 비어 있습니다(예: 레코드 133개 중 61번째). 마커 앞은 파일을 만들 때 쓴 전체 상태이고 마커 뒤는 그 뒤에 덧붙인 변경으로 보입니다. 소스 주석에는 이런 설명이 없습니다.
 
 ### 레코드 — 암호화 (버전 5)
 
 - 버전 5 파일은 `os_crypt_async` 의 Encryptor 로 암호화합니다. 브라우저는 먼저 암호화와 복호화가 되는지 확인합니다.
 - 어떤 알고리즘과 키를 쓰는지는 이 소스 파일에 적혀 있지 않습니다.
-- 레코드마다 uint32 길이와 내용이 이어졌습니다 (관찰).
-- 모든 레코드의 내용이 `v20`(`76 32 30`) 으로 시작했습니다 (관찰).
-- 레코드 수는 짝이 되는 평문 파일과 같았습니다(133=133, 207=207, 79=79) (관찰).
-- 레코드 길이는 짝이 되는 평문 레코드의 크기보다 모든 레코드에서 정확히 31바이트 길었습니다 (관찰).
-- 31바이트는 [쿠키](cookies.md) 페이지에 적은 `v20` 값의 덧붙는 길이(접두사·논스·태그)와 같습니다. 다만 쿠키와 같은 키(`app_bound_encrypted_key`)를 쓰는지는 확인하지 못했습니다.
+- 레코드마다 uint32 길이와 내용이 이어집니다.
+- 모든 레코드의 내용이 `v20`(`76 32 30`) 으로 시작합니다.
+- 레코드 수는 짝이 되는 평문 파일과 같습니다(예: 133=133, 207=207, 79=79).
+- 레코드 길이는 짝이 되는 평문 레코드의 크기보다 모든 레코드에서 정확히 31바이트 깁니다.
+- 31바이트는 [쿠키](cookies.md) 페이지에 적은 `v20` 값의 덧붙는 길이(접두사·논스·태그)와 같습니다. 다만 쿠키와 같은 키(`app_bound_encrypted_key`)를 쓰는지는 공개 자료가 없습니다.
 
 ### Session_ 명령 ID
 
-소스 `session_service_commands.cc` 기준입니다. 아래 표에는 분석에 자주 쓰는 명령만 적습니다.
+아래 표에는 분석에 자주 쓰는 명령만 적습니다[2].
 
 | ID | 소스 이름 | 내용 | 분석에서 보는 점 |
 |---|---|---|---|
@@ -117,19 +117,19 @@ nav_order: 1640
 | 25 | `kCommandSetTabGroup` | | 탭 그룹 |
 | 255 | `kInitialStateMarkerCommandId` | 없음 | 마커 |
 
-- 관찰한 파일의 ID 7·8 레코드는 크기가 9(ID 1 + 내용 8)였습니다. 소스의 내용 모양(ID + int32 index)과 길이가 맞습니다.
-- ID 16·21 레코드의 내용은 16바이트였습니다. 탭 ID 4바이트, 빈칸 4바이트, int64 시각 8바이트 순서입니다 (관찰).
+- ID 7·8 레코드는 크기가 9(ID 1 + 내용 8)입니다. 소스의 내용 모양(ID + int32 index)과 길이가 맞습니다.
+- ID 16·21 레코드의 내용은 16바이트입니다. 탭 ID 4바이트, 빈칸 4바이트, int64 시각 8바이트 순서입니다.
 - 그 밖의 ID 는 다음과 같습니다(이름 앞의 `kCommand` 는 뺐습니다). 13 SetExtensionAppID, 14 SetWindowBounds3, 15 SetWindowAppName, 18 SetTabUserAgentOverride(지금은 쓰지 않고 29 로 바뀜), 19 SessionStorageAssociated, 20 SetActiveWindow, 23 SetWindowWorkspace2, 24 TabNavigationPathPruned, 27 SetTabGroupMetadata2, 28 SetTabGuid, 29 SetTabUserAgentOverride2, 30 SetTabData, 31 SetWindowUserTitle, 32 SetWindowVisibleOnAllWorkspaces, 33 AddTabExtraData, 34 AddWindowExtraData, 35 SetPlatformSessionId, 36 SetSplitTab, 37 SetSplitTabData.
 - 지금은 쓰지 않는 옛 ID 도 있습니다. 1 SetWindowBounds, 5 TabNavigationPathPrunedFromBack, 10 SetWindowBounds2, 11 TabNavigationPathPrunedFromFront, 22 SetWindowWorkspace, 26 SetTabGroupMetadata 입니다.
-- 관찰한 `Session_` 파일 하나에 나온 ID 와 개수는 다음과 같았습니다. 0×7, 2×22, 6×28, 7×10, 8×6, 9×1, 12×15, 14×4, 16×3, 19×7, 21×12, 23×1, 25×15, 32×1, 255×1.
+- `Session_` 파일 하나에 나온 ID 와 개수의 예는 다음과 같습니다. 0×7, 2×22, 6×28, 7×10, 8×6, 9×1, 12×15, 14×4, 16×3, 19×7, 21×12, 23×1, 25×15, 32×1, 255×1.
 
 ### Tabs_ 명령 ID
 
-소스 `tab_restore_service_impl.cc` 기준입니다.
+명령 ID 는 아래와 같습니다[4].
 
 | ID | 소스 이름 | 분석에서 보는 점 |
 |---|---|---|
-| 1 | `kCommandUpdateTabNavigation` | 닫은 탭의 탐색 항목입니다. `Session_` 의 ID 6 과 같은 배치(탭 ID, index, 주소 … timestamp)로 읽혔습니다 (관찰) |
+| 1 | `kCommandUpdateTabNavigation` | 닫은 탭의 탐색 항목입니다. `Session_` 의 ID 6 과 같은 배치(탭 ID, index, 주소 … timestamp)로 읽힙니다 |
 | 2 | `kCommandRestoredEntry` | 사용자가 닫은 항목을 다시 열었습니다. 내용(`RestoredEntryPayload`)은 int32 입니다 |
 | 4 | `kCommandSelectedNavigationInTab` | 내용(`SelectedNavigationInTabPayload2`)은 SessionID, int32 index, int64 timestamp 입니다. timestamp 는 항목을 닫은 시각입니다 |
 | 5 | `kCommandPinnedState` | 고정 탭이었는지. 내용(`PinnedStatePayload`)은 bool 입니다 |
@@ -140,13 +140,13 @@ nav_order: 1640
 - 그 밖의 ID 는 다음과 같습니다. 3 WindowDeprecated, 6 SetExtensionAppID, 7 SetWindowAppName, 8 SetTabUserAgentOverride, 11 SetTabUserAgentOverride2, 12 SetWindowUserTitle, 14 AddTabExtraData, 15 CreateSplit, 16 SetTabSplitData.
 - 옛 창 정보(`WindowPayloadObsolete2`)에는 window_id, selected_tab_index, num_tabs 와 int64 timestamp 가 들어 있습니다.
 - 같은 숫자라도 두 파일에서 뜻이 다릅니다. 예를 들어 6 은 `Session_` 에서 탐색 항목이고, `Tabs_` 에서는 확장 앱 ID 입니다.
-- `Tabs_` 에 남기는 항목 수의 상한은 `TabRestoreServiceHelper::kMaxEntries` 입니다. 값은 25 입니다(`tab_restore_service_helper.h`). 상한을 넘으면 오래된 항목부터 지웁니다.
-- ID 4 레코드의 내용은 16바이트였습니다. 일부 레코드는 timestamp 가 0(1601-01-01)이었습니다 (관찰).
-- 관찰한 `Tabs_` 파일 하나에 나온 ID 와 개수는 다음과 같았습니다. 1×160, 4×36, 6×5, 9×5, 255×1.
+- `Tabs_` 에 남기는 항목 수의 상한은 `TabRestoreServiceHelper::kMaxEntries` 입니다. 값은 25 입니다[5]. 상한을 넘으면 오래된 항목부터 지웁니다.
+- ID 4 레코드의 내용은 16바이트입니다. timestamp 가 0(1601-01-01)인 레코드도 있습니다.
+- `Tabs_` 파일 하나에 나온 ID 와 개수의 예는 다음과 같습니다. 1×160, 4×36, 6×5, 9×5, 255×1.
 
 ### 탐색 항목의 내용 (Pickle)
 
-탐색 항목은 `SerializedNavigationEntry` 클래스가 Pickle 형식으로 직렬화합니다. 레코드 내용의 첫머리에는 아래 두 값이 먼저 옵니다 (관찰).
+탐색 항목은 `SerializedNavigationEntry` 클래스가 Pickle 형식으로 직렬화합니다. 레코드 내용의 첫머리에는 아래 두 값이 먼저 옵니다.
 
 | 순서 | 값 |
 |---|---|
@@ -174,17 +174,17 @@ nav_order: 1640
 | 15 | 확장 정보 (개수, 키·값 문자열) | 맵 |
 | 16 | task_id, parent_task_id, root_task_id, 자식 task 수 0 | int64 3개, int |
 
-값을 읽는 규칙은 다음과 같습니다 (관찰).
+값을 읽는 규칙은 다음과 같습니다.
 
 - string 은 int32 바이트 수 뒤에 바이트가 옵니다. 그 뒤를 4바이트 경계까지 채웁니다.
 - string16 은 int32 글자 수 뒤에 UTF-16LE 글자가 옵니다. 그 뒤를 4바이트 경계까지 채웁니다.
-- 이 규칙으로 주소·제목·timestamp·http_status_code(200) 까지 제자리에서 읽혔습니다.
-- 제목은 UTF-16LE 로 풀어야 합니다. 콘솔 기본 코드 페이지로 찍으면 한글이 깨졌습니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
-- 탭마다 저장하는 탐색 항목 수의 상한은 확인하지 못했습니다.
+- 이 규칙으로 읽으면 주소·제목·timestamp·http_status_code(200) 까지 제자리에서 읽힙니다.
+- 제목은 UTF-16LE 로 풀어야 합니다. 콘솔 기본 코드 페이지로 찍으면 한글이 깨집니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
+- 탭마다 저장하는 탐색 항목 수의 상한은 공개 자료가 없습니다.
 
 ### Edge 의 SessionRestoreLog
 
-Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON 하나를 적은 글자 파일입니다 (관찰). Chrome 에는 이 파일이 없었습니다.
+Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON 하나를 적은 글자 파일입니다. Chrome 에는 이 파일이 없습니다.
 
 | 줄 모양 | 키 |
 |---|---|
@@ -192,7 +192,7 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 | 내용 줄 | `logTime`, `level`, `location`, `message` |
 
 - `logTime` 은 `"MMDD/HHMMSS"` 꼴입니다. 연도가 없습니다.
-- `message` 에는 아래 같은 글이 적혀 있었습니다.
+- `message` 에는 아래 같은 글이 적힙니다.
 
 | message 예 | 알려 주는 것 |
 |---|---|
@@ -202,7 +202,7 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 | `Delete session file Session_<숫자>, for SessionType SessionRestore` | 어떤 세션 파일을 지웠는지 |
 
 - 지운 `Session_` 파일의 이름이 이 로그에 남습니다. 이름의 숫자가 곧 만든 시각이므로, 지금은 없는 옛 파일을 언제 만들었는지 알 수 있습니다.
-- `START`·`END` 가 정확히 1시간 간격으로 찍힌 곳이 있었습니다. 그래서 이 표시가 브라우저 시작·종료를 뜻하는지는 확인하지 못했습니다.
+- `START`·`END` 가 정확히 1시간 간격으로 찍힌 경우도 있습니다. 그래서 이 표시가 브라우저 시작·종료를 뜻한다고 단정하지 않습니다.
 
 ## 증거로서 의미
 
@@ -222,7 +222,7 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 - 키보드 앞에 누가 있었는지는 남지 않습니다.
 - 탭에 주소가 있었다는 것은 그 페이지를 읽었다는 뜻이 아닙니다.
 - 기록이 없다고 그 페이지를 열지 않은 것은 아닙니다. 브라우저는 새 파일을 만들 때 내용을 비우고 다시 씁니다. 옛 파일은 몇 개만 남기고 지웁니다. `Tabs_` 는 상한을 넘은 오래된 항목을 지웁니다.
-- 마커 앞뒤가 "처음 상태" 와 "그 뒤 변경" 이라는 해석은 소스로 확인하지 못했습니다. 이 구분을 근거로 순서를 단정하지 않습니다.
+- 마커 앞뒤가 "처음 상태" 와 "그 뒤 변경" 이라는 해석은 추정입니다. 이 구분을 근거로 순서를 단정하지 않습니다.
 - 시크릿 창 (Incognito) 의 흔적은 [시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md) 에서 다룹니다.
 
 보고서에는 "이 사이트를 보았다" 대신 이렇게 씁니다. "이 프로필의 `Session_<숫자>` 파일에 탭 ID 5 의 탐색 항목으로 A 주소가 있고, 같은 탭의 닫은 시각(ID 16)은 X(UTC) 이다."
@@ -236,27 +236,27 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 | 파일 이름의 숫자 | `Session_`·`Tabs_` 이름 | 파일을 만든 시각 | 앞 파일과 겹치면 1마이크로초를 더합니다 |
 | close_time | `Session_` ID 16·17 | 탭·창을 닫은 시각 | |
 | last_active_time | `Session_` ID 21 | 탭이 마지막으로 활성 상태였던 시각 | |
-| timestamp | 탐색 항목 11번째 값 | 탐색 항목에 붙은 시각 | 어떤 동작의 시각인지는 이 페이지에서 확인하지 못했습니다. [방문 기록](history.md) 의 방문 시각과 맞춰 본 뒤 씁니다 |
-| timestamp | `Tabs_` ID 4 | 항목을 닫은 시각 | 0 인 레코드도 있었습니다 (관찰) |
-| `logTime` | Edge `SessionRestoreLog` | 로그를 적은 시각 | 연도가 없습니다. UTC 로 보입니다 (관찰) |
+| timestamp | 탐색 항목 11번째 값 | 탐색 항목에 붙은 시각 | 어떤 동작의 시각인지는 공개 자료가 없습니다. [방문 기록](history.md) 의 방문 시각과 맞춰 본 뒤 씁니다 |
+| timestamp | `Tabs_` ID 4 | 항목을 닫은 시각 | 0 인 레코드도 있습니다 |
+| `logTime` | Edge `SessionRestoreLog` | 로그를 적은 시각 | 연도가 없습니다. UTC 로 보입니다 |
 
-- 파일 이름의 숫자를 UTC 로 바꾸면 파일을 만든 시각과 맞았습니다. 파일 수정 시각은 이보다 뒤였습니다(예: 이름 21:53:31, 수정 21:54:30 UTC) (관찰).
+- 파일 이름의 숫자를 UTC 로 바꾸면 파일을 만든 시각과 맞습니다. 파일 수정 시각은 이보다 뒤입니다(예: 이름 21:53:31, 수정 21:54:30 UTC).
 - `Tabs_` 는 항목 40개마다 파일을 새로 씁니다. 그래서 `Tabs_` 파일을 만든 시각이 처음 탭을 닫은 시각은 아닐 수 있습니다.
-- `SessionRestoreLog` 의 `logTime` 이 UTC 로 보이는 근거는 다음과 같습니다. 새 `Session_` 파일 이름의 시각(UTC 02:39:12)과 그 줄의 `logTime`(023912)이 같았습니다. 그 PC 의 시간대는 한국 표준시였습니다 (관찰).
+- `SessionRestoreLog` 의 `logTime` 이 UTC 로 보이는 근거는 다음과 같습니다. 시간대가 한국 표준시인 PC 에서 새 `Session_` 파일 이름의 시각(UTC 02:39:12)과 그 줄의 `logTime`(023912)이 같은 예가 있습니다.
 - `logTime` 에는 연도가 없으므로, 같은 줄에 나온 `Session_` 이름의 시각으로 연도를 채웁니다.
 - 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 - **`Session Storage` 폴더와 헷갈리지 않습니다.** 이름이 비슷하지만 웹 페이지의 저장소입니다.
-- **실행 중에는 최신 파일이 잠깁니다.** 브라우저가 열려 있는 동안 가장 최근 `Session_`·`Tabs_` 는 잠겨서 읽히지 않았습니다(Device or resource busy) (관찰). 라이브 수집은 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 절차를 따릅니다.
+- **실행 중에는 최신 파일이 잠깁니다.** 브라우저가 열려 있는 동안 가장 최근 `Session_`·`Tabs_` 는 잠겨서 읽히지 않습니다(Device or resource busy). 라이브 수집은 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 절차를 따릅니다.
 - **원본 프로필로 브라우저를 띄우지 않습니다.** 브라우저는 새 세션 파일을 만들고 옛 파일을 지우는 동작을 합니다. 원본을 열면 지금 남은 파일이 사라질 수 있습니다. 해시를 기록한 사본을 읽습니다.
 - **명령 ID 의 뜻은 파일마다 다릅니다.** `Session_` 과 `Tabs_` 는 ID 목록이 따로 있습니다. 같은 6 이라도 뜻이 다릅니다.
 - **판마다 ID 가 바뀝니다.** 옛 ID(1·5·10·11·22·26)는 지금 쓰지 않습니다. 한 판에 맞춘 파서가 다른 판 파일을 잘못 읽을 수 있습니다.
 - **옛 이름만 찾는 도구가 있습니다.** `Current Session` 같은 옛 이름만 찾는 도구는 요즘 판 프로필에서 아무것도 찾지 못합니다.
-- **암호화 파일은 그대로 읽을 수 없습니다.** 버전 5 파일은 키를 풀기 전에는 레코드 길이와 개수만 알 수 있습니다. 관찰한 Chrome 153 에는 평문 짝 파일이 함께 있었으므로 먼저 평문 폴더를 봅니다. 브라우저 암호화의 바탕은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+- **암호화 파일은 그대로 읽을 수 없습니다.** 버전 5 파일은 키를 풀기 전에는 레코드 길이와 개수만 알 수 있습니다. Chrome 153 에는 평문 짝 파일이 함께 있습니다. 평문 폴더부터 봅니다. 브라우저 암호화의 바탕은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 - **지운 파일도 찾아봅니다.** 옛 `Session_`·`Tabs_` 파일은 지워도 디스크에 남을 수 있습니다. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 함께 씁니다.
-- **Whale 은 따로 확인합니다.** 이 페이지의 구조는 Chrome·Edge 에서 확인한 것입니다.
+- **Whale 은 따로 확인합니다.** Whale 이 같은 구조를 쓰는지는 공개 자료가 없으므로 검체에서 봅니다.
 
 ## 직접 분석해 보기
 

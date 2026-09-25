@@ -11,7 +11,7 @@ nav_order: 3750
 
 이 페이지는 손에 넣은 자격 증명으로 다른 PC 에서 명령을 실행했는지 확인하는 순서를 다룹니다. 원격 실행은 출발 PC 와 도착 PC 양쪽에 다른 흔적을 남깁니다. 그래서 이 페이지는 도구마다 두 쪽을 나눠 봅니다.
 
-이 페이지의 이벤트 흔적 예시는 JPCERT/CC 의 도구 분석 시트 세 장에서 가져왔습니다[1][2][3]. 시트는 시험한 윈도 버전을 따로 적지 않았습니다. "(관찰)" 을 붙인 내용은 Windows 11 Home(빌드 26200) 분석 PC 한 대에서 본 공급자 메타데이터입니다.
+아래 이벤트 흔적 예시는 JPCERT/CC 도구 분석 시트의 시험 결과이고, 시험한 윈도 버전은 시트에 적혀 있지 않습니다[1][2][3].
 
 ## 조사 질문
 
@@ -27,7 +27,7 @@ nav_order: 3750
 | 출발·도착 구분 | 흔적이 양쪽에 나뉩니다. 두 PC 의 로그를 모두 확보해야 한 번의 실행을 이어 봅니다. |
 | 시간대 | 두 PC 의 시계 오차를 확인해 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
 | 감사·Sysmon 설정 | 기본 설정에서도 남는 흔적과, 감사 정책·Sysmon 을 켜야 남는 흔적이 나뉩니다[1][2][3]. [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 을 봅니다. |
-| 로그 크기 | WMI-Activity·WinRM 운영 로그는 1MB 순환이었습니다(관찰). 오래된 기록은 밀려납니다. |
+| 로그 크기 | WMI-Activity·WinRM 운영 로그는 1MB 순환으로 설정돼 있을 수 있습니다(Windows 11 빌드 26200). 그러면 오래된 기록은 밀려나므로 검체의 로그 크기를 확인합니다. |
 
 ## 볼 아티팩트와 순서
 
@@ -91,10 +91,10 @@ nav_order: 3750
 
 ### WMI-Activity 운영 로그
 
-- 로그: `Microsoft-Windows-WMI-Activity/Operational`(관찰). 이 PC 에서 켜져 있었고 1MB 순환이었습니다(관찰).
-- 5857: 공급자 시작. 칸은 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다(관찰).
-- 5858: 칸은 Id, ClientMachine, User, ClientProcessId, Component, Operation, ResultCode, PossibleCause 입니다(관찰).
-- JPCERT WinRM 시트의 도착 PC 에 WMI-Activity 5857 이 있었습니다[3].
+- 로그: `Microsoft-Windows-WMI-Activity/Operational`. 1MB 순환이면 오래된 기록은 밀려납니다.
+- 5857: 공급자 시작. 칸은 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다.
+- 5858: 칸은 Id, ClientMachine, User, ClientProcessId, Component, Operation, ResultCode, PossibleCause 입니다.
+- WinRM 으로 명령을 받은 도착 PC 에도 WMI-Activity 5857 이 남습니다[3].
 - 5861 은 영구 이벤트 구독 쪽입니다. [WMI 영구 이벤트 구독](../../../02-artifacts/persistence/wmi-event-subscription.md) 을 봅니다.
 
 ## WinRM
@@ -115,10 +115,10 @@ JPCERT 시트의 예시 명령은 원격 명령 실행이 아니라 설정 조�
 
 ### WinRM 운영 로그
 
-- 로그: `Microsoft-Windows-WinRM/Operational`(관찰). 이 PC 에서 켜져 있었고 1MB 순환이었습니다(관찰).
-- 6 "Creating WSMan Session. The connection string is: %1"(관찰).
-- 91 "Creating WSMan shell on server with ResourceUri: %1"(관찰).
-- 162 "Authenticating the user failed. The credentials didn't work."(관찰).
+- 로그: `Microsoft-Windows-WinRM/Operational`. 1MB 순환이면 오래된 기록은 밀려납니다.
+- 6 "Creating WSMan Session. The connection string is: %1".
+- 91 "Creating WSMan shell on server with ResourceUri: %1".
+- 162 "Authenticating the user failed. The credentials didn't work.".
 - 메시지 문구로 보면 6 은 세션을 여는 쪽(클라이언트), 91 은 서버 쪽 셸 생성입니다. 출발·도착 어느 쪽에 남는지는 검체에서 실측해 확인합니다.
 - PowerShell 원격 명령의 내용은 PowerShell 로그(4103·4104)로 넘깁니다: [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md).
 
@@ -126,9 +126,9 @@ JPCERT 시트의 예시 명령은 원격 명령 실행이 아니라 설정 조�
 
 PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치 이벤트를 남깁니다.
 
-- System 7045(공급자 Service Control Manager): 칸은 ServiceName, ImagePath, ServiceType, StartType, AccountName 입니다(관찰).
-- 7045 의 공급자 원시 ID 는 1073748869(0x40001B85)입니다(관찰). 도구에 따라 7045 가 아니라 이 값으로 보일 수 있습니다.
-- Security 4697 은 누가 설치했는지(Subject)를 함께 남깁니다. 7045 에는 그 칸이 없습니다(관찰 — 두 템플릿 비교).
+- System 7045(공급자 Service Control Manager): 칸은 ServiceName, ImagePath, ServiceType, StartType, AccountName 입니다.
+- 7045 의 공급자 원시 ID 는 1073748869(0x40001B85)입니다. 도구에 따라 7045 가 아니라 이 값으로 보일 수 있습니다.
+- Security 4697 은 누가 설치했는지(Subject)를 함께 남깁니다. 두 이벤트 템플릿을 비교하면 7045 에는 그 칸이 없습니다.
 - 두 이벤트의 칸과 차이는 [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md) 에서 다룹니다.
 
 ## 공통 판단
@@ -142,7 +142,7 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 1. 두 PC 의 시계 오차를 확인해 같은 기준으로 맞춥니다.
 2. 도착 PC 에서 로그온 유형 3 의 4624 를 시각순으로 모읍니다. Logon ID·계정·원본 주소를 적습니다.
 3. 각 4624 의 Logon ID·시각과 이어지는 서비스 설치(7045·4697), 공유 접근(5140·5145), 프로세스 생성(4688·Sysmon 1)을 묶습니다.
-4. 묶음의 실행 프로세스로 도구를 가립니다. PSEXESVC 서비스는 PsExec 입니다[1]. wmic 와 JPCERT 의 WinRM 예시는 모두 도착 PC 에 WmiPrvSE.exe 를 남겼습니다[2][3]. 그래서 WmiPrvSE.exe 하나로 WMI 와 WinRM 을 가르지 않고, WinRM 운영 로그와 출발 PC 기록을 함께 봅니다. PowerShell 원격의 도착 프로세스는 이 자료로 확인하지 못했습니다.
+4. 묶음의 실행 프로세스로 도구를 가립니다. PSEXESVC 서비스는 PsExec 입니다[1]. wmic 와 JPCERT 의 WinRM 예시는 모두 도착 PC 에 WmiPrvSE.exe 를 남겼습니다[2][3]. 그래서 WmiPrvSE.exe 하나로 WMI 와 WinRM 을 가르지 않고, WinRM 운영 로그와 출발 PC 기록을 함께 봅니다. PowerShell 원격의 도착 프로세스는 검체에서 확인합니다.
 5. 5145 의 Relative Target Name 이나 명령줄에서 출발 PC 이름을 꺼냅니다.
 6. 출발 PC 를 특정하면 그 PC 의 프리페치·EULA 값·Sysmon 3·WinRM 클라이언트 로그로 출발 쪽을 맞춰 봅니다.
 7. 원격 실행에 쓴 계정이 앞선 [자격 증명을 빼냈나](credential-dumping.md) 단계와 이어지는지 봅니다.
@@ -154,7 +154,7 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 2. **한쪽 PC 로그만 봅니다.** 흔적이 출발·도착에 나뉘어 있어 한쪽만 보면 반쪽 그림이 됩니다.
 3. **PSEXESVC 파일이 없으니 PsExec 을 안 썼다고 봅니다.** 이 파일은 쓴 뒤 지워집니다[1]. 7045·프리페치·USN 을 봅니다.
 4. **인증 패키지로 도구를 가릅니다.** NTLM·Kerberos 는 도구가 아니라 인증 방식에 따라 달라집니다[1][2][3].
-5. **로그에 없으니 원격 실행도 없었다고 봅니다.** WMI-Activity·WinRM 운영 로그는 1MB 순환이었습니다(관찰). 오래된 기록은 밀려납니다.
+5. **로그에 없으니 원격 실행도 없었다고 봅니다.** WMI-Activity·WinRM 운영 로그는 1MB 순환일 수 있어 오래된 기록이 밀려납니다.
 6. **WMI-Activity 5861 을 원격 실행으로 봅니다.** 5861 은 영구 이벤트 구독 쪽입니다. [WMI 영구 이벤트 구독](../../../02-artifacts/persistence/wmi-event-subscription.md) 을 봅니다.
 
 ## 보고서 문장 예

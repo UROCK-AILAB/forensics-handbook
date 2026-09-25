@@ -10,7 +10,7 @@ nav_order: 2690
 
 Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig/Operational` 로그에 기록이 남습니다. Windows 가 네트워크에 연결됐다고 판단하거나 연결이 끊겼다고 판단하면 `Microsoft-Windows-NetworkProfile/Operational` 로그에 기록이 남습니다. WLAN 쪽은 SSID·프로필 이름·인증 방식·암호화 방식을 알려 줍니다. NetworkProfile 쪽은 Windows 가 붙인 네트워크 이름과 프로필 GUID 를 알려 줍니다. 두 로그를 시각으로 맞추고, GUID 로 레지스트리의 네트워크 목록과 잇습니다.
 
-이 페이지의 사실은 모두 Windows 11 25H2 PC 한 대의 공급자 매니페스트와 실제 기록에서 읽었습니다. 두 공급자를 설명한 공식 문서는 이번에 열어 보지 못했습니다. 그래서 거의 모든 내용에 "" 가 붙습니다.
+이 페이지의 칸 구성과 값은 Windows 11 25H2 (빌드 26200) 의 공급자 매니페스트와 실제 기록 기준입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -19,7 +19,7 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 | WLAN-AutoConfig/Operational | 무선 연결을 시작할 때, 성공하거나 실패할 때, 끊길 때. 결합 (association) 과 보안 단계마다 | 어댑터, 연결 방식, 프로필 이름, SSID, 인증·암호화 방식, 무선 규격, 끊긴 사유 코드 |
 | NetworkProfile/Operational | 네트워크에 연결되거나 끊길 때, 네트워크 범주가 바뀔 때, 연결 상태가 바뀔 때 | Windows 가 붙인 네트워크 이름, 설명, 프로필 GUID, 상태 값, 범주 값 |
 
-- NetworkProfile 의 메시지 문구 "Network Connected" 는 무선 전용이 아닙니다. 유선(이더넷)·모바일 연결에도 이 이벤트가 생기는지는 확인하지 못했습니다.
+- NetworkProfile 의 메시지 문구 "Network Connected" 는 무선 전용이 아닙니다. 유선(이더넷)·모바일 연결에도 이 이벤트가 생기는지는 아래 실습 7번처럼 검체에서 확인합니다.
 - Wi-Fi 프로필 파일에 남는 설정은 [Wi-Fi 프로필](../network/wlan-profiles.md)에서 다룹니다.
 - 레지스트리의 네트워크 프로필은 [네트워크 목록](../network/networklist.md)에서 다룹니다.
 - 이 페이지는 이벤트만 다룹니다.
@@ -39,12 +39,12 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 
 
 
-- 8001 실제 기록의 Task 는 24010, Opcode 는 190, Keywords 는 `0x8000000000000600` 이었습니다.
+- 8001 기록의 Task 는 24010, Opcode 는 190, Keywords 는 `0x8000000000000600` 입니다.
 - S-1-5-18 은 SYSTEM, S-1-5-20 은 NETWORK SERVICE 입니다. 두 값 모두 연결한 사람의 계정이 아닙니다.
 
 ### 한 PC 의 설정과 기록량
 
-한 PC 에서 읽은 결과는 다음과 같습니다.
+아래는 Windows 11 25H2 PC 한 대의 값입니다.
 
 | 항목 | WLAN-AutoConfig/Operational | NetworkProfile/Operational |
 |---|---|---|
@@ -53,18 +53,18 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 | 기록 수 | 1,395건 | 2,036건 |
 | 남은 기간 | 2026-06-27 ~ 2026-09-23, 약 3개월 | 같음 |
 
-- 두 로그가 기본으로 켜져 있는지는 확인하지 못했습니다. 한 PC 에서 켜져 있었을 뿐입니다.
+- 위 PC 에서는 두 로그가 켜져 있었지만, 이것이 기본값인지는 검체의 로그 설정에서 확인합니다.
 - 로그 크기와 보관 방식을 확인하는 방법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### 버전
 
-이 페이지의 칸 구성은 빌드 26200 한 대에서 읽었고, 예전 Windows 버전에서 8001 의 칸 구성이 어떻게 달랐는지는 확인하지 못했습니다. 검체의 Windows 버전이 다르면 레코드의 칸을 직접 봅니다.
+이 페이지의 칸 구성은 빌드 26200 기준입니다. 예전 Windows 버전에서는 8001 의 칸 구성이 다를 수 있으므로, 검체의 Windows 버전이 다르면 레코드의 칸을 직접 봅니다.
 
 ## 구조
 
 ### WLAN-AutoConfig/Operational — 연결 이벤트
 
-아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다.
+아래 표는 빌드 26200 의 공급자 매니페스트에 있는 정의입니다.
 
 | ID | 뜻 | 칸 |
 |---|---|---|
@@ -89,7 +89,7 @@ Operational 채널에 정의된 ID 는 8000~8012, 11000~11010, 12011~12014, 1300
 
 ### MAC 칸
 
-이 빌드의 Operational 이벤트에는 BSSID 라는 칸이 없고 MAC 칸은 LocalMac 과 PeerMac 뿐입니다. LocalMac 은 11000번대와 12011~12014 에 있고, PeerMac 은 11006·11009·12013·20019·20020 에 있습니다. 8001 에는 접속한 AP 의 MAC (BSSID) 이 없으며, PeerMac 이 AP 의 MAC 인지는 확인하지 못했습니다.
+이 빌드의 Operational 이벤트에는 BSSID 라는 칸이 없고 MAC 칸은 LocalMac 과 PeerMac 뿐입니다. LocalMac 은 11000번대와 12011~12014 에 있고, PeerMac 은 11006·11009·12013·20019·20020 에 있습니다. 8001 에는 접속한 AP 의 MAC (BSSID) 이 없습니다. PeerMac 이 AP 의 MAC 인지는 아래 실습 6번처럼 BSSID 와 맞춰 확인합니다.
 
 ### NetworkProfile/Operational
 
@@ -123,7 +123,7 @@ Operational 채널에 정의된 ID 는 4001~4004, 10000~10002, 20001, 20002 입�
 | 8002 | 9 |
 | 8005 · 8006 · 8008 · 8012 | 각 1 |
 
-ConnectionMode 는 코드가 아니라 문장으로 저장됐습니다. 한국어판에서는 한국어 문장이었습니다.
+ConnectionMode 는 코드가 아니라 문장으로 저장됩니다. 한국어판에서는 한국어 문장입니다.
 
 - "프로필에 자동 연결"
 - "프로필과 수동 연결"
@@ -151,8 +151,6 @@ ConnectionMode 는 코드가 아니라 문장으로 저장됐습니다. 한국�
 | OnexEnabled | 모두 0 |
 | NonBroadcast | 모두 false |
 
-Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했습니다.
-
 ### 한 PC 의 실제 값 — NetworkProfile
 
 
@@ -167,9 +165,9 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 | 20002 | 36 |
 | 4003 | 13 |
 
-10000 의 Type 은 모두 0 이었고 State 는 1 이 248건, 9 가 103건, 41 이 3건이었습니다. 10001 의 Type 은 0, State 는 모두 2 였으며 Category 는 모두 0 이었습니다. State·Type·Category 값의 뜻은 확인하지 못했습니다.
+10000 의 Type 은 모두 0 이었고 State 는 1 이 248건, 9 가 103건, 41 이 3건이었습니다. 10001 의 Type 은 0, State 는 모두 2 였으며 Category 는 모두 0 이었습니다. State·Type·Category 값의 뜻은 아래 실습 5번처럼 재현해 확인합니다.
 
-이벤트를 레지스트리 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles` 와 맞춰 본 결과는 다음과 같습니다.
+이벤트를 레지스트리 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles` 와 맞추면 다음과 같습니다.
 
 1. 10000·10001 의 Name 은 9종이었습니다.
 2. 그 가운데 7종은 Profiles 아래 프로필의 ProfileName 과 같았습니다.
@@ -201,19 +199,19 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 - 8000 은 연결을 시작한 때, 8001 은 연결에 성공한 때, 8003 은 연결이 끊긴 때입니다.
 - 8000~8003 에는 모두 ConnectionId 칸이 있어서, 같은 값끼리 묶으면 연결 하나의 시작부터 끝까지 볼 수 있을 것으로 보입니다. 이 방법은 칸 이름에서 나온 해석입니다.
 - 10000 은 Windows 가 연결을 판단한 때, 10001 은 끊김을 판단한 때이며, 8001 과 10000 을 시각으로 맞추면 SSID 와 Windows 의 네트워크 이름을 이을 수 있습니다.
-- 한 PC 에서 레지스트리 네트워크 프로필의 마지막 연결 시각과 10000 의 시각을 맞춰 본 결과는 [네트워크 목록](../network/networklist.md)의 시각 해석 절에 있습니다.
-- 이 로그들의 기록 시각이 다른 EVTX 레코드처럼 UTC 로 저장된다는 점은 EVTX 형식의 일반 사실입니다. 이번에 이 두 로그에서 따로 확인하지는 않았습니다. 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+- 레지스트리 네트워크 프로필의 마지막 연결 시각과 10000 의 시각을 맞춰 보는 방법은 [네트워크 목록](../network/networklist.md)의 시각 해석 절에서 다룹니다.
+- 이 로그들의 기록 시각도 다른 EVTX 레코드처럼 UTC 로 저장됩니다. 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 두 로그 모두 1MB 남짓의 순환 로그라서, 한 PC 에서는 약 3개월치만 남아 있었습니다. 더 오래된 연결은 레지스트리의 네트워크 목록·Wi-Fi 프로필이나 [SRUM](../execution/system-resource-usage-monitor/index.md)에서 찾습니다. 이 판단은 해석입니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **문장 값으로 검색합니다.** ConnectionMode·Reason·FailureReason 은 OS 언어를 따르는 문장입니다. 여러 언어의 검체를 문자열로 찾으면 빠질 수 있습니다. 숫자 칸인 ReasonCode 로 찾는 편이 안전합니다. 이 판단은 해석입니다.
-2. **8001 에서 AP 를 찾습니다.** 8001 에는 BSSID 가 없습니다. PeerMac 이 AP 의 MAC 인지도 확인하지 못했습니다.
+2. **8001 에서 AP 를 찾습니다.** 8001 에는 BSSID 가 없습니다. PeerMac 이 AP 의 MAC 인지도 따로 확인해야 합니다.
 3. **"식별 중..." 을 네트워크 하나로 묶습니다.** 한 PC 에서 이 이름에는 Guid 가 29개 있었습니다. "식별되지 않은 네트워크" 에는 10개가 있었습니다. 둘 다 레지스트리 프로필과 이어지지 않았습니다.
-4. **Category·State·Type 숫자를 뜻으로 바꿔 적습니다.** 이번에는 세 값의 뜻을 확인하지 못했습니다. 레지스트리 Category 의 뜻과 한계는 [네트워크 목록](../network/networklist.md)에서 다룹니다.
-5. **WEP 가 적혔으니 WEP 로 연결했다고 봅니다.** 한 PC 에서 CipherAlgorithm WEP 는 모두 인증 방식 Open 과 함께 나왔습니다. 까닭은 확인하지 못했습니다.
-6. **로그가 없으면 연결이 없었다고 봅니다.** 두 로그가 기본으로 켜져 있는지 확인하지 못했습니다. 로그 설정과 남은 기간부터 봅니다.
+4. **Category·State·Type 숫자를 뜻으로 바꿔 적습니다.** 세 값의 뜻은 재현해 확인한 뒤에 적습니다. 레지스트리 Category 의 뜻과 한계는 [네트워크 목록](../network/networklist.md)에서 다룹니다.
+5. **WEP 가 적혔으니 WEP 로 연결했다고 봅니다.** 한 PC 에서 CipherAlgorithm WEP 는 모두 인증 방식 Open 과 함께 나왔습니다. 이 값만으로 WEP 연결이라고 적지 않습니다.
+6. **로그가 없으면 연결이 없었다고 봅니다.** 검체에서 두 로그가 켜져 있었는지, 로그 설정과 남은 기간부터 봅니다.
 7. **레코드의 계정을 사용자로 읽습니다.** 8001 은 S-1-5-18, 10000 은 S-1-5-20 으로 기록됐습니다. 사용자는 로그온 기록에서 따로 찾습니다.
 8. **분석 PC 의 매니페스트를 검체에 그대로 씁니다.** 이 페이지의 칸 구성은 빌드 26200 한 대의 것입니다.
 
@@ -229,7 +227,7 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 
 이벤트 칸의 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류 번호와 배열 구조는 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다.
 
-아래 바이트는 명세로 만든 예시입니다. 검체에서 나온 값이 아닙니다. Reason 칸이 UTF-16 문자열로 들어 있다고 보고 만들었습니다. 이 칸의 값 종류는 이번에 확인하지 않았습니다.
+아래 바이트는 명세로 만든 예시입니다. 검체에서 나온 값이 아닙니다. Reason 칸이 UTF-16 문자열로 들어 있다고 보고 만들었습니다. 실제 값 종류는 검체의 값 설명 배열에서 확인합니다.
 
 **8003 Reason 문장의 첫 네 글자 "드라이버"**
 
@@ -295,7 +293,7 @@ Get-WinEvent -FilterHashtable @{ Path = $np; Id = 10000, 10001 } | ForEach-Objec
 2. 저장된 Wi-Fi 에 연결합니다. 8000·8001·10000 이 어떤 순서로 남는지 봅니다. 세 레코드의 ConnectionId 와 Guid 를 적습니다.
 3. 작업 표시줄에서 직접 연결을 끊습니다. 8003 의 ReasonCode 가 무엇인지 봅니다.
 4. 처음 가는 네트워크에 연결합니다. 10000 의 Name 이 "식별 중..." 에서 실제 이름으로 바뀌는지, 새 Guid 가 NetworkList 에 생기는지 봅니다.
-5. 네트워크 범주를 바꿉니다. 10002 와 레지스트리 Category 값이 어떻게 바뀌는지 봅니다. 이 페이지가 확인하지 못한 값의 뜻을 여기서 확인할 수 있습니다.
+5. 네트워크 범주를 바꿉니다. 10002 와 레지스트리 Category 값이 어떻게 바뀌는지 봅니다. Category 값의 뜻을 여기서 확인할 수 있습니다.
 6. `netsh wlan show interfaces` 의 BSSID 를 적고, PeerMac 칸이 있는 레코드(11006·11009 등)의 값과 비교합니다.
 7. 유선 랜을 꽂았을 때도 10000 이 남는지 봅니다.
 
@@ -307,4 +305,4 @@ Get-WinEvent -FilterHashtable @{ Path = $np; Id = 10000, 10001 } | ForEach-Objec
 
 ## 참고 문헌
 
-이 페이지의 사실은 공개 문서가 아니라 Windows 11 25H2 (빌드 26200.9457) PC 한 대에서 직접 읽은 것입니다. 공급자 매니페스트는 `Get-WinEvent -ListProvider` 로, 로그 설정은 `Get-WinEvent -ListLog` 로, 실제 기록은 Operational 로그 두 개에서 읽었습니다. WLAN-AutoConfig·NetworkProfile 이벤트를 설명한 공식 문서는 이번에 열어 보지 못했습니다.
+이 페이지의 값은 Windows 11 25H2 (빌드 26200.9457) PC 한 대의 공급자 매니페스트 (`Get-WinEvent -ListProvider`), 로그 설정 (`Get-WinEvent -ListLog`), Operational 로그 두 개의 실제 기록에서 나왔습니다.

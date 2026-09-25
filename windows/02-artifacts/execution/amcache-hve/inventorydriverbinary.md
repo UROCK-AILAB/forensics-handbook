@@ -15,11 +15,11 @@ nav_order: 890
 
 AmCache 는 윈도의 프로그램 호환성 기능이 쓰는 레지스트리 하이브입니다. 전체 모습은 [AmCache](index.md) 허브에서 다룹니다.
 
-드라이버 항목은 호환성 조사 작업 (Microsoft Compatibility Appraiser) 이라는 예약 작업이 씁니다. ANSSI 연구는 Windows 10 1607·1709 의 기본 라이브러리에서 이 키를 이 작업만 갱신한다고 적습니다. 그래서 항목은 드라이버가 설치되거나 로드되는 순간이 아니라 작업이 다음에 돌 때 생깁니다.
+드라이버 항목은 호환성 조사 작업 (Microsoft Compatibility Appraiser) 이라는 예약 작업이 씁니다. Windows 10 1607·1709 의 기본 라이브러리에서는 이 작업만 이 키를 갱신합니다(ANSSI). 그래서 항목은 드라이버가 설치되거나 로드되는 순간이 아니라 작업이 다음에 돌 때 생깁니다.
 
-Microsoft 는 같은 이름의 필드를 진단 데이터 이벤트 `Microsoft.Windows.Inventory.Core.InventoryDriverBinaryAdd` 에서 설명합니다. 아래 값 설명은 이 공식 문서를 따릅니다. 이 이벤트의 필드 목록에는 `DriverId` 와 `DriverLastWriteTime` 이 없고, 이 두 값은 연구 자료와 공개 파서 소스로 설명합니다.
+같은 이름의 필드가 진단 데이터 이벤트 `Microsoft.Windows.Inventory.Core.InventoryDriverBinaryAdd` 에도 있습니다. 이 이벤트의 필드 목록에는 `DriverId` 와 `DriverLastWriteTime` 이 없어서, 이 두 값의 뜻은 연구 자료와 공개 파서 소스에 기댑니다.
 
-드라이버는 커널 권한으로 돕니다. 그래서 루트킷과 취약 드라이버 악용 (BYOVD, Bring Your Own Vulnerable Driver) 을 조사할 때 이 키를 봅니다. Kaspersky Securelist 는 이 키로 보안 프로그램을 끄는 악성코드(AV Killer)를 찾았다고 적습니다.
+드라이버는 커널 권한으로 돕니다. 그래서 루트킷과 취약 드라이버 악용 (BYOVD, Bring Your Own Vulnerable Driver) 을 조사할 때 이 키를 봅니다. 이 키로 보안 프로그램을 끄는 악성코드(AV Killer)를 찾은 사례도 있습니다(Kaspersky Securelist).
 
 ## 위치와 버전별 차이
 
@@ -28,27 +28,27 @@ Microsoft 는 같은 이름의 필드를 진단 데이터 이벤트 `Microsoft.W
 
 하이브 파일의 전체 구조와 수집 방법은 [구조와 버전별 차이](structure-versions.md)에서 다룹니다.
 
-ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라이브러리 버전을 따른다고 적습니다. 아래 표는 라이브러리 버전별로 드라이버가 어디에 적히는지 정리한 것입니다. "처음 실린 Windows" 는 그 라이브러리가 기본으로 들어 있던 Windows 입니다.
+AmCache 형식은 OS 버전이 아니라 이 파일을 채우는 라이브러리 버전을 따릅니다(ANSSI). 아래 표는 라이브러리 버전별로 드라이버가 어디에 적히는지 정리한 것입니다. "처음 실린 Windows" 는 그 라이브러리가 기본으로 들어 있던 Windows 입니다.
 
 | 라이브러리 버전 | 처음 실린 Windows | 드라이버가 적히는 곳 |
 |---|---|---|
 | 6.2.9200 · 6.3.9600 | 8.0 · 8.1 | `Amcache.hve` 의 `Root\Generic\0` 아래에 `0000`+SHA-1 이름의 키만 있습니다. 파일 이름·버전은 `%WinDir%\AppCompat\Programs\AEINV_AMI_WER_*.xml` 의 드라이버 목록에 있습니다 |
 | 10.0.10240 | 10 1507 | `Generic` 키가 비어 있습니다. 드라이버 목록은 `AEINV_AMI_WER` XML 에만 있습니다 |
-| 10.0.10586 | 10 1511 | ANSSI 는 드라이버 설치 정보를 찾을 수 없다고 적습니다 |
+| 10.0.10586 | 10 1511 | 드라이버 설치 정보가 없습니다(ANSSI) |
 | 10.0.14913 | 10 1607 | `InventoryDriverBinary` 와 `InventoryDriverPackage` 가 생깁니다. 하위 키 이름은 `0000`+SHA-1 입니다 |
 | 10.0.16299 | 10 1709 | 하위 키 이름이 드라이버 전체 경로로 바뀝니다. SHA-1 은 `DriverId` 값에 남습니다 |
 | 10.0.17134 | 10 1803 | `Generic` 키가 없어집니다. `InventoryApplicationDriver` 가 생깁니다 |
-| 10.0.17763 | 10 1809 | ANSSI 는 1803 과 동작이 같다고 적습니다 |
+| 10.0.17763 | 10 1809 | 1803 과 동작이 같습니다(ANSSI) |
 
 - ANSSI 연구는 1809 까지만 다룹니다.
-- Windows 11 22H2·23H2 용 Microsoft 진단 데이터 문서에도 캐시에 든 `InventoryDriverBinary` 개수를 세는 필드가 있습니다. 그래서 Windows 11 에서도 이 목록이 쓰인다고 볼 수 있습니다.
-- 값 구성은 빌드마다 늘거나 줄 수 있습니다. 공개 파서 AmcacheParser 의 소스는 드라이버 항목에서 `COMPID`·`HWID` 같은 값도 만날 수 있다고 보고 건너뜁니다. 모르는 값 이름을 만나면 경고를 남깁니다.
+- Windows 11 22H2·23H2 의 진단 데이터에도 캐시에 든 `InventoryDriverBinary` 개수를 세는 필드가 있습니다. 그래서 Windows 11 에서도 이 목록이 쓰인다고 볼 수 있습니다.
+- 값 구성은 빌드마다 늘거나 줄 수 있습니다. 드라이버 항목에 `COMPID`·`HWID` 같은 값이 들어 있기도 합니다. 공개 파서 AmcacheParser 는 이 값을 건너뛰고, 모르는 값 이름을 만나면 경고를 남깁니다.
 
 ## 구조
 
 ### 하위 키 이름
 
-| 형식 | 하위 키 이름 | ANSSI 가 보인 예 |
+| 형식 | 하위 키 이름 | 예 (ANSSI) |
 |---|---|---|
 | 1607 | `0000` + 드라이버 파일의 SHA-1 | `0000895407cb018368e62fc360b972a8b0da7e729662` |
 | 1709 이후 | 드라이버 전체 경로. 소문자이고 구분자는 `/` 입니다 | `c:/windows/system32/drivers/1394ohci.sys` |
@@ -66,7 +66,7 @@ ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라�
 | 값 | 공식 설명 | 읽을 때 주의 |
 |---|---|---|
 | `DriverName` | 드라이버 파일 이름 | |
-| `DriverId` | (공식 필드 목록에 없음) ANSSI 는 드라이버의 SHA-1 앞에 `0000` 을 붙인 값이라고 적습니다 | 앞 네 글자를 떼고 해시를 조회합니다. 계산 범위는 [AmCache 해석 함정](sha1.md)을 봅니다 |
+| `DriverId` | (공식 필드 목록에 없음) 드라이버의 SHA-1 앞에 `0000` 을 붙인 값입니다(ANSSI) | 앞 네 글자를 떼고 해시를 조회합니다. 계산 범위는 [AmCache 해석 함정](sha1.md)을 봅니다 |
 | `DriverVersion` | 드라이버 파일의 버전 | |
 | `DriverCompany` | 드라이버를 만든 회사 이름 | 파일 버전 정보에 적힌 글자입니다. 서명한 곳과 다를 수 있습니다 |
 | `Product` · `ProductVersion` | 드라이버 파일에 적힌 제품 이름과 제품 버전 | |
@@ -74,9 +74,9 @@ ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라�
 | `DriverInBox` | 운영체제에 기본으로 들어 있는 드라이버인가 | |
 | `DriverIsKernelMode` | 커널 모드 드라이버인가 | 이 값이 따로 있으므로 커널 모드가 아닌 드라이버도 목록에 오를 수 있다고 읽힙니다 |
 | `DriverType` | 드라이버 속성을 나타내는 비트 값 | 아래 표를 봅니다 |
-| `DriverTimeStamp` | 드라이버 파일 시각의 하위 32비트 | ANSSI 는 Unix 형식의 컴파일 날짜라고 적습니다. 아래 시각 해석을 봅니다 |
-| `DriverLastWriteTime` | (공식 필드 목록에 없음) 드라이버 파일의 마지막 수정 시각으로 설명됩니다 | 문자열입니다 |
-| `DriverCheckSum` | 드라이버 파일의 체크섬 | 이름으로 보아 PE 선택 헤더의 `CheckSum` 으로 보입니다(추정). 아래 헥스 절에서 맞춰 봅니다 |
+| `DriverTimeStamp` | 드라이버 파일 시각의 하위 32비트 | Unix 형식의 컴파일 날짜입니다(ANSSI). 아래 시각 해석을 봅니다 |
+| `DriverLastWriteTime` | (공식 필드 목록에 없음) 드라이버 파일의 마지막 수정 시각 | 문자열입니다 |
+| `DriverCheckSum` | 드라이버 파일의 체크섬 | 이름으로 보아 PE 선택 헤더의 `CheckSum` 으로 보입니다. 아래 헥스 절에서 맞춰 봅니다 |
 | `ImageSize` | 드라이버 파일의 크기 | 아래 함정과 한계 4번을 봅니다 |
 | `Inf` | INF 파일 이름 | |
 | `Service` | 장치용으로 설치된 서비스 이름 | [서비스·드라이버](../../persistence/services-drivers.md) 키와 잇습니다 |
@@ -85,7 +85,7 @@ ANSSI 는 AmCache 형식이 OS 버전이 아니라 이 파일을 채우는 라�
 
 ### DriverType 비트
 
-Microsoft 문서가 밝힌 비트입니다. 이름만 공개돼 있고, 각 비트를 어떤 기준으로 켜는지는 문서에 없습니다.
+비트 이름은 공개돼 있지만, 각 비트를 어떤 기준으로 켜는지는 공개돼 있지 않습니다.
 
 | 비트 | 이름 | 뜻 |
 |---|---|---|
@@ -106,14 +106,14 @@ Microsoft 문서가 밝힌 비트입니다. 이름만 공개돼 있고, 각 비�
 | 0x400000 | `DRIVER_MAP_DRIVER_TYPE_ARMNT` | ARM NT |
 | 0x800000 | `DRIVER_MAP_DRIVER_IS_TIME_STAMPED` | 문서에 이름만 있습니다 |
 
-ANSSI 가 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에서 보인 `1394ohci.sys` 의 `Type` 값은 `0x0004001A` 입니다. 같은 비트 정의를 쓰므로 여기서 예로 씁니다. 이 값은 0x40000 + 0x10 + 0x8 + 0x2 입니다. x64, 기본 포함, 서명됨, 커널 모드라는 뜻입니다.
+6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에 적힌 `1394ohci.sys` 의 `Type` 값 `0x0004001A` 를 예로 듭니다(ANSSI). 같은 비트 정의를 씁니다. 이 값은 0x40000 + 0x10 + 0x8 + 0x2 입니다. x64, 기본 포함, 서명됨, 커널 모드라는 뜻입니다.
 
 `DriverSigned`·`DriverInBox`·`DriverIsKernelMode` 와 이 비트가 서로 맞는지도 봅니다. 어긋나면 어느 쪽이 맞는지 문서로는 가릴 수 없습니다. 드라이버 파일이 남아 있으면 파일을 직접 확인합니다.
 
 ### 함께 보는 두 키
 
-- **`InventoryDriverPackage`** 는 INF 로 묶인 드라이버 패키지를 적습니다. Microsoft 문서의 필드에는 `Class`·`ClassGuid`·`Date`·`Directory`·`DriverInBox`·`Inf`·`Provider`·`SubmissionId`·`Version` 이 있습니다. Microsoft 문서는 `Date` 를 "드라이버 패키지 날짜" 라고만 적습니다. ANSSI 예시에서 기본 INF(`acpi.inf`)의 날짜는 06/21/2006 입니다. 그래서 `Date` 를 설치한 날짜로 읽지 않습니다.
-- **`InventoryApplicationDriver`** 는 프로그램이 함께 설치한 드라이버를 적습니다(1803 라이브러리부터). 값은 `DriverServiceName` 과 `ProgramIds` 두 개입니다. `ProgramIds` 는 [설치 프로그램 항목](inventoryapplication.md)의 키 이름을 가리킵니다. ANSSI 시험에서는 Wireshark 를 설치하자 `npcap` 항목이 생겼습니다.
+- **`InventoryDriverPackage`** 는 INF 로 묶인 드라이버 패키지를 적습니다. 필드에는 `Class`·`ClassGuid`·`Date`·`Directory`·`DriverInBox`·`Inf`·`Provider`·`SubmissionId`·`Version` 이 있습니다. `Date` 의 공식 설명은 "드라이버 패키지 날짜" 뿐입니다. 기본 INF(`acpi.inf`)의 날짜가 06/21/2006 인 예가 있습니다(ANSSI). 그래서 `Date` 를 설치한 날짜로 읽지 않습니다.
+- **`InventoryApplicationDriver`** 는 프로그램이 함께 설치한 드라이버를 적습니다(1803 라이브러리부터). 값은 `DriverServiceName` 과 `ProgramIds` 두 개입니다. `ProgramIds` 는 [설치 프로그램 항목](inventoryapplication.md)의 키 이름을 가리킵니다. 예를 들어 Wireshark 를 설치하면 `npcap` 항목이 생깁니다(ANSSI).
 
 [장치 항목 (InventoryDevicePnp)](inventorydevicepnp.md)에도 `DriverName`·`Inf`·`Service` 값이 있습니다. 이 값으로 장치와 드라이버를 잇습니다.
 
@@ -133,7 +133,7 @@ ANSSI 가 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에서 �
 - Microsoft 문서는 "시스템에서 실행 중인 드라이버 바이너리" 의 정보를 보낸다고 적습니다.
 - Securelist 는 "시스템이 로드한 커널 모드 드라이버" 를 적는다고 설명합니다.
 
-설치만 되고 한 번도 로드되지 않은 드라이버가 목록에 오르는지는 공개 자료로 확인하지 못했습니다. 그래서 이 항목 하나로 "로드했다" 고 쓰지 않습니다. 로드는 아래 교차 검증 절의 기록으로 따로 확인합니다.
+설치만 되고 한 번도 로드되지 않은 드라이버가 목록에 오르는지 밝힌 공개 자료는 없습니다. 그래서 이 항목 하나로 "로드했다" 고 쓰지 않습니다. 로드는 아래 교차 검증 절의 기록으로 따로 확인합니다.
 
 ### 보고서 문장
 
@@ -151,17 +151,17 @@ ANSSI 가 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에서 �
 | 키 마지막 기록 시각 (Last Write Time) | 하위 키 | 조사 작업이 이 항목을 쓴 때 | UTC FILETIME |
 | `DriverTimeStamp` | 값 (정수) | 드라이버 파일 PE 헤더의 빌드 시각 | 1970-01-01 UTC 부터 센 초 |
 | `DriverLastWriteTime` | 값 (문자열) | 드라이버 파일의 마지막 수정 시각 | 공식 문서가 없습니다 |
-| `InventoryDriverPackage` 의 `Date` | 값 | 드라이버 패키지에 적힌 날짜 | ANSSI 예시에는 날짜만 있습니다 |
+| `InventoryDriverPackage` 의 `Date` | 값 | 드라이버 패키지에 적힌 날짜 | 날짜만 있습니다 |
 
 ### 키 마지막 기록 시각
 
 이 시각은 조사 작업이 이 항목을 쓴 때라서 드라이버를 설치한 때보다 늦고, 둘 사이는 작업이 도는 간격만큼 벌어질 수 있습니다.
 
-ANSSI 는 1709 이후 조사 작업이 돌 때마다 `InventoryApplication` 의 항목을 모두 다시 쓴다고 적습니다. 드라이버 항목도 그런지는 따로 적지 않았습니다. 여러 드라이버 키의 시각이 몇 초 안에 몰려 있으면 한꺼번에 다시 쓴 것으로 보고, 이런 시각은 드라이버 하나하나의 시각으로 쓰지 않습니다. 키 시각의 성질은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
+1709 이후 조사 작업은 돌 때마다 `InventoryApplication` 의 항목을 모두 다시 씁니다(ANSSI). 드라이버 항목도 그런지 밝힌 공개 자료는 없습니다. 여러 드라이버 키의 시각이 몇 초 안에 몰려 있으면 한꺼번에 다시 쓴 것으로 보고, 이런 시각은 드라이버 하나하나의 시각으로 쓰지 않습니다. 키 시각의 성질은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
 ### DriverTimeStamp
 
-Microsoft 문서는 이 값을 "드라이버 파일 시각의 하위 32비트" 라고 적습니다. PE 형식 문서는 COFF 파일 헤더의 `TimeDateStamp` 를 "1970년 1월 1일 0시부터 센 초의 하위 32비트" 라고 적습니다. 두 설명이 같으므로 이 값은 PE 헤더의 `TimeDateStamp` 로 봅니다. ANSSI 도 이 값을 Unix 형식의 컴파일 날짜로 설명합니다.
+이 값은 드라이버 파일 시각의 하위 32비트입니다. PE 형식에서 COFF 파일 헤더의 `TimeDateStamp` 는 1970년 1월 1일 0시부터 센 초의 하위 32비트입니다. 두 설명이 같으므로 이 값은 PE 헤더의 `TimeDateStamp` 로 봅니다. Unix 형식의 컴파일 날짜라는 설명(ANSSI)과도 맞습니다.
 
 이 값을 날짜로 믿기 전에 두 가지를 확인합니다.
 
@@ -192,7 +192,7 @@ UTC 값은 그 PC 의 [시간대 설정](../../system-account/time-zone.md)으�
 
 ### 지우기와 조작
 
-- **드라이버 파일을 지웁니다.** Microsoft 문서에는 드라이버 목록 항목이 "더는 없다" 고 알리는 이벤트(`InventoryDriverBinaryRemove`)도 있습니다. 그래서 다음 조사 때 항목이 빠질 수 있습니다. 빠진 뒤에는 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
+- **드라이버 파일을 지웁니다.** 드라이버 목록 항목이 더는 없다고 알리는 진단 이벤트(`InventoryDriverBinaryRemove`)도 있습니다. 그래서 다음 조사 때 항목이 빠질 수 있습니다. 빠진 뒤에는 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
 - **`Amcache.hve` 를 지우거나 고칩니다.** 하이브 파일은 오프라인에서 고칠 수 있습니다. 파일을 지우거나 바꾼 흔적은 [$MFT](../../filesystem/mft.md)와 [$UsnJrnl](../../filesystem/usnjrnl.md)에 남을 수 있습니다.
 - **기본 드라이버 이름을 흉내 냅니다.** 이름만 보지 않고 경로, SHA-1, `DriverInBox`, `DriverSigned` 를 함께 봅니다.
 - **PE 헤더의 시각을 고칩니다.** `DriverTimeStamp` 도 고친 값을 따릅니다. 파일 시스템 시각과 다른 기록의 시각을 함께 봅니다.
@@ -203,7 +203,7 @@ UTC 값은 그 PC 의 [시간대 설정](../../system-account/time-zone.md)으�
 
 하이브 안의 키와 값을 헥스로 따라가는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 드라이버 파일이 남아 있을 때 `DriverTimeStamp`·`ImageSize`·`DriverCheckSum` 에 대응하는 칸을 파일에서 직접 찾습니다.
 
-Microsoft PE 형식 문서에 따른 위치입니다.
+PE 형식에서 각 칸의 위치는 다음과 같습니다.
 
 | 칸 | 위치 | 크기 |
 |---|---|---|
@@ -215,7 +215,7 @@ Microsoft PE 형식 문서에 따른 위치입니다.
 | `SizeOfImage` | 선택 헤더 + 56 | 4바이트 |
 | `CheckSum` | 선택 헤더 + 64 | 4바이트 |
 
-아래는 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `e_lfanew` 는 설명을 위해 0xE8 로 정했습니다. 세 값은 ANSSI 논문이 `AEINV_AMI_WER` XML 에서 보인 `1394ohci.sys` 예시 값을 옮겼습니다. `..` 은 이 풀이와 관계없는 바이트입니다.
+아래는 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `e_lfanew` 는 설명을 위해 0xE8 로 정했습니다. 세 값은 `AEINV_AMI_WER` XML 에 적힌 `1394ohci.sys` 예시 값입니다(ANSSI). `..` 은 이 풀이와 관계없는 바이트입니다.
 
 ```
 오프셋   00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -235,7 +235,7 @@ Microsoft PE 형식 문서에 따른 위치입니다.
 6. 이 수를 1970-01-01 00:00:00 UTC 에 초로 더하면 2012-07-26 02:26:46 UTC 입니다. 이 값이 `DriverTimeStamp` 와 같은지 봅니다.
 7. 선택 헤더는 0x100(= 0xE8 + 24)에서 시작합니다. 0x138 의 `00 D0 03 00` 은 `SizeOfImage` 0x0003D000(249,856)입니다.
 8. 0x140 의 `21 70 04 00` 은 `CheckSum` 0x00047021(290,849)입니다. 이 값이 `DriverCheckSum` 과 같은지 봅니다.
-9. 이 예시에서는 `SizeOfImage` 와 ANSSI 의 `ImageSize` 예시 값이 같게 만들었습니다. 실제 검체에서는 `ImageSize` 가 `SizeOfImage` 와 같은지, 파일 크기와 같은지 직접 확인합니다.
+9. 이 예시에서는 `SizeOfImage` 와 `ImageSize` 예시 값이 같게 만들었습니다. 실제 검체에서는 `ImageSize` 가 `SizeOfImage` 와 같은지, 파일 크기와 같은지 직접 확인합니다.
 
 > 그림 자리: 드라이버 파일 헤더에서 0x3C(e_lfanew), TimeDateStamp, SizeOfImage, CheckSum 자리를 색으로 나누고, 각각 InventoryDriverBinary 의 DriverTimeStamp·ImageSize·DriverCheckSum 과 선으로 잇는 그림
 
@@ -258,7 +258,7 @@ AmcacheParser, Registry Explorer 같은 공개 도구로 이 키를 볼 수 있�
 | [장치 설치 로그 (setupapi.dev.log)](../../external-devices/usb-storage-artifacts/setupapi-dev-log.md) | `Inf` 값의 INF 가 설치된 시각 |
 | [장치 항목 (InventoryDevicePnp)](inventorydevicepnp.md) | 같은 `Inf`·`Service` 를 쓰는 장치 |
 | [설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) | `InventoryApplicationDriver` 의 `ProgramIds` 가 가리키는 프로그램 |
-| [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) | ANSSI 는 프로그램 설치와 함께 생긴 SYS 파일도 이 키에 오른다고 적습니다(1709 라이브러리) |
+| [실행 파일 항목 (InventoryApplicationFile)](inventoryapplicationfile.md) | 프로그램 설치와 함께 생긴 SYS 파일도 이 키에 오릅니다(1709 라이브러리, ANSSI) |
 | [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | `.sys` 파일이 생기고 지워진 시각 |
 | [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md) | 파일이 남아 있으면 서명자와 버전 정보 |
 | [해시셋 대조](../../../03-techniques/analysis/hash-set-fuzzy-hash.md) | `DriverId` 의 SHA-1 이 LOLDrivers 같은 공개 취약 드라이버 목록에 있는지 |

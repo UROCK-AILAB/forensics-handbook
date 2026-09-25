@@ -17,7 +17,7 @@ nav_order: 2400
 
 ScreenConnect 는 ScreenConnect 가 돌아가는 관리 서버와 조종당하는 PC 에 설치되는 클라이언트, 두 부분으로 나뉩니다.
 
-LOLRMM 목록에는 "ScreenConnect" 와 "ConnectWise Control" 이 두 항목으로 따로 올라 있으므로 흔적을 찾을 때는 두 이름을 모두 씁니다.
+이 제품은 "ScreenConnect" 와 "ConnectWise Control" 두 이름으로 쓰이므로[3] 흔적을 찾을 때는 두 이름을 모두 씁니다.
 
 클라이언트는 설치할 때 서비스를 등록하고, 원격에서 명령을 실행하면 스크립트를 디스크에 쓴 뒤 그 스크립트에 맞는 해석기로 실행합니다. 그래서 명령 하나가 세 곳에 흔적을 남깁니다.
 
@@ -25,7 +25,7 @@ LOLRMM 목록에는 "ScreenConnect" 와 "ConnectWise Control" 이 두 항목으�
 - 임시 폴더: 스크립트 파일
 - 프로세스 생성 기록: 스크립트를 실행한 cmd.exe
 
-The DFIR Report 가 공개한 사건에서는 이 방식으로 systeminfo, ipconfig, net 명령이 실행됐습니다. 분석가는 4688 과 Sysmon 1 로 이 명령들을 추적했습니다.
+한 공개 사건에서는 이 방식으로 systeminfo, ipconfig, net 명령이 실행됐고, 4688 과 Sysmon 1 에 그 기록이 남았습니다[1].
 
 ## 위치와 버전별 차이
 
@@ -44,19 +44,19 @@ The DFIR Report 가 공개한 사건에서는 이 방식으로 systeminfo, ipcon
 
 | 흔적 | 경로 | 메모 |
 |---|---|---|
-| 세션 DB | `C:\Program Files*\ScreenConnect\App_Data\Session.db` | 형식(SQLite 인지)과 표 이름은 이번 자료로 확인하지 못했습니다 |
+| 세션 DB | `C:\Program Files*\ScreenConnect\App_Data\Session.db` | 형식(SQLite 인지)과 표 이름은 검체에서 확인 |
 | 사용자 설정 | `C:\Program Files*\ScreenConnect\App_Data\User.xml` | |
 
 ### 버전에 따라 달라지는 점
 
-- 임시 폴더 경로에 버전 번호가 들어갑니다. 자료의 예는 `22.8.9717.8313`(The DFIR Report)과 `23.6.8.8644`(Sigma 규칙 예시)입니다.
+- 임시 폴더 경로에 버전 번호가 들어갑니다. 예: `22.8.9717.8313`[1], `23.6.8.8644`[4].
 - Application 로그의 이벤트 ID 가 자료마다 다릅니다. 아래 "Application 이벤트 로그" 절을 봅니다.
 
 ## 구조
 
 ### 서비스 명령줄
 
-클라이언트를 설치하면 System 로그에 7045 가 남습니다. 시작 유형은 자동이고, 서비스 종류는 자기 프로세스 서비스(SERVICE_WIN32_OWN_PROCESS)입니다. 서비스 명령줄 끝에는 아래처럼 접속 정보가 붙습니다(The DFIR Report 예시).
+클라이언트를 설치하면 System 로그에 7045 가 남습니다. 시작 유형은 자동이고, 서비스 종류는 자기 프로세스 서비스(SERVICE_WIN32_OWN_PROCESS)입니다. 서비스 명령줄 끝에는 아래처럼 접속 정보가 붙습니다[1].
 
 ```
 ?e=Access&y=Guest&h=instance-…-relay.screenconnect.com&p=443&s=<GUID>&k=<인코딩된 키>&…
@@ -71,16 +71,16 @@ The DFIR Report 가 공개한 사건에서는 이 방식으로 systeminfo, ipcon
 | s | 클라이언트 고유 ID |
 | k | 신원 확인에 쓰는 인코딩된 암호화 키 |
 
-Sigma 규칙은 명령줄에 `e=Access&`, `y=Guest&`, `&p=`, `&c=`, `&k=` 가 모두 들어 있으면 ScreenConnect 설치 실행으로 봅니다. `c` 의 뜻은 이번 자료에 없습니다.
+명령줄에 `e=Access&`, `y=Guest&`, `&p=`, `&c=`, `&k=` 가 모두 들어 있으면 ScreenConnect 설치 실행으로 볼 수 있습니다[4]. `c` 의 뜻은 공개 자료에 없습니다.
 
-The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분석가는 SYSTEM 하이브와 SYSTEM.LOG1 을 Registry Explorer 로 열어 서비스 명령줄 전체를 되살렸습니다. 하이브와 트랜잭션 로그 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registry Explorer 로 열면 서비스 명령줄 전체를 되살릴 수 있습니다[1]. 하이브와 트랜잭션 로그 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ### Application 이벤트 로그
 
 원본(공급자) 이름은 자료마다 다르게 적혀 있습니다.
 
-- Hunt & Hackett(2021-06)은 `ScreenConnect Client (<16진 문자열>)` 로 적었습니다.
-- Sigma 규칙은 Provider_Name 을 `ScreenConnect` 로 적었습니다.
+- Hunt & Hackett 자료에는 `ScreenConnect Client (<16진 문자열>)` 로 나옵니다[2].
+- Sigma 규칙에는 Provider_Name 이 `ScreenConnect` 로 나옵니다[4].
 
 | 동작 | 메시지 문구 | Hunt & Hackett 의 이벤트 ID | Sigma 규칙의 이벤트 ID |
 |---|---|---|---|
@@ -89,13 +89,13 @@ The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분�
 | 파일 전송 | `Transferred files with action 'Transfer': <파일 이름들>` | 0 | 201 |
 | 명령 실행 | `Executed command of length: <길이>` | 0 | 200 |
 
-- 두 자료의 이벤트 ID 가 다릅니다. 버전에 따라 바뀐 것으로 보이지만 어느 버전부터인지는 확인하지 못했습니다. 그래서 이벤트 ID 보다 메시지 문구로 찾습니다.
+- 두 자료의 이벤트 ID 가 다릅니다. 버전에 따라 바뀐 것으로 보이며, 어느 버전부터인지는 공개 자료에 없습니다. 그래서 이벤트 ID 보다 메시지 문구로 찾습니다.
 - 명령 실행 이벤트에는 명령 내용이 없고 길이만 남습니다.
-- "Cloud Account Administrator" 는 클라우드판의 기본 관리자 이름으로 보이지만, 자체 서버에서 이 자리에 다른 사용자 이름이 들어가는지는 확인하지 못했습니다.
+- "Cloud Account Administrator" 는 클라우드판의 기본 관리자 이름으로 보입니다. 자체 서버에서 이 자리에 어떤 이름이 들어가는지는 검체에서 확인합니다.
 
 ### 명령 실행 스크립트
 
-명령 실행 기능을 쓰면 부모 프로세스 ScreenConnect.ClientService.exe 아래에서 cmd.exe 가 뜹니다. 아래는 Sigma 규칙에 실린 명령줄 예시입니다.
+명령 실행 기능을 쓰면 부모 프로세스 ScreenConnect.ClientService.exe 아래에서 cmd.exe 가 뜹니다. 아래는 명령줄 예시입니다[4].
 
 ```
 "cmd.exe" /c "C:\Windows\TEMP\ScreenConnect\23.6.8.8644\3c41d689-…run.cmd"
@@ -116,9 +116,9 @@ The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분�
 **증명하지 못하는 것**
 
 - 명령 실행 이벤트만으로는 무슨 명령인지 모릅니다. 스크립트 파일, 4688, Sysmon 1 로 내용을 채웁니다.
-- 스크립트 파일이 실행 뒤에도 남는지는 이번 자료로 확인하지 못했습니다. 파일이 없으면 [마스터 파일 테이블](../../filesystem/mft.md)과 [USN 변경 저널](../../filesystem/usnjrnl.md)에서 이름과 시각을 찾습니다.
+- 스크립트 파일이 실행 뒤에도 남는지는 검체에서 확인합니다. 파일이 없으면 [마스터 파일 테이블](../../filesystem/mft.md)과 [USN 변경 저널](../../filesystem/usnjrnl.md)에서 이름과 시각을 찾습니다.
 - 이벤트에 적힌 이름(Cloud Account Administrator 등)은 ScreenConnect 계정 이름입니다. 조작한 사람을 가리키지 않습니다.
-- 서버 쪽 Session.db 의 구조는 확인하지 못했습니다. 서버에서 세션 목록을 읽는 법은 이 페이지에서 다루지 않습니다.
+- 서버 쪽 Session.db 의 구조는 공개 자료에 없어, 서버에서 세션 목록을 읽는 법은 이 페이지에서 다루지 않습니다.
 
 보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "Application 로그에 원본 `ScreenConnect Client (…)` 의 `Executed command of length` 이벤트가 이 시각에 있다. 이 이벤트에는 명령 내용이 없다. 같은 시각의 4688 에는 ScreenConnect.ClientService.exe 가 띄운 cmd.exe 가 `C:\Windows\Temp\ScreenConnect\` 아래 run.cmd 를 실행한 기록이 있다." 처럼 씁니다.
 
@@ -140,7 +140,7 @@ The DFIR Report 사건에서는 Sysmon 자료가 망가져 있었습니다. 분�
 
 ### 헥스로 한 번
 
-이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 스크립트입니다. ScreenConnect 만의 이진 구조는 이번 자료로 확인한 것이 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 스크립트입니다. ScreenConnect 만의 이진 구조는 공개된 분석 자료가 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -171,8 +171,8 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\System.evtx'; Id = 7045 } |
 | Sysmon 파일 생성 | ScreenConnect.WindowsClient.exe 가 `Documents\ConnectWiseControl\Temp\` 에 만든 파일 | [Sysmon 로그](../../event-logs/sysmon/index.md) |
 | PowerShell 실행 기록 | `run.ps1` 로 실행한 PowerShell 명령 | [PowerShell 실행 기록](../../event-logs/powershell-event-logs-4103-4104.md) |
 | 마스터 파일 테이블 · USN 변경 저널 | 지워진 스크립트 파일의 이름과 시각 | [마스터 파일 테이블](../../filesystem/mft.md), [USN 변경 저널](../../filesystem/usnjrnl.md) |
-| 서버의 프로세스 생성 | 서버 프로세스 ScreenConnect.Service.exe 가 cmd.exe·csc.exe 를 띄우면 웹셸 실행으로 의심합니다(Sigma 규칙, 2024-02-26 작성) | [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) |
-| DNS·프록시 기록 | `control.connectwise.com`, `*.connectwise.com`, `*.screenconnect.com`, `live.screenconnect.com`. The DFIR Report 사건의 중계 서버는 `instance-…-relay.screenconnect.com:443` 꼴이었습니다 | — |
+| 서버의 프로세스 생성 | 서버 프로세스 ScreenConnect.Service.exe 가 cmd.exe·csc.exe 를 띄우면 웹셸 실행으로 의심합니다[4] | [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) |
+| DNS·프록시 기록 | `control.connectwise.com`, `*.connectwise.com`, `*.screenconnect.com`, `live.screenconnect.com`. 중계 서버는 `instance-…-relay.screenconnect.com:443` 꼴입니다[1] | — |
 
 ## 실습
 

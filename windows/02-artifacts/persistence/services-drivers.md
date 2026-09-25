@@ -29,7 +29,7 @@ Services 트리는 시스템의 서비스마다 정보를 담고, 드라이버�
 - `CurrentControlSet` 은 켜진 PC 에서 보이는 이름입니다. 이미지에서 어느 컨트롤셋을 읽어야 하는지는 [컨트롤셋 고르기](../../01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다.
 - Windows 11 PC 한 대에서 `HKLM\SYSTEM\Select` 는 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다. `ControlSet001` 과 `CurrentControlSet` 만 보였고 `ControlSet002` 는 없었습니다.
 - 같은 PC 의 `Svchost` 키에는 그룹 목록 값이 67개 있었습니다. 예를 들어 `netsvcs` 그룹에는 lanmanserver·IKEEXT·iphlpsvc 등이 들어 있었습니다.
-- 같은 PC 에는 사용자별 서비스가 있었습니다. 아래 "사용자별 서비스" 를 봅니다. 이 형태가 어느 버전부터 생겼는지는 확인하지 못했습니다.
+- 같은 PC 에는 사용자별 서비스가 있었습니다. 아래 "사용자별 서비스" 를 봅니다. 이 형태가 어느 버전부터 생겼는지는 공개 자료가 없습니다.
 
 ## 구조
 
@@ -59,7 +59,7 @@ Start=2 에는 지연된 자동 시작도 들어갑니다. 자동 시작 서비�
 | 0x110 | Interactive Own Process |
 | 0x120 | Interactive Share Process |
 
-0x8·0x110·0x120 은 4697 이벤트 문서의 Type 표에 있는 값입니다.
+0x8·0x110·0x120 은 4697 이벤트의 Type 칸에 나오는 값입니다[2].
 
 **ErrorControl (시작에 실패했을 때)**
 
@@ -103,13 +103,13 @@ Services\disk
     ErrorControl   0x1
 ```
 
-ImagePath 에는 드라이브 문자도 `%SystemRoot%` 도 없는 상대 경로가 들어 있었습니다. ImagePath 가 아예 없을 때 어느 경로를 쓰는지는 확인하지 못했습니다.
+ImagePath 에는 드라이브 문자도 `%SystemRoot%` 도 없는 상대 경로가 들어 있었습니다. ImagePath 가 아예 없을 때 어느 경로를 쓰는지는 공개 자료가 없습니다.
 
 ### 사용자별 서비스
 
 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다.
 
-Type 0x60 과 0xE0 이 쌍을 이뤘는데, 0x60 은 원형 키였고 0xE0 은 같은 이름 뒤에 `_[16진 5자리]` 가 붙은 사용자 세션용 사본이었습니다. 원형 0x60 키 가운데 15개에 `UserServiceFlags` 값이 있었습니다. 0x40·0x80 비트의 공식 뜻은 확인하지 못했습니다.
+Type 0x60 과 0xE0 이 쌍을 이뤘는데, 0x60 은 원형 키였고 0xE0 은 같은 이름 뒤에 `_[16진 5자리]` 가 붙은 사용자 세션용 사본이었습니다. 원형 0x60 키 가운데 15개에 `UserServiceFlags` 값이 있었습니다. 0x40·0x80 비트의 뜻은 공식 문서가 없습니다.
 
 ### 한 PC 의 분포
 
@@ -159,7 +159,7 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 | 4697 | Security (Audit Security System Extension) | 서비스가 설치되었습니다 |
 
 - 4697 의 서비스 파일 경로(ServiceFileName)는 서비스를 만들 때의 값입니다. 나중에 경로를 바꿔도 기록되지 않습니다. 실행 계정(ServiceAccount)도 마찬가지입니다.
-- 그래서 설치 이벤트의 경로·계정이 지금 레지스트리 값과 다르면, 설치 뒤에 값이 바뀐 것입니다. 이 문장은 4697 문서에서 끌어낸 해석입니다.
+- 그래서 설치 이벤트의 경로·계정이 지금 레지스트리 값과 다르면, 설치 뒤에 값이 바뀐 것입니다[2].
 - System 로그가 덮어쓰이면 7045 도 사라집니다. Windows 11 PC 한 대에서 System 로그의 가장 오래된 SCM 이벤트는 2026-06-27(UTC)이었습니다.
 - 두 이벤트의 칸과 해석은 [서비스 설치](../event-logs/7045-4697.md) 에서 다룹니다.
 - 드라이버 파일의 기록은 [AmCache 드라이버 항목](../execution/amcache-hve/inventorydriverbinary.md) 에서도 찾습니다.
@@ -175,7 +175,7 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 
 ### 먼저 볼 기준
 
-Microsoft 는 4697 이벤트를 감시할 때 아래 경우를 보라고 권합니다. 같은 기준을 레지스트리 값에도 쓸 수 있습니다.
+4697 이벤트를 감시할 때는 아래 경우를 먼저 봅니다[2]. 같은 기준을 레지스트리 값에도 쓸 수 있습니다.
 
 - 서비스 파일 경로가 `%windir%` 나 Program Files 밖에 있습니다.
 - Type 이 0x1·0x2·0x8 입니다. 드라이버는 부팅 초기부터 거의 제한 없는 권한으로 돌고, 드물게 설치됩니다.

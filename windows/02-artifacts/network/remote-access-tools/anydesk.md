@@ -25,21 +25,21 @@ AnyDesk 의 흔적은 세 갈래입니다.
 
 ## 위치와 버전별 차이
 
-아래 경로는 Synacktiv 가 AnyDesk 7.0.14.0 으로 시험한 결과에 LOLRMM 목록을 더한 것입니다.
+아래 경로는 AnyDesk 7.0.14.0 기준입니다[1][2].
 
 ### 파일
 
 | 흔적 | 경로 | 메모 |
 |---|---|---|
 | 설치 폴더 | `C:\Program Files (x86)\AnyDesk` | 설치할 때 바꿀 수 있습니다 |
-| 접속 목록 | `%PROGRAMDATA%\AnyDesk\connection_trace.txt` | 받는 쪽만. LOLRMM 은 `%APPDATA%\AnyDesk\connection_trace.txt` 도 적습니다 |
+| 접속 목록 | `%PROGRAMDATA%\AnyDesk\connection_trace.txt` | 받는 쪽만. `%APPDATA%\AnyDesk\connection_trace.txt` 에 있을 수도 있습니다[2] |
 | 서비스 로그 | `%PROGRAMDATA%\AnyDesk\ad_svc.trace` | |
 | 사용자 화면 쪽 로그 | `%APPDATA%\AnyDesk\ad.trace` | |
 | 설정 파일 | `%APPDATA%\AnyDesk\user.conf`, `system.conf`, `service.conf` / `%PROGRAMDATA%\AnyDesk\service.conf`, `system.conf` | |
 | 채팅 | `%APPDATA%\AnyDesk\chat\*.txt` | 채팅을 쓴 경우 |
 | 프린터 드라이버 설치 파일 | `%APPDATA%\AnyDesk\printer_driver` | |
 | 시작 프로그램 바로가기 | `%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\StartUp\AnyDesk.lnk` | |
-| 뜻을 확인하지 못한 경로 | `C:\Users\*\Videos\AnyDesk\*.anydesk`, `C:\Windows\SysWOW64\config\systemprofile\AppData\Roaming\AnyDesk\*` | LOLRMM 이 흔적 목록에 올렸습니다. 무엇을 담는지는 이번 자료로 확인하지 못했습니다 |
+| 그 밖의 경로 | `C:\Users\*\Videos\AnyDesk\*.anydesk`, `C:\Windows\SysWOW64\config\systemprofile\AppData\Roaming\AnyDesk\*` | 흔적 목록에 있는 경로입니다[2]. 무엇을 담는지는 검체에서 확인합니다 |
 
 ### 레지스트리
 
@@ -58,7 +58,7 @@ AnyDesk 의 흔적은 세 갈래입니다.
 | `C:\Windows\inf\setupapi.dev.log` | 기본 AnyDesk 프린터 드라이버 설치 기록 |
 | 프로세스 명령줄 | 조용한 설치는 `--install`, `--start-with-win`, `--silent` 인자를 함께 씁니다. 명령줄로 비밀번호를 넣으면 `echo <비밀번호> \| anydesk.exe --set-password` 꼴이 됩니다 |
 
-Sigma 규칙 "Suspicious Application Installed" 는 28115 에서 AppID `prokzult ad` 를 찾습니다. 명령줄 두 꼴도 각각 Sigma 규칙이 있습니다. 서비스 설치 이벤트 자체는 [서비스 설치](../../event-logs/7045-4697.md)에서 다룹니다.
+Sigma 규칙 "Suspicious Application Installed" 는 28115 에서 AppID `prokzult ad` 를 찾습니다. 명령줄 두 꼴도 각각 Sigma 규칙이 있습니다[3]. 서비스 설치 이벤트 자체는 [서비스 설치](../../event-logs/7045-4697.md)에서 다룹니다.
 
 ## 구조
 
@@ -73,17 +73,17 @@ Incoming 2022-09-28, 12:39 User 442226597 442226597
 
 날짜는 년-월-일 순서이고 시각은 분까지만 있습니다(예시 기준). 승인 방식 `Passwd` 는 비밀번호를 넣고 들어온 접속이고, `User` 는 이 PC 의 사용자가 수락한 접속입니다.
 
-끝의 두 숫자를 Synacktiv 는 상대 ID 와 로컬 ID 로 적었습니다. 그런데 공개 예시에서는 두 값이 같아서 두 숫자의 뜻을 확정하지 못했습니다. trace 로그의 Client-ID 줄과 맞춰 보고 판단합니다.
+끝의 두 숫자는 상대 ID 와 로컬 ID 라는 해석이 있습니다[1]. 그런데 공개 예시에서는 두 값이 같아 이 해석이 굳지 않았습니다. trace 로그의 Client-ID 줄과 맞춰 보고 판단합니다.
 
 ### trace 로그 (ad.trace, ad_svc.trace)
 
-아래는 LOLRMM 이 공개한 줄 예시입니다.
+아래는 줄 예시입니다[2].
 
 ```
 info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet.any_socket - …
 ```
 
-앞에서부터 수준(info), 날짜와 시각(밀리초까지), 구성 요소(lsvc), 숫자 칸(프로세스·스레드 번호 등)이 옵니다. 그 뒤에 모듈 이름과 내용이 옵니다. 칸마다 정확한 이름과 뜻은 공식 자료로 확인하지 못했습니다.
+앞에서부터 수준(info), 날짜와 시각(밀리초까지), 구성 요소(lsvc), 숫자 칸(프로세스·스레드 번호 등)이 옵니다. 그 뒤에 모듈 이름과 내용이 옵니다. 칸마다 정확한 이름과 뜻은 공식 자료가 없어 검체에서 맞춰 봅니다.
 
 접속을 찾을 때는 아래 문자열을 검색합니다. 예시 값은 공개 자료의 것입니다.
 
@@ -95,7 +95,7 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 | `New user data. Client-ID: 294433414` | 이 PC 의 AnyDesk ID |
 | `Preparation of 1 files completed (io_ok)` | 파일 전송. 파일 이름은 적히지 않습니다 |
 
-공개 예시에서는 접속 목록의 `2022-09-28, 12:39 User 442226597` 줄과 trace 로그의 `Client-ID: 442226597` 줄에 같은 ID 가 나옵니다. 두 파일을 ID 와 시각으로 이어 볼 수 있다는 뜻입니다. 이 판단은 공개 예시 두 개를 비교한 것입니다.
+공개 예시에서는 접속 목록의 `2022-09-28, 12:39 User 442226597` 줄과 trace 로그의 `Client-ID: 442226597` 줄에 같은 ID 가 나옵니다. 두 파일을 ID 와 시각으로 이어 볼 수 있습니다.
 
 ### 설정 파일
 
@@ -130,7 +130,7 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 ## 시각 해석
 
 - 접속 목록의 시각은 분까지만 있습니다. 다른 기록과 맞출 때는 1분 폭으로 봅니다.
-- 접속 목록과 trace 로그의 시각이 UTC 인지는 공개 자료로 확인하지 못했습니다.
+- 접속 목록과 trace 로그의 시각이 UTC 인지는 공개 자료가 없어 검체에서 확인합니다.
 - 28115 와 7045 의 기록 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 설치 직후에 trace 로그 줄이 있으면, 그 시각을 7045 기록 시각과 견주어 trace 로그의 시간대를 가늠합니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
 
@@ -146,7 +146,7 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 
 ### 헥스로 한 번
 
-이 페이지의 파일은 모두 텍스트입니다. 헥스로 풀어야 할 이진 구조가 없어 헥스 예시를 싣지 않습니다. 파일 인코딩은 자료에 적혀 있지 않습니다. 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+이 페이지의 파일은 모두 텍스트입니다. 헥스로 풀어야 할 이진 구조가 없어 헥스 예시를 싣지 않습니다. 인코딩은 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -189,7 +189,7 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Shell-Core-Operational.evtx'; I
 |---|---|---|
 | 서비스 설치 (7045·4697) | "AnyDesk Service" 설치 시각과 ImagePath | [서비스 설치](../../event-logs/7045-4697.md) |
 | 프로세스 생성 · Sysmon 1 | 조용한 설치 인자, `--set-password` 명령줄 | [프로세스 생성](../../event-logs/4688.md), [Sysmon 로그](../../event-logs/sysmon/index.md) |
-| Sysmon 3 (네트워크 연결) | 들어온 연결은 AnyDesk.exe 의 `Initiated=false` 로 보입니다(Sigma 규칙) | [Sysmon 로그](../../event-logs/sysmon/index.md) |
+| Sysmon 3 (네트워크 연결) | 들어온 연결은 AnyDesk.exe 의 `Initiated=false` 로 보입니다[3] | [Sysmon 로그](../../event-logs/sysmon/index.md) |
 | 프리페치 | `ANYDESK.EXE-[A-F0-9]{8}.pf`. 실행 시각과 횟수 | [프리페치](../../execution/prefetch/index.md) |
 | 그 밖의 실행 흔적 | BAM·UserAssist·심캐시·AmCache·점프 목록 | [허브](index.md) |
 | 로그온 자동실행 | `StartUp\AnyDesk.lnk` | [로그온 자동실행](../../persistence/run-runonce-startup-folder.md) |

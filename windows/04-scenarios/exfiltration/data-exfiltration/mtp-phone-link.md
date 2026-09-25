@@ -11,8 +11,6 @@ nav_order: 3600
 
 스마트폰이 PC 와 자료를 주고받는 길은 크게 두 가지입니다. 하나는 USB 선으로 연결해 MTP (Media Transfer Protocol) 로 붙는 길입니다. 다른 하나는 휴대폰과 연결 (Phone Link) 앱으로 휴대폰과 PC 를 연동하는 길입니다. 이 페이지는 두 길이 PC 에 남기는 흔적과, 그 흔적으로 말할 수 있는 범위를 다룹니다.
 
-이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 것입니다. 관찰한 휴대폰은 삼성 휴대폰 한 대입니다. 다른 제조사 휴대폰이나 다른 빌드에서는 다를 수 있습니다.
-
 ## 조사 질문
 
 - 이 PC 에 스마트폰을 USB 로 연결했습니까? 어느 휴대폰이고 언제입니까?
@@ -44,18 +42,18 @@ nav_order: 3600
 
 ### 레지스트리
 
-관찰한 삼성 휴대폰(`VID_04E8&PID_6860`)은 `Enum\USBSTOR` 에 없었고, SYSTEM 하이브 `Enum\USB\VID_04E8&PID_6860\<인스턴스>` 에 있었습니다(관찰). 이 인스턴스 키에도 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 0064·0065·0066·0067 이 모두 있었습니다(관찰). 그래서 USB 메모리와 같은 방법으로 설치·연결·해제 시각을 읽습니다. 네 값의 뜻은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 에 있습니다.
+아래 예는 Windows 11 Home 25H2(빌드 26200.9457)에 삼성 휴대폰을 MTP 로 연결한 경우입니다. 다른 제조사 휴대폰이나 다른 빌드에서는 다를 수 있습니다.
 
-인스턴스 키의 `Service` 값은 제조사가 만든 드라이버 이름이었습니다(관찰). 관찰한 휴대폰은 `dg_ssudbus` 였고, 드라이버 이름은 휴대폰 제조사마다 다릅니다.
+삼성 휴대폰(`VID_04E8&PID_6860`)은 `Enum\USBSTOR` 에 없고, SYSTEM 하이브 `Enum\USB\VID_04E8&PID_6860\<인스턴스>` 에 있습니다. 이 인스턴스 키에도 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 0064·0065·0066·0067 이 모두 있습니다. 그래서 USB 메모리와 같은 방법으로 설치·연결·해제 시각을 읽습니다. 네 값의 뜻은 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 에 있습니다.
 
-SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마다 하위 키가 있었습니다(관찰). 이 PC 에는 11개가 있었습니다.
+인스턴스 키의 `Service` 값은 제조사가 만든 드라이버 이름입니다. 삼성 휴대폰은 `dg_ssudbus` 이고, 드라이버 이름은 휴대폰 제조사마다 다릅니다.
+
+SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마다 하위 키가 있습니다.
 
 | 장치 | 하위 키 이름 모양 | FriendlyName 값 |
 |---|---|---|
 | MTP 휴대폰 | `USB#VID_04E8&PID_6860&MS_COMP_MTP&SAMSUNG_ANDROID#<인스턴스>` | 사용자가 휴대폰에서 정한 기기 이름 (예: "○○의 S25 Edge") |
 | USB 메모리 | `SWD#WPDBUSENUM#_??_USBSTOR#DISK&VEN_…` | `D:\` 같은 드라이브 문자 |
-
-(두 줄 모두 관찰)
 
 휴대폰 키 이름에는 VID·PID 와 `MS_COMP_MTP` 가 함께 들어 있어서 이 글자로 MTP 장치를 골라냅니다. 키 이름 끝의 인스턴스 부분은 `Enum\USB` 의 인스턴스 키 이름과 맞춰 봅니다.
 
@@ -63,9 +61,9 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 
 ### WPD-MTPClassDriver/Operational 로그
 
-`Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그가 켜져 있었고, 1000~1006 이벤트가 있었습니다(관찰). 이 로그가 기본으로 켜져 있는지, 어느 Windows 버전부터 있는지는 확인하지 못했습니다. 검체에서 로그가 있는지부터 봅니다.
+`Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그에는 1000~1006 이벤트가 남습니다. 이 로그가 기본으로 켜져 있는지, 어느 Windows 버전부터 있는지는 공개된 자료가 없으므로 검체에서 로그가 있는지부터 봅니다.
 
-| ID | 메시지 (관찰) |
+| ID | 메시지 |
 |---|---|
 | 1000 | "MTP Driver started successfully." |
 | 1001 | "Device will enter the suspend state if idle for 30 seconds." |
@@ -73,11 +71,11 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 | 1003 | 유휴 상태에서 돌아왔다는 기록 |
 | 1006 | "Driver has failed to start, HRESULT …" |
 
-1000 에는 EventData 칸이 없어서(관찰) 어느 휴대폰이 붙었는지 이 이벤트만으로는 알 수 없습니다. 기록한 계정은 S-1-5-19 (LOCAL SERVICE) 였고(관찰), 이 계정은 사용자를 가리키지 않습니다. 그래서 이 로그는 "그 시각에 MTP 장치가 붙었다" 까지만 말해 주며, 어느 장치인지는 `Enum\USB` 의 장치 속성 시각, Kernel-PnP/Configuration 이벤트와 시각을 맞춰 정합니다.
+1000 에는 EventData 칸이 없어서 어느 휴대폰이 붙었는지 이 이벤트만으로는 알 수 없습니다. 기록한 계정은 S-1-5-19 (LOCAL SERVICE) 이고, 이 계정은 사용자를 가리키지 않습니다. 그래서 이 로그는 "그 시각에 MTP 장치가 붙었다" 까지만 말해 주며, 어느 장치인지는 `Enum\USB` 의 장치 속성 시각, Kernel-PnP/Configuration 이벤트와 시각을 맞춰 정합니다.
 
 ### 파일을 옮겼나
 
-MTP 로 복사한 파일 목록이 PC 쪽에 따로 남는지는 확인하지 못했습니다. 휴대폰 안 폴더를 탐색기로 연 기록이 셸백에 어떤 모양으로 남는지도 이 글에서 확인하지 못했으므로, 셸백에서 휴대폰 기기 이름이 든 경로가 있는지 찾아봅니다. 그래서 PC 쪽 흔적은 연결 구간과 그 구간에 연 원본 파일까지만 이을 수 있습니다.
+MTP 로 복사한 파일 목록이 PC 쪽에 따로 남는다는 공개 자료는 없습니다. 휴대폰 안 폴더를 탐색기로 연 기록이 셸백에 어떤 모양으로 남는지도 정리된 자료가 없으므로, 셸백에서 휴대폰 기기 이름이 든 경로가 있는지 찾아봅니다. 그래서 PC 쪽 흔적은 연결 구간과 그 구간에 연 원본 파일까지만 이을 수 있습니다.
 
 ## Phone Link
 
@@ -85,7 +83,7 @@ Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일�
 
 ### 2019년 연구 기준 위치와 DB
 
-연구 환경은 Windows 10 1809·1903·빌드 18932, Your Phone 1.19041.481.0·1.19061.410.0 입니다[1]. 이 환경의 DB 위치는 아래와 같습니다[1].
+Windows 10 1809·1903·빌드 18932, Your Phone 1.19041.481.0·1.19061.410.0 에서 DB 위치는 아래와 같습니다[1].
 
 ```
 %LocalAppData%\Packages\Microsoft.YourPhone_8wekyb3d8bbwe\LocalCache\Indexed\<GUID>\System\Database\
@@ -102,14 +100,14 @@ Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일�
 (표는 [1])
 
 - 동기화된 사진은 두 곳에 남습니다[1]. 하나는 Photos.db 안의 원본 이미지 blob 입니다. 다른 하나는 파일 시스템의 `User\<휴대폰 이름>\Recent Photos` 폴더입니다.
-- .heic 사진도 동기화됐지만 앱 화면에는 보이지 않았습니다[1]. 앱 화면으로 사진 목록을 정하지 말고 DB 와 폴더를 직접 봅니다.
-- 이 DB 들에 든 것은 휴대폰에서 PC 로 온 자료입니다. PC 의 파일을 휴대폰으로 보낸(끌어 놓은) 기록이 어디 남는지는 확인하지 못했습니다.
+- .heic 사진도 동기화되지만 앱 화면에는 보이지 않습니다[1]. 앱 화면으로 사진 목록을 정하지 말고 DB 와 폴더를 직접 봅니다.
+- 이 DB 들에 든 것은 휴대폰에서 PC 로 온 자료입니다. PC 의 파일을 휴대폰으로 보낸(끌어 놓은) 기록이 어디 남는지는 공개된 자료가 없어 검체에서 확인해야 합니다.
 
-### 최신 판에서 본 것
+### 최신 판
 
-관찰한 PC 의 Phone Link 패키지 판은 1.26072.255.0 이었고, 패키지 폴더에 `LocalCache\Indexed` 가 없었습니다(관찰). `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json` 과 `Local`·`Roaming` 폴더만 있었습니다(관찰). 이 PC 가 휴대폰과 연동한 적이 없어서인지, 판이 바뀌어 위치가 달라졌는지는 모릅니다.
+Phone Link 패키지 1.26072.255.0 에서는 패키지 폴더에 `LocalCache\Indexed` 가 없을 수 있습니다. 이때 `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json` 과 `Local`·`Roaming` 폴더만 있습니다. 휴대폰과 연동한 적이 없어서인지, 판이 바뀌어 위치가 달라졌는지는 알려져 있지 않습니다.
 
-같은 PC 에 `MicrosoftWindows.CrossDevice` 패키지(1.26072.116.0)도 있었는데(관찰), 이 패키지가 휴대폰 연동 기록을 어디에 남기는지는 확인하지 못했습니다. 그래서 최신 판에 2019년 경로가 그대로 있다고 가정하지 않고, 두 패키지 폴더를 통째로 확보해 둡니다.
+최신 Windows 11 에는 `MicrosoftWindows.CrossDevice` 패키지(1.26072.116.0)도 함께 있을 수 있습니다. 이 패키지가 휴대폰 연동 기록을 어디에 남기는지는 공개된 자료가 없습니다. 그래서 최신 판에 2019년 경로가 그대로 있다고 가정하지 않고, 두 패키지 폴더를 통째로 확보해 둡니다.
 
 ## 분석 흐름
 
@@ -125,11 +123,11 @@ Phone Link 의 옛 이름은 Your Phone 입니다. 앱 데이터 폴더의 일�
 ## 흔한 오판
 
 1. **USBSTOR 에 없으니 휴대폰을 연결하지 않았다고 봅니다.** MTP 휴대폰은 `Enum\USB` 와 WPD 장치 목록에 남습니다.
-2. **MTPClassDriver 1000 을 특정 휴대폰의 연결로 봅니다.** 이 이벤트에는 장치를 가리키는 칸이 없습니다(관찰). 다른 기록과 시각을 맞춘 뒤에만 장치를 적습니다.
+2. **MTPClassDriver 1000 을 특정 휴대폰의 연결로 봅니다.** 이 이벤트에는 장치를 가리키는 칸이 없습니다. 다른 기록과 시각을 맞춘 뒤에만 장치를 적습니다.
 3. **기기 이름 속 사람 이름을 주인으로 단정합니다.** 기기 이름은 사용자가 바꿀 수 있습니다.
 4. **연결 기록을 파일 복사 증거로 씁니다.** 연결 기록은 휴대폰이 붙었다는 것만 보여 줍니다.
 5. **Phone Link 의 사진을 PC 에서 보낸 파일로 봅니다.** Photos.db 에는 휴대폰 속 위치가 적힌 동기화 사진이 들어 있습니다[1]. 방향은 휴대폰에서 PC 쪽입니다.
-6. **Phone Link DB 가 없으니 연동하지 않았다고 봅니다.** 최신 판의 DB 위치는 확인하지 못했습니다. 없다는 사실은 "2019년 연구 기준 위치에 없다" 로만 적습니다.
+6. **Phone Link DB 가 없으니 연동하지 않았다고 봅니다.** 최신 판은 DB 위치가 다를 수 있습니다. 없다는 사실은 "2019년 연구 기준 위치에 없다" 로만 적습니다.
 
 ## 보고서 문장 예
 

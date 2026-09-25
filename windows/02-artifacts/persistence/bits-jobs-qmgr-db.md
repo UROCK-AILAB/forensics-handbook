@@ -14,11 +14,11 @@ BITS (Background Intelligent Transfer Service) 작업은 파일을 받거나 올
 
 BITS 작업은 파일을 받거나 올리는 예약 전송이고, 전송은 서비스 호스트 프로세스가 합니다. 작업에는 알림 명령 (notify command) 을 걸 수 있으며 SetNotifyCmdLine 으로 설정합니다. 전송이 끝나거나 오류가 나면 BITS 가 그 명령을 실행하는데, 공격자가 이 알림 명령으로 지속성을 만든 사례가 있습니다. 명령은 레지스트리가 아니라 BITS 데이터베이스에 들어가기 때문에 레지스트리만 보는 자동실행 점검에서는 빠집니다.
 
-- 정상 업데이트도 BITS 작업을 계속 만듭니다. Windows 11 PC 한 대에서는 모든 사용자를 합쳐 작업이 3개 있었습니다(Suspended 1, Transferred 2).
+- 정상 업데이트도 BITS 작업을 계속 만듭니다. 그래서 Windows 11 PC 에도 작업이 몇 개 있습니다(예: 모든 사용자를 합쳐 3개, Suspended 1·Transferred 2).
 
 ### 사례에 남은 모습
 
-Mandiant 는 Ryuk 관련 KEGTAP 사례를 이렇게 적습니다.
+Ryuk 관련 KEGTAP 사례의 작업은 아래와 같습니다[1].
 
 | 항목 | 값 |
 |---|---|
@@ -27,7 +27,7 @@ Mandiant 는 Ryuk 관련 KEGTAP 사례를 이렇게 적습니다.
 | 받은 크기 | 0 |
 
 - 이 작업은 없는 파일을 받게 되어 있어서 오류 상태가 되었고, 그 오류 때 알림 명령이 백도어를 띄웠습니다.
-- 그래서 원본 URL 이 자기 PC 주소를 가리키고 받은 크기가 0 인 작업에 알림 명령이 걸려 있으면 먼저 봅니다. 이 문장은 사례에서 끌어낸 해석입니다.
+- 이 사례에 비추어, 원본 URL 이 자기 PC 주소를 가리키고 받은 크기가 0 인 작업에 알림 명령이 걸려 있으면 먼저 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -38,7 +38,7 @@ Mandiant 는 Ryuk 관련 KEGTAP 사례를 이렇게 적습니다.
 | Windows 10 이전 | `qmgr0.dat`, `qmgr1.dat` | 자체 바이너리 형식. 백업·동기화용 두 파일 |
 | Windows 10 이후 | `qmgr.db` | ESE 데이터베이스. 트랜잭션 로그 `edb.log`(최신)와 번호 붙은 이전 로그 세 개가 같이 있습니다 |
 
-Windows 11 PC 한 대의 폴더 내용은 이랬습니다.
+Windows 11 의 폴더 내용 예시입니다.
 
 | 파일 | 크기(바이트) |
 |---|---|
@@ -48,8 +48,8 @@ Windows 11 PC 한 대의 폴더 내용은 이랬습니다.
 | edb.log, 번호 붙은 로그 셋(edb0001F.log·edb00020.log·edb00021.log), edbtmp.log | 각 1,310,720 |
 | edbres00001.jrs, edbres00002.jrs | 각 1,310,720 |
 
-- 같은 PC 의 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\BITS` 에는 `JobInactivityTimeout`=7,776,000 과 `JobNoProgressTimeout`=1,209,600 값이 있었습니다. 초로 읽으면 90일과 14일입니다. 두 값의 뜻은 확인하지 못했습니다.
-- 완료된 작업이 DB 에 얼마나 남는지는 확인하지 못했습니다.
+- Windows 11 의 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\BITS` 에는 `JobInactivityTimeout`=7,776,000 과 `JobNoProgressTimeout`=1,209,600 같은 값이 있습니다. 초로 읽으면 90일과 14일입니다.
+- 완료된 작업이 DB 에 얼마나 남는지는 검체에서 확인합니다.
 - 이벤트 로그 채널은 `Microsoft-Windows-Bits-Client/Operational` 입니다. 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Bits-Client%4Operational.evtx` 입니다.
 
 ## 구조
@@ -91,7 +91,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 | 6 | 드라이브 | UTF-16 |
 | 7 | 볼륨 GUID | UTF-16 |
 
-- Mandiant 의 필드 목록에는 시각 필드가 없습니다. 작업을 만든 시각·바꾼 시각·완료 시각이 Blob 어디에 있는지는 확인하지 못했습니다.
+- 위 필드 목록에는 시각 필드가 없습니다[1]. 작업을 만든 시각·바꾼 시각·완료 시각이 Blob 어디에 있는지는 공개 자료에 없습니다.
 - UTF-16 가변 필드의 길이를 어떻게 적는지는 이 목록에 없습니다. 필드를 손으로 끝까지 따라가려면 파서의 코드를 함께 봅니다.
 
 ### 지운 작업을 찾는 GUID
@@ -108,7 +108,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 | 작업 식별 | `{8F5657D0-012C-4E3E-AD2C-F4A5D7656FAF}` |
 | 작업 식별 | `{94416750-0357-461D-A4CC-5DD9990706E4}` |
 
-- GUID 를 바이트로 적는 규칙은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. `qmgr.db` 안에서 이 GUID 가 어떤 바이트 순서로 들어 있는지는 이번 자료로 확인하지 못했습니다.
+- GUID 를 바이트로 적는 규칙은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. `qmgr.db` 안에서 이 GUID 가 어떤 바이트 순서로 들어 있는지는 검체에서 확인합니다.
 - ESE 파일 안에 지운 행이 어떻게 남는지는 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에서 다룹니다.
 
 ## 증거로서 의미
@@ -118,12 +118,12 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 - DB 에 작업이 있으면, 그 작업의 이름·알림 명령·인자·소유자 SID 가 수집 시점에 저장되어 있었습니다.
 - Files 표로 어느 URL 에서 어느 경로로 받도록 했는지, 얼마나 받았는지 알 수 있습니다.
 - 지운 작업도 식별 GUID 나 트랜잭션 로그로 되살릴 수 있습니다.
-- 이벤트 3 의 processPath 로 어느 프로그램이 작업을 만들었는지 볼 수 있습니다. 이 문장은 이벤트의 칸 구성에서 끌어낸 해석이며, 실제 악성 사례로는 확인하지 못했습니다.
+- 이벤트 3 의 processPath 로 어느 프로그램이 작업을 만들었는지 볼 수 있습니다.
 
 ### 증명하지 못하는 것
 
 - **알림 명령이 실행됐나.** DB 에 명령이 있다는 것은 설정만 알려 줍니다. 이벤트 64 는 실행에 **실패했을 때** 남습니다. 실행은 [프로세스 생성](../event-logs/4688.md) 이나 [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 로 따로 봅니다.
-- **언제 만들었나.** Blob 의 시각 필드를 확인하지 못했습니다. 아래 "시각 해석" 을 봅니다.
+- **언제 만들었나.** Blob 의 시각 필드 위치는 공개 자료에 없습니다. 아래 "시각 해석" 을 봅니다.
 - **받은 파일이 지금도 있나.** 목적지 경로의 파일을 따로 확인합니다.
 
 보고서에는 "`qmgr.db` 에 이 이름의 작업이 있고, 알림 명령으로 이 경로가 설정되어 있다" 처럼 씁니다.
@@ -132,7 +132,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 
 - 켜진 PC 의 API(`Get-BitsTransfer`)는 CreationTime·ModificationTime·TransferCompletionTime 속성을 보여 줍니다. 같은 API 는 NotifyCmdLine·OwnerAccount·FileList·JobState 도 보여 줍니다.
 - 오프라인 DB 에서는 시각을 이벤트 로그와 파일 시스템 시각으로 보탭니다.
-- `Microsoft-Windows-Bits-Client/Operational` 의 주요 이벤트는 아래와 같습니다. 메시지와 칸은 Windows 11 PC 한 대의 공급자 메시지에서 읽었습니다.
+- `Microsoft-Windows-Bits-Client/Operational` 의 주요 이벤트는 아래와 같습니다. 메시지와 칸은 Windows 11 의 공급자 메시지 기준입니다.
 
 | 이벤트 | 뜻 | 칸 |
 |---|---|---|
@@ -144,18 +144,18 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 | 61 | 60 과 메시지 문구가 같습니다 | |
 | 64 | 전송 뒤 실행하도록 설정된 프로그램을 띄우지 못했습니다. BITS 는 성공할 때까지 주기적으로 다시 시도합니다 | |
 
-- 이벤트 3 은 버전마다 칸이 다릅니다. 버전 0 에는 작업 이름과 소유자만 있고, 버전 2 부터 Process Path·Process ID 가 있습니다. Windows 11 PC 한 대의 템플릿은 버전 3 이었습니다.
-- Mandiant 는 이벤트 3(작업 생성), 61(전송 중지 경고), 64(알림 명령 경고) 를 짚습니다. 64 에는 작업 이름·대상 실행 파일·URL 이 보입니다.
+- 이벤트 3 은 버전마다 칸이 다릅니다. 버전 0 에는 작업 이름과 소유자만 있고, 버전 2 부터 Process Path·Process ID 가 있습니다. Windows 11 에서는 템플릿이 버전 3 입니다.
+- 먼저 볼 이벤트는 3(작업 생성), 61(전송 중지 경고), 64(알림 명령 경고) 입니다[1]. 64 에는 작업 이름·대상 실행 파일·URL 이 보입니다.
 - 이벤트 로그 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-- **로그가 금방 밀려납니다.** Windows 11 PC 한 대에서 이 로그는 최대 약 1MB, 순환 방식이었습니다. 1,451건이 약 17일 치(2026-09-06~09-23 UTC)였습니다.
-- 같은 PC 에서 많은 이벤트는 59(236건), 3(226), 60(226), 16403(226), 4(225), 306(191), 310(103), 61(10) 순이었습니다. 정상 업데이트 작업이 3·59·60·4 를 계속 남기므로 오래된 악성 작업의 기록은 쉽게 밀려납니다.
-- **켜진 PC 에서는 파일이 잠겨 있습니다.** Windows 11 PC 한 대에서 BITS 서비스가 `qmgr.db` 를 잠가 다시 읽지 못했습니다. `esentutl /mh` 도 JET_errFileAccessDenied(-1032) 로 실패했습니다.
+- **로그가 금방 밀려납니다.** Windows 11 에서 이 로그는 최대 약 1MB 이고 순환 방식입니다. 한 예로 1,451건이 약 17일 치(2026-09-06~09-23 UTC)였습니다.
+- 이 17일 치에서 많은 이벤트는 59(236건), 3(226), 60(226), 16403(226), 4(225), 306(191), 310(103), 61(10) 순이었습니다. 정상 업데이트 작업이 3·59·60·4 를 계속 남기므로 오래된 악성 작업의 기록은 쉽게 밀려납니다.
+- **켜진 PC 에서는 파일이 잠겨 있습니다.** BITS 서비스가 `qmgr.db` 를 잠가 두어 바로 읽을 수 없습니다. `esentutl /mh` 도 JET_errFileAccessDenied(-1032) 로 실패합니다.
 - BitsParser 단독판도 잠긴 파일은 읽지 못합니다. 서비스를 멈추거나 잠긴 파일을 복사하는 도구를 따로 씁니다. 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 - **압수 이미지의 `qmgr.db` 는 비정상 종료 상태일 수 있습니다.** 손상된 ESE DB 는 읽는 방식마다 행 수가 다를 수 있습니다. 로그를 함께 수집하고 [트랜잭션 로그와 비정상 종료 상태](../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 를 봅니다.
-- **이벤트 64 는 실패의 기록입니다.** 알림 명령이 성공적으로 실행되었을 때 어떤 이벤트가 남는지는 확인하지 못했습니다.
+- **이벤트 64 는 실패의 기록입니다.** 알림 명령이 성공했을 때 남는 BITS 이벤트는 공개 자료에 없으므로, 실행은 프로세스 생성 기록으로 봅니다.
 - **이벤트 61 과 60 은 메시지 문구가 같습니다.** 이벤트 ID 로 구별합니다.
 - **Windows 10 이전 검체는 형식이 다릅니다.** `qmgr0.dat`·`qmgr1.dat` 를 찾습니다.
 
@@ -172,7 +172,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 ```
 
 1. 오프셋 4 의 `EF CD AB 89` 를 리틀 엔디언으로 읽으면 0x89ABCDEF 입니다. ESE 파일의 서명입니다.
-2. Windows 11 PC 한 대의 `qmgr.db` 에서도 오프셋 4 에 이 4바이트가 있었고, 오프셋 8 의 값은 0x620 이었습니다. `20 06 00 00` 은 그 값을 리틀 엔디언으로 적은 모양입니다.
+2. 실제 Windows 11 의 `qmgr.db` 에서도 오프셋 4 에 이 4바이트가 있고, 오프셋 8 의 값은 예를 들어 0x620 입니다. `20 06 00 00` 은 그 값을 리틀 엔디언으로 적은 모양입니다.
 3. 오프셋 0 의 4바이트와 오프셋 8 값의 뜻은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 **Files Blob 에서 URL 을 찾을 때의 바이트 (`http://`).**
@@ -188,7 +188,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 ### 공개 도구로 한 번
 
 1. 이미지에서 `Downloader` 폴더의 파일을 모두 사본으로 뜹니다. `qmgr.db` 와 함께 로그·체크포인트 파일도 뜹니다.
-2. 공개 도구 BitsParser(https://github.com/fireeye/BitsParser) 로 사본을 읽습니다. Mandiant 는 이 도구가 모든 버전의 BITS DB 를 읽고, 지운 작업과 파일 정보도 복구한다고 설명합니다. 수정한 Impacket ESE 파서를 쓰는 Python 도구입니다.
+2. 공개 도구 BitsParser(https://github.com/fireeye/BitsParser) 로 사본을 읽습니다. 이 도구는 모든 버전의 BITS DB 를 읽고, 지운 작업과 파일 정보도 복구합니다[1]. 수정한 Impacket ESE 파서를 쓰는 Python 도구입니다.
 3. 작업마다 이름, 알림 명령(Command·Arguments), 소유자 SID, 파일 목록의 URL 과 목적지를 한 줄로 적습니다.
 4. 알림 명령이 있는 작업을 먼저 봅니다. URL 이 자기 PC 주소이거나 받은 크기가 0 인 작업도 따로 표시합니다.
 5. 켜진 PC 에서는 관리자 권한 PowerShell 의 `Get-BitsTransfer -AllUsers` 로 모든 사용자의 작업을 읽을 수 있습니다.

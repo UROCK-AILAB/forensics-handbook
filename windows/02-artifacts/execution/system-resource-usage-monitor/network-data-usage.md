@@ -17,7 +17,7 @@ SRUDB.dat 의 네트워크 사용량 표는 앱·계정·네트워크 인터페�
 
 SRUM 은 확장 (Extension) 마다 DLL 을 불러 값을 모읍니다. 이 표는 `nduprov.dll` 확장이 채웁니다. 확장과 표의 짝은 [구조와 ID 매핑](srudbidmaptable.md)에 정리돼 있습니다.
 
-WithSecure 조사팀은 2023년 SANS DFIR Summit Europe 에서 이 확장을 분석해 발표했습니다. 이 페이지와 관련 있는 내용은 `Ndu.sys` 드라이버가 Windows 필터링 플랫폼 (Windows Filtering Platform, WFP) 위에서 프로세스마다 오간 양을 세고, 조사팀이 시험한 범위에서는 세지 않고 빠지는 프로세스가 없었다는 점입니다. 바이트 수에는 2계층 (데이터 링크 계층) 프레임 크기가 들어가며, VPN 을 거친 통신은 VPN 프로세스나 서비스의 몫으로 잡혔습니다.
+`Ndu.sys` 드라이버가 Windows 필터링 플랫폼 (Windows Filtering Platform, WFP) 위에서 프로세스마다 오간 양을 셉니다. 공개된 시험 범위에서는 세지 않고 빠지는 프로세스가 없었습니다[4]. 바이트 수에는 2계층 (데이터 링크 계층) 프레임 크기가 들어가며, VPN 을 거친 통신은 VPN 프로세스나 서비스의 몫으로 잡힙니다[4].
 
 SRUM 은 모은 값을 메모리에 쌓아 두었다가 기본 1시간마다 SRUDB.dat 로 옮깁니다. 이 흐름과 거기서 생기는 함정은 [SRUM 해석 함정](1.md)에서 다룹니다. 이 페이지는 네트워크 사용량 표에만 해당하는 내용을 다룹니다.
 
@@ -28,20 +28,20 @@ SRUM 은 모은 값을 메모리에 쌓아 두었다가 기본 1시간마다 SRU
 | 파일 | `%SystemRoot%\System32\sru\SRUDB.dat` |
 | 표 이름 | `{973F5D5C-1D90-4944-BE8E-24B94231A174}` |
 | 확장 등록 키 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SRUM\Extensions\{973F5D5C-1D90-4944-BE8E-24B94231A174}` |
-| 확장 DLL | 등록 키의 `DllName` 값. `C:\WINDOWS\System32\nduprov.dll` 이었습니다 |
+| 확장 DLL | 등록 키의 `DllName` 값. 보통 `C:\WINDOWS\System32\nduprov.dll` 입니다 |
 
 | Windows | 이 표 | 근거 |
 |---|---|---|
-| 8 · 8.1 | SRUM DB 가 있습니다. 이 표의 열 구성은 이 글에서 확인하지 못했습니다 | WithSecure |
+| 8 · 8.1 | SRUM DB 가 있습니다. 이 표의 열 구성은 공개 자료가 없어 검체에서 확인합니다 | WithSecure |
 | 10 · 11 | 있습니다. 두 버전의 열 9개가 같았습니다 | libyal 명세, 공개 표본 |
 | Server 2019 · 2022 | 없습니다. SRUM DB 가 있는 빌드에서도 이 표는 없었습니다 | WithSecure 시험 |
 
 - 이 글의 "공개 표본" 은 Andrew Rathbun 의 GIAC 골드 페이퍼 연구 저장소에 올라 있는 SRUDB.dat 두 개입니다. 2022년에 만든 Windows 10·11 가상 머신에서 나왔습니다.
-- 보관 기간은 기본 60일입니다 (WithSecure). 확장 키에 `Tier2MaxEntries` 값을 따로 두면 기간이 달라집니다. 위 Windows 11 PC 의 이 확장 키에는 이 값이 없었습니다 (관찰). 계산식은 [앱별 자원 사용](application-resource-usage.md)에 있습니다.
+- 보관 기간은 기본 60일입니다[4]. 확장 키에 `Tier2MaxEntries` 값을 따로 두면 기간이 달라집니다. 이 값은 없을 수도 있습니다. 계산식은 [앱별 자원 사용](application-resource-usage.md)에 있습니다.
 
 ## 구조
 
-ESE 표 하나입니다. 레코드를 찾아가는 법은 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 열은 libyal 명세와 공개 표본의 카탈로그가 같았습니다. 모두 고정 길이 열입니다.
+ESE 표 하나입니다. 레코드를 찾아가는 법은 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 열 구성은 아래와 같고, 공개 표본의 카탈로그도 같습니다[1]. 모두 고정 길이 열입니다.
 
 | 열 ID | 이름 | 형식 (카탈로그 번호) | 크기 | 뜻 |
 |---|---|---|---|---|
@@ -59,12 +59,12 @@ AppId·UserId 를 푸는 법은 [구조와 ID 매핑](srudbidmaptable.md)을 봅
 
 ### 인터페이스 풀기 (InterfaceLuid)
 
-InterfaceLuid 는 Windows 의 NET_LUID 값입니다. 위 16비트가 인터페이스 유형 (IfType) 입니다. 비트 배치와 흔한 유형 번호는 [네트워크 연결 기록](network-connectivity.md)에 표로 있습니다. 그 표에 없는 모바일 광대역은 243 (GSM 계열) 과 244 (CDMA 계열) 입니다 (Microsoft Learn).
+InterfaceLuid 는 Windows 의 NET_LUID 값입니다. 위 16비트가 인터페이스 유형 (IfType) 입니다. 비트 배치와 흔한 유형 번호는 [네트워크 연결 기록](network-connectivity.md)에 표로 있습니다. 그 표에 없는 모바일 광대역은 243 (GSM 계열) 과 244 (CDMA 계열) 입니다[3].
 
 유형만으로는 어느 어댑터인지 모릅니다. 가운데 24비트인 NetLuidIndex 로 어댑터를 좁힐 수 있습니다.
 
-- SYSTEM 하이브의 `ControlSet00X\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\NNNN` 키에 `NetLuidIndex` 값과 `*IfType` 값이 있었습니다.
-- 같은 NetLuidIndex 가 유형이 다른 어댑터에도 쓰였습니다. 그래서 NetLuidIndex 와 IfType 을 함께 맞춥니다.
+- SYSTEM 하이브의 `ControlSet00X\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\NNNN` 키에 `NetLuidIndex` 값과 `*IfType` 값이 있습니다.
+- 같은 NetLuidIndex 가 유형이 다른 어댑터에도 쓰일 수 있습니다. 그래서 NetLuidIndex 와 IfType 을 함께 맞춥니다.
 - 같은 키의 `NetCfgInstanceId` 가 인터페이스 GUID 입니다. 이 GUID 로 [네트워크 인터페이스 설정](../../network/tcp-ip-interfaces.md)의 IP 설정과 이어 봅니다.
 - ControlSet 번호는 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)로 정합니다.
 
@@ -72,14 +72,14 @@ InterfaceLuid 는 Windows 의 NET_LUID 값입니다. 위 16비트가 인터페�
 
 ### Wi-Fi 프로필 풀기 (L2ProfileId)
 
-무선 행의 L2ProfileId 는 SOFTWARE 하이브 `Microsoft\WlanSvc\Interfaces\{인터페이스 GUID}\Profiles\{프로필 GUID}` 키의 `ProfileIndex` 와 맞춥니다. 공개 도구 srum-dump 가 이 방법을 씁니다. 순서와 이름 읽는 법은 [네트워크 연결 기록](network-connectivity.md)에 있습니다.
+무선 행의 L2ProfileId 는 SOFTWARE 하이브 `Microsoft\WlanSvc\Interfaces\{인터페이스 GUID}\Profiles\{프로필 GUID}` 키의 `ProfileIndex` 와 맞춥니다. 공개 도구 srum-dump 가 이 방법을 씁니다[5]. 순서와 이름 읽는 법은 [네트워크 연결 기록](network-connectivity.md)에 있습니다.
 
-- 프로필 GUID 는 `C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\` 아래 Wi-Fi 프로필 XML 의 파일 이름과 같았습니다. SSID 와 보안 설정은 [Wi-Fi 프로필](../../network/wlan-profiles.md)에서 읽습니다.
+- 프로필 GUID 는 `C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\` 아래 Wi-Fi 프로필 XML 의 파일 이름과 같습니다. SSID 와 보안 설정은 [Wi-Fi 프로필](../../network/wlan-profiles.md)에서 읽습니다.
 - 공개 표본의 이더넷 행은 L2ProfileId 와 L2ProfileFlags 가 모두 0 이었습니다. 유선 행은 이 방법으로 네트워크 이름을 풀 수 없습니다. 유선 네트워크는 [네트워크 목록](../../network/networklist.md)과 시각을 맞춰 좁힙니다.
 
 ### 한 번 기록할 때 생기는 행
 
-공개 표본에서 본 모양입니다. 두 파일 모두 이 표에 기록이 한 번씩만 있었습니다. 그래서 여러 번 기록한 DB 에서도 같은지는 검체에서 확인합니다.
+아래는 이 표에 기록이 한 번씩만 있는 공개 표본 두 개의 모양입니다. 여러 번 기록한 DB 에서도 같은지는 검체에서 확인합니다.
 
 - 한 번에 들어간 행(22행, 23행)은 TimeStamp 가 모두 같았습니다. 같은 파일의 앱별 자원 사용 표와 네트워크 연결 표의 TimeStamp 도 같은 값이었습니다.
 - 같은 AppId 가 UserId 만 다른 여러 행으로 나왔습니다. 앱 하나가 그 구간에 주고받은 양은 같은 TimeStamp 의 행을 앱별로 더해서 구합니다.
@@ -98,7 +98,7 @@ InterfaceLuid 는 Windows 의 NET_LUID 값입니다. 위 16비트가 인터페�
 | 평소보다 송신이 많은 시간대가 있었는지 | 인터넷으로 나갔는지, 같은 망 안의 장치로 갔는지 |
 | | 보낸 파일의 정확한 크기 |
 
-WithSecure 조사팀은 77,989,497바이트 파일을 보내 보았습니다. SRUM 에는 79,414,089바이트가 남았습니다. 파일보다 약 1.8% 컸습니다. 이 비율은 한 번 시험한 결과입니다. 다른 사건에 그대로 옮겨 쓰지 않습니다. "보낸 양이 파일 크기와 비슷하거나 조금 크다" 까지만 씁니다.
+WithSecure 시험에서 77,989,497바이트 파일을 보내자 SRUM 에는 79,414,089바이트가 남았습니다[4]. 파일보다 약 1.8% 컸습니다. 이 비율은 한 번 시험한 결과입니다. 다른 사건에 그대로 옮겨 쓰지 않습니다. "보낸 양이 파일 크기와 비슷하거나 조금 크다" 까지만 씁니다.
 
 ### 보고서 문장
 
@@ -127,9 +127,9 @@ WithSecure 조사팀은 77,989,497바이트 파일을 보내 보았습니다. SR
 2. **보낸 양과 받은 양을 합쳐서 봅니다.** 반출을 볼 때는 BytesSent 를 따로 봅니다. 공개 도구 가운데에는 두 값을 더한 열을 따로 만들어 주는 것도 있습니다.
 3. **큰 송신량을 곧바로 반출로 봅니다.** 공개 표본에서도 `BITS`·`DoSvc`·`wuauserv` 같은 업데이트 관련 서비스가 행을 남겼습니다. 먼저 어떤 앱·서비스의 몫인지 가립니다.
 4. **브라우저·동기화 앱의 행에서 사이트를 찾습니다.** 한 앱이 여러 사이트와 주고받은 양이 한 행에 합쳐집니다. 어느 사이트였는지는 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md)에서 찾습니다.
-5. **VPN 을 켠 PC 에서 앱별 송신량을 그대로 믿습니다.** VPN 을 거친 양은 VPN 프로세스나 서비스 몫으로 잡힙니다 (WithSecure). 조사팀도 이 부분은 더 연구할 거리로 남겼습니다. [VPN 연결 기록](../../network/vpn-connections.md)과 함께 봅니다.
+5. **VPN 을 켠 PC 에서 앱별 송신량을 그대로 믿습니다.** VPN 을 거친 양은 VPN 프로세스나 서비스 몫으로 잡힙니다[4]. 이 동작은 아직 자세히 연구되지 않았습니다. [VPN 연결 기록](../../network/vpn-connections.md)과 함께 봅니다.
 6. **L2ProfileId 이름이 비었다고 연결이 없었다고 봅니다.** 프로필을 지웠거나, SOFTWARE 하이브와 SRUDB.dat 의 시점이 다를 수 있습니다. 옛 하이브는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
-7. **DB 를 한 가지 방식으로만 엽니다.** 압수 이미지의 SRUDB.dat 는 대부분 비정상 종료 상태였고, 손상된 DB 는 읽는 방식에 따라 행 수가 달랐습니다 (현장 관찰). 읽는 순서는 [SRUM 해석 함정](1.md)을 따릅니다.
+7. **DB 를 한 가지 방식으로만 엽니다.** 압수 이미지의 SRUDB.dat 는 대부분 비정상 종료 상태이고, 손상된 DB 는 읽는 방식에 따라 행 수가 달라집니다. 읽는 순서는 [SRUM 해석 함정](1.md)을 따릅니다.
 8. **수집 직전 구간을 놓칩니다.** 마지막 TimeStamp 뒤의 사용량은 아직 DB 에 없을 수 있습니다. 켜져 있는 PC 라면 [네트워크 상태 수집](../../../03-techniques/process-acquisition/live-response/connections-dns-arp-routes.md)으로 지금 연결을 따로 남깁니다.
 9. **보관 기간이 지난 행을 "없었다" 로 봅니다.** 기본 60일이 지난 행은 지워집니다. 지운 행이 파일 안에 남는지는 [파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md)에서 봅니다. 옛 SRUDB.dat 는 섀도 복사본에서 꺼냅니다.
 

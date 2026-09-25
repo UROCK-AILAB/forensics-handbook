@@ -21,7 +21,7 @@ Windows 는 계정과 그룹을 보안 식별자 (SID, Security Identifier) 로 
 | CLSID | `HKLM\SOFTWARE\Classes\CLSID\{GUID}` 의 클래스 등록 정보 | 아래 "CLSID" 절 |
 | Known Folder ID | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{GUID}` 의 폴더 정의 | 아래 "Known Folder ID" 절 |
 
-두 레지스트리 경로는 한국어 Windows 11 PC 에서 확인했습니다.
+두 레지스트리 경로는 한국어 Windows 11 기준입니다.
 
 아래 아티팩트에도 GUID 나 CLSID 가 나오며, 어느 칸에 어떤 식별자가 들어가는지는 각 페이지에서 다룹니다.
 
@@ -39,7 +39,7 @@ SID 는 `S-1-식별기관-하위기관1-하위기관2-…-하위기관n` 꼴로 
 하위 기관 (SubAuthority) 은 늘 10진으로 적고 앞자리에 0 을 붙이지 않습니다.
 마지막 하위 기관을 상대 식별자 (RID, Relative Identifier) 라고 하며, 한 도메인 안의 SID 는 RID 로 서로 구분됩니다.
 
-명세는 도메인이나 컴퓨터 같은 계정 저장소를 새로 만들 때 96비트 식별자를 붙인다고 적으며, 이 식별자는 암호학적 강도의 난수입니다.
+도메인이나 컴퓨터 같은 계정 저장소를 새로 만들 때 96비트 식별자를 붙이며, 이 식별자는 암호학적 강도의 난수입니다[1].
 저장소 안의 보안 주체에는 그 저장소 안에서만 유일한 32비트 식별자를 붙입니다.
 `S-1-5-21-X-Y-Z-RID` 에서 X·Y·Z 는 32비트씩 모두 96비트이므로 X·Y·Z 는 저장소 식별자에, RID 는 보안 주체 식별자에 해당한다고 볼 수 있습니다.
 이 대응은 명세의 설명과 비트 수를 맞춰 본 추론입니다.
@@ -55,11 +55,11 @@ SID 는 `S-1-식별기관-하위기관1-하위기관2-…-하위기관n` 꼴로 
 
 전체 길이는 8 + 4 × 하위 기관 개수 바이트이고, 가장 길면 68바이트입니다.
 
-명세의 식별 기관 표는 NT 기관을 `{0x00,0x00,0x00,0x00,0x00,0x05}` 로 적습니다.
+NT 기관은 `{0x00,0x00,0x00,0x00,0x00,0x05}` 입니다[1].
 6바이트 가운데 마지막 바이트가 가장 낮은 자리라는 뜻입니다.
 
-하위 기관의 바이트 순서는 명세에 "그 프로토콜이 정한다" 고만 적혀 있습니다.
-한국어 Windows 11 PC 에서 .NET `SecurityIdentifier.GetBinaryForm` 으로 바꿔 보니 하위 기관이 리틀 엔디언이었습니다.
+하위 기관의 바이트 순서는 SID 를 쓰는 프로토콜이 정합니다[1].
+한국어 Windows 11 의 .NET `SecurityIdentifier.GetBinaryForm` 으로 바꾸면 하위 기관은 리틀 엔디언입니다.
 
 | SID | 이진 형태 (한국어 Windows 11 PC 의 .NET 결과) |
 |---|---|
@@ -130,13 +130,13 @@ SID 는 `S-1-식별기관-하위기관1-하위기관2-…-하위기관n` 꼴로 
 | S-1-16-16384 | System |
 | S-1-16-20480 | Protected Process |
 
-확인한 한국어 Windows 11 PC 의 현재 사용자 RID 는 1001 이었습니다.
-로컬 사용자에게 RID 를 몇 번부터 매기는지는 이 페이지의 자료로 확인하지 않았습니다.
+로컬 사용자에게 RID 를 몇 번부터 매기는지는 검체에서 확인합니다.
+한국어 Windows 11 에서 현재 사용자 RID 가 1001 인 예가 있습니다.
 
 ### GUID 구조
 
 GUID 는 16바이트 값이며, GUID 와 UUID 는 같은 말로 쓰고 특정한 생성 방식을 뜻하지 않습니다.
-명세는 GUID 를 RPC IDL 구조체, 패킷 바이트열, 중괄호 문자열의 세 가지로 표현합니다.
+GUID 는 RPC IDL 구조체, 패킷 바이트열, 중괄호 문자열의 세 가지로 표현합니다[1].
 
 | 오프셋 | 크기 | 구조체 칸 | DCE UUID 칸 | 디스크 바이트 순서 |
 |---|---|---|---|---|
@@ -145,17 +145,17 @@ GUID 는 16바이트 값이며, GUID 와 UUID 는 같은 말로 쓰고 특정한
 | 6 | 2 | Data3 | time_hi_and_version | 리틀 엔디언 |
 | 8 | 8 | Data4 | clock_seq_hi_and_reserved, clock_seq_low, node | 적힌 순서 그대로 |
 
-명세 [MS-DTYP] 는 따로 정하지 않은 여러 바이트 정수를 빅 엔디언으로 보지만, GUID 의 앞 세 칸은 리틀 엔디언이라고 따로 밝혀 두었습니다.
+여러 바이트 정수는 따로 정하지 않으면 빅 엔디언이지만, GUID 의 앞 세 칸은 리틀 엔디언입니다[1].
 Data4 는 8바이트 배열이라서 순서가 바뀌지 않습니다.
 
 문자열은 16진수를 `{8-4-4-4-12}` 자리로 끊어 중괄호로 감싸며, 중괄호 안은 RFC 4122 형식입니다.
-명세의 예는 `{f81d4fae-7dec-11d0-a765-00a0c91e6bf6}` 입니다.
+예를 들면 `{f81d4fae-7dec-11d0-a765-00a0c91e6bf6}` 입니다[1].
 
 > 그림 자리: GUID 문자열 다섯 묶음과 디스크 16바이트를 위아래로 놓고, 앞 세 묶음은 바이트 순서가 뒤집히는 화살표로, 뒤 두 묶음은 곧은 화살표로 잇는 그림
 
 ### 버전 1 GUID (시각 기반)
 
-dfDateTime 문서는 UUID 버전 1 의 구조를 다음과 같이 설명합니다.
+UUID 버전 1 의 구조는 다음과 같습니다[3].
 
 - 시각은 1582-10-15 00:00:00 부터 센 100나노초 단위 60비트 값입니다.
 - 오프셋 7 의 상위 4비트가 버전입니다.
@@ -163,7 +163,7 @@ dfDateTime 문서는 UUID 버전 1 의 구조를 다음과 같이 설명합니�
 - 오프셋 10 부터 48비트가 노드 식별자입니다. 버전 1 에서는 대개 MAC 주소입니다.
 
 그래서 버전 1 GUID 에서는 만든 시각과 장치의 MAC 주소를 뽑을 수 있습니다.
-RFC 4122 의 정의로는 60비트 시각이 time_hi_and_version 의 아래 12비트, time_mid 16비트, time_low 32비트를 차례로 이은 값입니다.
+60비트 시각은 time_hi_and_version 의 아래 12비트, time_mid 16비트, time_low 32비트를 차례로 이은 값입니다.
 기준 시각이 FILETIME 의 1601-01-01 과 다릅니다.
 그래서 FILETIME 변환식에 그대로 넣으면 틀린 날짜가 나옵니다.
 시각 형식 전반은 [시각 값 형식](filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
@@ -172,9 +172,9 @@ RFC 4122 의 정의로는 60비트 시각이 time_hi_and_version 의 아래 12�
 ### CLSID
 
 CLSID 는 COM 클래스를 가리키는 GUID 로 알려져 있습니다.
-KNOWNFOLDERID 문서의 예제 코드는 `CLSID_KnownFolderManager` 를 `CoCreateInstance` 함수에 넘겨 객체를 만듭니다.
+예를 들어 `CLSID_KnownFolderManager` 를 `CoCreateInstance` 함수에 넘기면 객체를 만듭니다[2].
 레지스트리에 등록된 CLSID 는 `HKLM\SOFTWARE\Classes\CLSID\{GUID}` 키에서 이름을 찾을 수 있습니다.
-아래는 한국어 Windows 11 PC 에서 이 키들의 값을 확인한 예입니다.
+아래는 한국어 Windows 11 에서 이 키들의 값 예입니다.
 
 | CLSID | 기본값 | LocalizedString 값 |
 |---|---|---|
@@ -231,7 +231,7 @@ KNOWNFOLDERID 상수는 시스템에 Known Folder 로 등록된 표준 폴더를
 
 설치 때 고른 설정이나 나중의 폴더 리디렉션 때문에 실제 경로는 기본 경로와 다를 수 있습니다.
 
-한국어 Windows 11 PC 에서는 Known Folder 정의가 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{GUID}` 아래에 있었고, Downloads 키에는 `Name=Downloads`, `RelativePath=Downloads` 값이 있었습니다.
+한국어 Windows 11 에서는 Known Folder 정의가 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FolderDescriptions\{GUID}` 아래에 있고, Downloads 키에는 `Name=Downloads`, `RelativePath=Downloads` 값이 있습니다.
 
 ## 읽는 법
 
@@ -278,7 +278,7 @@ Python `uuid` 모듈로 계산했습니다.
 
 ### SID 숫자로 뜻을 짐작하지 않습니다
 
-명세는 SID 를 쓰는 쪽이 "구조가 맞다" 는 것 이상에 기대면 안 된다고 적습니다.
+SID 를 쓰는 쪽은 "구조가 맞다" 는 것 이상에 기대면 안 됩니다[1].
 잘 알려진 SID 가 아니면 숫자만 보고 계정 종류를 단정하지 않습니다.
 그 SID 가 누구인지는 [사용자 계정](../../02-artifacts/system-account/sam.md) 과 [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 에서 이름과 맞춰 봅니다.
 시각과 사람을 잇는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
@@ -307,7 +307,7 @@ ProgramFiles 처럼 비트 수에 따라 다른 곳을 가리키는 GUID 도 있
 
 ## 함정
 
-- **GUID 는 대소문자를 가리지 않고 비교합니다.** Microsoft 문서의 표 안에서도 `{905e63b6-...}`, `{A52BBA46-E9E1-435f-...}` 처럼 대소문자가 섞여 있습니다.
+- **GUID 는 대소문자를 가리지 않고 비교합니다.** 공식 GUID 표기에도 `{905e63b6-...}`, `{A52BBA46-E9E1-435f-...}` 처럼 대소문자가 섞여 있습니다[2].
 - **GUID 바이트를 헥스 그대로 이으면 다른 GUID 가 됩니다.** 위 예에서 `B4BFCC3A` 가 헥스 편집기에는 `3ACCBFB4` 로 보입니다.
 - **ProgramFiles GUID 하나가 여러 경로를 가리킵니다.** 64비트 OS 에서도 32비트 앱에서는 Program Files (x86) 입니다.
 - **SID 가 다른 값 뒤에 붙어 있기도 합니다.** 길이 칸이 있는 문자열 뒤에 이진 SID 가 이어지는 예는 [문자 인코딩](utf-16le-utf-8-cp949.md) 의 길이 칸 설명에 있습니다.

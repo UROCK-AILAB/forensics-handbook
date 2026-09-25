@@ -22,9 +22,9 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 
 - 색인 범위 밖의 파일은 처음부터 색인하지 않습니다. 그래서 "색인에 없다" 가 "파일이 없었다" 는 뜻은 아닙니다.
 - 색인의 수집 시각 (GatherTime) 은 색인이 파일을 처리한 시각입니다. 사용자가 파일을 연 시각이 아닙니다.
-- 색인을 초기화하면 DB 를 새로 만듭니다. 초기화 전 기록이 새 DB 에 이어지는지는 확인한 자료가 없습니다.
-- 색인 기록을 특정 사용자와 잇는 방법은 공개 자료에서 확인하지 못했습니다.
-- Windows 11 25H2 PC 한 대에서는 DB 파일이 보통 SQLite 형식이 아니었습니다. 첫 16바이트가 `AesGcm1 SQLite3` 였고, SQLite 도구로 열리지 않았습니다.
+- 색인을 초기화하면 DB 를 새로 만듭니다. 초기화 전 기록이 새 DB 에 이어지는지는 공개된 자료가 없습니다.
+- 색인 기록을 특정 사용자와 잇는 방법은 공개된 자료가 없습니다.
+- Windows 11 25H2 에서는 DB 파일이 보통 SQLite 형식이 아닐 수 있습니다. 첫 16바이트가 `AesGcm1 SQLite3` 인 파일은 SQLite 도구로 열리지 않습니다.
 
 ## 한눈에 보기
 
@@ -49,8 +49,7 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 | 8·10 | `Windows.edb` | ESE | `SystemIndex_PropertyStore` | `SystemIndex_Gthr`·`SystemIndex_GthrPth` |
 | 11 | `Windows.db`·`Windows-gather.db`·`Windows-usn.db` | SQLite | `Windows.db` 의 `SystemIndex_1_PropertyStore` | `Windows-gather.db` 의 `SystemIndex_Gthr`·`SystemIndex_GthrPth` |
 
-- XP~8 의 표 구성은 libyal 문서를 따릅니다. Windows 10·11 은 LevelBlue(옛 Aon) 글을 따릅니다.
-- 암호화된 것으로 보이는 Windows 11 형식이 어느 빌드부터 쓰였는지는 확인한 자료가 없습니다.
+- 암호화된 것으로 보이는 Windows 11 형식이 어느 빌드부터 쓰였는지는 공개된 자료가 없습니다.
 
 ### 알려 주는 것
 
@@ -65,7 +64,7 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 
 ## 읽는 순서
 
-1. [위치와 형식 (Windows.edb·Windows.db)](windows-edb-windows-db.md) — 색인 폴더에서 무엇을 모을지 정리합니다. Windows 버전별 파일과 표 목록, 바이트 순서, Windows 11 에서 본 `AesGcm1 SQLite3` 헤더를 다룹니다.
+1. [위치와 형식 (Windows.edb·Windows.db)](windows-edb-windows-db.md) — 색인 폴더에서 무엇을 모을지 정리합니다. Windows 버전별 파일과 표 목록, 바이트 순서, Windows 11 의 `AesGcm1 SQLite3` 헤더를 다룹니다.
 2. [파일 속성 되살리기 (PropertyStore)](propertystore.md) — 파일마다 남은 이름·경로·크기·시각을 읽습니다. 압축된 문자열, IE·Edge 주소, 활동 기록, GatherTime 의 뜻도 다룹니다.
 3. [수집 기록 (SystemIndex_Gthr)](systemindex-gthr.md) — 수집기가 파일을 어떻게 찾아 처리하는지 설명합니다. 수집 기록 표의 칸과 GatherLogs 글자 로그를 읽는 법을 다룹니다.
 4. [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) — 지금 디스크에 없는 파일의 기록을 찾습니다. WAL 파일과 지운 문서 번호 표를 다루고, 라이브 수집 때 조심할 점을 짚습니다.

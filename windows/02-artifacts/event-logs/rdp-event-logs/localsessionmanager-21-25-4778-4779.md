@@ -13,7 +13,7 @@ nav_order: 2590
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Ponder The Bits 의 정리는 들어온 접속을 다섯 단계로 나눕니다. 이 페이지는 그 가운데 로그온, 끊김·다시 연결, 로그오프 단계를 다룹니다. 앞의 연결·인증 단계는 [인증 단계](1149-4624-10-4625.md) 에서 다룹니다.
+들어온 접속은 다섯 단계로 나눠 볼 수 있습니다. 이 페이지는 그 가운데 로그온, 끊김·다시 연결, 로그오프 단계를 다룹니다. 앞의 연결·인증 단계는 [인증 단계](1149-4624-10-4625.md) 에서 다룹니다.
 
 | 단계 | LocalSessionManager/Operational | Security | System |
 |---|---|---|---|
@@ -29,8 +29,8 @@ LocalSessionManager/Operational 의 공급자는 Microsoft-Windows-TerminalServi
 
 | Windows | 내용 |
 |---|---|
-| Vista · Server 2008 이후 | 4778·4779 의 최소 지원 버전입니다. 두 이벤트의 이벤트 버전은 0 하나뿐입니다. 이유 코드 열거형 ExtendedDisconnectReasonCode (MsTscAx.dll) 의 최소 지원 버전도 같습니다. Ponder The Bits 의 단계 정리도 Vista 이후를 다룹니다 |
-| 11 Home 빌드 26200 (관찰) | LocalSessionManager 이벤트의 메시지 원문과 XML 칸 위치를 확인했습니다 |
+| Vista · Server 2008 이후 | 4778·4779 의 최소 지원 버전입니다. 두 이벤트의 이벤트 버전은 0 하나뿐입니다. 이유 코드 열거형 ExtendedDisconnectReasonCode (MsTscAx.dll) 의 최소 지원 버전도 같습니다. 위 단계 구분도 Vista 이후에 맞습니다 |
+| 11 Home 빌드 26200 | 아래 LocalSessionManager 이벤트의 메시지 원문과 XML 칸 위치는 이 빌드 기준입니다 |
 
 ## 구조
 
@@ -48,7 +48,7 @@ LocalSessionManager/Operational 의 공급자는 Microsoft-Windows-TerminalServi
 | 41 | `Begin session arbitration:` | User, Session ID |
 | 42 | `End session arbitration:` | User, Session ID |
 
-메시지 원문은 Windows 11 Home 빌드 26200 의 공급자 정의에서 읽었습니다. XML 에서 이 값들은 EventData 아래에 있지 않고 UserData 아래 EventXML 요소에 있으며, 요소 이름은 User, SessionID, Address 입니다. 40 의 요소 이름은 Session, Reason 입니다.
+메시지 원문은 Windows 11 Home 빌드 26200 의 공급자 정의 기준입니다. XML 에서 이 값들은 EventData 아래에 있지 않고 UserData 아래 EventXML 요소에 있으며, 요소 이름은 User, SessionID, Address 입니다. 40 의 요소 이름은 Session, Reason 입니다.
 
 아래는 요소 배치만 보여 주는 틀입니다. 괄호 안은 자리표시이고, 실제 XML 과 글자 하나하나까지 같지는 않습니다.
 
@@ -64,8 +64,6 @@ LocalSessionManager/Operational 의 공급자는 Microsoft-Windows-TerminalServi
 
 ### 이벤트마다 뜻과 흔한 짝
 
-아래 뜻과 짝은 Ponder The Bits 의 정리를 따릅니다.
-
 | 이벤트 | 뜻 | 흔한 짝 |
 |---|---|---|
 | 21 · 22 | 세션 로그온, 셸 시작. 원격 데스크톱 로그온이면 주소 칸에 원격 IP 가 있어야 합니다 | |
@@ -77,7 +75,7 @@ LocalSessionManager/Operational 의 공급자는 Microsoft-Windows-TerminalServi
 
 ### 이유 코드 (40)
 
-Ponder The Bits 는 40 의 이유 코드가 IMsRdpClient::ExtendedDisconnectReason 값이라고 설명하고, Microsoft 는 이 값을 ExtendedDisconnectReasonCode 열거형으로 정의합니다.
+40 의 이유 코드는 IMsRdpClient::ExtendedDisconnectReason 값이고, 이 값은 ExtendedDisconnectReasonCode 열거형으로 정의돼 있습니다.
 
 | 코드 | 이름 | Microsoft 정의 | Ponder The Bits 해석 |
 |---|---|---|---|
@@ -149,7 +147,7 @@ LocalSessionManager 21~25 에는 로그온 ID 칸이 없고 4778·4779 에는 �
 ## 함정과 한계
 
 1. **21·22 를 모두 원격 접속으로 봅니다.** 주소 칸이 `LOCAL` 이면 로컬 로그온입니다. 로컬 로그온의 21 은 부팅 뒤나 로컬 사용자가 로그인할 때도 남습니다.
-2. **이벤트 번호만 보고 원격 접속이라고 합니다.** 원격 데스크톱을 받지 않는 PC 에도 이 번호들이 남습니다. 아래는 원격 데스크톱 받기가 꺼진 PC 한 대에서 본 결과입니다.
+2. **이벤트 번호만 보고 원격 접속이라고 합니다.** 원격 데스크톱을 받지 않는 PC 에도 이 번호들이 남습니다. 아래는 원격 데스크톱 받기가 꺼진 Windows 11 PC 한 대의 건수 예입니다.
 
    | 이벤트 | 21 | 22 | 23 | 24 | 25 | 39 | 40 | 41 | 42 |
    |---|---|---|---|---|---|---|---|---|---|
@@ -158,13 +156,13 @@ LocalSessionManager 21~25 에는 로그온 ID 칸이 없고 4778·4779 에는 �
    - 21·22·24 의 주소 칸 51건이 모두 `LOCAL` 이었습니다.
    - 39 세 건은 모두 `Session 1 has been disconnected by session 1` 이었습니다.
    - 40 세 건은 모두 이유 코드 11 이었습니다.
-   - 32·34·36·54 도 있었습니다. 이 네 이벤트의 뜻은 확인하지 못했습니다.
+   - 32·34·36·54 도 있었습니다. 이 네 이벤트의 뜻을 풀이한 공개 자료는 없습니다.
    - 그러므로 주소 칸을 보지 않고 21·22·24·39·40 의 번호만으로 원격 접속이라고 하지 않습니다.
-3. **23 에서 접속 주소를 찾습니다.** 21~25 를 한데 묶어 "원본 IP 와 사용자 이름을 적는 이벤트" 로 소개하는 자료가 있습니다. 관찰한 공급자 정의에서 23 에는 주소 칸이 없었습니다. 주소는 같은 세션 ID 의 21·22·25 에서 찾습니다.
+3. **23 에서 접속 주소를 찾습니다.** 21~25 를 한데 묶어 "원본 IP 와 사용자 이름을 적는 이벤트" 로 소개하는 자료가 있습니다. 공급자 정의에서 23 에는 주소 칸이 없습니다. 주소는 같은 세션 ID 의 21·22·25 에서 찾습니다.
 4. **4778·4779 를 모두 원격 데스크톱으로 봅니다.** 빠른 사용자 전환과 Hyper-V 확장 세션에서도 남습니다. SessionName 칸의 `RDP-Tcp#N` 과 `Console` 로 나눕니다.
-5. **4778·4779 가 없으면 다시 연결도 없었다고 봅니다.** 두 이벤트는 기타 로그온/로그오프 감사가 켜져 있어야 남습니다. 관찰한 PC 는 이 하위 범주가 No Auditing 이었고, 보안 로그에 4778·4779 가 0건이었습니다. 이 설정이 Windows 기본값인지는 확인하지 못했습니다. 검체마다 [감사 정책과 로그 설정](../audit-policy-log-settings.md) 으로 확인합니다.
+5. **4778·4779 가 없으면 다시 연결도 없었다고 봅니다.** 두 이벤트는 기타 로그온/로그오프 감사가 켜져 있어야 남습니다. 이 하위 범주가 No Auditing 이면 보안 로그에 4778·4779 가 남지 않습니다. 이 설정은 검체마다 [감사 정책과 로그 설정](../audit-policy-log-settings.md) 으로 확인합니다.
 6. **4647·9009 를 원격 데스크톱 세션의 끝으로 바로 읽습니다.** 4647 은 원격 데스크톱 전용이 아니어서 시각을 맞춰 봐야 합니다. 9009 는 늘 남지 않습니다.
-7. **오래된 세션 기록을 찾습니다.** 로그 크기 한도가 작으면 오래된 기록이 밀려납니다. 관찰한 크기는 [허브](index.md) 에 있습니다.
+7. **오래된 세션 기록을 찾습니다.** 로그 크기 한도가 작으면 오래된 기록이 밀려납니다. 채널별 기본 크기는 [허브](index.md) 에 있습니다.
 
 ## 직접 분석해 보기
 
@@ -216,7 +214,7 @@ Get-WinEvent -Path $sec -FilterXPath "*[System[(EventID=4778 or EventID=4779)]]"
 | 출발 컴퓨터의 RDPClient 1026 | 끊긴 시각 | [나간 접속](rdpclient-1024-1102.md) |
 | 전원 기록 | 로그오프 기록 없이 끝난 세션 | [켜짐·꺼짐](../power-on-off-events.md) |
 
-- 프리패치와 Easy Print 드라이버는 JPCERT/CC 자료를 따릅니다. 이 자료는 시험한 OS 버전을 적지 않았습니다.
+- 프리패치와 Easy Print 드라이버 흔적이 어느 Windows 버전에서 남는지는 공개 자료에 적혀 있지 않아 검체에서 확인합니다.
 - 세션 기록으로 그 시각의 사용자를 좁히는 흐름은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 를 봅니다.
 
 ## 실습

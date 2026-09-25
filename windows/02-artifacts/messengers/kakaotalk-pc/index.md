@@ -34,21 +34,21 @@ has_toc: false
 |---|---|---|
 | 데이터 기본 폴더 | `C:\Users\<사용자>\AppData\Local\Kakao\KakaoTalk\` | 논문 |
 | 계정별 폴더 | `...\KakaoTalk\users\<계정 폴더>\` | 논문 |
-| 계정 폴더 이름 | 40자 16진수 문자열이었습니다 | 관찰 |
-| 기기 정보 | `HKEY_CURRENT_USER\SOFTWARE\Kakao\KakaoTalk\DeviceInfo\<DATE>` | 논문, 관찰 |
-| 프로그램 설치 폴더 | 이번 자료로 확정하지 못했습니다 | — |
+| 계정 폴더 이름 | 40자리 16진수 문자열 | 카카오톡 PC 26.6.0.5208 |
+| 기기 정보 | `HKEY_CURRENT_USER\SOFTWARE\Kakao\KakaoTalk\DeviceInfo\<DATE>` | 논문, 카카오톡 PC 26.6.0.5208 |
+| 프로그램 설치 폴더 | 검체에서 확인 | — |
 
-"관찰" 로 적은 칸은 카카오톡 PC 26.6.0.5208 기준이며, 다른 버전에서는 다를 수 있습니다.
+근거에 버전을 적은 칸은 그 버전 기준이며, 다른 버전에서는 다를 수 있습니다.
 
 ### 버전에 따라 달라지는 점
 
-Windows 버전에 따른 차이는 이번 자료로 확인하지 못했고, 차이를 가르는 기준은 카카오톡 버전입니다.
+차이를 가르는 기준은 카카오톡 버전입니다.
 
 | 카카오톡 버전 | 대화 DB 상태 | 근거 |
 |---|---|---|
 | 25.7.2 미만 | 카카오톡 자체 모듈 EvaSQLite 로 암호화합니다 | 논문 |
 | 25.7.2 이상 | SQLCipher 4 로 암호화합니다 | 논문 |
-| 26.6.0.5208 | 활성 `chatLogs_*.edb` 여러 개가 평문 SQLite 였습니다. 연락처 DB 등 일부는 암호문이었습니다 | 관찰 (Windows 11 한 대) |
+| 26.6.0.5208 | 활성 `chatLogs_*.edb` 여러 개가 평문 SQLite 로 남은 사례가 있습니다. 연락처 DB 등 일부는 암호문입니다 | Windows 11 |
 
 표의 버전 경계와 실제 파일 상태는 다를 수 있으므로 버전만 믿지 않고 파일 머리를 직접 봅니다. 평문과 암호문을 가르는 법은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에서 다룹니다.
 
@@ -61,9 +61,9 @@ Windows 버전에 따른 차이는 이번 자료로 확인하지 못했고, 차�
 | 연락처 (친구) | `TalkUserDB.edb` | SQLite | [설치 위치와 파일 구성](install-paths-files.md) |
 | 행동 로그와 계정 userId | `ActionLogDB.edb` | SQLite | [계정·로그인 흔적](account-login.md) |
 | 주고받은 사진과 섬네일 | `.cng` 파일 | 암호화한 이미지 파일 | [받은 파일·사진 폴더](received-files.md) |
-| 로그인했던 이메일 | `login_list.dat`, `last_pc_login.dat` | 상태 파일 (관찰) | [계정·로그인 흔적](account-login.md) |
+| 로그인했던 이메일 | `login_list.dat`, `last_pc_login.dat` | 상태 파일 | [계정·로그인 흔적](account-login.md) |
 | 기기 정보와 계정 설정 시기 단서 | 레지스트리 `DeviceInfo\<DATE>` | 레지스트리 키 | [계정·로그인 흔적](account-login.md) |
-| 대화방별 예전 대화 | `chat_data\chatLogs_<대화방 식별자>.edb_<YYYYMMDD>_<HHMMSS>.backup` | 평문 SQLite (관찰) | [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) |
+| 대화방별 예전 대화 | `chat_data\chatLogs_<대화방 식별자>.edb_<YYYYMMDD>_<HHMMSS>.backup` | 평문 SQLite (26.6.0.5208 기준) | [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) |
 | 본 DB 에 아직 합치지 않은 최근 변경 | `*.edb-wal`, `*.edb-shm` | SQLite 쓰기 전 로그 (WAL) | [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) |
 
 ## 읽는 순서

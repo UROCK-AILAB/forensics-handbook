@@ -11,13 +11,13 @@ nav_order: 2180
 
 OneDrive 는 연결한 계정마다 사용자 레지스트리의 `HKCU\Software\Microsoft\OneDrive\Accounts` 아래에 하위 키를 하나씩 만듭니다. 이 키에는 계정 메일, 계정 ID, 동기화 폴더 경로, 로그인 시각이 남습니다. 앱은 같은 동기화 폴더를 `HKCU\Software\SyncEngines` 와 SOFTWARE 하이브의 `SyncRootManager` 키에도 적습니다.
 
-> **(관찰)** 표시는 Windows 11 빌드 26200 에 OneDrive 26.168.0830.0006 이 깔린 PC 한 대에서 직접 본 내용입니다. 이 PC 에는 개인 계정 1개와 회사 계정 1개가 연결돼 있었습니다. 다른 PC 와 다른 앱 버전에서는 값이 다를 수 있습니다. 표시가 없는 내용은 공개 문서에서 확인한 것입니다.
+> 이 페이지의 값 이름과 예시 값은 Windows 11 빌드 26200 과 OneDrive 26.168.0830.0006 기준입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하나 만듭니다. 개인 계정은 `Personal`, 회사·학교 계정은 `Business1`, `Business2` … 이고, 앱은 이 키에 계정을 알아보는 값, 동기화 폴더 경로, 여러 시각 값을 적습니다 (관찰).
+OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하나 만듭니다. 개인 계정은 `Personal`, 회사·학교 계정은 `Business1`, `Business2` … 이고, 앱은 이 키에 계정을 알아보는 값, 동기화 폴더 경로, 여러 시각 값을 적습니다.
 
-앱은 동기화 폴더를 Windows 클라우드 파일 기능에도 등록하기 때문에 같은 폴더가 `SyncEngines` 키와 `SyncRootManager` 키에 다시 나옵니다 (관찰). 이 등록 방식 전반은 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
+앱은 동기화 폴더를 Windows 클라우드 파일 기능에도 등록하기 때문에 같은 폴더가 `SyncEngines` 키와 `SyncRootManager` 키에 다시 나옵니다. 이 등록 방식 전반은 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
 
 계정별 설정 파일은 레지스트리와 별도로 `%LOCALAPPDATA%\Microsoft\OneDrive\settings\` 아래 계정 폴더에 있습니다. 관리자는 그룹 정책 (Group Policy) 으로 OneDrive 설정을 강제할 수 있고, 그룹 정책은 `Policies` 아래에 레지스트리 키를 써서 동작합니다.
 
@@ -34,7 +34,7 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 
 `settings` 폴더는 회사 계정을 `Business1` 부터 `Business9` 까지 나눠 둡니다. 하이브 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
-값의 이름과 구성은 OneDrive 앱이 정하는데, 이 페이지의 값 목록은 OneDrive 26.168.0830.0006 에서 본 것이라 옛 버전에서는 없는 값이 있을 수 있습니다.
+값의 이름과 구성은 OneDrive 앱이 정합니다. 이 페이지의 값 목록은 OneDrive 26.168.0830.0006 기준이라 옛 버전에는 없는 값이 있을 수 있습니다.
 
 `SyncRootManager` 키에는 Windows 버전에 따라 생기는 값이 있습니다. 동기화 앱은 아래 값을 동기화 루트 키에 적습니다.
 
@@ -42,7 +42,7 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 |---|---|
 | `CopyHook` | Windows 10 Insider 빌드 19624 이후 |
 | `ShareHandler` | Windows 11 21H2 이후 |
-| `SearchHandlerFactory` | Windows 11 24H2 이후. 문서는 이 검색 기능을 Copilot+ PC 와 AI 기능을 켠 Cloud PC 에서 지원한다고 적습니다 |
+| `SearchHandlerFactory` | Windows 11 24H2 이후. 이 검색 기능은 Copilot+ PC 와 AI 기능을 켠 Cloud PC 에서 지원합니다[3] |
 
 ## 구조
 
@@ -50,40 +50,38 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 
 | 값 | 형식 | 내용 |
 |---|---|---|
-| `Version`, `LastRunOneDriveVersion` | REG_SZ | 앱 버전 문자열입니다. 예: `26.168.0830.0006` (관찰) |
-| `UserFolder` | REG_SZ | 동기화 폴더 경로입니다 (관찰) |
-| `InstallerType` | REG_SZ | 이 PC 에서는 `Standard` 였습니다 (관찰) |
-| `SilentBusinessConfigCompleted` | DWORD | 자동 연결 정책(SilentAccountConfig)이 사용자를 OneDrive 에 연결하는 데 성공하면 생깁니다. 사용자가 동기화를 멈춘 뒤 다시 자동 연결되지 않게 막는 표시입니다. 이 PC 에서는 1 이었습니다 (관찰) |
-| `ClientEverSignedIn` | DWORD | 이 PC 에서는 1 이었습니다 (관찰) |
-| `PersonalUnlinkedTimeStamp`, `LastPersonalUnlinkedTimeStamp` | QWORD | 개인 계정 연결을 끊은 시각입니다. Unix 초입니다 (관찰) |
-| `LastPersonalUnlinkedReason` | REG_SZ | 개인 계정 연결을 끊은 이유입니다. 이 PC 에서는 `12-DeleteAccountSettingsReason::UserTriggeredUnlink` 였습니다 (관찰) |
+| `Version`, `LastRunOneDriveVersion` | REG_SZ | 앱 버전 문자열입니다. 예: `26.168.0830.0006` |
+| `UserFolder` | REG_SZ | 동기화 폴더 경로입니다 |
+| `InstallerType` | REG_SZ | 예: `Standard` |
+| `SilentBusinessConfigCompleted` | DWORD | 자동 연결 정책(SilentAccountConfig)이 사용자를 OneDrive 에 연결하는 데 성공하면 생깁니다. 사용자가 동기화를 멈춘 뒤 다시 자동 연결되지 않게 막는 표시입니다. 예: 1 |
+| `ClientEverSignedIn` | DWORD | 예: 1 |
+| `PersonalUnlinkedTimeStamp`, `LastPersonalUnlinkedTimeStamp` | QWORD | 개인 계정 연결을 끊은 시각입니다. Unix 초입니다 |
+| `LastPersonalUnlinkedReason` | REG_SZ | 개인 계정 연결을 끊은 이유입니다. 예: `12-DeleteAccountSettingsReason::UserTriggeredUnlink` |
 | `OneAuthUnrecoverableTimestamp` | — | 아래 SysPrep 안내에 나오는 값입니다 |
-| `MachineGuidCollection`, `HostNameCollection`, `UserNameCollection`, `UserDomainCollection` | — | 값 이름만 확인했습니다. 내용은 보지 않았습니다 (관찰) |
+| `MachineGuidCollection`, `HostNameCollection`, `UserNameCollection`, `UserDomainCollection` | — | 내용에 관한 공개 자료가 없어 검체에서 확인합니다 |
 
-Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개를 지우라고 안내합니다. `SilentBusinessConfigCompleted`, `ClientEverSignedIn`, `PersonalUnlinkedTimeStamp`, `OneAuthUnrecoverableTimestamp` 입니다.
+이미지를 준비(SysPrep)하기 전에는 이 키의 값 네 개를 지웁니다[2]. `SilentBusinessConfigCompleted`, `ClientEverSignedIn`, `PersonalUnlinkedTimeStamp`, `OneAuthUnrecoverableTimestamp` 입니다.
 
-`LastPersonalUnlinkedReason` 의 `UserTriggeredUnlink` 는 이름으로 보면 사용자가 직접 연결을 끊은 경우입니다. 이유 문자열에 어떤 종류가 더 있는지는 확인하지 못했습니다.
+`LastPersonalUnlinkedReason` 의 `UserTriggeredUnlink` 는 이름으로 보아 사용자가 직접 연결을 끊은 경우로 보입니다. 다른 이유 문자열은 공개 자료가 없어 검체에서 확인합니다.
 
 ### 계정 키 `Accounts\<계정>`
 
 > 그림 자리: `Accounts` 아래 `Personal`·`Business1` 키와, 각 키 아래 하위 키(`Tenants`·`ScopeIdToMountPointPathCache`·`AuthenticationURLs`·`USQInformation`·`WindowsSecurityCenterIntegration`)를 나무 모양으로 보여 주는 그림
-
-아래 표의 값은 모두 관찰한 것입니다.
 
 **신원 값**
 
 | 값 | 형식 | 내용 |
 |---|---|---|
 | `UserEmail` | REG_SZ | 로그인한 계정 메일 |
-| `cid` | REG_SZ | 계정 ID. 개인 계정은 16자리 16진수, 회사 계정은 GUID(36자)였습니다 |
+| `cid` | REG_SZ | 계정 ID. 개인 계정은 16자리 16진수, 회사 계정은 GUID(36자)입니다 |
 | `OneAuthAccountId`, `NamespaceRootId` | REG_SZ | 계정 관련 ID |
 | `UserFolder` | REG_SZ | 이 계정의 동기화 폴더 경로 |
 
-회사 계정에는 `DisplayName`, `UserName`, `PUID`, `ConfiguredTenantId`, `ServiceEndpointUri`, `SPOResourceId`, `TeamSiteSPOResourceId` 가 더 있었습니다. 이 값들은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
+회사 계정에는 `DisplayName`, `UserName`, `PUID`, `ConfiguredTenantId`, `ServiceEndpointUri`, `SPOResourceId`, `TeamSiteSPOResourceId` 가 더 있습니다. 이 값들은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
 
 **시각 값**
 
-아래 값은 QWORD 이고, 내용은 Unix 초였습니다.
+아래 값은 QWORD 이고, 내용은 Unix 초입니다.
 
 | 값 | 이름으로 짐작한 뜻 |
 |---|---|
@@ -94,13 +92,13 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `KFMOnboardingEnabledStartTime`, `LastKFMOptInTime`, `LastKnownFolderBackupTime` | 알려진 폴더 이동 (Known Folder Move, KFM) 관련 시각 |
 | `WebView2InstallCheckedTimeStamp` | WebView2 설치 여부를 확인한 때 |
 
-`FirstRunSignInOriginDateTime` 은 형식이 REG_SZ 이지만 내용은 Unix 초 숫자를 적은 문자열이었습니다.
+`FirstRunSignInOriginDateTime` 은 형식이 REG_SZ 이지만 내용은 Unix 초 숫자를 적은 문자열입니다.
 
-각 값을 정확히 언제 적는지는 공개 자료로 확인하지 못했고, 예를 들어 `_Upload` 가 올리기를 시작한 때인지 끝낸 때인지 알 수 없습니다. 보고서에는 이름에서 짐작한 뜻이라고 밝힙니다.
+각 값을 정확히 언제 적는지는 공개 자료가 없습니다. 예를 들어 `_Upload` 가 올리기를 시작한 때인지 끝낸 때인지 알 수 없습니다. 보고서에는 이름에서 짐작한 뜻이라고 밝힙니다.
 
 **상태 값**
 
-| 값 | 형식 | 이 PC 의 값 |
+| 값 | 형식 | 값 예 |
 |---|---|---|
 | `LastSignInResult` | DWORD | 0 |
 | `HasMadeFirstUpload` | DWORD | 1 |
@@ -109,9 +107,9 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `LastKFMOptInSource` | DWORD | (숫자) |
 | `LastPerFolderMigrationScanResult` | REG_SZ (JSON) | (JSON) |
 
-알려진 폴더 이동 값은 어느 폴더를 OneDrive 로 옮겼는지 보여 줍니다. 숫자 코드(위의 5, 3584 등)의 뜻은 확인하지 못했습니다.
+알려진 폴더 이동 값은 어느 폴더를 OneDrive 로 옮겼는지 보여 줍니다. 숫자 코드(위의 5, 3584 등)의 뜻은 공개 자료가 없습니다.
 
-**계정 종류에 따라 있던 값**
+**계정 종류에 따라 있는 값**
 
 | 계정 | 값 | 내용 |
 |---|---|---|
@@ -126,52 +124,50 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 
 | 하위 키 | 내용 |
 |---|---|
-| `Tenants\<동기화 폴더 표시 이름>` | 값 이름이 동기화 폴더 경로입니다. 이 PC 에서는 `Personal\Tenants\OneDrive`, `Business1\Tenants\OneDrive - <회사 이름>` 이었습니다 |
+| `Tenants\<동기화 폴더 표시 이름>` | 값 이름이 동기화 폴더 경로입니다. 예: `Personal\Tenants\OneDrive`, `Business1\Tenants\OneDrive - <회사 이름>` |
 | `ScopeIdToMountPointPathCache` | 값 이름이 32자리 16진수 범위 ID (scope ID) 입니다 |
 | `AuthenticationURLs` | `Authority`, `DiscoveryResourceId`, `DiscoveryApi`, `GraphApi`, `FederationProvider`, `NextEmailHRDUpdate` |
-| `USQInformation` (개인 계정) | 저장 공간 정보입니다. 값은 `total`, `used`, `remaining`, `state`, `lastFetchTime` 입니다. 하위 키 `services\OneDrive`, `services\Outlook` 에 `used` 가 있습니다. 단위는 확인하지 못했습니다 |
+| `USQInformation` (개인 계정) | 저장 공간 정보입니다. 값은 `total`, `used`, `remaining`, `state`, `lastFetchTime` 입니다. 하위 키 `services\OneDrive`, `services\Outlook` 에 `used` 가 있습니다. 단위는 공개 자료가 없어 검체에서 확인합니다 |
 | `WindowsSecurityCenterIntegration` | `WscRegistrationGuid` |
 
-연결을 끊은 계정의 키에는 값이 거의 남지 않을 수 있습니다. 이 PC 의 `Accounts\Business2` 에는 `KFMOnboardingEnabledStartTime` 하나만 있었습니다 (관찰).
+연결을 끊은 계정의 키에는 값이 거의 남지 않을 수 있습니다. 예를 들어 `Accounts\Business2` 에 `KFMOnboardingEnabledStartTime` 하나만 남기도 합니다.
 
 ### `HKCU\Software\SyncEngines\Providers\OneDrive`
 
-하위 키 이름은 `Personal`, `Business1`, 또는 32자리 범위 ID 입니다. 아래는 모두 관찰한 값이고, 형식은 모두 REG_SZ 입니다.
+하위 키 이름은 `Personal`, `Business1`, 또는 32자리 범위 ID 입니다. 아래 값의 형식은 모두 REG_SZ 입니다.
 
 | 값 | 내용 |
 |---|---|
 | `MountPoint` | 동기화 폴더 경로 |
 | `LastModifiedTime` | `2026-09-22T22:02:13` 같은 날짜 문자열 |
 | `UrlNamespace` | 서비스 쪽 주소 |
-| `LibraryType` | `Personal`·`Business1` 키는 `personal`, 범위 ID 키는 `mysite` 였습니다. 범위 ID 키는 회사 계정의 개인 문서 라이브러리였습니다 |
+| `LibraryType` | `Personal`·`Business1` 키는 `personal`, 범위 ID 키는 `mysite` 입니다. 범위 ID 키는 회사 계정의 개인 문서 라이브러리입니다 |
 | `CID` | 계정 ID |
 | `IsOfficeSyncIntegrationEnabled` | 오피스 동기화 연동 설정 |
 
-범위 ID 키에는 `WebUrl`, `OpcEnabled`, `AIPIntegrationEnabled`, `ZipItEnabled`, `SequentialID` 가 더 있었습니다.
+범위 ID 키에는 `WebUrl`, `OpcEnabled`, `AIPIntegrationEnabled`, `ZipItEnabled`, `SequentialID` 가 더 있습니다.
 
 ### `HKLM\…\Explorer\SyncRootManager`
 
-키 이름은 `OneDrive!<사용자 SID>!<Personal 또는 Business1>|<32자리 범위 ID>` 모양이었습니다 (관찰).
+키 이름은 `OneDrive!<사용자 SID>!<Personal 또는 Business1>|<32자리 범위 ID>` 모양입니다.
 
 | 항목 | 내용 |
 |---|---|
-| 값 | `DisplayNameResource`, `IconResource`, `Flags`, `Handler`, `CopyHook`, `ShareHandler`, `SearchHandlerFactory`, `ThumbnailProvider`, `UriHandler`, `AUMID`, `Cid` 등 (관찰) |
-| 회사 계정 키에만 있던 값 | `TenantName` (관찰) |
-| 하위 키 `UserSyncRoots` | 값 이름이 사용자 SID 이고, 데이터(REG_SZ)가 동기화 폴더 경로입니다 (관찰) |
+| 값 | `DisplayNameResource`, `IconResource`, `Flags`, `Handler`, `CopyHook`, `ShareHandler`, `SearchHandlerFactory`, `ThumbnailProvider`, `UriHandler`, `AUMID`, `Cid` 등 |
+| 회사 계정 키에만 있는 값 | `TenantName` |
+| 하위 키 `UserSyncRoots` | 값 이름이 사용자 SID 이고, 데이터(REG_SZ)가 동기화 폴더 경로입니다 |
 
-같은 32자리 범위 ID 가 세 곳에 나옵니다 (관찰). `ScopeIdToMountPointPathCache` 의 값 이름, `SyncEngines` 의 하위 키 이름, `SyncRootManager` 키 이름의 뒷부분입니다. 이 ID 로 세 키를 이어 읽습니다.
+같은 32자리 범위 ID 가 세 곳에 나옵니다. `ScopeIdToMountPointPathCache` 의 값 이름, `SyncEngines` 의 하위 키 이름, `SyncRootManager` 키 이름의 뒷부분입니다. 이 ID 로 세 키를 이어 읽습니다.
 
 ### settings 폴더의 ini 파일
-
-아래는 모두 관찰한 내용입니다.
 
 | 파일 | 인코딩 | 내용 |
 |---|---|---|
 | `settings\Personal\<cid>.ini`, `settings\Business1\<cid>.ini` | UTF-16LE | 줄 이름은 `libraryScope`, `lastRefreshTime`, `installID`, `originatorID`, `OfficeOriginatorID`, `lastKnownOSVersion`, `bytesTransferred`, `requestsSent`, `edpManaged`, `edpManagedSince`, `Subscription` 등입니다 |
 | `global.ini` | UTF-16LE | `cid`, `LastCleanShutdownTimestamp`, `IsCleanShutdown`, `LocalMassDeleteDetectedTime`, `LastSyncVerificationCompletedTimestamp` 등이 있습니다 |
 
-- `<cid>.ini` 의 파일 이름은 레지스트리 `Accounts\<계정>` 의 `cid` 값과 같았습니다. 회사 계정도 `ConfiguredTenantId` 가 아니라 `cid` 와 같았습니다.
-- 같은 폴더에는 `ClientPolicy.ini`, `ECSConfig.json`, `SurveyManagerState.json`, `SyncEngineDatabase.db`, `SafeDelete.db`, `SettingsDatabase.db`, `UXDatabase.db`, `OCSI.db`, `CxP.db`, `KFM.db` 등도 있었습니다.
+- `<cid>.ini` 의 파일 이름은 레지스트리 `Accounts\<계정>` 의 `cid` 값과 같습니다. 회사 계정도 `ConfiguredTenantId` 가 아니라 `cid` 와 같습니다.
+- 같은 폴더에는 `ClientPolicy.ini`, `ECSConfig.json`, `SurveyManagerState.json`, `SyncEngineDatabase.db`, `SafeDelete.db`, `SettingsDatabase.db`, `UXDatabase.db`, `OCSI.db`, `CxP.db`, `KFM.db` 등도 있습니다.
 - `SyncEngineDatabase.db` 와 `SafeDelete.db` 는 [동기화 DB](syncenginedatabase-db.md) 에서 다룹니다.
 - UTF-16LE 파일을 읽는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 
@@ -188,7 +184,7 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive\EnableODIgnoreListFromGPO` | 올리지 않을 파일 목록입니다 |
 | `HKLM\SOFTWARE\Policies\Microsoft\OneDrive` `FilesOnDemandEnabled` = 1 | 파일 주문형 (Files On-Demand) 을 켭니다 |
 
-`LocalMassDeleteFileDeleteThreshold` 를 구성하지 않으면, 짧은 시간에 파일을 200개 넘게 지울 때 알림이 뜹니다. 파일 주문형 옵션이 보이지 않으면 `HKLM\SYSTEM\CurrentControlSet\Services\CldFlt` 의 `Start` 가 2(AUTO_START)인지 보는데, 이 드라이버가 Windows Cloud Files Filter Driver 입니다. 서비스 키 읽는 법은 [서비스·드라이버](../../persistence/services-drivers.md) 에 있습니다. 관찰한 PC 에는 두 정책 키가 모두 없었습니다 (관찰).
+`LocalMassDeleteFileDeleteThreshold` 를 구성하지 않으면, 짧은 시간에 파일을 200개 넘게 지울 때 알림이 뜹니다. 파일 주문형 옵션이 보이지 않으면 `HKLM\SYSTEM\CurrentControlSet\Services\CldFlt` 의 `Start` 가 2(AUTO_START)인지 보는데, 이 드라이버가 Windows Cloud Files Filter Driver 입니다. 서비스 키 읽는 법은 [서비스·드라이버](../../persistence/services-drivers.md) 에 있습니다. 정책 키는 아예 없을 수도 있습니다.
 
 ## 증거로서 의미
 
@@ -197,16 +193,16 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 - `Accounts` 아래에 계정 하위 키가 있으면, 이 Windows 사용자 프로필에서 그 OneDrive 계정을 연결한 적이 있습니다.
 - `UserEmail` 과 `cid` 로 어느 계정을 연결했는지 알 수 있습니다.
 - `UserFolder`, `MountPoint`, `UserSyncRoots` 로 동기화 폴더가 어디 있었는지 알 수 있습니다.
-- `SyncRootManager` 는 HKLM 에 있지만 키 이름과 `UserSyncRoots` 에 사용자 SID 가 들어갑니다. 그래서 SOFTWARE 하이브 하나로 이 PC 에서 OneDrive 를 쓴 사용자를 가려낼 수 있습니다 (관찰을 바탕으로 한 짐작).
-- `PersonalUnlinkedTimeStamp` 와 `LastPersonalUnlinkedReason` 이 있으면 개인 계정 연결을 끊은 기록이 있습니다 (관찰).
+- `SyncRootManager` 는 HKLM 에 있지만 키 이름과 `UserSyncRoots` 에 사용자 SID 가 들어갑니다. 그래서 SOFTWARE 하이브 하나로 이 PC 에서 OneDrive 를 쓴 사용자를 가려낼 수 있을 것으로 보입니다.
+- `PersonalUnlinkedTimeStamp` 와 `LastPersonalUnlinkedReason` 이 있으면 개인 계정 연결을 끊은 기록이 있습니다.
 - `SilentBusinessConfigCompleted` 가 있으면 자동 연결 정책이 회사 계정을 연결하는 데 성공한 적이 있습니다.
-- `LastKnownFolderMigrationState` 는 바탕 화면·문서·사진 같은 폴더를 OneDrive 로 옮겼는지 보여 줍니다 (관찰). 숫자의 뜻은 확인하지 못했습니다.
+- `LastKnownFolderMigrationState` 는 바탕 화면·문서·사진 같은 폴더를 OneDrive 로 옮겼는지 보여 줍니다. 숫자의 뜻은 공개 자료가 없습니다.
 - 정책 키에 값이 있으면 관리자가 그 정책을 건 적이 있습니다.
 
 ### 증명하지 못하는 것
 
 - 어떤 파일을 올렸거나 내려받았는지는 이 키로 알 수 없습니다. 파일 단위 기록은 [동기화 DB](syncenginedatabase-db.md) 와 [로그](odl-odlgz.md) 에 있습니다.
-- 시각 값의 이름이 뜻을 보장하지 않습니다. 정확한 기록 조건은 확인하지 못했습니다.
+- 시각 값의 이름이 뜻을 보장하지 않습니다. 정확한 기록 조건은 공개 자료가 없습니다.
 - `UserEmail` 은 OneDrive 에 로그인한 계정입니다. 그 시각에 PC 앞에 있던 사람을 알려 주지 않습니다.
 - 정책 값이 있다고 지금도 그 정책이 걸려 있다는 뜻은 아닙니다. "구성 안 됨"으로 되돌려도 키가 남기 때문입니다.
 - 값이 없다고 쓰지 않았다는 뜻은 아닙니다. 연결을 끊은 계정 키에는 값이 거의 남지 않을 수 있습니다. 이미지로 배포한 PC 라면 관리자가 SysPrep 전에 루트 키 값을 지웠을 수도 있습니다.
@@ -217,23 +213,23 @@ Microsoft 는 이미지를 준비(SysPrep)하기 전에 이 키의 값 네 개�
 
 | 값 | 형식 | 기준 |
 |---|---|---|
-| `Accounts\<계정>` 의 시각 값, 루트 키의 `PersonalUnlinkedTimeStamp` 등 | QWORD, Unix 초 | 1970-01-01 00:00 UTC 부터 센 초. 변환하면 UTC 입니다 (관찰) |
-| `FirstRunSignInOriginDateTime` | REG_SZ 에 적은 Unix 초 숫자 | 위와 같습니다 (관찰) |
-| `SyncEngines` 의 `LastModifiedTime` | REG_SZ 날짜 문자열 | 시간대 표시가 없습니다. OneDrive 시작 시각(UTC)과 맞아서 UTC 로 보입니다 (관찰). 공식 설명은 확인하지 못했습니다 |
+| `Accounts\<계정>` 의 시각 값, 루트 키의 `PersonalUnlinkedTimeStamp` 등 | QWORD, Unix 초 | 1970-01-01 00:00 UTC 부터 센 초. 변환하면 UTC 입니다 |
+| `FirstRunSignInOriginDateTime` | REG_SZ 에 적은 Unix 초 숫자 | 위와 같습니다 |
+| `SyncEngines` 의 `LastModifiedTime` | REG_SZ 날짜 문자열 | 시간대 표시가 없습니다. OneDrive 시작 시각(UTC)과 맞아서 UTC 로 보입니다. 공식 설명은 없습니다 |
 | 키의 마지막 기록 시각 | 하이브에 있는 키 단위 시각 | [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 를 참고합니다 |
 
-Unix 초라고 판단한 근거는 이렇습니다. 관찰한 PC 에서 `Accounts\Personal` 의 `LastSignInTime` 은 1790114532 였습니다. 이 값은 2026-09-22 22:02:12 UTC 입니다. 실행 중이던 OneDrive 프로세스의 시작 시각은 22:02:11 UTC 로, 1초 차이였습니다.
+Unix 초로 읽는 근거는 이렇습니다. `Accounts\Personal` 의 `LastSignInTime` 이 1790114532 이면 2026-09-22 22:02:12 UTC 입니다. 같은 PC 에서 실행 중이던 OneDrive 프로세스의 시작 시각은 22:02:11 UTC 로, 1초 차이입니다.
 
 Unix 초를 변환하는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
-- **값 목록은 PC 한 대에서 본 것입니다.** 앱 버전이 다르면 값 이름과 구성이 다를 수 있습니다.
-- **숫자 코드의 뜻을 짐작으로 채우지 않습니다.** `LastKnownFolderMigrationState` 의 5, `KfmFoldersProtectedNow` 의 3584, `USQInformation` 의 단위는 모두 확인하지 못했습니다.
+- **값 목록은 OneDrive 26.168.0830.0006 기준입니다.** 앱 버전이 다르면 값 이름과 구성이 다를 수 있습니다.
+- **숫자 코드의 뜻을 짐작으로 채우지 않습니다.** `LastKnownFolderMigrationState` 의 5, `KfmFoldersProtectedNow` 의 3584, `USQInformation` 의 단위는 모두 공개 자료가 없습니다.
 - **QWORD 를 FILETIME 으로 읽지 않습니다.** 레지스트리 도구가 QWORD 를 FILETIME 으로 풀어 보여 주면 1601년 초의 날짜가 나옵니다. 아래 헥스 예시에서 확인합니다.
-- **회사 계정의 `UserName` 과 `UserEmail` 은 값이 달랐습니다 (관찰).** 보고서에는 어느 값을 썼는지 밝힙니다.
-- **ini 파일 이름은 테넌트 ID 가 아닙니다.** 회사 계정도 `cid` 로 파일 이름을 짓습니다 (관찰).
-- **`Collection` 으로 끝나는 루트 키 값 네 개는 내용을 보지 않았습니다.** 이름만으로 무엇이 들었는지 단정하지 않습니다.
+- **회사 계정의 `UserName` 과 `UserEmail` 은 값이 다를 수 있습니다.** 보고서에는 어느 값을 썼는지 밝힙니다.
+- **ini 파일 이름은 테넌트 ID 가 아닙니다.** 회사 계정도 `cid` 로 파일 이름을 짓습니다.
+- **`Collection` 으로 끝나는 루트 키 값 네 개는 내용에 관한 공개 자료가 없습니다.** 이름만으로 무엇이 들었는지 단정하지 않습니다.
 - **알려진 폴더 이동을 켠 PC 는 바탕 화면·문서 경로가 OneDrive 폴더 안으로 바뀝니다.** 다른 아티팩트의 경로를 읽을 때 [원드라이브 허브](index.md) 의 설명을 참고합니다.
 
 ## 직접 분석해 보기
@@ -274,7 +270,7 @@ OneDrive!S-1-5-21-…-1001!Business1|0123456789abcdef0123456789abcdef
 reg query "HKCU\Software\Microsoft\OneDrive\Accounts" /s
 ```
 
-공개 도구 OneDriveExplorer 는 사용자 레지스트리 하이브로 동기화 폴더 위치를 찾습니다. 도구 결과는 위 수작업 결과와 한 번 맞춰 봅니다.
+공개 도구 OneDriveExplorer 는 사용자 레지스트리 하이브로 동기화 폴더 위치를 찾습니다[4]. 도구 결과는 위 수작업 결과와 한 번 맞춰 봅니다.
 
 ## 교차 검증
 

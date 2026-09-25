@@ -20,7 +20,7 @@ Sysmon (System Monitor) 은 설정 파일이 정한 시스템 활동을 Windows 
 
 - Sysmon 은 누군가 설치해야 기록합니다. Windows 11 에 들어 있는 Sysmon 도 기본으로 꺼져 있습니다. 그래서 조사하는 PC 에 Sysmon 로그가 있는지부터 확인합니다.
 - 무엇을 기록할지는 설정 파일이 정합니다.
-- Microsoft 문서는 설정에서 빼서 기록하지 않은 활동은 나중에 되살릴 수 없다고 적습니다. 그래서 로그에 없다는 것만으로 그 일이 없었다고 쓰지 않습니다.
+- 설정에서 빼서 기록하지 않은 활동은 나중에 되살릴 수 없습니다. 그래서 로그에 없다는 것만으로 그 일이 없었다고 쓰지 않습니다.
 - Sysmon 은 기록만 합니다. 사건을 분석하지 않고, 공격자에게서 자신을 숨기려 하지도 않습니다.
 - Sysmon 이 멈췄거나, 설정이 바뀌었거나, 기록이 빠진 구간은 따로 확인합니다. 방법은 [Sysmon 개념과 설정 확인](sysmon-config.md)에서 다룹니다.
 
@@ -33,19 +33,19 @@ Sysmon (System Monitor) 은 설정 파일이 정한 시스템 활동을 Windows 
 | 채널 (Vista 이후) | Microsoft-Windows-Sysmon/Operational |
 | 이벤트 뷰어 위치 | 응용 프로그램 및 서비스 로그 > Microsoft > Windows > Sysmon > Operational |
 | Vista 이전 OS | System 로그에 씁니다 |
-| 로그 파일 | `%SystemRoot%\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx` (채널 이름 규칙으로 짐작한 경로입니다) |
+| 로그 파일 | `%SystemRoot%\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx` (채널 이름 규칙에서 나온 경로라 검체에서 확인합니다) |
 | 시각 | UTC. 이벤트마다 UtcTime 칸이 있습니다 |
 | 이벤트 종류 표시 | 이벤트 뷰어의 "작업 범주" 칸에 아래 필터 태그 이름이 보입니다 |
 | 무엇을 남길지 | 설정 파일이 정합니다 |
 
-로그 파일 경로를 짐작한 근거, 설치 흔적, 채널 기본값은 [Sysmon 개념과 설정 확인](sysmon-config.md)에서 다룹니다. EVTX 파일 형식은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+로그 파일 경로의 근거, 설치 흔적, 채널 기본값은 [Sysmon 개념과 설정 확인](sysmon-config.md)에서 다룹니다. EVTX 파일 형식은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### Windows 버전
 
 | 구분 | 내용 |
 |---|---|
 | 따로 받은 Sysmon v15.22 | Windows 11 이상, Windows Server 2019 이상에서 돕니다 |
-| 따로 받은 Sysmon 예전 버전 | 어느 OS 까지 지원했는지 확인하지 못했습니다 |
+| 따로 받은 Sysmon 예전 버전 | 어느 OS 까지 지원했는지 공개 자료가 없습니다 |
 | Windows 11 내장 Sysmon | 선택적 기능입니다. 기본으로 꺼져 있습니다. 따로 받은 Sysmon 과 함께 쓸 수 없고, 같은 채널에 기록합니다 |
 
 ### 이벤트 목록

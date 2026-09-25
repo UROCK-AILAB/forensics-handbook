@@ -9,13 +9,13 @@ nav_order: 1850
 
 ## 한 줄 요약
 
-IE 는 즐겨찾기를 사용자 즐겨찾기 폴더 (Favorites) 안의 `.url` 파일로 둡니다. `.url` 은 INI 형식의 글자 파일이고, `URL=` 줄에 즐겨찾기가 가리키는 주소가 있습니다. 한 PC 에서 본 `.url` 에는 시각을 적은 줄이 없었습니다. 그래서 시각은 파일 시스템에서 읽습니다. 옛 엣지 (EdgeHTML) 의 새 버전은 즐겨찾기를 ESE 데이터베이스인 `spartan.edb` 에 둡니다.
+IE 는 즐겨찾기를 사용자 즐겨찾기 폴더 (Favorites) 안의 `.url` 파일로 둡니다. `.url` 은 INI 형식의 글자 파일이고, `URL=` 줄에 즐겨찾기가 가리키는 주소가 있습니다. Windows 11 25H2 의 기본 `.url` 에는 시각을 적은 줄이 없으므로 시각은 파일 시스템에서 읽습니다. 옛 엣지 (EdgeHTML) 의 새 버전은 즐겨찾기를 ESE 데이터베이스인 `spartan.edb` 에 둡니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 즐겨찾기는 사용자가 다시 찾아가려고 저장해 둔 웹 주소입니다. IE 의 즐겨찾기 하나는 즐겨찾기 폴더 안의 `.url` 파일 하나이고, 이 파일은 인터넷 바로가기 (Internet Shortcut) 로서 안의 `[InternetShortcut]` 절에 주소가 있습니다. 즐겨찾기를 추가하면 폴더에 파일이 생기고 지우면 파일이 없어지므로, 즐겨찾기는 파일 시스템 기록과 함께 읽습니다.
 
-Forensafe 글은 옛 엣지의 새 버전이 즐겨찾기를 `spartan.edb` 에 둔다고 적었습니다.
+옛 엣지의 새 버전은 즐겨찾기를 `spartan.edb` 에 둡니다[1].
 
 이 페이지는 즐겨찾기 파일과 그 위치만 다룹니다. 즐겨찾기 주소에 실제로 방문했는지는 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 와 [옛 기록 파일 (index.dat)](index-dat.md) 에서 봅니다.
 
@@ -23,42 +23,42 @@ Forensafe 글은 옛 엣지의 새 버전이 즐겨찾기를 `spartan.edb` 에 �
 
 ### IE 즐겨찾기 폴더
 
-Windows 11 25H2 PC 에서 본 모습입니다.
+Windows 11 25H2 기준입니다.
 
-| 항목 | 이 PC 에서 본 것 |
+| 항목 | Windows 11 25H2 의 값 |
 |---|---|
 | 폴더 | `%USERPROFILE%\Favorites` |
 | 폴더 위치를 적은 값 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 의 `Favorites` 값 (REG_EXPAND_SZ), 값은 `%USERPROFILE%\Favorites` |
 | 폴더 안 | `Links` 하위 폴더, `desktop.ini`, `.url` 파일 |
-| 함께 있던 키 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MenuOrder\Favorites` |
+| 함께 있는 키 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MenuOrder\Favorites` |
 
 - `User Shell Folders` 값은 사용자 하이브 (NTUSER.DAT) 에 있습니다. 검체에서는 그 사용자의 NTUSER.DAT 에서 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - 기본 위치에 폴더가 없으면 이 값을 먼저 확인합니다.
-- 다른 Windows 버전의 기본 위치는 이번에 연 자료로 확인하지 못했습니다.
+- 다른 Windows 버전에서도 이 값으로 폴더 위치를 확인합니다.
 - `desktop.ini` 는 폴더 표시 설정 파일입니다. 즐겨찾기가 아닙니다.
-- `MenuOrder\Favorites` 키 값의 형식과 뜻은 이번에 연 자료로 확인하지 못했습니다. 이 키로 즐겨찾기 순서나 시각을 해석하지 않습니다.
+- `MenuOrder\Favorites` 키 값의 형식과 뜻은 공개 자료가 없습니다. 이 키로 즐겨찾기 순서나 시각을 해석하지 않습니다.
 
 ### 옛 엣지 즐겨찾기
 
 | 항목 | 내용 | 출처 |
 |---|---|---|
-| 저장 형식 | 새 버전은 `spartan.edb` (ESE 데이터베이스), 옛 버전은 `Favorites` 폴더 안의 `.url` 파일 | Forensafe |
-| 즐겨찾기 폴더 | `C:\Users\<사용자>\AppData\Local\Packages\<패키지 이름>\AC\MicrosoftEdge\User\<프로필 이름>\Favorites` | Forensafe |
-| 같은 곳의 다른 폴더 | `…\User\<프로필 이름>\Recovery`, `…\User\<프로필 이름>\Datastore` | Forensafe |
-| 수집 범위 예 | 공개 수집 정의 `Edge.tkape` 는 `…\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\` 아래를 모두 모읍니다 | KapeFiles |
+| 저장 형식 | 새 버전은 `spartan.edb` (ESE 데이터베이스), 옛 버전은 `Favorites` 폴더 안의 `.url` 파일 | [1] |
+| 즐겨찾기 폴더 | `C:\Users\<사용자>\AppData\Local\Packages\<패키지 이름>\AC\MicrosoftEdge\User\<프로필 이름>\Favorites` | [1] |
+| 같은 곳의 다른 폴더 | `…\User\<프로필 이름>\Recovery`, `…\User\<프로필 이름>\Datastore` | [1] |
+| 수집 범위 예 | 공개 수집 정의 `Edge.tkape` 는 `…\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\` 아래를 모두 모읍니다 | [2] |
 
-- `spartan.edb` 의 정확한 전체 경로와 표 이름·칸 이름은 이번에 연 자료로 확인하지 못했습니다.
-- 어느 버전부터 `spartan.edb` 를 썼는지는 확인하지 못했습니다. 출처 글도 "새 버전"·"옛 버전"으로만 나눕니다.
+- `spartan.edb` 의 정확한 전체 경로와 표 이름·칸 이름은 공개 자료가 없어 검체에서 확인합니다.
+- 어느 버전부터 `spartan.edb` 를 썼는지는 공개 자료에 나와 있지 않습니다. "새 버전"·"옛 버전"으로만 나뉩니다.
 - 그래서 경로 하나만 찾지 않고 패키지 폴더를 통째로 모읍니다.
 - `spartan.edb` 의 저장 형식은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서, 패키지 폴더의 짜임은 [UWP 앱 데이터 구조](../../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
-- Windows 11 25H2 PC 에는 옛 엣지 패키지 폴더가 없었습니다.
+- Windows 11 에는 옛 엣지 패키지 폴더가 없을 수 있습니다.
 - 옛 엣지의 지원 종료 시점은 [인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)](index.md) 에서 다룹니다.
 
 ## 구조
 
 ### .url 파일
 
-아래는 Windows 11 25H2 PC 의 즐겨찾기 폴더에서 본 `Bing.url` (208바이트) 의 내용입니다.
+아래는 Windows 11 25H2 의 즐겨찾기 폴더에 기본으로 들어 있는 `Bing.url` (208바이트) 의 내용입니다.
 
 ```
 [{000214A0-0000-0000-C000-000000000046}]
@@ -70,20 +70,20 @@ IconIndex=0
 IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 ```
 
-바이너리가 아니라 INI 형식의 글자 파일이며, `[InternetShortcut]` 이 아니라 `[{` (0x5B 0x7B) 로 시작했습니다. 위 일곱 줄의 글자 수를 모두 더하면 194이고, 줄마다 줄 끝 두 바이트 (CR LF) 를 더하면 208로 파일 크기와 같습니다. 그래서 이 파일은 한 글자를 한 바이트로 적고 줄 끝에 CR LF 를 붙인 것으로 보입니다.
+바이너리가 아니라 INI 형식의 글자 파일이며, `[InternetShortcut]` 이 아니라 `[{` (0x5B 0x7B) 로 시작합니다. 위 일곱 줄의 글자 수를 모두 더하면 194이고, 줄마다 줄 끝 두 바이트 (CR LF) 를 더하면 208로 파일 크기와 같습니다. 그래서 이 파일은 한 글자를 한 바이트로 적고 줄 끝에 CR LF 를 붙인 것으로 보입니다.
 
 | 줄 | 이 파일의 값 | 읽는 법 |
 |---|---|---|
-| `[{000214A0-0000-0000-C000-000000000046}]` | 절 이름 | 이 절의 뜻은 이번에 연 자료로 확인하지 못했습니다 |
-| `Prop3=` | `19,2` | 뜻을 확인하지 못했습니다 |
+| `[{000214A0-0000-0000-C000-000000000046}]` | 절 이름 | 공개 자료 없음 |
+| `Prop3=` | `19,2` | 공개 자료 없음 |
 | `[InternetShortcut]` | 절 이름 | 아래 줄들이 이 절에 듭니다 |
-| `IDList=` | 비어 있음 | 이 파일에서는 값이 없었습니다 |
+| `IDList=` | 비어 있음 | 이 파일에서는 값이 비어 있습니다 |
 | `URL=` | `http://go.microsoft.com/fwlink/p/?LinkId=255142` | 즐겨찾기가 가리키는 주소입니다 |
 | `IconIndex=` | `0` | 아이콘에 관한 값입니다 |
 | `IconFile=` | `%ProgramFiles%\Internet Explorer\Images\bing.ico` | 아이콘 파일 경로입니다 |
 
-- 이 파일에는 시각을 적은 줄이 없었습니다.
-- 다른 `.url` 파일에 `Modified=` 같은 시각 줄이 들어가는지는 이번에 연 자료로 확인하지 못했습니다. 이런 줄이 보이면 뜻을 따로 확인한 뒤에 씁니다.
+- 이 파일에는 시각을 적은 줄이 없습니다.
+- 다른 `.url` 파일에서 `Modified=` 같은 시각 줄이 보이면 뜻을 따로 확인한 뒤에 씁니다.
 - `.url` 은 `.lnk` 바로가기와 형식이 다릅니다. `.lnk` 형식은 [바로가기 형식](../../../01-foundations/shell-document-formats/shell-link-lnk.md) 에서 다룹니다.
 
 ## 증거로서 의미
@@ -106,22 +106,22 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 
 ## 시각 해석
 
-- 한 PC 에서 본 `.url` 에는 시각 줄이 없었습니다. 시각은 파일 시스템에서 읽습니다.
+- 위 `Bing.url` 처럼 시각 줄이 없는 `.url` 은 시각을 파일 시스템에서 읽습니다.
 - NTFS 는 파일 시각을 UTC 로 적습니다. 현지 시각으로 바꿀 때는 [시간대 설정](../../system-account/time-zone.md) 을 확인합니다.
 - 파일 시스템 시각의 종류와 바뀌는 조건은 [마스터 파일 테이블](../../filesystem/mft.md) 에서 다룹니다.
 - 만든 시각을 즐겨찾기를 추가한 시각으로 단정하지 않습니다. 다른 곳에서 복사해 온 파일이면 만든 시각은 복사한 때를 가리킬 수 있습니다.
 - 파일 내용을 고치면 수정 시각이 바뀝니다. 즐겨찾기 주소를 바꾼 흔적일 수 있습니다.
-- 옛 엣지 `spartan.edb` 안에 어떤 시각 칸이 있는지는 이번에 연 자료로 확인하지 못했습니다.
+- 옛 엣지 `spartan.edb` 안에 어떤 시각 칸이 있는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 함정과 한계
 
-- **처음부터 들어 있던 항목이 섞입니다.** 한 PC 의 `Bing.url` 은 주소가 `go.microsoft.com` 의 안내 링크였고, 아이콘은 Internet Explorer 설치 폴더의 그림이었습니다. 이런 항목을 사용자가 추가했다고 단정하지 않습니다.
-- **파일 첫머리만 보면 놓칩니다.** 한 PC 의 `.url` 은 `[InternetShortcut]` 이 아니라 `[{000214A0-…}]` 절로 시작했습니다. 지운 `.url` 을 내용으로 찾을 때는 `[InternetShortcut]` 과 `URL=` 문자열을 파일 어디서든 찾습니다. 검색 방법은 [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) 에서 다룹니다.
+- **처음부터 들어 있던 항목이 섞입니다.** 기본으로 들어 있는 `Bing.url` 은 주소가 `go.microsoft.com` 의 안내 링크이고, 아이콘은 Internet Explorer 설치 폴더의 그림입니다. 이런 항목을 사용자가 추가했다고 단정하지 않습니다.
+- **파일 첫머리만 보면 놓칩니다.** `.url` 은 `[InternetShortcut]` 이 아니라 `[{000214A0-…}]` 절로 시작하기도 합니다. 지운 `.url` 을 내용으로 찾을 때는 `[InternetShortcut]` 과 `URL=` 문자열을 파일 어디서든 찾습니다. 검색 방법은 [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) 에서 다룹니다.
 - **지운 즐겨찾기는 파일 시스템에서 찾습니다.** 휴지통, 지운 MFT 레코드, USN 저널, 폴더 인덱스 슬랙을 차례로 봅니다. 크기가 작은 파일은 내용이 MFT 레코드 안에 들어가기도 합니다. 복구 방법은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 - **쉽게 고칠 수 있습니다.** 글자 파일이라 메모장으로도 주소를 바꿀 수 있으므로 수정 시각과 USN 저널 기록을 함께 봅니다. 조작 흔적을 보는 법은 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
 - **폴더를 옮겼을 수 있습니다.** 기본 위치만 보지 않고 `User Shell Folders` 의 `Favorites` 값을 확인합니다.
 - **옛 엣지는 버전에 따라 저장 방식이 다릅니다.** 옛 버전은 패키지 폴더 안 `Favorites` 에 `.url` 을 두고, 새 버전은 `spartan.edb` 에 둡니다. IE 즐겨찾기 폴더의 `.url` 만 찾으면 옛 엣지 즐겨찾기를 놓칩니다. 패키지 폴더를 따로 모읍니다.
-- **`MenuOrder` 키를 해석하지 않습니다.** 형식을 확인하지 못한 키입니다.
+- **`MenuOrder` 키를 해석하지 않습니다.** 형식이 공개되지 않은 키입니다.
 
 ## 직접 분석해 보기
 

@@ -29,9 +29,9 @@ DB 하나는 롤백 저널과 WAL 가운데 하나만 쓰고 둘을 동시에 �
 
 Windows 에서 만나는 예는 아래와 같습니다(Windows 11 빌드 26200 기준).
 
-- [윈도 알림 기록 (wpndatabase.db)](../../../02-artifacts/execution/wpndatabase-db.md) 옆에 `-wal`·`-shm` 이 있었습니다.
-- [윈도 타임라인 (ActivitiesCache.db)](../../../02-artifacts/file-folder-usage/activitiescache-db.md) 옆에도 `-wal`·`-shm` 이 있었습니다.
-- 크롬·엣지 프로필의 `History`·`Web Data`·`Login Data` 옆에는 `-journal` 이 있었습니다. 대부분 0바이트였습니다. 같은 폴더의 `DIPS` 는 `-wal` 을 썼습니다. ([방문·다운로드 기록 (History)](../../../02-artifacts/browsers/chrome-edge-whale/history.md))
+- [윈도 알림 기록 (wpndatabase.db)](../../../02-artifacts/execution/wpndatabase-db.md) 옆에 `-wal`·`-shm` 이 있습니다.
+- [윈도 타임라인 (ActivitiesCache.db)](../../../02-artifacts/file-folder-usage/activitiescache-db.md) 옆에도 `-wal`·`-shm` 이 있습니다.
+- 크롬·엣지 프로필의 `History`·`Web Data`·`Login Data` 옆에는 `-journal` 이 있고, 대부분 0바이트입니다. 같은 폴더의 `DIPS` 는 `-wal` 을 씁니다. ([방문·다운로드 기록 (History)](../../../02-artifacts/browsers/chrome-edge-whale/history.md))
 
 어느 방식을 쓰는지는 앱과 앱 버전이 정하므로 검체마다 폴더의 보조 파일과 주 파일 머리를 확인합니다.
 이 형식은 Windows 버전과 상관이 없지만, SQLite 버전에 따라서는 아래가 달라집니다.
@@ -61,7 +61,7 @@ PERSIST 에서 `journal_size_limit` 를 정했으면 커밋 뒤 그 크기를 �
 
 ### 롤백 저널 (`-journal`)
 
-숫자는 모두 빅 엔디언입니다. 파일 형식 문서에는 이 점이 적혀 있지 않습니다. SQLite 소스 pager.c 로 확인했습니다.
+숫자는 모두 빅 엔디언입니다. (pager.c)
 
 | 오프셋 | 크기 | 칸 | 뜻 |
 |---|---|---|---|
@@ -88,13 +88,13 @@ PERSIST 에서 `journal_size_limit` 를 정했으면 커밋 뒤 그 크기를 �
 - 검사합은 난수에 페이지 안 바이트 몇 개를 더한 값입니다. 오프셋 N−200 부터 200바이트씩 앞으로 가며 한 바이트씩 더합니다. 페이지가 4,096바이트면 20바이트만 더합니다.
 - 동기화를 끄지 않은 보통 설정에서, SQLite 는 페이지 기록을 디스크에 확실히 쓴 다음 매직과 페이지 수를 채웁니다. 그 전까지 두 칸은 0 입니다. (pager.c)
 
-Windows 11 빌드 26200 의 엣지에서는 브라우저를 닫은 뒤에도 `History-journal` 이 8,720바이트로 남아 있었습니다.
-앞 12바이트(매직·페이지 수)는 0 이었고, 파일 크기는 512바이트 머리와 4,104바이트 페이지 기록 2개를 더한 값과 같았습니다.
-명세의 계산법으로 두 기록의 검사합이 모두 맞았습니다.
+Windows 11 빌드 26200 의 엣지는 브라우저를 닫은 뒤에도 `History-journal` 을 남길 수 있습니다. 한 예는 8,720바이트입니다.
+이 파일은 앞 12바이트(매직·페이지 수)가 0 이고, 크기는 512바이트 머리와 4,104바이트 페이지 기록 2개를 더한 값과 같습니다.
+두 기록의 검사합은 명세의 계산법으로 맞습니다.
 
 ### 핫 저널 (Hot Journal)
 
-되돌리기에 필요한 내용이 든 저널을 핫 저널이라고 부릅니다. pager.c 는 아래 네 조건이 모두 맞으면 핫 저널로 봅니다.
+되돌리기에 필요한 내용이 든 저널을 핫 저널이라고 부릅니다. SQLite 는 아래 네 조건이 모두 맞으면 핫 저널로 봅니다.
 
 - 저널 파일이 있습니다.
 - 어떤 프로세스도 DB 에 RESERVED 이상의 잠금을 걸지 않았습니다.
@@ -151,8 +151,7 @@ s0 = s1 = 0
 결과는 매직과 상관없이 빅 엔디언으로 저장합니다.
 SQLite 는 WAL 을 쓰는 컴퓨터의 바이트 순서에 맞춰 매직을 고릅니다. (wal.c)
 
-Windows 11 빌드 26200 의 `wpndatabase.db-wal` 에서 매직은 `0x377F0682` 였습니다.
-리틀 엔디언으로 다시 계산한 검사합이 머리와 모든 프레임에서 맞았습니다.
+Windows 11 빌드 26200 의 `wpndatabase.db-wal` 은 매직이 `0x377F0682` 이고, 검사합을 리틀 엔디언으로 계산하면 머리와 모든 프레임에서 맞습니다.
 
 ### 읽는 규칙·체크포인트·초기화
 
@@ -196,7 +195,7 @@ SQLite 는 이 파일을 디스크에 강제로 쓰지(fsync) 않습니다.
 
 머리 뒤에는 프레임마다 페이지 번호를 적은 배열(aPgno)과 해시 표(aHash)가 옵니다.
 mxFrame 과 nBackfill 로 WAL 을 셋으로 나눌 수 있는데, 프레임 1~nBackfill 은 이미 주 파일에 옮겼고 그 뒤 mxFrame 까지는 WAL 에만 있으며 mxFrame 뒤는 SQLite 가 쓰지 않는 프레임입니다.
-같은 `wpndatabase.db` 에서 `-shm` 의 aSalt 는 `-wal` 머리의 솔트와 같았습니다.
+같은 `wpndatabase.db` 의 `-shm` 에서 aSalt 는 `-wal` 머리의 솔트와 같습니다.
 
 > 그림 자리: 주 파일, `-wal`(머리 → 프레임 … → 커밋 프레임 → 옛 솔트 프레임), `-shm`(nBackfill·mxFrame 이 가리키는 프레임 범위) 세 파일의 관계
 
@@ -287,7 +286,7 @@ WAL 방식에서 최근 변경은 체크포인트 전까지 `-wal` 에만 있으
 ### 한 페이지의 여러 판
 
 `-wal` 에는 같은 페이지의 프레임이 여럿 있을 수 있고 판마다 레코드 내용이 다릅니다.
-같은 `-wal` 안에서는 솔트-1 이 클수록 새 세대이고, 솔트-1 이 같으면 파일 뒤쪽에 있는 프레임이 더 새것입니다. (Caithness, 2012)
+같은 `-wal` 안에서는 솔트-1 이 클수록 새 세대이고, 솔트-1 이 같으면 파일 뒤쪽에 있는 프레임이 더 새것입니다.
 서로 다른 `-wal` 파일 사이의 순서는 새 파일이 솔트를 새 난수로 시작하므로 솔트로 정할 수 없습니다.
 보안 삭제 (`secure_delete`) 가 켜진 앱이라도 옛 프레임과 저널에는 지우기 전 페이지가 남을 수 있습니다. 실험 결과는 [파일 안에 남은 지운 레코드](freelist-freeblock.md) 에 있습니다.
 
@@ -308,7 +307,7 @@ WAL 방식에서 최근 변경은 체크포인트 전까지 `-wal` 에만 있으
 
 일반 SQLite 프로그램으로 열면 핫 저널은 주 파일로 되돌려집니다.
 WAL 방식 DB 를 열었다 닫으면 체크포인트가 돌고 `-wal`·`-shm` 이 지워질 수 있는데, 이때 주 파일 안의 옛 판이 덮이고 `-wal` 의 옛 프레임도 사라집니다.
-SQLite 문서는 주 파일을 `-wal` 과 떼어 놓으면 커밋한 트랜잭션을 잃거나 DB 가 깨질 수 있다고 경고합니다.
+주 파일을 `-wal` 과 떼어 놓으면 커밋한 트랜잭션을 잃거나 DB 가 깨질 수 있습니다.
 그래서 주 파일, `-journal`, `-wal`, `-shm` 을 같은 이름 그대로 함께 모으고, 파일마다 해시를 남기며 사본에서만 작업합니다. 방법은 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 과 [해시로 무결성 검증](../../../03-techniques/process-acquisition/evidence-acquisition/hash-verification.md) 에 있습니다.
 디스크 이미지 속 `-shm` 은 SQLite 가 이 파일을 디스크에 강제로 쓰지 않기 때문에 마지막 상태와 다를 수 있으므로, mxFrame·nBackfill 은 참고로만 쓰고 `-wal` 로 다시 확인합니다.
 

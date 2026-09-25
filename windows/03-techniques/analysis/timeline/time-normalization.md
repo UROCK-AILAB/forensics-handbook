@@ -30,10 +30,10 @@ nav_order: 3300
 - NTFS 는 시각을 UTC 로 저장하므로 시간대나 일광 절약 시간 (Daylight Saving Time) 이 바뀌어도 저장된 값은 그대로입니다(참고 1).
 - FAT 는 현지 시각으로 저장하므로(참고 1) FAT 시각을 UTC 로 바꾸려면 그 시각을 적은 컴퓨터의 시간대를 알아야 합니다.
 - 이벤트 로그의 시각은 `2015-10-09T05:04:29.995794600Z` 처럼 적습니다(참고 4). 끝의 Z 가 UTC 라는 표시입니다(참고 4).
-- exFAT 에 시간대를 적는 칸이 있는지는 이 페이지에서 확인하지 못했습니다. 구조는 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md)를 봅니다.
+- exFAT 의 시각 칸 구조는 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md)를 봅니다.
 - 값을 날짜로 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다. 레지스트리·브라우저처럼 다른 출처의 기준은 각 아티팩트 페이지를 봅니다.
 
-Microsoft 문서의 예를 표로 옮기면 아래와 같습니다(참고 1). 워싱턴(PST)에서 오후 3시에 저장한 파일을 뉴욕 컴퓨터에서 본 경우입니다.
+워싱턴(PST)에서 오후 3시에 저장한 파일을 뉴욕 컴퓨터에서 보면 아래와 같습니다(참고 1).
 
 | 파일시스템 | 뉴욕 컴퓨터에 보이는 시각 (참고 1) |
 |---|---|
@@ -82,7 +82,7 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 - TZI 값은 REG_TZI_FORMAT 구조입니다(참고 2). Bias, StandardBias, DaylightBias 를 LONG 으로 차례로 적고, 그 뒤에 StandardDate, DaylightDate 를 SYSTEMTIME 으로 적습니다(참고 2).
 - Bias 는 REG_DWORD 로 저장하지만 부호 있는 32비트로 읽어야 합니다(현장 관찰). UTC+9 의 -540 을 부호 없이 읽으면 4,294,966,756 이 됩니다(현장 관찰).
 - 하이브의 REG_DWORD 를 글자로 보여 주는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다(현장 관찰). 부호에 뜻이 있는 값은 원시 바이트로 확인합니다.
-- TimeZoneInformation 키의 다른 값과 그 뜻은 이 페이지에서 확인하지 못했습니다. 이 키의 풀이는 [시간대 설정](../../../02-artifacts/system-account/time-zone.md)을 봅니다.
+- TimeZoneInformation 키의 다른 값과 그 뜻은 [시간대 설정](../../../02-artifacts/system-account/time-zone.md)을 봅니다.
 - 오프라인 SYSTEM 하이브에서 어느 컨트롤셋을 읽을지는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 
 ### 헥스로 한 번
@@ -106,7 +106,7 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 
 - FileTimeToLocalFileTime 은 지금 설정된 시간대와 일광 절약 시간을 씁니다(참고 1).
 - 그래서 지금이 일광 절약 시간이면, 표준시 기간의 파일 시각을 바꿀 때도 일광 절약 시간을 적용해(참고 1) 결과가 일광 절약 시간의 차이만큼 어긋납니다.
-- Microsoft 는 NTFS 시각을 현지 시각으로 바꿀 때 FileTimeToSystemTime → SystemTimeToTzSpecificLocalTime → SystemTimeToFileTime 순서를 권합니다(참고 1).
+- NTFS 시각을 현지 시각으로 바꿀 때는 FileTimeToSystemTime → SystemTimeToTzSpecificLocalTime → SystemTimeToFileTime 순서로 바꾸면 됩니다(참고 1).
 - 분석 PC 에서 "지금 설정" 으로 바꾸면 검체가 아닌 분석 PC 의 시간대가 들어갑니다. 도구가 어떤 방식으로 바꾸는지 모르면 UTC 로 뽑아 직접 바꿉니다.
 
 ### FAT 를 라이브로 읽을 때
@@ -138,10 +138,10 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 | ProcessId · ProcessName | 시각을 바꾼 프로세스 확인 |
 
 - PreviousTime·NewTime 은 UTC 이고, 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니다(참고 4).
-- 문서의 예시는 PreviousTime `2015-10-09T05:04:30.000941900Z`, NewTime `2015-10-09T05:04:30.000000000Z` 입니다(참고 4). 두 값을 빼면 시계를 약 0.94밀리초 뒤로 돌렸습니다.
+- 예를 들어 PreviousTime 이 `2015-10-09T05:04:30.000941900Z`, NewTime 이 `2015-10-09T05:04:30.000000000Z` 이면(참고 4), 두 값을 빼서 시계를 약 0.94밀리초 뒤로 돌린 것을 알 수 있습니다.
 - Subject 가 LOCAL SERVICE 이면 Windows Time 서비스가 한 보통의 시각 보정입니다(참고 4).
-- Microsoft 는 Subject 가 LOCAL SERVICE 가 아니거나 프로세스 이름이 svchost.exe 가 아니면 보고하라고 권합니다(참고 4).
-- 시각을 바꿀 때 System 로그에 함께 남는 이벤트는 이 페이지에서 확인하지 못했습니다. 이 이벤트의 자세한 풀이는 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md)을 봅니다.
+- Subject 가 LOCAL SERVICE 가 아니거나 프로세스 이름이 svchost.exe 가 아니면 따로 보고할 대상입니다(참고 4).
+- System 로그 쪽 기록과 이 이벤트의 자세한 풀이는 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md)을 봅니다.
 
 ### 바뀐 시계로 적힌 기록 읽기
 
@@ -149,7 +149,7 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 
 NewTime 에서 PreviousTime 을 빼면 시계가 뛴 크기가 나오고, 시계를 바꾼 뒤 다음 보정까지 그 PC 가 적은 시각에는 그 크기만큼 차이가 들어 있을 수 있습니다. 시계가 뒤로 가면 같은 시각대가 두 번 생겨서 이 구간의 기록은 시각만으로 순서를 정할 수 없습니다.
 
-- 시계가 조금씩 틀어지는 오차(드리프트, Drift)를 재는 방법은 이 페이지의 출처로 확인하지 못했습니다. 같은 사건을 이 PC 와 바깥 기준이 함께 적었다면 두 시각의 차이가 그 시점의 오차입니다.
+- 시계가 조금씩 틀어지는 오차(드리프트, Drift)는 같은 사건을 이 PC 와 바깥 기준이 함께 적은 기록으로 잽니다. 두 시각의 차이가 그 시점의 오차입니다.
 
 ## 절차
 

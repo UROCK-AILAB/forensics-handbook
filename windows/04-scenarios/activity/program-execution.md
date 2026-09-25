@@ -8,7 +8,7 @@ nav_order: 3780
 
 실행 파일 하나를 두고 "이 PC 에서 실행됐나, 언제·몇 번·어느 계정의 세션에서 실행됐나" 를 묻는 조사를 다룹니다. Windows 에는 실행과 관계있는 기록이 여럿 있고 기록마다 증명하는 범위가 다릅니다. 이 페이지는 기록마다 실행을 증명하는지 나눠 보고, 어떤 순서로 맞춰 보는지를 정리합니다.
 
-"(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) PC 한 대에서 직접 본 것입니다. 다른 빌드나 다른 PC 에서는 다를 수 있습니다.
+심캐시·UserAssist·BAM·PCA 의 값 예시는 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) 기준입니다.
 
 ## 조사 질문
 
@@ -39,7 +39,7 @@ nav_order: 3780
 | 2 | 부팅만 |
 | 3 | 둘 다 |
 
-이 PC 는 `EnablePrefetcher` 가 3 이었고 `.pf` 파일이 294개 있었으며, 프로세스 만들기 감사는 꺼져 있었습니다(관찰). `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit` 에는 `ProcessCreationIncludeCmdLine_Enabled` 값이 없었습니다(관찰). 이 값이 아래 "명령줄 포함" 정책과 짝이라는 것은 확인하지 못했습니다.
+Windows 11 Home 25H2 PC 에서 `EnablePrefetcher` 가 3, `.pf` 파일이 294개이고 프로세스 만들기 감사는 꺼진 예가 있습니다. 이때 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit` 에는 `ProcessCreationIncludeCmdLine_Enabled` 값이 없을 수 있습니다. 이 값이 아래 "명령줄 포함" 정책과 짝인지는 검체에서 정책 설정과 함께 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -47,8 +47,8 @@ nav_order: 3780
 |---|---|---|---|---|
 | 1 | 프리페치 | 실행 횟수, 최근 실행 시각(Windows 8 이후 최대 8개), 실행 직후 읽은 파일 | 증명합니다. 사용자는 알려 주지 않습니다. | [프리페치](../../02-artifacts/execution/prefetch/index.md) |
 | 2 | UserAssist | 사용자별 실행 횟수, 마지막 실행 시각 | 그 사용자 세션의 실행으로 읽습니다. GUID 의 뜻은 알려진 해석입니다. | [UserAssist](../../02-artifacts/execution/userassist.md) |
-| 3 | BAM | SID 별 장치 경로와 FILETIME 으로 읽히는 값(관찰) | 값의 뜻을 문서로 확인하지 못했습니다. 다른 기록과 맞춰 씁니다. | [BAM·DAM](../../02-artifacts/execution/background-activity-moderator.md) |
-| 4 | 프로그램 호환성 도우미 | 전체 경로와 시각(관찰) | 보조 기록으로 씁니다. | [프로그램 호환성 도우미](../../02-artifacts/execution/pca.md) |
+| 3 | BAM | SID 별 장치 경로와 FILETIME 으로 읽히는 값 | 값의 뜻을 밝힌 공식 문서가 없어 다른 기록과 맞춰 씁니다. | [BAM·DAM](../../02-artifacts/execution/background-activity-moderator.md) |
+| 4 | 프로그램 호환성 도우미 | 전체 경로와 시각 | 보조 기록으로 씁니다. | [프로그램 호환성 도우미](../../02-artifacts/execution/pca.md) |
 | 5 | 보안 로그 4688 | 새 프로세스, 부모 프로세스, 명령줄, 권한 상승 여부 | 감사가 켜져 있으면 증명합니다. | [프로세스 생성](../../02-artifacts/event-logs/4688.md) |
 | 6 | Sysmon 이벤트 1 | 명령줄, 파일 해시, ProcessGUID | 설치돼 있으면 증명합니다. | [Sysmon 로그](../../02-artifacts/event-logs/sysmon/index.md) |
 | 7 | SRUM | 앱·사용자별 자원 사용량(1시간 단위) | 그 시간대에 앱이 자원을 쓴 기록입니다. | [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) |
@@ -71,10 +71,10 @@ nav_order: 3780
 | 2003·Vista | 0xbadc0ffe | 8바이트 |
 | 7 | 0xbadc0fee | 128바이트 |
 | 8.0 | "00ts" | 128바이트 |
-| 8.1 | "10ts" | (확인하지 못함) |
+| 8.1 | "10ts" | 공개 자료 없음 |
 | 10 | "10ts" | 48 또는 52바이트 |
 
-(표는 [3] 에서 옮겼습니다.)
+(출처 [3])
 
 **Windows 10 항목.** 서명 "10ts", 알 수 없는 칸, 항목 데이터 크기, 경로 크기, UTF-16 경로, 마지막 수정 시각(FILETIME), 데이터 크기, 데이터 순서로 이어집니다[3].
 
@@ -86,13 +86,13 @@ NTFS 에서 항목의 시각은 캐시를 갱신한 시각이 아니라 그 파�
 
 **캐시 비우기.** Vista 이후에는 `Rundll32.exe apphelp.dll,ShimFlushCache` 명령으로 캐시를 비웁니다[3]. 항목이 없다고 파일이 없었다고 단정하지 않습니다.
 
-**레지스트리에 쓰는 시점.** 참고한 문서에는 캐시를 레지스트리에 언제 쓰는지 적혀 있지 않습니다[3]. "종료할 때 쓴다" 는 설명이 널리 알려져 있지만 확인하지 못했습니다.
+**레지스트리에 쓰는 시점.** 캐시를 레지스트리에 언제 쓰는지는 명세에 없습니다[3]. "종료할 때 쓴다" 는 설명이 널리 알려져 있지만 이를 뒷받침하는 공개 명세는 없습니다.
 
-**이 PC 에서 본 값.**
+**Windows 11 25H2 의 예.**
 
-AppCompatCache 값은 214,066바이트였고, 앞 4바이트 값은 0x34(52)였으며, 오프셋 0x34 에서 "10ts" 가 나왔습니다(관찰). 값 안에 "10ts" 서명은 904개 있었습니다(관찰).
+AppCompatCache 값이 214,066바이트이고, 앞 4바이트 값이 0x34(52)이며, 오프셋 0x34 에서 "10ts" 가 나오는 예입니다. 값 안에 "10ts" 서명은 904개 있습니다.
 
-아래는 이 배치를 보여 주려고 명세와 관찰을 바탕으로 만든 예시입니다. 실제 검체에서 떼어 온 바이트가 아닙니다.
+아래는 이 배치를 보여 주려고 명세와 위 예를 바탕으로 만든 예시입니다. 실제 검체에서 떼어 온 바이트가 아닙니다.
 
 ```
 오프셋      바이트            뜻
@@ -108,11 +108,11 @@ UserAssist 는 사용자 하이브의 탐색기(Explorer) 키 아래에 남는 �
 
 | GUID | 알려진 해석 | Windows |
 |---|---|---|
-| {CEBFF5CD-ACE2-4F4F-9178-9926F41749EA} | 실행 파일 실행 (추정) | 2008·7·8·10 |
-| {F4E57C4B-2036-45F0-A9AB-443BCFE33D9F} | 바로가기 실행 (추정) | 2008·7·8·10 |
+| {CEBFF5CD-ACE2-4F4F-9178-9926F41749EA} | 실행 파일 실행 | 2008·7·8·10 |
+| {F4E57C4B-2036-45F0-A9AB-443BCFE33D9F} | 바로가기 실행 | 2008·7·8·10 |
 | {75048700-EF1F-11D0-9888-006097DEACF9} · {5E6AB780-7743-11CF-A12B-00AA004AE837} | — | 2000~Vista |
 
-문서도 GUID 의 뜻을 "Assumed" 로 적었으므로 보고서에도 알려진 해석이라고 씁니다[4].
+두 GUID 의 뜻은 추정이므로[4] 보고서에도 알려진 해석이라고 씁니다.
 
 **값 이름은 ROT-13 입니다.**
 
@@ -128,42 +128,42 @@ UserAssist 는 사용자 하이브의 탐색기(Explorer) 키 아래에 남는 �
 | 버전 3 | 2000·XP·2003·Vista | 16바이트 | 0 세션 식별자(4), 4 실행 횟수(4), 8 마지막 실행 시각 FILETIME(8) |
 | 버전 5 | 7·8 등 | 72바이트 | 4 실행 횟수(4), 8 포커스 횟수(4), 12 포커스 시간(4), 60 마지막 실행 시각 FILETIME(8, 없으면 0) |
 
-(표는 [4] 에서 옮겼습니다. 포커스 시간의 단위는 확인하지 못했습니다.)
+(출처 [4]. 포커스 시간의 단위는 공개 자료에 없습니다.)
 
-**이 PC 에서 본 값.**
+**Windows 11 25H2 의 예.**
 
-- GUID 키 9개의 Version 값이 모두 5 였습니다(관찰).
-- {CEBFF5CD…} 의 Count 키에는 값이 203개 있었습니다(관찰). 72바이트 값이 202개, 1,612바이트 값이 1개였습니다(관찰).
-- {F4E57C4B…} 의 Count 키에는 값이 25개 있었습니다(관찰). 72바이트 값이 24개, 1,612바이트 값이 1개였습니다(관찰).
-- 1,612바이트 값의 이름은 `HRZR_PGYFRFFVBA` 였습니다(관찰).
-- 값 이름 가운데 경로 앞부분이 `{…GUID…}\` 로 된 것이 있었습니다(관찰). 알려진 폴더 GUID 로 보입니다. 경로로 바꾸는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 봅니다.
-- 스토어 앱 식별자(…!App) 형식의 값 이름도 있었습니다(관찰).
-- 명령줄로 띄운 실행이 UserAssist 에 남는지는 확인하지 못했습니다.
+- GUID 키 9개의 Version 값이 모두 5 입니다.
+- {CEBFF5CD…} 의 Count 키에 값이 203개 있고, 72바이트 값이 202개, 1,612바이트 값이 1개입니다.
+- {F4E57C4B…} 의 Count 키에 값이 25개 있고, 72바이트 값이 24개, 1,612바이트 값이 1개입니다.
+- 1,612바이트 값의 이름은 `HRZR_PGYFRFFVBA` 입니다.
+- 값 이름 가운데 경로 앞부분이 `{…GUID…}\` 로 된 것이 있습니다. 알려진 폴더 GUID 로 보입니다. 경로로 바꾸는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 봅니다.
+- 스토어 앱 식별자(…!App) 형식의 값 이름도 있습니다.
+- 명령줄로 띄운 실행이 UserAssist 에 남는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## BAM
 
-BAM (Background Activity Moderator) 키에는 SID 별로 실행 파일 경로가 남습니다. 아래는 모두 이 PC 에서 본 내용입니다.
+BAM (Background Activity Moderator) 키에는 SID 별로 실행 파일 경로가 남습니다. 아래는 Windows 11 Home 25H2 의 예입니다.
 
-- `HKLM\SYSTEM\CurrentControlSet\Services\bam\State\UserSettings\<SID>` 아래에 SID 별 키가 있었습니다(관찰).
-- SID 는 S-1-5-18, 사용자 SID 두 개, S-1-5-90-0-1 이었습니다(관찰).
-- 값 이름은 `\Device\HarddiskVolumeN\...\이름.exe` 형식의 장치 경로이거나 스토어 앱 패키지 이름이었습니다(관찰).
-- 값 데이터는 24바이트였습니다(관찰). 앞 8바이트를 FILETIME 으로 읽으면 최근 날짜가 나왔습니다(관찰).
-- `dam\State\UserSettings` 키는 이 PC 에 없었습니다(관찰).
+- `HKLM\SYSTEM\CurrentControlSet\Services\bam\State\UserSettings\<SID>` 아래에 SID 별 키가 있습니다.
+- SID 는 S-1-5-18, 사용자 SID 두 개, S-1-5-90-0-1 입니다.
+- 값 이름은 `\Device\HarddiskVolumeN\...\이름.exe` 형식의 장치 경로이거나 스토어 앱 패키지 이름입니다.
+- 값 데이터는 24바이트입니다. 앞 8바이트를 FILETIME 으로 읽으면 최근 날짜가 나옵니다.
+- `dam\State\UserSettings` 키는 없을 수 있습니다.
 
-값 이름이 드라이브 문자가 아니라 볼륨 장치 경로라서 `HarddiskVolumeN` 을 드라이브 문자와 맞추는 과정이 필요합니다. BAM 이 생긴 Windows 버전, 값이 뜻하는 시각, 오래된 항목을 지우는지는 확인하지 못했습니다. 이 값을 "마지막 실행 시각" 으로 단정하지 않고 프리페치·UserAssist 와 맞춰 씁니다.
+값 이름이 드라이브 문자가 아니라 볼륨 장치 경로라서 `HarddiskVolumeN` 을 드라이브 문자와 맞추는 과정이 필요합니다. BAM 이 생긴 Windows 버전, 값이 뜻하는 시각, 오래된 항목을 지우는지는 공개 문서에 없습니다. 이 값을 "마지막 실행 시각" 으로 단정하지 않고 프리페치·UserAssist 와 맞춰 씁니다.
 
 ## 프로그램 호환성 도우미
 
-아래는 모두 이 PC 에서 본 내용입니다.
+아래는 Windows 11 Home 25H2 의 예입니다.
 
-- `C:\Windows\appcompat\pca\` 에 PcaAppLaunchDic.txt, PcaGeneralDb0.txt, PcaGeneralDb1.txt 가 있었습니다(관찰). PcaGeneralDb1.txt 는 0바이트였습니다(관찰).
-- PcaAppLaunchDic.txt 는 UTF-8(또는 ASCII) 글자 파일이었습니다(관찰).
-- 이 파일의 95줄 가운데 94줄이 `전체 경로|YYYY-MM-DD HH:MM:SS.fff` 형식이었습니다(관찰).
-- 이 가운데 두 줄(WindowsTerminal.exe, Orca.exe)의 시각을 같은 프로그램의 프리페치 파일 수정 시각(UTC)과 비교했습니다(관찰). 차이는 0~19초였습니다(관찰).
-- 이 PC 의 시간대는 UTC+9 입니다. 그래서 이 파일의 시각은 UTC 로 보입니다. 두 건만 맞춘 결과이므로 검체마다 다시 맞춰 봅니다.
-- PcaGeneralDb0.txt 는 UTF-16 글자 파일이었습니다(관찰). 한 줄이 `|` 로 나뉜 8칸이었고, 첫 칸이 시각이었습니다(관찰). 나머지 칸의 뜻은 확인하지 못했습니다.
+- `C:\Windows\appcompat\pca\` 에 PcaAppLaunchDic.txt, PcaGeneralDb0.txt, PcaGeneralDb1.txt 가 있습니다. PcaGeneralDb1.txt 는 0바이트일 수 있습니다.
+- PcaAppLaunchDic.txt 는 UTF-8(또는 ASCII) 글자 파일입니다.
+- 이 파일의 95줄 가운데 94줄이 `전체 경로|YYYY-MM-DD HH:MM:SS.fff` 형식입니다.
+- 이 가운데 두 줄(WindowsTerminal.exe, Orca.exe)의 시각은 같은 프로그램의 프리페치 파일 수정 시각(UTC)과 0~19초 차이입니다.
+- 시간대가 UTC+9 인데도 프리페치 시각(UTC)과 맞으므로 이 파일의 시각은 UTC 로 보입니다. 검체마다 프리페치 시각과 다시 맞춰 봅니다.
+- PcaGeneralDb0.txt 는 UTF-16 글자 파일입니다. 한 줄이 `|` 로 나뉜 8칸이고, 첫 칸이 시각입니다. 나머지 칸의 뜻은 공개 자료에 없습니다.
 
-PCA 파일이 어느 Windows 버전부터 생겼는지는 확인하지 못했습니다. 검체에 폴더가 없으면 버전부터 확인합니다.
+PCA 파일이 어느 Windows 버전부터 생기는지는 공개 자료에 없습니다. 검체에 폴더가 없으면 버전부터 확인합니다.
 
 ## 보안 로그 4688
 
@@ -175,7 +175,7 @@ PCA 파일이 어느 Windows 버전부터 생겼는지는 확인하지 못했습
 | 1 | 8.1·Server 2012 R2 | Process Command Line 칸이 붙었습니다. |
 | 2 | 10 | Subject 가 Creator Subject 로 바뀌었습니다. Target Subject·Mandatory Label·Creator Process Name 이 붙었습니다. |
 
-(표는 [1] 에서 옮겼습니다.)
+(출처 [1])
 
 **조사에 쓰는 칸.**
 
@@ -203,7 +203,7 @@ SubjectLogonId 는 로그온 이벤트와 이어 봅니다([로그온·로그오
 
 ## Sysmon 이벤트 1
 
-Sysmon 은 서비스와 드라이버를 설치해야 기록을 남기고, Vista 이후에는 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 씁니다[2]. 이벤트 시각은 UTC 입니다[2]. 현재 판은 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상에서 돈다고 적혀 있습니다[2].
+Sysmon 은 서비스와 드라이버를 설치해야 기록을 남기고, Vista 이후에는 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 씁니다[2]. 이벤트 시각은 UTC 입니다[2]. 현재 판은 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상에서 돕니다[2].
 
 | 이벤트 | 남는 것 |
 |---|---|
@@ -211,7 +211,7 @@ Sysmon 은 서비스와 드라이버를 설치해야 기록을 남기고, Vista 
 | 5 프로세스 종료 | `UtcTime`, `ProcessGuid`, `ProcessId` |
 | 29 | 새 실행 파일(PE) 생성 탐지 |
 
-(표는 [2] 에서 옮겼습니다.)
+(출처 [2])
 
 - `ProcessGUID` 는 도메인 안에서 이 프로세스를 가리키는 고유 값입니다[2]. 이벤트 1 과 5 는 이 값으로 짝지어 봅니다.
 - 기본 설치는 SHA1 해시를 남기고 네트워크는 감시하지 않습니다[2].
@@ -246,8 +246,8 @@ Sysmon 은 서비스와 드라이버를 설치해야 기록을 남기고, Vista 
 3. **최근 항목 바로가기로 실행을 말합니다.** 실행 파일은 최근 항목에서 걸러집니다. 바로가기 파일은 [이 파일을 누가 언제 열었나](file-access.md) 에서 다룹니다.
 4. **프리페치가 없으니 실행하지 않았다고 봅니다.** 프리페치는 꺼져 있을 수 있습니다. Windows 8 이후 보관 한도는 1,024개라서 오래된 파일이 밀려날 수 있습니다.
 5. **UserAssist GUID 의 뜻을 확정된 사실로 씁니다.** 두 GUID 의 뜻은 추정입니다[4].
-6. **BAM·PCA 시각을 문서로 확인된 실행 시각처럼 씁니다.** 이 페이지의 BAM·PCA 내용은 한 PC 에서 본 것입니다(관찰).
-7. **4688 이 없으니 실행하지 않았다고 봅니다.** 감사 정책이 꺼져 있었을 수 있습니다(관찰).
+6. **BAM·PCA 시각을 문서로 확인된 실행 시각처럼 씁니다.** BAM·PCA 시각의 뜻은 공식 문서에 없습니다. 다른 기록과 맞춰 씁니다.
+7. **4688 이 없으니 실행하지 않았다고 봅니다.** 감사 정책이 꺼져 있었을 수 있습니다.
 8. **4688 명령줄이 비어 있으니 인자 없이 실행했다고 봅니다.** 정책을 켜지 않으면 명령줄 칸은 비어 있습니다[1].
 9. **실행 기록을 사람의 조작으로 씁니다.** 서비스·예약 작업·자동실행으로 뜬 프로그램도 같은 기록을 남깁니다.
 

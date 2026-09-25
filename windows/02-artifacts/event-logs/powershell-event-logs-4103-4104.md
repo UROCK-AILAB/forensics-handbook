@@ -21,7 +21,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | 40961 · 40962 · 53504 | PowerShell/Operational | PowerShell 이 뜰 때 | PowerShell 이 떴다는 사실 |
 | 녹취 (Transcription) | 로그가 아닌 텍스트 파일 | 녹취 정책을 켰을 때 | 입력한 명령과 출력 |
 
-4104 를 켜면 켠 뒤 새로 뜬 PowerShell 세션부터 PowerShell 이 처리하는 모든 스크립트 블록의 내용이 남습니다. `Invoke-Expression` 처럼 실행 중에 만든 코드도 따로 스크립트 블록으로 남기 때문에 난독화하거나 암호화한 스크립트도 푼 뒤의 내용을 볼 수 있습니다. Microsoft 블로그의 예에서는 Base64·XOR 로 감춘 코드가 풀린 `Write-Host 'Pwnd'` 로 남았습니다.
+4104 를 켜면 켠 뒤 새로 뜬 PowerShell 세션부터 PowerShell 이 처리하는 모든 스크립트 블록의 내용이 남습니다. `Invoke-Expression` 처럼 실행 중에 만든 코드도 따로 스크립트 블록으로 남기 때문에 난독화하거나 암호화한 스크립트도 푼 뒤의 내용을 볼 수 있습니다. 예를 들어 Base64·XOR 로 감춘 코드도 풀린 `Write-Host 'Pwnd'` 로 남습니다[3].
 
 대화형 셸에 입력한 명령의 기록 파일은 [PowerShell 명령 기록 (ConsoleHost_history.txt)](../execution/consolehost-history-txt.md)에서 다룹니다.
 
@@ -38,20 +38,19 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 - Microsoft-Windows-PowerShell 공급자의 메시지 파일은 `%windir%\system32\WindowsPowerShell\v1.0\PSEvents.dll` 이었습니다.
 - 옛 방식 PowerShell 공급자의 메시지 파일은 `%SystemRoot%\system32\WindowsPowerShell\v1.0\pwrshmsg.dll` 이었습니다. (같은 PC)
 - PowerShell 7 은 Windows 에서 `$PSHOME\RegisterManifest.ps1` 로 공급자를 등록해야 이벤트를 씁니다.
-- 조사한 PC 에는 PowerShell 7 이 없었고 PowerShellCore/Operational 로그도 없었습니다.
+- PowerShell 7 이 없는 PC 에는 PowerShellCore/Operational 로그도 없습니다.
 
 ### 켜는 설정
 
 | 기록 | 설정 | 근거 |
 |---|---|---|
-| 4104 | 정책 "Turn on Script Block Logging". 레지스트리 값 이름은 EnableScriptBlockLogging 입니다 | Microsoft 블로그 |
-| 4105 · 4106 | 같은 정책의 "Log script block invocation start / stop events". 레지스트리 `HKLM:\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging` 의 EnableScriptBlockInvocationLogging = 1 | Microsoft 블로그 |
-| 4103 | 세션과 모듈 양쪽에서 켭니다. 세션 안에서는 모듈의 LogPipelineExecutionDetails 속성으로 켜고 끕니다 | PowerShell 7 문서 |
-| 녹취 | 정책 "Turn on PowerShell Transcription". `HKLM:\Software\Policies\Microsoft\Windows\PowerShell\Transcription` 의 EnableTranscripting (1), OutputDirectory, IncludeInvocationHeader (1) | Microsoft 블로그 |
-| 보호된 이벤트 기록 | Administrative Templates -> Windows Components -> Event Logging -> Enable Protected Event Logging | Windows PowerShell 5.1 문서 |
+| 4104 | 정책 "Turn on Script Block Logging". 레지스트리 값 이름은 EnableScriptBlockLogging 입니다 | [3] |
+| 4105 · 4106 | 같은 정책의 "Log script block invocation start / stop events". 레지스트리 `HKLM:\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging` 의 EnableScriptBlockInvocationLogging = 1 | [3] |
+| 4103 | 세션과 모듈 양쪽에서 켭니다. 세션 안에서는 모듈의 LogPipelineExecutionDetails 속성으로 켜고 끕니다 | [2] |
+| 녹취 | 정책 "Turn on PowerShell Transcription". `HKLM:\Software\Policies\Microsoft\Windows\PowerShell\Transcription` 의 EnableTranscripting (1), OutputDirectory, IncludeInvocationHeader (1) | [3] |
+| 보호된 이벤트 기록 | Administrative Templates -> Windows Components -> Event Logging -> Enable Protected Event Logging | [1] |
 
-- Windows PowerShell 5.1 의 모듈 기록 정책이 레지스트리 어디에 저장되는지는 이번에 연 자료에 없었습니다.
-- 조사한 PC 에는 `HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell` 키 자체가 없었습니다. 그런데도 4104 가 수백 건 남아 있었습니다.
+- `HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell` 키 자체가 없는 PC 에도 4104 가 수백 건 남을 수 있습니다.
 
 ### 버전별 차이
 
@@ -84,15 +83,15 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | MessageNumber · MessageTotal | 나눈 조각의 번호와 전체 개수 | 긴 스크립트는 여러 이벤트로 나뉩니다 |
 | ScriptBlockText | 스크립트 블록 내용 | 조각을 이어야 전체가 됩니다 |
 | ScriptBlockId | 스크립트 블록이 살아 있는 동안 유지되는 GUID | 4105·4106 과 이을 때 씁니다 |
-| Path | 스크립트 파일 경로 | 조사한 PC 의 4104 는 모두 명령줄로 넘긴 코드라 비어 있었습니다 |
+| Path | 스크립트 파일 경로 | 명령줄로 넘긴 코드는 비어 있습니다 |
 
-한 이벤트에 담기 너무 긴 스크립트는 여러 이벤트로 나뉘는데, MessageNumber 로 정렬해 ScriptBlockText 를 이으면 원래 스크립트가 됩니다. 조사한 PC 에서 1/2·2/2, 1/3~3/3, 5/5 처럼 나뉜 예가 있었습니다. 한 이벤트에 들어가는 최대 길이는 확인하지 못했습니다.
+한 이벤트에 담기 너무 긴 스크립트는 여러 이벤트로 나뉘는데, MessageNumber 로 정렬해 ScriptBlockText 를 이으면 원래 스크립트가 됩니다. 예: 1/2·2/2, 1/3~3/3, 5/5.
 
 ### 정책 없이 남는 4104
 
-스크립트 블록 기록을 켜지 않았어도 PowerShell 은 악성 스크립트가 자주 쓰는 내용이 든 블록을 자동으로 남깁니다. Microsoft 블로그는 이 기록을 "최후의 기록" 이라고 적었으며, 백신이나 전체 기록을 대신하지 않습니다. 어떤 낱말이 걸리는지 목록은 확인하지 못했습니다.
+스크립트 블록 기록을 켜지 않았어도 PowerShell 은 악성 스크립트가 자주 쓰는 내용이 든 블록을 자동으로 남깁니다. 이 기록은 마지막 안전장치일 뿐, 백신이나 전체 기록을 대신하지 않습니다[3].
 
-정책이 없는 PC 에서 본 4104 의 머리 값입니다.
+정책이 없는 PC 의 4104 머리 값은 다음과 같습니다.
 
 | 항목 | 값 |
 |---|---|
@@ -104,7 +103,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | Security UserID | 실행한 사용자 SID |
 | Execution ProcessID | 실행한 `powershell.exe` 의 PID |
 
-이 PC 의 4104 는 모두 Level 3 (Warning) 이었습니다. 그래서 Warning 인 4104 는 자동 기록, Verbose (5) 인 4104 는 정책으로 켠 전체 기록으로 가를 수 있어 보이지만 이 구분은 해석입니다. 이 PC 에서 Verbose 4104 를 만들어 보지는 않았고, 정책을 켠 PC 에서 의심 내용이 든 블록이 어느 Level 로 남는지도 확인하지 못했습니다. 그래서 Warning 이라고 정책이 꺼져 있었다고 단정하지 않습니다.
+정책이 없는 PC 의 4104 는 Level 3 (Warning) 으로 남습니다. 그래서 Warning 인 4104 는 자동 기록, Verbose (5) 인 4104 는 정책으로 켠 전체 기록으로 가를 수 있어 보이지만 이 구분은 해석입니다. 정책을 켠 PC 에서 의심 내용이 든 블록이 어느 Level 로 남는지는 검체에서 확인해야 합니다. 그래서 Warning 이라고 정책이 꺼져 있었다고 단정하지 않습니다.
 
 ### 4105 · 4106 실행 시작·끝
 
@@ -123,27 +122,27 @@ ScriptBlock ID 로 4104 와 이을 수 있고, Runspace ID 는 그 블록이 돈
 
 
 
-조사한 PC 의 4103 은 Level 4, Task 106, Opcode 20 이었습니다. Payload 에는 명령과 인자 값이 이런 꼴로 들어 있었습니다.
+4103 은 Level 4, Task 106, Opcode 20 입니다. Payload 에는 명령과 인자 값이 이런 꼴로 들어 있습니다.
 
 ```
 CommandInvocation(Add-Type): "Add-Type"
 ParameterBinding(Add-Type): name="TypeDefinition"; value="…"
 ```
 
-ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 저장돼 있었습니다. 한국어 PC 의 키는 다음과 같았습니다.
+ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 저장됩니다. 한국어 PC 의 키는 다음과 같습니다.
 
 - 심각도, 호스트 이름, 호스트 버전, 호스트 ID, 호스트 응용 프로그램, 엔진 버전
 - Runspace ID, 파이프라인 ID, 명령 이름, 명령 유형, 스크립트 이름, 명령 경로
 - 시퀀스 번호, 사용자, 연결된 사용자, 셸 ID
 
-"호스트 응용 프로그램" 에는 `powershell.exe` 의 전체 명령줄이 들어 있었습니다. 예: `-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command …`.
+"호스트 응용 프로그램" 에는 `powershell.exe` 의 전체 명령줄이 들어 있습니다. 예: `-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command …`.
 
-- 조사한 PC 는 모듈 기록 정책이 없는데도 4103 이 9건 있었고 그중 7건이 `Add-Type` 이었는데, 왜 남았는지는 확인하지 못했습니다.
-- 영어 PC 의 키 이름 목록은 확인하지 못했습니다.
+- 모듈 기록 정책이 없어도 4103 이 남을 수 있습니다. 정책이 없는 한 PC 에서는 4103 이 9건이었고 그중 7건이 `Add-Type` 이었습니다.
+- 영어 PC 의 키 이름은 검체에서 확인합니다.
 
 ### 옛 방식 "Windows PowerShell" 로그
 
-조사한 PC 에서 본 이벤트입니다.
+이 로그에 남는 이벤트입니다. 건수는 한 PC 의 예입니다.
 
 | ID | 메시지 | 건수 |
 |---|---|---|
@@ -155,8 +154,8 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 - EventData 안에 이름 없는 Data 3개로 들어 있습니다. 칸 이름이 없습니다.
 - 400 의 Details 에는 NewEngineState, PreviousEngineState, SequenceNumber, HostName, HostVersion, HostId, HostApplication, EngineVersion, RunspaceId, PipelineId, CommandName, CommandType, ScriptName, CommandPath, CommandLine 이 있습니다.
 - 800 의 Context 에는 DetailSequence, DetailTotal, UserId, HostName … CommandLine 이 있고, 이어서 Details 에 CommandInvocation·ParameterBinding 이 있습니다.
-- 이 로그의 Details 키는 4103 과 달리 영어였습니다 (예: `HostName=ConsoleHost`).
-- HostApplication 에는 `-EncodedCommand` 로 넘긴 Base64 전체가 그대로 들어 있었고, 그래서 스크립트 블록 기록이 꺼져 있어도 400 의 HostApplication 으로 실행 명령줄을 볼 수 있습니다.
+- 이 로그의 Details 키는 4103 과 달리 영어입니다 (예: `HostName=ConsoleHost`).
+- HostApplication 에는 `-EncodedCommand` 로 넘긴 Base64 전체가 그대로 들어 있습니다. 그래서 스크립트 블록 기록이 꺼져 있어도 400 의 HostApplication 으로 실행 명령줄을 볼 수 있습니다.
 
 ### 그 밖의 Operational 이벤트
 
@@ -167,7 +166,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 | 53504 | Windows PowerShell has started an IPC listening thread on process: %1 in AppDomain: %2. | — |
 | 8193 · 8194 · 8197 · 12039 | Creating Runspace object / Creating RunspacePool object / Runspace state changed to %1 / Modifying activity Id and correlating | Verbose |
 
-- 40961·40962·53504 는 PowerShell 이 뜰 때마다 남았습니다. 조사한 PC 에서 셋 다 329건으로 같았습니다.
+- 40961·40962·53504 는 PowerShell 이 뜰 때마다 남습니다. 그래서 세 이벤트의 건수가 같습니다(한 PC 에서 셋 다 329건).
 
 ## 증거로서 의미
 
@@ -196,19 +195,19 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 ## 함정과 한계
 
 1. **자동 기록을 전체 기록으로 읽습니다.** 정책이 없으면 의심 내용이 든 블록만 남습니다. 남지 않은 블록이 없었다는 뜻이 아닙니다.
-2. **메시지 글자로 거릅니다.** 이 PC 메타데이터의 메시지는 "Creating Scriptblock text" 였습니다. Microsoft 블로그의 예시 출력은 "Compiling Scriptblock text" 였습니다. 글자가 아니라 ID 와 칸으로 거릅니다.
+2. **메시지 글자로 거릅니다.** 공급자 메타데이터의 메시지는 "Creating Scriptblock text" 이고, Microsoft 블로그의 예시 출력은 "Compiling Scriptblock text" 입니다[3]. 글자가 아니라 ID 와 칸으로 거릅니다.
 3. **조각 하나만 봅니다.** MessageTotal 이 1 보다 크면 같은 ScriptBlock ID 의 조각을 모두 모읍니다.
 4. **4103 을 영어 키로 찾습니다.** ContextInfo 의 키 이름은 화면 언어로 저장됩니다. "Host Application" 으로 찾는 도구는 한국어 PC 의 4103 에서 값을 찾지 못합니다.
 5. **스크립트 내용만 봅니다.** 스크립트 내용 (4104) 과 실행 명령줄 (400 의 HostApplication, 4103 의 호스트 응용 프로그램) 은 다른 곳에 있습니다. 둘 다 봅니다.
-6. **로그가 오래 남는다고 봅니다.** 조사한 PC 의 Operational 로그는 15MB 였습니다. 가장 오래된 기록은 조사 시점 약 3시간 반 전이었습니다 (1,868건). 조사하는 30분 사이에 952건으로 줄었습니다. 이 PC 는 자동화 도구가 PowerShell 을 쉴 새 없이 돌리는 특수한 경우입니다.
-7. **보호된 이벤트 기록을 흘려봅니다.** 이 정책을 켜면 공개키 (CMS, RFC 5652) 로 로그 내용을 암호화합니다. 개인키가 없으면 내용을 읽을 수 없습니다. 인증서는 Document Encryption EKU (1.3.6.1.4.1.311.80.1) 가 있어야 합니다. 이 정책이 켜진 PC 의 4104 가 어떤 모양인지는 확인하지 못했습니다.
+6. **로그가 오래 남는다고 봅니다.** Operational 로그가 15MB 인 PC 에서 자동화 도구가 PowerShell 을 쉴 새 없이 돌리면, 가장 오래된 기록이 약 3시간 반 전 것까지만 남습니다 (1,868건). 30분 사이에 952건으로 줄기도 합니다.
+7. **보호된 이벤트 기록을 흘려봅니다.** 이 정책을 켜면 공개키 (CMS, RFC 5652) 로 로그 내용을 암호화합니다. 개인키가 없으면 내용을 읽을 수 없습니다. 인증서는 Document Encryption EKU (1.3.6.1.4.1.311.80.1) 가 있어야 합니다.
 8. **보호된 이벤트 기록이 켜져 있으면 스크립트 블록 기록도 켜졌다고 봅니다.** 보호된 이벤트 기록을 켜도 스크립트 블록 기록은 자동으로 켜지지 않습니다.
 9. **PowerShell 7 을 흘려봅니다.** PowerShell 7 은 PowerShellCore/Operational 에 씁니다. Windows PowerShell 로그만 보면 빠집니다.
 
 ### 지우기와 조작
 
 - **자동 기록을 끕니다.** 정책을 Disabled 로 하거나 EnableScriptBlockLogging 을 0 으로 두면 자동 기록도 남지 않습니다. 이 값이 0 으로 설정돼 있으면 누가 언제 설정했는지 확인합니다.
-- **로그를 가짜 이벤트로 채웁니다.** Microsoft 블로그는 로그를 가짜 이벤트로 채워 이전 증거를 밀어내는 공격을 적었습니다. 이벤트를 빨리 다른 곳으로 모으라고 권합니다.
+- **로그를 가짜 이벤트로 채웁니다.** 가짜 이벤트로 로그를 채워 이전 증거를 밀어내는 공격이 있습니다. 그래서 이벤트를 빨리 다른 곳으로 모아 둡니다[3].
 - **로그를 지웁니다.** 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
 - **레코드 일부만 남습니다.** 밀려나거나 지운 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
@@ -235,7 +234,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 
 ### 공개 도구로 한 번
 
-Windows 에 들어 있는 PowerShell 의 `Get-WinEvent` 로 조각을 모아 잇습니다. Microsoft 블로그의 방법처럼 Properties[0] (MessageNumber) 으로 정렬하고 Properties[2] (ScriptBlockText) 를 잇습니다. 아래 `E:\case\` 는 예시 경로입니다.
+Windows 에 들어 있는 PowerShell 의 `Get-WinEvent` 로 조각을 모아 잇습니다. Properties[0] (MessageNumber) 으로 정렬하고 Properties[2] (ScriptBlockText) 를 잇습니다[3]. 아래 `E:\case\` 는 예시 경로입니다.
 
 ```powershell
 $f = 'E:\case\Microsoft-Windows-PowerShell%4Operational.evtx'
@@ -277,14 +276,14 @@ Get-WinEvent Microsoft-Windows-PowerShell/Operational | Where-Object Id -EQ 4104
 | [프리페치](../execution/prefetch/index.md) | `powershell.exe` 실행 횟수와 시각 |
 | [다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) | 원격 실행 흐름 안에서 4104 의 자리 |
 
-원격으로 실행한 PowerShell 도 도착 PC 의 이 로그에 남는다는 설명이 있지만, 이번에 확인하지 못했습니다.
+원격으로 실행한 PowerShell 도 도착 PC 의 이 로그에 남는다는 설명이 있습니다.
 
 ## 실습
 
 **직접 만든 Windows 10·11 가상 머신**에서 해 봅니다. 각 단계의 시각을 적어 둡니다.
 
 1. 정책을 켜기 전에 `Get-Date` 같은 평범한 명령을 실행합니다. 4104 가 남는지 봅니다.
-2. 스크립트 블록 기록 정책을 켜고 새 PowerShell 창을 엽니다. 같은 명령의 4104 가 어느 Level 로 남는지 봅니다. 이 페이지가 확인하지 못한 Level 구분입니다.
+2. 스크립트 블록 기록 정책을 켜고 새 PowerShell 창을 엽니다. 같은 명령의 4104 가 어느 Level 로 남는지 봅니다. Warning 과 Verbose 의 구분을 여기서 가릴 수 있습니다.
 3. 긴 스크립트 파일을 실행합니다. 몇 조각으로 나뉘는지, Path 칸에 파일 경로가 들어가는지 봅니다.
 4. 같은 스크립트를 두 번 실행합니다. 4104 가 한 번만 남는지 봅니다. 실행 시작·끝 기록을 켜고 4105·4106 도 봅니다.
 5. `-EncodedCommand` 로 무해한 명령을 넘깁니다. 400 의 HostApplication 과 4104 의 ScriptBlockText 를 비교합니다.

@@ -27,7 +27,7 @@ NIST SP 800-86 순서에서 네트워크 연결은 첫째, 네트워크 설정�
    ```
    netstat -anob > E:\out\netstat_anob.txt
    ```
-   `-q` 를 더하면 대기하지 않는 바인딩된 포트까지 나옵니다. 문서에는 `netstat -anobq` 가 예제로 실려 있습니다.
+   `-q` 를 더하면 대기하지 않는 바인딩된 포트까지 나옵니다(예: `netstat -anobq`).
 2. **PowerShell 로 한 번 더 남깁니다.** `Get-NetTCPConnection` 과 `Get-NetUDPEndpoint` 는 프로세스 ID 와 `CreationTime` 을 함께 보여 줍니다.
 3. **DNS 캐시를 남깁니다.**
    ```
@@ -68,20 +68,20 @@ NIST SP 800-86 순서에서 네트워크 연결은 첫째, 네트워크 설정�
 | `LISTEN` | `LISTENING` |
 | `TIMED_WAIT` | `TIME_WAIT` |
 
-문서에 적힌 나머지 상태 값은 `CLOSE_WAIT`, `CLOSED`, `ESTABLISHED`, `FIN_WAIT_1`, `FIN_WAIT_2`, `LAST_ACK`, `SYN_RECEIVED`, `SYN_SEND` 입니다.
+나머지 상태 값은 `CLOSE_WAIT`, `CLOSED`, `ESTABLISHED`, `FIN_WAIT_1`, `FIN_WAIT_2`, `LAST_ACK`, `SYN_RECEIVED`, `SYN_SEND` 입니다.
 
-한국어 Windows 에서는 머리글이 "프로토콜 / 로컬 주소 / 외부 주소 / 상태 / PID" 로 번역돼 나왔습니다. 상태 값은 영어 그대로였습니다.
+한국어 Windows 에서는 머리글이 "프로토콜 / 로컬 주소 / 외부 주소 / 상태 / PID" 로 번역돼 나오고, 상태 값은 영어 그대로 나옵니다.
 
 ### Get-NetTCPConnection · Get-NetUDPEndpoint
 
-NetTCPIP 모듈의 명령입니다. 아래는 PowerShell 5.1 에서 본 속성입니다.
+NetTCPIP 모듈의 명령입니다. PowerShell 5.1 에서 나오는 속성은 아래와 같습니다.
 
 | 명령 | 속성 |
 |---|---|
 | `Get-NetTCPConnection` | LocalAddress, LocalPort, RemoteAddress, RemotePort, State, OwningProcess, CreationTime |
 | `Get-NetUDPEndpoint` | LocalAddress, LocalPort, OwningProcess, CreationTime |
 
-그 PC 에서는 TCP 항목 277개 모두 `CreationTime` 에 값이 있었습니다. `Bound` 상태 항목도 119개 나왔는데, `netstat` 은 `-q` 를 줘야 이런 포트를 보여 줍니다.
+TCP 항목에는 `CreationTime` 값이 채워져 나옵니다. `Bound` 상태 항목도 나오는데, `netstat` 은 `-q` 를 줘야 이런 포트를 보여 줍니다.
 
 ### DNS 캐시
 
@@ -102,7 +102,7 @@ RFC 3227 은 ARP 캐시를 메모리와 같은 둘째 단계에 둡니다. 한�
 
 인터페이스마다 "인터페이스: `<IP>` --- 0x<번호>" 줄이 먼저 나오고, 그 아래에 인터넷 주소, 물리적 주소, 유형 칸이 옵니다. 유형은 동적 또는 정적입니다.
 
-`Get-NetNeighbor` 의 `State` 에는 `Permanent`, `Reachable`, `Stale`, `Unreachable` 이 나왔습니다.
+`Get-NetNeighbor` 의 `State` 에는 `Permanent`, `Reachable`, `Stale`, `Unreachable` 이 나옵니다.
 
 ### 라우팅 표
 
@@ -122,8 +122,8 @@ IPv4 활성 경로의 칸은 네트워크 대상, 네트워크 마스크, 게이
 
 1. **`ipconfig /flushdns` 를 돌립니다.** 캐시를 비우는 명령입니다. 수집 중에 돌리면 증거를 지웁니다.
 2. **`netstat` 결과에서 연결 시각을 찾습니다.** `netstat` 출력에는 시각 칸이 없습니다. 명령을 돌린 시각을 따로 적어야 합니다.
-3. **`CreationTime` 을 연결 시작 시각으로 씁니다.** 이 값이 정확히 무엇의 시각인지는 문서로 확인하지 못했습니다. 보고서에는 속성 이름 그대로 적습니다.
-4. **두 명령의 결과가 같다고 봅니다.** 두 명령을 몇 초 차이로 돌렸더니 상태별 개수가 조금 달랐습니다. 네트워크 상태는 몇 초 만에도 바뀝니다. 명령마다 돌린 시각을 적습니다.
+3. **`CreationTime` 을 연결 시작 시각으로 씁니다.** 이 값이 정확히 무엇의 시각인지는 공식 문서에 나와 있지 않습니다. 보고서에는 속성 이름 그대로 적습니다.
+4. **두 명령의 결과가 같다고 봅니다.** 두 명령을 몇 초 차이로 돌려도 상태별 개수가 조금 다를 수 있습니다. 네트워크 상태는 몇 초 만에도 바뀝니다. 명령마다 돌린 시각을 적습니다.
 5. **`netstat -ano` 에 모든 포트가 나온다고 봅니다.** 바인딩만 하고 대기하지 않는 TCP 포트는 `-q` 를 줘야 나옵니다.
 6. **`-b` 없이 실행 파일을 짐작합니다.** `-o` 는 PID 만 보여 주므로, `-b` 가 권한 문제로 실패하면 PID 를 프로세스 목록과 맞춰 실행 파일을 찾습니다.
 7. **문서의 상태 이름으로 검색합니다.** 실제 출력은 `LISTENING`, `TIME_WAIT` 입니다. 한국어 Windows 는 머리글도 번역돼 나오므로, 결과를 읽는 스크립트는 머리글 이름에 기대지 않게 만듭니다.

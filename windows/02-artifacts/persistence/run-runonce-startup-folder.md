@@ -15,13 +15,13 @@ Run·RunOnce 키와 시작프로그램 폴더 (Startup Folder) 는 사용자가 
 Run 키와 RunOnce 키는 사용자가 로그온할 때 프로그램을 실행하게 하며, 사용자별(HKCU)과 컴퓨터 전체(HKLM)에 한 벌씩 있습니다. 값 하나가 명령 하나이고, 값 이름은 설명 문자열이며 값 데이터는 260자 이하의 명령줄입니다. 한 키에 값을 여러 개 둘 수 있지만 이때 실행 순서는 정해져 있지 않습니다. 시스템은 Run 키 프로그램을 언제 실행할지 보장하지 않으며, 사용자가 쓰는 화면을 방해하지 않도록 Run 키와 시작프로그램 그룹의 실행을 늦출 수 있습니다.
 
 - 정상 프로그램도 이 자리를 씁니다. Windows 11 PC 한 대의 HKCU Run 키에는 값이 6개 있었습니다.
-- 악성코드도 Run 키와 시작프로그램 폴더를 자동실행 수단으로 씁니다. MITRE ATT&CK 는 이 수단을 T1547.001 로 분류합니다.
+- 악성코드도 Run 키와 시작프로그램 폴더를 자동실행 수단으로 씁니다. 이 수단은 MITRE ATT&CK 의 T1547.001 에 해당합니다[2].
 
 ## 위치와 버전별 차이
 
 ### Run·RunOnce 키
 
-Microsoft 문서가 적은 키는 네 개입니다.
+기본 키는 네 개입니다[1].
 
 | 경로 | 범위 | 실행 |
 |---|---|---|
@@ -33,14 +33,14 @@ Microsoft 문서가 적은 키는 네 개입니다.
 - HKLM 과 HKCU 가 각각 어느 하이브 파일인지는 [하이브 파일 종류](../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
 - 64비트 Windows 11 PC 한 대에서는 32비트 프로그램이 등록한 항목이 `HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run` 에 있었습니다. 이 경로를 빼먹으면 그 항목을 놓칩니다.
 
-### MITRE 가 더 적은 키
+### 그 밖의 Run 계열 키
 
-MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
+아래 자리도 같은 기법에 쓰입니다[2].
 
 | 경로 | 비고 |
 |---|---|
 | `HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnceEx` | Vista 이후에는 기본으로 만들어지지 않습니다 |
-| `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\RunServices` | 어느 Windows 버전에서 실제로 동작하는지는 확인하지 못했습니다 |
+| `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\RunServices` | 실제로 동작하는 Windows 버전은 검체에서 확인합니다 |
 | `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce` | 위와 같습니다 |
 | `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run` | |
 
@@ -65,7 +65,7 @@ MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
 | 사용자별 | `C:\Users\[사용자]\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup` |
 | 모든 사용자 | `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp` |
 
-- 폴더 위치는 `HKCU·HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 와 같은 경로의 `Shell Folders` 값이 정하므로, 기본 경로만 보지 말고 이 값이 가리키는 폴더를 봅니다. 이 문장은 위 사실에서 끌어낸 해석입니다.
+- 폴더 위치는 `HKCU·HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 와 같은 경로의 `Shell Folders` 값이 정하므로, 기본 경로만 보지 말고 이 값이 가리키는 폴더를 봅니다.
 - Windows 11 PC 한 대에서 본 값은 아래와 같습니다.
 
 | 키 | 값 이름 | 데이터 |
@@ -78,7 +78,7 @@ MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
 
 ### 작업 관리자 "시작 앱" 사용 여부 (StartupApproved)
 
-이 키를 설명한 공식 문서는 이번에 찾지 못했습니다. 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다.
+이 키를 설명한 공식 문서가 없어 검체에서 확인해야 합니다. 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다.
 
 - 위치는 `HKLM·HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved` 입니다.
 - 그 아래에 `Run`, `Run32`, `StartupFolder` 하위 키가 있었습니다.
@@ -123,7 +123,7 @@ StartupApproved\Run
 | 4–11 | 02·04 항목은 모두 0이었습니다. 01·03·07 항목은 FILETIME 으로 읽혔고, UTC 로 읽으면 2026년 6~8월 사이의 그럴듯한 시각이었습니다 |
 
 - 값 이름은 Run 키의 값 이름과 같았습니다. `StartupFolder` 쪽은 폴더 속 파일 이름으로 추정합니다.
-- "02 = 사용, 03 = 사용 안 함, FILETIME = 사용 안 함으로 바꾼 시각" 이라는 해석이 널리 쓰입니다. 이번에 연 자료로는 확인하지 못했습니다. 01·07 의 뜻도 확인하지 못했습니다.
+- "02 = 사용, 03 = 사용 안 함, FILETIME = 사용 안 함으로 바꾼 시각" 이라는 해석이 널리 쓰이지만 공식 문서는 없습니다. 01·07 의 뜻도 공개 자료가 없습니다.
 
 ## 증거로서 의미
 
@@ -138,9 +138,9 @@ StartupApproved\Run
 
 - **실행됐나.** 등록되어 있다는 것만 알려 줍니다. 실행은 [프리페치](../execution/prefetch/index.md), [AmCache](../execution/amcache-hve/index.md), [프로세스 생성](../event-logs/4688.md), [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 로 따로 확인합니다.
 - **언제 등록했나.** 값 하나하나의 시각은 없습니다. 키 단위 시각은 아래 "시각 해석" 을 봅니다.
-- **등록된 적이 없나.** RunOnce 는 실행되면 값이 사라집니다. 그래서 사후 분석 때 값이 없다고 해서 등록된 적이 없다는 뜻은 아닙니다. 이 문장은 RunOnce 동작에서 끌어낸 해석입니다.
+- **등록된 적이 없나.** RunOnce 는 실행되면 값이 사라집니다. 그래서 사후 분석 때 값이 없다고 해서 등록된 적이 없다는 뜻은 아닙니다.
 - **누가 등록했나.** 값에는 등록한 프로세스를 적는 칸이 없습니다. 레지스트리를 바꾼 프로세스는 [Sysmon 레지스트리 이벤트](../event-logs/sysmon/12-13-14.md) 가 켜져 있었을 때만 찾을 수 있습니다.
-- **StartupApproved 플래그의 뜻.** 공식 문서로 확인하지 못했습니다. "사용자가 시작 앱을 껐다" 고 단정하지 않습니다.
+- **StartupApproved 플래그의 뜻.** 공식 문서가 없습니다. "사용자가 시작 앱을 껐다" 고 단정하지 않습니다.
 
 보고서에는 "수집 시점에 HKCU Run 키에 이 이름으로 이 명령줄이 등록되어 있다" 처럼 씁니다. 실행을 말하려면 "같은 경로의 실행 기록이 프리페치에 있다" 처럼 근거를 따로 적습니다.
 
@@ -149,7 +149,7 @@ StartupApproved\Run
 - Run 값에는 값마다 붙은 시각이 없습니다. 키 단위 시각이 무엇이 바뀔 때 바뀌는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 - 키 시각은 키 안의 어느 값이 바뀌었는지 말하지 않습니다. 값이 여러 개인 키에서는 그 시각을 특정 값의 등록 시각으로 쓰지 않습니다.
 - 시작프로그램 폴더의 파일은 파일 시스템 시각으로 언제 놓였는지 짐작합니다. 시각 속성은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
-- StartupApproved 뒤 8바이트의 FILETIME 은 뜻을 확인하지 못했습니다. 시각 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- StartupApproved 뒤 8바이트의 FILETIME 이 무엇의 시각인지는 공식 문서가 없습니다. 시각 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 시스템은 Run 키 프로그램의 실행을 늦출 수 있습니다. 로그온 시각과 프로그램 실행 시각 사이에 틈이 있어도 이상하지 않습니다.
 
 ## 함정과 한계
@@ -188,12 +188,12 @@ StartupApproved\Run
 1. 앞 4바이트 `03 00 00 00` 을 리틀 엔디언으로 읽으면 3 입니다.
 2. 뒤 8바이트 `00 1C D8 81 3C 14 DD 01` 을 리틀 엔디언으로 읽으면 0x01DD143C81D81C00 입니다.
 3. 이 수를 FILETIME 으로 풀면 2026-07-15 09:30:00 UTC 입니다.
-4. 앞 4바이트의 뜻과 이 시각의 뜻은 확인하지 못했습니다. 읽는 법만 보여 주는 예시입니다.
+4. 앞 4바이트의 뜻과 이 시각의 뜻은 공식 문서가 없습니다. 읽는 법만 보여 주는 예시입니다.
 
 ### 공개 도구로 한 번
 
 1. HKLM 쪽 하이브와 사용자마다의 사용자 하이브를 하이브 로그와 함께 사본으로 뜹니다.
-2. 레지스트리 뷰어로 네 키, WOW6432Node 아래 Run·RunOnce, MITRE 가 더 적은 키를 차례로 엽니다.
+2. 레지스트리 뷰어로 네 키, WOW6432Node 아래 Run·RunOnce, 그 밖의 Run 계열 키를 차례로 엽니다.
 3. 같은 뷰어로 `Explorer\StartupApproved` 를 열어 Run 키의 값 이름과 맞춰 봅니다. 한쪽에만 있는 이름을 따로 적습니다.
 4. `User Shell Folders` 값이 가리키는 시작프로그램 폴더의 파일 목록과 파일 시각을 뽑습니다.
 5. 켜진 PC 에서는 `reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run` 처럼 읽기만 하는 명령으로 같은 값을 볼 수 있습니다.
@@ -211,7 +211,7 @@ StartupApproved\Run
 | 로그온 이벤트 | 그 계정이 언제 로그온했나 | [로그온·로그오프](../event-logs/logon-events/index.md) |
 | 서비스·예약 작업 | 같은 파일이 다른 자동실행 자리에도 등록되어 있나 | [서비스·드라이버](services-drivers.md), [예약 작업](scheduled-tasks/index.md) |
 
-MITRE 의 탐지 권고도 같은 방향입니다. Run·Startup 키에 새롭거나 이상한 실행 경로·스크립트가 생기는 변경을 보고, 표준이 아닌 폴더에서의 실행이나 이상한 부모-자식 프로세스와 엮어 봅니다. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
+탐지할 때는 Run·Startup 키에 새롭거나 이상한 실행 경로·스크립트가 생기는 변경을 보고, 표준이 아닌 폴더에서의 실행이나 이상한 부모-자식 프로세스와 엮어 봅니다[2]. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 

@@ -25,7 +25,7 @@ nav_order: 400
 | Windows | 근거 |
 |---|---|
 | 95 ~ 10 | libyal liblnk 문서가 시험한 범위입니다 |
-| 11 | liblnk 문서에 할 일 (TODO) 로 남아 있습니다. PC 한 대에서 시작 메뉴 LNK 125개를 이 글의 구조대로 읽었습니다 |
+| 11 | liblnk 문서에 할 일 (TODO) 로 남아 있습니다. PC 한 대의 시작 메뉴 LNK 125개는 이 글의 구조대로 읽힙니다 |
 
 ## 구조
 
@@ -86,7 +86,7 @@ nav_order: 400
 | 0x00040000 | ForceNoLinkTrack | 분산 링크 추적 블록이 없습니다 |
 | 0x00080000 | EnableTargetMetadata | 메타데이터 속성 저장소 블록이 있습니다 |
 
-0x00100000 부터 0x04000000 까지의 플래그 (DisableLinkPathTracking, DisableKnownFolderTracking, DisableKnownFolderAlias, AllowLinkToLink, UnaliasOnSave, PreferEnvironmentPath, KeepLocalIDListForUNCTarget) 는 liblnk 문서에서도 뜻이 대부분 확인되지 않았습니다. XP 이하의 LNK 는 ForceNoLinkTrack 플래그를 쓰지 않으며, 모든 추가 데이터 블록이 플래그로 표시되지도 않습니다.
+0x00100000 부터 0x04000000 까지의 플래그 (DisableLinkPathTracking, DisableKnownFolderTracking, DisableKnownFolderAlias, AllowLinkToLink, UnaliasOnSave, PreferEnvironmentPath, KeepLocalIDListForUNCTarget) 는 뜻이 대부분 알려져 있지 않습니다. XP 이하의 LNK 는 ForceNoLinkTrack 플래그를 쓰지 않으며, 모든 추가 데이터 블록이 플래그로 표시되지도 않습니다.
 
 ### 링크 대상 식별자 (LinkTargetIDList)
 
@@ -172,7 +172,7 @@ nav_order: 400
 - **특수 폴더 위치**: 오프셋 8 에 특수 폴더 번호, 오프셋 12 에 첫 자식 위치가 있습니다. 첫 자식 위치는 셸 아이템 목록 시작에서 센 바이트 수입니다.
 - **알려진 폴더 위치**: 오프셋 8 에 알려진 폴더 GUID 16바이트, 오프셋 24 에 첫 자식 위치가 있습니다. 알려진 폴더 GUID 는 [윈도 식별자 형식](../value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 - **메타데이터 속성 저장소**: 속성 저장소 (Property Store) 가 하나 이상 들어갑니다.
-- **셸 아이템 목록**: 셸 아이템 목록이 들어갑니다. liblnk 문서는 이 블록을 Vista 에서 추가된 것으로 적지만 불확실하다고 표시합니다.
+- **셸 아이템 목록**: 셸 아이템 목록이 들어갑니다. 이 블록은 Vista 에서 추가되었다는 해석이 있지만 확실하지 않습니다.
 
 **분산 링크 추적 블록 (0xa0000003)**
 
@@ -188,7 +188,7 @@ nav_order: 400
 | 64 | 16 | birth droid 볼륨 ID (GUID) |
 | 80 | 16 | birth droid 파일 ID (GUID) |
 
-droid 는 CDomainRelativeObjId 를 뜻하고, 네 GUID 는 NTFS 객체 ID 입니다. droid 볼륨 ID 는 그 볼륨 `$Volume` 파일의 `$OBJECT_ID` 속성에, droid 파일 ID 는 그 파일의 `$OBJECT_ID` 속성에 있으며, 이 속성은 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 다룹니다. droid 볼륨 ID 의 가장 낮은 비트가 볼륨 사이 이동 플래그라는 설명이 있는데, liblnk 문서는 이 설명에 불확실 표시를 붙였습니다. 머신 식별자와 GUID 를 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
+droid 는 CDomainRelativeObjId 를 뜻하고, 네 GUID 는 NTFS 객체 ID 입니다. droid 볼륨 ID 는 그 볼륨 `$Volume` 파일의 `$OBJECT_ID` 속성에, droid 파일 ID 는 그 파일의 `$OBJECT_ID` 속성에 있으며, 이 속성은 [NTFS 구조](../disk-volume/ntfs/index.md) 에서 다룹니다. droid 볼륨 ID 의 가장 낮은 비트가 볼륨 사이 이동 플래그라는 해석이 있지만 확실하지 않습니다. 머신 식별자와 GUID 를 증거로 읽는 법은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에서 다룹니다.
 
 ## 읽는 법
 
@@ -202,7 +202,7 @@ droid 는 CDomainRelativeObjId 를 뜻하고, 네 GUID 는 NTFS 객체 ID 입니
 
 ### 헥스로 한 번 — 위치 정보와 데이터 문자열
 
-아래는 liblnk 문서를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 설명을 위해 만든 예시이며 실제 검체의 값이 아닙니다.
 
 머리의 데이터 플래그가 0x00000096 이라고 둡니다. 0x02 (HasLinkInfo), 0x04 (HasName), 0x10 (HasWorkingDir), 0x80 (IsUnicode) 이 켜져 있습니다. 0x01 이 꺼져 있으므로 링크 대상 식별자가 없습니다. 그래서 위치 정보는 머리 바로 뒤인 파일 오프셋 76 (0x4C) 에서 시작합니다. 아래 오프셋은 위치 정보 시작에서 센 값입니다.
 
@@ -264,11 +264,11 @@ droid 는 CDomainRelativeObjId 를 뜻하고, 네 GUID 는 NTFS 객체 ID 입니
 
 ### 남은 바이트
 
-liblnk 문서는 환경 변수 위치 블록 (0xa0000001) 과 아이콘 위치 블록 (0xa0000007) 의 쓰지 않은 바이트에 이전 데이터가 남아 있을 수 있다고 적습니다. 두 블록은 크기가 788바이트로 정해져 있어서 짧은 경로를 적으면 경로 뒤쪽 바이트가 쓰이지 않고 남습니다. 남은 바이트는 경로 문자열과 따로 적어 두며, 어느 시점의 값인지는 형식만으로 알 수 없습니다.
+환경 변수 위치 블록 (0xa0000001) 과 아이콘 위치 블록 (0xa0000007) 의 쓰지 않은 바이트에는 이전 데이터가 남아 있을 수 있습니다. 두 블록은 크기가 788바이트로 정해져 있어서 짧은 경로를 적으면 경로 뒤쪽 바이트가 쓰이지 않고 남습니다. 남은 바이트는 경로 문자열과 따로 적어 두며, 어느 시점의 값인지는 형식만으로 알 수 없습니다.
 
 ### 명세와 어긋나지만 Windows 가 받아들이는 파일
 
-liblnk 문서에 적힌 사례입니다.
+아래와 같은 사례가 알려져 있습니다.
 
 - HasLinkInfo 가 켜져 있는데 위치 정보가 0 바이트로 채워진 파일이 있습니다. 탐색기는 이 파일을 정상 LNK 로 봅니다.
 - 추가 데이터 블록의 크기가 1바이트 작게 적힌 파일이 있습니다. 크기는 96 인데 다음 블록이 1바이트 뒤에서 시작합니다.
@@ -291,16 +291,16 @@ liblnk 문서에 적힌 사례입니다.
 2. **문자열 크기를 바이트 수로 읽습니다.** 데이터 문자열의 크기 칸은 글자 수입니다.
 3. **FileSize 를 실제 크기로 씁니다.** 0xFFFFFFFF 보다 큰 파일은 하위 32비트만 남습니다.
 4. **플래그만 보고 블록이 없다고 봅니다.** 모든 추가 데이터 블록이 플래그로 표시되지는 않습니다. XP 이하 LNK 는 ForceNoLinkTrack 도 쓰지 않습니다. 블록은 끝 블록까지 직접 따라가 확인합니다.
-5. **서명 검색 개수를 블록 개수로 씁니다.** 위 Windows 11 PC 에서 125개 파일을 바이트 검색하니 0xa0000003 서명이 77개 파일에서 나왔습니다. 이 숫자는 블록을 차례로 따라간 값이 아니라 대략값입니다. 보고서에는 블록을 따라가 센 값을 씁니다.
+5. **서명 검색 개수를 블록 개수로 씁니다.** 위 Windows 11 PC 의 125개 파일을 바이트로 검색하면 0xa0000003 서명이 77개 파일에서 나옵니다. 이 숫자는 블록을 차례로 따라간 값이 아니라 대략값입니다. 보고서에는 블록을 따라가 센 값을 씁니다.
 6. **공유 이름과 공통 경로를 그냥 붙입니다.** 공유 이름이 `\` 로 끝나지 않을 수 있습니다. 붙일 때 구분자가 빠졌는지 봅니다.
 7. **코드 페이지 문자열을 분석 PC 의 코드 페이지로 읽습니다.** IsUnicode 가 꺼진 문자열과 위치 정보의 ASCII 경로는 만든 PC 의 코드 페이지를 따릅니다. 한글 경로가 깨지면 코드 페이지부터 확인합니다.
 8. **사용자 지정 점프 목록 안의 LNK 길이를 FileSize 로 잽니다.** 이 값으로 항목 크기를 판단하면 안 됩니다. 경계를 찾는 법은 [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) 에서 다룹니다.
-9. **뜻이 확인되지 않은 플래그와 비트를 해석합니다.** 0x00100000 이후 플래그들과 droid 볼륨 ID 의 가장 낮은 비트는 liblnk 문서에서도 뜻이 불확실합니다. 보고서에는 값만 적습니다.
+9. **뜻이 확인되지 않은 플래그와 비트를 해석합니다.** 0x00100000 이후 플래그들과 droid 볼륨 ID 의 가장 낮은 비트는 뜻이 불확실합니다. 보고서에는 값만 적습니다.
 10. **IconIndex 를 부호 없는 수로 읽습니다.** 부호 있는 정수입니다. 위 설치 프로그램 LNK 의 값은 -114 였습니다.
 
 ## 도구
 
-이 글이 따른 형식 문서는 libyal 의 liblnk 저장소에 있는 문서와 Microsoft MS-SHLLINK 의 ShellLinkHeader 절입니다. LNK 파서 예와 도구 설정에서 볼 점은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
+형식 문서로는 libyal 의 liblnk 저장소 문서와 Microsoft MS-SHLLINK 의 ShellLinkHeader 절이 있습니다. LNK 파서 예와 도구 설정에서 볼 점은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 페이지에 있습니다.
 
 도구를 쓸 때는 다음을 확인합니다.
 

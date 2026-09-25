@@ -15,13 +15,13 @@ Windows Vista 부터 이벤트 로그는 EVTX 형식으로 저장됩니다. XP·
 ## 왜 중요한가
 
 - 이벤트 아티팩트는 모두 이 파일에서 읽습니다. [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md), [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md), [프로세스 생성](../../../02-artifacts/event-logs/4688.md), [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 이 그 예입니다.
-- Vista 에서 이벤트 기록 구조를 새로 짜면서 EVT 는 이때부터 쓰지 않습니다. Microsoft 문서도 Vista 부터 이 파일 형식을 더 이상 쓰지 않는다고 적습니다. 옛 PC 의 이미지에서는 EVT 를 읽어야 합니다.
+- Vista 에서 이벤트 기록 구조를 새로 짜면서 EVT 는 이때부터 쓰지 않습니다[3]. 옛 PC 의 이미지에서는 EVT 를 읽어야 합니다.
 - 이벤트 뷰어가 보여 주는 설명 문장은 로그 파일 안에 없고, 레코드에는 문장의 빈자리(`%1`, `%2` …)에 들어갈 값만 있습니다. 문장 틀은 공급자 (Provider) 의 메시지 파일에 있습니다.
 - 메시지를 보여 주는 프로그램마다 레지스트리와 메시지 파일을 따로 읽습니다. 그래서 프로그램마다 이벤트 뷰어와 다른 문장이 나올 수 있습니다.
 - EVTX 파일 안에는 정상 레코드 목록에서 빠진 옛 레코드가 남을 수 있습니다.
-- 손상된 EVTX 파일은 도구마다 읽어 내는 건수가 달랐습니다(libevtx 명세의 사례). 한 도구의 건수만 믿지 않습니다.
-- `.etl` 파일의 머리 정보에는 세션 시작 시각과 시스템 부팅 시각이 남습니다. 확인 PC 에서는 번호가 붙은 `.etl` 파일에 이전 부팅의 시각도 남아 있었습니다.
-- EVTX 와 ETW 는 레지스트리 설정에서 이어집니다. 확인 PC 의 ETW 설정 키(Autologger)에는 System 채널을 가리키는 세션이 있었습니다. 자세한 값은 [ETW 추적 로그 (ETL)](etl.md) 에 있습니다.
+- 손상된 EVTX 파일은 도구마다 읽어 내는 건수가 달랐습니다[1]. 한 도구의 건수만 믿지 않습니다.
+- `.etl` 파일의 머리 정보에는 세션 시작 시각과 시스템 부팅 시각이 남습니다. 번호가 붙은 `.etl` 파일에는 이전 부팅의 시각이 남아 있을 수 있습니다.
+- EVTX 와 ETW 는 레지스트리 설정에서 이어집니다. ETW 설정 키(Autologger)에는 System 채널을 가리키는 세션이 있을 수 있습니다. 자세한 값은 [ETW 추적 로그 (ETL)](etl.md) 에 있습니다.
 
 ## 한눈에 보기
 
@@ -36,15 +36,15 @@ Windows Vista 부터 이벤트 로그는 EVTX 형식으로 저장됩니다. XP·
 | ETL | AutoLogger 세션에 FileName 이 없으면 `%SystemRoot%\System32\LogFiles\WMI\<세션이름>.etl` | AutoLogger 는 Vista 이후. 그 전에는 Global Logger | 추적 세션의 이벤트, 세션 시작 시각, 시스템 부팅 시각 |
 
 - 로그 설정 키에 File 값이 없으면 EVTX 파일은 `%SystemRoot%\system32\winevt\logs\` 에 키 이름을 딴 이름으로 생깁니다.
-- libevt 명세는 EVT 를 NT 4·2000·XP·2003 에서 시험했습니다.
-- libevtx 명세는 EVTX 를 Vista·2008·7·8·10(1903 ~ 20H2)·11(21H2) 에서 시험했습니다.
+- libevt 명세는 EVT 를 NT 4·2000·XP·2003 에서 시험했습니다[2].
+- libevtx 명세는 EVTX 를 Vista·2008·7·8·10(1903 ~ 20H2)·11(21H2) 에서 시험했습니다[1].
 
 ### 세 형식 비교
 
 | | EVTX | EVT | ETL |
 |---|---|---|---|
 | 파일 머리 | 4096바이트 파일 헤더 | 48바이트 헤더 | 첫 이벤트에 세션 머리 정보 (TRACE_LOGFILE_HEADER) |
-| 그 뒤 | 65536바이트 청크 여러 개 | 레코드들과 파일 끝 레코드 | 같은 크기의 버퍼들(확인 PC 관찰) |
+| 그 뒤 | 65536바이트 청크 여러 개 | 레코드들과 파일 끝 레코드 | 같은 크기의 버퍼들(검체에서 확인) |
 | 레코드 본문 | 이진 XML | 고정 칸 뒤에 문자열과 데이터 | 공급자 종류마다 형식이 다릅니다 |
 | 시각 | FILETIME, UTC | 32비트 유닉스 시각, UTC | 1601-01-01 부터 센 100ns 단위(FILETIME 과 같은 단위) |
 
@@ -55,13 +55,13 @@ Windows Vista 부터 이벤트 로그는 EVTX 형식으로 저장됩니다. XP·
 - EVTX 의 채널 (Channel) 종류는 Admin·Analytic·Debug·Operational 넷입니다.
 - 채널 설정은 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels` 아래에 있습니다. 공급자 설정은 `WINEVT\Publishers` 아래에 있습니다.
 
-확인 PC 에서 본 규모입니다.
+Windows 11 PC 한 대의 예입니다.
 
 - `winevt\Logs` 안의 `.evtx` 파일은 225개였습니다.
 - `WINEVT\Channels` 아래 채널 키는 1,169개, `WINEVT\Publishers` 아래 공급자 키는 933개였습니다.
 - 채널 키 수와 `.evtx` 파일 수는 같지 않았습니다.
 - `Microsoft-Windows-TaskScheduler/Operational` 채널 키에는 OwningPublisher·Enabled(0)·MaxSize(0xa00000)·Type(1) 값이 있었습니다. 이 채널의 이벤트는 [예약 작업 이벤트](../../../02-artifacts/event-logs/taskscheduler-4698.md) 에서 다룹니다.
-- 채널 키의 Type 숫자가 어느 채널 종류에 대응하는지는 확인하지 못했습니다.
+- 채널 키의 Type 숫자가 어느 채널 종류에 대응하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 읽는 순서
 

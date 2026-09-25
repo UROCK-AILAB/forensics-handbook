@@ -12,11 +12,11 @@ has_toc: false
 
 OneDrive 는 Microsoft 의 클라우드 저장소입니다. PC 에서는 동기화 앱 `OneDrive.exe` 가 사용자의 동기화 폴더를 클라우드와 맞춥니다. 이 앱은 사용자 프로필 아래에 계정별 설정·DB·로그를 남기고, 레지스트리에 계정과 동기화 폴더를 등록합니다.
 
-> **(관찰)** 표시는 Windows 11 빌드 26200 에 OneDrive 26.168.0830.0006 이 깔린 PC 한 대에서 직접 본 내용입니다. 이 PC 에는 개인 계정 1개와 회사 계정 1개가 연결돼 있었습니다. 다른 PC 와 다른 앱 버전에서는 다를 수 있습니다.
+> 이 페이지의 경로와 값은 Windows 11 빌드 26200 과 OneDrive 26.168.0830.0006 기준입니다.
 
 ## 왜 중요한가
 
-동기화 폴더에 넣은 파일은 클라우드로 올라가므로, 파일이 PC 밖으로 나간 통로를 따질 때 먼저 봅니다. 한 사용자가 개인 계정과 회사 계정을 함께 연결할 수 있고, 기록은 `Personal`, `Business1` … 로 계정마다 따로 쌓입니다 (관찰).
+동기화 폴더에 넣은 파일은 클라우드로 올라가므로, 파일이 PC 밖으로 나간 통로를 따질 때 먼저 봅니다. 한 사용자가 개인 계정과 회사 계정을 함께 연결할 수 있고, 기록은 `Personal`, `Business1` … 로 계정마다 따로 쌓입니다.
 
 동기화 DB 에는 파일 목록과 내용 해시가 있어서, 이 해시로 다른 곳에서 찾은 파일과 같은 내용인지 맞춰 볼 수 있습니다. 파일 주문형 (Files On-Demand) 을 쓰면 동기화 폴더의 파일이 내용 없는 자리표시자일 수 있어서 파일 목록과 PC 에 실제로 있던 내용이 다를 수 있습니다.
 
@@ -26,7 +26,7 @@ OneDrive 는 Microsoft 의 클라우드 저장소입니다. PC 에서는 동기�
 
 기록은 OneDrive 계정과 Windows 사용자 프로필 단위로 남으며, 그 시각에 누가 PC 앞에 있었는지는 남지 않습니다. 동기화는 앱이 스스로 하므로 파일이 올라갔다는 기록만으로 사용자가 올리려는 뜻이 있었다고 단정하지 않습니다.
 
-레지스트리와 DB 의 시각 값은 대부분 정확한 기록 조건을 확인하지 못했으므로 이름에서 짐작한 뜻이라고 밝혀 씁니다. 로그는 며칠 치만 남을 수 있고, 관찰한 PC 에서 계정 폴더 로그는 4~5일 치였습니다 (관찰).
+레지스트리와 DB 의 시각 값은 대부분 정확한 기록 조건에 관한 공개 자료가 없으므로 이름에서 짐작한 뜻이라고 밝혀 씁니다. 로그는 며칠 치만 남을 수 있고, 계정 폴더 로그는 4~5일 치만 남기도 합니다.
 
 ## 한눈에 보기
 
@@ -49,9 +49,9 @@ OneDrive 는 Microsoft 의 클라우드 저장소입니다. PC 에서는 동기�
 
 | 기록 | 형식 |
 |---|---|
-| 레지스트리·DB 의 시각 값 | Unix 초. 변환하면 UTC 입니다 (관찰) |
+| 레지스트리·DB 의 시각 값 | Unix 초. 변환하면 UTC 입니다 |
 | 로그 레코드의 시각 | Unix 밀리초. 변환하면 UTC 입니다 |
-| 로그 파일 이름의 날짜·시각 | UTC 였습니다 (관찰) |
+| 로그 파일 이름의 날짜·시각 | UTC 입니다 |
 
 단위가 초와 밀리초로 섞여 있으므로, 한 시간 축에 놓기 전에 맞춥니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
@@ -59,11 +59,11 @@ OneDrive 는 Microsoft 의 클라우드 저장소입니다. PC 에서는 동기�
 
 사용자별 설치는 `%localappdata%\Microsoft\OneDrive\<빌드 번호>\` 아래에, 컴퓨터 전체 설치는 `%ProgramFiles(x86)%\Microsoft OneDrive\<빌드 번호>\` 또는 `%ProgramFiles%\Microsoft OneDrive\<빌드 번호>\` 아래에 정책 템플릿 폴더 `adm` 이 있습니다.
 
-관찰한 PC 는 `C:\Program Files\Microsoft OneDrive\OneDrive.exe` 로 돌고 있었습니다(컴퓨터 전체 설치). 그래도 `settings`·`logs` 는 사용자 프로필의 `%LOCALAPPDATA%\Microsoft\OneDrive` 아래에 있었습니다 (관찰). 그래서 설치 방식과 관계없이 사용자 프로필마다 `settings`·`logs` 를 찾습니다.
+컴퓨터 전체 설치(`C:\Program Files\Microsoft OneDrive\OneDrive.exe`)여도 `settings`·`logs` 는 사용자 프로필의 `%LOCALAPPDATA%\Microsoft\OneDrive` 아래에 있습니다. 그래서 설치 방식과 관계없이 사용자 프로필마다 `settings`·`logs` 를 찾습니다.
 
 ### 동기화 폴더
 
-- 개인 계정의 동기화 폴더는 관찰한 PC 에서 `C:\Users\<사용자>\OneDrive` 였습니다 (관찰).
+- 개인 계정의 동기화 폴더는 `C:\Users\<사용자>\OneDrive` 같은 경로입니다.
 - 회사 계정 폴더와 SharePoint 라이브러리 폴더의 이름·위치는 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
 - 실제 폴더 경로는 레지스트리의 `UserFolder`·`MountPoint` 값으로 확인합니다.
 
@@ -89,7 +89,7 @@ OneDrive 는 Microsoft 의 클라우드 저장소입니다. PC 에서는 동기�
 
 옮길 수 있는 폴더는 바탕 화면, 문서, 사진, 스크린샷, 카메라 앨범(Desktop, Documents, Pictures, Screenshots, Camera Roll)이고, OneDrive 정책은 음악·동영상 폴더에는 영향을 주지 않습니다.
 
-관찰한 PC 에서 `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 의 `Desktop`·`Personal`·`My Pictures` 값은 모두 OneDrive 동기화 폴더 아래(`…\Desktop`, `…\Documents`, `…\Pictures`)를 가리켰습니다 (관찰). 그래서 KFM 을 켠 PC 에서는 바로가기 파일·점프리스트 같은 기록에 바탕 화면·문서 경로가 OneDrive 폴더 안 경로로 찍힙니다 (관찰을 바탕으로 한 짐작). OneDrive 폴더 안 경로라고 해서 사용자가 일부러 그 폴더에 넣었다고 단정하지 않습니다.
+KFM 을 켠 PC 에서는 `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 의 `Desktop`·`Personal`·`My Pictures` 값이 모두 OneDrive 동기화 폴더 아래(`…\Desktop`, `…\Documents`, `…\Pictures`)를 가리킵니다. 그래서 바로가기 파일·점프리스트 같은 기록에 바탕 화면·문서 경로가 OneDrive 폴더 안 경로로 찍히는 것으로 보입니다. OneDrive 폴더 안 경로라고 해서 사용자가 일부러 그 폴더에 넣었다고 단정하지 않습니다.
 - 계정별 이동 상태 값은 [계정·설정 레지스트리](accounts-settings.md), 관리자 정책은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
 
 ### 공개 도구

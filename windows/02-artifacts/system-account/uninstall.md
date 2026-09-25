@@ -35,11 +35,10 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 - 64비트 윈도에 32비트 앱을 설치하면 `Wow6432Node` 아래로 들어갑니다. 64비트 윈도에서는 두 자리를 모두 봐야 합니다.
 - 사용자별 설치는 그 사용자의 NTUSER.DAT 에만 있습니다. 사용자마다 하이브를 따로 엽니다. 사용자별 NTUSER.DAT 는 [사용자 프로필 목록](profilelist.md)에서 찾은 프로필 폴더에서 찾습니다.
 - 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
-- 이 페이지가 기댄 자료는 이 밖의 Windows 버전별 차이를 적지 않습니다.
 
 ## 구조
 
-앱 하위 키마다 아래 값이 있을 수 있습니다. 표는 Microsoft 공식 문서가 Windows Installer 로 설치한 앱에 대해 적은 내용입니다.
+앱 하위 키마다 아래 값이 있을 수 있습니다. 표는 Windows Installer 로 설치한 앱의 값입니다.
 
 | 값 이름 | 뜻 |
 |---|---|
@@ -48,7 +47,7 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 | Publisher | 제조사. Manufacturer 속성에서 옵니다 |
 | InstallDate | 이 제품을 마지막으로 서비스(패치·복구)한 때. 그런 일이 없었으면 이 PC 에 처음 설치한 때 |
 
-공식 문서는 이 밖에 다음 값도 적습니다.
+이 밖에 다음 값도 있을 수 있습니다.
 
 - InstallLocation, InstallSource
 - UninstallString, ModifyPath
@@ -56,7 +55,7 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 - HelpLink, URLInfoAbout, Comments, Contact, Readme, Language
 - VersionMajor, VersionMinor, Version
 
-설치 위치(InstallLocation)나 설치 원본(InstallSource)이 있으면 파일 흔적과 맞춰 볼 수 있습니다. 공식 문서는 `InstallDate` 의 뜻만 적고 저장 형식은 적지 않습니다. 도구가 보여 주는 값을 그대로 옮기고, 형식은 검체에서 확인합니다.
+설치 위치(InstallLocation)나 설치 원본(InstallSource)이 있으면 파일 흔적과 맞춰 볼 수 있습니다. `InstallDate` 의 저장 형식은 공개 문서에 정해져 있지 않습니다. 도구가 보여 주는 값을 그대로 옮기고, 형식은 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -83,7 +82,7 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 
 | 시각 | 가리키는 때 | 비고 |
 |---|---|---|
-| `InstallDate` 값 | 마지막으로 서비스(패치·복구)한 때. 그런 일이 없었으면 처음 설치한 때 | 공식 문서의 뜻입니다. 바뀔 수 있는 값입니다 |
+| `InstallDate` 값 | 마지막으로 서비스(패치·복구)한 때. 그런 일이 없었으면 처음 설치한 때 | 바뀔 수 있는 값입니다 |
 | 앱 키의 LastWrite | 그 앱 항목을 마지막으로 손댄 때 | 레지스트리 키마다 있는 FILETIME 이라 UTC 로 해석합니다 |
 
 - 공개 도구(RegRipper 의 `uninstall`)는 앱 키마다 `DisplayName`·`DisplayVersion` 만 읽고 `InstallDate` 는 읽지 않으며, 대신 앱 키의 LastWrite 를 뽑아 최신순으로 늘어놓습니다. 이렇게 "언제 설치하거나 바꿨나" 를 봅니다.

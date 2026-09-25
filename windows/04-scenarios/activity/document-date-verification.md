@@ -64,7 +64,7 @@ nav_order: 3870
 
 `FileTimeToLocalFileTime` 은 "지금" 의 시간대·일광 절약 설정을 쓰기 때문에 표준시 기간의 시각도, 지금이 일광 절약 기간이면 한 시간 어긋나게 바뀝니다[1].
 
-- Microsoft 는 NTFS 시각을 현지 시각으로 바꿀 때 `FileTimeToSystemTime` → `SystemTimeToTzSpecificLocalTime` → `SystemTimeToFileTime` 순서를 권합니다[1].
+- NTFS 시각을 현지 시각으로 바꿀 때는 `FileTimeToSystemTime` → `SystemTimeToTzSpecificLocalTime` → `SystemTimeToFileTime` 순서로 바꿉니다[1].
 - FAT 에서 `GetFileTime` 은 캐시한 UTC 를 돌려줍니다[1]. 그래서 일광 절약 시간으로 바뀐 뒤 재부팅하기 전까지 한 시간 어긋납니다[1].
 - CD(CDFS) 의 파일 시각은 로컬 시간대에 맞춰 조정해서 보여 줍니다[1].
 - 도구 화면의 현지 시각을 옮겨 적었다면 이 차이를 의심합니다. 시각을 한 기준으로 맞추는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
@@ -94,9 +94,9 @@ nav_order: 3870
 
 (값은 [2] 의 표에서 골랐습니다.)
 
-- Total Editing Time 은 표에 형식만 VT_FILETIME (UTC) 로 적혀 있습니다[2]. 이 값을 시각으로 읽을지, 편집한 시간의 길이로 읽을지는 이번 자료로 확인하지 못했습니다. [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 확인합니다.
+- Total Editing Time 의 형식은 VT_FILETIME (UTC) 입니다[2]. 이 값을 시각으로 읽을지, 편집한 시간의 길이로 읽을지는 [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 봅니다.
 - FILETIME 값을 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
-- 문서는 만든 시각·마지막 저장 시각에 주석을 달았는데[2], BBS 에서 내려받기 같은 일부 파일 전송 방법은 이 정보의 "파일 시스템 쪽 값" 을 제대로 유지하지 않는다는 내용입니다[2]. 그래서 문서 안의 시각과 파일 시스템 시각이 어긋나는 것만으로 조작을 뜻하지 않습니다.
+- BBS 에서 내려받기 같은 일부 파일 전송 방법은 만든 시각·마지막 저장 시각의 "파일 시스템 쪽 값" 을 제대로 유지하지 않습니다[2]. 그래서 문서 안의 시각과 파일 시스템 시각이 어긋나는 것만으로 조작을 뜻하지 않습니다.
 
 ### OPC 패키지로 된 문서 — 핵심 속성
 
@@ -113,12 +113,12 @@ nav_order: 3870
 | Revision | 개정 번호[3] |
 | Creator | 패키지와 내용을 만든 사람·주체[3] |
 
-- 이 속성이 패키지 안 어느 파일에 어떤 시각 형식으로 저장되는지는 이번 자료로 확인하지 못했습니다. [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 확인합니다.
+- 이 속성이 패키지 안 어느 파일에 어떤 시각 형식으로 저장되는지는 [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 봅니다.
 - 편집 시간, 앱 이름 같은 확장 속성도 같은 페이지에서 봅니다.
 
 ### PDF·한글 문서·사진
 
-PDF, 한글 문서, 사진의 날짜 속성은 이번 자료로 확인하지 못했습니다. [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 와 [사진 EXIF](../../02-artifacts/embedded-metadata/exif.md) 에서 봅니다.
+PDF, 한글 문서, 사진의 날짜 속성은 [문서 메타데이터](../../02-artifacts/embedded-metadata/document-metadata/index.md) 와 [사진 EXIF](../../02-artifacts/embedded-metadata/exif.md) 에서 봅니다.
 
 ## 주변 기록으로 맞춰 보기
 
@@ -143,7 +143,7 @@ PDF, 한글 문서, 사진의 날짜 속성은 이번 자료로 확인하지 못
 3. 시스템 시각을 바꾼 흔적이 있는지 먼저 봅니다.
 4. $MFT 에서 문서의 레코드를 찾습니다. $STANDARD_INFORMATION 과 $FILE_NAME 의 시각을 확장 레코드까지 함께 뽑습니다.
 5. 문서 형식을 확인하고 문서 안의 날짜 속성을 뽑습니다.
-6. 두 층의 시각을 UTC 로 맞춥니다. 요약 정보 속성의 FILETIME 은 표에 UTC 로 적혀 있습니다[2]. NTFS 시각도 UTC 입니다[1].
+6. 두 층의 시각을 UTC 로 맞춥니다. 요약 정보 속성의 FILETIME 은 UTC 입니다[2]. NTFS 시각도 UTC 입니다[1].
 7. USN 변경 저널, NTFS 트랜잭션 로그, 폴더 인덱스에서 문서를 만들고 쓰고 이름을 바꾼 순서를 확인합니다.
 8. 바로가기·점프리스트·오피스 사용 흔적·검색 색인에 남은 예전 시각과 비교합니다.
 9. 섀도 복사본이 있으면 지난 시점의 문서와 속성을 비교합니다.

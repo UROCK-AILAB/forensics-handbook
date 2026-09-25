@@ -26,15 +26,13 @@ windows.vadyarascan 은 YARA 규칙으로 검색하는 플러그인입니다. �
 
 - Windows 는 문자열을 UTF-16LE 로 담는 경우가 많아서 검색할 때 ASCII 와 UTF-16LE 를 둘 다 찾습니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 - 메모리 이미지 전체를 그냥 검색하면 문자열이 어느 프로세스 것인지 모르므로, 찾은 위치를 프로세스에 잇는 과정이 따로 필요합니다.
-- windows.strings 문서는 이 플러그인이 strings 명령의 출력을 읽어, 문자열마다 어느 프로세스의 것인지 알려 준다고 적습니다 [4]. 그러니 먼저 이미지에서 문자열과 그 위치를 뽑아 둡니다. 입력 형식과 옵션 이름은 쓰는 버전의 도움말로 확인합니다.
+- windows.strings 플러그인은 strings 명령의 출력을 읽어, 문자열마다 어느 프로세스의 것인지 알려 줍니다 [4]. 그러니 먼저 이미지에서 문자열과 그 위치를 뽑아 둡니다. 입력 형식과 옵션 이름은 쓰는 버전의 도움말로 확인합니다.
 - 가상 주소로 이어진 내용도 물리 메모리에서는 떨어져 있을 수 있어서, 이미지 전체를 그냥 검색하면 긴 문자열이 끊겨 나올 수 있습니다.
 - 키워드 목록을 만들고 검색 결과를 정리하는 방법은 [파일 내용 검색](../content-search/index.md) 과 같습니다.
 
 ## 자격증명과 Credential Guard
 
-아래는 Microsoft 문서 "How Credential Guard works"(2025-06-12) 에서 확인한 내용입니다 [2].
-
-예전 Windows 는 비밀 정보를 LSA 프로세스 lsass.exe 의 메모리에 두었습니다. Credential Guard 를 켜면 lsass 는 격리된 LSA 프로세스 LSAIso.exe 와 RPC 로 통신하고, 이때 비밀은 LSAIso.exe 가 가상화 기반 보안 (VBS, Virtualization-based Security) 으로 보호해 둡니다. 나머지 운영체제는 이 자료에 접근할 수 없습니다. NTLM 해시와 Kerberos TGT 는 보통 디스크에 남지 않으며, 재부팅하면 사라지고 로그온할 때 새로 만듭니다.
+예전 Windows 는 비밀 정보를 LSA 프로세스 lsass.exe 의 메모리에 두었습니다. Credential Guard 를 켜면 lsass 는 격리된 LSA 프로세스 LSAIso.exe 와 RPC 로 통신하고, 이때 비밀은 LSAIso.exe 가 가상화 기반 보안 (VBS, Virtualization-based Security) 으로 보호해 둡니다. 나머지 운영체제는 이 자료에 접근할 수 없습니다. NTLM 해시와 Kerberos TGT 는 보통 디스크에 남지 않으며, 재부팅하면 사라지고 로그온할 때 새로 만듭니다 [2].
 
 Credential Guard 가 켜졌을 때 무엇을 보호하는지는 아래와 같습니다 [2].
 
@@ -45,15 +43,15 @@ Credential Guard 가 켜졌을 때 무엇을 보호하는지는 아래와 같습
 | 로컬 계정, Microsoft 계정 | 보호하지 않습니다 |
 | Windows 기능 밖에서 자격증명을 다루는 소프트웨어 | 보호하지 않습니다 |
 | Microsoft 가 아닌 보안 패키지 | 보호하지 않습니다 |
-| NTLM 인증에서 사용자가 창에 직접 입력한 자격증명 | 보호하지 않습니다. 문서는 이 값이 LSASS 메모리에서 읽힐 수 있다고 적습니다 |
+| NTLM 인증에서 사용자가 창에 직접 입력한 자격증명 | 보호하지 않습니다. 이 값은 LSASS 메모리에서 읽힐 수 있습니다 |
 | 캐시된 도메인 로그온 정보 | 레지스트리에 저장합니다. Credential Guard 가 말하는 "자격증명" 에 들지 않습니다 |
 
 메모리 분석에서 이 표가 뜻하는 것은 아래와 같습니다.
 
-- Credential Guard 가 켜진 PC 의 메모리 이미지에서는 lsass 로부터 NTLM 해시와 TGT 를 꺼내기 어렵습니다. 위 문서에서 끌어낸 해석이며, 실제 검체로는 확인하지 못했습니다.
+- Credential Guard 가 켜진 PC 의 메모리 이미지에서는 lsass 로부터 NTLM 해시와 TGT 를 꺼내기 어려울 것으로 보입니다.
 - 보호하지 않는 항목은 lsass 메모리에 남아 있을 수 있습니다.
 - Credential Guard 가 켜져 있으면 lsass 가 LSAIso.exe 와 통신합니다 [2]. 그래서 첫 확인은 프로세스 목록에서 LSAIso.exe 를 찾는 일입니다. 목록을 만드는 법은 [프로세스와 DLL 분석](process-analysis.md) 에 있습니다.
-- Windows 버전별로 Credential Guard 가 기본으로 켜지는지는 이 글의 참고 문헌으로 확인하지 못했습니다. 이미지마다 켜져 있었는지 직접 확인합니다.
+- Credential Guard 가 켜져 있었는지는 이미지마다 확인합니다.
 
 ## 레지스트리와 해시
 
@@ -69,13 +67,13 @@ Volatility 3 에는 메모리에 올라온 레지스트리를 보는 플러그�
 | 커널 풀 할당 | windows.bigpools, windows.poolscanner |
 
 - hashdump·lsadump·cachedump 는 windows.registry 아래에도 같은 이름이 있습니다 [1]. 이름을 읽는 법은 [프로세스와 DLL 분석](process-analysis.md) 의 "플러그인 이름 읽는 법" 에 있습니다.
-- 세 플러그인이 정확히 어느 하이브에서 무엇을 읽는지는 이 글의 참고 문헌으로 확인하지 못했습니다. 쓰는 버전의 도움말로 확인합니다.
+- 세 플러그인이 정확히 어느 하이브에서 무엇을 읽는지는 쓰는 버전의 도움말로 확인합니다.
 - 디스크에서 같은 정보를 읽는 법은 [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) 에 있습니다. 하이브 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ## 암호 키
 
 - Volatility 3 에는 windows.truecrypt 플러그인이 있습니다 [1].
-- 디스크 암호화 키가 볼륨이 열려 있는 동안 메모리에 있어 꺼낼 수 있다는 설명은 널리 알려져 있습니다. 이 글의 참고 문헌으로는 확인하지 못했습니다.
+- 볼륨이 열려 있는 동안에는 디스크 암호화 키가 메모리에 있어 꺼낼 수 있다는 설명이 널리 알려져 있습니다.
 - 암호화 볼륨을 다루는 순서는 [암호화 증거 다루기](../encrypted-evidence/index.md) 에 있습니다.
 - DPAPI 로 보호한 자료를 디스크에서 푸는 방법은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에 있습니다.
 

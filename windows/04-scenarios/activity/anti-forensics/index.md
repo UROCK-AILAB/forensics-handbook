@@ -21,7 +21,7 @@ has_toc: false
 - Defender 의 실시간 보호가 꺼지면 5001 이, 설정이 바뀌면 5007 이 운영 로그에 남습니다[8].
 - "내 파일 유지" 로 PC 를 초기화해도 옛 AppData 폴더는 `C:\Windows.old` 에서 볼 수 있습니다[5].
 
-시각 바꾸기는 다른 기록의 시각까지 흔듭니다. Microsoft 문서는 시스템 시각을 바꾸면 이벤트 로그 항목과 파일의 타임스탬프가 틀어질 수 있다고 적는데[7], 그래서 어떤 조사든 시각을 바꾼 기록부터 확인해 두면 뒤의 판단이 흔들리지 않습니다.
+시각 바꾸기는 다른 기록의 시각까지 흔듭니다. 시스템 시각을 바꾸면 이벤트 로그 항목과 파일의 타임스탬프가 틀어질 수 있습니다[7]. 그래서 어떤 조사든 시각을 바꾼 기록부터 확인해 두면 뒤의 판단이 흔들리지 않습니다.
 
 증명하지 못하는 것도 분명합니다.
 
@@ -38,12 +38,12 @@ has_toc: false
 | [완전삭제 도구](wiping-tools.md) | 프리패치·UserAssist·사용자 하이브, USN 변경 저널[4] | 도구마다 다름. SDelete 는 Windows 10·Server 2012 이상에서 돕니다[3] | 도구를 실행한 때, 지울 파일의 이름을 바꾼 기록 |
 | [초기화·재설치](reset-reinstall.md) | 새로 만든 `\Windows`·`\Program Files`·`\ProgramData`·각 사용자 AppData, `C:\Windows.old`[5] | Windows 10·11[5] | 초기화 옵션, 초기화 전 기록이 남은 곳 |
 | [시각 바꾸기](system-time-change.md) | 보안 로그의 4616. 감사 설정과 상관없이 항상 남습니다[6] | Windows Vista·Server 2008 부터[6] | 바뀌기 전후 시각, 바꾼 계정과 프로세스 |
-| [보안 프로그램 끄기](defense-evasion.md) | `Microsoft-Windows-Windows Defender/Operational` 채널의 5001·5007·5013[8] | 이번 자료로 확인하지 못함 | 실시간 보호가 꺼진 구간, 바뀐 설정, 막힌 변경 시도 |
+| [보안 프로그램 끄기](defense-evasion.md) | `Microsoft-Windows-Windows Defender/Operational` 채널의 5001·5007·5013[8] | 검체에서 확인 | 실시간 보호가 꺼진 구간, 바뀐 설정, 막힌 변경 시도 |
 
 ### 어느 경우든 같이 볼 기록
 
 - 도구를 실행한 흔적은 도구 종류와 상관없이 같이 봅니다. [프리패치](../../../02-artifacts/execution/prefetch/index.md)·[UserAssist](../../../02-artifacts/execution/userassist.md)·[프로세스 생성 (4688)](../../../02-artifacts/event-logs/4688.md) 이 여기에 듭니다.
-- JPCERT/CC 분석에서는 SDelete 와 wevtutil 모두 프리패치와 4688 로 실행을 확인했습니다[2][4].
+- SDelete 와 wevtutil 을 실행한 기록은 둘 다 프리패치와 4688 에 남습니다[2][4].
 - 행위를 찾으면 그 시각의 로그온 세션을 [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) 에서 찾습니다.
 - 모든 시각을 UTC 하나로 맞춰 [타임라인](../../../03-techniques/analysis/timeline/index.md) 에 놓습니다. 시각을 바꾼 기록이 있으면 틀어진 구간을 타임라인에 표시합니다.
 

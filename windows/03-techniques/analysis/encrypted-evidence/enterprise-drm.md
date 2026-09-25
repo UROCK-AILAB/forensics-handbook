@@ -41,7 +41,7 @@ DRM 문서 판별은 열리지 않는 문서를 세 갈래로 나누는 일입�
 
 ### 한글 문서의 DRM 표시
 
-한컴의 HWP 5.0 명세는 `FileHeader` 스트림 첫 번째 속성에 DRM 관련 비트를 따로 둡니다.
+HWP 5.0 의 `FileHeader` 스트림 첫 번째 속성에는 DRM 관련 비트가 따로 있습니다.
 `FileHeader` 의 전체 구성과 암호·배포용 문서 비트는 [암호 걸린 문서·압축 파일](password-protected-files.md) 에 있습니다.
 
 | 비트 | 뜻 |

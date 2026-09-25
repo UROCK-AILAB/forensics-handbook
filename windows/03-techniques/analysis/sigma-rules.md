@@ -22,11 +22,11 @@ Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 
 
 ## 규칙 파일의 형식
 
-이 페이지는 Sigma Rules Specification v2.1.0(2025-08-02 발표)을 따릅니다.
+이 페이지는 Sigma 규칙 명세 (Sigma Rules Specification) v2.1.0 을 따릅니다.
 
 ### 파일 규칙
 
-| 항목 | 명세의 규칙 |
+| 항목 | 규칙 |
 |---|---|
 | 형식 | YAML |
 | 문자 인코딩 | UTF-8 |
@@ -57,11 +57,11 @@ Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 
 - `logsource` 의 하위 칸은 `category`, `product`, `service`, `definition` 입니다.
 - 값은 소문자로 쓰고, 공백은 밑줄로 바꿉니다.
 
-명세에 나오는 Windows 쪽 예입니다.
+Windows 쪽 예입니다.
 
 | 하위 칸 | 예 |
 |---|---|
-| `product` | `windows`. 명세는 이 값이 Security·System·Application 같은 로그를 모두 포함한다고 적습니다 |
+| `product` | `windows`. 이 값은 Security·System·Application 같은 로그를 모두 포함합니다 |
 | `category` | `process_creation` |
 
 - `service` 에 쓸 Windows 값의 목록은 이 명세 본문에 없습니다. 쓰는 규칙 모음과 변환 설정에서 확인합니다.
@@ -100,7 +100,7 @@ Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 
 ### 예시 규칙
 
 아래 규칙은 명세의 문법으로 만든 예시이며, 공개 규칙 모음에서 가져온 규칙이 아닙니다. VssAdmin 으로 섀도 복사본을 지우는 명령이 실행된 기록을 찾는 모양입니다.
-`delete shadows` 는 Microsoft 문서에 적힌 VssAdmin 명령입니다. 섀도 복사본은 [섀도 복사본 활용](volume-shadow-copy-analysis.md) 에서 다룹니다.
+`delete shadows` 는 섀도 복사본을 지우는 VssAdmin 명령입니다. 섀도 복사본은 [섀도 복사본 활용](volume-shadow-copy-analysis.md) 에서 다룹니다.
 
 ```yaml
 title: 'Shadow copy deletion with vssadmin (wiki example)'
@@ -124,7 +124,7 @@ level: 'high'
 
 - `selection` 아래 두 줄은 맵이라 둘 다 맞아야 합니다.
 - `CommandLine|contains|all` 은 목록의 두 값이 모두 명령줄에 들어 있어야 맞습니다.
-- `Image`, `CommandLine` 은 설명하려고 넣은 필드 이름입니다. 실제로 쓸 필드 이름과 대소문자는 로그 원천과 변환 설정을 따릅니다. 이 페이지의 자료로는 필드 이름을 확인하지 못했습니다.
+- `Image`, `CommandLine` 은 설명하려고 넣은 필드 이름입니다. 실제로 쓸 필드 이름과 대소문자는 로그 원천과 변환 설정을 따릅니다.
 - `falsepositives` 에는 관리자가 일부러 섀도 복사본을 지운 경우를 적었습니다. 규칙에 걸린 이벤트는 이 경우인지 먼저 가립니다.
 
 ## 절차
@@ -144,7 +144,7 @@ level: 'high'
 
 - **텍스트 편집기와 YAML 검사기**: 규칙 파일을 읽고 문법을 확인합니다.
 - **변환 도구**: Sigma 규칙을 검색 도구의 질의 언어로 바꿉니다. 변환에 쓴 설정(매핑)을 함께 보관합니다.
-- **EVTX 에 규칙을 바로 돌리는 도구**: Chainsaw, Hayabusa 같은 공개 도구가 알려져 있습니다. 이 페이지의 자료로는 각 도구의 매핑 방식을 확인하지 못했습니다. 도구의 설정 파일을 확인합니다.
+- **EVTX 에 규칙을 바로 돌리는 도구**: Chainsaw, Hayabusa 같은 공개 도구가 있습니다. 도구마다 매핑 방식은 설정 파일에서 확인합니다.
 - 두 도구의 결과 수가 다르면 [도구 결과 교차 검증](../reporting/tool-validation.md) 의 방법으로 원래 레코드와 맞춰 봅니다.
 
 ## 함정과 한계

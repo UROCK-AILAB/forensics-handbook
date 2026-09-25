@@ -9,9 +9,7 @@ nav_order: 3620
 
 > 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
 
-이 페이지는 PC 용 메신저로 자료 파일을 보냈는지 확인하는 순서를 다룹니다. 메신저마다 대화 DB 의 위치·구조·암호화가 다르므로, 메신저별 내용은 각 메신저 페이지에서 다룹니다. 여기서는 어느 메신저에나 쓰는 조사 순서와, PC 한 대에서 본 메신저 폴더 위치를 다룹니다.
-
-이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 것입니다. 메신저 판이나 설치 방식이 다르면 위치가 다를 수 있습니다.
+이 페이지는 PC 용 메신저로 자료 파일을 보냈는지 확인하는 순서를 다룹니다. 메신저마다 대화 DB 의 위치·구조·암호화가 다르므로, 메신저별 내용은 각 메신저 페이지에서 다룹니다. 여기서는 어느 메신저에나 쓰는 조사 순서와, 메신저 폴더가 놓이는 위치를 다룹니다.
 
 ## 조사 질문
 
@@ -29,19 +27,19 @@ nav_order: 3620
 | 시간대 | 메신저 기록 시각과 PC 흔적 시각을 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
 | 수집 범위 | 사용자 프로필의 메신저 폴더 전체, 사용자 하이브(NTUSER.DAT), SRUDB.dat 를 확보합니다. |
 
-## 이 PC 에서 본 메신저 폴더
+## 메신저 폴더 위치
 
-아래는 관찰한 PC 에 있던 폴더와 키입니다(관찰). 기본 위치라고 확정한 목록이 아닙니다.
+아래 위치는 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다. 메신저 판이나 설치 방식에 따라 다를 수 있습니다.
 
-| 메신저 | 이 PC 에서 본 위치 | 함께 본 것 |
+| 메신저 | 위치 | 그 안의 내용 |
 |---|---|---|
-| 텔레그램 데스크톱 | `%APPDATA%\Telegram Desktop\tdata`, `%USERPROFILE%\Downloads\Telegram Desktop` | `Downloads\Telegram Desktop` 이 받은 파일의 기본 저장 폴더인지는 확인하지 못했습니다. |
-| 새 Teams | `%LOCALAPPDATA%\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\` | 그 아래 `EBWebView\WV2Profile_tfw` 가 WebView2 프로필이었습니다. `IndexedDB`·`History`·`Network\Cookies`·`Service Worker` 가 있었습니다. |
-| 클래식 Teams | `%APPDATA%\Microsoft\Teams` | 이 PC 에는 없었습니다. |
-| 카카오톡 PC | `%LOCALAPPDATA%\Kakao\KakaoTalk` | 그 아래 `users`, `global`, `OpenLinkPreset` 폴더가 있었습니다. |
-| 카카오톡 PC (레지스트리) | `HKCU\Software\Kakao\KakaoTalk` | 그 아래 `DeviceInfo`, `UserAccounts`, `Update` 등 하위 키가 있었습니다. |
+| 텔레그램 데스크톱 | `%APPDATA%\Telegram Desktop\tdata`, `%USERPROFILE%\Downloads\Telegram Desktop` | `Downloads\Telegram Desktop` 이 받은 파일의 기본 저장 폴더인지는 검체의 설정에서 확인합니다. |
+| 새 Teams | `%LOCALAPPDATA%\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\` | 그 아래 `EBWebView\WV2Profile_tfw` 가 WebView2 프로필입니다. `IndexedDB`·`History`·`Network\Cookies`·`Service Worker` 가 들어 있습니다. |
+| 클래식 Teams | `%APPDATA%\Microsoft\Teams` | 새 Teams 만 쓰는 PC 에는 없을 수 있습니다. |
+| 카카오톡 PC | `%LOCALAPPDATA%\Kakao\KakaoTalk` | 그 아래 `users`, `global`, `OpenLinkPreset` 폴더가 있습니다. |
+| 카카오톡 PC (레지스트리) | `HKCU\Software\Kakao\KakaoTalk` | 그 아래 `DeviceInfo`, `UserAccounts`, `Update` 등 하위 키가 있습니다. |
 
-이 PC 에는 카카오톡이 있었지만 `Documents\카카오톡 받은 파일` 폴더는 없었습니다(관찰). 카카오톡이 받은 파일을 어디에 두는지는 [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) 에서 확인합니다.
+카카오톡이 설치돼 있어도 `Documents\카카오톡 받은 파일` 폴더는 없을 수 있습니다. 카카오톡이 받은 파일을 어디에 두는지는 [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) 에서 확인합니다.
 
 새 Teams 폴더의 `History`·`Cookies` 는 브라우저가 아니라 Teams 가 쓰는 WebView2 프로필의 파일이며, 읽는 법은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 
@@ -69,9 +67,9 @@ nav_order: 3620
 ## 흔한 오판
 
 1. **받은 파일 폴더에 있는 파일을 보낸 파일로 봅니다.** 받은 파일 폴더는 받은 쪽 흔적입니다. 보낸 기록은 대화 DB 에서 찾습니다.
-2. **받은 파일 폴더가 없으니 메신저로 파일을 주고받지 않았다고 봅니다.** 관찰한 PC 에는 카카오톡이 있었지만 `Documents\카카오톡 받은 파일` 폴더가 없었습니다(관찰). 폴더가 없다는 것만으로 결론을 내리지 않습니다.
+2. **받은 파일 폴더가 없으니 메신저로 파일을 주고받지 않았다고 봅니다.** 카카오톡이 설치돼 있어도 `Documents\카카오톡 받은 파일` 폴더가 없을 수 있습니다. 폴더가 없다는 것만으로 결론을 내리지 않습니다.
 3. **SRUM 송신량을 파일 전송 증거로 씁니다.** SRUM 네트워크 사용량 표에는 목적지 주소나 파일 이름 칸이 없고[1], 송신량은 그 앱이 그 시간대에 보낸 양일 뿐입니다.
-4. **클래식 Teams 폴더만 보고 Teams 를 안 썼다고 봅니다.** 관찰한 PC 의 새 Teams 는 `Packages\MSTeams_8wekyb3d8bbwe` 아래에 있었습니다(관찰).
+4. **클래식 Teams 폴더만 보고 Teams 를 안 썼다고 봅니다.** 새 Teams 는 `Packages\MSTeams_8wekyb3d8bbwe` 아래에 있습니다.
 5. **대화 DB 를 못 읽었으니 보낸 기록이 없다고 적습니다.** 읽지 못한 것과 기록이 없는 것은 다릅니다. 보고서에는 "암호화로 읽지 못했다" 고 적습니다.
 
 ## 보고서 문장 예

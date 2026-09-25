@@ -55,7 +55,7 @@ XP 이하에서 쓰던 방식이고, 로그 종류는 XML 의 `Channel` 요소�
 1. XML `Provider` 요소의 `Guid` 로 공급자 키를 찾아 MessageFileName 을 씁니다.
 2. 공급자 키가 없으면 원본 키의 EventMessageFile 을 씁니다. Vista 부터는 원본 키에 EventMessageFile 이 늘 있지는 않습니다.
 
-확인 PC 의 예입니다.
+Windows 11 PC 한 대의 예입니다.
 
 원본 키 `EventLog\System\Service Control Manager` 에는 ProviderGuid `{555908d1-a6d7-4695-8e1e-26931d2012f4}` 와 EventMessageFile `%SystemRoot%\system32\services.exe` 가 있었습니다. 같은 GUID 의 Publishers 키는 기본값이 "Service Control Manager" 였고, ResourceFileName 과 MessageFileName 은 `%SystemRoot%\system32\services.exe`, ParameterFileName 은 `%SystemRoot%\system32\kernel32.dll` 이었습니다. 이 키 아래에는 하위 키 ChannelReferences 가 있었습니다.
 
@@ -83,7 +83,7 @@ XP 이하에서 쓰던 방식이고, 로그 종류는 XML 의 `Channel` 요소�
 
 ResourceFileName 의 파일에는 WEVT_TEMPLATE 리소스가 있어야 합니다. 최근 Windows 10 에서는 이 리소스가 `C:\Windows\SystemResources\<파일>.mun` 에 있을 수도 있습니다(예: `tquery.dll.mun`).
 
-확인 PC 에서 본 모습입니다. `System32\en-US\services.exe.mui` 와 `System32\ko-KR\services.exe.mui` 가 둘 다 있었고, `C:\Windows\SystemResources` 에는 항목이 172개 있었으며, `tquery.dll.mun` 안에서 "CRIM" 서명이 보였습니다.
+Windows 11 PC 한 대의 예를 들면 `System32\en-US\services.exe.mui` 와 `System32\ko-KR\services.exe.mui` 가 둘 다 있었고, `C:\Windows\SystemResources` 에는 항목이 172개 있었으며, `tquery.dll.mun` 안에서 "CRIM" 서명이 보였습니다.
 
 ### 이벤트 식별자에서 메시지 식별자로
 
@@ -103,7 +103,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 - 메시지 식별자의 위 2비트는 severity 입니다. 0x40001b7c 는 `01`(정보), 0xc0001b7a 는 `11`(오류) 입니다. 비트 구조는 [EVTX 파일 구조](file-header-chunk-record.md) 의 "이벤트 식별자와 수준" 에 있습니다.
 
-확인 PC 의 services.exe WEVT_TEMPLATE 에서 공급자 {555908d1-…} 의 정의를 읽었습니다. 이 공급자의 이벤트 정의는 43개였고, 그 가운데 넷은 아래와 같습니다.
+Windows 11 PC 한 대의 services.exe WEVT_TEMPLATE 에서 공급자 {555908d1-…} 의 이벤트 정의는 43개였고, 그 가운데 넷은 아래와 같습니다.
 
 | 이벤트 ID | 메시지 식별자 |
 |---|---|
@@ -112,7 +112,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 | 7040 | 0x40001b80 |
 | 7045 | 0x40001b85 |
 
-7036 의 값은 위 Qualifiers 계산 결과와 같습니다. 이 정의들의 키워드는 0x0080000000000000 이었고, libevtx 명세는 이 비트를 "Classic"(win:EventlogClassic) 으로 적습니다.
+7036 의 값은 위 Qualifiers 계산 결과와 같습니다. 이 정의들의 키워드는 0x0080000000000000 이었습니다. 이 비트는 "Classic"(win:EventlogClassic) 입니다[1].
 
 - 7045 이벤트를 조사에 쓰는 법은 [서비스 설치](../../../02-artifacts/event-logs/7045-4697.md) 에 있습니다.
 
@@ -131,7 +131,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 ### WEVT_TEMPLATE 리소스 (CRIM)
 
-Vista 부터 PE 파일의 `WEVT_TEMPLATE` 리소스에 이벤트 매니페스트 (Event Manifest) 가 이진으로 들어갈 수 있습니다. 서명 CRIM 은 "Compiled resource instrumentation manifest" 에서 왔거나, Longhorn 시절 이벤트 로그 서비스의 코드명 Crimson 에서 왔다고 libfwevt 명세는 짐작합니다.
+Vista 부터 PE 파일의 `WEVT_TEMPLATE` 리소스에 이벤트 매니페스트 (Event Manifest) 가 이진으로 들어갈 수 있습니다. 서명 CRIM 은 "Compiled resource instrumentation manifest" 에서 왔거나, Longhorn 시절 이벤트 로그 서비스의 코드명 Crimson 에서 왔다는 해석이 있습니다[3].
 
 **머리**
 
@@ -179,9 +179,9 @@ Vista 부터 PE 파일의 `WEVT_TEMPLATE` 리소스에 이벤트 매니페스트
 - 템플릿 정의는 `TEMP` 서명으로 시작합니다. 크기, 항목 설명자 수, 항목 이름 수, 항목 오프셋, 알 수 없는 값, GUID 16바이트, 이진 XML 조각, 항목 설명자, 항목 이름이 이어집니다.
 - 알 수 없는 값은 EventData 면 1, UserData 면 2 로 보입니다.
 - 이 이진 XML 은 EVTX 의 것과 조금 다릅니다. [이진 XML 해석](binary-xml-template.md) 의 "함정" 을 봅니다.
-- 이 템플릿 GUID 가 EVTX 레코드 안의 템플릿 GUID 와 같은 값인지는 이 핸드북이 참고한 자료로 확인하지 못했습니다.
+- 이 템플릿 GUID 가 EVTX 레코드 안의 템플릿 GUID 와 같은 값인지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-확인 PC 에서 본 모습입니다.
+Windows 11 PC 한 대의 예입니다.
 
 services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었고, 명세의 3.1 과 다릅니다. services.exe 의 CRIM 은 크기가 24,532바이트였고 공급자가 3개였으며, 그 가운데 하나가 {555908d1-…}(Service Control Manager) 였습니다. 세 공급자 모두 CHAN·TTBL·PRVA·OPCO·LEVL·TASK·KEYW·EVNT 요소 8개가 있었습니다.
 
@@ -197,7 +197,7 @@ services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었고, 명�
 
 ### 헥스로 한 번 따라가기
 
-아래는 명세의 이벤트 정의 배치에 확인 PC 에서 읽은 값(7036 → 0x40001b7c, 키워드 0x0080000000000000)을 넣어 만든 예시입니다. 실제 파일에서 떠낸 바이트가 아닙니다. `??` 는 이 설명에 쓰지 않는 바이트입니다. 오프셋은 이벤트 정의 시작 기준입니다.
+아래는 명세의 이벤트 정의 배치에 위 Windows 11 PC 의 값(7036 → 0x40001b7c, 키워드 0x0080000000000000)을 넣어 만든 예시입니다. 실제 파일에서 떠낸 바이트가 아닙니다. `??` 는 이 설명에 쓰지 않는 바이트입니다. 오프셋은 이벤트 정의 시작 기준입니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
@@ -230,7 +230,7 @@ services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었고, 명�
 - 원본 이름은 대소문자를 가리지 않습니다. 대소문자만 다른 이름을 다른 원본으로 보지 않습니다.
 - `%%n` 을 풀지 않으면 문장에 숫자만 남습니다.
 - 문장에 `%#` 이 그대로 보이면 이벤트 문자열이 모자란 것일 수 있습니다.
-- CRIM 버전이 명세 값(3.1)과 달라도 버리지 않습니다. 확인 PC 에서는 5.1 이었습니다.
+- CRIM 버전이 명세 값(3.1)과 달라도 버리지 않습니다. Windows 11 PC 에서는 5.1 이었습니다.
 - WEVT_TEMPLATE 은 원래 DLL 이 아니라 `SystemResources` 의 `.mun` 파일에 있을 수 있습니다.
 
 ## 도구

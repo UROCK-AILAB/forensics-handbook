@@ -17,7 +17,7 @@ nav_order: 870
 
 목록은 주로 호환성 점검 예약 작업 (Microsoft Compatibility Appraiser) 이 채우며, 이 작업은 `compattelrunner.exe` 를 실행합니다. 호환성 조치 (shim) 가 필요한 프로그램을 실행하면 DiagTrack 서비스가 그 파일을 바로 적고, 설치 프로그램을 실행하면 [프로그램 호환성 도우미 (PCA)](../pca.md) 서비스가 목록을 고칩니다.
 
-ANSSI 는 10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일을 세 종류로 나눴습니다.
+10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일은 세 종류입니다[1].
 
 | 종류 | 누가 적나 | 실행했다는 뜻인가 |
 |---|---|---|
@@ -25,7 +25,7 @@ ANSSI 는 10.0.16299 버전 라이브러리에서 이 키에 들어오는 파일
 | 프로그램을 설치하면서 생긴 EXE·SYS | 설치 처리, 점검 작업 | 아니오 |
 | 점검 작업이 훑는 폴더의 EXE (`Program Files`, `Program Files (x86)`, 바탕 화면) | 점검 작업 | 아니오 |
 
-ANSSI 실험에서 설치 폴더의 DLL 은 이 키에 들어오지 않았습니다(10.0.17134 기준). 항목 하나만 보고는 세 종류 가운데 어디에 속하는지 가릴 수 없으며, 실행 증거로 쓸 수 있는 조건은 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
+설치 폴더의 DLL 은 이 키에 들어오지 않습니다(10.0.17134 기준)[1]. 항목 하나만 보고는 세 종류 가운데 어디에 속하는지 가릴 수 없으며, 실행 증거로 쓸 수 있는 조건은 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -37,7 +37,7 @@ ANSSI 실험에서 설치 폴더의 DLL 은 이 키에 들어오지 않았습니
 | 사용자 정보 | 없습니다 |
 | 시각 | 하위 키의 마지막 기록 시각 (FILETIME, UTC), `LinkDate` 값 (문자열) |
 
-AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러리 버전을 따릅니다. 그래서 업데이트를 받은 Windows 7 에도 Windows 10 과 같은 형식이 생길 수 있습니다. 전체 흐름은 [구조와 버전별 차이](structure-versions.md) 에서 다룹니다. 이 키와 관련된 변화만 추리면 다음과 같습니다(ANSSI).
+AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러리 버전을 따릅니다. 그래서 업데이트를 받은 Windows 7 에도 Windows 10 과 같은 형식이 생길 수 있습니다. 전체 흐름은 [구조와 버전별 차이](structure-versions.md) 에서 다룹니다. 이 키와 관련된 변화만 추리면 다음과 같습니다[1].
 
 | 라이브러리 버전 (처음 실린 Windows 10) | 하위 키 이름 | 달라진 점 |
 |---|---|---|
@@ -45,11 +45,11 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 | 10.0.16299 (1709) | `파일 이름\|해시` | `Size` 가 REG_QWORD 로 바뀝니다. `Name`·`Publisher`·`Version`·`BinFileVersion`·`ProductName`·`ProductVersion`·`LinkDate`·`BinProductVersion`·`Language`·`IsPeFile`·`IsOsComponent` 가 더해집니다. |
 | 10.0.17134 (1803) · 10.0.17763 (1809) | 위와 같음 | 옛 `File`·`Programs` 키가 없어집니다. 실행 파일 목록은 이 키만 맡습니다. |
 
-`파일 이름|해시` 의 해시 계산 방식은 공개되지 않았습니다. ANSSI 는 서로 다른 두 PC 에서 같은 경로에 있는 다른 버전 파일이 같은 해시를 냈기 때문에 이 해시가 파일 이름과 경로로 정해진다고 봤습니다. 해시 길이는 자료마다 달라서 ANSSI 예시는 8자리이고 Windows 10 21H2 관찰 예(Psmths)는 16자리입니다.
+`파일 이름|해시` 의 해시 계산 방식은 공개되지 않았습니다. 서로 다른 두 PC 에서 같은 경로에 있는 다른 버전 파일이 같은 해시를 내므로, 이 해시는 파일 이름과 경로로 정해지는 것으로 보입니다[1]. 해시 길이는 8자리인 경우[1]와 16자리인 경우(Windows 10 21H2)[6]가 있습니다.
 
-ANSSI 의 값 목록에 없는 `Usn`·`OriginalFileName`·`Description`·`AppxPackageFullName`·`AppxPackageRelativeId` 도 쓰입니다. Windows 10 21H2 관찰 예에는 `Usn` 이 있고 공개 파서(AmcacheParser)도 이 값들을 읽지만, 어느 버전에서 처음 생겼는지는 확인하지 못했습니다.
+`Usn`·`OriginalFileName`·`Description`·`AppxPackageFullName`·`AppxPackageRelativeId` 값도 쓰입니다. Windows 10 21H2 하이브에는 `Usn` 이 있고[6] 공개 파서 AmcacheParser 도 이 값들을 읽습니다[5]. 어느 버전에서 처음 생겼는지는 공개 자료가 없습니다.
 
-Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서에 같은 이름의 인벤토리 이벤트가 있습니다. 다만 Windows 11 하이브의 버전별 차이를 정리한 공개 자료는 찾지 못했습니다.
+Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서에 같은 이름의 인벤토리 이벤트가 있습니다[2]. 다만 Windows 11 하이브의 버전별 차이를 정리한 공개 자료는 없어 검체에서 확인합니다.
 
 ## 구조
 
@@ -75,14 +75,14 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 | `OriginalFileName`·`Description` | REG_SZ | 버전 정보의 원래 파일 이름과 설명 | 추정 |
 | `AppxPackageFullName`·`AppxPackageRelativeId` | REG_SZ | 스토어 앱 패키지에 속한 파일일 때의 패키지 이름 | 추정 |
 
-- 관찰 예(Psmths)에서는 `Publisher`·`ProductName`·`BinaryType` 도 소문자로 남았습니다. 문자열을 찾을 때는 대소문자를 가리지 않습니다.
+- `Publisher`·`ProductName`·`BinaryType` 도 소문자로 남을 수 있습니다[6]. 문자열을 찾을 때는 대소문자를 가리지 않습니다.
 - 값이 어떻게 셀에 저장되는지는 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에서 다룹니다.
 
 ### 설치 프로그램과 잇기 (ProgramId)
 
 > 그림 자리: InventoryApplicationFile 하위 키의 `ProgramId` 값이 InventoryApplication 하위 키 이름과 이어지는 모습. 짝이 있는 항목과 짝이 없는 항목을 나란히 보여 주는 그림
 
-[설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 이고(ANSSI), 이 키의 `ProgramId` 와 같은 이름의 하위 키가 있으면 그 설치 프로그램에 딸린 파일입니다. 짝이 없는 항목은 설치 기록과 이어지지 않는 파일이며, 공개 파서 AmcacheParser 는 이런 항목을 "Unassociated" 로 따로 모읍니다. 설치 없이 들어온 파일이 이 무리에 섞이므로 먼저 훑어볼 후보가 됩니다. 다만 프로그램을 지우면 InventoryApplication 쪽 하위 키가 지워지므로(ANSSI), 짝이 없다는 것만으로 설치 없이 들어온 파일이라고 단정하지 않습니다.
+[설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 이고[1], 이 키의 `ProgramId` 와 같은 이름의 하위 키가 있으면 그 설치 프로그램에 딸린 파일입니다. 짝이 없는 항목은 설치 기록과 이어지지 않는 파일이며, 공개 파서 AmcacheParser 는 이런 항목을 "Unassociated" 로 따로 모읍니다[5]. 설치 없이 들어온 파일이 이 무리에 섞이므로 먼저 훑어볼 후보가 됩니다. 다만 프로그램을 지우면 InventoryApplication 쪽 하위 키가 지워지므로[1], 짝이 없다는 것만으로 설치 없이 들어온 파일이라고 단정하지 않습니다.
 
 ## 증거로서 의미
 
@@ -100,7 +100,7 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 - 실행 횟수와 마지막 실행 시각은 없습니다.
 - 큰 파일의 `FileId` 는 파일 전체의 해시가 아닐 수 있습니다. 계산 범위는 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 - 항목이 없다고 파일이 없었던 것은 아닙니다. 점검 작업이 돌기 전에 지운 파일은 목록에 들어오지 않을 수 있습니다.
-- 항목이 언제 지워지는지는 공개 자료로 확인하지 못했습니다.
+- 항목이 언제 지워지는지는 공개 자료가 없습니다.
 
 보고서에는 기록이 말하는 만큼만 씁니다.
 
@@ -115,7 +115,7 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 
 ### 하위 키 마지막 기록 시각
 
-ANSSI 실험에서 이 시각의 뜻은 라이브러리 버전에 따라 달랐습니다.
+이 시각의 뜻은 라이브러리 버전에 따라 다릅니다[1].
 
 | 라이브러리 버전 | 하위 키 시각이 맞은 때 |
 |---|---|
@@ -129,11 +129,11 @@ ANSSI 실험에서 이 시각의 뜻은 라이브러리 버전에 따라 달랐�
 
 ### LinkDate
 
-- Microsoft 문서는 이 값을 "파일이 링크된 날짜와 시각" 이라고 설명합니다.
-- PE 헤더의 링크 시각 칸 (TimeDateStamp) 은 1970년 1월 1일 0시부터 센 초입니다.
-- 공개 파서 AmcacheParser 는 이 문자열을 UTC 로 읽습니다.
+- 이 값은 파일이 링크된 날짜와 시각입니다[2].
+- PE 헤더의 링크 시각 칸 (TimeDateStamp) 은 1970년 1월 1일 0시부터 센 초입니다[3].
+- 공개 파서 AmcacheParser 는 이 문자열을 UTC 로 읽습니다[5].
 - 이 칸은 파일을 만든 쪽이 정합니다. 마음대로 바꿀 수 있습니다.
-- Windows 10 의 자체 모듈은 재현 가능한 빌드 (reproducible build) 때문에 이 칸에 시각 대신 해시를 넣습니다(Raymond Chen). 그래서 엉뚱한 날짜가 나옵니다.
+- Windows 10 의 자체 모듈은 재현 가능한 빌드 (reproducible build) 때문에 이 칸에 시각 대신 해시를 넣습니다[4]. 그래서 엉뚱한 날짜가 나옵니다.
 - 원본 파일이 남아 있으면 헤더 값과 맞춰 봅니다. PE 헤더는 [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
 
 ## 함정과 한계
@@ -143,7 +143,7 @@ ANSSI 실험에서 이 시각의 뜻은 라이브러리 버전에 따라 달랐�
 - **점검 작업이 돌아야 목록이 채워집니다.** 이 작업이 꺼져 있거나 오래 돌지 않은 PC 에서는 새 항목이 늦게 생기거나 생기지 않을 수 있습니다.
 - **경로는 소문자로만 남습니다.** 원래 대소문자는 알 수 없습니다.
 - **최근 변경이 하이브 본문에 없을 수 있습니다.** 사용 중인 하이브는 바뀐 내용을 `.LOG1`·`.LOG2` 에 먼저 적습니다. 로그를 반영하지 않으면 최근 항목을 놓칩니다.
-- **도구마다 읽는 값이 다릅니다.** AmcacheParser 소스는 `AppxPackageFullName` 같은 값을 결과에 넣지 않습니다. 결과가 이상하면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 처럼 원시 값을 다시 봅니다.
+- **도구마다 읽는 값이 다릅니다.** AmcacheParser 는 `AppxPackageFullName` 같은 값을 결과에 넣지 않습니다[5]. 결과가 이상하면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 처럼 원시 값을 다시 봅니다.
 - **하이브는 오프라인에서 고칠 수 있습니다.** 지운 하위 키는 빈 셀로 남을 수 있습니다. 다른 실행 흔적과 어긋나는 항목은 조작을 의심해 봅니다.
 
 ## 직접 분석해 보기

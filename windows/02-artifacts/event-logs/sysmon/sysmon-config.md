@@ -13,7 +13,7 @@ Sysmon (System Monitor) 은 Windows 서비스와 장치 드라이버로 이루�
 
 ## Sysmon 은 무엇을 하나
 
-Sysmon 은 Mark Russinovich 와 Thomas Garnier 가 만들었고 Sysinternals 도구로 배포됩니다. 한 번 설치하면 재부팅 뒤에도 남아 시스템 활동을 이벤트 로그에 쓰며, 설치와 제거에 재부팅이 필요 없습니다. 사건을 분석하지 않고, 공격자에게서 자신을 숨기려 하지도 않습니다. Windows 내장 Sysmon 의 Microsoft 문서도 같은 뜻으로, 기록만 하고 분석·경보·차단은 하지 않는다고 적습니다.
+Sysmon 은 Mark Russinovich 와 Thomas Garnier 가 만들었고 Sysinternals 도구로 배포됩니다. 한 번 설치하면 재부팅 뒤에도 남아 시스템 활동을 이벤트 로그에 쓰며, 설치와 제거에 재부팅이 필요 없습니다. 사건을 분석하지 않고, 공격자에게서 자신을 숨기려 하지도 않습니다. Windows 내장 Sysmon 문서도 같은 뜻으로, Sysmon 은 기록만 하고 분석·경보·차단은 하지 않는다고 설명합니다.
 
 다만 Sysinternals 문서의 이벤트 목록에는 실행 파일 생성 차단(27)과 파일 파쇄 차단(28)이 있습니다. 두 문서의 설명이 엇갈리므로 이 두 이벤트는 [파일 생성·삭제](11-23-26.md)에서 따로 봅니다.
 
@@ -26,7 +26,7 @@ Sysmon 은 두 부분이 함께 돕니다.
 
 ### 설정을 먼저 보는 까닭
 
-무엇을 기록할지는 설정 파일이 정합니다. Microsoft 문서는 설정에서 빼서 기록하지 않은 활동은 나중에 되살릴 수 없다고 적습니다. 설정 없이 설치하면 기록하는 이벤트가 몇 개뿐인데, 아래 "기본 동작과 명령줄 스위치" 를 봅니다. 그래서 Sysmon 로그에 어떤 활동이 없다고 해서 그 활동이 없었다고 쓸 수 없고, 그 기간의 설정이 그 활동을 기록하게 돼 있었는지부터 봅니다.
+무엇을 기록할지는 설정 파일이 정합니다. 설정에서 빼서 기록하지 않은 활동은 나중에 되살릴 수 없습니다. 설정 없이 설치하면 기록하는 이벤트가 몇 개뿐인데, 아래 "기본 동작과 명령줄 스위치" 를 봅니다. 그래서 Sysmon 로그에 어떤 활동이 없다고 해서 그 활동이 없었다고 쓸 수 없고, 그 기간의 설정이 그 활동을 기록하게 돼 있었는지부터 봅니다.
 
 이벤트 번호별 목록은 [Sysmon 로그](index.md) 허브에 있습니다.
 
@@ -35,9 +35,9 @@ Sysmon 은 두 부분이 함께 돕니다.
 ### 배포본과 지원 OS
 
 - 배포 zip 에는 Sysmon.exe, Sysmon64.exe, Sysmon64a.exe (ARM64 용), Eula.txt 가 들어 있습니다.
-- v15.22 실행 파일의 파일 버전은 15.22 였고, 서명자는 Microsoft Windows Publisher 였습니다.
+- v15.22 실행 파일의 파일 버전은 15.22 이고, 서명자는 Microsoft Windows Publisher 입니다.
 - v15.22 는 Windows 11 이상과 Windows Server 2019 이상에서 돕니다.
-- 예전 버전이 어느 OS 까지 지원했는지는 확인하지 못했습니다. 옛 OS 에서 나온 로그라면 예전 버전 Sysmon 이 남겼을 수 있습니다.
+- 예전 버전은 지원 OS 가 다를 수 있습니다. 옛 OS 에서 나온 로그라면 예전 버전 Sysmon 이 남겼을 수 있으니 실행 파일 버전을 확인합니다.
 - Vista 이후에는 Microsoft-Windows-Sysmon/Operational 채널에 씁니다. 이벤트 뷰어에서는 "응용 프로그램 및 서비스 로그 > Microsoft > Windows > Sysmon > Operational" 에 보입니다.
 - Vista 이전 OS 에서는 System 로그에 씁니다.
 
@@ -51,16 +51,16 @@ Sysmon 은 두 부분이 함께 돕니다.
 | 설정 값 | `HKLM\SYSTEM\CurrentControlSet\Services\<드라이버 이름>\Parameters` | Rules 값에 규칙이 들어 있습니다 |
 | 로그 채널 등록 | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Sysmon/Operational` | |
 | 로그 파일 | `%SystemRoot%\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx` | 이름 규칙으로 짐작한 경로입니다. 아래 설명을 봅니다 |
-| 사용자 키 | `HKCU\Software\Sysinternals\System Monitor` | Carlos Perez 는 이 키를 Sysinternals 도구가 사용권 동의를 기록하는 곳으로 설명합니다. 그 밖에 어떤 값이 들어가는지는 확인하지 못했습니다 |
+| 사용자 키 | `HKCU\Software\Sysinternals\System Monitor` | Sysinternals 도구가 사용권 동의를 기록하는 곳입니다. 그 밖의 값은 검체에서 확인합니다 |
 
 - 오프라인 SYSTEM 하이브에는 CurrentControlSet 이 없습니다. `ControlSet00x` 처럼 번호가 붙은 키에서 찾습니다. 하이브 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
-- 이벤트 로그 파일 이름은 채널 이름의 "/" 를 "%4" 로 바꿔 짓습니다. Windows 11 25H2 (빌드 26200.9457) PC 한 대에서 `Microsoft-Windows-AAD%4Operational.evtx` 같은 파일로 이 규칙을 확인했습니다. 그 PC 에는 Sysmon 이 없어서 Sysmon 로그 파일 자체는 보지 못했습니다.
-- 같은 PC 에서 `-s`·`-?` 만 실행했을 때는 사용자 키가 생기지 않았습니다.
+- 이벤트 로그 파일 이름은 채널 이름의 "/" 를 "%4" 로 바꿔 짓습니다. 예를 들어 Windows 11 25H2 (빌드 26200.9457) 에는 `Microsoft-Windows-AAD%4Operational.evtx` 파일이 있습니다. Sysmon 로그 파일 이름은 이 규칙으로 짐작한 것이므로 검체에서 확인합니다.
+- Windows 11 25H2 에서 `-s`·`-?` 만 실행하면 사용자 키가 생기지 않습니다.
 - 서비스 키와 드라이버 키를 읽는 법은 [서비스·드라이버](../../persistence/services-drivers.md)에서 다룹니다.
 
 ### 로그 채널 기본값
 
-아래 값은 v15.22 배포본 안의 이벤트 매니페스트에서 뽑았습니다.
+아래 값은 v15.22 배포본 안의 이벤트 매니페스트에 적힌 값입니다.
 
 | 항목 | 값 |
 |---|---|
@@ -76,9 +76,9 @@ Sysmon 은 두 부분이 함께 돕니다.
 
 Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 
-기본으로 꺼져 있어 관리자가 직접 켜야 합니다. 켜는 순서는 두 단계로, `Enable-WindowsOptionalFeature -Online -FeatureName Sysmon` 으로 기능을 설치하고 `sysmon -i` 를 실행하며, 이때 설정 파일을 줄 수 있습니다. 따로 받은 Sysmon 과 함께 쓸 수 없어서, Microsoft 문서는 먼저 `Get-Service sysmon*` 으로 기존 설치를 찾아 지우라고 적습니다. 이벤트는 따로 받은 Sysmon 과 같은 채널에 쌓이고, 설정을 바꾸면 바로 적용되며 재부팅 뒤에도 유지됩니다. 대상은 지원되는 Windows 11 이상입니다 (Microsoft 문서, 2026-02-03). Windows 11 25H2 (빌드 26200.9457) PC 한 대에서는 선택적 기능 "Sysmon" 과 "Sysmon-Service" 가 보였고, 둘 다 Disabled 였습니다.
+기본으로 꺼져 있어 관리자가 직접 켜야 합니다. 켜는 순서는 두 단계로, `Enable-WindowsOptionalFeature -Online -FeatureName Sysmon` 으로 기능을 설치하고 `sysmon -i` 를 실행하며, 이때 설정 파일을 줄 수 있습니다. 따로 받은 Sysmon 과 함께 쓸 수 없으므로, 먼저 `Get-Service sysmon*` 으로 기존 설치를 찾아 지웁니다. 이벤트는 따로 받은 Sysmon 과 같은 채널에 쌓이고, 설정을 바꾸면 바로 적용되며 재부팅 뒤에도 유지됩니다. 대상은 지원되는 Windows 11 이상입니다. Windows 11 25H2 (빌드 26200.9457) 에는 선택적 기능 "Sysmon" 과 "Sysmon-Service" 가 있고, 둘 다 Disabled 상태입니다.
 
-내장 Sysmon 의 실행 파일 위치, 서비스·드라이버 이름, 설정이 남는 레지스트리 값은 확인하지 못했습니다. 어느 빌드부터 들어갔는지도 확인하지 못했습니다. 이 페이지의 레지스트리 설명은 따로 받은 Sysmon 을 기준으로 합니다.
+내장 Sysmon 의 실행 파일 위치, 서비스·드라이버 이름, 설정이 남는 레지스트리 값, 처음 들어간 빌드는 공개된 분석 자료가 없어 검체에서 확인해야 합니다. 이 페이지의 레지스트리 설명은 따로 받은 Sysmon 을 기준으로 합니다.
 
 ## 구조
 
@@ -90,30 +90,30 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 
 | 단서 | 읽는 법 |
 |---|---|
-| 서비스 설명 "System Monitor service" | 실행 파일 이름을 바꿔 설치해도 이 설명은 남는다고 Carlos Perez 는 적습니다 |
+| 서비스 설명 "System Monitor service" | 실행 파일 이름을 바꿔 설치해도 이 설명은 남습니다 |
 | 로그 채널 이름 | 이름을 바꿔도 Microsoft-Windows-Sysmon/Operational 그대로입니다 |
 | 필터 드라이버 고도 (altitude) 385201 | fltmc 로 필터 드라이버 목록을 보면 이 값으로 찾을 수 있습니다. 배포본 안에도 이 숫자가 있습니다 |
-| 서비스 키 Parameters 의 DriverName (REG_SZ) | Matt Graeber 의 스크립트(Sysmon 6.20 시절)는 이 값으로 서비스와 드라이버를 짝지어 찾습니다 |
+| 서비스 키 Parameters 의 DriverName (REG_SZ) | 이 값으로 서비스와 드라이버를 짝지어 찾습니다 (Sysmon 6.20 기준) |
 
 ### Parameters 키의 값
 
 규칙은 드라이버 키 아래 `Parameters` 의 Rules 값에 들어 있습니다. 드라이버 이름을 바꾸면 SysmonDrv 자리가 그 이름으로 바뀝니다. Sysmon 은 설정 레지스트리가 바뀌면 설정을 자동으로 다시 읽습니다.
 
-아래 표는 Matt Graeber 의 PSSysmonTools 스크립트가 읽는 값입니다. 이 스크립트는 Sysmon 6.20 (스키마 3.30~4.10) 을 기준으로 만들었습니다.
+아래 표는 PSSysmonTools 스크립트가 읽는 값입니다. 이 스크립트는 Sysmon 6.20 (스키마 3.30~4.10) 을 기준으로 만들었습니다.
 
 | 값 이름 | 형식 | 뜻 (스크립트 기준) |
 |---|---|---|
 | Rules | REG_BINARY | 필터 규칙 |
 | Options | REG_DWORD | 1 = 네트워크 연결 기록, 2 = 이미지 로드 기록 |
 | HashingAlgorithm | REG_DWORD | 1 = SHA1, 2 = MD5, 4 = SHA256, 8 = IMPHASH |
-| ProcessAccessMasks | REG_BINARY | 스크립트가 읽는 값입니다. 뜻은 확인하지 못했습니다 |
+| ProcessAccessMasks | REG_BINARY | 스크립트가 읽는 값입니다. 뜻은 공개 자료 없음 |
 | ProcessAccessNames | REG_MULTI_SZ | 위와 같습니다 |
 | CheckRevocation | REG_BINARY | 위와 같습니다 |
 
 - v15.22 배포본에도 `System\CurrentControlSet\Services\%s\Parameters`, `Rules`, `Options`, `HashingAlgorithm`, `ConfigHash`, `ConfigFile` 문자열이 있습니다.
-- 위 비트 뜻이 v15 에서도 같은지는 확인하지 못했습니다.
-- ConfigHash·ConfigFile 이 Parameters 아래 값 이름인지도 확인하지 못했습니다.
-- Rules 값 안의 바이트 구조는 이 페이지에서 다루지 않습니다. 스크립트에 해석 코드가 있지만, 이번 조사에서는 오프셋을 믿을 만하게 확인하지 못했습니다.
+- 위 비트 뜻은 Sysmon 6.20 기준이므로, v15 에서도 같은지는 검체에서 확인합니다.
+- ConfigHash·ConfigFile 이 Parameters 아래 값 이름인지도 검체에서 확인합니다.
+- Rules 값 안의 바이트 구조는 이 페이지에서 다루지 않습니다. 스크립트에 해석 코드가 있지만 Sysmon 6.20 시절 형식 기준입니다.
 
 ### 설정 파일 (XML)
 
@@ -137,8 +137,8 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 
 1. `schemaversion` 은 이 설정 파일이 따르는 스키마 버전입니다.
 2. `HashAlgorithms` 는 전역 설정 항목입니다. 해시를 SHA256 으로 계산하라는 뜻입니다.
-3. 규칙이 없는 `<ProcessCreate onmatch="exclude" />` 는 뺄 것이 없다는 뜻입니다. 그래서 프로세스 생성을 전부 기록합니다 (Microsoft 예시).
-4. 규칙이 없는 `<ProcessTerminate onmatch="include" />` 는 넣을 것이 없다는 뜻입니다. 그래서 프로세스 종료를 기록하지 않습니다 (Sysinternals 예시 주석).
+3. 규칙이 없는 `<ProcessCreate onmatch="exclude" />` 는 뺄 것이 없다는 뜻입니다. 그래서 프로세스 생성을 전부 기록합니다.
+4. 규칙이 없는 `<ProcessTerminate onmatch="include" />` 는 넣을 것이 없다는 뜻입니다. 그래서 프로세스 종료를 기록하지 않습니다.
 
 #### 스키마 버전
 
@@ -155,7 +155,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 | 4.90 | 이벤트 29 |
 | 4.91 | DriverQueueSize, SigningQueueSize 설정 |
 
-각 스키마 버전이 어느 Sysmon 릴리스에 해당하는지는 확인하지 못했습니다. 그래서 설정 파일의 schemaversion 만으로 Sysmon 버전을 적지 않습니다. 실제 버전은 이벤트 4 의 Version 칸이나 실행 파일에서 확인합니다.
+스키마 버전만으로는 어느 Sysmon 릴리스인지 알 수 없습니다. 그래서 설정 파일의 schemaversion 만으로 Sysmon 버전을 적지 않습니다. 실제 버전은 이벤트 4 의 Version 칸이나 실행 파일에서 확인합니다.
 
 #### 전역 설정 항목
 
@@ -192,7 +192,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 | `-u [force]` | 제거합니다 |
 | `-accepteula` | 설치할 때 사용권 동의 창을 건너뜁니다 |
 
-설정 없이 설치하면 다음을 기록합니다 (Sysmon Community Guide).
+설정 없이 설치하면 다음을 기록합니다.
 
 - 프로세스 생성 (1)
 - 프로세스 종료 (5)
@@ -217,7 +217,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 | `-d` | DriverName |
 
 - 스위치로 켜는 이벤트도 설정 파일에서는 필터 태그로 따로 정합니다.
-- v15.22 스키마의 이벤트 정의에는 ruledefault 속성이 있습니다. 1·5 는 include, 11~22 는 exclude 이고, 나머지는 없습니다. 이 속성과 기본 기록 여부가 어떻게 이어지는지는 확인하지 못했습니다.
+- v15.22 스키마의 이벤트 정의에는 ruledefault 속성이 있습니다. 1·5 는 include, 11~22 는 exclude 이고, 나머지는 없습니다. 이 속성과 기본 기록 여부가 어떻게 이어지는지는 설정 없이 설치해 남는 이벤트로 확인합니다.
 
 ### 필터 규칙
 
@@ -242,7 +242,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 | 255 | 부하가 커서 작업을 못 했거나, 버그가 있거나, 보안·무결성 조건이 맞지 않을 때 | UtcTime, ID, Description |
 
 - 이벤트 4 와 16 은 필터로 끌 수 없습니다.
-- Sysinternals 문서는 이벤트 4 가 서비스의 시작·중지 상태를 알린다고 적습니다. 배포본에도 "Started", "Stopped" 문자열이 있습니다. State 칸에 이 문자열이 그대로 적히는지는 실물로 확인하지 못했습니다.
+- 이벤트 4 는 서비스의 시작·중지 상태를 알립니다. 배포본에도 "Started", "Stopped" 문자열이 있습니다. State 칸에 이 문자열이 그대로 적히는지는 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -266,7 +266,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 - Sysmon 이벤트의 시각은 UTC 입니다. UtcTime 칸의 서식은 [프로세스 생성](1.md)에서 다룹니다.
 - 이벤트 16 의 UtcTime 은 설정이 바뀐 때입니다. 이 시각 앞뒤로 기록되는 이벤트 종류가 달라질 수 있습니다.
 - 이벤트 4 의 UtcTime 은 서비스 상태가 바뀐 때입니다.
-- 드라이버는 부팅 초기 활동을 모아 두었다가 서비스가 뜬 뒤 넘깁니다. 그래서 부팅 직후에는 서비스 시작보다 이른 UtcTime 의 이벤트가 나중에 쓰일 수 있습니다. 이 점은 추론이며 확인하지 못했습니다.
+- 드라이버는 부팅 초기 활동을 모아 두었다가 서비스가 뜬 뒤 넘깁니다. 그래서 부팅 직후에는 서비스 시작보다 이른 UtcTime 의 이벤트가 나중에 쓰일 수 있습니다. 이 점은 추론입니다.
 - `-c` 로 설정을 바꾸면 Parameters 아래 값이 바뀌므로, 그 키의 마지막 기록 시각도 함께 바뀔 것으로 보입니다. 이 점도 추론입니다. 이벤트 16 의 시각과 맞춰 확인합니다.
 
 ## 함정과 한계
@@ -274,21 +274,21 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 1. **기본 이름으로만 찾습니다.** 서비스 이름과 드라이버 이름은 바꿀 수 있습니다. 서비스 설명, 채널 이름, 고도 값으로도 찾습니다.
 2. **기록이 없으니 활동도 없었다고 씁니다.** 설정에서 뺀 활동은 남지 않습니다. 설정부터 확인합니다.
 3. **해시 알고리즘을 문서 기본값으로 짐작합니다.** 문서 안에서도 기본값이 엇갈립니다. 적용된 설정과 실제 Hashes 칸을 봅니다.
-4. **레지스트리 비트 뜻을 그대로 믿습니다.** Options·HashingAlgorithm 비트 뜻은 Sysmon 6.20 시절 스크립트에서 왔습니다. v15 에서 같은지는 확인하지 못했습니다.
+4. **레지스트리 비트 뜻을 그대로 믿습니다.** Options·HashingAlgorithm 비트 뜻은 Sysmon 6.20 시절 스크립트에서 왔습니다. v15 에서 같은지는 검체로 확인합니다.
 5. **내장 Sysmon 문서의 설정 표를 그대로 옮깁니다.** CopyOnDeleteExtensions, DriverName 설명이 Sysinternals 문서와 다릅니다.
 6. **schemaversion 을 Sysmon 버전으로 적습니다.** 두 번호는 따로 매깁니다.
 7. **기록이 끊긴 구간을 지나칩니다.** 이벤트 255 가 있으면 그 무렵 기록이 빠졌을 수 있습니다.
 8. **채널 크기를 기본값으로 짐작합니다.** 64MiB 는 매니페스트 기본값입니다. 관리자가 바꿀 수 있습니다.
-9. **내장 Sysmon 과 따로 받은 Sysmon 을 같은 것으로 봅니다.** 둘은 함께 쓸 수 없습니다. 내장 Sysmon 의 흔적 위치는 확인하지 못했습니다.
+9. **내장 Sysmon 과 따로 받은 Sysmon 을 같은 것으로 봅니다.** 둘은 함께 쓸 수 없고, 내장 Sysmon 의 흔적 위치는 검체에서 따로 확인합니다.
 
 ### 지우기와 조작
 
-- **드라이버를 내립니다.** fltmc 로 Sysmon 드라이버를 내리면 System 로그에 Filter Manager 이벤트 1 이 남는다고 Carlos Perez 는 적습니다. Sysmon 은 그 명령의 실행을 마지막으로 기록합니다.
-- **규칙 값을 지웁니다.** 레지스트리 감사를 켜 두었다면, Rules 값을 지운 행위가 보안 로그 4657 로 보인다고 Carlos Perez 는 적습니다. 감사 설정은 [감사 정책과 로그 설정](../audit-policy-log-settings.md)에서 확인합니다.
+- **드라이버를 내립니다.** fltmc 로 Sysmon 드라이버를 내리면 System 로그에 Filter Manager 이벤트 1 이 남습니다. Sysmon 은 그 명령의 실행을 마지막으로 기록합니다.
+- **규칙 값을 지웁니다.** 레지스트리 감사를 켜 두었다면, Rules 값을 지운 행위가 보안 로그 4657 로 보입니다. 감사 설정은 [감사 정책과 로그 설정](../audit-policy-log-settings.md)에서 확인합니다.
 - **설정을 바꿉니다.** 설정 변경은 이벤트 16 으로 남고, 필터로 끌 수 없습니다.
 - **서비스 상태를 바꿉니다.** 서비스 상태 변경은 이벤트 4 로 남고, 필터로 끌 수 없습니다.
 - **로그를 지웁니다.** 매니페스트 기본 권한으로는 Administrators 가 이 채널을 지울 수 있습니다. [이벤트 로그 삭제](../1102-104.md)를 봅니다.
-- **Sysmon 을 제거합니다.** 제거 뒤에 무엇이 남는지는 확인하지 못했습니다. 설치 때 남은 [서비스 설치](../7045-4697.md) 기록과 실행 흔적을 찾습니다.
+- **Sysmon 을 제거합니다.** 제거 뒤에 남는 흔적은 공개된 분석 자료가 없어 검체에서 확인해야 합니다. 설치 때 남은 [서비스 설치](../7045-4697.md) 기록과 실행 흔적을 찾습니다.
 
 여러 흔적을 모아 판단하는 순서는 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
@@ -314,7 +314,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 
 ### 헥스로 한 번
 
-REG_DWORD 값은 4바이트를 리틀 엔디언으로 저장합니다. 아래는 PSSysmonTools 스크립트의 비트 정의로 만든 예시입니다. 검체에서 나온 값이 아닙니다. v15 에서도 뜻이 같은지는 확인하지 못했습니다.
+REG_DWORD 값은 4바이트를 리틀 엔디언으로 저장합니다. 아래는 PSSysmonTools 스크립트의 비트 정의로 만든 예시입니다. 검체에서 나온 값이 아닙니다. Sysmon 6.20 기준이라 v15 에서도 뜻이 같은지는 검체로 확인합니다.
 
 ```
 Options           03 00 00 00   → 0x00000003

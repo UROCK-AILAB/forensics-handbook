@@ -24,18 +24,17 @@ nav_order: 3250
 ## 커널 크래시 덤프 종류
 
 Windows 는 버그 체크 때 덤프 파일을 만들 수 있고, 만들지 않게 설정할 수도 있습니다 [1].
-아래 표는 Microsoft 문서 "Memory dump file options"(KB 254649) 에서 확인한 내용입니다 [1].
+종류별로 담는 것과 조건은 아래와 같습니다 [1].
 
 | 종류 | 담는 것 | 필요한 페이지 파일 | 다음 크래시 때 |
 |---|---|---|---|
 | 완전 메모리 덤프 (Complete Memory Dump) | 시스템 메모리 전체. 실행 중이던 프로세스의 자료가 들어 있을 수 있습니다 | 로컬 볼륨에 물리 RAM + 257MB 이상 | 이전 파일을 덮어씁니다 |
-| 커널 메모리 덤프 (Kernel Memory Dump) | 커널·HAL·커널 모드 드라이버의 메모리. 할당하지 않은 메모리와 사용자 모드 프로그램 메모리는 없습니다 | 이 글의 참고 문헌에 나오지 않습니다 | "기존 파일 덮어쓰기" 설정이 켜져 있으면 덮어씁니다 |
+| 커널 메모리 덤프 (Kernel Memory Dump) | 커널·HAL·커널 모드 드라이버의 메모리. 할당하지 않은 메모리와 사용자 모드 프로그램 메모리는 없습니다 | — | "기존 파일 덮어쓰기" 설정이 켜져 있으면 덮어씁니다 |
 | 작은 메모리 덤프 (Small Memory Dump) | 아래 목록 | 부트 볼륨에 2MB 이상 | 이전 파일을 남기고 새 이름으로 만듭니다 |
-| 활성 메모리 덤프 (Active Memory Dump) | 이 글의 참고 문헌에는 자세한 설명이 없습니다 | — | — |
+| 활성 메모리 덤프 (Active Memory Dump) | 설정 방법은 아래 CrashControl 표의 FilterPages 에 있습니다 | — | — |
 
-- 문서는 32비트 시스템의 커널 메모리가 보통 150MB ~ 2GB 라고 적습니다 [1].
+- 32비트 시스템의 커널 메모리는 보통 150MB ~ 2GB 입니다 [1].
 - 자동 메모리 덤프 (Automatic Memory Dump) 도 있습니다. 아래 CrashDumpEnabled 표에 값이 있습니다 [1].
-- 활성·자동 메모리 덤프는 별도 Microsoft 문서가 자세히 설명합니다. 그 문서는 이 글의 참고 문헌에 들지 않습니다.
 
 ### 작은 메모리 덤프에 든 것
 
@@ -49,17 +48,17 @@ Windows 는 버그 체크 때 덤프 파일을 만들 수 있고, 만들지 않�
 - 멈춘 스레드의 커널 모드 호출 스택
 
 작은 메모리 덤프는 크래시마다 새 파일을 만들어 폴더에 쌓고, 파일 이름에는 날짜가 들어갑니다 [1].
-문서의 예 `Mini022900-01.dmp` 는 2000년 2월 29일의 첫 덤프입니다 [1].
-요즘 Windows 가 쓰는 이름 형식은 이 글의 참고 문헌으로 확인하지 못했습니다.
+예를 들어 `Mini022900-01.dmp` 는 2000년 2월 29일의 첫 덤프입니다 [1].
+요즘 Windows 가 쓰는 이름 형식은 검체에서 확인합니다.
 
 ## 설정 레지스트리 — CrashControl
 
 커널 크래시 덤프 설정은 `HKLM\System\CurrentControlSet\Control\CrashControl` 에 있습니다 [1].
 
-| 값 | 형식 | 문서에 나온 값 [1] |
+| 값 | 형식 | 값의 뜻·예 [1] |
 |---|---|---|
 | CrashDumpEnabled | REG_DWORD | 0 = 없음, 1 = 완전, 2 = 커널, 3 = 작은 덤프, 7 = 자동 메모리 덤프 |
-| FilterPages | 이 글의 참고 문헌에 나오지 않음 | CrashDumpEnabled 가 1 이고 FilterPages 가 1 이면 활성 메모리 덤프입니다 |
+| FilterPages | — | CrashDumpEnabled 가 1 이고 FilterPages 가 1 이면 활성 메모리 덤프입니다 |
 | DumpFile | REG_EXPAND_SZ | `%SystemRoot%\Memory.dmp` |
 | MinidumpDir | REG_EXPAND_SZ | `%SystemRoot%\Minidump` |
 | Overwrite | REG_DWORD | 1 |
@@ -67,9 +66,9 @@ Windows 는 버그 체크 때 덤프 파일을 만들 수 있고, 만들지 않�
 | LogEvent | REG_DWORD | 1 |
 | SendAlert | REG_DWORD | 1 |
 
-- DumpFile, MinidumpDir, Overwrite, AutoReboot, LogEvent, SendAlert 는 문서에 값의 예만 있고 뜻 설명은 따로 없습니다 [1].
+- DumpFile, MinidumpDir, Overwrite, AutoReboot, LogEvent, SendAlert 의 값은 예시 값입니다 [1].
 - 바뀐 설정은 재부팅해야 적용됩니다 [1].
-- Windows 버전별 기본값은 이 글의 참고 문헌으로 확인하지 못했습니다. 이미지마다 값을 직접 읽습니다.
+- 기본값은 Windows 버전마다 다를 수 있어 이미지마다 값을 직접 읽습니다.
 - 디스크 이미지에서 떼어 낸 SYSTEM 하이브를 읽을 때는 경로의 `CurrentControlSet` 부분을 실제로 쓰던 제어 집합으로 바꿔 읽습니다. 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ## 사용자 모드 덤프 — WER 로컬 덤프
@@ -84,7 +83,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 | DumpFolder | REG_EXPAND_SZ | `%LOCALAPPDATA%\CrashDumps` | 덤프를 저장할 폴더입니다 |
 | DumpCount | REG_DWORD | 10 | 남길 덤프 수입니다. 넘으면 가장 오래된 덤프를 새 것으로 바꿉니다 |
 | DumpType | REG_DWORD | 1 | 0 = 사용자 지정, 1 = 미니 덤프, 2 = 전체 덤프 |
-| CustomDumpFlags | REG_DWORD | — | DumpType 이 0 일 때만 씁니다. MINIDUMP_TYPE 값의 조합입니다. 문서의 예는 0x00000121 입니다 |
+| CustomDumpFlags | REG_DWORD | — | DumpType 이 0 일 때만 씁니다. MINIDUMP_TYPE 값의 조합입니다. 예: 0x00000121 |
 
 서비스가 죽으면 서비스 계정의 프로필 폴더에 덤프를 씁니다 [2].
 
@@ -93,13 +92,13 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 | System | `%WINDIR%\System32\Config\SystemProfile` |
 | Network Service, Local Service | `%WINDIR%\ServiceProfiles` |
 
-- LocalDumps 아래에 프로그램 이름으로 키를 만들면 그 프로그램에는 전역 설정 대신 그 키의 설정을 씁니다 [2]. 문서의 예는 `LocalDumps\MyApplication.exe` 입니다.
+- LocalDumps 아래에 프로그램 이름으로 키를 만들면 그 프로그램에는 전역 설정 대신 그 키의 설정을 씁니다 [2]. 예를 들어 `LocalDumps\MyApplication.exe` 처럼 만듭니다.
 - 자체 크래시 보고를 하는 프로그램은 이 기능의 대상이 아닙니다 [2].
 - 프로그램 크래시용 자동 디버깅을 설정해 두면 덤프를 모으지 않습니다 [2].
 - WER 을 꺼 두었거나 사용자가 보고를 취소해도 로컬 덤프는 남을 수 있습니다 [2].
 - 로컬 덤프는 Microsoft 로 보낸 덤프와 다를 수 있습니다 [2].
 - WER 보고서 파일은 [윈도 오류 보고](../../../02-artifacts/execution/wer.md) 에서 다룹니다.
-- 작업 관리자나 ProcDump 로 만든 덤프는 [메모리 덤프 확보](memory-acquisition.md) 에서 다룹니다. 이런 덤프의 기본 저장 위치는 이 글의 참고 문헌으로 확인하지 못했습니다.
+- 작업 관리자나 ProcDump 로 만든 덤프는 [메모리 덤프 확보](memory-acquisition.md) 에서 다룹니다. 이런 덤프의 저장 위치는 검체에서 찾습니다.
 
 ## 구조 — 미니덤프 헤더
 
@@ -116,9 +115,8 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 | 6 | Reserved / TimeDateStamp | ULONG32 (공용체) | time_t 형식의 날짜·시각입니다 |
 | 7 | Flags | ULONG64 | MINIDUMP_TYPE 값의 조합입니다 |
 
-- 칸의 바이트 위치와 MINIDUMP_SIGNATURE 의 실제 값은 이 문서에 나오지 않아서 이 글에는 헥스 예시를 싣지 않습니다. 헤더 파일로 확인합니다.
+- 칸의 바이트 위치와 MINIDUMP_SIGNATURE 의 실제 값은 헤더 파일 minidumpapiset.h 로 확인합니다.
 - Flags 는 LocalDumps 의 CustomDumpFlags 와 같은 MINIDUMP_TYPE 조합입니다 [2][3]. 덤프에 무엇을 담았는지 가늠하는 단서가 됩니다.
-- 커널 크래시 덤프의 파일 머리글 형식은 이 글의 참고 문헌으로 확인하지 못했습니다.
 
 ## 절차
 
@@ -134,8 +132,8 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 
 ## 시각 해석
 
-- 작은 덤프는 파일 이름에 날짜가 들어갑니다 [1]. 이름 형식은 문서의 예로만 확인했습니다.
-- 미니덤프 헤더의 TimeDateStamp 는 time_t 형식입니다 [3]. UTC 인지는 문서에 적혀 있지 않습니다. time_t 를 읽는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 작은 덤프는 파일 이름에 날짜가 들어갑니다 [1].
+- 미니덤프 헤더의 TimeDateStamp 는 time_t 형식입니다 [3]. UTC 인지는 검체에서 확인합니다. time_t 를 읽는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 완전 덤프는 다음 크래시 때 이전 파일을 덮어씁니다 [1]. 커널 덤프도 덮어쓰기 설정이 켜져 있으면 덮어씁니다 [1]. 덮어썼다면 이 파일에는 마지막 크래시만 남습니다.
 - 파일 시스템 시각과 헤더 시각이 크게 다르면 파일을 옮기거나 복사했는지 봅니다.
 
@@ -155,7 +153,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 - **설정이 켜져 있어도 덤프가 없을 수 있습니다.** 완전 덤프와 작은 덤프는 페이지 파일 조건이 맞아야 합니다 [1]. 페이지 파일은 [페이지 파일](pagefile-sys-swapfile-sys.md) 에 있습니다.
 - **이전 크래시는 사라졌을 수 있습니다.** 완전·커널 덤프는 덮어씁니다 [1]. 사용자 모드 덤프는 DumpCount 를 넘으면 가장 오래된 것부터 바꿉니다 [2].
 - **커널 덤프에는 사용자 프로그램 메모리가 없습니다** [1]. 커널 덤프에 사용자 프로그램의 흔적이 없다고 해서 그 프로그램을 쓰지 않았다고 볼 수 없습니다.
-- **파일 크기로 덤프 종류를 가리지 않습니다.** 문서는 작은 메모리 덤프를 64KB 로 적습니다 [1]. 실제 파일 크기는 이 값과 다를 수 있습니다. CrashDumpEnabled 값과 파일 위치로 가립니다.
+- **파일 크기로 덤프 종류를 가리지 않습니다.** 작은 메모리 덤프의 크기는 64KB 로 정해져 있지만 [1], 실제 파일 크기는 이 값과 다를 수 있습니다. CrashDumpEnabled 값과 파일 위치로 가립니다.
 - **사용자 모드 덤프에는 비밀 정보가 들 수 있습니다.** 덤프 파일은 사건 자료로 따로 다룹니다. 보고서에 내용을 그대로 옮기지 않습니다.
 
 ## 결과를 어떻게 해석하나

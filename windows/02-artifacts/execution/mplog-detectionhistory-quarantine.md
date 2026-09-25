@@ -32,7 +32,7 @@ Defender 는 운영 이벤트 로그에도 탐지 (1116) 와 조치 (1117) 를 �
 | DetectionHistory | `C:\ProgramData\Microsoft\Windows Defender\Scans\History\Service\DetectionHistory\<번호 폴더>\<GUID>` |
 | Quarantine | `C:\ProgramData\Microsoft\Windows Defender\Quarantine\` 아래 `Entries`, `ResourceData`, `Resources` |
 
-`Windows Defender` 폴더 아래에서는 하위 폴더 13개를 봤습니다.
+`Windows Defender` 폴더 아래에는 하위 폴더가 13개 있습니다 (Windows 11 25H2 기준).
 
 ```
 Certificates, Clean Store, Definition Updates, Features, LocalCopy, Models,
@@ -43,11 +43,11 @@ Network Inspection System, Payloads, Platform, Quarantine, Scans, Snapshots, Sup
 
 | 항목 | 내용 | 근거 |
 |---|---|---|
-| MPLog 를 만드는 제품 | Windows Defender 또는 Microsoft Security Essentials | CrowdStrike |
-| MPLog 줄 형식 | 시기마다 바뀝니다. 언제 쓰였느냐에 따라 칸이 더 많거나 적습니다 | CrowdStrike |
-| DetectionHistory | 적어도 Windows 10 에서 생깁니다 | defender-detectionhistory-parser |
-| 그룹 정책 경로 | Windows 10 2004 (2020년 5월) 전에는 경로에 Microsoft 대신 Windows Defender Antivirus 라는 이름이 쓰였을 수 있습니다 | Microsoft Learn |
-| 관찰한 PC | Windows 11 25H2 (빌드 26200), Defender Product 4.18.26080.3 / Engine 1.1.26080.3. 세 폴더가 모두 위 위치에 있었습니다 | 관찰 (PC 한 대) |
+| MPLog 를 만드는 제품 | Windows Defender 또는 Microsoft Security Essentials | [1] |
+| MPLog 줄 형식 | 시기마다 바뀝니다. 언제 쓰였느냐에 따라 칸이 더 많거나 적습니다 | [1] |
+| DetectionHistory | 적어도 Windows 10 에서 생깁니다 | [2] |
+| 그룹 정책 경로 | Windows 10 2004 (2020년 5월) 전에는 경로에 Microsoft 대신 Windows Defender Antivirus 라는 이름이 쓰였을 수 있습니다 | [4] |
+| Windows 11 25H2 | 빌드 26200, Defender Product 4.18.26080.3 / Engine 1.1.26080.3 에서 세 폴더가 모두 위 위치에 있습니다 | |
 
 ## 구조
 
@@ -55,11 +55,11 @@ Network Inspection System, Payloads, Platform, Quarantine, Scans, Snapshots, Sup
 
 | 항목 | 내용 |
 |---|---|
-| 파일 이름 | `MPLog-YYYYMMDD-HHMMSS.log` (관찰 예: `MPLog-20260907-063545.log`) |
-| 인코딩 | UTF-16LE 텍스트. 파일 앞 2바이트가 `FF FE` 입니다 (관찰) |
+| 파일 이름 | `MPLog-YYYYMMDD-HHMMSS.log` (예: `MPLog-20260907-063545.log`) |
+| 인코딩 | UTF-16LE 텍스트. 파일 앞 2바이트가 `FF FE` 입니다 |
 | 시각 | UTC |
 
-인코딩을 읽는 방법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다. 관찰한 PC 의 `Support` 폴더에는 MPLog 말고도 다음 파일이 있었습니다.
+인코딩을 읽는 방법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다. `Support` 폴더에는 MPLog 말고도 다음 파일이 있습니다 (Windows 11 25H2 기준).
 
 - `MPDetection-*.log` (UTF-16LE)
 - `MPDeviceControl-*.log`, `MPScanSkip-*.log`
@@ -67,7 +67,7 @@ Network Inspection System, Payloads, Platform, Quarantine, Scans, Snapshots, Sup
 
 #### 줄 종류
 
-CrowdStrike 는 포렌식에 쓸 만한 줄을 네 가지로 나눕니다.
+포렌식에 쓸 만한 줄은 네 가지입니다[1].
 
 | 줄 종류 | 들어 있는 칸 | 알려 주는 것 |
 |---|---|---|
@@ -87,20 +87,20 @@ CrowdStrike 는 포렌식에 쓸 만한 줄을 네 가지로 나눕니다.
 | MaxTimeFile | 그 검사의 파일 경로 |
 | EstimatedImpact | 프로세스가 활동한 시간 가운데 검사에 쓴 비율 (%) |
 
-관찰한 PC 에서는 성능 영향 줄이 다음 모양이었습니다. 실행 파일 이름과 경로 뒷부분은 줄였습니다.
+Windows 11 25H2 에서 성능 영향 줄은 다음 모양입니다. 실행 파일 이름과 경로 뒷부분은 줄였습니다.
 
 ```
 ProcessImageName: <이름>.exe, Pid: 11536, TotalTime: 24424254, Count: 4341109, MaxTime: 93, MaxTimeFile: \Device\HarddiskVolume3\..., EstimatedImpact: 37%
 ```
 
-- 원문 목록에 없는 `Pid` 칸이 있었습니다.
-- 경로는 드라이브 문자가 아니라 `\Device\HarddiskVolumeN` 장치 경로로 적혀 있었습니다.
-- 약 16일 분량의 MPLog 한 개에 성능 영향 줄이 16,462개 있었습니다.
-- `SDN:` 으로 시작하는 줄은 0개였습니다.
+- 위 칸 목록에 없는 `Pid` 칸이 있습니다.
+- 경로는 드라이브 문자가 아니라 `\Device\HarddiskVolumeN` 장치 경로로 적힙니다.
+- 줄 수가 많습니다. 약 16일 분량의 MPLog 한 개에 성능 영향 줄이 16,462개 들어 있기도 합니다.
+- `SDN:` 으로 시작하는 줄은 하나도 없을 수 있습니다.
 
-#### 관찰한 다른 줄
+#### 그 밖의 줄
 
-아래 줄은 확인한 자료에 설명이 없습니다. 모양만 적습니다.
+아래 줄은 공개된 설명이 없어 모양만 적습니다.
 
 ```
 [RTP] [Mini-filter] Unsuccessful scan status(#n): <경로>. Process: <경로>, Status: 0x...
@@ -110,11 +110,11 @@ Engine:command line reported as lowfi: <명령줄>
 Detection State: Finished(0) Failed(0) CriticalFailed(0) Additional Actions(0)
 ```
 
-- `Engine:command line reported as lowfi` 줄에는 명령줄이 통째로 남았습니다. 이 줄이 어떤 조건에서 생기는지는 확인하지 못했습니다.
-- 서비스가 시작될 때 격리 복구 블록이 남았습니다. `Beginning quarantine recovery` 로 시작해 `Quarantine ID:{...}`, `Target:`, `Flags:131074`, `Start time:09-07-2026 06:05:24` 가 이어지고 `Finished quarantine recovery` 로 끝났습니다.
-- `MPDetection-*.log` 에는 서비스 시작 줄과 버전 줄이 있었습니다. 서비스 시작 줄은 `Service started - Microsoft Defender 바이러스 백신 (GUID)` 처럼 OS 표시 언어로 적혀 있었습니다. 버전 줄은 `Version: Product 4.18.26080.3 Service ... Engine 1.1.26080.3 AS 1.457.348.0 AV 1.457.348.0` 모양이었습니다.
+- `Engine:command line reported as lowfi` 줄에는 명령줄이 통째로 남습니다. 이 줄이 생기는 조건은 공개된 설명이 없습니다.
+- 서비스가 시작될 때 격리 복구 블록이 남습니다. `Beginning quarantine recovery` 로 시작해 `Quarantine ID:{...}`, `Target:`, `Flags:131074`, `Start time:09-07-2026 06:05:24` 가 이어지고 `Finished quarantine recovery` 로 끝납니다.
+- `MPDetection-*.log` 에는 서비스 시작 줄과 버전 줄이 있습니다. 서비스 시작 줄은 `Service started - Microsoft Defender 바이러스 백신 (GUID)` 처럼 OS 표시 언어로 적힙니다. 버전 줄은 `Version: Product 4.18.26080.3 Service ... Engine 1.1.26080.3 AS 1.457.348.0 AV 1.457.348.0` 모양입니다.
 
-MPLog 가 몇 개까지 남는지, 언제 새 파일로 넘어가는지는 확인하지 못했습니다.
+MPLog 가 몇 개까지 남는지, 언제 새 파일로 넘어가는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ### DetectionHistory
 
@@ -134,14 +134,14 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 | 2구역 | ThreatTrackingId, ThreatTrackingSha256, ThreatTrackingMD5, ThreatTrackingSha1, ThreatTrackingStartTime (FILETIME, UTC), ThreatTrackingSize, ThreatTrackingThreatId, ThreatTrackingScanSource, ThreatTrackingScanType. PUA 는 regkey·uninstall 칸이 더 붙을 수 있습니다 |
 | 3구역 | User (도메인\사용자), SpawningProcess (예: explorer.exe), SecurityGroup (있을 때만) |
 
-관찰한 PC 의 `Scans` 폴더에서는 다음을 봤습니다. 모두 확인한 자료에 설명이 없어 뜻을 풀지 않습니다.
+`Scans` 폴더에는 다음 파일과 폴더도 있습니다 (Windows 11 25H2 기준). 모두 공개된 설명이 없어 뜻을 풀지 않습니다.
 
-- `DetectionHistory` 아래에 `00`, `03`, `04` … `18` 같은 두 자리 숫자 폴더가 있었습니다. 폴더 안 파일은 0개였습니다.
-- `History\Service` 폴더에 `Detections.log`, `Unknown.Log`, `History.Log` 가 있었습니다. 셋 다 UTF-16LE 였습니다.
-- `Detections.log` 의 줄은 `2147893196|containerfile|C:\...`, `2147893196|file|C:\...` 처럼 "숫자|종류|경로" 모양이었습니다.
-- `Unknown.Log` 에는 숫자만 한 줄씩 있었습니다.
-- `Scans\History` 아래에 `CacheManager`, `RemCheck`, `ReportLatency`, `Results` (`Quick`, `Resource`), `Store` 폴더가 있었습니다.
-- `Scans` 폴더에 `mpenginedb.db` (SQLite, `-wal`·`-shm` 파일이 함께 있음), `mpcache-*.bin` 여러 개, `DefenderEcsCache.bin64`, `MpDiag.bin` 이 있었습니다.
+- `DetectionHistory` 아래에 `00`, `03`, `04` … `18` 같은 두 자리 숫자 폴더가 있습니다. 폴더가 비어 있을 수 있습니다.
+- `History\Service` 폴더에 `Detections.log`, `Unknown.Log`, `History.Log` 가 있습니다. 셋 다 UTF-16LE 입니다.
+- `Detections.log` 의 줄은 `2147893196|containerfile|C:\...`, `2147893196|file|C:\...` 처럼 "숫자|종류|경로" 모양입니다.
+- `Unknown.Log` 에는 숫자만 한 줄씩 있습니다.
+- `Scans\History` 아래에 `CacheManager`, `RemCheck`, `ReportLatency`, `Results` (`Quick`, `Resource`), `Store` 폴더가 있습니다.
+- `Scans` 폴더에 `mpenginedb.db` (SQLite, `-wal`·`-shm` 파일이 함께 있음), `mpcache-*.bin` 여러 개, `DefenderEcsCache.bin64`, `MpDiag.bin` 이 있습니다.
 
 ### Quarantine
 
@@ -151,18 +151,18 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 | `ResourceData` | 격리한 원본 내용. 해시 이름의 파일이 이름 앞 두 글자 하위 폴더에 들어갑니다 (예: `ResourceData\5D\5D92927E35A6D8FECE000ABB9739F5AEFF914A3E`) |
 | `Resources` | 항목과 원본 내용 파일을 이어 주는 메타데이터 |
 
-폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다. 오프셋과 칸 단위의 구조는 확인한 자료에 없습니다.
+폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다[3]. 오프셋과 칸 단위의 구조는 공개 자료에 없습니다.
 
-관찰한 PC 에서는 다음을 봤습니다.
+Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 
-- `Entries`, `ResourceData`, `Resources` 의 파일 수가 모두 11개로 같았습니다.
-- `ResourceData` 파일 이름은 40자리 16진수였습니다. SHA-1 과 길이가 같습니다.
-- `ResourceData` 파일 크기는 249바이트에서 215MB 까지 다양했습니다. 원본 크기를 따라가는 것으로 보였습니다.
-- `Entries` 파일 이름은 `{80063FCC-0000-0000-…}` 모양이었습니다. 앞 8자리 16진수 `0x80063FCC` 는 10진수로 2147893196 입니다. `Detections.log` 의 앞머리 숫자와 같았습니다. 모든 항목이 이렇게 맞는다는 근거는 없습니다.
+- `Entries`, `ResourceData`, `Resources` 의 파일 수가 서로 같습니다 (예: 모두 11개).
+- `ResourceData` 파일 이름은 40자리 16진수입니다. SHA-1 과 길이가 같습니다.
+- `ResourceData` 파일 크기는 249바이트에서 215MB 까지 다양합니다. 원본 크기를 따라가는 것으로 보입니다.
+- `Entries` 파일 이름은 `{80063FCC-0000-0000-…}` 모양입니다. 앞 8자리 16진수 `0x80063FCC` 는 10진수로 2147893196 이고, `Detections.log` 의 앞머리 숫자와 같습니다. 모든 항목이 이렇게 맞는다는 근거는 없습니다.
 
 ### 보관 기간과 조치 정책
 
-Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르게 적혀 있습니다. 그룹 정책 설명 문서는 검사 기록 30일, 격리 90일이라고 적었습니다. `Set-MpPreference` 명령 설명서는 검사 기록 15일이라고 적었고, 격리는 값을 주지 않으면 지우지 않는다고 적었습니다. 검체에서는 실제 설정 값을 확인합니다.
+아래 설정의 기본값은 Microsoft 문서마다 다릅니다. 그룹 정책 설명 문서는 검사 기록 30일, 격리 90일이라고 하고[4], `Set-MpPreference` 명령 설명서는 검사 기록 15일, 격리는 값을 주지 않으면 지우지 않는다고 합니다. 검체에서는 실제 설정 값을 확인합니다.
 
 | 설정 | 그룹 정책 이름 | 그룹 정책 문서의 기본값 | PowerShell |
 |---|---|---|---|
@@ -179,7 +179,7 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
-| MPLog 성능 영향 줄: 그 이름의 프로세스가 실행됐고 파일에 접근했습니다 | 누가 실행했는지. 원문의 칸 목록에도, 관찰한 줄에도 사용자 칸이 없습니다 |
+| MPLog 성능 영향 줄: 그 이름의 프로세스가 실행됐고 파일에 접근했습니다 | 누가 실행했는지. 성능 영향 줄에는 사용자 칸이 없습니다 |
 | MPLog SDN 줄: 그 경로에 파일이 있었고, 해시가 그 값이었습니다 | 그 파일을 실행했는지 |
 | MPLog 탐지 줄·EMS 탐지 줄: Defender 가 그 탐지명으로 잡았습니다 | 파일이 실제로 악성인지. 오탐일 수 있습니다 |
 | DetectionHistory: 실시간 보호가 그 파일을 잡았습니다. 해시, 사용자, 부모 프로세스도 알려 줍니다 | 사용자가 그 파일을 실행했는지. 실행하지 않아도 생깁니다 |
@@ -199,16 +199,16 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 
 | 시각 | 어디에 남나 | 형식 | 기준 |
 |---|---|---|---|
-| MPLog 줄 앞머리 | 각 줄 | 원문 예 `2020-06-14T20:11:42.880Z`. 관찰한 줄은 `2026-09-07T06:05:24.539` 처럼 끝에 `Z` 가 없었습니다 | UTC |
-| MPLog 탐지 줄의 시각 | 탐지 줄 | 확인한 자료에 형식 설명이 없습니다 | UTC |
-| MPLog 탐지 줄의 ProcessStart | 탐지 줄 | CrowdStrike 는 웹킷 시각 형식이라고 적었습니다. 그런데 원문 예시 값 `132696072639875080` 은 18자리입니다. FILETIME 으로 풀면 2021-07-01 10:01:03 UTC 가 되고, 웹킷 (마이크로초) 으로 풀면 5805년이 됩니다. 두 방식으로 모두 풀어 보고 맞는 쪽을 고릅니다 | 확인한 자료에 없습니다 |
-| 격리 복구 블록의 Start time | 서비스 시작 때 남는 블록 (관찰) | `09-07-2026 06:05:24` 처럼 월-일-년 순서 | 확인하지 못했습니다 |
+| MPLog 줄 앞머리 | 각 줄 | `2020-06-14T20:11:42.880Z` 처럼 끝에 `Z` 가 붙기도 하고, `2026-09-07T06:05:24.539` 처럼 없기도 합니다 | UTC |
+| MPLog 탐지 줄의 시각 | 탐지 줄 | 공개 자료 없음 | UTC |
+| MPLog 탐지 줄의 ProcessStart | 탐지 줄 | 웹킷 시각 형식이라는 설명이 있습니다[1]. 그런데 그 예시 값 `132696072639875080` 은 18자리입니다. FILETIME 으로 풀면 2021-07-01 10:01:03 UTC 가 되고, 웹킷 (마이크로초) 으로 풀면 5805년이 됩니다. 두 방식으로 모두 풀어 보고 맞는 쪽을 고릅니다 | 공개 자료 없음 |
+| 격리 복구 블록의 Start time | 서비스 시작 때 남는 블록 | `09-07-2026 06:05:24` 처럼 월-일-년 순서 | 공개 자료 없음 |
 | ThreatTrackingStartTime | DetectionHistory 2구역 | FILETIME | UTC |
-| Entries 의 시각 | 풀어낸 `Entries` 파일 | 확인한 자료에 없습니다 | 확인한 자료에 없습니다 |
+| Entries 의 시각 | 풀어낸 `Entries` 파일 | 공개 자료 없음 | 공개 자료 없음 |
 
-- 줄 앞머리에 `Z` 가 없어도 UTC 입니다. 관찰한 PC 에서 로그 마지막 줄은 11:36 이었습니다. 그때 한국 시각은 20:36 이었고 9시간 차이가 났습니다.
-- 한 파일 안에서도 날짜를 적는 순서가 다릅니다. 줄 앞머리는 년-월-일, 격리 복구 블록은 월-일-년이었습니다.
-- MPLog 파일 이름 속 날짜가 무엇을 기준으로 붙는지는 확인하지 못했습니다.
+- 줄 앞머리에 `Z` 가 없어도 UTC 입니다. 한국 시각 20:36 에 쓰인 마지막 줄의 앞머리가 11:36 으로, 9시간 차이가 납니다.
+- 한 파일 안에서도 날짜를 적는 순서가 다릅니다. 줄 앞머리는 년-월-일, 격리 복구 블록은 월-일-년입니다.
+- MPLog 파일 이름 속 날짜가 무엇을 기준으로 붙는지는 공개 자료가 없어 검체에서 확인합니다.
 - FILETIME 과 웹킷 시각을 푸는 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md) 을 봅니다.
 
 ## 함정과 한계
@@ -216,25 +216,25 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 1. **탐지를 실행으로 읽습니다.** DetectionHistory 는 파일을 실행하지 않아도 생깁니다. 실행 여부는 성능 영향 줄이나 다른 실행 흔적으로 따로 확인합니다.
 2. **Count 를 "사용자가 연 파일 수" 로 읽습니다.** Count 는 그 프로세스가 접근해서 Defender 가 검사한 파일 수입니다. 사용자가 파일을 하나하나 열었다는 뜻이 아닙니다.
 3. **장치 경로를 그대로 적습니다.** MPLog 경로는 `\Device\HarddiskVolumeN` 형식입니다. 드라이브 문자로 바꿔 읽어야 합니다. 볼륨 번호와 드라이브 문자의 짝은 따로 확인합니다.
-4. **칸 위치에 기대 파싱합니다.** MPLog 줄 형식은 시기마다 바뀝니다. 관찰한 줄에는 원문 목록에 없는 `Pid` 칸이 있었습니다. 칸 이름으로 값을 찾습니다.
-5. **보통 방식으로 복사합니다.** 서비스가 켜져 있으면 MPLog 가 잠겨 있어 보통 방식으로는 열리지 않습니다. 관찰한 PC 에서는 공유 읽기 (`FileShare.ReadWrite`) 로는 읽혔습니다. 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
-6. **MPLog 가 오래된 기록까지 담는다고 봅니다.** 관찰한 PC 에는 약 24MB 의 MPLog 가 하나뿐이었고 약 16일 분량이었습니다. 옛 기록은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
-7. **빈 DetectionHistory 를 "탐지 없음" 으로 읽습니다.** 관찰한 PC 에서는 DetectionHistory 파일이 0개였습니다. 같은 PC 의 7월 말 격리 항목은 남아 있었습니다. 검사 기록 보관 기간 (그룹 정책 문서 기준 30일) 이 격리 보관 기간 (90일) 보다 짧아서 먼저 지워진 것으로 보입니다. 이 PC 의 실제 설정 값은 확인하지 않았고, 이것은 추정입니다.
-8. **영어 문구로만 검색합니다.** `MPDetection-*.log` 의 서비스 이름은 OS 표시 언어로 적혔습니다. 한국어 Windows 에서는 한국어 문구로도 검색합니다.
+4. **칸 위치에 기대 파싱합니다.** MPLog 줄 형식은 시기마다 바뀝니다. 공개된 칸 목록에 없는 `Pid` 칸이 붙기도 합니다. 칸 이름으로 값을 찾습니다.
+5. **보통 방식으로 복사합니다.** 서비스가 켜져 있으면 MPLog 가 잠겨 있어 보통 방식으로는 열리지 않습니다. 공유 읽기 (`FileShare.ReadWrite`) 로는 읽힙니다. 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+6. **MPLog 가 오래된 기록까지 담는다고 봅니다.** MPLog 가 하나뿐이고, 약 24MB 에 약 16일 분량만 담기도 합니다. 옛 기록은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+7. **빈 DetectionHistory 를 "탐지 없음" 으로 읽습니다.** 격리 항목은 남아 있는데 DetectionHistory 파일은 하나도 없을 수 있습니다. 검사 기록 보관 기간 (그룹 정책 문서 기준 30일) 이 격리 보관 기간 (90일) 보다 짧아서 먼저 지워질 수 있기 때문입니다. 검체의 실제 설정 값을 함께 확인합니다.
+8. **영어 문구로만 검색합니다.** `MPDetection-*.log` 의 서비스 이름은 OS 표시 언어로 적힙니다. 한국어 Windows 에서는 한국어 문구로도 검색합니다.
 
 ### 지우기와 조작
 
 - **보호 기록 파일을 지웁니다.** DetectionHistory 파일을 지우면 보호 기록 화면의 알림도 사라집니다. 화면에 없어도 MPLog, [Windows Defender 탐지](../event-logs/1116-1117.md) 이벤트, 격리 폴더를 따로 봅니다.
 - **보관 기간을 줄입니다.** 위 "보관 기간과 조치 정책" 의 두 설정을 짧게 바꾸면 기록이 빨리 지워집니다. 정책 값과 `Set-MpPreference` 설정을 함께 확인합니다.
 - **조치를 바꿉니다.** Allow 와 조치 값 Ignore (6) 는 치료하지 않고 뒤이은 탐지 이벤트를 막습니다. 조치 값 None (11) 도 치료하지 않지만 경고와 보호 기록 항목은 남깁니다.
-- **격리에서 복원합니다.** Microsoft 문서에 따르면 오탐으로 격리된 파일은 장치를 재부팅한 뒤 격리에서 복원할 수 있습니다. 복원한 뒤 격리 폴더에 무엇이 남는지는 확인하지 못했습니다.
+- **격리에서 복원합니다.** 오탐으로 격리된 파일은 장치를 재부팅한 뒤 격리에서 복원할 수 있습니다[4]. 복원한 뒤 격리 폴더에 무엇이 남는지는 공개 자료가 없어 검체에서 확인합니다.
 - **파일을 직접 지웁니다.** 지운 로그와 격리 파일의 흔적은 [마스터 파일 테이블](../filesystem/mft.md) 과 [USN 변경 저널](../filesystem/usnjrnl.md) 에서 찾습니다. 지운 내용을 되살리는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 세 예시는 명세와 관찰한 형식을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래 세 예시는 알려진 형식에 맞춰 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
 
 **MPLog 앞부분**
 
@@ -257,7 +257,7 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 
 4. 앞 5바이트가 `08 00 00 00 08` 인지 봅니다. 다르면 DetectionHistory 파일이 아니거나 손상된 파일입니다.
 
-GUID `8CC4BE3D-8D3F-4952-9953-F24EB6638A37` 은 파일 안에 다음 바이트로 들어갑니다. 파일 안 위치는 확인한 자료에 없어 적지 않습니다.
+GUID `8CC4BE3D-8D3F-4952-9953-F24EB6638A37` 은 파일 안에 다음 바이트로 들어갑니다. 파일 안 위치는 공개 자료에 없습니다.
 
 ```
 3D BE C4 8C  3F 8D  52 49  99 53  F2 4E B6 63 8A 37

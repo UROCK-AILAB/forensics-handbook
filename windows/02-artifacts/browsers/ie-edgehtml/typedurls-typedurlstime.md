@@ -15,7 +15,7 @@ IE 주소창에 입력한 주소는 사용자 하이브(NTUSER.DAT)의 `TypedURL
 
 사용자가 IE 주소창에 입력한 주소를 기록합니다. 두 키 모두 사용자 하이브에 있어서 로그온한 사용자마다 따로 남습니다. `TypedURLs` 는 주소 문자열을 담고 `TypedURLsTime` 은 주소마다 시각 하나를 담으며, 두 키는 값 이름(`url` 뒤의 번호)으로 짝을 맞춥니다.
 
-RegRipper 의 `typedurlstime` 플러그인은 `TypedURLsTime` 의 시각을 주소를 주소창에 입력한 때로 해석하며, 같은 플러그인에는 "IE 를 끝내기 전에는 새 항목이 키에 추가되지 않는다" 는 주의가 적혀 있습니다.
+`TypedURLsTime` 의 시각은 주소를 주소창에 입력한 때로 해석합니다[3]. IE 를 끝내기 전에는 새 항목이 키에 추가되지 않습니다[3].
 
 ## 위치와 버전별 차이
 
@@ -24,9 +24,9 @@ RegRipper 의 `typedurlstime` 플러그인은 `TypedURLsTime` 의 시각을 주�
 | `TypedURLs` | NTUSER.DAT | `HKCU\Software\Microsoft\Internet Explorer\TypedURLs` |
 | `TypedURLsTime` | NTUSER.DAT | `HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime` |
 
-- 공개 수집 정의(ForensicArtifacts)는 이 키를 `HKEY_USERS\{사용자 SID}\Software\Microsoft\Internet Explorer\TypedURLs\*` 로 적습니다. 사용자 SID 와 계정 이름을 잇는 방법은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 다룹니다.
-- `TypedURLsTime` 은 Windows 8 에서 나온 값으로 소개됐습니다. 그보다 앞선 Windows 검체에는 이 키가 없을 수 있습니다.
-- Windows 11 25H2 PC 의 `TypedURLs` 키에는 `url1` 값 하나(REG_SZ)가 있었습니다. `TypedURLsTime` 키는 없었습니다.
+- 수집 경로로 적으면 `HKEY_USERS\{사용자 SID}\Software\Microsoft\Internet Explorer\TypedURLs\*` 입니다[1]. 사용자 SID 와 계정 이름을 잇는 방법은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 다룹니다.
+- `TypedURLsTime` 은 Windows 8 에서 생긴 키입니다[3]. 그보다 앞선 Windows 검체에는 이 키가 없을 수 있습니다.
+- Windows 11 25H2 에도 `TypedURLsTime` 키가 없을 수 있습니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -44,7 +44,7 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
     …
 ```
 
-- `TypedURLs` 의 값은 문자열입니다. 한 PC 에서 본 값의 형식은 REG_SZ 였습니다.
+- `TypedURLs` 의 값은 문자열입니다. Windows 11 25H2 에서 값 형식은 REG_SZ 입니다.
 - `TypedURLsTime` 의 값은 8바이트이고 FILETIME 으로 읽습니다.
 - `TypedURLs\url3` 의 시각은 `TypedURLsTime\url3` 에 있습니다. 번호가 같은 값끼리 짝입니다.
 
@@ -59,22 +59,22 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 
 - 주소를 입력한 뒤 페이지가 실제로 열렸는지는 알 수 없습니다. 방문 기록과 맞춰 봐야 합니다.
 - 누가 키보드 앞에 있었는지는 알 수 없고, 하이브가 가리키는 것은 로그온한 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
-- 값 번호의 순서가 입력 순서라는 해석과 키에 남는 최대 개수는 이번에 연 자료로 확인하지 못했습니다. 번호만 보고 "가장 최근 입력" 을 단정하지 않습니다.
-- 이 키는 IE 키 아래에 있는데, 옛 엣지가 이 키를 쓰는지는 이번에 연 자료로 확인하지 못했습니다. 옛 엣지 사용 흔적으로 읽으려면 따로 근거가 필요합니다.
+- 값 번호의 순서가 입력 순서인지와 키에 남는 최대 개수는 검체에서 확인합니다. 번호만 보고 "가장 최근 입력" 을 단정하지 않습니다.
+- 이 키는 IE 키 아래에 있습니다. 옛 엣지 사용 흔적으로 읽으려면 따로 근거가 필요합니다.
 
 보고서에는 "이 계정의 NTUSER.DAT 에 있는 IE 주소창 입력 기록에 이 주소가 있고, 짝을 이루는 TypedURLsTime 값은 이 시각이다" 처럼 씁니다.
 
 ## 시각 해석
 
 - `TypedURLsTime` 값을 FILETIME 으로 바꿉니다. 변환 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 이 시각이 UTC 인지는 참고한 플러그인 설명에 적혀 있지 않습니다. 같은 주소가 [웹캐시 DB](webcachev01-dat.md) 나 [index.dat](index-dat.md) 방문 기록에 있으면 두 시각을 맞춰 봅니다.
+- 이 시각이 UTC 인지 가리려면 같은 주소의 [웹캐시 DB](webcachev01-dat.md) 나 [index.dat](index-dat.md) 방문 기록 시각과 맞춰 봅니다.
 - `TypedURLsTime` 이 없는 시스템에서는 입력 시각을 따로 알 수 없습니다.
-- `TypedURLs` 키의 마지막 기록 시각 (LastWrite) 을 가장 최근 입력 시각으로 보는 해석이 있습니다. 이 해석은 이번에 연 자료로 확인하지 못했습니다. 키의 마지막 기록 시각은 그 키가 바뀐 때를 말할 뿐, 어느 값이 바뀌었는지는 말하지 않습니다.
+- `TypedURLs` 키의 마지막 기록 시각 (LastWrite) 을 가장 최근 입력 시각으로 보는 해석이 있습니다. 다만 키의 마지막 기록 시각은 그 키가 바뀐 때를 말할 뿐, 어느 값이 바뀌었는지는 말하지 않습니다.
 
 ## 함정과 한계
 
-- **IE 가 켜진 채로 수집하면 최근 입력이 빠질 수 있습니다.** IE 를 끝내기 전에는 새 항목이 키에 추가되지 않는다는 주의가 있습니다. 라이브 수집에서는 이 점을 기록해 둡니다.
-- **`TypedURLsTime` 이 없을 수 있습니다.** Windows 8 에서 소개된 키입니다. Windows 11 PC 한 대에서도 이 키가 없었습니다.
+- **IE 가 켜진 채로 수집하면 최근 입력이 빠질 수 있습니다.** IE 를 끝내기 전에는 새 항목이 키에 추가되지 않습니다[3]. 라이브 수집에서는 이 점을 기록해 둡니다.
+- **`TypedURLsTime` 이 없을 수 있습니다.** Windows 8 에서 생긴 키이고, Windows 11 에도 없을 수 있습니다.
 - **번호가 같은지 꼭 확인합니다.** 두 키의 값 개수가 다를 수 있습니다. 짝이 없는 값에 다른 번호의 시각을 붙이지 않습니다.
 - **값이 없다고 입력이 없었던 것은 아닙니다.** 값은 지우거나 덮일 수 있습니다. 이전 시점의 하이브를 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다.
 - **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 반영하는 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.

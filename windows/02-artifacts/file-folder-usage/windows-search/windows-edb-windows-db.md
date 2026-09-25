@@ -11,7 +11,7 @@ nav_order: 1270
 
 ## 한 줄 요약
 
-윈도 검색 색인 DB 는 한 폴더에 모여 있습니다. Windows 10 까지는 ESE 형식의 `Windows.edb` 가 본 DB 이고, Windows 11 은 SQLite 형식의 `Windows.db` 와 `Windows-gather.db` 로 나뉩니다. 이 페이지는 폴더 위치, 함께 모을 파일, 표 목록, 바이트 순서, 그리고 Windows 11 PC 한 대에서 본 `AesGcm1 SQLite3` 헤더를 다룹니다.
+윈도 검색 색인 DB 는 한 폴더에 모여 있습니다. Windows 10 까지는 ESE 형식의 `Windows.edb` 가 본 DB 이고, Windows 11 은 SQLite 형식의 `Windows.db` 와 `Windows-gather.db` 로 나뉩니다. 이 페이지는 폴더 위치, 함께 모을 파일, 표 목록, 바이트 순서, 그리고 Windows 11 의 `AesGcm1 SQLite3` 헤더를 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -25,11 +25,11 @@ nav_order: 1270
 
 | 항목 | 값 | 근거 |
 |---|---|---|
-| 기본 폴더 (Vista 이후) | `C:\ProgramData\Microsoft\Search\Data\Applications\Windows\` | libyal |
-| 기본 폴더 (XP) | `C:\Documents and Settings\All Users\Application Data\Microsoft\Search\Data\Applications\Windows\` | libyal |
-| 폴더를 정하는 값 | `HKLM\Software\Microsoft\Windows Search` 키의 `DataDirectory` 값 | libyal |
+| 기본 폴더 (Vista 이후) | `C:\ProgramData\Microsoft\Search\Data\Applications\Windows\` | 참고 1 |
+| 기본 폴더 (XP) | `C:\Documents and Settings\All Users\Application Data\Microsoft\Search\Data\Applications\Windows\` | 참고 1 |
+| 폴더를 정하는 값 | `HKLM\Software\Microsoft\Windows Search` 키의 `DataDirectory` 값 | 참고 1 |
 
-폴더는 `DataDirectory` 값이 정하므로, 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다. 한 PC 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 였고, DB 파일은 그 아래 `Applications\Windows\` 에 있었습니다. 같은 키의 `SetupCompletedSuccessfully` 값은 그 PC 에서 1 이었지만, 이 값의 뜻을 설명한 자료는 확인하지 못했습니다.
+폴더는 `DataDirectory` 값이 정하므로, 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다. Windows 11 25H2 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 이고, DB 파일은 그 아래 `Applications\Windows\` 에 있습니다. 같은 키에는 `SetupCompletedSuccessfully` 값(예: 1)도 있습니다. 이 값의 뜻을 설명한 공개 자료는 없습니다.
 
 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -37,20 +37,20 @@ nav_order: 1270
 
 | Windows | 본 DB | 형식 | 근거 |
 |---|---|---|---|
-| XP~8 | `Windows.edb` | ESE | libyal |
-| 10 | `C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb` | ESE | LevelBlue |
-| 11 | `Windows.db`, `Windows-gather.db`, `Windows-usn.db` | SQLite | LevelBlue |
-| 11 25H2 (PC 한 대) | 위와 같은 세 파일 | 첫 16바이트가 `AesGcm1 SQLite3`. 보통 SQLite 도구로 열리지 않았습니다. | 관찰 |
+| XP~8 | `Windows.edb` | ESE | 참고 1 |
+| 10 | `C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb` | ESE | 참고 2 |
+| 11 | `Windows.db`, `Windows-gather.db`, `Windows-usn.db` | SQLite | 참고 2 |
+| 11 25H2 | 위와 같은 세 파일 | 첫 16바이트가 `AesGcm1 SQLite3` 일 수 있습니다. 이런 파일은 보통 SQLite 도구로 열리지 않습니다. |  |
 
-- LevelBlue 글은 `Windows-usn.db` 의 포렌식 가치가 낮다고 적습니다.
+- `Windows-usn.db` 는 포렌식 가치가 낮다는 평가가 있습니다(참고 2).
 - libyal 문서는 Windows 10·11 과 `Windows.db` 를 다루지 않습니다. 그래서 Windows 10 이후 칸 구성과 바이트 순서는 검체에서 직접 확인합니다.
-- `AesGcm1 SQLite3` 형식이 어느 빌드부터 쓰였는지는 확인한 자료가 없습니다.
+- `AesGcm1 SQLite3` 형식이 어느 빌드부터 쓰였는지는 공개 자료가 없습니다.
 
 ## 구조
 
 ### ESE 판 폴더의 파일
 
-libyal 문서(XP~8 기준)가 적은 파일입니다.
+XP~8 기준 파일입니다(참고 1).
 
 | 파일 | 하는 일 |
 |---|---|
@@ -60,13 +60,13 @@ libyal 문서(XP~8 기준)가 적은 파일입니다.
 | `MSSres00001.jrs`, `MSSres00002.jrs` | 예약 로그 |
 | `tmp.edb` | 색인을 합칠 (merge) 때 쓰는 임시 DB |
 
-- Windows 10 이후의 윈도 검색은 트랜잭션 로그를 `.jtx`, 체크포인트를 `.jcp` 확장자로 씁니다. 예전 확장자는 `.log`·`.chk` 였습니다. (현장 관찰)
-- 로그로 복구할 때는 이 이름 규칙을 맞춰야 도구가 로그를 찾습니다. (현장 관찰)
+- Windows 10 이후의 윈도 검색은 트랜잭션 로그를 `.jtx`, 체크포인트를 `.jcp` 확장자로 씁니다. 예전 확장자는 `.log`·`.chk` 였습니다.
+- 로그로 복구할 때는 이 이름 규칙을 맞춰야 도구가 로그를 찾습니다.
 - 트랜잭션 로그와 체크포인트의 역할은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ### SQLite 판 폴더의 파일
 
-아래는 Windows 11 25H2 PC 한 대의 `Applications\Windows\` 폴더에서 본 파일입니다.
+아래는 Windows 11 25H2 의 `Applications\Windows\` 폴더에 있는 파일입니다.
 
 | 파일·폴더 | 내용 |
 |---|---|
@@ -74,8 +74,8 @@ libyal 문서(XP~8 기준)가 적은 파일입니다.
 | `Windows-gather.db`, `Windows-gather.db-wal`, `Windows-gather.db-shm` | 수집 기록 DB 와 그 `-wal`·`-shm` 파일 |
 | `Windows-usn.db`, `Windows-usn.db-wal`, `Windows-usn.db-shm` | 세 번째 DB 와 그 `-wal`·`-shm` 파일 |
 | `GatherLogs\SystemIndex\` | 수집 로그 폴더. [수집 기록](systemindex-gthr.md) 에서 다룹니다. |
-| `Projects\SystemIndex\PropMap\PropMap.db` | 첫 16바이트가 `AesGcm1 SQLite3` 였습니다 |
-| `Projects\SystemIndex\SecStore\SecStore.db` | 첫 16바이트가 `AesGcm1 SQLite3` 였습니다 |
+| `Projects\SystemIndex\PropMap\PropMap.db` | 첫 16바이트가 `AesGcm1 SQLite3` 일 수 있습니다 |
+| `Projects\SystemIndex\SecStore\SecStore.db` | 첫 16바이트가 `AesGcm1 SQLite3` 일 수 있습니다 |
 
 - `-wal` 파일에는 아직 본 DB 에 쓰지 않은 변경이 들어 있습니다. 그래서 `.db` 와 함께 `-wal`·`-shm` 도 모읍니다.
 - WAL 파일의 헤더와 지운 파일 흔적은 [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) 에서 다룹니다.
@@ -109,7 +109,7 @@ libyal 문서(XP~8 기준)가 적은 파일입니다.
 
 ### 바이트 순서
 
-libyal 문서는 이진 값의 바이트 순서가 Windows 버전마다 다르다고 적습니다.
+이진 값의 바이트 순서는 Windows 버전마다 다릅니다(참고 1).
 
 | Windows | 이진 값 | FILETIME |
 |---|---|---|
@@ -123,9 +123,9 @@ libyal 문서는 이진 값의 바이트 순서가 Windows 버전마다 다르�
 
 ### `AesGcm1 SQLite3` 헤더
 
-Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` 의 헤더를 본 결과입니다.
+Windows 11 25H2 의 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` 가 이 형식일 때의 헤더입니다.
 
-| 오프셋 | 본 값 | 풀이 |
+| 오프셋 | 값 | 풀이 |
 |---|---|---|
 | 0~15 | `AesGcm1 SQLite3` + `0x00` | 보통 SQLite 는 이 자리가 `SQLite format 3` + `0x00` 입니다. |
 | 16~17 | `0x1000` | 페이지 크기 4096 |
@@ -134,7 +134,7 @@ Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn
 | 21~23 | `0x40 0x20 0x20` | 보통 SQLite 와 같은 값입니다. |
 | 24 이후 | 파일마다 무작위처럼 보이는 값 | 평문 SQLite 헤더값이 아닙니다. |
 
-이 파일을 `sqlite3` 로 열면 "file is not a database" 오류가 났습니다. 48바이트 예약 공간에 암호 검증값(nonce·tag)이 들어 있는지와 암호 키가 어디에 있는지는 확인하지 못했습니다.
+이 파일을 `sqlite3` 로 열면 "file is not a database" 오류가 납니다. 48바이트 예약 공간에 암호 검증값(nonce·tag)이 들어 있는지, 암호 키가 어디에 있는지는 공개된 분석 자료가 없습니다.
 
 - 보통 SQLite 헤더는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
@@ -143,21 +143,21 @@ Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn
 **증명하는 것**
 
 - `DataDirectory` 값은 그 PC 가 색인 DB 를 둔 폴더를 알려 줍니다.
-- DB 형식으로 어느 세대의 윈도 검색이 만든 DB 인지 가늠할 수 있습니다. LevelBlue 글은 Windows 10 까지 ESE, Windows 11 은 SQLite 라고 적습니다. 빌드는 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 따로 확인합니다.
+- DB 형식으로 어느 세대의 윈도 검색이 만든 DB 인지 가늠할 수 있습니다. Windows 10 까지는 ESE, Windows 11 은 SQLite 입니다(참고 2). 빌드는 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 따로 확인합니다.
 - 폴더 안의 파일 목록은 무엇을 함께 모아야 하는지 알려 줍니다.
 
 **증명하지 못하는 것**
 
-- 폴더에 DB 파일이 있어도 내용을 바로 읽을 수 있는 것은 아닙니다. `AesGcm1 SQLite3` 로 시작하는 파일은 보통 SQLite 도구로 열리지 않았습니다.
+- 폴더에 DB 파일이 있어도 내용을 바로 읽을 수 있는 것은 아닙니다. `AesGcm1 SQLite3` 로 시작하는 파일은 보통 SQLite 도구로 열리지 않습니다.
 - 이 페이지의 정보만으로는 무엇이 색인됐는지 모릅니다. 내용은 표를 풀어야 나옵니다.
 
 ## 함정과 한계
 
-1. **압수 이미지의 ESE DB 는 대부분 비정상 종료 상태입니다.** 압수 이미지에서 꺼낸 ESE DB(`Windows.edb` 포함)는 대부분 비정상 종료 (Dirty Shutdown) 상태였습니다. (현장 관찰)
-2. **로그 복구가 안 되는 경우가 있습니다.** JET API 로 열려면 같은 폴더의 트랜잭션 로그로 복구해야 하는데, 오래된 로그가 지워져 이미지 안의 로그가 끊겨 있으면 복구가 안 됩니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다. (현장 관찰)
-3. **원본을 열면 바뀔 수 있습니다.** 항상 사본에서 작업합니다. (현장 관찰)
-4. **Windows 10 이후 로그 확장자가 다릅니다.** `.jtx`·`.jcp` 를 `.log`·`.chk` 로 착각하면 로그를 못 찾습니다. (현장 관찰)
-5. **Windows 11 파일은 암호화된 것으로 보이는 형식일 수 있습니다.** 보통 SQLite 도구로 열리지 않으면 첫 16바이트부터 확인합니다. WAL 안의 페이지 내용도 암호화돼 있는지는 확인하지 못했습니다.
+1. **압수 이미지의 ESE DB 는 대부분 비정상 종료 상태입니다.** 압수 이미지에서 꺼낸 ESE DB(`Windows.edb` 포함)는 대부분 비정상 종료 (Dirty Shutdown) 상태입니다.
+2. **로그 복구가 안 되는 경우가 있습니다.** JET API 로 열려면 같은 폴더의 트랜잭션 로그로 복구해야 하는데, 오래된 로그가 지워져 이미지 안의 로그가 끊겨 있으면 복구가 안 됩니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다.
+3. **원본을 열면 바뀔 수 있습니다.** 항상 사본에서 작업합니다.
+4. **Windows 10 이후 로그 확장자가 다릅니다.** `.jtx`·`.jcp` 를 `.log`·`.chk` 로 착각하면 로그를 못 찾습니다.
+5. **Windows 11 파일은 암호화된 것으로 보이는 형식일 수 있습니다.** 보통 SQLite 도구로 열리지 않으면 첫 16바이트부터 확인합니다. WAL 안의 페이지 내용도 암호화돼 있는지는 공개 자료가 없어 검체에서 확인합니다.
 6. **수집 기록 표는 다른 파일에 있습니다.** Windows 11 에서 `Windows.db` 만 모으면 수집 기록 표를 놓칩니다.
 7. **바이트 순서를 틀리면 값이 엉뚱하게 나옵니다.** XP·7 은 빅엔디언, Vista 는 리틀엔디언입니다. 도구가 버전을 가려 읽는지 확인합니다.
 8. **libyal 문서는 Windows 8 까지입니다.** Windows 10·11 의 칸 구성은 다른 자료와 검체로 확인합니다.
@@ -166,7 +166,7 @@ Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn
 
 ### 헥스로 한 번
 
-아래 바이트는 **관찰한 헤더 값으로 만든 예시**입니다. 오프셋 24 이후는 파일마다 달라서 `??` 로 적었습니다.
+아래 바이트는 **위 헤더 표의 값으로 만든 예시**입니다. 오프셋 24 이후는 파일마다 달라서 `??` 로 적었습니다.
 
 ```
 AesGcm1 SQLite3 헤더의 첫 32바이트 (관찰 값으로 만든 예시)
@@ -190,8 +190,8 @@ AesGcm1 SQLite3 헤더의 첫 32바이트 (관찰 값으로 만든 예시)
 
 - `Windows.edb` 는 ESEDatabaseView 같은 ESE 뷰어로 엽니다. 사본에서 엽니다.
 - 보통 SQLite 형식인 `Windows.db` 는 SQLite DB Browser 로 엽니다.
-- 공개 분석 도구 SIDR 은 `Windows.edb`(Windows 10 이하)와 `Windows.db`(Windows 11)를 모두 읽습니다. `AesGcm1 SQLite3` 로 시작하는 파일을 읽는지는 확인하지 못했습니다.
-- 같은 글에는 WinSearchDBAnalyzer 도 나옵니다.
+- 공개 분석 도구 SIDR 은 `Windows.edb`(Windows 10 이하)와 `Windows.db`(Windows 11)를 모두 읽습니다(참고 3). `AesGcm1 SQLite3` 로 시작하는 파일을 읽는지는 검체로 확인합니다.
+- WinSearchDBAnalyzer 라는 도구도 있습니다(참고 2).
 
 도구로 열기 전에 아래를 적어 둡니다.
 

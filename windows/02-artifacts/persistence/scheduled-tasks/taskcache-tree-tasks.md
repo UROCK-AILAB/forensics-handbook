@@ -34,7 +34,7 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 
 하이브 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
-`Schedule` 키 아래에는 Aliases, CompatibilityAdapter, Configuration, CredWom, Handlers, Handshake, TaskCache 하위 키가 있습니다. DomainJoinDetected, HashingCompleted, MigrationCleanupCompleted 값도 있습니다. 이 값들의 뜻은 winreg-kb 문서에 비어 있습니다.
+`Schedule` 키 아래에는 Aliases, CompatibilityAdapter, Configuration, CredWom, Handlers, Handshake, TaskCache 하위 키가 있습니다. DomainJoinDetected, HashingCompleted, MigrationCleanupCompleted 값도 있습니다. 이 값들의 뜻은 공개 자료에 없습니다[2].
 
 ### TaskCache 하위 키
 
@@ -42,8 +42,8 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 |---|---|
 | Tree | 작업 경로를 이름으로 쓰는 키. 폴더도 키가 됩니다 |
 | Tasks | GUID 를 이름으로 쓰는 키. 작업 정보가 들어 있습니다 |
-| Boot · Logon · Plain | GUID 이름의 하위 키만 있고 값은 없었습니다 |
-| Maintenance | winreg-kb 목록에는 없습니다. Win11 25H2 한 대에서 보였고, 역시 GUID 하위 키만 있었습니다 |
+| Boot · Logon · Plain | GUID 이름의 하위 키만 있고 값은 없습니다 |
+| Maintenance | Win11 25H2 에 있는 하위 키입니다. 역시 GUID 하위 키만 있습니다 |
 
 ### Windows 버전별 차이
 
@@ -63,7 +63,7 @@ Tree 아래 키 경로는 Tasks\{GUID} 의 Path 값을 Tree 뒤에 붙인 것입
 | 값 | 뜻 |
 |---|---|
 | Id | Tasks 아래 항목의 GUID |
-| Index | winreg-kb 문서에 뜻이 비어 있습니다 |
+| Index | 공개 자료에 뜻이 없습니다 |
 | SD | 보안 설명자 (Security Descriptor) |
 
 폴더에 해당하는 Tree 키에는 Id 가 없고 SD 값만 있었습니다. 한 PC 에서 이런 키가 142개였습니다.
@@ -76,7 +76,7 @@ O:BAG:SYD:(A;ID;0x1f019f;;;BA)(A;ID;0x1f019f;;;SY)(A;ID;FA;;;BA)(A;;FR;;;SY)
 
 `O:` 뒤는 소유자, `G:` 뒤는 그룹, `D:` 뒤의 괄호들은 접근 허용 항목입니다. `BA` 는 Administrators 그룹, `SY` 는 SYSTEM 계정을 가리키는 약어입니다. SID 표기는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. 작업 키에 SD 값이 없을 때 무슨 일이 생기는지는 [숨긴 예약 작업 찾기 (SD 값 삭제)](sd.md)에서 다룹니다.
 
-**Index 값.** 공식 뜻은 이번 조사에서 확인하지 못했습니다. 한 PC 에서는 Index 값과, 같은 GUID 가 들어 있는 하위 키가 이렇게 맞았습니다.
+**Index 값.** 공식 뜻은 공개 자료에 없습니다. 한 PC 에서는 Index 값과, 같은 GUID 가 들어 있는 하위 키가 이렇게 맞았습니다.
 
 | Index | 작업 키 수 | 같은 GUID 가 있던 하위 키 |
 |---|---|---|
@@ -91,13 +91,13 @@ Index 가 0 인 37개는 Id 의 GUID 가 Tasks·Boot·Logon·Plain·Maintenance 
 
 ### Tasks\{GUID}
 
-winreg-kb 문서는 값으로 DynamicInfo, Hash, Path, Triggers 를 적습니다. 한 PC 의 한 작업에는 값이 더 있었습니다.
+Tasks\{GUID} 키에는 DynamicInfo, Hash, Path, Triggers 값이 있습니다[2]. 한 PC 의 한 작업에는 값이 더 있었습니다.
 
-| 값 | 형식 (관찰) | 뜻 |
+| 값 | 형식 | 뜻 |
 |---|---|---|
 | Path | REG_SZ | Tree 아래 대응 키의 상대 경로 |
 | Hash | REG_BINARY | XML 파일의 무결성 해시 |
-| Schema | REG_DWORD | XML 의 version 속성과 짝을 이룹니다 (관찰) |
+| Schema | REG_DWORD | XML 의 version 속성과 짝을 이룹니다 |
 | Author | REG_SZ | |
 | Description | REG_SZ | |
 | URI | REG_SZ | |
@@ -143,15 +143,15 @@ DynamicInfo 는 시각 값이 들어 있는 바이너리입니다. 크기는 Win
 
 Vista·2008·7 은 오프셋 0~27 의 28바이트입니다. Windows 8·10 은 오프셋 28 의 8바이트가 더해진 36바이트입니다. 한 PC(Win11 25H2)의 DynamicInfo 269개는 모두 36바이트였습니다.
 
-winreg-kb 문서의 예시 헥스에서 오프셋 20 값은 Windows 7 예가 `2b 04 07 80`(0x8007042B), Windows 8·10 예가 `20 04 07 80`(0x80070420) 입니다. 이 값이 오류 코드인지는 이번 조사에서 확인하지 못했습니다.
+오프셋 20 값의 예는 Windows 7 에서 `2b 04 07 80`(0x8007042B), Windows 8·10 에서 `20 04 07 80`(0x80070420) 입니다[2]. 이 값이 오류 코드인지는 확정되지 않았습니다.
 
 ### Actions · Triggers
 
-두 값의 공개 명세는 이번 조사에서 찾지 못했습니다. 아래는 한 PC 에서 본 모습입니다.
+두 값은 공개 명세가 없습니다. 아래는 한 PC 의 값입니다.
 
 Actions 269개는 모두 첫 2바이트가 `03 00` 이었습니다. 한 Actions 값은 `03 00`, `0C 00 00 00`(12), UTF-16 문자열 `Author`, `66 66` 순서로 시작했고, 12 는 `Author` 여섯 글자를 UTF-16 으로 쓴 바이트 수와 같습니다. 그 뒤에는 명령 경로와 인자가 UTF-16 문자열로 들어 있었으며, XML 의 `<Actions Context="Author">`, Command, Arguments 와 같은 글자였습니다.
 
-winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인다고 적었습니다.
+Triggers 값 안의 FILETIME 은 현지 시각으로 보입니다[2].
 
 ## 증거로서 의미
 
@@ -166,7 +166,7 @@ winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인�
 
 - 누가 등록했는지는 여기서 확정하지 못합니다. Author 는 문자열 값입니다. 등록한 계정은 [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md)에서 찾습니다(켜 둔 경우).
 - 오프셋 12 는 마지막 한 번의 실행 시각입니다. 이 값만으로는 그 전에 몇 번, 언제 실행했는지 알 수 없습니다.
-- 오프셋 4 를 작업을 처음 만든 시각으로 단정하지 못합니다. 문서도 물음표로 적었고, 기본 작업에서는 OS 설치보다 앞선 날짜가 나왔습니다.
+- 오프셋 4 를 작업을 처음 만든 시각으로 단정하지 못합니다. 뜻이 확정되지 않은 칸이고[2], 기본 작업에서는 OS 설치보다 앞선 날짜가 나왔습니다.
 - 실행이 성공했는지는 여기서 알 수 없습니다. 오프셋 20 과 28 의 뜻이 확정되지 않았습니다.
 
 보고서에는 "`Tasks\{GUID}` 의 DynamicInfo 에 이 작업의 마지막 실행 시각이 `<UTC 시각>` 으로 남아 있다" 처럼 씁니다. "이 시각에 악성 프로그램이 실행되었다" 는 실행 흔적을 따로 확인한 다음에 씁니다.
@@ -175,10 +175,10 @@ winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인�
 
 | 값 | 형식 | 기준 | 읽는 법 |
 |---|---|---|---|
-| DynamicInfo 오프셋 4 | FILETIME | UTC 로 읽을 때 XML 파일 기록 시각과 맞았습니다 (관찰) | 마지막 등록·갱신 시각으로 보입니다. 확정은 아닙니다 |
-| DynamicInfo 오프셋 12 | FILETIME | UTC (관찰) | 마지막 실행 시각. 실행한 적 없으면 0 |
-| DynamicInfo 오프셋 28 | FILETIME | 확인 못 함 | 뜻 모름 |
-| Triggers 안의 시각 | FILETIME | 현지 시각으로 보임 (winreg-kb) | 트리거에 적은 시각 |
+| DynamicInfo 오프셋 4 | FILETIME | UTC 로 읽을 때 XML 파일 기록 시각과 맞았습니다 | 마지막 등록·갱신 시각으로 보입니다. 확정은 아닙니다 |
+| DynamicInfo 오프셋 12 | FILETIME | UTC | 마지막 실행 시각. 실행한 적 없으면 0 |
+| DynamicInfo 오프셋 28 | FILETIME | 공개 자료 없음 | 뜻 모름 |
+| Triggers 안의 시각 | FILETIME | 현지 시각으로 보임[2] | 트리거에 적은 시각 |
 
 FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각 값은 [시간대 설정](../../system-account/time-zone.md)을 보고 바꿉니다.
 
@@ -186,7 +186,7 @@ FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](
 
 - **오프셋 4.** Windows 기본 작업 153개에서 2024-05-25 (UTC) 였습니다. OS 설치 시각(2026-06-26)보다 앞섭니다. 설치 이미지에 미리 등록해 둔 시각이 남은 것으로 보입니다.
 - **오프셋 4 와 XML 파일.** 여러 작업에서 오프셋 4 의 시각과 XML 파일의 마지막 기록 시각(UTC)이 초 단위까지 같았습니다. 모든 작업이 이렇지는 않았습니다.
-- **오프셋 28.** 0 인 것이 100개, 오프셋 12 와 같거나 늦은 것이 159개였습니다. 늦은 것은 대개 몇 초 뒤였습니다. 오프셋 12 보다 이른 것도 10개 있었습니다. 마지막 완료 시각으로 보이지만 확인하지 못했습니다.
+- **오프셋 28.** 0 인 것이 100개, 오프셋 12 와 같거나 늦은 것이 159개였습니다. 늦은 것은 대개 몇 초 뒤였습니다. 오프셋 12 보다 이른 것도 10개 있었습니다. 마지막 완료 시각으로 보이지만 확정되지 않았습니다.
 
 한 번도 실행하지 않은 작업을 PowerShell 로 조회하면 특이한 날짜가 나옵니다. 이 내용은 [옛 작업 파일 (.job·at)](job-at.md)의 상태 값 절에서 다룹니다.
 
@@ -197,8 +197,8 @@ FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](
 - **오프셋 4 는 작업 생성 시각이 아닐 수 있습니다.** 기본 작업은 OS 설치보다 이른 날짜가 나옵니다.
 - **REG_DWORD 표시에 주의합니다.** 값을 문자열로 받는 도구는 REG_DWORD 를 부호 없는 10진수로 보여 줍니다. Schema 같은 값은 원시 바이트로 확인합니다.
 - **옛 시스템의 Hash 는 CRC32 입니다.** KB2305420 이전 시스템에서는 SHA-256 으로 비교하면 맞지 않습니다.
-- **Actions·Triggers 해석은 관찰에 기댑니다.** 공개 명세를 찾지 못했습니다. 같은 작업의 XML 과 맞춰 보며 읽습니다.
-- **Index 의 뜻은 확정되지 않았습니다.** Index 를 0 으로 바꾸면 작업이 숨는지도 확인하지 못했습니다.
+- **Actions·Triggers 는 공개 명세가 없습니다.** 같은 작업의 XML 과 맞춰 보며 읽습니다.
+- **Index 의 뜻은 확정되지 않았습니다.** Index 를 0 으로 바꾸면 작업이 숨는지도 알려지지 않았습니다.
 
 ## 직접 분석해 보기
 

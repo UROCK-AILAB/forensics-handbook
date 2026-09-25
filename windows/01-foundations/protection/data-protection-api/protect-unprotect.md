@@ -20,7 +20,7 @@ DPAPI 는 CryptProtectData 함수로 데이터를 암호로 감싸고, CryptUnpr
 
 ## 두 함수가 하는 일
 
-CryptProtectData 는 평문을 받아 속을 알 수 없는(opaque) 보호 블롭을 돌려주고, CryptUnprotectData 는 그 반대로 보호 블롭을 받아 평문을 돌려줍니다. 두 함수는 Crypt32.dll 안에 있고, 부르면 로컬 RPC 로 LSA (Local Security Authority) 를 부릅니다. 이 RPC 는 네트워크로 나가지 않으며 데이터는 그 컴퓨터 안에 남습니다. Microsoft 함수 문서가 적은 최소 지원 버전은 클라이언트 Windows XP, 서버 Windows Server 2003 이고, DPAPI 서비스 자체는 Windows 2000 부터 들어왔습니다.
+CryptProtectData 는 평문을 받아 속을 알 수 없는(opaque) 보호 블롭을 돌려주고, CryptUnprotectData 는 그 반대로 보호 블롭을 받아 평문을 돌려줍니다. 두 함수는 Crypt32.dll 안에 있고, 부르면 로컬 RPC 로 LSA (Local Security Authority) 를 부릅니다. 이 RPC 는 네트워크로 나가지 않으며 데이터는 그 컴퓨터 안에 남습니다. 최소 지원 버전은 클라이언트 Windows XP, 서버 Windows Server 2003 이고, DPAPI 서비스 자체는 Windows 2000 부터 들어왔습니다.
 
 블롭 자체의 바이트 구조는 [DPAPI 블롭 구조](dpapi-blob.md) 에서 다룹니다.
 
@@ -60,7 +60,7 @@ CryptUnprotectData 에는 아래 플래그도 있습니다.
 |---|---|
 | CRYPTPROTECT_VERIFY_PROTECTION | 그 컴퓨터의 기본 보호 수준이 블롭의 보호 수준보다 높으면 CRYPT_I_NEW_PROTECTION_REQUIRED 를 돌려줍니다. 다시 보호하라는 뜻입니다 |
 
-2001년 문서(Windows XP 기준)는 아래 플래그를 LSA 스레드 전용으로 적습니다. 일반 앱은 쓰지 못합니다.
+Windows XP 기준으로 아래 플래그는 LSA 스레드 전용입니다. 일반 앱은 쓰지 못합니다.
 
 | 플래그 | 뜻 |
 |---|---|
@@ -69,7 +69,7 @@ CryptUnprotectData 에는 아래 플래그도 있습니다.
 
 ### 프롬프트 흐름
 
-pPromptStruct 로 화면에 뜨는 프롬프트 흐름은 쓰지 않기로 정해졌고, Microsoft 문서는 이 흐름을 2027년 2월에 없앤다고 적습니다. pPromptStruct 가 NULL 이거나 dwPromptFlags 가 0 이면 화면을 띄우지 않는 경로를 씁니다. 프롬프트 흐름으로 보호했던 데이터는 그 뒤로 풀리지 않는다고 문서가 적습니다.
+pPromptStruct 로 화면에 뜨는 프롬프트 흐름은 쓰지 않기로 정해졌고, 2027년 2월에 없어집니다. pPromptStruct 가 NULL 이거나 dwPromptFlags 가 0 이면 화면을 띄우지 않는 경로를 씁니다. 프롬프트 흐름으로 보호했던 데이터는 그 뒤로 풀리지 않습니다.
 
 ## 누가 다시 풀 수 있나
 
@@ -79,7 +79,7 @@ pPromptStruct 로 화면에 뜨는 프롬프트 흐름은 쓰지 않기로 정�
 
 DPAPI 는 마스터키를 데이터 암호에 바로 쓰지 않습니다.
 데이터마다 세션키 (블롭키) 를 새로 만듭니다.
-아래는 2001년 문서(Windows XP 기준)가 설명한 방식입니다. 난수 길이와 해시 알고리즘은 뒤 버전에서 달라집니다.
+아래는 Windows XP 기준 방식입니다. 난수 길이와 해시 알고리즘은 뒤 버전에서 달라집니다.
 
 1. 16바이트 난수를 만듭니다.
 2. 그 난수와 마스터키를 함께 SHA-1 로 해시합니다.
@@ -90,11 +90,11 @@ DPAPI 는 마스터키를 데이터 암호에 바로 쓰지 않습니다.
 
 무결성 보호도 함께 붙습니다.
 
-블롭에 MAC (Message Authentication Code) 을 붙이는데, 2001년 문서는 HMAC(SHA-1) 로 적습니다. 지금 Microsoft 문서는 블롭이 바뀌었을 때 돌려주는 오류 코드가 일정하지 않고, 경우에 따라 깨진 결과를 돌려주며 성공할 수도 있다고 적습니다. 그래서 복호가 성공했다는 것만으로 블롭이 온전하다고 단정하지 않습니다.
+블롭에 MAC (Message Authentication Code) 을 붙이며, Windows XP 기준으로는 HMAC(SHA-1) 입니다. 블롭이 바뀌었을 때 돌려주는 오류 코드는 일정하지 않고, 경우에 따라 깨진 결과를 돌려주며 성공할 수도 있습니다. 그래서 복호가 성공했다는 것만으로 블롭이 온전하다고 단정하지 않습니다.
 
 ## 읽는 법 — 블롭을 푸는 다섯 단계
 
-역공학 자료가 정리한 복호 흐름은 다섯 단계입니다.
+복호 흐름은 다섯 단계입니다.
 
 1. 블롭에서 마스터키 GUID 를 꺼냅니다.
 2. 그 GUID 로 마스터키 파일을 찾아 salt 와 반복수를 얻습니다. 옛 암호로 암호화된 마스터키면 [CREDHIST](credhist.md) 를 풀어 맞는 SHA-1 을 찾습니다.

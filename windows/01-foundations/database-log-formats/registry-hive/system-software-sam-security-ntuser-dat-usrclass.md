@@ -55,7 +55,7 @@ regf 형식은 레지스트리 밖에서도 씁니다.
 |---|---|---|
 | Amcache.hve | `%SystemRoot%\AppCompat\Programs\Amcache.hve` | [AmCache (Amcache.hve)](../../../02-artifacts/execution/amcache-hve/index.md) |
 | settings.dat | `%LocalAppData%\Packages\<패키지 이름>\Settings\settings.dat` | [UWP 앱 데이터 구조 (Packages 폴더·settings.dat)](../../app-mail-data/packages-settings-dat.md) |
-| Syscache.hve | Windows 7 의 `System Volume Information` 폴더 | libregf 문서에는 이름과 위치만 나옵니다 |
+| Syscache.hve | Windows 7 의 `System Volume Information` 폴더 | 공개 자료는 이름과 위치뿐입니다[4] |
 | 새 사용자 틀 NTUSER.DAT | `C:\Users\Default\NTUSER.DAT` | 새 프로필을 만들 때 복사하는 원본입니다 |
 
 > 그림 자리: 왼쪽에 레지스트리 편집기 트리(HKLM·HKU·HKCU·HKCR), 오른쪽에 디스크 폴더(config 폴더·사용자 프로필 폴더)를 그리고, 어느 키가 어느 파일에 붙는지 화살표로 잇는다. HKCU 와 HKCR 은 "연결·합친 화면" 으로 점선 표시한다.

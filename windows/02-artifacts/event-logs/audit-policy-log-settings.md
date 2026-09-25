@@ -19,13 +19,13 @@ nav_order: 2470
 | 감사 정책 | 보안 로그에 어떤 하위 범주 (Subcategory) 의 성공·실패를 남길지 | 라이브 시스템의 `auditpol`, 정책이 바뀔 때 남는 4719 등 |
 | 로그 설정 | 로그 파일 위치, 최대 크기, 가득 찼을 때 덮어쓸지 | 레지스트리 `Services\Eventlog`·`WINEVT\Channels` |
 
-감사 정책에서 꺼진 하위 범주의 이벤트는 처음부터 기록하지 않습니다. 그래서 이벤트가 없다는 사실은 "일이 없었다" 가 아니라 "기록하지 않았다" 일 수 있고, 이 문장은 Microsoft 기본값 표에서 이끈 해석입니다. 로그가 가득 차면 기본 설정에서는 오래된 기록을 덮어씁니다.
+감사 정책에서 꺼진 하위 범주의 이벤트는 처음부터 기록하지 않습니다. 그래서 이벤트가 없다는 사실은 "일이 없었다" 가 아니라 "기록하지 않았다" 일 수 있습니다. 로그가 가득 차면 기본 설정에서는 오래된 기록을 덮어씁니다.
 
 ## 위치와 버전별 차이
 
 ### Windows 클라이언트의 기본 감사 정책
 
-Microsoft 는 "Recommended System Audit Policy by operating system" 이라는 표에 Windows 기본값을 적었습니다. 표는 Windows Client 와 Windows Server 두 개이고, 칸은 Windows Default·Baseline Recommendation·Stronger Recommendation 세 가지이며, 칸마다 성공 (Success) 과 실패 (Failure) 를 나눠 적습니다.
+Windows 기본값은 Microsoft 의 "Recommended System Audit Policy by operating system" 표에 있습니다[1]. 표는 Windows Client 와 Windows Server 두 개이고, 칸은 Windows Default·Baseline Recommendation·Stronger Recommendation 세 가지이며, 칸마다 성공 (Success) 과 실패 (Failure) 를 나눠 적습니다.
 
 아래는 Windows Client 표의 Windows Default 칸에 값이 적힌 하위 범주입니다.
 
@@ -44,7 +44,7 @@ Microsoft 는 "Recommended System Audit Policy by operating system" 이라는 �
 | Audit Security State Change | Yes | No |
 | Audit System Integrity | Yes | Yes |
 
-Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 것과 다릅니다. 나머지 하위 범주는 기본값 칸이 비어 있으며, 기본으로 켜 있지 않다고 읽습니다. 다만 아래 PC 에서는 칸이 빈 보안 그룹 관리가 켜져 있었습니다. 칸이 빈 하위 범주의 예: Audit Process Creation, Audit Security System Extension, Audit File Share, Audit File System, Audit Registry, Audit Other Logon/Logoff Events, Audit Kerberos Authentication Service, Audit Removable Storage. Audit Process Creation 을 켜야 [프로세스 생성 (4688)](4688.md) 이 남고, Audit Security System Extension 을 켜야 [서비스 설치 (7045·4697)](7045-4697.md) 의 4697 이 남습니다.
+Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 것과 다릅니다. 나머지 하위 범주는 기본값 칸이 비어 있으며, 기본으로 켜 있지 않다고 읽습니다. 다만 칸이 빈 하위 범주가 켜져 있는 PC 도 있습니다(아래 예의 보안 그룹 관리). 칸이 빈 하위 범주의 예: Audit Process Creation, Audit Security System Extension, Audit File Share, Audit File System, Audit Registry, Audit Other Logon/Logoff Events, Audit Kerberos Authentication Service, Audit Removable Storage. Audit Process Creation 을 켜야 [프로세스 생성 (4688)](4688.md) 이 남고, Audit Security System Extension 을 켜야 [서비스 설치 (7045·4697)](7045-4697.md) 의 4697 이 남습니다.
 
 버전에 따라 다른 값이 하나 있습니다.
 
@@ -55,37 +55,37 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 
 로그온 이벤트 자체는 [로그온·로그오프](logon-events/index.md)에서 다룹니다.
 
-### 한 PC 에서 읽은 실제 감사 정책
+### 실제 감사 정책의 예
 
-`auditpol /get /category:*` 로 한 PC 의 감사 정책을 읽었습니다. (Windows 11 빌드 26200, 한국어 화면 기준)
+아래는 Windows 11 빌드 26200 (한국어 화면) PC 의 `auditpol /get /category:*` 결과입니다.
 
-하위 범주는 60개였고, Microsoft 표와 다른 값은 하나였습니다. 보안 그룹 관리 (Security Group Management) 가 "성공" 으로 켜져 있었으며, Microsoft 표에서는 이 칸이 비어 있습니다. 그룹 구성원·플러그 앤 플레이 이벤트·토큰 권한 조정 이벤트·액세스 권한, 이 네 하위 범주는 Microsoft 표에 없는데, 이 PC 에서는 넷 다 "감사 없음" 이었습니다. 꺼져 있던 하위 범주 가운데 포렌식에서 자주 찾는 것은 다음과 같습니다: 프로세스 만들기, 보안 시스템 확장, 파일 공유, 세부 파일 공유, 파일 시스템, 레지스트리, 기타 로그온/로그오프 이벤트, 필터링 플랫폼 연결, 자격 증명 유효성 검사, Kerberos 인증 서비스.
+하위 범주는 60개이고, Microsoft 표와 다른 값은 하나입니다. 보안 그룹 관리 (Security Group Management) 가 "성공" 으로 켜져 있으며, Microsoft 표에서는 이 칸이 비어 있습니다. 그룹 구성원·플러그 앤 플레이 이벤트·토큰 권한 조정 이벤트·액세스 권한, 이 네 하위 범주는 Microsoft 표에 없고, 이 PC 에서는 넷 다 "감사 없음" 입니다. 꺼져 있는 하위 범주 가운데 포렌식에서 자주 찾는 것은 다음과 같습니다: 프로세스 만들기, 보안 시스템 확장, 파일 공유, 세부 파일 공유, 파일 시스템, 레지스트리, 기타 로그온/로그오프 이벤트, 필터링 플랫폼 연결, 자격 증명 유효성 검사, Kerberos 인증 서비스.
 
-오프라인 이미지에서 감사 정책 원본 값을 읽는 방법은 이번에 확인하지 못했습니다. 조사한 PC 에서 SECURITY 하이브를 열지 못했기 때문입니다. 이미지에서는 아래 "구조" 의 Task 값으로 보안 로그에 실제로 남은 하위 범주를 세어 보는 방법을 씁니다.
+이미지에서는 아래 "구조" 의 Task 값으로 보안 로그에 실제로 남은 하위 범주를 세어 보는 방법을 씁니다.
 
 ### 로그 설정이 저장되는 곳
 
-| 로그 종류 | 설정 키 | 근거 |
-|---|---|---|
-| 클래식 로그 (Application·Security·System 등) | `HKLM\SYSTEM\CurrentControlSet\Services\Eventlog\<로그 이름>` | Microsoft 문서 |
-| 그 밖의 채널 (`Microsoft-Windows-…/Operational` 등) | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\<채널 이름>` | 한 PC 관찰 |
+| 로그 종류 | 설정 키 |
+|---|---|
+| 클래식 로그 (Application·Security·System 등) | `HKLM\SYSTEM\CurrentControlSet\Services\Eventlog\<로그 이름>`[3] |
+| 그 밖의 채널 (`Microsoft-Windows-…/Operational` 등) | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\<채널 이름>` |
 
-같은 PC 에 `WINEVT\Channels\Security` 키는 없었고, 보안 로그 설정은 `Services\Eventlog\Security` 에만 있었습니다. 이미지에서는 `CurrentControlSet` 이 없으며, 실제로 쓰인 컨트롤셋 번호를 골라 읽습니다. 고르는 방법은 [컨트롤셋 고르기 (ControlSet·Select)](../../01-foundations/database-log-formats/registry-hive/controlset-select.md)에서 다룹니다.
+`WINEVT\Channels\Security` 키는 없을 수 있고, 이때 보안 로그 설정은 `Services\Eventlog\Security` 에만 있습니다. 이미지에서는 `CurrentControlSet` 이 없으며, 실제로 쓰인 컨트롤셋 번호를 골라 읽습니다. 고르는 방법은 [컨트롤셋 고르기 (ControlSet·Select)](../../01-foundations/database-log-formats/registry-hive/controlset-select.md)에서 다룹니다.
 
-`Services\Eventlog\<로그 이름>` 키의 값은 Microsoft 문서에 다음과 같이 적혀 있습니다.
+`Services\Eventlog\<로그 이름>` 키의 값은 다음과 같습니다[3].
 
 | 값 | 형식 | 뜻 |
 |---|---|---|
 | File | REG_SZ 또는 REG_EXPAND_SZ | 로그 파일 전체 경로. 값이 없으면 `%SystemRoot%\system32\winevt\logs\` 아래에 키 이름을 딴 파일을 씁니다 |
-| MaxSize | REG_DWORD | 최대 크기 (바이트). System·Application·Security 는 64K 배수여야 합니다. 문서가 적은 기본값은 1MB 입니다 |
+| MaxSize | REG_DWORD | 최대 크기 (바이트). System·Application·Security 는 64K 배수여야 합니다. 기본값은 1MB 입니다 |
 | Retention | REG_DWORD | 기본 0. 0 이면 항상 덮어씁니다. 0xFFFFFFFF 이거나 0 이 아니면 덮어쓰지 않습니다. 이때 로그가 가득 차면 새 이벤트를 버립니다 |
 | AutoBackupLogFiles | REG_DWORD | 기본 0 (자동 백업 안 함). Retention 이 -1 (0xFFFFFFFF) 일 때만 자동 백업합니다 |
 | CustomSD | 문자열 (SDDL) | 로그 접근 권한 |
 | Isolation | — | 기본 권한 묶음 (Application·System·Custom) |
 
-문서는 DisplayNameFile·DisplayNameID·PrimaryModule·Sources·RestrictGuestAccess 를 "쓰지 않는 값" 이라고 적었습니다.
+DisplayNameFile·DisplayNameID·PrimaryModule·Sources·RestrictGuestAccess 는 쓰지 않는 값입니다[3].
 
-한 PC 에서 읽은 값은 다음과 같습니다.
+실제 값의 예 (위와 같은 Windows 11 빌드 26200 PC) 는 다음과 같습니다.
 
 | 로그 | File | MaxSize | Retention | 그 밖의 값 |
 |---|---|---|---|---|
@@ -93,11 +93,11 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 | System | — | 20971520 | 0 | — |
 | Application | — | 20971520 | 0 | AutoBackupLogFiles 0 |
 
-세 로그의 MaxSize 는 20MB 였고, 문서가 적은 기본값 1MB 와 다릅니다. `wevtutil gl Security` 결과도 같았습니다: retention false, autoBackup false, maxSize 20971520, logFileName `%SystemRoot%\System32\Winevt\Logs\Security.evtx`. `WINEVT\Channels\Microsoft-Windows-PowerShell/Operational` 키에는 OwningPublisher `{a0c1853b-…}`, Enabled 1, MaxSize 15728640, MaxSizeUpper 0, Retention 0, Type 1, ChannelAccess (SDDL) 값이 있었습니다.
+세 로그의 MaxSize 는 20MB 로, 문서의 기본값 1MB 와 다릅니다[3]. `wevtutil gl Security` 결과도 같습니다: retention false, autoBackup false, maxSize 20971520, logFileName `%SystemRoot%\System32\Winevt\Logs\Security.evtx`. `WINEVT\Channels\Microsoft-Windows-PowerShell/Operational` 키에는 OwningPublisher `{a0c1853b-…}`, Enabled 1, MaxSize 15728640, MaxSizeUpper 0, Retention 0, Type 1, ChannelAccess (SDDL) 값이 있습니다.
 
-### 한 PC 의 채널별 크기와 켜짐
+### 채널별 크기와 켜짐의 예
 
-`Get-WinEvent -ListLog` 로 읽었습니다.
+같은 PC 의 `Get-WinEvent -ListLog` 결과입니다.
 
 | 채널 | 켜짐 | 최대 크기 |
 |---|---|---|
@@ -109,7 +109,7 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 | Microsoft-Windows-DriverFrameworks-UserMode/Operational · DNS-Client/Operational | 꺼짐 | — |
 | Microsoft-Windows-Sysmon/Operational | 없음 (설치 안 됨) | — |
 
-채널은 466개였고 그중 387개가 켜져 있었으며, 덮어쓰기 방식은 463개가 순환 (Circular), 3개가 보존 (Retain) 이었습니다. 다른 PC 의 채널 기본값은 확인하지 못했습니다.
+채널은 466개이고 그중 387개가 켜져 있으며, 덮어쓰기 방식은 463개가 순환 (Circular), 3개가 보존 (Retain) 입니다. 채널 설정은 PC 마다 다를 수 있어 검체에서 확인합니다.
 
 ## 구조
 
@@ -130,9 +130,9 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 
 ### 이벤트의 Task 값은 하위 범주 번호
 
-보안 로그 이벤트의 Task 칸에는 하위 범주 번호가 들어 있었습니다. 공급자 메타데이터의 Task 표와 실제 이벤트를 맞춰 보면 다음과 같습니다.
+보안 로그 이벤트의 Task 칸에는 하위 범주 번호가 들어 있습니다. 공급자 메타데이터의 Task 표와 실제 이벤트를 맞춰 보면 다음과 같습니다.
 
-| Task | 하위 범주 | 이 PC 에서 본 이벤트 |
+| Task | 하위 범주 | 이벤트 예 |
 |---|---|---|
 | 12288 | Security State Change | 4616 |
 | 12289 | Security System Extension | — |
@@ -144,13 +144,13 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 | 13312 | Process Creation | — |
 | 13568 | Audit Policy Change | — |
 | 13569 | Authentication Policy Change | — |
-| 13824 | (메타데이터 표에서 이름을 확인하지 못함) | 4798 |
+| 13824 | (메타데이터 표에 이름 없음) | 4798 |
 
-그래서 이미지의 보안 로그를 Task 값으로 묶어 세면, 그 PC 에서 어떤 하위 범주가 실제로 기록을 남기고 있었는지 가늠할 수 있습니다. 이 방법은 위 대응에서 이끈 해석입니다.
+그래서 이미지의 보안 로그를 Task 값으로 묶어 세면, 그 PC 에서 어떤 하위 범주가 실제로 기록을 남기고 있었는지 가늠할 수 있습니다.
 
 ### 감사 설정이 바뀔 때 남는 이벤트
 
-아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다.
+아래 메시지와 칸은 공급자 메타데이터에 있는 값입니다.
 
 | ID | 메시지 | 칸 |
 |---|---|---|
@@ -170,7 +170,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 | 1105 | Security | Event log automatic backup | Channel, BackupPath |
 | 105 | System | 1105 와 같은 자동 백업 메시지 | — |
 
-로그를 지울 때 남는 1102 (보안 로그)·104 (다른 로그) 는 [이벤트 로그 삭제 (1102·104)](1102-104.md)에서 다룹니다. 같은 PC 의 보안 로그에는 4719·4902·1100·1102 가 한 건도 없었는데, 약 이틀 치만 남아 있었습니다.
+로그를 지울 때 남는 1102 (보안 로그)·104 (다른 로그) 는 [이벤트 로그 삭제 (1102·104)](1102-104.md)에서 다룹니다. 보안 로그에 약 이틀 치만 남은 PC 에서는 4719·4902·1100·1102 가 한 건도 없을 수 있습니다.
 
 ## 증거로서 의미
 
@@ -190,9 +190,9 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 
 ## 시각 해석
 
-`auditpol` 결과와 레지스트리 값은 조사한 때의 값이며, 값이 언제 그렇게 바뀌었는지는 알려 주지 않습니다. 사건 당시 설정은 4719 같은 변경 기록으로 따로 확인하는데, 이 방법은 해석입니다.
+`auditpol` 결과와 레지스트리 값은 조사한 때의 값이며, 값이 언제 그렇게 바뀌었는지는 알려 주지 않습니다. 사건 당시 설정은 4719 같은 변경 기록으로 따로 확인합니다.
 
-로그의 가장 오래된 레코드 시각이 그 로그가 덮고 있는 기간의 시작입니다. 같은 PC 에서 보안 로그 20MB 에는 약 3만 4천 건이 있었고, 가장 오래된 기록은 조사 시점 약 이틀 전이었습니다. 같은 크기의 System 로그에는 약 2만 건, 약 3개월 치가 있었으므로 크기가 같아도 이벤트가 쌓이는 속도에 따라 덮는 기간이 크게 다릅니다.
+로그의 가장 오래된 레코드 시각이 그 로그가 덮고 있는 기간의 시작입니다. 위 Windows 11 PC 의 예에서 보안 로그 20MB 에는 약 3만 4천 건이 있었고, 가장 오래된 기록은 약 이틀 전이었습니다. 같은 크기의 System 로그에는 약 2만 건, 약 3개월 치가 있었으므로 크기가 같아도 이벤트가 쌓이는 속도에 따라 덮는 기간이 크게 다릅니다.
 
 - 레코드 시각의 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
@@ -201,11 +201,11 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 1. **없는 이벤트를 없었던 일로 읽습니다.** 먼저 그 PC 에서 해당 하위 범주가 켜져 있었는지 봅니다. 다음으로 로그가 그 시각까지 남아 있는지 봅니다.
 2. **지금 설정을 사건 당시 설정으로 읽습니다.** 설정은 나중에 바뀔 수 있습니다. 4719 를 찾습니다.
 3. **하위 범주를 이름으로 찾습니다.** 화면 언어에 따라 이름이 다릅니다. 스크립트나 규칙에서는 GUID 를 씁니다.
-4. **문서의 기본값을 그대로 믿습니다.** 조사한 PC 에서 MaxSize 는 문서 기본값 1MB 가 아니라 20MB 였습니다. 보안 그룹 관리도 문서 표와 달리 켜져 있었습니다. 기본값은 검체에서 직접 확인합니다.
+4. **문서의 기본값을 그대로 믿습니다.** MaxSize 가 문서 기본값 1MB 가 아니라 20MB 인 PC 가 있고, 보안 그룹 관리가 문서 표와 달리 켜져 있는 PC 도 있습니다. 기본값은 검체에서 직접 확인합니다.
 5. **Retention 을 도구가 보여 주는 숫자로만 읽습니다.** REG_DWORD 값을 문자열로 받는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다. 그래서 0xFFFFFFFF 가 4294967295 로 보일 수 있습니다. 원시 바이트로 확인합니다.
-6. **고급 감사 정책을 설정했다고 그대로 적용됐다고 봅니다.** Microsoft 는 고급 감사 정책 (Advanced Audit Policy Configuration) 을 쓸 때 기본 감사 정책 (basic audit policy) 이 덮어쓰지 않는지 확인하라고 적었습니다. 덮어쓰면 4719 가 남습니다. 이를 막는 설정은 Security Options 의 "Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings" 입니다. 이 설정을 Enabled 로 둡니다.
+6. **고급 감사 정책을 설정했다고 그대로 적용됐다고 봅니다.** 고급 감사 정책 (Advanced Audit Policy Configuration) 을 쓸 때는 기본 감사 정책 (basic audit policy) 이 덮어쓰지 않는지 확인합니다[1]. 덮어쓰면 4719 가 남습니다. 이를 막는 설정은 Security Options 의 "Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings" 입니다. 이 설정을 Enabled 로 둡니다.
 7. **4688 에 명령줄이 당연히 있다고 봅니다.** 프로세스 만들기 감사를 켜도 명령줄은 따로 켜야 남습니다. 켜는 설정과 주의점은 [프로세스 생성 (4688)](4688.md)에서 다룹니다.
-8. **채널이 켜져 있다고 봅니다.** 조사한 PC 에서 TaskScheduler/Operational·DriverFrameworks-UserMode/Operational·DNS-Client/Operational 은 꺼져 있었습니다. Sysmon 은 설치돼 있지 않았습니다.
+8. **채널이 켜져 있다고 봅니다.** TaskScheduler/Operational·DriverFrameworks-UserMode/Operational·DNS-Client/Operational 은 꺼져 있을 수 있습니다. Sysmon 은 따로 설치해야 생깁니다.
 9. **Retention 이 0 이 아닌 로그의 끝부분을 믿습니다.** 이 경우 로그가 가득 차면 새 이벤트를 버립니다. 그래서 오래된 기록은 남고 최근 기록이 빠질 수 있습니다. 보안 로그가 가득 차면 1104 가 남습니다.
 
 ### 지우기와 조작
@@ -213,7 +213,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 - **감사 정책을 끕니다.** 4719 에 바뀐 하위 범주와 요청한 계정이 남습니다.
 - **로그를 지웁니다.** 1102·104 가 남습니다. [이벤트 로그를 지웠나](../../04-scenarios/activity/anti-forensics/log-clearing.md)에서 흐름을 봅니다.
 - **이벤트 로그 서비스를 멈춥니다.** 1100 이 남습니다.
-- **자동 백업을 켭니다.** 1105·105 의 BackupPath 칸에 백업 파일 위치가 적힙니다. 원래 로그에서 밀려난 기록이 그 파일에 있을 수 있습니다. 이 판단은 해석입니다.
+- **자동 백업을 켭니다.** 1105·105 의 BackupPath 칸에 백업 파일 위치가 적힙니다. 원래 로그에서 밀려난 기록이 그 파일에 있을 수 있습니다.
 - **레코드 일부만 남습니다.** 덮어쓰거나 지운 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
 ## 직접 분석해 보기
@@ -296,7 +296,7 @@ Get-WinEvent -Path 'E:\case\Security.evtx' |
 2. `auditpol /set /subcategory:{0CCE922B-69AE-11D9-BED3-505054503030} /success:enable` 로 프로세스 만들기 감사를 켭니다. 4719 가 남는지 보고 AuditPolicyChanges 칸 값을 적습니다.
 3. 레지스트리의 `Services\Eventlog\Security` 값과 `wevtutil gl Security` 결과를 맞춰 봅니다.
 4. 테스트용 채널 하나의 최대 크기를 줄이고 이벤트를 쌓습니다. 가장 오래된 레코드 시각이 어떻게 바뀌는지 봅니다.
-5. `Get-WinEvent -ListLog *` 로 TaskScheduler/Operational 이 기본으로 꺼져 있는지 확인합니다. 이 페이지는 한 PC 에서만 확인했습니다.
+5. `Get-WinEvent -ListLog *` 로 TaskScheduler/Operational 이 기본으로 꺼져 있는지 확인합니다.
 
 **NIST CFReDS 같은 공개 검체**에서는 다음을 풀어 봅니다.
 

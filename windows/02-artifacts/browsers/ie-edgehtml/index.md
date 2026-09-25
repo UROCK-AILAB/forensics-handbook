@@ -15,15 +15,15 @@ has_toc: false
 ## 왜 중요한가
 
 - IE 는 Windows 의 구성 요소라서 설치된 Windows 의 지원 정책을 따릅니다.
-- Windows 11 25H2 PC 한 대에서도 IE 의 기록 자리가 남아 있었습니다. `HKLM\SOFTWARE\Microsoft\Internet Explorer` 의 `svcVersion` 값은 `11.1882.26100.0` 이었습니다.
-- 같은 PC 에 WebCache 폴더, `INetCache`·`INetCookies` 폴더, `TypedURLs` 키, `IntelliForms` 키, `%USERPROFILE%\Favorites` 폴더가 모두 있었습니다. 옛 엣지 패키지 폴더는 없었습니다.
+- Windows 11 25H2 에도 IE 의 기록 자리가 남아 있습니다. 이 판에서 `HKLM\SOFTWARE\Microsoft\Internet Explorer` 의 `svcVersion` 값은 `11.1882.26100.0` 입니다.
+- Windows 11 25H2 에도 WebCache 폴더, `INetCache`·`INetCookies` 폴더, `TypedURLs` 키, `IntelliForms` 키, `%USERPROFILE%\Favorites` 폴더가 모두 있고, 옛 엣지 패키지 폴더는 없습니다.
 - IE 10 이후에는 방문 기록·캐시·쿠키·내려받기 기록이 사용자마다 파일 하나에 모이고, 그 파일 하나로 웹 사용의 큰 줄기를 볼 수 있습니다.
 - IE 4~9 를 쓰던 옛 검체에서는 `index.dat` 가 주된 기록입니다. 그래서 검체의 IE 버전부터 확인합니다.
-- 엣지 안의 IE 모드는 최소 2029년까지 지원합니다. IE 모드가 어느 파일에 기록을 남기는지는 이번에 연 자료로 확인하지 못했습니다.
+- 엣지 안의 IE 모드는 최소 2029년까지 지원합니다. IE 모드가 어느 파일에 기록을 남기는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 증명하지 못하는 것도 있습니다.
 
-- 폴더와 키가 있다는 것만으로 사용자가 IE 를 썼다고 단정하지 않습니다. 위 Windows 11 PC 에도 폴더와 키가 모두 있었습니다.
+- 폴더와 키가 있다는 것만으로 사용자가 IE 를 썼다고 단정하지 않습니다. Windows 11 25H2 에도 폴더와 키가 모두 있습니다.
 - IE 와 옛 엣지는 같은 `WebCacheV01.dat` 를 씁니다. 그래서 이 파일의 기록을 IE 사용 흔적이라고 바로 단정하지 않습니다.
 - 기록은 Windows 계정 단위로 남을 뿐, 그 시각에 누가 키보드 앞에 있었는지는 남지 않습니다. 사람을 좁히는 법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - 기록이 없다고 방문하지 않은 것은 아니며, 사용자가 지웠을 수 있습니다. 이전 시점의 파일은 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 꺼내 비교합니다.
@@ -40,24 +40,24 @@ has_toc: false
 | IE 10·11 | `%LOCALAPPDATA%\Microsoft\Windows\WebCache\WebCacheV*.dat` (사용자마다 하나) | ESE |
 | 옛 엣지 | 같은 `WebCacheV01.dat` 안의 서로 다른 컨테이너 | ESE |
 
-- 파일 이름으로는 `WebCacheV01.dat` 와 `WebCacheV24.dat` 두 가지가 문서에 나옵니다.
-- 옛 엣지는 전용 폴더 `C:\Users\<사용자>\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\` 도 씁니다. 공개 수집 정의 `Edge.tkape` 는 이 폴더 아래를 모두 모읍니다.
+- 파일 이름은 `WebCacheV01.dat` 와 `WebCacheV24.dat` 두 가지가 있습니다[2].
+- 옛 엣지는 전용 폴더 `C:\Users\<사용자>\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\` 도 씁니다. 공개 수집 정의 `Edge.tkape` 는 이 폴더 아래를 모두 모읍니다[6].
 
 ### 지원 종료 시점
 
-Microsoft 수명 주기 FAQ 의 표를 옮겼습니다. 검체의 Windows 판과 날짜를 보고, 그 시점에 IE·옛 엣지를 쓸 수 있었는지 가늠할 때 씁니다.
+IE·옛 엣지의 지원 종료 시점입니다[5]. 검체의 Windows 판과 날짜를 보고, 그 시점에 IE·옛 엣지를 쓸 수 있었는지 가늠할 때 씁니다.
 
 | 대상 | 내용 |
 |---|---|
 | IE 11 | 마지막 주 버전입니다 |
 | Windows 10 반기 채널 (SAC)·Windows 10 IoT 의 IE 11 데스크톱 앱 | 2022-06-15 에 지원이 끝났습니다 |
 | 일부 Windows 10 버전의 IE 11 데스크톱 앱 | "영구히 사용 불가" 로 바뀌었습니다 |
-| Windows 10 LTSB 2015·2016, LTSC 2019·2021, Windows 8.1, Windows 7 ESU, Windows Server 2012~2022 | 같은 표의 IE 11 지원 목록에 남아 있습니다 |
+| Windows 10 LTSB 2015·2016, LTSC 2019·2021, Windows 8.1, Windows 7 ESU, Windows Server 2012~2022 | IE 11 지원 대상입니다 |
 | 엣지 안의 IE 모드 | 최소 2029년까지 지원합니다 |
 | 옛 엣지 데스크톱 앱 | 2021-03-09 에 지원이 끝났습니다 |
 
-- 같은 표에는 Windows 11 행이 없습니다.
-- "영구히 사용 불가" 조치의 정확한 날짜와 옛 엣지가 새 엣지로 바뀐 업데이트 시점은 이번에 연 자료로 확인하지 못했습니다.
+- 이 지원 목록에 Windows 11 은 없습니다[5].
+- "영구히 사용 불가" 조치가 적용된 날짜와 옛 엣지가 새 엣지로 바뀐 시점은 검체의 업데이트 기록에서 확인합니다.
 
 ### 알려 주는 것
 
@@ -68,9 +68,9 @@ Microsoft 수명 주기 FAQ 의 표를 옮겼습니다. 검체의 Windows 판과
 | 주소창에 입력한 주소와 입력 시각 | NTUSER.DAT 의 `Software\Microsoft\Internet Explorer\TypedURLs`·`TypedURLsTime` | 시각 키는 Windows 8 에서 소개됐습니다 | [주소창 입력 주소](typedurls-typedurlstime.md) |
 | 사이트별로 저장한 아이디·비밀번호 | NTUSER.DAT 의 `Software\Microsoft\Internet Explorer\IntelliForms\Storage2` | IE 7~9 | [저장 비밀번호](intelliforms.md) |
 | 받아 둔 웹 자원 파일·쿠키 폴더 | `%LOCALAPPDATA%\Microsoft\Windows\INetCache\IE` (IE 10 이후), `…\Temporary Internet Files\Content.IE5` (IE 4~9), `INetCookies` | IE 4 이후 | [쿠키·캐시 폴더](inetcookies-inetcache.md) |
-| 즐겨찾기 | `%USERPROFILE%\Favorites` 의 `.url` 파일(한 PC 에서 본 위치), 옛 엣지는 `spartan.edb` | IE, 옛 엣지 | [즐겨찾기](favorites-url.md) |
+| 즐겨찾기 | `%USERPROFILE%\Favorites` 의 `.url` 파일, 옛 엣지는 `spartan.edb` | IE, 옛 엣지 | [즐겨찾기](favorites-url.md) |
 
-하위 페이지에서 다루지 않는 자리도 하나 있습니다. Vista 이후 IE 는 탭 복구용 폴더 `C:\Users\<사용자>\AppData\Local\Microsoft\Internet Explorer\Recovery` 를 쓰는데, 이 폴더 안 파일의 형식은 이 허브의 하위 페이지에서 다루지 않습니다. 수집할 때는 이 폴더도 함께 모읍니다.
+하위 페이지에 없는 자리도 하나 있습니다. Vista 이후 IE 는 탭 복구용 폴더 `C:\Users\<사용자>\AppData\Local\Microsoft\Internet Explorer\Recovery` 를 씁니다[2]. 수집할 때는 이 폴더도 함께 모읍니다.
 
 ## 읽는 순서
 

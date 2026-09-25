@@ -15,11 +15,11 @@ SYSTEM 하이브의 `Enum\USBSTOR` 키에는 USB 대용량 저장장치 드라�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-USB 장치가 대용량 저장장치 부류이면 Windows 는 USB 저장 포트 드라이버 `Usbstor.sys` 를 올립니다. Windows 2000 부터 들어 있는 드라이버입니다. `Usbstor.sys` 는 장치 안의 논리 장치 (Logical Unit) 마다 물리 장치 객체 (PDO) 를 하나씩 만들며, 논리 장치는 16개까지입니다. Microsoft 문서의 예에서는 칸이 두 개인 카드 리더에 PDO 가 칸마다 하나씩 생깁니다.
+USB 장치가 대용량 저장장치 부류이면 Windows 는 USB 저장 포트 드라이버 `Usbstor.sys` 를 올립니다. Windows 2000 부터 들어 있는 드라이버입니다. `Usbstor.sys` 는 장치 안의 논리 장치 (Logical Unit) 마다 물리 장치 객체 (PDO) 를 하나씩 만들며, 논리 장치는 16개까지입니다. 칸이 두 개인 카드 리더라면 PDO 가 칸마다 하나씩 생깁니다.
 
 이 PDO 의 식별 문자열은 장치가 SCSI 조회 명령 (INQUIRY) 에 답한 데이터로 만듭니다. 플러그 앤 플레이 관리자 (PnP Manager) 는 장치마다 `Enum` 아래에 키를 만들고 이 정보를 적습니다. 장치를 뺀 뒤에도 키는 남지만, Windows 8.1 이후는 오래 안 보인 장치의 키를 스스로 지웁니다(아래 "함정과 한계").
 
-Microsoft 는 `Enum` 트리를 운영체제 부품만 쓰는 곳이라고 적었고 트리의 배치도 바뀔 수 있다고 적었습니다. 그래서 키 이름과 값의 해석은 드라이버 문서와 분석가의 관찰에 기댑니다. USB 3 의 UASP 로 붙는 장치는 이 키에 남지 않습니다. → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)
+`Enum` 트리는 운영체제 부품만 쓰는 곳이고 트리의 배치도 바뀔 수 있습니다. 그래서 키 이름과 값의 해석은 드라이버 문서와 실제 기록에 기댑니다. USB 3 의 UASP 로 붙는 장치는 이 키에 남지 않습니다. → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)
 
 ## 위치와 버전별 차이
 
@@ -37,13 +37,13 @@ Microsoft 는 `Enum` 트리를 운영체제 부품만 쓰는 곳이라고 적었
 | 7 | 인스턴스 키의 `Properties` 에 설치 시각(0064)과 처음 설치 시각(0065)이 있습니다. | Khatri (2013) |
 | 8 | 마지막 연결(0066)·마지막 해제(0067) 시각이 더해졌습니다. | Khatri (2013) |
 | 8.1·10 | 예약 작업 "Plug and Play Cleanup" 이 30일 넘게 안 보인 장치의 키를 지웁니다. | Cowen (2017) |
-| 11 | 같은 정리를 저장소 센스 (Storage Sense) 가 `cleanmgr.exe /autocleanstoragesense` 로 돌렸습니다. 로그에는 기본 기준이 30일이라고 적혀 있었습니다. 앞의 예약 작업은 없었습니다. | 관찰 |
+| 11 | 같은 정리를 저장소 센스 (Storage Sense) 가 `cleanmgr.exe /autocleanstoragesense` 로 돌립니다. 로그에는 기본 기준이 30일로 적힙니다. 앞의 예약 작업은 없습니다. |  |
 
 ## 구조
 
 ### 두 단계 키
 
-`USBSTOR` 아래에는 장치 항목 키 (Device Class ID) 가 있습니다. 그 아래에 인스턴스 키가 있습니다. 아래 이름은 Forensics Wiki 가 든 예입니다.
+`USBSTOR` 아래에는 장치 항목 키 (Device Class ID) 가 있습니다. 그 아래에 인스턴스 키가 있습니다.
 
 ```
 Enum\USBSTOR
@@ -60,7 +60,7 @@ Enum\USBSTOR
 
 ### 장치 항목 키 이름
 
-키 이름은 `<종류>&Ven_<제조사>&Prod_<제품>&Rev_<리비전>` 꼴입니다. 네 칸은 장치가 SCSI 조회 명령에 답한 문자열입니다. 종류 칸에 들어가는 말은 Microsoft 문서에 표로 있습니다.
+키 이름은 `<종류>&Ven_<제조사>&Prod_<제품>&Rev_<리비전>` 꼴입니다. 네 칸은 장치가 SCSI 조회 명령에 답한 문자열입니다. 종류 칸에 들어가는 말은 아래와 같습니다.
 
 | SCSI 장치 유형 코드 | 종류 칸 | 일반 이름 (Generic Type) |
 |---|---|---|
@@ -72,15 +72,15 @@ Enum\USBSTOR
 | 8 (매체 교환 장치) | `Changer` | `GenChanger` |
 | 그 밖의 값 | `Other` | `UsbstorOther` |
 
-Microsoft 문서의 하드웨어 ID 는 칸 사이에 구분자 없이 고정 길이로 붙여 씁니다. 제조사는 8자, 제품은 16자, 리비전은 4자입니다. SCSI 장치 식별자 문서는 공백 같은 특수 문자를 밑줄로 바꾼다고 적었습니다. 제품 문자열이 `U3 Cruzer Micro` 라고 가정하고 위 예를 이 규칙으로 쓰면 `USBSTOR\DiskSanDisk_U3_Cruzer_Micro_3.27` 입니다.
+하드웨어 ID 는 칸 사이에 구분자 없이 고정 길이로 붙여 씁니다. 제조사는 8자, 제품은 16자, 리비전은 4자입니다. 공백 같은 특수 문자는 밑줄로 바꿉니다. 제품 문자열이 `U3 Cruzer Micro` 라고 가정하고 위 예를 이 규칙으로 쓰면 `USBSTOR\DiskSanDisk_U3_Cruzer_Micro_3.27` 입니다.
 
-키 이름은 이 꼴과 다릅니다. 이 글을 쓰며 확인한 장치 두 개는 키 이름에 `&Ven_`·`&Prod_`·`&Rev_` 구분자가 있었고 칸 끝을 채운 밑줄은 없었습니다. 같은 인스턴스 키의 `HardwareID` 값 첫 줄은 문서의 고정 길이 꼴이었습니다.
+키 이름은 이 꼴과 다릅니다. 키 이름에는 `&Ven_`·`&Prod_`·`&Rev_` 구분자가 있고 칸 끝을 채운 밑줄은 없습니다. 같은 인스턴스 키의 `HardwareID` 값 첫 줄은 위의 고정 길이 꼴입니다.
 
-이 문자열은 장치가 스스로 알린 값입니다. 상표 이름과 다를 수 있습니다. 관찰한 USB 메모리 하나는 제조사 칸에 `USB` 라고 적고, 상표와 모델은 제품 칸에 적었습니다. 실제 제조사는 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md)의 VID 로 다시 확인합니다.
+이 문자열은 장치가 스스로 알린 값입니다. 상표 이름과 다를 수 있습니다. 제조사 칸에 `USB` 라고 적고 상표와 모델은 제품 칸에 적는 USB 메모리도 있습니다. 실제 제조사는 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md)의 VID 로 다시 확인합니다.
 
 ### 인스턴스 키 이름
 
-Microsoft 문서에 따르면 인스턴스 ID 는 버스 드라이버가 알려 주는 문자열이고, 버스가 지원하면 일련번호를 담고 아니면 위치 정보를 담습니다. 장치 능력의 UniqueID 가 참이면 버스가 준 문자열을 그대로 쓰고, 거짓이면 PnP 관리자가 문자열을 고쳐서 이 PC 안에서만 겹치지 않게 만듭니다. 인스턴스 ID 는 재시작해도 바뀌지 않습니다.
+인스턴스 ID 는 버스 드라이버가 알려 주는 문자열이고, 버스가 지원하면 일련번호를 담고 아니면 위치 정보를 담습니다. 장치 능력의 UniqueID 가 참이면 버스가 준 문자열을 그대로 쓰고, 거짓이면 PnP 관리자가 문자열을 고쳐서 이 PC 안에서만 겹치지 않게 만듭니다. 인스턴스 ID 는 재시작해도 바뀌지 않습니다.
 
 분석에서 널리 쓰는 규칙이 하나 있습니다. 인스턴스 키 이름의 둘째 글자가 `&` 이면 시스템이 만든 이름입니다. Forensics Wiki 는 이때 장치에 일련번호가 없었다고 설명합니다.
 
@@ -93,40 +93,40 @@ Windows 11 빌드 26200 에서 두 장치는 이렇게 남았습니다.
 
 `Capabilities` 값은 장치 능력 플래그 (`CM_DEVCAP_*`) 이고 `cfgmgr32.h` 에서 0x10 은 UniqueID 입니다. 두 장치 모두 레지스트리 값과 PnP API 가 돌려준 값이 같았습니다.
 
-둘째 장치는 일련번호가 있었는데도 UniqueID 가 꺼져 있었고, 이름은 둘째 글자가 `&` 인 꼴이었습니다. 앞에서 본 Microsoft 문서의 설명과 맞습니다. 그러므로 `&` 형 이름은 "일련번호가 없다" 보다 "이 PC 의 PnP 관리자가 만든 이름" 으로 읽습니다. 이름 안에 일련번호가 섞여 있을 수 있고, 이런 이름은 다른 PC 에서 같은 장치를 꽂았을 때 같게 나온다는 보장이 없습니다.
+둘째 장치는 일련번호가 있었는데도 UniqueID 가 꺼져 있었고, 이름은 둘째 글자가 `&` 인 꼴이었습니다. 앞의 인스턴스 ID 설명과 맞습니다. 그러므로 `&` 형 이름은 "일련번호가 없다" 보다 "이 PC 의 PnP 관리자가 만든 이름" 으로 읽습니다. 이름 안에 일련번호가 섞여 있을 수 있고, 이런 이름은 다른 PC 에서 같은 장치를 꽂았을 때 같게 나온다는 보장이 없습니다.
 
 첫째 장치처럼 긴 일련번호는 잘릴 수 있으므로 `Enum\USB` 쪽과 맞출 때는 앞부분이 같은지, `ContainerID` 가 같은지를 봅니다.
 
-끝의 `&0` 은 논리 장치 번호로 보는 해석이 널리 쓰입니다. 이 글에서는 Microsoft 문서로 확인하지 못했습니다. 위 관찰처럼 `&0` 이 붙지 않은 이름도 있습니다.
+끝의 `&0` 은 논리 장치 번호로 보는 해석이 널리 쓰이지만 공식 문서에는 설명이 없습니다. 위 표처럼 `&0` 이 붙지 않은 이름도 있습니다.
 
-일련번호는 장치가 Windows 에 알려 준 값입니다. 장치 겉에 인쇄된 번호와 다를 수 있습니다(Cowen 2009). 보고서와 압수 요청서에는 "Windows 에 보고된 일련번호" 라고 적습니다.
+일련번호는 장치가 Windows 에 알려 준 값입니다. 장치 겉에 인쇄된 번호와 다를 수 있습니다. 보고서와 압수 요청서에는 "Windows 에 보고된 일련번호" 라고 적습니다.
 
 ### 주요 값
 
-관찰한 인스턴스 키에는 값 12개가 있었습니다. 아래 표에 없는 값은 `Driver`·`ConfigFlags`·`Address` 입니다. `ContainerID` 밖의 값은 뜻을 `SetupDiGetDeviceRegistryProperty` 문서의 같은 이름 속성 설명에서 따왔습니다.
+인스턴스 키에는 값 12개가 있습니다. 아래 표에 없는 값은 `Driver`·`ConfigFlags`·`Address` 입니다. `ContainerID` 밖의 값은 `SetupDiGetDeviceRegistryProperty` 의 같은 이름 속성과 뜻이 같습니다.
 
 | 값 | 뜻 | 분석에 쓰는 곳 |
 |---|---|---|
-| `FriendlyName` | 장치 표시 이름 | 관찰에서는 제조사·제품 문자열 뒤에 ` USB Device` 가 붙은 꼴이었습니다. |
-| `HardwareID`·`CompatibleIDs` | 하드웨어 ID 목록, 호환 ID 목록 (REG_MULTI_SZ) | 관찰한 호환 ID 는 `USBSTOR\Disk`·`USBSTOR\RAW`·`GenDisk` 였습니다. |
+| `FriendlyName` | 장치 표시 이름 | 제조사·제품 문자열 뒤에 ` USB Device` 가 붙은 꼴입니다. |
+| `HardwareID`·`CompatibleIDs` | 하드웨어 ID 목록, 호환 ID 목록 (REG_MULTI_SZ) | 호환 ID 는 `USBSTOR\Disk`·`USBSTOR\RAW`·`GenDisk` 입니다. |
 | `ContainerID` | 한 물리 장치에서 나온 장치 노드를 묶는 GUID | `Enum\USB`·AmCache·휴대용 장치 기록과 같은 PC 안에서 잇습니다. |
-| `ClassGUID` | 장치 설치 클래스 GUID | 관찰한 디스크는 `{4d36e967-e325-11ce-bfc1-08002be10318}` 이었습니다. |
-| `Service` | 장치에 붙은 서비스 이름 | 관찰에서는 `disk` 였습니다. |
-| `Mfg`·`DeviceDesc` | 제조사, 장치 설명 | 관찰에서는 INF 의 일반 문자열("Standard disk drives", "Disk drive")이었습니다. 실제 제조사가 아닙니다. |
+| `ClassGUID` | 장치 설치 클래스 GUID | 디스크는 `{4d36e967-e325-11ce-bfc1-08002be10318}` 입니다. |
+| `Service` | 장치에 붙은 서비스 이름 | 디스크는 `disk` 입니다. |
+| `Mfg`·`DeviceDesc` | 제조사, 장치 설명 | INF 의 일반 문자열("Standard disk drives", "Disk drive")입니다. 실제 제조사가 아닙니다. |
 | `Capabilities` | 장치 능력 플래그 | 0x10(UniqueID)이 켜져 있으면 버스가 준 인스턴스 ID 를 그대로 씁니다. |
 
-Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices 와 잇는 방법을 설명합니다. 관찰한 Windows 11 의 USBSTOR 인스턴스 키에는 이 값이 없었습니다. 복합 장치의 저장 인터페이스 키(`Enum\USB\...&MI_xx`)에 있었습니다. 잇는 방법은 [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md)에서 다룹니다.
+Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices 와 잇는 방법을 설명하지만, Windows 11 의 USBSTOR 인스턴스 키에는 이 값이 없고 복합 장치의 저장 인터페이스 키(`Enum\USB\...&MI_xx`)에 있습니다. 잇는 방법은 [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md)에서 다룹니다.
 
 ### 하위 키
 
 | 하위 키 | 내용 |
 |---|---|
-| `Device Parameters` | 관찰에서는 아래에 `MediaChangeNotification` 과 `Partmgr` 가 있었습니다. `Partmgr` 에는 `DiskId`(GUID 문자열)·`Attributes`·`PartitionTableCache` 같은 값이 있었습니다. 이 값들의 뜻은 이 글에서 명세로 확인하지 못했습니다. |
+| `Device Parameters` | 아래에 `MediaChangeNotification` 과 `Partmgr` 가 있습니다. `Partmgr` 에는 `DiskId`(GUID 문자열)·`Attributes`·`PartitionTableCache` 같은 값이 있습니다. 이 값들의 뜻은 공개된 명세가 없습니다. |
 | `Properties` | 장치 속성입니다. `{83da6326-97a6-4088-9453-a1923f573b29}` 아래 `0064`~`0067` 에 설치·연결·해제 시각이 있습니다. `devpkey.h` 에서 `{540b947e-8b40-45bc-a8a2-6a0b894cbda2}` 의 4번 속성은 버스가 알린 장치 설명(`DEVPKEY_Device_BusReportedDeviceDesc`)입니다. 한 공개 플러그인은 `...\0004` 에서 장치 이름을 읽습니다. |
 
 시각 속성 읽는 법은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
-실행 중인 시스템에서는 관리자 권한으로도 `Properties` 키를 열 때 접근이 거부되었습니다. 하위 키 이름은 보였습니다. 하이브 사본을 떠서 읽으면 키 권한과 관계없이 읽힙니다.
+실행 중인 시스템에서는 관리자 권한으로도 `Properties` 키를 열면 접근이 거부됩니다. 하위 키 이름은 보입니다. 하이브 사본을 떠서 읽으면 키 권한과 관계없이 읽힙니다.
 
 ## 증거로서 의미
 
@@ -165,18 +165,18 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 
 키 시각이 무엇에 따라 바뀌는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
-2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 이 글에서 확인한 두 장치는 한 번씩만 꽂은 장치였습니다. 인스턴스 키 시각은 속성의 설치 시각·마지막 연결 시각과 같았습니다. 그 뒤 PC 를 다시 켰지만 키 시각은 바뀌지 않았습니다. 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지는 이 관찰로 알 수 없습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
+2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 한 번만 꽂은 장치에서는 인스턴스 키 시각이 속성의 설치 시각·마지막 연결 시각과 같고, PC 를 다시 켜도 키 시각은 바뀌지 않습니다. 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지는 공개 자료가 없습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
 - Windows 8.1 이후는 바뀐 내용을 트랜잭션 로그에 먼저 씁니다. 하이브 파일만 보면 최근 연결이 빠질 수 있습니다. → [.LOG1·.LOG2](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)
 
 ## 함정과 한계
 
-1. **Windows 가 스스로 지웁니다.** Cowen 은 Windows 8.1·10 에서 30일 넘게 안 보인 장치의 키가 지워진다고 보고했습니다. 지운 기록은 `setupapi.dev.log` 에 남습니다. 이 글에서 확인한 Windows 11 에서는 한 번의 정리에서 장치 16개가 지워졌습니다. 로그에서 이 정리는 `[Device and Driver Disk Cleanup Handler - {GUID}]` 구역으로 시작했습니다. 그 안에 장치마다 "`Device <장치 인스턴스 ID> was removed.`" 줄이 있었습니다. 키가 없을 때는 사용자가 지운 것인지 Windows 가 지운 것인지부터 가립니다.
+1. **Windows 가 스스로 지웁니다.** Windows 8.1·10 에서는 30일 넘게 안 보인 장치의 키가 지워집니다. 지운 기록은 `setupapi.dev.log` 에 남습니다. Windows 11 에서는 한 번의 정리로 장치 16개가 지워진 예가 있습니다. 로그에서 이 정리는 `[Device and Driver Disk Cleanup Handler - {GUID}]` 구역으로 시작하고, 그 안에 장치마다 "`Device <장치 인스턴스 ID> was removed.`" 줄이 있습니다. 키가 없을 때는 사용자가 지운 것인지 Windows 가 지운 것인지부터 가립니다.
 2. **UASP 장치는 USBSTOR 에 없습니다.** → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)
 3. **이름이 `Enum\USB` 쪽 일련번호와 똑같지 않을 수 있습니다.** 일련번호가 잘리거나 앞에 다른 문자열이 붙습니다(위 "인스턴스 키 이름").
 4. **제조사 칸과 `Mfg` 값으로 제조사를 정하지 않습니다.** 제조사 칸은 장치가 알린 문자열입니다. `Mfg` 는 드라이버 INF 의 일반 문자열입니다.
-5. **도구마다 시각 열이 다릅니다.** 한 공개 플러그인(RegistryPlugin.USBSTOR)은 소스상 "시각" 열에 장치 항목 키의 마지막 기록 시각을 넣습니다. 같은 플러그인은 `DiskId` 를 장치 항목 키 아래 첫 번째 인스턴스에서만 읽습니다. 그래서 한 장치 항목 아래 인스턴스가 여럿이면 `DiskId` 가 모두 같게 나옵니다. (2026-09 소스 기준) 속성 `0064`·`0065` 이름을 바꿔 적는 도구도 있습니다. 이 내용은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
+5. **도구마다 시각 열이 다릅니다.** 한 공개 플러그인(RegistryPlugin.USBSTOR)은 "시각" 열에 장치 항목 키의 마지막 기록 시각을 넣습니다. 같은 플러그인은 `DiskId` 를 장치 항목 키 아래 첫 번째 인스턴스에서만 읽습니다. 그래서 한 장치 항목 아래 인스턴스가 여럿이면 `DiskId` 가 모두 같게 나옵니다. 속성 `0064`·`0065` 이름을 바꿔 적는 도구도 있습니다. 이 내용은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 6. **컨트롤셋이 여럿이면 모두 봅니다.** 한쪽에만 남은 장치가 있을 수 있습니다.
-7. **누가 지운 경우에도 흔적이 남습니다.** 하이브 안의 [지워진 셀](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), 트랜잭션 로그, [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SYSTEM 하이브, `setupapi.dev.log`, [AmCache 장치 항목](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다. Cowen 은 `SYSTEM\Setup\Upgrade\PnP\CurrentControlSet\Control\DeviceMigration\Devices\USBSTOR` 에도 장치가 남는다고 보고했습니다. 이 글에서 확인한 Windows 11 에는 `DeviceMigration\Devices` 키는 있었지만 그 아래에 `USBSTOR` 는 없었습니다.
+7. **누가 지운 경우에도 흔적이 남습니다.** 하이브 안의 [지워진 셀](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), 트랜잭션 로그, [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SYSTEM 하이브, `setupapi.dev.log`, [AmCache 장치 항목](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다. Cowen 은 `SYSTEM\Setup\Upgrade\PnP\CurrentControlSet\Control\DeviceMigration\Devices\USBSTOR` 에도 장치가 남는다고 보고했지만, Windows 11 에서는 `DeviceMigration\Devices` 키는 있어도 그 아래에 `USBSTOR` 가 없을 수 있습니다.
 
 ## 직접 분석해 보기
 

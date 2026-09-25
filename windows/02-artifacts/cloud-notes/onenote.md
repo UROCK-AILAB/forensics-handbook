@@ -12,37 +12,35 @@ nav_order: 2310
 
 원노트는 전자 필기장을 구역마다 `.one` 파일 하나로 저장하고, 필기장 목차를 `.onetoc2` 파일로 저장합니다. 두 파일 모두 맨 앞 1,024바이트가 파일 머리이며, 여기서 파일 종류, 소속 필기장, 바뀐 횟수를 알 수 있습니다. 파일 안의 속성에서는 제목·작성자·시각·첨부 파일을 꺼낼 수 있습니다. 동기화한 필기장은 로컬 백업 폴더와 캐시 폴더에도 흔적이 남습니다. 스토어 앱 원노트는 앱 폴더의 SQLite DB 에 검색 색인과 최근 필기장 주소를 남깁니다.
 
-이 페이지에서 "관찰" 이라고 적은 것은 Windows 11(빌드 26200) PC 한 대에서 폴더와 레지스트리 키가 있는지만 본 결과입니다. 한 대의 결과이므로 모든 PC 에 맞는다고 보장하지 못합니다.
-
 ## 무엇을 기록하나 · 왜 생기나
 
-원노트 파일은 개정 저장 파일 (revision store file) 형식입니다. 구역 (section) 파일은 `.one` 이고, 목차 (table of contents) 파일은 `.onetoc2` 입니다. (MS-ONESTORE)
+원노트 파일은 개정 저장 파일 (revision store file) 형식입니다. 구역 (section) 파일은 `.one` 이고, 목차 (table of contents) 파일은 `.onetoc2` 입니다[1].
 
-Microsoft 는 이 형식을 공개 명세 두 개로 설명합니다. [MS-ONESTORE] 는 저장 구조를, [MS-ONE] 은 원노트 내용 구조를 다룹니다. (MS-ONESTORE)
+이 형식의 공개 명세는 두 개입니다. [MS-ONESTORE] 는 저장 구조를, [MS-ONE] 은 원노트 내용 구조를 다룹니다[1].
 
 원노트는 쓰는 방식에 따라 흔적을 여러 곳에 남깁니다.
 
-- **내 PC 에 저장한 전자 필기장 (notebook)**: 구역 하나가 `.one` 파일 하나입니다. (Obsidian 도움말)
-- **동기화한 전자 필기장**: 원노트가 로컬 백업 폴더에 사본을 둡니다. (Obsidian 도움말)
-- **캐시**: 원노트가 전자 필기장·구역·페이지를 받아 캐시 폴더에 둡니다. 페이지에 넣은 파일도 캐시 폴더에 `.bin` 파일로 있습니다. (OneMore)
-- **스토어 앱 원노트**: 앱 폴더에 검색 색인, 최근 본 필기장 주소, 태그, 최근 검색어 DB 가 있습니다. (KAPE 대상 파일)
+- **내 PC 에 저장한 전자 필기장 (notebook)**: 구역 하나가 `.one` 파일 하나입니다[4].
+- **동기화한 전자 필기장**: 원노트가 로컬 백업 폴더에 사본을 둡니다[4].
+- **캐시**: 원노트가 전자 필기장·구역·페이지를 받아 캐시 폴더에 둡니다. 페이지에 넣은 파일도 캐시 폴더에 `.bin` 파일로 있습니다[5].
+- **스토어 앱 원노트**: 앱 폴더에 검색 색인, 최근 본 필기장 주소, 태그, 최근 검색어 DB 가 있습니다[3].
 
 ## 위치와 버전별 차이
 
-참고한 자료는 Windows 버전이 아니라 원노트 종류로 위치를 나눕니다. Windows 버전별 차이는 확인하지 못했습니다.
+아래 위치는 원노트 종류별로 나눈 것입니다. Windows 버전에 따라 다를 수 있어 검체에서 확인합니다.
 
 ### 데스크톱 원노트 (Microsoft 365·2016 계열)
 
 | 무엇 | 위치 | 근거 |
 |---|---|---|
-| 내 PC 에 저장한 전자 필기장 | `Documents\OneNote Notebooks\` 아래. 구역 하나가 `.one` 하나 | Obsidian 도움말 |
-| 동기화한 필기장의 백업 | `%LOCALAPPDATA%\Microsoft\OneNote\16.0\Backup` | Obsidian 도움말 |
-| 캐시 | `%LOCALAPPDATA%\Microsoft\OneNote\16.0\cache` | OneMore |
-| 페이지에 넣은 파일 | 캐시 폴더의 `000007LE.bin`, `00000065.bin` 같은 이름의 `.bin` 파일 | OneMore |
+| 내 PC 에 저장한 전자 필기장 | `Documents\OneNote Notebooks\` 아래. 구역 하나가 `.one` 하나 | [4] |
+| 동기화한 필기장의 백업 | `%LOCALAPPDATA%\Microsoft\OneNote\16.0\Backup` | [4] |
+| 캐시 | `%LOCALAPPDATA%\Microsoft\OneNote\16.0\cache` | [5] |
+| 페이지에 넣은 파일 | 캐시 폴더의 `000007LE.bin`, `00000065.bin` 같은 이름의 `.bin` 파일 | [5] |
 
-- 데스크톱 원노트의 위치는 공식 문서로 확인하지 못했습니다. 위 표는 다른 프로그램의 도움말과 소스에서 가져온 것입니다.
-- 캐시를 지우고 원노트를 열면 원노트가 전자 필기장·구역·페이지를 다시 받아 캐시를 새로 만듭니다. (OneMore)
-- 원노트 API 가 돌려주는 페이지 XML 에는 첨부 파일마다 `InsertedFile` 요소가 있습니다. 이 요소에 세 값이 적힙니다. (OneMore)
+- 위 위치는 공식 문서가 아니라 다른 프로그램의 도움말과 소스 코드에 나오는 경로이므로, 증거 PC 에서 실제 폴더를 확인합니다.
+- 캐시를 지우고 원노트를 열면 원노트가 전자 필기장·구역·페이지를 다시 받아 캐시를 새로 만듭니다[5].
+- 원노트 API 가 돌려주는 페이지 XML 에는 첨부 파일마다 `InsertedFile` 요소가 있습니다. 이 요소에 세 값이 적힙니다[5].
 
 | 속성 | 뜻 |
 |---|---|
@@ -50,47 +48,47 @@ Microsoft 는 이 형식을 공개 명세 두 개로 설명합니다. [MS-ONESTO
 | `pathSource` | 파일을 넣을 때 원래 파일이 있던 경로 |
 | `preferredName` | 원래 파일 이름 |
 
-`pathSource` 는 첨부한 원본 파일이 어디 있었는지 보여 줍니다. OneMore 의 예시에는 OneDrive·SkyDrive 경로가 나옵니다. (OneMore)
+`pathSource` 는 첨부한 원본 파일이 어디 있었는지 보여 줍니다. OneDrive·SkyDrive 경로가 들어간 예가 있습니다[5].
 
 ### 원노트 for Windows 10 (스토어 앱)
 
-앱 폴더는 이렇습니다. (KAPE 대상 파일)
+앱 폴더는 이렇습니다[3].
 
 `C:\Users\<사용자>\AppData\Local\Packages\Microsoft.Office.OneNote_8wekyb3d8bbwe\LocalState\AppData\Local\OneNote\`
 
-KAPE 수집 대상 파일(작성자 Andrew Rathbun, 버전 1.0)은 이 폴더 아래에서 다섯 가지를 잡습니다. 작성자는 원노트가 많은 정보를 SQLite DB 에 둔다고 적었습니다. 다만 `RecentNotebooks_SeenURLs` 는 "파일" 이라고만 적었습니다. (KAPE 대상 파일)
+KAPE 수집 대상 `MicrosoftOneNote.tkape` 는 이 폴더 아래에서 다섯 가지를 모읍니다[3]. 원노트는 많은 정보를 SQLite DB 에 둡니다. 다만 `RecentNotebooks_SeenURLs` 는 "파일" 로만 설명됩니다[3].
 
-| 항목 | 작성자 설명 |
+| 항목 | 설명 |
 |---|---|
 | `OneNote\*\FullTextSearchIndex` | 전자 필기장마다 DB 가 하나씩 있습니다. 필기장 글 전체가 들어 있습니다 |
-| `OneNote\Notifications\RecentNotebooks_SeenURLs` | 최근 본 전자 필기장을 적는 파일로 보입니다. 작성자 PC 에서는 외부와 공유한 필기장 두 개의 URL 이 보였습니다 |
+| `OneNote\Notifications\RecentNotebooks_SeenURLs` | 최근 본 전자 필기장을 적는 파일로 보입니다. 외부와 공유한 필기장 URL 이 남은 예가 있습니다 |
 | `OneNote\16.0\AccessibilityCheckerIndex` | 필기장 동기화 오류(페이지 충돌) 이력으로 보입니다 |
 | `OneNote\16.0\NoteTags\*LiveId.db` | 사용자가 정한 태그입니다 |
-| `OneNote\16.0\RecentSearches\RecentSearches.db` | 최근 검색어입니다. 작성자 PC 에서는 비어 있었습니다 |
+| `OneNote\16.0\RecentSearches\RecentSearches.db` | 최근 검색어입니다. 비어 있을 수 있습니다 |
 
-- 위 설명은 모두 작성자가 자기 PC 에서 본 것입니다. 작성자는 여러 항목에 "~로 보인다 (appears to)" 라고 적었고, 공식 문서로 확인한 내용도 아닙니다.
-- 각 DB 의 표와 칸 이름은 확인하지 못했습니다. DB 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
-- 이 KAPE 대상에는 데스크톱 원노트의 `Backup`·`cache` 경로가 없습니다. (KAPE 대상 파일)
+- 위 설명은 KAPE 대상 작성자 한 사람이 자기 PC 에서 본 것이고, 여러 항목이 "~로 보인다 (appears to)" 수준의 짐작입니다[3]. 공식 문서에 나오는 내용이 아니므로 검체에서 확인합니다.
+- 각 DB 의 표와 칸 이름은 검체에서 확인합니다. DB 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 이 KAPE 대상에는 데스크톱 원노트의 `Backup`·`cache` 경로가 없습니다[3].
 - 스토어 앱 폴더 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 
-### 관찰: 설치만 된 PC
+### 설치만 된 PC
 
-관찰한 PC 에는 `C:\Program Files\Microsoft Office\root\Office16\` 에 `ONENOTE.EXE`, `ONENOTEM.EXE`, `onenotecapture.exe` 가 있었습니다. 클릭 투 런 설치였습니다.
+클릭 투 런으로 설치한 원노트는 `C:\Program Files\Microsoft Office\root\Office16\` 에 `ONENOTE.EXE`, `ONENOTEM.EXE`, `onenotecapture.exe` 를 둡니다.
 
-그런데 그 사용자 프로필에는 아래 네 가지가 모두 없었습니다.
+프로그램이 깔려 있어도 원노트를 한 번도 열지 않은 계정의 프로필에는 아래 네 가지가 모두 없을 수 있습니다(Windows 11 빌드 26200 기준).
 
 - `%LOCALAPPDATA%\Microsoft\OneNote` 폴더
 - `%APPDATA%\Microsoft\OneNote` 폴더
 - `HKCU\Software\Microsoft\Office\16.0\OneNote` 키
 - `Packages\Microsoft.Office.OneNote_*` 폴더
 
-원노트를 한 번도 열지 않은 계정으로 보입니다(추정). 프로그램이 깔려 있다는 것만으로 사용 흔적이 생기지는 않습니다. 같은 PC 에는 "OneNote (Desktop)" 가상 프린터(포트 `nul:`)도 있었습니다.
+프로그램이 깔려 있다는 것만으로 사용 흔적이 생기지는 않습니다. 이런 PC 에도 "OneNote (Desktop)" 가상 프린터(포트 `nul:`)는 있을 수 있습니다.
 
 ## 구조
 
 ### 파일 머리 (Header)
 
-파일 머리는 파일 맨 앞에 있어야 합니다. `.one` 과 `.onetoc2` 는 같은 파일 머리 구조를 씁니다. (MS-ONESTORE)
+파일 머리는 파일 맨 앞에 있어야 합니다. `.one` 과 `.onetoc2` 는 같은 파일 머리 구조를 씁니다[1].
 
 아래 칸 이름과 크기는 명세를 따릅니다. 오프셋은 명세의 칸 크기를 차례로 더해 계산한 값입니다.
 
@@ -136,15 +134,15 @@ KAPE 수집 대상 파일(작성자 Andrew Rathbun, 버전 1.0)은 이 폴더 �
 | 0x128 | rgbReserved | 728 | 0. 무시 |
 
 - 파일 머리는 0x128 + 728(0x2D8) = 0x400, 곧 1,024바이트입니다.
-- `fcr` 로 시작하는 칸은 파일 조각 참조 (file chunk reference) 입니다. 파일 안의 다른 영역을 가리킵니다. 8바이트짜리와 12바이트짜리가 있습니다. (MS-ONESTORE)
-- fcrZero·fcrNil 은 조각 참조의 특수값입니다. 두 값의 실제 바이트 모양은 확인하지 못했습니다.
-- **guidAncestor** 는 목차 파일(`.onetoc2`)의 guidFile 값입니다. `.one` 이면 같은 폴더의 목차 파일을 가리킵니다. `.onetoc2` 면 상위 폴더의 목차 파일을 가리킵니다. 값이 전부 0 이면 가리키는 목차 파일이 없습니다. (MS-ONESTORE)
-- **crcName** 은 파일 이름으로 계산합니다. 이름은 확장자를 포함하고 끝에 널 문자 하나를 붙인 유니코드 문자열입니다. 파일 형식과 관계없이 `.one` 용 CRC 알고리즘을 씁니다. (MS-ONESTORE)
-- **bn 으로 시작하는 네 칸**은 명세가 "무시해도 된다 (SHOULD be ignored)" 고 적었습니다. (MS-ONESTORE)
+- `fcr` 로 시작하는 칸은 파일 조각 참조 (file chunk reference) 입니다. 파일 안의 다른 영역을 가리킵니다. 8바이트짜리와 12바이트짜리가 있습니다[1].
+- fcrZero·fcrNil 은 조각 참조의 특수값입니다.
+- **guidAncestor** 는 목차 파일(`.onetoc2`)의 guidFile 값입니다. `.one` 이면 같은 폴더의 목차 파일을 가리킵니다. `.onetoc2` 면 상위 폴더의 목차 파일을 가리킵니다. 값이 전부 0 이면 가리키는 목차 파일이 없습니다[1].
+- **crcName** 은 파일 이름으로 계산합니다. 이름은 확장자를 포함하고 끝에 널 문자 하나를 붙인 유니코드 문자열입니다. 파일 형식과 관계없이 `.one` 용 CRC 알고리즘을 씁니다[1].
+- **bn 으로 시작하는 네 칸**은 읽을 때 무시해도 되는 칸입니다[1].
 
 ### 첫 16바이트로 가리기
 
-GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 순서가 뒤집힙니다(리틀 엔디언). pyOneNote 도 GUID 를 이 순서로 읽습니다. (pyOneNote) GUID 바이트 순서는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 순서가 뒤집힙니다(리틀 엔디언)[2]. GUID 바이트 순서는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 명세의 GUID 를 이 순서로 바꾸면 파일에 적히는 바이트가 나옵니다.
 
@@ -158,7 +156,7 @@ GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 �
 
 ### 페이지 속성 (pyOneNote 기준)
 
-아래는 pyOneNote 코드에 있는 속성 ID 와 이름입니다. 명세로 대조하지 않았습니다. "이름 풀이" 는 영어 이름을 옮긴 것입니다. (pyOneNote)
+아래 속성 ID 와 이름은 pyOneNote 코드에 들어 있는 값입니다[2]. 보고서에 쓸 때는 [MS-ONE] 명세와 대조합니다. "이름 풀이" 는 영어 이름을 옮긴 것입니다.
 
 | 속성 ID | 이름 | 이름 풀이 |
 |---|---|---|
@@ -173,7 +171,7 @@ GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 �
 
 ### 첨부 파일
 
-pyOneNote 는 `.one` 에서 페이지에 넣은 파일을 꺼냅니다. 관련 파일 노드 (file node) 는 세 가지입니다. (pyOneNote)
+페이지에 넣은 파일은 `.one` 에서 꺼낼 수 있습니다. 관련 파일 노드 (file node) 는 세 가지입니다[2].
 
 | 파일 노드 | ID |
 |---|---|
@@ -181,8 +179,8 @@ pyOneNote 는 `.one` 에서 페이지에 넣은 파일을 꺼냅니다. 관련 �
 | FileDataStoreObjectReferenceFND | 0x094 |
 | ObjectDeclarationFileData3RefCountFND | 0x072 |
 
-- ObjectDeclarationFileData3RefCountFND 에는 파일 데이터 참조 문자열(FileDataReference)과 확장자(Extension)가 들어 있습니다. 둘 다 UTF-16 문자열입니다. (pyOneNote)
-- 파일 내용은 FileDataStoreObject 에 들어 있습니다. pyOneNote 는 이 구조를 아래처럼 읽습니다. 오프셋은 크기를 더해 계산한 값입니다. (pyOneNote)
+- ObjectDeclarationFileData3RefCountFND 에는 파일 데이터 참조 문자열(FileDataReference)과 확장자(Extension)가 들어 있습니다. 둘 다 UTF-16 문자열입니다[2].
+- 파일 내용은 FileDataStoreObject 에 들어 있고, 구조는 아래와 같습니다[2]. 오프셋은 크기를 더해 계산한 값입니다.
 
 | 오프셋 | 칸 | 크기 | 뜻 |
 |---|---|---|---|
@@ -193,51 +191,51 @@ pyOneNote 는 `.one` 에서 페이지에 넣은 파일을 꺼냅니다. 관련 �
 | 0x24 | 파일 데이터 | cbLength | 넣은 파일의 내용 |
 | 영역 끝 − 16 | guidFooter | 16 | 꼬리 GUID. 조각 참조가 가리키는 영역의 마지막 16바이트 |
 
-guidHeader·guidFooter 의 실제 GUID 값은 확인하지 못했습니다.
+guidHeader·guidFooter 의 실제 GUID 값은 검체의 첨부 파일에서 읽어 둡니다.
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
 - **원노트 파일이라는 것.** 첫 16바이트로 구역 파일인지 목차 파일인지 가립니다. 확장자와 관계없습니다.
-- **구역이 속한 전자 필기장.** `.one` 의 guidAncestor 를 `.onetoc2` 의 guidFile 과 맞추면 어느 필기장의 구역인지 이을 수 있습니다. (MS-ONESTORE)
-- **파일이 바뀐 횟수.** nFileVersionGeneration 은 파일이 바뀐 횟수입니다. (MS-ONESTORE)
-- **페이지의 내용 속성.** 제목 문자열, 작성자 문자열, 시각 값을 꺼낼 수 있습니다. (pyOneNote)
-- **첨부 파일.** 파일 이름과 내용을 `.one` 에서 꺼낼 수 있습니다. pyOneNote 의 속성 목록에는 SourceFilepath 도 있습니다. (pyOneNote)
-- **첨부 파일의 원래 위치.** 원노트 API 의 페이지 XML 에서 `pathSource` 는 파일을 넣을 때 원본이 있던 경로입니다. 그 경로가 OneDrive 같은 동기화 폴더일 수도 있습니다. (OneMore)
-- **동기화 필기장의 로컬 사본.** 데스크톱 원노트는 백업 폴더와 캐시 폴더에 사본을 남길 수 있습니다. 서버에서 지운 필기장이라도 로컬 사본을 찾아볼 곳이 됩니다. (Obsidian 도움말, OneMore)
-- **스토어 앱 원노트의 사용 흔적.** 최근 본 필기장 URL, 필기장 글 전체가 든 검색 색인, 태그, 최근 검색어가 남을 수 있습니다. 모두 KAPE 대상 작성자의 관찰입니다. (KAPE 대상 파일)
+- **구역이 속한 전자 필기장.** `.one` 의 guidAncestor 를 `.onetoc2` 의 guidFile 과 맞추면 어느 필기장의 구역인지 이을 수 있습니다[1].
+- **파일이 바뀐 횟수.** nFileVersionGeneration 은 파일이 바뀐 횟수입니다[1].
+- **페이지의 내용 속성.** 제목 문자열, 작성자 문자열, 시각 값을 꺼낼 수 있습니다[2].
+- **첨부 파일.** 파일 이름과 내용을 `.one` 에서 꺼낼 수 있고, 원래 파일 경로를 담는 SourceFilepath 속성도 있습니다[2].
+- **첨부 파일의 원래 위치.** 원노트 API 의 페이지 XML 에서 `pathSource` 는 파일을 넣을 때 원본이 있던 경로입니다. 그 경로가 OneDrive 같은 동기화 폴더일 수도 있습니다[5].
+- **동기화 필기장의 로컬 사본.** 데스크톱 원노트는 백업 폴더와 캐시 폴더에 사본을 남길 수 있습니다. 서버에서 지운 필기장이라도 로컬 사본을 찾아볼 곳이 됩니다[4][5].
+- **스토어 앱 원노트의 사용 흔적.** 최근 본 필기장 URL, 필기장 글 전체가 든 검색 색인, 태그, 최근 검색어가 남을 수 있습니다[3].
 - **계정.** 위치가 모두 사용자 프로필 아래이므로 어느 계정의 원노트인지 알 수 있습니다.
 
 ### 증명하지 못하는 것
 
 - **누가 썼는지.** Author 는 원노트에 설정한 이름 문자열입니다. 계정과 사람은 다를 수 있습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
-- **프로그램을 썼다는 것.** 관찰한 PC 에는 원노트 실행 파일이 있었지만 프로필에 흔적이 하나도 없었습니다. 설치 기록만으로 사용을 말할 수 없습니다.
-- **파일 머리로 본 시각.** 파일 머리에는 날짜·시각 칸이 없습니다. 바뀐 횟수와 바뀔 때마다 새로 생기는 GUID 만 있습니다. (MS-ONESTORE)
-- **파일을 만든 프로그램의 버전.** bn 칸 네 개에 빌드 번호가 적힙니다. 하지만 명세는 이 칸을 무시해도 된다고 적었습니다. 버전 추정에 쓸 수 있는지는 확인하지 못했습니다.
+- **프로그램을 썼다는 것.** 원노트 실행 파일이 있어도 프로필에 흔적이 하나도 없을 수 있습니다. 설치 기록만으로 사용을 말할 수 없습니다.
+- **파일 머리로 본 시각.** 파일 머리에는 날짜·시각 칸이 없습니다. 바뀐 횟수와 바뀔 때마다 새로 생기는 GUID 만 있습니다[1].
+- **파일을 만든 프로그램의 버전.** bn 칸 네 개에 빌드 번호가 적힙니다. 하지만 명세상 무시해도 되는 칸이고[1], 버전 추정에 쓸 수 있는지는 알려져 있지 않습니다.
 - **사용자가 그 페이지를 열어 봤다는 것.** 원노트는 캐시를 다시 받아 새로 만들 수 있습니다. 캐시에 페이지나 첨부 파일이 있다는 것만으로 사용자가 그 페이지를 봤다고 말하기 어렵습니다.
 - **첨부 원본이 지금도 그 경로에 있다는 것.** `pathSource` 는 넣을 때의 경로입니다.
-- **`.one` 안의 SourceFilepath 가 API 의 `pathSource` 와 같은 값이라는 것.** 두 값이 같은 값인지는 확인하지 못했습니다.
+- **`.one` 안의 SourceFilepath 가 API 의 `pathSource` 와 같은 값이라는 것.** 두 값이 같은 값인지는 알려져 있지 않습니다.
 
 보고서에는 "피의자가 이 문서를 원노트에 붙였다" 가 아니라 이렇게 씁니다. "A 계정 프로필 아래 구역 파일 `X.one` 에 이름이 `Y` 인 첨부 파일이 들어 있다. 같은 첨부 파일의 SourceFilepath 속성 값은 `Z` 다. 값은 pyOneNote 로 읽었고 헥스로 확인했다." X·Y·Z 는 설명을 위한 자리입니다.
 
 ## 시각 해석
 
-pyOneNote 는 시각 속성을 값 길이에 따라 두 가지로 풉니다. (pyOneNote)
+시각 속성은 값 길이에 따라 두 가지 형식으로 풉니다[2].
 
 | 값 길이 | 형식 | 기준 시각 | 단위 | pyOneNote 의 변환 |
 |---|---|---|---|---|
 | 8바이트 | FILETIME | 1601-01-01 | 100ns | 초로 바꾼 뒤 11644473600 을 빼 Unix 시각으로 만듭니다 |
 | 4바이트 | Time32 | 1980-01-01 00:00:00 | 초 | 1980-01-01 부터 초를 더합니다 |
 
-- pyOneNote 는 속성 이름에 `time` 이 든 속성만 시각으로 풉니다. TopologyCreationTimeStamp, CreationTimeStamp, LastModifiedTimeStamp, LastModifiedTime 이 여기에 듭니다. NoteTagCreated, NoteTagCompleted, TaskTagDueDate 는 이름에 `time` 이 없어서 pyOneNote 가 시각으로 풀지 않습니다. 이 값들이 시각인지는 확인하지 못했습니다. (pyOneNote)
-- 어느 속성이 몇 바이트인지는 명세로 확인하지 못했습니다. 값 길이를 보고 형식을 가립니다.
+- pyOneNote 는 속성 이름에 `time` 이 든 속성만 시각으로 풉니다. TopologyCreationTimeStamp, CreationTimeStamp, LastModifiedTimeStamp, LastModifiedTime 이 여기에 듭니다. NoteTagCreated, NoteTagCompleted, TaskTagDueDate 는 이름에 `time` 이 없어서 pyOneNote 가 시각으로 풀지 않습니다[2]. 이 값들이 시각인지는 알려져 있지 않으므로 값 길이를 보고 따로 풀어 봅니다.
+- 어느 속성이 몇 바이트인지는 값 길이를 보고 가립니다.
 - Time32 는 초 단위이고 FILETIME 은 100ns 단위라서 같은 사건이라도 두 값의 정밀도가 다릅니다. 두 값이 초 아래에서 어긋나도 이상한 일이 아닙니다.
-- Time32 의 기준이 UTC 인지는 명세로 확인하지 못했습니다. pyOneNote 코드 주석은 기준을 "1980-01-01 UTC" 라고 적었습니다. 하지만 계산할 때는 시간대를 붙이지 않습니다. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다.
+- Time32 의 기준 시간대는 검체로 확인합니다. pyOneNote 코드 주석은 기준을 "1980-01-01 UTC" 로 적었지만, 계산할 때는 시간대를 붙이지 않습니다[2]. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다.
 - FILETIME·Time32 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 속성 시각이 어떤 동작에서 바뀌는지는 참고한 자료로 확인하지 못했습니다.
+- 속성 시각이 어떤 동작에서 바뀌는지는 알려져 있지 않아, 실습처럼 시험해 확인합니다.
 
-파일 머리에는 시각이 없지만 순서를 알려 주는 칸이 있습니다. (MS-ONESTORE)
+파일 머리에는 시각이 없지만 순서를 알려 주는 칸이 있습니다[1].
 
 | 칸 | 언제 바뀌나 |
 |---|---|
@@ -251,15 +249,15 @@ guidFile 이 같은 두 파일을 찾았다면 nFileVersionGeneration 을 비교
 
 ## 함정과 한계
 
-- **데스크톱 원노트 위치는 공식 문서로 확인하지 못했습니다.** `Backup`·`cache` 경로는 다른 프로그램의 도움말과 소스에서 가져왔습니다. 증거 PC 에서 실제 폴더를 확인합니다.
-- **수집 도구의 대상 범위를 봅니다.** 앞에서 본 KAPE 대상은 스토어 앱 폴더만 잡습니다. 데스크톱 원노트의 `Backup`·`cache` 와 `Documents\OneNote Notebooks` 는 따로 수집합니다.
+- **데스크톱 원노트 위치는 공식 문서가 아닌 다른 프로그램의 자료에 기댑니다.** `Backup`·`cache` 경로는 다른 프로그램의 도움말과 소스 코드에 나오는 경로입니다[4][5]. 증거 PC 에서 실제 폴더를 확인합니다.
+- **수집 도구의 대상 범위를 봅니다.** KAPE 대상 `MicrosoftOneNote.tkape` 는 스토어 앱 폴더만 잡습니다. 데스크톱 원노트의 `Backup`·`cache` 와 `Documents\OneNote Notebooks` 는 따로 수집합니다.
 - **증거 PC 에서 원노트를 열지 않습니다.** 원노트는 캐시를 다시 받아 새로 만들 수 있습니다. 폴더를 먼저 복사합니다. 수집 순서는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 - **스토어 앱 DB 설명은 한 사람의 관찰입니다.** 필기장 글 전체가 검색 색인에 있다는 설명도 KAPE 대상 작성자의 관찰입니다. 표와 칸을 직접 열어 확인합니다.
-- **설치와 사용을 섞지 않습니다.** 관찰한 PC 처럼 원노트가 깔려 있어도 프로필에 흔적이 없을 수 있습니다.
-- **시각 형식이 두 가지입니다.** 4바이트 Time32 를 FILETIME 으로 풀거나 반대로 풀면 엉뚱한 날짜가 나옵니다. Time32 의 시간대 기준도 확인하지 못했습니다.
+- **설치와 사용을 섞지 않습니다.** 원노트가 깔려 있어도 프로필에 흔적이 없을 수 있습니다.
+- **시각 형식이 두 가지입니다.** 4바이트 Time32 를 FILETIME 으로 풀거나 반대로 풀면 엉뚱한 날짜가 나옵니다. Time32 의 시간대 기준도 검체로 확인합니다.
 - **bn 칸은 명세가 무시하라고 한 칸입니다.** 이 값으로 프로그램 버전을 단정하지 않습니다.
-- **crcName 과 cbExpectedFileLength 로 결론을 내지 않습니다.** 원노트 밖에서 이름을 바꾸면 crcName 이 안 맞을 것이라는 추론은 확인하지 못했습니다. cbExpectedFileLength 가 실제 크기와 다르면 잘린 파일일 것이라는 추론도 확인하지 못했습니다. 명세는 cbExpectedFileLength 가 파일 크기라고만 적습니다. 두 추론은 아래 실습에서 시험해 봅니다.
-- **이 페이지에서 확인하지 못한 곳이 있습니다.** 전자 필기장 목록을 담는 레지스트리 값, 필기장 안에서 지운 페이지를 보관하는 곳, 전자 필기장 내보내기 파일, 캐시 파일의 내부 형식은 확인하지 못했습니다. 조사에서 이 흔적이 필요하면 따로 확인합니다.
+- **crcName 과 cbExpectedFileLength 로 결론을 내지 않습니다.** 원노트 밖에서 이름을 바꾸면 crcName 이 안 맞을 것이라는 짐작과, cbExpectedFileLength 가 실제 크기와 다르면 잘린 파일일 것이라는 짐작은 검증된 것이 아닙니다. 명세에는 cbExpectedFileLength 가 파일 크기라는 정의만 있습니다[1]. 두 짐작은 아래 실습에서 시험해 봅니다.
+- **검체로 확인할 흔적이 더 있습니다.** 전자 필기장 목록을 담는 레지스트리 값, 필기장 안에서 지운 페이지를 보관하는 곳, 전자 필기장 내보내기 파일, 캐시 파일의 내부 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 직접 분석해 보기
 
@@ -293,13 +291,13 @@ guidFile 이 같은 두 파일을 찾았다면 nFileVersionGeneration 을 비교
 
 ### 공개 도구로 한 번
 
-공개 도구의 예로 DissectMalware 의 pyOneNote 가 있습니다. `.one` 을 파싱해 속성과 첨부 파일을 꺼내는 파이썬 코드입니다. (pyOneNote)
+공개 도구의 예로 DissectMalware 의 pyOneNote 가 있습니다. `.one` 을 파싱해 속성과 첨부 파일을 꺼내는 파이썬 코드입니다[2].
 
 - 도구가 낸 제목·작성자·시각을 헥스의 속성 값과 몇 개 맞춰 봅니다.
 - 시각은 도구가 8바이트와 4바이트 가운데 어느 형식으로 풀었는지 확인합니다.
 - 꺼낸 첨부 파일의 크기가 FileDataStoreObject 의 cbLength 와 같은지 봅니다.
 
-스토어 앱 원노트 폴더는 KAPE 의 `MicrosoftOneNote.tkape` 대상으로 수집할 수 있습니다. 이 대상은 데스크톱 원노트 경로를 잡지 않습니다. (KAPE 대상 파일) 수집한 DB 는 SQLite 도구로 엽니다.
+스토어 앱 원노트 폴더는 KAPE 의 `MicrosoftOneNote.tkape` 대상으로 수집할 수 있습니다. 이 대상은 데스크톱 원노트 경로를 잡지 않습니다[3]. 수집한 DB 는 SQLite 도구로 엽니다.
 
 차이가 나면 헥스로 돌아갑니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
@@ -314,13 +312,13 @@ guidFile 이 같은 두 파일을 찾았다면 nFileVersionGeneration 을 비교
 | [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) | 스토어 앱 원노트 DB 를 읽는 법을 봅니다 |
 | [마스터 파일 테이블](../filesystem/mft.md) | `.one`·`.onetoc2`·캐시 `.bin` 의 파일 시스템 시각을 봅니다 |
 | [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `.one` 이 남았는지 봅니다. nFileVersionGeneration 으로 순서를 가립니다 |
-| [인쇄 흔적](../external-devices/print-spooler-spl-shd.md) | 관찰한 PC 에는 원노트 가상 프린터가 있었습니다. 원노트로 보낸 인쇄가 남았는지 봅니다 |
+| [인쇄 흔적](../external-devices/print-spooler-spl-shd.md) | 원노트가 깔린 PC 에는 원노트 가상 프린터가 있을 수 있습니다. 원노트로 보낸 인쇄가 남았는지 봅니다 |
 
 첨부 파일의 출처를 따지는 흐름은 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 에서 다룹니다.
 
 ## 실습
 
-이 페이지에서는 원노트 파일이 든 공개 검체를 확인하지 못했습니다. Windows 가상 머신에 원노트를 설치해 직접 시험합니다. 시험 전에 원노트 종류와 버전을 적어 둡니다.
+Windows 가상 머신에 원노트를 설치해 직접 시험합니다. 시험 전에 원노트 종류와 버전을 적어 둡니다.
 
 1. 원노트를 설치만 하고 열지 않습니다. 사용자 프로필에 `Microsoft\OneNote` 폴더가 생겼습니까?
 2. 내 PC 에 전자 필기장 하나와 구역 두 개를 만듭니다. 각 파일의 첫 16바이트와 0x040~0x04F 값은 무엇입니까?

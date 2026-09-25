@@ -20,7 +20,7 @@ nav_order: 1740
 ## 위치와 버전별 차이
 
 - 위치는 프로필 본 폴더입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
-- 파일 이름과 암호 방식은 파이어폭스 버전을 따릅니다. 아래는 공개 도구 firepwd 의 설명에서 확인한 것입니다.
+- 파일 이름과 암호 방식은 파이어폭스 버전을 따릅니다[1].
 
 | 파이어폭스 판 | 로그인 파일 | 키 파일 |
 |---|---|---|
@@ -36,9 +36,9 @@ nav_order: 1740
 
 ### `logins.json`
 
-`logins.json` 은 텍스트 JSON 파일입니다. 공개 도구 firepwd 가 읽는 칸은 `hostname`, `encryptedUsername`, `encryptedPassword` 입니다. `hostname` 은 평문이라 어느 사이트에 로그인 정보를 저장했는지는 값을 풀지 않아도 알 수 있고, `encryptedUsername`·`encryptedPassword` 는 암호화한 값입니다.
+`logins.json` 은 텍스트 JSON 파일입니다. 로그인마다 `hostname`, `encryptedUsername`, `encryptedPassword` 칸이 있습니다[2]. `hostname` 은 평문이라 어느 사이트에 로그인 정보를 저장했는지는 값을 풀지 않아도 알 수 있고, `encryptedUsername`·`encryptedPassword` 는 암호화한 값입니다.
 
-그 밖의 칸(`httpRealm`, `formSubmitURL`, `timeCreated`, `timeLastUsed`, `timePasswordChanged`, `timesUsed` 등)과 시각 단위는 이번 조사에서 확인하지 못했습니다.
+그 밖의 칸(`httpRealm`, `formSubmitURL`, `timeCreated`, `timeLastUsed`, `timePasswordChanged`, `timesUsed` 등)과 시각 단위는 판마다 다를 수 있어 검체에서 확인합니다.
 
 ### `key4.db`
 
@@ -58,7 +58,7 @@ nav_order: 1740
 
 ### 쓰이는 ASN.1 OID
 
-`key4.db` 와 `logins.json` 의 암호화 값 안에는 어떤 방식을 썼는지 알려 주는 ASN.1 식별자 (OID) 가 들어 있습니다. firepwd 의 설명에서 확인한 값은 아래와 같습니다.
+`key4.db` 와 `logins.json` 의 암호화 값 안에는 어떤 방식을 썼는지 알려 주는 ASN.1 식별자 (OID) 가 들어 있습니다. 쓰이는 값은 아래와 같습니다[1].
 
 | OID | 뜻 |
 |---|---|
@@ -87,7 +87,7 @@ nav_order: 1740
 
 ## 시각 해석
 
-- `logins.json` 의 시각 칸(`timeCreated`·`timeLastUsed`·`timePasswordChanged`)은 1970년 기준 밀리초로 알려져 있습니다. 이번 조사에서 소스로 확인하지는 못했습니다. 검체에서 다른 아티팩트의 시각과 맞춰 확인합니다.
+- `logins.json` 의 시각 칸(`timeCreated`·`timeLastUsed`·`timePasswordChanged`)은 1970년 기준 밀리초로 알려져 있으므로, 검체에서 다른 아티팩트의 시각과 맞춰 확인합니다.
 - 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
@@ -96,7 +96,7 @@ nav_order: 1740
 - **`logins.json` 과 `key4.db` 는 짝입니다.** 값을 풀려면 두 파일이 같은 프로필의 것이어야 합니다. 한쪽만 수집하면 값을 풀 수 없습니다.
 - **기본 비밀번호가 걸려 있으면 그 비밀번호가 필요합니다.** 확인값이 빈 문자열로 풀리지 않으면 기본 비밀번호가 걸린 것입니다. 이때는 사이트 목록만 뽑을 수 있습니다. 암호를 다루는 절차는 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 를 참고합니다.
 - **키를 못 풀어도 할 수 있는 일이 많습니다.** `hostname` 이 평문이라 어느 사이트에 계정을 저장했는지 목록으로 뽑아 다른 흔적과 맞춰 볼 수 있습니다.
-- **Windows 계정 비밀번호 없이도 풀 수 있습니다.** 기본 비밀번호가 없으면 firepwd 는 `key4.db` 와 `logins.json` 두 파일만으로 값을 풉니다. 크롬 계열은 사용자 [DPAPI](../../../01-foundations/protection/data-protection-api/index.md) 로 키를 보호하므로 Windows 쪽 키가 필요한데, 두 방식을 섞어 생각하지 않습니다.
+- **Windows 계정 비밀번호 없이도 풀 수 있습니다.** 기본 비밀번호가 없으면 `key4.db` 와 `logins.json` 두 파일만으로 값을 풀 수 있습니다[1]. 크롬 계열은 사용자 [DPAPI](../../../01-foundations/protection/data-protection-api/index.md) 로 키를 보호하므로 Windows 쪽 키가 필요한데, 두 방식을 섞어 생각하지 않습니다.
 - **버전마다 암호 방식이 다릅니다.** `key4.db` 인지 `key3.db` 인지, 3DES 인지 AES-256 인지 먼저 확인합니다. 도구가 옛 방식만 알면 새 파일에서 실패합니다.
 - **지운 로그인은 `logins.json` 에서 사라집니다.** 옛 로그인을 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
 

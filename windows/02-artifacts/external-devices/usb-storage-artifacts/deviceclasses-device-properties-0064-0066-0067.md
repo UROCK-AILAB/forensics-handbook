@@ -42,7 +42,7 @@ USB 저장장치는 처음 꽂을 때 설치 과정을 거치므로 `0065` 는 �
 
 | 항목 | XP·Vista | 7 | 8 이후 (8.1·10·11) |
 |---|---|---|---|
-| `0064`·`0065` | 문서상 지원 버전 밖 (Microsoft 문서는 7 이상으로 적습니다) | 있음. `0064\00000000` 키의 `Data` 값 | 있음. `0064` 키의 기본값 `(Default)` |
+| `0064`·`0065` | 지원 버전 밖 (7 이상에서 지원) | 있음. `0064\00000000` 키의 `Data` 값 | 있음. `0064` 키의 기본값 `(Default)` |
 | `0066`·`0067` | 없음 | 없음 | 있음. 기본값 `(Default)` |
 | `DeviceClasses` 인터페이스 키 | 있음 | 있음 | 있음 |
 | 마지막 연결 시각을 구하는 주된 방법 | 여러 키의 마지막 기록 시각 | 여러 키의 마지막 기록 시각 | `0066` 값 |
@@ -88,10 +88,10 @@ Enum\USBSTOR\Disk&Ven_<제조사>&Prod_<제품>&Rev_<판>\<인스턴스 ID>
 
 ## 시각 해석
 
-- 네 값 모두 FILETIME 입니다. Microsoft 문서(`DEVPROP_TYPE_FILETIME` 설명)는 장치 속성의 시각을 UTC 로 두라고 권장합니다. RegRipper 같은 공개 파서도 UTC 로 풀어 보여 줍니다. 계산은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
+- 네 값 모두 FILETIME 입니다. 장치 속성의 시각은 UTC 로 두도록 권장돼 있습니다(`DEVPROP_TYPE_FILETIME`). RegRipper 같은 공개 파서도 UTC 로 풀어 보여 줍니다. 계산은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 - 시각은 그때의 시스템 시계에서 옵니다. 시계를 바꿔 두었다면 이 값도 틀린 시계를 따릅니다([시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)).
 
-Yogesh Khatri 는 Windows 8 에서 `0066`·`0067` 이 언제 바뀌는지 시험했습니다(2013). 결과는 다음과 같습니다.
+Yogesh Khatri 의 Windows 8 시험(2013)에서 `0066`·`0067` 은 다음처럼 바뀌었습니다.
 
 | 동작 | `0066` (마지막 연결) | `0067` (마지막 제거) |
 |---|---|---|
@@ -110,7 +110,7 @@ Yogesh Khatri 는 Windows 8 에서 `0066`·`0067` 이 언제 바뀌는지 시험
 2. **`0067` 이 없으면** 마지막 연결 뒤에 켜진 상태에서 뺀 기록이 없다는 뜻입니다. 수집 때 꽂혀 있었거나, 꽂은 채로 꺼졌을 수 있습니다. 마지막 종료 시각과 비교합니다([시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md)).
 3. **`0066` 이 부팅 시각과 거의 같으면** 사람이 꽂은 때가 아닐 수 있습니다. 장치를 꽂은 채로 켜거나 다시 시작한 경우입니다. 부팅 기록과 비교합니다([켜짐·꺼짐](../../event-logs/power-on-off-events.md)).
 
-`DeviceClasses` 키의 마지막 기록 시각은 뜻이 더 느슨합니다. Forensics Wiki 는 이 시각을 "마지막 연결 시각(마지막 부팅 동안의 첫 연결)" 으로 설명하는데, 이 설명은 XP 시절 자료입니다. 키의 마지막 기록 시각은 그 키에 무언가 바뀐 때일 뿐입니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)). 새 버전에서는 `0066` 을 먼저 보고, `DeviceClasses` 시각은 보조 단서로만 씁니다.
+`DeviceClasses` 키의 마지막 기록 시각은 뜻이 더 느슨합니다. XP 시절 자료에는 이 시각을 "마지막 연결 시각(마지막 부팅 동안의 첫 연결)" 으로 보는 해석이 있습니다. 키의 마지막 기록 시각은 그 키에 무언가 바뀐 때일 뿐입니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)). 새 버전에서는 `0066` 을 먼저 보고, `DeviceClasses` 시각은 보조 단서로만 씁니다.
 
 ## 함정과 한계
 

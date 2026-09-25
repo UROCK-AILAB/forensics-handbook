@@ -14,7 +14,7 @@ Windows 는 인쇄할 때 먼저 스풀 파일 (spool file) 을 만들고, 차�
 
 ### 스풀 파일이 생기고 쓰이는 순서
 
-Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 의 흐름입니다.
+로컬 인쇄 공급자 (Local Print Provider) 는 다음 순서로 작업을 처리합니다[1].
 
 1. 로컬 인쇄 공급자는 로컬 포트 모니터로 접근하는 프린터의 작업과 프린터를 관리합니다. Windows 2000 부터 이렇게 동작합니다.
 2. 앱은 GDI 를 불러 인쇄 작업을 만듭니다.
@@ -29,13 +29,13 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 
 ### SPL 과 SHD
 
-작업마다 인쇄 데이터를 담은 SPL 파일과 작업 정보를 담은 SHD 파일 (shadow file) 이 생긴다고 널리 설명하지만, 이 글에서는 이 설명을 명세로 확인하지 못했습니다. 형식 문서를 열었지만 내용이 비어 있었습니다. 파일 이름 규칙, SHD 안의 칸과 오프셋, Windows 판별 서명 값도 확인하지 못했으므로 이 페이지는 SHD 오프셋을 적지 않습니다.
+작업마다 인쇄 데이터를 담은 SPL 파일과 작업 정보를 담은 SHD 파일 (shadow file) 이 생긴다고 널리 설명합니다. 이 설명을 뒷받침하는 공개 명세는 없습니다. 파일 이름 규칙, SHD 안의 칸과 오프셋, Windows 판을 가르는 서명 값도 공개 자료가 없어 검체에서 확인해야 합니다.
 
-`PRINTER_INFO_2` 구조체의 `pDatatype` 은 "인쇄 작업을 기록할 때 쓰는 데이터 형식" 입니다. SPL 에 EMF 가 그대로 담기는지, 프린터로 보낼 RAW 데이터가 담기는지는 작업의 데이터 형식에 따릅니다. EMF 스풀 형식 명세(MS-EMFSPOOL)는 이 글에서 열어 보지 않았습니다.
+`PRINTER_INFO_2` 구조체의 `pDatatype` 은 "인쇄 작업을 기록할 때 쓰는 데이터 형식" 입니다[2]. SPL 에 EMF 가 그대로 담기는지, 프린터로 보낼 RAW 데이터가 담기는지는 작업의 데이터 형식에 따릅니다. EMF 스풀 형식은 MS-EMFSPOOL 명세에 정리돼 있습니다.
 
 ### 프린터 목록
 
-관찰 PC 에서는 프린터마다 SYSTEM 하이브 `Control\Print\Printers` 아래에 하위 키가 하나 있었고, 사용자 하이브(NTUSER.DAT)에도 프린터 이름과 기본 프린터가 남아 있었습니다.
+프린터마다 SYSTEM 하이브 `Control\Print\Printers` 아래에 하위 키가 하나 생깁니다. 사용자 하이브(NTUSER.DAT)에도 프린터 이름과 기본 프린터가 남습니다.
 
 ## 위치와 버전별 차이
 
@@ -43,14 +43,14 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 
 | 기록 | 위치 | 주로 보는 것 |
 |---|---|---|
-| 기본 스풀 폴더 | SYSTEM `ControlSet00X\Control\Print\Printers` 의 `DefaultSpoolDirectory` 값 | 관찰 PC: `C:\Windows\system32\spool\PRINTERS` |
+| 기본 스풀 폴더 | SYSTEM `ControlSet00X\Control\Print\Printers` 의 `DefaultSpoolDirectory` 값 | `C:\Windows\system32\spool\PRINTERS` (Windows 11 25H2 기준) |
 | 프린터별 설정 | SYSTEM `ControlSet00X\Control\Print\Printers\<프린터 이름>` | `Attributes`, `Port`, `Printer Driver`, `Print Processor`, `Datatype`, `SpoolDirectory` |
 | 사용자별 프린터 목록 | NTUSER.DAT `Software\Microsoft\Windows NT\CurrentVersion\Devices`, 같은 곳의 `PrinterPorts` | 값 이름이 프린터 이름입니다. |
 | 기본 프린터 | NTUSER.DAT `Software\Microsoft\Windows NT\CurrentVersion\Windows` 의 `Device` 값 | `<프린터 이름>,winspool,<포트>` 모양 |
 | 인쇄 이벤트 | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-PrintService%4Operational.evtx` | [인쇄 이벤트](../event-logs/printservice-307.md) |
 
 - 라이브 PC 에서는 SYSTEM 쪽 키를 `HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers` 로 엽니다.
-- 관찰 PC 에서 기본 프린터 `Device` 값은 `<가상 PDF 프린터 이름>,winspool,Ne01:` 모양이었고, 같은 키의 `LegacyDefaultPrinterMode` 는 0 이었습니다.
+- 기본 프린터를 가상 PDF 프린터로 두면 `Device` 값은 `<가상 PDF 프린터 이름>,winspool,Ne01:` 모양이 됩니다. 같은 키에는 `LegacyDefaultPrinterMode` 값도 있습니다(Windows 11 25H2 에서 0).
 
 | Windows | 내용 | 근거 |
 |---|---|---|
@@ -59,19 +59,19 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 | Server 2003 | 속성 비트 `PRINTER_ATTRIBUTE_TS` 를 쓸 수 있습니다. | Microsoft |
 | Vista 이후 | 속성 비트 `FRIENDLY_NAME`·`MACHINE`·`PUSHED_USER`·`PUSHED_MACHINE` 을 쓸 수 있습니다. | Microsoft |
 | 10 이후 | 타사 인쇄 공급자 API 를 더 이상 권장하지 않습니다. | Microsoft |
-| 11 25H2 | 이 페이지의 레지스트리 값과 이벤트 채널 상태를 관찰했습니다. | 관찰 PC |
+| 11 25H2 | 이 페이지의 레지스트리 값 예와 이벤트 채널 상태는 이 판 기준입니다. | — |
 
-- Windows 판마다 SPL·SHD 형식이 어떻게 다른지는 확인하지 못했습니다.
+- Windows 판마다 SPL·SHD 형식이 어떻게 다른지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
 ### 프린터 키의 값
 
-- 관찰 PC 의 프린터 키에서 본 값: `Name`, `Share Name`, `Print Processor`, `Datatype`, `Parameters`, `Description`, `Printer Driver`, `Default DevMode`, `Priority`, `Default Priority`, `StartTime`, `UntilTime`, `Separator File`, `Location`, `Attributes`, `Port`, `SpoolDirectory`, `Status`, `StatusExt`, `ChangeID`, `CreatorSid`, `QueueInstanceId`, `DeviceInterfaceId`, `Security`, `ObjectGUID` 등.
-- 하위 키: `DsDriver`, `DsSpooler`, `PnPData`, `PrinterDriverData`. 일부 프린터에는 `ConfigDriverResources`, `PsaData` 도 있었습니다.
-- 값 이름 여럿이 `PRINTER_INFO_2` 구조체 멤버와 이름이 비슷합니다(`Attributes`, `Priority`, `StartTime` 등). 레지스트리 값과 구조체 멤버가 하나씩 같은지는 확인하지 못했습니다.
-- 관찰 PC 의 프린터 5개는 모두 `Print Processor` 가 `winprint`, `Datatype` 이 `RAW` 였습니다.
-- 프린터별 `SpoolDirectory` 값은 5개 모두 비어 있었습니다. 이 경우 기본 스풀 폴더를 씁니다.
+- 프린터 키에 있는 값(Windows 11 25H2): `Name`, `Share Name`, `Print Processor`, `Datatype`, `Parameters`, `Description`, `Printer Driver`, `Default DevMode`, `Priority`, `Default Priority`, `StartTime`, `UntilTime`, `Separator File`, `Location`, `Attributes`, `Port`, `SpoolDirectory`, `Status`, `StatusExt`, `ChangeID`, `CreatorSid`, `QueueInstanceId`, `DeviceInterfaceId`, `Security`, `ObjectGUID` 등.
+- 하위 키: `DsDriver`, `DsSpooler`, `PnPData`, `PrinterDriverData`. 일부 프린터에는 `ConfigDriverResources`, `PsaData` 도 있습니다.
+- 값 이름 여럿이 `PRINTER_INFO_2` 구조체 멤버와 이름이 비슷합니다(`Attributes`, `Priority`, `StartTime` 등). 다만 레지스트리 값과 구조체 멤버가 하나씩 대응한다고 밝힌 공개 문서는 없습니다.
+- 아래 예의 프린터 5개(Windows 11 25H2)는 모두 `Print Processor` 가 `winprint`, `Datatype` 이 `RAW` 입니다.
+- 같은 예에서 프린터별 `SpoolDirectory` 값은 5개 모두 비어 있습니다. 이 값이 비어 있으면 기본 스풀 폴더를 씁니다.
 
 ### Attributes 비트
 
@@ -89,12 +89,12 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 | 0x1000 | RawOnly | `RAW_ONLY` |
 | 0x2000 | Published | `PUBLISHED` |
 
-- 비트 값은 관찰 PC 의 .NET `System.Printing.PrintQueueAttributes` 에서 읽었습니다.
-- Wine 의 `winspool.h` 에서 `PRINTER_ATTRIBUTE_*` 상수가 위와 같은 숫자인 것을 확인했습니다. 0x40 은 `LOCAL` 이고, .NET 열거형에는 없습니다.
+- 비트 값은 .NET `System.Printing.PrintQueueAttributes` 열거형의 값입니다.
+- `winspool.h` 의 `PRINTER_ATTRIBUTE_*` 상수도 같은 숫자입니다[3]. 0x40 은 `LOCAL` 이고, .NET 열거형에는 없습니다.
 - 같은 헤더에는 0x4(`DEFAULT`), 0x10(`NETWORK`), 0x400(`WORK_OFFLINE`) 도 있습니다.
-- 관찰 PC 에서는 `Get-Printer` 의 `KeepPrintedJobs` 가 True 인 프린터만 레지스트리 `Attributes` 의 0x100 비트가 켜져 있었습니다.
+- `Get-Printer` 의 `KeepPrintedJobs` 가 True 인 프린터는 레지스트리 `Attributes` 의 0x100 비트가 켜져 있습니다.
 
-관찰 PC 의 프린터 5개는 아래와 같았습니다.
+Windows 11 25H2 PC 한 대의 프린터 5개를 예로 들면 아래와 같습니다.
 
 | 프린터 종류 | 포트 | `Attributes` | 켜진 비트 |
 |---|---|---|---|
@@ -104,16 +104,16 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 | Microsoft Print to PDF | `PORTPROMPT:` | 0x200 | ScheduleCompletedJobsFirst |
 | OneNote (Desktop) | `nul:` | 0x240 | ScheduleCompletedJobsFirst, 0x40(`LOCAL`) |
 
-타사 PDF 프린터는 인쇄 작업을 남기도록 설정돼 있었는데도 스풀 폴더는 비어 있었습니다(0개). 그 프린터로 인쇄하지 않았거나 파일을 지웠을 수 있지만, 이유는 확인하지 못했습니다.
+이 예에서 타사 PDF 프린터는 인쇄 작업을 남기도록 설정돼 있지만 스풀 폴더는 비어 있습니다(0개). 그 프린터로 인쇄하지 않았거나 파일을 지웠을 수 있습니다.
 
 ### 스풀 폴더
 
-관찰 PC 의 `C:\Windows\System32\spool\PRINTERS` 는 관리자 권한으로 목록을 볼 수 있었고 비어 있었습니다. 스풀 파일이 남아 있으면 프린터로 보낼 작업 데이터를 볼 수 있습니다. SHD 에서 사용자 이름·컴퓨터 이름·문서 이름·프린터 이름·제출 시각·쪽수를 읽을 수 있다는 설명이 있습니다. 이 글에서는 형식을 확인하지 못했습니다.
+`C:\Windows\System32\spool\PRINTERS` 는 관리자 권한으로 목록을 볼 수 있습니다. 스풀 파일이 남아 있으면 프린터로 보낼 작업 데이터를 볼 수 있습니다. SHD 에서 사용자 이름·컴퓨터 이름·문서 이름·프린터 이름·제출 시각·쪽수를 읽을 수 있다는 설명이 있지만, 공개된 형식 명세가 없어 검체에서 확인해야 합니다.
 
 ### 인쇄 이벤트 (요약)
 
-- 관찰 PC 에서 `Microsoft-Windows-PrintService/Operational` 채널은 꺼져 있었습니다. `Microsoft-Windows-PrintService/Admin` 채널은 켜져 있었고 0건이었습니다.
-- Operational 채널의 최대 크기는 1052672 바이트였습니다. 보존 설정(retention)은 false 여서, 꽉 차면 오래된 이벤트부터 덮어씁니다.
+- Windows 11 25H2 예에서는 `Microsoft-Windows-PrintService/Operational` 채널이 꺼져 있고, `Microsoft-Windows-PrintService/Admin` 채널은 켜져 있지만 0건입니다.
+- 같은 예에서 Operational 채널의 최대 크기는 1052672 바이트입니다. 보존 설정(retention)은 false 라서, 꽉 차면 오래된 이벤트부터 덮어씁니다.
 - 이 채널이 켜져 있으면 307 이벤트에 문서, 소유자, 프린터, 포트, 바이트 크기, 쪽수가 남습니다. 칸별 설명은 [인쇄 이벤트](../event-logs/printservice-307.md)에서 다룹니다.
 - 같은 채널의 800(스풀), 801(인쇄), 805(렌더링), 842(인쇄 처리기) 이벤트에는 작업 번호(`JobId`) 칸이 있습니다.
 
@@ -122,7 +122,7 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 ### 증명하는 것
 
 - 프린터 키는 이 PC 에 어떤 프린터와 가상 프린터가 설치돼 있었는지 보여 줍니다.
-- 포트와 드라이버로 실물 프린터와 파일을 만드는 가상 프린터를 가를 수 있습니다. 관찰 PC 의 가상 프린터 포트는 `PORTPROMPT:`, `nul:`, 전용 PDF 포트였습니다.
+- 포트와 드라이버로 실물 프린터와 파일을 만드는 가상 프린터를 가를 수 있습니다. 가상 프린터 포트의 예로 `PORTPROMPT:`, `nul:`, 프로그램 전용 PDF 포트가 있습니다.
 - 사용자 하이브의 `Devices`·`PrinterPorts` 에는 그 사용자 쪽에 적힌 프린터 이름이 있습니다.
 - 사용자 하이브의 `Windows\Device` 값은 그 사용자의 기본 프린터를 보여 줍니다.
 - `Attributes` 의 KeepPrintedJobs 비트는 인쇄가 끝난 뒤에도 스풀 파일을 남기도록 설정했는지 보여 줍니다.
@@ -130,7 +130,7 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 
 ### 증명하지 못하는 것
 
-- 프린터를 언제, 누가 추가했는지 알 수 없습니다. 그런 값은 이 글에서 확인하지 못했습니다. `CreatorSid` 라는 값이 있지만 뜻은 확인하지 못했습니다.
+- 프린터를 언제, 누가 추가했는지 알 수 없습니다. 이를 알려 주는 값은 알려진 것이 없습니다. `CreatorSid` 라는 값이 있지만 뜻을 설명한 공개 문서는 없습니다.
 - 프린터 목록은 인쇄 작업 자체를 보여 주지 않습니다.
 - 스풀 폴더가 비어 있어도 인쇄를 안 했다는 뜻이 아닙니다. 설정이 꺼져 있으면 인쇄가 끝난 작업을 지웁니다.
 - 307 이벤트가 없어도 인쇄를 안 했다는 뜻이 아닙니다. 채널이 꺼져 있을 수 있습니다.
@@ -146,23 +146,23 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 | 시각 | 무엇인가 | 기준 |
 |---|---|---|
 | 프린터 키 `StartTime`·`UntilTime` | 이름이 같은 `PRINTER_INFO_2` 멤버는 프린터 정보의 일부입니다. 인쇄 작업 시각으로 쓰지 않습니다. | 구조체 멤버는 "GMT 0시부터 지난 분" (Microsoft) |
-| SHD 안의 제출 시각 | 형식(SYSTEMTIME 인지)과 기준(UTC 인지 현지 시각인지)을 확인하지 못했습니다. | 확인하지 못함 |
+| SHD 안의 제출 시각 | 형식(SYSTEMTIME 인지)과 기준(UTC 인지 현지 시각인지)은 공개 자료가 없어 검체에서 확인합니다. | 검체에서 확인 |
 | 스풀 폴더 파일의 파일시스템 시각 | 스풀 파일도 NTFS 위의 파일입니다. 파일이나 그 MFT 항목이 남아 있으면 시각을 볼 수 있습니다. | UTC ([마스터 파일 테이블](../filesystem/mft.md)) |
-| 프린터 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 확인하지 못했습니다. 프린터를 추가한 시각으로 쓰지 않습니다. | UTC |
+| 프린터 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 공개 자료가 없습니다. 프린터를 추가한 시각으로 쓰지 않습니다. | UTC |
 | PrintService 이벤트 기록 시각 | [인쇄 이벤트](../event-logs/printservice-307.md)에서 다룹니다. | UTC |
 
 - 인쇄한 때를 정하려면 이벤트 로그와 스풀 폴더의 파일시스템 기록을 함께 봅니다. 프린터 키의 시각 값으로 정하지 않습니다.
 
 ## 함정과 한계
 
-1. **빈 스풀 폴더를 "인쇄 안 함" 으로 읽는 실수.** KeepPrintedJobs 가 꺼져 있으면 인쇄가 끝난 작업을 지웁니다. 관찰 PC 에서는 켜져 있는 프린터가 있었는데도 폴더가 비어 있었습니다.
-2. **스풀하지 않는 프린터.** Direct 비트가 켜져 있으면 스풀하지 않고 바로 프린터로 보냅니다. 이때는 스풀 파일이 생기지 않는다고 볼 수 있지만, 이 글에서 직접 확인하지는 못했습니다.
-3. **다른 스풀 폴더.** `DefaultSpoolDirectory` 와 프린터별 `SpoolDirectory` 를 먼저 읽습니다. `SpoolDirectory` 가 비어 있지 않으면 그 폴더도 봅니다. 그 폴더에 스풀 파일이 생기는지는 확인하지 못했습니다.
-4. **꺼져 있는 이벤트 채널.** 관찰 PC 에서 PrintService/Operational 은 꺼져 있었습니다. 이 채널이 기본으로 꺼져 있다는 설명이 있지만 이 글에서 확인하지는 못했습니다. 켜져 있어도 1MB 남짓한 크기라 오래된 이벤트는 덮어씁니다.
+1. **빈 스풀 폴더를 "인쇄 안 함" 으로 읽는 실수.** KeepPrintedJobs 가 꺼져 있으면 인쇄가 끝난 작업을 지웁니다. 켜져 있는 프린터가 있어도 폴더가 비어 있을 수 있습니다.
+2. **스풀하지 않는 프린터.** Direct 비트가 켜져 있으면 스풀하지 않고 바로 프린터로 보냅니다. 이때는 스풀 파일이 생기지 않을 것으로 보입니다.
+3. **다른 스풀 폴더.** `DefaultSpoolDirectory` 와 프린터별 `SpoolDirectory` 를 먼저 읽습니다. `SpoolDirectory` 가 비어 있지 않으면 그 폴더도 봅니다.
+4. **꺼져 있는 이벤트 채널.** PrintService/Operational 은 꺼져 있을 수 있습니다. 이 채널이 기본으로 꺼져 있다는 설명이 있습니다. 켜져 있어도 1MB 남짓한 크기라 오래된 이벤트는 덮어씁니다.
 5. **가상 프린터.** PDF·OneNote 같은 가상 프린터는 종이 대신 파일이나 노트를 만듭니다. 만든 PDF 파일은 [바로가기 파일](../file-folder-usage/lnk.md)과 [최근 문서](../file-folder-usage/recentdocs.md)로 추적합니다.
-6. **스풀 파일 형식을 미리 정하는 실수.** 관찰 PC 의 프린터는 모두 `Datatype` 이 RAW 였습니다. 작업마다 형식이 달라질 수 있는지는 확인하지 못했습니다. SPL 을 열 때는 형식을 가정하지 말고 첫 바이트부터 확인합니다.
+6. **스풀 파일 형식을 미리 정하는 실수.** 프린터의 `Datatype` 이 RAW 여도 작업마다 형식이 달라질 수 있는지는 공개 자료가 없습니다. SPL 을 열 때는 형식을 가정하지 말고 첫 바이트부터 확인합니다.
 7. **비트 값의 근거.** 이 페이지의 비트 숫자는 .NET 열거형과 Wine 의 `winspool.h` 에서 나왔습니다. .NET 열거형에는 0x40(`LOCAL`) 같은 비트가 없습니다. 도구가 .NET 이름만 보여 주면 헤더 값으로 다시 풉니다.
-8. **지워진 스풀 파일.** 비할당 영역에서 SPL·SHD 를 되살리는 방법은 이 글에서 확인하지 못했습니다. 일반 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
+8. **지워진 스풀 파일.** 비할당 영역에서 SPL·SHD 만 되살리는 방법은 공개 자료가 없습니다. 일반 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
 
 ## 직접 분석해 보기
 
@@ -177,7 +177,7 @@ Microsoft 문서가 설명하는 로컬 인쇄 공급자 (Local Print Provider) 
 7. 이미지에서 스풀 폴더의 파일 목록을 봅니다. 지워진 항목까지 보려면 MFT 를 직접 읽습니다.
 8. SPL·SHD 가 있으면 사본을 헥스 편집기로 엽니다. 형식을 가정하지 말고 앞부분부터 확인합니다.
 
-아래는 관찰 PC 에서 읽은 비트 값으로 만든 예시입니다. 검체에서 나온 값이 아닙니다.
+아래는 위 예의 타사 PDF 프린터 값으로 만든 예시입니다. 검체에서 나온 값이 아닙니다.
 
 ```
 Attributes 데이터 바이트    01 09 00 00

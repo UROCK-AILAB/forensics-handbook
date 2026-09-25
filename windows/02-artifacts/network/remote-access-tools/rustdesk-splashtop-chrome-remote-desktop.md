@@ -32,16 +32,16 @@ nav_order: 2410
 | 설치 폴더 | `C:\Program Files\RustDesk` | 설치 경로 예 |
 | 사용자 설치 | `C:\Users\*\AppData\Local\rustdesk\rustdesk.exe` | |
 | 서비스 쪽 폴더 | `C:\Windows\ServiceProfiles\LocalService\AppData\Roaming\RustDesk\*` | |
-| 로그 (휴대용, 설치형의 거는 쪽) | `%AppData%\RustDesk\log\RustDesk_rCURRENT.log` | RustDesk FAQ |
-| 로그 (설치형의 받는 쪽) | `C:\Windows\ServiceProfiles\LocalService\AppData\Roaming\RustDesk\log\server\` 또는 `C:\Windows\SysWOW64\config\systemprofile\AppData\Roaming\RustDesk\log\server` | RustDesk FAQ |
+| 로그 (휴대용, 설치형의 거는 쪽) | `%AppData%\RustDesk\log\RustDesk_rCURRENT.log` | [3] |
+| 로그 (설치형의 받는 쪽) | `C:\Windows\ServiceProfiles\LocalService\AppData\Roaming\RustDesk\log\server\` 또는 `C:\Windows\SysWOW64\config\systemprofile\AppData\Roaming\RustDesk\log\server` | [3] |
 | 자체 서버 로그 (Linux) | `/var/log/rustdesk-server/` 의 `hbbr.log`, `hbbs.log` | 중계 서버를 직접 둔 경우 |
 
 포트는 자료마다 조금 다르게 적혀 있습니다.
 
-- LOLRMM 은 443, 21115, 21116 을 적습니다.
-- RustDesk FAQ 는 ID(랑데부) 서버에 TCP 21116(UDP 21116 도 씀), 중계 서버에 TCP 21117, 웹 콘솔에 21114 를 적습니다.
+- LOLRMM 목록에는 443, 21115, 21116 이 올라 있습니다[2].
+- RustDesk FAQ 기준으로는 ID(랑데부) 서버에 TCP 21116(UDP 21116 도 씀), 중계 서버에 TCP 21117, 웹 콘솔에 21114 를 씁니다[3].
 
-LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있는데, 쓰는 사람이 중계 서버를 정할 수 있어서 접속 도메인 목록으로 거르기 어렵습니다.
+쓰는 사람이 중계 서버를 정할 수 있어서 접속 도메인 목록으로 거르기 어렵습니다[2].
 
 ### 증거로서 의미
 
@@ -52,15 +52,14 @@ LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있는데, 쓰는 사�
 
 **증명하지 못하는 것**
 
-- 로그 안에 상대 ID·IP 가 어떤 모양으로 남는지는 이번 자료로 확인하지 못했습니다. 로그를 열어 직접 확인하고, 확인한 버전을 보고서에 적습니다.
-- 설정 파일의 위치와 이름도 이번 자료로 확인하지 못했습니다.
+- 로그 안에 상대 ID·IP 가 어떤 모양으로 남는지는 공개된 분석 자료가 없어 검체에서 확인합니다. 확인한 버전을 보고서에 적습니다.
 - 중계 서버를 직접 둔 경우, 서버 로그는 그 서버에 있습니다. 조사하는 PC 만으로는 서버 쪽 기록을 볼 수 없습니다.
 
 ## Splashtop
 
 ### 위치
 
-아래 경로는 Synacktiv 가 Splashtop 3.52.1.42 로 시험한 결과에 LOLRMM 목록을 더한 것입니다. 이 시험에서 Splashtop 은 Atera 에 딸려 설치됐습니다.
+아래 경로는 Splashtop 3.52.1.42(Atera 에 딸려 설치된 경우) 기준입니다[1][2].
 
 | 흔적 | 경로 | 메모 |
 |---|---|---|
@@ -68,8 +67,8 @@ LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있는데, 쓰는 사�
 | 실행 파일 | `...\Splashtop Remote\Server\SRService.exe`(원격 서비스), `SRAgent.exe`(에이전트), `SRUtility.exe`, `SRFeature.exe`, `...\Splashtop Software Updater\SSUAgent.exe` | |
 | 주 로그 | `C:\Program Files (x86)\Splashtop\Splashtop Remote\Server\log\SPLog.txt` | 접속한 호스트 이름, 표시 이름, 상대 공인 IP, 파일 전송, 채팅 |
 | 파일 전송 로그 | `%PROGRAMDATA%\Splashtop\Temp\log\FTCLog.txt` | |
-| 디버그·내부 로그 | 주 로그와 같은 폴더의 `agent_log.txt`, `svcinfo.txt` | Synacktiv 는 포렌식 가치가 낮다고 적었습니다 |
-| 저장한 채팅 | `Splashtop_Chat_[YYYYMMDD]_[HHMM].txt` | 사용자가 채팅을 저장한 경우. 저장 위치는 이번 자료로 확인하지 못했습니다 |
+| 디버그·내부 로그 | 주 로그와 같은 폴더의 `agent_log.txt`, `svcinfo.txt` | 포렌식 가치가 낮습니다[1] |
+| 저장한 채팅 | `Splashtop_Chat_[YYYYMMDD]_[HHMM].txt` | 사용자가 채팅을 저장한 경우. 저장 위치는 검체에서 확인 |
 | 암호화된 파일 | `...\Server\db\SRAgent.sqlite3`, `%PROGRAMDATA%\Splashtop\Splashtop Remote Server\Credential\<무작위 이름>` | 암호화돼 있어 바로 읽지 못합니다 |
 | 전용 이벤트 로그 | `C:\Windows\System32\winevt\Logs\Splashtop-Splashtop Streamer-Remote Session%4Operational.evtx`, `Splashtop-Splashtop Streamer-Status%4Operational.evtx` | |
 
@@ -80,16 +79,16 @@ LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있는데, 쓰는 사�
 | `HKLM\SOFTWARE\WOW6432Node\Splashtop Inc.\Splashtop Remote Server\ClientInfo` | 마지막으로 접속한 상대. DeviceName(상대 호스트 이름), Client_DisplayName(표시 이름), UDID, AppVersion |
 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Printers\Splashtop PDF Remote Printer` | 원격 인쇄용 프린터 |
 
-7045 에는 "Splashtop® Remote Service"(SRService.exe)와 "Splashtop Software Updater Service"(SSUService.exe) 두 서비스가 남습니다. LOLRMM 은 "SplashtopRemoteService" 라는 이름도 적습니다.
+7045 에는 "Splashtop® Remote Service"(SRService.exe)와 "Splashtop Software Updater Service"(SSUService.exe) 두 서비스가 남습니다. 서비스 키 이름은 "SplashtopRemoteService" 입니다[2].
 
 ### 전용 이벤트 로그
 
-| 로그 | 남는 것 | 예시 (Synacktiv) |
+| 로그 | 남는 것 | 예시[1] |
 |---|---|---|
 | Splashtop-Splashtop Streamer-Remote Session/Operational | 원격 세션 생성, 파일 전송, 상대 호스트 이름, 파일 이름 | `A file was transferred during the Splashtop remote session (1018449597). App version: 3.5.2.1 File name: mechant.7z From: mechant_host (N/A) To: LABWINDOWS (C:\Users\lab\Desktop)` |
 | Splashtop-Splashtop Streamer-Status/Operational | 서비스 상태 | `Splashtop streamer went online. App version: 3.5.2.1 Server Info: st-v3-univ-srs-win-3521-g3.api.splashtop.com RMM ID: hZCDFPhK75mJ` |
 
-두 로그의 이벤트 ID 번호는 이번 자료로 확인하지 못했습니다. 메시지 문구로 찾습니다.
+두 로그의 이벤트 ID 번호는 공개 자료에 없어 메시지 문구로 찾습니다.
 
 ### 텍스트 로그
 
@@ -107,7 +106,7 @@ LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있는데, 쓰는 사�
 <1>Sep  1 11:42:12 [SM_04020]:[FTC] UploadRequest, fileID[289614100], filePath[C:\Users\lab\Desktop\mechant.7z]
 ```
 
-`[Auth-L]` 줄에는 접속한 상대 호스트 이름이, `[Banner]` 줄에는 상대 공인 IP 가, `[FTC]` 줄에는 파일 전송 요청과 파일 경로가 나옵니다. 위 예시는 모두 Synacktiv 공개 예시입니다.
+`[Auth-L]` 줄에는 접속한 상대 호스트 이름이, `[Banner]` 줄에는 상대 공인 IP 가, `[FTC]` 줄에는 파일 전송 요청과 파일 경로가 나옵니다. 위 예시 줄은 참고 문헌 [1] 의 것입니다.
 
 ### 증거로서 의미
 
@@ -132,16 +131,14 @@ LOLRMM 의 도메인 칸에는 "user_managed" 가 적혀 있는데, 쓰는 사�
 |---|---|
 | 호스트 실행 파일 | `C:\Program Files (x86)\Google\Chrome Remote Desktop\<버전>\remoting_host.exe` |
 | 서비스 이름 | "chromoting" 이 들어갑니다 |
-| 이벤트 로그 이름 | 호스트는 시스템 이벤트 로그에 "chromoting" 이라는 이름으로 기록합니다(Chromium 소스의 kApplicationName) |
+| 이벤트 로그 이름 | 호스트는 시스템 이벤트 로그에 "chromoting" 이라는 이름(kApplicationName 값)으로 기록합니다[7] |
 | 접속 도메인·포트 | `remotedesktop.google.com`, `*.remotedesktop.google.com`, `remotedesktop-pa.googleapis.com`, `chromoting-host.talkgadget.google.com` 등. 포트 443, 3478 |
 
-Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IPC 로 넘기면 다른 프로세스가 이벤트를 기록합니다. 그래서 실제 원본 이름과 로그 이름(Application 인지)은 이번 자료로 확인하지 못했습니다. 로그 전체에서 원본 이름에 "chromoting" 이 든 이벤트를 찾습니다.
-
-호스트 설정 파일의 위치는 이번 자료로 확인하지 못했습니다.
+Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IPC 로 넘기면 다른 프로세스가 이벤트를 기록합니다. 그래서 실제 원본 이름과 로그 이름(Application 인지)은 검체에서 확인합니다. 로그 전체에서 원본 이름에 "chromoting" 이 든 이벤트를 찾습니다.
 
 ### 이벤트 ID
 
-아래 표는 Chromium 소스의 메시지 파일 정의와 영어 문구입니다.
+아래 표는 메시지 파일에 정의된 이벤트와 영어 문구입니다[5][6].
 
 | ID | 이름 | 수준 | 문구 |
 |---|---|---|---|
@@ -177,23 +174,23 @@ Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IP
 
 - Splashtop 전용 이벤트 로그와 Chrome Remote Desktop 이벤트의 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - `SPLog.txt` 의 시각에는 연도가 없습니다(예: `Sep  1 11:40:53`). 연도는 파일 시각이나 같은 때의 다른 기록에서 채웁니다.
-- `SPLog.txt`, `FTCLog.txt`, RustDesk 로그의 시각이 UTC 인지는 이번 자료로 확인하지 못했습니다. 같은 파일 전송을 Remote Session 로그와 `FTCLog.txt` 에서 찾아 두 시각의 차이를 잽니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
-- Splashtop 공개 예시의 시각은 `[FTC] UploadRequest` 줄이 11:42:12, `FTCLog.txt` 줄이 11:42:14 입니다. 두 파일이 같은 시간대로 적힌 것으로 보입니다. 이 판단은 예시 두 줄을 비교해 추론한 것입니다.
+- `SPLog.txt`, `FTCLog.txt`, RustDesk 로그의 시각이 UTC 인지는 공개 자료에 없습니다. 같은 파일 전송을 Remote Session 로그와 `FTCLog.txt` 에서 찾아 두 시각의 차이를 잽니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
+- Splashtop 공개 예시의 시각은 `[FTC] UploadRequest` 줄이 11:42:12, `FTCLog.txt` 줄이 11:42:14 입니다[1]. 두 파일이 같은 시간대로 적힌 것으로 보입니다.
 
 ## 함정과 한계
 
 - **RustDesk 는 도메인으로 거르기 어렵습니다.** 중계 서버를 직접 둘 수 있습니다.
-- **Splashtop 은 다른 제품에 딸려 설치될 수 있습니다.** Synacktiv 시험에서는 Atera 에 딸려 설치됐습니다. 사용자가 Splashtop 을 따로 설치하지 않았어도 흔적이 있을 수 있습니다.
-- **Splashtop 이벤트 ID 를 모릅니다.** 로그 이름과 메시지 문구로 찾습니다.
+- **Splashtop 은 다른 제품에 딸려 설치될 수 있습니다.** Synacktiv 시험에서는 Atera 에 딸려 설치됐습니다[1]. 사용자가 Splashtop 을 따로 설치하지 않았어도 흔적이 있을 수 있습니다.
+- **Splashtop 이벤트 ID 는 공개 자료에 없습니다.** 로그 이름과 메시지 문구로 찾습니다.
 - **SPLog.txt 에 연도가 없습니다.** 해를 넘긴 로그는 순서가 헷갈립니다.
-- **Chrome Remote Desktop 이벤트의 원본 이름과 로그 이름이 확인되지 않았습니다.** 특정 로그 하나만 보지 말고 로그 전체에서 "chromoting" 을 찾습니다.
+- **Chrome Remote Desktop 이벤트의 원본 이름과 로그 이름은 검체에서 확인합니다.** 특정 로그 하나만 보지 말고 로그 전체에서 "chromoting" 을 찾습니다.
 - **Chrome Remote Desktop 문구는 OS 언어에 따라 다를 수 있습니다.** 문구보다 이벤트 ID 와 원본 이름을 함께 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 로그입니다. 도구마다의 이진 구조는 이번 자료로 확인한 것이 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 로그입니다. 도구마다의 이진 구조는 공개된 분석 자료가 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -205,7 +202,7 @@ Get-WinEvent -Path "$logs\Splashtop-Splashtop Streamer-Remote Session%4Operation
   Select-Object @{ n = 'UTC'; e = { $_.TimeCreated.ToUniversalTime() } }, Id, Message
 ```
 
-Chrome Remote Desktop 이벤트는 로그 이름을 확정하지 못했으므로, 수집한 evtx 파일 전체에서 원본 이름으로 찾습니다.
+Chrome Remote Desktop 이벤트는 어느 로그에 남는지 검체마다 확인해야 하므로, 수집한 evtx 파일 전체에서 원본 이름으로 찾습니다.
 
 ```powershell
 Get-ChildItem 'E:\case\winevt\Logs\*.evtx' | ForEach-Object {

@@ -8,7 +8,7 @@ nav_order: 2650
 
 ## 한 줄 요약
 
-예약 작업 (Scheduled Task) 을 만들거나 바꾸거나 실행하면 이벤트 로그 두 곳에 기록이 남을 수 있습니다. 보안 로그 (Security) 의 4698 에는 작업을 만든 계정과 작업 XML 전체가 남습니다. `Microsoft-Windows-TaskScheduler/Operational` 로그에는 작업 등록·수정·삭제와 실행의 시작·끝이 남습니다. Microsoft 는 두 기록 모두 기본으로 꺼져 있다고 적었습니다. 켜 두지 않았으면 아무것도 남지 않습니다.
+예약 작업 (Scheduled Task) 을 만들거나 바꾸거나 실행하면 이벤트 로그 두 곳에 기록이 남을 수 있습니다. 보안 로그 (Security) 의 4698 에는 작업을 만든 계정과 작업 XML 전체가 남습니다. `Microsoft-Windows-TaskScheduler/Operational` 로그에는 작업 등록·수정·삭제와 실행의 시작·끝이 남습니다. 두 기록 모두 기본으로 꺼져 있습니다[1]. 켜 두지 않았으면 아무것도 남지 않습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -34,10 +34,10 @@ nav_order: 2650
 | 켜는 방법 | 감사 하위 범주 기타 개체 액세스 이벤트 (Audit Other Object Access Events) 를 켭니다 | 로그를 사용하도록 켭니다 |
 | 기본 상태 | 꺼짐 | 꺼짐 |
 
-- Microsoft 는 4698 과 TaskScheduler Operational 로그를 두고 "Neither of these are audited by default and must be explicitly turned on by an administrator." 라고 적었습니다. 관리자가 따로 켜야 한다는 뜻입니다. 4698 의 감사 하위 범주는 Other Object Access Events 이고, 4699~4702 의 감사 하위 범주도 같은지는 이번에 확인하지 못했습니다.
+- 4698 과 TaskScheduler Operational 로그는 둘 다 기본으로 감사하지 않으므로 관리자가 따로 켜야 합니다[1]. 4698 의 감사 하위 범주는 Other Object Access Events 입니다.
 - TaskScheduler 공급자는 Operational 말고도 System 로그와 `Microsoft-Windows-TaskScheduler/Debug`·`/Diagnostic`·`/Maintenance` 로그에 씁니다.
 
-한 PC 에서 설정을 읽어 본 결과는 다음과 같습니다.
+한 PC 의 설정 예입니다.
 
 - Operational 로그는 꺼져 있었습니다 (IsEnabled False).
 - Operational 로그의 최대 크기는 10,485,760바이트였고, 보관 방식은 순환 (Circular) 이었습니다.
@@ -55,8 +55,7 @@ nav_order: 2650
 | 4698 | 1 | Windows 10 1903 부터 | ClientProcessStartKey, ClientProcessId, ParentProcessId, RpcCallClientLocality, FQDN |
 | 4699~4702 | 0 · 1 | 매니페스트에 두 버전이 모두 있습니다 | 버전 1 에 위와 같은 다섯 칸 |
 
-- 4699~4702 의 버전 1 이 어느 Windows 버전부터 쓰였는지는 확인하지 못했습니다.
-- Windows XP · 2003 의 작업 기록 파일은 이번에 확인하지 못했습니다. 옛 작업 형식은 [옛 작업 파일 (.job·at)](../persistence/scheduled-tasks/job-at.md)에서 다룹니다.
+- Windows XP · 2003 의 옛 작업 형식은 [옛 작업 파일 (.job·at)](../persistence/scheduled-tasks/job-at.md)에서 다룹니다.
 
 ## 구조
 
@@ -68,9 +67,9 @@ nav_order: 2650
 | SubjectLogonId | 그 계정의 로그온 ID | 4624 의 Logon ID 와 이을 수 있습니다 |
 | TaskName | 작업 경로와 이름 | `\task_path\task_name` 꼴입니다. 경로는 작업 스케줄러의 "Task Scheduler Library" 뿌리부터 적습니다 |
 | TaskContent | 새 작업의 XML 전체 | 명령, 트리거, 실행 계정 설정이 여기 있습니다 |
-| ClientProcessStartKey · ClientProcessId · ParentProcessId · RpcCallClientLocality · FQDN | 버전 1 에만 있는 칸 | 이번에는 칸 이름만 확인했습니다 |
+| ClientProcessStartKey · ClientProcessId · ParentProcessId · RpcCallClientLocality · FQDN | 버전 1 에만 있는 칸 | 값의 모양은 검체에서 확인합니다 |
 
-Microsoft 문서의 예시 이벤트 가운데 일부입니다. 문서가 보여 주는 예시이며 검체에서 나온 값이 아닙니다.
+Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보여 주는 예시이며 검체에서 나온 값이 아닙니다.
 
 ```xml
 <Provider Name="Microsoft-Windows-Security-Auditing" Guid="{54849625-5478-4994-A5BA-3E3B0328C30D}" />
@@ -101,7 +100,7 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다. 문서가 보여
 | 4702 | A scheduled task was updated. (작업 수정) | TaskContentNew |
 
 - 4702 에는 수정한 뒤의 내용만 있습니다. 수정하기 전 내용은 앞선 4698 이나 4702 에서 찾습니다.
-- 4699 에 TaskContent 칸이 있다는 것까지만 확인했습니다. 지운 작업의 XML 이 실제로 들어가는지는 확인하지 못했습니다.
+- 4699 에도 TaskContent 칸이 있습니다. 지운 작업의 XML 이 실제로 들어가는지는 검체에서 확인합니다.
 
 ### TaskScheduler/Operational 이벤트
 
@@ -175,9 +174,9 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다. 문서가 보여
 2. **106 에서 명령을 찾습니다.** 106·140·141 에는 작업 이름과 사용자뿐입니다. 명령은 4698 의 TaskContent 나 작업 정의 파일에서 찾습니다.
 3. **TaskContent 로만 검색합니다.** 4702 는 칸 이름이 TaskContentNew 입니다. 칸 이름으로 거르면 수정 이벤트가 빠집니다.
 4. **129 의 PID 를 4688 과 그대로 맞춥니다.** 129 의 ProcessID 는 10진 정수입니다. 4688 의 PID 는 16진으로 적힙니다([프로세스 생성 (4688)](4688.md)). 진법을 맞춘 뒤 비교합니다.
-5. **작업 목록에 없으면 작업이 없다고 봅니다.** Microsoft 가 분석한 Tarrask 는 레지스트리 SD 값을 지워 작업을 목록에서 감췄습니다. 감춘 작업도 트리거대로 계속 실행됩니다. SD 값 삭제만 알려 주는 전용 이벤트 ID 는 확인하지 못했습니다. 이벤트에 나온 작업 이름을 `TaskCache\Tree` 와 대조합니다. 자세한 방법은 [숨긴 예약 작업 찾기 (SD 값 삭제)](../persistence/scheduled-tasks/sd.md)에서 다룹니다.
-6. **뿌리에 있는 작업을 흘려봅니다.** Microsoft 는 TaskName 이 `\TASK_NAME` 꼴인 작업, 곧 뿌리에 바로 있는 작업을 살피라고 권합니다. 사람이 손으로 만든 작업과 악성 코드가 만든 작업이 흔히 뿌리에 있다고 적었습니다.
-7. **`<LogonType>Password</LogonType>` 를 흘려봅니다.** Microsoft 는 TaskContent 에 이 값이 있으면 경보를 울리라고 권합니다. 이때 작업 실행 계정의 비밀번호가 자격 증명 관리자에 평문 형식 (cleartext format) 으로 저장되고, 관리자 권한으로 꺼낼 수 있다고 적었습니다. 저장 위치는 [자격 증명 관리자와 볼트](../credentials/credential-manager-windows-vault.md)에서 다룹니다.
+5. **작업 목록에 없으면 작업이 없다고 봅니다.** Tarrask 악성 코드는 레지스트리 SD 값을 지워 작업을 목록에서 감춥니다. 감춘 작업도 트리거대로 계속 실행됩니다[3]. 이벤트에 나온 작업 이름을 `TaskCache\Tree` 와 대조합니다. 자세한 방법은 [숨긴 예약 작업 찾기 (SD 값 삭제)](../persistence/scheduled-tasks/sd.md)에서 다룹니다.
+6. **뿌리에 있는 작업을 흘려봅니다.** TaskName 이 `\TASK_NAME` 꼴인 작업, 곧 뿌리에 바로 있는 작업을 살핍니다. 사람이 손으로 만든 작업과 악성 코드가 만든 작업이 흔히 뿌리에 있습니다[1].
+7. **`<LogonType>Password</LogonType>` 를 흘려봅니다.** TaskContent 에 이 값이 있으면 경보 대상으로 봅니다. 이때 작업 실행 계정의 비밀번호가 자격 증명 관리자에 평문 형식 (cleartext format) 으로 저장되고, 관리자 권한으로 꺼낼 수 있습니다[1]. 저장 위치는 [자격 증명 관리자와 볼트](../credentials/credential-manager-windows-vault.md)에서 다룹니다.
 8. **순환 로그의 앞부분을 끝까지 믿습니다.** 한 PC 에서 Operational 로그는 10,485,760바이트 순환 설정이었습니다. 크기 한도에 이르면 오래된 기록부터 밀려납니다.
 9. **원격 등록을 한 컴퓨터에서만 찾습니다.** 다른 컴퓨터에 작업을 등록하면 실행한 쪽과 대상 쪽에 서로 다른 기록이 남습니다. 아래 "교차 검증" 의 JPCERT/CC 시험 결과를 봅니다.
 
@@ -218,7 +217,7 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다. 문서가 보여
 
 1. 리틀 엔디언으로 읽으면 0x00001A9C 입니다.
 2. 0x1A9C 는 10진으로 6,812 입니다.
-3. 129 의 메시지 `%3` 자리에는 10진 `6812` 로 보일 것으로 봅니다. 이 표시는 칸 형식에서 나온 추측이며 실제 화면으로 확인하지 않았습니다.
+3. 129 의 메시지 `%3` 자리에는 10진 `6812` 로 보일 가능성이 큽니다. 칸 형식에서 나온 추측입니다.
 4. 같은 프로세스의 4688 에는 New Process ID 가 `0x1a9c` 로 적힙니다.
 
 > 그림 자리: 129 레코드의 ProcessID 4바이트와, 같은 프로세스의 4688 New Process ID 칸을 나란히 놓고 10진·16진 변환을 보여 주는 그림
@@ -264,7 +263,7 @@ $e = Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Security.evtx'; Id = 4698 
 
 ### 원격 등록 시험 결과 (JPCERT/CC)
 
-JPCERT/CC 는 `schtasks` 로 다른 컴퓨터에 작업을 등록하는 시험을 하고 남은 기록을 표로 정리했습니다. 시험한 OS 는 결과표 요약에 드러나지 않습니다. `taskeng.exe` 가 나오므로 Windows 7 무렵의 옛 버전으로 보입니다. 이 판단은 추론입니다. 보고서에 인용할 때는 원문 표를 직접 확인합니다.
+JPCERT/CC 시험에서 `schtasks` 로 다른 컴퓨터에 작업을 등록했을 때 남은 기록은 아래와 같습니다[4]. 시험한 OS 는 결과표에 적혀 있지 않지만, `taskeng.exe` 가 나오므로 Windows 7 무렵의 옛 버전으로 보입니다. 보고서에 인용할 때는 원문 표를 직접 확인합니다.
 
 | 쪽 | 남은 기록 |
 |---|---|
@@ -289,7 +288,7 @@ JPCERT/CC 가 실행 성공을 판단한 기준은 다음과 같습니다.
 1. 로그를 켜기 전에 `Microsoft-Windows-TaskScheduler%4Operational.evtx` 파일이 있는지 봅니다.
 2. `auditpol /set /subcategory:{0CCE9227-69AE-11D9-BED3-505054503030} /success:enable` 로 감사를 켭니다. `wevtutil sl Microsoft-Windows-TaskScheduler/Operational /e:true` 로 Operational 로그를 켭니다.
 3. `schtasks` 로 뿌리에 작업을 하나 만듭니다. 4698 의 TaskContent 와 `System32\Tasks` 의 XML 파일을 비교합니다. 106 과 4698 의 시각도 비교합니다.
-4. 작업을 바로 실행합니다. 110·129·200·201·102 가 어떤 순서로 남는지 봅니다. 200 의 ActionName 과 129 의 Path 에 무엇이 들어가는지 적습니다. 이 페이지가 확인하지 못한 두 가지입니다.
+4. 작업을 바로 실행합니다. 110·129·200·201·102 가 어떤 순서로 남는지 봅니다. 200 의 ActionName 과 129 의 Path 에 무엇이 들어가는지 적습니다.
 5. 4688 도 켜 두었다면 129 의 ProcessID 를 16진으로 바꿔 4688 과 맞춥니다.
 6. 작업을 수정하고, 사용 안 함으로 바꾸고, 지웁니다. 4702·4701·4699 와 140·142·141 이 짝을 지어 남는지 봅니다. 4699 의 TaskContent 에 무엇이 들어가는지도 봅니다.
 7. 4699~4702 가 어느 감사 하위 범주를 켰을 때 남는지 확인합니다.

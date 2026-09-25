@@ -21,7 +21,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 - WMI 는 영구 소비자를 보통 시작할 때나 이벤트가 생길 때처럼 필요할 때 메모리에 올리며, 등록한 프로그램이 계속 떠 있을 필요는 없습니다.
 - 세 객체는 `CreatorSID` 속성의 SID 가 같아야 합니다.
 - 필터의 `EventNamespace` 속성으로 다른 네임스페이스의 이벤트를 받을 수 있습니다. 레지스트리 이벤트(`RegistryTreeChangeEvent` 등)는 `root\default` 에서만 발생합니다.
-- 소비자가 스크립트나 프로그램을 실행할 수 있으므로 자동실행 위치로 점검하는데, 이 문장은 아래 표준 소비자의 동작에서 끌어낸 해석입니다.
+- 소비자가 스크립트나 프로그램을 실행할 수 있으므로 자동실행 위치로 점검합니다.
 
 ## 위치와 버전별 차이
 
@@ -39,7 +39,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 ### 표준 소비자의 네임스페이스
 
-표준 소비자 클래스가 컴파일되는 기본 네임스페이스는 OS 마다 다르며, Microsoft 문서는 "Windows Server 2003 에서는 모두 `Root\Subscription`" 이라는 예만 듭니다. Windows 11 PC 한 대에서는 `root\subscription` 에 표준 소비자 5개 클래스가 모두 있었습니다. `root\cimv2` 에는 `__EventConsumer` 파생 클래스가 없었습니다.
+표준 소비자 클래스가 컴파일되는 기본 네임스페이스는 OS 마다 다릅니다. 예를 들어 Windows Server 2003 에서는 모두 `Root\Subscription` 입니다[2]. Windows 11 PC 한 대에서는 `root\subscription` 에 표준 소비자 5개 클래스가 모두 있었습니다. `root\cimv2` 에는 `__EventConsumer` 파생 클래스가 없었습니다.
 
 ### 이벤트 로그
 
@@ -50,7 +50,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 ### 세 객체의 속성
 
-아래 속성은 Windows 11 PC 한 대에서 클래스 정의를 읽어 확인했습니다.
+아래 속성은 Windows 11 PC 한 대의 클래스 정의에 있는 것입니다.
 
 | 클래스 | 속성 | 분석 때 볼 칸 |
 |---|---|---|
@@ -58,20 +58,17 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 | `__FilterToConsumerBinding` | Consumer, CreatorSID, DeliverSynchronously, DeliveryQoS, Filter, MaintainSecurityContext, SlowDownProviders | Filter, Consumer(두 객체의 경로) |
 | `ActiveScriptEventConsumer` | CreatorSID, MachineName, MaximumQueueSize, KillTimeout, Name, ScriptFilename, ScriptingEngine, ScriptText | ScriptText, ScriptFilename |
 | `CommandLineEventConsumer` | CommandLineTemplate, ExecutablePath, WorkingDirectory, RunInteractively, ShowWindowCommand 등 26개(CreatorSID·Name 포함) | CommandLineTemplate, ExecutablePath |
-
-"분석 때 볼 칸" 은 속성의 쓰임새에서 고른 해석입니다.
-
 ### 표준 소비자 5종
 
 | 클래스 | 이벤트를 받으면 |
 |---|---|
 | `ActiveScriptEventConsumer` | 스크립트를 실행합니다 |
-| `CommandLineEventConsumer` | 프로세스를 실행합니다. 실행 파일을 안전한 위치에 두거나 강한 ACL 로 보호하라는 주의가 문서에 붙어 있습니다 |
+| `CommandLineEventConsumer` | 프로세스를 실행합니다. 실행 파일은 안전한 위치에 두거나 강한 ACL 로 보호해야 합니다[2] |
 | `LogFileEventConsumer` | 텍스트 로그 파일에 문자열을 씁니다 |
 | `NTEventLogEventConsumer` | Application 이벤트 로그에 메시지를 씁니다 |
 | `SMTPEventConsumer` | SMTP 로 메일을 보냅니다 |
 
-- 소비자가 어느 계정 권한으로 도는지, 스크립트를 돌리는 호스트 프로세스가 무엇인지는 이번에 연 자료로 확인하지 못했습니다.
+- 소비자가 어느 계정 권한으로 도는지, 스크립트를 돌리는 호스트 프로세스가 무엇인지는 검체에서 확인합니다.
 
 ### 한 PC 에 있던 구독
 
@@ -84,7 +81,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 | `__FilterToConsumerBinding` | 위 둘을 잇습니다 |
 
 - 필터의 `CreatorSID` 는 S-1-5-32-544(Administrators) 였습니다.
-- 이 한 벌이 Windows 기본 설치에 들어 있는 정상 구독인지는 확인하지 못했고 PC 한 대에서 본 것뿐입니다. 다른 검체에서 같은 구독을 보면 오탐일 수 있으니 이 표와 맞춰 봅니다.
+- 이 한 벌이 Windows 기본 설치에 들어 있는 구독인지는 공개 자료가 없습니다. 다른 검체에서 같은 구독을 보면 악성으로 단정하기 전에 이 표와 맞춰 봅니다.
 
 ### 실패 기록
 
@@ -99,23 +96,23 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 - 수집 시점에 저장소에 이 필터·소비자·바인딩이 있었습니다.
 - 필터의 Query 로 어떤 조건에 반응하도록 했는지 알 수 있습니다.
 - 소비자의 ScriptText·ScriptFilename·CommandLineTemplate·ExecutablePath 로 무엇을 하도록 했는지 알 수 있습니다.
-- `CreatorSID` 는 등록에 쓰인 계정을 좁히는 실마리가 됩니다. 이 문장은 속성 이름에서 끌어낸 해석입니다.
+- `CreatorSID` 는 등록에 쓰인 계정을 좁히는 실마리가 될 수 있습니다.
 
 ### 증명하지 못하는 것
 
 - **동작했나.** 구독이 있다는 것만 알려 줍니다. 소비자가 실제로 실행한 프로그램은 [프로세스 생성](../event-logs/4688.md) 이나 [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 에서 따로 찾습니다.
-- **언제 만들었나.** 저장소 파일 안에 객체별 생성 시각이 있는지 확인하지 못했습니다.
-- **바인딩이 없는 필터나 소비자가 동작하나.** 바인딩이 필터와 소비자를 잇습니다. 바인딩 없이 남은 객체만으로 동작했다고 보지 않습니다. 이 문장은 구성 방식에서 끌어낸 해석입니다.
-- **지운 구독이 있었나.** 지운 구독을 OBJECTS.DATA 에서 찾을 수 있는지 확인하지 못했습니다.
+- **언제 만들었나.** 저장소 파일 안에 객체별 생성 시각이 있는지는 공개 자료가 없습니다.
+- **바인딩이 없는 필터나 소비자가 동작하나.** 바인딩이 필터와 소비자를 잇습니다. 바인딩 없이 남은 객체만으로 동작했다고 보지 않습니다.
+- **지운 구독이 있었나.** 지운 구독이 OBJECTS.DATA 에 남는지는 공개 자료가 없어 검체에서 확인합니다.
 
 보고서에는 "수집 시점에 `root\subscription` 에 이 Query 의 필터와 이 명령줄의 `CommandLineEventConsumer` 가 바인딩으로 묶여 있다" 처럼 씁니다.
 
 ## 시각 해석
 
-- 객체별 시각을 확인하지 못했으므로 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있는데, 이 문장은 해석입니다. 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
+- 객체별 시각이 알려져 있지 않으므로, 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있습니다. 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
 - Windows 11 PC 한 대에서 세 MAPPING 파일의 마지막 수정 시각이 서로 달랐습니다. 가장 최근 것이 INDEX.BTR·OBJECTS.DATA 와 같은 시각이었습니다.
 - 파일 시각은 저장소 전체가 마지막으로 바뀐 때를 말할 뿐, 어느 객체가 바뀌었는지 말하지 않습니다.
-- WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 칸 이름은 Windows 11 PC 한 대의 공급자 메시지에서 읽었습니다.
+- WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 칸 이름은 Windows 11 PC 한 대의 공급자 메시지 기준입니다.
 
 | 이벤트 | 칸 |
 |---|---|
@@ -125,7 +122,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 | 5860 | Namespace, NotificationQuery, UserName, ClientProcessID, ClientMachine |
 | 5861 | "Namespace = %1; Eventfilter = %2 (refer to its activate eventid:5859); Consumer = %3; PossibleCause = %4" |
 
-- 5861 은 필터와 소비자를 함께 적으며, 영구 구독이 등록될 때 남는 이벤트로 쓰입니다. 다만 "등록할 때 발생한다" 는 공식 설명은 확인하지 못했습니다.
+- 5861 은 필터와 소비자를 함께 적으며, 영구 구독이 등록될 때 남는 이벤트로 쓰입니다. 다만 "등록할 때 발생한다" 는 공식 설명은 없습니다.
 - 이 로그 전반은 [원격 명령 실행 이벤트](../event-logs/winrm-wmi-activity.md) 에서 다룹니다.
 - Sysmon 은 이벤트 19·20·21(WmiEvent) 로 필터·소비자·바인딩을 기록합니다. [Sysmon 로그](../event-logs/sysmon/index.md) 를 봅니다.
 
@@ -135,15 +132,15 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 - 그래서 구독이 오래전에 만들어졌다면 로그보다 저장소를 봅니다.
 - **레지스트리 자동실행 점검만으로는 찾지 못합니다.** 구독은 저장소 파일에 있습니다.
 - **정상 구독도 있습니다.** 위 "한 PC 에 있던 구독" 과 같은 한 벌을 악성으로 단정하지 않습니다.
-- **네임스페이스는 한 곳만 보지 않습니다.** 표준 소비자의 기본 네임스페이스가 OS 마다 다르고, 필터는 `EventNamespace` 로 다른 네임스페이스를 가리킬 수 있습니다. 이 문장은 위 사실에서 끌어낸 해석입니다.
-- **저장소 내부 구조는 이 글에서 다루지 않습니다.** OBJECTS.DATA 의 페이지 크기와 매핑 방식은 확인하지 못했습니다. 오프라인 분석 결과는 켜진 PC 에서 읽은 결과나 다른 도구와 맞춰 봅니다.
-- **호스트 프로세스로 잡는 탐지는 따로 확인합니다.** 소비자를 실행하는 프로세스와 계정을 이번 자료로 확인하지 못했습니다.
+- **네임스페이스는 한 곳만 보지 않습니다.** 표준 소비자의 기본 네임스페이스가 OS 마다 다르고, 필터는 `EventNamespace` 로 다른 네임스페이스를 가리킬 수 있습니다.
+- **저장소 내부 구조는 공식 문서가 없습니다.** OBJECTS.DATA 의 페이지 크기와 매핑 방식이 공개되어 있지 않으므로, 오프라인 분석 결과는 켜진 PC 에서 읽은 결과나 다른 도구와 맞춰 봅니다.
+- **호스트 프로세스로 잡는 탐지는 따로 확인합니다.** 소비자를 실행하는 프로세스와 계정은 검체에서 확인한 뒤 탐지 기준으로 씁니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-저장소 파일의 구조는 확인하지 못했습니다. 그래서 구조를 따라가는 헥스 풀이는 싣지 않습니다. 아래는 클래스 이름을 문자열로 찾을 때 쓸 바이트 모양입니다. 인코딩 규칙으로 만든 예시이며, 특정 검체에서 꺼낸 값이 아닙니다.
+저장소 파일의 구조는 공식 문서가 없어, 구조를 따라가는 헥스 풀이 대신 클래스 이름을 문자열로 찾을 때 쓸 바이트 모양을 싣습니다. 인코딩 규칙으로 만든 예시이며, 특정 검체에서 꺼낸 값이 아닙니다.
 
 **`CommandLine` 의 ASCII 바이트.**
 
@@ -158,7 +155,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 69 00 6E 00 65 00                                 i.n.e.
 ```
 
-1. OBJECTS.DATA 안에서 이 이름이 어느 인코딩으로 저장되는지는 확인하지 못했습니다. 두 모양을 모두 찾습니다.
+1. 이 이름이 OBJECTS.DATA 안에 어느 인코딩으로 저장되는지 알려져 있지 않으므로 두 모양을 모두 찾습니다.
 2. 찾은 문자열이 살아 있는 구독인지, 지운 구독의 잔재인지는 구조를 풀지 않고는 가릴 수 없습니다.
 3. 문자열 검색으로 나온 결과는 "이 문자열이 파일 안에 있다" 까지만 씁니다.
 

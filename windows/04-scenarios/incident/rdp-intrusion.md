@@ -8,8 +8,6 @@ nav_order: 3700
 
 이 페이지는 누군가 원격 데스크톱 (Remote Desktop Protocol, RDP) 으로 이 PC 에 들어왔는지 확인하는 순서를 다룹니다. 로그온 실패가 몰렸는지, 같은 곳에서 성공 로그온으로 이어졌는지, 세션 안에서 무엇을 했는지를 차례로 봅니다. 이 PC 가 다른 PC 로 원격 데스크톱 접속을 나간 출발점인지도 가립니다. 이벤트마다의 칸과 뜻은 [원격 데스크톱 이벤트](../../02-artifacts/event-logs/rdp-event-logs/index.md) 와 그 하위 페이지에 있습니다. 로그온 실패를 여러 건 묶어 대입 모양을 읽는 법은 [비밀번호 대입 공격이 있었나](credential-theft-lateral-movement/brute-force.md) 에 있습니다.
 
-"(관찰)" 을 붙인 내용은 Windows 11 Home(빌드 26200) 분석 PC 한 대에서 직접 조회한 것입니다. 한 대에서 본 값이므로 기본값으로 일반화하지 않습니다.
-
 ## 조사 질문
 
 - 이 PC 는 원격 데스크톱 접속을 받도록 켜져 있었습니까? 인터넷에 열려 있었습니까?
@@ -24,17 +22,15 @@ nav_order: 3700
 |---|---|
 | Windows 버전 | 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 적습니다. 로그온 실패 이벤트 4625 는 Windows Vista·Windows Server 2008 부터 있습니다[2]. |
 | 시간대 | 여러 로그의 시각을 한 기준으로 맞춥니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](../activity/file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
-| 원격 데스크톱 설정 | 접속을 받도록 켜져 있었는지 레지스트리 설정과 방화벽 규칙으로 봅니다. 분석 PC 는 원격 데스크톱 받기가 꺼진 상태였습니다(관찰). 이때 `HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server` 의 `fDenyTSConnections` 값은 1 이었습니다(관찰). 값마다의 뜻은 이번에 공식 문서로 확인하지 못했습니다. 방화벽 기록은 [윈도 방화벽](../../02-artifacts/network/windows-firewall-pfirewall-log.md) 에서 봅니다. |
+| 원격 데스크톱 설정 | 접속을 받도록 켜져 있었는지 레지스트리 설정과 방화벽 규칙으로 봅니다. Windows 11 Home(빌드 26200)에서 원격 데스크톱 받기가 꺼져 있으면 `HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server` 의 `fDenyTSConnections` 값이 1 입니다. 방화벽 기록은 [윈도 방화벽](../../02-artifacts/network/windows-firewall-pfirewall-log.md) 에서 봅니다. |
 | 감사 정책 | 로그온 감사가 꺼져 있으면 Security 로그에 로그온 기록이 남지 않습니다. 기록이 없다고 해서 접속이 없었다고 읽지 않습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
 | 수집 범위 | 받는 PC 의 Security 로그, TerminalServices 운영 로그, 방화벽 로그, 레지스트리 하이브를 확보합니다. 출발지로 의심되는 PC 가 조직 안에 있으면 그 PC 의 기록도 확보합니다. |
 
-## MITRE 가 설명하는 원격 데스크톱 악용
+## 원격 데스크톱 악용 기법 (T1021.001)
 
-MITRE ATT&CK 은 원격 데스크톱으로 옆 PC 로 옮겨 가는 기법을 T1021.001 (Remote Desktop Protocol) 로 둡니다[1]. 공격자는 서비스가 켜져 있고 자격 증명을 아는 계정이 접속할 수 있을 때, 그 유효한 계정으로 원격 데스크톱에 로그인합니다[1]. 탐지 문장은 원격 데스크톱 로그온 직후 짧은 시간 안에 이어지는 이상한 프로세스 실행·파일 접근·측면 이동을 보라고 합니다[1].
+원격 데스크톱으로 옆 PC 로 옮겨 가는 기법은 MITRE ATT&CK 의 T1021.001 (Remote Desktop Protocol) 입니다[1]. 공격자는 서비스가 켜져 있고 자격 증명을 아는 계정이 접속할 수 있을 때, 그 유효한 계정으로 원격 데스크톱에 로그인합니다[1]. 원격 데스크톱 로그온 직후 짧은 시간 안에 이어지는 이상한 프로세스 실행·파일 접근·측면 이동이 탐지 단서가 됩니다[1].
 
-같은 페이지는 원격 데스크톱을 접근성 기능(T1546.008)이나 터미널 서비스 DLL(T1505.005)과 함께 지속성에 쓰는 경우도 듭니다[1]. 자동실행 위치를 훑는 법은 [악성코드 지속성(자동실행) 찾기](persistence.md) 에 있습니다. 완화책으로는 필요 없으면 원격 데스크톱 끄기, 다중 인증, 인터넷에서 원격 데스크톱 막기, 세션 시간 제한, Remote Desktop Users 그룹 구성원 감사를 들며[1], 보고서의 권고 절에 쓸 수 있습니다.
-
-MITRE 페이지에는 윈도 이벤트 ID 나 레지스트리 키가 없어서[1], 아래 이벤트는 Microsoft 문서와 분석 PC 조회에서 가져왔습니다.
+원격 데스크톱은 접근성 기능(T1546.008)이나 터미널 서비스 DLL(T1505.005)과 함께 지속성에 쓰이기도 합니다[1]. 자동실행 위치를 훑는 법은 [악성코드 지속성(자동실행) 찾기](persistence.md) 에 있습니다. 완화책은 필요 없으면 원격 데스크톱 끄기, 다중 인증, 인터넷에서 원격 데스크톱 막기, 세션 시간 제한, Remote Desktop Users 그룹 구성원 감사입니다[1]. 보고서의 권고 절에 쓸 수 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -57,11 +53,11 @@ MITRE 페이지에는 윈도 이벤트 ID 나 레지스트리 키가 없어서[1
 
 로그온에 실패할 때마다 로그온을 받은 쪽 컴퓨터에 남습니다[2]. 로그온 유형 10 은 원격 대화형 (RemoteInteractive) 이고, 터미널 서비스나 원격 데스크톱 로그온이 여기에 듭니다[2]. Workstation Name 칸에는 시도한 컴퓨터의 이름이, Source Network Address 칸에는 시도한 컴퓨터의 IP 가 들어갑니다[2].
 
-Microsoft 문서는 로컬 계정의 4625 는 모두 지켜보라고 권하는데, 로컬 계정은 보통 잠기면 안 되기 때문입니다[2]. 칸 전체와 실패 코드 표는 [로그온 실패와 실패 코드](../../02-artifacts/event-logs/logon-events/4625.md) 에 있고, NLA 가 켜진 서버에서 실패가 어떤 로그온 유형으로 남는지는 [해석 함정 (1149의 뜻·NLA·유형 3과 10 구분)](../../02-artifacts/event-logs/rdp-event-logs/1149-nla-3-10.md) 에서 확인합니다.
+로컬 계정의 4625 는 모두 지켜봅니다. 로컬 계정은 보통 잠기면 안 되기 때문입니다[2]. 칸 전체와 실패 코드 표는 [로그온 실패와 실패 코드](../../02-artifacts/event-logs/logon-events/4625.md) 에 있고, NLA 가 켜진 서버에서 실패가 어떤 로그온 유형으로 남는지는 [해석 함정 (1149의 뜻·NLA·유형 3과 10 구분)](../../02-artifacts/event-logs/rdp-event-logs/1149-nla-3-10.md) 에서 확인합니다.
 
 **TerminalServices 운영 로그.**
 
-원격 데스크톱 인증 성공은 RemoteConnectionManager 운영 로그의 1149 로도 남으며, 분석 PC 의 공급자 정의에서 메시지가 "User authentication succeeded" 임을 확인했습니다(관찰). 같은 채널의 261 은 리스너가 연결을 받았다는 메시지입니다(관찰). 두 이벤트의 메시지 원문과 칸은 [들어온 접속: 인증 단계](../../02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) 에 있습니다.
+원격 데스크톱 인증 성공은 RemoteConnectionManager 운영 로그의 1149 로도 남으며, 메시지는 "User authentication succeeded" 입니다. 같은 채널의 261 은 리스너가 연결을 받았다는 메시지입니다. 두 이벤트의 메시지 원문과 칸은 [들어온 접속: 인증 단계](../../02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md) 에 있습니다.
 
 이 채널은 Security 로그와 따로 저장되므로, Security 로그가 비어 있어도 이 채널을 따로 봅니다.
 

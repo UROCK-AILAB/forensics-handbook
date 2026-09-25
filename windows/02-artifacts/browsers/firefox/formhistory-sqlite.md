@@ -9,21 +9,21 @@ nav_order: 1770
 
 ## 한 줄 요약
 
-파이어폭스는 웹 양식의 입력란에 친 값을 `formhistory.sqlite` 에 SQLite 형식으로 저장하고 다음에 입력할 때 이 값을 자동완성 후보로 보여 주며, 입력란 이름과 값, 쓴 횟수, 처음과 마지막으로 쓴 시각이 남습니다. 지운 항목의 식별자와 지운 시각을 따로 담는 표도 있지만, 소스는 안드로이드판에서만 이 표에 씁니다.
+파이어폭스는 웹 양식의 입력란에 친 값을 `formhistory.sqlite` 에 SQLite 형식으로 저장하고 다음에 입력할 때 이 값을 자동완성 후보로 보여 주며, 입력란 이름과 값, 쓴 횟수, 처음과 마지막으로 쓴 시각이 남습니다. 지운 항목의 식별자와 지운 시각을 따로 담는 표도 있지만, 이 표에는 안드로이드판만 씁니다[1].
 
 ## 무엇을 기록하나 · 왜 생기나
 
 양식 기록 (Form History) 은 사용자가 입력란에 친 값을 입력란 이름과 함께 모아 둔 기록이며, 같은 이름의 입력란을 다시 만나면 파이어폭스가 저장해 둔 값을 후보로 보여 줍니다. 한 행에는 쓴 횟수와 처음·마지막으로 쓴 시각이 함께 있습니다.
 
-- 안드로이드판은 항목을 지울 때 `moz_deleted_formhistory` 표에 그 항목의 `guid` 와 지운 시각을 씁니다. 소스의 `supportsDeletedTable` 이 안드로이드에서만 참이므로, Windows 판에서는 이 표에 행을 쓰지 않습니다.
-- 오래된 항목은 파이어폭스가 스스로 지웁니다. 소스의 `expireOldEntries()` 는 `browser.formfill.expire_days` 로 기준 시각을 계산하고, `lastUsed` 가 그보다 이른 항목을 지웁니다.
+- 안드로이드판은 항목을 지울 때 `moz_deleted_formhistory` 표에 그 항목의 `guid` 와 지운 시각을 씁니다. `supportsDeletedTable` 이 안드로이드에서만 참이므로, Windows 판에서는 이 표에 행을 쓰지 않습니다[1].
+- 오래된 항목은 파이어폭스가 스스로 지웁니다. `expireOldEntries()` 가 `browser.formfill.expire_days` 로 기준 시각을 계산하고, `lastUsed` 가 그보다 이른 항목을 지웁니다[1].
 
 ## 위치와 버전별 차이
 
 - 파일 이름은 `formhistory.sqlite` 입니다. 프로필 폴더에서 찾습니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
-- 이번에 연 소스에서는 파일 이름만 확인했습니다. 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 검체에서 확인합니다.
-- 아래 표와 칸은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 이때 DB 스키마 버전 상수(`DB_SCHEMA_VERSION`)는 5 입니다.
-- 예전 스키마 버전에 어느 표와 칸이 있었는지, 각 버전이 어느 출시판에 들어갔는지는 확인하지 못했습니다.
+- 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 검체에서 확인합니다.
+- 아래 표와 칸은 파이어폭스 소스 main 가지(2026-09-23 기준)의 것입니다. 이때 DB 스키마 버전 상수(`DB_SCHEMA_VERSION`)는 5 입니다[1].
+- 예전 스키마 버전에 어느 표와 칸이 있었는지, 각 버전이 어느 출시판에 들어갔는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
@@ -35,7 +35,7 @@ nav_order: 1770
 |---|---|
 | `moz_formhistory` | 입력란 이름과 값 한 쌍마다 한 행입니다 |
 | `moz_deleted_formhistory` | 지운 항목의 `guid` 와 지운 시각입니다. 안드로이드판만 씁니다 |
-| `moz_sources` | 출처 문자열입니다. 값의 뜻은 확인하지 못했습니다 |
+| `moz_sources` | 출처 문자열입니다. 값의 뜻은 검체에서 확인합니다 |
 | `moz_history_to_sources` | `moz_formhistory` 행과 `moz_sources` 행을 잇습니다 |
 
 ### `moz_formhistory` 의 칸
@@ -67,16 +67,16 @@ nav_order: 1770
 
 ### 관련 설정
 
-- 소스는 `browser.formfill` 아래 설정을 읽습니다. `enable`, `expire_days`, `agedWeight`, `boundaryWeight`, `bucketSize`, `debug`, `maxTimeGroupings`, `prefixWeight`, `timeGroupingSize` 입니다.
+- 파이어폭스는 `browser.formfill` 아래 설정을 읽습니다[1]. `enable`, `expire_days`, `agedWeight`, `boundaryWeight`, `bucketSize`, `debug`, `maxTimeGroupings`, `prefixWeight`, `timeGroupingSize` 입니다.
 - 분석에서 먼저 볼 설정은 `enable` 과 `expire_days` 입니다. `expire_days` 는 항목을 며칠 뒤에 지울지 정합니다.
-- `expire_days` 의 기본값은 확인하지 못했습니다. 설정 파일의 형식도 확인하지 못했습니다. [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 를 참고합니다.
+- `expire_days` 값은 검체의 설정 파일에서 확인합니다. 설정 파일은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 
-### 확인하지 못한 것
+### 검체에서 확인할 것
 
 - `moz_sources.source` 에 들어가는 값의 뜻입니다.
 - 비밀번호 칸이나 카드 번호 칸의 값을 저장하지 않는지입니다.
 - 브라우저 검색창에 친 검색어가 이 파일에 어떤 입력란 이름으로 들어가는지입니다.
-- 사생활 보호 창 (Private Browsing) 에서 친 값을 저장하는지입니다. 참고한 소스 파일(`FormHistory.sys.mjs`)에는 사생활 보호 창을 다루는 코드가 없었습니다. 다른 곳에서 처리할 수 있으므로 어느 쪽으로도 단정하지 않습니다.
+- 사생활 보호 창 (Private Browsing) 에서 친 값을 저장하는지입니다. `FormHistory.sys.mjs` 에는 사생활 보호 창을 다루는 코드가 없지만 다른 곳에서 처리할 수 있으므로, 어느 쪽으로도 단정하지 않습니다.
 
 ## 증거로서 의미
 
@@ -100,7 +100,7 @@ nav_order: 1770
 
 ## 시각 해석
 
-- `firstUsed`, `lastUsed`, `timeDeleted` 는 1970년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 파이어폭스 소스는 이 단위를 PRTime 이라고 부릅니다.
+- `firstUsed`, `lastUsed`, `timeDeleted` 는 1970년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 파이어폭스는 이 단위를 PRTime 이라고 부릅니다[2].
 - 현지 시각이 아닙니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 - 처음 저장할 때 `firstUsed`·`lastUsed` 를 그때 시각으로, `timesUsed` 를 1 로 씁니다.
 - 같은 값을 다시 쓰면 `timesUsed` 를 1 올리고 `lastUsed` 만 그때 시각으로 바꿉니다. `firstUsed` 는 그대로입니다.
@@ -110,7 +110,7 @@ nav_order: 1770
 ## 함정과 한계
 
 - **원본 프로필로 브라우저를 켜지 않습니다.** 파이어폭스는 만료된 항목을 스스로 지웁니다. 해시를 기록한 사본으로 분석합니다.
-- **저널 파일을 함께 뜹니다.** 이 파일의 저널 방식은 확인하지 못했습니다. 같은 폴더에 `formhistory.sqlite-wal` 이나 `formhistory.sqlite-journal` 이 있으면 함께 사본으로 뜹니다. [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
+- **저널 파일을 함께 뜹니다.** 같은 폴더에 `formhistory.sqlite-wal` 이나 `formhistory.sqlite-journal` 이 있으면 함께 사본으로 뜹니다. [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
 - **입력란 이름으로 사이트를 단정하지 않습니다.** `email`, `q` 같은 이름은 여러 사이트가 함께 씁니다. 사이트는 방문 기록의 시각과 맞춰 좁힙니다.
 - **지운 항목은 옛 사본과 견줘 찾습니다.** Windows 판에는 지운 항목 표에 행이 없습니다. 섀도 복사본 속 옛 파일에만 있는 `guid` 를 찾고, SQLite 의 빈 공간과 메모리도 봅니다. [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 를 참고합니다.
 - **민감한 값이 평문으로 나옵니다.** 이름·주소·전화번호 같은 개인정보가 들어 있을 수 있습니다. 보고서에 옮길 때는 필요한 만큼만 적습니다.

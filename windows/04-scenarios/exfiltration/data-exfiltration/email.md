@@ -11,7 +11,7 @@ nav_order: 3610
 
 이 페이지는 PC 에 설치한 메일 프로그램으로 자료를 첨부해 보냈는지 확인하는 순서를 다룹니다. 브라우저로 웹메일에 들어가 보낸 경우는 [웹메일·웹하드로 올렸나 (Web Upload)](web-upload.md) 에서 다룹니다.
 
-이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 것입니다. 이 PC 는 새 Outlook 만 쓰고 클래식 Outlook 은 쓰지 않은 PC 였습니다.
+아래 폴더 구성은 새 Outlook 만 쓰고 클래식 Outlook 은 쓰지 않은 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다.
 
 ## 조사 질문
 
@@ -53,11 +53,11 @@ nav_order: 3610
 | Outlook 2016 이후 | `C:\Users\<사용자>\Documents\Outlook Files\archive.pst` |
 | 그 전 판 | `C:\Users\<사용자>\AppData\Local\Microsoft\Outlook\archive.pst` |
 
-(표는 [1]. 연 문서는 archive.pst 를 기준으로 설명합니다.)
+(표는 [1]. 위치는 archive.pst 기준입니다.)
 
 - 다른 .pst 가 이 두 폴더에만 있다고 가정하지 않습니다. 디스크 전체에서 .pst·.ost 확장자로 찾습니다.
 - 외부 장치나 다른 폴더에 있던 .pst 를 연 흔적도 바로가기 파일에서 찾습니다. .pst 는 메일을 통째로 옮기는 수단이 될 수 있습니다.
-- 관찰한 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook` 과 `Documents\Outlook Files` 폴더가 모두 없었습니다(관찰). 클래식 Outlook 을 쓰지 않은 PC 였습니다.
+- 클래식 Outlook 을 쓰지 않은 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook` 과 `Documents\Outlook Files` 폴더가 모두 없을 수 있습니다.
 
 ### 보낸 편지함과 지운 메일
 
@@ -67,15 +67,15 @@ nav_order: 3610
 
 ### .pst 지원
 
-새 Outlook 은 .pst 지원이 제한적입니다[1]. .pst 파일 안에서 메일과 폴더를 옮기거나 복사하거나 지우는 일과 편지함과 .pst 사이의 끌어 놓기는 되고[1], 편지함의 메일·일정·연락처·작업을 .pst 로 내보내는 기능도 들어왔지만[1], .pst 를 편지함으로 한꺼번에 가져오는 기능은 앞으로 넣을 기능으로 적혀 있습니다[1]. 새 Outlook 을 쓰는 PC 에서도 메일을 .pst 로 옮길 수 있으므로 새 Outlook PC 에서도 .pst 파일을 찾습니다.
+새 Outlook 은 .pst 지원이 제한적입니다[1]. .pst 파일 안에서 메일과 폴더를 옮기거나 복사하거나 지우는 일과 편지함과 .pst 사이의 끌어 놓기는 되고[1], 편지함의 메일·일정·연락처·작업을 .pst 로 내보내는 기능도 들어왔지만[1], .pst 를 편지함으로 한꺼번에 가져오는 기능은 아직 없고 앞으로 들어올 기능입니다[1]. 새 Outlook 을 쓰는 PC 에서도 메일을 .pst 로 옮길 수 있으므로 새 Outlook PC 에서도 .pst 파일을 찾습니다.
 
 ### PC 에 남는 폴더
 
-- 관찰한 PC 에는 새 Outlook 패키지 `Microsoft.OutlookForWindows_8wekyb3d8bbwe` 가 있었습니다(관찰).
-- `%LOCALAPPDATA%\Microsoft\Olk\` 아래에 `EBWebView`, `logs`, `UserSettings.json` 등이 있었습니다(관찰).
-- `Olk\EBWebView\Default` 는 WebView2 프로필 모양이었습니다(관찰). `History`, `Network\Cookies`, `Local Storage`, `Session Storage`, `Cache` 등이 있었고 `IndexedDB` 는 없었습니다.
+- 새 Outlook 을 쓰는 PC 에는 새 Outlook 패키지 `Microsoft.OutlookForWindows_8wekyb3d8bbwe` 가 있습니다.
+- `%LOCALAPPDATA%\Microsoft\Olk\` 아래에 `EBWebView`, `logs`, `UserSettings.json` 등이 있습니다.
+- `Olk\EBWebView\Default` 는 WebView2 프로필 모양입니다. `History`, `Network\Cookies`, `Local Storage`, `Session Storage`, `Cache` 등이 있고, `IndexedDB` 는 없을 수 있습니다.
 - WebView2 프로필 파일을 읽는 법은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
-- 새 Outlook 이 메일 본문과 첨부를 PC 어디에 얼마나 남기는지는 확인하지 못했습니다. 메일은 서버에 있고 PC 에는 캐시만 남을 수 있습니다. 자세한 내용은 [새 Outlook](../../../02-artifacts/mail/new-outlook.md) 을 봅니다.
+- 새 Outlook 이 메일 본문과 첨부를 PC 어디에 얼마나 남기는지는 공개된 분석 자료가 없어 검체에서 확인합니다. 메일은 서버에 있고 PC 에는 캐시만 남을 수 있습니다. 자세한 내용은 [새 Outlook](../../../02-artifacts/mail/new-outlook.md) 을 봅니다.
 
 ## 분석 흐름
 

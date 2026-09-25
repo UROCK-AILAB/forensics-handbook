@@ -15,7 +15,7 @@ MountPoints2 는 사용자 하이브(NTUSER.DAT)에 있는 키이며, 그 사용
 
 볼륨이 붙으면 마운트 관리자 (Mount Manager) 가 볼륨 GUID 를 붙이고 SYSTEM 하이브의 `MountedDevices` 에 적습니다([드라이브 문자 매핑 (MountedDevices)](mounteddevices.md)). 같은 볼륨 GUID 가 사용자 하이브의 MountPoints2 아래에도 `{GUID}` 이름의 하위 키로 생기는데, 이 하위 키는 사용자마다 따로 생기므로 장치와 사용자를 잇는 몇 안 되는 레지스트리 기록입니다. 볼륨만 남는 것이 아니라 연결한 네트워크 공유도 `##서버#공유` 꼴의 하위 키로 남습니다.
 
-Harlan Carvey 가 정리한 순서는 다음과 같습니다(2013).
+장치와 사용자는 다음 순서로 잇습니다.
 
 1. USBSTOR 에서 장치를 찾습니다.
 2. `MountedDevices` 에서 그 장치를 가리키는 `\??\Volume{GUID}` 값을 찾아 볼륨 GUID 를 얻습니다.
@@ -35,10 +35,10 @@ Harlan Carvey 가 정리한 순서는 다음과 같습니다(2013).
 | 버전 | 키 이름 | 근거 |
 |---|---|---|
 | Windows 2000 | `MountPoints` (끝에 2 가 없음) | libyal winreg-kb |
-| XP·2003·Vista·2008·7·8·8.1·10 | `MountPoints2` | libyal winreg-kb 가 확인한 버전 목록 |
-| Vista 이후로 추정 | `MountPoints2\CPC`, `CPC\Volume` 이 생김 | winreg-kb 도 물음표를 달아 둔 추정입니다 |
-| 7 이후로 추정 | `CPC\LocalMOF` 가 생김 | winreg-kb 의 추정입니다 |
-| 11 | `MountPoints2` 와 `CPC\Volume` 이 있음 | 관찰 |
+| XP·2003·Vista·2008·7·8·8.1·10 | `MountPoints2` | libyal winreg-kb |
+| Vista 이후로 추정 | `MountPoints2\CPC`, `CPC\Volume` 이 생김 | winreg-kb 의 추정 |
+| 7 이후로 추정 | `CPC\LocalMOF` 가 생김 | winreg-kb 의 추정 |
+| 11 | `MountPoints2` 와 `CPC\Volume` 이 있음 | — |
 
 ## 구조
 
@@ -49,7 +49,7 @@ Harlan Carvey 가 정리한 순서는 다음과 같습니다(2013).
 | `{GUID}` | 볼륨 GUID. `MountedDevices` 의 `\??\Volume{GUID}` 와 짝입니다 | `{01234567-89ab-cdef-0123-456789abcdef}` (winreg-kb 예시) |
 | `##…#…` | 네트워크 공유. UNC 경로의 `\` 가 `#` 로 바뀐 꼴입니다 | `##1.2.3.4#username` (winreg-kb 예시) |
 | 영문 한 글자 | 드라이브 문자 | `C` (winreg-kb 예시) |
-| `CPC` | 아래에 `Volume`·`LocalMOF` 하위 키가 있습니다 | 뜻은 공개 문서로 확인하지 못했습니다 |
+| `CPC` | 아래에 `Volume`·`LocalMOF` 하위 키가 있습니다 | 뜻을 설명한 공개 문서는 없습니다 |
 
 `{GUID}` 하위 키 안에는 다음 하위 키와 값이 있을 수 있습니다(winreg-kb).
 
@@ -59,12 +59,12 @@ Harlan Carvey 가 정리한 순서는 다음과 같습니다(2013).
 | 하위 키 | `Shell`, `Shell\Autoplay`, `Shell\Autoplay\DropTarget`, `Shell\AutoRun`, `Shell\AutoRun\Command` |
 | 값 | `BaseClass` (REG_SZ) |
 
-Win11 25H2 한 대에서 본 모습은 이렇습니다(관찰).
+Windows 11 25H2 에서는 이런 모습입니다.
 
-- `{GUID}` 하위 키 가운데 여럿은 값도 하위 키도 없는 빈 키였습니다.
-- 나머지에는 `shell\Autoplay` (값 `MUIVerb`) 와 `shell\Autoplay\DropTarget` (값 `CLSID`) 가 있었습니다.
-- `CPC\Volume` 아래에는 `{GUID}` 하위 키가 있었고, 값 이름은 `Data`·`Generation` 이었습니다. 이 값의 뜻은 문서로 확인하지 못했으므로 해석하지 않습니다.
-- 드라이브 문자 하위 키는 없었습니다.
+- `{GUID}` 하위 키 가운데 여럿은 값도 하위 키도 없는 빈 키일 수 있습니다.
+- 나머지에는 `shell\Autoplay` (값 `MUIVerb`) 와 `shell\Autoplay\DropTarget` (값 `CLSID`) 가 있습니다.
+- `CPC\Volume` 아래에는 `{GUID}` 하위 키가 있고, 값 이름은 `Data`·`Generation` 입니다. 이 값의 뜻을 설명한 공개 문서는 없으므로 해석하지 않습니다.
+- 드라이브 문자 하위 키는 없을 수 있습니다.
 
 ### 볼륨 GUID 안에 든 정보
 
@@ -75,7 +75,7 @@ Win11 25H2 한 대에서 본 모습은 이렇습니다(관찰).
 | 1·2·3번째 칸 (버전 글자 제외) | 1582-10-15 00:00 UTC 부터 100나노초 단위로 센 60비트 시각 |
 | 마지막 칸 (12자리) | 노드 값. 보통 네트워크 카드의 MAC 주소입니다 |
 
-Carvey 는 MountPoints2 와 `MountedDevices` 의 볼륨 GUID 일부가 버전 1 형식이라고 보고했습니다(2012). 노드 값에서 그 PC 의 MAC 주소가 나왔습니다. 모든 GUID 가 버전 1 은 아니며, Win11 25H2 한 대에서는 세 번째 칸이 `0…` 이나 `4…` 로 시작하는 GUID 가 대부분이었습니다(관찰). 이런 GUID 에는 시각도 MAC 주소도 없습니다.
+MountPoints2 와 `MountedDevices` 의 볼륨 GUID 가운데 일부는 버전 1 형식이고, 노드 값에 그 PC 의 MAC 주소가 들어 있습니다. 모든 GUID 가 버전 1 은 아닙니다. Windows 11 25H2 에서는 세 번째 칸이 `0…` 이나 `4…` 로 시작하는 GUID 가 대부분입니다. 이런 GUID 에는 시각도 MAC 주소도 없습니다.
 
 GUID 문자열과 바이트 순서는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다.
 
@@ -89,7 +89,7 @@ GUID 문자열과 바이트 순서는 [윈도 식별자 형식](../../../01-foun
 | | 처음 연결한 때 |
 | | 키가 없으면 그 사용자 세션에 나타난 적이 없다는 것 (지웠을 수 있습니다) |
 
-Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙으면 그 GUID 는 로그온해 있는 **모든** 사용자의 MountPoints2 에 들어갑니다(2013). 콘솔 앞의 사용자에게만 들어가지 않습니다. 빠른 사용자 전환 (Fast User Switching) 으로 여러 사용자가 로그온해 있었다면 여러 하이브에 같은 GUID 가 남을 수 있습니다.
+볼륨이 붙으면 그 GUID 는 로그온해 있는 **모든** 사용자의 MountPoints2 에 들어갑니다. 콘솔 앞의 사용자에게만 들어가지 않습니다. 빠른 사용자 전환 (Fast User Switching) 으로 여러 사용자가 로그온해 있었다면 여러 하이브에 같은 GUID 가 남을 수 있습니다.
 
 보고서에는 기록이 말하는 만큼만 씁니다.
 
@@ -102,10 +102,10 @@ Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙�
 
 | 시각 | 흔히 읽는 뜻 | 조심할 점 |
 |---|---|---|
-| `{GUID}` 하위 키의 마지막 기록 시각 | 그 볼륨이 이 사용자 세션에 마지막으로 나타난 무렵 | Carvey 는 이것을 "일반적으로 받아들여지는 해석"이라고 썼습니다(2013). 형식 명세로 정해진 뜻이 아닙니다 |
+| `{GUID}` 하위 키의 마지막 기록 시각 | 그 볼륨이 이 사용자 세션에 마지막으로 나타난 무렵 | 널리 받아들여지는 해석일 뿐, 형식 명세로 정해진 뜻이 아닙니다 |
 | `MountPoints2` 키의 마지막 기록 시각 | 하위 키가 마지막으로 생기거나 지워진 무렵 | 어느 하위 키 때문인지는 알려 주지 않습니다 |
 | `Shell`·`_Autorun` 같은 더 아래 하위 키의 시각 | 그 하위 키가 바뀐 때 | 아래 키의 변경은 `{GUID}` 키의 시각을 바꾸지 않습니다 |
-| 버전 1 GUID 안의 시각 | GUID 를 만든 무렵 | 사용자별 값이 아닙니다. Carvey 의 시험에서는 장치를 연결한 부팅 세션의 부팅 시각을 가리켰습니다(2012). 확인된 규칙이 아니라 시험 결과입니다 |
+| 버전 1 GUID 안의 시각 | GUID 를 만든 무렵 | 사용자별 값이 아닙니다. Carvey 의 시험(2012)에서는 장치를 연결한 부팅 세션의 부팅 시각을 가리켰습니다. 정해진 규칙은 아닙니다 |
 
 - `{GUID}` 하위 키 시각은 [장치 속성의 마지막 연결 시각 (0066)](deviceclasses-device-properties-0064-0066-0067.md)과 맞춰 봅니다. 두 시각이 가까우면 마지막 연결 때 이 사용자가 로그온해 있었다고 볼 근거가 됩니다.
 - 하위 키 시각이 0066 보다 한참 앞서면, 그 뒤의 연결 때는 이 사용자 키가 다시 쓰이지 않았을 수 있습니다. 이 사용자가 그때 로그온해 있지 않았을 가능성을 따져 봅니다.
@@ -113,13 +113,13 @@ Jacky Fox 의 연구를 Carvey 가 소개한 내용에 따르면, 볼륨이 붙�
 
 ## 함정과 한계
 
-1. **여러 사용자에게 같은 GUID 가 남을 수 있습니다.** 로그온해 있던 사용자 모두에게 남는다는 연구가 있습니다. 한 하이브에서 GUID 를 찾았다고 그 사용자가 꽂았다고 단정하지 않습니다. 그 시각의 [로그온 세션](../../event-logs/logon-events/logon-id-4624-4634-4647.md)을 함께 봅니다.
-2. **GUID 는 장치가 아니라 볼륨 단위이므로** 파티션이 여럿인 장치는 GUID 도 여럿입니다. Microsoft 문서에 따르면 볼륨을 포맷할 때도 볼륨 GUID 를 붙입니다. 같은 USB 라도 포맷한 뒤에는 다른 GUID 로 남을 수 있습니다.
+1. **여러 사용자에게 같은 GUID 가 남을 수 있습니다.** 로그온해 있던 사용자 모두에게 남습니다. 한 하이브에서 GUID 를 찾았다고 그 사용자가 꽂았다고 단정하지 않습니다. 그 시각의 [로그온 세션](../../event-logs/logon-events/logon-id-4624-4634-4647.md)을 함께 봅니다.
+2. **GUID 는 장치가 아니라 볼륨 단위이므로** 파티션이 여럿인 장치는 GUID 도 여럿입니다. 볼륨을 포맷할 때도 볼륨 GUID 를 붙입니다. 같은 USB 라도 포맷한 뒤에는 다른 GUID 로 남을 수 있습니다.
 3. **볼륨 GUID 는 이 PC 가 붙인 이름이며** 장치 자체에 적힌 번호가 아닙니다. 다른 PC 의 GUID 와 맞춰 보는 용도로 쓰지 않습니다.
-4. **USB 만 남지 않습니다.** 내장 디스크와 광학 드라이브의 GUID 도 남습니다(Carvey 2012). `MountedDevices` 와 짝을 맞춰 USB 장치인지 먼저 가립니다.
-5. **짝이 없는 GUID 가 흔합니다.** Win11 25H2 한 대에서는 MountPoints2 의 볼륨 GUID 11개 가운데 1개만 지금의 `MountedDevices` 에 있었습니다(관찰, 원인은 확인하지 않음). 짝이 없으면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 안의 옛 SYSTEM 하이브에서 찾습니다.
+4. **USB 만 남지 않습니다.** 내장 디스크와 광학 드라이브의 GUID 도 남습니다. `MountedDevices` 와 짝을 맞춰 USB 장치인지 먼저 가립니다.
+5. **짝이 없는 GUID 가 흔합니다.** Windows 11 25H2 PC 한 대에서 MountPoints2 의 볼륨 GUID 11개 가운데 그때의 `MountedDevices` 에 짝이 있는 것은 1개뿐인 경우가 있습니다. 짝이 없으면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 안의 옛 SYSTEM 하이브에서 찾습니다.
 6. **도구가 보여 주는 MAC 주소를 그대로 믿지 않습니다.** RegRipper 의 mp2 플러그인(2020-05-26 판)은 `{` 로 시작하는 모든 하위 키에서 마지막 칸을 떼어 MAC 목록에 넣습니다. 버전 1 인지는 확인하지 않습니다. 버전 4 GUID 의 마지막 칸은 MAC 주소가 아닙니다.
-7. **버전 1 GUID 의 MAC 주소가 이 PC 의 실제 네트워크 카드라는 보장도 없습니다.** Carvey 의 시험에서 가상 머신 프로그램의 가상 어댑터 MAC 이 나왔고, 어느 MAC 과도 맞지 않는 노드 값도 있었습니다(2012).
+7. **버전 1 GUID 의 MAC 주소가 이 PC 의 실제 네트워크 카드라는 보장도 없습니다.** 가상 머신 프로그램의 가상 어댑터 MAC 이 나오기도 하고, 어느 MAC 과도 맞지 않는 노드 값도 있습니다.
 8. **키가 없다고 연결이 없었던 것은 아닙니다.** 이 키는 사용자 권한으로 지울 수 있습니다. 하위 키를 지우면 `MountPoints2` 키의 마지막 기록 시각이 바뀝니다. 지운 키는 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md), 섀도 복사본에서 다시 찾아봅니다.
 9. **`Shell\AutoRun\Command` 에 명령이 적혀 있으면 따로 봅니다.** 이름대로 명령을 담는 자리입니다. 무엇을 실행하도록 걸려 있는지 확인하고 [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md)와 함께 봅니다.
 

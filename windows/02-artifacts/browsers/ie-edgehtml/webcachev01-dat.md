@@ -26,7 +26,7 @@ IE 4~9 는 이 기록을 용도별 `index.dat` 파일에 나눠 두었고, 옛 �
 |---|---|
 | 폴더 | `%LOCALAPPDATA%\Microsoft\Windows\WebCache\` |
 | 풀어 쓴 경로 | `C:\Users\<사용자>\AppData\Local\Microsoft\Windows\WebCache\` |
-| 파일 이름 | `WebCacheV01.dat`, `WebCacheV24.dat` 두 가지가 문서에 나옵니다 |
+| 파일 이름 | `WebCacheV01.dat`, `WebCacheV24.dat` 두 가지가 있습니다[2] |
 | 개수 | 사용자마다 하나 |
 
 | 브라우저 | 기록을 두는 곳 |
@@ -35,7 +35,7 @@ IE 4~9 는 이 기록을 용도별 `index.dat` 파일에 나눠 두었고, 옛 �
 | IE 10·11 | `WebCacheV*.dat` |
 | 옛 엣지 | `WebCacheV01.dat` 안의 컨테이너(캐시·방문 기록·내려받기 기록·쿠키) |
 
-- 어느 버전이 `V01` 을 쓰고 어느 버전이 `V24` 를 쓰는지는 이번에 연 자료에 나오지 않습니다.
+- 어느 버전이 `V01` 을 쓰고 어느 버전이 `V24` 를 쓰는지는 공개 자료에 나오지 않습니다.
 - 수집할 때는 이름을 가리지 않고 `WebCacheV*.dat` 를 모두 가져옵니다.
 
 ### 폴더 안의 다른 파일
@@ -57,7 +57,7 @@ V01tmp.log
 
 ## 구조
 
-아래 표 구성은 공개 분석 도구 plaso 의 WebCache 파서 코드를 기준으로 정리했습니다. 파서가 읽는 범위만 담았으므로 파일 안의 모든 표를 적은 것은 아닙니다.
+아래 표는 공개 분석 도구 plaso 의 WebCache 파서가 읽는 표와 칸입니다[3]. 파일 안의 모든 표를 담지는 않습니다.
 
 ### 표
 
@@ -95,7 +95,7 @@ V01tmp.log
 | BackgroundTransferApi, Content, Cookies, DOMStore, History, iedownload | 읽습니다 |
 | 이름이 `MSHist` 로 시작하는 컨테이너 | 읽습니다 |
 | MicrosoftEdge_DNTException, MicrosoftEdge_EmieSiteList, MicrosoftEdge_EmieUserList | 건너뜁니다 |
-| wpnidm, iecompat, iecompatua, DNTException, DOMStore | 코드에 "아직 지원하지 않음" 으로 적혀 있습니다 |
+| wpnidm, iecompat, iecompatua, DNTException, DOMStore | 아직 지원하지 않습니다 |
 
 - DOMStore 는 두 목록에 모두 나옵니다.
 - `MSHist` 이름 규칙과 옛 index.dat 의 관계는 [옛 기록 파일 (index.dat)](index-dat.md) 에서 다룹니다.
@@ -109,7 +109,7 @@ Windows 11 25H2 PC 의 WebCacheV01.dat 사본에서 표 이름 문자열을 찾�
 - `CookieEntryEx_#`, `AppCacheEx_#`, `AppCacheEntryEx_#`, `HstsEntryEx_#`
 - `MSysObjects`, `MSysObjids`, `MSysLocales`
 
-`Partitions` 라는 이름만 따로 나오지는 않았습니다. `AppCacheEx_#`·`AppCacheEntryEx_#`·`HstsEntryEx_#` 의 뜻과 칸은 이번에 연 자료로 확인하지 못했습니다.
+`Partitions` 라는 이름만 따로 나오지는 않았습니다. `AppCacheEx_#`·`AppCacheEntryEx_#`·`HstsEntryEx_#` 의 뜻과 칸은 공개 자료가 없어 검체에서 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -124,7 +124,7 @@ Windows 11 25H2 PC 의 WebCacheV01.dat 사본에서 표 이름 문자열을 찾�
 
 - 사용자가 주소를 직접 열었는지, 페이지가 알아서 불러온 자원인지는 행 하나만으로 가르지 못합니다.
 - IE 와 옛 엣지가 같은 파일을 쓰므로 행이 어느 브라우저에서 왔는지는 파일만으로 단정하지 않습니다.
-- 컨테이너 이름에서 용도를 짐작할 수 있지만 용도를 적은 문서는 이번에 확인하지 못했습니다. 컨테이너의 뜻은 행의 Url 모양과 함께 판단합니다.
+- 컨테이너 이름에서 용도를 짐작할 수 있지만 용도를 설명한 공개 문서는 없습니다. 컨테이너의 뜻은 행의 Url 모양과 함께 판단합니다.
 - 행이 없다고 방문하지 않았다고 단정하지 않습니다. 기록은 지우거나 정리할 수 있습니다.
 
 보고서에는 "이 사용자 프로필의 WebCacheV01.dat History 컨테이너에 이 주소의 행이 있고, 시각 칸 값은 이렇다" 처럼 기록이 말하는 만큼만 씁니다.
@@ -132,8 +132,8 @@ Windows 11 25H2 PC 의 WebCacheV01.dat 사본에서 표 이름 문자열을 찾�
 ## 시각 해석
 
 - 시각 칸은 모두 FILETIME 입니다. 변환 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 값이 `0x7FFFFFFFFFFFFFFF` 이면 plaso 는 "기한 없음" 으로 처리합니다.
-- 값이 1 인 FILETIME 같은 특수값은 plaso 도 아직 처리하지 않는다고 적어 두었습니다. 변환 결과가 1601년 1월 1일로 나오면 특수값을 먼저 의심합니다.
+- 값이 `0x7FFFFFFFFFFFFFFF` 이면 "기한 없음" 입니다[3].
+- plaso 는 값이 1 인 FILETIME 같은 특수값을 아직 처리하지 않습니다[3]. 변환 결과가 1601년 1월 1일로 나오면 특수값을 먼저 의심합니다.
 
 plaso 는 각 시각 칸에 아래 설명을 붙입니다.
 
@@ -150,7 +150,7 @@ plaso 는 각 시각 칸에 아래 설명을 붙입니다.
 | `CookieEntryEx_#` | Expires | 만료 |
 | `CookieEntryEx_#` | LastModified | 수정 |
 
-History 컨테이너에서 어느 칸이 "방문 시각" 인지, 그 칸이 UTC 인지 현지 시각인지는 이번에 연 자료로 확인하지 못했습니다. 그래서 시각을 아는 방문 하나를 골라 칸 값과 맞춰 본 뒤 해석합니다. 같은 버전의 Windows 에서 시험 방문을 만들어 비교해도 됩니다.
+History 컨테이너에서 어느 칸이 "방문 시각" 인지, 그 칸이 UTC 인지 현지 시각인지는 공개 자료에 나오지 않습니다. 그래서 시각을 아는 방문 하나를 골라 칸 값과 맞춰 본 뒤 해석합니다. 같은 버전의 Windows 에서 시험 방문을 만들어 비교해도 됩니다.
 
 ## 함정과 한계
 

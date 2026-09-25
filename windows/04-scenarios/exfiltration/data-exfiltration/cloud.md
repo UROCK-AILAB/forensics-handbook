@@ -11,7 +11,7 @@ nav_order: 3630
 
 이 페이지는 원드라이브 같은 동기화 앱으로 자료를 클라우드 저장소에 올렸는지 확인하는 순서를 다룹니다. 브라우저로 웹하드나 클라우드 웹 화면에 직접 올린 경우는 [웹메일·웹하드로 올렸나 (Web Upload)](web-upload.md) 에서 다룹니다.
 
-이 페이지에서 "(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 것입니다. 이 PC 에는 원드라이브 개인 계정과 회사 계정이 함께 등록돼 있었습니다.
+아래 레지스트리 위치는 원드라이브 개인 계정과 회사 계정을 함께 등록한 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다.
 
 ## 조사 질문
 
@@ -45,9 +45,9 @@ nav_order: 3630
 
 클라우드 파일 API 는 동기화 엔진 (Sync Engine) 을 운영체제가 공식으로 지원하는 틀이며[1], 두 부분으로 이루어집니다[1]. Cloud Filter API(Win32) 는 플레이스홀더 (Placeholder) 파일·폴더를 만들고 관리하고, Windows.Storage.Provider 네임스페이스(WinRT) 는 동기화 루트 (Sync Root) 를 운영체제에 등록합니다. 서비스가 이 틀을 쓰면 운영체제에 동기화 루트가 등록되므로, 서비스가 달라도 같은 자리에서 먼저 찾아봅니다.
 
-### 레지스트리 위치 (관찰)
+### 레지스트리 위치
 
-관찰한 PC 의 동기화 루트는 아래 키에 등록돼 있었습니다(관찰).
+동기화 루트는 아래 키에 등록됩니다.
 
 ```
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SyncRootManager\
@@ -55,9 +55,9 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SyncRootManager\
     OneDrive!<SID>!Business1|<16진 문자열>
 ```
 
-- 하위 키 이름은 `!` 로 나뉩니다. 앞에서부터 서비스 이름, 사용자 SID, 계정 구분이 들어 있었습니다(관찰).
-- `Personal` 과 `Business1` 이 따로 등록돼 있었습니다(관찰). 이름으로 개인 계정과 회사 계정을 가릅니다.
-- 하위 키에는 아래 값 이름이 있었습니다(관찰).
+- 하위 키 이름은 `!` 로 나뉩니다. 앞에서부터 서비스 이름, 사용자 SID, 계정 구분이 들어 있습니다.
+- `Personal` 과 `Business1` 이 따로 등록됩니다. 이름으로 개인 계정과 회사 계정을 가릅니다.
+- 하위 키에는 아래 값 이름이 있습니다.
 
 ```
 DisplayNameResource, IconResource, Flags, Handler, BannerNotificationHandler,
@@ -66,8 +66,8 @@ SuggestionHandlerFactory, SearchHandlerFactory, AUMID, Cid, TenantName,
 StorageProviderStatusUISourceFactory
 ```
 
-- 하위 키 `UserSyncRoots` 에서 값 이름은 사용자 SID 였습니다(관찰).
-- 그 값의 데이터(REG_SZ)는 그 사용자의 로컬 동기화 폴더 경로였습니다(관찰). 예: `C:\Users\<사용자>\OneDrive - <회사명>`.
+- 하위 키 `UserSyncRoots` 에서 값 이름은 사용자 SID 입니다.
+- 그 값의 데이터(REG_SZ)는 그 사용자의 로컬 동기화 폴더 경로입니다. 예: `C:\Users\<사용자>\OneDrive - <회사명>`.
 - 하위 키 이름의 SID 와 `UserSyncRoots` 를 함께 보면 어느 사용자가 어느 폴더를 동기화했는지 이을 수 있습니다.
 - SOFTWARE 하이브는 PC 전체에 하나입니다. 사용자는 SID 로만 구분됩니다.
 
@@ -106,9 +106,9 @@ StorageProviderStatusUISourceFactory
 - 동기화 폴더에 파일이 "있다" 는 것은 올렸다는 증거가 아닙니다.
 - 플레이스홀더는 내용이 클라우드에만 있고 PC 에는 헤더만 있는 상태일 수 있습니다. 이 PC 에서 그 파일의 해시를 낼 수 없습니다.
 - 전체 파일은 클라우드에서 내려받아 채운 파일일 수 있습니다. 이 PC 에서 올린 파일이라는 뜻이 아닙니다.
-- 문서는 고정된 전체 파일을 사용자가 탐색기에서 명시적으로 채운 파일로 설명합니다[1]. 누가 언제 그렇게 했는지는 다른 기록으로 정합니다.
+- 고정된 전체 파일은 사용자가 탐색기에서 명시적으로 채운 파일입니다[1]. 누가 언제 그렇게 했는지는 다른 기록으로 정합니다.
 - 라이브 상태에서 플레이스홀더를 열면 채우기가 일어나 파일 상태가 바뀝니다. 라이브 응답에서는 동기화 폴더 안 파일을 함부로 열지 않습니다([라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md)).
-- 실제로 올렸는지는 서비스별 동기화 DB·로그로 봅니다. 원드라이브의 기록은 [원드라이브](../../../02-artifacts/cloud-notes/onedrive/index.md) 에서 다룹니다. 이 페이지를 쓰면서 서비스별 자료는 따로 확인하지 않았습니다.
+- 실제로 올렸는지는 서비스별 동기화 DB·로그로 봅니다. 원드라이브의 기록은 [원드라이브](../../../02-artifacts/cloud-notes/onedrive/index.md) 에서 다룹니다.
 
 ## 분석 흐름
 

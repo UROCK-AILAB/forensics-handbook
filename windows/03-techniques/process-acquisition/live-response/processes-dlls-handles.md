@@ -13,7 +13,7 @@ nav_order: 3130
 
 ## 언제 쓰나
 
-NIST SP 800-86 은 프로세스 목록의 쓰임을 이렇게 적습니다. 켜져 있는 서비스와 사용자가 돌리는 프로그램(암호화 도구가 한 예입니다)을 확인하고, 프로그램을 어떤 명령 옵션으로 실행했는지 봅니다. 돌아야 하는데 꺼졌거나 지워진 프로그램(백신과 방화벽이 한 예입니다)도 찾습니다.
+프로세스 목록으로는 켜져 있는 서비스와 사용자가 돌리는 프로그램(암호화 도구가 한 예입니다)을 확인하고, 프로그램을 어떤 명령 옵션으로 실행했는지 봅니다[1]. 돌아야 하는데 꺼졌거나 지워진 프로그램(백신과 방화벽이 한 예입니다)도 찾습니다.
 
 OS 는 열린 파일 목록과 그 파일을 연 사용자·프로세스를 관리할 수 있고, 핸들 목록이 이 정보를 보여 줍니다.
 
@@ -21,7 +21,7 @@ NIST 순서에서 실행 중 프로세스는 넷째, 열린 파일은 다섯째�
 
 ## 절차
 
-NIST 는 Windows 에서 작업 관리자 화면보다 글자 목록이 낫다고 적습니다. 그래서 아래 단계는 모두 결과를 파일로 남깁니다. 명령 예의 `E:` 는 결과를 받는 외장 매체라고 가정한 것입니다.
+Windows 에서는 작업 관리자 화면보다 글자 목록이 낫습니다[1]. 그래서 아래 단계는 모두 결과를 파일로 남깁니다. 명령 예의 `E:` 는 결과를 받는 외장 매체라고 가정한 것입니다.
 
 1. **관리자 권한 명령 창을 엽니다.** 명령 파일은 도구 매체의 사본을 씁니다.
 2. **프로세스 목록을 자세히 남깁니다.**
@@ -54,14 +54,14 @@ NIST 는 Windows 에서 작업 관리자 화면보다 글자 목록이 낫다고
 | 옵션 | 뜻 |
 |---|---|
 | `/v` | 자세한 정보를 보여 줍니다 |
-| `/svc` | 프로세스마다 서비스 정보를 잘리지 않게 보여 줍니다. 문서는 `/fo table` 과 함께 쓰는 옵션으로 적습니다 |
+| `/svc` | 프로세스마다 서비스 정보를 잘리지 않게 보여 줍니다. 문서는 `/fo table` 과 함께 쓰는 옵션으로 적습니다[2] |
 | `/m [모듈]` | 모듈 이름을 주면 그 DLL 을 불러온 작업만 보여 줍니다. 이름을 안 주면 작업마다 불러온 모듈을 모두 보여 줍니다 |
 | `/fo {table \| list \| csv}` | 출력 형식 |
 | `/nh` | 머리글을 뺍니다 |
 
-문서는 잘리지 않은 정보를 보려면 `/v` 와 `/svc` 를 함께 쓰라고 적습니다. 필터로 거를 수 있는 이름은 `STATUS`, `IMAGENAME`, `PID`, `SESSION`, `SESSIONNAME`, `CPUtime`, `MEMUSAGE`(KB), `USERNAME`, `SERVICES`, `WINDOWTITLE`, `MODULES` 입니다. 원격 시스템에서는 `STATUS` 와 `WINDOWTITLE` 로 거를 수 없습니다.
+잘리지 않은 정보를 보려면 `/v` 와 `/svc` 를 함께 씁니다[2]. 필터로 거를 수 있는 이름은 `STATUS`, `IMAGENAME`, `PID`, `SESSION`, `SESSIONNAME`, `CPUtime`, `MEMUSAGE`(KB), `USERNAME`, `SERVICES`, `WINDOWTITLE`, `MODULES` 입니다. 원격 시스템에서는 `STATUS` 와 `WINDOWTITLE` 로 거를 수 없습니다.
 
-CSV 로 받으면 칸은 아래처럼 나옵니다. `/svc` 도 CSV 로 칸이 나왔습니다.
+CSV 로 받으면 칸은 아래처럼 나옵니다. `/svc` 도 CSV 로 받을 수 있습니다.
 
 | 명령 | CSV 칸 |
 |---|---|
@@ -88,11 +88,11 @@ CSV 로 받으면 칸은 아래처럼 나옵니다. `/svc` 도 CSV 로 칸이 �
 | `GetOwner` | 프로세스를 실행한 사용자 이름과 도메인 이름을 돌려줍니다 |
 | `GetOwnerSid` | 소유자 SID 를 돌려줍니다 |
 
-SID 형식은 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. PowerShell 5.1 의 `Get-Process -IncludeUserName` 도 관리자 권한에서 `UserName` 을 돌려줬습니다.
+SID 형식은 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. PowerShell 5.1 의 `Get-Process -IncludeUserName` 도 관리자 권한에서 `UserName` 을 돌려줍니다.
 
 ### Sysinternals Handle
 
-시스템의 모든 프로세스가 연 핸들을 보여 주는 공개 도구입니다. 어떤 프로그램이 파일을 열었는지 찾을 수 있고, 한 프로그램이 연 핸들의 객체 종류와 이름도 볼 수 있습니다. 아래는 2022-10-26 판 문서의 내용입니다.
+시스템의 모든 프로세스가 연 핸들을 보여 주는 공개 도구입니다. 어떤 프로그램이 파일을 열었는지 찾을 수 있고, 한 프로그램이 연 핸들의 객체 종류와 이름도 볼 수 있습니다[3].
 
 | 옵션 | 뜻 |
 |---|---|
@@ -110,11 +110,11 @@ SID 형식은 [윈도 식별자 형식](../../../01-foundations/value-decoding/s
 ## 함정과 한계
 
 1. **`tasklist` 만 남깁니다.** 명령줄, 부모 PID, 시작 시각이 빠집니다. `Win32_Process` 결과를 함께 남깁니다.
-2. **부모 PID 를 그대로 믿습니다.** PID 는 다시 쓰입니다. 부모가 이미 끝났을 수 있고, 같은 번호를 다시 받은 다른 프로세스를 가리킬 수도 있습니다. Microsoft 문서는 `CreationDate` 를 비교해 부모가 자식보다 먼저 생겼는지 확인하라고 적습니다.
-3. **`Name` 만 보고 실행 파일을 판단합니다.** 문서는 `Name` 이 실행 파일에 새겨진 이름이라 파일 이름을 바꿔도 바뀌지 않는다고 적습니다. 실제로는 이름을 바꾼 실행 파일을 돌리면 `Name` 과 `tasklist` 의 Image Name 모두 바꾼 이름으로 나왔습니다 (Windows 11 Home 10.0.26200 기준). 그래서 `ExecutablePath` 의 경로와 파일의 버전 정보를 함께 봅니다.
-4. **빈 칸을 숨긴 흔적으로 읽습니다.** 관리자 권한으로도 352개 가운데 25개 프로세스는 `CommandLine` 과 `ExecutablePath` 가 비어 있었습니다. 대부분 System, Secure System, Registry, smss, csrss, wininit, services, lsass, LsaIso, Memory Compression, MsMpEng 같은 보호되는 프로세스였습니다. 같은 25개는 `tasklist /m` 의 Modules 칸이 "N/A" 였습니다.
+2. **부모 PID 를 그대로 믿습니다.** PID 는 다시 쓰입니다. 부모가 이미 끝났을 수 있고, 같은 번호를 다시 받은 다른 프로세스를 가리킬 수도 있습니다. `CreationDate` 를 비교해 부모가 자식보다 먼저 생겼는지 확인합니다[4].
+3. **`Name` 만 보고 실행 파일을 판단합니다.** 문서는 `Name` 이 실행 파일에 새겨진 이름이라 파일 이름을 바꿔도 바뀌지 않는다고 적습니다[4]. 그러나 Windows 11 Home 10.0.26200 에서는 이름을 바꾼 실행 파일을 돌리면 `Name` 과 `tasklist` 의 Image Name 모두 바꾼 이름으로 나옵니다. 그래서 `ExecutablePath` 의 경로와 파일의 버전 정보를 함께 봅니다.
+4. **빈 칸을 숨긴 흔적으로 읽습니다.** 관리자 권한으로도 `CommandLine` 과 `ExecutablePath` 가 비어 나오는 프로세스가 있습니다. 예를 들어 프로세스 352개가 도는 PC 에서 25개가 비어 나오며, 대부분 System, Secure System, Registry, smss, csrss, wininit, services, lsass, LsaIso, Memory Compression, MsMpEng 같은 보호되는 프로세스입니다. 이 프로세스들은 `tasklist /m` 의 Modules 칸도 "N/A" 입니다.
 5. **`TerminationDate` 와 `Status` 로 상태를 판단합니다.** `TerminationDate` 는 프로세스 핸들을 열어 두지 않으면 NULL 입니다. `Status` 는 구현되지 않아 늘 NULL 입니다.
-6. **Handle 의 `-c` 를 씁니다.** 핸들을 닫으면 앱이나 시스템이 불안정해질 수 있다고 문서가 경고합니다. 증거를 바꾸는 옵션이기도 합니다.
+6. **Handle 의 `-c` 를 씁니다.** 핸들을 닫으면 앱이나 시스템이 불안정해질 수 있습니다[3]. 증거를 바꾸는 옵션이기도 합니다.
 7. **목록에 없으면 실행되지 않았다고 봅니다.** 커널 수준 루트킷이 있으면 사용자 수준 도구는 숨긴 프로세스를 보지 못할 수 있습니다. 도구를 믿는 범위는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다.
 8. **원격으로 같은 필터를 씁니다.** `tasklist` 의 `STATUS` 와 `WINDOWTITLE` 필터는 원격 시스템에서 쓸 수 없습니다.
 

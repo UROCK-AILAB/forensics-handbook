@@ -10,8 +10,6 @@ nav_order: 2770
 
 이벤트 307 은 문서 한 건을 프린터로 인쇄했다는 기록입니다. 작업 번호, 문서 이름, 사용자, 컴퓨터, 프린터, 포트, 바이트 수, 쪽수가 들어갑니다. 이 이벤트는 `Microsoft-Windows-PrintService/Operational` 채널에 남고, 이 채널이 켜져 있을 때만 기록됩니다. 문서 이름은 "Allow job name in event logs" 정책을 켜야 들어갑니다. 시각은 UTC 입니다.
 
-> "관찰 PC" 의 시간대는 Korea Standard Time(UTC+9) 입니다.
-
 ## 무엇을 기록하나 · 왜 생기나
 
 307 의 메시지 틀은 아래와 같습니다.
@@ -26,10 +24,10 @@ Document %1, %2 owned by %3 on %4 was printed on %5 through port %6.  Size in by
 
 307 이 쓸모 있으려면 두 가지 설정을 먼저 봐야 합니다.
 
-| 설정 | 꺼져 있으면 | 관찰 PC |
+| 설정 | 꺼져 있으면 | 예 (Windows 11 25H2 한 대) |
 |---|---|---|
-| `PrintService/Operational` 채널 | 307 이 아예 남지 않습니다 | 꺼져 있었습니다 |
-| "Allow job name in event logs" 정책 | 307 에 문서 이름이 들어가지 않습니다 | 값이 없었습니다(설정 안 함) |
+| `PrintService/Operational` 채널 | 307 이 아예 남지 않습니다 | 꺼짐 |
+| "Allow job name in event logs" 정책 | 307 에 문서 이름이 들어가지 않습니다 | 값 없음(설정 안 함) |
 
 ## 위치와 버전별 차이
 
@@ -44,7 +42,7 @@ Document %1, %2 owned by %3 on %4 was printed on %5 through port %6.  Size in by
 | 이벤트 버전 | 0 |
 | 로그 파일 | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-PrintService%4Operational.evtx` |
 
-관찰 PC 의 두 채널 설정은 아래와 같았습니다.
+Windows 11 25H2 한 대의 두 채널 설정은 아래와 같습니다.
 
 | 채널 | 켜짐 | 최대 크기 | 꽉 찼을 때 | 레코드 |
 |---|---|---|---|---|
@@ -52,8 +50,8 @@ Document %1, %2 owned by %3 on %4 was printed on %5 through port %6.  Size in by
 | `PrintService/Admin` | 켜짐 | 1,052,672 바이트 | 오래된 기록부터 덮어씁니다 | 0건 |
 
 - 307 은 Operational 채널의 이벤트라서 Admin 채널이 켜져 있어도 그쪽에 남지 않습니다.
-- 이 채널이 모든 PC 에서 기본으로 꺼져 있는지는 확인하지 못했습니다.
-- 인쇄가 많을 때 약 1MB 로그에 며칠치가 남는지는 확인하지 못했습니다. 로그의 가장 오래된 레코드 시각을 먼저 적어 둡니다.
+- 이 채널이 꺼져 있는 PC 가 있으므로 검체마다 설정을 확인합니다.
+- 약 1MB 로그에 며칠치가 남는지는 인쇄량에 따라 다릅니다. 로그의 가장 오래된 레코드 시각을 먼저 적어 둡니다.
 
 ### 채널이 켜져 있었는지 오프라인에서 보기
 
@@ -64,11 +62,11 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 ```
 
 - 마지막 키 이름 `Microsoft-Windows-PrintService/Operational` 에는 슬래시가 들어 있습니다. 슬래시까지가 키 이름 하나입니다.
-- 관찰 PC 에서 Operational 의 `Enabled` 는 0(꺼짐), 같은 위치의 `…/Admin` 은 1(켜짐) 이었습니다.
-- 같은 키의 `OwningPublisher` 값은 공급자 GUID `{747ef6fd-e535-4d16-b510-42c90f6873a1}` 였습니다.
+- `Enabled` 가 0 이면 꺼짐, 1 이면 켜짐입니다. 앞 표의 PC 에서는 Operational 이 0, 같은 위치의 `…/Admin` 이 1 입니다.
+- 같은 키의 `OwningPublisher` 값은 공급자 GUID `{747ef6fd-e535-4d16-b510-42c90f6873a1}` 입니다.
 - 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
-라이브 시스템에서는 `wevtutil sl Microsoft-Windows-PrintService/Operational /e:true` 로 채널을 켤 수 있습니다. `wevtutil sl` 에 `/e`(`/enabled`) 옵션이 있는 것은 확인했지만 이 명령을 관찰 PC 에서 실행해 보지는 않았습니다. 앞으로의 인쇄를 기록하려고 미리 켜 두는 설정이라서, 조사 대상 PC 에서 켜면 증거 PC 의 설정을 바꾸게 됩니다.
+라이브 시스템에서는 `wevtutil sl Microsoft-Windows-PrintService/Operational /e:true` 로 채널을 켤 수 있습니다. 앞으로의 인쇄를 기록하려고 미리 켜 두는 설정이라서, 조사 대상 PC 에서 켜면 증거 PC 의 설정을 바꾸게 됩니다.
 
 ### 문서 이름 정책
 
@@ -80,32 +78,28 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 | 값 | 사용 = 1, 사용 안 함 = 0 |
 | 오프라인 위치 | SOFTWARE 하이브 `Policies\Microsoft\Windows NT\Printers\ShowJobTitleInEventLogs` |
 
-관찰 PC 의 `Printing.admx`·`Printing.adml`(WinSxS 안, 10.0.26100.8737) 에서 확인했습니다. 영어 도움말 원문은 아래와 같습니다.
-
-> This policy controls whether the print job name will be included in print event logs. If you disable or do not configure this policy setting, the print job name will not be included. If you enable this policy setting, the print job name will be included in new log entries. Note: This setting does not apply to Branch Office Direct Printing jobs.
-
-정책을 켜지 않으면 작업 이름 (job name) 이 인쇄 이벤트에 들어가지 않습니다. "사용 안 함" 과 "구성되지 않음" 모두 이름을 빼며, 정책을 켜면 그 뒤에 생기는 새 기록에만 이름이 들어갑니다. 지점 직접 인쇄 (Branch Office Direct Printing) 작업에는 이 정책이 적용되지 않습니다.
+정책을 켜지 않으면 작업 이름 (job name) 이 인쇄 이벤트에 들어가지 않습니다. "사용 안 함" 과 "구성되지 않음" 모두 이름을 빼며, 정책을 켜면 그 뒤에 생기는 새 기록에만 이름이 들어갑니다. 지점 직접 인쇄 (Branch Office Direct Printing) 작업에는 이 정책이 적용되지 않습니다[2].
 
 - 스풀러 구성 요소 `C:\Windows\System32\localspl.dll` 안에는 UTF-16 문자열 `ShowJobTitleInEventLogs` 와 `Software\Policies\Microsoft\Windows NT\Printers` 가 있습니다.
-- 관찰 PC 에는 이 값이 없었고 `Printers` 정책 키 아래에는 `DriverRanking` 하위 키만 있었습니다.
-- 이름을 뺄 때 문서 이름 칸에 무엇이 들어가는지는 확인하지 못했습니다.
+- 정책을 설정하지 않은 PC 에는 이 값이 없습니다. 앞 표의 PC 에서는 `Printers` 정책 키 아래에 `DriverRanking` 하위 키만 있습니다.
+- 이름을 뺄 때 문서 이름 칸에 무엇이 들어가는지는 검체나 시험으로 확인합니다.
 
 ### 버전별 차이
 
 | Windows | 내용 | 근거 |
 |---|---|---|
-| 8 이후 | 정책 파일이 적은 지원 대상 (supportedOn) 이 `SUPPORTED_Windows8` 입니다 | 관찰 PC 의 ADMX |
-| 11 25H2 | Operational 꺼짐, Admin 켜짐, 이름 정책 값 없음 | 관찰 PC |
+| 8 이후 | 정책 파일이 적은 지원 대상 (supportedOn) 이 `SUPPORTED_Windows8` 입니다 | [2] |
+| 11 25H2 | Operational 꺼짐, Admin 켜짐, 이름 정책 값 없음 (한 대) | [3] |
 
-지원 대상 값은 정책을 적용할 수 있는 Windows 판을 적을 뿐, 이름을 빼는 동작이 언제부터 기본값이 됐는지는 말하지 않습니다. 어느 업데이트부터 기본으로 이름을 빼게 됐는지와 이 밖의 버전별 차이는 확인하지 못했습니다.
+지원 대상 값은 정책을 적용할 수 있는 Windows 판을 적을 뿐, 이름을 빼는 동작이 언제부터 기본값이 됐는지는 말하지 않습니다.
 
 ## 구조
 
 ### 307 의 칸
 
-칸 이름은 param1~param8 이고, 모두 유니코드 문자열 (UnicodeString) 입니다. 칸의 뜻은 메시지 틀의 자리에서 읽었습니다.
+칸 이름은 param1~param8 이고, 모두 유니코드 문자열 (UnicodeString) 입니다. 칸의 뜻은 메시지 틀의 자리로 알 수 있습니다.
 
-| 칸 | 메시지 자리 | 뜻 | 확인하지 못한 것 |
+| 칸 | 메시지 자리 | 뜻 | 검체에서 확인할 것 |
 |---|---|---|---|
 | param1 | `Document %1` | 작업 번호 (Job ID) | 스풀 폴더의 SPL·SHD 파일 이름 번호와 같은지 |
 | param2 | `, %2` | 문서 이름. 정책이 켜져 있을 때만 들어갑니다 | 정책이 꺼져 있을 때 들어가는 값 |
@@ -142,7 +136,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 | 842 | `The print job %1 was sent through the print processor %2 on printer %3, driver %4, in the isolation mode %5 (…). Win32 error code returned by the print processor: %6.` | JobId, Processor, Printer, Driver, IsolationMode, Error |
 
 - 842 의 격리 모드 (isolation mode) 값은 메시지에 적혀 있습니다. 0 은 스풀러 안에서 불러옴, 1 은 공유 샌드박스, 2 는 격리 샌드박스입니다.
-- 805 에는 Copies 칸이 있습니다. 이 칸으로 복사 매수를 볼 수 있는지는 확인하지 못했습니다. 칸 이름만 확인했습니다.
+- 805 에는 Copies 칸이 있습니다. 이 칸이 복사 매수를 뜻하는지는 검체에서 확인합니다.
 - 307 이 없는 작업 번호가 있으면 같은 번호의 308·309·310 도 찾아봅니다.
 - 도구가 메시지 문장을 푸는 방식은 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
@@ -151,7 +145,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
 | 기록된 시각에 이 사용자 이름이 주인인 작업을 이 프린터와 포트로 인쇄했다는 스풀러 기록이 있습니다 | 계정 뒤의 사람이 누구인지, 인쇄물을 누가 가져갔는지 |
-| 작업의 바이트 수와 쪽수 | 쪽수가 종이 장수와 같다는 것 (복사 매수 반영 여부를 확인하지 못했습니다) |
+| 작업의 바이트 수와 쪽수 | 쪽수가 종이 장수와 같다는 것 (복사 매수 반영 여부는 검체에서 확인합니다) |
 | 정책이 켜져 있었다면 작업 이름 | 작업 이름이 디스크의 어느 파일인지 (이 칸에는 파일 경로가 아니라 작업 이름이 들어갑니다) |
 | | 문서의 내용 (307 에는 내용이 없습니다) |
 | | 307 이 없으니 인쇄하지 않았다는 것 (채널이 꺼져 있었을 수 있습니다) |
@@ -168,28 +162,28 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 
 - 이벤트 시각은 `<TimeCreated SystemTime>` 에 있습니다. 끝에 Z 가 붙은 UTC 값입니다.
 - 현지 시각으로 바꾸는 법은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
-- 307 의 시각이 인쇄가 끝난 시각인지, 스풀러가 작업을 프린터로 넘긴 시각인지는 확인하지 못했습니다. 보고서에는 "307 이 기록된 시각" 이라고만 씁니다.
-- 800(스풀), 801(인쇄), 805(렌더링), 842(인쇄 처리기) 에도 작업 번호 칸이 있습니다. 307 의 param1 과 같은 번호의 기록을 모아 시각 순으로 늘어놓아 봅니다. 두 번호가 같은 작업을 가리키는지는 이 글에서 확인하지 못했습니다.
+- 307 의 시각은 인쇄가 끝난 시각일 수도, 스풀러가 작업을 프린터로 넘긴 시각일 수도 있습니다. 그래서 보고서에는 "307 이 기록된 시각" 이라고만 씁니다.
+- 800(스풀), 801(인쇄), 805(렌더링), 842(인쇄 처리기) 에도 작업 번호 칸이 있습니다. 307 의 param1 과 같은 번호의 기록을 모아 시각 순으로 늘어놓아 봅니다. 두 번호가 같은 작업을 가리키는지는 검체에서 확인합니다.
 - 스풀 폴더 파일의 시각과 맞춰 보는 법은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
 
 ## 함정과 한계
 
-1. **307 이 없으니 인쇄하지 않았다고 씁니다.** 관찰 PC 에서는 Operational 채널이 꺼져 있었습니다. 채널 설정부터 확인합니다.
+1. **307 이 없으니 인쇄하지 않았다고 씁니다.** Operational 채널이 꺼져 있는 PC 도 있습니다. 채널 설정부터 확인합니다.
 2. **Admin 채널이 켜져 있으니 기록이 있으리라 봅니다.** 307 은 Operational 채널의 이벤트입니다.
 3. **문서 이름이 비어 있거나 다르니 누가 숨겼다고 봅니다.** 정책을 켜지 않으면 이름이 들어가지 않습니다. 정책 값부터 확인합니다.
-4. **정책을 켰으니 예전 기록에도 이름이 있으리라 봅니다.** 도움말은 켠 뒤의 새 기록에만 이름이 들어간다고 적습니다.
+4. **정책을 켰으니 예전 기록에도 이름이 있으리라 봅니다.** 정책을 켠 뒤의 새 기록에만 이름이 들어갑니다[2].
 5. **바이트 수와 쪽수를 문자열 그대로 정렬합니다.** 문자열로 정렬하면 "10" 이 "9" 보다 앞에 옵니다. 숫자로 바꿔 정렬하고 합칩니다.
-6. **쪽수를 종이 장수로 씁니다.** 복사 매수가 반영되는지, 드라이버가 센 값인지 확인하지 못했습니다.
-7. **param4 를 인쇄를 보낸 컴퓨터로 단정합니다.** 이 칸의 뜻과 모양은 확인하지 못했습니다.
-8. **공유 프린터 작업을 클라이언트 PC 에서 찾습니다.** 인쇄 서버로 보낸 작업의 307 이 클라이언트 PC 에 남는지, 서버에만 남는지는 확인하지 못했습니다. 두 곳을 모두 봅니다.
-9. **가상 프린터도 같다고 봅니다.** "Microsoft Print to PDF" 같은 가상 프린터로 보낸 작업이 307 을 남기는지는 확인하지 못했습니다.
+6. **쪽수를 종이 장수로 씁니다.** 복사 매수가 반영되는지, 드라이버가 센 값인지는 검체에서 확인합니다.
+7. **param4 를 인쇄를 보낸 컴퓨터로 단정합니다.** 이 칸의 뜻과 모양은 검체에서 확인합니다.
+8. **공유 프린터 작업을 클라이언트 PC 에서만 찾습니다.** 인쇄 서버로 보낸 작업의 307 이 클라이언트 PC 에 남는지, 서버에만 남는지 정해 두지 말고 두 곳을 모두 봅니다.
+9. **가상 프린터도 같다고 봅니다.** "Microsoft Print to PDF" 같은 가상 프린터로 보낸 작업이 307 을 남기는지는 시험으로 확인합니다(실습 3).
 10. **지점 직접 인쇄 작업의 이름을 찾습니다.** 이름 정책은 이 작업에 적용되지 않습니다.
 
 ### 지우기와 조작
 
 - **로그를 지웁니다.** 지운 흔적은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
 - **채널을 끕니다.** 끈 뒤로는 307 이 남지 않습니다. 채널과 감사 설정을 함께 보는 법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
-- **로그를 덮어쓰게 합니다.** 관찰 PC 의 Operational 최대 크기는 약 1MB 였습니다. 꽉 차면 오래된 기록부터 덮어씁니다.
+- **로그를 덮어쓰게 합니다.** Operational 최대 크기가 약 1MB 로 설정된 PC 도 있습니다. 꽉 차면 오래된 기록부터 덮어씁니다.
 - **스풀 파일을 지웁니다.** 이벤트와 스풀 파일은 따로 남습니다. 스풀 파일 쪽은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
 
 ## 직접 분석해 보기

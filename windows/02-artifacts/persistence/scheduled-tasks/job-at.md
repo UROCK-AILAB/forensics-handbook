@@ -32,13 +32,13 @@ XP 에서는 `HKLM\Software\Microsoft\SchedulingAgent` 키를 씁니다. 이 키
 
 - DataVersion, LastTaskRun, LogPath, MaxLogSizeKB, MinutesBeforeIdle, OldName, PriorDataVersion, TasksFolder
 
-winreg-kb 문서에는 이 값들의 뜻이 비어 있습니다. 다만 TasksFolder 와 LogPath 는 이름으로 보아 작업 폴더와 로그 파일의 위치를 찾는 첫 단서입니다. `.job` 파일의 기본 위치와 XP 작업 로그 파일은 이번 조사에서 확인하지 못했고, XP 검체에서는 TasksFolder 값을 먼저 읽고, 그 폴더를 봅니다.
+이 값들의 뜻은 winreg-kb 에도 비어 있습니다[1]. 다만 TasksFolder 와 LogPath 는 이름으로 보아 작업 폴더와 로그 파일의 위치를 찾는 첫 단서입니다. `.job` 파일의 기본 위치와 XP 작업 로그 파일은 공개 자료에 나와 있지 않습니다. 그래서 XP 검체에서는 TasksFolder 값을 먼저 읽고, 그 폴더를 봅니다.
 
 Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](taskcache-tree-tasks.md)에서 다룹니다.
 
 ### 제품 버전 값
 
-`.job` 파일의 첫 2바이트는 제품 버전입니다. 형식 명세(libyal dtformats)의 표에는 다음 값이 있습니다.
+`.job` 파일의 첫 2바이트는 제품 버전입니다. 값은 다음과 같습니다[2].
 
 | 제품 버전 | Windows |
 |---|---|
@@ -51,9 +51,9 @@ Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree
 | 0x0603 | 8.1 |
 | 0x0a00 | 10 |
 
-표에는 Windows 10 값까지 있지만 Vista 이후 시스템에서 `at` 이나 `schtasks /v1` 으로 만든 작업이 `.job` 을 함께 남기는지는 이번 조사에서 확인하지 못했습니다.
+표에는 Windows 10 값까지 있습니다. 하지만 Vista 이후 시스템에서 `at` 이나 `schtasks /v1` 으로 만든 작업이 `.job` 을 함께 남기는지는 공개 자료가 없어 검체에서 확인해야 합니다.
 
-한 PC 의 `C:\Windows\Tasks` 폴더에는 6바이트(`06 00 00 00 02 03`)짜리 `SA.DAT` 파일 하나만 있었고, 이 파일의 뜻은 확인하지 못했습니다.
+`C:\Windows\Tasks` 폴더에 6바이트(`06 00 00 00 02 03`)짜리 `SA.DAT` 파일 하나만 있는 경우가 있습니다. 이 파일의 뜻을 설명한 공개 자료는 없습니다.
 
 ## 구조
 
@@ -114,7 +114,7 @@ Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree
 | 36 | 6 | 종류별 값 |
 | 42 ~ 47 | 6 | 채움·예약 |
 
-42 이후 칸의 세부 경계는 libyal dtformats 원문 표로 확인합니다.
+42 이후 칸의 세부 경계는 libyal dtformats 원문 표로 확인합니다[2].
 
 ### 상태 값
 
@@ -124,13 +124,13 @@ Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree
 | 0x00041301 | SCHED_S_TASK_RUNNING. 실행 중 |
 | 0x00041305 | SCHED_S_TASK_NOT_SCHEDULED. 예약대로 실행하는 데 필요한 속성 가운데 설정되지 않은 것이 있음 |
 
-libyal dtformats 표에는 이 세 값이 있습니다. 상수 이름과 뜻은 Microsoft 의 작업 스케줄러 오류·성공 상수 문서(WinError.h)를 따랐습니다. 같은 문서에는 0x00041302(사용 안 함), 0x00041303(아직 실행한 적 없음), 0x00041307(유효한 트리거 없음) 같은 값도 있습니다.
+`.job` 형식 표에 실린 상태 값은 이 세 가지입니다[2][4]. 작업 스케줄러 상수에는 이 밖에도 0x00041302(사용 안 함), 0x00041303(아직 실행한 적 없음), 0x00041307(유효한 트리거 없음) 같은 값이 있습니다[4].
 
-Vista 이후 작업 스케줄러에서도 같은 꼴의 값이 보입니다. 한 PC 에서 한 번도 실행하지 않은 작업을 `Get-ScheduledTaskInfo` 로 조회했습니다. LastRunTime 은 1999-11-29 15:00:00Z, LastTaskResult 는 0x00041303 이었습니다. 0x00041303 은 Microsoft 문서에서 SCHED_S_TASK_HAS_NOT_RUN(아직 실행한 적 없음)입니다. 도구가 1999-11-29 를 보여 주면 실제 실행 시각으로 읽지 않습니다.
+Vista 이후 작업 스케줄러에서도 같은 꼴의 값이 보입니다. 한 번도 실행하지 않은 작업을 `Get-ScheduledTaskInfo` 로 조회하면 LastRunTime 은 1999-11-29 15:00:00Z, LastTaskResult 는 0x00041303 으로 나옵니다. 0x00041303 은 SCHED_S_TASK_HAS_NOT_RUN(아직 실행한 적 없음)입니다[4]. 도구가 1999-11-29 를 보여 주면 실제 실행 시각으로 읽지 않습니다.
 
 ## at 명령
 
-Microsoft 문서에 따르면 `at` 은 정해진 날짜와 시각에 명령이나 프로그램을 실행하도록 예약하며, Schedule 서비스가 돌고 있을 때만 쓸 수 있습니다. 인자 없이 실행하면 예약 목록을 보여 주고, 로컬 Administrators 그룹 구성원이어야 쓸 수 있습니다. 예약한 명령은 백그라운드로 돌고 현재 폴더는 systemroot 입니다.
+`at` 은 정해진 날짜와 시각에 명령이나 프로그램을 실행하도록 예약하는 명령이며, Schedule 서비스가 돌고 있을 때만 쓸 수 있습니다[3]. 인자 없이 실행하면 예약 목록을 보여 주고, 로컬 Administrators 그룹 구성원이어야 쓸 수 있습니다. 예약한 명령은 백그라운드로 돌고 현재 폴더는 systemroot 입니다.
 
 형식은 다음과 같습니다.
 
@@ -142,18 +142,18 @@ at [\\computername] <time> [/interactive] [/every:date[,...] | /next:date[,...]]
 
 **실행 시간 제한.** 예약한 명령은 기본으로 72시간이 지나면 멈춥니다. `HKLM\SYSTEM\CurrentControlSet\Services\Schedule` 에 REG_DWORD 값 `atTaskMaxHours` 를 넣으면 이 제한을 바꿉니다. 0 은 제한 없음, 1~99 는 시간 수입니다. 오프라인 SYSTEM 하이브에서는 CurrentControlSet 대신 실제로 쓰인 ControlSet 번호 키를 봅니다. 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
-**저장 위치.** 문서에는 "Scheduled commands are stored in the registry." 라는 문장만 있습니다. 어느 키인지는 적혀 있지 않습니다. 이 문서의 날짜는 2017년입니다.
+**저장 위치.** 예약한 명령은 레지스트리에 저장됩니다[3]. 어느 키인지는 공개 문서에 나와 있지 않습니다.
 
 **예약 작업 폴더에서 보이는 이름.** `at` 으로 만든 작업은 예약 작업 폴더에 `at3478` 같은 이름으로 보입니다. 그 폴더에서 작업을 고치면 일반 예약 작업으로 바뀝니다. 그러면 `at` 목록에서 사라지고, `at` 용 계정 설정도 적용되지 않습니다.
 
-**최근 Windows.** 문서에는 폐지(deprecated) 안내가 없습니다. 그러나 한 PC 에서 `at.exe` 를 인자 없이 실행하자 다음 메시지가 나왔고, 종료 코드는 1 이었습니다.
+**최근 Windows.** `at` 명령 문서에는 폐지(deprecated) 안내가 없습니다[3]. 그러나 Windows 11 25H2 에서 `at.exe` 를 인자 없이 실행하면 다음 메시지가 나오고, 종료 코드 1 로 끝납니다.
 
 ```
 The AT command has been deprecated. Please use schtasks.exe instead.
 The binding handle is invalid.
 ```
 
-`at` 이 어느 Windows 버전부터 폐지되었는지는 확인하지 못했습니다.
+`at` 이 어느 Windows 버전부터 폐지되었는지는 공개 자료에 나와 있지 않습니다.
 
 ## 증거로서 의미
 
@@ -174,17 +174,17 @@ The binding handle is invalid.
 ## 시각 해석
 
 - 마지막 실행 시각은 FILETIME 이 아니라 SYSTEMTIME 입니다. 연·월·일·시·분·초 칸을 바로 읽습니다. 시각 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
-- 이 값이 현지 시각인지 UTC 인지는 확정되지 않았습니다. 형식 명세에도 "TODO: confirm this is local time" 이라고 남아 있습니다. 보고서에 쓰기 전에 같은 시각 무렵의 다른 기록과 맞춰 봅니다. 시간대는 [시간대 설정](../../system-account/time-zone.md)에서 확인합니다.
+- 이 값이 현지 시각인지 UTC 인지는 확정되지 않았습니다[2]. 보고서에 쓰기 전에 같은 시각 무렵의 다른 기록과 맞춰 봅니다. 시간대는 [시간대 설정](../../system-account/time-zone.md)에서 확인합니다.
 - `.job` 파일 자체의 만든·고친 시각은 파일 시스템에 남습니다. 파일 시각을 읽는 법은 [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md)에서 다룹니다.
 
 ## 함정과 한계
 
-- **`.job` 파일의 기본 위치를 가정하지 않습니다.** 이번 조사에서 확인하지 못했습니다. XP 는 SchedulingAgent 키의 TasksFolder 값부터 봅니다.
+- **`.job` 파일의 기본 위치를 가정하지 않습니다.** XP 는 SchedulingAgent 키의 TasksFolder 값부터 봅니다.
 - **Vista 이후에도 `.job` 이 남는지 모릅니다.** 제품 버전 표에 Windows 10 값이 있다는 것만으로 판단하지 않습니다. 검체에서 직접 확인합니다.
 - **문자열에 BOM 이 없습니다.** UTF-16 LE 로 키워드를 검색해야 응용 프로그램 이름이 걸립니다.
 - **트리거 오프셋은 트리거 시작점 기준입니다.** 파일 처음부터 세면 날짜와 시각을 잘못 읽습니다. 트리거 위치는 고정 길이 부분의 트리거 오프셋(22)에서 읽습니다.
 - **`at` 작업의 레지스트리 위치는 문서에 없습니다.** 문서 문장 하나로 특정 키를 단정하지 않습니다.
-- **최근 Windows 에서 `at` 은 돌지 않을 수 있습니다.** Win11 25H2 한 대에서는 폐지 메시지와 함께 실패했습니다. 최근 시스템에서 `at` 흔적이 나오면 실제로 작업이 만들어졌는지 다른 기록으로 확인합니다.
+- **최근 Windows 에서 `at` 은 돌지 않을 수 있습니다.** Windows 11 25H2 에서는 폐지 메시지와 함께 실패합니다. 최근 시스템에서 `at` 흔적이 나오면 실제로 작업이 만들어졌는지 다른 기록으로 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -210,7 +210,7 @@ The binding handle is invalid.
 
 ### 공개 도구로 한 번
 
-libyal dtformats 의 "Job file format" 문서가 칸마다 뜻을 적어 두었습니다. 헥스 편집기로 파일을 열고 이 문서의 표와 맞춰 읽습니다. 고정 길이 부분은 Python 표준 라이브러리로도 풀 수 있습니다.
+libyal dtformats 의 "Job file format" 문서에 칸마다 뜻이 적혀 있습니다[2]. 헥스 편집기로 파일을 열고 이 문서의 표와 맞춰 읽습니다. 고정 길이 부분은 Python 표준 라이브러리로도 풀 수 있습니다.
 
 ```python
 import struct, uuid

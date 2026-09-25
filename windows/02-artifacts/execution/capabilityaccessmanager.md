@@ -12,11 +12,11 @@ Windows 는 앱이 카메라·마이크를 쓴 때를 레지스트리의 Consent
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Windows 설정의 개인 정보 화면에서 앱의 카메라·마이크 사용을 허용하거나 막습니다. Microsoft 설명서는 이 화면을 이렇게 설명합니다. 카메라에 표시등이 있으면 카메라가 켜질 때 불이 들어오고, 표시등이 없으면 Windows 가 카메라가 켜지고 꺼질 때 알림을 띄웁니다. 앱이 마이크를 쓰면 작업 표시줄 알림 영역에 마이크 아이콘이 뜹니다. 스토어 앱은 앱마다 켜고 끌 수 있지만 데스크톱 앱은 하나씩 끌 수 없고 스위치 하나로 한꺼번에 관리합니다. 카메라·마이크를 쓴 데스크톱 앱은 설정 화면 목록에 나오며, 앱을 누르면 카메라나 마이크에 접근한 파일의 세부 정보를 볼 수 있습니다.
+Windows 설정의 개인 정보 화면에서 앱의 카메라·마이크 사용을 허용하거나 막습니다. 카메라에 표시등이 있으면 카메라가 켜질 때 불이 들어오고, 표시등이 없으면 Windows 가 카메라가 켜지고 꺼질 때 알림을 띄웁니다. 앱이 마이크를 쓰면 작업 표시줄 알림 영역에 마이크 아이콘이 뜹니다. 스토어 앱은 앱마다 켜고 끌 수 있지만 데스크톱 앱은 하나씩 끌 수 없고 스위치 하나로 한꺼번에 관리합니다. 카메라·마이크를 쓴 데스크톱 앱은 설정 화면 목록에 나오며, 앱을 누르면 카메라나 마이크에 접근한 파일의 세부 정보를 볼 수 있습니다[1].
 
 레지스트리에는 권한마다 키가 있고, 그 아래에 앱마다 하위 키가 생깁니다. 앱 하위 키에는 그 앱이 장치를 쓰기 시작한 시각과 멈춘 시각이 남습니다. 카메라는 `webcam` 키, 마이크는 `microphone` 키입니다.
 
-ConsentStore 에는 카메라·마이크 말고도 권한 키가 여럿 있습니다. 관찰한 PC 에는 다음 35개가 있었습니다.
+ConsentStore 에는 카메라·마이크 말고도 권한 키가 여럿 있습니다. Windows 11 25H2(빌드 26200)에는 다음 35개가 있습니다.
 
 ```
 appDiagnostics, appointments, bluetooth, bluetoothSync, broadFileSystemAccess,
@@ -43,7 +43,7 @@ userNotificationListener, videosLibrary, webcam, wifiData, wiFiDirect
 
 ### 데이터베이스
 
-관찰한 PC 의 `C:\ProgramData\Microsoft\Windows\CapabilityAccessManager\` 폴더에는 다음 파일이 있었습니다. 형식은 모두 SQLite 였습니다.
+`C:\ProgramData\Microsoft\Windows\CapabilityAccessManager\` 폴더에는 다음 파일이 있습니다. 형식은 모두 SQLite 입니다.
 
 | 파일 | 함께 있던 파일 |
 |---|---|
@@ -57,13 +57,13 @@ SQLite 형식은 [SQLite 데이터베이스](../../01-foundations/database-log-f
 
 | 항목 | 내용 | 근거 |
 |---|---|---|
-| 데스크톱 앱 스위치 이름 | Windows 11 은 "Let desktop apps access your camera", Windows 10 은 "Allow desktop apps to access your camera" | Microsoft Support |
-| SOFTWARE 쪽 앱별 기록 | RECmd 배치 파일이 SOFTWARE 하이브의 `microphone`·`webcam` 아래에서 시각 값을 읽습니다 | Kroll_Batch.reb |
-| 앱별 기록이 있던 하이브 | SOFTWARE 쪽 `webcam`·`microphone` 키에는 `Value`·`LastSetTime` 만 있었습니다. 앱 하위 키가 없었습니다. 앱별 사용 시각은 모두 NTUSER.DAT 쪽에 있었습니다 | 관찰 (Windows 11 25H2 빌드 26200, PC 한 대) |
-| 레지스트리 구조가 처음 생긴 버전 | 확인한 자료에 없습니다 | — |
-| DB 가 처음 생긴 버전 | 확인한 자료에 없습니다 | — |
+| 데스크톱 앱 스위치 이름 | Windows 11 은 "Let desktop apps access your camera", Windows 10 은 "Allow desktop apps to access your camera" | [1] |
+| SOFTWARE 쪽 앱별 기록 | RECmd 배치 파일이 SOFTWARE 하이브의 `microphone`·`webcam` 아래에서 시각 값을 읽습니다 | [2] |
+| 앱별 기록이 있는 하이브 | SOFTWARE 쪽 `webcam`·`microphone` 키에는 `Value`·`LastSetTime` 만 있고 앱 하위 키가 없습니다. 앱별 사용 시각은 NTUSER.DAT 쪽에 있습니다 | Windows 11 25H2 (빌드 26200) |
+| 레지스트리 구조가 처음 생긴 버전 | 공개 자료 없음 | — |
+| DB 가 처음 생긴 버전 | 공개 자료 없음 | — |
 
-SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했습니다. 두 하이브를 모두 봅니다.
+SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없으므로 두 하이브를 모두 봅니다.
 
 ## 구조
 
@@ -74,32 +74,31 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 | 스토어 (패키지) 앱 | `<권한 이름>\<패키지 패밀리 이름>` | `Microsoft.WindowsCamera_8wekyb3d8bbwe` |
 | 일반 데스크톱 앱 | `<권한 이름>\NonPackaged\<실행 파일 전체 경로>` | `C:#Program Files#<회사>#<앱>#<앱>.exe` |
 
-데스크톱 앱의 하위 키 이름은 실행 파일의 전체 경로이고, 경로의 `\` 는 `#` 으로 바뀌어 있습니다. 위 구조는 관찰한 PC 에서 본 것입니다.
+데스크톱 앱의 하위 키 이름은 실행 파일의 전체 경로이고, 경로의 `\` 는 `#` 으로 바뀌어 있습니다.
 
 ### 앱 하위 키의 값
 
 | 값 | 형식 | 뜻 | 근거 |
 |---|---|---|---|
-| `LastUsedTimeStart` | REG_QWORD, FILETIME | 그 앱이 장치를 쓰기 시작한 시각 | RECmd 배치 파일, 관찰 |
-| `LastUsedTimeStop` | REG_QWORD, FILETIME | 그 앱이 장치 쓰기를 멈춘 시각 | RECmd 배치 파일, 관찰 |
-| `LastUserAnnotatedLabel` | REG_DWORD (관찰값 2) | 확인하지 못했습니다 | 관찰 |
-| `PersistedInDatabase` | REG_DWORD (관찰값 1) | 이름으로 보아 DB 에 옮겨 적었다는 표시로 보입니다. 확인하지 못했습니다 | 관찰 |
+| `LastUsedTimeStart` | REG_QWORD, FILETIME | 그 앱이 장치를 쓰기 시작한 시각 | [2] |
+| `LastUsedTimeStop` | REG_QWORD, FILETIME | 그 앱이 장치 쓰기를 멈춘 시각 | [2] |
+| `LastUserAnnotatedLabel` | REG_DWORD (예: 2) | 공개 자료 없음 | |
+| `PersistedInDatabase` | REG_DWORD (예: 1) | 이름으로 보아 DB 에 옮겨 적었다는 표시로 보입니다 | |
 
-- 스토어 앱 하위 키에는 `Value` (REG_SZ) 와 `LastSetTime` (REG_QWORD) 도 있었습니다. `Value` 의 관찰값은 `Allow` 와 `Prompt` 였습니다.
-- 한 번도 장치를 쓰지 않은 앱의 하위 키에는 `LastUsedTime` 값이 없었습니다.
-- 위 두 가지는 관찰한 것입니다.
+- 스토어 앱 하위 키에는 `Value` (REG_SZ) 와 `LastSetTime` (REG_QWORD) 도 있습니다. `Value` 에는 `Allow` 나 `Prompt` 가 들어갑니다.
+- 한 번도 장치를 쓰지 않은 앱의 하위 키에는 `LastUsedTime` 값이 없습니다.
 
 ### 권한 키와 NonPackaged 키의 값
 
-권한 키 자체와 `NonPackaged` 키에는 `Value` (REG_SZ, 관찰값 `Allow`) 와 `LastSetTime` (REG_QWORD) 이 있었습니다.
+권한 키 자체와 `NonPackaged` 키에는 `Value` (REG_SZ, 예: `Allow`) 와 `LastSetTime` (REG_QWORD) 이 있습니다.
 
-- `Value` 는 설정 화면의 켬·끔으로 보입니다. 확인하지 못했습니다.
-- `LastSetTime` 은 그 설정을 바꾼 시각으로 보입니다. 확인하지 못했습니다.
-- `Value` 에 `Deny` 가 오는지는 확인하지 못했습니다. 관찰한 값은 `Allow` 와 `Prompt` 뿐입니다.
+- `Value` 는 설정 화면의 켬·끔으로 보입니다.
+- `LastSetTime` 은 그 설정을 바꾼 시각으로 보입니다.
+- 알려진 `Value` 는 `Allow` 와 `Prompt` 입니다. `Deny` 가 오는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ### 데이터베이스 표
 
-아래 표 구조는 옛 파일 `CapabilityAccessManager (1).db` (2025년 4월 날짜) 에서 본 것입니다. 지금 쓰는 DB 의 구조가 같은지는 확인하지 못했습니다.
+아래 표 구조는 옛 파일 `CapabilityAccessManager (1).db` (2025년 4월 날짜) 의 것입니다. 지금 쓰는 DB 도 구조가 같은지는 검체에서 표 목록으로 확인합니다.
 
 | 표 | 칸 |
 |---|---|
@@ -110,11 +109,11 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 | 문자열 사전 표 (칸은 ID, StringValue) | Capabilities, PackageFamilyNames, BinaryFullPaths, Users, FileIDs, ProgramIDs, AccessGUIDs, AppNames, ServiceNames |
 
 - 사용 기록 표의 Capability, BinaryFullPath, UserSid, FileID 같은 칸에는 숫자 ID 가 들어 있고, 실제 문자열은 같은 이름의 사전 표에서 찾습니다. 예를 들어 Capability 칸의 숫자는 `Capabilities` 표의 ID 입니다.
-- 사전 표에서 본 값은 다음과 같습니다. `Capabilities` 에 `location`, `BinaryFullPaths` 에 `C:\Windows\System32\dllhost.exe`, `Users` 에 `S-1-5-21-…-500` 모양의 SID 가 있었습니다.
-- `FileIDs` 와 `ProgramIDs` 의 값은 `0000` 뒤에 16진수 40자가 붙은 44자 문자열이었습니다. [AmCache](amcache-hve/index.md) 의 FileId·ProgramId 와 모양이 같습니다. 파일의 SHA-1 인지는 확인하지 못했습니다.
-- 시각 칸에는 FILETIME 정수가 들어 있었습니다.
+- 사전 표 값의 예를 들면, `Capabilities` 에는 `location`, `BinaryFullPaths` 에는 `C:\Windows\System32\dllhost.exe`, `Users` 에는 `S-1-5-21-…-500` 모양의 SID 가 들어갑니다.
+- `FileIDs` 와 `ProgramIDs` 의 값은 `0000` 뒤에 16진수 40자가 붙은 44자 문자열입니다. [AmCache](amcache-hve/index.md) 의 FileId·ProgramId 와 모양이 같습니다. 파일의 SHA-1 인지는 밝혀지지 않았습니다.
+- 시각 칸에는 FILETIME 정수가 들어 있습니다.
 
-레지스트리에는 앱마다 마지막 한 쌍만 남습니다. DB 는 사용할 때마다 행을 쌓을 수 있는 표 모양입니다. 실제로 여러 번 쓴 기록이 여러 행으로 남는지는 지금 쓰는 DB 로 확인하지 못했습니다.
+레지스트리에는 앱마다 마지막 한 쌍만 남습니다. DB 는 사용할 때마다 행을 쌓을 수 있는 표 모양입니다. 여러 번 쓴 기록이 실제로 여러 행으로 남는지는 검체의 DB 에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -127,7 +126,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 
 - 이 기록은 앱이 장치를 열고 닫은 시각이며, 녹화·녹음한 내용이 있다는 뜻은 아닙니다.
 - NonPackaged 하위 키 이름으로 원격 도구나 화상 회의 프로그램 같은 실행 파일이 카메라·마이크를 썼는지 알 수 있습니다.
-- Microsoft 설명서에 따르면 데스크톱 앱이 설정 목록에 늘 나오지는 않습니다. 설정을 꺼도 카메라·마이크에 접근할 수 있는 경우도 있어서 기록이 없다고 장치를 쓰지 않았다고 단정하지 않습니다.
+- 데스크톱 앱이 설정 목록에 늘 나오지는 않습니다[1]. 설정을 꺼도 카메라·마이크에 접근할 수 있는 경우도 있어서 기록이 없다고 장치를 쓰지 않았다고 단정하지 않습니다.
 
 ### 보고서 문장
 
@@ -142,25 +141,25 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 |---|---|---|---|
 | `LastUsedTimeStart` | 앱 하위 키 | 앱이 장치를 쓰기 시작한 때 | FILETIME, UTC |
 | `LastUsedTimeStop` | 앱 하위 키 | 앱이 장치 쓰기를 멈춘 때 | FILETIME, UTC |
-| `LastSetTime` | 권한 키, NonPackaged 키, 스토어 앱 하위 키 | 설정을 바꾼 때로 보입니다. 확인하지 못했습니다 | REG_QWORD |
-| DB 의 시각 칸 | `LastUsedTimeStart`, `LastUsedTimeStop`, `LastObservedTime`, `ShownTime` | 칸 이름이 가리키는 때로 보입니다. 확인하지 못했습니다 | FILETIME 정수 (관찰) |
+| `LastSetTime` | 권한 키, NonPackaged 키, 스토어 앱 하위 키 | 설정을 바꾼 때로 보입니다 | REG_QWORD |
+| DB 의 시각 칸 | `LastUsedTimeStart`, `LastUsedTimeStop`, `LastObservedTime`, `ShownTime` | 칸 이름이 가리키는 때로 보입니다 | FILETIME 정수 |
 
-- 시작·끝 값은 FILETIME 이므로 UTC 로 읽습니다. 관찰한 PC 에서 UTC 로 풀었을 때 시작과 끝이 초에서 시간 단위 간격으로 맞게 나왔습니다. 예를 들어 01:16:34 UTC 에 시작해 02:29:28 UTC 에 끝났습니다.
-- 옛 DB 파일에서 본 값 133897659145807372 는 2025-04-22 03:25:14 UTC 입니다.
-- 레지스트리에는 앱마다 시작·끝 한 쌍만 있었습니다. 새로 쓰면 이 한 쌍을 덮어쓰는 것으로 보입니다. 이 해석은 관찰에서 나온 추정입니다.
-- 장치를 쓰는 동안 `LastUsedTimeStop` 이 0 인지는 확인하지 못했습니다. 관찰한 PC 에는 0 인 항목이 없었습니다.
-- 옛 DB 파일의 `NonPackagedUsageHistory` 4행은 모두 `AccessBlocked=1` 이었습니다. `LastUsedTimeStart` 는 0 이고 `LastUsedTimeStop` 에만 시각이 있었습니다. 막힌 접근은 시작 시각 없이 남는 것으로 보입니다. 4행뿐이라 일반화하지 못합니다.
+- 시작·끝 값은 FILETIME 이므로 UTC 로 읽습니다. UTC 로 풀면 시작과 끝의 간격이 몇 초에서 몇 시간으로 나옵니다. 예를 들어 01:16:34 UTC 에 시작해 02:29:28 UTC 에 끝난 항목이 있습니다.
+- 옛 DB 파일의 값 133897659145807372 는 2025-04-22 03:25:14 UTC 입니다.
+- 레지스트리에는 앱마다 시작·끝 한 쌍만 있습니다. 새로 쓰면 이 한 쌍을 덮어쓰는 것으로 보입니다.
+- 장치를 쓰는 동안 `LastUsedTimeStop` 이 0 인지는 공개 자료가 없어 검체에서 확인합니다.
+- 옛 DB 파일의 `NonPackagedUsageHistory` 에서 `AccessBlocked=1` 인 행은 `LastUsedTimeStart` 가 0 이고 `LastUsedTimeStop` 에만 시각이 있습니다. 막힌 접근은 시작 시각 없이 남는 것으로 보입니다. 이런 행이 4개뿐인 예라 일반화하기 어렵습니다.
 - FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-1. **SOFTWARE 하이브만 봅니다.** 관찰한 PC 에서는 앱별 사용 시각이 모두 NTUSER.DAT 에 있었습니다. SOFTWARE 만 읽는 도구로는 결과가 비어 나올 수 있습니다. 사용자 프로필마다 NTUSER.DAT 를 따로 봅니다.
+1. **SOFTWARE 하이브만 봅니다.** Windows 11 25H2 에서는 앱별 사용 시각이 NTUSER.DAT 에만 있을 수 있습니다. SOFTWARE 만 읽는 도구로는 결과가 비어 나올 수 있습니다. 사용자 프로필마다 NTUSER.DAT 를 따로 봅니다.
 2. **기록이 없으면 쓰지 않았다고 봅니다.** 데스크톱 앱이 설정 목록에 늘 나오지는 않습니다. 설정을 꺼도 접근할 수 있는 경우가 있습니다.
 3. **마지막 한 쌍을 전체 이력으로 읽습니다.** 레지스트리에는 앱마다 마지막 시작·끝만 있습니다. 이전 사용은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 하이브를 찾아 봅니다.
 4. **하위 키 이름을 그대로 경로로 적습니다.** 하위 키 이름의 `#` 은 `\` 로 바꿔 읽습니다.
-5. **라이브 PC 에서 DB 를 보통 방식으로 복사합니다.** 관찰한 PC 에서는 관리자 권한으로도 DB 폴더의 목록 보기가 거부됐습니다. 백업 권한 복사 (`robocopy /B`) 로는 잠기지 않은 옛 파일만 복사됐습니다. 지금 쓰는 DB 는 사용 중이라 복사하지 못했습니다. 라이브 수집에는 볼륨 섀도 복사본이나 원시 디스크 읽기가 필요합니다. 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
-6. **옛 DB 와 지금 DB 를 섞습니다.** 같은 폴더에 `CapabilityAccessManager (1).db` 가 있었습니다. 파일마다 따로 읽고, 결과에 어느 파일에서 나온 값인지 적습니다.
-7. **DB 표 구조를 고정된 것으로 봅니다.** 위 표 구조는 옛 파일에서 본 것입니다. 지금 DB 는 표 목록부터 다시 확인합니다.
+5. **라이브 PC 에서 DB 를 보통 방식으로 복사합니다.** 관리자 권한으로도 DB 폴더의 목록 보기가 거부될 수 있습니다. 백업 권한 복사 (`robocopy /B`) 로는 잠기지 않은 옛 파일만 복사되고, 지금 쓰는 DB 는 사용 중이라 복사되지 않습니다. 라이브 수집에는 볼륨 섀도 복사본이나 원시 디스크 읽기가 필요합니다. 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
+6. **옛 DB 와 지금 DB 를 섞습니다.** 같은 폴더에 `CapabilityAccessManager (1).db` 같은 옛 파일이 있을 수 있습니다. 파일마다 따로 읽고, 결과에 어느 파일에서 나온 값인지 적습니다.
+7. **DB 표 구조를 고정된 것으로 봅니다.** 위 표 구조는 옛 파일의 것입니다. 지금 DB 는 표 목록부터 다시 확인합니다.
 
 ### 지우기와 조작
 
@@ -201,10 +200,10 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 
 **레지스트리**: Eric Zimmerman 의 RECmd 에는 Kroll_Batch.reb 배치 파일이 있습니다. 이 배치는 SOFTWARE 하이브의 `ConsentStore\microphone` 과 `ConsentStore\webcam\*\*` 아래 `LastUsedTimeStart`·`LastUsedTimeStop` 을 하위 키까지 따라가며 읽습니다. 배치 항목의 하이브 종류는 SOFTWARE 하나뿐입니다. 값은 FILETIME 으로 풀고, 분류는 Devices 입니다.
 
-- 관찰한 PC 처럼 앱별 기록이 NTUSER.DAT 에만 있으면 이 항목으로는 결과가 나오지 않습니다.
+- 앱별 기록이 NTUSER.DAT 에만 있으면 이 항목으로는 결과가 나오지 않습니다.
 - NTUSER.DAT 의 같은 경로는 레지스트리 보기 도구로 따로 읽거나, 배치 항목을 고쳐 읽습니다.
 
-**데이터베이스**: sqlite3 명령줄 도구나 다른 SQLite 보기 도구로 엽니다. 사전 표를 이어 붙여야 사람이 읽을 수 있습니다. 아래는 옛 파일에서 본 표 구조로 만든 예시 쿼리입니다.
+**데이터베이스**: sqlite3 명령줄 도구나 다른 SQLite 보기 도구로 엽니다. 사전 표를 이어 붙여야 사람이 읽을 수 있습니다. 아래는 옛 파일의 표 구조로 만든 예시 쿼리입니다.
 
 ```sql
 SELECT h.ID,

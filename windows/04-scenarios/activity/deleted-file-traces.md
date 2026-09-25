@@ -8,7 +8,7 @@ nav_order: 3810
 
 파일이 지금 디스크에 없을 때 "이런 파일이 있었나, 언제 어떻게 없어졌나, 내용을 되살릴 수 있나" 를 묻는 조사를 다룹니다. 지운 파일의 흔적은 한곳에 모여 있지 않습니다. 휴지통, 파일 시스템 메타데이터, 변경 저널, 사용 흔적, 이벤트 로그에 조각으로 흩어져 남습니다. 이 페이지는 이 조각을 어떤 순서로 모으는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다. 아티팩트마다의 구조는 각 아티팩트 페이지에 있습니다.
 
-"(현장 관찰)" 을 붙인 내용은 분석 현장에서 겪은 일을 적어 둔 메모에서 가져왔습니다. 공식 문서로 확인한 내용이 아니므로 검체마다 다시 확인합니다.
+"(현장 관찰)" 을 붙인 내용은 공식 문서에 없는 내용이므로 검체마다 다시 확인합니다.
 
 ## 조사 질문
 
@@ -63,13 +63,11 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 | SequenceNumber | 레코드가 해제될 때마다 1씩 늘어납니다. 쓰이지 않은 레코드는 0 입니다. |
 | BaseFileRecordSegment | 확장 레코드이면 기본 레코드를 가리킵니다. 기본 레코드이면 0 입니다. |
 
-(표는 [1] 에서 옮겼습니다.)
-
-- 0x0002 를 "폴더" 로 읽는 설명이 흔합니다. 문서에는 이름만 있습니다[1].
+- 0x0002 를 "폴더" 로 읽는 설명이 흔하지만, 공식 정의는 이름(FILE_FILE_NAME_INDEX_PRESENT)뿐입니다[1].
 - 칸은 MultiSectorHeader, Reserved1(8), SequenceNumber(2), Reserved2(2), FirstAttributeOffset(2), Flags(2), Reserved3(8), BaseFileRecordSegment(8), Reserved4(2), UpdateSequenceArray 순서입니다[1].
 - MultiSectorHeader 에는 "FILE" 서명과 업데이트 시퀀스 배열의 위치·크기가 있습니다[1].
-- 참고한 문서에는 MultiSectorHeader 의 크기가 없습니다. 그래서 이 페이지에는 칸의 오프셋을 적지 않습니다. 오프셋은 [파일 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 확인합니다.
-- 이 구조는 NTFS 주 버전 3, 부 버전 0 또는 1 에만 맞는다고 문서에 적혀 있습니다[1].
+- 칸의 오프셋은 [파일 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 확인합니다.
+- 이 구조는 NTFS 주 버전 3, 부 버전 0 또는 1 에만 맞습니다[1].
 
 **Flags 값 읽기.** 아래는 두 비트를 조합해 만든 예시 값입니다.
 
@@ -120,13 +118,13 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 | 0x00010000 | USN_REASON_HARD_LINK_CHANGE |
 | 0x80000000 | USN_REASON_CLOSE |
 
-(값은 [2] 에서 골랐습니다. 이름 있는 스트림과 관계있는 값은 [이 파일은 어디서 왔나](file-origin.md) 에서, 나머지 값은 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에서 봅니다.)
+(이 표에는 지우기와 관계있는 값만 적었습니다[2]. 이름 있는 스트림과 관계있는 값은 [이 파일은 어디서 왔나](file-origin.md) 에서, 나머지 값은 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에서 봅니다.)
 
 값을 조합해 만든 예시로 읽는 법을 보입니다. Reason 이 0x80000200 이면 USN_REASON_FILE_DELETE(0x00000200)와 USN_REASON_CLOSE(0x80000000)가 함께 켜진 것입니다. Reason 이 0x00001000 이면 이름 바꾸기의 옛 이름 쪽 레코드입니다. 이때는 같은 파일 참조로 USN_REASON_RENAME_NEW_NAME 이 켜진 레코드를 찾아 새 이름과 새 부모 폴더를 확인합니다.
 
 **휴지통으로 보낸 파일.**
 
-`$R` 은 원래 파일의 파일 ID 를 그대로 쓰므로 휴지통으로 보낸 때에는 저널에 USN_REASON_FILE_DELETE 가 아니라 이름 바꾸기 레코드가 남을 것으로 보입니다. 이 동작은 직접 확인하지 못했고, 휴지통을 비울 때 USN_REASON_FILE_DELETE 가 남는지도 확인하지 못했습니다. 검체에서 `$R` 이름이 든 레코드를 찾아 어떤 값이 켜졌는지 확인합니다.
+`$R` 은 원래 파일의 파일 ID 를 그대로 쓰므로 휴지통으로 보낸 때에는 저널에 USN_REASON_FILE_DELETE 가 아니라 이름 바꾸기 레코드가 남을 것으로 보입니다. 이 동작과, 휴지통을 비울 때 USN_REASON_FILE_DELETE 가 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 검체에서 `$R` 이름이 든 레코드를 찾아 어떤 값이 켜졌는지 확인합니다.
 
 **$J 를 뽑을 때 (현장 관찰).** `$UsnJrnl:$J` 는 앞부분이 비어 있는 희소 스트림인데(현장 관찰), 빈 구간을 0 으로 채워 뽑으면 논리 크기(수 GB)만큼의 파일이 나오고(현장 관찰), 빈 구간을 건너뛰어 뽑으면 실제 데이터만 남습니다(현장 관찰). 두 방법은 크기와 해시가 다르므로 어떤 방법으로 뽑았는지 기록에 적습니다. 희소 파일의 구조는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 에서 봅니다.
 
@@ -157,8 +155,6 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 | 0x10000 | DELETE | %%1537 |
 | 0x40 | DeleteChild | %%4422 |
 
-(값은 [3] 의 표에서 골랐습니다.)
-
 - 4663 은 SACL 이 걸린 개체에서만 남고[3], 접근 권한에 DELETE 가 있으면 삭제 권한을 썼다는 기록입니다[3].
 - 4663 의 다른 칸과 다른 이벤트와 잇는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "보안 로그 4663" 절에 있습니다.
 - 개체 삭제 이벤트 4660 의 뜻과 칸은 [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) 에서 봅니다.
@@ -167,11 +163,9 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 
 | 이벤트 | 남는 것 |
 |---|---|
-| 23 FileDelete | 지운 파일을 `ArchiveDirectory` 에 보관하고 기록합니다. 보관 폴더의 기본 이름은 `Sysmon` 이고(C: 에서는 `C:\Sysmon`), 볼륨 루트에 있습니다. 이 폴더에는 System ACL 이 걸려 있습니다. |
-| 26 FileDeleteDetected | 보관하지 않고 기록만 합니다. |
-| 28 FileBlockShredding | SDelete 같은 완전삭제 도구를 막을 때 생깁니다. |
-
-(표는 [4] 에서 옮겼습니다.)
+| 23 FileDelete | 지운 파일을 `ArchiveDirectory` 에 보관하고 기록합니다. 보관 폴더의 기본 이름은 `Sysmon` 이고(C: 에서는 `C:\Sysmon`), 볼륨 루트에 있습니다. 이 폴더에는 System ACL 이 걸려 있습니다[4]. |
+| 26 FileDeleteDetected | 보관하지 않고 기록만 합니다[4]. |
+| 28 FileBlockShredding | SDelete 같은 완전삭제 도구를 막을 때 생깁니다[4]. |
 
 - 23 을 켜 둔 PC 에서는 볼륨 루트의 보관 폴더에서 지운 파일의 사본을 찾습니다.
 - 완전삭제 도구를 쓴 흔적은 [증거를 없애려 했나](anti-forensics/index.md) 에서 다룹니다.

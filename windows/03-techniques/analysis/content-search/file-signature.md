@@ -21,19 +21,18 @@ nav_order: 3470
 
 ## 시그니처 표를 읽는 법
 
-공개 목록의 예로 Gary Kessler 의 파일 시그니처 표 (GCK's File Signatures Table) 가 있습니다. 2002년부터 이어 온 목록인데, Kessler 가 이 표를 SEARCH 에 넘겨서 옛 주소 페이지는 이제 SEARCH 사이트(https://filesig.search.org/)로 안내합니다. 옛 주소 페이지의 마지막 갱신일은 2025-04-26 입니다.
+공개 목록으로 Gary Kessler 의 파일 시그니처 표 (GCK's File Signatures Table) 가 있습니다[1]. 2002년부터 이어 온 목록이며, 지금은 SEARCH 로 넘어가서 옛 주소 페이지가 SEARCH 사이트(https://filesig.search.org/)로 안내합니다[2].
 
 표를 읽을 때는 네 가지를 지킵니다.
 
-- **한 방향으로만 읽습니다.** 표는 스스로를 "한 방향 함수" 로 읽으라고 적습니다. 매직 넘버 (Magic Number) 가 맞으면 대개 그 형식이지만, 그 형식의 파일이 늘 그 매직 넘버로 시작하지는 않습니다.
+- **한 방향으로만 읽습니다.** 매직 넘버 (Magic Number) 가 맞으면 대개 그 형식이지만, 그 형식의 파일이 늘 그 매직 넘버로 시작하지는 않습니다[1].
 - **오프셋을 확인합니다.** 오프셋 0 이 아닌 곳에 시그니처가 있는 형식도 많고, 표에는 "[X byte offset]" 으로 적혀 있습니다.
 - **겹치는 값이 있습니다.** 여러 형식이 같은 시그니처를 쓰기도 합니다.
 - **끝도 봅니다.** 일부 형식은 파일 끝 표시인 트레일러 (Trailer) 도 표에 있습니다.
 
 ## 자주 보는 시그니처
 
-아래 값은 모두 오프셋 0 에서 시작합니다.
-출처는 Kessler 표입니다.
+아래 값은 모두 오프셋 0 에서 시작합니다[1].
 
 | 형식 | 시작 바이트 | 글자로 보면 | 트레일러 | 같은 값을 쓰는 확장자 |
 |---|---|---|---|---|
@@ -61,17 +60,17 @@ nav_order: 3470
 | 레지스트리 하이브 | 72 65 67 66 | regf | | |
 | 바로가기 (LNK) | 4C 00 00 00 01 14 02 00 | | | |
 
-PDF 안에는 파일 끝 표시가 여러 개 있을 수 있어서, Kessler 표는 카빙할 때 마지막 것을 잡으라고 적습니다.
+PDF 안에는 파일 끝 표시가 여러 개 있을 수 있어서, 카빙할 때는 마지막 것을 잡습니다[1].
 
 뒤쪽 네 형식의 안쪽 구조는 각 기반 페이지에 있습니다. [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md), [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md), [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md), [바로가기 형식](../../../01-foundations/shell-document-formats/shell-link-lnk.md) 을 봅니다.
 
-HWP·ALZ·EGG 처럼 국내에서 많이 쓰는 형식은 이 페이지의 근거 자료에 시그니처가 없어 싣지 않았습니다. HWP 문서의 구조는 [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
+HWP·ALZ·EGG 처럼 국내에서 많이 쓰는 형식은 위 공개 표에 없으므로 헥스 편집기로 직접 확인합니다. HWP 문서의 구조는 [문서 메타데이터](../../../02-artifacts/embedded-metadata/document-metadata/index.md) 에서 다룹니다.
 
 ## 시그니처 하나에 형식이 여럿일 때
 
 ### ZIP 계열
 
-Kessler 표에 ZIP 을 바탕으로 한 형식으로 나오는 것은 DOCX·PPTX·XLSX·JAR·ODT·ODP·OTT·APK·KMZ·XPI·XPS·EPUB 등입니다. 표는 OOXML(DOCX·PPTX·XLSX) 시그니처를 `50 4B 03 04 14 00 06 00` 으로 적는데, 뒤 4바이트는 ZIP 로컬 파일 헤더의 "추출에 필요한 버전"(0x04) 칸과 "일반 목적 비트 플래그"(0x06) 칸이고 칸 위치는 PKWARE 의 ZIP 명세(APPNOTE)를 따릅니다.
+ZIP 을 바탕으로 한 형식에는 DOCX·PPTX·XLSX·JAR·ODT·ODP·OTT·APK·KMZ·XPI·XPS·EPUB 등이 있습니다[1]. OOXML(DOCX·PPTX·XLSX) 시그니처는 `50 4B 03 04 14 00 06 00` 입니다[1]. 뒤 4바이트는 ZIP 로컬 파일 헤더의 "추출에 필요한 버전"(0x04) 칸과 "일반 목적 비트 플래그"(0x06) 칸입니다[4].
 
 OOXML 에는 따로 부헤더 (Sub-header) 가 없고 확장자를 .ZIP 으로 바꾸면 ZIP 으로 열리므로, 시그니처만으로는 OOXML 과 일반 ZIP 을 가르기 어렵습니다. 안쪽 항목을 펼쳐 봐야 하며, 방법은 [압축·복합 파일 펼치기](archive-expansion.md) 에 있습니다.
 
@@ -79,7 +78,7 @@ OOXML 에는 따로 부헤더 (Sub-header) 가 없고 확장자를 .ZIP 으로 �
 
 DOC·XLS·PPT 를 비롯한 여러 확장자가 같은 8바이트 `D0 CF 11 E0 A1 B1 1A E1` 을 쓰기 때문에 시그니처만으로는 이 확장자들을 가를 수 없습니다. 안쪽 구조는 [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
 
-CFB 는 시그니처 뒤의 칸까지 보면 한 번 더 확인할 수 있습니다. [MS-CFB] 명세에 따르면 복합 파일 헤더는 반드시 파일 맨 앞(오프셋 0)에 있으며, 확인에 쓰는 칸은 다음과 같습니다.
+CFB 는 시그니처 뒤의 칸까지 보면 한 번 더 확인할 수 있습니다. 복합 파일 헤더는 반드시 파일 맨 앞(오프셋 0)에 있으며[3], 확인에 쓰는 칸은 다음과 같습니다.
 
 | 오프셋 | 크기 | 칸 | 명세 값 |
 |---|---|---|---|
@@ -129,9 +128,9 @@ EXE·DLL·SYS·SCR·CPL·OCX 는 모두 `4D 5A`(MZ)로 시작합니다. 실행 �
 
 ## 확장자와 내용이 다를 때
 
-Windows Search 의 필터는 파일 이름 확장자·MIME 형식·CLSID 로 파일 종류와 연결됩니다. 필터 하나가 여러 형식을 처리할 수 있지만 한 형식에는 필터가 하나만 붙습니다.
+Windows Search 의 필터는 파일 이름 확장자·MIME 형식·CLSID 로 파일 종류와 연결됩니다. 필터 하나가 여러 형식을 처리할 수 있지만 한 형식에는 필터가 하나만 붙습니다[5].
 
-두 사실로 미루어 보면, 확장자를 바꾼 파일은 바뀐 확장자의 필터로 처리될 가능성이 큽니다. 이 동작을 직접 시험한 자료는 아니며, 그렇다면 그 파일의 본문은 색인에 들어가지 않을 수 있습니다. 필터를 찾는 순서는 [본문 추출과 글자 인식](text-extraction-ocr.md) 에, 색인 자체는 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 에 있습니다.
+그래서 확장자를 바꾼 파일은 바뀐 확장자의 필터로 처리될 가능성이 크고, 그러면 그 파일의 본문은 색인에 들어가지 않을 수 있습니다. 필터를 찾는 순서는 [본문 추출과 글자 인식](text-extraction-ocr.md) 에, 색인 자체는 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 에 있습니다.
 
 ## 도구
 

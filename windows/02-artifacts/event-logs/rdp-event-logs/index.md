@@ -52,20 +52,19 @@ has_toc: false
 | Microsoft-Windows-TerminalServices-RDPClient/Operational | `Microsoft-Windows-TerminalServices-RDPClient%4Operational.evtx` |
 | Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational | `Microsoft-Windows-RemoteDesktopServices-RdpCoreTS%4Operational.evtx` |
 
-파일 이름에서는 채널 이름의 `/` 자리에 `%4` 가 들어가고, 채널 이름은 JPCERT/CC 자료와 같습니다. 보안 로그 파일의 위치는 [로그온·로그오프](../logon-events/index.md) 에서 다룹니다.
+파일 이름에서는 채널 이름의 `/` 자리에 `%4` 가 들어갑니다[2]. 보안 로그 파일의 위치는 [로그온·로그오프](../logon-events/index.md) 에서 다룹니다.
 
-아래는 원격 데스크톱 받기가 꺼진 PC 한 대에서 `wevtutil gl` 로 본 결과입니다.
+원격 데스크톱 받기가 꺼진 Windows 11 Home 빌드 26200 에서 `wevtutil gl` 로 채널 설정을 보면 아래와 같습니다.
 
-- 네 채널 모두 켜져 (enabled: true) 있었습니다.
-- 네 채널 모두 최대 크기가 1052672 바이트 (약 1MB) 였고, retention 은 false 였습니다.
-- LocalSessionManager 파일만 폴더에 있었고, RemoteConnectionManager·RDPClient·RdpCoreTS 파일은 폴더에 없었습니다.
-- 파일이 첫 이벤트를 쓸 때 만들어지는지는 확인하지 못했습니다. 그래서 파일이 없다고 곧바로 지운 흔적으로 보지 않습니다.
-- LocalSessionManager 파일 (약 1MB) 에는 이벤트 227건이 있었습니다. 기간은 2026-06-26 ~ 2026-09-20 (UTC) 였습니다.
+- 네 채널 모두 켜져 (enabled: true) 있습니다.
+- 네 채널 모두 최대 크기가 1052672 바이트 (약 1MB) 이고, retention 은 false 입니다.
+- 채널이 켜져 있어도 파일이 없을 수 있습니다. 이 환경에서는 LocalSessionManager 파일만 폴더에 있고, RemoteConnectionManager·RDPClient·RdpCoreTS 파일은 폴더에 없습니다. 그래서 파일이 없다고 곧바로 지운 흔적으로 보지 않습니다.
+- 같은 환경에서 약 1MB 인 LocalSessionManager 파일에는 이벤트 227건, 2026-06-26 ~ 2026-09-20 (UTC) 기간의 기록이 들어 있습니다.
 - 크기 한도가 이만큼 작으면 오래된 접속 기록은 밀려나 없을 수 있습니다.
 
 ### 단계별로 보는 이벤트
 
-Ponder The Bits 는 들어온 접속을 다섯 단계로 나눠 정리했습니다. 이 정리는 Vista 이후만 다루고 XP 시절 이벤트는 뺐습니다. 2018-02-20 에 쓴 글입니다.
+들어온 접속은 다섯 단계로 나눠 볼 수 있습니다[1]. 이 단계 구분은 Vista 이후 기준이며, XP 시절 이벤트는 들어 있지 않습니다.
 
 | 단계 | 이벤트 | 자세히 |
 |---|---|---|
@@ -79,10 +78,10 @@ Ponder The Bits 는 들어온 접속을 다섯 단계로 나눠 정리했습니�
 
 | 범위 | 이 허브에서 다루는 것 |
 |---|---|
-| XP | 다루지 않습니다. Ponder The Bits 의 정리에서도 빠져 있습니다 |
+| XP | 다루지 않습니다 |
 | Vista · Server 2008 이후 | 단계 정리가 다루는 범위입니다. 4778·4779 의 버전은 [세션 단계](localsessionmanager-21-25-4778-4779.md) 에서 다룹니다 |
 | 8.1 · 10 | 4624 의 제한된 관리자 모드 칸이 생긴 과정은 [인증 단계](1149-4624-10-4625.md) 에서 다룹니다 |
-| 11 Home 빌드 26200 (관찰) | 네 채널의 설정과 메시지 원문을 확인했습니다 |
+| 11 Home 빌드 26200 | 위 채널 설정과 [인증 단계](1149-4624-10-4625.md) 의 메시지 원문이 이 빌드 기준입니다 |
 
 ### 시각
 

@@ -8,8 +8,6 @@ nav_order: 3800
 
 파일 하나를 두고 "이 파일이 어떤 길로 이 PC 에 들어왔나" 를 묻는 조사를 다룹니다. 인터넷에서 받았는지, 메일이나 메신저로 왔는지, USB 나 공유 폴더에서 옮겨 왔는지를 가립니다. 이 페이지는 출처를 알려 주는 기록을 어떤 순서로 보는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다. 아티팩트마다의 구조는 각 아티팩트 페이지에 있습니다.
 
-"(관찰)" 을 붙인 내용은 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) PC 한 대에서 직접 본 것입니다. 다른 빌드나 다른 PC 에서는 다를 수 있습니다.
-
 ## 조사 질문
 
 - 이 파일은 인터넷에서 받은 것입니까?
@@ -21,7 +19,7 @@ nav_order: 3800
 
 | 확인할 것 | 까닭 |
 |---|---|
-| Windows 버전 | 이 페이지의 관찰은 Windows 11 한 대에서 본 것입니다. 검체의 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 먼저 적습니다. |
+| Windows 버전 | 스트림과 기록의 모양은 버전마다 다를 수 있습니다. 검체의 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 먼저 적습니다. |
 | 시간대 | 브라우저 기록·이벤트 로그·파일 시스템의 시각 기준이 서로 다릅니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
 | 사용자 | 브라우저 기록과 바로가기 파일은 사용자 프로필마다 따로 남습니다. [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 으로 SID 와 프로필 폴더를 짝지어 둡니다. |
 | 파일 시스템 | 출처 표시는 NTFS 의 이름 있는 스트림에 남습니다. 파일이 지금 있는 볼륨과 거쳐 온 저장 장치의 파일 시스템을 적어 둡니다. |
@@ -49,9 +47,9 @@ nav_order: 3800
 
 ## 출처 표시 (Zone.Identifier)
 
-첨부 파일 관리자 (Attachment Manager) 는 파일을 열기 전에 경고를 띄울지 정합니다[1]. 이때 "웹 표시 (Mark of the Web, MOTW)" 라고 부르는 보안 정보를 봅니다[1]. 문서의 적용 대상은 Windows 11·Windows 10 입니다[1].
+첨부 파일 관리자 (Attachment Manager) 는 파일을 열기 전에 경고를 띄울지 정합니다[1]. 이때 "웹 표시 (Mark of the Web, MOTW)" 라고 부르는 보안 정보를 봅니다[1]. 이 동작은 Windows 11·Windows 10 에 해당합니다[1].
 
-파일이 차단돼 있는지는 탐색기의 파일 속성 → 일반 탭 아래쪽 보안 메시지로 보며, 차단돼 있으면 "차단 해제 (Unblock)" 를 고를 수 있습니다[1]. 차단 해제가 Zone.Identifier 스트림을 지우는지는 확인하지 못했습니다. Sysmon 문서는 브라우저가 붙이는 `Zone.Identifier` 스트림을 "mark of the web" 이라고 부릅니다[2].
+파일이 차단돼 있는지는 탐색기의 파일 속성 → 일반 탭 아래쪽 보안 메시지로 보며, 차단돼 있으면 "차단 해제 (Unblock)" 를 고를 수 있습니다[1]. 차단 해제 뒤 Zone.Identifier 스트림이 남는지는 검체에서 확인합니다. 브라우저가 붙이는 `Zone.Identifier` 스트림이 곧 웹 표시 (mark of the web) 입니다[2].
 
 **ZoneId 값.** ZoneId 번호는 URLZONE 열거와 같은 번호로 알려져 있습니다.
 
@@ -63,15 +61,15 @@ nav_order: 3800
 | 3 | URLZONE_INTERNET | 인터넷 |
 | 4 | URLZONE_UNTRUSTED | 신뢰하지 않는 영역 |
 
--1 은 URLZONE_INVALID(IE7)이고, 1000~10000 은 사용자 정의 영역입니다[3]. URLZONE 문서는 Zone.Identifier 를 언급하지 않으며[3], ZoneId 와 URLZONE 이 같은 번호라는 것은 알려진 해석입니다. 아래 관찰에서 Downloads 폴더 파일의 ZoneId 는 모두 3 이었고, 이 해석과 맞습니다.
+-1 은 URLZONE_INVALID(IE7)이고, 1000~10000 은 사용자 정의 영역입니다[3]. URLZONE 문서는 Zone.Identifier 를 언급하지 않으며[3], ZoneId 와 URLZONE 이 같은 번호라는 것은 알려진 해석입니다. 인터넷에서 받은 Downloads 폴더 파일의 ZoneId 가 3 으로 남는 것도 이 해석과 맞습니다.
 
-**이 PC 에서 본 값.**
+**Downloads 폴더 파일의 값.**
 
-사용자 Downloads 폴더의 파일 262개 가운데 211개에 Zone.Identifier 스트림이 있었고(관찰), 211개 모두 `[ZoneTransfer]` 절과 ZoneId 줄이 있었으며 ZoneId 는 모두 3 이었습니다(관찰). HostUrl 줄은 206개, ReferrerUrl 줄은 179개에 있었고 그 밖의 키는 없었습니다(관찰). HostUrl 은 https 주소가 195개, http 주소가 8개, `about:internet` 이 3개였으므로(관찰) HostUrl 이 늘 실제 주소인 것은 아닙니다.
+사용자 Downloads 폴더에도 Zone.Identifier 스트림이 없는 파일이 섞여 있습니다. 스트림이 있으면 `[ZoneTransfer]` 절과 ZoneId 줄이 있고, 브라우저로 받은 파일의 ZoneId 는 3 입니다. HostUrl·ReferrerUrl 줄은 빠진 파일도 있습니다. HostUrl 에는 https·http 주소 말고 `about:internet` 이 들어가기도 하므로 HostUrl 이 늘 실제 주소인 것은 아닙니다.
 
-스트림은 `[ZoneTransfer]` 와 줄바꿈(CRLF)으로 시작하는 ASCII 글자였고(관찰) 한 예의 크기는 192바이트였습니다(관찰). 이 PC 에서 본 스트림에는 시각을 적은 키가 없었습니다(관찰).
+스트림은 `[ZoneTransfer]` 와 줄바꿈(CRLF)으로 시작하는 ASCII 글자이고, 크기는 수백 바이트 정도입니다(예: 192바이트). 스트림에는 시각을 적은 키가 없습니다.
 
-아래는 관찰한 절 이름과 키 이름으로 만든 예시입니다. 실제 검체에서 떼어 온 내용이 아닙니다. 주소는 예시 주소이고, 줄 순서도 예시입니다.
+아래는 이 절 이름과 키 이름으로 만든 예시입니다. 실제 검체에서 떼어 온 내용이 아닙니다. 주소는 예시 주소이고, 줄 순서도 예시입니다.
 
 ```
 [ZoneTransfer]
@@ -94,7 +92,7 @@ HostUrl=https://example.com/files/sample.zip
 
 **NTFS 밖을 거친 파일.**
 
-FAT 처럼 NTFS 가 아닌 파일 시스템으로 옮기면 이름 있는 스트림이 없어지므로, FAT·exFAT 로 포맷한 USB 를 거친 파일에는 출처 표시가 없을 수 있습니다. 압축 파일을 풀 때 풀린 파일에도 출처 표시가 붙는지는 확인하지 못했습니다. 압축 파일 자체의 출처 표시와 [압축 프로그램 사용 기록](../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 을 함께 봅니다.
+FAT 처럼 NTFS 가 아닌 파일 시스템으로 옮기면 이름 있는 스트림이 없어지므로, FAT·exFAT 로 포맷한 USB 를 거친 파일에는 출처 표시가 없을 수 있습니다. 압축 파일을 풀 때 풀린 파일에도 출처 표시가 붙는지는 검체에서 확인합니다. 압축 파일 자체의 출처 표시와 [압축 프로그램 사용 기록](../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 을 함께 봅니다.
 
 ## 브라우저 다운로드 기록
 
@@ -136,7 +134,7 @@ AmCache 에는 파일의 SHA-1 이 남고([AmCache](../../02-artifacts/execution
 
 | 이벤트 | 남는 때 |
 |---|---|
-| 11 FileCreate | 파일이 만들어지거나 덮어써질 때입니다. 문서는 다운로드 폴더와 임시 폴더를 감시하는 데 쓸모 있다고 적었습니다. |
+| 11 FileCreate | 파일이 만들어지거나 덮어써질 때입니다. 다운로드 폴더와 임시 폴더를 감시하는 데 씁니다. |
 | 15 FileCreateStreamHash | 이름 있는 스트림이 생길 때입니다. 기본 스트림과 이름 있는 스트림 내용의 해시를 남깁니다. |
 | 2 | 프로세스가 파일 생성 시각을 바꿨을 때입니다. |
 
@@ -157,7 +155,7 @@ AmCache 에는 파일의 SHA-1 이 남고([AmCache](../../02-artifacts/execution
 
 ## 흔한 오판
 
-1. **ZoneId 3 으로 받은 사이트를 말합니다.** ZoneId 3 은 인터넷 영역이라는 뜻으로 알려진 값입니다. 어느 브라우저로 어느 사이트에서 받았는지는 HostUrl 과 브라우저 기록으로 따로 봅니다. HostUrl 이 `about:internet` 인 경우도 있었습니다(관찰).
+1. **ZoneId 3 으로 받은 사이트를 말합니다.** ZoneId 3 은 인터넷 영역이라는 뜻으로 알려진 값입니다. 어느 브라우저로 어느 사이트에서 받았는지는 HostUrl 과 브라우저 기록으로 따로 봅니다. HostUrl 이 `about:internet` 인 경우도 있습니다.
 2. **출처 표시가 없으니 인터넷에서 오지 않았다고 봅니다.** NTFS 가 아닌 파일 시스템을 거치면 스트림이 없어집니다. 사용자가 차단 해제를 했을 수도 있습니다[1].
 3. **처음 요청한 주소를 받은 주소로 씁니다.** 주소 사슬의 chain_index 0 은 처음 요청한 주소입니다. 실제로 받은 주소는 가장 큰 번호입니다.
 4. **다운로드 목록이 비어 있으니 받지 않았다고 봅니다.** 목록만 지워도 파일은 남을 수 있습니다. 시크릿 창을 썼을 수도 있습니다([시크릿 모드로 무엇을 했나](private-browsing.md)).

@@ -11,15 +11,13 @@ nav_order: 1290
 
 ## 한 줄 요약
 
-수집기 (Gatherer) 는 색인할 항목을 찾아 대기열에 넣고 처리하는 윈도 검색의 한 부분입니다. `SystemIndex_Gthr` 표에는 수집기가 다룬 문서의 번호·파일 이름·수정 시각 같은 칸이 있습니다. `SystemIndex_GthrPth` 표에는 경로 조각을 담는 칸이 있습니다. 수집기는 DB 밖에도 탭으로 나뉜 글자 로그를 남깁니다(관찰).
+수집기 (Gatherer) 는 색인할 항목을 찾아 대기열에 넣고 처리하는 윈도 검색의 한 부분입니다. `SystemIndex_Gthr` 표에는 수집기가 다룬 문서의 번호·파일 이름·수정 시각 같은 칸이 있습니다. `SystemIndex_GthrPth` 표에는 경로 조각을 담는 칸이 있습니다. 수집기는 DB 밖에도 탭으로 나뉜 글자 로그를 남깁니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 ### 수집기가 하는 일
 
-Microsoft 문서가 설명하는 색인 과정입니다.
-
-- 색인은 수집기가 이끄는 세 단계로 진행됩니다.
+- 색인은 수집기가 이끄는 세 단계로 진행됩니다[3].
   1. 주소 (URL) 를 대기열에 넣습니다.
   2. 항목에 접근해 자료를 모읍니다.
   3. 색인에 반영합니다.
@@ -34,25 +32,25 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 | Outlook | 훑지 않고 알림(`mapi://`)만 받습니다. |
 | FAT 처럼 알림이 없는 곳 | 수집기가 주기적으로 전체를 다시 훑습니다. |
 
-같은 문서는 원본을 두 무리로도 나눕니다.
+원본은 두 무리로도 나뉩니다[3].
 
 | 무리 | 예 | 처리 방식 |
 |---|---|---|
 | 알림만 (notification-only) | NTFS, Outlook | 첫 훑기 뒤에는 전체를 다시 훑지 않습니다. USN 저널이 한 바퀴 돌아 넘치는 것 같은 실패가 있을 때만 다시 훑습니다. |
 | 알림 가능 (notification-enabled) | IE, FAT | 색인기가 시작될 때 바뀐 것만 훑습니다. 그 뒤로는 알림을 듣습니다. |
 
-- 이 문서는 FAT 를 "주기적으로 다시 훑는 곳" 과 "알림 가능 원본" 양쪽에 예로 들므로, FAT 볼륨의 항목은 NTFS 와 처리 흐름이 다르다는 점만 기억해 둡니다.
+- FAT 는 "주기적으로 다시 훑는 곳" 과 "알림 가능 원본" 양쪽에 예로 나옵니다[3]. 그래서 FAT 볼륨의 항목은 NTFS 와 처리 흐름이 다르다는 점만 기억해 둡니다.
 - USN 변경 저널은 [USN 변경 저널](../../filesystem/usnjrnl.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
 | Windows | 파일 | 표 | 근거 |
 |---|---|---|---|
-| XP·Vista | `Windows.edb` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | libyal |
-| 7·8 | `Windows.edb` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | libyal |
-| 10 | `Windows.edb` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | LevelBlue |
-| 11 | `Windows-gather.db` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | LevelBlue |
-| 11 25H2 (PC 한 대) | `GatherLogs\SystemIndex\` 폴더 | 글자 로그 파일 `.Crwl`·`.gthr` | 관찰 |
+| XP·Vista | `Windows.edb` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | [1] |
+| 7·8 | `Windows.edb` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | [1] |
+| 10 | `Windows.edb` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | [2] |
+| 11 | `Windows-gather.db` | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | [2] |
+| 11 25H2 | `GatherLogs\SystemIndex\` 폴더 | 글자 로그 파일 `.Crwl`·`.gthr` | |
 
 - Windows 11 에서는 두 표가 `Windows.db` 가 아니라 `Windows-gather.db` 에 있습니다.
 - Vista 에는 두 표의 사본 표(`_S`)가 따로 있습니다. 목록은 [위치와 형식](windows-edb-windows-db.md) 에 있습니다.
@@ -61,7 +59,7 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 
 ### `SystemIndex_Gthr` 칸
 
-| Windows 7·8 (libyal) | XP·Vista (libyal) |
+| Windows 7·8 | XP·Vista |
 |---|---|
 | `ScopeID` | `PathId` |
 | `DocumentID` | `DocumentID` |
@@ -74,44 +72,44 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 | `RequiredSIDs` — 이진값 | `FileName1`, `FileName2` — UTF-16LE |
 | `FailureUpdateAttempts` — 8비트 | |
 
-- 두 열은 같은 줄끼리 짝이 아닙니다. 버전별 칸 목록을 나란히 둔 것입니다.
-- Windows 10 의 주요 칸은 `ScopeID`, `DocumentID`, `SDID`, `LastModified`, `FileName` 입니다(LevelBlue).
+- 두 열은 같은 줄끼리 짝이 아닙니다. 버전별 칸 목록을 나란히 둔 것입니다[1].
+- Windows 10 의 주요 칸은 `ScopeID`, `DocumentID`, `SDID`, `LastModified`, `FileName` 입니다[2].
 - `FileName` 은 압축된 문자열입니다. 압축과 난독화를 푸는 법은 [파일 속성 되살리기](propertystore.md) 에 있습니다.
 
 ### `SystemIndex_GthrPth` 칸
 
 | Windows | 칸 | 근거 |
 |---|---|---|
-| 7·8·10 | `Scope`, `Parent`, `Name` | libyal, LevelBlue |
-| XP·Vista | `LookupMD5`, `LookupValue` | libyal |
+| 7·8·10 | `Scope`, `Parent`, `Name` | [1][2] |
+| XP·Vista | `LookupMD5`, `LookupValue` | [1] |
 
-### 두 표를 잇는 법 — 확인하지 못한 부분
+### 두 표를 잇는 법 — 알려지지 않은 부분
 
-- 칸 이름만 보면 `Gthr.ScopeID` 를 `GthrPth.Scope` 에 맞추고 `Parent` 를 따라 올라가 폴더 경로를 조립할 수 있을 것처럼 보입니다. 이 방법을 설명한 명세는 확인하지 못했습니다.
-- `Gthr.DocumentID` 가 속성 저장소의 `WorkID` 와 같은 번호인지도 확인하지 못했습니다.
-- `LastModified` 가 정확히 어떤 시각인지도 확인하지 못했습니다. 파일 수정 시각을 옮겨 적은 값인지 알 수 없습니다.
+- 칸 이름만 보면 `Gthr.ScopeID` 를 `GthrPth.Scope` 에 맞추고 `Parent` 를 따라 올라가 폴더 경로를 조립할 수 있을 것처럼 보입니다. 이 방법을 설명한 공개 명세는 없습니다.
+- `Gthr.DocumentID` 가 속성 저장소의 `WorkID` 와 같은 번호인지도 공개된 자료가 없습니다.
+- `LastModified` 가 정확히 어떤 시각인지도 공개된 자료가 없습니다. 파일 수정 시각을 옮겨 적은 값인지 알 수 없습니다.
 - 그래서 조립한 경로나 번호 짝은 속성 저장소의 `System_ItemPathDisplay` 와 몇 행씩 맞춰 본 뒤에 씁니다.
 
 ### 수집 로그 파일 (GatherLogs)
 
-아래는 Windows 11 25H2 PC 한 대에서 본 내용입니다.
+아래는 Windows 11 25H2 기준입니다.
 
 **로그 위치를 정하는 값**
 
-`HKLM\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex` 키에 아래 값이 있었습니다.
+`HKLM\SOFTWARE\Microsoft\Windows Search\Gather\Windows\SystemIndex` 키에 아래 값이 있습니다.
 
-| 값 이름 | 본 값 |
+| 값 이름 | 값 |
 |---|---|
 | `StreamLogsDirectory` | `...\Applications\Windows\GatherLogs` |
 | `LogDirectory` | `...\Applications\Windows\Projects\SystemIndex` |
-| `CatalogResetSignature`, `CheckPointNumber`, `NewCrawlNumber` | 값은 있었으나 뜻은 확인하지 못했습니다 |
+| `CatalogResetSignature`, `CheckPointNumber`, `NewCrawlNumber` | 값의 뜻은 공개된 자료가 없습니다 |
 
 **로그 파일**
 
-- `GatherLogs\SystemIndex\` 에 `SystemIndex.<번호>.Crwl` 파일 95개와 `SystemIndex.<번호>.gthr` 파일 5개가 있었습니다.
-- 두 파일 모두 UTF-16LE 글자 파일이었습니다. 파일 첫머리에 BOM `FF FE` 가 있었습니다.
-- 한 줄의 칸은 탭으로 나뉘어 있었습니다.
-- `.gthr` 에는 수집 대상 주소(`file:` 경로)가 그대로 적혀 있었습니다.
+- `GatherLogs\SystemIndex\` 에 `SystemIndex.<번호>.Crwl` 파일과 `SystemIndex.<번호>.gthr` 파일이 있습니다. 개수는 PC 마다 다르며, 예를 들어 `.Crwl` 95개와 `.gthr` 5개가 있을 수 있습니다.
+- 두 파일 모두 UTF-16LE 글자 파일입니다. 파일 첫머리에 BOM `FF FE` 가 있습니다.
+- 한 줄의 칸은 탭으로 나뉩니다.
+- `.gthr` 에는 수집 대상 주소(`file:` 경로)가 그대로 적혀 있습니다.
 
 `.gthr` 한 줄의 예입니다. 사용자 이름과 파일 이름은 가렸습니다.
 
@@ -124,12 +122,12 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 | 첫째 칸 | FILETIME 의 하위 32비트 (16진수) |
 | 둘째 칸 | FILETIME 의 상위 32비트 (16진수) |
 | 셋째 칸 | 수집 대상 주소 |
-| 나머지 칸 (`8000000c`, `80041201` 등) | 뜻을 확인하지 못했습니다 |
+| 나머지 칸 (`8000000c`, `80041201` 등) | 공개 자료 없음 |
 
 - 첫째 칸과 둘째 칸을 합치면 UTC FILETIME 이 됩니다.
-- `.Crwl` 첫 줄의 값을 이렇게 풀면 2026-06-26 18:10:36 UTC 였습니다. 이 값은 그 폴더를 만든 시각(2026-06-27 03:10 한국 시각)과 맞았습니다.
+- `.Crwl` 첫 줄의 시각이 로그 폴더를 만든 시각과 맞은 예가 있습니다. 풀어 낸 값은 2026-06-26 18:10:36 UTC 이고, 폴더를 만든 시각은 2026-06-27 03:10 한국 시각입니다.
 - 위 줄의 둘째 칸 `1dd4ab1` 은 일곱 자리입니다. 앞자리 0 을 적지 않은 것으로 보입니다. 합칠 때는 앞에 0 을 채워 여덟 자리로 맞춥니다.
-- 로그가 얼마나 오래 남는지는 확인하지 못했습니다.
+- 로그가 얼마나 오래 남는지는 공개된 자료가 없습니다.
 
 ## 증거로서 의미
 
@@ -141,10 +139,10 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 **증명하지 못하는 것**
 
 - 수집기는 파일 변경 알림을 받아 움직이므로, 수집 기록만으로는 누가 파일을 바꿨는지, 사용자의 손인지 프로그램의 동작인지도 가리지 못합니다.
-- `LastModified` 의 정확한 뜻은 확인하지 못했습니다. 이 값을 파일 수정 시각이라고 단정해 적지 않습니다.
+- `LastModified` 의 정확한 뜻은 공개된 자료가 없습니다. 이 값을 파일 수정 시각이라고 단정해 적지 않습니다.
 - 로그가 얼마나 남는지 모르므로, 로그에 없는 경로가 수집된 적이 없다고 말할 수 없습니다.
-- 앞 두 칸의 시각이 정확히 무엇을 뜻하는지는 확인하지 못했습니다. `.Crwl` 첫 줄 하나를 폴더 생성 시각과 맞춰 본 것이 전부입니다. 검체에서 다른 기록과 한 번 더 맞춰 봅니다.
-- `SDID`·`RequiredSIDs` 로 기록을 사용자와 잇는 방법은 확인하지 못했습니다. [색인 해석 함정](pitfalls.md) 에서 다룹니다.
+- 앞 두 칸의 시각이 정확히 무엇을 뜻하는지는 공개된 자료가 없습니다. 폴더 생성 시각과 맞은 예가 하나 있을 뿐이므로, 검체에서 다른 기록과 한 번 더 맞춰 봅니다.
+- `SDID`·`RequiredSIDs` 로 기록을 사용자와 잇는 방법은 공개된 자료가 없습니다. [색인 해석 함정](pitfalls.md) 에서 다룹니다.
 
 보고서에는 기록이 말하는 만큼만 적습니다.
 예: "GatherLogs 의 `SystemIndex.○○.gthr` 에 `file:C:/Users/○○/Documents/계약서.docx` 줄이 있습니다. 이 줄의 앞 두 칸을 FILETIME 으로 풀면 ○○ UTC 입니다." (경로는 설명용 예시입니다.)
@@ -153,9 +151,9 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 
 | 값 | 형식 | 뜻 |
 |---|---|---|
-| `SystemIndex_Gthr.LastModified` (Windows 7·8) | 빅엔디언 FILETIME 이진값 | 확인하지 못했습니다 |
-| `SystemIndex_Gthr.FirstAccess`·`LastAccess` (XP·Vista) | 형식을 확인하지 못했습니다 | 확인하지 못했습니다 |
-| GatherLogs 한 줄의 첫째·둘째 칸 | 16진수 글자 두 조각으로 적은 FILETIME. UTC 입니다. (관찰) | 이 PC 에서 폴더 생성 시각과 맞았습니다 |
+| `SystemIndex_Gthr.LastModified` (Windows 7·8) | 빅엔디언 FILETIME 이진값 | 공개 자료 없음 |
+| `SystemIndex_Gthr.FirstAccess`·`LastAccess` (XP·Vista) | 공개 자료 없음 | 공개 자료 없음 |
+| GatherLogs 한 줄의 첫째·둘째 칸 | 16진수 글자 두 조각으로 적은 FILETIME. UTC 입니다. | 폴더 생성 시각과 맞은 예가 있습니다 |
 
 - FILETIME 을 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 빅엔디언 FILETIME 을 푸는 예는 [파일 속성 되살리기](propertystore.md) 에 있습니다.
@@ -164,8 +162,8 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 ## 함정과 한계
 
 1. **Windows 11 에서는 파일이 따로 있습니다.** 수집 기록 표는 `Windows-gather.db` 에 있습니다. `Windows.db` 만 보면 표가 없다고 착각합니다.
-2. **DB 가 안 열려도 로그는 읽힐 수 있습니다.** 같은 PC 에서 DB 파일은 `AesGcm1 SQLite3` 로 시작했지만 GatherLogs 파일은 UTF-16LE 글자 파일이었습니다.
-3. **16진수 칸의 자릿수가 다를 수 있습니다.** 앞자리 0 을 빼고 적은 칸이 있었습니다. 상위·하위 칸을 합칠 때 각각 여덟 자리로 채웁니다.
+2. **DB 가 안 열려도 로그는 읽힐 수 있습니다.** DB 파일이 `AesGcm1 SQLite3` 로 시작해도 GatherLogs 파일은 UTF-16LE 글자 파일일 수 있습니다.
+3. **16진수 칸의 자릿수가 다를 수 있습니다.** 앞자리 0 을 빼고 적은 칸이 있습니다. 상위·하위 칸을 합칠 때 각각 여덟 자리로 채웁니다.
 4. **칸 순서를 바꿔 읽지 않습니다.** 앞 칸이 하위 32비트, 뒤 칸이 상위 32비트입니다. 거꾸로 합치면 터무니없는 날짜가 나옵니다.
 5. **FAT 볼륨은 처리 흐름이 다릅니다.** 알림이 없는 곳은 주기적으로 다시 훑습니다. 그래서 수집 시각이 파일이 바뀐 때와 멀리 떨어질 수 있습니다.
 6. **USN 저널이 넘치면 다시 훑습니다.** 이때는 많은 항목이 한꺼번에 다시 수집됩니다. 한 시간대에 기록이 몰려 있으면 처음 색인·재구성과 함께 이런 다시 훑기도 까닭의 후보로 둡니다.
@@ -175,7 +173,7 @@ Microsoft 문서가 설명하는 색인 과정입니다.
 
 ### 헥스로 한 번
 
-아래 바이트는 **관찰한 칸 배치로 만든 예시**입니다. 실제 검체에서 나온 값이 아닙니다.
+아래 바이트는 **위 칸 배치에 맞춰 만든 예시**입니다. 실제 검체에서 나온 값이 아닙니다.
 
 ```
 .gthr 파일 첫머리 (UTF-16LE BOM)

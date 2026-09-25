@@ -51,15 +51,15 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 
 - PSReadLine 은 PowerShell 5.1 이상에서만 동작합니다. Windows PowerShell 5.1 에도 새 버전을 따로 설치할 수 있습니다. 5.1 이라고 2.0.0 이라고 단정하지 않습니다.
 - 민감한 명령을 거르는 규칙이 PSReadLine 버전마다 다릅니다. 아래 "민감한 명령 거르기" 를 봅니다.
-- 관찰한 PC 에는 Windows PowerShell 5.1.26100 과 PSReadLine 2.0.0 만 있었습니다. PowerShell 7 은 없었습니다.
+- PowerShell 7 을 따로 설치하지 않은 Windows 에는 Windows PowerShell 5.1(예: 5.1.26100)과 PSReadLine 2.0.0 만 있습니다.
 - Windows 버전마다 어떤 PowerShell 이 기본으로 들어 있는지는 이 페이지에서 다루지 않습니다. 검체에 설치된 PowerShell 과 PSReadLine 버전을 먼저 확인합니다.
 
 ## 구조
 
 - 글자 파일이고 한 줄에 명령 하나가 들어갑니다.
-- 여러 줄에 걸친 명령을 어떻게 저장하는지는 확인하지 못했습니다.
-- 시각 칸이 없습니다. 관찰한 파일 896줄 가운데 날짜로 시작하는 줄은 없었습니다.
-- 관찰한 파일은 BOM 없는 UTF-8 이었고 한글도 올바른 UTF-8 로 들어 있었으며, 줄 끝은 CRLF 였습니다.
+- 여러 줄에 걸친 명령을 어떻게 저장하는지는 공개 자료가 없어 검체에서 확인합니다.
+- 시각 칸이 없습니다.
+- Windows 에서 파일은 BOM 없는 UTF-8 이고, 한글도 UTF-8 로 들어갑니다. 줄 끝은 CRLF 입니다.
 
 ### 저장 방식을 정하는 설정
 
@@ -70,7 +70,7 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 | | `SaveNothing` | 파일에 쓰지 않습니다 |
 | `HistorySavePath` | 파일 경로 | 파일 위치를 바꿉니다 |
 | `HistoryNoDuplicates` | 켬·끔 | 불러올 때만 중복을 숨깁니다. 파일에는 중복 명령이 그대로 들어갑니다 |
-| `MaximumHistoryCount` | 문서의 기본값 칸은 "None" 입니다. 관찰한 PC(PSReadLine 2.0.0) 에서는 4096 이었습니다 | 파일 줄 수에 영향을 주는지는 확인하지 못했습니다 |
+| `MaximumHistoryCount` | 문서에는 기본값이 "None" 으로 적혀 있지만[2], PSReadLine 2.0.0 에서는 4096 입니다 | 파일 줄 수에 영향을 주는지는 공개 자료 없음 |
 | `AddToHistoryHandler` | 사용자가 정한 스크립트 | 명령마다 저장할지 정합니다. 반환값은 아래 표에 있습니다 |
 
 - `SaveNothing` 으로 바꿨다가 같은 세션에서 `SaveIncrementally` 로 되돌리면, 그동안 친 명령도 모두 저장됩니다.
@@ -94,8 +94,8 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
   - `ConvertTo-SecureString stringValue -AsPlainText`
   - `Invoke-WebRequest -Token xxx`
 - 2.3.4 부터는 속성에 값을 넣는 명령(예: `$a.Secret = $secret`)을 기록합니다. az·gcloud·kubectl 의 토큰 조회 명령도 기록합니다.
-- 문서는 2.2.0 이 거르기를 "개선했다" 고 적었습니다. 그 전 버전에도 거르기가 있었다는 뜻이지만, 2.0.0 에서 어떤 규칙으로 동작하는지는 확인하지 못했습니다.
-- 관찰한 PC(PSReadLine 2.0.0) 에서는 `AddToHistoryHandler` 가 설정되어 있었습니다.
+- 2.2.0 은 거르기를 개선한 판입니다[1]. 그 전 버전에도 거르기가 있었지만, 2.0.0 의 규칙은 공개 자료에 없어 검체에서 확인합니다.
+- PSReadLine 2.0.0 에서도 `AddToHistoryHandler` 가 설정되어 있는 경우가 있습니다.
 
 ## 증거로서 의미
 
@@ -135,12 +135,12 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 
 - **파일이 여러 개일 수 있습니다.** 호스트마다 파일이 다릅니다. PSReadLine 폴더의 `*_history.txt` 를 모두 수집합니다.
 - **경로가 바뀌었을 수 있습니다.** 사용자의 프로필 스크립트에 `HistorySavePath` 가 있는지 봅니다.
-- **스크립트와 원격 실행은 남지 않을 수 있습니다.** 이 조사에서 비대화형 PowerShell(`-NonInteractive`) 로 명령 수십 개를 실행했습니다. 그래도 파일의 마지막 수정 시각은 조사 시작 몇 시간 전 그대로였습니다.
+- **스크립트와 원격 실행은 남지 않을 수 있습니다.** 비대화형 PowerShell(`-NonInteractive`) 로 명령을 수십 개 실행해도 파일의 마지막 수정 시각은 바뀌지 않습니다.
 - **거른 명령은 처음부터 없습니다.** 비밀 값을 다루는 명령이 없다고 그런 명령을 치지 않았다고 쓰지 않습니다. 검체의 PSReadLine 버전으로 어떤 규칙이 적용됐는지 따져 봅니다.
 - **거르지 않은 비밀 값은 평문으로 남습니다.** 거르는 단어가 없는 명령 줄에 든 비밀번호 같은 값은 그대로 파일에 들어갑니다. 보고서에 옮길 때 가립니다.
 - **여러 창의 명령이 섞입니다.** 기본값에서는 여러 창이 같은 파일에 씁니다. 앞뒤 줄이 같은 창에서 나왔다고 단정하지 않습니다.
 - **중복 명령도 파일에 그대로 있습니다.** `HistoryNoDuplicates` 가 켜져 있어도 마찬가지입니다. 같은 명령이 여러 번 나오면 여러 번 친 것으로 봅니다.
-- **`AddToHistoryHandler` 가 있다고 조작을 단정하지 않습니다.** 관찰한 PC 에서도 설정되어 있었습니다. 설정 내용이 어디서 왔는지 프로필 스크립트에서 확인합니다.
+- **`AddToHistoryHandler` 가 있다고 조작을 단정하지 않습니다.** 평범한 PC 에도 설정되어 있는 경우가 있습니다. 설정 내용이 어디서 왔는지 프로필 스크립트에서 확인합니다.
 - **지우기와 조작.** 글자 파일이라 줄을 지우거나 고치기 쉽습니다. 파일 전체를 지울 수도 있습니다. `SaveNothing` 인 채로 세션을 끝내면 그 세션의 명령은 파일에 들어가지 않습니다. 지운 파일과 옛 내용은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 로 찾습니다.
 
 ## 직접 분석해 보기

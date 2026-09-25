@@ -23,7 +23,6 @@ ZIP 이나 OLE 복합 파일은 먼저 [압축·복합 파일 펼치기](archive
 ## 본문 추출: Windows 의 필터 방식
 
 Windows Search 가 본문을 뽑는 방식은 추출기가 무엇을 하는지 보여 주는 공개된 예입니다.
-근거는 Microsoft Learn 의 "Understanding filter handlers in Windows Search" 입니다.
 
 ### 필터가 하는 일
 
@@ -51,9 +50,9 @@ IFilter 의 메서드는 다섯 개입니다.
 2. 없으면 문서 형식의 CLSID 에 등록된 PersistentHandler 를 씁니다.
 3. `HKLM\SOFTWARE\Classes\CLSID\<PersistentHandler GUID>\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}` 에서 IFilter 를 찾습니다. `{89BCB740-…}` 은 IFilter 인터페이스의 GUID 이고, 이 키의 기본값이 필터 클래스의 CLSID 입니다.
 
-문서의 예를 따르면 `.htm` 의 PersistentHandler 는 `{EEC97550-47A9-11CF-B952-00AA0051FE20}` 입니다.
+예를 들어 `.htm` 의 PersistentHandler 는 `{EEC97550-47A9-11CF-B952-00AA0051FE20}` 입니다.
 그 아래 PersistentAddinsRegistered 키의 기본값은 `{E0CA5340-4534-11CF-B952-00AA0051FE20}` 입니다.
-문서는 이 예에서 HTML 용 IFilter DLL 이 `nlhtml.dll` 이라고 적습니다.
+이때 HTML 용 IFilter DLL 은 `nlhtml.dll` 입니다.
 
 분석 대상 PC 의 레지스트리에서 이 경로를 따라가면, 확장자마다 어떤 필터가 등록돼 있었는지 볼 수 있고, 색인에 어떤 파일의 본문이 없을 때 까닭을 찾는 출발점이 됩니다.
 레지스트리 파일 자체는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서, 색인은 [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md) 에서 다룹니다.
@@ -82,12 +81,11 @@ Windows 7 이후로는 관리 코드(.NET)로 만든 필터가 막힙니다.
 
 ## 글자 인식 (OCR)
 
-공개 OCR 엔진 Tesseract 의 문서 "Improving the quality of the output" 을 기준으로 정리합니다.
-이 문서는 Tesseract 3.05·3.0x·4.00·4.x·5.0.0 을 언급합니다.
+공개 OCR 엔진 Tesseract(3.05·3.0x·4.00·4.x·5.0.0)를 예로 듭니다.
 
 ### 인식 품질을 떨어뜨리는 것
 
-| 요인 | 문서의 설명 | 대응 |
+| 요인 | 설명 | 대응 |
 |---|---|---|
 | 해상도 | DPI 가 적어도 300 인 이미지에서 가장 잘 동작합니다. 글자 크기(대문자 높이, 픽셀)에도 알맞은 값이 있습니다 | 크기를 다시 맞춥니다 (Rescaling) |
 | 배경 밝기 | 내부에서 Otsu 알고리즘으로 흑백 변환(이진화)을 합니다. 배경 밝기가 고르지 않으면 결과가 나쁠 수 있습니다 | 5.0.0 에서 Adaptive Otsu 와 Sauvola 이진화가 추가됐습니다 |

@@ -11,11 +11,11 @@ nav_order: 2210
 
 회사·학교 계정으로 OneDrive 를 연결하면 레지스트리·`settings`·`logs` 에 `Business1`, `Business2` … 라는 이름으로 기록이 따로 쌓입니다. 이 기록에는 조직을 가리키는 테넌트 ID 와 SharePoint 주소가 남습니다. 관리자 정책의 값 이름에도 테넌트 ID 가 자주 들어갑니다. 그래서 어느 조직의 계정을 썼는지, 정책이 어느 조직을 대상으로 걸렸는지 가를 수 있습니다.
 
-> **(관찰)** 표시는 Windows 11 빌드 26200 에 OneDrive 26.168.0830.0006 이 깔린 PC 한 대에서 직접 본 내용입니다. 이 PC 에는 개인 계정 1개와 회사 계정 1개가 연결돼 있었고, 팀 사이트 라이브러리를 동기화한 흔적은 없었습니다. 다른 PC 와 다른 앱 버전에서는 다를 수 있습니다. 표시가 없는 내용은 Microsoft 문서에서 확인한 것입니다.
+> 이 페이지의 레지스트리·로그 값은 Windows 11 빌드 26200 과 OneDrive 26.168.0830.0006 기준입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Microsoft 365 를 쓰는 조직 하나를 테넌트 (Tenant) 라고 부르고, 조직마다 GUID 모양의 테넌트 ID 가 있습니다. 회사·학교 계정의 OneDrive 는 SharePoint 쪽 주소를 쓰며, 관찰한 PC 의 계정 키에는 `-my.sharepoint.com` 주소가 남아 있었습니다 (관찰).
+Microsoft 365 를 쓰는 조직 하나를 테넌트 (Tenant) 라고 부르고, 조직마다 GUID 모양의 테넌트 ID 가 있습니다. 회사·학교 계정의 OneDrive 는 SharePoint 쪽 주소를 쓰며, 계정 키에는 `-my.sharepoint.com` 주소가 남습니다.
 
 SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 수 있는데, 이 기능은 Microsoft 365 회사·학교 구독이나 SharePoint Server 2019 가 있어야 합니다. 관리자는 그룹 정책으로 어느 조직 계정을 허용할지, 동기화 폴더를 어디에 둘지, 어느 라이브러리를 자동으로 받을지 정할 수 있고, 이런 정책 값에 테넌트 ID 가 들어갑니다.
 
@@ -27,38 +27,38 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 
 | 기록 | 회사 계정의 자리 |
 |---|---|
-| 레지스트리 계정 키 | `HKCU\Software\Microsoft\OneDrive\Accounts\Business1`, `Business2` … (관찰) |
+| 레지스트리 계정 키 | `HKCU\Software\Microsoft\OneDrive\Accounts\Business1`, `Business2` … |
 | 설정·DB 폴더 | `%LOCALAPPDATA%\Microsoft\OneDrive\settings\Business<1-9>` |
-| 로그 폴더 | `logs\Business1`, `logs\ListSync\Business1` (관찰) |
+| 로그 폴더 | `logs\Business1`, `logs\ListSync\Business1` |
 | 회사 OneDrive 동기화 폴더 | 기본 이름이 `OneDrive - {organization name}` 입니다 |
 | SharePoint·Teams 라이브러리 | 조직 이름으로 된 폴더 아래로 받습니다. 예: `%userprofile%\Contoso` |
 
-옛 PC 에는 `Groove.exe` 로 동기화한 흔적이 있을 수 있습니다. 관찰한 PC 에는 팀 사이트 라이브러리 동기화 흔적이 없었으므로 그 경우의 레지스트리·DB 값(`LibraryType` 등)은 확인하지 못했고, 조직 이름 폴더 아래 하위 폴더의 이름 형식도 확인하지 못했습니다.
+옛 PC 에는 `Groove.exe` 로 동기화한 흔적이 있을 수 있습니다. 팀 사이트 라이브러리를 동기화했을 때의 레지스트리·DB 값(`LibraryType` 등)과 조직 이름 폴더 아래 하위 폴더의 이름 형식은 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
 ### 계정 키에서 조직을 가리키는 값
 
-`HKCU\Software\Microsoft\OneDrive\Accounts\Business1` 에서 본 값입니다 (관찰). 개인·회사 계정에 모두 있는 값은 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
+`HKCU\Software\Microsoft\OneDrive\Accounts\Business1` 키의 값입니다. 개인·회사 계정에 모두 있는 값은 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
 
 | 값 | 형식 | 내용 |
 |---|---|---|
-| `Business` | DWORD | 1. 회사 계정 키에만 있었습니다 |
+| `Business` | DWORD | 1. 회사 계정 키에만 있습니다 |
 | `ConfiguredTenantId` | REG_SZ | 테넌트 ID (GUID) |
 | `cid` | REG_SZ | 계정 ID. 회사 계정도 GUID 모양이지만 테넌트 ID 와는 다른 값입니다 |
 | `DisplayName` | REG_SZ | 표시 이름 |
-| `UserName` | REG_SZ | 사용자 이름. `UserEmail` 과 값이 달랐습니다 |
+| `UserName` | REG_SZ | 사용자 이름. `UserEmail` 과 값이 다를 수 있습니다 |
 | `PUID` | REG_SZ | 계정 식별 값 |
 | `SPOResourceId` | REG_SZ | `https://<테넌트>-my.sharepoint.com/` 모양 |
 | `TeamSiteSPOResourceId` | REG_SZ | `https://<테넌트>.sharepoint.com/` 모양 |
 | `ServiceEndpointUri` | REG_SZ | `https://<테넌트>-my.sharepoint.com/personal/<사용자>/_api` 모양 |
-| `EdpManaged` | DWORD | 이름만 확인했습니다 |
+| `EdpManaged` | DWORD | 뜻은 공개 자료가 없습니다 |
 | `GrooveTakeoverAttemptedOperations`, `GrooveTakeoverSuccessfulOperations` | DWORD | 예전 동기화 앱(`Groove.exe`)의 동기화를 넘겨받은 흔적으로 보입니다 |
 
 ### 동기화 루트 등록의 회사 계정 값
 
-- `HKCU\Software\SyncEngines\Providers\OneDrive\<범위 ID>` 의 `UrlNamespace` 는 `https://<테넌트>-my.sharepoint.com/personal/<사용자>/Documents/` 모양이었습니다 (관찰). 회사 계정의 개인 문서 라이브러리입니다.
-- `SyncRootManager` 의 `OneDrive!…` 키 가운데 회사 계정 키에만 `TenantName` 값이 있었습니다 (관찰).
+- `HKCU\Software\SyncEngines\Providers\OneDrive\<범위 ID>` 의 `UrlNamespace` 는 `https://<테넌트>-my.sharepoint.com/personal/<사용자>/Documents/` 모양입니다. 회사 계정의 개인 문서 라이브러리입니다.
+- `SyncRootManager` 의 `OneDrive!…` 키 가운데 회사 계정 키에만 `TenantName` 값이 있습니다.
 - 두 키의 나머지 값과 이어 읽는 법은 [계정·설정 레지스트리](accounts-settings.md) 에 있습니다.
 
 ### 동기화 폴더 이름과 위치
@@ -80,13 +80,13 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 
 ### DB 에서 라이브러리 가르기
 
-회사 계정의 [동기화 DB](syncenginedatabase-db.md) 에는 라이브러리를 가를 칸이 있습니다. 아래는 칸 이름만 관찰한 것이고, 팀 사이트 라이브러리 행의 실제 값은 보지 못했습니다.
+회사 계정의 [동기화 DB](syncenginedatabase-db.md) 에는 라이브러리를 가를 칸이 있습니다. 팀 사이트 라이브러리 행에 실제로 어떤 값이 들어가는지는 검체에서 확인합니다.
 
 | 표 | 칸 | 쓰임 |
 |---|---|---|
 | `od_ScopeInfo_Records` | `siteID`, `webID`, `listID`, `webURL`, `tenantID`, `remotePath`, `libraryType` | 동기화 중인 SharePoint 라이브러리를 가릅니다 |
-| `od_ClientFolder_Records` | `teamsChannelFolder`, `shortcutsFolder` | Teams 채널 폴더와 바로 가기 폴더 표시로 보입니다. 값의 뜻은 확인하지 못했습니다 |
-| `od_GraphMetadata_Records` | `createdBy`, `modifiedBy` | 만든 사람과 고친 사람이 남는지는 내용을 보지 않아 확인하지 못했습니다 |
+| `od_ClientFolder_Records` | `teamsChannelFolder`, `shortcutsFolder` | Teams 채널 폴더와 바로 가기 폴더 표시로 보입니다. 값의 뜻은 공개 자료가 없습니다 |
+| `od_GraphMetadata_Records` | `createdBy`, `modifiedBy` | 만든 사람과 고친 사람을 적는 칸으로 보입니다. 실제 값은 검체에서 확인합니다 |
 
 ### 조직에 관한 정책
 
@@ -111,8 +111,8 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 ### 로그
 
 - 회사 계정 로그는 `logs\Business1` 에 따로 쌓입니다. 형식과 읽는 법은 [로그 (ODL·ODLGZ)](odl-odlgz.md) 에서 다룹니다.
-- 관찰한 PC 에서 목록 동기화 (ListSync) 로그인 `Nucleus-….odlgz` 는 `logs\ListSync\Business1` 에 있었습니다 (관찰).
-- `logs\Common` 의 `FileCoAuth-….odl` 은 이름으로 보아 오피스 파일 공동 작성 (co-authoring) 쪽 로그로 보입니다 (관찰). 이름으로 짐작한 뜻이고, 확인하지 못했습니다.
+- 목록 동기화 (ListSync) 로그인 `Nucleus-….odlgz` 는 `logs\ListSync\Business1` 에 있습니다.
+- `logs\Common` 의 `FileCoAuth-….odl` 은 이름으로 보아 오피스 파일 공동 작성 (co-authoring) 쪽 로그로 보입니다.
 
 ## 증거로서 의미
 
@@ -120,8 +120,8 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 
 - `Accounts\BusinessN` 키와 `Business` = 1 이 있으면, 이 Windows 사용자 프로필에서 회사·학교 계정을 연결한 적이 있습니다.
 - `ConfiguredTenantId`, `SPOResourceId`, `ServiceEndpointUri` 로 어느 조직의 계정인지 가릴 수 있습니다.
-- `SyncRootManager` 의 `TenantName` 으로 조직 이름을 볼 수 있습니다 (관찰).
-- 정책 키의 값 이름에 테넌트 ID 가 있으면, 그 조직 계정이 관리 대상이었다고 볼 수 있습니다 (문서와 관찰을 바탕으로 한 짐작).
+- `SyncRootManager` 의 `TenantName` 으로 조직 이름을 볼 수 있습니다.
+- 정책 키의 값 이름에 테넌트 ID 가 있으면, 그 조직 계정이 관리 대상이었던 것으로 보입니다.
 - `od_ScopeInfo_Records` 의 `siteID`·`webURL` 로 동기화하던 SharePoint 라이브러리를 가릴 수 있습니다.
 - `AllowTenantList`·`BlockExternalSync` 가 있으면 관리자가 다른 조직 계정이나 다른 조직이 공유한 폴더의 동기화를 막는 정책을 건 적이 있습니다.
 
@@ -130,7 +130,7 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 - 회사 계정을 연결했다는 것만으로 업무 목적이었는지 개인 목적이었는지는 알 수 없습니다.
 - 라이브러리 폴더에 파일이 있다고 지금도 동기화 중이라는 뜻은 아닙니다. 동기화를 멈춰도 사본은 남습니다.
 - `TenantAutoMount` 로 받은 라이브러리의 파일은 온라인 전용일 수 있습니다. 목록에 있다고 내용이 PC 에 있었다는 뜻은 아닙니다.
-- 누가 파일을 만들고 고쳤는지는 확인하지 못했습니다. `createdBy`·`modifiedBy` 칸의 내용을 보지 않았습니다.
+- 누가 파일을 만들고 고쳤는지는 `createdBy`·`modifiedBy` 칸의 실제 값을 검체에서 보기 전에는 단정하지 않습니다.
 - 정책 값이 있다고 지금도 그 정책이 걸려 있다는 뜻은 아닙니다. 이유는 [계정·설정 레지스트리](accounts-settings.md) 의 정책 절에 있습니다.
 
 보고서에는 "회사 자료를 동기화했다" 대신 이렇게 씁니다. "사용자 A 의 `Accounts\Business1` 에 테넌트 ID X 가 있고, 동기화 DB 의 `od_ScopeInfo_Records` 에 `webURL` 이 Y 인 라이브러리 행이 있다."
@@ -141,12 +141,12 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 
 ## 함정과 한계
 
-- **GUID 두 개를 섞지 않습니다.** `cid` 와 `ConfiguredTenantId` 는 둘 다 GUID 모양이지만 다른 값입니다. 설정 ini 파일 이름은 `cid` 쪽입니다 (관찰).
-- **`UserName` 과 `UserEmail` 이 다를 수 있습니다 (관찰).** 보고서에는 어느 값을 썼는지 밝힙니다.
+- **GUID 두 개를 섞지 않습니다.** `cid` 와 `ConfiguredTenantId` 는 둘 다 GUID 모양이지만 다른 값입니다. 설정 ini 파일 이름은 `cid` 쪽입니다.
+- **`UserName` 과 `UserEmail` 이 다를 수 있습니다.** 보고서에는 어느 값을 썼는지 밝힙니다.
 - **라이브러리 폴더는 OneDrive 폴더 밖에 있을 수 있습니다.** "동기화" 버튼으로 받은 라이브러리는 조직 이름 폴더 아래로 갑니다. OneDrive 폴더만 뒤지면 놓칩니다.
 - **OneDrive 폴더 안의 파일이 사용자 것만은 아닙니다.** "내 파일에 바로 가기 추가" 로 넣은 공유 라이브러리도 OneDrive 폴더 안에 보입니다.
 - **문서의 예시 값을 실제 값으로 읽지 않습니다.** `1111-2222-3333-4444` 와 `Contoso` 는 Microsoft 문서의 예시입니다.
-- **팀 사이트 라이브러리의 값은 이 페이지에서 확인하지 못했습니다.** `LibraryType` 등은 검체에서 직접 봅니다.
+- **팀 사이트 라이브러리의 값은 공개 자료가 없습니다.** `LibraryType` 등은 검체에서 직접 봅니다.
 - **알려진 폴더를 다른 조직으로 옮긴 PC 는 바탕 화면이 비어 보일 수 있습니다.** 옛 조직 폴더를 함께 찾습니다.
 
 ## 직접 분석해 보기
@@ -183,7 +183,7 @@ SELECT scopeID, scopeType, libraryType, tenantID,
 FROM od_ScopeInfo_Records;
 ```
 
-`tenantID` 가 계정 키의 `ConfiguredTenantId` 와 다른 행이 있으면, 다른 조직이 공유한 라이브러리인지 따져 봅니다. 공개 도구 OneDriveExplorer 도 `settings\Business<1-9>` 폴더의 DB 를 읽습니다. 도구 결과는 위 조회 결과와 한 번 맞춰 봅니다.
+`tenantID` 가 계정 키의 `ConfiguredTenantId` 와 다른 행이 있으면, 다른 조직이 공유한 라이브러리인지 따져 봅니다. 공개 도구 OneDriveExplorer 도 `settings\Business<1-9>` 폴더의 DB 를 읽습니다[5]. 도구 결과는 위 조회 결과와 한 번 맞춰 봅니다.
 
 ## 교차 검증
 

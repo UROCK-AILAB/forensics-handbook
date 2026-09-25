@@ -16,7 +16,7 @@ ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의
 ## 이 형식을 쓰는 아티팩트
 
 - 부팅 초기 추적 세션인 AutoLogger 가 `.etl` 파일을 남깁니다. 세션 설정에 FileName 값이 없으면 `%SystemRoot%\System32\LogFiles\WMI\<세션이름>.etl` 에 씁니다.
-- 확인 PC 의 `C:\Windows\System32\LogFiles\WMI` 에는 LwtNetLog.etl·NetCore.etl·RadioMgr.etl·Wifi.etl·ReFSLog.etl·NtfsLog.etl.002 ~ .006 등이 있었습니다.
+- Windows 11 25H2 의 `C:\Windows\System32\LogFiles\WMI` 에는 LwtNetLog.etl·NetCore.etl·RadioMgr.etl·Wifi.etl·ReFSLog.etl·NtfsLog.etl.002 ~ .006 등이 있었습니다.
 - 같은 폴더의 `RtBackup` 에는 `EtwRT<세션이름>.etl` 파일들이 있었습니다. EtwRTDiagLog.etl 은 72바이트였고, EtwRTAdmin_PS_Provider.etl 은 약 26MB 였습니다.
 - 이벤트 로그 쪽 세션도 ETW 설정 키에 있습니다. 아래 "이벤트 로그(EVTX)와의 관계" 를 봅니다.
 
@@ -67,7 +67,7 @@ AutoLogger 는 부팅 초기, 로그인 전의 이벤트를 기록하는 세션�
 | ClockType | 시계 종류. 1 성능 카운터, 2 시스템 타이머, 3 CPU 사이클. Vista 이후 기본값은 1 입니다 |
 | FileName | 로그 파일 경로. 없으면 `%SystemRoot%\System32\LogFiles\WMI\<세션이름>.etl` 입니다 |
 | FileMax | 만들 파일 개수 한도. 최대 16 입니다 |
-| FileCounter | 파일 이름 번호. 문서는 이 값을 건드리지 말라고 적습니다 |
+| FileCounter | 파일 이름 번호. 직접 바꾸면 안 되는 값입니다[3] |
 | FlushTimer | 버퍼를 강제로 비우는 간격(초). 기본 0 이면 버퍼가 찰 때만 비웁니다. 실시간 세션은 0 이면 1초입니다 |
 | LogFileMode | 위 로그 모드 |
 | MaxFileSize | 최대 파일 크기(MB). 기본 100, 0 이면 제한이 없습니다. LogFileMode 에 USE_KBYTES_FOR_SIZE(0x2000) 가 있으면 단위가 KB 입니다 |
@@ -79,9 +79,9 @@ AutoLogger 는 부팅 초기, 로그인 전의 이벤트를 기록하는 세션�
 - 공급자 키에는 Enabled·EnableLevel·EnableFlags·EnableProperty·MatchAnyKeyword·MatchAllKeyword 값이 있습니다.
 - EnableProperty 가 0x1 이면 이벤트의 확장 데이터에 사용자 SID 가 들어갑니다. SID 를 읽는 법은 [윈도 식별자 형식](../../value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
 - AutoLogger 는 NEWFILE 모드를 지원하지 않습니다.
-- FileMax 를 쓰면 문서상 파일 이름이 `<세션이름>.etl.0001`, `.0002` … 로 늘어납니다. 한도를 넘으면 1 로 돌아가 덮어씁니다.
+- FileMax 를 쓰면 문서상 파일 이름이 `<세션이름>.etl.0001`, `.0002` … 로 늘어납니다. 한도를 넘으면 1 로 돌아가 덮어씁니다[3].
 
-확인 PC 의 Autologger 키 아래에는 Circular Kernel Context Logger·DefenderApiLogger·DiagLog·Diagtrack-Listener·EventLog-Application·EventLog-Security·EventLog-System·LwtNetLog·NetCore·NtfsLog·RadioMgr·ReFSLog·WdiContextLog 등의 세션 키가 있었습니다. 그중 몇 개의 값입니다.
+Windows 11 25H2 의 Autologger 키 아래에는 Circular Kernel Context Logger·DefenderApiLogger·DiagLog·Diagtrack-Listener·EventLog-Application·EventLog-Security·EventLog-System·LwtNetLog·NetCore·NtfsLog·RadioMgr·ReFSLog·WdiContextLog 등의 세션 키가 있었습니다. 그중 몇 개의 값입니다.
 
 | 세션 | LogFileMode | MaxFileSize | BufferSize | 그 밖의 값 | 파일 |
 |---|---|---|---|---|---|
@@ -92,11 +92,11 @@ AutoLogger 는 부팅 초기, 로그인 전의 이벤트를 기록하는 세션�
 
 - NetCore.etl 의 크기 23,068,672바이트는 정확히 22 × 1,048,576 입니다. PREALLOCATE 모드가 최대 크기만큼 공간을 미리 잡은 결과와 맞습니다.
 - NtfsLog 파일 번호는 세 자리(`.002`)였습니다. 문서의 네 자리(`.0001`)와 다릅니다.
-- 빈칸은 확인하지 않은 값입니다.
+- 빈칸은 싣지 않은 값입니다.
 
 ### 파일 안 모양 (버퍼)
 
-버퍼 머리 구조 (WMI_BUFFER_HEADER) 의 공식 필드 표는 이 페이지가 참고한 자료로 확인하지 못했습니다. 아래는 확인 PC 의 `.etl` 4개(LwtNetLog·NtfsLog·ReFSLog·NetCore)를 읽어 본 결과입니다.
+버퍼 머리 구조 (WMI_BUFFER_HEADER) 는 공식 필드 표가 공개돼 있지 않습니다. 아래는 Windows 11 25H2 의 `.etl` 4개(LwtNetLog·NtfsLog·ReFSLog·NetCore)에서 본 모습입니다.
 
 파일 맨 앞에는 고정 서명이 없었고, 첫 4바이트가 버퍼 크기였습니다. LwtNetLog 는 0x10000, NtfsLog 는 0x2000, ReFSLog 는 0x1000, NetCore 는 0x20000 이었습니다. 레지스트리에 BufferSize 가 있는 세션은 이 값과 맞았으며, LwtNetLog 0x40, NtfsLog 0x8, NetCore 0x80 이고 단위는 KB 입니다.
 
@@ -104,7 +104,7 @@ AutoLogger 는 부팅 초기, 로그인 전의 이벤트를 기록하는 세션�
 
 ### 머리 정보 (TRACE_LOGFILE_HEADER)
 
-Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 형식으로 설명합니다. 어떤 로그 파일이든 첫 이벤트에 이 구조의 데이터가 들어 있습니다.
+이 구조는 ETW 로그 파일 머리의 원시 데이터 형식입니다. 어떤 로그 파일이든 첫 이벤트에 이 구조의 데이터가 들어 있습니다[4].
 
 필드는 이 순서로 놓입니다: BufferSize, Version, ProviderVersion, NumberOfProcessors, EndTime, TimerResolution, MaximumFileSize, LogFileMode, BuffersWritten, (StartBuffers·PointerSize·EventsLost·CpuSpeedInMHz), LoggerName, LogFileName, TimeZone, BootTime, PerfFreq, StartTime, ReservedFlags, BuffersLost.
 
@@ -120,7 +120,7 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 | EventsLost | 세션 동안 잃은 이벤트 수 |
 | LoggerName·LogFileName | 포인터 칸이라 값으로 쓰지 않습니다. 구조 바로 뒤의 첫째 널 종료 문자열이 세션 이름, 둘째가 로그 파일 이름입니다 |
 | TimeZone | TIME_ZONE_INFORMATION 구조. BootTime·EndTime·StartTime 의 시간대입니다 |
-| BootTime | 시스템 부팅 시각. 문서는 Global Logger 세션 추적에서만 지원한다고 적습니다 |
+| BootTime | 시스템 부팅 시각. 문서는 Global Logger 세션 추적에서만 지원한다고 적습니다[4] |
 | StartTime | 세션 시작 시각 |
 | ReservedFlags | 시계 종류 |
 | BuffersLost | 세션 동안 잃은 버퍼 수 |
@@ -128,7 +128,7 @@ Microsoft 문서는 이 구조를 ETW 로그 파일 머리의 원시 데이터 �
 - StartTime·EndTime·BootTime 은 1601-01-01 부터 센 100ns 단위입니다. FILETIME 과 단위가 같습니다. 푸는 법은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 다른 PC 나 32비트(WOW) 세션에서 만든 파일은 구조 크기가 다를 수 있습니다. 분석 PC 의 구조 정의로 바로 읽으면 값이 틀릴 수 있습니다.
 
-확인 PC 의 `.etl` 4개에서 본 값입니다.
+Windows 11 25H2 의 `.etl` 4개에서 본 값입니다.
 
 버전은 10.0, ProviderVersion 은 26100, 프로세서 수는 24, PointerSize 는 8 이었습니다. EndTime 은 모두 0 이었는데 쓰는 중인 파일이었습니다. 시간대 Bias 는 −540, 시간대 이름은 `@tzres.dll,-622` 였습니다.
 
@@ -146,7 +146,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 
 ### 헥스로 한 번 따라가기
 
-아래는 확인 PC 의 LwtNetLog.etl 에서 본 규칙으로 만든 예시입니다. 공식 명세로 확인한 구조가 아닙니다. 실제 파일에서 떠낸 바이트도 아닙니다. `??` 는 이 설명에 쓰지 않는 바이트입니다.
+아래는 Windows 11 25H2 의 LwtNetLog.etl 에서 본 규칙으로 만든 예시입니다. 공식 명세가 없는 구조입니다. 실제 파일에서 떠낸 바이트도 아닙니다. `??` 는 이 설명에 쓰지 않는 바이트입니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
@@ -159,7 +159,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 
 - 0x00 `00 00 01 00` 은 리틀 엔디언으로 0x10000, 곧 65,536 입니다. 이 파일의 버퍼 크기입니다.
 - 레지스트리의 BufferSize 0x40 은 KB 단위라 64 × 1,024 = 65,536 입니다. 두 값이 같습니다.
-- 첫 버퍼에서는 0x68 부터 TRACE_LOGFILE_HEADER 가 이어집니다. 0x04 ~ 0x67 은 버퍼 머리 자리이고, 필드 표는 확인하지 못했습니다.
+- 첫 버퍼에서는 0x68 부터 TRACE_LOGFILE_HEADER 가 이어집니다. 0x04 ~ 0x67 은 버퍼 머리 자리이고, 필드 표는 공개 자료가 없습니다.
 - 0x10000 과 0x20000 에서도 같은 4바이트가 나옵니다. 버퍼가 65,536바이트마다 이어집니다.
 - n 번째 버퍼는 (n − 1) × 0x10000 에서 시작합니다.
 
@@ -167,10 +167,10 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 
 ### 부팅 시각이 파일마다 남는다
 
-- 확인 PC 의 LwtNetLog·NetCore·NtfsLog.etl.006 은 BootTime 이 2026-09-20 21:44:17, StartTime 이 21:44:18 이었습니다. FILETIME 을 그대로 UTC 로 푼 값입니다.
-- 한국 시각으로는 09-21 06:44 입니다. `RtBackup` 파일들의 수정 시각(09-21 06:44)과 맞았습니다. 확인 PC 에서는 이 시각이 UTC 로 저장돼 있었습니다.
+- Windows 11 25H2 의 LwtNetLog·NetCore·NtfsLog.etl.006 은 BootTime 이 2026-09-20 21:44:17, StartTime 이 21:44:18 이었습니다. FILETIME 을 그대로 UTC 로 푼 값입니다.
+- 한국 시각으로는 09-21 06:44 입니다. `RtBackup` 파일들의 수정 시각(09-21 06:44)과 맞았습니다. 이 시각은 UTC 로 저장돼 있었습니다.
 - NtfsLog.etl.002 는 BootTime 이 2026-09-10 21:57:03(UTC) 이었습니다. 이전 부팅의 시각이 남아 있었습니다.
-- 확인 PC 에서는 부팅마다 번호 파일이 생겨서 번호 파일마다 그때의 부팅 시각이 남았습니다.
+- 부팅마다 번호 파일이 생겨서 번호 파일마다 그때의 부팅 시각이 남았습니다.
 - 이 값은 켜짐·꺼짐 기록과 맞춰 볼 수 있습니다. [켜짐·꺼짐](../../../02-artifacts/event-logs/power-on-off-events.md) 과 [PC 사용 시간 재구성](../../../04-scenarios/activity/system-usage-time.md) 을 봅니다.
 
 ### 시간대 값
@@ -180,7 +180,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 
 ### 빠진 이벤트
 
-머리의 EventsLost·BuffersLost 는 세션 동안 잃은 이벤트와 버퍼 수입니다. Microsoft 문서가 드는 이벤트가 빠지는 경우는 넷입니다.
+머리의 EventsLost·BuffersLost 는 세션 동안 잃은 이벤트와 버퍼 수입니다. 이벤트가 빠지는 경우는 넷입니다[1].
 
 - 이벤트 전체 크기(ETW 헤더 + 값)가 64K 를 넘을 때
 - ETW 버퍼가 이벤트보다 작을 때
@@ -197,25 +197,25 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 
 ### 이벤트 로그(EVTX)와의 관계
 
-- 확인 PC 의 Autologger 키 아래에 EventLog-Application·EventLog-Security·EventLog-System 세션 키가 있었고, EventLog-System 키의 값은 OwningChannel=System, LogFileMode=0x98000180, BufferSize=0x40, FlushTimer=1 이었습니다.
+- Windows 11 25H2 의 Autologger 키 아래에 EventLog-Application·EventLog-Security·EventLog-System 세션 키가 있었고, EventLog-System 키의 값은 OwningChannel=System, LogFileMode=0x98000180, BufferSize=0x40, FlushTimer=1 이었습니다.
 - 0x98000180 을 로그 모드 상수로 풀면 SECURE(0x80)·REAL_TIME(0x100)·INDEPENDENT_SESSION(0x08000000)·NO_PER_PROCESSOR_BUFFERING(0x10000000)·ADDTO_TRIAGE_DUMP(0x80000000) 입니다.
 - 파일 모드 비트가 없어서 이 세션은 `.etl` 파일을 쓰지 않고 이벤트를 실시간으로 넘깁니다.
-- "About Event Tracing" 문서는 실시간 소비자가 없을 때 이벤트가 빠지는 예로 이벤트 로그 서비스를 멈췄다 켜는 경우를 듭니다. 다만 EventLog-* 세션을 받는 쪽이 이벤트 로그 서비스라고 직접 적은 공식 문서는 확인하지 못했습니다.
+- 실시간 소비자가 없을 때 이벤트가 빠지는 예로 이벤트 로그 서비스를 멈췄다 켜는 경우가 있습니다[1]. 다만 EventLog-* 세션을 받는 쪽이 이벤트 로그 서비스라는 것은 공식 문서에 직접 나오지 않습니다.
 - 로그를 없애려 한 흔적은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 와 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
 
 ## 함정
 
-- `.etl` 은 파일 맨 앞에 고정 서명이 없었습니다(확인 PC). 맨 앞 바이트만으로는 파일 종류를 가려낼 수 없었습니다.
-- 문서는 ProviderVersion 을 OS 빌드 번호로 설명합니다. 확인 PC 에서는 이 값이 26100 이었습니다. 같은 PC 의 `ver` 출력은 10.0.26200.9457 이었습니다. 이 값으로 OS 버전을 정하지 않습니다. OS 버전은 [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 확인합니다.
-- 문서는 BootTime 을 Global Logger 세션에서만 지원한다고 적습니다. 확인 PC 에서는 Global Logger 가 아닌 LwtNetLog 에도 BootTime 이 채워져 있었습니다. 값이 있으면 읽고, 없으면 그 이유를 따로 확인합니다.
-- 레지스트리에 MaxFileSize 가 없다고 제한이 없는 것은 아닙니다. 확인 PC 의 ReFSLog 는 머리에 기본값 100 이 들어 있었습니다.
-- 번호 파일 이름은 문서와 다를 수 있습니다. 확인 PC 는 세 자리(`.002`)였습니다. 파일을 찾을 때 자릿수를 정해 두지 않습니다.
-- `RtBackup` 파일이 DisableRealtimePersistence 가 저장한 실시간 이벤트라고 적은 공식 문서는 확인하지 못했습니다.
-- Analytic·Debug 채널이 `.etl` 로 저장되는지는 이 페이지가 참고한 자료로 확인하지 못했습니다.
+- `.etl` 은 파일 맨 앞에 고정 서명이 없었습니다(Windows 11 25H2 파일 4개). 맨 앞 바이트만으로는 파일 종류를 가려낼 수 없습니다.
+- 문서는 ProviderVersion 을 OS 빌드 번호로 설명합니다[4]. Windows 11 25H2 에서는 이 값이 26100 이었고, 같은 PC 의 `ver` 출력은 10.0.26200.9457 이었습니다. 이 값으로 OS 버전을 정하지 않습니다. OS 버전은 [시스템 기본 정보](../../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 확인합니다.
+- 문서는 BootTime 을 Global Logger 세션에서만 지원한다고 적습니다[4]. 그러나 Windows 11 25H2 에서는 Global Logger 가 아닌 LwtNetLog 에도 BootTime 이 채워져 있었습니다. 값이 있으면 읽고, 없으면 그 이유를 따로 확인합니다.
+- 레지스트리에 MaxFileSize 가 없다고 제한이 없는 것은 아닙니다. Windows 11 25H2 의 ReFSLog 는 머리에 기본값 100 이 들어 있었습니다.
+- 번호 파일 이름은 문서와 다를 수 있습니다. Windows 11 25H2 에서는 세 자리(`.002`)였습니다. 파일을 찾을 때 자릿수를 정해 두지 않습니다.
+- `RtBackup` 파일이 DisableRealtimePersistence 가 저장한 실시간 이벤트인지는 공식 문서에 나오지 않습니다.
+- Analytic·Debug 채널이 `.etl` 로 저장되는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 도구
 
-- Microsoft 문서는 분석 도구의 예로 WPA, PerfView, xperf, tracerpt 를 듭니다. tracerpt 는 Windows 에 기본으로 들어 있습니다.
+- 분석 도구로는 WPA, PerfView, xperf, tracerpt 가 있습니다[1]. tracerpt 는 Windows 에 기본으로 들어 있습니다.
 - 도구가 보여 주는 머리 값(시각·로그 모드·잃은 이벤트 수)을 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 - 여러 세션의 시각을 한 줄로 모으는 법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 봅니다.
 

@@ -12,7 +12,7 @@ Windows 10 1903 이후 사용자 하이브(NTUSER.DAT)의 `FeatureUsage` 키에 
 
 ## 무엇을 기록하나 · 왜 생기나
 
-작업 표시줄에서 일어난 동작을 종류별 하위 키에 나눠 세며, 값 하나가 앱 하나이고 값 데이터는 횟수입니다. 기록은 계정마다 따로 남습니다. CrowdStrike 에 따르면 그 계정이 대화형으로 로그온한 적이 없으면 키가 없고, 작업 표시줄로 다루지 않은 앱은 이 숫자에 잡히지 않습니다.
+작업 표시줄에서 일어난 동작을 종류별 하위 키에 나눠 세며, 값 하나가 앱 하나이고 값 데이터는 횟수입니다. 기록은 계정마다 따로 남습니다. 그 계정이 대화형으로 로그온한 적이 없으면 키가 없고, 작업 표시줄로 다루지 않은 앱은 이 숫자에 잡히지 않습니다[1].
 
 ## 위치와 버전별 차이
 
@@ -20,17 +20,15 @@ Windows 10 1903 이후 사용자 하이브(NTUSER.DAT)의 `FeatureUsage` 키에 
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage
 ```
 
-CrowdStrike 는 이 경로를 `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage` 로 적고, Windows 10 1903 이후에서 이 키를 관찰했다고 적습니다. 그보다 앞선 버전에는 없을 수 있습니다.
+하이브 파일 기준 경로는 `NTUSER.DAT\Software\Microsoft\Windows\CurrentVersion\Explorer\FeatureUsage` 입니다. 이 키는 Windows 10 1903 이후에 있습니다[1]. 그보다 앞선 버전에는 없을 수 있습니다.
 
-| 하위 키 | Windows 10 1903 이후 (CrowdStrike) | Windows 11 25H2 한 대 |
+| 하위 키 | Windows 10 1903 이후 [1] | Windows 11 25H2 |
 |---|---|---|
 | AppBadgeUpdated | 있음 | 있음 |
 | AppLaunch | 있음 | 있음 |
 | AppSwitched | 있음 | 있음 |
 | ShowJumpView | 있음 | 있음 |
 | TrayButtonClicked | 있음 | 없음 |
-
-Windows 11 열은 PC 한 대에서 본 결과입니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -46,7 +44,7 @@ FeatureUsage
     TrayButtonClicked\     <버튼 이름> = REG_DWORD 횟수
 ```
 
-**하위 키의 뜻 (CrowdStrike 의 정의)**
+**하위 키의 뜻[1]**
 
 | 하위 키 | 세는 것 |
 |---|---|
@@ -58,18 +56,18 @@ FeatureUsage
 
 **값 이름의 형태**
 
-Windows 11 PC 한 대에서 본 값은 모두 REG_DWORD 횟수였습니다. 값 이름은 아래 형태였습니다.
+Windows 11 에서 값은 모두 REG_DWORD 횟수이고, 값 이름은 아래 형태입니다.
 
 - 앱 사용자 모델 ID (AppUserModelID). `…!App` 처럼 이름에 `!` 가 들어 있습니다
 - `!` 없는 앱 ID. 예를 들어 `MSEdge`, `Microsoft.Windows.Explorer` 입니다
 - `C:\…` 로 시작하는 전체 경로
 - 알려진 폴더 GUID 로 시작하는 경로. 예를 들어 `{6D809377-…}\…` 은 Program Files 아래입니다. GUID 를 경로로 푸는 표는 [UserAssist](userassist.md) 페이지에 있습니다
-- `*PID` 뒤에 16진수 8자리가 붙은 이름. AppSwitched 에 6개 있었습니다
+- `*PID` 뒤에 16진수 8자리가 붙은 이름. AppSwitched 에 나옵니다
 - 숫자만으로 된 이름
 
-`*PID…` 이름과 숫자 이름이 무엇을 가리키는지는 확인하지 못했습니다.
+`*PID…` 이름과 숫자 이름의 뜻은 공개 자료에 없습니다.
 
-같은 PC 의 값 수는 AppBadgeUpdated 11개, AppLaunch 9개, AppSwitched 61개, ShowJumpView 19개였습니다.
+값 수는 PC 마다 다릅니다. 예를 들어 AppBadgeUpdated 11개, AppLaunch 9개, AppSwitched 61개, ShowJumpView 19개인 경우가 있습니다.
 
 ## 증거로서 의미
 
@@ -77,13 +75,13 @@ Windows 11 PC 한 대에서 본 값은 모두 REG_DWORD 횟수였습니다. 값 
 
 - 이 계정으로 작업 표시줄에서 이 앱을 다룬 기록이 있습니다. 어떤 동작인지는 하위 키가 말합니다.
 - AppLaunch 에 값이 있으면, 작업 표시줄에 고정한 그 앱을 작업 표시줄에서 실행한 횟수가 기록돼 있습니다.
-- `FeatureUsage` 키가 있으면 그 계정이 대화형으로 로그온한 적이 있습니다(CrowdStrike).
-- `KeyCreationTime` 은 그 계정이 처음 대화형 로그온한 무렵을 가리킵니다(CrowdStrike).
+- `FeatureUsage` 키가 있으면 그 계정이 대화형으로 로그온한 적이 있습니다[1].
+- `KeyCreationTime` 은 그 계정이 처음 대화형 로그온한 무렵을 가리킵니다[1].
 
 ### 증명하지 못하는 것
 
 - **언제 했나.** 값에는 시각이 없습니다.
-- **작업 표시줄 밖의 사용.** CrowdStrike 에 따르면 작업 표시줄로 다루지 않은 앱은 이 숫자에 잡히지 않습니다. 시작 메뉴나 명령줄로만 띄운 앱은 값이 없을 수 있습니다. 값이 없다고 실행하지 않은 것은 아닙니다.
+- **작업 표시줄 밖의 사용.** 작업 표시줄로 다루지 않은 앱은 이 숫자에 잡히지 않습니다[1]. 시작 메뉴나 명령줄로만 띄운 앱은 값이 없을 수 있습니다. 값이 없다고 실행하지 않은 것은 아닙니다.
 - **정확한 첫 로그온 시각.** 아래 "시각 해석" 에서 보듯 다른 흔적보다 늦을 수 있습니다.
 - **키보드 앞의 사람.** 하이브가 가리키는 것은 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
@@ -91,17 +89,17 @@ Windows 11 PC 한 대에서 본 값은 모두 REG_DWORD 횟수였습니다. 값 
 
 ## 시각 해석
 
-`KeyCreationTime` 은 REG_QWORD 이며 CrowdStrike 는 이 값을 64비트 FILETIME 숫자로 설명합니다. UTC 로 읽고, 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. CrowdStrike 는 이 값을 키가 처음 만들어진 때, 곧 그 사용자가 처음 대화형 로그온한 때로 봅니다.
+`KeyCreationTime` 은 REG_QWORD 이며 64비트 FILETIME 숫자입니다[1]. UTC 로 읽고, 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. 이 값을 키가 처음 만들어진 때, 곧 그 사용자가 처음 대화형 로그온한 때로 보는 해석이 있습니다[1].
 
-Windows 11 PC 한 대에서 `KeyCreationTime` 은 같은 날 가장 오래된 UserAssist·BAM 항목보다 20여 분 늦었으므로 첫 로그온 시각 그 자체로 쓰지 말고 "그 무렵" 으로 씁니다. 첫 로그온 시각은 [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트와 맞춰 봅니다.
-같은 PC 에서 하위 키의 마지막 기록 시각 (LastWrite) 은 사용할 때마다 바뀌었고, AppBadgeUpdated·AppSwitched 의 마지막 기록 시각은 조사 당일이었습니다. 하위 키의 마지막 기록 시각은 그 종류의 동작이 마지막으로 셈에 들어간 무렵을 말하며, 어느 앱의 값이 바뀌었는지는 말하지 않습니다.
+Windows 11 에서 `KeyCreationTime` 이 같은 날 가장 오래된 UserAssist·BAM 항목보다 20여 분 늦은 예가 있으므로 첫 로그온 시각 그 자체로 쓰지 말고 "그 무렵" 으로 씁니다. 첫 로그온 시각은 [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트와 맞춰 봅니다.
+하위 키의 마지막 기록 시각 (LastWrite) 은 사용할 때마다 바뀝니다. 이 시각은 그 종류의 동작이 마지막으로 셈에 들어간 무렵을 말하며, 어느 앱의 값이 바뀌었는지는 말하지 않습니다.
 
-같은 PC 에서 부모 키 `FeatureUsage` 의 마지막 기록 시각은 `KeyCreationTime` 과 같은 날이었습니다. 하위 키가 바뀌어도 부모 키의 시각은 따라 바뀌지 않았습니다.
+부모 키 `FeatureUsage` 의 마지막 기록 시각은 `KeyCreationTime` 과 같은 날일 수 있습니다. 하위 키가 바뀌어도 부모 키의 시각은 따라 바뀌지 않습니다.
 
 ## 함정과 한계
 
 - **값에 시각이 없습니다.** 횟수를 타임라인에 올리려면 다른 아티팩트의 시각이 필요합니다.
-- **하위 키가 버전마다 다를 수 있습니다.** Windows 11 PC 한 대에는 TrayButtonClicked 가 없었습니다.
+- **하위 키가 버전마다 다를 수 있습니다.** Windows 11 25H2 에는 TrayButtonClicked 가 없을 수 있습니다.
 - **값 이름 형태가 여러 가지입니다.** 같은 앱이 앱 ID, 전체 경로, 알려진 폴더 GUID 경로 가운데 어느 것으로든 남을 수 있습니다. 하나로 묶기 전에 같은 앱인지 확인합니다.
 - **뜻을 모르는 이름이 있습니다.** `*PID…` 이름과 숫자 이름은 해석하지 않고 그대로 적어 둡니다.
 - **값과 키는 지울 수 있습니다.** 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
@@ -111,7 +109,7 @@ Windows 11 PC 한 대에서 `KeyCreationTime` 은 같은 날 가장 오래된 Us
 
 ### 헥스로 한 번
 
-**`KeyCreationTime` 값 8바이트.** 아래 바이트는 CrowdStrike 글의 예시 값 132286223503288727 을 리틀 엔디언 바이트로 옮긴 것입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+**`KeyCreationTime` 값 8바이트.** 아래 바이트는 예시 값 132286223503288727[1] 을 리틀 엔디언 바이트로 옮긴 것입니다. 특정 검체에서 꺼낸 값이 아닙니다.
 
 ```
 97 69 97 90 9E F9 D5 01

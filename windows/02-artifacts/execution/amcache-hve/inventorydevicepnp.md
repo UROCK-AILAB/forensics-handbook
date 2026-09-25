@@ -13,11 +13,11 @@ Amcache.hve 의 `Root\InventoryDevicePnp` 키에는 플러그 앤 플레이 (Plu
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Windows 는 업그레이드한 뒤에도 장치와 드라이버가 호환되는지 판단하려고 PnP 장치와 드라이버 정보를 모읍니다. Microsoft 진단 데이터 문서는 이 정보를 `Microsoft.Windows.Inventory.Core.InventoryDevicePnpAdd` 이벤트로 설명하고, Amcache.hve 하위 키의 값 이름은 이 이벤트의 필드 이름과 같습니다. 공개 파서 소스가 읽는 값 이름과 Microsoft 필드 목록을 맞대어 확인한 결과입니다.
+Windows 는 업그레이드한 뒤에도 장치와 드라이버가 호환되는지 판단하려고 PnP 장치와 드라이버 정보를 모읍니다. 같은 정보는 진단 데이터 이벤트 `Microsoft.Windows.Inventory.Core.InventoryDevicePnpAdd` 로도 나갑니다. Amcache.hve 하위 키의 값 이름은 이 이벤트의 필드 이름과 같습니다.
 
-ANSSI 는 Windows 10 1607 기본 라이브러리에서 장치 정보가 예약 작업 Microsoft Compatibility Appraiser 가 돌 때만 갱신된다고 관찰했습니다. 그래서 장치를 꽂은 순간에 바로 기록된다고 볼 수 없습니다.
+Windows 10 1607 기본 라이브러리에서는 예약 작업 Microsoft Compatibility Appraiser 가 돌 때만 장치 정보가 갱신됩니다(ANSSI). 그래서 장치를 꽂은 순간에 바로 기록된다고 볼 수 없습니다.
 
-USB 장치만 들어가는 것도 아닙니다. Zimmerman 이 본 표본에는 프로세서·디스플레이·블루투스·오디오·프린터·볼륨·디스크 같은 클래스가 두루 들어 있었습니다.
+USB 장치만 들어가는 것도 아닙니다. 프로세서·디스플레이·블루투스·오디오·프린터·볼륨·디스크 같은 클래스가 두루 들어 있습니다(Zimmerman).
 
 ## 위치와 버전별 차이
 
@@ -34,7 +34,7 @@ USB 장치만 들어가는 것도 아닙니다. Zimmerman 이 본 표본에는 �
 | 6.2·6.3 (Windows 8·8.1) | 키가 없습니다. 8.1 판은 연결된 장치 목록을 `FullCompatReport.xml` 에 적었습니다. | ANSSI |
 | 10.0.14913 (Windows 10 1607) | `InventoryDevicePnp`·`InventoryDeviceContainer` 가 처음 보입니다. | ANSSI |
 | 10.0.16299 (Windows 10 1709) | 공개 연구가 USB 흔적으로 이 키를 다루기 시작한 판입니다. | Zimmerman·df-stream (2017) |
-| Windows 11 | 이 글에서는 명세나 연구로 따로 확인하지 못했습니다. 검체에서 키가 있는지부터 봅니다. | — |
+| Windows 11 | 공개된 명세나 연구가 없습니다. 검체에서 키가 있는지부터 봅니다. | — |
 
 라이브러리를 업데이트한 Windows 7·8.1 에도 같은 형식이 생길 수 있습니다(ANSSI).
 
@@ -42,9 +42,9 @@ USB 장치만 들어가는 것도 아닙니다. Zimmerman 이 본 표본에는 �
 
 ### 하위 키 이름
 
-장치 하나가 하위 키 하나입니다. 관찰 사례에서 하위 키 이름은 SYSTEM 하이브 `Enum` 의 장치 인스턴스 ID (Device Instance ID) 와 같은 모양입니다. 다만 모두 소문자이고 `\` 자리에 `/` 가 들어갑니다(df-stream 2017 사례 기준).
+장치 하나가 하위 키 하나입니다. 하위 키 이름은 SYSTEM 하이브 `Enum` 의 장치 인스턴스 ID (Device Instance ID) 와 같은 모양입니다. 다만 모두 소문자이고 `\` 자리에 `/` 가 들어갑니다(df-stream).
 
-df-stream 은 USB 저장장치 하나를 꽂으면 하위 키가 네 개 생긴다고 적었습니다.
+USB 저장장치 하나를 꽂으면 하위 키가 네 개 생깁니다(df-stream).
 
 ```
 usb/vid_{VID}&pid_{PID}/{일련번호 또는 UID}                         ← USB 장치
@@ -98,9 +98,9 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 - 연결한 시각, 해제한 시각, 연결한 횟수를 알 수 없습니다.
 - 누가 꽂았는지 알 수 없습니다. Amcache.hve 는 사용자별 파일이 아닙니다.
 - 장치에서 파일을 복사하거나 열었는지 알 수 없습니다.
-- 조사 시점에 장치가 꽂혀 있었는지 알 수 없습니다. Microsoft 문서(22H2 판)는 `DeviceState` 의 "있음"(0x20) 비트가 지금은 늘 켜져 있고, "연결됨"(0x01) 비트는 컨테이너에만 쓴다고 설명합니다.
+- 조사 시점에 장치가 꽂혀 있었는지 알 수 없습니다. `DeviceState` 의 "있음"(0x20) 비트는 지금은 늘 켜져 있고, "연결됨"(0x01) 비트는 컨테이너에만 씁니다(Microsoft 문서 22H2 판).
 - 키가 없다고 해서 연결된 적이 없다는 뜻은 아닙니다. 가장 최근에 꽂은 장치 항목이 재시작 뒤 지워진 사례가 있습니다(df-stream). 인벤토리 작업이 아직 돌지 않았을 수도 있습니다.
-- ANSSI 도 Amcache 에서는 항목이 "있다" 는 사실만 결론의 근거로 삼으라고 적었습니다.
+- Amcache 에서는 항목이 "있다" 는 사실만 결론의 근거로 삼습니다(ANSSI).
 
 ### 보고서 문장 예
 
@@ -111,24 +111,24 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 
 | 시각 | 무엇이 바뀔 때 바뀌나 | 기준 |
 |---|---|---|
-| 하위 키 마지막 기록 시각 | 인벤토리 작업이 항목을 다시 쓸 때 바뀝니다. 첫 연결 때도 바뀌지만, 연결·해제와 관계없는 때에도 바뀝니다(df-stream). 한 장치의 하위 키 네 개는 시각이 같았습니다. | UTC, FILETIME ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
-| `FirstInstallDate` 값 | Microsoft 필드 설명으로는 이 장치를 처음 설치한 때입니다. | 저장 형식은 아래 참고 |
-| `InstallDate` 값 | Microsoft 필드 설명으로는 이 장치를 가장 최근에 설치한 날짜입니다. | 저장 형식은 아래 참고 |
+| 하위 키 마지막 기록 시각 | 인벤토리 작업이 항목을 다시 쓸 때 바뀝니다. 첫 연결 때도 바뀌지만, 연결·해제와 관계없는 때에도 바뀝니다(df-stream). 한 장치의 하위 키 네 개는 시각이 같습니다. | UTC, FILETIME ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
+| `FirstInstallDate` 값 | 이 장치를 처음 설치한 때입니다(Microsoft 필드 설명). | 저장 형식은 아래 참고 |
+| `InstallDate` 값 | 이 장치를 가장 최근에 설치한 날짜입니다(Microsoft 필드 설명). | 저장 형식은 아래 참고 |
 | `DriverVerDate` 값 | 드라이버 패키지의 날짜입니다. 장치 사용과 관계없습니다. | 날짜만 |
 
 - SYSTEM 하이브의 장치 속성에도 같은 이름의 값이 있습니다. `DEVPKEY_Device_InstallDate` 는 속성 번호 0064, `DEVPKEY_Device_FirstInstallDate` 는 0065 입니다.
-- Microsoft 설명에서 `FirstInstallDate` 속성은 드라이버를 업데이트해도 바뀌지 않습니다. `InstallDate` 속성은 드라이버를 업데이트할 때마다 바뀔 수 있습니다.
-- Amcache 의 두 값이 이 속성을 그대로 옮긴 것인지는 명세로 확인하지 못했습니다. 저장 형식과 시간대도 확인하지 못했습니다.
+- `FirstInstallDate` 속성은 드라이버를 업데이트해도 바뀌지 않습니다. `InstallDate` 속성은 드라이버를 업데이트할 때마다 바뀔 수 있습니다.
+- Amcache 의 두 값이 이 속성을 그대로 옮긴 것인지, 저장 형식과 시간대가 무엇인지 밝힌 공개 명세는 없습니다.
 - 그래서 두 값은 원시 바이트를 먼저 보고, SYSTEM 하이브의 속성 값과 맞춰 본 뒤에 씁니다. 속성 위치는 [연결·해제 시각](../../external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
 ## 함정과 한계
 
 1. **키 시각을 연결 시각으로 쓰는 실수.** 공개 파서가 내는 "시각" 열이 하위 키 마지막 기록 시각인 경우가 있습니다. 한 공개 파서(AmcacheParser)는 소스에서 이 열에 하위 키 마지막 기록 시각을 넣습니다. 여러 장치가 같은 시각이면 인벤토리 작업이 한꺼번에 다시 쓴 흔적으로 봅니다.
-2. **항목이 빨리 빠집니다.** df-stream 은 USB 장치 항목이 금방 목록에서 빠지는 사례를 적었습니다. [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 Amcache.hve, [지워진 키](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)를 함께 봅니다.
+2. **항목이 빨리 빠집니다.** USB 장치 항목이 금방 목록에서 빠지기도 합니다(df-stream). [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 Amcache.hve, [지워진 키](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), [트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)를 함께 봅니다.
 3. **도구마다 내는 값이 다릅니다.** 앞의 공개 파서는 소스상 `InstallDate`·`FirstInstallDate`·`LocationPaths`·필터 값을 결과에 넣지 않습니다(2026-09 소스 기준). 이 값이 필요하면 원시 키를 봅니다.
 4. **키 이름은 소문자입니다.** 일련번호나 모델명으로 찾을 때 대소문자를 가리지 않고 찾습니다.
 5. **USB 가 아닌 항목이 대부분입니다.** `usb/`·`usbstor/`·`swd/wpdbusenum/`·`storage/volume/` 으로 시작하는 하위 키를 먼저 거릅니다.
-6. **Microsoft 문서 판마다 설명이 다릅니다.** Windows 10 22H2·21H2 판 문서의 `InventoryDevicePnpAdd` 필드 설명은 표에서 한 칸씩 밀려 있습니다(2026-09 열람 기준). 예를 들어 `ContainerId` 옆에 호환 ID 설명이 붙어 있습니다. 값의 뜻은 1809 판과 맞대어 봅니다.
+6. **Microsoft 문서 판마다 설명이 다릅니다.** Windows 10 22H2·21H2 판 문서의 `InventoryDevicePnpAdd` 필드 설명은 표에서 한 칸씩 밀려 있습니다(2026년 9월 기준). 예를 들어 `ContainerId` 옆에 호환 ID 설명이 붙어 있습니다. 값의 뜻은 1809 판과 맞대어 봅니다.
 7. **Amcache 공통 함정**은 [AmCache 해석 함정](sha1.md)에서 다룹니다.
 
 ## 직접 분석해 보기

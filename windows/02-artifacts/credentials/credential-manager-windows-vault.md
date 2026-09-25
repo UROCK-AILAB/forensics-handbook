@@ -8,13 +8,13 @@ nav_order: 2850
 
 ## 한 줄 요약
 
-Windows 는 사용자가 저장한 웹·앱·네트워크 자격 증명을 사용자 프로필 아래 암호화된 폴더에 담습니다. 자격 증명 관리자 (Credential Manager) 가 이 자격 증명을 관리하고, Microsoft 설명서는 저장 영역을 Windows 볼트 (Windows Vault) 라고 부릅니다. 파일은 DPAPI 로 감싸여 있다고 널리 알려져 있으나, 이번에 연 Microsoft 자료는 "암호화된 특수 폴더"라고만 밝힙니다.
+Windows 는 사용자가 저장한 웹·앱·네트워크 자격 증명을 사용자 프로필 아래 암호화된 폴더에 담습니다. 자격 증명 관리자 (Credential Manager) 가 이 자격 증명을 관리하고, 저장 영역은 Windows 볼트 (Windows Vault) 라고 부릅니다. 파일은 암호화된 특수 폴더에 들어 있고, DPAPI 로 감싸여 있다고 널리 알려져 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-사용자가 웹사이트나 앱, 네트워크 자원에서 사용자 이름과 비밀번호를 저장하면 그 자격 증명이 로컬 컴퓨터의 저장 영역에 남습니다. Microsoft 설명서는 이 저장 영역을 Credential Locker 라고 부르고, 자격 증명 관리자가 이를 관리한다고 밝힙니다. 사용자는 제어판의 자격 증명 관리자로 저장 영역에 접근합니다.
+사용자가 웹사이트나 앱, 네트워크 자원에서 사용자 이름과 비밀번호를 저장하면 그 자격 증명이 로컬 컴퓨터의 저장 영역에 남습니다. 이 저장 영역은 Credential Locker 라고도 부르고, 자격 증명 관리자가 관리합니다. 사용자는 제어판의 자격 증명 관리자로 저장 영역에 접근합니다.
 
-저장 영역은 두 보관함으로 나뉩니다. 웹 자격 증명은 Internet Explorer 와 Microsoft Edge 가 쓰고 (MITRE ATT&CK 설명 기준), Windows 자격 증명은 앱과 네트워크 인증이 씁니다.
+저장 영역은 두 보관함으로 나뉩니다. 웹 자격 증명은 Internet Explorer 와 Microsoft Edge 가 쓰고, Windows 자격 증명은 앱과 네트워크 인증이 씁니다.
 
 NTLM·Kerberos 인증을 요구하는 사이트·앱·컴퓨터에서 "기본 자격 증명 업데이트"나 "암호 저장"을 고르면 자격 증명이 남습니다. 저장된 자격 증명이 거부되고 새 자격 증명으로 접근이 되면 옛 것을 새 것으로 덮어씁니다. Internet Explorer 10 은 로그인이 필요한 사이트의 자격 증명을 이 저장 영역에서 찾습니다.
 
@@ -30,10 +30,10 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 | `%LocalAppData%\Microsoft\Credentials\` | 암호화된 자격 증명 파일 | MITRE ATT&CK T1555.004 |
 
 - `Vault` 폴더에는 `.vcrd` 파일과 `.vpol` 파일이 있습니다. `.vcrd` 는 암호화된 자격 증명, `.vpol` 은 암호화 키를 담습니다.
-- 파일은 사용자 프로필 아래 암호화된 특수 폴더에 들어 있습니다. Microsoft 설명서는 이 폴더가 암호화되어 있다고만 밝힙니다.
-- Roaming 프로필의 자격 증명 폴더 경로, 시스템 계정 (systemprofile) 쪽 경로, `%ProgramData%\Microsoft\Vault` 경로는 확인하지 못했습니다.
-- MITRE ATT&CK T1555.004 는 암호화 키가 `Policy.vpol` 이라는 파일에 있고, 보통 자격 증명 파일과 같은 폴더에 있다고 적습니다.
-- 볼트 폴더 아래 `{GUID}` 하위 폴더 구조와 웹·Windows 보관함을 가리키는 GUID 값은 확인하지 못했습니다.
+- 파일은 사용자 프로필 아래 암호화된 특수 폴더에 들어 있습니다.
+- Roaming 프로필의 자격 증명 폴더 경로, 시스템 계정 (systemprofile) 쪽 경로, `%ProgramData%\Microsoft\Vault` 경로는 공개된 자료가 없어 검체에서 확인합니다.
+- 암호화 키는 `Policy.vpol` 이라는 파일에 있고, 보통 자격 증명 파일과 같은 폴더에 있습니다.
+- 볼트 폴더 아래 `{GUID}` 하위 폴더 구조와 웹·Windows 보관함을 가리키는 GUID 값은 검체에서 확인합니다.
 
 ### 버전별 차이
 
@@ -43,13 +43,13 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 | Windows 8 / Server 2012 | 위 기능들이 빠졌습니다. Windows 스토어 앱이 저장 영역을 쓸 수 있게 됐습니다. Microsoft 계정으로 자격 증명을 로밍(동기화)합니다 | Credential Locker Overview |
 | Windows 8.1 / Server 2012 R2 | 같은 자원에 자격 증명이 여럿일 때 기본값을 지정합니다. 화면에 "마지막 사용 날짜"가 보입니다 | Credential Locker Overview |
 
-자격 증명 로밍은 도메인에 가입하지 않은 PC 에선 기본으로 켜지고, 도메인 가입 PC 에선 꺼집니다. 로밍 때문에 저장 영역 파일은 비밀번호로 보호할 수 없고 접근을 잠글 수 없습니다. Windows 10 과 11 에서 달라진 점은 이번에 연 자료로 확인하지 못했습니다.
+자격 증명 로밍은 도메인에 가입하지 않은 PC 에선 기본으로 켜지고, 도메인 가입 PC 에선 꺼집니다. 로밍 때문에 저장 영역 파일은 비밀번호로 보호할 수 없고 접근을 잠글 수 없습니다. Windows 10 과 11 에서 달라진 점은 공개된 자료가 없습니다.
 
 ## 구조
 
 ### 한 건의 자격 증명이 담는 칸
 
-아래 칸 이름과 값은 Win32 API 가 돌려주는 `CREDENTIALW` 구조체 기준입니다. 디스크 파일의 바이트 배치가 이 순서와 같다는 확인은 하지 못했습니다.
+아래 칸 이름과 값은 Win32 API 가 돌려주는 `CREDENTIALW` 구조체 기준입니다. 디스크 파일의 바이트 배치가 이 순서와 같다고 볼 근거는 없습니다.
 
 | 칸 | 뜻 |
 |---|---|
@@ -131,17 +131,17 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 
 `LastWritten` 은 쓰기 때 넣은 값을 무시하고 시스템이 정하므로 앱이 이 값을 마음대로 넣지는 못합니다. 다만 값은 그 컴퓨터의 시계를 따르므로, 시계가 틀렸으면 이 값도 틀립니다.
 
-Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값이 디스크 파일 어느 칸에 있는지는 확인하지 못했습니다. 그래서 "마지막 사용"과 "마지막 고침"을 섞지 않습니다.
+Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값이 디스크 파일 어느 칸에 있는지는 공개된 자료가 없습니다. 그래서 "마지막 사용"과 "마지막 고침"을 섞지 않습니다.
 
 
-- `.vcrd` 파일의 파일시스템 시각 (생성·수정) 이 저장·갱신 시점과 맞는지는 확인하지 못했습니다.
+- `.vcrd` 파일의 파일시스템 시각 (생성·수정) 이 저장·갱신 시점과 맞는지는 공개된 자료가 없어 검체에서 맞춰 봅니다.
 - FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 1. **파일만 있고 열쇠가 없으면 못 읽습니다.** 볼트 파일은 DPAPI 로 감싸여 있다고 알려져 있습니다. 사용자 마스터키와 그 마스터키를 풀 재료 (로그온 비밀번호나 도메인 백업키) 가 함께 있어야 풉니다. 구조는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
 2. **덮어쓴 자격 증명은 사라집니다.** 저장된 자격 증명이 거부되고 새 자격 증명으로 접근이 되면, 자격 증명 관리자가 옛 값을 새 값으로 덮어씁니다. 이전 값은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 파일에서 찾아 봅니다.
-3. **로밍 프로필을 놓칩니다.** 로밍이 켜진 계정은 자격 증명이 다른 컴퓨터에도 있을 수 있습니다. Roaming 폴더 쪽 경로는 이번 자료로 확인하지 못했으므로 사용자 프로필 전체를 훑습니다.
+3. **로밍 프로필을 놓칩니다.** 로밍이 켜진 계정은 자격 증명이 다른 컴퓨터에도 있을 수 있습니다. Roaming 폴더 쪽 경로는 공개된 자료가 없으므로 사용자 프로필 전체를 훑습니다.
 4. **API 구조체 순서를 디스크 배치로 오해합니다.** 위 칸 순서는 API 가 돌려주는 순서입니다. 파일 바이트 배치가 같다고 단정하지 않습니다.
 5. **세션형은 디스크에 안 남을 수 있습니다.** `Persist` 가 1 (세션) 인 자격 증명은 로그오프하면 사라집니다. 디스크 이미지에 없다고 저장한 적이 없다고 보지 않습니다.
 
@@ -149,7 +149,7 @@ Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값�
 
 - **자격 증명 관리자 UI 로 지웁니다.** 지운 `.vcrd` 파일이 볼트 폴더에서 사라져도 파일시스템에 흔적이 남을 수 있습니다. 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 - **정책으로 저장을 막습니다.** "네트워크 액세스: 네트워크 인증을 위한 암호 및 자격 증명의 저장 허용 안 함" 정책을 켜면 도메인 인증용 자격 증명이 저장되지 않습니다. 스토어 앱의 자격 증명 저장은 관리자가 막을 수 없습니다.
-- **백업 파일로 빼돌립니다.** 자격 증명 관리자의 백업 기능으로 저장된 자격 증명을 파일로 내보낼 수 있습니다. 백업·복원 창은 `rundll32.exe keymgr.dll` 로도 띄웁니다 (MITRE ATT&CK T1555.004). 백업하면 이벤트 5376 이 남습니다 (아래).
+- **백업 파일로 빼돌립니다.** 자격 증명 관리자의 백업 기능으로 저장된 자격 증명을 파일로 내보낼 수 있습니다. 백업·복원 창은 `rundll32.exe keymgr.dll` 로도 띄웁니다. 백업하면 이벤트 5376 이 남습니다 (아래).
 
 ## 직접 분석해 보기
 
@@ -183,13 +183,13 @@ Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값�
 | [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) | 볼트 파일을 풀 마스터키와 그 재료 |
 | [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](sam-security/index.md) | 시스템·계정이 저장한 다른 비밀 |
 | [사용자 프로필 목록](../system-account/profilelist.md) | 볼트가 어느 사용자 SID 아래에 있는지 |
-| [원격 데스크톱 접속 기록](../network/rdp-client-mru.md) | 원격 호스트를 대상으로 하는 자격 증명과 접속 이력 (원격 데스크톱 자격 증명의 `TargetName` 형식은 확인하지 못했습니다) |
+| [원격 데스크톱 접속 기록](../network/rdp-client-mru.md) | 원격 호스트를 대상으로 하는 자격 증명과 접속 이력 (원격 데스크톱 자격 증명의 `TargetName` 형식은 검체에서 확인합니다) |
 | [로그온·로그오프](../event-logs/logon-events/index.md) | 저장된 자격 증명으로 실제 로그온했는지 |
 | [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md) | 볼트를 노린 공격을 조사하는 흐름 |
 
 ### 탐지에서 보는 것
 
-MITRE ATT&CK T1555.004 는 다음을 탐지 대상으로 꼽습니다.
+다음을 탐지 대상으로 봅니다.
 
 - `vaultcmd.exe` 실행.
 - `rundll32.exe` 로 `keymgr.dll` 을 부르는 실행 (자격 증명 백업·복원 창).
@@ -202,7 +202,7 @@ MITRE ATT&CK T1555.004 는 다음을 탐지 대상으로 꼽습니다.
 - 채널 Security, 공급자 Microsoft-Windows-Security-Auditing, 하위 범주 Audit User Account Management, 성공만 (S), Task 13824.
 - 최소 OS 는 Windows Vista·Windows Server 2008. DC·멤버 서버·워크스테이션 모두에서 생깁니다.
 - 칸은 `SubjectUserSid`, `SubjectUserName`, `SubjectDomainName`, `SubjectLogonId` 입니다. `SubjectLogonId` 로 [로그온·로그오프](../event-logs/logon-events/index.md) 의 4624 와 이어 봅니다.
-- Microsoft 는 사용자가 거의 쓰지 않는 동작이라 모든 5376 을 기록하도록 권합니다.
+- 사용자가 거의 쓰지 않는 동작이므로 5376 은 모두 기록해 둡니다.
 
 ## 실습
 

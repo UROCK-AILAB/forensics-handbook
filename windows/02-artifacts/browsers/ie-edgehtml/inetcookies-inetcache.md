@@ -26,16 +26,16 @@ IE 4~9 는 캐시 파일을 이름이 8글자인 하위 폴더에 나눠 두고,
 | 쿠키 | `%APPDATA%\Microsoft\Windows\Cookies\index.dat` | WebCache DB 의 `CookieEntryEx_#` 표 |
 
 - Windows XP 에서 쓰던 경로는 [옛 기록 파일 (index.dat)](index-dat.md) 에 정리했습니다.
-- 옛 엣지의 쿠키 폴더로는 아래 두 곳이 알려져 있습니다.
+- 옛 엣지는 쿠키 폴더로 아래 두 곳을 씁니다[4].
 
 ```
 C:\Users\<사용자>\AppData\Local\Packages\<패키지 이름>\AC\INetCookies
 C:\Users\<사용자>\AppData\Local\Microsoft\Windows\INetCookies
 ```
 
-### 한 PC 에서 본 폴더
+### Windows 11 25H2 의 폴더
 
-Windows 11 25H2 PC 에서 본 모습입니다.
+Windows 11 25H2 의 폴더 모습입니다.
 
 ```
 %LOCALAPPDATA%\Microsoft\Windows\
@@ -57,7 +57,7 @@ Windows 11 25H2 PC 에서 본 모습입니다.
    └─ deprecated.cookie         (91바이트)
 ```
 
-`Temporary Internet Files` 는 `INetCache` 를 가리키는 연결 폴더 (Junction) 였고, `INetCache\Content.IE5` 는 `INetCache\IE` 를 가리키는 연결 폴더였으며 숨김·시스템 속성이 붙어 있었습니다. `INetCache\IE` 에는 8글자 캐시 하위 폴더가 없었고, `%APPDATA%\Microsoft\Windows\Cookies` 폴더도 없었습니다. 같은 PC 의 WebCacheV01.dat 사본에서는 `CookieEntryEx_#` 표 이름이 여럿 나왔습니다.
+이 판에서 `Temporary Internet Files` 는 `INetCache` 를 가리키는 연결 폴더 (Junction) 입니다. `INetCache\Content.IE5` 는 `INetCache\IE` 를 가리키는 연결 폴더이고, 숨김·시스템 속성이 붙어 있습니다. `INetCache\IE` 에 8글자 캐시 하위 폴더가 없을 수 있고, `%APPDATA%\Microsoft\Windows\Cookies` 폴더도 없을 수 있습니다. 쿠키는 WebCacheV01.dat 의 여러 `CookieEntryEx_#` 표에 들어갑니다.
 
 ## 구조
 
@@ -88,7 +88,7 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 ### IE 10 이후: WebCache 의 칸으로 잇기
 
 - WebCache DB 의 `Container_#` 표에는 캐시 파일과 관련된 칸이 있습니다. Filename, FileExtension, FileSize, CacheId, ResponseHeaders, RequestHeaders 입니다.
-- `Containers` 표에도 Directory 칸이 있습니다. 이 칸과 실제 캐시 폴더의 관계는 이번에 연 자료로 확인하지 못했습니다. Filename 칸 값으로 실제 폴더를 검색해 맞춰 봅니다.
+- `Containers` 표에도 Directory 칸이 있습니다. 이 칸과 실제 캐시 폴더의 관계는 공개된 분석 자료가 없으므로, Filename 칸 값으로 실제 폴더를 검색해 맞춰 봅니다.
 - 쿠키는 `CookieEntryEx_#` 표의 Name, Value, RDomain, Expires, LastModified 같은 칸에 들어갑니다.
 - 표와 칸 전체는 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에서 다룹니다.
 
@@ -105,7 +105,7 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 - 캐시 파일이 있다고 사용자가 그 내용을 화면에서 봤다고 단정하지 않습니다.
 - 기록과 이어지지 않은 캐시 파일은 어느 주소에서 왔는지 말하지 못합니다.
 - 캐시 폴더가 비어 있다고 IE 를 쓰지 않았다고 단정하지 않습니다. IE 10 이후 쿠키는 폴더가 아니라 DB 에 있고, 캐시는 지우거나 비울 수 있습니다.
-- `INetCache` 아래 모든 폴더가 IE 흔적은 아닙니다. `Content.MSO`·`Content.Word` 를 어떤 프로그램이 쓰는지는 이번에 연 자료로 확인하지 못했습니다.
+- `INetCache` 아래 모든 폴더가 IE 흔적은 아닙니다. `Content.MSO`·`Content.Word` 같은 폴더는 어느 프로그램이 쓰는지 따로 확인합니다.
 
 보고서에는 "이 사용자 프로필의 캐시 폴더에 이 파일이 있고, WebCacheV01.dat 의 이 행이 이 주소와 이 파일을 잇는다" 처럼 파일과 기록을 함께 씁니다.
 
@@ -120,7 +120,7 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 - **연결 폴더를 따라가면 같은 파일을 두 번 셉니다.** `Temporary Internet Files` 와 `INetCache`, `Content.IE5` 와 `IE` 는 같은 곳을 가리킬 수 있습니다. 수집 도구가 연결 폴더를 따라가는지 확인합니다.
 - **숨김·시스템 폴더를 놓치기 쉽습니다.** 탐색기 기본 설정으로는 `Content.IE5` 같은 폴더가 보이지 않을 수 있습니다. 연결 폴더는 재분석 지점 (Reparse Point) 이므로 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 의 속성으로 확인합니다.
 - **`Low` 폴더를 빠뜨리기 쉽습니다.** `INetCache` 와 `INetCookies` 아래에 `Low` 폴더가 따로 있습니다.
-- **폴더 이름만 보고 IE 버전을 정하지 않습니다.** `Content.IE5` 라는 이름은 IE 10 이후 PC 에도 연결 폴더로 남아 있었습니다. 기록 형식은 기록 파일에서 확인합니다.
+- **폴더 이름만 보고 IE 버전을 정하지 않습니다.** `Content.IE5` 라는 이름은 IE 10 이후 PC 에도 연결 폴더로 남아 있을 수 있습니다. 기록 형식은 기록 파일에서 확인합니다.
 - **폴더만 보고 쿠키를 찾으면 빠집니다.** IE 10 이후 쿠키는 WebCache DB 에 있습니다.
 - **지운 캐시 파일이 남을 수 있습니다.** 캐시를 비워도 파일 내용이 할당 해제 영역에 남을 수 있습니다. 찾는 방법은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 

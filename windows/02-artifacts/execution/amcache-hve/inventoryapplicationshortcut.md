@@ -13,11 +13,11 @@ Amcache.hve 의 `Root\InventoryApplicationShortcut` 키에는 호환성 인벤�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-윈도의 호환성 인벤토리는 설치된 프로그램과 실행 파일 목록을 모아 Amcache.hve 에 적습니다. 바로가기 목록은 예약 작업 Microsoft Compatibility Appraiser 가 채웁니다. ANSSI 는 10.0.16299 판 라이브러리(Windows 10 1709 에 처음 실림)부터 이 작업이 시작 메뉴 폴더를 훑는다고 확인했습니다. 이 작업은 시작 메뉴에서 LNK 파일만 골라 이 키에 넣습니다.
+윈도의 호환성 인벤토리는 설치된 프로그램과 실행 파일 목록을 모아 Amcache.hve 에 적습니다. 바로가기 목록은 예약 작업 Microsoft Compatibility Appraiser 가 채웁니다. 10.0.16299 판 라이브러리(Windows 10 1709 에 처음 실림)부터 이 작업이 시작 메뉴 폴더를 훑습니다[1]. 이 작업은 시작 메뉴에서 LNK 파일만 골라 이 키에 넣습니다.
 
 그래서 이 키로 검사한 때에 어떤 바로가기가 어느 폴더에 있었는지 알 수 있고, 새 판이라면 그 바로가기가 가리킨 파일과 연결된 설치 프로그램 식별자도 알 수 있습니다.
 
-시작 메뉴 바로가기는 대개 설치 프로그램이 만듭니다. 그래서 이 키는 설치 흔적을 보강하는 데 주로 씁니다. 다만 Zimmerman 은 MSI 나 설치 프로그램이 아닌 다른 프로그램이 직접 만든 바로가기도 들어온 것을 보고했습니다.
+시작 메뉴 바로가기는 대개 설치 프로그램이 만듭니다. 그래서 이 키는 설치 흔적을 보강하는 데 주로 씁니다. 다만 MSI 나 설치 프로그램이 아닌 다른 프로그램이 직접 만든 바로가기도 들어옵니다[2].
 
 Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브에서 다룹니다. 여기서는 바로가기 키만 다룹니다.
 
@@ -30,13 +30,13 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브�
 | 10.0.16299 판 라이브러리 (Win10 1709) | ANSSI 2019 | LNK 전체 경로 하나 | 모든 사용자 시작 메뉴 `C:\ProgramData\Microsoft\Windows\Start Menu` |
 | Windows Server 2016 표본 하이브 (2019년 수집, 라이브러리 판 모름) | 공개 파서 저장소(frnsc-amcache)에 실린 표본 | `ShortcutPath` (REG_SZ) 하나 | 모든 사용자 시작 메뉴, 사용자별 시작 메뉴, 공용 바탕 화면 `C:\Users\Public\Desktop` |
 | 2025년 설명 | Kaspersky Securelist | `ShortcutPath`·`ShortcutTargetPath`·`ShortcutProgramId` | 사용자별 시작 메뉴·바탕 화면이라고 설명합니다 |
-| Windows 11 빌드 26200 (한 대) | 관찰 | `ShortcutPath`·`ShortcutTargetPath`·`ShortcutAumid`·`ShortcutProgramId` (모두 REG_SZ), 이름 없는 기본값 (REG_DWORD) | 대부분 모든 사용자·사용자별 시작 메뉴 |
+| Windows 11 빌드 26200 | 검체 하이브 | `ShortcutPath`·`ShortcutTargetPath`·`ShortcutAumid`·`ShortcutProgramId` (모두 REG_SZ), 이름 없는 기본값 (REG_DWORD) | 대부분 모든 사용자·사용자별 시작 메뉴 |
 | Windows 11 24H2·25H2 | Microsoft Learn | 진단 이벤트가 캐시 안의 "application shortcut" 개수를 셉니다 | — |
 
-- 10.0.16299 보다 앞선 판의 하이브에는 이 키가 없습니다(ANSSI).
-- 값이 넷으로 늘어난 판이 어느 것인지 밝힌 공개 연구는 찾지 못했습니다. 검체마다 값 목록을 먼저 확인합니다.
-- 공개 파서 소스(frnsc-amcache)도 위의 값 네 개를 읽습니다.
-- 이 페이지가 확인한 Microsoft Learn 문서에는 이 값들의 설명이 없습니다. 이 문서로는 바로가기 항목이 지금의 인벤토리 캐시에도 있다는 사실만 확인됩니다.
+- 10.0.16299 보다 앞선 판의 하이브에는 이 키가 없습니다[1].
+- 값이 넷으로 늘어난 판이 어느 것인지 밝힌 공개 연구는 없습니다. 검체마다 값 목록을 먼저 확인합니다.
+- 공개 파서 frnsc-amcache 도 위의 값 네 개를 읽습니다[6].
+- Microsoft 진단 데이터 문서[5]에는 이 값들의 설명이 없습니다. 바로가기 항목이 지금의 인벤토리 캐시에도 있다는 사실만 알 수 있습니다.
 
 ## 구조
 
@@ -44,9 +44,9 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브�
 
 하위 키 하나가 LNK 파일 하나입니다. 이름은 `파일 이름|16진수` 꼴입니다.
 
-- ANSSI 가 보인 예는 `wireshark.lnk|ee4ba020` 입니다. 뒤쪽 16진수가 8자리입니다.
-- 공개 표본과 Windows 11 한 대에서 앞쪽은 대개 LNK 파일 이름을 소문자로 바꾼 뒤 앞 16자에서 자른 값이었습니다. 뒤쪽 16진수는 대개 16자리였습니다. 앞자리 0 이 빠진 듯한 15자리도 있었습니다.
-- 뒤쪽 16진수를 어떻게 계산하는지는 공개된 자료에서 찾지 못했습니다. 이 16진수로는 경로를 되살릴 수 없으므로 경로는 `ShortcutPath` 에서 읽습니다.
+- 10.0.16299 판의 예는 `wireshark.lnk|ee4ba020` 입니다. 뒤쪽 16진수가 8자리입니다[1].
+- Windows Server 2016 표본[6]과 Windows 11 빌드 26200 에서 앞쪽은 대개 LNK 파일 이름을 소문자로 바꾼 뒤 앞 16자에서 자른 값입니다. 뒤쪽 16진수는 대개 16자리이고, 앞자리 0 이 빠진 듯한 15자리도 있습니다.
+- 뒤쪽 16진수의 계산 방법은 공개되지 않았습니다. 이 16진수로는 경로를 되살릴 수 없으므로 경로는 `ShortcutPath` 에서 읽습니다.
 
 이름이 16자에서 잘리므로 이름이 비슷한 바로가기끼리 앞부분이 같아질 수 있습니다. 하위 키 이름으로 바로가기를 가리지 말고 `ShortcutPath` 값으로 가립니다.
 
@@ -58,11 +58,9 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브�
 | `ShortcutTargetPath` | REG_SZ | 바로가기가 가리킨 대상 경로 | Securelist |
 | `ShortcutProgramId` | REG_SZ | 연결된 설치 프로그램의 식별자. [설치 프로그램 항목](inventoryapplication.md)의 하위 키 이름과 맞춰 봅니다 | Securelist |
 | `ShortcutAumid` | REG_SZ | 값 이름으로 보아 앱 사용자 모델 ID (AppUserModelID) 입니다. 작업 표시줄이 창과 바로가기를 한 앱으로 묶을 때 쓰는 식별자입니다 | 파서 소스, 관찰 |
-| 이름 없는 기본값 | REG_DWORD | 뜻을 확인하지 못했습니다 | 관찰 (Win11 한 대) |
+| 이름 없는 기본값 | REG_DWORD | 공개된 설명이 없습니다 | 관찰 (Win11 빌드 26200) |
 
-Windows 11 한 대에서 본 모습은 다음과 같습니다.
-
-모든 하위 키에 값 다섯 개가 다 있었는데, `ShortcutTargetPath`·`ShortcutAumid` 는 몇 항목에서 비어 있었고 `ShortcutProgramId` 는 절반이 넘는 항목에서 비어 있었습니다.
+Windows 11 빌드 26200 에서는 모든 하위 키에 값 다섯 개가 다 있습니다. 다만 `ShortcutTargetPath`·`ShortcutAumid` 는 몇 항목에서, `ShortcutProgramId` 는 절반이 넘는 항목에서 비어 있습니다.
 
 LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/shell-document-formats/shell-link-lnk.md)에서 다룹니다. 이 키에는 LNK 안의 시각·볼륨 정보·셸 아이템이 없습니다.
 
@@ -93,12 +91,12 @@ LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/she
 
 이 키의 값에는 시각이 없습니다. 쓸 수 있는 시각은 하위 키의 마지막 기록 시각 (Last Write Time) 하나입니다. 이 시각은 UTC 기준 FILETIME 입니다([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md), [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
 
-이 시각은 인벤토리가 하위 키를 쓴 때입니다. LNK 파일이 생긴 때가 아닙니다. Qazeer 노트도 이 시각이 LNK 파일의 NTFS 시각 넷 가운데 어느 것과도 맞지 않는 것 같다고 적습니다. 그런데 하위 키를 언제 다시 쓰는지는 판마다 달랐습니다.
+이 시각은 인벤토리가 하위 키를 쓴 때입니다. LNK 파일이 생긴 때가 아닙니다. 이 시각은 LNK 파일의 NTFS 시각 넷 가운데 어느 것과도 맞지 않는 것으로 보입니다[4]. 그런데 하위 키를 언제 다시 쓰는지는 판마다 다릅니다.
 
-| 관찰 | 하위 키 시각의 모습 | 읽는 법 |
+| 검체 | 하위 키 시각의 모습 | 읽는 법 |
 |---|---|---|
 | 2019년 공개 표본 (Windows Server 2016) | 몇 개의 무리로 나뉩니다. 한 무리는 같은 분 안에 몰려 있습니다. 한 사용자의 시작 메뉴 바로가기가 모두 한 무리였습니다. 상위 키 시각은 하위 키들보다 한 달 넘게 뒤였습니다 | 뒤의 검사가 이미 있는 하위 키를 다시 쓰지 않은 것으로 보입니다. 하위 키 시각은 처음 기록한 때에 가깝습니다 |
-| Windows 11 빌드 26200 한 대 | 모든 하위 키가 같은 분 안에 있었습니다 | 검사할 때마다 모두 다시 쓴 것으로 보입니다. 하위 키 시각은 마지막 검사 때입니다 |
+| Windows 11 빌드 26200 | 모든 하위 키가 같은 분 안에 있었습니다 | 검사할 때마다 모두 다시 쓴 것으로 보입니다. 하위 키 시각은 마지막 검사 때입니다 |
 
 그래서 시각을 해석하기 전에 먼저 하위 키 시각을 분 단위로 묶어 봅니다.
 
@@ -110,17 +108,17 @@ LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/she
 
 ## 함정과 한계
 
-1. **실행 증거로 씁니다.** 이 키는 바로가기가 있었다는 기록입니다. ANSSI 는 이 키를 찾은 LNK 파일 목록으로만 설명합니다. Kaspersky 도 이 키를 다른 자료와 함께 봐야 실행을 말할 수 있는 키로 분류합니다.
+1. **실행 증거로 씁니다.** 이 키는 바로가기가 있었다는 기록이고, 찾은 LNK 파일의 목록일 뿐입니다[1]. 실행을 말하려면 다른 자료와 함께 봐야 합니다[3].
 2. **하위 키 이름으로 경로를 짐작합니다.** 이름은 파일 이름의 앞 16자만 남깁니다. 폴더도 들어 있지 않습니다. 경로는 `ShortcutPath` 에서 읽습니다.
 3. **대소문자로 비교합니다.** 공개 표본에서 사용자별 경로는 `c:\users\…` 처럼 앞부분이 소문자였습니다. 모든 사용자 경로는 `C:\ProgramData\…` 로 대문자였습니다. 다른 기록과 경로를 맞출 때는 대소문자를 가리지 않고 비교합니다.
-4. **`ShortcutProgramId` 짝을 믿고 끝냅니다.** Kaspersky 는 이 값으로 InventoryApplication 항목을 찾으라고 설명합니다. 그러나 Windows 11 한 대에서 값이 있는 항목을 하위 키 이름과 글자 그대로 맞춰 보니 짝이 나오지 않았습니다. 원인(표기 차이인지, 이미 지운 프로그램인지)은 확인하지 못했습니다. 짝이 없으면 [설치 프로그램 (Uninstall)](../../system-account/uninstall.md)에서 다시 찾아봅니다.
+4. **`ShortcutProgramId` 짝을 믿고 끝냅니다.** 이 값으로 InventoryApplication 항목을 찾을 수 있다는 설명이 있습니다[3]. 그러나 Windows 11 빌드 26200 에서는 값이 든 항목 어느 것도 InventoryApplication 하위 키 이름과 글자 그대로 맞지 않았습니다. 표기 차이 때문인지, 이미 지운 프로그램 때문인지는 공개 자료가 없습니다. 짝이 없으면 [설치 프로그램 (Uninstall)](../../system-account/uninstall.md)에서 다시 찾아봅니다.
 5. **검사 범위를 전체로 봅니다.** 이 키에는 검사하는 폴더의 LNK 만 들어옵니다. 검사 폴더는 판마다 다릅니다. 검체에서 실제로 나온 경로로 범위를 가늠합니다. 최근 문서 폴더의 LNK 는 [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md)에서 따로 봅니다.
 6. **값이 빠진 판을 오류로 봅니다.** 옛 판에는 `ShortcutPath` 하나만 있습니다. 대상 경로가 없다고 해서 하이브가 손상된 것이 아닙니다.
 7. **도구 출력만 봅니다.** 아래 "공개 도구로 한 번" 에서 보듯 도구마다 읽는 값이 다릅니다.
 
 ### 지우기와 조작
 
-- **LNK 파일을 지웁니다.** LNK 를 지운 뒤 다음 검사에서 하위 키가 빠지는지 밝힌 공개 연구는 찾지 못했습니다. Qazeer 노트는 지금은 없는 LNK 도 이 키에 남아 있을 수 있다고 적습니다. LNK 가 지워진 기록은 [$UsnJrnl](../../filesystem/usnjrnl.md)과 [$MFT](../../filesystem/mft.md)에서 찾습니다.
+- **LNK 파일을 지웁니다.** LNK 를 지운 뒤 다음 검사에서 하위 키가 빠지는지 밝힌 공개 연구는 없습니다. 지금은 없는 LNK 도 이 키에 남아 있을 수 있습니다[4]. LNK 가 지워진 기록은 [$UsnJrnl](../../filesystem/usnjrnl.md)과 [$MFT](../../filesystem/mft.md)에서 찾습니다.
 - **하위 키나 하이브를 지웁니다.** 지운 키는 하이브 안의 비할당 셀에 남을 수 있습니다([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 아직 주 파일에 들어가지 않은 변경은 `.LOG1`·`.LOG2` 에 있습니다([트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)). 옛 하이브는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
 - **키 시각을 바꿉니다.** 키 마지막 기록 시각은 따로 바꿀 수 있습니다. 조작 흔적을 가리는 법은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다. 같은 무리의 다른 하위 키와 시각이 동떨어진 항목이 있으면 의심해 봅니다.
 - **검사 폴더 밖에 바로가기를 둡니다.** 이 키에는 남지 않습니다. 다른 기록으로 찾아야 합니다.
@@ -177,7 +175,7 @@ LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/she
 
 레지스트리 하이브를 읽는 공개 도구면 어느 것이든 이 키를 볼 수 있습니다. Registry Explorer, RegRipper, python-registry, regipy 가 그 예입니다. AmcacheParser, Dissect, Velociraptor 처럼 Amcache 를 따로 풀어 주는 도구도 있습니다.
 
-전용 도구를 쓸 때는 어느 값을 읽는지 확인합니다. 2026년 9월에 공개 소스를 확인한 결과는 다음과 같습니다.
+전용 도구를 쓸 때는 어느 값을 읽는지 확인합니다. 도구별로 읽는 값은 다음과 같습니다(2026년 9월 공개 소스 기준).
 
 | 도구 | 바로가기 항목에서 읽는 것 |
 |---|---|
@@ -218,7 +216,7 @@ LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/she
 **직접 만든 Windows 10·11 가상 머신.**
 
 1. 시작 메뉴의 `Programs` 폴더와 바탕 화면에 LNK 를 하나씩 만들고 만든 시각을 적어 둡니다.
-2. 작업 스케줄러의 `\Microsoft\Windows\Application Experience\` 폴더에서 호환성 평가 작업을 찾아 실행합니다. 작업 이름은 빌드마다 다를 수 있습니다. Windows 11 빌드 26200 한 대에서는 `Microsoft Compatibility Appraiser Exp` 만 있었습니다.
+2. 작업 스케줄러의 `\Microsoft\Windows\Application Experience\` 폴더에서 호환성 평가 작업을 찾아 실행합니다. 작업 이름은 빌드마다 다를 수 있습니다. Windows 11 빌드 26200 에는 `Microsoft Compatibility Appraiser Exp` 만 있을 수 있습니다.
 3. 하이브를 꺼내 두 LNK 가 모두 들어왔는지 봅니다. 하위 키 시각과 LNK 를 만든 시각을 비교합니다.
 4. LNK 하나를 지우고 작업을 다시 실행합니다. 하위 키가 빠지는지, 남은 하위 키들의 시각이 다시 쓰였는지 확인합니다.
 

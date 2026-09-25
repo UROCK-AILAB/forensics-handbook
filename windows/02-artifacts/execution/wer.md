@@ -20,8 +20,6 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 | 1001 | Windows Error Reporting | Fault bucket, Event Name, 문제 서명 P1~P10, 붙인 파일 목록 (Attached files), 보고서 폴더 경로, Report Id, Report Status, Hashed bucket |
 | 1002 | Application Hang | 응답 없음 |
 
-이 표의 칸 이름은 관찰한 이벤트에서 옮겼습니다.
-
 - 로컬 덤프 (LocalDumps) 를 켜면 오류 순간의 프로세스 덤프가 파일로 남습니다.
 - 커널 쪽 보고서는 라이브 커널 보고서 (Live Kernel Reports) 폴더에 남습니다.
 
@@ -31,14 +29,13 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 | 무엇 | 위치 |
 |---|---|
-| 시스템 보고서 폴더 | `C:\ProgramData\Microsoft\Windows\WER\` 아래 `ReportArchive`, `ReportQueue`, `Temp` (관찰) |
-| 사용자별 보고서 폴더 | `%LOCALAPPDATA%\Microsoft\Windows\WER` 는 관찰한 PC 에 없었습니다 |
+| 시스템 보고서 폴더 | `C:\ProgramData\Microsoft\Windows\WER\` 아래 `ReportArchive`, `ReportQueue`, `Temp` |
+| 사용자별 보고서 폴더 | `%LOCALAPPDATA%\Microsoft\Windows\WER`. 없을 수도 있습니다 |
 | 로컬 덤프 (기본) | `%LOCALAPPDATA%\CrashDumps` |
 | 서비스 크래시 덤프 | 서비스 계정 프로필 폴더. System 서비스는 `%WINDIR%\System32\Config\SystemProfile`, Network·Local Service 는 `%WINDIR%\ServiceProfiles` |
 | 라이브 커널 보고서 | `%systemroot%\LiveKernelReports` |
 
-- "관찰" 과 "관찰한 PC" 는 입니다.
-- 예전 Windows 가 사용자별 보고서 폴더를 썼는지는 확인하지 못했습니다.
+- 예전 Windows 에서 사용자별 보고서 폴더를 쓰는지는 검체에서 확인합니다.
 
 ### 설정 위치
 
@@ -61,7 +58,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 ### 보고서 폴더
 
-아래는 관찰입니다.
+아래 수치는 PC 한 대의 예입니다.
 
 - 폴더 수는 `ReportArchive` 254개, `ReportQueue` 1개, `Temp` 0개였습니다.
 - 보고서 폴더 이름의 앞머리는 아래와 같았습니다.
@@ -76,40 +73,36 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 - `AppCrash` 폴더 이름은 `AppCrash_<프로그램 이름>_<16진 40자>_<16진 8자>_<GUID>` 모양이었습니다.
 - 프로그램 이름이 길면 잘려서 `.exe` 가 `.ex` 로 끝났습니다.
-- 폴더 이름 끝의 GUID 는 그 안 `Report.wer` 의 `ReportIdentifier` 와 같았지만, 가운데 16진 40자와 8자가 무엇의 해시인지는 확인하지 못했습니다.
+- 폴더 이름 끝의 GUID 는 그 안 `Report.wer` 의 `ReportIdentifier` 와 같았습니다. 가운데 16진 40자와 8자가 무엇의 해시인지는 공개 자료에 없습니다.
 - `ReportArchive` 폴더 254개에는 모두 `Report.wer` 하나만 있었습니다.
 - 이벤트 1001 이 붙인 파일로 적은 덤프·XML·CSV·TXT 는 `WER\Temp` 에 있었는데, `Temp` 는 비어 있었습니다. 보고서를 보낸 뒤 지운 것으로 보입니다.
 
 ### Report.wer
 
-아래는 관찰입니다.
-
 - 첫 두 바이트는 `FF FE` (UTF-16 LE BOM) 입니다.
 - 한 줄에 `키=값` 하나가 들어가고 줄 끝은 CRLF 입니다.
 
-| 묶음 | 키 | 관찰한 내용 |
+| 묶음 | 키 | 내용 |
 |---|---|---|
 | 사건 | `EventType` | `APPCRASH`, `BEX64` 같은 값 |
 | | `EventTime`, `UploadTime` | 10진수 FILETIME (UTC) |
 | | `ReportIdentifier` | 보고서 폴더 이름 끝의 GUID 와 같음 |
 | | `IntegratorReportIdentifier` | 이벤트 1000·1001 의 Report Id 와 같음 |
-| | `ReportType`, `ReportStatus`, `Consent`, `IsFatal`, `BootId` | 이름만 확인했습니다 |
+| | `ReportType`, `ReportStatus`, `Consent`, `IsFatal`, `BootId` | 공개 자료 없음 |
 | 프로그램 | `AppPath` | 실행 파일 전체 경로 |
-| | `TargetAppId` | `W:<16진>!0000<16진 40자>!<프로그램 이름>` 모양. 가운데 값이 파일 해시인지는 확인하지 못했습니다 |
-| | `AppName`, `OriginalFilename`, `TargetAppVer`, `NsAppName`, `ApplicationIdentity`, `AppSessionGuid` | 이름만 확인했습니다 |
+| | `TargetAppId` | `W:<16진>!0000<16진 40자>!<프로그램 이름>` 모양. 가운데 값의 뜻은 공개 자료에 없습니다 |
+| | `AppName`, `OriginalFilename`, `TargetAppVer`, `NsAppName`, `ApplicationIdentity`, `AppSessionGuid` | 공개 자료 없음 |
 | 오류 서명 | `Sig[n].Name`, `Sig[n].Value` | 프로그램 이름·버전·타임스탬프, 오류 모듈 이름·버전, 예외 코드(예: `e0434352`, `c0000409`), 예외 오프셋 |
-| | `DynamicSig[n].Name`, `DynamicSig[n].Value` | 이름만 확인했습니다 |
+| | `DynamicSig[n].Name`, `DynamicSig[n].Value` | 공개 자료 없음 |
 | 모듈 | `LoadedModule[n]` | 오류 당시 불러온 모듈 경로. 한 보고서에 95개가 있었습니다 |
 | 서버 응답 | `Response.BucketId` | 이벤트 1001 의 Hashed bucket 과 같음 |
-| | `Response.BucketTable`, `Response.LegacyBucketId`, `Response.type` | 이름만 확인했습니다 |
-| 그 밖 | `Version`, `FeatureStaging`, `Wow64Host`, `TargetAsId`, `EtwNonCollectReason`, `UI[n]`, `State[n].Key/Value`, `OsInfo[n].Key/Value`, `FriendlyEventName`, `ConsentKey`, `NsPartner`, `NsGroup`, `MetadataHash` | 이름만 확인했습니다 |
+| | `Response.BucketTable`, `Response.LegacyBucketId`, `Response.type` | 공개 자료 없음 |
+| 그 밖 | `Version`, `FeatureStaging`, `Wow64Host`, `TargetAsId`, `EtwNonCollectReason`, `UI[n]`, `State[n].Key/Value`, `OsInfo[n].Key/Value`, `FriendlyEventName`, `ConsentKey`, `NsPartner`, `NsGroup`, `MetadataHash` | 공개 자료 없음 |
 
 - `Sig[n].Name` 은 OS 표시 언어로 적혔습니다. 한국어 PC 에서는 "응용 프로그램 이름", "오류 모듈 이름", "예외 코드", "예외 오프셋" 처럼 나왔습니다.
-- `UploadTime` 이 보고서를 보낸 시각인지는 확인하지 못했습니다.
+- `UploadTime` 이 보고서를 보낸 시각인지는 공개 자료에 없습니다.
 
 ### 이벤트와 보고서를 잇는 값
-
-아래는 관찰입니다.
 
 | 이 값이 | 이 값과 같았습니다 |
 |---|---|
@@ -135,12 +128,12 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 - 자체 크래시 보고를 하는 프로그램은 대상이 아닙니다.
 - 응용 프로그램 자동 디버깅이 설정되어 있으면 덤프를 모으지 않습니다.
 
-아래는 관찰입니다.
+아래는 PC 한 대의 예입니다.
 
 - `LocalDumps` 키는 있었고, 키 자체에는 값이 없었습니다. 하위 키는 한 제조사의 프로그램 27개뿐이었습니다.
 - 그런데도 `%LOCALAPPDATA%\CrashDumps` 에 하위 키가 없는 프로그램의 덤프가 10개 있었습니다. 기본 `DumpCount` 와 같은 수입니다.
 - 덤프 파일 이름은 `<프로그램>.exe.<PID>.dmp` 모양이었고, 첫 4바이트는 `MDMP` 였습니다.
-- "`LocalDumps` 키가 값 없이 있기만 해도 전역 덤프가 켜진다" 는 주장은 확인하지 못했습니다. 관찰한 모습은 이 주장과 어긋나지 않습니다.
+- "`LocalDumps` 키가 값 없이 있기만 해도 전역 덤프가 켜진다" 는 해석이 있고, 위 예도 이 해석과 어긋나지 않습니다.
 
 ### WER 설정 값
 
@@ -168,7 +161,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 ### 증명하지 못하는 것
 
-- 누가 실행했는지는 `Report.wer` 만으로 알 수 없습니다. 관찰한 키 가운데 사용자 이름을 담은 키는 없었습니다. `AppPath` 가 사용자 프로필 아래면 그 경로로 가늠합니다.
+- 누가 실행했는지는 `Report.wer` 만으로 알 수 없습니다. `Report.wer` 에는 사용자 이름을 담은 키가 없습니다. `AppPath` 가 사용자 프로필 아래면 그 경로로 가늠합니다.
 - 오류의 원인과 프로그램이 악성인지는 알 수 없습니다.
 - 정상으로 실행하고 끝난 프로그램은 남지 않습니다.
 - 보고서가 없다고 오류가 없었던 것은 아닙니다. `Disabled`, `ExcludedApplications`, 보관 개수 한도, 사용자의 삭제로 빠질 수 있습니다.
@@ -178,26 +171,24 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 ## 시각 해석
 
-| 시각 | 형식 | 관찰한 관계 |
+| 시각 | 형식 | 관계 |
 |---|---|---|
 | `Report.wer` 의 `EventTime` | 10진수 FILETIME (UTC) | 한 보고서는 이벤트 1000 의 기록 시각보다 0.1초 늦었습니다. 다른 보고서는 보고서 폴더를 만든 시각보다 약 2.6초 빨랐습니다 |
-| 이벤트 1000 의 프로그램 시작 시각 | 16진수 FILETIME (UTC) | 관찰한 예에서 오류보다 5초 앞섰습니다 |
+| 이벤트 1000 의 프로그램 시작 시각 | 16진수 FILETIME (UTC) | 한 예에서 오류보다 5초 앞섰습니다 |
 | 이벤트 1000 과 1001 의 기록 시각 | 이벤트 로그 시각 | 1000 이 1001 보다 약 3초 먼저 기록됐습니다 |
 | 덤프 파일의 수정 시각 | 파일 시스템 시각 | 이벤트 1001 과 같은 초였습니다 |
 
-관찰한 관계 칸은 입니다.
-
 - FILETIME 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
-- 보고서 파일은 이벤트 로그보다 오래 남을 수 있습니다. 관찰한 PC 에서는 Application 로그의 가장 오래된 이벤트보다 약 한 달 앞선 보고서가 `ReportArchive` 에 남아 있었습니다.
+- 보고서 파일은 이벤트 로그보다 오래 남을 수 있습니다. Application 로그의 가장 오래된 이벤트보다 약 한 달 앞선 보고서가 `ReportArchive` 에 남은 예가 있습니다.
 - 이벤트 로그가 돌아서 지워졌으면 `Report.wer` 의 `EventTime` 으로 사건 시각을 잡습니다.
 
 ## 함정과 한계
 
-- **이벤트 1001 만 보고 크래시로 단정하지 않습니다.** 관찰한 PC 의 Application 로그에는 1001 이 364건, 1002 가 14건, 1000 이 8건 있었습니다. 1001 의 Event Name 을 보고 어떤 보고서인지 가립니다.
+- **이벤트 1001 만 보고 크래시로 단정하지 않습니다.** PC 한 대의 Application 로그에는 1001 이 364건, 1002 가 14건, 1000 이 8건 있었습니다. 1001 의 Event Name 을 보고 어떤 보고서인지 가립니다.
 - **서명 이름은 OS 언어를 따릅니다.** `Sig[n].Name` 이 한국어로 적힐 수 있습니다. 영어 이름으로 검색하면 놓칩니다. `Sig[n].Value` 를 번호로 읽습니다.
 - **폴더 이름의 프로그램 이름은 잘립니다.** 전체 경로는 `AppPath` 로 봅니다.
-- **붙인 파일은 사라질 수 있습니다.** 관찰한 PC 의 `ReportArchive` 에는 `Report.wer` 만 있었습니다. 덤프 같은 붙인 파일이 없다고 수집을 빠뜨린 것은 아닙니다.
-- **폴더 이름의 16진 값을 파일 해시로 쓰지 않습니다.** 폴더 이름의 16진 40자와 `TargetAppId` 가운데 값이 무엇인지 확인하지 못했습니다.
+- **붙인 파일은 사라질 수 있습니다.** `ReportArchive` 에 `Report.wer` 만 남는 경우가 있습니다. 덤프 같은 붙인 파일이 없다고 수집을 빠뜨린 것은 아닙니다.
+- **폴더 이름의 16진 값을 파일 해시로 쓰지 않습니다.** 폴더 이름의 16진 40자와 `TargetAppId` 가운데 값이 무엇인지는 공개 자료에 없습니다.
 - **PID 는 10진과 16진으로 다르게 적힙니다.** 덤프 이름은 10진, 이벤트 1000 은 16진입니다. 한쪽으로 바꿔 맞춥니다.
 - **설정 값을 원시 바이트로 확인합니다.** REG_DWORD 를 글자로 보여 주는 도구는 부호 없는 10진수로 보여 줍니다. 헷갈리면 원시 바이트를 봅니다.
 - **지우기와 끄기.** 사용자가 보고서 폴더와 덤프를 지울 수 있습니다. `Disabled`, `ExcludedApplications`, `DisableArchive` 로 기록을 막을 수도 있습니다. 설정 키의 값과 마지막 기록 시각을 함께 봅니다. 지운 보고서는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [마스터 파일 테이블](../filesystem/mft.md) 에서 찾습니다.
@@ -206,7 +197,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 ### 헥스로 한 번
 
-아래는 관찰한 형식으로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다. BOM 바로 뒤에 `EventType=APPCRASH` 한 줄이 온다고 두었습니다. 실제 파일에서는 줄 순서가 다를 수 있습니다.
+아래는 위 형식으로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다. BOM 바로 뒤에 `EventType=APPCRASH` 한 줄이 온다고 두었습니다. 실제 파일에서는 줄 순서가 다를 수 있습니다.
 
 ```
 FF FE 45 00 76 00 65 00 6E 00 74 00 54 00 79 00   ..E.v.e.n.t.T.y.

@@ -15,11 +15,11 @@ USBSTOR 키에는 Usbstor.sys 드라이버가 맡은 저장장치만 남습니�
 
 SYSTEM 하이브 `ControlSet00X\Enum` 바로 아래 키 이름은 장치를 찾아낸 열거자 (Enumerator) 입니다. `USB`·`USBSTOR`·`SCSI`·`SD`·`STORAGE` 가 모두 열거자 이름입니다. 어느 컨트롤셋을 볼지는 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다.
 
-`USBSTOR` 에는 USB 저장 포트 드라이버인 Usbstor.sys 가 만든 장치가 모입니다. Microsoft 문서에 따르면 Usbstor.sys 는 USB 저장장치 하나를 논리 장치 최대 16개로 나눌 수 있습니다. 문서의 카드 리더 예에서는 슬롯마다 물리 장치 객체 (PDO) 를 하나씩 만듭니다. 이 장치 객체가 `USBSTOR\Disk&Ven_…` 항목이 됩니다. 다른 드라이버가 맡은 저장장치는 이 자리에 나타나지 않습니다.
+`USBSTOR` 에는 USB 저장 포트 드라이버인 Usbstor.sys 가 만든 장치가 모입니다. Usbstor.sys 는 USB 저장장치 하나를 논리 장치 최대 16개로 나눌 수 있습니다. 카드 리더라면 슬롯마다 물리 장치 객체 (PDO) 를 하나씩 만듭니다. 이 장치 객체가 `USBSTOR\Disk&Ven_…` 항목이 됩니다. 다른 드라이버가 맡은 저장장치는 이 자리에 나타나지 않습니다.
 
 USBSTOR 를 거치지 않는 경우는 세 가지입니다.
 
-**1. UASP 장치.** USB 연결 SCSI 프로토콜 (USB Attached SCSI Protocol, UASP) 을 쓰는 장치는 Uaspstor.sys 가 맡습니다. Microsoft 는 이 드라이버를 벌크 스트림 (Bulk Stream) 을 지원하는 SuperSpeed USB 장치용 클래스 드라이버로 설명합니다. 대상은 USB 대용량 저장 클래스 (08h) 가운데 하위 클래스 06h·프로토콜 62h 인 장치입니다. 이 장치의 설치 클래스는 USB 가 아니라 SCSIAdapter 입니다. 그래서 그 아래 디스크는 내장 디스크처럼 `Enum\SCSI` 에 남습니다. UASP 를 지원하는 외장 SSD 와 디스크 케이스가 여기에 해당합니다.
+**1. UASP 장치.** USB 연결 SCSI 프로토콜 (USB Attached SCSI Protocol, UASP) 을 쓰는 장치는 Uaspstor.sys 가 맡습니다. 이 드라이버는 벌크 스트림 (Bulk Stream) 을 지원하는 SuperSpeed USB 장치용 클래스 드라이버입니다. 대상은 USB 대용량 저장 클래스 (08h) 가운데 하위 클래스 06h·프로토콜 62h 인 장치입니다. 이 장치의 설치 클래스는 USB 가 아니라 SCSIAdapter 입니다. 그래서 그 아래 디스크는 내장 디스크처럼 `Enum\SCSI` 에 남습니다. UASP 를 지원하는 외장 SSD 와 디스크 케이스가 여기에 해당합니다.
 
 **2. USB 가 아닌 버스로 붙은 디스크.** eSATA 외장 디스크는 내장 SATA 디스크와 같은 드라이버를 씁니다. 썬더볼트 외장 NVMe 디스크는 PCIe 장치로 붙으므로 내장 NVMe 디스크와 같은 드라이버를 씁니다. 두 경우 모두 내장 디스크가 남는 열거자에 남습니다. Windows 8 이후 기본 AHCI·NVMe 드라이버에서는 `Enum\SCSI` 입니다. 드라이버에 따라 `Enum\IDE` 같은 다른 열거자에 남을 수 있으므로 검체의 내장 디스크 위치부터 봅니다.
 
@@ -54,7 +54,7 @@ Windows 7 에는 UASP 기본 드라이버가 없어서 같은 장치도 Windows 
 
 UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁니다. `Enum\USB` 항목은 USB 장치 자체이고 `Enum\SCSI` 항목은 그 안의 디스크이므로, 두 항목을 이어야 VID·PID·시리얼 번호와 디스크 모델명·시각을 한 장치로 묶을 수 있습니다.
 
-아래에서 "(관찰)" 을 붙인 내용은 문서에 없고 Windows 11 빌드 26200 레지스트리에서 본 것입니다.
+이 절의 키 이름 꼴과 값은 Windows 11 빌드 26200 기준입니다. 공식 문서에 없는 내용이 많아 판마다 검체에서 확인합니다.
 
 > 그림 자리: `Enum\USB\VID_…&PID_…\MSFT30<시리얼>` (Service=UASPStor, ParentIdPrefix=P, ContainerID=C) → `Enum\SCSI\Disk&Ven_…&Prod_…\P&000000` (ContainerID=C, Partmgr DiskId=D) → `Enum\STORAGE\Volume\{D}#…`·WPD 키 `SWD#WPDBUSENUM#{D}#…` 로 이어지는 그림
 
@@ -64,25 +64,25 @@ UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁�
 |---|---|---|
 | Service | `UASPStor` | `USBSTOR` |
 | ClassGUID | `{4d36e97b-e325-11ce-bfc1-08002be10318}` (SCSIAdapter) | `{36fc9e60-c465-11cf-8056-444553540000}` (USB) |
-| 인스턴스 ID | `MSFT30` 뒤에 시리얼 번호 (관찰) | 시리얼 번호 |
-| ParentIdPrefix | 있음 (관찰) | 장치에 따라 다름 |
+| 인스턴스 ID | `MSFT30` 뒤에 시리얼 번호 | 시리얼 번호 |
+| ParentIdPrefix | 있음 | 장치에 따라 다름 |
 
-`MSFT30` 여섯 글자는 장치 시리얼 번호가 아니므로 다른 기록과 맞출 때는 이 접두어를 떼고 비교합니다. 이 접두어가 붙는 조건을 밝힌 Microsoft 문서는 찾지 못했습니다. 그래서 UASP 여부는 접두어가 아니라 Service 값과 ClassGUID 값으로 가립니다. 시리얼 번호와 VID·PID 를 읽는 법은 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) 에서 다룹니다.
+`MSFT30` 여섯 글자는 장치 시리얼 번호가 아니므로 다른 기록과 맞출 때는 이 접두어를 떼고 비교합니다. 이 접두어가 붙는 조건은 공식 문서에 없으므로 UASP 여부는 접두어가 아니라 Service 값과 ClassGUID 값으로 가립니다. 시리얼 번호와 VID·PID 를 읽는 법은 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) 에서 다룹니다.
 
 ### Enum\SCSI 인스턴스 키
 
-- 키 경로는 `Enum\SCSI\Disk&Ven_<제조사>&Prod_<제품>\<인스턴스 ID>` 꼴입니다 (관찰).
-- 인스턴스 ID 는 `Enum\USB` 쪽 ParentIdPrefix 값 뒤에 `&` 와 16진수 6자리가 붙은 꼴입니다 (관찰).
-- 두 키의 ContainerID 값은 같았습니다 (관찰). Microsoft 문서에 따르면 한 물리 장치에 속한 장치 노드는 모두 같은 컨테이너 ID 를 씁니다.
+- 키 경로는 `Enum\SCSI\Disk&Ven_<제조사>&Prod_<제품>\<인스턴스 ID>` 꼴입니다.
+- 인스턴스 ID 는 `Enum\USB` 쪽 ParentIdPrefix 값 뒤에 `&` 와 16진수 6자리가 붙은 꼴입니다.
+- 두 키의 ContainerID 값은 같습니다. 한 물리 장치에 속한 장치 노드는 모두 같은 컨테이너 ID 를 쓰기 때문입니다.
 - 사람이 읽는 장치 이름은 FriendlyName 값에 있습니다.
-- `Properties\{83da6326-97a6-4088-9453-a1923f573b29}\0064`~`0067` 에 설치·연결·해제 시각이 있습니다 (관찰).
-- `Device Parameters\Partmgr` 키의 DiskId 값에 디스크를 가리키는 GUID 가 있습니다 (관찰).
+- `Properties\{83da6326-97a6-4088-9453-a1923f573b29}\0064`~`0067` 에 설치·연결·해제 시각이 있습니다.
+- `Device Parameters\Partmgr` 키의 DiskId 값에 디스크를 가리키는 GUID 가 있습니다.
 
 ### DiskId 로 볼륨 기록까지 잇기
 
-UASP 디스크의 볼륨 기록은 키 이름에 시리얼 번호 대신 DiskId 를 씁니다 (관찰).
+UASP 디스크의 볼륨 기록은 키 이름에 시리얼 번호 대신 DiskId 를 씁니다.
 
-| 하이브 | 위치 | 키 이름 꼴 (관찰) |
+| 하이브 | 위치 | 키 이름 꼴 |
 |---|---|---|
 | SYSTEM | `ControlSet00X\Enum\STORAGE\Volume` | `{DiskId}#<16진수 16자리>` |
 | SYSTEM | `ControlSet00X\Enum\SWD\WPDBUSENUM` | `{DiskId}#<16진수 16자리>` |
@@ -91,11 +91,11 @@ UASP 디스크의 볼륨 기록은 키 이름에 시리얼 번호 대신 DiskId 
 
 Usbstor.sys 장치라면 이 자리에 USBSTOR 장치 경로와 시리얼 번호가 들어갑니다. 그래서 시리얼 번호로만 찾으면 UASP 볼륨 기록을 놓칩니다.
 
-같은 PC 의 MountedDevices 값 데이터에는 `SCSI#Disk…` 장치 경로 문자열이 없었습니다 (관찰). 값 데이터를 푸는 법은 [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) 에서 다룹니다.
+MountedDevices 값 데이터에는 `SCSI#Disk…` 장치 경로 문자열이 없습니다. 값 데이터를 푸는 법은 [드라이브 문자 매핑 (MountedDevices)](mounteddevices.md) 에서 다룹니다.
 
 ### Enum\SD 인스턴스 키
 
-Microsoft 문서가 정한 SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID_o(4)&PID_p(0~5)&REV_n.m` 꼴입니다. 레지스트리에서는 `Enum\SD\VID_…&OID_…&PID_…&REV_…\<인스턴스 ID>` 가 됩니다.
+SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID_o(4)&PID_p(0~5)&REV_n.m` 꼴입니다. 레지스트리에서는 `Enum\SD\VID_…&OID_…&PID_…&REV_…\<인스턴스 ID>` 가 됩니다.
 
 | 칸 | 뜻 |
 |---|---|
@@ -106,13 +106,13 @@ Microsoft 문서가 정한 SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID
 
 하드웨어 ID 는 두 개인데, 하나는 장치 ID 와 같고 다른 하나는 장치 ID 에서 리비전을 뺀 값입니다. 호환 ID 는 언제나 `SD\CLASS_STORAGE` 입니다.
 
-이 식별자는 카드 모델을 가리키며, 문서의 장치 ID 에는 카드 한 장을 가리키는 시리얼 번호가 없습니다. 인스턴스 ID 에 무엇이 들어가는지는 문서에 없으므로 인스턴스 ID 를 카드 시리얼 번호로 단정하지 않습니다.
+이 식별자는 카드 모델을 가리키며, 장치 ID 에는 카드 한 장을 가리키는 시리얼 번호가 없습니다. 인스턴스 ID 에 무엇이 들어가는지는 문서에 없으므로 인스턴스 ID 를 카드 시리얼 번호로 단정하지 않습니다.
 
-Microsoft 의 SD 드라이버 스택 문서는 카드 위에 sffdisk.sys 와 sffp_sd.sys 가 올라간다고 설명하고, Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다. 카드 아래 디스크 항목이 어느 열거자에 생기는지는 이 글에서 확인하지 못했습니다. 같은 ContainerID 를 쓰는 항목을 찾아 잇습니다.
+카드 위에는 sffdisk.sys 와 sffp_sd.sys 가 올라가고, Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다. 카드 아래 디스크 항목이 어느 열거자에 생기는지는 공개 자료가 없으므로, 같은 ContainerID 를 쓰는 항목을 찾아 잇습니다.
 
 ### USB 카드 리더
 
-Microsoft 문서의 예에서 CF 슬롯과 스마트미디어 슬롯이 있는 리더는 장치 객체를 두 개 만듭니다. 슬롯마다 USBSTOR 항목이 생긴다는 뜻이라서 카드를 꽂은 적이 없는 슬롯도 USBSTOR 항목으로 남을 수 있습니다. 이 항목의 제조사·제품·시리얼 번호는 리더가 알려 준 값이며 카드를 바꿔 꽂아도 그대로입니다. 어떤 카드를 꽂았는지는 볼륨 기록 (볼륨 시리얼 번호·볼륨 이름) 으로 봅니다.
+CF 슬롯과 스마트미디어 슬롯이 있는 리더는 장치 객체를 두 개 만듭니다. 슬롯마다 USBSTOR 항목이 생긴다는 뜻이라서 카드를 꽂은 적이 없는 슬롯도 USBSTOR 항목으로 남을 수 있습니다. 이 항목의 제조사·제품·시리얼 번호는 리더가 알려 준 값이며 카드를 바꿔 꽂아도 그대로입니다. 어떤 카드를 꽂았는지는 볼륨 기록 (볼륨 시리얼 번호·볼륨 이름) 으로 봅니다.
 
 ## 증거로서 의미
 
@@ -134,15 +134,15 @@ Microsoft 문서의 예에서 CF 슬롯과 스마트미디어 슬롯이 있는 �
 ## 시각 해석
 
 - `Enum\SCSI` 인스턴스 키 아래 0064~0067 은 USBSTOR 쪽과 같은 장치 속성입니다. 값은 FILETIME 이고 UTC 입니다. 각 값의 뜻은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md) 에서 다룹니다.
-- UASP 장치는 `Enum\USB` 인스턴스 키에도 0064~0067 이 따로 있습니다 (관찰). 두 쪽 시각을 나란히 놓고 봅니다.
+- UASP 장치는 `Enum\USB` 인스턴스 키에도 0064~0067 이 따로 있습니다. 두 쪽 시각을 나란히 놓고 봅니다.
 - 도구마다 0064·0065 에 붙이는 이름이 다릅니다. RegRipper 4.0 의 scsi.pl 은 0064 를 "First Install", 0065 를 "First Inserted" 로 적습니다. 이름표가 아니라 값 번호로 읽습니다.
 - 키 마지막 기록 시각은 연결이 아닌 다른 일로도 바뀝니다. 자세한 규칙은 [키 마지막 기록 시각 (Last Write Time)](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
 - FILETIME 을 읽는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-- **USBSTOR 만 보는 도구.** USBSTOR 만 읽는 도구나 점검표는 UASP 장치를 통째로 빠뜨립니다. RegRipper 4.0 저장소의 scsi.pl 은 2022년 8월에 만든 플러그인입니다(소스 머리말 기준). 그보다 오래된 도구 판에는 `Enum\SCSI` 를 읽는 기능이 없을 수 있습니다.
-- **`Enum\SCSI` 에 섞인 항목.** 내장 SATA·NVMe 디스크와 광학 드라이브도 `Enum\SCSI` 에 있습니다. 가상 디스크 (`Disk&Ven_Msft&Prod_Virtual_Disk`, `Disk&Ven_VMware_…`) 도 있습니다. 관찰한 PC 에서 내장 NVMe 디스크의 ContainerID 는 `{00000000-0000-0000-ffff-ffffffffffff}` 였습니다. 외장 UASP 디스크에는 자기 ContainerID 가 따로 있었습니다. 이 차이로 먼저 거릅니다.
+- **USBSTOR 만 보는 도구.** USBSTOR 만 읽는 도구나 점검표는 UASP 장치를 통째로 빠뜨립니다. RegRipper 4.0 저장소의 scsi.pl 은 2022년 8월에 만든 플러그인입니다. 그보다 오래된 도구 판에는 `Enum\SCSI` 를 읽는 기능이 없을 수 있습니다.
+- **`Enum\SCSI` 에 섞인 항목.** 내장 SATA·NVMe 디스크와 광학 드라이브도 `Enum\SCSI` 에 있습니다. 가상 디스크 (`Disk&Ven_Msft&Prod_Virtual_Disk`, `Disk&Ven_VMware_…`) 도 있습니다. 내장 NVMe 디스크의 ContainerID 는 `{00000000-0000-0000-ffff-ffffffffffff}` 이고, 외장 UASP 디스크에는 자기 ContainerID 가 따로 있습니다. 이 차이로 먼저 거릅니다.
 - **가상 디스크 항목.** `Msft Virtual Disk` 항목은 VHD·VHDX 를 붙인 흔적일 수 있습니다. 버리지 말고 따로 봅니다. 형식은 [증거 이미지·가상 디스크 형식](../../../01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md) 에서 다룹니다.
 - **MSFT30 접두어.** 이 접두어를 떼지 않으면 다른 기록의 시리얼 번호와 어긋납니다. 공개 스크립트 parseUSBs 는 Partition/Diagnostic 1006 이벤트와 Storsvc/Diagnostic 1001 이벤트의 ParentId·SerialNumber 필드에서도 이 접두어를 뗍니다. UASP 장치가 이 로그에도 남을 수 있다는 뜻입니다.
 - **한 장치, 두 기록.** 같은 장치를 USB 2.0 포트나 Windows 7 PC 에 꽂으면 USBSTOR 에 남을 수 있습니다. 한 PC 에서 두 방식으로 모두 붙었다면 `Enum\USB` 에 `MSFT30` 이 붙은 인스턴스와 안 붙은 인스턴스가 따로 생길 수 있습니다. 접두어를 떼고 시리얼 번호를 비교합니다.
@@ -187,7 +187,7 @@ Microsoft 문서의 예에서 CF 슬롯과 스마트미디어 슬롯이 있는 �
 | MountedDevices | 볼륨 GUID·값 데이터 | [드라이브 문자 매핑](mounteddevices.md) |
 | MountPoints2 | 볼륨 GUID | [사용자별 장치 연결](mountpoints2.md) |
 | WPD·EMDMgmt | DiskId·볼륨 시리얼 번호 | [휴대용 장치·볼륨 이름 기록](wpd-emdmgmt.md) |
-| setupapi.dev.log | `MSFT30` 이 붙은 USB 장치 경로·`uaspstor.inf` (관찰) | [장치 설치 로그](setupapi-dev-log.md) |
+| setupapi.dev.log | `MSFT30` 이 붙은 USB 장치 경로·`uaspstor.inf` | [장치 설치 로그](setupapi-dev-log.md) |
 | Partition/Diagnostic 이벤트 | `MSFT30` 을 뗀 시리얼 번호·모델명 | [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md) |
 | 바로가기 파일·점프리스트 | 볼륨 시리얼 번호 | [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md) · [점프리스트](../../file-folder-usage/jump-lists.md) |
 | AmCache 장치 항목 | 장치 목록 | [장치 항목 (InventoryDevicePnp)](../../execution/amcache-hve/inventorydevicepnp.md) |

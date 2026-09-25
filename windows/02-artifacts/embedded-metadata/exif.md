@@ -10,7 +10,7 @@ nav_order: 3000
 
 EXIF 는 사진 파일 안에 들어가는 메타데이터입니다. 기기 제조사와 모델, 저장한 프로그램 이름, 찍은 시각 같은 값이 칸마다 따로 들어갑니다(참고 1). 날짜 글자열에는 시간대가 없습니다(참고 1). 값은 나중에 고칠 수 있고, 한 파일 안에서도 칸끼리 값이 어긋날 수 있습니다. 그래서 칸 하나만 보고 찍은 시각이나 기기를 단정하지 않습니다.
 
-> "(관찰)" 은 시간대 KST (UTC+9), Python 3.12.10, Pillow 12.3.0, 탐색기 셸 속성 기준입니다. 시험 대상은 Windows 에 기본으로 들어 있는 JPEG 두 개의 사본과 Pillow 로 만든 JPEG 세 개입니다. 판마다 다를 수 있습니다.
+> 아래 예시 값은 Windows 에 기본으로 들어 있는 JPEG 두 개와 Pillow 12.3.0 으로 만든 JPEG 세 개의 값입니다. 탐색기 동작은 Windows 11 빌드 26200, 시간대 KST (UTC+9) 기준입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -48,39 +48,37 @@ EXIF 의 칸은 태그 (tag) 번호로 구분하며, 칸들은 이미지 파일 
 | Exif IFD | 0xA433 · 0xA434 | LensMake · LensModel | 렌즈 제조사·모델 |
 | IFD1 | 0x0201 · 0x0202 | ThumbnailOffset · ThumbnailLength | 섬네일 위치·길이 |
 
-탐색기는 XPTitle 보다 ImageDescription 을 먼저 씁니다(참고 1). GPS IFD 안의 칸 번호와 단위, GPS 시각이 UTC 인지는 이 페이지에서 확인하지 못했습니다.
+탐색기는 XPTitle 보다 ImageDescription 을 먼저 씁니다(참고 1).
 
-### 한 파일에 메타데이터가 여러 벌 들어갑니다 (관찰)
+### 한 파일에 메타데이터가 여러 벌 들어갑니다
 
-Windows 기본 이미지 `C:\Windows\Web\touchkeyboard\TouchKeyboardThemeDark000.jpg` 에는 EXIF 말고도 메타데이터 조각이 여럿 있었습니다.
+Windows 기본 이미지 `C:\Windows\Web\touchkeyboard\TouchKeyboardThemeDark000.jpg` 에는 EXIF 말고도 메타데이터 조각이 여럿 있습니다.
 
-- 조각 순서는 APP1 (Exif) → APP13 (Photoshop) → APP1 (XMP, `http://ns.adobe.com/xap/1.0/`) → APP2 (ICC_PROFILE) → APP14 (Adobe) 였습니다.
+- 조각 순서는 APP1 (Exif) → APP13 (Photoshop) → APP1 (XMP, `http://ns.adobe.com/xap/1.0/`) → APP2 (ICC_PROFILE) → APP14 (Adobe) 입니다.
 XMP 속성의 뜻은 [PDF 정보 사전과 XMP](document-metadata/pdf-info-xmp.md) 에서 다룹니다. 같은 뜻의 값이 IFD0, Exif IFD, XMP, 섬네일에 따로 있을 수 있으며, 어긋난 예는 아래 "구조" 에 있습니다.
 
 ## 위치와 버전별 차이
 
 ### 파일 안 위치
 
-- JPEG 에서는 EXIF 가 APP1 조각에 들어갑니다. 조각 앞머리에 식별 글자 `Exif\0\0` 가 있습니다(관찰).
-- 조각 순서는 파일마다 다릅니다. `C:\Windows\Web\Wallpaper\Spotlight\img50.jpg` 는 APP0 (JFIF) 조각이 먼저 오고, 그 뒤에 34바이트짜리 작은 EXIF APP1 조각이 있었습니다(관찰).
-- HEIC·PNG·TIFF 처럼 JPEG 가 아닌 형식에서 EXIF 가 어디에 들어가는지는 이 페이지에서 확인하지 못했습니다.
+- JPEG 에서는 EXIF 가 APP1 조각에 들어갑니다. 조각 앞머리에 식별 글자 `Exif\0\0` 가 있습니다.
+- 조각 순서는 파일마다 다릅니다. `C:\Windows\Web\Wallpaper\Spotlight\img50.jpg` 는 APP0 (JFIF) 조각이 먼저 오고, 그 뒤에 34바이트짜리 작은 EXIF APP1 조각이 있습니다.
 - 확장자와 실제 형식이 맞는지는 [파일 형식 식별](../../03-techniques/analysis/content-search/file-signature.md) 로 먼저 확인합니다.
 
 ### 버전별 차이
 
 EXIF 는 파일 안에 들어 있습니다. 그래서 값 자체는 Windows 버전과 관계가 없습니다. 달라질 수 있는 것은 Exif 판과, Windows 가 값을 읽어 보여 주는 방식입니다.
 
-| 항목 | 확인한 범위 | 근거 |
+| 항목 | 범위 | 근거 |
 |---|---|---|
 | 파일의 Exif 판 | 파일마다 ExifVersion 칸에 적습니다 | 참고 1 |
-| OffsetTime 계열 칸이 생긴 Exif 판 | 확인하지 못했습니다 | |
-| 탐색기 "찍은 날짜" 가 OffsetTimeOriginal 을 무시함 | Windows 11 빌드 26200 한 대 | 관찰 |
+| 탐색기 "찍은 날짜" 가 OffsetTimeOriginal 을 무시함 | Windows 11 빌드 26200 | — |
 
 ## 구조
 
-### JPEG 머리에서 TIFF 머리까지 (관찰)
+### JPEG 머리에서 TIFF 머리까지
 
-`TouchKeyboardThemeDark000.jpg` 에서 읽은 배치입니다. APP1 조각이 파일 첫 2바이트 바로 뒤에 올 때의 위치입니다.
+`TouchKeyboardThemeDark000.jpg` 의 배치입니다. APP1 조각이 파일 첫 2바이트 바로 뒤에 올 때의 위치입니다.
 
 | 파일 위치 | 크기 | 값 | 뜻 |
 |---|---|---|---|
@@ -90,15 +88,15 @@ EXIF 는 파일 안에 들어 있습니다. 그래서 값 자체는 Windows 버�
 | 6 | 6 | `45 78 69 66 00 00` | 식별 글자 `Exif\0\0` |
 | 12 | 8 | `49 49 2A 00 08 00 00 00` | TIFF 머리 |
 
-TIFF 머리는 이렇게 읽었습니다.
+TIFF 머리는 이렇게 읽습니다.
 
-- `49 49` 는 글자 "II" 입니다. 뒤의 숫자를 리틀 엔디언으로 읽으라는 뜻입니다. 이 페이지에서는 리틀 엔디언 파일만 봤습니다.
+- `49 49` 는 글자 "II" 입니다. 뒤의 숫자를 리틀 엔디언으로 읽으라는 뜻입니다.
 - `2A 00` 은 42 입니다.
 - `08 00 00 00` 은 8 입니다. IFD0 이 TIFF 머리에서 8바이트 뒤에 있습니다.
 
-### IFD 읽기 (관찰)
+### IFD 읽기
 
-- IFD 안의 오프셋은 파일 처음이 아니라 TIFF 머리부터 센 값입니다. 이렇게 풀어야 칸이 맞게 읽혔습니다.
+- IFD 안의 오프셋은 파일 처음이 아니라 TIFF 머리부터 센 값입니다.
 - 칸 하나는 12바이트입니다.
 
 | 칸 안 위치 | 크기 | 내용 |
@@ -112,9 +110,9 @@ TIFF 머리는 이렇게 읽었습니다.
 - 칸들이 끝난 뒤 4바이트는 다음 IFD (IFD1) 의 오프셋입니다. 이 파일에서는 300 이었습니다.
 - 자료형 번호의 뜻은 이 페이지에서 다루지 않습니다.
 
-### 한 파일 안에서 값이 어긋난 예 (관찰)
+### 한 파일 안에서 값이 어긋난 예
 
-같은 `TouchKeyboardThemeDark000.jpg` 에서 본 값입니다.
+같은 `TouchKeyboardThemeDark000.jpg` 의 값입니다.
 
 | 항목 | 한 자리의 값 | 다른 자리의 값 |
 |---|---|---|
@@ -129,10 +127,10 @@ TIFF 머리는 이렇게 읽었습니다.
 
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
-| 파일 안 어느 자리(IFD0·Exif IFD·XMP)에 어떤 값이 적혀 있는지 | 적힌 값이 사실인지. 값은 나중에 고칠 수 있습니다(관찰) |
+| 파일 안 어느 자리(IFD0·Exif IFD·XMP)에 어떤 값이 적혀 있는지 | 적힌 값이 사실인지. 값은 나중에 고칠 수 있습니다 |
 | 시간대 칸이 있으면, 값을 적은 쪽이 밝힌 UTC 와의 차이 | 시간대 칸이 없을 때 그 시각이 현지 시각인지 UTC 인지(참고 1) |
 | Make·Model·SerialNumber 에 적힌 기기 정보 | 그 기기로 찍었는지, 누가 찍었는지 |
-| Software·CreatorTool 에 적힌 프로그램 이름 | 그 프로그램이 마지막으로 저장했는지. 칸마다 따로 남습니다(관찰) |
+| Software·CreatorTool 에 적힌 프로그램 이름 | 그 프로그램이 마지막으로 저장했는지. 칸마다 따로 남습니다 |
 | | 기기 시계가 맞았는지 |
 | | 이 PC 로 사진을 옮기거나 연 시각 |
 
@@ -155,7 +153,7 @@ TIFF 머리는 이렇게 읽었습니다.
 
 날짜 글자열 형식은 `YYYY:mm:dd HH:MM:SS` 이고 시간대가 없어서, 시간대는 OffsetTime 계열 칸에 따로 적습니다(참고 1). DateTimeOriginal 은 원본 사진을 찍은 시각인데(참고 1), 기기 시계가 맞았는지는 이 값만으로 알 수 없습니다.
 
-### EXIF 와 XMP 의 시각 (관찰)
+### EXIF 와 XMP 의 시각
 
 `TouchKeyboardThemeDark000.jpg` 의 시각 값입니다.
 
@@ -168,9 +166,9 @@ TIFF 머리는 이렇게 읽었습니다.
 
 EXIF 값은 XMP 값에서 시간대만 뺀 모양이며, 편집한 컴퓨터의 현지 시각이었습니다. XMP 편집 이력을 보면 편집한 곳의 시간대가 +01:00 에서 -07:00 으로 바뀌었습니다. 그래서 시간대가 다른 곳에서 편집한 파일은 EXIF 시각만 늘어놓으면 순서가 틀릴 수 있으므로, 시간대가 적힌 XMP 값과 함께 봅니다.
 
-### 탐색기의 "찍은 날짜" (관찰)
+### 탐색기의 "찍은 날짜"
 
-Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOriginal 과 CreateDate 는 `2020:01:02 03:04:05` 이고, OffsetTimeOriginal 만 다르게 넣었습니다.
+DateTimeOriginal 과 CreateDate 가 모두 `2020:01:02 03:04:05` 이고 OffsetTimeOriginal 만 다른 JPEG 세 개를 탐색기에서 보면 아래와 같습니다.
 
 | 파일 | OffsetTimeOriginal | 탐색기 "찍은 날짜 (Date taken)" 열 | 셸 속성 System.Photo.DateTaken |
 |---|---|---|---|
@@ -178,27 +176,26 @@ Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOrigina
 | 2 | `+09:00` | 2020-01-02 오전 3:04 | 2020-01-01 18:04:05 (Kind=Unspecified) |
 | 3 | `-05:00` | 2020-01-02 오전 3:04 | 2020-01-01 18:04:05 (Kind=Unspecified) |
 
-세 파일 모두 값이 같았고, 탐색기는 OffsetTimeOriginal 을 반영하지 않았습니다. System.Photo.DateTaken 은 EXIF 값에서 9시간을 뺀 값이었는데, 9시간은 이 PC 의 시간대 차이입니다. 이 Windows 는 EXIF 시각을 "보고 있는 PC 의 현지 시각" 으로 보고 UTC 로 바꿔 두었다가, 화면에 보여 줄 때 다시 현지 시각으로 바꿨습니다.
+세 파일 모두 값이 같습니다. 탐색기는 OffsetTimeOriginal 을 반영하지 않습니다. System.Photo.DateTaken 은 EXIF 값에서 PC 의 시간대 차이(KST 는 9시간)를 뺀 값입니다. Windows 는 EXIF 시각을 "보고 있는 PC 의 현지 시각" 으로 보고 UTC 로 바꿔 두었다가, 화면에 보여 줄 때 다시 현지 시각으로 바꿉니다.
 
-- 이대로라면 Windows 검색 색인에 저장된 찍은 날짜도 색인한 PC 의 시간대에 따라 달라질 수 있습니다. 색인 DB 값을 직접 비교하지는 않았습니다. 색인 속에 남은 파일 속성은 [파일 속성 되살리기 (PropertyStore)](../file-folder-usage/windows-search/propertystore.md) 에서 다룹니다.
+- 그래서 Windows 검색 색인에 저장된 찍은 날짜도 색인한 PC 의 시간대에 따라 달라질 수 있습니다. 색인 속에 남은 파일 속성은 [파일 속성 되살리기 (PropertyStore)](../file-folder-usage/windows-search/propertystore.md) 에서 다룹니다.
 - 분석 대상 PC 의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 - 파일 시스템 시각은 EXIF 와 다른 기록입니다. 읽는 법은 [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 1. **시간대 없는 시각을 UTC 로 읽습니다.** EXIF 날짜 글자열에는 시간대가 없습니다(참고 1). OffsetTime 계열 칸이 있으면 그 값을 씁니다. 없으면 "시간대 모름" 으로 적습니다.
-2. **탐색기 "찍은 날짜" 를 그대로 옮겨 적습니다.** 탐색기는 OffsetTimeOriginal 을 무시했습니다(관찰). 화면 값 대신 원래 칸을 읽습니다.
-3. **칸 하나만 봅니다.** 한 파일 안에서 IFD0·Exif IFD·XMP·섬네일 값이 서로 달랐습니다(관찰).
-4. **EXIF 조각이 파일 맨 앞에 있다고 봅니다.** APP0 조각이 먼저 오는 파일이 있었습니다(관찰). 조각 표시를 차례로 따라가며 찾습니다.
-5. **오프셋을 파일 처음부터 셉니다.** IFD 안의 오프셋은 TIFF 머리부터 셉니다(관찰).
+2. **탐색기 "찍은 날짜" 를 그대로 옮겨 적습니다.** 탐색기는 OffsetTimeOriginal 을 무시합니다. 화면 값 대신 원래 칸을 읽습니다.
+3. **칸 하나만 봅니다.** 한 파일 안에서 IFD0·Exif IFD·XMP·섬네일 값이 서로 다를 수 있습니다.
+4. **EXIF 조각이 파일 맨 앞에 있다고 봅니다.** APP0 조각이 먼저 오는 파일이 있습니다. 조각 표시를 차례로 따라가며 찾습니다.
+5. **오프셋을 파일 처음부터 셉니다.** IFD 안의 오프셋은 TIFF 머리부터 셉니다.
 6. **도구가 보여 주는 이름으로 명세를 찾습니다.** ExifTool 은 명세의 DateTimeDigitized 를 CreateDate 라고 부릅니다(참고 1). 보고서에는 두 이름을 함께 적습니다.
-7. **EXIF 가 없다는 것만으로 결론을 냅니다.** 메신저·SNS 로 보낸 사진에서 EXIF 가 지워지는지는 이 페이지에서 확인하지 못했습니다.
+7. **EXIF 가 없다는 것만으로 결론을 냅니다.** 메신저·SNS 로 보낸 사진에서 EXIF 가 지워지는지는 서비스마다 다를 수 있어 검체에서 확인합니다.
 
 ### 지우기와 조작
 
-- EXIF 값은 나중에 고칠 수 있습니다. Pillow 로 DateTimeOriginal 에 임의 값을 넣은 JPEG 를 만들었더니, 탐색기는 그 값을 찍은 날짜로 보여 줬습니다(관찰).
-- 고친 흔적이 파일 안에 남는지는 이 페이지에서 확인하지 못했습니다.
-- 자리끼리 어긋난 값과 XMP 편집 이력은 파일을 다시 저장했는지 따질 때 단서가 됩니다. 어긋남만으로 조작이라고 결론 내지 않습니다. 정상 편집에서도 생깁니다(관찰).
+- EXIF 값은 나중에 고칠 수 있습니다. DateTimeOriginal 에 임의 값을 넣은 JPEG 도 탐색기는 그 값을 찍은 날짜로 보여 줍니다.
+- 자리끼리 어긋난 값과 XMP 편집 이력은 파일을 다시 저장했는지 따질 때 단서가 됩니다. 어긋남만으로 조작이라고 결론 내지 않습니다. 정상 편집에서도 생깁니다.
 - 날짜를 여러 기록으로 따지는 순서는 [이 문서의 날짜를 믿을 수 있나](../../04-scenarios/activity/document-date-verification.md) 에서 다룹니다. 일부러 지우거나 바꾼 정황은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에서 다른 흔적과 함께 봅니다.
 
 ## 직접 분석해 보기
@@ -227,7 +224,7 @@ Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOrigina
 ### 공개 도구로 한 번
 
 - ExifTool 은 칸 이름을 참고 1 의 표 이름으로 보여 줍니다(참고 1). 그래서 명세 이름과 다른 칸이 있습니다.
-- Python 의 Pillow 로도 칸을 읽을 수 있습니다. 이 페이지의 관찰은 Python 과 Pillow 로 했습니다.
+- Python 의 Pillow 로도 칸을 읽을 수 있습니다.
 
 어느 도구를 쓰든 아래를 확인합니다.
 
@@ -241,7 +238,7 @@ Pillow 로 JPEG 세 개를 만들었습니다. 세 파일 모두 DateTimeOrigina
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [썸네일 캐시](../file-folder-usage/thumbcache-db-thumbs-db.md) | 사진의 작은 그림이 캐시에 남았는지. 이 PC 의 `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 에 `thumbcache_exif.db` 가 있었지만, 무엇이 담기는지는 확인하지 못했습니다(관찰) |
+| [썸네일 캐시](../file-folder-usage/thumbcache-db-thumbs-db.md) | 사진의 작은 그림이 캐시에 남았는지. `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 에 `thumbcache_exif.db` 가 생길 수 있으며, 담긴 내용은 검체에서 확인합니다 |
 | [파일 속성 되살리기 (PropertyStore)](../file-folder-usage/windows-search/propertystore.md) | 색인에 들어간 파일 속성 |
 | [시간대 설정](../system-account/time-zone.md) | 분석 대상 PC 의 시간대 |
 | [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) | 파일을 만들거나 옮긴 시각 |

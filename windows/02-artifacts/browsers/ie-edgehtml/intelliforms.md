@@ -15,7 +15,7 @@ IE 7~9 는 웹 폼에 입력한 아이디·비밀번호를 사용자 하이브�
 
 IE 는 로그인 폼의 아이디·비밀번호를 자동 완성 (AutoComplete) 용으로 저장할 수 있고, IE 7~9 는 이 값을 `IntelliForms\Storage2` 키에 둡니다. 한 사이트에 아이디·비밀번호 쌍이 여러 개 있을 수 있습니다. HTTP 기본 인증 (Basic Authentication) 창에 넣은 비밀번호는 다른 곳에 저장하는데, IE 7 이후 이 비밀번호는 사용자의 `Credentials` 폴더에 들어갑니다.
 
-Windows 11 25H2 PC 의 `IntelliForms` 키에는 값도 하위 키도 없었고 `Storage2` 도 없었습니다.
+Windows 11 25H2 에서는 `IntelliForms` 키에 값도 하위 키도 없고 `Storage2` 도 없을 수 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -23,7 +23,7 @@ Windows 11 25H2 PC 의 `IntelliForms` 키에는 값도 하위 키도 없었고 `
 |---|---|
 | IE 4~6 | `HKCU\Software\Microsoft\Protected Storage System Provider` (보호 저장소, Protected Storage) |
 | IE 7~9 | `HKCU\Software\Microsoft\Internet Explorer\IntelliForms\Storage2` |
-| IE 10·11, 엣지 | 참고한 자료에 위치가 적혀 있지 않습니다 |
+| IE 10·11, 엣지 | 검체에서 확인 |
 | HTTP 기본 인증 (IE 7 이후) | 아래 표의 `Credentials` 폴더 |
 
 | Windows | HTTP 기본 인증 비밀번호 폴더 |
@@ -31,8 +31,8 @@ Windows 11 25H2 PC 의 `IntelliForms` 키에는 값도 하위 키도 없었고 `
 | XP | `C:\Documents and Settings\<사용자>\Application Data\Microsoft\Credentials` |
 | Vista 이후 | `C:\Users\<사용자>\AppData\Roaming\Microsoft\Credentials` |
 
-- 구조를 설명한 SecurityXploded 글이 다루는 범위는 IE 4~8, Windows XP·Vista·7 입니다.
-- 공개 복원 도구의 설명(참고 문헌 1)에는 IE 10·11 과 엣지 비밀번호를 다른 PC 의 드라이브에서 되살리려면 그 프로필의 마지막 로그온 비밀번호가 필요하다고 적혀 있습니다.
+- 아래 구조는 IE 4~8, Windows XP·Vista·7 기준입니다[2].
+- IE 10·11 과 엣지 비밀번호를 다른 PC 의 드라이브에서 되살리려면 그 프로필의 마지막 로그온 비밀번호가 필요합니다[1].
 - `Credentials` 폴더의 파일 구조는 [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) 에서 다룹니다.
 
 ## 구조
@@ -73,7 +73,7 @@ dwTotalSecrets 를 2 로 나누면 그 사이트에 저장한 쌍의 수가 나�
 - 자격 증명 종류 값은 1 입니다.
 - 추가 엔트로피는 GUID 문자열 `abe2869f-9b47-4cd9-a358-c22904dba7f7` 의 각 글자에 4 를 곱해 만든 74바이트입니다.
 - 풀면 `아이디:비밀번호` 형태의 문자열이 나옵니다.
-- 같은 설명(참고 문헌 1)에는 이 비밀번호를 되살리려면 관리자 권한이 필요하다고 적혀 있습니다.
+- 이 비밀번호를 되살리려면 관리자 권한이 필요합니다[1].
 
 ## 증거로서 의미
 
@@ -100,10 +100,10 @@ dwTotalSecrets 를 2 로 나누면 그 사이트에 저장한 쌍의 수가 나�
 
 ## 함정과 한계
 
-- **주소가 한 글자만 달라도 해시가 다릅니다.** IE 가 해시 전에 주소를 소문자로 바꾸는지는 이번에 연 자료로 확인하지 못했습니다. 방문 기록에 남은 주소를 끝 `/` 유무, 대소문자, 경로 차이를 바꿔 가며 맞춰 봅니다.
+- **주소가 한 글자만 달라도 해시가 다릅니다.** IE 가 해시 전에 주소를 소문자로 바꾸는지는 공개된 분석 자료가 없습니다. 그래서 방문 기록에 남은 주소를 끝 `/` 유무, 대소문자, 경로 차이를 바꿔 가며 맞춰 봅니다.
 - **주소를 못 찾으면 풀 수 없습니다.** 방문 기록을 지웠다면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 의 옛 방문 기록에서 주소 후보를 찾습니다.
 - **DPAPI 를 풀 열쇠가 필요합니다.** 다른 PC 의 드라이브나 이미지에서 풀려면 사용자의 마스터 키와 로그온 비밀번호가 필요합니다. 오프라인으로 푸는 절차는 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
-- **IE 10 이후는 이 키가 비어 있을 수 있습니다.** 참고한 구조 설명은 IE 4~8 까지만 다룹니다. IE 10 이후 저장 위치는 이번에 연 자료로 확인하지 못했습니다. 빈 `IntelliForms` 키를 "저장 비밀번호 없음" 으로 단정하지 않고, [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) 도 함께 봅니다.
+- **IE 10 이후는 이 키가 비어 있을 수 있습니다.** 위 구조는 IE 4~8 기준이고[2], IE 10 이후 저장 위치는 검체에서 확인합니다. 빈 `IntelliForms` 키를 "저장 비밀번호 없음" 으로 단정하지 않고, [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) 도 함께 봅니다.
 - **HTTP 기본 인증 비밀번호는 레지스트리에 없습니다.** `Credentials` 폴더를 따로 수집해야 합니다.
 
 ## 직접 분석해 보기

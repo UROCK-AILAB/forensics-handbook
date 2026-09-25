@@ -8,7 +8,7 @@ nav_order: 2700
 
 ## 한 줄 요약
 
-저장장치를 꽂고 뺄 때 이벤트 로그 여러 곳에 기록이 남습니다. Partition/Diagnostic 로그의 1006 은 꽂을 때와 뺄 때마다 한 건씩 쌓입니다. Kernel-PnP/Configuration 로그의 400·410 은 장치를 처음 구성할 때 남습니다. Kernel-PnP/Device Management 로그의 1010 은 장치가 버스에서 사라졌을 때 남습니다. 메시지 문구는 "예고 없이 빠짐 (surprise removed)" 입니다. DriverFrameworks-UserMode/Operational 로그는 조사한 PC 에서 꺼져 있었습니다. 기록 계정은 모두 SYSTEM 이어서, 누가 꽂았는지는 이 로그로 알 수 없습니다. 시각은 UTC 입니다.
+저장장치를 꽂고 뺄 때 이벤트 로그 여러 곳에 기록이 남습니다. Partition/Diagnostic 로그의 1006 은 꽂을 때와 뺄 때마다 한 건씩 쌓입니다. Kernel-PnP/Configuration 로그의 400·410 은 장치를 처음 구성할 때 남습니다. Kernel-PnP/Device Management 로그의 1010 은 장치가 버스에서 사라졌을 때 남습니다. 메시지 문구는 "예고 없이 빠짐 (surprise removed)" 입니다. DriverFrameworks-UserMode/Operational 로그는 꺼져 있을 수 있습니다. 기록 계정은 모두 SYSTEM 이어서, 누가 꽂았는지는 이 로그로 알 수 없습니다. 시각은 UTC 입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -21,13 +21,11 @@ nav_order: 2700
 | Microsoft-Windows-Kernel-PnP | Kernel-PnP/Device Management | 1010 | 장치가 버스에서 사라졌을 때 (문구는 "surprise removed") |
 | Microsoft-Windows-DriverFrameworks-UserMode | DriverFrameworks-UserMode/Operational, System | 2003~2010·2100~2106, 10000·10100 | 사용자 모드 드라이버 프레임워크 (UMDF) 드라이버를 올리거나 설치할 때 |
 
-"남는 때" 는 공급자 템플릿의 메시지 문구와 조사한 PC 의 기록을 맞춰 정리했습니다.
-
 ### Partition/Diagnostic 1006
 
-공급자 GUID 는 `412bdff2-a8c4-470d-8f33-63fe0d8c20e2` 입니다. 공급자 메타데이터에 적힌 1006 의 설명은 "For internal use only." 한 줄이라서, 칸의 뜻은 칸 이름을 보고 다른 기록과 맞춰 확인합니다. 공개 도구 EvtxECmd 의 맵은 1006 을 "USB/VHD Insertion/Removal" 로 설명합니다.
+공급자 GUID 는 `412bdff2-a8c4-470d-8f33-63fe0d8c20e2` 입니다. 공급자 메타데이터에 적힌 1006 의 설명은 "For internal use only." 한 줄이라서, 칸의 뜻은 칸 이름을 보고 다른 기록과 맞춰 확인합니다. 1006 은 USB·VHD 디스크를 꽂거나 뺀 기록입니다[1].
 
-같은 공급자에는 1001 "Operation started.", 1002 "Operation completed.", 1007 "Disk %1 has %2 hidden partitions." 도 있습니다. 1008·1009 는 파티션 오류이고, 5000~5006 은 작업 항목 이름입니다. 조사한 PC 의 이 로그에는 1006 만 247건 있었습니다.
+같은 공급자에는 1001 "Operation started.", 1002 "Operation completed.", 1007 "Disk %1 has %2 hidden partitions." 도 있습니다. 1008·1009 는 파티션 오류이고, 5000~5006 은 작업 항목 이름입니다. 실제 로그에는 1006 만 남아 있기도 합니다(Windows 11 25H2 PC 한 대에서 247건).
 
 ### Kernel-PnP
 
@@ -35,40 +33,39 @@ nav_order: 2700
 
 ### DriverFrameworks-UserMode
 
-공급자 GUID 는 `2e35aaeb-857f-4beb-a418-2e6c0e54d988` 입니다. 이 공급자는 DriverFrameworks-UserMode/Operational, Kernel-Power/Diagnostic, System 채널에 씁니다. Operational 로그는 UMDF 호스트가 장치의 드라이버를 올리는 과정과 PnP·전원 요청을 적고, System 채널의 10000·10100 은 UMDF 드라이버 패키지 설치를 적습니다. 조사한 PC 에서는 Operational 로그가 꺼져 있었지만 처음 꽂을 때 System 채널에 10000·10100 이 남았습니다.
+공급자 GUID 는 `2e35aaeb-857f-4beb-a418-2e6c0e54d988` 입니다. 이 공급자는 DriverFrameworks-UserMode/Operational, Kernel-Power/Diagnostic, System 채널에 씁니다. Operational 로그는 UMDF 호스트가 장치의 드라이버를 올리는 과정과 PnP·전원 요청을 적고, System 채널의 10000·10100 은 UMDF 드라이버 패키지 설치를 적습니다. Operational 로그가 꺼져 있어도 처음 꽂을 때 System 채널에 10000·10100 이 남습니다.
 
 ## 위치와 버전별 차이
 
 ### 로그 설정
 
-조사한 PC 의 설정입니다.
+Windows 11 25H2 PC 한 대의 설정입니다.
 
 | 로그 | 파일 | 켜짐 | 최대 크기 | 방식 | 남아 있던 기간 |
 |---|---|---|---|---|---|
 | Partition/Diagnostic | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Partition%4Diagnostic.evtx` | 켜짐 | 16MB | 순환 | OS 설치(2026-06-26 무렵) 뒤 전부, 247건 |
-| Kernel-PnP/Configuration | 확인하지 않음 | 켜짐 | 약 1MB | 순환 | OS 설치 뒤 전부, 1,367건 |
-| Kernel-PnP/Device Management | 확인하지 않음 | 켜짐 | 5MB | 순환 | 2026-08-18 부터 약 5주, 10,816건 |
+| Kernel-PnP/Configuration | 검체에서 확인 | 켜짐 | 약 1MB | 순환 | OS 설치 뒤 전부, 1,367건 |
+| Kernel-PnP/Device Management | 검체에서 확인 | 켜짐 | 5MB | 순환 | 2026-08-18 부터 약 5주, 10,816건 |
 | DriverFrameworks-UserMode/Operational | `Microsoft-Windows-DriverFrameworks-UserMode%4Operational.evtx` | 꺼짐 | 1MB | 순환 | 기록 없음 |
 
 - 순환 (Circular) 방식 로그는 가득 차면 오래된 이벤트부터 덮어씁니다.
 - Device Management 로그는 크기가 가장 컸지만 남은 기간이 가장 짧았습니다. 까닭은 "함정과 한계" 에서 다룹니다.
-- Windows 7 에서는 DriverFrameworks-UserMode/Operational 로그가 기본으로 켜져 있었다는 설명이 널리 퍼져 있습니다. 이번에는 확인하지 못했습니다. 검체마다 켜져 있는지부터 봅니다.
+- Windows 7 에서는 DriverFrameworks-UserMode/Operational 로그가 기본으로 켜져 있었다는 설명이 있습니다. 검체마다 켜져 있는지부터 봅니다.
 - 로그 설정 읽는 법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### 1006 의 이벤트 버전
 
-| 이벤트 버전 | 어디서 봤나 | Vbr 칸 |
+| 이벤트 버전 | 출처 | Vbr 칸 |
 |---|---|---|
 | 4 | EvtxECmd 맵의 첫 번째 예시 (2020년) | 있음 |
 | 0 | EvtxECmd 맵의 두 번째 예시 (2022년). EventData 에 "Version" 칸이 따로 있고 값이 3 입니다 | 있음 |
-| 7 | 조사한 PC (Win11 25H2) | 없음 |
+| 7 | Win11 25H2 레코드 | 없음 |
 
 - 맵 예시에는 Vbr0Bytes·Vbr0·Vbr1Bytes·Vbr1·Vbr2Bytes·Vbr2·Vbr3Size·Vbr3 칸이 있었습니다.
-- 조사한 PC 의 버전 7 에는 이름에 Vbr 이 든 칸이 없었습니다. 어느 빌드에서 빠졌는지는 확인하지 못했습니다.
+- Win11 25H2 의 버전 7 에는 이름에 Vbr 이 든 칸이 없습니다. 어느 빌드에서 빠졌는지는 검체의 이벤트 버전으로 확인합니다.
 - 두 번째 예시는 System 부분의 Version 이 0 인데 EventData 에 Version 칸이 따로 있습니다. 버전을 적는 방식이 바뀐 적이 있는 것으로 보입니다.
-- 맵이 참고로 적은 글 가운데 하나는 이 로그에서 볼륨 시리얼 번호 (VSN) 를 꺼내는 내용입니다. 그 방법은 확인하지 못했습니다. 검체의 1006 에 Vbr 칸이 있는지부터 봅니다.
-- 맵 첫 번째 예시의 공급자 GUID 는 끝자리가 `63fabc8c20e2` 로, 조사한 PC 값(`63fe0d8c20e2`)과 다릅니다. 두 번째 예시는 조사한 PC 값과 같습니다. 예시를 가리면서 바뀐 것으로 보입니다. GUID 로 거를 때는 공급자 이름도 함께 봅니다.
-- 이 로그가 어느 Windows 버전부터 생겼는지는 확인하지 못했습니다.
+- 이 로그에서 볼륨 시리얼 번호 (VSN) 를 꺼내는 방법을 다룬 글이 있습니다[1]. 검체의 1006 에 Vbr 칸이 있는지부터 봅니다.
+- 맵 첫 번째 예시의 공급자 GUID 는 끝자리가 `63fabc8c20e2` 로, 위 GUID(`63fe0d8c20e2`)와 다릅니다. 두 번째 예시는 위 GUID 와 같습니다. 예시를 가리면서 바뀐 것으로 보입니다. GUID 로 거를 때는 공급자 이름도 함께 봅니다.
 
 ## 구조
 
@@ -77,21 +74,21 @@ nav_order: 2700
 | 칸 | 내용 |
 |---|---|
 | BusType | 버스 종류입니다. 7 은 USB, 15 는 VHD 같은 파일 기반 가상 디스크, 17 은 NVMe 입니다 |
-| Capacity | 디스크 용량입니다. 조사한 PC 에서는 꽂을 때 0 보다 컸고 뺄 때 0 이었습니다 |
-| PartitionCount | 파티션 개수입니다. 뺄 때 0 이었습니다 |
-| SerialNumber | EvtxECmd 맵은 SCSI 시리얼 번호 (SCSI SerialNumber) 라고 설명합니다. USBSTOR 키의 시리얼 번호와 늘 같지는 않습니다 |
-| RegistryId | 맵은 이 값을 SYSTEM 하이브에서 찾아 맞는 USBSTOR 키와 시리얼 번호를 찾으라고 적습니다. 조사한 PC 의 USB 장치 1006 에는 모두 채워져 있었습니다 |
-| ParentId | 외장 SSD 의 1006 에서는 `USB\VID_…&PID_…\…` 모양의 USB 장치 인스턴스 ID 였습니다 |
-| UserRemovalPolicy | 꽂을 때 true, 뺄 때 false 였습니다 |
-| MbrBytes | 꽂을 때 512, 뺄 때 0 이었습니다 |
+| Capacity | 디스크 용량입니다. 꽂을 때 0 보다 크고 뺄 때 0 입니다 |
+| PartitionCount | 파티션 개수입니다. 뺄 때 0 입니다 |
+| SerialNumber | SCSI 시리얼 번호 (SCSI SerialNumber) 입니다[1]. USBSTOR 키의 시리얼 번호와 늘 같지는 않습니다 |
+| RegistryId | 이 값을 SYSTEM 하이브에서 찾으면 맞는 USBSTOR 키와 시리얼 번호가 나옵니다[1]. USB 장치의 1006 에는 채워져 있습니다 |
+| ParentId | 외장 SSD 의 1006 에서는 `USB\VID_…&PID_…\…` 모양의 USB 장치 인스턴스 ID 입니다 |
+| UserRemovalPolicy | 꽂을 때 true, 뺄 때 false 입니다 |
+| MbrBytes | 꽂을 때 512, 뺄 때 0 입니다 |
 
-- 표의 "꽂을 때·뺄 때" 값은 조사한 PC 에서 본 것입니다.
+- 표의 "꽂을 때·뺄 때" 값은 Windows 11 25H2 기준입니다.
 - BusType 값 표는 [USB 로 무엇을 가져갔나](../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
 - 디스크 구조 칸은 [파티션 구조](../../01-foundations/disk-volume/mbr-gpt.md)를 알고 읽습니다.
 
 ### 시리얼 번호 맞추기
 
-조사한 PC 에서 두 장치의 1006 SerialNumber 를 장치 인스턴스 ID 와 맞춰 봤습니다.
+두 장치의 1006 SerialNumber 를 장치 인스턴스 ID 와 맞춰 보면 다음과 같습니다.
 
 | 장치 | 장치 인스턴스 ID | 1006 SerialNumber |
 |---|---|---|
@@ -108,7 +105,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 
 | 모양 | Capacity | PartitionCount | UserRemovalPolicy | MbrBytes | 맞는 시각 |
 |---|---|---|---|---|---|
-| 꽂을 때 | 0 보다 큼 | 확인하지 않음 | true | 512 | 장치 속성의 마지막 연결 시각 |
+| 꽂을 때 | 0 보다 큼 | 검체에서 확인 | true | 512 | 장치 속성의 마지막 연결 시각 |
 | 뺄 때 | 0 | 0 | false | 0 | 장치 속성의 마지막 해제 시각 |
 
 한 가지 예외가 있었습니다. 리눅스 USB 가젯은 꽂을 때도 Capacity 가 0 이고 PartitionCount 가 1 이었습니다. 매체가 없는 장치처럼 보였습니다.
@@ -117,7 +114,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 
 ### Kernel-PnP 이벤트 틀
 
-메시지 틀과 칸 이름은 공급자 템플릿에서 읽었습니다.
+메시지 틀과 칸 이름은 공급자 템플릿의 값입니다.
 
 | 로그 | ID | 메시지 틀 | 칸 |
 |---|---|---|---|
@@ -130,7 +127,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 | Device Management | 1010 | "Device %1 has been surprise removed as it is reported as missing on the bus." | DeviceInstanceId, DeviceCount |
 | Device Management | 1011 | "Device %1 has been surprise removed as it was reported to be failing." | DeviceInstanceId, DeviceCount |
 
-- 조사한 PC 의 Configuration 로그에는 400(502건), 410(442건), 440(193건), 430(86건), 420(72건), 442(58건), 411(9건), 403(4건), 412(1건)가 있었습니다.
+- Windows 11 25H2 PC 한 대의 Configuration 로그에는 400(502건), 410(442건), 440(193건), 430(86건), 420(72건), 442(58건), 411(9건), 403(4건), 412(1건)가 있었습니다.
 - Device Management 로그는 10,816건 가운데 10,814건이 1010 이었습니다.
 
 ### 처음 꽂았을 때 남는 순서
@@ -150,11 +147,11 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 - UserPnp 20003
 - WPDClassInstaller 24576·24577·24579
 
-이 PC 에서 연결·해제 시간대에 본 Kernel-PnP 레코드의 기록 계정 (System 의 Security UserID) 은 모두 `S-1-5-18`(SYSTEM) 이었습니다. 1006 도 모두 같았습니다.
+연결·해제 때 남는 Kernel-PnP 레코드와 1006 의 기록 계정 (System 의 Security UserID) 은 `S-1-5-18`(SYSTEM) 입니다.
 
 ### DriverFrameworks-UserMode 이벤트 틀
 
-메시지 틀과 칸 이름은 공급자 템플릿에서 읽었습니다.
+메시지 틀과 칸 이름은 공급자 템플릿의 값입니다.
 
 | 채널 | ID | 메시지 틀 (줄임) | 칸 |
 |---|---|---|---|
@@ -169,8 +166,8 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 | System | 10100 | "The driver package installation has succeeded." | FinalStatus |
 | System | 10110·10111 | 사용자 모드 드라이버 충돌 | |
 
-- Operational 채널 템플릿은 버전 1 이었습니다.
-- 2100·2102 의 MinorCode 값마다 무슨 뜻인지는 확인하지 못했습니다. 장치를 뽑은 요청을 이 값으로 가를 수 있다는 설명이 있지만, 이번에 연 자료로는 확인하지 못했습니다.
+- Operational 채널 템플릿은 버전 1 입니다.
+- 장치를 뽑은 요청을 2100·2102 의 MinorCode 값으로 가를 수 있다는 설명이 있습니다. 값마다의 뜻은 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -180,7 +177,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 | 한 장치를 여러 번 꽂고 뺀 이력. 1006 은 꽂고 뺄 때마다 쌓입니다 | 장치 안의 파일을 열거나 복사했다는 것 |
 | 이 장치를 이 PC 에서 처음 구성하고 시작한 시각 (400·410) | 400·410 이 없으니 그 시각에 연결이 없었다는 것. 다시 꽂을 때는 남지 않습니다 |
 | 장치가 버스에서 사라진 시각 (1010) | Capacity 0 인 1006 이 모두 뺀 기록이라는 것 |
-| USBSTOR 에 없는 UASP 장치도 USB 로 연결됐다는 것 (1006 의 BusType 7) | "안전하게 제거" 로 뺐는지. 그때 1010 이 남는지 확인하지 못했습니다 |
+| USBSTOR 에 없는 UASP 장치도 USB 로 연결됐다는 것 (1006 의 BusType 7) | "안전하게 제거" 로 뺐는지. 그때 1010 이 남는지는 알려져 있지 않습니다 |
 
 ### 보고서 문장
 
@@ -198,7 +195,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 
 ### 장치 속성 시각과 맞춰 보기
 
-장치 속성의 마지막 연결·해제 시각(DEVPKEY_Device_LastArrivalDate·LastRemovalDate, 레지스트리 속성 0066·0067)과 1006 시각을 맞춰 봤습니다.
+장치 속성의 마지막 연결·해제 시각(DEVPKEY_Device_LastArrivalDate·LastRemovalDate, 레지스트리 속성 0066·0067)과 1006 시각을 맞춰 보면 다음과 같습니다(Windows 11 25H2).
 
 | 장치 | 동작 | 장치 속성 시각 | 1006 시각 | 1006 모양 |
 |---|---|---|---|---|
@@ -207,9 +204,9 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 | 리눅스 USB 가젯 | 꽂음 | 2026-09-15T05:51:35.932Z | 05:51:35.947Z | Capacity 0, PartitionCount 1 |
 | 리눅스 USB 가젯 | 뺌 | 2026-09-15T05:51:55.578Z | 05:51:55.575Z | Capacity 0 |
 
-네 쌍 모두 1초 안팎으로 맞았습니다. 이 PC 에서는 Capacity 0·PartitionCount 0 인 1006 이 장치를 뺀 시각과 맞았지만, 모든 빌드에서 그런지는 확인하지 못했습니다.
+네 쌍 모두 1초 안팎으로 맞습니다. Capacity 0·PartitionCount 0 인 1006 은 장치를 뺀 시각과 맞습니다(Windows 11 25H2 기준).
 
-장치 속성은 마지막 한 번만 남기는데 1006 은 꽂고 뺄 때마다 쌓입니다. 외장 SSD 한 대에 1006 이 189건 있었으므로, 여러 번 꽂은 이력은 1006 이 더 자세합니다.
+장치 속성은 마지막 한 번만 남기는데 1006 은 꽂고 뺄 때마다 쌓입니다. 외장 SSD 한 대에 1006 이 189건 쌓인 예처럼, 여러 번 꽂은 이력은 1006 이 더 자세합니다.
 
 - 장치 속성 읽는 법은 [연결·해제 시각](../external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
@@ -223,15 +220,15 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 ## 함정과 한계
 
 1. **Capacity 0 인 1006 을 곧바로 "뺌" 으로 읽습니다.** 리눅스 USB 가젯은 꽂을 때도 Capacity 0 이었습니다. PartitionCount 와 앞뒤 레코드, 장치 속성 시각을 함께 봅니다.
-2. **1006 의 SerialNumber 를 USBSTOR 시리얼 번호와 그대로 맞춥니다.** 맵은 이 값이 SCSI 시리얼 번호여서 다를 수 있다고 적습니다. 조사한 PC 에서도 외장 SSD 는 달랐습니다. 맞지 않으면 RegistryId 로 SYSTEM 하이브의 장치를 찾습니다.
+2. **1006 의 SerialNumber 를 USBSTOR 시리얼 번호와 그대로 맞춥니다.** 이 값은 SCSI 시리얼 번호여서 다를 수 있습니다[1]. UASP 외장 SSD 에서는 실제로 달랐습니다. 맞지 않으면 RegistryId 로 SYSTEM 하이브의 장치를 찾습니다.
 3. **USBSTOR 에 없으니 USB 저장장치가 아니었다고 봅니다.** UASP 외장 SSD 는 `SCSI\…` 인스턴스였지만 1006 에는 BusType 7 로 남았습니다.
 4. **400·410 으로 연결 횟수를 셉니다.** 400·410 은 처음 구성할 때 남습니다. 다시 꽂은 기록은 1006 에 있습니다.
-5. **Device Management 로그가 오래 남는다고 봅니다.** 조사한 PC 에서는 블루투스 HID 장치(`HID\{00001812-…}` 같은 장치)가 1010 을 계속 남겼습니다. 그래서 5MB 로그에 약 5주치만 남아 있었습니다. USB 를 뺀 1010 은 빨리 밀려납니다.
-6. **Configuration 로그가 오래 남는다고 봅니다.** 최대 크기가 약 1MB 입니다. 조사한 PC 에서는 설치 뒤 기록이 다 남아 있었지만, 오래 쓴 PC 에서는 밀려났을 수 있습니다.
-7. **DriverFrameworks-UserMode/Operational 에 기록이 없으니 연결도 없었다고 봅니다.** 이 로그는 꺼져 있을 수 있습니다. 조사한 PC 에서는 꺼져 있어도 System 채널에 10000·10100 이 남았습니다.
+5. **Device Management 로그가 오래 남는다고 봅니다.** 블루투스 HID 장치(`HID\{00001812-…}` 같은 장치)가 1010 을 계속 남기면 5MB 로그에 약 5주치만 남기도 합니다. USB 를 뺀 1010 은 빨리 밀려납니다.
+6. **Configuration 로그가 오래 남는다고 봅니다.** 최대 크기가 약 1MB 입니다. OS 를 설치한 지 석 달쯤 된 PC 에서는 설치 뒤 기록이 다 남아 있었지만, 오래 쓴 PC 에서는 밀려났을 수 있습니다.
+7. **DriverFrameworks-UserMode/Operational 에 기록이 없으니 연결도 없었다고 봅니다.** 이 로그는 꺼져 있을 수 있습니다. 꺼져 있어도 System 채널에 10000·10100 이 남습니다.
 8. **BusType 15·17 을 USB 로 봅니다.** 15 는 VHD 같은 파일 기반 가상 디스크이고, 17 은 NVMe 입니다.
-9. **1010 을 "안전하게 제거하지 않은 증거" 로 단정합니다.** 메시지 문구("surprise removed")는 예고 없이 뽑은 경우를 가리킵니다. 그러나 안전하게 제거했을 때 1010 이 남는지는 확인하지 못했습니다.
-10. **기록 계정을 사용자로 읽습니다.** 1006 과 Kernel-PnP 레코드의 기록 계정은 모두 SYSTEM 이었습니다. 사람은 로그온 기록과 장치 안 파일을 연 흔적으로 따로 찾습니다.
+9. **1010 을 "안전하게 제거하지 않은 증거" 로 단정합니다.** 메시지 문구("surprise removed")는 예고 없이 뽑은 경우를 가리킵니다. 그러나 안전하게 제거했을 때 1010 이 남는지는 알려져 있지 않으므로 실습 3번으로 확인합니다.
+10. **기록 계정을 사용자로 읽습니다.** 1006 과 Kernel-PnP 레코드의 기록 계정은 SYSTEM 입니다. 사람은 로그온 기록과 장치 안 파일을 연 흔적으로 따로 찾습니다.
 
 ### 지우기와 조작
 

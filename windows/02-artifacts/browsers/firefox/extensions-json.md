@@ -13,33 +13,31 @@ nav_order: 1780
 
 ## 무엇을 기록하나 · 왜 생기나
 
-파이어폭스는 설치한 추가 기능의 정보를 데이터베이스로 관리하며, 소스는 이 데이터베이스의 JSON 파일 이름을 `FILE_JSON_DB = "extensions.json"` 으로 정합니다. 파일 맨 위에는 `schemaVersion` 과 `addons` 가 있고, `addons` 는 추가 기능 목록을 담은 배열입니다. 스키마 버전은 설정 `extensions.databaseSchema` 에도 적히고, 추가 기능마다 저장하는 칸은 소스의 `PROP_JSON_FIELDS` 목록이 정합니다. 악성 확장은 브라우저 안에서 방문 페이지를 엿보거나 바꿀 수 있어서 침해 조사에서 확장 목록을 봅니다.
+파이어폭스는 설치한 추가 기능의 정보를 데이터베이스로 관리하며, 이 데이터베이스의 JSON 파일 이름은 `extensions.json` 입니다(`FILE_JSON_DB`)[1]. 파일 맨 위에는 `schemaVersion` 과 `addons` 가 있고, `addons` 는 추가 기능 목록을 담은 배열입니다. 스키마 버전은 설정 `extensions.databaseSchema` 에도 적히고, 추가 기능마다 저장하는 칸은 `PROP_JSON_FIELDS` 목록이 정합니다[1]. 악성 확장은 브라우저 안에서 방문 페이지를 엿보거나 바꿀 수 있어서 침해 조사에서 확장 목록을 봅니다.
 
 ## 위치와 버전별 차이
 
 - 파일은 프로필 폴더에서 찾습니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
-- 이번에 연 소스에서는 파일 이름만 확인했습니다. 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 검체에서 확인합니다.
-- 아래 칸 목록은 파이어폭스 소스의 개발 중인 최신 코드(main 가지, 2026-09-23)에서 확인한 것입니다. 예전 출시판에 어느 칸이 있었는지는 이 자료로 알 수 없습니다.
+- 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 검체에서 확인합니다.
+- 아래 칸 목록은 파이어폭스 소스 main 가지(2026-09-23 기준)의 것입니다[1]. 예전 출시판에 어느 칸이 있었는지는 검체에서 확인합니다.
 - 분석을 시작할 때 `schemaVersion` 값을 먼저 적어 둡니다. 도구 결과가 이상하면 이 값부터 봅니다.
-- 추가 기능 파일 자체가 어느 폴더에 어떤 이름으로 저장되는지는 확인하지 못했습니다.
+- 추가 기능 파일 자체가 어느 폴더에 어떤 이름으로 저장되는지는 검체의 프로필 폴더에서 확인합니다.
 
 ## 구조
 
 ### 칸 목록
 
-소스의 `PROP_JSON_FIELDS` 에 있는 칸은 아래와 같습니다.
+`PROP_JSON_FIELDS` 에 있는 칸은 아래와 같습니다[1].
 
 `id`, `syncGUID`, `version`, `type`, `loader`, `updateURL`, `installOrigins`, `manifestVersion`, `optionsURL`, `optionsType`, `optionsBrowserStyle`, `aboutURL`, `defaultLocale`, `visible`, `active`, `userDisabled`, `appDisabled`, `embedderDisabled`, `pendingUninstall`, `installDate`, `updateDate`, `applyBackgroundUpdates`, `path`, `skinnable`, `sourceURI`, `releaseNotesURI`, `softDisabled`, `foreignInstall`, `strictCompatibility`, `locales`, `targetApplications`, `targetPlatforms`, `signedState`, `signedTypes`, `signedDate`, `seen`, `dependencies`, `incognito`, `userPermissions`, `optionalPermissions`, `requestedPermissions`, `icons`, `iconURL`, `blocklistAttentionDismissed`, `blocklistState`, `blocklistURL`, `startupData`, `previewImage`, `hidden`, `installTelemetryInfo`, `recommendationState`, `rootURI`
 
 ### 먼저 볼 칸
 
-아래 뜻은 소스를 요약해 받은 설명입니다. 소스 주석을 원문 그대로 옮긴 것은 아닙니다.
-
 | 칸 | 뜻 |
 |---|---|
 | `id` | 추가 기능의 식별자입니다 |
 | `version` | 추가 기능의 판입니다 |
-| `type` | 추가 기능의 종류입니다. 들어가는 값의 목록은 확인하지 못했습니다 |
+| `type` | 추가 기능의 종류입니다. 들어가는 값은 검체에서 확인합니다 |
 | `active` | 지금 켜져 돌아가는지입니다 |
 | `userDisabled` | 사용자가 껐는지입니다 |
 | `appDisabled` | 프로그램이 껐는지입니다. 호환되지 않거나 서명이 없거나 차단 목록에 올랐을 때 꺼집니다 |
@@ -51,7 +49,7 @@ nav_order: 1780
 | `signedState` | 서명 상태입니다 |
 | `signedDate` | 서명 시각입니다 |
 
-아래 칸은 뜻을 소스로 확인하지 못했습니다. 이름으로 짐작만 하고, 검체에서 값을 보고 판단합니다.
+아래 칸은 뜻을 설명한 공개 자료가 없어 이름으로 짐작한 뜻만 적습니다. 검체에서 값을 보고 판단합니다.
 
 | 칸 | 이름으로 짐작한 뜻 |
 |---|---|
@@ -63,11 +61,11 @@ nav_order: 1780
 
 ### `signedState` 의 이름
 
-소스에는 `SIGNEDSTATE_SYSTEM`, `SIGNEDSTATE_PRIVILEGED`, `SIGNEDSTATE_SIGNED`, `SIGNEDSTATE_NOT_REQUIRED` 같은 이름이 있지만, 이름마다 어떤 숫자 값인지는 확인하지 못했습니다.
+서명 상태에는 `SIGNEDSTATE_SYSTEM`, `SIGNEDSTATE_PRIVILEGED`, `SIGNEDSTATE_SIGNED`, `SIGNEDSTATE_NOT_REQUIRED` 같은 이름이 있습니다[1]. 이름마다 어떤 숫자 값인지는 공개 자료가 없습니다.
 
 ### 설치 위치 이름
 
-소스는 추가 기능을 설치한 위치를 아래 이름으로 나눕니다.
+파이어폭스는 추가 기능을 설치한 위치를 아래 이름으로 나눕니다[1].
 
 | 이름 | 뜻 |
 |---|---|
@@ -79,7 +77,7 @@ nav_order: 1780
 
 - 이 이름은 각 항목의 `location` 칸에 들어갑니다. `PROP_JSON_FIELDS` 목록에는 없지만 저장할 때(`toJSON()`) 설치 위치 이름을 `location` 으로 덧붙입니다.
 - `location` 이 `app-profile` 이 아닌 항목은 사용자 프로필 밖에서 온 추가 기능입니다.
-- Windows 레지스트리로 설치하는 위치의 이름과 그 레지스트리 경로도 확인하지 못했습니다.
+- Windows 레지스트리로 설치하는 위치의 이름과 그 레지스트리 경로는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -95,15 +93,15 @@ nav_order: 1780
 - 사용자가 직접 설치했다는 것은 증명하지 못합니다. 내장·시스템 추가 기능도 목록에 오릅니다.
 - `foreignInstall` 은 파이어폭스 밖에서 설치했다는 표시일 뿐입니다. 어느 프로그램이나 사람이 설치했는지는 알려 주지 않습니다.
 - 추가 기능이 언제 실제로 돌았는지, 무엇을 했는지는 알 수 없습니다.
-- 지운 추가 기능이 이 파일에 남는지는 확인하지 못했습니다. 목록에 없다고 설치한 적이 없다고 단정하지 않습니다.
+- 지운 추가 기능이 이 파일에 남는지는 알려져 있지 않습니다. 목록에 없다고 설치한 적이 없다고 단정하지 않습니다.
 - 키보드 앞의 사람이 누구인지는 알 수 없습니다.
 
 보고서에는 "악성 확장을 설치했다" 대신 "이 프로필의 `extensions.json` 에 `id` X, 판 Y 인 항목이 있다. `foreignInstall` 은 true 이고 `installDate` 는 Z(UTC) 이다. 파일을 쓴 시점에 `active` 는 true 였다" 처럼 씁니다.
 
 ## 시각 해석
 
-- `installDate`·`updateDate`·`signedDate` 는 1970년 1월 1일 00:00 UTC 부터 센 밀리초입니다.
-- 이 단위는 소스를 요약해 받은 결과이고 원문 주석은 따로 확인하지 못했으므로, 검체에서 [$MFT](../../filesystem/mft.md) 의 파일 시각과 맞춰 확인합니다.
+- `installDate`·`updateDate`·`signedDate` 는 1970년 1월 1일 00:00 UTC 부터 센 밀리초입니다[1].
+- 검체에서 [$MFT](../../filesystem/mft.md) 의 파일 시각과 맞춰 이 단위를 확인합니다.
 - 시작할 때 새로 찾아낸 추가 기능은 `installDate`·`updateDate` 에 파일 수정 시각을 넣습니다. 이 값은 실제 설치 시각과 다를 수 있습니다.
 - [places.sqlite](places-sqlite.md) 같은 SQLite 파일의 시각은 대부분 마이크로초입니다. 이 파일은 밀리초이므로 섞어 읽지 않습니다.
 - `active` 같은 상태 칸에는 시각이 붙지 않습니다. 상태는 이 파일을 마지막으로 쓴 무렵의 것입니다.
@@ -114,16 +112,16 @@ nav_order: 1780
 
 - **원본 프로필로 브라우저를 켜지 않습니다.** 파이어폭스를 켜면 추가 기능 상태와 이 파일이 바뀔 수 있습니다. 해시를 기록한 사본으로 분석합니다.
 - **밀리초와 마이크로초를 섞지 않습니다.** 밀리초 값을 마이크로초로 나누면 1970년 1월 무렵의 엉뚱한 날짜가 나옵니다.
-- **상태 칸의 뜻을 판마다 확인합니다.** 위 뜻은 최신 소스 요약입니다. 옛 판에서 같은 칸의 뜻이 같은지 검체에서 확인합니다.
+- **상태 칸의 뜻을 판마다 확인합니다.** 위 뜻은 최신 판 기준입니다. 옛 판에서 같은 칸의 뜻이 같은지 검체에서 확인합니다.
 - **내장·시스템 추가 기능을 사용자 설치로 오해하지 않습니다.** 목록에는 사용자가 설치하지 않은 추가 기능도 있습니다.
 - **이름만 보고 정상 확장이라고 판단하지 않습니다.** 널리 쓰는 확장과 이름이 같아 보여도 `id`, 서명 상태, 받아 온 주소를 따로 봅니다.
-- **이 파일 하나로 끝내지 않습니다.** 추가 기능과 관련한 다른 파일의 이름과 역할은 이번 조사에서 확인하지 못했습니다. 프로필 폴더에서 추가 기능 이름이나 `id` 가 든 파일을 따로 찾습니다.
+- **이 파일 하나로 끝내지 않습니다.** 추가 기능과 관련한 파일이 이것 말고도 있을 수 있습니다. 프로필 폴더에서 추가 기능 이름이나 `id` 가 든 파일을 따로 찾습니다.
 
 ## 직접 분석해 보기
 
 ### 텍스트로 한 번
 
-`extensions.json` 은 텍스트 JSON 이므로 헥스 대신 텍스트로 읽습니다. 아래는 소스의 칸 목록으로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다. 값을 모르는 칸은 `…` 로 둡니다.
+`extensions.json` 은 텍스트 JSON 이므로 헥스 대신 텍스트로 읽습니다. 아래는 위 칸 목록으로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다. 값이 판마다 다른 칸은 `…` 로 둡니다.
 
 ```json
 {

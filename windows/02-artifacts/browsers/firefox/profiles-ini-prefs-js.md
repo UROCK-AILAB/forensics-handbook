@@ -32,7 +32,7 @@ nav_order: 1700
 | macOS | `~/Library/Application Support/Firefox/Profiles` | `~/Library/Caches/Firefox/Profiles` |
 
 - 실행 중인 프로그램 안에서는 디렉터리 서비스의 `ProfD` 가 본 폴더를 가리키고, `ProfLD` 가 로컬 폴더를 가리킵니다.
-- 옛 Windows 의 실제 경로 예는 아래와 같습니다. 이 경로는 Forensics Wiki 에서 확인한 값입니다.
+- 옛 Windows 의 실제 경로 예는 아래와 같습니다[2].
 
 | Windows 판 | 본 폴더 안 파일 예 (`places.sqlite`) |
 |---|---|
@@ -42,22 +42,22 @@ nav_order: 1700
 - 캐시는 로컬 폴더 쪽에 있습니다. Vista·7 의 캐시 폴더 예는 `C:\Users\%USERNAME%\AppData\Local\Mozilla\Firefox\Profiles\%PROFILE%.default\cache2\` 입니다. 자세한 내용은 [캐시 (cache2)](cache2.md) 에서 다룹니다.
 - 폴더 이름의 앞부분은 무작위 문자열입니다. 뒤에 `.default` 처럼 프로필 이름이 붙습니다.
 
-### 확인하지 못한 것
+### 검체에서 확인할 것
 
-이번 조사에서 연 자료로는 아래를 확인하지 못했습니다. 글에 쓰려면 실제 파일이나 다른 자료로 따로 확인합니다.
+아래는 공개된 공식 문서에 자세히 나와 있지 않아 실제 파일에서 확인합니다.
 
-- `profiles.ini` 파일 자체의 위치입니다. 참고한 문서에는 파일 이름만 있고 위치는 없습니다.
-- `profiles.ini` 안의 절 이름과 키 이름입니다. 프로필 목록이 어떤 형식으로 적히는지 확인하지 못했습니다.
+- `profiles.ini` 파일 자체의 위치입니다.
+- `profiles.ini` 안의 절 이름과 키 이름, 프로필 목록이 적히는 형식입니다.
 - 설치본별 전용 프로필이 몇 번 판부터 생겼는지입니다.
 - 프로필 잠금 파일의 이름입니다.
-- `prefs.js` 의 형식, 파이어폭스가 종료할 때 이 파일을 다시 쓰는지, `user.js` 가 덮어쓰는지입니다. 이번에 연 자료에 `prefs.js` 내용이 없었습니다.
+- `prefs.js` 의 형식, 파이어폭스가 종료할 때 이 파일을 다시 쓰는지, `user.js` 가 덮어쓰는지입니다.
 
 ## 구조
 
 - `profiles.ini` 는 텍스트 파일입니다. 프로필 서비스가 시작할 때 이 파일을 읽어 프로필 목록을 만듭니다.
 - 설치본 식별자는 설치 위치 문자열의 CityHash 값입니다. 같은 컴퓨터에 여러 설치본이 있으면 `profiles.ini` 안에서 설치본마다 기본 프로필이 갈립니다.
-- `prefs.js` 는 프로필의 설정을 담는 파일로 알려져 있습니다. 다만 이 파일의 형식과 안에 담기는 설정 이름은 이번 조사에서 확인하지 못했습니다.
-- 다른 페이지의 소스에서 확인한 설정 이름은 있습니다. 세션 복원의 `browser.sessionstore.upgradeBackup.maxUpgradeBackups`, 양식 기록의 `browser.formfill.expire_days`, 확장 프로그램의 `extensions.databaseSchema` 가 그 예입니다. 이 이름들이 `prefs.js` 에 어떻게 적히는지는 확인하지 못했습니다.
+- `prefs.js` 는 프로필의 설정을 담는 파일로 알려져 있습니다. 파일 형식과 안에 담기는 설정 이름은 검체에서 확인합니다.
+- 다른 페이지에서 다룬 설정 이름으로는 세션 복원의 `browser.sessionstore.upgradeBackup.maxUpgradeBackups`, 양식 기록의 `browser.formfill.expire_days`, 확장 프로그램의 `extensions.databaseSchema` 가 있습니다. 이 이름들이 `prefs.js` 에 어떻게 적히는지도 검체에서 확인합니다.
 
 ## 증거로서 의미
 

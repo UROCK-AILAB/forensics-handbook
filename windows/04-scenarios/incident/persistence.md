@@ -28,7 +28,7 @@ nav_order: 3690
 
 ## 자동실행 위치 종류
 
-Microsoft Sysinternals 의 Autoruns 문서는 자동실행 위치로 시작 프로그램 폴더, Run·RunOnce 와 그 밖의 레지스트리 키, 탐색기 셸 확장, 툴바, 브라우저 도우미 개체 (Browser Helper Object, BHO), Winlogon 알림, 자동 시작 서비스를 듭니다[1]. 같은 문서는 AppInit DLL, 이미지 하이재크 (Image Hijacks), 부트 실행 이미지, Winsock 계층 서비스 공급자, 미디어 코덱도 듭니다[1].
+자동실행 위치에는 시작 프로그램 폴더, Run·RunOnce 와 그 밖의 레지스트리 키, 탐색기 셸 확장, 툴바, 브라우저 도우미 개체 (Browser Helper Object, BHO), Winlogon 알림, 자동 시작 서비스가 있습니다[1]. AppInit DLL, 이미지 하이재크 (Image Hijacks), 부트 실행 이미지, Winsock 계층 서비스 공급자, 미디어 코덱도 자동실행 위치입니다[1].
 
 아래 표는 이 핸드북이 위치를 종류별로 묶은 것입니다. 오른쪽 열의 페이지에 위치마다의 키·폴더·칸이 있습니다.
 
@@ -42,7 +42,7 @@ Microsoft Sysinternals 의 Autoruns 문서는 자동실행 위치로 시작 프�
 | Winlogon·이미지 하이재크·AppInit DLL | Winlogon 항목, 이미지 하이재크, AppInit DLL | [기타 자동실행 위치](../../02-artifacts/persistence/winlogon-ifeo-appinit-dlls.md) |
 | 그 밖의 위치 | 탐색기 추가 기능, IE 추가 기능, 부트 실행, Known DLLs, Winsock·네트워크 공급자, LSA 보안 공급자, 프린터 모니터 DLL, 코덱 | — |
 
-"그 밖의 위치" 줄은 Autoruns 명령줄판이 나누는 범주에서 옮긴 것입니다[1].
+"그 밖의 위치" 줄은 Autoruns 명령줄판이 나누는 범주입니다[1].
 
 **공개 도구로 한 번에 훑기.** Autoruns 는 자동실행 위치를 한 번에 훑는 공개 도구의 한 예입니다.
 
@@ -54,7 +54,7 @@ Microsoft Sysinternals 의 Autoruns 문서는 자동실행 위치로 시작 프�
 
 ## 공개 사례에서 본 지속성
 
-The DFIR Report 사례에서는 원격 관리 프로그램 ScreenConnect 가 자동 시작 서비스로 남았고, 이 설치는 System 로그의 7045("A service was installed in the system")와 Sysmon 이벤트 13(레지스트리 값 설정)에 흔적을 남겼습니다[2]. 같은 사례에서 다른 원격 관리 프로그램(Atera)도 자동 시작 서비스로 등록됐고, 이 등록도 7045 에 남았습니다[2]. MITRE 는 원격 접속 도구의 설치 과정이 흔히 Windows 서비스로 지속성을 만든다고 적습니다[3]. 이 사례의 서비스 종류·시작 방식·실행 경로는 [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) 에 있습니다.
+The DFIR Report 사례에서는 원격 관리 프로그램 ScreenConnect 가 자동 시작 서비스로 남았고, 이 설치는 System 로그의 7045("A service was installed in the system")와 Sysmon 이벤트 13(레지스트리 값 설정)에 흔적을 남겼습니다[2]. 같은 사례에서 다른 원격 관리 프로그램(Atera)도 자동 시작 서비스로 등록됐고, 이 등록도 7045 에 남았습니다[2]. 원격 접속 도구는 설치 과정에서 흔히 Windows 서비스로 지속성을 만듭니다[3]. 이 사례의 서비스 종류·시작 방식·실행 경로는 [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) 에 있습니다.
 
 ## 등록 시각과 실행 여부
 

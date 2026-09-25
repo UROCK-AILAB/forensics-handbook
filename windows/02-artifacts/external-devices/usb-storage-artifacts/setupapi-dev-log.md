@@ -13,11 +13,11 @@ nav_order: 1530
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Windows 는 장치 설치 문제를 풀 때 쓰라고 이 로그를 남깁니다. Vista 부터 로그가 둘로 나뉘어, 장치·드라이버 설치는 장치 설치 로그 (`setupapi.dev.log`) 에, 그 밖의 설치 작업은 앱 설치 로그 (`setupapi.app.log`) 에 적습니다(Microsoft). 설치 작업 하나는 로그에서 섹션 (Section) 하나가 됩니다(Microsoft).
+Windows 는 장치 설치 문제를 풀 때 쓰라고 이 로그를 남깁니다. Vista 부터 로그가 둘로 나뉘어, 장치·드라이버 설치는 장치 설치 로그 (`setupapi.dev.log`) 에, 그 밖의 설치 작업은 앱 설치 로그 (`setupapi.app.log`) 에 적습니다. 설치 작업 하나는 로그에서 섹션 (Section) 하나가 됩니다.
 
-새 장치를 꽂으면 PnP 관리자가 드라이버를 골라 장치를 설치하고, 이때 `Device Install (Hardware initiated)` 섹션이 생깁니다(Windows 10 1507, Windows 11 25H2 기준). 설치 섹션의 첫 본문 줄에는 "장치가 아직 구성되지 않아 설치가 필요하다" 는 줄이 있었습니다(`ump: Install needed due to device having problem code CM_PROB_NOT_CONFIGURED`). 설치 섹션은 꽂을 때마다 생기지 않고 설치가 필요할 때 생깁니다. 그래서 포렌식 자료들은 이 로그를 장치를 처음 연결한 시각의 근거로 씁니다(ForensicsWiki, HECF).
+새 장치를 꽂으면 PnP 관리자가 드라이버를 골라 장치를 설치하고, 이때 `Device Install (Hardware initiated)` 섹션이 생깁니다(Windows 10 1507, Windows 11 25H2 기준). 설치 섹션의 첫 본문 줄은 "장치가 아직 구성되지 않아 설치가 필요하다" 는 줄입니다(`ump: Install needed due to device having problem code CM_PROB_NOT_CONFIGURED`). 설치 섹션은 꽂을 때마다 생기지 않고 설치가 필요할 때 생깁니다. 그래서 이 로그는 장치를 처음 연결한 시각의 근거로 씁니다.
 
-USB 저장장치만 들어가는 것이 아니라 네트워크 어댑터, 휴대폰, 프린터, 입력 장치의 설치도 같은 로그에 들어갑니다(관찰). 장치를 지울 때(`Delete Device`), 드라이버 패키지를 들이거나 뺄 때, 오래 쓰지 않은 장치를 정리할 때도 섹션이 생깁니다(관찰).
+USB 저장장치만 들어가는 것이 아니라 네트워크 어댑터, 휴대폰, 프린터, 입력 장치의 설치도 같은 로그에 들어갑니다. 장치를 지울 때(`Delete Device`), 드라이버 패키지를 들이거나 뺄 때, 오래 쓰지 않은 장치를 정리할 때도 섹션이 생깁니다.
 
 ## 위치와 버전별 차이
 
@@ -27,20 +27,20 @@ USB 저장장치만 들어가는 것이 아니라 네트워크 어댑터, 휴대
 | Vista 이후 | `%SystemRoot%\INF\setupapi.dev.log`, `%SystemRoot%\INF\setupapi.app.log` | Microsoft |
 | 7 이후 | 위 두 파일에 `setupapi.offline.log` 가 더해집니다. | ForensicsWiki |
 | 10 이후 | `setupapi.upgrade.log` 가 더해집니다. | ForensicsWiki |
-| 11 25H2 (관찰) | `setupapi.dev.<연월일>_<시분초>.log` 같은 날짜 붙은 옛 로그가 있었습니다. `setupapi.setup.log` 도 있었습니다. `setupapi.app.log` 는 없었습니다. | 관찰 |
+| 11 25H2 | `setupapi.dev.<연월일>_<시분초>.log` 같은 날짜 붙은 옛 로그와 `setupapi.setup.log` 가 있을 수 있습니다. `setupapi.app.log` 는 없을 수 있습니다. |  |
 
-XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니다(Microsoft). XP 섹션의 첫 줄은 `[날짜 시각 … Driver Install]` 처럼 대괄호 한 줄로 되어 있어 Vista 이후 형식과 다릅니다(ForensicsWiki 예시).
+XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니다. XP 섹션의 첫 줄은 `[날짜 시각 … Driver Install]` 처럼 대괄호 한 줄로 되어 있어 Vista 이후 형식과 다릅니다.
 
 ### 로그 위치와 기록 수준을 바꾸는 값
 
-두 값 모두 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Setup` 키에 있습니다(Microsoft). 하이브 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를 봅니다.
+두 값 모두 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Setup` 키에 있습니다. 하이브 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md)를 봅니다.
 
 | 값 | 형식 | 뜻 |
 |---|---|---|
 | `LogPath` | REG_SZ | 로그를 둘 폴더입니다. 값이 없거나 폴더가 없으면 `%SystemRoot%\INF` 에 둡니다. |
 | `LogLevel` | REG_DWORD | 기록 수준 (Event Level) 을 정합니다. `0xUUUUGHVW` 꼴입니다. `VW` 는 앱 로그, `GH` 는 장치 로그를 정합니다. 윗자리 `UUUU` 는 쓰지 않습니다. |
 
-`LogLevel` 의 `VW`·`GH` 바이트는 이렇게 풉니다(Microsoft).
+`LogLevel` 의 `VW`·`GH` 바이트는 이렇게 풉니다.
 
 | 바이트 값 | 뜻 |
 |---|---|
@@ -48,26 +48,26 @@ XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니�
 | `0x01`~`0x0F` | 그 로그를 끕니다. |
 | `0x10`~`0x7F` | 기록하고, 윗자리 숫자를 수준으로 씁니다. 예: `0x50` 은 수준 5 입니다. |
 
-기본 수준은 이렇습니다(Microsoft).
+기본 수준은 이렇습니다.
 
 | 로그 | Windows 7 이후 | Vista SP2 | Vista SP1 이전 |
 |---|---|---|---|
 | 앱 로그 | 4 (SUMMARY) | 2 (WARNING) | 5 (DETAILS) |
 | 장치 로그 | 5 (DETAILS) | 5 (DETAILS) | 5 (DETAILS) |
 
-관찰한 Windows 11 25H2 한 대에는 `LogLevel` 값이 `0x20004001` 로 들어 있었습니다. 규칙대로 풀면 앱 로그는 꺼지고 장치 로그는 수준 4 로 켜지며, 문서가 쓰지 않는다고 한 윗자리에도 값이 있었습니다. 이 PC 에는 `setupapi.app.log` 가 없었습니다. 이 값을 누가 넣었는지는 확인하지 못했습니다. `LogLevel` 이 0 이 아니라는 사실만으로 조작이라고 보지 않습니다.
+Windows 11 25H2 에서 `LogLevel` 값이 `0x20004001` 로 들어 있는 경우가 있습니다. 규칙대로 풀면 앱 로그는 꺼지고 장치 로그는 수준 4 로 켜지며, 쓰지 않는 윗자리에도 값이 있습니다. 이때는 `setupapi.app.log` 가 없습니다. 이 값을 넣은 주체는 공개 자료로 알 수 없으므로, `LogLevel` 이 0 이 아니라는 사실만으로 조작이라고 보지 않습니다.
 
 ## 구조
 
 ### 파일 전체
 
-- ANSI 일반 텍스트이고, 문구는 영어입니다(Microsoft).
-- 관찰한 파일은 BOM 없이 시작했고 줄 끝이 CR LF (`0D 0A`) 였습니다.
-- 한국어판 Windows 에서는 서비스 표시 이름 같은 한글이 CP949 로 적혀 있었습니다. UTF-8 로 열면 글자가 깨집니다. [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
-- 맨 앞은 머리말 (Text Log Header) 입니다. `[Device Install Log]` 아래에 OS 버전, 서비스 팩, 아키텍처가 있고 `[BeginLog]` 로 끝납니다(Microsoft).
-- 날짜 붙은 옛 로그에도 머리말이 따로 있었습니다(관찰).
-- 머리말 뒤에는 섹션이 만든 순서대로 이어집니다(Microsoft). 줄 순서는 곧 기록한 순서입니다.
-- 섹션 사이에 `[Boot Session: 2015/11/22 17:58:03.498]` 같은 줄이 끼어 있습니다(plaso 공개 시험 파일, 관찰). Microsoft 문서에는 이 줄의 설명이 없습니다. 뜻을 확정하지 말고 보조 단서로만 씁니다.
+- ANSI 일반 텍스트이고, 문구는 영어입니다.
+- 파일은 BOM 없이 시작하고 줄 끝이 CR LF (`0D 0A`) 입니다.
+- 한국어판 Windows 에서는 서비스 표시 이름 같은 한글이 CP949 로 적힙니다. UTF-8 로 열면 글자가 깨집니다. [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
+- 맨 앞은 머리말 (Text Log Header) 입니다. `[Device Install Log]` 아래에 OS 버전, 서비스 팩, 아키텍처가 있고 `[BeginLog]` 로 끝납니다.
+- 날짜 붙은 옛 로그에도 머리말이 따로 있습니다.
+- 머리말 뒤에는 섹션이 만든 순서대로 이어집니다. 줄 순서는 곧 기록한 순서입니다.
+- 섹션 사이에 `[Boot Session: 2015/11/22 17:58:03.498]` 같은 줄이 끼어 있습니다. 공식 문서에는 이 줄의 설명이 없으므로 뜻을 확정하지 말고 보조 단서로만 씁니다.
 
 ### 섹션 하나
 
@@ -88,14 +88,14 @@ XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니�
 |---|---|---|
 | 섹션 제목 | `>>>  [제목 - 대상]` | 작업 이름과 대상입니다. 장치 설치에서는 대상이 장치 인스턴스 ID (Device Instance ID) 입니다. |
 | 섹션 시작 | `>>>  Section start 날짜 시각` | 섹션을 연 시각입니다. |
-| 본문 줄 | `접두어 범주: 들여쓰기 메시지` | 접두어 `!!!` 는 오류, `!` 는 경고, 공백은 정보입니다(Microsoft). |
+| 본문 줄 | `접두어 범주: 들여쓰기 메시지` | 접두어 `!!!` 는 오류, `!` 는 경고, 공백은 정보입니다. |
 | 섹션 끝 | `<<<  Section end 날짜 시각` | 섹션을 닫은 시각입니다. |
 | 결과 | `<<<  [Exit status: SUCCESS]` | 작업 결과입니다. |
 
-- 범주 (Event Category) 는 작업 종류를 알려 줍니다. `dvi:` 장치 설치, `ump:` 사용자 모드 PnP 관리자, `ndv:` 새 장치 마법사, `inf:` INF 처리, `cpy:` 파일 복사, `sto:` 드라이버 저장소, `sig:` 서명 확인, `set:` 일반 설치가 있습니다(Microsoft).
-- 문서에 없는 범주도 보입니다. 관찰한 파일에는 `utl:`·`dvs:`·`cmd:` 가 있었습니다.
-- `cmd:` 줄에는 그 작업을 시작한 프로그램의 명령줄이 있었습니다(관찰). 예를 들어 인쇄 스풀러나 디스크 정리 프로그램입니다. 장치를 꽂아서 생긴 설치 섹션에는 이 줄이 없었습니다.
-- 본문 줄 끝에 날짜 없이 시각만 붙는 경우가 있습니다(plaso 시험 파일, 관찰).
+- 범주 (Event Category) 는 작업 종류를 알려 줍니다. `dvi:` 장치 설치, `ump:` 사용자 모드 PnP 관리자, `ndv:` 새 장치 마법사, `inf:` INF 처리, `cpy:` 파일 복사, `sto:` 드라이버 저장소, `sig:` 서명 확인, `set:` 일반 설치가 있습니다.
+- 문서에 없는 범주도 나옵니다. `utl:`·`dvs:`·`cmd:` 가 그 예입니다.
+- `cmd:` 줄에는 그 작업을 시작한 프로그램의 명령줄이 있습니다. 예를 들어 인쇄 스풀러나 디스크 정리 프로그램입니다. 장치를 꽂아서 생긴 설치 섹션에는 이 줄이 없습니다.
+- 본문 줄 끝에 날짜 없이 시각만 붙는 경우가 있습니다.
 
 ### 문서 예시와 실제 형식이 다릅니다
 
@@ -107,18 +107,18 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 | 섹션 끝 | `<<<  [2005/02/13 22:06:29.000: Section end]` | `<<<  Section end 날짜 시각` |
 | 결과 | `<<<  [Exit Status(0x00000000)]` | `<<<  [Exit status: SUCCESS]` |
 
-공개 파서 plaso 는 소스상 오른쪽 형식만 읽습니다(2026-09 열람 소스 기준). 다른 도구도 한쪽 형식만 읽을 수 있습니다.
+공개 파서 plaso 는 오른쪽 형식만 읽습니다. 다른 도구도 한쪽 형식만 읽을 수 있습니다.
 
 ### USB 저장장치 하나가 남기는 섹션
 
-관찰한 Windows 11 25H2 한 대에서는 USB 메모리 하나를 처음 꽂았을 때 설치 섹션이 둘 생겼습니다.
+Windows 11 25H2 에서는 USB 메모리 하나를 처음 꽂으면 설치 섹션이 둘 생깁니다.
 
 | 섹션 대상 | 설치한 것 |
 |---|---|
-| `USB\VID_xxxx&PID_xxxx\<일련번호>` | USB 장치. 드라이버는 `usbstor.inf` 였습니다. |
+| `USB\VID_xxxx&PID_xxxx\<일련번호>` | USB 장치. 드라이버는 `usbstor.inf` 입니다. |
 | `SWD\WPDBUSENUM\_??_USBSTOR#Disk&Ven_…&Prod_…&Rev_…#<일련번호>&0#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}` | 휴대용 장치 (WPD) |
 
-두 섹션의 시작 시각은 1초 안쪽으로 붙어 있었습니다. `USBSTOR\Disk&…` 를 대상으로 한 섹션은 없었고 로그 전체에서 `USBSTOR\Disk` 문자열도 나오지 않았으므로, `USBSTOR` 로 찾지 말고 일련번호로 찾습니다. 일련번호가 Windows 가 만든 ID 일 수 있는데, 이 경우는 [USB 저장장치 목록 (USBSTOR)](usbstor.md)에서 다룹니다. VID·PID 읽는 법은 [USB 장치 식별자](enum-usb-vid-pid.md)에서 다룹니다.
+두 섹션의 시작 시각은 1초 안쪽으로 붙어 있습니다. `USBSTOR\Disk&…` 를 대상으로 한 섹션은 없고 로그 전체에서 `USBSTOR\Disk` 문자열도 나오지 않으므로, `USBSTOR` 로 찾지 말고 일련번호로 찾습니다. 일련번호가 Windows 가 만든 ID 일 수 있는데, 이 경우는 [USB 저장장치 목록 (USBSTOR)](usbstor.md)에서 다룹니다. VID·PID 읽는 법은 [USB 장치 식별자](enum-usb-vid-pid.md)에서 다룹니다.
 
 > 그림 자리: USB 메모리 하나가 만든 두 설치 섹션(USB\VID…, SWD\WPDBUSENUM…)이 같은 일련번호로 USBSTOR·Enum\USB 레지스트리 항목에 이어지는 모습
 
@@ -129,10 +129,10 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 - 섹션에 적힌 장치 인스턴스를 이 PC 에 설치하는 작업이 있었습니다.
 - 그 작업이 시작하고 끝난 현지 시각을 밀리초까지 알 수 있습니다.
 - `Exit status` 로 설치가 성공했는지 알 수 있습니다.
-- 어떤 INF·드라이버로 설치했는지 알 수 있습니다. 모르는 장치가 무슨 기능인지 가늠할 때 씁니다(HECF).
+- 어떤 INF·드라이버로 설치했는지 알 수 있습니다. 모르는 장치가 무슨 기능인지 가늠할 때 씁니다.
 - 남아 있는 로그 범위 안에서 가장 이른 설치 섹션이 그 장치의 첫 설치 시각입니다.
-- 이 로그는 레지스트리 밖의 파일입니다. 레지스트리의 USB 흔적만 지운 경우에도 이 로그에는 남을 수 있습니다(HECF).
-- 오래 쓰지 않은 장치를 Windows 가 지운 기록도 남습니다(HECF). 레지스트리에서 사라진 장치를 여기서 찾을 수 있습니다.
+- 이 로그는 레지스트리 밖의 파일입니다. 레지스트리의 USB 흔적만 지운 경우에도 이 로그에는 남을 수 있습니다.
+- 오래 쓰지 않은 장치를 Windows 가 지운 기록도 남습니다. 레지스트리에서 사라진 장치를 여기서 찾을 수 있습니다.
 
 ### 증명하지 못하는 것
 
@@ -151,29 +151,29 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 
 | 시각 | 무엇을 뜻하나 | 기준 |
 |---|---|---|
-| `Section start` | 섹션을 연 때입니다. 장치 설치 섹션이면 설치를 시작한 때입니다. | 현지 시각, 시간대 표시 없음(Microsoft, plaso) |
+| `Section start` | 섹션을 연 때입니다. 장치 설치 섹션이면 설치를 시작한 때입니다. | 현지 시각, 시간대 표시 없음 |
 | `Section end` | 섹션을 닫은 때입니다. | 현지 시각 |
 | 본문 줄 끝 시각 | 그 단계의 시각입니다. 날짜가 없습니다. | 현지 시각 |
 | `[Boot Session: …]` | 문서에 설명이 없습니다. | 날짜 모양은 섹션 시각과 같습니다. |
-| 옛 로그 파일 이름 속 날짜·시각 | 관찰한 파일에서는 그 파일 마지막 섹션의 시각과 같았습니다. | 현지 시각(관찰) |
+| 옛 로그 파일 이름 속 날짜·시각 | 그 파일 마지막 섹션의 시각과 같습니다. | 현지 시각 |
 
-- 섹션 헤더의 시각은 현지 시각이라고 Microsoft 문서에 적혀 있으므로, UTC 로 바꾸려면 기록할 당시의 시간대 설정이 필요합니다. [시간대 설정](../../system-account/time-zone.md)을 봅니다.
-- 시간대의 `Bias` 값은 부호 있는 32비트로 읽습니다. UTC+9 는 `-540` 입니다. 부호 없이 읽으면 `4294966756` 이 됩니다(관찰).
+- 섹션 헤더의 시각은 현지 시각이므로, UTC 로 바꾸려면 기록할 당시의 시간대 설정이 필요합니다. [시간대 설정](../../system-account/time-zone.md)을 봅니다.
+- 시간대의 `Bias` 값은 부호 있는 32비트로 읽습니다. UTC+9 는 `-540` 입니다. 부호 없이 읽으면 `4294966756` 이 됩니다.
 - 일광 절약 시간이 끝나는 날에는 같은 현지 시각이 두 번 있습니다. 그 한 시간 안의 시각은 UTC 로 하나로 정할 수 없습니다.
 - 섹션이 자정을 넘기면 본문 줄의 날짜는 섹션 시작 날짜와 다를 수 있습니다.
-- 줄 순서는 기록한 순서입니다. 그런데 plaso 공개 시험 파일에는 뒤에 나온 `Boot Session` 시각이 앞의 것보다 이른 곳이 있었습니다. 이런 역전은 시계나 시간대를 바꾼 흔적일 수 있습니다. [시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)의 절차로 확인합니다.
+- 줄 순서는 기록한 순서입니다. 그런데 뒤에 나온 `Boot Session` 시각이 앞의 것보다 이른 경우가 있습니다. 이런 역전은 시계나 시간대를 바꾼 흔적일 수 있습니다. [시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)의 절차로 확인합니다.
 - 레지스트리의 첫 설치 시각 (`DEVPKEY_Device_FirstInstallDate`) 은 FILETIME 이고 UTC 입니다. 이 로그 시각을 UTC 로 바꾼 뒤에 비교합니다. 위치는 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
-- df-stream 은 이 로그의 설치 시작·끝 시각이 장치 컨테이너 속성의 두 시각과 맞는다고 관찰했고(2015), 같은 글은 그 두 시각이 레지스트리의 설치·첫 설치 시각과 조금 다르다고 적었습니다. 그러므로 이 로그 시각과 레지스트리 첫 설치 시각이 딱 맞지 않을 수 있습니다. 차이의 크기는 검체에서 직접 확인합니다.
+- 이 로그의 설치 시작·끝 시각은 장치 컨테이너 속성의 두 시각과 맞고, 그 두 시각은 레지스트리의 설치·첫 설치 시각과 조금 다릅니다. 그러므로 이 로그 시각과 레지스트리 첫 설치 시각이 딱 맞지 않을 수 있습니다. 차이의 크기는 검체에서 직접 확인합니다.
 
 ## 함정과 한계
 
-1. **옛 로그를 빠뜨리는 실수.** 관찰한 Windows 11 에서는 옛 내용이 `setupapi.dev.<날짜>_<시각>.log` 로 따로 있었습니다. `setupapi.dev*.log` 를 모두 모아서 봅니다. 파일을 언제, 몇 개까지 넘기는지는 공식 문서로 확인하지 못했습니다.
-2. **업그레이드 뒤에 로그가 새로 시작합니다.** 관찰한 PC 는 기능 업데이트를 한 날부터 로그가 시작했습니다. 그 전 내용은 `INF` 폴더에 없었습니다. 업그레이드 전 기록은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)이나 `Windows.old` 폴더에서 찾습니다.
-3. **"처음 연결" 이 두 번 나올 수 있습니다.** 관찰한 파일에서 같은 장치 인스턴스의 설치 섹션이 같은 날 두 번 있었습니다. 가장 이른 것을 쓰고, 나머지는 따로 설명합니다.
-4. **장치 정리 뒤 다시 설치될 수 있습니다.** HECF 는 `Plug and Play Cleanup` 예약 작업이 30일 넘게 꽂지 않은 장치를 레지스트리에서 지운다고 보고했습니다(Windows 8.1·10 관찰, 2017). 이 작업은 `Device and Driver Disk Cleanup Handler` 섹션에 `set: Device … was removed.` 로 남습니다. 지운 장치를 다시 꽂으면 설치 섹션이 새로 생길 수 있습니다. HECF 예시에서는 이 섹션의 `cmd:` 줄이 `taskhostw.exe` 였습니다. 관찰한 Windows 11 에서는 디스크 정리 프로그램(`cleanmgr.exe /autocleanstoragesense`) 이었습니다.
+1. **옛 로그를 빠뜨리는 실수.** Windows 11 에서는 옛 내용이 `setupapi.dev.<날짜>_<시각>.log` 로 따로 남습니다. `setupapi.dev*.log` 를 모두 모아서 봅니다. 파일을 언제, 몇 개까지 넘기는지는 공식 문서에 없습니다.
+2. **업그레이드 뒤에 로그가 새로 시작합니다.** 기능 업데이트를 하면 그날부터 로그가 새로 시작하고, 그 전 내용은 `INF` 폴더에 남지 않을 수 있습니다. 업그레이드 전 기록은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)이나 `Windows.old` 폴더에서 찾습니다.
+3. **"처음 연결" 이 두 번 나올 수 있습니다.** 같은 장치 인스턴스의 설치 섹션이 같은 날 두 번 있을 수 있습니다. 가장 이른 것을 쓰고, 나머지는 따로 설명합니다.
+4. **장치 정리 뒤 다시 설치될 수 있습니다.** `Plug and Play Cleanup` 예약 작업은 30일 넘게 꽂지 않은 장치를 레지스트리에서 지웁니다(Windows 8.1·10). 이 작업은 `Device and Driver Disk Cleanup Handler` 섹션에 `set: Device … was removed.` 로 남습니다. 지운 장치를 다시 꽂으면 설치 섹션이 새로 생길 수 있습니다. 이 섹션의 `cmd:` 줄은 Windows 8.1·10 에서는 `taskhostw.exe`, Windows 11 에서는 디스크 정리 프로그램(`cleanmgr.exe /autocleanstoragesense`) 입니다.
 5. **로그를 끄거나 옮길 수 있습니다.** `LogLevel`·`LogPath` 값과 그 키의 [마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)을 봅니다. 다만 앞에서 본 것처럼 0 이 아닌 `LogLevel` 이 곧 조작은 아닙니다.
 6. **텍스트 파일이라 고치기 쉽습니다.** 관리자 권한이 있으면 지우거나 줄을 뺄 수 있습니다. 머리말이 없는지, 기간이 비는지, 시각이 거꾸로 가는지 봅니다. 파일 크기가 줄어든 흔적은 [$MFT](../../filesystem/mft.md)와 [$UsnJrnl](../../filesystem/usnjrnl.md)에서 찾습니다.
-7. **지운 로그는 조각으로 되살릴 수 있습니다.** 형식이 일정한 텍스트라서 비할당 영역에서 찾기 쉽습니다(HECF). [비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)을 봅니다.
+7. **지운 로그는 조각으로 되살릴 수 있습니다.** 형식이 일정한 텍스트라서 비할당 영역에서 찾기 쉽습니다. [비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)을 봅니다.
 8. **USBSTOR 에 없는 장치도 여기에는 남을 수 있습니다.** 이 로그는 드라이버 종류와 관계없이 설치 작업을 적습니다. UASP 장치나 SD 카드는 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)를 함께 봅니다.
 9. **인코딩.** 비 ASCII 글자는 시스템 ANSI 코드 페이지로 적힙니다. 문자열 검색 도구의 인코딩을 맞춥니다.
 
@@ -211,7 +211,7 @@ Microsoft 문서의 섹션 예시에는 2005년 날짜가 찍혀 있습니다. �
 ### 공개 도구로 한 번
 
 - 텍스트 편집기나 `grep` 같은 문자열 검색 도구로 충분합니다. 예: 일련번호로 찾고 앞뒤 몇 줄을 함께 봅니다.
-- 타임라인 도구 plaso 에는 이 로그의 파서가 있습니다. 소스상 섹션 시작·끝 시각을 현지 시각으로 처리합니다. 그래서 분석할 때 시간대를 맞게 지정해야 합니다.
+- 타임라인 도구 plaso 에는 이 로그의 파서가 있습니다. 이 파서는 섹션 시작·끝 시각을 현지 시각으로 처리합니다. 그래서 분석할 때 시간대를 맞게 지정해야 합니다.
 - 도구가 섹션을 0건으로 내면 먼저 형식을 확인합니다. 앞의 "문서 예시와 실제 형식이 다릅니다" 표를 봅니다.
 - 도구 결과와 직접 찾은 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 절차를 따릅니다.
 

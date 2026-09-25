@@ -68,7 +68,7 @@ Windows 와 앱은 평소에도 ADS 를 씁니다. 스트림이 있다는 것만
 | $EFS | $LOGGED_UTILITY_STREAM | 아닙니다. EFS 가 암호화 정보를 두는 곳입니다. [EFS 암호화 파일](../../../03-techniques/analysis/encrypted-evidence/encrypting-file-system.md) |
 | 확장 특성 (Extended Attributes, EA) | $EA·$EA_INFORMATION | 아닙니다. $DATA 가 아니므로 스트림 목록에 나오지 않습니다 |
 
-MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으로 묶습니다. 숨긴 자료를 찾을 때는 둘을 따로 확인해야 합니다.
+ADS 와 EA 는 둘 다 MITRE ATT&CK 의 자료 숨기기 기법 T1564.004 에 들어갑니다[5]. 숨긴 자료를 찾을 때는 둘을 따로 확인해야 합니다.
 
 ## 읽는 법
 
@@ -102,7 +102,7 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 - `dir /r` 는 파일의 대체 데이터 스트림을 함께 보여 줍니다.
 - PowerShell 의 `Get-Item <경로> -Stream *` 은 스트림 이름과 크기를 보여 줍니다. `Get-Content <경로> -Stream <이름>` 은 스트림 내용을 읽습니다.
 - `fsutil file layout <경로>` 는 속성 종류 코드, 스트림 이름, 상주 여부를 함께 보여 줍니다.
-- 폴더에 붙인 ADS 는 `dir /r` 에서 `.:이름:$DATA` 로 보였습니다. 같은 폴더에 `Get-Item -Stream *` 을 쓰면 아무것도 나오지 않았습니다 (Windows 11 25H2, Windows PowerShell 5.1 기준).
+- 폴더에 붙인 ADS 는 `dir /r` 에서 `.:이름:$DATA` 로 나옵니다. 같은 폴더에 `Get-Item -Stream *` 을 쓰면 아무것도 나오지 않습니다 (Windows 11 25H2, Windows PowerShell 5.1 기준).
 
 ## 포렌식에서 중요한 점
 
@@ -110,9 +110,8 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 
 스트림마다 따로 매긴 시각은 없고, 어느 스트림이든 바뀌면 파일의 시각이 바뀝니다. 그래서 파일의 수정 시각이 바뀌었다고 해서 기본 스트림의 내용이 바뀌었다고 할 수 없습니다.
 
-
-- 작은 ADS 를 새로 붙이자 $STANDARD_INFORMATION 의 수정·접근·MFT 변경 시각이 함께 바뀌었습니다. 만든 시각은 그대로였습니다.
-- 그 ADS 를 지우자 MFT 변경 시각만 바뀌었습니다. 수정 시각은 그대로였습니다.
+- 작은 ADS 를 새로 붙이면 $STANDARD_INFORMATION 의 수정·접근·MFT 변경 시각이 함께 바뀝니다. 만든 시각은 그대로입니다 (Windows 11 25H2 기준).
+- 그 ADS 를 지우면 MFT 변경 시각만 바뀌고 수정 시각은 그대로입니다.
 - 스트림이 언제 생겼는지는 변경 저널과 $LogFile 에서 찾습니다.
 - 두 벌의 시각이 각각 언제 바뀌는지는 [두 벌의 시각](standard-information-file-name.md) 과 [파일 시각 네 가지와 변화 규칙](../../../03-techniques/analysis/timeline/macb-timestamp-rules.md) 에 있습니다.
 
@@ -138,14 +137,14 @@ USN_RECORD_V2 의 이름 칸에는 파일이나 폴더 이름이 들어가고 �
 
 ### 숨기는 데 쓰이는 경우
 
-탐색기와 옵션 없는 `dir` 는 ADS 를 보여 주지 않고, 파일 크기에도 기본 스트림 크기만 나옵니다. ADS 크기는 더해지지 않습니다. MITRE ATT&CK 은 ADS 에 자료를 숨기는 것을 T1564.004 로 분류하며, esentutl, expand 같은 Windows 기본 도구가 ADS 를 읽고 쓰는 데 쓰인다고 적습니다.
+탐색기와 옵션 없는 `dir` 는 ADS 를 보여 주지 않고, 파일 크기에도 기본 스트림 크기만 나옵니다. ADS 크기는 더해지지 않습니다. ADS 에 자료를 숨기는 것은 MITRE ATT&CK 의 T1564.004 에 해당합니다. esentutl, expand 같은 Windows 기본 도구로도 ADS 를 읽고 쓸 수 있습니다[5].
 
 - 명령줄에 `파일이름:스트림이름` 모양의 콜론이 있으면 단서가 됩니다. 명령줄은 [프로세스 생성 (4688)](../../../02-artifacts/event-logs/4688.md) 이나 [Sysmon 이벤트 1](../../../02-artifacts/event-logs/sysmon/1.md) 에 남을 수 있습니다.
 - 보고서에는 기록이 말하는 만큼만 씁니다. 예: "이 파일에 이름이 X 인 ADS 가 있고, 크기는 N 바이트입니다." 누가 왜 만들었는지는 변경 저널, 프로세스 기록 같은 다른 근거가 있을 때만 씁니다.
 
 ### 옮기거나 모으면 사라질 수 있습니다
 
-- Windows 의 파일 복사 함수(CopyFileEx)는 ADS 도 함께 복사합니다. PowerShell `Copy-Item` 으로 복사한 사본에 5,000바이트 ADS 가 비상주로 그대로 있었습니다.
+- Windows 의 파일 복사 함수(CopyFileEx)는 ADS 도 함께 복사합니다. PowerShell `Copy-Item` 으로 복사해도 사본에 ADS 가 그대로 남습니다 (5,000바이트 비상주 ADS 기준).
 - FAT 처럼 NTFS 가 아닌 파일시스템으로 옮기면 ADS 는 없어집니다. FAT 구조는 [FAT·exFAT 구조](../fat-exfat.md) 에 있습니다.
 - 파일을 골라 모으는 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 은 수집 도구가 ADS 를 챙기는지 따로 확인해야 합니다.
 - [디스크 이미징](../../../03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 은 MFT 와 클러스터를 통째로 담습니다. 그래서 ADS 도 이미지에 남습니다.
@@ -154,7 +153,7 @@ USN_RECORD_V2 의 이름 칸에는 파일이나 폴더 이름이 들어가고 �
 
 ## 함정
 
-- **"ADS 를 붙여도 파일 시각은 안 바뀐다"** 는 옛 설명입니다. 2000년대 초 자료 중에 이렇게 쓴 것이 있습니다. Microsoft 문서는 어느 스트림이 바뀌어도 파일 시각이 바뀐다고 적습니다. Windows 11 25H2 에서도 바뀌었습니다.
+- **"ADS 를 붙여도 파일 시각은 안 바뀐다"** 는 옛 설명입니다. 2000년대 초 자료 중에는 이렇게 쓴 것이 있지만, 어느 스트림이 바뀌어도 파일 시각은 바뀝니다[1]. Windows 11 25H2 에서도 마찬가지입니다.
 - **흔한 ADS 를 수상하다고 보고하지 않습니다.** Zone.Identifier 와 WofCompressedData 는 정상 동작으로 생깁니다.
 - **파일만 훑는 방법은 폴더의 ADS 를 놓칠 수 있습니다.** 폴더에도 이름 있는 $DATA 를 붙일 수 있습니다.
 - **기본 레코드만 읽는 도구는 확장 레코드에 있는 스트림을 놓칠 수 있습니다.** 확장 레코드는 [MFT 레코드와 속성](file-record-attribute.md) 에 설명이 있습니다.

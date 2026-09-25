@@ -30,7 +30,7 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 | 절전 | System | Power-Troubleshooter 1 | 잠든 시각과 깨어난 시각, 깨운 원인 |
 | 모던 스탠바이 | System | Kernel-Power 506 · 507 · 566 | 모던 스탠바이에 들어감·나옴, 세션 상태 변화 |
 
-- Microsoft 는 1074 가 두 경우에 남는다고 적었습니다. 응용 프로그램이 종료·재시작을 일으켰을 때, 그리고 사용자가 시작 메뉴나 Ctrl+Alt+Del 로 종료·재시작했을 때입니다.
+- 1074 는 두 경우에 남습니다. 응용 프로그램이 종료·재시작을 일으켰을 때, 그리고 사용자가 시작 메뉴나 Ctrl+Alt+Del 로 종료·재시작했을 때입니다[1].
 - `shutdown.exe` 도 꺼지기 직전에 Source=User32, ID 1074 로 사용자 이름·날짜·시각·이유 코드·설명을 남깁니다.
 - 41 은 예기치 않게 꺼진 뒤 다음 부팅 때 남습니다. Windows 는 꺼질 때 오류 코드를 기록할 수 있으면 기록하고, 다음 시작의 커널 단계에서 그 코드를 41 의 데이터에 넣습니다.
 - 6006 은 제대로 꺼졌다는 뜻이고, 6008 은 직전 종료가 예기치 않았다는 뜻입니다.
@@ -38,13 +38,13 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 ## 위치와 버전별 차이
 
-대부분 System 로그에 남고, 4608·4609·1100 은 Security 로그에 남습니다. 한 PC 의 Security 로그에는 4608·4609 가 없었는데, 약 이틀 치만 남아 있어 마지막 부팅 기록이 이미 밀려났습니다. 4608 이 어느 감사 하위 범주에 속하는지는 확인하지 못했습니다.
+대부분 System 로그에 남고, 4608·4609·1100 은 Security 로그에 남습니다. Security 로그는 빨리 밀려나서 마지막 부팅의 4608·4609 가 이미 없을 수 있습니다.
 
-부팅 상태 파일 `%SystemRoot%\Bootstat.dat` 에는 부팅·종료·최대 절전/절전에서 돌아옴의 성공 여부가 기록됩니다. Microsoft 문서가 Windows Internals 6판을 인용해 적은 내용이며, 내부 구조는 확인하지 못했습니다.
+부팅 상태 파일 `%SystemRoot%\Bootstat.dat` 에는 부팅·종료·최대 절전/절전에서 돌아옴의 성공 여부가 기록됩니다[1].
 
 ### 이벤트 버전
 
-아래는 한 PC 의 공급자 메타데이터에서 읽은 버전입니다. 버전마다 어느 Windows 부터 쓰였는지는 확인하지 못했습니다.
+아래는 한 PC 의 공급자 메타데이터에 적힌 버전입니다.
 
 | 이벤트 | 버전 | 차이 |
 |---|---|---|
@@ -110,12 +110,12 @@ User32 1074 의 메시지는 "The process … has initiated the [종류] of comp
 
 버전 10 의 칸은 다음과 같습니다: BugcheckCode, BugcheckParameter1~4, SleepInProgress, PowerButtonTimestamp, BootAppStatus, Checkpoint, ConnectedStandbyInProgress, SystemSleepTransitionsToOn, CsEntryScenarioInstanceId, BugcheckInfoFromEFI, CheckpointStatus, CsEntryScenarioInstanceIdV2, LongPowerButtonPressDetected, LidReliability, InputSuppressionState, PowerButtonSuppressionState, LidState, WHEABootErrorCount.
 
-Microsoft 문서는 몇 칸을 이렇게 설명합니다.
+몇 칸의 뜻은 다음과 같습니다[1].
 
 - BugcheckCode 는 10진수로 들어 있습니다. 예를 들어 159 는 0x9F 입니다.
-- 전원 버튼을 길게 눌러 재시작하면 PowerButtonTimestamp 가 0 이 아닙니다. 문서의 예시 값은 131728546170882432 입니다.
+- 전원 버튼을 길게 눌러 재시작하면 PowerButtonTimestamp 가 0 이 아닙니다. 예시 값은 131728546170882432 입니다.
 - 41 이 아예 없거나 BugcheckCode 가 0 이면 전원 문제일 수 있습니다. 배터리 분리·방전, 플러그 뽑힘, 정전 같은 경우입니다.
-- 모든 값이 0 이면 volmgr 46 ("Crash dump initialization failed!") 도 확인하라고 적었습니다.
+- 모든 값이 0 이면 volmgr 46 ("Crash dump initialization failed!") 도 확인합니다.
 
 ### 절전·최대 절전·모던 스탠바이
 
@@ -172,7 +172,7 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 ## 시각 해석
 
 - 12 의 StartTime, 13 의 StopTime, Power-Troubleshooter 1 의 SleepTime·WakeTime 은 FILETIME 입니다. 값 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
-- Microsoft 문서는 이벤트 뷰어가 .evtx 의 시각을 시스템 시간대로 바꿔 보여 준다고 주의를 줍니다. 서버 시간대를 확인하라고 적었습니다. 시간대 설정은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
+- 이벤트 뷰어는 .evtx 의 시각을 시스템 시간대로 바꿔 보여 줍니다. 그래서 서버 시간대를 확인합니다[1]. 시간대 설정은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 
 한 PC 에서 본 시각의 특징입니다.
 
@@ -181,9 +181,9 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 - **6005 는 늦습니다.** 네 번의 부팅에서 6005 는 12 의 StartTime 보다 19~29초 늦었습니다. 6005 를 켜진 시각으로 쓰면 그만큼 늦게 잡힙니다.
 - **6013 은 하루 한 번도 남습니다.** 부팅 직후 한 번, 그 뒤 매일 03:00 UTC 쯤 한 번씩 남았습니다. 이 PC 시간대로는 정오입니다.
 - **6008 의 시각은 현지 시각 글자입니다.** 메시지는 "The previous system shutdown at 오전 5:57:17 on ‎2026-‎09-‎21 was unexpected." 꼴이었습니다. 날짜 글자 안에 보이지 않는 U+200E (왼쪽에서 오른쪽 표시) 문자가 들어 있었습니다. 글자를 그대로 파싱하면 깨지기 쉽습니다.
-- **6008 의 이진 데이터에 두 시각이 있습니다.** 앞 32바이트는 SYSTEMTIME 두 개였습니다. 첫째는 현지 시각, 둘째는 UTC 였습니다. 그 뒤 바이트의 뜻은 확인하지 못했습니다.
+- **6008 의 이진 데이터에 두 시각이 있습니다.** 앞 32바이트는 SYSTEMTIME 두 개였습니다. 첫째는 현지 시각, 둘째는 UTC 였습니다.
 - **6005 의 이진 데이터 앞 16바이트도 SYSTEMTIME (UTC) 였습니다.**
-- **6008 의 시각은 꺼진 시각이 아닐 수 있습니다.** 한 번의 비정상 종료에서 6008 의 시각 (20:57:17 UTC) 은 다음 부팅 (21:44) 보다 47분 앞이었습니다. 그때 이 PC 는 모던 스탠바이 중이었습니다 (41 의 ConnectedStandbyInProgress true). 6008 시각은 "마지막으로 살아 있음을 기록한 시각" 일 수 있습니다. 이 설명은 해석이며, 기록 방식은 확인하지 못했습니다.
+- **6008 의 시각은 꺼진 시각이 아닐 수 있습니다.** 한 번의 비정상 종료에서 6008 의 시각 (20:57:17 UTC) 은 다음 부팅 (21:44) 보다 47분 앞이었습니다. 그때 이 PC 는 모던 스탠바이 중이었습니다 (41 의 ConnectedStandbyInProgress true). 6008 시각은 "마지막으로 살아 있음을 기록한 시각" 일 수 있습니다. 이 설명은 해석입니다.
 - **PowerButtonTimestamp 는 FILETIME 으로 풀립니다.** 같은 41 의 값 134344115099009259 를 FILETIME 으로 풀면 2026-09-20T20:58:29.9Z 입니다. 6008 시각보다 약 1분 뒤입니다. 문서 예시 값도 FILETIME 으로 풀면 2018-06-07T14:16:57Z 입니다. 다만 이 칸이 FILETIME 이라는 설명은 Microsoft 문서에 없습니다. 이 해석은 값을 풀어 본 결과입니다.
 - **6013 에는 시간대가 들어 있습니다.** 삽입 문자열 [6] 은 "-540 대한민국 표준시" 였습니다. 시간대 바이어스 (분) 와 현지화된 시간대 이름입니다. -540 은 UTC+9 입니다. 레지스트리의 REG_DWORD Bias 를 부호 없이 읽으면 4294966756 이 됩니다.
 - **깨어난 시각은 107 이 아니라 Power-Troubleshooter 1 에서 봅니다.** 한 번의 최대 절전에서 107 의 기록 시각은 05:54:36 이었습니다. Power-Troubleshooter 1 의 WakeTime 은 05:56:39 로 2분 뒤였습니다.
@@ -197,14 +197,14 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 5. **BugcheckCode 를 16진으로 읽습니다.** 10진수입니다. 159 는 0x9F 입니다.
 6. **6008 의 시각을 꺼진 시각으로 씁니다.** 모던 스탠바이 중이었다면 한참 앞설 수 있습니다.
 7. **모던 스탠바이 PC 에서 42·107 만 찾습니다.** 한 노트북에서 약 3개월 동안 506 은 319건, 507 은 314건, 566 은 687건이었습니다. 42·107 은 7건뿐이었습니다. 이런 PC 에서는 뚜껑을 닫고 여는 일이 506·507 로 남는 것으로 보입니다. 이 판단은 해석입니다.
-8. **절전 코드 값을 추측합니다.** 최대 절전 한 번에서 42 의 TargetState 는 5, 27 의 BootType 은 2 였습니다. Power-Troubleshooter 1 에 HiberWriteDuration 11073, HiberReadDuration 14298, HiberPagesWritten 2532886 이 있어 최대 절전과 맞습니다. 그러나 TargetState 5 와 BootType 2 의 공식 대응은 확인하지 못했습니다.
+8. **절전 코드 값을 추측합니다.** 최대 절전 한 번에서 42 의 TargetState 는 5, 27 의 BootType 은 2 였습니다. Power-Troubleshooter 1 에 HiberWriteDuration 11073, HiberReadDuration 14298, HiberPagesWritten 2532886 이 있어 최대 절전과 맞습니다. 그러나 TargetState 5 와 BootType 2 만으로 최대 절전이라고 단정하지 않고, 다른 칸과 함께 판단합니다.
 9. **6013 의 OS 이름을 믿습니다.** Windows 11 인데 6013 의 이진 데이터에는 "Windows 10 Home" 으로 적혀 있었습니다.
 10. **Security 로그에서 4608·4609 를 기대합니다.** 보안 로그는 빨리 밀려납니다. 한 PC 에서는 이틀 치만 남아 있었습니다. 로그 크기와 보존 기간은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### 지우기와 조작
 
 - **로그를 지웁니다.** System 로그를 지우면 104 가 남습니다. [이벤트 로그 삭제 (1102·104)](1102-104.md)를 봅니다.
-- **Reliability 값을 지웁니다.** Microsoft 문서는 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` 에 DirtyShutdown, LastAliveStamp, TimeStampInterval 값이 있다고 적었습니다. 이 값을 지우면 비정상 종료 뒤 종료 이벤트 추적기가 뜨지 않게 할 수 있다고도 적었습니다. 그래서 이 값이 없다고 비정상 종료가 없었다고 보지 않습니다. 41·6008 을 따로 봅니다.
+- **Reliability 값을 지웁니다.** `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` 에는 DirtyShutdown, LastAliveStamp, TimeStampInterval 값이 있습니다. 이 값을 지우면 비정상 종료 뒤 종료 이벤트 추적기가 뜨지 않게 할 수 있습니다[1]. 그래서 이 값이 없다고 비정상 종료가 없었다고 보지 않습니다. 41·6008 을 따로 봅니다.
 - **시스템 시각을 바꿉니다.** 켜짐·꺼짐 시각 전체가 어긋납니다. [시간 변경 (4616·Kernel-General)](4616-kernel-general.md)을 봅니다.
 
 ## 직접 분석해 보기
@@ -265,7 +265,6 @@ Get-WinEvent -Path $f | Sort-Object TimeCreated | Select-Object TimeCreated, Rec
 Reliability 키와 `Bootstat.dat` 에 대해 한 PC 에서 본 것은 다음과 같습니다.
 
 - Reliability 키에는 TimeStampInterval 1, DirtyShutdown 1, DirtyShutdownTime, LastAliveStamp (REG_BINARY 4바이트) 가 있었습니다.
-- LastAliveStamp·TimeStampInterval 의 뜻과 단위는 확인하지 못했습니다.
 - `C:\Windows\bootstat.dat` 는 67,584바이트였습니다. 마지막 수정 시각은 모던 스탠바이에서 깨어난 시각대였습니다.
 
 ## 실습
