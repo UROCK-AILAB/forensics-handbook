@@ -10,10 +10,6 @@ Windows 시스템에 남는 흔적을 어떻게 읽고 해석하는지 정리한
 
 아티팩트가 어디에 있는지뿐만 아니라 그 기록이 왜 생기는지, 무엇을 증명하고 무엇은 증명하지 못하는지까지 설명합니다. 보고서에 어떻게 쓸 수 있는지도 함께 다룹니다.
 
-macOS에 남는 흔적은 [macOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-mac/)에서, Android 기기에 남는 흔적은 [Android 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-android/)에서, iPhone에 남는 흔적은 [iOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-ios/)에서 다룹니다.
-
-ChatGPT·Claude 같은 AI 서비스를 쓰면 남는 흔적은 [AI 서비스 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-ai/)에서 다룹니다. Linux 서버와 데스크톱에 남는 흔적은 [Linux 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook-linux/)에서 다룹니다.
-
 ## 구성
 
 핸드북은 네 갈래로 나뉩니다.
