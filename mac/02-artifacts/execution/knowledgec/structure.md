@@ -56,7 +56,7 @@ Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK
 
 ### ZSOURCE
 
-`ZDEVICEID` 는 기기를 가리키는 칸이고, APOLLO는 이 칸에 "DEVICE ID (HARDWARE UUID)" 라는 이름을 붙여 보여 줍니다 [1][2][4]. `ZBUNDLEID` 는 동기화된 데이터를 보낸 앱을 가리킵니다 [1]. 블로그 글에서는 ZSOURCE의 OS 빌드 칸에 iOS 버전이 있고 `ZDEVICEID` 에 GUID가 들어 있는 행이 필자의 iPhone에서 온 기록이었다고 설명해서 [1], 다른 기기에서 동기화한 기록은 그 기기를 가리키는 값을 달고 들어올 수 있습니다(확인 범위: macOS 10.13·iOS 11). 이 Mac 자신의 기록에서 `ZDEVICEID` 가 늘 하드웨어 UUID와 같은지는 확인하지 못해서, 값을 보고서에 쓸 때는 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../../system-account/computer-name-hardware.md)의 하드웨어 UUID와 직접 맞춰 봅니다.
+`ZDEVICEID` 는 기기를 가리키는 칸이고, APOLLO는 이 칸에 "DEVICE ID (HARDWARE UUID)" 라는 이름을 붙여 보여 줍니다 [1][2][4]. `ZBUNDLEID` 는 동기화된 데이터를 보낸 앱을 가리킵니다 [1]. 블로그 글에서는 ZSOURCE의 OS 빌드 칸에 iOS 버전이 있고 `ZDEVICEID` 에 GUID가 들어 있는 행이 필자의 iPhone에서 온 기록이었다고 설명해서 [1], 다른 기기에서 동기화한 기록은 그 기기를 가리키는 값을 달고 들어올 수 있습니다(macOS 10.13·iOS 11 기준). 이 Mac 자신의 기록에서 `ZDEVICEID` 가 늘 하드웨어 UUID와 같은지는 확인하지 못해서, 값을 보고서에 쓸 때는 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../../system-account/computer-name-hardware.md)의 하드웨어 UUID와 직접 맞춰 봅니다.
 
 ### ZSTRUCTUREDMETADATA
 
@@ -79,7 +79,7 @@ Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK
 
 스트림 (Stream)은 기록의 종류이고, `ZSTREAMNAME` 칸에 `/app/inFocus` 같은 경로 모양으로 들어 있습니다. 블로그 글이 macOS 10.13에서 본 스트림과, 그 뒤 APOLLO 모듈에서 macOS 쪽으로 확인한 스트림을 합치면 아래와 같습니다.
 
-| 스트림 | 확인 범위 | 다루는 페이지 |
+| 스트림 | 나오는 버전 | 다루는 페이지 |
 |---|---|---|
 | `/app/inFocus` | macOS 10.13 [1], APOLLO 목록 10.13~10.16 [3] | [앱 사용 기록](app-usage.md) |
 | `/app/usage` | APOLLO 목록 10.14~10.16 [2] | [앱 사용 기록](app-usage.md) |

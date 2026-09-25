@@ -34,7 +34,7 @@ DumpBTM README의 다른 곳에는 `BackgroundItems-v4.btm` 이라는 이름도 
 
 ## 구조
 
-파일은 NSKeyedArchiver로 직렬화한 바이너리 plist이고, 최상위 키 `store` 에 `Storage` 객체가 들어 있습니다 [3][4]. 아래 구조는 공개 도구 DumpBTM의 소스를 기준으로 합니다(확인 범위: DumpBTM 소스, 2023-01-20) [4]. NSKeyedArchiver plist를 푸는 일반 원리는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다.
+파일은 NSKeyedArchiver로 직렬화한 바이너리 plist이고, 최상위 키 `store` 에 `Storage` 객체가 들어 있습니다 [3][4]. 아래 구조는 공개 도구 DumpBTM의 소스를 기준으로 합니다(2023-01-20 판) [4]. NSKeyedArchiver plist를 푸는 일반 원리는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다.
 
 `Storage` 에는 두 묶음이 있습니다 [4].
 

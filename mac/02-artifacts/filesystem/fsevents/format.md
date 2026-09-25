@@ -50,7 +50,7 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 |---|---|---|---|---|
 | 1 | `1SLD` | 12바이트 | 이벤트 ID 8 + 플래그 4 | Mac OS X 10.5 ~ macOS 10.12 [1][4] |
 | 2 | `2SLD` | 20바이트 | 이벤트 ID 8 + 플래그 4 + 노드 ID 8 | macOS 10.13 High Sierra [1][2][4] |
-| 3 | `3SLD` | 24바이트 | 이벤트 ID 8 + 플래그 4 + 노드 ID 8 + UID 4 | macOS 14 Sonoma (확인 범위: FSEventsParser 코드 주석) [2] |
+| 3 | `3SLD` | 24바이트 | 이벤트 ID 8 + 플래그 4 + 노드 ID 8 + UID 4 | macOS 14 Sonoma (FSEventsParser 코드 주석 기준) [2] |
 
 고정 부분 안의 자리와 FSEventsParser가 읽는 형식은 아래와 같습니다 [2].
 

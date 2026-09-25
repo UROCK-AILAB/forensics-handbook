@@ -26,7 +26,7 @@ TeamViewer·AnyDesk 같은 외부 원격 제어 앱은 macOS에 들어 있는 �
 3. **자동 실행** — 앱이 로그인이나 부팅 때 스스로 뜨도록 등록한 항목이 있는지 [실행 에이전트·데몬 (LaunchAgents·LaunchDaemons)](../../persistence/launchd/index.md)과 [로그인 항목 (Login Items)](../../persistence/login-items.md)에서 번들 ID와 앱 이름으로 찾습니다.
 4. **권한** — 화면을 내보내거나 원격 입력으로 조작하는 앱이라면 화면 녹화나 손쉬운 사용 권한을 받은 기록이 있는지 [개인 정보 보호 권한 (TCC)](../../credentials/tcc/index.md)에서 번들 ID로 찾습니다.
 5. **실행과 통신** — 앱이 앞에 나와 있던 구간은 [KnowledgeC (knowledgeC.db)](../../execution/knowledgec/index.md)와 [바이옴 (Biome)](../../execution/biome/index.md)에서, 실행된 프로세스는 [통합 로그의 프로세스 실행 기록 (Process Events)](../../execution/unified-log-process.md)에서, 앱이 주고받은 데이터 양은 [앱별 네트워크 사용량 (netusage)](../netusage.md)에서 찾습니다.
-6. **앱 자체 기록** — 앞 단계에서 얻은 번들 ID와 앱 이름으로 사용자 홈의 `~/Library` 와 시스템의 `/Library` 아래를 검색해 로그·설정 파일을 찾습니다. 찾은 경로는 검체의 macOS 버전, 앱 버전과 함께 "(확인 범위: ...)" 로 적어 두고, 파일 안의 칸이나 문구를 해석할 때는 같은 버전의 앱으로 알려진 동작을 해 보고 기록이 어떻게 남는지 먼저 확인합니다.
+6. **앱 자체 기록** — 앞 단계에서 얻은 번들 ID와 앱 이름으로 사용자 홈의 `~/Library` 와 시스템의 `/Library` 아래를 검색해 로그·설정 파일을 찾습니다. 찾은 경로는 검체의 macOS 버전, 앱 버전과 함께 "" 로 적어 두고, 파일 안의 칸이나 문구를 해석할 때는 같은 버전의 앱으로 알려진 동작을 해 보고 기록이 어떻게 남는지 먼저 확인합니다.
 
 ## 증거로서 의미
 

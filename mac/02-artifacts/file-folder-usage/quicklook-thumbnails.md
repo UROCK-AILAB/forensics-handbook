@@ -95,7 +95,7 @@ datetime(last_hit_date + strftime('%s', '2001-01-01 00:00:00'), 'unixepoch')
 
 접근 권한도 버전에 따라 다를 수 있습니다. 2018년 글은 캐시를 "사용자 권한으로 도는 모든 코드가 읽을 수 있다" 고 적었지만 [4], 10.15 이후 이 폴더를 읽을 때 전체 디스크 접근(TCC)이나 SIP 제한이 걸리는지는 확인하지 못했습니다. `-wal`·`-shm` 파일이 같이 생기는지도 확인하지 못했고, 수집할 때는 캐시 폴더를 통째로 받아 두면 이런 파일을 놓치지 않습니다.
 
-안티포렌식 관점에서 보면, `qlmanage -r cache` 를 실행하면 재부팅 없이 캐시가 비워졌고 `qlmanage -r` 만으로는 캐시가 지워지지 않는 것처럼 보였다는 관찰이 있습니다(확인 범위: 2018년 글 작성 당시 macOS) [4]. ss64 사용법에는 `qlmanage -r`("Reset the Quick Look Server and all Quick Look client's generator cache.")만 있고 `cache` 인자는 적혀 있지 않습니다 [5]. 캐시를 비운 흔적이 통합 로그 등에 남는지, 남는다면 어느 서브시스템인지는 확인하지 못했습니다. 그래서 캐시가 비어 있다는 사실만으로 누가 일부러 지웠다고 보지 않고 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)의 다른 기록과 함께 판단합니다.
+안티포렌식 관점에서 보면, `qlmanage -r cache` 를 실행하면 재부팅 없이 캐시가 비워졌고 `qlmanage -r` 만으로는 캐시가 지워지지 않는 것처럼 보였다는 관찰이 있습니다(2018년 글 당시 macOS 기준) [4]. ss64 사용법에는 `qlmanage -r`("Reset the Quick Look Server and all Quick Look client's generator cache.")만 있고 `cache` 인자는 적혀 있지 않습니다 [5]. 캐시를 비운 흔적이 통합 로그 등에 남는지, 남는다면 어느 서브시스템인지는 확인하지 못했습니다. 그래서 캐시가 비어 있다는 사실만으로 누가 일부러 지웠다고 보지 않고 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)의 다른 기록과 함께 판단합니다.
 
 ## 직접 분석해 보기
 

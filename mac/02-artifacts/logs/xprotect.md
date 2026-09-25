@@ -97,7 +97,7 @@ Tahoe 는 주 XProtect 번들을 Software Update 말고 iCloud 의 CloudKit 연�
 
 XProtect Remediator 의 실행 주기와 실행을 맡는 LaunchDaemon 이름, 검사 결과가 남는 통합 로그 카테고리는 확인하지 못했습니다. 통합 로그에서 XProtect 쪽 메시지를 찾는 조건은 [통합 로그에서 찾을 것 (Unified Log Events)](unified-log-events/index.md)에 있습니다.
 
-XPdb 에 대한 설명은 한 저자의 2024년 6월 글에 기대고 있어 [3], 그 뒤 판에서 기록 방식이 바뀌었을 수 있습니다(확인 범위: 2024년 6월 글 시점).
+XPdb 에 대한 설명은 한 저자의 2024년 6월 글에 기대고 있어 [3], 그 뒤 판에서 기록 방식이 바뀌었을 수 있습니다.
 
 ## 직접 분석해 보기
 

@@ -20,7 +20,7 @@ KnowledgeC (knowledgeC.db)는 macOS가 앱 사용, 화면 켜짐, 잠금 같은 
 
 | 항목 | 내용 |
 |---|---|
-| 위치 | 시스템 쪽 `/private/var/db/CoreDuet/Knowledge/knowledgeC.db`, 사용자 쪽 `~/Library/Application Support/Knowledge/knowledgeC.db` (확인 범위: macOS 10.13) [1] |
+| 위치 | 시스템 쪽 `/private/var/db/CoreDuet/Knowledge/knowledgeC.db`, 사용자 쪽 `~/Library/Application Support/Knowledge/knowledgeC.db` (macOS 10.13 기준) [1] |
 | 형식 | SQLite. 기록 본체는 ZOBJECT 표이고 ZSOURCE·ZSTRUCTUREDMETADATA 표가 딸림 [1] |
 | 시각 | 맥 절대 시각(2001-01-01 00:00:00 UTC부터 센 초) [1] |
 | macOS 버전 | 블로그 글은 10.13 기준이고, APOLLO 모듈 목록으로 확인되는 macOS 범위는 10.16까지 [3]. 그 뒤 버전은 검체에서 직접 확인 |
@@ -36,7 +36,7 @@ APOLLO는 BSD 계열 라이선스(인용 조항)와 GPL v3 이상 가운데 하�
 
 ## 읽는 순서
 
-1. [표와 스트림 구조 (ZOBJECT·Stream)](structure.md) — ZOBJECT·ZSOURCE·ZSTRUCTUREDMETADATA 표의 관계와 주요 칸, 스트림 이름과 버전별 확인 범위, 맥 절대 시각을 푸는 법을 다룹니다.
+1. [표와 스트림 구조 (ZOBJECT·Stream)](structure.md) — ZOBJECT·ZSOURCE·ZSTRUCTUREDMETADATA 표의 관계와 주요 칸, 스트림 이름과 나오는 버전, 맥 절대 시각을 푸는 법을 다룹니다.
 2. [앱 사용 기록 (App Usage)](app-usage.md) — `/app/inFocus`·`/app/usage`·`/app/activity`·`/safari/history` 로 어떤 앱을 언제 얼마나 썼는지 읽고, 무엇을 증명하지 못하는지 정리합니다.
 3. [화면·잠금 상태 (Display·Device Lock)](device-state.md) — `/display/isBacklit`·`/device/isLocked`·`/device/isPluggedIn` 의 값과 버전 차이, 앱 사용 구간과 겹쳐 읽는 법을 다룹니다.
 

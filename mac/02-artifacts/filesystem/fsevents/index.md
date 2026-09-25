@@ -22,7 +22,7 @@ FSEvents 이벤트는 재부팅한 뒤에도 남고 [4], 지금은 없는 파일
 |---|---|
 | 위치 | `/.fseventsd`, `/System/Volumes/Data/.fseventsd` (공개 도구가 보는 경로) [2], 외장 저장 장치의 볼륨 [6] |
 | 형식 | 여러 멤버로 된 GZIP 파일 안에 디스크 로그 스트림(페이지)이 이어짐 [1] |
-| macOS 버전 | 레코드 버전 1(`1SLD`) Mac OS X 10.5 ~ macOS 10.12, 버전 2(`2SLD`) macOS 10.13 High Sierra부터, 버전 3(`3SLD`) macOS 14 Sonoma부터(확인 범위: FSEventsParser 코드 주석) [1][2] |
+| macOS 버전 | 레코드 버전 1(`1SLD`) Mac OS X 10.5 ~ macOS 10.12, 버전 2(`2SLD`) macOS 10.13 High Sierra부터, 버전 3(`3SLD`) macOS 14 Sonoma부터(FSEventsParser 코드 주석 기준) [1][2] |
 | 알려 주는 것 | 바뀐 경로, 변경 종류와 대상 종류(플래그), 이벤트 ID로 본 순서, 버전에 따라 노드 ID·UID |
 | 알려 주지 않는 것 | 사건 시각, 바꾼 프로그램이나 사람, 합쳐지기 전의 개별 동작 |
 | 공개 도구 | FSEventsParser(1SLD·2SLD·3SLD) [2], plaso `fseventsd` 파서(코드 설명상 1SLD·2SLD) [5] |

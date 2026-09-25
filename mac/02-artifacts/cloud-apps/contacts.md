@@ -53,7 +53,7 @@ nav_order: 1580
 
 ## 시각 해석
 
-연락처 파일의 시각 칸과 그 기준은 이번 자료로 확인하지 못했습니다. 검체에서 시각으로 보이는 칸을 찾으면 값의 크기로 맥 절대 시각인지 유닉스 시각인지 가리고, 가리는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다. 가려 낸 기준은 보고서에 "(확인 범위: 검체의 macOS 버전)" 처럼 범위를 붙여 적습니다.
+연락처 파일의 시각 칸과 그 기준은 참고 문헌에 나오지 않습니다. 검체에서 시각으로 보이는 칸을 찾으면 값의 크기로 맥 절대 시각인지 유닉스 시각인지 가리고, 가리는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다. 가려 낸 기준은 보고서에 "(macOS 버전 기준)" 처럼 검체의 macOS 버전을 붙여 적습니다.
 
 ## 함정과 한계
 

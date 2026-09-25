@@ -32,7 +32,7 @@ Apple Technical Q&A QA1809(2014-01-29)는 iOS 7과 OS X 10.9 Mavericks부터 Cor
 
 ## 표와 칸 이름
 
-knowledgeC.db를 설명한 자료에는 ZOBJECT, ZSOURCE, ZSTRUCTUREDMETADATA 같은 표와 ZCREATIONDATE 같은 칸이 나오고, 표를 서로 묶을 때 Z_PK와 Z_ENT 칸을 씁니다 [4]. 표와 칸 이름 앞에 Z가 붙는 모양은 이 자료의 예에서 보이는 것이고(확인 범위: knowledgeC.db [4]), 이 이름 규칙이나 Z_PK·Z_ENT 칸의 정확한 뜻을 설명한 Apple 문서는 참고 문헌에 없습니다.
+knowledgeC.db를 설명한 자료에는 ZOBJECT, ZSOURCE, ZSTRUCTUREDMETADATA 같은 표와 ZCREATIONDATE 같은 칸이 나오고, 표를 서로 묶을 때 Z_PK와 Z_ENT 칸을 씁니다 [4]. 표와 칸 이름 앞에 Z가 붙는 모양은 knowledgeC.db 자료의 예에서 보이는 것이고 [4], 이 이름 규칙이나 Z_PK·Z_ENT 칸의 정확한 뜻을 설명한 Apple 문서는 참고 문헌에 없습니다.
 
 낯선 Core Data 저장소를 처음 열 때는 이름으로 짐작하기보다 작업 사본에서 `sqlite_schema` 를 조회해 실제 표 목록과 `CREATE` 문부터 확인합니다.
 
@@ -44,7 +44,7 @@ SELECT name, sql FROM sqlite_schema WHERE type = 'table';
 
 ## 날짜 칸
 
-Core Data 계열 DB의 날짜 칸은 2001-01-01 00:00:00 UTC부터 센 초, 곧 맥 절대 시각 (Mac Absolute Time)으로 적힙니다(확인 범위: knowledgeC.db [4]). Apple 문서의 `NSTimeIntervalSince1970` 은 유닉스 기준 시각(1970-01-01 00:00:00 UTC)부터 Foundation 기준일(2001-01-01 00:00:00 UTC)까지의 초이고 [3], 그 값 978307200을 더하면 유닉스 시각이 됩니다 [4].
+Core Data 계열 DB의 날짜 칸은 2001-01-01 00:00:00 UTC부터 센 초, 곧 맥 절대 시각 (Mac Absolute Time)으로 적힙니다(knowledgeC.db 기준 [4]). Apple 문서의 `NSTimeIntervalSince1970` 은 유닉스 기준 시각(1970-01-01 00:00:00 UTC)부터 Foundation 기준일(2001-01-01 00:00:00 UTC)까지의 초이고 [3], 그 값 978307200을 더하면 유닉스 시각이 됩니다 [4].
 
 ```sql
 -- [4]에 실린 예. 'LOCALTIME' 을 붙이면 조회하는 컴퓨터의 시간대로 바뀐다
