@@ -170,7 +170,7 @@ Microsoft 문서는 이 값을 "드라이버 파일 시각의 하위 32비트" �
 
 ### DriverLastWriteTime
 
-이 값은 날짜와 시각을 적은 문자열입니다. 공개 파서 AmcacheParser 는 이 문자열을 날짜로 읽고 UTC 로 다룹니다. 이 문자열의 시간대를 밝힌 공식 문서는 없습니다. 그래서 검체마다 [$MFT](../../filesystem/mft.md)의 파일 수정 시각과 한 번 맞춰 보고, 보고서에 확인 범위를 적습니다.
+이 값은 날짜와 시각을 적은 문자열입니다. 공개 파서 AmcacheParser 는 이 문자열을 날짜로 읽고 UTC 로 다룹니다. 이 문자열의 시간대를 밝힌 공식 문서는 없습니다. 그래서 검체마다 [$MFT](../../filesystem/mft.md)의 파일 수정 시각과 한 번 맞춰 보고, 그 결과를 보고서에 적습니다.
 
 윈도 API 가 돌려주는 파일 수정 시각은 보통 $STANDARD_INFORMATION 의 값입니다. 그래서 이 값도 시각 조작 도구의 영향을 받을 수 있다고 봅니다([두 벌의 시각](../../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
 

@@ -60,7 +60,7 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브�
 | `ShortcutAumid` | REG_SZ | 값 이름으로 보아 앱 사용자 모델 ID (AppUserModelID) 입니다. 작업 표시줄이 창과 바로가기를 한 앱으로 묶을 때 쓰는 식별자입니다 | 파서 소스, 관찰 |
 | 이름 없는 기본값 | REG_DWORD | 뜻을 확인하지 못했습니다 | 관찰 (Win11 한 대) |
 
-Windows 11 한 대에서 본 모습은 다음과 같습니다(확인 범위: Windows 11 빌드 26200 한 대).
+Windows 11 한 대에서 본 모습은 다음과 같습니다.
 
 모든 하위 키에 값 다섯 개가 다 있었는데, `ShortcutTargetPath`·`ShortcutAumid` 는 몇 항목에서 비어 있었고 `ShortcutProgramId` 는 절반이 넘는 항목에서 비어 있었습니다.
 

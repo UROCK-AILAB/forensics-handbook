@@ -6,7 +6,7 @@ nav_order: 680
 
 # 윈도 업데이트 기록 (Windows Update·CBS Log)
 
-> 이 페이지에서 "(확인 범위: 조사 PC)" 는 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) PC 한 대에서 직접 열어 본 사실을 뜻합니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
+> 이 페이지에서 "" 는 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) PC 한 대에서 직접 열어 본 사실을 뜻합니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
 
 ## 한 줄 요약
 
@@ -21,8 +21,8 @@ nav_order: 680
 | Windows Update 클라이언트 | 업데이트를 찾고 내려받습니다 | ETL 진단 로그. Windows 8.1 부터 ETW (Event Tracing for Windows) 로 만듭니다 |
 | 업데이트 오케스트레이터 (Update Orchestrator) 서비스 | 내려받기·설치 순서를 맡습니다. Windows 10 부터 있습니다 | USO 로그(.etl) |
 | 서비싱 스택 (servicing stack) | 업데이트를 실제로 설치합니다 | CBS.log |
-| 설치가 끝난 패키지 | — | Component Based Servicing 레지스트리 키, `servicing\Packages` 의 .mum 파일 (확인 범위: 조사 PC) |
-| Windows Update 이벤트 | 설치 시작·성공·실패 | System 로그, Setup 로그, WindowsUpdateClient/Operational 로그 (확인 범위: 조사 PC) |
+| 설치가 끝난 패키지 | — | Component Based Servicing 레지스트리 키, `servicing\Packages` 의 .mum 파일 |
+| Windows Update 이벤트 | 설치 시작·성공·실패 | System 로그, Setup 로그, WindowsUpdateClient/Operational 로그 |
 
 이 기록으로 아래 질문에 답합니다.
 
@@ -44,7 +44,7 @@ Microsoft 문서가 밝힌 로그 파일은 아래와 같습니다.
 
 Windows Update 는 이제 WindowsUpdate.log 를 직접 만들지 않고 바로 읽을 수 없는 .etl 파일을 만들기 때문에, 읽을 수 있는 WindowsUpdate.log 는 PowerShell `Get-WindowsUpdateLog` 로 .etl 을 풀어서 만듭니다. Windows 8.1 이전의 텍스트 로그 위치는 이번에 연 자료로 확인하지 못했고, CBS.log 가 처음 생긴 Windows 버전도 확인하지 못했습니다.
 
-조사 PC 에서 실제로 본 위치는 아래와 같습니다. (확인 범위: 조사 PC)
+조사 PC 에서 실제로 본 위치는 아래와 같습니다.
 
 | 위치 | 있던 것 |
 |---|---|
@@ -86,7 +86,7 @@ USO 로그는 `Logs\` 바로 아래가 아니라 `System\`, `User\` 하위 폴�
 
 ### CBS.log
 
-한 줄은 날짜 시각, 수준, 구성 요소, 내용 순서입니다. (확인 범위: 조사 PC)
+한 줄은 날짜 시각, 수준, 구성 요소, 내용 순서입니다.
 
 ```
 YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
@@ -98,7 +98,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - 패키지는 `Package_for_KB5054156~31bf3856ad364e35~amd64~~26100.6717.1.4` 같은 이름으로 나옵니다.
 - 이 이름은 `~` 로 나뉘며, 순서는 이름, 공개 키 토큰, 아키텍처, 언어, 버전입니다. 각 칸의 공식 이름은 확인하지 못했습니다.
 
-로그가 넘겨지면 옛 로그는 `CbsPersist_` 파일로 바뀝니다. 파일 이름의 시각은 UTC 이고 새 CBS.log 가 시작한 시각이며, 파일 수정 시각은 그 로그의 마지막 기록 시각에 가깝습니다. (확인 범위: 조사 PC)
+로그가 넘겨지면 옛 로그는 `CbsPersist_` 파일로 바뀝니다. 파일 이름의 시각은 UTC 이고 새 CBS.log 가 시작한 시각이며, 파일 수정 시각은 그 로그의 마지막 기록 시각에 가깝습니다.
 
 - `CbsPersist_20260920234451.log` 의 이름 시각(23:44:51 UTC)은 새 CBS.log 첫 줄 시각(현지 2026-09-21 08:44:51)과 정확히 9시간 차이였습니다. 다른 .cab 파일도 같은 관계였습니다.
 - 옛 로그가 늘 .cab 으로 눌려 있지는 않았습니다. 압축하지 않은 .log 도 있었습니다.
@@ -106,7 +106,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 ### ReportingEvents.log
 
-`C:\Windows\SoftwareDistribution\ReportingEvents.log` 는 UTF-16LE 텍스트입니다. 파일 앞에 BOM `FF FE` 가 있고, 칸은 탭으로 나눕니다. (확인 범위: 조사 PC)
+`C:\Windows\SoftwareDistribution\ReportingEvents.log` 는 UTF-16LE 텍스트입니다. 파일 앞에 BOM `FF FE` 가 있고, 칸은 탭으로 나눕니다.
 
 조사 PC 에서 본 칸 순서는 아래와 같습니다. 칸 이름은 내용을 보고 붙인 것입니다. 공식 이름은 확인하지 못했습니다.
 
@@ -130,14 +130,14 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 ### DataStore.edb
 
-- `SoftwareDistribution\DataStore\DataStore.edb` 는 ESE DB 입니다. 옆의 `Logs\` 폴더에 edb.chk, edb.log, `edb0029C.log` 같은 세대 로그, edbres00001.jrs, edbres00002.jrs, edbtmp.log 가 있었습니다. (확인 범위: 조사 PC)
+- `SoftwareDistribution\DataStore\DataStore.edb` 는 ESE DB 입니다. 옆의 `Logs\` 폴더에 edb.chk, edb.log, `edb0029C.log` 같은 세대 로그, edbres00001.jrs, edbres00002.jrs, edbtmp.log 가 있었습니다.
 - 로그 이름은 옛 형식(.log·.chk)이었습니다. Windows 10 이후 Windows Search 는 로그를 .jtx, 체크포인트를 .jcp 로 쓰는 등 DB 마다 이름 규칙이 다르므로 복구할 때 확인합니다.
 - 안의 표 이름과 칸은 이번에 보지 않았습니다.
 - ESE 의 구조와 복구는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
 ### Component Based Servicing 레지스트리
 
-`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\<패키지 이름>` 에 서비싱 패키지마다 키가 하나 있습니다. 조사 PC 에서 키는 6,680개였고, `C:\Windows\servicing\Packages\*.mum` 파일도 6,680개였습니다. (확인 범위: 조사 PC)
+`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages\<패키지 이름>` 에 서비싱 패키지마다 키가 하나 있습니다. 조사 PC 에서 키는 6,680개였고, `C:\Windows\servicing\Packages\*.mum` 파일도 6,680개였습니다.
 
 | 값 | 조사 PC 에서 본 내용 |
 |---|---|
@@ -149,14 +149,14 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | `InstallUser` | S-1-5-18 |
 | `SelfUpdate`, `Visibility` | 이번에 뜻을 보지 않았습니다 |
 
-패키지 이름으로 업데이트 종류를 나눕니다. (확인 범위: 조사 PC)
+패키지 이름으로 업데이트 종류를 나눕니다.
 
 - 월간 누적 업데이트는 `Package_for_KB…` 가 아니라 `Package_for_RollupFix~31bf3856ad364e35~amd64~~26100.<UBR>.x.y` 로 남았습니다.
 - 현재 RollupFix 항목의 버전 26100.9457 은 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion` 의 `UBR`=9457 과 같았습니다.
 - `Package_for_KB…` 이름의 키는 2개뿐이었습니다.
 - `Package_for_ServicingStack_…`, `Package_for_DotNetRollup_…` 키도 있었습니다.
 
-`CurrentState` 값은 세 가지가 보였습니다. 숫자마다 공식 뜻은 확인하지 못했습니다. (확인 범위: 조사 PC)
+`CurrentState` 값은 세 가지가 보였습니다. 숫자마다 공식 뜻은 확인하지 못했습니다.
 
 | 값 | 개수 | 관찰 |
 |---|---|---|
@@ -168,7 +168,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 ### 이벤트 로그
 
-아래 이벤트는 조사 PC 의 실제 이벤트로만 확인했습니다. 이 이벤트를 설명한 Microsoft 공식 문서는 확인하지 못했습니다. (확인 범위: 조사 PC)
+아래 이벤트는 조사 PC 의 실제 이벤트로만 확인했습니다. 이 이벤트를 설명한 Microsoft 공식 문서는 확인하지 못했습니다.
 
 **System 로그, 공급자 `Microsoft-Windows-WindowsUpdateClient`**
 
@@ -212,11 +212,11 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 ### 증명하는 것
 
 - Component Based Servicing 키가 있으면 수집 시점에 그 서비싱 패키지가 이 PC 에 등록돼 있었습니다.
-- `InstallTimeHigh`·`InstallTimeLow` 는 그 패키지를 설치한 시각으로 읽습니다. 조사 PC 에서 OS 설치 때 들어간 패키지의 이 값은 OS 설치 시각과 3분 차이였습니다. (확인 범위: 조사 PC)
-- RollupFix 항목의 버전이 `UBR` 과 같으면 그 항목이 현재 누적 업데이트 수준입니다. (확인 범위: 조사 PC)
-- `InstallClient` 와 Setup 로그의 Client id 는 설치를 맡은 주체를 알려 줍니다. 조사 PC 에서는 이 값으로 Windows Update 에이전트(UpdateAgentLCU)와 DISM(DISM Package Manager Provider)을 나눌 수 있었습니다. (확인 범위: 조사 PC)
+- `InstallTimeHigh`·`InstallTimeLow` 는 그 패키지를 설치한 시각으로 읽습니다. 조사 PC 에서 OS 설치 때 들어간 패키지의 이 값은 OS 설치 시각과 3분 차이였습니다.
+- RollupFix 항목의 버전이 `UBR` 과 같으면 그 항목이 현재 누적 업데이트 수준입니다.
+- `InstallClient` 와 Setup 로그의 Client id 는 설치를 맡은 주체를 알려 줍니다. 조사 PC 에서는 이 값으로 Windows Update 에이전트(UpdateAgentLCU)와 DISM(DISM Package Manager Provider)을 나눌 수 있었습니다.
 - 이벤트 19·20·43 은 어떤 제목의 업데이트를 언제 설치 시작·성공·실패했는지 알려 줍니다.
-- ReportingEvents.log 의 호출한 프로세스 칸은 어떤 프로그램이 Windows Update 를 불렀는지 알려 줍니다. (확인 범위: 조사 PC)
+- ReportingEvents.log 의 호출한 프로세스 칸은 어떤 프로그램이 Windows Update 를 불렀는지 알려 줍니다.
 
 ### 증명하지 못하는 것
 
@@ -231,7 +231,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 ## 시각 해석
 
-기록마다 시각 기준이 다릅니다. 여러 기록을 한 줄로 세우기 전에 이 표부터 봅니다. (확인 범위: 조사 PC)
+기록마다 시각 기준이 다릅니다. 여러 기록을 한 줄로 세우기 전에 이 표부터 봅니다.
 
 | 기록 | 시각 기준 |
 |---|---|

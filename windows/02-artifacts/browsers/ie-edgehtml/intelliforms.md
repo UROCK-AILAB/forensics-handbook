@@ -15,7 +15,7 @@ IE 7~9 는 웹 폼에 입력한 아이디·비밀번호를 사용자 하이브�
 
 IE 는 로그인 폼의 아이디·비밀번호를 자동 완성 (AutoComplete) 용으로 저장할 수 있고, IE 7~9 는 이 값을 `IntelliForms\Storage2` 키에 둡니다. 한 사이트에 아이디·비밀번호 쌍이 여러 개 있을 수 있습니다. HTTP 기본 인증 (Basic Authentication) 창에 넣은 비밀번호는 다른 곳에 저장하는데, IE 7 이후 이 비밀번호는 사용자의 `Credentials` 폴더에 들어갑니다.
 
-Windows 11 25H2 PC 의 `IntelliForms` 키에는 값도 하위 키도 없었고 `Storage2` 도 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+Windows 11 25H2 PC 의 `IntelliForms` 키에는 값도 하위 키도 없었고 `Storage2` 도 없었습니다.
 
 ## 위치와 버전별 차이
 

@@ -24,7 +24,7 @@ Drive for desktop 은 관리자와 사용자가 정한 설정을 레지스트리
 
 ## 위치와 버전별 차이
 
-| 기록 | 위치 | 확인 범위 |
+| 기록 | 위치 | 근거 |
 |---|---|---|
 | 컴퓨터 전체 설정 | `HKEY_LOCAL_MACHINE\Software\Google\DriveFS` | 문서 |
 | 사용자 설정 | `HKEY_CURRENT_USER\Software\Google\DriveFS` | 문서 |

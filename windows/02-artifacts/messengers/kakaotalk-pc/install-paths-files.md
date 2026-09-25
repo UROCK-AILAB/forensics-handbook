@@ -31,7 +31,7 @@ DB 확장자는 `.edb` 이지만 형식은 SQLite 입니다.
 | `C:\Users\<사용자>\AppData\Local\Kakao\KakaoTalk\users\<계정 폴더>\` | 카카오톡 계정별 폴더 | 논문 |
 
 - `<사용자>` 는 Windows 사용자 프로필 폴더 이름입니다. 이 폴더가 어느 Windows 계정의 것인지는 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 확인합니다.
-- `<계정 폴더>` 이름은 40자리 16진수 문자열이었습니다. (확인 범위: 카카오톡 PC 26.6.0.5208, Windows 11 한 대)
+- `<계정 폴더>` 이름은 40자리 16진수 문자열이었습니다(카카오톡 PC 26.6.0.5208 기준).
 - 이 이름이 무엇을 가리키는지는 [계정·로그인 흔적](account-login.md) 에서 다룹니다.
 
 ### 프로그램 설치 폴더
@@ -98,7 +98,7 @@ Windows 검색 색인 `Windows.edb` 와 브라우저 캐시 `WebCacheV01.dat` �
 SQLite 는 쓰기 전 로그 (Write-Ahead Log, WAL) 방식에서 주 파일 옆에 `-wal`·`-shm` 파일을 둡니다.
 두 파일의 이름은 주 파일 이름 뒤에 `-wal`·`-shm` 을 붙인 것입니다(SQLite WAL 문서).
 예를 들어 `TalkUserDB.edb` 의 짝은 `TalkUserDB.edb-wal` 과 `TalkUserDB.edb-shm` 입니다.
-관찰한 PC 에서는 DB 마다 두 파일이 함께 있었습니다. (확인 범위: 카카오톡 PC 26.6.0.5208, Windows 11 한 대)
+카카오톡 PC 26.6.0.5208 에서는 DB 마다 두 파일이 함께 있었습니다.
 두 파일을 함께 봐야 하는 이유는 [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) 에서 다룹니다.
 
 ## 증거로서 의미

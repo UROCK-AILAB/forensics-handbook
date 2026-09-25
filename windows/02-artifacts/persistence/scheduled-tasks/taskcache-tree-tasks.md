@@ -42,7 +42,7 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 |---|---|
 | Tree | 작업 경로를 이름으로 쓰는 키. 폴더도 키가 됩니다 |
 | Tasks | GUID 를 이름으로 쓰는 키. 작업 정보가 들어 있습니다 |
-| Boot · Logon · Plain | GUID 이름의 하위 키만 있고 값은 없었습니다 (확인 범위: Win11 25H2 한 대) |
+| Boot · Logon · Plain | GUID 이름의 하위 키만 있고 값은 없었습니다 |
 | Maintenance | winreg-kb 목록에는 없습니다. Win11 25H2 한 대에서 보였고, 역시 GUID 하위 키만 있었습니다 |
 
 ### Windows 버전별 차이
@@ -52,7 +52,7 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 | XP | `HKLM\Software\Microsoft\SchedulingAgent` ([옛 작업 파일](job-at.md) 참고) | 없음 |
 | Vista · 2008 · 7 | `Schedule\TaskCache` | 28바이트 |
 | 8 · 10 | `Schedule\TaskCache` | 36바이트 |
-| 11 25H2 | `Schedule\TaskCache` (Maintenance 하위 키도 있음) | 36바이트 (확인 범위: 한 대) |
+| 11 25H2 | `Schedule\TaskCache` (Maintenance 하위 키도 있음) | 36바이트 |
 
 ## 구조
 
@@ -66,9 +66,9 @@ Tree 아래 키 경로는 Tasks\{GUID} 의 Path 값을 Tree 뒤에 붙인 것입
 | Index | winreg-kb 문서에 뜻이 비어 있습니다 |
 | SD | 보안 설명자 (Security Descriptor) |
 
-폴더에 해당하는 Tree 키에는 Id 가 없고 SD 값만 있었습니다. 한 PC 에서 이런 키가 142개였습니다. (확인 범위: Win11 25H2 한 대)
+폴더에 해당하는 Tree 키에는 Id 가 없고 SD 값만 있었습니다. 한 PC 에서 이런 키가 142개였습니다.
 
-**SD 값.** 한 PC 에서 SD 는 148바이트, 152바이트 같은 REG_BINARY 였습니다. 자기 상대형 (self-relative) 보안 설명자로 풀면 다음과 같은 SDDL 문자열이 나왔습니다. (확인 범위: Win11 25H2 한 대)
+**SD 값.** 한 PC 에서 SD 는 148바이트, 152바이트 같은 REG_BINARY 였습니다. 자기 상대형 (self-relative) 보안 설명자로 풀면 다음과 같은 SDDL 문자열이 나왔습니다.
 
 ```
 O:BAG:SYD:(A;ID;0x1f019f;;;BA)(A;ID;0x1f019f;;;SY)(A;ID;FA;;;BA)(A;;FR;;;SY)
@@ -76,7 +76,7 @@ O:BAG:SYD:(A;ID;0x1f019f;;;BA)(A;ID;0x1f019f;;;SY)(A;ID;FA;;;BA)(A;;FR;;;SY)
 
 `O:` 뒤는 소유자, `G:` 뒤는 그룹, `D:` 뒤의 괄호들은 접근 허용 항목입니다. `BA` 는 Administrators 그룹, `SY` 는 SYSTEM 계정을 가리키는 약어입니다. SID 표기는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. 작업 키에 SD 값이 없을 때 무슨 일이 생기는지는 [숨긴 예약 작업 찾기 (SD 값 삭제)](sd.md)에서 다룹니다.
 
-**Index 값.** 공식 뜻은 이번 조사에서 확인하지 못했습니다. 한 PC 에서는 Index 값과, 같은 GUID 가 들어 있는 하위 키가 이렇게 맞았습니다. (확인 범위: Win11 25H2 한 대)
+**Index 값.** 공식 뜻은 이번 조사에서 확인하지 못했습니다. 한 PC 에서는 Index 값과, 같은 GUID 가 들어 있는 하위 키가 이렇게 맞았습니다.
 
 | Index | 작업 키 수 | 같은 GUID 가 있던 하위 키 |
 |---|---|---|
@@ -91,7 +91,7 @@ Index 가 0 인 37개는 Id 의 GUID 가 Tasks·Boot·Logon·Plain·Maintenance 
 
 ### Tasks\{GUID}
 
-winreg-kb 문서는 값으로 DynamicInfo, Hash, Path, Triggers 를 적습니다. 한 PC 의 한 작업에는 값이 더 있었습니다. (확인 범위: Win11 25H2 한 대)
+winreg-kb 문서는 값으로 DynamicInfo, Hash, Path, Triggers 를 적습니다. 한 PC 의 한 작업에는 값이 더 있었습니다.
 
 | 값 | 형식 (관찰) | 뜻 |
 |---|---|---|
@@ -111,13 +111,13 @@ Boot·Logon·Plain·Maintenance 아래 GUID 키에는 값이 없었습니다. �
 
 Hash 는 `System32\Tasks` 에 있는 XML 파일의 무결성 해시입니다. 알고리즘은 SHA-256 이고(KB2305420 이전에는 CRC32 였습니다), 파일 앞의 BOM(`FF FE`)은 계산에서 뺍니다.
 
-한 PC 에서 Hash(32바이트) 269개가 모두 "BOM 을 뺀 XML 의 SHA-256" 과 같았습니다. BOM 을 넣고 계산한 해시와는 한 건도 맞지 않았습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 에서 Hash(32바이트) 269개가 모두 "BOM 을 뺀 XML 의 SHA-256" 과 같았습니다. BOM 을 넣고 계산한 해시와는 한 건도 맞지 않았습니다.
 
 그래서 Hash 로 XML 파일을 검증할 수 있습니다. 두 값이 다르면 레지스트리에 적힌 해시와 지금 파일 내용이 다르다는 뜻입니다. 파일을 따로 고쳤거나 바꿔 넣었는지 따져 봅니다.
 
 ### Schema
 
-한 PC 에서 Schema 값과 XML version 속성은 이렇게 짝을 이뤘습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 에서 Schema 값과 XML version 속성은 이렇게 짝을 이뤘습니다.
 
 | Schema (10진) | 16진 | XML version |
 |---|---|---|
@@ -147,7 +147,7 @@ winreg-kb 문서의 예시 헥스에서 오프셋 20 값은 Windows 7 예가 `2b
 
 ### Actions · Triggers
 
-두 값의 공개 명세는 이번 조사에서 찾지 못했습니다. 아래는 한 PC 에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
+두 값의 공개 명세는 이번 조사에서 찾지 못했습니다. 아래는 한 PC 에서 본 모습입니다.
 
 Actions 269개는 모두 첫 2바이트가 `03 00` 이었습니다. 한 Actions 값은 `03 00`, `0C 00 00 00`(12), UTF-16 문자열 `Author`, `66 66` 순서로 시작했고, 12 는 `Author` 여섯 글자를 UTF-16 으로 쓴 바이트 수와 같습니다. 그 뒤에는 명령 경로와 인자가 UTF-16 문자열로 들어 있었으며, XML 의 `<Actions Context="Author">`, Command, Arguments 와 같은 글자였습니다.
 
@@ -157,8 +157,8 @@ winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인�
 
 **증명하는 것**
 
-- Tree 키의 Id 가 가리키는 GUID 가 Tasks 에 있으면, 작업 스케줄러가 알고 있는 작업입니다. 한 PC 에서 Tasks 하위 키 수(269)와 Get-ScheduledTask 결과 수(269)가 같았습니다. (확인 범위: Win11 25H2 한 대)
-- DynamicInfo 오프셋 12 는 마지막 실행 시각입니다. 한 PC 에서 한 번 이상 실행된 작업 175개 모두 이 값이 Get-ScheduledTaskInfo 의 LastRunTime(UTC)과 초 단위까지 같았습니다. (확인 범위: Win11 25H2 한 대)
+- Tree 키의 Id 가 가리키는 GUID 가 Tasks 에 있으면, 작업 스케줄러가 알고 있는 작업입니다. 한 PC 에서 Tasks 하위 키 수(269)와 Get-ScheduledTask 결과 수(269)가 같았습니다.
+- DynamicInfo 오프셋 12 는 마지막 실행 시각입니다. 한 PC 에서 한 번 이상 실행된 작업 175개 모두 이 값이 Get-ScheduledTaskInfo 의 LastRunTime(UTC)과 초 단위까지 같았습니다.
 - Actions 값에 명령 경로와 인자가 문자열로 남아서, XML 파일이 없을 때 실행 대상을 찾는 단서가 됩니다.
 - Hash 로 지금의 XML 파일이 레지스트리에 적힌 내용과 같은지 확인할 수 있습니다.
 
@@ -182,7 +182,7 @@ winreg-kb 문서는 Triggers 값 안의 FILETIME 이 현지 시각으로 보인�
 
 FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각 값은 [시간대 설정](../../system-account/time-zone.md)을 보고 바꿉니다.
 
-한 PC 에서 본 모습은 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 에서 본 모습은 다음과 같습니다.
 
 - **오프셋 4.** Windows 기본 작업 153개에서 2024-05-25 (UTC) 였습니다. OS 설치 시각(2026-06-26)보다 앞섭니다. 설치 이미지에 미리 등록해 둔 시각이 남은 것으로 보입니다.
 - **오프셋 4 와 XML 파일.** 여러 작업에서 오프셋 4 의 시각과 XML 파일의 마지막 기록 시각(UTC)이 초 단위까지 같았습니다. 모든 작업이 이렇지는 않았습니다.
@@ -192,7 +192,7 @@ FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](
 
 ## 함정과 한계
 
-- **Tree 키 수는 작업 수가 아닙니다.** 폴더 키가 있고, 없어진 작업의 키(Index 0)도 남습니다. 한 PC 에서 Id 가 있는 Tree 키는 306개였고, 작업은 269개였습니다. (확인 범위: Win11 25H2 한 대)
+- **Tree 키 수는 작업 수가 아닙니다.** 폴더 키가 있고, 없어진 작업의 키(Index 0)도 남습니다. 한 PC 에서 Id 가 있는 Tree 키는 306개였고, 작업은 269개였습니다.
 - **Maintenance 는 다른 하위 키와 겹칩니다.** Boot·Logon·Plain·Maintenance 의 GUID 를 더하면 작업 수보다 커집니다.
 - **오프셋 4 는 작업 생성 시각이 아닐 수 있습니다.** 기본 작업은 OS 설치보다 이른 날짜가 나옵니다.
 - **REG_DWORD 표시에 주의합니다.** 값을 문자열로 받는 도구는 REG_DWORD 를 부호 없는 10진수로 보여 줍니다. Schema 같은 값은 원시 바이트로 확인합니다.

@@ -16,7 +16,7 @@ Windows 설정의 개인 정보 화면에서 앱의 카메라·마이크 사용�
 
 레지스트리에는 권한마다 키가 있고, 그 아래에 앱마다 하위 키가 생깁니다. 앱 하위 키에는 그 앱이 장치를 쓰기 시작한 시각과 멈춘 시각이 남습니다. 카메라는 `webcam` 키, 마이크는 `microphone` 키입니다.
 
-ConsentStore 에는 카메라·마이크 말고도 권한 키가 여럿 있습니다. 관찰한 PC 에는 다음 35개가 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+ConsentStore 에는 카메라·마이크 말고도 권한 키가 여럿 있습니다. 관찰한 PC 에는 다음 35개가 있었습니다.
 
 ```
 appDiagnostics, appointments, bluetooth, bluetoothSync, broadFileSystemAccess,
@@ -43,7 +43,7 @@ userNotificationListener, videosLibrary, webcam, wifiData, wiFiDirect
 
 ### 데이터베이스
 
-관찰한 PC 의 `C:\ProgramData\Microsoft\Windows\CapabilityAccessManager\` 폴더에는 다음 파일이 있었습니다. 형식은 모두 SQLite 였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+관찰한 PC 의 `C:\ProgramData\Microsoft\Windows\CapabilityAccessManager\` 폴더에는 다음 파일이 있었습니다. 형식은 모두 SQLite 였습니다.
 
 | 파일 | 함께 있던 파일 |
 |---|---|
@@ -74,7 +74,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 | 스토어 (패키지) 앱 | `<권한 이름>\<패키지 패밀리 이름>` | `Microsoft.WindowsCamera_8wekyb3d8bbwe` |
 | 일반 데스크톱 앱 | `<권한 이름>\NonPackaged\<실행 파일 전체 경로>` | `C:#Program Files#<회사>#<앱>#<앱>.exe` |
 
-데스크톱 앱의 하위 키 이름은 실행 파일의 전체 경로이고, 경로의 `\` 는 `#` 으로 바뀌어 있습니다. 위 구조는 관찰한 PC 에서 본 것입니다. (확인 범위: Windows 11 25H2, PC 한 대)
+데스크톱 앱의 하위 키 이름은 실행 파일의 전체 경로이고, 경로의 `\` 는 `#` 으로 바뀌어 있습니다. 위 구조는 관찰한 PC 에서 본 것입니다.
 
 ### 앱 하위 키의 값
 
@@ -87,11 +87,11 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 
 - 스토어 앱 하위 키에는 `Value` (REG_SZ) 와 `LastSetTime` (REG_QWORD) 도 있었습니다. `Value` 의 관찰값은 `Allow` 와 `Prompt` 였습니다.
 - 한 번도 장치를 쓰지 않은 앱의 하위 키에는 `LastUsedTime` 값이 없었습니다.
-- 위 두 가지는 관찰한 것입니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 위 두 가지는 관찰한 것입니다.
 
 ### 권한 키와 NonPackaged 키의 값
 
-권한 키 자체와 `NonPackaged` 키에는 `Value` (REG_SZ, 관찰값 `Allow`) 와 `LastSetTime` (REG_QWORD) 이 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+권한 키 자체와 `NonPackaged` 키에는 `Value` (REG_SZ, 관찰값 `Allow`) 와 `LastSetTime` (REG_QWORD) 이 있었습니다.
 
 - `Value` 는 설정 화면의 켬·끔으로 보입니다. 확인하지 못했습니다.
 - `LastSetTime` 은 그 설정을 바꾼 시각으로 보입니다. 확인하지 못했습니다.
@@ -99,7 +99,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 
 ### 데이터베이스 표
 
-아래 표 구조는 옛 파일 `CapabilityAccessManager (1).db` (2025년 4월 날짜) 에서 본 것입니다. 지금 쓰는 DB 의 구조가 같은지는 확인하지 못했습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+아래 표 구조는 옛 파일 `CapabilityAccessManager (1).db` (2025년 4월 날짜) 에서 본 것입니다. 지금 쓰는 DB 의 구조가 같은지는 확인하지 못했습니다.
 
 | 표 | 칸 |
 |---|---|
@@ -145,7 +145,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 | `LastSetTime` | 권한 키, NonPackaged 키, 스토어 앱 하위 키 | 설정을 바꾼 때로 보입니다. 확인하지 못했습니다 | REG_QWORD |
 | DB 의 시각 칸 | `LastUsedTimeStart`, `LastUsedTimeStop`, `LastObservedTime`, `ShownTime` | 칸 이름이 가리키는 때로 보입니다. 확인하지 못했습니다 | FILETIME 정수 (관찰) |
 
-- 시작·끝 값은 FILETIME 이므로 UTC 로 읽습니다. 관찰한 PC 에서 UTC 로 풀었을 때 시작과 끝이 초에서 시간 단위 간격으로 맞게 나왔습니다. 예를 들어 01:16:34 UTC 에 시작해 02:29:28 UTC 에 끝났습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 시작·끝 값은 FILETIME 이므로 UTC 로 읽습니다. 관찰한 PC 에서 UTC 로 풀었을 때 시작과 끝이 초에서 시간 단위 간격으로 맞게 나왔습니다. 예를 들어 01:16:34 UTC 에 시작해 02:29:28 UTC 에 끝났습니다.
 - 옛 DB 파일에서 본 값 133897659145807372 는 2025-04-22 03:25:14 UTC 입니다.
 - 레지스트리에는 앱마다 시작·끝 한 쌍만 있었습니다. 새로 쓰면 이 한 쌍을 덮어쓰는 것으로 보입니다. 이 해석은 관찰에서 나온 추정입니다.
 - 장치를 쓰는 동안 `LastUsedTimeStop` 이 0 인지는 확인하지 못했습니다. 관찰한 PC 에는 0 인 항목이 없었습니다.
@@ -158,7 +158,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 확인하지 못했�
 2. **기록이 없으면 쓰지 않았다고 봅니다.** 데스크톱 앱이 설정 목록에 늘 나오지는 않습니다. 설정을 꺼도 접근할 수 있는 경우가 있습니다.
 3. **마지막 한 쌍을 전체 이력으로 읽습니다.** 레지스트리에는 앱마다 마지막 시작·끝만 있습니다. 이전 사용은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 하이브를 찾아 봅니다.
 4. **하위 키 이름을 그대로 경로로 적습니다.** 하위 키 이름의 `#` 은 `\` 로 바꿔 읽습니다.
-5. **라이브 PC 에서 DB 를 보통 방식으로 복사합니다.** 관찰한 PC 에서는 관리자 권한으로도 DB 폴더의 목록 보기가 거부됐습니다. 백업 권한 복사 (`robocopy /B`) 로는 잠기지 않은 옛 파일만 복사됐습니다. 지금 쓰는 DB 는 사용 중이라 복사하지 못했습니다. 라이브 수집에는 볼륨 섀도 복사본이나 원시 디스크 읽기가 필요합니다. (확인 범위: Windows 11 25H2, PC 한 대) 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
+5. **라이브 PC 에서 DB 를 보통 방식으로 복사합니다.** 관찰한 PC 에서는 관리자 권한으로도 DB 폴더의 목록 보기가 거부됐습니다. 백업 권한 복사 (`robocopy /B`) 로는 잠기지 않은 옛 파일만 복사됐습니다. 지금 쓰는 DB 는 사용 중이라 복사하지 못했습니다. 라이브 수집에는 볼륨 섀도 복사본이나 원시 디스크 읽기가 필요합니다. 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [증거 획득](../../03-techniques/process-acquisition/evidence-acquisition/index.md) 에서 다룹니다.
 6. **옛 DB 와 지금 DB 를 섞습니다.** 같은 폴더에 `CapabilityAccessManager (1).db` 가 있었습니다. 파일마다 따로 읽고, 결과에 어느 파일에서 나온 값인지 적습니다.
 7. **DB 표 구조를 고정된 것으로 봅니다.** 위 표 구조는 옛 파일에서 본 것입니다. 지금 DB 는 표 목록부터 다시 확인합니다.
 

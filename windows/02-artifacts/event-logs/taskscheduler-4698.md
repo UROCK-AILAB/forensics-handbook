@@ -35,9 +35,9 @@ nav_order: 2650
 | 기본 상태 | 꺼짐 | 꺼짐 |
 
 - Microsoft 는 4698 과 TaskScheduler Operational 로그를 두고 "Neither of these are audited by default and must be explicitly turned on by an administrator." 라고 적었습니다. 관리자가 따로 켜야 한다는 뜻입니다. 4698 의 감사 하위 범주는 Other Object Access Events 이고, 4699~4702 의 감사 하위 범주도 같은지는 이번에 확인하지 못했습니다.
-- TaskScheduler 공급자는 Operational 말고도 System 로그와 `Microsoft-Windows-TaskScheduler/Debug`·`/Diagnostic`·`/Maintenance` 로그에 씁니다. (확인 범위: Win11 25H2 한 대)
+- TaskScheduler 공급자는 Operational 말고도 System 로그와 `Microsoft-Windows-TaskScheduler/Debug`·`/Diagnostic`·`/Maintenance` 로그에 씁니다.
 
-한 PC 에서 설정을 읽어 본 결과는 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 에서 설정을 읽어 본 결과는 다음과 같습니다.
 
 - Operational 로그는 꺼져 있었습니다 (IsEnabled False).
 - Operational 로그의 최대 크기는 10,485,760바이트였고, 보관 방식은 순환 (Circular) 이었습니다.
@@ -53,7 +53,7 @@ nav_order: 2650
 |---|---|---|---|
 | 4698 | 0 | Windows Vista · Windows Server 2008 부터 | — |
 | 4698 | 1 | Windows 10 1903 부터 | ClientProcessStartKey, ClientProcessId, ParentProcessId, RpcCallClientLocality, FQDN |
-| 4699~4702 | 0 · 1 | 매니페스트에 두 버전이 모두 있습니다 (확인 범위: Win11 25H2 한 대) | 버전 1 에 위와 같은 다섯 칸 |
+| 4699~4702 | 0 · 1 | 매니페스트에 두 버전이 모두 있습니다 | 버전 1 에 위와 같은 다섯 칸 |
 
 - 4699~4702 의 버전 1 이 어느 Windows 버전부터 쓰였는지는 확인하지 못했습니다.
 - Windows XP · 2003 의 작업 기록 파일은 이번에 확인하지 못했습니다. 옛 작업 형식은 [옛 작업 파일 (.job·at)](../persistence/scheduled-tasks/job-at.md)에서 다룹니다.
@@ -91,7 +91,7 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다. 문서가 보여
 
 ### 4699~4702 칸
 
-네 이벤트 모두 Subject 네 칸과 TaskName 이 있습니다. 작업 내용이 들어가는 칸 이름은 이벤트마다 다릅니다. (확인 범위: Win11 25H2 한 대의 매니페스트)
+네 이벤트 모두 Subject 네 칸과 TaskName 이 있습니다. 작업 내용이 들어가는 칸 이름은 이벤트마다 다릅니다. (Windows 11 25H2 매니페스트 기준)
 
 | ID | 메시지 | 작업 내용 칸 |
 |---|---|---|
@@ -105,7 +105,7 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다. 문서가 보여
 
 ### TaskScheduler/Operational 이벤트
 
-아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다. (확인 범위: Win11 25H2 한 대)
+아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다.
 
 | ID | 뜻 | 칸 |
 |---|---|---|
@@ -178,7 +178,7 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다. 문서가 보여
 5. **작업 목록에 없으면 작업이 없다고 봅니다.** Microsoft 가 분석한 Tarrask 는 레지스트리 SD 값을 지워 작업을 목록에서 감췄습니다. 감춘 작업도 트리거대로 계속 실행됩니다. SD 값 삭제만 알려 주는 전용 이벤트 ID 는 확인하지 못했습니다. 이벤트에 나온 작업 이름을 `TaskCache\Tree` 와 대조합니다. 자세한 방법은 [숨긴 예약 작업 찾기 (SD 값 삭제)](../persistence/scheduled-tasks/sd.md)에서 다룹니다.
 6. **뿌리에 있는 작업을 흘려봅니다.** Microsoft 는 TaskName 이 `\TASK_NAME` 꼴인 작업, 곧 뿌리에 바로 있는 작업을 살피라고 권합니다. 사람이 손으로 만든 작업과 악성 코드가 만든 작업이 흔히 뿌리에 있다고 적었습니다.
 7. **`<LogonType>Password</LogonType>` 를 흘려봅니다.** Microsoft 는 TaskContent 에 이 값이 있으면 경보를 울리라고 권합니다. 이때 작업 실행 계정의 비밀번호가 자격 증명 관리자에 평문 형식 (cleartext format) 으로 저장되고, 관리자 권한으로 꺼낼 수 있다고 적었습니다. 저장 위치는 [자격 증명 관리자와 볼트](../credentials/credential-manager-windows-vault.md)에서 다룹니다.
-8. **순환 로그의 앞부분을 끝까지 믿습니다.** 한 PC 에서 Operational 로그는 10,485,760바이트 순환 설정이었습니다. (확인 범위: Win11 25H2 한 대) 크기 한도에 이르면 오래된 기록부터 밀려납니다.
+8. **순환 로그의 앞부분을 끝까지 믿습니다.** 한 PC 에서 Operational 로그는 10,485,760바이트 순환 설정이었습니다. 크기 한도에 이르면 오래된 기록부터 밀려납니다.
 9. **원격 등록을 한 컴퓨터에서만 찾습니다.** 다른 컴퓨터에 작업을 등록하면 실행한 쪽과 대상 쪽에 서로 다른 기록이 남습니다. 아래 "교차 검증" 의 JPCERT/CC 시험 결과를 봅니다.
 
 ### 지우기와 조작

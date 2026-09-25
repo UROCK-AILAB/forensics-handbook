@@ -6,7 +6,7 @@ nav_order: 670
 
 # 스토어 앱 설치 목록 (AppX·StateRepository)
 
-> 이 페이지에서 "(확인 범위: 조사 PC)" 는 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) PC 한 대에서 직접 열어 본 사실을 뜻합니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
+> 이 페이지에서 "" 는 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) PC 한 대에서 직접 열어 본 사실을 뜻합니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
 
 ## 한 줄 요약
 
@@ -16,9 +16,9 @@ nav_order: 670
 
 Windows 는 스토어 앱을 패키지로 설치하며, 패키지 형식의 이름은 MSIX 입니다. MSIX 는 예전 APPX 의 새 이름입니다. 패키지 하나에는 앱 (application) 이 0개에서 100개까지 들어가고, 프레임워크 패키지와 리소스 패키지에는 앱이 없습니다.
 
-앱 본체는 `C:\Program Files\WindowsApps\<패키지 전체 이름>\` 폴더에 설치됩니다. 패키지는 사용자마다 따로 등록하므로 같은 패키지라도 사용자마다 등록 기록이 따로 남습니다. (확인 범위: 조사 PC)
+앱 본체는 `C:\Program Files\WindowsApps\<패키지 전체 이름>\` 폴더에 설치됩니다. 패키지는 사용자마다 따로 등록하므로 같은 패키지라도 사용자마다 등록 기록이 따로 남습니다.
 
-StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지를 등록한 사용자, 사용자별 등록 시각이 표로 남습니다. 레지스트리에는 모든 사용자용 목록과 사용자별 목록이 따로 남고, 설치·등록·제거 작업은 이벤트 로그에 작업마다 남습니다. (확인 범위: 조사 PC)
+StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지를 등록한 사용자, 사용자별 등록 시각이 표로 남습니다. 레지스트리에는 모든 사용자용 목록과 사용자별 목록이 따로 남고, 설치·등록·제거 작업은 이벤트 로그에 작업마다 남습니다.
 
 이 기록으로 아래 질문에 답합니다.
 
@@ -44,7 +44,7 @@ StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지�
 | `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages\<패키지 전체 이름>` | 사용자별 패키지 목록 |
 | `%SystemRoot%\System32\Winevt\Logs\` 의 AppX 관련 .evtx | 설치·등록·제거 작업 |
 
-표의 위치는 모두 조사 PC 에서 확인했습니다. (확인 범위: 조사 PC)
+표의 위치는 모두 조사 PC 에서 확인했습니다.
 
 - 두 .srd 파일은 첫 16바이트가 `SQLite format 3\0` 이라서, 확장자는 .srd 이지만 SQLite DB 입니다.
 - 조사 PC 에서 `StateRepository-Machine.srd-wal` 은 103,032바이트로 비어 있지 않았습니다.
@@ -91,7 +91,7 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 
 ### StateRepository-Machine.srd 의 표
 
-조사 PC 의 이 DB 에는 표 (table) 가 90개쯤 있었습니다. 분석에 먼저 쓰는 표는 아래와 같습니다. (확인 범위: 조사 PC)
+조사 PC 의 이 DB 에는 표 (table) 가 90개쯤 있었습니다. 분석에 먼저 쓰는 표는 아래와 같습니다.
 
 | 표 | 주요 칸 (column) | 알려 주는 것 |
 |---|---|---|
@@ -106,7 +106,7 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 
 그 밖에 PackageUserStatus, PackageMachineStatus, ProvisionedPackage, ProvisionedPackageDeleted, EndOfLifePackage, Bundle, BundlePackage, Dependency, ApplicationUser, AppExecutionAlias, Protocol, FileTypeAssociation, PrimaryTile, SecondaryTile 같은 표가 있었습니다.
 
-조사 PC 에서 본 값은 이렇습니다. (확인 범위: 조사 PC)
+조사 PC 에서 본 값은 이렇습니다.
 
 - User 표는 5행이었습니다. S-1-0-0, S-1-5-18, S-1-5-19, 로컬 계정 2개(RID 1000·1001)입니다.
 - PackageUser 에는 IsInbox=1(기본 탑재) 패키지가 129건, IsInbox=0 패키지가 362건 있었습니다.
@@ -122,16 +122,16 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 
 ### StateRepository-Deployment.srd 의 표
 
-조사 PC 의 이 DB 에는 AppInstaller, AppInstallerUri, AppxManifest, AutoUpdatePackage, ContentGroup, ContentGroupFile, File, PackageAppInstaller, PackageSourceUri 표가 있었습니다. 칸 구성과 뜻은 이번에 보지 않았습니다. (확인 범위: 조사 PC)
+조사 PC 의 이 DB 에는 AppInstaller, AppInstallerUri, AppxManifest, AutoUpdatePackage, ContentGroup, ContentGroupFile, File, PackageAppInstaller, PackageSourceUri 표가 있었습니다. 칸 구성과 뜻은 이번에 보지 않았습니다.
 
 ### 레지스트리
 
-`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore` 아래에는 아래 하위 키가 있었습니다. (확인 범위: 조사 PC)
+`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore` 아래에는 아래 하위 키가 있었습니다.
 
 - Applications, Config, DeferredRemoval, Deleted, Deprovisioned, EndOfLife, InboxApplications, Staged, UpdatedApplications, Upgrade, UupProducts
 - 사용자 SID 이름의 키들
 
-하위 키에서 본 내용은 이렇습니다. (확인 범위: 조사 PC)
+하위 키에서 본 내용은 이렇습니다.
 
 - `Applications\<패키지 전체 이름>` 키에는 `Path` 값이 있습니다. 값은 `C:\Program Files\WindowsApps\<전체 이름>\...\AppxManifest.xml` 이나 `AppxBundleManifest.xml` 경로입니다. 조사 PC 에서 126개였습니다.
 - `Deprovisioned` 아래에는 패키지 계열 이름 키가 있었습니다. 예: `Microsoft.Copilot_8wekyb3d8bbwe`
@@ -148,7 +148,7 @@ Microsoft 문서에는 아래 두 키가 나옵니다.
 
 Microsoft 는 배포 문제를 볼 때 `Microsoft-Windows-AppxPackaging/Operational` 과 `Microsoft-Windows-AppXDeploymentServer/Operational` 로그를 보라고 안내합니다. 이 가운데 AppXDeployment-Server 쪽을 먼저 보라고 합니다. PowerShell 의 `Get-AppxLog` 는 가장 최근 배포 작업의 로그를 보여 줍니다.
 
-조사 PC 에는 아래 로그가 있었습니다. 모두 `%SystemRoot%\System32\Winevt\Logs\` 아래 .evtx 파일입니다. (확인 범위: 조사 PC)
+조사 PC 에는 아래 로그가 있었습니다. 모두 `%SystemRoot%\System32\Winevt\Logs\` 아래 .evtx 파일입니다.
 
 - AppxPackaging/Operational
 - AppXDeploymentServer/Operational, AppXDeploymentServer/Restricted
@@ -157,7 +157,7 @@ Microsoft 는 배포 문제를 볼 때 `Microsoft-Windows-AppxPackaging/Operatio
 - StateRepository/Operational
 - Store/Operational
 
-AppXDeploymentServer/Operational 에서 본 이벤트는 아래와 같습니다. (확인 범위: 조사 PC)
+AppXDeploymentServer/Operational 에서 본 이벤트는 아래와 같습니다.
 
 | ID | 메시지 | 알려 주는 것 |
 |---|---|---|
@@ -202,11 +202,11 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 
 - Package 표에 행이 있으면 수집 시점에 그 패키지가 이 PC 에 설치돼 있었습니다.
 - PackageUser 행은 그 패키지를 어느 사용자 SID 에 등록했는지 알려 줍니다.
-- PackageUser 의 InstallTime 은 그 사용자에게 패키지를 등록한 시각에 가깝습니다. (확인 범위: 조사 PC)
-- IsInbox 값으로 기본 탑재 앱과 나중에 들인 앱을 나눕니다. (확인 범위: 조사 PC)
+- PackageUser 의 InstallTime 은 그 사용자에게 패키지를 등록한 시각에 가깝습니다.
+- IsInbox 값으로 기본 탑재 앱과 나중에 들인 앱을 나눕니다.
 - PackageIdentity 에만 있는 이름은 그 버전 이름이 이 PC 의 저장소에 한 번은 기록됐다는 뜻입니다.
-- 이벤트 400 의 Add·Stage 기록은 설치에 쓴 원본 .msix 파일 이름을 알려 줍니다. (확인 범위: 조사 PC)
-- 이벤트 607·821 은 제거·등록 대상 사용자 SID 를 알려 줍니다. (확인 범위: 조사 PC)
+- 이벤트 400 의 Add·Stage 기록은 설치에 쓴 원본 .msix 파일 이름을 알려 줍니다.
+- 이벤트 607·821 은 제거·등록 대상 사용자 SID 를 알려 줍니다.
 
 ### 증명하지 못하는 것
 
@@ -222,7 +222,7 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 
 ## 시각 해석
 
-| 시각 | 형식·기준 | 무엇과 가까운가 (확인 범위: 조사 PC) |
+| 시각 | 형식·기준 | 무엇과 가까운가 |
 |---|---|---|
 | PackageUser.InstallTime | FILETIME 정수, UTC | 그 사용자에게 등록을 마친 시각 |
 | DeploymentHistory.WhenOccurred | FILETIME 정수, UTC | 배포 결과가 난 시각 |
@@ -233,7 +233,7 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 - SQLite 에서는 `datetime(값/10000000-11644473600,'unixepoch')` 로 UTC 날짜를 얻습니다.
 - 변환 원리는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
-조사 PC 에서 한 앱의 시각을 맞춰 보면 이렇습니다. (확인 범위: 조사 PC)
+조사 PC 에서 한 앱의 시각을 맞춰 보면 이렇습니다.
 
 | 기록 | 시각 (UTC) |
 |---|---|
@@ -244,7 +244,7 @@ Microsoft 문서가 밝힌 코드입니다. 이벤트 401·404 의 오류 코드
 
 InstallTime 은 Register 완료와 1초 차이였고 Add 완료와는 31분 차이였습니다. 그래서 InstallTime 은 내려받은 시각이 아니라 그 사용자에게 등록한 시각으로 읽습니다.
 
-기본 탑재 앱의 시각은 OS 설치 시각과 다릅니다. (확인 범위: 조사 PC)
+기본 탑재 앱의 시각은 OS 설치 시각과 다릅니다.
 
 기본 탑재 앱의 가장 이른 InstallTime 은 2026-06-26 02:15:10 UTC 였고, 같은 PC 의 OS 설치 시각(`InstallDate`)은 2026-06-26 18:07:41 UTC 였습니다. 기본 탑재 앱의 InstallTime 이 OS 설치 시각보다 16시간 일렀습니다.
 
@@ -254,7 +254,7 @@ InstallTime 은 Register 완료와 1초 차이였고 Add 완료와는 31분 차�
 ## 함정과 한계
 
 1. **-wal·-shm 파일을 같이 떠야 합니다.** 조사 PC 에서 `-wal` 파일은 비어 있지 않았으므로 .srd 파일만 뜨면 최근 변경이 빠집니다.
-2. **서비스가 돌아가도 복사는 됐습니다.** 조사 PC 에서는 켜진 상태에서도 .srd 파일을 복사할 수 있었습니다. (확인 범위: 조사 PC)
+2. **서비스가 돌아가도 복사는 됐습니다.** 조사 PC 에서는 켜진 상태에서도 .srd 파일을 복사할 수 있었습니다.
 3. **설치 시각은 Package 표가 아니라 PackageUser 표에 있습니다.** 같은 패키지에 SYSTEM 행과 사용자 행이 따로 있습니다. 어느 SID 의 행인지 늘 같이 적습니다.
 4. **숫자 칸의 뜻은 확인하지 못했습니다.** DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 는 값만 적고 뜻을 단정하지 않습니다.
 5. **기본 탑재 앱의 InstallTime 은 OS 설치 시각이 아닙니다.** 조사 PC 에서는 16시간 어긋났습니다.

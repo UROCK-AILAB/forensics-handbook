@@ -27,7 +27,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 ### 저장소 파일
 
-아래는 Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
+아래는 Windows 11 PC 한 대에서 본 모습입니다.
 
 구독은 WMI 저장소 (repository) 에 저장되며, 저장소 폴더는 `C:\Windows\System32\wbem\Repository` 였습니다. 이 폴더는 `HKLM\SOFTWARE\Microsoft\Wbem\CIMOM` 의 `Repository Directory` 값(`C:\WINDOWS\system32\wbem\repository`)에 적혀 있었습니다.
 
@@ -39,18 +39,18 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 ### 표준 소비자의 네임스페이스
 
-표준 소비자 클래스가 컴파일되는 기본 네임스페이스는 OS 마다 다르며, Microsoft 문서는 "Windows Server 2003 에서는 모두 `Root\Subscription`" 이라는 예만 듭니다. Windows 11 PC 한 대에서는 `root\subscription` 에 표준 소비자 5개 클래스가 모두 있었습니다. `root\cimv2` 에는 `__EventConsumer` 파생 클래스가 없었습니다. (확인 범위: Win11 25H2 한 대)
+표준 소비자 클래스가 컴파일되는 기본 네임스페이스는 OS 마다 다르며, Microsoft 문서는 "Windows Server 2003 에서는 모두 `Root\Subscription`" 이라는 예만 듭니다. Windows 11 PC 한 대에서는 `root\subscription` 에 표준 소비자 5개 클래스가 모두 있었습니다. `root\cimv2` 에는 `__EventConsumer` 파생 클래스가 없었습니다.
 
 ### 이벤트 로그
 
 - 로그 이름은 `Microsoft-Windows-WMI-Activity/Operational` 입니다.
-- 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-WMI-Activity%4Operational.evtx` 였습니다. (확인 범위: Win11 25H2 한 대)
+- 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-WMI-Activity%4Operational.evtx` 였습니다.
 
 ## 구조
 
 ### 세 객체의 속성
 
-아래 속성은 Windows 11 PC 한 대에서 클래스 정의를 읽어 확인했습니다. (확인 범위: Win11 25H2 한 대)
+아래 속성은 Windows 11 PC 한 대에서 클래스 정의를 읽어 확인했습니다.
 
 | 클래스 | 속성 | 분석 때 볼 칸 |
 |---|---|---|
@@ -75,7 +75,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 ### 한 PC 에 있던 구독
 
-Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었습니다.
 
 | 객체 | 내용 |
 |---|---|
@@ -113,9 +113,9 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 ## 시각 해석
 
 - 객체별 시각을 확인하지 못했으므로 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있는데, 이 문장은 해석입니다. 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
-- Windows 11 PC 한 대에서 세 MAPPING 파일의 마지막 수정 시각이 서로 달랐습니다. 가장 최근 것이 INDEX.BTR·OBJECTS.DATA 와 같은 시각이었습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 세 MAPPING 파일의 마지막 수정 시각이 서로 달랐습니다. 가장 최근 것이 INDEX.BTR·OBJECTS.DATA 와 같은 시각이었습니다.
 - 파일 시각은 저장소 전체가 마지막으로 바뀐 때를 말할 뿐, 어느 객체가 바뀌었는지 말하지 않습니다.
-- WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 칸 이름은 Windows 11 PC 한 대의 공급자 메시지에서 읽었습니다. (확인 범위: Win11 25H2 한 대)
+- WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 칸 이름은 Windows 11 PC 한 대의 공급자 메시지에서 읽었습니다.
 
 | 이벤트 | 칸 |
 |---|---|
@@ -131,7 +131,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 
 ## 함정과 한계
 
-- **로그가 금방 밀려납니다.** Windows 11 PC 한 대에서 이 로그는 최대 1,052,672바이트(약 1MB)였고 순환 방식이었습니다. 기록 1,143건이 약 9시간 치뿐이었습니다(5858 1,068건, 5857 75건). 5861 은 0건이었습니다. (확인 범위: Win11 25H2 한 대)
+- **로그가 금방 밀려납니다.** Windows 11 PC 한 대에서 이 로그는 최대 1,052,672바이트(약 1MB)였고 순환 방식이었습니다. 기록 1,143건이 약 9시간 치뿐이었습니다(5858 1,068건, 5857 75건). 5861 은 0건이었습니다.
 - 그래서 구독이 오래전에 만들어졌다면 로그보다 저장소를 봅니다.
 - **레지스트리 자동실행 점검만으로는 찾지 못합니다.** 구독은 저장소 파일에 있습니다.
 - **정상 구독도 있습니다.** 위 "한 PC 에 있던 구독" 과 같은 한 벌을 악성으로 단정하지 않습니다.

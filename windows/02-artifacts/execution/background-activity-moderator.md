@@ -12,7 +12,7 @@ Windows 10 1709 무렵부터 SYSTEM 하이브의 `Services\bam` 키 아래에 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-BAM (Background Activity Moderator) 은 커널 드라이버입니다. Windows 11 PC 한 대에서 드라이버 파일은 `%SystemRoot%\System32\drivers\bam.sys`, 설명은 "BAM Kernel Driver" 였습니다. (확인 범위: Win11 25H2 한 대) 같은 PC 에는 짝을 이루는 DAM 드라이버 `dam.sys`(설명 "DAM Kernel Driver")도 있었습니다. (확인 범위: Win11 25H2 한 대)
+BAM (Background Activity Moderator) 은 커널 드라이버입니다. Windows 11 PC 한 대에서 드라이버 파일은 `%SystemRoot%\System32\drivers\bam.sys`, 설명은 "BAM Kernel Driver" 였습니다. 같은 PC 에는 짝을 이루는 DAM 드라이버 `dam.sys`(설명 "DAM Kernel Driver")도 있었습니다.
 
 libyal 에 따르면 `UserSettings` 키 아래에 사용자 SID 마다 하위 키가 있고, 하위 키에는 추적한 실행 파일마다 값이 하나씩 있습니다. 값 하나에는 실행 파일 경로(값 이름)와 시각(값 데이터)이 들어 있습니다. 드라이버가 이 기록을 어떤 목적으로 남기는지는 이번에 연 자료에 나오지 않습니다.
 
@@ -21,14 +21,14 @@ libyal 에 따르면 `UserSettings` 키 아래에 사용자 SID 마다 하위 �
 | 경로 | 비고 |
 |---|---|
 | `HKLM\SYSTEM\CurrentControlSet\Services\bam\UserSettings\{SID}` | libyal 이 적은 경로 |
-| `HKLM\SYSTEM\CurrentControlSet\Services\bam\State\UserSettings\{SID}` | libyal 이 적은 경로. Windows 11 PC 한 대에는 이 경로만 있었습니다 (확인 범위: Win11 25H2 한 대) |
+| `HKLM\SYSTEM\CurrentControlSet\Services\bam\State\UserSettings\{SID}` | libyal 이 적은 경로. Windows 11 PC 한 대에는 이 경로만 있었습니다 |
 
 - libyal 은 BAM 키가 Windows 10 1709 이후에 생긴 것으로 "보인다" 고 적습니다. 도입 버전을 단정하지 않습니다.
 - 어느 빌드부터 `State` 가 붙는지는 확인하지 못했습니다. 두 경로를 모두 확인합니다.
 - 오프라인 하이브에서는 `CurrentControlSet` 대신 `ControlSet00X` 아래에서 찾습니다. 이 점은 [심캐시](shimcache-appcompatcache.md) 의 위치 절에서 다룹니다.
-- 보존 기간을 바꾸는 설정 값이 있습니다. dfir.ru 는 `\REGISTRY\MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\BAM` 키의 `UserSettingsLifetimeMs` 값을 듭니다. Windows 11 PC 한 대에는 이 `Session Manager\BAM` 키가 없었습니다. (확인 범위: Win11 25H2 한 대)
-- DAM 의 레지스트리 경로와 값 구조는 이번에 연 자료 어디에도 없습니다. Windows 11 PC 한 대의 `Services\dam` 키에는 `PowerEvents` 하위 키 하나만 있었습니다. `dam\State\UserSettings` 는 없었습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 에서 `bam`·`dam` 서비스는 둘 다 Type=1(커널 드라이버), Start=1(System) 이었고 실행 중이었습니다. 서비스 키 읽는 법은 [서비스·드라이버](../persistence/services-drivers.md) 에서 다룹니다. (확인 범위: Win11 25H2 한 대)
+- 보존 기간을 바꾸는 설정 값이 있습니다. dfir.ru 는 `\REGISTRY\MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\BAM` 키의 `UserSettingsLifetimeMs` 값을 듭니다. Windows 11 PC 한 대에는 이 `Session Manager\BAM` 키가 없었습니다.
+- DAM 의 레지스트리 경로와 값 구조는 이번에 연 자료 어디에도 없습니다. Windows 11 PC 한 대의 `Services\dam` 키에는 `PowerEvents` 하위 키 하나만 있었습니다. `dam\State\UserSettings` 는 없었습니다.
+- 같은 PC 에서 `bam`·`dam` 서비스는 둘 다 Type=1(커널 드라이버), Start=1(System) 이었고 실행 중이었습니다. 서비스 키 읽는 법은 [서비스·드라이버](../persistence/services-drivers.md) 에서 다룹니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -44,7 +44,7 @@ libyal 에 따르면 `UserSettings` 키 아래에 사용자 SID 마다 하위 �
 ```
 
 - 값 이름은 드라이브 문자가 아니라 장치 경로 (device path) 입니다. 위 예는 libyal 이 든 값 이름입니다.
-- Windows 11 PC 한 대에서는 패키지 앱 항목의 값 이름이 `이름_게시자ID` 형태의 패키지 패밀리 이름 (package family name) 이었습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서는 패키지 앱 항목의 값 이름이 `이름_게시자ID` 형태의 패키지 패밀리 이름 (package family name) 이었습니다.
 
 **값 데이터 (24바이트, REG_BINARY)**
 
@@ -56,9 +56,9 @@ libyal 에 따르면 `UserSettings` 키 아래에 사용자 SID 마다 하위 �
 | 20 | 4 | 알 수 없음 (항상 2) |
 
 - 표는 libyal 의 정리이고, dfir.ru 도 값이 24바이트(0x18) REG_BINARY 이며 앞 8바이트가 FILETIME 이라고 적습니다.
-- Windows 11 PC 한 대에서 실행 파일 경로 항목은 오프셋 16 이 0, 패키지 앱 항목은 1 이었습니다. 오프셋 20 은 모두 2, 오프셋 8~15 는 모두 0 이었습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 의 SID 키마다 DWORD 값 `Version`(모두 1)과 `SequenceNumber`(키마다 다름, 624~4886)가 있었습니다. 두 값의 뜻은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 의 `UserSettings` 아래에는 SID 키가 네 개 있었습니다. `S-1-5-18` 하나, 로컬 계정 `S-1-5-21-…` 두 개, `S-1-5-90-0-…` 하나입니다. `S-1-5-90-0` 계정의 뜻은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 실행 파일 경로 항목은 오프셋 16 이 0, 패키지 앱 항목은 1 이었습니다. 오프셋 20 은 모두 2, 오프셋 8~15 는 모두 0 이었습니다.
+- 같은 PC 의 SID 키마다 DWORD 값 `Version`(모두 1)과 `SequenceNumber`(키마다 다름, 624~4886)가 있었습니다. 두 값의 뜻은 확인하지 못했습니다.
+- 같은 PC 의 `UserSettings` 아래에는 SID 키가 네 개 있었습니다. `S-1-5-18` 하나, 로컬 계정 `S-1-5-21-…` 두 개, `S-1-5-90-0-…` 하나입니다. `S-1-5-90-0` 계정의 뜻은 확인하지 못했습니다.
 
 SID 의 짜임과 잘 알려진 SID 는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서, SID 를 계정 이름과 잇는 방법은 [사용자 프로필 목록](../system-account/profilelist.md) 에서 다룹니다.
 
@@ -85,14 +85,14 @@ SID 의 짜임과 잘 알려진 SID 는 [윈도 식별자 형식](../../01-found
 - 오프셋 0 의 8바이트는 FILETIME 이고 UTC 로 읽습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - dfir.ru 실험은 빌드 19592·18363 에서 했습니다. 같은 글은 "It's too early to make conclusions about possible cases when the FILETIME timestamp can be updated" 라고 적습니다. 시각이 바뀌는 조건은 아직 다 밝혀지지 않았습니다.
 - 부팅 때 지우는 규칙이 있으므로 시각은 마지막 부팅 시각과 함께 봅니다. 부팅 시각은 [켜짐·꺼짐](../event-logs/power-on-off-events.md) 에서 찾습니다.
-- Windows 11 PC 한 대에서 실행 파일 경로 항목 44개는 모두 마지막 부팅 7일 전 이후의 시각이었습니다. 44개 가운데 39개는 마지막 부팅 뒤의 시각이었습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 실행 파일 경로 항목 44개는 모두 마지막 부팅 7일 전 이후의 시각이었습니다. 44개 가운데 39개는 마지막 부팅 뒤의 시각이었습니다.
 
 ## 함정과 한계
 
 - **부팅 때 7일이 지난 항목이 지워집니다.** dfir.ru 는 "BAM entries older than 7 days are removed during the boot" 라고 적습니다. 기본 보존 기간은 7일(604,800초)입니다. 수집 전에 재부팅하면 기록이 줄 수 있습니다. 켜진 PC 는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 절차로 먼저 수집합니다.
 - **한 번에 몇 개가 지워지는지는 모릅니다.** dfir.ru 도 이 점이 불분명하다고 적습니다.
-- **7일 규칙이 모든 항목에 들어맞지는 않았습니다.** Windows 11 PC 한 대에서 패키지 앱 항목 13개는 마지막 부팅 7일 전보다 오래됐는데도 남아 있었습니다. 가장 오래된 것은 약 석 달 전 시각이었습니다. (확인 범위: Win11 25H2 한 대)
-- **파일이 없으면 부팅 때 항목이 지워질 수 있습니다.** dfir.ru 는 여기에 특정 DWORD 가 0 일 때라는 조건을 붙입니다. 이번 조사에서는 그 조건을 정확히 확인하지 못했습니다. Windows 11 PC 한 대에서 실행 파일 경로 항목 44개는 모두 그 경로에 파일이 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **7일 규칙이 모든 항목에 들어맞지는 않았습니다.** Windows 11 PC 한 대에서 패키지 앱 항목 13개는 마지막 부팅 7일 전보다 오래됐는데도 남아 있었습니다. 가장 오래된 것은 약 석 달 전 시각이었습니다.
+- **파일이 없으면 부팅 때 항목이 지워질 수 있습니다.** dfir.ru 는 여기에 특정 DWORD 가 0 일 때라는 조건을 붙입니다. 이번 조사에서는 그 조건을 정확히 확인하지 못했습니다. Windows 11 PC 한 대에서 실행 파일 경로 항목 44개는 모두 그 경로에 파일이 있었습니다.
 - **보존 기간 설정을 확인합니다.** `Session Manager\BAM` 의 `UserSettingsLifetimeMs` 로 보존 기간을 바꿀 수 있습니다. 이 값이 있으면 누가 언제 넣었는지 따로 봅니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 - **장치 경로를 드라이브 문자로 바꿔야 합니다.** `\Device\HarddiskVolumeN` 이 어느 드라이브인지 맞추는 방법은 이번에 연 자료로 확인하지 못했습니다. 번호를 짐작으로 드라이브 문자에 붙이지 않습니다.
 - **섀도 복사본 안의 프로그램도 기록됩니다.** dfir.ru 가 확인한 점입니다. 경로가 낯설면 섀도 복사본 안의 파일을 실행했는지 봅니다. 섀도 복사본 구조는 [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) 에서 다룹니다.

@@ -12,16 +12,16 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-프로그램 호환성 도우미 (Program Compatibility Assistant, PCA) 는 프로그램 호환성 문제를 다루는 Windows 기능입니다. 서비스 이름은 `PcaSvc` 이고 표시 이름은 "Program Compatibility Assistant Service" 이며, 시작 유형은 자동이었고 실행 중이었습니다. (확인 범위: Win11 25H2 한 대) 세 파일을 어느 프로세스가 쓰는지는 이번 자료로 확인하지 못했습니다.
+프로그램 호환성 도우미 (Program Compatibility Assistant, PCA) 는 프로그램 호환성 문제를 다루는 Windows 기능입니다. 서비스 이름은 `PcaSvc` 이고 표시 이름은 "Program Compatibility Assistant Service" 이며, 시작 유형은 자동이었고 실행 중이었습니다. 세 파일을 어느 프로세스가 쓰는지는 이번 자료로 확인하지 못했습니다.
 
 | 기록 | 담는 것 |
 |---|---|
 | `PcaAppLaunchDic.txt` | 실행 파일 경로와 시각입니다. AboutDFIR 글은 이 시각을 마지막 실행 시각으로 봅니다 |
 | `PcaGeneralDb0.txt` | 실행 시각, 상태 숫자, 경로, 파일 설명, 제조사, 버전, ProgramId, 끝 칸 문장입니다 |
-| `PcaGeneralDb1.txt` | 관찰한 PC 에서는 0바이트였습니다 (확인 범위: Win11 25H2 한 대) |
+| `PcaGeneralDb1.txt` | 관찰한 PC 에서는 0바이트였습니다 |
 | 레지스트리 `AppCompatFlags` | 호환 모드 설정 (`Layers`) 과, 값 이름이 실행 파일 경로인 목록 (`Compatibility Assistant\Store`) 등입니다 |
 
-실행 흔적 가운데 새로 생긴 기록이고, 글자 파일이라 전용 도구 없이도 읽을 수 있습니다. 관찰한 값으로 보면 `PcaGeneralDb0.txt` 는 정상 실행 목록이 아니라 비정상 종료·설치 실패·호환성 판정 같은 사건 기록에 가깝습니다. (확인 범위: Win11 25H2 한 대)
+실행 흔적 가운데 새로 생긴 기록이고, 글자 파일이라 전용 도구 없이도 읽을 수 있습니다. 관찰한 값으로 보면 `PcaGeneralDb0.txt` 는 정상 실행 목록이 아니라 비정상 종료·설치 실패·호환성 판정 같은 사건 기록에 가깝습니다.
 
 ## 위치와 버전별 차이
 
@@ -33,7 +33,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 | `PcaGeneralDb0.txt` | 같은 폴더 | BOM 없는 UTF-16 LE, 줄 끝 LF (`0A 00`) 만 |
 | `PcaGeneralDb1.txt` | 같은 폴더 | 0바이트여서 확인하지 못했습니다 |
 
-인코딩 칸은 관찰입니다. (확인 범위: Win11 25H2 한 대)
+인코딩 칸은 관찰입니다.
 
 ### Windows 버전
 
@@ -41,7 +41,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 |---|---|---|
 | Windows 11 21H2 | 없음 | AboutDFIR 글 |
 | Windows 11 22H2 | 처음 보임. 글쓴이는 2022년 11월 빌드에서 처음 보았고, Pro 22H2 (빌드 22621.963) 가상 머신과 Process Monitor 로 조사했습니다 | AboutDFIR 글 |
-| Windows 11 25H2 Home (빌드 26200) | 세 파일 모두 있음 | 관찰 (확인 범위: Win11 25H2 한 대) |
+| Windows 11 25H2 Home (빌드 26200) | 세 파일 모두 있음 | 관찰 |
 
 출처 글 제목에는 "Pro" 가 들어 있지만 관찰한 PC 는 Home 판이었는데도 세 파일이 있었습니다. Windows 10 과 서버 판에 이 파일이 있는지는 확인하지 못했습니다.
 
@@ -53,7 +53,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 |---|---|
 | `Layers` | 호환 모드 설정입니다. 값 데이터 예: `ELEVATECREATEPROCESS`, `RUNASADMIN`, `WINXPSP2 RUNASADMIN` |
 | `Compatibility Assistant\Store` | 값 이름이 실행 파일 경로입니다 |
-| `Compatibility Assistant\Persisted` | RegRipper 플러그인이 읽는 키입니다. 관찰한 PC 에는 없었습니다 (확인 범위: Win11 25H2 한 대) |
+| `Compatibility Assistant\Persisted` | RegRipper 플러그인이 읽는 키입니다. 관찰한 PC 에는 없었습니다 |
 | `Custom`, `InstalledSDB` | RegRipper 플러그인이 읽는 키입니다. 담는 내용은 이번 자료로 확인하지 못했습니다 |
 
 하이브를 수집하고 여는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 를 따릅니다.
@@ -65,7 +65,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 - 한 줄 모양은 `경로|시각` 입니다.
 - AboutDFIR 글의 예 (프로그램 이름은 가림): `C:\Program Files\(프로그램)\(프로그램).exe|2022-12-28 16:06:24.212`
 
-아래는 관찰입니다. (확인 범위: Win11 25H2 한 대)
+아래는 관찰입니다.
 
 - 0x7F 를 넘는 바이트가 하나도 없었습니다.
 - 95줄이 모두 서로 다른 경로였습니다. 경로 하나에 한 줄입니다.
@@ -75,7 +75,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 ### PcaGeneralDb0.txt
 
-칸 순서는 AboutDFIR 글을 따랐습니다. "관찰한 값" 칸은 관찰입니다. (확인 범위: Win11 25H2 한 대)
+칸 순서는 AboutDFIR 글을 따랐습니다. "관찰한 값" 칸은 관찰입니다.
 
 | 순서 | 칸 | 관찰한 값 |
 |---|---|---|
@@ -90,7 +90,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 - AboutDFIR 글의 예 (앱 폴더 이름은 가림): `2022-05-12 21:32:42.556|2|%USERPROFILE%\appdata\local\(앱)\...\git\cmd\git.exe|git|...`
 
-아래는 관찰입니다. (확인 범위: Win11 25H2 한 대)
+아래는 관찰입니다.
 
 - 2,174줄이 모두 칸 8개였습니다.
 - 경로는 `%programfiles%`, `%programfiles(x86)%`, `%USERPROFILE%`, `%systemroot%` 같은 환경 변수로 줄여 적혔습니다.
@@ -109,14 +109,14 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 ### PcaGeneralDb1.txt
 
-관찰한 PC 에서는 0바이트였습니다. (확인 범위: Win11 25H2 한 대) `PcaGeneralDb0.txt` 와 번갈아 쓰이는지는 확인하지 못했으며, 크기가 0 이 아니면 같은 방법으로 읽어 봅니다.
+관찰한 PC 에서는 0바이트였습니다. `PcaGeneralDb0.txt` 와 번갈아 쓰이는지는 확인하지 못했으며, 크기가 0 이 아니면 같은 방법으로 읽어 봅니다.
 
 ### 레지스트리 `Compatibility Assistant\Store`
 
 - 값 이름이 실행 파일 경로입니다.
 - RegRipper 의 `appcompatflags` 플러그인은 값 데이터의 오프셋 0x2C 에서 8바이트 시각을 읽습니다.
 
-아래는 관찰입니다. (확인 범위: Win11 25H2 한 대)
+아래는 관찰입니다.
 
 - 사용자 하이브의 Store 키에 값이 183개 있었습니다.
 - 값 이름은 모두 드라이브 문자로 시작하는 경로였습니다.
@@ -136,12 +136,12 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 ### 증명하지 못하는 것
 
-- 모든 실행이 남지 않습니다. 관찰한 PC 에서 터미널로 자주 실행한 `git.exe`·`python.exe`·`cmd.exe`·`powershell.exe` 는 `PcaAppLaunchDic.txt` 에 없었습니다. 반면 `dotnet.exe`·`wsl.exe`·`msiexec.exe` 는 있었습니다. (확인 범위: Win11 25H2 한 대)
+- 모든 실행이 남지 않습니다. 관찰한 PC 에서 터미널로 자주 실행한 `git.exe`·`python.exe`·`cmd.exe`·`powershell.exe` 는 `PcaAppLaunchDic.txt` 에 없었습니다. 반면 `dotnet.exe`·`wsl.exe`·`msiexec.exe` 는 있었습니다.
 - 어떤 실행이 남는지는 AboutDFIR 글도 "더 조사해야 한다" 고 적었습니다. "탐색기에서 연 것만 남는다" 는 주장은 확인하지 못했습니다.
 - `PcaAppLaunchDic.txt` 는 경로 하나에 한 줄입니다. 실행 횟수와 그 전의 실행 시각은 알 수 없습니다.
 - 누가 실행했는지는 알 수 없습니다. 글자 파일은 시스템에 한 벌만 있고, 사용자를 적는 칸이 없습니다. `%USERPROFILE%` 로 줄인 경로도 어느 사용자 폴더인지 알려 주지 않습니다.
 - 비정상 종료의 원인과 프로그램이 악성인지는 알 수 없습니다.
-- Store 값의 0x2C 시각을 프로그램별 실행 시각으로 읽으면 틀릴 수 있습니다. 관찰한 PC 에서는 모든 값이 같은 시각이었습니다. (확인 범위: Win11 25H2 한 대)
+- Store 값의 0x2C 시각을 프로그램별 실행 시각으로 읽으면 틀릴 수 있습니다. 관찰한 PC 에서는 모든 값이 같은 시각이었습니다.
 
 보고서에는 "그 프로그램을 실행했다" 대신 "`PcaAppLaunchDic.txt` 에 경로 X 와 시각 A 가 적힌 줄이 있다. 이 시각은 파일의 마지막 수정 시각과 견주어 UTC 로 판단했다" 처럼 씁니다.
 
@@ -149,18 +149,18 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 두 파일의 시각은 `YYYY-MM-DD HH:MM:SS.mmm` 모양 글자인데, AboutDFIR 글은 이 시각이 UTC 인지 현지 시각인지 밝히지 않았습니다.
 
-- 관찰한 PC 에서는 두 파일 모두 가장 늦은 줄의 시각이 파일의 마지막 수정 시각 (UTC) 과 같았습니다. 시각은 UTC 로 보입니다. (확인 범위: Win11 25H2 한 대)
+- 관찰한 PC 에서는 두 파일 모두 가장 늦은 줄의 시각이 파일의 마지막 수정 시각 (UTC) 과 같았습니다. 시각은 UTC 로 보입니다.
 - 검체마다 같은 방법으로 확인합니다. 가장 늦은 줄의 시각을 [마스터 파일 테이블](../filesystem/mft.md) 의 수정 시각과 견줍니다.
 - 줄 순서는 시각 순서가 아닙니다. 시각 칸으로 정렬한 뒤 읽습니다.
-- Store 키의 마지막 기록 시각은 UTC 입니다. 이 시각이 `PcaGeneralDb0.txt` 의 마지막 수정 시각과 맞는지 봅니다. 관찰한 PC 에서는 초 단위까지 같았습니다. (확인 범위: Win11 25H2 한 대)
-- 세 파일을 만든 시각은 관찰한 PC 에서 모두 OS 설치 당일이었습니다. 파일을 만든 시각은 어느 프로그램의 첫 실행 시각도 알려 주지 않습니다. (확인 범위: Win11 25H2 한 대)
+- Store 키의 마지막 기록 시각은 UTC 입니다. 이 시각이 `PcaGeneralDb0.txt` 의 마지막 수정 시각과 맞는지 봅니다. 관찰한 PC 에서는 초 단위까지 같았습니다.
+- 세 파일을 만든 시각은 관찰한 PC 에서 모두 OS 설치 당일이었습니다. 파일을 만든 시각은 어느 프로그램의 첫 실행 시각도 알려 주지 않습니다.
 - 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
 - **줄이 없다고 실행하지 않았다고 쓰지 않습니다.** 모든 실행이 남지 않습니다. 다른 실행 흔적과 함께 봅니다.
 - **두 파일의 인코딩이 다릅니다.** `PcaGeneralDb0.txt` 는 BOM 이 없는 UTF-16 LE 입니다. 편집기나 도구가 이를 알아보지 못하면 글자 사이에 빈 바이트가 끼어 보입니다. 인코딩을 고르는 법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
-- **비 ASCII 경로가 잘립니다.** 관찰한 PC 의 `PcaAppLaunchDic.txt` 에서 한글 경로가 잘렸습니다. 같은 프로그램을 `PcaGeneralDb0.txt` 에서 찾아 온전한 경로를 봅니다. (확인 범위: Win11 25H2 한 대)
+- **비 ASCII 경로가 잘립니다.** 관찰한 PC 의 `PcaAppLaunchDic.txt` 에서 한글 경로가 잘렸습니다. 같은 프로그램을 `PcaGeneralDb0.txt` 에서 찾아 온전한 경로를 봅니다.
 - **반복 줄에 묻히지 않습니다.** 한 프로그램의 반복 오류가 줄 대부분을 차지할 수 있습니다. 경로별로 묶어 센 뒤 드문 줄부터 봅니다.
 - **8번 칸 이름에 매이지 않습니다.** 출처는 종료 코드라고 불렀지만 관찰한 PC 에서는 문장이 들어 있었습니다. 문장 그대로 보고서에 옮깁니다.
 - **Store 값의 0x2C 시각을 믿기 전에 확인합니다.** 도구가 이 값을 실행 시각처럼 보여 줄 수 있습니다. 값들이 한 시각으로 몰려 있는지 먼저 봅니다.

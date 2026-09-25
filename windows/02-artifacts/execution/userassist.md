@@ -22,7 +22,7 @@ NT4 에는 이 키가 없는 것으로 보입니다. libyal 은 Windows 2000 에
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{GUID}\Count
 ```
 
-- Windows 11 PC 한 대에서 HKCU 에 해당하는 하이브 파일은 `C:\Users\<user>\NTUSER.DAT` 였습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 HKCU 에 해당하는 하이브 파일은 `C:\Users\<user>\NTUSER.DAT` 였습니다.
 - 각 GUID 키에는 REG_DWORD `Version` 값이 있습니다. 항목은 하위 키 `Count` 에 있습니다.
 
 | Version | Windows |
@@ -43,7 +43,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{GUID}\Count
 | `{B267E3AD-A825-4A09-82B9-EEC22AA3B847}`, `{CAA59E3C-4792-41A5-9909-6A6A8D32490E}` | 8 | 설명 없음 |
 | `{BCB48336-4DDD-48FF-BB0B-D3190DACB3E2}` | 8.1 | 설명 없음 |
 
-Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 모습은 아래와 같습니다.
 
 - GUID 키는 9개였습니다. 9E04CAB2·A3D53349·B267E3AD·BCB48336·CAA59E3C·CEBFF5CD·F2A1CB5A·F4E57C4B·FA99DFC7 이고, 모두 Version=5 였습니다.
 - 항목이 들어 있는 키는 둘뿐이었습니다. CEBFF5CD 에는 72바이트 값이 202개, F4E57C4B 에는 24개 있었습니다.
@@ -58,7 +58,7 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위
 - `Count` 아래 값 이름은 ROT-13 으로 가려져 있습니다. ASCII 알파벳 `[A-Za-z]` 만 13자리씩 밀고, 숫자와 0x80 이상 문자는 그대로 둡니다.
 - Windows 7 베타는 ROT-13 대신 비즈네르 암호 (Vigenère) 를 썼습니다. 키는 `BWHQNKTEZYFSLMRGXADUJOPIVC` 입니다.
 - `Settings` 하위 키에 `NoEncrypt`=1 이 있으면 이름을 가리지 않고, `NoLog`=1 이 있으면 기록을 끕니다.
-- `Settings` 키는 기본으로는 없으며 Windows 11 PC 한 대에도 없었습니다. (확인 범위: Win11 25H2 한 대)
+- `Settings` 키는 기본으로는 없으며 Windows 11 PC 한 대에도 없었습니다.
 
 ### 특수 값 이름
 
@@ -77,16 +77,16 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위
 
 ### 풀어 본 값 이름의 형태
 
-Windows 11 PC 한 대에서 ROT-13 을 푼 값 이름은 네 가지 형태였습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 ROT-13 을 푼 값 이름은 네 가지 형태였습니다.
 
 - 알려진 폴더 (Known Folder) GUID 로 시작하는 경로
 - `C:\…` 로 시작하는 전체 경로
 - 앱 사용자 모델 ID (AppUserModelID). `…!App` 처럼 이름에 `!` 가 들어 있습니다
 - `UEME_` 로 시작하는 이름
 
-F4E57C4B(바로 가기) 키의 항목은 `UEME_` 이름 두 개를 빼면 모두 알려진 폴더 GUID 로 시작하는 .lnk 경로였습니다. 시작 메뉴와 작업 표시줄 고정 폴더의 바로 가기였습니다. (확인 범위: Win11 25H2 한 대)
+F4E57C4B(바로 가기) 키의 항목은 `UEME_` 이름 두 개를 빼면 모두 알려진 폴더 GUID 로 시작하는 .lnk 경로였습니다. 시작 메뉴와 작업 표시줄 고정 폴더의 바로 가기였습니다.
 
-같은 PC 에서 SHGetKnownFolderPath 로 푼 알려진 폴더 GUID 는 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+같은 PC 에서 SHGetKnownFolderPath 로 푼 알려진 폴더 GUID 는 아래와 같습니다.
 
 | GUID | 풀린 경로 |
 |---|---|
@@ -126,7 +126,7 @@ F4E57C4B(바로 가기) 키의 항목은 `UEME_` 이름 두 개를 빼면 모두
 - 오프셋 8·12 의 "포커스 횟수·포커스 시간" 은 libyal 이 확정하지 않은 해석입니다.
 - `UEME_CTLSESSION` 은 Version 3 에서 8바이트, Version 5 에서 1,612바이트입니다. 1,612바이트 안에는 532바이트 레코드 세 개가 오프셋 0x10·0x224·0x438 에 있습니다.
 
-Windows 11 PC 한 대의 CEBFF5CD 키에서 본 값은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대의 CEBFF5CD 키에서 본 값은 아래와 같습니다.
 
 항목 202개 가운데 201개는 오프셋 0 의 값이 11 이었고 나머지 하나(`UEME_CTLCUACount:ctor`)는 -1 이었습니다. 같은 키 `UEME_CTLSESSION` 의 첫 4바이트도 11 이었지만 두 값이 같은 뜻인지는 확인하지 못했습니다. 실행 횟수(오프셋 4)가 1 이상인 항목은 16개뿐이었습니다. 113개는 실행 횟수가 0 인데 오프셋 60 에 시각이 있었고, 73개는 시각이 0 이었습니다.
 
@@ -161,7 +161,7 @@ Windows 11 PC 한 대의 CEBFF5CD 키에서 본 값은 아래와 같습니다. (
 - **GUID 안의 알파벳도 바뀝니다.** GUID 의 A~F 도 ROT-13 대상입니다. 숫자는 그대로입니다. 그래서 가려진 GUID 는 N~S 와 숫자로 보입니다.
 - **알려진 폴더 GUID 를 경로로 풀어야 합니다.** 사용자 폴더 쪽 GUID 는 계정마다 실제 경로가 다릅니다. 위 표는 한 PC 에서 푼 결과입니다.
 - **Version 마다 오프셋이 다릅니다.** Version 3 표로 72바이트 값을 읽으면 엉뚱한 숫자가 나옵니다. 먼저 GUID 키의 `Version` 값을 봅니다.
-- **실행 횟수가 1 이상인 항목은 드뭅니다.** Windows 11 PC 한 대에서 202개 가운데 16개뿐이었습니다. 실행 횟수만 보고 항목을 거르면 대부분을 놓칩니다. (확인 범위: Win11 25H2 한 대)
+- **실행 횟수가 1 이상인 항목은 드뭅니다.** Windows 11 PC 한 대에서 202개 가운데 16개뿐이었습니다. 실행 횟수만 보고 항목을 거르면 대부분을 놓칩니다.
 - **기록을 끄거나 가림을 풀 수 있습니다.** `Settings` 키의 `NoLog`=1 은 기록을 끄고, `NoEncrypt`=1 은 이름 가리기를 끕니다. 기본으로는 없는 키이므로, 있다면 누가 언제 만들었는지 봅니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 - **값은 지울 수 있습니다.** 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다.
 - **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 함께 수집합니다. 반영 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
@@ -181,7 +181,7 @@ HRZR_PGYFRFFVBA                          →  UEME_CTLSESSION
 
 1. 알파벳마다 13자리를 밉니다. H→U, R→E, Z→M 입니다.
 2. `_`·`-`·`{`·`}` 와 숫자는 그대로 둡니다.
-3. 두 번째 줄을 풀면 알려진 폴더 GUID 가 나옵니다. 한 PC 에서 이 GUID 는 `C:\WINDOWS\system32` 로 풀렸습니다. (확인 범위: Win11 25H2 한 대)
+3. 두 번째 줄을 풀면 알려진 폴더 GUID 가 나옵니다. 한 PC 에서 이 GUID 는 `C:\WINDOWS\system32` 로 풀렸습니다.
 
 **Version 5 값 데이터 72바이트 (실행 횟수 3 으로 만든 예시).**
 

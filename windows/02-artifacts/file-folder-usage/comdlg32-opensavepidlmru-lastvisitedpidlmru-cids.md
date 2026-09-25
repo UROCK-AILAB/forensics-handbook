@@ -38,7 +38,7 @@ nav_order: 1220
 | `CIDSizeMRU` | Vista 로 적혀 있음 | MRUListEx + 숫자 항목. 예시 값은 실행 파일 이름으로 시작합니다 | winreg-kb |
 | `FirstFolder` | 버전 표기 없음 | UTF-16LE 문자열 | winreg-kb |
 
-Windows 11 25H2 PC 한 대에서 본 모습은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대에서 본 모습은 다음과 같습니다.
 
 - `ComDlg32` 아래에는 `CIDSizeMRU`, `FirstFolder`, `LastVisitedPidlMRU`, `OpenSavePidlMRU` 네 개가 있었습니다.
 - `OpenSaveMRU` 와 `LastVisitedMRU` 는 없었습니다.
@@ -54,9 +54,9 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 
 - MRUList 는 UTF-16LE 글자의 배열입니다. 첫 글자가 가장 최근 항목이고, 끝은 `00 00` 입니다.
 - MRUListEx 는 4바이트 리틀 엔디언 정수의 배열입니다. 첫 정수가 가장 최근 항목이고, 끝은 -1 (`FF FF FF FF`) 입니다.
-- 값 이름 `0`, `1`, `2` … 는 번호표일 뿐입니다. 순서는 MRUListEx 가 정합니다. 관찰한 PC 에서 `CIDSizeMRU` 의 MRUListEx 는 01, 02, 07, 00, 06 … 순이었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 값 이름 `0`, `1`, `2` … 는 번호표일 뿐입니다. 순서는 MRUListEx 가 정합니다. 관찰한 PC 에서 `CIDSizeMRU` 의 MRUListEx 는 01, 02, 07, 00, 06 … 순이었습니다.
 
-관찰한 PC 에서는 MRUListEx 길이가 모두 (항목 수 + 1) × 4 바이트였고 마지막 4바이트는 모두 `FF FF FF FF` 였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+관찰한 PC 에서는 MRUListEx 길이가 모두 (항목 수 + 1) × 4 바이트였고 마지막 4바이트는 모두 `FF FF FF FF` 였습니다.
 
 | 키 | MRUListEx 길이 | 항목 수 |
 |---|---|---|
@@ -70,7 +70,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 ### OpenSavePidlMRU 값
 
 - 값 전체가 셸 항목 목록입니다. plaso 도 이 키의 하위 키를 셸 항목 목록으로 읽습니다 (플러그인 `mrulistex_shell_item_list`).
-- 관찰한 PC 의 `OpenSavePidlMRU\pdf` 값은 첫 바이트부터 바로 셸 항목이었습니다. 첫 셸 항목은 크기 0x0014, 종류 0x1F 였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 관찰한 PC 의 `OpenSavePidlMRU\pdf` 값은 첫 바이트부터 바로 셸 항목이었습니다. 첫 셸 항목은 크기 0x0014, 종류 0x1F 였습니다.
 - 셸 항목 목록을 끝까지 풀면 파일의 경로가 나옵니다.
 
 ### LastVisitedPidlMRU 값
@@ -82,11 +82,11 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 
 - plaso 는 이 키를 "문자열 + 셸 항목 목록" 형식으로 읽습니다.
 - 앞부분 문자열은 대화상자를 부른 프로그램의 실행 파일 이름으로 널리 설명됩니다. 확인한 자료로는 이 뜻을 확정하지 못했습니다.
-- 관찰한 PC 에서는 앞부분이 실행 파일 이름 모양의 UTF-16LE 문자열과 `00 00` 이었습니다. 바로 뒤가 셸 항목이었고, 첫 셸 항목은 크기 0x003A, 종류 0x1F 였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 관찰한 PC 에서는 앞부분이 실행 파일 이름 모양의 UTF-16LE 문자열과 `00 00` 이었습니다. 바로 뒤가 셸 항목이었고, 첫 셸 항목은 크기 0x003A, 종류 0x1F 였습니다.
 
 ### CIDSizeMRU 값
 
-winreg-kb 는 이 키를 Vista 에서 본 키로 적고, 헥스 예시 하나만 싣습니다. 예시 값은 UTF-16LE 실행 파일 이름과 `00 00` 으로 시작하고, 그 뒤는 0 이며, 0x208 (520) 부근부터 0 이 아닌 값이 있습니다. 칸의 뜻은 적혀 있지 않습니다. 관찰한 PC 의 값도 같은 모양이었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+winreg-kb 는 이 키를 Vista 에서 본 키로 적고, 헥스 예시 하나만 싣습니다. 예시 값은 UTF-16LE 실행 파일 이름과 `00 00` 으로 시작하고, 그 뒤는 0 이며, 0x208 (520) 부근부터 0 이 아닌 값이 있습니다. 칸의 뜻은 적혀 있지 않습니다. 관찰한 PC 의 값도 같은 모양이었습니다.
 
 | 오프셋 | 크기 | 관찰한 내용 |
 |---|---|---|
@@ -99,7 +99,7 @@ winreg-kb 는 이 키를 Vista 에서 본 키로 적고, 헥스 예시 하나만
 
 ### FirstFolder 값
 
-winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관찰한 PC 에는 MRUListEx (8바이트) 와 값 `0` (REG_BINARY 208바이트) 이 있었습니다. 값 `0` 은 실행 파일 이름 모양의 UTF-16LE 문자열과 `00 00` 으로 시작했습니다. 그 뒤에 `C:\` 로 시작하는 UTF-16LE 경로 문자열이 이어졌습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관찰한 PC 에는 MRUListEx (8바이트) 와 값 `0` (REG_BINARY 208바이트) 이 있었습니다. 값 `0` 은 실행 파일 이름 모양의 UTF-16LE 문자열과 `00 00` 으로 시작했습니다. 그 뒤에 `C:\` 로 시작하는 UTF-16LE 경로 문자열이 이어졌습니다.
 
 ## 증거로서 의미
 
@@ -131,9 +131,9 @@ winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관
 
 - 항목 값에는 시각이 없고, plaso 도 이 키들의 시각으로 키의 마지막 기록 시각만 씁니다.
 - 키 시각은 첫 항목에만 조건부로 이어집니다. 두 번째 이후 항목에는 붙이지 않습니다.
-- 관찰한 PC 에서는 `OpenSavePidlMRU\*`, `LastVisitedPidlMRU`, `CIDSizeMRU` 세 키의 마지막 기록 시각이 초까지 같았습니다. 대화상자를 한 번 쓰면 여러 키가 함께 바뀌는 것으로 보입니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 관찰한 PC 에서는 `OpenSavePidlMRU\*`, `LastVisitedPidlMRU`, `CIDSizeMRU` 세 키의 마지막 기록 시각이 초까지 같았습니다. 대화상자를 한 번 쓰면 여러 키가 함께 바뀌는 것으로 보입니다.
 - 그래서 시각이 같은 키들의 첫 항목끼리 짝을 지어 "어느 프로그램으로 어느 파일을" 을 추정할 수 있습니다. 첫 항목에만 쓸 수 있고, 추정이라고 밝힙니다.
-- 같은 PC 에서 상위 키 `OpenSavePidlMRU` 와 하위 키 `OpenSavePidlMRU\pdf` 의 시각은 서로 달랐습니다. 상위 키 시각은 하위 키가 바뀔 때 함께 움직이지 않습니다. 시각은 항목이 들어 있는 하위 키에서 읽습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 같은 PC 에서 상위 키 `OpenSavePidlMRU` 와 하위 키 `OpenSavePidlMRU\pdf` 의 시각은 서로 달랐습니다. 상위 키 시각은 하위 키가 바뀔 때 함께 움직이지 않습니다. 시각은 항목이 들어 있는 하위 키에서 읽습니다.
 - 키 시각의 성질은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서, FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
@@ -143,7 +143,7 @@ winreg-kb 는 이 키가 UTF-16LE 문자열을 담는다고 적었습니다. 관
 3. **키 시각을 모든 항목에 붙입니다.** 키 시각은 첫 항목에만 이어집니다.
 4. **LastVisitedPidlMRU 의 문자열을 실행 파일 이름으로 단정합니다.** 널리 쓰는 설명이지만 확인한 자료로 확정하지 못했습니다. 실행 흔적과 맞춰 본 뒤에 씁니다.
 5. **CIDSizeMRU 의 뒤 72바이트를 해석합니다.** 뜻이 확인되지 않았습니다.
-6. **RecentDocs 가 비었으니 대화상자 기록도 없다고 봅니다.** 관찰한 PC 에서는 `Start_TrackDocs` 값이 0 이고 [최근 문서](recentdocs.md) 가 비어 있었습니다. 그래도 ComDlg32 키는 갱신되고 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+6. **RecentDocs 가 비었으니 대화상자 기록도 없다고 봅니다.** 관찰한 PC 에서는 `Start_TrackDocs` 값이 0 이고 [최근 문서](recentdocs.md) 가 비어 있었습니다. 그래도 ComDlg32 키는 갱신되고 있었습니다.
 7. **셸 항목 목록 풀이를 도구 하나에 맡깁니다.** 값 한두 개는 원시 바이트로 풀어 도구가 보여 준 경로와 맞춰 봅니다.
 8. **확인하지 못한 점을 사실로 씁니다.** 다음은 확인한 자료로 정하지 못했습니다.
    - `*` 키의 정확한 뜻

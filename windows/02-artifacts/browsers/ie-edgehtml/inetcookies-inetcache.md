@@ -35,7 +35,7 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Windows\INetCookies
 
 ### 한 PC 에서 본 폴더
 
-Windows 11 25H2 PC 에서 본 모습입니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+Windows 11 25H2 PC 에서 본 모습입니다.
 
 ```
 %LOCALAPPDATA%\Microsoft\Windows\
@@ -117,7 +117,7 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 
 ## 함정과 한계
 
-- **연결 폴더를 따라가면 같은 파일을 두 번 셉니다.** `Temporary Internet Files` 와 `INetCache`, `Content.IE5` 와 `IE` 는 같은 곳을 가리킬 수 있습니다. 수집 도구가 연결 폴더를 따라가는지 확인합니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+- **연결 폴더를 따라가면 같은 파일을 두 번 셉니다.** `Temporary Internet Files` 와 `INetCache`, `Content.IE5` 와 `IE` 는 같은 곳을 가리킬 수 있습니다. 수집 도구가 연결 폴더를 따라가는지 확인합니다.
 - **숨김·시스템 폴더를 놓치기 쉽습니다.** 탐색기 기본 설정으로는 `Content.IE5` 같은 폴더가 보이지 않을 수 있습니다. 연결 폴더는 재분석 지점 (Reparse Point) 이므로 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 의 속성으로 확인합니다.
 - **`Low` 폴더를 빠뜨리기 쉽습니다.** `INetCache` 와 `INetCookies` 아래에 `Low` 폴더가 따로 있습니다.
 - **폴더 이름만 보고 IE 버전을 정하지 않습니다.** `Content.IE5` 라는 이름은 IE 10 이후 PC 에도 연결 폴더로 남아 있었습니다. 기록 형식은 기록 파일에서 확인합니다.

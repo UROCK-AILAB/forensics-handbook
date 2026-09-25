@@ -12,7 +12,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ## 무엇을 기록하나 · 왜 생기나
 
-앱이 띄운 알림 (notification) 은 이 DB 에 들어가고, `ExpiryTime` 칸의 시각이 되면 지워집니다. 알림 한 건은 `Notification` 표의 한 행이며 실제 내용은 `Payload` 칸에 있습니다. 알림을 보낼 수 있는 앱의 목록은 `NotificationHandler` 표에 있고 `PrimaryId` 칸이 앱 이름을 보여 줍니다. 알림 종류는 토스트 (toast), 타일 (tile), 배지 (badge) 가 나왔습니다. (확인 범위: Win11 25H2 한 대)
+앱이 띄운 알림 (notification) 은 이 DB 에 들어가고, `ExpiryTime` 칸의 시각이 되면 지워집니다. 알림 한 건은 `Notification` 표의 한 행이며 실제 내용은 `Payload` 칸에 있습니다. 알림을 보낼 수 있는 앱의 목록은 `NotificationHandler` 표에 있고 `PrimaryId` 칸이 앱 이름을 보여 줍니다. 알림 종류는 토스트 (toast), 타일 (tile), 배지 (badge) 가 나왔습니다.
 
 알림에는 팝업 메시지나 앱의 글 일부가 들어 있을 수 있어서, 원본이 지워진 뒤에도 알림에서 내용을 되찾을 수 있습니다.
 
@@ -22,7 +22,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 - 사용자마다 `%LOCALAPPDATA%\Microsoft\Windows\Notifications\wpndatabase.db` 가 있습니다.
 - 출처 글(inc0x0)은 이 경로를 `%APPDATA%\Local\Microsoft\Windows\Notifications\wpndatabase.db` 로 적었는데, `%LOCALAPPDATA%` 와 같은 폴더를 가리킵니다.
-- 관찰한 PC 에서는 같은 폴더에 `wpndatabase.db-wal`, `wpndatabase.db-shm`, `WPNPRMRY.tmp`(0바이트), 빈 `wpnidm` 폴더가 함께 있었습니다. (확인 범위: Win11 25H2 한 대)
+- 관찰한 PC 에서는 같은 폴더에 `wpndatabase.db-wal`, `wpndatabase.db-shm`, `WPNPRMRY.tmp`(0바이트), 빈 `wpnidm` 폴더가 함께 있었습니다.
 - 프로필 폴더가 어느 계정의 것인지는 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
 ### Windows 버전
@@ -35,7 +35,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | Windows 10 1607 | API 에 `NotificationMirroring`·`RemoteId` 가 추가됩니다 | 공식 문서 |
 | Windows 10 1703 | API 에 `Data`·`Priority` 가 추가됩니다 | 공식 문서 |
 | Windows 10 1903 | API 에 `ExpiresOnReboot` 이 추가됩니다 | 공식 문서 |
-| Windows 11 25H2 | 아래 "구조" 의 표와 칸이 있었습니다 | 관찰 (확인 범위: Win11 25H2 한 대) |
+| Windows 11 25H2 | 아래 "구조" 의 표와 칸이 있었습니다 | 관찰 |
 
 - 1607 이전 파일의 이름과 형식은 확인하지 못했습니다.
 
@@ -43,11 +43,11 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 저장 형식은 SQLite 입니다. 페이지와 레코드, `-wal` 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
-- 관찰한 파일은 헤더의 오프셋 18·19 바이트가 모두 2 였습니다. WAL 모드라는 뜻입니다. 페이지 크기는 4096 이었습니다. (확인 범위: Win11 25H2 한 대)
+- 관찰한 파일은 헤더의 오프셋 18·19 바이트가 모두 2 였습니다. WAL 모드라는 뜻입니다. 페이지 크기는 4096 이었습니다.
 
 ### 표
 
-표와 칸 이름은 관찰한 스키마입니다. (확인 범위: Win11 25H2 한 대)
+표와 칸 이름은 관찰한 스키마입니다.
 
 | 표 | 칸 |
 |---|---|
@@ -75,7 +75,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `ExpiryTime` | 알림이 DB 에서 지워질 시각입니다. FILETIME 입니다 |
 | `Tag`, `Group`, `ExpiresOnReboot` | API 의 같은 이름 속성과 이름이 같습니다 (아래 표) |
 
-"관찰" 은 (확인 범위: Win11 25H2 한 대) 입니다. `ActivityId`, `DataVersion`, `BootId` 의 뜻은 확인하지 못했습니다.
+"관찰" 은 입니다. `ActivityId`, `DataVersion`, `BootId` 의 뜻은 확인하지 못했습니다.
 
 ### `NotificationHandler` 의 주요 칸
 
@@ -86,11 +86,11 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `HandlerType` | `app:desktop` 11개, `app:immersive` 222개, `app:system` 73개가 나왔습니다 (관찰) |
 | `CreatedTime`, `ModifiedTime` | `YYYY-MM-DD HH:MM:SS` 모양 글자였습니다. FILETIME 이 아닙니다 (관찰) |
 
-"관찰" 은 (확인 범위: Win11 25H2 한 대) 입니다. 나머지 칸의 뜻은 확인하지 못했습니다.
+"관찰" 은 입니다. 나머지 칸의 뜻은 확인하지 못했습니다.
 
 ### 나머지 표에서 본 값
 
-아래는 관찰입니다. (확인 범위: Win11 25H2 한 대)
+아래는 관찰입니다.
 
 - `HandlerAssets` 의 키는 `DisplayName`, `IconUri`, `LaunchArgs` 였습니다.
 - `HandlerSettings` 에는 앱마다 `s:toast`, `s:banner`, `s:audio`, `s:lock:toast`, `s:badge`, `s:tile`, `c:toast` 같은 설정 키가 있었습니다. 핸들러 306개에 키가 약 20개씩이었습니다. 키마다의 뜻은 확인하지 못했습니다.
@@ -127,8 +127,8 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 </toast>
 ```
 
-- `image` 의 `src` 는 `file:` 주소였습니다. (확인 범위: Win11 25H2 한 대)
-- 브라우저가 띄운 웹 알림은 `toast` 의 `launch` 속성에 사이트 주소가 들어 있었습니다. (확인 범위: Win11 25H2 한 대)
+- `image` 의 `src` 는 `file:` 주소였습니다.
+- 브라우저가 띄운 웹 알림은 `toast` 의 `launch` 속성에 사이트 주소가 들어 있었습니다.
 
 ### 알림 API 와 DB 칸
 
@@ -154,14 +154,14 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 - `Notification` 의 한 행은 이 사용자에게 `PrimaryId` 의 앱이 `ArrivalTime` 에 알림을 보낸 기록입니다.
 - `Payload` 는 그 알림에 보인 글과 그림 경로입니다.
-- 웹 알림이면 `launch` 속성으로 알림을 보낸 사이트를 알 수 있습니다. (확인 범위: Win11 25H2 한 대)
+- 웹 알림이면 `launch` 속성으로 알림을 보낸 사이트를 알 수 있습니다.
 - `NotificationHandler` 는 이 사용자 환경에서 알림 핸들러로 등록된 앱 목록입니다.
 
 ### 증명하지 못하는 것
 
 - 사용자가 알림을 보았는지, 눌렀는지는 알 수 없습니다.
 - 알림을 닫으면 DB 에서 바로 지워지는지는 확인하지 못했습니다. 출처 글도 이를 밝히지 않았습니다. 행이 없다고 알림을 받지 않은 것은 아닙니다.
-- 지난 알림은 대부분 남지 않습니다. 관찰한 PC 의 `Notification` 표에는 11행만 있었는데 `CurrentNotificationId` 는 3348 이었습니다. (확인 범위: Win11 25H2 한 대)
+- 지난 알림은 대부분 남지 않습니다. 관찰한 PC 의 `Notification` 표에는 11행만 있었는데 `CurrentNotificationId` 는 3348 이었습니다.
 - 알림은 원본 메시지의 일부일 수 있습니다. 원본 전체를 알려 주지 않습니다.
 - 핸들러로 등록된 앱을 사용자가 실행했다고 단정할 수 없습니다.
 
@@ -176,19 +176,19 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `NotificationHandler.CreatedTime`, `ModifiedTime` | `YYYY-MM-DD HH:MM:SS` 글자 | 시간대를 확인하지 못했습니다 |
 | `WNSPushChannel.ExpiryTime`, `CreatedTime` | FILETIME | 만료가 생성 30일 뒤였습니다 |
 
-비고 칸의 관찰은 (확인 범위: Win11 25H2 한 대) 입니다.
+비고 칸의 관찰은 입니다.
 
 - inc0x0 글의 변환식은 `(값 ÷ 10000000) − 11644473600 = 유닉스 시간` 입니다.
-- 관찰한 토스트 5건은 모두 `ExpiryTime − ArrivalTime` 이 정확히 72시간 (3일) 이었습니다. 3일이 기본값인지는 문서로 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- 관찰한 토스트 5건은 모두 `ExpiryTime − ArrivalTime` 이 정확히 72시간 (3일) 이었습니다. 3일이 기본값인지는 문서로 확인하지 못했습니다.
 - FILETIME 의 뜻과 다른 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 - 알림 시각을 다른 기록과 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
 
-- **세 파일을 함께 수집합니다.** 관찰한 PC 에서는 `-wal` 파일이 DB 파일보다 늦게 바뀌었습니다. 사본을 뜨는 몇 분 사이에도 `-wal` 이 70KB 에서 1.5MB 로 커졌습니다. 최근 알림은 `-wal` 에만 있을 수 있습니다. `wpndatabase.db`, `-wal`, `-shm` 을 함께 뜹니다. (확인 범위: Win11 25H2 한 대)
+- **세 파일을 함께 수집합니다.** 관찰한 PC 에서는 `-wal` 파일이 DB 파일보다 늦게 바뀌었습니다. 사본을 뜨는 몇 분 사이에도 `-wal` 이 70KB 에서 1.5MB 로 커졌습니다. 최근 알림은 `-wal` 에만 있을 수 있습니다. `wpndatabase.db`, `-wal`, `-shm` 을 함께 뜹니다.
 - **원본을 열지 않습니다.** SQLite 도구로 열면 `-wal` 의 내용이 DB 파일로 옮겨질 수 있습니다. 해시를 기록한 사본으로 작업합니다. [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
 - **행이 적은 것이 정상일 수 있습니다.** 알림은 만료되면 지워집니다. 과거 알림은 섀도 복사본 속 옛 파일에서 찾습니다. [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 참고합니다.
-- **지운 행.** 관찰한 파일은 202쪽 가운데 5쪽이 빈 페이지 (freelist) 였습니다. 지운 행을 되살릴 수 있는지는 확인하지 못했습니다. 찾는 법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다. (확인 범위: Win11 25H2 한 대)
+- **지운 행.** 관찰한 파일은 202쪽 가운데 5쪽이 빈 페이지 (freelist) 였습니다. 지운 행을 되살릴 수 있는지는 확인하지 못했습니다. 찾는 법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 - **시각 형식이 표마다 다릅니다.** `NotificationHandler` 의 시각은 글자이고 시간대를 모릅니다. FILETIME 칸과 같은 방법으로 풀지 않습니다.
 - **`Payload` 는 BLOB 입니다.** 뷰어가 헥스로만 보여 줄 수 있습니다. 글자로 바꿔 읽습니다. 글자가 깨지면 문자 인코딩을 헥스로 확인합니다.
 - **API 이름과 DB 칸을 섞어 쓰지 않습니다.** 이름이 같다고 뜻이 같다고 확인한 것은 아닙니다. 보고서에는 DB 칸 이름을 씁니다.

@@ -54,7 +54,7 @@ Windows 7 에는 UASP 기본 드라이버가 없어서 같은 장치도 Windows 
 
 UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁니다. `Enum\USB` 항목은 USB 장치 자체이고 `Enum\SCSI` 항목은 그 안의 디스크이므로, 두 항목을 이어야 VID·PID·시리얼 번호와 디스크 모델명·시각을 한 장치로 묶을 수 있습니다.
 
-아래에서 "(관찰)" 을 붙인 내용은 문서가 아니라 실제 레지스트리에서 확인한 것입니다. (확인 범위: Windows 11 빌드 26200 한 대, UASP 항목 2개)
+아래에서 "(관찰)" 을 붙인 내용은 문서에 없고 Windows 11 빌드 26200 레지스트리에서 본 것입니다.
 
 > 그림 자리: `Enum\USB\VID_…&PID_…\MSFT30<시리얼>` (Service=UASPStor, ParentIdPrefix=P, ContainerID=C) → `Enum\SCSI\Disk&Ven_…&Prod_…\P&000000` (ContainerID=C, Partmgr DiskId=D) → `Enum\STORAGE\Volume\{D}#…`·WPD 키 `SWD#WPDBUSENUM#{D}#…` 로 이어지는 그림
 

@@ -6,7 +6,7 @@ nav_order: 2430
 
 # SSH·FTP 도구 흔적 (PuTTY·WinSCP·FileZilla·OpenSSH)
 
-> 이 페이지에서 "(확인 범위: 조사 PC)" 는 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 사실을 뜻합니다. 조사 PC 에는 PuTTY·WinSCP·FileZilla 가 설치돼 있지 않았습니다. 그래서 PuTTY·WinSCP 내용은 공식 문서와 공개 도구 소스로만 확인했습니다.
+> 이 페이지에서 "" 는 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 사실을 뜻합니다. 조사 PC 에는 PuTTY·WinSCP·FileZilla 가 설치돼 있지 않았습니다. 그래서 PuTTY·WinSCP 내용은 공식 문서와 공개 도구 소스로만 확인했습니다.
 
 ## 한 줄 요약
 
@@ -66,16 +66,16 @@ FileZilla 공식 설정 파일 문서(wiki.filezilla-project.org/Config_Files)�
 
 - OpenSSH 는 Windows Server 2019 와 Windows 10(빌드 1809)부터 윈도에 들어갔습니다. [4]
 - 기본 설치 폴더는 `%systemdrive%\Windows\System32\openssh` 입니다. [4]
-- 조사 PC 의 이 폴더에는 ssh.exe, scp.exe, sftp.exe, ssh-add.exe, ssh-agent.exe, ssh-keygen.exe, ssh-keyscan.exe 등이 있었습니다. 버전은 OpenSSH_9.5p2 for Windows 였습니다. (확인 범위: 조사 PC)
-- 클라이언트와 서버는 따로 설치하는 선택적 기능입니다. 조사 PC 에는 OpenSSH.Client 만 있고 OpenSSH.Server 는 없었습니다. (확인 범위: 조사 PC)
+- 조사 PC 의 이 폴더에는 ssh.exe, scp.exe, sftp.exe, ssh-add.exe, ssh-agent.exe, ssh-keygen.exe, ssh-keyscan.exe 등이 있었습니다. 버전은 OpenSSH_9.5p2 for Windows 였습니다.
+- 클라이언트와 서버는 따로 설치하는 선택적 기능입니다. 조사 PC 에는 OpenSSH.Client 만 있고 OpenSSH.Server 는 없었습니다.
 
 클라이언트 쪽 파일은 아래와 같습니다.
 
 | 파일 | 위치 | 메모 |
 |---|---|---|
 | 클라이언트 설정 | `ssh.exe -F` 로 준 파일 → `%userprofile%\.ssh\config` → `%programdata%\ssh\ssh_config` | 이 순서로 읽습니다 [4] |
-| 호스트 키 목록 | `%userprofile%\.ssh\known_hosts` | 조사 PC 에는 `known_hosts.old` 도 있었습니다 (확인 범위: 조사 PC) |
-| 개인 키 | `%userprofile%\.ssh\` | 조사 PC 에는 `.pem` 개인 키 파일이 설정 파일과 함께 있었습니다 (확인 범위: 조사 PC) |
+| 호스트 키 목록 | `%userprofile%\.ssh\known_hosts` | 조사 PC 에는 `known_hosts.old` 도 있었습니다 |
+| 개인 키 | `%userprofile%\.ssh\` | 조사 PC 에는 `.pem` 개인 키 파일이 설정 파일과 함께 있었습니다 |
 
 서버 쪽 파일과 설정은 아래와 같습니다. 모두 [4] 의 내용입니다.
 
@@ -94,7 +94,7 @@ FileZilla 공식 설정 파일 문서(wiki.filezilla-project.org/Config_Files)�
 
 ### OpenSSH 클라이언트 설정 (.ssh\config)
 
-조사 PC 의 `config` 에는 `Host`, `HostName`, `User`, `Port`, `IdentityFile`, `ProxyJump` 키워드가 쓰였습니다. 접속 대상 이름, 계정, 경유 서버가 평문으로 남습니다. (확인 범위: 조사 PC)
+조사 PC 의 `config` 에는 `Host`, `HostName`, `User`, `Port`, `IdentityFile`, `ProxyJump` 키워드가 쓰였습니다. 접속 대상 이름, 계정, 경유 서버가 평문으로 남습니다.
 
 아래는 문법을 보여 주려고 만든 예시입니다. 주소는 문서용 예약 주소입니다.
 
@@ -115,7 +115,7 @@ Host db
 
 ### 호스트 키 목록 (known_hosts)
 
-조사 PC 의 `known_hosts` 한 줄은 "호스트 키종류 공개키" 세 칸이었습니다. 호스트 칸은 해시가 아니라 평문 IP 였습니다. (확인 범위: 조사 PC) 아래는 칸 모양만 보여 주려고 만든 예시입니다.
+조사 PC 의 `known_hosts` 한 줄은 "호스트 키종류 공개키" 세 칸이었습니다. 호스트 칸은 해시가 아니라 평문 IP 였습니다. 아래는 칸 모양만 보여 주려고 만든 예시입니다.
 
 ```
 192.0.2.20 ssh-ed25519 AAAA…(공개 키, 생략)
@@ -125,7 +125,7 @@ Host db
 
 ### OpenSSH 이벤트 채널
 
-채널은 `OpenSSH/Admin`, `OpenSSH/Operational`, `OpenSSH/Debug` 입니다. 파일은 `%SystemRoot%\System32\Winevt\Logs\OpenSSH%4Operational.evtx` 처럼 이름이 붙습니다. (확인 범위: 조사 PC)
+채널은 `OpenSSH/Admin`, `OpenSSH/Operational`, `OpenSSH/Debug` 입니다. 파일은 `%SystemRoot%\System32\Winevt\Logs\OpenSSH%4Operational.evtx` 처럼 이름이 붙습니다.
 
 | ID | 수준 | 채널 |
 |---|---|---|
@@ -135,9 +135,9 @@ Host db
 | 4 | Information | Operational |
 | 6 | Debug | Debug |
 
-(확인 범위: 조사 PC)
 
-메시지 형식은 모두 `%1: %2` 입니다. `%1` 은 프로그램 이름, `%2` 는 로그 한 줄입니다. (확인 범위: 조사 PC) 서버가 남기는 로그 줄의 실제 문장은 이번에 확인하지 못했습니다.
+
+메시지 형식은 모두 `%1: %2` 입니다. `%1` 은 프로그램 이름, `%2` 는 로그 한 줄입니다. 서버가 남기는 로그 줄의 실제 문장은 이번에 확인하지 못했습니다.
 
 ### WinSCP 경로 기록의 인코딩
 
@@ -150,7 +150,7 @@ RegRipper winscp 플러그인은 `RemoteTarget`·`LocalTarget` 값을 URL 디코
 - PuTTY·WinSCP 의 `SshHostKeys` 나 `known_hosts` 에 서버가 있으면, 그 사용자 계정의 클라이언트가 그 서버와 SSH 접속을 시작한 적이 있습니다.
 - `.ssh\config` 는 접속 대상 이름, 계정, 포트, 개인 키 파일, 경유 서버를 설정한 기록입니다.
 - WinSCP 의 `RemoteTarget`·`LocalTarget`·`LastPath` 는 원격·로컬에서 다룬 경로를 보여 줍니다.
-- PowerShell 명령 기록의 `ssh`·`scp` 줄은 접속 대상과 옵션을 명령줄 그대로 보여 줍니다. 조사 PC 에서는 이런 줄이 91개 있었습니다. (확인 범위: 조사 PC)
+- PowerShell 명령 기록의 `ssh`·`scp` 줄은 접속 대상과 옵션을 명령줄 그대로 보여 줍니다. 조사 PC 에서는 이런 줄이 91개 있었습니다.
 - `administrators_authorized_keys` 나 사용자 `authorized_keys` 의 공개 키는 그 키로 이 PC 에 로그인할 수 있게 해 두었다는 기록입니다.
 - `DefaultShell` 값은 SSH 로 들어온 사람이 받는 셸을 보여 줍니다.
 
@@ -160,7 +160,7 @@ RegRipper winscp 플러그인은 `RemoteTarget`·`LocalTarget` 값을 URL 디코
 - 이 흔적들에는 주고받은 파일 이름이나 내용이 없습니다.
 - PuTTY 는 비밀번호를 저장하지 않습니다. 비밀번호가 없다고 이상한 것이 아닙니다.
 - WinSCP 는 비밀번호를 기본으로 저장하지 않습니다. 사용자가 세션 저장 대화상자에서 따로 요청해야 저장합니다. [3]
-- 조사 PC 에서는 ssh 클라이언트를 썼는데도 `OpenSSH/Operational`·`OpenSSH/Admin` 에 기록이 0건이었습니다. `known_hosts` 는 바뀌었고 프리페치도 있었습니다. 클라이언트 사용은 이 채널에 남지 않았습니다. (확인 범위: 조사 PC)
+- 조사 PC 에서는 ssh 클라이언트를 썼는데도 `OpenSSH/Operational`·`OpenSSH/Admin` 에 기록이 0건이었습니다. `known_hosts` 는 바뀌었고 프리페치도 있었습니다. 클라이언트 사용은 이 채널에 남지 않았습니다.
 
 보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "사용자 A 의 `known_hosts` 에 192.0.2.20 의 호스트 키가 있다. 이 사용자 계정의 SSH 클라이언트가 이 서버와 접속을 시작한 적이 있다. 이 기록만으로는 로그인 성공 여부와 접속 시각을 알 수 없다." 처럼 씁니다. 예의 값은 만든 예시입니다.
 
@@ -179,8 +179,8 @@ RegRipper winscp 플러그인은 `RemoteTarget`·`LocalTarget` 값을 URL 디코
 - **관리자 그룹 사용자의 공개 키는 사용자 홈에 없습니다.** 관리자 그룹 사용자는 `administrators_authorized_keys` 를 씁니다. [4] 사용자 홈의 `.ssh` 만 보면 이 키를 놓칩니다.
 - **`sshd_config` 가 있다고 누가 설정을 고쳤다는 뜻은 아닙니다.** 파일이 없으면 서비스가 기본값으로 만듭니다. [4] 기본값과 다른 줄이 있는지 따로 봅니다.
 - **서버 로그는 기본값에서 파일이 아니라 ETW 로 갑니다.** `%programdata%\ssh\logs` 가 비어 있다고 서버를 쓰지 않았다고 단정하지 않습니다. [4]
-- **OpenSSH 클라이언트 사용은 이벤트 채널에 남지 않았습니다.** 클라이언트 흔적은 `.ssh` 폴더, 프리페치, PowerShell 명령 기록으로 찾습니다. (확인 범위: 조사 PC)
-- **ssh-agent 가 등록한 키를 어디에 두는지는 확인하지 못했습니다.** 조사 PC 에서 ssh-agent 서비스는 중지·사용 안 함 상태였습니다. (확인 범위: 조사 PC)
+- **OpenSSH 클라이언트 사용은 이벤트 채널에 남지 않았습니다.** 클라이언트 흔적은 `.ssh` 폴더, 프리페치, PowerShell 명령 기록으로 찾습니다.
+- **ssh-agent 가 등록한 키를 어디에 두는지는 확인하지 못했습니다.** 조사 PC 에서 ssh-agent 서비스는 중지·사용 안 함 상태였습니다.
 - **FileZilla 는 이 페이지에서 다루지 못했습니다.** 공식 문서로 위치를 확인한 뒤 분석합니다.
 
 ## 직접 분석해 보기
@@ -236,7 +236,7 @@ Get-WinEvent -Path 'E:\case\OpenSSH%4Operational.evtx' |
 
 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 프리페치 | 조사 PC 에는 `SSH.EXE-17F86097.pf` 가 있었습니다 (확인 범위: 조사 PC). PuTTY·WinSCP·FileZilla 실행 파일도 같은 방식으로 찾습니다 | [프리페치](../execution/prefetch/index.md) |
+| 프리페치 | 조사 PC 에는 `SSH.EXE-17F86097.pf` 가 있었습니다. PuTTY·WinSCP·FileZilla 실행 파일도 같은 방식으로 찾습니다 | [프리페치](../execution/prefetch/index.md) |
 | PowerShell 명령 기록 | `ssh`·`scp` 명령줄의 접속 대상과 옵션 | [PowerShell 명령 기록](../execution/consolehost-history-txt.md) |
 | 점프리스트 | Windows 7 이후 PuTTY 의 최근 세션 [1] | [점프리스트](../file-folder-usage/jump-lists.md) |
 | AmCache · 심캐시 | 설치하지 않고 실행한 도구의 경로 | [AmCache](../execution/amcache-hve/index.md), [심캐시](../execution/shimcache-appcompatcache.md) |

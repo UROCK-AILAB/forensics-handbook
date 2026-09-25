@@ -48,7 +48,7 @@ USN 변경 저널 (USN Change Journal) 은 NTFS 볼륨에서 파일과 폴더가
 
 ### 실제 PC 한 대에서 본 값
 
-`fsutil usn queryjournal C:` 로 확인한 값입니다. (확인 범위: Windows 11 25H2, 1.8TB 볼륨 한 대)
+`fsutil usn queryjournal C:` 출력입니다(Windows 11 25H2, 1.8TB 볼륨 기준).
 
 | 항목 | 값 |
 |---|---|

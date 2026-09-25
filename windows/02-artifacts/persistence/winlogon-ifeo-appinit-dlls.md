@@ -64,7 +64,7 @@ AppInit_DLLs 는 사용자가 지정한 DLL 을 모든 대화형 응용 프로�
 
 ### Winlogon 값
 
-Windows 11 PC 한 대에서 본 값은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 값은 아래와 같습니다.
 
 | 키 | 값 |
 |---|---|
@@ -79,7 +79,7 @@ Windows 11 PC 한 대에서 본 값은 아래와 같습니다. (확인 범위: W
 
 ### IFEO 하위 키
 
-Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 모습입니다.
 
 - IFEO 하위 키가 59개 있었습니다.
 - `Debugger` 값이 있는 키는 0개였습니다.
@@ -97,7 +97,7 @@ Windows 7 부터 쓸 수 있고, 감시 대상은 IFEO 하위 키 `GlobalFlag` �
 
 ### AppInit_DLLs 값
 
-Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 있었습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 있었습니다.
 
 | 키 | `AppInit_DLLs` | `LoadAppInit_DLLs` | `RequireSignedAppInit_DLLs` |
 |---|---|---|---|
@@ -108,8 +108,8 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 
 ### BootExecute·Load 값
 
-- Windows 11 PC 한 대에서 `BootExecute` 는 `autocheck autochk *` 였습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 의 `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` 에는 `Load` 값도 `Run` 값도 없었습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 `BootExecute` 는 `autocheck autochk *` 였습니다.
+- 같은 PC 의 `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` 에는 `Load` 값도 `Run` 값도 없었습니다.
 
 ## 증거로서 의미
 
@@ -140,7 +140,7 @@ Windows 11 PC 한 대에서 본 값입니다. 이 PC 는 Secure Boot 가 켜져 
 
 - **WOW6432Node 를 빼먹습니다.** Winlogon·IFEO·AppInit_DLLs 모두 WOW6432Node 쪽 경로가 따로 있습니다.
 - **HKCU 쪽 Winlogon 도 봅니다.** MITRE 는 HKCU 경로도 적습니다. 사용자 하이브마다 확인합니다.
-- **`Userinit` 끝의 쉼표를 이상 신호로 보지 않습니다.** Windows 11 PC 한 대의 정상 값에도 쉼표가 붙어 있었습니다. 쉼표 뒤에 다른 경로가 이어지는지를 봅니다. (확인 범위: Win11 25H2 한 대)
+- **`Userinit` 끝의 쉼표를 이상 신호로 보지 않습니다.** Windows 11 PC 한 대의 정상 값에도 쉼표가 붙어 있었습니다. 쉼표 뒤에 다른 경로가 이어지는지를 봅니다.
 - **IFEO 하위 키는 원래 많습니다.** 보안 완화 설정이 흔합니다. `Debugger`·전역 플래그 값을 봅니다.
 - **보안 제품 이름의 IFEO 키를 먼저 봅니다.** MITRE 는 IFEO 경로 아래 변경, 특히 보안 제품 실행 파일을 대상으로 한 변경을 보라고 권합니다.
 - **AppInit_DLLs 의 뜻은 Secure Boot 상태에 따라 갈립니다.** 값만 보고 DLL 이 올라갔다고 쓰지 않습니다.

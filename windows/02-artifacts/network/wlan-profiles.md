@@ -14,12 +14,12 @@ nav_order: 2320
 
 무선 프로필 (wireless profile) 은 WLAN_profile 스키마를 따르는 XML 이고, 이 PC 에 저장해 둔 무선 네트워크 설정이며 연결 기록이 아닙니다. 프로필에는 모든 사용자용 (all-user) 과 사용자별 (per-user) 이 있는데, 무선 LAN API 의 WlanGetProfile 결과에 `WLAN_PROFILE_USER` 플래그가 없으면 모든 사용자용 프로필입니다. 그룹 정책으로 만든 프로필은 `WLAN_PROFILE_GROUP_POLICY` 플래그로 구분하고, 읽기 전용이라 내용도 우선순위도 바꿀 수 없습니다. 프로필 이름은 대소문자를 가리고, 최대 255자입니다.
 
-- Windows 11 PC 한 대에서 무선 프로필 9개는 모두 프로필 이름이 SSID 이름과 같았습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 의 AP 프로필 (`WLANAPProfile`) 1개는 프로필 이름이 SSID 이름과 달랐습니다. 이 프로필이 모바일 핫스팟 설정인지는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 무선 프로필 9개는 모두 프로필 이름이 SSID 이름과 같았습니다.
+- 같은 PC 의 AP 프로필 (`WLANAPProfile`) 1개는 프로필 이름이 SSID 이름과 달랐습니다. 이 프로필이 모바일 핫스팟 설정인지는 확인하지 못했습니다.
 
 ## 위치와 버전별 차이
 
-Windows 11 PC 한 대에서 본 위치는 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 위치는 아래와 같습니다.
 
 ```
 C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프로필 GUID}.xml
@@ -47,8 +47,8 @@ C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프
 
 ### XML 요소
 
-- 네임스페이스는 `http://www.microsoft.com/networking/WLAN/profile/v1` 이고, 루트 요소는 `WLANProfile` 입니다. (확인 범위: Win11 25H2 한 대)
-- 각 요소의 공식 정의는 이번에 열어 보지 못했습니다. 아래 표에는 요소 이름과 Windows 11 PC 한 대에서 본 값만 적습니다. (확인 범위: Win11 25H2 한 대)
+- 네임스페이스는 `http://www.microsoft.com/networking/WLAN/profile/v1` 이고, 루트 요소는 `WLANProfile` 입니다.
+- 각 요소의 공식 정의는 이번에 열어 보지 못했습니다. 아래 표에는 요소 이름과 Windows 11 PC 한 대에서 본 값만 적습니다.
 
 | 요소 | 이 PC 에서 본 내용 |
 |---|---|
@@ -66,8 +66,8 @@ C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프
 | `sharedKey/keyMaterial` | 키. 아래 "키" 절 |
 | `MacRandomization/enableRandomization`, `randomizationSeed` | 값의 뜻은 확인하지 못했습니다 |
 
-- AP 프로필 (`WLANAPProfile`) 에는 `name`, `SSIDConfig`, `MSM/connectivity/maxNumberOfClients`, `security`(`authEncryption`·`transitionMode`·`sharedKey`) 가 있었습니다. (확인 범위: Win11 25H2 한 대)
-- 프로필 XML 안에는 만든 시각이나 마지막 연결 시각을 적는 칸이 없었습니다. (확인 범위: Win11 25H2 한 대)
+- AP 프로필 (`WLANAPProfile`) 에는 `name`, `SSIDConfig`, `MSM/connectivity/maxNumberOfClients`, `security`(`authEncryption`·`transitionMode`·`sharedKey`) 가 있었습니다.
+- 프로필 XML 안에는 만든 시각이나 마지막 연결 시각을 적는 칸이 없었습니다.
 
 ### 키 (keyMaterial)
 
@@ -77,7 +77,7 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 
 - WEP 키는 ASCII 5자로 넣든 16진 10자로 넣든 16진 10자로 저장하고 돌려줍니다.
 
-디스크의 XML 파일에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+디스크의 XML 파일에서 본 모습은 아래와 같습니다.
 
 - 키가 있는 프로필 9개 모두 `protected` 가 `true` 였습니다.
 - 9개 모두 `keyMaterial` 이 16진 `01000000D08C9DDF0115D1118C7A00C04FC297EB` 로 시작했습니다.
@@ -99,7 +99,7 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 
 - **연결했는지.** 설정을 저장만 하고 연결하지 않았는지는 프로필만으로 알 수 없습니다.
 - **언제 연결했는지.** XML 안에 시각이 없습니다. 연결 여부와 시각은 [네트워크 목록](networklist.md)·[네트워크 연결 이벤트](../event-logs/wlan-autoconfig-networkprofile.md)·[SRUM](../execution/system-resource-usage-monitor/index.md) 에서 봅니다.
-- **누가 만들었는지.** Windows 11 PC 한 대에서 본 XML 요소에는 사용자를 가리키는 칸이 없었습니다. (확인 범위: Win11 25H2 한 대)
+- **누가 만들었는지.** Windows 11 PC 한 대에서 본 XML 요소에는 사용자를 가리키는 칸이 없었습니다.
 - **키의 평문.** 디스크에는 암호화된 키만 있습니다. 키를 풀지 못하면 SSID·인증 방식까지만 씁니다.
 
 보고서에는 "이 PC 의 무선 프로필 폴더에 SSID 가 이 이름인 프로필 파일이 있고, 인증 방식은 WPA2PSK 로 적혀 있다" 처럼 씁니다.
@@ -107,7 +107,7 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 ## 시각 해석
 
 - XML 안에 시각이 없으므로 파일 시스템 시각($STANDARD_INFORMATION)을 봅니다. 읽는 법은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
-- 파일 생성 시각이 곧 프로필을 처음 만든 때라고 단정하지 않습니다. Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+- 파일 생성 시각이 곧 프로필을 처음 만든 때라고 단정하지 않습니다. Windows 11 PC 한 대에서 본 모습은 아래와 같습니다.
 
 | 본 것 | 값 |
 |---|---|
@@ -125,9 +125,9 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 ## 함정과 한계
 
 - **수정 시각이 생성 시각보다 앞서도 조작으로 단정하지 않습니다.** 업그레이드 때 파일을 옮기면 이런 모습이 나올 수 있습니다. [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 의 설치 시각과 먼저 맞춰 봅니다.
-- **라이브 명령 결과와 파일 수가 다를 수 있습니다.** Windows 11 PC 한 대에서 `netsh wlan show profiles` 는 "All User Profile" 9개를 보였습니다. 같은 PC 에서 `netsh wlan export profile` 은 파일 6개만 만들었습니다. 이유는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- **라이브 명령 결과와 파일 수가 다를 수 있습니다.** Windows 11 PC 한 대에서 `netsh wlan show profiles` 는 "All User Profile" 9개를 보였습니다. 같은 PC 에서 `netsh wlan export profile` 은 파일 6개만 만들었습니다. 이유는 확인하지 못했습니다.
 - **네트워크 목록과 GUID 로 이어지지 않습니다.** 파일 이름 GUID 가 네트워크 목록 프로필 GUID 와 달랐습니다. 이름으로 맞춰야 합니다.
-- **이름도 늘 같지는 않습니다.** Windows 11 PC 한 대에서 프로필 이름 10개 가운데 4개만 네트워크 목록의 `ProfileName` 과 같았습니다. (확인 범위: Win11 25H2 한 대)
+- **이름도 늘 같지는 않습니다.** Windows 11 PC 한 대에서 프로필 이름 10개 가운데 4개만 네트워크 목록의 `ProfileName` 과 같았습니다.
 - **SSID 는 hex 값으로도 맞춥니다.** `SSIDConfig/SSID/hex` 는 SSID 바이트 그대로입니다. 네트워크 목록과 TCP/IP 인터페이스 키에도 SSID 를 16진수로 적은 값이 있습니다.
 - **프로필 이름은 대소문자를 가립니다.** 대소문자만 다른 두 프로필을 같은 것으로 합치지 않습니다.
 - **파일이 없으면 이전 시점을 봅니다.** 프로필을 지울 때 파일이 어떻게 되는지는 이번에 확인하지 못했습니다. [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 로 이전 시점의 파일을 찾아봅니다.
@@ -174,7 +174,7 @@ hex   48 4F 4D 45
 1. `hex` 값을 두 자리씩 끊습니다.
 2. 각 바이트를 문자로 바꾸면 `HOME` 입니다. `name` 과 같습니다.
 
-**keyMaterial 머리 읽기.** 아래 20바이트는 Windows 11 PC 한 대의 프로필 9개에 공통으로 있던 머리입니다. 그 뒤는 줄였습니다. (확인 범위: Win11 25H2 한 대)
+**keyMaterial 머리 읽기.** 아래 20바이트는 Windows 11 PC 한 대의 프로필 9개에 공통으로 있던 머리입니다. 그 뒤는 줄였습니다.
 
 ```
 오프셋  바이트                                              읽은 값
@@ -193,7 +193,7 @@ hex   48 4F 4D 45
 3. XML 파일을 텍스트 편집기나 XML 뷰어로 열어 `name`·`SSID/hex`·`authentication`·`encryption`·`connectionMode` 를 표로 적습니다.
 4. 공개 MFT 파서로 각 XML 파일의 생성·수정 시각을 뽑습니다.
 5. 라이브 시스템이면 `netsh wlan show profiles` 결과와 폴더의 파일 수를 비교합니다.
-6. `netsh wlan export profile` 로 내보낸 파일 이름은 `<인터페이스 이름>-<프로필 이름>.xml` 모양이었습니다. 이 이름으로 인터페이스 이름도 확인할 수 있습니다. (확인 범위: Win11 25H2 한 대)
+6. `netsh wlan export profile` 로 내보낸 파일 이름은 `<인터페이스 이름>-<프로필 이름>.xml` 모양이었습니다. 이 이름으로 인터페이스 이름도 확인할 수 있습니다.
 
 ## 교차 검증
 

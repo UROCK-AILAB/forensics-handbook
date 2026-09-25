@@ -54,7 +54,7 @@ has_toc: false
 
 파일 이름에서는 채널 이름의 `/` 자리에 `%4` 가 들어가고, 채널 이름은 JPCERT/CC 자료와 같습니다. 보안 로그 파일의 위치는 [로그온·로그오프](../logon-events/index.md) 에서 다룹니다.
 
-아래는 원격 데스크톱 받기가 꺼진 PC 한 대에서 `wevtutil gl` 로 본 결과입니다 (확인 범위: Windows 11 Home 빌드 26200).
+아래는 원격 데스크톱 받기가 꺼진 PC 한 대에서 `wevtutil gl` 로 본 결과입니다.
 
 - 네 채널 모두 켜져 (enabled: true) 있었습니다.
 - 네 채널 모두 최대 크기가 1052672 바이트 (약 1MB) 였고, retention 은 false 였습니다.

@@ -35,7 +35,7 @@ Sysmon 은 두 부분이 함께 돕니다.
 ### 배포본과 지원 OS
 
 - 배포 zip 에는 Sysmon.exe, Sysmon64.exe, Sysmon64a.exe (ARM64 용), Eula.txt 가 들어 있습니다.
-- v15.22 실행 파일의 파일 버전은 15.22 였고, 서명자는 Microsoft Windows Publisher 였습니다 (확인 범위: 공식 배포본 v15.22).
+- v15.22 실행 파일의 파일 버전은 15.22 였고, 서명자는 Microsoft Windows Publisher 였습니다.
 - v15.22 는 Windows 11 이상과 Windows Server 2019 이상에서 돕니다.
 - 예전 버전이 어느 OS 까지 지원했는지는 확인하지 못했습니다. 옛 OS 에서 나온 로그라면 예전 버전 Sysmon 이 남겼을 수 있습니다.
 - Vista 이후에는 Microsoft-Windows-Sysmon/Operational 채널에 씁니다. 이벤트 뷰어에서는 "응용 프로그램 및 서비스 로그 > Microsoft > Windows > Sysmon > Operational" 에 보입니다.

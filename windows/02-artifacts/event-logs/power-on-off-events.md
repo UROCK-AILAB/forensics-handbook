@@ -38,13 +38,13 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 ## 위치와 버전별 차이
 
-대부분 System 로그에 남고, 4608·4609·1100 은 Security 로그에 남습니다. 한 PC 의 Security 로그에는 4608·4609 가 없었는데, 약 이틀 치만 남아 있어 마지막 부팅 기록이 이미 밀려났습니다. (확인 범위: Win11 빌드 26200 한 대) 4608 이 어느 감사 하위 범주에 속하는지는 확인하지 못했습니다.
+대부분 System 로그에 남고, 4608·4609·1100 은 Security 로그에 남습니다. 한 PC 의 Security 로그에는 4608·4609 가 없었는데, 약 이틀 치만 남아 있어 마지막 부팅 기록이 이미 밀려났습니다. 4608 이 어느 감사 하위 범주에 속하는지는 확인하지 못했습니다.
 
 부팅 상태 파일 `%SystemRoot%\Bootstat.dat` 에는 부팅·종료·최대 절전/절전에서 돌아옴의 성공 여부가 기록됩니다. Microsoft 문서가 Windows Internals 6판을 인용해 적은 내용이며, 내부 구조는 확인하지 못했습니다.
 
 ### 이벤트 버전
 
-아래는 한 PC 의 공급자 메타데이터에서 읽은 버전입니다. (확인 범위: Win11 빌드 26200 한 대) 버전마다 어느 Windows 부터 쓰였는지는 확인하지 못했습니다.
+아래는 한 PC 의 공급자 메타데이터에서 읽은 버전입니다. 버전마다 어느 Windows 부터 쓰였는지는 확인하지 못했습니다.
 
 | 이벤트 | 버전 | 차이 |
 |---|---|---|
@@ -55,7 +55,7 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 ### 같은 번호를 다른 공급자가 씁니다
 
-한 PC 의 System 로그에서 본 예입니다. (확인 범위: Win11 빌드 26200 한 대)
+한 PC 의 System 로그에서 본 예입니다.
 
 - ID 12 는 Kernel-General (부팅) 말고도 BTHUSB·UserModePowerService·Wininit 이 썼습니다.
 - ID 1 은 Kernel-General (시각 변경)·Power-Troubleshooter (깨어남) 말고도 Configuration-Change-Monitor·FilterManager·Hyper-V-Hypervisor·IsolatedUserMode 가 썼습니다.
@@ -65,7 +65,7 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 ## 구조
 
-아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다. (확인 범위: Win11 빌드 26200 한 대) 공급자 이름은 `Microsoft-Windows-` 를 뺀 짧은 이름으로 적었습니다.
+아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다. 공급자 이름은 `Microsoft-Windows-` 를 뺀 짧은 이름으로 적었습니다.
 
 ### 켜짐·꺼짐
 
@@ -104,7 +104,7 @@ User32 1074 의 메시지는 "The process … has initiated the [종류] of comp
 | param6 | 설명 | — |
 | param7 | 사용자 | `[컴퓨터 이름]\[사용자]`, `NT AUTHORITY\SYSTEM` |
 
-(확인 범위: Win11 빌드 26200 한 대, 한국어 화면)
+(Windows 11 빌드 26200, 한국어 화면 기준)
 
 ### 비정상 종료 (Kernel-Power 41)
 
@@ -131,7 +131,7 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 
 ## 증거로서 의미
 
-한 PC 에서 본 정상 재시작의 순서입니다. 시작 메뉴로 재시작한 경우입니다. (확인 범위: Win11 빌드 26200 한 대, 시각은 UTC)
+한 PC 에서 본 정상 재시작의 순서입니다. 시작 메뉴로 재시작한 경우입니다. (Windows 11 빌드 26200 기준, 시각은 UTC)
 
 | 시각 | 이벤트 | 값 |
 |---|---|---|
@@ -174,7 +174,7 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 - 12 의 StartTime, 13 의 StopTime, Power-Troubleshooter 1 의 SleepTime·WakeTime 은 FILETIME 입니다. 값 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다.
 - Microsoft 문서는 이벤트 뷰어가 .evtx 의 시각을 시스템 시간대로 바꿔 보여 준다고 주의를 줍니다. 서버 시간대를 확인하라고 적었습니다. 시간대 설정은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 
-한 PC 에서 본 시각의 특징입니다. (확인 범위: Win11 빌드 26200 한 대)
+한 PC 에서 본 시각의 특징입니다.
 
 - **레코드 번호와 시각 순서가 다릅니다.** 꺼질 때의 109·13 과 켜질 때의 12·20·27 은 레코드 번호가 다음 부팅의 6005 보다 뒤였습니다. 예: 6005 (레코드 18209, 21:55:18) → 109 (18214, 21:54:34) → 13 (18216, 21:54:36) → 12 (18217, 21:54:50). 커널 이벤트가 이벤트 로그 서비스가 다시 뜬 뒤에 파일에 쓰인 것으로 보입니다. 이 설명은 해석입니다. 레코드 번호가 아니라 시각으로 정렬합니다.
 - **12 의 StartTime 은 0.5초 단위로 끊겨 있었습니다.** 이벤트 기록 시각보다 약 0.6초 빨랐습니다. 13 의 StopTime 은 이벤트 기록 시각과 같았습니다.
@@ -193,7 +193,7 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 1. **번호만으로 거릅니다.** 12·1·7001·7002 는 다른 공급자도 씁니다. 공급자 이름을 함께 거릅니다.
 2. **레코드 번호로 정렬합니다.** 부팅 앞뒤의 커널 이벤트는 레코드 번호 순서가 시각 순서와 다릅니다.
 3. **6005 를 켜진 시각으로 씁니다.** 12 의 StartTime 보다 수십 초 늦습니다.
-4. **1074 를 영어 글자로 거릅니다.** 이유 글자 (param3) 와 종류 (param5) 는 현지화된 글자로 저장돼 있었습니다. "restart" 로 찾으면 "다시 시작" 을 놓칩니다. (확인 범위: Win11 빌드 26200 한 대, 한국어 화면)
+4. **1074 를 영어 글자로 거릅니다.** 이유 글자 (param3) 와 종류 (param5) 는 현지화된 글자로 저장돼 있었습니다. "restart" 로 찾으면 "다시 시작" 을 놓칩니다. (Windows 11 빌드 26200, 한국어 화면 기준)
 5. **BugcheckCode 를 16진으로 읽습니다.** 10진수입니다. 159 는 0x9F 입니다.
 6. **6008 의 시각을 꺼진 시각으로 씁니다.** 모던 스탠바이 중이었다면 한참 앞설 수 있습니다.
 7. **모던 스탠바이 PC 에서 42·107 만 찾습니다.** 한 노트북에서 약 3개월 동안 506 은 319건, 507 은 314건, 566 은 687건이었습니다. 42·107 은 7건뿐이었습니다. 이런 PC 에서는 뚜껑을 닫고 여는 일이 506·507 로 남는 것으로 보입니다. 이 판단은 해석입니다.
@@ -211,7 +211,7 @@ Microsoft 문서는 몇 칸을 이렇게 설명합니다.
 
 ### 헥스로 한 번
 
-`HKLM\SYSTEM\CurrentControlSet\Control\Windows\ShutdownTime` 은 REG_BINARY 8바이트 FILETIME (UTC) 이었습니다. (확인 범위: Win11 빌드 26200 한 대) 41 의 PowerButtonTimestamp 도 FILETIME 으로 풀렸습니다.
+`HKLM\SYSTEM\CurrentControlSet\Control\Windows\ShutdownTime` 은 REG_BINARY 8바이트 FILETIME (UTC) 이었습니다. 41 의 PowerButtonTimestamp 도 FILETIME 으로 풀렸습니다.
 
 아래 바이트는 설명을 위해 만든 예시입니다. Microsoft 문서 41 예시의 PowerButtonTimestamp 값 131728546170882432 를 8바이트 리틀 엔디언으로 적었습니다. 검체에서 나온 값이 아닙니다.
 
@@ -262,7 +262,7 @@ Get-WinEvent -Path $f | Sort-Object TimeCreated | Select-Object TimeCreated, Rec
 | [시간대 설정](../system-account/time-zone.md) | 6008·6013 의 현지 시각과 바이어스 |
 | [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md) | 다른 기록과 시각을 맞출 때 |
 
-Reliability 키와 `Bootstat.dat` 에 대해 한 PC 에서 본 것은 다음과 같습니다. (확인 범위: Win11 빌드 26200 한 대)
+Reliability 키와 `Bootstat.dat` 에 대해 한 PC 에서 본 것은 다음과 같습니다.
 
 - Reliability 키에는 TimeStampInterval 1, DirtyShutdown 1, DirtyShutdownTime, LastAliveStamp (REG_BINARY 4바이트) 가 있었습니다.
 - LastAliveStamp·TimeStampInterval 의 뜻과 단위는 확인하지 못했습니다.

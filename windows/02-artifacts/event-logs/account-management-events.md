@@ -53,7 +53,7 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 
 4732 "A member was added to a security-enabled local group." 은 보안 로컬 그룹에 구성원이 더해질 때마다 생기며, 감사 하위 범주는 Audit Security Group Management 입니다.
 
-같은 공급자 매니페스트에는 다음 그룹 이벤트도 있습니다. (확인 범위: Win11 25H2 한 대)
+같은 공급자 매니페스트에는 다음 그룹 이벤트도 있습니다.
 
 | 그룹 종류 | 만들어짐 | 구성원 추가 | 구성원 제거 | 삭제 | 변경 | 구성원 조회 |
 |---|---|---|---|---|---|---|
@@ -71,10 +71,10 @@ Microsoft 는 이 하위 범주의 이벤트 양을 Low 로 적었습니다.
 
 | 이벤트 | 감사 하위 범주 | 최소 Windows | 이벤트 버전 |
 |---|---|---|---|
-| 4720 | Audit User Account Management | Windows Vista · Windows Server 2008 | 0. 한 PC 의 매니페스트에도 버전 0 하나뿐이었습니다 (확인 범위: Win11 25H2 한 대) |
-| 4732 | Audit Security Group Management | Windows Vista · Windows Server 2008 | 문서는 0. 매니페스트에는 버전 1 도 있습니다 (확인 범위: Win11 25H2 한 대) |
+| 4720 | Audit User Account Management | Windows Vista · Windows Server 2008 | 0. 한 PC 의 매니페스트에도 버전 0 하나뿐이었습니다 |
+| 4732 | Audit Security Group Management | Windows Vista · Windows Server 2008 | 문서는 0. 매니페스트에는 버전 1 도 있습니다 |
 
-4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다. 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 칸을 더하는데 (확인 범위: Win11 25H2 한 대의 매니페스트), 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 확인하지 못했습니다.
+4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다. 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 칸을 더합니다 (Windows 11 25H2 기준). 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 판마다 다를 수 있습니다.
 
 Windows XP · 2003 의 계정 이벤트는 이번에 확인하지 못했습니다. 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
 
@@ -84,7 +84,7 @@ Microsoft 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두�
 
 ### 한 PC 의 설정
 
-한 PC 에서 읽은 결과는 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 에서 읽은 결과는 다음과 같습니다.
 
 User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Group Management `{0CCE9237-69AE-11D9-BED3-505054503030}` 는 둘 다 성공 (Success) 이었습니다. 이 값이 Windows 11 의 기본값인지는 확인하지 못했습니다. 보안 로그에는 약 2일치만 남아 있었고, 그 안에 4720·4722·4724·4726·4732 는 0건, 4738 은 4건이었습니다.
 
@@ -118,7 +118,7 @@ User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Gr
 
 ### 메시지 번호
 
-XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파일의 문구를 가리킵니다. 한 PC 의 msobjs.dll 메시지 표에서 읽은 문구는 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
+XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파일의 문구를 가리킵니다. 한 PC 의 msobjs.dll 메시지 표에서 읽은 문구는 다음과 같습니다.
 
 | 번호 | 문구 |
 |---|---|
@@ -151,7 +151,7 @@ Microsoft 문서의 4720 예시 가운데 일부입니다. 문서가 보여 주�
 
 ### 다른 사용자 계정 이벤트의 칸
 
-아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다. (확인 범위: Win11 25H2 한 대)
+아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다.
 
 | ID | 칸 |
 |---|---|
@@ -212,14 +212,14 @@ Microsoft 는 4720 에서 다음 값을 살피라고 권합니다.
 - 4720 의 PasswordLastSet 칸은 이벤트 시각과 따로 적힌 값이며, Microsoft 는 이 값이 미래 시각이면 살피라고 권합니다.
 - 레코드의 기록 시각을 저장하는 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
-- 보안 로그는 크기 한도에 이르면 오래된 기록부터 밀려납니다. 한 PC 에서는 약 2일치만 남아 있었습니다. (확인 범위: Win11 25H2 한 대) 오래전에 만든 계정의 4720 은 남아 있지 않을 때가 많습니다.
+- 보안 로그는 크기 한도에 이르면 오래된 기록부터 밀려납니다. 한 PC 에서는 약 2일치만 남아 있었습니다. 오래전에 만든 계정의 4720 은 남아 있지 않을 때가 많습니다.
 
 ## 함정과 한계
 
 1. **4732 의 TargetUserName 을 더해진 계정으로 읽습니다.** 이 칸은 그룹 이름입니다. 더해진 계정은 MemberSid 로 봅니다.
 2. **MemberName 이 `-` 라서 구성원을 모른다고 봅니다.** 로컬 그룹이면 MemberName 은 보통 `-` 입니다. MemberSid 를 [사용자 프로필 목록](../system-account/profilelist.md)이나 다른 이벤트의 SID 와 맞춥니다.
 3. **4735 하나를 그룹 조작으로 봅니다.** 4732 앞에는 아무것도 바뀌지 않은 4735 가 보통 먼저 보입니다.
-4. **4738 이 있으면 사람이 계정을 바꿨다고 봅니다.** 한 PC 의 4738 4건은 모두 Subject 가 S-1-5-18 (SYSTEM) 이었습니다. 대상은 RID 1001 계정이었습니다. `-` 가 아닌 속성 칸은 DisplayName 하나였고, Old·New UAC 는 `-` 였습니다. 사용자 조작 없이 SYSTEM 이 표시 이름을 바꾼 기록으로 보입니다. 원인은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+4. **4738 이 있으면 사람이 계정을 바꿨다고 봅니다.** 한 PC 의 4738 4건은 모두 Subject 가 S-1-5-18 (SYSTEM) 이었습니다. 대상은 RID 1001 계정이었습니다. `-` 가 아닌 속성 칸은 DisplayName 하나였고, Old·New UAC 는 `-` 였습니다. 사용자 조작 없이 SYSTEM 이 표시 이름을 바꾼 기록으로 보입니다. 원인은 확인하지 못했습니다.
 5. **4720 과 함께 4722·4738 이 반드시 남는다고 봅니다.** 계정을 만들 때 4722·4738 이 함께 남는다는 설명이 있습니다. 4720 문서에는 이 내용이 없었습니다. 검체에서 직접 확인합니다.
 6. **New UAC Value 를 액티브 디렉터리 기준으로 풉니다.** 이 값은 SAM 쪽 계정 플래그입니다. userAccountControl 과 정의가 다릅니다.
 7. **컴퓨터 계정의 기록을 사용자 계정으로 읽습니다.** 4722·4725·4724·4781 같은 이벤트는 컴퓨터 계정에도 생깁니다. TargetSid 와 TargetUserName 으로 어떤 계정인지 먼저 가립니다.

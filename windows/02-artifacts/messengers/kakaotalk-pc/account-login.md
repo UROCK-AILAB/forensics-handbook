@@ -34,7 +34,7 @@ nav_order: 2020
 - `.dat` 파일과 계정 폴더 이름은 26.6.0.5208 한 대에서 본 것입니다. 다른 버전에서 같다고 보장하지 못합니다.
 
 관찰한 PC 에서 카카오톡은 키를 Windows DPAPI 로 저장하지 않았고, 카카오 폴더와 레지스트리에서 DPAPI blob 시그니처가 한 건도 나오지 않았습니다.
-(확인 범위: 카카오톡 PC 26.6.0.5208, Windows 11 한 대. 다른 버전은 다를 수 있습니다)
+(카카오톡 PC 26.6.0.5208 기준. 다른 버전은 다를 수 있습니다)
 DPAPI blob 을 알아보는 법은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
 ## 구조

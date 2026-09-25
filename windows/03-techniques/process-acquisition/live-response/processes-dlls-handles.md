@@ -61,7 +61,7 @@ NIST 는 Windows 에서 작업 관리자 화면보다 글자 목록이 낫다고
 
 문서는 잘리지 않은 정보를 보려면 `/v` 와 `/svc` 를 함께 쓰라고 적습니다. 필터로 거를 수 있는 이름은 `STATUS`, `IMAGENAME`, `PID`, `SESSION`, `SESSIONNAME`, `CPUtime`, `MEMUSAGE`(KB), `USERNAME`, `SERVICES`, `WINDOWTITLE`, `MODULES` 입니다. 원격 시스템에서는 `STATUS` 와 `WINDOWTITLE` 로 거를 수 없습니다.
 
-CSV 로 받으면 칸은 아래처럼 나옵니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대). `/svc` 도 CSV 로 칸이 나왔습니다.
+CSV 로 받으면 칸은 아래처럼 나옵니다. `/svc` 도 CSV 로 칸이 나왔습니다.
 
 | 명령 | CSV 칸 |
 |---|---|
@@ -88,7 +88,7 @@ CSV 로 받으면 칸은 아래처럼 나옵니다 (확인 범위: Windows 11 Ho
 | `GetOwner` | 프로세스를 실행한 사용자 이름과 도메인 이름을 돌려줍니다 |
 | `GetOwnerSid` | 소유자 SID 를 돌려줍니다 |
 
-SID 형식은 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. PowerShell 5.1 의 `Get-Process -IncludeUserName` 도 관리자 권한에서 `UserName` 을 돌려줬습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
+SID 형식은 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. PowerShell 5.1 의 `Get-Process -IncludeUserName` 도 관리자 권한에서 `UserName` 을 돌려줬습니다.
 
 ### Sysinternals Handle
 
@@ -111,8 +111,8 @@ SID 형식은 [윈도 식별자 형식](../../../01-foundations/value-decoding/s
 
 1. **`tasklist` 만 남깁니다.** 명령줄, 부모 PID, 시작 시각이 빠집니다. `Win32_Process` 결과를 함께 남깁니다.
 2. **부모 PID 를 그대로 믿습니다.** PID 는 다시 쓰입니다. 부모가 이미 끝났을 수 있고, 같은 번호를 다시 받은 다른 프로세스를 가리킬 수도 있습니다. Microsoft 문서는 `CreationDate` 를 비교해 부모가 자식보다 먼저 생겼는지 확인하라고 적습니다.
-3. **`Name` 만 보고 실행 파일을 판단합니다.** 문서는 `Name` 이 실행 파일에 새겨진 이름이라 파일 이름을 바꿔도 바뀌지 않는다고 적습니다. 실제로는 이름을 바꾼 실행 파일을 돌리면 `Name` 과 `tasklist` 의 Image Name 모두 바꾼 이름으로 나왔습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대, 시스템 명령을 다른 이름으로 복사해 실행). 그래서 `ExecutablePath` 의 경로와 파일의 버전 정보를 함께 봅니다.
-4. **빈 칸을 숨긴 흔적으로 읽습니다.** 관리자 권한으로도 352개 가운데 25개 프로세스는 `CommandLine` 과 `ExecutablePath` 가 비어 있었습니다. 대부분 System, Secure System, Registry, smss, csrss, wininit, services, lsass, LsaIso, Memory Compression, MsMpEng 같은 보호되는 프로세스였습니다. 같은 25개는 `tasklist /m` 의 Modules 칸이 "N/A" 였습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대).
+3. **`Name` 만 보고 실행 파일을 판단합니다.** 문서는 `Name` 이 실행 파일에 새겨진 이름이라 파일 이름을 바꿔도 바뀌지 않는다고 적습니다. 실제로는 이름을 바꾼 실행 파일을 돌리면 `Name` 과 `tasklist` 의 Image Name 모두 바꾼 이름으로 나왔습니다 (Windows 11 Home 10.0.26200 기준). 그래서 `ExecutablePath` 의 경로와 파일의 버전 정보를 함께 봅니다.
+4. **빈 칸을 숨긴 흔적으로 읽습니다.** 관리자 권한으로도 352개 가운데 25개 프로세스는 `CommandLine` 과 `ExecutablePath` 가 비어 있었습니다. 대부분 System, Secure System, Registry, smss, csrss, wininit, services, lsass, LsaIso, Memory Compression, MsMpEng 같은 보호되는 프로세스였습니다. 같은 25개는 `tasklist /m` 의 Modules 칸이 "N/A" 였습니다.
 5. **`TerminationDate` 와 `Status` 로 상태를 판단합니다.** `TerminationDate` 는 프로세스 핸들을 열어 두지 않으면 NULL 입니다. `Status` 는 구현되지 않아 늘 NULL 입니다.
 6. **Handle 의 `-c` 를 씁니다.** 핸들을 닫으면 앱이나 시스템이 불안정해질 수 있다고 문서가 경고합니다. 증거를 바꾸는 옵션이기도 합니다.
 7. **목록에 없으면 실행되지 않았다고 봅니다.** 커널 수준 루트킷이 있으면 사용자 수준 도구는 숨긴 프로세스를 보지 못할 수 있습니다. 도구를 믿는 범위는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다.

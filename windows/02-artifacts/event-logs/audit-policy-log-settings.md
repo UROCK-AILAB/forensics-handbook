@@ -57,7 +57,7 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 
 ### 한 PC 에서 읽은 실제 감사 정책
 
-`auditpol /get /category:*` 로 한 PC 의 감사 정책을 읽었습니다. (확인 범위: Win11 빌드 26200 한 대, 한국어 화면)
+`auditpol /get /category:*` 로 한 PC 의 감사 정책을 읽었습니다. (Windows 11 빌드 26200, 한국어 화면 기준)
 
 하위 범주는 60개였고, Microsoft 표와 다른 값은 하나였습니다. 보안 그룹 관리 (Security Group Management) 가 "성공" 으로 켜져 있었으며, Microsoft 표에서는 이 칸이 비어 있습니다. 그룹 구성원·플러그 앤 플레이 이벤트·토큰 권한 조정 이벤트·액세스 권한, 이 네 하위 범주는 Microsoft 표에 없는데, 이 PC 에서는 넷 다 "감사 없음" 이었습니다. 꺼져 있던 하위 범주 가운데 포렌식에서 자주 찾는 것은 다음과 같습니다: 프로세스 만들기, 보안 시스템 확장, 파일 공유, 세부 파일 공유, 파일 시스템, 레지스트리, 기타 로그온/로그오프 이벤트, 필터링 플랫폼 연결, 자격 증명 유효성 검사, Kerberos 인증 서비스.
 
@@ -68,7 +68,7 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 | 로그 종류 | 설정 키 | 근거 |
 |---|---|---|
 | 클래식 로그 (Application·Security·System 등) | `HKLM\SYSTEM\CurrentControlSet\Services\Eventlog\<로그 이름>` | Microsoft 문서 |
-| 그 밖의 채널 (`Microsoft-Windows-…/Operational` 등) | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\<채널 이름>` | 한 PC 관찰 (확인 범위: Win11 빌드 26200 한 대) |
+| 그 밖의 채널 (`Microsoft-Windows-…/Operational` 등) | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\<채널 이름>` | 한 PC 관찰 |
 
 같은 PC 에 `WINEVT\Channels\Security` 키는 없었고, 보안 로그 설정은 `Services\Eventlog\Security` 에만 있었습니다. 이미지에서는 `CurrentControlSet` 이 없으며, 실제로 쓰인 컨트롤셋 번호를 골라 읽습니다. 고르는 방법은 [컨트롤셋 고르기 (ControlSet·Select)](../../01-foundations/database-log-formats/registry-hive/controlset-select.md)에서 다룹니다.
 
@@ -85,7 +85,7 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 
 문서는 DisplayNameFile·DisplayNameID·PrimaryModule·Sources·RestrictGuestAccess 를 "쓰지 않는 값" 이라고 적었습니다.
 
-한 PC 에서 읽은 값은 다음과 같습니다. (확인 범위: Win11 빌드 26200 한 대)
+한 PC 에서 읽은 값은 다음과 같습니다.
 
 | 로그 | File | MaxSize | Retention | 그 밖의 값 |
 |---|---|---|---|---|
@@ -97,7 +97,7 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 
 ### 한 PC 의 채널별 크기와 켜짐
 
-`Get-WinEvent -ListLog` 로 읽었습니다. (확인 범위: Win11 빌드 26200 한 대)
+`Get-WinEvent -ListLog` 로 읽었습니다.
 
 | 채널 | 켜짐 | 최대 크기 |
 |---|---|---|
@@ -115,7 +115,7 @@ Audit Credential Validation 은 표에 "No" 라고 적혀 있으며, 칸이 빈 
 
 ### 하위 범주 GUID
 
-`auditpol` 은 하위 범주 이름을 화면 언어로 보여 줍니다. 한국어 PC 에서는 "프로세스 만들기" 처럼 나옵니다. 하위 범주 GUID 는 언어와 상관없습니다. (확인 범위: Win11 빌드 26200 한 대)
+`auditpol` 은 하위 범주 이름을 화면 언어로 보여 줍니다. 한국어 PC 에서는 "프로세스 만들기" 처럼 나옵니다. 하위 범주 GUID 는 언어와 상관없습니다.
 
 | 하위 범주 | GUID |
 |---|---|
@@ -130,7 +130,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 
 ### 이벤트의 Task 값은 하위 범주 번호
 
-보안 로그 이벤트의 Task 칸에는 하위 범주 번호가 들어 있었습니다. 공급자 메타데이터의 Task 표와 실제 이벤트를 맞춰 보면 다음과 같습니다. (확인 범위: Win11 빌드 26200 한 대)
+보안 로그 이벤트의 Task 칸에는 하위 범주 번호가 들어 있었습니다. 공급자 메타데이터의 Task 표와 실제 이벤트를 맞춰 보면 다음과 같습니다.
 
 | Task | 하위 범주 | 이 PC 에서 본 이벤트 |
 |---|---|---|
@@ -150,7 +150,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 
 ### 감사 설정이 바뀔 때 남는 이벤트
 
-아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다. (확인 범위: Win11 빌드 26200 한 대)
+아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다.
 
 | ID | 메시지 | 칸 |
 |---|---|---|
@@ -192,7 +192,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 
 `auditpol` 결과와 레지스트리 값은 조사한 때의 값이며, 값이 언제 그렇게 바뀌었는지는 알려 주지 않습니다. 사건 당시 설정은 4719 같은 변경 기록으로 따로 확인하는데, 이 방법은 해석입니다.
 
-로그의 가장 오래된 레코드 시각이 그 로그가 덮고 있는 기간의 시작입니다. 같은 PC 에서 보안 로그 20MB 에는 약 3만 4천 건이 있었고, 가장 오래된 기록은 조사 시점 약 이틀 전이었습니다. (확인 범위: Win11 빌드 26200 한 대) 같은 크기의 System 로그에는 약 2만 건, 약 3개월 치가 있었으므로 크기가 같아도 이벤트가 쌓이는 속도에 따라 덮는 기간이 크게 다릅니다.
+로그의 가장 오래된 레코드 시각이 그 로그가 덮고 있는 기간의 시작입니다. 같은 PC 에서 보안 로그 20MB 에는 약 3만 4천 건이 있었고, 가장 오래된 기록은 조사 시점 약 이틀 전이었습니다. 같은 크기의 System 로그에는 약 2만 건, 약 3개월 치가 있었으므로 크기가 같아도 이벤트가 쌓이는 속도에 따라 덮는 기간이 크게 다릅니다.
 
 - 레코드 시각의 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 

@@ -33,7 +33,7 @@ Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있�
 
 ## 위치와 버전별 차이
 
-| 기록 | 위치 | 하이브·저장 위치 | 확인 범위 |
+| 기록 | 위치 | 하이브·저장 위치 | 근거 |
 |---|---|---|---|
 | 동기화 루트 등록 | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SyncRootManager\<동기화 루트 ID>` | `SOFTWARE` | 관찰 |
 | 루트별 사용자와 폴더 | 위 키의 하위 키 `UserSyncRoots` | `SOFTWARE` | 관찰 |

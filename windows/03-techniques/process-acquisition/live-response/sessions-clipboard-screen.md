@@ -58,11 +58,11 @@ NIST 는 OS 가 아래 정보를 관리할 수 있다고 적습니다.
 | 유휴 시간 | 마지막 키 입력이나 마우스 움직임 뒤로 지난 분 |
 | 로그온 시각 | 로그온한 날짜와 시각 |
 
-현재 세션 앞에는 `>` 가 붙습니다. 이 명령을 쓰려면 모든 권한 (Full Control) 이나 특별 접근 권한이 있어야 하고, 문서는 원격 데스크톱 세션 호스트 서버를 기준으로 쓰여 있습니다. Windows 11 Home PC 한 대에는 `quser.exe` 도 `query.exe` 도 없었습니다 (확인 범위: Windows 11 Home 10.0.26200). 다른 판에서는 명령이 있는지 먼저 확인합니다.
+현재 세션 앞에는 `>` 가 붙습니다. 이 명령을 쓰려면 모든 권한 (Full Control) 이나 특별 접근 권한이 있어야 하고, 문서는 원격 데스크톱 세션 호스트 서버를 기준으로 쓰여 있습니다. Windows 11 Home PC 한 대에는 `quser.exe` 도 `query.exe` 도 없었습니다. 다른 판에서는 명령이 있는지 먼저 확인합니다.
 
 ### Win32_LogonSession
 
-WMI 의 `Win32_LogonSession` 클래스는 로그온 세션을 하나씩 보여 줍니다. 아래는 PC 한 대에서 본 내용입니다 (확인 범위: Windows 11 Home 10.0.26200). 속성으로 `LogonId`, `LogonType`, `StartTime`, `AuthenticationPackage` 가 나왔고, `LogonType` 값은 0 이 1개, 2 가 6개, 5 가 4개였습니다.
+WMI 의 `Win32_LogonSession` 클래스는 로그온 세션을 하나씩 보여 줍니다. 아래는 PC 한 대에서 본 내용입니다. 속성으로 `LogonId`, `LogonType`, `StartTime`, `AuthenticationPackage` 가 나왔고, `LogonType` 값은 0 이 1개, 2 가 6개, 5 가 4개였습니다.
 
 Microsoft 문서가 적은 `LogonType` 값의 뜻은 아래와 같습니다.
 
@@ -104,7 +104,7 @@ Microsoft 문서가 적은 `LogonType` 값의 뜻은 아래와 같습니다.
 
 ### 모으는 방법
 
-PowerShell 5.1 에는 `Get-Clipboard` 가 있습니다. `Microsoft.PowerShell.Management` 모듈의 명령이고, `-Format`, `-TextFormatType`, `-Raw` 인자를 받습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대). 이 명령은 지금 클립보드에 있는 한 건만 읽고 기록 목록 25개는 읽지 않습니다.
+PowerShell 5.1 에는 `Get-Clipboard` 가 있습니다. `Microsoft.PowerShell.Management` 모듈의 명령이고, `-Format`, `-TextFormatType`, `-Raw` 인자를 받습니다. 이 명령은 지금 클립보드에 있는 한 건만 읽고 기록 목록 25개는 읽지 않습니다.
 
 기록이 켜져 있으면 목록 창을 열어 보이는 그대로 사진으로 남깁니다. 기록이 꺼져 있으면 켜는 것이 설정을 바꾸는 일이므로 수집하면서 새로 켜지 않습니다.
 

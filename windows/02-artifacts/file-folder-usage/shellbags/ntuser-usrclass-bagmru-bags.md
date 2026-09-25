@@ -27,7 +27,7 @@ Lo 의 실험에서 Vista~8.1 은 폴더를 두 번 클릭해 열지 않아도 �
 | UsrClass.dat | `%UserProfile%\AppData\Local\Microsoft\Windows\UsrClass.dat` | `HKCU\Software\Classes` |
 
 - 하이브 파일의 쓰임새와 옛 버전 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
-- UsrClass.dat 옆에도 `UsrClass.dat.LOG1`·`UsrClass.dat.LOG2` 가 있습니다. (확인 범위: Windows 11 25H2)
+- UsrClass.dat 옆에도 `UsrClass.dat.LOG1`·`UsrClass.dat.LOG2` 가 있습니다.
 - 하이브 파일만 뽑지 말고 같은 폴더의 로그 파일도 함께 수집합니다. 까닭은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) 에 있습니다.
 
 ### 키 경로
@@ -46,7 +46,7 @@ Lo 의 실험에서 Vista~8.1 은 폴더를 두 번 클릭해 열지 않아도 �
 - Vista 의 NTUSER.DAT 에도 `ShellNoRoam` 키가 있었습니다. 그 안에는 `BagMRU Size` 라는 DWORD 값 하나만 있었습니다. (Lo)
 - Lo 의 실험에서 Windows 7 부터는 `ShellNoRoam` 을 쓰지 않았습니다.
 - winreg-kb 는 UsrClass.dat 쪽에도 `ShellNoRoam\BagMRU` 경로와 `Wow6432Node` 아래 `ShellNoRoam\BagMRU` 경로를 적었습니다. Lo 는 이 키들을 실험에서 찾지 못했습니다. 검체에 이런 키가 있으면 같은 방법으로 읽습니다.
-- Windows 11 25H2 PC 한 대에서는 `ShellNoRoam` 키와 `Wow6432Node` 쪽 셸백 키가 둘 다 없었습니다. (확인 범위: Windows 11 25H2)
+- Windows 11 25H2 PC 한 대에서는 `ShellNoRoam` 키와 `Wow6432Node` 쪽 셸백 키가 둘 다 없었습니다.
 - Windows 10 은 이 글에서 직접 확인하지 않았습니다. 두 하이브에서 위 경로를 모두 찾아봅니다.
 
 ### 하이브마다 담는 폴더
@@ -60,7 +60,7 @@ Lo 는 어떤 폴더가 어느 하이브에 남는지 실험으로 나눴습니�
 
 - Vista 이후 로컬 폴더 흔적은 UsrClass.dat 에 남습니다. NTUSER.DAT 만 보면 로컬 폴더를 대부분 놓칩니다.
 - 네트워크 쪽 흔적은 NTUSER.DAT 에 남을 수 있습니다. UsrClass.dat 만 보아도 빠지는 것이 생깁니다.
-- Windows 11 25H2 PC 한 대에서는 NTUSER.DAT 쪽 BagMRU 에 폴더 항목이 하나도 없었습니다. `NodeSlot` 값 하나와 `Bags\1\Desktop` 키만 있었습니다. 이 PC 에서 네트워크 폴더를 연 적이 있는지는 확인하지 않았습니다. (확인 범위: Windows 11 25H2)
+- Windows 11 25H2 PC 한 대에서는 NTUSER.DAT 쪽 BagMRU 에 폴더 항목이 하나도 없었습니다. `NodeSlot` 값 하나와 `Bags\1\Desktop` 키만 있었습니다. 이 PC 에서 네트워크 폴더를 연 적이 있는지는 확인하지 않았습니다.
 
 ## 구조
 
@@ -82,12 +82,12 @@ BagMRU 키 안의 값은 다음과 같습니다.
 | `NodeSlots` | REG_BINARY (관찰) | BagMRU 맨 위 키에만 | 공개 명세에 뜻이 적혀 있지 않습니다 | winreg-kb |
 
 - 숫자 값의 형식은 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 풉니다.
-- Windows 11 25H2 PC 한 대에서는 모든 숫자 값이 같은 모양이었습니다. 셸 아이템 하나 뒤에 목록 끝 표시 0x0000 두 바이트가 붙었습니다. 즉 항목이 하나뿐인 셸 아이템 목록입니다. (확인 범위: Windows 11 25H2)
+- Windows 11 25H2 PC 한 대에서는 모든 숫자 값이 같은 모양이었습니다. 셸 아이템 하나 뒤에 목록 끝 표시 0x0000 두 바이트가 붙었습니다. 즉 항목이 하나뿐인 셸 아이템 목록입니다.
 - `MRUListEx` 읽는 법은 [MRU 목록 읽는 법](../../../01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md) 에 있습니다.
 - Lo 는 하위 키 번호를 셸백이 만들어진 차례로 설명합니다. `BagMRU\0` 이 처음 만든 폴더이고 `BagMRU\1` 이 두 번째입니다. 최근에 고른 순서는 번호가 아니라 `MRUListEx` 로 봅니다.
 - `MRUListEx` 는 같은 부모 아래 형제 폴더끼리의 순서만 알려 줍니다. 다른 부모 아래 폴더와의 앞뒤는 알려 주지 않습니다.
 
-Windows 11 25H2 PC 한 대에서 관찰한 점은 다음과 같습니다. (확인 범위: Windows 11 25H2)
+Windows 11 25H2 PC 한 대에서 관찰한 점은 다음과 같습니다.
 
 - `NodeSlot` 이 없는 BagMRU 키가 있었습니다. 그런 키에는 모두 하위 키가 있었습니다. 보기 설정 없이 경로 중간 단계로만 남은 폴더로 추정합니다.
 - `NodeSlot` 값은 모두 서로 달랐습니다. 값마다 같은 번호의 `Bags` 하위 키가 있었습니다.
@@ -109,7 +109,7 @@ Windows 11 25H2 PC 한 대에서 관찰한 점은 다음과 같습니다. (확�
 
 Lo 의 실험에서 `ComDlg` 는 대화상자로 폴더를 열었다가 닫거나 대화상자 안에서 다른 폴더로 옮겨 가야 생겼습니다. 그래서 `ComDlg` 가 있는 슬롯은 그 폴더를 대화상자로 다룬 적이 있다는 단서가 되며, 대화상자 기록은 [열기·저장 대화상자 기록](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) 과 맞춰 봅니다.
 
-- Windows 11 25H2 PC 한 대에서 NTUSER.DAT `Bags\1\Desktop` 에는 `IconLayouts` 값이 있었습니다. 이름으로 보아 바탕 화면 아이콘 배치입니다. 형식은 확인하지 않았습니다. (확인 범위: Windows 11 25H2)
+- Windows 11 25H2 PC 한 대에서 NTUSER.DAT `Bags\1\Desktop` 에는 `IconLayouts` 값이 있었습니다. 이름으로 보아 바탕 화면 아이콘 배치입니다. 형식은 확인하지 않았습니다.
 
 #### `Shell` 키의 값
 
@@ -119,11 +119,11 @@ Lo 의 실험에서 `ComDlg` 는 대화상자로 폴더를 열었다가 닫거�
 | `KnownFolderDerivedFolderType` | REG_SZ | Lo 는 이름만 적었습니다. 이름으로 보아 알려진 폴더 (Known Folder) 에서 정한 폴더 유형입니다 | Lo |
 
 - 한 폴더에 폴더 유형 GUID 하위 키가 여럿일 수 있습니다. 지금 쓰는 설정이 어느 GUID 에 있는지는 `SniffedFolderType` 이 알려 줍니다. (Lo)
-- Windows 11 25H2 PC 한 대의 `{폴더 유형 GUID}` 키에는 `Mode`·`LogicalViewMode`·`Vid`·`IconSize`·`Sort`·`GroupView`·`GroupByKey:FMTID`·`GroupByKey:PID`·`GroupByDirection`·`FFlags`·`Rev`·`ColInfo` 값이 있었습니다. 이름으로 보아 보기 방식·아이콘 크기·정렬·묶기·열 배치 값입니다. 각 값의 형식은 공개 명세에서 확인하지 못했습니다. (확인 범위: Windows 11 25H2)
+- Windows 11 25H2 PC 한 대의 `{폴더 유형 GUID}` 키에는 `Mode`·`LogicalViewMode`·`Vid`·`IconSize`·`Sort`·`GroupView`·`GroupByKey:FMTID`·`GroupByKey:PID`·`GroupByDirection`·`FFlags`·`Rev`·`ColInfo` 값이 있었습니다. 이름으로 보아 보기 방식·아이콘 크기·정렬·묶기·열 배치 값입니다. 각 값의 형식은 공개 명세에서 확인하지 못했습니다.
 
 #### 폴더 유형 GUID
 
-GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{GUID}` 키에 있습니다. (Microsoft Learn) 이름은 그 키의 `CanonicalName` 값에 있었습니다. (확인 범위: Windows 11 25H2) 그래서 검체 자신의 SOFTWARE 하이브로 GUID 를 풀 수 있습니다.
+GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{GUID}` 키에 있습니다. (Microsoft Learn) 이름은 그 키의 `CanonicalName` 값에 있었습니다. 그래서 검체 자신의 SOFTWARE 하이브로 GUID 를 풀 수 있습니다.
 
 | GUID | `CanonicalName` |
 |---|---|
@@ -144,7 +144,7 @@ GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersio
 #### `AllFolders\Shell` 의 창 위치 값
 
 - winreg-kb 는 `Bags\<번호>\Shell` 에 `MinPos1100x705(1).x` 처럼 화면 크기가 이름에 들어간 값을 적었습니다.
-- Windows 11 25H2 PC 한 대에서는 이런 값이 `Bags\AllFolders\Shell` 에 있었습니다. 값 이름은 `WinPos<가로>x<세로>x<숫자>(<번호>).left` 꼴이었습니다. 세 번째 숫자의 뜻은 확인하지 못했습니다. (확인 범위: Windows 11 25H2)
+- Windows 11 25H2 PC 한 대에서는 이런 값이 `Bags\AllFolders\Shell` 에 있었습니다. 값 이름은 `WinPos<가로>x<세로>x<숫자>(<번호>).left` 꼴이었습니다. 세 번째 숫자의 뜻은 확인하지 못했습니다.
 - 값 이름에 화면 크기가 여럿 보이면 그 크기의 화면에서 탐색기 창을 쓴 적이 있다고 추정할 수 있습니다. 어떤 모니터였는지는 다른 기록과 맞춰 봅니다.
 
 ### 경로를 되살리는 순서

@@ -237,7 +237,7 @@ NTFS 압축 파일의 희소 구간과 뽑는 방식에 따른 해시 차이는 
 
 ## 도구
 
-- **Windows 압축 API** — ntdll 의 `RtlCompressBuffer` 계열 함수입니다. 형식 번호 2·3·4 로 세 형식을 누를 수 있었습니다(확인 범위: 한국어 Windows 11 PC). 알고 있는 입력을 눌러 명세 예시와 비교하면 파서를 시험할 수 있습니다.
+- **Windows 압축 API** — ntdll 의 `RtlCompressBuffer` 계열 함수입니다. 형식 번호 2·3·4 로 세 형식을 누를 수 있습니다(Windows 11 기준). 알고 있는 입력을 눌러 명세 예시와 비교하면 파서를 시험할 수 있습니다.
 - **libfwnt** — libfsntfs 문서가 압축 방식 설명으로 가리키는 libyal 라이브러리입니다. LZNT1·Xpress Huffman 등을 다룹니다.
 - **헥스 편집기** — 위 따라가기처럼 청크 머리와 플래그를 직접 확인할 때 씁니다.
 

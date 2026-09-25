@@ -10,7 +10,7 @@ nav_order: 1560
 
 SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스 장치가 주소마다 하위 키 하나로 남습니다. 하위 키에는 장치 이름, VID·PID, `LastSeen`·`LastConnected` 시각 같은 값이 있습니다. 관찰한 PC 한 대에서는 두 시각 값이 UTC 가 아니라 현지 시각이었습니다. 시각은 페어링 이벤트와 장치 속성 시각에 맞춰 본 뒤에 씁니다.
 
-> 이 페이지에서 "관찰 PC" 는 Windows 11 Home 25H2(빌드 26200.9457), 시간대 Korea Standard Time(UTC+9) PC 한 대를 말합니다. 관찰 PC 에서 본 내용은 모두 "확인 범위: Win11 25H2 한 대" 입니다. 관찰 PC 의 장치 주소는 적지 않고 장치 A·B·C 로 부릅니다.
+> "관찰 PC" 의 시간대는 Korea Standard Time(UTC+9) 입니다. 장치는 A·B·C 로 부릅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 

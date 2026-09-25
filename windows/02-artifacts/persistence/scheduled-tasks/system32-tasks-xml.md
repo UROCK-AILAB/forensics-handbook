@@ -36,9 +36,9 @@ XML 작업 정의는 Windows Vista · Server 2008 부터 쓰입니다. 그 전�
 | 하위 폴더 | 작업 경로(예: `\Microsoft\Windows\...`)와 같은 모양입니다 |
 | 최소 버전 | Windows Vista · Server 2008 |
 
-레지스트리 `TaskCache\Tasks\{GUID}` 키에는 Path 값이 있습니다. 이 값 앞에 `C:\Windows\System32\Tasks` 를 붙이면 XML 파일의 경로가 됩니다. 한 PC 에서는 작업 269개가 모두 이렇게 맞았습니다. (확인 범위: Win11 25H2 한 대)
+레지스트리 `TaskCache\Tasks\{GUID}` 키에는 Path 값이 있습니다. 이 값 앞에 `C:\Windows\System32\Tasks` 를 붙이면 XML 파일의 경로가 됩니다. 한 PC 에서는 작업 269개가 모두 이렇게 맞았습니다.
 
-뿌리 요소 `<Task>` 에는 version 속성이 붙습니다. 한 PC 에서 이 값은 다음과 같이 나뉘었습니다. (확인 범위: Win11 25H2 한 대)
+뿌리 요소 `<Task>` 에는 version 속성이 붙습니다. 한 PC 에서 이 값은 다음과 같이 나뉘었습니다.
 
 | version 속성 | 파일 수 |
 |---|---|
@@ -54,7 +54,7 @@ XML 작업 정의는 Windows Vista · Server 2008 부터 쓰입니다. 그 전�
 
 ### 파일 첫 부분
 
-한 PC 의 XML 271개는 모두 첫 2바이트가 `FF FE` 였습니다. 이 두 바이트는 UTF-16 LE 의 바이트 순서 표시 (BOM) 입니다. XML 선언은 `<?xml version="1.0" encoding="UTF-16"?>` 였습니다. (확인 범위: Win11 25H2 한 대) 인코딩은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+한 PC 의 XML 271개는 모두 첫 2바이트가 `FF FE` 였습니다. 이 두 바이트는 UTF-16 LE 의 바이트 순서 표시 (BOM) 입니다. XML 선언은 `<?xml version="1.0" encoding="UTF-16"?>` 였습니다. 인코딩은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 뿌리 요소는 다음 꼴입니다.
 
@@ -89,7 +89,7 @@ Microsoft 스키마 문서는 자식 요소를 다음과 같이 적습니다. �
 | URI | anyURI | URI |
 | Version | | 버전 |
 
-Windows 기본 작업 가운데에는 SecurityDescriptor 에 SDDL 문자열을 넣은 것이 있습니다. Source 에 `$(@%SystemRoot%\system32\...dll,-102)` 같은 리소스 참조를 넣은 것도 있습니다. (확인 범위: Win11 25H2 한 대)
+Windows 기본 작업 가운데에는 SecurityDescriptor 에 SDDL 문자열을 넣은 것이 있습니다. Source 에 `$(@%SystemRoot%\system32\...dll,-102)` 같은 리소스 참조를 넣은 것도 있습니다.
 
 ### Principals 와 Actions
 
@@ -104,11 +104,11 @@ Windows 기본 작업 가운데에는 SecurityDescriptor 에 SDDL 문자열을 �
 - Command: 실행할 프로그램 경로
 - Arguments: 인자
 
-Principal 의 id 값과 Actions 의 Context 값에는 같은 이름(Author)이 들어 있었습니다. (확인 범위: Win11 25H2 한 대)
+Principal 의 id 값과 Actions 의 Context 값에는 같은 이름(Author)이 들어 있었습니다.
 
 ### Triggers 와 Settings
 
-트리거 요소의 예는 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
+트리거 요소의 예는 다음과 같습니다.
 
 - LogonTrigger: 사용자가 로그온할 때 실행합니다.
 - CalendarTrigger: 날짜와 시각으로 실행합니다. 안에 StartBoundary(시작 시각), Repetition\Interval(반복 간격), ScheduleByDay\DaysInterval(며칠마다)이 들어갑니다.
@@ -175,7 +175,7 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 **증명하지 못하는 것**
 
 - 작업이 실제로 실행됐는지는 XML 에 없습니다. 마지막 실행 시각은 레지스트리 DynamicInfo 값에서 봅니다. [작업 캐시 레지스트리](taskcache-tree-tasks.md)를 봅니다.
-- 파일이 있다고 해서 등록된 작업이라는 뜻은 아닙니다. 한 PC 에서는 XML 파일 두 개(`\Microsoft\Windows\PI\SecureBootEncodeUEFI`, `\Microsoft\Windows\Security\Pwdless\IntelligentPwdlessTask`)가 TaskCache 에 항목이 없었습니다. 두 작업은 Get-ScheduledTask 결과에도 나오지 않았습니다. (확인 범위: Win11 25H2 한 대)
+- 파일이 있다고 해서 등록된 작업이라는 뜻은 아닙니다. 한 PC 에서는 XML 파일 두 개(`\Microsoft\Windows\PI\SecureBootEncodeUEFI`, `\Microsoft\Windows\Security\Pwdless\IntelligentPwdlessTask`)가 TaskCache 에 항목이 없었습니다. 두 작업은 Get-ScheduledTask 결과에도 나오지 않았습니다.
 - 누가 만들었는지 확정하지 못합니다. Author 는 문자열 칸입니다. Date 는 작업을 만든 쪽이 적어 넣은 값일 수 있습니다(아래 "시각 해석").
 - Hidden 이 false 여도 숨긴 작업일 수 있습니다. 레지스트리 SD 값을 지워 숨기는 방법이 따로 있습니다.
 
@@ -189,14 +189,14 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 - Microsoft 의 4698 문서 예시에서 Task Content 의 Date 는 `2015-09-22T19:03:06.9258653` 입니다. 시간대 표시가 없습니다.
 - 같은 이벤트의 기록 시각(TimeCreated)은 `2015-09-23T02:03:06.944522200Z` 입니다. 두 값은 7시간 차이입니다.
 - 그래서 예시의 Date 는 작업을 만든 컴퓨터의 현지 시각으로 보입니다. 이 판단은 문서 예시의 두 값을 비교해 추론한 것입니다.
-- Date 가 없는 파일이 많습니다. 한 PC 의 XML 271개 가운데 Date 가 있는 파일은 30개였습니다. 그중 28개는 시간대 표시가 없었고, 2개는 있었습니다. (확인 범위: Win11 25H2 한 대)
-- Date 는 실제 등록 시각과 다를 수 있습니다. 한 PC 에서 어느 제조사 작업의 Date 는 2013-08-09 였습니다. 같은 작업의 레지스트리 등록 시각(DynamicInfo)은 2026-08-30 이었습니다. 작업을 만든 쪽이 XML 에 적어 넣은 값이 그대로 남은 것으로 보입니다. (확인 범위: Win11 25H2 한 대)
+- Date 가 없는 파일이 많습니다. 한 PC 의 XML 271개 가운데 Date 가 있는 파일은 30개였습니다. 그중 28개는 시간대 표시가 없었고, 2개는 있었습니다.
+- Date 는 실제 등록 시각과 다를 수 있습니다. 한 PC 에서 어느 제조사 작업의 Date 는 2013-08-09 였습니다. 같은 작업의 레지스트리 등록 시각(DynamicInfo)은 2026-08-30 이었습니다. 작업을 만든 쪽이 XML 에 적어 넣은 값이 그대로 남은 것으로 보입니다.
 
 **파일 자체의 시각**
 
-- 한 PC 에서 Windows 기본 작업 XML 의 파일 생성 시각은 2026-06-26 18:07:30 (UTC) 에 모여 있었습니다. 같은 PC 의 OS 설치 시각(InstallDate)은 2026-06-26 18:07:41 (UTC) 이었습니다. (확인 범위: Win11 25H2 한 대)
+- 한 PC 에서 Windows 기본 작업 XML 의 파일 생성 시각은 2026-06-26 18:07:30 (UTC) 에 모여 있었습니다. 같은 PC 의 OS 설치 시각(InstallDate)은 2026-06-26 18:07:41 (UTC) 이었습니다.
 - 기능 업데이트나 재설치 때 파일을 새로 만들면, 파일 생성 시각은 작업을 처음 만든 때를 뜻하지 않습니다. OS 설치 시각은 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md)에서 봅니다.
-- 여러 작업에서 XML 파일의 마지막 기록 시각(UTC)이 DynamicInfo 오프셋 4 의 시각과 초 단위까지 같았습니다. 수정한 작업은 파일 생성 시각과는 다르고 마지막 기록 시각과는 같았습니다. 모든 작업이 이렇지는 않았습니다. (확인 범위: Win11 25H2 한 대)
+- 여러 작업에서 XML 파일의 마지막 기록 시각(UTC)이 DynamicInfo 오프셋 4 의 시각과 초 단위까지 같았습니다. 수정한 작업은 파일 생성 시각과는 다르고 마지막 기록 시각과는 같았습니다. 모든 작업이 이렇지는 않았습니다.
 
 파일 시각을 읽는 법은 [마스터 파일 테이블 ($MFT)](../../filesystem/mft.md)에서 다룹니다.
 

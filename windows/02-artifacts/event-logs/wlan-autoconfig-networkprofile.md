@@ -10,7 +10,7 @@ nav_order: 2690
 
 Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig/Operational` 로그에 기록이 남습니다. Windows 가 네트워크에 연결됐다고 판단하거나 연결이 끊겼다고 판단하면 `Microsoft-Windows-NetworkProfile/Operational` 로그에 기록이 남습니다. WLAN 쪽은 SSID·프로필 이름·인증 방식·암호화 방식을 알려 줍니다. NetworkProfile 쪽은 Windows 가 붙인 네트워크 이름과 프로필 GUID 를 알려 줍니다. 두 로그를 시각으로 맞추고, GUID 로 레지스트리의 네트워크 목록과 잇습니다.
 
-이 페이지의 사실은 모두 Windows 11 25H2 PC 한 대의 공급자 매니페스트와 실제 기록에서 읽었습니다. 두 공급자를 설명한 공식 문서는 이번에 열어 보지 못했습니다. 그래서 거의 모든 내용에 "(확인 범위: Win11 25H2 한 대)" 가 붙습니다.
+이 페이지의 사실은 모두 Windows 11 25H2 PC 한 대의 공급자 매니페스트와 실제 기록에서 읽었습니다. 두 공급자를 설명한 공식 문서는 이번에 열어 보지 못했습니다. 그래서 거의 모든 내용에 "" 가 붙습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -37,14 +37,14 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 | 파일 | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-WLAN-AutoConfig%4Operational.evtx` | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-NetworkProfile%4Operational.evtx` |
 | 레코드의 Security UserID | 8001 기록에서 S-1-5-18 | 10000 기록에서 S-1-5-20 |
 
-(확인 범위: Win11 25H2 한 대)
+
 
 - 8001 실제 기록의 Task 는 24010, Opcode 는 190, Keywords 는 `0x8000000000000600` 이었습니다.
 - S-1-5-18 은 SYSTEM, S-1-5-20 은 NETWORK SERVICE 입니다. 두 값 모두 연결한 사람의 계정이 아닙니다.
 
 ### 한 PC 의 설정과 기록량
 
-한 PC 에서 읽은 결과는 다음과 같습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 에서 읽은 결과는 다음과 같습니다.
 
 | 항목 | WLAN-AutoConfig/Operational | NetworkProfile/Operational |
 |---|---|---|
@@ -64,7 +64,7 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 
 ### WLAN-AutoConfig/Operational — 연결 이벤트
 
-아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다. (확인 범위: Win11 25H2 한 대)
+아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다.
 
 | ID | 뜻 | 칸 |
 |---|---|---|
@@ -85,7 +85,7 @@ Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig
 | 11010 · 11005 · 11004 · 11006 | 보안 시작 · 성공 · 멈춤 · 실패 (11006 은 Error) | 11006 에는 PeerMac·ReasonCode·ErrorCode 가 있습니다 |
 | 20019 | 호스트 네트워크 (hosted network) 에 클라이언트가 결합함 | InterfaceGuid, SSID, LocalMAC, PeerMAC |
 
-Operational 채널에 정의된 ID 는 8000~8012, 11000~11010, 12011~12014, 13001·13002·13011~13014·13100~13103, 20019~20021, 60001~60004·60101~60103 입니다. (확인 범위: Win11 25H2 한 대)
+Operational 채널에 정의된 ID 는 8000~8012, 11000~11010, 12011~12014, 13001·13002·13011~13014·13100~13103, 20019~20021, 60001~60004·60101~60103 입니다.
 
 ### MAC 칸
 
@@ -103,11 +103,11 @@ Operational 채널에 정의된 ID 는 8000~8012, 11000~11010, 12011~12014, 1300
 | 4004 | Network State Change Fired | 새 인터넷 연결 프로필, 비용, 도메인 연결 수준, 네트워크 연결 수준, 호스트 이름, WWAN, 테더링이 바뀌었는지. 모두 Boolean 입니다 |
 | 20002 | NSI Set Category Result | Profile GUID, Interface GUID, Network Category, IPv4 Error Code, IPv6 Error Code, Context |
 
-Operational 채널에 정의된 ID 는 4001~4004, 10000~10002, 20001, 20002 입니다. (확인 범위: Win11 25H2 한 대)
+Operational 채널에 정의된 ID 는 4001~4004, 10000~10002, 20001, 20002 입니다.
 
 ### 한 PC 의 실제 값 — WLAN
 
-(확인 범위: Win11 25H2 한 대. 네트워크 이름과 계정은 옮기지 않았습니다)
+(Windows 11 25H2 기준)
 
 | ID | 건수 |
 |---|---|
@@ -155,7 +155,7 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 
 ### 한 PC 의 실제 값 — NetworkProfile
 
-(확인 범위: Win11 25H2 한 대)
+
 
 | ID | 건수 |
 |---|---|
@@ -203,7 +203,7 @@ Open 인증에 CipherAlgorithm 이 WEP 로 적힌 까닭은 확인하지 못했�
 - 10000 은 Windows 가 연결을 판단한 때, 10001 은 끊김을 판단한 때이며, 8001 과 10000 을 시각으로 맞추면 SSID 와 Windows 의 네트워크 이름을 이을 수 있습니다.
 - 한 PC 에서 레지스트리 네트워크 프로필의 마지막 연결 시각과 10000 의 시각을 맞춰 본 결과는 [네트워크 목록](../network/networklist.md)의 시각 해석 절에 있습니다.
 - 이 로그들의 기록 시각이 다른 EVTX 레코드처럼 UTC 로 저장된다는 점은 EVTX 형식의 일반 사실입니다. 이번에 이 두 로그에서 따로 확인하지는 않았습니다. 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
-- 두 로그 모두 1MB 남짓의 순환 로그라서, 한 PC 에서는 약 3개월치만 남아 있었습니다. (확인 범위: Win11 25H2 한 대) 더 오래된 연결은 레지스트리의 네트워크 목록·Wi-Fi 프로필이나 [SRUM](../execution/system-resource-usage-monitor/index.md)에서 찾습니다. 이 판단은 해석입니다.
+- 두 로그 모두 1MB 남짓의 순환 로그라서, 한 PC 에서는 약 3개월치만 남아 있었습니다. 더 오래된 연결은 레지스트리의 네트워크 목록·Wi-Fi 프로필이나 [SRUM](../execution/system-resource-usage-monitor/index.md)에서 찾습니다. 이 판단은 해석입니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 
 ## 함정과 한계

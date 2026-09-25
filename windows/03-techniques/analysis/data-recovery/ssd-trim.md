@@ -65,7 +65,7 @@ fsutil behavior query DisableDeleteNotify
 
 삭제 알림(trim, unmap)은 파일 삭제로 풀린 클러스터를 저장 장치에 알리는 기능입니다. 값 1 은 삭제 알림을 끈 상태이고 값 0 은 켠 상태입니다. NTFS 는 관리자가 끄지 않는 한 기본으로 켜져 있으며, ReFS 는 v2 가 기본으로 꺼져 있고 v1 은 기본으로 켜져 있습니다. 하드디스크나 SAN 이 TRIM 을 지원하지 않는다고 알리면 알림을 받지 않습니다. 켜고 끌 때 재부팅이 필요 없고, 다음 unmap 명령부터 바뀐 설정을 따릅니다. 설정 명령 예는 `fsutil behavior set disabledeletenotify 1` (NTFS·ReFS v1) 과 `fsutil behavior set disabledeletenotify ReFS 0` (ReFS v2) 입니다.
 
-한 PC 에서 본 결과는 이렇습니다(확인 범위: Windows 11 25H2 빌드 26200, NVMe SSD 한 대).
+Windows 11 25H2 빌드 26200, NVMe SSD 기준으로 보면 이렇습니다.
 
 ```
 NTFS DisableDeleteNotify = 0  (Allows TRIM operations to be sent to the storage device)
@@ -88,11 +88,11 @@ ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 | 씬 프로비저닝 Storage Space, SAN 가상 디스크, 동적 VHD, 차이 VHD | Analyze + SlabConsolidate + Retrim |
 | TRIM 을 지원하지 않는 SSD, 이동식 FAT, 알 수 없음 | 작업 안 함 |
 
-기본 우선순위는 낮음이고 `-NormalPriority` 를 주면 보통 우선순위로 돕니다. `defrag /?` 도움말은 `/L` (`/Retrim`) 을 이렇게 적습니다. 씬 프로비저닝 볼륨에서는 빈 slab 을 풉니다. SSD 에서는 쓰기 성능을 위해 retrim 합니다(확인 범위: 위와 같은 PC).
+기본 우선순위는 낮음이고 `-NormalPriority` 를 주면 보통 우선순위로 돕니다. `defrag /?` 도움말은 `/L` (`/Retrim`) 을 이렇게 적습니다. 씬 프로비저닝 볼륨에서는 빈 slab 을 풉니다. SSD 에서는 쓰기 성능을 위해 retrim 합니다.
 
 ### 예약된 retrim 과 그 기록
 
-아래는 한 PC 에서 본 것입니다(확인 범위: Windows 11 25H2 빌드 26200, NVMe SSD 한 대). 모든 PC 에 맞는다고 보장하지 못합니다.
+아래는 Windows 11 25H2 빌드 26200, NVMe SSD 기준입니다. 다른 PC 에서는 다를 수 있습니다.
 
 예약 작업 `\Microsoft\Windows\Defrag\ScheduledDefrag` 는 Ready 상태였고, 이 작업은 `%windir%\system32\defrag.exe` 를 인수 `-c -h -o -$` 로 실행합니다. defrag 도움말에서 `/C` 는 모든 볼륨, `/H` 는 보통 우선순위, `/O` 는 매체 종류에 알맞은 최적화입니다. `-$` 의 뜻은 확인하지 못했습니다.
 

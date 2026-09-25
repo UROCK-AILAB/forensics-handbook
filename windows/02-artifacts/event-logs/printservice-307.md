@@ -10,7 +10,7 @@ nav_order: 2770
 
 이벤트 307 은 문서 한 건을 프린터로 인쇄했다는 기록입니다. 작업 번호, 문서 이름, 사용자, 컴퓨터, 프린터, 포트, 바이트 수, 쪽수가 들어갑니다. 이 이벤트는 `Microsoft-Windows-PrintService/Operational` 채널에 남고, 이 채널이 켜져 있을 때만 기록됩니다. 문서 이름은 "Allow job name in event logs" 정책을 켜야 들어갑니다. 시각은 UTC 입니다.
 
-> 이 페이지에서 "관찰 PC" 는 Windows 11 Home 25H2(빌드 26200, 시간대 Korea Standard Time) PC 한 대를 말합니다. 이 페이지의 사실은 모두 관찰 PC 의 공급자 메타데이터, 레지스트리, 시스템 파일에서 확인했으며 범위는 "확인 범위: Win11 25H2 한 대" 입니다. 다른 PC 에서도 같다고 보장하지 못합니다.
+> "관찰 PC" 의 시간대는 Korea Standard Time(UTC+9) 입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 

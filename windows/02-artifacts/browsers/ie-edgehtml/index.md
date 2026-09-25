@@ -15,8 +15,8 @@ has_toc: false
 ## 왜 중요한가
 
 - IE 는 Windows 의 구성 요소라서 설치된 Windows 의 지원 정책을 따릅니다.
-- Windows 11 25H2 PC 한 대에서도 IE 의 기록 자리가 남아 있었습니다. `HKLM\SOFTWARE\Microsoft\Internet Explorer` 의 `svcVersion` 값은 `11.1882.26100.0` 이었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
-- 같은 PC 에 WebCache 폴더, `INetCache`·`INetCookies` 폴더, `TypedURLs` 키, `IntelliForms` 키, `%USERPROFILE%\Favorites` 폴더가 모두 있었습니다. 옛 엣지 패키지 폴더는 없었습니다. (확인 범위: 같은 PC)
+- Windows 11 25H2 PC 한 대에서도 IE 의 기록 자리가 남아 있었습니다. `HKLM\SOFTWARE\Microsoft\Internet Explorer` 의 `svcVersion` 값은 `11.1882.26100.0` 이었습니다.
+- 같은 PC 에 WebCache 폴더, `INetCache`·`INetCookies` 폴더, `TypedURLs` 키, `IntelliForms` 키, `%USERPROFILE%\Favorites` 폴더가 모두 있었습니다. 옛 엣지 패키지 폴더는 없었습니다.
 - IE 10 이후에는 방문 기록·캐시·쿠키·내려받기 기록이 사용자마다 파일 하나에 모이고, 그 파일 하나로 웹 사용의 큰 줄기를 볼 수 있습니다.
 - IE 4~9 를 쓰던 옛 검체에서는 `index.dat` 가 주된 기록입니다. 그래서 검체의 IE 버전부터 확인합니다.
 - 엣지 안의 IE 모드는 최소 2029년까지 지원합니다. IE 모드가 어느 파일에 기록을 남기는지는 이번에 연 자료로 확인하지 못했습니다.

@@ -101,8 +101,8 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 
 - `dir /r` 는 파일의 대체 데이터 스트림을 함께 보여 줍니다.
 - PowerShell 의 `Get-Item <경로> -Stream *` 은 스트림 이름과 크기를 보여 줍니다. `Get-Content <경로> -Stream <이름>` 은 스트림 내용을 읽습니다.
-- `fsutil file layout <경로>` 는 속성 종류 코드, 스트림 이름, 상주 여부를 함께 보여 줍니다 (확인 범위: Windows 11 25H2).
-- 폴더에 붙인 ADS 는 `dir /r` 에서 `.:이름:$DATA` 로 보였습니다. 같은 폴더에 `Get-Item -Stream *` 을 쓰면 아무것도 나오지 않았습니다 (확인 범위: Windows 11 25H2, Windows PowerShell 5.1).
+- `fsutil file layout <경로>` 는 속성 종류 코드, 스트림 이름, 상주 여부를 함께 보여 줍니다.
+- 폴더에 붙인 ADS 는 `dir /r` 에서 `.:이름:$DATA` 로 보였습니다. 같은 폴더에 `Get-Item -Stream *` 을 쓰면 아무것도 나오지 않았습니다 (Windows 11 25H2, Windows PowerShell 5.1 기준).
 
 ## 포렌식에서 중요한 점
 
@@ -111,8 +111,8 @@ MITRE ATT&CK 은 ADS 와 EA 를 둘 다 자료를 숨기는 기법(T1564.004)으
 스트림마다 따로 매긴 시각은 없고, 어느 스트림이든 바뀌면 파일의 시각이 바뀝니다. 그래서 파일의 수정 시각이 바뀌었다고 해서 기본 스트림의 내용이 바뀌었다고 할 수 없습니다.
 
 
-- 작은 ADS 를 새로 붙이자 $STANDARD_INFORMATION 의 수정·접근·MFT 변경 시각이 함께 바뀌었습니다. 만든 시각은 그대로였습니다 (확인 범위: Windows 11 25H2).
-- 그 ADS 를 지우자 MFT 변경 시각만 바뀌었습니다. 수정 시각은 그대로였습니다 (확인 범위: Windows 11 25H2).
+- 작은 ADS 를 새로 붙이자 $STANDARD_INFORMATION 의 수정·접근·MFT 변경 시각이 함께 바뀌었습니다. 만든 시각은 그대로였습니다.
+- 그 ADS 를 지우자 MFT 변경 시각만 바뀌었습니다. 수정 시각은 그대로였습니다.
 - 스트림이 언제 생겼는지는 변경 저널과 $LogFile 에서 찾습니다.
 - 두 벌의 시각이 각각 언제 바뀌는지는 [두 벌의 시각](standard-information-file-name.md) 과 [파일 시각 네 가지와 변화 규칙](../../../03-techniques/analysis/timeline/macb-timestamp-rules.md) 에 있습니다.
 
@@ -145,7 +145,7 @@ USN_RECORD_V2 의 이름 칸에는 파일이나 폴더 이름이 들어가고 �
 
 ### 옮기거나 모으면 사라질 수 있습니다
 
-- Windows 의 파일 복사 함수(CopyFileEx)는 ADS 도 함께 복사합니다. PowerShell `Copy-Item` 으로 복사한 사본에 5,000바이트 ADS 가 비상주로 그대로 있었습니다 (확인 범위: Windows 11 25H2).
+- Windows 의 파일 복사 함수(CopyFileEx)는 ADS 도 함께 복사합니다. PowerShell `Copy-Item` 으로 복사한 사본에 5,000바이트 ADS 가 비상주로 그대로 있었습니다.
 - FAT 처럼 NTFS 가 아닌 파일시스템으로 옮기면 ADS 는 없어집니다. FAT 구조는 [FAT·exFAT 구조](../fat-exfat.md) 에 있습니다.
 - 파일을 골라 모으는 [선별 수집](../../../03-techniques/process-acquisition/evidence-acquisition/triage-collection.md) 은 수집 도구가 ADS 를 챙기는지 따로 확인해야 합니다.
 - [디스크 이미징](../../../03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md) 은 MFT 와 클러스터를 통째로 담습니다. 그래서 ADS 도 이미지에 남습니다.

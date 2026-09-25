@@ -96,7 +96,7 @@ Chromium 소스 코드에서 읽은 규칙입니다(참고 4).
 
 ### 실제 PC 한 대에서 본 값
 
-받은 파일 폴더를 `Get-Content -Stream Zone.Identifier` 로 읽은 결과입니다. (확인 범위: Windows 11 25H2 한 대)
+받은 파일 폴더를 `Get-Content -Stream Zone.Identifier` 로 읽은 결과입니다.
 
 | 항목 | 값 |
 |---|---|

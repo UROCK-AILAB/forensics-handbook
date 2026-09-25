@@ -38,7 +38,7 @@ Harlan Carvey 가 정리한 순서는 다음과 같습니다(2013).
 | XP·2003·Vista·2008·7·8·8.1·10 | `MountPoints2` | libyal winreg-kb 가 확인한 버전 목록 |
 | Vista 이후로 추정 | `MountPoints2\CPC`, `CPC\Volume` 이 생김 | winreg-kb 도 물음표를 달아 둔 추정입니다 |
 | 7 이후로 추정 | `CPC\LocalMOF` 가 생김 | winreg-kb 의 추정입니다 |
-| 11 | `MountPoints2` 와 `CPC\Volume` 이 있음 | 관찰 (확인 범위: Win11 25H2 한 대) |
+| 11 | `MountPoints2` 와 `CPC\Volume` 이 있음 | 관찰 |
 
 ## 구조
 

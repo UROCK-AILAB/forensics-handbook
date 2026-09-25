@@ -29,7 +29,7 @@ nav_order: 1270
 | 기본 폴더 (XP) | `C:\Documents and Settings\All Users\Application Data\Microsoft\Search\Data\Applications\Windows\` | libyal |
 | 폴더를 정하는 값 | `HKLM\Software\Microsoft\Windows Search` 키의 `DataDirectory` 값 | libyal |
 
-폴더는 `DataDirectory` 값이 정하므로, 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다. 한 PC 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 였고, DB 파일은 그 아래 `Applications\Windows\` 에 있었습니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대) 같은 키의 `SetupCompletedSuccessfully` 값은 그 PC 에서 1 이었지만, 이 값의 뜻을 설명한 자료는 확인하지 못했습니다.
+폴더는 `DataDirectory` 값이 정하므로, 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다. 한 PC 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 였고, DB 파일은 그 아래 `Applications\Windows\` 에 있었습니다. 같은 키의 `SetupCompletedSuccessfully` 값은 그 PC 에서 1 이었지만, 이 값의 뜻을 설명한 자료는 확인하지 못했습니다.
 
 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -66,7 +66,7 @@ libyal 문서(XP~8 기준)가 적은 파일입니다.
 
 ### SQLite 판 폴더의 파일
 
-아래는 Windows 11 25H2 PC 한 대의 `Applications\Windows\` 폴더에서 본 파일입니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대)
+아래는 Windows 11 25H2 PC 한 대의 `Applications\Windows\` 폴더에서 본 파일입니다.
 
 | 파일·폴더 | 내용 |
 |---|---|
@@ -123,7 +123,7 @@ libyal 문서는 이진 값의 바이트 순서가 Windows 버전마다 다르�
 
 ### `AesGcm1 SQLite3` 헤더
 
-Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` 의 헤더를 본 결과입니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대)
+Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` 의 헤더를 본 결과입니다.
 
 | 오프셋 | 본 값 | 풀이 |
 |---|---|---|
@@ -148,7 +148,7 @@ Windows 11 25H2 PC 한 대에서 `Windows.db`·`Windows-gather.db`·`Windows-usn
 
 **증명하지 못하는 것**
 
-- 폴더에 DB 파일이 있어도 내용을 바로 읽을 수 있는 것은 아닙니다. `AesGcm1 SQLite3` 로 시작하는 파일은 보통 SQLite 도구로 열리지 않았습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 폴더에 DB 파일이 있어도 내용을 바로 읽을 수 있는 것은 아닙니다. `AesGcm1 SQLite3` 로 시작하는 파일은 보통 SQLite 도구로 열리지 않았습니다.
 - 이 페이지의 정보만으로는 무엇이 색인됐는지 모릅니다. 내용은 표를 풀어야 나옵니다.
 
 ## 함정과 한계

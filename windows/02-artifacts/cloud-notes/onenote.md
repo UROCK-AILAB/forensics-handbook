@@ -84,7 +84,7 @@ KAPE 수집 대상 파일(작성자 Andrew Rathbun, 버전 1.0)은 이 폴더 �
 - `HKCU\Software\Microsoft\Office\16.0\OneNote` 키
 - `Packages\Microsoft.Office.OneNote_*` 폴더
 
-원노트를 한 번도 열지 않은 계정으로 보입니다(추정). 프로그램이 깔려 있다는 것만으로 사용 흔적이 생기지는 않습니다. 같은 PC 에는 "OneNote (Desktop)" 가상 프린터(포트 `nul:`)도 있었습니다. (확인 범위: Win11 빌드 26200 한 대)
+원노트를 한 번도 열지 않은 계정으로 보입니다(추정). 프로그램이 깔려 있다는 것만으로 사용 흔적이 생기지는 않습니다. 같은 PC 에는 "OneNote (Desktop)" 가상 프린터(포트 `nul:`)도 있었습니다.
 
 ## 구조
 

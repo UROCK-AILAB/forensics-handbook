@@ -14,7 +14,7 @@ Run·RunOnce 키와 시작프로그램 폴더 (Startup Folder) 는 사용자가 
 
 Run 키와 RunOnce 키는 사용자가 로그온할 때 프로그램을 실행하게 하며, 사용자별(HKCU)과 컴퓨터 전체(HKLM)에 한 벌씩 있습니다. 값 하나가 명령 하나이고, 값 이름은 설명 문자열이며 값 데이터는 260자 이하의 명령줄입니다. 한 키에 값을 여러 개 둘 수 있지만 이때 실행 순서는 정해져 있지 않습니다. 시스템은 Run 키 프로그램을 언제 실행할지 보장하지 않으며, 사용자가 쓰는 화면을 방해하지 않도록 Run 키와 시작프로그램 그룹의 실행을 늦출 수 있습니다.
 
-- 정상 프로그램도 이 자리를 씁니다. Windows 11 PC 한 대의 HKCU Run 키에는 값이 6개 있었습니다. (확인 범위: Win11 25H2 한 대)
+- 정상 프로그램도 이 자리를 씁니다. Windows 11 PC 한 대의 HKCU Run 키에는 값이 6개 있었습니다.
 - 악성코드도 Run 키와 시작프로그램 폴더를 자동실행 수단으로 씁니다. MITRE ATT&CK 는 이 수단을 T1547.001 로 분류합니다.
 
 ## 위치와 버전별 차이
@@ -31,7 +31,7 @@ Microsoft 문서가 적은 키는 네 개입니다.
 | `HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce` | 그 사용자 | 한 번 |
 
 - HKLM 과 HKCU 가 각각 어느 하이브 파일인지는 [하이브 파일 종류](../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
-- 64비트 Windows 11 PC 한 대에서는 32비트 프로그램이 등록한 항목이 `HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run` 에 있었습니다. 이 경로를 빼먹으면 그 항목을 놓칩니다. (확인 범위: Win11 25H2 한 대)
+- 64비트 Windows 11 PC 한 대에서는 32비트 프로그램이 등록한 항목이 `HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run` 에 있었습니다. 이 경로를 빼먹으면 그 항목을 놓칩니다.
 
 ### MITRE 가 더 적은 키
 
@@ -46,7 +46,7 @@ MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
 
 `Load` 값과 `BootExecute` 값은 [기타 자동실행 위치](winlogon-ifeo-appinit-dlls.md) 에서 다룹니다.
 
-같은 PC 에서 본 상태는 이렇습니다. (확인 범위: Win11 25H2 한 대)
+같은 PC 에서 본 상태는 이렇습니다.
 
 | 키 | 상태 |
 |---|---|
@@ -66,7 +66,7 @@ MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
 | 모든 사용자 | `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp` |
 
 - 폴더 위치는 `HKCU·HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders` 와 같은 경로의 `Shell Folders` 값이 정하므로, 기본 경로만 보지 말고 이 값이 가리키는 폴더를 봅니다. 이 문장은 위 사실에서 끌어낸 해석입니다.
-- Windows 11 PC 한 대에서 본 값은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 본 값은 아래와 같습니다.
 
 | 키 | 값 이름 | 데이터 |
 |---|---|---|
@@ -74,11 +74,11 @@ MITRE ATT&CK 는 아래 자리도 같은 기법으로 적습니다.
 | HKLM ...\User Shell Folders | `Common Startup` | `%ProgramData%\Microsoft\Windows\Start Menu\Programs\Startup` |
 | HKLM ...\Shell Folders | `Common Startup` | `C:\ProgramData\...\Startup` (펼친 경로) |
 
-- 같은 PC 의 두 시작프로그램 폴더에는 모두 desktop.ini(174바이트)가 들어 있었습니다. 이 파일만 있는 것은 정상 모습입니다. (확인 범위: Win11 25H2 한 대)
+- 같은 PC 의 두 시작프로그램 폴더에는 모두 desktop.ini(174바이트)가 들어 있었습니다. 이 파일만 있는 것은 정상 모습입니다.
 
 ### 작업 관리자 "시작 앱" 사용 여부 (StartupApproved)
 
-이 키를 설명한 공식 문서는 이번에 찾지 못했습니다. 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
+이 키를 설명한 공식 문서는 이번에 찾지 못했습니다. 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다.
 
 - 위치는 `HKLM·HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved` 입니다.
 - 그 아래에 `Run`, `Run32`, `StartupFolder` 하위 키가 있었습니다.
@@ -94,7 +94,7 @@ Run
     <설명 이름>    REG_SZ 또는 REG_EXPAND_SZ    <명령줄>
 ```
 
-- Windows 11 PC 한 대에서 HKLM Run 의 값 1개는 REG_EXPAND_SZ 였고, 나머지 Run 값은 REG_SZ 였습니다. 두 형식이 섞입니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 HKLM Run 의 값 1개는 REG_EXPAND_SZ 였고, 나머지 Run 값은 REG_SZ 였습니다. 두 형식이 섞입니다.
 - REG_EXPAND_SZ 는 `%...%` 환경 변수를 펼치지 않은 채 저장합니다. 실제 경로는 그 계정의 환경 변수로 펼쳐서 확인합니다.
 
 ### RunOnce 값 이름의 접두사
@@ -110,7 +110,7 @@ Run
 
 ### StartupApproved 값
 
-아래는 Windows 11 PC 한 대에서 본 형태입니다. (확인 범위: Win11 25H2 한 대)
+아래는 Windows 11 PC 한 대에서 본 형태입니다.
 
 ```
 StartupApproved\Run
@@ -132,7 +132,7 @@ StartupApproved\Run
 - 수집 시점에 이 키에 이 이름으로 이 명령줄이 등록되어 있었습니다.
 - HKCU 쪽 값이면 그 사용자 하이브에 등록되어 있었습니다. 그 계정이 로그온할 때 실행 대상이 됩니다.
 - 시작프로그램 폴더에 파일이 있으면, 수집 시점에 그 파일이 로그온 때 실행될 자리에 있었습니다.
-- StartupApproved 에는 지금 Run 키에 없는 이름도 남아 있었습니다(HKLM Run 쪽 2개, HKCU Run 쪽 1개). Run 값을 지워도 이 항목은 남을 수 있습니다. 그 이름으로 등록된 항목이 예전에 있었다는 실마리가 됩니다. (확인 범위: Win11 25H2 한 대)
+- StartupApproved 에는 지금 Run 키에 없는 이름도 남아 있었습니다(HKLM Run 쪽 2개, HKCU Run 쪽 1개). Run 값을 지워도 이 항목은 남을 수 있습니다. 그 이름으로 등록된 항목이 예전에 있었다는 실마리가 됩니다.
 
 ### 증명하지 못하는 것
 
@@ -154,7 +154,7 @@ StartupApproved\Run
 
 ## 함정과 한계
 
-- **WOW6432Node 를 빼먹습니다.** 64비트 Windows 에서 32비트 프로그램의 항목은 그 아래에 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **WOW6432Node 를 빼먹습니다.** 64비트 Windows 에서 32비트 프로그램의 항목은 그 아래에 있었습니다.
 - **HKCU 는 사용자마다 따로 있습니다.** 로그온한 적 있는 모든 프로필의 사용자 하이브를 수집합니다. 프로필 목록은 [사용자 프로필 목록](../system-account/profilelist.md) 에서 봅니다.
 - **RunOnce 는 흔적을 스스로 지웁니다.** 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 지운 값이 하이브 안에 남는지는 [지운 키·값 복구](../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 에서 다룹니다.
 - **폴더 위치가 바뀔 수 있습니다.** `User Shell Folders` 값이 가리키는 폴더를 확인합니다.

@@ -79,7 +79,7 @@ libyal 문서는 Windows 11 21H2 까지 NTFS 3.1 로 시험했다고 적었고, 
 
 ### 실제 PC 한 대에서 본 값
 
-`fsutil fsinfo ntfsinfo C:` 로 확인한 값입니다. (확인 범위: Windows 11 25H2, 1.8TB 볼륨 한 대)
+`fsutil fsinfo ntfsinfo C:` 출력입니다(Windows 11 25H2, 1.8TB 볼륨 기준).
 
 | 항목 | 값 |
 |---|---|

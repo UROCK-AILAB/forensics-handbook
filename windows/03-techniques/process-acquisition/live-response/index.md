@@ -53,7 +53,7 @@ NIST SP 800-86 5.2.1.2 절은 휘발성 데이터의 종류로 메모리 내용,
 | 디스크·볼륨 | `\\.\PhysicalDriveX`·`\\.\X:` 직접 열기, 볼륨 섀도 복사본 | 켜진 상태의 디스크 내용, 잠금 해제된 암호화 볼륨의 풀린 내용 | [실행 중 시스템 이미징](live-imaging.md) |
 | 메모리 전체 | 이 허브에서 다루지 않습니다 | — | [메모리 분석](../../analysis/memory-forensics/index.md) |
 
-`Get-NetTCPConnection`, `arp -a`, `route print`, `Win32_LogonSession`, `Get-Clipboard` 의 결과는 PC 한 대에서 직접 확인했습니다 (확인 범위: Windows 11 Home 10.0.26200). 나머지 명령은 공식 문서로 확인했습니다.
+`Get-NetTCPConnection`, `arp -a`, `route print`, `Win32_LogonSession`, `Get-Clipboard` 의 결과는 PC 한 대에서 직접 확인했습니다. 나머지 명령은 공식 문서로 확인했습니다.
 
 메모리를 복사하는 도구를 돌리면 RAM 이 바뀌는데, 이 변화는 피할 수 없습니다. 그래서 NIST 는 도구가 남기는 흔적을 최소로 하라고 적습니다.
 
@@ -64,8 +64,8 @@ NIST SP 800-86 5.2.1.2 절은 휘발성 데이터의 종류로 메모리 내용,
 | `Win32_Process` | 최소 지원 버전은 Windows Vista, Windows Server 2008 입니다 | 공식 문서 |
 | 클립보드 기록 | 안내 대상은 Windows 10 과 Windows 11 입니다 | 공식 안내 |
 | 디스크·볼륨 직접 열기 | 지금 Windows 는 직접 접근을 제한합니다. Windows XP 와 Windows Server 2003 에는 이 제한이 없었습니다 | 공식 문서 |
-| `query user` | 문서는 원격 데스크톱 세션 호스트 서버를 기준으로 씁니다. Windows 11 Home 에는 `quser.exe` 도 `query.exe` 도 없었습니다 | 공식 문서, 관찰 (확인 범위: Windows 11 Home 10.0.26200) |
-| 섀도 복사본 만들기 | DiskShadow 는 Windows Server 에만 있습니다. `vssadmin` 명령 참조 문서의 클라이언트 명령 목록에는 `create shadow` 가 없습니다. Windows 11 Home 에서도 이 명령이 "Error: Invalid command." 로 끝났습니다 | 공식 문서, 관찰 (확인 범위: Windows 11 Home 10.0.26200) |
+| `query user` | 문서는 원격 데스크톱 세션 호스트 서버를 기준으로 씁니다. Windows 11 Home 에는 `quser.exe` 도 `query.exe` 도 없었습니다 | 공식 문서, 관찰 |
+| 섀도 복사본 만들기 | DiskShadow 는 Windows Server 에만 있습니다. `vssadmin` 명령 참조 문서의 클라이언트 명령 목록에는 `create shadow` 가 없습니다. Windows 11 Home 에서도 이 명령이 "Error: Invalid command." 로 끝났습니다 | 공식 문서, 관찰 |
 
 ## 읽는 순서
 

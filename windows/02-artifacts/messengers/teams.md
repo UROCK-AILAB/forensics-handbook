@@ -12,7 +12,7 @@ nav_order: 2060
 
 Teams 는 메시지·연락처·일정 같은 데이터를 IndexedDB 에 LevelDB 형식으로 저장합니다. 새 Teams 는 스토어 패키지 폴더 안에 브라우저와 같은 구성의 `EBWebView` 폴더를 둡니다. 관찰한 PC 에서 대화용 IndexedDB 는 `Default` 가 아니라 `WV2Profile_tfw` 프로필에 있었습니다. 앱 폴더의 `Logs` 에는 실행·업데이트 로그가 쌓입니다. 관찰한 PC 에서 로그 줄 시각에는 `+09:00` 이 붙어 있었지만 실제 값은 UTC 였습니다.
 
-이 페이지에서 "관찰" 이라고 적은 내용의 확인 범위는 Windows 11(빌드 26200), 새 Teams 26225.1806.5074.1452, 시간대 Korea Standard Time 인 PC 한 대입니다. 폴더·파일 이름, 파일 앞 몇 바이트, JSON 키 이름, 로그 줄 시각만 봤습니다. 대화 내용·토큰 값·계정 식별자는 열지 않았습니다.
+"관찰" 은 새 Teams 26225.1806.5074.1452, 시간대 KST 기준입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -64,7 +64,7 @@ README 가 적은 폴더 이름은 `IndexedDB\https_teams.microsoft.com_0.indexe
 - `...indexeddb.leveldb` 폴더에는 `CURRENT`, `MANIFEST-011437`, 번호가 붙은 `.ldb`·`.log` 파일 등 33개가 있었습니다. (관찰)
 - `<조직>-my.sharepoint.com` 출처의 IndexedDB 도 있었습니다. 조직 OneDrive 의 출처입니다. (관찰)
 - `EBWebView\Default` 프로필에는 IndexedDB 가 없고 `Local Storage` 만 있었습니다. (관찰)
-- 그래서 대화 데이터는 `Default` 가 아니라 `WV2Profile_tfw` 에서 찾습니다. (확인 범위: 위 PC 한 대)
+- 그래서 대화 데이터는 `Default` 가 아니라 `WV2Profile_tfw` 에서 찾습니다.
 - `WV2Profile_tfw` 에는 `History`, `Login Data`, `Network`, `Cache`, `Local Storage\leveldb` 등 브라우저와 같은 구성이 있었습니다. (관찰) 이 파일들은 [크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md) 와 같은 방법으로 읽습니다.
 
 forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb`)을 모두 읽습니다. README 는 기록 대부분이 `.ldb` 에 있다고 적었습니다. (forensicsim README)
@@ -171,7 +171,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 
 파일 이름은 현지 시각이었습니다. 첫 줄이 `2026-09-20T23:33:05+09:00` 인 파일의 이름은 `MSTeams_2026-09-21_08-33-05.00.log` 였습니다. 23:33:05 UTC 는 다음 날 08:33:05 KST 입니다.
 
-확인 범위는 Windows 11, 새 Teams 26225.1806.5074.1452, KST PC 한 대입니다. 다른 버전과 시간대에서도 같은지는 확인하지 못했습니다. 줄 시각을 표시대로 현지 시각으로 읽으면 KST PC 에서 9시간이 틀립니다. 증거 PC 에서도 마지막 줄 시각과 파일 수정 시각을 맞춰 본 뒤 씁니다. 증거 PC 의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
+판과 시간대마다 다를 수 있습니다. 줄 시각을 표시대로 현지 시각으로 읽으면 KST PC 에서 9시간이 틀립니다. 증거 PC 에서도 마지막 줄 시각과 파일 수정 시각을 맞춰 본 뒤 씁니다. 증거 PC 의 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 
 ## 함정과 한계
 

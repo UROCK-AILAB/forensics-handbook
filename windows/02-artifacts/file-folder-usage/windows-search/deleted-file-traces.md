@@ -41,7 +41,7 @@ Microsoft 문서가 설명하는 흐름에서 NTFS 는 알림 원본입니다. �
 | `Windows.db` | `Windows.db-wal` |
 | `Windows-gather.db` | `Windows-gather.db-wal` |
 
-Windows 11 25H2 PC 한 대에서 본 WAL 파일입니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대)
+Windows 11 25H2 PC 한 대에서 본 WAL 파일입니다.
 
 | 파일 | 크기 | 첫 4바이트 |
 |---|---|---|

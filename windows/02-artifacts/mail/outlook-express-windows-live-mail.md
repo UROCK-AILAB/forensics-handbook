@@ -124,7 +124,7 @@ Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서
 ## 함정과 한계
 
 1. **원본 ESE 데이터베이스를 바로 엽니다.** 압수 이미지에서 꺼낸 ESE 데이터베이스는 비정상 종료 상태인 경우가 많았습니다(관찰). 사본에서만 작업합니다. 비정상 종료와 손상을 다루는 법은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. 이 관찰은 SRUDB.dat·WebCacheV01.dat·Windows.edb 에서 한 것이고, `MSMessageStore` 는 직접 보지 않았습니다.
-2. **도구 하나의 행 수를 믿습니다.** 손상된 ESE 데이터베이스는 읽는 방식에 따라 행 수가 달랐습니다(관찰, 확인 범위는 1번과 같습니다). 두 가지 이상으로 열어 비교합니다.
+2. **도구 하나의 행 수를 믿습니다.** 손상된 ESE 데이터베이스는 읽는 방식에 따라 행 수가 달랐습니다(관찰). 두 가지 이상으로 열어 비교합니다.
 3. **`Backup` 사본을 빠뜨립니다.** Windows Live Mail 은 데이터베이스의 백업 사본을 `Backup` 하위 폴더에 둡니다[2]. 본 데이터베이스와 사본의 목록을 비교합니다.
 4. **데이터베이스에 없으면 메일이 없다고 봅니다.** 메시지는 `.eml` 파일로 따로 있습니다[2][3]. 폴더 안 `.eml` 목록과 데이터베이스 목록을 따로 세어 비교합니다.
 5. **지운 `.eml` 을 데이터베이스에서만 찾습니다.** `.eml` 은 개별 파일이라, 지운 메일은 파일 시스템에서 찾아야 한다고 추론할 수 있습니다. 문서로 확인하지는 못했습니다. [마스터 파일 테이블](../filesystem/mft.md), [USN 변경 저널](../filesystem/usnjrnl.md), [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를 함께 봅니다.

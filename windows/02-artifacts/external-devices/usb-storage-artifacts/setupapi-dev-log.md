@@ -15,7 +15,7 @@ nav_order: 1530
 
 Windows 는 장치 설치 문제를 풀 때 쓰라고 이 로그를 남깁니다. Vista 부터 로그가 둘로 나뉘어, 장치·드라이버 설치는 장치 설치 로그 (`setupapi.dev.log`) 에, 그 밖의 설치 작업은 앱 설치 로그 (`setupapi.app.log`) 에 적습니다(Microsoft). 설치 작업 하나는 로그에서 섹션 (Section) 하나가 됩니다(Microsoft).
 
-새 장치를 꽂으면 PnP 관리자가 드라이버를 골라 장치를 설치하고, 이때 `Device Install (Hardware initiated)` 섹션이 생깁니다(확인 범위: Windows 10 1507 공개 시험 파일, Windows 11 25H2 관찰). 관찰한 설치 섹션의 첫 본문 줄에는 "장치가 아직 구성되지 않아 설치가 필요하다" 는 줄이 있었습니다(`ump: Install needed due to device having problem code CM_PROB_NOT_CONFIGURED`). 설치 섹션은 꽂을 때마다 생기지 않고 설치가 필요할 때 생깁니다(관찰). 그래서 포렌식 자료들은 이 로그를 장치를 처음 연결한 시각의 근거로 씁니다(ForensicsWiki, HECF).
+새 장치를 꽂으면 PnP 관리자가 드라이버를 골라 장치를 설치하고, 이때 `Device Install (Hardware initiated)` 섹션이 생깁니다(Windows 10 1507, Windows 11 25H2 기준). 설치 섹션의 첫 본문 줄에는 "장치가 아직 구성되지 않아 설치가 필요하다" 는 줄이 있었습니다(`ump: Install needed due to device having problem code CM_PROB_NOT_CONFIGURED`). 설치 섹션은 꽂을 때마다 생기지 않고 설치가 필요할 때 생깁니다. 그래서 포렌식 자료들은 이 로그를 장치를 처음 연결한 시각의 근거로 씁니다(ForensicsWiki, HECF).
 
 USB 저장장치만 들어가는 것이 아니라 네트워크 어댑터, 휴대폰, 프린터, 입력 장치의 설치도 같은 로그에 들어갑니다(관찰). 장치를 지울 때(`Delete Device`), 드라이버 패키지를 들이거나 뺄 때, 오래 쓰지 않은 장치를 정리할 때도 섹션이 생깁니다(관찰).
 
@@ -63,7 +63,7 @@ XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니�
 
 - ANSI 일반 텍스트이고, 문구는 영어입니다(Microsoft).
 - 관찰한 파일은 BOM 없이 시작했고 줄 끝이 CR LF (`0D 0A`) 였습니다.
-- 한국어판 Windows 에서는 서비스 표시 이름 같은 한글이 CP949 로 적혀 있었습니다(확인 범위: Windows 11 25H2 한국어판 한 대). UTF-8 로 열면 글자가 깨집니다. [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
+- 한국어판 Windows 에서는 서비스 표시 이름 같은 한글이 CP949 로 적혀 있었습니다. UTF-8 로 열면 글자가 깨집니다. [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
 - 맨 앞은 머리말 (Text Log Header) 입니다. `[Device Install Log]` 아래에 OS 버전, 서비스 팩, 아키텍처가 있고 `[BeginLog]` 로 끝납니다(Microsoft).
 - 날짜 붙은 옛 로그에도 머리말이 따로 있었습니다(관찰).
 - 머리말 뒤에는 섹션이 만든 순서대로 이어집니다(Microsoft). 줄 순서는 곧 기록한 순서입니다.
@@ -93,7 +93,7 @@ XP 의 `setupapi.log` 는 이름을 바꾸거나 지우면 새로 시작합니�
 | 결과 | `<<<  [Exit status: SUCCESS]` | 작업 결과입니다. |
 
 - 범주 (Event Category) 는 작업 종류를 알려 줍니다. `dvi:` 장치 설치, `ump:` 사용자 모드 PnP 관리자, `ndv:` 새 장치 마법사, `inf:` INF 처리, `cpy:` 파일 복사, `sto:` 드라이버 저장소, `sig:` 서명 확인, `set:` 일반 설치가 있습니다(Microsoft).
-- 문서에 없는 범주도 보입니다. 관찰한 파일에는 `utl:`·`dvs:`·`cmd:` 가 있었습니다(확인 범위: Windows 11 25H2 한 대).
+- 문서에 없는 범주도 보입니다. 관찰한 파일에는 `utl:`·`dvs:`·`cmd:` 가 있었습니다.
 - `cmd:` 줄에는 그 작업을 시작한 프로그램의 명령줄이 있었습니다(관찰). 예를 들어 인쇄 스풀러나 디스크 정리 프로그램입니다. 장치를 꽂아서 생긴 설치 섹션에는 이 줄이 없었습니다.
 - 본문 줄 끝에 날짜 없이 시각만 붙는 경우가 있습니다(plaso 시험 파일, 관찰).
 

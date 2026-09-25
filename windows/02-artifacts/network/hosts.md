@@ -6,7 +6,7 @@ nav_order: 2460
 
 # hosts 파일 (hosts)
 
-> 이 페이지에서 "(확인 범위: 조사 PC)" 는 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 사실을 뜻합니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
+> 이 페이지에서 "" 는 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 사실을 뜻합니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
 
 ## 한 줄 요약
 
@@ -30,18 +30,18 @@ hosts 는 로그가 아니라 설정 파일이며, 관리자나 프로그램이 
 |---|---|---|
 | hosts | `%SystemRoot%\System32\drivers\etc\hosts` | ForensicArtifacts 가 정의한 위치입니다. 조사 PC 에서도 같았습니다. 확장자가 없습니다 |
 | Lmhosts | 같은 폴더 | ForensicArtifacts 는 hosts 와 함께 수집 대상으로 정의합니다 |
-| 같은 폴더의 다른 파일 | `lmhosts.sam`(예시 파일), `networks`, `protocol`, `services` | 조사 PC 에는 확장자 없는 `lmhosts` 가 없었습니다 (확인 범위: 조사 PC) |
-| 폴더 경로 설정 | SYSTEM `CurrentControlSet\Services\Tcpip\Parameters` 의 `DataBasePath` | 조사 PC 값은 `C:\WINDOWS\System32\drivers\etc` 였습니다 (확인 범위: 조사 PC) |
+| 같은 폴더의 다른 파일 | `lmhosts.sam`(예시 파일), `networks`, `protocol`, `services` | 조사 PC 에는 확장자 없는 `lmhosts` 가 없었습니다 |
+| 폴더 경로 설정 | SYSTEM `CurrentControlSet\Services\Tcpip\Parameters` 의 `DataBasePath` | 조사 PC 값은 `C:\WINDOWS\System32\drivers\etc` 였습니다 |
 
 - `DataBasePath` 를 바꾸면 윈도가 다른 폴더의 hosts 를 읽는다는 설명은 확인하지 못했습니다. 그래도 값이 기본 폴더와 다르면 그 폴더도 함께 봅니다.
 - 오프라인 SYSTEM 하이브에서는 `Select` 키가 가리키는 `ControlSet00n` 을 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
-- 버전별 차이는 확인하지 않았습니다. 조사 PC 기본 파일의 첫 줄은 `# Copyright (c) 1993-2009 Microsoft Corp.` 였습니다. (확인 범위: 조사 PC)
+- 버전별 차이는 확인하지 않았습니다. 조사 PC 기본 파일의 첫 줄은 `# Copyright (c) 1993-2009 Microsoft Corp.` 였습니다.
 
 ## 구조
 
 ### 형식
 
-기본 파일 주석에 적힌 규칙은 이렇습니다. (확인 범위: 조사 PC)
+기본 파일 주석에 적힌 규칙은 이렇습니다.
 
 - 한 줄에 항목 하나를 씁니다.
 - IP 주소를 첫 칸에 쓰고, 호스트 이름을 다음 칸에 씁니다.
@@ -50,15 +50,15 @@ hosts 는 로그가 아니라 설정 파일이며, 관리자나 프로그램이 
 
 ### 기본 내용
 
-- 조사 PC 의 기본 파일은 824바이트였고, 인코딩은 ASCII, 줄바꿈은 CRLF 였습니다. 모든 줄이 `#` 로 시작하는 주석이었습니다. (확인 범위: 조사 PC)
-- 주석 안에 예시 줄이 두 개 있으며, `#` 뒤에 아래 내용이 적혀 있습니다. 줄 앞에 `#` 이 있어 쓰이지 않는 줄입니다. (확인 범위: 조사 PC)
+- 조사 PC 의 기본 파일은 824바이트였고, 인코딩은 ASCII, 줄바꿈은 CRLF 였습니다. 모든 줄이 `#` 로 시작하는 주석이었습니다.
+- 주석 안에 예시 줄이 두 개 있으며, `#` 뒤에 아래 내용이 적혀 있습니다. 줄 앞에 `#` 이 있어 쓰이지 않는 줄입니다.
 
 ```
 102.54.94.97     rhino.acme.com          # source server
 38.25.63.10     x.acme.com              # x client host
 ```
 
-- 파일 끝에는 `# localhost name resolution is handled within DNS itself.` 줄이 있습니다. 그 아래 `127.0.0.1 localhost` 와 `::1 localhost` 도 주석 처리돼 있습니다. (확인 범위: 조사 PC)
+- 파일 끝에는 `# localhost name resolution is handled within DNS itself.` 줄이 있습니다. 그 아래 `127.0.0.1 localhost` 와 `::1 localhost` 도 주석 처리돼 있습니다.
 
 ### 권한
 
@@ -67,7 +67,7 @@ hosts 는 로그가 아니라 설정 파일이며, 관리자나 프로그램이 
 | SYSTEM, Administrators | 전체 제어 |
 | Users, ALL APPLICATION PACKAGES | 읽기·실행 |
 
-(확인 범위: 조사 PC)
+
 
 파일을 고치려면 관리자 권한이 필요합니다. 권한이 위와 다르면 권한을 바꾼 흔적으로 따로 봅니다.
 
@@ -91,8 +91,8 @@ hosts 는 로그가 아니라 설정 파일이며, 관리자나 프로그램이 
 
 ## 시각 해석
 
-- 파일 안에는 줄마다 시각이 없습니다. 언제 줄을 넣었는지는 파일 시스템 시각과 USN 저널로만 가늠합니다. (확인 범위: 조사 PC, 파일 구조)
-- 조사 PC 의 hosts 수정 시각은 2024-04-01T07:24:05Z 였습니다. OS 설치 시각은 2026-06-26T18:07:41Z 였습니다. 수정 시각이 설치보다 2년 넘게 앞섰고, 같은 폴더의 다른 파일도 수정 시각이 같았습니다. (확인 범위: 조사 PC)
+- 파일 안에는 줄마다 시각이 없습니다. 언제 줄을 넣었는지는 파일 시스템 시각과 USN 저널로만 가늠합니다.
+- 조사 PC 의 hosts 수정 시각은 2024-04-01T07:24:05Z 였습니다. OS 설치 시각은 2026-06-26T18:07:41Z 였습니다. 수정 시각이 설치보다 2년 넘게 앞섰고, 같은 폴더의 다른 파일도 수정 시각이 같았습니다.
 - 즉 손대지 않은 hosts 의 수정 시각은 설치한 날이 아니라 윈도 설치 이미지를 만든 무렵의 시각입니다. 이 판단은 위 관찰에서 나온 추론입니다.
 - 같은 폴더의 다른 파일과 수정 시각을 나란히 봅니다. hosts 만 시각이 다르면 hosts 만 따로 고쳤다는 단서가 됩니다.
 - NTFS 시각은 UTC 입니다. 파일 시각을 읽는 법은 [마스터 파일 테이블](../filesystem/mft.md)에서 다룹니다. 설치 시각은 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md)에서 확인합니다.

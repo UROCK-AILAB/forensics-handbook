@@ -23,7 +23,7 @@ Forensafe 글은 옛 엣지의 새 버전이 즐겨찾기를 `spartan.edb` 에 �
 
 ### IE 즐겨찾기 폴더
 
-Windows 11 25H2 PC 에서 본 모습입니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+Windows 11 25H2 PC 에서 본 모습입니다.
 
 | 항목 | 이 PC 에서 본 것 |
 |---|---|
@@ -51,14 +51,14 @@ Windows 11 25H2 PC 에서 본 모습입니다. (확인 범위: Windows 11 25H2, 
 - 어느 버전부터 `spartan.edb` 를 썼는지는 확인하지 못했습니다. 출처 글도 "새 버전"·"옛 버전"으로만 나눕니다.
 - 그래서 경로 하나만 찾지 않고 패키지 폴더를 통째로 모읍니다.
 - `spartan.edb` 의 저장 형식은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서, 패키지 폴더의 짜임은 [UWP 앱 데이터 구조](../../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
-- Windows 11 25H2 PC 에는 옛 엣지 패키지 폴더가 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+- Windows 11 25H2 PC 에는 옛 엣지 패키지 폴더가 없었습니다.
 - 옛 엣지의 지원 종료 시점은 [인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)](index.md) 에서 다룹니다.
 
 ## 구조
 
 ### .url 파일
 
-아래는 Windows 11 25H2 PC 의 즐겨찾기 폴더에서 본 `Bing.url` (208바이트) 의 내용입니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+아래는 Windows 11 25H2 PC 의 즐겨찾기 폴더에서 본 `Bing.url` (208바이트) 의 내용입니다.
 
 ```
 [{000214A0-0000-0000-C000-000000000046}]
@@ -106,7 +106,7 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 
 ## 시각 해석
 
-- 한 PC 에서 본 `.url` 에는 시각 줄이 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대) 시각은 파일 시스템에서 읽습니다.
+- 한 PC 에서 본 `.url` 에는 시각 줄이 없었습니다. 시각은 파일 시스템에서 읽습니다.
 - NTFS 는 파일 시각을 UTC 로 적습니다. 현지 시각으로 바꿀 때는 [시간대 설정](../../system-account/time-zone.md) 을 확인합니다.
 - 파일 시스템 시각의 종류와 바뀌는 조건은 [마스터 파일 테이블](../../filesystem/mft.md) 에서 다룹니다.
 - 만든 시각을 즐겨찾기를 추가한 시각으로 단정하지 않습니다. 다른 곳에서 복사해 온 파일이면 만든 시각은 복사한 때를 가리킬 수 있습니다.
@@ -115,7 +115,7 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 
 ## 함정과 한계
 
-- **처음부터 들어 있던 항목이 섞입니다.** 한 PC 의 `Bing.url` 은 주소가 `go.microsoft.com` 의 안내 링크였고, 아이콘은 Internet Explorer 설치 폴더의 그림이었습니다. 이런 항목을 사용자가 추가했다고 단정하지 않습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+- **처음부터 들어 있던 항목이 섞입니다.** 한 PC 의 `Bing.url` 은 주소가 `go.microsoft.com` 의 안내 링크였고, 아이콘은 Internet Explorer 설치 폴더의 그림이었습니다. 이런 항목을 사용자가 추가했다고 단정하지 않습니다.
 - **파일 첫머리만 보면 놓칩니다.** 한 PC 의 `.url` 은 `[InternetShortcut]` 이 아니라 `[{000214A0-…}]` 절로 시작했습니다. 지운 `.url` 을 내용으로 찾을 때는 `[InternetShortcut]` 과 `URL=` 문자열을 파일 어디서든 찾습니다. 검색 방법은 [파일 내용 검색](../../../03-techniques/analysis/content-search/index.md) 에서 다룹니다.
 - **지운 즐겨찾기는 파일 시스템에서 찾습니다.** 휴지통, 지운 MFT 레코드, USN 저널, 폴더 인덱스 슬랙을 차례로 봅니다. 크기가 작은 파일은 내용이 MFT 레코드 안에 들어가기도 합니다. 복구 방법은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 - **쉽게 고칠 수 있습니다.** 글자 파일이라 메모장으로도 주소를 바꿀 수 있으므로 수정 시각과 USN 저널 기록을 함께 봅니다. 조작 흔적을 보는 법은 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.

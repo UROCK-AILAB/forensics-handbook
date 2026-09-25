@@ -39,7 +39,7 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 - `.bmc` 에서 `.bin` 으로 바뀐 윈도 버전은 확인하지 못했습니다.
 - `bcache2`, `bcache22`, `bcache24` 처럼 파일 이름에 붙는 번호와 색 깊이의 관계도 확인하지 못했습니다.
 
-원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 한 대에는 `Terminal Server Client\Cache` 폴더가 없었습니다. (확인 범위: Win11 25H2 한 대)
+원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 한 대에는 `Terminal Server Client\Cache` 폴더가 없었습니다.
 
 ## 구조
 

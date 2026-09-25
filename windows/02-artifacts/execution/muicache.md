@@ -22,15 +22,15 @@ libyal 은 이 키를 다국어 사용자 인터페이스 캐시 (Multilingual U
 | Vista 이후 | `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache` | UsrClass.dat (Win11 25H2 한 대에서 확인) |
 
 - 두 경로는 libyal 과 NirSoft 가 같게 적습니다.
-- Windows 11 PC 한 대에서 같은 키가 `HKEY_USERS\<SID>_Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로도 열렸습니다. 두 경로의 값 수(218)가 같았습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 의 하이브 목록에서 `<SID>_Classes` 의 파일은 `C:\Users\<user>\AppData\Local\Microsoft\Windows\UsrClass.dat` 였습니다. 오프라인에서는 UsrClass.dat 를 열고 `Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로 들어갑니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 에는 XP 용 `ShellNoRoam\MUICache` 키가 없었습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 같은 키가 `HKEY_USERS\<SID>_Classes\Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로도 열렸습니다. 두 경로의 값 수(218)가 같았습니다.
+- 같은 PC 의 하이브 목록에서 `<SID>_Classes` 의 파일은 `C:\Users\<user>\AppData\Local\Microsoft\Windows\UsrClass.dat` 였습니다. 오프라인에서는 UsrClass.dat 를 열고 `Local Settings\Software\Microsoft\Windows\Shell\MuiCache` 로 들어갑니다.
+- 같은 PC 에는 XP 용 `ShellNoRoam\MUICache` 키가 없었습니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
 ## 구조
 
-아래는 Windows 11 PC 한 대에서 본 값의 형태입니다. (확인 범위: Win11 25H2 한 대)
+아래는 Windows 11 PC 한 대에서 본 값의 형태입니다.
 
 ```
 MuiCache
@@ -47,7 +47,7 @@ MuiCache
 
 ### 앱 이름과 파일 버전 정보 비교
 
-같은 PC 에서 `.FriendlyAppName` 을 파일의 버전 정보와 맞춰 보았습니다. (확인 범위: Win11 25H2 한 대)
+같은 PC 에서 `.FriendlyAppName` 을 파일의 버전 정보와 맞춰 보았습니다.
 
 | 비교 | 결과 |
 |---|---|
@@ -83,9 +83,9 @@ MuiCache
 
 ## 함정과 한계
 
-- **NTUSER.DAT 만 수집하면 놓칩니다.** Windows 11 PC 한 대에서 이 키는 UsrClass.dat 에 있었습니다. 사용자 프로필마다 두 하이브를 함께 수집합니다. (확인 범위: Win11 25H2 한 대)
+- **NTUSER.DAT 만 수집하면 놓칩니다.** Windows 11 PC 한 대에서 이 키는 UsrClass.dat 에 있었습니다. 사용자 프로필마다 두 하이브를 함께 수집합니다.
 - **앱 이름이 파일의 FileDescription 과 다를 수 있습니다.** 현지화된 이름이 들어가거나, 파일 이름이 대신 들어갈 수 있습니다. 앱 이름으로 파일을 찾을 때는 경로를 기준으로 삼습니다.
-- **.exe 만 있지 않습니다.** Windows 11 PC 한 대에는 .dll·.bat 경로도 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **.exe 만 있지 않습니다.** Windows 11 PC 한 대에는 .dll·.bat 경로도 있었습니다.
 - **XP 와 Vista 이후의 경로가 다릅니다.** 검체 버전에 맞는 경로를 봅니다.
 - **항목은 지울 수 있습니다.** 다만 NirSoft 에 따르면 다시 실행하면 다시 생깁니다. 값이 적거나 없으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 - **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 함께 수집합니다.

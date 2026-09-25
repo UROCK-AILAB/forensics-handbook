@@ -6,7 +6,7 @@ nav_order: 2450
 
 # 윈도 방화벽 (Windows Firewall: 규칙·pfirewall.log)
 
-> 이 페이지에서 "(확인 범위: 조사 PC)" 는 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 사실을 뜻합니다. "(확인 범위: 조사 PC 시험)" 은 같은 PC 에서 방화벽 로그를 일부러 켰다가 끄며 본 사실입니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
+> 이 페이지에서 "" 는 Windows 11 Home 25H2(빌드 26200.9457) PC 한 대에서 직접 본 사실을 뜻합니다. "" 은 같은 PC 에서 방화벽 로그를 일부러 켰다가 끄며 본 사실입니다. 다른 버전이나 다른 PC 에서는 따로 확인해야 합니다.
 
 ## 한 줄 요약
 
@@ -37,16 +37,16 @@ nav_order: 2450
 |---|---|---|
 | 방화벽 설정 기본 키 | SYSTEM `CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy` | ForensicArtifacts 가 정의한 위치입니다. 조사 PC 에서도 같았습니다 |
 | 프로필 설정 | `...\FirewallPolicy\DomainProfile`·`StandardProfile`·`PublicProfile` | `StandardProfile` 이 "개인 (Private)" 프로필이라는 대응은 이번에 확인하지 못했습니다 |
-| 규칙 | `...\FirewallPolicy\FirewallRules` | 조사 PC 에는 581개가 있었습니다 (확인 범위: 조사 PC) |
-| 스토어 앱 규칙 | `...\FirewallPolicy\RestrictedServices\AppIso\FirewallRules` | 조사 PC 에는 540개가 있었습니다 (확인 범위: 조사 PC) |
-| 로그 설정 | 각 프로필 키 아래 `Logging` | (확인 범위: 조사 PC) |
+| 규칙 | `...\FirewallPolicy\FirewallRules` | 조사 PC 에는 581개가 있었습니다 |
+| 스토어 앱 규칙 | `...\FirewallPolicy\RestrictedServices\AppIso\FirewallRules` | 조사 PC 에는 540개가 있었습니다 |
+| 로그 설정 | 각 프로필 키 아래 `Logging` | |
 | 통신 로그 | `%windir%\system32\logfiles\firewall\pfirewall.log` | 기본 경로입니다(Microsoft 문서, ForensicArtifacts) |
-| 이벤트 채널 | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx` 입니다. 기본으로 켜져 있고 최대 1MB 입니다 (확인 범위: 조사 PC) |
-| 같은 공급자의 다른 채널 | ConnectionSecurity·FirewallDiagnostics(켜짐), FirewallVerbose·ConnectionSecurityVerbose(꺼짐) | 내용은 이번에 확인하지 않았습니다 (확인 범위: 조사 PC) |
+| 이벤트 채널 | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx` 입니다. 기본으로 켜져 있고 최대 1MB 입니다 |
+| 같은 공급자의 다른 채널 | ConnectionSecurity·FirewallDiagnostics(켜짐), FirewallVerbose·ConnectionSecurityVerbose(꺼짐) | 내용은 이번에 확인하지 않았습니다 |
 | Security 로그 | 4946~4948·4950, 5024·5025, 5031, 5152·5156·5157 | 감사 정책을 켜야 남습니다 |
-| 그룹 정책 | `HKLM\SOFTWARE\Policies\Microsoft\WindowsFirewall` | 조사 PC 에는 이 키가 없었습니다. 그룹 정책을 적용하지 않은 PC 입니다 (확인 범위: 조사 PC) |
+| 그룹 정책 | `HKLM\SOFTWARE\Policies\Microsoft\WindowsFirewall` | 조사 PC 에는 이 키가 없었습니다. 그룹 정책을 적용하지 않은 PC 입니다 |
 
-- 조사 PC 의 `FirewallPolicy` 아래에는 DomainProfile, StandardProfile, PublicProfile, FirewallRules, RestrictedServices, RestrictedInterfaces, DynamicKeywords, HyperVFirewallPolicy, HyperVVMCreators, Mdm, TenantRestrictions 하위 키가 있었습니다. (확인 범위: 조사 PC)
+- 조사 PC 의 `FirewallPolicy` 아래에는 DomainProfile, StandardProfile, PublicProfile, FirewallRules, RestrictedServices, RestrictedInterfaces, DynamicKeywords, HyperVFirewallPolicy, HyperVVMCreators, Mdm, TenantRestrictions 하위 키가 있었습니다.
 - 오프라인 SYSTEM 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키가 가리키는 `ControlSet00n` 을 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 옛 방식의 예외 목록은 윈도 버전마다 위치가 다릅니다. ForensicArtifacts 는 아래 위치를 수집 대상으로 정의합니다.
@@ -56,7 +56,7 @@ nav_order: 2450
 | XP·2003 | `HKLM\Software\Policies\Microsoft\WindowsFirewall\<프로필>\...` |
 | Vista 이후 | `...\FirewallPolicy\<프로필>\AuthorizedApplications\List`, `...\FirewallPolicy\<프로필>\GloballyOpenPorts\List` |
 
-규칙 이벤트 번호도 두 벌입니다. 공급자에는 옛 번호와 새 번호가 모두 정의돼 있지만, 조사 PC 에 실제로 남은 것은 새 번호뿐이었습니다. (확인 범위: 조사 PC) 어느 윈도 버전부터 새 번호로 바뀌었는지는 확인하지 못했습니다.
+규칙 이벤트 번호도 두 벌입니다. 공급자에는 옛 번호와 새 번호가 모두 정의돼 있지만, 조사 PC 에 실제로 남은 것은 새 번호뿐이었습니다. 어느 윈도 버전부터 새 번호로 바뀌었는지는 확인하지 못했습니다.
 
 | 뜻 | 옛 번호 | 새 번호 |
 |---|---|---|
@@ -68,7 +68,7 @@ nav_order: 2450
 | 기본값으로 초기화 | 2032 | 2060 |
 | 모든 규칙 삭제 | 2033 | 2059 |
 
-새 번호의 메시지에는 Error Code 가 붙습니다. 2097·2099 에는 PolicyAppId 도 붙습니다. (확인 범위: 조사 PC)
+새 번호의 메시지에는 Error Code 가 붙습니다. 2097·2099 에는 PolicyAppId 도 붙습니다.
 
 ## 구조
 
@@ -112,21 +112,21 @@ v2.33|Action=Allow|Active=FALSE|Dir=Out|Protocol=6|Profile=Public|RPort=2869|RA4
 | `Defer` | `User` | 다른 규칙에서 본 칸입니다. 뜻은 확인하지 못했습니다 |
 | `TTK2_22` | `WFDPrint` | 다른 규칙에서 본 칸입니다. 뜻은 확인하지 못했습니다 |
 
-값 이름과 `Name` 칸의 모양으로 규칙이 어디서 왔는지 가립니다. (확인 범위: 조사 PC)
+값 이름과 `Name` 칸의 모양으로 규칙이 어디서 왔는지 가립니다.
 
 | 규칙 | 값 이름 | `Name` 칸 |
 |---|---|---|
 | 윈도 기본 규칙 | 규칙 ID. 예: `NETDIS-UPnPHost-Out-TCP` | `@FirewallAPI.dll,-번호` 같은 리소스 참조 |
 | 프로그램이 추가한 규칙 | `{GUID}` | 평문 이름. 조사 PC 에는 72개가 있었습니다 |
 
-- 조사 PC 의 규칙 581개 가운데 569개는 버전이 `v2.33`, 12개는 `v2.10` 이었습니다. (확인 범위: 조사 PC)
-- `v2.10` 12개는 이름이 모두 `TCP Query User{GUID}<실행 파일 경로>` 나 `UDP Query User{GUID}<경로>` 꼴이었습니다. 모두 받는 방향(`Dir=In`) 허용 규칙이었고 `Defer=User` 가 붙어 있었습니다. (확인 범위: 조사 PC)
-- 이 Query User 규칙에는 사용자 폴더 아래 실행 파일 경로가 그대로 들어 있었습니다. (확인 범위: 조사 PC)
+- 조사 PC 의 규칙 581개 가운데 569개는 버전이 `v2.33`, 12개는 `v2.10` 이었습니다.
+- `v2.10` 12개는 이름이 모두 `TCP Query User{GUID}<실행 파일 경로>` 나 `UDP Query User{GUID}<경로>` 꼴이었습니다. 모두 받는 방향(`Dir=In`) 허용 규칙이었고 `Defer=User` 가 붙어 있었습니다.
+- 이 Query User 규칙에는 사용자 폴더 아래 실행 파일 경로가 그대로 들어 있었습니다.
 - Query User 규칙이 "방화벽이 일부 기능을 차단했습니다" 알림에 사용자가 답할 때 생긴다는 설명은 확인하지 못했습니다.
 
 ### 로그 설정
 
-각 프로필 키 아래 `Logging` 하위 키에 로그 설정이 있습니다. (확인 범위: 조사 PC)
+각 프로필 키 아래 `Logging` 하위 키에 로그 설정이 있습니다.
 
 | 값 | 조사 PC 값 |
 |---|---|
@@ -141,7 +141,7 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 
 ### pfirewall.log
 
-머리글은 네 줄입니다. (확인 범위: 조사 PC 시험)
+머리글은 네 줄입니다.
 
 ```
 #Version: 1.5
@@ -170,14 +170,14 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 | `path` | `SEND` | `SEND` 나 `RECEIVE` 입니다 |
 | `pid` | `41752` | 프로세스 ID 입니다. 프로그램 이름은 없습니다 |
 
-- 빈 칸은 `-` 로 채웁니다. (확인 범위: 조사 PC 시험)
-- 파일 인코딩은 ASCII, 줄바꿈은 CRLF 였습니다. (확인 범위: 조사 PC 시험)
-- 머리글 바로 뒤에 NUL(0x00) 212바이트가 있었고, 그 뒤에 첫 기록이 이어졌습니다. (확인 범위: 조사 PC 시험)
-- Public 프로필에서 두 옵션을 모두 켜자 약 6분 동안 54줄이 쌓였습니다. `ALLOW` 가 37줄, `DROP` 이 13줄이었습니다. (확인 범위: 조사 PC 시험)
+- 빈 칸은 `-` 로 채웁니다.
+- 파일 인코딩은 ASCII, 줄바꿈은 CRLF 였습니다.
+- 머리글 바로 뒤에 NUL(0x00) 212바이트가 있었고, 그 뒤에 첫 기록이 이어졌습니다.
+- Public 프로필에서 두 옵션을 모두 켜자 약 6분 동안 54줄이 쌓였습니다. `ALLOW` 가 37줄, `DROP` 이 13줄이었습니다.
 
 ### 방화벽 이벤트 채널
 
-조사 PC 에 실제로 남은 이벤트 수입니다. (확인 범위: 조사 PC)
+조사 PC 에 실제로 남은 이벤트 수입니다.
 
 | ID | 뜻 | 건수 |
 |---|---|---|
@@ -190,16 +190,16 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 | 2059 | 모든 규칙 삭제 | 7 |
 | 2004·2005·2006 | 옛 번호 규칙 추가·수정·삭제 | 0 |
 
-2097 메시지에는 아래 칸이 있습니다. (확인 범위: 조사 PC)
+2097 메시지에는 아래 칸이 있습니다.
 
 - Rule ID, Rule Name, Origin, Active, Direction, Profiles, Action, Application Path, Service Name, Protocol, Security Options, Edge Traversal, Modifying User, Modifying Application, PolicyAppId, Error Code
 
-2097 이벤트 데이터의 칸 이름은 RuleId, RuleName, Origin, ApplicationPath, ServiceName, Direction, Protocol, LocalPorts, RemotePorts, Action, Profiles, LocalAddresses, RemoteAddresses, EmbeddedContext, Flags, Active, EdgeTraversal, SecurityOptions, ModifyingUser, ModifyingApplication, SchemaVersion, RuleStatus, PolicyAppId, ErrorCode 등입니다. (확인 범위: 조사 PC)
+2097 이벤트 데이터의 칸 이름은 RuleId, RuleName, Origin, ApplicationPath, ServiceName, Direction, Protocol, LocalPorts, RemotePorts, Action, Profiles, LocalAddresses, RemoteAddresses, EmbeddedContext, Flags, Active, EdgeTraversal, SecurityOptions, ModifyingUser, ModifyingApplication, SchemaVersion, RuleStatus, PolicyAppId, ErrorCode 등입니다.
 
-- 스토어 앱 규칙을 더하고 지운 기록은 `ModifyingUser` 가 서비스 SID(`S-1-5-80-…`), `ModifyingApplication` 이 `C:\WINDOWS\System32\svchost.exe` 로 남았습니다. (확인 범위: 조사 PC)
-- `netsh` 로 로그 설정을 바꾸자 2082 가 두 건 남았습니다. 하나는 "Type: Log Dropped Packets Value: 예", 다른 하나는 "Type: Log Successful Connections Value: 예" 였습니다. Modifying User 에는 사용자 SID, Modifying Application 에는 `C:\Windows\System32\netsh.exe` 가 들어 있었습니다. (확인 범위: 조사 PC 시험)
-- 2010 에는 Adapter GUID, Adapter Name, Old Profile, New Profile 칸이 있습니다. (확인 범위: 조사 PC)
-- 2011 은 받는 연결을 막았지만 사용자에게 알리지 못한 기록입니다. Application Path, Protocol, Port, Process Id, User 칸이 있습니다. (확인 범위: 조사 PC)
+- 스토어 앱 규칙을 더하고 지운 기록은 `ModifyingUser` 가 서비스 SID(`S-1-5-80-…`), `ModifyingApplication` 이 `C:\WINDOWS\System32\svchost.exe` 로 남았습니다.
+- `netsh` 로 로그 설정을 바꾸자 2082 가 두 건 남았습니다. 하나는 "Type: Log Dropped Packets Value: 예", 다른 하나는 "Type: Log Successful Connections Value: 예" 였습니다. Modifying User 에는 사용자 SID, Modifying Application 에는 `C:\Windows\System32\netsh.exe` 가 들어 있었습니다.
+- 2010 에는 Adapter GUID, Adapter Name, Old Profile, New Profile 칸이 있습니다.
+- 2011 은 받는 연결을 막았지만 사용자에게 알리지 못한 기록입니다. Application Path, Protocol, Port, Process Id, User 칸이 있습니다.
 
 ### Security 로그의 방화벽 이벤트
 
@@ -218,7 +218,7 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 | 5156 | WFP 가 연결을 허용함 | 같음 |
 | 5157 | WFP 가 연결을 막음 | 같음 |
 
-(확인 범위: 조사 PC)
+
 
 WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156·5157 에는 프로세스 경로가 있습니다. 그래서 pid 만 남는 `pfirewall.log` 보다 프로그램을 잇기 쉽습니다.
 
@@ -247,25 +247,25 @@ WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156�
 ## 시각 해석
 
 - `pfirewall.log` 의 시각은 현지 시각이고 시간대 표시가 없습니다(`#Time Format: Local`). UTC 로 바꾸려면 그 PC 의 [시간대 설정](../system-account/time-zone.md)을 따로 확인합니다.
-- 로그를 켠 직후의 통신은 바로 파일에 쓰이지 않았습니다. 약 1분 뒤에 다시 보니 들어와 있었습니다. (확인 범위: 조사 PC 시험) 수집 직전의 통신은 파일에 아직 없을 수 있습니다.
+- 로그를 켠 직후의 통신은 바로 파일에 쓰이지 않았습니다. 약 1분 뒤에 다시 보니 들어와 있었습니다. 수집 직전의 통신은 파일에 아직 없을 수 있습니다.
 - 레지스트리 값에는 시각이 없습니다. `FirewallRules` 키의 마지막 기록 시각은 어느 규칙이 바뀌었는지 알려 주지 않습니다. 규칙마다 언제 생겼는지는 2097 로 봅니다.
 - 이벤트 시각은 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
-- 조사 PC 의 방화벽 채널(1MB)에는 992건이 있었습니다. 2026-09-05 부터 2026-09-23 까지 약 18일만 남아 있었습니다. (확인 범위: 조사 PC)
+- 조사 PC 의 방화벽 채널(1MB)에는 992건이 있었습니다. 2026-09-05 부터 2026-09-23 까지 약 18일만 남아 있었습니다.
 
 ## 함정과 한계
 
-1. **로그는 기본으로 꺼져 있습니다.** 조사 PC 는 시험 전에 `LogFiles\Firewall` 폴더 자체가 없었습니다. `netsh` 로 로그를 켜자 방화벽 서비스가 폴더와 파일을 만들었습니다. (확인 범위: 조사 PC 시험)
+1. **로그는 기본으로 꺼져 있습니다.** 조사 PC 는 시험 전에 `LogFiles\Firewall` 폴더 자체가 없었습니다. `netsh` 로 로그를 켜자 방화벽 서비스가 폴더와 파일을 만들었습니다.
 2. **로그를 켜도 파일이 생기지 않을 수 있습니다.** Microsoft 문서에 따르면 로그 폴더나 파일에 방화벽 서비스(`NT SERVICE\mpssvc`)의 쓰기 권한이 없으면 로그가 생기지 않습니다. 정책으로 로그를 켰는데 기본 폴더 `%windir%\System32\LogFiles\firewall` 이 없을 때도 생기지 않습니다.
 3. **로그 크기에 한도가 있습니다.** 문서는 최대 크기에 이르면 오래된 항목을 지우고 새 항목을 쓴다고 적었습니다. 조사 PC 시험에서는 로그를 켜자 `pfirewall.log` 와 함께 0바이트 `pfirewall.log.old` 가 생겼습니다. `.old` 파일도 함께 수집합니다.
 4. **파일 이름이 기본값과 다를 수 있습니다.** 프로필마다 파일을 나누었을 수 있습니다. 각 프로필의 `LogFilePath` 를 먼저 읽습니다.
 5. **시각이 현지 시각입니다.** UTC 로 적힌 다른 기록과 섞을 때 시간대를 먼저 맞춥니다.
 6. **pid 만 있습니다.** 프로세스 ID 는 다시 쓰일 수 있습니다. 같은 시각의 다른 기록으로 프로그램을 잇습니다.
 7. **첫 기록 앞에 NUL 바이트가 있습니다.** 텍스트 도구가 첫 줄을 깨뜨려 보여 줄 수 있습니다. NUL 을 지우고 읽습니다.
-8. **라이브 수집에서 파일이 잠겨 있습니다.** 서비스가 파일을 연 채로 있어 보통 방식으로 읽으면 "다른 프로세스가 사용 중" 오류가 났습니다. 쓰기 공유(`FileShare.ReadWrite`)를 허용해 열면 읽혔습니다. (확인 범위: 조사 PC 시험) 라이브 수집은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
+8. **라이브 수집에서 파일이 잠겨 있습니다.** 서비스가 파일을 연 채로 있어 보통 방식으로 읽으면 "다른 프로세스가 사용 중" 오류가 났습니다. 쓰기 공유(`FileShare.ReadWrite`)를 허용해 열면 읽혔습니다. 라이브 수집은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
 9. **방화벽 채널은 빨리 밀려납니다.** 최대 1MB 인데 스토어 앱 규칙이 자주 추가·삭제됩니다. 조사 PC 에는 약 18일만 남아 있었습니다.
 10. **옛 번호로만 찾으면 놓칩니다.** 조사 PC(25H2)에는 2004·2005·2006 이 한 건도 없었습니다. 2097·2099·2052 도 함께 찾습니다.
-11. **값이 표시 언어로 번역돼 남습니다.** 2082 의 Value 가 "예" 로 남았습니다. (확인 범위: 조사 PC 시험) 영어 "Yes" 만 검색하면 놓칩니다.
-12. **숫자 칸의 뜻 표를 확인하지 못했습니다.** 규칙 ID 가 `...-Out-Block` 인 규칙의 2097 에서 `Direction=2`, `Action=2`, `Protocol=256`, `Profiles=2147483647` 이었습니다. (확인 범위: 조사 PC) 숫자마다 뜻은 자료로 확인하지 못했습니다. 메시지 문장과 함께 읽습니다.
+11. **값이 표시 언어로 번역돼 남습니다.** 2082 의 Value 가 "예" 로 남았습니다. 영어 "Yes" 만 검색하면 놓칩니다.
+12. **숫자 칸의 뜻 표를 확인하지 못했습니다.** 규칙 ID 가 `...-Out-Block` 인 규칙의 2097 에서 `Direction=2`, `Action=2`, `Protocol=256`, `Profiles=2147483647` 이었습니다. 숫자마다 뜻은 자료로 확인하지 못했습니다. 메시지 문장과 함께 읽습니다.
 13. **레지스트리를 직접 고친 경우는 확인하지 못했습니다.** 악성코드가 프로필 값을 바꾼다는 설명이 있습니다(ForensicArtifacts). 레지스트리 값을 직접 고쳐도 2082 가 남는지는 이번에 확인하지 못했습니다. 이벤트가 없다고 설정이 그대로였다고 보지 않습니다.
 
 ## 직접 분석해 보기
@@ -346,7 +346,7 @@ netsh advfirewall monitor show firewall rule name=all
 |---|---|---|
 | Sysmon 로그 | 프로세스와 묶인 네트워크 연결 기록 | [Sysmon 로그](../event-logs/sysmon/index.md) |
 | SRUM | 앱별 네트워크 사용량 | [SRUM](../execution/system-resource-usage-monitor/index.md) |
-| 프리페치 | `netsh` 로 로그를 켠 뒤 `NETSH.EXE` 항목이 생기거나 갱신됐습니다 (확인 범위: 조사 PC 시험) | [프리페치](../execution/prefetch/index.md) |
+| 프리페치 | `netsh` 로 로그를 켠 뒤 `NETSH.EXE` 항목이 생기거나 갱신됐습니다 | [프리페치](../execution/prefetch/index.md) |
 | PowerShell 명령 기록 | `netsh`·방화벽 설정 명령이 남았는지 | [PowerShell 명령 기록](../execution/consolehost-history-txt.md) |
 | 사용자 계정 | 2097·2082 의 사용자 SID 가 어느 계정인지 | [사용자 계정](../system-account/sam.md), [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) |
 | 시간대 설정 | `pfirewall.log` 현지 시각을 UTC 로 바꿀 때 | [시간대 설정](../system-account/time-zone.md) |

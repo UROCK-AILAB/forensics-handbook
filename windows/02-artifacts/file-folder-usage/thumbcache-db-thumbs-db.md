@@ -31,7 +31,7 @@ XP 의 Thumbs.db 는 폴더를 미리 보기 (thumbnail) 보기로 볼 때 Windo
 
 중앙 캐시는 사용자 프로필 폴더 안에 있어서 어느 계정의 캐시인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
-Windows 11 25H2 PC 한 대의 `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 폴더에서 본 파일은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대의 `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 폴더에서 본 파일은 다음과 같습니다.
 
 - `thumbcache_16`, `_32`, `_48`, `_96`, `_256`, `_768`, `_1280`, `_1920`, `_2560`, `_custom_stream`, `_exif`, `_idx`, `_sr`, `_wide`, `_wide_alternate` (모두 확장자 `.db`)
 - `thumbcache_1920`, `_2560`, `_custom_stream`, `_sr`, `_wide_alternate` 는 크기가 24바이트였습니다. 헤더만 있고 항목이 없는 파일입니다.
@@ -49,7 +49,7 @@ Windows 11 25H2 PC 한 대의 `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 폴더
 | 31 | 8.1 |
 | 32 | 10 · 11 |
 
-Windows 11 25H2 PC 한 대에서는 모든 thumbcache 파일의 형식 버전이 `0x20` (32) 이었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대에서는 모든 thumbcache 파일의 형식 버전이 `0x20` (32) 이었습니다.
 
 ### Thumbs.db 가 생기는 조건
 
@@ -77,7 +77,7 @@ Windows 11 25H2 PC 한 대에서는 모든 thumbcache 파일의 형식 버전이
 | 16 | 4 | 첫 빈 캐시 항목의 오프셋 |
 | 20 | 4 | 캐시 항목 수. 문서에 정확성 의문 표시가 붙어 있습니다 |
 
-형식 버전 32 파일에서는 오프셋 12 뒤의 값이 이 표와 한 칸씩 어긋나 보였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+형식 버전 32 파일에서는 오프셋 12 뒤의 값이 이 표와 한 칸씩 어긋나 보였습니다.
 
 - 오프셋 12 는 0 이었습니다.
 - 오프셋 16 은 24 였습니다. 실제 첫 `CMMM` 항목이 24 에서 시작했습니다.
@@ -106,7 +106,7 @@ Windows 11 25H2 PC 한 대에서는 모든 thumbcache 파일의 형식 버전이
 | 12 | | | | wide_alternate |
 | 13 | | | | custom_stream |
 
-표의 이름은 `thumbcache_<이름>.db` 의 파일 이름과 맞춰 읽습니다. Windows 11 25H2 PC 한 대에서 `thumbcache_16` 은 0, `_96` 은 3, `_256` 은 4, `_1280` 은 6, `_1920` 은 7 이었습니다. 버전 32 열과 맞았습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+표의 이름은 `thumbcache_<이름>.db` 의 파일 이름과 맞춰 읽습니다. Windows 11 25H2 PC 한 대에서 `thumbcache_16` 은 0, `_96` 은 3, `_256` 은 4, `_1280` 은 6, `_1920` 은 7 이었습니다. 버전 32 열과 맞았습니다.
 
 ### 캐시 항목 (버전 30 이후)
 
@@ -137,7 +137,7 @@ Windows 11 25H2 PC 한 대에서는 모든 thumbcache 파일의 형식 버전이
 - CRC-64 의 다항식은 알려져 있지 않습니다. 조회표는 `thumbcache.dll` 안에 있습니다. 문서는 계산할 때 처음과 마지막에 -1 로 XOR 하지 않는다고 적습니다. 헤더 체크섬 칸 설명에는 초기값을 -1 로 둔다고 적혀 있습니다.
 - 문자열 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
-Windows 11 25H2 PC 한 대에서 본 내용은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대에서 본 내용은 다음과 같습니다.
 
 - `thumbcache_256.db` 는 항목 2,433개를 끝까지 따라갈 수 있었습니다. 데이터 없는 항목이 972개, JPEG 가 1,010개, PNG 가 451개였습니다.
 - `thumbcache_96.db` 는 항목 429개 가운데 BMP 가 428개, 데이터 없는 항목이 1개였습니다.
@@ -156,7 +156,7 @@ Windows 11 25H2 PC 한 대에서 본 내용은 다음과 같습니다. (확인 �
 | 오프셋 16 | 전체 항목 수 | 오프셋 20 | 사용 중 항목 수 |
 | 오프셋 20 | 빈 값 | 오프셋 24 | 전체 항목 수 |
 
-Windows 11 25H2 PC 한 대의 색인 파일은 오프셋 4 에 `IMMM`, 8 에 `0x20` (32) 이 있었습니다. 오프셋 20 은 2,926, 오프셋 24 는 6,464 였습니다. 버전 30 이후 표와 맞았습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대의 색인 파일은 오프셋 4 에 `IMMM`, 8 에 `0x20` (32) 이 있었습니다. 오프셋 20 은 2,926, 오프셋 24 는 6,464 였습니다. 버전 30 이후 표와 맞았습니다.
 
 색인 항목 하나의 크기는 버전마다 다릅니다.
 

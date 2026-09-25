@@ -20,7 +20,7 @@ Windows Vista 부터 이벤트 로그는 EVTX 형식으로 저장됩니다. XP·
 - 메시지를 보여 주는 프로그램마다 레지스트리와 메시지 파일을 따로 읽습니다. 그래서 프로그램마다 이벤트 뷰어와 다른 문장이 나올 수 있습니다.
 - EVTX 파일 안에는 정상 레코드 목록에서 빠진 옛 레코드가 남을 수 있습니다.
 - 손상된 EVTX 파일은 도구마다 읽어 내는 건수가 달랐습니다(libevtx 명세의 사례). 한 도구의 건수만 믿지 않습니다.
-- `.etl` 파일의 머리 정보에는 세션 시작 시각과 시스템 부팅 시각이 남습니다. 확인 PC 에서는 번호가 붙은 `.etl` 파일에 이전 부팅의 시각도 남아 있었습니다(확인 범위: Windows 11 25H2 PC 한 대).
+- `.etl` 파일의 머리 정보에는 세션 시작 시각과 시스템 부팅 시각이 남습니다. 확인 PC 에서는 번호가 붙은 `.etl` 파일에 이전 부팅의 시각도 남아 있었습니다.
 - EVTX 와 ETW 는 레지스트리 설정에서 이어집니다. 확인 PC 의 ETW 설정 키(Autologger)에는 System 채널을 가리키는 세션이 있었습니다. 자세한 값은 [ETW 추적 로그 (ETL)](etl.md) 에 있습니다.
 
 ## 한눈에 보기
@@ -55,7 +55,7 @@ Windows Vista 부터 이벤트 로그는 EVTX 형식으로 저장됩니다. XP·
 - EVTX 의 채널 (Channel) 종류는 Admin·Analytic·Debug·Operational 넷입니다.
 - 채널 설정은 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels` 아래에 있습니다. 공급자 설정은 `WINEVT\Publishers` 아래에 있습니다.
 
-확인 PC 에서 본 규모입니다(확인 범위: Windows 11 25H2 PC 한 대).
+확인 PC 에서 본 규모입니다.
 
 - `winevt\Logs` 안의 `.evtx` 파일은 225개였습니다.
 - `WINEVT\Channels` 아래 채널 키는 1,169개, `WINEVT\Publishers` 아래 공급자 키는 933개였습니다.

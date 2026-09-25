@@ -23,7 +23,7 @@ USB 저장장치를 꽂으면 그 볼륨이 WPD 장치로도 한 번 더 등록�
 
 EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스트는 USB 메모리 같은 플래시 장치를 디스크 캐시로 쓰는 기능이고 Windows Vista 에서 처음 나왔습니다. "EMD" 는 흔히 외부 메모리 장치 (External Memory Device) 의 줄임말로 풀이하지만, 이 풀이를 공식 문서로 확인하지는 못했습니다.
 
-플래시 장치를 꽂으면 레디부스트 서비스가 장치 성능을 검사하고 검사 결과를 `EMDMgmt` 아래에 적습니다(Russinovich). 사용자가 그 장치를 레디부스트용으로 쓰지 않아도 하위 키는 생깁니다(Cowen, 확인 범위: Vista·7). USB 메모리뿐만 아니라 eSATA·FireWire 장치와 시스템 디스크가 아닌 로컬 디스크도 남는다고 Cowen 이 적었습니다. 그래서 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
+플래시 장치를 꽂으면 레디부스트 서비스가 장치 성능을 검사하고 검사 결과를 `EMDMgmt` 아래에 적습니다(Russinovich). 사용자가 그 장치를 레디부스트용으로 쓰지 않아도 하위 키는 생깁니다(Cowen, Vista·7 기준). USB 메모리뿐만 아니라 eSATA·FireWire 장치와 시스템 디스크가 아닌 로컬 디스크도 남는다고 Cowen 이 적었습니다. 그래서 [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)의 볼륨을 찾을 때도 이 키를 봅니다.
 
 ## 위치와 버전별 차이
 

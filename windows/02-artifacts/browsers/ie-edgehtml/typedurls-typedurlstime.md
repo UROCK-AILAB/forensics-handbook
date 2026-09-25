@@ -26,7 +26,7 @@ RegRipper 의 `typedurlstime` 플러그인은 `TypedURLsTime` 의 시각을 주�
 
 - 공개 수집 정의(ForensicArtifacts)는 이 키를 `HKEY_USERS\{사용자 SID}\Software\Microsoft\Internet Explorer\TypedURLs\*` 로 적습니다. 사용자 SID 와 계정 이름을 잇는 방법은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 다룹니다.
 - `TypedURLsTime` 은 Windows 8 에서 나온 값으로 소개됐습니다. 그보다 앞선 Windows 검체에는 이 키가 없을 수 있습니다.
-- Windows 11 25H2 PC 의 `TypedURLs` 키에는 `url1` 값 하나(REG_SZ)가 있었습니다. `TypedURLsTime` 키는 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+- Windows 11 25H2 PC 의 `TypedURLs` 키에는 `url1` 값 하나(REG_SZ)가 있었습니다. `TypedURLsTime` 키는 없었습니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -44,7 +44,7 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
     …
 ```
 
-- `TypedURLs` 의 값은 문자열입니다. 한 PC 에서 본 값의 형식은 REG_SZ 였습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+- `TypedURLs` 의 값은 문자열입니다. 한 PC 에서 본 값의 형식은 REG_SZ 였습니다.
 - `TypedURLsTime` 의 값은 8바이트이고 FILETIME 으로 읽습니다.
 - `TypedURLs\url3` 의 시각은 `TypedURLsTime\url3` 에 있습니다. 번호가 같은 값끼리 짝입니다.
 
@@ -74,7 +74,7 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 ## 함정과 한계
 
 - **IE 가 켜진 채로 수집하면 최근 입력이 빠질 수 있습니다.** IE 를 끝내기 전에는 새 항목이 키에 추가되지 않는다는 주의가 있습니다. 라이브 수집에서는 이 점을 기록해 둡니다.
-- **`TypedURLsTime` 이 없을 수 있습니다.** Windows 8 에서 소개된 키입니다. Windows 11 PC 한 대에서도 이 키가 없었습니다. (확인 범위: Windows 11 25H2, 빌드 26200 PC 한 대)
+- **`TypedURLsTime` 이 없을 수 있습니다.** Windows 8 에서 소개된 키입니다. Windows 11 PC 한 대에서도 이 키가 없었습니다.
 - **번호가 같은지 꼭 확인합니다.** 두 키의 값 개수가 다를 수 있습니다. 짝이 없는 값에 다른 번호의 시각을 붙이지 않습니다.
 - **값이 없다고 입력이 없었던 것은 아닙니다.** 값은 지우거나 덮일 수 있습니다. 이전 시점의 하이브를 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다.
 - **하이브 사본만 보면 최근 변경이 빠질 수 있습니다.** 하이브 로그를 반영하는 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.

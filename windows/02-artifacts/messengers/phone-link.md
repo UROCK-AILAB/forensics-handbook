@@ -44,7 +44,7 @@ C:\Users\<사용자>\AppData\Local\Packages\Microsoft.YourPhone_8wekyb3d8bbwe\Lo
 
 ### 관찰한 PC
 
-이 절은 Windows 11 PC 한 대에서 본 것입니다(확인 범위: Windows 11 PC 한 대, 패키지 1.26072.255.0).
+이 절은 Windows 11, 휴대폰과 연결 패키지 1.26072.255.0 기준입니다.
 
 패키지 폴더에 `LocalCache\Indexed` 가 없었지만, 이 PC 에서 휴대폰을 연결해 쓴 적이 없는지는 모릅니다. `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json`, `YppCryptoTrustRelationships`, `Local\`, `Roaming\` 이 있었습니다. 패키지 폴더의 `Settings\` 에는 `settings.dat` 와 `settings.dat.LOG1`·`settings.dat.LOG2` 가 있었고, 이 파일의 형식은 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 

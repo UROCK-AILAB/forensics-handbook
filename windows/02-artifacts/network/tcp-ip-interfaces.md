@@ -31,11 +31,11 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkCards\<번호>
     Description   어댑터 이름
 ```
 
-- `ServiceName` 이 인터페이스 GUID 이고, `Description` 이 어댑터 이름입니다. (확인 범위: Win11 25H2 한 대)
-- Windows 11 PC 한 대에서 `ServiceName` 4개 모두 Tcpip `Interfaces` 의 하위 키 이름과 같았습니다. (확인 범위: Win11 25H2 한 대)
+- `ServiceName` 이 인터페이스 GUID 이고, `Description` 이 어댑터 이름입니다.
+- Windows 11 PC 한 대에서 `ServiceName` 4개 모두 Tcpip `Interfaces` 의 하위 키 이름과 같았습니다.
 - Wi-Fi 프로필 폴더의 인터페이스 GUID 도 이 키 이름과 같았습니다. [Wi-Fi 프로필](wlan-profiles.md) 에서 다룹니다.
 
-**Windows 11 PC 한 대에서 본 것** (확인 범위: Win11 25H2 한 대)
+**Windows 11 PC 한 대에서 본 것**
 
 - 인터페이스 하위 키가 12개였습니다. 그중 2개는 값이 하나도 없었습니다.
 - `Tcpip6\Parameters\Interfaces` 도 있었습니다(하위 키 13개). 이 페이지에서는 내용을 다루지 않습니다.
@@ -55,7 +55,7 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkCards\<번호>
 
 ### 인터페이스 키의 값 (DHCP)
 
-Windows 11 PC 한 대에서 DHCP 를 쓰는 인터페이스에 있던 값입니다. 묶음은 값 이름으로 나눈 것입니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 DHCP 를 쓰는 인터페이스에 있던 값입니다. 묶음은 값 이름으로 나눈 것입니다.
 
 | 묶음 | 값 |
 |---|---|
@@ -73,7 +73,7 @@ Microsoft 문서가 적는 내용은 아래와 같습니다.
 
 RegRipper nic2 플러그인은 `T1`, `T2`, 이름이 `Time` 으로 끝나는 값을 Unix 시각으로 바꿔 UTC(Z)로 표시합니다.
 
-Windows 11 PC 한 대에서 본 관계는 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 관계는 아래와 같습니다.
 
 | 값 | 이 PC 에서 맞은 계산 |
 |---|---|
@@ -85,7 +85,7 @@ Windows 11 PC 한 대에서 본 관계는 아래와 같습니다. (확인 범위
 
 무선 인터페이스의 GUID 키 아래 하위 키는 무선 SSID 별로 있고, 하위 키 이름과 `DhcpNetworkHint` 값은 SSID 를 16진수로 쓰되 바이트마다 두 자리(니블) 순서를 바꾼 값입니다.
 
-Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 모습은 아래와 같습니다.
 
 - 무선 인터페이스 키 아래에 하위 키가 3개 있었습니다.
 - 하위 키 이름은 그 안의 `DhcpNetworkHint` 값과 같았습니다.
@@ -95,7 +95,7 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위
 
 ### DhcpGatewayHardware
 
-Windows 11 PC 한 대에서 4개 모두 14바이트였습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 4개 모두 14바이트였습니다.
 
 | 오프셋 | 크기 | 이 PC 에서 본 내용 |
 |---|---|---|
@@ -119,16 +119,16 @@ Windows 11 PC 한 대에서 4개 모두 14바이트였습니다. (확인 범위:
 
 - **이전 임대 이력 전체.** 이 키에서 앞선 임대들이 어디에 남는지는 확인하지 못했습니다. 임대를 새로 받을 때 덮어쓰는 것으로 보이지만 확인하지 못했습니다.
 - **누가 썼는지.** SYSTEM 하이브 기록이라 사용자를 적는 칸이 없습니다.
-- **모든 무선 네트워크.** 한 PC 에서는 지금 연결된 네트워크의 하위 키가 없었습니다. 하위 키가 없다고 그 네트워크에 연결하지 않은 것은 아닙니다. (확인 범위: Win11 25H2 한 대)
+- **모든 무선 네트워크.** 한 PC 에서는 지금 연결된 네트워크의 하위 키가 없었습니다. 하위 키가 없다고 그 네트워크에 연결하지 않은 것은 아닙니다.
 - **장소.** IP 주소와 게이트웨이 MAC 은 다른 자료와 맞춰 볼 수 있는 값입니다. 이 값만으로 장소를 단정하지 않습니다.
 
 보고서에는 "이 인터페이스 키에 DHCP 서버 이 주소에서 이 IP 를 받은 임대 값이 있고, 임대 받은 시각은 이 시각(UTC)으로 기록돼 있다" 처럼 씁니다.
 
 ## 시각 해석
 
-- `LeaseObtainedTime` 은 1970-01-01 0시부터 흐른 초입니다. Microsoft 문서는 기준 시간대를 적지 않습니다. RegRipper nic2 플러그인은 UTC 로 읽고, Windows 11 PC 한 대에서도 UTC 였습니다. (확인 범위: Win11 25H2 한 대) 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- `LeaseObtainedTime` 은 1970-01-01 0시부터 흐른 초입니다. Microsoft 문서는 기준 시간대를 적지 않습니다. RegRipper nic2 플러그인은 UTC 로 읽고, Windows 11 PC 한 대에서도 UTC 였습니다. 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - `T1`·`T2`·`LeaseTerminatesTime` 도 같은 Unix 시각으로 읽습니다. 기간이 아니라 시각입니다.
-- 같은 순간이 두 기록에 다른 기준으로 적혀 있었습니다. (확인 범위: Win11 25H2 한 대)
+- 같은 순간이 두 기록에 다른 기준으로 적혀 있었습니다.
 
 | 기록 | 형식 | 적힌 값 |
 |---|---|---|
@@ -138,15 +138,15 @@ Windows 11 PC 한 대에서 4개 모두 14바이트였습니다. (확인 범위:
 | 네트워크 목록 `DateLastConnected` | SYSTEMTIME, 현지 시각 | 같은 순간을 현지 시각으로 적었습니다 |
 
 - 두 레지스트리 값을 나란히 놓을 때는 한쪽을 시간대로 바꿔 맞춥니다. 시간대는 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
-- 한 PC 에서 1시간짜리 임대도 있었습니다. 임대를 갱신할 때 `LeaseObtainedTime` 이 바뀌는지는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- 한 PC 에서 1시간짜리 임대도 있었습니다. 임대를 갱신할 때 `LeaseObtainedTime` 이 바뀌는지는 확인하지 못했습니다.
 
 ## 함정과 한계
 
 - **오프라인에서는 `CurrentControlSet` 이 없습니다.** 현재 쓰는 컨트롤 세트 번호를 먼저 확인하고 `ControlSet00<번호>` 를 읽습니다.
 - **SSID 하위 키 이름을 그대로 풀면 틀립니다.** 바이트마다 두 자리를 바꾼 값입니다. 바꾸지 않고 ASCII 로 풀면 엉뚱한 문자가 나옵니다.
 - **두 시각의 기준이 다릅니다.** 한 PC 에서 `LeaseObtainedTime` 은 UTC, 네트워크 목록 `DateLastConnected` 는 한 PC 에서 현지 시각이었습니다.
-- **T1·T2 는 기간이 아닙니다.** 한 PC 에서 `T1` 은 `LeaseObtainedTime` 에 임대 기간의 절반을 더한 시각이었습니다. (확인 범위: Win11 25H2 한 대)
-- **값이 없는 인터페이스 키가 있습니다.** 한 PC 에서 12개 가운데 2개가 비어 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **T1·T2 는 기간이 아닙니다.** 한 PC 에서 `T1` 은 `LeaseObtainedTime` 에 임대 기간의 절반을 더한 시각이었습니다.
+- **값이 없는 인터페이스 키가 있습니다.** 한 PC 에서 12개 가운데 2개가 비어 있었습니다.
 - **IPv6 는 따로 있습니다.** `Tcpip6\Parameters\Interfaces` 는 이 페이지에서 다루지 않았습니다.
 - **공식 설명은 Windows 2000 자료입니다.** 이후 버전은 관찰로 맞춰 본 것입니다.
 - **앞선 값은 이전 시점에서 찾습니다.** [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 하이브 로그로 이전 임대 값을 찾아봅니다. 하이브 로그는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
@@ -170,7 +170,7 @@ LeaseTerminatesTime  00 52 93 65   → 0x65935200 = 1704153600 → 2024-01-02 00
 1. REG_DWORD 4바이트를 리틀 엔디언으로 읽습니다.
 2. `LeaseObtainedTime` 은 1970-01-01 0시부터 흐른 초입니다. 1704067200초는 2024-01-01 00:00:00 UTC 입니다.
 3. `T1` 은 임대 기간의 1/2(43200초)을 더한 시각입니다.
-4. `T2` 는 기본값대로라면 임대 기간의 7/8(75600초)을 더한 시각입니다. 한 PC 에서 계산을 맞춰 본 값은 `T1` 과 `LeaseTerminatesTime` 입니다. (확인 범위: Win11 25H2 한 대)
+4. `T2` 는 기본값대로라면 임대 기간의 7/8(75600초)을 더한 시각입니다. 한 PC 에서 계산을 맞춰 본 값은 `T1` 과 `LeaseTerminatesTime` 입니다.
 5. `LeaseTerminatesTime` 은 임대 기간을 모두 더한 시각입니다.
 
 **SSID 하위 키 이름 (SSID `HOME` 으로 만든 예시).**

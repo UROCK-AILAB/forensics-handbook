@@ -26,7 +26,7 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList
 - 네트워크 범주를 나타내는 NLM_NETWORK_CATEGORY 열거는 Windows Vista·Server 2008 이후에 있습니다.
 - 윈도 버전마다 하위 키나 값이 어떻게 다른지는 이번에 연 자료로 확인하지 못했습니다.
 
-Windows 11 PC 한 대에서 본 하위 키는 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 하위 키는 아래와 같습니다.
 
 | 하위 키 | 이 PC 에서 본 것 |
 |---|---|
@@ -41,7 +41,7 @@ Windows 11 PC 한 대에서 본 하위 키는 아래와 같습니다. (확인 �
 
 ### Profiles\{GUID}
 
-Windows 11 PC 한 대에서 본 값은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 값은 아래와 같습니다.
 
 | 값 | 형식 | 내용 |
 |---|---|---|
@@ -53,8 +53,8 @@ Windows 11 PC 한 대에서 본 값은 아래와 같습니다. (확인 범위: W
 | `NameType` | REG_DWORD | 네트워크 종류 |
 | `DateLastConnected` | REG_BINARY 16바이트 | 마지막 연결 시각 |
 
-- 프로필 10개 모두 `DateCreated`·`DateLastConnected` 가 16바이트였습니다. (확인 범위: Win11 25H2 한 대)
-- `ProfileName` 과 `Description` 은 10개 가운데 8개가 같았습니다. 나머지 2개는 `ProfileName` 뒤에 " 2" 가 더 붙어 있었습니다. 같은 이름의 네트워크가 다시 생길 때 번호가 붙는 것인지는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- 프로필 10개 모두 `DateCreated`·`DateLastConnected` 가 16바이트였습니다.
+- `ProfileName` 과 `Description` 은 10개 가운데 8개가 같았습니다. 나머지 2개는 `ProfileName` 뒤에 " 2" 가 더 붙어 있었습니다. 같은 이름의 네트워크가 다시 생길 때 번호가 붙는 것인지는 확인하지 못했습니다.
 
 ### NameType
 
@@ -65,7 +65,7 @@ Windows 11 PC 한 대에서 본 값은 아래와 같습니다. (확인 범위: W
 | `0x17` | 23 | 광대역 (3G) | RegRipper networklist |
 | `0x01` | 1 | 확인하지 못했습니다 | 관찰만. 이 PC 에서 이 프로필 이름은 "로컬 영역 연결" 이었습니다 |
 
-- Windows 11 PC 한 대에서는 71 이 6개, 6 이 3개, 1 이 1개였습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서는 71 이 6개, 6 이 3개, 1 이 1개였습니다.
 - 레지스트리 도구는 REG_DWORD 를 10진으로 보여 주기도 합니다. 그러면 무선은 `0x47` 이 아니라 71 로 보입니다.
 - 위 표에 없는 값의 뜻은 확인하지 못했습니다.
 
@@ -80,12 +80,12 @@ NLM_NETWORK_CATEGORY 열거의 값은 아래와 같습니다.
 | 2 | 도메인 인증 | 액티브 디렉터리 도메인에 인증된 네트워크 |
 
 - 레지스트리 `Category` 값이 이 열거와 같은 번호라고 적은 문서는 이번에 보지 못했습니다.
-- Windows 11 PC 한 대에서는 10개 모두 `Category` 가 0 이었습니다. 같은 PC 의 지금 연결도 `Get-NetConnectionProfile` 에서 Public 으로 나왔습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서는 10개 모두 `Category` 가 0 이었습니다. 같은 PC 의 지금 연결도 `Get-NetConnectionProfile` 에서 Public 으로 나왔습니다.
 - Microsoft 는 범주만 보고 방화벽 포트가 열렸다고 가정하지 말라고 적습니다. 사용자가 범주의 기본 설정을 바꿀 수 있기 때문입니다.
 
 ### Managed
 
-Windows 11 PC 한 대에서 `Managed`=1 인 프로필은 3개였고 `Signatures\Managed` 아래 키도 3개였습니다. 그 3개는 모두 유선(NameType 6)이었으며 이름이 DNS 접미사 모양이었습니다. (확인 범위: Win11 25H2 한 대) `Managed` 의 정확한 뜻은 확인하지 못했습니다.
+Windows 11 PC 한 대에서 `Managed`=1 인 프로필은 3개였고 `Signatures\Managed` 아래 키도 3개였습니다. 그 3개는 모두 유선(NameType 6)이었으며 이름이 DNS 접미사 모양이었습니다. `Managed` 의 정확한 뜻은 확인하지 못했습니다.
 
 ### DateCreated · DateLastConnected
 
@@ -106,10 +106,10 @@ Windows 11 PC 한 대에서 `Managed`=1 인 프로필은 3개였고 `Signatures\
 
 ### Signatures\Managed · Unmanaged
 
-- 하위 키 이름은 Windows 11 PC 한 대에서 모두 96자 16진 문자열이었습니다. 무엇으로 만든 값인지는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- 하위 키 이름은 Windows 11 PC 한 대에서 모두 96자 16진 문자열이었습니다. 무엇으로 만든 값인지는 확인하지 못했습니다.
 - RegRipper networklist 플러그인은 `DefaultGatewayMac` 의 앞 6바이트를 MAC 주소로 읽습니다.
 
-같은 PC 에서 본 값은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+같은 PC 에서 본 값은 아래와 같습니다.
 
 | 값 | 형식 | 이 PC 에서 본 것 |
 |---|---|---|
@@ -120,11 +120,11 @@ Windows 11 PC 한 대에서 `Managed`=1 인 프로필은 3개였고 `Signatures\
 | `FirstNetwork` | — | 10개 모두 해당 프로필의 `ProfileName` 과 같았습니다 |
 | `DefaultGatewayMac` | REG_BINARY | Unmanaged 7개 가운데 6개는 6바이트, 1개는 0바이트였습니다. Managed 3개는 모두 0바이트였습니다 |
 
-- `DefaultGatewayMac` 6바이트 값은 [네트워크 인터페이스 설정](tcp-ip-interfaces.md) 의 게이트웨이 MAC 과 같았습니다(4/4). (확인 범위: Win11 25H2 한 대)
+- `DefaultGatewayMac` 6바이트 값은 [네트워크 인터페이스 설정](tcp-ip-interfaces.md) 의 게이트웨이 MAC 과 같았습니다(4/4).
 
 ### Nla\Wireless
 
-Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 모습은 아래와 같습니다.
 
 하위 키는 4개였고, 각 하위 키의 기본값(REG_SZ)은 SSID 바이트를 16진수로 쓴 문자열이었습니다. 각 하위 키에는 4바이트 REG_BINARY 값들이 있었는데 값 이름은 SSID 의 16진수이거나 SSID 그대로였으며, 이 4바이트 값의 뜻은 확인하지 못했습니다.
 
@@ -150,7 +150,7 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. (확인 범위
 
 ## 시각 해석
 
-RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그대로 출력합니다. Windows 11 PC 한 대에서 두 값은 현지 시각으로 적혀 있었고, 근거는 아래와 같습니다. (확인 범위: Win11 25H2 한 대)
+RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그대로 출력합니다. Windows 11 PC 한 대에서 두 값은 현지 시각으로 적혀 있었고, 근거는 아래와 같습니다.
 
 | DateLastConnected | 맞춰 본 기록 |
 |---|---|
@@ -159,20 +159,20 @@ RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그
 
 - 보고서에서 UTC 로 바꿀 때는 그 시점의 시간대 설정을 밝힙니다. 시간대 설정은 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 - 같은 순간이 TCP/IP 인터페이스 키에는 UTC 로 적혀 있었습니다. [네트워크 인터페이스 설정](tcp-ip-interfaces.md) 에서 다룹니다.
-- `DateLastConnected` 가 연결할 때마다 바뀌는지, 끊을 때 바뀌는지는 확인하지 못했습니다. 한 PC 에서는 연결 이벤트(10000) 시각과 같았습니다. (확인 범위: Win11 25H2 한 대)
-- `DateCreated` 는 OS 설치 시각보다 앞설 수 있습니다. Windows 11 PC 한 대는 InstallDate 가 2026-06-27 03:07 인데 `DateCreated` 가 2025-04-21 인 프로필이 3개 남아 있었습니다. 업그레이드 뒤에도 이전 프로필이 이어진 것으로 보입니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 에는 InstallDate 1분 뒤(2026-06-27 03:08:24)가 `DateCreated` 인 무선 프로필도 있었습니다. (확인 범위: Win11 25H2 한 대)
+- `DateLastConnected` 가 연결할 때마다 바뀌는지, 끊을 때 바뀌는지는 확인하지 못했습니다. 한 PC 에서는 연결 이벤트(10000) 시각과 같았습니다.
+- `DateCreated` 는 OS 설치 시각보다 앞설 수 있습니다. Windows 11 PC 한 대는 InstallDate 가 2026-06-27 03:07 인데 `DateCreated` 가 2025-04-21 인 프로필이 3개 남아 있었습니다. 업그레이드 뒤에도 이전 프로필이 이어진 것으로 보입니다.
+- 같은 PC 에는 InstallDate 1분 뒤(2026-06-27 03:08:24)가 `DateCreated` 인 무선 프로필도 있었습니다.
 - Wi-Fi 프로필 파일의 생성 시각과 `DateCreated` 를 맞춰 본 결과는 [Wi-Fi 프로필](wlan-profiles.md) 에서 다룹니다.
 - 키의 마지막 기록 시각 (LastWrite) 은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 시각 값 형식 전체는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 
 ## 함정과 한계
 
 - **10진과 16진을 섞어 읽지 않습니다.** 도구가 71 로 보여 준 NameType 은 `0x47`, 곧 무선입니다. 23 은 `0x17` 입니다.
-- **현지 시각일 수 있습니다.** 한 PC 에서는 두 시각이 현지 시각으로 적혀 있었습니다. 다른 UTC 기록과 나란히 놓기 전에 시간대를 맞춥니다. (확인 범위: Win11 25H2 한 대)
-- **이름에 번호가 붙을 수 있습니다.** `ProfileName` 뒤에 " 2" 가 붙은 프로필이 있었습니다. 이름으로 다른 자료와 맞출 때 `Description`·`FirstNetwork` 도 함께 봅니다. (확인 범위: Win11 25H2 한 대)
+- **현지 시각일 수 있습니다.** 한 PC 에서는 두 시각이 현지 시각으로 적혀 있었습니다. 다른 UTC 기록과 나란히 놓기 전에 시간대를 맞춥니다.
+- **이름에 번호가 붙을 수 있습니다.** `ProfileName` 뒤에 " 2" 가 붙은 프로필이 있었습니다. 이름으로 다른 자료와 맞출 때 `Description`·`FirstNetwork` 도 함께 봅니다.
 - **Wi-Fi 프로필 파일과 GUID 가 다릅니다.** 두 자료는 이름으로 맞춰야 합니다. 자세한 것은 [Wi-Fi 프로필](wlan-profiles.md) 에 있습니다.
-- **도구가 읽는 키가 없을 수 있습니다.** RegRipper 는 `Nla\Cache\Intranet` 을 읽지만, Windows 11 PC 한 대에는 `Nla\Cache` 가 없었습니다. 결과가 비어도 도구 오류로 단정하지 않습니다. (확인 범위: Win11 25H2 한 대)
-- **`DefaultGatewayMac` 이 비어 있을 수 있습니다.** 0바이트인 서명이 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **도구가 읽는 키가 없을 수 있습니다.** RegRipper 는 `Nla\Cache\Intranet` 을 읽지만, Windows 11 PC 한 대에는 `Nla\Cache` 가 없었습니다. 결과가 비어도 도구 오류로 단정하지 않습니다.
+- **`DefaultGatewayMac` 이 비어 있을 수 있습니다.** 0바이트인 서명이 있었습니다.
 - **지운 네트워크.** 설정 앱의 "알려진 네트워크 삭제" 등으로 프로필을 지울 때 이 키도 지워지는지는 확인하지 못했습니다. 지운 키와 값을 찾는 방법, 하이브 로그 반영은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 이전 시점은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 봅니다.
 
 ## 직접 분석해 보기

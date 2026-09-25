@@ -1,7 +1,7 @@
 title: Windows 디지털 포렌식 핸드북
 description: Windows 시스템에 남는 흔적을 읽고 해석하는 한국어 포렌식 핸드북
 lang: ko
-remote_theme: just-the-docs/just-the-docs@v0.12.0
+theme: just-the-docs
 search_enabled: true
 search:
   button: true
@@ -12,3 +12,13 @@ color_scheme: light
 exclude:
   - _work
   - _manifest.json
+plugins:
+  - jekyll-relative-links
+  - jekyll-last-modified-at
+relative_links:
+  enabled: true
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default

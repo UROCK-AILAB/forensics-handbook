@@ -36,8 +36,8 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 - Windows 2000 의 하위 키가 뒤 버전의 `AppCompatCache` 값과 목적이 같은지는 libyal 도 불분명하다고 적습니다.
 - 오프라인 하이브에는 `CurrentControlSet` 이 없습니다. `ControlSet00X` 아래에서 찾습니다. Mandiant 도 오프라인 경로를 `SYSTEM\ControlSet00X\...` 로 적습니다.
 - 어느 `ControlSet00X` 가 현재 것인지는 `SYSTEM\Select` 의 `Current` 값으로 고른다는 설명이 흔합니다. 이 설명은 이번에 연 자료로 확인하지 못했습니다.
-- Windows 11 PC 한 대의 `Select` 값은 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 의 `AppCompatCache` 키에는 값이 셋 있었습니다. `AppCompatCache`(REG_BINARY, 214,066바이트), `CacheMainSdb`(REG_BINARY, 6,512바이트), `SdbTime`(REG_BINARY, 96바이트)입니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대의 `Select` 값은 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다.
+- 같은 PC 의 `AppCompatCache` 키에는 값이 셋 있었습니다. `AppCompatCache`(REG_BINARY, 214,066바이트), `CacheMainSdb`(REG_BINARY, 6,512바이트), `SdbTime`(REG_BINARY, 96바이트)입니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -93,7 +93,7 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 ### Windows 11 25H2 에서 본 모습
 
-아래는 모두 Windows 11 PC 한 대에서 본 것입니다. (확인 범위: Win11 25H2 한 대)
+아래는 모두 Windows 11 PC 한 대에서 본 것입니다.
 
 - 헤더 첫 4바이트는 0x34(52)였습니다. Creators Update 이후 형식과 같습니다.
 - 헤더 오프셋 16 의 값은 22 였습니다.
@@ -109,7 +109,7 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 
 ### 증명하는 것
 
-- 항목의 경로에 파일이 있었던 적이 있습니다. 지금은 없는 파일도 남습니다. Windows 11 PC 한 대에서 `C:\` 경로 항목 689개 가운데 259개는 그 경로에 파일이 더는 없었습니다. (확인 범위: Win11 25H2 한 대)
+- 항목의 경로에 파일이 있었던 적이 있습니다. 지금은 없는 파일도 남습니다. Windows 11 PC 한 대에서 `C:\` 경로 항목 689개 가운데 259개는 그 경로에 파일이 더는 없었습니다.
 - 항목의 시각은 그 파일의 마지막 수정 시각입니다. 지금 파일의 수정 시각과 다르면 그 사이에 파일이 바뀌었을 수 있습니다.
 - Vista·7·Server 2008·Server 2012 에서는 항목마다 실행 표시 (Process Execution Flag) 가 있다고 Mandiant 는 설명합니다. 프로세스를 만들 때 CSRSS 가 이 표시를 켭니다. 표시가 켜져 있으면 실행한 항목입니다.
 - XP·2003 에는 이 표시가 없습니다. Mandiant 는 이 두 버전의 항목을 시스템에 있었고 한 번은 실행됐을 가능성이 높은 파일로 봅니다.
@@ -131,18 +131,18 @@ Mandiant 가 정리한 항목이 생기는 조건은 아래와 같습니다.
 - 예외가 하나 있습니다. PsExec 는 원격 PC 에 PSEXESVC.exe 를 새로 만들므로 이 항목의 수정 시각은 파일을 만든 시각과 같고, 결과적으로 실행 무렵의 시각이 됩니다.
 - XP 항목에는 마지막 갱신 시각 칸이 따로 있습니다(오프셋 544).
 - 목록은 위에서 아래로 최근 사용 순 큐입니다. 맨 위가 가장 최근 항목입니다. 시각은 수정 시각이라서 목록 순서와 시각 순서가 다를 수 있습니다.
-- Windows 11 PC 한 대에서 시각이 1970-01-01 00:00:00(UTC)인 항목이 있었습니다. 패키지 앱 항목의 시각은 모두 0 이었습니다. 이런 값은 타임라인에 그대로 넣지 말고 파일 쪽 시각과 맞춰 봅니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 에서 `C:\` 경로 항목 689개 가운데 404개는 지금 파일의 수정 시각과 값이 정확히 같았습니다. 26개는 달랐습니다. (확인 범위: Win11 25H2 한 대)
-- `AppCompatCache` 키의 마지막 기록 시각은 캐시가 쓰인 시각이 아닐 수 있습니다. 같은 키에 `CacheMainSdb`·`SdbTime` 값도 있기 때문입니다. Windows 11 PC 한 대에서 이 키의 마지막 기록 시각은 마지막 부팅 두 시간 뒤였습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 시각이 1970-01-01 00:00:00(UTC)인 항목이 있었습니다. 패키지 앱 항목의 시각은 모두 0 이었습니다. 이런 값은 타임라인에 그대로 넣지 말고 파일 쪽 시각과 맞춰 봅니다.
+- 같은 PC 에서 `C:\` 경로 항목 689개 가운데 404개는 지금 파일의 수정 시각과 값이 정확히 같았습니다. 26개는 달랐습니다.
+- `AppCompatCache` 키의 마지막 기록 시각은 캐시가 쓰인 시각이 아닐 수 있습니다. 같은 키에 `CacheMainSdb`·`SdbTime` 값도 있기 때문입니다. Windows 11 PC 한 대에서 이 키의 마지막 기록 시각은 마지막 부팅 두 시간 뒤였습니다.
 
 ## 함정과 한계
 
 - **수정 시각을 실행 시각으로 읽는 오해.** 가장 흔한 오판입니다. 실행 시각은 [프리페치](prefetch/index.md) 나 [프로세스 생성](../event-logs/4688.md) 이벤트에서 찾습니다.
 - **최근 항목이 빠질 수 있습니다.** Mandiant 는 이 캐시가 "somewhat volatile" 하니 되도록 빨리 보존하라고 적습니다. 캐시를 메모리에 두었다가 종료나 재부팅 때만 레지스트리에 쓴다는 설명도 흔합니다. 이 설명은 이번에 연 자료로 확인하지 못했습니다. 켜진 PC 는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 과 [메모리 분석](../../03-techniques/analysis/memory-forensics/index.md) 도 함께 검토합니다.
-- **헤더의 항목 수를 믿지 않습니다.** Windows 11 PC 한 대에서 헤더의 항목 수 칸은 0 이었지만 실제 항목은 904개였습니다. 항목을 끝까지 따라가며 셉니다. (확인 범위: Win11 25H2 한 대)
+- **헤더의 항목 수를 믿지 않습니다.** Windows 11 PC 한 대에서 헤더의 항목 수 칸은 0 이었지만 실제 항목은 904개였습니다. 항목을 끝까지 따라가며 셉니다.
 - **32비트와 64비트의 항목 크기가 다릅니다.** 2003·Vista·7 형식은 운영체제의 비트 수에 맞는 표로 읽습니다.
 - **XP 경로 칸에 이전 데이터가 남습니다.** 528바이트 경로 칸의 남는 자리에 앞 항목의 글자가 남을 수 있습니다. 문자열 끝의 NUL 뒤는 버립니다.
-- **실행 파일만 있지 않습니다.** Windows 11 PC 한 대에는 .tmp·.dll·.scr 과 확장자 없는 항목도 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **실행 파일만 있지 않습니다.** Windows 11 PC 한 대에는 .tmp·.dll·.scr 과 확장자 없는 항목도 있었습니다.
 - **캐시를 비우는 명령이 있습니다.** Vista 이후에는 `Rundll32.exe apphelp.dll,ShimFlushCache`, XP·2003 에서는 `Rundll32.exe kernel32.dll,BaseFlushAppcompatCache` 입니다. Vista 형식은 캐시가 비면 헤더만 남습니다. 항목이 없거나 너무 적으면 이전 시점 하이브를 [섀도 복사본](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 꺼내 비교합니다. 명령 실행 흔적은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 찾습니다.
 
 ## 직접 분석해 보기

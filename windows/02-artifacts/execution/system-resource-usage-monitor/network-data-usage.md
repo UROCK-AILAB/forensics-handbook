@@ -28,7 +28,7 @@ SRUM 은 모은 값을 메모리에 쌓아 두었다가 기본 1시간마다 SRU
 | 파일 | `%SystemRoot%\System32\sru\SRUDB.dat` |
 | 표 이름 | `{973F5D5C-1D90-4944-BE8E-24B94231A174}` |
 | 확장 등록 키 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SRUM\Extensions\{973F5D5C-1D90-4944-BE8E-24B94231A174}` |
-| 확장 DLL | 등록 키의 `DllName` 값. `C:\WINDOWS\System32\nduprov.dll` 이었습니다 (확인 범위: Windows 11 25H2 한 대) |
+| 확장 DLL | 등록 키의 `DllName` 값. `C:\WINDOWS\System32\nduprov.dll` 이었습니다 |
 
 | Windows | 이 표 | 근거 |
 |---|---|---|
@@ -63,7 +63,7 @@ InterfaceLuid 는 Windows 의 NET_LUID 값입니다. 위 16비트가 인터페�
 
 유형만으로는 어느 어댑터인지 모릅니다. 가운데 24비트인 NetLuidIndex 로 어댑터를 좁힐 수 있습니다.
 
-- SYSTEM 하이브의 `ControlSet00X\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\NNNN` 키에 `NetLuidIndex` 값과 `*IfType` 값이 있었습니다 (확인 범위: Windows 11 25H2 한 대).
+- SYSTEM 하이브의 `ControlSet00X\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\NNNN` 키에 `NetLuidIndex` 값과 `*IfType` 값이 있었습니다.
 - 같은 NetLuidIndex 가 유형이 다른 어댑터에도 쓰였습니다. 그래서 NetLuidIndex 와 IfType 을 함께 맞춥니다.
 - 같은 키의 `NetCfgInstanceId` 가 인터페이스 GUID 입니다. 이 GUID 로 [네트워크 인터페이스 설정](../../network/tcp-ip-interfaces.md)의 IP 설정과 이어 봅니다.
 - ControlSet 번호는 [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)로 정합니다.
@@ -74,7 +74,7 @@ InterfaceLuid 는 Windows 의 NET_LUID 값입니다. 위 16비트가 인터페�
 
 무선 행의 L2ProfileId 는 SOFTWARE 하이브 `Microsoft\WlanSvc\Interfaces\{인터페이스 GUID}\Profiles\{프로필 GUID}` 키의 `ProfileIndex` 와 맞춥니다. 공개 도구 srum-dump 가 이 방법을 씁니다. 순서와 이름 읽는 법은 [네트워크 연결 기록](network-connectivity.md)에 있습니다.
 
-- 프로필 GUID 는 `C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\` 아래 Wi-Fi 프로필 XML 의 파일 이름과 같았습니다 (확인 범위: Windows 11 25H2 한 대). SSID 와 보안 설정은 [Wi-Fi 프로필](../../network/wlan-profiles.md)에서 읽습니다.
+- 프로필 GUID 는 `C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\` 아래 Wi-Fi 프로필 XML 의 파일 이름과 같았습니다. SSID 와 보안 설정은 [Wi-Fi 프로필](../../network/wlan-profiles.md)에서 읽습니다.
 - 공개 표본의 이더넷 행은 L2ProfileId 와 L2ProfileFlags 가 모두 0 이었습니다. 유선 행은 이 방법으로 네트워크 이름을 풀 수 없습니다. 유선 네트워크는 [네트워크 목록](../../network/networklist.md)과 시각을 맞춰 좁힙니다.
 
 ### 한 번 기록할 때 생기는 행

@@ -32,7 +32,7 @@ Defender 는 운영 이벤트 로그에도 탐지 (1116) 와 조치 (1117) 를 �
 | DetectionHistory | `C:\ProgramData\Microsoft\Windows Defender\Scans\History\Service\DetectionHistory\<번호 폴더>\<GUID>` |
 | Quarantine | `C:\ProgramData\Microsoft\Windows Defender\Quarantine\` 아래 `Entries`, `ResourceData`, `Resources` |
 
-`Windows Defender` 폴더 아래에서는 하위 폴더 13개를 봤습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+`Windows Defender` 폴더 아래에서는 하위 폴더 13개를 봤습니다.
 
 ```
 Certificates, Clean Store, Definition Updates, Features, LocalCopy, Models,
@@ -59,7 +59,7 @@ Network Inspection System, Payloads, Platform, Quarantine, Scans, Snapshots, Sup
 | 인코딩 | UTF-16LE 텍스트. 파일 앞 2바이트가 `FF FE` 입니다 (관찰) |
 | 시각 | UTC |
 
-인코딩을 읽는 방법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다. 관찰한 PC 의 `Support` 폴더에는 MPLog 말고도 다음 파일이 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+인코딩을 읽는 방법은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다. 관찰한 PC 의 `Support` 폴더에는 MPLog 말고도 다음 파일이 있었습니다.
 
 - `MPDetection-*.log` (UTF-16LE)
 - `MPDeviceControl-*.log`, `MPScanSkip-*.log`
@@ -87,7 +87,7 @@ CrowdStrike 는 포렌식에 쓸 만한 줄을 네 가지로 나눕니다.
 | MaxTimeFile | 그 검사의 파일 경로 |
 | EstimatedImpact | 프로세스가 활동한 시간 가운데 검사에 쓴 비율 (%) |
 
-관찰한 PC 에서는 성능 영향 줄이 다음 모양이었습니다. 실행 파일 이름과 경로 뒷부분은 줄였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+관찰한 PC 에서는 성능 영향 줄이 다음 모양이었습니다. 실행 파일 이름과 경로 뒷부분은 줄였습니다.
 
 ```
 ProcessImageName: <이름>.exe, Pid: 11536, TotalTime: 24424254, Count: 4341109, MaxTime: 93, MaxTimeFile: \Device\HarddiskVolume3\..., EstimatedImpact: 37%
@@ -100,7 +100,7 @@ ProcessImageName: <이름>.exe, Pid: 11536, TotalTime: 24424254, Count: 4341109,
 
 #### 관찰한 다른 줄
 
-아래 줄은 확인한 자료에 설명이 없습니다. 모양만 적습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+아래 줄은 확인한 자료에 설명이 없습니다. 모양만 적습니다.
 
 ```
 [RTP] [Mini-filter] Unsuccessful scan status(#n): <경로>. Process: <경로>, Status: 0x...
@@ -134,7 +134,7 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 | 2구역 | ThreatTrackingId, ThreatTrackingSha256, ThreatTrackingMD5, ThreatTrackingSha1, ThreatTrackingStartTime (FILETIME, UTC), ThreatTrackingSize, ThreatTrackingThreatId, ThreatTrackingScanSource, ThreatTrackingScanType. PUA 는 regkey·uninstall 칸이 더 붙을 수 있습니다 |
 | 3구역 | User (도메인\사용자), SpawningProcess (예: explorer.exe), SecurityGroup (있을 때만) |
 
-관찰한 PC 의 `Scans` 폴더에서는 다음을 봤습니다. 모두 확인한 자료에 설명이 없어 뜻을 풀지 않습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+관찰한 PC 의 `Scans` 폴더에서는 다음을 봤습니다. 모두 확인한 자료에 설명이 없어 뜻을 풀지 않습니다.
 
 - `DetectionHistory` 아래에 `00`, `03`, `04` … `18` 같은 두 자리 숫자 폴더가 있었습니다. 폴더 안 파일은 0개였습니다.
 - `History\Service` 폴더에 `Detections.log`, `Unknown.Log`, `History.Log` 가 있었습니다. 셋 다 UTF-16LE 였습니다.
@@ -153,7 +153,7 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 
 폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다. 오프셋과 칸 단위의 구조는 확인한 자료에 없습니다.
 
-관찰한 PC 에서는 다음을 봤습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+관찰한 PC 에서는 다음을 봤습니다.
 
 - `Entries`, `ResourceData`, `Resources` 의 파일 수가 모두 11개로 같았습니다.
 - `ResourceData` 파일 이름은 40자리 16진수였습니다. SHA-1 과 길이가 같습니다.
@@ -206,7 +206,7 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 | ThreatTrackingStartTime | DetectionHistory 2구역 | FILETIME | UTC |
 | Entries 의 시각 | 풀어낸 `Entries` 파일 | 확인한 자료에 없습니다 | 확인한 자료에 없습니다 |
 
-- 줄 앞머리에 `Z` 가 없어도 UTC 입니다. 관찰한 PC 에서 로그 마지막 줄은 11:36 이었습니다. 그때 한국 시각은 20:36 이었고 9시간 차이가 났습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 줄 앞머리에 `Z` 가 없어도 UTC 입니다. 관찰한 PC 에서 로그 마지막 줄은 11:36 이었습니다. 그때 한국 시각은 20:36 이었고 9시간 차이가 났습니다.
 - 한 파일 안에서도 날짜를 적는 순서가 다릅니다. 줄 앞머리는 년-월-일, 격리 복구 블록은 월-일-년이었습니다.
 - MPLog 파일 이름 속 날짜가 무엇을 기준으로 붙는지는 확인하지 못했습니다.
 - FILETIME 과 웹킷 시각을 푸는 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md) 을 봅니다.
@@ -217,9 +217,9 @@ Microsoft 문서에 나오는 설정입니다. 기본값은 문서마다 다르�
 2. **Count 를 "사용자가 연 파일 수" 로 읽습니다.** Count 는 그 프로세스가 접근해서 Defender 가 검사한 파일 수입니다. 사용자가 파일을 하나하나 열었다는 뜻이 아닙니다.
 3. **장치 경로를 그대로 적습니다.** MPLog 경로는 `\Device\HarddiskVolumeN` 형식입니다. 드라이브 문자로 바꿔 읽어야 합니다. 볼륨 번호와 드라이브 문자의 짝은 따로 확인합니다.
 4. **칸 위치에 기대 파싱합니다.** MPLog 줄 형식은 시기마다 바뀝니다. 관찰한 줄에는 원문 목록에 없는 `Pid` 칸이 있었습니다. 칸 이름으로 값을 찾습니다.
-5. **보통 방식으로 복사합니다.** 서비스가 켜져 있으면 MPLog 가 잠겨 있어 보통 방식으로는 열리지 않습니다. 관찰한 PC 에서는 공유 읽기 (`FileShare.ReadWrite`) 로는 읽혔습니다. (확인 범위: Windows 11 25H2, PC 한 대) 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
-6. **MPLog 가 오래된 기록까지 담는다고 봅니다.** 관찰한 PC 에는 약 24MB 의 MPLog 가 하나뿐이었고 약 16일 분량이었습니다. (확인 범위: Windows 11 25H2, PC 한 대) 옛 기록은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
-7. **빈 DetectionHistory 를 "탐지 없음" 으로 읽습니다.** 관찰한 PC 에서는 DetectionHistory 파일이 0개였습니다. 같은 PC 의 7월 말 격리 항목은 남아 있었습니다. 검사 기록 보관 기간 (그룹 정책 문서 기준 30일) 이 격리 보관 기간 (90일) 보다 짧아서 먼저 지워진 것으로 보입니다. 이 PC 의 실제 설정 값은 확인하지 않았고, 이것은 추정입니다. (확인 범위: Windows 11 25H2, PC 한 대)
+5. **보통 방식으로 복사합니다.** 서비스가 켜져 있으면 MPLog 가 잠겨 있어 보통 방식으로는 열리지 않습니다. 관찰한 PC 에서는 공유 읽기 (`FileShare.ReadWrite`) 로는 읽혔습니다. 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+6. **MPLog 가 오래된 기록까지 담는다고 봅니다.** 관찰한 PC 에는 약 24MB 의 MPLog 가 하나뿐이었고 약 16일 분량이었습니다. 옛 기록은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
+7. **빈 DetectionHistory 를 "탐지 없음" 으로 읽습니다.** 관찰한 PC 에서는 DetectionHistory 파일이 0개였습니다. 같은 PC 의 7월 말 격리 항목은 남아 있었습니다. 검사 기록 보관 기간 (그룹 정책 문서 기준 30일) 이 격리 보관 기간 (90일) 보다 짧아서 먼저 지워진 것으로 보입니다. 이 PC 의 실제 설정 값은 확인하지 않았고, 이것은 추정입니다.
 8. **영어 문구로만 검색합니다.** `MPDetection-*.log` 의 서비스 이름은 OS 표시 언어로 적혔습니다. 한국어 Windows 에서는 한국어 문구로도 검색합니다.
 
 ### 지우기와 조작

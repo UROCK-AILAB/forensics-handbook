@@ -30,7 +30,7 @@ HKCU\Software\Microsoft\Terminal Server Client\Servers\<대상 호스트>
 - Mac 용 원격 데스크톱 연결은 레지스트리가 아니라 `Users:Username:Library:Preferences:Microsoft:RDC Client:Recent Servers` 파일에 목록을 둡니다.
 - Microsoft 문서(KB 312169, 2026-02-12 판)는 윈도 버전별 차이를 적지 않습니다. 이번에 연 자료로 버전별 차이는 확인하지 못했습니다.
 
-Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. 원격 데스크톱 연결을 쓴 적이 없는 PC 입니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대에서 본 모습은 아래와 같습니다. 원격 데스크톱 연결을 쓴 적이 없는 PC 입니다.
 
 `HKCU\Software\Microsoft\Terminal Server Client` 키는 없었고, `HKLM\SOFTWARE\Microsoft\Terminal Server Client` 에는 `Default`, `IME Mapping Table`, `TrustedGateways` 하위 키가 있었습니다. 그래서 HKLM 쪽 키가 있다는 사실만으로는 이 도구를 썼다고 볼 수 없습니다.
 
@@ -89,7 +89,7 @@ MRU 값은 호스트 문자열뿐이라 시각이 없습니다. 공개 도구 Re
 - **사용자가 지울 수 있습니다.** Microsoft 가 직접 레지스트리에서 지우는 방법을 안내합니다. 목록이 비어 있거나 번호가 이상하면 지운 흔적을 의심합니다.
 - **지운 값은 다른 곳에서 찾습니다.** 지운 키와 값, 하이브 로그 반영은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 이전 시점은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 봅니다. 조작 흔적을 찾는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 - **LastWrite 는 목록 전체의 마지막 변경입니다.** `MRU1` 이하 대상의 접속 시각이 아닙니다.
-- **HKLM 키와 헷갈리지 않습니다.** 원격 데스크톱 연결을 쓴 적이 없는 PC 에도 `HKLM\SOFTWARE\Microsoft\Terminal Server Client` 가 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **HKLM 키와 헷갈리지 않습니다.** 원격 데스크톱 연결을 쓴 적이 없는 PC 에도 `HKLM\SOFTWARE\Microsoft\Terminal Server Client` 가 있었습니다.
 - **원격 데스크톱 연결 도구의 목록입니다.** 다른 원격 제어 도구의 접속은 여기 남지 않을 수 있습니다.
 - **어느 계정의 하이브인지 먼저 확인합니다.** [사용자 프로필 목록](../system-account/profilelist.md) 으로 NTUSER.DAT 와 계정을 잇습니다.
 
@@ -142,7 +142,7 @@ MRU 값은 호스트 문자열뿐이라 시각이 없습니다. 공개 도구 Re
 
 - `Default.rdp` 가 숨김 파일인지는 확인하지 못했습니다.
 - mstsc 의 [점프리스트](../file-folder-usage/jump-lists.md) 에 접속 대상이 남는지는 확인하지 못했습니다.
-- 원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 한 대에는 `Documents\Default.rdp` 와 `Cache` 폴더가 없었습니다. (확인 범위: Win11 25H2 한 대)
+- 원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 한 대에는 `Documents\Default.rdp` 와 `Cache` 폴더가 없었습니다.
 
 전체 흐름은 [원격 데스크톱 침입 확인](../../04-scenarios/incident/rdp-intrusion.md) 과 [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md) 에 있습니다.
 

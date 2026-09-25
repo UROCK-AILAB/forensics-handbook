@@ -35,7 +35,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 | 채널 | Operational·Analytic·Debug | Operational·Trace |
 | 켜짐 | 켜짐, 1MB, 순환 | 켜짐, 1MB, 순환 |
 
-(확인 범위: Win11 빌드 26200 한 대)
+
 
 - Microsoft 의 WMI 추적 문서는 이벤트 원본을 "Microsoft-Windows-WMI" 라고 적습니다. 조사한 PC 의 공급자 이름은 Microsoft-Windows-WMI-Activity 였습니다.
 - WMI-Activity 의 Trace 채널은 기본으로 꺼져 있습니다. `wevtutil sl Microsoft-Windows-WMI-Activity/Trace /e:true` 로 켭니다.
@@ -55,7 +55,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 
 ### 레지스트리에 남는 WinRM 설정
 
-조사한 PC 의 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN` 입니다. (확인 범위: Win11 빌드 26200 한 대, 클라이언트)
+조사한 PC 의 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WSMAN` 입니다. (Windows 11 빌드 26200, 클라이언트 기준)
 
 - 하위 키: AutoRestartList, CertMapping, Client, Listener, Plugin, SafeClientList, Service, WinRS
 - `Listener\*+HTTP` 키에 Port 5985, uriprefix `wsman` 이 있었습니다.
@@ -70,7 +70,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 
 ### WinRM/Operational 이벤트
 
-아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다. (확인 범위: Win11 빌드 26200 한 대) "보이는 쪽" 은 메시지 문구로 가른 해석입니다. 실제 원격 실행으로 확인하지 않았습니다.
+아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다. "보이는 쪽" 은 메시지 문구로 가른 해석입니다. 실제 원격 실행으로 확인하지 않았습니다.
 
 | ID | 메시지 | 칸 | 보이는 쪽 |
 |---|---|---|---|
@@ -102,7 +102,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 | 5860 | Namespace = %1; NotificationQuery = %2; UserName = %3; ClientProcessID = %4, ClientMachine = %5; PossibleCause = %6 | — |
 | 5861 | Namespace = %1; Eventfilter = %2 (refer to its activate eventid:5859); Consumer = %3; PossibleCause = %4 | — |
 
-(확인 범위: Win11 빌드 26200 한 대)
+
 
 이 이벤트들의 값은 EventData 가 아니라 UserData 아래에 들어 있었습니다. 5857 은 `UserData\Operation_StartedOperational`, 5858 은 `UserData\Operation_ClientFailure` 요소였고 네임스페이스는 `http://manifests.microsoft.com/win/2006/windows/WMI` 였습니다.
 
@@ -139,7 +139,7 @@ WMI 는 Vista 부터 옛 로그 파일 대신 ETW 를 쓰므로 이벤트 뷰어
 
 - 세션을 여는 쪽과 받는 쪽의 기록은 서로 다른 PC 에 있으므로 두 PC 의 시계가 맞는지 먼저 확인합니다. 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 - 145 의 메시지는 작업 시작, 132·142 의 메시지는 작업 성공·실패입니다. 같은 operationName 의 145 와 132·142 사이를 작업 시간으로 볼 수 있습니다. 이 판단은 메시지에서 이끈 해석입니다.
-- 두 로그는 1MB 라 덮는 기간이 짧습니다. 조사한 PC 에서 WinRM 로그 1,984건은 가장 오래된 기록이 약 40일 전이었습니다. WMI-Activity 로그는 약 하루 치만 있었습니다 (5858 1,080건, 5857 112건). (확인 범위: Win11 빌드 26200 한 대)
+- 두 로그는 1MB 라 덮는 기간이 짧습니다. 조사한 PC 에서 WinRM 로그 1,984건은 가장 오래된 기록이 약 40일 전이었습니다. WMI-Activity 로그는 약 하루 치만 있었습니다 (5858 1,080건, 5857 112건).
 - 시각 값 저장 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계

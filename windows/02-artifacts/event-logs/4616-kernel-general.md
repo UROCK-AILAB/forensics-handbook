@@ -18,7 +18,7 @@ nav_order: 2710
 
 ### 시스템 로그 Kernel-General 1
 
-공급자는 Microsoft-Windows-Kernel-General 이고 채널은 System 입니다. 메시지 틀은 "The system time has changed to %1 from %2." 이며 버전 1 부터 "Change Reason: %3." 이 붙습니다 (확인 범위: Win11 25H2 한 대의 공급자 템플릿). Reason 칸은 시각을 바꾼 까닭을 숫자로 적으며, 공개 도구 EvtxECmd 의 맵은 아래처럼 풉니다.
+공급자는 Microsoft-Windows-Kernel-General 이고 채널은 System 입니다. 메시지 틀은 "The system time has changed to %1 from %2." 이며 버전 1 부터 "Change Reason: %3." 이 붙습니다 (Windows 11 25H2 기준). Reason 칸은 시각을 바꾼 까닭을 숫자로 적으며, 공개 도구 EvtxECmd 의 맵은 아래처럼 풉니다.
 
 | Reason | 맵의 풀이 |
 |---|---|
@@ -29,7 +29,7 @@ nav_order: 2710
 
 맵은 근거로 다른 사이트의 이벤트 설명 페이지를 적었는데, 그 페이지와 Microsoft 공식 문서의 Reason 표는 확인하지 못했습니다.
 
-조사한 PC 의 Kernel-General 1 은 199건이었습니다. Reason 마다 모습이 달랐습니다 (확인 범위: Win11 25H2 한 대).
+조사한 PC 의 Kernel-General 1 은 199건이었습니다. Reason 마다 모습이 달랐습니다.
 
 | Reason | 건수 | ProcessName | 기록 계정 | 언제 |
 |---|---|---|---|---|
@@ -41,7 +41,7 @@ Reason 2 뒤 몇 초 안에 Kernel-Boot 18·25·27·30·32, Kernel-Power 506·50
 
 ### 같은 공급자의 다른 시각 이벤트
 
-Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. 메시지 틀과 칸은 공급자 템플릿에서 읽었습니다 (확인 범위: Win11 25H2 한 대).
+Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. 메시지 틀과 칸은 공급자 템플릿에서 읽었습니다.
 
 | ID | 메시지 틀 | 주요 칸 |
 |---|---|---|
@@ -75,7 +75,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 
 ### Kernel-General 1 의 이벤트 버전
 
-공급자 템플릿에는 버전 0~4 가 있었습니다 (확인 범위: Win11 25H2 한 대).
+공급자 템플릿에는 버전 0~4 가 있었습니다.
 
 | 버전 | 더해진 칸 |
 |---|---|
@@ -89,7 +89,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 
 ### 로그 보존 기간
 
-조사한 PC 에서 보안 로그(20MB)는 약 2일치, 시스템 로그(20MB)는 약 3개월치가 남아 있었습니다 (확인 범위: Win11 25H2 한 대). 4616 이 밀려난 뒤에도 Kernel-General 1 은 남아 있을 수 있습니다.
+조사한 PC 에서 보안 로그(20MB)는 약 2일치, 시스템 로그(20MB)는 약 3개월치가 남아 있었습니다. 4616 이 밀려난 뒤에도 Kernel-General 1 은 남아 있을 수 있습니다.
 
 ## 구조
 
@@ -123,7 +123,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 | 9 | RealTimeIsUniversal | Boolean | 하드웨어 시계가 UTC 인지 |
 | 10 | SystemInCmosMode | Boolean | |
 
-칸 이름과 형식은 공급자 템플릿에서 읽었고 (확인 범위: Win11 25H2 한 대), "뜻" 은 칸 이름과 관찰한 값으로 풀었습니다. SystemInCmosMode 의 뜻은 확인하지 못했습니다.
+칸 이름과 형식은 공급자 템플릿에서 읽었고, "뜻" 은 칸 이름과 관찰한 값으로 풀었습니다. SystemInCmosMode 의 뜻은 확인하지 못했습니다.
 
 ### Microsoft 의 4616 예시 값
 
@@ -139,7 +139,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 
 ### 두 이벤트의 짝
 
-조사한 PC 에서 보안 로그가 남아 있던 기간(2026-09-21T22:39Z 이후)에 두 이벤트를 맞대 봤습니다 (확인 범위: Win11 25H2 한 대).
+조사한 PC 에서 보안 로그가 남아 있던 기간(2026-09-21T22:39Z 이후)에 두 이벤트를 맞대 봤습니다.
 
 Kernel-General 1 이 4건, 4616 이 4건이었고 하나씩 짝이 맞았습니다. 짝끼리 기록 시각 차이는 1ms 미만이었고, 4616 의 PreviousTime·NewTime 과 Kernel-General 1 의 OldTime·NewTime 은 100ns 단위까지 같았습니다.
 
@@ -175,7 +175,7 @@ Kernel-General 1 이 4건, 4616 이 4건이었고 하나씩 짝이 맞았습니�
 ## 시각 해석
 
 - 이벤트 시각은 `<TimeCreated SystemTime>` 에 들어 있고, 끝에 Z 가 붙은 UTC 값입니다. PreviousTime·NewTime·OldTime 도 UTC 입니다.
-- CmosTime 도 끝에 Z 를 붙여 보여 주지만 RealTimeIsUniversal 이 false 이면 현지 시각입니다. 조사한 PC 에서는 CmosTime 이 NewTime 에 9시간을 더한 값이었습니다 (확인 범위: Win11 25H2 한 대).
+- CmosTime 도 끝에 Z 를 붙여 보여 주지만 RealTimeIsUniversal 이 false 이면 현지 시각입니다. 조사한 PC 에서는 CmosTime 이 NewTime 에 9시간을 더한 값이었습니다.
 - TimeZoneBias 는 부호 있는 32비트 값입니다. 조사한 PC 에서는 -540(UTC+9)이었습니다.
 - TimeDeltaInMs 는 음수가 될 수 있습니다. 조사한 PC 에서 -1995 는 약 2초 뒤로 돌린 것이었고, 깨어날 때 121010 은 약 2분 앞으로 옮긴 것이었습니다. 뒤로 간 변경을 찾을 때는 이 칸의 부호를 봅니다.
 - 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md)을 씁니다.

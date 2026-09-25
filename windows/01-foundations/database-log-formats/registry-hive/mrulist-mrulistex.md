@@ -44,7 +44,7 @@ MRU 목록은 대부분 사용자 하이브 NTUSER.DAT 와 UsrClass.dat 에 있�
 | 실행 창 명령 | `RunMRU`: MRUList, 문자열 | `RunMRU`: MRUList, 문자열 (winreg-kb 는 Vista 까지 적었습니다) |
 
 - winreg-kb 는 `OpenSavePidlMRU` 와 `LastVisitedPidlMRU` 를 Vista·7 기준으로 적었습니다.
-- Windows 11 에서도 `OpenSavePidlMRU`·`LastVisitedPidlMRU`·`CIDSizeMRU`·`BagMRU` 는 MRUListEx 를 썼습니다. 순서 값과 항목 값은 모두 REG_BINARY 였습니다. (확인 범위: Windows 11 25H2)
+- Windows 11 에서도 `OpenSavePidlMRU`·`LastVisitedPidlMRU`·`CIDSizeMRU`·`BagMRU` 는 MRUListEx 를 썼습니다. 순서 값과 항목 값은 모두 REG_BINARY 였습니다.
 
 ## 구조
 
@@ -156,7 +156,7 @@ MRUList 는 comctl32.dll 의 MRU 함수가 쓰는 저장 형식입니다. Micros
 
 - 목록을 만들 때 `MRU_CACHEWRITE` 표시를 켜면, 바뀐 순서를 레지스트리에 바로 쓰지 않습니다. 새 항목이 들어오거나 목록을 닫을 때 씁니다. 그동안 메모리의 순서와 레지스트리의 순서가 다를 수 있습니다.
 - MRUListEx 를 쓰는 셸 구현은 공개 문서를 찾지 못했습니다.
-- Windows 11 에서는 가장 큰 번호가 순서 맨 앞에 있지 않은 목록이 여럿 있었습니다. 번호가 클수록 최근 항목이라고 읽으면 틀립니다. (확인 범위: Windows 11 25H2, `OpenSavePidlMRU`·`LastVisitedPidlMRU`·`CIDSizeMRU`)
+- Windows 11 에서는 가장 큰 번호가 순서 맨 앞에 있지 않은 목록이 여럿 있었습니다. 번호가 클수록 최근 항목이라고 읽으면 틀립니다. (Windows 11 25H2 의 `OpenSavePidlMRU`·`LastVisitedPidlMRU`·`CIDSizeMRU` 기준)
 
 ## 포렌식에서 중요한 점
 
@@ -194,7 +194,7 @@ MRUList 는 comctl32.dll 의 MRU 함수가 쓰는 저장 형식입니다. Micros
 - 목록에 올랐다고 사용자가 직접 열었다는 뜻은 아닙니다. Windows 10 의 RecentDocs 는 파일을 만들기만 해도 항목이 생기고, 상위 폴더 항목도 함께 생긴다고 보고됐습니다. 키마다 무엇이 항목을 만드는지는 각 아티팩트 페이지에서 확인합니다.
 - 최근 목록인데 이 방식이 아닌 키가 있습니다. [TypedURLs](../../../02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md) 는 순서 값 없이 `url1`, `url2` … 이름을 씁니다. 새 주소가 들어오면 기존 값의 이름을 하나씩 뒤로 밀어서 다시 씁니다. 이런 키는 값 이름의 번호가 곧 순서입니다.
 - 이런 키는 새 항목 하나만 들어와도 모든 값을 다시 쓰므로, 두 시점을 비교할 때 바뀐 값이 모두 사용자가 쓴 항목은 아닙니다.
-- 탐색기 주소창 기록인 TypedPaths 에도 순서 값이 없었습니다. (확인 범위: Windows 11 25H2) 해석은 [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](../../../02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) 에 있습니다.
+- 탐색기 주소창 기록인 TypedPaths 에도 순서 값이 없었습니다. 해석은 [탐색기 입력 기록 (TypedPaths·WordWheelQuery)](../../../02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md) 에 있습니다.
 - 끝 표시에서 읽기를 멈춰야 합니다. 끝 표시 뒤에 바이트가 더 있거나 끝 표시가 없으면 도구마다 결과가 다를 수 있습니다. 이런 경우에는 원시 바이트를 직접 확인합니다.
 
 ## 도구

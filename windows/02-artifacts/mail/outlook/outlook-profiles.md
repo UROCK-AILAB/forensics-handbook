@@ -77,7 +77,7 @@ Office 는 판마다 레지스트리 경로에 버전 번호를 넣습니다. Mi
 
 ### 클래식 Outlook 이 없는 PC 에서 본 것
 
-아래는 새 Outlook 만 깔린 PC 에서 본 것입니다. (확인 범위: Windows 11 25H2 PC 한 대, 클래식 Outlook 없음, 새 Outlook 1.2026.707.300)
+아래는 새 Outlook 1.2026.707.300 만 깔린 Windows 11 25H2 기준입니다.
 
 위 표의 두 `Profiles` 키가 모두 없었습니다. `HKCU\Software\Microsoft\Office\16.0\Outlook` 키는 있었고, 그 아래에는 `Options` 키만 있었습니다.
 

@@ -34,7 +34,7 @@ HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 하이브 파일의 위
 
 ### 자료와 관찰이 다른 점
 
-Windows 11 25H2 PC 한 대에서 본 WordWheelQuery 는 winreg-kb 의 설명과 달랐습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대에서 본 WordWheelQuery 는 winreg-kb 의 설명과 달랐습니다.
 
 | 항목 | winreg-kb 의 설명 | Windows 11 25H2 관찰 |
 |---|---|---|
@@ -44,7 +44,7 @@ Windows 11 25H2 PC 한 대에서 본 WordWheelQuery 는 winreg-kb 의 설명과 
 
 이 GUID 하위 키가 무엇을 뜻하는지, 어느 버전부터 하위 키로 나뉘었는지는 확인하지 못했습니다. 같은 PC 의 `HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings` 에 `IsDeviceSearchHistoryEnabled` 값이 0 으로 있었습니다. 이 값이 WordWheelQuery 기록과 관계있는지는 확인하지 못했습니다.
 
-TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. MRUList 와 MRUListEx 값은 없었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+TypedPaths 는 같은 PC 에서 `url1`~`url13` 이 모두 REG_SZ 였습니다. MRUList 와 MRUListEx 값은 없었습니다.
 
 ## 구조
 
@@ -63,7 +63,7 @@ plaso 는 이 키를 `windows_typed_urls` 플러그인으로 읽는데, 인터�
 
 ### WordWheelQuery
 
-관찰한 PC 의 구조입니다. (확인 범위: Windows 11 25H2, PC 한 대)
+관찰한 PC 의 구조입니다.
 
 | 자리 | 값 | 내용 |
 |---|---|---|

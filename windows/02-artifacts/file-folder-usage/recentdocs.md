@@ -47,7 +47,7 @@ RecentDocs 를 해석할 때 알아 둘 점은 다음과 같습니다.
 |---|---|---|
 | 2000 · XP | 문자열 | winreg-kb |
 | Vista 이후 | 문자열 + 셸 항목, 순서는 MRUListEx | winreg-kb |
-| 11 25H2 | 키가 있었습니다. 값과 하위 키는 0개였습니다 | 관찰 (확인 범위: Windows 11 25H2, PC 한 대) |
+| 11 25H2 | 키가 있었습니다. 값과 하위 키는 0개였습니다 | 관찰 |
 
 Windows 11 에서 키가 비어 있던 PC 의 사정은 아래 "함정과 한계" 에서 다룹니다.
 
@@ -111,7 +111,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 
 1. **값 이름의 번호를 순서로 읽습니다.** 순서는 MRUListEx 만 정하며 값 이름 `0` 이 가장 오래된 항목이라는 보장이 없습니다.
 2. **키 시각을 모든 항목에 붙입니다.** 키 시각은 첫 항목에만 조건부로 이어집니다.
-3. **빈 키를 "쓰지 않았다" 로 읽습니다.** Windows 11 25H2 PC 한 대에서 다음을 봤습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+3. **빈 키를 "쓰지 않았다" 로 읽습니다.** Windows 11 25H2 PC 한 대에서 다음을 봤습니다.
    - `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced` 의 `Start_TrackDocs` 값이 0 이었습니다.
    - RecentDocs 키는 있었지만 값과 하위 키가 0개였습니다.
    - RecentDocs 키의 마지막 기록 시각은 사용자 프로필을 만든 날과 같았습니다.

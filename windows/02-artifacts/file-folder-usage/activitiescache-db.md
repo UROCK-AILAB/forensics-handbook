@@ -54,7 +54,7 @@ Microsoft 는 활동 기록 (activity history) 을 이렇게 설명합니다.
 - DB 옆에 `ActivitiesCache.db-wal` 과 `ActivitiesCache.db-shm` 이 함께 있습니다. 세 파일을 함께 수집하며, 이유는 "구조" 에서 설명합니다.
 - 사용자 프로필 폴더 안이라 어느 Windows 사용자의 기록인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
-Windows 11 25H2 PC 한 대에서 본 모습은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대에서 본 모습은 다음과 같습니다.
 
 - 계정 폴더는 두 개였습니다. 하나는 16자리 16진수 이름이었고, 하나는 `AAD.<GUID>` 이름이었습니다.
 - `L.` 로 시작하는 폴더는 없었습니다.
@@ -70,17 +70,17 @@ GUID 표기는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid
 |---|---|---|
 | 10 1803 (빌드 17134) · 1809 (17763) · 1903 이후 | 타임라인을 지원합니다 | kacos2000 WindowsTimeline |
 | 11 22H2 · 23H2 | 2024-01-23 KB5034204 부터 Microsoft 로 보내는 옵션이 없어졌습니다 | Microsoft |
-| 11 25H2 | DB 를 만들고 계속 갱신했습니다. `user_version` 은 30 이었습니다 | 관찰 (확인 범위: Windows 11 25H2, PC 한 대) |
+| 11 25H2 | DB 를 만들고 계속 갱신했습니다. `user_version` 은 30 이었습니다 | 관찰 |
 
 - Windows 11 에서 타임라인 화면이 없어졌다는 설명이 널리 쓰입니다. 확인한 Microsoft 문서에서는 그런 문장을 찾지 못했습니다.
-- 화면이 없어도 DB 는 남습니다. Windows 11 25H2 PC 한 대에서 16진수 이름 폴더의 DB 는 조사 당일에도 기록되고 있었습니다. 몇 분 사이에 `-wal` 크기가 4,152 바이트에서 935,272 바이트로 바뀌었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 화면이 없어도 DB 는 남습니다. Windows 11 25H2 PC 한 대에서 16진수 이름 폴더의 DB 는 조사 당일에도 기록되고 있었습니다. 몇 분 사이에 `-wal` 크기가 4,152 바이트에서 935,272 바이트로 바뀌었습니다.
 - 검체의 버전은 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 먼저 확인합니다.
 
 ## 구조
 
 ### 파일 형식
 
-Windows 11 25H2 PC 한 대에서 본 형식은 다음과 같습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대에서 본 형식은 다음과 같습니다.
 
 - 평범한 SQLite 파일이었습니다. 첫 16바이트가 `SQLite format 3` 과 `00` 이었습니다.
 - 같은 PC 의 [윈도 검색 색인 DB](windows-search/index.md) 처럼 헤더가 암호화돼 있지 않았습니다.
@@ -90,7 +90,7 @@ WAL 파일을 읽는 방법과 지운 행이 남는 자리는 [SQLite 데이터�
 
 ### 표
 
-Windows 11 25H2 PC 한 대의 DB 에는 다음 표가 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대의 DB 에는 다음 표가 있었습니다.
 
 | 표 | 칸 또는 내용 |
 |---|---|
@@ -105,7 +105,7 @@ kacos2000 의 자료가 주로 다루는 표는 `Activity` (원문 표기 "Activ
 
 ### Activity 표의 칸
 
-Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니다.
 
 `Id`, `AppId`, `PackageIdHash`, `AppActivityId`, `ActivityType`, `ActivityStatus`, `ParentActivityId`, `Tag`, `Group`, `MatchId`, `LastModifiedTime`, `ExpirationTime`, `Payload`, `Priority`, `IsLocalOnly`, `PlatformDeviceId`, `DdsDeviceId`, `CreatedInCloud`, `StartTime`, `EndTime`, `LastModifiedOnClient`, `GroupAppActivityId`, `ClipboardPayload`, `EnterpriseId`, `OriginalPayload`, `UserActionState`, `IsRead`, `OriginalLastModifiedOnClient`, `GroupItems`, `LocalExpirationTime`, `ETag`
 
@@ -119,10 +119,10 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
 | `Payload` | BLOB | kacos2000 자료는 JSON 이라고 적습니다. 전체를 조회하려면 SQLite JSON1 확장이 필요합니다 |
 | `ClipboardPayload` | BLOB | Base64 로 인코딩한 텍스트 |
 | `PlatformDeviceId` | (형태는 적지 않음) | 활동이 나온 기기. kacos2000 자료는 이 값을 HKCU 의 DeviceCache 항목과 맞춰 기기를 찾습니다. 같은 기기의 값도 시간이 지나면 바뀐다고 적습니다 |
-| `StartTime`, `EndTime`, `LastModifiedTime`, `ExpirationTime`, `CreatedInCloud`, `LastModifiedOnClient` | `StartTime`·`LastModifiedTime` 은 INTEGER | Unix 초로 풀립니다 (확인 범위: Windows 11 25H2, PC 한 대). 칸마다의 정확한 뜻은 아래 "시각 해석" 을 봅니다 |
+| `StartTime`, `EndTime`, `LastModifiedTime`, `ExpirationTime`, `CreatedInCloud`, `LastModifiedOnClient` | `StartTime`·`LastModifiedTime` 은 INTEGER | Unix 초로 풀립니다. 칸마다의 정확한 뜻은 아래 "시각 해석" 을 봅니다 |
 
-- DeviceCache 의 전체 키 경로는 확인하지 못했습니다. 흔히 `HKCU\Software\Microsoft\Windows\CurrentVersion\TaskFlow\DeviceCache` 로 설명하는 키는 Windows 11 25H2 PC 한 대에 없었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
-- `Metadata` 의 `CurrentSettings` 값은 `{"ActivityTypes":[0,1,3,4,7,11,12,13,15,16],"Environment":"prod"}` 였습니다. `AAD.<GUID>` 폴더 DB 에서는 `ActivityTypes` 가 `[0,1,3,4,7,13,16]` 이었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- DeviceCache 의 전체 키 경로는 확인하지 못했습니다. 흔히 `HKCU\Software\Microsoft\Windows\CurrentVersion\TaskFlow\DeviceCache` 로 설명하는 키는 Windows 11 25H2 PC 한 대에 없었습니다.
+- `Metadata` 의 `CurrentSettings` 값은 `{"ActivityTypes":[0,1,3,4,7,11,12,13,15,16],"Environment":"prod"}` 였습니다. `AAD.<GUID>` 폴더 DB 에서는 `ActivityTypes` 가 `[0,1,3,4,7,13,16]` 이었습니다.
 
 ## 증거로서 의미
 
@@ -156,14 +156,14 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
 | `CreatedInCloud` | Unix 초 | 정확한 뜻은 확인하지 못했습니다. 값이 있는 행은 동기화를 거친 행일 수 있습니다 |
 
 - Unix 초는 1970-01-01 00:00:00 UTC 부터 센 초입니다. 그래서 풀어낸 값은 UTC 입니다. 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
-- Windows 11 25H2 PC 한 대에서 `StartTime` 과 `LastModifiedTime` 은 INTEGER 로 저장돼 있었습니다. Unix 초로 풀면 그럴듯한 날짜가 나왔습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- Windows 11 25H2 PC 한 대에서 `StartTime` 과 `LastModifiedTime` 은 INTEGER 로 저장돼 있었습니다. Unix 초로 풀면 그럴듯한 날짜가 나왔습니다.
 - 로컬 DB 의 보존 기간은 확인한 자료에 없습니다. Microsoft 문서의 30일은 클라우드에 올라간 활동 기록이 마지막 동기화 뒤 30일 안에 자동으로 지워진다는 설명입니다. 로컬 DB 의 보존 기간이 아닙니다.
-- 같은 PC 에서 `ExpirationTime` − `LastModifiedTime` 은 2,555~3,650일 (약 7~10년) 이었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 같은 PC 에서 `ExpirationTime` − `LastModifiedTime` 은 2,555~3,650일 (약 7~10년) 이었습니다.
 - 보존 기간을 가정해 "이 날짜 전 기록은 없다" 고 쓰지 않습니다. 실제 행의 날짜 범위를 적습니다.
 
 ## 함정과 한계
 
-1. **동기화된 행을 이 PC 의 행으로 읽습니다.** Windows 11 25H2 PC 한 대에서 다음을 봤습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+1. **동기화된 행을 이 PC 의 행으로 읽습니다.** Windows 11 25H2 PC 한 대에서 다음을 봤습니다.
    - `StartTime` 범위는 2023-03-28 ~ 2026-09-23 이었습니다.
    - 이 PC 의 사용자 폴더는 2026-06-26 에 만들어졌는데 PC 보다 오래된 행이 있었습니다.
    - 711행 가운데 702행에 `CreatedInCloud` 값이 있었습니다.
@@ -172,19 +172,19 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
    이 DB 에는 다른 기기에서 동기화돼 들어온 행이 섞여 있다고 보는 것이 맞습니다. 행을 `PlatformDeviceId` 로 먼저 나눕니다.
 2. **`-wal` 을 빼고 수집합니다.** 최근 기록이 `-wal` 에만 있을 수 있습니다. `ActivitiesCache.db`, `-wal`, `-shm` 세 파일을 함께 가져옵니다.
 3. **원본 DB 를 바로 엽니다.** 사본을 만든 뒤 사본을 엽니다. SQLite 도구가 WAL 을 합치면 파일이 바뀝니다. 자세한 내용은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
-4. **Windows 11 에서도 파일 열기 행을 기대합니다.** Windows 11 25H2 PC 한 대의 16진수 이름 폴더 DB 는 다음과 같았습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+4. **Windows 11 에서도 파일 열기 행을 기대합니다.** Windows 11 25H2 PC 한 대의 16진수 이름 폴더 DB 는 다음과 같았습니다.
    - `Activity` 711행, `ActivityOperation` 0행, `Activity_PackageId` 1,422행, `DataEncryptionKeys` 82행이었습니다.
    - `ActivityType` 은 11 (604행), 12 (21행), 15 (86행) 뿐이었습니다. 유형 5·6 행은 없었습니다.
    - `AppId` 의 application 값은 설정·자격 증명 동기화처럼 보이는 이름이었습니다. "11·12·15 = 시스템 작업" 설명과 맞습니다.
    - `AAD.<GUID>` 폴더 DB 는 `Activity` 와 `ActivityOperation` 이 모두 0행이었습니다.
 
    두 DB 의 `CurrentSettings` 에 있는 `ActivityTypes` 목록에는 5 와 6 이 없었습니다. 이 목록과 유형 5·6 행이 없는 것이 관계있는지는 확인하지 못했습니다.
-5. **`Payload` 를 모두 JSON 으로 읽습니다.** Windows 11 25H2 PC 한 대에서 `Payload` 는 BLOB 칸에 Base64 ASCII 텍스트로 들어 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+5. **`Payload` 를 모두 JSON 으로 읽습니다.** Windows 11 25H2 PC 한 대에서 `Payload` 는 BLOB 칸에 Base64 ASCII 텍스트로 들어 있었습니다.
    - 유형 15 는 Base64 를 풀면 DER 로 된 CMS EnvelopedData (OID 1.2.840.113549.1.7.3) 였습니다.
    - 유형 11·12 는 Base64 를 풀면 `43 42 01 00` 으로 시작하는 이진 데이터였습니다.
 
    이 유형들은 JSON 이 아니고 암호화된 것으로 보입니다. `DataEncryptionKeys` 표와의 관계는 확인하지 못했습니다.
-6. **클립보드 칸에 값이 있으면 내용도 있다고 봅니다.** 같은 PC 에서 `ClipboardPayload` 는 137행에 있었지만 모두 `[]` 였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+6. **클립보드 칸에 값이 있으면 내용도 있다고 봅니다.** 같은 PC 에서 `ClipboardPayload` 는 137행에 있었지만 모두 `[]` 였습니다.
 7. **계정 폴더 이름을 규칙대로만 찾습니다.** 같은 PC 에는 `L.` 폴더가 없었습니다. `ConnectedDevicesPlatform` 아래 폴더를 모두 열어 봅니다.
 
 ### 지우기와 조작
@@ -209,7 +209,7 @@ Windows 11 25H2 PC 한 대에서 `Activity` 표의 칸은 다음과 같았습니
 3. 이 16바이트가 보이면 평범한 SQLite 파일입니다. 보이지 않으면 암호화나 손상을 의심합니다.
 4. 같은 폴더에 `-wal` 파일이 있는지, 크기가 얼마인지 적어 둡니다.
 
-`Payload` 를 볼 때는 BLOB 의 앞 바이트를 먼저 봅니다. 아래는 Windows 11 25H2 PC 한 대에서 본 앞부분 모양만 옮긴 예시입니다. 뒤 바이트는 줄였습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+`Payload` 를 볼 때는 BLOB 의 앞 바이트를 먼저 봅니다. 아래는 Windows 11 25H2 PC 한 대에서 본 앞부분 모양만 옮긴 예시입니다. 뒤 바이트는 줄였습니다.
 
 ```
 Base64 를 푼 뒤 (유형 11·12)

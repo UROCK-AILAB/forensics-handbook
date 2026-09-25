@@ -59,7 +59,7 @@ Windows 에서 디스크와 볼륨은 `CreateFile` 함수로 직접 엽니다. �
 
 ## 암호화 볼륨
 
-BitLocker 가 켜진 PC 한 대에서 같은 자리를 두 경로로 읽었습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대). C: 는 사용한 공간만 암호화, XTS-AES 128, 보호 켜짐, 잠금 해제 상태였습니다.
+BitLocker 가 켜진 PC 한 대에서 같은 자리를 두 경로로 읽었습니다. C: 는 사용한 공간만 암호화, XTS-AES 128, 보호 켜짐, 잠금 해제 상태였습니다.
 
 | 읽은 경로 | 볼륨 첫 섹터의 OEM ID |
 |---|---|
@@ -97,7 +97,7 @@ BitLocker 가 켜진 PC 한 대에서 같은 자리를 두 경로로 읽었습�
 | DiskShadow | Windows Server 에만 있습니다. 클라이언트에는 없습니다 | — |
 | VssAdmin | VSS 개요 문서는 클라이언트와 서버 모두에 있고 `create shadow` 명령이 있다고 적습니다. `vssadmin` 명령 참조 문서의 목록에는 `create shadow` 가 없습니다 | Windows 11 Home 에서 `vssadmin create shadow` 는 "Error: Invalid command." 였습니다 |
 
-`vssadmin` 명령 참조 문서는 클라이언트와 서버 모두에서 쓸 수 있는 명령으로 Delete Shadows, List Providers, List Shadows, List ShadowStorage, List Volumes, List Writers, Resize ShadowStorage 를 듭니다. 그 PC 의 VssAdmin 도 같은 명령만 보여 줬습니다 (확인 범위: Windows 11 Home 10.0.26200, PC 한 대). 클라이언트 Windows 에서 VssAdmin 으로는 복사본을 만들 수 없다고 보고, 현장에 가기 전에 대상 판에서 쓸 수 있는 방법을 확인해 둡니다.
+`vssadmin` 명령 참조 문서는 클라이언트와 서버 모두에서 쓸 수 있는 명령으로 Delete Shadows, List Providers, List Shadows, List ShadowStorage, List Volumes, List Writers, Resize ShadowStorage 를 듭니다. 그 PC 의 VssAdmin 도 같은 명령만 보여 줬습니다. 클라이언트 Windows 에서 VssAdmin 으로는 복사본을 만들 수 없다고 보고, 현장에 가기 전에 대상 판에서 쓸 수 있는 방법을 확인해 둡니다.
 
 ## 도구
 
@@ -113,7 +113,7 @@ RFC 3227 은 비트 복사 도구의 예로 `dd` 를, 체크섬 도구의 예로
 6. **파일 복사로 충분하다고 봅니다.** 논리 백업에는 지운 파일과 슬랙 공간이 없습니다. 파일 생성 시각이 바뀔 수도 있습니다.
 7. **어디서나 `vssadmin create shadow` 가 된다고 봅니다.** `vssadmin` 명령 참조 문서의 클라이언트 명령 목록에 없고, Windows 11 Home 한 대에서도 되지 않았습니다.
 8. **섀도 복사본을 만들어도 증거가 그대로라고 봅니다.** 차이 영역이 증거 볼륨에 있으면 그 볼륨에 데이터를 씁니다.
-9. **희소 스트림을 뽑은 방법을 적지 않습니다.** `$UsnJrnl:$J` 같은 희소 스트림은 빈 구간을 0 으로 채우느냐 건너뛰느냐에 따라 크기와 해시가 달라집니다 (확인 범위: 압수 이미지에서 추출). 켜진 시스템에서 파일 단위로 뽑을 때도 어떻게 뽑았는지 적습니다. 저널 자체는 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md)에서 다룹니다.
+9. **희소 스트림을 뽑은 방법을 적지 않습니다.** `$UsnJrnl:$J` 같은 희소 스트림은 빈 구간을 0 으로 채우느냐 건너뛰느냐에 따라 크기와 해시가 달라집니다. 켜진 시스템에서 파일 단위로 뽑을 때도 어떻게 뽑았는지 적습니다. 저널 자체는 [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md)에서 다룹니다.
 
 ## 결과를 어떻게 해석하나
 

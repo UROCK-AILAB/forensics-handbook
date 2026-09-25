@@ -78,7 +78,7 @@ Outlook for Microsoft 365 버전 2202(빌드 14931.20604)부터 달라진 점이
 
 이 페이지 제목의 "Stream_Autocomplete" 는 위 로컬 사본 파일 이름에서 온 말입니다. 목록 항목에 마지막 사용 시각이나 사용 횟수 같은 칸이 있는지도 확인하지 못했습니다.
 
-클래식 Outlook 이 없는 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook\RoamCache` 폴더가 없었습니다. (확인 범위: Windows 11 25H2 PC 한 대, 새 Outlook 만 설치)
+클래식 Outlook 이 없는 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook\RoamCache` 폴더가 없습니다(Windows 11 25H2 기준).
 
 ## 증거로서 의미
 

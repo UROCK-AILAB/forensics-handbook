@@ -23,7 +23,7 @@ NTFS 에서 파일 하나를 여러 경로로 보이게 하는 방법은 두 가
 | 시스템 파일 압축 (WOF) | WOF 태그 | 이름 없는 `$DATA` 는 희소 스트림이고, 압축된 내용은 `WofCompressedData` 스트림에 있습니다. |
 | 스토어 앱 실행 별칭 | APPEXECLINK 태그 | 크기 0바이트 `.exe` 로 보입니다. |
 
-관찰 사례입니다(확인 범위: Windows 11 25H2, 빌드 26200). `System32\notepad.exe` 는 MFT 레코드 하나에 `\Windows`, `\Windows\System32`, `\Windows\WinSxS\…` 세 경로가 붙어 있었습니다. `%LOCALAPPDATA%\Microsoft\WindowsApps` 의 실행 별칭은 0바이트였고 태그는 0x8000001B 였습니다.
+관찰 사례입니다. `System32\notepad.exe` 는 MFT 레코드 하나에 `\Windows`, `\Windows\System32`, `\Windows\WinSxS\…` 세 경로가 붙어 있었습니다. `%LOCALAPPDATA%\Microsoft\WindowsApps` 의 실행 별칭은 0바이트였고 태그는 0x8000001B 였습니다.
 
 ## 구조
 
@@ -173,7 +173,7 @@ NTFS 에서 파일 하나를 여러 경로로 보이게 하는 방법은 두 가
 3. **액세스 거부는 숨김이 아님.** 호환용 정션에는 숨김·시스템 속성과 Everyone 읽기 거부 ACL 이 걸려 있습니다. 목록 열기가 실패하는 것은 정상입니다.
 4. **같은 해시 여러 개.** 하드 링크된 파일은 해시가 같은 파일 여러 개로 나옵니다. MFT 번호가 같으면 사본이 아니라 한 파일입니다([해시셋 대조와 유사 해시](../../../03-techniques/analysis/hash-set-fuzzy-hash.md)).
 5. **내용이 빈 파일.** WOF·클라우드 태그 파일에서 이름 없는 `$DATA` 만 읽으면 비어 있거나 0 으로 보입니다. WOF 는 `WofCompressedData` 스트림을 풀어야 합니다([압축·희소 파일](compressed-sparse.md), [ADS](ads.md)). 클라우드 자리표시 파일은 내용이 디스크에 없을 수 있습니다([클라우드 동기화 공통 구조](../../../02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md)).
-6. **이름 순서와 널 문자.** 관찰 사례입니다(확인 범위: Windows 11 25H2, 빌드 26200). `C:\Users\All Users` 심볼릭 링크는 표시 이름 `C:\ProgramData` 가 앞에, 대체 이름 `\??\C:\ProgramData` 가 뒤에 있었고 널 문자가 없었습니다. 같은 PC 의 `C:\Documents and Settings` 정션은 대체 이름이 앞이었고 이름마다 널 문자가 붙어 있었습니다. 항상 오프셋과 길이로 읽습니다.
+6. **이름 순서와 널 문자.** 관찰 사례입니다. `C:\Users\All Users` 심볼릭 링크는 표시 이름 `C:\ProgramData` 가 앞에, 대체 이름 `\??\C:\ProgramData` 가 뒤에 있었고 널 문자가 없었습니다. 같은 PC 의 `C:\Documents and Settings` 정션은 대체 이름이 앞이었고 이름마다 널 문자가 붙어 있었습니다. 항상 오프셋과 길이로 읽습니다.
 7. **태그 값이 문서마다 다름.** 문서나 도구에 따라 태그 이름과 값이 다르게 적힌 곳이 있습니다. 태그 값은 MS-FSCC 표로 확인합니다.
 
 ## 도구

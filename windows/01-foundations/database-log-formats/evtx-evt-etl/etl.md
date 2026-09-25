@@ -16,7 +16,7 @@ ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의
 ## 이 형식을 쓰는 아티팩트
 
 - 부팅 초기 추적 세션인 AutoLogger 가 `.etl` 파일을 남깁니다. 세션 설정에 FileName 값이 없으면 `%SystemRoot%\System32\LogFiles\WMI\<세션이름>.etl` 에 씁니다.
-- 확인 PC 의 `C:\Windows\System32\LogFiles\WMI` 에는 LwtNetLog.etl·NetCore.etl·RadioMgr.etl·Wifi.etl·ReFSLog.etl·NtfsLog.etl.002 ~ .006 등이 있었습니다(확인 범위: Windows 11 25H2 PC 한 대, 이하 같음).
+- 확인 PC 의 `C:\Windows\System32\LogFiles\WMI` 에는 LwtNetLog.etl·NetCore.etl·RadioMgr.etl·Wifi.etl·ReFSLog.etl·NtfsLog.etl.002 ~ .006 등이 있었습니다.
 - 같은 폴더의 `RtBackup` 에는 `EtwRT<세션이름>.etl` 파일들이 있었습니다. EtwRTDiagLog.etl 은 72바이트였고, EtwRTAdmin_PS_Provider.etl 은 약 26MB 였습니다.
 - 이벤트 로그 쪽 세션도 ETW 설정 키에 있습니다. 아래 "이벤트 로그(EVTX)와의 관계" 를 봅니다.
 

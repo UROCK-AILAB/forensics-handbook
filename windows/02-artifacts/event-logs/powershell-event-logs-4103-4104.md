@@ -35,7 +35,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | Windows PowerShell (옛 방식 로그) | Windows PowerShell | PowerShell | `%SystemRoot%\System32\Winevt\Logs\Windows PowerShell.evtx` (이름에 빈칸) |
 | PowerShell 7 | PowerShellCore/Operational | `{f90714a8-5509-434a-bf6d-b1624c8a19a2}` | — |
 
-- Microsoft-Windows-PowerShell 공급자의 메시지 파일은 `%windir%\system32\WindowsPowerShell\v1.0\PSEvents.dll` 이었습니다. (확인 범위: Win11 빌드 26200 한 대)
+- Microsoft-Windows-PowerShell 공급자의 메시지 파일은 `%windir%\system32\WindowsPowerShell\v1.0\PSEvents.dll` 이었습니다.
 - 옛 방식 PowerShell 공급자의 메시지 파일은 `%SystemRoot%\system32\WindowsPowerShell\v1.0\pwrshmsg.dll` 이었습니다. (같은 PC)
 - PowerShell 7 은 Windows 에서 `$PSHOME\RegisterManifest.ps1` 로 공급자를 등록해야 이벤트를 씁니다.
 - 조사한 PC 에는 PowerShell 7 이 없었고 PowerShellCore/Operational 로그도 없었습니다.
@@ -51,7 +51,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | 보호된 이벤트 기록 | Administrative Templates -> Windows Components -> Event Logging -> Enable Protected Event Logging | Windows PowerShell 5.1 문서 |
 
 - Windows PowerShell 5.1 의 모듈 기록 정책이 레지스트리 어디에 저장되는지는 이번에 연 자료에 없었습니다.
-- 조사한 PC 에는 `HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell` 키 자체가 없었습니다. 그런데도 4104 가 수백 건 남아 있었습니다. (확인 범위: Win11 빌드 26200 한 대)
+- 조사한 PC 에는 `HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell` 키 자체가 없었습니다. 그런데도 4104 가 수백 건 남아 있었습니다.
 
 ### 버전별 차이
 
@@ -74,7 +74,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | Task | CommandStart |
 | Keyword | Runspace |
 
-한 PC 의 공급자 메타데이터에서 읽은 메시지와 칸은 다음과 같습니다. (확인 범위: Win11 빌드 26200 한 대)
+한 PC 의 공급자 메타데이터에서 읽은 메시지와 칸은 다음과 같습니다.
 
 - 메시지: `Creating Scriptblock text (%1 of %2): %3 ScriptBlock ID: %4 Path: %5`
 - 칸: MessageNumber (Int32), MessageTotal (Int32), ScriptBlockText, ScriptBlockId, Path
@@ -92,7 +92,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 
 스크립트 블록 기록을 켜지 않았어도 PowerShell 은 악성 스크립트가 자주 쓰는 내용이 든 블록을 자동으로 남깁니다. Microsoft 블로그는 이 기록을 "최후의 기록" 이라고 적었으며, 백신이나 전체 기록을 대신하지 않습니다. 어떤 낱말이 걸리는지 목록은 확인하지 못했습니다.
 
-정책이 없는 PC 에서 본 4104 의 머리 값입니다. (확인 범위: Win11 빌드 26200 한 대)
+정책이 없는 PC 에서 본 4104 의 머리 값입니다.
 
 | 항목 | 값 |
 |---|---|
@@ -121,7 +121,7 @@ ScriptBlock ID 로 4104 와 이을 수 있고, Runspace ID 는 그 블록이 돈
 - 칸: ContextInfo, UserData, Payload
 - 4100 (오류) 과 4102 도 같은 세 칸을 씁니다.
 
-(확인 범위: Win11 빌드 26200 한 대)
+
 
 조사한 PC 의 4103 은 Level 4, Task 106, Opcode 20 이었습니다. Payload 에는 명령과 인자 값이 이런 꼴로 들어 있었습니다.
 
@@ -143,7 +143,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 
 ### 옛 방식 "Windows PowerShell" 로그
 
-조사한 PC 에서 본 이벤트입니다. (확인 범위: Win11 빌드 26200 한 대)
+조사한 PC 에서 본 이벤트입니다.
 
 | ID | 메시지 | 건수 |
 |---|---|---|
@@ -200,7 +200,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 3. **조각 하나만 봅니다.** MessageTotal 이 1 보다 크면 같은 ScriptBlock ID 의 조각을 모두 모읍니다.
 4. **4103 을 영어 키로 찾습니다.** ContextInfo 의 키 이름은 화면 언어로 저장됩니다. "Host Application" 으로 찾는 도구는 한국어 PC 의 4103 에서 값을 찾지 못합니다.
 5. **스크립트 내용만 봅니다.** 스크립트 내용 (4104) 과 실행 명령줄 (400 의 HostApplication, 4103 의 호스트 응용 프로그램) 은 다른 곳에 있습니다. 둘 다 봅니다.
-6. **로그가 오래 남는다고 봅니다.** 조사한 PC 의 Operational 로그는 15MB 였습니다. 가장 오래된 기록은 조사 시점 약 3시간 반 전이었습니다 (1,868건). 조사하는 30분 사이에 952건으로 줄었습니다. 이 PC 는 자동화 도구가 PowerShell 을 쉴 새 없이 돌리는 특수한 경우입니다. (확인 범위: Win11 빌드 26200 한 대)
+6. **로그가 오래 남는다고 봅니다.** 조사한 PC 의 Operational 로그는 15MB 였습니다. 가장 오래된 기록은 조사 시점 약 3시간 반 전이었습니다 (1,868건). 조사하는 30분 사이에 952건으로 줄었습니다. 이 PC 는 자동화 도구가 PowerShell 을 쉴 새 없이 돌리는 특수한 경우입니다.
 7. **보호된 이벤트 기록을 흘려봅니다.** 이 정책을 켜면 공개키 (CMS, RFC 5652) 로 로그 내용을 암호화합니다. 개인키가 없으면 내용을 읽을 수 없습니다. 인증서는 Document Encryption EKU (1.3.6.1.4.1.311.80.1) 가 있어야 합니다. 이 정책이 켜진 PC 의 4104 가 어떤 모양인지는 확인하지 못했습니다.
 8. **보호된 이벤트 기록이 켜져 있으면 스크립트 블록 기록도 켜졌다고 봅니다.** 보호된 이벤트 기록을 켜도 스크립트 블록 기록은 자동으로 켜지지 않습니다.
 9. **PowerShell 7 을 흘려봅니다.** PowerShell 7 은 PowerShellCore/Operational 에 씁니다. Windows PowerShell 로그만 보면 빠집니다.

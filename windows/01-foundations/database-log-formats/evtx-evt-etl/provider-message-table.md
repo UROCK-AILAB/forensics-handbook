@@ -55,7 +55,7 @@ XP 이하에서 쓰던 방식이고, 로그 종류는 XML 의 `Channel` 요소�
 1. XML `Provider` 요소의 `Guid` 로 공급자 키를 찾아 MessageFileName 을 씁니다.
 2. 공급자 키가 없으면 원본 키의 EventMessageFile 을 씁니다. Vista 부터는 원본 키에 EventMessageFile 이 늘 있지는 않습니다.
 
-확인 PC 의 예입니다(확인 범위: Windows 11 25H2 PC 한 대).
+확인 PC 의 예입니다.
 
 원본 키 `EventLog\System\Service Control Manager` 에는 ProviderGuid `{555908d1-a6d7-4695-8e1e-26931d2012f4}` 와 EventMessageFile `%SystemRoot%\system32\services.exe` 가 있었습니다. 같은 GUID 의 Publishers 키는 기본값이 "Service Control Manager" 였고, ResourceFileName 과 MessageFileName 은 `%SystemRoot%\system32\services.exe`, ParameterFileName 은 `%SystemRoot%\system32\kernel32.dll` 이었습니다. 이 키 아래에는 하위 키 ChannelReferences 가 있었습니다.
 
@@ -83,7 +83,7 @@ XP 이하에서 쓰던 방식이고, 로그 종류는 XML 의 `Channel` 요소�
 
 ResourceFileName 의 파일에는 WEVT_TEMPLATE 리소스가 있어야 합니다. 최근 Windows 10 에서는 이 리소스가 `C:\Windows\SystemResources\<파일>.mun` 에 있을 수도 있습니다(예: `tquery.dll.mun`).
 
-확인 PC 에서 본 모습입니다(확인 범위: Windows 11 25H2 PC 한 대). `System32\en-US\services.exe.mui` 와 `System32\ko-KR\services.exe.mui` 가 둘 다 있었고, `C:\Windows\SystemResources` 에는 항목이 172개 있었으며, `tquery.dll.mun` 안에서 "CRIM" 서명이 보였습니다.
+확인 PC 에서 본 모습입니다. `System32\en-US\services.exe.mui` 와 `System32\ko-KR\services.exe.mui` 가 둘 다 있었고, `C:\Windows\SystemResources` 에는 항목이 172개 있었으며, `tquery.dll.mun` 안에서 "CRIM" 서명이 보였습니다.
 
 ### 이벤트 식별자에서 메시지 식별자로
 
@@ -103,7 +103,7 @@ Qualifiers 계산의 예는 다음과 같습니다. 0x40001b7c 의 문장은 "Th
 
 - 메시지 식별자의 위 2비트는 severity 입니다. 0x40001b7c 는 `01`(정보), 0xc0001b7a 는 `11`(오류) 입니다. 비트 구조는 [EVTX 파일 구조](file-header-chunk-record.md) 의 "이벤트 식별자와 수준" 에 있습니다.
 
-확인 PC 의 services.exe WEVT_TEMPLATE 에서 공급자 {555908d1-…} 의 정의를 읽었습니다(확인 범위: Windows 11 25H2 PC 한 대). 이 공급자의 이벤트 정의는 43개였고, 그 가운데 넷은 아래와 같습니다.
+확인 PC 의 services.exe WEVT_TEMPLATE 에서 공급자 {555908d1-…} 의 정의를 읽었습니다. 이 공급자의 이벤트 정의는 43개였고, 그 가운데 넷은 아래와 같습니다.
 
 | 이벤트 ID | 메시지 식별자 |
 |---|---|
@@ -181,7 +181,7 @@ Vista 부터 PE 파일의 `WEVT_TEMPLATE` 리소스에 이벤트 매니페스트
 - 이 이진 XML 은 EVTX 의 것과 조금 다릅니다. [이진 XML 해석](binary-xml-template.md) 의 "함정" 을 봅니다.
 - 이 템플릿 GUID 가 EVTX 레코드 안의 템플릿 GUID 와 같은 값인지는 이 핸드북이 참고한 자료로 확인하지 못했습니다.
 
-확인 PC 에서 본 모습입니다(확인 범위: Windows 11 25H2 PC 한 대).
+확인 PC 에서 본 모습입니다.
 
 services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었고, 명세의 3.1 과 다릅니다. services.exe 의 CRIM 은 크기가 24,532바이트였고 공급자가 3개였으며, 그 가운데 하나가 {555908d1-…}(Service Control Manager) 였습니다. 세 공급자 모두 CHAN·TTBL·PRVA·OPCO·LEVL·TASK·KEYW·EVNT 요소 8개가 있었습니다.
 

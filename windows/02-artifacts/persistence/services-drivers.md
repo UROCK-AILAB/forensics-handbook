@@ -27,8 +27,8 @@ Services 트리는 시스템의 서비스마다 정보를 담고, 드라이버�
 | svchost 그룹 목록 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Svchost` |
 
 - `CurrentControlSet` 은 켜진 PC 에서 보이는 이름입니다. 이미지에서 어느 컨트롤셋을 읽어야 하는지는 [컨트롤셋 고르기](../../01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다.
-- Windows 11 PC 한 대에서 `HKLM\SYSTEM\Select` 는 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다. `ControlSet001` 과 `CurrentControlSet` 만 보였고 `ControlSet002` 는 없었습니다. (확인 범위: Win11 25H2 한 대)
-- 같은 PC 의 `Svchost` 키에는 그룹 목록 값이 67개 있었습니다. 예를 들어 `netsvcs` 그룹에는 lanmanserver·IKEEXT·iphlpsvc 등이 들어 있었습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서 `HKLM\SYSTEM\Select` 는 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다. `ControlSet001` 과 `CurrentControlSet` 만 보였고 `ControlSet002` 는 없었습니다.
+- 같은 PC 의 `Svchost` 키에는 그룹 목록 값이 67개 있었습니다. 예를 들어 `netsvcs` 그룹에는 lanmanserver·IKEEXT·iphlpsvc 등이 들어 있었습니다.
 - 같은 PC 에는 사용자별 서비스가 있었습니다. 아래 "사용자별 서비스" 를 봅니다. 이 형태가 어느 버전부터 생겼는지는 확인하지 못했습니다.
 
 ## 구조
@@ -45,7 +45,7 @@ Services 트리는 시스템의 서비스마다 정보를 담고, 드라이버�
 | 0x3 | Demand | 필요할 때 올립니다. 드라이버는 장치에 필요하면 PnP 가 자동으로 올립니다 |
 | 0x4 | Disabled | 올리지 않습니다 |
 
-Start=2 에는 지연된 자동 시작도 들어갑니다. 자동 시작 서비스가 다 뜬 뒤 지연을 두고 하나씩 시작하는 방식이고, Windows 11 PC 한 대에서는 `DelayedAutostart`=1 값으로 표시되어 있었습니다(21개). (확인 범위: Win11 25H2 한 대)
+Start=2 에는 지연된 자동 시작도 들어갑니다. 자동 시작 서비스가 다 뜬 뒤 지연을 두고 하나씩 시작하는 방식이고, Windows 11 PC 한 대에서는 `DelayedAutostart`=1 값으로 표시되어 있었습니다(21개).
 
 **Type (조합할 수 있습니다)**
 
@@ -75,11 +75,11 @@ Start=2 에는 지연된 자동 시작도 들어갑니다. 자동 시작 서비�
 - `ImagePath`: 서비스 실행 파일 경로입니다.
 - `DisplayName`: 표시 이름입니다.
 - `Description`: 설명입니다.
-- Windows 11 PC 한 대에서는 `ObjectName`(실행 계정, 예: LocalSystem), `DependOnService`, `FailureActions`(REG_BINARY), `RequiredPrivileges`, `ServiceSidType`, `Group` 값도 보였습니다. 하위 키로는 `Security` 와 `TriggerInfo`(122개 서비스)가 있었습니다. (확인 범위: Win11 25H2 한 대)
+- Windows 11 PC 한 대에서는 `ObjectName`(실행 계정, 예: LocalSystem), `DependOnService`, `FailureActions`(REG_BINARY), `RequiredPrivileges`, `ServiceSidType`, `Group` 값도 보였습니다. 하위 키로는 `Security` 와 `TriggerInfo`(122개 서비스)가 있었습니다.
 
 ### svchost 형 서비스
 
-아래는 Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
+아래는 Windows 11 PC 한 대에서 본 모습입니다.
 
 ```
 Services\<이름>
@@ -93,7 +93,7 @@ Services\<이름>
 
 ### 드라이버 키의 예
 
-Windows 11 PC 한 대의 `disk` 키는 이랬습니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대의 `disk` 키는 이랬습니다.
 
 ```
 Services\disk
@@ -107,13 +107,13 @@ ImagePath 에는 드라이브 문자도 `%SystemRoot%` 도 없는 상대 경로�
 
 ### 사용자별 서비스
 
-아래는 모두 Windows 11 PC 한 대에서 본 모습입니다. (확인 범위: Win11 25H2 한 대)
+아래는 모두 Windows 11 PC 한 대에서 본 모습입니다.
 
 Type 0x60 과 0xE0 이 쌍을 이뤘는데, 0x60 은 원형 키였고 0xE0 은 같은 이름 뒤에 `_[16진 5자리]` 가 붙은 사용자 세션용 사본이었습니다. 원형 0x60 키 가운데 15개에 `UserServiceFlags` 값이 있었습니다. 0x40·0x80 비트의 공식 뜻은 확인하지 못했습니다.
 
 ### 한 PC 의 분포
 
-Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는 키는 773개였습니다. 정상 PC 에서 어떤 값이 흔한지 가늠하는 기준으로만 씁니다. (확인 범위: Win11 25H2 한 대)
+Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는 키는 773개였습니다. 정상 PC 에서 어떤 값이 흔한지 가늠하는 기준으로만 씁니다.
 
 | Type | 개수 | Type | 개수 |
 |---|---|---|---|
@@ -139,7 +139,7 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 
 ### 증명하지 못하는 것
 
-- **실행됐나.** 서비스 키는 등록만 알려 줍니다. 실행은 서비스 상태 변경 이벤트(7036), [프리페치](../execution/prefetch/index.md), [프로세스 생성](../event-logs/4688.md) 으로 따로 봅니다. Windows 11 PC 한 대에는 7036 이 한 건도 없었습니다. 7036 이 없다고 실행되지 않았다고 볼 수 없습니다. (확인 범위: Win11 25H2 한 대)
+- **실행됐나.** 서비스 키는 등록만 알려 줍니다. 실행은 서비스 상태 변경 이벤트(7036), [프리페치](../execution/prefetch/index.md), [프로세스 생성](../event-logs/4688.md) 으로 따로 봅니다. Windows 11 PC 한 대에는 7036 이 한 건도 없었습니다. 7036 이 없다고 실행되지 않았다고 볼 수 없습니다.
 - **언제 설치됐나.** 값에는 시각이 없습니다. 아래 "시각 해석" 의 설치 이벤트와 키 시각을 봅니다.
 - **지금 그 경로의 파일이 그때 그 파일인가.** 키에는 해시가 없습니다.
 - **누가 설치했나.** 서비스 키에는 설치한 계정을 적는 칸이 없습니다. 설치 이벤트에서 찾습니다.
@@ -160,18 +160,18 @@ Windows 11 PC 한 대의 Services 하위 키 823개 가운데 Type 값이 있는
 
 - 4697 의 서비스 파일 경로(ServiceFileName)는 서비스를 만들 때의 값입니다. 나중에 경로를 바꿔도 기록되지 않습니다. 실행 계정(ServiceAccount)도 마찬가지입니다.
 - 그래서 설치 이벤트의 경로·계정이 지금 레지스트리 값과 다르면, 설치 뒤에 값이 바뀐 것입니다. 이 문장은 4697 문서에서 끌어낸 해석입니다.
-- System 로그가 덮어쓰이면 7045 도 사라집니다. Windows 11 PC 한 대에서 System 로그의 가장 오래된 SCM 이벤트는 2026-06-27(UTC)이었습니다. (확인 범위: Win11 25H2 한 대)
+- System 로그가 덮어쓰이면 7045 도 사라집니다. Windows 11 PC 한 대에서 System 로그의 가장 오래된 SCM 이벤트는 2026-06-27(UTC)이었습니다.
 - 두 이벤트의 칸과 해석은 [서비스 설치](../event-logs/7045-4697.md) 에서 다룹니다.
 - 드라이버 파일의 기록은 [AmCache 드라이버 항목](../execution/amcache-hve/inventorydriverbinary.md) 에서도 찾습니다.
 
 ## 함정과 한계
 
 - **svchost 형 서비스는 ImagePath 만 보면 놓칩니다.** `Parameters\ServiceDll` 과 서비스 키 바로 아래 `ServiceDll` 을 함께 봅니다.
-- **ImagePath 가 상대 경로일 수 있습니다.** 드라이버 키에서는 `System32\drivers\...` 처럼 드라이브 문자 없이 적혀 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **ImagePath 가 상대 경로일 수 있습니다.** 드라이버 키에서는 `System32\drivers\...` 처럼 드라이브 문자 없이 적혀 있었습니다.
 - **도구가 DWORD 를 10진으로 보여 줄 수 있습니다.** Type 0xE0 은 224, 0x110 은 272 로 보입니다. 뜻이 걸린 값은 원시 바이트로 확인합니다.
 - **이미지에는 `CurrentControlSet` 이 없습니다.** `Select` 가 가리키는 컨트롤셋을 읽습니다.
 - **사용자별 서비스 사본은 이름 뒤에 16진 접미사가 붙습니다.** 비슷한 이름의 키가 여러 개 보여도 그것만으로 이상하다고 보지 않습니다.
-- **서비스 키는 수백 개입니다.** Windows 11 PC 한 대에 823개가 있었습니다. 전부 읽기보다 아래 기준으로 먼저 거릅니다. (확인 범위: Win11 25H2 한 대)
+- **서비스 키는 수백 개입니다.** Windows 11 PC 한 대에 823개가 있었습니다. 전부 읽기보다 아래 기준으로 먼저 거릅니다.
 
 ### 먼저 볼 기준
 
@@ -207,7 +207,7 @@ E0 00 00 00
 
 1. 리틀 엔디언으로 읽으면 0xE0 입니다.
 2. 10진으로는 224 입니다. 도구가 224 로 보여 주면 이 값입니다.
-3. Windows 11 PC 한 대에서 0xE0 은 사용자별 서비스의 세션용 사본이었습니다. (확인 범위: Win11 25H2 한 대)
+3. Windows 11 PC 한 대에서 0xE0 은 사용자별 서비스의 세션용 사본이었습니다.
 
 **ImagePath 값의 앞부분 (REG_EXPAND_SZ, `%SystemRoot%`).**
 

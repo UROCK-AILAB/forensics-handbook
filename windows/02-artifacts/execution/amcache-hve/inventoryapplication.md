@@ -24,7 +24,7 @@ nav_order: 880
 | `Source` 값 | 뜻 |
 |---|---|
 | `AddRemoveProgram` | 설치 파일(EXE)로 설치했고, 프로그램 추가/제거 목록 (Add/Remove Programs, ARP) 에 올라간 프로그램입니다. SOFTWARE 하이브의 제거(Uninstall) 키에 항목이 있습니다 |
-| `AddRemoveProgramPerUser` | 사용자별로 설치한 프로그램입니다. 제거 키가 그 사용자의 하이브에 있습니다 (확인 범위: Windows 11 25H2 한 대) |
+| `AddRemoveProgramPerUser` | 사용자별로 설치한 프로그램입니다. 제거 키가 그 사용자의 하이브에 있습니다 |
 | `Msi` | Windows Installer 로 설치한 프로그램입니다 |
 | `AppxPackage` | 스토어 앱 패키지입니다. 자료에 따라 `AppXPackage` 로도 적습니다 |
 
@@ -46,7 +46,7 @@ AmCache 의 모양은 Windows 버전보다 그 안의 `ae*.dll` 라이브러리 
 | 10.0.14913 (Windows 10 1607) | 이 키가 새로 생깁니다. `Programs` 도 남아 있습니다 | 설치 시각과 맞습니다 | 이 키에서는 하위 키를 지웁니다. `Programs` 의 `b` 값에는 제거 시각이 남습니다 |
 | 10.0.16299 이후 (Windows 10 1709~) | 점검 작업이 돌 때마다 항목을 모두 다시 씁니다. 10.0.17134 부터 `Programs` 키가 없어집니다 | 점검 작업이 돈 시각입니다 | 다음에 다시 쓸 때 목록에서 빠집니다 |
 
-ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대에서는 321개 하위 키의 마지막 기록 시각이 모두 `LastScanTime` 16초 앞부터 42초 뒤 사이에 몰려 있었고(확인 범위: Windows 11 25H2 한 대), 이는 1709 이후 동작과 같습니다.
+ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대에서는 321개 하위 키의 마지막 기록 시각이 모두 `LastScanTime` 16초 앞부터 42초 뒤 사이에 몰려 있었고, 이는 1709 이후 동작과 같습니다.
 
 ## 구조
 
@@ -82,7 +82,7 @@ ANSSI 연구는 10.0.17763 (Windows 10 1809) 까지입니다. Windows 11 한 대
 Microsoft 문서는 ProgramId 를 "Name·Version·Publisher·Language 로 만든 해시" 로 설명하지만 계산 방법은 공개하지 않습니다. 같은 프로그램의 같은 버전은 다른 PC 에서도 ProgramId 가 같고(ANSSI), 버전이 해시 입력에 들어가므로 업데이트한 뒤에는 다른 ProgramId 로 잡힐 수 있습니다.
 
 - 하위 키 이름은 `0000` 으로 시작하는 16진 44자리입니다.
-- 끝 네 자리는 `Language` 값을 리틀 엔디언 2바이트로 적은 것과 맞았습니다. 예를 들어 1033(0x0409)은 `0904`, 65535 는 `ffff` 였습니다(확인 범위: Windows 11 25H2 한 대, 321개 항목). 공식 설명은 없습니다.
+- 끝 네 자리는 `Language` 값을 리틀 엔디언 2바이트로 적은 것과 맞았습니다. 예를 들어 1033(0x0409)은 `0904`, 65535 는 `ffff` 였습니다(Windows 11 25H2 기준). 공식 설명은 없습니다.
 
 ### 다른 키와 잇기
 
@@ -128,7 +128,7 @@ Microsoft 문서는 ProgramId 를 "Name·Version·Publisher·Language 로 만든
 
 - 날짜는 월/일/연 순서입니다. 예를 들어 `10/18/2023` 은 2023년 10월 18일입니다. 일이 12 이하이면 순서를 바꿔 읽기 쉬우므로 조심합니다.
 - ANSSI 는 10.0.16299 라이브러리에서 이 값이 날짜 단위까지만 맞는다고 보고했습니다.
-- Windows 11 한 대에서는 128개 가운데 115개가 `00:00:00` 이었습니다. `AddRemoveProgram` 계열 항목 13개에만 시·분·초가 있었습니다(확인 범위: Windows 11 25H2 한 대).
+- Windows 11 한 대에서는 128개 가운데 115개가 `00:00:00` 이었습니다. `AddRemoveProgram` 계열 항목 13개에만 시·분·초가 있었습니다.
 - 문자열에 시간대가 적혀 있지 않습니다. 어떤 도구는 이 문자열을 UTC 로 간주해 보여 줍니다. 예를 들어 AmcacheParser 소스는 시간대 차이를 0 으로 두고 읽습니다. 보고서에는 날짜만 쓰고 다른 근거로 확인합니다.
 
 FILETIME 을 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서, 키 시각이 바뀌는 규칙은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.

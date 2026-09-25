@@ -23,7 +23,7 @@ nav_order: 1080
 | NTUSER.DAT | `Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU` | 그 사용자가 로그온해 있으면 HKEY_CURRENT_USER 아래 같은 경로 |
 
 - Windows 버전에 따라 키나 값이 어떻게 다른지는 이번 자료로 확인하지 못했습니다.
-- 관찰한 PC 에는 RunMRU 키가 있었지만 값이 하나도 없었고, 키의 마지막 기록 시각은 OS 설치 당일이었습니다. 실행 창을 쓰지 않아서인지 다른 까닭인지는 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+- 관찰한 PC 에는 RunMRU 키가 있었지만 값이 하나도 없었고, 키의 마지막 기록 시각은 OS 설치 당일이었습니다. 실행 창을 쓰지 않아서인지 다른 까닭인지는 확인하지 못했습니다.
 - 하이브 파일의 위치와 수집하는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 를 따릅니다.
 
 ## 구조
@@ -41,7 +41,7 @@ nav_order: 1080
 - 목록에 최대 26개까지 남는다는 점
 - 정책 값 `NoRun`·`ClearRecentDocsOnExit`·`NoRecentDocsHistory` (NTUSER.DAT 의 `Policies\Explorer` 키) 와 `Start_TrackProgs` (`Explorer\Advanced` 키) 가 이 목록에 영향을 주는지
 
-관찰한 PC 에는 위 네 값이 모두 없었습니다. 기본 상태입니다. (확인 범위: Win11 25H2 한 대)
+관찰한 PC 에는 위 네 값이 모두 없었습니다. 기본 상태입니다.
 
 ## 증거로서 의미
 
@@ -73,7 +73,7 @@ nav_order: 1080
 
 ## 함정과 한계
 
-- **키가 있다고 실행 창을 썼다는 뜻이 아닙니다.** 관찰한 PC 에는 값이 없는 키가 OS 설치 당일부터 있었습니다. (확인 범위: Win11 25H2 한 대)
+- **키가 있다고 실행 창을 썼다는 뜻이 아닙니다.** 관찰한 PC 에는 값이 없는 키가 OS 설치 당일부터 있었습니다.
 - **값 이름순으로 읽지 않습니다.** 도구가 값을 이름순으로 보여 줄 수 있습니다. 순서는 늘 `MRUList` 로 읽습니다.
 - **로그 파일을 함께 수집합니다.** 주 하이브 파일만으로는 최신 상태가 아닐 수 있습니다. [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 를 따라 트랜잭션 로그를 함께 가져옵니다.
 - **정책과 설정 값을 함께 적어 둡니다.** `NoRun`·`ClearRecentDocsOnExit`·`NoRecentDocsHistory`·`Start_TrackProgs` 의 영향은 확인하지 못했습니다. 검체에 이 값이 있는지 보고서에 함께 적습니다.

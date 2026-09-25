@@ -32,7 +32,7 @@ nav_order: 1310
 
 ### 레지스트리에 남은 색인 범위 (관찰)
 
-아래는 Windows 11 25H2 PC 한 대에서 본 내용입니다. (확인 범위: Windows 11 25H2 빌드 26200.9457, PC 한 대)
+아래는 Windows 11 25H2 PC 한 대에서 본 내용입니다.
 
 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeManager\Windows\SystemIndex` 아래에 세 키가 있었습니다.
 
@@ -87,7 +87,7 @@ nav_order: 1310
 
 ## 사용자 구분
 
-- 한 PC 의 `SearchRoots` 에는 사용자별 SID 가 든 루트가 있었습니다. (확인 범위: Windows 11 25H2, PC 한 대)
+- 한 PC 의 `SearchRoots` 에는 사용자별 SID 가 든 루트가 있었습니다.
 - 검색 프로토콜 호스트는 시스템용과 사용자용으로 나뉩니다. 자세한 내용은 [수집 기록](systemindex-gthr.md) 에 있습니다.
 - 속성 저장소에는 `System_FileOwner` 칸이 있습니다(LevelBlue).
 - 수집 기록 표에는 `SDID`·`RequiredSIDs` 칸이 있습니다(libyal).

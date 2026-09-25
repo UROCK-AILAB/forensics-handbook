@@ -51,7 +51,7 @@ nav_order: 1910
 
 ### 클래식 Outlook 이 없는 PC 에서 본 것
 
-아래는 새 Outlook 만 깔린 PC 에서 본 것입니다. (확인 범위: Windows 11 25H2 PC 한 대, 클래식 Outlook 없음)
+아래는 새 Outlook 만 깔린 Windows 11 25H2 기준입니다.
 
 `%LOCALAPPDATA%\Microsoft\Windows\INetCache` 아래에는 `Content.IE5`·`Content.MSO`·`Content.Word`·`IE`·`Low`·`Virtualized`·`WebTempDir` 만 있었고 `Content.Outlook` 은 없었습니다. `HKCU\Software\Microsoft\Office\16.0\Outlook` 아래에는 `Options` 키만 있었습니다.
 
@@ -59,7 +59,7 @@ nav_order: 1910
 
 ### 이름이 헷갈리는 폴더: 새 Outlook 의 `Olk`
 
-새 Outlook 은 `%LOCALAPPDATA%\Microsoft\Olk` 폴더를 씁니다. 같은 PC 에서 이 폴더 안에는 `EBWebView`·`Feedback`·`logs` 폴더와 `UserSettings.json`·`updated.txt`·`xpdApi.log` 파일이 있었습니다. (확인 범위: Windows 11 25H2 PC 한 대, 새 Outlook 1.2026.707.300)
+새 Outlook 은 `%LOCALAPPDATA%\Microsoft\Olk` 폴더를 씁니다. 이 폴더 안에는 `EBWebView`·`Feedback`·`logs` 폴더와 `UserSettings.json`·`updated.txt`·`xpdApi.log` 파일이 있습니다(새 Outlook 1.2026.707.300 기준).
 
 이 폴더는 클래식 Outlook 의 OLK 임시 폴더와 다르므로 이름만 보고 첨부 임시 폴더로 보고하지 않습니다. 새 Outlook 의 흔적은 [새 Outlook](../new-outlook.md)에서 다룹니다.
 

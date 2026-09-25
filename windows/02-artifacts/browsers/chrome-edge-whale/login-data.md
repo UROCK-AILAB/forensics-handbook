@@ -43,7 +43,7 @@ nav_order: 1630
 
 - `<User Data>` 는 Chrome 이 `%LOCALAPPDATA%\Google\Chrome\User Data`, Edge 가 `%LOCALAPPDATA%\Microsoft\Edge\User Data` 입니다. 다른 계열 브라우저의 경로와 `<프로필>` 폴더 이름(`Default`, `Profile 1` …)은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에 있습니다.
 - 파일 네 개의 이름은 Chromium 소스(`password_manager_constants.cc`)에 그대로 적혀 있습니다.
-- 아래 PC 에서는 두 브라우저 모두 `Login Data For Account` 파일이 있었지만 행은 0개였습니다. `-wal` 파일은 없었습니다 (확인 범위: Windows 11 25H2, Chrome 153·Edge 151, PC 한 대). 이 글에서 "관찰" 이라고 쓴 것은 모두 이 PC 에서 본 것입니다.
+- 두 브라우저 모두 `Login Data For Account` 파일이 있었지만 행은 0개였습니다. `-wal` 파일은 없었습니다 (Windows 11 25H2, Chrome 153·Edge 151 기준).
 
 ### Windows 버전보다 브라우저 버전이 중요합니다
 

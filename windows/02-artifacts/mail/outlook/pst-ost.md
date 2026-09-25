@@ -42,7 +42,7 @@ Microsoft 지원 문서가 적은 새 PST 의 기본 위치입니다(Windows 10 
 
 - 이 위치는 새 파일을 만들 때의 기본값이라서, 검체에서는 확장자와 헤더 시그니처로 디스크 전체를 찾습니다.
 - OST 는 `%LOCALAPPDATA%\Microsoft\Outlook\` 에 있다는 설명이 흔합니다. 이번에 연 공식 자료에는 OST 경로가 없어 확인하지 못했습니다.
-- 클래식 Outlook 이 깔려 있지 않은 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook` 폴더 자체가 없었습니다. (확인 범위: Windows 11 25H2 PC 한 대, 새 Outlook 만 설치)
+- 클래식 Outlook 이 깔려 있지 않은 PC 에는 `%LOCALAPPDATA%\Microsoft\Outlook` 폴더 자체가 없었습니다(Windows 11 25H2, 새 Outlook 만 설치된 경우).
 
 ### 형식 버전
 
@@ -247,7 +247,7 @@ NID 에는 항목 종류를 나타내는 값이 들어 있습니다.
 
 ANSI 형식(`wVer` 14·15)이면 파일 크기는 오프셋 168 의 4바이트, `bSentinel` 은 460, `bCryptMethod` 는 461 에서 읽습니다.
 
-실제 파일 하나에서 위 순서를 따라가 보았습니다. 시그니처 `!BDN`, `wMagicClient` "SM", `wVer` 23, `wVerClient` 19 였습니다. 오프셋 184 의 값은 실제 파일 크기(4,591,469,568바이트)와 같았습니다. 오프셋 512 는 `0x80`, 513 은 `0x01` 이었습니다. (확인 범위: Windows 11 25H2 PC 한 대의 유니코드 PST 한 개)
+실제 파일에서 위 순서를 따라가 보았습니다. 시그니처 `!BDN`, `wMagicClient` "SM", `wVer` 23, `wVerClient` 19 였습니다. 오프셋 184 의 값은 실제 파일 크기(4,591,469,568바이트)와 같았습니다. 오프셋 512 는 `0x80`, 513 은 `0x01` 이었습니다(Windows 11 25H2 의 유니코드 PST 기준).
 
 아래 파이썬 코드는 위 순서를 옮긴 것입니다.
 

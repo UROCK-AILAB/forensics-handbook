@@ -53,7 +53,7 @@ Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree
 
 표에는 Windows 10 값까지 있지만 Vista 이후 시스템에서 `at` 이나 `schtasks /v1` 으로 만든 작업이 `.job` 을 함께 남기는지는 이번 조사에서 확인하지 못했습니다.
 
-한 PC 의 `C:\Windows\Tasks` 폴더에는 6바이트(`06 00 00 00 02 03`)짜리 `SA.DAT` 파일 하나만 있었고, 이 파일의 뜻은 확인하지 못했습니다. (확인 범위: Win11 25H2 한 대)
+한 PC 의 `C:\Windows\Tasks` 폴더에는 6바이트(`06 00 00 00 02 03`)짜리 `SA.DAT` 파일 하나만 있었고, 이 파일의 뜻은 확인하지 못했습니다.
 
 ## 구조
 
@@ -126,7 +126,7 @@ Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree
 
 libyal dtformats 표에는 이 세 값이 있습니다. 상수 이름과 뜻은 Microsoft 의 작업 스케줄러 오류·성공 상수 문서(WinError.h)를 따랐습니다. 같은 문서에는 0x00041302(사용 안 함), 0x00041303(아직 실행한 적 없음), 0x00041307(유효한 트리거 없음) 같은 값도 있습니다.
 
-Vista 이후 작업 스케줄러에서도 같은 꼴의 값이 보입니다. 한 PC 에서 한 번도 실행하지 않은 작업을 `Get-ScheduledTaskInfo` 로 조회했습니다. LastRunTime 은 1999-11-29 15:00:00Z, LastTaskResult 는 0x00041303 이었습니다. (확인 범위: Win11 25H2 한 대) 0x00041303 은 Microsoft 문서에서 SCHED_S_TASK_HAS_NOT_RUN(아직 실행한 적 없음)입니다. 도구가 1999-11-29 를 보여 주면 실제 실행 시각으로 읽지 않습니다.
+Vista 이후 작업 스케줄러에서도 같은 꼴의 값이 보입니다. 한 PC 에서 한 번도 실행하지 않은 작업을 `Get-ScheduledTaskInfo` 로 조회했습니다. LastRunTime 은 1999-11-29 15:00:00Z, LastTaskResult 는 0x00041303 이었습니다. 0x00041303 은 Microsoft 문서에서 SCHED_S_TASK_HAS_NOT_RUN(아직 실행한 적 없음)입니다. 도구가 1999-11-29 를 보여 주면 실제 실행 시각으로 읽지 않습니다.
 
 ## at 명령
 
@@ -146,7 +146,7 @@ at [\\computername] <time> [/interactive] [/every:date[,...] | /next:date[,...]]
 
 **예약 작업 폴더에서 보이는 이름.** `at` 으로 만든 작업은 예약 작업 폴더에 `at3478` 같은 이름으로 보입니다. 그 폴더에서 작업을 고치면 일반 예약 작업으로 바뀝니다. 그러면 `at` 목록에서 사라지고, `at` 용 계정 설정도 적용되지 않습니다.
 
-**최근 Windows.** 문서에는 폐지(deprecated) 안내가 없습니다. 그러나 한 PC 에서 `at.exe` 를 인자 없이 실행하자 다음 메시지가 나왔고, 종료 코드는 1 이었습니다. (확인 범위: Win11 25H2 한 대)
+**최근 Windows.** 문서에는 폐지(deprecated) 안내가 없습니다. 그러나 한 PC 에서 `at.exe` 를 인자 없이 실행하자 다음 메시지가 나왔고, 종료 코드는 1 이었습니다.
 
 ```
 The AT command has been deprecated. Please use schtasks.exe instead.

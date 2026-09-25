@@ -37,7 +37,7 @@ Microsoft 는 `Enum` 트리를 운영체제 부품만 쓰는 곳이라고 적었
 | 7 | 인스턴스 키의 `Properties` 에 설치 시각(0064)과 처음 설치 시각(0065)이 있습니다. | Khatri (2013) |
 | 8 | 마지막 연결(0066)·마지막 해제(0067) 시각이 더해졌습니다. | Khatri (2013) |
 | 8.1·10 | 예약 작업 "Plug and Play Cleanup" 이 30일 넘게 안 보인 장치의 키를 지웁니다. | Cowen (2017) |
-| 11 | 같은 정리를 저장소 센스 (Storage Sense) 가 `cleanmgr.exe /autocleanstoragesense` 로 돌렸습니다. 로그에는 기본 기준이 30일이라고 적혀 있었습니다. 앞의 예약 작업은 없었습니다. | 관찰 (확인 범위: Windows 11 25H2 빌드 26200 한 대) |
+| 11 | 같은 정리를 저장소 센스 (Storage Sense) 가 `cleanmgr.exe /autocleanstoragesense` 로 돌렸습니다. 로그에는 기본 기준이 30일이라고 적혀 있었습니다. 앞의 예약 작업은 없었습니다. | 관찰 |
 
 ## 구조
 
@@ -74,7 +74,7 @@ Enum\USBSTOR
 
 Microsoft 문서의 하드웨어 ID 는 칸 사이에 구분자 없이 고정 길이로 붙여 씁니다. 제조사는 8자, 제품은 16자, 리비전은 4자입니다. SCSI 장치 식별자 문서는 공백 같은 특수 문자를 밑줄로 바꾼다고 적었습니다. 제품 문자열이 `U3 Cruzer Micro` 라고 가정하고 위 예를 이 규칙으로 쓰면 `USBSTOR\DiskSanDisk_U3_Cruzer_Micro_3.27` 입니다.
 
-키 이름은 이 꼴과 다릅니다. 이 글을 쓰며 확인한 장치 두 개는 키 이름에 `&Ven_`·`&Prod_`·`&Rev_` 구분자가 있었고 칸 끝을 채운 밑줄은 없었습니다. 같은 인스턴스 키의 `HardwareID` 값 첫 줄은 문서의 고정 길이 꼴이었습니다. (확인 범위: Windows 11 빌드 26200 한 대)
+키 이름은 이 꼴과 다릅니다. 이 글을 쓰며 확인한 장치 두 개는 키 이름에 `&Ven_`·`&Prod_`·`&Rev_` 구분자가 있었고 칸 끝을 채운 밑줄은 없었습니다. 같은 인스턴스 키의 `HardwareID` 값 첫 줄은 문서의 고정 길이 꼴이었습니다.
 
 이 문자열은 장치가 스스로 알린 값입니다. 상표 이름과 다를 수 있습니다. 관찰한 USB 메모리 하나는 제조사 칸에 `USB` 라고 적고, 상표와 모델은 제품 칸에 적었습니다. 실제 제조사는 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md)의 VID 로 다시 확인합니다.
 
@@ -84,7 +84,7 @@ Microsoft 문서에 따르면 인스턴스 ID 는 버스 드라이버가 알려 
 
 분석에서 널리 쓰는 규칙이 하나 있습니다. 인스턴스 키 이름의 둘째 글자가 `&` 이면 시스템이 만든 이름입니다. Forensics Wiki 는 이때 장치에 일련번호가 없었다고 설명합니다.
 
-이 글을 쓰며 한 PC 에서 두 장치를 확인했습니다. (확인 범위: Windows 11 빌드 26200 한 대, 장치 2개)
+Windows 11 빌드 26200 에서 두 장치는 이렇게 남았습니다.
 
 | 장치 | `Capabilities` 값 | `Enum\USB` 쪽 인스턴스 키 | USBSTOR 인스턴스 키 |
 |---|---|---|---|
@@ -103,7 +103,7 @@ Microsoft 문서에 따르면 인스턴스 ID 는 버스 드라이버가 알려 
 
 ### 주요 값
 
-관찰한 인스턴스 키에는 값 12개가 있었습니다. 아래 표에 없는 값은 `Driver`·`ConfigFlags`·`Address` 입니다. `ContainerID` 밖의 값은 뜻을 `SetupDiGetDeviceRegistryProperty` 문서의 같은 이름 속성 설명에서 따왔습니다. (확인 범위: Windows 11 빌드 26200 한 대)
+관찰한 인스턴스 키에는 값 12개가 있었습니다. 아래 표에 없는 값은 `Driver`·`ConfigFlags`·`Address` 입니다. `ContainerID` 밖의 값은 뜻을 `SetupDiGetDeviceRegistryProperty` 문서의 같은 이름 속성 설명에서 따왔습니다.
 
 | 값 | 뜻 | 분석에 쓰는 곳 |
 |---|---|---|
@@ -126,7 +126,7 @@ Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices
 
 시각 속성 읽는 법은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 
-실행 중인 시스템에서는 관리자 권한으로도 `Properties` 키를 열 때 접근이 거부되었습니다. 하위 키 이름은 보였습니다. (확인 범위: Windows 11 빌드 26200 한 대) 하이브 사본을 떠서 읽으면 키 권한과 관계없이 읽힙니다.
+실행 중인 시스템에서는 관리자 권한으로도 `Properties` 키를 열 때 접근이 거부되었습니다. 하위 키 이름은 보였습니다. 하이브 사본을 떠서 읽으면 키 권한과 관계없이 읽힙니다.
 
 ## 증거로서 의미
 
@@ -165,12 +165,12 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 
 키 시각이 무엇에 따라 바뀌는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
-2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 이 글에서 확인한 두 장치는 한 번씩만 꽂은 장치였습니다. 인스턴스 키 시각은 속성의 설치 시각·마지막 연결 시각과 같았습니다. 그 뒤 PC 를 다시 켰지만 키 시각은 바뀌지 않았습니다. (확인 범위: Windows 11 빌드 26200 한 대) 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지는 이 관찰로 알 수 없습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
+2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 이 글에서 확인한 두 장치는 한 번씩만 꽂은 장치였습니다. 인스턴스 키 시각은 속성의 설치 시각·마지막 연결 시각과 같았습니다. 그 뒤 PC 를 다시 켰지만 키 시각은 바뀌지 않았습니다. 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지는 이 관찰로 알 수 없습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
 - Windows 8.1 이후는 바뀐 내용을 트랜잭션 로그에 먼저 씁니다. 하이브 파일만 보면 최근 연결이 빠질 수 있습니다. → [.LOG1·.LOG2](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)
 
 ## 함정과 한계
 
-1. **Windows 가 스스로 지웁니다.** Cowen 은 Windows 8.1·10 에서 30일 넘게 안 보인 장치의 키가 지워진다고 보고했습니다. 지운 기록은 `setupapi.dev.log` 에 남습니다. 이 글에서 확인한 Windows 11 에서는 한 번의 정리에서 장치 16개가 지워졌습니다. 로그에서 이 정리는 `[Device and Driver Disk Cleanup Handler - {GUID}]` 구역으로 시작했습니다. 그 안에 장치마다 "`Device <장치 인스턴스 ID> was removed.`" 줄이 있었습니다. (확인 범위: Windows 11 빌드 26200 한 대) 키가 없을 때는 사용자가 지운 것인지 Windows 가 지운 것인지부터 가립니다.
+1. **Windows 가 스스로 지웁니다.** Cowen 은 Windows 8.1·10 에서 30일 넘게 안 보인 장치의 키가 지워진다고 보고했습니다. 지운 기록은 `setupapi.dev.log` 에 남습니다. 이 글에서 확인한 Windows 11 에서는 한 번의 정리에서 장치 16개가 지워졌습니다. 로그에서 이 정리는 `[Device and Driver Disk Cleanup Handler - {GUID}]` 구역으로 시작했습니다. 그 안에 장치마다 "`Device <장치 인스턴스 ID> was removed.`" 줄이 있었습니다. 키가 없을 때는 사용자가 지운 것인지 Windows 가 지운 것인지부터 가립니다.
 2. **UASP 장치는 USBSTOR 에 없습니다.** → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)
 3. **이름이 `Enum\USB` 쪽 일련번호와 똑같지 않을 수 있습니다.** 일련번호가 잘리거나 앞에 다른 문자열이 붙습니다(위 "인스턴스 키 이름").
 4. **제조사 칸과 `Mfg` 값으로 제조사를 정하지 않습니다.** 제조사 칸은 장치가 알린 문자열입니다. `Mfg` 는 드라이버 INF 의 일반 문자열입니다.
