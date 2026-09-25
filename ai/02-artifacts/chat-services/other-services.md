@@ -6,19 +6,19 @@ nav_order: 380
 
 # 그 밖의 서비스 (DeepSeek·Grok 등)
 
-DeepSeek·Grok 처럼 따로 페이지를 두지 않은 대화형 AI 서비스를 모아, 공식 문서로 확인한 수집·보관 규칙과 공개 분석 도구로 확인한 Android 앱의 저장 구조를 같은 기준으로 정리합니다.
+DeepSeek·Grok 처럼 따로 페이지를 두지 않은 대화형 AI 서비스의 수집·보관 규칙과 Android 앱의 저장 구조를 같은 기준으로 모았습니다.
 
-LEAF 문서는 Android 15 기기에서 뽑은 자료를 적은 개발 메모라서 보조 근거로만 씁니다[7]. Replika·Character.AI 같은 AI 컴패니언 앱은 [AI 컴패니언 앱](companion-apps.md)에서 다룹니다.
+Replika·Character.AI 같은 AI 컴패니언 앱은 [AI 컴패니언 앱](companion-apps.md)에서 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-조사에서는 대화 원본이 서버에 있는지 기기에 있는지부터 가립니다. 이 기준은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다. 두 서비스는 기기에 남기는 것이 크게 다릅니다. DeepSeek Android 앱은 대화 목록과 메시지 본문을 SQLite 에 저장하고[3][4], Grok Android 앱은 공개 분석 도구 기준으로 계정 정보와 영상 캐시를 남깁니다[6].
+조사에서는 대화 원본이 서버에 있는지 기기에 있는지부터 가립니다. 이 기준은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다. 두 서비스는 기기에 남기는 것이 크게 다릅니다. DeepSeek Android 앱은 대화 목록과 메시지 본문을 SQLite 에 저장하고[3][4], Grok Android 앱에는 계정 정보와 영상 캐시가 남습니다[6].
 
 ### DeepSeek
 
-DeepSeek 의 개인정보 처리방침은 앱과 웹에 모두 적용되고, 쿠키 같은 일부 항목만 웹에 해당합니다[1]. 처리방침이 수집한다고 적은 사용자 입력은 텍스트, 음성, 프롬프트, 올린 파일, 사진, 피드백, 채팅 기록이고, 사용자가 올린 음성·사진에서 음성 인식 정보, 얼굴 인식 정보 같은 고유한 생체 정보를 뽑아내지는 않는다고 적혀 있습니다[1]. 기기 정보로는 기기 모델, 운영체제, IP 주소, 기기 식별자, 시스템 언어를 적었고, 네트워크 정보로는 이동 통신사, MCC, MNC, 접속 방식, IP 주소를 적었습니다[1]. 서버 자료를 받으면 대화 내용뿐만 아니라 어느 기기·어느 IP 에서 접속했는지도 맞춰 볼 수 있습니다.
+DeepSeek 의 개인정보 처리방침은 앱과 웹에 모두 적용되고, 쿠키 같은 일부 항목만 웹에 해당합니다[1]. DeepSeek 이 수집하는 사용자 입력은 텍스트, 음성, 프롬프트, 올린 파일, 사진, 피드백, 채팅 기록이고, 사용자가 올린 음성·사진에서 음성 인식 정보, 얼굴 인식 정보 같은 고유한 생체 정보는 뽑아내지 않습니다[1]. 함께 수집하는 기기 정보는 기기 모델, 운영체제, IP 주소, 기기 식별자, 시스템 언어이고, 네트워크 정보는 이동 통신사, MCC, MNC, 접속 방식, IP 주소입니다[1]. 서버 자료를 받으면 대화 내용뿐만 아니라 어느 기기·어느 IP 에서 접속했는지도 맞춰 볼 수 있습니다.
 
-처리방침에는 "저희 서버는 중화인민공화국에 위치해 있습니다" 라는 문장이 있습니다[1]. 서버 쪽 자료를 요청할 때 어느 나라 절차를 거쳐야 하는지가 여기서 갈리고, 절차는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)에서 다룹니다.
+DeepSeek 서버는 중화인민공화국에 있습니다[1]. 서버 쪽 자료를 요청할 때 어느 나라 절차를 거쳐야 하는지가 여기서 갈리고, 절차는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)에서 다룹니다.
 
 Android 앱(패키지 `com.deepseek.chat`)은 사용자별 데이터베이스에 대화 목록을 두고, 대화 하나마다 메시지 표를 따로 만듭니다[4][7]. 계정 정보는 다른 데이터베이스에 있고, 여기에 인증 토큰·이메일·전화번호가 함께 들어 있습니다[5]. 기기를 확보하면 서버 자료 없이도 대화 본문을 볼 수 있다는 뜻입니다.
 
@@ -26,7 +26,7 @@ Android 앱(패키지 `com.deepseek.chat`)은 사용자별 데이터베이스에
 
 Grok 은 2023-11 에 X(옛 Twitter) 안의 기능으로 일부 사용자에게 먼저 공개됐습니다[2]. grok.com 웹과 iOS 앱은 2024-12 에 베타로 나와 2025-01-09 에 전 세계에 공개됐고, Android 앱은 2025-02-04 에 일부 지역부터 나왔습니다[2]. 3D 애니메이션 캐릭터와 대화하는 동반자 기능(2025-07), 이미지 생성 Aurora(2024-12-09), 영상 생성 Grok Imagine(2025-07-28) 같은 기능이 있어서[2], 흔적은 대화 글뿐만 아니라 생성한 이미지·영상으로도 이어집니다. 생성물 흔적의 일반 원리는 [Midjourney와 이미지 생성 서비스](../generative-media/image-generation.md)에서 다룹니다.
 
-Android 앱(패키지 `ai.x.grok`)에서 공개 분석 도구가 읽는 것은 두 가지입니다[6]. 하나는 앱에 들어간 고객 지원 SDK(Intercom)가 설정 XML 에 남긴 계정 속성이고, 다른 하나는 Grok Imagine 영상을 재생하면서 쌓인 영상 캐시입니다. Android 기기에서 대화 본문이 어디에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 하고, ALEAPP 에도 Grok 대화 분석기는 없습니다.
+Android 앱(패키지 `ai.x.grok`)에서 읽을 수 있는 흔적은 두 가지입니다[6]. 하나는 앱에 들어간 고객 지원 SDK(Intercom)가 설정 XML 에 남긴 계정 속성이고, 다른 하나는 Grok Imagine 영상을 재생하면서 쌓인 영상 캐시입니다. Android 기기에서 대화 본문이 어디에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 하고, ALEAPP 에도 Grok 대화 분석기는 없습니다.
 
 같은 Grok 을 X 앱 안에서도, grok.com 에서도, 전용 앱에서도 쓸 수 있어서 한 사용자의 흔적이 세 곳에 흩어질 수 있습니다. X 계정으로 쓴 Grok 대화가 X 데이터 내보내기(아카이브)에 들어가는지는 공개 자료가 없어서, 받은 아카이브의 파일 목록으로 직접 확인합니다.
 
@@ -47,7 +47,7 @@ Android 앱(패키지 `ai.x.grok`)에서 공개 분석 도구가 읽는 것은 �
 | Android 대화 본문 | SQLite 에 있음[4] | 공개 분석 자료 없음, 검체로 확인 |
 | iOS·웹·PC 저장 위치 | 공개 분석 자료 없음, 검체로 확인 | 공개 분석 자료 없음, 검체로 확인 |
 
-DeepSeek 처리방침은 웹사이트 방문 기록을 통신 관련 법에 따라 3개월, 거래 기록을 소비자 보호 법에 따라 5년 보관한다고 적었습니다[1]. 근거 법이 어느 나라 법인지는 사건 당시의 원문판에서 확인합니다. 같은 주소라도 접속 지역에 따라 다른 언어판이 열릴 수 있어서, 사건에 쓸 때는 원문판을 따로 확보해 인용 문장과 대조합니다.
+DeepSeek 은 웹사이트 방문 기록을 통신 관련 법에 따라 3개월, 거래 기록을 소비자 보호 법에 따라 5년 보관합니다[1]. 근거 법이 어느 나라 법인지는 사건 당시의 원문판에서 확인합니다. 같은 주소라도 접속 지역에 따라 다른 언어판이 열릴 수 있어서, 사건에 쓸 때는 원문판을 따로 확보해 인용 문장과 대조합니다.
 
 Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`) 아래에 있습니다. 폴더 구조와 수집 방법은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)를 따릅니다.
 
@@ -60,13 +60,13 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 | Grok | `databases/exoplayer_internal.db` | 영상 캐시 색인과 캐시 파일별 메타데이터 | [6] |
 | Grok | `cache/*/video-cache/*/*.exo` | 영상 캐시 조각 파일 | [6] |
 
-분석기마다 시험한 판이 다릅니다. ALEAPP 의 Grok 분석기는 Grok 1.0.71(2025-11-11)로 시험했다고 적었고, 영상 분석기는 2026-08-01 에 마지막으로 고쳤습니다[6]. DeepSeek 분석기 세 개(2026-05-24 작성)에는 시험한 앱 판이 적혀 있지 않습니다[3][4][5]. 두 앱 모두 지금 판과 구조가 다를 수 있어서, 검체에서 표 이름과 칸을 먼저 확인한 뒤 분석기 결과를 씁니다.
+분석기마다 시험한 판이 다릅니다. ALEAPP 의 Grok 분석기는 Grok 1.0.71(2025-11-11)로 시험한 것이고, 영상 분석기의 마지막 수정은 2026-08-01 입니다[6]. DeepSeek 분석기 세 개(2026-05-24 작성)에는 시험한 앱 판이 적혀 있지 않습니다[3][4][5]. 두 앱 모두 지금 판과 구조가 다를 수 있어서, 검체에서 표 이름과 칸을 먼저 확인한 뒤 분석기 결과를 씁니다.
 
 ## 구조
 
 ### DeepSeek — 대화 목록
 
-`deepseek_chat_사용자UUID.db` 의 `chat_session_list` 표에 대화 하나가 한 행으로 들어갑니다. ALEAPP 은 `id`, `title`, `updated_at` 세 칸을 읽고[3], LEAF 문서는 같은 표에서 칸을 더 적었습니다[7].
+`deepseek_chat_사용자UUID.db` 의 `chat_session_list` 표에 대화 하나가 한 행으로 들어가고, 칸은 아래와 같습니다[3][7]. ALEAPP 은 이 가운데 `id`, `title`, `updated_at` 세 칸만 읽습니다[3].
 
 | 칸 | 형식 | 뜻 | 근거 |
 |---|---|---|---|
@@ -84,7 +84,7 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 
 | 칸 | 형식 | 뜻 | 근거 |
 |---|---|---|---|
-| `role` | TEXT | 말한 쪽. LEAF 문서는 `USER`·`ASSISTANT` 로 적음 | [4][7] |
+| `role` | TEXT | 말한 쪽(`USER`·`ASSISTANT`) | [4][7] |
 | `inserted_at` | REAL | 메시지가 들어간 시각(Unix 초, 소수) | [4][7] |
 | `fragments` | TEXT | 본문 조각을 담은 JSON 배열 | [4][7] |
 | `message_id`, `parent_id` | INTEGER | 메시지 ID 와 부모 메시지 ID | [7] |
@@ -92,7 +92,7 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 | `status` | TEXT | 응답 상태(예: `FINISHED`) | [7] |
 | `feedback_type`, `accumulated_token_usage` | TEXT, INTEGER | 피드백 종류와 누적 토큰 수 | [7] |
 
-`fragments` 배열의 각 항목에는 `type` 과 `content` 가 있고, 사용자 입력은 `type` 이 `REQUEST`, 응답은 `RESPONSE` 입니다[4][7]. ALEAPP 은 이 두 종류의 `content` 만 이어 붙여 보여 주므로[4], 다른 `type` 의 항목이 있으면 분석기 결과에서 빠집니다. 원본 JSON 은 한 번 직접 봅니다. 아래는 LEAF 문서의 구조를 따라 만든 예시입니다.
+`fragments` 배열의 각 항목에는 `type` 과 `content` 가 있고, 사용자 입력은 `type` 이 `REQUEST`, 응답은 `RESPONSE` 입니다[4][7]. ALEAPP 은 이 두 종류의 `content` 만 이어 붙여 보여 주므로[4], 다른 `type` 의 항목이 있으면 분석기 결과에서 빠집니다. 원본 JSON 은 한 번 직접 봅니다. 아래는 이 구조를 따라 만든 예시입니다.
 
 ```json
 // 만든 예시: 사용자 메시지 행의 fragments
@@ -103,11 +103,11 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 
 ### DeepSeek — 계정 정보
 
-`deepseek_chat.db` 의 `app_user_info` 표에서 ALEAPP 은 `id`, `token`, `email`, `mobile_number` 를 읽습니다[5]. LEAF 문서는 연동된 외부 로그인(OAuth) 프로필을 담은 JSON 칸 `id_profiles` 와 `chat_status`, `status`, `need_birthday` 칸도 적었습니다[7]. `token` 은 인증 토큰이라 보고서에서는 가리고, 다루는 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다. `mmkv.default` 의 `key_user_info` 에도 토큰이 있으니 같은 원칙을 적용합니다[7].
+`deepseek_chat.db` 의 `app_user_info` 표에는 `id`, `token`, `email`, `mobile_number` 칸이 있습니다[5]. 연동된 외부 로그인(OAuth) 프로필을 담은 JSON 칸 `id_profiles` 와 `chat_status`, `status`, `need_birthday` 칸도 있습니다[7]. `token` 은 인증 토큰이라 보고서에서는 가리고, 다루는 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다. `mmkv.default` 의 `key_user_info` 에도 토큰이 있으니 같은 원칙을 적용합니다[7].
 
 ### Grok — 계정 속성
 
-ALEAPP 이 두 Intercom 설정 XML 에서 읽는 키는 아래와 같습니다[6]. 설정 XML 자체의 형식은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)에 있습니다.
+두 Intercom 설정 XML 에 든 키는 아래와 같습니다[6]. 설정 XML 자체의 형식은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)에 있습니다.
 
 | 키 | 담긴 것 |
 |---|---|
@@ -145,9 +145,9 @@ DeepSeek 데이터베이스는 WAL 모드라서, `-wal`·`-shm` 파일을 함께
 
 ALEAPP Grok 영상 결과의 "Not Present" 는 `ExoPlayerCacheFileMetadata` 에 행은 있는데 캐시 폴더에 그 파일이 없다는 뜻입니다[6]. 앱이 캐시를 정리했을 수도, 누가 지웠을 수도 있어서 이것만으로 삭제 행위를 말할 수는 없지만, 파일 이름과 원래 URL 은 캐시에 있던 영상의 흔적으로 남습니다.
 
-2025-08 에 일부 Grok 대화가 Google 검색에 색인돼 공개됐다는 보도가 있었다고 위키백과는 적었습니다[2]. 검색에 드러난 대화는 서버에 있는 사본이라서, 기기에서 그 주소를 찾았다고 대화 본문이 기기에 있다고 볼 수는 없습니다.
+2025-08 에 일부 Grok 대화가 Google 검색에 색인돼 공개됐다는 보도가 있었습니다[2]. 검색에 드러난 대화는 서버에 있는 사본이라서, 기기에서 그 주소를 찾았다고 대화 본문이 기기에 있다고 볼 수는 없습니다.
 
-비공개 대화 같은 기능 이름만 보고 "기록이 없다" 고 단정하지 말고, 사건 당시의 처리방침과 기기 저장소를 함께 확인합니다. 보관·삭제의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다. DeepSeek 내보내기는 처리방침 기준으로 웹에서만 되니[1], 앱만 쓰던 사용자라도 웹에 로그인해서 받아야 합니다. 받는 동작 자체가 계정에 새 흔적을 남길 수 있어서 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)의 절차대로 기록을 남기며 받습니다.
+비공개 대화 같은 기능 이름만 보고 "기록이 없다" 고 단정하지 말고, 사건 당시의 처리방침과 기기 저장소를 함께 확인합니다. 보관·삭제의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다. DeepSeek 내보내기는 웹에서만 되니[1], 앱만 쓰던 사용자라도 웹에 로그인해서 받아야 합니다. 받는 동작 자체가 계정에 새 흔적을 남길 수 있어서 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)의 절차대로 기록을 남기며 받습니다.
 
 ## 직접 분석해 보기
 

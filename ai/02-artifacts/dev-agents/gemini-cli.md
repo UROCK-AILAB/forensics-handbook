@@ -12,7 +12,7 @@ Gemini CLI 는 Google 의 명령줄 AI 에이전트이고, 대화할 때마다 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Gemini CLI 는 대화하는 동안 세션을 자동으로 저장해서, 중간에 끊어도 그때까지의 내용이 남습니다[1]. 공식 문서가 밝힌 저장 내용은 프롬프트와 모델 답변, 모든 도구 실행의 입력과 출력, 토큰 사용량(입력·출력·캐시 등), 그리고 있으면 모델의 생각·추론 요약입니다[1]. 도구 실행의 입력과 출력까지 담기 때문에, 에이전트가 어떤 명령을 돌리고 무엇을 돌려받았는지를 대화 흐름 안에서 볼 수 있습니다.
+Gemini CLI 는 대화하는 동안 세션을 자동으로 저장해서, 중간에 끊어도 그때까지의 내용이 남습니다[1]. 저장하는 내용은 프롬프트와 모델 답변, 모든 도구 실행의 입력과 출력, 토큰 사용량(입력·출력·캐시 등), 그리고 있으면 모델의 생각·추론 요약입니다[1]. 도구 실행의 입력과 출력까지 담기 때문에, 에이전트가 어떤 명령을 돌리고 무엇을 돌려받았는지를 대화 흐름 안에서 볼 수 있습니다.
 
 세션은 프로젝트별로 나뉩니다. 다른 프로젝트 폴더에서 실행하면 그 프로젝트의 기록으로 바뀌고[1], 사용자는 `gemini --resume`(`-r`, 번호나 세션 UUID 로 고를 수 있음)이나 CLI 안의 `/resume` 으로 지난 세션을 이어 갑니다[1]. `--list-sessions` 로 목록을 보고 `--delete-session` 이나 세션 브라우저의 `x` 키로 세션을 지울 수 있습니다[1].
 
@@ -52,15 +52,15 @@ Gemini CLI 는 대화하는 동안 세션을 자동으로 저장해서, 중간�
 
 새 방식은 처음 실행할 때 옛 해시 폴더(`tmp/`, `history/` 아래)를 새 이름 폴더로 복사하고, 옛 폴더는 지우지 않습니다[3]. 새 이름 폴더에 `.project_root` 말고 다른 파일이 이미 있으면 복사하지 않습니다[3]. 경로와 폴더 이름의 대응은 `projects.json` 에 `{"projects":{"경로":"이름"}}` 꼴로 적습니다[3]. Windows 에서는 이 파일의 경로를 소문자로 바꿔 적습니다[3]. 같은 날짜의 공식 문서는 여전히 `tmp/<project_hash>/chats/` 로 적고 있으므로[1], 문서와 소스가 다르다는 점을 알고 두 모양을 모두 찾습니다.
 
-**세션 파일 형식.** 지금 판은 세션마다 JSON Lines 파일 하나(`.jsonl`)에 기록을 덧붙이고, 옛 판은 JSON 한 덩어리(`.json`)로 저장했습니다[2][7]. 옛 `.json` 세션을 `--resume` 으로 이어 쓰면 같은 이름 끝에 `l` 을 붙인 `.jsonl` 로 전체를 옮겨 적고 이어서 씁니다[2]. 이때 옛 `.json` 을 지우는 코드는 없어서[2], 같은 세션이 `.json` 과 `.jsonl` 두 파일로 남을 수 있습니다.
+**세션 파일 형식.** 지금 판은 세션마다 JSON Lines 파일 하나(`.jsonl`)에 기록을 덧붙이고, 옛 판은 JSON 한 덩어리(`.json`)로 저장했습니다[2][7]. 옛 `.json` 세션을 `--resume` 으로 이어 쓰면 같은 이름 끝에 `l` 을 붙인 `.jsonl` 로 전체를 옮겨 적고 이어서 씁니다[2]. 이때 옛 `.json` 은 지우지 않아서[2], 같은 세션이 `.json` 과 `.jsonl` 두 파일로 남을 수 있습니다.
 
 **신뢰 폴더 파일.** 출처끼리 형식이 다릅니다. gemini-cli 소스(`acae712`, 2026-07-17)는 `{"경로":"TRUST_FOLDER"}` 처럼 경로마다 `TRUST_FOLDER`·`TRUST_PARENT`·`DO_NOT_TRUST` 중 하나를 적습니다[6]. agentsview 분석기(2026-09 기준)는 `{"trustedFolders":[…]}` 배열 꼴을 읽습니다[7]. 검체의 파일을 열어 어느 꼴인지 보고 읽습니다.
 
 ### 같은 폴더를 쓰는 다른 제품
 
-`~/.gemini` 는 Gemini CLI 만 쓰는 폴더가 아닙니다. agentsview 는 Google Antigravity(IDE)의 세션 폴더를 `~/.gemini/antigravity/`, Antigravity CLI 의 폴더를 `~/.gemini/antigravity-cli/` 로 적습니다[8]. agentsview 분석기 소스의 설명으로는 IDE 쪽에 `conversations/<uuid>.db`(세션별 SQLite), `annotations/<uuid>.pbtxt`, `brain/<uuid>/`(평문 계획·작업 문서), `implicit/<uuid>.pb`(암호화)가 있습니다[8]. Antigravity CLI 는 새 판이 세션별 SQLite, 옛 판이 AES 로 암호화한 `.pb` 파일을 쓰고, `history.jsonl` 과 `brain/` 이 함께 있습니다[8]. Google 이 저장 형식을 공개하지 않아서 agentsview 도 이 부분을 역분석으로 표시합니다(2026-07-19, 2026-09-02 기준)[8]. 이 페이지는 Gemini CLI 만 다루고, Antigravity 폴더는 다른 제품의 흔적으로 나눠 봅니다.
+`~/.gemini` 는 Gemini CLI 만 쓰는 폴더가 아닙니다. Google Antigravity(IDE)의 세션 폴더는 `~/.gemini/antigravity/`, Antigravity CLI 의 폴더는 `~/.gemini/antigravity-cli/` 입니다[8]. IDE 쪽에는 `conversations/<uuid>.db`(세션별 SQLite), `annotations/<uuid>.pbtxt`, `brain/<uuid>/`(평문 계획·작업 문서), `implicit/<uuid>.pb`(암호화)가 있습니다[8]. Antigravity CLI 는 새 판이 세션별 SQLite, 옛 판이 AES 로 암호화한 `.pb` 파일을 쓰고, `history.jsonl` 과 `brain/` 이 함께 있습니다[8]. Google 이 저장 형식을 공개하지 않아서, 이 구조는 역분석으로 알아낸 것입니다(2026-07-19, 2026-09-02 기준)[8]. Antigravity 폴더는 Gemini CLI 와 다른 제품의 흔적으로 나눠 봅니다.
 
-관찰한 PC 의 `%USERPROFILE%\.gemini` 에는 `tmp/` 가 없고 `antigravity/` 와 `config/` 만 있었습니다. `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 있었습니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 있었고, 이 폴더를 어느 제품이 쓰는지 밝힌 공개 자료가 없어 검체에서 파일 시각과 함께 쓴 프로그램을 확인해야 합니다. 이런 PC 처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
+`%USERPROFILE%\.gemini` 에 `tmp/` 없이 `antigravity/` 와 `config/` 만 있는 경우도 있습니다. `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 들어갑니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 들어가고, 이 폴더를 어느 제품이 쓰는지는 공개 자료가 없어 검체에서 파일 시각과 함께 쓴 프로그램을 확인해야 합니다. 이처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
 
 ## 구조
 
@@ -113,11 +113,11 @@ chats/5f0c2a9e-1b2c-4d3e-8f90-a1b2c3d4e5f6/7c1d0e2f-3a4b-4c5d-9e6f-0a1b2c3d4e5f.
 
 ### 같은 메시지가 여러 줄에 남는 이유
 
-기록 코드는 파일을 고쳐 쓰지 않고 줄을 덧붙이기만 합니다[2]. 토큰 수가 뒤늦게 오거나 도구 호출이 더해지면 같은 `id` 의 메시지를 통째로 한 줄 더 적습니다[2]. 그래서 한 파일에 같은 `id` 가 여러 번 나오고, Gemini CLI 와 agentsview 는 뒤에 나온 줄로 앞 줄을 바꿔 읽습니다[2][7]. 다만 agentsview 는 `$rewindTo` 줄을 처리하지 않아서, 되감아 뺀 메시지도 대화에 넣어 보여 줍니다[7]. 되감기(`$rewindTo`)로 뺀 메시지와, 가리기 등으로 내용이 바뀌어 `$set.messages` 로 다시 적기 전의 메시지도 앞쪽 줄에 그대로 남습니다[2]. coding-agent-forensics 도 Gemini CLI 의 되감은 턴을 지우지 않고 표시해 보여 주고, 되감기 때문에 세션이 갈라질 수 있다고 적습니다[9].
+기록 코드는 파일을 고쳐 쓰지 않고 줄을 덧붙이기만 합니다[2]. 토큰 수가 뒤늦게 오거나 도구 호출이 더해지면 같은 `id` 의 메시지를 통째로 한 줄 더 적습니다[2]. 그래서 한 파일에 같은 `id` 가 여러 번 나오고, Gemini CLI 와 agentsview 는 뒤에 나온 줄로 앞 줄을 바꿔 읽습니다[2][7]. 다만 agentsview 는 `$rewindTo` 줄을 처리하지 않아서, 되감아 뺀 메시지도 대화에 넣어 보여 줍니다[7]. 되감기(`$rewindTo`)로 뺀 메시지와, 가리기 등으로 내용이 바뀌어 `$set.messages` 로 다시 적기 전의 메시지도 앞쪽 줄에 그대로 남습니다[2]. 되감기 때문에 세션이 갈라질 수도 있고, coding-agent-forensics 는 되감은 턴을 지우지 않고 표시해 보여 줍니다[9].
 
 ### 사용자 입력 기록 `logs.json`
 
-프로젝트 폴더의 `logs.json` 은 사용자 입력마다 `sessionId`, `messageId`(세션 안 순번), `timestamp`(ISO 8601 UTC), `type`(`user`), `message` 를 담은 항목의 배열입니다[4]. 세션을 지우는 코드는 세션 파일, `logs/`, `tool-outputs/`, 세션별 폴더를 지우고 `logs.json` 은 건드리지 않습니다[4].
+프로젝트 폴더의 `logs.json` 은 사용자 입력마다 `sessionId`, `messageId`(세션 안 순번), `timestamp`(ISO 8601 UTC), `type`(`user`), `message` 를 담은 항목의 배열입니다[4]. 세션을 지울 때는 세션 파일, `logs/`, `tool-outputs/`, 세션별 폴더를 지우고 `logs.json` 은 건드리지 않습니다[4].
 
 ### 설정 `settings.json`
 
@@ -131,13 +131,13 @@ chats/5f0c2a9e-1b2c-4d3e-8f90-a1b2c3d4e5f6/7c1d0e2f-3a4b-4c5d-9e6f-0a1b2c3d4e5f.
 | `general.sessionRetention.minRetention` | 이 기간보다 새 세션은 지우지 않음, 기본 `"1d"` |
 | `model.maxSessionTurns` | 세션 하나에서 주고받을 수 있는 횟수, 기본 `-1`(제한 없음) |
 
-훅은 `hooks` 아래에 사건 이름별 배열로 적고, 각 항목에 `matcher` 와 `hooks` 목록(`type`, `command`, `name`, `timeout`)이 있습니다[5]. 사건 이름은 `SessionStart`, `SessionEnd`, `BeforeAgent`, `AfterAgent`, `BeforeModel`, `AfterModel`, `BeforeToolSelection`, `BeforeTool`, `AfterTool`, `PreCompress`, `Notification` 입니다[5]. 관찰한 PC 의 `settings.json` 에 있던 `hooks.AfterAgent`, `hooks.AfterTool`, `hooks.BeforeAgent`, `hooks.BeforeTool` 도 이 형식이었습니다. 훅의 `command` 가 가리키는 스크립트는 도구 실행 전후에 따로 기록을 남길 수 있어서 열어 봅니다.
+훅은 `hooks` 아래에 사건 이름별 배열로 적고, 각 항목에 `matcher` 와 `hooks` 목록(`type`, `command`, `name`, `timeout`)이 있습니다[5]. 사건 이름은 `SessionStart`, `SessionEnd`, `BeforeAgent`, `AfterAgent`, `BeforeModel`, `AfterModel`, `BeforeToolSelection`, `BeforeTool`, `AfterTool`, `PreCompress`, `Notification` 입니다[5]. 훅의 `command` 가 가리키는 스크립트는 도구 실행 전후에 따로 기록을 남길 수 있어서 열어 봅니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `tmp/` 아래 `chats/` 에 세션이 있으면 그 사용자 계정에서 그 프로젝트를 대상으로 Gemini CLI 와 대화한 기록이 있다는 뜻입니다. `toolCalls[]` 에 `args` 와 `result` 가 있으면 "이 세션에서 에이전트가 이 인자로 이 도구를 실행하고 이 출력을 받은 기록이 있다" 고 쓸 수 있습니다. `projectHash` 와 `.project_root`, `projects.json` 은 세션이 어느 프로젝트 경로에서 일어났는지를 알려 줍니다[2][3]. 되감기 줄 앞에 남은 메시지는 사용자가 되돌린 요청과 답변을 보여 줍니다[2]. `general.sessionRetention` 값은 기록이 얼마나 오래 남도록 설정되어 있었는지를 보여 줍니다.
 
-**증명하지 못하는 것.** 세션이 없다고 쓰지 않았다고 말할 수 없습니다. 기본 30일 정리, 사용자가 줄인 보관 설정, `--delete-session` 으로 지웠을 수 있고, 기록 코드에는 대화 내용 없이 시작만 한 세션을 지우는 기능도 있습니다[2]. 디스크가 가득 차면 기록을 멈추고 대화는 계속합니다[2]. 세션에 적힌 도구 실행이 실제로 파일을 바꿨는지는 파일 시스템과 git 이력으로 따로 확인하고, 입력한 사람이 누구인지는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)의 방법으로 좁힙니다. `~/.gemini` 폴더나 그 안의 `antigravity/` 는 다른 Google 도구의 흔적일 수 있습니다[8].
+**증명하지 못하는 것.** 세션이 없다고 쓰지 않았다고 말할 수 없습니다. 기본 30일 정리, 사용자가 줄인 보관 설정, `--delete-session` 으로 지웠을 수 있고, 대화 내용 없이 시작만 한 세션은 스스로 지우기도 합니다[2]. 디스크가 가득 차면 기록을 멈추고 대화는 계속합니다[2]. 세션에 적힌 도구 실행이 실제로 파일을 바꿨는지는 파일 시스템과 git 이력으로 따로 확인하고, 입력한 사람이 누구인지는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)의 방법으로 좁힙니다. `~/.gemini` 폴더나 그 안의 `antigravity/` 는 다른 Google 도구의 흔적일 수 있습니다[8].
 
 ## 시각 해석
 
@@ -149,7 +149,7 @@ chats/5f0c2a9e-1b2c-4d3e-8f90-a1b2c3d4e5f6/7c1d0e2f-3a4b-4c5d-9e6f-0a1b2c3d4e5f.
 
 - 기본 30일 정리는 정상 동작이라서 오래된 세션이 없다고 조작으로 볼 이유는 없습니다[1]. 다만 사건 무렵에 `maxAge` 나 `maxCount` 를 줄였다면 기록을 일부러 줄였을 수 있으니, `settings.json` 의 수정 시각과 백업·볼륨 섀도 사본의 이전 판을 함께 봅니다. 기록이 스스로 지워지므로 조사 중인 기기는 되도록 빨리, 필요하면 정해진 간격으로 수집합니다[9]. 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 - 줄 수를 그대로 세면 같은 메시지를 여러 번 세게 됩니다. `id` 로 묶어 마지막 줄만 쓰고, 되감기 앞 줄은 따로 표시합니다.
-- 토큰 수를 메시지마다 더하면 부풀 수 있습니다. agentsview 는 일부 기록이 누적값이거나 나눠 받은 값이라고 보고, 입력·캐시 토큰을 앞 메시지와의 차이로 다시 셉니다[7].
+- 토큰 수를 메시지마다 더하면 부풀 수 있습니다. 일부 기록은 누적값이거나 나눠 받은 값이라서, 입력·캐시 토큰은 앞 메시지와의 차이로 다시 셉니다[7].
 - 하위 에이전트 세션은 `chats/` 바로 아래가 아니라 부모 세션 ID 폴더 안에 있습니다[2]. agentsview 는 `chats/session-*` 만 찾으므로[7], 도구 결과만 보면 하위 에이전트 대화가 빠집니다.
 - 폴더 이름이 해시인지 이름인지는 판에 따라 다르고, 새 방식으로 바꿀 때 옛 해시 폴더를 복사만 하므로 같은 세션이 두 폴더에 함께 있을 수 있습니다[3]. `tmp/` 아래 폴더를 모두 수집하고 세션 ID 로 중복을 가립니다.
 - 정리로 지운 세션 파일은 할당되지 않은 영역에 조각으로 남을 수 있습니다. JSON Lines 라서 줄 단위로 되살릴 수 있고, 일반 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에 있습니다.

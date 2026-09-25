@@ -10,19 +10,15 @@ nav_order: 1000
 
 손에 든 이미지·영상·음성·글 하나를 두고 "AI 가 만들었는가, 만들었다면 어떤 도구로 누가 만들었는가" 를 묻는 조사입니다. 답을 찾는 길은 둘인데, 하나는 파일 자체에 든 출처 표시(C2PA 매니페스트, IPTC 원천 유형 값, 보이지 않는 워터마크)를 읽는 길이고, 다른 하나는 파일을 만든 쪽 기기나 계정에 남은 대화·생성 기록을 찾는 길입니다. 내용만 보고 AI 가 썼는지 가리는 판별기의 한계는 [AI가 만든 글·이미지 판별의 한계](../../03-techniques/analysis/detection-limits.md)에서 따로 다루고, 이 글은 기록으로 확인할 수 있는 흔적에 집중합니다.
 
-이 글에서 기댄 자료와 확인 날짜는 다음과 같습니다. C2PA 는 설명서(Explainer) 2.2 판, IPTC 원천 유형 어휘는 각 값의 수정일(2022-06-14 ~ 2024-10-23) 기준, SynthID 는 Google DeepMind 소개 페이지를 2026-09-25 에 확인했습니다. 기기 쪽 키 이름 가운데 관찰로 알아낸 것에는 "" 를 붙였습니다.
-
 ## 먼저 확인할 것
 
 **받은 파일이 원본인가.** 출처 표시는 파일 안에 들어 있기도 하고 파일 밖에 따로 두기도 해서, 받은 파일이 원본인지 여러 번 다시 저장한 사본인지에 따라 찾을 수 있는 것이 달라집니다. 먼저 입수 경로와 해시를 적고, 분석은 사본으로 합니다.
 
-**출처 표시가 무엇을 보장하는가.** C2PA 매니페스트(Content Credential)는 자산의 출처 정보를 담은 주장(assertion) 묶음에 디지털 서명을 한 것입니다. C2PA 설명서는 이 표시가 내용이 참인지 판단하지 않는다고 분명히 적고 있습니다.
+**출처 표시가 무엇을 보장하는가.** C2PA 매니페스트(Content Credential)는 자산의 출처 정보를 담은 주장(assertion) 묶음에 디지털 서명을 한 것입니다. 이 표시는 출처 정보가 형식에 맞고 조작되지 않았는지만 알려 주고, 그 정보가 참인지는 판단하지 않습니다.
 
-> "Content Credentials do not provide value judgments about whether a given set of provenance data is 'true', but instead merely whether the provenance information is well-formed and free from tampering."
+서명이 멀쩡하다는 결과는 "서명한 쪽이 이렇게 주장했고 그 뒤로 바뀌지 않았다" 까지만 말해 줍니다. 또 출처 표시는 선택 사항이고, 표시가 없는 자산을 덜 믿게 만들려는 장치가 아닙니다. 그래서 표시가 없다는 사실로 사람이 만들었다고 말할 수 없습니다. 매니페스트 구조와 서명 원리는 [AI 생성물의 출처 정보](../../01-foundations/concepts/c2pa-provenance.md)에서 다룹니다.
 
-서명이 멀쩡하다는 결과는 "서명한 쪽이 이렇게 주장했고 그 뒤로 바뀌지 않았다" 까지만 말해 줍니다. 또 설명서는 출처 표시가 선택 사항이고 표시가 없는 자산을 덜 믿게 만들려는 목적이 아니라고 밝히므로, 표시가 없다는 사실로 사람이 만들었다고 말할 수 없습니다. 매니페스트 구조와 서명 원리는 [AI 생성물의 출처 정보](../../01-foundations/concepts/c2pa-provenance.md)에서 다룹니다.
-
-**어떤 종류의 파일인가.** 이미지·영상·음성은 C2PA 와 워터마크를 모두 찾아볼 수 있습니다. Google 은 SynthID 워터마크를 이미지·오디오·텍스트·영상에 넣는다고 밝히는데, 글은 Gemini 앱·웹에서 만든 텍스트에 넣는다고만 밝혀서 다른 서비스에서 만든 글은 만든 쪽 기록을 찾는 길에 더 기대게 됩니다.
+**어떤 종류의 파일인가.** 이미지·영상·음성은 C2PA 와 워터마크를 모두 찾아볼 수 있습니다. Google 은 SynthID 워터마크를 이미지·오디오·텍스트·영상에 넣습니다. 글에 넣는 곳으로 알려진 것은 Gemini 앱·웹뿐이라서, 다른 서비스에서 만든 글은 만든 쪽 기록을 찾는 길에 더 기대게 됩니다.
 
 ## 볼 아티팩트와 순서
 
@@ -56,11 +52,11 @@ nav_order: 1000
 
    학습된 AI 모델이 처음부터 만든 것을 가리키는 값은 `trainedAlgorithmicMedia` 하나이고, `compositeWithTrainedAlgorithmicMedia`·`compositeSynthetic`·`algorithmicallyEnhanced` 는 다른 요소나 원본이 섞인 경우, `algorithmicMedia` 는 학습된 모델이 아닌 알고리즘으로 만든 경우입니다.
 
-5. **워터마크를 확인합니다.** Google 은 SynthID 를 이미지·영상은 자사 생성형 AI 소비자 제품에, 오디오는 Lyria 와 NotebookLM 팟캐스트 생성에, 텍스트는 Gemini 앱·웹에 넣는다고 밝히고 있습니다. 이미지·영상 워터마크는 자르기·필터·프레임 수 변경·손실 압축에, 오디오 워터마크는 잡음·MP3 압축·속도 변경에 버티도록 설계했다고 합니다. 확인은 Gemini 앱에 파일을 올려 Google AI 로 만들었는지 묻거나, 기자·미디어 전문가와 시험 중인 SynthID Detector 포털로 합니다. 어느 쪽이든 증거 사본을 외부 서비스에 올리는 일이므로, 사건 규정과 동의 범위를 먼저 확인하고 올린 날짜와 받은 답을 그대로 기록합니다.
+5. **워터마크를 확인합니다.** Google 은 SynthID 를 이미지·영상은 자사 생성형 AI 소비자 제품에, 오디오는 Lyria 와 NotebookLM 팟캐스트 생성에, 텍스트는 Gemini 앱·웹에 넣습니다. 이미지·영상 워터마크는 자르기·필터·프레임 수 변경·손실 압축에, 오디오 워터마크는 잡음·MP3 압축·속도 변경에 버티도록 만들어졌습니다. 확인은 Gemini 앱에 파일을 올려 Google AI 로 만들었는지 묻거나, 기자·미디어 전문가와 시험 중인 SynthID Detector 포털로 합니다. 어느 쪽이든 증거 사본을 외부 서비스에 올리는 일이므로, 사건 규정과 동의 범위를 먼저 확인하고 올린 날짜와 받은 답을 그대로 기록합니다.
 
 6. **만든 쪽 기록을 찾습니다.** 용의 기기나 계정이 있으면 생성 서비스의 대화·생성 기록에서 같은 결과물을 찾습니다. 파일 해시가 같거나 프롬프트와 결과물이 짝지어 남아 있어야 "이 계정에서 만든 것" 이라고 말할 수 있고, 비슷한 주제의 대화가 있다는 것만으로는 부족합니다. 기록이 서버에만 있으면 계정 데이터 내보내기로 받습니다. 대화를 한 사람을 좁히는 절차는 [그 대화를 한 사람이 누구인가](user-attribution.md)에서 다룹니다.
 
-7. **코드라면 수정 전후를 맞춰 봅니다.** Claude Code 의 `projects/*.jsonl` 에는 모든 메시지와 도구 호출, 도구 결과가 들어 있고, `file-history/<session>/` 에는 Claude 가 고친 파일의 수정 전 사본이 남습니다. 도구 호출 기록과 수정 전 사본을 현재 파일과 비교하면 어느 줄을 AI 도구가 바꿨는지 가릴 수 있습니다. Windows 11 에서 관찰한 대화 기록에는 `message.model`, `toolUseResult`, `snapshot.trackedFileBackups`, `isSidechain`, `attributionPlugin`, `attributionSkill`, `attributionAgent` 키가 있었습니다. `attribution` 으로 시작하는 키는 공식 문서에 뜻이 나와 있지 않으므로, 보고서에는 값을 그대로 옮기고 해석을 덧붙이지 않습니다.
+7. **코드라면 수정 전후를 맞춰 봅니다.** Claude Code 의 `projects/*.jsonl` 에는 모든 메시지와 도구 호출, 도구 결과가 들어 있고, `file-history/<session>/` 에는 Claude 가 고친 파일의 수정 전 사본이 남습니다. 도구 호출 기록과 수정 전 사본을 현재 파일과 비교하면 어느 줄을 AI 도구가 바꿨는지 가릴 수 있습니다. 대화 기록에는 `message.model`, `toolUseResult`, `snapshot.trackedFileBackups`, `isSidechain`, `attributionPlugin`, `attributionSkill`, `attributionAgent` 키가 있습니다(Windows 11 기준). `attribution` 으로 시작하는 키는 뜻을 설명한 공개 문서가 없으므로, 보고서에는 값을 그대로 옮기고 해석을 덧붙이지 않습니다.
 
 8. **조직 훅 로그를 봅니다.** Cursor 의 `hooks.json` 에는 `afterAgentResponse`, `postToolUse`, `beforeSubmitPrompt` 같은 훅 키가 있고, Claude Code `settings.json` 에도 `hooks.PreToolUse`, `hooks.UserPromptSubmit` 같은 키가 있습니다. 조직이 이 훅에 AI 응답이나 도구 사용을 기록하는 명령을 걸어 두었다면, 그 명령이 쓴 로그가 사용자 기기의 대화 기록과 따로 남는 증거가 됩니다.
 
@@ -76,7 +72,7 @@ nav_order: 1000
 
 **일부 보정을 전부 생성으로 읽는 경우.** `compositeWithTrainedAlgorithmicMedia` 나 `algorithmicallyEnhanced` 는 사람이 만든 원본에 AI 가 손댄 경우를 포함하고, `trainedAlgorithmicMedia` 와 같은 뜻이 아닙니다.
 
-**SynthID 가 안 나오니 AI 가 아니라고 보는 경우.** SynthID 를 넣는다고 밝힌 곳은 Google 제품들입니다(SynthID 소개 페이지 기준). 검출되지 않았다는 결과는 다른 회사 모델이나 워터마크를 넣지 않는 도구로 만들었을 가능성을 지우지 못합니다.
+**SynthID 가 안 나오니 AI 가 아니라고 보는 경우.** SynthID 는 Google 제품이 넣는 워터마크입니다. 검출되지 않았다는 결과는 다른 회사 모델이나 워터마크를 넣지 않는 도구로 만들었을 가능성을 지우지 못합니다.
 
 ## 보고서 문장 예
 

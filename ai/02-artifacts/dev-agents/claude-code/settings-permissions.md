@@ -37,17 +37,17 @@ Claude Code 판이 바뀌면 설정 키가 달라질 수 있습니다.
 | `~/.claude/remote-settings.json`, `~/.claude/policy-limits.json` | 서버 관리 설정의 캐시, 로그아웃할 때 지움 | 문서[5] |
 | `~/.claude/.credentials.json` | 로그인 토큰. ccfx 는 있는지와 크기·수정 시각만 봄 | ccfx 문서[9] |
 
-관찰한 PC 의 `backups/` 에도 사본이 여럿 있었습니다. `backups/` 는 `cleanupPeriodDays` 청소 대상이라 오래된 사본은 남아 있지 않을 수 있고, 청소 목록 전체는 [세션 기록 구조](transcripts.md)에 있습니다. claude-forensics 문서는 Windows 의 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 적습니다(2026-06)[10].
+`backups/` 는 `cleanupPeriodDays` 청소 대상이라 오래된 사본은 남아 있지 않을 수 있고, 청소 목록 전체는 [세션 기록 구조](transcripts.md)에 있습니다. Windows 의 Claude Code 는 판에 따라 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않을 수 있습니다[10].
 
 설정 파일을 고치면 실행 중인 세션이 바로 다시 읽고, 파일이 바뀔 때마다 `ConfigChange` 훅이 돕니다(MDM 이나 콘솔로 바꾼 관리 정책은 제외)[2]. 지금 어떤 관리 소스가 적용 중인지는 `/status` 의 `Setting sources` 줄에 나옵니다[5].
 
 ## 구조
 
-### 관찰한 사용자 설정 키
+### 사용자 설정 키
 
-관찰한 `~/.claude/settings.json` 에는 `permissions.allow`, `hooks` 아래 이벤트별 `matcher` 와 `hooks`, `enabledPlugins`, `extraKnownMarketplaces` 아래 이름별 `source.repo` 와 `source.source`, `autoMode.environment`, `autoUpdatesChannel`, `effortLevel`, `modelSettings` 아래 모델별 `effortLevel`, `theme` 같은 키가 있었습니다. 훅 이벤트 키로는 `Notification`, `PermissionRequest`, `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `SessionEnd`, `Stop`, `StopFailure`, `SubagentStart`, `SubagentStop`, `TeammateIdle`, `UserPromptSubmit` 을 보았습니다. `extraKnownMarketplaces` 의 `source.repo` 에는 저장소 이름이 들어 있어서, 외부 플러그인을 어디서 받아 왔는지 따라갈 때 출발점으로 씁니다.
+`~/.claude/settings.json` 에는 `permissions.allow`, `hooks` 아래 이벤트별 `matcher` 와 `hooks`, `enabledPlugins`, `extraKnownMarketplaces` 아래 이름별 `source.repo` 와 `source.source`, `autoMode.environment`, `autoUpdatesChannel`, `effortLevel`, `modelSettings` 아래 모델별 `effortLevel`, `theme` 같은 키가 들어갑니다. 훅 이벤트 키로는 `Notification`, `PermissionRequest`, `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `SessionEnd`, `Stop`, `StopFailure`, `SubagentStart`, `SubagentStop`, `TeammateIdle`, `UserPromptSubmit` 같은 것이 쓰입니다. `extraKnownMarketplaces` 의 `source.repo` 에는 저장소 이름이 들어 있어서, 외부 플러그인을 어디서 받아 왔는지 따라갈 때 출발점으로 씁니다.
 
-아래는 키 이름을 문서·관찰과 맞추고 값은 새로 만든 예시입니다.
+아래는 키 이름만 실제와 같고 값은 새로 만든 예시입니다.
 
 ```json
 {
@@ -76,7 +76,7 @@ Claude Code 판이 바뀌면 설정 키가 달라질 수 있습니다.
 
 ### 훅
 
-문서가 밝힌 훅 이벤트는 다음과 같습니다[2].
+훅 이벤트는 다음과 같습니다[2].
 
 ```
 SessionStart, Setup, UserPromptSubmit, UserPromptExpansion, PreToolUse,
@@ -111,9 +111,9 @@ ccfx 는 `backups/` 에서 이름이 `.claude.json.backup.` 으로 시작하는 
 | `oauthAccount` | `accountUuid`, `emailAddress`, `organizationUuid`, `organizationName`, `organizationType`, `organizationRole`, `organizationRateLimitTier`, `userRateLimitTier` | 보고서의 사용자 신원 절. 등급은 `userRateLimitTier` 가 비어 있으면 `organizationRateLimitTier` 를 씀 |
 | `projects` 아래 프로젝트 경로별 | `lastCost`, `lastTotalInputTokens`, `lastTotalOutputTokens`, `lastTotalCacheCreationInputTokens`, `lastTotalCacheReadInputTokens` | 프로젝트별 비용(달러)과 토큰 수 |
 
-ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModified` 키도 정의하지만 보고서에 쓰지 않습니다[9]. `lastSessionFirstPrompt` 에는 키 이름으로 보아 마지막 세션의 첫 입력이 들어갈 수 있으므로, 검체에서 값이 있는지 직접 확인합니다. claude-forensics 문서도 `backups/` 의 OAuth 계정 묶음이 신원을 드러낸다고 적습니다[10].
+ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModified` 키도 정의하지만 보고서에 쓰지 않습니다[9]. `lastSessionFirstPrompt` 에는 키 이름으로 보아 마지막 세션의 첫 입력이 들어갈 수 있으므로, 검체에서 값이 있는지 직접 확인합니다. `backups/` 의 OAuth 계정 묶음은 신원을 드러냅니다[10].
 
-아래는 키 이름을 ccfx 코드와 맞추고 값은 모두 새로 만든 예시입니다.
+아래는 키 이름만 실제와 같고 값은 모두 새로 만든 예시입니다.
 
 ```json
 {
@@ -151,7 +151,7 @@ ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModifi
 
 ## 시각 해석
 
-관찰한 사용자 설정 파일의 키에는 시각 값이 없었습니다. 설정이 언제 바뀌었는지는 파일 시스템의 마지막 쓰기 시각, `backups/` 의 파일 이름에 붙은 시각, 저장소의 git 커밋 시각, 세션 기록의 `permissionMode` 가 바뀐 줄의 시각으로 가늠합니다. 설정 파일은 고칠 때마다 통째로 다시 쓰일 수 있어서, 마지막 쓰기 시각은 마지막 변경만 알려 줍니다.
+사용자 설정 파일의 키에는 시각 값이 없습니다. 설정이 언제 바뀌었는지는 파일 시스템의 마지막 쓰기 시각, `backups/` 의 파일 이름에 붙은 시각, 저장소의 git 커밋 시각, 세션 기록의 `permissionMode` 가 바뀐 줄의 시각으로 가늠합니다. 설정 파일은 고칠 때마다 통째로 다시 쓰일 수 있어서, 마지막 쓰기 시각은 마지막 변경만 알려 줍니다.
 
 `backups/` 사본 이름에 붙은 시각과 `projects` 아래 `lastSessionModified` 값의 형식·시간대는 공개된 명세가 없어서 검체에서 확인해야 합니다. ccfx 코드는 `lastSessionModified` 를 형식을 정하지 않은 JSON 값(`json.RawMessage`)으로 받기만 합니다[9]. 사본 이름의 시각을 파일 시스템의 생성·수정 시각과 나란히 놓으면 어떤 형식인지 가늠할 수 있습니다.
 
@@ -159,7 +159,7 @@ ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModifi
 
 우선순위가 높은 파일 하나가 아래 파일의 규칙을 덮기 때문에, 한 파일만 보고 "허용돼 있었다" 고 쓰지 않습니다. HKCU 정책 값은 사용자가 직접 쓸 수 있는 위치라서 조직 정책의 근거로 삼지 않습니다.
 
-훅은 플러그인과 스킬·하위 에이전트 머리말에도 있을 수 있어서, 설정 파일 네 곳만 보면 빠뜨립니다. `/hooks` 메뉴는 훅과 그 출처(User, Project, Local, Plugin, Session)를 읽기 전용으로 보여 주지만[2], 살아 있는 시스템에서 앱을 켜야 볼 수 있습니다. 관찰한 키와 문서 키는 판에 따라 다를 수 있습니다.
+훅은 플러그인과 스킬·하위 에이전트 머리말에도 있을 수 있어서, 설정 파일 네 곳만 보면 빠뜨립니다. `/hooks` 메뉴는 훅과 그 출처(User, Project, Local, Plugin, Session)를 읽기 전용으로 보여 주지만[2], 살아 있는 시스템에서 앱을 켜야 볼 수 있습니다.
 
 ccfx 는 이름순으로 가장 마지막 사본 하나만 읽어서[9], 그보다 앞선 사본에 다른 계정이 남아 있어도 보고서에는 나오지 않습니다. 사본은 모두 따로 열어 봅니다. ccfx 의 `-ac` 옵션이 만드는 수집 압축 파일에는 `.credentials.json` 이 평문 그대로 들어가고 `--redact-pii` 도 적용되지 않으므로[9], 그 파일은 토큰이 든 증거물로 다룹니다.
 

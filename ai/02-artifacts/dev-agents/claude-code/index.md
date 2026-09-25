@@ -15,9 +15,9 @@ Claude Code 는 터미널에서 도는 코딩 에이전트이고, 대화 전문�
 
 Claude Code 는 모델 호출만 네트워크로 보내고 파일 편집과 명령 실행은 사용자 PC 에서 합니다. 그래서 "AI 가 무엇을 실행했나", "어떤 파일을 모델에 보냈나", "누가 허용했나" 같은 질문의 답이 대부분 PC 안의 기록에 있습니다. 세션 기록은 저장할 때 암호화하지 않고 OS 파일 권한으로만 보호합니다[1]. 사고 조사에서는 사용자 폴더와 함께 저장소 안의 `.claude/` 폴더도 보는데, 그 까닭은 [설정·권한·훅](settings-permissions.md)의 훅 절에 있습니다.
 
-Anthropic 은 기록 파일의 형식을 명세로 공개하지 않았습니다. agentsview 는 형식 근거를 정리한 문서(2026-09-11 수정)에서 Claude Code 를 "공개 출처 없음(no-public-source)" 으로 분류하고, 공식 문서에 없는 칸은 로컬 기록 관찰과 시험 자료(fixture)를 근거로 삼는다고 적습니다[8]. 판이 바뀌면 칸이 달라질 수 있으므로 검체의 줄을 직접 열어 이 핸드북의 설명과 맞는지 확인합니다. coding-agent-forensics 는 기록에 서명이 없고 사용자가 고칠 수 있다는 점을 들어, 기록은 도구가 적은 내용의 증거일 뿐 사람이 한 행동의 증명은 아니라고 경고합니다[9].
+기록 파일의 형식은 공개된 명세가 없고, 공식 문서에 없는 칸은 실제 기록과 시험 자료로만 알 수 있습니다[8]. 판이 바뀌면 칸이 달라질 수 있으므로 검체의 줄을 직접 열어 이 핸드북의 설명과 맞는지 확인합니다. 기록에는 서명이 없고 사용자가 고칠 수 있어서, 기록은 도구가 적은 내용의 증거일 뿐 사람이 한 행동의 증명은 아닙니다[9].
 
-지원 OS 는 macOS 13.0 이상, Windows 10 1809 이상과 Windows Server 2019 이상, Ubuntu 20.04 이상, Debian 10 이상, Alpine 3.19 이상이고, 모든 OS 에서 사용자 데이터 폴더는 `~/.claude/`(Windows 는 `%USERPROFILE%\.claude`)입니다[2][3]. 설치는 네이티브 설치기, Homebrew, WinGet, apt·dnf·apk, npm 으로 할 수 있고, VS Code 확장·JetBrains 플러그인·데스크톱 앱도 같은 폴더에 씁니다. 다만 Claude 데스크톱 앱은 자기 데이터 폴더에 세션 메타와 Cowork 기록을 따로 두므로, claude-forensics 는 두 폴더를 모두 떠야 전체가 보인다고 적습니다[6].
+지원 OS 는 macOS 13.0 이상, Windows 10 1809 이상과 Windows Server 2019 이상, Ubuntu 20.04 이상, Debian 10 이상, Alpine 3.19 이상이고, 모든 OS 에서 사용자 데이터 폴더는 `~/.claude/`(Windows 는 `%USERPROFILE%\.claude`)입니다[2][3]. 설치는 네이티브 설치기, Homebrew, WinGet, apt·dnf·apk, npm 으로 할 수 있고, VS Code 확장·JetBrains 플러그인·데스크톱 앱도 같은 폴더에 씁니다. 다만 Claude 데스크톱 앱은 자기 데이터 폴더에 세션 메타와 Cowork 기록을 따로 두므로, 두 폴더를 모두 떠야 전체가 보입니다[6].
 
 ### PC 에 없고 서버에 있는 것
 
@@ -49,9 +49,9 @@ Anthropic 은 기록 파일의 형식을 명세로 공개하지 않았습니다.
 | `~/.claude/image-cache/` | 모두 | 문서[2], v2.1.274 이하 | 붙여 넣은 이미지(그 뒤 버전은 임시 폴더 아래 세션별 `images/`) |
 | 관리 정책 파일·레지스트리·구성 프로파일 | OS 마다 다름 | 문서[5] | 조직이 건 설정과 제한 |
 
-`history.jsonl` 은 세션 기록이 지워진 뒤에도 몇 달 남는다고 claude-forensics 는 적습니다[6]. 이 도구는 `history.jsonl` 의 세션 ID 가운데 세션 기록 파일이 없는 것을 따로 모으고, `.last-cleanup` 시각과 함께 보여 줍니다. 이렇게 하면 기록이 지워진 세션도 프롬프트는 되살릴 수 있습니다. 자세한 짜임은 [세션 기록 구조](transcripts.md)에 있습니다.
+`history.jsonl` 은 세션 기록이 지워진 뒤에도 몇 달 남습니다[6]. claude-forensics 는 `history.jsonl` 의 세션 ID 가운데 세션 기록 파일이 없는 것을 따로 모으고, `.last-cleanup` 시각과 함께 보여 줍니다. 이렇게 하면 기록이 지워진 세션도 프롬프트는 되살릴 수 있습니다. 자세한 짜임은 [세션 기록 구조](transcripts.md)에 있습니다.
 
-Windows 에서 어떤 폴더가 생기는지는 출처마다 다릅니다. claude-forensics(v0.1.1, 2026-06)는 2026년 중반의 Windows 판 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 적었습니다[6]. 이 핸드북의 Windows 11 관찰(2026-09)에서는 `history.jsonl`, `file-history\`, `paste-cache\` 가 있었고 `shell-snapshots\` 는 없었습니다([Windows](windows.md) 참고). 판과 사용한 기능에 따라 다르므로, 폴더가 없다는 사실만으로 그 기능을 쓰지 않았다고 판단하지 않고 검체로 확인합니다.
+Windows 에서 어떤 폴더가 생기는지는 출처마다 다릅니다. claude-forensics(v0.1.1, 2026-06)는 2026년 중반의 Windows 판 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보았지만[6], 2026년 9월 Windows 11 에서는 `history.jsonl`, `file-history\`, `paste-cache\` 가 생기고 `shell-snapshots\` 는 생기지 않았습니다([Windows](windows.md) 참고). 판과 사용한 기능에 따라 다르므로, 폴더가 없다는 사실만으로 그 기능을 쓰지 않았다고 판단하지 않고 검체로 확인합니다.
 
 `.credentials.json` 과 `backups/` 의 계정 정보는 보고서에서 가려야 합니다. 로그인 정보가 남는 곳 전체는 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
@@ -70,13 +70,13 @@ Claude 데스크톱 앱의 데이터 폴더에는 Cowork 세션 메타와 Cowork
 
 | 위치 | 근거 | 알려 주는 것 |
 |---|---|---|
-| `claude-code-sessions/<orgUuid>/<accountUuid>/local_<sessionId>.json` | [6] | claude-forensics 가 Cowork 세션 메타라고 부르는 파일로, 제목, 모델, 작업 폴더, 보관 여부, 권한 모드, 원격 MCP 설정이 들어 있습니다. 소유 조직·계정 UUID 는 상위 폴더 이름에 있고, `cliSessionId` 로 `~/.claude/projects/` 의 세션 기록과 이어집니다 |
+| `claude-code-sessions/<orgUuid>/<accountUuid>/local_<sessionId>.json` | [6] | Cowork 세션 메타 파일로, 제목, 모델, 작업 폴더, 보관 여부, 권한 모드, 원격 MCP 설정이 들어 있습니다. 소유 조직·계정 UUID 는 상위 폴더 이름에 있고, `cliSessionId` 로 `~/.claude/projects/` 의 세션 기록과 이어집니다 |
 | `local-agent-mode-sessions/<orgUuid>/<accountUuid>/local_<sessionId>.json` | [6][8] | Cowork 에이전트 세션의 제목, 첫 메시지, 소유 계정의 이메일과 이름, 허용한 폴더·도메인 |
 | `local-agent-mode-sessions/…/local_<sessionId>/audit.jsonl` | [6] | Cowork 에이전트 대화 전문과, 에이전트 런타임이 적은 비용·턴 수 |
 | `local-agent-mode-sessions/…/local_<sessionId>/.claude/projects/…/<cliSessionId>.jsonl` | [8] | Claude Code 와 같은 형식의 세션 기록, 그 옆 `subagents/` 의 하위 에이전트 기록 |
 | `local-agent-mode-sessions/<orgUuid>/<accountUuid>/spaces.json` | [6] | Cowork 스페이스 ID 와 이름·폴더·지시문 |
 | `cowork-enabled-cli-ops.json`, `claude_desktop_config.json`, `config.json`, `buddy-tokens.json`, `ant-did` | [6] | claude-forensics 가 수집 사본에 넣는 설정 파일입니다. 각 파일의 용도는 공개 자료에 설명이 없어 검체로 확인해야 합니다 |
-| `vm_bundles/`, `Cache/`, `Code Cache/` | [6] | 큰 캐시 폴더라서 claude-forensics 는 수집 사본에서 뺍니다(문서는 `vm_bundles/` 를 12GB 로 적음) |
+| `vm_bundles/`, `Cache/`, `Code Cache/` | [6] | 큰 캐시 폴더라서 claude-forensics 는 수집 사본에서 뺍니다(`vm_bundles/` 는 12GB 정도) |
 
 데스크톱 앱 자체의 대화 기록과 저장 구조는 [Claude](../../chat-services/claude/index.md)에서 다룹니다.
 

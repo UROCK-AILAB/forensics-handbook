@@ -53,11 +53,11 @@ nav_order: 920
    | `DLP rule match` | 생성형 AI 사이트와 주고받는 중에 DLP 규칙과 일치 |
    | `Sensitive info types` | 생성형 AI 사이트와 주고받는 중에 민감 정보 유형 발견 |
 
-   기본 DLP 정책 `DSPM for AI: Detect sensitive info added to AI sites` 는 Edge·Chrome·Firefox 에서 AI 사이트에 붙여넣거나 올린 민감 내용을 감사 모드로만 탐지합니다 [1]. 수집 정책 `DSPM for AI - Capture interactions for enterprise AI apps` 는 ChatGPT Enterprise 와 Entra·Microsoft Foundry 로 연결한 AI 앱의 프롬프트·응답을 eDiscovery 등에서 다룰 수 있게 캡처합니다 [1]. 제3자 AI 사이트에 민감 정보를 넣은 사건을 보려면 기기가 Purview 에 등록돼 있어야 합니다 [1]. 이 문서는 DSPM for AI 의 "classic" 판이고 새 판으로 바뀌는 중이라고 적혀 있어서, 사건 당시 어느 판을 썼는지도 함께 확인합니다 [1].
+   기본 DLP 정책 `DSPM for AI: Detect sensitive info added to AI sites` 는 Edge·Chrome·Firefox 에서 AI 사이트에 붙여넣거나 올린 민감 내용을 감사 모드로만 탐지합니다 [1]. 수집 정책 `DSPM for AI - Capture interactions for enterprise AI apps` 는 ChatGPT Enterprise 와 Entra·Microsoft Foundry 로 연결한 AI 앱의 프롬프트·응답을 eDiscovery 등에서 다룰 수 있게 캡처합니다 [1]. 제3자 AI 사이트에 민감 정보를 넣은 사건을 보려면 기기가 Purview 에 등록돼 있어야 합니다 [1]. DSPM for AI 는 "classic" 판에서 새 판으로 바뀌는 중이므로, 사건 당시 어느 판을 썼는지도 함께 확인합니다 [1].
 
    Endpoint DLP 쪽에서는 `Paste to supported browsers`(제한된 서비스 도메인에 붙여넣는 내용 자체를 평가하고 원본 파일 분류와는 상관없음), `Upload to a restricted cloud service domain or access from an unallowed browser`, `Copy to clipboard`(보호된 파일에서 복사) 활동을 봅니다 [2]. 기기가 온보딩되면 DLP 정책을 걸기 전에도 감사된 활동이 활동 탐색기로 들어오고 [2], 상세 속성에는 사용자, 기기 이름, 파일 이름·경로, 민감 정보 유형, sha1·sha256, 작업한 앱 등이 있습니다 [2]. 보안 제품 기록 읽는 법은 [보안 제품이 남기는 AI 사용 기록](../../02-artifacts/network-enterprise/dlp-casb.md) 에서 다룹니다.
 
-3. **서비스 관리자 로그로 계정과 기기를 맞춥니다.** Claude 는 Enterprise 조직에만 감사 로그가 있고, Organization Owner 나 Primary Owner 가 조직 설정의 데이터·개인정보 메뉴에서 내보냅니다 [3]. 이 사건에서 먼저 볼 이벤트는 `file_uploaded` 와 `conversation_created` 이고, `created_at`, `actor_info`, `ip_address`, `device_id`, `user_agent`, `client_platform` 칸으로 언제 누가 어느 기기에서 올렸는지 맞춥니다 [3]. 감사 로그에는 대화·프로젝트의 제목과 내용이 없고 고유 ID 만 있어서, 무엇을 올렸는지는 Primary Owner 가 따로 받는 데이터 내보내기로 확인합니다 [3]. 공개 파서 코드가 읽는 칸을 보면, 내보낸 `conversations.json` 의 `chat_messages[].attachments[]` 에는 `file_name`, `file_size`, `file_type` 과 함께 첨부에서 뽑은 글인 `extracted_content` 가 있고, `files[]` 에는 `file_name` 만 있습니다 [7][8]. 첨부의 글 내용은 `extracted_content` 에서 보고, `files[]` 에 이름만 있는 파일은 내용을 다른 곳에서 찾습니다. 프로젝트에 올린 문서는 `projects.json` 의 `docs[].filename` 과 `docs[].content` 에 들어갑니다 [7]. 칸 이름은 판마다 바뀔 수 있어 검체에서 먼저 확인합니다. 전체 이벤트 목록은 [Claude 기업용 감사 로그](../../02-artifacts/network-enterprise/claude-enterprise.md) 에 있고, ChatGPT Enterprise 와 Google Workspace 의 Gemini 도 각 페이지의 관리자 기록을 같은 방식으로 봅니다. 회사가 직접 볼 수 없는 기록은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 으로 받습니다.
+3. **서비스 관리자 로그로 계정과 기기를 맞춥니다.** Claude 는 Enterprise 조직에만 감사 로그가 있고, Organization Owner 나 Primary Owner 가 조직 설정의 데이터·개인정보 메뉴에서 내보냅니다 [3]. 이 사건에서 먼저 볼 이벤트는 `file_uploaded` 와 `conversation_created` 이고, `created_at`, `actor_info`, `ip_address`, `device_id`, `user_agent`, `client_platform` 칸으로 언제 누가 어느 기기에서 올렸는지 맞춥니다 [3]. 감사 로그에는 대화·프로젝트의 제목과 내용이 없고 고유 ID 만 있어서, 무엇을 올렸는지는 Primary Owner 가 따로 받는 데이터 내보내기로 확인합니다 [3]. 내보낸 `conversations.json` 의 `chat_messages[].attachments[]` 에는 `file_name`, `file_size`, `file_type` 과 함께 첨부에서 뽑은 글인 `extracted_content` 가 있고, `files[]` 에는 `file_name` 만 있습니다 [7][8]. 첨부의 글 내용은 `extracted_content` 에서 보고, `files[]` 에 이름만 있는 파일은 내용을 다른 곳에서 찾습니다. 프로젝트에 올린 문서는 `projects.json` 의 `docs[].filename` 과 `docs[].content` 에 들어갑니다 [7]. 칸 이름은 판마다 바뀔 수 있어 검체에서 먼저 확인합니다. 전체 이벤트 목록은 [Claude 기업용 감사 로그](../../02-artifacts/network-enterprise/claude-enterprise.md) 에 있고, ChatGPT Enterprise 와 Google Workspace 의 Gemini 도 각 페이지의 관리자 기록을 같은 방식으로 봅니다. 회사가 직접 볼 수 없는 기록은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 으로 받습니다.
 
 4. **기기에서 입력 본문을 확인합니다.** 개발 도구는 입력과 도구 결과를 기기에 남깁니다. Claude Code 에서 이 사건에 바로 쓰는 키는 다음과 같습니다. 파일 구조 전체는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에서 설명합니다.
 
@@ -76,19 +76,19 @@ nav_order: 920
    {"display":"첨부한 견적서 요약해 줘","pastedContents":{"1":{"id":1,"type":"...","contentHash":"0000aaaa1111bbbb"}},"project":"C:\\work\\sample-project","sessionId":"00000000-1111-2222-3333-444444444444","timestamp":1700000000000}
    ```
 
-   세션 기록에 도구 결과로 파일 내용이 들어 있으면 사용자가 직접 붙여넣지 않았어도 그 내용이 대화에 들어간 것입니다. Claude Code 가 모든 프롬프트와 모델 출력을 TLS 1.2 이상으로 서버에 보낸다고 공식 문서에 적혀 있지만 [4], 도구 결과 하나하나가 서버로 간 범위를 이 문장만으로 단정하지는 않습니다. 에이전트가 스스로 읽은 파일을 따로 추려야 할 때는 [AI 에이전트가 무엇을 실행했나](../agents/agent-actions.md) 의 흐름을 함께 씁니다.
+   세션 기록에 도구 결과로 파일 내용이 들어 있으면 사용자가 직접 붙여넣지 않았어도 그 내용이 대화에 들어간 것입니다. Claude Code 는 모든 프롬프트와 모델 출력을 TLS 1.2 이상으로 서버에 보내지만 [4], 도구 결과 하나하나가 서버로 간 범위는 이 사실만으로 단정하지 않습니다. 에이전트가 스스로 읽은 파일을 따로 추려야 할 때는 [AI 에이전트가 무엇을 실행했나](../agents/agent-actions.md) 의 흐름을 함께 씁니다.
 
-5. **서버로 간 뒤 어디에 얼마나 남는지 확인합니다.** Claude Code 의 서버 보관 기간은 소비자 요금제(Free·Pro·Max)에서 모델 개선을 허용하면 5년, 거부하면 30일이고, 상업 요금제(Team·Enterprise·API)는 기본 30일이며 조건을 갖춘 Enterprise 는 제로 데이터 보관(ZDR)을 씁니다 [4]. `/feedback`·`/bug`·`/share` 로 보낸 기록에는 코드를 포함한 대화 기록이 들어가 5년 동안 보관되고, 세션 설문 뒤 대화 기록을 보여 줄지 묻는 질문에 "Yes" 를 고르면 대화 기록, 하위 에이전트 기록, 디스크의 세션 로그가 올라가 최대 6개월 보관됩니다 [4]. Bedrock·Google Cloud Agent Platform 같은 제3자 공급자를 쓰거나 Anthropic 자격 증명이 없는 환경에서는 `/feedback` 보고가 `~/.claude/feedback-bundles/` 에 로컬 파일로 남고 보내지 않습니다 [4]. Claude 가 대신 쓴 피드백 초안은 사용자가 보내기로 고르기 전까지 기기에만 있고 [4], 기기의 `feedback\drafts\파일.json` 에는 `details`, `transcript_ref.session_file`, `cwd`, `status`, `created_at` 키가 있었습니다. 초안 파일만 있다면 보냈다는 근거가 되지 못합니다. 보관·삭제 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md) 를 봅니다.
+5. **서버로 간 뒤 어디에 얼마나 남는지 확인합니다.** Claude Code 의 서버 보관 기간은 소비자 요금제(Free·Pro·Max)에서 모델 개선을 허용하면 5년, 거부하면 30일이고, 상업 요금제(Team·Enterprise·API)는 기본 30일이며 조건을 갖춘 Enterprise 는 제로 데이터 보관(ZDR)을 씁니다 [4]. `/feedback`·`/bug`·`/share` 로 보낸 기록에는 코드를 포함한 대화 기록이 들어가 5년 동안 보관되고, 세션 설문 뒤 대화 기록을 보여 줄지 묻는 질문에 "Yes" 를 고르면 대화 기록, 하위 에이전트 기록, 디스크의 세션 로그가 올라가 최대 6개월 보관됩니다 [4]. Bedrock·Google Cloud Agent Platform 같은 제3자 공급자를 쓰거나 Anthropic 자격 증명이 없는 환경에서는 `/feedback` 보고가 `~/.claude/feedback-bundles/` 에 로컬 파일로 남고 보내지 않습니다 [4]. Claude 가 대신 쓴 피드백 초안은 사용자가 보내기로 고르기 전까지 기기에만 있고 [4], 기기의 `feedback\drafts\파일.json` 에는 `details`, `transcript_ref.session_file`, `cwd`, `status`, `created_at` 키가 있습니다. 초안 파일만 있다면 보냈다는 근거가 되지 못합니다. 보관·삭제 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md) 를 봅니다.
 
-6. **로컬 AI 인지 가립니다.** Ollama 공식 FAQ 에는 로컬에서 돌릴 때 프롬프트와 데이터를 Ollama 가 보지 않는다고 적혀 있어서 [5], 서버 쪽 기록은 기대하지 않고 기기 쪽을 조사합니다. Ollama 의 파일 위치는 [Ollama](../../02-artifacts/local-ai/ollama.md) 페이지를 봅니다. 로컬 AI 앱에 올린 파일은 아래 위치에 남습니다(Windows 11 Pro 24H2 기준, 앱 판은 표에 적음) [6].
+6. **로컬 AI 인지 가립니다.** Ollama 는 로컬에서 돌릴 때 프롬프트와 데이터를 보지 않으므로 [5], 서버 쪽 기록은 기대하지 않고 기기 쪽을 조사합니다. Ollama 의 파일 위치는 [Ollama](../../02-artifacts/local-ai/ollama.md) 페이지를 봅니다. 로컬 AI 앱에 올린 파일은 아래 위치에 남습니다(Windows 11 Pro 24H2 기준, 앱 판은 표에 적음) [6].
 
-   | 앱(시험한 판) | 올린 파일이 남는 곳 | 논문에 적힌 내용 |
+   | 앱(시험한 판) | 올린 파일이 남는 곳 | 저장 방식과 삭제 뒤 복구 |
    |---|---|---|
    | LM Studio 0.3.14 | `%UserProfile%\.lmstudio\user-files\파일이름` 과 같은 폴더의 `파일이름.metadata.json` | 원본 형식 그대로 저장합니다. 메타데이터에는 형식, 크기, 원래 이름, SHA-256 값이 있습니다. 앱에서 지운 업로드 50건은 한 건도 되살아나지 않았습니다. |
    | Msty 1.8.5 | `%AppData%\Msty\attachments\` | 원본 형식 그대로 저장합니다. 업로드 메시지를 지워도 파일은 남아서, 지운 업로드 50건이 모두 되살아났습니다. |
    | GPT4All 3.10.0 | `%LocalAppData%\nomic.ai\GPT4ALL\gpt4all-ID.chat` | 올린 파일 내용이 대화 파일 안에 통째로 들어갑니다. 앱에서 지운 대화는 되살아나지 않았습니다. |
 
-   LM Studio 메타데이터의 SHA-256 값은 회사 문서의 해시와 바로 맞춰 볼 수 있습니다. 논문의 "되살아나지 않음" 은 앱 화면에서 지운 뒤 디스크에 남은 파일을 본 결과이고, 볼륨 섀도 복사본과 메모리는 시험 범위에서 뺐다고 논문에 적혀 있으므로 [6], 그 둘은 따로 확인합니다. 새 판은 저장 위치가 다를 수 있어 검체의 앱 판을 먼저 봅니다. 로컬 AI 에 넣은 자료는 기기 밖으로 나가지 않았을 수 있으므로 "유출" 과 "입력" 을 나눠 적습니다.
+   LM Studio 메타데이터의 SHA-256 값은 회사 문서의 해시와 바로 맞춰 볼 수 있습니다. 표의 "되살아나지 않음" 은 앱 화면에서 지운 뒤 디스크에 남은 파일만 본 LangurTrace 시험 결과이고, 볼륨 섀도 복사본과 메모리는 시험 범위에 없었으므로 [6], 그 둘은 따로 확인합니다. 새 판은 저장 위치가 다를 수 있어 검체의 앱 판을 먼저 봅니다. 로컬 AI 에 넣은 자료는 기기 밖으로 나가지 않았을 수 있으므로 "유출" 과 "입력" 을 나눠 적습니다.
 
 7. **타임라인으로 묶어 교차 검증합니다.** 보안 제품의 붙여넣기 시각, 관리자 로그의 업로드 시각, 기기 기록의 `timestamp` 를 한 줄에 놓고 계정과 기기가 같은지 봅니다. 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md) 을 따릅니다.
 
@@ -104,7 +104,7 @@ nav_order: 920
 
 **"30일보다 오래된 세션 기록이 없으니 사용자가 지웠다."** Claude Code 는 기본 설정만으로도 30일이 지난 세션 기록을 지웁니다 [4]. 지운 행위를 주장하려면 `cleanupPeriodDays` 를 바꿨는지, 기한 안의 기록이 비었는지를 먼저 봅니다.
 
-**"붙여넣기 항목에 본문이 없으니 붙여넣은 것이 없다."** `history.jsonl` 에는 해시만 남은 붙여넣기 항목이 있었습니다. 해시만 있어도 붙여넣은 사실 자체는 남습니다.
+**"붙여넣기 항목에 본문이 없으니 붙여넣은 것이 없다."** `history.jsonl` 에는 해시만 남은 붙여넣기 항목이 있을 수 있습니다. 해시만 있어도 붙여넣은 사실 자체는 남습니다.
 
 ## 보고서 문장 예
 

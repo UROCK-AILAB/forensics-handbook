@@ -12,7 +12,7 @@ Electron 앱과 WebView2 를 쓰는 앱은 웹 페이지를 앱 창 안에 띄�
 
 ## 이 형식을 쓰는 아티팩트
 
-Claude 데스크톱(스토어 앱)의 데이터 폴더는 Electron 앱의 사용자 데이터 폴더와 같은 모양입니다. 다른 AI 데스크톱 앱이 Electron·WebView2·WKWebView 가운데 무엇으로 만들어졌는지는 앱마다 다르므로 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Microsoft Copilot](../../02-artifacts/chat-services/copilot/index.md) 같은 서비스별 쪽을 봅니다. 모바일에서는 Claude Android 앱이 앱 안의 WebView 저장소를 만든다는 공개 자료가 있고, 아래 Android WebView 절에서 다룹니다 [4][5].
+Claude 데스크톱(스토어 앱)의 데이터 폴더는 Electron 앱의 사용자 데이터 폴더와 같은 모양입니다. 다른 AI 데스크톱 앱이 Electron·WebView2·WKWebView 가운데 무엇으로 만들어졌는지는 앱마다 다르므로 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Microsoft Copilot](../../02-artifacts/chat-services/copilot/index.md) 같은 서비스별 쪽을 봅니다. 모바일에서는 Claude Android 앱도 앱 안에 WebView 저장소를 만들고, 아래 Android WebView 절에서 다룹니다 [4][5].
 
 크롬 계열 저장소 하나하나의 파일 형식은 다른 판에서 이미 다룹니다. 폴더 공통 구조는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html), LevelDB 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html), SQLite 는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 를 봅니다. 이 쪽은 AI 앱 폴더에서 무엇을 먼저 찾고 어떻게 나눠 읽는지에 집중합니다.
 
@@ -30,11 +30,11 @@ Electron 은 앱이 쓰는 폴더를 이름으로 나눠 부르고, 앱은 `app.
 | `logs` | 앱 로그 폴더 | `userData` 안(앱이 `setAppLogsPath()` 를 경로 없이 부른 경우) | `~/Library/Logs/<앱 이름>`(같은 조건) | `userData` 안(같은 조건) |
 | `crashDumps`, `temp` | 충돌 덤프, 임시 파일 | 문서에 기본 위치 없음 | 문서에 기본 위치 없음 | 문서에 기본 위치 없음 |
 
-`sessionData` 는 따로 정하지 않으면 `userData` 를 가리키고, 문서는 브라우저 저장소를 쓰지 않는 앱이라면 `sessionData` 를 다른 곳으로 옮기라고 권합니다 [1]. 그래서 쿠키·캐시 같은 크롬 계열 저장소는 보통 `userData` 폴더 안에서 찾지만, 앱이 위치를 바꿨을 수 있어서 기본 위치에 없으면 다른 곳도 찾아봅니다. 문서는 또 일부 환경이 `userData` 폴더를 클라우드에 백업한다며 이 폴더에 큰 파일을 쓰지 말라고 적고 있습니다 [1].
+`sessionData` 는 따로 정하지 않으면 `userData` 를 가리키고, 브라우저 저장소를 쓰지 않는 앱은 `sessionData` 를 다른 곳으로 옮기는 편이 좋습니다 [1]. 그래서 쿠키·캐시 같은 크롬 계열 저장소는 보통 `userData` 폴더 안에서 찾지만, 앱이 위치를 바꿨을 수 있어서 기본 위치에 없으면 다른 곳도 찾아봅니다. 일부 환경은 `userData` 폴더를 클라우드에 백업하므로, 이 폴더에는 큰 파일을 쓰지 않는 편이 좋습니다 [1].
 
-### AI 앱 폴더에서 본 크롬 계열 항목
+### AI 앱 폴더의 크롬 계열 항목
 
-Claude 데스크톱 데이터 폴더(스토어 앱은 패키지 폴더 아래 `LocalCache\Roaming\Claude\`)에서 본 항목을 크롬 계열 저장소와 앱 자체 파일로 나누면 아래와 같습니다. "담기는 것" 칸은 Electron 문서의 `sessionData` 설명 [1] 과 폴더 이름으로 맞춘 것이라서, 실제 내용은 검체에서 복사본을 열어 확인합니다.
+Claude 데스크톱 데이터 폴더(스토어 앱은 패키지 폴더 아래 `LocalCache\Roaming\Claude\`)의 항목을 크롬 계열 저장소와 앱 자체 파일로 나누면 아래와 같습니다. "담기는 것" 칸은 Electron 문서의 `sessionData` 설명 [1] 과 폴더 이름으로 맞춘 것이라서, 실제 내용은 검체에서 복사본을 열어 확인합니다.
 
 | 항목 | 모양 | 담기는 것 |
 |---|---|---|
@@ -51,15 +51,15 @@ Claude 데스크톱 데이터 폴더(스토어 앱은 패키지 폴더 아래 `L
 | `Local State`, `DIPS`, `DIPS-wal`, `InterestGroups` | 파일 | 크롬 계열 공통 파일(각 형식은 다른 판 참고) |
 | `Partitions\` 아래 이름별 폴더 | 위 항목을 파티션마다 따로 | 앱이 나눈 세션별 저장소 |
 
-`Partitions\` 아래에는 `cowork-file-preview`, `launch-preview-static` 같은 이름의 폴더가 있었고, 폴더마다 `Network\Cookies` 가 따로 있었습니다. 앱이 세션(파티션)을 나누면 쿠키 DB 도 파티션마다 따로 생겨서, 쿠키를 찾을 때는 기본 `Network\Cookies` 한 곳만 보지 말고 `Partitions\` 아래를 모두 봅니다.
+`Partitions\` 아래에는 `cowork-file-preview`, `launch-preview-static` 같은 이름의 폴더가 있고, 폴더마다 `Network\Cookies` 가 따로 있습니다. 앱이 세션(파티션)을 나누면 쿠키 DB 도 파티션마다 따로 생겨서, 쿠키를 찾을 때는 기본 `Network\Cookies` 한 곳만 보지 말고 `Partitions\` 아래를 모두 봅니다.
 
 ### 쿠키 DB 의 표와 칸
 
-파티션 쪽 쿠키 DB 를 열어 보니 `cookies` 표와 `meta` 표가 있었습니다. `cookies` 표의 칸은 `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` 이고, `meta` 표의 칸은 `key`, `value` 입니다. 값이 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉘는 구성과 시각 칸의 해석은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 쪽을 따릅니다. 로그인 세션의 흔적으로서 쿠키가 무엇을 뜻하는지는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
+파티션 쪽 쿠키 DB 에는 `cookies` 표와 `meta` 표가 있습니다. `cookies` 표의 칸은 `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` 이고, `meta` 표의 칸은 `key`, `value` 입니다. 값이 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉘는 구성과 시각 칸의 해석은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 쪽을 따릅니다. 로그인 세션의 흔적으로서 쿠키가 무엇을 뜻하는지는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
 
 ### 앱 자체 JSON 파일
 
-같은 폴더에는 크롬 계열 저장소와 별개로 앱이 직접 쓰는 JSON 파일이 있었습니다. 이름은 `claude_desktop_config.json`, `config.json`, `window-state.json`, `bridge-state.json`, `buddy-tokens.json`, `plan-usage-history.json`, `git-worktrees.json`, `mcp-user-tool-toggles.json`, `extensions-blocklist.json`, `cowork-enabled-cli-ops.json`, `ant-device-registry.json` 입니다. 파일 이름과 키 구성은 앱 버전마다 바뀔 수 있어서 검체의 앱 버전과 함께 적습니다.
+같은 폴더에는 크롬 계열 저장소와 별개로 앱이 직접 쓰는 JSON 파일이 있습니다. 이름은 `claude_desktop_config.json`, `config.json`, `window-state.json`, `bridge-state.json`, `buddy-tokens.json`, `plan-usage-history.json`, `git-worktrees.json`, `mcp-user-tool-toggles.json`, `extensions-blocklist.json`, `cowork-enabled-cli-ops.json`, `ant-device-registry.json` 입니다. 파일 이름과 키 구성은 앱 버전마다 바뀔 수 있어서 검체의 앱 버전과 함께 적습니다.
 
 조사에 먼저 쓰이는 키는 아래와 같습니다. 키의 뜻을 설명한 공식 문서가 없어서 "짐작" 칸은 키 이름만 보고 짐작한 뜻이고, 보고서에 쓰기 전에 다른 기록과 맞춰 봐야 합니다.
 
@@ -109,7 +109,7 @@ macOS·iOS 앱이 쓰는 WKWebView 의 저장 위치와 데이터 저장소 구�
 
 Android 앱이 쓰는 WebView 도 앱 데이터 폴더 안에 크롬 계열 저장소를 만듭니다. 공개된 사례는 LEAF 저장소 하나이고, 학생 과제 규모의 저장소이며 README 와 스키마 문서가 서로 어긋나서 보조 근거로만 봅니다 [4][5].
 
-LEAF 의 스키마 문서는 Claude Android 앱(`com.anthropic.claude`)이 주로 `claude.ai` 를 WebView 로 띄우는 앱이고, 최근에 연 대화만 앱 자체 SQLite 캐시에 남는다고 적었습니다(Android 15, 2026-04-20 추출, 앱 버전은 적혀 있지 않음) [4]. 저장소에 올라온 추출본 폴더(`Autopsy Case/LogicalFileSet3/com.anthropic.claude/`)에는 아래 WebView 항목이 있고, 이 추출본의 날짜와 OS 판은 적혀 있지 않습니다 [5].
+Claude Android 앱(`com.anthropic.claude`)은 주로 `claude.ai` 를 WebView 로 띄우고, 최근에 연 대화만 앱 자체 SQLite 캐시에 남깁니다(Android 15, 2026-04-20 추출, 앱 버전 모름) [4]. 공개 추출본 폴더(`Autopsy Case/LogicalFileSet3/com.anthropic.claude/`)의 WebView 항목은 아래와 같고, 이 추출본은 날짜와 OS 판을 알 수 없습니다 [5].
 
 | 앱 데이터 폴더 기준 경로 | 담기는 것 |
 |---|---|
@@ -137,13 +137,13 @@ LEAF 의 스키마 문서는 Claude Android 앱(`com.anthropic.claude`)이 주�
 
 **LevelDB 는 지운 값이 한동안 남습니다.** Local Storage·IndexedDB 는 LevelDB 라서 지운 레코드가 `.log`·`.ldb` 에 남아 있을 수 있고, 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 를 따릅니다. 그 안에 AI 대화 내용이 들어 있는지는 앱마다 다르므로 검체에서 확인하고, 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md) 에서 다룹니다.
 
-**앱을 지워도 데이터가 남을 수 있습니다.** 위 WebView2 UDF 삭제 규칙대로 스토어 앱·ClickOnce 앱이 아니면 UDF 가 남고, Electron 문서가 `userData` 를 클라우드에 백업하는 환경을 언급하고 있어서 [1] 백업 사본이 있는지도 확인합니다.
+**앱을 지워도 데이터가 남을 수 있습니다.** 위 WebView2 UDF 삭제 규칙대로 스토어 앱·ClickOnce 앱이 아니면 UDF 가 남고, `userData` 를 클라우드에 백업하는 환경도 있어서 [1] 백업 사본이 있는지도 확인합니다.
 
 ## 함정
 
-**같은 UDF 는 여러 앱이 함께 쓸 수 있습니다.** 같은 UDF 를 쓰는 WebView2 컨트롤은 앱이 달라도 같은 로그온 세션 안에서 세션을 공유한다고 문서가 적고 있어서 [3], UDF 의 쿠키 하나를 특정 앱의 흔적이라고 단정하지 않습니다.
+**같은 UDF 는 여러 앱이 함께 쓸 수 있습니다.** 같은 UDF 를 쓰는 WebView2 컨트롤은 앱이 달라도 같은 로그온 세션 안에서 세션을 공유하므로 [3], UDF 의 쿠키 하나를 특정 앱의 흔적이라고 단정하지 않습니다.
 
-**Windows 의 safeStorage 는 사용자 단위 보호입니다.** 같은 사용자 공간의 다른 앱은 풀 수 있다고 문서가 적고 있어서 [2], 암호화돼 있다는 사실만으로 그 사용자 계정 안의 다른 프로그램은 풀 수 없었다고 쓰지 않습니다.
+**Windows 의 safeStorage 는 사용자 단위 보호입니다.** 같은 사용자 공간의 다른 앱은 풀 수 있으므로 [2], 암호화돼 있다는 사실만으로 그 사용자 계정 안의 다른 프로그램은 풀 수 없었다고 쓰지 않습니다.
 
 **하위 폴더 이름을 문서로 단정하지 않습니다.** WebView2 UDF 의 하위 폴더 이름과 Electron `crashDumps` 의 OS 별 기본 위치는 문서에 없고, `logs` 도 앱이 `setAppLogsPath()` 를 부른 경우의 위치만 문서에 있습니다 [1]. 검체에서 본 이름을 그대로 적고, 다른 앱에도 같다고 쓰지 않습니다.
 

@@ -45,7 +45,7 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 
 ### 버전에 따라 달라지는 곳
 
-| 항목 | 문서가 밝힌 차이 |
+| 항목 | 차이 |
 |---|---|
 | 붙여 넣은 이미지·첨부 이미지 | v2.1.274 이하는 `~/.claude/image-cache/` 아래 세션별 폴더, 그 뒤는 `CLAUDE_CODE_TMPDIR` 이 정하는 임시 폴더 아래 세션별 `images/`[2] |
 | 권한 거부 규칙 | v2.1.268 부터 `/etc` 가 `/private/etc` 로 풀리는 것처럼 심볼릭 링크 폴더를 거쳐 적은 거부·묻기 규칙을 실제 위치에도 적용(macOS·Linux)[5] |
@@ -56,9 +56,9 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 
 ### 프로젝트 폴더 이름
 
-기록 파일은 `~/.claude/projects/` 아래, 작업 경로를 바꿔 만든 이름의 폴더에 들어갑니다. agentsview 는 Claude Code 2.1.233 으로 시험해(2026-08-16) ASCII 영문자·숫자·`-` 는 그대로 두고 나머지 글자는 모두 `-` 로 바꾼다고 적었습니다[8]. macOS 경로는 `/` 로 시작해서 폴더 이름이 `-` 로 시작합니다. 만든 예시로 작업 경로가 `/Users/examiner01/work/app` 이면 폴더 이름은 `-Users-examiner01-work-app` 이 되고, 세션 파일은 `/Users/examiner01/.claude/projects/-Users-examiner01-work-app/` 아래에 생깁니다.
+기록 파일은 `~/.claude/projects/` 아래, 작업 경로를 바꿔 만든 이름의 폴더에 들어갑니다. 이름은 작업 경로의 ASCII 영문자·숫자·`-` 는 그대로 두고 나머지 글자는 모두 `-` 로 바꿔 만듭니다(Claude Code 2.1.233 기준)[8]. macOS 경로는 `/` 로 시작해서 폴더 이름이 `-` 로 시작합니다. 만든 예시로 작업 경로가 `/Users/examiner01/work/app` 이면 폴더 이름은 `-Users-examiner01-work-app` 이 되고, 세션 파일은 `/Users/examiner01/.claude/projects/-Users-examiner01-work-app/` 아래에 생깁니다.
 
-이 바꾸기는 되돌릴 수 없습니다. claude-forensics 는 앞의 `-` 를 `/` 로 돌리고 나머지 `-` 도 `/` 로 바꿔 경로를 되짚지만, 원래 경로에 `-` 가 있으면 틀어진다고 코드 주석에 적고 기록 줄의 `cwd` 값을 먼저 씁니다[7]. 보고서에는 폴더 이름이 아니라 `cwd` 값을 적습니다.
+이 바꾸기는 되돌릴 수 없습니다. claude-forensics 는 앞의 `-` 를 `/` 로 돌리고 나머지 `-` 도 `/` 로 바꿔 경로를 되짚는데, 원래 경로에 `-` 가 있으면 틀어지므로 기록 줄의 `cwd` 값을 먼저 씁니다[7]. 보고서에는 폴더 이름이 아니라 `cwd` 값을 적습니다.
 
 ### 로그인 정보
 
@@ -72,7 +72,7 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 
 ### 데스크톱 앱에서 돌린 Code 세션
 
-Claude 데스크톱 앱에서 돌린 Code 세션은 본문이 `~/.claude/projects/` 에, 메타데이터가 `~/Library/Application Support/Claude/claude-code-sessions/` 아래 조직 ID 폴더와 계정 ID 폴더를 거친 `local_세션ID.json` 에 따로 남습니다[7]. claude-forensics 는 메타데이터의 `cliSessionId` 값으로 `~/.claude/projects/` 의 기록 파일을 찾아 잇고, 이렇게 이어야 제목·모델·보관 여부·계정과 대화 본문이 한 세션으로 묶입니다[7]. 같은 폴더의 `local-agent-mode-sessions/` 에는 Cowork 세션이 남습니다[7][8]. 두 폴더의 짜임과 키는 [Claude macOS 앱](../../chat-services/claude/macos.md)에서 다룹니다.
+Claude 데스크톱 앱에서 돌린 Code 세션은 본문이 `~/.claude/projects/` 에, 메타데이터가 `~/Library/Application Support/Claude/claude-code-sessions/` 아래 조직 ID 폴더와 계정 ID 폴더를 거친 `local_세션ID.json` 에 따로 남습니다[7]. 메타데이터의 `cliSessionId` 값으로 `~/.claude/projects/` 의 기록 파일을 찾아 이어야 제목·모델·보관 여부·계정과 대화 본문이 한 세션으로 묶입니다[7]. 같은 폴더의 `local-agent-mode-sessions/` 에는 Cowork 세션이 남습니다[7][8]. 두 폴더의 짜임과 키는 [Claude macOS 앱](../../chat-services/claude/macos.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -84,7 +84,7 @@ Claude 데스크톱 앱에서 돌린 Code 세션은 본문이 `~/.claude/project
 
 기록 안의 시각은 [세션 기록 구조](transcripts.md)를 따릅니다. 폴더가 언제 생기고 바뀌었는지는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html)에서 `~/.claude/`, `~/.local/share/claude/versions/`, `~/Library/Application Support/Claude/` 경로를 찾아 맞춰 봅니다. `versions/` 에 새 파일이 생긴 시각은 업데이트 시각을 가늠하는 데 쓸 수 있지만, 스스로 업데이트하는 설치에서는 사용자가 그 시각에 앱을 켰다는 뜻까지는 아닙니다.
 
-claude-forensics 는 `~/.claude/.last-cleanup` 을 마지막 자동 삭제 시각으로 읽고, 남은 기록의 날짜 범위와 함께 보고서에 적습니다[7]. 이 파일이 없거나 오래됐는데 남은 기록의 날짜 범위가 넓으면, 그 Mac 에 보통보다 오래된 기록이 남아 있다는 신호로 적어 둡니다[7].
+`~/.claude/.last-cleanup` 은 마지막 자동 삭제 시각이라서, 남은 기록의 날짜 범위와 함께 봅니다[7]. 이 파일이 없거나 오래됐는데 남은 기록의 날짜 범위가 넓으면, 그 Mac 에 보통보다 오래된 기록이 남아 있다는 신호입니다[7].
 
 ## 함정과 한계
 

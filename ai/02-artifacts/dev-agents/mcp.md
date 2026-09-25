@@ -8,15 +8,15 @@ nav_order: 670
 
 MCP(Model Context Protocol)는 AI 앱이 바깥의 도구 서버를 불러 쓰는 규약입니다. 디스크에는 어떤 서버를 붙였는지 적은 설정 파일과 호스트 앱이 받아 둔 서버 로그가 남고, 메모리에는 앱과 서버가 주고받은 JSON-RPC 메시지가 평문으로 남을 수 있습니다.
 
-MCPRecon 논문은 Ubuntu 24.04 가상 머신에서 Codex CLI 와 VS Code + GitHub Copilot 을 시험했고, 공격 시연은 Cursor 2.4.27 로 했습니다[4]. 앱은 자주 바뀌므로 지금 판과 다를 수 있습니다.
+메모리 흔적은 Ubuntu 24.04 가상 머신의 Codex CLI 와 VS Code + GitHub Copilot 기준이고, 공격 시연은 Cursor 2.4.27 기준입니다[4]. 앱은 자주 바뀌므로 지금 판과 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 MCP 에서 AI 앱(호스트)은 설정 파일에 적힌 서버를 띄우거나 접속하고, 그 서버가 내놓는 도구를 모델이 부를 수 있게 합니다. 모든 메시지는 JSON-RPC 2.0 형식이고, 한 세션은 보통 도구 목록을 묻는 `tools/list` 로 시작해 도구를 부르는 `tools/call` 과 그 응답으로 이어집니다[4]. 서버는 도구 말고도 리소스(resources)와 프롬프트 틀(prompts)을 내놓을 수 있습니다[4].
 
-서버와 주고받는 방식(전송 방식)은 두 가지입니다. stdio 는 로컬 프로세스로 서버를 띄워 표준 입출력으로 대화하고, Streamable HTTP 는 원격 서버에 접속합니다[3]. Cursor 는 여기에 SSE 도 지원하지만[2], 논문은 SSE 를 MCP 문서가 폐기한 옛 전송 방식이라고 보고 시험에서 뺐습니다[4].
+서버와 주고받는 방식(전송 방식)은 두 가지입니다. stdio 는 로컬 프로세스로 서버를 띄워 표준 입출력으로 대화하고, Streamable HTTP 는 원격 서버에 접속합니다[3]. Cursor 는 여기에 SSE 도 지원하지만[2], SSE 는 MCP 에서 폐기한 옛 전송 방식이라 아래 메모리 시험 결과에는 들어 있지 않습니다[4].
 
-흔적이 남는 곳은 전송 방식에 따라 갈립니다. stdio 서버가 표준 오류(stderr)로 쓴 로그는 호스트 앱이 자동으로 받아 두고, 표준 출력(stdout)은 규약 통신에 쓰기 때문에 여기에 로그를 쓰면 안 됩니다[3]. Streamable HTTP 서버의 stderr 는 클라이언트가 받지 않아서 서버 쪽에서 따로 모으거나 OpenTelemetry 를 써야 합니다[3]. 원격 서버 안에서 도구가 실제로 무엇을 했는지는 그 서버를 운영하는 쪽에 남습니다. 다만 논문은 HTTP 방식에서도 도구 호출 인자와 응답(`result`·`error`·`isError`)을 메모리에서 되살렸습니다(Table 3)[4]. 요청과 응답이 PC 메모리에도 남을 수 있다는 뜻이고, 이 시험에서는 HTTP 서버도 같은 가상 머신 안에서 돌렸습니다[4]. 서버와 기기 중 어디에 무엇이 있는지 가르는 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
+흔적이 남는 곳은 전송 방식에 따라 갈립니다. stdio 서버가 표준 오류(stderr)로 쓴 로그는 호스트 앱이 자동으로 받아 두고, 표준 출력(stdout)은 규약 통신에 쓰기 때문에 여기에 로그를 쓰면 안 됩니다[3]. Streamable HTTP 서버의 stderr 는 클라이언트가 받지 않아서 서버 쪽에서 따로 모으거나 OpenTelemetry 를 써야 합니다[3]. 원격 서버 안에서 도구가 실제로 무엇을 했는지는 그 서버를 운영하는 쪽에 남습니다. 다만 HTTP 방식에서도 도구 호출 인자와 응답(`result`·`error`·`isError`)이 메모리에서 되살아난 시험 결과가 있습니다[4]. 요청과 응답이 PC 메모리에도 남을 수 있다는 뜻이고, 이 시험에서는 HTTP 서버도 같은 가상 머신 안에서 돌렸습니다[4]. 서버와 기기 중 어디에 무엇이 있는지 가르는 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
 
 규약 안에도 로그 알림 `notifications/message` 가 있지만, 프로토콜 버전 `2026-07-28` 부터 폐기 예정으로 표시되었고 폐기 기간 동안은 남아 있습니다[3]. 로그 수준은 RFC 5424 의 8단계(debug 부터 emergency 까지)를 쓰고, 클라이언트가 요청의 `_meta` 에 `io.modelcontextprotocol/logLevel` 을 넣은 요청에만 서버가 이 알림을 보냅니다[3]. 그래서 규약 로그가 없다고 서버가 아무 일도 하지 않았다고 볼 수 없습니다. 요청마다 `_meta` 에 `io.modelcontextprotocol/protocolVersion` 과 `io.modelcontextprotocol/clientCapabilities` 가 꼭 들어가고, `io.modelcontextprotocol/clientInfo` 는 권장 항목입니다[3].
 
@@ -28,15 +28,15 @@ MCP 설정과 로그는 호스트 앱마다 따로 둡니다.
 
 | 호스트 앱 | 설정 | 로그·기타 | 근거 |
 |---|---|---|---|
-| Claude 데스크톱 | `claude_desktop_config.json` 의 `mcpServers` | macOS `~/Library/Logs/Claude`, Windows `%APPDATA%\Claude\logs` 의 `mcp*.log` | 문서[3] |
-| Claude 데스크톱(Windows 스토어 앱) | `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 아래 `claude_desktop_config.json`, `mcp-user-tool-toggles.json` | 패키지 안 `mcp-logs-<서버 이름>` 폴더의 JSON Lines | 경로[7], 파일 관찰 |
+| Claude 데스크톱 | `claude_desktop_config.json` 의 `mcpServers` | macOS `~/Library/Logs/Claude`, Windows `%APPDATA%\Claude\logs` 의 `mcp*.log` | [3] |
+| Claude 데스크톱(Windows 스토어 앱) | `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 아래 `claude_desktop_config.json`, `mcp-user-tool-toggles.json` | 패키지 안 `mcp-logs-<서버 이름>` 폴더의 JSON Lines | [7] |
 | Claude 데스크톱 Cowork 세션 | 세션 메타 파일 `local_*.json` 의 `remoteMcpServersConfig` | — | [8] |
-| Cursor | 전역 `~/.cursor/mcp.json`, 프로젝트 `.cursor/mcp.json` | 출력(Output) 패널의 "MCP Logs" | 문서[2] |
-| Codex CLI | `~/.codex/config.toml` 의 `[mcp_servers.<이름>]` | OAuth 토큰: 키링 또는 `CODEX_HOME/.credentials.json` | 스키마[6] |
-| Claude Code | [Claude Code](claude-code/index.md) 페이지에서 다룸 | 대화 기록 안의 MCP 서버 상태 | 관찰 |
-| Gemini CLI | 관찰한 `~/.gemini/config/mcp_config.json` | — | 관찰 |
+| Cursor | 전역 `~/.cursor/mcp.json`, 프로젝트 `.cursor/mcp.json` | 출력(Output) 패널의 "MCP Logs" | [2] |
+| Codex CLI | `~/.codex/config.toml` 의 `[mcp_servers.<이름>]` | OAuth 토큰: 키링 또는 `CODEX_HOME/.credentials.json` | [6] |
+| Claude Code | [Claude Code](claude-code/index.md) 페이지에서 다룸 | 대화 기록 안의 MCP 서버 상태 | — |
+| Gemini CLI | `~/.gemini/config/mcp_config.json`(쓰는 제품은 검체에서 확인) | — | — |
 
-Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 오류, 메시지 교환이 남습니다[3]. Windows 에서 Claude 데스크톱의 사용자 데이터 폴더는 스토어(MSIX) 설치면 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`, 스토어 밖 설치나 옛 설치면 `%APPDATA%\Claude` 입니다[7]. claude-forensics 는 Windows 검체에서 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 트리를 모두 떠야 한다고 적습니다[8]. 스토어 앱은 `logs` 폴더도 패키지 안으로 옮겨질 수 있어서, 두 위치를 모두 뒤져 `mcp*.log` 를 찾습니다. 관찰한 스토어 앱에서는 아래 경로에 MCP 흔적이 있었습니다.
+Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 오류, 메시지 교환이 남습니다[3]. Windows 에서 Claude 데스크톱의 사용자 데이터 폴더는 스토어(MSIX) 설치면 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`, 스토어 밖 설치나 옛 설치면 `%APPDATA%\Claude` 입니다[7]. Windows 검체에서는 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 트리를 모두 뜹니다[8]. 스토어 앱은 `logs` 폴더도 패키지 안으로 옮겨질 수 있어서, 두 위치를 모두 뒤져 `mcp*.log` 를 찾습니다. 스토어 앱에서는 아래 경로에 MCP 흔적이 남습니다.
 
 ```
 %LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\
@@ -45,7 +45,7 @@ Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 
   LocalCache\Roaming\Claude\claude_desktop_config.json
 ```
 
-같은 PC 에서 `%APPDATA%\Claude\logs\mcp*.log` 는 보이지 않았습니다. 패키지 폴더 구조의 일반 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [Claude](../chat-services/claude/index.md)에 있습니다.
+이때 `%APPDATA%\Claude\logs\mcp*.log` 는 없을 수 있습니다. 패키지 폴더 구조의 일반 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [Claude](../chat-services/claude/index.md)에 있습니다.
 
 ## 구조
 
@@ -67,7 +67,7 @@ Claude 데스크톱과 Cursor 는 둘 다 최상위 `mcpServers` 아래 서버 �
 
 Codex 는 MCP OAuth 토큰을 `mcp_oauth_credentials_store` 설정에 따라 둡니다. 기본값 `auto` 는 OS 키링을 쓰고, 키링을 쓸 수 없으면 `CODEX_HOME/.credentials.json` 파일에 둡니다[6]. 이 파일은 같은 사용자로 도는 다른 프로그램도 읽을 수 있다고 스키마에 적혀 있습니다[6]. Cursor 가 원격 서버에 OAuth 로 로그인할 때 쓰는 콜백 주소는 데스크톱이 `http://localhost:8787/callback`, 웹·에이전트가 `https://www.cursor.com/agents/mcp/oauth/callback` 입니다[2]. 토큰이 들어 있는 파일은 보고서에서 값을 가리고, 서비스 쪽 사용 기록은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
-아래는 문서 형식대로 만든 예시이고, 관찰한 값이 아닙니다. `env` 값은 형식을 흉내 내지 않은 자리 표시입니다.
+아래는 문서 형식대로 만든 예시입니다. `env` 값은 형식을 흉내 내지 않은 자리 표시입니다.
 
 ```json
 {
@@ -83,21 +83,21 @@ Codex 는 MCP OAuth 토큰을 `mcp_oauth_credentials_store` 설정에 따라 둡
 
 `command` 와 `args` 에서는 어떤 프로그램이 어떤 폴더를 대상으로 떴는지, `url` 에서는 어느 원격 서버에 붙도록 설정했는지 알 수 있습니다. 도구가 건드릴 수 있었던 범위를 여기서부터 좁힙니다.
 
-관찰한 스토어 앱의 `claude_desktop_config.json` 에는 `mcpServers` 키가 없었고 `preferences` 와 `coworkUserFilesPath` 만 있었습니다. 같은 폴더의 `mcp-user-tool-toggles.json` 은 `owners`(사전)와 그 아래 목록, `v`(정수)로 되어 있었습니다. 두 파일의 칸 뜻을 설명한 공개 문서가 없어서, 검체에서는 서버를 붙인 뒤와 뗀 뒤의 파일을 시험 기기에서 비교해 해석합니다.
+스토어 앱의 `claude_desktop_config.json` 에는 `mcpServers` 키 없이 `preferences` 와 `coworkUserFilesPath` 만 있을 수 있습니다. 같은 폴더의 `mcp-user-tool-toggles.json` 은 `owners`(사전)와 그 아래 목록, `v`(정수)로 되어 있습니다. 두 파일의 칸 뜻을 설명한 공개 문서가 없어서, 검체에서는 서버를 붙인 뒤와 뗀 뒤의 파일을 시험 기기에서 비교해 해석합니다.
 
 ### 호스트 앱이 받은 서버 로그
 
-스토어 앱 패키지의 `mcp-logs-<서버 이름>` 폴더에 있던 JSON Lines 파일은 한 줄의 키가 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다. 폴더 이름에 서버 이름이 들어가서 어느 서버의 로그인지 폴더만 보고 나눌 수 있습니다. `sessionId` 가 어느 세션 기록과 이어지는지는 공개 문서가 없어서, 같은 값이 대화 기록이나 세션 메타 파일에 있는지 검체에서 찾아 맞춥니다.
+스토어 앱 패키지의 `mcp-logs-<서버 이름>` 폴더에 있는 JSON Lines 파일은 한 줄에 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. 폴더 이름에 서버 이름이 들어가서 어느 서버의 로그인지 폴더만 보고 나눌 수 있습니다. `sessionId` 가 어느 세션 기록과 이어지는지는 공개 문서가 없어서, 같은 값이 대화 기록이나 세션 메타 파일에 있는지 검체에서 찾아 맞춥니다.
 
 ### 대화 기록·세션 메타·훅에 남는 MCP 흔적
 
-Claude Code 대화 기록 줄에서 `attachment.failedMcpServers`, `attachment.pendingMcpServers` 키를 보았습니다. 대화 기록 구조는 [Claude Code](claude-code/index.md)에서 다룹니다. Claude 데스크톱 Cowork 세션 메타 파일(`local_*.json`)에는 `remoteMcpServersConfig` 칸이 있습니다[8]. 도구 문서에는 칸 이름만 있어서, 그 세션에 붙인 원격 MCP 서버 설정이 어떤 모양으로 들어가는지는 검체에서 열어 봅니다.
+Claude Code 대화 기록 줄에는 `attachment.failedMcpServers`, `attachment.pendingMcpServers` 키가 남습니다. 대화 기록 구조는 [Claude Code](claude-code/index.md)에서 다룹니다. Claude 데스크톱 Cowork 세션 메타 파일(`local_*.json`)에는 `remoteMcpServersConfig` 칸이 있습니다[8]. 도구 문서에는 칸 이름만 있어서, 그 세션에 붙인 원격 MCP 서버 설정이 어떤 모양으로 들어가는지는 검체에서 열어 봅니다.
 
-Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후에 사용자 스크립트를 돌릴 수 있습니다[1]. 조직이 감사 로그를 남겼는지 여기서 확인합니다. 관찰한 PC 의 `~/.cursor/hooks.json` 에도 `beforeMCPExecution` 훅이 있었습니다. 훅 파일 형식은 [Cursor](cursor.md)에 있습니다.
+Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후에 사용자 스크립트를 돌릴 수 있습니다[1]. 조직이 감사 로그를 남겼는지 여기서 확인합니다. 훅 파일 형식은 [Cursor](cursor.md)에 있습니다.
 
 ### 메모리에 남는 JSON-RPC 메시지
 
-논문은 MCP 메시지가 클라이언트 프로세스의 힙에 평문 UTF-8 JSON 으로 남는다는 것을 보였습니다[4]. stdio 방식에서 Copilot 은 파이프, Codex 는 소켓으로 서버와 통신했고, HTTP 방식에서는 HTTP 클라이언트 라이브러리와 스트리밍 파서의 버퍼가 더 생긴다고 논문은 적습니다[4]. 논문이 되살린 흔적은 아래와 같습니다(Table 5, Table A.6)[4].
+MCP 메시지는 클라이언트 프로세스의 힙에 평문 UTF-8 JSON 으로 남습니다[4]. stdio 방식에서 Copilot 은 파이프, Codex 는 소켓으로 서버와 통신하고, HTTP 방식에서는 HTTP 클라이언트 라이브러리와 스트리밍 파서의 버퍼가 더 생깁니다[4]. 메모리에서 되살릴 수 있는 흔적은 아래와 같습니다[4].
 
 | 무리 | 메모리에 남은 모양 | 알려 주는 것 |
 |---|---|---|
@@ -110,7 +110,7 @@ Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후
 | 경계 단서 | JSON 뒤의 널 채움, 붙어 있는 바이너리 | 메시지 끝 찾기 |
 | 클라이언트 지시문 | 메모리 안의 긴 지시·정책 문장 | 클라이언트에 내장된 지시 |
 
-시험은 Ubuntu 24.04(커널 6.14) 가상 머신(VMware, 메모리 8GB)에서 했고, 날씨 서버(stdio·HTTP)와 Context7(stdio)을 붙여 도구 목록 조회 한 번과 호출 두 번을 한 뒤 메모리를 떴습니다[4]. 클라이언트 하나씩 돌린 여섯 구성에서는 세 단계가 모두 되살아났습니다(Table 3)[4]. Codex 와 Copilot 을 한 VM 에서 함께 돌리고 메모리를 한 번만 뜬 경우에는 일부 단계가 빠졌습니다(Table 4)[4]. 이 절은 요약이고, 메모리 수집과 분석 절차는 [메모리에서 AI 흔적 찾기](../../03-techniques/analysis/memory-analysis.md)에 있습니다.
+시험은 Ubuntu 24.04(커널 6.14) 가상 머신(VMware, 메모리 8GB)에서 했고, 날씨 서버(stdio·HTTP)와 Context7(stdio)을 붙여 도구 목록 조회 한 번과 호출 두 번을 한 뒤 메모리를 떴습니다[4]. 클라이언트 하나씩 돌린 여섯 구성에서는 세 단계가 모두 되살아났습니다(Table 3)[4]. Codex 와 Copilot 을 한 VM 에서 함께 돌리고 메모리를 한 번만 뜬 경우에는 일부 단계가 빠졌습니다(Table 4)[4]. 메모리 수집과 분석 절차는 [메모리에서 AI 흔적 찾기](../../03-techniques/analysis/memory-analysis.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -122,17 +122,17 @@ Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후
 
 MCP 는 메시지에 시각을 넣으라고 정하지 않습니다[4]. 메모리에서 되살린 메시지는 `id` 와 메모리 위치로 순서를 추정할 뿐이고, JSON-RPC 규격이 `id` 를 차례대로 매기라고 정하지 않아서 `id` 순서를 시간 순서로 단정할 수 없습니다[4]. 메모리 흔적의 시각은 메모리를 뜬 시각과, 같은 호출을 적은 디스크 쪽 기록(호스트 앱 로그, 대화 기록)에서 가져옵니다.
 
-관찰한 JSON Lines 로그에는 `timestamp` 칸이 있었습니다. 형식과 시간대를 설명한 공개 문서가 없어서, 검체에서 몇 줄을 열어 끝에 `Z` 나 `+09:00` 같은 시간대 표시가 있는지 먼저 봅니다. `mcp*.log` 도 같은 방법으로 확인합니다. 설정 파일에는 시각 칸이 없어서, 서버를 언제 등록했는지는 파일 수정 시각이나 백업·볼륨 섀도 사본의 이전 판을 비교해 좁힙니다. 여러 출처를 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+`mcp-logs-<서버 이름>` 폴더의 JSON Lines 로그에는 `timestamp` 칸이 있습니다. 형식과 시간대를 설명한 공개 문서가 없어서, 검체에서 몇 줄을 열어 끝에 `Z` 나 `+09:00` 같은 시간대 표시가 있는지 먼저 봅니다. `mcp*.log` 도 같은 방법으로 확인합니다. 설정 파일에는 시각 칸이 없어서, 서버를 언제 등록했는지는 파일 수정 시각이나 백업·볼륨 섀도 사본의 이전 판을 비교해 좁힙니다. 여러 출처를 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
-MCP 설정은 호스트 앱마다, 그리고 전역·프로젝트 범위마다 흩어집니다. 한 앱의 설정만 보고 "MCP 를 쓰지 않았다" 고 쓰기 쉬우므로, 설치된 AI 도구 목록부터 만들고 도구별로 전역 설정과 저장소 안의 프로젝트 설정을 모두 모읍니다. 관찰한 `~/.gemini/config/mcp_config.json` 은 JSON 으로 읽히지 않았습니다. 이런 파일은 바이트를 직접 열어 빈 파일인지 다른 형식인지 판단합니다.
+MCP 설정은 호스트 앱마다, 그리고 전역·프로젝트 범위마다 흩어집니다. 한 앱의 설정만 보고 "MCP 를 쓰지 않았다" 고 쓰기 쉬우므로, 설치된 AI 도구 목록부터 만들고 도구별로 전역 설정과 저장소 안의 프로젝트 설정을 모두 모읍니다. `~/.gemini/config/mcp_config.json` 처럼 JSON 으로 읽히지 않는 설정 파일도 있습니다. 이런 파일은 바이트를 직접 열어 빈 파일인지 다른 형식인지 판단합니다.
 
-호스트 앱이 받아 두는 것은 stdio 서버의 stderr 이고[3], 서버가 스스로 다른 파일에 로그를 쓰는지는 서버마다 다릅니다. 설정 파일을 사건 뒤에 고치거나 지우면 등록 흔적이 사라지므로, 호스트 앱 로그·대화 기록·세션 메타의 서버 이름을 설정과 맞춰 빈틈을 찾습니다. 논문도 설정을 바꾸고 흔적을 지우는 로컬 공격자를 위협 모델에 넣고, 이때 메모리가 디스크와 별개인 증거원이 된다고 봅니다[4].
+호스트 앱이 받아 두는 것은 stdio 서버의 stderr 이고[3], 서버가 스스로 다른 파일에 로그를 쓰는지는 서버마다 다릅니다. 설정 파일을 사건 뒤에 고치거나 지우면 등록 흔적이 사라지므로, 호스트 앱 로그·대화 기록·세션 메타의 서버 이름을 설정과 맞춰 빈틈을 찾습니다. 설정을 바꾸고 흔적을 지우는 로컬 공격자가 있을 때는 메모리가 디스크와 별개인 증거원이 됩니다[4].
 
-메모리 흔적에는 한계가 따로 있습니다. 논문의 시험은 Linux 에서만 했고, Windows·macOS 클라이언트에서 같은 결과가 나오는지는 검체로 확인해야 합니다[4]. 앞으로 MCP 구현이 메시지를 평문으로 메모리에 두지 않으면 되살리기 어려워집니다[4]. 메모리에는 MCP 와 상관없는 JSON 조각도 많습니다. 증거로 쓰려면 method, `id`, 도구 이름, 인자, 응답, `inputSchema` 가 서로 맞아야 하고, 인자가 도구의 `inputSchema` 와 어긋나거나 짝이 없는 조각은 혼자서 근거로 쓰지 않습니다[4].
+메모리 흔적에는 한계가 따로 있습니다. 공개된 시험 결과는 Linux 뿐이라, Windows·macOS 클라이언트에서 같은 결과가 나오는지는 검체로 확인해야 합니다[4]. 앞으로 MCP 구현이 메시지를 평문으로 메모리에 두지 않으면 되살리기 어려워집니다[4]. 메모리에는 MCP 와 상관없는 JSON 조각도 많습니다. 증거로 쓰려면 method, `id`, 도구 이름, 인자, 응답, `inputSchema` 가 서로 맞아야 하고, 인자가 도구의 `inputSchema` 와 어긋나거나 짝이 없는 조각은 혼자서 근거로 쓰지 않습니다[4].
 
-논문의 공격 시연(Cursor 2.4.27)에서는 악성 날씨 서버가 `get_current_weather` 도구의 네 번째 응답에 지시문을 끼워 넣었습니다[4]. 지시문은 작업 폴더에서 `mcp.json` 을 찾아 그 내용을 다음 도구 호출의 인자에 실으라는 것이었습니다[4]. Composer 1 과 Gemini 3 Flash 는 지시를 따랐고, GPT 5.2 Low 와 Sonnet 4.5 는 거부했습니다[4]. 추가로 부른 도구를 논문 8.2절은 `get_weather_forecast`, 8.3절은 `get_current_weather` 로 다르게 적고, 8.3절은 사용자 데이터가 `country` 인자에 실려 나갔다고 적습니다[4]. 사용자 화면에 드러난 것은 "Listed test Read mcp.json" 한 줄과 조금 바뀐 도구 호출뿐이었고, 나머지는 접힌 생각(Thinking) 블록과 입력·응답 블록을 펼쳐야 보였습니다[4]. MCPRecon 은 빼낸 내용이 든 요청은 되살렸지만, 지시문이 든 응답은 이미 덮어써져 메모리에 없었습니다[4]. 논문 안에서도 공격이 먹힌 모델을 초록은 "Composer 1 and Gemini 3 Flash", 기여 목록은 "Gemini 3 Flash and Cursor 1" 로 다르게 적습니다[4]. 인젝션 사고 전반은 [프롬프트 인젝션 사고 분석](../../03-techniques/analysis/prompt-injection.md)에서 다룹니다.
+공격 시연(Cursor 2.4.27)에서는 악성 날씨 서버가 `get_current_weather` 도구의 네 번째 응답에 지시문을 끼워 넣었습니다[4]. 지시문은 작업 폴더에서 `mcp.json` 을 찾아 그 내용을 다음 도구 호출의 인자에 실으라는 것이었습니다[4]. Composer 1 과 Gemini 3 Flash 는 지시를 따랐고, GPT 5.2 Low 와 Sonnet 4.5 는 거부했습니다[4]. 추가로 부른 도구를 논문 8.2절은 `get_weather_forecast`, 8.3절은 `get_current_weather` 로 다르게 적고, 8.3절은 사용자 데이터가 `country` 인자에 실려 나갔다고 적습니다[4]. 사용자 화면에 드러난 것은 "Listed test Read mcp.json" 한 줄과 조금 바뀐 도구 호출뿐이었고, 나머지는 접힌 생각(Thinking) 블록과 입력·응답 블록을 펼쳐야 보였습니다[4]. MCPRecon 은 빼낸 내용이 든 요청은 되살렸지만, 지시문이 든 응답은 이미 덮어써져 메모리에 없었습니다[4]. 논문 안에서도 공격이 먹힌 모델을 초록은 "Composer 1 and Gemini 3 Flash", 기여 목록은 "Gemini 3 Flash and Cursor 1" 로 다르게 적습니다[4]. 인젝션 사고 전반은 [프롬프트 인젝션 사고 분석](../../03-techniques/analysis/prompt-injection.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -145,7 +145,7 @@ MCP 설정은 호스트 앱마다, 그리고 전역·프로젝트 범위마다 �
 "jsonrpc":"2.0"    UTF-8     22 6A 73 6F 6E 72 70 63 22 3A 22 32 2E 30 22
 ```
 
-메모리에서 `"jsonrpc":"2.0"` 을 찾으면 앞뒤로 중괄호 짝을 맞춰 JSON 하나를 떼어 냅니다. 뒤에 이어지는 널 바이트(`00`)는 메시지 끝을 찾는 단서가 됩니다[4]. 아래는 논문의 칸 모양대로 만든 예시 요청이고, 값은 모두 지어낸 것입니다.
+메모리에서 `"jsonrpc":"2.0"` 을 찾으면 앞뒤로 중괄호 짝을 맞춰 JSON 하나를 떼어 냅니다. 뒤에 이어지는 널 바이트(`00`)는 메시지 끝을 찾는 단서가 됩니다[4]. 아래는 위 공격 시연의 칸 모양대로 만든 예시 요청이고, 값은 모두 지어낸 것입니다.
 
 ```json
 {"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"get_current_weather","arguments":{"city_name":"Exampleville","country":"XX"}}}
@@ -173,7 +173,7 @@ find "$CASE" -type d -name 'mcp-logs-*'
 python3 mcprecon.py case-0001.vmem --keywords jsonrpc tools/list tools/call --mcp-only > case-0001-mcp.jsonl
 ```
 
-출력은 한 줄에 JSON 하나이고, 칸은 `offset`, `session`, `type`(request·response·notification·unknown), `id`, `method`, `tool`, `confidence`, `mcp`, `json` 입니다. `--emit-raw` 를 주면 원문 `raw` 가 붙습니다[5]. `--tools-only` 는 `tools/call` 요청과 짝지은 응답만 남기고, `--client {codex,cursor,copilot,auto,other}` 와 `--vol3`(Volatility3 `linux.pslist` 자동 실행)으로 프로세스별로 나눌 수 있습니다[5]. JSON 짝이 안 맞으면 `--window`(기본 16KB)를 늘립니다[5]. 도구 README 가 밝힌 시험 환경은 Linux 의 Python 3.10 입니다[5]. 보고서에는 `offset` 을 함께 적고, `xxd` 로 그 위치에 같은 JSON 이 있는지 한 번 더 확인합니다[4].
+출력은 한 줄에 JSON 하나이고, 칸은 `offset`, `session`, `type`(request·response·notification·unknown), `id`, `method`, `tool`, `confidence`, `mcp`, `json` 입니다. `--emit-raw` 를 주면 원문 `raw` 가 붙습니다[5]. `--tools-only` 는 `tools/call` 요청과 짝지은 응답만 남기고, `--client {codex,cursor,copilot,auto,other}` 와 `--vol3`(Volatility3 `linux.pslist` 자동 실행)으로 프로세스별로 나눌 수 있습니다[5]. JSON 짝이 안 맞으면 `--window`(기본 16KB)를 늘립니다[5]. MCPRecon 의 시험 환경은 Linux 의 Python 3.10 입니다[5]. 보고서에는 `offset` 을 함께 적고, `xxd` 로 그 위치에 같은 JSON 이 있는지 한 번 더 확인합니다[4].
 
 ## 교차 검증
 
@@ -181,7 +181,7 @@ python3 mcprecon.py case-0001.vmem --keywords jsonrpc tools/list tools/call --mc
 
 ## 실습
 
-MCPRecon README 는 시험용 메모리 스냅숏(`*.vmem`, `sample.vmem`)을 저장소에 함께 둔다고 적고, Google Drive 내려받기 주소도 안내합니다[5]. 저장소 파일 목록에 스냅숏이 없으면 이 주소에서 받습니다. 이 스냅숏으로 1~2번을 풀고, 나머지는 시험용 가상 머신과 시험 계정으로 풀어 봅니다.
+MCPRecon 저장소에는 시험용 메모리 스냅숏(`*.vmem`, `sample.vmem`)과 Google Drive 내려받기 주소가 있습니다[5]. 저장소 파일 목록에 스냅숏이 없으면 이 주소에서 받습니다. 이 스냅숏으로 1~2번을 풀고, 나머지는 시험용 가상 머신과 시험 계정으로 풀어 봅니다.
 
 1. 시험용 스냅숏에서 `tools/list` 응답을 찾아, 모델에게 보인 도구 이름과 `required` 칸을 표로 만듭니다.
 2. 같은 스냅숏에서 `tools/call` 요청과 같은 `id` 의 응답을 짝짓고, 짝이 없는 조각이 몇 개인지 셉니다.

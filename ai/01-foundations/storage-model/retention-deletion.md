@@ -36,19 +36,19 @@ AI 대화 기록은 서버에서는 서비스 회사의 보관 정책과 사용�
 
 **Microsoft 365 Copilot 과 조직 보존 정책.** 조직이 보존 정책을 걸면 Copilot 과 AI 앱의 프롬프트·응답 사본이 앱을 쓴 사용자의 Exchange Online 메일함 안 숨은 폴더에 저장됩니다 [5]. 새로 만드는 보존 정책은 Microsoft 365 Copilot, Copilot Studio 같은 Microsoft 앱뿐 아니라 ChatGPT, Google Gemini, 소비자용 Microsoft Copilot, DeepSeek 같은 "다른 AI 앱" 도 위치로 고를 수 있습니다 [5]. Microsoft 365 Copilot 과 Copilot Studio 는 프롬프트·응답이 늘 들어가고, 그 밖의 Copilot 과 생성형 AI 앱은 수집 정책에서 내용 수집을 켜 두었을 때만 들어갑니다 [5]. 사용자가 Microsoft 365 Copilot Chat 에서 대화를 지우거나 그 사용자의 전체 기록 삭제 요청이 들어오면 항목이 같은 메일함의 또 다른 숨은 폴더 `SubstrateHolds` 로 옮겨집니다 [5]. 창이나 앱을 닫는 것만으로는 메시지가 지워지지 않고 화면에서 숨겨질 뿐입니다 [5].
 
-`SubstrateHolds` 로 간 항목은 최소 1일 머물고, 보존 기간이 끝난 뒤 Exchange 타이머 작업이 다음에 돌 때 영구 삭제됩니다 [5]. 이 타이머 작업은 보통 1~7일 간격으로 돕니다 [5]. 영구 삭제 전까지는 eDiscovery 로 검색되고, 같은 위치의 다른 보존 정책, Litigation Hold, delay hold, eDiscovery hold 가 걸려 있으면 영구 삭제가 멈춥니다 [5]. 문서의 예시로는 "1일 뒤 삭제" 정책도 영구 삭제까지 16일 걸릴 수 있습니다 [5]. 퇴사해 계정이 지워진 사용자의 메시지는 비활성 사서함 (inactive mailbox) 에 남아 eDiscovery 로 찾을 수 있습니다 [5]. Copilot 메모리는 item class `IPM.Contact` 로 저장되고, Purview 나 eDiscovery 에서 대화를 지워도 연결된 메모리는 지워지지 않습니다 [6]. 정책 종류별 삭제 흐름 표와 감사 기록의 칸은 [Microsoft Purview로 본 Copilot 기록](../../02-artifacts/network-enterprise/purview-copilot.md) 에 있습니다.
+`SubstrateHolds` 로 간 항목은 최소 1일 머물고, 보존 기간이 끝난 뒤 Exchange 타이머 작업이 다음에 돌 때 영구 삭제됩니다 [5]. 이 타이머 작업은 보통 1~7일 간격으로 돕니다 [5]. 영구 삭제 전까지는 eDiscovery 로 검색되고, 같은 위치의 다른 보존 정책, Litigation Hold, delay hold, eDiscovery hold 가 걸려 있으면 영구 삭제가 멈춥니다 [5]. "1일 뒤 삭제" 정책도 영구 삭제까지 16일 걸릴 수 있습니다 [5]. 퇴사해 계정이 지워진 사용자의 메시지는 비활성 사서함 (inactive mailbox) 에 남아 eDiscovery 로 찾을 수 있습니다 [5]. Copilot 메모리는 item class `IPM.Contact` 로 저장되고, Purview 나 eDiscovery 에서 대화를 지워도 연결된 메모리는 지워지지 않습니다 [6]. 정책 종류별 삭제 흐름 표와 감사 기록의 칸은 [Microsoft Purview로 본 Copilot 기록](../../02-artifacts/network-enterprise/purview-copilot.md) 에 있습니다.
 
 감사 기록은 보존 사본과 보관 체계가 따로입니다. 감사 (Standard) 의 기본 보관은 180일이고, 2023-10-17 이전에 생긴 레코드는 90일입니다 [7]. Audit (Premium) 의 기본 1년 정책은 `Workload` 가 AzureActiveDirectory·Exchange·OneDrive·SharePoint 인 레코드에만 걸려서, 그 밖의 레코드는 사용자 지정 정책이 없으면 180일 보관입니다 [7]. 180일을 넘겨 1년까지 두려면 레코드를 만든 사용자에게 E5 계열 라이선스가 있어야 하고, 10년까지 두려면 10년 보관 추가 라이선스도 있어야 합니다 [7].
 
 ### 기기 쪽 — 로컬 도구의 자동 정리
 
-Claude Code 는 세션 기록을 `cleanupPeriodDays` 로 정한 기간이 지나면 지우고, 기본값은 30일이며 최소값은 1입니다(0 은 설정 검증에서 거부) [4]. 무엇을 지우고 무엇을 남기는지는 문서가 나눠 적고 있습니다 [4].
+Claude Code 는 세션 기록을 `cleanupPeriodDays` 로 정한 기간이 지나면 지우고, 기본값은 30일이며 최소값은 1입니다(0 은 설정 검증에서 거부) [4]. 자동 정리로 지우는 것과 남기는 것은 아래와 같습니다 [4].
 
 | 자동 정리로 지우는 것 | 자동 정리로 지우지 않는 것 |
 |---|---|
 | 세션 기록 `.jsonl` 과 그 변형, `subagents/`, `tool-results/`, `file-history/` 아래 세션별 폴더, `debug/`, `paste-cache/`, `image-cache/` 등 | `history.jsonl`(입력 이력), `stats-cache.json`(사용량 통계), `backups/`, `jobs/`, `daemon/`, 자동 메모리 |
 
-데스크톱 앱이나 Cowork 에서 시작했거나 마지막으로 이어 간 세션 기록은 기본으로 기한 없이 남고, `desktopSessionCleanupPeriodDays` 로 따로 정합니다(문서 기준 v2.1.248 부터) [4]. 설정 파일을 읽을 수 없거나 `--bare` 로 실행하면 정리를 멈추고, 관리 정책이 `cleanupPeriodDays` 를 주면 그 값으로 정리합니다 [4]. 사용자가 직접 지우는 명령은 `claude project purge` 이고, 그 프로젝트의 기록·자동 메모리·세션별 폴더와 함께 `history.jsonl` 의 해당 줄과 `~/.claude.json` 의 프로젝트 항목까지 지웁니다 [4]. `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜면 처음부터 기록과 입력 이력을 쓰지 않습니다 [4].
+데스크톱 앱이나 Cowork 에서 시작했거나 마지막으로 이어 간 세션 기록은 기본으로 기한 없이 남고, `desktopSessionCleanupPeriodDays` 로 따로 정합니다(v2.1.248 부터) [4]. 설정 파일을 읽을 수 없거나 `--bare` 로 실행하면 정리를 멈추고, 관리 정책이 `cleanupPeriodDays` 를 주면 그 값으로 정리합니다 [4]. 사용자가 직접 지우는 명령은 `claude project purge` 이고, 그 프로젝트의 기록·자동 메모리·세션별 폴더와 함께 `history.jsonl` 의 해당 줄과 `~/.claude.json` 의 프로젝트 항목까지 지웁니다 [4]. `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜면 처음부터 기록과 입력 이력을 쓰지 않습니다 [4].
 
 아래는 설정 파일에서 정리 기간 키가 어떻게 보이는지 보이려고 만든 예시이고, 값은 가짜입니다.
 
@@ -58,9 +58,9 @@ Claude Code 는 세션 기록을 `cleanupPeriodDays` 로 정한 기간이 지나
 }
 ```
 
-`stats-cache.json` 은 자동 정리 대상이 아니고 [4], 관찰한 파일에는 `dailyActivity[].date`·`messageCount`·`sessionCount`·`toolCallCount`, `firstSessionDate`, `hourCounts`, `longestSession`, `modelUsage`, `totalMessages`, `totalSessions` 같은 키가 있었습니다. 세션 기록이 정리된 뒤에도 그 세션의 수치가 통계에 남는지는 정리 전후의 파일을 견주어 검체에서 확인합니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에서 다룹니다.
+`stats-cache.json` 은 자동 정리 대상이 아니고 [4], 파일에는 `dailyActivity[].date`·`messageCount`·`sessionCount`·`toolCallCount`, `firstSessionDate`, `hourCounts`, `longestSession`, `modelUsage`, `totalMessages`, `totalSessions` 같은 키가 있습니다. 세션 기록이 정리된 뒤에도 그 세션의 수치가 통계에 남는지는 정리 전후의 파일을 견주어 검체에서 확인합니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에서 다룹니다.
 
-Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 `preferences.ccAutoArchiveInactiveDays` 키가 있었습니다. 이 설정이 기기의 파일을 지우는지는 값과 데이터 폴더의 세션 파일을 대조해 검체에서 확인합니다.
+Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 `preferences.ccAutoArchiveInactiveDays` 키가 있습니다. 이 설정이 기기의 파일을 지우는지는 값과 데이터 폴더의 세션 파일을 대조해 검체에서 확인합니다.
 
 ### 기기 쪽 — 앱 화면에서 지운 뒤 남는 것
 
@@ -76,7 +76,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 | Kindroid | 계정 삭제 | 기기에 남은 인증 정보로도 서버 대화를 얻을 수 없었음 |
 | Character.AI | 메시지 삭제, 계정 삭제 | 지운 메시지가 서버 API 응답에서 빠짐. 계정을 지우면 기기의 인증 토큰과 로그인 정보도 지워짐. 서버 백업·로그에서 지워졌는지는 논문의 시험 범위 밖 |
 
-논문은 대화를 기기에 저장하는 네 앱이 모두 대화 지우기와 계정 삭제 뒤에도 기기에 자료를 남겼고, 서버에 저장하는 두 앱은 지우거나 접근할 수 없게 만들었다고 정리합니다 [8]. 앱별 경로는 [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md) 에 있습니다.
+이 시험에서 대화를 기기에 저장하는 네 앱은 모두 대화 지우기와 계정 삭제 뒤에도 기기에 자료를 남겼고, 서버에 저장하는 두 앱은 자료를 지우거나 접근할 수 없게 만들었습니다 [8]. 앱별 경로는 [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md) 에 있습니다.
 
 **로컬 LLM 앱.** Jeong 외는 Windows 11 Pro 24H2(빌드 26100.3775)에서 앱 화면으로 지운 항목을 LangurTrace 로 얼마나 되살리는지 쟀습니다 [9]. 시험한 판은 Ollama 0.6.5, Chatbox 1.11.8, LM Studio 0.3.14, Msty 1.8.5, Jan 0.5.16, GPT4All 3.10.0 이고 [9], 이후 판은 저장 방식이 바뀌었을 수 있습니다.
 
@@ -103,7 +103,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 
 ## 포렌식에서 중요한 점
 
-**목록에서 사라진 것과 서버에서 사라진 것은 다릅니다.** Claude 는 지운 대화를 목록에서 바로 감추지만 서버 저장소에서는 30일 안에 지우고 [1], Gemini 는 사람 검토를 거친 대화를 활동 삭제와 별개로 최대 3년 남깁니다 [2]. Microsoft 문서는 AI 앱에 보이는지 여부가 보존·영구 삭제 상태를 정확히 나타내지 않는다고 적고 있습니다 [5]. 사용자가 "지웠다" 고 말해도 서버 쪽 기록이 남아 있을 수 있어서, 삭제 시각과 요청 시각을 함께 적습니다.
+**목록에서 사라진 것과 서버에서 사라진 것은 다릅니다.** Claude 는 지운 대화를 목록에서 바로 감추지만 서버 저장소에서는 30일 안에 지우고 [1], Gemini 는 사람 검토를 거친 대화를 활동 삭제와 별개로 최대 3년 남깁니다 [2]. AI 앱에 보이는지 여부는 보존·영구 삭제 상태를 정확히 나타내지 않습니다 [5]. 사용자가 "지웠다" 고 말해도 서버 쪽 기록이 남아 있을 수 있어서, 삭제 시각과 요청 시각을 함께 적습니다.
 
 **기록을 끈 것과 지운 것은 흔적이 다릅니다.** Claude Code 는 `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜면 처음부터 기록을 쓰지 않고 [4], Gemini 는 Keep Activity 를 끈 대화도 72시간은 계정에 남깁니다 [2]. 기록이 비어 있다면 삭제 흔적을 찾기 전에 기록을 끄는 설정이 있었는지부터 봅니다.
 
@@ -115,9 +115,9 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 
 ## 함정
 
-**"30일 안에" 는 정확한 삭제 날짜가 아닙니다.** 문서는 상한만 적고 있어서, 지운 지 30일이 안 된 대화가 서버에 남아 있다고 단정하지도, 이미 사라졌다고 단정하지도 않습니다. Microsoft 365 Copilot 도 타이머 작업 주기 때문에 영구 삭제 날짜가 며칠씩 흔들립니다 [5].
+**"30일 안에" 는 정확한 삭제 날짜가 아닙니다.** 30일은 상한일 뿐이라서, 지운 지 30일이 안 된 대화가 서버에 남아 있다고 단정하지도, 이미 사라졌다고 단정하지도 않습니다. Microsoft 365 Copilot 도 타이머 작업 주기 때문에 영구 삭제 날짜가 며칠씩 흔들립니다 [5].
 
-**비식별 학습 데이터는 계정 기록이 아닙니다.** Claude 의 모델 개선용 대화는 비식별 형태로 학습 파이프라인에 남는다고 적혀 있어서 [1], 최대 5년이라는 기간을 계정 기록이 5년 남는다는 뜻으로 읽지 않습니다.
+**비식별 학습 데이터는 계정 기록이 아닙니다.** Claude 의 모델 개선용 대화는 비식별 형태로 학습 파이프라인에 남으므로 [1], 최대 5년이라는 기간을 계정 기록이 5년 남는다는 뜻으로 읽지 않습니다.
 
 **대화를 지워도 메모리는 남을 수 있습니다.** Microsoft 365 Copilot 의 메모리는 대화와 따로 `IPM.Contact` 로 저장되고, Purview 나 eDiscovery 에서 대화를 지워도 함께 지워지지 않습니다 [6]. 대화가 없다는 사실만으로 그 대화에서 나온 정보가 계정에 남아 있지 않다고 보지 않습니다.
 

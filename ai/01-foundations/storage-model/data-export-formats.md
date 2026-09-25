@@ -43,7 +43,7 @@ nav_order: 20
 
 ### ChatGPT
 
-ZIP 맨 위에 `conversations.json`, `user.json`, `chat.html`, `message_feedback.json`, `shared_conversations.json` 이 오고, 2025년 이후 판에는 `group_chats.json`, `shopping.json`, `sora.json` 이 더해졌다고 convoviz 명세(v3.0, 2026-02-05)가 적었습니다[6]. 대화 파일이 `conversations-000.json` 처럼 번호 붙은 파일 여러 개로 나뉘어 오기도 하고[9], 개인정보 포털에서 받은 파일은 겉 ZIP 안에 `Conversations__*-chatgpt-*.zip` 모양의 ZIP 이 한 겹 더 들어 있습니다[9].
+ZIP 맨 위에 `conversations.json`, `user.json`, `chat.html`, `message_feedback.json`, `shared_conversations.json` 이 오고, 2025년 이후 판에는 `group_chats.json`, `shopping.json`, `sora.json` 이 더해졌습니다[6]. 대화 파일이 `conversations-000.json` 처럼 번호 붙은 파일 여러 개로 나뉘어 오기도 하고[9], 개인정보 포털에서 받은 파일은 겉 ZIP 안에 `Conversations__*-chatgpt-*.zip` 모양의 ZIP 이 한 겹 더 들어 있습니다[9].
 
 RLEAPP 분석기는 네 파일을 읽습니다[7][8]. `user.json` 에서는 `id`, `email`, `chatgpt_plus_user`, `phone_number` 를, `shared_conversations.json` 에서는 공유 ID(`id`)와 `conversation_id`, `title`, `is_anonymous` 를 뽑습니다. `message_feedback.json` 에서는 `create_time`, `user_id`, `id`, `conversation_id`, `rating`, `workspace_id`, `content`, `storage_protocol` 을 뽑습니다. RLEAPP 의 대화 분석기는 2024-07-09 을 마지막 검증일로 적었고, 계정 정보 분석기는 2026-07-09 에 마지막으로 고쳤습니다.
 
@@ -63,7 +63,7 @@ ZIP 안의 파일은 `conversations.json`, `users.json`, `projects.json`, `memor
 | `projects.json` | `uuid`, `name`, `description`, `is_private`, `is_starter_project`, `prompt_template`, `created_at`, `updated_at`, `creator`, `docs[]`(`uuid`, `filename`, `content`) | [10], [13] |
 | `memories.json` | 판마다 모양이 다름. 계정 단위 객체에 `conversations_memory`, `project_memories`, `memory_files[]`, `account_uuid` | [10], [12], [13] |
 
-`sender` 값은 `human` 과 `assistant` 입니다[10]. 예전 내보내기는 메시지 배열 이름이 `chat_messages` 가 아니라 `messages` 라서, Proton 의 불러오기 코드는 두 이름을 모두 받습니다[9]. 메시지 본문은 `text` 한 칸과 `content[]` 블록 배열 두 곳에 있고, `content[]` 에는 `text`, `thinking`, `tool_use`, `tool_result` 블록이 들어갑니다[10][11]. empirica 문서는 `text` 칸이 도구 블록을 빼고 펼친 글이라 654개 메시지 가운데 87개에서 두 곳이 달랐다고 적었고, 그래서 `content[]` 를 읽으라고 권합니다[11].
+`sender` 값은 `human` 과 `assistant` 입니다[10]. 예전 내보내기는 메시지 배열 이름이 `chat_messages` 가 아니라 `messages` 라서, 두 이름을 모두 찾아야 합니다[9]. 메시지 본문은 `text` 한 칸과 `content[]` 블록 배열 두 곳에 있고, `content[]` 에는 `text`, `thinking`, `tool_use`, `tool_result` 블록이 들어갑니다[10][11]. `text` 칸은 도구 블록을 빼고 펼친 글이라 두 곳이 다를 수 있고(한 내보내기에서는 메시지 654개 가운데 87개), 그래서 `content[]` 를 읽습니다[11].
 
 첨부는 `attachments[]` 의 `file_name`, `file_size`, `file_type`, `extracted_content` 로 들어가고, `extracted_content` 에는 첨부에서 뽑은 본문 글이 담깁니다[10]. `files[]` 에는 `file_name` 만 있습니다[10].
 
@@ -71,9 +71,9 @@ ZIP 안의 파일은 `conversations.json`, `users.json`, `projects.json`, `memor
 
 ### Gemini
 
-Takeout 의 Gemini 대화는 `Takeout/My Activity/Gemini Apps/` 아래 활동 파일 하나로 옵니다[14][15]. 파일 이름은 `MyActivity.json` 으로 적은 도구[14][15]가 있고, remnic 은 `My Activity.json` 과 예전 표기 `MyActivity.json` 을 함께 적었습니다[16]. 폴더와 파일 이름은 계정 언어를 따라 바뀝니다. silver-gr 문서는 그리스어 계정에서 `Takeout/Η δραστηριότητά μου/Εφαρμογές Gemini/Ηδραστηριότητάμου.json` 이 된 예를 들었습니다[15]. JSON 으로 받으려면 "My Activity" 옆 "Multiple formats" 에서 JSON 을 골라야 한다고 적은 도구가 있으므로[14], 받은 파일이 HTML 인지 JSON 인지부터 봅니다.
+Takeout 의 Gemini 대화는 `Takeout/My Activity/Gemini Apps/` 아래 활동 파일 하나로 옵니다[14][15]. 파일 이름은 `My Activity.json` 이나 예전 표기 `MyActivity.json` 입니다[14][15][16]. 폴더와 파일 이름은 계정 언어를 따라 바뀌어서, 그리스어 계정에서는 `Takeout/Η δραστηριότητά μου/Εφαρμογές Gemini/Ηδραστηριότητάμου.json` 이 됩니다[15]. JSON 으로 받으려면 "My Activity" 옆 "Multiple formats" 에서 JSON 을 골라야 하므로[14], 받은 파일이 HTML 인지 JSON 인지부터 봅니다.
 
-JSON 레코드 한 건은 프롬프트 하나입니다. 도구들이 읽는 칸은 아래와 같습니다.
+JSON 레코드 한 건은 프롬프트 하나이고, 칸은 아래와 같습니다.
 
 | 칸 | 내용 | 출처 |
 |---|---|---|
@@ -95,9 +95,9 @@ Gemini 는 "Keep Activity" 가 켜져 있을 때 대화를 계정의 "Gemini App
 
 ### Microsoft Copilot
 
-소비자용 Copilot 은 활동 기록을 CSV 한 장으로 내보내고, 파일 이름은 `copilot-activity-history.csv` 로 적은 도구가 여럿입니다[18]. MaxAnkum 도구는 이름이 다를 수 있다고 덧붙였습니다[18].
+소비자용 Copilot 은 활동 기록을 CSV 한 장으로 내보내고, 파일 이름은 보통 `copilot-activity-history.csv` 이고, 다를 수도 있습니다[18].
 
-llm-aggregator.ts 의 분석기는 2026년 7월 실제 내보내기로 확인했다고 적었고, 그 코드가 밝힌 모양은 다음과 같습니다[17].
+2026년 7월 내보내기 파일의 모양은 다음과 같습니다[17].
 
 - 첫 줄은 `Conversation,Time,Author,Message` 이고 파일 앞에 UTF-8 BOM(`EF BB BF`)이 붙습니다.
 - `Author` 값은 `Human` 과 `AI` 입니다.
@@ -106,11 +106,11 @@ llm-aggregator.ts 의 분석기는 2026년 7월 실제 내보내기로 확인했
 - 줄은 최신 것부터 나옵니다. 파일 전체와 대화 안 모두 그렇습니다.
 - 대화 ID 와 메시지 ID 가 없어서 대화는 `Conversation` 칸의 제목으로만 가립니다.
 
-같은 코드는 실제 파일 2613줄 가운데 1290줄이 옆 줄과 시각이 같았다고 적었습니다[17]. AI 줄과 그 앞 Human 줄이 같은 초를 쓰기 때문이고, 그래서 시각으로 정렬하면 답변이 질문보다 앞에 올 수 있습니다. 시간 순서로 보려면 정렬하지 말고 파일 순서를 뒤집습니다[17]. 칸별 해석은 [Microsoft Copilot 계정 데이터 내보내기](../../02-artifacts/chat-services/copilot/export.md)에 있습니다.
+한 실제 파일에서는 2613줄 가운데 1290줄이 옆 줄과 시각이 같았습니다[17]. AI 줄과 그 앞 Human 줄이 같은 초를 쓰기 때문이고, 그래서 시각으로 정렬하면 답변이 질문보다 앞에 올 수 있습니다. 시간 순서로 보려면 정렬하지 말고 파일 순서를 뒤집습니다[17]. 칸별 해석은 [Microsoft Copilot 계정 데이터 내보내기](../../02-artifacts/chat-services/copilot/export.md)에 있습니다.
 
 ### Meta AI
 
-Ray-Ban Meta 안경을 다룬 논문은 Meta 계정 센터에서 받은 클라우드 내보내기가 분류별 HTML 파일로 온다고 적었습니다[19]. 실험 환경은 Android 14 와 Meta AI 앱(`com.facebook.stella`) 258.0.0.15.167 입니다[19]. 논문 표 5 가 꼽은 파일은 아래와 같습니다.
+Meta 계정 센터에서 받은 클라우드 내보내기는 분류별 HTML 파일로 옵니다(Android 14, Meta AI 앱 `com.facebook.stella` 258.0.0.15.167 기준)[19]. 파일은 아래와 같습니다(표 5).
 
 | 경로 | 담긴 것 |
 |---|---|
@@ -138,7 +138,7 @@ Ray-Ban Meta 안경을 다룬 논문은 Meta 계정 센터에서 받은 클라�
 
 ## 포렌식에서 중요한 점
 
-**내보내기는 요청 시점의 사본입니다.** Google 도움말은 요청한 때와 보관 파일을 만든 때 사이에 바뀐 데이터가 빠질 수 있다고 적었습니다[2]. 사용자가 이미 지운 대화가 내보내기에 들어가는지는 서비스 문서에 적혀 있지 않습니다. 그래서 "내보내기에 없다" 를 "그런 대화를 한 적이 없다" 로 쓰지 않습니다.
+**내보내기는 요청 시점의 사본입니다.** 요청한 때와 보관 파일을 만든 때 사이에 바뀐 데이터는 빠질 수 있습니다[2]. 사용자가 이미 지운 대화가 내보내기에 들어가는지는 서비스 문서에 적혀 있지 않습니다. 그래서 "내보내기에 없다" 를 "그런 대화를 한 적이 없다" 로 쓰지 않습니다.
 
 **지우는 동작마다 클라우드에 남는 것이 다릅니다.** Ray-Ban Meta 논문의 실험에서는 앱에서 미디어를 지우자 뒤에 받은 내보내기의 `meta_ai_media.html` 과 `posts/media/your_posts/` 에서도 사라졌고, "Delete Voice Activity" 를 쓰자 대화 기록이 빠졌습니다[19]. 그런데 AI 로 만든 알림은 대화 기록을 지우고 안경을 초기화한 뒤에도 `reminders.html` 에 남았습니다[19]. 이 결과는 그 실험 환경의 관찰이라서, 다른 서비스에 옮겨 적지 않습니다.
 

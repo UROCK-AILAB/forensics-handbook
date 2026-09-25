@@ -13,15 +13,15 @@ Claude 의 계정 데이터 내보내기는 계정 서버에 있는 대화·프�
 
 ## 무엇을 받나 · 왜 생기나
 
-공식 도움말은 개인 Free·Pro·Max 사용자가 웹이나 데스크톱 앱에서 왼쪽 아래 이니셜을 눌러 Settings 의 Privacy 절로 들어간 뒤 "Export data" 로 내보내기를 요청한다고 설명합니다[1]. iOS·Android 앱에는 이 기능이 없어서, 휴대전화로만 쓴 계정이라도 내보내기는 웹이나 PC 에서 요청합니다[1]. Team·Enterprise 요금제에서는 조직의 데이터를 Primary Owner 만 내보낼 수 있습니다[1]. 조직 계정의 활동을 관리자 쪽 기록으로 보는 방법은 [Claude 기업용 감사 로그](../../network-enterprise/claude-enterprise.md)에서 따로 다룹니다.
+개인 Free·Pro·Max 사용자는 웹이나 데스크톱 앱에서 왼쪽 아래 이니셜을 눌러 Settings 의 Privacy 절로 들어간 뒤 "Export data" 로 내보내기를 요청합니다[1]. iOS·Android 앱에는 이 기능이 없어서, 휴대전화로만 쓴 계정이라도 내보내기는 웹이나 PC 에서 요청합니다[1]. Team·Enterprise 요금제에서는 조직의 데이터를 Primary Owner 만 내보낼 수 있습니다[1]. 조직 계정의 활동을 관리자 쪽 기록으로 보는 방법은 [Claude 기업용 감사 로그](../../network-enterprise/claude-enterprise.md)에서 따로 다룹니다.
 
-요청하면 파일을 만드는 데 시간이 조금 걸릴 수 있고, 준비가 끝나면 계정 이메일로 내려받기 링크가 옵니다[1]. 링크는 받은 뒤 24시간이 지나면 만료되고, 내려받으려면 그 계정으로 로그인해야 하며, 만료되면 다시 요청합니다[1]. 도움말은 받는 자료를 "대화 데이터와 사용자 계정 정보" 라고만 적었고 파일 목록은 싣지 않았습니다[1]. 내보낸 자료를 다른 개인 계정으로 가져올 수는 없고, 개인 계정을 Team·Enterprise 조직으로 옮길 때는 내보내기 없이 바로 옮긴다고 적었습니다[1].
+요청하면 파일을 만드는 데 시간이 조금 걸릴 수 있고, 준비가 끝나면 계정 이메일로 내려받기 링크가 옵니다[1]. 링크는 받은 뒤 24시간이 지나면 만료되고, 내려받으려면 그 계정으로 로그인해야 하며, 만료되면 다시 요청합니다[1]. 받는 자료는 대화 데이터와 사용자 계정 정보이고, 공식 파일 목록은 공개돼 있지 않습니다[1]. 내보낸 자료를 다른 개인 계정으로 가져올 수는 없고, 개인 계정을 Team·Enterprise 조직으로 옮길 때는 내보내기 없이 바로 옮깁니다[1].
 
 내보내기는 기기에 있던 파일을 모으는 기능이 아니라, 요청한 때 계정에 있던 자료의 사본을 서버가 만들어 보내 주는 기능입니다. 그래서 보관 파일의 내용은 내보낸 시점의 계정 상태를 보여 주고, 기기에 남은 흔적과 같은지는 둘을 맞춰 봐야 압니다. 기기 쪽 흔적은 [웹 브라우저](web.md), [Windows 앱](windows.md), [macOS 앱](macos.md) 같은 판별 페이지에서 다루고, 서비스마다 다른 내보내기 형식을 견준 내용은 [계정 데이터 내보내기 형식](../../../01-foundations/storage-model/data-export-formats.md)에 있습니다.
 
 ## 위치와 버전별 차이
 
-받은 파일은 ZIP 입니다[1][2]. claude-to-sqlite 설명서는 내려받은 파일에 `.zip` 확장자가 빠져 있을 수 있다고 적었으므로[2], 확장자만 보고 거르지 말고 파일 머리로 ZIP 인지 가립니다. 기기에서 보관 파일을 찾을 때는 내려받은 위치를 먼저 봅니다. 링크를 이메일로 받아 브라우저로 내려받는 방식이라, 보관 파일이 기기에 있었다면 브라우저 다운로드 기록과 메일 기록에도 흔적이 남을 수 있습니다.
+받은 파일은 ZIP 입니다[1][2]. 내려받은 파일에는 `.zip` 확장자가 빠져 있을 수 있으므로[2], 확장자만 보고 거르지 말고 파일 머리로 ZIP 인지 가립니다. 기기에서 보관 파일을 찾을 때는 내려받은 위치를 먼저 봅니다. 링크를 이메일로 받아 브라우저로 내려받는 방식이라, 보관 파일이 기기에 있었다면 브라우저 다운로드 기록과 메일 기록에도 흔적이 남을 수 있습니다.
 
 ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 표에서 날짜는 각 도구 소스 파일의 마지막 커밋 날짜입니다.
 
@@ -35,9 +35,9 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 | `design_chats/*.json` | 프로젝트에 묶인 디자인 대화 | la-roca(2026-09)[10] |
 | `login_history.json` | 이름만 나옴(도구가 읽지 않는 파일로 적음) | la-roca(2026-09)[10] |
 
-프로젝트가 `projects.json` 한 파일로 오는지, `projects` 폴더 아래 파일 하나씩으로 오는지는 출처끼리 다릅니다. lordjabez·ukogan 도구(2026-02)와 empirica 설명서(2026-09-23)는 앞의 모양을, la-roca 설명서(2026-09-21)는 뒤의 모양을 읽으므로, 검체에서는 ZIP 목록을 먼저 뽑아 어느 모양인지 봅니다. 대화의 메시지 배열 이름도 판마다 달라서, Proton 파서는 예전 내보내기가 `chat_messages` 대신 `messages` 를 썼다고 적고 두 이름을 모두 받습니다[7].
+프로젝트가 `projects.json` 한 파일로 오는지, `projects` 폴더 아래 파일 하나씩으로 오는지는 출처끼리 다릅니다. lordjabez·ukogan 도구(2026-02)와 empirica 설명서(2026-09-23)는 앞의 모양을, la-roca 설명서(2026-09-21)는 뒤의 모양을 읽으므로, 검체에서는 ZIP 목록을 먼저 뽑아 어느 모양인지 봅니다. 대화의 메시지 배열 이름도 판마다 달라서, 예전 내보내기는 `chat_messages` 대신 `messages` 를 썼으므로 두 이름을 모두 찾아봅니다[7].
 
-조직(Team·Enterprise) 내보내기도 같은 네 파일(`conversations.json`, `users.json`, `memories.json`, `projects.json`)로 온다고 ukogan 도구가 적었고, 이 도구는 조직 내보내기를 ZIP 이 아닌 JSON 파일 여러 개로 받는다고 설명합니다[9]. 조직 내보내기에서는 대화마다 `account.uuid` 가 있어야 한다고 보고, 이 칸이 없는 대화는 건너뜁니다[9].
+조직(Team·Enterprise) 내보내기도 같은 네 파일(`conversations.json`, `users.json`, `memories.json`, `projects.json`)로 오고, ZIP 이 아닌 JSON 파일 여러 개로 옵니다[9]. ukogan 도구는 조직 내보내기의 대화마다 `account.uuid` 가 있다고 보고, 이 칸이 없는 대화는 건너뜁니다[9].
 
 ## 구조
 
@@ -70,7 +70,7 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 | `attachments` | 첨부 배열(아래 표) | [2][5][8][10] |
 | `files` | 파일 배열(아래 표) | [2][5][10] |
 
-`sender` 는 lordjabez 모델이 `human` 과 `assistant` 두 값만 받도록 적었고[5], la-roca 도 이 두 값이 아니면 버립니다[10]. 본문은 `text` 보다 `content` 를 읽어야 합니다. empirica 설명서(2026-09-23)는 `text` 가 도구 블록을 빼고 화면용으로 편 글이라 `content` 와 내용이 다를 수 있고, 잰 메시지 654개 가운데 87개(약 13%)에서 둘이 달랐다고 적었습니다[6].
+`sender` 값은 `human` 과 `assistant` 두 가지입니다[5][10]. 본문은 `text` 보다 `content` 를 읽어야 합니다. `text` 는 도구 블록을 빼고 화면용으로 편 글이라 `content` 와 내용이 다를 수 있고, empirica 가 잰 메시지 654개 가운데 87개(약 13%)에서 둘이 달랐습니다[6].
 
 ### 내용 블록 (`content` 의 한 항목)
 
@@ -83,9 +83,9 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 | `token_budget` | 도구가 읽는 칸 없음 | [5][8] |
 | `voice_note` | 도구가 읽는 칸 없음(종류 이름만 나옴) | [8] |
 
-2brain 문서(2025-11)는 블록마다 `start_timestamp`, `stop_timestamp`, `flags` 칸이 있다고 적었습니다[11]. 이 칸은 다른 도구가 읽지 않으므로 검체에서 있는지 확인한 뒤 씁니다.
+블록마다 `start_timestamp`, `stop_timestamp`, `flags` 칸이 있다는 자료도 있습니다[11]. 한 자료에만 나오는 칸이므로 검체에서 있는지 확인한 뒤 씁니다.
 
-생성물(아티팩트)은 판에 따라 담기는 곳이 다릅니다. 2024년 10월 claude-to-sqlite 는 `sender` 가 `assistant` 인 메시지의 `text` 안에서 `antArtifact` 태그(속성 identifier·type·language·title)와 `antThinking` 태그를 정규식으로 찾아 뽑았습니다[3]. 2026년 2월 lordjabez 도구는 `name` 이 `artifacts` 인 `tool_use` 블록을 아티팩트로 읽고, 그 `input` 에서 `command`(도구 기본값 `create`), `id`, `type`, `title`, `language`, `content`, `old_str`, `new_str`, `version_uuid` 를 꺼냅니다[5]. 그래서 `text` 만 읽는 도구로는 최근 내보내기의 아티팩트가 보이지 않을 수 있습니다.
+생성물(아티팩트)은 판에 따라 담기는 곳이 다릅니다. 2024년 10월 무렵에는 `sender` 가 `assistant` 인 메시지의 `text` 안에 `antArtifact` 태그(속성 identifier·type·language·title)와 `antThinking` 태그로 들어 있었습니다[3]. 2026년 2월 무렵에는 `name` 이 `artifacts` 인 `tool_use` 블록으로 들어 있고, 그 `input` 에 `command`, `id`, `type`, `title`, `language`, `content`, `old_str`, `new_str`, `version_uuid` 가 있습니다[5]. `command` 가 비어 있으면 lordjabez 도구는 `create` 로 봅니다[5]. 그래서 `text` 만 읽는 도구로는 최근 내보내기의 아티팩트가 보이지 않을 수 있습니다.
 
 ### 첨부와 파일
 
@@ -94,7 +94,7 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 | `attachments[]` | `file_name`, `file_size`, `file_type`, `extracted_content` | [5][8][11] |
 | `files[]` | `file_name` | [5] |
 
-`extracted_content` 에는 첨부에서 뽑아낸 글이 들어 있고, agentsview 는 이 글을 `[Attachment: 파일이름]` 머리를 붙여 메시지 본문 뒤에 이어 붙입니다[8]. la-roca 는 파일 이름 칸을 `file_name`, `filename`, `name` 세 가지로 받고, 첨부 원본 바이트는 열지 않는다고 적었습니다[10]. 첨부 원본 파일이 ZIP 안에 따로 들어 있는지는 ZIP 목록으로 확인합니다. 프롬프트·첨부·생성물을 서로 가려 읽는 일반 방법은 [프롬프트·첨부·생성물 구분하기](../../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
+`extracted_content` 에는 첨부에서 뽑아낸 글이 들어 있고, agentsview 는 이 글을 `[Attachment: 파일이름]` 머리를 붙여 메시지 본문 뒤에 이어 붙입니다[8]. 파일 이름 칸은 `file_name`, `filename`, `name` 세 이름으로 나올 수 있습니다[10]. 첨부 원본 파일이 ZIP 안에 따로 들어 있는지는 ZIP 목록으로 확인합니다. 프롬프트·첨부·생성물을 서로 가려 읽는 일반 방법은 [프롬프트·첨부·생성물 구분하기](../../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
 
 ### 계정·프로젝트·메모리
 
@@ -107,7 +107,7 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 | `memories.json`(예전 모양) | 항목마다 글 하나. 문자열이거나, `uuid`(또는 `id`)와 글 칸(`memory`·`content`·`text` 가운데 하나), `created_at`, `updated_at` 을 담은 객체 | [6][10] |
 | `design_chats/*.json` | `uuid`, `title`, `created_at`, `updated_at`, `project`(`uuid`, `name`), `messages[]`(`uuid`, `role`, `created_at`, `content`) | [10] |
 
-메모리 파일은 모양이 두 가지입니다. la-roca(2026-08)는 `conversations_memory`·`project_memories`·`memory_files` 가운데 하나가 있으면 지금 모양으로, 아니면 예전 모양으로 읽습니다[10]. empirica 설명서의 예는 `content` 와 `created_at` 만 있는 예전 모양입니다[6]. lordjabez 모델은 `project_memories` 와 `account_uuid` 만 읽습니다[5].
+메모리 파일은 모양이 두 가지입니다. `conversations_memory`·`project_memories`·`memory_files` 가운데 하나가 있으면 지금 모양이고, 없으면 예전 모양입니다[10]. empirica 설명서의 예는 `content` 와 `created_at` 만 있는 예전 모양입니다[6]. lordjabez 모델은 `project_memories` 와 `account_uuid` 만 읽습니다[5].
 
 ### 만든 예시
 
@@ -171,9 +171,9 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 
 ## 시각 해석
 
-도구들은 시각 칸을 ISO 8601(RFC 3339) 문자열로 읽습니다. agentsview 는 대화의 `created_at`·`updated_at` 을 나노초까지 받는 RFC 3339 형식으로 풀고, 풀리지 않으면 가져오기 전체를 오류로 멈춥니다[8]. 도구 설명서와 시험 자료의 예는 `2024-07-18T21:23:35.731874Z`(2brain)[11], `2026-01-15T10:30:00Z`(empirica)[6] 처럼 끝에 `Z` 가 붙어 있고, `Z` 는 UTC 라는 표시입니다. 소수점 아래 자릿수는 예마다 다르므로 자릿수를 가정하지 말고 검체에서 값의 모양을 먼저 봅니다.
+시각 칸은 ISO 8601(RFC 3339) 문자열입니다[6][8][11]. agentsview 는 대화의 `created_at`·`updated_at` 을 나노초까지 받는 RFC 3339 형식으로 풀고, 풀리지 않으면 가져오기 전체를 오류로 멈춥니다[8]. 값은 `2024-07-18T21:23:35.731874Z`[11], `2026-01-15T10:30:00Z`[6] 처럼 끝에 `Z` 가 붙고, `Z` 는 UTC 라는 표시입니다. 소수점 아래 자릿수는 예마다 다르므로 자릿수를 가정하지 말고 검체에서 값의 모양을 먼저 봅니다.
 
-대화의 `updated_at` 을 2brain 은 마지막 메시지 시각이라고 적었습니다[11]. 다른 출처는 이 뜻을 적지 않았으므로, 마지막 메시지의 `created_at` 과 견주어 보고 씁니다. la-roca 는 대화의 `created_at`·`updated_at` 을 시작과 끝으로 보고 둘 사이를 대화 길이로 계산합니다[10].
+대화의 `updated_at` 은 마지막 메시지 시각이라는 설명이 있습니다[11]. 한 자료에만 나오는 설명이므로, 마지막 메시지의 `created_at` 과 견주어 보고 씁니다. la-roca 는 대화의 `created_at`·`updated_at` 을 시작과 끝으로 보고 둘 사이를 대화 길이로 계산합니다[10].
 
 메시지 순서는 배열 순서만 믿지 않습니다. 메시지에 `parent_message_uuid` 가 있어서 한 사용자 메시지에 답변이 여러 개 달리는 가지가 생길 수 있고, la-roca 는 이 칸으로 질문과 답을 짝지은 뒤 시각 순으로 늘어놓으며 다른 답변은 가지를 합치지 않고 따로 둡니다[10].
 
@@ -197,7 +197,7 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 00000000  5B 7B 22 75 75 69 64 22 3A 22 30 30 30 30 30 30  [{"uuid":"000000
 ```
 
-**공개 도구로 한 번.** lordjabez/claude-export-viewer 는 ZIP 을 그대로 받아 네 파일을 읽고 대화·생각 과정·도구 사용·아티팩트를 HTML 로 보여 줍니다[5]. claude-to-sqlite 는 `conversations.json` 을 읽어 SQLite 파일을 만들고, README 는 도구를 마지막으로 낸 2024년 10월 20일 기준으로 아래 세 표를 적었습니다[2]. 도구는 대화의 `account.uuid` 를 `account_id` 로 옮기고 메시지는 칸을 그대로 넣으면서 없는 칸을 새로 만들므로(`alter=True`), 최근 내보내기에서는 표에 칸이 더 생길 수 있습니다[3]. `artifacts` 표는 `text` 안의 태그에서만 뽑으므로 최근 내보내기의 `tool_use` 아티팩트는 이 표에 들어가지 않습니다[3]. 이 표는 도구가 만든 결과물이라 원본 형식과 같지 않습니다.
+**공개 도구로 한 번.** lordjabez/claude-export-viewer 는 ZIP 을 그대로 받아 네 파일을 읽고 대화·생각 과정·도구 사용·아티팩트를 HTML 로 보여 줍니다[5]. claude-to-sqlite 는 `conversations.json` 을 읽어 SQLite 파일을 만들고, 만들어지는 표는 아래 세 개입니다(2024년 10월 20일 판 기준)[2]. 도구는 대화의 `account.uuid` 를 `account_id` 로 옮기고 메시지는 칸을 그대로 넣으면서 없는 칸을 새로 만들므로(`alter=True`), 최근 내보내기에서는 표에 칸이 더 생길 수 있습니다[3]. `artifacts` 표는 `text` 안의 태그에서만 뽑으므로 최근 내보내기의 `tool_use` 아티팩트는 이 표에 들어가지 않습니다[3]. 이 표는 도구가 만든 결과물이라 원본 형식과 같지 않습니다.
 
 | 표 | 칸 |
 |---|---|

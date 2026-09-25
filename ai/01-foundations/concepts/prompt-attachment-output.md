@@ -10,21 +10,21 @@ nav_order: 50
 
 AI 대화 기록은 사용자가 입력한 프롬프트 (Prompt), 프롬프트와 함께 넣은 첨부 (Attachment), 모델이 만든 생성물 (Output) 로 나뉘고, 셋은 기록 안에서 서로 다른 칸이나 파일에 들어가서 어디에서 나온 글인지에 따라 "사용자가 넣었다" 와 "모델이 만들었다" 가 갈립니다.
 
-로컬 AI 앱의 내용은 LangurTrace 논문 [2] 이 2025년에 시험한 판 기준입니다.
+로컬 AI 앱의 내용은 2025년에 시험한 판 기준입니다 [2].
 
 ## 이 형식을 쓰는 아티팩트
 
 대화형 서비스, 개발 도구, 로컬 AI 모두 프롬프트·첨부·생성물을 주고받지만 원본이 어디에 남는지는 서비스마다 다릅니다. 서버·기기·동기화의 전체 그림은 [AI 서비스의 데이터는 어디에 있나](../storage-model/where-data-lives.md) 에서 다루고, 이 쪽은 기록 안에서 세 가지를 가르는 법을 다룹니다.
 
-공식 문서에 나온 예는 Claude Code 입니다. Claude Code 는 모든 사용자 프롬프트와 모델 출력을 네트워크로 LLM 에 보내고, 이때 TLS 1.2 이상으로 암호화합니다. 대화는 서버를 거치지만 클라이언트는 세션을 이어 가려고 세션 대화 기록을 `~/.claude/projects/` 아래에 평문으로 저장하기도 합니다. 로컬 기록의 기본 보관 기간은 30일이고 `cleanupPeriodDays` 로 바꾸며, Claude 데스크톱·Cowork 에서 시작했거나 마지막으로 이어 간 세션은 기본적으로 이 30일 제한을 받지 않습니다. Remote Control 세션은 기기에서 실행하지만, 연결된 동안에는 기기 간 동기화를 위해 대화 기록을 Anthropic 서버에도 저장합니다 [1]. 서버 쪽 보관 기간은 [대화 기록 보관 설정과 삭제](../storage-model/retention-deletion.md) 에 정리했습니다.
+Claude Code 를 예로 듭니다. Claude Code 는 모든 사용자 프롬프트와 모델 출력을 네트워크로 LLM 에 보내고, 이때 TLS 1.2 이상으로 암호화합니다. 대화는 서버를 거치지만 클라이언트는 세션을 이어 가려고 세션 대화 기록을 `~/.claude/projects/` 아래에 평문으로 저장하기도 합니다. 로컬 기록의 기본 보관 기간은 30일이고 `cleanupPeriodDays` 로 바꾸며, Claude 데스크톱·Cowork 에서 시작했거나 마지막으로 이어 간 세션은 기본적으로 이 30일 제한을 받지 않습니다. Remote Control 세션은 기기에서 실행하지만, 연결된 동안에는 기기 간 동기화를 위해 대화 기록을 Anthropic 서버에도 저장합니다 [1]. 서버 쪽 보관 기간은 [대화 기록 보관 설정과 삭제](../storage-model/retention-deletion.md) 에 정리했습니다.
 
 웹 서비스(ChatGPT·Claude 웹·Gemini 등)는 계정 내보내기 파일에서 프롬프트·첨부·생성 이미지가 어떤 파일로 나뉘는지가 서비스마다 다르므로 [계정 데이터 내보내기 형식](../storage-model/data-export-formats.md) 과 서비스별 쪽을 봅니다.
 
-로컬 AI 앱은 LangurTrace 논문 [2] 이 흔적을 여섯 가지로 나눕니다. 내려받은 모델, 모델 설치 기록, 대화 세션 설정, 대화 기록, 올린·생성 파일, API 키이고(표 2), 이 가운데 대화·올린 파일·생성 파일을 가장 중요한 흔적으로 봅니다. 생성 파일은 불법 콘텐츠를 만들거나 퍼뜨린 사건에서 직접 증거가 될 수 있다는 이유입니다(§3). 앱별로 올린 파일과 생성 파일을 가르는 법은 아래 "로컬 AI 앱의 올린 파일과 생성 파일" 절에 정리했습니다.
+로컬 AI 앱의 흔적은 여섯 가지로 나뉩니다. 내려받은 모델, 모델 설치 기록, 대화 세션 설정, 대화 기록, 올린·생성 파일, API 키이고(표 2) [2], 이 가운데 대화·올린 파일·생성 파일이 가장 중요합니다. 생성 파일은 불법 콘텐츠를 만들거나 퍼뜨린 사건에서 직접 증거가 될 수 있기 때문입니다(§3). 앱별로 올린 파일과 생성 파일을 가르는 법은 아래 "로컬 AI 앱의 올린 파일과 생성 파일" 절에 정리했습니다.
 
-Windows 11 에서 AI 도구 폴더를 열어 본 결과는 아래와 같습니다. 대화 기록 파일이 없는 칸은 그 기기에 없었다는 뜻일 뿐이고, 도구가 기록을 남기지 않는다는 뜻은 아닙니다.
+Windows 11 의 AI 도구 폴더에는 아래 항목이 들어 있습니다. "없음" 은 이 폴더에 대화 기록 파일이 없을 수 있다는 뜻이고, 도구가 기록을 남기지 않는다는 뜻은 아닙니다.
 
-| 도구 | 위치 | 본 것 | 대화 기록 파일 |
+| 도구 | 위치 | 들어 있는 것 | 대화 기록 파일 |
 |---|---|---|---|
 | [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) | `%USERPROFILE%\.claude` | 프롬프트 기록·세션 기록 | 있음 |
 | [Claude](../../02-artifacts/chat-services/claude/index.md) 데스크톱(스토어 앱) | 앱 패키지 폴더 아래 `LocalCache\Roaming\Claude\` | `IndexedDB`, `Local Storage\leveldb`, `Cache`, `Code Cache`, `Network\Cookies` 같은 Electron 형 폴더 | LevelDB 안을 검체에서 확인 |
@@ -39,7 +39,7 @@ Electron 형 폴더의 공통 구조는 [Electron·웹뷰 앱의 저장 구조](
 
 ### 세 가지와 기록 칸 (Claude Code)
 
-Claude Code 로컬 기록은 프롬프트 기록 파일 `history.jsonl` 과 세션 기록 `projects/이름/파일.jsonl` 두 곳이 중심이고, 둘 다 한 줄에 JSON 하나가 들어가는 JSONL 입니다. 아래 표는 키 이름을 세 가지로 나눈 것입니다. 키 이름은 관찰로 확인했고, "담기는 것" 칸은 키 이름으로 짐작한 뜻입니다.
+Claude Code 로컬 기록은 프롬프트 기록 파일 `history.jsonl` 과 세션 기록 `projects/이름/파일.jsonl` 두 곳이 중심이고, 둘 다 한 줄에 JSON 하나가 들어가는 JSONL 입니다. 아래 표는 키 이름을 세 가지로 나눈 것입니다. "담기는 것" 칸은 키 이름으로 짐작한 뜻입니다.
 
 | 구분 | 파일 | 키 | 담기는 것(짐작) |
 |---|---|---|---|
@@ -68,11 +68,11 @@ Claude Code 로컬 기록은 프롬프트 기록 파일 `history.jsonl` 과 세�
 
 세션 기록에는 `snapshot.trackedFileBackups`, `snapshot.messageId`, `snapshot.timestamp` 키도 있고, 같은 폴더 아래 `file-history/이름/파일` 이 쌓여 있습니다. 생성물이 바꾼 파일의 이전 상태를 담은 사본으로 보이지만 짐작이므로, 사본과 편집 전 파일을 내용으로 대조해 확인합니다. 서브에이전트 기록은 `projects/이름/ID/subagents/workflows/이름/파일.jsonl` 에 따로 쌓이고 `agentId`, `attributionAgent` 키가 더 붙습니다.
 
-`stats-cache.json` 에는 날짜별 `messageCount`·`sessionCount`·`toolCallCount` 와 모델별 토큰 수만 있고 내용은 없습니다. 공식 문서도 사용량 지표에는 코드·프롬프트·파일 경로가 들어가지 않는다고 밝힙니다 [1].
+`stats-cache.json` 에는 날짜별 `messageCount`·`sessionCount`·`toolCallCount` 와 모델별 토큰 수만 있고 내용은 없습니다. 사용량 지표에도 코드·프롬프트·파일 경로는 들어가지 않습니다 [1].
 
 ### 로컬 AI 앱의 올린 파일과 생성 파일
 
-LangurTrace 논문 [2] 은 Windows 11 Pro 24H2(26100.3775)에서 Chatbox 1.11.8, LM Studio 0.3.14, Msty 1.8.5, GPT4All 3.10.0 을 시험했고(표 1, §4.1), 앱마다 올린 파일과 생성 파일을 두는 곳이 다릅니다. 아래 경로는 논문 부록 A·B 와 §4.5·§4.6 에서 가져왔고, 지금 판에서는 바뀌었을 수 있으므로 검체에서 확인합니다.
+앱마다 올린 파일과 생성 파일을 두는 곳이 다릅니다. 아래 경로는 Windows 11 Pro 24H2(26100.3775)의 Chatbox 1.11.8, LM Studio 0.3.14, Msty 1.8.5, GPT4All 3.10.0 기준이고(표 1, §4.1, 부록 A·B, §4.5·§4.6) [2], 지금 판에서는 바뀌었을 수 있으므로 검체에서 확인합니다.
 
 | 앱(시험한 판) | 올린 파일 | 생성 파일 | 대화 기록에 남는 것 |
 |---|---|---|---|
@@ -83,12 +83,12 @@ LangurTrace 논문 [2] 은 Windows 11 Pro 24H2(26100.3775)에서 Chatbox 1.11.8,
 
 GPT4All 을 뺀 나머지 앱은 대화 기록에 파일 경로와 메타데이터만 두고 실제 파일은 따로 관리합니다(§4.6.4). 그래서 대화 기록에서 첨부 이름을 찾은 뒤, 위 폴더에서 실제 파일을 찾아 짝을 맞춥니다.
 
-Chatbox 는 올린 파일과 생성 파일이 같은 `chatbox-blobs` 폴더에 섞여 있어서 파일 이름 앞부분으로 가립니다. 논문 공개 샘플에서 올린 이미지는 `pictureinput-box` 뒤에 UUID 하나가 붙고, 생성한 이미지는 `picture` 뒤에 UUID 세 개가 이어 붙습니다 [3]. 두 이름 모두 `picture` 로 시작하므로 `pictureinput` 을 먼저 걸러야 올린 파일이 생성 파일로 섞이지 않습니다. 저장 형식은 출처끼리 다릅니다. 논문(2025) §4.5 는 올린 파일이 base64 블롭이고 생성 파일이 Data URL 로 들어 있다고 씁니다. LangurTrace 코드 `src/reporter/chatbox/files_reporter.py`(2025-07-20 커밋)는 반대로 `pictureinput*` 을 Data URL 로 풀어 `uploaded/` 에 두고, `picture*` 는 base64 로 풀어 `generated/` 에 둡니다 [3]. 블롭 앞부분이 `data:` 로 시작하는지 검체에서 직접 보고 어느 쪽인지 확인합니다. 같은 폴더의 `parse*` 파일은 코드가 문서에서 뽑은 글로 보고 `uploaded/` 에 글 파일로 둡니다 [3].
+Chatbox 는 올린 파일과 생성 파일이 같은 `chatbox-blobs` 폴더에 섞여 있어서 파일 이름 앞부분으로 가립니다. 올린 이미지 이름은 `pictureinput-box` 뒤에 UUID 하나가 붙고, 생성한 이미지 이름은 `picture` 뒤에 UUID 세 개가 이어 붙습니다 [3]. 두 이름 모두 `picture` 로 시작하므로 `pictureinput` 을 먼저 걸러야 올린 파일이 생성 파일로 섞이지 않습니다. 저장 형식은 출처끼리 다릅니다. 논문(2025) §4.5 는 올린 파일이 base64 블롭이고 생성 파일이 Data URL 로 들어 있다고 씁니다. LangurTrace 코드 `src/reporter/chatbox/files_reporter.py`(2025-07-20 커밋)는 반대로 `pictureinput*` 을 Data URL 로 풀어 `uploaded/` 에 두고, `picture*` 는 base64 로 풀어 `generated/` 에 둡니다 [3]. 블롭 앞부분이 `data:` 로 시작하는지 검체에서 직접 보고 어느 쪽인지 확인합니다. 같은 폴더의 `parse*` 파일은 코드가 문서에서 뽑은 글로 보고 `uploaded/` 에 글 파일로 둡니다 [3].
 
 ## 읽는 법
 
 1. 원본 폴더를 복사해 두고 사본으로 작업합니다. JSONL 은 한 줄이 독립된 JSON 이라서 파일 전체가 아니라 줄 단위로 읽습니다.
-2. `history.jsonl` 로 프롬프트를 시간순으로 늘어놓습니다. `pastedContents` 가 비어 있지 않은 줄은 붙여넣기가 있었던 프롬프트이고, 여기에 `content` 가 있으면 붙여 넣은 내용이 이 파일에 함께 남은 것입니다. 관찰한 파일의 처음 300줄에서 붙여넣기 5건 가운데 `content` 가 있는 것은 1건, `contentHash` 만 있는 것은 4건이었습니다.
+2. `history.jsonl` 로 프롬프트를 시간순으로 늘어놓습니다. `pastedContents` 가 비어 있지 않은 줄은 붙여넣기가 있었던 프롬프트이고, 여기에 `content` 가 있으면 붙여 넣은 내용이 이 파일에 함께 남은 것입니다. 한 파일 안에 `content` 가 있는 붙여넣기와 `contentHash` 만 있는 붙여넣기가 섞여 있을 수 있습니다.
 3. `contentHash` 만 있는 붙여넣기는 본문이 이 파일에 없습니다. 같은 폴더에 `paste-cache/파일.txt` 가 있어도 이름만 보고 짝을 짓지 말고, 내용과 해시를 직접 대조해 이어지는지 확인합니다.
 4. 세션 기록에서는 `message.role` 과 `message.content[].type` 으로 사용자 줄과 모델 줄을 가릅니다. 모델 줄에는 `message.model`, `requestId`, `message.usage` 가 함께 붙어서 사용자 줄과 구별하기 쉽습니다.
 5. 도구 호출의 `id` 와 도구 결과의 `tool_use_id` 는 이름이 짝을 이루므로, 두 값이 같은지 확인한 뒤 "모델이 무엇을 부르고 무엇을 돌려받았는지" 를 한 묶음으로 봅니다. 에이전트가 실행한 명령을 따라가는 법은 [AI 에이전트가 무엇을 실행했나](../../04-scenarios/agents/agent-actions.md) 에서 다룹니다.
@@ -103,13 +103,13 @@ jq -c 'select(.message.role != null) | {timestamp, role: .message.role, model: .
 
 ## 포렌식에서 중요한 점
 
-로컬 세션 기록은 기본 30일이 지나면 정리되고 `cleanupPeriodDays` 로 이 기간을 바꿀 수 있어서 [1], 오래된 세션이 없을 때는 사용하지 않은 것인지 보관 기간이 지나 정리된 것인지를 먼저 가립니다. 관찰한 `settings.json` 에는 `cleanupPeriodDays` 키가 없었습니다. 세션 기록이 없어도 `stats-cache.json` 의 날짜별 메시지·세션 수는 남아 있을 수 있어 사용한 날을 가늠하는 데 쓰지만, 내용은 되살리지 못합니다. 지운 대화를 캐시나 스냅숏에서 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md) 에서 다룹니다.
+로컬 세션 기록은 기본 30일이 지나면 정리되고 `cleanupPeriodDays` 로 이 기간을 바꿀 수 있어서 [1], 오래된 세션이 없을 때는 사용하지 않은 것인지 보관 기간이 지나 정리된 것인지를 먼저 가립니다. 세션 기록이 없어도 `stats-cache.json` 의 날짜별 메시지·세션 수는 남아 있을 수 있어 사용한 날을 가늠하는 데 쓰지만, 내용은 되살리지 못합니다. 지운 대화를 캐시나 스냅숏에서 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md) 에서 다룹니다.
 
 로컬 AI 앱은 대화를 지워도 파일이 남는 경우가 있습니다. LangurTrace 논문의 시험에서 앱 화면으로 지운 뒤 Chatbox 는 올린 파일과 생성 파일을 50개 모두 되살렸고, Msty 는 올린 파일을 50개 모두 되살렸지만 대화는 0/50 이었습니다. LM Studio 는 지운 대화와 올린 파일이 모두 0/50 이었습니다(표 8). 그래서 대화 기록에 없는 파일이 첨부 폴더에 있으면, 지운 대화에 딸렸던 파일일 수 있다고 보고 앱 로그와 맞춰 봅니다.
 
-프롬프트와 첨부의 사본이 기기 밖으로 나가는 길도 있습니다. `/feedback`·`/bug`·`/share` 로 보낸 기록은 대화 내용과 코드를 포함해 Anthropic 으로 가서 5년 보관됩니다. Amazon Bedrock·Google Cloud Agent Platform 같은 외부 제공자를 쓰거나 Anthropic 자격 증명이 없으면 이 기록을 보내지 않고 `~/.claude/feedback-bundles/` 에 로컬 압축 파일로 쓰며, 이때 알려진 API 키·토큰 모양은 가린 뒤 씁니다. Claude 가 초안을 쓴 피드백은 사용자가 보내기로 하기 전까지 기기에 쌓여 있습니다. 세션 설문 뒤 기록을 봐도 되는지 묻는 질문에 Yes 를 고르면 대화 기록과 서브에이전트 기록, 디스크의 원본 세션 로그 파일을 올리고 최대 6개월 보관하며, 알려진 API 키·토큰 모양만 가리고 소스 코드와 파일 내용은 그대로 올립니다. Bedrock·Google Cloud Agent Platform·Microsoft Foundry 에서는 같은 내용을 올리지 않고 `~/.claude/feedback-bundles/` 에 씁니다 [1]. 관찰한 `feedback/drafts/파일.json` 에는 `draft_id`, `created_at`, `cli_version`, `model`, `status`, `request_ids`, `source_session_id`, `transcript_ref.session_file` 같은 키가 있었습니다. 이 파일이 공식 문서의 피드백 초안과 같은 것인지는 짐작입니다. `source_session_id` 와 `transcript_ref.session_file` 은 이름으로 보아 초안이 가리키는 세션이므로 세션 기록과 대조해 봅니다.
+프롬프트와 첨부의 사본이 기기 밖으로 나가는 길도 있습니다. `/feedback`·`/bug`·`/share` 로 보낸 기록은 대화 내용과 코드를 포함해 Anthropic 으로 가서 5년 보관됩니다. Amazon Bedrock·Google Cloud Agent Platform 같은 외부 제공자를 쓰거나 Anthropic 자격 증명이 없으면 이 기록을 보내지 않고 `~/.claude/feedback-bundles/` 에 로컬 압축 파일로 쓰며, 이때 알려진 API 키·토큰 모양은 가린 뒤 씁니다. Claude 가 초안을 쓴 피드백은 사용자가 보내기로 하기 전까지 기기에 쌓여 있습니다. 세션 설문 뒤 기록을 봐도 되는지 묻는 질문에 Yes 를 고르면 대화 기록과 서브에이전트 기록, 디스크의 원본 세션 로그 파일을 올리고 최대 6개월 보관하며, 알려진 API 키·토큰 모양만 가리고 소스 코드와 파일 내용은 그대로 올립니다. Bedrock·Google Cloud Agent Platform·Microsoft Foundry 에서는 같은 내용을 올리지 않고 `~/.claude/feedback-bundles/` 에 씁니다 [1]. `feedback/drafts/파일.json` 에는 `draft_id`, `created_at`, `cli_version`, `model`, `status`, `request_ids`, `source_session_id`, `transcript_ref.session_file` 같은 키가 있습니다. 이 파일은 위의 피드백 초안으로 보이지만 짐작입니다. `source_session_id` 와 `transcript_ref.session_file` 은 이름으로 보아 초안이 가리키는 세션이므로 세션 기록과 대조해 봅니다.
 
-프롬프트를 제출하는 시점에 외부 명령을 돌리는 훅 설정도 흔적으로 남습니다. Claude Code 와 Codex CLI 의 `hooks.UserPromptSubmit`, Cursor 의 `hooks.beforeSubmitPrompt`, Gemini CLI 의 `hooks.BeforeAgent` 가 설정 파일에 있었습니다. 훅이 프롬프트 내용을 받는지는 각 도구의 훅 문서와 훅에 걸린 명령으로 확인하고, 그 명령이 어디에 무엇을 쓰는지도 따로 봅니다. 도구 호출이 외부 서버로 이어지는 경우는 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md) 을 봅니다.
+프롬프트를 제출하는 시점에 외부 명령을 돌리는 훅 설정도 흔적으로 남습니다. Claude Code 와 Codex CLI 는 `hooks.UserPromptSubmit`, Cursor 는 `hooks.beforeSubmitPrompt`, Gemini CLI 는 `hooks.BeforeAgent` 를 설정 파일에 둡니다. 훅이 프롬프트 내용을 받는지는 각 도구의 훅 문서와 훅에 걸린 명령으로 확인하고, 그 명령이 어디에 무엇을 쓰는지도 따로 봅니다. 도구 호출이 외부 서버로 이어지는 경우는 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md) 을 봅니다.
 
 ## 함정
 

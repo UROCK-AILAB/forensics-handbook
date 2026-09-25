@@ -9,13 +9,13 @@ nav_order: 180
 
 Android 의 Claude 앱(패키지 ID `com.anthropic.claude`)은 대화 원본을 계정 서버에 두지만, 기기의 앱 데이터 폴더에 대화 목록·메시지·프로젝트를 캐시 데이터베이스로 남기고 계정 정보를 JSON 파일로 남깁니다.
 
-분석기와 문서에는 앱 판이 적혀 있지 않고 앱이 자주 바뀌므로, 검체의 앱 판과 이 쪽 내용을 맞춰 봅니다[4][5].
+이 쪽 내용이 어느 앱 판 기준인지는 알려져 있지 않고 앱이 자주 바뀌므로, 검체의 앱 판과 맞춰 봅니다[4][5].
 
 ## 무엇을 기록하나 · 왜 생기나
 
 Google Play 에서 앱 이름은 "Claude by Anthropic", 개발자는 Anthropic PBC 이고, Play 주소에 붙은 패키지 ID 는 `com.anthropic.claude` 입니다[1][2]. 앱은 claude.ai 와 같은 계정으로 로그인해 쓰고, 대화 원본은 서버에 있습니다. 지운 대화의 서버 쪽 처리는 [Claude](index.md) 허브에 정리해 두었습니다.
 
-앱은 서버에서 받은 대화와 메시지를 기기 안 SQLite 캐시(`acc_*_claude_cache.db`)에 JSON 으로 담아 둡니다[4]. ALEAPP 분석기는 이 캐시에서 대화 이름·모델·시크릿(Incognito) 여부·즐겨찾기 여부, 메시지 본문·보낸 쪽·시각, 프로젝트 정보를 읽고, 따로 `cache.json` 에서 계정 이름과 이메일을 읽습니다[4]. LEAF 문서는 최근에 연 대화만 메시지가 캐시에 남고, 대화 제목·모델·시각 같은 목록 정보는 더 넓게 남는다고 적었습니다[5]. LEAF 문서는 앱이 주로 claude.ai 를 띄운 웹뷰(WebView)라고 적었고[5], LEAF 저장소의 추출본에도 웹뷰 저장소 폴더가 있습니다[7]. 웹뷰 저장 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+앱은 서버에서 받은 대화와 메시지를 기기 안 SQLite 캐시(`acc_*_claude_cache.db`)에 JSON 으로 담아 둡니다[4]. 이 캐시에는 대화 이름·모델·시크릿(Incognito) 여부·즐겨찾기 여부, 메시지 본문·보낸 쪽·시각, 프로젝트 정보가 있고, 계정 이름과 이메일은 따로 `cache.json` 에 있습니다[4]. 메시지는 최근에 연 대화의 것만 캐시에 남고, 대화 제목·모델·시각 같은 목록 정보는 더 넓게 남습니다[5]. 앱은 주로 claude.ai 를 띄운 웹뷰(WebView)이고[5], 추출본에도 웹뷰 저장소 폴더가 있습니다[7]. 웹뷰 저장 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
 Android 앱에서는 계정 데이터를 내보낼 수 없고, 내보내기는 웹이나 데스크톱 앱에서만 됩니다[3]. 캐시에 없는 대화까지 필요하면 [계정 데이터 내보내기](export.md)를 웹이나 PC 에서 받거나 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)을 검토합니다.
 
@@ -34,7 +34,7 @@ Android 앱에서는 계정 데이터를 내보낼 수 없고, 내보내기는 �
 
 캐시 파일 이름에 계정 UUID 와 조직 UUID 가 들어가서, 한 기기에서 계정을 여럿 썼다면 캐시 파일도 여럿 생깁니다[5]. ALEAPP 경로 패턴은 `*/com.anthropic.claude/databases/acc_*_claude_cache.db*` 로 끝이 `db*` 라서 `-wal`·`-shm` 까지 함께 잡습니다[4].
 
-추출본마다 파일 구성이 다릅니다. LEAF 문서는 다른 추출본 하나에서 Claude 앱 폴더는 있었지만 대화 캐시 없이 Firebase Analytics 데이터베이스만 나왔다고 적었습니다[6]. LEAF 저장소에 올라온 추출본 파일 목록에도 이런 Claude 앱 폴더가 두 벌 있습니다. 두 벌 모두 `databases/` 에는 `google_app_measurement_local.db` 와 `com.google.android.datatransport.events` 만 있고, 계정 정보 파일은 `acc_` 단계 없이 `cache/app_start/org_{조직UUID}/cache.json` 에 있습니다[7]. 이 경로는 ALEAPP 경로 패턴에 걸리지 않으므로, 분석기가 계정 정보를 내놓지 않으면 `cache/app_start/` 아래를 직접 봅니다. 같은 목록의 `shared_prefs/` 에는 `account_prefs{계정UUID}.xml`, `organization_prefs__{계정UUID}_{조직UUID}.xml`, `user_cookies_{계정UUID}.xml`, `device_id_prefs.xml`, `app_prefs_latest_seen_completed_messages.xml` 같은 이름의 파일이 있습니다[7]. 이 파일들의 내용을 설명한 공개 자료는 없어서 검체에서 열어 확인합니다.
+추출본마다 파일 구성이 다릅니다. Claude 앱 폴더는 있는데 대화 캐시 없이 Firebase Analytics 데이터베이스만 나오는 추출본도 있습니다[6]. 공개된 이런 추출본 두 벌은 모두 `databases/` 에 `google_app_measurement_local.db` 와 `com.google.android.datatransport.events` 만 있고, 계정 정보 파일은 `acc_` 단계 없이 `cache/app_start/org_{조직UUID}/cache.json` 에 있습니다[7]. 이 경로는 ALEAPP 경로 패턴에 걸리지 않으므로, 분석기가 계정 정보를 내놓지 않으면 `cache/app_start/` 아래를 직접 봅니다. 같은 추출본의 `shared_prefs/` 에는 `account_prefs{계정UUID}.xml`, `organization_prefs__{계정UUID}_{조직UUID}.xml`, `user_cookies_{계정UUID}.xml`, `device_id_prefs.xml`, `app_prefs_latest_seen_completed_messages.xml` 같은 이름의 파일이 있습니다[7]. 이 파일들의 내용을 설명한 공개 자료는 없어서 검체에서 열어 확인합니다.
 
 앱 데이터 폴더의 하위 폴더 구성은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서, 기기 암호화 때문에 무엇을 언제 읽을 수 있는지는 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)에서 다룹니다.
 
@@ -62,9 +62,9 @@ Play 의 데이터 보안 페이지는 앱이 모으는 데이터와 다른 곳�
 | `cachedMessages` | `conversation_uuid`, `message_json` | `created_at`, `sender`, `content[]`(`type`, `text`), `files[0].file_name` | [4] |
 | | `uuid`(메시지 ID) | `uuid`, `parent_message_uuid`, `index`, `updated_at`, `text`, `content[].start_timestamp`, `content[].stop_timestamp`, `content[].citations` | [5] |
 | `cachedProjects` | `project_json` | `created_at`, `updated_at`, `name`, `description`, `creator.full_name`, `is_starred`, `docs_count`, `files_count` | [4] |
-| `chatIdListEntries` | 설명 없음 | 설명 없음 | [5] |
+| `chatIdListEntries` | 공개 자료 없음 | 공개 자료 없음 | [5] |
 
-`sender` 값은 사용자면 `human`, Claude 면 `assistant` 입니다[4][5]. 메시지 본문은 `content` 배열에서 `type` 이 `text` 인 항목의 `text` 를 이어 붙이면 됩니다[4]. LEAF 문서는 `content` 에 웹 검색 같은 도구 호출이 `type` 이 `tool_use` 인 항목으로 들어가고 `name`·`input` 이 있다고 적었습니다[5]. 대화 안 순서는 `index` 나 `created_at` 으로 정합니다[5]. `is_temporary`·`is_starred` 는 0 이나 1 로 들어 있고, ALEAPP 은 그 밖의 값을 "Unknown" 으로 표시합니다[4]. ALEAPP 은 메시지를 `conversation_uuid` 로 `cachedConversations` 에 이어 대화 이름을 붙입니다[4].
+`sender` 값은 사용자면 `human`, Claude 면 `assistant` 입니다[4][5]. 메시지 본문은 `content` 배열에서 `type` 이 `text` 인 항목의 `text` 를 이어 붙이면 됩니다[4]. `content` 에는 웹 검색 같은 도구 호출이 `type` 이 `tool_use` 인 항목으로 들어가고, 이 항목에 `name`·`input` 이 있습니다[5]. 대화 안 순서는 `index` 나 `created_at` 으로 정합니다[5]. `is_temporary`·`is_starred` 는 0 이나 1 로 들어 있고, ALEAPP 은 그 밖의 값을 "Unknown" 으로 표시합니다[4]. 메시지의 `conversation_uuid` 는 `cachedConversations` 의 `uuid` 와 이어져, 메시지마다 대화 이름을 붙일 수 있습니다[4].
 
 아래는 `message_json` 한 행의 모양을 보여 주려고 만든 예시입니다. UUID·시각·본문은 모두 지어낸 값입니다.
 

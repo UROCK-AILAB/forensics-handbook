@@ -13,9 +13,9 @@ Windows 의 소비자용 Copilot 앱은 패키지 이름이 `Microsoft.Copilot` 
 
 Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목은 "Microsoft Copilot on Windows" 입니다[6]. 새 Windows 11 PC 에는 앱이 기본으로 깔려 있고, 작업 표시줄이나 시작 메뉴에 고정되어 있습니다[3]. 개인 Microsoft 계정으로 로그인하면 채팅 기록, 이미지 만들기, 긴 대화, 음성 대화를 쓸 수 있습니다[3]. 계정에 쌓인 활동 기록은 [계정 데이터 내보내기](export.md)로 받습니다.
 
-지원 문서는 copilot.com 의 기능 말고도 이 앱에만 있는 기능 일곱 가지를 적습니다[3]. 단축키는 아래 "구조" 절에서 다루고, 나머지 여섯 가지는 아래와 같습니다.
+이 앱에는 copilot.com 의 기능 말고도 이 앱에만 있는 기능이 일곱 가지 있습니다[3]. 단축키는 아래 "구조" 절에서 다루고, 나머지 여섯 가지는 아래와 같습니다.
 
-| 기능 | 문서가 적은 동작[3] | 조사에서 볼 점 |
+| 기능 | 동작[3] | 조사에서 볼 점 |
 |---|---|---|
 | 파일 검색 (File search) | 기기의 파일(동기화된 OneDrive 파일 포함)을 찾아 열고 내용을 묻는다. .docx, .xlsx, .pptx, .txt, .pdf, .json 을 읽는다 | 권한은 앱의 Account → Settings → File Search and File Read 에서 켜고 끈다 |
 | 스크린샷 (Take a screenshot) | 입력 창의 + 에서 화면 전체나 일부를 잡아 Copilot 에 올린다 | 화면 내용이 첨부로 넘어간다 |
@@ -40,17 +40,17 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 ### 배포 연혁
 
-관리되는 PC 에는 2024년 9월 선택적 미리보기 업데이트와 10월 월간 보안 업데이트(Windows 11), 11월 업데이트(Windows 10)로 들어왔고, 이 업데이트가 예전 "Copilot in Windows" 사이드바를 대신했습니다[1]. 이 업데이트를 설치하면 앱이 자동으로 켜지는데, 그 전에 설치를 막는 그룹 정책을 켜 두었다면 예외입니다[1]. 2025년 5월 선택적 미리보기 업데이트부터는 Windows 11 의 Copilot 키가 사이드바 대신 새 방식으로 동작합니다[1]. 2025년 11월부터 음성 대화를 새로 시작할 수 있다고 회사 계정 대상 문서가 적습니다[1].
+관리되는 PC 에는 2024년 9월 선택적 미리보기 업데이트와 10월 월간 보안 업데이트(Windows 11), 11월 업데이트(Windows 10)로 들어왔고, 이 업데이트가 예전 "Copilot in Windows" 사이드바를 대신했습니다[1]. 이 업데이트를 설치하면 앱이 자동으로 켜지는데, 그 전에 설치를 막는 그룹 정책을 켜 두었다면 예외입니다[1]. 2025년 5월 선택적 미리보기 업데이트부터는 Windows 11 의 Copilot 키가 사이드바 대신 새 방식으로 동작합니다[1]. 회사 계정에서는 2025년 11월부터 음성 대화를 새로 시작할 수 있습니다[1].
 
 ### 이름이 비슷한 회사용 앱
 
-회사 계정 PC 에서는 예전 "Microsoft 365 app" 이 "Microsoft Copilot app" 으로 이름을 바꿨고, 소비자용 "Microsoft Copilot" 앱과 이름이 비슷합니다[1]. 화면 이름으로 가르지 않고 패키지 이름으로 가릅니다. 정책 문서의 예시에서 회사용 앱의 AUMID 는 `Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe!Microsoft.MicrosoftOfficeHub` 이라서, 회사용은 `Microsoft.MicrosoftOfficeHub`, 소비자용은 `Microsoft.Copilot` 로 구분하면 됩니다[2].
+회사 계정 PC 에서는 예전 "Microsoft 365 app" 이 "Microsoft Copilot app" 으로 이름을 바꿨고, 소비자용 "Microsoft Copilot" 앱과 이름이 비슷합니다[1]. 화면 이름으로 가르지 않고 패키지 이름으로 가릅니다. 회사용 앱의 AUMID 는 `Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe!Microsoft.MicrosoftOfficeHub` 이라서, 회사용은 `Microsoft.MicrosoftOfficeHub`, 소비자용은 `Microsoft.Copilot` 로 구분하면 됩니다[2].
 
 회사·학교(Microsoft Entra) 계정은 소비자용 앱에 로그인할 수 없습니다. 로그인하려 하면 기본 브라우저에서 `https://m365.cloud.microsoft/chat` 이 열리므로 그 브라우저 방문 기록에 흔적이 남을 수 있습니다[1]. 회사용 Copilot Chat 은 [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)과 [Microsoft Purview로 본 Copilot 기록](../../network-enterprise/purview-copilot.md)에서 다룹니다.
 
 ## 구조
 
-대화 파일의 짜임은 공개된 분석 자료가 없어서, 이 절은 공식 문서가 밝힌 관리 정책 값만 다룹니다. `TurnOffWindowsCopilot` 과 `SetCopilotHardwareKey` 의 ADMX 는 `WindowsCopilot.admx` 이고, `RemoveMicrosoftCopilotApp` 은 CSP 에 ADMX 이름이 없습니다[2].
+대화 파일의 짜임은 공개된 분석 자료가 없어서, 이 절은 관리 정책 값만 다룹니다. `TurnOffWindowsCopilot` 과 `SetCopilotHardwareKey` 의 ADMX 는 `WindowsCopilot.admx` 이고, `RemoveMicrosoftCopilotApp` 은 CSP 에 ADMX 이름이 없습니다[2].
 
 | 정책 | 범위 | 레지스트리 | 값 | 적용 OS·에디션 |
 |---|---|---|---|---|
@@ -59,11 +59,11 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 | `RemoveMicrosoftCopilotApp` | Device, User | 문서에 없다 | 정수. 0 Removal Disabled, 1 Removal Enabled | Windows 11 24H2 [10.0.26100] 이후. 에디션은 아래 설명 |
 | AppLocker 패키지 앱 규칙 | 규칙에 따라 | AppLocker 정책 | Publisher `CN=MICROSOFT CORPORATION, O=MICROSOFT CORPORATION, L=REDMOND, S=WASHINGTON, C=US`, Package name `MICROSOFT.COPILOT`, Package version `* (and above)`[1] | 문서에 없다 |
 
-그룹 정책 경로는 `TurnOffWindowsCopilot` 과 `SetCopilotHardwareKey` 가 User Configuration → Administrative Templates → Windows Components → Windows Copilot 이고, `RemoveMicrosoftCopilotApp` 은 문서에 "WindowsAI > AT > WindowsComponents > WindowsAI" 로 적혀 있습니다[1][2]. CSP 경로는 `./User/Vendor/MSFT/Policy/Config/WindowsAI/` 뒤에 정책 이름을 붙이고, `RemoveMicrosoftCopilotApp` 에는 `./Device/...` 경로도 있습니다[2].
+그룹 정책 경로는 `TurnOffWindowsCopilot` 과 `SetCopilotHardwareKey` 가 User Configuration → Administrative Templates → Windows Components → Windows Copilot 이고, `RemoveMicrosoftCopilotApp` 은 "WindowsAI > AT > WindowsComponents > WindowsAI" 입니다[1][2]. CSP 경로는 `./User/Vendor/MSFT/Policy/Config/WindowsAI/` 뒤에 정책 이름을 붙이고, `RemoveMicrosoftCopilotApp` 에는 `./Device/...` 경로도 있습니다[2].
 
 정책마다 읽을 때 알아 둘 점이 있습니다.
 
-- **TurnOffWindowsCopilot.** CSP 는 이 정책이 폐지됐고(deprecated) 이후 릴리스에서 빠질 수 있다고 적고, 이 정책이 새 Copilot 경험에는 적용되지 않는다고 밝힙니다[2]. 같은 문서는 사이드바가 들어 있던 이미지에서 업그레이드할 때 Copilot 앱이 설치되지 않게 막는 데에도 이 정책이 적용된다고 적습니다[2]. 관리 문서는 이 정책이 곧 폐지될 예정이라며 대신 AppLocker 를 쓰라고 안내합니다[1].
+- **TurnOffWindowsCopilot.** 이 정책은 폐지 대상(deprecated)이라 이후 릴리스에서 빠질 수 있고, 새 Copilot 경험에는 적용되지 않습니다[2]. 다만 사이드바가 들어 있던 이미지에서 업그레이드할 때 Copilot 앱이 설치되지 않게 막는 데에는 적용됩니다[2]. 앱을 막으려면 이 정책 대신 AppLocker 를 씁니다[1].
 - **SetCopilotHardwareKey.** 정책을 두지 않으면 그 나라·지역에서 쓸 수 있을 때 Copilot 이 열리고, 정책이 있어도 사용자가 설정에서 키를 바꿀 수 있습니다[2]. 사용자는 설정 → 개인 설정 → 텍스트 입력의 "Customize Copilot key on keyboard"(`ms-settings:personalization-textinput-copilot-hardwarekey`)에서 Search, Custom, 지금 묶인 앱 가운데 고릅니다[1]. 앱 쪽에서는 Account → Settings → Copilot Keyboard Shortcuts 에서 키가 전체 앱을 열지 작은 빠른 보기를 열지 정합니다[3].
 - **RemoveMicrosoftCopilotApp.** 세 조건을 모두 채운 기기·사용자에게만 앱을 지웁니다. Microsoft 365 Copilot 과 Microsoft Copilot 이 둘 다 설치되어 있고, 사용자가 직접 설치한 앱이 아니고, 최근 28일 동안 앱을 실행하지 않았어야 합니다[2]. 지운 뒤에도 사용자가 다시 설치할 수 있습니다[2]. Intune 설정 카탈로그를 추적하는 저장소의 같은 정책 설명은 기간을 14일로 적고 있어서(2026-07-13 커밋)[7], CSP(2026-09-23 갱신)와 다릅니다. 에디션도 CSP 표에서는 Pro 가 빠져 있고 본문은 "Enterprise, Professional and Education" 이라고 적어 한 문서 안에서 다릅니다[2]. 레지스트리 위치가 문서에 없으므로 검체의 SOFTWARE 하이브와 NTUSER.DAT 에서 `RemoveMicrosoftCopilotApp` 이름으로 찾아봅니다.
 - **AppLocker 규칙.** 앱이 없으면 설치를 막고, 이미 깔려 있으면 실행을 막습니다[1].
@@ -86,9 +86,9 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 Copilot 키를 누른 흔적이 있어도 그 키가 어느 앱에 묶여 있었는지부터 봅니다. `SetCopilotHardwareKey` 가 있어도 사용자가 설정에서 바꿀 수 있으므로[2], 정책 값만으로 그 시점의 대상 앱을 단정하지 않습니다.
 
-음성 대화의 저장 방식은 회사 계정 대상 문서에만 나옵니다. 이 문서는 음성 대화의 글 기록을 일반 대화처럼 저장해 보존·eDiscovery·감사 정책을 적용하고, 사용자와 Copilot 의 음성은 저장하지 않는다고 적습니다[1]. 같은 문서는 "Hey Copilot" 이 기능을 켰고 PC 잠금이 풀려 있을 때만 동작한다고 적고, 관리자가 음성 기능만 따로 끄는 설정은 없다고 밝힙니다[1]. 소비자용 앱에 대한 같은 설명은 공식 문서에 없으므로 그대로 옮겨 쓰지 않습니다.
+회사 계정에서는 음성 대화의 글 기록을 일반 대화처럼 저장해 보존·eDiscovery·감사 정책을 적용하고, 사용자와 Copilot 의 음성은 저장하지 않습니다[1]. "Hey Copilot" 은 기능을 켰고 PC 잠금이 풀려 있을 때만 동작하고, 관리자가 음성 기능만 따로 끄는 설정은 없습니다[1]. 소비자용 앱의 음성 저장 방식은 공개 자료가 없으므로, 회사 계정의 설명을 그대로 옮겨 쓰지 않습니다.
 
-Purview 보존 정책의 "Other AI apps" 위치에는 "Microsoft Copilot (consumer version)" 이 들어 있고, 조직에 내용을 수집하는 수집 정책(collection policy)이 있어야 프롬프트와 응답이 남습니다[4]. eDiscovery 문서는 Other AI apps 의 item class 를 기기 쪽 상호작용 `IPM.SkypeTeams.Message.ConnectedAIApp.Connector.<AppName>` 과 브라우저 쪽 상호작용 `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 나눠 적습니다[5]. Windows 앱에서 한 대화가 어느 쪽으로 들어가는지는 문서에 없으므로, 조직 검체에서 두 item class 를 모두 검색합니다.
+Purview 보존 정책의 "Other AI apps" 위치에는 "Microsoft Copilot (consumer version)" 이 들어 있고, 조직에 내용을 수집하는 수집 정책(collection policy)이 있어야 프롬프트와 응답이 남습니다[4]. eDiscovery 에서 Other AI apps 의 item class 는 기기 쪽 상호작용 `IPM.SkypeTeams.Message.ConnectedAIApp.Connector.<AppName>` 과 브라우저 쪽 상호작용 `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 나뉩니다[5]. Windows 앱에서 한 대화가 어느 쪽으로 들어가는지는 공개 자료가 없으므로, 조직 검체에서 두 item class 를 모두 검색합니다.
 
 AppLocker 규칙은 실행을 막으므로[1], 규칙이 걸린 기간에 실행 흔적이 있으면 규칙이 실제로 적용된 시점과 그 사용자에게 적용됐는지를 다시 맞춰 봅니다.
 
@@ -106,7 +106,7 @@ M     i     c     r     o     s     o     f     t     .
 
 **공개 도구로 한 번.** 디스크 이미지에서는 사용자마다 NTUSER.DAT 를 레지스트리 뷰어(예: Registry Explorer)로 열어 위 정책 키와 마이크 권한 키를 보고, 각 키의 마지막 기록 시각을 적습니다. 파일 시스템에서는 `%LOCALAPPDATA%\Packages\` 아래 `Microsoft.Copilot_` 로 시작하는 폴더를 찾아 시각과 안의 폴더 구성을 기록합니다. KapeFiles 에는 이 앱 전용 수집 항목(target)이 없고, 이름이 비슷한 `Targets/Windows/WindowsCopilotRecall.tkape` 는 Recall 폴더 `C:\Users\*\AppData\Local\CoreAIPlatform.00\UKP\` 만 모읍니다(2026-09-18 커밋 기준)[8]. 그래서 앱 폴더는 수집 목록에 따로 넣습니다.
 
-살아 있는 PC 에서는 관리 문서에 나오는 명령으로 설치 여부를 읽습니다[1]. 이 명령은 문서의 제거 스크립트 첫 줄이지만, 여기서는 읽기에만 씁니다.
+살아 있는 PC 에서는 아래 명령으로 설치 여부를 읽습니다[1]. 이 명령은 제거 스크립트의 첫 줄이지만, 여기서는 읽기에만 씁니다.
 
 ```powershell
 # 설치된 Copilot 앱 패키지를 읽기만 한다(지우지 않는다)

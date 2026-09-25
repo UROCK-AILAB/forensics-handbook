@@ -8,7 +8,7 @@ nav_order: 650
 
 Codex CLI 는 OpenAI 가 만든 명령줄 코딩 에이전트입니다. 기기의 `CODEX_HOME`(기본 `~/.codex`) 아래에는 세션마다 대화 전체를 적는 rollout 파일, 입력 기록 `history.jsonl`, 상태 SQLite, 설정, 인증 파일이 남습니다. 조직이 OpenTelemetry 수집을 켰다면 도구 실행 결정과 결과가 PC 밖 수집 서버에도 남습니다.
 
-> 근거와 날짜: 경로·줄 구조·키 이름은 생산자 소스 `openai/codex` 커밋 406dc92(2026-07-30)[2]와 그 커밋의 설정 스키마[3]에서 확인했습니다. agentsview 의 형식 문서(2026-09-11 수정)[4]는 Codex CLI 0.147.0 으로 rollout 을 다시 확인했다고 적습니다(2026-08-16). OpenTelemetry 이벤트와 `[history]` 설정은 공식 설정 문서[1]를 따릅니다. Codex 는 자주 바뀌므로 검체의 버전은 rollout 의 `session_meta.payload.cli_version` 으로 확인합니다.
+> 기준: 경로·줄 구조·키 이름은 `openai/codex` 커밋 406dc92(2026-07-30)와 그 커밋의 설정 스키마 기준입니다[2][3]. rollout 구조는 Codex CLI 0.147.0 에서도 같습니다[4]. Codex 는 자주 바뀌므로 검체의 버전은 rollout 의 `session_meta.payload.cli_version` 으로 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -30,7 +30,7 @@ Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에
 | `sessions/YYYY/MM/DD/rollout-YYYY-MM-DDThh-mm-ss-세션ID.jsonl` | 세션 하나의 전체 기록. 날짜 폴더와 파일 이름의 시각은 현지 시각 | [2] |
 | `sessions/…`, `archived_sessions/` 의 `rollout-….jsonl.zst` | 수정 뒤 7일이 지난 rollout 을 zstd 로 압축한 파일 | [2] |
 | `archived_sessions/rollout-….jsonl` | 보관 처리한 세션. 날짜 폴더 없이 한 폴더에 둠 | [2][4] |
-| `session_index.jsonl` | 옛 판의 세션 목록·제목. agentsview 는 지금 판이 쓰지 않는다고 적음 | [4] |
+| `session_index.jsonl` | 옛 판의 세션 목록·제목. 지금 판은 쓰지 않음 | [4] |
 | `history.jsonl` | 전역 입력 기록 | [2][3] |
 | `state_5.sqlite` | 세션(thread) 목록·제목·작업 폴더·git 정보 | [2] |
 | `thread_history_1.sqlite` | 턴과 항목(item) 사본 | [2][4] |
@@ -42,11 +42,11 @@ Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에
 | `.credentials.json` | MCP 서버 OAuth 정보(키링을 쓸 수 없을 때) | [3] |
 | `.tmp/rollout-compression.lock` | 마지막 rollout 압축 작업의 프로세스 번호와 시작 시각 | [2] |
 
-SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는 폴더에 생깁니다. `sqlite_home` 의 기본값은 환경 변수 `CODEX_SQLITE_HOME` 이고, 그것도 없으면 `CODEX_HOME` 입니다[3]. 파일 이름의 숫자(`state_5`, `logs_2`)는 406dc92 기준이라 판이 바뀌면 달라질 수 있어서, 검체에서는 `*.sqlite` 로 모두 찾습니다. agentsview 문서(2026-09-11 수정)는 지금 판이 세션 제목을 `thread_history_*.sqlite` 에 두고, 2026-08-13 에 실제 `~/.codex` 에서 `session_index.jsonl` 이 없고 `thread_history_1.sqlite` 가 있는 것을 확인해 인덱스 파일이 없는 것이 정상이라고 적었습니다[4]. 406dc92 의 테이블 정의에서는 `title` 칸이 `state_5.sqlite` 의 `threads` 테이블에 있습니다[2].
+SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는 폴더에 생깁니다. `sqlite_home` 의 기본값은 환경 변수 `CODEX_SQLITE_HOME` 이고, 그것도 없으면 `CODEX_HOME` 입니다[3]. 파일 이름의 숫자(`state_5`, `logs_2`)는 406dc92 기준이라 판이 바뀌면 달라질 수 있어서, 검체에서는 `*.sqlite` 로 모두 찾습니다. agentsview 문서는 지금 판이 세션 제목을 `thread_history_*.sqlite` 에 두므로, `session_index.jsonl` 이 없고 `thread_history_1.sqlite` 만 있는 것이 정상이라고 봅니다[4]. 406dc92 의 테이블 정의에서는 `title` 칸이 `state_5.sqlite` 의 `threads` 테이블에 있습니다[2].
 
 로그인 정보는 `cli_auth_credentials_store` 로 저장 방식을 고릅니다. `file`(기본)은 `auth.json`, `keyring` 은 OS 키링, `auto` 는 키링을 먼저 쓰고 안 되면 파일, `ephemeral` 은 실행 중인 프로세스 메모리에만 둡니다[3]. MCP 서버의 OAuth 정보는 `mcp_oauth_credentials_store` 가 따로 정하고, 기본값 `auto` 는 키링을 먼저 쓰고 쓸 수 없으면 `.credentials.json` 에 둡니다[3]. 키링에 두었다면 Windows 는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에서 찾습니다. 토큰이 남는 곳 전반은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
-관찰한 PC 의 `%USERPROFILE%\.codex` 에는 파일이 11개 있었습니다. `hooks.json` 하나, `skills/<이름>/SKILL.md` 다섯 개, `skills/<이름>/<파일>.json` 다섯 개이고, `config.toml`·`auth.json`·`history.jsonl`·`sessions/` 는 없었습니다. Codex 를 실행하지 않아도 다른 도구가 이 폴더에 스킬·훅 파일을 둘 수 있으므로, 폴더가 있다는 사실만으로 Codex 를 썼다고 보지 않습니다.
+`%USERPROFILE%\.codex` 에 `hooks.json` 과 `skills/<이름>/SKILL.md`, `skills/<이름>/<파일>.json` 만 있고 `config.toml`·`auth.json`·`history.jsonl`·`sessions/` 는 없는 경우도 있습니다. Codex 를 실행하지 않아도 다른 도구가 이 폴더에 스킬·훅 파일을 둘 수 있으므로, 폴더가 있다는 사실만으로 Codex 를 썼다고 보지 않습니다.
 
 ## 구조
 
@@ -89,7 +89,7 @@ SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는
 
 한 줄의 모양은 `{"session_id":"…","ts":…,"text":"…"}` 입니다[2]. `ts` 는 Unix 초(UTC 기준)이고, `session_id` 는 rollout 의 세션 ID 와 같은 값이라 두 파일을 이어 볼 수 있습니다. 줄 하나를 한 번에 쓰고 덧붙이며, 쓰는 동안 파일에 잠금을 겁니다. Unix 에서는 권한 0600 으로 만듭니다[2].
 
-`[history]` 의 `persistence` 는 `save-all`(기본)과 `none` 두 값이고, `none` 이면 이 파일에 아무것도 쓰지 않습니다[2][3]. `max_bytes` 를 정하면 파일이 그 크기를 넘을 때 가장 오래된 줄부터 버려 `max_bytes` 의 80% 까지 줄입니다. 이때 파일 길이를 0 으로 잘랐다가 남길 줄을 처음부터 다시 씁니다[2]. 생산자 소스에서 이 파일에 줄을 덧붙이는 곳은 대화형 화면(TUI)의 입력 경로이고, `codex exec` 와 app-server 코드에는 그 호출이 없습니다[4].
+`[history]` 의 `persistence` 는 `save-all`(기본)과 `none` 두 값이고, `none` 이면 이 파일에 아무것도 쓰지 않습니다[2][3]. `max_bytes` 를 정하면 파일이 그 크기를 넘을 때 가장 오래된 줄부터 버려 `max_bytes` 의 80% 까지 줄입니다. 이때 파일 길이를 0 으로 잘랐다가 남길 줄을 처음부터 다시 씁니다[2]. 이 파일에 줄을 덧붙이는 곳은 대화형 화면(TUI)의 입력 경로이고, `codex exec` 와 app-server 코드에는 그 호출이 없습니다[4].
 
 ### 상태 SQLite
 
@@ -119,7 +119,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 
 `[otel]` 의 `log_user_prompt` 는 기본이 `false` 라서 프롬프트 내용은 가려진 채 나가고, 켜야만 내용이 남습니다[1]. `[mcp_servers]` 의 `env` 나 `http_headers` 에 비밀 값이 그대로 적혀 있을 수 있으니 보고서에는 키 이름만 옮깁니다. MCP 전반은 [MCP 서버와 도구 호출 기록](mcp.md)에서 다룹니다.
 
-설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. 관찰한 PC 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양이었고, 이벤트는 PermissionRequest, PostToolUse, PreToolUse, Stop, UserPromptSubmit 이었습니다. `skills/<이름>/<파일>.json` 의 키는 `files`, `files.SKILL.md`, `version` 이었고, 이 파일의 용도는 공개 자료에 설명이 없어 검체에서 만든 도구를 먼저 가립니다.
+설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. `CODEX_HOME` 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양입니다. `skills/<이름>/<파일>.json` 에는 `files`, `files.SKILL.md`, `version` 키가 있고, 이 파일의 용도는 공개 자료가 없어 검체에서 만든 도구를 먼저 가립니다.
 
 ### 구조화 로그 이벤트(OpenTelemetry)
 
@@ -152,7 +152,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 | `threads.created_at`·`updated_at` (뒤에 `_ms` 가 붙은 칸) | Unix 초 (`_ms` 는 밀리초) | 세션을 만들 때 / 갱신할 때 |
 | `.jsonl.zst` 의 수정 시각 | 압축 전 원본의 수정 시각을 옮겨 적음 | 압축할 때 |
 
-폴더와 파일 이름은 현지 시각이고 줄 안의 `timestamp` 는 UTC 라서, 한국 시간대(UTC+9) PC 에서 오전 9시 전에 연 세션은 폴더 날짜가 첫 줄의 UTC 날짜보다 하루 뒤입니다[2]. 폴더 날짜로 사건일을 정하지 말고 줄의 `timestamp` 로 정한 뒤, `turn_context.timezone` 과 운영체제 시간대 설정으로 현지 시각을 붙입니다. coding-agent-forensics 도 Codex CLI 기록에 시작한 곳의 시간대가 남는다고 적습니다[5]. `thread_items.created_at_ms` 와 `thread_turns.started_at` 같은 DB 시각은 rollout 에서 옮긴 값이므로 rollout 과 어긋나면 rollout 을 먼저 봅니다. 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+폴더와 파일 이름은 현지 시각이고 줄 안의 `timestamp` 는 UTC 라서, 한국 시간대(UTC+9) PC 에서 오전 9시 전에 연 세션은 폴더 날짜가 첫 줄의 UTC 날짜보다 하루 뒤입니다[2]. 폴더 날짜로 사건일을 정하지 말고 줄의 `timestamp` 로 정한 뒤, `turn_context.timezone` 과 운영체제 시간대 설정으로 현지 시각을 붙입니다. Codex CLI 기록에는 세션을 시작한 곳의 시간대가 남습니다[5]. `thread_items.created_at_ms` 와 `thread_turns.started_at` 같은 DB 시각은 rollout 에서 옮긴 값이므로 rollout 과 어긋나면 rollout 을 먼저 봅니다. 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -162,7 +162,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 - **입력 기록 끄기와 세션 기록은 별개.** `[history] persistence = "none"` 은 `history.jsonl` 만 막습니다[3]. rollout 은 그대로 생기므로 `history.jsonl` 이 없다는 사실로 기록 전체가 꺼졌다고 보지 않습니다.
 - **잘린 입력 기록.** `max_bytes` 로 앞부분이 버려지는 것은 설정에 따른 정상 동작이라서, 첫 줄이 늦다고 조작으로 보면 안 됩니다. `persistence` 를 사건 전후로 바꿨는지는 `config.toml` 의 수정 시각과 백업으로 봅니다. 보관·삭제 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 - **읽을 수 없는 항목.** 다중 에이전트 도구의 `encrypted_content` 에는 평문 대신 `gAAAAA` 로 시작하는 암호화된 값이 들어 있을 수 있습니다[4]. agentsview 는 이 값을 풀지 않고 표시에서 뺍니다[4]. 보고서에는 "내용 암호화" 라고 적습니다.
-- **같은 모양의 다른 도구.** TRAE CLI 2.0 도 Codex 와 같은 모양의 rollout 을 쓰고 `originator` 에 `codex-tui` 를 적는다고 agentsview 가 적었습니다[4]. 형식만 보고 Codex 라고 단정하지 말고 폴더 위치와 설치 흔적으로 도구를 가립니다.
+- **같은 모양의 다른 도구.** TRAE CLI 2.0 도 Codex 와 같은 모양의 rollout 을 쓰고 `originator` 에 `codex-tui` 를 적습니다[4]. 형식만 보고 Codex 라고 단정하지 말고 폴더 위치와 설치 흔적으로 도구를 가립니다.
 - **로그인 정보.** `auth.json` 과 `.credentials.json` 은 토큰을 담으므로, 파일이 있었다는 사실과 수정 시각만 보고서에 적고 값은 가립니다.
 
 ## 직접 분석해 보기
@@ -204,7 +204,7 @@ agentsview[4]는 Codex rollout 을 읽어 세션·도구 호출·사용량으로
 
 에이전트가 실행한 명령과 고친 파일은 [AI 에이전트가 무엇을 실행했나](../../04-scenarios/agents/agent-actions.md)의 흐름으로 셸 기록·git 이력과 맞추고, rollout 의 `git` 과 `threads.git_sha` 를 커밋 이력과 비교합니다. 인증 파일이나 비밀 값을 건드린 정황은 [에이전트가 자격 증명을 건드렸나](../../04-scenarios/agents/agent-credentials.md)에서 다룹니다.
 
-디스크에 기록이 없어도 Codex 가 실행 중일 때 뜬 메모리에서는 MCP 요청·응답을 되살릴 수 있습니다. Satter 등의 연구는 Ubuntu 24.04 가상 머신에서 Codex CLI 와 MCP 서버를 돌린 뒤 메모리 이미지에서 `tools/list`·`tools/call` JSON-RPC 메시지를 되살렸고, stdio 방식 MCP 서버와의 통신은 소켓을 거쳤다고 적었습니다[6]. 여러 클라이언트를 함께 돌린 경우에는 일부 요청의 흔적이 메모리 이미지에 없었고, 연구진은 메모리에 없다는 것이 실행하지 않았다는 증거는 아니라고 적었습니다[6]. 방법은 [메모리에서 AI 흔적 찾기](../../03-techniques/analysis/memory-analysis.md)와 [MCP 서버와 도구 호출 기록](mcp.md)에 있습니다.
+디스크에 기록이 없어도 Codex 가 실행 중일 때 뜬 메모리에서는 MCP 요청·응답을 되살릴 수 있습니다. Ubuntu 24.04 가상 머신에서 Codex CLI 와 MCP 서버를 돌린 시험에서는 메모리 이미지에서 `tools/list`·`tools/call` JSON-RPC 메시지가 되살아났고, stdio 방식 MCP 서버와의 통신은 소켓을 거쳤습니다[6]. 여러 클라이언트를 함께 돌린 경우에는 일부 요청의 흔적이 메모리 이미지에 없었으므로, 메모리에 없다는 것이 실행하지 않았다는 증거는 아닙니다[6]. 방법은 [메모리에서 AI 흔적 찾기](../../03-techniques/analysis/memory-analysis.md)와 [MCP 서버와 도구 호출 기록](mcp.md)에 있습니다.
 
 같은 PC 에 [Claude Code](claude-code/index.md)나 [Gemini CLI](gemini-cli.md)가 함께 있으면 훅·스킬 파일이 어느 도구 것인지 먼저 나눕니다. 서비스 접속은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)과, 웹 ChatGPT 쪽 흔적은 [ChatGPT](../chat-services/chatgpt/index.md)와 이어 봅니다.
 

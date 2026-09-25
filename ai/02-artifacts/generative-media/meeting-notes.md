@@ -12,25 +12,25 @@ AI 회의록 앱은 회의 녹음을 받아 글로 옮기고 정리하며, Otter
 
 회의록 앱은 회의를 녹음하거나 녹음 파일을 받아 받아쓰기(transcript)를 만들고 요약을 붙이는 서비스라서, 한 회의에 녹음, 받아쓴 기록, 요약, 회의 자료가 함께 쌓입니다. 개인 대화형 AI 와 달리 여러 사람의 목소리와 화면이 한 기록에 들어간다는 점이 조사에서 가장 먼저 눈여겨볼 부분입니다.
 
-Otter 개인정보 처리방침에 적힌 수집 항목은 오디오 녹음("Audio Recordings"), OtterPilot 의 자동 스크린샷, 사용자가 올린 글·이미지·영상입니다[1]. 자동 스크린샷은 온라인 회의에서만 찍고("The automatic screenshots will only take place in virtual meetings.") 회의의 받아쓴 기록에 붙습니다[1]. 외부 서비스를 연동하면 캘린더 정보와 연락처 정보도 받습니다[1]. OtterPilot 이 어느 회의 플랫폼에 들어가는지는 처리방침에 적혀 있지 않아서, 검체의 연동 설정에서 확인합니다.
+Otter 가 모으는 항목은 오디오 녹음("Audio Recordings"), OtterPilot 의 자동 스크린샷, 사용자가 올린 글·이미지·영상입니다[1]. 자동 스크린샷은 온라인 회의에서만 찍고("The automatic screenshots will only take place in virtual meetings.") 회의의 받아쓴 기록에 붙습니다[1]. 외부 서비스를 연동하면 캘린더 정보와 연락처 정보도 받습니다[1]. OtterPilot 이 어느 회의 플랫폼에 들어가는지는 검체의 연동 설정에서 확인합니다.
 
-Otter 는 비식별화한 오디오 녹음과 받아쓴 기록으로 자체 AI 를 학습시킨다고 밝히고, 이 기록에 개인정보가 들어 있을 수 있다고 적었습니다[1].
+Otter 는 비식별화한 오디오 녹음과 받아쓴 기록으로 자체 AI 를 학습시키고, 이 기록에는 개인정보가 들어 있을 수 있습니다[1].
 
 클로바노트(네이버)는 녹음 파일과 음성 기록을 서버에 두는지, 얼마나 보관하는지, 기기에 무엇이 남는지 공개된 분석 자료가 없어서 검체와 계정 화면으로 직접 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
-| 앱 | 원본이 있는 곳 | 보관 | 기기에 남는 것 | 확인 상태 |
+| 앱 | 원본이 있는 곳 | 보관 | 기기에 남는 것 | 근거 |
 |---|---|---|---|---|
-| Otter | 클라우드(Amazon Web Services, 미국 기반)에서 저장·처리 | "as long as necessary to fulfill the purposes set out in this Policy, or for as long as we are required to do so by law", 구체 기간과 휴지통 기간은 적혀 있지 않음 | 검체의 앱 데이터 폴더에서 확인 | 처리방침[1] |
+| Otter | 클라우드(Amazon Web Services, 미국 기반)에서 저장·처리 | "as long as necessary to fulfill the purposes set out in this Policy, or for as long as we are required to do so by law", 구체 기간과 휴지통 기간은 공개되지 않음 | 검체의 앱 데이터 폴더에서 확인 | 처리방침[1] |
 | 클로바노트 | 계정 화면에서 확인 | 계정 화면에서 확인 | 검체의 앱 데이터 폴더에서 확인 | 공개 분석 자료 없음 |
-| 로컬 받아쓰기 도구 | PC | 도구마다 다름 | 스크립트, 모델 파일, 결과 파일 | 스크립트 이름만 관찰(Windows 11, 2026-09) |
+| 로컬 받아쓰기 도구 | PC | 도구마다 다름 | 스크립트, 모델 파일, 결과 파일 | 검체에서 확인 |
 
-Otter 는 녹음과 받아쓴 기록을 클라우드에서 저장·처리한다고 밝혀서[1], 회의 원본은 서버에 있다고 보고 수집을 계획합니다. 내보낼 수 있는 형식은 계정의 내보내기 메뉴에서 확인하고, 계정에서 받는 방법은 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)을, 서비스 회사에 직접 요청하는 방법은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을 따릅니다. 데스크톱 앱이 웹뷰로 만든 앱이면 캐시는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 원리대로 찾고, Android·iOS 앱은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)와 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)를 따릅니다.
+Otter 는 녹음과 받아쓴 기록을 클라우드에서 저장·처리하므로[1], 회의 원본은 서버에 있다고 보고 수집을 계획합니다. 내보낼 수 있는 형식은 계정의 내보내기 메뉴에서 확인하고, 계정에서 받는 방법은 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)을, 서비스 회사에 직접 요청하는 방법은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을 따릅니다. 데스크톱 앱이 웹뷰로 만든 앱이면 캐시는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 원리대로 찾고, Android·iOS 앱은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)와 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)를 따릅니다.
 
 ### 로컬 받아쓰기 스크립트
 
-회의록 앱을 쓰지 않고 PC 에서 음성 인식 모델로 직접 받아쓰는 경우도 있고, 이런 스크립트는 AI 개발 도구의 플러그인 안에도 들어 있습니다. 관찰한 PC 의 Claude Code 플러그인 폴더에는 영상 받아쓰기용 플러그인의 스크립트 `transcribe.py` 와 `whisper.py` 가 있었고, 같은 스크립트가 내려받은 캐시 폴더와 마켓 폴더 두 곳에 있었습니다.
+회의록 앱을 쓰지 않고 PC 에서 음성 인식 모델로 직접 받아쓰는 경우도 있고, 이런 스크립트는 AI 개발 도구의 플러그인 안에도 들어 있습니다. 예를 들어 Claude Code 에 영상 받아쓰기용 플러그인을 설치하면 플러그인 폴더에 `transcribe.py` 와 `whisper.py` 같은 스크립트가 생기고, 같은 스크립트가 내려받은 캐시 폴더와 마켓 폴더 두 곳에 있을 수 있습니다.
 
 ```
 %USERPROFILE%\.claude\plugins\cache\(마켓 이름)\watch\(버전)\scripts\transcribe.py
@@ -42,7 +42,7 @@ Otter 는 녹음과 받아쓴 기록을 클라우드에서 저장·처리한다�
 
 ## 구조
 
-Otter 의 회의 한 건에 모일 수 있는 기록을 처리방침 기준으로 나누면 다음과 같습니다[1].
+Otter 의 회의 한 건에 모일 수 있는 기록을 나누면 다음과 같습니다[1].
 
 | 기록 | 뜻 | 조건 |
 |---|---|---|
@@ -52,7 +52,7 @@ Otter 의 회의 한 건에 모일 수 있는 기록을 처리방침 기준으�
 | 올린 콘텐츠 | 사용자가 올린 글·이미지·영상 | 올린 경우 |
 | 연동 정보 | 캘린더 정보, 연락처 정보 | 외부 서비스를 연동한 경우 |
 
-요약의 저장 형식과 화자 이름을 붙이는 방식은 처리방침에 없어서, 내보낸 파일에서 확인합니다.
+요약의 저장 형식과 화자 이름을 붙이는 방식은 공개 자료에 없어서, 내보낸 파일에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -68,7 +68,7 @@ Otter 의 회의 한 건에 모일 수 있는 기록을 처리방침 기준으�
 
 ## 함정과 한계
 
-Otter 처리방침의 보관 기간은 "목적에 필요한 동안, 또는 법이 요구하는 동안" 이라는 표현뿐이라 언제 지워지는지 기준이 없고, 필요한 기록은 일찍 보존을 요청합니다. 기록이 미국의 클라우드에 있어서 요청 절차가 국내 서비스와 다를 수 있고, 그 절차는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)에서 다룹니다. 보관 설정과 삭제의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
+Otter 의 보관 기간은 "목적에 필요한 동안, 또는 법이 요구하는 동안" 으로만 정해져 있어 언제 지워지는지 기준이 없고[1], 필요한 기록은 일찍 보존을 요청합니다. 기록이 미국의 클라우드에 있어서 요청 절차가 국내 서비스와 다를 수 있고, 그 절차는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)에서 다룹니다. 보관 설정과 삭제의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
 회의록 앱은 한 사람의 AI 사용이 아니라 회의 참석자 모두의 발언과 화면을 담아서, 조사 범위를 정할 때 조사 대상이 아닌 참석자의 정보가 함께 들어온다는 점을 미리 정리해 둡니다. 클로바노트는 공개된 분석 자료가 없어서, 다른 앱의 저장 방식을 그대로 옮겨 적용하지 않고 검체로 확인합니다.
 

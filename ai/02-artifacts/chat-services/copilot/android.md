@@ -13,7 +13,7 @@ Android 용 Microsoft Copilot 앱(패키지 `com.microsoft.copilot`)은 앱 데�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Microsoft 개인정보 처리방침은 소비자용 Copilot 을 웹과 Windows·Mac·iOS·Android 앱으로 제공한다고 적습니다 [8]. 대화 원본은 계정에 쌓이고, 계정 쪽 기록은 [계정 데이터 내보내기](export.md)로 받습니다.
+소비자용 Copilot 은 웹과 Windows·Mac·iOS·Android 앱으로 제공됩니다 [8]. 대화 원본은 계정에 쌓이고, 계정 쪽 기록은 [계정 데이터 내보내기](export.md)로 받습니다.
 
 기기에 대화가 남는지는 두 출처가 다르게 말합니다. Tyagi·Gong·Karabiyik(2025)은 Copilot 이 Android 와 iOS 모두에서 대화를 브라우저 데이터와 함께 평문으로 저장한다고 초록에 적었고, Android 에서는 사용자 프롬프트, 브라우저 데이터, 위치 데이터를 되살렸다고 적었습니다 [1]. 초록에는 시험한 앱 판이 나오지 않습니다. 반면 LEAF 문서(2026-04-20, Android 15)는 앱 폴더에 원격 측정 대기열만 있고 대화는 기기에 저장하지 않는다고 적었습니다 [4]. 같은 저장소의 README 는 Copilot 의 형식을 "SQLite 안의 암호화된 JSON" 이라고 적어서 자기 문서끼리도 어긋납니다 [5].
 
@@ -47,7 +47,7 @@ LEAF 저장소에 올라온 수집 파일(2026-02, 앱 30.0.440127001)에도 대
 
 ## 구조
 
-**원격 측정 DB.** `StorageRecord` 표의 칸은 `id`, `tenantToken`, `latency`, `persistence`, `timestamp`, `retryCount`, `reservedUntil`, `blob` 이고, 설정을 담는 `StorageSetting`(`name`, `value`) 표가 따로 있습니다 [6]. DB 파일 이름은 `tenantToken` 값의 앞부분과 같습니다. `blob` 은 이진 형식이지만 안의 문자열이 그대로 읽히고, 이벤트 이름(`eventName`), 앱 이름과 판, OS 판, 네트워크 종류, 시간대 오프셋, 요금제(`accountTier`), 로그인 방식(`accountType`), 위치 권한 상태(`userCoarseLocationPermissionStatus`, `userFineLocationPermissionStatus`), 학습·개인화 동의 값이 들어 있습니다 [6]. LEAF 문서도 이 표를 Microsoft 원격 측정 이벤트 대기열로 보았습니다 [4].
+**원격 측정 DB.** `StorageRecord` 표의 칸은 `id`, `tenantToken`, `latency`, `persistence`, `timestamp`, `retryCount`, `reservedUntil`, `blob` 이고, 설정을 담는 `StorageSetting`(`name`, `value`) 표가 따로 있습니다 [6]. DB 파일 이름은 `tenantToken` 값의 앞부분과 같습니다. `blob` 은 이진 형식이지만 안의 문자열이 그대로 읽히고, 이벤트 이름(`eventName`), 앱 이름과 판, OS 판, 네트워크 종류, 시간대 오프셋, 요금제(`accountTier`), 로그인 방식(`accountType`), 위치 권한 상태(`userCoarseLocationPermissionStatus`, `userFineLocationPermissionStatus`), 학습·개인화 동의 값이 들어 있습니다 [6]. 이 표는 Microsoft 원격 측정 이벤트를 보내기 전에 모아 두는 대기열입니다 [4].
 
 **계정 정보.** `user_info.preferences_pb` 에는 `active_account` 와 `re_auth_data` 키가 있고, 값은 JSON 문자열입니다. JSON 안에는 `type`(로그인 방식), `userId`, `email`, `firstName`, `userAgeGroup` 과 함께 `token`, `accessToken`, `expiry`, `expiryEpoch` 가 들어 있습니다 [6]. 토큰과 쿠키가 있는 곳과 보고서에서 가리는 기준은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다.
 

@@ -8,11 +8,11 @@ nav_order: 370
 
 에이닷은 SK텔레콤의 AI 에이전트 서비스로, 대화뿐만 아니라 통화 녹음 요약·일정 관리·먼저 보내는 알림까지 다룹니다. 녹음과 요약이 폰에 남는지 서버에 올라가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-> 기준 날짜: 2026-09. 서비스 연혁과 기능은 위키백과(2차 자료, 2026-09-25 열람)를 근거로 적었습니다. 로컬 경로·파일 이름·앱 패키지 이름은 공개된 분석 자료가 없으므로, 검체에서 확인하고 앱 버전과 추출 날짜를 함께 적습니다.
+> 기준 날짜: 2026-09. 서비스 연혁과 기능의 근거는 2차 자료인 위키백과[1]입니다. 로컬 경로·파일 이름·앱 패키지 이름은 공개된 분석 자료가 없으므로, 검체에서 확인하고 앱 버전과 추출 날짜를 함께 적습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-에이닷은 2022-05-16 에 Android 베타로 나와 2023-09-26 에 정식으로 문을 열었고, 지금은 Android·iOS·PC·웹으로 제공합니다[1]. 위키백과는 서비스 유형을 "AI 에이전트 서비스" 로 적고, 한국어 GPT 를 바탕으로 초거대 언어 모델 (LLM) 과 ChatGPT 를 함께 섞어 운영한다고 설명합니다[1].
+에이닷은 2022-05-16 에 Android 베타로 나와 2023-09-26 에 정식으로 문을 열었고, 지금은 Android·iOS·PC·웹으로 제공합니다[1]. 서비스 유형은 AI 에이전트 서비스이고, 한국어 GPT 를 바탕으로 초거대 언어 모델 (LLM) 과 ChatGPT 를 함께 섞어 운영합니다[1].
 
 기능은 대화형 AI 에 그치지 않습니다. 통화 녹음 내용을 분석해 상대방과 나눈 대화를 자동으로 정리하는 통화 녹음·요약, 날씨·뉴스·교통·환율 같은 실시간 정보, 일정 관리, 사용자에게 먼저 말을 거는 개인화 알림이 있습니다[1]. 그래서 조사에서는 사용자가 에이닷에 입력한 글뿐만 아니라 통화 상대와 나눈 말의 요약, 일정, 알림 문구까지 흔적이 될 수 있고, 이 가운데 무엇이 기기에 남는지를 먼저 가려야 합니다. 서버와 기기의 몫을 가르는 기준은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
 
@@ -33,7 +33,7 @@ nav_order: 370
 
 ## 구조
 
-로컬 저장 구조(파일 이름, 데이터베이스 표, 설정 키, 녹음 파일 형식)는 공개 자료가 없어 이 쪽에 적지 않습니다. 검체에서 앱 폴더를 찾았다면 파일 형식을 첫 바이트로 가린 뒤 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)나 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html) 같은 형식 페이지로 읽고, 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않습니다.
+로컬 저장 구조(파일 이름, 데이터베이스 표, 설정 키, 녹음 파일 형식)는 공개 자료가 없어 검체로 확인해야 합니다. 검체에서 앱 폴더를 찾았다면 파일 형식을 첫 바이트로 가린 뒤 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)나 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html) 같은 형식 페이지로 읽고, 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않습니다.
 
 ## 증거로서 의미
 

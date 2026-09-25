@@ -17,7 +17,7 @@ nav_order: 220
 
 회사·학교(Microsoft Entra) 계정은 소비자용 Copilot 에 로그인하지 못하고, 브라우저에서 `https://m365.cloud.microsoft/chat` 으로 넘어갑니다[5]. 이 주소는 기업 데이터 보호 약정이 붙는 별개 제품이라서 [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)과 [Microsoft Purview로 본 Copilot 기록](../../network-enterprise/purview-copilot.md)에서 따로 봅니다. Edge 사이드바처럼 브라우저 안에 들어간 Copilot 은 [브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md)에서 다룹니다.
 
-조직이 수집 정책을 두면 소비자용 Copilot 대화도 조직 쪽에 남을 수 있습니다. Microsoft Purview 보존 정책의 위치 목록에는 "Other AI apps" 아래 "Microsoft Copilot (consumer version)" 이 있고, 이 갈래의 프롬프트와 응답은 조직에 내용을 잡도록 설정한 수집 정책(collection policy)이 있을 때만 보존 대상이 됩니다[6]. 잡힌 메시지는 AI 앱을 쓴 사용자의 Exchange Online 사서함 안 숨은 폴더에 저장되고, 관리자는 이 폴더를 eDiscovery 로 검색합니다[6]. eDiscovery 문서는 "Other AI apps" 의 브라우저 대화를 item class `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 찾도록 안내합니다[7]. 이 사건에서 실제로 대화가 잡혔는지는 조직의 Purview 수집 정책과 검색 결과로 확인합니다.
+조직이 수집 정책을 두면 소비자용 Copilot 대화도 조직 쪽에 남을 수 있습니다. Microsoft Purview 보존 정책의 위치 목록에는 "Other AI apps" 아래 "Microsoft Copilot (consumer version)" 이 있고, 이 갈래의 프롬프트와 응답은 조직에 내용을 잡도록 설정한 수집 정책(collection policy)이 있을 때만 보존 대상이 됩니다[6]. 잡힌 메시지는 AI 앱을 쓴 사용자의 Exchange Online 사서함 안 숨은 폴더에 저장되고, 관리자는 이 폴더를 eDiscovery 로 검색합니다[6]. "Other AI apps" 의 브라우저 대화는 eDiscovery 에서 item class `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 찾습니다[7]. 이 사건에서 실제로 대화가 잡혔는지는 조직의 Purview 수집 정책과 검색 결과로 확인합니다.
 
 ## 위치
 
@@ -32,7 +32,7 @@ nav_order: 220
 
 ## 관련 설정
 
-설정에는 "Bring over your browsing data from Microsoft Edge" 켬/끔이 있고, 지금은 미국에 기반한 Microsoft 계정만 이 설정을 쓸 수 있습니다. 대화 하나는 채팅 목록에서 대화를 고르고 "…More" → "Delete" 로 지우고, 대화 전체는 개인정보 대시보드의 Copilot 활동 기록 관리에서 지우도록 안내합니다. 삭제와 보관의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)를 함께 봅니다.
+설정에는 "Bring over your browsing data from Microsoft Edge" 켬/끔이 있고, 지금은 미국에 기반한 Microsoft 계정만 이 설정을 쓸 수 있습니다. 대화 하나는 채팅 목록에서 대화를 고르고 "…More" → "Delete" 로 지우고, 대화 전체는 개인정보 대시보드의 Copilot 활동 기록 관리에서 지웁니다[4]. 삭제와 보관의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)를 함께 봅니다.
 
 ## 증거로서 의미
 

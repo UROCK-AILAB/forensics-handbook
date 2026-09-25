@@ -9,11 +9,11 @@ nav_order: 270
 
 소비자용 Microsoft Copilot 의 활동 기록은 계정 주인이 개인정보 대시보드에서 CSV 파일 하나로 내보낼 수 있고, 이 파일에는 대화 제목·시각·말한 쪽·본문이 한 줄씩 들어 있어서 기기 흔적으로 알기 어려운 프롬프트와 응답을 얻는 공식 통로가 됩니다.
 
-Microsoft 는 CSV 칸을 공식 문서로 밝히지 않았습니다. 아래 칸 구성은 2026년 7월 내보내기 파일 기준입니다[6][7].
+CSV 칸 구성은 공식 문서에 없고, 아래 내용은 2026년 7월 내보내기 파일 기준입니다[6][7].
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Microsoft 는 활동 기록을 "Copilot 과 나눈 대화의 프롬프트와 응답" 이라고 설명하고, 사용자가 이 기록을 개인정보 대시보드에서 보고 내보내고 지울 수 있다고 밝힙니다[2][3][4]. 내보내기 파일은 계정 주인이 대시보드에서 직접 요청해야 생기므로, 기기에서 이 파일이 나오면 누군가 그 계정으로 내보내기를 요청한 적이 있다는 뜻이 됩니다. 다만 파일은 다른 곳에서 받아 옮겨 왔을 수도 있습니다.
+활동 기록은 Copilot 과 나눈 대화의 프롬프트와 응답이고, 사용자는 이 기록을 개인정보 대시보드에서 보고 내보내고 지울 수 있습니다[2][3][4]. 내보내기 파일은 계정 주인이 대시보드에서 직접 요청해야 생기므로, 기기에서 이 파일이 나오면 누군가 그 계정으로 내보내기를 요청한 적이 있다는 뜻이 됩니다. 다만 파일은 다른 곳에서 받아 옮겨 왔을 수도 있습니다.
 
 대시보드는 활동 기록을 두 갈래로 나눠 관리하고, 두 갈래는 따로 내보내고 따로 지웁니다[3]. 한쪽만 받으면 다른 쪽 대화가 빠지니, 계정 주인이 어느 쪽을 썼는지 모를 때는 둘 다 받습니다.
 
@@ -26,19 +26,19 @@ Microsoft 는 활동 기록을 "Copilot 과 나눈 대화의 프롬프트와 응
 
 ## 위치와 버전별 차이
 
-공식 문서가 안내하는 대시보드 주소는 `account.microsoft.com/privacy` 이고, 들어가는 길은 다음과 같습니다[3].
+대시보드 주소는 `account.microsoft.com/privacy` 이고, 들어가는 길은 다음과 같습니다[3].
 
 ```
 개인정보 대시보드 → Privacy > Empower your productivity > Copilot > Your Copilot app activity history
 ```
 
-공개 도구가 적은 경로도 같은 곳을 가리킵니다. copilot-history-memory-mart 는 `https://account.microsoft.com/privacy/copilot` 에서 "Your Copilot activity history" 의 "Export all activity history" 를 고르라고 적었고(2025-09-20)[8], llm-aggregator.ts 도 "privacy dashboard → Copilot → Export all activity history" 라고 적었습니다(2026-07-27)[6]. 두 도구 모두 어느 갈래에서 받은 파일인지 밝히지 않았으니, 두 갈래를 따로 받아 첫 줄의 칸 이름을 나란히 비교합니다.
+내보내기는 `https://account.microsoft.com/privacy/copilot` 에서 "Your Copilot activity history" 의 "Export all activity history" 를 고르면 됩니다[6][8]. 이 메뉴가 어느 갈래의 파일을 주는지는 공개 자료에 없으니, 두 갈래를 따로 받아 첫 줄의 칸 이름을 나란히 비교합니다.
 
-받은 파일 이름은 두 도구가 `copilot-activity-history.csv` 로 적었습니다[7][8]. copilot-history-memory-mart 는 이름이 다를 수 있고 화면 문구와 형식도 바뀔 수 있다고 덧붙였습니다[8]. 그래서 기기에서 찾을 때는 이름보다 첫 줄의 칸 이름으로 찾습니다. 다른 서비스의 내보내기 형식과 견준 내용은 [계정 데이터 내보내기 형식](../../../01-foundations/storage-model/data-export-formats.md)에 있습니다.
+받은 파일 이름은 `copilot-activity-history.csv` 입니다[7][8]. 다만 이름이 다를 수 있고 화면 문구와 형식도 바뀔 수 있습니다[8]. 그래서 기기에서 찾을 때는 이름보다 첫 줄의 칸 이름으로 찾습니다. 다른 서비스의 내보내기 형식과 견준 내용은 [계정 데이터 내보내기 형식](../../../01-foundations/storage-model/data-export-formats.md)에 있습니다.
 
 ## 구조
 
-파일 하나에 모든 대화가 들어 있고, 한 줄이 말 한 번입니다. 첫 줄의 칸 이름은 `Conversation,Time,Author,Message` 이고[6][7], llm-aggregator.ts 는 이 첫 줄을 이 형식을 알아보는 표지로 씁니다[6].
+파일 하나에 모든 대화가 들어 있고, 한 줄이 말 한 번입니다. 첫 줄의 칸 이름은 `Conversation,Time,Author,Message` 이고, 이 첫 줄로 형식을 알아볼 수 있습니다[6][7].
 
 | 칸 | 담는 것 | 근거 |
 |---|---|---|
@@ -85,7 +85,7 @@ Conversation,Time,Author,Message
 
 ## 함정과 한계
 
-**줄 순서.** 시각으로 정렬하면 같은 시각 안에서 AI 응답이 프롬프트보다 앞에 남습니다. llm-aggregator.ts 는 그래서 시각으로 정렬하지 않고 한 대화의 줄 순서를 그대로 뒤집습니다(2026-07-27)[6]. ai-suite 의 분할 스킬은 시각으로 오름차순 정렬하고, 같은 시각이면 `Human` 줄을 앞에 둡니다(2026-08-07)[7]. 한 시각에 Human 줄과 AI 줄이 하나씩이면 두 방법의 결과가 같지만, 한 시각에 줄이 셋 이상이면 달라질 수 있으니 도구가 어느 방법을 쓰는지 확인합니다.
+**줄 순서.** 시각으로 정렬하면 같은 시각 안에서 AI 응답이 프롬프트보다 앞에 남습니다. llm-aggregator.ts 는 그래서 시각으로 정렬하지 않고 한 대화의 줄 순서를 그대로 뒤집습니다[6]. ai-suite 의 분할 스킬은 시각으로 오름차순 정렬하고, 같은 시각이면 `Human` 줄을 앞에 둡니다[7]. 한 시각에 Human 줄과 AI 줄이 하나씩이면 두 방법의 결과가 같지만, 한 시각에 줄이 셋 이상이면 달라질 수 있으니 도구가 어느 방법을 쓰는지 확인합니다.
 
 **들어가는지 공식 문서에 설명이 없는 것.** 아래 항목은 검체로 확인합니다.
 
@@ -95,7 +95,7 @@ Conversation,Time,Author,Message
 | 로그인하지 않고 쓴 대화 | 개인정보 안내는 개인 Microsoft 계정으로 로그인했을 때 적용[2] | 로그인하지 않고 대화한 뒤 같은 기기에서 로그인해 내보내서 그 대화가 나오는지 봄 |
 | 대화에 올린 파일·이미지 | 대시보드 안내는 이미지가 있으면 "How to view images in exports or downloads from the privacy dashboard" 문서를 보라고 함[3] | 이미지를 넣은 대화를 내보내서 CSV 안의 모양과 따로 오는 파일이 있는지 봄 |
 
-"Saved memories" 설정을 꺼도 이미 저장된 메모리는 저절로 지워지지 않는다고 안내합니다[2]. 그래서 설정이 꺼져 있다는 사실만으로 메모리가 비어 있다고 보지 않습니다. Personalization 아래에는 "Web search", "One shared experience", "Allow ads personalization" 켬/끔도 있고, 18세 미만에게는 맞춤 광고를 보여 주지 않는다고 밝힙니다[2].
+"Saved memories" 설정을 꺼도 이미 저장된 메모리는 저절로 지워지지 않습니다[2]. 그래서 설정이 꺼져 있다는 사실만으로 메모리가 비어 있다고 보지 않습니다. Personalization 아래에는 "Web search", "One shared experience", "Allow ads personalization" 켬/끔도 있고, 18세 미만에게는 맞춤 광고를 보여 주지 않습니다[2].
 
 **지우기와 내보내기의 순서.** 전체 삭제는 대시보드에서 "Delete all activity history" 를 누르고, 확인 창 "Are you sure you want to clear your Copilot activity history?" 에서 Clear 를 고르는 순서입니다[3]. 서버에서 삭제가 끝나는 시점과 활동 기록의 보관 기간은 공식 문서에 나오지 않으니 필요하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 묻습니다. 내보내기는 사본을 만들 뿐 서버 기록을 지우지 않으므로, 내려받은 뒤 대시보드에서 기록을 지웠다면 기기의 CSV 에만 대화가 남아 있을 수 있습니다. 반대로 지운 뒤에 내보냈다면 CSV 에는 지운 대화가 없습니다. 대화 하나를 앱이나 웹에서 지우는 방법은 [웹 브라우저](web.md)에, 보관과 삭제의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 

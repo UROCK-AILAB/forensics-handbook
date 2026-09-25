@@ -14,7 +14,7 @@ AnythingLLM 데스크톱 앱은 대화·워크스페이스·이벤트 기록을 
 
 AnythingLLM 은 대화를 워크스페이스(workspace) 단위로 묶고, 워크스페이스 안에서 다시 스레드(thread)로 나눕니다. 사용자가 질문을 보내면 앱은 질문과 답을 한 행으로 DB 에 적고, 답에는 쓴 모델·공급자·토큰 수와 참고한 문서 조각을 JSON 으로 함께 넣습니다[4]. 그래서 대화 본문뿐만 아니라 그 답이 어느 문서를 근거로 나왔는지까지 한 행에서 읽을 수 있습니다.
 
-문서를 올리면 앱은 파일을 처리해 본문 글을 뽑고, 그 결과를 JSON 파일로 저장합니다. 보고서는 이 JSON 에 올린 문서의 본문이 글 그대로 들어 있다고 적었고[1], 샘플 JSON 의 `pageContent` 칸에도 원래 문서의 글이 통째로 들어 있습니다[4]. 원래 파일을 지웠더라도 앱 저장소에 본문이 남는다는 뜻이라서, 기밀 자료를 넣었는지 묻는 조사([기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md))에서 먼저 볼 곳입니다. 프롬프트·첨부·생성물을 나눠 보는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)를 따릅니다.
+문서를 올리면 앱은 파일을 처리해 본문 글을 뽑고, 그 결과를 JSON 파일로 저장합니다. 이 JSON 의 `pageContent` 칸에는 올린 문서의 본문이 글 그대로 통째로 들어 있습니다[1][4]. 원래 파일을 지웠더라도 앱 저장소에 본문이 남는다는 뜻이라서, 기밀 자료를 넣었는지 묻는 조사([기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md))에서 먼저 볼 곳입니다. 프롬프트·첨부·생성물을 나눠 보는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)를 따릅니다.
 
 답을 낸 공급자와 모델은 답 JSON 의 `metrics` 에 남고, 샘플의 `metrics.provider` 칸은 `GenericOpenAiLLM` 이었습니다[4]. 공급자가 원격 서버라면 질문이 그 서버로도 나갔으므로, 어느 주소였는지는 설정에서 확인합니다. 로컬 런타임을 붙여 쓴 경우의 흔적은 [Ollama](ollama.md) 쪽에서 다룹니다. 서버 쪽에 남는 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
@@ -33,13 +33,13 @@ AnythingLLM 은 대화를 워크스페이스(workspace) 단위로 묶고, 워크
 
 `storage` 폴더 밖의 `GPUCache` 같은 폴더는 크롬 계열 앱 프로필에서 보이는 이름입니다. 크롬 계열 앱 프로필의 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에서 다루고, `%APPDATA%\anythingllm-desktop\` 에 그 밖에 무엇이 생기는지는 검체에서 폴더 목록을 떠서 봅니다.
 
-**판 번호.** 자료에 앱 판 번호가 없습니다. 샘플 DB 의 `_prisma_migrations` 표에는 적용한 스키마 변경이 40건 있고, 가장 늦은 `migration_name` 은 `20260406120000_init` 입니다[4]. 검체에서도 이 표의 목록과 설치 파일의 판 정보를 함께 적어 두면, 아래 표와 칸이 어느 무렵 스키마 기준인지 나중에 맞춰 볼 수 있습니다. GAPS.md 는 Jan·Msty 가 저장 형식을 새로 바꿨다고 적었는데[6], 자주 바뀌는 앱은 이런 일이 흔하니 표 이름을 먼저 `sqlite_master` 로 읽고 시작합니다.
+**판 번호.** 자료에 앱 판 번호가 없습니다. 샘플 DB 의 `_prisma_migrations` 표에는 적용한 스키마 변경이 40건 있고, 가장 늦은 `migration_name` 은 `20260406120000_init` 입니다[4]. 검체에서도 이 표의 목록과 설치 파일의 판 정보를 함께 적어 두면, 아래 표와 칸이 어느 무렵 스키마 기준인지 나중에 맞춰 볼 수 있습니다. Jan·Msty 처럼 저장 형식을 새로 바꾼 로컬 AI 앱도 있으니[6], 표 이름을 먼저 `sqlite_master` 로 읽고 시작합니다.
 
 ## 구조
 
 ### `anythingllm.db` 의 주요 표
 
-샘플 DB 는 페이지 크기 4096 바이트, 롤백 저널 방식이고 표가 32개(`sqlite_sequence` 포함)입니다[4]. 조사에 바로 쓰는 표는 아래와 같습니다. 칸 이름은 샘플 DB 의 `CREATE TABLE` 문에서 옮겼습니다.
+샘플 DB 는 페이지 크기 4096 바이트, 롤백 저널 방식이고 표가 32개(`sqlite_sequence` 포함)입니다[4]. 조사에 바로 쓰는 표는 아래와 같습니다.
 
 | 표 | 주요 칸 | 알려 주는 것 |
 |---|---|---|
@@ -57,7 +57,7 @@ AnythingLLM 은 대화를 워크스페이스(workspace) 단위로 묶고, 워크
 
 ### `workspace_chats.response` 의 JSON
 
-`response` 칸은 글이 아니라 JSON 입니다. 샘플에서 읽은 키는 아래와 같습니다[4].
+`response` 칸은 글이 아니라 JSON 이고, 아래 키가 들어 있습니다[4].
 
 - `text`: 모델이 낸 답 본문
 - `sources[]`: 답에 쓴 문서 조각. 조각마다 `id`, `title`, `url`, `chunkSource`, `published`, `location`, `isDirectUpload`, `text` 등이 들어 있습니다.
@@ -87,7 +87,7 @@ Impl 파서는 이 JSON 에서 `text` 만 꺼내 CSV 에 옮기므로[2], 어떤
 | `update_llm_provider`, `update_embedding_engine`, `update_vector_db` | 샘플에서는 빈 `{}` |
 | `workspace_vectors_reset` | `reason` |
 
-`update_llm_provider` 는 공급자를 바꿨다는 사실만 남기고 무엇으로 바꿨는지는 적지 않았습니다. 대화마다 실제로 쓴 공급자와 모델은 `response` 의 `metrics` 에서 읽습니다.
+`update_llm_provider` 는 공급자를 바꿨다는 사실만 남기고 무엇으로 바꿨는지는 적지 않습니다. 대화마다 실제로 쓴 공급자와 모델은 `response` 의 `metrics` 에서 읽습니다.
 
 ### 문서 JSON 과 첨부 JSON
 
@@ -136,12 +136,11 @@ DB 의 밀리초 값을 사람이 읽는 시각으로 바꾸는 법은 1000 으�
 
 - **기록이 지워진 흔적.** 샘플에서 `event_logs` 의 `workspace_file_uploaded` 는 10건인데 `workspace_parsed_files` 에 남은 행은 7건이고, `sqlite_sequence` 의 그 표 값은 10이었습니다[4]. 행이 빠진 자리의 파일 이름은 이벤트 `metadata` 의 `filename` 에 남아 있습니다. 한 표만 보면 사라진 첨부를 놓칩니다.
 - **삭제 뒤 복구.** 대화나 문서를 UI 에서 지운 뒤 무엇이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)와 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)를 봅니다.
-- **켜진 앱의 DB.** 보고서는 앱이 켜져 있을 때 잠금을 피하려고 DB 를 `-wal`, `-shm` 과 함께 복사한 뒤 연다고 적었습니다[1][2]. 샘플 DB 는 롤백 저널 방식이라 `-wal` 이 없을 수 있지만, 있으면 반드시 함께 떠야 마지막 대화가 빠지지 않습니다.
+- **켜진 앱의 DB.** 앱이 켜져 있으면 잠금을 피하려고 DB 를 `-wal`, `-shm` 과 함께 복사한 뒤 엽니다[1][2]. 샘플 DB 는 롤백 저널 방식이라 `-wal` 이 없을 수 있지만, 있으면 반드시 함께 떠야 마지막 대화가 빠지지 않습니다.
 - **파서가 읽지 않는 것.** Impl 파서는 `workspace_chats`, `workspaces`, `event_logs` 세 표와 `documents` 아래 JSON 만 읽습니다[2]. `workspace_threads`(스레드 이름), `workspace_parsed_files`, `direct-uploads` 아래 JSON, 답 JSON 의 `metrics`·`sources` 는 결과 CSV 에 들어가지 않습니다. `documents` 폴더가 없으면 `storage` 전체에서 `pageContent` 나 `chunkSource` 가 든 JSON 을 모읍니다.
 - **시간대 가정.** 같은 저장소의 `correlation.py` 는 시각 칸 전체가 밀리초로 읽히지 않고 시간대 표시도 없으면 `Asia/Kolkata` 시각으로 보고 UTC 로 바꿉니다[4]. 샘플의 `published` 는 UTC+1 이었으므로 이 가정을 그대로 쓰면 시각이 어긋납니다.
 - **수집 범위.** KAPE 타깃은 `C:\Users\%user%\AppData\Roaming\anythingllm-desktop\storage\` 만 재귀로 모읍니다[3]. 같은 프로필 폴더의 캐시 폴더나 다른 드라이브에 둔 저장소는 모으지 않습니다.
 - **KAPE 모듈.** 모듈은 `main.py --app anythingllm` 을 부르는데[3], 저장소 트리에는 이 `main.py` 도, 보고서가 적은 `src/reporter/anythingllm/` 도 없습니다[1]. 실제로 돌릴 수 있는 것은 독립 파서 `final_anythingllm_parser.py` 입니다.
-- **판 차이.** 근거가 판 번호 없는 한 번의 관찰이라서, 다른 판에서는 표·칸·폴더가 다를 수 있습니다.
 
 ## 직접 분석해 보기
 

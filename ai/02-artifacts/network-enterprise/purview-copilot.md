@@ -10,7 +10,7 @@ nav_order: 800
 
 Microsoft Purview 에는 Copilot 과 AI 앱 사용이 세 갈래로 남습니다. 감사 기록은 누가 어느 앱에서 무엇을 근거로 AI 를 썼는지를, 보존 정책으로 사용자 메일함에 모인 사본은 프롬프트와 응답 본문을, DSPM for AI 활동 탐색기는 민감 정보가 오갔는지를 보여 주고, 셋 다 Microsoft 365 테넌트 쪽에만 있습니다.
 
-확인 날짜는 2026-09입니다. 근거는 Microsoft Learn 문서 일곱 편이고, 각 문서의 작성일(ms.date)과 갱신일은 참고 문헌에 적었습니다. PC 에 남는 Copilot 앱 흔적은 [Microsoft Copilot](../chat-services/copilot/index.md), 업무 앱에서 쓴 Copilot 의 기록 성격과 감사 레코드 한 건을 읽는 예시는 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)에서 다룹니다. 이 페이지는 Purview 쪽 기록의 칸, 보관 기간, 삭제 흐름을 다룹니다.
+확인 날짜는 2026-09입니다. PC 에 남는 Copilot 앱 흔적은 [Microsoft Copilot](../chat-services/copilot/index.md), 업무 앱에서 쓴 Copilot 의 기록 성격과 감사 레코드 한 건을 읽는 예시는 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)에서 다룹니다. 이 페이지는 Purview 쪽 기록의 칸, 보관 기간, 삭제 흐름을 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -20,7 +20,7 @@ Microsoft Purview 에는 Copilot 과 AI 앱 사용이 세 갈래로 남습니다
 
 **보존 (Retention).** 보존 정책을 걸면 프롬프트와 응답에서 복사한 데이터가 AI 앱을 쓴 사용자의 Exchange 메일함 안 숨은 폴더에 저장됩니다[2]. 이 폴더는 사용자나 관리자가 직접 여는 곳이 아니고, 준수 관리자가 eDiscovery 로 검색하는 곳입니다. 입력한 텍스트, 미리 채운 프롬프트를 고른 기록, 응답의 텍스트·링크·참조가 들어가고, Teams 채팅·채널의 Copilot 은 스레드 요약도 들어갑니다. 응답을 만드는 중이라는 안내 메시지는 저장하지 않습니다. Microsoft 365 Copilot 과 Copilot Studio 가 아닌 앱은 수집 정책 (collection policy) 에서 내용 수집을 켜 두어야 본문이 들어갑니다[2].
 
-**DSPM for AI 활동 탐색기.** 조직이 권장 정책을 켜면 활동 탐색기에 AI interaction, Sensitive info types, AI website visit 같은 이벤트가 보입니다[3]. 이벤트마다 활동 종류와 사용자, 날짜와 시각, AI 앱 분류와 앱, 접근한 앱, 민감 정보 유형, 참조한 파일과 참조한 민감 파일을 보여 줍니다. 프롬프트와 응답은 권한이 있을 때 AI interaction 이벤트 안에서 보이고, Web queries 필터로 웹 검색을 쓴 상호작용을 고르면 그 검색어가 상세 창에 나옵니다. Copilot in Fabric 과 Security Copilot 은 권장 정책과 비슷한 정책이 없으면 감사 이벤트만 남고 프롬프트·응답은 모으지 않습니다. 이 문서는 "classic" 판이고, 문서 첫머리에 새 Data Security Posture Management 로 바뀌었다고 적혀 있습니다[3].
+**DSPM for AI 활동 탐색기.** 조직이 권장 정책을 켜면 활동 탐색기에 AI interaction, Sensitive info types, AI website visit 같은 이벤트가 보입니다[3]. 이벤트마다 활동 종류와 사용자, 날짜와 시각, AI 앱 분류와 앱, 접근한 앱, 민감 정보 유형, 참조한 파일과 참조한 민감 파일을 보여 줍니다. 프롬프트와 응답은 권한이 있을 때 AI interaction 이벤트 안에서 보이고, Web queries 필터로 웹 검색을 쓴 상호작용을 고르면 그 검색어가 상세 창에 나옵니다. Copilot in Fabric 과 Security Copilot 은 권장 정책과 비슷한 정책이 없으면 감사 이벤트만 남고 프롬프트·응답은 모으지 않습니다. 이 기능은 새 Data Security Posture Management 로 바뀌었고, 위 설명은 바뀌기 전 "classic" 판 기준입니다[3].
 
 ## 위치와 버전별 차이
 
@@ -33,7 +33,7 @@ Microsoft Purview 에는 Copilot 과 AI 앱 사용이 세 갈래로 남습니다
 | Copilot 메모리 | 사용자 메일함, item class `IPM.Contact` | eDiscovery(연락처로 걸림) | 있음 |
 | 활동 탐색기 이벤트 | Purview DSPM for AI | Purview 포털 | 권한이 있으면 보임 |
 
-문서는 보존 사본이 들어가는 곳을 이름 없이 "숨은 폴더" 라고만 적습니다[2]. 메일함 안에서는 item class 로 앱을 가릅니다[4]. 앱 종류별 앞부분은 아래와 같고, Word·Excel·Teams 같은 앱마다의 item class 는 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)에서 다룹니다.
+보존 사본이 들어가는 숨은 폴더의 이름은 공개되어 있지 않습니다[2]. 메일함 안에서는 item class 로 앱을 가릅니다[4]. 앱 종류별 앞부분은 아래와 같고, Word·Excel·Teams 같은 앱마다의 item class 는 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)에서 다룹니다.
 
 | 대상 | item class |
 |---|---|
@@ -63,20 +63,20 @@ ChatGPT Enterprise 를 Purview 에 연결하는 경로는 [ChatGPT 기업용 감
 
 ### 감사 기록을 가르는 칸
 
-`RecordType` 은 포털 화면에서는 이름으로, 레코드 JSON 에서는 숫자로 나옵니다. Copilot 스키마 문서의 예시 레코드에도 `"RecordType":261` 처럼 숫자가 들어 있습니다[5]. 숫자는 Management Activity API 스키마의 AuditLogRecordType 표에서 가져왔습니다[6].
+`RecordType` 은 포털 화면에서는 이름으로, 레코드 JSON 에서는 `"RecordType":261` 처럼 숫자로 나옵니다[5]. 이름과 숫자의 짝은 Management Activity API 의 AuditLogRecordType 값과 같습니다[6].
 
 | `RecordType` 이름 | 숫자 | `Workload` | 대상 |
 |---|---|---|---|
 | `CopilotInteraction` | 261 | `Copilot` | Microsoft 가 만든 Copilot(Microsoft 365 Copilot, Cowork, Security Copilot 등) |
 | `AIAppInteraction` | 284 | `AIApp` | 조직에 배포하지 않은 제3자 AI 앱 |
 | `ConnectedAIAppInteraction` | 328 | `ConnectedAIApp` | 조직 테넌트에 배포·등록한 AI 앱 |
-| `TeamCopilotInteraction` | 334 | 문서 예시에 없음 | Teams 회의 도우미. `Operation` 은 `AINotesUpdate`, `LiveNotesUpdate`, `TeamCopilotMsgInteraction` |
+| `TeamCopilotInteraction` | 334 | 공개 자료 없음 | Teams 회의 도우미. `Operation` 은 `AINotesUpdate`, `LiveNotesUpdate`, `TeamCopilotMsgInteraction` |
 
-감사 문서는 `ConnectedAIAppInteraction` 을 "조직에 등록한 사용자 정의 Copilot 이나 제3자 AI 앱" 으로 정의하지만, 같은 문서의 예시에서 Copilot Studio 로 만든 앱은 `RecordType` `CopilotInteraction`, `AppIdentity` `Copilot.Studio.<appId>` 로 남습니다[1]. 조직이 만든 앱이라고 `ConnectedAIAppInteraction` 만 찾으면 Copilot Studio 앱을 빠뜨리므로, 두 값을 함께 검색합니다. 회의 도우미 레코드의 `AppIdentity` 는 `Copilot.TeamCopilot.AINotes`, `Copilot.TeamCopilot.LiveNotes`, `Copilot.TeamCopilot.MeetingModerator`, `Copilot.TeamCopilot.Message` 입니다[1]. 관리자 작업은 `UpdateTenantSettings`, `CreatePlugin`, `DeletePlugin`, `EnablePromptBook` 같은 `Operation` 으로 따로 남습니다.
+`ConnectedAIAppInteraction` 은 "조직에 등록한 사용자 정의 Copilot 이나 제3자 AI 앱" 의 기록이지만, Copilot Studio 로 만든 앱은 `RecordType` `CopilotInteraction`, `AppIdentity` `Copilot.Studio.<appId>` 로 남습니다[1]. 조직이 만든 앱이라고 `ConnectedAIAppInteraction` 만 찾으면 Copilot Studio 앱을 빠뜨리므로, 두 값을 함께 검색합니다. 회의 도우미 레코드의 `AppIdentity` 는 `Copilot.TeamCopilot.AINotes`, `Copilot.TeamCopilot.LiveNotes`, `Copilot.TeamCopilot.MeetingModerator`, `Copilot.TeamCopilot.Message` 입니다[1]. 관리자 작업은 `UpdateTenantSettings`, `CreatePlugin`, `DeletePlugin`, `EnablePromptBook` 같은 `Operation` 으로 따로 남습니다.
 
 ### 레코드의 짜임
 
-Copilot 스키마 문서의 예시 레코드는 두 층입니다[5]. 모든 감사 레코드에 공통인 칸이 바깥에 있고, Copilot 에만 있는 칸은 `CopilotEventData` 객체 안에 들어 있습니다. jq 로 거를 때 이 층을 빼먹으면 아무것도 걸리지 않습니다.
+Copilot 감사 레코드는 두 층입니다[5]. 모든 감사 레코드에 공통인 칸이 바깥에 있고, Copilot 에만 있는 칸은 `CopilotEventData` 객체 안에 들어 있습니다. jq 로 거를 때 이 층을 빼먹으면 아무것도 걸리지 않습니다.
 
 | 층 | 칸 |
 |---|---|
@@ -84,7 +84,7 @@ Copilot 스키마 문서의 예시 레코드는 두 층입니다[5]. 모든 감�
 | 바깥(Copilot 전용) | `ClientRegion`, `CopilotLogVersion` |
 | `CopilotEventData` 안 | `AppHost`, `Contexts`, `ThreadId`, `MessageIds`, `Messages`, `AccessedResources`, `ModelTransparencyDetails`, `AISystemPlugin` |
 
-감사 문서에는 이 밖에 `AppIdentity`, `AgentId`·`AgentName`·`AgentVersion`, `CapacityId`, `DLPEvaluationDeferred`·`DLPEvaluationDeferredReason` 이 나오지만[1], 스키마 문서에는 이 칸들이 어느 층에 들어가는지가 없습니다[5]. 내보낸 레코드에서 칸의 실제 위치를 먼저 확인합니다(아래 "직접 분석해 보기").
+이 밖에 `AppIdentity`, `AgentId`·`AgentName`·`AgentVersion`, `CapacityId`, `DLPEvaluationDeferred`·`DLPEvaluationDeferredReason` 칸도 있지만[1], 이 칸들이 어느 층에 들어가는지는 공개되어 있지 않습니다[5]. 내보낸 레코드에서 칸의 실제 위치를 먼저 확인합니다(아래 "직접 분석해 보기").
 
 JSON 키는 대소문자를 가리고, 문서마다 표기가 다릅니다. 감사 문서의 설명은 `ID`·`IsPrompt` 로 쓰지만, 스키마 정의와 두 문서의 예시 레코드는 `Id`·`isPrompt` 이고 `AccessedResources` 의 예시 키는 `listItemUniqueId` 입니다[1][5]. 필터를 쓰기 전에 내보낸 파일에서 키 표기를 확인합니다.
 
@@ -107,9 +107,9 @@ JSON 키는 대소문자를 가리고, 문서마다 표기가 다릅니다. 감�
 | `DLPEvaluationDeferredReason` | 평가를 미룬 이유. `DLPEvaluationDeferred` 가 0 이 아닐 때만 채워집니다. 예: Timeout, Authentication Error, Service Unavailable |
 | `CapacityId` | Microsoft Fabric 용량 ID |
 
-칸 설명은 감사 문서[1]와 스키마 문서[5]를 따랐습니다. `ClientIP` 는 공통 스키마 설명대로 서비스에 따라 사용자 기기가 아니라 대신 호출한 앱의 IP 가 들어갈 수 있습니다[6].
+`ClientIP` 에는 서비스에 따라 사용자 기기가 아니라 대신 호출한 앱의 IP 가 들어갈 수 있습니다[6].
 
-`ModelTransparencyDetails` 는 문서와 시기에 따라 다릅니다. 감사 문서(2026-08-26)는 Microsoft 365 Copilot 에서는 `ModelName`·`ModelVersion` 이 없다고 적고, 사용자가 모델을 직접 고르면 제공사와 모델 이름이 남지만 Auto 를 고르면 빠질 수 있으며 Cowork 는 제공사 정보를 보여 주지 않는다고 적습니다[1]. 스키마 문서의 2023-12 예시 레코드에는 `ModelName` 값이 들어 있습니다[5]. 레코드가 생긴 시기에 따라 칸이 다를 수 있으니, 비교할 때는 같은 시기의 레코드끼리 봅니다.
+`ModelTransparencyDetails` 는 시기에 따라 다릅니다. Microsoft 365 Copilot 에서는 `ModelName`·`ModelVersion` 이 없고, 사용자가 모델을 직접 고르면 제공사와 모델 이름이 남지만 Auto 를 고르면 빠질 수 있으며 Cowork 는 제공사 정보를 보여 주지 않습니다[1]. 반면 2023-12 예시 레코드에는 `ModelName` 값이 들어 있습니다[5]. 레코드가 생긴 시기에 따라 칸이 다를 수 있으니, 비교할 때는 같은 시기의 레코드끼리 봅니다.
 
 ## 증거로서 의미
 
@@ -121,7 +121,7 @@ JSON 키는 대소문자를 가리고, 문서마다 표기가 다릅니다. 감�
 
 ## 시각 해석
 
-**감사 기록의 시각.** 공통 스키마의 `CreationTime` 은 레코드가 생긴 시각이고 UTC 입니다[6]. 스키마 문서의 예시 값은 `"CreationTime":"2023-12-13T17:12:36"` 처럼 시간대 표시(Z)가 붙지 않아서, 표시가 없다고 현지 시각으로 읽으면 안 됩니다[5]. 같은 예시에서 포털 결과 쪽 `CreationDate` 는 `12/13/2023 17:12` 꼴이고 초가 없습니다. 내보낸 파일에서 두 값을 나란히 놓고 시각이 같은지 한 번 확인한 뒤 타임라인에 올립니다.
+**감사 기록의 시각.** 공통 스키마의 `CreationTime` 은 레코드가 생긴 시각이고 UTC 입니다[6]. 값은 `"CreationTime":"2023-12-13T17:12:36"` 처럼 시간대 표시(Z)가 붙지 않지만, 표시가 없다고 현지 시각으로 읽으면 안 됩니다[5]. 포털 결과 쪽 `CreationDate` 는 `12/13/2023 17:12` 꼴이고 초가 없습니다. 내보낸 파일에서 두 값을 나란히 놓고 시각이 같은지 한 번 확인한 뒤 타임라인에 올립니다.
 
 **감사 기록의 보관 기간.** 감사 (Standard) 의 기본 보관은 180일이고, 2023-10-17 이전에 생긴 레코드는 90일입니다[7]. Audit (Premium) 의 기본 1년 정책은 `Workload` 가 `AzureActiveDirectory`, `Exchange`, `OneDrive`, `SharePoint` 인 레코드에만 걸리므로, `Workload` 가 `Copilot` 인 레코드는 E5 조직이라도 사용자 지정 정책이 없으면 180일 보관입니다. 180일을 넘겨 1년까지 두려면 레코드를 만든 사용자에게 E5 계열 라이선스가 있어야 하고, 10년은 추가 라이선스가 있어야 합니다. 보관 기간은 레코드가 감사 파이프라인에 들어올 때 정해지고, 나중에 라이선스나 정책을 바꿔도 이미 들어온 레코드에는 적용되지 않습니다[7]. 사건 날짜가 오래되었다면 그 시기에 어떤 감사 보존 정책이 있었는지부터 확인합니다.
 
@@ -133,9 +133,9 @@ JSON 키는 대소문자를 가리고, 문서마다 표기가 다릅니다. 감�
 | 보존만 | 기간이 끝나고 보통 1~7일 안에 `SubstrateHolds` 로 옮겨짐. 영구 보존이면 그대로 남고, 끝나는 날이 있으면 그 뒤 영구 삭제 | 원래 자리에 그대로 남음 |
 | 삭제만 | `SubstrateHolds` 로 옮겨져 최소 1일 뒤 다음 타이머 작업 때 영구 삭제 | 기간이 끝나고 보통 1~7일 안에 복사, 최소 1일 뒤 영구 삭제 |
 
-문서의 예시로 보면 "30일 보존 후 삭제" 정책에서 10일째 지운 프롬프트는 30일이 지난 뒤에야 영구 삭제되고, 그 전까지 eDiscovery 로 찾을 수 있습니다. "1일 뒤 삭제" 정책도 복사와 삭제를 거치느라 영구 삭제까지 16일 걸릴 수 있습니다[2]. 같은 위치의 다른 보존 정책, Litigation Hold, delay hold, eDiscovery hold 가 걸려 있으면 `SubstrateHolds` 에서의 영구 삭제가 멈춥니다.
+예를 들어 "30일 보존 후 삭제" 정책에서 10일째 지운 프롬프트는 30일이 지난 뒤에야 영구 삭제되고, 그 전까지 eDiscovery 로 찾을 수 있습니다. "1일 뒤 삭제" 정책도 복사와 삭제를 거치느라 영구 삭제까지 16일 걸릴 수 있습니다[2]. 같은 위치의 다른 보존 정책, Litigation Hold, delay hold, eDiscovery hold 가 걸려 있으면 `SubstrateHolds` 에서의 영구 삭제가 멈춥니다.
 
-앱 화면도 이 흐름과 어긋납니다. 채팅 창이나 앱을 닫으면 메시지는 숨겨질 뿐 남아 있고, Microsoft 365 Copilot 메시지가 실제로 지워지는 것은 사용자가 Copilot Chat 에서 대화를 지우거나 전체 기록 삭제를 요청한 경우입니다[2]. 반대로 보존 기간이 끝난 메시지도 삭제 신호가 앱까지 전달되는 사이 잠시 화면에 보일 수 있습니다. 문서는 앱에 보이는지 여부가 보존·영구 삭제 상태를 정확히 반영하지 않는다고 적습니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+앱 화면도 이 흐름과 어긋납니다. 채팅 창이나 앱을 닫으면 메시지는 숨겨질 뿐 남아 있고, Microsoft 365 Copilot 메시지가 실제로 지워지는 것은 사용자가 Copilot Chat 에서 대화를 지우거나 전체 기록 삭제를 요청한 경우입니다[2]. 반대로 보존 기간이 끝난 메시지도 삭제 신호가 앱까지 전달되는 사이 잠시 화면에 보일 수 있습니다. 앱에 보이는지 여부는 보존·영구 삭제 상태를 정확히 반영하지 않습니다[2]. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

@@ -6,17 +6,17 @@ nav_order: 940
 
 # AI로 피싱·사기 문구를 만들었나 (Phishing)
 
-확인 날짜는 2026-09이고, 기기에서 직접 본 내용은 Windows 11 한 대에 한정됩니다. AI 앱은 자주 바뀌어서 아래 경로와 키 이름은 이 날짜를 기준으로 읽어야 합니다. 검체를 볼 때는 앱 버전을 먼저 확인해 결과와 함께 적습니다.
+확인 날짜는 2026-09이고, 기기 경로는 Windows 11 기준입니다. AI 앱은 자주 바뀌어서 아래 경로와 키 이름은 이 날짜를 기준으로 읽어야 합니다. 검체를 볼 때는 앱 버전을 먼저 확인해 결과와 함께 적습니다.
 
 ## 조사 질문
 
 피싱 메일·사기 문자·가짜 안내문을 용의자가 AI 서비스로 만들었는지 묻는 조사입니다. 질문은 두 방향으로 나뉩니다. 용의자 쪽에서는 그 문구를 만든 AI 대화 기록이 기기나 계정에 남았는지를 보고, 피해 쪽에서는 받은 메일과 첨부에 AI 를 쓴 흔적이 보이는지를 봅니다.
 
-MITRE ATT&CK 는 공격자가 생성형 AI 도구를 손에 넣어 쓰는 행위를 T1588.007 인공지능 (Artificial Intelligence)으로 분류합니다. 상위 기법은 T1588 능력 확보 (Obtain Capabilities)이고 전술은 자원 개발 (Resource Development, TA0042), 플랫폼은 PRE 입니다. 설명에는 여러 언어로 피싱 문구를 자동으로 만들고, 악성 스크립트를 난독화하고, 사기·사칭용 합성 미디어를 만드는 쓰임이 적혀 있습니다. 이 항목은 2024-03-11 에 생겼고 2026-05-12 에 고친 1.1 판이 최신입니다.
+MITRE ATT&CK 는 공격자가 생성형 AI 도구를 손에 넣어 쓰는 행위를 T1588.007 인공지능 (Artificial Intelligence)으로 분류합니다. 상위 기법은 T1588 능력 확보 (Obtain Capabilities)이고 전술은 자원 개발 (Resource Development, TA0042), 플랫폼은 PRE 입니다[4]. 쓰임으로는 여러 언어로 피싱 문구를 자동으로 만들기, 악성 스크립트 난독화, 사기·사칭용 합성 미디어 만들기가 들어 있습니다[4]. 이 항목은 2024-03-11 에 생겼고 2026-05-12 에 고친 1.1 판이 최신입니다.
 
-ATT&CK 는 이 행위가 조직의 방어 범위 밖에서 일어나서 예방 통제로 쉽게 막을 수 없고, 대상 조직이 볼 수 없는 곳에서 일어나 탐지도 어렵다고 적었습니다. 그래서 탐지는 생성형 AI 를 쓴 결과로 나타나는 피싱 (Phishing)과 정보 수집용 피싱 (Phishing for Information)에 맞추라고 권합니다. 이 핸드북은 이를 바탕으로 증거를 세 갈래로 나눕니다. 용의자 기기의 AI 앱·도구 기록, 수사 요청으로만 받을 수 있는 서비스 회사 서버 기록, 메일·첨부 같은 결과물에 남은 특징입니다.
+이 행위는 조직의 방어 범위 밖에서 일어나서 예방 통제로 쉽게 막을 수 없고, 대상 조직이 볼 수 없는 곳에서 일어나 탐지도 어렵습니다[4]. 그래서 탐지는 생성형 AI 를 쓴 결과로 나타나는 피싱 (Phishing)과 정보 수집용 피싱 (Phishing for Information)에 맞춥니다[4]. 증거는 세 갈래로 나뉩니다. 용의자 기기의 AI 앱·도구 기록, 수사 요청으로만 받을 수 있는 서비스 회사 서버 기록, 메일·첨부 같은 결과물에 남은 특징입니다.
 
-위협 보고서에 나온 사례는 이 조사가 무엇을 찾아야 하는지 보여 줍니다. Google 위협 인텔리전스 그룹(GTIG)은 2025-11-06 보고서에서 이란 정부와 연계된 APT42 가 싱크탱크 직원을 사칭하는 피싱 자료를 만들고 전문 용어를 번역하는 데 Gemini 를 썼다고 밝혔습니다. 같은 보고서에는 북한 UNC1069 가 스페인어 사회공학 미끼 문구와 업무 핑계 문구, 자격 증명을 노린 가짜 소프트웨어 업데이트 안내문을 만든 사례가 있고, Google 은 두 행위자의 계정을 막았습니다. 보고서는 2025년 지하 시장에 광고된 주요 AI 도구가 거의 모두 피싱 지원 기능을 내세웠다고도 적었습니다. ATT&CK 의 절차 예에는 ShinyHunters(G1057)가 음성 피싱에 Bland AI 를 쓴 사례와 Contagious Interview(G1052)가 캠페인용 이미지·콘텐츠를 AI 로 만든 사례가 올라 있습니다. Anthropic 은 2025-08-27 보고서에서 북한 원격 근무자가 AI 로 기술 면접을 통과하고 업무를 이어 간 위장 취업 사례를 밝혔고, 같은 보고서 목록에는 연애 사기 사례도 올라 있습니다.
+위협 보고서에 나온 사례는 이 조사가 무엇을 찾아야 하는지 보여 줍니다. 이란 정부와 연계된 APT42 는 싱크탱크 직원을 사칭하는 피싱 자료를 만들고 전문 용어를 번역하는 데 Gemini 를 썼습니다[2]. 북한 UNC1069 는 스페인어 사회공학 미끼 문구와 업무 핑계 문구, 자격 증명을 노린 가짜 소프트웨어 업데이트 안내문을 만들었고, Google 은 두 행위자의 계정을 막았습니다[2]. 2025년 지하 시장에 광고된 주요 AI 도구는 거의 모두 피싱 지원 기능을 내세웠습니다[2]. T1588.007 의 절차 예로는 ShinyHunters(G1057)가 음성 피싱에 Bland AI 를 쓴 사례와 Contagious Interview(G1052)가 캠페인용 이미지·콘텐츠를 AI 로 만든 사례가 있습니다[4]. 북한 원격 근무자가 AI 로 기술 면접을 통과하고 업무를 이어 간 위장 취업 사례와 연애 사기 사례도 있습니다[3].
 
 ## 먼저 확인할 것
 
@@ -24,11 +24,11 @@ ATT&CK 는 이 행위가 조직의 방어 범위 밖에서 일어나서 예방 �
 
 수집을 시작하기 전에 OS 판과 시간대, 조사할 사용자 계정, 수집 범위(기기 이미지만인지, 계정 내보내기나 서버 기록 요청까지인지)를 정해 둡니다. 시간대는 AI 대화 시각과 메일 발송 시각을 맞춰 볼 때 필요합니다.
 
-OS 마다 앱 데이터를 보호하는 방식이 다르고, 아래 기기 관찰은 Windows 11 에서 한 것입니다. 다른 OS 에서는 아래 공통 원리 쪽을 먼저 읽고 앱 폴더를 찾습니다.
+OS 마다 앱 데이터를 보호하는 방식이 다르고, 아래 기기 경로는 Windows 11 기준입니다. 다른 OS 에서는 아래 공통 원리 쪽을 먼저 읽고 앱 폴더를 찾습니다.
 
-| OS | 이 쪽의 기기 관찰 | 공통 원리 |
+| OS | 이 쪽에서 다루는 경로 | 공통 원리 |
 |---|---|---|
-| Windows | 사용자 폴더의 AI 도구 폴더와 Claude 데스크톱(스토어 앱) 폴더를 봤습니다 | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html), [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) |
+| Windows | 사용자 폴더의 AI 도구 폴더, Claude 데스크톱(스토어 앱) 폴더 | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html), [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) |
 | macOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/leveldb-indexeddb.html) |
 | Android | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html), [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html) |
 | iOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html), [iOS 키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) |
@@ -46,11 +46,11 @@ OS 마다 앱 데이터를 보호하는 방식이 다르고, 아래 기기 관�
 
 ### 피해 쪽 결과물에 남는 특징
 
-Microsoft 위협 인텔리전스는 2025-09-24 블로그에서 SVG 첨부 안의 페이로드를 AI 가 만든 코드로 난독화한 피싱 캠페인을 탐지했다고 밝혔습니다. 미국 조직을 노린 캠페인이었고, 공격자는 탈취한 소규모 기업 메일 계정에서 받는 사람을 자기 자신으로 두고 실제 대상은 숨은 참조(BCC)에 넣어 보냈습니다. 첨부 이름은 "23mb – PDF- 6 pages.svg" 처럼 PDF 로 보이게 지었지만 확장자는 `.svg` 였고, SVG 는 텍스트 형식이라 안에 스크립트를 넣을 수 있습니다.
+Microsoft 위협 인텔리전스는 SVG 첨부 안의 페이로드를 AI 가 만든 코드로 난독화한 피싱 캠페인을 탐지했습니다[1]. 미국 조직을 노린 캠페인이었고, 공격자는 탈취한 소규모 기업 메일 계정에서 받는 사람을 자기 자신으로 두고 실제 대상은 숨은 참조(BCC)에 넣어 보냈습니다. 첨부 이름은 "23mb – PDF- 6 pages.svg" 처럼 PDF 로 보이게 지었지만 확장자는 `.svg` 였고, SVG 는 텍스트 형식이라 안에 스크립트를 넣을 수 있습니다.
 
 Microsoft 는 이 코드에서 LLM 이 만든 코드로 볼 만한 표시 다섯 가지를 들었습니다.
 
-| 표시 | 보고서의 예 |
+| 표시 | 예 |
 |---|---|
 | 영어 설명 단어에 무작위 16진수를 붙인 지나치게 긴 이름 | `processBusinessMetricsf43e08` |
 | 필요 이상으로 잘게 나눈 모듈 구조 | — |
@@ -58,7 +58,7 @@ Microsoft 는 이 코드에서 LLM 이 만든 코드로 볼 만한 표시 다섯
 | 틀에 박힌 방식의 난독화 | — |
 | 문서를 흉내 낸 듯한 CDATA·XML 선언 | — |
 
-그런데 Microsoft 가 실제로 막은 근거는 이 표시가 아니라 기존 신호였습니다. 자기 앞으로 보내고 BCC 를 쓴 발송 방식, PDF 로 꾸민 SVG, 이미 알려진 피싱 도메인으로 넘어가는 동작, 난독화 자체, 세션 추적과 브라우저 지문 수집이 그 신호입니다. Microsoft 는 AI 가 만든 코드가 더 복잡할 수는 있어도 사람이 만든 공격과 같은 행위·기반 시설의 틀 안에서 움직인다고 결론을 냈고, Safe Links, 0시간 자동 제거(Zero-Hour Auto Purge, ZAP), 피싱에 강한 인증, SmartScreen, 조건부 액세스의 인증 강도 설정을 권했습니다. 다섯 표시는 의심할 근거일 뿐 AI 가 만들었다는 증명이 아니고, 문장만 보고 AI 작성 여부를 가리는 도구의 한계는 [AI가 만든 글·이미지 판별의 한계](../../03-techniques/analysis/detection-limits.md) 쪽에서 봅니다.
+그런데 Microsoft 가 실제로 막은 근거는 이 표시가 아니라 기존 신호였습니다. 자기 앞으로 보내고 BCC 를 쓴 발송 방식, PDF 로 꾸민 SVG, 이미 알려진 피싱 도메인으로 넘어가는 동작, 난독화 자체, 세션 추적과 브라우저 지문 수집이 그 신호입니다. AI 가 만든 코드가 더 복잡할 수는 있어도 사람이 만든 공격과 같은 행위·기반 시설의 틀 안에서 움직입니다[1]. 막는 데는 Safe Links, 0시간 자동 제거(Zero-Hour Auto Purge, ZAP), 피싱에 강한 인증, SmartScreen, 조건부 액세스의 인증 강도 설정을 씁니다[1]. 다섯 표시는 의심할 근거일 뿐 AI 가 만들었다는 증명이 아니고, 문장만 보고 AI 작성 여부를 가리는 도구의 한계는 [AI가 만든 글·이미지 판별의 한계](../../03-techniques/analysis/detection-limits.md) 쪽에서 봅니다.
 
 ### 용의자 기기에 남는 것
 
@@ -68,7 +68,7 @@ Claude 데스크톱(스토어 앱)은 `%USERPROFILE%\Packages\` 아래 Claude �
 
 Claude Code 로 문구를 만들었다면 `%USERPROFILE%\.claude\history.jsonl` 의 `display` 칸과 세션 파일 `projects\` 아래 `.jsonl` 의 `message.content[].text` 칸에서 입력과 응답을 찾습니다(Windows 11 기준). 시각은 `history.jsonl` 의 `timestamp` 가 정수, 세션 파일의 `timestamp` 가 문자열로 들어 있고, 에포크 밀리초인지 ISO 8601 인지는 검체의 값을 보고 정합니다. 키 전체의 뜻과 보관 기간은 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에 있습니다.
 
-같은 PC 에서 Codex CLI(`%USERPROFILE%\.codex`), Gemini CLI(`%USERPROFILE%\.gemini`), Ollama(`%USERPROFILE%\.ollama`) 폴더에는 대화 기록 파일이 없었습니다. 이 PC 에서 그랬다는 뜻이지 이 도구들이 기록을 전혀 남기지 않는다는 뜻은 아니고, 도구별 내용은 [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md), [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md), [Ollama](../../02-artifacts/local-ai/ollama.md) 쪽에서 봅니다.
+Codex CLI(`%USERPROFILE%\.codex`), Gemini CLI(`%USERPROFILE%\.gemini`), Ollama(`%USERPROFILE%\.ollama`) 폴더에는 대화 기록 파일이 없을 수 있습니다. 그렇다고 이 도구들이 기록을 전혀 남기지 않는 것은 아니고, 도구별 기록 위치는 [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md), [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md), [Ollama](../../02-artifacts/local-ai/ollama.md) 쪽에서 봅니다.
 
 ## 분석 흐름
 

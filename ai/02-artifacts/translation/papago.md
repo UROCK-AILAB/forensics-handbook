@@ -8,8 +8,6 @@ nav_order: 470
 
 파파고는 네이버가 만든 번역 서비스입니다. 앱 스토어에는 수집 항목과 앱 식별자가 공개되어 있지만, 번역 기록이 기기와 서버에 어떻게 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-기기 안의 저장 위치와 구조는 공개 자료가 없어서, 검체에서 찾아가는 순서만 적습니다.
-
 ## 무엇을 기록하나 · 왜 생기나
 
 파파고는 텍스트·이미지·음성·오프라인·웹사이트·대화·문서 번역을 제공합니다. 번역하려면 원문을 입력하거나 사진·음성·문서를 넘겨야 해서, 입력한 내용이 앱과 서버를 거쳐 갑니다. 번역 원문과 결과를 어디에 얼마 동안 보관하는지, 번역 기록이나 단어장이 네이버 계정에 동기화되는지는 공개 자료에 없습니다. 그래서 조사할 때는 기기에서 앱 데이터 폴더와 브라우저 기록을 찾고, 서버 쪽 기록은 따로 요청할 대상으로 나눠 둡니다. 서버·기기·동기화를 나눠 보는 방법은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다.
@@ -37,7 +35,7 @@ Google Play 수집 항목에 사진, 음성 녹음, 파일 및 문서가 있고 
 | Windows | 전용 데스크톱 앱에 대한 공개 자료 없음. 검체의 설치 프로그램 목록에서 확인 | 검체에서 확인 |
 | 웹 | 브라우저로 쓰는 판 | 브라우저 기록·저장소 |
 
-Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾습니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서 다룹니다. 파파고 폴더 안의 파일과 DB 는 공개 자료가 없어 이 페이지에 적지 않고, 검체에서 아래 구조 절의 순서로 확인합니다. iOS 에서는 앱 컨테이너 안의 파일이 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html) 등급에 따라 잠기므로, 수집 방식에 따라 읽을 수 있는 파일이 달라집니다.
+Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾습니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서 다룹니다. 파파고 폴더 안의 파일과 DB 는 공개 자료가 없어 검체에서 아래 구조 절의 순서로 확인합니다. iOS 에서는 앱 컨테이너 안의 파일이 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html) 등급에 따라 잠기므로, 수집 방식에 따라 읽을 수 있는 파일이 달라집니다.
 
 웹 판을 썼다면 방문 기록과 저장소는 브라우저 쪽에 남습니다. 읽는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html), [사파리(macOS)](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html), [크롬(Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html), [사파리(iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html) 페이지를 따릅니다. 파파고 웹 페이지가 브라우저 저장소에 쓰는 키는 검체의 저장소를 열어 확인합니다.
 
@@ -51,7 +49,7 @@ Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾습니다. �
 
 ## 증거로서 의미
 
-**증명하는 것.** Android 에서 `com.naver.labs.translator` 패키지가 설치되어 있었다는 기록이나 iOS 앱 목록의 파파고 항목은 기기에 이 앱이 있었다는 사실을 보여 줍니다. 앱 데이터 폴더에서 번역 원문과 결과가 나오면, 그 기기에서 그 내용을 파파고로 번역한 기록이 있다고 쓸 수 있습니다. 개발사 신고에 따르면 식별자·연락처 정보·사용자 콘텐츠·사용 데이터를 사용자와 연결해 다루므로, 서버 쪽 기록을 받으면 계정과 사용을 잇는 자료가 됩니다.
+**증명하는 것.** Android 에서 `com.naver.labs.translator` 패키지가 설치되어 있었다는 기록이나 iOS 앱 목록의 파파고 항목은 기기에 이 앱이 있었다는 사실을 보여 줍니다. 앱 데이터 폴더에서 번역 원문과 결과가 나오면, 그 기기에서 그 내용을 파파고로 번역한 기록이 있다고 쓸 수 있습니다. 개발사 신고에 따르면 식별자·연락처 정보·사용자 콘텐츠·사용 데이터를 사용자와 연결해 다루므로[2], 서버 쪽 기록을 받으면 계정과 사용을 잇는 자료가 됩니다.
 
 **증명하지 못하는 것.** 스토어 라벨은 수집하는 데이터의 종류만 말하고, 특정 번역을 서버에 얼마 동안 두었는지는 말하지 않습니다. 앱이 번역 기록을 기기에 남기는지는 검체와 테스트 기기로 먼저 확인해야 하므로, 기기에 번역 기록이 없다는 사실만으로 번역하지 않았다고 단정할 수 없습니다. 앱이 설치되어 있었다는 사실만으로 특정 문서를 번역했다고 쓸 수도 없습니다. 기기를 여러 사람이 썼다면 누가 입력했는지는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 좁힙니다.
 

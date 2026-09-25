@@ -16,7 +16,7 @@ AI 도구가 기기와 서버, 네트워크에 남긴 시각을 모아 UTC 기�
 
 ### 1. 시간대와 기준을 먼저 적습니다
 
-기기의 시간대 설정과 수집 시각을 먼저 적고, 타임라인의 기준은 UTC 로 정합니다. 도구마다 UTC 로 적는 것과 현지 시각으로 적는 것, 유닉스 초와 밀리초가 섞여 있어서, 바꾼 값 옆에 원래 값과 원래 표기를 그대로 남겨 둡니다. 아래 표는 근거 자료에 형식이 나오는 값만 모았습니다.
+기기의 시간대 설정과 수집 시각을 먼저 적고, 타임라인의 기준은 UTC 로 정합니다. 도구마다 UTC 로 적는 것과 현지 시각으로 적는 것, 유닉스 초와 밀리초가 섞여 있어서, 바꾼 값 옆에 원래 값과 원래 표기를 그대로 남겨 둡니다. 도구별 시각 형식은 아래와 같습니다.
 
 | 도구 · 파일 · 값 | 형식 | 근거 |
 |---|---|---|
@@ -51,26 +51,26 @@ Sysmon 이벤트 로그는 시각을 UTC 로 적고, Chromium 쿠키 DB 는 `cre
 
 | 파일 | 시각 칸 | 뜻과 근거 |
 |---|---|---|
-| `history.jsonl` | `timestamp`(정수) | 입력한 프롬프트마다 시각과 프로젝트 경로를 한 줄씩 남기고, 날짜 기준 자동 삭제 대상이 아닙니다(문서). 단위는 1단계 표를 봅니다 |
-| `projects/<프로젝트>/<세션>.jsonl` | 줄마다 `timestamp`(문자열) | 메시지, 도구 호출, 도구 결과를 줄로 쌓는 대화 전문입니다(문서). 끝에 `Z` 가 붙는지 검체에서 보고 적습니다 |
-| 같은 파일의 스냅숏 줄 | `snapshot.timestamp` | 문서는 사용자가 프롬프트를 보내 턴을 시작할 때마다 체크포인트를 만든다고 적습니다. 이 줄이 그 체크포인트라는 것은 키 이름으로 한 짐작입니다(추정) |
-| `jobs/<이름>/state.json`, `jobs/<이름>/timeline.jsonl` | `createdAt`·`updatedAt`, `at` | 폴더 이름으로 보아 백그라운드 작업의 상태 변화로 짐작합니다(추정) |
-| `feedback/drafts/<파일>.json` | `created_at` | 폴더 이름으로 보아 피드백 초안을 만든 시각으로 짐작합니다(추정) |
+| `history.jsonl` | `timestamp`(정수) | 입력한 프롬프트마다 시각과 프로젝트 경로를 한 줄씩 남기고, 날짜 기준 자동 삭제 대상이 아닙니다[1]. 단위는 1단계 표를 봅니다 |
+| `projects/<프로젝트>/<세션>.jsonl` | 줄마다 `timestamp`(문자열) | 메시지, 도구 호출, 도구 결과를 줄로 쌓는 대화 전문입니다[1]. 끝에 `Z` 가 붙는지 검체에서 보고 적습니다 |
+| 같은 파일의 스냅숏 줄 | `snapshot.timestamp` | 사용자가 프롬프트를 보내 턴을 시작할 때마다 체크포인트가 만들어집니다[2]. 이 줄은 키 이름으로 보아 그 체크포인트로 보입니다 |
+| `jobs/<이름>/state.json`, `jobs/<이름>/timeline.jsonl` | `createdAt`·`updatedAt`, `at` | 폴더 이름으로 보아 백그라운드 작업의 상태 변화로 보입니다 |
+| `feedback/drafts/<파일>.json` | `created_at` | 폴더 이름으로 보아 피드백 초안을 만든 시각으로 보입니다 |
 | `stats-cache.json` | `firstSessionDate`, `dailyActivity[].date`, `hourCounts`, `longestSession.timestamp` | 날짜별 메시지·세션·도구 호출 수를 모은 집계이고 내용은 없습니다. 날짜를 자르는 시간대는 같은 날의 `history.jsonl` 줄과 맞춰 검체에서 확인합니다 |
 
-위 표의 키 이름은 모두 관찰로 확인했습니다. 세션 기록은 이전 판을 `<세션>.jsonl.superseded-<시각>`, 떼어 둔 기록을 `<세션>.orphaned-<시각>-<접미사>.jsonl` 로 남기기도 해서, 파일 이름 안의 시각도 함께 적어 둡니다.
+세션 기록은 이전 판을 `<세션>.jsonl.superseded-<시각>`, 떼어 둔 기록을 `<세션>.orphaned-<시각>-<접미사>.jsonl` 로 남기기도 해서, 파일 이름 안의 시각도 함께 적어 둡니다.
 
-같은 줄이 두 파일에 나올 수 있습니다. agentsview 문서(2026-08-09 Claude Code 2.1.226 으로 재현)에 따르면 세션을 백그라운드로 넘기면 `claude --resume <기록> --fork-session` 이 돌고, 새 기록 파일에 이전 대화 줄을 `uuid`·`timestamp`·`requestId` 까지 똑같이 다시 적으며 `sessionId` 만 바꿉니다[5]. 새 파일에는 원래 세션을 가리키는 칸이 없으므로, 합칠 때 `uuid` 가 같은 줄은 한 번만 셉니다.
+같은 줄이 두 파일에 나올 수 있습니다. 세션을 백그라운드로 넘기면 `claude --resume <기록> --fork-session` 이 돌고, 새 기록 파일에 이전 대화 줄을 `uuid`·`timestamp`·`requestId` 까지 똑같이 다시 적으며 `sessionId` 만 바꿉니다(Claude Code 2.1.226 기준)[5]. 새 파일에는 원래 세션을 가리키는 칸이 없으므로, 합칠 때 `uuid` 가 같은 줄은 한 번만 셉니다.
 
-**Claude 데스크톱(Windows 스토어 앱).** 패키지 폴더 아래 `LocalCache\Roaming\Claude` 에 Electron 모양 폴더와 앱 설정 JSON 이 있고, 그 가운데 시각으로 보이는 칸은 `config.json` 의 `first_launch_at`·`version_first_launch.at`, `plan-usage-history.json` 의 `samples[].t` 입니다. 같은 패키지의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래 `mcp-logs-<서버 이름>` 폴더의 JSONL 에는 줄마다 `timestamp` 가 있고, `Partitions\<이름>\Network\Cookies` 의 `cookies` 표에는 `creation_utc`·`last_access_utc`·`last_update_utc`·`expires_utc` 칸이 있습니다. 뜻은 칸 이름으로 짐작한 것이라 근거 등급을 "관찰" 로 둡니다. 폴더 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+**Claude 데스크톱(Windows 스토어 앱).** 패키지 폴더 아래 `LocalCache\Roaming\Claude` 에 Electron 모양 폴더와 앱 설정 JSON 이 있고, 그 가운데 시각으로 보이는 칸은 `config.json` 의 `first_launch_at`·`version_first_launch.at`, `plan-usage-history.json` 의 `samples[].t` 입니다. 같은 패키지의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래 `mcp-logs-<서버 이름>` 폴더의 JSONL 에는 줄마다 `timestamp` 가 있고, `Partitions\<이름>\Network\Cookies` 의 `cookies` 표에는 `creation_utc`·`last_access_utc`·`last_update_utc`·`expires_utc` 칸이 있습니다. 이 칸들은 공개된 설명이 없어 뜻을 이름으로만 짐작할 수 있습니다. 폴더 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
-**다른 개발 도구.** Gemini CLI 는 세션을 `~/.gemini/tmp/<project_hash>/chats/` 아래 `session-` 으로 시작하는 JSONL 파일에 대화하는 동안 저장하고, 하위 에이전트 세션은 `chats/<부모 세션 ID>/<세션 ID>.jsonl` 에 둡니다[8]. 첫 줄 메타데이터에 `startTime`·`lastUpdated` 가 있고 메시지마다 `timestamp` 가 있습니다[8]. Codex CLI 는 입력 기록을 `~/.codex/history.jsonl` 에 `session_id`·`ts`·`text` 세 키로 한 줄씩 남기고[7], 세션 전체는 `~/.codex/sessions/YYYY/MM/DD/` 아래 rollout 파일에 남깁니다[6]. 조직이 OpenTelemetry 수집을 켜 두었다면 `codex.user_prompt`·`codex.tool_result` 같은 이벤트가 수집 서버에 따로 있습니다. Cursor 의 지금 Composer·에이전트 대화는 전역 `globalStorage/state.vscdb` 의 `cursorDiskKV` 표에 `composerData:<uuid>`(세션)와 `bubbleId:<composerId>:<bubbleUuid>`(한 턴) 키로 들어 있다고 agentsview 코드(2026-09)가 적고 있습니다[9]. 시각 형식은 1단계 표에 모았고, 이런 도구는 기록 파일 자체의 파일 시스템 시각도 함께 타임라인에 올립니다.
+**다른 개발 도구.** Gemini CLI 는 세션을 `~/.gemini/tmp/<project_hash>/chats/` 아래 `session-` 으로 시작하는 JSONL 파일에 대화하는 동안 저장하고, 하위 에이전트 세션은 `chats/<부모 세션 ID>/<세션 ID>.jsonl` 에 둡니다[8]. 첫 줄 메타데이터에 `startTime`·`lastUpdated` 가 있고 메시지마다 `timestamp` 가 있습니다[8]. Codex CLI 는 입력 기록을 `~/.codex/history.jsonl` 에 `session_id`·`ts`·`text` 세 키로 한 줄씩 남기고[7], 세션 전체는 `~/.codex/sessions/YYYY/MM/DD/` 아래 rollout 파일에 남깁니다[6]. 조직이 OpenTelemetry 수집을 켜 두었다면 `codex.user_prompt`·`codex.tool_result` 같은 이벤트가 수집 서버에 따로 있습니다. Cursor 의 지금 Composer·에이전트 대화는 전역 `globalStorage/state.vscdb` 의 `cursorDiskKV` 표에 `composerData:<uuid>`(세션)와 `bubbleId:<composerId>:<bubbleUuid>`(한 턴) 키로 들어 있습니다[9]. 시각 형식은 1단계 표에 모았고, 이런 도구는 기록 파일 자체의 파일 시스템 시각도 함께 타임라인에 올립니다.
 
-**서버에서 받은 자료.** ChatGPT 계정 내보내기 ZIP 의 `conversations.json` 에는 메시지마다 `create_time`·`update_time` 이 있고, 오픈소스 변환 도구 convoviz 의 메시지 모델은 이 두 칸을 날짜·시각 값으로 읽습니다[15]. 공식 스키마가 아니므로, 값의 단위는 사용자가 기억하는 대화 하나의 시각과 맞춰 보고 정합니다. convoviz 는 2026년 7월 무렵부터 일부 메시지에서 `status`·`weight` 가 빠졌다고 적어서, 내보내기 형식이 알림 없이 바뀔 수 있다는 점도 기억해 둡니다. Claude Enterprise 감사 로그는 기록마다 `created_at`, `event`, `ip_address`, `device_id`, `client_platform` 같은 칸이 있고 대화 내용은 넣지 않습니다.
+**서버에서 받은 자료.** ChatGPT 계정 내보내기 ZIP 의 `conversations.json` 에는 메시지마다 `create_time`·`update_time` 이 있고, 오픈소스 변환 도구 convoviz 의 메시지 모델은 이 두 칸을 날짜·시각 값으로 읽습니다[15]. 공식 스키마가 아니므로, 값의 단위는 사용자가 기억하는 대화 하나의 시각과 맞춰 보고 정합니다. 2026년 7월 무렵부터는 일부 메시지에서 `status`·`weight` 가 빠졌습니다[14]. 내보내기 형식은 이처럼 알림 없이 바뀔 수 있습니다. Claude Enterprise 감사 로그는 기록마다 `created_at`, `event`, `ip_address`, `device_id`, `client_platform` 같은 칸이 있고 대화 내용은 넣지 않습니다.
 
 **네트워크.** Sysmon 이벤트 ID 22 는 프로세스가 DNS 질의를 할 때마다, 이벤트 ID 3 은 TCP/UDP 연결을 기록하고, 둘 다 프로세스와 연결되며 시각은 UTC 입니다. 이벤트 3 은 기본으로 꺼져 있어 설정 파일이 있어야 남습니다. Zeek 를 쓰는 조직이라면 `ssl.log` 의 `server_name` 칸에서 클라이언트가 요청한 도메인을 봅니다. 도메인 해석은 [AI 서비스 도메인과 네트워크 기록](../../02-artifacts/network-enterprise/network-traces.md)에 있습니다.
 
-**Windows 의 AI 기능.** Recall 은 스냅숏 시각을 100나노초 단위(FILETIME)로 적는다고 제3자 연구 도구 문서가 설명하지만, 2025-04 이후 다시 설계한 판은 스냅숏과 DB 를 암호화해서 디스크 이미지만으로는 폴더와 파일의 존재, 크기, 파일 시스템 시각 정도만 타임라인에 올릴 수 있습니다. 자세한 내용은 [Recall](../../02-artifacts/windows-ai/recall.md)에 있습니다.
+**Windows 의 AI 기능.** Recall 은 스냅숏 시각을 100나노초 단위(FILETIME)로 적지만[21], 2025-04 이후 다시 설계한 판은 스냅숏과 DB 를 암호화해서 디스크 이미지만으로는 폴더와 파일의 존재, 크기, 파일 시스템 시각 정도만 타임라인에 올릴 수 있습니다. 자세한 내용은 [Recall](../../02-artifacts/windows-ai/recall.md)에 있습니다.
 
 ### 4. 한 표로 합치고 근거 등급을 붙입니다
 
@@ -95,7 +95,7 @@ UTC 시각              출처(파일 · 키)                                   
 
 ## 도구
 
-JSONL 기록은 `jq` 로 필요한 키만 뽑아 표로 만들면 됩니다. 아래 명령은 `history.jsonl` 에서 관찰로 확인한 키 이름만 쓴 예시이고, `display` 칸에는 입력한 프롬프트가 그대로 들어 있어 결과 파일도 증거와 같은 수준으로 다룹니다.
+JSONL 기록은 `jq` 로 필요한 키만 뽑아 표로 만들면 됩니다. 아래 명령은 `history.jsonl` 에서 시각·세션 ID·프로젝트를 뽑는 예시이고, `display` 칸에는 입력한 프롬프트가 그대로 들어 있어 결과 파일도 증거와 같은 수준으로 다룹니다.
 
 ```bash
 jq -r '[.timestamp, .sessionId, .project] | @tsv' history.jsonl > history_times.tsv
@@ -109,7 +109,7 @@ jq -r '[.timestamp, .sessionId, .project] | @tsv' history.jsonl > history_times.
 
 세션 기록의 줄 시각이 모두 사람이 입력한 시각은 아닙니다. 같은 파일에는 모델 응답, 도구 결과, 훅 실행 결과(`attachment.hookEvent` 등), 파일 되돌리기 스냅숏 줄이 섞여 있고, 하위 에이전트 기록은 `subagents/` 아래 다른 파일에 `agentId`·`isSidechain` 키와 함께 따로 쌓입니다. 사람의 입력 시각은 `history.jsonl` 과 맞춰 가립니다.
 
-앱 폴더에 AI 와 무관한 흔적이 섞일 수 있습니다. 관찰한 Claude 데스크톱 스토어 앱 패키지의 `LocalCache\Local` 아래에는 Android SDK, NuGet, npm, pip 캐시도 있었고, 이 파일들의 시각을 AI 사용 시각으로 읽으면 안 됩니다. 쿠키 시각도 쿠키가 만들어지거나 쓰인 시각이지 대화 시각은 아닙니다.
+앱 폴더에 AI 와 무관한 흔적이 섞일 수 있습니다. Claude 데스크톱 스토어 앱 패키지의 `LocalCache\Local` 아래에는 Android SDK, NuGet, npm, pip 캐시가 함께 있을 수 있고, 이 파일들의 시각을 AI 사용 시각으로 읽으면 안 됩니다. 쿠키 시각도 쿠키가 만들어지거나 쓰인 시각이지 대화 시각은 아닙니다.
 
 기기에 원본이 없는 세션이 있습니다. Claude Code 클라우드 세션은 서비스 쪽 가상 머신에서 돌아 사용자 PC 에 대화 파일이 생기지 않고, 이런 구간은 서버 자료 없이는 채울 수 없다고 보고서에 적습니다.
 

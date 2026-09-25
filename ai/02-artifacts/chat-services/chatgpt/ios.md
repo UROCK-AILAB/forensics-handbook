@@ -15,9 +15,9 @@ iOS 용 ChatGPT 앱은 대화 하나를 JSON 파일 하나로 앱 컨테이너�
 
 앱은 계정의 대화를 기기에 사본으로 내려 둡니다. 그래서 컨테이너에는 대화 제목·만든 시각·고친 시각·쓴 모델과 메시지 본문이 남고, 맞춤 지시(custom instructions)와 임시 채팅(temporary chat) 여부, 보내지 않은 초안, 로그인한 계정의 이메일과 요금제도 남습니다 [3].
 
-Tyagi·Gong·Karabiyik(2025)은 ChatGPT 가 Android 와 iOS 모두에서 대화를 평문으로 저장한다고 초록에 적었습니다 [2]. iLEAPP 분석기도 복호화 단계 없이 JSON 과 plist 를 바로 엽니다 [3].
+ChatGPT 는 Android 와 iOS 모두에서 대화를 평문으로 저장합니다 [2]. iLEAPP 분석기도 복호화 단계 없이 JSON 과 plist 를 바로 엽니다 [3].
 
-LangurTrace 논문은 Dragonas·Lambrinoudakis·Nakoutis(2024)[1]를 ChatGPT 모바일 앱을 처음 포렌식으로 분석한 연구로 소개하고, 이 연구가 Android·iOS·클라우드 저장소에서 흔적을 찾았다고 요약했습니다 [6]. Ex Machina 논문은 같은 연구가 캐시된 프롬프트, 접근 토큰, 네트워크 흔적을 찾았다고 요약했습니다 [5]. iLEAPP `chatgpt.py` 의 작성자도 Dragonas 이고, 분석기 설명은 "연구 과제를 바탕으로 했다" 고 적었습니다 [3].
+ChatGPT 모바일 앱을 처음 포렌식으로 분석한 연구[1]에서는 Android·iOS·클라우드 저장소에서 흔적이 나왔고 [6], 그 가운데 캐시된 프롬프트, 접근 토큰, 네트워크 흔적이 있었습니다 [5]. iLEAPP `chatgpt.py` 는 이 연구의 제1저자가 연구 과제를 바탕으로 만든 분석기입니다 [3].
 
 ## 위치와 버전별 차이
 
@@ -32,7 +32,7 @@ LangurTrace 논문은 Dragonas·Lambrinoudakis·Nakoutis(2024)[1]를 ChatGPT 모
 | `tmp/photo-*.png`, `tmp/*/*.png` | PNG | 올린 이미지 | [3] |
 | `tmp/recordings/*.m4a`, `tmp/*/*.m4a` | M4A | 음성 입력 | [3] |
 
-폴더 이름 `conversations-*`·`drafts-*` 의 별표 자리에 무엇이 들어가는지는 분석기에 적혀 있지 않습니다. 같은 모양의 폴더가 여러 개 있으면 폴더별로 따로 읽고, 계정 plist 와 맞춰 봅니다.
+폴더 이름 `conversations-*`·`drafts-*` 의 별표 자리에 들어가는 값은 공개 자료가 없어 검체에서 확인합니다. 같은 모양의 폴더가 여러 개 있으면 폴더별로 따로 읽고, 계정 plist 와 맞춰 봅니다.
 
 파일은 기기의 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html) 등급에 따라 잠기고, 로그인 정보 같은 비밀 값을 두는 곳의 일반 원리는 [키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html)에서 다룹니다. ChatGPT 앱이 키체인에 무엇을 두는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
@@ -40,7 +40,7 @@ iLEAPP 의 경로는 전체 파일 시스템 추출을 기준으로 합니다. �
 
 ### App Store 정보
 
-2026-09-25 에 App Store 페이지에서 본 값은 다음과 같습니다 [7].
+App Store 페이지의 값은 다음과 같습니다(2026-09-25 기준) [7].
 
 | 항목 | 값 |
 |---|---|
@@ -63,7 +63,7 @@ iLEAPP 의 경로는 전체 파일 시스템 추출을 기준으로 합니다. �
 
 App Store 의 "Data Linked to You" 라벨에는 Health & Fitness, Location, Contact Info, User Content, Search History, Identifiers, Usage Data, Diagnostics 가 적혀 있습니다 [7]. 이 라벨은 개발사가 신고한 수집 항목이라서, 서버로 모으는 데이터의 종류로 읽고 기기에 남는 파일 목록으로 읽지 않습니다.
 
-위치에 관해서는 Tyagi 외(2025)가 iOS 에서 ChatGPT 와 Gemini 가 위치 서비스를 꺼 둔 상태에서도 약 0.5마일 안쪽의 위치 데이터를 얻을 수 있었다고 초록에 적었습니다 [2]. 초록에는 그 위치가 어느 파일이나 서버 기록에 남는지 나와 있지 않습니다. 위치 서비스를 껐다는 설정만으로 앱이 위치를 몰랐다고 쓰지 않습니다.
+iOS 에서 ChatGPT 와 Gemini 는 위치 서비스를 꺼 둔 상태에서도 약 0.5마일 안쪽의 위치 데이터를 얻을 수 있습니다 [2]. 그 위치가 어느 파일이나 서버 기록에 남는지는 공개된 자료가 없습니다. 위치 서비스를 껐다는 설정만으로 앱이 위치를 몰랐다고 쓰지 않습니다.
 
 ### 앱 안 결제 항목
 
@@ -147,7 +147,7 @@ App Store 페이지의 출시 표시는 "1일 전" 처럼 상대 시각이라서
 - **다른 앱의 미디어가 섞입니다.** iLEAPP 은 ChatGPT 표식 파일(`conversations-*` 폴더나 `com.openai.chat` plist)로 컨테이너를 찾았을 때만 그 컨테이너의 `tmp/` 로 결과를 좁힙니다 [3]. 표식이 없으면 경로 패턴에 맞는 다른 앱의 미디어까지 나오고, 분석기의 시험 이미지에서도 메신저·사진 보관 앱 같은 다른 앱의 PNG·M4A 가 결과로 나왔습니다. ChatGPT 가 깔린 세 시험 이미지에서는 두 결과 모두 0행이었습니다. 결과의 파일 경로에서 컨테이너 UUID 를 먼저 확인합니다.
 - **시험 범위가 좁습니다.** 대화를 읽은 시험 판은 1.2024.219 와 1.2024.233 이고, 2026-09-25 의 App Store 판은 1.2026.258 입니다 [3][7]. 폴더 이름이나 키가 바뀌면 도구가 조용히 0행을 낼 수 있어서, 결과가 비면 `Library/Application Support/` 의 폴더 목록부터 봅니다.
 - **키가 있는 층을 확인합니다.** iLEAPP 은 `content_type` 을 `tree.storage.메시지ID.content` 층에서, 본문은 그 아래 `content.parts` 에서 읽습니다 [3]. 판에 따라 층이 다르면 도구 칸이 비므로, 빈 칸이 많으면 JSON 을 직접 엽니다.
-- **토큰.** Ex Machina 논문의 요약처럼 모바일 앱에서 접근 토큰이 나올 수 있습니다 [5]. 나오면 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 따라 보고서에서 가립니다. 서버에 있는 대화는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)이나 [계정 데이터 내보내기](export.md)로 확보합니다.
+- **토큰.** 모바일 앱에서는 접근 토큰이 나올 수 있습니다 [5]. 나오면 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 따라 보고서에서 가립니다. 서버에 있는 대화는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)이나 [계정 데이터 내보내기](export.md)로 확보합니다.
 - **지운 대화.** 대화가 파일 단위라서 지운 대화는 파일째 사라질 수 있습니다. 파일 시스템의 빈 공간에서 JSON 조각을 찾는 방법은 [내용 복구](../../../03-techniques/analysis/content-recovery.md)에 있습니다.
 - **수집 범위.** 컨테이너는 수집 방법에 따라 얻을 수도 있고 못 얻을 수도 있습니다. 폴더가 비어 보이면 앱 동작 때문인지 수집 범위 때문인지부터 가립니다. 수집 범위를 정하는 방법은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
 - **브라우저로 쓴 경우.** 사파리나 크롬으로 쓴 ChatGPT 는 앱이 아니라 [웹 브라우저](web.md) 흔적으로 남고, 그쪽 기록은 [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html)와 [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html)에서 읽습니다.
@@ -221,7 +221,7 @@ iLEAPP 에 전체 파일 시스템 추출본을 넣으면 "ChatGPT" 분류 아�
 
 ## 실습
 
-iLEAPP 시험 이미지(`felix_ios17`, `otto_ios17`, `dexter_ios18`)는 분석기 코드에 이름만 적혀 있고 내려받는 곳은 적혀 있지 않습니다 [3]. 시험용 기기에 앱을 깔고 시험용 계정으로 가짜 대화를 만든 뒤 전체 파일 시스템을 추출해 다음을 풀어 봅니다.
+iLEAPP 시험 이미지(`felix_ios17`, `otto_ios17`, `dexter_ios18`)는 내려받는 곳이 공개돼 있지 않습니다 [3]. 시험용 기기에 앱을 깔고 시험용 계정으로 가짜 대화를 만든 뒤 전체 파일 시스템을 추출해 다음을 풀어 봅니다.
 
 1. `Library/Application Support/` 에 생긴 `conversations-*` 폴더의 파일 수가 앱에 보이는 대화 수와 같은지 봅니다.
 2. 대화 하나의 `creation_date` 와 첫 메시지의 `create_time` 을 각각 UTC 로 바꿔, 둘의 차이가 앱에서 대화를 시작한 흐름과 맞는지 봅니다.

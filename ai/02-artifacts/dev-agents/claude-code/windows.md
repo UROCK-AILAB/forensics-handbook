@@ -34,7 +34,7 @@ Claude Code 는 터미널에서 도는 코딩 에이전트입니다. 모델 호�
 
 데이터 폴더는 `CLAUDE_CONFIG_DIR` 환경 변수로 옮길 수 있습니다. 표의 `.claude` 폴더가 없거나 비어 있으면 미사용으로 판단하기 전에 사용자·시스템 환경 변수에 이 값이 있는지 먼저 봅니다.
 
-"다시 묻지 않기" 규칙 줄은 Windows 에서 달라지는 부분입니다. 문서는 이 규칙이 v2.1.211 부터 저장소 루트의 `.claude\settings.local.json` 에 남는다고 설명하면서, Windows 에서는 저장소 루트를 쓰지 않고 세션을 시작한 폴더의 `.claude` 쪽 파일에 남긴다고 따로 적습니다[6]. v2.1.211 전에는 OS 와 상관없이 시작 폴더에 남겼습니다. 저장소의 하위 폴더에서 시작한 세션이었다면 루트의 `.claude` 만 열어서는 규칙을 놓칠 수 있어서, 저장소 안의 `.claude` 폴더를 모두 찾아봅니다.
+"다시 묻지 않기" 규칙 줄은 Windows 에서 달라지는 부분입니다. 이 규칙은 v2.1.211 부터 저장소 루트의 `.claude\settings.local.json` 에 남지만, Windows 에서는 저장소 루트를 쓰지 않고 세션을 시작한 폴더의 `.claude` 쪽 파일에 남습니다[6]. v2.1.211 전에는 OS 와 상관없이 시작 폴더에 남겼습니다. 저장소의 하위 폴더에서 시작한 세션이었다면 루트의 `.claude` 만 열어서는 규칙을 놓칠 수 있어서, 저장소 안의 `.claude` 폴더를 모두 찾아봅니다.
 
 ### 설치 방법별 차이
 
@@ -51,7 +51,7 @@ WinGet·npm 설치는 문서에 실행 파일 위치가 없어서, 검체에서�
 
 ### Windows 에서 생기는 하위 폴더
 
-관찰한 PC 의 `%USERPROFILE%\.claude` 아래에는 다음 항목이 있었습니다. 항목마다의 뜻은 [세션 기록 구조](transcripts.md)와 [설정·권한·훅](settings-permissions.md)에 있습니다.
+`%USERPROFILE%\.claude` 아래에서 볼 수 있는 항목은 다음과 같습니다. 항목마다의 뜻은 [세션 기록 구조](transcripts.md)와 [설정·권한·훅](settings-permissions.md)에 있습니다.
 
 ```
 .credentials.json
@@ -73,13 +73,13 @@ plugins\
 projects\
 ```
 
-출처마다 Windows 판이 무엇을 쓰는지가 다릅니다. claude-forensics 는 v0.1.1(2026-06-16) 문서에서 2026년 중반의 Windows 판 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 적고, `projects/` 의 세션 기록, Cowork 세션 정보, `audit.jsonl` 을 포함한 Cowork 에이전트 기록은 그대로 뽑힌다고 적습니다[8]. 2026-09 관찰 PC 에는 이 네 가지 가운데 `history.jsonl`, `paste-cache\`, `file-history\` 가 있었고 `shell-snapshots\` 는 없었습니다. 두 자료는 시점이 달라서 어느 한쪽을 기준으로 삼지 않고, 검체마다 이 네 항목이 있는지부터 봅니다.
+Windows 판이 이 가운데 무엇을 쓰는지는 자료마다 다릅니다. claude-forensics v0.1.1(2026-06-16) 문서는 2026년 중반의 Windows 판 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 했고, `projects/` 의 세션 기록, Cowork 세션 정보, `audit.jsonl` 을 포함한 Cowork 에이전트 기록은 그대로 뽑힌다고 했습니다[8]. 2026년 9월 Windows 기기에서는 이 네 가지 가운데 `history.jsonl`, `paste-cache\`, `file-history\` 가 있었고 `shell-snapshots\` 는 없었습니다. 시점이 달라서 어느 한쪽을 기준으로 삼지 않고, 검체마다 이 네 항목이 있는지부터 봅니다.
 
-공식 문서가 설명하는 `plans\`, `session-env\`, `sessions\`, `tasks\`, `todos\` 도 관찰 PC 에는 없었습니다. 그 기능을 쓰지 않았을 수도 있고 자동 정리가 지웠을 수도 있어서, 폴더가 없다는 사실만으로 판이나 사용 여부를 가르지 않습니다. `daemon\` 의 두 파일은 쓰임을 설명한 공개 자료가 없어서 검체로 확인해야 합니다.
+`plans\`, `session-env\`, `sessions\`, `tasks\`, `todos\` 폴더[3]는 없을 수도 있습니다. 그 기능을 쓰지 않았을 수도 있고 자동 정리가 지웠을 수도 있어서, 폴더가 없다는 사실만으로 판이나 사용 여부를 가르지 않습니다. `daemon\` 의 두 파일은 쓰임을 설명한 공개 자료가 없어서 검체로 확인해야 합니다.
 
 ### 데스크톱 앱 폴더와 수집 범위
 
-Claude 데스크톱 앱에서 Claude Code 나 Cowork(로컬 에이전트 모드)를 쓰면 앱 데이터 폴더에도 세션 정보가 남습니다. claude-forensics 는 Windows 검체에서 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 폴더를 모두 떠야 전체를 볼 수 있다고 적습니다(v0.1.1, 2026-06-16)[8]. agentsview 코드(2026-09-25 판)는 스토어(MSIX) 설치의 앱 폴더를 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 로, 스토어가 아닌 설치나 예전 설치의 앱 폴더를 `%APPDATA%\Claude` 로 적습니다[9]. claude-forensics 는 `AppData\Roaming\Claude` 한 곳만 적어서, 검체에서는 두 곳을 모두 봅니다.
+Claude 데스크톱 앱에서 Claude Code 나 Cowork(로컬 에이전트 모드)를 쓰면 앱 데이터 폴더에도 세션 정보가 남습니다. Windows 검체에서는 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 폴더를 모두 떠야 전체를 볼 수 있습니다[8]. 스토어(MSIX) 설치의 앱 폴더는 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 이고, 스토어가 아닌 설치나 예전 설치의 앱 폴더는 `%APPDATA%\Claude` 입니다[9]. claude-forensics 는 `AppData\Roaming\Claude` 한 곳만 다루므로, 검체에서는 두 곳을 모두 봅니다[8].
 
 앱 폴더 아래에서 Claude Code 와 이어지는 항목은 다음과 같습니다.
 
@@ -96,13 +96,13 @@ Claude 데스크톱 앱에서 Claude Code 나 Cowork(로컬 에이전트 모드)
 
 claude-forensics 는 앱 폴더 전체가 아니라 `claude-code-sessions`, `local-agent-mode-sessions` 와 위 설정 파일만 복사합니다. 약 12GB 인 `vm_bundles\` 와 `Cache\`, `Code Cache\` 같은 캐시는 뺍니다[8]. 선별 수집이라면 이 목록을 최소 범위로 삼으면 되고, 각 파일의 키와 시각, 크롬 계열 저장소까지 넣은 앱 폴더 전체 구조는 [Claude — Windows 앱](../../chat-services/claude/windows.md)에서 다룹니다.
 
-스토어판 패키지 폴더의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래에는 `mcp-logs-` 로 시작하는 폴더가 있었고, 그 안의 JSON Lines 파일 한 줄의 키는 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다. MCP 기록을 읽는 법은 [MCP 서버와 도구 호출 기록](../mcp.md)에서 다룹니다.
+스토어판 패키지 폴더의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래에는 `mcp-logs-` 로 시작하는 폴더가 생기고, 그 안의 JSON Lines 파일 한 줄에는 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. MCP 기록을 읽는 법은 [MCP 서버와 도구 호출 기록](../mcp.md)에서 다룹니다.
 
 ## 구조
 
 ### 기록 폴더 이름
 
-agentsview 는 Claude Code 2.1.233 으로 시험해서, `projects\` 아래 폴더 이름이 작업 폴더 경로에서 ASCII 영문자·숫자·`-` 만 남기고 나머지 글자를 모두 `-` 로 바꾼 값이라고 적습니다(2026-08-16 시험)[9]. Windows 경로는 드라이브 문자 뒤의 `:\` 가 `--` 로 바뀝니다. 한글 같은 ASCII 밖 글자도 `-` 로 바뀌어서 폴더 이름만으로는 원래 경로를 알아볼 수 없습니다.
+`projects\` 아래 폴더 이름은 작업 폴더 경로에서 ASCII 영문자·숫자·`-` 만 남기고 나머지 글자를 모두 `-` 로 바꾼 값입니다(Claude Code 2.1.233 기준)[9]. Windows 경로는 드라이브 문자 뒤의 `:\` 가 `--` 로 바뀝니다. 한글 같은 ASCII 밖 글자도 `-` 로 바뀌어서 폴더 이름만으로는 원래 경로를 알아볼 수 없습니다.
 
 ```
 만든 예시
@@ -110,13 +110,13 @@ agentsview 는 Claude Code 2.1.233 으로 시험해서, `projects\` 아래 폴�
 기록 폴더   %USERPROFILE%\.claude\projects\C--Work-my-app\
 ```
 
-이름을 되돌리면 원래 있던 `-` 와 바뀐 `-` 를 가를 수 없어서, claude-forensics 도 폴더 이름보다 기록 줄의 `cwd` 값을 먼저 씁니다[8]. 기록 줄의 짜임은 [세션 기록 구조](transcripts.md)에서 다룹니다.
+이름을 되돌리면 원래 있던 `-` 와 바뀐 `-` 를 가를 수 없으므로, 폴더 이름보다 기록 줄의 `cwd` 값을 먼저 씁니다[8]. 기록 줄의 짜임은 [세션 기록 구조](transcripts.md)에서 다룹니다.
 
 ### 로그인 정보 파일
 
 `.credentials.json` 은 사용자 프로필 폴더의 접근 권한을 그대로 물려받아 기본으로 그 사용자 계정만 읽을 수 있고, 파일 자체는 따로 암호화하지 않습니다[5]. [DPAPI](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)나 [자격 증명 관리자](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html)를 거치지 않는 평문 JSON 이라서, 이미지 사본에서도 바로 읽힙니다. macOS 는 같은 정보를 키체인에 넣어서 [macOS](macos.md) 페이지와 비교해 봅니다.
 
-관찰한 파일에는 최상위 키 `claudeAiOauth` 아래에 다음 키가 있었습니다.
+파일의 최상위 키 `claudeAiOauth` 아래에는 다음 키가 있습니다.
 
 ```
 claudeAiOauth
@@ -145,7 +145,7 @@ claudeAiOauth
 
 네이티브 설치는 백그라운드에서 스스로 업데이트하기 때문에, 실행 파일이나 버전 파일의 파일 시스템 시각을 처음 설치한 때로 단정하지 않습니다. `.credentials.json` 의 `expiresAt`, `refreshTokenExpiresAt` 는 정수 시각이고 단위를 적은 공개 자료가 없어서, 13자리면 1970-01-01 UTC 기준 밀리초, 10자리면 초로 보고 파일 시각과 맞는지 확인합니다. 대화 시각은 기록 파일 안의 값이 더 정확하며 [세션 기록 구조](transcripts.md)의 시각 절을 따릅니다. 앱 폴더 쪽 세션 정보의 `createdAt`, `lastActivityAt` 해석은 [Claude — Windows 앱](../../chat-services/claude/windows.md)의 시각 절을 따릅니다.
 
-관찰한 PC 의 `.claude` 폴더 바로 아래에는 이름을 가린 JSON 파일 하나에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 있었습니다. 이 파일을 설명한 공개 자료가 없어서, 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 가늠해 볼 수 있습니다.
+`.claude` 폴더 바로 아래에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 든 JSON 파일이 있을 수 있습니다. 이 파일을 설명한 공개 자료가 없어서, 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 가늠해 볼 수 있습니다.
 
 ## 함정과 한계
 
@@ -155,7 +155,7 @@ claudeAiOauth
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 아래는 JSON 명세와 관찰한 최상위 키 이름으로 만든 예시 바이트이고, 실제 파일에서 뜬 것이 아닙니다. 파일 첫 바이트가 `7B`(`{`)이고, 공백·줄바꿈을 건너뛴 뒤 `claudeAiOauth` 의 ASCII 가 이어지면 암호화하지 않은 평문 JSON 입니다.
+**헥스로 한 번.** 아래는 JSON 명세와 최상위 키 이름으로 만든 예시 바이트이고, 실제 파일에서 뜬 것이 아닙니다. 파일 첫 바이트가 `7B`(`{`)이고, 공백·줄바꿈을 건너뛴 뒤 `claudeAiOauth` 의 ASCII 가 이어지면 암호화하지 않은 평문 JSON 입니다.
 
 ```
 만든 예시(명세로 만든 바이트)

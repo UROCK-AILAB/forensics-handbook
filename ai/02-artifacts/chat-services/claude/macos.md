@@ -27,8 +27,8 @@ Anthropic 은 Cowork 의 디스크 형식을 공개하지 않았습니다. 아�
 | `~/Library/Logs/Claude/mcp-server-서버이름.log` | 그 서버가 표준 오류로 낸 출력 | 문서[2] |
 | `~/Library/Application Support/Claude/local-agent-mode-sessions/` | Cowork 세션 메타데이터와 대화 기록 | 도구[5][6] |
 | `~/Library/Application Support/Claude/claude-code-sessions/` | 세션 메타데이터(본문은 `~/.claude/projects/`) | 도구[5] |
-| `~/Library/Application Support/Claude/` 의 `cowork-enabled-cli-ops.json`, `config.json`, `buddy-tokens.json`, `ant-did` | claude-forensics 가 수집 목록에 넣은 설정 파일 | 도구[5] |
-| `~/Library/Application Support/Claude/vm_bundles/` | 큰 캐시 폴더(claude-forensics 문서는 12GB 라고 적음) | 도구[5] |
+| `~/Library/Application Support/Claude/` 의 `cowork-enabled-cli-ops.json`, `config.json`, `buddy-tokens.json`, `ant-did` | 앱 설정·상태 파일 | 도구[5] |
+| `~/Library/Application Support/Claude/vm_bundles/` | 큰 캐시 폴더(12GB 에 이르기도 함) | 도구[5] |
 | 환경설정 도메인 `com.anthropic.claudefordesktop` | MDM 으로 내려받는 관리 설정 | 문서[3] |
 
 claude-forensics 는 `-W` 옵션을 주면 macOS 에서 `~/Library/Application Support/Claude` 를 자동으로 찾아 읽고, 다른 OS 에서는 이 옵션을 거부하고 `-w` 로 경로를 직접 받습니다[5]. Windows 에서 같은 폴더는 설치 방식에 따라 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 나 `%APPDATA%\Claude` 이고, Linux 에서는 `~/.config/Claude` 입니다[6]. Windows 쪽 폴더 모양과 앱 JSON 파일의 키는 [Windows 앱](windows.md)에서 다룹니다.
@@ -54,7 +54,7 @@ local-agent-mode-sessions/
             └── cliSessionId/subagents/**/agent-id.jsonl   하위 에이전트 기록 [6]
 ```
 
-agentsview 코드 주석은 세션 작업 폴더(`local_sid/`) 아래에 `.claude/outputs` 같은 큰 하위 폴더가 있고, 메타데이터 파일 옆에 `cowork-clientdata-cache.json`·`cowork_settings.json` 같은 캐시 파일이 함께 있다고 적습니다[6]. 그래서 도구는 `local_` 로 시작하고 `.json` 으로 끝나며 이름이 세션 ID 형식에 맞는 파일만 메타데이터로 봅니다. 인코딩된 폴더 이름은 판마다 달라서, 호스트에서 돈 세션은 `-outputs` 로 끝나는 이름이고 가상 머신에서 돈 세션은 `/sessions/이름` 을 바꾼 이름입니다[6]. 이름을 되짚어 만들지 말고 `cliSessionId.jsonl` 파일을 찾아 들어갑니다.
+세션 작업 폴더(`local_sid/`) 아래에는 `.claude/outputs` 같은 큰 하위 폴더가 있고, 메타데이터 파일 옆에는 `cowork-clientdata-cache.json`·`cowork_settings.json` 같은 캐시 파일이 함께 있습니다[6]. 그래서 agentsview 는 `local_` 로 시작하고 `.json` 으로 끝나며 이름이 세션 ID 형식에 맞는 파일만 메타데이터로 봅니다. 인코딩된 폴더 이름은 판마다 달라서, 호스트에서 돈 세션은 `-outputs` 로 끝나는 이름이고 가상 머신에서 돈 세션은 `/sessions/이름` 을 바꾼 이름입니다[6]. 이름을 되짚어 만들지 말고 `cliSessionId.jsonl` 파일을 찾아 들어갑니다.
 
 세션 메타데이터 `local_sid.json` 에서 두 도구가 읽는 키는 다음과 같습니다.
 
@@ -79,7 +79,7 @@ agentsview 코드 주석은 세션 작업 폴더(`local_sid/`) 아래에 `.claud
 
 ### 세션 메타데이터: `claude-code-sessions/`
 
-`claude-code-sessions/org/account/local_sessionId.json` 은 메타데이터만 담고(claude-forensics 는 이것을 Cowork 세션 메타데이터라고 부릅니다), 대화 본문은 `~/.claude/projects/` 의 Claude Code 기록 파일에 있습니다[5]. 둘은 `cliSessionId` 값과 기록 파일 이름으로 이어집니다. claude-forensics 문서가 드는 키는 `sessionId`, `cliSessionId`, `cwd`, `originCwd`, `createdAt`, `lastActivityAt`, `model`, `effort`, `isArchived`, `title`, `titleSource`, `permissionMode`, `remoteMcpServersConfig` 입니다[5]. 데스크톱 앱에서 시작한 세션 기록을 언제 지우는지는 Claude Code 의 [세션 기록 구조](../../dev-agents/claude-code/transcripts.md)에서 다룹니다.
+`claude-code-sessions/org/account/local_sessionId.json` 은 메타데이터만 담고(claude-forensics 는 이것을 Cowork 세션 메타데이터라고 부릅니다), 대화 본문은 `~/.claude/projects/` 의 Claude Code 기록 파일에 있습니다[5]. 둘은 `cliSessionId` 값과 기록 파일 이름으로 이어집니다. 파일에 드는 키는 `sessionId`, `cliSessionId`, `cwd`, `originCwd`, `createdAt`, `lastActivityAt`, `model`, `effort`, `isArchived`, `title`, `titleSource`, `permissionMode`, `remoteMcpServersConfig` 입니다[5]. 데스크톱 앱에서 시작한 세션 기록을 언제 지우는지는 Claude Code 의 [세션 기록 구조](../../dev-agents/claude-code/transcripts.md)에서 다룹니다.
 
 ### 관리 설정과 로그인 정보
 
@@ -91,11 +91,11 @@ agentsview 코드 주석은 세션 작업 폴더(`local_sid/`) 아래에 `.claud
 
 **증명하는 것.** 응용 프로그램 폴더에 앱이 있고 `~/Library/Application Support/Claude/` 가 있으면 이 macOS 사용자 계정에 앱을 설치하고 실행한 흔적이 있다고 쓸 수 있습니다. `local-agent-mode-sessions/` 에 세션이 있으면 그 계정으로 Cowork 세션을 만든 기록이 있다고 쓸 수 있고, 대화 기록에서 요청한 내용, 에이전트가 부른 도구, 쓴 토큰을 읽을 수 있습니다[5]. 메타데이터의 `userSelectedFolders`·`egressAllowedDomains`·`webFetchAllowedUrls` 는 에이전트에 허락한 폴더와 접속 범위를 알려 줍니다[5]. MCP 설정과 `~/Library/Logs/Claude` 의 로그가 있으면 로컬 MCP 서버를 연결했거나 연결하려 한 기록이 있다고 쓸 수 있고, 관리 설정이 있으면 기기에 조직 정책이 놓여 있었다고 쓸 수 있습니다.
 
-**증명하지 못하는 것.** 메타데이터의 `emailAddress` 는 앱에 로그인한 계정을 알려 줄 뿐이고, 그때 키보드 앞에 누가 있었는지는 알려 주지 않습니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)). `egressAllowedDomains` 는 허락한 범위이고 실제로 접속한 기록이 아니라서 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)과 맞춰 봅니다. `result` 줄의 `total_cost_usd` 는 런타임이 계산한 값이고 청구 금액이 아니며, claude-forensics 도 청구 근거는 Anthropic 콘솔이라고 적습니다[5]. 일반 채팅 대화가 기기에 남는지는 공개된 분석 자료가 없어서, 대화 내용이 필요하면 [계정 데이터 내보내기](export.md)를 씁니다.
+**증명하지 못하는 것.** 메타데이터의 `emailAddress` 는 앱에 로그인한 계정을 알려 줄 뿐이고, 그때 키보드 앞에 누가 있었는지는 알려 주지 않습니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)). `egressAllowedDomains` 는 허락한 범위이고 실제로 접속한 기록이 아니라서 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)과 맞춰 봅니다. `result` 줄의 `total_cost_usd` 는 런타임이 계산한 값이고 청구 금액이 아니며, 청구 근거는 Anthropic 콘솔입니다[5]. 일반 채팅 대화가 기기에 남는지는 공개된 분석 자료가 없어서, 대화 내용이 필요하면 [계정 데이터 내보내기](export.md)를 씁니다.
 
 ## 시각 해석
 
-세션 메타데이터의 `createdAt`·`lastActivityAt` 은 유닉스 epoch 밀리초 정수입니다[6]. claude-forensics 는 이 칸과 `_audit_timestamp` 를 밀리초 정수나 ISO 8601 문자열 두 형식으로 모두 받고, `audit.jsonl` 의 시각은 끝에 `Z` 가 붙은 UTC 문자열이라고 적습니다[5]. agentsview 는 대화 기록에 시각이 하나도 없는 세션(만들고 돌리지 않은 세션)만 `createdAt`·`lastActivityAt` 으로 시작·끝 시각을 채웁니다[6].
+세션 메타데이터의 `createdAt`·`lastActivityAt` 은 유닉스 epoch 밀리초 정수입니다[6]. 이 칸과 `_audit_timestamp` 는 밀리초 정수나 ISO 8601 문자열로 올 수 있고, `audit.jsonl` 의 시각은 끝에 `Z` 가 붙은 UTC 문자열입니다[5]. agentsview 는 대화 기록에 시각이 하나도 없는 세션(만들고 돌리지 않은 세션)만 `createdAt`·`lastActivityAt` 으로 시작·끝 시각을 채웁니다[6].
 
 세션 제목을 바꾸면 메타데이터 파일만 바뀌어서, agentsview 는 메타데이터 파일과 대화 기록 파일의 수정 시각 가운데 늦은 쪽을 세션의 수정 시각으로 씁니다[6]. 메타데이터 파일의 수정 시각이 늦다고 그때 대화가 있었다고 보지 않습니다.
 
@@ -107,7 +107,7 @@ agentsview 코드 주석은 세션 작업 폴더(`local_sid/`) 아래에 `.claud
 - **큰 폴더는 따로 판단합니다.** claude-forensics 는 `vm_bundles/`·`Cache/`·`Code Cache/` 를 수사 가치가 없다고 보고 복사하지 않습니다[5]. 도구의 수집 목록을 그대로 쓰면 이 폴더들이 빠지므로, 사건에 필요하면 따로 뜹니다.
 - **`skills-plugin/` 은 세션이 아닙니다.** `local-agent-mode-sessions/` 바로 아래에 있지만 플러그인 지원 데이터입니다[5][6].
 - **도구마다 읽는 기록이 다릅니다.** 위치 절에서 본 것처럼 `audit.jsonl` 과 세션 폴더 안 `.claude/projects/` 가운데 도구가 한쪽만 읽을 수 있어서, 도구 결과에 세션이 비어 있으면 원본 폴더를 직접 봅니다.
-- **App Store 판과 헷갈리지 않습니다.** App Store 의 Claude 앱은 iPhone·iPad 호환만 표기돼 있고 Mac 호환 표기는 없었습니다(2026-09-25 열람)[4]. Mac 의 Claude 흔적은 이 페이지의 데스크톱 앱에서 나온 것인지 [웹 브라우저](web.md)에서 나온 것인지부터 가립니다.
+- **App Store 판과 헷갈리지 않습니다.** App Store 의 Claude 앱은 iPhone·iPad 호환만 표기돼 있고 Mac 호환 표기는 없습니다(2026-09 기준)[4]. Mac 의 Claude 흔적은 이 페이지의 데스크톱 앱에서 나온 것인지 [웹 브라우저](web.md)에서 나온 것인지부터 가립니다.
 - **앱을 지워도 라이브러리가 남을 수 있습니다.** 응용 프로그램 폴더에 앱이 없어도 사용자 라이브러리의 폴더와 로그를 따로 봅니다.
 
 ## 직접 분석해 보기

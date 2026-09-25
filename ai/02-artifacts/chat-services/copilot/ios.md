@@ -11,9 +11,9 @@ Microsoft Copilot iOS 앱은 대화를 기기에 평문으로 남긴다는 연�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Microsoft 개인정보 처리방침은 소비자용 Copilot 을 웹과 Windows, Mac, iOS, Android 앱으로 제공한다고 적습니다 [1]. 앱의 App Store 주소는 `https://apps.apple.com/us/app/microsoft-copilot/id6472538445` 입니다. 공개 사용자 에이전트 목록에는 이 주소가 Android 패키지 `com.microsoft.copilot` 와 한 줄로 함께 올라 있습니다 [3].
+Microsoft 는 소비자용 Copilot 을 웹과 Windows, Mac, iOS, Android 앱으로 제공합니다 [1]. 앱의 App Store 주소는 `https://apps.apple.com/us/app/microsoft-copilot/id6472538445` 이고, 같은 앱의 Android 패키지는 `com.microsoft.copilot` 입니다 [3].
 
-Tyagi·Gong·Karabiyik(2025)은 ChatGPT·Gemini·Copilot 모바일 앱을 Android 와 iOS 에서 분석했습니다 [2]. 초록에 따르면 ChatGPT 와 Copilot 은 두 OS 모두에서 대화 데이터를 브라우저 데이터와 함께 평문으로 저장합니다. 그래서 iOS 기기의 앱 데이터에 닿을 수 있으면 대화 내용이 기기에서 나올 수 있습니다.
+ChatGPT·Gemini·Copilot 모바일 앱을 Android 와 iOS 에서 분석한 2025년 논문에서, ChatGPT 와 Copilot 은 두 OS 모두에서 대화 데이터를 브라우저 데이터와 함께 평문으로 저장했습니다 [2]. 그래서 iOS 기기의 앱 데이터에 닿을 수 있으면 대화 내용이 기기에서 나올 수 있습니다.
 
 같은 초록 안에서도 OS 나 앱이 다른 결과는 섞어 쓰지 않습니다. Copilot 에서 사용자 프롬프트·브라우저 데이터·위치 데이터를 복구한 것은 Android 기기의 결과입니다 [2]. 위치 설정을 끈 iOS 기기에서 반경 약 0.5마일로 위치가 드러난 앱은 Gemini 와 ChatGPT 이고, Copilot 은 여기에 들지 않습니다 [2]. Android 쪽 내용은 [Android 앱](android.md) 페이지에서 다룹니다.
 
@@ -29,7 +29,7 @@ Copilot iOS 앱의 번들 ID 는 공개 자료에 나오지 않으니 검체에�
 | `*/Containers/Shared/AppGroup/*/.com.apple.mobile_container_manager.metadata.plist` | 앱 그룹 폴더의 주인 번들 ID(`MCMMetadataIdentifier` 키) | iLEAPP `appGrouplisting.py` [6] |
 | `*/Containers/Data/PluginKitPlugin/*/.com.apple.mobile_container_manager.metadata.plist` | 앱 확장 폴더의 주인 번들 ID(같은 키) | iLEAPP `appGrouplisting.py` [6] |
 
-iLEAPP 은 두 분석기를 iOS 12.4 부터 iOS 18.7.8 까지의 시험 이미지로 돌렸다고 적었습니다 [4][6]. 그보다 새 iOS 판에서는 모양이 다를 수 있습니다. Tyagi 외(2025)의 초록에는 시험한 Copilot 앱 판과 iOS 판이 나오지 않으니, 판을 인용하려면 논문 본문을 봅니다 [2].
+iLEAPP 의 두 분석기를 시험한 범위는 iOS 12.4 부터 iOS 18.7.8 까지입니다 [4][6]. 그보다 새 iOS 판에서는 모양이 다를 수 있습니다. 2025년 논문의 초록에는 시험한 Copilot 앱 판과 iOS 판이 나오지 않으니, 판을 인용하려면 논문 본문을 봅니다 [2].
 
 로컬 백업에 이 앱의 데이터가 들어가는지, 로그인 정보가 키체인에 어떤 이름으로 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 백업을 받는 방법과 그 안의 짜임은 [로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html) 페이지를 따릅니다. 잠금 상태에서 파일이 읽히는지는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html), 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) 페이지에 있습니다. 이 페이지는 잠금 해제나 보안 우회 방법을 다루지 않습니다.
 
@@ -37,7 +37,7 @@ iLEAPP 은 두 분석기를 iOS 12.4 부터 iOS 18.7.8 까지의 시험 이미�
 
 앱 데이터 폴더 안에서 대화가 어떤 파일에 어떤 짜임으로 들어 있는지는 공개된 분석 자료가 없습니다. iLEAPP 에는 Copilot 분석기가 없고, 2026-09-25 기준 저장소의 AI 대화 앱 분석기는 `chatgpt.py` 와 `iOSclaude.py` 두 개입니다 [5].
 
-그래서 폴더 안의 파일을 하나씩 형식부터 가립니다. SQLite 파일은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/sqlite/index.html), plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html) 페이지를 따라 읽습니다. Tyagi 외(2025)가 대화와 함께 브라우저 데이터를 들었으니 앱 안의 웹뷰 저장소도 살펴봅니다 [2]. 웹뷰 저장소의 일반 구조는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+그래서 폴더 안의 파일을 하나씩 형식부터 가립니다. SQLite 파일은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/sqlite/index.html), plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html) 페이지를 따라 읽습니다. 대화가 브라우저 데이터와 함께 저장된다는 연구가 있으니 앱 안의 웹뷰 저장소도 살펴봅니다 [2]. 웹뷰 저장소의 일반 구조는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -49,13 +49,13 @@ iLEAPP 은 두 분석기를 iOS 12.4 부터 iOS 18.7.8 까지의 시험 이미�
 
 Copilot 앱 파일 안의 시각 칸과 형식은 공개 자료에 없습니다. 검체에서 칸을 찾으면 값의 모양(유닉스 초·밀리초, Mac 절대 시각 등)과 시간대를 따로 확인합니다.
 
-앱을 쓴 시점을 보조로 볼 때는 `applicationState.db` 의 화면 스냅숏 시각을 쓸 수 있습니다. iLEAPP 은 iOS 18 과 iOS 26 추출본에서 `creationDate` 가 해당 스냅숏 파일의 UTC 수정 시각과 맞았다고 적었습니다 [4]. `lastUsedDate` 는 드물게 채워지고, `creationDate` 보다 한참 뒤에 바뀔 수 있습니다 [4]. 두 값 모두 그 시각에 앱이 화면 앞에 있었다거나 사용자가 화면을 봤다는 증명은 아닙니다 [4].
+앱을 쓴 시점을 보조로 볼 때는 `applicationState.db` 의 화면 스냅숏 시각을 쓸 수 있습니다. iOS 18 과 iOS 26 추출본에서 `creationDate` 는 해당 스냅숏 파일의 UTC 수정 시각과 같습니다 [4]. `lastUsedDate` 는 드물게 채워지고, `creationDate` 보다 한참 뒤에 바뀔 수 있습니다 [4]. 두 값 모두 그 시각에 앱이 화면 앞에 있었다거나 사용자가 화면을 봤다는 증명은 아닙니다 [4].
 
 ## 함정과 한계
 
-- `applicationState.db` 에 번들 ID 가 없다고 앱을 설치한 적이 없다고 보지 않습니다. iLEAPP 은 이 DB 에서 번들 ID 를 읽을 수 없는 앱은 표에서 빠지고, 설치·삭제 이력은 Mobile Installation 로그에 남을 수 있다고 적었습니다 [4].
-- iLEAPP 은 시험 이미지의 앱 그룹 목록에 기기에 더는 없는 앱의 항목이 남아 있었다고 적었습니다 [6]. 이 항목 하나로 "지금 설치되어 있다" 고 쓰지 않습니다.
-- Tyagi 외(2025)는 2025년 시점의 결과입니다 [2]. 앱이 바뀌면 기기에 두는 데이터도 바뀔 수 있으니 검체의 앱 판을 함께 적습니다.
+- `applicationState.db` 에 번들 ID 가 없다고 앱을 설치한 적이 없다고 보지 않습니다. 이 DB 에서 번들 ID 를 읽을 수 없는 앱은 iLEAPP 표에서 빠지고, 설치·삭제 이력은 Mobile Installation 로그에 남을 수 있습니다 [4].
+- 앱 그룹 목록에는 기기에 더는 없는 앱의 항목이 남아 있을 수 있습니다 [6]. 이 항목 하나로 "지금 설치되어 있다" 고 쓰지 않습니다.
+- 위 논문은 2025년 시점의 결과입니다 [2]. 앱이 바뀌면 기기에 두는 데이터도 바뀔 수 있으니 검체의 앱 판을 함께 적습니다.
 - 초록의 iOS 위치 데이터 결과는 Copilot 이 아니라 Gemini·ChatGPT 의 것입니다 [2].
 - 같은 계정을 브라우저에서도 썼다면 대화가 앱이 아니라 [웹 브라우저](web.md)에서 이뤄졌을 수 있습니다. [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html)나 [크롬](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html) 방문 기록도 봅니다.
 - 앱 데이터에 로그인 토큰이 남아 있으면 보고서에서 가립니다. 토큰이 남는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있고, 서버 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
@@ -78,7 +78,7 @@ com.example.app  | (생략)      | .../mobile/Containers/Data/Application/2222BB
 | 함께 볼 기록 | 알려 주는 것 |
 |---|---|
 | [계정 데이터 내보내기](export.md) | 서버에 남은 프롬프트·응답 |
-| [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱이 서비스와 통신한 시간대. 공개 사용자 에이전트 목록은 `CopilotSapphire/` 뒤에 판 번호가 붙은 문자열을 Copilot 앱 요청으로 봅니다 [3] |
+| [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱이 서비스와 통신한 시간대. Copilot 앱 요청의 사용자 에이전트는 `CopilotSapphire/` 뒤에 판 번호가 붙은 모양입니다 [3] |
 | [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html) | 같은 서비스를 브라우저로 쓴 기록 |
 | [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html) | 앱 설치·사용과 다른 활동을 한 시간 축에 놓기 |
 

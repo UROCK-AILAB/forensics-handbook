@@ -9,7 +9,7 @@ nav_order: 620
 
 macOS 에서 GitHub Copilot 기록은 제품마다 다른 폴더에 남습니다. VS Code 채팅은 `~/Library/Application Support/Code/User` 아래, Copilot CLI 는 `~/.copilot` 아래, Visual Studio 추적 파일은 `~/Library/Caches/VSGitHubCopilotLogs/traces` 아래, Xcode 용 Copilot 로그는 `~/Library/Logs/GitHubCopilot` 아래에 있습니다.
 
-> 근거와 날짜: VS Code·GitHub 공식 문서(2026-09-25 열람), VS Code 오픈소스 `chatSessionStore.ts`(그 파일의 마지막 커밋 2026-08-06), agentsview 파서 코드와 형식 조사 문서(`session-format-sources.md`, 2026-09-11 갱신, 저장소는 2026-09-25 기준)를 근거로 썼습니다. agentsview 는 VS Code 1.132 의 JSONL 세션(2026-08-12), Copilot CLI 1.0.76-0 기록(2026-07-28), Copilot CLI 1.0.83 macOS(arm64) 배포 패키지(2026-09-10)로 형식을 다시 확인했습니다. 이보다 새 판에서는 경로나 칸이 다를 수 있으니 검체의 앱 버전부터 적어 둡니다.
+> 이 쪽의 형식은 VS Code 1.132(JSONL 세션), Copilot CLI 1.0.76-0(세션 기록), Copilot CLI 1.0.83 macOS(arm64) 기준입니다[5]. 이보다 새 판에서는 경로나 칸이 다를 수 있으니 검체의 앱 버전부터 적어 둡니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -38,7 +38,7 @@ VS Code 는 채팅 세션을 저장하는 코드가 OS 와 상관없이 같아�
 | `~/Library/Logs/GitHubCopilot/` | Xcode 용 Copilot 로그 폴더 | GitHub 문서 [9] |
 | `~/Library/Logs/GitHubCopilot/github-copilot-for-xcode.log` | Xcode 용 Copilot 의 최근 로그 파일 | GitHub 문서 [9] |
 
-Linux 에서는 VS Code 가 같은 폴더 짜임을 `~/.config/Code/User` 아래에 씁니다(VS Code 문서 [1], agentsview 코드 주석 [3]). Visual Studio 추적 파일은 Windows 에서 `%LOCALAPPDATA%\Temp\VSGitHubCopilotLogs\traces\`, Linux 에서 `~/.cache/VSGitHubCopilotLogs/traces/` 에 있습니다 [8].
+Linux 에서는 VS Code 가 같은 폴더 짜임을 `~/.config/Code/User` 아래에 씁니다 [1][3]. Visual Studio 추적 파일은 Windows 에서 `%LOCALAPPDATA%\Temp\VSGitHubCopilotLogs\traces\`, Linux 에서 `~/.cache/VSGitHubCopilotLogs/traces/` 에 있습니다 [8].
 
 판에 따라 달라지는 점은 아래와 같습니다.
 
@@ -72,12 +72,12 @@ Linux 에서는 VS Code 가 같은 폴더 짜임을 `~/.config/Code/User` 아래
 
 ### Copilot CLI 이벤트
 
-Copilot CLI 세션 파일은 한 줄에 이벤트 하나를 적는 JSONL 이고, 줄마다 `type`, `timestamp`, `data` 가 있습니다 [7]. agentsview 가 읽는 이벤트 종류와 칸은 아래와 같습니다 [7].
+Copilot CLI 세션 파일은 한 줄에 이벤트 하나를 적는 JSONL 이고, 줄마다 `type`, `timestamp`, `data` 가 있습니다 [7]. 주요 이벤트 종류와 칸은 아래와 같습니다 [7].
 
-| `type` | agentsview 가 읽는 칸 | 알려 주는 것 |
+| `type` | 주요 칸 | 알려 주는 것 |
 |---|---|---|
 | `session.start` | `data.sessionId`, `data.context.cwd`, `data.context.branch` | 세션 ID, CLI 를 실행한 폴더, git 브랜치 |
-| `user.message` | `data.content`, `data.source` | 사용자가 넣은 글. `source` 가 `skill-` 로 시작하면 사용자 입력이 아니라 스킬이 넣은 글이라서 agentsview 는 뺌 |
+| `user.message` | `data.content`, `data.source` | 사용자가 넣은 글. `source` 가 `skill-` 로 시작하면 사용자 입력이 아니라 스킬이 넣은 글 |
 | `assistant.message` | `data.content`, `data.reasoningText`, `data.toolRequests[]`(`name`, `arguments`, `toolCallId`), `data.model`, `data.outputTokens` | 응답, 추론 글, 요청한 도구와 인자, 모델, 출력 토큰 수 |
 | `tool.execution_start` | `data.toolCallId` | 도구 실행 시작 |
 | `tool.execution_complete` | `data.toolCallId`, `data.result`, `data.success` | 도구 실행 결과와 성공 여부 |
@@ -88,7 +88,7 @@ Copilot CLI 세션 파일은 한 줄에 이벤트 하나를 적는 JSONL 이고,
 
 ### Visual Studio 추적 파일
 
-추적 파일은 OpenTelemetry span 을 한 줄에 하나씩 적은 JSONL 입니다 [5]. agentsview 는 span 속성 `gen_ai.conversation.id` 로 대화를 나누고, 토큰 수는 `gen_ai.usage.input_tokens` 와 `gen_ai.usage.output_tokens` 에서 읽습니다 [5][10]. agentsview 코드 주석에는 Visual Studio Copilot 이 대화를 이 공용 추적 파일 안에 저장한다고 적혀 있습니다 [10]. Microsoft 는 이 파일 형식을 공개하지 않았습니다 [5].
+추적 파일은 OpenTelemetry span 을 한 줄에 하나씩 적은 JSONL 입니다 [5]. 대화는 span 속성 `gen_ai.conversation.id` 로 나뉘고, 토큰 수는 `gen_ai.usage.input_tokens` 와 `gen_ai.usage.output_tokens` 에 있습니다 [5][10]. Visual Studio Copilot 은 대화를 이 공용 추적 파일 안에 저장합니다 [10]. Microsoft 는 이 파일 형식을 공개하지 않았습니다 [5].
 
 ### Xcode 용 Copilot 로그
 
@@ -96,7 +96,7 @@ Xcode 용 Copilot 앱에서 Advanced → Open Copilot Log Folder 를 누르면 �
 
 ### JetBrains IDE
 
-macOS 의 JetBrains IDE 에서는 Help → Show Log in Finder 로 `idea.log` 를 엽니다 [9]. JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장하고, agentsview 는 이 데이터베이스를 직접 읽지 않고 `copilot-jetbrains-exporter` 로 JSONL 을 뽑아서 읽습니다 [8]. 그 데이터베이스 파일의 경로는 공개된 분석 자료가 없어 검체로 확인해야 합니다. `idea.log` 에 남는 Copilot 관련 줄은 [로그와 원격 측정](logs.md)에서 다룹니다.
+macOS 의 JetBrains IDE 에서는 Help → Show Log in Finder 로 `idea.log` 를 엽니다 [9]. JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장하고, 이 데이터베이스는 `copilot-jetbrains-exporter` 로 JSONL 을 뽑아서 읽을 수 있습니다 [8]. 그 데이터베이스 파일의 경로는 공개된 분석 자료가 없어 검체로 확인해야 합니다. `idea.log` 에 남는 Copilot 관련 줄은 [로그와 원격 측정](logs.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -123,7 +123,7 @@ VS Code 세션 파일과 설정 파일이 증명하는 것과 증명하지 못�
 - **VS Code JSONL 세션은 마지막 줄만 보면 안 됩니다.** 조작 기록이라서 처음부터 다시 적용해야 최종 모양이 나오고, 나중에 바뀐 값의 이전 값은 앞 줄에 남습니다 [4]. 다시 적용하는 방법은 [Windows](windows.md)에 있습니다.
 - **`session-store.db` 는 WAL 과 함께 뜹니다.** `session-store.db-wal` 을 빼고 복사하면 최근 기록이 빠질 수 있습니다. 저장소에서 가장 늦은 사용량 줄의 시각이 세션 전체가 기록됐다는 뜻은 아닙니다 [5]. WAL 을 읽는 법은 [SQLite](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/sqlite/index.html)에 있습니다.
 - **Visual Studio 추적 파일은 캐시 폴더에 있습니다.** `~/Library/Caches` 아래라서 수집할 때 파일이 남아 있는지부터 확인합니다.
-- **로그인 정보는 따로 봅니다.** Copilot 로그인 토큰이 키체인에 들어가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에, 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다. agentsview 는 VS Code 세션 파일과 Copilot CLI 세션 파일을 복호화 단계 없이 JSON 으로 읽습니다 [4][7].
+- **로그인 정보는 따로 봅니다.** Copilot 로그인 토큰이 키체인에 들어가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에, 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다. VS Code 세션 파일과 Copilot CLI 세션 파일은 복호화 단계 없이 JSON 으로 읽힙니다 [4][7].
 - **MCP 도구 호출.** Copilot 에 붙인 MCP 서버의 기록은 [MCP 서버와 도구 호출 기록](../mcp.md)에서 다룹니다.
 
 ## 직접 분석해 보기

@@ -11,9 +11,9 @@ Microsoft 는 소비자용 Copilot 을 Mac 앱으로도 제공하고, 이 앱은
 
 ## 공개 자료로 알 수 있는 것
 
-개인정보 처리방침은 소비자용 Copilot 을 웹(`copilot.microsoft.com`)과 Windows, Mac, iOS, Android 앱으로 제공한다고 적습니다[1]. Microsoft 앱의 배포 정보를 모아 두는 MOFA 저장소의 README 는 Mac App Store 목록에 "Microsoft Copilot" 을 판 `25.7.440902001`, 번들 ID `com.microsoft.copilot-mac` 으로 적어 두었습니다[2]. 판은 목록을 만든 때의 값이라서, 검체에 설치된 판은 앱 번들의 `Info.plist` 에서 따로 읽습니다.
+Microsoft 는 소비자용 Copilot 을 웹(`copilot.microsoft.com`)과 Windows, Mac, iOS, Android 앱으로 제공합니다[1]. Mac App Store 의 "Microsoft Copilot" 은 번들 ID 가 `com.microsoft.copilot-mac` 이고, 2026-09-25 기준 판은 `25.7.440902001` 입니다[2]. 판은 그때의 값이라서, 검체에 설치된 판은 앱 번들의 `Info.plist` 에서 따로 읽습니다.
 
-같은 README 의 독립 설치 패키지 목록에도 "Microsoft Copilot" 이 있지만, 이쪽은 번들 ID 가 `com.microsoft.m365copilot` 이고 최소 macOS 14.0, 판 `1.2608 (0301)`(2026-08-03 갱신)이며 Microsoft 365 Copilot 릴리스 노트로 이어집니다[2]. 이름이 같아도 회사·학교 계정용 앱이므로 번들 ID 로 둘을 구별하고, 이 앱은 [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)에서 다룹니다.
+App Store 를 거치지 않는 독립 설치 패키지에도 "Microsoft Copilot" 이 있지만, 이쪽은 번들 ID 가 `com.microsoft.m365copilot` 이고 최소 macOS 14.0, 판 `1.2608 (0301)`(2026-08-03 갱신)이며 Microsoft 365 Copilot 릴리스 노트로 이어집니다[2]. 이름이 같아도 회사·학교 계정용 앱이므로 번들 ID 로 둘을 구별하고, 이 앱은 [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)에서 다룹니다.
 
 | 항목 | 내용 |
 |---|---|
@@ -40,7 +40,7 @@ Microsoft 는 소비자용 Copilot 을 Mac 앱으로도 제공하고, 이 앱은
 
 ## 함정과 한계
 
-이 페이지의 내용은 공개 문서와 배포 목록, 공통 원리에서 왔으므로 Mac 앱의 실제 파일 모양은 검체에서 확인합니다. 같은 계정을 웹이나 다른 기기에서 썼다면 대화가 그쪽에서 생겼을 수 있어서, [웹 브라우저](web.md)의 흔적과 [사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html) 방문 기록도 함께 봅니다. 회사·학교 계정 대화는 소비자용 개인정보 안내가 아니라 조직의 보존 정책을 따르고, [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)에서 다룹니다.
+Mac 앱의 실제 파일 모양은 공개된 분석 자료가 없어 검체에서 확인합니다. 같은 계정을 웹이나 다른 기기에서 썼다면 대화가 그쪽에서 생겼을 수 있어서, [웹 브라우저](web.md)의 흔적과 [사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html) 방문 기록도 함께 봅니다. 회사·학교 계정 대화는 소비자용 개인정보 안내가 아니라 조직의 보존 정책을 따르고, [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)에서 다룹니다.
 
 ## 교차 검증
 

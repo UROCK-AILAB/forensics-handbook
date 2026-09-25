@@ -11,7 +11,7 @@ nav_order: 150
 
 ## 무엇이 남나 · 왜 생기나
 
-웹판은 따로 설치하는 프로그램 없이 브라우저 탭 안에서 돌아서, 기기에 남는 흔적은 모두 브라우저가 만든 것입니다. 대화는 계정에 묶여 서버에 저장되고, 개인정보 안내 문서는 사용자가 지운 대화를 대화 목록에서 바로 감추고 서버 저장소에서는 30일 안에 지운다고 설명합니다[2]. 이 문서는 보관과 삭제를 모두 서버 저장소 기준으로 설명하므로, 대화 내용은 브라우저보다 계정 쪽 자료에서 먼저 찾습니다. 보관 기간과 모델 개선 설정은 [Claude](index.md) 허브와 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 모아 두었습니다.
+웹판은 따로 설치하는 프로그램 없이 브라우저 탭 안에서 돌아서, 기기에 남는 흔적은 모두 브라우저가 만든 것입니다. 대화는 계정에 묶여 서버에 저장되고, 사용자가 지운 대화는 대화 목록에서 바로 사라지고 서버 저장소에서는 30일 안에 지워집니다[2]. 보관과 삭제가 모두 서버 저장소 기준이므로, 대화 내용은 브라우저보다 계정 쪽 자료에서 먼저 찾습니다. 보관 기간과 모델 개선 설정은 [Claude](index.md) 허브와 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 모아 두었습니다.
 
 브라우저 쪽에는 claude.ai 주소를 연 방문 기록, claude.ai 도메인의 쿠키, 받은 페이지 자원이 들어간 캐시가 남고, 사이트가 쓰는 Local Storage·IndexedDB 같은 사이트 저장소도 생길 수 있습니다. 사이트 저장소에 어떤 키가 있는지, 대화 본문이 들어가는지는 공개된 분석 자료가 없어 검체에서 claude.ai 출처 항목을 열어 확인합니다. 저장소의 파일 형식과 위치는 브라우저마다 달라서 아래 브라우저 페이지를 따릅니다.
 
@@ -50,15 +50,15 @@ nav_order: 150
 
 ## 함정과 한계
 
-브라우저의 시크릿 창과 Claude 의 시크릿 대화 (Incognito chat) 는 서로 다른 기능입니다. 브라우저 시크릿 창은 브라우저 쪽 기록을 줄이는 기능이고, Claude 의 시크릿 대화는 서비스 안의 대화 방식입니다. 개인정보 안내 문서는 Claude 의 시크릿 대화를 모델 개선 설정을 켜 두었어도 개선에 쓰지 않는다고 설명하지만[2], 시크릿 대화를 얼마나 보관하는지와 대화 목록에 보이는지는 그 시점의 공식 도움말에서 따로 확인합니다.
+브라우저의 시크릿 창과 Claude 의 시크릿 대화 (Incognito chat) 는 서로 다른 기능입니다. 브라우저 시크릿 창은 브라우저 쪽 기록을 줄이는 기능이고, Claude 의 시크릿 대화는 서비스 안의 대화 방식입니다. Claude 의 시크릿 대화는 모델 개선 설정을 켜 두었어도 개선에 쓰지 않습니다[2]. 시크릿 대화를 얼마나 보관하는지와 대화 목록에 보이는지는 그 시점의 공식 도움말에서 따로 확인합니다.
 
-대화를 지우면 목록에서는 바로 사라지고 서버 저장소에서는 30일 안에 지웁니다[2]. 이 설명대로라면 목록에 없는 대화도 지운 지 30일이 지나지 않았으면 서버 쪽에 아직 남아 있을 수 있습니다. 지운 대화가 내보내기 자료에 들어가는지는 공개된 자료가 없어, 시험용 계정에서 대화를 지운 뒤 내보내 보고 확인합니다.
+대화를 지우면 목록에서는 바로 사라지고 서버 저장소에서는 30일 안에 지웁니다[2]. 그래서 목록에 없는 대화도 지운 지 30일이 지나지 않았으면 서버 쪽에 아직 남아 있을 수 있습니다. 지운 대화가 내보내기 자료에 들어가는지는 공개된 자료가 없어, 시험용 계정에서 대화를 지운 뒤 내보내 보고 확인합니다.
 
 Windows 데스크톱 앱은 앱 패키지 폴더 안에 크롬 계열 저장소를 따로 두어서, 브라우저 프로필만 보면 앱으로 쓴 흔적을 놓칩니다([Windows 앱](windows.md)). macOS 앱의 저장 위치는 [macOS 앱](macos.md)에서 다룹니다. 반대로 브라우저에 들어간 다른 회사의 AI 기능이 남긴 기록과 claude.ai 방문을 섞지 않도록 [브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md)도 함께 봅니다.
 
 ## 직접 분석해 보기
 
-claude.ai 가 브라우저에 두는 값은 공개된 분석 자료가 없어서 이 페이지에는 헥스 예시를 싣지 않습니다. 브라우저 파일을 헥스로 따라가는 방법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. 공개 도구로는 다음 순서로 봅니다.
+claude.ai 가 브라우저에 두는 값은 공개된 분석 자료가 없습니다. 브라우저 파일을 헥스로 따라가는 방법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. 공개 도구로는 다음 순서로 봅니다.
 
 1. 브라우저를 닫은 상태에서 프로필 폴더를 통째로 사본으로 뜹니다. 데이터베이스 옆의 저널·WAL 파일도 함께 가져옵니다.
 2. 방문 기록 데이터베이스를 SQLite 도구(예: DB Browser for SQLite)로 열어 주소에 claude.ai 가 들어간 줄만 거릅니다.

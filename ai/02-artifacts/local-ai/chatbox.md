@@ -12,11 +12,11 @@ Chatbox 는 Ollama·LM Studio 같은 로컬 백엔드나 클라우드 API 에 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-논문[1]은 로컬 LLM 환경을 백엔드 런타임, 클라이언트 화면, 통합형으로 나누고 Chatbox 를 클라이언트 화면 앱으로 분류합니다(§3.2, 표 1). 모델도 백엔드도 대화 문맥을 스스로 들고 있지 않아서, 클라이언트 앱이 대화를 저장해 두었다가 요청할 때마다 다시 보냅니다(§4.4). 그래서 논문은 클라이언트 화면 앱을 로컬 LLM 환경에서 가장 중요한 증거가 나오는 곳으로 봅니다(§4.5). 백엔드 쪽 흔적은 [Ollama](ollama.md)와 [LM Studio](lm-studio.md)에서, 갈래 전체의 틀은 [로컬 AI](index.md)에서 다룹니다.
+로컬 LLM 환경은 백엔드 런타임, 클라이언트 화면, 통합형으로 나뉘고, Chatbox 는 클라이언트 화면 앱입니다[1, §3.2, 표 1]. 모델도 백엔드도 대화 문맥을 스스로 들고 있지 않아서, 클라이언트 앱이 대화를 저장해 두었다가 요청할 때마다 다시 보냅니다[1, §4.4]. 그래서 로컬 LLM 환경에서 가장 중요한 증거는 클라이언트 화면 앱에서 나옵니다[1, §4.5]. 백엔드 쪽 흔적은 [Ollama](ollama.md)와 [LM Studio](lm-studio.md)에서, 갈래 전체의 틀은 [로컬 AI](index.md)에서 다룹니다.
 
-클라우드 모델을 API 키로 쓸 때도 대화 기록은 로컬 앱에 남습니다. 논문은 API 호출이 대개 상태를 남기지 않아서, 로컬 앱이 대화 기록을 들고 있다가 호출할 때마다 함께 보내고 클라우드 쪽은 이 문맥을 대개 보관하지 않는다고 적었습니다(§3.4). 같은 계정이라도 브라우저로 쓴 대화와 API 키로 쓴 대화는 따로 관리되므로, Chatbox 로 쓴 클라우드 대화는 서비스 회사 쪽보다 이 PC 에서 먼저 찾습니다. 서버와 기기 가운데 어디에 데이터가 남는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다.
+클라우드 모델을 API 키로 쓸 때도 대화 기록은 로컬 앱에 남습니다. API 호출은 대개 상태를 남기지 않아서, 로컬 앱이 대화 기록을 들고 있다가 호출할 때마다 함께 보내고 클라우드 쪽은 이 문맥을 대개 보관하지 않습니다[1, §3.4]. 같은 계정이라도 브라우저로 쓴 대화와 API 키로 쓴 대화는 따로 관리되므로, Chatbox 로 쓴 클라우드 대화는 서비스 회사 쪽보다 이 PC 에서 먼저 찾습니다. 서버와 기기 가운데 어디에 데이터가 남는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다.
 
-논문이 꼽은 Chatbox 아티팩트는 여섯 가지입니다[1, 표 4].
+Chatbox 의 주요 아티팩트는 여섯 가지입니다[1, 표 4].
 
 | 아티팩트 | 형식 | 담긴 것 |
 |---|---|---|
@@ -27,13 +27,13 @@ Chatbox 는 Ollama·LM Studio 같은 로컬 백엔드나 클라우드 API 에 �
 | API 캐시 | 크롬 캐시 | API 호출에 대한 응답 |
 | 모델 목록 | LevelDB | 제공자별 모델 목록 |
 
-논문은 이 가운데 `config.json` 을 가장 중요한 아티팩트로 꼽고, 올린 파일과 만든 파일을 그다음으로 봅니다(§4.5). 만든 파일은 아동 성착취물 같은 불법 콘텐츠를 만들거나 퍼뜨린 사건에서 직접 증거가 될 수 있습니다(§4.3).
+이 가운데 가장 중요한 것은 `config.json` 이고, 그다음이 올린 파일과 만든 파일입니다[1, §4.5]. 만든 파일은 아동 성착취물 같은 불법 콘텐츠를 만들거나 퍼뜨린 사건에서 직접 증거가 될 수 있습니다[1, §4.3].
 
 ## 위치와 버전별 차이
 
 ### Windows 경로
 
-논문 부록 A 와 LangurTrace KAPE 타깃[3], 공개 샘플[4]을 합친 표입니다. 소스를 보면 `config.json`, 백업 파일, `chatbox-blobs` 는 모두 Electron 이 앱마다 정하는 사용자 데이터 폴더(`userData`) 아래에 만들어집니다[5, `store-node.ts`].
+논문 부록 A 와 LangurTrace KAPE 타깃[3], 공개 샘플[4]을 합친 표입니다. `config.json`, 백업 파일, `chatbox-blobs` 는 모두 Electron 이 앱마다 정하는 사용자 데이터 폴더(`userData`) 아래에 만들어집니다[5, `store-node.ts`].
 
 | 경로 | 담긴 것 | 근거 |
 |---|---|---|
@@ -47,13 +47,13 @@ Chatbox 는 Ollama·LM Studio 같은 로컬 백엔드나 클라우드 API 에 �
 | `%AppData%\xyz.chatboxapp.app\Cache\CacheData\` | 같은 캐시(타깃이 적은 이름) | 타깃 |
 | `%LocalAppData%\xyz.chatboxapp.app-updater\pending\` | 받아 둔 업데이트 설치 파일 | 샘플 `main.log` |
 
-API 캐시 폴더 이름은 논문이 `Cache_Data`, KAPE 타깃이 `CacheData` 로 서로 다르게 적었습니다. 타깃 경로가 검체의 실제 폴더와 다르면 캐시가 수집되지 않으므로, 검체에서 폴더 이름을 먼저 보고 수집 경로를 맞춥니다. 모델 목록 LevelDB 는 논문이 경로를 적지 않았고 KAPE 타깃도 모으지 않습니다[1, 부록 A][3]. 검체의 `xyz.chatboxapp.app` 폴더 아래에서 LevelDB 폴더를 찾아 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)의 방법으로 읽습니다.
+API 캐시 폴더 이름은 논문이 `Cache_Data`, KAPE 타깃이 `CacheData` 로 서로 다르게 적었습니다[1, 부록 A][3]. 타깃 경로가 검체의 실제 폴더와 다르면 캐시가 수집되지 않으므로, 검체에서 폴더 이름을 먼저 보고 수집 경로를 맞춥니다. 모델 목록 LevelDB 는 공개된 경로가 없고 KAPE 타깃도 모으지 않습니다[1, 부록 A][3]. 검체의 `xyz.chatboxapp.app` 폴더 아래에서 LevelDB 폴더를 찾아 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)의 방법으로 읽습니다.
 
-논문은 Windows 만 시험했고, 다른 운영체제에서는 형식과 저장 위치가 다를 수 있어도 아티팩트 종류는 크게 다르지 않을 것으로 본다고 적었습니다(§6.2). macOS·Linux 에서는 Electron 사용자 데이터 폴더를 찾으면 같은 파일이 있는지 볼 수 있습니다. 사용자 데이터 폴더의 위치와 Electron 앱 공통 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에서 다룹니다.
+공개된 시험은 Windows 만 다룹니다. 다른 운영체제에서는 형식과 저장 위치가 다를 수 있어도 아티팩트 종류는 크게 다르지 않으리라는 추정이 있습니다[1, §6.2]. macOS·Linux 에서는 Electron 사용자 데이터 폴더를 찾으면 같은 파일이 있는지 볼 수 있습니다. 사용자 데이터 폴더의 위치와 Electron 앱 공통 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에서 다룹니다.
 
 ### 판에 따른 대화 저장 위치
 
-Chatbox 저장소의 저장 구조 문서[6, `docs/storage.md`]는 데스크톱 판의 저장 방식이 아래처럼 바뀌었다고 적었습니다. 설정(`settings`, `configs`, `configVersion`)은 어느 판에서도 파일에 남고, 바뀐 것은 대화 세션입니다. 문서는 세션 데이터의 키를 `chat-sessions-list`, `session:*` 로 적었습니다.
+데스크톱 판의 저장 방식은 아래처럼 바뀌었습니다[6, `docs/storage.md`]. 설정(`settings`, `configs`, `configVersion`)은 어느 판에서도 파일에 남고, 바뀐 것은 대화 세션입니다. 세션 데이터의 키는 `chat-sessions-list`, `session:*` 입니다.
 
 | 앱 판 | `configVersion` | 데스크톱 판의 대화 세션 |
 |---|---|---|
@@ -93,11 +93,11 @@ Chatbox 는 `config.json` 을 10분마다 같은 폴더에 `config-backup-{UTC I
 | `remoteConfig` | 샘플에서는 빈 객체 |
 | `windowState` | 창 크기·위치 |
 
-논문은 `settings` 에 API 키, 등록한 로컬·클라우드 모델, 기본 프롬프트가 들어가고, `chat-sessions` 에 세션마다 메타데이터, 시스템 프롬프트, 고른 모델, 대화 기록이 들어간다고 적었습니다(§4.5, 그림 3).
+`settings` 에는 API 키, 등록한 로컬·클라우드 모델, 기본 프롬프트가 들어가고, `chat-sessions` 에는 세션마다 메타데이터, 시스템 프롬프트, 고른 모델, 대화 기록이 들어갑니다[1, §4.5, 그림 3].
 
 ### `settings` 의 연결 설정과 API 키
 
-샘플 `settings` 에서 조사에 쓰는 키입니다[4]. 1.11.8 소스의 설정 형식에는 Chatbox 자체 서비스(Chatbox AI)의 라이선스 키 `licenseKey` 도 있습니다[5, `types.ts`].
+샘플 `settings` 에서 조사에 쓰는 키입니다[4]. 1.11.8 의 설정 형식에는 Chatbox 자체 서비스(Chatbox AI)의 라이선스 키 `licenseKey` 도 있습니다[5, `types.ts`].
 
 | 무리 | 키 |
 |---|---|
@@ -107,7 +107,7 @@ Chatbox 는 `config.json` 을 10분마다 같은 폴더에 `config-backup-{UTC I
 | 사용자가 더한 제공자 | `customProviders`(샘플에서는 빈 목록) |
 | 프롬프트·생성 설정 | `defaultPrompt`(샘플 `You are a helpful assistant.`), `temperature`, `topP`, `dalleStyle`, `imageGenerateNum` |
 
-API 키는 평문 문자열로 들어갑니다. 샘플에서는 `openaiKey` 에만 값이 있고 나머지 키는 빈 문자열이었습니다[4]. 논문은 이런 API 키가 그 자체로는 증거 가치가 크지 않아도, 서비스 회사에 서버 쪽 자료를 요청할 때 넘길 수 있다고 적었습니다(§4.3). 키 값은 보고서와 공유 자료에서 가리고, 어느 키 이름에 값이 있었는지와 파일 시각만 적습니다. 서비스 회사에 자료를 요청하는 절차는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을, 키와 토큰을 다루는 기준은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다.
+API 키는 평문 문자열로 들어갑니다. 샘플에서는 `openaiKey` 에만 값이 있고 나머지 키는 빈 문자열이었습니다[4]. 이런 API 키는 그 자체로는 증거 가치가 크지 않아도, 서비스 회사에 서버 쪽 자료를 요청할 때 넘길 수 있습니다[1, §4.3]. 키 값은 보고서와 공유 자료에서 가리고, 어느 키 이름에 값이 있었는지와 파일 시각만 적습니다. 서비스 회사에 자료를 요청하는 절차는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을, 키와 토큰을 다루는 기준은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다.
 
 `ollamaHost`, `lmStudioHost` 는 기본값으로도 들어가므로 값이 있다고 그 백엔드를 썼다고 보지 않습니다. 실제로 쓴 백엔드는 메시지별 `aiProvider`·`model` 로 봅니다.
 
@@ -124,7 +124,7 @@ API 키는 평문 문자열로 들어갑니다. 샘플에서는 `openaiKey` 에�
 | `threads[]` | 앞선 주제 목록(`id`, `name`, `messages`, `createdAt`) | 소스 |
 | `messageForksHash` | 다시 만든 답 같은 갈래 메시지(`lists[].messages`, `createdAt`) | 샘플, 소스 |
 
-`threads` 와 `messageForksHash` 는 1.11.8 소스의 세션 형식에 있는 키입니다[5, `types.ts`]. 사용자가 새 주제를 시작하거나 답을 다시 만들면 앞선 메시지가 여기로 옮겨지므로, `messages` 만 보면 대화 일부가 빠집니다. 샘플에서는 `messageForksHash` 가 있는 세션마다 빈 객체였습니다[4].
+`threads` 와 `messageForksHash` 는 1.11.8 의 세션 형식에 있는 키입니다[5, `types.ts`]. 사용자가 새 주제를 시작하거나 답을 다시 만들면 앞선 메시지가 여기로 옮겨지므로, `messages` 만 보면 대화 일부가 빠집니다. 샘플에서는 `messageForksHash` 가 있는 세션마다 빈 객체였습니다[4].
 
 ### 메시지(`messages[]`)
 
@@ -144,7 +144,7 @@ API 키는 평문 문자열로 들어갑니다. 샘플에서는 `openaiKey` 에�
 | `files[]` | 올린 문서(`id`, `name`, `fileType`, `storageKey`, `chatboxAIFileUUID`) |
 | `links[]` | 넣은 웹 주소(`id`, `url`, `title`, `storageKey`) |
 
-`files[]` 와 `links[]` 는 1.11.8 소스의 메시지 형식에만 있고 공개 샘플에는 나오지 않습니다[5]. 샘플의 `chat` 세션은 하나를 빼고 첫 메시지가 `role` 이 `system` 인 시스템 프롬프트였고, 그 본문이 `settings.defaultPrompt` 와 같았습니다. `picture` 세션의 첫 `system` 메시지는 앱이 넣는 이미지 생성 안내문이었습니다[4]. 논문은 답마다 그때 쓴 모델이 함께 기록된다고 적었습니다(§4.5).
+`files[]` 와 `links[]` 는 1.11.8 소스의 메시지 형식에만 있고 공개 샘플에는 나오지 않습니다[5]. 샘플의 `chat` 세션은 하나를 빼고 첫 메시지가 `role` 이 `system` 인 시스템 프롬프트였고, 그 본문이 `settings.defaultPrompt` 와 같았습니다. `picture` 세션의 첫 `system` 메시지는 앱이 넣는 이미지 생성 안내문이었습니다[4]. 답마다 그때 쓴 모델이 함께 기록됩니다[1, §4.5].
 
 모양을 보여 주려고 만든 예시입니다. ID·시각·본문은 지어낸 값입니다.
 
@@ -185,9 +185,9 @@ blob 파일 이름은 메시지의 `storageKey` 에서 파일 이름에 못 쓰�
 
 만든 이미지는 한 번에 여러 장이 나오면 세션 ID 와 메시지 ID 가 같고 마지막 UUID 만 다릅니다. 샘플의 `picture` 세션에는 `OpenAI API (DALL-E-3)` 답 하나에 blob 세 개가 달려 있고, 이는 `settings.imageGenerateNum` 값 `3` 과 맞습니다[4].
 
-올린 파일과 만든 파일의 인코딩은 출처끼리 다릅니다. 논문(2025)은 올린 파일이 base64 이고 만든 파일이 Data URL 이라고 적었습니다(§4.5). LangurTrace 코드(2025-07)는 반대로 `pictureinput` 로 시작하는 blob 을 Data URL 로 풀어 `uploaded` 에 두고, 그 밖의 `picture` blob 은 머리말 없는 base64 로 풀어 `generated` 에 둡니다[2, `files_reporter.py`]. 공개 샘플의 blob 여섯 개는 코드 쪽 설명대로 풀립니다[4]. 검체에서는 blob 첫 글자가 `data:` 인지 보고 판단합니다.
+올린 파일과 만든 파일의 인코딩은 출처끼리 다릅니다. 논문(2025)은 올린 파일이 base64 이고 만든 파일이 Data URL 이라고 적었습니다[1, §4.5]. LangurTrace 코드(2025-07)는 반대로 `pictureinput` 로 시작하는 blob 을 Data URL 로 풀어 `uploaded` 에 두고, 그 밖의 `picture` blob 은 머리말 없는 base64 로 풀어 `generated` 에 둡니다[2, `files_reporter.py`]. 공개 샘플의 blob 여섯 개는 코드 쪽 설명대로 풀립니다[4]. 검체에서는 blob 첫 글자가 `data:` 인지 보고 판단합니다.
 
-올린 문서는 원본이 아니라 뽑은 글만 남습니다. 1.11.8 소스는 제공자가 Chatbox AI 가 아니면 문서에서 글을 뽑아 정해진 토큰 수(첨부 전체 4만 토큰을 첨부 수로 나눈 값)만큼 자른 뒤 `parseFile-{UUID}` blob 으로 저장하고, 메시지 `files[]` 에는 이름·파일 종류·blob 키만 적습니다[5, `sessionActions.ts`, `desktop_platform.ts`]. 제공자가 Chatbox 자체 서비스(Chatbox AI)일 때는 파일을 그 서버에 올리고 `files[].chatboxAIFileUUID` 에 서버 쪽 식별자만 남깁니다[5, `sessionActions.ts`]. 논문도 올린 파일과 만든 파일이 대화 기록에는 파일 이름과 MIME 종류로만 적힌다고 설명합니다(§4.5).
+올린 문서는 원본이 아니라 뽑은 글만 남습니다. 1.11.8 에서는 제공자가 Chatbox AI 가 아니면 문서에서 글을 뽑아 정해진 토큰 수(첨부 전체 4만 토큰을 첨부 수로 나눈 값)만큼 자른 뒤 `parseFile-{UUID}` blob 으로 저장하고, 메시지 `files[]` 에는 이름·파일 종류·blob 키만 적습니다[5, `sessionActions.ts`, `desktop_platform.ts`]. 제공자가 Chatbox 자체 서비스(Chatbox AI)일 때는 파일을 그 서버에 올리고 `files[].chatboxAIFileUUID` 에 서버 쪽 식별자만 남깁니다[5, `sessionActions.ts`]. 올린 파일과 만든 파일은 대화 기록에 파일 이름과 MIME 종류로만 적힙니다[1, §4.5].
 
 ### `main.log`
 
@@ -207,7 +207,7 @@ blob 파일 이름은 메시지의 `storageKey` 에서 파일 이름에 못 쓰�
 
 **증명하는 것.** `config.json` 이나 백업의 메시지는 그 시각에 그 세션에서 그 본문이 오갔고, 답을 어느 제공자의 어느 모델이 했는지를 보여 줍니다(§4.5). 세션의 `system` 메시지와 `settings.defaultPrompt` 로 사용자가 정한 시스템 프롬프트를 보이고, `settings` 의 API 키 칸으로 어느 클라우드 서비스의 키를 등록했는지 보입니다. 만든 이미지 blob 은 모델이 만든 결과물의 사본이고, 올린 이미지 blob 은 사용자가 대화에 넣은 이미지 원본입니다. 논문 실험에서 UI 로 지운 올린 파일 50개와 만든 파일 50개는 모두 blob 으로 되살아났습니다(표 8, 50/50)[1, §5.3]. 백업 여러 개를 비교하면 어느 세션이 두 백업 사이에 없어졌는지 보입니다. 공개 샘플에서는 11:36:10Z 백업에 있던 세션 하나가 11:46:10Z 백업에 없고, 그사이 `picture` 세션 하나가 새로 생겼으며 이름이 `Untitled` 이던 세션 하나에는 새 이름이 붙었습니다[4].
 
-**증명하지 못하는 것.** 지운 대화는 백업에 들어간 것만 되살아납니다. 논문 실험에서 지운 대화 50개 가운데 29개(58%)만 되살아났고, 논문은 백업이 규칙적으로 만들어지지 않는 탓으로 봅니다(표 8, §5.3). 두 백업 사이 10분 안에 만들고 지운 대화는 어느 백업에도 없습니다. 올린 문서는 뽑은 글만 남아서 원본 파일의 내용·형식·해시를 이것으로 증명하지 못하고, 파일 이름은 `files[].name` 에서만 읽습니다. blob 이름에는 시각이 없어서, 어느 메시지에도 이어지지 않는 blob 은 대화 안에서 언제 쓰였는지 알 수 없습니다. 공개 샘플의 올린 이미지 blob 세 개 가운데 두 개는 남은 백업 어느 메시지도 가리키지 않습니다[4]. API 키가 있다는 사실만으로 그 키로 대화했다고 쓰지 않고, 메시지의 `aiProvider` 가 그 제공자인 답이 있을 때 그 서비스를 쓴 기록이 있다고 씁니다. 로컬 모델 답이라도 모델 파일이 이 PC 에 있었는지는 백엔드 쪽 기록([Ollama](ollama.md), [로컬 모델 파일](model-files.md))으로 따로 확인합니다.
+**증명하지 못하는 것.** 지운 대화는 백업에 들어간 것만 되살아납니다. 논문 실험에서 지운 대화 50개 가운데 29개(58%)만 되살아났고, 백업이 규칙적으로 만들어지지 않는 탓이라는 해석이 있습니다[1, 표 8, §5.3]. 두 백업 사이 10분 안에 만들고 지운 대화는 어느 백업에도 없습니다. 올린 문서는 뽑은 글만 남아서 원본 파일의 내용·형식·해시를 이것으로 증명하지 못하고, 파일 이름은 `files[].name` 에서만 읽습니다. blob 이름에는 시각이 없어서, 어느 메시지에도 이어지지 않는 blob 은 대화 안에서 언제 쓰였는지 알 수 없습니다. 공개 샘플의 올린 이미지 blob 세 개 가운데 두 개는 남은 백업 어느 메시지도 가리키지 않습니다[4]. API 키가 있다는 사실만으로 그 키로 대화했다고 쓰지 않고, 메시지의 `aiProvider` 가 그 제공자인 답이 있을 때 그 서비스를 쓴 기록이 있다고 씁니다. 로컬 모델 답이라도 모델 파일이 이 PC 에 있었는지는 백엔드 쪽 기록([Ollama](ollama.md), [로컬 모델 파일](model-files.md))으로 따로 확인합니다.
 
 ## 시각 해석
 
@@ -223,12 +223,12 @@ blob 파일 이름은 메시지의 `storageKey` 에서 파일 이름에 못 쓰�
 
 ## 함정과 한계
 
-- **판 차이.** 1.12.0 에서 세션 형식이 세션 목록 방식으로 바뀌었고(문서가 적은 세션 키는 `chat-sessions-list`, `session:*`), 1.16.1 부터 세션이 IndexedDB 로 옮겨졌습니다[6, `docs/storage.md`]. LangurTrace 는 `chat-sessions` 키만 읽으므로[2, `config_reporter.py`] 1.12.0 뒤 판에서는 대화를 뽑지 못할 수 있습니다. 백업은 `config.json` 만 복사하므로[6, `store-node.ts`], 1.16.1 뒤 판에서 백업으로 지운 대화를 되살리는 방법이 통하는지는 검체로 확인해야 합니다.
+- **판 차이.** 1.12.0 에서 세션 형식이 세션 목록 방식으로 바뀌었고(세션 키는 `chat-sessions-list`, `session:*`), 1.16.1 부터 세션이 IndexedDB 로 옮겨졌습니다[6, `docs/storage.md`]. LangurTrace 는 `chat-sessions` 키만 읽으므로[2, `config_reporter.py`] 1.12.0 뒤 판에서는 대화를 뽑지 못할 수 있습니다. 백업은 `config.json` 만 복사하므로[6, `store-node.ts`], 1.16.1 뒤 판에서 백업으로 지운 대화를 되살리는 방법이 통하는지는 검체로 확인해야 합니다.
 - **LangurTrace 가 읽지 않는 칸.** 대화 보고서는 세션의 `messages` 만 읽고 `threads[]` 와 `messageForksHash` 는 읽지 않습니다[2]. 올린 문서는 `files[].mimeType` 으로 이미지인지 가리는데 1.11.8 소스의 칸 이름은 `fileType` 입니다[2][5]. HTML 의 문서 링크는 `.txt` 가 빠진 이름을 가리키므로 `uploaded` 폴더에서 `parseFile-…txt` 를 직접 찾습니다.
 - **LangurTrace 의 API 키 표.** `configuration.csv` 는 `settings` 최상위 키 이름에 `key` 가 들어가고 값이 있으면 모두 `API Key` 행으로 냅니다[2]. 그래서 `userAvatarKey`, `defaultAssistantAvatarKey` 처럼 아바타 이미지 키를 담는 칸도 값이 있으면 API 키로 나오고, `extension.webSearch.tavilyApiKey` 처럼 한 단계 안에 든 키는 빠집니다. 이 표의 키 값은 가리지 않은 평문이므로 공유하기 전에 가립니다.
 - **HTML 이 덮어써짐.** 대화 HTML 이름은 첫 메시지의 현지 시각과 `threadName`(없으면 세션 ID)으로 만들어서, 여러 백업에 같은 세션이 있으면 같은 이름으로 여러 번 쓰고 마지막에 읽은 파일의 내용만 남습니다[2]. 백업마다 달라진 메시지는 원본 JSON 을 비교해서 봅니다.
-- **캐시와 모델 목록.** KAPE 타깃은 API 캐시를 모으지만 보고서에는 넣지 않고, 모델 목록 LevelDB 는 모으지도 않습니다[1, §5.3][3]. 논문은 API 캐시에서 모델 목록 호출 응답만 나왔고 모든 요청이 저장되지도 않았다고 적었으며, LevelDB 는 지운 항목의 잔재가 남을 때가 있다고 적었습니다(§4.5). 이 두 곳은 직접 엽니다.
-- **복구 범위.** 논문의 복구율은 디스크에 남은 파일을 LangurTrace 로 읽은 결과이고, 볼륨 섀도 복사본과 메모리는 시험하지 않았습니다(§6.2). 백업이 정리 규칙에 따라 지워졌다면 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)의 방법으로 지워진 백업 파일을 찾습니다.
+- **캐시와 모델 목록.** KAPE 타깃은 API 캐시를 모으지만 보고서에는 넣지 않고, 모델 목록 LevelDB 는 모으지도 않습니다[1, §5.3][3]. 논문 시험에서 API 캐시에는 모델 목록 호출 응답만 나왔고 모든 요청이 저장되지도 않았습니다. LevelDB 에는 지운 항목의 잔재가 남을 때가 있습니다[1, §4.5]. 이 두 곳은 직접 엽니다.
+- **복구 범위.** 논문의 복구율은 디스크에 남은 파일을 LangurTrace 로 읽은 결과이고, 볼륨 섀도 복사본과 메모리는 시험 범위에 들지 않았습니다[1, §6.2]. 백업이 정리 규칙에 따라 지워졌다면 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)의 방법으로 지워진 백업 파일을 찾습니다.
 - **Chatbox 자체 서비스.** 제공자가 Chatbox AI 면 올린 파일이 Chatbox 서버에 있고 PC 에는 서버 쪽 식별자만 남습니다[5]. 서버 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 구합니다.
 
 ## 직접 분석해 보기

@@ -13,7 +13,7 @@ macOS 용 ChatGPT 앱은 2024-07 보도 당시 대화를 `~/Library/Application 
 
 ## 무엇이 남나 · 왜 생기나
 
-2024-07-03 9to5Mac 은 개발자 Pedro Vieito 가 Threads 에 올린 글을 전하면서, macOS 용 ChatGPT 앱이 대화를 사용자 라이브러리의 `Application Support` 아래 `com.openai.chat` 폴더에 평문으로 저장한다고 보도했습니다. 같은 기사는 당시 앱이 macOS 샌드박스를 쓰지 않았다고 적었고, 뒤에 덧붙인 업데이트에서 OpenAI 가 Mac 에 저장한 대화를 암호화하는 새 앱을 내놓았다고 전했습니다. 기사에는 고친 앱의 버전 번호가 없습니다.
+2024-07-03 보도 당시 macOS 용 ChatGPT 앱은 대화를 사용자 라이브러리의 `Application Support` 아래 `com.openai.chat` 폴더에 평문으로 저장했고, macOS 샌드박스를 쓰지 않았습니다. 그 뒤 OpenAI 는 Mac 에 저장한 대화를 암호화하는 새 앱을 내놓았습니다. 고친 앱의 버전 번호는 알려져 있지 않습니다.
 
 이 일로 macOS 앱은 적어도 한동안 대화 사본을 기기에 남겼다는 것을 알 수 있습니다. 대화 원본이 서버에 있다는 점과 서비스 전체의 정리는 [ChatGPT](index.md) 허브에 있습니다.
 
@@ -24,7 +24,7 @@ macOS 용 ChatGPT 앱은 2024-07 보도 당시 대화를 `~/Library/Application 
 | 2024-07 보도 당시 판 | `~/Library/Application Support/com.openai.chat` | 평문 | 쓰지 않음 |
 | 보도 뒤 업데이트한 판 | 검체에서 확인 | 암호화(방식은 검체에서 확인) | 검체에서 확인 |
 
-두 판을 가르는 버전 번호가 기사에 없어서, 기기에 깔린 앱 버전을 먼저 적고 그 판이 보도 전인지 뒤인지를 설치·업데이트 시기와 함께 따집니다. 앱 버전은 앱 번들의 정보 파일에서 읽고, 이 파일의 형식은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/plist/index.html) 페이지에서 설명합니다. 앱을 App Store 에서 받았는지 직접 내려받았는지도 검체에서 따로 확인합니다.
+두 판을 가르는 버전 번호가 알려져 있지 않아서, 기기에 깔린 앱 버전을 먼저 적고 그 판이 보도 전인지 뒤인지를 설치·업데이트 시기와 함께 따집니다. 앱 버전은 앱 번들의 정보 파일에서 읽고, 이 파일의 형식은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/plist/index.html) 페이지에서 설명합니다. 앱을 App Store 에서 받았는지 직접 내려받았는지도 검체에서 따로 확인합니다.
 
 지금 판이 샌드박스를 쓴다면 저장 위치가 보도 당시와 다를 수 있습니다. 그래서 표의 경로에 아무것도 없다고 앱을 쓰지 않았다고 보지 않고, 사용자 라이브러리에서 `com.openai.chat` 이 이름에 들어간 폴더를 더 찾아봅니다.
 
@@ -50,7 +50,7 @@ macOS 용 ChatGPT 앱은 2024-07 보도 당시 대화를 `~/Library/Application 
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 폴더 안 파일의 형식은 공개된 자료가 없어 바이트 예시는 싣지 않습니다. 파일을 헥스 편집기로 열어 앞부분에 읽을 수 있는 글자(영문, UTF-8 한글, JSON 의 중괄호 등)가 이어지면 평문이고, 처음부터 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라고 가를 수 있습니다. 파일 앞머리에 SQLite 같은 알려진 형식의 머리 글자가 보이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/sqlite/index.html) 페이지를 따라 읽습니다.
+**헥스로 한 번.** 폴더 안 파일의 형식은 공개된 자료가 없습니다. 파일을 헥스 편집기로 열어 앞부분에 읽을 수 있는 글자(영문, UTF-8 한글, JSON 의 중괄호 등)가 이어지면 평문이고, 처음부터 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라고 가를 수 있습니다. 파일 앞머리에 SQLite 같은 알려진 형식의 머리 글자가 보이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/sqlite/index.html) 페이지를 따라 읽습니다.
 
 **공개 도구로 한 번.** 앱 번들의 정보 파일은 plist 를 읽는 공개 도구로 열어 버전을 적고, 앱 폴더의 파일은 형식을 확인한 다음 그 형식에 맞는 도구로 엽니다.
 

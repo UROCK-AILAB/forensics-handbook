@@ -11,7 +11,7 @@ nav_order: 350
 
 ## 무엇을 기록하나 · 왜 생기나
 
-운영사 뤼튼테크놀로지스(Wrtn Technologies)는 2021-04-13 에 세운 대한민국 소프트웨어 회사로, 대표는 이세영이고 본사는 서울 서초구에 있습니다[1]. 회사는 2021년에 회사 이름을 딴 생성형 AI "뤼튼" 을 내놓았고, 2025-04 에는 뤼튼의 일부 기능을 "크랙" 이라는 앱으로 따로 떼어 냈습니다[1]. 어떤 기능이 크랙으로 옮겨 갔는지는 자료에 없어서, 사건 기간에 따라 같은 사용자의 흔적이 뤼튼과 크랙 두 앱에 나뉘어 있을 수 있다는 점만 염두에 둡니다.
+운영사 뤼튼테크놀로지스(Wrtn Technologies)는 2021-04-13 에 세운 대한민국 소프트웨어 회사로, 대표는 이세영이고 본사는 서울 서초구에 있습니다[1]. 회사는 2021년에 회사 이름을 딴 생성형 AI "뤼튼" 을 내놓았고, 2025-04 에는 뤼튼의 일부 기능을 "크랙" 이라는 앱으로 따로 떼어 냈습니다[1]. 어떤 기능이 크랙으로 옮겨 갔는지는 공개된 자료가 없어서, 사건 기간에 따라 같은 사용자의 흔적이 뤼튼과 크랙 두 앱에 나뉘어 있을 수 있다는 점만 염두에 둡니다.
 
 뤼튼이 어떤 언어 모델을 쓰는지, 대화 기록을 서버에만 두는지 기기에도 두는지는 공개된 자료가 없습니다. 그래서 "사용자가 뤼튼에 무엇을 입력했나" 를 기기에서 바로 읽을 수 있다고 전제하지 않고 조사를 시작하고, 서버와 기기의 몫은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)의 기준으로 가릅니다.
 
@@ -30,7 +30,7 @@ nav_order: 350
 
 ## 구조
 
-로컬 대화 기록의 파일 이름, 데이터베이스 표, 설정 키는 공개된 자료가 없어서 여기에 쓰지 않습니다. 검체에서 뤼튼이나 크랙의 앱 폴더를 찾았다면 안에 든 파일의 형식을 첫 바이트로 먼저 가리고, SQLite 이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html), 설정 XML 이면 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html) 페이지의 방식으로 읽습니다. 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 앱 버전과 함께 무엇을 보았는지만 적습니다.
+로컬 대화 기록의 파일 이름, 데이터베이스 표, 설정 키는 공개된 자료가 없어 검체로 확인해야 합니다. 검체에서 뤼튼이나 크랙의 앱 폴더를 찾았다면 안에 든 파일의 형식을 첫 바이트로 먼저 가리고, SQLite 이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html), 설정 XML 이면 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html) 페이지의 방식으로 읽습니다. 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 앱 버전과 함께 무엇을 보았는지만 적습니다.
 
 ## 증거로서 의미
 

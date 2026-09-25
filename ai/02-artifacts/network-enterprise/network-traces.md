@@ -10,7 +10,7 @@ nav_order: 770
 
 AI 서비스에 접속하면 기기 안의 DNS 질의 기록, 네트워크 장비의 TLS 기록, 프록시 기록, 앱의 네트워크 폴더에 "어느 도메인에 언제 붙었는지" 가 남고, 이 기록들은 대화 내용 없이 접속 사실과 시간대만 알려 줍니다.
 
-확인 날짜는 2026-09입니다. 근거는 Microsoft Learn 문서 두 편(Purview 지원 AI 사이트 목록 2025-12-15·갱신 2026-06-25, Sysmon 2026-09-10)과 Zeek 문서(master 판)이고, 앱 폴더는 이 핸드북의 기기 관찰(Windows 11, 2026-09)에서 확인했습니다.
+확인 날짜는 2026-09입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -24,7 +24,7 @@ AI 서비스에 접속하면 기기 안의 DNS 질의 기록, 네트워크 장�
 
 ### 어떤 도메인을 AI 서비스로 볼 것인가
 
-Microsoft Purview 는 데이터 보호 기능이 알아보는 "지원 생성형 AI 사이트" 목록을 도메인 와일드카드로 공개합니다. 서비스를 가려내는 출발점으로 쓸 만한 항목은 아래와 같고, 문서는 이 목록이 시간이 지나며 늘어난다고 밝힙니다.
+Microsoft Purview 는 데이터 보호 기능이 알아보는 "지원 생성형 AI 사이트" 목록을 도메인 와일드카드로 공개합니다[1]. 서비스를 가려내는 출발점으로 쓸 만한 항목은 아래와 같고, 이 목록은 시간이 지나며 늘어납니다.
 
 | 서비스 | 목록에 나온 도메인 |
 |---|---|
@@ -45,7 +45,7 @@ Microsoft Purview 는 데이터 보호 기능이 알아보는 "지원 생성형 
 | DNS 질의 | 이벤트 ID 22 `DNSEvent (DNS query)`, 필터 태그 `DnsQuery` | 설정 파일에 따라 다름 | 프로세스가 한 DNS 질의. 성공·실패, 캐시 여부와 관계없이 기록 |
 | 네트워크 연결 | 이벤트 ID 3 `Network connection` | 꺼져 있음 | TCP/UDP 연결. `ProcessId`·`ProcessGuid`, 출발지·목적지 호스트 이름, IP, 포트 |
 
-Sysmon 은 Sysinternals 도구라서 조직이 설치해 두지 않았으면 기록이 없고, 기본 설정으로 설치하면 네트워크 감시를 하지 않습니다. 이벤트 3 은 설정 파일로 켜야 남고, 설정 항목 `DnsLookup`(역방향 DNS 조회)은 기본값이 True 입니다. 이벤트 22 는 Windows 8.1 에 추가된 원격 측정을 쓰기 때문에 Windows 7 이하에서는 생기지 않습니다. 기록은 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 쌓이고, 2026-09-10 판 문서는 실행 환경을 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상으로 적습니다.
+Sysmon 은 Sysinternals 도구라서 조직이 설치해 두지 않았으면 기록이 없고, 기본 설정으로 설치하면 네트워크 감시를 하지 않습니다. 이벤트 3 은 설정 파일로 켜야 남고, 설정 항목 `DnsLookup`(역방향 DNS 조회)은 기본값이 True 입니다. 이벤트 22 는 Windows 8.1 에 추가된 원격 측정을 쓰기 때문에 Windows 7 이하에서는 생기지 않습니다. 기록은 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 쌓입니다. 실행 환경은 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상입니다[2].
 
 Sysmon 이 없는 기기에서 Windows 기본 DNS Client 이벤트 로그를 볼 때는 그 로그가 켜져 있었는지와 어떤 이벤트 번호가 남았는지 검체에서 먼저 확인합니다.
 
@@ -55,7 +55,7 @@ Zeek 는 TLS 트래픽을 분석해 `ssl.log` 에 남기고, `server_name` 칸�
 
 ### 기기 안: 데스크톱 앱의 네트워크 폴더
 
-Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습니다. 앱 버전은 검체에서 따로 확인합니다. 패키지 앱이 `AppData` 에 쓴 파일은 사용자·패키지별 전용 위치로 옮겨 저장되므로(참고 문헌 4), 수집할 때는 아래 경로의 앞부분을 그대로 쓰지 말고 사용자 프로필 아래에서 `LocalCache\Roaming\Claude` 가 들어 있는 패키지 폴더를 찾습니다. 자세한 위치는 [Claude](../chat-services/claude/windows.md) Windows 페이지에서 다룹니다.
+Claude 데스크톱(스토어 앱) 폴더에는 아래 파일이 있습니다. 패키지 앱이 `AppData` 에 쓴 파일은 사용자·패키지별 전용 위치로 옮겨 저장되므로[4], 수집할 때는 아래 경로의 앞부분을 그대로 쓰지 말고 사용자 프로필 아래에서 `LocalCache\Roaming\Claude` 가 들어 있는 패키지 폴더를 찾습니다. 자세한 위치는 [Claude](../chat-services/claude/windows.md) Windows 페이지에서 다룹니다.
 
 ```
 %USERPROFILE%\Packages\<Claude 패키지>\LocalCache\Roaming\Claude\Network\
@@ -82,7 +82,7 @@ Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습
 | `established` | 연결이 성립했는지 |
 | `ja3`, `ja3s` | 클라이언트·서버 TLS 핸드셰이크의 지문. 기본 칸이 아니라 JA3·JA3S 패키지를 설치했을 때 붙는 칸 |
 
-TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypted Client Hello) 를 쓰는 연결은 `server_name` 이 비어서 Zeek 문서도 이런 연결의 `ssl.log` 에는 식별 정보가 없다고 설명합니다. 조사하는 서비스의 연결에서 `server_name` 이 비어 있는지는 받은 `ssl.log` 에서 확인합니다.
+TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypted Client Hello) 를 쓰는 연결은 `server_name` 이 비어서 `ssl.log` 에 식별 정보가 남지 않습니다[3]. 조사하는 서비스의 연결에서 `server_name` 이 비어 있는지는 받은 `ssl.log` 에서 확인합니다.
 
 ### 앱의 `Cookies` DB
 
@@ -105,7 +105,7 @@ TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypt
 
 ## 시각 해석
 
-Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 칸은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 칸은 `ts` 이고, 문서 예시에는 유닉스 시각(초)과 끝에 `Z` 가 붙은 UTC 문자열 두 모양이 모두 나옵니다. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 칸은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 칸은 `ts` 이고, 값은 유닉스 시각(초)일 수도 있고 끝에 `Z` 가 붙은 UTC 문자열일 수도 있습니다[3]. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -113,7 +113,7 @@ Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마�
 - **비슷한 이름의 도메인.** 지원 사이트 목록 자체에 공식 서비스를 흉내 낸 제3자 도메인이 섞여 있습니다. 도메인을 서비스 이름으로 바꿔 적을 때 공식 여부를 따로 적습니다.
 - **ECH 와 TLS 1.3.** ECH 를 쓰는 연결은 `server_name` 이 비고, TLS 1.3 에서는 인증서도 보이지 않습니다. 이런 연결은 DNS 기록이나 목적지 IP 와 묶어서 봐야 합니다.
 - **공유 도메인.** `*.bing.com/chat` 처럼 경로까지 붙은 항목은 DNS·SNI 에서 경로가 보이지 않아서 도메인만으로는 AI 기능을 썼는지 검색만 했는지 나누지 못합니다. `*.github.com/features/copilot` 도 같습니다.
-- **원래 자리에서 열기.** 기본 `Network\Cookies` 를 원래 자리에서 SQLite 로 열면 OperationalError 가 났습니다. 그래서 `Cookies-journal` 과 함께 복사한 사본으로 봅니다. 기기에서 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
+- **원래 자리에서 열기.** 기본 `Network\Cookies` 를 원래 자리에서 SQLite 로 열면 OperationalError 가 날 수 있으므로, `Cookies-journal` 과 함께 복사한 사본으로 봅니다. 기기에서 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
 - **지우기.** 사용자가 기기에서 앱 폴더를 지워도 기기 밖의 Zeek·프록시 기록과 이미 중앙으로 모은 이벤트 로그 사본은 그대로 남습니다. 기기 안 기록과 기기 밖 기록이 서로 맞지 않으면 그 차이를 지운 흔적의 단서로 적습니다.
 
 ## 직접 분석해 보기
@@ -151,7 +151,7 @@ ORDER BY last_access_utc;
 - [Microsoft Purview로 본 Copilot 기록](purview-copilot.md) — 조직 계정으로 Copilot 을 쓴 감사 기록
 - [Claude 기업용 감사 로그](claude-enterprise.md) — 같은 시간대의 로그인 기록과 `ip_address`
 - [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) — 브라우저 방문 기록으로 어느 페이지를 열었는지
-- [Ollama](../local-ai/ollama.md) — 로컬 Ollama 서버는 `server.log` 의 API 호출 줄마다 호출한 IP 를 남기고, 이 값은 보통 `127.0.0.1` 입니다(참고 문헌 5, Windows 11 24H2·Ollama 0.6.5 에서 시험). 다른 IP 가 보이면 네트워크 기록에서 그 IP 의 연결을 찾고, 지금 판은 로그 모양이 다를 수 있으므로 검체의 로그에서 확인합니다.
+- [Ollama](../local-ai/ollama.md) — 로컬 Ollama 서버는 `server.log` 의 API 호출 줄마다 호출한 IP 를 남기고, 이 값은 보통 `127.0.0.1` 입니다(LangurTrace 시험, Windows 11 24H2·Ollama 0.6.5)[5]. 다른 IP 가 보이면 네트워크 기록에서 그 IP 의 연결을 찾고, 지금 판은 로그 모양이 다를 수 있으므로 검체의 로그에서 확인합니다.
 - [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md) — 도메인 기록을 조사 질문에 쓰는 흐름
 
 ## 실습

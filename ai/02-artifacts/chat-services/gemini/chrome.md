@@ -13,9 +13,9 @@ Chrome 에 들어간 Gemini 는 도구 모음의 "Ask Gemini" 버튼으로 열�
 
 ## 무엇이 남나 · 왜 생기나
 
-도움말은 이 기능을 Chromebook Plus, Mac, Windows 에서 쓸 수 있다고 적었고, 최신 Chrome 과 Chrome 로그인이 필요하며 시크릿 모드에서는 쓸 수 없다고 안내합니다. 13세 이상이어야 하고, 18세 미만은 Gemini Live 와 자동 탐색 (auto browse), 마이크·자막 권한을 쓸 수 없습니다. 설정에서 단축키를 켜면 단축키로도 열 수 있습니다. 현재 탭은 기본으로 공유되고 열린 탭은 최대 10개까지 공유할 수 있으며, Workspace 페이지를 공유하면 Gemini 가 Workspace 계정에 바로 접근할 수 있다고 적었습니다.
+이 기능은 Chromebook Plus, Mac, Windows 에서 쓸 수 있고, 최신 Chrome 과 Chrome 로그인이 필요하며 시크릿 모드에서는 쓸 수 없습니다[1]. 13세 이상이어야 하고, 18세 미만은 Gemini Live 와 자동 탐색 (auto browse), 마이크·자막 권한을 쓸 수 없습니다. 설정에서 단축키를 켜면 단축키로도 열 수 있습니다. 현재 탭은 기본으로 공유되고 열린 탭은 최대 10개까지 공유할 수 있으며, Workspace 페이지를 공유하면 Gemini 가 Workspace 계정에 바로 접근할 수 있습니다[1].
 
-개인정보 안내는 이 기능이 현재 탭의 페이지 내용과 URL 을 모은다고 적었습니다. 페이지 내용은 잠시 기록되고 Gemini 앱 활동에는 나오지 않지만, 활동 저장 (Keep Activity) 이 켜져 있으면 대화는 활동에 저장됩니다. 그래서 활동 목록에서 대화는 볼 수 있어도 그때 Gemini 가 읽은 페이지 내용까지 볼 수 있다고 기대하지 않습니다. 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 있고, 브라우저에 들어간 AI 기능을 제품끼리 견준 내용은 [브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md)에서 다룹니다.
+이 기능은 현재 탭의 페이지 내용과 URL 을 모읍니다. 페이지 내용은 잠시 기록되고 Gemini 앱 활동에는 나오지 않지만, 활동 저장 (Keep Activity) 이 켜져 있으면 대화는 활동에 저장됩니다[2]. 그래서 활동 목록에서 대화는 볼 수 있어도 그때 Gemini 가 읽은 페이지 내용까지 볼 수 있다고 기대하지 않습니다. 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 있고, 브라우저에 들어간 AI 기능을 제품끼리 견준 내용은 [브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md)에서 다룹니다.
 
 ## 위치와 구조 — Chromium 소스로 본 설정 키
 

@@ -13,9 +13,9 @@ OpenAI 는 이 파일의 형식을 공개하지 않습니다. 아래 칸 이름�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-convoviz 설명서는 웹에서 프로필 이름 → Settings → Data controls → Export 순서로 들어가 "Confirm export" 를 누르면 OpenAI 가 보낸 메일로 ZIP 파일을 받는다고 적었습니다[1]. kninami 도구 설명서도 같은 메뉴(settings > data control > export data)를 적었습니다[7]. 메일 링크가 열리는 기간과 Team·Enterprise 요금제에서 같은 메뉴를 쓰는지는 시기마다 다를 수 있어서, 보고서에 절차를 적을 때는 그 시점의 공식 도움말에서 확인합니다.
+웹에서 프로필 이름 → Settings → Data controls → Export 순서로 들어가 "Confirm export" 를 누르면 OpenAI 가 보낸 메일로 ZIP 파일을 받습니다[1][7]. 메일 링크가 열리는 기간과 Team·Enterprise 요금제에서 같은 메뉴를 쓰는지는 시기마다 다를 수 있어서, 보고서에 절차를 적을 때는 그 시점의 공식 도움말에서 확인합니다.
 
-설정 화면 말고 개인정보 포털(privacy.openai.com)에서 받는 경로도 있습니다. Proton 의 불러오기 코드는 이 포털에서 받은 파일이 겉 ZIP 안에 `Conversations__*-chatgpt-*.zip` 모양의 ZIP 을 한 겹 더 담고, 대화가 그 안에 있다고 주석에 적었습니다[9]. 그래서 겉 ZIP 에 `conversations.json` 이 없으면 안쪽 ZIP 부터 찾아봅니다.
+설정 화면 말고 개인정보 포털(privacy.openai.com)에서 받는 경로도 있습니다. 이 포털에서 받은 파일은 겉 ZIP 안에 `Conversations__*-chatgpt-*.zip` 모양의 ZIP 을 한 겹 더 담고, 대화는 그 안에 있습니다[9]. 그래서 겉 ZIP 에 `conversations.json` 이 없으면 안쪽 ZIP 부터 찾아봅니다.
 
 내보내기는 기기에 있던 파일을 모으는 것이 아니라 계정에서 받는 사본입니다. 기기에 무엇이 남았는지와는 따로 보고, 서비스마다 다른 내보내기 형식을 견준 내용은 [계정 데이터 내보내기 형식](../../../01-foundations/storage-model/data-export-formats.md)에 있습니다. 조직 계정의 대화를 관리자 쪽에서 가져가는 경로는 이 기능과 다르고, [ChatGPT 기업용 감사 기록](../../network-enterprise/chatgpt-enterprise.md)에서 따로 봅니다.
 
@@ -40,13 +40,13 @@ ZIP 안에서 확인된 파일은 아래와 같습니다. 출처 열의 번호�
 
 이미지가 들어 있는지는 출처끼리 다릅니다. convoviz 개발 문서(2026-02 판)는 위 표처럼 생성 이미지와 올린 파일이 들어 있다고 적었고[3], chatgpt-forensic-exporter 설명서(2026-03)는 공식 내보내기가 24~48시간 걸리고 JSON 하나로 오며 이미지가 빠진다고 적었습니다[10]. 그래서 받은 ZIP 에 이미지 폴더가 있는지는 검체에서 직접 확인하고, 보고서에는 내보낸 날짜와 함께 적습니다.
 
-형식은 공지 없이 바뀝니다. convoviz 개발 문서는 Canvas 용 `textdocs` 가 더해진 일과 이미지 포인터 형식이 바뀐 일을 예로 들었고[3], convoviz 메시지 모델에는 "ChatGPT exports from ~July 2026 omit status/weight on some messages" 라는 주석이 있습니다[2]. 2026-07 무렵부터 일부 메시지에 `status` 와 `weight` 가 빠졌다는 뜻입니다.
+형식은 공지 없이 바뀝니다. Canvas 용 `textdocs` 가 더해졌고 이미지 포인터 형식도 바뀌었습니다[3]. 2026-07 무렵부터는 일부 메시지에 `status` 와 `weight` 가 빠집니다[2].
 
 ## 구조
 
 ### 대화 한 건
 
-`conversations.json` 은 대화를 늘어놓은 배열이고, convoviz 개발 문서는 `conversations` 열쇠 아래에 배열을 둔 객체 모양도 있다고 적었습니다[3]. 대화 한 건의 칸은 아래와 같습니다.
+`conversations.json` 은 대화를 늘어놓은 배열이고, `conversations` 열쇠 아래에 배열을 둔 객체 모양도 있습니다[3]. 대화 한 건의 칸은 아래와 같습니다.
 
 | 칸 | 뜻 | 출처 |
 |---|---|---|
@@ -65,11 +65,11 @@ ZIP 안에서 확인된 파일은 아래와 같습니다. 출처 열의 번호�
 | `is_do_not_remember`, `memory_scope` | 메모리 학습에서 뺀 대화인지, 메모리 범위 | [3] |
 | `safe_urls`, `blocked_urls` | 주소 목록(`safe_urls` 는 설명 없이 이름만 적힘), 이 대화에서 막힌 주소 목록 | [3] |
 
-chatgpt-forensic-exporter 의 프로젝트 수집 코드는 `gizmo_id` 가 `g-p-` 로 시작하면 프로젝트로, 나머지는 맞춤 GPT 로 나눕니다[10]. 그래서 `gizmo_id` 앞머리로 이 대화가 프로젝트에 속했는지, 맞춤 GPT 로 한 대화인지 가를 수 있습니다.
+`gizmo_id` 가 `g-p-` 로 시작하면 프로젝트이고, 나머지는 맞춤 GPT 입니다[10]. 그래서 `gizmo_id` 앞머리로 이 대화가 프로젝트에 속했는지, 맞춤 GPT 로 한 대화인지 가를 수 있습니다.
 
 ### 노드와 가지
 
-`mapping` 의 노드마다 `parent`, `children`, `message` 가 있어서 메시지가 부모·자식으로 이어진 나무 모양이 됩니다[3]. 맨 위 노드는 `parent` 가 `null` 이고 `message` 도 `null` 인 일이 많습니다. 답변을 다시 만들거나 질문을 고치면 한 노드에 자식이 여럿 생기고, `current_node` 에서 부모를 따라 올라간 길이 화면에 보이던 대화입니다[3]. 그래서 화면에 보이지 않던 이전 답변이나 고치기 전 질문이 다른 가지에 남아 있을 수 있습니다. `mapping` 은 순서가 없는 사전이라서, Proton 코드는 사용자 메시지를 모은 뒤 `create_time` 으로 다시 정렬합니다[8].
+`mapping` 의 노드마다 `parent`, `children`, `message` 가 있어서 메시지가 부모·자식으로 이어진 나무 모양이 됩니다[3]. 맨 위 노드는 `parent` 가 `null` 이고 `message` 도 `null` 인 일이 많습니다. 답변을 다시 만들거나 질문을 고치면 한 노드에 자식이 여럿 생기고, `current_node` 에서 부모를 따라 올라간 길이 화면에 보이던 대화입니다[3]. 그래서 화면에 보이지 않던 이전 답변이나 고치기 전 질문이 다른 가지에 남아 있을 수 있습니다. `mapping` 은 순서가 없는 사전이라서, 메시지를 모은 뒤 `create_time` 으로 다시 정렬해야 순서가 섭니다[8].
 
 ### 메시지
 
@@ -80,17 +80,17 @@ chatgpt-forensic-exporter 의 프로젝트 수집 코드는 `gizmo_id` 가 `g-p-
 | 본문(`content`) | `content_type`, `parts`, `text`, `language`, `result`, `name`, `content`, `thoughts`, `url`, `domain`, `title` | [2], [5] |
 | 부가 정보(`metadata`) | `model_slug`, `invoked_plugin`, `is_user_system_message`, `is_visually_hidden_from_conversation`, `user_context_message_data`, `voice_mode_message`, `citations`, `search_result_groups`, `_cite_metadata`, `attachments` | [2], [3], [5], [7] |
 
-`author.role` 에는 `system`, `user`, `assistant`, `tool` 이 들어가서 사용자가 쓴 메시지, 답변, 도구 결과를 가를 수 있고[3], convoviz 메시지 모델은 `function` 도 받습니다[2]. 도구 메시지는 `author.name` 에 도구 이름이 들어가고, convoviz 개발 문서는 `dalle.text2im`(이미지 생성), `python`(코드 실행), `bio`(메모리), `web.search`·`web.run`(웹 검색), `canmore.*`(Canvas) 를 예로 들었습니다[3]. 답변이 도구를 부를 때는 `recipient` 에 도구 이름이 들어가고, 사용자에게 보이는 답변은 `all` 입니다[3].
+`author.role` 에는 `system`, `user`, `assistant`, `tool` 이 들어가서 사용자가 쓴 메시지, 답변, 도구 결과를 가를 수 있고[3], `function` 이 들어가기도 합니다[2]. 도구 메시지는 `author.name` 에 도구 이름이 들어가고, `dalle.text2im`(이미지 생성), `python`(코드 실행), `bio`(메모리), `web.search`·`web.run`(웹 검색), `canmore.*`(Canvas) 같은 이름이 있습니다[3]. 답변이 도구를 부를 때는 `recipient` 에 도구 이름이 들어가고, 사용자에게 보이는 답변은 `all` 입니다[3].
 
-`content.content_type` 은 본문 종류이고, convoviz 개발 문서는 `text`, `multimodal_text`, `code`, `execution_output`, `sonic_webpage`(웹 검색으로 긁어 온 쪽 본문), `system_error`, `reasoning_recap`, `thoughts`, `tether_quote`, `tether_browsing_display` 를 적었습니다[3]. 본문은 대개 `content.parts` 에 있는데, 이 배열에는 글자열과 객체가 섞여 들어갑니다. Proton 코드는 주석에서 객체를 이미지 참조 같은 것으로 설명하고, 글자열만 골라 본문으로 읽습니다[8].
+`content.content_type` 은 본문 종류이고, 값에는 `text`, `multimodal_text`, `code`, `execution_output`, `sonic_webpage`(웹 검색으로 긁어 온 쪽 본문), `system_error`, `reasoning_recap`, `thoughts`, `tether_quote`, `tether_browsing_display` 가 있습니다[3]. 본문은 대개 `content.parts` 에 있는데, 이 배열에는 글자열과 객체가 섞여 들어갑니다. 객체는 이미지 참조 같은 것이라서 본문은 글자열만 골라 읽습니다[8].
 
 사용자 지정 지침 (custom instructions) 은 `metadata.is_user_system_message` 가 붙은 메시지이고[3], 실제 지침 글은 `metadata.user_context_message_data` 의 `about_user_message`(사용자에 대해 적은 글)와 `about_model_message`(답변 방식에 대해 적은 글)에 들어 있습니다[5]. 음성 모드로 주고받은 메시지에는 `metadata.voice_mode_message` 가 붙고[5], 음성 기능의 흔적은 [음성 대화 기능](../../generative-media/voice-mode.md)에서 함께 봅니다.
 
 ### 첨부·이미지·인용
 
-올린 파일은 `metadata.attachments[]` 에 `id`, `mime_type`, `name`, `size` 로 남습니다[7]. 이미지는 `multimodal_text` 본문의 `parts` 안에 `content_type: "image_asset_pointer"` 객체로 들어가고, `asset_pointer`, `size_bytes`, `width`, `height` 와 생성 이미지면 `metadata.dalle.prompt` 가 붙습니다[3]. 이미지 포인터는 예전에는 `file-service://` 로, 요즘은 `sediment://` 로 시작한다고 convoviz 개발 문서가 적었습니다(2026-02)[3]. 포인터 뒤의 파일 ID 가 ZIP 안 `file-*` 파일 이름과 어떻게 이어지는지는 검체에서 맞춰 보고, 생성 이미지 전반은 [Midjourney와 이미지 생성 서비스](../../generative-media/image-generation.md)에서 봅니다.
+올린 파일은 `metadata.attachments[]` 에 `id`, `mime_type`, `name`, `size` 로 남습니다[7]. 이미지는 `multimodal_text` 본문의 `parts` 안에 `content_type: "image_asset_pointer"` 객체로 들어가고, `asset_pointer`, `size_bytes`, `width`, `height` 와 생성 이미지면 `metadata.dalle.prompt` 가 붙습니다[3]. 이미지 포인터는 예전에는 `file-service://` 로, 2026-02 무렵에는 `sediment://` 로 시작합니다[3]. 포인터 뒤의 파일 ID 가 ZIP 안 `file-*` 파일 이름과 어떻게 이어지는지는 검체에서 맞춰 보고, 생성 이미지 전반은 [Midjourney와 이미지 생성 서비스](../../generative-media/image-generation.md)에서 봅니다.
 
-웹 인용은 형식이 두 가지입니다. kninami 도구는 `metadata._cite_metadata.metadata_list[]` 의 `url`, `title`, `text` 를 읽고[7], convoviz 개발 문서는 요즘 인용이 `citations` 에 `start_ix`, `end_ix` 로 본문 위치를 가리킨다고 적었습니다[3]. 프롬프트·첨부·생성물을 서로 가려 읽는 일반 방법은 [프롬프트·첨부·생성물 구분하기](../../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
+웹 인용은 형식이 두 가지입니다. 하나는 `metadata._cite_metadata.metadata_list[]` 의 `url`, `title`, `text` 이고[7], 요즘 형식은 `citations` 에 `start_ix`, `end_ix` 로 본문 위치를 가리킵니다[3]. 프롬프트·첨부·생성물을 서로 가려 읽는 일반 방법은 [프롬프트·첨부·생성물 구분하기](../../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
 
 ### 부속 파일
 
@@ -100,7 +100,7 @@ chatgpt-forensic-exporter 의 프로젝트 수집 코드는 `gizmo_id` 가 `g-p-
 | `shared_conversations.json` | `id`(공유 ID), `conversation_id`, `title`, `is_anonymous` | [5] |
 | `message_feedback.json` | `create_time`, `user_id`, `id`, `conversation_id`, `rating`, `workspace_id`, `content`, `storage_protocol` | [5] |
 
-RLEAPP 는 `message_feedback.json` 의 `id` 를 메시지 ID 로 읽습니다[5]. `shared_conversations.json` 의 `conversation_id` 와 `message_feedback.json` 의 `conversation_id` 로 `conversations.json` 의 대화를 찾아 이을 수 있습니다.
+`message_feedback.json` 의 `id` 는 메시지 ID 입니다[5]. `shared_conversations.json` 의 `conversation_id` 와 `message_feedback.json` 의 `conversation_id` 로 `conversations.json` 의 대화를 찾아 이을 수 있습니다.
 
 ### 만든 예시
 
@@ -139,7 +139,7 @@ RLEAPP 는 `message_feedback.json` 의 `id` 를 메시지 ID 로 읽습니다[5]
 
 **증명하는 것.** `conversations.json` 에 대화가 있으면 내보낸 때 그 계정에 그 대화가 남아 있었다고 쓸 수 있고, `author.role` 로 계정 쪽 입력과 답변을 나눠 적을 수 있습니다. `metadata.attachments` 가 있으면 그 메시지에 그 이름의 파일이 첨부된 기록이 있다고 쓸 수 있고, `user_context_message_data` 가 있으면 그 계정에 그런 사용자 지정 지침이 설정돼 있었다고 쓸 수 있습니다. `shared_conversations.json` 에 대화가 있으면 그 대화로 공유 링크를 만든 기록이 있다고 쓸 수 있습니다. 기기에서 보관 파일이 나오면 그 파일이 그 기기에 저장돼 있었다고 쓸 수 있습니다.
 
-**증명하지 못하는 것.** 보관 파일에 없는 대화를 처음부터 없었다고 쓸 수는 없는데, 사용자가 지웠거나 임시 채팅을 썼을 수 있기 때문입니다. chatgpt-forensic-exporter 설명서도 지운 대화는 받을 수 없다고 적었습니다[10]. 지운 대화와 임시 채팅을 서버에 얼마나 두는지는 조사 시점의 OpenAI 공식 도움말에서 확인하고, 보관 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
+**증명하지 못하는 것.** 보관 파일에 없는 대화를 처음부터 없었다고 쓸 수는 없는데, 사용자가 지웠거나 임시 채팅을 썼을 수 있기 때문입니다. 지운 대화는 받을 수 없습니다[10]. 지운 대화와 임시 채팅을 서버에 얼마나 두는지는 조사 시점의 OpenAI 공식 도움말에서 확인하고, 보관 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
 계정 기록은 그 계정으로 로그인한 누군가의 활동입니다. `user.json` 의 이메일과 전화번호는 계정 주인을 가리키지만 실제로 누가 입력했는지는 말해 주지 않아서, 기기 흔적과 함께 따집니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)). 이 두 칸은 개인정보라서 보고서에서는 필요한 만큼만 적고 나머지는 가립니다. 기기에서 찾은 보관 파일은 JSON 이라 누구든 고칠 수 있어서, 원본인지는 받은 경로와 파일 시각을 함께 봅니다.
 
@@ -152,9 +152,9 @@ RLEAPP 는 `message_feedback.json` 의 `id` 를 메시지 ID 로 읽습니다[5]
 | 대화 `pinned_time` | 유닉스 초 | UTC | [3] |
 | `message_feedback.json` 의 `create_time` | ISO-8601 글자열 | 글자열에 붙은 시간대 표시를 따름 | [5] |
 
-유닉스 초는 1970-01-01 UTC 부터 센 초라서 기준이 UTC 입니다. RLEAPP 는 대화·메시지 시각을 유닉스 초로 보고 UTC 로 바꾸고, 피드백 시각은 ISO-8601 로 읽습니다[5]. RLEAPP 는 피드백 시각에 시간대 표시가 없으면 UTC 로 두기 때문에, 원본 글자열 끝에 `Z` 나 `+00:00` 이 붙었는지 먼저 봅니다. 같은 ZIP 안에서도 파일마다 시각 형식이 달라서, 한 줄로 세우기 전에 형식을 맞춥니다.
+유닉스 초는 1970-01-01 UTC 부터 센 초라서 기준이 UTC 입니다. 대화·메시지 시각은 유닉스 초이고, 피드백 시각은 ISO-8601 입니다[5]. RLEAPP 는 피드백 시각에 시간대 표시가 없으면 UTC 로 두기 때문에, 원본 글자열 끝에 `Z` 나 `+00:00` 이 붙었는지 먼저 봅니다. 같은 ZIP 안에서도 파일마다 시각 형식이 달라서, 한 줄로 세우기 전에 형식을 맞춥니다.
 
-대화의 `update_time` 은 마지막 활동 시각으로 설명돼 있어서[3], 대화를 처음 연 때가 아니라 마지막으로 무엇이 바뀐 때에 가깝습니다. 알고 있는 대화 시각 하나와 맞춰 본 다음 보고서에 씁니다.
+대화의 `update_time` 은 마지막 활동 시각이라서[3], 대화를 처음 연 때가 아니라 마지막으로 무엇이 바뀐 때에 가깝습니다. 알고 있는 대화 시각 하나와 맞춰 본 다음 보고서에 씁니다.
 
 보관 파일 자체의 시각은 따로 봅니다. ZIP 파일의 파일 시스템 시각은 내려받거나 옮긴 때에 따라 바뀌어서 내보내기를 요청한 시각이나 대화 시각과 다릅니다. 기기 흔적과 보관 파일 안의 시각을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)을 봅니다.
 
@@ -170,7 +170,7 @@ RLEAPP 는 `message_feedback.json` 의 `id` 를 메시지 ID 로 읽습니다[5]
 
 **공식 내보내기가 아닌 파일.** 기기에서 발견한 대화 파일이 모두 공식 내보내기에서 나온 것은 아닙니다. 브라우저 사용자 스크립트로 대화를 하나씩 파일로 뽑은 경우는 [웹 브라우저](web.md) 페이지에서 다룹니다. chatgpt-forensic-exporter 같은 도구는 로그인한 브라우저 세션을 빌려 공개되지 않은 서버 API 에서 대화, 프로젝트, 생성 이미지를 받습니다[10]. 이 도구가 만든 대화 JSON 은 `messages` 배열에 `role`, `text`, `create_time` 을 담고 수집 시각 `scraped_at_utc` 를 붙인 자체 형식이라서 공식 `conversations.json` 과 모양이 다릅니다. 파일 이름과 형식이 공식 보관 파일과 같은지부터 가립니다.
 
-**수집 권한.** 내보내기는 계정 주인이 로그인해서 요청하는 기능이라, 조사에 쓰려면 법적 절차나 당사자 동의 안에서만 계정에 접근합니다. 위와 같은 비공식 API 수집 도구는 그 도구 설명서가 밝히듯 OpenAI 가 지원하지 않는 주소를 쓰고, 주소가 예고 없이 바뀔 수 있습니다[10]. 이런 도구를 쓸 수 있는지는 수집 권한의 범위와 서비스 약관을 먼저 따지고, 도구가 파일마다 남기는 SHA-256 해시 목록(`*_hashes.csv`)과 수집 시각도 함께 보존합니다. 수집 순서와 받은 파일을 원본 그대로 지키는 방법은 [계정 데이터 내보내기로 수집](../../../03-techniques/acquisition/export-collection.md)에서, 세션 토큰이 남는 곳과 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에서 다룹니다. 계정 주인의 협조를 얻을 수 없으면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)을 검토합니다.
+**수집 권한.** 내보내기는 계정 주인이 로그인해서 요청하는 기능이라, 조사에 쓰려면 법적 절차나 당사자 동의 안에서만 계정에 접근합니다. 위와 같은 비공식 API 수집 도구는 OpenAI 가 지원하지 않는 주소를 쓰고, 주소가 예고 없이 바뀔 수 있습니다[10]. 이런 도구를 쓸 수 있는지는 수집 권한의 범위와 서비스 약관을 먼저 따지고, 도구가 파일마다 남기는 SHA-256 해시 목록(`*_hashes.csv`)과 수집 시각도 함께 보존합니다. 수집 순서와 받은 파일을 원본 그대로 지키는 방법은 [계정 데이터 내보내기로 수집](../../../03-techniques/acquisition/export-collection.md)에서, 세션 토큰이 남는 곳과 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에서 다룹니다. 계정 주인의 협조를 얻을 수 없으면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)을 검토합니다.
 
 ## 직접 분석해 보기
 

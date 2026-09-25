@@ -12,7 +12,7 @@ Recall 은 Copilot+ PC 에서 화면 스냅숏을 주기적으로 저장하고 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Recall 을 켠 사용자의 화면 내용이 직전 스냅숏과 달라지면 Windows 가 스냅숏을 한 장 저장합니다. 이어서 로컬 OCR 로 글자를 읽어 이미지와 텍스트를 모두 검색할 수 있게 하고, 스냅숏을 타임라인으로 정리합니다[1]. 저장 간격은 자료마다 다르게 적었습니다. 2024 년 Microsoft 소개 문구는 화면 내용이 바뀌는 동안 5초마다 찍는다고 적었고(TotalRecall 첫 판 설명서가 인용)[6], 2025-12 Manage Recall 은 "주기적으로"라고만 적습니다[1]. 오디오는 녹음하지 않고 연속 동영상도 남기지 않으며, DRM 콘텐츠와 게임 모드 중의 게임 화면(지원 플랫폼)도 저장하지 않습니다[1]. 검색에 맞춘 언어는 영어, 중국어(간체), 프랑스어, 독일어, 일본어, 스페인어입니다[1].
+Recall 을 켠 사용자의 화면 내용이 직전 스냅숏과 달라지면 Windows 가 스냅숏을 한 장 저장합니다. 이어서 로컬 OCR 로 글자를 읽어 이미지와 텍스트를 모두 검색할 수 있게 하고, 스냅숏을 타임라인으로 정리합니다[1]. 저장 간격은 자료마다 다릅니다. 2024 년 Microsoft 소개 문구는 화면 내용이 바뀌는 동안 5초마다 찍는다고 했지만[6], 2025-12 Manage Recall 은 "주기적으로"라고만 합니다[1]. 오디오는 녹음하지 않고 연속 동영상도 남기지 않으며, DRM 콘텐츠와 게임 모드 중의 게임 화면(지원 플랫폼)도 저장하지 않습니다[1]. 검색에 맞춘 언어는 영어, 중국어(간체), 프랑스어, 독일어, 일본어, 스페인어입니다[1].
 
 스냅숏 저장과 분석에는 인터넷이나 클라우드를 쓰지 않고 스냅숏을 Microsoft 로 보내지도 않아서, 원본은 그 기기에만 있고 서버 사본을 요청할 곳이 없습니다[1]. 예외는 세 가지입니다. 타임라인에 보여 줄 파비콘 같은 웹 메타데이터를 스냅숏 URL 의 최상위 도메인에서 가끔 받아 오고, 설정에 따라 일부 진단 데이터를 보내며, 사용자가 피드백을 보내면 첨부한 스크린샷이 함께 갑니다[1]. 서버·기기·동기화로 나눈 일반 설명은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
 
@@ -26,13 +26,13 @@ Recall 은 Secured-core 기준을 채운 Copilot+ PC 에서만 돌고, 최소 �
 
 민감 정보 필터(Sensitive information filtering)는 기본으로 켜져 있고, 비밀번호나 신분증 번호, 카드 번호 같은 정보를 감지하면 그 스냅숏을 저장하지 않습니다. 이 감지에는 NPU 와 Microsoft Classification Engine(MCE)을 씁니다[1]. 지원 브라우저의 비공개 창도 저장하지 않습니다. Edge, Firefox, Opera, Chrome 은 사이트 필터와 비공개 창 필터를 모두 지원하고, 그 밖의 Chromium 124 이상 브라우저는 비공개 창 필터만 지원합니다[1]. `edge://`, `chrome://` 같은 브라우저 내부 주소는 기본으로 거릅니다. 다만 거른 사이트라도 다른 페이지에 들어간 콘텐츠나 브라우저 기록, 뒤쪽 탭은 스냅숏에 나올 수 있습니다[1].
 
-원격 데스크톱 클라이언트인 mstsc.exe, VMConnect.exe, Azure Virtual Desktop(MSI), RAIL 의 세션은 기본으로 빠집니다. 같은 문서는 클라이언트가 화면 캡처 보호를 구현하지 않으면 저장될 수 있다고도 적었습니다[1]. 앱이 `SetWindowDisplayAffinity` 로 `WDA_EXCLUDEFROMCAPTURE` 나 `WDA_MONITOR` 를 건 창은 스냅숏에 내용이 담기지 않습니다[1][9]. DLP 제품과 연동하면 제공자가 지정한 창만 지우고 나머지 화면은 남기며, 문서가 적은 지원 DLP 는 Microsoft Purview 하나입니다[1].
+원격 데스크톱 클라이언트인 mstsc.exe, VMConnect.exe, Azure Virtual Desktop(MSI), RAIL 의 세션은 기본으로 빠집니다. 다만 클라이언트가 화면 캡처 보호를 구현하지 않으면 저장될 수 있습니다[1]. 앱이 `SetWindowDisplayAffinity` 로 `WDA_EXCLUDEFROMCAPTURE` 나 `WDA_MONITOR` 를 건 창은 스냅숏에 내용이 담기지 않습니다[1][9]. DLP 제품과 연동하면 제공자가 지정한 창만 지우고 나머지 화면은 남기며, 지원하는 DLP 는 Microsoft Purview 하나입니다[1].
 
-TotalRecall Reloaded 설명서는 캡처 서비스가 찍기 전에 따지는 조건 12개를 적었습니다[5]. `GameModeActive`, `BatterySaverActive`, `UserActivityIdle`, `UserPresenceIdle`, `StorageLow`, `PrivateWindow`, `BlockedByContentProtection`, `BlockedAppId`, `BlockedExecutable`, `BlockedURL`, `BlockedContentFilePath`, `BitLockerDisabled` 입니다. 설명서는 조건 이름만 적고 각 조건이 어떻게 동작하는지는 설명하지 않았습니다[5]. 이름으로 보아 절전 모드나 자리 비움도 스냅숏이 빈 구간을 만들 수 있지만, 이는 이름에서 짐작한 것이므로 검체에서 빈 구간과 전원·자리 비움 기록을 맞춰 보고 판단합니다.
+캡처 서비스는 찍기 전에 조건 12개를 따집니다[5]. `GameModeActive`, `BatterySaverActive`, `UserActivityIdle`, `UserPresenceIdle`, `StorageLow`, `PrivateWindow`, `BlockedByContentProtection`, `BlockedAppId`, `BlockedExecutable`, `BlockedURL`, `BlockedContentFilePath`, `BitLockerDisabled` 입니다. 조건마다 어떻게 동작하는지는 공개된 설명이 없습니다. 이름으로 보아 절전 모드나 자리 비움도 스냅숏에 빈 구간을 만들 수 있으므로, 검체에서 빈 구간과 전원·자리 비움 기록을 맞춰 보고 판단합니다.
 
 ## 위치와 버전별 차이
 
-공개 분석 자료[5][6][7][8]는 모두 같은 경로를 적었습니다. 수집 도구도 이 경로를 씁니다. KAPE 타깃 `WindowsCopilotRecall.tkape` 는 `C:\Users\*\AppData\Local\CoreAIPlatform.00\UKP\` 를 하위 폴더까지 모으고[10], Velociraptor 아티팩트는 `UKP\*\ukg.db` 를 찾습니다[7].
+저장소는 사용자 폴더의 `AppData\Local\CoreAIPlatform.00\UKP\` 아래에 있습니다[5][6][7][8]. 수집 도구도 이 경로를 씁니다. KAPE 타깃 `WindowsCopilotRecall.tkape` 는 `C:\Users\*\AppData\Local\CoreAIPlatform.00\UKP\` 를 하위 폴더까지 모으고[10], Velociraptor 아티팩트는 `UKP\*\ukg.db` 를 찾습니다[7].
 
 ```
 C:\Users\사용자\AppData\Local\CoreAIPlatform.00\UKP\{GUID}\
@@ -42,7 +42,7 @@ SemanticTextStore.sidb          텍스트 의미 검색 색인 (DiskANN), 들어
 SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어 있는 폴더는 검체로 확인
 ```
 
-`ukg.db` 와 `ImageStore` 가 같은 `{GUID}` 폴더에 있다는 점은 TotalRecall 첫 판 코드와 Velociraptor 아티팩트에 나옵니다[6][7]. 두 `.sidb` 파일은 자료들이 이름만 적었고, 어느 폴더에 있는지는 적지 않았습니다[5][8]. 그래서 검체에서는 `UKP` 아래를 통째로 봅니다. 자료마다 예로 든 GUID 값이 서로 다르므로[6][7], GUID 값을 정해 두고 찾지 말고 `UKP\*\` 로 찾습니다.
+`ukg.db` 와 `ImageStore` 는 같은 `{GUID}` 폴더에 있습니다[6][7]. 두 `.sidb` 파일이 어느 폴더에 있는지는 공개 자료가 없습니다[5][8]. 그래서 검체에서는 `UKP` 아래를 통째로 봅니다. 자료마다 예로 든 GUID 값이 서로 다르므로[6][7], GUID 값을 정해 두고 찾지 말고 `UKP\*\` 로 찾습니다.
 
 | 판 | 시기 | 저장 형태 | 근거 |
 |---|---|---|---|
@@ -51,13 +51,13 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 | 〃 (24H2) | 2025-10 글 | 관리자 권한 없이 `ukg.db` 에 접근은 되지만 암호화돼 있고, 글을 쓸 때 공개된 복호 방법이 없음 | Securelist[8] |
 | 〃 (25H2 26300.8155) | 2026-04 글 | `ukg.db` 를 SQLite SEE 의 AES-256-GCM 으로 페이지마다 암호화 | TotalRecall Reloaded[5] |
 
-Microsoft 문서가 적은 보호 방식은 다음과 같습니다. 암호화 키는 TPM 이 보호하면서 사용자의 Windows Hello ESS 신원에 묶이고, VBS 엔클레이브 안의 작업만 이 키를 씁니다. Recall 을 열 때와 스냅숏에 접근할 때마다 Windows Hello 로 본인을 확인하고, 그때에만 복호합니다(just in time decryption)[1][4]. TotalRecall Reloaded 설명서는 키가 Windows Hello, TPM 에 묶인 NGC 키, 엔클레이브에 봉인된 키를 거쳐 페이지 단위 AES-256-GCM 키로 이어진다고 적었습니다[5]. 설명서가 적은 사슬에는 DPAPI 가 없습니다. 따라서 사용자 암호를 알아도 [DPAPI](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 방식으로 디스크 이미지에서 풀 수 있다고 볼 근거가 없고, Securelist 도 공개된 복호 방법이 없다고 적었습니다[8].
+보호 방식은 다음과 같습니다. 암호화 키는 TPM 이 보호하면서 사용자의 Windows Hello ESS 신원에 묶이고, VBS 엔클레이브 안의 작업만 이 키를 씁니다. Recall 을 열 때와 스냅숏에 접근할 때마다 Windows Hello 로 본인을 확인하고, 그때에만 복호합니다(just in time decryption)[1][4]. 키는 Windows Hello, TPM 에 묶인 NGC 키, 엔클레이브에 봉인된 키를 거쳐 페이지 단위 AES-256-GCM 키로 이어집니다[5]. 이 사슬에는 DPAPI 가 없습니다. 따라서 사용자 암호를 알아도 [DPAPI](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 방식으로 디스크 이미지에서 풀 수 있다고 볼 근거가 없고, 공개된 복호 방법도 없습니다[8].
 
 ### 설정과 정책
 
 사용자 설정은 설정 → 개인 정보 및 보안 → Recall & snapshots 에 있습니다[4]. 저장 켜기, 필터 목록, 보존 기간 같은 사용자 설정이 어느 파일이나 레지스트리에 들어가는지는 공식 문서와 공개 분석에 없어서 검체로 확인해야 합니다.
 
-조직이 거는 정책은 `SOFTWARE\Policies\Microsoft\Windows\WindowsAI` 키에 들어갑니다. ADMX 는 `WindowsCopilot.admx`, 그룹 정책 경로는 Windows Components → Windows AI 이고, 장치와 사용자 둘 다 되는 항목은 HKLM 과 HKCU 양쪽에 올 수 있습니다[2]. Securelist 도 사용자 하이브의 이 키가 스냅숏 저장을 켜고 끈다고 적었습니다[8].
+조직이 거는 정책은 `SOFTWARE\Policies\Microsoft\Windows\WindowsAI` 키에 들어갑니다. ADMX 는 `WindowsCopilot.admx`, 그룹 정책 경로는 Windows Components → Windows AI 이고, 장치와 사용자 둘 다 되는 항목은 HKLM 과 HKCU 양쪽에 올 수 있습니다[2]. 사용자 하이브의 이 키로도 스냅숏 저장을 켜고 끕니다[8].
 
 | 정책 이름 | 범위 | 값 |
 |---|---|---|
@@ -71,7 +71,7 @@ Microsoft 문서가 적은 보호 방식은 다음과 같습니다. 암호화 �
 | `SetDataLossPreventionProvider` | 장치, Ent/Edu | DLP 제공자의 레지스트리 위치와 DLL 을 적은 문자열(그룹 정책 이름 `SetDataLossPreventionProviderKey`) |
 | `DisableRecallDataProviders` | 사용자, Ent/Edu, Insider | 앱 작업 제공자가 주는 추가 정보(예: 회의 참석자)를 보일지, Recall 을 다시 시작해야 적용 |
 
-표의 이름은 CSP 정책 이름입니다. CSP 문서는 `SetDataLossPreventionProvider` 와 `DisableRecallDataProviders` 를 뺀 일곱 개에 대해 `SOFTWARE\Policies\Microsoft\Windows\WindowsAI` 아래 레지스트리 값 이름을 적었고, 두 정책은 값 이름을 적지 않았으므로 검체의 같은 키에서 직접 찾아봅니다[2]. `AllowRecallEnablement`, `DisableAIDataAnalysis`, 저장·필터 정책은 Windows 11 24H2 KB5055627(10.0.26100.3915) 이상에서, `SetDataLossPreventionProvider` 는 KB5065789(10.0.26100.6725) 이상에서 적용됩니다[2].
+표의 이름은 CSP 정책 이름입니다. `SetDataLossPreventionProvider` 와 `DisableRecallDataProviders` 를 뺀 일곱 개는 `SOFTWARE\Policies\Microsoft\Windows\WindowsAI` 아래 레지스트리 값 이름이 공개돼 있습니다. 두 정책은 값 이름이 공개되지 않았으므로 검체의 같은 키에서 직접 찾아봅니다[2]. `AllowRecallEnablement`, `DisableAIDataAnalysis`, 저장·필터 정책은 Windows 11 24H2 KB5055627(10.0.26100.3915) 이상에서, `SetDataLossPreventionProvider` 는 KB5065789(10.0.26100.6725) 이상에서 적용됩니다[2].
 
 `AllowRecallEnablement` 의 기본값은 문서 안에서도 엇갈립니다. CSP 값 표는 1(사용 가능)을 기본값으로 적었지만, 같은 CSP 본문은 구성하지 않으면 구성 요소가 꺼진 상태라고 적었고, Manage Recall 은 관리 기기에서 기본으로 꺼지고 제거된다고 적었습니다(CSP 2026-09-10, Manage Recall 2025-12-10)[1][2]. 정책으로 Recall 을 끄거나(`AllowRecallEnablement`=0) 스냅숏 저장을 끄면(`DisableAIDataAnalysis`=1) 이미 있던 스냅숏을 지우고, `AllowRecallEnablement`=0 은 재시작 뒤 구성 요소도 기기에서 지웁니다[1][2]. DLP 정책을 지우면 DLP 제공자를 더 부르지 않을 뿐 이미 저장된 스냅숏은 그대로 둡니다[1].
 
@@ -87,11 +87,11 @@ Microsoft 문서가 적은 보호 방식은 다음과 같습니다. 암호화 �
 
 용량과 기간을 둘 다 정하면 먼저 닿는 쪽에서 지웁니다[2]. 사용자는 설정에서 스냅숏을 모두 지울 수 있고, 검색 결과나 스냅숏 화면에서 특정 앱이나 웹사이트의 스냅숏만 모두 지울 수도 있습니다[4]. "Reset Recall" 을 하면 스냅숏과 Recall 설정을 모두 지우지만, 이미 폴더로 내보낸 스냅숏은 지우지 않습니다[11]. 알림 영역 아이콘이 저장 중, 일시 정지, 필터링 상태를 보여 주고, 그 아이콘으로 저장을 잠시 멈출 수 있습니다[4]. 보관 설정과 삭제의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
-폴더를 지우는 주체가 사용자나 Recall 만은 아닙니다. 2025-11 에 공개된 한 취약점 보고서는 예약 작업 `\Microsoft\Windows\WindowsAI\Recall\PolicyConfiguration` 이 SYSTEM 권한(taskhostw.exe)으로 돌면서 `UKP` 아래 `{GUID}` 모양 폴더를 찾아 지운다고 적었습니다[12]. 같은 보고서가 옮긴 작업 정의의 트리거는 `RecallPolicyCheckUpdateTrigger`, `AADStatusChangeTrigger`, `DisableAIDataAnalysisTrigger`, `UserLoginTrigger`(모두 WNF 상태 변경)와 `SessionUnlockTrigger`(세션 잠금 해제)입니다[12]. 이 작업의 동작은 이후 업데이트에서 바뀌었을 수 있으므로 검체의 작업 정의를 직접 봅니다.
+폴더를 지우는 주체가 사용자나 Recall 만은 아닙니다. 예약 작업 `\Microsoft\Windows\WindowsAI\Recall\PolicyConfiguration` 은 SYSTEM 권한(taskhostw.exe)으로 돌면서 `UKP` 아래 `{GUID}` 모양 폴더를 찾아 지웁니다(2025-11 기준)[12]. 이 작업 정의의 트리거는 `RecallPolicyCheckUpdateTrigger`, `AADStatusChangeTrigger`, `DisableAIDataAnalysisTrigger`, `UserLoginTrigger`(모두 WNF 상태 변경)와 `SessionUnlockTrigger`(세션 잠금 해제)입니다[12]. 이 작업의 동작은 이후 업데이트에서 바뀌었을 수 있으므로 검체의 작업 정의를 직접 봅니다.
 
 ### 내보내기(EEA 한정)
 
-유럽경제지역(EEA) 기기에서만 사용자가 스냅숏을 내보낼 수 있고, 관리 기기는 기본으로 막혀 있습니다[1]. 지난 스냅숏을 한 번 내보내거나(최근 7일, 30일, 전부) 지금부터 계속 내보내게 할 수 있고, 계속 내보내기를 켜 두면 30일마다 켜져 있다고 알려 줍니다[1][11]. 내보내기 전에 Windows Hello 로 본인을 확인하고, 내보낼 폴더는 사용자가 고릅니다. 지원 문서는 `C:\Recall\Exported` 를 예로 듭니다[11]. 내보내는 내용은 스냅숏과 저장 시각, 그때 열려 있던 앱 정보 같은 스냅숏 세부 정보입니다[1].
+유럽경제지역(EEA) 기기에서만 사용자가 스냅숏을 내보낼 수 있고, 관리 기기는 기본으로 막혀 있습니다[1]. 지난 스냅숏을 한 번 내보내거나(최근 7일, 30일, 전부) 지금부터 계속 내보내게 할 수 있고, 계속 내보내기를 켜 두면 30일마다 켜져 있다고 알려 줍니다[1][11]. 내보내기 전에 Windows Hello 로 본인을 확인하고, 내보낼 폴더는 사용자가 고릅니다. 예를 들면 `C:\Recall\Exported` 입니다[11]. 내보내는 내용은 스냅숏과 저장 시각, 그때 열려 있던 앱 정보 같은 스냅숏 세부 정보입니다[1].
 
 내보낸 파일은 암호화돼 있습니다. 풀려면 Recall 을 처음 설정할 때 한 번만 보여 주는 32자 "Recall export code" 가 있어야 하고, Reset Recall 을 하면 새 코드가 나옵니다[11]. Microsoft 는 파일 구조와 복호 절차, 예제 코드(RecallSnapshotsExport)를 공개했습니다[3][13].
 
@@ -110,7 +110,7 @@ Microsoft 문서가 적은 보호 방식은 다음과 같습니다. 암호화 �
 
 ### ukg.db 의 표와 칸
 
-아래 칸 이름은 TotalRecall Reloaded 설명서가 엔클레이브 바이너리 `storage_support.dll` 안의 CREATE TABLE 문에서 옮겨 적은 것입니다(25H2 26300.8155, 2026-04)[5]. 표 개수는 설명서마다 다릅니다. Securelist 는 `ukg.db` 가 표 20개로 이뤄졌다고 적었지만 어느 판 기준인지는 밝히지 않았고, Reloaded 설명서는 핵심 표 17개를 적었습니다[5][8]. 2024 판 도구가 읽는 `WindowCaptureTextIndex_content` 처럼 FTS5 가 스스로 만드는 표가 있어서 차이가 날 수 있으므로, 검체에서 표 목록을 먼저 뽑아 맞춰 봅니다.
+아래 칸 이름은 엔클레이브 바이너리 `storage_support.dll` 안의 CREATE TABLE 문에 있는 것입니다(25H2 26300.8155 기준)[5]. 표 개수는 설명서마다 다릅니다. Securelist 는 `ukg.db` 가 표 20개로 이뤄졌다고 적었지만 어느 판 기준인지는 밝히지 않았고, Reloaded 설명서는 핵심 표 17개를 적었습니다[5][8]. 2024 판 도구가 읽는 `WindowCaptureTextIndex_content` 처럼 FTS5 가 스스로 만드는 표가 있어서 차이가 날 수 있으므로, 검체에서 표 목록을 먼저 뽑아 맞춰 봅니다.
 
 | 표 | 칸 |
 |---|---|
@@ -132,19 +132,19 @@ Microsoft 문서가 적은 보호 방식은 다음과 같습니다. 암호화 �
 | `IdTable` | NextId |
 | `_MigrationMetadata` | Id, Version |
 
-2024 판을 다룬 자료들이 적은 칸의 뜻은 다음과 같습니다.
+2024 판 기준으로 칸의 뜻은 다음과 같습니다.
 
 - `WindowCapture.Name` 은 사건 종류입니다. `WindowCreatedEvent` 는 창이 처음 생긴 때, `WindowChangedEvent` 는 창이 옮겨지거나 크기가 바뀐 때, `WindowCaptureEvent` 는 스냅숏을 찍은 때(`ImageToken` 이 있음), `WindowDestroyedEvent` 는 창을 닫은 때이고, `ForegroundChangedEvent` 도 있습니다[8]. 스냅숏 이미지가 없어도 창이 생기고 바뀌고 닫힌 흐름이 이 표에 남습니다.
 - `WindowCapture.ImageToken` 값이 `ImageStore` 안의 파일 이름입니다[6][7][8].
-- `WindowCaptureTextIndex_content` 는 FTS5 가 `WindowCaptureTextIndex` 의 칸을 c0, c1, c2 로 담은 표입니다. 가상 표의 칸 순서(WindowCaptureId, WindowTitle, OcrText)대로라면 c1 은 창 제목입니다[5]. Securelist 와 Velociraptor 는 c0 를 `WindowCapture.Id` 와 이어 붙이고 c2 를 OCR 텍스트로 읽으며, 앱 정보는 `WindowCaptureAppRelation.AppId = App.Id` 로 붙입니다[7][8].
-- Securelist 는 `AppDwellTime` 에 창을 띄운 프로세스의 전체 경로(`WindowsAppId`), 띄운 날짜와 시각(`HourOfDay`, `DayOfWeek`, `HourStartTimestamp`), 창이 화면에 떠 있던 시간(`DwellTime`)이 있다고 적었습니다[8]. `WebDomainDwellTime` 에도 같은 시각 칸이 있습니다[5]. 칸 이름으로 보아 시간(hour) 단위로 모은 값이지만, 모으는 단위를 밝힌 공개 자료는 없으므로 검체의 값으로 확인합니다.
-- Reloaded 설명서는 캡처 입력 구조의 `FileObjectId`, `VolumeId` 를 NTFS 의 영구 파일 식별자라고 적었고, `File` 표에도 `ObjectId`, `VolumeId` 칸이 있습니다[5].
+- `WindowCaptureTextIndex_content` 는 FTS5 가 `WindowCaptureTextIndex` 의 칸을 c0, c1, c2 로 담은 표입니다. 가상 표의 칸 순서(WindowCaptureId, WindowTitle, OcrText)대로라면 c1 은 창 제목입니다[5]. c0 는 `WindowCapture.Id` 와 이어 붙이고 c2 는 OCR 텍스트로 읽으며, 앱 정보는 `WindowCaptureAppRelation.AppId = App.Id` 로 붙입니다[7][8].
+- `AppDwellTime` 에는 창을 띄운 프로세스의 전체 경로(`WindowsAppId`), 띄운 날짜와 시각(`HourOfDay`, `DayOfWeek`, `HourStartTimestamp`), 창이 화면에 떠 있던 시간(`DwellTime`)이 있습니다[8]. `WebDomainDwellTime` 에도 같은 시각 칸이 있습니다[5]. 칸 이름으로 보아 시간(hour) 단위로 모은 값이지만, 모으는 단위를 밝힌 공개 자료는 없으므로 검체의 값으로 확인합니다.
+- 캡처 입력 구조의 `FileObjectId`, `VolumeId` 는 NTFS 의 영구 파일 식별자이고, `File` 표에도 `ObjectId`, `VolumeId` 칸이 있습니다[5].
 
 ### 의미 검색 색인과 이미지
 
 `.sidb` 파일에는 `si_items`, `si_embedding_metadata`, `si_diskann_graph`, `si_diskann_references`, `si_diskann_config`, `si_diskann_info`, `si_application_values` 표가 있습니다[5]. SQLite 파일 구조 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
 
-2024 판의 `ImageStore` 파일은 확장자 없는 JPEG 이고, TotalRecall 첫 판은 복사본에 `.jpg` 를 붙여 엽니다[6]. Securelist 도 `ImageStore` 파일을 JPEG 라고 적고, 이 JPEG 의 `Exif.Photo.MakerNote`(0x927C) 태그에 전경 창 경계, 캡처 시각, 창 제목, 창 ID, 창을 띄운 프로세스 전체 경로, 브라우저라면 URI 와 도메인이 들어 있다고 적었습니다[8]. DB 가 없어도 이미지 한 장에서 이 메타데이터를 얻을 수 있다는 뜻이고, 내보낸 스냅숏도 같은 태그를 씁니다[13]. 다만 Securelist 는 이 이미지 설명이 어느 판 기준인지 밝히지 않았고, Microsoft 는 다시 설계한 판에서 스냅숏을 늘 암호화한다고 적었습니다[1][8]. 그래서 다시 설계한 판의 `ImageStore` 파일 형식은 검체로 확인해야 합니다.
+2024 판의 `ImageStore` 파일은 확장자 없는 JPEG 이고, TotalRecall 첫 판은 복사본에 `.jpg` 를 붙여 엽니다[6]. 이 JPEG 의 `Exif.Photo.MakerNote`(0x927C) 태그에는 전경 창 경계, 캡처 시각, 창 제목, 창 ID, 창을 띄운 프로세스 전체 경로, 브라우저라면 URI 와 도메인이 들어 있습니다[8]. DB 가 없어도 이미지 한 장에서 이 메타데이터를 얻을 수 있다는 뜻이고, 내보낸 스냅숏도 같은 태그를 씁니다[13]. 다만 이 이미지 설명이 어느 판 기준인지는 밝혀져 있지 않고, 다시 설계한 판은 스냅숏을 늘 암호화합니다[1][8]. 그래서 다시 설계한 판의 `ImageStore` 파일 형식은 검체로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -156,7 +156,7 @@ Microsoft 문서가 적은 보호 방식은 다음과 같습니다. 암호화 �
 
 2024 판 `WindowCapture.TimeStamp` 는 Unix epoch(1970-01-01 UTC)부터 센 밀리초입니다. TotalRecall 첫 판은 값을 1000으로 나눠 초로 바꾸고, Velociraptor 는 `timestamp(epoch=TimeStamp)` 로 읽습니다[6][7]. TotalRecall 첫 판은 Python `datetime.fromtimestamp` 로 바꾸므로 결과 파일의 시각은 분석 PC 의 현지 시각입니다[6]. 보고서에 옮길 때는 UTC 로 다시 적습니다.
 
-다시 설계한 판의 칸 형식은 공개 자료가 없어서 검체로 확인해야 합니다. TotalRecall Reloaded 설명서의 "100나노초 정밀도" 는 WinRT API 가 돌려주는 시각을 설명한 말이고, DB 칸 형식을 말한 것이 아닙니다[5]. `HourStartTimestamp` 의 형식도 공개 자료에 없습니다. 내보낸 스냅숏의 `.json` 에 있는 시각은 Microsoft 예제 코드가 WinRT DateTime 을 Unix epoch 밀리초 문자열로 바꿔 쓴 값입니다[13].
+다시 설계한 판의 칸 형식은 공개 자료가 없어서 검체로 확인해야 합니다. 공개 자료에 나오는 "100나노초 정밀도" 는 WinRT API 가 돌려주는 시각의 정밀도이고, DB 칸 형식이 아닙니다[5]. `HourStartTimestamp` 의 형식도 공개 자료에 없습니다. 내보낸 스냅숏의 `.json` 에 있는 시각은 Microsoft 예제 코드가 WinRT DateTime 을 Unix epoch 밀리초 문자열로 바꿔 쓴 값입니다[13].
 
 `WindowCapture` 의 시각이 화면을 찍은 순간인지 저장을 마친 순간인지는 공개 자료에 없습니다. 디스크 이미지에서 바로 쓸 수 있는 시각은 파일 시스템 쪽입니다. `ImageStore` 파일의 생성 시각이 스냅숏을 저장한 무렵과 맞는지는 공개 자료가 다루지 않았으므로, 검체에서 DB 시각이나 다른 기록과 맞춰 본 뒤에 추정이라고 밝혀 씁니다. 폴더나 파일이 사라진 USN 기록은 지워진 무렵을 알려 줍니다. 다만 USN 기록만으로는 누가 왜 지웠는지(최대 용량, 보존 기간, 사용자 삭제, Reset Recall, 정책, 예약 작업)를 가를 수 없습니다. 정책 키의 마지막 쓰기 시각은 정책 값이 바뀐 무렵을 알려 줍니다.
 
@@ -180,7 +180,7 @@ Microsoft 문서가 적은 보호 방식은 다음과 같습니다. 암호화 �
 
 이 문자열이 보이면 2024 판처럼 평문 SQLite 로 열어 볼 수 있습니다. 보이지 않으면 암호화된 판일 수 있지만, 암호화된 파일의 머리 모양은 공개 분석 자료가 없어서 검체로 확인해야 합니다. `ImageStore` 파일은 JPEG 명세의 시작 표지 `FF D8 FF` 로 시작하는지 봅니다. 2024 판이라면 이 표지로 시작하고, 그렇지 않으면 암호화된 파일일 수 있습니다.
 
-내보낸 스냅숏 파일은 공개된 구조대로 처음 16바이트에 네 값이 들어 있습니다. 콘텐츠 키 블록은 nonce 12 + 키 32 + 태그 16 이라서 encryptedKeySize 는 60(0x3C)이어야 합니다[13]. 아래는 만든 예시이고, contentSize 와 contentType 값은 지어낸 값입니다(Microsoft 문서는 contentType 값의 뜻을 적지 않았습니다).
+내보낸 스냅숏 파일은 공개된 구조대로 처음 16바이트에 네 값이 들어 있습니다. 콘텐츠 키 블록은 nonce 12 + 키 32 + 태그 16 이라서 encryptedKeySize 는 60(0x3C)이어야 합니다[13]. 아래는 만든 예시이고, contentSize 와 contentType 값은 지어낸 값입니다(contentType 값의 뜻은 공개되지 않았습니다).
 
 ```
 만든 예시(내보낸 스냅숏 파일 머리)

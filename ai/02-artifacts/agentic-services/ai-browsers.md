@@ -14,13 +14,13 @@ AI 에이전트 브라우저 (AI agent browser) 는 AI 에이전트를 브라우
 
 AABF 는 여섯 브라우저를 다룹니다. Perplexity Comet, Fellou, Microsoft Edge(Copilot), BrowserOS, Sigma Browser, Genspark Browser 입니다[1]. 도구는 흔적을 계정(Account), 프롬프트(Prompt), 작업 흐름(Workflow), 결과(Output) 네 갈래로 나누고, 서버 접속에 쓰는 인증(Authentication) 흔적을 따로 셉니다. 작업 흐름은 에이전트가 세운 계획, 검색어, 부른 도구와 그 입력·출력 같은 중간 단계를 말합니다.
 
-도구는 각 브라우저를 서비스 형태로도 나눕니다. 대화 본문을 기기에 남기는 쪽(local-centric)은 Comet 과 BrowserOS, 계정·토큰만 기기에 남기고 본문은 서버에 두는 쪽(cloud-centric)은 Fellou, Edge, Genspark, 둘이 섞인 쪽(hybrid)은 Sigma 입니다[1]. 이 구분이 조사 방향을 정합니다. 기기 쪽이면 프로필 폴더를 떠서 캐시를 읽고, 서버 쪽이면 기기에서는 누가 언제 썼는지까지만 잡고 본문은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
+브라우저는 서비스 형태로도 나뉩니다. 대화 본문을 기기에 남기는 쪽(local-centric)은 Comet 과 BrowserOS, 계정·토큰만 기기에 남기고 본문은 서버에 두는 쪽(cloud-centric)은 Fellou, Edge, Genspark, 둘이 섞인 쪽(hybrid)은 Sigma 입니다[1]. 이 구분이 조사 방향을 정합니다. 기기 쪽이면 프로필 폴더를 떠서 캐시를 읽고, 서버 쪽이면 기기에서는 누가 언제 썼는지까지만 잡고 본문은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 이 브라우저들은 대부분 Chromium 을 바탕으로 만들었고 Fellou 만 Electron 입니다[1]. 그래서 방문 기록·쿠키 같은 일반 흔적은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)와 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md) 방식대로 읽고, 이 쪽은 에이전트 기능이 더하는 흔적만 다룹니다. 일반 브라우저에 확장으로 붙는 에이전트(Claude in Chrome 등)는 [브라우저를 조작하는 AI](browser-agents.md)에 있습니다.
 
 ## 위치와 버전별 차이
 
-아래 경로에서 `%LOCALAPPDATA%` 는 `...\AppData\Local`, `%APPDATA%` 는 `...\AppData\Roaming` 이고, `{profile}` 은 `Default`, `Profile 1` 같은 프로필 폴더 자리입니다. 모두 AABF `aabf/signatures.py` 에서 옮겼습니다[1].
+아래 경로에서 `%LOCALAPPDATA%` 는 `...\AppData\Local`, `%APPDATA%` 는 `...\AppData\Roaming` 이고, `{profile}` 은 `Default`, `Profile 1` 같은 프로필 폴더 자리입니다. 브라우저별 사용자 데이터 폴더는 아래와 같습니다[1].
 
 | 브라우저 | 바탕 | 서비스 형태 | 사용자 데이터 폴더 |
 |---|---|---|---|
@@ -42,7 +42,7 @@ AABF 는 여섯 브라우저를 다룹니다. Perplexity Comet, Fellou, Microsof
 | `Network\Cookies` | 세션 쿠키 `__Secure-next-auth.session-token`(JWE) |
 | `Local State` (프로필 폴더가 아니라 `UserData` 바로 아래) | 쿠키를 푸는 키 `os_crypt.encrypted_key`(DPAPI 로 감쌈) |
 
-Local Storage 에는 로그인하지 않아도 남는 흔적도 있습니다. AABF 는 `pplx-top-sites-cache`(방문한 사이트의 주소·제목·방문 횟수), 이름이 `web_url` 이나 `first_page_visit_url` 로 끝나는 키(이동한 주소), `cometOnboardingStep`(첫 설정 단계), `locationMetadata`(위치 권한 상태와 갱신 시각)를 이런 흔적으로 따로 읽습니다[1].
+Local Storage 에는 로그인하지 않아도 남는 흔적도 있습니다. `pplx-top-sites-cache`(방문한 사이트의 주소·제목·방문 횟수), 이름이 `web_url` 이나 `first_page_visit_url` 로 끝나는 키(이동한 주소), `cometOnboardingStep`(첫 설정 단계), `locationMetadata`(위치 권한 상태와 갱신 시각)입니다[1].
 
 ### Fellou
 
@@ -53,7 +53,7 @@ Local Storage 에는 로그인하지 않아도 남는 흔적도 있습니다. AA
 | `Partitions\shared-process\Local Storage\leveldb` | 계정 정보(이름·이메일·전화번호·만든 시각)와 로그인 토큰 |
 | `Partitions\profile-{profile}\Local Storage\leveldb` | `fellou.id_token` 과 관련 토큰 |
 
-`{folder16}` 은 AABF 가 이 자리의 폴더를 부르는 이름이고, 실제 이름은 검체에서 봅니다. AABF 는 에이전트의 작업 흐름 본문이 `sqliteDatabase.db` 에 없고 서버에만 있다고 적습니다[1].
+`{folder16}` 은 AABF 가 이 자리의 폴더를 부르는 이름이고, 실제 이름은 검체에서 봅니다. 에이전트의 작업 흐름 본문은 `sqliteDatabase.db` 에 없고 서버에만 있습니다[1].
 
 ### Microsoft Edge (Copilot)
 
@@ -107,7 +107,7 @@ Sigma 도 에이전트가 고정 ID `amabiocpfnlgbceffljgkcjeacejflga` 인 내�
 
 ### Comet 의 IndexedDB 캐시
 
-Comet 캐시는 `keyval` 저장소에 있고, 키는 `["pplx-query-cache-버전", 캐시 종류, 대화 slug 나 UUID, ...]` 모양의 배열입니다(`aabf/parsing/services/comet.py`)[1]. 두 번째 칸이 캐시 종류이고 AABF 는 네 가지를 읽습니다.
+Comet 캐시는 `keyval` 저장소에 있고, 키는 `["pplx-query-cache-버전", 캐시 종류, 대화 slug 나 UUID, ...]` 모양의 배열입니다[1]. 두 번째 칸이 캐시 종류이고, 주요 종류는 아래 네 가지입니다.
 
 | 캐시 종류 | 담긴 것 | 주요 칸 |
 |---|---|---|
@@ -118,17 +118,17 @@ Comet 캐시는 `keyval` 저장소에 있고, 키는 `["pplx-query-cache-버전"
 
 `blocks[]` 안에서 `markdown_block.answer` 가 답변이고, `plan_block.goals[].description` 이 에이전트가 세운 계획입니다. `workflow_block.steps[]` 는 단계마다 `title`, `status`, `items[]` 를 담고, 항목 `type` 이 `WORKFLOW_ITEM_QUERIES` 면 검색어(`payload.queries_payload.queries`), `WORKFLOW_ITEM_SOURCES` 면 참고한 주소(`payload.sources_payload.sources[].url`)입니다.
 
-`source` 칸은 대화가 어디서 시작됐는지 알려 줍니다. AABF 는 값이 `entropy` 면 에이전트 대화로, `default`(일반 Perplexity 검색)와 `youtube`(위젯)는 에이전트 대화가 아닌 것으로 봅니다[1]. 캐시 항목에는 `expiry_time` 이 붙어 있고 AABF 는 이 값이 약 30일이라 오래된 대화는 캐시에서 빠질 수 있다고 적습니다.
+`source` 칸은 대화가 어디서 시작됐는지 알려 줍니다. 값이 `entropy` 면 에이전트 대화이고, `default`(일반 Perplexity 검색)와 `youtube`(위젯)는 에이전트 대화가 아닙니다[1]. 캐시 항목에는 `expiry_time` 이 붙어 있고, 이 값이 약 30일이라 오래된 대화는 캐시에서 빠질 수 있습니다[1].
 
 ### BrowserOS 의 확장 저장소
 
-확장 저장소(`chrome.storage.local`)의 `conversations` 키에 대화 목록이 JSON 으로 들어 있습니다(`aabf/parsing/services/browseros.py`)[1]. 대화마다 `id`, `lastMessagedAt`, `messages[]` 가 있고, 메시지마다 `id`, `role`, `parts[]` 가 있습니다. `role` 이 `user` 면 프롬프트, `assistant` 면 답변입니다. `parts[]` 에서 `type` 이 `text` 인 조각은 글이고, `tool-` 로 시작하는 조각은 도구 호출 하나이며 `input`, `output`, `state`, `toolCallId` 칸이 있습니다. 도구 이름은 `type` 에서 `tool-` 를 뗀 나머지입니다.
+확장 저장소(`chrome.storage.local`)의 `conversations` 키에 대화 목록이 JSON 으로 들어 있습니다[1]. 대화마다 `id`, `lastMessagedAt`, `messages[]` 가 있고, 메시지마다 `id`, `role`, `parts[]` 가 있습니다. `role` 이 `user` 면 프롬프트, `assistant` 면 답변입니다. `parts[]` 에서 `type` 이 `text` 인 조각은 글이고, `tool-` 로 시작하는 조각은 도구 호출 하나이며 `input`, `output`, `state`, `toolCallId` 칸이 있습니다. 도구 이름은 `type` 에서 `tool-` 를 뗀 나머지입니다.
 
 같은 저장소에는 대화가 없어도 남는 설정이 있습니다. `scheduledJobRuns`(예약 작업의 `id`, `name`, `status`, `nextRunAt`, `lastRunAt`, `prompt` 또는 `goal`), `llm-providers`(`modelId`, `type`, `baseUrl`, `contextWindow`, `createdAt`), `mcpServers`(`name`, `url`), `sessionInfo` 입니다. 예약 작업의 프롬프트는 사용자가 무엇을 시키려 했는지 보여 주고, `baseUrl` 은 어느 모델 서버 주소를 설정했는지 보여 줍니다. MCP 설정 읽는 법은 [MCP 서버와 도구 호출 기록](../dev-agents/mcp.md)에 있습니다.
 
 ### Sigma 의 `search-storage`
 
-`search-storage` 값은 JSON 이고 `state` 아래에 칸이 모여 있습니다(`aabf/parsing/services/sigma.py`)[1].
+`search-storage` 값은 JSON 이고 `state` 아래에 칸이 모여 있습니다[1].
 
 | 칸 | 담긴 것 |
 |---|---|
@@ -137,21 +137,21 @@ Comet 캐시는 `keyval` 저장소에 있고, 키는 `["pplx-query-cache-버전"
 | `state.userHistory[]` | `id` 또는 `api_thread_id`, `query`(프롬프트), `hash`, `created_at`, `updated_at`, `session_id`, `thread_name`, `thread_type`, `summary`(답변 요약) |
 | `state.userPrompts[]` | 판에 따라 프롬프트를 여기에 두기도 함. 항목이 객체일 수도 문자열일 수도 있음 |
 
-확장 저장소 쪽 `inputSearchPage:` 와 `inputMainPage` 로 시작하는 키에는 AABF 설명으로 사용자가 입력 칸에 친 원래 글이 들어갑니다[1]. 이 값을 `userHistory` 의 `query` 와 맞춰 보면 입력 칸에 남은 글이 실제로 보낸 프롬프트와 같은지 볼 수 있습니다.
+확장 저장소 쪽 `inputSearchPage:` 와 `inputMainPage` 로 시작하는 키에는 사용자가 입력 칸에 친 원래 글이 들어갑니다[1]. 이 값을 `userHistory` 의 `query` 와 맞춰 보면 입력 칸에 남은 글이 실제로 보낸 프롬프트와 같은지 볼 수 있습니다.
 
 ### Fellou 의 Local Storage 와 SQLite
 
-Local Storage 에서 AABF 가 읽는 키는 여섯 가지입니다(`aabf/parsing/services/fellou.py`)[1]. `fellou.userInfo`(`id`, `email`, `phone_number`, `createdAt`, `authing_user_id`, `isAdmin`), `_authing_user`(`id`, `username`, `email`, `phone`), 토큰 `fellou.id_token`·`fellou.access_token`·`_authing_token`, 이용량 `userPoint`(`availablePoint`, `usedPoint`, `monthlyPoint`)입니다. `fellou.id_token` 은 Authing 이 발급한 JWT 이고, AABF 는 유효 기간이 발급 뒤 약 10년이라고 적습니다.
+Local Storage 의 주요 키는 여섯 가지입니다[1]. `fellou.userInfo`(`id`, `email`, `phone_number`, `createdAt`, `authing_user_id`, `isAdmin`), `_authing_user`(`id`, `username`, `email`, `phone`), 토큰 `fellou.id_token`·`fellou.access_token`·`_authing_token`, 이용량 `userPoint`(`availablePoint`, `usedPoint`, `monthlyPoint`)입니다. `fellou.id_token` 은 Authing 이 발급한 JWT 이고, 유효 기간은 발급 뒤 약 10년입니다[1].
 
-`sqliteDatabase.db` 의 `key_value_store` 표에서는 키 `fellou.tabRestore` 가 중요합니다. 값은 JSON 이고 `records[]` 마다 되살릴 탭의 `url`, `title`, `id` 가 있어서, 에이전트가 만든 보고서·작업 화면의 주소와 제목(작업 주제)이 남습니다. 주소가 `agent.fellou.ai/report/`, `/container/`, `/task/`, `/chat/`, `/session/` 뒤에 UUID 가 붙는 모양이면 AABF 는 그 UUID 를 에이전트 세션 ID 로 읽습니다. `history` 표에서는 `url`, `title`, `lastVisitTime` 또는 `visitTime`, `visitCount` 를, `permission` 표에서는 `url`, `domain`, `permission`, `visitTime` 을 읽습니다. AABF 목록은 이 방문 기록에 AI 방문인지 사람 방문인지 가리는 표시가 있다고 적는데, 파서 코드에는 그 칸 이름이 나오지 않으므로 검체의 `history` 표 칸을 직접 보고 확인합니다.
+`sqliteDatabase.db` 의 `key_value_store` 표에서는 키 `fellou.tabRestore` 가 중요합니다. 값은 JSON 이고 `records[]` 마다 되살릴 탭의 `url`, `title`, `id` 가 있어서, 에이전트가 만든 보고서·작업 화면의 주소와 제목(작업 주제)이 남습니다. 주소가 `agent.fellou.ai/report/`, `/container/`, `/task/`, `/chat/`, `/session/` 뒤에 UUID 가 붙는 모양이면 그 UUID 가 에이전트 세션 ID 입니다[1]. `history` 표에서는 `url`, `title`, `lastVisitTime` 또는 `visitTime`, `visitCount` 를, `permission` 표에서는 `url`, `domain`, `permission`, `visitTime` 을 읽습니다. AABF 의 목록 설명에는 이 방문 기록에 AI 방문인지 사람 방문인지 가리는 표시가 있다고 되어 있지만 파서 코드에는 그 칸 이름이 없으므로, 검체의 `history` 표 칸을 보고 확인합니다[1].
 
 ### Genspark 쿠키 값
 
-AABF 주석에 따르면 `session_id` 값은 `UUID:16진수 토큰`, `ai_user` 는 `ID|ISO 시각`, `ai_session` 은 `ID|시각|시각` 모양입니다(`aabf/parsing/services/genspark.py`)[1]. `ai_user` 의 시각은 처음 발급된 때라서 이 계정을 이 브라우저에서 처음 쓴 시점의 단서가 됩니다.
+`session_id` 값은 `UUID:16진수 토큰`, `ai_user` 는 `ID|ISO 시각`, `ai_session` 은 `ID|시각|시각` 모양입니다[1]. `ai_user` 의 시각은 처음 발급된 때라서 이 계정을 이 브라우저에서 처음 쓴 시점의 단서가 됩니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** 사용자 데이터 폴더는 그 브라우저가 설치돼 실행된 흔적입니다. BrowserOS·Sigma 의 고정 확장 ID 저장소는 AABF 설명으로 에이전트를 쓴 뒤에야 생기므로, 에이전트를 한 번 이상 썼다는 흔적이 됩니다. AABF 는 이 저장소를 브라우저를 가려낼 때 보조 표시로 씁니다[1]. 계정 키(`pplx-next-auth-session`, `fellou.userInfo`, `search-storage` 의 `state.user`)는 이 프로필에 로그인한 계정을 알려 주고, Comet `all_results` 의 `author_id`·`author_username` 은 대화마다 어느 계정이 썼는지를 잇습니다. 기기 중심인 Comet·BrowserOS 에서는 프롬프트와 답변, 에이전트가 거친 단계까지 기기에서 읽을 수 있습니다.
+**증명하는 것.** 사용자 데이터 폴더는 그 브라우저가 설치돼 실행된 흔적입니다. BrowserOS·Sigma 의 고정 확장 ID 저장소는 에이전트를 쓴 뒤에야 생기므로, 에이전트를 한 번 이상 썼다는 흔적이 됩니다. AABF 는 이 저장소를 브라우저를 가려낼 때 보조 표시로 씁니다[1]. 계정 키(`pplx-next-auth-session`, `fellou.userInfo`, `search-storage` 의 `state.user`)는 이 프로필에 로그인한 계정을 알려 주고, Comet `all_results` 의 `author_id`·`author_username` 은 대화마다 어느 계정이 썼는지를 잇습니다. 기기 중심인 Comet·BrowserOS 에서는 프롬프트와 답변, 에이전트가 거친 단계까지 기기에서 읽을 수 있습니다.
 
 **증명하지 못하는 것.** 계정이 남아 있다고 해서 그 시각에 키보드 앞에 있던 사람이 계정 주인이라는 뜻은 아니고, 이 문제는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)에서 다룹니다. 서버 중심인 Fellou·Edge·Genspark 는 기기에 본문이 없어서, 기기만으로는 무엇을 시켰는지 말할 수 없습니다. Comet 캐시는 약 30일 뒤 밀려나므로 캐시에 없다고 해서 그 대화가 없었다는 뜻도 아닙니다. 에이전트가 페이지를 열고 눌렀다는 기록이 있어도, 그 결과 외부 사이트에서 실제로 무엇이 바뀌었는지는 그 사이트 쪽 기록으로 확인해야 합니다.
 
@@ -159,7 +159,7 @@ AABF 주석에 따르면 `session_id` 값은 `UUID:16진수 토큰`, `ai_user` �
 
 ## 시각 해석
 
-한 브라우저 안에서도 시각 형식이 섞여 있습니다. AABF `aabf/analysis/timestamps.py` 는 네 형식을 구분합니다[1].
+한 브라우저 안에서도 시각 형식이 섞여 있고, 크게 네 가지입니다[1].
 
 | 형식 | 예로 든 칸 |
 |---|---|
@@ -177,11 +177,11 @@ AABF 는 숫자의 크기로 형식을 고릅니다. 10^15 이상이면 WebKit �
 - **폴더 이름이 겹치는 경우.** Sigma 폴더는 `%LOCALAPPDATA%\Chromium\UserData` 라서 이름만으로 Sigma 라고 단정하지 않고, 확장 ID `amabiocpfnlgbceffljgkcjeacejflga` 폴더나 `search-storage` 키가 있는지 함께 봅니다. Edge 폴더는 거의 모든 Windows 에 있으므로 `msal.2.*` 키로 Copilot 사용을 따로 확인합니다.
 - **Comet 의 에이전트 대화와 일반 검색이 섞임.** 같은 캐시에 일반 Perplexity 검색이 함께 들어 있습니다. `source` 칸이 있으면 `entropy` 만 에이전트 대화이고, 칸이 없는 캐시(`list_recent` 만 있는 경우)는 AABF 가 모두 에이전트 대화로 둡니다[1]. 이 경우 일반 검색이 섞였을 수 있다는 점을 보고서에 적습니다.
 - **같은 대화가 여러 번 나옴.** Comet 은 같은 대화 본문을 캐시 판(`pplx-query-cache-버전`)마다 따로 두므로 AABF 는 중복을 걷어 냅니다[1]. 손으로 셀 때도 대화 ID 로 묶어서 셉니다.
-- **IndexedDB 의 `.blob` 폴더.** IndexedDB 는 큰 값을 `이름.indexeddb.leveldb` 옆의 `이름.indexeddb.blob` 폴더에 따로 둡니다. AABF 는 이 폴더를 함께 수집하지 않으면 대화 본문처럼 큰 값을 가리키는 레코드가 조용히 빠진다고 적습니다(`aabf/collection/local.py`)[1]. 수집할 때 두 폴더를 함께 뜹니다.
+- **IndexedDB 의 `.blob` 폴더.** IndexedDB 는 큰 값을 `이름.indexeddb.leveldb` 옆의 `이름.indexeddb.blob` 폴더에 따로 둡니다. 이 폴더를 함께 수집하지 않으면 대화 본문처럼 큰 값을 가리키는 레코드가 조용히 빠집니다[1]. 수집할 때 두 폴더를 함께 뜹니다.
 - **Genspark 쿠키가 평문인지.** AABF 안에서도 적힌 내용이 다릅니다. `signatures.py` 의 설명은 `session_id`·`ai_user`·`ai_session` 이 평문이라고 적고, 같은 파일의 항목 표시와 `genspark.py` 주석은 보통 `encrypted_value` 칸에 DPAPI·AES-GCM 으로 암호화돼 있다고 적습니다(둘 다 2026-06 코드)[1]. 검체의 `cookies` 표에서 `value` 와 `encrypted_value` 중 어느 칸이 차 있는지 봅니다.
-- **암호화된 쿠키.** Chromium 쿠키의 `v10` 형식은 `Local State` 의 키와 같은 사용자의 DPAPI 로 풀리지만, AABF README 는 App-Bound(`v20`) 쿠키 암호화를 다루지 않는다고 적습니다[1]. DPAPI 구조는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)(Windows 판)에 있습니다.
+- **암호화된 쿠키.** Chromium 쿠키의 `v10` 형식은 `Local State` 의 키와 같은 사용자의 DPAPI 로 풀리지만, AABF 는 App-Bound(`v20`) 쿠키 암호화를 다루지 않습니다[1]. DPAPI 구조는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)(Windows 판)에 있습니다.
 - **토큰은 가립니다.** `pplx-next-auth-session`, `fellou.id_token`, `search-storage` 의 `access_token`·`refresh_token`, 쿠키의 세션 값은 모두 계정 접근에 쓰이는 값입니다. `fellou.id_token` 은 JWT 라서 가운데 조각을 base64url 로 풀면 사용자 ID·이름·이메일이 보이지만 서명된 것이지 암호화된 것은 아닙니다[1]. 보고서에는 토큰이 어느 파일의 어느 키에 있었는지만 쓰고 값은 가립니다. 토큰이 남는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md), 서버 쪽 대화는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 안내합니다.
-- **도구의 범위.** AABF 는 디스크 흔적만 다루고 메모리는 다루지 않습니다[1]. 실행 중인 브라우저의 프로필을 읽거나 DPAPI 값을 풀려면 관리자 권한이 필요하다고 README 가 적습니다. 실행 중인 브라우저가 `Cookies` 를 잡고 있으면 그 파일만 복사에 실패하고, AABF 는 나머지 파일은 계속 복사합니다(`aabf/collection/local.py`)[1].
+- **도구의 범위.** AABF 는 디스크 흔적만 다루고 메모리는 다루지 않습니다[1]. 실행 중인 브라우저의 프로필을 읽거나 DPAPI 값을 풀려면 관리자 권한이 필요합니다[1]. 실행 중인 브라우저가 `Cookies` 를 잡고 있으면 그 파일만 복사에 실패하고, AABF 는 나머지 파일은 계속 복사합니다[1].
 
 ## 직접 분석해 보기
 
@@ -200,7 +200,7 @@ aabf identify "E:\cases\disk0.E01"          # 어떤 브라우저가 있는지 �
 aabf collect  "E:\cases\disk0.E01" -O evidence   # 기기 흔적 수집
 ```
 
-`aabf collect` 는 원래 경로 모양을 살려 파일을 복사하고, 파일마다 SHA-256 을 `manifest.json` 에 적습니다(README, `aabf/collection/local.py`)[1]. 결과를 읽을 때는 도구가 판정한 "에이전트 대화" 가 위 함정 절의 규칙(`source` 칸, 중복 제거)을 거친 것이라는 점을 기억하고, 중요한 레코드는 원래 LevelDB 에서 한 번 더 확인합니다. 서버에만 있는 대화는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
+`aabf collect` 는 원래 경로 모양을 살려 파일을 복사하고, 파일마다 SHA-256 을 `manifest.json` 에 적습니다[1]. 결과를 읽을 때는 도구가 판정한 "에이전트 대화" 가 위 함정 절의 규칙(`source` 칸, 중복 제거)을 거친 것이라는 점을 기억하고, 중요한 레코드는 원래 LevelDB 에서 한 번 더 확인합니다. 서버에만 있는 대화는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 ## 교차 검증
 

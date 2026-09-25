@@ -13,13 +13,13 @@ Android 의 Gemini 는 따로 받은 Gemini 앱(패키지 `com.google.android.ap
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Google 개인정보 안내는 Gemini 앱을 받아도 Gemini 를 Google 앱이 실행한다(hosted by the Google app)고 적었고, 위치·마이크·카메라·알림 권한도 Google 앱 설정에서 관리한다고 안내합니다 [1]. 공개 코드에서도 같은 구조가 보입니다. 기본 어시스턴트를 바꿔 주는 앱 SwitchAI 는 Gemini 를 열 때 Gemini 앱의 `com.google.android.apps.bard.shellapp.BardEntryPointActivity` 를 부르고, 루트 권한 설정을 켜면 Google 앱 패키지 안의 액티비티를 곧바로 부릅니다 [4]. Gemini 앱 쪽 액티비티 이름에 "shellapp" 이 들어간 점도 Google 앱이 Gemini 를 실행한다는 도움말 설명과 들어맞습니다.
+Gemini 앱을 받아도 Gemini 는 Google 앱이 실행하고(hosted by the Google app), 위치·마이크·카메라·알림 권한도 Google 앱 설정에서 관리합니다 [1]. 공개 코드에서도 같은 구조가 보입니다. 기본 어시스턴트를 바꿔 주는 앱 SwitchAI 는 Gemini 를 열 때 Gemini 앱의 `com.google.android.apps.bard.shellapp.BardEntryPointActivity` 를 부르고, 루트 권한 설정을 켜면 Google 앱 패키지 안의 액티비티를 곧바로 부릅니다 [4]. Gemini 앱 쪽 액티비티 이름에 "shellapp" 이 들어간 점도 Google 앱이 Gemini 를 실행하는 구조와 들어맞습니다.
 
-대화를 어디에 두는지는 논문 초록에 나옵니다. Tyagi·Gong·Karabiyik(2025)은 ChatGPT 와 Copilot 이 대화를 기기에 평문으로 두는 것과 달리, Gemini 는 대화·브라우저 데이터·이미지를 모두 클라우드에 두고 Google Takeout 으로 받을 수 있다고 초록에 적었습니다 [3]. 초록의 요약 항목에는 세 앱 모두 쓰는 플랫폼에 따라 대화를 되살렸다고 적혀 있고, Gemini 대화를 기기와 Takeout 가운데 어디서 되살렸는지는 초록에 나오지 않습니다 [3]. 그래서 대화 내용은 [계정 데이터 내보내기](export.md)나 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인하고, 기기에서는 설치·설정·실행 흔적을 봅니다. 서버 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 정리했습니다.
+ChatGPT 와 Copilot 이 대화를 기기에 평문으로 두는 것과 달리, Gemini 는 대화·브라우저 데이터·이미지를 모두 클라우드에 두고 Google Takeout 으로 받을 수 있습니다 [3]. 세 앱 모두 쓰는 플랫폼에 따라 대화를 되살릴 수 있지만, Gemini 대화를 기기와 Takeout 가운데 어디서 되살렸는지는 공개 자료에 없습니다 [3]. 그래서 대화 내용은 [계정 데이터 내보내기](export.md)나 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인하고, 기기에서는 설치·설정·실행 흔적을 봅니다. 서버 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 정리했습니다.
 
-Google 앱을 기본 어시스턴트 앱으로 둔 휴대폰에서는 Gemini 를 모바일 어시스턴트로 고를 수 있고, 고르면 Google Assistant 대신 Gemini 가 답합니다 [2]. 휴대폰이 아닌 기기에서는 "Hey Google" 에 계속 Google Assistant 가 답한다고 도움말은 구분해 적었습니다 [2]. 여는 길도 여럿이라 전원 버튼 길게 누르기, "Hey Google", 화면 아래 모서리에서 위로 쓸기, Gemini 앱을 직접 여는 방법이 있습니다 [2].
+Google 앱을 기본 어시스턴트 앱으로 둔 휴대폰에서는 Gemini 를 모바일 어시스턴트로 고를 수 있고, 고르면 Google Assistant 대신 Gemini 가 답합니다 [2]. 휴대폰이 아닌 기기에서는 "Hey Google" 에 계속 Google Assistant 가 답합니다 [2]. 여는 길도 여럿이라 전원 버튼 길게 누르기, "Hey Google", 화면 아래 모서리에서 위로 쓸기, Gemini 앱을 직접 여는 방법이 있습니다 [2].
 
-개인정보 안내가 적은 수집 항목 가운데 휴대폰과 관련된 것은 통화·메시지 기록, 연락처, 설치된 앱, 언어 같은 기기 정보입니다 [1]. 위치는 기기·IP·계정의 집·직장 주소로 대략 위치를 잡는다고 적었습니다 [1]. 이 항목들은 서버 쪽에 모이는 데이터라서 기기에 어떤 모양으로 남는지는 검체로 확인해야 합니다.
+Gemini 가 모으는 항목 가운데 휴대폰과 관련된 것은 통화·메시지 기록, 연락처, 설치된 앱, 언어 같은 기기 정보입니다 [1]. 위치는 기기·IP·계정의 집·직장 주소로 대략 잡습니다 [1]. 이 항목들은 서버 쪽에 모이는 데이터라서 기기에 어떤 모양으로 남는지는 검체로 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
@@ -33,7 +33,7 @@ Google 앱을 기본 어시스턴트 앱으로 둔 휴대폰에서는 Gemini 를
 | 필요 조건 | Gemini 를 쓸 수 있는 개인 계정 또는 회사·학교 계정 로그인, 지원 언어·국가의 기기 | [2] |
 | 나이 제한 | Family Link 로 13세 미만(나라마다 나이 기준 다름) 사용을 끌 수 있음 | [2] |
 
-SwitchAI 의 액티비티 이름은 2026-03-29 에 고친 코드에서 옮겼습니다 [4]. Google 앱 판이 바뀌면 이름도 바뀔 수 있어서, 검체의 앱 판에서 다시 확인합니다.
+SwitchAI 의 액티비티 이름은 2026-03-29 판 코드 기준입니다 [4]. Google 앱 판이 바뀌면 이름도 바뀔 수 있어서, 검체의 앱 판에서 다시 확인합니다.
 
 Gemini 앱 폴더는 `/data/data/com.google.android.apps.bard/` 입니다. LEAF 저장소의 기록에는 Android 15 기기에서 2026-04-20 에 뽑은 이 폴더에 SQLite 데이터베이스가 하나도 없었고, 파일 13개가 모두 웹뷰(WebView) 캐시와 미리 컴파일한 OAT 파일이었다고 적혀 있습니다 [5]. 같은 저장소의 README 는 Gemini 를 "SQLite 안에 Protocol Buffer 로 인코딩" 한다고 적어 두 문서가 서로 어긋납니다 [5]. 이 저장소는 학생 과제 수준이라 두 기록 모두 검체로 다시 확인하고, 어느 쪽이든 대화 전문이 앱 폴더에 있다는 근거로 쓰지 않습니다.
 
@@ -41,7 +41,7 @@ Google 앱 폴더 `/data/data/com.google.android.googlequicksearchbox/` 안에�
 
 ## 구조
 
-Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google 앱 쪽에는 ALEAPP 이 읽는 파일이 두 종류 있고, 설명에 따르면 검색 위젯과 어시스턴트의 검색 세션, 최근 검색어를 담습니다 [6][7]. 두 분석기 모두 Gemini 를 언급하지 않아서, 이 파일에 Gemini 대화가 들어가는지는 검체에서 따로 확인합니다.
+Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google 앱 쪽에는 ALEAPP 이 읽는 파일이 두 종류 있고, 검색 위젯과 어시스턴트의 검색 세션, 최근 검색어를 담습니다 [6][7]. 두 분석기 모두 Gemini 를 언급하지 않아서, 이 파일에 Gemini 대화가 들어가는지는 검체에서 따로 확인합니다.
 
 | 경로(Google 앱 폴더 안) | 형식 | ALEAPP 이 꺼내는 것 | 근거 |
 |---|---|---|---|

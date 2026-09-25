@@ -13,7 +13,7 @@ nav_order: 80
 
 ## 무엇이 남나 · 왜 생기나
 
-웹 판은 따로 설치하는 프로그램 없이 브라우저 탭 안에서 돌아갑니다. 브라우저는 대화를 서버 API 에서 받아 와 화면에 그리고, 공개 도구 두 개가 이 API 주소를 적어 두었습니다.
+웹 판은 따로 설치하는 프로그램 없이 브라우저 탭 안에서 돌아갑니다. 브라우저는 대화를 서버 API 에서 받아 와 화면에 그립니다. API 주소는 아래와 같습니다[1][2].
 
 ```
 https://chat.openai.com/backend-api/conversation/[id]     chatgpt-exporter 문서 [1]
@@ -21,20 +21,20 @@ https://chatgpt.com/backend-api/conversation/[id]         chatgpt-forensic-expor
 https://chatgpt.com/c/[id]                                chatgpt-forensic-exporter 코드 [2] (대화 화면 주소)
 ```
 
-`chat.openai.com` 은 옛 도메인입니다. chatgpt-exporter 문서는 이 스크립트가 `chat.openai.com` 과 `chatgpt.com` 두 곳에서 돌아간다고 적었고[1], chatgpt-forensic-exporter 코드도 두 도메인의 탭을 모두 ChatGPT 탭으로 봅니다[2]. 대화 원본이 어디에 있는지는 [ChatGPT](index.md) 허브에서 정리했고, 서버·기기·동기화의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다. 이 페이지는 브라우저 쪽에 남는 흔적만 봅니다.
+`chat.openai.com` 은 옛 도메인이고, ChatGPT 는 `chat.openai.com` 과 `chatgpt.com` 두 도메인에서 모두 열립니다[1][2]. 대화 원본이 어디에 있는지는 [ChatGPT](index.md) 허브에서 정리했고, 서버·기기·동기화의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다. 이 페이지는 브라우저 쪽에 남는 흔적만 봅니다.
 
 브라우저 흔적은 대부분 ChatGPT 만의 것이 아니고, 어느 웹 서비스를 쓰든 브라우저가 똑같이 남기는 기록입니다. 아래 표는 흔적의 종류와 조사에서 쓰는 곳, 그리고 ChatGPT 에 맞춰 검체에서 볼 것을 정리한 것입니다.
 
 | 흔적 | 조사에서 쓰는 곳 | ChatGPT 에서 볼 것 |
 |---|---|---|
 | 방문 기록 | 서비스 주소를 연 시각과 횟수 | `chatgpt.com/c/` 로 시작하는 주소가 있는지. 뒤에 붙은 값이 대화 ID 입니다[2] |
-| 쿠키 | 그 브라우저 프로필에 로그인 흔적이 있었는지 | 두 도메인의 쿠키 목록. 도구 코드는 `oai-did` 라는 이름을 쿠키에서 찾습니다[2] |
-| Local Storage·IndexedDB | 웹 앱이 브라우저에 남긴 데이터 | 도구 코드는 Local Storage 의 `oai-did` 를 기기 ID 로 읽습니다[2]. 그 밖의 키와 대화 사본은 검체에서 확인합니다 |
+| 쿠키 | 그 브라우저 프로필에 로그인 흔적이 있었는지 | 두 도메인의 쿠키 목록. `oai-did` 라는 이름의 쿠키가 있는지[2] |
+| Local Storage·IndexedDB | 웹 앱이 브라우저에 남긴 데이터 | Local Storage 의 `oai-did` 는 기기 ID 로 보이는 값입니다[2]. 그 밖의 키와 대화 사본은 검체에서 확인합니다 |
 | 캐시 | 받아 온 응답·그림 조각 | `backend-api` 주소의 응답이 캐시에 남았는지 검체에서 확인합니다 |
 | 다운로드 기록과 다운로드 폴더 | 서비스에서 내려받은 파일 | 브라우저 공통 |
 | 확장 프로그램·사용자 스크립트 | 대화를 파일로 뽑는 도구를 설치했는지 | 아래 "내보내기 도구의 흔적" |
 
-`oai-did` 는 chatgpt-forensic-exporter 가 ChatGPT 의 기기 ID 로 보고 읽는 값입니다[2]. 이 도구는 시험한 서비스 판이나 날짜를 코드에 적지 않았으므로, 검체의 Local Storage 와 쿠키에 같은 이름이 있는지 먼저 봅니다. 쿠키와 저장소에는 로그인 세션 값도 함께 남을 수 있는데, 이런 값은 보고서에서 가립니다. 서버에 있는 대화는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md) 같은 법적 절차로 확보합니다.
+`oai-did` 는 ChatGPT 의 기기 ID 로 보이는 값입니다[2]. 어느 서비스 판에서 쓰는 이름인지 알려져 있지 않으므로, 검체의 Local Storage 와 쿠키에 같은 이름이 있는지 먼저 봅니다. 쿠키와 저장소에는 로그인 세션 값도 함께 남을 수 있는데, 이런 값은 보고서에서 가립니다. 서버에 있는 대화는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md) 같은 법적 절차로 확보합니다.
 
 ## 위치와 OS별 차이
 
@@ -53,9 +53,9 @@ Local Storage 와 IndexedDB 는 크롬 계열에서 LevelDB 파일로 남아서 
 
 ## 내보내기 도구의 흔적
 
-chatgpt-exporter 는 Tampermonkey 에 올려 쓰는 사용자 스크립트이고 GreasyFork 에서 배포하며 MIT 라이선스입니다[1]. 문서에 따르면 대화를 Text·HTML·Markdown·PNG·JSON 형식으로 내보낼 수 있고, "Export All" 기능으로 여러 대화를 골라 한꺼번에 내보내거나(JSON 을 ZIP 으로 묶는 선택지 포함) 보관하거나 지울 수 있습니다. 같은 일을 하는 도구는 이것 말고도 있으므로 이름 하나로만 찾지 않습니다.
+chatgpt-exporter 는 Tampermonkey 에 올려 쓰는 사용자 스크립트이고 GreasyFork 에서 배포하며 MIT 라이선스입니다[1]. 대화를 Text·HTML·Markdown·PNG·JSON 형식으로 내보낼 수 있고, "Export All" 기능으로 여러 대화를 골라 한꺼번에 내보내거나(JSON 을 ZIP 으로 묶는 선택지 포함) 보관하거나 지울 수 있습니다[1]. 같은 일을 하는 도구는 이것 말고도 있으므로 이름 하나로만 찾지 않습니다.
 
-이런 스크립트나 확장이 설치돼 있으면 사용자가 대화를 파일로 뽑았을 수 있으므로, 다운로드 폴더의 파일과 브라우저 다운로드 기록을 함께 봅니다. 이 해석은 조사하는 쪽의 판단이고 도구 문서에 적힌 내용은 아닙니다. 문서에 여러 대화를 한꺼번에 지우는 기능도 적혀 있어서, 계정에서 대화가 한꺼번에 사라졌다면 이런 도구를 썼는지도 따져 봅니다. 서비스 설정에서 받는 공식 내보내기 파일은 [계정 데이터 내보내기](export.md)에서 다룹니다.
+이런 스크립트나 확장이 설치돼 있으면 사용자가 대화를 파일로 뽑았을 수 있으므로, 다운로드 폴더의 파일과 브라우저 다운로드 기록을 함께 봅니다. 이런 도구에는 여러 대화를 한꺼번에 지우는 기능도 있어서[1], 계정에서 대화가 한꺼번에 사라졌다면 이런 도구를 썼는지도 따져 봅니다. 서비스 설정에서 받는 공식 내보내기 파일은 [계정 데이터 내보내기](export.md)에서 다룹니다.
 
 ## 증거로서 의미
 

@@ -9,15 +9,15 @@ nav_order: 110
 
 Android 용 ChatGPT 앱(패키지 `com.openai.chatgpt`)은 대화 목록과 메시지를 앱 데이터 폴더의 SQLite 데이터베이스에 평문으로 두고, 계정·요금제·맞춤 지시·채팅 기록 설정은 `files/datastore/` 아래 설정 파일에, 분석 도구 식별자는 `shared_prefs/` 의 XML 에 둡니다 [2][3][4].
 
-이 쪽의 경로와 칸은 앱 1.2024.177 까지 다루는 ALEAPP 분석기 기준이고, 지금 판은 형식이 다를 수 있습니다[3][4].
+아래 경로와 칸은 앱 1.2024.177 까지 다루는 ALEAPP 분석기 기준이라서, 지금 판은 형식이 다를 수 있습니다[3][4].
 
 ## 무엇을 기록하나 · 왜 생기나
 
 앱은 계정의 대화를 기기 데이터베이스에 사본으로 둡니다. 그래서 기기에는 대화 제목·만든 시각·고친 시각과 메시지 본문이 남고, 로그인한 계정의 이메일·이름·요금제, 사용자가 적은 맞춤 지시(custom instructions), "채팅 기록 끄기" 설정도 함께 남습니다 [3][4].
 
-Tyagi·Gong·Karabiyik(2025)은 ChatGPT 가 Android 와 iOS 모두에서 대화를 브라우저 데이터와 함께 평문으로 저장한다고 초록에 적었습니다 [2]. 두 ALEAPP 분석기도 복호화 단계 없이 데이터베이스를 바로 엽니다 [3][4].
+ChatGPT 는 Android 와 iOS 모두에서 대화를 브라우저 데이터와 함께 평문으로 저장합니다 [2]. ALEAPP 분석기 두 개도 복호화 단계 없이 데이터베이스를 바로 엽니다 [3][4].
 
-LangurTrace 논문은 Dragonas·Lambrinoudakis·Nakoutis(2024)[1]를 ChatGPT 모바일 앱을 처음 포렌식으로 분석한 연구로 소개하고, 이 연구가 Android·iOS·클라우드 저장소에서 흔적을 찾았다고 요약했습니다 [7]. Ex Machina 논문은 같은 연구가 캐시된 프롬프트, 접근 토큰, 네트워크 흔적처럼 증거로 쓸 수 있는 흔적을 찾았다고 요약했습니다 [6]. ALEAPP `chatgpt.py` 의 작성자도 Dragonas 입니다 [3].
+ChatGPT 모바일 앱을 처음 포렌식으로 분석한 연구로는 Dragonas·Lambrinoudakis·Nakoutis(2024)가 꼽힙니다 [1][7]. 이 연구는 Android·iOS·클라우드 저장소에서 캐시된 프롬프트, 접근 토큰, 네트워크 흔적처럼 증거로 쓸 수 있는 흔적을 찾았습니다 [6][7]. ALEAPP `chatgpt.py` 의 작성자도 Dragonas 입니다 [3].
 
 ## 위치와 버전별 차이
 
@@ -79,11 +79,11 @@ ALEAPP 은 대화 DB 파일 이름에서 `_conversations.db` 앞부분을 떼어
 | `content.created_date`, `content.modification_date` | 만든 시각, 고친 시각 |
 | `content.content` | 본문. 사전(dict)이면 그 안의 `content` 가 본문이고 `references` 가 참조 목록이며, 일부 도구·음성 메시지는 그냥 문자열입니다 |
 
-보조 자료인 LEAF 문서는 조각 JSON 에 `role`(User 또는 Assistant), `model`, `is_visually_hidden_in_conversation` 가 있다고 적었고, LEAF 파서는 이 값이 참인 조각을 건너뜁니다 [8]. ALEAPP `chatgpt2.py` 는 이 세 키를 읽지 않아서 [4], 도구 결과에는 역할과 숨김 여부가 나오지 않습니다. 이 키가 JSON 의 어느 층에 있는지는 검체에서 확인합니다.
+조각 JSON 에는 `role`(User 또는 Assistant), `model`, `is_visually_hidden_in_conversation` 도 있고, LEAF 파서는 `is_visually_hidden_in_conversation` 이 참인 조각을 건너뜁니다 [8]. ALEAPP `chatgpt2.py` 는 이 세 키를 읽지 않아서 [4], 도구 결과에는 역할과 숨김 여부가 나오지 않습니다. 이 키가 JSON 의 어느 층에 있는지는 검체에서 확인합니다.
 
 ### 계정·설정 파일: `files/datastore/*.preferences_pb`
 
-이 파일들은 protobuf 로 감싼 JSON 입니다. ALEAPP 은 protobuf 를 풀어 필드 1 → 2 → 5 에 든 바이트를 JSON 으로 읽습니다 [3].
+이 파일들은 protobuf 로 감싼 JSON 입니다. protobuf 를 풀면 필드 1 → 2 → 5 에 JSON 바이트가 들어 있습니다 [3].
 
 | 파일 꼬리 | JSON 키 |
 |---|---|
@@ -103,7 +103,7 @@ Google Play 데이터 안전 항목에는 "기기 또는 그 밖의 ID 를 제3�
 
 ### 데이터 안전 항목
 
-Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이고, 2026-09-25 에 본 내용은 다음과 같습니다 [9].
+Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이고, 2026-09-25 기준 내용은 다음과 같습니다 [9].
 
 | 구분 | 신고된 항목 |
 |---|---|
@@ -144,7 +144,7 @@ Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이�
 - **메시지 형식을 먼저 가립니다.** `DBMessage` 에서 0행이 나와도 `DBMessageChunk` 에 메시지가 있을 수 있습니다. 두 표를 모두 봅니다.
 - **시험 범위가 좁습니다.** 공개 분석기가 시험한 판은 1.2024.177 까지와 버전 코드 2525902 하나입니다 [3][4]. 다른 판에서 표·키 이름이 바뀌면 도구가 조용히 0행을 낼 수 있어서, 도구 결과가 비면 DB 를 직접 열어 표 목록부터 봅니다.
 - **캐시 이미지는 대화와 이어져 있지 않습니다.** ALEAPP 은 `cache/files/` 안에서 이미지로 열리는 파일을 모을 뿐이라서 [3], 이미지 하나가 어느 대화에서 왔는지는 파일 이름이나 메시지 JSON 의 첨부 값과 따로 맞춰 봅니다.
-- **지운 대화.** GMDSOFT 는 자사 도구(MD-NEXT·MD-RED)로 Android ChatGPT 앱에서 지운 대화방을 복구하고 로그인하지 않은 세션의 흔적도 다룬다고 밝혔지만, 어느 파일의 어느 칸인지는 공개하지 않았습니다 [5]. 지운 행은 SQLite 의 빈 페이지나 WAL 에 남을 수 있으니 [내용 복구](../../../03-techniques/analysis/content-recovery.md)의 방법으로 찾습니다.
+- **지운 대화.** GMDSOFT 의 MD-NEXT·MD-RED 는 Android ChatGPT 앱에서 지운 대화방을 복구하고 로그인하지 않은 세션의 흔적도 다루지만, 어느 파일의 어느 칸인지는 공개되지 않았습니다 [5]. 지운 행은 SQLite 의 빈 페이지나 WAL 에 남을 수 있으니 [내용 복구](../../../03-techniques/analysis/content-recovery.md)의 방법으로 찾습니다.
 - **토큰.** 앱 데이터에서 접근 토큰이 나오면 [API 키와 토큰](../../../01-foundations/storage-model/api-keys-tokens.md)에 따라 보고서에서 가립니다. 서버에 있는 대화는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)이나 [계정 데이터 내보내기](export.md)로 확보합니다.
 - **수집 범위.** 앱 데이터 폴더는 기기를 수집한 방법에 따라 얻을 수도 있고 못 얻을 수도 있습니다. 폴더가 비어 보이면 앱 동작 때문인지 수집 범위 때문인지부터 가립니다. 수집 범위를 정하는 방법은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
 - **비슷한 앱.** 브라우저로 쓴 ChatGPT 는 앱이 아니라 [웹 브라우저](web.md) 흔적으로 남습니다. 이름이 비슷한 비공식 앱도 있을 수 있어서, 패키지 이름이 `com.openai.chatgpt` 와 정확히 같은지 확인합니다.
