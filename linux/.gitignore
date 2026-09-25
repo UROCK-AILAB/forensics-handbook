@@ -1,0 +1,5 @@
+_work/
+Gemfile.lock
+.bundle/
+vendor/
+_site/

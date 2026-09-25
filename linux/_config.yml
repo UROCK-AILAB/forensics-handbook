@@ -1,0 +1,23 @@
+title: Linux 디지털 포렌식 핸드북
+description: Linux 서버와 데스크톱에 남는 흔적을 읽고 해석하는 한국어 포렌식 핸드북
+lang: ko
+theme: just-the-docs
+search_enabled: true
+search:
+  button: true
+heading_anchors: true
+back_to_top: true
+back_to_top_text: 맨 위로
+color_scheme: light
+exclude:
+  - _work
+  - _manifest.json
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
