@@ -92,7 +92,7 @@ WAL 파일은 32바이트 머리 뒤에 프레임이 이어지는 구조입니�
 
 ## Android 의 기본 저널 설정
 
-Android 플랫폼은 SQLite 기본값 몇 가지를 자기 설정으로 바꿔 둡니다. 아래 값은 현행 AOSP 의 config.xml 과 빌드 파일에서 읽은 것이고, 어느 버전부터 이 값이었는지는 확인하지 못했습니다 [5][6].
+Android 플랫폼은 SQLite 기본값 몇 가지를 자기 설정으로 바꿔 둡니다. 아래 값은 현행 AOSP 의 config.xml 과 빌드 파일 기준입니다 [5][6].
 
 | 항목 | 값 | 비고 |
 |---|---|---|
@@ -104,26 +104,26 @@ Android 플랫폼은 SQLite 기본값 몇 가지를 자기 설정으로 바꿔 �
 | WAL 연결 수 (`db_connection_pool_size`) | 4 | |
 | WAL 파일 자르기 기준 (`db_wal_truncate_size`) | 1048576바이트 | WAL 로 열 때 기존 WAL 이 이보다 크면 자름. `debug.sqlite.wal.truncatesize` 속성이 덮어씀 [4] |
 
-config.xml 주석에는 PERSIST 가 거래가 끝난 뒤에도 저널에 데이터를 남겨 SECURE_DELETE 와 잘 맞지 않는다는 설명이 있습니다 [5]. SECURE_DELETE 가 Android 에서 어떻게 켜져 있는지는 [지운 레코드 되살리기](freelist-freeblock.md)에서 다룹니다.
+PERSIST 는 거래가 끝난 뒤에도 저널에 데이터를 남겨서 SECURE_DELETE 와 잘 맞지 않습니다 [5]. SECURE_DELETE 가 Android 에서 어떻게 켜져 있는지는 [지운 레코드 되살리기](freelist-freeblock.md)에서 다룹니다.
 
 WAL 자르기 기준은 앱이 DB 를 다시 열 때 적용돼서, 확보 전에 앱이 DB 를 다시 열면 큰 WAL 의 옛 프레임이 사라질 수 있습니다. 이 부분은 설정 주석에서 끌어낸 해석입니다.
 
 ### 호환 WAL
 
-Android 9 에서 호환 WAL (Compatibility WAL) 이 들어왔습니다. journal_mode=WAL 을 쓰되 DB 하나에 연결을 하나만 유지하는 방식입니다 [3]. 공식 문서는 호환 WAL 이 기본으로 켜져 있다고 적었고, 앱이 `enableWriteAheadLogging()`·`disableWriteAheadLogging()`·`OpenParams.setJournalMode()` 를 부르면 호환 WAL 을 쓰지 않는다고 설명합니다. 제조사는 `db_compatibility_wal_supported` 리소스를 false 로 덮어써서 끌 수 있다고 하지만, 현행 AOSP config.xml 에서는 이 이름을 찾지 못했습니다 [3][5]. 같은 문서에 따르면 Room 은 API 16 이상이고 저메모리 기기가 아니면 호환 WAL 이 아닌 전체 WAL 을 씁니다 [3].
+Android 9 에서 호환 WAL (Compatibility WAL) 이 들어왔습니다. journal_mode=WAL 을 쓰되 DB 하나에 연결을 하나만 유지하는 방식입니다 [3]. AOSP 문서에는 호환 WAL 이 기본으로 켜져 있다고 되어 있습니다 [3]. 앱이 `enableWriteAheadLogging()`·`disableWriteAheadLogging()`·`OpenParams.setJournalMode()` 를 부르면 호환 WAL 을 쓰지 않습니다 [3]. 같은 문서에는 제조사가 `db_compatibility_wal_supported` 리소스를 false 로 덮어써서 끌 수 있다고 되어 있지만, 현행 AOSP config.xml 에는 이 이름이 없습니다 [3][5]. Room 은 API 16 이상이고 저메모리 기기가 아니면 호환 WAL 이 아닌 전체 WAL 을 씁니다 [3].
 
-설정 값 쪽에서는 settings global 의 `sqlite_compatibility_wal_flags` 키가 호환 WAL 을 조정합니다. 값은 쉼표로 나눈 key=value 목록이고, 읽는 키는 `legacy_compatibility_wal_enabled`(기본 false), `wal_syncmode`, `truncate_size`(기본 −1) 세 개입니다. `truncate_size` 가 0 이상이면 위 표의 WAL 자르기 기준보다 이 값이 먼저이고, 프로세스마다 처음 읽은 값을 저장해 두고 씁니다(현행 AOSP 기준) [7][4]. 문서가 말하는 "기본 켜짐" 과 AOSP 의 `legacy_compatibility_wal_enabled` 기본값 false 가 어떻게 맞물리는지, 곧 최신 Android 에서 일반 앱 DB 의 실제 기본 저널 모드가 무엇인지는 확인하지 못했습니다. 설정 키를 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
+설정 값 쪽에서는 settings global 의 `sqlite_compatibility_wal_flags` 키가 호환 WAL 을 조정합니다. 값은 쉼표로 나눈 key=value 목록이고, 읽는 키는 `legacy_compatibility_wal_enabled`(기본 false), `wal_syncmode`, `truncate_size`(기본 −1) 세 개입니다. `truncate_size` 가 0 이상이면 위 표의 WAL 자르기 기준보다 이 값이 먼저이고, 프로세스마다 처음 읽은 값을 저장해 두고 씁니다(현행 AOSP 기준) [7][4]. 문서의 "기본 켜짐" 과 AOSP 의 `legacy_compatibility_wal_enabled` 기본값 false 가 서로 달라서, 최신 Android 에서 일반 앱 DB 의 실제 기본 저널 모드는 검체에서 확인합니다. 설정 키를 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
 
-| 범위 | 확인한 내용 |
+| 범위 | 내용 |
 |---|---|
 | Android 9 | 호환 WAL 도입 [3] |
 | 현행 AOSP(main) | 위 표의 기본값, `sqlite_compatibility_wal_flags` 키 해석 [4][5][7] |
-| Android 16, One UI 8.5 | settings global 에 `sqlite_compatibility_wal_flags` 키가 있음. 값은 가려져 있어 모름 |
-| 그 밖의 버전, One UI 의 따로 바꾼 설정 | 확인 못 함 |
+| Android 16, One UI 8.5 | settings global 에 `sqlite_compatibility_wal_flags` 키가 있음 |
+| 그 밖의 버전, One UI 의 따로 바꾼 설정 | 공개 자료 없음. 검체에서 확인 |
 
 ## 포렌식에서 중요한 점
 
-증거를 확보할 때는 주 DB 파일과 -wal·-shm·-journal 을 한꺼번에 복사합니다. SQLite 공식 문서는 DB 파일이 WAL 파일과 떨어지면 이미 커밋한 거래를 잃거나 DB 가 망가질 수 있다고 적었습니다 [2]. 주 파일만 가져오면 WAL 에만 있던 최근 기록이 빠지고, 이 누락은 결과 화면에서 드러나지 않습니다. 확보 절차는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다.
+증거를 확보할 때는 주 DB 파일과 -wal·-shm·-journal 을 한꺼번에 복사합니다. DB 파일이 WAL 파일과 떨어지면 이미 커밋한 거래를 잃거나 DB 가 망가질 수 있습니다 [2]. 주 파일만 가져오면 WAL 에만 있던 최근 기록이 빠지고, 이 누락은 결과 화면에서 드러나지 않습니다. 확보 절차는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다.
 
 SQLite 3.22.0(2018-01-22)부터는 -shm 과 -wal 이 이미 있고 읽을 수 있거나, 폴더에 쓰기 권한이 있거나, immutable 옵션을 주면 WAL DB 를 읽기 전용으로 열 수 있고, 그 전에는 쓰기 권한이 필요했습니다 [2]. 쓰기 권한이 있는 채로 클라이언트가 DB 를 열고 닫으면 체크포인트가 일어나 WAL 이 주 파일에 합쳐지고 -wal 이 지워질 수 있습니다. 그래서 원본은 해시를 남긴 뒤 손대지 않고, 사본에서만 DB 를 엽니다.
 

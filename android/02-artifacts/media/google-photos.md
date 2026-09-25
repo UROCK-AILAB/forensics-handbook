@@ -12,42 +12,44 @@ nav_order: 670
 
 ## 무엇을 기록하나 · 왜 생기나
 
-구글 포토는 기기의 사진을 보여 주는 갤러리이면서 계정의 클라우드 사진을 함께 보여 주는 앱이라서, 기기 안 파일 목록과 클라우드 항목 목록을 한 DB 안의 다른 표에 적습니다. 공개 도구 ALEAPP 는 기기 안 미디어를 local_media 표에서, 클라우드 미디어를 remote_media 표에서, 공유받은 미디어를 shared_media 표에서 읽고, 백업 대상 폴더를 backup_folders 표에서 읽습니다 [1]. 화면에 띄운 이미지는 캐시 폴더에, 앱 안에서 휴지통으로 보낸 기기 사진은 local_trash.db 와 trash_files 폴더에 남습니다 [1].
+구글 포토는 기기의 사진을 보여 주는 갤러리이면서 계정의 클라우드 사진을 함께 보여 주는 앱이라서, 기기 안 파일 목록과 클라우드 항목 목록을 한 DB 안의 다른 표에 적습니다. 기기 안 미디어는 local_media 표에, 클라우드 미디어는 remote_media 표에, 공유받은 미디어는 shared_media 표에, 백업 대상 폴더는 backup_folders 표에 적힙니다 [1]. 화면에 띄운 이미지는 캐시 폴더에, 앱 안에서 휴지통으로 보낸 기기 사진은 local_trash.db 와 trash_files 폴더에 남습니다 [1].
 
 각 표와 칸의 공식 뜻은 구글이 공개하지 않았습니다. 이 페이지의 칸 이름과 단위는 ALEAPP 가 읽는 방식에서 가져온 것이고, 앱 버전이 바뀌면 칸이 없어지거나 늘어날 수 있습니다.
 
 ## 위치와 버전별 차이
 
-| 무엇 | 경로 패턴 | 근거 |
-|---|---|---|
-| 주 DB | `*/com.google.android.apps.photos/databases/gphotos*.db` | ALEAPP 경로 패턴 [1] |
-| 캐시 색인 DB | `*/com.google.android.apps.photos/databases/disk_cache` | ALEAPP 경로 패턴 [1] |
-| 캐시 이미지 | `*/com.google.android.apps.photos/cache/glide_cache/*` | ALEAPP 경로 패턴 [1] |
-| 앱 휴지통 DB | `*/com.google.android.apps.photos/databases/local_trash.db` | ALEAPP 경로 패턴 [1] |
-| 앱 휴지통 파일 | `*/com.google.android.apps.photos/files/trash_files/*` | ALEAPP 경로 패턴 [1] |
+경로 패턴은 아래와 같습니다 [1].
 
-주 DB 파일 이름은 gphotos 뒤에 번호가 붙는 꼴이라 계정마다 파일이 따로 생기는 것으로 보이지만, 번호의 뜻은 확인하지 못했습니다. ALEAPP 는 Android 10·13·14·15·16 기기의 검체에서 이 DB 를 읽었고, 앱 버전 코드는 36652547 ~ 51832862 범위였습니다 [1]. 관찰한 기기는 기본 앱이 아닌 패키지를 가려서, 구글 포토 설치 여부는 관찰 메모로 알 수 없습니다. 앱 전용 폴더의 위치와 확보 조건은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에 있습니다.
+| 무엇 | 경로 패턴 |
+|---|---|
+| 주 DB | `*/com.google.android.apps.photos/databases/gphotos*.db` |
+| 캐시 색인 DB | `*/com.google.android.apps.photos/databases/disk_cache` |
+| 캐시 이미지 | `*/com.google.android.apps.photos/cache/glide_cache/*` |
+| 앱 휴지통 DB | `*/com.google.android.apps.photos/databases/local_trash.db` |
+| 앱 휴지통 파일 | `*/com.google.android.apps.photos/files/trash_files/*` |
+
+주 DB 파일 이름은 gphotos 뒤에 번호가 붙는 꼴이라 계정마다 파일이 따로 생기는 것으로 보이지만, 번호의 뜻은 공개 자료가 없습니다. ALEAPP 시험 검체(Android 10·13·14·15·16, 앱 버전 코드 36652547 ~ 51832862)에서 이 구조의 DB 를 읽을 수 있었습니다 [1]. 앱 전용 폴더의 위치와 확보 조건은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에 있습니다.
 
 ## 구조
 
 ### gphotos DB 의 표
 
-| 표 | ALEAPP 가 읽는 칸 | 메모 |
+| 표 | 주요 칸 | 메모 |
 |---|---|---|
 | local_media | utc_timestamp, filename, filepath, capture_timestamp, timezone_offset, width, height, size_bytes, duration, latitude, longitude, folder_name, media_store_id, trash_timestamp, purge_timestamp | 뒤의 네 칸(folder_name, media_store_id, trash_timestamp, purge_timestamp)은 없는 DB 도 있어 먼저 확인 |
 | remote_media | utc_timestamp, filename, remote_url, capture_timestamp, timezone_offset, duration, latitude, longitude, inferred_latitude, inferred_longitude, upload_status | inferred_latitude·inferred_longitude, upload_status 는 없는 DB 도 있음. remote_url 끝의 "=s0-d" 를 지워 보여 줌 |
 | shared_media | utc_timestamp, filename, remote_url, size_bytes, capture_timestamp, timezone_offset, upload_status | 표가 없는 DB 도 있음 |
 | backup_folders | bucket_id | local_media 와 bucket_id 로 이어짐 |
 
-local_media 의 media_store_id 는 이름으로 보아 MediaStore 의 `_id` 로 보이지만, 실제로 짝지어 확인한 자료는 찾지 못했습니다. remote_media 의 upload_status 는 저장된 값 그대로이고 퍼센트가 아니라고 ALEAPP 가 적는데 [1], 값마다의 뜻은 확인하지 못했습니다. inferred_latitude·inferred_longitude 도 무엇으로 추정한 위치인지 확인하지 못했습니다. backup_folders 표에 폴더가 있다고 해서 그 폴더의 파일이 올라갔다는 뜻은 아니라고 ALEAPP 가 따로 적습니다 [1].
+local_media 의 media_store_id 는 이름으로 보아 MediaStore 의 `_id` 로 보이지만, 짝지어 확인한 공개 자료는 없어서 검체에서 맞춰 봅니다. remote_media 의 upload_status 는 저장된 값 그대로이고 퍼센트가 아닙니다 [1]. 값마다의 뜻은 공개 자료가 없습니다. inferred_latitude·inferred_longitude 가 무엇으로 추정한 위치인지도 알려져 있지 않습니다. backup_folders 표에 폴더가 있다고 해서 그 폴더의 파일이 올라갔다는 뜻은 아닙니다 [1].
 
 ### 캐시
 
-disk_cache 는 SQLite DB 이고 journal 표에 last_modified_time, key, size, pending_delete 칸이 있습니다 [1]. 캐시 이미지 파일은 glide_cache 폴더에 있고, ALEAPP 는 journal 의 key 가 파일 경로에 들어 있는 파일을 찾아 두 쪽을 짝짓습니다 [1]. ALEAPP 검체에서 이 캐시 모듈은 0~1,833 행을 냈습니다 [1]. 다른 앱의 이미지 캐시와 시스템 섬네일은 [섬네일 캐시](thumbnails.md) 페이지에서 다룹니다.
+disk_cache 는 SQLite DB 이고 journal 표에 last_modified_time, key, size, pending_delete 칸이 있습니다 [1]. 캐시 이미지 파일은 glide_cache 폴더에 있고, journal 의 key 가 파일 경로에 들어 있는 파일을 찾으면 두 쪽을 짝지을 수 있습니다 [1]. ALEAPP 시험 검체에서 이 캐시는 0~1,833 행이었습니다 [1]. 다른 앱의 이미지 캐시와 시스템 섬네일은 [섬네일 캐시](thumbnails.md) 페이지에서 다룹니다.
 
 ### 앱 휴지통
 
-local_trash.db 의 local 표에는 deleted_time, local_path, content_uri, trash_file_name, media_store_id(없을 수 있음), is_video 칸이 있고, 휴지통 파일은 trash_files 폴더에서 trash_file_name 으로 짝짓습니다 [1]. ALEAPP 는 이 결과가 아직 남아 있는 파일을 짝지은 것일 뿐 복구(carving)한 것이 아니라고 적고, 검체 10개에서 local_trash 는 모두 0행이었습니다 [1]. 구글 포토 휴지통의 보관 기간과, 구글 포토가 휴지통으로 보낸 기기 사진이 MediaStore 휴지통 표시(is_trashed)와 어떻게 맞물리는지는 확인하지 못했습니다. MediaStore 쪽 휴지통은 [지운 사진의 흔적](mediastore/deleted-media.md) 페이지에 있습니다.
+local_trash.db 의 local 표에는 deleted_time, local_path, content_uri, trash_file_name, media_store_id(없을 수 있음), is_video 칸이 있고, 휴지통 파일은 trash_files 폴더에서 trash_file_name 으로 짝짓습니다 [1]. 이 결과는 아직 남아 있는 파일을 짝지은 것일 뿐 복구(carving)한 것이 아닙니다 [1]. ALEAPP 시험 검체 10개에서 local_trash 는 모두 0행이었습니다 [1]. 구글 포토 휴지통의 보관 기간과, 구글 포토가 휴지통으로 보낸 기기 사진이 MediaStore 휴지통 표시(is_trashed)와 어떻게 맞물리는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. MediaStore 쪽 휴지통은 [지운 사진의 흔적](mediastore/deleted-media.md) 페이지에 있습니다.
 
 ## 증거로서 의미
 
@@ -66,7 +68,7 @@ local_trash.db 의 local 표에는 deleted_time, local_path, content_uri, trash_
 | 칸 | 단위(ALEAPP 처리) | 비고 |
 |---|---|---|
 | utc_timestamp | 유닉스 밀리초 | 뜻은 공개되지 않음 |
-| capture_timestamp | 유닉스 밀리초 | utc_timestamp 와의 차이는 확인 못 함 |
+| capture_timestamp | 유닉스 밀리초 | utc_timestamp 와의 차이는 공개 자료 없음 |
 | timezone_offset | 밀리초 단위 시차 | ALEAPP 는 3,600,000 으로 나눠 시간 단위로 보여 줌 |
 | trash_timestamp, purge_timestamp | 유닉스 밀리초 | 없는 DB 도 있음 |
 | duration | 밀리초 | 이름으로 보아 재생 길이 |
@@ -78,7 +80,7 @@ ALEAPP 는 timezone_offset 을 시간 단위로 나눌 때 나머지를 버립�
 ## 함정과 한계
 
 - 칸 이름·단위는 공개 도구의 해석이고 구글의 규격이 아닙니다 [1]. 앱 버전마다 칸이 다를 수 있어서, 쿼리 전에 표 구조를 먼저 확인합니다.
-- local_media 는 앱이 알고 있는 기기 미디어 목록이라 파일이 지워진 뒤에도 행이 얼마나 남는지 확인하지 못했습니다.
+- local_media 는 앱이 알고 있는 기기 미디어 목록이라 파일이 지워진 뒤에도 행이 얼마나 남는지는 검체에서 확인합니다.
 - 클라우드 쪽 원본과 전체 기록은 기기에 없고, 계정에서 받은 자료로 확인해야 합니다. 방법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 페이지에 있습니다.
 - 앱 휴지통 결과는 남아 있는 파일을 짝지은 것이라 [1], 비운 파일은 이 방법으로 나오지 않습니다.
 

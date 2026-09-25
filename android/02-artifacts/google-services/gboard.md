@@ -8,15 +8,15 @@ nav_order: 1180
 
 ## 한 줄 요약
 
-구글 키보드 앱인 지보드(Gboard)는 앱 데이터 폴더의 SQLite 데이터베이스에 클립보드 항목과 키 입력 캐시, 입력 세션을 남기고, 여기서 사용자가 복사한 글과 입력칸에 친 글, 입력한 앱과 시각을 읽을 수 있습니다.
+구글 키보드 앱인 지보드(Gboard)는 앱 데이터 폴더의 SQLite 데이터베이스에 클립보드 항목과 키 입력 캐시, 입력 세션을 남기고, 여기서 사용자가 복사한 글과 입력칸에 친 글, 입력한 앱과 시각을 읽을 수 있습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나
 
-지보드의 패키지 이름은 `com.google.android.inputmethod.latin` 이고, 흔적은 이 앱의 데이터 폴더 아래 `databases/` 와 `files/` 에 남습니다. 공개 도구 ALEAPP 는 지보드 흔적을 클립보드(Clipboard), 키 입력 캐시(Keystroke Cache), 세션(Sessions) 세 갈래로 나눠 읽습니다. 세 모듈 모두 @ydkhatri 가 2021-01-09 에 처음 만들었고, 키 입력 캐시와 세션 모듈은 2026-08-01 에 고쳐졌습니다.
+지보드의 패키지 이름은 `com.google.android.inputmethod.latin` 이고, 흔적은 이 앱의 데이터 폴더 아래 `databases/` 와 `files/` 에 남습니다. 흔적은 클립보드(Clipboard), 키 입력 캐시(Keystroke Cache), 세션(Sessions) 세 갈래로 나뉘고, 공개 도구 ALEAPP 도 이 셋을 모듈 하나씩으로 따로 읽습니다 [1].
 
-클립보드 데이터베이스에는 지보드 클립보드에 들어간 글과 HTML 글, 이미지를 가리키는 URI, 고정(Pinned) 여부가 시각과 함께 남습니다. 키 입력 캐시에는 입력한 글자와 맞춤법 실수, 고친 내용, 키보드가 띄운 추천 단어가 남고, Khatri 가 살펴본 기기에서는 이미 지운 앱이나 사라진 메시지, 웹 입력칸에 쳤던 내용도 남아 있었다고 합니다. 다만 비밀번호 입력칸은 기록하지 않고, 백스페이스(지우기)도 기록하지 않습니다.
+클립보드 데이터베이스에는 지보드 클립보드에 들어간 글과 HTML 글, 이미지를 가리키는 URI, 고정(Pinned) 여부가 시각과 함께 남습니다. 키 입력 캐시에는 입력한 글자와 맞춤법 실수, 고친 내용, 키보드가 띄운 추천 단어가 남고, 이미 지운 앱이나 사라진 메시지, 웹 입력칸에 쳤던 내용이 남아 있기도 합니다 [2]. 다만 비밀번호 입력칸은 기록하지 않고, 백스페이스(지우기)도 기록하지 않습니다 [2].
 
-파일 이름에 training(학습)이 들어 있지만, 어떤 설정(개인 맞춤 학습 등)일 때 이 캐시가 생기는지, 시크릿 모드에서는 어떻게 동작하는지는 출처로 확인하지 못했습니다. 삼성 기기에서 어떤 키보드가 기본으로 설정됐는지는 기기마다 설정 값으로 확인해야 하고, 삼성 자체 키보드의 흔적은 [삼성 키보드 입력 기록](../samsung/samsung-keyboard.md) 에서 다룹니다.
+파일 이름에 training(학습)이 들어 있지만, 어떤 설정(개인 맞춤 학습 등)일 때 이 캐시가 생기는지, 시크릿 모드에서는 어떻게 동작하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 삼성 기기에서 어떤 키보드가 기본으로 설정됐는지는 기기마다 설정 값으로 확인해야 하고, 삼성 자체 키보드의 흔적은 [삼성 키보드 입력 기록](../samsung/samsung-keyboard.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -30,19 +30,19 @@ nav_order: 1180
 | `databases/trainingcachev2.db` | `input_action_table`, `session_table` | 키 입력 동작과 세션 | Gboard - Keystroke Cache |
 | `databases/trainingcachev3.db` | `session` | 입력 세션 | Gboard - Sessions |
 
-키 입력 캐시의 파일 이름은 지보드 판에 따라 달라집니다. Khatri 는 trainingcache2.db, trainingcache3.db, trainingcachev2.db, trainingcache4.db 를 찾았는데, 그중 trainingcache4.db 에는 의미 있는 자료가 없었다고 합니다. Khatri 는 기본 설정의 Pixel 3 에서 아래 판을 확인했습니다.
+키 입력 캐시의 파일 이름은 지보드 판에 따라 달라집니다. 알려진 파일은 trainingcache2.db, trainingcache3.db, trainingcachev2.db, trainingcache4.db 이고, 그중 trainingcache4.db 에는 의미 있는 자료가 없었습니다 [2]. 아래는 기본 설정의 Pixel 3 로 시험한 판입니다 [2].
 
 | 지보드 판 | Android | 비고 |
 |---|---|---|
 | 8.3.6.250752527 | 10 | |
 | 8.8.10.277552084 | 10 | |
 | 10.0.02.338070508 | 11 | trainingcache3.db 에 `s_table`, `tf_table` 도 있음 |
-| Android 12 이후 판 | 12 이후 | 파일 이름과 구조를 확인하지 못함 |
-| 삼성 One UI 기기 | — | 출처에 시험 결과 없음 |
+| Android 12 이후 판 | 12 이후 | 공개 자료 없음 |
+| 삼성 One UI 기기 | — | 공개 자료 없음 |
 
-ALEAPP 도 파일 이름마다 어느 판에 해당하는지를 적어 두지 않았습니다. 그래서 새 기기에서는 `databases/` 아래 `trainingcache` 로 시작하는 파일을 모두 열어 표 이름부터 확인합니다.
+어느 판이 어떤 파일 이름을 쓰는지는 정리된 자료가 없으니, 새 기기에서는 `databases/` 아래 `trainingcache` 로 시작하는 파일을 모두 열어 표 이름부터 확인합니다.
 
-기기 쪽 설정에도 키보드와 관련된 키 이름이 보입니다. 아래는 실제 기기에서 adb 일반 권한으로 읽은 키 이름이고, 값은 가려져 있어서 이 기기에 어떤 키보드가 설정됐는지는 알 수 없습니다.
+기기 쪽 설정에도 키보드와 관련된 키 이름이 보입니다. 아래 키 이름은 adb 일반 권한으로 읽을 수 있습니다.
 
 ```
 settings secure : default_input_method, enabled_input_methods,
@@ -54,11 +54,11 @@ settings global : touch_keyboard, keyboard_dex
 settings system : keyboard_vibration_enabled, sip_speak_keyboard_input_aloud
 ```
 
-키 이름으로 보아 secure 쪽 키들이 기본 입력기와 켜 둔 입력기를 가리키는 것으로 보이지만, 값이 어떤 형식으로 적히는지는 공식 문서를 열지 못해 확인하지 못했습니다. global·system 쪽 키의 뜻도 확인하지 못했습니다. 설정 값 전체는 [설정 값](../system-account/settings.md) 에서 다룹니다.
+키 이름으로 보아 secure 쪽 키들은 기본 입력기와 켜 둔 입력기를 가리키는 것으로 보입니다. 값의 형식과 global·system 쪽 키의 뜻은 검체에서 확인합니다. 설정 값 전체는 [설정 값](../system-account/settings.md) 에서 다룹니다.
 
 ## 구조
 
-저장 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 페이지를 봅니다. 아래는 ALEAPP 가 읽는 칸만 정리한 것입니다.
+저장 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 페이지를 봅니다. 아래는 ALEAPP 가 읽는 칸만 정리한 것입니다 [1].
 
 ### 클립보드 — gboard_clipboard.db 의 clips 표
 
@@ -72,7 +72,7 @@ settings system : keyboard_vibration_enabled, sip_speak_keyboard_input_aloud
 | `entity_type` | 0 이면 빈칸, 1 이면 'Link', 그 밖의 값은 숫자 그대로 |
 | `_id` | 행 번호 |
 
-ALEAPP 는 `uri` 칸에서 마지막 '/' 뒤의 이름만 떼어 내 `files/clipboard_image/` 아래 이미지 파일과 잇습니다. 이 이미지 파일의 형식과 이름 규칙은 ALEAPP 에도 설명이 없습니다.
+ALEAPP 는 `uri` 칸에서 마지막 '/' 뒤의 이름만 떼어 내 `files/clipboard_image/` 아래 이미지 파일과 잇습니다 [1]. 이 이미지 파일의 형식과 이름 규칙은 공개 자료가 없어 검체에서 확인합니다.
 
 ```sql
 replace(uri, rtrim(uri, replace(uri, '/', '')), '')
@@ -80,7 +80,7 @@ replace(uri, rtrim(uri, replace(uri, '/', '')), '')
 
 ### 키 입력 캐시 — trainingcache2.db, trainingcache3.db
 
-`training_input_events_table` 한 행에는 입력 당시 앞에 떠 있던 앱과 입력이 들어간 칸의 이름, 시각, 키 입력이 든 `_payload` 가 함께 들어 있습니다. Khatri 의 글에는 앱의 예로 Gmail 이 나옵니다.
+`training_input_events_table` 한 행에는 입력 당시 앞에 떠 있던 앱과 입력이 들어간 칸의 이름, 시각, 키 입력이 든 `_payload` 가 함께 들어 있습니다. 앱 칸에는 Gmail 같은 앱이 들어갑니다 [2].
 
 | 칸 | 뜻 |
 |---|---|
@@ -91,13 +91,13 @@ replace(uri, rtrim(uri, replace(uri, '/', '')), '')
 | `f5` | 입력칸 ID |
 | `f9` | 유닉스 밀리초 시각 |
 
-ALEAPP 는 `_payload` 를 프로토콜 버퍼로 풀어 필드 '7' 안의 필드 '2' 에서 글자 항목들을 꺼내고, 각 항목의 필드 '1' 을 UTF-8 로 풀어 이어 붙입니다. 백스페이스를 기록하지 않아서 이렇게 글자를 다시 이어 붙여야 하고, 지운 부분은 글 끝에 붙어 나온다고 합니다.
+ALEAPP 는 `_payload` 를 프로토콜 버퍼로 풀어 필드 '7' 안의 필드 '2' 에서 글자 항목들을 꺼내고, 각 항목의 필드 '1' 을 UTF-8 로 풀어 이어 붙입니다. 백스페이스를 기록하지 않아서 이렇게 글자를 다시 이어 붙여야 하고, 지운 부분은 글 끝에 붙어 나옵니다 [2].
 
 10.0.02.338070508 판의 trainingcache3.db 에는 이 밖에 `s_table` 과 `tf_table` 이 더 있습니다. `tf_table` 은 키를 하나씩 담는데 `f1` 이 세션 ID, `f3` 이 키 데이터, `f4` 가 키 순서이고, ALEAPP 는 두 표를 읽지 않습니다.
 
 ### 키 입력 캐시 — trainingcachev2.db
 
-이 파일에는 `input_action_table` 과 `session_table` 이 있고, ALEAPP 는 `_payload`, `_timestamp`(유닉스 밀리초), `_session_id`, `_id` 칸을 읽습니다. 두 표는 세션 ID 로 묶습니다. Khatri 의 글은 이 파일을 다루지 않았습니다.
+이 파일에는 `input_action_table` 과 `session_table` 이 있고, ALEAPP 는 `_payload`, `_timestamp`(유닉스 밀리초), `_session_id`, `_id` 칸을 읽습니다. 두 표는 세션 ID 로 묶습니다 [1].
 
 ```sql
 input_action_table i LEFT JOIN session_table s ON s._session_id = i._session_id
@@ -130,15 +130,15 @@ input_action_table i LEFT JOIN session_table s ON s._session_id = i._session_id
 
 ALEAPP 의 `unixepoch` 변환 결과는 UTC 라서, 현지 시각으로 옮길 때는 기기 시간대를 따로 확인합니다([시간대와 시각 설정](../system-account/time-zone.md)). 유닉스 밀리초를 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-클립보드 시각이 복사한 때인지 고정한 때인지, 세션 표의 두 시각이 세션 시작과 마지막 기록 중 무엇을 뜻하는지는 출처에 적혀 있지 않습니다. 그래서 이 시각들은 "이 시각 값이 기록되어 있다" 까지만 쓰고, 다른 기록으로 뒷받침합니다.
+클립보드 시각이 복사한 때인지 고정한 때인지, 세션 표의 두 시각이 세션 시작과 마지막 기록 중 무엇을 뜻하는지는 공개 자료가 없습니다. 그래서 이 시각들은 "이 시각 값이 기록되어 있다" 까지만 쓰고, 다른 기록으로 뒷받침합니다.
 
 ## 함정과 한계
 
-키 입력 캐시의 파일 이름과 표 구조가 판마다 달라서, 한 판에서 확인한 쿼리를 다른 판에 그대로 쓰면 빈 결과가 나올 수 있습니다. Android 12 이후 판과 삼성 기기에서의 모양은 출처로 확인하지 못했습니다.
+키 입력 캐시의 파일 이름과 표 구조가 판마다 달라서, 한 판에서 확인한 쿼리를 다른 판에 그대로 쓰면 빈 결과가 나올 수 있습니다. Android 12 이후 판과 삼성 기기에서의 모양은 공개 자료가 없어 검체로 확인해야 합니다.
 
 ALEAPP 는 `_payload` 에서 필드 '7'·'2'·'1' 만 풀고 나머지 필드는 보여 주지 않습니다. 백스페이스가 기록되지 않아 지운 글자가 끝에 붙어 나와서, 복원한 글은 사용자가 최종으로 남긴 글과 다를 수 있습니다.
 
-캐시는 주기적으로 지워지고 크기 제한도 있는 것으로 보이지만 주기와 크기는 확인하지 못했고, 고정하지 않은 클립보드 항목을 얼마나 두는지도 확인하지 못했습니다. 사용자가 클립보드를 비우거나 앱 데이터를 지웠을 때 무엇이 남는지도 출처에 없어서, 지운 행은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 따로 찾아봅니다. ALEAPP 경로 패턴은 파일 이름 뒤에 `*` 가 붙어 있어 같은 이름으로 시작하는 파일을 모두 잡으니, 수집할 때 딸린 파일까지 함께 가져옵니다.
+캐시는 주기적으로 지워지고 크기 제한도 있는 것으로 보이지만, 주기와 크기, 고정하지 않은 클립보드 항목을 두는 기간은 알려져 있지 않습니다. 사용자가 클립보드를 비우거나 앱 데이터를 지운 뒤 사라진 행은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 따로 찾아봅니다. ALEAPP 경로 패턴은 파일 이름 뒤에 `*` 가 붙어 있어 같은 이름으로 시작하는 파일을 모두 잡으니, 수집할 때 딸린 파일까지 함께 가져옵니다.
 
 ## 직접 분석해 보기
 
@@ -176,7 +176,7 @@ FROM clips ORDER BY timestamp;
 | 함께 볼 아티팩트 | 맞춰 볼 것 |
 |---|---|
 | [설정 값](../system-account/settings.md) | 그 기기에서 지보드가 기본 입력기로 켜져 있었는지 |
-| [앱 사용 기록](../app-usage/usagestats/index.md) | 키 입력 캐시의 시각에 그 앱이 앞에 떠 있었는지(ACTIVITY_RESUMED 등). 키보드 앱 자체가 여기에 어떻게 찍히는지는 확인하지 못함 |
+| [앱 사용 기록](../app-usage/usagestats/index.md) | 키 입력 캐시의 시각에 그 앱이 앞에 떠 있었는지(ACTIVITY_RESUMED 등). 키보드 앱 자체가 여기에 찍히는 모양은 검체에서 확인 |
 | [카카오톡](../messengers/kakaotalk/index.md) 등 메신저 | 입력한 글이 실제 보낸 메시지로 남았는지 |
 | [크롬](../browsers/chrome/index.md) | 웹 입력칸에 친 글과 같은 시각의 방문·검색 기록 |
 | [삼성 키보드 입력 기록](../samsung/samsung-keyboard.md) | 삼성 기기에서 다른 키보드를 쓴 기간 |

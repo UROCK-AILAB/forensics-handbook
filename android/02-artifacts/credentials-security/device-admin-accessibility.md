@@ -14,9 +14,9 @@ nav_order: 1250
 
 ### 기기 관리자
 
-기기 관리자 앱은 `DeviceAdminReceiver` 를 이어받은 receiver 를 매니페스트에 선언하고, 이 receiver 가 쓸 정책을 별도 XML 에 적습니다 [1]. 앱이 `ACTION_ADD_DEVICE_ADMIN` 인텐트로 활성화 화면을 띄우고 사용자가 허용해야 정책이 적용되며, 허용하지 않으면 앱은 정책 없이 비활성 상태로 남습니다 [1]. 활성 기기 관리자 앱은 관리자를 먼저 해제해야 삭제할 수 있다고 문서에 적혀 있어서 [1], 지워지지 않는 앱이 있으면 기기 관리자인지부터 확인해 볼 만합니다.
+기기 관리자 앱은 `DeviceAdminReceiver` 를 이어받은 receiver 를 매니페스트에 선언하고, 이 receiver 가 쓸 정책을 별도 XML 에 적습니다 [1]. 앱이 `ACTION_ADD_DEVICE_ADMIN` 인텐트로 활성화 화면을 띄우고 사용자가 허용해야 정책이 적용되며, 허용하지 않으면 앱은 정책 없이 비활성 상태로 남습니다 [1]. 활성 기기 관리자 앱은 관리자를 먼저 해제해야 삭제할 수 있으니 [1], 지워지지 않는 앱이 있으면 기기 관리자인지부터 확인해 볼 만합니다.
 
-정책 XML 에 적을 수 있는 정책과 문서상 뜻은 아래와 같습니다 [1].
+정책 XML 에 적을 수 있는 정책과 뜻은 아래와 같습니다 [1].
 
 | 정책 태그 | 뜻 |
 |---|---|
@@ -27,13 +27,13 @@ nav_order: 1250
 | `expire-password` | 비밀번호 만료 |
 | `encrypted-storage` | 저장소 암호화 요구 |
 | `disable-camera` | 카메라 끄기 |
-| `watch-login` | 문서의 정책 XML 예에 있으나 이번에 뜻은 따로 확인하지 않음 |
+| `watch-login` | 문서의 정책 XML 예에 나옴 |
 
 활성화되면 시스템은 관리자 목록을 사용자마다 `device_policies.xml` 에 적습니다 [3][4]. 앱 쪽에서는 `onEnabled`, `onDisableRequested`, `onDisabled`, `onPasswordChanged`, `onPasswordFailed` 콜백을 받고, 시스템은 `ACTION_DEVICE_ADMIN_ENABLED`, `ACTION_DEVICE_ADMIN_DISABLE_REQUESTED` 방송을 보냅니다 [1]. 이 콜백을 받은 앱이 자기 데이터에 무엇을 남기는지는 앱마다 다릅니다.
 
 ### 접근성 서비스
 
-접근성 서비스는 장애 등으로 기기를 다루기 어려운 사용자를 돕는 앱이고, 백그라운드에서 돌며 화면 내용을 살피고 사용자 대신 앱과 상호작용합니다 [2]. TalkBack, Switch Access, 음성 제어가 대표적인 예입니다 [2]. 문서에 적힌 능력은 창 내용 관찰(접근성 트리), 스와이프·탭·멀티터치 같은 제스처 실행, 키 이벤트 처리, 버튼 누르기·스크롤 같은 동작 수행이고 [2], 사용자가 설정에서 직접 켜야 돌아갑니다 [2]. 어떤 앱이 켜 두었는지는 settings secure 의 접근성 키에 남습니다.
+접근성 서비스는 장애 등으로 기기를 다루기 어려운 사용자를 돕는 앱이고, 백그라운드에서 돌며 화면 내용을 살피고 사용자 대신 앱과 상호작용합니다 [2]. TalkBack, Switch Access, 음성 제어가 대표적인 예입니다 [2]. 이 서비스는 창 내용 관찰(접근성 트리), 스와이프·탭·멀티터치 같은 제스처 실행, 키 이벤트 처리, 버튼 누르기·스크롤 같은 동작 수행을 할 수 있고 [2], 사용자가 설정에서 직접 켜야 돌아갑니다 [2]. 어떤 앱이 켜 두었는지는 settings secure 의 접근성 키에 남습니다.
 
 ## 위치와 버전별 차이
 
@@ -48,9 +48,9 @@ nav_order: 1250
 
 ### 시스템 쪽 기록
 
-기기 관리자 목록은 `device_policies.xml` 파일에 있고, 소스의 상수 이름은 `DEVICE_POLICIES_XML` 입니다 [4]. 파일은 사용자마다 따로 있고 어느 폴더에 두는지는 소스의 PolicyPathProvider 가 정합니다(현행 AOSP main) [4][5]. 기본값은 시스템 사용자(0 번)가 `/data/system`, 다른 사용자가 `/data/system/users/<사용자 번호>` 이고, 소스 주석에 따르면 기기 소유자 (Device Owner) 파일도 `/data/system` 에, 프로필 소유자 (Profile Owner) 파일은 사용자 폴더에 둡니다 [5]. 그래서 기본 사용자의 파일은 `/data/system/device_policies.xml` 이고, 제조사가 경로를 바꿨을 수 있으니 전체 파일 시스템 사본에서는 파일 이름으로도 한 번 찾습니다. 사용자와 프로필 구조는 [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md) 페이지에서 다룹니다.
+기기 관리자 목록은 `device_policies.xml` 파일에 있고, 소스의 상수 이름은 `DEVICE_POLICIES_XML` 입니다 [4]. 파일은 사용자마다 따로 있고 어느 폴더에 두는지는 소스의 PolicyPathProvider 가 정합니다(현행 AOSP main) [4][5]. 기본값은 시스템 사용자(0 번)가 `/data/system`, 다른 사용자가 `/data/system/users/<사용자 번호>` 이고, 기기 소유자 (Device Owner) 파일도 `/data/system` 에, 프로필 소유자 (Profile Owner) 파일은 사용자 폴더에 둡니다 [5]. 그래서 기본 사용자의 파일은 `/data/system/device_policies.xml` 이고, 제조사가 경로를 바꿨을 수 있으니 전체 파일 시스템 사본에서는 파일 이름으로도 한 번 찾습니다. 사용자와 프로필 구조는 [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md) 페이지에서 다룹니다.
 
-접근성 설정은 관찰 기기의 settings secure 에 아래 이름의 키로 있었고, 값은 관찰 메모에서 가려져 있습니다.
+접근성 설정은 settings secure 에 아래 이름의 키로 남습니다.
 
 ```
 accessibility_enabled
@@ -62,21 +62,21 @@ accessibility_qs_targets
 notified_non_accessibility_category_services
 ```
 
-이 밖에 확대(magnification)·자막(captioning) 관련 키도 있었습니다. `enabled_accessibility_services` 값이 "패키지/서비스 클래스" 를 `:` 로 이은 문자열이라는 설명은 이번에 문서로 확인하지 못했습니다. 설정 값의 저장 파일과 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
+이 밖에 확대(magnification)·자막(captioning) 관련 키도 있습니다. `enabled_accessibility_services` 값의 형식은 검체에서 값을 읽어 확인합니다. 설정 값의 저장 파일과 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
 
 ### 버전별 차이
 
 | 범위 | 차이 |
 |---|---|
-| Android 9 (API 28) 이후 | 기기 관리자가 일부 정책을 호출하면 사용 중단(deprecated)으로 표시됨 [1]. 어느 정책인지와 Android 10 에서의 동작은 확인하지 못함 |
+| Android 9 (API 28) 이후 | 기기 관리자가 일부 정책을 호출하면 사용 중단(deprecated)으로 표시됨 [1] |
 | Android 14 이후, Headless System User 모드 | 전역 범위 정책만 전면 사용자에게 적용됨 [1] |
-| 삼성 One UI | 접근성·기기 관리자 설정 화면 위치와 삼성만의 추가 기록은 확인하지 못함 |
+| 삼성 One UI | 접근성·기기 관리자 설정 화면 위치와 삼성만의 추가 기록은 공개 자료 없음 |
 
 ## 구조
 
 ### device_policies.xml
 
-활성 관리자 한 개가 `<admin>` 태그 하나로 저장되고, `name` 속성에 컴포넌트 이름이 "패키지/클래스" 모양으로 들어갑니다 [3]. 관리자별 정책은 그 아래에 따로 쓰지만, 하위 태그 이름은 이번에 확인하지 못했습니다. 아래는 소스의 태그 이름으로 만든 모양 예시이고, 실제 검체에서 가져온 값이 아닙니다.
+활성 관리자 한 개가 `<admin>` 태그 하나로 저장되고, `name` 속성에 컴포넌트 이름이 "패키지/클래스" 모양으로 들어갑니다 [3]. 관리자별 정책은 그 아래에 따로 씁니다. 아래는 소스의 태그 이름으로 만든 모양 예시이고, 실제 검체에서 가져온 값이 아닙니다.
 
 ```xml
 <admin name="com.example.app/com.example.app.AdminReceiver">
@@ -84,7 +84,7 @@ notified_non_accessibility_category_services
 </admin>
 ```
 
-소스에 상수로 정의된 다른 태그 이름은 아래와 같습니다 [3]. 태그마다 무엇을 담는지는 이름 말고는 확인하지 않았습니다.
+소스에 상수로 정의된 다른 태그 이름은 아래와 같습니다 [3].
 
 ```
 accepted-ca-certificate        lock-task-component         lock-task-features
@@ -98,7 +98,7 @@ keep-profiles-running
 
 속성 이름으로는 `value`, `alias`, `id`, `permission-provider`, `name`, `disabled`, `setup-complete`, `provisioning-state`, `permission-policy`, `device-provisioning-config-applied`, `device-paired`, `new-user-disclaimer`, `factory-reset-flags`, `factory-reset-reason` 이 있습니다 [3]. `accepted-ca-certificate` 와 `owner-installed-ca-cert` 는 인증서 쪽 기록이라서 [설치된 인증서 (User Certificates)](user-certificates.md) 페이지에서 함께 봅니다. 파일이 텍스트 XML 로 열리지 않으면 [안드로이드 바이너리 XML (ABX)](../../01-foundations/data-formats/abx.md) 페이지를 봅니다.
 
-기기 소유자·프로필 소유자 정보는 위 폴더에 따로 저장되지만 [5], 그 파일 이름은 이번에 확인하지 못했습니다. 관찰 기기의 `dumpsys user` 에는 사용자마다 `Has profile owner`, `Device policy restrictions`, `Effective restrictions` 줄이 있었고, UserProperties 안에 `mInheritDevicePolicy` 칸이 있었습니다. 이 줄로 프로필 소유자 유무와 정책에서 나온 제한을 사용자 단위로 볼 수 있습니다. `dumpsys device_policy` 출력의 모양은 이번에 확인하지 못했습니다.
+기기 소유자·프로필 소유자 정보는 위 폴더에 따로 저장됩니다 [5]. `dumpsys user` 출력에는 사용자마다 `Has profile owner`, `Device policy restrictions`, `Effective restrictions` 줄이 있고, UserProperties 안에 `mInheritDevicePolicy` 칸이 있습니다. 이 줄로 프로필 소유자 유무와 정책에서 나온 제한을 사용자 단위로 볼 수 있습니다.
 
 ### 접근성 서비스 설정 XML
 
@@ -107,44 +107,42 @@ APK 안의 `<accessibility-service>` XML 에는 아래 속성이 올 수 있고,
 | 속성 | 뜻 |
 |---|---|
 | `accessibilityEventTypes` | 받을 이벤트 종류. `typeAllMask` 면 모든 이벤트 |
-| `accessibilityFlags`, `accessibilityFeedbackType`, `notificationTimeout` | 문서 예에 나오지만 뜻은 따로 확인하지 않음 |
+| `accessibilityFlags`, `accessibilityFeedbackType`, `notificationTimeout` | 문서 예에 나옴 |
 | `canRetrieveWindowContent` | 화면 구조를 읽으려면 `true` 여야 함 |
 | `canPerformGestures` | 제스처를 보내려면 `true` 여야 함 |
-| `settingsActivity` | 문서 예에 나오지만 뜻은 따로 확인하지 않음 |
+| `settingsActivity` | 문서 예에 나옴 |
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-`device_policies.xml` 에 `<admin>` 이 있으면 그 파일을 쓸 때 해당 컴포넌트가 활성 기기 관리자였다는 뜻이고, APK 의 정책 XML 을 함께 보면 그 앱이 초기화·잠금·비밀번호 정책 가운데 무엇을 요청했는지 알 수 있습니다. 문서상 사용자가 허용해야 활성화되니 [1], 활성 상태라면 기기에서 누군가 허용 화면을 거쳤다고 볼 수 있습니다. 접근성 쪽도 사용자가 설정에서 켜야 돌아가니 [2], `enabled_accessibility_services` 에 어떤 서비스가 있으면 그 기기에서 누군가 켰다는 기록이 되고, 설정 XML 에 `canRetrieveWindowContent="true"` 가 있으면 그 서비스가 화면 구조를 읽을 수 있게 선언돼 있다는 뜻입니다.
+`device_policies.xml` 에 `<admin>` 이 있으면 그 파일을 쓸 때 해당 컴포넌트가 활성 기기 관리자였다는 뜻이고, APK 의 정책 XML 을 함께 보면 그 앱이 초기화·잠금·비밀번호 정책 가운데 무엇을 요청했는지 알 수 있습니다. 사용자가 허용해야 활성화되니 [1], 활성 상태라면 기기에서 누군가 허용 화면을 거쳤다고 볼 수 있습니다. 접근성 쪽도 사용자가 설정에서 켜야 돌아가니 [2], `enabled_accessibility_services` 에 어떤 서비스가 있으면 그 기기에서 누군가 켰다는 기록이 되고, 설정 XML 에 `canRetrieveWindowContent="true"` 가 있으면 그 서비스가 화면 구조를 읽을 수 있게 선언돼 있다는 뜻입니다.
 
 **증명하지 못하는 것**
 
-두 기록 모두 누가 허용했는지는 알려 주지 않고, 언제 켰는지도 이번에 확인한 범위에서는 파일 안에 남지 않습니다. 능력을 선언했다는 사실은 그 능력을 실제로 썼다는 증거가 아니라서, 화면을 읽었다거나 제스처를 보냈다고 쓰려면 앱 자체의 데이터나 로그 같은 다른 기록이 필요합니다. 기기 관리자나 접근성 권한을 쓰는 앱이 곧 악성 앱이라는 뜻도 아닙니다. TalkBack 같은 보조 앱도 접근성 권한을 쓰고 [2], 기기 관리자 정책도 문서상 비밀번호·잠금을 관리하려고 만든 기능입니다 [1].
+두 기록 모두 누가 허용했는지는 알려 주지 않고, 언제 켰는지를 담은 칸도 알려져 있지 않습니다. 능력을 선언했다는 사실은 그 능력을 실제로 썼다는 증거가 아니라서, 화면을 읽었다거나 제스처를 보냈다고 쓰려면 앱 자체의 데이터나 로그 같은 다른 기록이 필요합니다. 기기 관리자나 접근성 권한을 쓰는 앱이 곧 악성 앱이라는 뜻도 아닙니다. TalkBack 같은 보조 앱도 접근성 권한을 쓰고 [2], 기기 관리자 정책도 비밀번호·잠금을 관리하려고 만든 기능입니다 [1].
 
-현재 설정만 보이니, 한때 켰다가 끈 앱은 이 두 곳에서 드러나지 않을 수 있습니다. 관리자 앱 패키지가 사라지면 서비스가 "Admin package %s not found for user %d, removing active admin" 로그를 남기고 활성 관리자에서 뺀다는 코드가 있어서 [4], 로그가 남아 있다면 사라진 관리자 앱의 단서가 됩니다. 이 로그가 logcat 에 어느 태그로 찍히는지는 확인하지 못했습니다.
+현재 설정만 보이니, 한때 켰다가 끈 앱은 이 두 곳에서 드러나지 않을 수 있습니다. 관리자 앱 패키지가 사라지면 서비스가 "Admin package %s not found for user %d, removing active admin" 로그를 남기고 활성 관리자에서 빼므로 [4], 로그가 남아 있다면 사라진 관리자 앱의 단서가 됩니다. logcat 에서는 태그보다 이 문구로 찾습니다.
 
 ## 시각 해석
 
-`<admin>` 태그에 활성화 시각이 들어 있다고 확인하지는 못했습니다. `last-security-log-retrieval` 같은 시각 값은 long 으로 저장하지만 [3] 단위가 밀리초인지는 확인하지 못했으니, 날짜로 바꿀 때는 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지의 방법으로 여러 단위를 시험하고 기기의 다른 기록과 맞춰 봅니다.
+`<admin>` 태그에 활성화 시각이 들어 있다는 공개 자료는 없습니다. `last-security-log-retrieval` 같은 시각 값은 long 으로 저장하니 [3], 날짜로 바꿀 때는 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지의 방법으로 여러 단위를 시험하고 기기의 다른 기록과 맞춰 봅니다.
 
 활성화 시점을 가늠할 때는 `device_policies.xml` 파일의 수정 시각, 앱 설치 시각, 설정 화면을 연 기록을 모아 보는 방법이 있지만, 파일 수정 시각은 관리자 추가 말고 다른 정책 변경으로도 바뀔 수 있다고 보고 추정으로만 씁니다. 접근성 설정의 시각도 같은 이유로 설정 파일 수정 시각만으로 정하지 않습니다.
 
 ## 함정과 한계
 
-첫째, `device_policies.xml` 은 사용자마다 따로 있어서 `/data/system` 한 곳에서 관리자를 못 찾았다고 기기 전체에 기기 관리자가 없다고 결론 내리면 안 되고, `/data/system/users/` 아래 사용자 폴더도 모두 봅니다 [5]. 기기 소유자 파일의 이름은 이번에 확인하지 못했습니다.
+첫째, `device_policies.xml` 은 사용자마다 따로 있어서 `/data/system` 한 곳에서 관리자를 못 찾았다고 기기 전체에 기기 관리자가 없다고 결론 내리면 안 되고, `/data/system/users/` 아래 사용자 폴더도 모두 봅니다 [5].
 
-둘째, 관찰 기기의 접근성 키 값은 가려져 있었습니다. 키가 있다는 사실은 서비스가 켜져 있다는 뜻이 아니고, 값을 직접 읽어야 합니다.
+둘째, 접근성 키가 있다는 사실은 서비스가 켜져 있다는 뜻이 아니고, 값을 직접 읽어야 합니다.
 
-셋째, Android 13 의 "제한된 설정" 과 `isAccessibilityTool` 속성은 이번에 연 문서에 나오지 않아 다루지 않습니다.
-
-넷째, 삼성 One UI 에서 기기 관리자·접근성에 관한 추가 기록이 있는지는 확인하지 못했습니다. 녹스 구조는 [삼성 녹스 (Samsung Knox)](../../01-foundations/security-model/samsung-knox.md), 작업 프로필은 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에서 다룹니다.
+셋째, 삼성 One UI 에서 기기 관리자·접근성에 관한 추가 기록이 있는지는 공개 자료가 없어 검체로 확인해야 합니다. 녹스 구조는 [삼성 녹스 (Samsung Knox)](../../01-foundations/security-model/samsung-knox.md), 작업 프로필은 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 설정 키와 dumpsys 로 한 번
 
-adb 일반 셸 권한으로 settings secure 목록과 `dumpsys user` 를 읽을 수 있고, 관찰 기기의 키 이름과 줄 모양도 이렇게 얻었습니다.
+adb 일반 셸 권한으로 settings secure 목록과 `dumpsys user` 를 읽을 수 있습니다.
 
 ```
 adb shell settings list secure

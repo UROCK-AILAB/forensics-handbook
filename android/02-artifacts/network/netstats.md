@@ -20,7 +20,7 @@ Android 시스템 서비스(NetworkStatsService)가 네트워크 사용량을 �
 | uid | 앱 UID 별 |
 | uid_tag | UID 와 태그별 |
 
-예전에 있던 dev 기록기는 없어졌고, 옛 파일을 가져올 때 호환을 위해서만 잠깐 만듭니다 [2]. 파일 이름 앞부분은 `PREFIX_XT`, `PREFIX_UID`, `PREFIX_UID_TAG` 상수로 정하는데, 상수의 실제 문자열은 다른 소스 파일에 있어 직접 보지 못했고, ALEAPP 가 찾는 `xt*`·`uid*` 패턴과는 맞습니다 [2][1].
+예전에 있던 dev 기록기는 없어졌고, 옛 파일을 가져올 때 호환을 위해서만 잠깐 만듭니다 [2]. 파일 이름 앞부분은 `PREFIX_XT`, `PREFIX_UID`, `PREFIX_UID_TAG` 상수로 정하는데, 상수의 실제 문자열은 다른 소스 파일에 있고, ALEAPP 가 찾는 `xt*`·`uid*` 패턴과 맞습니다 [2][1].
 
 시스템은 사용량을 메모리에 쌓다가 쌓인 양이 기본 2MB(`mPersistThreshold`)를 넘으면 디스크에 씁니다 [2]. 그래서 가장 최근 사용량은 확보 시점에 아직 파일에 들어가지 않았을 수 있습니다.
 
@@ -33,7 +33,7 @@ Android 시스템 서비스(NetworkStatsService)가 네트워크 사용량을 �
 | 예전 위치 | `Environment.getDataDirectory()` 아래 `system/netstats`, 곧 `/data/system/netstats` | `getLegacyStatsDir` |
 | 현재 위치 | 테더링(Tethering) 모듈 APEX 의 DE 데이터 폴더 아래 `netstats` | `ApexEnvironment.getApexEnvironment(TETHERING_MODULE_NAME).getDeviceProtectedDataDir()` |
 
-어느 쪽을 쓸지는 DeviceConfig 플래그 `netstats_store_files_in_apexdata` 로 정하고 기본값은 true 입니다 [2]. 현재 위치의 실제 경로 문자열은 열어 본 소스에 없었고, 어느 Android 버전부터 APEX 위치를 썼는지도 확인하지 못했습니다. 현재 위치가 DE(기기 보호) 영역이라는 점은 소스로 확인했으니, CE 와 DE 의 차이는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
+어느 쪽을 쓸지는 DeviceConfig 플래그 `netstats_store_files_in_apexdata` 로 정하고 기본값은 true 입니다 [2]. 현재 위치의 실제 경로와 APEX 위치를 쓰기 시작한 Android 버전은 검체에서 확인합니다. 현재 위치는 DE(기기 보호) 영역이고 [2], CE 와 DE 의 차이는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
 
 예전 위치에서 새 위치로 옮길 때는 옛 파일을 가져오는(import) 절차가 돌고, 시도·성공·대체 횟수를 통계 폴더 안의 `import.attempts`, `import.successes`, `import.fallbacks` 파일에 셉니다 [2]. 두 위치에 모두 파일이 있는 검체라면 이 세 파일로 가져오기가 어떻게 끝났는지 확인합니다.
 
@@ -47,7 +47,7 @@ ALEAPP 는 폴더 위치와 상관없이 아래 패턴으로 찾고, UID 를 패
 
 ALEAPP 가 이 모듈을 시험한 이미지는 삼성을 포함한 Android 10~17 여러 기기이고, 이미지 하나에서 수천~수만 행이 나왔습니다 [1].
 
-관찰 기기의 설정 값에는 global 키 `netstats_enabled` 가 있었고, 모바일 데이터 관련 키로 `mobile_data`, `mobile_data_always_on`, `data_roaming`(유심 슬롯별 `data_roaming#` 포함), `preferred_network_mode` 가 있었습니다. 값은 가려져 있었고, 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
+설정 값의 global 영역에는 `netstats_enabled` 키가 있고, 모바일 데이터 관련 키로 `mobile_data`, `mobile_data_always_on`, `data_roaming`(유심 슬롯별 `data_roaming#` 포함), `preferred_network_mode` 가 있습니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -67,7 +67,7 @@ ALEAPP 의 netstats 모듈은 AOSP 소스를 따라 이진 파일을 읽고, 아
 | 7 | `sub_id` |
 | 8 | `transport_type` |
 
-`network_id` 와 `subscriber_id` 에 실제로 어떤 값(SSID, 가입자 식별값 등)이 들어가는지는 이번 자료로 확인하지 못했습니다. 검체에서 값을 읽은 뒤 [와이파이 설정과 접속 기록 (WifiConfigStore)](wifi.md) 의 SSID 목록과 맞춰 보고 뜻을 정합니다.
+`network_id` 와 `subscriber_id` 에 실제로 어떤 값(SSID, 가입자 식별값 등)이 들어가는지는 검체에서 값을 읽은 뒤 [와이파이 설정과 접속 기록 (WifiConfigStore)](wifi.md) 의 SSID 목록과 맞춰 보고 뜻을 정합니다.
 
 연결 종류 번호는 `ConnectivityManager` 의 옛 `TYPE_` 상수를 씁니다 [1].
 
@@ -104,13 +104,13 @@ set 값과 특수 UID 는 아래처럼 풉니다 [1].
 | uid | 2시간 | 15일 | 90일 |
 | uid_tag | 2시간 | 5일 | 15일 |
 
-기본값대로라면 xt·uid 기록은 90일, uid_tag 기록은 15일이 지나면 지웁니다. 제조사가 이 값을 바꿨는지는 확인하지 못했습니다.
+기본값대로라면 xt·uid 기록은 90일, uid_tag 기록은 15일이 지나면 지웁니다. 제조사가 이 값을 바꿨을 수 있으니 검체에 남은 가장 오래된 구간으로 확인합니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-한 기록은 "이 구간에 이 UID 가 이 연결 종류로 이만큼 받고 보냈다" 를 말합니다. set 값으로 앱이 앞에 있을 때(포그라운드)인지 뒤에서(백그라운드) 쓴 것인지 나눌 수 있고, UID -5 기록은 테더링으로 다른 기기에 넘겨준 양입니다. 연결 종류 17 과 set 1001·1002 는 ALEAPP 가 VPN 으로 푸는 값이라서 VPN 과 관련된 사용량으로 볼 수 있지만, 두 set 값이 VPN 사용량을 어떤 방식으로 나눠 적는지는 이번 자료로 확인하지 못했습니다. 앱 데이터가 지워졌어도 시스템 쪽 기록이라 남아 있을 수 있고, UID -4 는 그 사이 삭제된 앱의 사용량을 모아 둔 값입니다. 평소보다 보낸 바이트가 크게 튄 구간이 있으면 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 시간대를 좁히는 근거가 됩니다.
+한 기록은 "이 구간에 이 UID 가 이 연결 종류로 이만큼 받고 보냈다" 를 말합니다. set 값으로 앱이 앞에 있을 때(포그라운드)인지 뒤에서(백그라운드) 쓴 것인지 나눌 수 있고, UID -5 기록은 테더링으로 다른 기기에 넘겨준 양입니다. 연결 종류 17 과 set 1001·1002 는 ALEAPP 가 VPN 으로 푸는 값이라서 VPN 과 관련된 사용량으로 볼 수 있지만, 두 set 값이 VPN 사용량을 어떻게 나눠 적는지는 공개 자료가 없습니다. 앱 데이터가 지워졌어도 시스템 쪽 기록이라 남아 있을 수 있고, UID -4 는 그 사이 삭제된 앱의 사용량을 모아 둔 값입니다. 평소보다 보낸 바이트가 크게 튄 구간이 있으면 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 시간대를 좁히는 근거가 됩니다.
 
 **증명하지 못하는 것**
 
@@ -124,11 +124,11 @@ set 값과 특수 UID 는 아래처럼 풉니다 [1].
 
 ## 함정과 한계
 
-첫째, 최근 사용량이 빠져 있을 수 있습니다. 메모리에 쌓인 양이 2MB 를 넘어야 디스크에 쓰니 [2], 확보 직전 몇 시간은 파일에 없을 수 있습니다. 기기가 켜져 있다면 아래 "공개 도구로 한 번" 의 `dumpsys netstats` 로 확인해 볼 수 있지만, adb 일반 권한에서 되는지는 확인하지 못했습니다.
+첫째, 최근 사용량이 빠져 있을 수 있습니다. 메모리에 쌓인 양이 2MB 를 넘어야 디스크에 쓰니 [2], 확보 직전 몇 시간은 파일에 없을 수 있습니다. 기기가 켜져 있다면 아래 "공개 도구로 한 번" 의 `dumpsys netstats` 로 확인해 볼 수 있습니다. adb 일반 권한에서 되는지는 기기에서 먼저 확인합니다.
 
 둘째, 보관 기간이 짧습니다. 기본값으로 uid_tag 는 15일, xt·uid 는 90일이라 [2], 오래된 사건은 이미 지워졌을 수 있습니다.
 
-셋째, UID 를 패키지 이름으로 바꾸려면 `packages.xml` 이 필요합니다. ALEAPP 주석에는 시험한 이미지 하나에서 `packages.xml` 이 암호화돼 있어 UID 만 보였다는 기록이 있습니다 [1]. UID 를 푸는 법은 [패키지 이름과 UID (Package Name·UID)](../../01-foundations/value-decoding/package-uid.md) 와 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 페이지에 있습니다.
+셋째, UID 를 패키지 이름으로 바꾸려면 `packages.xml` 이 필요합니다. ALEAPP 시험 이미지 하나에서는 `packages.xml` 이 암호화돼 있어 UID 만 보였습니다 [1]. UID 를 푸는 법은 [패키지 이름과 UID (Package Name·UID)](../../01-foundations/value-decoding/package-uid.md) 와 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 페이지에 있습니다.
 
 넷째, 형식 버전이 다르면 도구가 읽지 못합니다. ALEAPP 는 버전 16 만 읽으니 [1], 예전 형식 파일이 결과에서 빠졌는지 파일 머리의 버전부터 확인합니다.
 
@@ -152,7 +152,7 @@ set 값과 특수 UID 는 아래처럼 풉니다 [1].
 
 ALEAPP 의 `netstats` 모듈이 위 패턴의 파일을 읽어 구간 시각, 연결 종류, UID(패키지 이름), set, 받고 보낸 바이트를 표로 만들어 줍니다 [1]. 도구 결과에서 한 구간을 골라, 같은 구간의 앱별 행을 더한 값이 기기 전체 기록과 크게 어긋나지 않는지 확인합니다. 검증 방법은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 페이지에 있습니다.
 
-기기가 켜져 있고 명령을 쓸 수 있는 상황이라면 소스 주석에 적힌 아래 사용법으로 메모리에 있는 최근 기록까지 볼 수 있고, `detail` 은 `--uid`·`--tag` 를 함께 켭니다 [2]. 다만 adb 일반 권한에서 이 명령이 되는지는 관찰 기기에서 확인하지 못했습니다. `dumpsys` 를 다루는 법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
+기기가 켜져 있고 명령을 쓸 수 있는 상황이라면 아래 명령으로 메모리에 있는 최근 기록까지 볼 수 있고, `detail` 은 `--uid`·`--tag` 를 함께 켭니다 [2]. adb 일반 권한에서 이 명령이 되는지는 기기에서 먼저 확인합니다. `dumpsys` 를 다루는 법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
 
 ```
 dumpsys netstats --full --uid --tag --poll --checkin

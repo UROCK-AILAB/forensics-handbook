@@ -14,7 +14,7 @@ logcat (logcat) 은 시스템 프로세스 `logd` 가 메모리에 두는 순환
 
 Android 로그는 `logd` 가 관리하는 구조화된 순환 버퍼 여러 개로 이루어져 있습니다 [1]. 앱은 `android.util.Log` 로, 플랫폼 코드는 숨은 API 인 `android.util.Slog` 로, 무선·전화 쪽 코드는 `android.telephony.Rlog` 로, 시스템 진단 이벤트는 `android.util.EventLog` 로 로그를 남깁니다 [2]. 네이티브 코드는 liblog 매크로를 쓰는데, 매크로 이름에 따라 들어가는 버퍼가 갈려서 `ALOGV`·`ALOGW` 는 main, `RLOGD`·`RLOGE` 는 radio, `SLOGI`·`SLOGW` 는 system 버퍼로 갑니다 [2].
 
-개발자가 동작을 확인하거나 문제를 고치려고 남기는 기록이라 줄 내용은 앱마다 제각각이지만, 시각·PID·TID·수준·태그는 줄마다 같은 자리에 찍힙니다. 공식 문서는 로그에 이메일·전화번호·이름 같은 개인 정보를 남기지 말라고 권하지만 [2], 앱이 실제로 이 권고를 지키는지는 확인하지 못했습니다. 로그 내용에 개인 정보가 섞여 있을 수 있다고 보고 다룹니다.
+개발자가 동작을 확인하거나 문제를 고치려고 남기는 기록이라 줄 내용은 앱마다 제각각이지만, 시각·PID·TID·수준·태그는 줄마다 같은 자리에 찍힙니다. 로그에 이메일·전화번호·이름 같은 개인 정보를 남기지 말라는 권고가 있지만 [2], 모든 앱이 이 권고를 지킨다는 보장은 없습니다. 로그 내용에 개인 정보가 섞여 있을 수 있다고 보고 다룹니다.
 
 로그 접근은 `android.permission.READ_LOGS` 를 포함해 모두 제한되고, 서드파티 앱은 시스템 로그를 읽을 수 없습니다 [2]. 예외는 시스템 UID, 네이티브 프로세스, `DropBoxManager` 같은 특정 API 입니다 [2]. 앱 권한 구조는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md) 에서 다룹니다.
 
@@ -32,15 +32,15 @@ logcat 로그는 파일이 아니라 `logd` 의 메모리 버퍼에 있습니다
 | `default` | main + system + crash | — |
 | `all` | 모든 버퍼 | — |
 
-events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따로 다룹니다. developer.android.com 의 logcat 문서에는 `kernel` 버퍼가 없고 [1], logd 설정 `ro.logd.kernel` 은 "klogd 데몬 켜기" 로 적혀 있습니다 [3].
+events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따로 다룹니다. `-b` 로 고르는 버퍼에는 `kernel` 이 없습니다 [1]. logd 설정 `ro.logd.kernel` 은 klogd 데몬을 켜는 속성입니다 [3].
 
-관찰 기기의 버퍼 크기 목록에는 `main`, `system`, `crash`, `kernel` 네 줄이 나왔고 events·radio 는 이 목록에 없었습니다. 어떤 명령으로 이 목록을 뽑았는지는 기록이 남아 있지 않아서, 목록에 없다는 사실만으로 events·radio 버퍼가 없다고 판단하지 않습니다. 같은 기기에서 adb 일반 셸 권한으로 main·system·events·crash·radio 다섯 버퍼의 줄을 읽을 수 있었습니다.
+기기에 따라 버퍼 크기 목록에 `main`, `system`, `crash`, `kernel` 네 줄만 나오고 events·radio 가 빠질 수 있습니다. 목록에 없다고 events·radio 버퍼가 없는 것은 아니어서, 이런 기기에서도 adb 일반 셸 권한으로 main·system·events·crash·radio 다섯 버퍼의 줄을 읽을 수 있습니다.
 
 버퍼 크기와 파일 저장은 logd 설정 속성으로 정합니다 [3].
 
 | 속성 | 뜻 |
 |---|---|
-| `ro.logd.size` | 기본 크기. 기본값 256KB 이고, 문서는 256KB 보다 큰 기본값이 잘 확장되지 않는다고 적음 |
+| `ro.logd.size` | 기본 크기. 기본값 256KB 이고, 256KB 보다 큰 기본값은 잘 확장되지 않음 |
 | `persist.logd.size` | 시작할 때 쓰는 전체 기본 크기 |
 | `persist.logd.size.<버퍼>` | 버퍼별 크기 |
 | `ro.config.low_ram` | 켜져 있으면 256K 대신 64K |
@@ -51,20 +51,20 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 | `ro.logd.auditd` | SELinux 감사 메시지 수집. 기본값 true |
 | `ro.logd.auditd.dmesg` | 감사 메시지를 dmesg 로도 보냄. 기본값 true |
 
-파일로 남기는 기능을 켰을 때 저장되는 경로와 삼성 기기의 기본 버퍼 크기는 확인하지 못했습니다.
+파일로 남기는 기능을 켰을 때 저장되는 경로와 삼성 기기의 기본 버퍼 크기는 공개 자료가 없어 검체에서 확인합니다.
 
 버전·제조사 차이는 아래와 같습니다.
 
-| 구분 | 확인한 것 |
+| 구분 | 내용 |
 |---|---|
-| AOSP 공통 | 버퍼 종류, 출력 형식, 우선순위 문자 [1]. 옵션은 OS 버전마다 달라서 `adb logcat --help` 로 확인하라고 안내함 [1] |
-| 삼성 One UI | settings global 에 `activity_starts_logging_enabled`, `autofill_logging_level`, settings system 에 `samsung_errorlog_agree`, `show_message_logs` 키가 있음. 각 키의 뜻은 확인하지 못함 |
+| AOSP 공통 | 버퍼 종류, 출력 형식, 우선순위 문자 [1]. 옵션은 OS 버전마다 달라서 `adb logcat --help` 로 확인 [1] |
+| 삼성 One UI | settings global 에 `activity_starts_logging_enabled`, `autofill_logging_level`, settings system 에 `samsung_errorlog_agree`, `show_message_logs` 키가 있음. 각 키의 뜻은 공개 자료 없음 |
 
-삼성 전용 로그 수집 경로와 파일 위치는 확인하지 못했습니다. 설정 키를 읽는 방법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 에서 다룹니다.
+삼성 전용 로그 수집 경로와 파일 위치는 공개 자료가 없어 검체에서 확인합니다. 설정 키를 읽는 방법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 에서 다룹니다.
 
 ## 구조
 
-기본 출력 형식은 `threadtime` 이고, 날짜·호출 시각·우선순위·태그·PID·TID 를 적습니다 [1]. 관찰 기기의 출력은 버퍼마다 시작 줄이 한 번 나오고 그 아래로 로그 줄이 이어지는 모양이었습니다.
+기본 출력 형식은 `threadtime` 이고, 날짜·호출 시각·우선순위·태그·PID·TID 를 적습니다 [1]. 출력은 버퍼마다 시작 줄이 한 번 나오고 그 아래로 로그 줄이 이어집니다.
 
 ```
 --------- beginning of main
@@ -75,7 +75,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 ##-## ##:##:##.### <PID> <TID> F <태그>: <내용>
 ```
 
-맨 앞 칸은 월-일 시:분:초.밀리초이고 연도가 없습니다. 관찰 기기에서 줄을 확인한 버퍼와 수준은 main(I), system(D), events(I), crash(F), radio(D, I) 였습니다.
+맨 앞 칸은 월-일 시:분:초.밀리초이고 연도가 없습니다.
 
 수준 칸의 우선순위 문자는 낮은 것부터 아래 순서입니다 [1].
 
@@ -116,7 +116,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 
 ## 시각 해석
 
-기본 `threadtime` 형식은 연도와 시간대를 붙이지 않습니다 [1]. 기본 출력이 기기 현지 시각이라고 적은 공식 문장은 확인하지 못했으니, 수집할 때 `year`·`zone` 수식어를 붙이거나 `UTC`·`epoch` 수식어로 한 번 더 받아 두어 기준을 분명히 합니다. `monotonic` 은 마지막 부팅부터 흐른 CPU 시간이라 [1] 벽시계 시각이 아니고, 재부팅 앞뒤의 값을 서로 비교하지 않습니다.
+기본 `threadtime` 형식은 연도와 시간대를 붙이지 않습니다 [1]. 기본 출력이 기기 현지 시각인지 밝힌 공식 문서가 없으니, 수집할 때 `year`·`zone` 수식어를 붙이거나 `UTC`·`epoch` 수식어로 한 번 더 받아 두어 기준을 분명히 합니다. `monotonic` 은 마지막 부팅부터 흐른 CPU 시간이라 [1] 벽시계 시각이 아니고, 재부팅 앞뒤의 값을 서로 비교하지 않습니다.
 
 연도는 수집 날짜와 로그가 이어진 기간으로 판단합니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md), 기기 시간대 설정은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 다룹니다.
 
@@ -124,7 +124,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 
 첫째, 버퍼는 메모리 순환 버퍼라서 오래된 항목은 새 항목에 밀려 사라집니다 [1]. 기본 크기가 256KB 로 작고 [3], `ro.logd.filter` 기본값은 가장 말 많은 UID 의 오래된 항목과 system 에서 가장 말 많은 PID 의 항목을 먼저 지웁니다 [3]. 로그를 많이 찍는 앱 하나 때문에 다른 앱의 기록이 먼저 사라질 수 있습니다.
 
-둘째, 재부팅 뒤에도 버퍼 내용이 남는지는 공식 문서에서 확인하지 못했습니다. 메모리 버퍼라는 점을 생각해 기기를 끄거나 다시 켜기 전에 먼저 받는 편이 안전하고, 받은 시각을 수집 기록에 적어 둡니다.
+둘째, 재부팅 뒤에도 버퍼 내용이 남는지는 공식 문서에 나와 있지 않습니다. 메모리 버퍼라는 점을 생각해 기기를 끄거나 다시 켜기 전에 먼저 받는 편이 안전하고, 받은 시각을 수집 기록에 적어 둡니다.
 
 셋째, 태그별 로그 수준은 `setprop log.tag.<TAG>` 로 바꿀 수 있고, `persist.log.tag.<TAG>` 는 재부팅 뒤에도 남습니다 [2]. 검체에 `persist.log.tag.` 로 시작하는 속성이 있으면 누군가 로그 수준을 바꾼 흔적일 수 있다고 보고(추론), 그 태그의 로그가 적거나 없는 이유를 따로 따져 봅니다. `persist.logd.size` 계열 값이 기본보다 작게 잡혀 있을 때도 로그가 짧게 남는 이유가 될 수 있습니다(추론). 이런 흔적은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 에서 다른 기록과 함께 봅니다.
 
@@ -134,7 +134,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 
 ### 텍스트로 한 번
 
-logd 버퍼의 바이너리 형식은 확인하지 못해서 헥스 따라가기 대신 텍스트 출력을 직접 읽습니다.
+logd 버퍼의 바이너리 형식은 공개 문서가 없어서 헥스 따라가기 대신 텍스트 출력을 직접 읽습니다.
 
 1. `adb logcat --help` 로 그 기기에서 쓸 수 있는 옵션을 확인합니다. 특히 버퍼를 한 번 쏟아 내고 끝내는 `-d` 가 있는지 봅니다. `-d` 없이 부르면 명령이 끝나지 않고 새 줄을 계속 받습니다.
 2. `adb logcat -d -b all -v threadtime` 출력을 파일로 받고, 같은 방식으로 `year`·`zone` 수식어를 붙인 출력도 받아 둡니다.

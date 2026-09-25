@@ -20,17 +20,17 @@ has_toc: false
 
 ## 한눈에 보기
 
-아래 경로는 공개 도구 ALEAPP 가 파일을 찾을 때 쓰는 패턴(`*/...`)이라서 앞부분의 전체 경로는 적지 않았습니다. "시험 이미지"는 ALEAPP 모듈이 시험한 공개 이미지를 말하고, 그 버전·제조사에서 반드시 동작한다는 보증은 아닙니다.
+아래 경로는 공개 도구 ALEAPP 가 파일을 찾을 때 쓰는 패턴(`*/...`)이라서 앞부분이 `*` 로 줄어 있습니다. "시험 이미지"는 ALEAPP 모듈이 시험한 공개 이미지를 말하고, 그 버전·제조사에서 반드시 동작한다는 보증은 아닙니다.
 
 | 유출 길 | 위치 | Android 버전·제조사 | 알려 주는 것 |
 |---|---|---|---|
 | 메신저 | 왓츠앱 `*/com.whatsapp/databases/msgstore.db*` [5] | 앱 버전에 따라 요즘 표 `message`, 예전 표 `messages` 로 구조가 다름. 시험 이미지에 Android 14 포함 [5] | 보낸 메시지(`from_me`=1)와 첨부 파일 경로·크기, 대화 상대 |
-| 클라우드 | 구글 드라이브 `*/com.google.android.apps.docs/databases/DocList.db*` [7] | 시험 이미지 10개(Android 10~16, 삼성 포함) 모두 0행이라 최근 앱에서 채워지는지 확인 못 함 [7] | 파일 제목·크기·MD5·공유 주소, 만든·고친·연 시각 |
+| 클라우드 | 구글 드라이브 `*/com.google.android.apps.docs/databases/DocList.db*` [7] | 시험 이미지 10개(Android 10~16, 삼성 포함) 모두 0행이라 최근 앱에서 채워지는지는 검체에서 확인 [7] | 파일 제목·크기·MD5·공유 주소, 만든·고친·연 시각 |
 | 메일 | 지메일 `*/com.google.android.gm/databases/bigTopDataDB.*` [6] | 시험 이미지에 삼성 Galaxy S10(Android 10) 포함 [6] | 메일과 첨부(본문·머리는 압축한 protobuf) |
-| PC 연결 | ADB 인증 기록 `*/misc/adb/adb_temp_keys.xml` [2] | 요즘은 ABX, 예전은 일반 XML. 바뀐 버전은 확인 못 함 [2] | 인증해 둔 PC 의 이름과 마지막 연결 시각 |
+| PC 연결 | ADB 인증 기록 `*/misc/adb/adb_temp_keys.xml` [2] | 요즘은 ABX, 예전은 일반 XML. 바뀐 버전은 공개 자료 없음 [2] | 인증해 둔 PC 의 이름과 마지막 연결 시각 |
 | PC 연결 | 휴대폰과 연결 `*/com.microsoft.appmanager/databases/eventstore*` [9] | 시험 이미지 삼성 Android 13·14 에서 행이 나옴 [9] | 연결된 계정, 내용 접근 이벤트 |
 | PC 연결 | 삼성 내 파일 `*/com.sec.android.app.myfiles/databases/OperationHistory.db*` [8] | 경로 풀이가 Android 10~12 에서만 맞고 13·14 값은 풀지 못함 [8] | 파일 복사·이동 같은 작업 기록 |
-| 근거리 공유 | 블루투스 `*/bt_config.conf` [3] | 전체 경로의 버전별 차이는 확인 못 함 | 짝지은 기기의 MAC 주소·이름·시각(유닉스 초) |
+| 근거리 공유 | 블루투스 `*/bt_config.conf` [3] | 전체 경로의 버전별 차이는 공개 자료 없음 | 짝지은 기기의 MAC 주소·이름·시각(유닉스 초) |
 | 근거리 공유 | Nearby 캐시 `*/nearby-fast-pair/...`, `*/nearby-discovery/...`(LevelDB) [4] | Google Play 서비스 캐시 | 주변에서 발견한 액세서리·기기(전송 기록 아님) |
 | 공통 | `dumpsys account` 의 Accounts History | | 계정을 붙이고 뗀 기록(`action_account_add`, `action_account_remove` 등) |
 | 공통 | `dumpsys usagestats` | | 앱을 앞에 띄우고 내린 순서(`ACTIVITY_RESUMED` 등) |
@@ -38,7 +38,7 @@ has_toc: false
 
 카카오톡 전용 ALEAPP 모듈은 목록에 없고, 삼성 이메일·Quick Share 전송 기록·블루투스 파일 전송(OPP)을 이름으로 내건 모듈도 목록에서 보이지 않습니다 [1]. 이 앱들은 공개 도구의 결과만으로 판단하지 말고 [앱 데이터 분석](../../../03-techniques/analysis/app-data-analysis/index.md)처럼 데이터를 직접 열어 봅니다.
 
-관찰한 기기(Android 16, One UI 8.5)의 /sdcard 최상위에는 Download·Documents·DCIM 같은 표준 폴더가 있었고, 받은 파일과 보낼 파일이 모이기 쉬운 Download 폴더에는 항목이 151개 있었습니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md)에서 다룹니다.
+/sdcard 최상위에는 Download·Documents·DCIM 같은 표준 폴더가 있고, 받은 파일과 보낼 파일은 Download 폴더에 모이기 쉽습니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md)에서 다룹니다.
 
 ## 읽는 순서
 

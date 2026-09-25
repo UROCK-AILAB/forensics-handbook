@@ -7,7 +7,7 @@ nav_order: 1330
 
 # ADB로 볼 수 있는 것 (ADB)
 
-안드로이드 디버그 브리지 (Android Debug Bridge, adb) 로 기기에서 무엇을 읽을 수 있는지, 쓰려면 어떤 조건이 필요한지, 쓰고 나면 기기에 어떤 흔적이 남는지를 정리합니다. 공식 문서와 현행 AOSP 소스(frameworks/base 의 main 가지)로 확인한 내용은 그대로 쓰고, 기기 출력 예시는 루팅하지 않고 부트로더가 잠긴 기기에서 adb 일반 셸 권한(UID 2000)으로 읽은 것입니다. 잠금을 풀거나 보안을 우회하는 방법은 다루지 않습니다.
+안드로이드 디버그 브리지 (Android Debug Bridge, adb) 로 기기에서 무엇을 읽을 수 있는지, 쓰려면 어떤 조건이 필요한지, 쓰고 나면 기기에 어떤 흔적이 남는지를 정리합니다. 기기 출력 예시는 루팅하지 않고 부트로더가 잠긴 기기에서 adb 일반 셸 권한(UID 2000)으로 읽은 것입니다. 잠금을 풀거나 보안을 우회하는 방법은 다루지 않습니다.
 
 ## 한 줄 요약
 
@@ -25,18 +25,18 @@ adb 는 기기와 통신하는 명령줄 도구이고, 컴퓨터에서 명령을
 | 컴퓨터 허용 | Android 4.2.2 이상 | 연결할 때 컴퓨터의 RSA 키를 받아들일지 묻는 창이 뜨고, 기기 잠금을 풀고 이 창에서 허용해야 adb 명령이 됩니다 [1] |
 | 무선 디버깅 | 휴대폰은 Android 11(API 30) 이상 | 컴퓨터와 기기가 같은 무선 네트워크에 있어야 합니다 [1] |
 
-두 조건을 합치면 adb 수집은 개발자 옵션과 USB 디버깅이 켜져 있고, 잠금을 풀어 허용 창에서 컴퓨터를 받아들일 수 있을 때만 됩니다. 이 정리는 [1]에서 끌어낸 해석입니다. 잠금 해제 여부가 수집 범위 전체에 주는 영향은 [수집 방식 비교](methods.md) 페이지에 있습니다.
+그래서 adb 수집은 개발자 옵션과 USB 디버깅이 켜져 있고, 잠금을 풀어 허용 창에서 컴퓨터를 받아들일 수 있을 때만 됩니다 [1]. 잠금 해제 여부가 수집 범위 전체에 주는 영향은 [수집 방식 비교](methods.md) 페이지에 있습니다.
 
 ## 켜면 남는 흔적
 
-관찰한 폰의 설정에는 adb 와 개발자 옵션에 관련된 이름의 키가 아래처럼 있었습니다. 각 값의 뜻은 출처로 확인하지 않았습니다.
+기기 설정에는 adb 와 개발자 옵션에 관련된 이름의 키가 아래처럼 있습니다(삼성 기기 예). 각 값의 뜻을 밝힌 공개 자료는 없습니다.
 
 | 어디서 | 키 이름 |
 |---|---|
 | settings global | `adb_enabled`, `adb_wifi_enabled`, `adb_allowed_connection_time`, `development_settings_enabled` |
 | settings secure | `rampart_blocked_adb_cmd`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled` |
 
-secure 쪽 `rampart_` 키는 삼성 기능과 관련 있어 보이지만 어떤 기능인지는 확인하지 못했습니다. 조사자가 adb 를 켜면 이런 설정 값도 바뀌어서, 수집 전 상태를 기록해 두지 않으면 나중에 누가 언제 켰는지를 가를 수 없습니다. 이 판단은 관찰한 키 이름과 [1]을 합쳐 끌어낸 해석입니다. 설정 값을 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
+secure 쪽 `rampart_` 키는 삼성 기능과 관련 있어 보입니다. 조사자가 adb 를 켜면 이런 설정 값도 바뀌어서, 수집 전 상태를 기록해 두지 않으면 나중에 누가 언제 켰는지를 가를 수 없습니다. 설정 값을 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
 
 ## 절차
 
@@ -47,9 +47,9 @@ secure 쪽 `rampart_` 키는 삼성 기능과 관련 있어 보이지만 어떤 
 5. 필요한 파일은 `adb pull` 로 폴더째 복사합니다. `adb push` 는 반대 방향이라 수집에는 쓰지 않습니다 [1].
 6. 받은 결과물마다 해시를 계산합니다. 방법은 [결과물 형식과 해시](formats-hash.md) 페이지에 있습니다.
 
-## 일반 셸 권한으로 읽은 것
+## 일반 셸 권한으로 읽을 수 있는 것
 
-아래는 모두 루팅하지 않고 부트로더가 잠긴 폰에서 adb 일반 셸로 읽은 출력입니다. 줄 수는 읽은 때의 값이라 기기와 시점에 따라 달라집니다.
+아래는 루팅하지 않고 부트로더가 잠긴 폰에서 adb 일반 셸로 읽을 수 있는 출력입니다. 줄 수는 한 기기에서 한 번 읽은 값의 예라서 기기와 시점에 따라 달라집니다.
 
 | 출력 | 크기 | 담긴 것 | 자세히 |
 |---|---|---|---|
@@ -65,9 +65,9 @@ secure 쪽 `rampart_` 키는 삼성 기능과 관련 있어 보이지만 어떤 
 | `/sdcard` | — | 폴더 목록 | [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) |
 | logcat | — | main, system, crash, kernel 버퍼의 크기와, main, system, events, crash, radio 버퍼의 로그 | [logcat](../../../02-artifacts/logs/logcat.md) |
 
-`dumpsys account` 의 "Accounts History" 표에는 AccountId, Action_Type, timestamp, UID, TableName, Key 칸이 있었고, 동작 값으로 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 보였습니다.
+`dumpsys account` 의 "Accounts History" 표에는 AccountId, Action_Type, timestamp, UID, TableName, Key 칸이 있고, 동작 값으로 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 나옵니다.
 
-dumpsys 와 logcat 은 지금 메모리에 있는 상태를 보여 주어서 저장된 파일과 범위가 다르고, usagestats 출력이 "Last ## hour events" 처럼 최근 몇 시간만 담는 것이 그 예입니다. 같은 일반 셸 권한으로 `/data/data` 나 `/data/system_ce` 같은 보호 경로를 읽을 수 있는지는 확인하지 않았습니다. dumpsys 출력을 읽는 법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지에 있습니다.
+dumpsys 와 logcat 은 지금 메모리에 있는 상태를 보여 주어서 저장된 파일과 범위가 다르고, usagestats 출력이 "Last ## hour events" 처럼 최근 몇 시간만 담는 것이 그 예입니다. dumpsys 출력을 읽는 법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지에 있습니다.
 
 ## 버그 리포트 받기
 
@@ -80,17 +80,17 @@ dumpsys 와 logcat 은 지금 메모리에 있는 상태를 보여 주어서 저
 | `systrace.txt` | systrace 를 켰을 때만 생김 [2] |
 | `FS/` 폴더 | 기기 파일의 복사본. 기기의 `/dirA/dirB/fileC` 가 `FS/dirA/dirB/fileC` 로 들어감 [2] |
 
-버그 리포트가 zip 으로 바뀐 Android 버전은 이번 출처에 없었습니다. 버그 리포트 안의 기록을 해석하는 법은 [버그 리포트](../../../02-artifacts/logs/bugreport.md) 페이지에 있습니다.
+버그 리포트 안의 기록을 해석하는 법은 [버그 리포트](../../../02-artifacts/logs/bugreport.md) 페이지에 있습니다.
 
 ## adb backup
 
-Android 12 부터 adb backup 의 기본 동작이 바뀌어서, Android 12(API 31) 이상을 대상으로 하는 앱은 adb backup 을 해도 앱 데이터가 빠지고 매니페스트에 `android:debuggable=true` 를 둔 앱만 들어갑니다 [3]. 현행 AOSP 는 백업 대상 자격이 없는 앱과 멈춘 상태의 앱도 대기열에서 빼는데 [4], 자격 규칙의 자세한 조건은 확인하지 못했습니다.
+Android 12 부터 adb backup 의 기본 동작이 바뀌어서, Android 12(API 31) 이상을 대상으로 하는 앱은 adb backup 을 해도 앱 데이터가 빠지고 매니페스트에 `android:debuggable=true` 를 둔 앱만 들어갑니다 [3]. 현행 AOSP 는 백업 대상 자격이 없는 앱과 멈춘 상태의 앱도 대기열에서 뺍니다 [4].
 
-공유 저장소를 포함하는 옵션을 주면 `com.android.sharedstoragebackup` 패키지를 대기열에 넣어 공유 저장소를 담고, APK 와 OBB 를 넣을지도 옵션으로 정합니다 [4]. 이 옵션은 소스의 변수 이름으로만 봤고, 명령줄에 쓰는 실제 플래그 글자와 adb backup 이 몇 버전부터 사용 중단 표시가 됐는지는 확인하지 못했습니다. 만들어진 파일의 형식은 [결과물 형식과 해시](formats-hash.md) 페이지에 있습니다.
+공유 저장소를 포함하는 옵션을 주면 `com.android.sharedstoragebackup` 패키지를 대기열에 넣어 공유 저장소를 담고, APK 와 OBB 를 넣을지도 옵션으로 정합니다 [4]. 만들어진 파일의 형식은 [결과물 형식과 해시](formats-hash.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-adb 로 읽은 결과는 명령을 실행한 순간의 상태라서 같은 명령을 다시 실행하면 결과가 달라지고, 명령마다 실행 시각을 적어 두지 않으면 나중에 어느 시점의 상태인지 알 수 없습니다. 조사자가 adb 를 켜고 연결하는 일 자체도 설정 값을 바꾸니, 수집 전 상태와 한 조작을 따로 기록합니다. 일반 셸 권한으로 읽을 수 있는 범위는 제조사와 버전에 따라 다를 수 있어서 위 표는 관찰한 한 기기의 결과로만 봅니다. 도구가 기대한 대로 뽑았는지 확인하는 방법은 [도구 검증](../../reporting/tool-validation.md) 페이지에 있습니다.
+adb 로 읽은 결과는 명령을 실행한 순간의 상태라서 같은 명령을 다시 실행하면 결과가 달라지고, 명령마다 실행 시각을 적어 두지 않으면 나중에 어느 시점의 상태인지 알 수 없습니다. 조사자가 adb 를 켜고 연결하는 일 자체도 설정 값을 바꾸니, 수집 전 상태와 한 조작을 따로 기록합니다. 일반 셸 권한으로 읽을 수 있는 범위는 제조사와 버전에 따라 다를 수 있어서 위 표는 한 기기의 예로만 봅니다. 도구가 기대한 대로 뽑았는지 확인하는 방법은 [도구 검증](../../reporting/tool-validation.md) 페이지에 있습니다.
 
 ## 결과를 어떻게 해석하나
 

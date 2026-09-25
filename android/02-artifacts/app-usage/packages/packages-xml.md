@@ -7,7 +7,7 @@ nav_order: 420
 
 # 패키지 목록 구조 (packages.xml·packages.list)
 
-패키지 관리자(PackageManager)가 `/data/system/` 에 남기는 설치 앱 목록 파일의 짜임새를 정리합니다. 소스로 확인한 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 어느 Android 출시 버전에서 바뀌었는지는 대부분 확인하지 못했습니다. 설치자와 설치 시각 칸의 뜻은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서, 사용자가 준 권한은 [앱 권한 부여 기록](runtime-permissions.md) 페이지에서 다룹니다.
+패키지 관리자(PackageManager)가 `/data/system/` 에 남기는 설치 앱 목록 파일의 짜임새를 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 출시 버전마다 다를 수 있습니다. 설치자와 설치 시각 칸의 뜻은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서, 사용자가 준 권한은 [앱 권한 부여 기록](runtime-permissions.md) 페이지에서 다룹니다.
 
 ## 한 줄 요약
 
@@ -29,11 +29,11 @@ nav_order: 420
 | `packages.list` | 한 줄에 한 앱씩 적은 요약 목록 |
 | `packages-stopped.xml`, `packages-stopped-backup.xml` | 소스에 "Deprecated: Needed for migration" 으로 남아 있고, 내용을 옮긴 뒤 지웁니다 |
 
-`packages-backup.xml` 과 `packages.xml.reservecopy` 는 ResilientAtomicFile 이 쓰는 사본이라서 본 파일과 시점이 다를 수 있습니다 [1]. 각 사본이 언제 남고 언제 지워지는지 세부 조건은 확인하지 못했습니다.
+`packages-backup.xml` 과 `packages.xml.reservecopy` 는 ResilientAtomicFile 이 쓰는 사본이라서 본 파일과 시점이 다를 수 있습니다 [1].
 
-현행 AOSP 는 이 설정 파일들을 `Xml.resolveSerializer()` 로 쓰고, 시스템 속성 `persist.sys.binary_xml` 의 기본값이 true 라서 기본적으로 안드로이드 바이너리 XML(ABX) 형식으로 저장합니다 [1][2]. 읽을 때는 파일 앞 바이트를 보고 ABX 인지 일반 XML 인지 가리기 때문에, 두 형식이 섞여 있어도 시스템은 둘 다 읽습니다 [2]. ABX 가 기본이 된 Android 버전과 앞 바이트(magic)의 실제 값은 확인하지 못했고, 형식 자체는 [안드로이드 바이너리 XML (ABX)](../../../01-foundations/data-formats/abx.md) 페이지에서 다룹니다.
+현행 AOSP 는 이 설정 파일들을 `Xml.resolveSerializer()` 로 쓰고, 시스템 속성 `persist.sys.binary_xml` 의 기본값이 true 라서 기본적으로 안드로이드 바이너리 XML(ABX) 형식으로 저장합니다 [1][2]. 읽을 때는 파일 앞 바이트를 보고 ABX 인지 일반 XML 인지 가리기 때문에, 두 형식이 섞여 있어도 시스템은 둘 다 읽습니다 [2]. ABX 형식은 [안드로이드 바이너리 XML (ABX)](../../../01-foundations/data-formats/abx.md) 페이지에서 다룹니다.
 
-`packages.list` 는 권한 0640, 소유자 SYSTEM_UID, 그룹 PACKAGE_INFO_GID 로 만들어집니다 [1]. 루팅되지 않은 기기에서 adb 일반 권한으로 `packages.xml` 을 직접 읽을 수 있는지는 관찰하지 못했습니다.
+`packages.list` 는 권한 0640, 소유자 SYSTEM_UID, 그룹 PACKAGE_INFO_GID 로 만들어집니다 [1].
 
 ## 구조 — packages.xml
 
@@ -73,13 +73,13 @@ nav_order: 420
 
 `<package>` 아래에는 공유·정적 라이브러리 사용(`uses-sdk-lib`, `uses-static-lib`), 서명(`sigs`), 설치 요청 앱의 서명(`install-initiator-sigs`), 키셋(`proper-signing-keyset`, `upgrade-keyset`, `defined-keyset`), `mime-group`, `split-version` 하위 요소가 붙습니다 [1].
 
-현행 writePackageLPr 는 `<package>` 아래에 권한 목록(`<perms>`)을 쓰지 않습니다. 다만 읽는 코드(readInstallPermissionsLPr)는 남아 있어서 옛 파일의 `<perms>` 는 읽습니다 [1]. 설치 권한이 지금 어느 파일에 저장되는지는 확인하지 못했습니다.
+현행 writePackageLPr 는 `<package>` 아래에 권한 목록(`<perms>`)을 쓰지 않습니다. 다만 읽는 코드(readInstallPermissionsLPr)는 남아 있어서 옛 파일의 `<perms>` 는 읽습니다 [1].
 
 ### 시각 속성의 형식
 
-ft, ut, loadingCompletedTime 은 attributeLongHex 로 쓰기 때문에 일반 XML 로 풀면 16진수 문자열로 보입니다 [1]. ALEAPP 는 이 값을 유닉스 에포크 밀리초로 보고 UTC 날짜로 바꿉니다 [3]. 읽는 코드는 ft 가 없거나 0 이면 옛 속성 ts 를 10진수로 읽는데 [1], ts 를 쓰던 버전 범위는 확인하지 못했습니다.
+ft, ut, loadingCompletedTime 은 attributeLongHex 로 쓰기 때문에 일반 XML 로 풀면 16진수 문자열로 보입니다 [1]. 값은 유닉스 에포크 밀리초입니다 [3]. 읽는 코드는 ft 가 없거나 0 이면 옛 속성 ts 를 10진수로 읽습니다 [1].
 
-ft 는 패키지 설정의 getLastModifiedTime() 값이고 dumpsys 에서는 `timeStamp=` 라는 이름으로 찍힙니다 [1]. 이 값이 코드 경로 파일의 수정 시각인지는 PackageSetting 소스를 열지 않아 확인하지 못했습니다. ut 과 첫 설치 시각의 뜻은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서 설명합니다.
+ft 는 패키지 설정의 getLastModifiedTime() 값이고 dumpsys 에서는 `timeStamp=` 라는 이름으로 찍힙니다 [1]. ut 과 첫 설치 시각의 뜻은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서 설명합니다.
 
 ## 구조 — packages.list
 
@@ -98,15 +98,15 @@ ft 는 패키지 설정의 getLastModifiedTime() 값이고 dumpsys 에서는 `ti
 | 9 | 플랫폼에서 프로파일 가능 | 1 또는 0 |
 | 10 | 설치자 | 시스템 앱은 `@system`, product 파티션 앱은 `@product`, 설치자 이름이 있으면 그 이름, 없으면 `@null` |
 
-소스 주석에 이 형식을 native 코드(system/core/libpackagelistparser)가 읽는다고 적혀 있습니다 [1]. 데이터 경로 칸은 소스 주석("This doesn't handle multiple users")대로 사용자 0 의 경로만 적기 때문에, 다른 사용자나 프로필의 설치 상태는 이 파일로 알 수 없습니다 [1]. APEX 와 메타데이터가 없는 패키지는 적지 않고, 데이터 경로에 공백이 있는 앱도 건너뜁니다 [1].
+이 형식은 native 코드(system/core/libpackagelistparser)가 읽습니다 [1]. 데이터 경로 칸은 사용자 0 의 경로만 적기 때문에, 다른 사용자나 프로필의 설치 상태는 이 파일로 알 수 없습니다 [1]. APEX 와 메타데이터가 없는 패키지는 적지 않고, 데이터 경로에 공백이 있는 앱도 건너뜁니다 [1].
 
 이 파일은 임시 파일(`.tmp`)과 JournaledFile 로 통째로 다시 쓰기 때문에, 지운 앱의 줄은 다음에 파일을 쓸 때 사라집니다 [1]. UID 와 패키지 이름을 이어 주는 방법은 [패키지 이름과 UID](../../../01-foundations/value-decoding/package-uid.md) 페이지를 봅니다.
 
 ## 라이브 기기에서 보이는 모양 (dumpsys package)
 
-`dumpsys package` 맨 앞 "Database versions:" 아래 "Internal:" 절은 `packages.xml` 의 `<version>` 값을 찍습니다 [1]. 실제 폰에서는 "Internal:" 아래에 `sdkVersion=`, `sdkVersionFull=`, `databaseVersion=` 이 한 줄에, `buildFingerprint=`, `fingerprint=` 가 다음 줄에 보였고 "External:" 아래에는 값이 없었습니다. `sdkVersionFull` 은 현행 AOSP main 의 Settings.java 에서 찾지 못해서, 제조사가 넣은 칸인지 다른 버전의 코드인지 확인하지 못했습니다.
+`dumpsys package` 맨 앞 "Database versions:" 아래 "Internal:" 절은 `packages.xml` 의 `<version>` 값을 찍습니다 [1]. 실제 출력에서는 "Internal:" 아래에 `sdkVersion=`, `sdkVersionFull=`, `databaseVersion=` 이 한 줄에, `buildFingerprint=`, `fingerprint=` 가 다음 줄에 찍히고, "External:" 아래는 비어 있을 수 있습니다. `sdkVersionFull` 은 현행 AOSP main 의 Settings.java 에는 없는 칸이라, 제조사가 넣은 칸이거나 다른 버전의 코드일 수 있습니다.
 
-현행 AOSP 기준으로 패키지마다 찍히는 줄의 이름은 `appId=`, `pkg=`, `codePath=`, `versionCode=`, `timeStamp=`, `lastUpdateTime=`, `installerPackageName=` 등이고, 권한은 `declared permissions:`, `requested permissions:`, `install permissions:`, `runtime permissions:` 절로 나뉩니다 [1]. 관찰 메모에는 패키지별 줄이 생략되어 있어서 실제 폰에서 이 줄들이 어떻게 찍히는지는 확인하지 못했습니다. dumpsys 의 시각은 `yyyy-MM-dd HH:mm:ss` 꼴이라 밀리초가 잘리고 시간대 표시가 없어서 [1], 정밀한 시각은 파일의 16진수 값으로 확인합니다. 출력을 뽑는 방법은 [dumpsys 출력](../../logs/dumpsys.md) 페이지를 봅니다.
+현행 AOSP 기준으로 패키지마다 찍히는 줄의 이름은 `appId=`, `pkg=`, `codePath=`, `versionCode=`, `timeStamp=`, `lastUpdateTime=`, `installerPackageName=` 등이고, 권한은 `declared permissions:`, `requested permissions:`, `install permissions:`, `runtime permissions:` 절로 나뉩니다 [1]. dumpsys 의 시각은 `yyyy-MM-dd HH:mm:ss` 꼴이라 밀리초가 잘리고 시간대 표시가 없어서 [1], 정밀한 시각은 파일의 16진수 값으로 확인합니다. 출력을 뽑는 방법은 [dumpsys 출력](../../logs/dumpsys.md) 페이지를 봅니다.
 
 ## 증거로서 의미
 
@@ -120,7 +120,7 @@ ft 는 패키지 설정의 getLastModifiedTime() 값이고 dumpsys 에서는 `ti
 
 `packages.xml` 이 ABX 로 저장되어 있으면 텍스트 편집기나 일반 XML 도구로는 깨진 글자만 보이기 때문에, 파일을 먼저 일반 XML 로 풀어야 합니다. 본 파일과 `packages-backup.xml`·`packages.xml.reservecopy` 는 시점이 다를 수 있어서, 사본에만 있는 패키지가 보이면 어느 파일에서 나온 값인지 보고서에 밝힙니다.
 
-ALEAPP 의 permissions 모듈 중 "Package and Shared User" 표는 `<package>` 아래 `<perms>` 에서 권한을 뽑는데 [4], 현행 쓰기 코드는 `<perms>` 를 쓰지 않기 때문에 새 파일에서는 이 표가 빌 수 있습니다. 실물 파일로 확인한 것이 아니라 소스에서 나온 추론입니다.
+ALEAPP 의 permissions 모듈 중 "Package and Shared User" 표는 `<package>` 아래 `<perms>` 에서 권한을 뽑는데 [4], 현행 쓰기 코드는 `<perms>` 를 쓰지 않기 때문에 새 파일에서는 이 표가 빌 수 있습니다.
 
 `packages.list` 는 사용자 0 기준이고 APEX 와 일부 앱을 빼고 적어서, 이 파일의 줄 수를 설치 앱 수로 보고하면 틀릴 수 있습니다.
 

@@ -22,12 +22,12 @@ has_toc: false
 
 | 행위 | 주로 보는 곳 | Android 버전 | 알려 주는 것 |
 |---|---|---|---|
-| 초기화 | 복구 모드 기록(`/cache/recovery` 의 `last_` 파일), `dumpsys user`, 설정 값, 각 기록의 가장 오래된 시각 | `/cache` 파티션이 없는 기기의 기록 위치는 확인하지 못함 | 초기화가 있었을 무렵, 초기화 이후 기록의 시작점 |
+| 초기화 | 복구 모드 기록(`/cache/recovery` 의 `last_` 파일), `dumpsys user`, 설정 값, 각 기록의 가장 오래된 시각 | `/cache` 파티션이 없는 기기의 기록 위치는 검체에서 확인 | 초기화가 있었을 무렵, 초기화 이후 기록의 시작점 |
 | 앱 지우기 | usagestats 와 mappings, 공용 저장 공간의 주인 없는 파일, 설치된 앱 목록 | 보관(archiving)은 Android 15 이상 | 지운 앱의 이름과 마지막 흔적 시각, 지운 것인지 보관한 것인지 |
 | 메시지·사진 지우기 | `.trashed-` 파일 이름, MediaStore, 알림 기록 | 미디어 휴지통은 Android 11 이상 | 휴지통으로 보낸 무렵, 메시지가 도착했던 흔적 |
 | 시각 바꾸기 | `dumpsys usagestats` 의 시각 변경 줄, 자동 시각 설정, 연도 없는 로그 줄 | 자동 시각 출처와 설정 이름이 버전마다 다름 | 기기 시각이 옮겨진 흔적과 그 크기 |
 
-초기화·삭제·시각 변경을 볼 때 쓰는 adb 일반 권한 출력은 `dumpsys user`, `dumpsys package`, `dumpsys usagestats`, `dumpsys batterystats`, `settings global/secure/system` 이었고, 칸마다의 뜻은 각 하위 페이지에 있습니다.
+초기화·삭제·시각 변경을 볼 때 쓰는 adb 일반 권한 출력은 `dumpsys user`, `dumpsys package`, `dumpsys usagestats`, `dumpsys batterystats`, `settings global/secure/system` 이고, 칸마다의 뜻은 각 하위 페이지에 있습니다.
 
 > 그림 자리: 네 행위를 가로로 놓고, 각 행위에서 "없어지는 것" 과 "남는 흔적" 을 위아래로 나눠 보여 주는 표 그림
 

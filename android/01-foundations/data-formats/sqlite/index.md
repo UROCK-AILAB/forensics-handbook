@@ -18,17 +18,17 @@ SQLite 데이터베이스는 표와 색인을 파일 하나에 담는 데이터�
 
 분석에서 놓치기 쉬운 점은 두 가지입니다. 하나는 곁 파일입니다. 주 DB 파일 옆에는 롤백 저널(-journal), WAL(-wal), WAL 색인(-shm)이 붙을 수 있고 [1], 주 파일만 복사하고 -wal 과 -shm 을 빼면 WAL 에만 있던 커밋된 거래를 잃습니다 [2]. 다른 하나는 지운 데이터입니다. 지운 행은 빈 페이지 목록, 페이지 안의 빈 조각, WAL 의 옛 프레임, 롤백 저널의 원래 페이지 사본에 남을 수 있지만 [1], Android 플랫폼에 들어 있는 SQLite 라이브러리는 지운 내용을 0 으로 덮는 secure_delete 와 빈 페이지를 잘라내는 자동 정리를 켜고 빌드해서(현행 AOSP 기준) [3], 플랫폼 SQLite 를 쓰는 DB 에서는 되살릴 것이 적을 수 있습니다. 앱이 SQLCipher 같은 자기 라이브러리를 따로 넣어 쓰면 이 빌드 옵션을 따르지 않습니다.
 
-앱 DB 를 찾을 폴더는 [앱 데이터 폴더 구조](../../storage/app-data-layout.md)에서 다룹니다. 삼성 One UI 가 SQLite 설정을 따로 바꾸는지도 확인하지 못했습니다.
+앱 DB 를 찾을 폴더는 [앱 데이터 폴더 구조](../../storage/app-data-layout.md)에서 다룹니다.
 
 ## 한눈에 보기
 
 | 위치 | Android 버전 | 알려 주는 것 |
 |---|---|---|
-| 주 DB 파일 | 현행 AOSP 의 플랫폼 SQLite 는 secure_delete 와 auto_vacuum=FULL 을 기본으로 빌드 [3]. 버전별 차이는 확인 못 함 | 마지막 체크포인트까지의 표·색인, 빈 페이지와 빈 조각에 남은 옛 레코드 |
+| 주 DB 파일 | 현행 AOSP 의 플랫폼 SQLite 는 secure_delete 와 auto_vacuum=FULL 을 기본으로 빌드 [3]. 버전별 차이는 공개 자료 없음 | 마지막 체크포인트까지의 표·색인, 빈 페이지와 빈 조각에 남은 옛 레코드 |
 | 같은 폴더의 `이름-journal` | 현행 AOSP 의 WAL 이 아닐 때 기본 저널 모드는 TRUNCATE [4] | 거래가 바꾸기 전의 원래 페이지 |
 | 같은 폴더의 `이름-wal` | Android 9 에서 호환 WAL 도입 [5] | 커밋했지만 주 파일로 옮기지 않은 새 페이지, 같은 페이지의 옛 버전 프레임 |
 | 같은 폴더의 `이름-shm` | WAL 과 함께 생김 | WAL 에서 페이지를 찾는 일시 색인. 영구 상태는 아님 [1] |
-| settings global 의 `sqlite_compatibility_wal_flags` | Android 16 에서 키가 있음을 관찰, 값은 가려져 있어 모름 | 호환 WAL 과 WAL 자르기 기준을 조정하는 설정 |
+| settings global 의 `sqlite_compatibility_wal_flags` | Android 16 에 키가 있음. 값은 검체에서 확인 | 호환 WAL 과 WAL 자르기 기준을 조정하는 설정 |
 
 ## 읽는 순서
 

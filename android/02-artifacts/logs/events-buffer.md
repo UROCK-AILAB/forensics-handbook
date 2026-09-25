@@ -12,17 +12,17 @@ nav_order: 1210
 
 ## 무엇을 기록하나 · 왜 생기나
 
-events 버퍼는 logcat 문서에서 "해석된 바이너리 시스템 이벤트 버퍼" 로 소개하는 버퍼이고 [1], 코드는 `android.util.EventLog` 로 이 버퍼에 이벤트를 남깁니다 [2]. 이벤트 로그는 바이너리 형식이라 일반 logcat 보다 덜 시끄럽고 [3], 태그마다 칸 이름과 자료형이 정해져 있어서 앱마다 제각각인 main 버퍼 로그보다 읽는 방법이 일정합니다.
+events 버퍼는 해석된 바이너리 시스템 이벤트를 담는 버퍼이고 [1], 코드는 `android.util.EventLog` 로 이 버퍼에 이벤트를 남깁니다 [2]. 이벤트 로그는 바이너리 형식이라 일반 logcat 보다 덜 시끄럽고 [3], 태그마다 칸 이름과 자료형이 정해져 있어서 앱마다 제각각인 main 버퍼 로그보다 읽는 방법이 일정합니다.
 
 시스템 서버의 ActivityManager 와 WindowManager 가 프로세스와 화면의 상태가 바뀔 때마다 태그를 남기기 때문에, 짧은 시간대 안에서 어떤 앱 프로세스가 언제 뜨고 죽었는지, 어떤 화면이 언제 앞으로 나오고 멈췄는지를 순서대로 따라갈 수 있습니다. 버퍼 자체의 성격(메모리 순환 버퍼, 접근 제한, 출력 형식)은 [logcat (logcat)](logcat.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
-events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있고, `adb logcat -b events` 로 읽습니다 [1]. 태그 번호를 이름과 칸으로 바꾸는 태그 사전 파일은 기기의 `/system/etc` 아래에 설치되고, logcat 이 해석할 때 이 사전을 씁니다 [5]. 사전 파일의 정확한 이름은 확인하지 못했습니다.
+events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있고, `adb logcat -b events` 로 읽습니다 [1]. 태그 번호를 이름과 칸으로 바꾸는 태그 사전 파일은 기기의 `/system/etc` 아래에 설치되고, logcat 이 해석할 때 이 사전을 씁니다 [5]. 사전 파일 이름은 기기의 `/system/etc` 목록에서 확인합니다.
 
-관찰 기기에서는 adb 일반 셸 권한으로 events 버퍼의 줄을 읽을 수 있었지만, 같은 기기의 버퍼 크기 목록에는 events 가 나오지 않았습니다. 목록에 빠진 이유는 확인하지 못했습니다.
+adb 일반 셸 권한으로 events 버퍼의 줄을 읽을 수 있는 기기에서도, 버퍼 크기 목록에는 events 가 나오지 않을 수 있습니다.
 
-태그 이름은 Android 버전에 따라 다릅니다. source.android.com 의 버그 리포트 문서에는 `am_focused_activity` 가 나오지만 [3], 현재 AOSP main 의 ActivityManager 태그 파일에는 이 태그가 없고 [4], 화면 전환 태그는 WindowManager 태그 파일에 `wm_` 으로 시작하는 이름으로 있습니다 [6]. 태그가 옮겨 간 Android 버전은 확인하지 못했으니, 검체를 읽을 때는 그 기기의 태그 사전과 실제 출력으로 이름을 확인합니다.
+태그 이름은 Android 버전에 따라 다릅니다. source.android.com 의 버그 리포트 문서에는 `am_focused_activity` 가 나오지만 [3], 현재 AOSP main 의 ActivityManager 태그 파일에는 이 태그가 없고 [4], 화면 전환 태그는 WindowManager 태그 파일에 `wm_` 으로 시작하는 이름으로 있습니다 [6]. 태그가 옮겨 간 Android 버전은 공개 자료에 없으니, 검체를 읽을 때는 그 기기의 태그 사전과 실제 출력으로 이름을 확인합니다.
 
 | 출처 | 기준 | 담긴 태그 |
 |---|---|---|
@@ -31,13 +31,13 @@ events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있�
 | logcat 공통 태그 파일 | AOSP main | 부팅 단계, 스레드 락 경합 표본, 와이파이 상태 같은 공통 이벤트 [5] |
 | 버그 리포트 문서 | 문서 작성 시점 | `am_focused_activity` 같은 예전 이름이 보임 [3] |
 
-아래 표의 번호와 칸은 모두 AOSP main 기준이고, 특정 Android 버전이나 삼성 기기에서 같은지는 확인하지 못했습니다.
+아래 표의 번호와 칸은 모두 AOSP main 기준이고, 특정 Android 버전이나 삼성 기기에서는 다를 수 있으니 검체의 태그 사전과 맞춰 봅니다.
 
 ## 구조
 
 ### 줄 모양
 
-이벤트 로그 한 줄은 "timestamp PID TID log-level tag tag-values" 순서입니다 [3]. 관찰 기기의 출력은 아래 모양이었고, 확인한 수준은 I 였으며 연도는 없었습니다.
+이벤트 로그 한 줄은 "timestamp PID TID log-level tag tag-values" 순서입니다 [3]. 출력은 아래 모양이고, 수준 칸에는 I 가 찍히며 연도는 없습니다.
 
 ```
 --------- beginning of events
@@ -91,7 +91,7 @@ events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있�
 | 30051 | `am_user_state_changed` | id, state |
 | 30047 | `am_pss` | Pid, UID, Process Name, Pss, Uss, SwapPss, Rss, StatType, ProcState, TimeToCollect |
 | 30050 | `am_mem_factor` | Current, Previous |
-| 30100 | `am_foreground_service_start` | User, Component Name 로 시작하고 fgsType 으로 끝남. 가운데 칸은 확인하지 못함 |
+| 30100 | `am_foreground_service_start` | User, Component Name 로 시작하고 fgsType 으로 끝남. 가운데 칸은 태그 파일에서 확인 |
 
 출처는 AOSP main 의 ActivityManager 태그 파일입니다 [4].
 
@@ -130,7 +130,7 @@ events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있�
 | 80100번대 | `bionic_event_` 로 시작하는 태그들 |
 | 1937006964 | `stats_log` |
 
-출처는 AOSP main 의 logcat 공통 태그 파일입니다 [5]. 화면 켜짐·배터리·알림처럼 흔히 기대하는 태그(`screen_toggled`, `power_screen_state`, `battery_level`, `notification_` 이나 `sysui_` 로 시작하는 태그)는 여기서 본 태그 파일들에 없었습니다 [5]. 다른 태그 파일에 있을 수 있지만 번호와 칸은 확인하지 못했으니, 다른 자료에서 본 번호를 그대로 옮겨 쓰지 않습니다.
+출처는 AOSP main 의 logcat 공통 태그 파일입니다 [5]. 화면 켜짐·배터리·알림처럼 흔히 기대하는 태그(`screen_toggled`, `power_screen_state`, `battery_level`, `notification_` 이나 `sysui_` 로 시작하는 태그)는 위 태그 파일들에 없습니다 [5]. 다른 태그 파일에 있을 수 있으니, 다른 자료에서 본 번호를 그대로 옮겨 쓰지 말고 검체의 태그 사전에서 번호와 칸을 확인합니다.
 
 ## 증거로서 의미
 
@@ -144,13 +144,13 @@ events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있�
 
 ## 시각 해석
 
-events 줄의 시각 칸은 다른 logcat 버퍼와 같은 방식으로 찍히고, 관찰 기기에서는 연도 없이 월-일 시:분:초.밀리초였습니다. 시간대를 확인하는 방법과 수식어는 [logcat (logcat)](logcat.md) 의 시각 해석 절을 따릅니다.
+events 줄의 시각 칸은 다른 logcat 버퍼와 같은 방식으로 찍히고, 연도 없이 월-일 시:분:초.밀리초로 나옵니다. 시간대를 확인하는 방법과 수식어는 [logcat (logcat)](logcat.md) 의 시각 해석 절을 따릅니다.
 
 칸 값 안의 시간은 태그 사전의 단위 코드로 읽습니다. `wm_activity_launch_time` 의 time 칸은 밀리초 단위의 걸린 시간이고 [6], 시각이 아닙니다. 단위 코드 `s` 는 단조 시간 기준 초라서 [5] 벽시계 시각으로 바꾸지 않습니다.
 
 ## 함정과 한계
 
-첫째, 순환 버퍼라 오래된 항목이 밀려납니다 [1]. events 버퍼가 main 버퍼보다 덜 시끄럽다고 해서 [3] 더 오래 남는다는 보장은 확인하지 못했습니다.
+첫째, 순환 버퍼라 오래된 항목이 밀려납니다 [1]. events 버퍼가 main 버퍼보다 덜 시끄럽다고 해서 [3] 더 오래 남는다는 보장은 없습니다.
 
 둘째, 태그 이름과 칸은 버전마다 다릅니다. 예전 문서나 도구가 `am_focused_activity` 같은 이름을 찾는다면 최신 기기에서는 결과가 비어 나올 수 있으니 [3][4], 빈 결과를 "화면 전환이 없었다" 로 읽지 않습니다.
 
@@ -162,7 +162,7 @@ events 줄의 시각 칸은 다른 logcat 버퍼와 같은 방식으로 찍히�
 
 ### 텍스트로 한 번
 
-바이너리 항목의 바이트 배치는 확인하지 못해서 헥스 따라가기 대신 해석된 텍스트를 읽습니다.
+바이너리 항목의 바이트 배치는 이 페이지에서 다루지 않으니, 헥스 따라가기 대신 해석된 텍스트를 읽습니다.
 
 1. `adb logcat -b events` 출력을 파일로 받고, 같은 방식으로 `-v descriptive` 를 붙인 출력도 받습니다.
 2. `am_proc_start` 줄을 모아 프로세스 이름과 PID 의 짝을 만듭니다.

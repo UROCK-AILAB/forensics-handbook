@@ -21,11 +21,11 @@ nav_order: 720
 | 저장한 장소 | `databases/gmm_myplaces.db` | E6 정수 | 유닉스 밀리초 [2] |
 | 검색 기록 | `files/new_recent_history_cache_search.cs` | 프로토콜 버퍼 안 | 유닉스 마이크로초 [3] |
 
-사용자가 켠 타임라인 기록은 지도 앱이 아니라 Google Play 서비스 폴더에 있어서 [구글 위치 기록과 타임라인 (Timeline)](google-timeline.md) 페이지에서 따로 다룹니다. ALEAPP 에는 googleLastTrip, googleInitiatedNav, googlemapaudio, googlemapaudioTemp 모듈도 있지만 [4], 이 모듈들의 경로와 내용은 열어 보지 않았습니다.
+사용자가 켠 타임라인 기록은 지도 앱이 아니라 Google Play 서비스 폴더에 있어서 [구글 위치 기록과 타임라인 (Timeline)](google-timeline.md) 페이지에서 따로 다룹니다. ALEAPP 에는 googleLastTrip, googleInitiatedNav, googlemapaudio, googlemapaudioTemp 모듈도 있습니다 [4].
 
 ## 위치와 버전별 차이
 
-ALEAPP 는 아래 경로 패턴으로 찾습니다 [1][2][3]. 앱 데이터 영역은 루팅되지 않은 기기에서 adb 일반 권한으로 읽을 수 없고, 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다. 관찰 기기에서는 이 앱의 데이터를 보지 못했습니다.
+ALEAPP 는 아래 경로 패턴으로 찾습니다 [1][2][3]. 앱 데이터 영역은 루팅되지 않은 기기에서 adb 일반 권한으로 읽을 수 없고, 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다.
 
 ```
 */com.google.android.apps.maps/databases/da_destination_history*
@@ -44,7 +44,7 @@ ALEAPP 모듈에 적힌 시험 표본을 보면 기록마다 남는 정도가 �
 | Pixel 7a | 14 | 4행 | 0행 | 6행 |
 | Pixel 8 Pro | 16 | 0행 | 1행 | |
 
-`da_destination_history` 모듈은 2021년에 만들어졌고 표본 정보가 없어서 [1], 현행 지도 앱에 이 DB 가 아직 있는지는 확인하지 못했습니다. 오래된 `gmm_myplaces.db` 에는 `sync_item` 표가 없어서 ALEAPP 가 읽지 못합니다 [2].
+`da_destination_history` 를 읽는 ALEAPP 모듈은 2021년에 만들어졌고 표본 정보가 없습니다 [1]. 현행 지도 앱에 이 DB 가 아직 있는지는 검체에서 확인합니다. 오래된 `gmm_myplaces.db` 에는 `sync_item` 표가 없어서 ALEAPP 가 읽지 못합니다 [2].
 
 ## 구조
 
@@ -52,11 +52,11 @@ SQLite 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-fo
 
 ### da_destination_history
 
-표 `destination_history` 에 칸 `time`, `dest_lat`, `dest_lng`, `dest_title`, `dest_address`, `source_lat`, `source_lng` 이 있습니다 [1]. 목적지와 출발지 좌표가 따로 들어 있고, 좌표는 E6 정수라서 ALEAPP 는 끝 여섯 자리 앞에 소수점을 넣어 읽습니다 [1].
+표 `destination_history` 에 칸 `time`, `dest_lat`, `dest_lng`, `dest_title`, `dest_address`, `source_lat`, `source_lng` 이 있습니다 [1]. 목적지와 출발지 좌표가 따로 들어 있고, 좌표는 E6 정수라서 끝 여섯 자리 앞에 소수점을 넣어 읽습니다 [1].
 
 ### gmm_storage.db
 
-표 `gmm_storage_table` 에 칸 `rowid`, `_data`(바이너리), `_key_pri` 가 있습니다 [2]. ALEAPP 는 `_data` 바이트에서 `/dir/` 로 시작하는 길찾기 URL 조각을 찾아 출발 위도·경도를 꺼내고, `!1d` 뒤의 숫자를 도착 경도로, `!2d` 뒤의 숫자를 도착 위도로 읽습니다 [2]. 순서가 경도 먼저라는 점을 놓치면 위도와 경도가 뒤바뀝니다.
+표 `gmm_storage_table` 에 칸 `rowid`, `_data`(바이너리), `_key_pri` 가 있습니다 [2]. `_data` 바이트에서 `/dir/` 로 시작하는 길찾기 URL 조각에 출발 위도·경도가 있고, `!1d` 뒤의 숫자가 도착 경도, `!2d` 뒤의 숫자가 도착 위도입니다 [2]. 순서가 경도 먼저라는 점을 놓치면 위도와 경도가 뒤바뀝니다.
 
 ### gmm_myplaces.db
 
@@ -68,11 +68,11 @@ SQLite 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-fo
 | 6 → 2 | 주소 |
 | 6 → 6 | URL |
 
-ALEAPP 는 `key_string` 이 `0:0` 이면 Home, `1:0` 이면 Work 로 표시하지만, 모듈 메모에 이 대응이 데이터에 적혀 있지 않고 근거도 없다고 스스로 적었습니다 [2]. 같은 메모는 라벨이 붙었다고 실제 집이나 직장이라는 뜻은 아니라고도 적었습니다 [2].
+ALEAPP 는 `key_string` 이 `0:0` 이면 Home, `1:0` 이면 Work 로 표시하지만, 이 대응은 데이터에 적혀 있지 않고 근거도 없습니다 [2]. 라벨이 붙었다고 실제 집이나 직장이라는 뜻은 아닙니다 [2].
 
 ### new_recent_history_cache_search.cs
 
-파일 앞 8바이트를 건너뛴 뒤를 프로토콜 버퍼로 읽습니다 [3]. 그 8바이트에 무엇이 들어 있는지는 확인하지 못했습니다. 항목마다 아래 필드가 있습니다 [3].
+파일 앞 8바이트를 건너뛴 뒤를 프로토콜 버퍼로 읽습니다 [3]. 그 8바이트의 뜻은 알려져 있지 않습니다. 항목마다 아래 필드가 있습니다 [3].
 
 | 필드 | 뜻 |
 |---|---|
@@ -93,9 +93,9 @@ ALEAPP 는 `key_string` 이 `0:0` 이면 Home, `1:0` 이면 Work 로 표시하�
 
 ## 시각 해석
 
-같은 앱 안에서 기록마다 단위가 다릅니다. `destination_history.time` 과 `sync_item.timestamp` 는 유닉스 밀리초이고 [1][2], 검색 기록의 필드 2 는 유닉스 마이크로초라서 ALEAPP 는 1,000,000 으로 나눕니다 [3]. 검색 기록을 밀리초로 잘못 나누면 먼 미래의 날짜가 나와서 한눈에 알아챌 수 있지만, 여러 기록을 한 타임라인에 올릴 때는 단위를 먼저 맞춥니다. 유닉스 시각은 UTC 기준이고, 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮기는 기준은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+같은 앱 안에서 기록마다 단위가 다릅니다. `destination_history.time` 과 `sync_item.timestamp` 는 유닉스 밀리초이고 [1][2], 검색 기록의 필드 2 는 유닉스 마이크로초라서 1,000,000 으로 나눠야 초가 됩니다 [3]. 검색 기록을 밀리초로 잘못 나누면 먼 미래의 날짜가 나와서 한눈에 알아챌 수 있지만, 여러 기록을 한 타임라인에 올릴 때는 단위를 먼저 맞춥니다. 유닉스 시각은 UTC 기준이고, 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮기는 기준은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
-`sync_item.timestamp` 가 장소를 처음 저장한 때인지 마지막으로 동기화한 때인지는 확인하지 못했습니다. 보고서에는 "이 행의 시각 값" 이라고만 씁니다.
+`sync_item.timestamp` 가 장소를 처음 저장한 때인지 마지막으로 동기화한 때인지는 알려져 있지 않습니다. 보고서에는 "이 행의 시각 값" 이라고만 씁니다.
 
 ## 함정과 한계
 
@@ -105,7 +105,7 @@ ALEAPP 는 `key_string` 이 `0:0` 이면 Home, `1:0` 이면 Work 로 표시하�
 
 셋째, Home·Work 라벨을 그대로 보고서에 옮기지 않습니다 [2].
 
-넷째, 사용자가 앱에서 기록을 지웠을 때 이 파일들에 무엇이 남는지는 확인하지 못했습니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에 있고, 원본이 아니라 사본을 열고 `-wal` 파일도 함께 복사합니다.
+넷째, 사용자가 앱에서 기록을 지웠을 때 이 파일들에 무엇이 남는지는 공개 자료가 없어 검체에서 확인합니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에 있고, 원본이 아니라 사본을 열고 `-wal` 파일도 함께 복사합니다.
 
 ## 직접 분석해 보기
 

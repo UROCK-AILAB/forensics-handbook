@@ -14,15 +14,15 @@ Android 기기 조사는 보존, 수집, 검사와 분석, 보고의 네 단계�
 
 ## 언제 쓰나
 
-사건에 휴대전화가 걸려 있을 때 조사 전체의 순서를 잡는 데 씁니다. NIST 는 모바일 포렌식 절차를 보존(Preservation), 수집(Acquisition), 검사와 분석(Examination and Analysis), 보고(Reporting) 의 네 장으로 나눠 설명하고 [1], 이 페이지도 같은 순서를 따릅니다.
+사건에 휴대전화가 걸려 있을 때 조사 전체의 순서를 잡는 데 씁니다. 모바일 포렌식 절차는 보존(Preservation), 수집(Acquisition), 검사와 분석(Examination and Analysis), 보고(Reporting) 의 네 단계로 나뉘고 [1], 이 페이지도 같은 순서를 따릅니다.
 
-NIST SP 800-101 Rev.1 은 2014년 문서라서 Android 10 부터 의무가 된 파일 단위 암호화(File-Based Encryption, FBE) 가 나오기 전에 쓰였습니다. 그래서 Android 10 이후 기기에 맞춰 덧붙인 내용은 따로 출처를 달았고, 출처 없이 이어 붙인 판단은 해석이라고 밝혔습니다.
+NIST SP 800-101 Rev.1 은 2014년 문서라서 Android 10 부터 의무가 된 파일 단위 암호화(File-Based Encryption, FBE) 가 나오기 전에 쓰였습니다. Android 10 이후 기기에 맞춘 내용은 따로 출처를 달았습니다.
 
 ## 절차
 
 ### 1단계: 보존
 
-보존은 기기와 이동식 매체의 데이터를 바꾸지 않고 보관하는 과정이고, 디지털 증거를 확보하는 첫 단계입니다 [1]. 수색, 식별, 기록, 수집이 모두 여기에 들어가며, 원래 상태로 보존하지 못하면 조사 전체가 흔들릴 수 있습니다 [1]. NIST 는 보존 단계를 아래 순서로 설명합니다 [1].
+보존은 기기와 이동식 매체의 데이터를 바꾸지 않고 보관하는 과정이고, 디지털 증거를 확보하는 첫 단계입니다 [1]. 수색, 식별, 기록, 수집이 모두 여기에 들어가며, 원래 상태로 보존하지 못하면 조사 전체가 흔들릴 수 있습니다 [1]. 보존 단계는 아래 순서로 진행합니다 [1].
 
 1. **현장 확보와 평가.** 증거는 기기뿐 아니라 UICC(SIM 카드) 와 딸린 매체까지 포함하고, 주변기기·케이블·전원 어댑터·액세서리도 챙깁니다 [1]. 이동식 매체나 UICC, 개인 컴퓨터가 기기 자체보다 쓸모 있을 때도 있습니다 [1]. 기기를 잘못 다루면 디지털 데이터를 잃을 수 있고, 기기와 사용자를 잇는 데 지문·DNA 같은 전통적인 감식이 필요할 수도 있습니다 [1]. 설명서·포장·청구서 같은 종이 자료에서도 기기 기능이나 통신사, 계정 정보를 알아낼 수 있습니다 [1]. 액체에 잠기거나 부서진 기기는 기관 절차에 따라 실험실로 보내고, 겉이 부서져도 데이터를 꺼내지 못한다고 단정하지 않습니다 [1].
 2. **현장 기록.** 모든 기기를 주변기기·케이블·전원·연결 상태와 함께 사진으로 찍되, 찍으면서 기기를 만지거나 오염시키지 않습니다 [1]. 화면이 보이면 화면도 찍고, 필요하면 시각, 서비스 상태, 배터리 잔량, 떠 있는 아이콘을 손으로 적습니다 [1].
@@ -30,9 +30,9 @@ NIST SP 800-101 Rev.1 은 2014년 문서라서 Android 10 부터 의무가 된 �
 4. **포장·운반·보관.** 알맞은 용기에 넣어 봉하고 기관 기준에 따라 표시합니다 [1]. 배터리로 돌아가는 기기를 하루 넘게 두면 전원이 떨어져 데이터를 잃을 위험이 있으니, 곧바로 실험실에 넘기고 전원 문제는 증거 관리자와 상의합니다 [1]. 보관 장소는 서늘하고 건조한 출입 통제 구역이고, 봉인한 용기째 둡니다 [1].
 5. **현장 선별 (Triage).** 현장에서 수동 또는 논리 수집을 한 뒤 곧바로 예비 분석을 하는 과정입니다 [1]. 증거가 있을 가능성이 큰 매체, 더 깊이 검사할 사건, 급히 조사할 자료를 이때 가려냅니다 [1].
 
-NIST 는 Android 처럼 암호화를 지원하는 기기가 잠금이 풀린 채 발견되면 가능한 한 현장에서 선별 처리하라고 권합니다. 화면이 잠기거나 배터리가 떨어지면 데이터를 더는 쓰지 못할 수 있기 때문입니다 [1]. Android 10 이상으로 출시한 기기는 FBE 를 써야 하고, 사용자 인증 뒤에만 쓸 수 있는 저장 영역(Credential Encrypted, CE) 은 사용자가 잠금을 푼 뒤에만 열립니다 [3]. 두 사실을 합치면 켜져 있고 잠금이 풀린 기기를 끄거나 잠기게 두는 판단이 수집 범위를 크게 바꿀 수 있다는 해석이 나옵니다. 암호화 구조는 [저장 공간 암호화](../../01-foundations/storage/encryption/index.md) 페이지를 봅니다.
+Android 처럼 암호화를 지원하는 기기가 잠금이 풀린 채 발견되면 가능한 한 현장에서 선별 처리합니다. 화면이 잠기거나 배터리가 떨어지면 데이터를 더는 쓰지 못할 수 있기 때문입니다 [1]. Android 10 이상으로 출시한 기기는 FBE 를 써야 하고, 사용자 인증 뒤에만 쓸 수 있는 저장 영역(Credential Encrypted, CE) 은 사용자가 잠금을 푼 뒤에만 열립니다 [3]. 그래서 켜져 있고 잠금이 풀린 기기를 끄거나 잠기게 두는 판단이 수집 범위를 크게 바꿀 수 있습니다. 암호화 구조는 [저장 공간 암호화](../../01-foundations/storage/encryption/index.md) 페이지를 봅니다.
 
-현장 선별을 할지 말지 정할 때 NIST 의 일반 현장 결정 나무(그림 7)가 따지는 항목은 아래와 같습니다 [1]. NIST 는 기관마다 선별 우선순위를 매기는 점수 방식을 두고 계속 고쳐 가라고 권합니다 [1].
+현장 선별을 할지 말지 정할 때 따지는 항목은 아래와 같습니다 [1]. 기관마다 선별 우선순위를 매기는 점수 방식을 두고 계속 고쳐 갑니다 [1].
 
 | 판단 항목 | 따지는 내용 |
 |---|---|
@@ -47,21 +47,21 @@ NIST 는 Android 처럼 암호화를 지원하는 기기가 잠금이 풀린 채
 
 수집은 기기를 식별하는 데서 시작합니다. 기기 종류와 운영체제에 따라 사본을 만드는 경로와 도구가 정해지기 때문입니다 [1]. 제조사, 모델, 통신사로 식별하고, 알 수 없으면 앞·뒤·옆을 사진으로 찍어 두면 나중에 모델과 당시 상태(화면 잠금 여부 등)를 알아내는 데 도움이 됩니다 [1]. 제조사 라벨을 떼거나 운영체제·앱을 바꿔 정체를 숨긴 기기도 있으니 사례마다 따로 봅니다 [1].
 
-수집 도구를 연결하기 전에는 기기의 지금 상태를 먼저 적어 둡니다. 조사자가 비행기 모드를 켜거나 개발자 옵션을 여는 순간 설정 값에 조사자의 조작이 섞이니, 수집 전 상태를 남겨 두어야 원래 상태와 조사자가 바꾼 부분을 나눌 수 있다는 해석입니다. 관찰한 폰에서 adb 일반 셸 권한으로 읽어 기록지에 옮길 만한 칸은 아래와 같았습니다. 값이 가려진 채로 관찰했고 각 값의 정확한 뜻은 출처로 확인하지 못했으니, 이름만 보고 값을 해석하지 않습니다.
+수집 도구를 연결하기 전에는 기기의 지금 상태를 먼저 적어 둡니다. 조사자가 비행기 모드를 켜거나 개발자 옵션을 여는 순간 설정 값에 조사자의 조작이 섞이니, 수집 전 상태를 남겨 두어야 원래 상태와 조사자가 바꾼 부분을 나눌 수 있습니다. adb 일반 셸 권한으로 읽어 기록지에 옮길 만한 칸은 아래와 같습니다(삼성 One UI 8.5 기준). 각 값의 정확한 뜻을 밝힌 공개 자료는 없으니, 이름만 보고 값을 해석하지 않습니다.
 
 | 기록할 것 | 어디서 읽나 | 칸·키 이름 |
 |---|---|---|
 | 빌드 | `dumpsys package` 의 Database versions 절 | `sdkVersion`, `sdkVersionFull`, `databaseVersion`, `buildFingerprint`, `fingerprint` |
-| 사용자와 잠금 상태 | `dumpsys user` | 사용자마다 `State:`(관찰 값 `RUNNING_UNLOCKED`), `Created:`, `Last logged in:`, `Start time:`, `Unlock time:`, `Last entered foreground:` |
+| 사용자와 잠금 상태 | `dumpsys user` | 사용자마다 `State:`(값 예: `RUNNING_UNLOCKED`), `Created:`, `Last logged in:`, `Start time:`, `Unlock time:`, `Last entered foreground:` |
 | 통신 상태 | settings global, `dumpsys wifi`, `dumpsys bluetooth_manager` | `airplane_mode_on`, `AirplaneModeOn` 줄, `Wi-Fi is enabled` 줄, `enabled:`·`state: ON` 줄 |
 | 디버깅 설정 | settings global | `adb_enabled`, `adb_wifi_enabled`, `development_settings_enabled`, `stay_on_while_plugged_in` |
 | 시각 설정 | settings global | `auto_time`, `auto_time_zone` |
 | 식별자 | settings secure | `android_id` |
 | 원격 잠금·도난 방지·기기 찾기 | settings secure | `remote_lock_setting`, `theft_detection_lock_supported`, `theft_protection_default_on`, `fmm_offline_find_support`, `fmm_community_finding`, `lock_screen_lock_after_timeout` |
 
-`dumpsys user` 에는 주 사용자(`isPrimary=true`) 말고 `isPrimary=false` 이고 `parentId` 가 붙은 두 번째 사용자도 보였습니다. 이 사용자가 무엇인지는 확인하지 못했지만, 사용자가 여럿이면 상태를 사용자마다 따로 적어야 합니다. 여러 사용자와 보안 폴더는 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 과 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+`dumpsys user` 에는 주 사용자(`isPrimary=true`) 말고 `isPrimary=false` 이고 `parentId` 가 붙은 두 번째 사용자가 나올 수 있습니다. 사용자가 여럿이면 상태를 사용자마다 따로 적습니다. 여러 사용자와 보안 폴더는 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 과 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
-`dumpsys usagestats` 의 이벤트 목록은 `Last ## hour events` 라는 제목 아래 최근 몇 시간 치만 나왔습니다. 이런 메모리 쪽 상태는 시간이 지나면 바뀌니 먼저 떠 둡니다. 다만 무엇부터 떠야 하는지 휘발성 순서를 정한 출처는 이 페이지에서 확인하지 않았습니다.
+`dumpsys usagestats` 의 이벤트 목록은 `Last ## hour events` 라는 제목 아래 최근 몇 시간 치만 나옵니다. 이런 메모리 쪽 상태는 시간이 지나면 바뀌니 먼저 떠 둡니다.
 
 상태를 적은 뒤에는 사건에 맞는 수집 방식을 고릅니다. 방식별 차이는 [수집 방식 비교](mobile-acquisition/methods.md), adb 를 쓰는 조건과 켤 때 남는 흔적은 [ADB로 볼 수 있는 것](mobile-acquisition/adb.md), 결과물 해시와 수집 날짜·시간대 기록은 [결과물 형식과 해시](mobile-acquisition/formats-hash.md) 페이지에 있습니다. 서버에만 있는 데이터는 [클라우드 데이터](cloud-data.md) 페이지를 봅니다.
 
@@ -77,7 +77,7 @@ NIST 는 Android 처럼 암호화를 지원하는 기기가 잠금이 풀린 채
 
 보고는 조사에서 한 모든 단계와 결론을 자세히 정리하는 과정이고, 모든 조치와 관찰을 꼼꼼히 적은 기록, 시험 결과, 데이터에서 끌어낸 추론의 설명이 바탕이 됩니다 [1]. 도구가 만든 보고서는 전체 보고서의 일부일 뿐이라서, 최종 보고서의 내용이 도구 화면과 맞는지 반드시 대조합니다 [1]. 도구가 가져오지 못한 데이터를 손으로 확인했다면 그 과정을 영상이나 사진으로 남겨 보고서에 넣을 수 있습니다 [1].
 
-NIST 는 미국 법무부 자료를 인용해 보고서에 넣을 항목을 아래처럼 듭니다 [1].
+보고서에 넣을 항목은 아래와 같습니다 [1].
 
 | 구분 | 항목 |
 |---|---|
@@ -98,21 +98,21 @@ NIST 는 미국 법무부 자료를 인용해 보고서에 넣을 항목을 아�
 | Android 10 이상 출시 기기 | FBE 가 필수이고, CE 영역은 사용자가 잠금을 푼 뒤에만 쓸 수 있습니다 [3] | [저장 공간 암호화](../../01-foundations/storage/encryption/index.md) |
 | adb 쓰는 기기 전반 | USB 디버깅은 개발자 옵션에서 켜고, 잠금을 푼 상태에서 컴퓨터의 RSA 키를 허용해야 합니다. 무선 디버깅은 Android 11 이상에서 됩니다 [4] | [ADB로 볼 수 있는 것](mobile-acquisition/adb.md) |
 | Android 12 이상을 대상으로 만든 앱 | adb backup 에 앱 데이터가 빠지고, 매니페스트에 `android:debuggable=true` 를 둔 앱만 예외입니다 [5] | [백업으로 수집](mobile-acquisition/backups.md) |
-| Android 17 기기 | Google Play 서비스 v26.19(2026년 5월) 릴리스 노트에 따르면 원격 잠금(Remote Lock) 과 도난 감지 잠금(Theft Detection Lock) 이 기본으로 켜집니다 [2] | [압수와 보관](mobile-acquisition/seizure-handling.md) |
+| Android 17 기기 | Google Play 서비스 v26.19(2026년 5월)부터 원격 잠금(Remote Lock) 과 도난 감지 잠금(Theft Detection Lock) 이 기본으로 켜집니다 [2] | [압수와 보관](mobile-acquisition/seizure-handling.md) |
 | Google Play 서비스 v26.22(2026년 6월) | 기기 초기 설정에 Find Hub 설정이 들어가 원격으로 기기 위치를 찾을 수 있습니다 [2] | [압수와 보관](mobile-acquisition/seizure-handling.md) |
-| 삼성 One UI 8.5 (관찰) | settings secure 에 원격 잠금·도난 방지·기기 찾기와 이름이 닿는 키가 있고, `dumpsys user` 에 두 번째 사용자가 보였습니다 | [설정 값](../../02-artifacts/system-account/settings.md) |
+| 삼성 One UI 8.5 | settings secure 에 원격 잠금·도난 방지·기기 찾기와 이름이 닿는 키가 있고, `dumpsys user` 에 두 번째 사용자가 나올 수 있습니다 | [설정 값](../../02-artifacts/system-account/settings.md) |
 
-원격 잠금과 도난 방지 기능이 기본으로 켜지는 흐름은, 원격으로도 공장 초기화를 할 수 있어 통신을 끊어야 한다는 NIST 의 설명 [1] 과 겹쳐 봐야 할 변화입니다. 삼성 One UI 에만 있는 절차상 차이(보안 폴더, Knox 등) 는 이 페이지에서 출처로 확인하지 못했습니다.
+원격 잠금과 도난 방지 기능이 기본으로 켜지는 흐름은, 원격 공장 초기화에 대비해 통신을 끊는 조치 [1] 와 함께 봐야 합니다. 삼성 One UI 에만 있는 절차상 차이(보안 폴더, Knox 등) 는 이 페이지에서 다루지 않습니다.
 
 ## 도구
 
-절차 문서에는 특정 도구가 정해져 있지 않고, NIST 도 도구마다 사건 파일 형식이 다르다는 점만 짚습니다 [1]. 수집 전 상태를 적을 때 쓴 `dumpsys` 와 `settings` 출력은 adb 일반 셸 권한으로 읽을 수 있었고, 읽는 조건은 [ADB로 볼 수 있는 것](mobile-acquisition/adb.md), 출력 모양은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 과 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다. 어떤 도구를 쓰든 결과를 믿기 전에 [도구 검증](../reporting/tool-validation.md) 을 거칩니다.
+절차에는 특정 도구가 정해져 있지 않고, 도구마다 사건 파일 형식이 다릅니다 [1]. 수집 전 상태를 적는 `dumpsys` 와 `settings` 출력은 adb 일반 셸 권한으로 읽을 수 있고, 읽는 조건은 [ADB로 볼 수 있는 것](mobile-acquisition/adb.md), 출력 모양은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 과 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다. 어떤 도구를 쓰든 결과를 믿기 전에 [도구 검증](../reporting/tool-validation.md) 을 거칩니다.
 
 ## 함정과 한계
 
-NIST SP 800-101 Rev.1 은 FBE 이전 문서라서, 켜진 기기를 끄는 판단처럼 Android 10 이후 기기에서 무게가 달라진 부분은 이 문서만으로 정할 수 없습니다. 원격 잠금·도난 방지 기능도 2026년 릴리스 노트에서 새로 기본값이 바뀌고 있어 [2], 기기를 확보한 시점의 Google Play 서비스 버전과 설정을 함께 적어 두어야 나중에 설명할 수 있습니다.
+NIST SP 800-101 Rev.1 은 FBE 이전 문서라서, 켜진 기기를 끄는 판단처럼 Android 10 이후 기기에서 무게가 달라진 부분은 이 문서만으로 정할 수 없습니다. 원격 잠금·도난 방지 기능도 2026년에 새로 기본값이 바뀌고 있어 [2], 기기를 확보한 시점의 Google Play 서비스 버전과 설정을 함께 적어 두어야 나중에 설명할 수 있습니다.
 
-관찰한 settings 키는 이름만 보고 뜻을 짐작하기 쉽습니다. `remote_lock_setting` 이나 `theft_protection_default_on` 같은 키가 있다는 사실은 확인했지만 값이 무엇을 뜻하는지는 확인하지 못했으니, 보고서에는 "키가 있고 값이 이러했다" 까지만 씁니다. `android_id` 도 값이 앱별·사용자별로 달라지는지 확인하지 않았으니 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 페이지와 맞춰 본 뒤에 식별자로 씁니다.
+settings 키는 이름만 보고 뜻을 짐작하기 쉽습니다. `remote_lock_setting` 이나 `theft_protection_default_on` 같은 키는 값이 무엇을 뜻하는지 알려져 있지 않으니, 보고서에는 "키가 있고 값이 이러했다" 까지만 씁니다. `android_id` 도 값이 앱별·사용자별로 달라질 수 있으니 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 페이지와 맞춰 본 뒤에 식별자로 씁니다.
 
 `dumpsys` 출력은 읽는 순간의 상태라서 시간이 지나면 같은 명령이라도 다른 값이 나옵니다. 조사자의 연결과 조작도 이 상태를 바꿀 수 있으니, 언제 무엇을 했는지 시각과 함께 적은 기록이 없으면 원래 상태와 조사자가 만든 변화를 나누지 못합니다.
 

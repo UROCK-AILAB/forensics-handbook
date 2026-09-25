@@ -7,7 +7,7 @@ nav_order: 460
 
 # 파일 구조 (usagestats)
 
-앱 사용 기록(usagestats)이 디스크에 어떤 폴더와 파일로 남는지, 파일 안의 칸과 시각을 어떻게 읽는지 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 이전 Android 버전에서는 다를 수 있습니다.
+앱 사용 기록(usagestats)이 디스크에 어떤 폴더와 파일로 남는지, 파일 안의 칸과 시각을 어떻게 읽는지 정리합니다. 소스에 근거한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 이전 Android 버전에서는 다를 수 있습니다.
 
 ## 한 줄 요약
 
@@ -19,11 +19,11 @@ usagestats 는 사용자별 CE 영역의 `usagestats` 폴더에 일·주·월·�
 
 현행 AOSP 의 UsageStatsService 는 `Environment.getDataSystemCeDirectory(userId)` 아래 `usagestats` 폴더에 기록하고, 실제 경로로 쓰면 `/data/system_ce/<사용자ID>/usagestats/` 입니다 [3]. CE 영역은 사용자가 잠금을 풀어야 열리는 저장 영역이라서, 암호화 구조는 [저장 공간 암호화](../../../01-foundations/storage/encryption/index.md) 페이지를 함께 봅니다. 예전에는 `/data/system/usagestats/` 아래 사용자별 하위 폴더(`/data/system/usagestats/<사용자ID>/`)를 썼고, ALEAPP 도 `*/system_ce/*/usagestats*` 와 `*/system/usagestats/*` 두 패턴을 모두 찾습니다 [2][3].
 
-서비스는 새 위치에 `migrated` 파일이 없으면 예전 사용자 폴더를 통째로 복사하고, `migrated` 파일에 백업 버전 값(BACKUP_VERSION)을 적은 뒤 예전 폴더를 지웁니다(deleteLegacyUserDir) [3]. 어느 Android 버전부터 system_ce 로 옮겼는지는 소스 주석으로 확인하지 못했습니다.
+서비스는 새 위치에 `migrated` 파일이 없으면 예전 사용자 폴더를 통째로 복사하고, `migrated` 파일에 백업 버전 값(BACKUP_VERSION)을 적은 뒤 예전 폴더를 지웁니다(deleteLegacyUserDir) [3]. 어느 Android 버전부터 system_ce 로 옮겼는지는 소스 주석에 나오지 않습니다.
 
 첫 잠금 해제 전에 생긴 이벤트는 서비스가 메모리에 모아 둡니다. 잠금 해제 전에 사용자가 멈추면(종료 등) 모아 둔 이벤트를 `/data/system_de/<사용자ID>/usagestats/` 폴더에 `pendingevents_<유닉스 밀리초>` 파일로 쓰고, 잠금 해제 때 이 파일을 읽어 합친 다음 이 system_de 쪽 `usagestats` 폴더를 통째로 지웁니다 [3]. 그래서 잠금 해제가 한 번이라도 끝난 기기에서는 이 파일이 남아 있지 않은 것이 보통입니다.
 
-모든 사용자에 걸친 부품 사용 기록 파일 `globalcomponentusage` 는 사용자별 폴더가 아니라 `/data/system/usagestats/` 에 따로 둡니다. 이 파일을 처음 추가할 때 `/data/system_de/usagestats/` 에 잘못 두었던 적이 있어서, 서비스는 새 위치에 없으면 그 옛 위치에서 읽고 옛 폴더는 지우지 않습니다(소스 주석) [3]. 그러니 `/data/system/usagestats/` 폴더가 있다고 해서 사용자별 기록을 옮기기 전의 기기라고 볼 수는 없습니다.
+모든 사용자에 걸친 부품 사용 기록 파일 `globalcomponentusage` 는 사용자별 폴더가 아니라 `/data/system/usagestats/` 에 따로 둡니다. 이 파일을 처음 추가할 때 `/data/system_de/usagestats/` 에 잘못 두었던 적이 있어서, 서비스는 새 위치에 없으면 그 옛 위치에서 읽고 옛 폴더는 지우지 않습니다 [3]. 그러니 `/data/system/usagestats/` 폴더가 있다고 해서 사용자별 기록을 옮기기 전의 기기라고 볼 수는 없습니다.
 
 ### 폴더 안 구성
 
@@ -38,7 +38,7 @@ usagestats 는 사용자별 CE 영역의 `usagestats` 폴더에 일·주·월·�
 | `breadcrumb` | 업그레이드 진행 상태(토큰과 이전 버전)를 적고, 업그레이드가 끝나면 지웁니다 |
 | `migrated` | 예전 경로에서 옮겨 왔다는 표시입니다 |
 
-구간 파일의 이름은 그 구간이 시작한 시각(beginTime)을 유닉스 밀리초 숫자 그대로 적은 값입니다. 체크인한 파일에는 접미사(CHECKED_IN_SUFFIX)가 붙지만 그 문자열 값은 확인하지 못했습니다. 파일은 AtomicFile 방식으로 쓰기 때문에 쓰는 도중에는 `.bak` 파일이 함께 생깁니다 [1].
+구간 파일의 이름은 그 구간이 시작한 시각(beginTime)을 유닉스 밀리초 숫자 그대로 적은 값입니다. 체크인한 파일에는 접미사(CHECKED_IN_SUFFIX)가 붙습니다. 파일은 AtomicFile 방식으로 쓰기 때문에 쓰는 도중에는 `.bak` 파일이 함께 생깁니다 [1].
 
 ### 형식 버전
 
@@ -48,7 +48,7 @@ usagestats 는 사용자별 CE 영역의 `usagestats` 폴더에 일·주·월·�
 | 4 | 프로토콜 버퍼 | UsageStatsProto |
 | 5 | 프로토콜 버퍼 V2(패키지 이름 등을 토큰으로 바꿔 저장) | UsageStatsProtoV2 |
 
-현행 AOSP 의 기본 버전(DEFAULT_CURRENT_VERSION)은 5이고 백업 버전(BACKUP_VERSION)은 4입니다 [1]. 버전을 올릴 때는 이전 형식으로 읽은 다음, 버전 5 이상으로 올리는 경우 토큰으로 바꿔 새 형식으로 다시 씁니다 [1]. 버전 5가 어느 Android 출시 버전부터 쓰였는지는 확인하지 못했습니다.
+현행 AOSP 의 기본 버전(DEFAULT_CURRENT_VERSION)은 5이고 백업 버전(BACKUP_VERSION)은 4입니다 [1]. 버전을 올릴 때는 이전 형식으로 읽은 다음, 버전 5 이상으로 올리는 경우 토큰으로 바꿔 새 형식으로 다시 씁니다 [1]. 검체가 어느 버전을 쓰는지는 `version` 파일로 확인합니다.
 
 ALEAPP 는 프로토콜 버퍼 파일을 문자열을 파일 안에 넣는 "Version 1" 과 바깥의 mappings 파일이 필요한 "Version 2" 로 나눠 부릅니다 [2]. AOSP 의 DB 버전 번호(4·5)와 이름이 다르니 보고서에서 섞어 쓰지 않습니다.
 
@@ -123,7 +123,7 @@ ALEAPP 는 프로토콜 버퍼 파일을 문자열을 파일 안에 넣는 "Vers
 event.mTimeStamp = beginTime + proto.readLong(EventObfuscatedProto.TIME_MS);
 ```
 
-쓸 때는 구간 시작 이후의 시각만 쓰는 것이 원칙이지만, 소스 주석에 따르면 넘김(rollover) 처리 때문에 시작 1시간 전까지는 허용합니다("a grace period of one hour before the begin time is allowed because of rollover logic"). 그래서 차이값이 음수일 수 있습니다 [5]. ALEAPP 는 음수가 아닌 값은 파일 이름에 더하고 음수 값은 절댓값을 그대로 시각으로 쓴다고 설명하며, 결과는 UTC 로 보여 줍니다 [2]. AOSP 는 쓸 때 시각에서 구간 시작을 뺀 값을 적고(차이가 0이면 1을 적습니다), 읽을 때는 부호와 상관없이 구간 시작에 더합니다 [5]. 곧 AOSP 기준으로 음수는 구간 시작보다 앞선 시각이라서, 음수를 절댓값으로 읽는 ALEAPP 와 결과가 다를 수 있고 음수가 나온 이벤트는 두 방법으로 모두 계산해 봅니다.
+쓸 때는 구간 시작 이후의 시각만 쓰는 것이 원칙이지만, 넘김(rollover) 처리 때문에 시작 1시간 전까지는 허용합니다. 그래서 차이값이 음수일 수 있습니다 [5]. ALEAPP 는 음수가 아닌 값은 파일 이름에 더하고 음수 값은 절댓값을 그대로 시각으로 쓰며, 결과는 UTC 로 보여 줍니다 [2]. AOSP 는 쓸 때 시각에서 구간 시작을 뺀 값을 적고(차이가 0이면 1을 적습니다), 읽을 때는 부호와 상관없이 구간 시작에 더합니다 [5]. 곧 AOSP 기준으로 음수는 구간 시작보다 앞선 시각이라서, 음수를 절댓값으로 읽는 ALEAPP 와 결과가 다를 수 있고 음수가 나온 이벤트는 두 방법으로 모두 계산해 봅니다.
 
 아래는 명세로 만든 계산 예시이고 검체에서 나온 값이 아닙니다.
 
@@ -137,7 +137,7 @@ event.mTimeStamp = beginTime + proto.readLong(EventObfuscatedProto.TIME_MS);
 
 ## 라이브 기기에서 보이는 모양 (dumpsys usagestats)
 
-adb 일반 셸 권한(UID 2000)으로 `dumpsys usagestats` 를 실행하면 파일이 아니라 서비스가 메모리에 든 최근 이벤트와 일간 통계를 글자로 보여 주고, 출력은 약 7,546줄이었습니다. 값을 가린 출력의 모양은 다음과 같습니다.
+adb 일반 셸 권한(UID 2000)으로 `dumpsys usagestats` 를 실행하면 파일이 아니라 서비스가 메모리에 든 최근 이벤트와 일간 통계를 글자로 보여 줍니다. 삼성 기기(Android 16, One UI 8.5)에서 값을 가린 출력의 모양은 다음과 같습니다.
 
 ```text
 user=#
@@ -157,15 +157,15 @@ user=#
     event aggregations
 ```
 
-맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 한글이 섞인 날짜 문자열이었습니다. "In-memory daily stats" 절에는 timeRange 가 4개 있었고 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙어 있었습니다. 이벤트 줄에 나온 이벤트 이름과 칸은 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
+맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 날짜 문자열이고, 한국어로 설정한 기기에서는 한글이 섞여 나옵니다. "In-memory daily stats" 절에는 timeRange 가 여러 개 나오고, 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙습니다. 이벤트 줄에 나온 이벤트 이름과 칸은 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
 
-현행 AOSP 의 dumpsys usagestats 는 `--checkin`, `-c`, `flush`, `apptimelimit`, `file`, `database-info`, `appstandby`, `stats-directory`, `mappings`, `broadcast-response-stats`, `app-component-usage` 인자를 받습니다 [3]. 이 인자들을 adb 일반 권한으로 실행한 결과는 관찰하지 못했습니다.
+현행 AOSP 의 dumpsys usagestats 는 `--checkin`, `-c`, `flush`, `apptimelimit`, `file`, `database-info`, `appstandby`, `stats-directory`, `mappings`, `broadcast-response-stats`, `app-component-usage` 인자를 받습니다 [3]. adb 일반 권한으로 어느 인자까지 쓸 수 있는지는 기기에서 확인합니다.
 
 ## 직접 분석해 보기
 
 ### 파일로 따라가기
 
-1. `usagestats` 폴더를 통째로 확보합니다. 구간 파일만 뽑고 `mappings` 와 `version` 을 빠뜨리면 이름과 형식 판단이 어려워집니다. 루팅되지 않은 기기에서 adb 일반 권한으로 이 폴더를 읽을 수 있는지는 확인하지 못했고, 확보 방법은 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
+1. `usagestats` 폴더를 통째로 확보합니다. 구간 파일만 뽑고 `mappings` 와 `version` 을 빠뜨리면 이름과 형식 판단이 어려워집니다. 확보 방법은 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 2. `version` 파일로 스키마 버전을 확인합니다. 1~3이면 XML, 4 이상이면 프로토콜 버퍼입니다.
 3. 구간 파일을 헥스 편집기로 열어 [프로토콜 버퍼](../../../01-foundations/data-formats/protobuf.md) 페이지의 방법으로 필드 번호를 찾고, 위 표와 맞춰 봅니다. `.proto` 없이 필드 번호만 풀어 주는 범용 프로토콜 버퍼 해독기를 써도 됩니다.
 4. 토큰 번호는 `mappings` 파일에서 문자열로 바꾸고, 시각 칸은 파일 이름에 더해 절대 시각으로 바꿉니다.

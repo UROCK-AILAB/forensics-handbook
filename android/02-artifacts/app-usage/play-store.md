@@ -32,9 +32,9 @@ ALEAPP 는 세 파일을 아래 패턴으로 찾고, 파일 이름 뒤의 `*` �
 */com.android.vending/databases/frosting.db*
 ```
 
-세 파일은 스토어 앱의 비공개 데이터 폴더에 있어서 앱 샌드박스의 보호를 받습니다. 폴더 구조와 사용자별 폴더는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md)에서, 이런 폴더를 확보하는 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다. ALEAPP 는 찾은 경로에서 사용자 번호를 읽어 결과의 User 칸에 넣으므로, 사용자가 여럿인 기기에서는 이 칸으로 어느 사용자의 스토어 기록인지 나눕니다. [1][2] 딸림 파일에 무엇이 남는지는 확인하지 못했습니다.
+세 파일은 스토어 앱의 비공개 데이터 폴더에 있어서 앱 샌드박스의 보호를 받습니다. 폴더 구조와 사용자별 폴더는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md)에서, 이런 폴더를 확보하는 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다. ALEAPP 는 찾은 경로에서 사용자 번호를 읽어 결과의 User 칸에 넣으므로, 사용자가 여럿인 기기에서는 이 칸으로 어느 사용자의 스토어 기록인지 나눕니다. [1][2] 딸림 파일에 무엇이 남는지는 공개 자료가 없어 검체에서 확인합니다.
 
-Android 버전·제조사별 칸 차이를 표로 정리할 근거는 아직 없습니다. 확인한 범위는 ALEAPP 시험 자료가 Android 10부터 16까지, 삼성 갤럭시(S10·S20·A53)를 포함한 기기 10대이고 세 모듈 모두 이 자료로 시험했다는 점까지입니다. [1][2][3]
+Android 버전·제조사별 칸 차이를 정리한 공개 자료는 없습니다. ALEAPP 의 세 모듈은 Android 10부터 16까지, 삼성 갤럭시(S10·S20·A53)를 포함한 기기 10대의 시험 자료로 시험되었고, 그 범위는 아래와 같습니다. [1][2][3]
 
 | DB | 시험 자료의 Android 범위 | 스토어 vc 범위 | DB 하나의 행 수 |
 |---|---|---|---|
@@ -42,7 +42,7 @@ Android 버전·제조사별 칸 차이를 표로 정리할 근거는 아직 없
 | `library.db` | 10~16 | 82481710~85180930 | 62~162행 |
 | `frosting.db` | 10~16 | 82481710~85180930 | 324~555행 |
 
-버전 차이로 확인한 것은 스토어 판에 따라 `appstate` 표에 install_reason 칸이 없을 수 있다는 한 가지뿐입니다. [1]
+알려진 버전 차이는 스토어 판에 따라 `appstate` 표에 install_reason 칸이 없을 수 있다는 점입니다. [1]
 
 ## 구조
 
@@ -58,7 +58,7 @@ Android 버전·제조사별 칸 차이를 표로 정리할 근거는 아직 없
 | `auto_update` | 자동 업데이트 | '0' 이면 빈칸, '1' 이면 Yes |
 | `account` | 스토어에서 쓴 계정 | 그대로 |
 
-install_reason 숫자가 어떤 뜻인지는 ALEAPP 에도 표가 없고 공식 정의도 확인하지 못했습니다. [1] account 칸 값이 이메일 주소 형식인지도 이번 자료로는 확인하지 못했습니다.
+install_reason 숫자의 뜻을 정리한 표는 ALEAPP 에도 없고 공개된 공식 정의도 없어서, 검체에서 확인합니다. [1] account 칸 값이 이메일 주소 형식인지도 검체에서 확인합니다.
 
 **`library.db` 의 `ownership` 표.** ALEAPP 는 조건 없이 아래 질의로 전부 읽고, purchase_time 을 UTC 로 바꿔 User, Purchase Time, Account, Doc ID 칸으로 보여 줍니다. [2]
 
@@ -76,7 +76,7 @@ SELECT last_updated, pk, apk_path FROM frosting
 
 **증명하는 것.** `appstate` 표에 어떤 패키지 행이 있으면 이 기기의 스토어 앱이 그 패키지를 다룬 기록이 있다는 뜻이고, 행에 적힌 계정과 두 시각은 스토어가 적어 둔 값입니다. `ownership` 표는 어느 계정에 어떤 doc ID 가 어느 시각에 소유 기록으로 올라 있는지 보여 주고, `frosting` 표는 패키지별로 스토어가 기록한 마지막 업데이트 시각과 APK 경로를 보여 줍니다. [1][2][3]
 
-**증명하지 못하는 것.** 아래 내용은 이번 자료로 확인하지 못해서 사실로 쓸 수 없습니다.
+**증명하지 못하는 것.** 아래 내용은 공개 자료로 밝혀진 것이 없어서 사실로 쓸 수 없고, 검체에서 따로 확인해야 합니다.
 
 - 앱을 지운 뒤에도 세 DB 에 행이 남는지
 - 스토어 밖에서(APK 파일을 직접 설치하는 등) 들어온 앱이 `appstate` 에 들어가는지
@@ -90,7 +90,7 @@ SELECT last_updated, pk, apk_path FROM frosting
 
 세 DB 의 시각 칸은 모두 유닉스 밀리초이고 기준은 UTC 이며, ALEAPP 는 값을 1000 으로 나눠 UTC 시각으로 바꿉니다. [1][2][3] 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
-`first_download_ms` 와 `last_update_timestamp_ms` 는 ALEAPP 가 각각 처음 받은 시각과 마지막 업데이트 시각이라고 이름 붙인 값입니다. [1] 이 값이 패키지 관리자가 [설치된 앱](packages/index.md) 기록에 적는 설치·업데이트 시각과 같은 순간을 가리키는지는 확인하지 못했으니, 두 값이 몇 초~몇 분 어긋나도 곧바로 조작으로 보지 않습니다. 0 이나 빈 값은 ALEAPP 가 빈칸으로 보여 주므로, 결과 화면의 빈칸이 "기록 없음" 인지 "값 0" 인지는 원본 DB 에서 다시 확인합니다. [1][3]
+`first_download_ms` 와 `last_update_timestamp_ms` 는 ALEAPP 가 각각 처음 받은 시각과 마지막 업데이트 시각이라고 이름 붙인 값입니다. [1] 이 값이 패키지 관리자가 [설치된 앱](packages/index.md) 기록에 적는 설치·업데이트 시각과 같은 순간을 가리키는지는 공개 자료가 없으니, 두 값이 몇 초~몇 분 어긋나도 곧바로 조작으로 보지 않습니다. 0 이나 빈 값은 ALEAPP 가 빈칸으로 보여 주므로, 결과 화면의 빈칸이 "기록 없음" 인지 "값 0" 인지는 원본 DB 에서 다시 확인합니다. [1][3]
 
 ## 함정과 한계
 
@@ -98,11 +98,11 @@ SELECT last_updated, pk, apk_path FROM frosting
 
 `ownership` 질의에는 조건이 없어서 ALEAPP 결과에 모든 행이 나오고, 행 종류를 거르는 일은 분석가 몫입니다. [2] 이 표에 앱이 아닌 항목이 섞일 수 있다는 말은 짐작일 뿐이라 보고서에는 쓰지 않습니다.
 
-기기 쪽에서 볼 수 있는 흔적도 해석에 주의합니다. 관찰한 기기에서 `dumpsys package` 의 "Known Packages:" 절에 Verifier 역할로 com.android.vending 과 com.samsung.android.sm.devicesecurity 가, Installer 역할로 com.google.android.packageinstaller 가 올라 있었고, 같은 절에 "Developer verification service provider: com.google.android.verifier" 도 있었습니다. 이 절은 역할을 맡은 패키지를 보여 줄 뿐이라서 개별 앱이 스토어로 들어왔다는 증거가 되지 않습니다.
+기기 쪽에서 볼 수 있는 흔적도 해석에 주의합니다. 삼성 기기의 예를 들면 `dumpsys package` 의 "Known Packages:" 절에 Verifier 역할로 com.android.vending 과 com.samsung.android.sm.devicesecurity 가, Installer 역할로 com.google.android.packageinstaller 가 올라 있고, 같은 절에 "Developer verification service provider: com.google.android.verifier" 도 나옵니다. 이 절은 역할을 맡은 패키지를 보여 줄 뿐이라서 개별 앱이 스토어로 들어왔다는 증거가 되지 않습니다.
 
-설정 값에도 Play 스토어나 설치와 이름이 닮은 키가 있었습니다. global 에 `phone_play_store_availability`·`default_install_location`·`set_install_location`, secure 에 `install_non_market_apps`·`play_bio_auth_opt_in_displaye_in_suw`·`play_determined_choice_program`·`play_determined_dma_eligibility` 가 보였지만 값은 가려져 있었고 뜻과 값 형식도 확인하지 못했습니다. 키 이름만 보고 뜻을 단정하지 않고, 설정 값 읽는 법은 [설정 값](../system-account/settings.md)을 봅니다.
+설정 값에도 Play 스토어나 설치와 이름이 닮은 키가 있습니다. global 에 `phone_play_store_availability`·`default_install_location`·`set_install_location`, secure 에 `install_non_market_apps`·`play_bio_auth_opt_in_displaye_in_suw`·`play_determined_choice_program`·`play_determined_dma_eligibility` 가 있지만, 뜻과 값 형식을 설명한 공개 자료는 없습니다. 키 이름만 보고 뜻을 단정하지 않고, 설정 값 읽는 법은 [설정 값](../system-account/settings.md)을 봅니다.
 
-`dumpsys usagestats` 이벤트에는 `type=SHORTCUT_INVOCATION ... shortcutId=AUTO_UPDATE` 줄이 4번 있었지만 패키지 이름이 가려져 있어 Play 스토어의 것인지 알 수 없습니다. 이 기기에서 adb 일반 권한으로 스토어의 databases 폴더를 읽었다는 관찰은 없으므로, 스토어 DB 를 그 방법으로 얻을 수 있다고 쓰지 않습니다.
+`dumpsys usagestats` 이벤트에 `type=SHORTCUT_INVOCATION ... shortcutId=AUTO_UPDATE` 줄이 나오기도 하지만, 이 줄만으로는 Play 스토어의 것인지 가릴 수 없어 같은 이벤트의 패키지 이름을 함께 봅니다. adb 일반 권한으로 스토어의 databases 폴더를 읽을 수 있다는 근거는 없으므로, 스토어 DB 를 그 방법으로 얻을 수 있다고 쓰지 않습니다.
 
 ## 직접 분석해 보기
 
@@ -138,7 +138,7 @@ FROM appstate;
 | [앱 사용 기록](usagestats/index.md) | 처음 받은 시각 뒤에 그 앱을 실제로 쓴 기록이 있는지 봅니다 |
 | [APK 정보](../embedded-metadata/apk.md) | `frosting` 의 APK 경로에 있는 파일의 서명·버전을 확인합니다 |
 
-Android 는 앱마다 어떻게 설치됐는지를 InstallSourceInfo 로 알려 주고, `PackageManager#getInstallSourceInfo(String)` 로 얻습니다. 항목은 설치를 요청한 패키지(getInitiatingPackageName)와 그 서명 정보(getInitiatingPackageSigningInfo), 요청한 패키지가 누구를 대신했는지(getOriginatingPackageName), 설치 책임 패키지(getInstallingPackageName), 업데이트 소유 패키지(getUpdateOwnerPackageName), 설치 당시의 출처 정보(getPackageSource)이고, 해당 값이 없으면 null 입니다. (현행 AOSP 기준) [4] 스토어로 받은 앱이면 설치 책임 패키지가 com.android.vending 으로 나올 것으로 보이지만 이번 자료에서 그렇게 적힌 문장은 찾지 못했습니다.
+Android 는 앱마다 어떻게 설치됐는지를 InstallSourceInfo 로 알려 주고, `PackageManager#getInstallSourceInfo(String)` 로 얻습니다. 항목은 설치를 요청한 패키지(getInitiatingPackageName)와 그 서명 정보(getInitiatingPackageSigningInfo), 요청한 패키지가 누구를 대신했는지(getOriginatingPackageName), 설치 책임 패키지(getInstallingPackageName), 업데이트 소유 패키지(getUpdateOwnerPackageName), 설치 당시의 출처 정보(getPackageSource)이고, 해당 값이 없으면 null 입니다. (현행 AOSP 기준) [4] 스토어로 받은 앱이면 설치 책임 패키지가 com.android.vending 으로 나올 것으로 보이지만, 이를 밝힌 공개 문서는 없으니 검체에서 확인합니다.
 
 앱이 어디서 들어왔는지를 묻는 조사라면 [악성 앱은 어디서 들어왔나](../../04-scenarios/incident/initial-access.md), 앱을 언제 썼는지를 묻는 조사라면 [어떤 앱을 언제 썼나](../../04-scenarios/activity/app-usage.md)에서 이 기록의 쓰임새를 이어서 봅니다.
 

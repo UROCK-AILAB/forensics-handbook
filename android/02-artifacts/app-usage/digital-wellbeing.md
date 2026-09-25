@@ -12,32 +12,32 @@ nav_order: 490
 
 ## 무엇을 기록하나 · 왜 생기나
 
-디지털 웰빙은 앱별 사용 시간을 보여 주는 Google 앱입니다. ALEAPP 가 읽는 이 앱의 DB 에는 이벤트마다 시각, 패키지, 이벤트 종류가 한 줄씩 들어 있고, 액티비티 이름까지 적는 별도 표도 있습니다 [1].
+디지털 웰빙은 앱별 사용 시간을 보여 주는 Google 앱입니다. 이 앱의 DB 에는 이벤트마다 시각, 패키지, 이벤트 종류가 한 줄씩 들어 있고, 액티비티 이름까지 적는 별도 표도 있습니다 [1].
 
-ALEAPP 가 이 DB 의 숫자에 붙이는 이벤트 이름 [1] 은 `dumpsys usagestats` 에 찍히는 `type=` 이름과 같은 체계이고, 관찰 기기의 `dumpsys usagestats` 에도 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED, NOTIFICATION_INTERRUPTION, KEYGUARD_HIDDEN, FOREGROUND_SERVICE_START·FOREGROUND_SERVICE_STOP 이 보였습니다. 다만 디지털 웰빙이 usagestats 에서 이벤트를 받아 옮겨 적는다는 구조 설명은 공식 문서로 확인하지 못했습니다. 두 기록이 같은 출처에서 나왔는지는 검체마다 두 쪽 시각을 맞춰 보고 판단해야 합니다.
+이 DB 의 숫자가 뜻하는 이벤트 이름 [1] 은 `dumpsys usagestats` 에 찍히는 `type=` 이름과 같은 체계이고, `dumpsys usagestats` 에도 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED, NOTIFICATION_INTERRUPTION, KEYGUARD_HIDDEN, FOREGROUND_SERVICE_START·FOREGROUND_SERVICE_STOP 이 나옵니다. 다만 디지털 웰빙이 usagestats 에서 이벤트를 받아 옮겨 적는다는 공식 설명은 없습니다. 두 기록이 같은 출처에서 나왔는지는 검체마다 두 쪽 시각을 맞춰 보고 판단해야 합니다.
 
 ## 위치와 버전별 차이
 
-Google 디지털 웰빙 앱의 DB 는 앱 데이터 영역에 있고, ALEAPP 는 아래 경로 패턴으로 찾습니다 [1].
+Google 디지털 웰빙 앱의 DB 는 앱 데이터 영역의 아래 경로 패턴에 있습니다 [1].
 
 ```
 */com.google.android.apps.wellbeing/databases/app_usage*
 ```
 
-앱 데이터 영역의 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다. 루팅되지 않은 기기에서 adb 일반 권한으로 이 DB 를 읽을 수 없다는 점은 앱 데이터 영역의 일반 원칙이고, 이 DB 에 대해 따로 확인하지는 않았습니다.
+앱 데이터 영역의 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다. 앱 데이터 영역이라 루팅되지 않은 기기에서는 adb 일반 권한으로 이 DB 를 읽을 수 없습니다.
 
-| 기기 | 기록하는 쪽 | 확인한 것 |
+| 기기 | 기록하는 쪽 | 내용 |
 |---|---|---|
-| Google 디지털 웰빙 앱이 깔린 기기 | `com.google.android.apps.wellbeing` | DB 경로 패턴과 표 구조(ALEAPP 기준) [1] |
-| 삼성 One UI | 확인하지 못함 | 아래 관찰 내용만 있음 |
+| Google 디지털 웰빙 앱이 깔린 기기 | `com.google.android.apps.wellbeing` | DB 경로 패턴과 표 구조 [1] |
+| 삼성 One UI | 공개 자료 없음 | 아래 설명 참고 |
 
-관찰 기기의 `dumpsys package` 출력에서 "Known Packages" 의 `Wellbeing:` 항목 값은 `none` 이었습니다. 시스템이 디지털 웰빙 역할로 지정한 패키지가 이 기기에는 없다는 뜻입니다. 같은 기기의 settings system 키 가운데 `add_info_com_samsung_android_forest#screenTime` 이라는 이름이 있었지만, 키 이름만 확인했고 값과 뜻은 모릅니다. 삼성 기기에서 화면 사용 시간 기능이 어떤 앱의 어떤 DB 에 기록하는지는 확인하지 못했으니, 삼성 검체에서는 Google 경로가 없다고 해서 사용 이벤트 기록이 없다고 결론 내리면 안 됩니다. 설정 키를 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
+삼성 기기에서는 `dumpsys package` 출력의 "Known Packages" 에서 `Wellbeing:` 항목 값이 `none` 으로 나올 수 있습니다. 시스템이 디지털 웰빙 역할로 지정한 패키지가 없다는 뜻입니다. settings system 키 가운데 `add_info_com_samsung_android_forest#screenTime` 이라는 키도 있는데, 값과 뜻은 공개 자료가 없습니다. 삼성 기기에서 화면 사용 시간 기능이 어떤 앱의 어떤 DB 에 기록하는지도 공개 자료가 없으니, 삼성 검체에서는 Google 경로가 없다고 해서 사용 이벤트 기록이 없다고 결론 내리면 안 됩니다. 설정 키를 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
 
-DB 를 몇 날치 남기는지, 어느 Android 버전부터 이 앱이 있었는지는 확인하지 못했습니다.
+DB 를 몇 날치 남기는지, 어느 Android 버전부터 이 앱이 있었는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
-`app_usage` DB 에서 ALEAPP 가 읽는 표는 네 개입니다 [1]. SQLite 파일 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다.
+`app_usage` DB 에서 이벤트를 담은 표는 네 개입니다 [1]. SQLite 파일 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다.
 
 | 표 | 칸 | 담긴 것 |
 |---|---|---|
@@ -48,7 +48,7 @@ DB 를 몇 날치 남기는지, 어느 Android 버전부터 이 앱이 있었는
 
 `events.package_id` 를 `packages._id` 와 이어야 패키지 이름이 나오고, `component_events.component_id` 는 `components._id` 로, 다시 `components.package_id` 는 `packages._id` 로 이어집니다 [1].
 
-`type` 칸의 숫자를 ALEAPP 는 아래처럼 풉니다 [1]. 각 이벤트가 무슨 순간에 생기는지는 [앱 사용 기록 (usagestats)](usagestats/index.md) 페이지에서 설명합니다.
+`type` 칸의 숫자는 아래 뜻입니다 [1]. 각 이벤트가 무슨 순간에 생기는지는 [앱 사용 기록 (usagestats)](usagestats/index.md) 페이지에서 설명합니다.
 
 | type | 이름 |
 |---|---|
@@ -76,17 +76,17 @@ ALEAPP 가 풀어 주는 숫자는 이 아홉 개이고, 표에 없는 숫자가
 
 ## 시각 해석
 
-`timestamp` 는 유닉스 에포크 밀리초이고, ALEAPP 는 1000 으로 나눠 UTC 시각으로 바꿉니다 [1]. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 기기 시간대를 먼저 확인합니다. 값을 읽는 일반 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+`timestamp` 는 유닉스 에포크 밀리초라서 1000 으로 나누면 UTC 시각이 됩니다 [1]. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 기기 시간대를 먼저 확인합니다. 값을 읽는 일반 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
-기기 시계를 사람이 바꾸면 그 뒤 이벤트의 벽시계 시각도 따라 바뀔 수 있습니다. 관찰 기기의 `dumpsys usagestats` 에는 `Time changed. actualSystemTime:... expectedSystemTime:...` 모양의 줄이 있어서 시스템 쪽에서는 시계 변경을 따로 적습니다. 디지털 웰빙 DB 가 시계 변경을 어떻게 처리하는지는 확인하지 못했으니, 시각 순서가 뒤집힌 구간이 보이면 usagestats 쪽 기록과 맞춰 봅니다.
+기기 시계를 사람이 바꾸면 그 뒤 이벤트의 벽시계 시각도 따라 바뀔 수 있습니다. `dumpsys usagestats` 에는 `Time changed. actualSystemTime:... expectedSystemTime:...` 모양의 줄이 있어서 시스템 쪽에서는 시계 변경을 따로 적습니다. 디지털 웰빙 DB 가 시계 변경을 어떻게 처리하는지는 공개 자료가 없으니, 시각 순서가 뒤집힌 구간이 보이면 usagestats 쪽 기록과 맞춰 봅니다.
 
 ## 함정과 한계
 
-첫째, 이 페이지의 표 구조와 숫자 뜻은 ALEAPP 파서가 기대하는 모양이고, 앱 판마다 표가 바뀌었는지는 확인하지 못했습니다. 파서가 빈 결과를 내면 표 이름부터 직접 열어 봅니다.
+첫째, 이 페이지의 표 구조와 숫자 뜻은 ALEAPP 파서가 기대하는 모양이고, 앱 판에 따라 표가 바뀌었을 수 있습니다. 파서가 빈 결과를 내면 표 이름부터 직접 열어 봅니다.
 
-둘째, 삼성 기기처럼 Google 디지털 웰빙이 없는 기기가 있습니다. 관찰 기기에서는 디지털 웰빙 역할 패키지가 `none` 이었습니다.
+둘째, 삼성 기기처럼 Google 디지털 웰빙이 없는 기기가 있습니다. 이런 기기에서는 디지털 웰빙 역할 패키지가 `none` 으로 나옵니다.
 
-셋째, 보존 기간을 모르니 가장 오래된 줄의 날짜를 "사용 시작일" 로 읽으면 안 됩니다. 가장 오래된 줄은 "이 DB 에 남은 기록의 시작" 일 뿐입니다.
+셋째, 보존 기간이 알려져 있지 않으니 가장 오래된 줄의 날짜를 "사용 시작일" 로 읽으면 안 됩니다. 가장 오래된 줄은 "이 DB 에 남은 기록의 시작" 일 뿐입니다.
 
 넷째, 사용자가 디지털 웰빙 앱 데이터를 지우거나 앱을 끄면 이 DB 가 비거나 없어질 수 있습니다. 이 경우에도 usagestats 같은 시스템 쪽 기록이 남아 있을 수 있어서, 두 쪽 기록량이 크게 다르면 그 차이 자체를 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 관점에서 살펴봅니다.
 

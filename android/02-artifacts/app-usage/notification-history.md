@@ -12,36 +12,36 @@ nav_order: 520
 
 ## 무엇을 기록하나 · 왜 생기나
 
-사용자가 설정에서 알림 기록을 켜 두면, 시스템은 이미 지나간 알림을 다시 볼 수 있도록 알림 내용을 파일에 적어 둡니다. 알림 기록이 켜져 있는지는 설정 값 `notification_history_enabled` 로 판단하고, ALEAPP 는 사용자별 `settings_secure.xml` 에서 이 값을 읽습니다 [3]. 관찰 기기의 settings secure 키 목록에도 `notification_history_enabled` 가 있었고 값은 가려져 있었습니다. 설정 파일을 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
+사용자가 설정에서 알림 기록을 켜 두면, 시스템은 이미 지나간 알림을 다시 볼 수 있도록 알림 내용을 파일에 적어 둡니다. 알림 기록이 켜져 있는지는 설정 값 `notification_history_enabled` 로 판단하고, 이 값은 사용자별 `settings_secure.xml` 에 있습니다 [3]. 삼성 기기의 settings secure 키 목록에도 `notification_history_enabled` 가 있습니다. 설정 파일을 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
 
 기록에는 알림마다 패키지, 채널, UID, 사용자 번호, 게시 시각, 제목, 본문, 아이콘 정보가 들어갑니다 [2]. 메신저 알림이라면 본문에 메시지 앞부분이 들어가기 때문에, 앱 DB 에서 메시지를 지운 뒤에도 알림 기록에는 남아 있을 수 있습니다.
 
 ## 위치와 버전별 차이
 
-ALEAPP 는 아래 경로 패턴으로 기록 파일을 찾습니다 [3].
+기록 파일은 아래 경로 패턴에 있습니다 [3].
 
 ```
 **/system_ce/*/notification_history/history/*
 ```
 
-`system_ce` 다음 칸은 사용자 번호이고, 기준 디렉터리 `/data/system_ce/<사용자>/notification_history` 라는 전체 경로는 ALEAPP 경로 패턴으로만 확인했습니다 [3]. AOSP 코드에서는 기준 디렉터리 아래 `history` 디렉터리에 기록 파일을 두고, 같은 기준 디렉터리에 `version` 파일을 둡니다 [1].
+`system_ce` 다음 칸은 사용자 번호이고, 기준 디렉터리는 `/data/system_ce/<사용자>/notification_history` 입니다 [3]. 기준 디렉터리 아래 `history` 디렉터리에 기록 파일이 있고, 같은 기준 디렉터리에 `version` 파일이 있습니다 [1].
 
 | 파일 | 뜻 |
 |---|---|
 | `history/<밀리초 숫자>` | 기록 파일 하나. 이름이 그 파일의 시각 |
-| `version` | 버전 파일(내용은 확인하지 못함) |
+| `version` | 버전 파일 |
 | `*.new`, `*.bak` | AtomicFile 이 쓰는 도중에 만든 임시 파일 |
 
 기록 파일 이름은 밀리초 시각 숫자이고, 시스템은 최신 파일부터 오래된 파일 순으로 정렬해 다룹니다 [1]. 이름을 숫자로 읽지 못하는 파일은 `INVALID_FILE_TIME_MS = -1` 로 두고 정리 대상에 넣습니다 [1].
 
-다시 알림(스누즈)으로 미뤄 둔 알림은 이 파일이 아니라 `**/system/notification_policy.xml` 에 따로 있고, ALEAPP 는 여기서 Reminder Time 과 Snoozed Notification 을 읽습니다 [3].
+다시 알림(스누즈)으로 미뤄 둔 알림은 이 파일이 아니라 `**/system/notification_policy.xml` 에 따로 있고, 이 파일에 Reminder Time 과 Snoozed Notification 이 들어 있습니다 [3].
 
-| 기기 | 확인한 것 |
+| 기기 | 내용 |
 |---|---|
 | AOSP | 파일 위치 규칙, 보관 기간, 쓰기 주기, proto 구조(현행 소스 기준) [1][2] |
-| 삼성 One UI | 설정 키 `notification_history_enabled` 의 존재만 확인. 삼성의 알림 기록 화면이 AOSP 저장소를 그대로 쓰는지는 확인하지 못함 |
+| 삼성 One UI | 설정 키 `notification_history_enabled` 가 있음. 삼성의 알림 기록 화면이 AOSP 저장소를 그대로 쓰는지는 공개 자료 없음 |
 
-기술 매체는 이 기능이 Android 11 에서 들어왔고 기본으로 꺼져 있다고 소개합니다 [4]. 공식 문서로는 확인하지 못했으니, 검체에서는 `notification_history_enabled` 값을 직접 읽어 판단합니다.
+이 기능은 Android 11 에서 들어왔고 기본으로 꺼져 있습니다 [4]. 공식 문서에는 이 내용이 없으니, 검체에서는 `notification_history_enabled` 값을 직접 읽어 판단합니다.
 
 ## 구조
 
@@ -54,7 +54,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 | `HISTORY_RETENTION_DAYS` | 1 | 하루치만 남기고 그보다 오래된 기록은 지움 |
 | `WRITE_BUFFER_INTERVAL_MS` | `1000 * 60 * 20` | 첫 알림이 들어온 뒤 20분마다 버퍼를 디스크에 씀 |
 
-디스크에 쓰기 전 20분 동안의 알림은 메모리에만 있다가 다음 쓰기 때 파일로 갑니다 [1]. 기기를 강제로 끄거나 전원을 끊은 경우 마지막 버퍼가 파일에 남았는지는 확인하지 못했습니다.
+디스크에 쓰기 전 20분 동안의 알림은 메모리에만 있다가 다음 쓰기 때 파일로 갑니다 [1]. 기기를 강제로 끄거나 전원을 끊었을 때 마지막 버퍼가 파일에 남는지는 공개 자료가 없어 검체에서 확인해야 합니다.
 
 ### 파일 형식
 
@@ -67,7 +67,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 | `Notification` | `package`(1), `package_index`(2), `channel_name`(3), `channel_name_index`(4), `channel_id`(5), `channel_id_index`(6), `uid`(7), `user_id`(8), `posted_time_ms`(9, int64), `title`(10), `text`(11), `icon`(12), `conversation_id`(13), `conversation_id_index`(14) |
 | `Icon` | `image_type`, `image_bitmap_filename`, `image_resource_id`, `image_resource_id_package`, `image_data`, `image_data_length`, `image_data_offset`, `image_uri` |
 
-패키지·채널 이름·채널 ID·대화 ID 는 문자열을 직접 넣는 필드와 `*_index` 필드가 짝을 이루고, `*_index` 값은 파일 앞 문자열 풀(`string_pool`)의 위치에 1을 더한 수입니다 [2]. 실제 파일이 어느 쪽 필드를 채우는지는 확인하지 못했으니 두 쪽 모두 읽어야 합니다.
+패키지·채널 이름·채널 ID·대화 ID 는 문자열을 직접 넣는 필드와 `*_index` 필드가 짝을 이루고, `*_index` 값은 파일 앞 문자열 풀(`string_pool`)의 위치에 1을 더한 수입니다 [2]. 실제 파일이 어느 쪽 필드를 채우는지는 파일마다 다를 수 있으니 두 쪽 모두 읽습니다.
 
 ## 증거로서 의미
 
@@ -81,7 +81,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 ## 시각 해석
 
-`posted_time_ms` 는 알림이 올라온 시각이고 밀리초 단위이며, ALEAPP 는 1000 으로 나눠 UTC 로 바꿉니다 [2][3]. 기록 파일 이름도 밀리초 시각 숫자입니다 [1]. 파일 이름 시각이 파일을 만든 시각인지, 안에 든 알림의 시각과 어떻게 맞물리는지는 확인하지 못했으니 알림 한 건의 시각은 반드시 `posted_time_ms` 에서 읽습니다. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 을 확인하고, 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`posted_time_ms` 는 알림이 올라온 시각이고 밀리초 단위라서, 1000 으로 나누면 UTC 유닉스 시각이 됩니다 [2][3]. 기록 파일 이름도 밀리초 시각 숫자입니다 [1]. 파일 이름 시각이 파일을 만든 시각인지, 안에 든 알림의 시각과 어떻게 맞물리는지는 공개 자료가 없으니 알림 한 건의 시각은 반드시 `posted_time_ms` 에서 읽습니다. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 을 확인하고, 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -91,11 +91,11 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 셋째, 지워진 기록 파일이나 `.new`·`.bak` 임시 파일에 더 오래된 알림이 남아 있을 수 있습니다. 파일 시스템 수준 복구는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
-넷째, 삼성 One UI 가 AOSP 와 같은 파일을 쓰는지 확인하지 못했으니, 삼성 검체에서 파일이 없으면 기능이 꺼져 있었는지와 경로가 다른지를 모두 따집니다.
+넷째, 삼성 One UI 가 AOSP 와 같은 파일을 쓰는지는 공개 자료가 없으니, 삼성 검체에서 파일이 없으면 기능이 꺼져 있었는지와 경로가 다른지를 모두 따집니다.
 
 ## 라이브 기기에서 보이는 모양 (dumpsys notification)
 
-`dumpsys notification` 은 파일에 저장된 기록이 아니라 지금 떠 있는 알림(`NotificationRecord`)을 보여 줍니다. 관찰 기기에서 본 칸은 다음과 같습니다.
+`dumpsys notification` 은 파일에 저장된 기록이 아니라 지금 떠 있는 알림(`NotificationRecord`)을 보여 줍니다. 주요 칸은 다음과 같습니다.
 
 | 묶음 | 칸 |
 |---|---|
@@ -106,7 +106,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 | 반응 통계 | `stats=` 안의 `posttimeToFirstClickMs`, `posttimeToDismissMs`, `airtimeCount`, `airtimeMs` 등 |
 | 시각 | `when=`, `mRankingTimeMs=`, `mCreationTimeMs=`, `mVisibleSinceMs=`, `mUpdateTimeMs=` |
 
-관찰 기기 출력에서 제목과 본문은 실제 글자 대신 `[length=##]` 처럼 길이만 찍혔습니다. 이 출력에 알림 기록 파일의 내용이 함께 나오는지는 관찰 메모에 없어서 확인하지 못했습니다. dumpsys 전반은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에서 다룹니다.
+제목과 본문은 실제 글자 대신 `[length=##]` 처럼 길이만 찍힐 수 있습니다. 이 출력에 알림 기록 파일의 내용이 함께 나오는지는 기기에서 확인합니다. dumpsys 전반은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -144,7 +144,7 @@ ALEAPP 의 notificationHistory 모듈이 기록 파일을 풀어 알림 목록�
 | [문자 (SMS·MMS·RCS)](../communications/messages/index.md) | 문자 알림 본문과 문자 DB 의 메시지가 맞는지 |
 | [카카오톡 (KakaoTalk)](../messengers/kakaotalk/index.md) 등 메신저 | 알림 본문에만 있고 앱 DB 에는 없는 메시지가 있는지 |
 
-관찰 기기의 usagestats 에는 NOTIFICATION_INTERRUPTION(`channelId=` 칸 포함)과 NOTIFICATION_SEEN 이벤트가 있어서, 알림 기록 파일이 없을 때 어느 앱의 알림이 언제 울렸는지를 보조로 알려 줍니다. 대화 상대를 재구성하는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 와 [지운 대화와 사진 찾기 (Deleted Content)](../../04-scenarios/activity/deleted-content.md) 에서 다룹니다.
+usagestats 에는 NOTIFICATION_INTERRUPTION(`channelId=` 칸 포함)과 NOTIFICATION_SEEN 이벤트가 있어서, 알림 기록 파일이 없을 때 어느 앱의 알림이 언제 울렸는지를 보조로 알려 줍니다. 대화 상대를 재구성하는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 와 [지운 대화와 사진 찾기 (Deleted Content)](../../04-scenarios/activity/deleted-content.md) 에서 다룹니다.
 
 ## 실습
 

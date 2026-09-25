@@ -21,7 +21,7 @@ Android 기기의 시각 값은 1970년 기준 Unix 시각, 1601년 기준 Chrom
 | 연도 없는 "월-일 시:분:초.밀리초" | dumpsys batterystats·wifi·bluetooth_manager, logcat | [배터리 사용 기록](../../02-artifacts/app-usage/batterystats.md), [logcat](../../02-artifacts/logs/logcat.md) |
 | 이름으로만 시각을 알 수 있는 설정 값 | settings global·secure·system | [설정 값](../../02-artifacts/system-account/settings.md) |
 
-앱 SQLite 데이터베이스가 칸마다 어떤 단위를 쓰는지는 앱과 버전마다 달라서 이 페이지에서 일반 규칙으로 정하지 않습니다. 삼성 기본 앱의 단위도 여기서는 확인하지 못했고, 각 앱 페이지에서 칸마다 따로 확인합니다.
+앱 SQLite 데이터베이스가 칸마다 어떤 단위를 쓰는지는 앱과 버전마다 달라서 이 페이지에서 일반 규칙으로 정하지 않습니다. 삼성 기본 앱도 각 앱 페이지에서 칸마다 따로 확인합니다.
 
 ## 구조
 
@@ -46,11 +46,11 @@ Unix 초 = (Chrome 값 − 11644473600000000) ÷ 1,000,000
 
 ### 16진수로 적은 첫 설치 시각
 
-Android 패키지 관리자 설정 코드(`Settings.java`)는 첫 설치 시각을 `first-install-time` 속성(`ATTR_FIRST_INSTALL_TIME`)에 두고, 사용자별 `package-restrictions.xml` 을 읽을 때 이 속성을 `getAttributeLongHex` 로 읽습니다[1]. 그래서 이 파일의 첫 설치 시각은 10진수가 아니라 16진수 긴 정수로 적혀 있고, 사용자마다 값이 따로 있습니다. 앱이 보는 `PackageInfo.firstInstallTime` 은 `System.currentTimeMillis()` 와 같은 단위, 곧 Unix 밀리초라고 AOSP 소스 주석에 적혀 있습니다[3]. 파일에 적힌 값도 같은 값이라 밀리초일 가능성이 높지만, 파일 값의 단위를 원문에서 직접 확인하지는 못했습니다. 현재 AOSP 는 이 파일들을 `TypedXmlSerializer`·`TypedXmlPullParser` 로 읽고 쓰기 때문에 일반 텍스트 XML 이 아닌 [안드로이드 바이너리 XML](../data-formats/abx.md)일 수 있습니다[1]. 파일 위치와 나머지 칸은 [설치된 앱](../../02-artifacts/app-usage/packages/index.md)에서 다룹니다.
+Android 패키지 관리자는 첫 설치 시각을 `first-install-time` 속성(`ATTR_FIRST_INSTALL_TIME`)에 두고, 사용자별 `package-restrictions.xml` 을 읽을 때 이 속성을 `getAttributeLongHex` 로 읽습니다[1]. 그래서 이 파일의 첫 설치 시각은 10진수가 아니라 16진수 긴 정수로 적혀 있고, 사용자마다 값이 따로 있습니다. 앱이 보는 `PackageInfo.firstInstallTime` 은 `System.currentTimeMillis()` 와 같은 단위, 곧 Unix 밀리초입니다[3]. 파일에 적힌 값도 같은 값이라 밀리초일 가능성이 높습니다. 현재 AOSP 는 이 파일들을 `TypedXmlSerializer`·`TypedXmlPullParser` 로 읽고 쓰기 때문에 일반 텍스트 XML 이 아닌 [안드로이드 바이너리 XML](../data-formats/abx.md)일 수 있습니다[1]. 파일 위치와 나머지 칸은 [설치된 앱](../../02-artifacts/app-usage/packages/index.md)에서 다룹니다.
 
 ### dumpsys 와 logcat 이 보여 주는 문자열
 
-dumpsys 와 logcat 은 저장된 숫자를 그대로 내보이지 않고 사람이 읽는 문자열로 바꿔 찍는 경우가 많고, 서비스마다 모양이 다릅니다. 아래는 실제 기기에서 본 출력의 모양입니다. 관찰 기록에서 값은 모두 가려져 있어 칸 이름과 모양만 근거로 삼았습니다.
+dumpsys 와 logcat 은 저장된 숫자를 그대로 내보이지 않고 사람이 읽는 문자열로 바꿔 찍는 경우가 많고, 서비스마다 모양이 다릅니다. 서비스별 출력 모양은 아래와 같습니다.
 
 | 출력 | 칸 이름·줄 | 값의 모양 |
 |---|---|---|
@@ -64,7 +64,7 @@ dumpsys 와 logcat 은 저장된 숫자를 그대로 내보이지 않고 사람�
 | dumpsys batterystats 기록, dumpsys wifi `rec[#]: time=`, dumpsys bluetooth_manager "Enable log", logcat | 줄 맨 앞 | `##-## ##:##:##.###` — 연도와 시간대 표시가 없음 |
 | dumpsys batterystats 기록 첫 줄 | `RESET:TIME:` | 기록의 기준 시각 |
 
-설정 값 가운데 이름으로 시각임을 드러내는 키도 있습니다. 값과 단위는 가려져 있어 확인하지 못했습니다.
+설정 값 가운데 이름으로 시각임을 드러내는 키도 있습니다. 값의 단위는 키마다 검체에서 확인합니다.
 
 | 설정 공간 | 키 |
 |---|---|
@@ -120,9 +120,9 @@ print(datetime.fromtimestamp((chrome - 11644473600000000) / 1_000_000, timezone.
 
 ## 포렌식에서 중요한 점
 
-시각을 사람이 바꿨는지는 시각 값 하나만으로는 알 수 없고, 시스템이 시각 변경을 따로 적어 둔 곳을 찾아야 합니다. 실제 기기의 dumpsys usagestats 에는 "UsageStats RollOver history" 절이 있고, 그 안에 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄과 `rolloverStats by event Type … realTime:… systemTime:…` 줄이 있었습니다. 이름으로 보면 시스템 시각이 예상과 달라진 순간을 적는 줄이라 시각 조작을 의심할 때 먼저 봅니다. 다만 이 절이 AOSP 공통인지 삼성이 덧붙인 것인지는 확인하지 못했고, `realTime` 과 `systemTime` 의 정확한 정의도 이 페이지에서는 확인하지 못했습니다. 시각 조작을 다루는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)에 있습니다.
+시각을 사람이 바꿨는지는 시각 값 하나만으로는 알 수 없고, 시스템이 시각 변경을 따로 적어 둔 곳을 찾아야 합니다. One UI 기기의 dumpsys usagestats 에는 "UsageStats RollOver history" 절이 있고, 그 안에 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄과 `rolloverStats by event Type … realTime:… systemTime:…` 줄이 있습니다. 이름으로 보면 시스템 시각이 예상과 달라진 순간을 적는 줄이라 시각 조작을 의심할 때 먼저 봅니다. 다만 이 절이 AOSP 공통인지 삼성이 덧붙인 것인지, `realTime` 과 `systemTime` 의 정확한 정의가 무엇인지는 공개된 분석 자료가 없어 검체에서 확인해야 합니다. 시각 조작을 다루는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)에 있습니다.
 
-자동 시각과 자동 시간대가 켜져 있었는지는 settings global 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키로 확인합니다. 값의 뜻은 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에서 다룹니다. settings system 의 `TIME_DIFFERENCE` 키도 이름만 보면 시각과 관련 있어 보이지만 뜻과 단위는 확인하지 못했습니다.
+자동 시각과 자동 시간대가 켜져 있었는지는 settings global 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키로 확인합니다. 값의 뜻은 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에서 다룹니다. settings system 의 `TIME_DIFFERENCE` 키도 이름만 보면 시각과 관련 있어 보이지만, 뜻과 단위는 공개 자료가 없어 검체에서 확인합니다.
 
 dumpsys 와 logcat 출력은 수집하는 순간의 메모리 상태와 버퍼 내용이라, 오래된 기록은 이미 밀려나 있을 수 있습니다. 연도 없는 줄을 여러 번 수집해서 이어 붙일 때는 앞 수집과 뒤 수집이 겹치는 줄을 기준으로 맞추고, 연도를 추정했다면 추정한 사실을 보고서에 적습니다.
 
@@ -130,9 +130,9 @@ dumpsys 와 logcat 출력은 수집하는 순간의 메모리 상태와 버퍼 �
 
 단위를 잘못 고르면 결과가 크게 틀어집니다. Unix 밀리초를 초로 읽으면 수만 년 뒤의 날짜가 나오고, Chrome 시각을 1970년 기준 마이크로초로 읽으면 약 369년 뒤로 밀린 날짜가 나옵니다. 날짜가 그럴듯해 보여도 같은 칸의 다른 값과 함께 바꿔 보고, 다른 기록과 앞뒤가 맞는지 확인합니다.
 
-이름이 `Ms` 나 `time` 으로 끝난다고 모두 한 시점을 뜻하지는 않습니다. dumpsys notification 의 `airtimeMs` 같은 칸은 이름만 보면 길이를 잴 가능성이 있고, 실제 기기에서는 `posttimeToFirstClickMs=-#` 처럼 음수가 찍힌 칸도 있었습니다. 이런 칸을 시각으로 바꾸기 전에 원 코드나 문서로 뜻을 확인합니다.
+이름이 `Ms` 나 `time` 으로 끝난다고 모두 한 시점을 뜻하지는 않습니다. dumpsys notification 의 `airtimeMs` 같은 칸은 이름만 보면 길이를 잴 가능성이 있고, `posttimeToFirstClickMs=-#` 처럼 음수가 찍히는 칸도 있습니다. 이런 칸을 시각으로 바꾸기 전에 원 코드나 문서로 뜻을 확인합니다.
 
-문자열로 바뀐 시각은 기기가 지역 설정에 맞춰 서식을 고른 결과라서 한글이 섞이고, 날짜 순서도 지역 설정에 따라 바뀔 수 있습니다. 실제 기기의 usagestats 시각 문자열에는 한글이 섞여 있었지만 값이 가려져 있어 정확한 서식은 확인하지 못했습니다. 도구가 이런 문자열을 자동으로 읽을 때는 월과 일을 바꿔 읽지 않았는지 한두 줄을 손으로 대조합니다.
+문자열로 바뀐 시각은 기기가 지역 설정에 맞춰 서식을 고른 결과라서 한글이 섞이고, 날짜 순서도 지역 설정에 따라 바뀔 수 있습니다. usagestats 시각 문자열에도 한글이 섞여 나오고, 정확한 서식은 검체에서 확인합니다. 도구가 이런 문자열을 자동으로 읽을 때는 월과 일을 바꿔 읽지 않았는지 한두 줄을 손으로 대조합니다.
 
 설정 키의 이름에 `milli_seconds` 가 들어 있어도 그 이름만으로 단위를 확정하지 않습니다. 이름과 저장 값이 어긋나는 경우가 없는지 실제 값의 자릿수로 한 번 더 봅니다.
 

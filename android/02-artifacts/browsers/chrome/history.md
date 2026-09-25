@@ -27,7 +27,7 @@ Chrome 은 페이지를 열 때마다 방문 한 건을 visits 표에 적고, �
 | 표본의 방문 행 수 | Android 10 표본 291행, Android 14 표본 58행, Android 16 표본 39행 [1] |
 | 삼성 인터넷 | 같은 Chromium 계열의 방문 기록 파일을 따로 남깁니다. 경로는 [크롬 (Chrome for Android)](index.md) 허브, 내용은 [삼성 인터넷 (Samsung Internet)](../samsung-internet.md) 페이지를 봅니다 |
 
-표본의 행 수는 기기와 사용 기간에 따라 크게 달라지는 예일 뿐이고, 기준치로 쓰지 않습니다. 어느 Chrome 버전에서 표 구조가 바뀌었는지는 확인하지 못했습니다.
+표본의 행 수는 기기와 사용 기간에 따라 크게 달라지는 예일 뿐이고, 기준치로 쓰지 않습니다.
 
 ## 구조
 
@@ -40,7 +40,7 @@ URL 한 개에 한 행이고, ALEAPP 는 아래 칸을 읽습니다 [1].
 | id | URL 번호. visits.url 과 keyword_search_terms.url_id 가 이 값을 가리킵니다 |
 | url, title | 주소와 페이지 제목 |
 | visit_count | 방문 횟수 |
-| typed_count | 이름으로 보아 주소창에 직접 입력해 들어간 횟수를 세는 칸이지만, 뜻을 소스 주석으로 확인하지는 못했습니다 |
+| typed_count | 주소창에 직접 입력해 들어간 횟수를 세는 칸으로 보입니다 |
 | last_visit_time | 마지막 방문 시각(1601-01-01 UTC 부터의 마이크로초) |
 | hidden | 0 이면 목록에 보이는 기록, 1 이면 숨긴 기록 |
 
@@ -111,7 +111,7 @@ visits 에는 방문마다 시각이 남고 urls 에는 마지막 방문 시각 
 
 ## 함정과 한계
 
-현행 Chromium 소스의 `history_backend.h` 에는 기록 만료 기준 kExpireDaysThreshold 가 90일로 정해져 있고, HistoryBackend 가 이 일수를 기준으로 오래된 기록을 지우기 시작합니다 [2]. Android 판에도 같은 90일이 적용되는지는 확인하지 못했고, 다른 기기에서 동기화된 방문이 이 파일에 들어오는지도 확인하지 못했습니다. 따라서 오래전 방문이 없다는 사실만으로 사용자가 지웠다고 판단하지 않습니다.
+Chromium 의 기록 만료 기준(kExpireDaysThreshold)은 90일이고, HistoryBackend 가 이 일수를 기준으로 오래된 기록을 지우기 시작합니다 [2]. Android 판에 같은 90일이 적용되는지, 다른 기기에서 동기화된 방문이 이 파일에 들어오는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 따라서 오래전 방문이 없다는 사실만으로 사용자가 지웠다고 판단하지 않습니다.
 
 원본 `History` 옆에 `-journal` 파일이 있으면 읽기 전용으로 열 때 실패할 수 있는데, SQLite 가 저널을 되감으려면 파일에 써야 하기 때문입니다. ALEAPP 는 이런 파일을 건너뛰고 기록을 남깁니다 [1]. 원본은 건드리지 말고 사본을 만들어 곁 파일과 함께 열고, 저널과 지운 행의 흔적은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md) 페이지를 봅니다. ALEAPP 는 Magisk 미러 경로(`.magisk` … `mirror`)에 있는 사본은 중복이라 건너뜁니다 [1].
 

@@ -23,51 +23,51 @@ UTC 로 옮긴 여러 기록을 한 시간 축에 올리되, 부팅 경계와 �
 
 | 기록 | 함께 적히는 값 | 근거 |
 |---|---|---|
-| `dumpsys usagestats` 의 "UsageStats RollOver history" 절, `rolloverStats` 줄 | `realTime:`, `systemTime:` | 관찰 |
-| 같은 절의 "Time changed." 줄 | `actualSystemTime`, `expectedSystemTime`, `actualRealtime` | 관찰 (같은 범위). 뜻은 [시각 조작 흔적](time-manipulation.md) 참고 |
+| `dumpsys usagestats` 의 "UsageStats RollOver history" 절, `rolloverStats` 줄 | `realTime:`, `systemTime:` | |
+| 같은 절의 "Time changed." 줄 | `actualSystemTime`, `expectedSystemTime`, `actualRealtime` | 뜻은 [시각 조작 흔적](time-manipulation.md) 참고 |
 | 알람 관리자 서비스의 마지막 시각 변경 기록 | 변경 때의 벽시계와 그때의 부팅 기준 시각 | 현행 AOSP 기준. [시각 조작 흔적](time-manipulation.md) 참고 |
 | logcat 을 두 형식으로 뽑은 결과 | `-v monotonic`(마지막 부팅 이후 CPU 초)와 `-v epoch`(1970-01-01 부터 초) | [2] |
 
-관찰한 `rolloverStats` 줄은 아래 모양이었습니다. 값이 가려져 있어서 `realTime:` 과 `systemTime:` 이 어떤 단위와 형식으로 찍히는지는 확인하지 못했고, 이 절이 AOSP 에도 있는지 삼성이 더한 것인지도 확인하지 못했습니다.
+`rolloverStats` 줄은 아래 모양입니다(값 자리는 가림). `realTime:` 과 `systemTime:` 이 어떤 단위와 형식으로 찍히는지, 이 절이 AOSP 에도 있는지 삼성이 더한 것인지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ```
 <<한글>>:##:##.###User[#] rolloverStats by event Type:#/ init elapsed time:<<한글>>/ timeStamp:<<한글>>/ ExpiryDate:<<한글>>/ realTime:<<한글>>/ systemTime:<<한글>>
 ```
 
-logcat 은 같은 줄을 `-v monotonic` 과 `-v epoch` 로 한 번씩 뽑으면 두 기준을 맞댈 수 있습니다 [2]. 실제 조사에서 이렇게 맞댄 사례 자료는 확인하지 못했고, logcat 은 순환 버퍼라서 [2] 두 번 뽑는 사이에 앞쪽 줄이 밀려날 수 있습니다. 두 결과는 PID·TID·태그·내용이 같은 줄끼리 짝을 짓습니다.
+logcat 은 같은 줄을 `-v monotonic` 과 `-v epoch` 로 한 번씩 뽑으면 두 기준을 맞댈 수 있습니다 [2]. 다만 logcat 은 순환 버퍼라서 [2] 두 번 뽑는 사이에 앞쪽 줄이 밀려날 수 있습니다. 두 결과는 PID·TID·태그·내용이 같은 줄끼리 짝을 짓습니다.
 
 > 그림 자리: 부팅 기준 축(부팅마다 0에서 시작)과 벽시계 축을 위아래로 두고, rolloverStats 줄 하나가 두 축의 한 점씩을 잇는 모습
 
 ## 절차
 
 1. **정규화를 먼저 끝냅니다.** 기록마다 시계 종류, 원래 표기, 옮긴 UTC 시각이 한 줄에 있어야 엮을 수 있습니다. 방법은 [시각 정규화](time-normalization.md) 에 있습니다.
-2. **부팅 경계를 찾습니다.** 부팅 기준 값은 부팅마다 0부터 다시 세서 [1], 경계를 모르면 서로 다른 부팅의 값을 한 줄에 섞게 됩니다. 관찰한 폰의 `dumpsys bluetooth_manager` 에는 `Enable log:` 아래에 아래 같은 줄이 있었습니다. 부팅 무렵 시스템이 블루투스를 켠 기록으로 읽히지만, 이 시각이 부팅 시각과 얼마나 가까운지는 확인하지 못했습니다. `settings global` 에는 `boot_count` 키가 있었지만 (같은 범위) 이 값으로 부팅 시점을 알 수 있는지도 확인하지 못했습니다.
+2. **부팅 경계를 찾습니다.** 부팅 기준 값은 부팅마다 0부터 다시 세서 [1], 경계를 모르면 서로 다른 부팅의 값을 한 줄에 섞게 됩니다. `dumpsys bluetooth_manager` 의 `Enable log:` 아래에는 아래 같은 줄이 있습니다. 부팅 무렵 시스템이 블루투스를 켠 기록으로 보이고, 이 시각이 부팅 시각과 얼마나 가까운지는 검체에서 확인합니다. `settings global` 에는 `boot_count` 키도 있는데, 이 값으로 부팅 시점을 알 수 있는지 밝힌 공개 자료는 없습니다.
 
    ```
    ##-## ##:##:##.### 	Package [android] requested to [Enable]. 	Reason is SYSTEM_BOOT
    ```
 
 3. **뼈대 기록을 고릅니다.** 연도가 있고 벽시계 기준이 분명한 기록을 뼈대로 삼고 나머지를 붙입니다. 앱 사용 기록의 원본 이벤트 시각은 유닉스 밀리초라서 뼈대로 쓰기 좋고, 자세한 내용은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에 있습니다.
-4. **연도가 빠진 줄을 채웁니다.** 관찰한 폰에서는 logcat 기본 형식, `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]` 줄, `dumpsys bluetooth_manager` 의 `Enable log:` 줄이 모두 `MM-DD HH:MM:SS.mmm` 모양이라 연도가 없었습니다. 수집한 시각이나 같은 사건이 연도와 함께 남은 다른 기록으로 연도를 채우고, 수집이 1월 초라면 12월 날짜 줄은 전년도일 수 있다는 점을 따져 봅니다. 채운 연도는 원래 값과 구별되게 "추정" 으로 표시합니다.
+4. **연도가 빠진 줄을 채웁니다.** logcat 기본 형식, `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]` 줄, `dumpsys bluetooth_manager` 의 `Enable log:` 줄은 모두 `MM-DD HH:MM:SS.mmm` 모양이라 연도가 없습니다. 수집한 시각이나 같은 사건이 연도와 함께 남은 다른 기록으로 연도를 채우고, 수집이 1월 초라면 12월 날짜 줄은 전년도일 수 있다는 점을 따져 봅니다. 채운 연도는 원래 값과 구별되게 "추정" 으로 표시합니다.
 5. **같은 사건을 여러 기록에서 맞춰 봅니다.** 아래 "같은 사건이 남는 곳" 표의 짝을 찾아 두 기록의 시각 차이를 적어 두면, 한쪽 기록만 있는 구간에서 시각을 얼마나 믿을 수 있는지 가늠할 수 있습니다.
 6. **기록마다 보관 범위를 표시합니다.** logcat 은 main·system·crash·radio·events 버퍼를 돌려 쓰는 순환 버퍼이고 [2], 앱 사용 기록의 이벤트는 며칠만 남습니다([앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 참고). 어떤 기록이 비어 있는 구간이 보관 범위 밖이라면 "그때 아무 일도 없었다" 는 뜻이 아닙니다.
 7. **벽시계가 바뀐 구간을 따로 표시합니다.** 변경 시점을 찾는 방법은 [시각 조작 흔적](time-manipulation.md) 에 있고, 그 앞뒤 구간의 벽시계 기록은 따로 묶어 순서를 다시 확인합니다.
 
 ## 같은 사건이 남는 곳
 
-관찰한 폰의 출력에서 칸 이름으로 짝을 찾은 표입니다. 값이 가려진 출력이라서 짝끼리 시각이 실제로 얼마나 맞는지는 확인하지 못했고, 칸마다 무엇을 사건으로 치는지도 조금씩 다를 수 있어서 같은 밀리초를 기대하지 않습니다.
+칸 이름으로 짝을 지은 표입니다. 짝끼리 시각이 실제로 얼마나 맞는지는 검체에서 확인하고, 칸마다 무엇을 사건으로 치는지도 조금씩 다를 수 있어서 같은 밀리초를 기대하지 않습니다.
 
 | 사건 | 앱 사용 기록 (`dumpsys usagestats`) | 다른 기록 |
 |---|---|---|
 | 화면 켜짐·꺼짐 | `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE` | `dumpsys batterystats` 의 `+screen`·`-screen`, `screenwake=`, `display_state_changed=`, `dumpsys wifi` 의 `CMD_SCREEN_STATE_CHANGED` |
-| 잠금 화면 | `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN` | 이번 관찰에서는 짝을 찾지 못함 |
+| 잠금 화면 | `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN` | 공개 자료 없음 |
 | 알림 | `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN` | `dumpsys notification` 의 `mCreationTimeMs`, `mUpdateTimeMs` 등 |
 
 알림 쪽은 `dumpsys notification` 의 시각 칸에 `+####` 오프셋이 함께 찍혀서 시간대가 분명하고, 앱 사용 기록 쪽은 원본이 유닉스 밀리초라서 두 기록을 맞추면 서로의 시간대 해석을 검산할 수 있습니다. 각 기록의 뜻은 [배터리 사용 기록 (batterystats)](../../../02-artifacts/app-usage/batterystats.md), [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md), [와이파이 설정과 접속 기록 (WifiConfigStore)](../../../02-artifacts/network/wifi.md) 페이지에 있습니다.
 
 ## 도구
 
-공개 도구 ALEAPP 는 기록마다 시각을 UTC 로 맞춘 뒤 지정한 시간대로 보여 주고, 그 변환 함수는 [시각 정규화](time-normalization.md) 페이지에 정리했습니다. ALEAPP 가 여러 기록을 한 표로 합치는 기능을 두는지와 그 형식은 확인하지 못했습니다.
+공개 도구 ALEAPP 는 기록마다 시각을 UTC 로 맞춘 뒤 지정한 시간대로 보여 주고, 그 변환 함수는 [시각 정규화](time-normalization.md) 페이지에 정리했습니다.
 
 도구와 상관없이 엮은 결과는 한 표에 모읍니다. 칸은 UTC 시각, 원래 표기, 기록 출처, 시계 종류(벽시계·부팅 기준), 부팅 구간 번호, 연도를 채웠는지 여부, 벽시계 변경 구간 여부 정도면 나중에 순서를 다시 검토할 때 되짚을 수 있습니다.
 
@@ -75,7 +75,7 @@ logcat 은 같은 줄을 `-v monotonic` 과 `-v epoch` 로 한 번씩 뽑으면 
 
 벽시계가 바뀐 구간에서는 UTC 로 옮긴 값의 순서가 실제 일어난 순서와 다를 수 있고 [1], 이 경우 순서를 뒷받침하는 근거는 같은 부팅 안의 부팅 기준 값뿐입니다. 부팅 기준 값이 없는 기록은 그 구간에서 순서를 확정하지 못합니다.
 
-연도를 채운 줄은 추정이 섞인 값이라서, 연도가 바뀌는 무렵의 기록이나 수집보다 오래된 기록에서는 틀릴 수 있습니다. 관찰한 폰의 dumpsys 출력은 값이 가려진 것이라 기록끼리 몇 초씩 어긋나는지 같은 실제 차이는 이 페이지에서 말하지 못하고, 삼성 One UI 가 기록 형식을 AOSP 와 다르게 바꿨는지도 확인하지 못했습니다.
+연도를 채운 줄은 추정이 섞인 값이라서, 연도가 바뀌는 무렵의 기록이나 수집보다 오래된 기록에서는 틀릴 수 있습니다. 기록끼리 실제로 몇 초씩 어긋나는지와 삼성 One UI 가 기록 형식을 AOSP 와 다르게 바꿨는지는 기기마다 다를 수 있어 검체에서 확인합니다.
 
 ## 결과를 어떻게 해석하나
 

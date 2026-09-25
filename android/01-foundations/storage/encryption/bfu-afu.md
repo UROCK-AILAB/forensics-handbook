@@ -11,7 +11,7 @@ nav_order: 100
 
 ## 이름과 공식 개념
 
-BFU·AFU 라는 이름은 열어 본 Android 공식 문서에는 나오지 않습니다. 공식 문서는 기기를 켰지만 사용자가 아직 잠금을 풀지 않은 상태를 다이렉트 부트 모드 (Direct Boot mode) 라고 부르고, 이 모드는 Android 7.0(API 24)에서 들어왔습니다. 이 핸드북에서는 BFU 를 다이렉트 부트 모드와 같은 뜻으로 쓰고, AFU 를 첫 잠금 해제 뒤부터 다음 재시작 전까지의 상태로 씁니다.
+BFU·AFU 는 Android 공식 문서에서 쓰는 이름이 아닙니다. 기기를 켰지만 사용자가 아직 잠금을 풀지 않은 상태의 공식 이름은 다이렉트 부트 모드 (Direct Boot mode) 이고, 이 모드는 Android 7.0(API 24)에서 들어왔습니다 [1]. 이 핸드북에서는 BFU 를 다이렉트 부트 모드와 같은 뜻으로 쓰고, AFU 를 첫 잠금 해제 뒤부터 다음 재시작 전까지의 상태로 씁니다.
 
 ## 두 상태에서 쓸 수 있는 영역
 
@@ -52,11 +52,11 @@ CE 영역은 사용자가 잠금을 푼 뒤 기기를 다시 시작할 때까지
 | 4 | `STOPPING` | 멈추는 중 |
 | 5 | `SHUTDOWN` | `ACTION_SHUTDOWN` 을 보내는 중 |
 
-소스는 이 값을 BFU·AFU 라는 이름과 직접 연결하지 않습니다. 다만 `RUNNING_LOCKED` 와 `RUNNING_UNLOCKED` 는 사용자가 잠금을 풀었는지를 나타내는 이름이라서, 수집 시점의 상태를 적을 때 근거로 쓸 수 있습니다.
+이 값은 BFU·AFU 라는 이름과 직접 이어지지 않습니다 [2]. 다만 `RUNNING_LOCKED` 와 `RUNNING_UNLOCKED` 는 사용자가 잠금을 풀었는지를 나타내는 이름이라서, 수집 시점의 상태를 적을 때 근거로 쓸 수 있습니다.
 
 ## 기기에 남는 흔적
 
-adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 기본 사용자 블록의 `State:` 줄에 현재 상태 이름이 나오고, 같은 블록에 `Start time:`, `Unlock time:`, `Last logged in:` 칸이 있습니다. 관찰 기기에서는 이 줄이 `State: RUNNING_UNLOCKED` 였고, 다른 칸의 값은 가려서 확인하지 않았습니다.
+adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 기본 사용자 블록의 `State:` 줄에 현재 상태 이름이 나오고, 같은 블록에 `Start time:`, `Unlock time:`, `Last logged in:` 칸이 있습니다. 잠금이 풀린 상태라면 이 줄에 `State: RUNNING_UNLOCKED` 가 나옵니다.
 
 ```
 Current user: #
@@ -68,11 +68,11 @@ Users:
     Unlock time: (가림)
 ```
 
-위 출력은 관찰 메모에서 필요한 줄만 옮긴 것이고, `#` 와 `(가림)` 은 가린 자리입니다. `Unlock time` 은 이름으로 보아 잠금 해제 시각을 적는 칸이지만, 어떤 시계를 기준으로 어떤 형식으로 적는지는 확인하지 못했습니다. dumpsys 출력을 읽는 방법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
+위 출력은 필요한 줄만 옮긴 것이고, `#` 와 `(가림)` 은 가린 자리입니다. `Unlock time` 은 이름으로 보아 잠금 해제 시각을 적는 칸입니다. 어떤 시계를 기준으로 어떤 형식으로 적는지는 공개된 설명이 없어 검체에서 확인합니다. dumpsys 출력을 읽는 방법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
 
 앱 사용 기록의 이벤트에도 `KEYGUARD_SHOWN`·`KEYGUARD_HIDDEN` 줄이 있어서 잠금 화면이 나타나고 사라진 시각의 흔적이 남습니다. 이 이벤트의 해석은 [앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 다룹니다.
 
-설정 값에는 재시작·잠금과 이름이 이어지는 키가 있습니다. 이름만 확인했고, 각 키가 무엇을 기록하는지는 공식 문서로 확인하지 못했습니다.
+설정 값에는 재시작·잠금과 이름이 이어지는 키가 있습니다. 각 키가 무엇을 기록하는지는 공식 문서에 설명이 없어 검체에서 확인합니다.
 
 - global: `boot_count`, `add_users_when_locked`
 - secure: `lockdown_in_power_menu`, `lock_screen_lock_after_timeout`, `theft_detection_lock_supported`, `remote_lock_setting`, `fmm_unlock_recovery`
@@ -81,7 +81,7 @@ Users:
 
 ## 포렌식에서 중요한 점
 
-아래 내용은 공식 문서의 설명에서 끌어낸 해석이고, 문서에 이 문장 그대로 있지는 않습니다. BFU 상태에서는 기기 안에서도 CE 영역을 쓸 수 없어서 복호화된 채 읽을 수 있는 범위가 DE 영역으로 좁아지고, AFU 상태에서는 CE 영역까지 쓸 수 있습니다. 압수한 기기가 AFU 상태라도 재시작하면 BFU 로 돌아가기 때문에, 기기를 받은 시점의 상태와 그 뒤 재시작 여부를 기록해 두어야 결과의 차이를 설명할 수 있습니다. 수집 절차 전체는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에서 다룹니다.
+BFU 상태에서는 기기 안에서도 CE 영역을 쓸 수 없어서 복호화된 채 읽을 수 있는 범위가 DE 영역으로 좁아지고, AFU 상태에서는 CE 영역까지 쓸 수 있습니다. 압수한 기기가 AFU 상태라도 재시작하면 BFU 로 돌아가기 때문에, 기기를 받은 시점의 상태와 그 뒤 재시작 여부를 기록해 두어야 결과의 차이를 설명할 수 있습니다. 수집 절차 전체는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에서 다룹니다.
 
 ## 함정
 

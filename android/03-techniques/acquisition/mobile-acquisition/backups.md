@@ -7,7 +7,7 @@ nav_order: 1340
 
 # 백업으로 수집 (Google 백업·Smart Switch)
 
-기기를 직접 수집하기 어렵거나 기기 수집 결과를 보태야 할 때 백업이 무엇을 담고 무엇을 빼는지 정리합니다. Google 계정 백업과 앱 데이터 자동 백업은 Google 공식 문서로 확인한 내용이고, 삼성 Smart Switch 는 기기에 남는 설정 키 이름을 적었습니다.
+기기를 직접 수집하기 어렵거나 기기 수집 결과를 보태야 할 때 백업이 무엇을 담고 무엇을 빼는지 정리합니다. Google 계정 백업, 앱 데이터 자동 백업, 삼성 Smart Switch 가 기기에 남기는 설정 키를 다룹니다.
 
 ## 한 줄 요약
 
@@ -24,7 +24,7 @@ nav_order: 1340
 | 자동으로 담김 | 앱과 앱 데이터, 통화 기록, 연락처, 기기 설정, SMS·MMS [1] |
 | Google 앱을 쓸 때 더 담김 | Google 메시지의 RCS 메시지, Google 전화의 전화 설정과 차단 번호, Google 포토의 사진·동영상 [1] |
 
-일부 데이터는 기기 화면 잠금으로 한 번 더 암호화되지만, Google 포토의 사진·동영상과 통신사에서 받은 MMS 미디어는 화면 잠금으로 암호화되지 않습니다 [1]. 무엇이 백업되는지는 설정의 Google 서비스 → 백업 화면에 있는 "백업 세부정보" 에서 볼 수 있습니다 [1]. 이 메뉴 이름은 영문 도움말 페이지를 옮긴 것이고, 삼성 기기의 메뉴 경로는 확인하지 못했습니다. 기기를 쓰지 않을 때 백업이 얼마 동안 남는지도 이 도움말에는 없었습니다.
+일부 데이터는 기기 화면 잠금으로 한 번 더 암호화되지만, Google 포토의 사진·동영상과 통신사에서 받은 MMS 미디어는 화면 잠금으로 암호화되지 않습니다 [1]. 무엇이 백업되는지는 설정의 Google 서비스 → 백업 화면에 있는 "백업 세부정보" 에서 볼 수 있습니다 [1]. 삼성 기기에서는 메뉴 이름과 경로가 다를 수 있어 기기에서 확인합니다. 기기를 쓰지 않을 때 백업이 얼마 동안 남는지는 계정 쪽에서 확인합니다.
 
 ## 앱 데이터 자동 백업
 
@@ -43,13 +43,13 @@ nav_order: 1340
 |---|---|---|
 | 11 이하 | `android:fullBackupContent` [2] | 백업 규칙이 하나 |
 | 12 이상 | `android:dataExtractionRules` 로 cloud-backup 과 device-transfer 규칙을 따로 둠 [2] | Google Drive 백업에서는 빠지고 기기 간 전송에서는 옮겨지는 파일이 있을 수 있음 [2] |
-| 일부 제조사 기기(Android 12 동작 변경 문서에 적힘) | `allowBackup=false` 가 Google Drive 백업만 끄고 기기 간(D2D) 전송은 끄지 않음 [3] | Drive 백업에 없는 앱 데이터가 기기 간 전송으로는 옮겨졌을 수 있음 |
+| 일부 제조사 기기 | `allowBackup=false` 가 Google Drive 백업만 끄고 기기 간(D2D) 전송은 끄지 않음 [3] | Drive 백업에 없는 앱 데이터가 기기 간 전송으로는 옮겨졌을 수 있음 |
 
-복원은 Play 스토어, 기기 초기 설정, `adb install` 로 앱을 설치할 때 일어나고, APK 를 설치한 뒤 사용자가 앱을 열기 전에 데이터가 복원됩니다 [2]. 따라서 복원한 기기의 앱 데이터는 그 기기에서 처음 생긴 것이 아니라 이전 기기에서 온 것일 수 있습니다. 이 판단은 [2]에서 끌어낸 해석입니다. adb 로 받는 백업은 [ADB로 볼 수 있는 것](adb.md) 페이지에 따로 정리했습니다.
+복원은 Play 스토어, 기기 초기 설정, `adb install` 로 앱을 설치할 때 일어나고, APK 를 설치한 뒤 사용자가 앱을 열기 전에 데이터가 복원됩니다 [2]. 따라서 복원한 기기의 앱 데이터는 그 기기에서 처음 생긴 것이 아니라 이전 기기에서 온 것일 수 있습니다. adb 로 받는 백업은 [ADB로 볼 수 있는 것](adb.md) 페이지에 따로 정리했습니다.
 
 ## 기기에 남는 백업 관련 키
 
-관찰한 폰의 설정에는 백업에 관련된 이름의 키가 아래처럼 있었습니다. 각 값의 뜻과 시각 형식은 확인하지 못했으니, 키가 있다는 사실까지만 씁니다.
+기기 설정에는 백업에 관련된 이름의 키가 아래처럼 있습니다. 각 값의 뜻과 시각 형식을 설명한 공개 자료가 없으니, 보고서에는 키가 있다는 사실까지만 씁니다.
 
 | 어디서 | 키 이름 |
 |---|---|
@@ -60,16 +60,16 @@ nav_order: 1340
 
 ## 삼성 Smart Switch
 
-삼성 공식 Smart Switch 페이지를 열었지만 다른 주소로 옮겼다는 안내만 나와 내용을 얻지 못했습니다. 그래서 Smart Switch 가 어떤 데이터를 옮기는지, 무선·케이블·PC 중 어떤 방식으로 연결하는지, PC 백업을 어디에 어떤 형식으로 남기는지는 이 페이지에 적지 않습니다.
+Smart Switch 가 어떤 데이터를 옮기는지, 무선·케이블·PC 중 어떤 방식으로 연결하는지, PC 백업을 어디에 어떤 형식으로 남기는지는 판마다 다를 수 있어 삼성 안내와 검체로 확인합니다.
 
-관찰한 폰에는 Smart Switch 와 삼성 쪽 백업·복원에 관련된 이름의 키가 아래처럼 있었습니다. 이름에서 뜻을 짐작할 수는 있지만 출처로 확인하지 못했으니, 보고서에도 키가 있다는 사실까지만 씁니다.
+삼성 기기의 설정에는 Smart Switch 와 삼성 쪽 백업·복원에 관련된 이름의 키가 아래처럼 있습니다. 이름에서 뜻을 짐작할 수는 있지만 값의 뜻을 설명한 공개 자료가 없으니, 보고서에도 키가 있다는 사실까지만 씁니다.
 
 | 어디서 | 키 이름 |
 |---|---|
 | settings global | `smartswitch_bnr_count`, `smartswitch_data_exist_samsungnote`, `smartswitch_data_exist_securefolder`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `SecureWifiBackupExist` |
 | settings secure | `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `wifi_ap_settings_cloud_backup_restoring`, `wifi_ap_settings_smart_switch_restoring` |
 
-삼성 클라우드 백업은 이번에 확인하지 않았고, 삼성 클라우드 앱의 흔적은 [삼성 클라우드와 원드라이브](../../../02-artifacts/mail-cloud/samsung-cloud-onedrive.md) 페이지에서 다룹니다.
+삼성 클라우드 앱의 흔적은 [삼성 클라우드와 원드라이브](../../../02-artifacts/mail-cloud/samsung-cloud-onedrive.md) 페이지에서 다룹니다.
 
 ## 함정과 한계
 

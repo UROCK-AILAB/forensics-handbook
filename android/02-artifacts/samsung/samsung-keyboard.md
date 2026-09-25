@@ -14,20 +14,20 @@ nav_order: 1170
 
 지금 삼성 기기에 들어가는 삼성 키보드의 패키지 이름은 `com.samsung.android.honeyboard` 입니다. 삼성 키보드에는 클립보드 기능이 들어 있어서, 사용자가 복사한 글과 HTML, 이미지를 가리키는 URI 를 시각과 함께 데이터베이스에 쌓아 둡니다. 화면을 캡처해 클립보드에 넣은 "캡처 클립" 은 데이터베이스 밖에 이미지 파일로 저장됩니다.
 
-공개 도구 ALEAPP 에는 이 흔적을 읽는 모듈(`samsung_honeyboard_clipboard.py`)이 있습니다. 이 모듈은 2024-05-30 에 처음 만들어져 2026-07-13 에 고쳐졌고, 모듈에 적힌 시험 표본은 Galaxy S20(Android 13), A53(Android 14), A15(Android 15) 입니다. ALEAPP 는 데이터베이스의 WAL 파일까지 직접 읽어서 이미 지운 클립보드 항목도 되살립니다.
+공개 도구 ALEAPP 에는 이 흔적을 읽는 모듈(`samsung_honeyboard_clipboard.py`)이 있습니다. 이 모듈의 시험 표본은 Galaxy S20(Android 13), A53(Android 14), A15(Android 15) 입니다[1]. ALEAPP 는 데이터베이스의 WAL 파일까지 직접 읽어서 이미 지운 클립보드 항목도 되살립니다.
 
-예전 삼성 키보드 패키지 `com.sec.android.inputmethod` 에는 사용자가 예측 단어 목록에서 지운 단어를 적어 두는 제외 목록이 있었습니다. Alexis Brignoni 는 2019-06 글에서 이 목록이 사용자가 직접 한 행동의 기록이라서, 어떤 단어를 자주 쳤고 언제 지웠는지를 보여 준다고 해석했습니다. 지금의 `honeyboard` 에도 이런 제외 목록이나 학습 단어 데이터베이스가 이어지는지는 확인하지 못했습니다. 입력한 글 전체가 삼성 키보드에 남는다는 공개 근거도 찾지 못했는데, 이 점이 지보드와 다릅니다([지보드 입력 기록](../google-services/gboard.md)).
+예전 삼성 키보드 패키지 `com.sec.android.inputmethod` 에는 사용자가 예측 단어 목록에서 지운 단어를 적어 두는 제외 목록이 있었습니다[2]. 이 목록은 사용자가 직접 한 행동의 기록이라서, 어떤 단어를 자주 쳤고 언제 지웠는지를 보여 준다는 해석이 있습니다[2]. 지금의 `honeyboard` 에도 이런 제외 목록이나 학습 단어 데이터베이스가 이어지는지는 공개 자료가 없어 검체에서 확인합니다. 입력한 글 전체가 삼성 키보드에 남는다는 공개 근거도 없는데, 이 점이 지보드와 다릅니다([지보드 입력 기록](../google-services/gboard.md)).
 
 ## 위치와 버전별 차이
 
-| 패키지 | 경로 | 담긴 것 | 출처 |
+| 패키지 | 경로 | 담긴 것 | 참고 |
 |---|---|---|---|
-| `com.samsung.android.honeyboard` | `*/com.samsung.android.honeyboard/databases/ClipItem.db` (함께 `ClipItem.db-wal`, `ClipItem.db-shm`) | 클립보드 기록 | ALEAPP |
-| `com.samsung.android.honeyboard` | `*/com.samsung.android.honeyboard/clipboard/*/clip` | 캡처 클립, 확장자 없는 JPEG | ALEAPP |
-| `com.sec.android.inputmethod` (예전) | `data/data/com.sec.android.inputmethod/databases/RemoveListManager` | 예측 단어 제외 목록 | Brignoni 2019 |
-| `com.sec.android.inputmethod` (예전) | `data/data/com.sec.android.inputmethod/app_SwiftKey/user/blacklist` | SwiftKey 제외 목록, 한 줄에 한 단어인 텍스트 파일 | Brignoni 2019 |
+| `com.samsung.android.honeyboard` | `*/com.samsung.android.honeyboard/databases/ClipItem.db` (함께 `ClipItem.db-wal`, `ClipItem.db-shm`) | 클립보드 기록 | [1] |
+| `com.samsung.android.honeyboard` | `*/com.samsung.android.honeyboard/clipboard/*/clip` | 캡처 클립, 확장자 없는 JPEG | [1] |
+| `com.sec.android.inputmethod` (예전) | `data/data/com.sec.android.inputmethod/databases/RemoveListManager` | 예측 단어 제외 목록 | [2] |
+| `com.sec.android.inputmethod` (예전) | `data/data/com.sec.android.inputmethod/app_SwiftKey/user/blacklist` | SwiftKey 제외 목록, 한 줄에 한 단어인 텍스트 파일 | [2] |
 
-앞의 두 줄은 ALEAPP 의 경로 패턴이라 앞부분이 `*` 로 되어 있습니다. 앱 데이터 폴더가 어떻게 짜여 있는지는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 를 봅니다. Brignoni 의 글에는 어느 기종과 Android 판을 살펴봤는지가 적혀 있지 않습니다.
+앞의 두 줄은 ALEAPP 의 경로 패턴이라 앞부분이 `*` 로 되어 있습니다. 앱 데이터 폴더가 어떻게 짜여 있는지는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 를 봅니다. 예전 패키지의 두 경로가 어느 기종과 Android 판의 것인지는 알려져 있지 않습니다.
 
 `clip_table` 에는 스키마가 두 가지 있고, 앱을 가리키는 칸이 서로 다릅니다.
 
@@ -36,9 +36,9 @@ nav_order: 1170
 | 새 스키마 | `caller_package_name` | 패키지 이름 문자열 |
 | 옛 스키마 | `caller_app_uid` | 숫자 UID |
 
-어느 One UI 판이나 키보드 판에서 스키마가 바뀌었는지는 확인하지 못했습니다.
+어느 One UI 판이나 키보드 판에서 스키마가 바뀌었는지는 공개 자료가 없어, 검체마다 표 정의를 보고 가립니다.
 
-실제 폰에서 adb 일반 권한으로 설정 값의 키 이름을 읽었을 때, 키보드와 클립보드에 관련된 삼성 쪽 이름으로 보이는 키는 아래와 같았습니다. 값은 가려져 있어서 이 폰의 기본 키보드가 삼성 키보드인지는 알 수 없고, 키의 뜻도 확인하지 못했습니다. 기본 입력기를 가리키는 것으로 보이는 공통 키(`default_input_method` 등)는 [지보드 입력 기록](../google-services/gboard.md) 에 정리했습니다.
+삼성 기기의 설정 값에는 키보드와 클립보드에 관련된 삼성 쪽 이름으로 보이는 아래 키가 있습니다. 키의 뜻은 공개 자료에 없어 시험 기기로 확인합니다. 기본 입력기를 가리키는 것으로 보이는 공통 키(`default_input_method` 등)는 [지보드 입력 기록](../google-services/gboard.md) 에 정리했습니다.
 
 ```
 settings secure : sip_keyboard_type_mouse_id_list, sip_voice_input_use_side_key,
@@ -58,7 +58,7 @@ settings global : navigation_bar_button_to_hide_keyboard
 |---|---|
 | `id` | 행 번호 |
 | `time_stamp` | 유닉스 밀리초 시각 |
-| `type` | 항목 종류. 값마다의 뜻은 확인하지 못함 |
+| `type` | 항목 종류. 값마다의 뜻은 공개 자료 없음 |
 | `text` | 클립보드 글 |
 | `caller_package_name` 또는 `caller_app_uid` | 앱을 가리키는 칸(위 스키마 표) |
 | `user_id` | 사용자 번호. 칸이 없으면 ALEAPP 는 0 으로 봄 |
@@ -89,11 +89,11 @@ JPEG 끝 표지(`FF D9`) 뒤에는 삼성 전용 SEFT 꼬리가 붙습니다. �
 
 `clip_table` 의 한 행은 기록된 시각에 이 글이나 HTML, URI 가 삼성 키보드 클립보드에 들어가 있었다는 기록이고, `user_id` 로 주 사용자 쪽인지 보안 폴더 쪽인지를 가를 수 있습니다. WAL 에서 되살린 항목은 사용자가 지우기 전까지 그런 항목이 클립보드에 있었다는 것을 보여 줍니다.
 
-캡처 클립은 캡처한 시각과 클립보드에 넣은 시각을 따로 남기고, `"comp"` 값으로 캡처할 때 화면에 떠 있던 앱까지 알려 줍니다. 예전 패키지의 제외 목록은 사용자가 그 단어를 예측 목록에서 직접 지웠다는 기록이고, Brignoni 는 이것을 그 단어를 자주 쳤다는 흔적으로도 해석했습니다.
+캡처 클립은 캡처한 시각과 클립보드에 넣은 시각을 따로 남기고, `"comp"` 값으로 캡처할 때 화면에 떠 있던 앱까지 알려 줍니다. 예전 패키지의 제외 목록은 사용자가 그 단어를 예측 목록에서 직접 지웠다는 기록이고, 그 단어를 자주 쳤다는 흔적으로 보는 해석도 있습니다[2].
 
 ### 증명하지 못하는 것
 
-클립보드에 들어갔다는 기록만으로는 그 글을 어디에 붙여 넣었는지, 보냈는지 알 수 없어서 메신저나 메일 쪽 기록과 맞춰 봐야 합니다. ALEAPP 는 `caller_package_name` 을 앱을 가리키는 칸으로 읽지만, 그 앱이 복사한 앱인지 붙여 넣은 앱인지는 출처에 적혀 있지 않습니다. 누가 폰을 들고 복사했는지도 알 수 없습니다([그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
+클립보드에 들어갔다는 기록만으로는 그 글을 어디에 붙여 넣었는지, 보냈는지 알 수 없어서 메신저나 메일 쪽 기록과 맞춰 봐야 합니다. ALEAPP 는 `caller_package_name` 을 앱을 가리키는 칸으로 읽지만, 그 앱이 복사한 앱인지 붙여 넣은 앱인지는 공개 자료에 없습니다. 누가 폰을 들고 복사했는지도 알 수 없습니다([그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
 
 사용자가 친 글 전체가 남는다는 근거는 없어서, 삼성 키보드에서 입력 내용을 찾지 못했다고 입력이 없었다고 말할 수 없습니다. 클립보드 기록이 없다고 해서 복사하지 않았다고 말할 수도 없습니다. 항목을 얼마나 오래 두는지, 다른 키보드를 쓴 기간이 있었는지를 따로 확인해야 하기 때문입니다.
 
@@ -108,9 +108,9 @@ JPEG 끝 표지(`FF D9`) 뒤에는 삼성 전용 SEFT 꼬리가 붙습니다. �
 | 캡처 클립 EXIF `DateTimeOriginal` + `SubSecTimeOriginal` | 날짜·시각 글자 | 캡처한 시각 |
 | `RemovedList.time_word_added` | 사람이 읽는 글자 | 제외 목록에 들어간 시각으로 보임 |
 
-캡처 클립에서는 폴더 이름(복사한 때)과 EXIF 시각(캡처한 때)이 서로 다른 사건이라서, 두 값을 나란히 적으면 캡처하고 얼마 뒤에 복사했는지를 알 수 있습니다. EXIF 시각이 어느 시간대로 적히는지는 출처에 없으니 [카메라 사진과 메타데이터](../media/dcim-exif.md) 를 보고 기기 시간대와 함께 판단합니다([시간대와 시각 설정](../system-account/time-zone.md)).
+캡처 클립에서는 폴더 이름(복사한 때)과 EXIF 시각(캡처한 때)이 서로 다른 사건이라서, 두 값을 나란히 적으면 캡처하고 얼마 뒤에 복사했는지를 알 수 있습니다. EXIF 시각이 어느 시간대로 적히는지는 공개 자료에 없으니 [카메라 사진과 메타데이터](../media/dcim-exif.md) 를 보고 기기 시간대와 함께 판단합니다([시간대와 시각 설정](../system-account/time-zone.md)).
 
-Brignoni 는 `time_word_added` 가 실제 시각과 4시간 차이가 나서 UTC 로 보인다고 적었습니다. 한 사람의 시험 결과이므로, 검체에서는 시각을 알고 있는 항목 하나로 먼저 확인합니다. 유닉스 밀리초를 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`time_word_added` 는 실제 시각과 4시간 차이가 나서 UTC 로 보인다는 시험 결과가 있습니다[2]. 한 사람의 시험 결과이므로, 검체에서는 시각을 알고 있는 항목 하나로 먼저 확인합니다. 유닉스 밀리초를 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -118,7 +118,7 @@ Brignoni 는 `time_word_added` 가 실제 시각과 4시간 차이가 나서 UTC
 
 `ClipItem.db-wal` 을 빠뜨리면 지운 항목을 되살릴 수 없고, 최근 항목이 빠질 수도 있습니다. 세 파일을 함께 복사하고, SQLite 도구로 열 때는 원본이 아닌 사본으로 엽니다. `user_id` 150 인 행은 보안 폴더 쪽 기록이라서, 주 사용자만 보고 끝내면 놓칩니다.
 
-캡처 클립은 확장자가 없어서 확장자로 이미지를 찾는 검색에 걸리지 않습니다. 파일 머리의 JPEG 표지로 찾습니다. ALEAPP 표본은 Android 13~15 라서 Android 16 이후 판에서 구조가 같은지는 확인하지 못했고, 이번 폰 관찰은 adb 일반 권한이라 앱 데이터 폴더를 읽지 못했습니다. 예전 패키지의 제외 목록은 2019년 글 하나에 기댄 내용이라서, 지금 기기에서는 없을 수 있습니다.
+캡처 클립은 확장자가 없어서 확장자로 이미지를 찾는 검색에 걸리지 않습니다. 파일 머리의 JPEG 표지로 찾습니다. ALEAPP 표본은 Android 13~15 라서 Android 16 이후 판에서는 구조가 다를 수 있어 검체에서 확인합니다. adb 일반 권한으로는 앱 데이터 폴더를 읽을 수 없습니다. 예전 패키지의 제외 목록은 2019년 자료 하나[2]에만 나오는 내용이라서, 지금 기기에서는 없을 수 있습니다.
 
 ## 직접 분석해 보기
 

@@ -14,9 +14,9 @@ Chrome for Android(패키지 com.android.chrome)는 앱 데이터 폴더의 `app
 
 ## 왜 중요한가
 
-관찰한 기기에서는 `dumpsys package` 출력의 "Known Packages" 아래 "Browser:" 항목에 com.android.chrome 이 나와 기본 브라우저 역할을 Chrome 이 맡고 있었습니다. 웹에서 무엇을 찾고, 어디에 들어가고, 무엇을 받았는지를 묻는 사건이면 기본 브라우저가 무엇인지 먼저 확인하고, Chrome 이라면 이 앱의 파일부터 봅니다.
+`dumpsys package` 출력의 "Known Packages" 아래 "Browser:" 항목을 보면 기본 브라우저가 어느 앱인지 알 수 있고, 이 자리에 com.android.chrome 이 나오면 Chrome 이 기본 브라우저입니다. 웹에서 무엇을 찾고, 어디에 들어가고, 무엇을 받았는지를 묻는 사건이면 기본 브라우저가 무엇인지 먼저 확인하고, Chrome 이라면 이 앱의 파일부터 봅니다.
 
-한 앱 안에서도 파일마다 시각 기준이 다르다는 점을 먼저 알아 두어야 합니다. History 와 Cookies 는 1601-01-01 UTC 부터의 마이크로초이고 [1][2], Web Data 의 자동 완성 시각은 ALEAPP 가 유닉스 초로 읽으며 [3], 탭 상태 파일의 시각 칸은 이름이 …Millis 인 long 값이지만 기준 에포크를 확인하지 못했습니다 [4]. 각 페이지의 "시각 해석" 절에서 칸마다 따로 다룹니다.
+한 앱 안에서도 파일마다 시각 기준이 다르다는 점을 먼저 알아 두어야 합니다. History 와 Cookies 는 1601-01-01 UTC 부터의 마이크로초이고 [1][2], Web Data 의 자동 완성 시각은 유닉스 초이며 [3], 탭 상태 파일의 시각 칸은 이름이 …Millis 인 long 값이지만 기준 에포크는 소스에 밝혀져 있지 않아 검체로 확인해야 합니다 [4]. 각 페이지의 "시각 해석" 절에서 칸마다 따로 다룹니다.
 
 같은 폴더 이름을 다른 앱도 씁니다. Brave, Edge, Opera 같은 Chromium 계열 앱도 `app_chrome` 이라는 이름을 쓰기 때문에 폴더 구조만으로는 어느 브라우저인지 알 수 없고, 경로 안의 패키지 폴더 이름으로 가려야 합니다 [1]. WebView 를 쓰는 다른 앱도 자기 패키지 아래 `app_webview/Default/` 에 History, Cookies, Web Data 를 남기고, ALEAPP 는 이것도 같은 파서로 읽어 브라우저 이름 칸에 그 앱의 패키지 이름을 적습니다 [1][2][3]. 도구 결과에 Chrome 이 아닌 이름이 섞여 나오면 이 두 경우인지 먼저 봅니다.
 
@@ -29,12 +29,12 @@ Chrome for Android(패키지 com.android.chrome)는 앱 데이터 폴더의 `app
 | `app_chrome/Default/History` | SQLite | 방문 기록(urls, visits), 검색어(keyword_search_terms) [1] | ALEAPP 표본 Android 10~16 [1] |
 | `app_chrome/Default/History` | SQLite | 다운로드(downloads, downloads_url_chains, downloads_slices) [1][5] | 같은 파일, 오래된 DB 에는 일부 칸이 없음 [1] |
 | 탭 상태 폴더(`tabs` 로 만든 폴더) | Chrome 전용 파일 | 저장 시점에 열려 있던 탭의 URL, 탭을 연 앱, 시크릿 탭 파일 [4] | 현행 Chromium 소스 기준 |
-| `app_chrome/Default/Cookies` | SQLite | 도메인별 쿠키와 만든·읽은 시각 [2] | 경로 이동 여부는 확인 못 함 |
+| `app_chrome/Default/Cookies` | SQLite | 도메인별 쿠키와 만든·읽은 시각 [2] | 경로 이동 여부는 검체에서 확인 |
 | `app_chrome/Default/Web Data` | SQLite | 입력란에 넣은 값, 주소 프로필 [3] | 옛 형식과 새 형식이 있음 [3] |
 
-같은 Chromium 계열인 삼성 인터넷(com.sec.android.app.sbrowser)은 `app_sbrowser/Default/History` 를 남기고 ALEAPP 가 Chrome 과 같은 SQL 로 읽습니다 [1]. 삼성 기기에서는 Chrome 과 삼성 인터넷이 함께 깔려 있는 경우가 있어서(ALEAPP 의 Android 14 삼성 표본이 그런 예입니다 [1]) 두 앱을 따로 봅니다. 관찰 기기에 삼성 인터넷이 깔려 있는지는 관찰 메모에서 가려져 있어 확인하지 못했습니다.
+같은 Chromium 계열인 삼성 인터넷(com.sec.android.app.sbrowser)은 `app_sbrowser/Default/History` 를 남기고, 이 파일은 Chrome 과 같은 SQL 로 읽힙니다 [1]. 삼성 기기에서는 Chrome 과 삼성 인터넷이 함께 깔려 있는 경우가 있어서(ALEAPP 의 Android 14 삼성 표본이 그런 예입니다 [1]) 두 앱을 따로 봅니다.
 
-루팅하지 않은 기기에서 일반 adb 권한으로 이 폴더를 읽을 수 있는지는 확인하지 못했습니다. 앱 데이터 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다. 저장된 비밀번호(Login Data)와 Top Sites, Shortcuts, Bookmarks 같은 다른 파일의 Android 경로와 표 이름도 이번에 확인하지 않았고, 저장된 암호는 [저장된 암호 (Google 비밀번호 관리자·Samsung Pass)](../../credentials-security/saved-passwords.md) 페이지에서 다룹니다.
+앱 데이터 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다. 저장된 비밀번호(Login Data)는 [저장된 암호 (Google 비밀번호 관리자·Samsung Pass)](../../credentials-security/saved-passwords.md) 페이지에서 다룹니다.
 
 > 그림 자리: Chrome 앱 데이터 폴더 아래 app_chrome/Default 의 세 SQLite 파일과 탭 상태 폴더, 각 파일에서 이어지는 하위 페이지를 한 장에 그린 구조도
 

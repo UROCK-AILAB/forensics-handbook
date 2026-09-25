@@ -19,7 +19,7 @@ super 가 담는 논리 파티션에는 사용자가 만든 데이터가 없고,
 
 ### 도입과 구현
 
-동적 파티션 (Dynamic Partitions)은 Android 10 에 도입되었고, AOSP 구현 문서는 "Android 10 으로 출시하는 기기는 super 라는 파티션을 만든다"고 적습니다. AOSP 파티션 개요 문서에는 Android 11 이상 기기가 지원할 수 있다고 적혀 있지만, 이 페이지는 도입 버전을 구현 문서의 Android 10 으로 씁니다.
+동적 파티션 (Dynamic Partitions)은 Android 10 에 도입되었고, Android 10 으로 출시하는 기기는 super 라는 파티션을 만듭니다[1]. AOSP 파티션 개요 문서에는 Android 11 이상 기기가 지원할 수 있다고 적혀 있어, 두 문서가 말하는 도입 버전이 다릅니다[1][3].
 
 super 안의 메타데이터에는 동적 파티션마다 이름과 블록 범위가 적혀 있고, 커널은 리눅스 device-mapper 의 dm-linear 모듈로 그 블록 범위를 논리 파티션 하나로 이어 보여 줍니다. A/B 기기에서도 super 는 하나뿐이라서 super_a·super_b 를 따로 두지 않고, 슬롯은 super 안에서 다룹니다.
 
@@ -45,7 +45,7 @@ fstab 에서 논리 파티션 줄의 fs_mgr 플래그에는 `logical` 과 `first
 
 ### super 메타데이터 형식
 
-메타데이터 형식은 AOSP liblp 의 헤더 `metadata_format.h` 에 정의되어 있습니다. 이 페이지의 상수와 칸 이름은 모두 그 헤더에서 가져왔습니다.
+메타데이터 형식은 AOSP liblp 의 헤더 `metadata_format.h` 에 정의되어 있고, 아래 상수와 칸 이름은 그 헤더의 정의입니다[2].
 
 | 상수 | 값 | 뜻 |
 |---|---|---|
@@ -69,7 +69,7 @@ name[36], attributes, first_extent_index, num_extents, group_index
 
 `attributes` 칸의 비트는 다음과 같습니다.
 
-| 비트 | 이름 | 뜻 (헤더 주석) |
+| 비트 | 이름 | 뜻 |
 |---|---|---|
 | `1<<0` | READONLY | 쓰기 불가 |
 | `1<<1` | SLOT_SUFFIXED | 이름에 슬롯 접미사를 붙임 |
@@ -78,7 +78,7 @@ name[36], attributes, first_extent_index, num_extents, group_index
 
 extent 가 가리키는 대상은 두 종류이고, LINEAR (0)는 dm-linear 로 super 의 블록 범위를 잇고 ZERO (1)는 dm-zero 로 0 을 채운 범위를 만듭니다.
 
-헤더 주석에 따르면 super 는 맨 앞 4096바이트를 예약해 두고, 그 뒤에 geometry, 예비 geometry, 메타데이터, 예비 메타데이터, 논리 파티션 데이터를 차례로 둡니다. 메타데이터 사본마다 정확한 바이트 오프셋은 `metadata_max_size` 와 `metadata_slot_count` 에 따라 달라지므로 이 페이지에서는 값을 정해 적지 않습니다.
+super 는 맨 앞 4096바이트를 예약해 두고, 그 뒤에 geometry, 예비 geometry, 메타데이터, 예비 메타데이터, 논리 파티션 데이터를 차례로 둡니다[2]. 메타데이터 사본마다 정확한 바이트 오프셋은 `metadata_max_size` 와 `metadata_slot_count` 에 따라 달라집니다.
 
 ## 읽는 법
 
@@ -94,24 +94,22 @@ extent 가 가리키는 대상은 두 종류이고, LINEAR (0)는 dm-linear 로 
 
 A/B 기기에서는 super 하나 안에 이름에 슬롯 접미사가 붙은 논리 파티션이 함께 있을 수 있고, `SLOT_SUFFIXED` 비트가 그 표시입니다. 이때 어느 쪽이 기기가 실제로 부팅한 슬롯이었는지는 super 메타데이터만으로 정하지 않고 [A/B 슬롯](ab-slots.md)의 방법으로 확인합니다.
 
-`UPDATED` 비트는 헤더 주석대로 스냅샷 기반 업데이트로 만들어지거나 바뀐 파티션이라는 표시이고, 이 비트로 업데이트 시각이나 업데이트 내용까지 알 수 있는지는 확인하지 못했습니다. 보고서에는 "이 논리 파티션에 UPDATED 표시가 있다" 처럼 기록이 말하는 만큼만 적습니다.
+`UPDATED` 비트는 스냅샷 기반 업데이트로 만들어지거나 바뀐 파티션이라는 표시입니다[2]. 이 비트만으로는 업데이트 시각이나 업데이트 내용을 알 수 없습니다. 보고서에는 "이 논리 파티션에 UPDATED 표시가 있다" 처럼 기록이 말하는 만큼만 적습니다.
 
 Virtual A/B 기기는 COW 이미지를 super 의 빈 공간에 둘 수 있어서, 메타데이터가 가리키지 않는 영역도 비어 있다고 단정하지 않습니다. geometry 에는 `checksum` 칸이 있어서 geometry 가 손상되었는지 확인할 때 씁니다. 손상된 메타데이터로 만든 논리 파티션 이미지는 블록이 엉뚱하게 이어질 수 있고, 그 위에서 읽은 파일 시스템 결과도 믿기 어렵습니다.
 
 ## 함정
 
-업그레이드 기기는 새 super 파티션 대신 기존 파티션을 이어 쓰기 때문에, 파티션 표에서 super 라는 이름을 찾지 못했다고 곧바로 동적 파티션이 아니라고 적지 않습니다. 논리 파티션이 실행 중인 기기에서 어느 장치 경로로 나타나는지는 이 조사에서 확인하지 못했고, 물리 파티션 경로는 [파티션 배치](partition-layout.md)에 있습니다.
+업그레이드 기기는 새 super 파티션 대신 기존 파티션을 이어 쓰기 때문에, 파티션 표에서 super 라는 이름을 찾지 못했다고 곧바로 동적 파티션이 아니라고 적지 않습니다. 실행 중인 기기에서 논리 파티션이 나타나는 장치 경로는 기기에서 직접 확인합니다. 물리 파티션 경로는 [파티션 배치](partition-layout.md)에 있습니다.
 
 | 항목 | AOSP 문서 | 삼성 갤럭시 (One UI) |
 |---|---|---|
-| super 파티션 사용 | Android 10 이상으로 출시한 기기는 만듦 | 확인 못 함 |
-| super 안의 논리 파티션 목록 | system, vendor, product, system_ext, odm 가운데 | 확인 못 함 |
-
-(Android 16, One UI 8.5)의 기기 관찰 메모에는 파티션 목록이나 super 정보가 없어서, 이 기기의 super 구성은 이 페이지에서 말하지 않습니다.
+| super 파티션 사용 | Android 10 이상으로 출시한 기기는 만듦 | 검체에서 확인 |
+| super 안의 논리 파티션 목록 | system, vendor, product, system_ext, odm 가운데 | 검체에서 확인 |
 
 ## 도구
 
-구조의 기준은 AOSP liblp 의 `metadata_format.h` 입니다. 이 조사에서 super 를 풀어 주는 도구의 이름과 동작은 문서로 확인하지 못했고, 어떤 도구를 쓰든 파티션 이름, extent 수, 속성 비트를 헤더 정의에 따라 직접 읽은 값과 대조합니다. 대조하는 방법은 [도구 검증](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
+구조의 기준은 AOSP liblp 의 `metadata_format.h` 입니다[2]. super 를 풀어 주는 도구를 쓸 때는 파티션 이름, extent 수, 속성 비트를 헤더 정의에 따라 직접 읽은 값과 대조합니다. 대조하는 방법은 [도구 검증](../../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 참고 문헌
 

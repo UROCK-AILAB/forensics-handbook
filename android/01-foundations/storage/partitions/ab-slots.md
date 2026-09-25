@@ -29,7 +29,7 @@ system_a  system_b
 vendor_a  vendor_b
 ```
 
-빌드에서는 `AB_OTA_UPDATER := true` 로 A/B 를 켜고 `AB_OTA_PARTITIONS := boot system vendor ...` 로 두 벌 둘 파티션을 정합니다. A/B 기기는 별도의 recovery·cache 파티션 없이 동작하고, OTA 패키지를 cache 에 두지 않습니다. AOSP 문서는 현재 슬롯이 쓰는 파티션(한 벌뿐인 파티션 포함)을 OTA 로 업데이트하지 않는다고 적고, userdata·misc·metadata 가 한 벌이라는 설명은 이 문장에서 끌어낸 요약이라서 문서에 목록으로 적혀 있지는 않습니다.
+빌드에서는 `AB_OTA_UPDATER := true` 로 A/B 를 켜고 `AB_OTA_PARTITIONS := boot system vendor ...` 로 두 벌 둘 파티션을 정합니다. A/B 기기는 별도의 recovery·cache 파티션 없이 동작하고, OTA 패키지를 cache 에 두지 않습니다. 현재 슬롯이 쓰는 파티션은 한 벌뿐인 파티션까지 포함해 OTA 로 업데이트하지 않습니다[1]. userdata·misc·metadata 도 한 벌뿐인 파티션이라 여기에 들어가는 것으로 보입니다.
 
 ### 슬롯 상태
 
@@ -78,25 +78,25 @@ COW 연산에는 Copy, Replace, Zero, XOR (Android 13 이상)가 있고, 전체 
 3. Virtual A/B 기기라면 `/metadata/ota` 와 `/data/gsi/ota` 에 스냅샷 흔적이 있는지 보고, 병합 상태는 misc 파티션에 있다는 점을 기억해 둡니다.
 4. 두 슬롯의 빌드가 다르면 현재 슬롯의 빌드를 기준으로 삼고, 다른 슬롯은 업데이트 전후의 비교 자료로 둡니다.
 
-(Android 16, One UI 8.5)의 기기 관찰 메모에는 getprop 출력이나 슬롯·마운트 정보가 없어서, 이 기기가 어느 방식을 쓰는지와 현재 슬롯은 이 페이지에서 말하지 않습니다. 같은 메모의 설정 키 목록에는 settings global 의 `ota_disable_automatic_update`, `galaxy_system_update`, `galaxy_system_update_use_wifi_only` 와 settings system 의 `IsFotaUpgrade` 같은 업데이트 관련 키 이름이 있습니다. 이 키들의 값과 뜻은 확인하지 못했고 슬롯 상태를 알려 주는 값도 아니며, 설정 값 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
+Android 16·One UI 8.5 기기의 설정에는 settings global 의 `ota_disable_automatic_update`, `galaxy_system_update`, `galaxy_system_update_use_wifi_only` 와 settings system 의 `IsFotaUpgrade` 같은 업데이트 관련 키가 있습니다. 이 키들은 슬롯 상태를 알려 주는 값이 아니고, 값의 뜻은 공개된 자료가 없어 검체에서 확인합니다. 설정 값 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
-`/metadata/ota` 나 `/data/gsi/ota` 에 스냅샷 흔적이 남아 있으면 최근 OTA 가 진행 중이었거나 병합이 끝나지 않았을 수 있지만, 이 해석은 문서 내용에서 끌어낸 추론이고 실제 파일 이름과 시각을 읽는 기준은 확인하지 못했습니다. 병합이 끝나지 않은 상태에서 만든 이미지는 원래 파티션만 읽으면 업데이트가 반영되지 않은 내용일 수 있다는 판단도 같은 추론이라서, 보고서에는 추론이라고 밝혀 적습니다.
+`/metadata/ota` 나 `/data/gsi/ota` 에 스냅샷 흔적이 남아 있으면 최근 OTA 가 진행 중이었거나 병합이 끝나지 않았을 가능성이 있습니다. 파일 이름과 시각을 읽는 기준은 공개된 자료가 없어 검체에서 확인합니다. 병합이 끝나지 않은 상태에서 만든 이미지는 원래 파티션만 읽으면 업데이트가 반영되지 않은 내용일 수 있습니다. 두 해석 모두 추정이므로 보고서에는 추정이라고 밝혀 적습니다.
 
-병합 상태가 MERGING 이나 SNAPSHOTTED 인 동안 부트로더가 metadata·userdata 와 병합 상태를 담은 파티션의 지우기 (erase·wipe)를 거부한다는 점은 문서에 적힌 요구 사항이고, MERGING 상태에서는 현재 슬롯을 바꾸는 명령도 거부합니다. 이 동작은 부트로더 단계의 지우기에 관한 것이라서 설정 메뉴의 초기화까지 막는다고 적지 않습니다. 초기화 시도와 업데이트 시점이 겹치는 사건에서는 이 동작을 함께 적어 두고, 초기화 흔적 자체는 [초기화 흔적](../../../02-artifacts/system-account/factory-reset.md)에서 확인합니다.
+병합 상태가 MERGING 이나 SNAPSHOTTED 인 동안 부트로더가 metadata·userdata 와 병합 상태를 담은 파티션의 지우기 (erase·wipe)를 거부해야 하고, MERGING 상태에서는 현재 슬롯을 바꾸는 명령도 거부합니다[4]. 이 동작은 부트로더 단계의 지우기에 관한 것이라서 설정 메뉴의 초기화까지 막는다고 볼 근거는 없습니다. 초기화 시도와 업데이트 시점이 겹치는 사건에서는 이 동작을 함께 적어 두고, 초기화 흔적 자체는 [초기화 흔적](../../../02-artifacts/system-account/factory-reset.md)에서 확인합니다.
 
 successful 상태는 사용자 공간이 슬롯을 표시한 결과이고 사용자가 기기를 조작했다는 기록은 아닙니다. 슬롯 상태와 병합 상태는 기기를 다시 켜거나 업데이트가 진행되면 바뀌기 때문에, 수집 중에는 슬롯 상태를 바꾸는 조작을 하지 않고 수집 전후의 상태를 기록합니다. 수집 절차는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다.
 
 ## 함정
 
-`ro.virtual_ab.enabled` 와 `ro.build.ab_update` 속성은 이 조사에서 문서로 확인하지 못해서, A/B 나 Virtual A/B 여부를 판단하는 근거로 적지 않습니다. 삼성 기기의 방식도 확인하지 못했습니다.
+`ro.virtual_ab.enabled` 와 `ro.build.ab_update` 속성은 참고 문헌의 AOSP 문서에 나오지 않는 값이라, A/B 나 Virtual A/B 여부를 판단하는 근거로 쓰지 않습니다. 삼성 기기가 어느 방식을 쓰는지는 공개된 자료가 없어 검체에서 확인합니다.
 
 | 항목 | AOSP 문서 | 삼성 갤럭시 (One UI) |
 |---|---|---|
-| A/B·Virtual A/B·비 A/B 가운데 무엇을 쓰나 | 기기마다 다름 | 확인 못 함 |
-| Android 16 기기의 슬롯 여부 | — | 확인 못 함 |
-| 슬롯 접미사 | `_a`·`_b` | 확인 못 함 |
+| A/B·Virtual A/B·비 A/B 가운데 무엇을 쓰나 | 기기마다 다름 | 검체에서 확인 |
+| Android 16 기기의 슬롯 여부 | — | 검체에서 확인 |
+| 슬롯 접미사 | `_a`·`_b` | 검체에서 확인 |
 
 ## 도구
 

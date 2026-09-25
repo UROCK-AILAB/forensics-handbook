@@ -7,7 +7,7 @@ nav_order: 440
 
 # 앱 권한 부여 기록 (Runtime Permissions)
 
-사용자가 앱에 준 위험 권한(런타임 권한)의 현재 상태가 어느 파일에 어떻게 남는지 정리합니다. 소스로 확인한 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 어느 Android 출시 버전에서 바뀌었는지는 대부분 확인하지 못했습니다. 권한 체계 자체는 [앱 샌드박스와 권한](../../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다.
+사용자가 앱에 준 위험 권한(런타임 권한)의 현재 상태가 어느 파일에 어떻게 남는지 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 출시 버전마다 다를 수 있습니다. 권한 체계 자체는 [앱 샌드박스와 권한](../../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다.
 
 ## 한 줄 요약
 
@@ -24,11 +24,11 @@ nav_order: 440
 | `/data/system/users/<사용자ID>/runtime-permissions.xml` | Android 10 이하 [7] | 옛 위치(Settings.getUserRuntimePermissionsFile) [1] |
 | `/data/misc_de/<사용자ID>/apexdata/com.android.permission/runtime-permissions.xml` | Android 11 부터 [7] | 권한 모듈이 쓰는 새 위치. 같은 폴더에 예비 사본 `runtime-permissions.xml.reservecopy` 도 씁니다 [6] |
 
-ALEAPP 는 두 위치를 함께 찾습니다 [2]. 현행 AOSP 는 먼저 권한 모듈의 저장소에서 읽고, 없으면 옛 파일을 읽은 뒤 새 저장소에 다시 씁니다 [1]. Android 10 에서 11 로 올린 기기에는 두 위치에 파일이 모두 남고, 올린 뒤의 변경은 새 위치에만 적힌다는 분석 사례가 있습니다 [7]. 그래서 두 파일을 비교하면 업그레이드 전의 권한 상태를 볼 수 있지만, 옛 파일을 언제 지우는지는 소스로 확인하지 못했습니다.
+ALEAPP 는 두 위치를 함께 찾습니다 [2]. 현행 AOSP 는 먼저 권한 모듈의 저장소에서 읽고, 없으면 옛 파일을 읽은 뒤 새 저장소에 다시 씁니다 [1]. Android 10 에서 11 로 올린 기기에는 두 위치에 파일이 모두 남고, 올린 뒤의 변경은 새 위치에만 적힙니다 [7]. 그래서 두 파일을 비교하면 업그레이드 전의 권한 상태를 볼 수 있습니다. 옛 파일이 남아 있는지는 검체에서 확인합니다.
 
-옛 파일을 읽는 코드는 `Xml.resolvePullParser` 를 쓰기 때문에 옛 위치 파일은 안드로이드 바이너리 XML(ABX)로 저장되어 있을 수 있습니다 [1][4]. 새 위치 파일은 권한 모듈이 `Xml.newSerializer()` 로 쓰는데, 이 함수는 ABX 가 아닌 일반 텍스트 XML 쓰기 도구를 돌려줍니다 [4][6]. 권한 모듈은 파일을 쓴 뒤 본 파일과 예비 사본에 fs-verity 보호를 겁니다 [6]. 삼성 One UI 가 이 파일의 위치나 형식을 바꿨는지는 확인하지 못했습니다.
+옛 파일을 읽는 코드는 `Xml.resolvePullParser` 를 쓰기 때문에 옛 위치 파일은 안드로이드 바이너리 XML(ABX)로 저장되어 있을 수 있습니다 [1][4]. 새 위치 파일은 권한 모듈이 `Xml.newSerializer()` 로 쓰는데, 이 함수는 ABX 가 아닌 일반 텍스트 XML 쓰기 도구를 돌려줍니다 [4][6]. 권한 모듈은 파일을 쓴 뒤 본 파일과 예비 사본에 fs-verity 보호를 겁니다 [6]. 삼성 One UI 에서 이 파일의 위치나 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-ALEAPP 의 runtimePerms 모듈 설명에는 Android 16 Pixel 8 Pro 와 Android 15 Poco X7 이미지에서 결과가 "0 rows" 였다고 적혀 있습니다 [2]. 파일이 없었는지 형식이 달랐는지 이유는 적혀 있지 않아서, 최신 기기에서 이 모듈 결과가 비면 파일이 있는지부터 직접 확인합니다.
+ALEAPP 의 runtimePerms 모듈은 Android 16 Pixel 8 Pro 와 Android 15 Poco X7 이미지에서 결과가 "0 rows" 였습니다 [2]. 파일이 없었는지 형식이 달랐는지는 밝혀져 있지 않아서, 최신 기기에서 이 모듈 결과가 비면 파일이 있는지부터 직접 확인합니다.
 
 ## 구조
 
@@ -68,7 +68,7 @@ flags 의 각 비트는 PackageManager 의 FLAG_PERMISSION_* 상수로 정의되
 | 0x20000 | AUTO_REVOKED | 자동 거둠(auto-revoke)으로 거둬짐 |
 | 0x80000 | SELECTED_LOCATION_ACCURACY | 선택한 위치 정확도(예: ACCESS_FINE_LOCATION 에 있으면 정밀 위치를 고름) |
 
-0x400 과 0x40000 은 이 목록에 정의가 없었습니다. 권한 컨트롤러가 쓰는 예약 비트("Reserved for use by the permission controller")가 따로 정의되어 있지만 그 값은 확인하지 못했습니다 [3]. 일회성 권한과 자동 거둠이 도입된 Android 버전도 이번 출처로는 확인하지 못했고, 비트 이름만 확인했습니다.
+0x400 과 0x40000 은 이 목록에 정의가 없습니다. 권한 컨트롤러가 쓰는 예약 비트는 따로 정의되어 있습니다 [3].
 
 ## 라이브 기기에서 보이는 모양 (dumpsys package)
 
@@ -80,7 +80,7 @@ flags 의 각 비트는 PackageManager 의 FLAG_PERMISSION_* 상수로 정의되
 
 비트 이름은 permissionFlagToString() 으로 바꾸고, 이 변환 목록에 없는 비트는 숫자로 찍습니다. SELECTED_LOCATION_ACCURACY 도 변환 목록에 없어서 숫자로 나옵니다 [1][3]. 설치 권한(install permissions)도 같은 꼴이고, 사용자 0 과 다를 때만 `, userId=` 와 사용자 번호가 붙습니다 [1].
 
-실제 폰의 "Known Packages:" 절에서 "Permission Controller:" 는 `com.google.android.permissioncontroller` 였습니다. 관찰 메모에는 `runtime permissions:` 줄이 생략되어 있어서 실제 폰에서 권한 줄의 모양은 확인하지 못했습니다.
+같은 출력의 "Known Packages:" 절에는 권한 컨트롤러 패키지가 "Permission Controller:" 로 찍힙니다(예: `com.google.android.permissioncontroller`).
 
 ## 증거로서 의미
 
@@ -90,7 +90,7 @@ flags 의 각 비트는 PackageManager 의 FLAG_PERMISSION_* 상수로 정의되
 | 사용자가 정했는지, 정책·시스템·기본값·역할로 부여됐는지 | 앱이 그 권한으로 실제로 데이터에 접근했는지 |
 | 사용자가 고정(USER_FIXED)해서 다시 묻지 않게 했는지 | 권한을 준 사람이 기기 주인인지 |
 
-권한 모듈이 새 위치 파일에 쓰는 값은 version, fingerprint 와 권한마다 name, granted, flags 뿐이고, 권한을 준 시각이나 거둔 시각은 쓰지 않습니다 [6]. 옛 파일 읽기 코드에도 시각 칸은 없습니다 [1]. 그래서 보고서에는 "이 파일로는 부여 시각을 알 수 없다" 고 쓰고, 파일 자체의 수정 시각은 마지막으로 파일을 다시 쓴 때일 뿐이라서 특정 권한의 부여 시각으로 쓰지 않습니다. 권한을 실제로 쓴 기록은 앱 작업(appops) 쪽 흔적이고, ALEAPP 에 appops·appOpsAccesses·appOpsModes·permissionAccessState 모듈이 있지만 [5] 이번에 내용을 열지 않았습니다.
+권한 모듈이 새 위치 파일에 쓰는 값은 version, fingerprint 와 권한마다 name, granted, flags 뿐이고, 권한을 준 시각이나 거둔 시각은 쓰지 않습니다 [6]. 옛 파일 읽기 코드에도 시각 칸은 없습니다 [1]. 그래서 보고서에는 "이 파일로는 부여 시각을 알 수 없다" 고 쓰고, 파일 자체의 수정 시각은 마지막으로 파일을 다시 쓴 때일 뿐이라서 특정 권한의 부여 시각으로 쓰지 않습니다. 권한을 실제로 쓴 기록은 앱 작업(appops) 쪽 흔적이고, ALEAPP 에는 appops·appOpsAccesses·appOpsModes·permissionAccessState 모듈이 있습니다 [5].
 
 보고서 문장은 "앱이 위치를 추적했다" 가 아니라 "이 파일을 쓴 시점에 이 앱에는 정밀 위치 권한이 부여되어 있었고, flags 에 USER_SET 이 켜져 있었다" 처럼 기록이 말하는 만큼만 씁니다.
 

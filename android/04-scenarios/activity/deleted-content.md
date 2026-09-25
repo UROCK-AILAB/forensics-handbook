@@ -14,10 +14,10 @@ Android 에서 "지웠다" 는 한 가지 상태가 아닙니다. 사진은 휴�
 
 ## 먼저 확인할 것
 
-- **OS 버전과 제조사** — 미디어 저장소(MediaStore)의 휴지통 규칙과 플랫폼 SQLite 빌드 설정은 현행 AOSP 소스로 확인한 값이고, 삼성 기기에는 삼성 휴지통 제공자가 따로 있습니다(아래 표). 검체의 Android 버전과 One UI 버전을 먼저 적어 둡니다.
+- **OS 버전과 제조사** — 미디어 저장소(MediaStore)의 휴지통 규칙과 플랫폼 SQLite 빌드 설정은 현행 AOSP 기준이고, 삼성 기기에는 삼성 휴지통 제공자가 따로 있습니다(아래 표). 검체의 Android 버전과 One UI 버전을 먼저 적어 둡니다.
 - **시간대** — 휴지통 파일 이름의 숫자는 유닉스 초, 삼성 휴지통 DB 의 시각은 유닉스 밀리초라서 [2][3] 단위를 맞춘 뒤 기기 시간대로 바꿉니다([시각 값](../../01-foundations/value-decoding/time-values.md)).
 - **사용자와 프로필** — 삼성 휴지통 DB 에는 `user_id` 칸이 있고 휴지통 파일 경로에도 사용자 번호 자리가 있어 [3], 보안 폴더나 작업 프로필이 있으면 사용자별로 따로 찾습니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
-- **수집 범위** — 앱 DB 와 휴지통 DB 는 앱 데이터 영역에 있어 전체 파일 시스템을 확보해야 볼 수 있습니다. 관찰 기기에서 adb 일반 권한으로 `/sdcard/Android` 를 나열했을 때는 `data`, `media`, `obb` 세 항목만 나왔지만, 숨김 항목까지 나열한 결과인지 알 수 없어 `.Trash` 폴더가 없다고 결론 내지 않습니다. 확보 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 정합니다.
+- **수집 범위** — 앱 DB 와 휴지통 DB 는 앱 데이터 영역에 있어 전체 파일 시스템을 확보해야 볼 수 있습니다. adb 일반 권한으로 `/sdcard/Android` 를 나열하면 `data`, `media`, `obb` 세 항목만 보일 수 있지만, 숨김 항목이 빠진 결과일 수 있으니 이것만으로 `.Trash` 폴더가 없다고 결론 내지 않습니다. 확보 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 정합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -32,8 +32,8 @@ Android 에서 "지웠다" 는 한 가지 상태가 아닙니다. 사진은 휴�
 
 | 기록 | 확인된 범위 | 비고 |
 |---|---|---|
-| MediaStore 휴지통 이름 규칙과 기본 기간 | 현행 AOSP 기준 [2] | 어느 Android 버전부터 이 규칙인지는 이 페이지의 출처로 확인하지 못했습니다 |
-| 삼성 휴지통 제공자 | ALEAPP 시험 자료가 Android 14·15, 행 0~29개 [3] | One UI 몇 버전부터 있는지, 보관 기간이 며칠인지는 확인하지 못했습니다 |
+| MediaStore 휴지통 이름 규칙과 기본 기간 | 현행 AOSP 기준 [2] | 어느 Android 버전부터 이 규칙인지는 검체에서 확인합니다 |
+| 삼성 휴지통 제공자 | ALEAPP 시험 자료가 Android 14·15, 행 0~29개 [3] | One UI 몇 버전부터 있는지, 보관 기간이 며칠인지는 공개 자료가 없어 검체에서 확인합니다 |
 | 플랫폼 SQLite 빌드 설정 | 현행 AOSP 기준 [4] | 앱이 자체 SQLite 를 넣어 쓰는 경우는 앱마다 따로 확인합니다 |
 
 ## 분석 흐름
@@ -49,7 +49,7 @@ Android 에서 "지웠다" 는 한 가지 상태가 아닙니다. 사진은 휴�
 
    이름 가운데 숫자는 만료 예정 시각(`date_expires`)이고 단위는 유닉스 초이며, 휴지통 기본 기간은 30일, 대기 중 파일은 7일, 연장은 7일입니다 [2]. 파일이 보이면 원본 내용이 그대로 남아 있는 상태라서 해시를 떠 두고 그대로 확보합니다. 이 숫자로 휴지통에 넣은 무렵을 셈하는 법과 연장 때문에 생기는 오차는 [증거를 없애려 했나](anti-forensics/index.md) 묶음에 있습니다. 원래 이름이 UTF-8 로 255바이트를 넘으면 가운데를 잘라 `...` 을 넣으니 [2], 되살린 이름이 처음 이름과 다를 수 있다는 점을 적어 둡니다.
 
-2. **삼성 기기라면 삼성 휴지통 제공자를 봅니다.** ALEAPP 는 아래 경로에서 휴지통 DB 와 휴지통 파일을 찾습니다 [3].
+2. **삼성 기기라면 삼성 휴지통 제공자를 봅니다.** 휴지통 DB 와 휴지통 파일은 아래 경로에 있습니다 [3].
 
    ```
    */com.samsung.android.providers.trash/databases/trash.db*
@@ -57,13 +57,13 @@ Android 에서 "지웠다" 는 한 가지 상태가 아닙니다. 사진은 휴�
    */storage/*/Android/.Trash/*
    ```
 
-   `trashes` 표의 칸은 `_id`, `_data`, `original_path`, `title`, `_display_name`, `_size`, `mime_type`, `delete_package_name`, `user_id`, `date_deleted`, `date_expires`, `extra` 이고, `date_deleted` 와 `date_expires` 는 ALEAPP 가 1000 으로 나눠 UTC 로 바꾸는 유닉스 밀리초입니다 [3]. ALEAPP 설명에 따르면 `original_path` 는 휴지통에 넣기 전 위치, `delete_package_name` 은 지우기를 시작한 앱입니다 [3]. `_data` 가 가리키는 휴지통 파일이 남아 있으면 내용을 되찾은 것이고, 파일은 없고 행만 남아 있으면 "이 이름·크기의 파일이 이 경로에 있었다" 는 흔적까지만 얻습니다. 갤러리 앱 쪽 휴지통 기록은 [삼성 갤러리](../../02-artifacts/media/samsung-gallery.md) 에서 봅니다.
+   `trashes` 표의 칸은 `_id`, `_data`, `original_path`, `title`, `_display_name`, `_size`, `mime_type`, `delete_package_name`, `user_id`, `date_deleted`, `date_expires`, `extra` 이고, `date_deleted` 와 `date_expires` 는 유닉스 밀리초라서 1000 으로 나눠 UTC 로 바꿉니다 [3]. `original_path` 는 휴지통에 넣기 전 위치, `delete_package_name` 은 지우기를 시작한 앱입니다 [3]. `_data` 가 가리키는 휴지통 파일이 남아 있으면 내용을 되찾은 것이고, 파일은 없고 행만 남아 있으면 "이 이름·크기의 파일이 이 경로에 있었다" 는 흔적까지만 얻습니다. 갤러리 앱 쪽 휴지통 기록은 [삼성 갤러리](../../02-artifacts/media/samsung-gallery.md) 에서 봅니다.
 
-3. **대화 앱 DB 에서 삭제 표시가 붙은 행을 찾습니다.** 앱에 따라 행을 바로 지우지 않고 삭제 시각이나 삭제 표시 칸만 채우는 경우가 있어, 표와 칸 이름은 앱마다 [문자](../../02-artifacts/communications/messages/index.md), [카카오톡](../../02-artifacts/messengers/kakaotalk/index.md), [연락처](../../02-artifacts/communications/contacts.md) 같은 앱 페이지에서 확인합니다. 관찰 기기의 `settings global` 에는 `contact_setting_trash_bin_on` 키가 있었지만 값과 뜻은 확인하지 못했습니다.
+3. **대화 앱 DB 에서 삭제 표시가 붙은 행을 찾습니다.** 앱에 따라 행을 바로 지우지 않고 삭제 시각이나 삭제 표시 칸만 채우는 경우가 있어, 표와 칸 이름은 앱마다 [문자](../../02-artifacts/communications/messages/index.md), [카카오톡](../../02-artifacts/messengers/kakaotalk/index.md), [연락처](../../02-artifacts/communications/contacts.md) 같은 앱 페이지에서 확인합니다. `settings global` 에 `contact_setting_trash_bin_on` 키가 있을 수 있지만, 뜻을 풀이한 공개 자료가 없어 값은 검체에서 확인합니다.
 
-4. **DB 파일 안에 남은 조각을 찾되 기대치를 낮춥니다.** 현행 AOSP 의 플랫폼 SQLite 는 `-DSQLITE_SECURE_DELETE`, `-DSQLITE_DEFAULT_AUTOVACUUM=1`, `-DSQLITE_DEFAULT_JOURNAL_SIZE_LIMIT=1048576` 으로 빌드하고, 소스 설명은 두 번째 설정이 DB 를 자동 비우기(auto-vacuum) 대상으로 만든다고 적습니다 [4]. 이 설정대로라면 플랫폼 SQLite 로 만든 DB 는 지운 레코드를 0 으로 덮고 빈 페이지를 잘라 낸다고 해석할 수 있습니다. 다만 저널 크기 한도는 저널·WAL 파일을 비울 때 크기를 1MiB 로 줄이는 설정이지 그 안의 옛 페이지를 지우는 설정이 아니라서, `-wal` 파일에는 지우기 전 페이지가 남아 있을 수 있으니 본 DB 와 함께 확보합니다. 그래서 문자·연락처 같은 시스템 제공자 DB 의 빈 공간에서 되살릴 것이 적더라도 "지운 것이 없었다" 로 읽지 않습니다. 앱이 자체 SQLite 를 넣어 쓰는지, 그 설정이 어떤지는 앱마다 다르니 따로 확인합니다. 관찰 기기의 `settings global` 에는 `sqlite_compatibility_wal_flags` 키가 있었습니다. WAL 파일과 빈 공간을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
+4. **DB 파일 안에 남은 조각을 찾되 기대치를 낮춥니다.** 현행 AOSP 의 플랫폼 SQLite 는 `-DSQLITE_SECURE_DELETE`, `-DSQLITE_DEFAULT_AUTOVACUUM=1`, `-DSQLITE_DEFAULT_JOURNAL_SIZE_LIMIT=1048576` 으로 빌드하고, 두 번째 설정은 DB 를 자동 비우기(auto-vacuum) 대상으로 만듭니다 [4]. 이 설정대로라면 플랫폼 SQLite 로 만든 DB 는 지운 레코드를 0 으로 덮고 빈 페이지를 잘라 낸다고 해석할 수 있습니다. 다만 저널 크기 한도는 저널·WAL 파일을 비울 때 크기를 1MiB 로 줄이는 설정이지 그 안의 옛 페이지를 지우는 설정이 아니라서, `-wal` 파일에는 지우기 전 페이지가 남아 있을 수 있으니 본 DB 와 함께 확보합니다. 그래서 문자·연락처 같은 시스템 제공자 DB 의 빈 공간에서 되살릴 것이 적더라도 "지운 것이 없었다" 로 읽지 않습니다. 앱이 자체 SQLite 를 넣어 쓰는지, 그 설정이 어떤지는 앱마다 다르니 따로 확인합니다. `settings global` 에 `sqlite_compatibility_wal_flags` 키가 있을 수 있습니다. WAL 파일과 빈 공간을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 
-5. **알림에 남은 내용을 확인합니다.** 관찰 기기의 `dumpsys notification` 에서 대화 앱 알림 항목에는 `android.title` 과 `android.text` 칸이 있었고, 값이 가려져 길이만 `[length=##]` 로 보였습니다. 대화를 앱에서 지운 뒤에도 알림에 제목과 본문이 남아 있을 수 있다는 해석이 여기서 나오고, 알림 기록 파일의 위치와 보관 기간은 [알림 기록](../../02-artifacts/app-usage/notification-history.md) 에서 봅니다.
+5. **알림에 남은 내용을 확인합니다.** `dumpsys notification` 의 대화 앱 알림 항목에는 `android.title` 과 `android.text` 칸이 있어, 대화를 앱에서 지운 뒤에도 알림에 제목과 본문이 남아 있을 수 있습니다. 알림 기록 파일의 위치와 보관 기간은 [알림 기록](../../02-artifacts/app-usage/notification-history.md) 에서 봅니다.
 
 6. **어느 앱으로 지웠는지 좁힙니다.** 휴지통의 삭제 시각 전후로 usagestats 에서 앞에 있던 앱(`ACTIVITY_RESUMED` 등)을 보면 지울 때 쓴 앱을 좁힐 수 있고 [1], 삼성 휴지통의 `delete_package_name` 과 맞춰 봅니다 [3]. 이 단계는 [폰 사용 시간 재구성](usage-time.md) 에서 세운 구간을 그대로 씁니다.
 

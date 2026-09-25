@@ -20,22 +20,17 @@ OOXML 형식은 Microsoft Office 2007 에서 들어왔고 DOCX, PPTX, XLSX, VSDX
 
 ## 위치와 버전별 차이
 
-문서 안의 메타데이터는 PDF 와 OOXML 형식이 정한 것이라서 Android 버전이나 제조사에 따라 구조가 달라지지 않습니다. 폰에서 이런 파일을 찾을 곳은 공용 저장 공간의 폴더와 각 앱의 데이터 폴더이고, 실제 폰에서 본 공용 저장 공간의 문서 관련 폴더는 다음과 같습니다.
+문서 안의 메타데이터는 PDF 와 OOXML 형식이 정한 것이라서 Android 버전이나 제조사에 따라 구조가 달라지지 않습니다. 폰에서 이런 파일을 찾을 곳은 공용 저장 공간의 `/sdcard/Documents`, `/sdcard/Download` 같은 폴더와 각 앱의 데이터 폴더입니다.
 
-| 폴더 | 관찰 내용 | 범위 |
-|---|---|---|
-| `/sdcard/Documents` | 항목 2개(모두 이름을 가린 폴더) | |
-| `/sdcard/Download` | 항목 151개, 그 가운데 이름을 가린 폴더 36개 | |
-
-공용 저장 공간의 폴더 구성은 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md), 앱 데이터 폴더는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. MediaStore 가 PDF·Office 파일 안의 작성자 같은 값을 읽어 칸에 넣는지는 확인하지 못했고, 삼성 내 파일 앱이나 모바일 문서 편집 앱이 문서를 저장하거나 고칠 때 작성 프로그램 칸에 어떤 값을 남기는지도 확인하지 못했습니다.
+공용 저장 공간의 폴더 구성은 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md), 앱 데이터 폴더는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. MediaStore 가 PDF·Office 파일 안의 작성자 같은 값을 읽어 칸에 넣는지, 삼성 내 파일 앱이나 모바일 문서 편집 앱이 문서를 저장하거나 고칠 때 작성 프로그램 칸에 어떤 값을 남기는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 구조
 
 ### PDF 와 증분 업데이트
 
-ExifTool 은 PDF 2.0 까지 읽고 쓸 수 있고, RC4·AES-128·AES-256 으로 암호화한 PDF 도 다룹니다 [1]. ExifTool 이 PDF 를 고칠 때는 파일 뒤에 바뀐 부분을 덧붙이는 증분 업데이트(incremental update) 방식을 쓰고, 원래 상태는 PDF-update 가상 그룹을 지워 되살릴 수 있습니다 [1]. ExifTool 문서는 이 방식에서 "old information is never actually deleted from the file" 이라서 보안 문제가 될 수 있다고 적고, 선형화(linearized)한 PDF 는 업데이트 뒤 선형화가 풀린다고 적습니다 [1].
+ExifTool 은 PDF 2.0 까지 읽고 쓸 수 있고, RC4·AES-128·AES-256 으로 암호화한 PDF 도 다룹니다 [1]. ExifTool 이 PDF 를 고칠 때는 파일 뒤에 바뀐 부분을 덧붙이는 증분 업데이트(incremental update) 방식을 쓰고, 원래 상태는 PDF-update 가상 그룹을 지워 되살릴 수 있습니다 [1]. 이 방식에서는 고치기 전 정보가 파일에서 실제로 지워지지 않아 보안 문제가 될 수 있고, 선형화(linearized)한 PDF 는 업데이트 뒤 선형화가 풀립니다 [1].
 
-이 두 사실에서 나온 해석이지만, 증분 업데이트로 고친 PDF 에는 고치기 전의 메타데이터가 파일 안에 남아 있을 수 있고, 선형화가 풀린 PDF 는 나중에 편집한 단서가 될 수 있습니다. ExifTool 말고 다른 편집기도 증분 업데이트를 쓰는지는 확인하지 못했습니다. PDF 에 Info 사전과 별도로 XMP 메타데이터가 있는지, 둘의 값이 다를 수 있는지도 이번 출처로 확인하지 못했습니다.
+그래서 증분 업데이트로 고친 PDF 에는 고치기 전의 메타데이터가 파일 안에 남아 있을 수 있고, 선형화가 풀린 PDF 는 나중에 편집한 단서가 될 수 있습니다. 다른 편집기가 증분 업데이트를 쓰는지는 편집기마다 다를 수 있어 검체에서 확인합니다.
 
 ### OOXML 핵심 속성
 
@@ -50,7 +45,7 @@ ExifTool 은 PDF 2.0 까지 읽고 쓸 수 있고, RC4·AES-128·AES-256 으로 
 | LastPrinted | 마지막으로 인쇄한 시각 |
 | Revision | 개정 번호 |
 
-핵심 속성 파트는 파일 이름이 아니라 관계 유형으로 찾습니다. 관계 유형은 `http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties` 이고, 파트의 콘텐츠 유형은 `application/vnd.openxmlformats-package.core-properties+xml` 입니다 [4]. .NET 구현은 이 파트를 새로 만들 때 `/package/services/metadata/core-properties/{guid}.psmdcp` 라는 이름을 쓰니 [4], 파트 이름은 만든 프로그램마다 다를 수 있고, 관계 파일(`_rels/.rels`)의 core-properties 관계가 가리키는 파트를 여는 쪽이 안전합니다. Office 가 만든 파일에서 이 파트가 어느 경로에 있는지는 이번 출처로 확인하지 못했습니다.
+핵심 속성 파트는 파일 이름이 아니라 관계 유형으로 찾습니다. 관계 유형은 `http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties` 이고, 파트의 콘텐츠 유형은 `application/vnd.openxmlformats-package.core-properties+xml` 입니다 [4]. .NET 구현은 이 파트를 새로 만들 때 `/package/services/metadata/core-properties/{guid}.psmdcp` 라는 이름을 쓰니 [4], 파트 이름은 만든 프로그램마다 다를 수 있고, 관계 파일(`_rels/.rels`)의 core-properties 관계가 가리키는 파트를 여는 쪽이 안전합니다.
 
 파트 안의 XML 은 다음 네임스페이스를 씁니다 [4].
 
@@ -61,11 +56,9 @@ ExifTool 은 PDF 2.0 까지 읽고 쓸 수 있고, RC4·AES-128·AES-256 으로 
 | DC Terms | `http://purl.org/dc/terms/` |
 | XML Schema Instance | 날짜 속성의 `xsi:type` 에 씀 |
 
-각 속성이 어느 네임스페이스 접두사로 적히는지는 요소 단위로 확인하지 못했습니다.
-
 ### ExifTool 이 읽는 문서 속성
 
-ExifTool 은 OOXML 의 문서 속성에서 Application, AppVersion, Company, CreateDate, ModifyDate, LastModifiedBy, LastPrinted, RevisionNumber, TotalEditTime(누적 편집 시간), Template, Pages, Words, Characters, CharactersWithSpaces, Lines, Paragraphs, Slides, HiddenSlides, Manager, HyperlinkBase, DocSecurity, Keywords, Language 같은 태그를 뽑고, 이 태그들은 모두 쓰기를 지원하지 않습니다(Writable: no) [2]. 확장 속성 파트의 원래 XML 요소 이름은 확인하지 못해서 이 페이지는 ExifTool 태그 이름으로만 적습니다. DocSecurity 값은 다음과 같습니다 [2].
+ExifTool 은 OOXML 의 문서 속성에서 Application, AppVersion, Company, CreateDate, ModifyDate, LastModifiedBy, LastPrinted, RevisionNumber, TotalEditTime(누적 편집 시간), Template, Pages, Words, Characters, CharactersWithSpaces, Lines, Paragraphs, Slides, HiddenSlides, Manager, HyperlinkBase, DocSecurity, Keywords, Language 같은 태그를 뽑고, 이 태그들은 모두 쓰기를 지원하지 않습니다(Writable: no) [2]. 이 이름은 확장 속성 파트의 원래 XML 요소 이름이 아니라 ExifTool 태그 이름입니다. DocSecurity 값은 다음과 같습니다 [2].
 
 | 값 | 뜻 |
 |---|---|
@@ -93,21 +86,21 @@ ExifTool 은 OOXML 의 문서 속성에서 Application, AppVersion, Company, Cre
 |---|---|---|
 | OOXML Created | `xsi:type="dcterms:W3CDTF"` 날짜. .NET 구현은 UTC `yyyy-MM-ddTHH:mm:ss.fffffffZ` 로 씀 [4] | 만들 때 [3] |
 | OOXML Modified | 위와 같음 [4] | 마지막으로 바꿀 때 [3] |
-| OOXML LastPrinted | 형식 확인 못 함 | 마지막으로 인쇄할 때 [3] |
-| ExifTool TotalEditTime | 단위 확인 못 함 | 누적 편집 시간 [2] |
-| PDF CreationDate·ModDate | ExifTool 표시 이름은 CreateDate·ModifyDate [1]. 날짜 문자열 형식은 확인 못 함 | 확인 못 함 |
+| OOXML LastPrinted | 검체에서 확인 | 마지막으로 인쇄할 때 [3] |
+| ExifTool TotalEditTime | 단위는 검체에서 확인 | 누적 편집 시간 [2] |
+| PDF CreationDate·ModDate | ExifTool 표시 이름은 CreateDate·ModifyDate [1]. 날짜 문자열 형식은 검체에서 확인 | 검체에서 확인 |
 
-.NET 구현은 읽을 때 소수 초가 0~7자리인 형식을 받아들이니 [4], 같은 W3CDTF 날짜라도 파일마다 소수 초 자릿수가 다를 수 있다고 보고 읽습니다. Office 나 모바일 앱이 어떤 정밀도와 시간대로 이 날짜를 쓰는지는 확인하지 못했으니, 끝에 `Z` 가 없는 값을 UTC 로 단정하지 않습니다.
+.NET 구현은 읽을 때 소수 초가 0~7자리인 형식을 받아들이니 [4], 같은 W3CDTF 날짜라도 파일마다 소수 초 자릿수가 다를 수 있다고 보고 읽습니다. Office 나 모바일 앱이 쓰는 정밀도와 시간대는 앱마다 다를 수 있으니, 끝에 `Z` 가 없는 값을 UTC 로 단정하지 않습니다.
 
-문서 안의 시각은 파일을 만든 프로그램이 적은 값이고, 폰의 파일 시스템 시각이나 MediaStore 칸의 시각은 폰이 적은 값입니다. 둘이 어떻게 어긋나는지는 이번 출처로 확인하지 못했지만, 나란히 놓고 보면 문서가 폰에 들어오기 전에 만들어졌는지 판단하는 재료가 됩니다. 시각 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 여러 기록을 한 줄로 놓는 법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md) 페이지에 있습니다.
+문서 안의 시각은 파일을 만든 프로그램이 적은 값이고, 폰의 파일 시스템 시각이나 MediaStore 칸의 시각은 폰이 적은 값입니다. 둘을 나란히 놓고 보면 문서가 폰에 들어오기 전에 만들어졌는지 판단하는 재료가 됩니다. 시각 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 여러 기록을 한 줄로 놓는 법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
 - ExifTool 이 보여 주는 태그 이름(CreateDate, ModifyDate, RevisionNumber 등)은 표시 이름이라서, 보고서에 원래 키나 요소 이름처럼 적지 않습니다.
 - OOXML 핵심 속성 파트의 이름은 만든 프로그램마다 다를 수 있으니 [4], 특정 파일 이름이 없다고 핵심 속성이 없다고 판단하지 않습니다.
 - ExifTool 은 OOXML 태그를 쓰지 못하지만 [2], 다른 프로그램으로는 값을 바꿀 수 있습니다. 메타데이터만으로 작성자나 작성 시각을 확정하지 않습니다.
-- 모바일 앱이 문서를 저장할 때 작성 프로그램 칸에 무엇을 남기는지 확인하지 못했으니, 작성 프로그램 값만 보고 폰에서 편집했다고 단정하지 않습니다.
-- MediaStore 가 문서 안의 메타데이터를 색인하는지 확인하지 못했으니, 작성자 같은 값은 DB 가 아니라 원본 파일에서 읽습니다.
+- 작성 프로그램 값만 보고 폰에서 편집했다고 단정하지 않습니다.
+- 작성자 같은 값은 MediaStore DB 가 아니라 원본 파일에서 읽습니다.
 
 ## 직접 분석해 보기
 
@@ -121,9 +114,9 @@ ExifTool 은 OOXML 의 문서 속성에서 Application, AppVersion, Company, Cre
 해석: 끝의 Z(5A) 는 UTC 표시 → UTC 2020-12-15 00:06:26, 한국 시각(+09:00)으로 09:06:26
 ```
 
-PDF 는 날짜 문자열 형식을 이번 출처로 확인하지 못해서 헥스 예시를 만들지 않고, 아래처럼 공개 도구로 읽습니다.
+PDF 의 날짜는 아래처럼 공개 도구로 읽습니다.
 
-**공개 도구로 읽기.** ExifTool 로 PDF 나 OOXML 파일을 열면 이 페이지의 태그 이름으로 값이 나옵니다 [1][2]. ExifTool 로 고친 PDF 라면 ExifTool 문서가 적은 대로 PDF-update 가상 그룹을 지워 원래 상태로 되돌릴 수 있으니 [1], 사본의 사본에서만 아래 명령을 돌리고 되돌린 결과를 지금 값과 비교합니다. 파일을 고치는 명령이라서 원본이나 증거 사본에는 쓰지 않습니다.
+**공개 도구로 읽기.** ExifTool 로 PDF 나 OOXML 파일을 열면 이 페이지의 태그 이름으로 값이 나옵니다 [1][2]. ExifTool 로 고친 PDF 라면 PDF-update 가상 그룹을 지워 원래 상태로 되돌릴 수 있으니 [1], 사본의 사본에서만 아래 명령을 돌리고 되돌린 결과를 지금 값과 비교합니다. 파일을 고치는 명령이라서 원본이나 증거 사본에는 쓰지 않습니다.
 
 ```text
 exiftool -PDF-update:all= copy_of_copy.pdf

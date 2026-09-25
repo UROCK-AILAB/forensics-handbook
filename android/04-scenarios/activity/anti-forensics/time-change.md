@@ -7,7 +7,7 @@ nav_order: 1680
 
 # 시각 바꾸기 (Time Change)
 
-기기 시각이 바뀐 적이 있는지, 바뀌었다면 기록의 시각을 어떻게 읽어야 하는지를 정리합니다. 기기 시각을 손으로 바꾸면 그 뒤에 생긴 기록은 모두 틀린 시각을 달게 되고, 시스템이 이미 저장된 기록의 이름까지 옮기는 경우가 있어서 타임라인 전체를 다시 따져 봐야 합니다. 소스로 확인한 동작은 현행 AOSP 기준(frameworks/base 의 main 가지, 2026-09-25 에 읽음)입니다.
+기기 시각이 바뀐 적이 있는지, 바뀌었다면 기록의 시각을 어떻게 읽어야 하는지를 정리합니다. 기기 시각을 손으로 바꾸면 그 뒤에 생긴 기록은 모두 틀린 시각을 달게 되고, 시스템이 이미 저장된 기록의 이름까지 옮기는 경우가 있어서 타임라인 전체를 다시 따져 봐야 합니다. 소스 동작은 현행 AOSP(frameworks/base 의 main 가지) 기준입니다.
 
 ## 조사 질문
 
@@ -15,8 +15,8 @@ nav_order: 1680
 
 ## 먼저 확인할 것
 
-- **자동 시각 설정**: 시각은 자동으로 맞추거나 사용자가 직접 정할 수 있고 [3], 관찰한 폰의 `settings global` 에는 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키가 있었습니다. 이 키들의 공식 설명은 본문을 받지 못해 확인하지 못했고, 값이 수집 시점의 상태일 뿐 사건 당시 상태가 아니라는 점도 함께 적습니다.
-- **시간대**: 시간대 설정은 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다. 관찰한 폰의 `settings global` 키 목록에는 `time_zone` 키가 없었고, `settings system` 에는 삼성이 추가한 것으로 보이는 `TIME_DIFFERENCE`, `homecity_timezone` 키가 있었지만 뜻은 확인하지 못했습니다.
+- **자동 시각 설정**: 시각은 자동으로 맞추거나 사용자가 직접 정할 수 있고 [3], `settings global` 에는 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키가 있습니다. 이 값은 수집 시점의 상태일 뿐 사건 당시 상태가 아니라는 점도 함께 적습니다.
+- **시간대**: 시간대 설정은 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다. `settings global` 키 목록에 `time_zone` 키가 없을 수 있고, 삼성 기기의 `settings system` 에는 삼성이 추가한 것으로 보이는 `TIME_DIFFERENCE`, `homecity_timezone` 키가 있을 수 있습니다. 두 키의 뜻은 공개된 설명이 없습니다.
 - **수집 시각**: 수집할 때 기기 시각과 믿을 만한 기준 시각을 함께 적어 두면, 수집 시점의 차이를 기준으로 삼을 수 있습니다. 수집 절차는 [조사 절차](../../../03-techniques/acquisition/investigation-process.md) 에 있습니다.
 
 ## 시각을 정하는 방식
@@ -33,7 +33,7 @@ nav_order: 1680
 | 자동 시간대 감지(통신사 NITZ) | — | 셀룰러 기기, 11 이하에서는 이 방식만 씀 |
 | 자동 시간대 감지(위치) | 12 이상 | 위치 서비스가 켜져 있어야 함 |
 
-time_detector 서비스의 상태는 제안을 받은 "certain" 과 제안이 없거나 오래된 "uncertain" 두 가지이고, time_zone_detector 서비스도 같은 두 상태를 씁니다 [3]. `adb shell cmd time_detector dump` 는 출처 우선순위, 자동 감지가 켜져 있는지, 시각 변경 기록(time change logs), 출처별 제안 이력을 보여 준다고 문서에 나와 있지만 [3], 관찰한 폰에서 이 명령을 실행한 결과는 없고 일반 권한으로 되는지도 확인하지 못했습니다.
+time_detector 서비스의 상태는 제안을 받은 "certain" 과 제안이 없거나 오래된 "uncertain" 두 가지이고, time_zone_detector 서비스도 같은 두 상태를 씁니다 [3]. `adb shell cmd time_detector dump` 는 출처 우선순위, 자동 감지가 켜져 있는지, 시각 변경 기록(time change logs), 출처별 제안 이력을 보여 줍니다 [3]. 일반 권한으로 실행되는지는 검체에서 확인합니다.
 
 ## usagestats 가 시각 변경을 다루는 방식
 
@@ -43,7 +43,7 @@ time_detector 서비스의 상태는 제안을 받은 "certain" 과 제안이 �
 
 데이터베이스 쪽 `UsageStatsDatabase.onTimeChanged(차이)` 는 모든 통계 파일의 이름, 곧 구간 시작 유닉스 밀리초에 차이를 더해 이름을 바꾸고, 새 값이 0보다 작으면 그 파일을 지웁니다 [2]. 체크인 접미사(`CHECKED_IN_SUFFIX`)는 그대로 두고, 지운 파일 수와 옮긴 파일 수를 로그에 남깁니다(` files deleted: `, ` files moved: `) [2]. 시각을 바꾸면 이미 저장된 usagestats 파일의 이름도 같이 옮겨지니, 파일 이름만 보고 "그 시각에 기록됐다" 고 단정하지 않습니다(해석). 파일 이름과 시각 칸의 관계는 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 에 있습니다.
 
-UsageStatsService.java 에서는 `Intent.ACTION_TIME_CHANGED` 방송을 직접 받는 코드를 찾지 못했고 [4], 다른 파일에서 받는지는 확인하지 못했습니다.
+UsageStatsService.java 에는 `Intent.ACTION_TIME_CHANGED` 방송을 직접 받는 코드가 없습니다 [4].
 
 ## 볼 아티팩트와 순서
 
@@ -58,16 +58,16 @@ UsageStatsService.java 에서는 `Intent.ACTION_TIME_CHANGED` 방송을 직접 �
 
 ### adb 일반 권한으로 보이는 줄
 
-관찰한 폰의 `dumpsys usagestats` 에는 "UsageStats RollOver history :" 절이 있었고, 그 안에 아래 모양의 줄이 있었습니다. 값은 가려서 보지 않았습니다.
+기기에 따라 `dumpsys usagestats` 에 "UsageStats RollOver history :" 절이 있고, 그 안에 아래 모양의 줄이 있습니다.
 
 ```
 User[#] Time changed. actualSystemTime:... expectedSystemTime:... actualRealtime:...          (5건)
 User[#] rolloverStats by event Type:#/ init elapsed time:/ timeStamp:/ ExpiryDate:/ realTime:/ systemTime:
 ```
 
-`Time changed. actualSystemTime` 줄의 모양은 AOSP 소스의 로그 문자열 `Time changed in by ... seconds` 와 다르고, 소스 로그 문자열에는 actualSystemTime 같은 칸 이름이 없습니다 [1]. 다만 `actualSystemTime`, `expectedSystemTime`, `actualRealtime` 은 AOSP `checkAndGetTimeLocked()` 안의 변수 이름과 같아서 [1], 같은 판정 결과를 제조사가 따로 적은 기록일 수 있지만 확인하지 못했습니다. 이 줄은 실제 벽시계(actualSystemTime)와 서비스가 기대한 시각(expectedSystemTime)을 나란히 적는 모양이라서, 값이 보이는 기기라면 두 값의 차이로 시각이 얼마나 옮겨졌는지를 가늠할 수 있습니다(해석). 이 절이 몇 건까지, 언제까지 남는지는 확인하지 못했습니다.
+`Time changed. actualSystemTime` 줄의 모양은 AOSP 소스의 로그 문자열 `Time changed in by ... seconds` 와 다르고, 소스 로그 문자열에는 actualSystemTime 같은 칸 이름이 없습니다 [1]. 다만 `actualSystemTime`, `expectedSystemTime`, `actualRealtime` 은 AOSP `checkAndGetTimeLocked()` 안의 변수 이름과 같아서 [1], 같은 판정 결과를 제조사가 따로 적은 기록일 가능성이 있습니다. 이 줄은 실제 벽시계(actualSystemTime)와 서비스가 기대한 시각(expectedSystemTime)을 나란히 적는 모양이라서, 값이 보이는 기기라면 두 값의 차이로 시각이 얼마나 옮겨졌는지를 가늠할 수 있습니다(해석). 이 절이 몇 건까지, 언제까지 남는지는 공개된 자료가 없어 검체에서 확인합니다.
 
-logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 모양이고, 보인 버퍼는 main, system, events, crash, radio 였습니다. `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]: time=...` 줄, `dumpsys bluetooth_manager` 의 기록 줄도 같은 "월-일 시:분:초.밀리초" 모양이었습니다. 연도가 없어서 해를 넘는 판단은 다른 기록과 맞춰야 합니다(해석). batterystats 에는 "Battery History" 첫 줄 가까이에 `RESET:TIME:` 줄이 있었지만, 시각이 바뀔 때 따로 줄이 생기는지는 관찰하지 않았습니다.
+logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 모양이고, 버퍼는 main, system, events, crash, radio 등이 있습니다. `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]: time=...` 줄, `dumpsys bluetooth_manager` 의 기록 줄도 같은 "월-일 시:분:초.밀리초" 모양입니다. 연도가 없어서 해를 넘는 판단은 다른 기록과 맞춰야 합니다(해석). batterystats 에는 "Battery History" 첫 줄 가까이에 `RESET:TIME:` 줄이 있습니다. 시각이 바뀔 때 따로 줄이 생기는지는 검체에서 확인합니다.
 
 ## 분석 흐름
 

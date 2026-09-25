@@ -8,13 +8,13 @@ nav_order: 1110
 
 ## 한 줄 요약
 
-원드라이브 (OneDrive) 앱은 `QTMetadata.db` 의 `items` 표에 클라우드 파일과 폴더의 이름·크기·시각·SHA-1 을 담고 `stream_cache` 표에 기기에 캐시한 사본의 경로를 적어 두어서 [2] 파일 목록과 폴더 경로를 되살릴 수 있지만, 삼성 클라우드 (Samsung Cloud) 는 이번에 연 자료에서 앱 쪽 저장 위치를 확인하지 못했고 관찰 기기의 설정 키 이름만 볼 수 있었습니다.
+원드라이브 (OneDrive) 앱은 `QTMetadata.db` 의 `items` 표에 클라우드 파일과 폴더의 이름·크기·시각·SHA-1 을 담고 `stream_cache` 표에 기기에 캐시한 사본의 경로를 적어 두어서 [2] 파일 목록과 폴더 경로를 되살릴 수 있습니다. 삼성 클라우드 (Samsung Cloud) 는 앱 쪽 저장 위치를 적은 공개 자료가 없어 검체에서 확인해야 합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 원드라이브 앱은 계정의 클라우드 저장 공간에 있는 파일과 폴더 목록을 기기에 받아 두고, 사용자가 연 파일은 기기에 사본을 캐시해 둡니다. 공개 도구 ALEAPP 의 Microsoft OneDrive 모듈은 이 목록과 캐시 경로를 읽어 폴더 경로가 붙은 파일 목록으로 보여 줍니다 [2].
 
-삼성 클라우드는 갤럭시 기기의 동기화·백업 서비스이지만, 앱 패키지 이름·DB·동기화 기록을 적은 공개 자료를 이번에 찾지 못했습니다. ALEAPP 모듈 목록에도 삼성 클라우드 전용 모듈은 없었고 [1], 삼성 이름이 붙은 모듈은 SamsungNotes, SamsungTrash, Samsungwallet, SamsungGalleryHiddenAlbum, samsungMediaProvider, samsungSecureFolderHistoryLog, samsung_honeyboard_clipboard 같은 다른 앱의 것이었습니다 [1]. 두 서비스를 한 페이지에서 다루지만, 삼성 클라우드의 기능이 원드라이브로 옮겨 갔는지와 그 일정은 확인하지 못해서 적지 않습니다.
+삼성 클라우드는 갤럭시 기기의 동기화·백업 서비스이지만, 앱 패키지 이름·DB·동기화 기록을 적은 공개 자료는 없습니다. ALEAPP 에도 삼성 클라우드 전용 모듈은 없고 [1], 삼성 이름이 붙은 모듈은 SamsungNotes, SamsungTrash, Samsungwallet, SamsungGalleryHiddenAlbum, samsungMediaProvider, samsungSecureFolderHistoryLog, samsung_honeyboard_clipboard 같은 다른 앱의 것입니다 [1].
 
 ## 위치와 버전별 차이
 
@@ -28,11 +28,11 @@ nav_order: 1110
 
 앱 데이터 폴더의 짜임은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), 다른 앱이나 셸이 이 폴더를 읽을 수 있는지는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다.
 
-모듈은 2025-04-17 에 만들어졌고 마지막 갱신은 2026-08-25 입니다 [2]. 모듈에 시험 이미지 목록이 없어서 어느 Android·앱 버전에서 확인한 것인지는 알 수 없습니다. `items` 표에 `sha1Hash` 칸이 없는 DB 도 있어서 ALEAPP 가 칸이 있는지 먼저 확인하는데 [2], 어느 앱 버전부터 이 칸이 생겼는지는 확인하지 못했습니다.
+`items` 표에 `sha1Hash` 칸이 없는 DB 도 있어서 [2], 질의 전에 칸이 있는지 먼저 봅니다.
 
 ### 삼성 클라우드
 
-앱 쪽 저장 위치는 확인하지 못했습니다. 관찰 기기의 설정 값에는 이름에 `scloud` 나 클라우드 백업이 들어간 키가 아래처럼 있었습니다.
+앱 쪽 저장 위치는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 갤럭시 기기의 설정 값에는 이름에 `scloud` 나 클라우드 백업이 들어간 키가 아래처럼 있을 수 있습니다.
 
 | 설정 표 | 키 |
 |---|---|
@@ -41,19 +41,19 @@ nav_order: 1110
 | secure | `wifi_ap_settings_cloud_backup_restoring` |
 | global | `first_launch_samsung_account_menu` |
 
-키 이름만 보였고 값의 뜻은 확인하지 못했습니다. 이 키가 있다는 것만으로 삼성 클라우드를 썼다고 볼 수는 없고, 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
+값의 뜻을 적은 공개 자료는 없습니다. 이 키가 있다는 것만으로 삼성 클라우드를 썼다고 볼 수는 없고, 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
 
 ## 구조
 
 ### items 표
 
-`QTMetadata.db` 는 SQLite 파일이고, 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다. ALEAPP 가 `items` 표에서 읽는 칸은 아래와 같습니다 [2].
+`QTMetadata.db` 는 SQLite 파일이고, 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다. `items` 표의 주요 칸은 아래와 같습니다 [2].
 
 | 칸 | 담긴 것 |
 |---|---|
 | `_id` | 행 번호. `stream_cache.parentId` 가 이 값을 가리킴 |
 | `resourceId`, `parentRid` | 항목 id 와 상위 폴더 id |
-| `resourceIdAlias` | 뜻은 확인 못 함 |
+| `resourceIdAlias` | 공개 자료 없음 |
 | `name`, `extension` | 이름과 확장자 |
 | `itemType` | 종류 |
 | `ownerName` | 주인 이름 |
@@ -61,7 +61,7 @@ nav_order: 1110
 | `sha1Hash` | SHA-1 (없는 DB 도 있음) |
 | `itemDate`, `creationDate`, `modifiedDateOnClient` | 시각 세 개 |
 
-ALEAPP 는 `itemType` 을 아래처럼 풀고, 표에 없는 값은 숫자 그대로 둡니다 [2].
+`itemType` 값의 뜻은 아래와 같습니다. 표에 없는 값은 ALEAPP 가 숫자 그대로 보여 줍니다 [2].
 
 | `itemType` | 뜻 |
 |---|---|
@@ -69,7 +69,7 @@ ALEAPP 는 `itemType` 을 아래처럼 풀고, 표에 없는 값은 숫자 그�
 | 3 | Image |
 | 32 | Folder |
 
-폴더 경로는 한 항목의 `parentRid` 와 같은 `resourceId` 를 가진 행을 찾고, 그 행의 `parentRid` 를 다시 따라 올라가며 이름을 이어 붙여 만듭니다 [2]. `resourceId` 가 `search`, `Mru`, `SharedBy`, `SharedWithMe` 인 행은 실제 파일이 아니라 목록 화면용 특수 행이라서 ALEAPP 가 뺍니다 [2].
+폴더 경로는 한 항목의 `parentRid` 와 같은 `resourceId` 를 가진 행을 찾고, 그 행의 `parentRid` 를 다시 따라 올라가며 이름을 이어 붙여 만듭니다 [2]. `resourceId` 가 `search`, `Mru`, `SharedBy`, `SharedWithMe` 인 행은 실제 파일이 아니라 목록 화면용 특수 행이라서 셀 때 뺍니다 [2].
 
 ### stream_cache 표
 
@@ -87,17 +87,17 @@ ALEAPP 는 `itemType` 을 아래처럼 풀고, 표에 없는 값은 숫자 그�
 
 ## 시각 해석
 
-ALEAPP 는 `itemDate`, `creationDate`, `modifiedDateOnClient` 세 칸을 유닉스 밀리초로 읽고, 0 이하인 값은 비웁니다 [2]. 유닉스 시각은 UTC 기준이라 보고서에 현지 시각을 쓸 때는 기기 시간대를 따로 확인합니다. `modifiedDateOnClient` 는 이름으로 보아 클라이언트 쪽에서 고친 시각으로 보이지만 확인하지 못했고, `itemDate` 가 서버에 올라간 시각인지 목록에 들어온 시각인지도 확인하지 못했습니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+`itemDate`, `creationDate`, `modifiedDateOnClient` 세 칸은 유닉스 밀리초이고, 0 이하인 값은 빈 값으로 봅니다 [2]. 유닉스 시각은 UTC 기준이라 보고서에 현지 시각을 쓸 때는 기기 시간대를 따로 확인합니다. `modifiedDateOnClient` 는 이름으로 보아 클라이언트 쪽에서 고친 시각으로 보입니다. `itemDate` 가 서버에 올라간 시각인지 목록에 들어온 시각인지는 공개 자료가 없어 검체에서 확인합니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-첫째, 모듈에 시험 이미지 목록이 없어서 [2] 이 구조가 어느 판까지 맞는지 알 수 없습니다. 칸이 없다는 오류가 나거나 결과가 비면 표 정의부터 다시 읽습니다.
+첫째, ALEAPP 모듈에 시험 이미지 목록이 없어서 [2] 이 구조가 어느 판까지 맞는지 알려져 있지 않습니다. 칸이 없다는 오류가 나거나 결과가 비면 표 정의부터 다시 읽습니다.
 
 둘째, 폴더 경로를 이어 붙일 때 중간 폴더 행이 빠져 있으면 경로가 끊깁니다. 끊긴 경로를 보고서에 적을 때는 확인한 부분까지만 씁니다.
 
 셋째, 특수 행(`search`, `Mru`, `SharedBy`, `SharedWithMe`)을 빼지 않고 세면 항목 수가 부풀려집니다 [2].
 
-넷째, 파일을 지우면 `items` 에서 어떻게 빠지는지, 휴지통 항목이 따로 표시되는지는 확인하지 못했습니다. SQLite 에서 지운 행이 남을 수 있는 자리는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 계정 쪽 전체 목록과 변경 기록을 받는 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
+넷째, 파일을 지우면 `items` 에서 어떻게 빠지는지, 휴지통 항목이 따로 표시되는지는 공개 자료가 없어 검체에서 확인해야 합니다. SQLite 에서 지운 행이 남을 수 있는 자리는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 계정 쪽 전체 목록과 변경 기록을 받는 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
 
 다섯째, 삼성 클라우드는 공개 자료가 없어서 시험 기기에 계정을 넣고 동기화를 켠 뒤 무엇이 생기는지 직접 보는 방법밖에 없습니다. 그 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다.
 

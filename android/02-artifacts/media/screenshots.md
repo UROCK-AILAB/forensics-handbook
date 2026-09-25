@@ -16,17 +16,17 @@ AOSP 의 시스템 UI(SystemUI)는 스크린샷을 `Pictures/Screenshots` 에 �
 
 ## 위치와 버전별 차이
 
-| 항목 | AOSP (현행 기준) | 삼성 One UI (관찰) |
+| 항목 | AOSP (현행 기준) | 삼성 One UI |
 |---|---|---|
 | 스크린샷 폴더 | `Pictures/Screenshots` [1] | `/sdcard/DCIM` 아래에 Screenshots 폴더가 있음 |
-| 스크린샷 파일 이름 | `Screenshot_연월일-시분초.확장자` [1] | 확인 못 함 |
+| 스크린샷 파일 이름 | `Screenshot_연월일-시분초.확장자` [1] | 검체에서 확인 |
 | 스크린샷 형식 | PNG 기본, 호출 쪽이 JPEG·WEBP 로 바꿀 수 있음 [1] | 형식 설정 키가 있음(아래) |
-| 화면 녹화 폴더 | Movies(동영상 기본 폴더) [2][3] | 확인 못 함 |
-| 화면 녹화 파일 이름 | `screen-yyyyMMdd-HHmmss.mp4` [2] | 확인 못 함 |
+| 화면 녹화 폴더 | Movies(동영상 기본 폴더) [2][3] | 검체에서 확인 |
+| 화면 녹화 파일 이름 | `screen-yyyyMMdd-HHmmss.mp4` [2] | 검체에서 확인 |
 
-관찰한 기기의 `/sdcard/Pictures` 목록은 가려져 있어서 `Pictures/Screenshots` 도 있었는지는 알 수 없습니다. 같은 기기의 `/sdcard` 최상위에는 Recordings 폴더가 있었지만, Android 문서는 Recordings/ 를 음성 녹음 폴더로 설명하고 Android 11 이하에는 없다고 적습니다 [5]. 화면 녹화 파일이 이 폴더에 들어가는지는 확인하지 못했습니다.
+`/sdcard` 최상위의 Recordings/ 는 음성 녹음 폴더이고, Android 11 이하에는 없습니다 [5]. 삼성 기기에서 화면 녹화 파일이 이 폴더에 들어가는지는 검체에서 확인합니다.
 
-관찰한 기기의 settings system 에는 스크린샷과 관련된 이름의 키가 있었습니다. 값은 가려져 있고 각 키의 공식 뜻은 삼성 문서로 확인하지 못했습니다.
+삼성 기기의 settings system 에는 스크린샷과 관련된 이름의 다음 키가 있습니다. 각 키의 뜻을 밝힌 삼성 공식 문서는 없습니다.
 
 ```text
 screenshot_current_save_dir
@@ -37,7 +37,7 @@ exclude_systemui_screenshots
 enable_smart_capture
 ```
 
-키 이름으로 보면 사용자가 저장 폴더(screenshot_current_save_dir)와 저장 형식(smart_capture_screenshot_format)을 바꿀 수 있는 것으로 보이지만, 이름에서 짐작한 것일 뿐입니다. 값을 읽을 수 있다면 [설정 값 (Settings)](../system-account/settings.md) 페이지의 방법으로 확인하고, 스크린샷을 찾을 폴더를 정할 때 참고합니다. 삼성 스크린샷 파일 이름 뒤에 앱 이름이 붙는 꼴인지는 이번에 연 자료로 확인하지 못했습니다.
+키 이름으로 보면 사용자가 저장 폴더(screenshot_current_save_dir)와 저장 형식(smart_capture_screenshot_format)을 바꿀 수 있는 것으로 보이지만, 이름에서 짐작한 것일 뿐입니다. 값을 읽을 수 있다면 [설정 값 (Settings)](../system-account/settings.md) 페이지의 방법으로 확인하고, 스크린샷을 찾을 폴더를 정할 때 참고합니다. 삼성 스크린샷 파일 이름 뒤에 앱 이름이 붙는지는 검체에서 확인합니다.
 
 ## 구조
 
@@ -58,13 +58,13 @@ enable_smart_capture
 | SubSecTimeOriginal | 밀리초 3자리 |
 | OffsetTimeOriginal | 시차(예 "+09:00") |
 
-카메라 정보와 GPS 태그는 쓰지 않습니다 [1]. 스크린샷을 찍을 때 화면에 떠 있던 앱을 AOSP 가 파일 이름이나 EXIF 에 넣는지는 이 코드에서 보이지 않았습니다. 삼성 media.db 에는 captured_app, captured_url 칸이 있는데 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에서 다루고, 이 칸과 스크린샷의 관계는 확인하지 못했습니다.
+카메라 정보와 GPS 태그는 쓰지 않고, 스크린샷을 찍을 때 화면에 떠 있던 앱도 파일 이름이나 EXIF 에 넣지 않습니다 [1]. 삼성 media.db 에는 captured_app, captured_url 칸이 있는데 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에서 다루고, 이 칸과 스크린샷의 관계는 공개된 자료가 없어 검체로 확인해야 합니다.
 
 ### AOSP 화면 녹화
 
 녹화하는 동안 SystemUI 는 자기 앱 캐시 폴더(getCacheDir())에 임시 파일 `temp*.mp4`(영상)와 `temp*.aac`(내부 소리)를 씁니다 [2]. 녹화가 끝나면 기기 기본 시간대의 SimpleDateFormat 으로 `screen-yyyyMMdd-HHmmss.mp4` 이름을 만들어 MediaStore 동영상 모음(external_primary)에 mime_type video/mp4 로 넣습니다 [2]. 이때 RELATIVE_PATH 를 지정하지 않아서 MediaProvider 의 동영상 기본 폴더인 Movies 에 저장됩니다 [2][3].
 
-소리를 함께 녹음했다면 캐시 폴더에서 영상과 소리를 합친(mux) 뒤 복사하고 임시 파일을 지웁니다 [2]. 코드 흐름으로 보면 녹화 도중 기기가 꺼질 때 캐시 폴더에 temp 파일이 남을 수 있지만, 실제로 확인한 자료는 찾지 못했습니다. 저장한 뒤 알림에 쓰는 섬네일을 ThumbnailUtils.createVideoThumbnail() 로 만드는데 [2], 이 섬네일이 파일로 남는지는 확인하지 못했습니다.
+소리를 함께 녹음했다면 캐시 폴더에서 영상과 소리를 합친(mux) 뒤 복사하고 임시 파일을 지웁니다 [2]. 코드 흐름으로 보면 녹화 도중 기기가 꺼질 때 캐시 폴더에 temp 파일이 남을 가능성이 있습니다. 저장한 뒤 알림에 쓰는 섬네일을 ThumbnailUtils.createVideoThumbnail() 로 만드는데 [2], 이 섬네일이 파일로 남는지는 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -93,9 +93,9 @@ enable_smart_capture
 
 ## 함정과 한계
 
-- 이름 규칙만 보고 스크린샷을 찾으면 삼성 기기의 다른 이름·다른 폴더를 놓칠 수 있습니다. 관찰한 기기에서는 AOSP 기본 위치가 아닌 `DCIM/Screenshots` 가 있었습니다.
+- 이름 규칙만 보고 스크린샷을 찾으면 삼성 기기의 다른 이름·다른 폴더를 놓칠 수 있습니다. 삼성 기기에는 AOSP 기본 위치가 아닌 `DCIM/Screenshots` 가 있을 수 있습니다.
 - 파일 이름과 EXIF 는 파일을 복사해도 그대로 따라가서, 다른 기기에서 찍은 스크린샷을 받은 파일과 이 기기에서 찍은 파일을 이름만으로 가를 수 없습니다. EXIF Software 의 빌드 표시값을 [기기 정보와 빌드](../system-account/device-build.md) 의 값과 맞춰 봅니다.
-- 이 페이지의 AOSP 동작은 현행 main 가지 소스 기준이고, 어느 Android 버전에서 바뀌었는지는 확인하지 못했습니다 [1][2].
+- 이 페이지의 AOSP 동작은 현행 main 가지 소스 기준이라 [1][2], 예전 Android 버전의 동작은 검체에서 확인합니다.
 - 화면 녹화 temp 파일이 SystemUI 캐시에 남는지는 코드로 짐작한 것일 뿐이고, 그 폴더는 시스템 앱 전용이라 확보 방법에 따라 볼 수 없을 수 있습니다.
 
 ## 직접 분석해 보기

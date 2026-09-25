@@ -12,9 +12,9 @@ dumpsys 출력 (dumpsys) 은 기기에서 돌고 있는 시스템 서비스가 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-dumpsys 는 원래 개발자가 시스템 서비스의 상태를 확인하려고 쓰는 도구입니다 [1]. 서비스마다 출력 형식이 제각각이고, 문서가 예로 드는 서비스만 해도 입력(input), 그래픽(gfxinfo), 네트워크 통계(netstats), 배터리(batterystats), 프로세스 통계(procstats), 메모리(meminfo) 로 다양합니다 [1].
+dumpsys 는 원래 개발자가 시스템 서비스의 상태를 확인하려고 쓰는 도구입니다 [1]. 서비스마다 출력 형식이 제각각이고, 서비스도 입력(input), 그래픽(gfxinfo), 네트워크 통계(netstats), 배터리(batterystats), 프로세스 통계(procstats), 메모리(meminfo) 로 다양합니다 [1].
 
-포렌식에서는 시스템 영역 파일을 루팅 없이 꺼내기 어려운 기기에서 서비스가 내놓는 기록을 텍스트로 받을 수 있다는 점이 쓸모 있고, 관찰 기기에서도 아래 절의 서비스들을 adb 일반 셸 권한으로 읽을 수 있었습니다. 이 페이지는 dumpsys 로 무엇이 나오는지까지만 다루고, 서비스별 해석은 각 아티팩트 페이지로 넘깁니다.
+포렌식에서는 시스템 영역 파일을 루팅 없이 꺼내기 어려운 기기에서 서비스가 내놓는 기록을 텍스트로 받을 수 있다는 점이 쓸모 있습니다. 아래 절의 서비스들은 adb 일반 셸 권한으로 읽을 수 있습니다. 서비스별 해석은 각 아티팩트 페이지에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -36,11 +36,11 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
 
 버그 리포트 본문에도 dumpsys 출력이 들어 있습니다 [2]. 버그 리포트로 한꺼번에 받는 방법은 [버그 리포트 (bugreport)](bugreport.md) 에서 다룹니다.
 
-부르는 쪽 권한에 따라 출력이 달라지는지는 공식 문서에 없어서 확인하지 못했습니다 [1]. 버전·제조사마다 서비스 목록과 출력 칸이 다를 수 있으니, 검체마다 `-l` 목록부터 받아 둡니다.
+부르는 쪽 권한에 따라 출력이 달라지는지는 공식 문서에 나오지 않습니다 [1]. 버전·제조사마다 서비스 목록과 출력 칸이 다를 수 있으니, 검체마다 `-l` 목록부터 받아 둡니다.
 
 ## 구조
 
-관찰 기기에서 adb 일반 셸로 아래 서비스의 출력을 받았고, 줄 수와 눈에 띄는 모양은 다음과 같았습니다.
+아래 서비스의 출력은 adb 일반 셸로 받을 수 있습니다. 줄 수와 눈에 띄는 모양은 다음과 같습니다.
 
 | 서비스 | 줄 수 | 눈에 띄는 모양 | 해석 페이지 |
 |---|---|---|---|
@@ -65,7 +65,7 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
     time="..." type=SCREEN_INTERACTIVE package=<값> flags=<값>
 ```
 
-관찰 기기에서 본 type 은 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED`, `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE`, `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN`, `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN`, `SHORTCUT_INVOCATION`, `USER_INTERACTION`, `STANDBY_BUCKET_CHANGED` 였습니다. 앞의 세 가지 ACTIVITY 줄에는 `instanceId`, `taskRootPackage`, `taskRootClass` 칸이 더 붙고, `NOTIFICATION_INTERRUPTION` 에는 `channelId`, `SHORTCUT_INVOCATION` 에는 `shortcutId`, `STANDBY_BUCKET_CHANGED` 에는 `standbyBucket`, `reason` 칸이 붙습니다.
+나올 수 있는 type 에는 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED`, `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE`, `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN`, `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN`, `SHORTCUT_INVOCATION`, `USER_INTERACTION`, `STANDBY_BUCKET_CHANGED` 가 있습니다. 앞의 세 가지 ACTIVITY 줄에는 `instanceId`, `taskRootPackage`, `taskRootClass` 칸이 더 붙고, `NOTIFICATION_INTERRUPTION` 에는 `channelId`, `SHORTCUT_INVOCATION` 에는 `shortcutId`, `STANDBY_BUCKET_CHANGED` 에는 `standbyBucket`, `reason` 칸이 붙습니다.
 
 ### 변경 이력 표 (account)
 
@@ -79,11 +79,11 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
   ##,action_account_add,...,#####,accounts,##
 ```
 
-관찰 기기에서 본 Action_Type 에는 `action_account_add`, `action_account_remove`, `action_called_account_remove` 등이 있었습니다.
+Action_Type 에는 `action_account_add`, `action_account_remove`, `action_called_account_remove` 등이 있습니다.
 
 ### 사용자 상태 (user)
 
-`dumpsys user` 는 사용자마다 `UserInfo{...} serialNo= isPrimary=` 줄과 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground` 칸을 적습니다. 관찰 기기의 주 사용자는 `State: RUNNING_UNLOCKED` 였고 `Created:` 칸은 `<unknown>` 으로 나왔습니다.
+`dumpsys user` 는 사용자마다 `UserInfo{...} serialNo= isPrimary=` 줄과 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground` 칸을 적습니다. 주 사용자의 `State` 는 `RUNNING_UNLOCKED` 처럼 나오고, `Created:` 칸은 `<unknown>` 으로 나올 수 있습니다.
 
 ### 그 밖의 서비스
 
@@ -97,11 +97,11 @@ dumpsys 출력은 그 명령을 부른 시각에 그 서비스가 내놓은 상�
 
 **증명하지 못하는 것**
 
-dumpsys 는 서비스의 현재 상태를 뽑기 때문에 부르는 시점에 따라 내용이 달라집니다(추론). 이틀 뒤에 다시 부르면 그 사이 지워지거나 밀려난 기록은 나오지 않으니, 출력 한 번은 그 시점의 사진일 뿐입니다. 출력에 없는 기록이 원래 없었다는 뜻도 아닌데, 서비스가 보여 주는 기간이 `Last ## hour events` 처럼 정해져 있을 수 있고, 부르는 쪽 권한에 따라 출력이 달라지는지도 확인하지 못했습니다. 보고서에는 "이 시각에 받은 dumpsys usagestats 출력에 이런 이벤트 줄이 있다" 처럼 받은 시각과 서비스 이름을 함께 씁니다.
+dumpsys 는 서비스의 현재 상태를 뽑기 때문에 부르는 시점에 따라 내용이 달라집니다(추론). 이틀 뒤에 다시 부르면 그 사이 지워지거나 밀려난 기록은 나오지 않으니, 출력 한 번은 그 시점의 사진일 뿐입니다. 출력에 없는 기록이 원래 없었다는 뜻도 아닌데, 서비스가 보여 주는 기간이 `Last ## hour events` 처럼 정해져 있을 수 있고, 부르는 쪽 권한에 따라 출력이 달라지는지도 공식 문서에 나오지 않습니다. 보고서에는 "이 시각에 받은 dumpsys usagestats 출력에 이런 이벤트 줄이 있다" 처럼 받은 시각과 서비스 이름을 함께 씁니다.
 
 ## 시각 해석
 
-시각 형식은 서비스마다 다릅니다. 관찰 기기에서 `usagestats` 의 `time=` 값과 `account` 이력의 시각은 한글이 섞인 사람이 읽는 형식이었고, `batterystats` 기록 줄은 연도 없이 월-일과 시각만 찍혀 있었습니다. 사람이 읽는 형식은 기기 언어 설정을 따를 수 있으니(추론), 파싱하기 전에 몇 줄을 눈으로 보고 형식과 시간대를 정합니다. 시간대 판단은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md), 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+시각 형식은 서비스마다 다릅니다. `usagestats` 의 `time=` 값과 `account` 이력의 시각은 한글이 섞인 사람이 읽는 형식으로 나올 수 있고, `batterystats` 기록 줄은 연도 없이 월-일과 시각만 찍힙니다. 사람이 읽는 형식은 기기 언어 설정을 따를 수 있으니(추론), 파싱하기 전에 몇 줄을 눈으로 보고 형식과 시간대를 정합니다. 시간대 판단은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md), 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -109,7 +109,7 @@ dumpsys 는 서비스의 현재 상태를 뽑기 때문에 부르는 시점에 �
 
 둘째, `-t` 의 기본 시간 제한은 10초입니다 [1]. `package` 나 `batterystats` 처럼 수만~수십만 줄이 나오는 서비스는 출력이 끝까지 왔는지 마지막 줄을 확인합니다.
 
-셋째, 일부 서비스 출력에는 그 서비스가 자세한 로그를 켰는지 알려 주는 줄이 있습니다. 관찰 기기의 `dumpsys wifi` 에는 `Verbose logging is off` 와 `mVerboseLoggingLevel` 줄이, `dumpsys bluetooth_manager` 에는 `Enable log:` 줄이 있었습니다. 이 설정이 평소와 다르다면 누가 언제 바꿨는지 다른 기록과 맞춰 봅니다.
+셋째, 일부 서비스 출력에는 그 서비스가 자세한 로그를 켰는지 알려 주는 줄이 있습니다. `dumpsys wifi` 에는 `Verbose logging is off` 와 `mVerboseLoggingLevel` 줄이, `dumpsys bluetooth_manager` 에는 `Enable log:` 줄이 있습니다. 이 설정이 평소와 다르다면 누가 언제 바꿨는지 다른 기록과 맞춰 봅니다.
 
 넷째, 출력에는 계정 이름, 알림 내용, 패키지 목록 같은 개인 정보가 많이 들어 있습니다. 조사 범위를 벗어난 부분은 보고서에 옮기지 않습니다.
 

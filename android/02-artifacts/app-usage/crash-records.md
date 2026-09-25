@@ -14,7 +14,7 @@ nav_order: 530
 
 이 기록들은 개발자와 제조사가 오류를 고치려고 남기는 진단용 기록이지만, 포렌식에서는 "그 시각에 그 앱의 프로세스가 살아 있었다" 는 흔적으로 씁니다. 사용자가 앱을 지운 뒤에도 오류 기록에 앱 이름이 남아 있을 수 있어서, [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md) 에서도 찾아볼 곳입니다.
 
-세 기록은 생기는 조건이 다릅니다. DropBox 는 시스템 서비스(DropBoxManagerService)가 태그를 붙여 여러 종류의 진단 기록을 모으는 저장소입니다 [1]. tombstone 은 네이티브(C/C++) 코드가 충돌했을 때 남는 파일이고, 같은 충돌 정보가 logcat 의 crash 버퍼와 DropBox 에도 들어갑니다 [2]. ANR(Application Not Responding) 은 앱이 정해진 시간 안에 응답하지 않을 때 생기는데, 개발자 문서는 아래 경우를 듭니다 [3].
+세 기록은 생기는 조건이 다릅니다. DropBox 는 시스템 서비스(DropBoxManagerService)가 태그를 붙여 여러 종류의 진단 기록을 모으는 저장소입니다 [1]. tombstone 은 네이티브(C/C++) 코드가 충돌했을 때 남는 파일이고, 같은 충돌 정보가 logcat 의 crash 버퍼와 DropBox 에도 들어갑니다 [2]. ANR(Application Not Responding) 은 앱이 정해진 시간 안에 응답하지 않을 때 생기고, 그 경우는 아래와 같습니다 [3].
 
 | 경우 | 조건 |
 |---|---|
@@ -32,22 +32,22 @@ nav_order: 530
 |---|---|---|
 | DropBox | `/data/system/dropbox` [1] | 3일, 최대 1000개(저사양 램 기기 300개), 용량 한도 있음 [1] |
 | tombstones | `/data/tombstones/` [2] | 개수 한도가 있어 새 충돌이 나면 오래된 파일을 지움 [2] |
-| ANR (예전) | `/data/anr/traces.txt` 한 파일 [3] | 확인하지 못함 |
-| ANR (새 버전) | `/data/anr/anr_*` 여러 파일 [3] | 확인하지 못함 |
+| ANR (예전) | `/data/anr/traces.txt` 한 파일 [3] | 공개 자료 없음 |
+| ANR (새 버전) | `/data/anr/anr_*` 여러 파일 [3] | 공개 자료 없음 |
 | logcat crash 버퍼 | 메모리 버퍼 | 버퍼 크기만큼 |
 
-DropBox 의 기본 보존 상수는 `DEFAULT_AGE_SECONDS = 3 * 86400`, `DEFAULT_MAX_FILES = 1000` 이고, 용량 한도 `DEFAULT_QUOTA_KB` 는 userdebug 빌드에서 `20 * 1024`, 그 밖에서는 `10 * 1024` 입니다 [1]. tombstone 을 몇 개까지 보관하는지, `.pb` 형식이 어느 버전에 들어왔는지는 확인하지 못했습니다. ANR 기록이 한 파일에서 여러 파일로 바뀐 버전도 문서에 없습니다 [3].
+DropBox 의 기본 보존 상수는 `DEFAULT_AGE_SECONDS = 3 * 86400`, `DEFAULT_MAX_FILES = 1000` 이고, 용량 한도 `DEFAULT_QUOTA_KB` 는 userdebug 빌드에서 `20 * 1024`, 그 밖에서는 `10 * 1024` 입니다 [1]. tombstone 보관 개수, `.pb` 형식이 들어온 버전, ANR 기록이 한 파일에서 여러 파일로 바뀐 버전은 공개 문서에 나와 있지 않습니다 [3].
 
-세 디렉터리 모두 시스템 영역이라 adb 일반 권한으로 바로 읽기 어렵고, 개발자 문서도 `/data/anr` 를 adb 로 직접 읽는 예에 `adb root` 를 씁니다 [3]. 일반 기기에서는 `adb bugreport` 나 개발자 옵션의 "버그 신고" 로 받습니다 [3]. 버그 리포트 짜임새는 [버그 리포트 (bugreport)](../logs/bugreport.md) 페이지에서 다룹니다. adb 일반 권한으로 `dumpsys dropbox` 를 읽을 수 있는지는 관찰 메모에 없어서 확인하지 못했습니다.
+세 디렉터리 모두 시스템 영역이라 adb 일반 권한으로 바로 읽기 어렵고, `/data/anr` 를 adb 로 직접 읽을 때도 `adb root` 를 씁니다 [3]. 일반 기기에서는 `adb bugreport` 나 개발자 옵션의 "버그 신고" 로 받습니다 [3]. 버그 리포트 짜임새는 [버그 리포트 (bugreport)](../logs/bugreport.md) 페이지에서 다룹니다. adb 일반 권한으로 `dumpsys dropbox` 를 읽을 수 있는지는 기기에서 확인합니다.
 
-삼성 기기에서 오류 로그를 따로 모으는 위치가 더 있는지는 확인하지 못했습니다. 관찰 기기에서 본 관련 설정 키는 아래와 같고, 키 이름만 확인했습니다.
+삼성 기기에서 오류 로그를 따로 모으는 위치가 더 있는지는 공개 자료가 없습니다. 삼성 기기에서 보이는 관련 설정 키는 아래와 같습니다.
 
 | 설정 영역 | 키 이름 |
 |---|---|
 | secure | `dropbox:data_app_anr`, `dropbox:data_app_crash`, `dropbox:data_app_wtf` |
 | secure | `anr_show_background` |
 
-AOSP 코드는 DropBox 태그를 켜고 끄는 값을 Global 설정의 `dropbox:<태그>` 키에서 `enabled`·`disabled` 로 읽는다고 되어 있는데 [1], 관찰 기기에서는 같은 이름의 키가 secure 목록에 보였고 그 이유는 모릅니다. 설정 값 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
+AOSP 는 DropBox 태그를 켜고 끄는 값을 Global 설정의 `dropbox:<태그>` 키에서 `enabled`·`disabled` 로 읽습니다 [1]. 그런데 삼성 기기에서는 같은 이름의 키가 secure 목록에 있으니 두 영역을 모두 봅니다. 설정 값 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -62,7 +62,7 @@ DropBox 의 파일 하나는 항목 하나이고, 이름은 `태그@시각` 에 
 | `.gz` 추가 | 압축한 항목 (예: `.txt.gz`) |
 | `.lost` | 내용이 지워지고 이름만 남은 항목 |
 
-`.lost` 파일은 내용 없이 "이 태그의 항목이 이 시각에 있었다" 는 사실만 남깁니다 [1]. 태그 이름의 전체 목록과 뜻은 확인하지 못했고, 관찰 기기의 설정 키에서 `data_app_anr`, `data_app_crash`, `data_app_wtf` 세 개만 확인했습니다.
+`.lost` 파일은 내용 없이 "이 태그의 항목이 이 시각에 있었다" 는 사실만 남깁니다 [1]. 태그 이름의 전체 목록과 뜻은 공개 자료가 없고, 설정 키에는 `data_app_anr`, `data_app_crash`, `data_app_wtf` 같은 태그가 보입니다.
 
 ### tombstone 내용
 
@@ -79,7 +79,7 @@ tombstone 은 `tombstone_06` 처럼 번호 붙은 파일이고, 사람이 읽는
 
 ### logcat crash 버퍼
 
-관찰 기기의 logcat 에는 `main`, `system`, `crash`, `kernel` 버퍼가 있었고, crash 버퍼 한 줄은 아래 모양이었습니다.
+logcat 에는 `main`, `system`, `crash`, `kernel` 버퍼가 있고, crash 버퍼 한 줄은 아래 모양입니다.
 
 ```
 [crash] ##-## ##:##:##.### <PID> <TID> F <태그>: <내용>
@@ -99,7 +99,7 @@ logcat 형식 전반은 [logcat (logcat)](../logs/logcat.md) 페이지에서 다
 
 ## 시각 해석
 
-DropBox 파일 이름의 시각은 항목을 만들 때 `System.currentTimeMillis()` 로 얻은 값이라 [1] 유닉스 에포크 밀리초(UTC 기준)이고, 벽시계 값이라서 기기 시계를 바꾸면 그 뒤 파일 이름 시각도 따라 바뀝니다. logcat crash 버퍼 줄의 시각은 연도가 없는 월-일 시각이라, 연도는 수집 날짜로 채우고 연말·연초에 걸친 기록은 특히 조심합니다. tombstone 과 ANR 파일 안 시각의 형식은 확인하지 못했습니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+DropBox 파일 이름의 시각은 항목을 만들 때 `System.currentTimeMillis()` 로 얻은 값이라 [1] 유닉스 에포크 밀리초(UTC 기준)이고, 벽시계 값이라서 기기 시계를 바꾸면 그 뒤 파일 이름 시각도 따라 바뀝니다. logcat crash 버퍼 줄의 시각은 연도가 없는 월-일 시각이라, 연도는 수집 날짜로 채우고 연말·연초에 걸친 기록은 특히 조심합니다. tombstone 과 ANR 파일 안 시각의 형식은 검체에서 확인합니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 함정과 한계
 

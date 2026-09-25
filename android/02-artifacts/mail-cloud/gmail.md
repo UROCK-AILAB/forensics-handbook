@@ -14,11 +14,11 @@ nav_order: 1080
 
 지메일 앱은 서버의 메일을 기기에 받아 두고 보여 주는 앱이라서, 받은 메일과 보낸 메일의 사본과 라벨별 개수, 내려받은 첨부 파일이 앱 데이터 폴더에 쌓입니다 [2]. 구글 계정 말고도 IMAP 같은 다른 메일 계정을 지메일 앱에 넣을 수 있고, 이런 계정의 메일은 구글 계정 메일과 따로 `EmailProvider` DB 에 저장됩니다 [3].
 
-이 페이지의 경로·표·필드 번호는 공개 도구 ALEAPP 의 지메일 모듈 세 개가 읽는 방식을 정리한 것입니다 [1][2][3]. 필드 번호를 적은 공식 문서가 없어서, 이 번호는 ALEAPP 가 시험 이미지에서 맞춰 정한 값입니다 [2].
+필드 번호를 적은 공식 문서는 없고, 아래 필드 번호는 공개 도구 ALEAPP 가 시험 이미지에서 맞춰 정한 값입니다 [2].
 
 ## 위치와 버전별 차이
 
-앱 데이터는 `/data/data/` 또는 `/data/user/` 아래 사용자 번호 폴더에 있고, ALEAPP 는 `data_mirror` 경로까지 함께 찾습니다 [2]. 폴더 짜임은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), 이 폴더를 다른 앱이나 셸이 읽을 수 있는지는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다. ALEAPP 가 쓰는 경로 패턴은 아래와 같습니다.
+앱 데이터는 `/data/data/` 또는 `/data/user/` 아래 사용자 번호 폴더에 있고, `data_mirror` 경로로도 찾을 수 있습니다 [2]. 폴더 짜임은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), 이 폴더를 다른 앱이나 셸이 읽을 수 있는지는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다. 경로 패턴은 아래와 같습니다.
 
 ```
 */com.google.android.gm/shared_prefs/Gmail.xml                 계정 정보 [1][2]
@@ -31,11 +31,11 @@ nav_order: 1080
 */com.google.android.gm/cache/*.attachment                     IMAP 보낸 첨부 [3]
 ```
 
-IMAP 본문 파일은 메시지 `_id` 를 이름으로 씁니다 [3]. DB 옆에는 `-wal`·`-shm`·`-journal` 파일이 함께 있을 수 있고 ALEAPP 도 이 이름들을 따로 거릅니다 [2]. 복사할 때 이 파일들을 빠뜨리면 안 되는 까닭은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
+IMAP 본문 파일은 메시지 `_id` 를 이름으로 씁니다 [3]. DB 옆에는 `-wal`·`-shm`·`-journal` 파일이 함께 있을 수 있습니다 [2]. 복사할 때 이 파일들을 빠뜨리면 안 되는 까닭은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
 
 한 기기에 Android 사용자가 여럿이면 사용자마다 `Gmail.xml` 과 `bigTopDataDB` 가 따로 생깁니다 [1][2]. 사용자 번호를 읽는 법은 [사용자와 프로필](../system-account/users-profiles.md) 페이지에 있습니다.
 
-ALEAPP 시험 이미지에서 확인한 범위는 아래와 같습니다 [1][2]. One UI 버전에 따라 경로나 표가 달라지는지를 적은 자료는 찾지 못했습니다.
+ALEAPP 시험 이미지로 확인된 범위는 아래와 같습니다 [1][2]. One UI 버전에 따라 경로나 표가 달라지는지는 공개 자료가 없어 검체에서 확인합니다.
 
 | 항목 | 내용 |
 |---|---|
@@ -53,7 +53,7 @@ SharedPreferences 형식의 XML 이고, 읽는 법은 [설정 XML과 SharedPrefe
 
 ### bigTopDataDB
 
-파일 이름 뒤의 숫자 id 는 계정 주소를 Java `String.hashCode` 로 계산한 값과 같았습니다 [2]. ALEAPP 시험 이미지에서 맞춰 본 관찰이고, 구글이 문서로 밝힌 규칙은 아닙니다 [2]. ALEAPP 는 이 관계로 DB 파일과 `Gmail.xml` 의 주소를 짝짓고, 짝이 맞지 않는 DB 는 계정 칸을 비워 둡니다 [2].
+파일 이름 뒤의 숫자 id 는 계정 주소를 Java `String.hashCode` 로 계산한 값과 같습니다 [2]. 구글이 문서로 밝힌 규칙은 아니고, ALEAPP 시험 이미지에서 맞춰 본 결과입니다 [2]. ALEAPP 는 이 관계로 DB 파일과 `Gmail.xml` 의 주소를 짝짓고, 짝이 맞지 않는 DB 는 계정 칸을 비워 둡니다 [2].
 
 | 표 | 칸 | 담긴 것 |
 |---|---|---|
@@ -61,9 +61,9 @@ SharedPreferences 형식의 XML 이고, 읽는 법은 [설정 XML과 SharedPrefe
 | `item_message_attachments` | `item_messages_row_id` 등 | 첨부 이름·해시. `item_messages.row_id` 로 이어짐 [2] |
 | `label_counts` | `label_server_perm_id`, `unread_count`, `total_count`, `unseen_count` | 라벨(받은편지함 등)별 개수 [2] |
 
-첨부 표는 ALEAPP 가 열 순서로 읽어서 이름·해시 칸의 이름이 코드에 없습니다 [2].
+첨부 표의 이름·해시 칸은 칸 이름이 알려져 있지 않아 열 순서로 읽습니다 [2].
 
-`zipped_message_proto` 칸은 첫 1바이트 뒤가 zlib 으로 압축한 프로토콜 버퍼이고, 풀면 번호 붙은 필드로 나뉩니다 [2]. 프로토콜 버퍼를 읽는 일반 방법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다. ALEAPP 가 쓰는 필드 번호는 아래와 같습니다 [2].
+`zipped_message_proto` 칸은 첫 1바이트 뒤가 zlib 으로 압축한 프로토콜 버퍼이고, 풀면 번호 붙은 필드로 나뉩니다 [2]. 프로토콜 버퍼를 읽는 일반 방법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다. 필드 번호는 아래와 같습니다 [2].
 
 | 필드 | 뜻 |
 |---|---|
@@ -77,7 +77,7 @@ SharedPreferences 형식의 XML 이고, 읽는 법은 [설정 XML과 SharedPrefe
 | 11.8 | Mailed By |
 | 11.9 | Signed by |
 
-본문이 들어 있는 필드 자리가 앱 버전마다 달라서 본문을 못 읽는 경우가 있다고 ALEAPP 가 적어 두었습니다 [2].
+본문이 들어 있는 필드 자리는 앱 버전마다 달라서 본문을 못 읽는 경우가 있습니다 [2].
 
 ### downloader.db
 
@@ -89,7 +89,7 @@ SharedPreferences 형식의 XML 이고, 읽는 법은 [설정 XML과 SharedPrefe
 
 `HostAuth` 표에는 `login`, `password`, `address`, `port` 칸이 있고 `Account.hostAuthKeyRecv`·`hostAuthKeySend` 로 이어집니다 [3]. 메일 서버 비밀번호가 들어 있을 수 있는 칸이라서, 보고서와 사본을 다룰 때 따로 가려서 취급합니다.
 
-칸 이름이 AOSP 이메일 앱과 같아서 칸 뜻은 [삼성 이메일 (Samsung Email)](samsung-email.md) 페이지의 AOSP 비교 절을 참고할 수 있습니다. 지메일 앱 쪽 DB 가 AOSP 와 같은 구조라는 것은 칸 이름이 같다는 점에서 짐작할 뿐이고 확인하지는 못했습니다.
+칸 이름이 AOSP 이메일 앱과 같아서 칸 뜻은 [삼성 이메일 (Samsung Email)](samsung-email.md) 페이지의 AOSP 비교 절을 참고할 수 있습니다. 다만 지메일 앱 쪽 DB 가 AOSP 와 같은 구조라는 것은 칸 이름이 같다는 점에서 나온 짐작입니다.
 
 ## 증거로서 의미
 
@@ -103,7 +103,7 @@ Mailed By·Signed by 는 저장된 머리 값을 그대로 보인 것이고 인�
 
 ## 시각 해석
 
-`zipped_message_proto` 필드 17 과 `download_requests.request_time_ms` 는 유닉스 밀리초이고 [2], 유닉스 시각은 UTC 기준이라 현지 시각으로 옮길 때 기기 시간대를 따로 확인합니다. 필드 17 이 받은 시각인지 보낸 시각인지는 ALEAPP 설명에 없어서 "메일 시각" 으로만 적습니다. EmailProvider 의 `timeStamp` 가 어떤 시각인지는 ALEAPP 설명에 없고, 같은 이름 칸의 AOSP 쪽 뜻은 [삼성 이메일 (Samsung Email)](samsung-email.md) 페이지에 있지만 지메일 앱 쪽도 같은지는 확인하지 못했습니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+`zipped_message_proto` 필드 17 과 `download_requests.request_time_ms` 는 유닉스 밀리초이고 [2], 유닉스 시각은 UTC 기준이라 현지 시각으로 옮길 때 기기 시간대를 따로 확인합니다. 필드 17 이 받은 시각인지 보낸 시각인지는 알려져 있지 않아 "메일 시각" 으로만 적습니다. EmailProvider 의 `timeStamp` 가 어떤 시각인지 적은 자료도 없습니다. 같은 이름 칸의 AOSP 쪽 뜻은 [삼성 이메일 (Samsung Email)](samsung-email.md) 페이지에 있지만, 지메일 앱 쪽도 같은지는 검체에서 확인합니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
@@ -111,15 +111,15 @@ Mailed By·Signed by 는 저장된 머리 값을 그대로 보인 것이고 인�
 
 둘째, EmailProvider 쪽은 ALEAPP 시험 이미지 17개 모두 `Account`·`Message` 표가 비어 있었고, 모듈은 만든 자료로만 검증했습니다 [3]. 실제 검체에서 결과가 나오면 도구 출력과 원본 행을 맞춰 보는 과정을 거칩니다.
 
-셋째, 숫자 id 와 `String.hashCode` 가 맞는다는 것은 관찰이라서 [2], 맞지 않는 파일이 나오면 규칙이 바뀐 것인지 다른 계정인지 가려 두고 보고서에 단정하지 않습니다.
+셋째, 숫자 id 와 `String.hashCode` 가 맞는다는 것은 문서로 밝힌 규칙이 아니라서 [2], 맞지 않는 파일이 나오면 규칙이 바뀐 것인지 다른 계정인지 가려 두고 보고서에 단정하지 않습니다.
 
-넷째, 삭제한 메일이 DB 나 WAL 에 얼마나 남는지는 확인한 자료가 없습니다. SQLite 에서 지운 행이 남을 수 있는 자리는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 계정을 기기에서 빼면 앱 데이터가 어떻게 되는지도 확인하지 못했고, 계정을 넣고 뺀 흔적은 아래 교차 검증의 계정 기록에서 찾습니다.
+넷째, 삭제한 메일이 DB 나 WAL 에 얼마나 남는지는 공개 자료가 없어 검체에서 확인합니다. SQLite 에서 지운 행이 남을 수 있는 자리는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 계정을 기기에서 빼면 앱 데이터가 어떻게 되는지도 공개 자료가 없으니, 계정을 넣고 뺀 흔적은 아래 교차 검증의 계정 기록에서 찾습니다.
 
 ## 직접 분석해 보기
 
 ### 값으로 한 번
 
-아래는 Java `String.hashCode` 계산 방식과 프로토콜 버퍼 인코딩 규칙으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. 주소 `user@example.com` 을 `String.hashCode` 로 계산하면 1084137992 가 나오고, 위 관찰대로라면 이 계정의 DB 파일 이름은 `bigTopDataDB.1084137992` 가 됩니다. 해시가 음수로 나오는 주소에서 파일 이름이 어떻게 적히는지는 확인하지 못했습니다.
+아래는 Java `String.hashCode` 계산 방식과 프로토콜 버퍼 인코딩 규칙으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. 주소 `user@example.com` 을 `String.hashCode` 로 계산하면 1084137992 가 나오고, 위 규칙대로라면 이 계정의 DB 파일 이름은 `bigTopDataDB.1084137992` 가 됩니다. 해시가 음수로 나오는 주소에서 파일 이름이 어떻게 적히는지는 알려져 있지 않아 검체에서 확인합니다.
 
 압축을 푼 덩어리에서 필드 17 을 찾을 때는 필드 번호 17 과 형식 0(varint)을 합친 머리 바이트 `88 01` 을 찾습니다. 그 뒤의 varint 를 풀어 유닉스 밀리초로 읽습니다.
 
@@ -157,7 +157,7 @@ ALEAPP 의 GmailActive 모듈이 `Gmail.xml` 을 [1], Gmail - App Emails·Label 
 | [설치된 앱 (packages.xml)](../app-usage/packages/index.md) | 지메일 앱의 설치·업데이트 시점과 버전 |
 | [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) | 첨부 파일을 공용 폴더로 따로 저장한 흔적 |
 
-관찰 기기에서는 `dumpsys account` 출력에 계정마다 `Account {name=..., type=...}` 줄과 "Accounts History" 표가 있었고, 표에 계정 추가·삭제 동작이 기록되어 있었습니다. 칸 뜻은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md), 첨부로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
+`dumpsys account` 출력에는 계정마다 `Account {name=..., type=...}` 줄과 "Accounts History" 표가 있고, 이 표에 계정 추가·삭제 동작이 기록됩니다. 칸 뜻은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md), 첨부로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 

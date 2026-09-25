@@ -12,11 +12,11 @@ nav_order: 700
 
 ## 무엇을 기록하나 · 왜 생기나
 
-구글 설명에 따르면 타임라인은 로그인한 각 기기에서 방문한 곳과 이동 경로를 저장하고, 화면에 보이는 데이터가 기기에서 직접 나오기 때문에 컴퓨터용 지도에서는 타임라인을 쓸 수 없습니다 [1]. 타임라인은 구글 계정에서 기본으로 꺼져 있고, 사용자가 동의해야 켜집니다 [1].
+타임라인은 로그인한 각 기기에서 방문한 곳과 이동 경로를 저장하고, 화면에 보이는 데이터가 기기에서 직접 나오기 때문에 컴퓨터용 지도에서는 타임라인을 쓸 수 없습니다 [1]. 타임라인은 구글 계정에서 기본으로 꺼져 있고, 사용자가 동의해야 켜집니다 [1].
 
-백업을 켜면 지도 앱이 암호화한 사본을 구글 서버에 저장하고, 이 백업으로 다른 기기에 데이터를 옮길 수 있습니다 [1]. 데이터는 자동 삭제 설정에 따라, 또는 사용자가 지울 때까지 남고, 사용자는 "내 Google 활동" 과 휴대폰 지도 앱에서 지울 수 있습니다 [1]. 자동 삭제 기간으로 어떤 선택지가 있는지는 확인하지 못했습니다.
+백업을 켜면 지도 앱이 암호화한 사본을 구글 서버에 저장하고, 이 백업으로 다른 기기에 데이터를 옮길 수 있습니다 [1]. 데이터는 자동 삭제 설정에 따라, 또는 사용자가 지울 때까지 남고, 사용자는 "내 Google 활동" 과 휴대폰 지도 앱에서 지울 수 있습니다 [1].
 
-예전 이름인 "위치 기록 (Location History)" 이 "타임라인" 으로 바뀐 시기와, 서버에 두던 기록이 기기 저장으로 옮겨 간 날짜·단계는 이번에 연 자료에서 확인하지 못했습니다. ALEAPP 에 예전 서버형 위치 기록의 기기 쪽 설정을 읽는 ulrUserprefs 모듈이 있다는 것까지만 확인했고 [4], 그 경로와 내용은 읽지 않았습니다.
+타임라인의 예전 이름은 "위치 기록 (Location History)" 이고, 예전에는 기록을 서버에 두었습니다. ALEAPP 에는 예전 서버형 위치 기록의 기기 쪽 설정을 읽는 ulrUserprefs 모듈이 있습니다 [4].
 
 ## 위치와 버전별 차이
 
@@ -27,9 +27,9 @@ nav_order: 700
 */com.google.android.gms/app_semanticlocation_rawsignal_db/*
 ```
 
-첫째 파일은 기기 내 위치 기록 (On Device Location History, ODLH) 을 담은 SQLite DB 이고 [2], 둘째 폴더는 LevelDB 입니다 [3]. 두 저장소가 원재료와 정리된 구간의 관계인지는 확인하지 못했습니다. 앱 데이터 영역은 루팅되지 않은 기기에서 adb 일반 권한으로 읽을 수 없는 곳이고, 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다.
+첫째 파일은 기기 내 위치 기록 (On Device Location History, ODLH) 을 담은 SQLite DB 이고 [2], 둘째 폴더는 LevelDB 입니다 [3]. 두 저장소가 원재료와 정리된 구간의 관계인지는 알려져 있지 않습니다. 앱 데이터 영역은 루팅되지 않은 기기에서 adb 일반 권한으로 읽을 수 없는 곳이고, 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다.
 
-타임라인을 쓰는 데 필요한 Android 버전과 지도 앱 버전은 구글 도움말에 없었습니다 [1]. 대신 ALEAPP 모듈에 시험한 표본 기기와 결과 행 수가 적혀 있어서 [2][3], 기기에 따라 비어 있을 수 있다는 점을 볼 수 있습니다. 아래 표는 그 일부입니다.
+타임라인을 쓰는 데 필요한 Android 버전과 지도 앱 버전은 공개되어 있지 않습니다. ALEAPP 모듈의 시험 표본을 보면 기기에 따라 두 저장소가 비어 있을 수 있습니다 [2][3]. 아래 표는 그 일부입니다.
 
 | 표본 기기 | Android | odlh-storage.db 행 수 [2] | rawsignal LevelDB [3] |
 |---|---|---|---|
@@ -40,28 +40,28 @@ nav_order: 700
 | Galaxy A53 | 14 | 0행 | 0행 |
 | Galaxy S20 | 13 | 0행 | 0행 |
 
-삼성 표본 두 대는 두 저장소 모두 0행이었고, Pixel 6a·7a 도 odlh-storage.db 에는 행이 있지만 LevelDB 는 0행이었습니다 [2][3]. 그래서 빈 결과가 삼성 기기에만 나타나는 일은 아니고, 삼성 One UI 에서 저장 위치가 다른지 설정 차이 때문인지도 확인하지 못했습니다. 검체에서 이 두 곳이 비어 있어도 사용자가 이동하지 않았다고 결론 내리면 안 되고, 그 기기에 타임라인이 켜져 있었는지부터 따져야 합니다.
+삼성 표본 두 대는 두 저장소 모두 0행이었고, Pixel 6a·7a 도 odlh-storage.db 에는 행이 있지만 LevelDB 는 0행이었습니다 [2][3]. 그래서 빈 결과는 삼성 기기에만 나타나는 일이 아니고, 삼성 One UI 에서 저장 위치가 다른지 설정 차이 때문인지는 알려져 있지 않습니다. 검체에서 이 두 곳이 비어 있어도 사용자가 이동하지 않았다고 결론 내리면 안 되고, 그 기기에 타임라인이 켜져 있었는지부터 따져야 합니다.
 
-관찰 기기의 공용 저장 공간에는 `/sdcard/Android/media/com.google.android.gms` 폴더가 있었습니다. 그 안에 타임라인과 관련된 파일이 있는지는 확인하지 못했습니다.
+공용 저장 공간에도 `/sdcard/Android/media/com.google.android.gms` 폴더가 있을 수 있습니다. 그 안에 타임라인과 관련된 파일이 있는지는 검체에서 확인합니다.
 
 ## 구조
 
 ### odlh-storage.db
 
-SQLite 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다. ALEAPP 가 읽는 표는 두 개입니다 [2].
+SQLite 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다. 타임라인 구간이 든 표는 두 개입니다 [2].
 
 | 표 | 칸 | 담긴 것 |
 |---|---|---|
 | `semantic_segment_table` | `start_timestamp_seconds`, `end_timestamp_seconds`, `segment_type`, `semantic_segment`, `shown_in_timeline`, `is_finalized`, `hierarchy_level`, `segment_id`, `obfuscated_gaia_id` | 타임라인 구간 한 개 |
 | `edited_segment_table` | `start_timestamp_seconds`, `end_timestamp_seconds`, `block_start_timestamp_seconds`, `block_end_timestamp_seconds`, `segment_type`, `is_edit_uploaded`, `segment_id`, `obfuscated_gaia_id` | 사용자가 고친 구간과, 그 수정을 올렸는지 여부 |
 
-`semantic_segment` 칸은 프로토콜 버퍼 덩어리이고, 좌표가 들어 있는 구간에서만 위도·경도를 꺼낼 수 있습니다 [2]. ALEAPP 는 필드 경로 3→1→4→5 아래의 1번 필드를 위도로, 2번 필드를 경도로 읽습니다 [2]. 값은 E7 고정소수라서 정수를 10,000,000 으로 나누면 도 단위가 되고, 부호 없는 값으로 읽힌 숫자가 2^31 을 넘으면 2^32 를 빼서 음수로 되돌립니다 [2]. 덩어리를 읽는 일반 방법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다.
+`semantic_segment` 칸은 프로토콜 버퍼 덩어리이고, 좌표가 들어 있는 구간에서만 위도·경도를 꺼낼 수 있습니다 [2]. 필드 경로 3→1→4→5 아래의 1번 필드가 위도, 2번 필드가 경도입니다 [2]. 값은 E7 고정소수라서 정수를 10,000,000 으로 나누면 도 단위가 되고, 부호 없는 값으로 읽힌 숫자가 2^31 을 넘으면 2^32 를 빼서 음수로 되돌립니다 [2]. 덩어리를 읽는 일반 방법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다.
 
-`segment_type` 은 정수인데 ALEAPP 도 숫자의 뜻을 풀지 않고 그대로 보고합니다 [2]. 어느 숫자가 방문이고 어느 숫자가 이동인지는 확인하지 못했으니 보고서에 이름을 붙이지 않습니다.
+`segment_type` 은 정수인데 ALEAPP 도 숫자의 뜻을 풀지 않고 그대로 보고합니다 [2]. 어느 숫자가 방문이고 어느 숫자가 이동인지는 알려져 있지 않으니 보고서에 이름을 붙이지 않습니다.
 
 ### app_semanticlocation_rawsignal_db
 
-LevelDB 의 기록 값마다 프로토콜 버퍼가 들어 있고, ALEAPP 는 필드 1→1 아래를 아래처럼 읽습니다 [3]. LevelDB 자체는 [LevelDB와 IndexedDB](../../01-foundations/data-formats/leveldb-indexeddb.md) 페이지에서 다룹니다.
+LevelDB 의 기록 값마다 프로토콜 버퍼가 들어 있고, 필드 1→1 아래 값은 아래와 같습니다 [3]. LevelDB 자체는 [LevelDB와 IndexedDB](../../01-foundations/data-formats/leveldb-indexeddb.md) 페이지에서 다룹니다.
 
 | 필드 | 뜻 | 단위 |
 |---|---|---|
@@ -84,17 +84,17 @@ ALEAPP 결과에는 Timestamp, Rec. Sequence(LevelDB 기록 순번), Latitude, L
 
 ## 시각 해석
 
-odlh-storage.db 의 시각은 칸 이름대로 유닉스 초이고, ALEAPP 는 UTC 로 바꿉니다 [2]. 한 구간에는 시작과 끝 두 시각이 있고, `edited_segment_table` 에는 `block_start_timestamp_seconds`·`block_end_timestamp_seconds` 가 더 있습니다 [2]. rawsignal LevelDB 의 시각은 유닉스 밀리초입니다 [3]. 두 저장소는 시각 단위가 달라서, 한 타임라인에 올릴 때 단위를 맞추지 않으면 1000 배 어긋난 날짜가 나옵니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+odlh-storage.db 의 시각은 칸 이름대로 유닉스 초(UTC 기준)입니다 [2]. 한 구간에는 시작과 끝 두 시각이 있고, `edited_segment_table` 에는 `block_start_timestamp_seconds`·`block_end_timestamp_seconds` 가 더 있습니다 [2]. rawsignal LevelDB 의 시각은 유닉스 밀리초입니다 [3]. 두 저장소는 시각 단위가 달라서, 한 타임라인에 올릴 때 단위를 맞추지 않으면 1000 배 어긋난 날짜가 나옵니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-첫째, 이 페이지의 경로·표·필드 번호는 ALEAPP 가 이렇게 읽는다는 사실이고, 모든 Play 서비스 판에서 그렇게 저장한다는 보증은 아닙니다 [2][3]. ALEAPP 는 이 모듈의 참고 자료로 "Cellebrite Location Booklet 2025" 를 적었지만 [2], 그 자료는 열어 보지 않았습니다.
+첫째, 이 페이지의 경로·표·필드 번호는 ALEAPP 가 이렇게 읽는다는 사실이고, 모든 Play 서비스 판에서 그렇게 저장한다는 보증은 아닙니다 [2][3]. ALEAPP 모듈은 "Cellebrite Location Booklet 2025" 를 참고 자료로 듭니다 [2].
 
 둘째, 삼성 표본에서는 두 저장소가 모두 비어 있었고, 픽셀 표본 가운데에도 LevelDB 가 빈 기기가 있었습니다 [2][3]. 빈 결과가 나오면 원인을 확인하지 못한 상태라는 점을 보고서에 적습니다.
 
-셋째, 사용자는 지도 앱과 "내 Google 활동" 에서 타임라인을 지울 수 있고 자동 삭제도 설정할 수 있습니다 [1]. 지운 뒤 기기 DB 에 무엇이 남는지는 확인하지 못했고, SQLite 에서 지운 행이 어디에 남을 수 있는지는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 구간을 고친 흔적은 `edited_segment_table` 에 남으니 [2], 조작을 의심할 때는 이 표부터 봅니다. 지우기·고치기를 조사하는 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+셋째, 사용자는 지도 앱과 "내 Google 활동" 에서 타임라인을 지울 수 있고 자동 삭제도 설정할 수 있습니다 [1]. 지운 뒤 기기 DB 에 무엇이 남는지는 공개 자료가 없어 검체에서 확인합니다. SQLite 에서 지운 행이 어디에 남을 수 있는지는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 구간을 고친 흔적은 `edited_segment_table` 에 남으니 [2], 조작을 의심할 때는 이 표부터 봅니다. 지우기·고치기를 조사하는 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 
-넷째, 서버 백업은 암호화한 사본이라서 [1] 기기 없이 서버 쪽만으로 무엇을 얻을 수 있는지는 확인하지 못했습니다. Google Takeout 으로 받는 타임라인 형식도 확인하지 못했고, 클라우드 쪽 확보 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
+넷째, 서버 백업은 암호화한 사본입니다 [1]. 기기 없이 서버 쪽만으로 무엇을 얻을 수 있는지와 Google Takeout 으로 받는 타임라인 형식은 공개 자료가 없어 따로 확인해야 합니다. 클라우드 쪽 확보 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 

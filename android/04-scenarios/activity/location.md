@@ -15,9 +15,9 @@ nav_order: 1590
 ## 먼저 확인할 것
 
 - **OS 버전과 제조사** — 구글 기기 내 위치 기록은 ALEAPP 시험 표본 여러 대에 수백~수천 행이 있었지만 삼성 두 대(Galaxy A53 Android 14, Galaxy S20 Android 13)에서는 0행이었습니다 [2][3]. 삼성 기기에서는 이 저장소가 비어 있을 수 있으므로 원인은 단정하지 말고 다른 기록으로 넘어갈 준비를 합니다.
-- **설정** — 구글 타임라인은 계정에서 기본으로 꺼져 있고 사용자가 동의해야 켜집니다 [1]. 관찰 기기의 settings secure 에는 `location_mode`, `mock_location`, `location_changer`, `skyhook_location_enabled`, `trusted_locations_count` 키 이름이, settings global 에는 `assisted_gps_enabled`, `wifi_scan_always_enabled` 키 이름이 있었습니다. 값과 뜻은 확인하지 못했으므로 키가 있다는 사실만 적고, 값은 [설정 값](../../02-artifacts/system-account/settings.md) 에서 따로 풉니다.
+- **설정** — 구글 타임라인은 계정에서 기본으로 꺼져 있고 사용자가 동의해야 켜집니다 [1]. 위치와 관련된 설정 키로는 settings secure 의 `location_mode`, `mock_location`, `location_changer`, `skyhook_location_enabled`, `trusted_locations_count` 와 settings global 의 `assisted_gps_enabled`, `wifi_scan_always_enabled` 가 있습니다. 키 이름만으로 뜻을 단정하지 말고, 값은 [설정 값](../../02-artifacts/system-account/settings.md) 에서 따로 풉니다.
 - **시간대** — 저장소마다 시각 단위가 달라 모두 UTC 로 바꾼 뒤 현지 시각을 붙입니다([시각 값](../../01-foundations/value-decoding/time-values.md), [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)).
-- **수집 범위** — 구글 Play 서비스와 지도 앱의 저장소는 앱 데이터 영역에 있어 adb 일반 권한으로는 보이지 않고, 관찰 메모에도 들어 있지 않습니다. 계정 쪽 타임라인은 기기 밖 자료라서 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 의 절차로 따로 받습니다.
+- **수집 범위** — 구글 Play 서비스와 지도 앱의 저장소는 앱 데이터 영역에 있어 adb 일반 권한으로는 보이지 않습니다. 계정 쪽 타임라인은 기기 밖 자료라서 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 의 절차로 따로 받습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -36,24 +36,24 @@ nav_order: 1590
 |---|---|---|---|
 | `odlh-storage.db` 의 `semantic_segment_table` | protobuf 안의 E7 정수(정수 ÷ 10,000,000) [2] | `start_timestamp_seconds`·`end_timestamp_seconds`, 유닉스 초 [2] | 삼성 표본 두 대 0행 [2] |
 | `app_semanticlocation_rawsignal_db` (LevelDB) | E7 정수, 수평 정확도 값이 함께 있음 [3] | 유닉스 밀리초 [3] | 삼성 표본 두 대 0행 [3] |
-| 구글 지도 `da_destination_history` DB 의 `destination_history` 표 | E6 정수, 목적지와 출발지 좌표 [4] | 유닉스 밀리초 [4] | 현행 지도 앱에 아직 있는지는 확인하지 못했습니다 |
+| 구글 지도 `da_destination_history` DB 의 `destination_history` 표 | E6 정수, 목적지와 출발지 좌표 [4] | 유닉스 밀리초 [4] | 현행 지도 앱에 아직 있는지는 검체에서 확인합니다 |
 | 구글 지도 `gmm_myplaces.db` 의 `sync_item` | E6 정수 [5] | 유닉스 밀리초 [5] | 오래된 파일에는 이 표가 없습니다 [5] |
 | 구글 지도 검색 기록 `new_recent_history_cache_search.cs` | 검색어 중심 | 유닉스 마이크로초 [6] | 다른 지도 기록과 단위가 다릅니다 |
-| 삼성 `wifigeofence.db` 의 `geofence_wifi` | `latitude`·`longitude`, 1000.0·-1.0 은 값 없음 [8] | `time` 칸(단위는 확인하지 못함) | ALEAPP 시험 이미지 Android 10~15 삼성 기기 [8] |
+| 삼성 `wifigeofence.db` 의 `geofence_wifi` | `latitude`·`longitude`, 1000.0·-1.0 은 값 없음 [8] | `time` 칸(단위는 검체에서 확인) | ALEAPP 시험 이미지 Android 10~15 삼성 기기 [8] |
 
 ## 분석 흐름
 
 1. **질문의 시간 창을 정합니다.** "밤 10시" 처럼 한 점으로 주어진 질문도 앞뒤로 창을 넓혀 잡습니다. 위치 기록은 연속된 선이 아니라 드문드문 찍힌 점이나 구간이라서, 창 안에 기록이 몇 개 있는지부터 셉니다.
 
-2. **구글 기기 내 위치 기록을 봅니다.** ALEAPP 는 `*/com.google.android.gms/databases/odlh-storage.db*` 를 읽는데, 파일 주인은 지도 앱이 아니라 Google Play 서비스입니다 [2]. `semantic_segment_table` 한 행은 시작·끝 시각이 있는 구간이고 `shown_in_timeline`, `is_finalized` 같은 칸도 함께 있습니다 [2]. 개별 위치 점은 `*/com.google.android.gms/app_semanticlocation_rawsignal_db/*` 의 LevelDB 에 위도·경도·수평 정확도·시각으로 남습니다 [3]. 두 저장소가 어떤 관계인지(원재료와 정리된 구간인지)는 확인하지 못했으므로 둘을 별개 기록으로 표에 올립니다.
+2. **구글 기기 내 위치 기록을 봅니다.** 기기 내 위치 기록 파일은 `*/com.google.android.gms/databases/odlh-storage.db*` 이고, 파일 주인은 지도 앱이 아니라 Google Play 서비스입니다 [2]. `semantic_segment_table` 한 행은 시작·끝 시각이 있는 구간이고 `shown_in_timeline`, `is_finalized` 같은 칸도 함께 있습니다 [2]. 개별 위치 점은 `*/com.google.android.gms/app_semanticlocation_rawsignal_db/*` 의 LevelDB 에 위도·경도·수평 정확도·시각으로 남습니다 [3]. 두 저장소가 어떤 관계인지(원재료와 정리된 구간인지)는 공개 자료가 없으므로 둘을 별개 기록으로 표에 올립니다.
 
-3. **지도 앱 기록을 더합니다.** 구글 지도의 길찾기 목적지 기록은 `da_destination_history` DB 의 `destination_history` 표에 목적지와 출발지 좌표, 시각을 남기고 [4], 저장한 장소 `gmm_myplaces.db` 에는 라벨과 좌표가 남습니다 [5]. ALEAPP 는 저장한 장소의 key_string 두 값을 Home·Work 로 표시하지만, 이 대응은 데이터에 적혀 있지 않고 라벨이 붙었다고 실제 집·직장이라는 뜻도 아니라고 모듈 메모에 적었습니다 [5]. 길찾기 목적지는 "가려고 했던 곳" 이고 도착했다는 기록이 아니므로, 도착은 다른 기록으로 확인합니다. 네이버 지도·카카오맵은 공개 도구 모듈이 없어 경로와 표를 확인하지 못했으니 각 앱 페이지를 따라갑니다.
+3. **지도 앱 기록을 더합니다.** 구글 지도의 길찾기 목적지 기록은 `da_destination_history` DB 의 `destination_history` 표에 목적지와 출발지 좌표, 시각을 남기고 [4], 저장한 장소 `gmm_myplaces.db` 에는 라벨과 좌표가 남습니다 [5]. ALEAPP 는 저장한 장소의 key_string 두 값을 Home·Work 로 표시하지만, 이 대응은 데이터에 적혀 있지 않고, 라벨이 붙었다고 실제 집·직장이라는 뜻도 아닙니다 [5]. 길찾기 목적지는 "가려고 했던 곳" 이고 도착했다는 기록이 아니므로, 도착은 다른 기록으로 확인합니다. 네이버 지도·카카오맵은 공개 분석 도구가 없어 경로와 표를 검체에서 확인해야 하니 각 앱 페이지를 따라갑니다.
 
 4. **사진 한 점을 올립니다.** 창 안에서 찍은 사진이 있으면 EXIF 좌표와 GPS UTC 시각을 한 점으로 올립니다. 촬영 순간 한 점이라는 성격만 기억해 두고, 태그를 읽는 방법과 함정은 [이 사진은 언제 어디서 찍었나](photo-origin.md) 에 있습니다.
 
-5. **Wi-Fi 기록으로 장소를 좁힙니다.** `WifiConfigStore.xml` 은 ALEAPP 가 `*/misc**/apexdata/com.android.wifi/WifiConfigStore.xml`(예전에는 `*/misc/wifi/`)에서 찾고, 삼성 기기에는 `semCreationTime`, `semUpdateTime`, `LastConnectedTime` 칸이 있어 ALEAPP 가 유닉스 밀리초로 읽습니다 [7]. 네트워크 이름(SSID)으로 집·회사·카페 같은 장소를 짐작할 수는 있지만 이름은 누구나 붙일 수 있으므로 짐작으로만 적습니다. 삼성 기기의 `wifigeofence.db` 에는 Wi-Fi 네트워크별 `bssid` 와 좌표가 있어 [8] 네트워크를 지도 위의 점으로 옮길 수 있지만, 이 좌표가 언제 어떻게 잡힌 것인지는 확인하지 못했습니다. 관찰 기기의 `dumpsys wifi` 에는 `rec[#]: time=MM-DD HH:MM:SS.mmm processed=... what=CMD_...` 모양의 상태 기록 줄이 있었고 여기에도 연도가 없었습니다.
+5. **Wi-Fi 기록으로 장소를 좁힙니다.** `WifiConfigStore.xml` 은 `*/misc**/apexdata/com.android.wifi/WifiConfigStore.xml`(예전에는 `*/misc/wifi/`)에 있고, 삼성 기기에는 유닉스 밀리초 값인 `semCreationTime`, `semUpdateTime`, `LastConnectedTime` 칸이 있습니다 [7]. 네트워크 이름(SSID)으로 집·회사·카페 같은 장소를 짐작할 수는 있지만 이름은 누구나 붙일 수 있으므로 짐작으로만 적습니다. 삼성 기기의 `wifigeofence.db` 에는 Wi-Fi 네트워크별 `bssid` 와 좌표가 있어 [8] 네트워크를 지도 위의 점으로 옮길 수 있지만, 이 좌표가 언제 어떻게 잡힌 것인지는 공개 자료가 없습니다. `dumpsys wifi` 의 상태 기록 줄은 `rec[#]: time=MM-DD HH:MM:SS.mmm processed=... what=CMD_...` 모양이고 연도가 없습니다.
 
-6. **배터리 기록으로 빈틈을 확인합니다.** 관찰 기기의 `dumpsys batterystats` 이력에는 `+gps +state=`, `-gps -state=`, `gps_signal_quality=`, `+wifi_scan`·`-wifi_scan` 같은 줄이 있었고, 시각은 `MM-DD HH:MM:SS.mmm` 모양이며 이력 머리에 `RESET:TIME:` 줄이 있었습니다. 이 줄로 알 수 있는 것은 "그 시각에 GPS 가 켜져 있었다" 까지이고 좌표와 GPS 를 켠 앱은 이 줄에 없습니다. 위치 기록이 비어 있는 창에서 GPS 가 켜져 있었다면 어딘가에 위치를 남겼을 앱을 찾아볼 단서가 됩니다.
+6. **배터리 기록으로 빈틈을 확인합니다.** `dumpsys batterystats` 이력에는 `+gps +state=`, `-gps -state=`, `gps_signal_quality=`, `+wifi_scan`·`-wifi_scan` 같은 줄이 있고, 시각은 `MM-DD HH:MM:SS.mmm` 모양이며 이력 머리에 `RESET:TIME:` 줄이 있습니다. 이 줄로 알 수 있는 것은 "그 시각에 GPS 가 켜져 있었다" 까지이고 좌표와 GPS 를 켠 앱은 이 줄에 없습니다. 위치 기록이 비어 있는 창에서 GPS 가 켜져 있었다면 어딘가에 위치를 남겼을 앱을 찾아볼 단서가 됩니다.
 
 7. **한 지도 위에 올립니다.** 점마다 좌표를 도 단위로 바꾸고, 시각을 UTC 와 현지 시각으로 적고, 정확도(오차 반경)가 있으면 원으로 그립니다. 출처 저장소와 원래 값도 칸으로 남겨 두면 나중에 값을 다시 확인할 수 있습니다. 여러 기록을 한 시간 축에 놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
@@ -69,7 +69,7 @@ nav_order: 1590
 
 **삼성 기기에서 구글 위치 기록이 비었다고 "위치 기록이 없다" 로 끝내는 것**도 조심합니다. 삼성 표본에서 비어 있던 사례가 있고 [2][3], Wi-Fi·사진·앱 기록에 위치가 남아 있을 수 있습니다.
 
-**`mock_location` 키가 있으니 가짜 위치를 썼다고 보는 것**도 지나칩니다. 관찰 기기에서 확인한 것은 키 이름이 있다는 사실까지이고, 가짜 위치 앱 사용 여부를 판단하는 방법은 이번 자료로 확인하지 못했습니다.
+**`mock_location` 키가 있으니 가짜 위치를 썼다고 보는 것**도 지나칩니다. 키가 있다는 것은 설정 항목이 있다는 뜻일 뿐이고, 가짜 위치 앱을 썼는지는 다른 기록으로 따로 확인해야 합니다.
 
 ## 보고서 문장 예
 

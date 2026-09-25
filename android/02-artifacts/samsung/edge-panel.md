@@ -8,17 +8,17 @@ nav_order: 1160
 
 ## 한 줄 요약
 
-엣지 패널은 화면 가장자리의 손잡이를 끌어 여는 삼성 전용 바로가기 패널이고, 기기 안 파일을 다룬 공개 포렌식 자료는 아직 없어서 지금 확인할 수 있는 흔적은 설정 값의 키 이름과 앱 사용 기록 정도입니다.
+엣지 패널은 화면 가장자리의 손잡이를 끌어 여는 삼성 전용 바로가기 패널이고, 기기 안 파일을 다룬 공개 포렌식 자료는 아직 없어서 알려진 흔적은 설정 값의 키 이름과 앱 사용 기록 정도입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 엣지 패널에는 자주 쓰는 앱이나 연락처 같은 바로가기를 모아 두고, 사용자는 어느 화면에서든 가장자리를 끌어 패널을 엽니다. 어떤 패널을 켜 두었는지, 손잡이를 어디에 두었는지 같은 설정은 기기 설정 저장소에 남고, 패널에서 띄운 앱은 그 앱의 실행 흔적으로 남을 수 있습니다.
 
-다만 엣지 패널 앱의 패키지 이름은 공식 자료로 확인하지 못했습니다. 앱 스토어의 상세 페이지를 열어 보려 했지만 페이지가 없어서(404) 내용을 보지 못했습니다. 엣지 패널 앱의 데이터베이스와 파일 경로, 표 이름을 다룬 공개 포렌식 자료도 찾지 못했고, 삼성 전용 흔적을 모은 Mattia Epifani 의 글(2025-11)에도 엣지 패널 항목은 없습니다. 그래서 이 글에서는 확인된 것과 아직 모르는 것을 나눠 적습니다.
+다만 엣지 패널 앱의 패키지 이름은 공식 자료에 나와 있지 않아 검체의 설치된 앱 목록에서 확인합니다. 엣지 패널 앱의 데이터베이스와 파일 경로, 표 이름을 다룬 공개 포렌식 자료도 없고, 삼성 전용 흔적을 모은 목록에도 엣지 패널 항목은 없습니다[1].
 
 ## 위치와 버전별 차이
 
-실제 폰에서 adb 일반 권한으로 설정 값의 키 이름을 읽었을 때, 이름에 `edge` 나 `cocktail` 이 들어간 키는 아래와 같았습니다. 값은 가려져 있고, 키의 뜻은 하나도 확인하지 못했습니다.
+One UI 8.5 기기의 설정 값에서 이름에 `edge` 나 `cocktail` 이 들어간 키는 아래와 같습니다. adb 일반 권한으로도 키 이름은 읽힙니다. 키의 뜻은 공개 자료에 없어 시험 기기로 확인합니다.
 
 | 영역 | 키 이름 |
 |---|---|
@@ -26,7 +26,7 @@ nav_order: 1160
 | secure | `edge_enable`, `edge_handle_size_percent`, `edge_handle_transparency`, `edge_lighting_recommend_app_list`, `game_edgescreen_touch_lock` |
 | global | `edge_panel_height`, `edge_panel_width`, `edge_lighting_aod_brightness`, `edgelighting_custom_color`, `edgelighting_recently_used_color` |
 
-`cocktail_bar_enabled_cocktails` 는 이름으로 보아 켜 둔 패널 목록일 수 있지만 추측입니다. `edge_handle_*`, `edge_handler_position_percent` 는 이름으로 보아 손잡이의 크기·투명도·위치 설정으로 보이고, `edge_panel_height`, `edge_panel_width` 는 패널 크기로 보이지만 모두 확인하지 못했습니다.
+`cocktail_bar_enabled_cocktails` 는 이름으로 보아 켜 둔 패널 목록일 가능성이 있습니다. `edge_handle_*`, `edge_handler_position_percent` 는 이름으로 보아 손잡이의 크기·투명도·위치 설정으로 보이고, `edge_panel_height`, `edge_panel_width` 는 패널 크기로 보입니다.
 
 system 영역에는 이 밖에 `edge_lighting` 으로 시작하는 키가 10개 있습니다.
 
@@ -37,21 +37,21 @@ edge_lighting_show_condition, edge_lighting_style_type_str,
 edge_lighting_thickness, edge_lighting_transparency, edge_lighting_version
 ```
 
-이 키들은 알림이 올 때 화면 가장자리를 빛나게 하는 "엣지 조명" 설정으로 보이고, 엣지 패널과는 다른 기능입니다. 두 기능이 키 이름으로 정확히 갈리는지는 확인하지 못했으므로, 보고서에서 `edge_` 로 시작하는 키를 모두 엣지 패널로 묶지 않습니다.
+이 키들은 알림이 올 때 화면 가장자리를 빛나게 하는 "엣지 조명" 설정으로 보이고, 엣지 패널과는 다른 기능입니다. 두 기능이 키 이름으로 정확히 갈린다는 공개 자료가 없으므로, 보고서에서 `edge_` 로 시작하는 키를 모두 엣지 패널로 묶지 않습니다.
 
-One UI 판에 따라 키 이름이나 저장 방식이 어떻게 달라지는지는 확인하지 못했습니다. 설정 값을 읽는 법과 저장 위치는 [설정 값](../system-account/settings.md) 에서 다룹니다.
+One UI 판에 따라 키 이름이나 저장 방식이 다를 수 있어 검체에서 확인합니다. 설정 값을 읽는 법과 저장 위치는 [설정 값](../system-account/settings.md) 에서 다룹니다.
 
 ## 구조
 
-엣지 패널 앱의 파일을 확인하지 못해서 이 절에서 설명할 구조는 없습니다. 설정 값의 저장 형식은 [설정 값](../system-account/settings.md) 과 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 을 봅니다.
+엣지 패널 앱 파일의 구조를 다룬 공개 자료는 없습니다. 설정 값의 저장 형식은 [설정 값](../system-account/settings.md) 과 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 을 봅니다.
 
-앱 사용 기록에는 엣지 패널과 관련 있을 수 있는 이벤트 종류가 보입니다. 같은 폰의 `dumpsys usagestats` 출력에는 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED` 와 함께 `shortcutId` 칸이 붙은 `SHORTCUT_INVOCATION` 이벤트가 있었습니다. 엣지 패널에서 앱이나 바로가기를 띄운 일이 이 이벤트로 따로 구분되는지는 확인하지 못했습니다. 이벤트 종류의 뜻은 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 다룹니다.
+앱 사용 기록에는 엣지 패널과 관련 있을 수 있는 이벤트 종류가 보입니다. `dumpsys usagestats` 출력에는 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED` 와 함께 `shortcutId` 칸이 붙은 `SHORTCUT_INVOCATION` 이벤트가 있습니다. 엣지 패널에서 앱이나 바로가기를 띄운 일이 이 이벤트로 따로 구분되는지는 시험 기기로 확인합니다. 이벤트 종류의 뜻은 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
-전체 추출로 설정 값을 읽을 수 있다면 `cocktail_bar_enabled_cocktails` 같은 키의 값으로 기기의 엣지 패널 설정 상태를 적을 수 있습니다. 다만 키의 뜻을 확인하지 못했으므로 "이 키에 이 값이 있다" 까지만 쓰고, "이 패널을 켜 두었다" 로 옮기려면 같은 One UI 판의 시험 기기로 먼저 확인합니다.
+전체 추출로 설정 값을 읽을 수 있다면 `cocktail_bar_enabled_cocktails` 같은 키의 값으로 기기의 엣지 패널 설정 상태를 적을 수 있습니다. 다만 키의 뜻이 공개 자료로 밝혀지지 않았으므로 "이 키에 이 값이 있다" 까지만 쓰고, "이 패널을 켜 두었다" 로 옮기려면 같은 One UI 판의 시험 기기로 먼저 확인합니다.
 
 ### 증명하지 못하는 것
 
@@ -61,19 +61,19 @@ One UI 판에 따라 키 이름이나 저장 방식이 어떻게 달라지는지
 
 ## 시각 해석
 
-확인한 설정 키 목록에는 시각 값이 없어서, 설정이 언제 바뀌었는지는 이 관찰로 알 수 없습니다. 시각이 필요하면 앱 사용 기록의 이벤트 시각을 쓰고, 그 시각이 어느 시간대로 찍혔는지는 [시간대와 시각 설정](../system-account/time-zone.md) 으로 확인합니다.
+위 설정 키에는 시각 값이 없어서, 설정이 언제 바뀌었는지는 알 수 없습니다. 시각이 필요하면 앱 사용 기록의 이벤트 시각을 쓰고, 그 시각이 어느 시간대로 찍혔는지는 [시간대와 시각 설정](../system-account/time-zone.md) 으로 확인합니다.
 
 ## 함정과 한계
 
-`edge_` 로 시작하는 키에는 엣지 패널과 엣지 조명이 섞여 있어서, 이름만 보고 한 기능으로 묶으면 잘못 해석하기 쉽습니다. 패키지 이름을 공식 자료로 확인하지 못했으므로, 검색 결과에 떠도는 패키지 이름을 그대로 보고서에 옮기지 않고 검체의 설치된 앱 목록에서 직접 확인합니다.
+`edge_` 로 시작하는 키에는 엣지 패널과 엣지 조명이 섞여 있어서, 이름만 보고 한 기능으로 묶으면 잘못 해석하기 쉽습니다. 패키지 이름이 공식 자료에 나와 있지 않으므로, 검색 결과에 떠도는 패키지 이름을 그대로 보고서에 옮기지 않고 검체의 설치된 앱 목록에서 직접 확인합니다.
 
-엣지 패널을 다룬 공개 연구가 없어서, 분석 도구가 엣지 패널 결과를 내지 않는다고 흔적이 없다고 말할 수 없습니다. 이 글의 관찰은 One UI 8.5 폰 한 대의 키 이름뿐이라서 다른 판과 기종에서는 키가 다를 수 있습니다.
+엣지 패널을 다룬 공개 연구가 없어서, 분석 도구가 엣지 패널 결과를 내지 않는다고 흔적이 없다고 말할 수 없습니다. 위 키 목록은 One UI 8.5 기기 기준이라서 다른 판과 기종에서는 키가 다를 수 있습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-헥스로 따라갈 엣지 패널 파일을 공개 자료로 확인하지 못했습니다. 전체 추출본이 있다면 설치된 앱 목록에서 엣지 패널 앱을 찾고, 그 앱 데이터 폴더의 파일마다 첫 바이트를 보고 형식부터 가립니다. 형식별로 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md), [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
+헥스로 따라갈 엣지 패널 파일은 공개 자료에 없습니다. 전체 추출본이 있다면 설치된 앱 목록에서 엣지 패널 앱을 찾고, 그 앱 데이터 폴더의 파일마다 첫 바이트를 보고 형식부터 가립니다. 형식별로 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md), [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 

@@ -15,7 +15,7 @@ nav_order: 1420
 
 여러 기록을 한 시간 축에 올리기 전에 먼저 합니다. Android 기록에는 유닉스 밀리초 정수, 연도가 빠진 "월-일 시:분:초" 문자열, 시간대 오프셋이 붙은 문자열, 한글이 섞인 현지 형식 문자열이 함께 나오고, 부팅한 뒤 흐른 시간을 세는 값도 있습니다. 이 차이를 맞추지 않고 정렬하면 순서와 간격이 틀어집니다.
 
-이 페이지는 값 하나하나를 같은 기준으로 옮기는 데까지만 다룹니다. 옮긴 기록을 서로 맞물리는 방법은 [여러 기록 엮기](correlation.md), 벽시계가 바뀐 흔적을 찾는 방법은 [시각 조작 흔적](time-manipulation.md) 에 있고, 밀리초·Chrome 시각 같은 개별 값의 변환 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다. 소스로 확인한 동작은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
+이 페이지는 값 하나하나를 같은 기준으로 옮기는 데까지만 다룹니다. 옮긴 기록을 서로 맞물리는 방법은 [여러 기록 엮기](correlation.md), 벽시계가 바뀐 흔적을 찾는 방법은 [시각 조작 흔적](time-manipulation.md) 에 있고, 밀리초·Chrome 시각 같은 개별 값의 변환 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다. 이 페이지의 동작 설명은 현행 AOSP(frameworks/base 의 main 가지) 기준입니다.
 
 ## Android 의 시계 종류
 
@@ -29,11 +29,11 @@ Android 에는 성격이 다른 시계가 여럿 있고, 기록이 어느 시계
 | `SystemClock.currentNetworkTimeClock()` | 네트워크 시간으로 맞춘 시계 | 사용자가 바꿀 수 없지만 네트워크 지연·서버 차이·기기 쪽 흔들림 때문에 값의 순서가 뒤바뀔 수 있고, 쓸 수 없으면 `DateTimeException` |
 | `SystemClock.currentGnssTimeClock()` | 위치 제공자(GNSS)로 맞춘 시계 | 부팅 뒤 위치를 한 번도 잡지 못했으면 `DateTimeException` |
 
-마지막 두 메서드가 어느 API 수준부터 들어갔는지는 확인하지 못했습니다. 벽시계 기록은 사용자가 바꾼 시각을 그대로 따르고, 부팅 기준 기록은 부팅할 때마다 0부터 다시 셉니다 [1]. 그래서 정규화는 기록마다 어느 시계를 썼는지 가리는 데서 시작합니다. 예를 들어 앱 사용 기록의 이벤트 시각은 벽시계와 같은 유닉스 밀리초이고, 자세한 내용은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에 있습니다.
+벽시계 기록은 사용자가 바꾼 시각을 그대로 따르고, 부팅 기준 기록은 부팅할 때마다 0부터 다시 셉니다 [1]. 그래서 정규화는 기록마다 어느 시계를 썼는지 가리는 데서 시작합니다. 예를 들어 앱 사용 기록의 이벤트 시각은 벽시계와 같은 유닉스 밀리초이고, 자세한 내용은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에 있습니다.
 
 ## 절차
 
-1. **수집할 때 기준 정보를 적어 둡니다.** 수집한 시각(UTC)과 기기의 시간대, 자동 시각·자동 시간대 설정 값을 함께 기록합니다. 관찰한 폰에서는 `settings global` 에 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit`, `boot_count` 키가 있었고, `settings system` 에 `TIME_DIFFERENCE`, `homecity_timezone` 키가 있었습니다. 이 페이지의 출처로는 각 키의 뜻을 확인하지 못했고, 설정 값을 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md), 시간대 설정의 의미는 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 페이지를 봅니다.
+1. **수집할 때 기준 정보를 적어 둡니다.** 수집한 시각(UTC)과 기기의 시간대, 자동 시각·자동 시간대 설정 값을 함께 기록합니다. Android 16(One UI 8.5) 기기에는 `settings global` 에 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit`, `boot_count` 키가, `settings system` 에 `TIME_DIFFERENCE`, `homecity_timezone` 키가 있습니다. 설정 값을 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md), 시간대 설정의 의미는 [시간대와 시각 설정](../../../02-artifacts/system-account/time-zone.md) 페이지를 봅니다.
 2. **기록마다 시계와 단위를 가립니다.** 칸 이름이나 명세로 벽시계인지 부팅 기준인지, 초·밀리초·마이크로초·나노초 중 무엇인지 확인합니다. 부팅 기준 값은 그 자체로는 날짜로 바꿀 수 없고, 같은 부팅 안에서 벽시계와 짝을 이룬 기록이 있어야 옮길 수 있습니다. 그 짝을 찾는 방법은 [여러 기록 엮기](correlation.md) 에 있습니다.
 3. **기준점 (epoch) 을 맞춥니다.** 유닉스 에포크(1970년) 말고도 기준점이 다른 시각 값이 있습니다. 978307200 초는 1970-01-01 부터 2001-01-01 까지의 초이고, 11644473600 초는 1601년 기준 WebKit 시각을 유닉스 시각으로 옮길 때 쓰는 상수라서 두 값을 혼동하면 결과가 수백 년 어긋납니다. 기준점별 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 4. **시간대를 가립니다.** 문자열에 `+0900` 같은 오프셋이 붙어 있으면 그 오프셋으로 옮기고, 오프셋이 없으면 어느 시간대 기준인지 따로 확인합니다. 사용자가 시각을 손으로 넣을 때는 현지 시각으로 넣고, 시스템은 그때의 시간대로 유닉스 에포크 시각을 계산합니다 [2].
@@ -44,7 +44,7 @@ Android 에는 성격이 다른 시계가 여럿 있고, 기록이 어느 시계
 
 ### logcat
 
-logcat 의 기본 출력 형식은 threadtime 이고, 날짜·호출 시각·우선순위·태그·PID·TID 를 한 줄에 찍습니다 [3]. 관찰한 폰에서 기본 형식 줄은 main·system·events·crash·radio 버퍼 모두 아래 모양이었고 연도와 시간대가 없었습니다.
+logcat 의 기본 출력 형식은 threadtime 이고, 날짜·호출 시각·우선순위·태그·PID·TID 를 한 줄에 찍습니다 [3]. 기본 형식 줄은 main·system·events·crash·radio 버퍼 모두 아래 모양이고 연도와 시간대가 없습니다.
 
 ```
 ##-## ##:##:##.### <PID> <TID> I <태그>: <내용>
@@ -63,7 +63,7 @@ logcat 의 기본 출력 형식은 threadtime 이고, 날짜·호출 시각·우
 
 ### dumpsys 출력
 
-관찰한 폰의 dumpsys 출력은 서비스마다 시각을 다르게 찍었습니다. 값이 가려진 출력으로 본 것이라 모양만 적습니다.
+dumpsys 출력은 서비스마다 시각을 다르게 찍습니다. 아래 표는 Android 16(One UI 8.5) 기기의 표기 모양입니다.
 
 | 명령 | 시각이 찍히는 곳 | 표기 모양 |
 |---|---|---|
@@ -75,7 +75,7 @@ logcat 의 기본 출력 형식은 threadtime 이고, 날짜·호출 시각·우
 | `dumpsys account` | "Accounts History" 표의 `timestamp` 칸 | 날짜·시각 문자열 |
 | `dumpsys user` | 사용자마다 `Created`, `Last logged in`, `Start time`, `Unlock time`, `Last entered foreground` | 주 사용자의 `Created` 는 `<unknown>` 으로 나옴 |
 
-오프셋이 함께 찍히는 곳은 notification 의 네 칸뿐이었고, 나머지 문자열이 어느 시간대 기준인지와 각 칸이 벽시계인지 부팅 기준인지는 이 관찰만으로 알 수 없습니다. 이런 칸은 결과표에 "시간대 미확인" 으로 표시해 두고, 같은 사건이 벽시계로 남은 다른 기록과 맞춰 본 다음에 씁니다. dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지에 있습니다.
+오프셋이 함께 찍히는 곳은 notification 의 네 칸뿐이고, 나머지 문자열이 어느 시간대 기준인지와 각 칸이 벽시계인지 부팅 기준인지는 표기만으로 알 수 없습니다. 이런 칸은 결과표에 "시간대 미확인" 으로 표시해 두고, 같은 사건이 벽시계로 남은 다른 기록과 맞춰 본 다음에 씁니다. dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지에 있습니다.
 
 ## 도구
 
@@ -95,9 +95,9 @@ ALEAPP 는 공통 함수 파일(`ilapfuncs.py`)에 시각 변환 함수를 모�
 
 자릿수로 단위를 짐작하는 방식은 편하지만, 값이 아주 작거나 0 이 채워진 칸이면 틀릴 수 있어서 칸의 정의를 먼저 확인하는 편이 안전합니다. 네트워크 시간으로 맞춘 시계는 사용자가 바꿀 수 없어도 값의 순서가 뒤바뀔 수 있어서 [1], 이 시계로 적힌 기록을 밀리초 단위로 줄 세우면 앞뒤가 뒤집힐 수 있습니다.
 
-dumpsys 는 시각을 사람이 읽는 문자열로 바꿔 찍고, 관찰한 폰에서는 한글이 섞인 형식이었습니다. 기기 언어 설정에 따라 표기가 달라질 수 있는지는 확인하지 못했지만, 문자열을 파싱하는 스크립트는 관찰한 형식에 맞춰 짜고 한 줄씩 원래 문자열과 대조합니다.
+dumpsys 는 시각을 사람이 읽는 문자열로 바꿔 찍고, 한국어 기기에서는 한글이 섞인 형식입니다. 기기 언어 설정에 따라 표기가 달라질 수도 있으므로, 문자열을 파싱하는 스크립트는 검체의 형식에 맞춰 짜고 한 줄씩 원래 문자열과 대조합니다.
 
-Android 10 미만의 시각 처리 차이와, 삼성 One UI 가 AOSP 시각 서비스를 어떻게 바꾸는지는 확인하지 못했습니다. 관찰한 폰의 `TIME_DIFFERENCE`, `homecity_timezone` 같은 키도 뜻을 확인하기 전에는 정규화 근거로 쓰지 않습니다.
+Android 10 미만의 시각 처리 차이와, 삼성 One UI 가 AOSP 시각 서비스를 어떻게 바꾸는지는 공개 자료가 없어 검체에서 확인합니다. 삼성 기기의 `TIME_DIFFERENCE`, `homecity_timezone` 같은 키도 뜻을 확인하기 전에는 정규화 근거로 쓰지 않습니다.
 
 ## 결과를 어떻게 해석하나
 

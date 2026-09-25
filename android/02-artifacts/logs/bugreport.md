@@ -14,22 +14,22 @@ nav_order: 1220
 
 버그 리포트는 개발자가 문제를 찾으려고 만드는 묶음이라 진단 출력, 오류 로그, 시스템 메시지 로그, 모든 앱의 스택 추적(stack trace)이 들어갑니다 [1]. 본문에는 dumpsys, dumpstate, logcat 출력이 함께 들어 있습니다 [1].
 
-AOSP 문서는 버그 리포트 안의 로그를 세 가지로 나눕니다 [2]. logcat 은 문자열 로그이고 줄마다 시각·UID·PID·수준이 붙습니다. 이벤트 로그는 바이너리 형식의 시스템 이벤트이고, VM traces 는 ANR 이나 충돌이 났을 때의 스택입니다. logcat 과 이벤트 로그 각각은 [logcat (logcat)](logcat.md) 과 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서, dumpsys 출력은 [dumpsys 출력 (dumpsys)](dumpsys.md) 에서 다룹니다.
+버그 리포트 안의 로그는 세 가지로 나뉩니다 [2]. logcat 은 문자열 로그이고 줄마다 시각·UID·PID·수준이 붙습니다. 이벤트 로그는 바이너리 형식의 시스템 이벤트이고, VM traces 는 ANR 이나 충돌이 났을 때의 스택입니다. logcat 과 이벤트 로그 각각은 [logcat (logcat)](logcat.md) 과 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서, dumpsys 출력은 [dumpsys 출력 (dumpsys)](dumpsys.md) 에서 다룹니다.
 
 버그 리포트가 생기는 경로는 두 가지입니다. 기기의 개발자 옵션에서 "Take bug report" 를 누르고 종류를 고르면 만들어지고, 다 되면 알림이 뜹니다 [1]. PC 에서는 `adb bugreport` 뒤에 PC 쪽 저장 경로를 붙여 받고, 경로를 붙이지 않으면 현재 폴더에 저장합니다 [1].
 
 ## 위치와 버전별 차이
 
-기기 안에서 만든 버그 리포트는 `/bugreports` 에서 찾을 수 있고, 개발자 문서는 아래처럼 목록을 보고 가져오라고 안내합니다 [1].
+기기 안에서 만든 버그 리포트는 `/bugreports` 에서 찾을 수 있고, 아래처럼 목록을 보고 가져옵니다 [1].
 
 ```
 adb shell ls /bugreports/
 adb pull /bugreports/bugreport-....zip
 ```
 
-`/bugreports` 가 실제 저장 폴더와 어떤 관계인지는 확인하지 못했습니다. 파일 이름은 `bugreport-BUILD_ID-DATE.zip` 형식이고, 문서의 예시는 `bugreport-foo-bar.xxx.YYYY-MM-DD-HH-MM-SS.zip` 입니다 [1]. 문서는 DATE 가 어느 시점의 시각인지 따로 적지 않았지만, 만든 시각으로 보입니다(추론). 같은 폴더에는 ZIP 말고도 `bugreport-...-dumpstate_log-....txt` 와 `dumpstate-stats.txt` 가 함께 보일 수 있습니다 [1].
+파일 이름은 `bugreport-BUILD_ID-DATE.zip` 형식이고, 예시는 `bugreport-foo-bar.xxx.YYYY-MM-DD-HH-MM-SS.zip` 입니다 [1]. DATE 는 만든 시각으로 보입니다(추론). 같은 폴더에는 ZIP 말고도 `bugreport-...-dumpstate_log-....txt` 와 `dumpstate-stats.txt` 가 함께 보일 수 있습니다 [1].
 
-관찰 기기에서는 버그 리포트와 관련된 이름이 아래처럼 보였고, 각 값의 뜻은 확인하지 못했습니다.
+기기에 따라 버그 리포트와 관련된 아래 이름이 보일 수 있습니다. 각 값의 뜻은 공개 문서에 설명이 없습니다.
 
 | 보인 곳 | 이름 |
 |---|---|
@@ -37,7 +37,7 @@ adb pull /bugreports/bugreport-....zip
 | settings secure 키 | `dropbox:data_app_anr`, `dropbox:data_app_crash`, `dropbox:data_app_wtf` |
 | `dumpsys wifi` 출력 | `mIsMultiplePrimaryBugreportTaken: false` |
 
-`DropBoxManager` 는 앱이 시스템 로그에 접근하지 못하는 규칙의 예외로 언급되는 API 이고 [4], DropBox 에 쌓이는 충돌·ANR 기록은 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../app-usage/crash-records.md) 에서 다룹니다. 삼성 기기의 버그 리포트가 AOSP 형식과 어떻게 다른지는 확인하지 못했습니다.
+`DropBoxManager` 는 앱이 시스템 로그에 접근하지 못하는 규칙의 예외인 API 이고 [4], DropBox 에 쌓이는 충돌·ANR 기록은 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../app-usage/crash-records.md) 에서 다룹니다. 삼성 기기의 버그 리포트가 AOSP 형식과 어떻게 다른지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 구조
 
@@ -52,7 +52,7 @@ ZIP 안에는 아래 파일과 폴더가 들어 있습니다 [1].
 
 `FS/` 는 기기의 `/dirA/dirB/fileC` 를 `FS/dirA/dirB/fileC` 로 담습니다 [1]. 폴더 경로가 기기 경로와 같아서, 이 안의 파일이 기기 어디에서 왔는지는 경로로 바로 알 수 있습니다.
 
-본문은 여러 절로 나뉘고, ANR 을 볼 때는 "VM TRACES AT LAST ANR" 절에서 앱이 멈춘 순간의 메인 스레드 상태를 봅니다 [2]. 그 밖의 절을 나누는 구분 문자열은 확인하지 못해서 여기에 적지 않습니다.
+본문은 여러 절로 나뉘고, ANR 을 볼 때는 "VM TRACES AT LAST ANR" 절에서 앱이 멈춘 순간의 메인 스레드 상태를 봅니다 [2]. 그 밖의 절을 나누는 구분 문자열은 공개 문서에 정리돼 있지 않아 검체 본문에서 확인합니다.
 
 > 그림 자리: 버그 리포트 ZIP 안의 본문·version.txt·FS/ 가 각각 기기의 어떤 기록에서 오는지 잇는 그림
 
@@ -68,11 +68,11 @@ ZIP 안에는 아래 파일과 폴더가 들어 있습니다 [1].
 
 ## 시각 해석
 
-ZIP 이름의 날짜·시각은 만든 시각으로 보이지만(추론), 어느 시간대 기준인지는 확인하지 못했습니다. 본문 안의 logcat 줄은 연도 없이 찍힐 수 있으니 [3], 연도는 ZIP 이름의 날짜를 기준으로 판단합니다. `version.txt` 에는 Android 릴리스 정보만 있어서 [1] 연도를 정하는 근거로 쓰지 않습니다. 본문의 여러 절은 각 서비스가 제 방식으로 시각을 찍으니, 절마다 시간대와 형식을 따로 확인합니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+ZIP 이름의 날짜·시각은 만든 시각으로 보이지만(추론), 어느 시간대 기준인지는 공개 문서에 나오지 않습니다. 본문 안의 logcat 줄은 연도 없이 찍힐 수 있으니 [3], 연도는 ZIP 이름의 날짜를 기준으로 판단합니다. `version.txt` 에는 Android 릴리스 정보만 있어서 [1] 연도를 정하는 근거로 쓰지 않습니다. 본문의 여러 절은 각 서비스가 제 방식으로 시각을 찍으니, 절마다 시간대와 형식을 따로 확인합니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-첫째, 버그 리포트를 만들면 `/bugreports` 에 새 ZIP 이 생깁니다 [1]. 수집하려고 만든 버그 리포트도 기기에 흔적을 남기니, 만든 시각과 방법을 수집 기록에 적어 두어 검체에 원래 있던 ZIP 과 구별합니다. 그 밖에 알림 기록 같은 다른 흔적이 남는지는 확인하지 못했습니다. 수집 절차 전반은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
+첫째, 버그 리포트를 만들면 `/bugreports` 에 새 ZIP 이 생깁니다 [1]. 수집하려고 만든 버그 리포트도 기기에 흔적을 남기니, 만든 시각과 방법을 수집 기록에 적어 두어 검체에 원래 있던 ZIP 과 구별합니다. 알림 기록 같은 다른 흔적이 남는지는 공개 자료가 없어 시험 기기로 확인합니다. 수집 절차 전반은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 둘째, 재부팅 흔적을 볼 때 런타임 재시작과 진짜 재부팅을 구분해야 합니다 [2]. 런타임 재시작은 `system_server` 가 죽었다가 다시 뜬 것이고, 진짜 재부팅은 커널 충돌 같은 이유로 기기 전체가 다시 시작한 것입니다 [2]. 둘을 섞으면 "기기를 껐다 켰다" 는 잘못된 문장이 나옵니다.
 

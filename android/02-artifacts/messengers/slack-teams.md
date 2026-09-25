@@ -12,7 +12,7 @@ nav_order: 1030
 
 두 앱 모두 업무용 메신저이고, 서버에서 받은 대화를 기기 안 SQLite 데이터베이스에 저장합니다. 슬랙 앱(패키지 이름 `com.Slack`)은 기기에 로그인한 워크스페이스마다 DB 파일을 따로 두고, 계정 목록은 별도의 계정 DB 에, 대화에 오간 이미지는 이미지 캐시에 남깁니다[1]. 팀즈 앱(패키지 이름 `com.microsoft.teams`)은 `SkypeTeams.db` 한 파일에 메시지, 대화방, 사용자, 통화 기록, 활동 피드, 파일 정보를 표로 나눠 저장합니다[2].
 
-이 페이지의 사실은 공개 도구 ALEAPP 의 슬랙·팀즈 모듈이 적어 둔 설명을 바탕으로 하고, 슬랙·Microsoft 공식 문서로 확인한 내용은 없습니다. 두 모듈 모두 시험 이미지가 하나뿐이고, 팀즈 모듈은 2021-04-29 에 만든 뒤 고친 기록이 없어서 요즘 팀즈 앱에도 그대로 맞는지는 확인하지 못했습니다[2].
+두 앱의 표 구조는 ALEAPP 슬랙·팀즈 모듈의 시험 이미지 하나씩에서 확인된 것입니다[1][2]. 팀즈 모듈은 2021-04-29 에 만든 뒤 고친 기록이 없어서 요즘 팀즈 앱에서는 구조가 다를 수 있습니다[2].
 
 ## 위치와 버전별 차이
 
@@ -25,7 +25,7 @@ nav_order: 1030
 | 슬랙 | 이미지 캐시 | `cache/slack_image_cache/<폴더>/<요청 URL 의 SHA-256>.0`(메타데이터), `.1`(본문) |
 | 팀즈 | 메시지 DB | `databases/SkypeTeams.db` |
 
-ALEAPP 은 슬랙 워크스페이스 DB 를 파일 이름보다 `messages`·`conversation`·`users` 표가 모두 있는지로 알아봅니다[1]. 슬랙 이미지 캐시는 DiskLruCache 형식이라서 항목 하나가 `.0` 과 `.1` 두 파일로 짝을 이룹니다[1].
+슬랙 워크스페이스 DB 는 파일 이름보다 `messages`·`conversation`·`users` 표가 모두 있는지로 알아봅니다[1]. 슬랙 이미지 캐시는 DiskLruCache 형식이라서 항목 하나가 `.0` 과 `.1` 두 파일로 짝을 이룹니다[1].
 
 앱 데이터 폴더는 시스템이 다른 앱의 접근을 막는 앱 내부 저장소라서 일반 adb 권한으로는 바로 읽을 수 없고, Android 10(API 29) 이상에서는 이 위치가 암호화됩니다[3]. 확보 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 를 봅니다.
 
@@ -34,7 +34,7 @@ ALEAPP 은 슬랙 워크스페이스 DB 를 파일 이름보다 `messages`·`con
 | 슬랙 | 픽셀 7a, Android 14 | 적혀 있지 않음 | 메시지 33, 대화 8, 사용자 5, 파일 4, 계정 1 |
 | 팀즈 | 픽셀 7a, Android 14 | 버전코드 2024132725 | 메시지 32, 사용자 3, 통화 2, 활동 0, 파일 0 |
 
-두 앱 모두 삼성 기기에서 시험한 기록이 없고, 삼성 One UI 에서 경로나 구조가 다르다는 자료도 찾지 못했습니다[1][2]. 팀즈 앱이 지금도 `SkypeTeams.db` 를 쓰는지는 확인하지 못했으니, 검체에서 이 파일이 없으면 `databases` 폴더의 다른 파일을 먼저 살펴봅니다.
+두 앱 모두 삼성 기기에서 시험한 기록이 없어서, 삼성 One UI 에서 경로나 구조가 다른지는 검체로 확인합니다[1][2]. 요즘 팀즈 앱은 `SkypeTeams.db` 를 쓰지 않을 수도 있으니, 검체에서 이 파일이 없으면 `databases` 폴더의 다른 파일을 먼저 살펴봅니다.
 
 ## 구조
 
@@ -46,13 +46,13 @@ SQLite 파일 구조 자체는 [SQLite 데이터베이스](../../01-foundations/
 
 ### 슬랙 — 대화·사용자·파일 표
 
-`conversation` 표에는 `conversation_id`, `name_or_user`, `type`, `is_member`, `is_open`, `is_starred`, `latest`, `lastRead` 같은 칸이 있습니다[1]. 시험 이미지에서 `type` 값은 `PUBLIC` 과 `DM` 이었습니다[1]. DB 의 CREATE TABLE 주석에 따르면 `is_member` 는 DM·그룹 DM 에서 NULL 이라서, DM 행에서는 이 칸이 비어 있는 상태가 정상입니다[1]. `lastRead` 는 읽은 시각이 아니라 마지막으로 읽은 메시지의 `ts` 값입니다[1].
+`conversation` 표에는 `conversation_id`, `name_or_user`, `type`, `is_member`, `is_open`, `is_starred`, `latest`, `lastRead` 같은 칸이 있습니다[1]. 시험 이미지에서 `type` 값은 `PUBLIC` 과 `DM` 이었습니다[1]. `is_member` 는 DM·그룹 DM 에서 NULL 이라서, DM 행에서는 이 칸이 비어 있는 상태가 정상입니다[1]. `lastRead` 는 읽은 시각이 아니라 마지막으로 읽은 메시지의 `ts` 값입니다[1].
 
 `users` 표에는 `id`, `name` 과 `profile_real_name`, `profile_email`, `profile_phone`, `profile_title` 처럼 `profile_` 로 시작하는 칸이 있습니다[1]. `files` 표의 칸은 `id`, `file_blob`(서버 파일 기록 JSON), `user`, `channels`, `title`, `deleted` 입니다[1]. 파일 기록 안의 `url_private`, `thumb_720` 같은 URL 을 SHA-256 으로 바꾸면 이미지 캐시의 파일 이름과 맞춰 볼 수 있고, 시험 이미지에서는 3개가 원본 URL 로, 1개는 썸네일 URL 로만 맞았습니다[1].
 
 ### 슬랙 — account_manager 의 accounts 표
 
-`accounts` 표의 칸은 `last_accessed`, `email`, `user_id`, `team_id`, `team_domain`, `enterprise_id`, `environment_variant`, `secondary_auth_enabled`, `is_logged_out`, `created_ts`, `team_json` 이고, `team_json` 에 팀 이름 같은 정보가 들어 있습니다[1]. 같은 표의 `token_encrypted`·`token_encrypted_ext1` 칸에는 세션 인증 값이 들어 있어서 ALEAPP 도 일부러 보고서에 넣지 않습니다[1]. 이 핸드북에서도 이 두 칸의 값은 다루지 않고, 보고서에도 옮기지 않습니다.
+`accounts` 표의 칸은 `last_accessed`, `email`, `user_id`, `team_id`, `team_domain`, `enterprise_id`, `environment_variant`, `secondary_auth_enabled`, `is_logged_out`, `created_ts`, `team_json` 이고, `team_json` 에 팀 이름 같은 정보가 들어 있습니다[1]. 같은 표의 `token_encrypted`·`token_encrypted_ext1` 칸에는 세션 인증 값이 들어 있어서 ALEAPP 도 일부러 보고서에 넣지 않습니다[1]. 이 두 칸의 값은 보고서에 옮기지 않습니다.
 
 ### 팀즈 — SkypeTeams.db
 
@@ -80,13 +80,13 @@ SQLite 파일 구조 자체는 [SQLite 데이터베이스](../../01-foundations/
 | 앱 | 값 | 형식 |
 |---|---|---|
 | 슬랙 | `ts`, `thread_ts`, `lastRead` | 유닉스 초에 소수점 아래가 붙은 값, 텍스트로 저장(모양: `0000000000.000000`) |
-| 슬랙 | `last_accessed`, `created_ts` | 단위 확인 못 함 |
+| 슬랙 | `last_accessed`, `created_ts` | 단위는 검체에서 확인 |
 | 팀즈 | `arrivalTime`, `deleteTime` | 유닉스 밀리초 |
 | 팀즈 | `lastSyncTime`(`User`), `activityTimestamp`(`ActivityFeed`) | 유닉스 밀리초 |
 | 팀즈 | `connectTimeMillis`, `endTimeMillis`(`CallLog` JSON) | 유닉스 밀리초 |
 | 팀즈 | `lastModifiedTime`(`FileInfo`) | ISO 형태 문자열, T 구분자 |
 
-슬랙의 `ts` 는 텍스트로 저장돼 있어서 정렬하거나 바꿀 때 숫자로 먼저 바꿉니다[1]. `lastRead` 는 벽시계 시각이 아니라 마지막으로 읽은 메시지의 `ts` 라서, 그 메시지를 읽은 때가 아니라 읽은 위치를 가리킵니다[1]. 슬랙 `accounts` 표의 두 시각은 ALEAPP 이 공통 변환 함수에 넘기기만 해서 단위가 확인되지 않았으니, 검체에서 자릿수를 보고 판단합니다[1].
+슬랙의 `ts` 는 텍스트로 저장돼 있어서 정렬하거나 바꿀 때 숫자로 먼저 바꿉니다[1]. `lastRead` 는 벽시계 시각이 아니라 마지막으로 읽은 메시지의 `ts` 라서, 그 메시지를 읽은 때가 아니라 읽은 위치를 가리킵니다[1]. 슬랙 `accounts` 표의 두 시각은 단위를 설명한 공개 자료가 없으니, 검체에서 자릿수를 보고 판단합니다[1].
 
 유닉스 시각은 1970-01-01 UTC 기준이라서, 현지 시각으로 옮길 때는 기기의 [시간대와 시각 설정](../system-account/time-zone.md) 을 함께 봅니다. 팀즈 `FileInfo` 의 문자열은 시간대 표시가 있는지 검체에서 확인합니다. 시각 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
@@ -96,9 +96,9 @@ SQLite 파일 구조 자체는 [SQLite 데이터베이스](../../01-foundations/
 
 슬랙 `conversation` 표의 `is_member` 가 비어 있는 행을 "소속 정보 누락" 으로 읽지 않습니다. DM·그룹 DM 에서는 원래 NULL 입니다[1].
 
-팀즈 쪽 설명은 2021년에 만든 모듈과 앱 버전코드 2024132725 하나로 확인한 것이라, 다른 앱 버전의 검체에서는 표나 칸이 다를 수 있습니다[2]. 시험 이미지에 활동 피드와 파일 정보가 0행이었던 점도 한계입니다[2].
+팀즈의 표 구조는 2021년에 만든 ALEAPP 모듈과 앱 버전코드 2024132725 시험 이미지 하나 기준이라, 다른 앱 버전의 검체에서는 표나 칸이 다를 수 있습니다[2]. 그 시험 이미지에서 활동 피드와 파일 정보는 0행이어서, 두 표에 실제로 어떤 값이 들어가는지는 검체에서 확인합니다[2].
 
-ALEAPP 은 DB 를 읽을 때 `-wal`·`-shm`·`-journal` 짝 파일도 함께 경로에 넣으니, 확보할 때 짝 파일을 모두 복사하고 사본을 엽니다. 앱을 지우면 앱 전용 저장소의 파일도 지워져서[3] 이 페이지의 흔적이 남지 않습니다. 이때는 [설치된 앱](../app-usage/packages/index.md) 과 [앱 사용 기록](../app-usage/usagestats/index.md) 으로 앱이 있었는지를 확인합니다.
+DB 를 읽을 때는 `-wal`·`-shm`·`-journal` 짝 파일도 함께 있어야 하니, 확보할 때 짝 파일을 모두 복사하고 사본을 엽니다. 앱을 지우면 앱 전용 저장소의 파일도 지워져서[3] 이 페이지의 흔적이 남지 않습니다. 이때는 [설치된 앱](../app-usage/packages/index.md) 과 [앱 사용 기록](../app-usage/usagestats/index.md) 으로 앱이 있었는지를 확인합니다.
 
 ## 직접 분석해 보기
 

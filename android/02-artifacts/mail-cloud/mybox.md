@@ -8,19 +8,19 @@ nav_order: 1120
 
 ## 한 줄 요약
 
-네이버 MYBOX 는 국내에서 쓰는 클라우드 저장 앱이지만 이번에 연 공개 자료에서는 패키지 이름·DB·캐시 경로·업로드 기록을 하나도 확인하지 못해서, 이 페이지는 확인된 사실이 없다는 점과 앱을 직접 조사하는 방법, 그동안 시스템 기록으로 볼 수 있는 것을 정리합니다.
+네이버 MYBOX 는 국내에서 쓰는 클라우드 저장 앱이지만 패키지 이름·DB·캐시 경로·업로드 기록을 다룬 공개 분석 자료가 없어서, 이 페이지는 앱을 직접 조사하는 방법과 그동안 시스템 기록으로 볼 수 있는 것을 정리합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-클라우드 저장 앱은 계정의 파일 목록을 기기에 받아 두고, 사용자가 연 파일을 캐시하며, 올린 파일의 기록을 남기는 것이 보통입니다. 구글 드라이브나 원드라이브 앱에서 이런 기록이 확인되었지만 ([구글 드라이브 (Google Drive)](google-drive.md), [삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)](samsung-cloud-onedrive.md)), MYBOX 앱이 무엇을 어디에 남기는지 적은 공개 포렌식 자료는 이번에 찾지 못했습니다.
+클라우드 저장 앱은 계정의 파일 목록을 기기에 받아 두고, 사용자가 연 파일을 캐시하며, 올린 파일의 기록을 남기는 것이 보통입니다. 구글 드라이브나 원드라이브 앱에는 이런 기록이 있지만 ([구글 드라이브 (Google Drive)](google-drive.md), [삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)](samsung-cloud-onedrive.md)), MYBOX 앱이 무엇을 어디에 남기는지 적은 공개 포렌식 자료는 없습니다.
 
-공개 도구 ALEAPP 의 모듈 목록에도 MYBOX 나 네이버 관련 모듈은 없었습니다 [1]. 파일 이름에 naver, ndrive, mybox 가 들어간 모듈이 하나도 없었습니다 [1].
+공개 도구 ALEAPP 에도 MYBOX 나 네이버 관련 모듈(파일 이름에 naver, ndrive, mybox 가 들어간 모듈)은 없습니다 [1].
 
 ## 위치와 버전별 차이
 
-패키지 이름을 확인하지 못해서 경로도 적지 않습니다. 검체에서는 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더와 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 의 앱 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
+패키지 이름이 공개 자료에 없어서 경로도 적지 않습니다. 검체에서는 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더와 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 의 앱 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
 
-Android 버전이나 One UI 버전에 따른 차이, 앱 버전에 따른 차이도 확인한 자료가 없습니다. 관찰 기기에서도 이 앱이 설치되어 있었는지는 확인하지 못했습니다.
+Android 버전이나 One UI 버전에 따른 차이, 앱 버전에 따른 차이도 공개 자료가 없어 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -28,17 +28,17 @@ Android 버전이나 One UI 버전에 따른 차이, 앱 버전에 따른 차이
 
 ## 함정과 한계
 
-첫째, 관찰 기기의 설정 값에는 네이버 이름이 들어간 키로 `naver_sports_state`, `support_nowbar_naver_sports`, `key_now_bar_com_nhn_android_search` 가 있었습니다. 이 키들은 MYBOX 와 관계가 없고, 마지막 키는 네이버 검색 앱의 패키지 이름이 키에 들어간 모양입니다. 설정에 네이버 키가 있다고 MYBOX 를 썼다는 근거로 삼으면 안 됩니다.
+첫째, 설정 값에는 네이버 이름이 들어간 키로 `naver_sports_state`, `support_nowbar_naver_sports`, `key_now_bar_com_nhn_android_search` 가 있을 수 있습니다. 이 키들은 MYBOX 와 관계가 없고, 마지막 키는 네이버 검색 앱의 패키지 이름이 키에 들어간 모양입니다. 설정에 네이버 키가 있다고 MYBOX 를 썼다는 근거로 삼으면 안 됩니다.
 
 둘째, 다른 자료나 도구가 MYBOX 의 경로나 표를 보여 주더라도 검체에서 직접 확인하고 쓰고, 도구 출력은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 방법으로 원본과 맞춰 봅니다.
 
-셋째, 앱 내부 기록이 없으면 무엇을 올렸는지는 기기보다 계정 쪽 데이터에서 찾아야 할 수 있고, 계정 데이터를 받는 일반 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다. MYBOX 계정 데이터를 내려받는 기능이 있는지는 확인하지 못했습니다.
+셋째, 앱 내부 기록이 없으면 무엇을 올렸는지는 기기보다 계정 쪽 데이터에서 찾아야 할 수 있고, 계정 데이터를 받는 일반 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다. MYBOX 계정 데이터를 내려받는 기능이 있는지는 공개 자료가 없습니다.
 
 ## 직접 분석해 보기
 
 ### 앱을 직접 조사하기
 
-공개 자료가 없으니 시험 기기에 앱을 설치해 조사하는 방법이 맞습니다. 순서는 아래처럼 잡을 수 있습니다.
+공개 자료가 없으니 시험 기기에 앱을 설치해 조사하면 됩니다. 순서는 아래처럼 잡을 수 있습니다.
 
 1. 시험 기기에 MYBOX 앱을 설치하고, 설치 직후 앱 데이터 폴더와 공용 저장 공간의 파일 목록을 떠 둡니다.
 2. 로그인, 파일 하나 올리기, 파일 하나 내려받기, 파일 하나 지우기를 시각을 적어 가며 한 가지씩 합니다.

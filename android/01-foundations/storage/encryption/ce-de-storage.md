@@ -11,7 +11,7 @@ nav_order: 110
 
 ## 두 영역의 차이
 
-CE 영역 (Credential Encrypted Storage) 은 기본 저장 위치이고, 사용자 자격 증명(PIN·비밀번호)과 묶인 키로 암호화되어 사용자가 잠금을 푼 뒤에만 쓸 수 있습니다. DE 영역 (Device Encrypted Storage) 은 다이렉트 부트 (Direct Boot) 중에도 잠금을 푼 뒤에도 쓸 수 있고, 검증 부팅이 성공하면 쓸 수 있는 키로 암호화됩니다. 공식 문서는 DE 영역을 다이렉트 부트 중에 꼭 필요한 정보에만 쓰라고 안내합니다.
+CE 영역 (Credential Encrypted Storage) 은 기본 저장 위치이고, 사용자 자격 증명(PIN·비밀번호)과 묶인 키로 암호화되어 사용자가 잠금을 푼 뒤에만 쓸 수 있습니다. DE 영역 (Device Encrypted Storage) 은 다이렉트 부트 (Direct Boot) 중에도 잠금을 푼 뒤에도 쓸 수 있고, 검증 부팅이 성공하면 쓸 수 있는 키로 암호화됩니다. DE 영역에는 다이렉트 부트 중에 꼭 필요한 정보만 둡니다 [2].
 
 | | CE 영역 | DE 영역 |
 |---|---|---|
@@ -24,7 +24,7 @@ CE 영역이 언제 다시 잠기는지, 잠금 화면과 CE 잠금이 어떻게
 
 ## 경로
 
-AOSP 문서가 적은 대표 경로는 아래와 같고, `${user_id}` 자리에는 사용자 ID 가 들어갑니다. 문서에는 이 밖에 FBE 로 암호화하지 않는 폴더(`/data/unencrypted` 등)와 재부팅하면 사라지는 `/data/per_boot`, adoptable storage 쪽 경로도 따로 나뉘어 있습니다.
+대표 경로는 아래와 같고, `${user_id}` 자리에는 사용자 ID 가 들어갑니다 [1]. 이 밖에 FBE 로 암호화하지 않는 폴더(`/data/unencrypted` 등)와 재부팅하면 사라지는 `/data/per_boot`, adoptable storage 쪽 경로도 따로 있습니다 [1].
 
 | 구분 | 경로 |
 |---|---|
@@ -32,11 +32,11 @@ AOSP 문서가 적은 대표 경로는 아래와 같고, `${user_id}` 자리에�
 | DE(사용자별) | `/data/user_de/${user_id}`, `/data/misc_de/${user_id}`, `/data/system_de/${user_id}`, `/data/vendor_de/${user_id}` |
 | 시스템 DE | `/data/app`, `/data/system`, `/data/misc`, `/data/vendor` |
 
-CE 목록에는 `/data/media/${user_id}` 도 들어 있습니다. 이 폴더와 사용자가 보는 공용 저장 공간(/sdcard)이 어떻게 이어지는지는 이 페이지의 출처로 확인하지 못해서 [공용 저장 공간](../shared-storage.md) 페이지에 맡깁니다. 앱 폴더가 `/data/user` 와 `/data/user_de` 아래에 어떻게 놓이는지는 [앱 데이터 폴더 구조](../app-data-layout.md) 페이지를 봅니다.
+CE 목록에는 `/data/media/${user_id}` 도 들어 있습니다. 이 폴더와 사용자가 보는 공용 저장 공간(/sdcard)이 어떻게 이어지는지는 [공용 저장 공간](../shared-storage.md) 페이지를 봅니다. 앱 폴더가 `/data/user` 와 `/data/user_de` 아래에 어떻게 놓이는지는 [앱 데이터 폴더 구조](../app-data-layout.md) 페이지를 봅니다.
 
 시스템 아티팩트도 이 구분을 따릅니다. 예를 들어 앱 사용 기록은 `/data/system_ce/${user_id}/usagestats/` 아래에 있어서 CE 경로 목록과 들어맞고, 자세한 내용은 [앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 다룹니다.
 
-이 경로는 AOSP 문서 기준입니다. 관찰 기기에서는 일반 셸 권한으로 `/data` 아래를 읽지 않아서, 삼성 One UI 에서도 경로가 그대로인지는 확인하지 못했습니다.
+이 경로는 AOSP 기준이라, 삼성 One UI 같은 제조사 기기에서도 경로가 그대로인지는 검체에서 확인합니다. 일반 셸 권한으로는 `/data` 아래를 읽을 수 없습니다.
 
 ## 앱이 DE 영역을 쓰는 방법
 
@@ -48,11 +48,11 @@ CE 목록에는 `/data/media/${user_id}` 도 들어 있습니다. 이 폴더와 
 | 매니페스트 속성 `directBootAware` | 구성 요소를 다이렉트 부트 중에도 실행할 수 있다고 표시합니다 |
 | `moveSharedPreferencesFrom()`, `moveDatabaseFrom()` | CE·DE 사이로 SharedPreferences 와 DB 를 옮깁니다 |
 
-앱이 DE 영역으로 옮긴 파일은 `/data/user_de` 아래에 있고, 잠금 해제 전에도 기기 안에서 복호화된 채 쓰일 수 있는 자리입니다. 어떤 앱이 무엇을 DE 영역에 두는지는 앱마다 달라서, 이 페이지에서는 개별 앱 목록을 다루지 않습니다.
+앱이 DE 영역으로 옮긴 파일은 `/data/user_de` 아래에 있고, 잠금 해제 전에도 기기 안에서 복호화된 채 쓰일 수 있는 자리입니다. 어떤 앱이 무엇을 DE 영역에 두는지는 앱마다 다릅니다.
 
 ## CE 키를 지키는 방식 (합성 비밀번호)
 
-CE 키는 합성 비밀번호 (Synthetic Password) 로 보호하고, AOSP 문서는 그 과정을 아래처럼 설명합니다. 기기가 Weaver HAL 을 갖췄는지에 따라 2·3단계가 갈립니다.
+CE 키는 합성 비밀번호 (Synthetic Password) 로 보호하고, 그 과정은 아래와 같습니다 [1]. 기기가 Weaver HAL 을 갖췄는지에 따라 2·3단계가 갈립니다.
 
 1. 사용자의 잠금 화면 지식 요소(LSKF: PIN·패턴·비밀번호)를 scrypt 로 늘립니다.
 2. Weaver HAL 이 있는 기기는 늘린 값을 보안 요소나 TEE 에 둔 Weaver 비밀과 짝짓고, Weaver 가 없는 기기는 늘린 값을 Gatekeeper 비밀번호로 씁니다. 두 경우 모두 이 단계에서 시도 횟수를 제한합니다.
@@ -62,7 +62,7 @@ CE 키는 합성 비밀번호 (Synthetic Password) 로 보호하고, AOSP 문서
 
 ## 사용자마다 따로 있는 CE·DE
 
-경로에 `${user_id}` 가 들어가는 것처럼 CE·DE 영역은 사용자마다 따로 있습니다. 관찰 기기의 `dumpsys user` 출력에는 기본 사용자(`isPrimary=true`) 말고도 사용자 ID 가 세 자리 이상이고 `isPrimary=false`, `parentId=#` 인 사용자가 하나 더 있었습니다. 이 사용자가 보안 폴더인지 다른 기능인지는 값이 가려져 있어 확인하지 못했고, 이런 사용자에게도 따로 CE·DE 영역이 있다고 보면 경로 표의 `${user_id}` 자리에 그 ID 가 들어갑니다. 여러 사용자와 프로필은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를, 보안 폴더는 [보안 폴더와 작업 프로필](../../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+경로에 `${user_id}` 가 들어가는 것처럼 CE·DE 영역은 사용자마다 따로 있습니다. `dumpsys user` 출력에는 기본 사용자(`isPrimary=true`) 말고도 사용자 ID 가 세 자리 이상이고 `isPrimary=false`, `parentId=#` 인 사용자가 더 나올 수 있습니다. 이 사용자가 보안 폴더인지 다른 기능인지는 검체에서 확인하고, 이런 사용자에게도 따로 CE·DE 영역이 있다고 보면 경로 표의 `${user_id}` 자리에 그 ID 가 들어갑니다. 여러 사용자와 프로필은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를, 보안 폴더는 [보안 폴더와 작업 프로필](../../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
 ## 함정
 

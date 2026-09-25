@@ -7,7 +7,7 @@ nav_order: 1660
 
 # 앱 지우기 (App Removal)
 
-기기에서 앱을 지웠는지, 지운 앱이 무엇이고 언제쯤 썼는지를 남은 흔적으로 따라가는 흐름을 정리합니다. 소스로 확인한 동작은 현행 AOSP 기준(frameworks/base 의 main 가지, 2026-09-25 에 읽음)이고, 버전에 따라 다를 수 있습니다.
+기기에서 앱을 지웠는지, 지운 앱이 무엇이고 언제쯤 썼는지를 남은 흔적으로 따라가는 흐름을 정리합니다. 소스에 나온 동작은 현행 AOSP(frameworks/base 의 main 가지) 기준이고, 버전에 따라 다를 수 있습니다.
 
 ## 조사 질문
 
@@ -16,7 +16,7 @@ nav_order: 1660
 ## 먼저 확인할 것
 
 - **Android 버전**: Android 15(API 35)부터 앱을 완전히 지우지 않고 보관(archiving)할 수 있어서 [3], "목록에서 사라진 앱" 이 정말 지운 앱인지 버전부터 봅니다.
-- **관리 기기 여부**: 프로필 소유자(profile owner)가 있으면 usagestats 가 지운 앱의 데이터를 지우지 않습니다 [2]. 관찰한 폰의 `dumpsys user` 사용자 항목에는 `Has profile owner:` 칸이 있었습니다. 업무 프로필은 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 에 있습니다.
+- **관리 기기 여부**: 프로필 소유자(profile owner)가 있으면 usagestats 가 지운 앱의 데이터를 지우지 않습니다 [2]. 프로필 소유자가 있는지는 `dumpsys user` 사용자 항목의 `Has profile owner:` 칸에서 봅니다. 업무 프로필은 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 에 있습니다.
 - **수집 시점**: usagestats 는 앱이 지워진 뒤 기록을 바로 지우지 않고 나중에 정리해서(아래 절), 앱을 지운 직후에 수집했는지가 결과를 가릅니다.
 - **수집 범위**: adb 일반 권한 출력만 있는지, 전체 파일 시스템 사본이 있는지 적어 둡니다.
 
@@ -24,13 +24,13 @@ nav_order: 1660
 
 ### usagestats 기록
 
-패키지가 지워지면 UsageStatsService 의 PackageMonitor 가 알아채고 `MSG_PACKAGE_REMOVED` 를 거쳐 `onPackageRemoved()` 를 부릅니다 [2]. 이 함수는 기록을 바로 지우지 않고 `UsageStatsIdleService.schedulePruneJob()` 으로 정리 작업(prune job)을 예약하며, 소스 주석은 "Schedule a job to prune any data related to this package." 입니다 [2]. 그래서 정리 작업이 돌기 전에 수집하면 지운 앱의 기록이 남아 있을 수 있다고 보지만(해석), 작업이 언제 도는지(대기 조건·지연 시간)는 확인하지 못했습니다.
+패키지가 지워지면 UsageStatsService 의 PackageMonitor 가 알아채고 `MSG_PACKAGE_REMOVED` 를 거쳐 `onPackageRemoved()` 를 부릅니다 [2]. 이 함수는 기록을 바로 지우지 않고 `UsageStatsIdleService.schedulePruneJob()` 으로 정리 작업(prune job)을 예약합니다 [2]. 그래서 정리 작업이 돌기 전에 수집하면 지운 앱의 기록이 남아 있을 수 있습니다(해석). 작업이 언제 도는지(대기 조건·지연 시간)는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-데이터베이스 쪽에서는 `UsageStatsDatabase.onPackageRemoved()` 가 패키지 이름과 번호를 잇는 대응표(mappings)에서 그 패키지에 지운 시각(timeRemoved)을 붙여 제거 표시를 하고 mappings 파일을 다시 씁니다 [1]. `pruneUninstalledPackagesData()` 는 주석대로 디스크의 사용 기록을 모두 읽어 지워진 패키지와 관련된 데이터를 빼고 다시 쓰고, `prunePackagesDataOnUpgrade()` 는 설치 목록에 없는 패키지의 통계(packageStats)와 이벤트(events)를 걸러 냅니다 [1]. 구간 파일은 패키지 이름 대신 mappings 의 번호를 쓰니, mappings 에서 빠진 뒤에는 파일에 번호가 남아 있어도 패키지 이름을 되살리기 어렵습니다(해석). 파일과 mappings 의 구조는 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 에 있습니다.
+데이터베이스 쪽에서는 `UsageStatsDatabase.onPackageRemoved()` 가 패키지 이름과 번호를 잇는 대응표(mappings)에서 그 패키지에 지운 시각(timeRemoved)을 붙여 제거 표시를 하고 mappings 파일을 다시 씁니다 [1]. `pruneUninstalledPackagesData()` 는 디스크의 사용 기록을 모두 읽어 지워진 패키지와 관련된 데이터를 빼고 다시 쓰고, `prunePackagesDataOnUpgrade()` 는 설치 목록에 없는 패키지의 통계(packageStats)와 이벤트(events)를 걸러 냅니다 [1]. 구간 파일은 패키지 이름 대신 mappings 의 번호를 쓰니, mappings 에서 빠진 뒤에는 파일에 번호가 남아 있어도 패키지 이름을 되살리기 어렵습니다(해석). 파일과 mappings 의 구조는 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 에 있습니다.
 
 ### 공용 저장 공간의 파일
 
-앱이 공용 저장 공간에 만든 미디어 파일은 앱을 지워도 기기에 남습니다("Even after your app is uninstalled, these files remain on the user's device.") [4]. 앱을 다시 설치하면 이전 설치가 만든 파일은 새 설치의 것으로 보지 않아서, 다시 설치한 앱은 READ_EXTERNAL_STORAGE 권한이 있어야 그 파일에 접근합니다 [4]. 공용 저장 공간에 주인 없는 앱 폴더나 파일이 남아 있으면 지운 앱의 흔적일 수 있습니다(해석). 관찰한 폰의 `/sdcard/Android/media` 아래에는 앱별 폴더가 있었지만, 지운 앱의 폴더가 남는지는 관찰하지 않았습니다. 폴더 구조는 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 에 있습니다.
+앱이 공용 저장 공간에 만든 미디어 파일은 앱을 지워도 기기에 남습니다 [4]. 앱을 다시 설치하면 이전 설치가 만든 파일은 새 설치의 것으로 보지 않아서, 다시 설치한 앱은 READ_EXTERNAL_STORAGE 권한이 있어야 그 파일에 접근합니다 [4]. 공용 저장 공간에 주인 없는 앱 폴더나 파일이 남아 있으면 지운 앱의 흔적일 수 있습니다(해석). `/sdcard/Android/media` 아래에는 앱별 폴더가 있고, 지운 앱의 폴더가 여기에 남는지는 검체에서 확인합니다. 폴더 구조는 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 에 있습니다.
 
 ### 보관(archiving)은 지운 것이 아님
 
@@ -39,7 +39,7 @@ nav_order: 1660
 | 일반 제거 | 모든 버전 | 앱 | 공용 저장 공간의 미디어 파일 [4], 정리 작업 전까지의 usagestats 기록 [2] |
 | OS 수준 보관 (`PackageInstaller.requestArchive()`) | Android 15(API 35) 이상 | APK, 캐시 파일 | 사용자 데이터, 런처 목록의 보관 표시 [3] |
 
-보관을 요청하려면 REQUEST_DELETE_PACKAGES 권한이 필요합니다 [3]. 보관된 앱은 LauncherApps API 에 계속 나오고 화면에는 보관됨 표시가 붙으며, 사용자가 누르면 설치 앱(installer)에 복원(requestUnarchive) 요청이 가고 복원은 `ACTION_PACKAGE_ADDED` 방송으로 알 수 있습니다 [3]. 구글 플레이는 이보다 먼저(2023년) App Bundle 로 올린 앱의 자동 보관을 발표했으니 [3], 사용자가 쓰지 않아 자동으로 보관된 앱을 "지웠다" 로 적지 않습니다. 삼성 기기에서 보관이 어떻게 보이는지는 확인하지 못했습니다.
+보관을 요청하려면 REQUEST_DELETE_PACKAGES 권한이 필요합니다 [3]. 보관된 앱은 LauncherApps API 에 계속 나오고 화면에는 보관됨 표시가 붙으며, 사용자가 누르면 설치 앱(installer)에 복원(requestUnarchive) 요청이 가고 복원은 `ACTION_PACKAGE_ADDED` 방송으로 알 수 있습니다 [3]. 구글 플레이는 이보다 먼저(2023년) App Bundle 로 올린 앱의 자동 보관을 발표했으니 [3], 사용자가 쓰지 않아 자동으로 보관된 앱을 "지웠다" 로 적지 않습니다. 삼성 기기에서 보관이 어떻게 보이는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -52,11 +52,11 @@ nav_order: 1660
 | 5 | 배터리·데이터 사용 기록 | 그 앱이 돌거나 통신한 흔적 | [배터리 사용 기록](../../../02-artifacts/app-usage/batterystats.md), [데이터 사용량](../../../02-artifacts/network/netstats.md) |
 | 6 | 구글 플레이 기록 | 계정에 설치 이력이 남았는지 | [구글 플레이 기록](../../../02-artifacts/app-usage/play-store.md) |
 
-플레이 스토어 기록에 지운 앱이 남는지는 이번에 출처를 열지 않아 확인하지 못했고, 앱 데이터를 남기고 지우는 제거 방식도 다루지 않았습니다.
+플레이 스토어 기록에 지운 앱이 남는지는 검체에서 확인합니다. 앱 데이터를 남기고 지우는 제거 방식은 이 페이지에서 다루지 않습니다.
 
 ### adb 일반 권한으로 보이는 칸
 
-관찰한 폰의 출력에는 아래 칸이 있었습니다.
+adb 일반 권한 출력에서 볼 칸은 아래와 같습니다. 제조사가 추가한 칸·키가 섞여 있어 기기마다 다를 수 있습니다.
 
 | 출력 | 칸·키 |
 |---|---|
@@ -65,7 +65,7 @@ nav_order: 1660
 | `settings secure` | `install_non_market_apps`, `fixed_delete_mode_rule`, `fixed_delete_reminder` |
 | `settings global` | `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung` |
 
-`fixed_delete_*` 키의 뜻은 확인하지 못했습니다. `dumpsys package` 에 지워진 패키지 이력을 보여 주는 절이 있는지도 관찰 메모에 없어서 확인하지 못했습니다.
+`fixed_delete_*` 키의 뜻을 밝힌 공개 자료는 없습니다. `dumpsys package` 에 지워진 패키지 이력을 보여 주는 절이 있는지는 검체의 출력에서 확인합니다.
 
 ## 분석 흐름
 

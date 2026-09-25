@@ -27,16 +27,16 @@ nav_order: 750
 
 ## 위치와 버전별 차이
 
-`getWifiSharedDirectory()` 와 `getWifiUserDirectory()` 가 돌려주는 실제 경로 문자열은 이번에 열어 본 소스에 없었습니다. ALEAPP 는 예전 위치와 APEX 위치 두 곳을 아래 패턴으로 찾습니다 [1].
+파일은 예전 위치와 APEX 위치 두 곳 가운데 하나에 있고, ALEAPP 는 두 곳을 아래 패턴으로 찾습니다 [1].
 
 ```
 */misc/wifi/WifiConfigStore.xml
 */misc**/apexdata/com.android.wifi/WifiConfigStore.xml
 ```
 
-첫 줄은 예전 위치인 `/data/misc/wifi` 아래이고, 둘째 줄은 APEX 데이터 폴더 아래이며 `misc` 와 `misc_ce` 가 둘 다 걸리도록 쓴 패턴입니다 [1]. 어느 Android 버전에서 예전 위치를 떠나 APEX 위치로 옮겼는지는 확인하지 못했고, ALEAPP 가 이 모듈을 시험한 이미지는 Android 10~16 입니다 [1]. 버전을 짐작해 한 곳만 보지 말고 두 패턴을 모두 찾습니다.
+첫 줄은 예전 위치인 `/data/misc/wifi` 아래이고, 둘째 줄은 APEX 데이터 폴더 아래이며 `misc` 와 `misc_ce` 가 둘 다 걸리도록 쓴 패턴입니다 [1]. ALEAPP 는 이 모듈을 Android 10~16 이미지로 시험했습니다 [1]. 버전을 짐작해 한 곳만 보지 말고 두 패턴을 모두 찾습니다.
 
-삼성 기기에는 ALEAPP 가 따로 읽는 SQLite DB 가 두 개 더 있습니다 [2]. 두 DB 의 전체 경로는 확인하지 못했고, 패턴으로 보아 이름이 `system` 인 폴더 아래에 있습니다.
+삼성 기기에는 ALEAPP 가 따로 읽는 SQLite DB 가 두 개 더 있습니다 [2]. 두 DB 는 경로 패턴으로 보아 이름이 `system` 인 폴더 아래에 있습니다.
 
 | 파일 | ALEAPP 경로 패턴 | ALEAPP 시험 이미지 |
 |---|---|---|
@@ -51,9 +51,9 @@ XML 파일에는 형식 버전이 적혀 있고, 현행 버전은 3 입니다 [3
 | 2 | 무결성 정보(Integrity) 추가 |
 | 3 | 자격 증명 암호화 추가, 무결성 정보 제거 |
 
-관찰 기기에서 `dumpsys wifi` 출력은 약 10,850줄이었고, 설정 상태(`WifiState`, `AirplaneModeOn`, `ScanAlwaysAvailable`, `WifiStateApm`, `WifiStateBt`, `SatelliteModeOn` 등)와 지원 기능 목록(`SupportedFeatures`), 상태 기계 기록(`WifiController`, `WifiClientModeManager`, `WifiClientModeImpl` 의 `rec[#]: time=... what=CMD_...` 줄)이 나왔습니다. `WifiClientModeManager` 기록에는 `RequestorWs: WorkSource{... com.android.settings}` 처럼 Wi-Fi 클라이언트 모드를 켜 달라고 요청한 앱이 함께 찍혔고, 이 줄은 특정 네트워크에 붙은 기록이 아니라 모드 전환 명령(`CMD_START`, `CMD_SWITCH_TO_CONNECT_MODE`) 기록입니다. 저장된 네트워크 목록이 이 출력에 나오는지, adb 일반 권한으로 `WifiConfigStore.xml` 을 직접 읽을 수 있는지는 확인하지 못했습니다. `dumpsys` 를 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
+`dumpsys wifi` 출력은 1만 줄이 넘을 만큼 길고(한 기기에서 약 10,850줄), 설정 상태(`WifiState`, `AirplaneModeOn`, `ScanAlwaysAvailable`, `WifiStateApm`, `WifiStateBt`, `SatelliteModeOn` 등)와 지원 기능 목록(`SupportedFeatures`), 상태 기계 기록(`WifiController`, `WifiClientModeManager`, `WifiClientModeImpl` 의 `rec[#]: time=... what=CMD_...` 줄)이 나옵니다. `WifiClientModeManager` 기록에는 `RequestorWs: WorkSource{... com.android.settings}` 처럼 Wi-Fi 클라이언트 모드를 켜 달라고 요청한 앱이 함께 찍히고, 이 줄은 특정 네트워크에 붙은 기록이 아니라 모드 전환 명령(`CMD_START`, `CMD_SWITCH_TO_CONNECT_MODE`) 기록입니다. 저장된 네트워크 목록이 이 출력에 나오는지와 adb 일반 권한으로 `WifiConfigStore.xml` 을 직접 읽을 수 있는지는 기기에서 확인합니다. `dumpsys` 를 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
 
-같은 기기의 설정 값에는 Wi-Fi 관련 키가 여러 개 있었습니다. global 쪽에는 `wifi_on`, `wifi_scan_always_enabled`, `wifi_wakeup_enabled`, `wifi_networks_available_notification_on`, `wifi_sleep_policy`, `network_avoid_bad_wifi`, `wifi_migration_completed`, `SecureWifiBackupExist`, `adb_wifi_enabled`, `auto_wifi`, `sem_auto_wifi_added_removed_list`, `sem_auto_wifi_control_enabled` 와 `sem_wifi_` 로 시작하는 키 여러 개가 있었고, secure 쪽에는 `wifi_saved_state`, `wifi_apm_state`, `sem_wifi_turn_off_by_autowifi`, `sec_wifi_mlo_link_count` 가 있었습니다. 값은 가려져 있었고 키마다 값이 무슨 뜻인지는 공식 문서로 확인하지 못했으며, 특히 `sem_auto_wifi_added_removed_list` 에 어떤 형식으로 무엇이 들어가는지는 모릅니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
+삼성 기기의 설정 값에는 Wi-Fi 관련 키가 여러 개 있습니다. global 쪽에는 `wifi_on`, `wifi_scan_always_enabled`, `wifi_wakeup_enabled`, `wifi_networks_available_notification_on`, `wifi_sleep_policy`, `network_avoid_bad_wifi`, `wifi_migration_completed`, `SecureWifiBackupExist`, `adb_wifi_enabled`, `auto_wifi`, `sem_auto_wifi_added_removed_list`, `sem_auto_wifi_control_enabled` 와 `sem_wifi_` 로 시작하는 키 여러 개가 있고, secure 쪽에는 `wifi_saved_state`, `wifi_apm_state`, `sem_wifi_turn_off_by_autowifi`, `sec_wifi_mlo_link_count` 가 있습니다. 키마다 값의 뜻을 밝힌 공식 문서는 없고, 특히 `sem_auto_wifi_added_removed_list` 에 어떤 형식으로 무엇이 들어가는지는 검체에서 확인해야 합니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -83,11 +83,11 @@ WifiConfigStoreData
 | IP 설정 | `IpAssignment`, `ProxySettings`, `ProxyHost`, `ProxyPort`, `ProxyPac`, `ProxyExclusionList` |
 | 그 밖 | `MeteredHint`, `MeteredOverride`, `AutoJoinEnabled`, `Priority`, `Trusted`, `CarrierId`, `SubscriptionId`, `LinkedNetworksList`, `Shared` |
 
-`CreatorUid`·`LastUpdateUid` 같은 숫자 UID 를 패키지 이름으로 바꾸는 법은 [패키지 이름과 UID (Package Name·UID)](../../01-foundations/value-decoding/package-uid.md) 페이지에서 다룹니다. ALEAPP 는 `ConfigKey` 문자열을 큰따옴표로 잘라 세 번째 조각을 보안 방식(끝에 붙은 `WPA_PSK` 같은 값)으로 읽습니다 [1]. ALEAPP 주석에 따르면 `DefaultGwMacAddress` 는 그 네트워크의 기본 게이트웨이, 곧 공유기의 MAC 주소이고 폰이나 같은 네트워크에 붙은 다른 기기의 주소가 아닙니다 [1].
+`CreatorUid`·`LastUpdateUid` 같은 숫자 UID 를 패키지 이름으로 바꾸는 법은 [패키지 이름과 UID (Package Name·UID)](../../01-foundations/value-decoding/package-uid.md) 페이지에서 다룹니다. `ConfigKey` 문자열을 큰따옴표로 자르면 세 번째 조각이 보안 방식(끝에 붙은 `WPA_PSK` 같은 값)입니다 [1]. `DefaultGwMacAddress` 는 그 네트워크의 기본 게이트웨이, 곧 공유기의 MAC 주소이고 폰이나 같은 네트워크에 붙은 다른 기기의 주소가 아닙니다 [1].
 
-형식 버전 3 에서는 `PreSharedKey`(비밀번호), `WEPKeys`, DPP 키를 암호화해서 쓸 수 있고, 암호화하면 `EncryptedData` 와 `IV` 값으로 저장됩니다 [4]. 암호화할지는 파일을 만들 때 넘기는 `shouldEncryptCredentials` 값으로 정해지는데 [3], 기기와 버전마다 기본값이 무엇인지는 확인하지 못했습니다. 소스 주석("We silently fail encryption failures!")대로 암호화 도구가 없거나 암호화에 실패하면 평문으로 쓰기 때문에 [4], 같은 버전의 파일이라도 비밀번호가 평문으로 보일 수도 있고 암호문으로 보일 수도 있습니다.
+형식 버전 3 에서는 `PreSharedKey`(비밀번호), `WEPKeys`, DPP 키를 암호화해서 쓸 수 있고, 암호화하면 `EncryptedData` 와 `IV` 값으로 저장됩니다 [4]. 암호화할지는 파일을 만들 때 넘기는 `shouldEncryptCredentials` 값으로 정해지고 [3], 기본값은 기기와 버전마다 다를 수 있어 검체에서 확인합니다. 암호화 도구가 없거나 암호화에 실패하면 알리지 않고 평문으로 쓰기 때문에 [4], 같은 버전의 파일이라도 비밀번호가 평문으로 보일 수도 있고 암호문으로 보일 수도 있습니다.
 
-삼성 `WifiConfigStore.db` 에서 ALEAPP 가 읽는 표는 `configs` 이고, 칸은 `CREATION_TIME`, `CONFIG_KEY`, `NETWORK_SCORE`, `CAPTIVE_PORTAL`, `LOCK_DOWN`, `NO_INTERNET_ACCESS_EXPECTED`, `NETWORK_DISABLE_REASON`, `_ID` 입니다 [2]. 예전 One UI 에는 `CREATION_TIME` 칸이 없었고, Android 11 에서는 `NETWORK_DISABLE_REASON` 칸도 없었습니다 [2]. `wifigeofence.db` 의 `geofence_wifi` 표에는 Wi-Fi 네트워크별 좌표가 들어 있고, 칸은 `time`, `time_major`, `config_key`, `bssid`, `latitude`, `longitude`, `latitude_major`, `longitude_major`, `location_id`, `network_id`, `_id` 입니다 [2]. 좌표가 1000.0(칸 기본값)이나 -1.0 이면 ALEAPP 는 값이 없는 것으로 봅니다 [2].
+삼성 `WifiConfigStore.db` 에서 ALEAPP 가 읽는 표는 `configs` 이고, 칸은 `CREATION_TIME`, `CONFIG_KEY`, `NETWORK_SCORE`, `CAPTIVE_PORTAL`, `LOCK_DOWN`, `NO_INTERNET_ACCESS_EXPECTED`, `NETWORK_DISABLE_REASON`, `_ID` 입니다 [2]. 예전 One UI 에는 `CREATION_TIME` 칸이 없었고, Android 11 에서는 `NETWORK_DISABLE_REASON` 칸도 없었습니다 [2]. `wifigeofence.db` 의 `geofence_wifi` 표에는 Wi-Fi 네트워크별 좌표가 들어 있고, 칸은 `time`, `time_major`, `config_key`, `bssid`, `latitude`, `longitude`, `latitude_major`, `longitude_major`, `location_id`, `network_id`, `_id` 입니다 [2]. 좌표가 1000.0(칸 기본값)이나 -1.0 이면 값이 없는 것입니다 [2].
 
 ## 증거로서 의미
 
@@ -97,13 +97,13 @@ WifiConfigStoreData
 
 **증명하지 못하는 것**
 
-AOSP 칸에는 시각이 없어서 이 파일만으로는 특정 시각에 그 네트워크에 붙어 있었다고 말할 수 없고, 연결 횟수나 연결된 동안 주고받은 데이터 양도 나오지 않습니다. SSID 는 누구나 같은 이름으로 만들 수 있어서 이름만으로 장소를 정할 수 없고, `PreSharedKey` 가 저장돼 있다고 해서 사용자가 비밀번호를 직접 입력했거나 알고 있었다는 뜻도 아닙니다. 네트워크를 지운 뒤 파일에 무엇이 남는지는 확인하지 못했으니, 항목이 없다는 사실만으로 연결한 적이 없다고 결론 내리지 않습니다.
+AOSP 칸에는 시각이 없어서 이 파일만으로는 특정 시각에 그 네트워크에 붙어 있었다고 말할 수 없고, 연결 횟수나 연결된 동안 주고받은 데이터 양도 나오지 않습니다. SSID 는 누구나 같은 이름으로 만들 수 있어서 이름만으로 장소를 정할 수 없고, `PreSharedKey` 가 저장돼 있다고 해서 사용자가 비밀번호를 직접 입력했거나 알고 있었다는 뜻도 아닙니다. 네트워크를 지운 뒤 파일에 무엇이 남는지 밝힌 공개 자료가 없으니, 항목이 없다는 사실만으로 연결한 적이 없다고 결론 내리지 않습니다.
 
 ## 시각 해석
 
-ALEAPP 는 `semCreationTime`, `semUpdateTime`, `LastConnectedTime` 세 칸을 시각으로 읽고, 값을 유닉스 밀리초로 보고 UTC 로 바꾸며 0 이하 값은 비워 둡니다 [1]. `sem` 으로 시작하는 두 칸은 AOSP 칸 목록에 없어서 제조사(삼성)가 더한 칸으로 보이지만, 삼성이 더했다는 공식 근거와 `LastConnectedTime` 을 쓰는 제조사 범위는 확인하지 못했습니다. 칸 이름으로 보아 설정을 만든 시각, 고친 시각, 마지막으로 연결한 시각으로 읽을 수 있지만, 정확히 어떤 동작 때 값이 바뀌는지는 검체에서 다른 기록과 맞춰 본 뒤 씁니다.
+`semCreationTime`, `semUpdateTime`, `LastConnectedTime` 세 칸은 유닉스 밀리초 시각이고, 0 이하 값은 비어 있는 값입니다 [1]. `sem` 으로 시작하는 두 칸은 AOSP 칸 목록에 없어서 제조사(삼성)가 더한 칸으로 보입니다. `LastConnectedTime` 을 쓰는 제조사 범위는 공개 자료가 없어 검체로 확인해야 합니다. 칸 이름으로 보아 설정을 만든 시각, 고친 시각, 마지막으로 연결한 시각으로 읽을 수 있지만, 정확히 어떤 동작 때 값이 바뀌는지는 검체에서 다른 기록과 맞춰 본 뒤 씁니다.
 
-삼성 `configs` 표의 `CREATION_TIME` 은 TEXT 칸이고 ALEAPP 는 유닉스 시각으로 바꾸지만, 초인지 밀리초인지는 모듈 코드만으로 확인하지 못했습니다 [2]. 값이 13자리 안팎이면 밀리초, 10자리 안팎이면 초일 가능성이 높으니 자릿수부터 보고 바꿉니다. `wifigeofence.db` 의 `time`·`time_major` 칸 단위도 확인하지 못했습니다. 값을 읽는 일반 방법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+삼성 `configs` 표의 `CREATION_TIME` 은 유닉스 시각을 담은 TEXT 칸이고 [2], 초인지 밀리초인지는 값으로 가립니다. 값이 13자리 안팎이면 밀리초, 10자리 안팎이면 초일 가능성이 높으니 자릿수부터 보고 바꿉니다. `wifigeofence.db` 의 `time`·`time_major` 칸 단위도 같은 방법으로 가립니다. 값을 읽는 일반 방법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 `dumpsys wifi` 상태 기계 기록의 시각은 `time=MM-DD HH:MM:SS.mmm` 모양이고 연도가 없습니다. 출력에 시간대도 적혀 있지 않으니, 연도는 수집 날짜에서 거꾸로 짐작하고 시간대는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 확인한 뒤 보고서에 씁니다.
 
@@ -123,9 +123,9 @@ ALEAPP 는 `semCreationTime`, `semUpdateTime`, `LastConnectedTime` 세 칸을 �
 
 ### 파일을 직접 한 번
 
-XML 은 글자로 된 형식이라 헥스 대신 문서 구조를 따라갑니다. 사본을 텍스트 편집기로 열어 `WifiConfigStoreData` 아래 `Version` 값을 먼저 보고, `Network` 요소를 하나씩 따라가며 `name` 속성이 `SSID`, `ConfigKey`, `CreatorName`, `HasEverConnected` 인 값을 적어 둡니다. 편집기에서 글자가 보이지 않고 이진 데이터처럼 보이면 이번 자료로는 확인하지 못한 저장 형식일 수 있으니 [안드로이드 바이너리 XML (ABX)](../../01-foundations/data-formats/abx.md) 페이지를 보고 변환부터 합니다.
+XML 은 글자로 된 형식이라 헥스 대신 문서 구조를 따라갑니다. 사본을 텍스트 편집기로 열어 `WifiConfigStoreData` 아래 `Version` 값을 먼저 보고, `Network` 요소를 하나씩 따라가며 `name` 속성이 `SSID`, `ConfigKey`, `CreatorName`, `HasEverConnected` 인 값을 적어 둡니다. 편집기에서 글자가 보이지 않고 이진 데이터처럼 보이면 바이너리 XML 로 저장됐을 수 있으니 [안드로이드 바이너리 XML (ABX)](../../01-foundations/data-formats/abx.md) 페이지를 보고 변환부터 합니다.
 
-같은 일을 파이썬 표준 라이브러리로 하면 아래와 같습니다. ALEAPP 가 `Network` 요소를 훑고 `name` 속성으로 칸을 가리는 방식 [1] 을 따라 만든 예시이고, 값이 속성에 있는지 글자로 있는지 모르니 둘 다 찍습니다.
+같은 일을 파이썬 표준 라이브러리로 하면 아래와 같습니다. `Network` 요소를 훑고 `name` 속성으로 칸을 가리는 예시이고 [1], 값이 속성에 있을 때와 글자로 있을 때를 모두 찍습니다.
 
 ```python
 import xml.etree.ElementTree as ET
@@ -157,7 +157,7 @@ ALEAPP 의 `wifiProfiles` 모듈이 XML 두 위치를 찾아 네트워크 표를
 | 함께 볼 기록 | 맞춰 볼 것 |
 |---|---|
 | [데이터 사용량 (netstats)](netstats.md) | Wi-Fi 연결 종류로 데이터가 오간 시간대가 있는지 |
-| [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) | 관찰 기기 배터리 기록에 `+wifi_scan`·`-wifi_scan` 표시가 있었고, 이 표시가 있는 시간대와 연결 시각이 어울리는지 |
+| [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) | 배터리 기록의 `+wifi_scan`·`-wifi_scan` 표시가 있는 시간대와 연결 시각이 어울리는지 |
 | [위치 캐시 (Cached Locations)](../location/cached-locations.md) | `wifigeofence.db` 좌표와 같은 시간대 위치 기록이 맞는지 |
 | [테더링과 핫스폿 (Tethering·Hotspot)](tethering-hotspot.md) | 폰이 네트워크에 붙은 쪽인지, 네트워크를 내어 준 쪽인지 |
 | [설치된 앱 (packages.xml)](../app-usage/packages/index.md) | `CreatorUid`·`LastUpdateUid` 가 어느 앱인지 |

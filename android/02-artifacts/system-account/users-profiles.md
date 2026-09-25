@@ -6,7 +6,7 @@ nav_order: 360
 
 # 사용자와 프로필 (Multi-user·users)
 
-한 기기 안에 사용자와 프로필이 몇 개 있었는지, 각각 언제 만들어지고 마지막으로 쓰였는지를 알려 주는 기록을 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
+한 기기 안에 사용자와 프로필이 몇 개 있었는지, 각각 언제 만들어지고 마지막으로 쓰였는지를 알려 주는 기록을 정리합니다. 값은 현행 AOSP(frameworks/base 의 main 가지) 기준입니다.
 
 ## 한 줄 요약
 
@@ -39,13 +39,13 @@ Android 는 한 기기에서 여러 사용자 공간을 나눠 씁니다. 사용
 | 항목 | 내용 | 출처·범위 |
 |---|---|---|
 | 사용자 종류 정의를 정리한 버전 | Android 11 | [2] |
-| 헤드리스 시스템 사용자 | `ro.fw.mu.headless_system_user=true` 일 때이고, 문서는 Android 10 이후 자동차용으로 언급 | [2] |
+| 헤드리스 시스템 사용자 | `ro.fw.mu.headless_system_user=true` 일 때이고, Android 10 이후 자동차용 | [2] |
 | 다중 사용자 켜기 | 기기 설정 `config_multiuserMaximumUsers`(1보다 크게), `config_enableMultiUserUI`(true) | [2] |
-| 휴대폰에 다중 사용자가 들어온 버전 | 확인하지 못함 | |
-| 삼성 기기의 두 번째 사용자 | 번호가 세 자리이고 parentId 가 붙은 프로필이 하나 있었음 | 관찰 |
-| 삼성 보안 폴더·앱 이중 실행이 쓰는 번호 범위 | 확인하지 못함 | |
+| 휴대폰에 다중 사용자가 들어온 버전 | 공개 자료 없음 | |
+| 삼성 기기의 두 번째 사용자 | 번호가 세 자리이고 parentId 가 붙은 프로필일 수 있음 | |
+| 삼성 보안 폴더·앱 이중 실행이 쓰는 번호 범위 | 공개 자료 없음(검체에서 확인) | |
 
-관찰한 삼성 기기의 settings 에는 global 표에 `add_users_when_locked`, `lock_add_profile`, `lock_remove_profile`, `lock_reset_profile`, `smartswitch_data_exist_securefolder` 키가, secure 표에 `hide_secure_folder_flag` 키가 있었습니다. 이름으로 보면 잠금 상태에서 사용자 추가, 프로필 추가·삭제, 보안 폴더와 관련된 값이지만 값의 뜻은 확인하지 못했습니다.
+삼성 기기의 settings 에는 global 표에 `add_users_when_locked`, `lock_add_profile`, `lock_remove_profile`, `lock_reset_profile`, `smartswitch_data_exist_securefolder` 키가, secure 표에 `hide_secure_folder_flag` 키가 있을 수 있습니다. 이름으로 보면 잠금 상태에서 사용자 추가, 프로필 추가·삭제, 보안 폴더와 관련된 값으로 보이지만, 값의 뜻을 밝힌 공개 자료는 없습니다.
 
 ## 구조
 
@@ -64,7 +64,7 @@ Android 는 한 기기에서 여러 사용자 공간을 나눠 씁니다. 사용
 | `seedAccountName`, `seedAccountType` | 사용자를 만들 때 넘겨받은 계정 |
 | `icon` | 사용자 사진 경로 |
 
-사용자별 파일에는 속성 말고도 `name`, `restrictions`, `seedAccountOptions`, `userProperties` 같은 하위 태그가 들어갑니다 [1]. "담긴 것" 칸의 일부(부모 사용자, 만들다 만 사용자 등)는 속성 이름에서 읽은 뜻이고 소스의 설명으로 확인한 것은 아닙니다. `type` 에 들어가는 값의 예는 다음과 같습니다 [2].
+사용자별 파일에는 속성 말고도 `name`, `restrictions`, `seedAccountOptions`, `userProperties` 같은 하위 태그가 들어갑니다 [1]. "담긴 것" 칸의 일부(부모 사용자, 만들다 만 사용자 등)는 속성 이름으로 짐작한 뜻이고, 소스에 따로 붙은 설명은 없습니다. `type` 에 들어가는 값의 예는 다음과 같습니다 [2].
 
 ```
 android.os.usertype.full.SYSTEM
@@ -76,7 +76,7 @@ android.os.usertype.system.HEADLESS
 
 ### 라이브 기기의 dumpsys user
 
-adb 일반 셸 권한으로 `dumpsys user` 를 실행하면 789줄이 나왔고, 앞부분 모양은 다음과 같습니다(값은 가려져 있고, 대표 줄만 옮겼습니다).
+`dumpsys user` 는 adb 일반 셸 권한으로 실행할 수 있습니다. 출력 한 예(789줄)의 앞부분은 다음 모양입니다. 값은 가리고 대표 줄만 실었습니다.
 
 ```
 Current user: #
@@ -128,13 +128,13 @@ Users:
 
 `dumpsys user` 는 이 값들을 날짜로 찍지 않고 출력한 때로부터 얼마 전인지("... ago")로 찍고, 값이 0 이면 `<unknown>` 으로 찍습니다 [1]. 그래서 날짜로 바꾸려면 dumpsys 를 뽑은 시각을 함께 기록해 둬야 합니다. `Start time` 과 `Unlock time` 은 부팅 뒤 흐른 시간(SystemClock.elapsedRealtime)으로 적는 값이라 [1], 파일에 남지 않고 재부팅하면 사라집니다.
 
-관찰한 기기에서는 사용자 0 의 `Created:` 가 `<unknown>` 으로 나왔습니다. 소스로 보면 `created` 값이 0 이라는 뜻이지만 왜 0 인지는 확인하지 못해서, 사용자 0 의 생성 시각으로 기기를 처음 설정한 날을 말하지 않고 [초기화 흔적 (Factory Reset)](factory-reset.md) 페이지의 기록과 함께 봅니다. 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+사용자 0 의 `Created:` 가 `<unknown>` 으로 나오는 기기도 있습니다. `created` 값이 0 이라는 뜻이고 [1], 왜 0 이 되었는지 밝힌 공개 자료는 없습니다. 그래서 사용자 0 의 생성 시각으로 기기를 처음 설정한 날을 말하지 않고 [초기화 흔적 (Factory Reset)](factory-reset.md) 페이지의 기록과 함께 봅니다. 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-사용자 번호마다 계정·앱 데이터·설정이 따로 있어서 다른 아티팩트를 읽을 때도 번호를 함께 적어야 합니다. 관찰한 기기의 `dumpsys account` 출력도 사용자마다 `User UserInfo{...}:` 로 시작하는 블록으로 나뉘었습니다. 계정 쪽 해석은 [계정 (Accounts)](accounts/index.md) 페이지에 있습니다.
+사용자 번호마다 계정·앱 데이터·설정이 따로 있어서 다른 아티팩트를 읽을 때도 번호를 함께 적어야 합니다. `dumpsys account` 출력도 사용자마다 `User UserInfo{...}:` 로 시작하는 블록으로 나뉩니다. 계정 쪽 해석은 [계정 (Accounts)](accounts/index.md) 페이지에 있습니다.
 
-이미 지운 사용자가 목록 파일이나 다른 기록에 흔적을 남기는지는 이번 자료로 확인하지 못했습니다. `userlist.xml` 의 `nextSerialNumber` 값과 남아 있는 사용자들의 `serialNumber` 를 비교해 볼 수는 있지만, 번호가 비는 까닭을 소스로 확인하지 못해서 지운 사용자가 있었다는 근거로 쓰지 않습니다.
+이미 지운 사용자가 목록 파일이나 다른 기록에 흔적을 남기는지는 공개 자료가 없어 검체로 확인해야 합니다. `userlist.xml` 의 `nextSerialNumber` 값과 남아 있는 사용자들의 `serialNumber` 를 비교해 볼 수는 있지만, 번호가 비는 까닭이 소스에 드러나 있지 않아 지운 사용자가 있었다는 근거로 쓰지 않습니다.
 
 비공개 프로필처럼 따로 잠글 수 있는 공간은 확보할 때의 잠금 상태에 따라 읽히는 범위가 달라질 수 있어서, 사용자별 암호화 영역을 설명한 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지를 함께 봅니다.
 
@@ -142,7 +142,7 @@ Users:
 
 ### 헥스로 한 번
 
-사용자 xml 이 글자 XML 이라면 한 사용자 항목은 다음 모양이 됩니다. 속성 이름은 소스에서 가져왔고 [1], 값은 설명하려고 만든 예시이며 실제 기기에서 나온 것이 아닙니다.
+사용자 xml 이 글자 XML 이라면 한 사용자 항목은 다음 모양이 됩니다. 속성 이름은 소스와 같고 [1], 값은 설명하려고 만든 예시이며 실제 기기에서 나온 것이 아닙니다.
 
 ```xml
 <user id="10" serialNumber="10" type="android.os.usertype.full.SECONDARY"

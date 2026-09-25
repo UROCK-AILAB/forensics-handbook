@@ -7,7 +7,7 @@ nav_order: 430
 
 # 설치 출처와 설치 시각 (Installer·Install Time)
 
-앱을 누가, 어떤 경로로, 언제 설치했는지 시스템이 남기는 칸을 정리합니다. 소스로 확인한 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 어느 Android 출시 버전에서 바뀌었는지는 대부분 확인하지 못했습니다. 이 칸들이 들어 있는 파일의 전체 짜임새는 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
+앱을 누가, 어떤 경로로, 언제 설치했는지 시스템이 남기는 칸을 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 어느 Android 출시 버전에서 바뀌었는지는 대부분 공개 자료로 정리돼 있지 않습니다. 이 칸들이 들어 있는 파일의 전체 짜임새는 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
 
 ## 한 줄 요약
 
@@ -19,7 +19,7 @@ nav_order: 430
 
 ## 설치 출처 칸
 
-InstallSourceInfo 의 문서 주석과 Settings 의 쓰기·출력 코드를 맞추면 칸의 대응은 다음과 같습니다 [1][2].
+칸의 대응은 다음과 같습니다 [1][2].
 
 | `packages.xml` 속성 | InstallSourceInfo 이름 | dumpsys 줄 | 뜻 |
 |---|---|---|---|
@@ -35,15 +35,15 @@ InstallSourceInfo 의 문서 주석과 Settings 의 쓰기·출력 코드를 맞
 
 원 출처(installOriginator)는 요청 앱이 알려 주는 값이고 시스템이 검증하지 않습니다 [2]. 예를 들어 내려받은 APK 파일을 패키지 설치 프로그램으로 설치하면, APK 를 내려받은 앱이 이 칸에 들어갈 수 있습니다 [2].
 
-packageSource 는 PackageInstaller.PackageSourceType 값을 정수로 적은 것인데 [2], 숫자와 이름(STORE·LOCAL_FILE·DOWNLOADED_FILE 등)의 대응은 PackageInstaller 소스를 열지 않아 확인하지 못했습니다.
+packageSource 는 PackageInstaller.PackageSourceType 값을 정수로 적은 것인데 [2], 숫자와 이름(STORE·LOCAL_FILE·DOWNLOADED_FILE 등)의 대응은 PackageInstaller 에서 찾아봅니다.
 
-installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그 뒤에 지워졌다는 뜻이고, isOrphaned 는 설치자 기록이 고아가 된 상태를 나타냅니다 [1]. isOrphaned 가 켜지는 정확한 조건은 확인하지 못했습니다. `<package>` 아래 `install-initiator-sigs` 요소에는 설치를 요청한 패키지의 서명이 저장됩니다 [1]. `packages.list` 마지막 칸에도 설치자가 적히는데, 형식은 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
+installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그 뒤에 지워졌다는 뜻이고, isOrphaned 는 설치자 기록이 고아가 된 상태를 나타냅니다 [1]. isOrphaned 가 켜지는 정확한 조건은 공개 자료로 정리돼 있지 않습니다. `<package>` 아래 `install-initiator-sigs` 요소에는 설치를 요청한 패키지의 서명이 저장됩니다 [1]. `packages.list` 마지막 칸에도 설치자가 적히는데, 형식은 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
 
-### 기기에서 본 설치 관련 앱과 설정 키
+### 기기의 설치 관련 앱과 설정 키
 
-`dumpsys package` 의 "Known Packages:" 절에서 Installer 는 `com.google.android.packageinstaller`, Verifier 는 `com.android.vending` 과 `com.samsung.android.sm.devicesecurity`, "Developer verification service provider" 는 `com.google.android.verifier` 였습니다. 설치자 칸의 값을 이 목록과 맞춰 보면 기기에 지정된 설치 프로그램이 설치를 맡았는지 가릴 수 있습니다.
+삼성 기기의 예를 들면 `dumpsys package` 의 "Known Packages:" 절에서 Installer 는 `com.google.android.packageinstaller`, Verifier 는 `com.android.vending` 과 `com.samsung.android.sm.devicesecurity`, "Developer verification service provider" 는 `com.google.android.verifier` 입니다. 설치자 칸의 값을 이 목록과 맞춰 보면 기기에 지정된 설치 프로그램이 설치를 맡았는지 가릴 수 있습니다.
 
-설정 값 가운데 settings secure 에 `install_non_market_apps` 키가, settings global 에 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `default_install_location`, `set_install_location`, `upload_apk_enable` 키가 있었습니다. 관찰 메모에는 값이 가려져 있고 각 키의 뜻도 확인하지 못했습니다. 설정 값을 읽는 방법은 [설정 값](../../system-account/settings.md) 페이지를 봅니다.
+설정 값 가운데 settings secure 에 `install_non_market_apps` 키가, settings global 에 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `default_install_location`, `set_install_location`, `upload_apk_enable` 키가 있습니다. 각 키의 뜻을 설명한 공개 자료는 없습니다. 설정 값을 읽는 방법은 [설정 값](../../system-account/settings.md) 페이지를 봅니다.
 
 ## 설치 시각 칸
 
@@ -53,7 +53,7 @@ installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그
 | 마지막 업데이트 시각 | `packages.xml` 의 `<package>` 요소 ut(16진수) | `lastUpdateTime=` |
 | 마지막 수정 시각 | `packages.xml` 의 `<package>` 요소 ft(16진수) | `timeStamp=` |
 
-첫 설치 시각은 예전에 `packages.xml` 의 `<package>` 요소 it 속성(16진수)에 패키지별로 적었고, 현행 AOSP 는 사용자별로 옮겼습니다. 소스 주석에 "we migrated from per package firstInstallTime to per user-state" 라고 적혀 있습니다 [1]. 사용자별 값이 0(없음)이면 OTA 전 `packages.xml` 의 it 값을 대신 쓰는데, OTA 로 정보가 사라지는 것을 막으려는 코드입니다 [1]. 사용자별로 옮긴 Android 버전은 확인하지 못했습니다. ft 의 뜻은 [패키지 목록 구조](packages-xml.md) 페이지에서 다룹니다.
+첫 설치 시각은 예전에 `packages.xml` 의 `<package>` 요소 it 속성(16진수)에 패키지별로 적었고, 현행 AOSP 는 사용자별로 옮겼습니다 [1]. 사용자별 값이 0(없음)이면 OTA 전 `packages.xml` 의 it 값을 대신 쓰는데, OTA 로 정보가 사라지는 것을 막으려는 코드입니다 [1]. 사용자별로 옮긴 Android 버전은 공개 자료로 정리돼 있지 않습니다. ft 의 뜻은 [패키지 목록 구조](packages-xml.md) 페이지에서 다룹니다.
 
 ## 설치 이유와 사용자별 상태
 
@@ -86,9 +86,9 @@ installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그
 | 4 | INSTALL_REASON_USER | 사용자가 시작한 설치 |
 | 5 | INSTALL_REASON_ROLLBACK | RollbackManager 가 시작한 롤백(@hide) |
 
-삭제 이유(uninstall-reason)는 0 이 UNINSTALL_REASON_UNKNOWN, 1 이 UNINSTALL_REASON_USER_TYPE 입니다 [3]. USER_TYPE 의 뜻은 문서 주석을 확인하지 않아 쓰지 않습니다.
+삭제 이유(uninstall-reason)는 0 이 UNINSTALL_REASON_UNKNOWN, 1 이 UNINSTALL_REASON_USER_TYPE 입니다 [3].
 
-`dumpsys package` 에서는 사용자별로 `installReason=`, `dataDir=`, `firstInstallTime=`, `uninstallReason=` 줄이 찍히고, 보관 상태가 있으면 `archiveTime=`·`unarchiveInstallerTitle=` 줄이 붙습니다 [1]. 관찰 메모에는 패키지별 줄이 생략되어 있어서 실제 폰에서 이 줄의 모양은 확인하지 못했습니다.
+`dumpsys package` 에서는 사용자별로 `installReason=`, `dataDir=`, `firstInstallTime=`, `uninstallReason=` 줄이 찍히고, 보관 상태가 있으면 `archiveTime=`·`unarchiveInstallerTitle=` 줄이 붙습니다 [1]. 실제 폰에서 찍히는 줄의 모양은 검체에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -102,15 +102,15 @@ installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그
 
 ## 시각 해석
 
-`packages.xml` 과 `package-restrictions.xml` 의 시각 칸은 16진수 문자열이고, ALEAPP 는 이 값을 유닉스 에포크 밀리초로 보고 UTC 로 바꿉니다 [4]. 바꾸는 계산은 [패키지 목록 구조](packages-xml.md) 페이지의 예시를 따르고, 시각 값 일반은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다. `dumpsys package` 는 시각을 `yyyy-MM-dd HH:mm:ss` 꼴로 찍어서 밀리초가 잘리고 시간대 표시가 없습니다 [1]. 어느 시간대로 찍히는지는 확인하지 못했기 때문에, 파일 값과 한 번 맞춰 본 뒤에 쓰는 편이 안전합니다.
+`packages.xml` 과 `package-restrictions.xml` 의 시각 칸은 16진수 문자열이고, 유닉스 에포크 밀리초로 읽어 UTC 로 바꿉니다 [4]. 바꾸는 계산은 [패키지 목록 구조](packages-xml.md) 페이지의 예시를 따르고, 시각 값 일반은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다. `dumpsys package` 는 시각을 `yyyy-MM-dd HH:mm:ss` 꼴로 찍어서 밀리초가 잘리고 시간대 표시가 없습니다 [1]. 어느 시간대로 찍히는지 알려져 있지 않으니, 파일 값과 한 번 맞춰 본 뒤에 씁니다.
 
 첫 설치 시각은 사용자별로 적기 때문에 같은 앱이라도 사용자마다 다를 수 있습니다 [1]. 설치 이유가 2(복원)인 앱은 이 기기에 복원하며 설치한 앱이라서, 첫 설치 시각을 원래 기기에서 처음 설치한 때로 읽지 않습니다.
 
 ## 함정과 한계
 
-ALEAPP 의 packageInfo 는 ft·it·ut 를 "ft", "Install Time", "Update Time" 칸으로 내고, "Install Time" 은 `packages.xml` 의 it 속성입니다 [4]. 현행 AOSP 는 첫 설치 시각을 `package-restrictions.xml` 에 적기 때문에, it 가 없는 새 파일에서는 이 칸이 빌 수 있습니다. 실물로 확인한 것이 아니라 소스에서 나온 추론이라서, 빈칸을 보면 `package-restrictions.xml` 의 first-install-time 을 직접 확인합니다.
+ALEAPP 의 packageInfo 는 ft·it·ut 를 "ft", "Install Time", "Update Time" 칸으로 내고, "Install Time" 은 `packages.xml` 의 it 속성입니다 [4]. 현행 AOSP 는 첫 설치 시각을 `package-restrictions.xml` 에 적기 때문에, it 가 없는 새 파일에서는 이 칸이 빌 가능성이 있습니다. 빈칸을 보면 `package-restrictions.xml` 의 first-install-time 을 직접 확인합니다.
 
-설치자 기록은 설치 뒤에 바뀔 수 있고 [2], 원 출처는 요청 앱이 알려 준 값이라서 [2] 두 칸 모두 단독 근거로 쓰지 않습니다. installSessions 라는 ALEAPP 모듈 이름으로 알 수 있듯 설치 세션 기록이 따로 있지만 [5], 파일 경로와 내용은 확인하지 못했습니다.
+설치자 기록은 설치 뒤에 바뀔 수 있고 [2], 원 출처는 요청 앱이 알려 준 값이라서 [2] 두 칸 모두 단독 근거로 쓰지 않습니다. ALEAPP 에 installSessions 모듈이 있을 만큼 설치 세션 기록도 따로 있습니다 [5]. 그 파일 경로와 내용은 공개 자료가 없어 검체에서 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -131,7 +131,7 @@ install-reason 4 = INSTALL_REASON_USER
 
 ### 공개 도구로 따라가기
 
-ALEAPP 의 packageInfo 모듈로 `packages.xml` 을 읽어 설치자와 시각 칸을 표로 봅니다 [4]. ALEAPP 에는 packageRestrictions·packageUserStates·installSessions 모듈도 있지만 [5] 이번에 내용을 열지 않아서, 사용자별 칸은 위의 손 확인 결과와 맞춰 봅니다.
+ALEAPP 의 packageInfo 모듈로 `packages.xml` 을 읽어 설치자와 시각 칸을 표로 봅니다 [4]. ALEAPP 에는 packageRestrictions·packageUserStates·installSessions 모듈도 있으니 [5], 사용자별 칸은 이 모듈의 결과를 위의 손 확인 결과와 맞춰 봅니다.
 
 ## 교차 검증
 

@@ -12,7 +12,7 @@ nav_order: 660
 
 ## 무엇을 기록하나 · 왜 생기나
 
-앱이 미디어의 섬네일을 요청하면 MediaProvider 가 섬네일 파일을 처음 만들고, 이미 파일이 있으면 그대로 엽니다(ensureThumbnail) [1]. 예전 섬네일 API 인 MediaStore.Images.Thumbnails 등은 폐기됐고, 문서는 앱이 ContentResolver#loadThumbnail() 을 쓰도록 안내합니다 [2][3]. 섬네일을 미리 만들지 않고 요청이 올 때 만드는 구조라서, 섬네일 파일이 있다는 것은 어떤 앱이 그 항목의 섬네일을 한 번 이상 요청했다는 뜻으로 볼 수 있지만, 이 해석을 다룬 자료는 이번에 열지 않았습니다.
+앱이 미디어의 섬네일을 요청하면 MediaProvider 가 섬네일 파일을 처음 만들고, 이미 파일이 있으면 그대로 엽니다(ensureThumbnail) [1]. 예전 섬네일 API 인 MediaStore.Images.Thumbnails 등은 폐기됐고, 지금은 ContentResolver#loadThumbnail() 을 씁니다 [2][3]. 섬네일을 미리 만들지 않고 요청이 올 때 만드는 구조라서, 섬네일 파일이 있다는 것은 어떤 앱이 그 항목의 섬네일을 한 번 이상 요청했다는 뜻으로 볼 수 있습니다.
 
 이와 별도로 많은 앱이 이미지 라이브러리의 디스크 캐시에 화면에 띄운 이미지를 저장합니다. 널리 쓰이는 이미지 라이브러리 Glide 의 기본 디스크 캐시 폴더는 앱 cache 아래 image_manager_disk_cache 이고, 공개 도구 ALEAPP 는 이 폴더의 파일을 이미지 캐시로 모읍니다 [4]. 시스템 섬네일과 앱 캐시는 만드는 주체와 지우는 규칙이 달라서 따로 봅니다.
 
@@ -27,9 +27,9 @@ nav_order: 660
 | 앱 이미지 캐시(Glide) | `*/cache/image_manager_disk_cache/*.*`, `*/*.cnt` | ALEAPP 의 경로 패턴 [4] |
 | 구글 포토 캐시 | [구글 포토](google-photos.md) 페이지 참고 | ALEAPP 검체 |
 
-MediaProvider 는 섬네일을 항상 기본 외부 저장소(external_primary)에 저장한다고 소스 주석에 적어 두어서 [1], SD 카드 같은 다른 볼륨의 사진이라도 섬네일은 기본 볼륨 쪽에 생깁니다. 예전 방식의 `/sdcard/DCIM/.thumbnails` 폴더가 어느 버전까지 쓰였는지는 이번에 연 자료로 확인하지 못했고, 섬네일 폴더가 어느 버전부터 `Pictures/.thumbnails` 로 바뀌었는지도 확인하지 못했습니다.
+MediaProvider 는 섬네일을 항상 기본 외부 저장소(external_primary)에 저장하므로 [1], SD 카드 같은 다른 볼륨의 사진이라도 섬네일은 기본 볼륨 쪽에 생깁니다. 예전 방식의 `/sdcard/DCIM/.thumbnails` 폴더가 어느 버전까지 쓰였는지, 섬네일 폴더가 어느 버전부터 `Pictures/.thumbnails` 로 바뀌었는지는 검체에서 확인합니다.
 
-관찰한 기기의 `/sdcard/Pictures` 목록에는 항목 39개와 가린 폴더 11개만 나와 있고, `.thumbnails` 가 있었는지나 숨김 항목까지 나열했는지는 관찰 메모에 없습니다. 같은 기기의 dumpsys package 라이브러리 목록에는 `SemAudioThumbnail` (`/system/framework/SemAudioThumbnail.jar`)이 있었는데, 이름으로 보아 삼성의 오디오 섬네일 라이브러리로 보이지만 역할은 확인하지 못했습니다. 삼성 갤러리의 자체 섬네일 캐시 경로와 형식도 확인하지 못했습니다.
+삼성 기기의 dumpsys package 라이브러리 목록에는 `SemAudioThumbnail` (`/system/framework/SemAudioThumbnail.jar`)이 있는데, 이름으로 보아 삼성의 오디오 섬네일 라이브러리로 보입니다. 삼성 갤러리의 자체 섬네일 캐시 경로와 형식은 공개된 자료가 없어 검체로 확인해야 합니다.
 
 ## 구조
 

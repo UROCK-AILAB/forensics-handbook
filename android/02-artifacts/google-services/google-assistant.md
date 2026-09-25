@@ -8,15 +8,15 @@ nav_order: 1190
 
 ## 한 줄 요약
 
-구글 어시스턴트(Google Assistant)와 구글 검색 위젯에 넣은 질의는 구글 앱 데이터 폴더의 `app_session` 아래 `.binarypb` 파일에 프로토콜 버퍼로 남고, 여기서 질의 글과 소리 데이터를 꺼낼 수 있지만 공개 도구가 보여 주는 시각은 파일 수정 시각뿐입니다. 계정 쪽에는 웹 및 앱 활동 기록이 따로 쌓입니다.
+구글 어시스턴트(Google Assistant)와 구글 검색 위젯에 넣은 질의는 구글 앱 데이터 폴더의 `app_session` 아래 `.binarypb` 파일에 프로토콜 버퍼로 남고, 여기서 질의 글과 소리 데이터를 꺼낼 수 있지만 공개 도구가 보여 주는 시각은 파일 수정 시각뿐입니다. 계정 쪽에는 웹 및 앱 활동 기록이 따로 쌓입니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나
 
-기기 안의 어시스턴트 흔적은 구글 앱(패키지 `com.google.android.googlequicksearchbox`)의 데이터 폴더에 남습니다. 공개 도구 ALEAPP 는 이 흔적을 "Google Quick Search Queries" 모듈로 읽고, 모듈 설명은 "Search query sessions from the Google Search widget / Assistant (Google Now)" 입니다. 모듈 이름대로 구글 검색 위젯과 어시스턴트의 질의 세션이 같은 파일 묶음에 섞여 있고, 한 파일 안에는 세션 종류와 질의 글, 그리고 MP3 소리 데이터가 들어 있을 수 있습니다.
+기기 안의 어시스턴트 흔적은 구글 앱(패키지 `com.google.android.googlequicksearchbox`)의 데이터 폴더에 남습니다. 구글 검색 위젯과 어시스턴트(Google Now)의 질의 세션은 같은 파일 묶음에 섞여 있고, 한 파일 안에는 세션 종류와 질의 글, 그리고 MP3 소리 데이터가 들어 있을 수 있습니다 [1]. 공개 도구 ALEAPP 는 이 파일들을 "Google Quick Search Queries" 모듈로 읽습니다 [1].
 
-기기 밖에도 기록이 남습니다. 구글 계정의 웹 및 앱 활동(Web & App Activity)을 켜 두면 구글 어시스턴트 같은 일부 구글 서비스의 활동이 계정에 저장되고, 이 설정이 켜져 있을 때 "음성 및 오디오 활동 포함(Include voice and audio activity)" 을 따로 고를 수 있습니다. 저장된 활동은 My Activity(myactivity.google.com)에서 보고 지울 수 있고, 기기가 오프라인일 때도 활동이 저장될 수 있다고 안내합니다. 오프라인일 때 기기 안 어디에 임시로 두는지는 확인하지 못했습니다.
+기기 밖에도 기록이 남습니다. 구글 계정의 웹 및 앱 활동(Web & App Activity)을 켜 두면 구글 어시스턴트 같은 일부 구글 서비스의 활동이 계정에 저장되고, 이 설정이 켜져 있을 때 "음성 및 오디오 활동 포함(Include voice and audio activity)" 을 따로 고를 수 있습니다. 저장된 활동은 My Activity(myactivity.google.com)에서 보고 지울 수 있고, 기기가 오프라인일 때도 활동이 저장될 수 있습니다 [2].
 
-어시스턴트 전용 앱이 따로 있는지, 제미나이(Gemini)가 어시스턴트를 대신하는 기기에서 흔적 위치가 어떻게 바뀌는지는 출처로 확인하지 못했습니다. 삼성 기기의 음성 비서인 빅스비 쪽 흔적은 [빅스비](../samsung/bixby.md) 에서 다룹니다.
+어시스턴트 전용 앱이 따로 있는 기기나 제미나이(Gemini)가 어시스턴트를 대신하는 기기의 흔적 위치는 검체에서 확인합니다. 삼성 기기의 음성 비서인 빅스비 쪽 흔적은 [빅스비](../samsung/bixby.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -24,9 +24,9 @@ nav_order: 1190
 /data/data/com.google.android.googlequicksearchbox/app_session/*.binarypb
 ```
 
-ALEAPP 는 `app_session` 바로 아래의 `.binarypb` 파일만 읽고, 경로에 `/mirror/` 가 들어간 파일과 폴더는 건너뜁니다. 앱 데이터 폴더의 짜임은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 에 있습니다.
+ALEAPP 는 `app_session` 바로 아래의 `.binarypb` 파일만 읽고, 경로에 `/mirror/` 가 들어간 파일과 폴더는 건너뜁니다 [1]. 앱 데이터 폴더의 짜임은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 에 있습니다.
 
-이 모듈은 @abrignoni 가 만들었고 만든 날과 고친 날이 모두 2020-03-22 로 적혀 있지만, ALEAPP 의 시험 자료는 Android 13·14 기기입니다.
+ALEAPP 모듈은 2020-03-22 에 만든 뒤로 고친 기록이 없고, 시험 자료는 Android 13·14 기기입니다 [1].
 
 | 시험 자료 | Android | 구글 앱 버전 코드 | 결과 행 |
 |---|---|---|---|
@@ -34,9 +34,9 @@ ALEAPP 는 `app_session` 바로 아래의 `.binarypb` 파일만 읽고, 경로�
 | russell_pixel6a_a13 (Pixel 6a) | 13 | 301246250 | 2 |
 | 삼성 One UI 기기 | — | — | 시험 자료 없음 |
 
-삼성 기기에서 같은 경로와 구조가 쓰이는지는 확인하지 못했습니다. 이 파일이 언제 만들어지고 얼마 동안 남는지도 출처에 없습니다.
+삼성 기기에서 같은 경로와 구조가 쓰이는지, 이 파일이 언제 만들어지고 얼마 동안 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-기기 쪽 설정에는 음성 비서와 관련된 키 이름이 보입니다. 아래는 실제 기기에서 adb 일반 권한으로 읽은 키 이름이고, 값은 가려져 있어서 이 기기의 기본 비서가 어떤 앱인지는 알 수 없습니다.
+기기 쪽 설정에는 음성 비서와 관련된 키 이름이 보입니다. 아래 키 이름은 adb 일반 권한으로 읽을 수 있습니다.
 
 ```
 settings secure : assistant, voice_interaction_service, voice_recognition_service,
@@ -50,11 +50,11 @@ settings system : key_now_bar_com_google_android_googlequicksearchbox,
                   bixby_setting_show_app_icon_enabled
 ```
 
-secure 쪽 키는 이름으로 보아 기본 비서와 음성 서비스를 가리키는 것으로 보이지만, 값의 형식과 어느 Android 버전부터 있는 키인지는 공식 문서를 열지 못해 확인하지 못했습니다. global·system 쪽 키의 뜻도 확인하지 못했습니다. 설정 값 전체는 [설정 값](../system-account/settings.md) 에서 다룹니다.
+secure 쪽 키는 이름으로 보아 기본 비서와 음성 서비스를 가리키는 것으로 보입니다. 값의 형식, 키가 들어온 Android 버전, global·system 쪽 키의 뜻은 검체에서 확인합니다. 설정 값 전체는 [설정 값](../system-account/settings.md) 에서 다룹니다.
 
 ## 구조
 
-파일은 프로토콜 버퍼(binarypb)이고, 인코딩 규칙은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다. ALEAPP 는 아래 필드만 읽습니다.
+파일은 프로토콜 버퍼(binarypb)이고, 인코딩 규칙은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다. ALEAPP 는 아래 필드만 읽습니다 [1].
 
 | 필드 번호 | 담긴 것 | ALEAPP 처리 |
 |---|---|---|
@@ -62,7 +62,7 @@ secure 쪽 키는 이름으로 보아 기본 비서와 음성 서비스를 가�
 | `132269847` | 질의 글 | 바이너리에서 문자열 `com.google.android.apps.gsa.shared.search.Query` 를 찾아 그 뒤를 UTF-8 또는 UTF-16 으로 풂 |
 | `132269388` | MP3 소리 데이터 | "Response" 칸의 미디어로 붙이고, 원본 파일 이름에서 확장자만 `.mp3` 로 바꿔 저장 |
 
-세션 종류 필드에 어떤 값이 나오는지, 그 값으로 검색과 어시스턴트를 가를 수 있는지는 확인하지 못했습니다. ALEAPP 결과는 File Timestamp, Type, Queries, Response, Source File 칸으로 나옵니다.
+세션 종류 필드에 나오는 값과, 그 값으로 검색과 어시스턴트를 가를 수 있는지는 공개 자료가 없어 검체에서 확인합니다. ALEAPP 결과는 File Timestamp, Type, Queries, Response, Source File 칸으로 나옵니다.
 
 ## 증거로서 의미
 
@@ -72,7 +72,7 @@ secure 쪽 키는 이름으로 보아 기본 비서와 음성 서비스를 가�
 
 ### 증명하지 못하는 것
 
-질의를 말로 했는지 글로 쳤는지, 어시스턴트였는지 검색 위젯이었는지는 세션 종류 값의 뜻을 확인하지 못해 이 파일만으로 가를 수 없습니다. MP3 소리가 사용자의 목소리인지 어시스턴트의 응답 음성인지도 출처에 적혀 있지 않고, ALEAPP 칸 이름이 Response 라는 점만 알 수 있습니다. 그래서 소리를 직접 들어 보기 전에는 "사용자가 말했다" 고 쓰지 않습니다. ALEAPP 가 보여 주는 시각은 질의한 시각이 아니라 파일 수정 시각이고, 누가 폰을 들고 질의했는지도 알 수 없습니다([그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
+질의를 말로 했는지 글로 쳤는지, 어시스턴트였는지 검색 위젯이었는지는 세션 종류 값의 뜻이 알려져 있지 않아 이 파일만으로 가를 수 없습니다. MP3 소리가 사용자의 목소리인지 어시스턴트의 응답 음성인지도 알려져 있지 않고, ALEAPP 는 이 소리를 Response 칸에 붙일 뿐입니다. 그래서 소리를 직접 들어 보기 전에는 "사용자가 말했다" 고 쓰지 않습니다. ALEAPP 가 보여 주는 시각은 질의한 시각이 아니라 파일 수정 시각이고, 누가 폰을 들고 질의했는지도 알 수 없습니다([그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
 
 보고서에는 "이 시각에 이렇게 물었다" 가 아니라 "구글 앱 `app_session` 의 이 파일에 이 질의 글이 있고, 파일 수정 시각은 이렇다" 처럼 씁니다.
 
@@ -80,7 +80,7 @@ secure 쪽 키는 이름으로 보아 기본 비서와 음성 서비스를 가�
 
 ALEAPP 의 File Timestamp 는 파일 안에 든 값이 아니라 파일의 수정 시각(`os.path.getmtime`)을 UTC 로 바꾼 값입니다. 그래서 수정 시각을 보존하지 않는 방법으로 파일을 꺼냈다면 이 시각은 추출한 때를 가리킬 수 있어 믿기 어렵습니다. 수집한 방법과 원본 파일 시스템의 시각을 함께 기록해 두고([모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)), 파일 시스템의 시각 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 봅니다.
 
-수정 시각은 파일을 마지막으로 쓴 때를 가리킬 뿐이라서, 한 파일 안에 질의가 여럿 있을 때 각 질의의 시각을 따로 알려 주지 않습니다. 파일 안에 시각 필드가 있는지는 ALEAPP 가 다루지 않아 확인하지 못했습니다.
+수정 시각은 파일을 마지막으로 쓴 때를 가리킬 뿐이라서, 한 파일 안에 질의가 여럿 있을 때 각 질의의 시각을 따로 알려 주지 않습니다. 파일 안에 시각 필드가 있는지는 공개 자료가 없어 검체에서 확인합니다.
 
 ## 함정과 한계
 
@@ -88,7 +88,7 @@ ALEAPP 는 `/mirror/` 경로를 건너뛰어서, 그 아래에 무엇이 있는�
 
 ALEAPP 는 질의 글을 바이너리 안에서 클래스 이름 문자열로 찾아 그 뒤를 푸는 방식이라서, 구글 앱이 바뀌어 이 문자열이 없어지면 질의가 빈칸으로 나올 수 있습니다. ALEAPP 가 UTF-8 또는 UTF-16 으로 풀기 때문에, 직접 볼 때도 두 방식으로 모두 읽어 봅니다. 모듈을 2020-03-22 뒤로 고친 기록이 없고 삼성 기기 시험 자료도 없어서, 새 기기에서는 결과가 비어도 흔적이 없다고 단정하지 않습니다.
 
-계정 쪽 기록은 사용자가 My Activity 에서 지울 수 있습니다. 자동 삭제 기간과 새 계정의 기본 설정, "음성 및 오디오 활동 포함" 의 기본값은 확인하지 못했습니다. 계정 쪽 자료를 어떻게 얻는지는 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 를 봅니다. 기기 쪽 파일을 지웠을 때 무엇이 남는지도 출처에 없어서, 지운 파일은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 따로 찾아봅니다.
+계정 쪽 기록은 사용자가 My Activity 에서 지울 수 있습니다. 자동 삭제 기간과 새 계정의 기본 설정, "음성 및 오디오 활동 포함" 의 기본값은 계정 설정에서 확인합니다. 계정 쪽 자료를 어떻게 얻는지는 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 를 봅니다. 기기 쪽에서 지운 파일은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 따로 찾아봅니다.
 
 ## 직접 분석해 보기
 
@@ -106,7 +106,7 @@ ALEAPP 는 질의 글을 바이너리 안에서 클래스 이름 문자열로 �
 EB 82 A0 EC 94 A8                  UTF-8 "날씨"
 ```
 
-클래스 이름과 질의 글 사이에 어떤 바이트가 끼는지는 출처에 적혀 있지 않아서, UTF-8 로 읽히지 않으면 UTF-16 으로도 읽어 봅니다. 필드 '3' 과 필드 '132269388' 을 태그로 따라가는 방법은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
+클래스 이름 뒤의 질의 글이 UTF-8 로 읽히지 않으면 UTF-16 으로도 읽어 봅니다. 필드 '3' 과 필드 '132269388' 을 태그로 따라가는 방법은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 

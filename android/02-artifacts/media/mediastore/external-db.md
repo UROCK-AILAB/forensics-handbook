@@ -7,7 +7,7 @@ nav_order: 630
 
 # 미디어 DB 구조 (external.db)
 
-미디어 저장소(MediaStore)가 공용 저장 공간의 사진·동영상·오디오·문서를 색인해 두는 외부 볼륨 DB(external.db)의 표와 칸, 시각 단위, 스키마 버전을 정리합니다. 소스로 확인한 내용은 AOSP MediaProvider 저장소의 main 가지를 읽은 것이라 "현행 AOSP 기준"이고, 특정 Android 출시 버전의 태그로 확인한 것은 아닙니다. 휴지통과 삭제 흔적은 [지운 사진의 흔적](deleted-media.md) 페이지에서 다룹니다.
+미디어 저장소(MediaStore)가 공용 저장 공간의 사진·동영상·오디오·문서를 색인해 두는 외부 볼륨 DB(external.db)의 표와 칸, 시각 단위, 스키마 버전을 정리합니다. 표와 칸은 AOSP MediaProvider 저장소의 main 가지, 곧 현행 AOSP 기준이라 Android 출시 버전마다 다를 수 있습니다. 휴지통과 삭제 흔적은 [지운 사진의 흔적](deleted-media.md) 페이지에서 다룹니다.
 
 ## 한 줄 요약
 
@@ -21,17 +21,17 @@ files 표의 행 하나는 공용 저장 공간의 파일 하나에 대응합니
 
 ## 위치와 버전별 차이
 
-external.db 가 기기 안 어느 폴더에 있는지, 그리고 MediaProvider 가 몇 번 Android 부터 메인라인 모듈 패키지로 나뉘었는지는 이번에 연 자료로 확인하지 못했습니다. 경로를 보고서에 적을 때는 검체에서 실제로 찾은 경로를 씁니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
+external.db 가 기기 안 어느 폴더에 있는지, 그리고 MediaProvider 가 몇 번 Android 부터 메인라인 모듈 패키지로 나뉘었는지는 공개 자료로 정해지지 않아 검체에서 확인합니다. 보고서에는 검체에서 실제로 찾은 경로를 씁니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
 
-삼성 기기에는 AOSP external.db 와 별도로 삼성 미디어 제공자의 DB 가 있습니다. ALEAPP 는 경로 패턴 `*/com.samsung.android.providers.media/databases/media.db*` 로 이 DB 를 찾고, Android 10·11·13·14·15 삼성 검체에서 읽었다고 적습니다 [3]. 두 DB 는 표 구조가 달라서 아래 "삼성 media.db" 절에 따로 정리합니다.
+삼성 기기에는 AOSP external.db 와 별도로 삼성 미디어 제공자의 DB 가 있습니다. 이 DB 는 경로 패턴 `*/com.samsung.android.providers.media/databases/media.db*` 로 찾을 수 있고, ALEAPP 시험 검체 가운데 Android 10·11·13·14·15 삼성 기기에서 나왔습니다 [3]. 두 DB 는 표 구조가 달라서 아래 "삼성 media.db" 절에 따로 정리합니다.
 
-사용자와 프로필이 여럿이면 DB 도 여럿일 수 있습니다. ALEAPP 설명에 따르면 검체 cookbook_a11 과 samsungs20_a13 에서는 user/150 아래에 두 번째 media.db 가 있었고, `system/users/150.xml` 이 사용자 150 을 "Secure Folder" 라는 관리 프로필로 기록했습니다 [3]. 관찰한 기기의 `dumpsys user` 출력에도 두 번째 사용자(isPrimary=false, parentId 있음)가 있었고 첫 사용자의 UserProperties 에는 mMediaSharedWithParent=false 칸이 보였지만, 그 사용자가 보안 폴더인지는 값이 가려져 알 수 없었습니다. 프로필 구조는 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+사용자와 프로필이 여럿이면 DB 도 여럿일 수 있습니다. ALEAPP 시험 검체 cookbook_a11 과 samsungs20_a13 에서는 user/150 아래에 두 번째 media.db 가 있었고, `system/users/150.xml` 이 사용자 150 을 "Secure Folder" 라는 관리 프로필로 기록했습니다 [3]. `dumpsys user` 출력에서도 두 번째 사용자(isPrimary=false, parentId 있음)와 UserProperties 의 mMediaSharedWithParent 칸을 볼 수 있고, 그 사용자가 보안 폴더인지는 `system/users/<번호>.xml` 로 확인합니다. 프로필 구조는 [보안 폴더와 작업 프로필](../../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
-adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는 관찰 메모에 없어서 확인하지 못했습니다.
+adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는 공개 자료가 없어 기기에서 확인해야 합니다.
 
 ### 스키마 버전
 
-현행 AOSP 의 DatabaseHelper 에는 출시 버전별 스키마 번호 상수가 있고, 최신(VERSION_LATEST)은 VERSION_V 입니다. Android 16 용 상수는 소스에 따로 없었습니다 [1].
+현행 AOSP 의 DatabaseHelper 에는 출시 버전별 스키마 번호 상수가 있고, 최신(VERSION_LATEST)은 VERSION_V 입니다. Android 16 용 상수는 따로 없습니다 [1].
 
 | 상수 | 값 |
 |---|---|
@@ -62,7 +62,7 @@ adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는
 | 1500 | oem_metadata |
 | 1501 | inferred_media_date |
 
-상수 이름의 글자를 Android 버전으로 읽어 "deleted_media 표는 Android 13 부터" 처럼 말하면 상수 이름에 기댄 추정이 됩니다. 번호로 말할 수 있는 것은 is_trashed 와 date_expires 가 VERSION_R(1115) 이전 단계에서, deleted_media 표가 VERSION_S(1209) 와 VERSION_T(1308) 사이에서 생겼다는 점까지입니다 [1]. 검체의 external.db 가 몇 번 스키마인지 읽는 방법은 이번에 확인하지 못했고, 위 표의 칸이 있는지 없는지를 맞춰 보면 대략 어느 단계 이후의 DB 인지 짐작할 수 있습니다.
+상수 이름의 글자를 Android 버전으로 읽어 "deleted_media 표는 Android 13 부터" 처럼 말하면 상수 이름에 기댄 추정이 됩니다. 번호로 말할 수 있는 것은 is_trashed 와 date_expires 가 VERSION_R(1115) 이전 단계에서, deleted_media 표가 VERSION_S(1209) 와 VERSION_T(1308) 사이에서 생겼다는 점까지입니다 [1]. 검체의 external.db 가 몇 번 스키마인지는 위 표의 칸이 있는지 없는지를 맞춰 보면 대략 어느 단계 이후의 DB 인지 짐작할 수 있습니다.
 
 ## 구조
 
@@ -94,9 +94,9 @@ adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는
 | 동기화 번호 | generation_added, generation_modified |
 | 기타 | `_hash`(BLOB), xmp(BLOB), document_id, instance_id, original_document_id, `_modifier`, `_user_id`, `_special_format`, `_transcode_status`, `_video_codec_type`, redacted_uri_id, oem_metadata(BLOB), 카메라 값(exposure_time, f_number, iso, scene_capture_type), 오디오 값(artist, album, genre 등) |
 
-출처는 모두 현행 AOSP 의 DatabaseHelper 입니다 [1]. 이 가운데 해석에 자주 쓰는 칸의 뜻은 다음과 같습니다.
+위 칸은 모두 현행 AOSP 기준입니다 [1]. 이 가운데 해석에 자주 쓰는 칸의 뜻은 다음과 같습니다.
 
-**경로와 폴더.** `_data` 는 파일의 전체 경로이고 한 DB 안에서 겹치지 않습니다. bucket_id 는 부모 폴더 경로를 소문자로 바꾼 문자열의 hashCode() 값이고, bucket_display_name 은 부모 폴더 이름이며 최상위 폴더에 있는 파일이면 NULL 입니다 [5]. is_download 는 경로가 `/storage/<볼륨>/(<사용자ID>/)Download/` 아래일 때 1 로 채우는 업그레이드 단계가 있습니다(정규식 PATTERN_DOWNLOADS_FILE) [1][5]. 관찰한 기기의 `/sdcard/DCIM` 아래에는 Camera, Screenshots, media 와 가린 폴더 19개가 있었는데, 이런 폴더 이름이 relative_path 와 bucket_display_name 에 그대로 나타납니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
+**경로와 폴더.** `_data` 는 파일의 전체 경로이고 한 DB 안에서 겹치지 않습니다. bucket_id 는 부모 폴더 경로를 소문자로 바꾼 문자열의 hashCode() 값이고, bucket_display_name 은 부모 폴더 이름이며 최상위 폴더에 있는 파일이면 NULL 입니다 [5]. is_download 는 경로가 `/storage/<볼륨>/(<사용자ID>/)Download/` 아래일 때 1 로 채우는 업그레이드 단계가 있습니다(정규식 PATTERN_DOWNLOADS_FILE) [1][5]. `/sdcard/DCIM` 아래의 Camera, Screenshots 같은 폴더 이름이 relative_path 와 bucket_display_name 에 그대로 나타납니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
 
 **소유 앱.** owner_package_name 은 이 미디어를 넣은 패키지 이름이고, 소유를 확실히 알 수 없으면 NULL 일 수 있습니다. Android 14(UPSIDE_DOWN_CAKE)부터는 앱이 이 칸을 조회할 때 패키지 가시성에 따라 결과가 제한됩니다 [2]. 그래서 앱을 거쳐 조회한 결과와 DB 파일을 직접 읽은 결과가 다를 수 있습니다. 패키지 이름을 앱과 맞추는 법은 [패키지 이름과 UID](../../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
 
@@ -112,15 +112,15 @@ adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는
 | 4 | CR_PENDING_METADATA | (소스 상수 이름) |
 | 5 | SCHEMA_UPDATE | 스키마 업데이트 |
 
-어느 패키지가 바꿨는지는 이 칸이 알려 주지 않는다고 소스 주석이 적습니다 [2]. 스키마 업그레이드로 이 칸이 처음 생길 때 기존 행은 모두 3(MEDIA_SCAN)으로 채우기 때문에 [1], 오래된 행의 3 은 실제 미디어 스캔이 아니었을 수 있습니다.
+어느 패키지가 바꿨는지는 이 칸으로 알 수 없습니다 [2]. 스키마 업그레이드로 이 칸이 처음 생길 때 기존 행은 모두 3(MEDIA_SCAN)으로 채우기 때문에 [1], 오래된 행의 3 은 실제 미디어 스캔이 아니었을 수 있습니다.
 
 **문서 ID.** document_id 는 XMP Media Management 표준의 문서 ID(GUID)이고, 파일에 XMP 메타데이터가 없으면 null 입니다 [2].
 
 ### 그 밖의 표
 
-**log 표.** 칸은 time(DATETIME), message(TEXT) 이고 현행 스키마에서도 만들어집니다. 다만 스키마 버전 1106 으로 올리는 단계(updateMigrateLogs)가 기존 log 표 내용을 새 기록 방식(Logging.logPersistent, "Historical log ..." 형태)으로 옮기고 표를 비웁니다 [1]. 새 방식의 기록이 어느 파일에 남는지는 이번에 확인하지 못했습니다.
+**log 표.** 칸은 time(DATETIME), message(TEXT) 이고 현행 스키마에서도 만들어집니다. 다만 스키마 버전 1106 으로 올리는 단계(updateMigrateLogs)가 기존 log 표 내용을 새 기록 방식(Logging.logPersistent, "Historical log ..." 형태)으로 옮기고 표를 비웁니다 [1].
 
-**media_grants 표(외부 볼륨).** 칸은 owner_package_name, file_id, package_user_id, generation_granted 이고, file_id 는 files(`_id`)를 참조해서 파일 행이 지워지면 이 표의 행도 같이 지워집니다(ON DELETE CASCADE) [1]. 이 표가 정확히 무엇을 기록하는지(예: 사진 선택기로 앱에 준 접근 허가인지)는 소스 주석으로 확인하지 못했습니다.
+**media_grants 표(외부 볼륨).** 칸은 owner_package_name, file_id, package_user_id, generation_granted 이고, file_id 는 files(`_id`)를 참조해서 파일 행이 지워지면 이 표의 행도 같이 지워집니다(ON DELETE CASCADE) [1]. 이 표가 정확히 무엇을 기록하는지(예: 사진 선택기로 앱에 준 접근 허가인지)는 소스 주석에 설명이 없어, 검체의 다른 기록과 맞춰 보고 해석합니다.
 
 **deleted_media 표.** 지워지거나 안 보이게 된 이미지·동영상의 옛 번호를 모으는 표이고, [지운 사진의 흔적](deleted-media.md) 페이지에서 다룹니다.
 
@@ -128,7 +128,7 @@ adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는
 
 ALEAPP 가 삼성 media.db 의 files 표에서 읽는 칸은 datetaken, date_added, date_modified, `_display_name`, `_data`, mime_type, `_size`, latitude, longitude, addr, bucket_display_name, owner_package_name, captured_url, captured_app, is_favorite, is_hide, is_trashed, deleted 이고, addr 는 여러 부분을 `|` 로 이어 붙인 문자열입니다 [3]. location 표에서는 latitude, longitude, address_text, country_name, country_code, admin_area, sub_admin_area, locality, sub_locality, street_name, street_number, postal_code 를 읽습니다 [3].
 
-ALEAPP 설명에 따르면 시험한 검체 10개에서 is_hide 와 deleted 는 모든 행이 비어 있었고 is_favorite·is_trashed 는 0 이거나 비어 있었기 때문에, 다른 값이 무엇을 뜻하는지는 그 검체들로 알 수 없었습니다 [3]. 이 DB 의 칸 뜻과 시각 단위를 삼성이 공개한 문서는 찾지 못했으니, captured_app 같은 칸을 해석할 때는 같은 파일의 AOSP external.db 행과 나란히 놓고 봅니다.
+ALEAPP 시험 검체 10개에서는 is_hide 와 deleted 가 모든 행에서 비어 있었고 is_favorite·is_trashed 는 0 이거나 비어 있어서, 다른 값이 무엇을 뜻하는지는 알려져 있지 않습니다 [3]. 이 DB 의 칸 뜻과 시각 단위는 삼성이 공개한 문서가 없으니, captured_app 같은 칸을 해석할 때는 같은 파일의 AOSP external.db 행과 나란히 놓고 봅니다.
 
 ## 시각 해석
 
@@ -140,13 +140,13 @@ files 표에는 초 단위 칸과 밀리초 단위 칸이 섞여 있습니다 [2
 | date_modified | 유닉스 초 | 파일의 File#lastModified() 를 색인한 값 |
 | datetaken | 유닉스 밀리초 | MediaMetadataRetriever 의 METADATA_KEY_DATE 나 EXIF 의 TAG_DATETIME_ORIGINAL 에서 뽑은 값 |
 | date_expires | 유닉스 초 | is_pending 이나 is_trashed 가 바뀔 때 자동으로 계산 |
-| inferred_date | (확인 못 함) | datetaken 이 있으면 그 값, 없으면 date_modified |
+| inferred_date | 공개 자료 없음 | datetaken 이 있으면 그 값, 없으면 date_modified |
 
-이미지의 datetaken 은 EXIF 의 TAG_DATETIME_ORIGINAL 과 TAG_OFFSET_TIME_ORIGINAL 이 둘 다 있어야 에포크 기준 시각을 믿을 수 있다고 MediaStore 문서가 적습니다 [2]. 시차 칸이 없는 사진이라면 datetaken 을 UTC 로 단정하지 말고 원본 파일의 EXIF 를 [카메라 사진과 메타데이터](../dcim-exif.md) 페이지 방법으로 다시 읽습니다. inferred_date 는 기능 플래그(FLAG_INFERRED_MEDIA_DATE)가 붙은 칸이고, 예전 칸 inferred_media_date 는 더는 쓰지 않습니다 [1][2].
+이미지의 datetaken 은 EXIF 의 TAG_DATETIME_ORIGINAL 과 TAG_OFFSET_TIME_ORIGINAL 이 둘 다 있어야 에포크 기준 시각을 믿을 수 있습니다 [2]. 시차 칸이 없는 사진이라면 datetaken 을 UTC 로 단정하지 말고 원본 파일의 EXIF 를 [카메라 사진과 메타데이터](../dcim-exif.md) 페이지 방법으로 다시 읽습니다. inferred_date 는 기능 플래그(FLAG_INFERRED_MEDIA_DATE)가 붙은 칸이고, 예전 칸 inferred_media_date 는 더는 쓰지 않습니다 [1][2].
 
 단위가 섞인 탓에 칸 두 개를 한 번에 날짜로 바꾸면 한쪽이 1970년 근처나 먼 미래로 나오는 일이 생깁니다. 사진 선택기 쪽 쿼리도 date_modified 에 1000 을 곱해 밀리초로 맞춥니다 [4]. 시각 값 변환 일반은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
-generation_added 와 generation_modified 는 시각이 아니라 세대 번호입니다. 항목이 추가되거나 바뀔 때 local_metadata 표의 generation 값을 적고, 이 값은 쓰기 트랜잭션을 시작할 때마다 1씩 오릅니다 [1][2]. MediaStore 문서는 앱이 File#setLastModified() 를 부르거나 시스템 시계가 틀리면 날짜 값이 예상과 다르게 바뀔 수 있어서, 추가·변경을 감지하는 데는 generation 번호가 date_added·date_modified 보다 믿을 만하다고 적습니다 [2]. 그래서 날짜 칸끼리 순서가 어긋나 보이면 generation 번호로 행이 바뀐 순서를 다시 맞춰 봅니다. 다만 MediaStore 버전(getVersion)이 바뀌면 generation 번호가 초기화됐다고 보고 처음부터 다시 맞춰야 한다고 문서가 적으니 [2], 번호 비교는 같은 DB 세대 안에서만 합니다.
+generation_added 와 generation_modified 는 시각이 아니라 세대 번호입니다. 항목이 추가되거나 바뀔 때 local_metadata 표의 generation 값을 적고, 이 값은 쓰기 트랜잭션을 시작할 때마다 1씩 오릅니다 [1][2]. 앱이 File#setLastModified() 를 부르거나 시스템 시계가 틀리면 날짜 값이 예상과 다르게 바뀔 수 있어서, 추가·변경을 감지하는 데는 generation 번호가 date_added·date_modified 보다 믿을 만합니다 [2]. 그래서 날짜 칸끼리 순서가 어긋나 보이면 generation 번호로 행이 바뀐 순서를 다시 맞춰 봅니다. 다만 MediaStore 버전(getVersion)이 바뀌면 generation 번호가 초기화된 것으로 보고 처음부터 다시 맞춰야 하니 [2], 번호 비교는 같은 DB 세대 안에서만 합니다.
 
 ## 증거로서 의미
 
@@ -162,11 +162,11 @@ generation_added 와 generation_modified 는 시각이 아니라 세대 번호�
 
 ## 함정과 한계
 
-- external.db 의 기기 안 경로, 메인라인 모듈로 나뉜 버전, 검체 스키마 번호를 읽는 방법은 이 페이지에서 확인하지 못했습니다. 도구가 보여 주는 경로와 버전을 그대로 옮기지 말고 검체에서 확인합니다.
+- external.db 의 기기 안 경로와 메인라인 모듈로 나뉜 버전은 공개 자료로 정해지지 않았습니다. 도구가 보여 주는 경로와 버전을 그대로 옮기지 말고 검체에서 확인합니다.
 - 보기(images, video 등)는 조건에 맞는 행만 보여 주고 음악 관련 보기는 휴지통·대기 항목까지 빼서, 개수를 셀 때는 files 표를 기준으로 삼습니다.
 - `_modifier` 칸이 생기기 전부터 있던 행은 모두 3 으로 채워졌습니다 [1].
 - 삼성 media.db 칸의 뜻은 공개 문서가 없고, ALEAPP 검체에서도 is_hide·deleted 가 비어 있었습니다 [3].
-- 지운 행이 SQLite 빈 페이지에 남는지는 확인하지 않았습니다. SQLite 에서 지운 레코드를 찾는 일반 방법은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지를 봅니다.
+- 지운 행이 SQLite 빈 페이지에 남는지는 공개 자료가 없어 검체에서 확인합니다. SQLite 에서 지운 레코드를 찾는 일반 방법은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지를 봅니다.
 
 ## 직접 분석해 보기
 

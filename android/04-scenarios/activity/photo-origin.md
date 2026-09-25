@@ -32,7 +32,7 @@ nav_order: 1580
 
 ## 분석 흐름
 
-1. **파일이 놓인 자리를 봅니다.** 관찰 기기의 `/sdcard/DCIM` 아래에는 `Camera`, `Screenshots`, `media` 와 이름이 가려진 폴더들이 있었고, 스크린샷이 AOSP 기본 위치로 알려진 `Pictures/Screenshots` 가 아니라 `DCIM/Screenshots` 에 있었습니다. 같은 기기의 `/sdcard/Download` 에는 항목이 151개, `Pictures` 에는 39개 있었는데, 받은 사진은 이렇게 `DCIM/Camera` 밖에 쌓일 수 있습니다. 폴더는 출발점일 뿐이라서 사용자가 파일을 옮기면 자리도 바뀝니다. 파일 이름에 날짜가 들어 있어도 이름은 사용자가 바꿀 수 있고 다른 기기에서 받은 파일일 수도 있으므로, 이름의 날짜를 촬영 시각의 근거로 쓰지 않습니다.
+1. **파일이 놓인 자리를 봅니다.** `/sdcard/DCIM` 아래에는 `Camera`, `Screenshots` 같은 폴더가 있고, 기기에 따라 스크린샷이 AOSP 기본 위치인 `Pictures/Screenshots` 가 아니라 `DCIM/Screenshots` 에 저장됩니다. 받은 사진은 `/sdcard/Download`, `Pictures` 처럼 `DCIM/Camera` 밖에 쌓일 수 있습니다. 폴더는 출발점일 뿐이라서 사용자가 파일을 옮기면 자리도 바뀝니다. 파일 이름에 날짜가 들어 있어도 이름은 사용자가 바꿀 수 있고 다른 기기에서 받은 파일일 수도 있으므로, 이름의 날짜를 촬영 시각의 근거로 쓰지 않습니다.
 
 2. **EXIF 시각 태그를 읽습니다.** 촬영 시각은 `DateTimeOriginal`(0x9003)에 "원본 이미지를 찍은 날짜·시각" 으로 적히고, 그 시간대는 `OffsetTimeOriginal`(0x9011)에, 초 아래 자리는 `SubSecTimeOriginal`(0x9291)에 따로 적힙니다 [1]. 도구마다 태그 이름이 달라 보고서에서 혼동하기 쉬운 두 태그가 있어 아래처럼 같이 적습니다 [1].
 
@@ -44,23 +44,23 @@ nav_order: 1580
 
    Android 의 `ExifInterface` 도 같은 이름 문자열(`DateTime`, `DateTimeOriginal`, `OffsetTimeOriginal`, `SubSecTimeOriginal`)을 씁니다 [3]. 시간대 태그가 없는 파일이라면 촬영 시각은 "시간대를 모르는 현지 시각" 으로만 적습니다.
 
-3. **EXIF GPS 태그를 읽습니다.** GPS 태그는 EXIF 안의 따로 된 IFD 에 들어 있습니다 [2]. 위도 `GPSLatitude`(0x0002)와 경도 `GPSLongitude`(0x0004)는 도·분·초 세 값의 유리수이고, 북·남과 동·서는 `GPSLatitudeRef`(0x0001, N/S)와 `GPSLongitudeRef`(0x0003, E/W)에 따로 있어서 Ref 를 빠뜨리면 남반구·서반구 좌표의 부호가 틀립니다 [2]. `GPSTimeStamp`(0x0007)는 GPS 가 위치를 잡은 UTC 시각이고 `GPSDateStamp`(0x001d)는 `YYYY:mm:dd` 형식의 UTC 날짜입니다 [2]. `GPSProcessingMethod`(0x001b)에는 "GPS", "CELLID", "WLAN", "MANUAL" 같은 값이 들어가 위성·기지국·Wi-Fi·수동 중 무엇으로 위치를 잡았는지 알려 주고, `GPSHPositioningError`(0x001f)는 수평 위치 오차입니다 [2]. 삼성 카메라가 이 두 태그를 채우는지는 확인하지 못했으므로, 비어 있으면 비어 있다고 적습니다.
+3. **EXIF GPS 태그를 읽습니다.** GPS 태그는 EXIF 안의 따로 된 IFD 에 들어 있습니다 [2]. 위도 `GPSLatitude`(0x0002)와 경도 `GPSLongitude`(0x0004)는 도·분·초 세 값의 유리수이고, 북·남과 동·서는 `GPSLatitudeRef`(0x0001, N/S)와 `GPSLongitudeRef`(0x0003, E/W)에 따로 있어서 Ref 를 빠뜨리면 남반구·서반구 좌표의 부호가 틀립니다 [2]. `GPSTimeStamp`(0x0007)는 GPS 가 위치를 잡은 UTC 시각이고 `GPSDateStamp`(0x001d)는 `YYYY:mm:dd` 형식의 UTC 날짜입니다 [2]. `GPSProcessingMethod`(0x001b)에는 "GPS", "CELLID", "WLAN", "MANUAL" 같은 값이 들어가 위성·기지국·Wi-Fi·수동 중 무엇으로 위치를 잡았는지 알려 주고, `GPSHPositioningError`(0x001f)는 수평 위치 오차입니다 [2]. 두 태그는 카메라 앱에 따라 비어 있을 수 있으므로, 비어 있으면 비어 있다고 적습니다.
 
    > 그림 자리: EXIF 안에서 IFD0 → Exif IFD(시각 태그) 와 IFD0 → GPS IFD(위치 태그) 로 갈라지는 구조를 상자로 그린 그림. 명세로 만든 예시라고 밝힌다
 
 4. **두 시각을 맞춰 봅니다.** `DateTimeOriginal` 은 현지 시각이고 GPS 날짜·시각은 UTC 라서 기준이 다릅니다 [1][2]. 두 값의 차이가 `OffsetTimeOriginal` 과 맞으면 촬영 당시 기기 시간대 설정이 일관된 것이고, 맞지 않으면 기기 시각이 잘못 맞춰져 있었거나 GPS 가 위치를 잡은 때가 촬영보다 앞섰거나 EXIF 가 고쳐졌을 가능성을 차례로 봅니다. 이 단계는 두 출처에서 끌어낸 해석이라서, 보고서에는 두 값을 그대로 적고 차이를 따로 적습니다.
 
-5. **어느 기기가 찍었는지 봅니다.** `Make`(0x010f), `Model`(0x0110), `Software`(0x0131), `ImageUniqueID`(0xa420) 같은 태그로 찍은 기기와 소프트웨어를 봅니다 [1]. `Make`·`Model` 이 조사 기기와 다르면 받은 파일일 가능성을 먼저 봅니다. AOSP 스크린샷은 EXIF 에 `ImageUniqueID`, `Software`("Android " 와 빌드 표시 이름), `DateTimeOriginal`, `SubSecTimeOriginal`, `OffsetTimeOriginal` 을 쓰고 카메라·GPS 태그는 쓰지 않아서 [8] 카메라 사진과 가를 수 있지만, 삼성 스크린샷도 같은지는 확인하지 못했습니다.
+5. **어느 기기가 찍었는지 봅니다.** `Make`(0x010f), `Model`(0x0110), `Software`(0x0131), `ImageUniqueID`(0xa420) 같은 태그로 찍은 기기와 소프트웨어를 봅니다 [1]. `Make`·`Model` 이 조사 기기와 다르면 받은 파일일 가능성을 먼저 봅니다. AOSP 스크린샷은 EXIF 에 `ImageUniqueID`, `Software`("Android " 와 빌드 표시 이름), `DateTimeOriginal`, `SubSecTimeOriginal`, `OffsetTimeOriginal` 을 쓰고 카메라·GPS 태그는 쓰지 않아서 [8] 카메라 사진과 가를 수 있습니다. 삼성 스크린샷도 같은지는 공개 자료가 없어 검체에서 확인합니다.
 
-6. **MediaStore 행과 맞춥니다.** `datetaken` 은 EXIF `DateTimeOriginal`(동영상은 메타데이터의 날짜)에서 뽑은 유닉스 밀리초이고, 문서 주석은 이미지의 경우 `DateTimeOriginal` 과 `OffsetTimeOriginal` 이 둘 다 있어야 이 값을 믿을 수 있다고 적습니다 [4]. `date_added` 는 처음 색인한 시각, `date_modified` 는 파일 수정 시각이고 둘 다 유닉스 초입니다 [4]. 현행 AOSP 에서는 앱이 어떤 값을 넣든 MediaProvider 가 `date_added` 를 그때의 현재 시각으로 다시 쓰므로 [5], `datetaken` 보다 `date_added` 가 한참 늦다면 나중에 기기로 들어온 파일일 수 있습니다. `owner_package_name` 은 이 미디어를 넣은 패키지이고 확실하지 않으면 NULL 일 수 있습니다 [4]. 삼성 `media.db` 의 `files` 표에는 `captured_url`, `captured_app` 칸도 있어 ALEAPP 가 함께 읽는데 [7], 칸 뜻을 삼성이 공개한 문서는 찾지 못했으므로 값은 원래 칸 이름과 함께 옮깁니다.
+6. **MediaStore 행과 맞춥니다.** `datetaken` 은 EXIF `DateTimeOriginal`(동영상은 메타데이터의 날짜)에서 뽑은 유닉스 밀리초입니다. 이미지는 `DateTimeOriginal` 과 `OffsetTimeOriginal` 이 둘 다 있어야 이 값을 믿을 수 있습니다 [4]. `date_added` 는 처음 색인한 시각, `date_modified` 는 파일 수정 시각이고 둘 다 유닉스 초입니다 [4]. 현행 AOSP 에서는 앱이 어떤 값을 넣든 MediaProvider 가 `date_added` 를 그때의 현재 시각으로 다시 쓰므로 [5], `datetaken` 보다 `date_added` 가 한참 늦다면 나중에 기기로 들어온 파일일 수 있습니다. `owner_package_name` 은 이 미디어를 넣은 패키지이고 확실하지 않으면 NULL 일 수 있습니다 [4]. 삼성 `media.db` 의 `files` 표에는 `captured_url`, `captured_app` 칸도 있습니다 [7]. 칸 뜻을 설명한 삼성 공개 문서가 없으므로 값은 원래 칸 이름과 함께 옮깁니다.
 
 7. **위치는 원본 파일에서 읽습니다.** MediaStore 의 `latitude`·`longitude` 칸은 폐기돼 항상 NULL 이고 [4], MediaProvider 는 자신이 아닌 앱이 이 칸에 값을 넣으려 하면 NULL 로 바꿉니다 [5]. Android 10 이상에서 앱이 EXIF 위치를 가리지 않은 채 읽으려면 `ACCESS_MEDIA_LOCATION` 권한과 사용자 동의가 필요하므로 [6], 앱을 거쳐 뽑은 사본에 좌표가 없다고 해서 원본에도 없다고 단정하지 않습니다.
 
-8. **촬영 순간의 보조 흔적을 겹칩니다.** 관찰 기기의 `dumpsys batterystats` 이력에는 `+camera`·`-camera` 가 붙은 줄과 `+gps`·`-gps` 줄이 있었고, 줄 앞 시각은 연도 없는 `MM-DD HH:MM:SS.mmm` 모양이었습니다. camera 줄이 카메라 하드웨어 사용 구간을 뜻하는지는 출처로 확인하지 못했고 gps 줄에는 좌표가 없으므로, EXIF 시각 근처에 이런 줄이 있는지를 보조 근거로만 씁니다.
+8. **촬영 순간의 보조 흔적을 겹칩니다.** `dumpsys batterystats` 이력에는 `+camera`·`-camera` 가 붙은 줄과 `+gps`·`-gps` 줄이 있을 수 있고, 줄 앞 시각은 연도 없는 `MM-DD HH:MM:SS.mmm` 모양입니다. camera 줄이 카메라 하드웨어 사용 구간을 뜻한다는 공개 설명이 없고 gps 줄에는 좌표가 없으므로, EXIF 시각 근처에 이런 줄이 있는지를 보조 근거로만 씁니다.
 
 ## 흔한 오판
 
-**"기기에 있다" 를 "기기가 찍었다" 로 읽는 오판**이 가장 흔합니다. `Make`·`Model` 이 다르거나, EXIF 가 비어 있거나, `owner_package_name` 이 카메라 앱이 아니면 받은 파일일 가능성을 먼저 봅니다. 메신저가 전송 과정에서 EXIF 를 지우는지는 앱마다 달라 확인하지 못했습니다.
+**"기기에 있다" 를 "기기가 찍었다" 로 읽는 오판**이 가장 흔합니다. `Make`·`Model` 이 다르거나, EXIF 가 비어 있거나, `owner_package_name` 이 카메라 앱이 아니면 받은 파일일 가능성을 먼저 봅니다. 메신저가 전송 과정에서 EXIF 를 지우는지는 앱마다 달라 검체에서 확인합니다.
 
 **`DateTimeOriginal` 을 UTC 로 읽는 실수**도 자주 나옵니다. 이 값은 시간대 없는 현지 시각이고 시간대는 `OffsetTimeOriginal` 에 따로 있습니다 [1].
 

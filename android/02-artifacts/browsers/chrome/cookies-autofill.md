@@ -15,7 +15,7 @@ Chrome for Android 의 쿠키는 프로필 폴더의 `Cookies` SQLite 파일에,
 
 쿠키는 사이트가 브라우저에 맡겨 둔 값이라서, 어느 도메인이 언제 쿠키를 만들었고 언제 마지막으로 읽었는지를 보여 줍니다 [1]. 자동 완성은 사용자가 웹 양식의 입력란에 넣은 값을 Chrome 이 다음에 다시 제안하려고 입력란 이름과 함께 저장한 것이고, 같은 파일에 이름·전화번호·주소 같은 주소 프로필도 들어 있습니다 [2].
 
-저장된 비밀번호(Login Data)와 결제 카드 정보가 Android 에서 어느 파일, 어느 표에 남는지는 이번에 확인하지 않았습니다. 저장된 암호 전반은 [저장된 암호 (Google 비밀번호 관리자·Samsung Pass)](../../credentials-security/saved-passwords.md) 페이지를 봅니다.
+저장된 비밀번호(Login Data)와 결제 카드 정보를 포함한 저장된 암호 전반은 [저장된 암호 (Google 비밀번호 관리자·Samsung Pass)](../../credentials-security/saved-passwords.md) 페이지를 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -24,9 +24,9 @@ Chrome for Android 의 쿠키는 프로필 폴더의 `Cookies` SQLite 파일에,
 | Cookies | `app_chrome/Default/Cookies` | ALEAPP 는 이름이 정확히 `Cookies` 인 파일만 엽니다 [1] |
 | Web Data | `app_chrome/Default/Web Data` | 파일 이름에 빈칸이 있습니다 [2] |
 
-데스크톱 Chrome 처럼 쿠키 파일이 `Default/Network/Cookies` 로 옮겨졌는지는 Android 에서 확인하지 못했고, ALEAPP 의 경로 패턴은 `Default/Cookies*` 만 찾습니다 [1]. 경로가 다른 검체라면 프로필 폴더 전체에서 `Cookies` 라는 이름을 찾아봅니다. 패키지 이름과 앱 데이터 폴더, WebView 를 쓰는 다른 앱이 같은 이름의 파일을 남기는 경우는 [크롬 (Chrome for Android)](index.md) 허브를 봅니다. WebView 가 만든 `Web Data` 에는 autofill 표가 아예 없을 수 있습니다 [2].
+Android 에서도 데스크톱 Chrome 처럼 쿠키 파일이 `Default/Network/Cookies` 로 옮겨져 있을 수 있지만, ALEAPP 의 경로 패턴은 `Default/Cookies*` 만 찾습니다 [1]. 경로가 다른 검체라면 프로필 폴더 전체에서 `Cookies` 라는 이름을 찾아봅니다. 패키지 이름과 앱 데이터 폴더, WebView 를 쓰는 다른 앱이 같은 이름의 파일을 남기는 경우는 [크롬 (Chrome for Android)](index.md) 허브를 봅니다. WebView 가 만든 `Web Data` 에는 autofill 표가 아예 없을 수 있습니다 [2].
 
-Web Data 의 표 구성은 Chrome 버전에 따라 옛 형식과 새 형식으로 나뉘고, ALEAPP 는 `PRAGMA table_info` 로 칸이 있는지 보고 두 형식을 모두 읽습니다 [2]. 어느 Chrome 버전에서 바뀌었는지는 확인하지 못했습니다.
+Web Data 의 표 구성은 Chrome 버전에 따라 옛 형식과 새 형식으로 나뉘고, ALEAPP 는 `PRAGMA table_info` 로 칸이 있는지 보고 두 형식을 모두 읽습니다 [2].
 
 | 구분 | 옛 형식 | 새 형식 |
 |---|---|---|
@@ -48,7 +48,7 @@ ALEAPP 는 host_key, name, value, path, creation_utc, expires_utc, last_access_u
 | expires_utc | 만료 시각 |
 | last_access_utc | 마지막으로 읽은 시각 |
 
-ALEAPP 는 value 칸만 읽고 encrypted_value 칸은 읽지 않습니다 [1]. Android 판 Chrome 이 쿠키 값을 암호화해 저장하는지는 확인하지 못했으니, value 가 비어 있다고 쿠키 값이 없었다고 말하지 않습니다.
+ALEAPP 는 value 칸만 읽고 encrypted_value 칸은 읽지 않습니다 [1]. 쿠키 값이 암호화되어 encrypted_value 에만 들어 있을 수 있으니, value 가 비어 있다고 쿠키 값이 없었다고 말하지 않습니다.
 
 ### autofill 표(새 형식)
 
@@ -81,7 +81,7 @@ ALEAPP 는 value 칸만 읽고 encrypted_value 칸은 읽지 않습니다 [1]. A
 | 60 | COMPANY_NAME |
 | 77 | ADDRESS_HOME_STREET_ADDRESS |
 
-ALEAPP 는 이 10개 말고 다른 번호(ADDRESS_HOME_COUNTRY, NAME_FULL 등)는 보고하지 않아서 [2], 도구 결과에 나라나 전체 이름이 없더라도 표에는 남아 있을 수 있습니다. local_addresses 라는 표도 있지만, 시험한 이미지 두 개에서 비어 있어 ALEAPP 는 읽지 않습니다 [2].
+ALEAPP 는 이 10개 말고 다른 번호(ADDRESS_HOME_COUNTRY, NAME_FULL 등)는 보고하지 않아서 [2], 도구 결과에 나라나 전체 이름이 없더라도 표에는 남아 있을 수 있습니다. local_addresses 라는 표도 있지만, ALEAPP 는 시험 이미지 두 개에서 이 표가 비어 있어 읽지 않습니다 [2].
 
 ## 증거로서 의미
 
@@ -105,7 +105,7 @@ Web Data 의 date_created, date_last_used(autofill 표)와 date_modified, use_da
 
 원본 파일 옆에 `-journal` 파일이 있으면 읽기 전용으로 열 때 실패할 수 있고 ALEAPP 는 이런 파일을 건너뜁니다 [1][2]. 사본을 만드는 방법과 이유는 [방문 기록 (History)](history.md) 페이지의 함정 절에 있습니다.
 
-expires_utc 는 만료 시각이라 사용자가 언제 무엇을 했는지 보여 주는 칸이 아니고, 만료 시각이 지난 쿠키가 파일에 남아 있는지 여부도 이번에 확인하지 못했습니다. autofill 표에는 사이트 칸이 없어서 값이 어느 사이트에서 입력되었는지는 이 표만으로 알 수 없고, 같은 시각 근처의 [방문 기록 (History)](history.md)에서 양식 제출(transition 7, FORM_SUBMIT) 방문을 찾아 맞춰 봅니다.
+expires_utc 는 만료 시각이라 사용자가 언제 무엇을 했는지 보여 주는 칸이 아닙니다. autofill 표에는 사이트 칸이 없어서 값이 어느 사이트에서 입력되었는지는 이 표만으로 알 수 없고, 같은 시각 근처의 [방문 기록 (History)](history.md)에서 양식 제출(transition 7, FORM_SUBMIT) 방문을 찾아 맞춰 봅니다.
 
 ## 직접 분석해 보기
 

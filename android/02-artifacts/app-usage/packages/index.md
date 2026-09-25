@@ -16,7 +16,7 @@ has_toc: false
 
 앱 데이터 폴더만 봐서는 그 앱이 언제, 어떤 경로로 들어왔는지 알기 어렵습니다. 이 파일들에는 앱마다 이름·코드 경로·버전·설치자·시각·서명이 적혀 있고, 사용자별 파일에는 첫 설치 시각과 설치 이유, 앱이 받은 런타임 권한이 적혀 있습니다 [1]. 그래서 "이 앱은 어디서 들어왔나", "이 사용자에게 언제 처음 설치됐나", "이 앱에 위치 권한이 있었나" 같은 질문에 앱 자체의 데이터와 따로 답할 수 있는 시스템 쪽 기록이 됩니다.
 
-다만 현행 AOSP 는 이 설정 파일들을 기본적으로 안드로이드 바이너리 XML(ABX)로 저장하기 때문에 [1][2], 먼저 일반 XML 로 풀어야 읽을 수 있습니다. 라이브 기기에서는 `dumpsys package` 로 같은 정보를 볼 수 있는데, 실제 폰에서 adb 일반 셸 권한으로 실행하면 약 192,000 줄이 나왔고, 설치된 패키지는 시스템 앱 486개와 사용자가 설치한 앱 168개였습니다. 루팅되지 않은 기기에서 adb 일반 권한으로 `packages.xml` 을 직접 읽을 수 있는지는 관찰하지 못했습니다.
+다만 현행 AOSP 는 이 설정 파일들을 기본적으로 안드로이드 바이너리 XML(ABX)로 저장하기 때문에 [1][2], 먼저 일반 XML 로 풀어야 읽을 수 있습니다. 라이브 기기에서는 `dumpsys package` 로 같은 정보를 볼 수 있습니다. adb 일반 셸 권한으로도 실행되고, 시스템 앱 486개와 사용자가 설치한 앱 168개가 있는 폰에서는 약 192,000 줄이 나옵니다. 루팅되지 않은 기기에서 adb 일반 권한으로 `packages.xml` 을 직접 읽을 수 있다는 공개 자료는 없습니다.
 
 ## 한눈에 보기
 
@@ -27,9 +27,9 @@ has_toc: false
 | `/data/system/users/<사용자ID>/package-restrictions.xml` | 현행 AOSP 기준 | 사용자별 설치 여부, 첫 설치 시각, 설치 이유, 실행한 적 없음 표시 [1] |
 | `/data/system/users/<사용자ID>/runtime-permissions.xml` | Android 10 이하 [5] | 사용자별 런타임 권한 부여 상태와 flags [1] |
 | `/data/misc_de/<사용자ID>/apexdata/com.android.permission/runtime-permissions.xml` | Android 11 부터 [5] | 위와 같은 권한 기록(요소 이름은 다름) [3] |
-| `dumpsys package` 출력 | Android 16 에서 관찰 | 라이브 기기의 같은 정보 |
+| `dumpsys package` 출력 | Android 16 기준 | 라이브 기기의 같은 정보 |
 
-공개 도구로는 ALEAPP 에 packageInfo, permissions, runtimePerms, packageRestrictions, packageUserStates, installSessions 모듈이 있습니다 [4]. 이 가운데 packageInfo·permissions·runtimePerms 가 무엇을 읽는지는 아래 하위 페이지에서 다루고, 나머지 모듈의 내용은 확인하지 못했습니다.
+공개 도구로는 ALEAPP 에 packageInfo, permissions, runtimePerms, packageRestrictions, packageUserStates, installSessions 모듈이 있습니다 [4]. 이 가운데 packageInfo·permissions·runtimePerms 가 무엇을 읽는지는 아래 하위 페이지에서 다룹니다.
 
 ## 읽는 순서
 

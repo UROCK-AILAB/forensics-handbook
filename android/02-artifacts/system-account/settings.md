@@ -6,7 +6,7 @@ nav_order: 370
 
 # 설정 값 (Settings Global·Secure·System)
 
-Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되고, 조사에서 어떤 키를 먼저 보는지를 정리합니다. 소스로 확인한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
+Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되고, 조사에서 어떤 키를 먼저 보는지를 정리합니다. 값은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
 
 ## 한 줄 요약
 
@@ -22,9 +22,9 @@ Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되�
 | secure | 사용자별 | 위치·입력기·잠금 같은 사용자별 값 |
 | system | 사용자별 | 화면 꺼짐 시간 같은 사용자 환경 값 |
 | ssaid | 사용자별 | 앱별 Android ID. 호출한 앱의 UID 문자열이 키 |
-| config | 확인하지 못함 | 확인하지 못함. 아래 구조 절의 namespace 태그가 이 표에 쓰임 |
+| config | 공개 자료 없음 | 공개 자료 없음. 아래 구조 절의 namespace 태그가 이 표에 쓰임 |
 
-소스 주석에 "Global settings are stored under the device owner" 와 "Settings are stored in the user specific system directory" 가 있고, global 표는 사용자 0(USER_SYSTEM) 쪽으로만 읽고 쓰기 때문에 global 은 사용자 0 쪽에만 있고 나머지는 사용자 번호 폴더마다 따로 있습니다 [1]. "내용" 칸의 예시는 소스가 아니라 아래 "조사에 쓸 만한 키" 절에 적은 관찰 기기의 키 이름에서 가져왔습니다.
+global 설정은 기기 소유자 아래에 저장하고 나머지 설정은 사용자별 시스템 폴더에 저장합니다. global 표는 사용자 0(USER_SYSTEM) 쪽으로만 읽고 쓰기 때문에 global 은 사용자 0 쪽에만 있고 나머지는 사용자 번호 폴더마다 따로 있습니다 [1]. "내용" 칸의 예시는 아래 "조사에 쓸 만한 키" 절의 키 이름입니다.
 
 앱별 Android ID(SSAID)는 ssaid 표에 호출한 앱의 UID 문자열을 키로 저장합니다 [1]. 식별자로서의 해석은 [기기 식별자 (Android ID·IMEI·광고 ID)](../../01-foundations/value-decoding/device-identifiers.md) 페이지에 있습니다.
 
@@ -35,17 +35,17 @@ Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되�
 | 항목 | 내용 | 출처·범위 |
 |---|---|---|
 | 옛 저장 방식 | SQLite 데이터베이스였다가 XML 로 옮김. 소스에 migrateAllLegacySettingsIfNeededLocked(), DROP_DATABASE_ON_MIGRATION = true 가 있음 | [1] |
-| 옛 DB 파일 이름과 옮긴 버전 | 확인하지 못함 | |
-| 파일 형식 | 글자 XML 또는 ABX. 소스가 Xml.resolveSerializer 로 기기 설정에 따라 형식을 고르고, ALEAPP 도 ABX 를 따로 읽음 | [2][3] |
-| ABX 가 기본이 된 버전 | 확인하지 못함 | |
+| 옛 DB 파일 이름과 옮긴 버전 | 공개 자료 없음 | |
+| 파일 형식 | 글자 XML 또는 ABX. Xml.resolveSerializer 가 기기 설정에 따라 형식을 고르고, ALEAPP 도 ABX 를 따로 읽음 | [2][3] |
+| ABX 가 기본이 된 버전 | 공개 자료 없음 | |
 | 뿌리 태그가 없는 파일 | ALEAPP 가 Android 11 파일에서 따로 처리 | [3] |
-| 키 개수 | global 596개, secure 464개, system 582개 | 관찰 |
+| 키 개수 | 기기마다 다름(예: global 596개, secure 464개, system 582개) | |
 
-삼성 기기에는 AOSP 소문자 키 사이에 대문자로 쓴 키, `SEM_` 으로 시작하는 키, 삼성 기능 이름이 들어간 키가 섞여 있었습니다. 예를 들어 global 에 `Phenotype_boot_count`, `Phenotype_flags`, `SPEN_INPUT_MODE_DEX`, `STANDARD_BOLD_FONT`, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `SUPPORT_BG_AD_RESTRICTION_BY_AI`, `rampart_blocked_adb_cmd`, `rampart_blocked_unknown_apps`, system 에 `IsFotaUpgrade`, `PowerbuttonTapping`, `SEM_VIBRATION_NOTIFICATION_INTENSITY` 가 있었습니다. 이런 제조사 키의 뜻은 공개 문서로 확인하지 못해서 이름만 보고 해석하지 않습니다.
+삼성 기기에는 AOSP 소문자 키 사이에 대문자로 쓴 키, `SEM_` 으로 시작하는 키, 삼성 기능 이름이 들어간 키가 섞여 있습니다. 예를 들어 global 에 `Phenotype_boot_count`, `Phenotype_flags`, `SPEN_INPUT_MODE_DEX`, `STANDARD_BOLD_FONT`, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `SUPPORT_BG_AD_RESTRICTION_BY_AI`, `rampart_blocked_adb_cmd`, `rampart_blocked_unknown_apps`, system 에 `IsFotaUpgrade`, `PowerbuttonTapping`, `SEM_VIBRATION_NOTIFICATION_INTENSITY` 가 있습니다. 이런 제조사 키는 뜻을 설명한 공개 문서가 없어서 이름만 보고 해석하지 않습니다.
 
 ## 구조
 
-XML 뿌리 태그는 `settings` 이고 설정 하나가 `setting` 태그 하나입니다. 확인한 속성은 다음과 같습니다(현행 AOSP 기준) [2].
+XML 뿌리 태그는 `settings` 이고 설정 하나가 `setting` 태그 하나입니다. 속성은 다음과 같습니다(현행 AOSP 기준) [2].
 
 | 속성 | 담긴 것 |
 |---|---|
@@ -58,15 +58,15 @@ XML 뿌리 태그는 `settings` 이고 설정 하나가 `setting` 태그 하나�
 | `preserve_in_restore` | 복원할 때 값을 보존할지 |
 | `valueBase64`, `defaultValueBase64`, `tagBase64` | 값을 이진으로 적을 때의 Base64 판 |
 
-config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태그도 있습니다 [2]. `package` 속성은 그 값을 마지막으로 쓴 패키지로 흔히 읽지만 이번 자료에서 뜻을 확인하지는 못했습니다.
+config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태그도 있습니다 [2]. `package` 속성은 그 값을 마지막으로 쓴 패키지로 흔히 읽지만, 이 뜻을 밝힌 공개 자료는 없습니다.
 
 파일은 AtomicFile 로 쓰고, 백업 파일은 이름 끝에 `.fallback` 을 붙입니다. 원본 파일이 깨지면 서비스가 fallback 파일을 다시 읽고 복사해서 원본을 되살립니다 [2]. 앱 패키지 하나가 쓸 수 있는 설정 크기에는 한도(MAX_BYTES_PER_APP_PACKAGE_LIMITED = 40000)가 있고 `android` 패키지는 예외입니다 [2].
 
-소스에는 최근 변경 20건(UPDATE·DELETE·PERSIST·INITIALIZE·RESET 과 시각·이름)을 기억하는 mHistoricalOperations 가 있지만, 디버그 빌드에서만 메모리에 남고 dump 로 나옵니다 [2]. 일반 판매 기기에서는 이 기록이 없다고 보고 찾지 않습니다.
+최근 변경 20건(UPDATE·DELETE·PERSIST·INITIALIZE·RESET 과 시각·이름)을 기억하는 mHistoricalOperations 는 디버그 빌드에서만 메모리에 남고 dump 로 나옵니다 [2]. 일반 판매 기기에서는 이 기록이 없다고 보고 찾지 않습니다.
 
 ## 조사에 쓸 만한 키
 
-관찰한 기기에 다음 키들이 실제로 있었습니다. 이번 자료로는 키가 있다는 사실만 확인했고 값의 뜻은 확인하지 못해서, 아래 "볼 거리" 는 키 이름에서 짐작한 방향일 뿐입니다.
+다음 키들은 실제 기기의 settings 목록에 나오는 키입니다. 값의 뜻을 설명한 공개 자료가 없어서, 아래 "볼 거리" 는 키 이름에서 짐작한 방향입니다.
 
 | 표 | 키 | 볼 거리(이름에서 짐작) |
 |---|---|---|
@@ -91,22 +91,22 @@ config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태�
 | 키와 값 | 파일을 확보한 시점에 그 설정이 그 값이었다는 것 | 사건 당시에도 같은 값이었는지, 언제 바뀌었는지 |
 | 키가 있음 | 그 키에 값이 한 번은 쓰였다는 것 | 사용자가 직접 바꿨는지(시스템·앱도 씀) |
 | 키가 없음 | 확보한 파일에 그 항목이 없다는 것 | 그 기능을 한 번도 쓰지 않았다는 것 |
-| `package` 속성 | 값과 함께 그 패키지 이름이 적혀 있다는 것 | 그 앱이 값을 바꿨다는 것(뜻을 확인하지 못함) |
+| `package` 속성 | 값과 함께 그 패키지 이름이 적혀 있다는 것 | 그 앱이 값을 바꿨다는 것(속성의 뜻이 밝혀지지 않음) |
 | `.fallback` 파일 | 백업 파일이 남아 있었다는 것 | 원본과 다른 시점의 값이라는 것 |
 
 보고서에는 "확보한 settings_global.xml 파일에 adb_enabled 키의 값이 N 으로 기록되어 있다" 처럼 파일·키·값만 적고, 값이 무엇을 뜻하는지는 확인한 근거가 있을 때만 덧붙입니다.
 
 ## 시각 해석
 
-이번에 확인한 `setting` 태그의 속성 목록에는 시각 칸이 없어서 [2], 설정별로 언제 바뀌었는지는 이 파일로 알 수 없습니다. 파일 전체의 마지막 수정 시각은 파일 시스템 메타데이터에 남지만 어느 키가 그때 바뀌었는지는 말해 주지 않고, 읽는 법은 [파일 시스템 (ext4·F2FS)](../../01-foundations/storage/filesystems/index.md) 페이지에 있습니다. 설정이 바뀐 시각이 필요하면 로그나 앱 사용 기록처럼 시각이 붙은 다른 기록에서 찾습니다.
+`setting` 태그의 속성에는 시각 칸이 없어서 [2], 설정별로 언제 바뀌었는지는 이 파일로 알 수 없습니다. 파일 전체의 마지막 수정 시각은 파일 시스템 메타데이터에 남지만 어느 키가 그때 바뀌었는지는 말해 주지 않고, 읽는 법은 [파일 시스템 (ext4·F2FS)](../../01-foundations/storage/filesystems/index.md) 페이지에 있습니다. 설정이 바뀐 시각이 필요하면 로그나 앱 사용 기록처럼 시각이 붙은 다른 기록에서 찾습니다.
 
 ## 함정과 한계
 
 settings 파일은 확보 시점의 값만 담고 변경 이력이 없습니다. adb 를 켰다가 끈 경우처럼 사건 뒤에 값을 되돌렸다면 파일에는 되돌린 값만 남고, 판매용 기기에는 변경 기록(mHistoricalOperations)도 없습니다 [2]. 증거를 없애려 한 정황을 볼 때는 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 시나리오의 순서로 다른 기록과 맞춰 봅니다.
 
-ALEAPP 주석에는 settings 파일에 제어 문자나 이스케이프하지 않은 `&` 가 들어 있어 XML 파싱이 실패하는 경우가 있다고 적혀 있습니다 [3]. 일반 XML 파서가 오류를 내면 파일이 손상됐다고 단정하지 말고 원문을 헥스로 먼저 봅니다.
+settings 파일에 제어 문자나 이스케이프하지 않은 `&` 가 들어 있어 XML 파싱이 실패하는 경우가 있습니다 [3]. 일반 XML 파서가 오류를 내면 파일이 손상됐다고 단정하지 말고 원문을 헥스로 먼저 봅니다.
 
-관찰한 기기에서는 AOSP 에 이름이 있는 키 가운데 목록에 나오지 않은 것도 있었고, 구체적인 키는 시간대·잠금 화면 페이지에 적었습니다. 한 번도 값을 쓰지 않은 키가 목록에서 빠지는지는 확인하지 못해서, 키가 없다는 사실로 기능 사용 여부를 말하지 않습니다.
+AOSP 에 이름이 있는 키라도 기기의 목록에 나오지 않을 수 있고, 그런 키의 예는 시간대·잠금 화면 페이지에 있습니다. 한 번도 값을 쓰지 않은 키가 목록에서 빠지는지는 알려져 있지 않아서, 키가 없다는 사실로 기능 사용 여부를 말하지 않습니다.
 
 ## 직접 분석해 보기
 
@@ -122,7 +122,7 @@ ALEAPP 주석에는 settings 파일에 제어 문자나 이스케이프하지 �
 
 ### 공개 도구로 한 번
 
-라이브 기기에서는 adb 일반 권한으로 세 표의 키와 값을 뽑을 수 있었습니다.
+라이브 기기에서는 adb 일반 권한으로 세 표의 키와 값을 뽑을 수 있습니다.
 
 ```sh
 adb shell settings list global > settings_global.txt

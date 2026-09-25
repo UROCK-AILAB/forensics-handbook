@@ -14,11 +14,11 @@ nav_order: 210
 
 `android.util.Xml` 은 시스템 속성 `persist.sys.binary_xml` 을 보고 기본 출력 형식을 정하는데, 코드에 적힌 기본값은 `true` 입니다(`SystemProperties.getBoolean("persist.sys.binary_xml", true)`). `Xml.resolveSerializer()` 로 XML 을 쓰는 곳은 이 속성이 켜져 있으면 바이너리로, 꺼져 있으면 텍스트로 씁니다. 읽는 쪽인 `Xml.resolvePullParser()` 는 파일 앞 4바이트를 `BinaryXmlSerializer.PROTOCOL_MAGIC_VERSION_0` 과 비교해 같으면 바이너리 파서로, 다르면 텍스트 파서(`newFastPullParser()`)로 읽습니다. 그래서 같은 파일 이름이라도 기기와 설정에 따라 텍스트로도 바이너리로도 나올 수 있고, 시스템은 둘 다 읽습니다.
 
-설계 주석에는 설치된 앱 목록인 `packages.xml` 을 예로 든 비교가 나오고, 이 파일의 해석은 [설치된 앱](../../02-artifacts/app-usage/packages/index.md) 에서 다룹니다. 그 밖에 어떤 시스템 파일이 ABX 로 저장되는지는 이 페이지의 출처로 목록을 확인하지 않았으며, 파일마다 앞 4바이트를 보고 판단합니다. 앱의 공유 환경설정 파일은 [설정 XML과 SharedPreferences](shared-preferences.md) 에서 다루듯 대개 텍스트 XML 입니다.
+ABX 의 크기·속도 비교는 설치된 앱 목록인 `packages.xml` 을 기준으로 했고 [2], 이 파일의 해석은 [설치된 앱](../../02-artifacts/app-usage/packages/index.md) 에서 다룹니다. 어떤 시스템 파일이 ABX 로 저장됐는지는 파일마다 앞 4바이트를 보고 판단합니다. 앱의 공유 환경설정 파일은 [설정 XML과 SharedPreferences](shared-preferences.md) 에서 다루듯 대개 텍스트 XML 입니다.
 
-ABX 가 처음 들어간 Android 버전과 제조사(삼성 One UI 포함)가 이 속성을 바꾸는지도 이 페이지에서 확인하지 않았습니다. Android 버전이나 제조사만 보고 파일 형식을 단정하지 말고, 파일을 직접 보고 판단합니다.
+Android 버전이나 제조사(삼성 One UI 포함)만 보고 파일 형식을 단정하지 말고, 파일 앞 4바이트를 직접 보고 판단합니다.
 
-크기와 속도에 대해서는 두 출처의 수치가 조금 다릅니다. `BinaryXmlSerializer` 주석에는 텍스트 방식인 `Xml.newFastSerializer()` 보다 전형적인 `packages.xml` 기준으로 4.3배 빠르고 디스크를 2.4배 덜 쓴다고 적혀 있고, `Xml.java` 의 javadoc 에는 4.4배 빠르고 2.8배 덜 쓴다고 적혀 있습니다.
+크기와 속도에 대해서는 두 출처의 수치가 조금 다릅니다. `BinaryXmlSerializer` 주석에는 텍스트 방식인 `Xml.newFastSerializer()` 보다 전형적인 `packages.xml` 기준으로 4.3배 빠르고 디스크를 2.4배 덜 쓴다고 적혀 있고 [2], `Xml.java` 의 javadoc 에는 4.4배 빠르고 2.8배 덜 쓴다고 적혀 있습니다 [1].
 
 ## 구조
 
@@ -53,11 +53,11 @@ ABX 가 처음 들어간 Android 버전과 제조사(삼성 One UI 포함)가 �
 | TYPE_BOOLEAN_TRUE | `12 << 4` | `0xC0` |
 | TYPE_BOOLEAN_FALSE | `13 << 4` | `0xD0` |
 
-참과 거짓은 형식 값 자체가 둘로 나뉘어 있습니다. 정수는 `writeInt`, long 은 `writeLong`, float 과 double 은 `writeFloat`·`writeDouble` 로 원래 형식 그대로 쓰고 텍스트로 바꾸지 않으며, 바이트 배열은 길이를 `writeShort` 로 앞에 둡니다. 바이트 순서와 인턴 문자열(한 번 나온 문자열을 다시 쓸 때의 표기) 규칙은 `FastDataOutput` 쪽 코드에 있어 이 페이지에서는 다루지 않습니다.
+참과 거짓은 형식 값 자체가 둘로 나뉘어 있습니다. 정수는 `writeInt`, long 은 `writeLong`, float 과 double 은 `writeFloat`·`writeDouble` 로 원래 형식 그대로 쓰고 텍스트로 바꾸지 않으며, 바이트 배열은 길이를 `writeShort` 로 앞에 둡니다. 바이트 순서와 인턴 문자열(한 번 나온 문자열을 다시 쓸 때의 표기) 규칙은 `FastDataOutput` 코드에 정해져 있습니다.
 
 ### 제약
 
-설계 주석에 따르면 ABX 는 UTF-8 만 지원하고, `byte[]` 나 `String` 같은 길이가 바뀌는 값은 65,535바이트까지만 담으며, 네임스페이스·접두사·속성(properties)·옵션은 지원하지 않습니다. 현재 코드는 `frameworks/libs/modules-utils` 의 `com.android.modules.utils.BinaryXmlSerializer` 에 있고, 예전 경로인 `frameworks/base/core/java/com/android/internal/util/BinaryXmlSerializer.java` 는 main 브랜치에서 찾을 수 없었습니다.
+ABX 는 UTF-8 만 지원하고, `byte[]` 나 `String` 같은 길이가 바뀌는 값은 65,535바이트까지만 담으며, 네임스페이스·접두사·속성(properties)·옵션은 지원하지 않습니다 [2]. 현재 코드는 `frameworks/libs/modules-utils` 의 `com.android.modules.utils.BinaryXmlSerializer` 에 있고, 예전 경로인 `frameworks/base/core/java/com/android/internal/util/BinaryXmlSerializer.java` 는 main 브랜치에 없습니다.
 
 ### 헥스로 따라가 보기
 
@@ -96,7 +96,7 @@ ABX 파일은 앞 4바이트가 늘 같아서, 비할당 영역에서 조각을 
 
 ## 도구
 
-ABX 를 텍스트로 바꾸는 변환 도구가 필요합니다. 이 페이지의 출처로는 특정 도구 이름을 확인하지 않았고, 어떤 도구를 쓰든 위 형식 표와 알려진 파일로 결과를 맞춰 봅니다. 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다. 머리 4바이트를 확인하는 일은 헥스 편집기로 충분합니다.
+ABX 를 텍스트로 바꾸는 변환 도구가 필요합니다. 어떤 도구를 쓰든 위 형식 표와 알려진 파일로 결과를 맞춰 봅니다. 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다. 머리 4바이트를 확인하는 일은 헥스 편집기로 충분합니다.
 
 ## 참고 문헌
 

@@ -15,7 +15,7 @@ nav_order: 1460
 
 앱이 SQLite 에 저장하는 기록에서 사용자가 항목 몇 개를 지웠고, DB 파일은 논리 수집이나 파일 시스템 수집으로 확보했을 때 씁니다. Android 에서는 저장 장치 층의 복구가 암호화와 TRIM 때문에 어렵고(자세한 내용은 [TRIM과 암호화가 주는 한계](trim-encryption.md) 페이지에 있습니다), 실무에서 되살릴 수 있는 곳은 주로 아직 살아 있는 파일 안의 잔재입니다 [1][2][3].
 
-SQLite 파일 형식 전체의 설명은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 페이지에 있고, 이 페이지는 지운 레코드가 남는 자리와 Android 플랫폼 설정이 그 자리를 얼마나 지우는지만 다룹니다. AOSP 소스로 확인한 내용은 현행 AOSP 기준(`platform/external/sqlite` 의 main 가지)이고, 어느 Android 버전부터 그렇게 됐는지는 확인하지 못했습니다.
+SQLite 파일 형식 전체의 설명은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 페이지에 있고, 이 페이지는 지운 레코드가 남는 자리와 Android 플랫폼 설정이 그 자리를 얼마나 지우는지만 다룹니다. 플랫폼 설정은 현행 AOSP 기준(`platform/external/sqlite` 의 main 가지)이고, 어느 Android 버전부터 그렇게 됐는지는 버전마다 다를 수 있어 검체에서 확인합니다.
 
 ## 지운 레코드가 남는 자리
 
@@ -32,9 +32,9 @@ SQLite 파일 안에서 지운 레코드의 바이트가 남을 수 있는 자�
 
 freeblock 은 페이지 안의 빈 조각을 잇는 체인입니다. 첫 2바이트에 다음 freeblock 의 오프셋(마지막이면 0)을, 다음 2바이트에 이 4바이트 머리말을 포함한 크기를 적고, 가장 작은 freeblock 이 4바이트입니다 [1]. 머리말 4바이트가 들어선 자리에는 원래 바이트가 남지 않습니다.
 
-freelist 는 trunk 페이지를 이은 목록입니다. trunk 페이지의 첫 4바이트는 다음 trunk 페이지 번호이고, 다음 4바이트는 뒤따르는 leaf 페이지 번호의 개수입니다. 파일 형식 문서는 "Freelist leaf pages contain no information." 이라고 적고 SQLite 가 leaf 페이지를 읽지도 쓰지도 않아서, secure_delete 가 꺼져 있으면 leaf 페이지에 예전 내용이 그대로 남을 수 있습니다 [1][2].
+freelist 는 trunk 페이지를 이은 목록입니다. trunk 페이지의 첫 4바이트는 다음 trunk 페이지 번호이고, 다음 4바이트는 뒤따르는 leaf 페이지 번호의 개수입니다. SQLite 는 leaf 페이지에 정보가 없다고 보고 읽지도 쓰지도 않아서, secure_delete 가 꺼져 있으면 leaf 페이지에 예전 내용이 그대로 남을 수 있습니다 [1][2].
 
-롤백 저널에는 DB 페이지를 고치기 전에 그 페이지의 원래 내용을 먼저 적습니다. 파일 형식 문서의 문장은 "Before any information-bearing page of the database is modified, the original unmodified content of that page is written into the rollback journal." 입니다. 저널 머리의 매직은 `d9 d5 05 f9 20 a1 63 d7` 이고, 페이지 레코드는 페이지 번호(4바이트), 원래 페이지 내용, 체크섬(4바이트) 순서입니다 [1].
+롤백 저널에는 DB 페이지를 고치기 전에 그 페이지의 원래 내용을 먼저 적습니다. 저널 머리의 매직은 `d9 d5 05 f9 20 a1 63 d7` 이고, 페이지 레코드는 페이지 번호(4바이트), 원래 페이지 내용, 체크섬(4바이트) 순서입니다 [1].
 
 WAL 은 32바이트 머리말 뒤에 프레임이 이어지는 파일이고, 프레임 하나는 24바이트 프레임 머리말과 페이지 한 장으로 이뤄집니다. WAL 은 앞에서 뒤로만 자라서 같은 페이지의 여러 판이 프레임으로 겹쳐 있을 수 있고, 체크포인트 뒤에는 새 프레임이 앞에서부터 옛 프레임을 덮어서 파일 뒤쪽에 옛 프레임이 남을 수 있습니다 [1]. WAL 모드는 한 번 켜면 연결을 닫았다 다시 열어도 DB 에 남습니다 [2].
 
@@ -80,14 +80,14 @@ Android 프레임워크가 쓰는 플랫폼 SQLite 라이브러리는 빌드 파
 | `-DSQLITE_SECURE_DELETE` | secure_delete 꺼짐 | 플랫폼 라이브러리로 연 DB 는 secure_delete 가 기본으로 켜져서, 지운 내용을 0 으로 덮음 [2][3] |
 | `-DSQLITE_DEFAULT_AUTOVACUUM=1` | auto_vacuum 0(NONE) | 새로 만든 DB 가 FULL 이 되어, 커밋마다 freelist 페이지를 파일 끝으로 옮기고 잘라 냄 [2][3] |
 | `-DSQLITE_DEFAULT_JOURNAL_SIZE_LIMIT=1048576` | -1(한도 없음) | 커밋하거나 WAL 을 리셋할 때 저널·WAL 파일이 1MiB 보다 크면 1MiB 까지 잘라 냄 [2][3] |
-| `-DSQLITE_TEMP_STORE=3` | — | 빌드 파일 주석대로 임시 파일을 모두 RAM 에 둠 [3] |
+| `-DSQLITE_TEMP_STORE=3` | — | 임시 파일을 모두 RAM 에 둠 [3] |
 | `-DSQLITE_ENABLE_FTS3`·`FTS3_BACKWARDS`·`FTS4` | — | 전문 검색 가상 테이블을 쓸 수 있음 [3] |
 
 그래서 플랫폼 기본값 그대로 만든 DB 는 페이지 안의 지운 내용이 0 으로 덮이고 빈 페이지도 커밋마다 파일에서 잘려 나가며, 흔적이 남기 쉬운 곳은 WAL 쪽입니다. 롤백 저널은 저널 모드에 따라 달라서, DELETE 모드는 트랜잭션이 끝날 때마다 저널 파일을 지우고 TRUNCATE 모드는 길이 0 으로 잘라 내며, PERSIST 모드만 머리말을 0 으로 덮고 파일을 남깁니다 [2]. 그래서 DELETE·TRUNCATE 모드의 DB 에서는 저널 파일 안에 옛 페이지가 남지 않습니다. secure_delete 는 일반 테이블에만 작동하고, 가상 테이블이 shadow 테이블에 저장하는 경우(FTS 등)에는 가상 테이블에서 지워도 shadow 테이블에 흔적이 남을 수 있습니다 [2]. 플랫폼 라이브러리가 FTS3·FTS4 를 켜 두었기 때문에, 검색 색인 테이블이 있는 DB 는 따로 살펴봅니다.
 
-예외도 있습니다. SQLCipher 같은 암호화 SQLite 처럼 앱이 자기 SQLite 라이브러리를 따로 넣으면 이 컴파일 옵션을 따르지 않고, 앱이 PRAGMA 로 secure_delete 와 auto_vacuum 을 바꿀 수도 있습니다 [2][3]. auto_vacuum 은 테이블을 만들기 전에만 정할 수 있고 나중에 바꾸려면 VACUUM 이 필요해서, 기본값이 바뀌기 전에 만든 오래된 DB 는 NONE 일 수 있습니다 [2]. 어떤 앱이 어떤 설정을 쓰는지는 확인하지 못했으므로, 플랫폼 기본값만 보고 판단하지 말고 DB 머리말을 직접 읽어 확인합니다. 머리말 오프셋 52 가 0 이 아니면 auto-vacuum 이 켜진 DB 이고, 오프셋 64 로 incremental 인지 가립니다 [1]. secure_delete 는 파일 형식 문서의 머리말 칸 목록에서 해당 칸을 찾지 못해서, 파일만 보고 켜져 있었는지 판단할 수 없습니다.
+예외도 있습니다. SQLCipher 같은 암호화 SQLite 처럼 앱이 자기 SQLite 라이브러리를 따로 넣으면 이 컴파일 옵션을 따르지 않고, 앱이 PRAGMA 로 secure_delete 와 auto_vacuum 을 바꿀 수도 있습니다 [2][3]. auto_vacuum 은 테이블을 만들기 전에만 정할 수 있고 나중에 바꾸려면 VACUUM 이 필요해서, 기본값이 바뀌기 전에 만든 오래된 DB 는 NONE 일 수 있습니다 [2]. 앱마다 설정이 다를 수 있으므로, 플랫폼 기본값만 보고 판단하지 말고 DB 머리말을 직접 읽어 확인합니다. 머리말 오프셋 52 가 0 이 아니면 auto-vacuum 이 켜진 DB 이고, 오프셋 64 로 incremental 인지 가립니다 [1]. DB 머리말에는 secure_delete 를 적는 칸이 없어서, 파일만 보고 켜져 있었는지 판단할 수 없습니다 [1].
 
-관찰한 폰의 `settings global` 에는 `sqlite_compatibility_wal_flags` 키가 있었습니다. 키 이름만 봤고, 이 키가 무엇을 조절하는지와 플랫폼의 기본 저널 모드는 확인하지 못했습니다.
+`settings global` 에 `sqlite_compatibility_wal_flags` 키가 있는 기기도 있습니다. 이 키가 무엇을 조절하는지와 플랫폼의 기본 저널 모드는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
 ## 절차
 
@@ -145,7 +145,7 @@ WAL 파일 머리말의 앞 12바이트입니다.
 
 ## 도구
 
-지운 레코드를 찾아 주는 공개 도구로 FQLite, Undark 등이 있지만, 이 페이지를 쓰면서 그 문서를 열어 보지 않아서 각 도구가 freeblock·freelist·저널·WAL 중 어디까지 읽는지는 적지 않습니다. 도구를 쓰기 전에 지운 행이 어디에 남는지 알고 있는 시험용 DB 를 만들어 도구 결과와 맞춰 보고, 그 방법은 [도구 검증](../../reporting/tool-validation.md) 페이지에 있습니다. 도구가 찾아 준 레코드는 위의 헥스 절차로 한 건 이상 직접 확인합니다.
+지운 레코드를 찾아 주는 공개 도구로 FQLite, Undark 등이 있고, 도구마다 freeblock·freelist·저널·WAL 중 읽는 범위가 다를 수 있습니다. 도구를 쓰기 전에 지운 행이 어디에 남는지 알고 있는 시험용 DB 를 만들어 도구 결과와 맞춰 보고, 그 방법은 [도구 검증](../../reporting/tool-validation.md) 페이지에 있습니다. 도구가 찾아 준 레코드는 위의 헥스 절차로 한 건 이상 직접 확인합니다.
 
 ## 함정과 한계
 

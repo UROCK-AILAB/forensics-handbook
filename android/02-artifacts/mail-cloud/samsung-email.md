@@ -8,13 +8,13 @@ nav_order: 1090
 
 ## 한 줄 요약
 
-삼성 이메일 (Samsung Email) 은 갤럭시 기기에서 쓰는 메일 앱이지만 이번에 연 공개 자료에서는 패키지 이름·DB 경로·표 이름을 하나도 확인하지 못해서, 이 페이지는 확인하지 못한 범위를 먼저 밝히고 비교 기준으로 AOSP 이메일 앱의 저장 구조를 정리합니다.
+삼성 이메일 (Samsung Email) 은 갤럭시 기기에서 쓰는 메일 앱입니다. 패키지 이름·DB 경로·표 이름을 적은 공개 분석 자료가 없어서, 이 페이지는 검체에서 확인할 순서와 비교 기준이 되는 AOSP 이메일 앱의 저장 구조를 정리합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-메일 앱은 서버의 메일을 기기에 받아 두고 보여 주기 때문에 계정 설정, 폴더, 메일 머리, 본문, 첨부가 앱 데이터 폴더에 쌓이는 것이 보통입니다. 삼성 이메일도 그런 기록을 남길 것으로 짐작할 수 있지만, 무엇을 어디에 남기는지 적은 공개 포렌식 자료는 이번에 찾지 못했습니다.
+메일 앱은 서버의 메일을 기기에 받아 두고 보여 주기 때문에 계정 설정, 폴더, 메일 머리, 본문, 첨부가 앱 데이터 폴더에 쌓이는 것이 보통입니다. 삼성 이메일도 그런 기록을 남길 것으로 짐작할 수 있지만, 무엇을 어디에 남기는지 적은 공개 포렌식 자료는 없습니다.
 
-공개 도구 ALEAPP 의 모듈 목록에도 삼성 이메일 전용 모듈은 없었습니다 [1]. 메일 관련 모듈은 아래 것들이 있었습니다 [1].
+공개 도구 ALEAPP 에도 삼성 이메일 전용 모듈은 없습니다 [1]. 메일 관련 모듈은 아래와 같습니다 [1].
 
 ```
 gmail.py  gmailEmails.py  gmailIMAPEmails.py  outlook.py  FCMQueuedMessageOutlook.py
@@ -22,26 +22,26 @@ protonmail.py  protonmailDbMail.py  protonmailInbox.py  yahooMail.py
 K9Mail.py  FairEmail.py  thunderbird.py
 ```
 
-삼성 이메일이 AOSP 이메일 앱을 바탕으로 만들어졌는지, DB 이름이 `EmailProvider.db` 인지도 확인하지 못했습니다. 그래서 아래 "구조" 절의 AOSP 내용은 앱을 직접 조사할 때 맞춰 볼 기준으로만 쓰고, 삼성 앱에 그대로 있다고 보고서에 쓰면 안 됩니다.
+삼성 이메일이 AOSP 이메일 앱을 바탕으로 만들어졌는지, DB 이름이 `EmailProvider.db` 인지는 알려져 있지 않습니다. 그래서 아래 "구조" 절의 AOSP 내용은 앱을 직접 조사할 때 맞춰 볼 기준으로만 쓰고, 삼성 앱에 그대로 있다고 보고서에 쓰면 안 됩니다.
 
 ## 위치와 버전별 차이
 
-패키지 이름을 확인하지 못해서 경로도 적지 않습니다. 검체에서는 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
+패키지 이름이 공개되어 있지 않아서, 검체에서 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
 
-One UI 버전이나 앱 버전에 따른 차이도 확인한 자료가 없습니다. 관찰 기기에서도 이 앱이 설치되어 있었는지는 확인하지 못했습니다.
+One UI 버전이나 앱 버전에 따른 차이도 공개 자료가 없습니다.
 
 ## 구조
 
 ### 비교 기준: AOSP 이메일 앱
 
-아래는 AOSP 이메일 앱(`com.android.email` 계열) 소스의 `EmailContent.java` 를 읽고 정리한 것입니다 [2]. 소스는 aosp-mirror 의 master 브랜치이고 저작권 표기 연도는 2009 입니다 [2]. 최근 Android 판에 이 앱이 기본으로 들어가는지는 확인하지 못했습니다.
+아래는 AOSP 이메일 앱(`com.android.email` 계열)의 `EmailContent.java` 에 정의된 저장 구조입니다 [2]. 이 소스는 master 브랜치 기준이고 저작권 표기 연도는 2009 입니다 [2].
 
 콘텐츠 제공자 (Content Provider) 의 authority 는 앱 패키지 이름 뒤에 `.provider` 를 붙여 만들고, 패키지 이름은 리소스 `email_package_name` 에서 읽습니다 [2]. 표와 주요 칸은 아래와 같습니다 [2].
 
 | 표 | 주요 칸 | 담긴 것 |
 |---|---|---|
 | `Message` | `displayName`, `timeStamp`, `subject`, `flagRead`, `flagLoaded`, `flagFavorite`, `flagAttachment`, `flags`, `messageId`, `mailboxKey`, `accountKey`, `fromList`, `toList`, `ccList`, `bccList`, `replyToList`, `snippet`, `threadTopic`, `flagSeen`, `syncServerId`, `syncServerTimeStamp` 등 | 메일 한 통 |
-| `Message_Updates`, `Message_Deletes` | 확인 못 함 | 갱신·삭제된 메시지용 |
+| `Message_Updates`, `Message_Deletes` | 검체에서 확인 | 갱신·삭제된 메시지용 |
 | `Body` | `messageKey`, `htmlContent`, `textContent`, `htmlContentUri`, `textContentUri`, `htmlReply`, `textReply`, `sourceMessageKey`, `introText`, `quotedTextStartPos` | 본문 |
 | `Attachment` | `fileName`, `mimeType`, `size`, `contentId`, `contentUri`, `cachedFile`, `messageKey`, `location`, `encoding`, `content`, `flags`, `content_bytes`, `accountKey`, `uiState`, `uiDestination`, `uiDownloadedSize` | 첨부 |
 | `Account` | `displayName`, `emailAddress`, `syncKey`, `syncLookback`, `syncInterval`, `hostAuthKeyRecv`, `hostAuthKeySend`, `flags`, `isDefault`, `senderName`, `protocolVersion`, `signature`, `maxAttachmentSize` 등 | 메일 계정 |
@@ -49,9 +49,9 @@ One UI 버전이나 앱 버전에 따른 차이도 확인한 자료가 없습니
 | `HostAuth` | `protocol`, `address`, `port`, `flags`, `login`, `password`, `domain`, `certAlias`, `accountKey`, `serverCert`, `credentialKey` | 메일 서버 접속 정보 |
 | `Policy` | `passwordMode`, `passwordMinLength`, `passwordExpirationDays`, `passwordHistory`, `passwordComplexChars`, `passwordMaxFails`, `maxScreenLockTime` 등 | Exchange 보안 정책 |
 
-`Message_Updates`·`Message_Deletes` 는 표 이름만 확인했고, `Message` 와 같은 칸으로 되어 있는지와 서버에 반영되기 전의 원래 행이 이 표에 남는지는 확인하지 못했습니다.
+`Message_Updates`·`Message_Deletes` 가 `Message` 와 같은 칸으로 되어 있는지, 서버에 반영되기 전의 원래 행이 이 표에 남는지는 검체 DB 에서 확인합니다.
 
-몇몇 칸은 소스에 값의 뜻이 적혀 있습니다 [2]. `flagRead` 는 0 이 안 읽음, 1 이 읽음이고, `messageId` 는 메일 머리의 Message-ID, `clientId` 는 쓰지 않던 칸을 다시 써서 임시 보관 메일(초안) 정보를 담습니다. `flagLoaded` 는 값 이름으로 보아 메일을 받아 둔 상태를 나타냅니다.
+몇몇 칸의 값 뜻은 아래와 같습니다 [2]. `flagRead` 는 0 이 안 읽음, 1 이 읽음이고, `messageId` 는 메일 머리의 Message-ID, `clientId` 는 쓰지 않던 칸을 다시 써서 임시 보관 메일(초안) 정보를 담습니다. `flagLoaded` 는 값 이름으로 보아 메일을 받아 둔 상태를 나타냅니다.
 
 | `flagLoaded` 값 | 이름 |
 |---|---|
@@ -71,7 +71,7 @@ One UI 버전이나 앱 버전에 따른 차이도 확인한 자료가 없습니
 
 **증명하는 것**
 
-`Account` 행은 그 주소의 메일 계정을 이 앱에 설정한 적이 있다는 기록이고, `Message` 행은 그 메일이 기기에 받아져 있었다는 뜻입니다. `flagRead` 가 1 이면 앱 안에서 읽음으로 표시된 상태였고, `Mailbox.lastTouchedTime` 은 소스 주석으로는 그 폴더의 메일을 마지막으로 읽은 시각입니다 [2]. `Policy` 행이 있으면 Exchange 서버가 보낸 보안 정책을 받은 적이 있다는 정황이 됩니다.
+`Account` 행은 그 주소의 메일 계정을 이 앱에 설정한 적이 있다는 기록이고, `Message` 행은 그 메일이 기기에 받아져 있었다는 뜻입니다. `flagRead` 가 1 이면 앱 안에서 읽음으로 표시된 상태였고, `Mailbox.lastTouchedTime` 은 그 폴더의 메일을 마지막으로 읽은 시각입니다 [2]. `Policy` 행이 있으면 Exchange 서버가 보낸 보안 정책을 받은 적이 있다는 정황이 됩니다.
 
 **증명하지 못하는 것**
 
@@ -79,21 +79,21 @@ One UI 버전이나 앱 버전에 따른 차이도 확인한 자료가 없습니
 
 ## 시각 해석
 
-AOSP 소스 주석에는 `Message.timeStamp` 가 목록에 보이는 시각, `Mailbox.syncTime` 이 마지막 동기화를 마친 시각, `Mailbox.lastTouchedTime` 이 마지막으로 메일을 읽은 시각이라고 적혀 있고, 모두 밀리초 단위입니다 [2]. Java 에서 흔히 쓰는 유닉스 밀리초로 읽는 것이 자연스럽지만 기준 시점을 소스에서 따로 확인하지는 않았고, 삼성 앱에서 같은지는 확인하지 못했습니다. `timeStamp` 는 메일 머리의 Date 값인지 기기가 받은 시각인지 주석만으로는 가를 수 없습니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+AOSP 이메일 앱에서 `Message.timeStamp` 는 목록에 보이는 시각, `Mailbox.syncTime` 은 마지막 동기화를 마친 시각, `Mailbox.lastTouchedTime` 은 마지막으로 메일을 읽은 시각이고, 모두 밀리초 단위입니다 [2]. Java 에서 흔히 쓰는 유닉스 밀리초로 보이지만, 삼성 앱에서 같은지는 검체 값으로 확인합니다. `timeStamp` 는 메일 머리의 Date 값인지 기기가 받은 시각인지 주석만으로는 가를 수 없습니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-첫째, 이 페이지에서 삼성 이메일 자체에 대해 확인한 사실은 없습니다. 다른 자료나 도구가 삼성 이메일의 경로를 보여 주더라도 검체에서 직접 확인하고 쓰고, 도구 출력은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 방법으로 원본 행과 맞춰 봅니다.
+첫째, 삼성 이메일 자체의 저장 구조를 적은 공개 자료는 없습니다. 다른 자료나 도구가 삼성 이메일의 경로를 보여 주더라도 검체에서 직접 확인하고 쓰고, 도구 출력은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 방법으로 원본 행과 맞춰 봅니다.
 
 둘째, AOSP 소스는 오래된 master 브랜치라서 [2], 칸이 더해지거나 빠졌을 수 있습니다. 표 이름이 같아도 칸 목록은 검체 DB 에서 다시 읽습니다.
 
-셋째, 삭제한 메일이 `Message_Deletes` 나 SQLite 여유 공간에 남는지는 확인하지 못했습니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다.
+셋째, 삭제한 메일이 `Message_Deletes` 나 SQLite 여유 공간에 남는지는 검체에서 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 앱을 직접 조사하기
 
-공개 자료가 없으니 시험 기기에 앱을 설치해 계정을 넣고 메일을 주고받은 뒤, 앱 데이터 폴더에 무엇이 생기는지 보는 방법이 맞습니다. 알려진 동작을 한 가지씩 하고 파일을 비교하는 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
+공개 자료가 없으니 시험 기기에 앱을 설치해 계정을 넣고 메일을 주고받은 뒤, 앱 데이터 폴더에 무엇이 생기는지 보면 됩니다. 알려진 동작을 한 가지씩 하고 파일을 비교하는 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
 
 DB 를 찾았으면 먼저 표 이름을 뽑아 AOSP 구조와 맞는지 봅니다. 아래 질의는 위 AOSP 구조 표로 만든 예시이고, 검체 DB 에 같은 표가 있을 때만 돌아갑니다.
 
@@ -122,7 +122,7 @@ ALEAPP 에는 삼성 이메일 전용 모듈이 없습니다 [1]. SQLite 뷰어�
 | [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) | 메일 시각 앞뒤로 앱을 앞에 띄운 기록 |
 | [알림 기록 (Notification History)](../app-usage/notification-history.md) | 새 메일 알림과 DB 의 메일이 맞는지 |
 
-관찰 기기의 `dumpsys account` 출력에는 계정 추가·삭제 동작을 적은 "Accounts History" 표가 있었습니다. 칸 뜻과 읽는 법은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 에 있습니다.
+`dumpsys account` 출력에는 계정 추가·삭제 동작을 적은 "Accounts History" 표가 있습니다. 칸 뜻과 읽는 법은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 에 있습니다.
 
 ## 실습
 

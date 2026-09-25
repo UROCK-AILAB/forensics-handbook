@@ -10,11 +10,11 @@ nav_order: 960
 
 ## 무엇을 기록하나 · 왜 생기나
 
-왓츠앱은 주고받은 메시지, 대화방, 통화, 위치 공유, 그룹 정보를 앱 내부 저장소의 DB 에 한 행씩 쌓습니다. 이 페이지의 파일과 표 이름은 공개 도구 ALEAPP 의 `WhatsApp.py` 가 찾는 경로와 읽는 표에서 가져왔고, 두 DB 의 역할도 ALEAPP 가 각 DB 에서 어떤 표를 읽는지를 보고 판단했습니다. 모두 2026-09 조사 시점의 코드 기준입니다.
+왓츠앱은 주고받은 메시지, 대화방, 통화, 위치 공유, 그룹 정보를 앱 내부 저장소의 DB 에 한 행씩 쌓습니다[1].
 
 ## 위치와 버전별 차이
 
-패키지 이름은 `com.whatsapp` 입니다. ALEAPP 가 찾는 파일은 다음과 같습니다.
+패키지 이름은 `com.whatsapp` 입니다. 공개 도구 ALEAPP 의 `WhatsApp.py` 가 찾는 파일은 다음과 같습니다[1].
 
 ```
 */com.whatsapp/databases/msgstore.db*
@@ -26,11 +26,11 @@ nav_order: 960
 */WhatsApp/Media/*
 ```
 
-DB 파일 이름 뒤의 `*` 는 `-wal`·`-shm` 같은 딸린 파일까지 함께 잡으려는 것으로 보이지만, 도구의 의도를 확인하지는 않았습니다. 어느 쪽이든 DB 를 확보할 때는 딸린 파일을 같이 가져와야 최근 변경분을 잃지 않고, 그 이유는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. `shared_prefs` 아래 두 XML 은 앱 설정 파일이고, 읽는 법은 [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md)를 봅니다.
+DB 파일 이름 뒤의 `*` 는 `-wal`·`-shm` 같은 딸린 파일까지 함께 잡으려는 것으로 보입니다. DB 를 확보할 때는 딸린 파일을 같이 가져와야 최근 변경분을 잃지 않고, 그 이유는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. `shared_prefs` 아래 두 XML 은 앱 설정 파일이고, 읽는 법은 [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md)를 봅니다.
 
-마지막 줄 `*/WhatsApp/Media/*` 는 앞쪽 경로를 가리지 않고 찾는 패턴이라서, 받은 사진·파일이 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 어디에 있든 잡습니다. Android 11 이후 이 폴더가 `/sdcard/Android/media/com.whatsapp/WhatsApp/` 로 옮겨졌다는 이야기는 공식 자료로 확인하지 못했습니다. 관찰 기기의 `/sdcard/Android/media` 에는 앱 폴더가 5개 있었고, 이름이 보이는 것은 `com.google.android.gms` 와 `com.samsung.android.spay` 둘이며 나머지는 가려져 있어서 `com.whatsapp` 폴더가 있는지는 알 수 없습니다.
+마지막 줄 `*/WhatsApp/Media/*` 는 앞쪽 경로를 가리지 않고 찾는 패턴이라서, 받은 사진·파일이 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 어디에 있든 잡습니다. Android 11 이후 이 폴더가 `/sdcard/Android/media/com.whatsapp/WhatsApp/` 로 옮겨졌다는 이야기가 있지만 공식 자료는 없으므로, 검체에서 두 위치를 모두 찾아봅니다.
 
-| 항목 | 조사 시점에 확인한 것 | 확인 못 한 것 |
+| 항목 | 알려진 것 | 검체에서 확인할 것 |
 |---|---|---|
 | 메시지 표 | 예전 구조 `messages`, 새 구조 `message` 두 가지가 있고 ALEAPP 는 둘 다 읽습니다 | 어느 앱 버전에서 바뀌었는지 |
 | 미디어 폴더 | ALEAPP 는 `*/WhatsApp/Media/*` 로 찾습니다 | Android 11 이후 폴더 이동 |
@@ -46,7 +46,7 @@ DB 파일 이름 뒤의 `*` 는 `-wal`·`-shm` 같은 딸린 파일까지 함께
 | `wa_contacts` | `jid`, `given_name`, `family_name`, `display_name`, `number`, `wa_name` |
 | `wa_group_admin_settings` | `jid`, `creator_jid` |
 
-ALEAPP 는 `wa.db` 를 `msgstore.db` 에 붙여 열고, `wa_contacts.jid` 를 `msgstore.db` 의 `jid.raw_string` 과 같은 값으로 이어 붙입니다. `wa_group_admin_settings` 도 `wa.db` 쪽 표이고, ALEAPP 는 그룹 JID 로 이 표에서 `creator_jid` 를 찾아 그룹을 만든 사람으로 보여 줍니다.
+`wa_contacts.jid` 는 `msgstore.db` 의 `jid.raw_string` 과 같은 값이라서, `wa.db` 를 `msgstore.db` 에 붙여 열면 두 표를 이어 붙일 수 있습니다[1]. `wa_group_admin_settings` 도 `wa.db` 쪽 표이고, 그룹 JID 로 이 표에서 찾은 `creator_jid` 는 그룹을 만든 사람을 가리키는 것으로 보입니다[1].
 
 ### msgstore.db — 메시지, 대화방, 통화
 
@@ -57,7 +57,7 @@ ALEAPP 는 `wa.db` 를 `msgstore.db` 에 붙여 열고, `wa_contacts.jid` 를 `m
 | 예전 | `messages` | `timestamp`, `received_timestamp`, `key_remote_jid`, `key_from_me`, `data`, `remote_resource`, `media_url` |
 | 새 | `message` | `timestamp`, `received_timestamp`, `from_me`, `text_data`, `chat_row_id`, `recipient_count`, `sender_jid_row_id` |
 
-예전 구조는 상대 식별자(`key_remote_jid`)와 본문(`data`)이 메시지 행에 바로 있습니다. 새 구조는 본문이 `text_data` 에 있지만 상대는 번호로만 가리켜서, `message.chat_row_id` → `chat.jid_row_id` → `jid.raw_string` 순서로 이어 붙여야 상대 번호가 나옵니다. 이 연결 순서는 ALEAPP 쿼리 구조로 판단한 것입니다.
+예전 구조는 상대 식별자(`key_remote_jid`)와 본문(`data`)이 메시지 행에 바로 있습니다. 새 구조는 본문이 `text_data` 에 있지만 상대는 번호로만 가리켜서, `message.chat_row_id` → `chat.jid_row_id` → `jid.raw_string` 순서로 이어 붙여야 상대 번호가 나옵니다[1].
 
 새 구조에서 메시지에 딸린 표와 통화·그룹 표는 다음과 같습니다.
 
@@ -68,11 +68,11 @@ ALEAPP 는 `wa.db` 를 `msgstore.db` 에 붙여 열고, `wa_contacts.jid` 를 `m
 | `chat` 또는 `chat_view` | `_id`, `subject`, `jid_row_id`, `created_timestamp` | 대화방. `subject` 는 그룹 이름으로 보입니다 |
 | `jid` | `_id`, `raw_string` | 상대·그룹 식별자 |
 | `call_log` | `timestamp`, `duration`, `from_me`, `video_call`, `jid_row_id`, `group_jid_row_id` | 통화 기록 |
-| `group_participants` | `gjid`, `jid` | 그룹 참여자. ALEAPP 는 예전 구조를 읽을 때 이 표로 그룹의 참여자 목록을 만듭니다 |
+| `group_participants` | `gjid`, `jid` | 그룹 참여자. 예전 구조에서는 이 표로 그룹의 참여자 목록을 만듭니다 |
 
 ## 증거로서 의미
 
-**증명하는 것.** `message` 에 행이 있으면 그 대화방에 그 시각으로 적힌 메시지 기록이 기기의 DB 에 있었다는 뜻입니다. `from_me`(예전 구조는 `key_from_me`)는 이 기기 쪽에서 보낸 기록인지 받은 기록인지를 가르고, ALEAPP 는 0 을 받은 것, 1 을 보낸 것으로 읽습니다. `call_log` 는 왓츠앱으로 걸고 받은 통화의 시각·길이·영상 여부(ALEAPP 는 `video_call` 1 을 영상으로 읽습니다)를 보여 주고, 기기 기본 통화 기록과는 따로 대조합니다. `message_location` 은 위치를 보낸 기록과 실시간 위치 공유의 마지막 좌표·시각을 보여 줍니다.
+**증명하는 것.** `message` 에 행이 있으면 그 대화방에 그 시각으로 적힌 메시지 기록이 기기의 DB 에 있었다는 뜻입니다. `from_me`(예전 구조는 `key_from_me`)는 이 기기 쪽에서 보낸 기록인지 받은 기록인지를 가르며, 0 은 받은 것, 1 은 보낸 것입니다[1]. `call_log` 는 왓츠앱으로 걸고 받은 통화의 시각·길이·영상 여부(`video_call` 이 1 이면 영상)를 보여 주고, 기기 기본 통화 기록과는 따로 대조합니다. `message_location` 은 위치를 보낸 기록과 실시간 위치 공유의 마지막 좌표·시각을 보여 줍니다.
 
 **증명하지 못하는 것.** `from_me` 가 이 기기 쪽이라는 뜻이어도 그 순간 폰을 누가 쥐고 있었는지는 말해 주지 않고, 이 판단은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)의 방법으로 따로 합니다. `message_media.file_path` 는 첨부가 저장된 경로를 가리킬 뿐이라서, 그 경로에 지금 파일이 있는지는 공용 저장 공간을 직접 확인해야 합니다. 위치 좌표는 앱이 보낸 좌표이고, 그 사람이 그 자리에 있었다는 사실과는 구분해서 씁니다.
 
@@ -80,16 +80,16 @@ ALEAPP 는 `wa.db` 를 `msgstore.db` 에 붙여 열고, `wa_contacts.jid` 를 `m
 
 ## 시각 해석
 
-시각 칸은 유닉스 밀리초이고, ALEAPP 는 `datetime(칸/1000,'unixepoch')` 로 바꿉니다. 이 변환 결과는 UTC 이며, 현지 시각이 필요하면 [시간대와 시각 설정](../system-account/time-zone.md)을 함께 봅니다. 메시지 표에는 `timestamp` 와 `received_timestamp` 두 시각이 있고, 이름으로 보면 앞의 것이 메시지 시각, 뒤의 것이 기기가 받은 시각입니다. 두 칸이 정확히 무엇이 바뀔 때 쓰이는지는 확인하지 못했으니, 알려진 대화 몇 건으로 차이를 먼저 확인합니다.
+시각 칸은 유닉스 밀리초이고, `datetime(칸/1000,'unixepoch')` 로 바꿉니다[1]. 이 변환 결과는 UTC 이며, 현지 시각이 필요하면 [시간대와 시각 설정](../system-account/time-zone.md)을 함께 봅니다. 메시지 표에는 `timestamp` 와 `received_timestamp` 두 시각이 있고, 이름으로 보면 앞의 것이 메시지 시각, 뒤의 것이 기기가 받은 시각입니다. 두 칸이 정확히 언제 쓰이는지는 공개 자료가 없으니, 알려진 대화 몇 건으로 차이를 먼저 확인합니다.
 
-`chat.created_timestamp` 는 대화방 시각, `message_location.live_location_final_timestamp` 는 실시간 위치 공유의 마지막 시각, `call_log.timestamp` 는 통화 시각이고 `call_log.duration` 은 길이입니다. ALEAPP 는 `timestamp/1000 + duration` 을 통화가 끝난 시각으로 계산하므로 `duration` 을 초 단위로 다룹니다. 단위 판별과 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+`chat.created_timestamp` 는 대화방 시각, `message_location.live_location_final_timestamp` 는 실시간 위치 공유의 마지막 시각, `call_log.timestamp` 는 통화 시각이고 `call_log.duration` 은 길이입니다. `duration` 은 초 단위라서 `timestamp/1000 + duration` 이 통화가 끝난 시각입니다[1]. 단위 판별과 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 ## 함정과 한계
 
 - 검체의 메시지 표가 `messages` 인지 `message` 인지 먼저 확인합니다. 두 구조의 칸 이름이 달라서, 한쪽 구조에 맞춘 쿼리를 다른 쪽에 그대로 쓰면 빈 결과가 나옵니다.
 - 새 구조에서는 상대 번호가 메시지 행에 없어서, 이어 붙이는 단계를 빠뜨리면 대화 상대를 잘못 짝지을 수 있습니다.
-- ALEAPP 에는 로그 파일을 보는 모듈 `WhatsAppLogFiles.py` 가 따로 있지만, 이번 조사에서 내용은 열어 보지 않았습니다.
-- 외부 저장소의 암호화 백업은 위치와 형식을 확인하지 못했고, 이 핸드북은 백업을 푸는 절차를 다루지 않습니다.
+- ALEAPP 에는 로그 파일을 보는 모듈 `WhatsAppLogFiles.py` 가 따로 있습니다[2].
+- 외부 저장소의 암호화 백업은 위치와 형식을 다룬 공개 자료가 없고, 이 핸드북은 백업을 푸는 절차를 다루지 않습니다.
 - 지운 메시지가 DB 안에 남는지, 남는다면 어디에 남는지는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [지운 대화와 사진 찾기](../../04-scenarios/activity/deleted-content.md)를 봅니다.
 
 ## 직접 분석해 보기
@@ -121,7 +121,7 @@ LEFT JOIN message_media mm ON mm.message_row_id = m._id
 ORDER BY m.timestamp;
 ```
 
-ALEAPP 도 `message_media.message_row_id` 와 `message_location.message_row_id` 를 `message._id` 에 잇습니다. 검체 앱 버전에서 칸 이름이 같은지는 `PRAGMA table_info(message);` 로 먼저 확인합니다. 도구 결과와 직접 뽑은 결과의 건수가 다르면 [도구 검증](../../03-techniques/reporting/tool-validation.md)의 방법대로 원인을 찾습니다.
+`message_media.message_row_id` 와 `message_location.message_row_id` 는 `message._id` 에 이어집니다[1]. 검체 앱 버전에서 칸 이름이 같은지는 `PRAGMA table_info(message);` 로 먼저 확인합니다. 도구 결과와 직접 뽑은 결과의 건수가 다르면 [도구 검증](../../03-techniques/reporting/tool-validation.md)의 방법대로 원인을 찾습니다.
 
 ## 교차 검증
 

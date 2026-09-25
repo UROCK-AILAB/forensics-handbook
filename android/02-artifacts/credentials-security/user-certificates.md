@@ -14,7 +14,7 @@ nav_order: 1260
 
 TLS 연결에서 상대 서버를 믿을지는 기기에 등록된 CA (Certificate Authority, 인증 기관) 인증서로 정합니다. 안드로이드의 CA 저장소는 Conscrypt 의 TrustedCertificateStore 가 관리하고, 기기에 처음부터 들어 있는 시스템 CA, 사용자가 추가한 CA, 사용자가 끈 시스템 CA 를 폴더로 나눠 둡니다 [1].
 
-사용자가 시스템 CA 를 끄면 원본은 그대로 두고 똑같은 사본을 `cacerts-removed` 에 넣습니다 [1]. 소스 주석에 따르면 이 삭제는 업그레이드 뒤에도 유지되지만, 시스템 업데이트로 다시 발급된 CA 까지 가리려는 것은 아닙니다 [1]. 그래서 `cacerts-removed` 에 파일이 있으면 누군가 그 시스템 CA 를 끈 흔적으로 읽을 수 있습니다.
+사용자가 시스템 CA 를 끄면 원본은 그대로 두고 똑같은 사본을 `cacerts-removed` 에 넣습니다 [1]. 이 삭제는 업그레이드 뒤에도 유지되지만, 시스템 업데이트로 다시 발급된 CA 까지 가리려는 것은 아닙니다 [1]. 그래서 `cacerts-removed` 에 파일이 있으면 누군가 그 시스템 CA 를 끈 흔적으로 읽을 수 있습니다.
 
 CA 가 설치돼 있다고 모든 앱이 그 CA 를 믿지는 않습니다. 앱마다 네트워크 보안 설정 (Network Security Configuration) 으로 어느 CA 를 믿을지 정하고, 기본값은 앱의 targetSdk 에 따라 다릅니다 [2]. 사용자 CA 한 장이 어느 앱의 통신에 영향을 줄 수 있었는지는 이 설정까지 봐야 답할 수 있습니다.
 
@@ -27,7 +27,7 @@ CA 가 설치돼 있다고 모든 앱이 그 CA 를 믿지는 않습니다. 앱�
 | 사용자가 추가한 CA | `/data/misc/user/<사용자 번호>/cacerts-added` [1][4][5] | 저장소 소스의 기본값은 `/data/misc/keychain/cacerts-added` [1] |
 | 사용자가 끈 시스템 CA | `/data/misc/user/<사용자 번호>/cacerts-removed` [1][4][5] | 저장소 소스의 기본값은 `/data/misc/keychain/cacerts-removed` [1] |
 
-저장소 소스에는 `/data/misc/keychain` 아래가 기본값으로 적혀 있지만, 이 기본 폴더는 `setDefaultUserDirectory()` 로 바꿀 수 있습니다 [1]. 앱 프로세스는 시작할 때 이 값을 `Environment.getUserConfigDirectory(사용자 번호)` 로 바꾸고 [5], 이 함수는 `/data/misc/user/<사용자 번호>` 를 돌려주니 [4] 사용자 CA 는 사용자마다 따로 있습니다. 기본 사용자는 0 번이라서 `/data/misc/user/0/cacerts-added` 부터 보고, 여러 사용자가 있는 기기라면 사용자 번호마다 폴더를 확인합니다. 사용자와 프로필 구조는 [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md), 파티션과 APEX 같은 저장 영역은 [파티션과 저장 영역 (Partitions)](../../01-foundations/storage/partitions/index.md) 페이지에서 다룹니다.
+저장소의 기본값은 `/data/misc/keychain` 아래지만, 이 기본 폴더는 `setDefaultUserDirectory()` 로 바꿀 수 있습니다 [1]. 앱 프로세스는 시작할 때 이 값을 `Environment.getUserConfigDirectory(사용자 번호)` 로 바꾸고 [5], 이 함수는 `/data/misc/user/<사용자 번호>` 를 돌려주니 [4] 사용자 CA 는 사용자마다 따로 있습니다. 기본 사용자는 0 번이라서 `/data/misc/user/0/cacerts-added` 부터 보고, 여러 사용자가 있는 기기라면 사용자 번호마다 폴더를 확인합니다. 사용자와 프로필 구조는 [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md), 파티션과 APEX 같은 저장 영역은 [파티션과 저장 영역 (Partitions)](../../01-foundations/storage/partitions/index.md) 페이지에서 다룹니다.
 
 앱이 사용자 CA 를 믿는 기본값도 버전마다 다릅니다 [2].
 
@@ -36,7 +36,7 @@ CA 가 설치돼 있다고 모든 앱이 그 CA 를 믿지는 않습니다. 앱�
 | Android 6.0 (API 23) 이하 | 시스템 CA 와 사용자 CA (`src="system"`, `src="user"`) |
 | Android 7.0 (API 24) 이상 | 시스템 CA 만 (`<certificates src="system" />`) |
 
-Android 11 부터 CA 를 설정 앱에서만 설치할 수 있다는 설명과 사용자 CA 를 설치하면 "네트워크가 모니터링될 수 있음" 알림이 뜬다는 설명은 이번에 확인하지 못했습니다. 삼성 One UI 의 인증서 설정 화면 위치와 녹스 쪽 인증서 저장소도 확인하지 못했습니다.
+Android 11 부터 CA 를 설정 앱에서만 설치할 수 있고, 사용자 CA 를 설치하면 "네트워크가 모니터링될 수 있음" 알림이 뜬다고 알려져 있습니다. 삼성 One UI 의 인증서 설정 화면 위치와 녹스 쪽 인증서 저장소는 공개 자료가 없습니다.
 
 ## 구조
 
@@ -74,9 +74,9 @@ user:7651b327.0
 
 ### 기기 관리자·설정 쪽 기록
 
-기기 관리자 정책 파일 `device_policies.xml` 에는 `accepted-ca-certificate`, `owner-installed-ca-cert` 라는 태그 이름이 있습니다 [3]. 관리자 앱이 설치한 CA 와 사용자가 확인한 CA 를 적는 곳으로 보이지만 뜻은 소스 주석으로 확인하지 못했고, 파일 자체는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](device-admin-accessibility.md) 페이지에서 다룹니다. 관찰 기기의 settings secure 에는 `config_update_certificate` 키가 있었지만 뜻은 모르고, 키 이름만 확인했습니다.
+기기 관리자 정책 파일 `device_policies.xml` 에는 `accepted-ca-certificate`, `owner-installed-ca-cert` 라는 태그 이름이 있습니다 [3]. 관리자 앱이 설치한 CA 와 사용자가 확인한 CA 를 적는 곳으로 보입니다. 파일 자체는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](device-admin-accessibility.md) 페이지에서 다룹니다. settings secure 에는 `config_update_certificate` 키가 있을 수 있지만, 뜻을 밝힌 공개 자료는 없습니다.
 
-VPN·Wi-Fi 에 쓰는 사용자 인증서(클라이언트 인증서와 개인 키)가 어디에 어떤 모양으로 남는지는 이 페이지에서 확인하지 않았습니다. 설정 쪽 흔적은 [VPN 설정 (VPN)](../network/vpn.md) 과 [와이파이 설정과 접속 기록 (WifiConfigStore)](../network/wifi.md), 키 저장소는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
+VPN·Wi-Fi 에 쓰는 사용자 인증서(클라이언트 인증서와 개인 키)의 설정 쪽 흔적은 [VPN 설정 (VPN)](../network/vpn.md) 과 [와이파이 설정과 접속 기록 (WifiConfigStore)](../network/wifi.md), 키 저장소는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
 
 ## 증거로서 의미
 
@@ -86,7 +86,7 @@ VPN·Wi-Fi 에 쓰는 사용자 인증서(클라이언트 인증서와 개인 �
 
 **증명하지 못하는 것**
 
-사용자 CA 가 있다는 사실만으로 통신을 가로챘다고 말할 수 없습니다. API 24 이상을 목표로 하고 `src="user"` 를 따로 두지 않은 앱은 기본적으로 사용자 CA 로 만든 TLS 연결을 받아들이지 않으니 [2], 영향을 받았을 수 있는 앱은 앱마다 설정을 보고 좁혀야 합니다. 누가, 어떤 경로로 CA 를 설치했는지도 인증서 파일은 말하지 않습니다. 회사 관리 앱이 넣은 CA 인지 사용자가 직접 넣은 CA 인지는 `device_policies.xml` 의 관련 태그와 관리자 앱 기록을 함께 봐야 하는데, 그 태그의 정확한 뜻은 아직 확인하지 못했습니다.
+사용자 CA 가 있다는 사실만으로 통신을 가로챘다고 말할 수 없습니다. API 24 이상을 목표로 하고 `src="user"` 를 따로 두지 않은 앱은 기본적으로 사용자 CA 로 만든 TLS 연결을 받아들이지 않으니 [2], 영향을 받았을 수 있는 앱은 앱마다 설정을 보고 좁혀야 합니다. 누가, 어떤 경로로 CA 를 설치했는지도 인증서 파일은 말하지 않습니다. 회사 관리 앱이 넣은 CA 인지 사용자가 직접 넣은 CA 인지는 `device_policies.xml` 의 관련 태그와 관리자 앱 기록을 함께 봐야 하는데, 그 태그의 정확한 뜻을 밝힌 공개 자료는 없습니다.
 
 보고서에는 "이 사용자 폴더에 이 주체 이름의 CA 가 추가돼 있고, 이 앱들은 설정상 사용자 CA 를 믿는다" 처럼 기록이 말하는 만큼만 씁니다.
 

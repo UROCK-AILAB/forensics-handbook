@@ -19,7 +19,7 @@ Android 기기의 저장소는 하는 일이 정해진 여러 파티션으로 �
 
 ### 파티션 세 묶음
 
-AOSP 문서는 파티션을 system 쪽, vendor 쪽, 업데이트하지 않는 파티션의 세 묶음으로 나눕니다. system 쪽은 한 묶음으로, vendor 쪽은 또 다른 한 묶음으로 업데이트하도록 권장하고, userdata 처럼 업데이트하지 않는 파티션은 OTA 가 건드리지 않습니다. system·vendor·product 같은 파티션은 Android 10 이후 기기에서 super 파티션 안의 논리 파티션으로 들어갈 수 있는데, 그 구조는 [동적 파티션 (super)](super-partition.md)에서 다룹니다. 이름 끝에 `_a`·`_b` 가 붙은 두 벌짜리 파티션은 [A/B 슬롯](ab-slots.md)에서 설명합니다.
+파티션은 system 쪽, vendor 쪽, 업데이트하지 않는 파티션의 세 묶음으로 나뉩니다[1]. system 쪽은 한 묶음으로, vendor 쪽은 또 다른 한 묶음으로 업데이트하도록 권장하고, userdata 처럼 업데이트하지 않는 파티션은 OTA 가 건드리지 않습니다. system·vendor·product 같은 파티션은 Android 10 이후 기기에서 super 파티션 안의 논리 파티션으로 들어갈 수 있는데, 그 구조는 [동적 파티션 (super)](super-partition.md)에서 다룹니다. 이름 끝에 `_a`·`_b` 가 붙은 두 벌짜리 파티션은 [A/B 슬롯](ab-slots.md)에서 설명합니다.
 
 **system 쪽 파티션**
 
@@ -66,7 +66,7 @@ vbmeta 가 담는 검증 부팅 정보가 무엇을 확인하는지는 [부트�
 
 키의 위치는 userdata 의 fstab 줄에 `keydirectory=/metadata/vold/metadata_encryption` 으로 적혀 있습니다. 키는 KeyMint (예전 이름 Keymaster)가 보호하고 KeyMint 는 검증 부팅이 보호합니다. 커널에서는 dm-default-key 모듈이 이 암호화를 맡고, 기본 알고리즘은 AES-256-XTS 이지만 AES 가속이 없는 기기는 Adiantum 을 쓸 수 있습니다. fstab 에서는 `metadata_encryption=` 플래그로 설정합니다.
 
-AOSP 문서에 나오는 metadata 파티션의 fstab 예는 다음과 같습니다.
+metadata 파티션의 fstab 예는 다음과 같습니다[3].
 
 ```
 /dev/block/by-name/metadata /metadata ext4 noatime,nosuid,nodev,discard,sync wait,formattable,first_stage_mount,check
@@ -74,7 +74,7 @@ AOSP 문서에 나오는 metadata 파티션의 fstab 예는 다음과 같습니�
 
 ### 파일 시스템
 
-AOSP 가 보안 패치를 자주 내는 파일 시스템은 ext4, f2fs, exfat (커널 5.10 이상), vfat, EROFS, incfs, fuse 이고, sdcardfs 는 커널 4.14 이하만 지원하며 폐기되었습니다. Android 는 커널에 fscrypt (파일 단위 암호화)와 fsverity 지원을 요구하고, Android 13 부터 사용자 공간은 GKI 에 들어간 파일 시스템만 씁니다. 어느 파티션이 어느 파일 시스템인지는 기기마다 달라서 이 페이지에서 정해 말하지 않으며, 각 파일 시스템의 구조는 [파일 시스템 (ext4·F2FS)](../filesystems/index.md)에서 다룹니다.
+AOSP 가 보안 패치를 자주 내는 파일 시스템은 ext4, f2fs, exfat (커널 5.10 이상), vfat, EROFS, incfs, fuse 이고, sdcardfs 는 커널 4.14 이하만 지원하며 폐기되었습니다. Android 는 커널에 fscrypt (파일 단위 암호화)와 fsverity 지원을 요구하고, Android 13 부터 사용자 공간은 GKI 에 들어간 파일 시스템만 씁니다. 어느 파티션이 어느 파일 시스템인지는 기기마다 다르고, 각 파일 시스템의 구조는 [파일 시스템 (ext4·F2FS)](../filesystems/index.md)에서 다룹니다.
 
 ### 장치 경로
 
@@ -84,19 +84,19 @@ AOSP 가 보안 패치를 자주 내는 파일 시스템은 ext4, f2fs, exfat (�
 /dev/block/by-name/<이름>
 ```
 
-super 안의 논리 파티션이 어느 장치 경로로 나타나는지는 이 조사에서 확인하지 못했습니다.
+super 안의 논리 파티션이 어느 장치 경로로 나타나는지는 검체에서 확인합니다.
 
 ## 읽는 법
 
 이미지나 수집 보고서에서 파티션 목록을 받으면 먼저 이름을 위의 세 묶음에 나눠 넣습니다. userdata 와 metadata 는 사용자 데이터를 풀 때 짝으로 필요하고, system·vendor 쪽은 빌드를 확인하고 검증 부팅 정보와 대조할 때 봅니다. init_boot 가 있으면 ramdisk 를 boot 와 따로 두는 Android 13 이후 방식이고, 목록에 system·vendor 가 없고 super 만 있으면 동적 파티션을 쓰는 기기입니다. 이름에 `_a`·`_b` 가 붙어 있으면 두 벌 가운데 어느 쪽이 현재 슬롯이었는지를 [A/B 슬롯](ab-slots.md)의 방법으로 확인합니다.
 
-루팅하지 않은 기기에서 adb 일반 권한으로 얻는 출력에도 파티션 배치의 흔적이 보입니다. `dumpsys package` 의 Libraries 목록에는 `/system/framework` 와 `/system_ext/framework` 아래의 jar 경로가 나옵니다. 같은 기기의 관찰 메모에는 파티션 목록이나 마운트 정보가 없어서, 이 기기의 실제 파티션 구성은 이 페이지에서 말하지 않습니다.
+루팅하지 않은 기기에서 adb 일반 권한으로 얻는 출력에도 파티션 배치의 흔적이 보입니다. `dumpsys package` 의 Libraries 목록에는 `/system/framework` 와 `/system_ext/framework` 아래의 jar 경로가 나옵니다.
 
 ## 포렌식에서 중요한 점
 
 조사에서 주로 보는 곳은 userdata 입니다. 메타데이터 암호화를 쓰는 기기에서 암호를 풀지 못한 userdata 이미지는 파일 내용과 이름뿐 아니라 폴더 구조, 크기, 시각도 읽을 수 없고, 그래서 지운 파일 복구나 파일 시스템 시각 분석도 복호화가 된 뒤에야 시작할 수 있습니다. 복구 방법은 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
-metadata 파티션을 잃거나 지우면 userdata 를 풀 수 없다는 판단은 "키가 metadata 파티션에 있다"는 문서 내용에서 끌어낸 추론이고, 문서가 직접 한 말은 아닙니다. 보고서에는 추론이라고 밝혀 적습니다.
+키가 metadata 파티션에 있으므로[3], metadata 파티션을 잃거나 지우면 userdata 를 풀 수 없을 것으로 보입니다. 문서에 직접 적힌 내용은 아니므로 보고서에는 추정이라고 밝혀 적습니다.
 
 misc 파티션은 recovery 가 쓰는 작은 영역이지만 Virtual A/B 기기에서는 업데이트 병합 상태도 여기에 남습니다. 그 내용은 [A/B 슬롯](ab-slots.md)에서 다룹니다.
 
@@ -106,9 +106,9 @@ misc 파티션은 recovery 가 쓰는 작은 영역이지만 Virtual A/B 기기�
 
 | 항목 | AOSP 문서 | 삼성 갤럭시 (One UI) |
 |---|---|---|
-| 파티션 묶음과 이름 | 위 표 | 확인 못 함 |
-| 제조사 전용 파티션 (EFS, persist 등) | 문서 범위 밖 | 확인 못 함 |
-| 파티션별 파일 시스템 | 기기마다 다름 | 확인 못 함 |
+| 파티션 묶음과 이름 | 위 표 | 검체에서 확인 |
+| 제조사 전용 파티션 (EFS, persist 등) | 문서 범위 밖 | 검체에서 확인 |
+| 파티션별 파일 시스템 | 기기마다 다름 | 검체에서 확인 |
 
 ## 참고 문헌
 

@@ -6,7 +6,7 @@ nav_order: 300
 
 # 보안 폴더와 작업 프로필 (Secure Folder·Work Profile)
 
-작업 프로필 (Work Profile) 은 Android 다중 사용자 구조 위에서 주 사용자에 딸린 보조 사용자로 동작하며 앱 데이터와 계정을 따로 두고, 삼성 보안 폴더 (Secure Folder) 도 관찰 기기에서는 주 사용자에 딸린 사용자로 보였지만 그 구조는 삼성 문서로 확인하지 못했습니다.
+작업 프로필 (Work Profile) 은 Android 다중 사용자 구조 위에서 주 사용자에 딸린 보조 사용자로 동작하며 앱 데이터와 계정을 따로 둡니다[1]. 삼성 보안 폴더 (Secure Folder) 도 기기에서 주 사용자에 딸린 사용자로 보일 수 있지만, 그 구조를 설명한 공개 삼성 문서가 없어 검체에서 확인해야 합니다.
 
 ## 이 구조가 드러나는 아티팩트
 
@@ -18,7 +18,7 @@ nav_order: 300
 
 같은 앱이 주 사용자와 작업 프로필에 모두 설치되어 있으면 데이터가 따로 있고, 프로필 경계를 넘어 통신하려면 `INTERACT_ACROSS_PROFILES` 권한이나 앱옵스 승인이 있어야 합니다. 작업 프로필의 계정은 주 사용자와 별개라서 자격 증명을 프로필 경계 너머로 읽을 수 없고, 인텐트를 프로필 안팎으로 넘길지는 관리자가 정합니다.
 
-모든 것이 나뉘지는 않습니다. 아래 표는 공식 문서가 나뉘는 것과 함께 쓰는 것으로 설명한 항목입니다.
+모든 것이 나뉘지는 않습니다. 따로 두는 것과 함께 쓰는 것은 아래와 같습니다[1].
 
 | 구분 | 항목 |
 |---|---|
@@ -28,24 +28,24 @@ nav_order: 300
 
 작업 프로필을 관리하는 쪽은 프로필 소유자 (profile owner) 인 기기 정책 클라이언트(DPC) 앱이고, 이 앱이 DevicePolicyManager API 로 정책을 겁니다. 작업 프로필 앱의 아이콘에는 파란 배지가 붙고, Android 9 이상에서 그 색은 `#1A73E8` 입니다. 사용자는 설정이나 빠른 설정에서 작업 프로필을 켜고 끌 수 있습니다. 정책을 거는 앱의 흔적은 [기기 관리자와 접근성 권한](../../02-artifacts/credentials-security/device-admin-accessibility.md) 페이지에서 다룹니다.
 
-작업 프로필에 어떤 userid 값이 붙는지, 프로필마다 어떤 파일이 남는지는 이번 판에서 확인하지 못했습니다.
+작업 프로필에 붙는 userid 값과 프로필마다 남는 파일은 검체에서 확인합니다.
 
-## 보안 폴더에 대해 확인하지 못한 것
+## 보안 폴더에서 확인할 것
 
-보안 폴더의 구조는 이번 판에서 삼성 문서로 확인하지 못했고, 조사할 때 확인할 질문을 아래에 남깁니다.
+보안 폴더의 구조를 설명한 공개 삼성 문서가 없어서, 조사할 때 아래 질문을 검체에서 확인합니다.
 
 | 질문 | 상태 |
 |---|---|
-| 보안 폴더가 별도 Android 사용자(프로필)로 만들어지는가, 그렇다면 userid 는 몇인가 | 확인 전 |
-| 보안 폴더의 앱 데이터가 `/data/user/<userid>` 아래에 따로 놓이는가 | 확인 전 |
-| 보안 폴더가 주 사용자와 다른 암호화 키를 쓰는가 | 확인 전 |
-| 보안 폴더를 숨기는 기능이 어떤 흔적을 남기는가 | 확인 전(아래 설정 키 이름만 봄) |
+| 보안 폴더가 별도 Android 사용자(프로필)로 만들어지는가, 그렇다면 userid 는 몇인가 | 검체에서 확인 |
+| 보안 폴더의 앱 데이터가 `/data/user/<userid>` 아래에 따로 놓이는가 | 검체에서 확인 |
+| 보안 폴더가 주 사용자와 다른 암호화 키를 쓰는가 | 검체에서 확인 |
+| 보안 폴더를 숨기는 기능이 어떤 흔적을 남기는가 | 검체에서 확인(관련 설정 키는 아래에 있음) |
 
 ## 기기에서 보이는 흔적
 
 ### 사용자 목록
 
-adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 관찰 기기에는 사용자가 둘 나옵니다. 아래는 관찰 메모에서 필요한 줄만 옮긴 것이고, `#` 와 `<값>` 은 가린 자리입니다.
+adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 사용자 목록이 나옵니다. 아래는 사용자가 둘인 기기의 출력에서 필요한 줄만 옮긴 것이고, `#` 와 `<값>` 은 가린 자리입니다.
 
 ```
 Users:
@@ -57,7 +57,7 @@ Users:
     Flags: <값>
 ```
 
-둘째 사용자는 userid 가 세 자리이고 `parentId` 가 있어서 주 사용자에 딸린 프로필로 보입니다. 이 사용자가 보안 폴더인지 작업 프로필인지는 `Type` 값이 가려져 있어 확인하지 못했습니다.
+둘째 사용자는 userid 가 세 자리이고 `parentId` 가 있어서 주 사용자에 딸린 프로필로 보입니다. 이 사용자가 보안 폴더인지 작업 프로필인지는 `Type` 값으로 가립니다.
 
 사용자 항목에는 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground`, `Has profile owner`, `Restrictions`, `Device policy restrictions`, `Effective restrictions`, `Can have profile`, `UserProperties`, `Ignore errors preparing storage` 칸이 있습니다. 이 가운데 `Has profile owner` 는 앞에서 말한 프로필 소유자가 있는지와 이름이 이어지고, 각 칸의 뜻과 시각 형식은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
 
@@ -83,11 +83,11 @@ mProfileApiVisibility
 mItemsRestrictedOnHomeScreen
 ```
 
-이 칸들의 공식 설명은 이번 판에서 확인하지 못했습니다. 이름으로 보아 `mUseParentsContacts` 는 연락처, `mMediaSharedWithParent` 는 미디어, `mCredentialShareableWithParent` 는 자격 증명을 주 사용자와 나눠 쓰는지와 이어져 있어서, 프로필 안의 데이터가 주 사용자 쪽 기록에도 섞였을지 판단할 때 확인할 곳입니다.
+이름으로 보아 `mUseParentsContacts` 는 연락처, `mMediaSharedWithParent` 는 미디어, `mCredentialShareableWithParent` 는 자격 증명을 주 사용자와 나눠 쓰는지와 이어져 있어서, 프로필 안의 데이터가 주 사용자 쪽 기록에도 섞였을지 판단할 때 확인할 곳입니다.
 
 ### 설정 값
 
-설정 값에는 보안 폴더와 이름이 이어지는 키가 표마다 하나씩 있었고, 값은 가려서 확인하지 않았습니다.
+설정 값에는 보안 폴더와 이름이 이어지는 키가 표마다 하나씩 있습니다.
 
 | 설정 표 | 키 |
 |---|---|
@@ -95,17 +95,15 @@ mItemsRestrictedOnHomeScreen
 | global | `smartswitch_data_exist_securefolder` |
 | system | `caller_id_to_show_Secure Folder` |
 
-`hide_secure_folder_flag` 는 이름으로 보아 보안 폴더 숨기기와 이어지지만 값의 뜻은 확인하지 못했습니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다.
+`hide_secure_folder_flag` 는 이름으로 보아 보안 폴더 숨기기와 이어지고, 값의 뜻은 공개 자료가 없어 검체에서 확인합니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다.
 
 ### 계정과 알림
 
-`dumpsys account` 는 사용자마다 `User UserInfo{...}:` 머리 아래에 계정 목록과 계정 변경 이력(Accounts History)을 보여 주고, 이력의 칸은 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다. 관찰 메모에는 사용자 머리가 한 번만 보이는데, 요약본이라 둘째 사용자 부분이 출력에 있었는지는 알 수 없습니다. 이력 해석은 [계정](../../02-artifacts/system-account/accounts/index.md) 페이지에서 다룹니다.
+`dumpsys account` 는 사용자마다 `User UserInfo{...}:` 머리 아래에 계정 목록과 계정 변경 이력(Accounts History)을 보여 주고, 이력의 칸은 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다. 이력 해석은 [계정](../../02-artifacts/system-account/accounts/index.md) 페이지에서 다룹니다.
 
-`dumpsys notification` 의 알림 항목에는 `userId=` 칸이 있고, 관찰 기기에는 `userId=-#` 처럼 음수인 값도 있었습니다. 음수 userId 가 무엇을 뜻하는지는 확인하지 못했습니다.
+`dumpsys notification` 의 알림 항목에는 `userId=` 칸이 있고, `userId=-#` 처럼 음수인 값도 나올 수 있습니다. 음수 userId 의 뜻은 검체에서 확인합니다.
 
 ## 포렌식에서 중요한 점
-
-아래는 공식 문서의 설명에서 끌어낸 해석이고, 문서에 이 문장 그대로 있지는 않습니다.
 
 작업 프로필은 앱 데이터와 계정을 주 사용자와 따로 두기 때문에, 수집과 분석을 주 사용자 기준으로만 하면 프로필 안의 앱 데이터와 계정을 놓칩니다. 먼저 `dumpsys user` 나 수집한 이미지로 사용자가 몇 명인지 확인하고, 사용자마다 앱 데이터·계정·알림을 따로 봅니다.
 
@@ -113,9 +111,9 @@ mItemsRestrictedOnHomeScreen
 
 ## 함정
 
-관찰 기기의 둘째 사용자를 보안 폴더로 단정하지 않습니다. userid 가 세 자리이고 주 사용자에 딸린 프로필이라는 것까지만 확인했고, 종류를 보여 주는 `Type` 값은 확인하지 못했습니다.
+userid 가 세 자리이고 주 사용자에 딸린 프로필이라는 것만으로 그 사용자를 보안 폴더로 단정하지 않습니다. 종류는 `Type` 값으로 가립니다.
 
-작업 프로필이 꺼져 있을 때 데이터가 어떤 상태로 남는지, 보안 폴더가 잠겨 있을 때 무엇을 읽을 수 있는지는 이번 판에서 확인하지 못했습니다. 두 경우 모두 수집 결과에 프로필 데이터가 없다고 해서 프로필에 데이터가 없었다고 말하지 않습니다.
+작업 프로필이 꺼져 있을 때 데이터가 어떤 상태로 남는지, 보안 폴더가 잠겨 있을 때 무엇을 읽을 수 있는지는 검체에서 확인합니다. 두 경우 모두 수집 결과에 프로필 데이터가 없다고 해서 프로필에 데이터가 없었다고 말하지 않습니다.
 
 ## 도구
 

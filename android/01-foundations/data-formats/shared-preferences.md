@@ -16,7 +16,7 @@ nav_order: 200
 
 Google 은 SharedPreferences 를 쓰는 앱에 Jetpack DataStore 로 옮기라고 권하고, DataStore 에는 SharedPreferences 의 값을 옮겨 오는 기능이 들어 있습니다. 그래서 최근 앱은 설정을 이 XML 대신 `files/datastore/` 아래의 프로토콜 버퍼 파일에 둘 수 있고, 그 형식은 [프로토콜 버퍼](protobuf.md) 에서 설명합니다. 옮긴 뒤 옛 XML 파일이 지워지는지는 이 페이지의 출처로 확인되지 않아서 두 곳을 모두 보는 편이 안전합니다.
 
-제목의 "설정 XML" 에는 시스템 설정도 들어갑니다. 시스템 설정 값(global·secure·system)은 기기에서 `settings` 명령으로 키 이름을 읽을 수 있고, 관찰한 기기에서는 global 596개, secure 464개, system 582개가 나왔습니다. 이 값이 디스크의 어느 파일에 어떤 형식으로 저장되는지는 이 페이지에서 확인하지 않았고, 키마다 무엇을 뜻하는지는 [설정 값](../../02-artifacts/system-account/settings.md) 에서 다룹니다. 시스템 서비스가 쓰는 XML 은 텍스트가 아니라 바이너리일 수 있으니 [안드로이드 바이너리 XML](abx.md) 도 함께 봅니다.
+제목의 "설정 XML" 에는 시스템 설정도 들어갑니다. 시스템 설정 값(global·secure·system)은 기기에서 `settings` 명령으로 키 이름을 읽을 수 있고, 키는 영역마다 수백 개씩 나올 수 있습니다(예: global 596개, secure 464개, system 582개). 이 값이 디스크의 어느 파일에 어떤 형식으로 저장되는지는 이 페이지에서 확인하지 않았고, 키마다 무엇을 뜻하는지는 [설정 값](../../02-artifacts/system-account/settings.md) 에서 다룹니다. 시스템 서비스가 쓰는 XML 은 텍스트가 아니라 바이너리일 수 있으니 [안드로이드 바이너리 XML](abx.md) 도 함께 봅니다.
 
 ## 구조
 

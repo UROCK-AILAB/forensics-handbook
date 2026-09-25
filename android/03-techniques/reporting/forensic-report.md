@@ -12,11 +12,11 @@ nav_order: 1540
 
 보고서는 데이터를 충분히 검색하고 관련 항목을 북마크한 뒤, 분석을 마무리하는 단계에서 씁니다[1]. 다만 좋은 보고서는 조사 내내 쌓은 기록·메모·사진·도구 출력을 바탕으로 하기 때문에[1], 준비는 증거를 확보하는 단계부터 시작합니다. 전체 조사 흐름에서 보고가 어디에 오는지는 [조사 절차](../acquisition/investigation-process.md)에 있습니다.
 
-NIST 는 디지털 증거뿐 아니라 검사에 쓴 도구·기법·방법론까지 법정 등에서 다퉈질 수 있다고 적고, 그래서 처음부터 끝까지 과정을 다시 만들 수 있게 기록을 남기라고 권합니다[1]. 보고서는 결과를 알리는 문서이면서 이 재현 기록을 한데 묶는 문서이기도 합니다.
+디지털 증거뿐 아니라 검사에 쓴 도구·기법·방법론까지 법정 등에서 다퉈질 수 있으므로, 처음부터 끝까지 과정을 다시 만들 수 있게 기록을 남깁니다[1]. 보고서는 결과를 알리는 문서이면서 이 재현 기록을 한데 묶는 문서이기도 합니다.
 
 ## 보고서에 들어갈 것
 
-NIST SP 800-101 Rev.1 은 미국 법무부(DOJ) 2008년 지침을 인용해, 보고서에는 사건과 출처를 특정할 정보, 검사 결과와 발견, 내용 책임자의 서명이 있어야 한다고 적습니다[1]. 그 밖에 넣을 수 있는 항목은 다음과 같고, 표의 구분은 읽기 쉽게 이 핸드북이 묶은 것입니다.
+보고서에는 사건과 출처를 특정할 정보, 검사 결과와 발견, 내용 책임자의 서명이 있어야 합니다[1]. 그 밖에 넣을 수 있는 항목은 다음과 같고, 표의 구분은 읽기 쉽게 묶은 것입니다.
 
 | 구분 | 넣을 수 있는 항목[1] |
 |---|---|
@@ -42,7 +42,7 @@ NIST SP 800-101 Rev.1 은 미국 법무부(DOJ) 2008년 지침을 인용해, 보
 
 ### 기기 식별 정보 적기
 
-CFTT 모바일 기기 도구 규격은 수집 대상 데이터 가운데 가입자·단말 식별자로 IMEI 와 MEID/ESN 을, UICC(SIM) 쪽 식별 정보로 SPN, ICCID, IMSI, MSISDN 등을 듭니다[2]. 각 식별자의 뜻과 읽는 곳은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md)에 있습니다.
+기기 식별 정보로는 가입자·단말 식별자인 IMEI 와 MEID/ESN, UICC(SIM) 쪽 식별 정보인 SPN, ICCID, IMSI, MSISDN 등이 있습니다[2]. 각 식별자의 뜻과 읽는 곳은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md)에 있습니다.
 
 Android 빌드 정보는 Build 클래스의 필드 이름과 그 필드가 읽는 시스템 속성 이름을 함께 적어 두면, 다른 분석가가 같은 값을 찾아 대조하기 쉽습니다. 현행 AOSP 소스 기준으로 보고서에 적을 만한 필드와 속성은 다음과 같습니다[4]. 속성 파일과 빌드 정보 자체의 설명은 [기기 정보와 빌드](../../02-artifacts/system-account/device-build.md)에 있습니다.
 
@@ -58,11 +58,11 @@ Android 빌드 정보는 Build 클래스의 필드 이름과 그 필드가 읽�
 | 빌드 지문 | `Build.FINGERPRINT` | `ro.build.fingerprint` | 이 빌드를 유일하게 식별하는 문자열 |
 | 빌드 시각 | `Build.TIME` | `ro.build.date.utc` 값에 1000 을 곱함 | 빌드를 만든 시각, 필드 값은 유닉스 기준 밀리초 |
 
-`Build.FINGERPRINT` 의 설명문은 이 값을 쪼개 해석하려 하지 말라고 적고 있어서, 보고서에는 문자열 전체를 그대로 옮깁니다[4]. 이 속성이 비어 있으면 AOSP 는 `ro.product.brand/ro.product.name/ro.product.device:ro.build.version.release/ro.build.id/ro.build.version.incremental:ro.build.type/ro.build.tags` 꼴로 값을 조립합니다[4]. `Build.TIME` 은 속성 값에 1000 을 곱해 만들기 때문에, 속성 `ro.build.date.utc` 는 초 단위이고 필드는 밀리초 단위입니다[4]. 속성 값과 필드 값을 나란히 적을 때는 이 차이를 함께 밝힙니다.
+`Build.FINGERPRINT` 는 쪼개 해석하지 않는 값이라서, 보고서에는 문자열 전체를 그대로 옮깁니다[4]. 이 속성이 비어 있으면 AOSP 는 `ro.product.brand/ro.product.name/ro.product.device:ro.build.version.release/ro.build.id/ro.build.version.incremental:ro.build.type/ro.build.tags` 꼴로 값을 조립합니다[4]. `Build.TIME` 은 속성 값에 1000 을 곱해 만들기 때문에, 속성 `ro.build.date.utc` 는 초 단위이고 필드는 밀리초 단위입니다[4]. 속성 값과 필드 값을 나란히 적을 때는 이 차이를 함께 밝힙니다.
 
-`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 칸과 `buildFingerprint`, `fingerprint` 칸이 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다. 두 fingerprint 칸의 뜻이 어떻게 다른지는 확인하지 못해서, 보고서에 옮길 때는 칸 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
+`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 칸과 `buildFingerprint`, `fingerprint` 칸이 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다. 두 fingerprint 칸의 뜻 차이는 공개 자료가 없으므로, 보고서에 옮길 때는 칸 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
 
-관찰 기기를 예로 들면 대상 목록의 기기 부분은 다음처럼 적을 수 있습니다. 일련번호와 IMEI 같은 식별자는 이 예에서 뺐습니다.
+Android 16 기기를 예로 들면 대상 목록의 기기 부분은 다음처럼 적을 수 있습니다. 일련번호와 IMEI 같은 식별자는 이 예에서 뺐습니다.
 
 ```
 모델: Android 16 기기
@@ -76,7 +76,7 @@ OS: Android 16 (SDK 36), One UI 8.5
 
 ### 시각 기준 밝히기
 
-Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대가 찍히지 않은 것이 많습니다. 관찰 기기에서 본 시각 모양은 다음과 같습니다.
+Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대가 찍히지 않은 것이 많습니다. Android 16 기기의 기록에 나오는 시각 모양은 다음과 같습니다.
 
 | 출처 | 시각 모양 | 연도·시간대 |
 |---|---|---|
@@ -86,9 +86,9 @@ Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대
 | `dumpsys batterystats` 의 Battery History 줄 | `##-## ##:##:##.###` | 찍혀 있지 않음 |
 | `dumpsys notification` 의 `mCreationTimeMs` 등 | `값(날짜 시:분:초.밀리초+####)` | 사람이 읽는 시각 옆에 시간대 차이(`+####`)가 붙음 |
 
-연도와 시간대가 없는 기록을 보고서에 옮길 때는 연도를 무엇으로 정했는지, 어느 시간대로 읽었는지를 함께 적습니다. logcat 의 기본 출력이 기기 현지 시각인지는 이 핸드북에서 확인하지 않았습니다. 줄 형식은 [logcat](../../02-artifacts/logs/logcat.md)에, 시각 값을 푸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
+연도와 시간대가 없는 기록을 보고서에 옮길 때는 연도를 무엇으로 정했는지, 어느 시간대로 읽었는지를 함께 적습니다. logcat 의 기본 출력이 기기 현지 시각인지는 검체에서 확인합니다. 줄 형식은 [logcat](../../02-artifacts/logs/logcat.md)에, 시각 값을 푸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-기기 시각이 바뀐 흔적이 있으면 그것도 보고서에 적습니다. 관찰 기기의 `dumpsys usagestats` 에는 "UsageStats RollOver history" 아래 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄이 있었습니다. 이 줄이 사용자가 시각을 바꿀 때 찍히는지 네트워크로 맞출 때 찍히는지는 확인하지 못해서, 이 줄 하나로 시각 조작을 단정하지 않습니다. 수집 시점의 자동 시간 설정은 `settings global` 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키에서 봅니다. 키의 뜻은 [설정 값](../../02-artifacts/system-account/settings.md)과 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에, 이벤트 기록 자체는 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
+기기 시각이 바뀐 흔적이 있으면 그것도 보고서에 적습니다. `dumpsys usagestats` 에는 "UsageStats RollOver history" 아래 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄이 남을 수 있습니다. 이 줄에는 사용자가 시각을 바꿨는지 네트워크로 맞췄는지 가리는 칸이 없어서, 이 줄 하나로 시각 조작을 단정하지 않습니다. 수집 시점의 자동 시간 설정은 `settings global` 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키에서 봅니다. 키의 뜻은 [설정 값](../../02-artifacts/system-account/settings.md)과 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에, 이벤트 기록 자체는 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
 
 ### 무결성 값 적기
 
@@ -106,19 +106,19 @@ Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대
 python aleapp.py -t <zip | tar | fs | gz | raw> -i <추출본 경로> -o <보고서 출력 경로>
 ```
 
-입력으로는 zip, tar(xz 압축 tar 포함), fs(폴더), gz, raw 를 받고, raw 에는 `.img`·`.dd`·`.bin` 같은 디스크 이미지와 `.001` 로 나뉜 이미지, EWF(`.E01`)가 들어갑니다[3]. NIST 는 수집하기 전에 쓰는 도구의 버전과 적용한 패치를 기록하라고 권합니다[1]. ALEAPP 가 도구 버전과 처리 기록을 보고서에 어떻게 남기는지는 README 에서 확인하지 못해서, 쓴 도구의 버전과 실행한 명령 줄은 분석가가 직접 보고서의 "검사에 쓴 장비와 설정" 에 적어 둡니다.
+입력으로는 zip, tar(xz 압축 tar 포함), fs(폴더), gz, raw 를 받고, raw 에는 `.img`·`.dd`·`.bin` 같은 디스크 이미지와 `.001` 로 나뉜 이미지, EWF(`.E01`)가 들어갑니다[3]. 수집하기 전에 쓰는 도구의 버전과 적용한 패치를 기록합니다[1]. 도구가 보고서에 버전과 처리 기록을 남기는지와 상관없이, 쓴 도구의 버전과 실행한 명령 줄은 분석가가 직접 보고서의 "검사에 쓴 장비와 설정" 에 적어 둡니다.
 
 ## 함정과 한계
 
 도구가 만든 보고서를 그대로 최종 보고서로 내면 한 일과 찾은 증거의 의미가 빠지고, 도구 출력이 화면과 다르거나 잘리는 경우도 있습니다[1]. 쓴 도구가 어떤 데이터를 정확히 가져오는지는 [도구 검증](tool-validation.md)으로 미리 확인해 두고, 알려진 한계는 보고서에 적습니다.
 
-기기 정보는 조작될 수 있어서 보고서 해석에 영향을 줍니다[1]. NIST 는 파일 확장자를 바꿔 도구를 속이는 경우, 기기 날짜·시각을 바꿔 기록된 활동의 시각을 거짓으로 만드는 경우, 가짜 거래 기록을 만드는 경우, 삭제 도구로 지우는 경우를 예로 듭니다[1]. 이런 흔적을 보는 법은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)에 있습니다.
+기기 정보는 조작될 수 있어서 보고서 해석에 영향을 줍니다[1]. 파일 확장자를 바꿔 도구를 속이는 경우, 기기 날짜·시각을 바꿔 기록된 활동의 시각을 거짓으로 만드는 경우, 가짜 거래 기록을 만드는 경우, 삭제 도구로 지우는 경우가 그 예입니다[1]. 이런 흔적을 보는 법은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)에 있습니다.
 
 NIST SP 800-101 Rev.1 은 2014년 문서라서, Android 10 이상으로 출시되는 기기에 파일 단위 암호화 (File-Based Encryption, FBE)가 의무가 된 뒤의 사정은 반영돼 있지 않습니다. 보고서 항목과 원칙은 그대로 쓸 수 있지만, 수집 범위를 설명할 때는 [저장 공간 암호화](../../01-foundations/storage/encryption/index.md)를 함께 봅니다.
 
 ## 결과를 어떻게 해석하나
 
-NIST 는 DOJ 2008 지침을 인용해 분석 관점을 네 가지로 나누고[1], 보고서의 "발견" 도 이 틀로 짜면 빠진 관점이 드러납니다.
+분석 관점은 네 가지로 나눌 수 있고[1], 보고서의 "발견" 도 이 틀로 짜면 빠진 관점이 드러납니다.
 
 | 관점 | 보는 것[1] | 함께 볼 페이지 |
 |---|---|---|
