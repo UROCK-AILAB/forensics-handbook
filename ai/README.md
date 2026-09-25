@@ -10,7 +10,7 @@ ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정�
 
 같은 서비스라도 Windows·macOS·Android·iOS 마다 저장 위치와 보호 방식이 다르므로, 주요 서비스는 OS 별로 나눠 설명합니다. 대화 원본이 서버에만 남는 경우가 많아서, 계정 데이터 내보내기와 기업용 감사 기록도 함께 다룹니다.
 
-AI 앱은 자주 바뀝니다. 이 핸드북은 2026년 9월 기준입니다. OS 자체의 저장 구조는 [Windows](https://urock-ailab.github.io/forensics-handbook-windows/)·[macOS](https://urock-ailab.github.io/forensics-handbook-mac/)·[Android](https://urock-ailab.github.io/forensics-handbook-android/)·[iOS](https://urock-ailab.github.io/forensics-handbook-ios/)·[Linux](https://urock-ailab.github.io/forensics-handbook-linux/) 핸드북에서 다룹니다.
+AI 앱은 자주 바뀝니다. 이 핸드북은 2026년 9월 기준입니다.
 
 ## 구성
 
