@@ -14,7 +14,7 @@ nav_order: 1460
 
 ## 먼저 확인할 것
 
-**수집 범위**를 먼저 봅니다. 웹사이트 방문 기록은 암호를 건 로컬 백업에만 들어간다고 Apple 이 밝혔고 [5], MVT 도 Safari 방문 기록 모듈을 암호 건 백업용으로 표시합니다 [12]. 실제로 암호를 걸지 않은 로컬 백업에는 `History.db`·`SafariTabs.db`·`BrowserState.db`·`CloudTabs.db` 가 없고 HomeDomain `Library/Safari/Bookmarks.db` 만 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 바이옴은 전체 파일 시스템 추출에서 다룬 자료만 있습니다 [11].
+**수집 범위**를 먼저 봅니다. 웹사이트 방문 기록은 암호를 건 로컬 백업에만 들어간다고 Apple 이 밝혔고 [5], MVT 도 Safari 방문 기록 모듈을 암호 건 백업용으로 표시합니다 [12]. 실제로 암호를 걸지 않은 로컬 백업에는 `History.db`·`SafariTabs.db`·`BrowserState.db`·`CloudTabs.db` 가 없고 HomeDomain `Library/Safari/Bookmarks.db` 만 있었습니다 (확인 범위: iOS 27.0). 바이옴은 전체 파일 시스템 추출에서 다룬 자료만 있습니다 [11].
 
 **iOS 버전**에 따라 파일 위치와 시각 형식이 달라집니다.
 
@@ -24,7 +24,7 @@ nav_order: 1460
 | iOS 16 | `_DKEvent.Safari.History` 스트림이 `History.db` 보다 몇 초 늦게 찍히고, 기록을 지울 때 바이옴에 남는 모양이 시험으로 보고됐습니다 [4] |
 | iOS 17 이후 | 프로필별 기록 `Safari/Profiles/*/History.db` 를 iLEAPP 가 따로 찾습니다 [2]. 바이옴 `App.WebUsage` 를 iLEAPP 가 iOS 17.1~18.7.8 자료로 시험했습니다 [7] |
 | iOS 18 이하 / 26 이상 | iLEAPP 탭 파서 주석에 "iOS 18 이하 Cocoa, iOS 26 이상 Unix" 로 시각 형식이 바뀐다고 적혀 있습니다 [3] |
-| iOS 27 | `Bookmarks.db` 와 아래 "로컬 백업에서 보이는 것" 의 파일 이름을 암호 없는 백업에서 확인했습니다 (확인 범위: iPhone 13 mini, iOS 27.0) |
+| iOS 27 | `Bookmarks.db` 와 아래 "로컬 백업에서 보이는 것" 의 파일 이름을 암호 없는 백업에서 확인했습니다 (확인 범위: iOS 27.0) |
 
 **시각 기준**이 브라우저마다 다릅니다. Safari 방문 시각은 iLEAPP 가 값이 978307200 보다 크면 Unix 시각, 작으면 Mac 절대 시각으로 가려 읽고 [2], 크롬은 1601-01-01 부터 센 마이크로초라서 [8] 기준점이 다릅니다. 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
 
@@ -45,7 +45,7 @@ nav_order: 1460
 
 ### 로컬 백업에서 보이는 것
 
-암호를 걸지 않은 로컬 백업에서는 방문 기록 DB 가 없는 대신 아래 파일의 표·칸·키 이름을 확인했습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 칸의 시각 기준과, 이 기록이 방문 기록을 얼마나 대신할 수 있는지는 확인하지 못해서 "`History.db` 가 없어도 방문한 도메인의 흔적이 남는 곳" 으로만 씁니다.
+암호를 걸지 않은 로컬 백업에서는 방문 기록 DB 가 없는 대신 아래 파일의 표·칸·키 이름을 확인했습니다 (확인 범위: iOS 27.0). 칸의 시각 기준과, 이 기록이 방문 기록을 얼마나 대신할 수 있는지는 확인하지 못해서 "`History.db` 가 없어도 방문한 도메인의 흔적이 남는 곳" 으로만 씁니다.
 
 | 파일 | 확인한 이름 |
 |---|---|

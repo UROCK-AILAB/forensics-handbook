@@ -25,7 +25,7 @@ iOS 17·iPadOS 17 부터는 잠긴 개인 정보 보호 브라우징(Locked Priv
 | iOS 16 | SafariTabs.db 의 `parent` 값으로 개인 정보 보호 탭이 나뉘었고, 바이옴 SEGB 파일에는 처음부터 쓰이지 않는 것으로 보였습니다 | [3] |
 | iOS 17 이후 | 잠긴 개인 정보 보호 브라우징이 생겼습니다 | [1] |
 
-탭 DB 의 위치와 구조는 [탭과 세션 (Tabs)](tabs.md)에서 다룹니다. 관찰한 백업(암호화 안 함)에는 SafariTabs.db 와 BrowserState.db 가 없어서(확인 범위: iPhone 13 mini, iOS 27.0), 이 백업만으로는 개인 정보 보호 탭을 볼 수 없습니다.
+탭 DB 의 위치와 구조는 [탭과 세션 (Tabs)](tabs.md)에서 다룹니다. 관찰한 백업(암호화 안 함)에는 SafariTabs.db 와 BrowserState.db 가 없어서(확인 범위: iOS 27.0), 이 백업만으로는 개인 정보 보호 탭을 볼 수 없습니다.
 
 ## 구조
 
@@ -39,7 +39,7 @@ iOS 17·iPadOS 17 부터는 잠긴 개인 정보 보호 브라우징(Locked Priv
 
 `parent` 의 숫자는 검체마다 다를 수 있어서, 숫자보다 폴더 행의 `title` 을 먼저 보는 편이 안전합니다. 이름이 `privatepinned` 인 폴더는 이름으로 보아 개인 정보 보호 모드의 고정 탭으로 보이지만, 이 뜻을 따로 설명한 자료는 확인하지 못했습니다.
 
-사파리 설정 plist 에는 생체 인증·암호와 이어진 이름의 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). AppDomain-com.apple.mobilesafari `Library/Preferences/com.apple.mobilesafari.plist` 의 `BiometricAuthenticationIsAvailable`(bool), `BiometricAuthenticationTypeIfAvailable`(int), `PasscodeIsAvailable`(bool) 이고, 잠긴 개인 정보 보호 브라우징 설정과 관계가 있는지는 확인하지 못했습니다. 같은 파일의 `WBSPrivacyProxyAvailabilitySubscriberTier`, `WBSPrivacyProxyAvailabilityAccountType`, `WBSPrivacyProxyAvailabilityServiceStatus`, `WBSPrivacyProxyAvailabilityActiveOnDefaultNetwork` 는 이름으로 보아 사설 릴레이와 이어진 키이지만(확인 범위: iPhone 13 mini, iOS 27.0), 개인 정보 보호 브라우징과 직접 관계가 있다는 근거는 없습니다.
+사파리 설정 plist 에는 생체 인증·암호와 이어진 이름의 키가 있습니다(확인 범위: iOS 27.0). AppDomain-com.apple.mobilesafari `Library/Preferences/com.apple.mobilesafari.plist` 의 `BiometricAuthenticationIsAvailable`(bool), `BiometricAuthenticationTypeIfAvailable`(int), `PasscodeIsAvailable`(bool) 이고, 잠긴 개인 정보 보호 브라우징 설정과 관계가 있는지는 확인하지 못했습니다. 같은 파일의 `WBSPrivacyProxyAvailabilitySubscriberTier`, `WBSPrivacyProxyAvailabilityAccountType`, `WBSPrivacyProxyAvailabilityServiceStatus`, `WBSPrivacyProxyAvailabilityActiveOnDefaultNetwork` 는 이름으로 보아 사설 릴레이와 이어진 키이지만(확인 범위: iOS 27.0), 개인 정보 보호 브라우징과 직접 관계가 있다는 근거는 없습니다.
 
 ## 증거로서 의미
 

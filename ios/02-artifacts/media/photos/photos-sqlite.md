@@ -19,7 +19,7 @@ nav_order: 550
 
 ## 위치와 버전별 차이
 
-기기에서는 `/private/var/mobile/Media/PhotoData/Photos.sqlite` 에 있고[1][3], 로컬 백업에서는 CameraRollDomain 의 `Media/PhotoData/Photos.sqlite` 로 들어 있습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+기기에서는 `/private/var/mobile/Media/PhotoData/Photos.sqlite` 에 있고[1][3], 로컬 백업에서는 CameraRollDomain 의 `Media/PhotoData/Photos.sqlite` 로 들어 있습니다(확인 범위: iOS 27.0).
 
 자산 기본 표의 이름은 한 번 바뀌었습니다. 예전 쿼리는 `ZGENERICASSET` 을 쓰고[2], iOS 14·15 시험 자료는 `ZASSET` 을 씁니다[1]. iOS 에서 정확히 어느 버전에 바뀌었는지는 이번에 연 자료로 확인하지 못했고, macOS 사진 보관함 기준 공개 도구 값만 아래처럼 확인했습니다[4].
 
@@ -28,13 +28,13 @@ nav_order: 550
 | macOS 사진 5 (macOS 10.15) | `ZGENERICASSET` | [4] |
 | macOS 사진 6 이후 (macOS 11 이후) | `ZASSET` | [4] |
 | iOS 14·15 시험 자료 | `ZASSET` | [1] |
-| iOS 27.0 관찰 기기 | `ZASSET` | 확인 범위: iPhone 13 mini, iOS 27.0 |
+| iOS 27.0 관찰 기기 | `ZASSET` | 확인 범위: iOS 27.0 |
 
 시험 자료는 iOS 14.7·15.x 기기를 비교했고, 촬영 정보를 담는 `ZEXTENDEDATTRIBUTES` 는 iOS 15 기기에서만 채워져 있었다고 적습니다[1]. 공개 도구 iLEAPP 는 Photos.sqlite 파서를 iOS 11~18 용으로 두고 주로 15~18 을 다룹니다[3]. iOS 27 을 지원하는지는 확인하지 못했습니다.
 
 ## 구조
 
-관찰 기기의 Photos.sqlite 에는 표가 많고, 자산을 읽을 때 자주 여는 표는 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0). 표마다 칸 이름은 일부만 적었고, 역할 칸에 "이름으로 보아" 라고 붙인 표는 역할을 문서로 확인하지 못했습니다.
+관찰 기기의 Photos.sqlite 에는 표가 많고, 자산을 읽을 때 자주 여는 표는 아래와 같습니다(확인 범위: iOS 27.0). 표마다 칸 이름은 일부만 적었고, 역할 칸에 "이름으로 보아" 라고 붙인 표는 역할을 문서로 확인하지 못했습니다.
 
 | 표 | 관찰한 칸(일부) | 역할 |
 |---|---|---|
@@ -49,7 +49,7 @@ nav_order: 550
 | `ZMIGRATIONHISTORY` | `ZMIGRATIONDATE`, `ZOSVERSION`, `ZHARDWAREMODEL`, `ZDEVICEUNIQUEID`, `ZSTOREUUID`, `ZMODELVERSION`, `ZCPLENABLED` | 이름으로 보아 DB 를 새 버전으로 옮긴 기록 |
 | `ACHANGE`·`ATRANSACTION` | `ACHANGE` 에 `ZCHANGETYPE`, `ZENTITY`, `ZENTITYPK`, `ATRANSACTION` 에 `ZTIMESTAMP`, `ZAUTHOR`, `ZBUNDLEID`, `ZCONTEXTNAME` | 이름으로 보아 Core Data 변경 이력 |
 
-이 밖에 `ZGENERICALBUM`, `ZALBUMLIST`, `ZMOMENT`, `ZPHOTOSHIGHLIGHT`, `ZMEMORY`, `ZSHARE`, `ZSHAREPARTICIPANT`, `ZCLOUDSHAREDCOMMENT`, `ZCLOUDFEEDENTRY` 도 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 앨범·공유 쪽 표는 [앨범과 공유 앨범 (Albums·Shared Albums)](albums-shared.md)에서 다룹니다.
+이 밖에 `ZGENERICALBUM`, `ZALBUMLIST`, `ZMOMENT`, `ZPHOTOSHIGHLIGHT`, `ZMEMORY`, `ZSHARE`, `ZSHAREPARTICIPANT`, `ZCLOUDSHAREDCOMMENT`, `ZCLOUDFEEDENTRY` 도 있습니다(확인 범위: iOS 27.0). 앨범·공유 쪽 표는 [앨범과 공유 앨범 (Albums·Shared Albums)](albums-shared.md)에서 다룹니다.
 
 관찰 메모는 표마다 칸을 60개까지만 적어서 `ZASSET`, `ZADDITIONALASSETATTRIBUTES` 의 칸 목록이 중간에 끊겨 있습니다. 그래서 공개 도구 자료가 쓰는 `ZASSET` 의 날짜·파일 칸인 `ZDATECREATED`, `ZADDEDDATE`, `ZMODIFICATIONDATE`, `ZTRASHEDDATE`, `ZLASTSHAREDDATE`, `ZDIRECTORY`, `ZFILENAME`[5]은 관찰 기기에서 보지 못했고, 출처로만 적습니다.
 
@@ -70,7 +70,7 @@ nav_order: 550
 
 ### 편집 기록
 
-사진을 편집하면 편집 정보가 DB 와 plist 두 곳에 남습니다. DB 에는 `ZUNMANAGEDADJUSTMENT` 가 있고, CameraRollDomain 의 `Media/PhotoData/Mutations/PhotoData/CPLAssets/group###/` 아래 자산별 폴더에 `Adjustments/Adjustments.plist` 가 있으며, 이 plist 에는 `adjustmentBaseVersion`, `adjustmentData`, `adjustmentEditorBundleID`, `adjustmentFormatIdentifier`, `adjustmentFormatVersion`, `adjustmentRenderTypes`, `adjustmentTimestamp` 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). `adjustmentEditorBundleID` 는 이름으로 보아 편집한 앱을 가리키지만 문서로 확인하지는 못했습니다. iLEAPP 는 편집본을 Ph8 파서로 따로 뽑습니다[3].
+사진을 편집하면 편집 정보가 DB 와 plist 두 곳에 남습니다. DB 에는 `ZUNMANAGEDADJUSTMENT` 가 있고, CameraRollDomain 의 `Media/PhotoData/Mutations/PhotoData/CPLAssets/group###/` 아래 자산별 폴더에 `Adjustments/Adjustments.plist` 가 있으며, 이 plist 에는 `adjustmentBaseVersion`, `adjustmentData`, `adjustmentEditorBundleID`, `adjustmentFormatIdentifier`, `adjustmentFormatVersion`, `adjustmentRenderTypes`, `adjustmentTimestamp` 키가 있습니다(확인 범위: iOS 27.0). `adjustmentEditorBundleID` 는 이름으로 보아 편집한 앱을 가리키지만 문서로 확인하지는 못했습니다. iLEAPP 는 편집본을 Ph8 파서로 따로 뽑습니다[3].
 
 ## 증거로서 의미
 
@@ -82,7 +82,7 @@ nav_order: 550
 
 ## 시각 해석
 
-Photos.sqlite 의 날짜 칸은 Mac 절대 시각이라서 2001-01-01 00:00:00 UTC 부터 흐른 초로 적혀 있고, 공개 쿼리도 `datetime('2001-01-01', 칸 || ' seconds')` 로 바꿉니다[2]. 유닉스 시각이 필요하면 1970-01-01 과 2001-01-01 사이의 978307200 초를 더합니다. 바꾼 값은 도구 자료처럼 UTC 로 읽고[1], 현지 시각으로 옮길 때는 `ZADDITIONALASSETATTRIBUTES.ZTIMEZONEOFFSET` 이나 `ZEXTENDEDATTRIBUTES.ZTIMEZONENAME` 같은 시간대 칸(확인 범위: iPhone 13 mini, iOS 27.0)을 참고하되, 이 칸들이 어느 시각에 맞춘 값인지는 확인하지 못했습니다. 시각 값 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+Photos.sqlite 의 날짜 칸은 Mac 절대 시각이라서 2001-01-01 00:00:00 UTC 부터 흐른 초로 적혀 있고, 공개 쿼리도 `datetime('2001-01-01', 칸 || ' seconds')` 로 바꿉니다[2]. 유닉스 시각이 필요하면 1970-01-01 과 2001-01-01 사이의 978307200 초를 더합니다. 바꾼 값은 도구 자료처럼 UTC 로 읽고[1], 현지 시각으로 옮길 때는 `ZADDITIONALASSETATTRIBUTES.ZTIMEZONEOFFSET` 이나 `ZEXTENDEDATTRIBUTES.ZTIMEZONENAME` 같은 시간대 칸(확인 범위: iOS 27.0)을 참고하되, 이 칸들이 어느 시각에 맞춘 값인지는 확인하지 못했습니다. 시각 값 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 칸마다 바뀌는 때가 다릅니다. `ZDATECREATED` 와 `ZADDEDDATE` 는 도구 자료가 읽는 칸이고[5], 이름으로 보아 만든 시각과 보관함에 추가된 시각이지만 문서로 뜻을 확인하지는 못했습니다. 최근 삭제로 옮길 때는 `ZMODIFICATIONDATE` 도 갱신됩니다[1]. 그래서 `ZMODIFICATIONDATE` 를 편집 시각으로만 읽으면 안 되고, 편집은 `ZUNMANAGEDADJUSTMENT.ZADJUSTMENTTIMESTAMP` 나 `Adjustments.plist` 의 `adjustmentTimestamp` 와 맞춰 봅니다.
 
@@ -92,7 +92,7 @@ Photos.sqlite 의 날짜 칸은 Mac 절대 시각이라서 2001-01-01 00:00:00 U
 
 값 해석은 대부분 공개 쿼리와 도구 자료에서 왔고 Apple 이 공개한 명세가 아닙니다. `ZKINDSUBTYPE` 은 옛 스키마 기준이고, `ZSAVEDASSETTYPE` 은 옛 쿼리와 새 자료가 적은 값이 다릅니다[1][2]. 새 버전 검체에서는 값의 분포를 먼저 세어 보고, 뜻을 모르는 값은 모른다고 적습니다.
 
-`ZMIGRATIONHISTORY` 와 `ACHANGE`·`ATRANSACTION` 은 이름만 보면 DB 이전 기록과 변경 이력처럼 보이지만(확인 범위: iPhone 13 mini, iOS 27.0), 이번에 연 자료로 뜻을 확인하지 못해서 결론의 근거로 쓰지 않습니다.
+`ZMIGRATIONHISTORY` 와 `ACHANGE`·`ATRANSACTION` 은 이름만 보면 DB 이전 기록과 변경 이력처럼 보이지만(확인 범위: iOS 27.0), 이번에 연 자료로 뜻을 확인하지 못해서 결론의 근거로 쓰지 않습니다.
 
 ## 직접 분석해 보기
 

@@ -32,7 +32,7 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 
 ### 로컬 백업에서 본 도메인
 
-암호화하지 않은 로컬 백업에서 워치와 관련된 이름의 도메인을 확인했습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+암호화하지 않은 로컬 백업에서 워치와 관련된 이름의 도메인을 확인했습니다(확인 범위: iOS 27.0).
 
 | 도메인 | 비고 |
 |---|---|
@@ -55,7 +55,7 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 
 ### 설정 파일
 
-백업의 `HomeDomain` 안 `Library/Preferences/` 에서 아래 파일과 키를 확인했습니다(확인 범위: iPhone 13 mini, iOS 27.0). 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
+백업의 `HomeDomain` 안 `Library/Preferences/` 에서 아래 파일과 키를 확인했습니다(확인 범위: iOS 27.0). 키 이름만 확인했고 값과 의미는 읽지 않았습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
 
 | 파일 | 확인한 키 |
 |---|---|
@@ -91,7 +91,7 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 
 ## 시각 해석
 
-`com.apple.NanoTimeKit.daemon.plist` 의 `DateOfLastActivity_*` 와 `com.apple.nanolifestyle.plist` 의 `HasWatchOnAccountLastFetchDate` 는 plist 의 날짜형으로 저장되어 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 반면 `com.apple.nanoregistryd.plist` 의 `lastAssetUpdateCheckDate` 와 `lastVersionBroadcastTimestamp` 는 실수로 저장되어 있었고, 이 실수가 유닉스 시각인지 Mac 절대 시각인지는 확인하지 못했습니다. 두 기준 사이에는 978,307,200초(약 31년) 차이가 있어서, 두 방식으로 모두 바꿔 보고 백업 시각이나 iOS 설치 시기와 앞뒤가 맞는 쪽을 고릅니다. 이 판단 과정은 보고서에 함께 적습니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
+`com.apple.NanoTimeKit.daemon.plist` 의 `DateOfLastActivity_*` 와 `com.apple.nanolifestyle.plist` 의 `HasWatchOnAccountLastFetchDate` 는 plist 의 날짜형으로 저장되어 있었습니다(확인 범위: iOS 27.0). 반면 `com.apple.nanoregistryd.plist` 의 `lastAssetUpdateCheckDate` 와 `lastVersionBroadcastTimestamp` 는 실수로 저장되어 있었고, 이 실수가 유닉스 시각인지 Mac 절대 시각인지는 확인하지 못했습니다. 두 기준 사이에는 978,307,200초(약 31년) 차이가 있어서, 두 방식으로 모두 바꿔 보고 백업 시각이나 iOS 설치 시기와 앞뒤가 맞는 쪽을 고릅니다. 이 판단 과정은 보고서에 함께 적습니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
 워치에서 온 건강 기록의 시각은 [건강 데이터](health.md)의 시각 해석 절을 따릅니다.
 
@@ -103,13 +103,13 @@ Apple 이 밝힌 워치 백업의 범위는 아래와 같습니다[1].
 
 **자녀용 워치는 다른 계정으로 갑니다.** 가족 설정 워치의 백업은 그 가족 구성원의 iCloud 로 가므로[1], 부모 폰이나 부모 계정에서는 찾을 수 없습니다. 계정 쪽 자료 요청은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md)에서 다룹니다.
 
-**짝을 푼 시점.** 짝을 풀 때 워치가 아이폰에 한 번 더 백업되므로[1], 워치를 초기화하거나 다른 폰으로 옮긴 경우에도 이전 폰에 그 시점까지의 워치 백업이 남아 있을 수 있습니다. 이 백업이 폰 안 어디에, 얼마 동안 남는지는 이번 자료로 확인하지 못했습니다. `com.apple.NanoTimeKit.daemon.plist` 에 `DateOfLastActivity_CleanupUnpairedDevices` 라는 날짜 키가 있었지만(확인 범위: iPhone 13 mini, iOS 27.0), 이 값이 짝을 푼 시각과 어떤 관계인지도 확인하지 못했습니다.
+**짝을 푼 시점.** 짝을 풀 때 워치가 아이폰에 한 번 더 백업되므로[1], 워치를 초기화하거나 다른 폰으로 옮긴 경우에도 이전 폰에 그 시점까지의 워치 백업이 남아 있을 수 있습니다. 이 백업이 폰 안 어디에, 얼마 동안 남는지는 이번 자료로 확인하지 못했습니다. `com.apple.NanoTimeKit.daemon.plist` 에 `DateOfLastActivity_CleanupUnpairedDevices` 라는 날짜 키가 있었지만(확인 범위: iOS 27.0), 이 값이 짝을 푼 시각과 어떤 관계인지도 확인하지 못했습니다.
 
 ## 직접 분석해 보기
 
 ### 백업 목록에서 워치 도메인 찾기
 
-로컬 백업의 목록 데이터베이스 `Manifest.db` 에는 `Files` 표가 있고, 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다(확인 범위: iPhone 13 mini, iOS 27.0). 아래 쿼리로 워치 관련 이름의 도메인과 설정 파일을 한 번에 뽑을 수 있습니다.
+로컬 백업의 목록 데이터베이스 `Manifest.db` 에는 `Files` 표가 있고, 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다(확인 범위: iOS 27.0). 아래 쿼리로 워치 관련 이름의 도메인과 설정 파일을 한 번에 뽑을 수 있습니다.
 
 ```sql
 SELECT domain, relativePath, fileID

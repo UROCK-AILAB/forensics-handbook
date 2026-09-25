@@ -20,15 +20,15 @@ has_toc: false
 
 | 무엇 | 위치 | iOS 버전 | 알려 주는 것 |
 |---|---|---|---|
-| 사진 DB | 기기 `/private/var/mobile/Media/PhotoData/Photos.sqlite`[1][2], 백업 CameraRollDomain `Media/PhotoData/Photos.sqlite`(확인 범위: iPhone 13 mini, iOS 27.0) | 전 버전(자산 표 이름은 버전마다 다름) | 자산별 날짜, 들어온 경로, 촬영 정보, 앨범, 공유, 삭제·가려짐 상태 |
+| 사진 DB | 기기 `/private/var/mobile/Media/PhotoData/Photos.sqlite`[1][2], 백업 CameraRollDomain `Media/PhotoData/Photos.sqlite`(확인 범위: iOS 27.0) | 전 버전(자산 표 이름은 버전마다 다름) | 자산별 날짜, 들어온 경로, 촬영 정보, 앨범, 공유, 삭제·가려짐 상태 |
 | 나와 공유됨 보관함 | 기기 `/private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite`[2] | — | 메시지 등으로 "나와 공유됨" 에 들어온 사진. iLEAPP 는 Ph25~26 파서로 읽습니다[2] |
-| 앱별 사진 보관함 | 백업 HomeDomain `Library/Preferences/com.apple.assetsd.plist` 의 `PLBackgroundMigrationPaths` 에 `com.apple.GenerativePlayground` 의 `.photoslibrary` 경로가 보였습니다(확인 범위: iPhone 13 mini, iOS 27.0) | — | 앱마다 사진 보관함이 따로 있을 수 있다는 단서. 그 파일이 백업의 어느 도메인에 들어가는지는 확인하지 못했습니다 |
-| iCloud 사진 상태 | 백업 CameraRollDomain `Media/PhotoData/CPL/` 의 `syncstatus.plist`, `DownloadCounts.plist`, `metrics.plist`, `mobileCPL.plist`, `cloudphotos-#.#.plist`(확인 범위: iPhone 13 mini, iOS 27.0) | — | 이름으로 보아 iCloud 사진 동기화 시각과 개수. 키는 아래 표에 있습니다 |
-| DCIM 번호 | 백업 CameraRollDomain `Media/PhotoData/MISC/DCIM_APPLE.plist` 의 `DCIMLastDirectoryNumber`, `DCIMLastFileNumber`(확인 범위: iPhone 13 mini, iOS 27.0) | — | 이름으로 보아 마지막 DCIM 폴더·파일 번호. 값의 뜻은 문서로 확인하지 못했습니다 |
-| 사진 앱 내부 설정 | 백업 CameraRollDomain `Media/PhotoData/private/com.apple.assetsd/appPrivateData.plist`, `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist`, `Media/PhotoData/Journals/MigrationHistory.plist`(확인 범위: iPhone 13 mini, iOS 27.0) | — | 사진 앱과 사진 서비스의 내부 상태 |
-| iCloud 사진 데몬 설정 | 백업 HomeDomain `Library/Preferences/com.apple.cloudphotod.plist` 에 `CPLCloudKitCoordinator-com.apple.photos.cloud` 키(확인 범위: iPhone 13 mini, iOS 27.0) | — | iCloud 사진 연결 설정으로 보이는 값 |
+| 앱별 사진 보관함 | 백업 HomeDomain `Library/Preferences/com.apple.assetsd.plist` 의 `PLBackgroundMigrationPaths` 에 `com.apple.GenerativePlayground` 의 `.photoslibrary` 경로가 보였습니다(확인 범위: iOS 27.0) | — | 앱마다 사진 보관함이 따로 있을 수 있다는 단서. 그 파일이 백업의 어느 도메인에 들어가는지는 확인하지 못했습니다 |
+| iCloud 사진 상태 | 백업 CameraRollDomain `Media/PhotoData/CPL/` 의 `syncstatus.plist`, `DownloadCounts.plist`, `metrics.plist`, `mobileCPL.plist`, `cloudphotos-#.#.plist`(확인 범위: iOS 27.0) | — | 이름으로 보아 iCloud 사진 동기화 시각과 개수. 키는 아래 표에 있습니다 |
+| DCIM 번호 | 백업 CameraRollDomain `Media/PhotoData/MISC/DCIM_APPLE.plist` 의 `DCIMLastDirectoryNumber`, `DCIMLastFileNumber`(확인 범위: iOS 27.0) | — | 이름으로 보아 마지막 DCIM 폴더·파일 번호. 값의 뜻은 문서로 확인하지 못했습니다 |
+| 사진 앱 내부 설정 | 백업 CameraRollDomain `Media/PhotoData/private/com.apple.assetsd/appPrivateData.plist`, `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist`, `Media/PhotoData/Journals/MigrationHistory.plist`(확인 범위: iOS 27.0) | — | 사진 앱과 사진 서비스의 내부 상태 |
+| iCloud 사진 데몬 설정 | 백업 HomeDomain `Library/Preferences/com.apple.cloudphotod.plist` 에 `CPLCloudKitCoordinator-com.apple.photos.cloud` 키(확인 범위: iOS 27.0) | — | iCloud 사진 연결 설정으로 보이는 값 |
 
-관찰한 백업의 CameraRollDomain 에는 항목이 173개 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 사진 파일 자체가 백업의 어느 경로에 들어가는지는 관찰 메모로 확인하지 못했습니다. 백업 도메인을 찾는 법은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
+관찰한 백업의 CameraRollDomain 에는 항목이 173개 있었습니다(확인 범위: iOS 27.0). 사진 파일 자체가 백업의 어느 경로에 들어가는지는 관찰 메모로 확인하지 못했습니다. 백업 도메인을 찾는 법은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
 사진 파일이 놓이는 기기 경로는 도구 문서 기준으로 아래와 같고[1], 들어온 경로마다 폴더가 다릅니다. Photos.sqlite 에서 이 경로를 가르는 `ZSAVEDASSETTYPE` 값은 [사진 DB 구조 (Photos.sqlite)](photos-sqlite.md)에 있습니다.
 
@@ -41,7 +41,7 @@ has_toc: false
 | iCloud 공유 링크 | `/private/var/mobile/Media/PhotoData/CMMAssets/<zShare-UUID>/` |
 | 썸네일 | `/private/var/mobile/Media/PhotoData/Thumbnails/V2/` 아래 |
 
-`Media/PhotoData/CPL/` 의 plist 에는 아래 키가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 각 키의 뜻은 문서로 확인하지 못했고, 값은 읽지 않았습니다.
+`Media/PhotoData/CPL/` 의 plist 에는 아래 키가 있었습니다(확인 범위: iOS 27.0). 각 키의 뜻은 문서로 확인하지 못했고, 값은 읽지 않았습니다.
 
 | 파일 | 키 |
 |---|---|

@@ -61,7 +61,7 @@ iOS 18 에서는 잠긴 채 72시간(3일)이 지나면 기기가 스스로 재�
 
 ## 백업과 설정에서 보이는 이름
 
-관찰한 로컬 백업에는 잠금·키 가방과 관련된 이름을 단 키가 몇 개 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 뜻을 밝힌 문서는 확인하지 못했으니, 아래 표는 어디에 어떤 이름이 있는지까지만 알려 줍니다.
+관찰한 로컬 백업에는 잠금·키 가방과 관련된 이름을 단 키가 몇 개 있습니다(확인 범위: iOS 27.0). 뜻을 밝힌 문서는 확인하지 못했으니, 아래 표는 어디에 어떤 이름이 있는지까지만 알려 줍니다.
 
 | 파일 | 키(형식) | 이름으로 짐작되는 것 |
 |---|---|---|
@@ -71,7 +71,7 @@ iOS 18 에서는 잠긴 채 72시간(3일)이 지나면 기기가 스스로 재�
 
 이 가운데 `WasPasscodeSet` 은 백업 당시 암호 설정 여부로 보이지만, 백업 시점의 값일 뿐 수집 시점의 BFU·AFU 상태를 알려 주지는 않습니다.
 
-관찰한 백업에서는 `HomeDomain` 의 `Library/UserConfigurationProfiles/EffectiveUserSettings.plist` 와 `Library/UserConfigurationProfiles/Truth.plist` 의 `restrictedValue` 안에 `maxGracePeriod`, `maxInactivity`, `maxFailedAttempts`, `minLength`, `passcodeKeyboardComplexity` 같은 암호 정책 이름이 보입니다(확인 범위: iPhone 13 mini, iOS 27.0). `maxInactivity` 는 이름이 비슷해도 비활성 재부팅과 같은 것이라는 근거가 없으니 섞어 해석하지 않습니다. 프로필 흔적은 [구성 프로파일과 MDM (Configuration Profiles·MDM)](../../../02-artifacts/credentials-security/configuration-profiles.md) 에서, 암호 설정 흔적은 [암호와 Face ID 설정 흔적 (Passcode·Biometrics)](../../../02-artifacts/system-account/passcode-biometrics.md) 에서 다룹니다.
+관찰한 백업에서는 `HomeDomain` 의 `Library/UserConfigurationProfiles/EffectiveUserSettings.plist` 와 `Library/UserConfigurationProfiles/Truth.plist` 의 `restrictedValue` 안에 `maxGracePeriod`, `maxInactivity`, `maxFailedAttempts`, `minLength`, `passcodeKeyboardComplexity` 같은 암호 정책 이름이 보입니다(확인 범위: iOS 27.0). `maxInactivity` 는 이름이 비슷해도 비활성 재부팅과 같은 것이라는 근거가 없으니 섞어 해석하지 않습니다. 프로필 흔적은 [구성 프로파일과 MDM (Configuration Profiles·MDM)](../../../02-artifacts/credentials-security/configuration-profiles.md) 에서, 암호 설정 흔적은 [암호와 Face ID 설정 흔적 (Passcode·Biometrics)](../../../02-artifacts/system-account/passcode-biometrics.md) 에서 다룹니다.
 
 ## 함정
 

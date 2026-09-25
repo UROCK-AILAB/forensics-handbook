@@ -84,9 +84,9 @@ iVerify 는 iOS 26 으로 올리기 전에 sysdiagnose 를 만들어 저장해 �
 
 ### 로컬 백업에 남는 관련 흔적
 
-로컬 백업에는 sysdiagnose 묶음 파일이 없었고, 도메인 목록에 `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose`(항목 4개)가 있었을 뿐입니다(확인 범위: iPhone 13 mini, iOS 27.0). 같은 백업에는 `…DiagnosticExtensions.CrashLogs`, `.Panic`, `.StackShot`, `.WiFi`, `.Cellular`, `.CoreLocation`, `.ScreenTime`, `.VPN`, `.Messages` 같은 진단 확장 컨테이너도 많았지만, 각 컨테이너에 무엇이 있는지와 sysdiagnose 의 어느 부분을 채우는지는 확인하지 못했습니다.
+로컬 백업에는 sysdiagnose 묶음 파일이 없었고, 도메인 목록에 `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose`(항목 4개)가 있었을 뿐입니다(확인 범위: iOS 27.0). 같은 백업에는 `…DiagnosticExtensions.CrashLogs`, `.Panic`, `.StackShot`, `.WiFi`, `.Cellular`, `.CoreLocation`, `.ScreenTime`, `.VPN`, `.Messages` 같은 진단 확장 컨테이너도 많았지만, 각 컨테이너에 무엇이 있는지와 sysdiagnose 의 어느 부분을 채우는지는 확인하지 못했습니다.
 
-값은 읽지 않았지만 진단과 관련된 설정 plist 도 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 키의 뜻은 확인하지 못했습니다.
+값은 읽지 않았지만 진단과 관련된 설정 plist 도 있었습니다(확인 범위: iOS 27.0). 키의 뜻은 확인하지 못했습니다.
 
 | 파일 | 키 |
 |---|---|
@@ -96,7 +96,7 @@ iVerify 는 iOS 26 으로 올리기 전에 sysdiagnose 를 만들어 저장해 �
 
 ## 함정
 
-로컬 백업만 받으면 sysdiagnose 묶음은 얻지 못합니다(확인 범위: iPhone 13 mini, iOS 27.0). 묶음이 필요하면 기기에서 따로 만들어 꺼내야 합니다.
+로컬 백업만 받으면 sysdiagnose 묶음은 얻지 못합니다(확인 범위: iOS 27.0). 묶음이 필요하면 기기에서 따로 만들어 꺼내야 합니다.
 
 sysdiagnose 에 담긴 통합 로그는 전체가 아니라 일부이고 [3], 수명이 짧은 항목은 이미 사라졌을 수 있습니다. 로그에 기록이 없다는 사실을 "그 일이 없었다" 는 근거로 쓰지 않습니다.
 

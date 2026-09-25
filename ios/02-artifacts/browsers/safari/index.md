@@ -14,7 +14,7 @@ has_toc: false
 
 ## 왜 중요한가
 
-어떤 사이트를 언제 열었는지 묻는 조사에서 아이폰은 사파리부터 봅니다. 방문 한 번마다 시각과 URL 이 남고[2][6], 열려 있던 탭과 닫은 탭, 다른 기기의 탭까지 따로 저장되어서[3] 한 사람의 웹 사용을 여러 방향에서 맞춰 볼 수 있습니다. 다만 기록마다 들어가는 수집 방식이 달라서, 암호화하지 않은 로컬 백업에는 방문 기록이 들어가지 않고[4] 관찰한 백업에서도 탭 DB 가 보이지 않았습니다(확인 범위: iPhone 13 mini, iOS 27.0). 그래서 사파리 분석은 어떤 방식으로 수집했는지 확인하는 데서 시작합니다.
+어떤 사이트를 언제 열었는지 묻는 조사에서 아이폰은 사파리부터 봅니다. 방문 한 번마다 시각과 URL 이 남고[2][6], 열려 있던 탭과 닫은 탭, 다른 기기의 탭까지 따로 저장되어서[3] 한 사람의 웹 사용을 여러 방향에서 맞춰 볼 수 있습니다. 다만 기록마다 들어가는 수집 방식이 달라서, 암호화하지 않은 로컬 백업에는 방문 기록이 들어가지 않고[4] 관찰한 백업에서도 탭 DB 가 보이지 않았습니다(확인 범위: iOS 27.0). 그래서 사파리 분석은 어떤 방식으로 수집했는지 확인하는 데서 시작합니다.
 
 ## 한눈에 보기
 
@@ -22,22 +22,22 @@ has_toc: false
 |---|---|---|---|
 | 방문 기록 | 기기 `/private/var/mobile/Library/Safari/History.db`[1][2], 프로필별 `Safari/Profiles/*/History.db`[6] | 프로필별 DB 는 iLEAPP 가 iOS 17 이후용으로 찾습니다[6] | 방문 URL·시각·제목·방문 횟수, 넘겨주기, 이 기기인지 다른 기기인지 |
 | 탭 | 같은 폴더의 `SafariTabs.db`, `BrowserState.db`, `CloudTabs.db`[1][3] | iOS 16 부터 BrowserState.db 는 닫은 탭만 담음[5] | 열린 탭·닫은 탭·다른 기기 탭, 마지막으로 본 시각 |
-| 북마크 | 기기 `/private/var/mobile/Library/Safari/Bookmarks.db`[1][2], 백업 HomeDomain `Library/Safari/Bookmarks.db`(확인 범위: iPhone 13 mini, iOS 27.0) | — | 저장한 URL 과 폴더 구조, iCloud 동기화 상태 |
+| 북마크 | 기기 `/private/var/mobile/Library/Safari/Bookmarks.db`[1][2], 백업 HomeDomain `Library/Safari/Bookmarks.db`(확인 범위: iOS 27.0) | — | 저장한 URL 과 폴더 구조, iCloud 동기화 상태 |
 | 개인 정보 보호 탭 | SafariTabs.db 안의 개인 정보 보호 폴더[3], BrowserState.db `private_browsing` 칸[3] | 잠긴 개인 정보 보호 브라우징은 iOS 17 부터 | 방문 기록에 남지 않는 개인 정보 보호 모드 탭 |
-| 내려받기 목록 | `/private/var/mobile/Containers/Data/Application/<GUID>/Library/Safari/Downloads/Downloads.plist`[1] | iOS 15 이미지 기준[1] | 내려받은 파일 목록. 관찰한 백업에는 이 파일이 없었습니다(확인 범위: iPhone 13 mini, iOS 27.0) |
+| 내려받기 목록 | `/private/var/mobile/Containers/Data/Application/<GUID>/Library/Safari/Downloads/Downloads.plist`[1] | iOS 15 이미지 기준[1] | 내려받은 파일 목록. 관찰한 백업에는 이 파일이 없었습니다(확인 범위: iOS 27.0) |
 | 캐시 | `/private/var/mobile/Containers/Data/Application/<GUID>/Library/Caches/com.apple.mobilesafari/Cache.db`[1] | iOS 15 이미지 기준[1] | 불러온 웹 자원의 캐시 |
 | 파비콘 | `/private/var/mobile/Containers/Data/Application/<App_GUID>/Library/Image Cache/Favicons/Favicons.db`[2] | — | 사이트 아이콘 |
 | 바이옴 사파리 스트림 | `/private/var/db/biome/streams/restricted/` 아래 `_DKEvent.Safari.History`, SafariPageView 스트림[5] | iOS 16 시험[5] | 방문 기록과 따로 남는 방문·페이지 보기 기록 |
 
 잠긴 개인 정보 보호 브라우징의 버전은 [개인 정보 보호 브라우징 (Private Browsing)](private-browsing.md)에 출처와 함께 있습니다. 바이옴의 SafariPageView 스트림에는 페이지 제목·URL·본문 텍스트와 "기부(donate)" 시각이 담기고, SEGB 파일이 `local` 폴더에 있으면 이 기기의 기록, `remote` 폴더에 있으면 다른 기기에서 동기화된 기록입니다(iOS 16 시험)[5]. 바이옴 형식은 [바이옴 (Biome)](../../app-usage/biome/index.md)과 [SEGB 형식 (SEGB)](../../../01-foundations/data-formats/segb.md)에서 다룹니다.
 
-사파리의 번들 ID 는 `com.apple.mobilesafari` 이고, 관찰한 백업에는 AppDomain-com.apple.mobilesafari 도메인(항목 83개)과 함께 아래 도메인이 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+사파리의 번들 ID 는 `com.apple.mobilesafari` 이고, 관찰한 백업에는 AppDomain-com.apple.mobilesafari 도메인(항목 83개)과 함께 아래 도메인이 있었습니다(확인 범위: iOS 27.0).
 
 - AppDomainGroup-group.com.apple.safari, AppDomain-com.apple.SafariViewService, AppDomainGroup-com.apple.SafariSearchUploadWorker
 - AppDomainPlugin-com.apple.mobilesafari 아래 SafariActionExtension, SafariDiagnosticExtension, SafariLinkExtension, SafariShareExtension, SafariWidgetExtension
 - AppDomainPlugin-com.apple.safari.SafariUsageRetentionExtension, AppDomainPlugin-com.apple.parsec.SafariBrowsingAssistantWorker, AppDomainPlugin-com.apple.unilog.SafariSearchUploadWorker
 
-사파리 설정 plist 는 AppDomain-com.apple.mobilesafari `Library/Preferences/` 아래 `com.apple.mobilesafari.plist`, `com.apple.Safari.History.plist`, `com.apple.SafariViewService.plist` 등과 HomeDomain `Library/Preferences/` 아래 `com.apple.SafariBookmarksSyncAgent.plist`, `com.apple.SafariCloudHistoryPushAgent.plist`, `com.apple.Safari.SafeBrowsing.plist` 등으로 나뉘어 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 각 키는 주제에 맞는 하위 페이지에서 다룹니다. 번들 ID 와 백업 도메인의 관계는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에 있습니다.
+사파리 설정 plist 는 AppDomain-com.apple.mobilesafari `Library/Preferences/` 아래 `com.apple.mobilesafari.plist`, `com.apple.Safari.History.plist`, `com.apple.SafariViewService.plist` 등과 HomeDomain `Library/Preferences/` 아래 `com.apple.SafariBookmarksSyncAgent.plist`, `com.apple.SafariCloudHistoryPushAgent.plist`, `com.apple.Safari.SafeBrowsing.plist` 등으로 나뉘어 있었습니다(확인 범위: iOS 27.0). 각 키는 주제에 맞는 하위 페이지에서 다룹니다. 번들 ID 와 백업 도메인의 관계는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에 있습니다.
 
 > 그림 자리: 기기의 `Library/Safari/` 폴더에 있는 DB 다섯 개와 앱 컨테이너 쪽 파일, 그리고 암호화하지 않은 백업에 실제로 들어가는 것과 빠지는 것
 

@@ -20,7 +20,7 @@ iOS 는 전화를 걸거나 받을 때마다 통화 기록 데이터베이스 `C
 
 기기 안의 경로는 `/private/var/mobile/Library/CallHistoryDB/` 이고, 공개 도구 iLEAPP 는 이 폴더에서 이름이 `CallHistory` 로 시작하는 파일(`CallHistory.storedata`, `CallHistoryTemp.storedata`)과 예전 형식의 `call_history.db` 를 찾습니다 [1]. `CallHistoryTemp.storedata` 의 용도를 밝힌 자료는 이번에 찾지 못했습니다.
 
-로컬 백업에서는 이 파일이 늘 보이지는 않습니다. 암호화하지 않은 백업을 관찰했을 때 백업 목록 어디에도 `CallHistoryDB` 경로가 없었고, 이름에 CallHistory 가 들어간 파일은 설정 파일 `HomeDomain :: Library/Preferences/com.apple.CallHistorySyncHelper.plist` 하나뿐이었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 백업을 암호화해야 들어가는 자료의 범위는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다루고, 통화 기록이 필요하면 수집 방법부터 정해야 합니다. 수집 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 를 봅니다.
+로컬 백업에서는 이 파일이 늘 보이지는 않습니다. 암호화하지 않은 백업을 관찰했을 때 백업 목록 어디에도 `CallHistoryDB` 경로가 없었고, 이름에 CallHistory 가 들어간 파일은 설정 파일 `HomeDomain :: Library/Preferences/com.apple.CallHistorySyncHelper.plist` 하나뿐이었습니다 (확인 범위: iOS 27.0). 백업을 암호화해야 들어가는 자료의 범위는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다루고, 통화 기록이 필요하면 수집 방법부터 정해야 합니다. 수집 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 를 봅니다.
 
 | 구분 | 내용 | 출처 |
 |---|---|---|
@@ -55,7 +55,7 @@ Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](
 
 ### 곁에 있는 설정 파일
 
-백업에는 통화 기록 DB 대신 통화 기능의 설정 파일이 남아 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 키 이름만 확인했고 값의 뜻은 확인하지 못했으므로 단서로만 씁니다.
+백업에는 통화 기록 DB 대신 통화 기능의 설정 파일이 남아 있었습니다 (확인 범위: iOS 27.0). 키 이름만 확인했고 값의 뜻은 확인하지 못했으므로 단서로만 씁니다.
 
 | 파일 (HomeDomain) | 보인 키 |
 |---|---|
@@ -64,7 +64,7 @@ Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](
 | `Library/Preferences/com.apple.TelephonyUtilities.plist` | `CallScreeningDisabled`, `ReceptionistDisabled`, `SiriGreetings`, `IntelligentRoutingServiceToken` 등 |
 | `Library/Accessibility/com.apple.RTTTranscripts.sqlite` | `ZTTYHISTORY`(`ZCALLUID`, `ZDATA` 등), `ZTTYCONTACTLIST`(`ZCALLUID`, `ZCONTACTID` 등) 표 |
 
-`CallHistorySyncHelper.plist` 의 `callhistorysync.devices` 키는 이름으로 보아 기기 사이 통화 기록 동기화와 관련된 것으로 보이지만 뜻은 확인하지 못했습니다. `RTTTranscripts.sqlite` 는 칸 이름으로 보아 RTT·TTY 통화의 대화 기록을 담는 곳으로 보이지만 내용 구조는 확인하지 못했습니다. 이 밖에 `WirelessDomain :: Library/Preferences/com.apple.commcenter.callservices.plist` 에 `last.known.icloud.id` 키가 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+`CallHistorySyncHelper.plist` 의 `callhistorysync.devices` 키는 이름으로 보아 기기 사이 통화 기록 동기화와 관련된 것으로 보이지만 뜻은 확인하지 못했습니다. `RTTTranscripts.sqlite` 는 칸 이름으로 보아 RTT·TTY 통화의 대화 기록을 담는 곳으로 보이지만 내용 구조는 확인하지 못했습니다. 이 밖에 `WirelessDomain :: Library/Preferences/com.apple.commcenter.callservices.plist` 에 `last.known.icloud.id` 키가 있었습니다 (확인 범위: iOS 27.0).
 
 ## 증거로서 의미
 
@@ -84,7 +84,7 @@ Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](
 
 - **전화 앱 기록을 이동통신 통화로 보는 오해.** `ZCALLTYPE` 0 행은 다른 회사 앱 통화이고 `ZSERVICE_PROVIDER` 에 앱 이름이 들어갑니다 [1]. 통신사 통화 내역과 대조할 때 이런 행을 빼야 개수가 맞습니다. 이동통신·FaceTime 행의 `ZSERVICE_PROVIDER` 에 실제로 어떤 문자열이 들어가는지는 확인하지 못했으니 검체에서 값을 직접 봅니다.
 - **예전 형식과 섞어 읽는 실수.** 예전 `call_history.db` 는 표·칸·시각 기준이 모두 달라서 [1], 도구가 어느 형식을 읽었는지 확인합니다.
-- **백업에 없는 DB.** 암호화하지 않은 백업에는 이 DB 가 없었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 결과가 비었을 때 "통화가 없다" 가 아니라 "수집 범위에 없다" 로 적습니다.
+- **백업에 없는 DB.** 암호화하지 않은 백업에는 이 DB 가 없었습니다 (확인 범위: iOS 27.0). 결과가 비었을 때 "통화가 없다" 가 아니라 "수집 범위에 없다" 로 적습니다.
 - **그룹 통화 누락.** `ZADDRESS` 만 보면 여럿이 한 통화의 다른 참여자를 놓칩니다 [2].
 - **해석값에 기대기.** `ZDISCONNECTED_CAUSE` 와 iOS 26 새 칸은 뜻이 공식 문서로 확인되지 않았습니다 [1].
 

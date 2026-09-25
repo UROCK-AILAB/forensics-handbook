@@ -10,9 +10,9 @@ nav_order: 190
 
 ## 이 형식을 쓰는 아티팩트
 
-번들 ID (Bundle ID) 는 폴더 이름, 백업 도메인 이름, DB 칸 값의 세 자리에 나타납니다. 기기 파일 시스템에서는 앱 폴더 이름이 UUID 라서 번들 ID 가 폴더 안의 메타데이터 파일에만 들어 있고 [1][2], 로컬 백업에서는 도메인 이름에 번들 ID 가 그대로 붙습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 컨테이너 경로와 도메인 종류별 개수는 [iOS의 파일 시스템](../storage/filesystem/index.md) 과 [로컬 백업](../backups/local-backup/index.md) 에서 다룹니다.
+번들 ID (Bundle ID) 는 폴더 이름, 백업 도메인 이름, DB 칸 값의 세 자리에 나타납니다. 기기 파일 시스템에서는 앱 폴더 이름이 UUID 라서 번들 ID 가 폴더 안의 메타데이터 파일에만 들어 있고 [1][2], 로컬 백업에서는 도메인 이름에 번들 ID 가 그대로 붙습니다 (확인 범위: iOS 27.0). 컨테이너 경로와 도메인 종류별 개수는 [iOS의 파일 시스템](../storage/filesystem/index.md) 과 [로컬 백업](../backups/local-backup/index.md) 에서 다룹니다.
 
-관찰한 백업에서 번들 ID 나 관련 식별자를 값으로 담는 칸은 아래와 같습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 칸 이름만 확인했고 값은 읽지 않았습니다. sms.db 의 `balloon_bundle_id` 는 메시지 앱 확장의 번들 ID 를, mis.db 의 `team_id` 칸은 개발자 팀 ID 를 담는 칸이고, 나머지 칸이 앱 본체와 확장 가운데 무엇을 적는지는 확인하지 못했습니다.
+관찰한 백업에서 번들 ID 나 관련 식별자를 값으로 담는 칸은 아래와 같습니다 (확인 범위: iOS 27.0). 칸 이름만 확인했고 값은 읽지 않았습니다. sms.db 의 `balloon_bundle_id` 는 메시지 앱 확장의 번들 ID 를, mis.db 의 `team_id` 칸은 개발자 팀 ID 를 담는 칸이고, 나머지 칸이 앱 본체와 확장 가운데 무엇을 적는지는 확인하지 못했습니다.
 
 | 파일 | 표와 칸 |
 |---|---|
@@ -24,7 +24,7 @@ nav_order: 190
 | `HomeDomain` :: `Library/Shortcuts/Shortcuts.sqlite` | `ZSHORTCUT.ZASSOCIATEDAPPBUNDLEIDENTIFIER`, `ZSEARCHATTRIBUTIONAPPBUNDLEIDENTIFIER` |
 | `MobileDeviceDomain` :: `ProvisioningProfiles/mis.db` | `profiles.team_id`, `team_id_info.team_id`·`team_name`, `trusted_team_ids.team_id` |
 
-백업 폴더 맨 위 파일에도 앱 목록 키가 있어서, Manifest.plist 에는 `Applications` 키가, Info.plist 에는 `Applications`·`Installed Applications` 키가 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이 키들의 하위 구조는 확인하지 못했습니다.
+백업 폴더 맨 위 파일에도 앱 목록 키가 있어서, Manifest.plist 에는 `Applications` 키가, Info.plist 에는 `Applications`·`Installed Applications` 키가 있었습니다 (확인 범위: iOS 27.0). 이 키들의 하위 구조는 확인하지 못했습니다.
 
 ## 구조
 
@@ -32,7 +32,7 @@ nav_order: 190
 
 번들 ID 는 `com.apple.mobileslideshow`(사진 앱)처럼 점으로 나눈 이름이고, 이 앱의 확장에는 `com.apple.mobileslideshow.photo-picker` 같은 번들 ID 가 따로 붙습니다 [2]. 앱 그룹 (App Group) ID 는 `group.com.apple.notes` 처럼 `group.` 으로 시작한다고 설명하는 자료가 있고 [1], 시스템 그룹은 핵심 iOS 앱이 쓰는 공유 컨테이너입니다 [2].
 
-관찰한 백업의 도메인 이름에서는 아래 네 가지 이름이 보였습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업의 도메인 이름에서는 아래 네 가지 이름이 보였습니다 (확인 범위: iOS 27.0).
 
 | 종류 | 백업 도메인 이름 예 | 뒤에 붙는 값 |
 |---|---|---|
@@ -41,7 +41,7 @@ nav_order: 190
 | 확장(플러그인) | `AppDomainPlugin-com.apple.mobileslideshow.photo-picker` | 확장 번들 ID |
 | 시스템 컨테이너·시스템 그룹 | `SysContainerDomain-com.apple.linkd`, `SysSharedContainerDomain-systemgroup.com.apple.bluetooth` | 번들 ID, `systemgroup.` 으로 시작하는 그룹 이름 |
 
-앱 그룹 도메인 92개 가운데 14개는 `group.` 으로 시작하지 않았고, `AppDomainGroup-com.apple.Home.group`, `AppDomainGroup-com.apple.bird`, `AppDomainGroup-com.apple.CoreODI`, `AppDomainGroup-systemgroup.com.apple.accessorysetupkit` 같은 이름이 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 그룹 ID 를 `group.` 접두어로만 골라내면 이런 그룹을 놓칩니다.
+앱 그룹 도메인 92개 가운데 14개는 `group.` 으로 시작하지 않았고, `AppDomainGroup-com.apple.Home.group`, `AppDomainGroup-com.apple.bird`, `AppDomainGroup-com.apple.CoreODI`, `AppDomainGroup-systemgroup.com.apple.accessorysetupkit` 같은 이름이 있었습니다 (확인 범위: iOS 27.0). 그룹 ID 를 `group.` 접두어로만 골라내면 이런 그룹을 놓칩니다.
 
 ### 앱과 그룹의 관계
 
@@ -86,7 +86,7 @@ ORDER BY ZBUNDLENAME;
 
 ## 함정
 
-- **그룹 ID 가 모두 `group.` 으로 시작하지 않습니다.** 관찰한 백업에서도 접두어가 없거나 `systemgroup.` 으로 시작하는 그룹이 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+- **그룹 ID 가 모두 `group.` 으로 시작하지 않습니다.** 관찰한 백업에서도 접두어가 없거나 `systemgroup.` 으로 시작하는 그룹이 있었습니다 (확인 범위: iOS 27.0).
 - **이름이 비슷하다고 같은 앱의 그룹이라고 단정하지 않습니다.** 그룹 ID 와 앱 번들 ID 의 관계는 권한 정보로 확인해야 하고, 그룹 ID 에 개발자 팀 ID 접두어가 붙는지는 Apple 개발자 문서를 열지 못해 확인하지 못했습니다.
 - **UUID 폴더 이름은 기기마다 다릅니다.** 재설치·업데이트·복원 뒤에 UUID 가 바뀌는지는 확인하지 못했으니, 여러 시점의 자료를 비교할 때는 UUID 대신 번들 ID 로 맞춥니다.
 - **applicationState.db 만으로는 그룹을 알 수 없습니다.** 이 DB 는 앱 UUID 와 번들 ID 를 이어 주지만 앱 그룹 경로 정보는 없습니다 [2].

@@ -25,27 +25,27 @@ iCloud Drive 는 표준 보호에서 전송 중과 서버 저장 시 암호화�
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
 | 파일 본체 | 기기 `/private/var/mobile/Library/Mobile Documents/com~apple~CloudDocs/` | [1] (iOS 13.7) |
-| 메타데이터 DB | `HomeDomain :: Library/Application Support/CloudDocs/session/db/client.db`, `server.db` | [1], 관찰(확인 범위: iPhone 13 mini, iOS 27.0) |
-| 앱별 iCloud 컨테이너 정보 | `HomeDomain :: Library/Application Support/CloudDocs/session/containers/*.plist` | 관찰(확인 범위: iPhone 13 mini, iOS 27.0) |
-| 서버 설정 | `HomeDomain :: Library/Application Support/CloudDocs/server-conflig.plist` (관찰한 철자 그대로) | 관찰(확인 범위: iPhone 13 mini, iOS 27.0) |
-| 파일 공급자 도메인 | `HomeDomain :: Library/Application Support/FileProvider/com.apple.CloudDocs.iCloudDriveFileProvider/Domains.plist` | 관찰(확인 범위: iPhone 13 mini, iOS 27.0) |
-| 설정 | `HomeDomain :: Library/Preferences/com.apple.bird.plist`, `com.apple.fileproviderd.plist` | 관찰(확인 범위: iPhone 13 mini, iOS 27.0) |
+| 메타데이터 DB | `HomeDomain :: Library/Application Support/CloudDocs/session/db/client.db`, `server.db` | [1], 관찰(확인 범위: iOS 27.0) |
+| 앱별 iCloud 컨테이너 정보 | `HomeDomain :: Library/Application Support/CloudDocs/session/containers/*.plist` | 관찰(확인 범위: iOS 27.0) |
+| 서버 설정 | `HomeDomain :: Library/Application Support/CloudDocs/server-conflig.plist` (관찰한 철자 그대로) | 관찰(확인 범위: iOS 27.0) |
+| 파일 공급자 도메인 | `HomeDomain :: Library/Application Support/FileProvider/com.apple.CloudDocs.iCloudDriveFileProvider/Domains.plist` | 관찰(확인 범위: iOS 27.0) |
+| 설정 | `HomeDomain :: Library/Preferences/com.apple.bird.plist`, `com.apple.fileproviderd.plist` | 관찰(확인 범위: iOS 27.0) |
 
-관찰한 로컬 백업에는 `Library/Mobile Documents/com~apple~CloudDocs/` 아래 파일이 나오지 않았고, `Mobile Documents` 쪽에서는 `com~apple~shoebox/UbiquitousCards/CatalogOfRecord.plist` 하나만 보였습니다(확인 범위: iPhone 13 mini, iOS 27.0). 파일 본체가 필요하면 파일 시스템 전체 수집이나 계정 쪽 자료를 검토하고, 수집 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
+관찰한 로컬 백업에는 `Library/Mobile Documents/com~apple~CloudDocs/` 아래 파일이 나오지 않았고, `Mobile Documents` 쪽에서는 `com~apple~shoebox/UbiquitousCards/CatalogOfRecord.plist` 하나만 보였습니다(확인 범위: iOS 27.0). 파일 본체가 필요하면 파일 시스템 전체 수집이나 계정 쪽 자료를 검토하고, 수집 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
 
-같은 백업에는 관련 도메인으로 `AppDomainPlugin-com.apple.CloudDocs.iCloudDriveFileProvider`, `AppDomainPlugin-com.apple.CloudDocs.iCloudDriveFileProviderManaged`, `AppDomainPlugin-com.apple.CloudDocs.MobileDocumentsFileProviderUI`, `AppDomainPlugin-com.apple.CloudDocsUI.CloudSharing`, `AppDomainPlugin-com.apple.CloudDocsUI.DocumentPicker`, `AppDomainGroup-group.com.apple.FileProvider.LocalStorage` 가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+같은 백업에는 관련 도메인으로 `AppDomainPlugin-com.apple.CloudDocs.iCloudDriveFileProvider`, `AppDomainPlugin-com.apple.CloudDocs.iCloudDriveFileProviderManaged`, `AppDomainPlugin-com.apple.CloudDocs.MobileDocumentsFileProviderUI`, `AppDomainPlugin-com.apple.CloudDocsUI.CloudSharing`, `AppDomainPlugin-com.apple.CloudDocsUI.DocumentPicker`, `AppDomainGroup-group.com.apple.FileProvider.LocalStorage` 가 있었습니다(확인 범위: iOS 27.0).
 
 | iOS | 확인한 내용 | 근거 |
 |---|---|---|
 | 13.7 | 파일 위치, `client.db`·`server.db`, `.iCloud` 자리표시 파일, 최근 삭제된 항목 동작 | [1] |
 | 15~26 | 확인하지 못함 | — |
-| 27.0 | 두 DB 의 표·칸 이름, 설정 plist 키 이름 | 확인 범위: iPhone 13 mini, iOS 27.0 |
+| 27.0 | 두 DB 의 표·칸 이름, 설정 plist 키 이름 | 확인 범위: iOS 27.0 |
 
 ## 구조
 
 ### client.db
 
-관찰한 `client.db` 에는 아래 표가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 `client.db` 에는 아래 표가 있었습니다(확인 범위: iOS 27.0).
 
 ```
 client_items, client_uploads, client_downloads, client_sync_up, client_unapplied_table,
@@ -55,7 +55,7 @@ backup_detector, aggregated_daily_telemetry, named_throttles_history,
 telemetry_failure_counts, fpfs_folders_not_migrated, completed_db_fixups, os_names
 ```
 
-기기 쪽 파일 목록은 `client_items` 에 있고, 분석에 쓸 만한 칸은 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+기기 쪽 파일 목록은 `client_items` 에 있고, 분석에 쓸 만한 칸은 아래와 같습니다(확인 범위: iOS 27.0).
 
 ```
 client_items (일부)
@@ -69,11 +69,11 @@ version_quarantine_info, version_upload_error, app_library_rowid, zone_rowid
 
 `item_id` 와 `item_parent_id` 를 이으면 폴더 구조를 다시 세울 수 있고, `app_library_rowid`·`zone_rowid` 로 `app_libraries`·`client_zones` 표와 이어 어느 앱 영역의 파일인지 봅니다. `item_type` 값이 파일과 폴더를 어떻게 나누는지는 확인하지 못했습니다.
 
-올리기와 내려받기 대기열은 `client_uploads`·`client_downloads` 에 있고, 두 표에는 `transfer_size`, `transfer_stage`, `last_try_stamp`, `next_retry_stamp`, `expire_stamp` 칸이, 각각 `upload_error`·`download_error` 칸이, `client_downloads` 에는 `download_request_stamp` 칸이 더 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 동기화 실패는 `item_errors` 의 `error_domain`, `error_code`, `error_message`, `error_timestamp` 칸에 남고, `boot_history` 에는 `date`, `os`, `br`, `bird_schema`, `db_schema`, `device_id` 칸이 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). `boot_history` 의 `os` 칸 이름은 OS 버전을 적은 것처럼 보이지만 확인하지 못했습니다.
+올리기와 내려받기 대기열은 `client_uploads`·`client_downloads` 에 있고, 두 표에는 `transfer_size`, `transfer_stage`, `last_try_stamp`, `next_retry_stamp`, `expire_stamp` 칸이, 각각 `upload_error`·`download_error` 칸이, `client_downloads` 에는 `download_request_stamp` 칸이 더 있습니다(확인 범위: iOS 27.0). 동기화 실패는 `item_errors` 의 `error_domain`, `error_code`, `error_message`, `error_timestamp` 칸에 남고, `boot_history` 에는 `date`, `os`, `br`, `bird_schema`, `db_schema`, `device_id` 칸이 있습니다(확인 범위: iOS 27.0). `boot_history` 의 `os` 칸 이름은 OS 버전을 적은 것처럼 보이지만 확인하지 못했습니다.
 
 ### server.db
 
-`server.db` 에는 `server_items`, `server_zones`, `server_share_items_participants`, `server_state`, `server_boot_history`, `devices`, `users`, `side_car_lookahead`, `rowid_reservations`, `completed_db_fixups` 표가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`server.db` 에는 `server_items`, `server_zones`, `server_share_items_participants`, `server_state`, `server_boot_history`, `devices`, `users`, `side_car_lookahead`, `rowid_reservations`, `completed_db_fixups` 표가 있었습니다(확인 범위: iOS 27.0).
 
 ```
 server_items (일부)
@@ -86,11 +86,11 @@ users: user_key, user_name, user_plist
 
 `server_items` 는 서버에 있는 파일 목록이고 [1], `devices` 표의 `name` 과 `version_device` 칸을 이으면 어느 기기가 그 판을 만들었는지 가늠할 수 있지만, 두 칸을 잇는 방법은 이름에서 나온 추정이라서 검체에서 값을 보고 확인합니다. 공유 폴더의 참여자는 `server_share_items_participants` 와 `users` 를 `user_key` 로 이어 봅니다.
 
-휴지통과 관련된 칸(`item_trash_put_back_parent_id`, `item_trash_put_back_path`)이 `client_items` 와 `server_items` 양쪽에 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이름으로는 휴지통으로 옮긴 항목의 원래 위치로 보이지만, 값의 해석은 확인하지 못했습니다.
+휴지통과 관련된 칸(`item_trash_put_back_parent_id`, `item_trash_put_back_path`)이 `client_items` 와 `server_items` 양쪽에 있습니다(확인 범위: iOS 27.0). 이름으로는 휴지통으로 옮긴 항목의 원래 위치로 보이지만, 값의 해석은 확인하지 못했습니다.
 
 ### 파일 공급자 도메인과 설정 plist
 
-iCloud Drive 가 파일 앱에 등록한 도메인은 아래처럼 남습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+iCloud Drive 가 파일 앱에 등록한 도메인은 아래처럼 남습니다(확인 범위: iOS 27.0).
 
 ```
 HomeDomain :: Library/Application Support/FileProvider/com.apple.CloudDocs.iCloudDriveFileProvider/Domains.plist
@@ -102,9 +102,9 @@ NSFileProviderDomainDefaultIdentifier: {Connected, Enabled}
 
 이름으로 보아 `Enabled`·`Connected` 값은 수집 시점에 iCloud Drive 가 파일 앱에 연결되어 켜져 있었는지를 가늠하는 단서입니다. 같은 `FileProvider` 폴더의 `backup/backup_manifest.db`, `<UUID>/wharf/wharf/directoryManifest/manifest.db`, `speculative-set-pacer.plist` 는 어느 공급자 것인지 확인하지 못했고, 구조는 [구글 드라이브](google-drive.md) 에 정리해 두었습니다.
 
-`session/containers/` 에는 앱별 iCloud 컨테이너 plist 가 많고, 파일 이름은 `<팀ID>.<번들ID>.plist` 또는 `com.apple.*.plist` 꼴이며 키는 `BRContainerName`, `BRContainerDocumentTypes`, `BRContainerVersionNumber` 같은 `BRContainer` 계열입니다(확인 범위: iPhone 13 mini, iOS 27.0). 이 목록으로 iCloud Drive 를 쓰는 앱이 무엇인지 가늠할 수 있지만, 앱이 설치되어 있었다거나 실제로 썼다는 근거로 쓸 수 있는지는 확인하지 못했습니다.
+`session/containers/` 에는 앱별 iCloud 컨테이너 plist 가 많고, 파일 이름은 `<팀ID>.<번들ID>.plist` 또는 `com.apple.*.plist` 꼴이며 키는 `BRContainerName`, `BRContainerDocumentTypes`, `BRContainerVersionNumber` 같은 `BRContainer` 계열입니다(확인 범위: iOS 27.0). 이 목록으로 iCloud Drive 를 쓰는 앱이 무엇인지 가늠할 수 있지만, 앱이 설치되어 있었다거나 실제로 썼다는 근거로 쓸 수 있는지는 확인하지 못했습니다.
 
-설정 plist 가운데 `com.apple.bird.plist` 에는 `optimize-storage`(bool), `didDropCoreSpotlightIndex`(bool), `CKStartupTime`(int)이, `com.apple.fileproviderd.plist` 에는 `LocalStorageStubDomainEnabled`(bool), `iCDPackageExtensions`(list)가, `server-conflig.plist` 에는 `etag`, `default`, `com.apple.CloudDocs.recovery` 같은 키가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). `bird` 는 iCloud Drive 데몬 이름으로 알려져 있지만 이번 자료로 확인하지 못했고, `optimize-storage` 가 "iPhone 저장 공간 최적화" 설정과 같은 것인지도 확인하지 못했습니다.
+설정 plist 가운데 `com.apple.bird.plist` 에는 `optimize-storage`(bool), `didDropCoreSpotlightIndex`(bool), `CKStartupTime`(int)이, `com.apple.fileproviderd.plist` 에는 `LocalStorageStubDomainEnabled`(bool), `iCDPackageExtensions`(list)가, `server-conflig.plist` 에는 `etag`, `default`, `com.apple.CloudDocs.recovery` 같은 키가 있었습니다(확인 범위: iOS 27.0). `bird` 는 iCloud Drive 데몬 이름으로 알려져 있지만 이번 자료로 확인하지 못했고, `optimize-storage` 가 "iPhone 저장 공간 최적화" 설정과 같은 것인지도 확인하지 못했습니다.
 
 ## 증거로서 의미
 

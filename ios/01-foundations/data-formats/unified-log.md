@@ -104,7 +104,7 @@ tracev3 와 uuidtext 는 짝으로 다뤄야 합니다. 둘 중 하나만 확보
 
 macos-UnifiedLogs 는 printf 오류 코드를 뜻으로 풀지 않고 번호 그대로 두며, 지원하지 않는 객체는 base64 로 내보냅니다[2]. 출력에 숫자나 base64 가 보이면 해석 실패가 아니라 도구가 풀지 않은 값일 수 있습니다.
 
-실제 아이폰 로컬 백업에서는 이름에 로그가 들어간 영역이 보였습니다. 도메인 `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`, `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs`, 그리고 `WirelessDomain` 의 `Library/Preferences/com.apple.AppleBasebandManager.plist` 안의 `systemlogs.mode` 키가 그 예입니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이들이 통합 로그와 직접 관련 있는지는 확인하지 못했으므로, 이름만 보고 통합 로그를 확보했다고 적지 않습니다. 같은 관찰은 DB 와 plist 만 목록으로 적었기 때문에, tracev3 가 백업에 들어 있는지도 이 관찰로 말할 수 없습니다. 충돌 기록은 [충돌·진단 기록](../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
+실제 아이폰 로컬 백업에서는 이름에 로그가 들어간 영역이 보였습니다. 도메인 `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`, `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs`, 그리고 `WirelessDomain` 의 `Library/Preferences/com.apple.AppleBasebandManager.plist` 안의 `systemlogs.mode` 키가 그 예입니다 (확인 범위: iOS 27.0). 이들이 통합 로그와 직접 관련 있는지는 확인하지 못했으므로, 이름만 보고 통합 로그를 확보했다고 적지 않습니다. 같은 관찰은 DB 와 plist 만 목록으로 적었기 때문에, tracev3 가 백업에 들어 있는지도 이 관찰로 말할 수 없습니다. 충돌 기록은 [충돌·진단 기록](../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
 
 개인정보를 가리는 표시(`<private>`)가 붙는 조건과 로그 수준별 보관 기간은 이 페이지의 출처로 확인하지 못했습니다. 어떤 사건의 로그가 없다는 사실만으로 그 사건이 없었다고 쓰지 않습니다.
 

@@ -24,7 +24,7 @@ Apple 설명에 따르면, 이 기능을 켠 기기와 같은 Apple 계정으로
 
 2018년 글 기준으로, 중요 위치 데이터는 `/private/var/mobile/Library/Caches/com.apple.routined/` 폴더의 SQLite DB 에 있고 방문 기록은 그중 `Cloud.sqlite` 에 있습니다 [3]. 같은 글은 이 데이터가 백업으로는 나오지 않고 파일 시스템 전체 추출에서만 얻을 수 있다고 적었습니다 [3]. 전체 추출 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
-실제 아이폰의 암호화하지 않은 로컬 백업에서도 `com.apple.routined` 의 DB 파일은 백업 DB 목록에 없었고, 설정 plist `HomeDomain :: Library/Preferences/com.apple.routined.plist` 만 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 백업을 암호화했다면 결과가 달라지는지는 확인하지 못했습니다. 로컬 백업의 도메인 체계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
+실제 아이폰의 암호화하지 않은 로컬 백업에서도 `com.apple.routined` 의 DB 파일은 백업 DB 목록에 없었고, 설정 plist `HomeDomain :: Library/Preferences/com.apple.routined.plist` 만 있었습니다 (확인 범위: iOS 27.0). 백업을 암호화했다면 결과가 달라지는지는 확인하지 못했습니다. 로컬 백업의 도메인 체계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
 
 ### 버전별로 확인한 내용
 
@@ -32,7 +32,7 @@ Apple 설명에 따르면, 이 기능을 켠 기기와 같은 Apple 계정으로
 |---|---|---|
 | 2018년 글 | `routined` 폴더의 `Cloud.sqlite` 에 방문 기록, 전체 추출에서만 얻음 | [3] |
 | iOS 15~18 | 방문 기록 표 구조가 바뀌었는지 확인한 자료 없음 | — |
-| iOS 27.0 로컬 백업 | `routined` DB 없음, 설정 plist 만 있음 | (확인 범위: iPhone 13 mini, iOS 27.0) |
+| iOS 27.0 로컬 백업 | `routined` DB 없음, 설정 plist 만 있음 | (확인 범위: iOS 27.0) |
 | 2026년 Apple 문서 | 설정 이름 "Significant Locations & Routes", 동기화는 종단간 암호화 | [1] |
 
 iOS 15 이후 방문 기록을 담는 파일 이름이 바뀌었다는 자료를 검색 결과에서 보았지만 원문으로 확인하지 못해서, 이 페이지에는 파일 이름을 적지 않습니다. 검체에서는 `routined` 폴더 안의 DB 를 모두 열어 아래 구조와 맞는 표를 찾습니다.
@@ -48,7 +48,7 @@ iOS 15 이후 방문 기록을 담는 파일 이름이 바뀌었다는 자료를
 | 장소 이름 | 주소, 도시, 주, 업체명 | [3] 에 형식 설명 없음 |
 | 장소 지오(geo) | 좌표 | 프로토콜 버퍼, 좌표는 8바이트 실수(big-endian) |
 
-프로토콜 버퍼를 읽는 법은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에서 다룹니다. 표 이름과 칸 이름은 원문으로 확인한 자료가 없어서, 검체에서는 시각 칸이 여러 개이고 신뢰도·불확실도 칸과 BLOB 칸이 함께 있는 표를 찾아 방문 기록으로 판단합니다. DB 가 Core Data 형식이라면 `Z_PRIMARYKEY` 표의 `Z_NAME` 칸으로 개체 이름을 먼저 확인할 수 있습니다(Core Data 형식 DB 에 이 표가 있다는 점은 확인 범위: iPhone 13 mini, iOS 27.0). SQLite 구조 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 를 봅니다.
+프로토콜 버퍼를 읽는 법은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에서 다룹니다. 표 이름과 칸 이름은 원문으로 확인한 자료가 없어서, 검체에서는 시각 칸이 여러 개이고 신뢰도·불확실도 칸과 BLOB 칸이 함께 있는 표를 찾아 방문 기록으로 판단합니다. DB 가 Core Data 형식이라면 `Z_PRIMARYKEY` 표의 `Z_NAME` 칸으로 개체 이름을 먼저 확인할 수 있습니다(Core Data 형식 DB 에 이 표가 있다는 점은 확인 범위: iOS 27.0). SQLite 구조 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 를 봅니다.
 
 ## 증거로서 의미
 
@@ -75,7 +75,7 @@ iOS 15 이후 방문 기록을 담는 파일 이름이 바뀌었다는 자료를
 
 기록은 시간이 지나면 만료되고 [3], Apple 문서 두 곳([1], [2])에서는 보존 기간이나 목록 지우기 방법을 설명한 문구를 찾지 못했습니다. 그래서 오래된 날짜의 방문이 없다고 해서 사용자가 지웠다고 볼 수 없고, 가능한 한 빨리 기기를 확보하는 편이 낫습니다 [3]. 의도적으로 지운 흔적을 찾을 때는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름을 따릅니다.
 
-로컬 백업만 받은 사건에서는 방문 기록이 처음부터 없습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이때 중요 위치가 켜져 있었는지 알려 줄 만한 키 후보가 `com.apple.routined.plist` 에 있지만, 키의 뜻은 확인하지 못했고 그 목록은 [위치 기록 데몬](routined.md) 에 정리했습니다.
+로컬 백업만 받은 사건에서는 방문 기록이 처음부터 없습니다 (확인 범위: iOS 27.0). 이때 중요 위치가 켜져 있었는지 알려 줄 만한 키 후보가 `com.apple.routined.plist` 에 있지만, 키의 뜻은 확인하지 못했고 그 목록은 [위치 기록 데몬](routined.md) 에 정리했습니다.
 
 2018년 글 이후의 표 구조는 확인한 자료가 없어서, 다른 버전 검체에서 얻은 표·칸 이름을 그대로 쓰지 않고 검체의 iOS 버전을 함께 적어 둡니다.
 

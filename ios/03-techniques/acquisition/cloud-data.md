@@ -74,7 +74,7 @@ privacy.apple.com 의 데이터 사본 요청으로 받을 수 있는 범주는 
 
 ## 기기에 남는 계정·클라우드 흔적
 
-요청할 자료를 고르려면 기기 쪽에서 어떤 계정과 동기화 서비스를 썼는지 먼저 봅니다. 관찰한 로컬 백업에는 아래 파일이 있었고, 키와 칸 이름만 확인했으며 값은 읽지 않았습니다(확인 범위: iPhone 13 mini, iOS 27.0). 경로의 `#` 는 관찰 메모에서 숫자를 가린 자리입니다.
+요청할 자료를 고르려면 기기 쪽에서 어떤 계정과 동기화 서비스를 썼는지 먼저 봅니다. 관찰한 로컬 백업에는 아래 파일이 있었고, 키와 칸 이름만 확인했으며 값은 읽지 않았습니다(확인 범위: iOS 27.0). 경로의 `#` 는 관찰 메모에서 숫자를 가린 자리입니다.
 
 | 위치(도메인 :: 경로) | 관찰한 표·키 | 단서가 되는 것 | 자세히 |
 |---|---|---|---|
@@ -85,11 +85,11 @@ privacy.apple.com 의 데이터 사본 요청으로 받을 수 있는 범주는 
 | `HomeDomain :: Library/Application Support/CloudDocs/session/db/client.db`, `server.db` | `client_items`, `server_items`, `devices`, `users`, `boot_history` 등 | iCloud Drive 에 동기화한 파일과 기기 | [아이클라우드 드라이브](../../02-artifacts/mail-cloud/icloud-drive.md) |
 | `HomeDomain :: Library/Preferences/com.apple.AuthKit.plist` | `_AKBAACertMarkerKey`, `timeCfg` | 인증 설정. 같은 이름의 파일이 여러 앱 도메인에도 있음 | [애플 계정](../../02-artifacts/system-account/apple-account.md) |
 
-동기화를 쓰는 Apple 앱의 데이터베이스에는 CloudKit 관련 칸도 남습니다. 메시지의 `HomeDomain :: Library/SMS/sms.db` `chat` 표에는 `cloudkit_record_id` 와 `ck_sync_state` 가, 단축어의 `HomeDomain :: Library/Shortcuts/Shortcuts.sqlite` 에는 `ZCLOUDKITRECORDMETADATA` 가, Freeform 의 `AppDomainGroup-group.com.apple.freeform :: Boards/boards.db` 에는 `last_cloudkit_fetch_version` 이 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이 칸들은 항목이 클라우드와 동기화됐는지 가늠하는 단서가 될 수 있지만, 값이 무엇을 뜻하는지는 확인하지 못했습니다. 메시지 쪽 해석은 [메시지](../../02-artifacts/communications/messages/index.md)에서 다룹니다.
+동기화를 쓰는 Apple 앱의 데이터베이스에는 CloudKit 관련 칸도 남습니다. 메시지의 `HomeDomain :: Library/SMS/sms.db` `chat` 표에는 `cloudkit_record_id` 와 `ck_sync_state` 가, 단축어의 `HomeDomain :: Library/Shortcuts/Shortcuts.sqlite` 에는 `ZCLOUDKITRECORDMETADATA` 가, Freeform 의 `AppDomainGroup-group.com.apple.freeform :: Boards/boards.db` 에는 `last_cloudkit_fetch_version` 이 있었습니다(확인 범위: iOS 27.0). 이 칸들은 항목이 클라우드와 동기화됐는지 가늠하는 단서가 될 수 있지만, 값이 무엇을 뜻하는지는 확인하지 못했습니다. 메시지 쪽 해석은 [메시지](../../02-artifacts/communications/messages/index.md)에서 다룹니다.
 
 ## 도구
 
-계정 자료를 받는 데는 따로 도구가 필요하지 않고, 본인 사본은 privacy.apple.com 에서 요청합니다 [2]. 받은 .json, .csv 파일과 기기 쪽 SQLite·plist 파일은 범용 뷰어로 열어 볼 수 있으며, 여는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다. `Accounts#.sqlite` 는 `Z_PK`, `Z_ENT`, `Z_OPT` 칸이 있는 Core Data 형식의 표이고, 칸 이름이 `Z` 로 시작합니다(확인 범위: iPhone 13 mini, iOS 27.0).
+계정 자료를 받는 데는 따로 도구가 필요하지 않고, 본인 사본은 privacy.apple.com 에서 요청합니다 [2]. 받은 .json, .csv 파일과 기기 쪽 SQLite·plist 파일은 범용 뷰어로 열어 볼 수 있으며, 여는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다. `Accounts#.sqlite` 는 `Z_PK`, `Z_ENT`, `Z_OPT` 칸이 있는 Core Data 형식의 표이고, 칸 이름이 `Z` 로 시작합니다(확인 범위: iOS 27.0).
 
 ## 함정과 한계
 

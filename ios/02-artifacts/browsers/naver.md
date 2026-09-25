@@ -20,20 +20,20 @@ App Store 에서 판매자는 NAVER Corp., 앱 ID 는 `id393499958` 이고, 설�
 
 2026-09-25 에 본 App Store 판은 12.23.72 이고, 최소 요구 버전은 iOS 17.0 이상입니다 [1]. 이 값은 앱을 고칠 때마다 자주 바뀌니, 검체의 iOS 버전과 앱 판을 먼저 적어 둡니다.
 
-번들 ID 는 신뢰할 만한 공개 출처로 확인하지 못했습니다. 검체에서는 [설치된 앱](../app-usage/installed-apps.md) 기록에서 번들 ID 와 컨테이너 UUID 를 먼저 찾고, 로컬 백업이라면 `Manifest.db` 의 `Files` 표에서 `AppDomain-` 뒤에 그 번들 ID 가 붙은 도메인을 찾습니다. 관찰한 백업에서 `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다(확인 범위: iPhone 13 mini, iOS 27.0). 번들 ID 와 앱 그룹 컨테이너의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을, 백업 도메인 규칙은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 을 봅니다.
+번들 ID 는 신뢰할 만한 공개 출처로 확인하지 못했습니다. 검체에서는 [설치된 앱](../app-usage/installed-apps.md) 기록에서 번들 ID 와 컨테이너 UUID 를 먼저 찾고, 로컬 백업이라면 `Manifest.db` 의 `Files` 표에서 `AppDomain-` 뒤에 그 번들 ID 가 붙은 도메인을 찾습니다. 관찰한 백업에서 `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다(확인 범위: iOS 27.0). 번들 ID 와 앱 그룹 컨테이너의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을, 백업 도메인 규칙은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 을 봅니다.
 
 검색 기록·방문 기록이 들어가는 DB 이름, 표·칸 이름, plist 키, 앱 그룹 이름은 논문·블로그·iLEAPP·MVT 같은 공개 포렌식 자료에서 찾지 못했습니다. 그래서 이 페이지에는 경로를 적지 않고, 판별 방법만 적습니다. iOS 버전별 차이도 확인한 자료가 없습니다.
 
 ## 구조
 
-앱 고유 파일은 확인하지 못했지만, WebKit 을 쓰는 앱의 컨테이너에는 `Library/WebKit/WebsiteData/` 아래 파일이 생길 수 있습니다. 관찰한 백업에서는 Apple 앱(음악·메일·사파리) 컨테이너에서 다음 두 파일을 봤습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+앱 고유 파일은 확인하지 못했지만, WebKit 을 쓰는 앱의 컨테이너에는 `Library/WebKit/WebsiteData/` 아래 파일이 생길 수 있습니다. 관찰한 백업에서는 Apple 앱(음악·메일·사파리) 컨테이너에서 다음 두 파일을 봤습니다(확인 범위: iOS 27.0).
 
 ```
 Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db
 Library/WebKit/WebsiteData/EnhancedSecurity/EnhancedSecuritySites.db
 ```
 
-두 파일 모두 SQLite 이고([SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)), 관찰한 주요 표와 칸은 다음과 같습니다(확인 범위: iPhone 13 mini, iOS 27.0). `observations.db` 에는 이 밖에도 `SubresourceUniqueRedirectsFrom`, `SubresourceUniqueRedirectsTo`, `TopFrameUniqueRedirectsToSinceSameSiteStrictEnforcement` 표가 있었습니다.
+두 파일 모두 SQLite 이고([SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)), 관찰한 주요 표와 칸은 다음과 같습니다(확인 범위: iOS 27.0). `observations.db` 에는 이 밖에도 `SubresourceUniqueRedirectsFrom`, `SubresourceUniqueRedirectsTo`, `TopFrameUniqueRedirectsToSinceSameSiteStrictEnforcement` 표가 있었습니다.
 
 | 파일 | 표 | 칸 |
 |---|---|---|
@@ -53,7 +53,7 @@ Library/WebKit/WebsiteData/EnhancedSecurity/EnhancedSecuritySites.db
 
 ## 증거로서 의미
 
-**증명하는 것.** 네이버 앱 컨테이너에서 `observations.db` 를 찾았다면 `registrableDomain` 은 그 앱의 WebKit 데이터에 그 도메인이 적혀 있다는 것을 보여 주고, `hadUserInteraction` 은 칸 이름대로 사용자 조작이 있었는지를 적는 칸입니다. 위치 권한이 있는 앱은 시스템 위치 서비스의 `Library/Caches/locationd/clients.plist`(RootDomain) 에 번들 ID 로 한 항목씩 적히고, 관찰한 백업에서 앱 항목의 키 이름은 `BundleId`, `BundlePath`, `ClientStorageToken`, `Executable`, `PluginBundleIds`, `SupportedAuthorizationMask`, `SuppressShowingInSettings`, `Tombstones`, `VersionVector` 등입니다(확인 범위: iPhone 13 mini, iOS 27.0). 그래서 "내 주변" 검색처럼 위치를 쓰는 기능이 있는 앱이 이 파일에 적혀 있는지 볼 수 있습니다.
+**증명하는 것.** 네이버 앱 컨테이너에서 `observations.db` 를 찾았다면 `registrableDomain` 은 그 앱의 WebKit 데이터에 그 도메인이 적혀 있다는 것을 보여 주고, `hadUserInteraction` 은 칸 이름대로 사용자 조작이 있었는지를 적는 칸입니다. 위치 권한이 있는 앱은 시스템 위치 서비스의 `Library/Caches/locationd/clients.plist`(RootDomain) 에 번들 ID 로 한 항목씩 적히고, 관찰한 백업에서 앱 항목의 키 이름은 `BundleId`, `BundlePath`, `ClientStorageToken`, `Executable`, `PluginBundleIds`, `SupportedAuthorizationMask`, `SuppressShowingInSettings`, `Tombstones`, `VersionVector` 등입니다(확인 범위: iOS 27.0). 그래서 "내 주변" 검색처럼 위치를 쓰는 기능이 있는 앱이 이 파일에 적혀 있는지 볼 수 있습니다.
 
 **증명하지 못하는 것.** 도메인 단위 기록은 어떤 페이지를 봤는지, 무엇을 검색했는지 알려 주지 않습니다. App Store 개인정보 표시에 검색 기록이 있다고 해서 기기 안에 검색어가 남는다고 볼 수 없고, 반대로 기기에서 검색어를 찾지 못했다고 해서 검색하지 않았다고 쓸 수도 없습니다.
 
@@ -61,7 +61,7 @@ Library/WebKit/WebsiteData/EnhancedSecurity/EnhancedSecuritySites.db
 
 ## 시각 해석
 
-`observations.db` 의 `lastSeen`, `mostRecentUserInteractionTime`, `lastUpdated` 와 `EnhancedSecuritySites.db` 의 `last_modified` 가 어떤 기준의 시각인지는 확인하지 못했습니다. 값의 크기로 기준을 짐작하는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있고, 다른 기록의 시각과 맞춰 본 뒤에 보고서에 씁니다. `OperatingDates` 는 칸이 `year`, `month`, `monthDay` 로 나뉘어 날짜만 적는 표입니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`observations.db` 의 `lastSeen`, `mostRecentUserInteractionTime`, `lastUpdated` 와 `EnhancedSecuritySites.db` 의 `last_modified` 가 어떤 기준의 시각인지는 확인하지 못했습니다. 값의 크기로 기준을 짐작하는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있고, 다른 기록의 시각과 맞춰 본 뒤에 보고서에 씁니다. `OperatingDates` 는 칸이 `year`, `month`, `monthDay` 로 나뉘어 날짜만 적는 표입니다(확인 범위: iOS 27.0).
 
 ## 함정과 한계
 

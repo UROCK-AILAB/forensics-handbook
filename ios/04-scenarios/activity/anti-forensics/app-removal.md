@@ -17,7 +17,7 @@ nav_order: 1520
 
 지운 앱을 다룬 포렌식 자료 [1] 은 2019년 글이고, iOS 15 이후에도 경로와 동작이 같은지는 이 핸드북에서 확인하지 못했습니다. 검체의 iOS 버전에서 파일이 실제로 있는지부터 봅니다.
 
-수집 범위가 결과를 크게 가릅니다. 지운 앱을 가장 직접 보여 주는 `UninstalledApplications.plist` 는 전체 파일 시스템 이미지에서만 얻을 수 있다고 [1] 은 설명하고, 관찰한 로컬 백업에서도 이 파일과 `DAAP.sqlitedb` 는 보이지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 로컬 백업만 있다면 설치 목록과 홈 화면 배치를 비교하는 방법이 중심이 됩니다.
+수집 범위가 결과를 크게 가릅니다. 지운 앱을 가장 직접 보여 주는 `UninstalledApplications.plist` 는 전체 파일 시스템 이미지에서만 얻을 수 있다고 [1] 은 설명하고, 관찰한 로컬 백업에서도 이 파일과 `DAAP.sqlitedb` 는 보이지 않았습니다 (확인 범위: iOS 27.0). 로컬 백업만 있다면 설치 목록과 홈 화면 배치를 비교하는 방법이 중심이 됩니다.
 
 기기 이전 이력도 봅니다. `UninstalledApplications.plist` 는 기기마다 따로 있고 다른 기기로 옮겨지지 않아서 [1], 새 기기로 옮긴 경우 예전 기기에서 지운 앱은 이 파일에 없습니다. 복원·이전 흔적은 [초기화 (Erase All Content)](erase-reset.md) 에서 다룹니다.
 
@@ -31,9 +31,9 @@ nav_order: 1520
 | 4 | 구입 앱 목록 | `/private/var/mobile/Library/Caches/com.apple.appstored/DAAP.sqlitedb` | Apple 계정 기준 구입 앱 목록이고(iOS 12 이후), 기기에 지금 없는 앱도 들어 있습니다 [1] | [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) |
 | 5 | 예전 구입 기록 | `/private/var/mobile/Library/Caches/com.apple.storeservices/AppPurchaseHistory.6.sqlitedb` | 예전 iOS 에서 4번과 비슷한 역할을 했습니다 [1] | [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) |
 
-[1] 은 이 밖에 Mobile Installation 로그, 스크린 타임, PowerLog, KnowledgeC, DataUsage.sqlite, netusage.sqlite, CallHistory.storedata 도 함께 볼 곳으로 듭니다. 이 파일들에 지운 앱이 어떻게 남는지는 이 핸드북에서 확인하지 못했고, 각 파일을 읽는 법은 [화면 사용 시간](../../../02-artifacts/app-usage/screen-time.md), [전원 로그](../../../02-artifacts/app-usage/powerlog.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 에서 다룹니다. 관찰한 백업에서는 KnowledgeC·바이옴·PowerLog·installd 로그가 보이지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+[1] 은 이 밖에 Mobile Installation 로그, 스크린 타임, PowerLog, KnowledgeC, DataUsage.sqlite, netusage.sqlite, CallHistory.storedata 도 함께 볼 곳으로 듭니다. 이 파일들에 지운 앱이 어떻게 남는지는 이 핸드북에서 확인하지 못했고, 각 파일을 읽는 법은 [화면 사용 시간](../../../02-artifacts/app-usage/screen-time.md), [전원 로그](../../../02-artifacts/app-usage/powerlog.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 에서 다룹니다. 관찰한 백업에서는 KnowledgeC·바이옴·PowerLog·installd 로그가 보이지 않았습니다 (확인 범위: iOS 27.0).
 
-관찰한 백업에서 앱 지우기와 관련될 만한 파일은 아래와 같습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 표 이름과 키 이름만 확인했고, 앱을 지운 뒤 값이 어떻게 바뀌는지는 확인하지 못했습니다.
+관찰한 백업에서 앱 지우기와 관련될 만한 파일은 아래와 같습니다 (확인 범위: iOS 27.0). 표 이름과 키 이름만 확인했고, 앱을 지운 뒤 값이 어떻게 바뀌는지는 확인하지 못했습니다.
 
 | 파일(백업) | 표·키 이름 |
 |---|---|

@@ -20,7 +20,7 @@ Apple 지도는 아이폰 기본 지도 앱이고, iOS 14 이후 검색·길찾�
 
 iOS 14 기준 글은 `var/mobile/Containers/Shared/AppGroup/group.com.apple.Maps/Maps/` 아래에 `MapsSync_0.0.1` 과 `MapsSync_0.0.1_deviceLocalCache.db` 가 있다고 적었습니다 [2]. 경로는 원문 표기 그대로이고, 실제 파일 시스템에서 `AppGroup` 아래 폴더가 그룹 ID 이름인지 GUID 이름인지는 확인하지 못했습니다. 앱 그룹 폴더를 찾는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다. iLEAPP 의 지도 모듈은 경로 패턴 `*/MapsSync_0.0.1*` 로 파일을 찾습니다 [1].
 
-iOS 14 에서는 이 데이터가 맥·윈도우에서 만든 암호화한 iTunes 백업에 들어 있었습니다 [2]. 반면 실제 아이폰의 암호화하지 않은 로컬 백업에서는 백업 DB 목록에 `MapsSync_0.0.1` 이 없었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이 차이가 백업 암호화 여부 때문인지는 확인하지 못했고, 백업 형식은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
+iOS 14 에서는 이 데이터가 맥·윈도우에서 만든 암호화한 iTunes 백업에 들어 있었습니다 [2]. 반면 실제 아이폰의 암호화하지 않은 로컬 백업에서는 백업 DB 목록에 `MapsSync_0.0.1` 이 없었습니다 (확인 범위: iOS 27.0). 이 차이가 백업 암호화 여부 때문인지는 확인하지 못했고, 백업 형식은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
 
 ### 버전별로 확인한 내용
 
@@ -29,13 +29,13 @@ iOS 14 에서는 이 데이터가 맥·윈도우에서 만든 암호화한 iTune
 | iOS 14 이전 | `GeoHistory.mapsdata` (프로토콜 버퍼) | [2] |
 | iOS 14 | `MapsSync_0.0.1`, 암호화한 iTunes 백업에 들어 있음 | [2] |
 | iOS 14.3, 15.0.2, 16.1.1, 16.5, 17.1, 17.3, 17.5.1, 17.6.1, 18.0, 18.3.2, 18.7, 18.7.8 | iLEAPP 지도 모듈의 시험 자료 버전 | [1] |
-| iOS 27.0 로컬 백업(암호화 안 함) | `MapsSync_0.0.1` 없음, 도메인과 설정 plist 만 있음 | (확인 범위: iPhone 13 mini, iOS 27.0) |
+| iOS 27.0 로컬 백업(암호화 안 함) | `MapsSync_0.0.1` 없음, 도메인과 설정 plist 만 있음 | (확인 범위: iOS 27.0) |
 
 iLEAPP 모듈은 iOS 14.3 부터 18 까지의 시험 자료를 적어 두었고, 표 구조에 따라 쿼리를 세 가지로 나눠 둡니다 [1]. 아래 칸 목록은 그중 가장 새 구조의 쿼리를 따른 것이고, iOS 15 용 쿼리는 `ZLOCATIONDISPLAY` 대신 `ZMIXINMAPITEM.ZNAME` 을 읽고 길찾기 칸(`ZLATITUDE1`, `ZLONGITUDE1`, `ZROUTEREQUESTSTORAGE`)을 읽지 않습니다 [1]. 그래서 검체마다 `.schema` 로 구조를 먼저 확인합니다.
 
 ### 로컬 백업에서 보이는 것
 
-지도 관련 도메인으로 `AppDomain-com.apple.Maps`, `AppDomainGroup-group.com.apple.Maps`, 확장 도메인 `AppDomainPlugin-com.apple.Maps.GeneralMapsWidget`, `AppDomainPlugin-com.apple.Maps.MapsIntents`, `AppDomainPlugin-com.apple.Maps.MapsSettingsAppIntents`, `AppDomainPlugin-com.apple.Maps.SiriTrafficIncidents` 가 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 키 이름을 확인한 plist 는 다음과 같고, 값은 가려져 있어 읽지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+지도 관련 도메인으로 `AppDomain-com.apple.Maps`, `AppDomainGroup-group.com.apple.Maps`, 확장 도메인 `AppDomainPlugin-com.apple.Maps.GeneralMapsWidget`, `AppDomainPlugin-com.apple.Maps.MapsIntents`, `AppDomainPlugin-com.apple.Maps.MapsSettingsAppIntents`, `AppDomainPlugin-com.apple.Maps.SiriTrafficIncidents` 가 있었습니다 (확인 범위: iOS 27.0). 키 이름을 확인한 plist 는 다음과 같고, 값은 가려져 있어 읽지 않았습니다 (확인 범위: iOS 27.0).
 
 | 파일 | 키 |
 |---|---|
@@ -63,7 +63,7 @@ iLEAPP 모듈은 iOS 14.3 부터 18 까지의 시험 자료를 적어 두었고,
 | 14 | 검색 좌표 |
 | 16 | 장소 검색 |
 
-표 이름 앞의 `Z` 와 `Z_PK`·`Z_ENT` 칸으로 보아 Core Data 형식 DB 이고, Core Data 형식 DB 에는 `Z_PRIMARYKEY` 표(`Z_ENT`, `Z_NAME`, `Z_SUPER`, `Z_MAX`)가 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). `Z_ENT` 번호가 모든 버전에서 같은지는 확인한 자료가 없어서, 검체의 `Z_PRIMARYKEY` 에서 번호와 개체 이름을 먼저 맞춰 본 뒤 위 표를 적용합니다. iLEAPP 는 `ZROUTEREQUESTSTORAGE` 를 프로토콜 버퍼로 풀어 길찾기 도착지 주소를 꺼내고, `ZMAPITEMSTORAGE` 도 프로토콜 버퍼로 풀어 주소 요소를 꺼냅니다 [1]. 필드 번호의 뜻은 공개 명세가 없어서, [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 의 읽는 법대로 필드를 풀어 검색어·주소와 맞춰 봅니다. SQLite 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+표 이름 앞의 `Z` 와 `Z_PK`·`Z_ENT` 칸으로 보아 Core Data 형식 DB 이고, Core Data 형식 DB 에는 `Z_PRIMARYKEY` 표(`Z_ENT`, `Z_NAME`, `Z_SUPER`, `Z_MAX`)가 있습니다 (확인 범위: iOS 27.0). `Z_ENT` 번호가 모든 버전에서 같은지는 확인한 자료가 없어서, 검체의 `Z_PRIMARYKEY` 에서 번호와 개체 이름을 먼저 맞춰 본 뒤 위 표를 적용합니다. iLEAPP 는 `ZROUTEREQUESTSTORAGE` 를 프로토콜 버퍼로 풀어 길찾기 도착지 주소를 꺼내고, `ZMAPITEMSTORAGE` 도 프로토콜 버퍼로 풀어 주소 요소를 꺼냅니다 [1]. 필드 번호의 뜻은 공개 명세가 없어서, [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 의 읽는 법대로 필드를 풀어 검색어·주소와 맞춰 봅니다. SQLite 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -92,7 +92,7 @@ iOS 14 로 업데이트한 기기에서는 `ZCREATETIME` 이 검색한 시각이
 
 `Z_ENT` 번호는 iLEAPP 가 쓰는 값이고 [1] 버전마다 같다고 확인한 자료가 없어서, 검체에서 `Z_PRIMARYKEY` 로 확인하지 않고 번호만으로 종류를 나누면 잘못 분류할 수 있습니다.
 
-로컬 백업만 있으면 기록 DB 가 없을 수 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). Apple 개인 안전 가이드에 지도의 위치 기록을 비공개로 두는 방법을 설명한 문서가 있다는 것은 보았지만 내용은 확인하지 못했습니다. 기록을 지운 흔적을 의심할 때는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름을 따릅니다.
+로컬 백업만 있으면 기록 DB 가 없을 수 있습니다 (확인 범위: iOS 27.0). Apple 개인 안전 가이드에 지도의 위치 기록을 비공개로 두는 방법을 설명한 문서가 있다는 것은 보았지만 내용은 확인하지 못했습니다. 기록을 지운 흔적을 의심할 때는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름을 따릅니다.
 
 ## 직접 분석해 보기
 
@@ -132,8 +132,8 @@ ORDER BY h.ZCREATETIME;
 |---|---|
 | [중요 위치](significant-locations.md) · [위치 기록 데몬](routined.md) | 검색한 장소에 실제로 갔는지 |
 | [KnowledgeC](../app-usage/knowledgec/index.md) · [바이옴](../app-usage/biome/index.md) | 지도 앱을 앞에 띄운 시각 |
-| [미리 알림과 캘린더](../mail-cloud/reminders-calendar.md) | 캘린더 `Location` 표(`title`, `address`, `latitude`, `longitude`, `mapkit_handle`, `radius` 등)의 일정 장소 (확인 범위: iPhone 13 mini, iOS 27.0) |
-| [연락처](../communications/contacts.md) | `ABPerson` 표의 `MapsData` 칸 (확인 범위: iPhone 13 mini, iOS 27.0) |
+| [미리 알림과 캘린더](../mail-cloud/reminders-calendar.md) | 캘린더 `Location` 표(`title`, `address`, `latitude`, `longitude`, `mapkit_handle`, `radius` 등)의 일정 장소 (확인 범위: iOS 27.0) |
+| [연락처](../communications/contacts.md) | `ABPerson` 표의 `MapsData` 칸 (확인 범위: iOS 27.0) |
 | [시리](../input-assistant/siri.md) | 음성으로 길찾기를 요청한 흔적 |
 | [카카오맵](kakaomap.md) · [네이버 지도](naver-map.md) | 다른 지도 앱으로 같은 장소를 찾았는지 |
 

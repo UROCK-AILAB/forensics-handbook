@@ -17,7 +17,7 @@ SQLite 는 쓰는 도중 문제가 생겨도 DB 가 깨지지 않도록 본 파�
 |---|---|---|
 | Core Data SQLite 저장소, iOS 7 이후 | WAL | Apple QA1809 |
 | Core Data 를 쓰지 않는 SQLite DB | 앱이 정하고, SQLite 자체 기본값은 DELETE | SQLite pragma 문서 |
-| 로컬 백업의 `Manifest.db` | 최상위에 `Manifest.db-wal`, `Manifest.db-shm` 이 함께 있음(확인 범위: iPhone 13 mini, iOS 27.0) | 관찰 |
+| 로컬 백업의 `Manifest.db` | 최상위에 `Manifest.db-wal`, `Manifest.db-shm` 이 함께 있음(확인 범위: iOS 27.0) | 관찰 |
 
 iOS 앱 DB 가 대부분 WAL 방식인지는 전수로 확인하지 못했고, 로컬 백업에 앱 DB 의 `-wal` 이 따로 들어가는지도 관찰 메모에 목록이 없어 확인하지 못했습니다.
 

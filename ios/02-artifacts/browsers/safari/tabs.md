@@ -19,7 +19,7 @@ BrowserState.db 의 `tabs` 표는 iOS 16 부터 닫은 뒤의 탭만 담습니�
 
 ## 위치와 버전별 차이
 
-세 DB 모두 기기의 `/private/var/mobile/Library/Safari/` 아래에 있습니다[1][3]. 관찰한 백업(암호화 안 함)에서는 세 DB 가 모두 보이지 않았고(확인 범위: iPhone 13 mini, iOS 27.0), 방문 기록처럼 암호화한 백업에만 들어가는 규칙 때문인지는 확인하지 못했습니다. 그 규칙은 [방문 기록 (History.db)](history.md)에서 다룹니다.
+세 DB 모두 기기의 `/private/var/mobile/Library/Safari/` 아래에 있습니다[1][3]. 관찰한 백업(암호화 안 함)에서는 세 DB 가 모두 보이지 않았고(확인 범위: iOS 27.0), 방문 기록처럼 암호화한 백업에만 들어가는 규칙 때문인지는 확인하지 못했습니다. 그 규칙은 [방문 기록 (History.db)](history.md)에서 다룹니다.
 
 | iOS 버전 | 달라지는 점 | 출처 |
 |---|---|---|
@@ -50,7 +50,7 @@ SafariTabs.db 의 두 BLOB 칸 안에는 이진 plist 가 들어 있습니다.
 
 `SessionState` 키 안에는 또 다른 이진 plist 가 들어 있고, 앞 4바이트를 떼어야 plist 로 읽힙니다[2].
 
-사파리 설정 plist 에도 탭과 이어진 이름의 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 값의 뜻은 확인하지 못했습니다.
+사파리 설정 plist 에도 탭과 이어진 이름의 키가 있습니다(확인 범위: iOS 27.0). 값의 뜻은 확인하지 못했습니다.
 
 | 위치 | 키 |
 |---|---|
@@ -71,7 +71,7 @@ BrowserState.db 의 `last_viewed_time` 은 iOS 18 이하에서 Apple 절대 시�
 
 ## 함정과 한계
 
-- 암호화하지 않은 백업에는 세 DB 가 없었으므로(확인 범위: iPhone 13 mini, iOS 27.0), 탭을 보려면 다른 수집 방식이 필요한지 먼저 따집니다. 수집 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다.
+- 암호화하지 않은 백업에는 세 DB 가 없었으므로(확인 범위: iOS 27.0), 탭을 보려면 다른 수집 방식이 필요한지 먼저 따집니다. 수집 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)에서 다룹니다.
 - iOS 15 시험에서 CloudTabs.db 를 읽는 도구가 거의 없었다는 결과가 있어서[3], 도구 결과에 다른 기기 탭이 없다고 DB 가 비었다고 보지 않습니다.
 - `SessionState` 는 앞 4바이트를 떼지 않으면 plist 로 열리지 않아서[2], 도구 결과에 이 값이 비어 있으면 직접 꺼내 확인합니다.
 

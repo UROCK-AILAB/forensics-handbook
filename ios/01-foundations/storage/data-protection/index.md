@@ -28,7 +28,7 @@ has_toc: false
 | 잠금 해제 전·후 | 기기 상태. 비활성 재부팅은 통합 로그 메시지와 NVRAM 변수 `aks-inactivity` 에 흔적 | 비활성 재부팅은 iOS 18 부터 | 수집 당시 기기가 BFU 였는지 AFU 였는지, 보관 중 재부팅했는지 |
 | 보안 칩과 키 가방 | SoC 안의 Secure Enclave. 로컬 백업의 `Manifest.plist` 키 `BackupKeyBag`, `KeychainDomain` 의 `keychain-backup.plist` | Secure Enclave 는 A7 부터 | 어떤 키가 데이터를 보호하는지, 백업이 어느 키 가방으로 암호화됐는지 |
 
-`Manifest.db`, `Manifest.plist`, `keychain-backup.plist` 의 이름은 관찰한 로컬 백업에서 확인했습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`Manifest.db`, `Manifest.plist`, `keychain-backup.plist` 의 이름은 관찰한 로컬 백업에서 확인했습니다(확인 범위: iOS 27.0).
 
 ## 읽는 순서
 

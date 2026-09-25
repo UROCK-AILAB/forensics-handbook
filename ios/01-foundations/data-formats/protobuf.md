@@ -16,7 +16,7 @@ nav_order: 170
 
 iOS 에서 이 형식을 가장 자주 만나는 곳은 [바이옴](../../02-artifacts/app-usage/biome/index.md)입니다. 바이옴의 [SEGB](segb.md) 파일은 기록마다 헤더 뒤에 protobuf 페이로드를 붙이고[2][3], iOS 16 에서 쓰던 protobuf 구조를 iOS 17 에서도 그대로 쓰는 스트림이 많습니다[2]. Apple 이 이 페이로드의 스키마를 공개하지 않았기 때문에, 바이옴 페이로드는 대개 스키마 없이 필드 번호로 읽습니다.
 
-그 밖의 iOS 아티팩트 가운데 어디가 protobuf 를 쓰는지는 이 페이지의 출처로 확인하지 못했습니다. 예를 들어 실제 아이폰 로컬 백업의 `AppDomainGroup-group.com.apple.notes` 영역에는 `NoteStore.sqlite` 가 있고, 그 안 `ZICNOTEDATA` 표에 `ZDATA` 칸이 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 값을 읽지 않았기 때문에 이 칸이 protobuf 인지는 알 수 없고, 메모 본문의 저장 방식은 [메모](../../02-artifacts/mail-cloud/notes.md)에서 다룹니다. plist 의 bytes 값처럼 겉으로 형식을 알 수 없는 이진 값을 만나면 protobuf 도 후보에 넣고 아래 규칙으로 맞춰 봅니다. plist 쪽 사례는 [속성 목록 파일](plist.md)에 있습니다.
+그 밖의 iOS 아티팩트 가운데 어디가 protobuf 를 쓰는지는 이 페이지의 출처로 확인하지 못했습니다. 예를 들어 실제 아이폰 로컬 백업의 `AppDomainGroup-group.com.apple.notes` 영역에는 `NoteStore.sqlite` 가 있고, 그 안 `ZICNOTEDATA` 표에 `ZDATA` 칸이 있습니다 (확인 범위: iOS 27.0). 값을 읽지 않았기 때문에 이 칸이 protobuf 인지는 알 수 없고, 메모 본문의 저장 방식은 [메모](../../02-artifacts/mail-cloud/notes.md)에서 다룹니다. plist 의 bytes 값처럼 겉으로 형식을 알 수 없는 이진 값을 만나면 protobuf 도 후보에 넣고 아래 규칙으로 맞춰 봅니다. plist 쪽 사례는 [속성 목록 파일](plist.md)에 있습니다.
 
 ## 구조
 

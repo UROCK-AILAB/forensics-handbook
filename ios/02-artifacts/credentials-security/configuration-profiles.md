@@ -32,7 +32,7 @@ nav_order: 1120
 
 ### 로컬 백업에서 볼 곳
 
-관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 암호화하지 않은 로컬 백업이었고, 아래 도메인은 모두 이름과 항목 수만 확인했습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업은 Windows 의 Apple 기기 앱으로 만든 암호화하지 않은 로컬 백업이었고, 아래 도메인은 모두 이름과 항목 수만 확인했습니다(확인 범위: iOS 27.0).
 
 | 백업 도메인 | 항목 수 | 보는 까닭 |
 |---|---|---|
@@ -49,7 +49,7 @@ MDM 서버 주소와 등록 시각이 백업의 어느 파일에 남는지는 �
 
 ### ConfigurationProfiles 폴더
 
-`systemgroup.com.apple.configurationprofiles` 도메인의 `Library/ConfigurationProfiles/` 아래에서 본 파일과 키는 다음과 같습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`systemgroup.com.apple.configurationprofiles` 도메인의 `Library/ConfigurationProfiles/` 아래에서 본 파일과 키는 다음과 같습니다(확인 범위: iOS 27.0).
 
 ```
 CloudConfigurationDetails.plist
@@ -81,19 +81,19 @@ UserSettings.plist
   assignedObject, intersection, restrictedBool, restrictedValue, union
 ```
 
-`AppAccessibilityParameters.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist` 는 키가 비어 보였습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`AppAccessibilityParameters.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist` 는 키가 비어 보였습니다(확인 범위: iOS 27.0).
 
 `IsSupervised` 는 이름으로 보아 [3]이 말한 감독 여부에 해당하지만, 값의 정의 문서는 열지 않았습니다. `PayloadManifest.plist` 의 `OrderedProfiles` 는 이름으로 보아 설치된 프로파일의 순서, `HiddenProfiles` 는 화면에 드러나지 않는 프로파일의 목록이고, `MCProfileEvents.plist` 의 `ProfileEvents` 는 프로파일 설치·제거 이벤트 목록으로 보입니다. 다만 목록 안 항목에 어떤 키(설치·삭제 시각 등)가 있는지는 확인하지 못했으니, 이 세 목록은 값을 직접 열어 확인한 만큼만 해석합니다. `MCMeta.plist` 의 두 키는 이름으로 보아 설정을 마지막으로 옮겨 적은 iOS 빌드 번호입니다.
 
-`SystemProfileRestrictions` 아래에는 통신사 이름과 UUID 가 들어간 식별자가 하나 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 개인 기기에도 통신사 설정처럼 처음부터 들어 있는 프로파일이 있을 수 있다는 뜻으로 읽히지만, 값을 읽지 않아 무엇인지는 확인하지 못했습니다. 이 목록에 항목이 있다는 사실만으로 사용자가 프로파일을 설치했다고 보지 않습니다.
+`SystemProfileRestrictions` 아래에는 통신사 이름과 UUID 가 들어간 식별자가 하나 있었습니다(확인 범위: iOS 27.0). 개인 기기에도 통신사 설정처럼 처음부터 들어 있는 프로파일이 있을 수 있다는 뜻으로 읽히지만, 값을 읽지 않아 무엇인지는 확인하지 못했습니다. 이 목록에 항목이 있다는 사실만으로 사용자가 프로파일을 설치했다고 보지 않습니다.
 
 ### UserConfigurationProfiles 폴더
 
-`HomeDomain :: Library/UserConfigurationProfiles/` 아래에도 같은 계열의 이름이 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). `PayloadManifest.plist`(`HiddenProfiles`, `OrderedProfiles`), `PublicInfo/MCMeta.plist`(`LastMigratedBuild`)와 함께 제한 설정 키가 든 `EffectiveUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist`, `PublicInfo/Truth.plist`, `Truth.plist` 가 있었고, `ClientTruth.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist`, `UserSettings.plist` 는 키가 비어 보였습니다. 두 폴더가 어떻게 나뉘어 쓰이는지는 확인하지 못했습니다.
+`HomeDomain :: Library/UserConfigurationProfiles/` 아래에도 같은 계열의 이름이 있었습니다(확인 범위: iOS 27.0). `PayloadManifest.plist`(`HiddenProfiles`, `OrderedProfiles`), `PublicInfo/MCMeta.plist`(`LastMigratedBuild`)와 함께 제한 설정 키가 든 `EffectiveUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist`, `PublicInfo/Truth.plist`, `Truth.plist` 가 있었고, `ClientTruth.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist`, `UserSettings.plist` 는 키가 비어 보였습니다. 두 폴더가 어떻게 나뉘어 쓰이는지는 확인하지 못했습니다.
 
 ### 제한 설정 키
 
-제한 설정은 `restrictedBool`, `restrictedValue`, `union`, `intersection` 네 묶음으로 나뉘어 있었고, 묶음마다 보인 키 이름의 예는 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+제한 설정은 `restrictedBool`, `restrictedValue`, `union`, `intersection` 네 묶음으로 나뉘어 있었고, 묶음마다 보인 키 이름의 예는 아래와 같습니다(확인 범위: iOS 27.0).
 
 | 묶음 | 키 이름 예 |
 |---|---|
@@ -107,7 +107,7 @@ UserSettings.plist
 
 ### ManagedPreferencesDomain
 
-관찰한 백업에서 두 파일의 키는 아래와 같았습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업에서 두 파일의 키는 아래와 같았습니다(확인 범위: iOS 27.0).
 
 ```
 mobile/.GlobalPreferences.plist
@@ -124,7 +124,7 @@ mobile/com.apple.webcontentfilter.plist
 
 ### 뜻을 확인하지 못한 항목
 
-아래 항목은 이름이 기기 관리와 관련되어 보이지만 뜻을 확인하지 못했고, 모두 관찰한 백업에서 이름만 확인했습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+아래 항목은 이름이 기기 관리와 관련되어 보이지만 뜻을 확인하지 못했고, 모두 관찰한 백업에서 이름만 확인했습니다(확인 범위: iOS 27.0).
 
 | 위치 | 키 | 비고 |
 |---|---|---|
@@ -136,7 +136,7 @@ mobile/com.apple.webcontentfilter.plist
 
 ### 이름이 비슷하지만 다른 것
 
-`MobileDeviceDomain :: ProvisioningProfiles/mis.db` 는 이름에 "profile" 이 들어가지만, 표 이름으로 보아 구성 프로파일이 아니라 개발자·기업 배포 앱의 서명에 쓰는 프로비저닝 프로파일 (provisioning profile)을 담는 DB 로 보입니다. 연 문서로는 확인하지 못했고, 관찰한 백업의 주요 표는 아래와 같았습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`MobileDeviceDomain :: ProvisioningProfiles/mis.db` 는 이름에 "profile" 이 들어가지만, 표 이름으로 보아 구성 프로파일이 아니라 개발자·기업 배포 앱의 서명에 쓰는 프로비저닝 프로파일 (provisioning profile)을 담는 DB 로 보입니다. 연 문서로는 확인하지 못했고, 관찰한 백업의 주요 표는 아래와 같았습니다(확인 범위: iOS 27.0).
 
 ```
 profiles: uuid, team_id, install_time, name, expires, is_for_all_devices, is_apple_internal, is_local, is_beta, cms_blob, is_der
@@ -145,9 +145,9 @@ trusted_team_ids: team_id, signature
 online_auth: uuid, cdhash, grace_period, last_success_monotonic_time, last_success_reset_count, is_rejected, is_rejected_by_whole_profile
 ```
 
-그 밖에 `banned_cdhashes`, `banned_profile_uuids`, `certificate_provisioning_cache`, `certificates`, `entitlements_provisioning_cache`, `legacy_profile_grace_periods`, `online_auth_migration_state`, `settings`, `signing_identities`, `xml_profiles_cache` 표가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 앱 서명과 앱 번들은 [앱 번들 정보](../embedded-metadata/app-bundle.md) 페이지에서 다룹니다.
+그 밖에 `banned_cdhashes`, `banned_profile_uuids`, `certificate_provisioning_cache`, `certificates`, `entitlements_provisioning_cache`, `legacy_profile_grace_periods`, `online_auth_migration_state`, `settings`, `signing_identities`, `xml_profiles_cache` 표가 있었습니다(확인 범위: iOS 27.0). 앱 서명과 앱 번들은 [앱 번들 정보](../embedded-metadata/app-bundle.md) 페이지에서 다룹니다.
 
-`ProtectedDomain :: trustd/private/TrustStore.sqlite#` 에는 `tsettings` 표(`subj`, `tset`, `data`, `uuid` 와 이름을 가린 칸 1개)가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이름으로 보아 사용자가 신뢰한 인증서 설정이고 프로파일로 설치한 루트 인증서와 이어질 수 있지만, 확인하지 못했습니다.
+`ProtectedDomain :: trustd/private/TrustStore.sqlite#` 에는 `tsettings` 표(`subj`, `tset`, `data`, `uuid` 와 이름을 가린 칸 1개)가 있었습니다(확인 범위: iOS 27.0). 이름으로 보아 사용자가 신뢰한 인증서 설정이고 프로파일로 설치한 루트 인증서와 이어질 수 있지만, 확인하지 못했습니다.
 
 ## 증거로서 의미
 
@@ -157,7 +157,7 @@ online_auth: uuid, cdhash, grace_period, last_success_monotonic_time, last_succe
 
 ### 증명하지 못하는 것
 
-프로파일이 있다는 사실만으로 사용자가 직접 설치했다고 말할 수 없는데, MDM 과 Apple Configurator 도 프로파일을 설치하고 [1] 통신사 설정처럼 처음부터 들어 있을 수 있는 항목도 보이기 때문입니다(확인 범위: iPhone 13 mini, iOS 27.0). 백업에 MDM 서버 주소와 등록 시각이 어디 남는지는 확인하지 못해서, 어느 조직이 기기를 관리했는지를 이 페이지의 파일만으로 밝히지 못합니다. 제한 키 이름이 있다는 사실은 제한이 걸렸다는 뜻이 아니고, 프로파일이 지금 없다는 사실도 설치된 적이 없다는 뜻이 아닙니다.
+프로파일이 있다는 사실만으로 사용자가 직접 설치했다고 말할 수 없는데, MDM 과 Apple Configurator 도 프로파일을 설치하고 [1] 통신사 설정처럼 처음부터 들어 있을 수 있는 항목도 보이기 때문입니다(확인 범위: iOS 27.0). 백업에 MDM 서버 주소와 등록 시각이 어디 남는지는 확인하지 못해서, 어느 조직이 기기를 관리했는지를 이 페이지의 파일만으로 밝히지 못합니다. 제한 키 이름이 있다는 사실은 제한이 걸렸다는 뜻이 아니고, 프로파일이 지금 없다는 사실도 설치된 적이 없다는 뜻이 아닙니다.
 
 보고서에는 "피의자가 악성 프로파일을 설치했다" 가 아니라 "백업 시점의 프로파일 목록에 이 식별자의 프로파일이 있고, 이 프로파일이 설정한 제한 값은 이러하다" 처럼 기록이 말하는 만큼만 씁니다.
 

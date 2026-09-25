@@ -29,9 +29,9 @@ nav_order: 1390
 
 1. **질문과 검색어를 정합니다.** 검색어는 목록으로 적어 두고, 사람 이름이라면 별칭·영문 표기, 전화번호라면 국가 번호를 붙인 꼴과 하이픈을 뺀 꼴처럼 저장될 수 있는 모양을 함께 적습니다. 보고서에서 "무엇으로 찾았고 무엇이 안 나왔나" 를 밝히려면 이 목록이 그대로 남아 있어야 합니다. 한글 검색어는 인코딩마다 바이트가 달라서, 원시 바이트로 찾을 때는 UTF-8 과 UTF-16 두 꼴을 모두 준비합니다(6단계의 예시).
 
-2. **수집 범위와 암호 여부를 확인합니다.** 로컬 백업이라면 `Manifest.plist` 의 `IsEncrypted` 키로 암호 여부를 봅니다(확인 범위: iPhone 13 mini, iOS 27.0). 암호를 걸지 않은 백업에는 저장된 암호, Wi-Fi 설정, 웹사이트 방문 기록, 건강 데이터, 통화 기록이 들어가지 않으므로 [2], 이런 자료에서 나와야 할 검색어가 안 걸렸다면 "없다" 가 아니라 "수집 범위 밖" 으로 적습니다. Apple 보관 문서에 따르면 앱의 `Library/Caches` 폴더도 백업에 들어가지 않아서 [4], 앱 HTTP 캐시(`Cache.db`)는 보통 전체 파일 시스템 추출에서만 검색할 수 있습니다. 수집 방식별 범위는 [모바일 증거 확보](../acquisition/mobile-acquisition/index.md) 를 봅니다.
+2. **수집 범위와 암호 여부를 확인합니다.** 로컬 백업이라면 `Manifest.plist` 의 `IsEncrypted` 키로 암호 여부를 봅니다(확인 범위: iOS 27.0). 암호를 걸지 않은 백업에는 저장된 암호, Wi-Fi 설정, 웹사이트 방문 기록, 건강 데이터, 통화 기록이 들어가지 않으므로 [2], 이런 자료에서 나와야 할 검색어가 안 걸렸다면 "없다" 가 아니라 "수집 범위 밖" 으로 적습니다. Apple 보관 문서에 따르면 앱의 `Library/Caches` 폴더도 백업에 들어가지 않아서 [4], 앱 HTTP 캐시(`Cache.db`)는 보통 전체 파일 시스템 추출에서만 검색할 수 있습니다. 수집 방식별 범위는 [모바일 증거 확보](../acquisition/mobile-acquisition/index.md) 를 봅니다.
 
-3. **경로와 이름으로 먼저 좁힙니다.** 로컬 백업 안의 파일 이름은 도메인과 상대 경로를 `-` 로 이은 문자열의 SHA-1 값(fileID)이라서 [1], 백업 폴더를 파일 이름으로 검색해서는 아무것도 알 수 없습니다. 대신 `Manifest.db` 의 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)를 조회하면 도메인과 원래 경로로 파일을 찾을 수 있고, 이 표에는 `relativePath` 와 `(domain, relativePath)` 색인이 걸려 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 찾은 fileID 는 3.2 형식에서 앞 두 글자 폴더 아래에 있습니다 [1]. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 자세히 다룹니다.
+3. **경로와 이름으로 먼저 좁힙니다.** 로컬 백업 안의 파일 이름은 도메인과 상대 경로를 `-` 로 이은 문자열의 SHA-1 값(fileID)이라서 [1], 백업 폴더를 파일 이름으로 검색해서는 아무것도 알 수 없습니다. 대신 `Manifest.db` 의 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)를 조회하면 도메인과 원래 경로로 파일을 찾을 수 있고, 이 표에는 `relativePath` 와 `(domain, relativePath)` 색인이 걸려 있습니다(확인 범위: iOS 27.0). 찾은 fileID 는 3.2 형식에서 앞 두 글자 폴더 아래에 있습니다 [1]. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 자세히 다룹니다.
 
    ```sql
    -- 경로에 검색어(예: 앱 번들 ID 일부)가 든 파일 목록
@@ -41,9 +41,9 @@ nav_order: 1390
    -- 결과의 fileID 가 ad0009ec... 라면 백업 폴더의 ad/ad0009ec... 파일을 엽니다
    ```
 
-   경로 이름 자체가 검색어가 되기도 합니다. 관찰한 백업의 도메인은 1428개였고, 그중 161개는 Apple 기본 영역이 아닌 설치 앱 등이었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 앱 이름이나 회사 이름으로 도메인을 먼저 찾으면 그 앱의 파일만 골라 다음 단계로 넘길 수 있습니다.
+   경로 이름 자체가 검색어가 되기도 합니다. 관찰한 백업의 도메인은 1428개였고, 그중 161개는 Apple 기본 영역이 아닌 설치 앱 등이었습니다(확인 범위: iOS 27.0). 앱 이름이나 회사 이름으로 도메인을 먼저 찾으면 그 앱의 파일만 골라 다음 단계로 넘길 수 있습니다.
 
-4. **파일 형식을 머리 바이트로 가립니다.** DB 파일 확장자는 `.sqlite`, `.db`, `.sqlitedb` 로 제각각이라(확인 범위: iPhone 13 mini, iOS 27.0) 확장자로는 형식을 가를 수 없고, 백업 안 파일은 이름이 fileID 라서 확장자조차 없습니다 [1]. 아래 머리 바이트로 가른 뒤 형식에 맞는 방법으로 넘깁니다.
+4. **파일 형식을 머리 바이트로 가립니다.** DB 파일 확장자는 `.sqlite`, `.db`, `.sqlitedb` 로 제각각이라(확인 범위: iOS 27.0) 확장자로는 형식을 가를 수 없고, 백업 안 파일은 이름이 fileID 라서 확장자조차 없습니다 [1]. 아래 머리 바이트로 가른 뒤 형식에 맞는 방법으로 넘깁니다.
 
    | 형식 | 머리 바이트 | 출처 |
    |---|---|---|
@@ -57,7 +57,7 @@ nav_order: 1390
 5. **형식에 맞게 풀어서 찾습니다.** 같은 문자열이라도 담긴 형식에 따라 원시 바이트로는 보이지 않는 경우가 많아서, 형식마다 다음처럼 풀고 나서 찾습니다.
 
    - **SQLite**: 칸 단위로 조회하되 `-wal` 파일을 같은 폴더에 두고 엽니다. WAL 방식 DB 는 읽을 때 먼저 WAL 에 그 페이지가 있는지 보기 때문에, 본 파일만 열면 최신 내용이 빠질 수 있습니다 [7]. 헤더 56번 오프셋의 4바이트는 글자 인코딩(1=UTF-8, 2=UTF-16le, 3=UTF-16be)이라 [6], 원시 바이트로 찾을 때 어느 꼴을 쓸지 여기서 정합니다. 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
-   - **본문이 BLOB 에 있는 표**: 메시지 DB 의 `message` 표에는 `text` 와 `attributedBody` 칸이 함께 있고(확인 범위: iPhone 13 mini, iOS 27.0), iLEAPP 는 `text` 가 비어 있으면 `attributedBody`(NSAttributedString, typedstream 형식)에서 본문을 꺼냅니다 [17]. `text LIKE '%검색어%'` 한 줄로는 이런 행을 놓칩니다. 칸 해석은 [메시지](../../02-artifacts/communications/messages/index.md) 를 봅니다.
+   - **본문이 BLOB 에 있는 표**: 메시지 DB 의 `message` 표에는 `text` 와 `attributedBody` 칸이 함께 있고(확인 범위: iOS 27.0), iLEAPP 는 `text` 가 비어 있으면 `attributedBody`(NSAttributedString, typedstream 형식)에서 본문을 꺼냅니다 [17]. `text LIKE '%검색어%'` 한 줄로는 이런 행을 놓칩니다. 칸 해석은 [메시지](../../02-artifacts/communications/messages/index.md) 를 봅니다.
 
      ```sql
      -- text 가 비어 본문이 attributedBody 에만 있을 수 있는 행
@@ -65,9 +65,9 @@ nav_order: 1390
      WHERE text IS NULL AND attributedBody IS NOT NULL;
      ```
 
-   - **압축한 본문**: 메모 앱은 본문을 `ZICNOTEDATA` 표 `ZDATA` 칸에 gzip 으로 압축한 protobuf 로 저장합니다 [19]. 관찰한 백업에서도 `AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite` 의 `ZICNOTEDATA` 에 `ZDATA` 칸이 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 압축을 풀기 전에는 본문 글자가 바이트로 드러나지 않으니, 파서로 푼 결과에서 찾습니다. 자세한 내용은 [메모](../../02-artifacts/mail-cloud/notes.md) 에 있습니다.
-   - **인코딩한 메일 본문**: 메일 본문(`.emlx`)은 Quoted-Printable 이나 Base64 로 인코딩되어 있어서 [20], 디코딩한 뒤에 찾습니다. Quoted-Printable 에서는 `=` 가 이스케이프 글자라 [20], UTF-8 한글이라면 `=EC=95=88` 같은 꼴이 되어 평문 검색어로는 걸리지 않습니다. iOS 13 의 Protected Index 에는 본문 앞 500바이트를 담은 `Summaries` 표가 있어서 [20], 본문 파일이 없을 때도 앞부분은 찾을 수 있습니다. 관찰한 백업에서는 Envelope Index·Protected Index·`.emlx` 파일을 찾지 못했습니다(확인 범위: iPhone 13 mini, iOS 27.0). [메일 앱](../../02-artifacts/mail-cloud/apple-mail.md) 을 함께 봅니다.
-   - **plist**: 바이너리 plist 는 ASCII 문자열(마커 `0101`)과 유니코드 문자열(마커 `0110`)을 다른 형식으로 담고 [9], 객체끼리 오프셋 표로 이어져 있어서 풀어서 찾는 편이 확실합니다. plist 의 data 값 안에 NSKeyedArchiver 구조가 한 겹 더 들어 있는 경우가 흔하니 [10], 바이너리 plist 해석기와 NSKeyedArchiver 해석기를 함께 씁니다. 관찰한 백업의 plist 에서 값 형식이 bytes 인 키는 360개였고, 그 안이 어떤 형식인지는 값을 읽지 않아 모릅니다(확인 범위: iPhone 13 mini, iOS 27.0). 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+   - **압축한 본문**: 메모 앱은 본문을 `ZICNOTEDATA` 표 `ZDATA` 칸에 gzip 으로 압축한 protobuf 로 저장합니다 [19]. 관찰한 백업에서도 `AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite` 의 `ZICNOTEDATA` 에 `ZDATA` 칸이 있었습니다(확인 범위: iOS 27.0). 압축을 풀기 전에는 본문 글자가 바이트로 드러나지 않으니, 파서로 푼 결과에서 찾습니다. 자세한 내용은 [메모](../../02-artifacts/mail-cloud/notes.md) 에 있습니다.
+   - **인코딩한 메일 본문**: 메일 본문(`.emlx`)은 Quoted-Printable 이나 Base64 로 인코딩되어 있어서 [20], 디코딩한 뒤에 찾습니다. Quoted-Printable 에서는 `=` 가 이스케이프 글자라 [20], UTF-8 한글이라면 `=EC=95=88` 같은 꼴이 되어 평문 검색어로는 걸리지 않습니다. iOS 13 의 Protected Index 에는 본문 앞 500바이트를 담은 `Summaries` 표가 있어서 [20], 본문 파일이 없을 때도 앞부분은 찾을 수 있습니다. 관찰한 백업에서는 Envelope Index·Protected Index·`.emlx` 파일을 찾지 못했습니다(확인 범위: iOS 27.0). [메일 앱](../../02-artifacts/mail-cloud/apple-mail.md) 을 함께 봅니다.
+   - **plist**: 바이너리 plist 는 ASCII 문자열(마커 `0101`)과 유니코드 문자열(마커 `0110`)을 다른 형식으로 담고 [9], 객체끼리 오프셋 표로 이어져 있어서 풀어서 찾는 편이 확실합니다. plist 의 data 값 안에 NSKeyedArchiver 구조가 한 겹 더 들어 있는 경우가 흔하니 [10], 바이너리 plist 해석기와 NSKeyedArchiver 해석기를 함께 씁니다. 관찰한 백업의 plist 에서 값 형식이 bytes 인 키는 360개였고, 그 안이 어떤 형식인지는 값을 읽지 않아 모릅니다(확인 범위: iOS 27.0). 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
    - **protobuf 와 바이옴**: protobuf 이진 데이터에는 필드 이름이 없고 필드 번호만 있으며, wire type 2(LEN)가 문자열·bytes·하위 메시지를 모두 싣기 때문에 [11] 스키마 없이 걸린 문자열은 어떤 필드인지 알 수 없습니다. 바이옴 SEGB 파일의 레코드 페이로드가 대개 protobuf 라서 [12], 바이옴에서 걸린 문자열은 SEGB 레코드 경계와 레코드 시각을 함께 읽어야 뜻이 생깁니다. [SEGB 형식](../../01-foundations/data-formats/segb.md), [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md), [바이옴](../../02-artifacts/app-usage/biome/index.md) 을 봅니다.
    - **통합 로그**: tracev3 파일은 메시지 문장의 위치와 인수만 담고 형식 문자열은 uuidtext·dsc 파일에 두며, 청크셋은 LZ4 로 압축되어 있습니다 [14]. 그래서 tracev3 를 원시 바이트로 훑어서는 문장을 찾을 수 없고, `log show --style json` 으로 바꾸거나 [15] 공개 파서 출력으로 바꾼 뒤에 찾습니다. 1.63GB 로그 묶음을 JSON 으로 바꾸니 29.19GB 가 된 예가 있으니 [15] 저장 공간을 미리 잡아 둡니다. 형식은 [통합 로그 형식](../../01-foundations/data-formats/unified-log.md), 찾을 사건은 [통합 로그에서 찾을 것](../../02-artifacts/logs/unified-log-events.md) 에 있습니다.
    - **HTTP 캐시**: 앱의 `Cache.db` 는 요청·응답 본문을 HTTP 압축을 푼 상태로 저장하고 헤더·메서드는 바이너리 plist 로 저장합니다 [5]. 본문은 원시 바이트 검색으로도 걸리지만, 헤더에서 찾으려면 plist 를 풀어야 합니다.

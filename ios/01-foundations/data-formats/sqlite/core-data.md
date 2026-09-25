@@ -11,7 +11,7 @@ Core Data 는 Apple 앱이 데이터를 객체 단위로 저장할 때 쓰는 �
 
 ## 이 형식을 쓰는 아티팩트
 
-관찰한 로컬 백업의 Apple 영역 DB 131개 가운데 52개에 Core Data 관리 표(`Z_PRIMARYKEY`·`Z_METADATA`·`Z_MODELCACHE`)가 있었고, 52개 모두 칸 이름이 같았습니다(확인 범위: iPhone 13 mini, iOS 27.0). 예를 들면 아래 저장소들입니다(도메인 :: 경로, `#` 은 가린 숫자).
+관찰한 로컬 백업의 Apple 영역 DB 131개 가운데 52개에 Core Data 관리 표(`Z_PRIMARYKEY`·`Z_METADATA`·`Z_MODELCACHE`)가 있었고, 52개 모두 칸 이름이 같았습니다(확인 범위: iOS 27.0). 예를 들면 아래 저장소들입니다(도메인 :: 경로, `#` 은 가린 숫자).
 
 ```
 AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite
@@ -56,7 +56,7 @@ SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd :: Library/local.sql
 
 ### 영구 이력 추적 표
 
-영구 이력 추적(persistent history tracking)을 켜면 변경 기록을 담는 표 세 개가 생깁니다. 출처 문서는 이 표들을 `Z_ATRANSACTIONSTRING`·`Z_ATRANSACTION`·`Z_ACHANGE` 로 적었지만, 관찰한 기기에서는 앞에 `Z_` 가 없는 이름이었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+영구 이력 추적(persistent history tracking)을 켜면 변경 기록을 담는 표 세 개가 생깁니다. 출처 문서는 이 표들을 `Z_ATRANSACTIONSTRING`·`Z_ATRANSACTION`·`Z_ACHANGE` 로 적었지만, 관찰한 기기에서는 앞에 `Z_` 가 없는 이름이었습니다(확인 범위: iOS 27.0).
 
 | 표(관찰 이름) | 관찰한 칸 | 뜻 |
 |---|---|---|
@@ -66,7 +66,7 @@ SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd :: Library/local.sql
 
 관찰한 DB 가운데 `ACHANGE` 표가 있는 DB 는 38개였고, `NoteStore.sqlite` 와 `Photos.sqlite` 에도 있었습니다.
 
-이 밖에 `ANSCKEVENT`, `ANSCKEXPORTEDOBJECT`, `ANSCKMIRROREDRELATIONSHIP`, `ANSCKMETADATAENTRY` 처럼 `ANSCK` 로 시작하는 표가 DB 세 개에 있었습니다(`HomeDomain :: Library/Accessibility/com.apple.RTTTranscripts.sqlite`, `HomeDomain :: Library/Accessibility/com.apple.personalaudio.sqlite`, `HomeDomain :: Library/ContactsMetadata/CNContactMetadata.db`, 확인 범위: iPhone 13 mini, iOS 27.0). 이 표들의 용도는 확인하지 못했습니다.
+이 밖에 `ANSCKEVENT`, `ANSCKEXPORTEDOBJECT`, `ANSCKMIRROREDRELATIONSHIP`, `ANSCKMETADATAENTRY` 처럼 `ANSCK` 로 시작하는 표가 DB 세 개에 있었습니다(`HomeDomain :: Library/Accessibility/com.apple.RTTTranscripts.sqlite`, `HomeDomain :: Library/Accessibility/com.apple.personalaudio.sqlite`, `HomeDomain :: Library/ContactsMetadata/CNContactMetadata.db`, 확인 범위: iOS 27.0). 이 표들의 용도는 확인하지 못했습니다.
 
 ## 읽는 법
 

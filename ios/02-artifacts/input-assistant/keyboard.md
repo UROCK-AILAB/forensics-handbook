@@ -20,7 +20,7 @@ nav_order: 1070
 
 ## 위치와 버전별 차이
 
-파일시스템 추출에서는 사용자 영역의 `mobile/Library/Keyboard/` 아래에 파일이 있고, iLEAPP 는 이 자리를 `*/mobile/Library/Keyboard/...` 형식으로 찾습니다 [1]. 로컬 백업에서는 키보드 파일이 `KeyboardDomain` 도메인 아래 `Library/Keyboard/` 로 보이지만, 이 도메인이 기기의 어느 경로에 대응하는지는 확인하지 못했습니다(확인 범위: iPhone 13 mini, iOS 27.0). 백업 도메인과 상대 경로를 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
+파일시스템 추출에서는 사용자 영역의 `mobile/Library/Keyboard/` 아래에 파일이 있고, iLEAPP 는 이 자리를 `*/mobile/Library/Keyboard/...` 형식으로 찾습니다 [1]. 로컬 백업에서는 키보드 파일이 `KeyboardDomain` 도메인 아래 `Library/Keyboard/` 로 보이지만, 이 도메인이 기기의 어느 경로에 대응하는지는 확인하지 못했습니다(확인 범위: iOS 27.0). 백업 도메인과 상대 경로를 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
 
 | 파일 | 담는 것 | iLEAPP 시험 표본의 iOS 범위 | iOS 27.0 로컬 백업에서 |
 |---|---|---|---|
@@ -32,9 +32,9 @@ nav_order: 1070
 | `DynamicPhraseLexicon_ko_KR.db` | 언어별 어구 사전으로 보임 | 다룬 자료 없음 | 있음 |
 | `emoji_adaptation.db` | 이모지 적응 | 다룬 자료 없음 | 있음 |
 
-마지막 칸은 iOS 27.0 에서 만든 암호화하지 않은 로컬 백업의 `KeyboardDomain` 을 본 결과입니다(확인 범위: iPhone 13 mini, iOS 27.0). 이 도메인에는 항목이 6개 있었고 표 이름을 확인한 DB 는 3개였습니다. "보지 못함" 은 관찰 메모에 없다는 뜻이고, 백업에 들어가지 않는다는 뜻인지 메모가 적지 않은 것인지는 가리지 못했습니다. `AutocorrectionRejections.db` 의 경우 iLEAPP 도 표본의 분포가 도입 시점을 밝힌 것은 아니라고 적었습니다 [1].
+마지막 칸은 iOS 27.0 에서 만든 암호화하지 않은 로컬 백업의 `KeyboardDomain` 을 본 결과입니다(확인 범위: iOS 27.0). 이 도메인에는 항목이 6개 있었고 표 이름을 확인한 DB 는 3개였습니다. "보지 못함" 은 관찰 메모에 없다는 뜻이고, 백업에 들어가지 않는다는 뜻인지 메모가 적지 않은 것인지는 가리지 못했습니다. `AutocorrectionRejections.db` 의 경우 iLEAPP 도 표본의 분포가 도입 시점을 밝힌 것은 아니라고 적었습니다 [1].
 
-키보드 폴더 밖에서 함께 볼 자리는 다음과 같습니다(모두 확인 범위: iPhone 13 mini, iOS 27.0).
+키보드 폴더 밖에서 함께 볼 자리는 다음과 같습니다(모두 확인 범위: iOS 27.0).
 
 | 백업 경로 | 볼 것 |
 |---|---|
@@ -57,7 +57,7 @@ nav_order: 1070
 
 ### 사용 통계 DB
 
-`user_model_database.sqlite` 에는 다음 표가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`user_model_database.sqlite` 에는 다음 표가 있습니다(확인 범위: iOS 27.0).
 
 ```
 properties: ROWID, key, value
@@ -78,7 +78,7 @@ iLEAPP 는 `usermodeldurablerecords` 의 `key`, `value`, `creation_date`, `last_
 
 ### iOS 27.0 에서 본 두 DB
 
-아래 두 DB 는 iOS 27.0 백업에서 표와 칸 이름만 확인했고, 칸의 뜻을 설명한 자료는 찾지 못했습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+아래 두 DB 는 iOS 27.0 백업에서 표와 칸 이름만 확인했고, 칸의 뜻을 설명한 자료는 찾지 못했습니다(확인 범위: iOS 27.0).
 
 ```
 DynamicPhraseLexicon_ko_KR.db
@@ -98,13 +98,13 @@ emoji_adaptation.db
 
 `UITextInputContextIdentifiers.plist` 에서 `ID_<식별자>` 키는 키보드 언어를 담고, `ID_<식별자>_SETTIME` 키는 그 식별자의 시각을 담으며, 시각 키가 없는 식별자도 있습니다 [2]. 식별자 형식은 앱이 정합니다. Messenger 는 `<계정 id>_<스레드 id>_0` 형식을 쓰고 WhatsApp 은 대화의 JID 를 쓰는데, JID 서버 부분이 `s.whatsapp.net` 이면 1:1 대화, `g.us` 이면 그룹, `status@broadcast` 이면 상태, `newsletter` 이면 채널입니다 [2]. 앱 컨테이너 밖의 `mobile/Library/Preferences` 사본에는 `CK_`·`IM_` 형식 식별자가 있고, 해시값이라 대화로 풀리지 않습니다 [2].
 
-iOS 27.0 백업의 `HomeDomain :: Library/Preferences/UITextInputContextIdentifiers.plist` 는 키 이름이 가려져 있었지만 값 종류가 str 과 datetime 으로 섞여 있어, 언어 키와 `_SETTIME` 시각 키가 짝을 이루는 구조와 어긋나지 않습니다(확인 범위: iPhone 13 mini, iOS 27.0). 메시지 앱 설정 plist 에는 `CKTextInputIdentifiersMigrated`, `__CK_clearTextInputContextIdentifierKey` 키도 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). plist 형식 자체는 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 을 봅니다.
+iOS 27.0 백업의 `HomeDomain :: Library/Preferences/UITextInputContextIdentifiers.plist` 는 키 이름이 가려져 있었지만 값 종류가 str 과 datetime 으로 섞여 있어, 언어 키와 `_SETTIME` 시각 키가 짝을 이루는 구조와 어긋나지 않습니다(확인 범위: iOS 27.0). 메시지 앱 설정 plist 에는 `CKTextInputIdentifiersMigrated`, `__CK_clearTextInputContextIdentifierKey` 키도 있었습니다(확인 범위: iOS 27.0). plist 형식 자체는 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 을 봅니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-동적 어휘나 자동 수정 거절 DB 에 어떤 낱말이 있으면 이 기기의 키보드 자료에 그 낱말이 들어간 적이 있다고 말할 수 있습니다. 사용 통계 DB 의 `key`·`value` 는 무엇을 담는지 문서화되지 않아 [1], 낱말의 근거로 쓰지 않습니다. 자동 수정 거절 DB 의 `typed` 는 실제로 입력한 글자라서, 사건 관련 낱말·이름·계정명을 찾을 때 단서가 됩니다 [1]. 입력 문맥 plist 에 메신저 대화방 식별자와 시각이 있으면 그 시각 무렵 그 대화방의 입력창과 관련된 기록이 남았다고 말할 수 있고, 이 기록은 메시지 저장소가 아니라 앱 설정에 있어서 대화방을 지운 뒤에도 남을 수 있습니다 [2]. `.GlobalPreferences.plist` 의 `AppleKeyboards` 는 어떤 키보드를 설치했는지 보여 줍니다(확인 범위: iPhone 13 mini, iOS 27.0).
+동적 어휘나 자동 수정 거절 DB 에 어떤 낱말이 있으면 이 기기의 키보드 자료에 그 낱말이 들어간 적이 있다고 말할 수 있습니다. 사용 통계 DB 의 `key`·`value` 는 무엇을 담는지 문서화되지 않아 [1], 낱말의 근거로 쓰지 않습니다. 자동 수정 거절 DB 의 `typed` 는 실제로 입력한 글자라서, 사건 관련 낱말·이름·계정명을 찾을 때 단서가 됩니다 [1]. 입력 문맥 plist 에 메신저 대화방 식별자와 시각이 있으면 그 시각 무렵 그 대화방의 입력창과 관련된 기록이 남았다고 말할 수 있고, 이 기록은 메시지 저장소가 아니라 앱 설정에 있어서 대화방을 지운 뒤에도 남을 수 있습니다 [2]. `.GlobalPreferences.plist` 의 `AppleKeyboards` 는 어떤 키보드를 설치했는지 보여 줍니다(확인 범위: iOS 27.0).
 
 **증명하지 못하는 것**
 
@@ -129,9 +129,9 @@ iOS 27.0 백업의 `HomeDomain :: Library/Preferences/UITextInputContextIdentifi
 
 동적 어휘 결과는 구조를 푼 것이 아니라 문자열을 긁어 낸 것이라, 두 낱말이 이어져 보여도 실제로 이어서 입력했다는 뜻이 아닙니다 [1]. 자동 수정 거절 DB 의 `hard_rejections`·`soft_rejections` 는 차이가 정의되지 않았으니 보고서에서 두 값을 나눠 해석하지 않습니다 [1]. 비속어 사용 DB 는 공개 표본에서 값이 채워진 적이 없어, 행이 나오더라도 시각 기준부터 다시 검증해야 합니다 [1].
 
-버전 문제도 큽니다. 동적 어휘의 iLEAPP 표본에는 iOS 18 이후가 없고 앱 사용 plist 표본은 16.5 가 마지막이라서 [1], 최신 iOS 에서 이 파일이 없을 때 "지웠다" 고 읽으면 안 됩니다. iOS 27.0 백업에서는 `DynamicPhraseLexicon_ko_KR.db` 와 `emoji_adaptation.db` 처럼 다룬 자료가 없는 DB 가 보였습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+버전 문제도 큽니다. 동적 어휘의 iLEAPP 표본에는 iOS 18 이후가 없고 앱 사용 plist 표본은 16.5 가 마지막이라서 [1], 최신 iOS 에서 이 파일이 없을 때 "지웠다" 고 읽으면 안 됩니다. iOS 27.0 백업에서는 `DynamicPhraseLexicon_ko_KR.db` 와 `emoji_adaptation.db` 처럼 다룬 자료가 없는 DB 가 보였습니다(확인 범위: iOS 27.0).
 
-사용자가 추가한 텍스트 대치(사용자 사전)는 `com.apple.TextInput.plist` 의 컨테이너 키와 푸시 주제 `com.apple.keyboardServices.textReplacementServer.aps` 로 보아 iCloud 와 이어져 있지만(확인 범위: iPhone 13 mini, iOS 27.0), 목록 자체를 담은 파일의 이름과 위치는 확인하지 못했습니다. 계정 쪽 자료를 요청하는 방법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에 있습니다.
+사용자가 추가한 텍스트 대치(사용자 사전)는 `com.apple.TextInput.plist` 의 컨테이너 키와 푸시 주제 `com.apple.keyboardServices.textReplacementServer.aps` 로 보아 iCloud 와 이어져 있지만(확인 범위: iOS 27.0), 목록 자체를 담은 파일의 이름과 위치는 확인하지 못했습니다. 계정 쪽 자료를 요청하는 방법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에 있습니다.
 
 SQLite 파일은 `-wal`, `-shm` 을 함께 수집해야 최근 기록이 빠지지 않습니다. iLEAPP 도 `user_model_database.sqlite*` 처럼 끝에 `*` 을 붙여 찾습니다 [1]. 지운 레코드가 여유 공간에 남는 문제는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를 봅니다.
 

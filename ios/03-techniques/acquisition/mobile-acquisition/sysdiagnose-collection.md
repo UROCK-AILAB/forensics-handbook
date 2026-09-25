@@ -52,7 +52,7 @@ sysdiagnose 에는 통합 로그 스냅숏(`system_logs.logarchive`), 크래시 
 
 ## 백업에 남는 진단 흔적
 
-sysdiagnose 결과물 자체가 로컬 백업에 들어가는지는 확인하지 못했지만, 관찰한 백업에는 진단 기능과 관련된 도메인과 설정 파일이 있었습니다. (확인 범위: iPhone 13 mini, iOS 27.0)
+sysdiagnose 결과물 자체가 로컬 백업에 들어가는지는 확인하지 못했지만, 관찰한 백업에는 진단 기능과 관련된 도메인과 설정 파일이 있었습니다. (확인 범위: iOS 27.0)
 
 ```
 AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose   (항목 4개)

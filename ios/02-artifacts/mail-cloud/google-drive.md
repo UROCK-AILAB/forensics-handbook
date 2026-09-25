@@ -16,17 +16,17 @@ nav_order: 1020
 
 App Store 개인정보 라벨에는 사용자와 연결된 데이터로 구입 항목, 위치, 연락처 정보, 연락처, 사용자 콘텐츠(사진·비디오·오디오), 검색 기록, 식별자, 사용 데이터, 진단이 적혀 있습니다 [4]. 이 라벨은 개발사가 수집해 처리하는 데이터 종류를 밝힌 것이고, 기기 안에 그 데이터가 남는다는 뜻은 아닙니다.
 
-또 하나 볼 곳은 Files 앱입니다. iOS 의 파일 공급자 확장(File Provider extension)은 내용을 도메인(NSFileProviderDomain) 단위로 나누고, 도메인 하나는 계정 하나나 위치 하나를 나타낼 수 있습니다 [2]. NSFileProviderDomain 은 iOS 11.0 부터 있고, 도메인마다 identifier(고유 식별자), displayName(화면에 보이는 이름), isHidden(사용자에게 보이는지), isDisconnected(도메인은 있지만 확장과 연결이 끊겼는지), userEnabled(사용자가 켰는지 껐는지), isReplicated, supportsSyncingTrash, backingStoreIdentity, userInfo 속성이 붙습니다 [2]. 다른 회사 앱이 파일 공급자 도메인을 등록하면 로컬 백업의 `HomeDomain` 안 `Library/Application Support/FileProvider/` 아래에 앱별 폴더가 생기고 그 안에 `Domains.plist` 가 남습니다(확인 범위: iPhone 13 mini, iOS 27.0). 다만 이번 관찰에서는 다른 회사 앱 이름을 가렸기 때문에, 이 자리에 남은 앱이 구글 드라이브인지는 확인하지 않았습니다.
+또 하나 볼 곳은 Files 앱입니다. iOS 의 파일 공급자 확장(File Provider extension)은 내용을 도메인(NSFileProviderDomain) 단위로 나누고, 도메인 하나는 계정 하나나 위치 하나를 나타낼 수 있습니다 [2]. NSFileProviderDomain 은 iOS 11.0 부터 있고, 도메인마다 identifier(고유 식별자), displayName(화면에 보이는 이름), isHidden(사용자에게 보이는지), isDisconnected(도메인은 있지만 확장과 연결이 끊겼는지), userEnabled(사용자가 켰는지 껐는지), isReplicated, supportsSyncingTrash, backingStoreIdentity, userInfo 속성이 붙습니다 [2]. 다른 회사 앱이 파일 공급자 도메인을 등록하면 로컬 백업의 `HomeDomain` 안 `Library/Application Support/FileProvider/` 아래에 앱별 폴더가 생기고 그 안에 `Domains.plist` 가 남습니다(확인 범위: iOS 27.0). 다만 이번 관찰에서는 다른 회사 앱 이름을 가렸기 때문에, 이 자리에 남은 앱이 구글 드라이브인지는 확인하지 않았습니다.
 
 ## 위치와 버전별 차이
 
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
-| 앱 설치 여부와 번들 ID | 백업 최상위 `Info.plist` 의 `Installed Applications`·`Applications` 키, `Manifest.plist` 의 `Applications` 키, `Manifest.db` 의 도메인 이름 | 키 이름 관찰(확인 범위: iPhone 13 mini, iOS 27.0) |
+| 앱 설치 여부와 번들 ID | 백업 최상위 `Info.plist` 의 `Installed Applications`·`Applications` 키, `Manifest.plist` 의 `Applications` 키, `Manifest.db` 의 도메인 이름 | 키 이름 관찰(확인 범위: iOS 27.0) |
 | 앱 컨테이너 안의 메타데이터 DB·캐시·오프라인 파일 | 앱 도메인(`AppDomain-` 로 시작) 안 | 확인 못 함, 검체에서 직접 확인 |
-| 파일 공급자 도메인 설정 | `HomeDomain :: Library/Application Support/FileProvider/<앱>/Domains.plist` | 관찰(확인 범위: iPhone 13 mini, iOS 27.0), 어느 앱인지는 가림 |
-| Files 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.DocumentManager.defaults.plist` | 관찰(확인 범위: iPhone 13 mini, iOS 27.0) |
-| 파일 공급자 작업 자료 | `HomeDomain :: Library/Application Support/FileProvider/<UUID>/wharf/...`, `.../FileProvider/backup/backup_manifest.db` | 관찰(확인 범위: iPhone 13 mini, iOS 27.0), 어느 공급자 것인지 확인 못 함 |
+| 파일 공급자 도메인 설정 | `HomeDomain :: Library/Application Support/FileProvider/<앱>/Domains.plist` | 관찰(확인 범위: iOS 27.0), 어느 앱인지는 가림 |
+| Files 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.DocumentManager.defaults.plist` | 관찰(확인 범위: iOS 27.0) |
+| 파일 공급자 작업 자료 | `HomeDomain :: Library/Application Support/FileProvider/<UUID>/wharf/...`, `.../FileProvider/backup/backup_manifest.db` | 관찰(확인 범위: iOS 27.0), 어느 공급자 것인지 확인 못 함 |
 
 버전에 따라 확인한 내용은 아래와 같습니다.
 
@@ -35,7 +35,7 @@ App Store 개인정보 라벨에는 사용자와 연결된 데이터로 구입 �
 | 앱이 요구하는 최소 iOS | iOS 17.0 이상(2026-09 조회 시점) | [4] |
 | 조회 시점 앱 버전 | 4.2638.41000 | [4] |
 | NSFileProviderDomain | iOS 11.0 부터 | [2] |
-| Files 앱 쪽 흔적 | iOS 27.0 에서 관찰 | 확인 범위: iPhone 13 mini, iOS 27.0 |
+| Files 앱 쪽 흔적 | iOS 27.0 에서 관찰 | 확인 범위: iOS 27.0 |
 
 지금 App Store 버전은 iOS 17.0 이상을 요구하므로 iOS 15·16 기기에서 발견한 앱은 그보다 예전 버전일 수 있고, 예전 버전의 저장 구조도 확인하지 못했습니다.
 
@@ -43,25 +43,25 @@ App Store 개인정보 라벨에는 사용자와 연결된 데이터로 구입 �
 
 ### 앱이 있는지 확인하기
 
-로컬 백업의 `Manifest.db` 에는 아래 표가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+로컬 백업의 `Manifest.db` 에는 아래 표가 있습니다(확인 범위: iOS 27.0).
 
 ```
 CREATE TABLE Files (fileID TEXT PRIMARY KEY, domain TEXT, relativePath TEXT, flags INTEGER, file BLOB)
 CREATE TABLE Properties (key TEXT PRIMARY KEY, value BLOB)
 ```
 
-도메인 이름은 `AppDomain-`, `AppDomainGroup-`, `AppDomainPlugin-` 뒤에 번들 ID 나 앱 그룹 이름을 붙인 꼴입니다. 관찰한 백업에는 도메인이 1428개 있었고 그중 다른 회사 앱 161개는 메모에서 이름을 가렸기 때문에, 구글 드라이브 앱 도메인의 존재와 내용은 관찰하지 않았습니다(확인 범위: iPhone 13 mini, iOS 27.0). 검체에서는 `Info.plist` 의 설치 앱 목록에서 번들 ID 를 먼저 찾고, 그 번들 ID 가 들어간 도메인을 `Manifest.db` 에서 찾습니다. 번들 ID 와 앱 그룹을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에, 백업 폴더와 `fileID` 의 관계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
+도메인 이름은 `AppDomain-`, `AppDomainGroup-`, `AppDomainPlugin-` 뒤에 번들 ID 나 앱 그룹 이름을 붙인 꼴입니다. 관찰한 백업에는 도메인이 1428개 있었고 그중 다른 회사 앱 161개는 메모에서 이름을 가렸기 때문에, 구글 드라이브 앱 도메인의 존재와 내용은 관찰하지 않았습니다(확인 범위: iOS 27.0). 검체에서는 `Info.plist` 의 설치 앱 목록에서 번들 ID 를 먼저 찾고, 그 번들 ID 가 들어간 도메인을 `Manifest.db` 에서 찾습니다. 번들 ID 와 앱 그룹을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에, 백업 폴더와 `fileID` 의 관계는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에 있습니다.
 
 ### 파일 공급자 도메인 설정 (Domains.plist)
 
-다른 회사 앱의 폴더에서 관찰한 `Domains.plist` 에는 기본 도메인 항목 하나만 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+다른 회사 앱의 폴더에서 관찰한 `Domains.plist` 에는 기본 도메인 항목 하나만 있었습니다(확인 범위: iOS 27.0).
 
 ```
 HomeDomain :: Library/Application Support/FileProvider/<앱>/Domains.plist
 NSFileProviderDomainDefaultIdentifier: {Connected, Enabled}
 ```
 
-같은 폴더 구조를 쓰는 iCloud Drive 의 `Domains.plist` 에는 도메인 항목이 따로 있고, 그 항목의 키는 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0). iCloud Drive 쪽 해석은 [아이클라우드 드라이브](icloud-drive.md) 에서 다룹니다.
+같은 폴더 구조를 쓰는 iCloud Drive 의 `Domains.plist` 에는 도메인 항목이 따로 있고, 그 항목의 키는 아래와 같습니다(확인 범위: iOS 27.0). iCloud Drive 쪽 해석은 [아이클라우드 드라이브](icloud-drive.md) 에서 다룹니다.
 
 ```
 Connected, DisplayName, Enabled, Hidden, Path, Replicated, SpotlightDomain,
@@ -73,7 +73,7 @@ SupportsStringSearchRequest, SupportsSyncingTrash, UserInfo
 
 ### Files 앱 설정 (com.apple.DocumentManager.defaults.plist)
 
-Files 앱 설정 파일에서 공급자와 관련된 키는 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+Files 앱 설정 파일에서 공급자와 관련된 키는 아래와 같습니다(확인 범위: iOS 27.0).
 
 ```
 HomeDomain :: Library/Preferences/com.apple.DocumentManager.defaults.plist
@@ -89,7 +89,7 @@ DOCDefaultFileProviderIdentifierKey
 
 ### 파일 공급자 작업 자료
 
-`HomeDomain` 의 `FileProvider` 폴더 아래에는 아래 DB 와 plist 도 있습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`HomeDomain` 의 `FileProvider` 폴더 아래에는 아래 DB 와 plist 도 있습니다(확인 범위: iOS 27.0).
 
 ```
 Library/Application Support/FileProvider/backup/backup_manifest.db
@@ -123,7 +123,7 @@ Library/Application Support/FileProvider/<UUID>/wharf/wharf/resources/speculativ
 
 앱이 내부에 시각을 어떤 형식(Unix 시각, Mac 절대 시각 등)으로 저장하는지는 확인하지 못했습니다. 검체에서 시각으로 보이는 숫자를 찾으면 자릿수와 기준 시점을 여러 형식으로 바꿔 보고, 앱에서 실제로 한 동작의 시각과 견주어 형식을 정합니다. 형식별 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-파일 공급자 쪽 `speculative-set-pacer.plist` 에서는 `lastRefreshDate`·`lastTotalDownloadResetDate` 가 정수로, `indexAllStartDate`·`indexableConfigurationStartDate` 가 날짜 형식으로 저장되어 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 값은 읽지 않아서 정수 쪽의 기준 시점은 확인하지 못했고, 이 파일이 어느 공급자 것인지도 모르기 때문에 구글 드라이브 사용 시각으로 바로 쓰지 않습니다.
+파일 공급자 쪽 `speculative-set-pacer.plist` 에서는 `lastRefreshDate`·`lastTotalDownloadResetDate` 가 정수로, `indexAllStartDate`·`indexableConfigurationStartDate` 가 날짜 형식으로 저장되어 있었습니다(확인 범위: iOS 27.0). 값은 읽지 않아서 정수 쪽의 기준 시점은 확인하지 못했고, 이 파일이 어느 공급자 것인지도 모르기 때문에 구글 드라이브 사용 시각으로 바로 쓰지 않습니다.
 
 ## 함정과 한계
 

@@ -42,9 +42,9 @@ nav_order: 650
 
 ### 로컬 백업에서 찾기
 
-로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다 (확인 범위: iPhone 13 mini, iOS 27.0). 앱 영역의 도메인은 `AppDomain-` 뒤에 번들 ID 를 붙이고, 앱 그룹은 `AppDomainGroup-`, 확장은 `AppDomainPlugin-` 으로 시작합니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이 형식에 따르면 카카오맵 앱 영역은 `AppDomain-net.daum.maps` 로 찾습니다. 관찰한 백업에는 도메인이 1428개 있었지만 다른 회사 앱 등 161개는 이름을 가려 두었기 때문에, 카카오맵 도메인이 실제로 이 이름으로 있는지는 관찰로 확인하지 못했습니다.
+로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다 (확인 범위: iOS 27.0). 앱 영역의 도메인은 `AppDomain-` 뒤에 번들 ID 를 붙이고, 앱 그룹은 `AppDomainGroup-`, 확장은 `AppDomainPlugin-` 으로 시작합니다 (확인 범위: iOS 27.0). 이 형식에 따르면 카카오맵 앱 영역은 `AppDomain-net.daum.maps` 로 찾습니다. 관찰한 백업에는 도메인이 1428개 있었지만 다른 회사 앱 등 161개는 이름을 가려 두었기 때문에, 카카오맵 도메인이 실제로 이 이름으로 있는지는 관찰로 확인하지 못했습니다.
 
-백업의 `Info.plist` 에는 `Installed Applications` 키가 있어서 (확인 범위: iPhone 13 mini, iOS 27.0) 앱 영역을 찾기 전에 카카오맵이 설치 목록에 있는지 먼저 볼 수 있습니다. 백업 폴더 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
+백업의 `Info.plist` 에는 `Installed Applications` 키가 있어서 (확인 범위: iOS 27.0) 앱 영역을 찾기 전에 카카오맵이 설치 목록에 있는지 먼저 볼 수 있습니다. 백업 폴더 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
 
 앱 데이터 영역은 `Documents/`, `Library/`, `tmp/` 로 나뉘고 [3], 백업에 들어가는 범위가 폴더마다 다릅니다.
 

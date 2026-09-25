@@ -25,17 +25,17 @@ nav_order: 1540
 
 수동 시각 변경이 PowerLog 에 남는다는 서술이 있고, `PLSTORAGEOPERATOR_EVENTFORWARD_TIMEOFFSET` 이라는 표 이름이 함께 알려져 있습니다. 이 핸드북에서는 이 서술의 원문을 열어 확인하지 못했고, 표의 칸 이름·단위·기록 빈도, PowerLog 파일 경로도 확인하지 못했습니다. 검체에서 이 표를 쓰려면 먼저 시험 기기로 시각을 바꿔 행이 어떻게 생기는지 확인합니다. PowerLog 자체는 [전원 로그 (PowerLog)](../../../02-artifacts/app-usage/powerlog.md) 에서 다룹니다.
 
-설정 메뉴의 자동 시각 설정이 정확히 어떻게 동작하는지, 시각을 맡는 데몬과 그 설정 파일이 어디에 무엇을 남기는지도 확인하지 못했습니다. 관찰한 백업에는 `com.apple.timed.plist`, `com.apple.preferences.datetime.plist`, PowerLog 파일이 보이지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+설정 메뉴의 자동 시각 설정이 정확히 어떻게 동작하는지, 시각을 맡는 데몬과 그 설정 파일이 어디에 무엇을 남기는지도 확인하지 못했습니다. 관찰한 백업에는 `com.apple.timed.plist`, `com.apple.preferences.datetime.plist`, PowerLog 파일이 보이지 않았습니다 (확인 범위: iOS 27.0).
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 위치 | 알려 주는 것 | 자세히 |
 |---|---|---|---|---|
 | 1 | logd 로그 | `/private/var/db/diagnostics/logd.0.log` | 시간대 변경이 남습니다 [1] | [통합 로그에서 찾을 것](../../../02-artifacts/logs/unified-log-events.md) |
-| 2 | 사진 DB 의 시간대 칸 | CameraRollDomain `Media/PhotoData/Photos.sqlite` | `ZADDITIONALASSETATTRIBUTES` 의 `ZTIMEZONEOFFSET`, `ZINFERREDTIMEZONEOFFSET`, `ZDATECREATEDSOURCE`, `ZEXTENDEDATTRIBUTES` 의 `ZTIMEZONEOFFSET`, `ZTIMEZONENAME`, `ZDATECREATED`, `ZMOMENT` 의 `ZTIMEZONEOFFSET` 이 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0) | [카메라 사진과 메타데이터](../../../02-artifacts/media/dcim-exif.md) |
-| 3 | 미리 알림의 시간대 칸 | AppDomainGroup-group.com.apple.reminders `Container_v#/Stores/Data-*.sqlite` | `ZREMCDREMINDER` 의 `ZTIMEZONE`, `ZDISPLAYDATETIMEZONE`, `ZDISPLAYDATEUPDATEDFORSECONDSFROMGMT` 가 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0) | [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md) |
-| 4 | 캘린더 부가 DB | HomeDomain `Library/Calendar/Extras.db` | `ZALARM` 표에 `ZENTITYTIMEZONE` 등이 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0) | [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md) |
-| 5 | 백업 설정 | HomeDomain `Library/Preferences/com.apple.mobile.ldbackup.plist` | `LastCloudBackupDate` 와 `LastCloudBackupTZ` 가 함께 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0) | [아이클라우드 백업](../../../01-foundations/backups/icloud-backup.md) |
+| 2 | 사진 DB 의 시간대 칸 | CameraRollDomain `Media/PhotoData/Photos.sqlite` | `ZADDITIONALASSETATTRIBUTES` 의 `ZTIMEZONEOFFSET`, `ZINFERREDTIMEZONEOFFSET`, `ZDATECREATEDSOURCE`, `ZEXTENDEDATTRIBUTES` 의 `ZTIMEZONEOFFSET`, `ZTIMEZONENAME`, `ZDATECREATED`, `ZMOMENT` 의 `ZTIMEZONEOFFSET` 이 있습니다 (확인 범위: iOS 27.0) | [카메라 사진과 메타데이터](../../../02-artifacts/media/dcim-exif.md) |
+| 3 | 미리 알림의 시간대 칸 | AppDomainGroup-group.com.apple.reminders `Container_v#/Stores/Data-*.sqlite` | `ZREMCDREMINDER` 의 `ZTIMEZONE`, `ZDISPLAYDATETIMEZONE`, `ZDISPLAYDATEUPDATEDFORSECONDSFROMGMT` 가 있습니다 (확인 범위: iOS 27.0) | [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md) |
+| 4 | 캘린더 부가 DB | HomeDomain `Library/Calendar/Extras.db` | `ZALARM` 표에 `ZENTITYTIMEZONE` 등이 있습니다 (확인 범위: iOS 27.0) | [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md) |
+| 5 | 백업 설정 | HomeDomain `Library/Preferences/com.apple.mobile.ldbackup.plist` | `LastCloudBackupDate` 와 `LastCloudBackupTZ` 가 함께 있습니다 (확인 범위: iOS 27.0) | [아이클라우드 백업](../../../01-foundations/backups/icloud-backup.md) |
 | 6 | PowerLog | 확인하지 못함 | 수동 시각 변경이 남는다는 서술이 있지만 확인하지 못했습니다 | [전원 로그](../../../02-artifacts/app-usage/powerlog.md) |
 
 2~5번은 기록마다 시각과 함께 시간대나 오프셋을 적어 두는 칸입니다. 이 칸들을 기기 시각 조작 판단에 쓰는 방법은 확인하지 못했고, 여기서는 시간대 변경을 시각 조작과 가르는 데 참고하는 용도로만 적습니다.

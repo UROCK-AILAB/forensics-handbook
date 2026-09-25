@@ -16,7 +16,7 @@ nav_order: 660
 
 iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있고, 기기는 네트워크마다 다른 Wi-Fi 주소로 자신을 알립니다 [2]. iLEAPP 는 네트워크별 개인 MAC 주소 목록에서 쓰고 있는 주소 값과 주소를 만든 시각 등을 읽습니다 [1]. 공유기나 사내 무선망 기록에 남은 MAC 주소를 기기와 맞춰 볼 때 이 목록이 다리 역할을 합니다.
 
-관찰한 로컬 백업에는 지운 네트워크로 보이는 목록과, 와이파이 접속 지점·신호 세기·위치 칸이 한 표에 모인 데이터 사용량 DB 의 `ZWIFIDATA` 표도 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 백업에 알려진 네트워크 목록이 없을 때 이 두 가지가 그 빈자리를 일부 메웁니다.
+관찰한 로컬 백업에는 지운 네트워크로 보이는 목록과, 와이파이 접속 지점·신호 세기·위치 칸이 한 표에 모인 데이터 사용량 DB 의 `ZWIFIDATA` 표도 있었습니다 (확인 범위: iOS 27.0). 백업에 알려진 네트워크 목록이 없을 때 이 두 가지가 그 빈자리를 일부 메웁니다.
 
 ## 위치와 버전별 차이
 
@@ -33,7 +33,7 @@ iLEAPP 는 아래 네 파일 이름으로 와이파이 기록을 찾습니다 [1
 
 ### 로컬 백업에서 본 파일
 
-암호화하지 않은 로컬 백업에서는 아래 파일을 보았고, `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi.plist` 는 보이지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 알려진 네트워크 목록이 암호화한 백업에는 들어가는지는 공식 자료로 확인하지 못했습니다.
+암호화하지 않은 로컬 백업에서는 아래 파일을 보았고, `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi.plist` 는 보이지 않았습니다 (확인 범위: iOS 27.0). 알려진 네트워크 목록이 암호화한 백업에는 들어가는지는 공식 자료로 확인하지 못했습니다.
 
 | 도메인 :: 상대 경로 | 관찰한 내용 |
 |---|---|
@@ -45,7 +45,7 @@ iLEAPP 는 아래 네 파일 이름으로 와이파이 기록을 찾습니다 [1
 | `RootDomain :: Library/Preferences/com.apple.wifid.plist` | `joinPMAssertionResetTimestamp`, `joinPMAssertionTimeUsedKey` 키 |
 | `WirelessDomain :: Library/Databases/DataUsage.sqlite` | `ZWIFIDATA` 표 |
 
-위 표는 모두 (확인 범위: iPhone 13 mini, iOS 27.0) 입니다. 공개 자료의 `com.apple.wifi-private-mac-networks.plist` 와 관찰한 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르고, 두 파일이 같은 역할인지는 확인하지 못했습니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있었지만 안의 내용은 보지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+위 표는 모두 (확인 범위: iOS 27.0) 입니다. 공개 자료의 `com.apple.wifi-private-mac-networks.plist` 와 관찰한 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르고, 두 파일이 같은 역할인지는 확인하지 못했습니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있었지만 안의 내용은 보지 않았습니다 (확인 범위: iOS 27.0). 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전별 차이
 
@@ -55,7 +55,7 @@ iLEAPP 는 아래 네 파일 이름으로 와이파이 기록을 찾습니다 [1
 | 14 전후(정확한 버전 미확인) | 예전 `com.apple.wifi.plist` 에서 `com.apple.wifi.known-networks.plist` 로 바뀐 것으로 흔히 말하지만 확인하지 못함 | — |
 | 14 이상 | 개인 Wi-Fi 주소 사용 가능 | [2] |
 | 18 이상 | 개인 Wi-Fi 주소 설정이 끔·고정·순환 세 가지 | [2] |
-| 27.0 | 암호화하지 않은 백업에 알려진 네트워크 목록 없음, 지운 네트워크 목록 있음 | (확인 범위: iPhone 13 mini, iOS 27.0) |
+| 27.0 | 암호화하지 않은 백업에 알려진 네트워크 목록 없음, 지운 네트워크 목록 있음 | (확인 범위: iOS 27.0) |
 
 ## 구조
 
@@ -90,11 +90,11 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
 ### 지운 네트워크 목록 (관찰)
 
-`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 꼴이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 파일 이름과 `RemovedAt` 키로 보아 사용자가 지운 네트워크의 목록으로 보이지만, 어떤 조작이 이 목록에 항목을 더하는지는 확인하지 못했습니다.
+`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 꼴이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다 (확인 범위: iOS 27.0). 파일 이름과 `RemovedAt` 키로 보아 사용자가 지운 네트워크의 목록으로 보이지만, 어떤 조작이 이 목록에 항목을 더하는지는 확인하지 못했습니다.
 
 ### 데이터 사용량 DB 의 ZWIFIDATA 표 (관찰)
 
-`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 칸(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 3칸은 이름을 가렸습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준은 공개 자료로 확인하지 못했습니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
+`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 칸(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 3칸은 이름을 가렸습니다 (확인 범위: iOS 27.0). 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준은 공개 자료로 확인하지 못했습니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -122,13 +122,13 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
 ## 함정과 한계
 
-암호화하지 않은 로컬 백업만 받았다면 알려진 네트워크 목록이 없을 수 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이때 "와이파이 기록이 없다" 고 쓰지 말고, 지운 네트워크 목록과 `ZWIFIDATA` 를 보면서 수집 범위의 한계로 적습니다. 파일 시스템 추출에서 얻는 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
+암호화하지 않은 로컬 백업만 받았다면 알려진 네트워크 목록이 없을 수 있습니다 (확인 범위: iOS 27.0). 이때 "와이파이 기록이 없다" 고 쓰지 말고, 지운 네트워크 목록과 `ZWIFIDATA` 를 보면서 수집 범위의 한계로 적습니다. 파일 시스템 추출에서 얻는 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 파일 이름과 키 이름이 iOS 버전마다 달라서, 예전 형식만 읽는 파서는 새 기기에서 아무것도 못 찾거나 일부 키를 빠뜨릴 수 있습니다. iLEAPP 스크립트도 iOS 12.4 ~ 18.x 표본을 기준으로 만들어서 [1], 그보다 새 버전에서는 결과를 원본 plist 와 대조합니다.
 
 개인 Wi-Fi 주소 때문에 공유기·무선망 기록의 MAC 주소가 기기 하드웨어 MAC 과 다를 수 있고, 같은 기기라도 네트워크마다, 순환 설정이면 시기마다 주소가 다릅니다 [2]. 네트워크 설정을 지운 뒤 같은 네트워크에 다시 들어가면 다른 개인 주소를 쓰고, iOS 18 이상에서는 네트워크를 지우면 그 네트워크의 개인 주소도 잊습니다(앞선 24시간 안에 이미 지운 적이 있으면 예외) [2]. 그래서 외부 기록의 MAC 주소가 기기 쪽 목록과 맞지 않는다고 해서 다른 기기라고 결론 내리지 않습니다.
 
-사용자가 네트워크를 지우면 알려진 네트워크 목록에서는 빠지지만, 지운 네트워크 목록에 항목이 남을 수 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 지우기와 초기화 흔적을 함께 따지는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 와 [초기화와 복원 흔적](../system-account/erase-restore.md) 에서 다룹니다.
+사용자가 네트워크를 지우면 알려진 네트워크 목록에서는 빠지지만, 지운 네트워크 목록에 항목이 남을 수 있습니다 (확인 범위: iOS 27.0). 지우기와 초기화 흔적을 함께 따지는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 와 [초기화와 복원 흔적](../system-account/erase-restore.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 

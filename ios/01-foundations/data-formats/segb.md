@@ -16,7 +16,7 @@ Apple 은 이 형식의 공식 문서를 내지 않았습니다. 아래 구조�
 
 공개 도구 ccl-segb 는 스스로를 "iOS·macOS 등의 SEGB(예전 이름 'Biome') 데이터" 를 읽는 도구라고 소개합니다[1]. 곧 SEGB 파일은 바이옴 스트림 폴더 안에서 만나고, 폴더 위치와 스트림 종류는 [바이옴](../../02-artifacts/app-usage/biome/index.md)에서 다룹니다.
 
-실제 아이폰 로컬 백업에서는 바이옴과 관련된 설정 plist 가 보였습니다. `HomeDomain` 의 `Library/Preferences/com.apple.biomed.plist`, `com.apple.biomesyncd.plist`, `com.apple.lighthouse.dill.BiomeSELFIngestor.plist` 와 `SysSharedContainerDomain-systemgroup.com.apple.safetyalerts` 의 `apsd_biome_collection.plist` 가 그 예입니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이 관찰은 DB 와 plist 만 목록으로 적었기 때문에, SEGB 파일이 백업에 들어 있는지 없는지는 이 관찰로 말할 수 없습니다.
+실제 아이폰 로컬 백업에서는 바이옴과 관련된 설정 plist 가 보였습니다. `HomeDomain` 의 `Library/Preferences/com.apple.biomed.plist`, `com.apple.biomesyncd.plist`, `com.apple.lighthouse.dill.BiomeSELFIngestor.plist` 와 `SysSharedContainerDomain-systemgroup.com.apple.safetyalerts` 의 `apsd_biome_collection.plist` 가 그 예입니다 (확인 범위: iOS 27.0). 이 관찰은 DB 와 plist 만 목록으로 적었기 때문에, SEGB 파일이 백업에 들어 있는지 없는지는 이 관찰로 말할 수 없습니다.
 
 ## 버전별 차이
 

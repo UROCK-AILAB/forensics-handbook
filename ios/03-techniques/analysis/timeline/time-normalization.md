@@ -26,7 +26,7 @@ Apple 의 Core Foundation 은 참조 시각인 2001-01-01 00:00:00 GMT 부터 �
 ## 절차
 
 1. **시각 칸과 키를 목록으로 적습니다.** 기록마다 파일(백업 도메인과 경로), 표나 키 이름, 저장된 형을 한 줄씩 적어 두면 나중에 어떤 값을 어떻게 바꿨는지 되짚을 수 있습니다.
-2. **저장된 형을 확인합니다.** plist 에서 `datetime` 형은 plist 의 날짜 형식이라 도구가 날짜로 풀어 보여 주지만, `float` 형은 숫자만 들어 있어 기준점을 따로 확인해야 합니다. 예를 들어 `com.apple.ScreenTimeAgent.plist` 의 `UsageGenesisDate` 는 `datetime` 형이고, `com.apple.AppStore.plist` 의 `lastBootstrapDate` 는 `float` 형입니다(확인 범위: iPhone 13 mini, iOS 27.0). `lastBootstrapDate` 가 Mac 절대 초인지는 확인하지 못했으므로, 기준점을 모르는 숫자는 바꾸지 않고 원래 값으로 남겨 둡니다. plist 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../../01-foundations/data-formats/plist.md)에 있습니다.
+2. **저장된 형을 확인합니다.** plist 에서 `datetime` 형은 plist 의 날짜 형식이라 도구가 날짜로 풀어 보여 주지만, `float` 형은 숫자만 들어 있어 기준점을 따로 확인해야 합니다. 예를 들어 `com.apple.ScreenTimeAgent.plist` 의 `UsageGenesisDate` 는 `datetime` 형이고, `com.apple.AppStore.plist` 의 `lastBootstrapDate` 는 `float` 형입니다(확인 범위: iOS 27.0). `lastBootstrapDate` 가 Mac 절대 초인지는 확인하지 못했으므로, 기준점을 모르는 숫자는 바꾸지 않고 원래 값으로 남겨 둡니다. plist 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../../01-foundations/data-formats/plist.md)에 있습니다.
 3. **자릿수로 단위를 가립니다.** 같은 칸 안에서도 초와 나노초가 섞일 수 있어서(아래 "sms.db 에서 섞이는 단위") 칸 단위가 아니라 행 단위로 판단합니다.
 4. **UTC 로 바꾸고 원래 값을 함께 남깁니다.** 변환한 시각 옆에 원래 숫자와 적용한 식을 같이 적어야 다른 분석가가 같은 결과를 다시 만들 수 있습니다.
 5. **시간대는 따로 적습니다.** 기록에 시간대 칸이 있으면 그 값을 별도 열로 옮기고, 없으면 시간대를 모른다고 적습니다(아래 "시간대가 함께 남는 곳").
@@ -44,7 +44,7 @@ case when LENGTH(chat_message_join.message_date)=18 then datetime(chat_message_j
 
 이 식은 `'localtime'` 을 붙여서 분석하는 PC 의 시간대로 바꿔 보여 줍니다. 여러 기록을 한 줄에 세울 때는 `'localtime'` 을 빼고 UTC 로 받은 뒤, 기기의 시간대는 5단계처럼 따로 적는 편이 뒤섞이지 않습니다.
 
-iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서는 시각이 들어갈 칸 이름을 다음과 같이 확인했습니다(확인 범위: iPhone 13 mini, iOS 27.0). 값은 읽지 않았으므로 이 버전에서 각 칸이 초인지 나노초인지는 확인하지 못했고, 행마다 자릿수를 보고 판단합니다.
+iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서는 시각이 들어갈 칸 이름을 다음과 같이 확인했습니다(확인 범위: iOS 27.0). 값은 읽지 않았으므로 이 버전에서 각 칸이 초인지 나노초인지는 확인하지 못했고, 행마다 자릿수를 보고 판단합니다.
 
 | 표 | 시각 칸 |
 |---|---|
@@ -58,7 +58,7 @@ iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서는 시각이 들어
 
 ## 시간대가 함께 남는 곳
 
-몇몇 DB 와 plist 에는 시각 옆에 시간대 칸이나 키가 따로 있습니다. 아래는 iOS 27.0 백업에서 이름을 확인한 곳이고(확인 범위: iPhone 13 mini, iOS 27.0), 값은 읽지 않았습니다. 각 칸의 저장 기준(Mac 절대 초인지 등)과 정확한 쓰임새는 확인하지 못했으므로, 이름만 보고 값을 해석하지 말고 해당 아티팩트 페이지와 실제 값으로 확인합니다.
+몇몇 DB 와 plist 에는 시각 옆에 시간대 칸이나 키가 따로 있습니다. 아래는 iOS 27.0 백업에서 이름을 확인한 곳이고(확인 범위: iOS 27.0), 값은 읽지 않았습니다. 각 칸의 저장 기준(Mac 절대 초인지 등)과 정확한 쓰임새는 확인하지 못했으므로, 이름만 보고 값을 해석하지 말고 해당 아티팩트 페이지와 실제 값으로 확인합니다.
 
 | 파일(도메인 :: 경로) | 표 또는 키 | 시간대·시각 칸 |
 |---|---|---|

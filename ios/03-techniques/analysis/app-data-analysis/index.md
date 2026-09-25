@@ -20,12 +20,12 @@ has_toc: false
 
 | 위치 | iOS 버전 | 알려 주는 것 |
 |---|---|---|
-| 앱 데이터 컨테이너 (`/private/var/mobile/Containers/Data/Application/<GUID>`, 백업에서는 `AppDomain-<번들 ID>`) | 파일 시스템 경로[7], 백업 도메인 (확인 범위: iPhone 13 mini, iOS 27.0) | 앱이 저장한 설정·DB·문서 |
-| 앱 그룹 공유 폴더 (`AppDomainGroup-<그룹 ID>`), 앱 확장 (`AppDomainPlugin-<번들 ID>`) | (확인 범위: iPhone 13 mini, iOS 27.0) | 본체와 확장이 함께 쓰는 데이터 |
-| `Manifest.db` 의 `Files` 표 | (확인 범위: iPhone 13 mini, iOS 27.0) | 로컬 백업 안에서 앱 파일을 찾는 목록 |
-| `applicationState.db` | iOS 11.2.1 에서 시험[6], 표 이름은 (확인 범위: iPhone 13 mini, iOS 27.0) | 설치 상태, 일부 앱의 삭제 시각 |
+| 앱 데이터 컨테이너 (`/private/var/mobile/Containers/Data/Application/<GUID>`, 백업에서는 `AppDomain-<번들 ID>`) | 파일 시스템 경로[7], 백업 도메인 (확인 범위: iOS 27.0) | 앱이 저장한 설정·DB·문서 |
+| 앱 그룹 공유 폴더 (`AppDomainGroup-<그룹 ID>`), 앱 확장 (`AppDomainPlugin-<번들 ID>`) | (확인 범위: iOS 27.0) | 본체와 확장이 함께 쓰는 데이터 |
+| `Manifest.db` 의 `Files` 표 | (확인 범위: iOS 27.0) | 로컬 백업 안에서 앱 파일을 찾는 목록 |
+| `applicationState.db` | iOS 11.2.1 에서 시험[6], 표 이름은 (확인 범위: iOS 27.0) | 설치 상태, 일부 앱의 삭제 시각 |
 | 앱 HTTP 캐시 `Cache.db` | 백업에 안 들어감(iOS 2.2 이후)[1] | 앱이 받아 저장한 HTTP 응답 |
-| WebKit `observations.db` | (확인 범위: iPhone 13 mini, iOS 27.0) | 앱 안 웹뷰가 접속한 도메인 |
+| WebKit `observations.db` | (확인 범위: iOS 27.0) | 앱 안 웹뷰가 접속한 도메인 |
 | Mobile Installation 로그, `UninstalledApplications.plist` | 2019년 글[3] | 설치·삭제 시각 |
 | Biome `_DKEvent.App.Install` | iOS 16[4] | 설치 시각, 보존 28일 |
 

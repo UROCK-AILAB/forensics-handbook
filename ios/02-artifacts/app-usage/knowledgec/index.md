@@ -35,7 +35,7 @@ knowledgeC 에 기록되는 종류, 곧 활성 스트림 (stream) 의 수는 버
 
 iOS 16 에서 knowledgeC 에 보이지 않게 되었다고 보고된 것은 앱 포커스, Safari 기록, 설치 기록, 기기 방향, 충전기 연결 상태입니다 [3]. 앱과 기기 상태 스트림이 각각 어떻게 바뀌었는지는 아래 하위 페이지에서 다루고, 방문 기록은 [사파리](../../browsers/safari/index.md) 페이지에서 다룹니다.
 
-이 핸드북의 기기 관찰에서는 로컬 백업 목록에 knowledgeC.db 가 없었고, HomeDomain 항목 1979 개 가운데 `Library/CoreDuet` 경로도 `Library/Biome` 경로도 없었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 같은 백업에서 CoreDuet·바이옴과 이름이 닿는 설정 plist 는 아래처럼 보였고, 값은 읽지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+이 핸드북의 기기 관찰에서는 로컬 백업 목록에 knowledgeC.db 가 없었고, HomeDomain 항목 1979 개 가운데 `Library/CoreDuet` 경로도 `Library/Biome` 경로도 없었습니다 (확인 범위: iOS 27.0). 같은 백업에서 CoreDuet·바이옴과 이름이 닿는 설정 plist 는 아래처럼 보였고, 값은 읽지 않았습니다 (확인 범위: iOS 27.0).
 
 ```
 HomeDomain :: Library/Preferences/com.apple.coreduetd.plist

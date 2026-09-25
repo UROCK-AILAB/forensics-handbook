@@ -22,11 +22,11 @@ Photos.sqlite 의 전체 구조와 삭제·편집 기록은 [사진 보관함 (P
 
 | 대상 | 위치 | 출처 |
 |---|---|---|
-| 사진 보관함 DB | CameraRollDomain :: `Media/PhotoData/Photos.sqlite` | 확인 범위: iPhone 13 mini, iOS 27.0 |
-| 스크린샷 서비스 | AppDomain-com.apple.ScreenshotServicesService (항목 5개) | 확인 범위: iPhone 13 mini, iOS 27.0 |
-| 스크린샷 앱 인텐트 | AppDomainPlugin-com.apple.ScreenshotServicesAppIntents (항목 4개) | 확인 범위: iPhone 13 mini, iOS 27.0 |
-| 화면 녹화(ReplayKit) | AppDomain-com.apple.replaykitangel (항목 4개) | 확인 범위: iPhone 13 mini, iOS 27.0 |
-| 화면 녹화 확장 | AppDomainPlugin-com.apple.ReplayKit.RPBroadcastActivityViewControllerExtension, AppDomainPlugin-com.apple.ReplayKit.RPVideoEditorExtension | 확인 범위: iPhone 13 mini, iOS 27.0 |
+| 사진 보관함 DB | CameraRollDomain :: `Media/PhotoData/Photos.sqlite` | 확인 범위: iOS 27.0 |
+| 스크린샷 서비스 | AppDomain-com.apple.ScreenshotServicesService (항목 5개) | 확인 범위: iOS 27.0 |
+| 스크린샷 앱 인텐트 | AppDomainPlugin-com.apple.ScreenshotServicesAppIntents (항목 4개) | 확인 범위: iOS 27.0 |
+| 화면 녹화(ReplayKit) | AppDomain-com.apple.replaykitangel (항목 4개) | 확인 범위: iOS 27.0 |
+| 화면 녹화 확장 | AppDomainPlugin-com.apple.ReplayKit.RPBroadcastActivityViewControllerExtension, AppDomainPlugin-com.apple.ReplayKit.RPVideoEditorExtension | 확인 범위: iOS 27.0 |
 
 스크린샷·화면 녹화 파일의 확장자와 파일 이름 규칙, "스크린샷" 앨범이 저절로 생기는지는 이번에 연 자료로 확인하지 못했습니다. 아래 값의 뜻이 iOS 버전마다 어떻게 달라지는지도 확인하지 못했고, 관찰 기기인 iOS 27.0 에서 값의 뜻이 같은지도 검증하지 못했습니다.
 
@@ -41,17 +41,17 @@ Photos.sqlite 의 전체 구조와 삭제·편집 기록은 [사진 보관함 (P
 | 0 (사진) | 10 | 스크린샷 |
 | 1 (동영상) | 103 | 화면 녹화 |
 
-관찰 기기의 `ZASSET` 에는 `ZISDETECTEDSCREENSHOT` 칸도 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이름으로 보아 스크린샷으로 판정된 자산을 표시하는 칸으로 보이지만, 값의 뜻과 어느 iOS 부터 생겼는지는 확인하지 못해서 `ZKINDSUBTYPE` 과 나란히 세어 보는 데만 씁니다.
+관찰 기기의 `ZASSET` 에는 `ZISDETECTEDSCREENSHOT` 칸도 있습니다(확인 범위: iOS 27.0). 이름으로 보아 스크린샷으로 판정된 자산을 표시하는 칸으로 보이지만, 값의 뜻과 어느 iOS 부터 생겼는지는 확인하지 못해서 `ZKINDSUBTYPE` 과 나란히 세어 보는 데만 씁니다.
 
 ### 스크린샷 서비스 plist
 
-AppDomain-com.apple.ScreenshotServicesService 의 `Library/Preferences/com.apple.ScreenshotServicesService.plist` 에는 `PKPaletteDefaults` 사전 하나만 있고, 그 안에 `PKPaletteAutoHideCorner`, `PKPaletteAutoHideEnabled`, `PKPaletteLastEdge`, `PKPalettePosition` 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이름으로 보아 스크린샷을 편집(마크업)할 때 쓰는 도구 팔레트의 위치 설정으로 보이지만 뜻은 확인하지 못했고, 스크린샷을 찍은 기록은 이 plist 에 없습니다.
+AppDomain-com.apple.ScreenshotServicesService 의 `Library/Preferences/com.apple.ScreenshotServicesService.plist` 에는 `PKPaletteDefaults` 사전 하나만 있고, 그 안에 `PKPaletteAutoHideCorner`, `PKPaletteAutoHideEnabled`, `PKPaletteLastEdge`, `PKPalettePosition` 키가 있습니다(확인 범위: iOS 27.0). 이름으로 보아 스크린샷을 편집(마크업)할 때 쓰는 도구 팔레트의 위치 설정으로 보이지만 뜻은 확인하지 못했고, 스크린샷을 찍은 기록은 이 plist 에 없습니다.
 
-HomeDomain 의 `Library/Preferences/.GlobalPreferences.plist` 에는 `com.apple.VisualIntelligence.FeatureAwareness.Screenshot`(int) 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이 값의 뜻도 확인하지 못했습니다.
+HomeDomain 의 `Library/Preferences/.GlobalPreferences.plist` 에는 `com.apple.VisualIntelligence.FeatureAwareness.Screenshot`(int) 키가 있습니다(확인 범위: iOS 27.0). 이 값의 뜻도 확인하지 못했습니다.
 
 ### 화면 녹화 쪽 흔적
 
-HomeDomain 의 `Library/Preferences/com.apple.replaykit.AudioConferenceControlCenterModule.plist` 에는 `SBIconVisibility`(bool) 키 하나만 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 관찰 메모에는 ReplayKit 이 화면 녹화 기록을 따로 적는 DB 가 없어서, 화면 녹화 흔적은 보관함에 든 동영상 자산(`ZKINDSUBTYPE` 103)에서 찾습니다. 녹화를 시작하고 끝낸 시각을 따로 적은 기록은 확인하지 못했습니다.
+HomeDomain 의 `Library/Preferences/com.apple.replaykit.AudioConferenceControlCenterModule.plist` 에는 `SBIconVisibility`(bool) 키 하나만 있습니다(확인 범위: iOS 27.0). 관찰 메모에는 ReplayKit 이 화면 녹화 기록을 따로 적는 DB 가 없어서, 화면 녹화 흔적은 보관함에 든 동영상 자산(`ZKINDSUBTYPE` 103)에서 찾습니다. 녹화를 시작하고 끝낸 시각을 따로 적은 기록은 확인하지 못했습니다.
 
 plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01-foundations/data-formats/plist.md)에 있습니다.
 

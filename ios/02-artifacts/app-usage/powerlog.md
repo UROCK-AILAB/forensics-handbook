@@ -47,13 +47,13 @@ nav_order: 450
 |---|---|
 | AFU 상태 수집(전체 파일시스템) | `CurrentPowerlog.PLSQL` 전체를 얻습니다[6] |
 | sysdiagnose | 일부만 얻습니다[6]. 묶음 안 `logs/powerlogs/` 아래에 `.PLSQL`·`.EPSQL`·`.BGSQL` 파일이 있고, iLEAPP 가 확인한 sysdiagnose(iOS 13.3.1~26)에는 DB 파일만 있고 `-wal`·`-shm` 은 없었습니다[3]. 전체 파일시스템 수집 안에서는 `DiagnosticLogs/sysdiagnose` 아래에 sysdiagnose 가 들어 있는 경우도 있습니다[3] |
-| 로컬 백업 | iOS 10.2 시절 글쓴이는 백업에 나오지 않는다고 보았지만 단정하지는 않았습니다[4]. 관찰한 로컬 백업에는 `CurrentPowerlog.PLSQL`·`BatteryLife` 폴더·`.PLSQL`/`.EPSQL`/`.BGSQL` 파일이 없었습니다 (확인 범위: iPhone 13 mini, iOS 27.0) |
+| 로컬 백업 | iOS 10.2 시절 글쓴이는 백업에 나오지 않는다고 보았지만 단정하지는 않았습니다[4]. 관찰한 로컬 백업에는 `CurrentPowerlog.PLSQL`·`BatteryLife` 폴더·`.PLSQL`/`.EPSQL`/`.BGSQL` 파일이 없었습니다 (확인 범위: iOS 27.0) |
 
 sysdiagnose 묶음을 여는 법은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md), 수집 방식 차이는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 ### 로컬 백업에 보이는 전원 관련 설정 파일
 
-관찰한 로컬 백업에서 전원 로그 DB 는 없었지만, 이름에 전원 로그나 전원 관리가 들어간 설정 파일과 도메인은 보였습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이 plist 들이 무엇을 기록하는지는 자료로 확인하지 못해서, 키 이름만 적고 뜻은 풀지 않습니다.
+관찰한 로컬 백업에서 전원 로그 DB 는 없었지만, 이름에 전원 로그나 전원 관리가 들어간 설정 파일과 도메인은 보였습니다 (확인 범위: iOS 27.0). 이 plist 들이 무엇을 기록하는지는 자료로 확인하지 못해서, 키 이름만 적고 뜻은 풀지 않습니다.
 
 | 도메인 :: 경로 | 관찰한 키 |
 |---|---|
@@ -65,7 +65,7 @@ sysdiagnose 묶음을 여는 법은 [sysdiagnose 묶음](../../01-foundations/ba
 | `HomeDomain :: Library/Preferences/com.apple.powerui.runtimeAwareness.plist` | `bootUUIDOnLastInit` (str) |
 | `SysSharedContainerDomain-systemgroup.com.apple.powerexceptions :: RepeatOffenders.plist` | 키 없음(빈 파일) |
 
-도메인 이름으로는 `AppDomainPlugin-com.apple.PowerlogCore.DEPowerlogEPL`, `AppDomainPlugin-com.apple.PowerlogCore.diagnosticextension`, `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose` 가 보였습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+도메인 이름으로는 `AppDomainPlugin-com.apple.PowerlogCore.DEPowerlogEPL`, `AppDomainPlugin-com.apple.PowerlogCore.diagnosticextension`, `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose` 가 보였습니다 (확인 범위: iOS 27.0). 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ### 버전별로 달라지는 표와 칸
 

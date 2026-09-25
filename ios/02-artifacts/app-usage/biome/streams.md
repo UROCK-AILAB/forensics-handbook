@@ -37,11 +37,11 @@ SEGB 파일이 꾸준히 보이는 가장 이른 버전은 iOS 14 라고 한 연
 
 ### 수집 범위
 
-바이옴 SEGB 파일은 전체 파일시스템 추출에서 얻고, 로컬 백업(논리 추출)에는 드러나지 않는다고 두 자료가 적었습니다[3][7]. 관찰한 백업의 기록에도 `Library/Biome` 경로나 SEGB 파일은 없었지만, 그 기록은 DB 와 plist 만 목록으로 만들어서 백업에 바이옴이 없다고 관찰로 말할 수는 없습니다(확인 범위: iPhone 13 mini, iOS 27.0). 수집 방식에 따른 차이는 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)와 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
+바이옴 SEGB 파일은 전체 파일시스템 추출에서 얻고, 로컬 백업(논리 추출)에는 드러나지 않는다고 두 자료가 적었습니다[3][7]. 관찰한 백업의 기록에도 `Library/Biome` 경로나 SEGB 파일은 없었지만, 그 기록은 DB 와 plist 만 목록으로 만들어서 백업에 바이옴이 없다고 관찰로 말할 수는 없습니다(확인 범위: iOS 27.0). 수집 방식에 따른 차이는 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md)와 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
 ### 백업에 보이는 바이옴 관련 설정
 
-백업의 HomeDomain `Library/Preferences/` 에는 이름에 바이옴이 들어간 설정 파일과 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이 키들이 무엇의 시각이고 어떤 뜻인지는 이번 자료로 확인하지 못해서, "이런 이름의 키가 있다" 까지만 적습니다.
+백업의 HomeDomain `Library/Preferences/` 에는 이름에 바이옴이 들어간 설정 파일과 키가 있습니다(확인 범위: iOS 27.0). 이 키들이 무엇의 시각이고 어떤 뜻인지는 이번 자료로 확인하지 못해서, "이런 이름의 키가 있다" 까지만 적습니다.
 
 | 파일 | 키 이름(형식) |
 |---|---|
@@ -54,7 +54,7 @@ SEGB 파일이 꾸준히 보이는 가장 이른 버전은 iOS 14 라고 한 연
 | `com.apple.lighthouse.dill.BiomeSELFIngestor.plist` | `bm_IntelligenceFlow.` 으로 시작하는 키 9개 (bytes) |
 | `com.apple.das.fairscheduling.plist` | `priorityQueue` 안에 `com.apple.biomesyncd.deferredMerge` 라는 항목 이름 |
 
-KnowledgeC 쪽 설정 파일인 `com.apple.CoreDuet.plist` 도 같은 폴더에 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). plist 를 읽는 법은 [설정 값 (Preferences)](../../system-account/preferences.md)에 있습니다.
+KnowledgeC 쪽 설정 파일인 `com.apple.CoreDuet.plist` 도 같은 폴더에 있습니다(확인 범위: iOS 27.0). plist 를 읽는 법은 [설정 값 (Preferences)](../../system-account/preferences.md)에 있습니다.
 
 ## 구조
 

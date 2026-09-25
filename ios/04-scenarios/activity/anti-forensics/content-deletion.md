@@ -29,7 +29,7 @@ iOS 버전과 지운 뒤 지난 기간이 가장 먼저입니다. Apple 문서�
 
 ## 볼 아티팩트와 순서
 
-아래 표·칸·키는 관찰한 백업에서 이름만 확인한 것이고 (확인 범위: iPhone 13 mini, iOS 27.0), 각 칸 값의 뜻과 시각 기준은 이 핸드북에서 확인하지 못했습니다. 이름이 삭제·복구를 가리키는 것처럼 보여도, 검체에서 쓰기 전에 공개 도구의 해석과 대조하거나 시험 기기로 값이 바뀌는 모습을 확인합니다.
+아래 표·칸·키는 관찰한 백업에서 이름만 확인한 것이고 (확인 범위: iOS 27.0), 각 칸 값의 뜻과 시각 기준은 이 핸드북에서 확인하지 못했습니다. 이름이 삭제·복구를 가리키는 것처럼 보여도, 검체에서 쓰기 전에 공개 도구의 해석과 대조하거나 시험 기기로 값이 바뀌는 모습을 확인합니다.
 
 | 순서 | 아티팩트 | 위치(백업) | 표·칸·키 이름 | 자세히 |
 |---|---|---|---|---|
@@ -42,9 +42,9 @@ iOS 버전과 지운 뒤 지난 기간이 가장 먼저입니다. Apple 문서�
 | 7 | 사진 DB 의 변경 이력 | 같은 파일 | `ACHANGE`(`ZCHANGETYPE`, `ZENTITY`, `ZENTITYPK`, `ZTRANSACTIONID`, `ZCOLUMNS`), `ATRANSACTION`(`ZTIMESTAMP`, `ZAUTHOR`, `ZBUNDLEID`, `ZCONTEXTNAME`, `ZPROCESSID` 등) | [사진 보관함](../../../02-artifacts/media/photos/index.md) |
 | 8 | iCloud 사진 설정 | CameraRollDomain `Media/PhotoData/CPL/cloudphotos-#.#.plist` | `configuration` 안의 `max.days.inRecentlyDeleted`(값은 읽지 않았습니다) | [사진 보관함](../../../02-artifacts/media/photos/index.md) |
 
-관찰한 `ZASSET` 칸 목록에서는 `ZTRASHEDDATE` 가 보이지 않았지만, 칸 목록이 앞쪽만 적혀 있었을 수 있어서 검체에서 직접 확인합니다. 사진 DB 에는 이 밖에 `ZADDITIONALASSETATTRIBUTES` 의 `ZPTPTRASHEDSTATE`, `ZGENERICALBUM`·`ZMOMENT`·`ZSHARE`·`ZINTERNALRESOURCE` 의 `ZTRASHEDSTATE`, `ZDETECTEDFACE` 의 `ZISINTRASH` 칸도 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 `ZASSET` 칸 목록에서는 `ZTRASHEDDATE` 가 보이지 않았지만, 칸 목록이 앞쪽만 적혀 있었을 수 있어서 검체에서 직접 확인합니다. 사진 DB 에는 이 밖에 `ZADDITIONALASSETATTRIBUTES` 의 `ZPTPTRASHEDSTATE`, `ZGENERICALBUM`·`ZMOMENT`·`ZSHARE`·`ZINTERNALRESOURCE` 의 `ZTRASHEDSTATE`, `ZDETECTEDFACE` 의 `ZISINTRASH` 칸도 있습니다 (확인 범위: iOS 27.0).
 
-메시지·사진 말고 다른 Apple 기본 앱에도 비슷한 이름의 칸이 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 메모 앱 `NoteStore.sqlite`(AppDomainGroup-group.com.apple.notes)의 `ZICCLOUDSYNCINGOBJECT` 표에 `ZMARKEDFORDELETION`, `ZISRECOVERINGFROMTRASH` 가 있고, 프리폼 `Boards/boards.db`(AppDomainGroup-group.com.apple.freeform)의 `boards` 표에 `tombstoned`, `tombstone_date`, `hide_from_recently_deleted` 가 있으며, 미리 알림 `Data-*.sqlite` 의 `ZREMCDREMINDER` 표에 `ZMARKEDFORDELETION` 이 있습니다. 메모 앱의 "최근 삭제된 항목" 보관 기간은 확인하지 못했고, 앱별 설명은 [메모](../../../02-artifacts/mail-cloud/notes.md) 와 [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md) 에서 다룹니다.
+메시지·사진 말고 다른 Apple 기본 앱에도 비슷한 이름의 칸이 있습니다 (확인 범위: iOS 27.0). 메모 앱 `NoteStore.sqlite`(AppDomainGroup-group.com.apple.notes)의 `ZICCLOUDSYNCINGOBJECT` 표에 `ZMARKEDFORDELETION`, `ZISRECOVERINGFROMTRASH` 가 있고, 프리폼 `Boards/boards.db`(AppDomainGroup-group.com.apple.freeform)의 `boards` 표에 `tombstoned`, `tombstone_date`, `hide_from_recently_deleted` 가 있으며, 미리 알림 `Data-*.sqlite` 의 `ZREMCDREMINDER` 표에 `ZMARKEDFORDELETION` 이 있습니다. 메모 앱의 "최근 삭제된 항목" 보관 기간은 확인하지 못했고, 앱별 설명은 [메모](../../../02-artifacts/mail-cloud/notes.md) 와 [미리 알림과 캘린더](../../../02-artifacts/mail-cloud/reminders-calendar.md) 에서 다룹니다.
 
 ## 분석 흐름
 

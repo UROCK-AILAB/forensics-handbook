@@ -53,7 +53,7 @@ log show --predicate 'category = "AirDrop"' system_logs.logarchive
 
 ### 설정 파일
 
-관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.sharingd.plist` 에는 아래 키가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업의 `HomeDomain :: Library/Preferences/com.apple.sharingd.plist` 에는 아래 키가 있었습니다(확인 범위: iOS 27.0).
 
 ```text
 AirDropID
@@ -71,13 +71,13 @@ UIActivityCategoryAction
 StreamID
 ```
 
-키 이름만 확인했고 뜻은 확인하지 못했습니다. 수신 모드("연락처만"·"모든 사람")를 드러내는 이름의 키는 이 목록에 없었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 같은 백업에는 AppDomain-com.apple.Sharing.AirDropUI, AppDomainGroup-group.com.apple.sharingd, AppDomainPlugin-com.apple.Sharing.AirDrop, AppDomainPlugin-com.apple.Sharing.AirDropAlertUI, AppDomainPlugin-com.apple.AirDropSettingsIntents, AppDomain-com.apple.SharingViewService 도메인이 있었지만 각각 항목이 3~4개뿐이었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+키 이름만 확인했고 뜻은 확인하지 못했습니다. 수신 모드("연락처만"·"모든 사람")를 드러내는 이름의 키는 이 목록에 없었습니다(확인 범위: iOS 27.0). 같은 백업에는 AppDomain-com.apple.Sharing.AirDropUI, AppDomainGroup-group.com.apple.sharingd, AppDomainPlugin-com.apple.Sharing.AirDrop, AppDomainPlugin-com.apple.Sharing.AirDropAlertUI, AppDomainPlugin-com.apple.AirDropSettingsIntents, AppDomain-com.apple.SharingViewService 도메인이 있었지만 각각 항목이 3~4개뿐이었습니다(확인 범위: iOS 27.0).
 
-`HomeDomain :: Library/UserConfigurationProfiles/EffectiveUserSettings.plist` 의 restrictedBool 안에는 allowAirDrop 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 회사 기기라면 이 값으로 AirDrop 이 막혀 있었는지를 먼저 봅니다. 다만 이 값은 수집 시점의 설정이라서, 사건 당시에도 막혀 있었는지는 프로파일을 설치하거나 지운 기록과 함께 판단합니다.
+`HomeDomain :: Library/UserConfigurationProfiles/EffectiveUserSettings.plist` 의 restrictedBool 안에는 allowAirDrop 키가 있습니다(확인 범위: iOS 27.0). 회사 기기라면 이 값으로 AirDrop 이 막혀 있었는지를 먼저 봅니다. 다만 이 값은 수집 시점의 설정이라서, 사건 당시에도 막혀 있었는지는 프로파일을 설치하거나 지운 기록과 함께 판단합니다.
 
 ### 받은 쪽 기기
 
-받은 쪽 기기를 확보했으면 들어온 자료의 경로를 봅니다. `Photos.sqlite` 에서는 ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY 와 ZCLOUDMASTER 의 ZIMPORTEDBY·ZIMPORTEDBYBUNDLEIDENTIFIER·ZIMPORTEDBYDISPLAYNAME·ZORIGINALFILENAME 칸으로 사진이 어떻게 들어왔는지 가립니다(확인 범위: iPhone 13 mini, iOS 27.0). AirDrop 으로 들어온 사진에 어떤 값이 들어가는지는 확인하지 못했으니, 같은 버전의 시험 기기로 AirDrop 을 한 번 받아 값을 확인한 뒤 씁니다. 파일 앱에서 AirDrop 으로 받은 파일은 Inbox 로 갑니다[4](iOS 13 기준).
+받은 쪽 기기를 확보했으면 들어온 자료의 경로를 봅니다. `Photos.sqlite` 에서는 ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY 와 ZCLOUDMASTER 의 ZIMPORTEDBY·ZIMPORTEDBYBUNDLEIDENTIFIER·ZIMPORTEDBYDISPLAYNAME·ZORIGINALFILENAME 칸으로 사진이 어떻게 들어왔는지 가립니다(확인 범위: iOS 27.0). AirDrop 으로 들어온 사진에 어떤 값이 들어가는지는 확인하지 못했으니, 같은 버전의 시험 기기로 AirDrop 을 한 번 받아 값을 확인한 뒤 씁니다. 파일 앱에서 AirDrop 으로 받은 파일은 Inbox 로 갑니다[4](iOS 13 기준).
 
 ## 분석 흐름
 

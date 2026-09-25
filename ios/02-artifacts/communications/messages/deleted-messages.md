@@ -26,7 +26,7 @@ sms.db 의 기본 구조는 [대화 DB 구조 (sms.db)](sms-db.md)에서, 첨부
 | iOS 15 까지 | 최근 삭제된 항목 복구, 보낸 메시지 취소·편집 기능이 없습니다 | [2][3] |
 | iOS 16 이후 | 최근 삭제된 항목(30~40일 안 복구), 취소(2분 안), 편집(15분 안)이 생겼고 `chat_recoverable_message_join` 이 쓰입니다 | [1][2][3][4][5] |
 
-아래 표와 칸은 관찰한 백업의 sms.db 에서 확인했습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+아래 표와 칸은 관찰한 백업의 sms.db 에서 확인했습니다(확인 범위: iOS 27.0).
 
 | 표 | 칸 |
 |---|---|
@@ -44,9 +44,9 @@ sms.db 의 기본 구조는 [대화 DB 구조 (sms.db)](sms-db.md)에서, 첨부
 
 `chat_recoverable_message_join` 은 최근 삭제된 항목에 들어간 메시지를 대화방과 이어 두는 표이지만, `delete_date` 는 늘 채워지지는 않아서 칸이 있는지와 값이 있는지를 먼저 확인합니다[5]. `recoverable_message_part`, `deleted_messages`, `sync_deleted_*` 표가 정확히 무엇을 담는지는 이번에 연 자료에 설명이 없어 확인하지 못했습니다. 특히 `recoverable_message_part.part_text` 는 이름만 보면 지운 본문이 남을 것 같지만 확인한 자료가 없어서, 실제 검체에서 값을 보고 판단합니다.
 
-취소하거나 편집한 메시지는 `message.text` 칸이 비워집니다[1][4]. 다른 자료는 두 경우 모두 `date_edited` 칸에 바뀐 시각이 남는다고 설명하지만[4], 관찰한 백업의 `message` 칸 목록에는 `date_edited` 가 보이지 않았습니다(확인 범위: iPhone 13 mini, iOS 27.0). 편집 기록과 취소 정보는 `message_summary_info` 에 들어가고[5], D20 의 시험에서는 `attributedBody` 와 `message_summary_info` 에서 편집 기록을 찾았으며 편집할 때마다 따로 기록되었습니다[1].
+취소하거나 편집한 메시지는 `message.text` 칸이 비워집니다[1][4]. 다른 자료는 두 경우 모두 `date_edited` 칸에 바뀐 시각이 남는다고 설명하지만[4], 관찰한 백업의 `message` 칸 목록에는 `date_edited` 가 보이지 않았습니다(확인 범위: iOS 27.0). 편집 기록과 취소 정보는 `message_summary_info` 에 들어가고[5], D20 의 시험에서는 `attributedBody` 와 `message_summary_info` 에서 편집 기록을 찾았으며 편집할 때마다 따로 기록되었습니다[1].
 
-설정 파일에도 삭제와 이어진 이름의 키가 보이지만(확인 범위: iPhone 13 mini, iOS 27.0), 모두 값과 뜻을 확인하지 못했습니다.
+설정 파일에도 삭제와 이어진 이름의 키가 보이지만(확인 범위: iOS 27.0), 모두 값과 뜻을 확인하지 못했습니다.
 
 | 파일(HomeDomain, `Library/Preferences/`) | 키 |
 |---|---|

@@ -53,13 +53,13 @@ CrowdStrike 도 기본 설정에서 디스크에 남는 수준은 Default·Error
 |---|---|
 | sysdiagnose 묶음 | 묶음 안에 `system_logs.logarchive` 폴더가 들어 있습니다[4]. 묶음 안의 다른 로그는 [sysdiagnose 안의 로그](sysdiagnose-logs.md) 에서 다룹니다 |
 | `log collect` | 실행 중인 시스템에서 `.logarchive` 를 만들고, 다른 macOS 나 분석 도구로 나중에 읽습니다[2]. 출처는 macOS 에서 실행하는 경우만 설명하고, 아이폰을 Mac 에 연결해 받는 방법은 확인한 자료에 없습니다 |
-| 로컬 백업 | 관찰 메모에 `.tracev3`·`logarchive`·`uuidtext`·`diagnostics` 경로가 나오지 않았습니다. 메모가 DB·plist 위주라 백업에 없다고 단정하지는 않습니다 (확인 범위: iPhone 13 mini, iOS 27.0) |
+| 로컬 백업 | 관찰 메모에 `.tracev3`·`logarchive`·`uuidtext`·`diagnostics` 경로가 나오지 않았습니다. 메모가 DB·plist 위주라 백업에 없다고 단정하지는 않습니다 (확인 범위: iOS 27.0) |
 
 sysdiagnose 묶음을 만들고 여는 법은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md), 수집 방식끼리의 차이는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
 ### 로컬 백업에 보이는 로그 관련 도메인
 
-관찰한 로컬 백업에는 이름에 로그가 들어간 도메인이 세 개 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 안에 든 파일과 그 뜻은 관찰 메모에 없어서 이름만 적습니다.
+관찰한 로컬 백업에는 이름에 로그가 들어간 도메인이 세 개 있었습니다 (확인 범위: iOS 27.0). 안에 든 파일과 그 뜻은 관찰 메모에 없어서 이름만 적습니다.
 
 | 도메인 | 항목 수 |
 |---|---|

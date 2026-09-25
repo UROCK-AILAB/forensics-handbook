@@ -30,7 +30,7 @@ iOS 는 앱을 설치할 때 앱마다 번들 컨테이너(앱 본체)와 데이
 
 번들 ID 에 band 라는 글자가 들어 있지 않습니다[1]. 이름으로 찾으면 놓치기 쉬운 부분이라 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을 함께 봅니다.
 
-로컬 백업에서는 앱 데이터가 `AppDomain-` 뒤에 번들 ID 를 붙인 도메인으로 들어갑니다. 이 규칙은 관찰한 백업의 Apple 앱 도메인(예: `AppDomain-com.apple.AAUIViewService`)에서 볼 수 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 같은 백업에는 `AppDomainGroup-`, `AppDomainPlugin-` 으로 시작하는 도메인도 따로 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 다만 관찰 백업은 다른 회사 앱 도메인 161개의 이름을 가려 두어서, 밴드 도메인을 실물로 본 것은 아니고 규칙에 따라 적은 이름입니다. 밴드가 앱 그룹이나 확장 도메인을 쓰는지도 확인하지 못했습니다.
+로컬 백업에서는 앱 데이터가 `AppDomain-` 뒤에 번들 ID 를 붙인 도메인으로 들어갑니다. 이 규칙은 관찰한 백업의 Apple 앱 도메인(예: `AppDomain-com.apple.AAUIViewService`)에서 볼 수 있습니다(확인 범위: iOS 27.0). 같은 백업에는 `AppDomainGroup-`, `AppDomainPlugin-` 으로 시작하는 도메인도 따로 있었습니다(확인 범위: iOS 27.0). 다만 관찰 백업은 다른 회사 앱 도메인 161개의 이름을 가려 두어서, 밴드 도메인을 실물로 본 것은 아니고 규칙에 따라 적은 이름입니다. 밴드가 앱 그룹이나 확장 도메인을 쓰는지도 확인하지 못했습니다.
 
 전체 파일시스템 추출에서는 데이터 컨테이너 폴더 이름이 번들 ID 가 아니라서, 번들 ID 와 컨테이너 경로를 먼저 이어야 합니다. 이 작업은 `applicationState.db` 로 하고, 방법은 [설치된 앱](../app-usage/installed-apps.md)에 있습니다.
 
@@ -66,7 +66,7 @@ iOS 밴드 앱의 DB 이름, 표와 칸 이름, 첨부 파일 캐시 위치는 �
 
 논문이 짚은 안티포렌식 행위는 같은 계정의 여러 프로필 쓰기, 밴드 숨기기, 채팅방 나가기, 메시지 삭제, 로그아웃입니다[5]. 안드로이드에서는 삭제한 메시지가 상태 값 RECLAIM 으로 표시되고, 로그아웃하면 기기의 사용자 데이터가 모두 지워진다고 적었습니다[5]. iOS 에서도 같은지는 확인하지 못했고, 로그아웃이 의심되면 앱 데이터보다 시스템 흔적과 서버 자료에 기대야 합니다.
 
-앱을 지웠다면 `UninstalledApplications.plist` 에 번들 ID 와 날짜가 남을 수 있습니다. 다만 번들 ID 하나에 날짜 하나만 남아서 여러 번 지우고 다시 깔아도 날짜는 하나이고, iLEAPP 시험 이미지 24개 가운데 2개에만 이 파일이 있었습니다[4]. 파일이 없다고 앱을 지우지 않았다는 뜻은 아닙니다. 관찰한 로컬 백업의 `InstallDomain` 에는 이 파일이 보이지 않았고 `BackedUpState/BackupSystemAppInstallState.plist` 와 `SystemAppInstallState.plist` 만 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+앱을 지웠다면 `UninstalledApplications.plist` 에 번들 ID 와 날짜가 남을 수 있습니다. 다만 번들 ID 하나에 날짜 하나만 남아서 여러 번 지우고 다시 깔아도 날짜는 하나이고, iLEAPP 시험 이미지 24개 가운데 2개에만 이 파일이 있었습니다[4]. 파일이 없다고 앱을 지우지 않았다는 뜻은 아닙니다. 관찰한 로컬 백업의 `InstallDomain` 에는 이 파일이 보이지 않았고 `BackedUpState/BackupSystemAppInstallState.plist` 와 `SystemAppInstallState.plist` 만 있었습니다(확인 범위: iOS 27.0).
 
 따로 지정하지 않은 서드파티 앱 데이터의 기본 보호 등급은 Class C(첫 잠금 해제 후 보호)이고[7], 밴드가 실제로 어떤 등급을 쓰는지는 확인하지 못했습니다. 등급 설명은 [데이터 보호](../../01-foundations/storage/data-protection/index.md)에 있습니다.
 
@@ -84,7 +84,7 @@ iOS 밴드 앱의 DB 이름, 표와 칸 이름, 첨부 파일 캐시 위치는 �
 
 **공개 도구로 한 번**
 
-iLEAPP 에는 밴드 전용 분석기가 없어서[2], 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표에서 도메인을 바로 찾을 수 있습니다. `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다(확인 범위: iPhone 13 mini, iOS 27.0).
+iLEAPP 에는 밴드 전용 분석기가 없어서[2], 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표에서 도메인을 바로 찾을 수 있습니다. `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다(확인 범위: iOS 27.0).
 
 ```sql
 SELECT fileID, relativePath, flags

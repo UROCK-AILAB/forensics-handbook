@@ -19,7 +19,7 @@ nav_order: 1300
 
 같은 로그도 보는 방법에 따라 시각이 다르게 보일 수 있습니다. 로그를 logarchive 로 뽑아서 보면 시계를 손으로 바꾼 뒤에도 실제로 일이 일어난 시각이 남지만, 라이브 Console 로 보면 바뀐 시스템 시각으로 보입니다. 소개된 사례에서는 Console 에서 3월 6일로 보인 로그가 logarchive 에서는 3월 23일이었고, 글쓴이는 logarchive 쪽이 실제 시각을 담는다고 봅니다. 이 글은 시험한 iOS 버전을 적지 않았습니다 [1]. 한 사건에 속한 로그를 ActivityID 로 묶는 법은 [여러 기록 엮기 (Correlation)](correlation.md)에 있습니다.
 
-암호화하지 않은 iOS 27.0 로컬 백업의 관찰 메모에는 통합 로그(tracev3·logarchive)가 나오지 않았습니다(확인 범위: iPhone 13 mini, iOS 27.0). 로컬 백업만 확보한 사건에서는 이 흔적을 볼 수 없으니, 통합 로그를 보지 못했다는 사실을 결과에 적습니다. 로그 형식은 [통합 로그 형식 (Unified Log·tracev3)](../../../01-foundations/data-formats/unified-log.md), 로그에서 찾을 사건은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events.md)에 있습니다.
+암호화하지 않은 iOS 27.0 로컬 백업의 관찰 메모에는 통합 로그(tracev3·logarchive)가 나오지 않았습니다(확인 범위: iOS 27.0). 로컬 백업만 확보한 사건에서는 이 흔적을 볼 수 없으니, 통합 로그를 보지 못했다는 사실을 결과에 적습니다. 로그 형식은 [통합 로그 형식 (Unified Log·tracev3)](../../../01-foundations/data-formats/unified-log.md), 로그에서 찾을 사건은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events.md)에 있습니다.
 
 ## 기록 사이의 앞뒤 모순
 
@@ -37,7 +37,7 @@ nav_order: 1300
 
 ## 백업에서 볼 수 있는 단서
 
-로컬 백업에도 시각 설정과 관계있어 보이는 키가 있지만, 아래 키는 이름만 확인했고 뜻은 출처로 확인하지 못했습니다(확인 범위: iPhone 13 mini, iOS 27.0). 조작을 판단하는 근거가 아니라 다른 기록과 맞춰 볼 후보로만 적어 둡니다.
+로컬 백업에도 시각 설정과 관계있어 보이는 키가 있지만, 아래 키는 이름만 확인했고 뜻은 출처로 확인하지 못했습니다(확인 범위: iOS 27.0). 조작을 판단하는 근거가 아니라 다른 기록과 맞춰 볼 후보로만 적어 둡니다.
 
 | 파일(도메인 :: 경로) | 키 | 형 |
 |---|---|---|

@@ -17,7 +17,7 @@ nav_order: 1580
 
 iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 사이에서 달라졌고[1], iOS 15 이후의 표 구조는 이 페이지의 자료로 확인하지 못했습니다. 버전은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md), 시간대는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다.
 
-수집 범위도 확인합니다. 메일 앱 데이터는 `/private/var/mobile/Library/Mail` 에 있습니다[1]. 관찰한 로컬 백업에는 `Envelope Index`·`Protected Index`·`.emlx` 파일이 없었고(확인 범위: iPhone 13 mini, iOS 27.0), 로컬 백업에 이 DB 가 들어가는지는 확인하지 못했습니다. 로컬 백업만 있다면 아래 "메일 DB 가 없을 때" 절의 설정 파일부터 봅니다. 수집 방법은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
+수집 범위도 확인합니다. 메일 앱 데이터는 `/private/var/mobile/Library/Mail` 에 있습니다[1]. 관찰한 로컬 백업에는 `Envelope Index`·`Protected Index`·`.emlx` 파일이 없었고(확인 범위: iOS 27.0), 로컬 백업에 이 DB 가 들어가는지는 확인하지 못했습니다. 로컬 백업만 있다면 아래 "메일 DB 가 없을 때" 절의 설정 파일부터 봅니다. 수집 방법은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -47,7 +47,7 @@ iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 
 
 ### 메일 DB 가 없을 때
 
-관찰한 백업에서 메일과 관련해 볼 수 있었던 파일은 아래와 같습니다. 모두 키 이름만 확인했고 값은 읽지 않았습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업에서 메일과 관련해 볼 수 있었던 파일은 아래와 같습니다. 모두 키 이름만 확인했고 값은 읽지 않았습니다(확인 범위: iOS 27.0).
 
 | 파일 | 키 |
 |---|---|
@@ -58,14 +58,14 @@ iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 
 | `HomeDomain :: Library/Preferences/com.apple.email.maild.plist` | kDefaultsKeyLastVerifiedMessageID, com.apple.mobilemail.purge.bodies.purge_markers 등 |
 | `HomeDomain :: Library/Preferences/com.apple.icloudmailagent.plist` | com.apple.icloud.mail.lastRetryTimestamp, com.apple.icloud.mail.lastSyncAllTimestamp(실수) |
 
-`group.com.apple.mail.plist` 의 UserNotificationMailboxCutoffs 안에는 아래처럼 IMAP 계정의 보낸편지함과 받은편지함을 가리키는 항목이 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+`group.com.apple.mail.plist` 의 UserNotificationMailboxCutoffs 안에는 아래처럼 IMAP 계정의 보낸편지함과 받은편지함을 가리키는 항목이 있었습니다(확인 범위: iOS 27.0).
 
 ```text
 imap://<UUID>/...Sent
 imap://<UUID>/INBOX
 ```
 
-이 항목으로 기기에 IMAP 계정이 있고 그 계정에 보낸편지함이 있다는 데까지는 말할 수 있지만, 메일을 보냈다는 근거로는 쓰지 않습니다. 메일 계정 목록은 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 의 ZACCOUNTTYPE 표 등에서도 볼 수 있고(확인 범위: iPhone 13 mini, iOS 27.0), 계정 종류별 식별자 값은 확인하지 못했습니다.
+이 항목으로 기기에 IMAP 계정이 있고 그 계정에 보낸편지함이 있다는 데까지는 말할 수 있지만, 메일을 보냈다는 근거로는 쓰지 않습니다. 메일 계정 목록은 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 의 ZACCOUNTTYPE 표 등에서도 볼 수 있고(확인 범위: iOS 27.0), 계정 종류별 식별자 값은 확인하지 못했습니다.
 
 Gmail·Outlook 같은 다른 회사 메일 앱의 저장 구조는 이 페이지의 자료로 확인하지 못했습니다. Gmail 앱은 [지메일 (Gmail)](../../../02-artifacts/mail-cloud/gmail.md) 을 따릅니다.
 

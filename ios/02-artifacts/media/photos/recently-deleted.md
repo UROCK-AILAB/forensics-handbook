@@ -27,11 +27,11 @@ Photos.sqlite 의 기본 구조는 [사진 DB 구조 (Photos.sqlite)](photos-sql
 |---|---|---|
 | iOS 16, iPadOS 16.1 이후 | "가려진 항목" 과 "최근 삭제된 항목" 앨범을 볼 때 기본으로 Face ID 나 Touch ID 가 필요하고, 설정 > 앱 > 사진 에서 "Face ID 사용" 을 끄면 풀립니다 | [1] |
 
-보관 기간은 Apple 지원 문서가 30일로 적고[1][2], 도구 자료는 "약 30일, 달라질 수 있음" 이라고 적습니다[3]. 관찰 기기의 CameraRollDomain `Media/PhotoData/CPL/cloudphotos-#.#.plist` 에서는 `configuration` 아래에 `max.days.inRecentlyDeleted` 키가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 값은 읽지 않았고, 이 키가 실제 보관 일수를 정하는지도 문서로 확인하지 못했습니다.
+보관 기간은 Apple 지원 문서가 30일로 적고[1][2], 도구 자료는 "약 30일, 달라질 수 있음" 이라고 적습니다[3]. 관찰 기기의 CameraRollDomain `Media/PhotoData/CPL/cloudphotos-#.#.plist` 에서는 `configuration` 아래에 `max.days.inRecentlyDeleted` 키가 있었습니다(확인 범위: iOS 27.0). 값은 읽지 않았고, 이 키가 실제 보관 일수를 정하는지도 문서로 확인하지 못했습니다.
 
 ## 구조
 
-관찰 기기의 Photos.sqlite 에서 삭제와 이어진 칸은 아래 표들에 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰 기기의 Photos.sqlite 에서 삭제와 이어진 칸은 아래 표들에 있었습니다(확인 범위: iOS 27.0).
 
 | 표 | 칸 |
 |---|---|

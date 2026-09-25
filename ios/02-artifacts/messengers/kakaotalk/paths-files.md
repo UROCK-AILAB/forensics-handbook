@@ -35,7 +35,7 @@ iLEAPP 는 앱 데이터 컨테이너의 루트를 `.../Data/Application/<UUID>/
 
 ### 로컬 백업 안의 위치
 
-아이튠즈(로컬) 백업에서 카카오톡 파일은 `AppDomain-com.iwilab.KakaoTalk` 도메인에 들어가고, 상대 경로는 기기와 같은 `Library/PrivateDocuments/Message.sqlite`, `Library/PrivateDocuments/Talk.sqlite` 입니다[3]. 백업의 `Manifest.db` 에는 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)가 있어서(확인 범위: iPhone 13 mini, iOS 27.0), 이 표에서 `domain` 과 `relativePath` 로 파일을 찾습니다[3]. 관찰한 백업에서는 Apple 이 아닌 앱의 도메인 161개를 이름을 가린 채 기록해서, 카카오톡 도메인과 그 안의 파일 목록은 직접 확인하지 않았습니다(확인 범위: iPhone 13 mini, iOS 27.0). 백업 파일 ID 를 구하는 방법과 백업 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에 있습니다.
+아이튠즈(로컬) 백업에서 카카오톡 파일은 `AppDomain-com.iwilab.KakaoTalk` 도메인에 들어가고, 상대 경로는 기기와 같은 `Library/PrivateDocuments/Message.sqlite`, `Library/PrivateDocuments/Talk.sqlite` 입니다[3]. 백업의 `Manifest.db` 에는 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)가 있어서(확인 범위: iOS 27.0), 이 표에서 `domain` 과 `relativePath` 로 파일을 찾습니다[3]. 관찰한 백업에서는 Apple 이 아닌 앱의 도메인 161개를 이름을 가린 채 기록해서, 카카오톡 도메인과 그 안의 파일 목록은 직접 확인하지 않았습니다(확인 범위: iOS 27.0). 백업 파일 ID 를 구하는 방법과 백업 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에 있습니다.
 
 로컬 백업만으로 DB 와 미디어 파일을 꺼내 분석한 공개 도구가 있지만[3], 암호화 백업이어야 이 파일들이 들어가는지는 확인하지 못했습니다.
 

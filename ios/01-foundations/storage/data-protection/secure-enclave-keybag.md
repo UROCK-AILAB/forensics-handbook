@@ -58,11 +58,11 @@ UID 는 제조할 때 SoC 에 새기는 무작위 값이고, A9 부터는 제조
 
 ## 읽는 법 — 로컬 백업에서 보이는 흔적
 
-관찰한 로컬 백업의 `Manifest.plist` 에는 `IsEncrypted`, `Version`, `Containers`, `Date`, `SystemDomainsVersion`, `WasPasscodeSet`, `Lockdown`, `Applications`, `BackupKeyBag` 키가 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 이 백업은 암호화하지 않은 백업인데도 `BackupKeyBag` 키가 있었고, `ManifestKey` 라는 키는 목록에 없었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 따라서 `BackupKeyBag` 이 있다는 것만으로 암호화 백업이라고 판단하지 않고, 암호화 여부는 `IsEncrypted` 키로 따로 봅니다.
+관찰한 로컬 백업의 `Manifest.plist` 에는 `IsEncrypted`, `Version`, `Containers`, `Date`, `SystemDomainsVersion`, `WasPasscodeSet`, `Lockdown`, `Applications`, `BackupKeyBag` 키가 있습니다(확인 범위: iOS 27.0). 이 백업은 암호화하지 않은 백업인데도 `BackupKeyBag` 키가 있었고, `ManifestKey` 라는 키는 목록에 없었습니다(확인 범위: iOS 27.0). 따라서 `BackupKeyBag` 이 있다는 것만으로 암호화 백업이라고 판단하지 않고, 암호화 여부는 `IsEncrypted` 키로 따로 봅니다.
 
 iMazing 의 설명으로는 암호화 백업에서 `Manifest.db` 자체도 별도 키로 암호화하고, 기기가 등급별 키로 암호화해 보낸 데이터를 컴퓨터는 받은 그대로 저장합니다[3]. 그 별도 키가 어느 plist 키에 들어 있는지는 이번에 확인하지 못했습니다.
 
-키체인 백업은 `KeychainDomain` 의 `keychain-backup.plist` 에 있고, 최상위 키는 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+키체인 백업은 `KeychainDomain` 의 `keychain-backup.plist` 에 있고, 최상위 키는 아래와 같습니다(확인 범위: iOS 27.0).
 
 ```
 keybag-uuid (str)
@@ -78,7 +78,7 @@ keys (list)
 
 UID 는 디버그 경로로도 볼 수 없고[2], Apple 은 다른 기기로 옮길 수 없는 키체인 항목이 암호화 백업 안에서도 UID 파생 키로 감싼 채 남는다고 설명합니다[1]. 로컬 백업을 받았더라도 키체인 안의 비밀 값까지 읽을 수 있는지는 백업 암호화 여부와 항목의 등급에 따라 갈립니다.
 
-키체인이 비암호화 백업에 들어가는지를 두고는 자료끼리 말이 다릅니다. iMazing 은 키체인·건강·Safari 기록·통화 기록 등은 백업 암호화를 켜야 백업된다고 쓰고[3], Apple 은 암호화하지 않은 백업에서도 키체인이 UID 파생 키로 보호된 채라고 씁니다[1]. 관찰한 비암호화 백업에도 `keychain-backup.plist` 가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 셋을 합치면 "비암호화 백업에도 키체인 파일은 있지만 원래 기기 밖에서는 풀 수 없다" 로 읽히지만, 해석이니 보고서에서 단정하지 않습니다.
+키체인이 비암호화 백업에 들어가는지를 두고는 자료끼리 말이 다릅니다. iMazing 은 키체인·건강·Safari 기록·통화 기록 등은 백업 암호화를 켜야 백업된다고 쓰고[3], Apple 은 암호화하지 않은 백업에서도 키체인이 UID 파생 키로 보호된 채라고 씁니다[1]. 관찰한 비암호화 백업에도 `keychain-backup.plist` 가 있었습니다(확인 범위: iOS 27.0). 셋을 합치면 "비암호화 백업에도 키체인 파일은 있지만 원래 기기 밖에서는 풀 수 없다" 로 읽히지만, 해석이니 보고서에서 단정하지 않습니다.
 
 ## 함정
 

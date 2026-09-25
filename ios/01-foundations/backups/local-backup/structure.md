@@ -19,7 +19,7 @@ nav_order: 220
 
 ### 최상위 파일
 
-실제 백업 폴더 하나의 맨 위에서 본 파일은 아래 여섯 개입니다(확인 범위: iPhone 13 mini, iOS 27.0).
+실제 백업 폴더 하나의 맨 위에서 본 파일은 아래 여섯 개입니다(확인 범위: iOS 27.0).
 
 ```
 Info.plist
@@ -48,11 +48,11 @@ Rich Infante 의 분석 [2] 은 백업 형식을 버전 번호로 나눕니다.
 | iOS 9 기기 | 2.4 | Manifest.mbdb (이진 파일) | 모든 파일이 폴더 하나에 있음 |
 | iOS 10·11 기기 | 3.2 | Manifest.db (SQLite) | fileID 앞 두 글자로 하위 폴더를 나눔 |
 
-[2] 는 iOS 11 까지만 다뤘지만, 관찰한 iOS 27.0 백업도 Manifest.db 를 썼습니다(확인 범위: iPhone 13 mini, iOS 27.0). 그 사이 버전의 형식 버전 번호는 확인하지 못했으니 Status.plist 에서 직접 읽습니다.
+[2] 는 iOS 11 까지만 다뤘지만, 관찰한 iOS 27.0 백업도 Manifest.db 를 썼습니다(확인 범위: iOS 27.0). 그 사이 버전의 형식 버전 번호는 확인하지 못했으니 Status.plist 에서 직접 읽습니다.
 
 ### Info.plist 키
 
-관찰한 백업의 Info.plist 에 있던 키 이름은 아래와 같습니다. 이름을 가린 키가 하나 더 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업의 Info.plist 에 있던 키 이름은 아래와 같습니다. 이름을 가린 키가 하나 더 있었습니다(확인 범위: iOS 27.0).
 
 ```
 Applications          Build Version         Device Name
@@ -68,7 +68,7 @@ Windows 에서 만든 백업이라 Windows OS Version 키가 들어 있고, 맥�
 
 ### Manifest.plist 키
 
-관찰한 백업의 Manifest.plist 에는 아래 키가 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업의 Manifest.plist 에는 아래 키가 있었습니다(확인 범위: iOS 27.0).
 
 ```
 IsEncrypted
@@ -90,7 +90,7 @@ BackupKeyBag
 
 ### Manifest.db
 
-관찰한 백업의 Manifest.db 스키마는 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업의 Manifest.db 스키마는 아래와 같습니다(확인 범위: iOS 27.0).
 
 ```sql
 CREATE TABLE Files (fileID TEXT PRIMARY KEY, domain TEXT, relativePath TEXT, flags INTEGER, file BLOB)
@@ -115,7 +115,7 @@ flags 칸에는 1, 2, 4 같은 값이 나옵니다 [3]. 이 값을 파일·폴�
 
 ### 기기 안에 남는 백업 설정
 
-백업 폴더와 따로, 기기 안에도 백업과 관련된 설정 파일이 남고 이 파일은 백업에도 들어옵니다. 관찰한 백업에서 본 파일과 최상위 키는 아래와 같습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+백업 폴더와 따로, 기기 안에도 백업과 관련된 설정 파일이 남고 이 파일은 백업에도 들어옵니다. 관찰한 백업에서 본 파일과 최상위 키는 아래와 같습니다(확인 범위: iOS 27.0).
 
 `HomeDomain` 의 `Library/Preferences/com.apple.MobileBackup.plist`
 
@@ -166,7 +166,7 @@ SELECT domain, COUNT(*) FROM Files GROUP BY domain ORDER BY 2 DESC;
 
 ## 포렌식에서 중요한 점
 
-관찰한 백업에는 Manifest.db 옆에 -shm·-wal 파일이 함께 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 백업이 끝난 뒤에도 늘 남는지, 언제 본 파일에 합쳐지는지는 확인하지 못했습니다. WAL 파일에는 본 데이터베이스에 아직 합쳐지지 않은 내용이 있을 수 있어 세 파일을 떼어 놓지 않고, 원본을 SQLite 도구로 직접 열지 않습니다. WAL 을 다루는 법은 [SQLite 데이터베이스](../../data-formats/sqlite/index.md) 에서 다룹니다.
+관찰한 백업에는 Manifest.db 옆에 -shm·-wal 파일이 함께 있었습니다(확인 범위: iOS 27.0). 백업이 끝난 뒤에도 늘 남는지, 언제 본 파일에 합쳐지는지는 확인하지 못했습니다. WAL 파일에는 본 데이터베이스에 아직 합쳐지지 않은 내용이 있을 수 있어 세 파일을 떼어 놓지 않고, 원본을 SQLite 도구로 직접 열지 않습니다. WAL 을 다루는 법은 [SQLite 데이터베이스](../../data-formats/sqlite/index.md) 에서 다룹니다.
 
 Info.plist 와 Manifest.plist 에는 백업 폴더 안 파일 목록과 별개로 기기와 앱에 관한 정보가 들어 있어, 폴더 안 개별 파일을 열기 전에 어떤 기기의 백업인지와 암호가 걸렸는지를 먼저 판단할 수 있습니다.
 

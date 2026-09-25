@@ -10,7 +10,7 @@ nav_order: 200
 
 ## 이 형식을 쓰는 아티팩트
 
-로컬 백업 폴더 맨 위의 Info.plist 에는 아래 키가 있었고, 이름을 가린 키가 하나 더 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 키 이름만 확인했고 값은 읽지 않았습니다.
+로컬 백업 폴더 맨 위의 Info.plist 에는 아래 키가 있었고, 이름을 가린 키가 하나 더 있었습니다 (확인 범위: iOS 27.0). 키 이름만 확인했고 값은 읽지 않았습니다.
 
 | 묶음 | Info.plist 키 |
 |---|---|
@@ -18,9 +18,9 @@ nav_order: 200
 | 기종과 OS | `Product Type`, `Product Name`, `Product Version`, `Build Version` |
 | 이름과 백업 | `Device Name`, `Display Name`, `Target Type`, `Last Backup Date`, `Windows OS Version` |
 
-관찰한 백업의 `Product Type` 에 해당하는 기종 식별자는 `iPhone14,4`(iPhone 13 mini)였고, OS 는 iOS 27.0 빌드 24A5418b 였습니다. 같은 백업의 Manifest.plist 에는 `Lockdown` 키가 있었지만 그 아래 키는 확인하지 못했습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업의 `Product Type` 에 해당하는 기종 식별자는 iOS 27.0 기기였고, OS 는 iOS 27.0 빌드 24A5418b 였습니다. 같은 백업의 Manifest.plist 에는 `Lockdown` 키가 있었지만 그 아래 키는 확인하지 못했습니다 (확인 범위: iOS 27.0).
 
-Info.plist 밖에서 식별자와 관련된 이름이 보인 곳은 아래와 같습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+Info.plist 밖에서 식별자와 관련된 이름이 보인 곳은 아래와 같습니다 (확인 범위: iOS 27.0).
 
 | 위치 | 확인한 내용 |
 |---|---|
@@ -87,7 +87,7 @@ plist 의 형식은 [속성 목록 파일](../data-formats/plist.md) 에서 다�
 
 ## 포렌식에서 중요한 점
 
-복원이나 기기 이전이 있었으면 한 기기의 데이터가 다른 기기에 들어 있을 수 있어서, 식별자와 함께 빌드 번호 흔적도 봅니다. 관찰한 백업에서는 com.apple.MobileBackup.plist 의 `RestoreInfo` 아래 `BackupBuildVersion`, `DeviceBuildVersion`, `RestoreDate`, `WasCloudRestore` 키와 `HomeDomain` :: `Library/Preferences/com.apple.imdsmsrecordstore.plist` 의 `IMDSavedDeviceState` 아래 `IMDSavedDeviceStateBuildVersionKey`, `IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey` 키가 보였습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 같은 백업의 `HomeDomain` :: `Library/Preferences/com.apple.cloudphotod.plist` 에는 `_CPLUpgradeHistory-SystemLibrary` 아래 `lastSeenOSBuildVersion`, `previousOSBuildVersion` 키도 있었습니다. 이 키들은 이름으로 보아 복원·이전 흔적과 엮을 수 있지만 뜻은 출처로 확인하지 못했고, 복원 흔적을 읽는 법은 [초기화와 복원 흔적](../../02-artifacts/system-account/erase-restore.md) 에서 다룹니다.
+복원이나 기기 이전이 있었으면 한 기기의 데이터가 다른 기기에 들어 있을 수 있어서, 식별자와 함께 빌드 번호 흔적도 봅니다. 관찰한 백업에서는 com.apple.MobileBackup.plist 의 `RestoreInfo` 아래 `BackupBuildVersion`, `DeviceBuildVersion`, `RestoreDate`, `WasCloudRestore` 키와 `HomeDomain` :: `Library/Preferences/com.apple.imdsmsrecordstore.plist` 의 `IMDSavedDeviceState` 아래 `IMDSavedDeviceStateBuildVersionKey`, `IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey` 키가 보였습니다 (확인 범위: iOS 27.0). 같은 백업의 `HomeDomain` :: `Library/Preferences/com.apple.cloudphotod.plist` 에는 `_CPLUpgradeHistory-SystemLibrary` 아래 `lastSeenOSBuildVersion`, `previousOSBuildVersion` 키도 있었습니다. 이 키들은 이름으로 보아 복원·이전 흔적과 엮을 수 있지만 뜻은 출처로 확인하지 못했고, 복원 흔적을 읽는 법은 [초기화와 복원 흔적](../../02-artifacts/system-account/erase-restore.md) 에서 다룹니다.
 
 `UDIDChangeTracker.plist` 도 이름으로 보아 UDID 변화와 관련된 파일이지만 키 이름이 가려져 있어서 무엇을 적는지 확인하지 못했습니다. 이름만으로 "UDID 가 바뀐 기록이 있다" 고 쓰지 않습니다.
 

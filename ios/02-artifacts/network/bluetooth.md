@@ -16,7 +16,7 @@ nav_order: 670
 
 차량 연결을 다룬 사례에서는 `devices.plist` 의 `LastSeenTime` 이 차량과 블루투스 연결이 끊긴 시각을 나타냈다고 보고했습니다 [1]. 다만 이 글은 시험한 iOS 버전을 밝히지 않았습니다 [1].
 
-관찰한 로컬 백업에는 이 세 파일 말고도 연결 종류별 횟수·시간으로 보이는 키가 든 `com.apple.MobileBluetooth.debug.plist` 가 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 로컬 백업에는 이 세 파일 말고도 연결 종류별 횟수·시간으로 보이는 키가 든 `com.apple.MobileBluetooth.debug.plist` 가 있었습니다 (확인 범위: iOS 27.0).
 
 ## 위치와 버전별 차이
 
@@ -32,7 +32,7 @@ nav_order: 670
 
 ### 로컬 백업에서 본 위치
 
-암호화하지 않은 로컬 백업에서는 세 파일이 모두 `SysSharedContainerDomain-systemgroup.com.apple.bluetooth` 도메인(항목 7개)에 있었습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+암호화하지 않은 로컬 백업에서는 세 파일이 모두 `SysSharedContainerDomain-systemgroup.com.apple.bluetooth` 도메인(항목 7개)에 있었습니다 (확인 범위: iOS 27.0).
 
 | 도메인 :: 상대 경로 | 형식 |
 |---|---|
@@ -43,14 +43,14 @@ nav_order: 670
 | `HomeDomain :: Library/Preferences/com.apple.bluetooth.plist` | plist |
 | `HomeDomain :: Library/Preferences/com.apple.bluetoothuserd.plist` | plist |
 
-위 표는 모두 (확인 범위: iPhone 13 mini, iOS 27.0) 입니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+위 표는 모두 (확인 범위: iOS 27.0) 입니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전
 
 | iOS | 알려진 내용 | 근거 |
 |---|---|---|
 | 밝히지 않음 | 세 파일의 역할, `devices.plist` 시각이 현지 시각이라는 점, WAL 을 함께 파싱해야 한다는 점 | [1] |
-| 27.0 | 두 DB 의 표·칸 이름, `devices.plist`·`debug.plist` 키 이름 | (확인 범위: iPhone 13 mini, iOS 27.0) |
+| 27.0 | 두 DB 의 표·칸 이름, `devices.plist`·`debug.plist` 키 이름 | (확인 범위: iOS 27.0) |
 
 iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 확인하지 못해서, 검체의 iOS 버전을 먼저 적고 칸 이름을 직접 확인합니다.
 
@@ -58,7 +58,7 @@ iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 확인하지 못해�
 
 ### 두 DB (관찰)
 
-`ledevices.paired.db` 에는 `PairedDevices`, `CustomProperties`, `_SqliteDatabaseProperties` 표가 있고, `ledevices.other.db` 에는 `PairedDevices` 대신 `OtherDevices` 표가 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). `PairedDevices` 와 `OtherDevices` 의 칸은 같습니다.
+`ledevices.paired.db` 에는 `PairedDevices`, `CustomProperties`, `_SqliteDatabaseProperties` 표가 있고, `ledevices.other.db` 에는 `PairedDevices` 대신 `OtherDevices` 표가 있습니다 (확인 범위: iOS 27.0). `PairedDevices` 와 `OtherDevices` 의 칸은 같습니다.
 
 | 표 | 칸 |
 |---|---|
@@ -66,21 +66,21 @@ iOS 15 ~ 18 사이에 표·칸 이름이 바뀌었는지는 확인하지 못해�
 | `CustomProperties` | `Uuid`, `JSON` |
 | `_SqliteDatabaseProperties` | `key`, `value` |
 
-(확인 범위: iPhone 13 mini, iOS 27.0)
+(확인 범위: iOS 27.0)
 
 `Uuid` 로 장치 표와 `CustomProperties` 를 이어 볼 수 있을 것으로 보이지만, 두 표의 관계와 `JSON` 칸 내용은 확인하지 못했습니다. `Address` 와 `ResolvedAddress` 가 따로 있어서 두 값이 다를 수 있다는 점만 칸 구성으로 알 수 있고, `NameOrigin`·`Tags`·`iCloudIdentifier` 값의 뜻은 공개 자료로 확인하지 못했습니다. SQLite 파일을 읽는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 ### devices.plist (관찰)
 
-`com.apple.MobileBluetooth.devices.plist` 는 장치 주소를 키로 한 사전이고, 장치 항목 안에서 `Name`, `DefaultName`, `DeviceClass`, `LastSeenTime`, `EncryptionKeySize`, `EncryptionMode`, `CarPlayType`, `AppleDevFeatures`, `CaseInfoColor`, `CaseInfoVersion`, `DoubleTapAction`, `UserNameKey` 와 `ServiceHID`, `ServiceMAP`, `ServicePhoneBook`, `ServiceAACP`, `ServiceGATT`, `ServiceWiAP` 같은 서비스 키, `LastHandsfreeVersion`, `LastAVRCPVersion` 같은 프로필 판 키가 보였습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+`com.apple.MobileBluetooth.devices.plist` 는 장치 주소를 키로 한 사전이고, 장치 항목 안에서 `Name`, `DefaultName`, `DeviceClass`, `LastSeenTime`, `EncryptionKeySize`, `EncryptionMode`, `CarPlayType`, `AppleDevFeatures`, `CaseInfoColor`, `CaseInfoVersion`, `DoubleTapAction`, `UserNameKey` 와 `ServiceHID`, `ServiceMAP`, `ServicePhoneBook`, `ServiceAACP`, `ServiceGATT`, `ServiceWiAP` 같은 서비스 키, `LastHandsfreeVersion`, `LastAVRCPVersion` 같은 프로필 판 키가 보였습니다 (확인 범위: iOS 27.0).
 
-한 장치 항목에는 `CarPlayType` 과 `ServicePhoneBook`·`ServiceMAP`·`LastHandsfreeVersion` 이 함께 있어서 차량이나 핸즈프리 장치로 보이지만, 값은 보지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 키 이름으로 장치 종류를 짐작할 수는 있어도, 보고서에는 `Name`·`DeviceClass` 값과 함께 "이런 키가 있는 장치" 로 적습니다.
+한 장치 항목에는 `CarPlayType` 과 `ServicePhoneBook`·`ServiceMAP`·`LastHandsfreeVersion` 이 함께 있어서 차량이나 핸즈프리 장치로 보이지만, 값은 보지 않았습니다 (확인 범위: iOS 27.0). 키 이름으로 장치 종류를 짐작할 수는 있어도, 보고서에는 `Name`·`DeviceClass` 값과 함께 "이런 키가 있는 장치" 로 적습니다.
 
 ### debug.plist 와 그 밖의 plist (관찰)
 
-`com.apple.MobileBluetooth.debug.plist` 는 연결 종류마다 사전을 두고, 사전마다 `BtConnectionTypeCounter`, `BtConnectionTypeDuration`, `BtConnectionTypeStartTimeStamp` 키가 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 보인 연결 종류 이름은 `HID`, `HFP`, `SENSOR`, `WIRELESSIAP`, `NETSHARING`, `PASSIVEMULTISTREAM`, `IDLE`, `LEGATTCLIENT`, `MAP`, `BRAILLE` 등이고, `LeDeviceCache` 아래에는 `WipeNameOrigin` 키가 있습니다. 키 이름으로 보아 연결 종류별 횟수·지속 시간·시작 시각이지만, 장치별 기록이 아니라 종류별로 모인 값이라서 특정 장치와 바로 잇지 않습니다.
+`com.apple.MobileBluetooth.debug.plist` 는 연결 종류마다 사전을 두고, 사전마다 `BtConnectionTypeCounter`, `BtConnectionTypeDuration`, `BtConnectionTypeStartTimeStamp` 키가 있습니다 (확인 범위: iOS 27.0). 보인 연결 종류 이름은 `HID`, `HFP`, `SENSOR`, `WIRELESSIAP`, `NETSHARING`, `PASSIVEMULTISTREAM`, `IDLE`, `LEGATTCLIENT`, `MAP`, `BRAILLE` 등이고, `LeDeviceCache` 아래에는 `WipeNameOrigin` 키가 있습니다. 키 이름으로 보아 연결 종류별 횟수·지속 시간·시작 시각이지만, 장치별 기록이 아니라 종류별로 모인 값이라서 특정 장치와 바로 잇지 않습니다.
 
-`com.apple.bluetooth.plist` 에는 `deviceLastRebootTime`, `lastNowPlayedTime` 키가, `com.apple.bluetoothuserd.plist` 에는 `lastLaunchBootSessionUUID`, `CKPerBootTasks`, `CKStartupTime`, `LastOSLaunchVersion`, `CC_OncePerBootBackingData` 키가 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 두 파일 모두 장치 목록이 아니라 서비스 상태로 보입니다.
+`com.apple.bluetooth.plist` 에는 `deviceLastRebootTime`, `lastNowPlayedTime` 키가, `com.apple.bluetoothuserd.plist` 에는 `lastLaunchBootSessionUUID`, `CKPerBootTasks`, `CKStartupTime`, `LastOSLaunchVersion`, `CC_OncePerBootBackingData` 키가 있습니다 (확인 범위: iOS 27.0). 두 파일 모두 장치 목록이 아니라 서비스 상태로 보입니다.
 
 ## 증거로서 의미
 

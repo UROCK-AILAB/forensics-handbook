@@ -20,14 +20,14 @@ has_toc: false
 
 | 무엇 | 위치 | iOS 버전 | 알려 주는 것 |
 |---|---|---|---|
-| 대화 DB | 기기 `/private/var/mobile/Library/SMS/sms.db`[1], 백업 HomeDomain `Library/SMS/sms.db`(확인 범위: iPhone 13 mini, iOS 27.0) | 전 버전(날짜 단위는 대략 iOS 11 부터 나노초) | 본문, 보낸 방향, 상대 주소, 서비스, 대화방, 보낸·읽은·전달된 시각 |
+| 대화 DB | 기기 `/private/var/mobile/Library/SMS/sms.db`[1], 백업 HomeDomain `Library/SMS/sms.db`(확인 범위: iOS 27.0) | 전 버전(날짜 단위는 대략 iOS 11 부터 나노초) | 본문, 보낸 방향, 상대 주소, 서비스, 대화방, 보낸·읽은·전달된 시각 |
 | 첨부 파일 | 기기 `/private/var/mobile/Library/SMS/Attachments`[1], 백업 MediaDomain[4] | 전 버전 | 주고받은 사진·영상·파일과 그 이름·형식·크기 |
 | 삭제·취소·편집 흔적 | sms.db 안의 복구용 표와 `message` 칸 | iOS 16 이후 | 최근 삭제된 항목, 취소·편집한 메시지 |
-| 메시지 설정 | 백업 HomeDomain `Library/Preferences/com.apple.MobileSMS.plist` 등(확인 범위: iPhone 13 mini, iOS 27.0) | — | 보관·첨부·필터와 이어진 이름의 설정 키 |
-| 서비스 계정 | 백업 HomeDomain `Library/Preferences/` 의 `com.apple.imservice.SMS.plist`, `com.apple.imservice.RCS.plist`, `com.apple.imservice.SatelliteSMS.plist`, `com.apple.imservice.ids.iMessage.plist`(확인 범위: iPhone 13 mini, iOS 27.0) | — | SMS·RCS·SatelliteSMS 에는 `Accounts`, `OnlineAccounts`, `ActiveAccounts`, `Status` 키가 있고 ids.iMessage 에는 `Accounts` 를 뺀 세 키가 있습니다. 값의 뜻은 확인하지 못했습니다 |
-| 별명 캐시 | 백업 HomeDomain `Library/MessagesMetaData/NickNameCache/` 아래 `nickNameKeyStore.db`, `nicknameRecordsStore.db`, `handleSharingPreferences.db`, `unknownSenderRecordInfoStore.db` 등 7개(확인 범위: iPhone 13 mini, iOS 27.0) | — | 모두 `kvtable`(`ROWID`, `key`, `value`, `value_type`, `date`) 구조입니다. 각 DB 의 용도는 확인하지 못했습니다 |
+| 메시지 설정 | 백업 HomeDomain `Library/Preferences/com.apple.MobileSMS.plist` 등(확인 범위: iOS 27.0) | — | 보관·첨부·필터와 이어진 이름의 설정 키 |
+| 서비스 계정 | 백업 HomeDomain `Library/Preferences/` 의 `com.apple.imservice.SMS.plist`, `com.apple.imservice.RCS.plist`, `com.apple.imservice.SatelliteSMS.plist`, `com.apple.imservice.ids.iMessage.plist`(확인 범위: iOS 27.0) | — | SMS·RCS·SatelliteSMS 에는 `Accounts`, `OnlineAccounts`, `ActiveAccounts`, `Status` 키가 있고 ids.iMessage 에는 `Accounts` 를 뺀 세 키가 있습니다. 값의 뜻은 확인하지 못했습니다 |
+| 별명 캐시 | 백업 HomeDomain `Library/MessagesMetaData/NickNameCache/` 아래 `nickNameKeyStore.db`, `nicknameRecordsStore.db`, `handleSharingPreferences.db`, `unknownSenderRecordInfoStore.db` 등 7개(확인 범위: iOS 27.0) | — | 모두 `kvtable`(`ROWID`, `key`, `value`, `value_type`, `date`) 구조입니다. 각 DB 의 용도는 확인하지 못했습니다 |
 
-메시지 앱의 번들 ID 는 `com.apple.MobileSMS` 이고, 백업에는 `AppDomain-com.apple.MobileSMS` 도메인도 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 번들 ID 와 백업 도메인의 관계는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다.
+메시지 앱의 번들 ID 는 `com.apple.MobileSMS` 이고, 백업에는 `AppDomain-com.apple.MobileSMS` 도메인도 있습니다(확인 범위: iOS 27.0). 번들 ID 와 백업 도메인의 관계는 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에서 다룹니다.
 
 > 그림 자리: 기기 경로와 백업 도메인(HomeDomain·MediaDomain)에 sms.db 와 첨부 폴더가 어떻게 나뉘어 들어가는지
 

@@ -41,7 +41,7 @@ iOS 15 이후 DB 의 표 구조가 바뀌었는지, DB 에 기록을 며칠 치 
 
 ### 로컬 백업에 보이는 것
 
-관찰한 로컬 백업에는 `SysContainerDomain-com.apple.remotemanagementd` 도메인(항목 6개)이 있었지만, 관찰 메모에는 도메인 이름과 항목 수만 적혀 있고 안의 파일 이름은 없습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 그래서 백업에 `RMAdminStore-Local.sqlite` 가 들어가는지는 이 관찰로 판단할 수 없습니다. 이름에 화면 사용 시간이 들어간 도메인은 다음과 같았습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 로컬 백업에는 `SysContainerDomain-com.apple.remotemanagementd` 도메인(항목 6개)이 있었지만, 관찰 메모에는 도메인 이름과 항목 수만 적혀 있고 안의 파일 이름은 없습니다 (확인 범위: iOS 27.0). 그래서 백업에 `RMAdminStore-Local.sqlite` 가 들어가는지는 이 관찰로 판단할 수 없습니다. 이름에 화면 사용 시간이 들어간 도메인은 다음과 같았습니다 (확인 범위: iOS 27.0).
 
 ```
 AppDomain-com.apple.ScreenTimeUnlock
@@ -53,7 +53,7 @@ AppDomainPlugin-com.apple.DiagnosticExtensions.ScreenTime
 AppDomainPlugin-com.apple.FamilyControls.ActivityPickerExtension
 ```
 
-설정 plist 는 값을 읽지 않고 키 이름과 형만 보았습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
+설정 plist 는 값을 읽지 않고 키 이름과 형만 보았습니다 (확인 범위: iOS 27.0).
 
 | 도메인 :: 경로 | 관찰한 키 |
 |---|---|
@@ -81,7 +81,7 @@ AppDomainPlugin-com.apple.FamilyControls.ActivityPickerExtension
 
 Magnet 글이 든 시각은 집계 구간이 시작한 시각이고, 사용 시간은 초 단위입니다[1]. DB 안 시각 칸이 Mac 절대 시각(2001-01-01 기준 초)인지는 확인한 자료가 없어서, 값을 풀 때는 같은 날 다른 기록과 맞춰 기준을 먼저 확인합니다. 설정 plist 의 `datetime` 형은 plist 날짜 형식이라 도구가 날짜로 풀어 줍니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
-`ScreenTimeAgent.plist` 에는 `LastTimeZoneName` (str) 키가 있어서 (확인 범위: iPhone 13 mini, iOS 27.0) 시간대와 관련된 값으로 보이지만 뜻은 확인하지 못했습니다. 일간 합계를 다른 기록과 맞출 때는 기기 시간대를 [시간대와 시각 설정](../system-account/time-zone.md) 에서 따로 확인하고, 하루를 UTC 로 끊었는지 현지 시각으로 끊었는지 단정하지 않습니다.
+`ScreenTimeAgent.plist` 에는 `LastTimeZoneName` (str) 키가 있어서 (확인 범위: iOS 27.0) 시간대와 관련된 값으로 보이지만 뜻은 확인하지 못했습니다. 일간 합계를 다른 기록과 맞출 때는 기기 시간대를 [시간대와 시각 설정](../system-account/time-zone.md) 에서 따로 확인하고, 하루를 UTC 로 끊었는지 현지 시각으로 끊었는지 단정하지 않습니다.
 
 ## 함정과 한계
 
@@ -93,7 +93,7 @@ Magnet 글이 든 시각은 집계 구간이 시작한 시각이고, 사용 시�
 
 **iOS 17 이후에는 바이옴 쪽도 봅니다.** 같은 종류의 기록이 바이옴 `ScreenTime.AppUsage` 스트림에도 있고 보관 기간이 28일이라[3], DB 와 스트림의 합계가 다르면 기간과 집계 방식이 다른지부터 확인합니다.
 
-**지우기와 조작.** 사용자는 화면 사용 시간을 끄거나 켤 수 있고, `FamilyControlsAgent.plist` 에는 이름에 삭제가 들어간 `DidDeleteActivityRecords` 키도 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 이 키가 사용 기록을 지운 사건을 뜻하는지는 확인하지 못해서 삭제의 근거로 쓰지 않고, 기록이 비어 있는 구간은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 다른 기록과 함께 봅니다.
+**지우기와 조작.** 사용자는 화면 사용 시간을 끄거나 켤 수 있고, `FamilyControlsAgent.plist` 에는 이름에 삭제가 들어간 `DidDeleteActivityRecords` 키도 있습니다 (확인 범위: iOS 27.0). 이 키가 사용 기록을 지운 사건을 뜻하는지는 확인하지 못해서 삭제의 근거로 쓰지 않고, 기록이 비어 있는 구간은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 다른 기록과 함께 봅니다.
 
 ## 직접 분석해 보기
 

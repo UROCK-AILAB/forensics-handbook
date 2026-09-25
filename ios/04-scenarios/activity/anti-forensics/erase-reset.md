@@ -37,9 +37,9 @@ Apple 문서는 "읽을 수 없다" 까지만 말하고, 이 페이지도 초기
 | 4 | containermanagerd 로그 | `/private/var/root/Library/Logs/MobileContainerManager/containermanagerd.log.0`, `.log.1` … | 숫자가 클수록 오래된 파일이고, 초기화 뒤 첫 부팅 기록에는 OS 빌드 정보가 빠져 있습니다 [1] | — |
 | 5 | logd 로그 | `/private/var/db/diagnostics/logd.0.log` | 시간대 변경과 종료가 남아서, containermanagerd 로그 시각을 UTC 로 바꾸는 데 씁니다 [1] | [통합 로그에서 찾을 것](../../../02-artifacts/logs/unified-log-events.md) |
 
-관찰한 백업에는 `com.apple.purplebuddy.plist` 가 HomeDomain `Library/Preferences/` 에 있었고, 키로 `SetupState`(문자열), `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `GuessedCountry`(list), `SetupLastExit`(날짜), `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion`, `CKStartupTime` 이 보였습니다 (확인 범위: iPhone 13 mini, iOS 27.0). [1] 은 `GuessedCountry` 를 시각 근거로 쓰지만, 관찰한 백업에서 이 키는 list 형식이었고 list 안 어디에 시각이 들어 있는지는 확인하지 못했습니다.
+관찰한 백업에는 `com.apple.purplebuddy.plist` 가 HomeDomain `Library/Preferences/` 에 있었고, 키로 `SetupState`(문자열), `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `GuessedCountry`(list), `SetupLastExit`(날짜), `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion`, `CKStartupTime` 이 보였습니다 (확인 범위: iOS 27.0). [1] 은 `GuessedCountry` 를 시각 근거로 쓰지만, 관찰한 백업에서 이 키는 list 형식이었고 list 안 어디에 시각이 들어 있는지는 확인하지 못했습니다.
 
-같은 백업에는 이름으로 보아 복원·이전과 관련될 만한 값이 더 있습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 아래 값들은 모두 뜻을 확인하지 못했고, 초기화 판단에 쓰이는지도 모릅니다. 검체에서 다른 근거와 맞아떨어질 때만 보조로 씁니다.
+같은 백업에는 이름으로 보아 복원·이전과 관련될 만한 값이 더 있습니다 (확인 범위: iOS 27.0). 아래 값들은 모두 뜻을 확인하지 못했고, 초기화 판단에 쓰이는지도 모릅니다. 검체에서 다른 근거와 맞아떨어질 때만 보조로 씁니다.
 
 | 파일(백업 HomeDomain) | 키·표 이름 |
 |---|---|
@@ -49,7 +49,7 @@ Apple 문서는 "읽을 수 없다" 까지만 말하고, 이 페이지도 초기
 | `Library/Preferences/com.apple.springboard.datamigrator.plist` | `lastBuildVersion` |
 | CameraRollDomain `Media/PhotoData/Photos.sqlite` | `ZMIGRATIONHISTORY` 표(`ZMIGRATIONDATE`, `ZINITIALSYNCDATE`, `ZOSVERSION`, `ZMIGRATIONTYPE`, `ZFORCEREBUILDREASON` 등) |
 
-관찰한 백업에 `Library/AddressBook/AddressBook.sqlitedb` 는 있었지만 `CallHistory.storedata` 는 보이지 않았습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 백업 안 파일의 생성 시각을 무엇으로 읽는지는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 을 봅니다.
+관찰한 백업에 `Library/AddressBook/AddressBook.sqlitedb` 는 있었지만 `CallHistory.storedata` 는 보이지 않았습니다 (확인 범위: iOS 27.0). 백업 안 파일의 생성 시각을 무엇으로 읽는지는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 을 봅니다.
 
 ## 분석 흐름
 

@@ -26,7 +26,7 @@ iOS 16 에서 KnowledgeC.db 의 일부 핵심 기록이 바이옴으로 옮겨�
 | SEGB 파일 | 각 스트림 폴더 안 | v1 은 iOS 16 까지, v2 는 iOS 17 부터[2][3][6] | 기록마다 시각과 상태(Written·Deleted), protobuf 페이로드[1][3][6] |
 | 동기화 DB | `/private/var/mobile/Library/Biome/sync/sync.db`[1] | iOS 16 조사 | 동기화한 기기와 마지막 동기화 시각[1] |
 | 앱 사용 스트림 | `/private/var/db/biome/streams/restricted/_DKEvent.App.InFocus`(iOS 16)[1], iLEAPP 는 `App.InFocus`[5] | iOS 16 이후(iOS 15 까지는 KnowledgeC.db) | 어느 앱이 언제 화면 앞에 나오고 들어갔는지, 번들 ID, 전환 이유[1][3][5] |
-| 바이옴 관련 설정 | 백업 HomeDomain `Library/Preferences/` 의 `com.apple.biomed.plist`, `com.apple.biomesyncd.plist` 등(확인 범위: iPhone 13 mini, iOS 27.0) | — | 이름에 바이옴이 들어간 설정 키. 뜻은 확인하지 못했습니다 |
+| 바이옴 관련 설정 | 백업 HomeDomain `Library/Preferences/` 의 `com.apple.biomed.plist`, `com.apple.biomesyncd.plist` 등(확인 범위: iOS 27.0) | — | 이름에 바이옴이 들어간 설정 키. 뜻은 확인하지 못했습니다 |
 
 > 그림 자리: 두 바이옴 폴더 아래 스트림 폴더와 `local`·`remote`·`tombstone`, `sync.db` 가 어떻게 놓이는지
 

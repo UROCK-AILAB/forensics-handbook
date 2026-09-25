@@ -60,9 +60,9 @@ Class A 는 등급 키를 버린 뒤 사용자가 암호나 생체 인증으로 
 
 ## 읽는 법 — 로컬 백업에서
 
-로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고, 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file`(BLOB) 입니다(확인 범위: iPhone 13 mini, iOS 27.0). iMazing 의 설명으로는 `Manifest.db` 에 도메인·경로·flags·크기·해시 같은 파일 메타데이터와 함께 암호화·보호 속성이 들어 있습니다[3]. 관찰한 백업에서는 `file` 칸 안쪽의 키 이름까지 읽지 않았고, 이 페이지에서도 그 키 이름은 다루지 않습니다. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에서 봅니다.
+로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고, 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file`(BLOB) 입니다(확인 범위: iOS 27.0). iMazing 의 설명으로는 `Manifest.db` 에 도메인·경로·flags·크기·해시 같은 파일 메타데이터와 함께 암호화·보호 속성이 들어 있습니다[3]. 관찰한 백업에서는 `file` 칸 안쪽의 키 이름까지 읽지 않았고, 이 페이지에서도 그 키 이름은 다루지 않습니다. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에서 봅니다.
 
-관찰한 백업의 설정 plist 가운데 이름에 파일 보호가 들어간 키가 몇 개 있습니다(확인 범위: iPhone 13 mini, iOS 27.0). 각 키의 뜻을 설명한 문서는 확인하지 못했으니, 이름만 보고 기기의 등급 설정을 판단하지 않습니다.
+관찰한 백업의 설정 plist 가운데 이름에 파일 보호가 들어간 키가 몇 개 있습니다(확인 범위: iOS 27.0). 각 키의 뜻을 설명한 문서는 확인하지 못했으니, 이름만 보고 기기의 등급 설정을 판단하지 않습니다.
 
 | 도메인 | 파일 | 키(형식) |
 |---|---|---|

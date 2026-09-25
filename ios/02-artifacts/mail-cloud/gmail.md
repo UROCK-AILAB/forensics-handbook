@@ -37,7 +37,7 @@ iLEAPP 가 찾는 경로는 아래와 같습니다 [1].
 | 앱 번들 ID·백업 도메인 이름 | 확인하지 못함 | 관찰 메모가 다른 회사 앱 이름을 가림 |
 | 로컬 백업에 들어가는 파일 | 확인하지 못함 | — |
 
-지메일 앱의 번들 ID 는 `com.google.Gmail` 로 알려져 있지만 이번 자료로 확인하지 못했고, 관찰한 백업에서도 다른 회사 앱 도메인 이름은 가려져 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0). 검체에서는 설치 앱 목록에서 번들 ID 를 먼저 확인하고, 그 번들 ID 가 들어간 도메인을 찾습니다. 방법은 [설치된 앱](../app-usage/installed-apps.md) 과 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에 있습니다.
+지메일 앱의 번들 ID 는 `com.google.Gmail` 로 알려져 있지만 이번 자료로 확인하지 못했고, 관찰한 백업에서도 다른 회사 앱 도메인 이름은 가려져 있었습니다(확인 범위: iOS 27.0). 검체에서는 설치 앱 목록에서 번들 ID 를 먼저 확인하고, 그 번들 ID 가 들어간 도메인을 찾습니다. 방법은 [설치된 앱](../app-usage/installed-apps.md) 과 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에 있습니다.
 
 ## 구조
 
@@ -65,7 +65,7 @@ iLEAPP 가 찾는 경로는 아래와 같습니다 [1].
 
 ### 기본 메일 앱 쪽 흔적
 
-관찰한 백업의 `com.apple.accountsd.plist` 에 있는 `AuthenticationPluginCache` 에는 `com.apple.account.Google` 이 들어 있었지만, 인증 플러그인 목록이라서 구글 계정을 실제로 추가했다는 뜻인지는 확인하지 못했습니다(확인 범위: iPhone 13 mini, iOS 27.0). 같은 백업의 `group.com.apple.mail.plist` 의 `UserNotificationMailboxCutoffs` 안에는 아래처럼 이름에 `Gmail` 이 들어간 IMAP 메일함 URL 이 있었습니다(확인 범위: iPhone 13 mini, iOS 27.0).
+관찰한 백업의 `com.apple.accountsd.plist` 에 있는 `AuthenticationPluginCache` 에는 `com.apple.account.Google` 이 들어 있었지만, 인증 플러그인 목록이라서 구글 계정을 실제로 추가했다는 뜻인지는 확인하지 못했습니다(확인 범위: iOS 27.0). 같은 백업의 `group.com.apple.mail.plist` 의 `UserNotificationMailboxCutoffs` 안에는 아래처럼 이름에 `Gmail` 이 들어간 IMAP 메일함 URL 이 있었습니다(확인 범위: iOS 27.0).
 
 ```
 AppDomainGroup-group.com.apple.mail :: Library/Preferences/group.com.apple.mail.plist

@@ -50,7 +50,7 @@ Data 볼륨은 암호화됩니다 [2]. 데이터 볼륨에 파일을 만들 때�
 
 ## 읽는 법 — 로컬 백업에서 보이는 범위
 
-로컬 백업은 볼륨을 통째로 담지 않고, 기기 경로를 "도메인 + 상대 경로" 로 바꿔 파일 단위로 담습니다 [7]. 백업 안의 파일 이름은 `sha1(domain + '-' + relativePath)` 이고 [7], 도메인과 상대 경로의 목록은 `Manifest.db` 의 `Files` 표에 있습니다(칸: `fileID`, `domain`, `relativePath`, `flags`, `file`) (확인 범위: iPhone 13 mini, iOS 27.0). 백업 형식 자체는 [로컬 백업](../../backups/local-backup/index.md) 에서 다룹니다.
+로컬 백업은 볼륨을 통째로 담지 않고, 기기 경로를 "도메인 + 상대 경로" 로 바꿔 파일 단위로 담습니다 [7]. 백업 안의 파일 이름은 `sha1(domain + '-' + relativePath)` 이고 [7], 도메인과 상대 경로의 목록은 `Manifest.db` 의 `Files` 표에 있습니다(칸: `fileID`, `domain`, `relativePath`, `flags`, `file`) (확인 범위: iOS 27.0). 백업 형식 자체는 [로컬 백업](../../backups/local-backup/index.md) 에서 다룹니다.
 
 도메인은 Data 쪽 경로에 대응합니다 [7]. 아래 표의 "관찰 항목 수" 는 관찰한 백업 한 개의 `Files` 행 수라서 기기와 사용 상태에 따라 달라집니다.
 
@@ -66,11 +66,11 @@ Data 볼륨은 암호화됩니다 [2]. 데이터 볼륨에 파일을 만들 때�
 | ManagedPreferencesDomain | `/var/Managed Preferences` | 4 |
 | KeychainDomain | `/var/Keychains` | 2 |
 
-관찰 항목 수의 확인 범위: iPhone 13 mini, iOS 27.0.
+관찰 항목 수의 확인 범위: iOS 27.0.
 
-관찰한 백업에는 이 밖에 HealthDomain, InstallDomain, KeyboardDomain, MobileDeviceDomain, ProtectedDomain, TonesDomain 도 하나씩 있었지만, 이 도메인들의 기기 경로는 이번에 확인한 자료에 없습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 앱별 도메인(`AppDomain-`, `AppDomainGroup-` 등)은 [앱 컨테이너](app-containers.md) 에서 다룹니다.
+관찰한 백업에는 이 밖에 HealthDomain, InstallDomain, KeyboardDomain, MobileDeviceDomain, ProtectedDomain, TonesDomain 도 하나씩 있었지만, 이 도메인들의 기기 경로는 이번에 확인한 자료에 없습니다 (확인 범위: iOS 27.0). 앱별 도메인(`AppDomain-`, `AppDomainGroup-` 등)은 [앱 컨테이너](app-containers.md) 에서 다룹니다.
 
-`/System`, `/usr` 처럼 시스템 볼륨에 있는 내용에 대응하는 도메인은 관찰한 백업에 없었습니다 (확인 범위: iPhone 13 mini, iOS 27.0). 그 이유를 설명한 공식 자료는 확인하지 못했습니다.
+`/System`, `/usr` 처럼 시스템 볼륨에 있는 내용에 대응하는 도메인은 관찰한 백업에 없었습니다 (확인 범위: iOS 27.0). 그 이유를 설명한 공식 자료는 확인하지 못했습니다.
 
 ## 포렌식에서 중요한 점
 
@@ -81,8 +81,8 @@ Data 볼륨의 파일은 만들 때마다 새로 생긴 파일별 키로 암호�
 ## 함정
 
 - **볼륨 목록은 관찰 기록입니다.** 위 볼륨 표는 한 필자가 iOS 18.5 기기 한 대씩에서 본 목록이고 [2], Apple 이 iOS 버전별 볼륨 목록을 표로 공개한 자료는 이번에 확인하지 못했습니다. 다른 버전·기종에서는 볼륨이 더하거나 빠질 수 있습니다.
-- **로컬 백업으로 볼륨 구성을 확인할 수는 없습니다.** 백업에는 도메인과 상대 경로만 있고 볼륨·스냅숏 정보가 없습니다 (확인 범위: iPhone 13 mini, iOS 27.0).
-- **fskit 확장 도메인을 볼륨 정보로 읽지 않습니다.** 관찰한 백업에 `AppDomainPlugin-com.apple.fskit.apfs`, `AppDomainPlugin-com.apple.fskit.exfat`, `AppDomainPlugin-com.apple.fskit.hfs`, `AppDomainPlugin-com.apple.fskit.msdos` 가 각각 항목 4개씩 있었지만 (확인 범위: iPhone 13 mini, iOS 27.0) 이름만 확인했고 내용과 역할은 확인하지 못했습니다.
+- **로컬 백업으로 볼륨 구성을 확인할 수는 없습니다.** 백업에는 도메인과 상대 경로만 있고 볼륨·스냅숏 정보가 없습니다 (확인 범위: iOS 27.0).
+- **fskit 확장 도메인을 볼륨 정보로 읽지 않습니다.** 관찰한 백업에 `AppDomainPlugin-com.apple.fskit.apfs`, `AppDomainPlugin-com.apple.fskit.exfat`, `AppDomainPlugin-com.apple.fskit.hfs`, `AppDomainPlugin-com.apple.fskit.msdos` 가 각각 항목 4개씩 있었지만 (확인 범위: iOS 27.0) 이름만 확인했고 내용과 역할은 확인하지 못했습니다.
 - **마운트 위치는 따로 확인해야 합니다.** Data 볼륨과 Preboot 가 어느 경로에 마운트되는지는 이번에 확인한 자료에 없습니다. 이 쪽의 경로는 백업 도메인 대응표 [7] 의 경로만 적었습니다.
 
 ## 참고 문헌

@@ -14,7 +14,7 @@ has_toc: false
 
 정보 유출 사건에서는 "보냈다" 는 결론보다 어느 경로로, 언제, 얼마만큼 나갔는지가 중요합니다. 경로마다 흔적이 남는 곳이 달라서 메시지 DB 만 보고 끝내면 클라우드 업로드나 에어드롭 전송을 놓치고, 에어드롭 기록을 찾을 통합 로그는 sysdiagnose 로 따로 얻어 `log show` 로 봐야 합니다 [2]. 수집 방법도 결과를 바꿉니다. Wi-Fi 와 셀룰러 사용량을 함께 담는 `netusage.sqlite` 는 파일 시스템 추출에서만 얻을 수 있고 [1], 암호화한 로컬 백업이어야 저장 비밀번호·Wi-Fi 설정·웹사이트 방문 기록·통화 기록 같은 항목이 들어갑니다 [5]. 수집 방법의 차이는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
-경로 하나를 고르기 전에 앱별 데이터 사용량 DB 인 `DataUsage.sqlite` 로 어느 앱이 셀룰러로 많이 보냈는지를 먼저 보면 범위를 좁힐 수 있습니다 [1]. 관찰한 백업에서도 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 로 보였지만 (확인 범위: iPhone 13 mini, iOS 27.0), 이 DB 는 Wi-Fi 사용량을 기록하지 않습니다 [1]. 표 구조와 시각 해석은 [앱별 데이터 사용량 (DataUsage.sqlite)](../../../02-artifacts/network/data-usage.md) 에서 다룹니다.
+경로 하나를 고르기 전에 앱별 데이터 사용량 DB 인 `DataUsage.sqlite` 로 어느 앱이 셀룰러로 많이 보냈는지를 먼저 보면 범위를 좁힐 수 있습니다 [1]. 관찰한 백업에서도 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 로 보였지만 (확인 범위: iOS 27.0), 이 DB 는 Wi-Fi 사용량을 기록하지 않습니다 [1]. 표 구조와 시각 해석은 [앱별 데이터 사용량 (DataUsage.sqlite)](../../../02-artifacts/network/data-usage.md) 에서 다룹니다.
 
 이 묶음의 페이지는 모두 기록이 말하는 만큼만 씁니다. 송신량이나 업로드 기록은 그 시간대에 그 앱이 무엇을 보냈다는 기록일 뿐이고, 어떤 파일을 누구에게 넘겼는지나 넘긴 의도는 다른 흔적과 함께 판단합니다.
 
@@ -22,9 +22,9 @@ has_toc: false
 
 | 경로 | 주로 볼 곳 | 버전 조건 | 알려 주는 것 |
 |---|---|---|---|
-| 메신저 | `sms.db` 의 `attachment`·`message` 표, 다른 회사 메신저는 앱 DB 와 `DataUsage.sqlite` | `sms.db` 칸 이름은 관찰로 확인 (확인 범위: iPhone 13 mini, iOS 27.0) | 보낸 첨부의 이름·형식·크기, 앱 DB 를 못 읽을 때는 앱별 셀룰러 송신량과 시각 [1] |
-| 클라우드 | iCloud Drive 의 `client.db`·`server.db`, `Photos.sqlite` 의 업로드·공유 표, iCloud 백업 설정 plist | `client.db` 해석 자료는 iOS 13.7 에서 시험했고 [3], 표와 칸 이름은 관찰로 확인 (확인 범위: iPhone 13 mini, iOS 27.0) | 파일 앱으로 iCloud Drive 에 올린 흔적 [3], 공유 참여자, iCloud 백업을 켰는지와 마지막 백업 시각 값 |
-| 메일 | 기본 메일 앱의 `Envelope Index`·`Protected Index` 와 `.emlx` 파일, 계정·메일함 설정 plist | DB 해석 자료는 iOS 12·13 을 다뤘고 [4], 관찰한 백업에는 이 DB 가 보이지 않음 (확인 범위: iPhone 13 mini, iOS 27.0) | 보낸편지함에 있는 메일의 겉봉 정보와 받는 사람, 본문 앞부분 [4] |
+| 메신저 | `sms.db` 의 `attachment`·`message` 표, 다른 회사 메신저는 앱 DB 와 `DataUsage.sqlite` | `sms.db` 칸 이름은 관찰로 확인 (확인 범위: iOS 27.0) | 보낸 첨부의 이름·형식·크기, 앱 DB 를 못 읽을 때는 앱별 셀룰러 송신량과 시각 [1] |
+| 클라우드 | iCloud Drive 의 `client.db`·`server.db`, `Photos.sqlite` 의 업로드·공유 표, iCloud 백업 설정 plist | `client.db` 해석 자료는 iOS 13.7 에서 시험했고 [3], 표와 칸 이름은 관찰로 확인 (확인 범위: iOS 27.0) | 파일 앱으로 iCloud Drive 에 올린 흔적 [3], 공유 참여자, iCloud 백업을 켰는지와 마지막 백업 시각 값 |
+| 메일 | 기본 메일 앱의 `Envelope Index`·`Protected Index` 와 `.emlx` 파일, 계정·메일함 설정 plist | DB 해석 자료는 iOS 12·13 을 다뤘고 [4], 관찰한 백업에는 이 DB 가 보이지 않음 (확인 범위: iOS 27.0) | 보낸편지함에 있는 메일의 겉봉 정보와 받는 사람, 본문 앞부분 [4] |
 | 에어드롭 | sysdiagnose 의 통합 로그(AirDrop 범주), `com.apple.sharingd.plist` | 로그 해석 자료는 iOS 15.3.1 에서 시험 [2] | 받는 쪽 기기에서 보낸 사람 전화번호 후보 [2], 보낸 쪽에 남는 기록은 확인하지 못함 |
 | PC 동기화 | "이 컴퓨터를 신뢰하겠습니까" 알림과 신뢰 기록, 백업 폴더의 `Info.plist`·`Manifest.plist`, `com.apple.MobileBackup.plist` | iOS 16 이상은 백업할 때도 신뢰 알림이 뜸 [6] | 신뢰한 컴퓨터가 콘텐츠에 접근할 수 있었는지 [6], 백업을 만든 기기와 시각 |
 
