@@ -1,0 +1,4 @@
+<meta name="publisher" content="주식회사 유락">
+<link rel="author" href="mailto:jimicro@gmail.com">
+{% if page.last_modified_date %}<meta property="article:modified_time" content="{{ page.last_modified_date }}">{% endif %}
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":{{ page.title | default: site.title | jsonify }},"inLanguage":"ko","author":{"@type":"Person","name":"박지민 (Jimin Park)","email":"mailto:jimicro@gmail.com"},"publisher":{"@type":"Organization","name":"주식회사 유락","url":"https://urock.kr/"}{% if page.last_modified_date %},"dateModified":"{{ page.last_modified_date }}"{% endif %}}</script>

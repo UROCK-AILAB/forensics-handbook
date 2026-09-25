@@ -25,7 +25,7 @@ jobs:
         run: |
           git ls-files '*.md' | while IFS= read -r f; do
             d=$(git log -1 --format=%cs -- "$f")
-            if [ -n "$d" ] && [ "$(head -1 "$f")" = "---" ]; then sed -i "1a last_modified_date: $d" "$f"; fi
+            if [ -n "$d" ] && [ "$(head -1 "$f")" = "---" ]; then sed -i "1a last_modified_date: $d\nlast_modified_at: $d" "$f"; fi
           done
       - uses: ruby/setup-ruby@v1
         with:
