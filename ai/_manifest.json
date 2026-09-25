@@ -1,0 +1,1046 @@
+[
+ {
+  "title": "AI 서비스의 데이터는 어디에 있나 (서버·기기·동기화)",
+  "path": "01-foundations/storage-model/where-data-lives.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Electron·웹뷰 앱의 저장 구조 (Electron·WebView2·WKWebView)",
+  "path": "01-foundations/storage-model/electron-webview.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "계정 데이터 내보내기 형식 (Data Export Formats)",
+  "path": "01-foundations/storage-model/data-export-formats.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "API 키와 토큰이 남는 곳 (API Keys·Tokens)",
+  "path": "01-foundations/storage-model/api-keys-tokens.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "대화 기록 보관 설정과 삭제 (Retention·Deletion)",
+  "path": "01-foundations/storage-model/retention-deletion.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "프롬프트·첨부·생성물 구분하기 (Prompt·Attachment·Output)",
+  "path": "01-foundations/concepts/prompt-attachment-output.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "기본 개념",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI 생성물의 출처 정보 (C2PA·Content Credentials·워터마크)",
+  "path": "01-foundations/concepts/c2pa-provenance.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "기본 개념",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "ChatGPT (ChatGPT)",
+  "path": "02-artifacts/chat-services/chatgpt/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "웹 브라우저 (Web)",
+    "path": "02-artifacts/chat-services/chatgpt/web.md"
+   },
+   {
+    "title": "Windows 앱 (Windows)",
+    "path": "02-artifacts/chat-services/chatgpt/windows.md"
+   },
+   {
+    "title": "macOS 앱 (macOS)",
+    "path": "02-artifacts/chat-services/chatgpt/macos.md"
+   },
+   {
+    "title": "Android 앱 (Android)",
+    "path": "02-artifacts/chat-services/chatgpt/android.md"
+   },
+   {
+    "title": "iOS 앱 (iOS)",
+    "path": "02-artifacts/chat-services/chatgpt/ios.md"
+   },
+   {
+    "title": "계정 데이터 내보내기 (Data Export)",
+    "path": "02-artifacts/chat-services/chatgpt/export.md"
+   }
+  ]
+ },
+ {
+  "title": "웹 브라우저 (Web)",
+  "path": "02-artifacts/chat-services/chatgpt/web.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "ChatGPT (ChatGPT)",
+   "path": "02-artifacts/chat-services/chatgpt/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Windows 앱 (Windows)",
+  "path": "02-artifacts/chat-services/chatgpt/windows.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "ChatGPT (ChatGPT)",
+   "path": "02-artifacts/chat-services/chatgpt/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "macOS 앱 (macOS)",
+  "path": "02-artifacts/chat-services/chatgpt/macos.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "ChatGPT (ChatGPT)",
+   "path": "02-artifacts/chat-services/chatgpt/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Android 앱 (Android)",
+  "path": "02-artifacts/chat-services/chatgpt/android.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "ChatGPT (ChatGPT)",
+   "path": "02-artifacts/chat-services/chatgpt/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "iOS 앱 (iOS)",
+  "path": "02-artifacts/chat-services/chatgpt/ios.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "ChatGPT (ChatGPT)",
+   "path": "02-artifacts/chat-services/chatgpt/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "계정 데이터 내보내기 (Data Export)",
+  "path": "02-artifacts/chat-services/chatgpt/export.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "ChatGPT (ChatGPT)",
+   "path": "02-artifacts/chat-services/chatgpt/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Claude (Claude)",
+  "path": "02-artifacts/chat-services/claude/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "웹 브라우저 (Web)",
+    "path": "02-artifacts/chat-services/claude/web.md"
+   },
+   {
+    "title": "Windows 앱 (Windows)",
+    "path": "02-artifacts/chat-services/claude/windows.md"
+   },
+   {
+    "title": "macOS 앱 (macOS)",
+    "path": "02-artifacts/chat-services/claude/macos.md"
+   },
+   {
+    "title": "Android 앱 (Android)",
+    "path": "02-artifacts/chat-services/claude/android.md"
+   },
+   {
+    "title": "iOS 앱 (iOS)",
+    "path": "02-artifacts/chat-services/claude/ios.md"
+   },
+   {
+    "title": "계정 데이터 내보내기 (Data Export)",
+    "path": "02-artifacts/chat-services/claude/export.md"
+   }
+  ]
+ },
+ {
+  "title": "웹 브라우저 (Web)",
+  "path": "02-artifacts/chat-services/claude/web.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Claude (Claude)",
+   "path": "02-artifacts/chat-services/claude/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Windows 앱 (Windows)",
+  "path": "02-artifacts/chat-services/claude/windows.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Claude (Claude)",
+   "path": "02-artifacts/chat-services/claude/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "macOS 앱 (macOS)",
+  "path": "02-artifacts/chat-services/claude/macos.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Claude (Claude)",
+   "path": "02-artifacts/chat-services/claude/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Android 앱 (Android)",
+  "path": "02-artifacts/chat-services/claude/android.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Claude (Claude)",
+   "path": "02-artifacts/chat-services/claude/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "iOS 앱 (iOS)",
+  "path": "02-artifacts/chat-services/claude/ios.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Claude (Claude)",
+   "path": "02-artifacts/chat-services/claude/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "계정 데이터 내보내기 (Data Export)",
+  "path": "02-artifacts/chat-services/claude/export.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Claude (Claude)",
+   "path": "02-artifacts/chat-services/claude/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Microsoft Copilot (Copilot)",
+  "path": "02-artifacts/chat-services/copilot/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "웹 브라우저 (Web)",
+    "path": "02-artifacts/chat-services/copilot/web.md"
+   },
+   {
+    "title": "Windows 앱 (Windows)",
+    "path": "02-artifacts/chat-services/copilot/windows.md"
+   },
+   {
+    "title": "macOS 앱 (macOS)",
+    "path": "02-artifacts/chat-services/copilot/macos.md"
+   },
+   {
+    "title": "Android 앱 (Android)",
+    "path": "02-artifacts/chat-services/copilot/android.md"
+   },
+   {
+    "title": "iOS 앱 (iOS)",
+    "path": "02-artifacts/chat-services/copilot/ios.md"
+   },
+   {
+    "title": "계정 데이터 내보내기 (Data Export)",
+    "path": "02-artifacts/chat-services/copilot/export.md"
+   }
+  ]
+ },
+ {
+  "title": "웹 브라우저 (Web)",
+  "path": "02-artifacts/chat-services/copilot/web.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Microsoft Copilot (Copilot)",
+   "path": "02-artifacts/chat-services/copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Windows 앱 (Windows)",
+  "path": "02-artifacts/chat-services/copilot/windows.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Microsoft Copilot (Copilot)",
+   "path": "02-artifacts/chat-services/copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "macOS 앱 (macOS)",
+  "path": "02-artifacts/chat-services/copilot/macos.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Microsoft Copilot (Copilot)",
+   "path": "02-artifacts/chat-services/copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Android 앱 (Android)",
+  "path": "02-artifacts/chat-services/copilot/android.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Microsoft Copilot (Copilot)",
+   "path": "02-artifacts/chat-services/copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "iOS 앱 (iOS)",
+  "path": "02-artifacts/chat-services/copilot/ios.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Microsoft Copilot (Copilot)",
+   "path": "02-artifacts/chat-services/copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "계정 데이터 내보내기 (Data Export)",
+  "path": "02-artifacts/chat-services/copilot/export.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Microsoft Copilot (Copilot)",
+   "path": "02-artifacts/chat-services/copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Gemini (Gemini)",
+  "path": "02-artifacts/chat-services/gemini/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "웹 브라우저 (Web)",
+    "path": "02-artifacts/chat-services/gemini/web.md"
+   },
+   {
+    "title": "Android 앱 (Android)",
+    "path": "02-artifacts/chat-services/gemini/android.md"
+   },
+   {
+    "title": "iOS 앱 (iOS)",
+    "path": "02-artifacts/chat-services/gemini/ios.md"
+   },
+   {
+    "title": "Chrome 통합 (Gemini in Chrome)",
+    "path": "02-artifacts/chat-services/gemini/chrome.md"
+   },
+   {
+    "title": "계정 데이터 내보내기 (Data Export)",
+    "path": "02-artifacts/chat-services/gemini/export.md"
+   }
+  ]
+ },
+ {
+  "title": "웹 브라우저 (Web)",
+  "path": "02-artifacts/chat-services/gemini/web.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Gemini (Gemini)",
+   "path": "02-artifacts/chat-services/gemini/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Android 앱 (Android)",
+  "path": "02-artifacts/chat-services/gemini/android.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Gemini (Gemini)",
+   "path": "02-artifacts/chat-services/gemini/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "iOS 앱 (iOS)",
+  "path": "02-artifacts/chat-services/gemini/ios.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Gemini (Gemini)",
+   "path": "02-artifacts/chat-services/gemini/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Chrome 통합 (Gemini in Chrome)",
+  "path": "02-artifacts/chat-services/gemini/chrome.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Gemini (Gemini)",
+   "path": "02-artifacts/chat-services/gemini/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "계정 데이터 내보내기 (Data Export)",
+  "path": "02-artifacts/chat-services/gemini/export.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": {
+   "title": "Gemini (Gemini)",
+   "path": "02-artifacts/chat-services/gemini/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Perplexity (Perplexity)",
+  "path": "02-artifacts/chat-services/perplexity.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "뤼튼 (Wrtn)",
+  "path": "02-artifacts/chat-services/wrtn.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클로바X (CLOVA X)",
+  "path": "02-artifacts/chat-services/clova-x.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "에이닷 (A.)",
+  "path": "02-artifacts/chat-services/adot.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "그 밖의 서비스 (DeepSeek·Grok 등)",
+  "path": "02-artifacts/chat-services/other-services.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "대화형 AI 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "ChatGPT 에이전트 모드 (ChatGPT Agent)",
+  "path": "02-artifacts/agentic-services/chatgpt-agent.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "에이전트형 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "브라우저를 조작하는 AI (Browser Agents)",
+  "path": "02-artifacts/agentic-services/browser-agents.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "에이전트형 서비스",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Midjourney와 이미지 생성 서비스 (Midjourney·Image Generation)",
+  "path": "02-artifacts/generative-media/image-generation.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "생성·음성·회의록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "음성 대화 기능 (Voice Mode)",
+  "path": "02-artifacts/generative-media/voice-mode.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "생성·음성·회의록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI 회의록 앱 (클로바노트·Otter 등)",
+  "path": "02-artifacts/generative-media/meeting-notes.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "생성·음성·회의록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "파파고 (Papago)",
+  "path": "02-artifacts/translation/papago.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "번역 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "DeepL (DeepL)",
+  "path": "02-artifacts/translation/deepl.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "번역 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Recall (Recall)",
+  "path": "02-artifacts/windows-ai/recall.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Windows의 AI 기능",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클릭 투 두 (Click to Do)",
+  "path": "02-artifacts/windows-ai/click-to-do.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Windows의 AI 기능",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Microsoft 365 Copilot (M365 Copilot)",
+  "path": "02-artifacts/office-integrations/m365-copilot.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무 도구 속 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Google Workspace의 Gemini (Workspace Gemini)",
+  "path": "02-artifacts/office-integrations/workspace-gemini.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무 도구 속 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "협업 도구의 AI 기능 (Notion AI·Slack AI 등)",
+  "path": "02-artifacts/office-integrations/workspace-ai-features.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무 도구 속 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "브라우저에 들어간 AI (Edge Copilot·Chrome Gemini 등)",
+  "path": "02-artifacts/office-integrations/browser-builtin-ai.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무 도구 속 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Claude Code (Claude Code)",
+  "path": "02-artifacts/dev-agents/claude-code/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "Windows (Windows)",
+    "path": "02-artifacts/dev-agents/claude-code/windows.md"
+   },
+   {
+    "title": "macOS (macOS)",
+    "path": "02-artifacts/dev-agents/claude-code/macos.md"
+   },
+   {
+    "title": "세션 기록 구조 (Transcripts)",
+    "path": "02-artifacts/dev-agents/claude-code/transcripts.md"
+   },
+   {
+    "title": "설정·권한·훅 (Settings·Permissions·Hooks)",
+    "path": "02-artifacts/dev-agents/claude-code/settings-permissions.md"
+   }
+  ]
+ },
+ {
+  "title": "Windows (Windows)",
+  "path": "02-artifacts/dev-agents/claude-code/windows.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": {
+   "title": "Claude Code (Claude Code)",
+   "path": "02-artifacts/dev-agents/claude-code/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "macOS (macOS)",
+  "path": "02-artifacts/dev-agents/claude-code/macos.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": {
+   "title": "Claude Code (Claude Code)",
+   "path": "02-artifacts/dev-agents/claude-code/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "세션 기록 구조 (Transcripts)",
+  "path": "02-artifacts/dev-agents/claude-code/transcripts.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": {
+   "title": "Claude Code (Claude Code)",
+   "path": "02-artifacts/dev-agents/claude-code/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "설정·권한·훅 (Settings·Permissions·Hooks)",
+  "path": "02-artifacts/dev-agents/claude-code/settings-permissions.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": {
+   "title": "Claude Code (Claude Code)",
+   "path": "02-artifacts/dev-agents/claude-code/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "GitHub Copilot (VS Code·JetBrains)",
+  "path": "02-artifacts/dev-agents/github-copilot/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "Windows (Windows)",
+    "path": "02-artifacts/dev-agents/github-copilot/windows.md"
+   },
+   {
+    "title": "macOS (macOS)",
+    "path": "02-artifacts/dev-agents/github-copilot/macos.md"
+   },
+   {
+    "title": "로그와 원격 측정 (Logs·Telemetry)",
+    "path": "02-artifacts/dev-agents/github-copilot/logs.md"
+   }
+  ]
+ },
+ {
+  "title": "Windows (Windows)",
+  "path": "02-artifacts/dev-agents/github-copilot/windows.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": {
+   "title": "GitHub Copilot (VS Code·JetBrains)",
+   "path": "02-artifacts/dev-agents/github-copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "macOS (macOS)",
+  "path": "02-artifacts/dev-agents/github-copilot/macos.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": {
+   "title": "GitHub Copilot (VS Code·JetBrains)",
+   "path": "02-artifacts/dev-agents/github-copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "로그와 원격 측정 (Logs·Telemetry)",
+  "path": "02-artifacts/dev-agents/github-copilot/logs.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": {
+   "title": "GitHub Copilot (VS Code·JetBrains)",
+   "path": "02-artifacts/dev-agents/github-copilot/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Cursor (Cursor)",
+  "path": "02-artifacts/dev-agents/cursor.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Codex CLI (Codex)",
+  "path": "02-artifacts/dev-agents/codex-cli.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Gemini CLI (Gemini CLI)",
+  "path": "02-artifacts/dev-agents/gemini-cli.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "MCP 서버와 도구 호출 기록 (MCP)",
+  "path": "02-artifacts/dev-agents/mcp.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "개발 도구·에이전트",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Ollama (Ollama)",
+  "path": "02-artifacts/local-ai/ollama.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "LM Studio (LM Studio)",
+  "path": "02-artifacts/local-ai/lm-studio.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로컬 이미지 생성 도구 (Stable Diffusion WebUI·ComfyUI)",
+  "path": "02-artifacts/local-ai/image-gen-local.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로컬 모델 파일 (GGUF·safetensors)",
+  "path": "02-artifacts/local-ai/model-files.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로컬 AI",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI 서비스 도메인과 네트워크 기록 (DNS·Proxy·SNI)",
+  "path": "02-artifacts/network-enterprise/network-traces.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·기업 기록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "ChatGPT 기업용 감사 기록 (Compliance API)",
+  "path": "02-artifacts/network-enterprise/chatgpt-enterprise.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·기업 기록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Claude 기업용 감사 로그 (Audit Logs)",
+  "path": "02-artifacts/network-enterprise/claude-enterprise.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·기업 기록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Microsoft Purview로 본 Copilot 기록 (Purview)",
+  "path": "02-artifacts/network-enterprise/purview-copilot.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·기업 기록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "보안 제품이 남기는 AI 사용 기록 (DLP·CASB)",
+  "path": "02-artifacts/network-enterprise/dlp-casb.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·기업 기록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "조사 절차 (Investigation Process)",
+  "path": "03-techniques/acquisition/investigation-process.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "서비스 회사에 대한 데이터 요청 (Legal Requests)",
+  "path": "03-techniques/acquisition/legal-requests.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "계정 데이터 내보내기로 수집 (Export Collection)",
+  "path": "03-techniques/acquisition/export-collection.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "기기에서 AI 흔적 모으기 (Endpoint Triage)",
+  "path": "03-techniques/acquisition/endpoint-triage.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI 사용 타임라인 (Timeline)",
+  "path": "03-techniques/analysis/timeline.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "대화 내용 되살리기 (캐시·스냅숏·알림)",
+  "path": "03-techniques/analysis/content-recovery.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI가 만든 글·이미지 판별의 한계 (Detection Limits)",
+  "path": "03-techniques/analysis/detection-limits.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "프롬프트 인젝션 사고 분석 (Prompt Injection)",
+  "path": "03-techniques/analysis/prompt-injection.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI 관련 포렌식 보고서 (Forensic Report)",
+  "path": "03-techniques/reporting/forensic-report.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "기밀 자료를 AI에 넣었나 (Confidential Data Input)",
+  "path": "04-scenarios/data-leak/confidential-input.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "회사가 허용하지 않은 AI를 썼나 (Shadow AI)",
+  "path": "04-scenarios/data-leak/shadow-ai.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI로 피싱·사기 문구를 만들었나 (Phishing)",
+  "path": "04-scenarios/misuse/phishing.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "악용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI로 악성 코드를 만들었나 (Malware Development)",
+  "path": "04-scenarios/misuse/malware-development.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "악용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "딥페이크·합성 이미지를 만들었나 (Deepfake)",
+  "path": "04-scenarios/misuse/deepfake.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "악용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AI 에이전트가 무엇을 실행했나 (Agent Actions)",
+  "path": "04-scenarios/agents/agent-actions.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "AI 에이전트",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "에이전트가 자격 증명을 건드렸나 (Agent Credentials)",
+  "path": "04-scenarios/agents/agent-credentials.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "AI 에이전트",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "그 대화를 한 사람이 누구인가 (User Attribution)",
+  "path": "04-scenarios/attribution/user-attribution.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "사용자와 출처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이 글·이미지는 AI가 만들었나 (AI-Generated Content)",
+  "path": "04-scenarios/attribution/ai-generated.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "사용자와 출처",
+  "parent": null,
+  "subpages": []
+ }
+]
