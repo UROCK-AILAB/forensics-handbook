@@ -9,7 +9,7 @@ nav_order: 300
 
 Android 의 Gemini 는 따로 받은 Gemini 앱(패키지 `com.google.android.apps.bard`)으로 열어도 실제 실행은 Google 앱(`com.google.android.googlequicksearchbox`)이 맡고, 대화·이미지 원본은 서버에 있어서 기기에서는 대화 내용보다 "언제 어떤 길로 Gemini 를 불렀나" 를 보여 주는 흔적을 찾게 됩니다 [1][3][4].
 
-> 확인 날짜: 2026-09-25. Google 도움말 두 편 [1][2], Tyagi·Gong·Karabiyik(2025) 논문 초록 [3], 공개 코드 SwitchAI [4], 학생 과제 저장소 LEAF [5], ALEAPP 분석기 코드 [6][7][8] 를 바탕으로 썼습니다. 앱 판에 따라 폴더 내용이 달라질 수 있어서 경로와 파일은 검체에서 다시 확인합니다.
+앱 판에 따라 폴더 내용이 달라질 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 

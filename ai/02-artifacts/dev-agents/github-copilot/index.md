@@ -10,7 +10,6 @@ has_toc: false
 
 GitHub Copilot 은 여러 IDE 와 터미널에서 도는 코딩 도우미이고, 어디서 썼느냐에 따라 대화가 VS Code 사용자 데이터 폴더, Copilot CLI 의 `~/.copilot` 폴더, Visual Studio 의 추적 파일처럼 서로 다른 곳에 남습니다.
 
-> 확인 날짜: 2026-09. GitHub·VS Code 공식 문서(2026-09-25 열람), VS Code 오픈소스 코드(`chatSessionStore.ts`, 그 파일의 마지막 커밋 2026-08-06), 공개 도구 agentsview[1](저장소 마지막 반영 2026-09-25)의 분석기 코드를 근거로 썼습니다. 이 쪽의 경로와 키는 기기 관찰이 아니라 공식 문서와 소스 코드에서 왔으므로, 검체에서 실제 파일로 한 번 더 확인합니다.
 
 ## 왜 중요한가
 

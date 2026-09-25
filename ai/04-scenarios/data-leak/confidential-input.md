@@ -6,8 +6,6 @@ nav_order: 920
 
 # 기밀 자료를 AI에 넣었나 (Confidential Data Input)
 
-> 확인 날짜: 2026-09. Claude Code 의 파일 이름과 키 이름은 Windows 11 에서 관찰한 것이고, 관찰 기록에 앱 버전은 없습니다. 서비스·보안 제품 쪽 내용은 2026-09 에 본 공식 문서를 따릅니다. 로컬 AI 앱에 올린 파일의 위치는 Windows 11 Pro 24H2 에서 LM Studio 0.3.14, Msty 1.8.5, GPT4All 3.10.0 을 시험한 논문을 따릅니다 [6]. AI 앱은 자주 바뀌므로 실제 사건에서는 검체의 앱 버전을 먼저 적어 두고 비교합니다.
-
 ## 조사 질문
 
 회사 자료(설계 문서, 고객 명단, 소스 코드 등)가 AI 서비스에 들어갔는지, 들어갔다면 언제 어느 계정과 기기로 무엇이 들어갔는지를 묻는 조사입니다. 답은 회사 보안 제품의 기록, AI 서비스의 관리자 로그, 기기에 남은 입력 기록 세 곳에서 찾고, 세 곳이 서로 맞는지 대조해서 결론을 냅니다. 허용되지 않은 AI 를 썼는지 자체를 따지는 조사는 [회사가 허용하지 않은 AI를 썼나](shadow-ai.md) 에서 다루고, 이 페이지는 "무엇이 들어갔나" 에 집중합니다.
@@ -35,7 +33,7 @@ nav_order: 920
 
 ## OS 별로 다른 점
 
-**Windows.** 개발 도구는 사용자 폴더 아래 점(.)으로 시작하는 폴더에 기록을 두고, Claude 데스크톱 같은 스토어 앱은 패키지 폴더 아래 Electron(Chromium) 저장소 모양으로 데이터를 둡니다(확인 범위: Windows 11, 2026-09). 저장소 원리와 DPAPI 로 보호되는 값은 다른 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 를 봅니다.
+**Windows.** 개발 도구는 사용자 폴더 아래 점(.)으로 시작하는 폴더에 기록을 두고, Claude 데스크톱 같은 스토어 앱은 패키지 폴더 아래 Electron(Chromium) 저장소 모양으로 데이터를 둡니다. 저장소 원리와 DPAPI 로 보호되는 값은 다른 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 를 봅니다.
 
 **macOS.** Endpoint DLP 는 Windows 10/11 과 함께 macOS 최신 3개 주 버전을 지원하지만, 브라우저 붙여넣기 평가는 macOS 에서 미리 보기(Preview) 단계입니다 [2]. 로컬 AI 인 Ollama 는 모델을 `~/.ollama/models` 에 둡니다 [5]. macOS 의 AI 앱 저장 위치는 각 서비스 페이지를 보고, 보호된 값은 다른 판의 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html) 페이지를 봅니다.
 
@@ -61,7 +59,7 @@ nav_order: 920
 
 3. **서비스 관리자 로그로 계정과 기기를 맞춥니다.** Claude 는 Enterprise 조직에만 감사 로그가 있고, Organization Owner 나 Primary Owner 가 조직 설정의 데이터·개인정보 메뉴에서 내보냅니다 [3]. 이 사건에서 먼저 볼 이벤트는 `file_uploaded` 와 `conversation_created` 이고, `created_at`, `actor_info`, `ip_address`, `device_id`, `user_agent`, `client_platform` 칸으로 언제 누가 어느 기기에서 올렸는지 맞춥니다 [3]. 감사 로그에는 대화·프로젝트의 제목과 내용이 없고 고유 ID 만 있어서, 무엇을 올렸는지는 Primary Owner 가 따로 받는 데이터 내보내기로 확인합니다 [3]. 공개 파서 코드가 읽는 칸을 보면, 내보낸 `conversations.json` 의 `chat_messages[].attachments[]` 에는 `file_name`, `file_size`, `file_type` 과 함께 첨부에서 뽑은 글인 `extracted_content` 가 있고, `files[]` 에는 `file_name` 만 있습니다 [7][8]. 첨부의 글 내용은 `extracted_content` 에서 보고, `files[]` 에 이름만 있는 파일은 내용을 다른 곳에서 찾습니다. 프로젝트에 올린 문서는 `projects.json` 의 `docs[].filename` 과 `docs[].content` 에 들어갑니다 [7]. 칸 이름은 판마다 바뀔 수 있어 검체에서 먼저 확인합니다. 전체 이벤트 목록은 [Claude 기업용 감사 로그](../../02-artifacts/network-enterprise/claude-enterprise.md) 에 있고, ChatGPT Enterprise 와 Google Workspace 의 Gemini 도 각 페이지의 관리자 기록을 같은 방식으로 봅니다. 회사가 직접 볼 수 없는 기록은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 으로 받습니다.
 
-4. **기기에서 입력 본문을 확인합니다.** 개발 도구는 입력과 도구 결과를 기기에 남깁니다. Claude Code 에서 이 사건에 바로 쓰는 키는 다음과 같습니다(확인 범위: Windows 11, 2026-09). 파일 구조 전체는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에서 설명합니다.
+4. **기기에서 입력 본문을 확인합니다.** 개발 도구는 입력과 도구 결과를 기기에 남깁니다. Claude Code 에서 이 사건에 바로 쓰는 키는 다음과 같습니다. 파일 구조 전체는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에서 설명합니다.
 
    | 보는 것 | 파일 | 키 |
    |---|---|---|
@@ -72,7 +70,7 @@ nav_order: 920
    | 입력 이력과 붙여넣은 내용 | `history.jsonl` | `display`, `project`, `sessionId`, `timestamp`, `pastedContents.번호.id / type / content / contentHash` |
    | 붙여넣기 캐시 | `paste-cache\파일.txt` | (글 파일) |
 
-   `ownerAccountUuid` 와 `ownerOrganizationUuid` 는 개인 계정과 회사 조직 계정을 가르는 단서가 될 수 있고, 값이 어느 계정을 가리키는지는 관리자 로그의 계정·조직 ID 와 대조해서 정합니다. `history.jsonl` 의 붙여넣기 항목은 `content` 에 본문이 든 것과 `contentHash` 만 있는 것이 섞여 있었습니다(처음 300줄 중 붙여넣기 5건에서 본문 1건, 해시만 4건. 확인 범위: Windows 11, 2026-09). `contentHash` 가 `paste-cache` 의 어느 파일과 이어지는지는 검체에서 해시 값과 파일 이름·내용을 대조해 확인합니다. 아래는 키 모양만 보여 주는 만든 예시이고 값은 모두 가짜입니다. `type` 값은 비워 두었고, `timestamp` 단위는 검체에서 확인합니다.
+   `ownerAccountUuid` 와 `ownerOrganizationUuid` 는 개인 계정과 회사 조직 계정을 가르는 단서가 될 수 있고, 값이 어느 계정을 가리키는지는 관리자 로그의 계정·조직 ID 와 대조해서 정합니다. `history.jsonl` 의 붙여넣기 항목은 `content` 에 본문이 든 것과 `contentHash` 만 있는 것이 섞여 있을 수 있습니다(Windows 11 기준). `contentHash` 가 `paste-cache` 의 어느 파일과 이어지는지는 검체에서 해시 값과 파일 이름·내용을 대조해 확인합니다. 아래는 키 모양만 보여 주는 만든 예시이고 값은 모두 가짜입니다. `type` 값은 비워 두었고, `timestamp` 단위는 검체에서 확인합니다.
 
    ```json
    {"display":"첨부한 견적서 요약해 줘","pastedContents":{"1":{"id":1,"type":"...","contentHash":"0000aaaa1111bbbb"}},"project":"C:\\work\\sample-project","sessionId":"00000000-1111-2222-3333-444444444444","timestamp":1700000000000}
@@ -80,9 +78,9 @@ nav_order: 920
 
    세션 기록에 도구 결과로 파일 내용이 들어 있으면 사용자가 직접 붙여넣지 않았어도 그 내용이 대화에 들어간 것입니다. Claude Code 가 모든 프롬프트와 모델 출력을 TLS 1.2 이상으로 서버에 보낸다고 공식 문서에 적혀 있지만 [4], 도구 결과 하나하나가 서버로 간 범위를 이 문장만으로 단정하지는 않습니다. 에이전트가 스스로 읽은 파일을 따로 추려야 할 때는 [AI 에이전트가 무엇을 실행했나](../agents/agent-actions.md) 의 흐름을 함께 씁니다.
 
-5. **서버로 간 뒤 어디에 얼마나 남는지 확인합니다.** Claude Code 의 서버 보관 기간은 소비자 요금제(Free·Pro·Max)에서 모델 개선을 허용하면 5년, 거부하면 30일이고, 상업 요금제(Team·Enterprise·API)는 기본 30일이며 조건을 갖춘 Enterprise 는 제로 데이터 보관(ZDR)을 씁니다 [4]. `/feedback`·`/bug`·`/share` 로 보낸 기록에는 코드를 포함한 대화 기록이 들어가 5년 동안 보관되고, 세션 설문 뒤 대화 기록을 보여 줄지 묻는 질문에 "Yes" 를 고르면 대화 기록, 하위 에이전트 기록, 디스크의 세션 로그가 올라가 최대 6개월 보관됩니다 [4]. Bedrock·Google Cloud Agent Platform 같은 제3자 공급자를 쓰거나 Anthropic 자격 증명이 없는 환경에서는 `/feedback` 보고가 `~/.claude/feedback-bundles/` 에 로컬 파일로 남고 보내지 않습니다 [4]. Claude 가 대신 쓴 피드백 초안은 사용자가 보내기로 고르기 전까지 기기에만 있고 [4], 기기의 `feedback\drafts\파일.json` 에는 `details`, `transcript_ref.session_file`, `cwd`, `status`, `created_at` 키가 있었습니다(확인 범위: Windows 11, 2026-09). 초안 파일만 있다면 보냈다는 근거가 되지 못합니다. 보관·삭제 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md) 를 봅니다.
+5. **서버로 간 뒤 어디에 얼마나 남는지 확인합니다.** Claude Code 의 서버 보관 기간은 소비자 요금제(Free·Pro·Max)에서 모델 개선을 허용하면 5년, 거부하면 30일이고, 상업 요금제(Team·Enterprise·API)는 기본 30일이며 조건을 갖춘 Enterprise 는 제로 데이터 보관(ZDR)을 씁니다 [4]. `/feedback`·`/bug`·`/share` 로 보낸 기록에는 코드를 포함한 대화 기록이 들어가 5년 동안 보관되고, 세션 설문 뒤 대화 기록을 보여 줄지 묻는 질문에 "Yes" 를 고르면 대화 기록, 하위 에이전트 기록, 디스크의 세션 로그가 올라가 최대 6개월 보관됩니다 [4]. Bedrock·Google Cloud Agent Platform 같은 제3자 공급자를 쓰거나 Anthropic 자격 증명이 없는 환경에서는 `/feedback` 보고가 `~/.claude/feedback-bundles/` 에 로컬 파일로 남고 보내지 않습니다 [4]. Claude 가 대신 쓴 피드백 초안은 사용자가 보내기로 고르기 전까지 기기에만 있고 [4], 기기의 `feedback\drafts\파일.json` 에는 `details`, `transcript_ref.session_file`, `cwd`, `status`, `created_at` 키가 있었습니다. 초안 파일만 있다면 보냈다는 근거가 되지 못합니다. 보관·삭제 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md) 를 봅니다.
 
-6. **로컬 AI 인지 가립니다.** Ollama 공식 FAQ 에는 로컬에서 돌릴 때 프롬프트와 데이터를 Ollama 가 보지 않는다고 적혀 있어서 [5], 서버 쪽 기록은 기대하지 않고 기기 쪽을 조사합니다. Ollama 의 파일 위치는 [Ollama](../../02-artifacts/local-ai/ollama.md) 페이지를 봅니다. 로컬 AI 앱에 올린 파일은 아래 위치에 남습니다(확인 범위: Windows 11 Pro 24H2, 앱 판은 표에 적음) [6].
+6. **로컬 AI 인지 가립니다.** Ollama 공식 FAQ 에는 로컬에서 돌릴 때 프롬프트와 데이터를 Ollama 가 보지 않는다고 적혀 있어서 [5], 서버 쪽 기록은 기대하지 않고 기기 쪽을 조사합니다. Ollama 의 파일 위치는 [Ollama](../../02-artifacts/local-ai/ollama.md) 페이지를 봅니다. 로컬 AI 앱에 올린 파일은 아래 위치에 남습니다(Windows 11 Pro 24H2 기준, 앱 판은 표에 적음) [6].
 
    | 앱(시험한 판) | 올린 파일이 남는 곳 | 논문에 적힌 내용 |
    |---|---|---|
@@ -106,7 +104,7 @@ nav_order: 920
 
 **"30일보다 오래된 세션 기록이 없으니 사용자가 지웠다."** Claude Code 는 기본 설정만으로도 30일이 지난 세션 기록을 지웁니다 [4]. 지운 행위를 주장하려면 `cleanupPeriodDays` 를 바꿨는지, 기한 안의 기록이 비었는지를 먼저 봅니다.
 
-**"붙여넣기 항목에 본문이 없으니 붙여넣은 것이 없다."** `history.jsonl` 에는 해시만 남은 붙여넣기 항목이 있었습니다(확인 범위: Windows 11, 2026-09). 해시만 있어도 붙여넣은 사실 자체는 남습니다.
+**"붙여넣기 항목에 본문이 없으니 붙여넣은 것이 없다."** `history.jsonl` 에는 해시만 남은 붙여넣기 항목이 있었습니다. 해시만 있어도 붙여넣은 사실 자체는 남습니다.
 
 ## 보고서 문장 예
 

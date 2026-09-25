@@ -9,8 +9,6 @@ nav_order: 260
 
 Microsoft Copilot iOS 앱은 대화를 기기에 평문으로 남긴다는 연구가 있고, 설치 앱 목록에서 번들 ID 를 읽어 앱 데이터 폴더를 찾아가며 분석합니다.
 
-> 확인 날짜: 2026-09-25. 근거는 Microsoft 개인정보 처리방침(2026-09 갱신), Tyagi·Gong·Karabiyik(2025) 논문 초록, 공개 도구 코드입니다. 이 페이지의 파일 위치는 iOS 공통 위치입니다. Copilot 앱 폴더 안의 파일 이름·표·칸은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
-
 ## 무엇을 기록하나 · 왜 생기나
 
 Microsoft 개인정보 처리방침은 소비자용 Copilot 을 웹과 Windows, Mac, iOS, Android 앱으로 제공한다고 적습니다 [1]. 앱의 App Store 주소는 `https://apps.apple.com/us/app/microsoft-copilot/id6472538445` 입니다. 공개 사용자 에이전트 목록에는 이 주소가 Android 패키지 `com.microsoft.copilot` 와 한 줄로 함께 올라 있습니다 [3].

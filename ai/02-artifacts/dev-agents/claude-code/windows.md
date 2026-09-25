@@ -9,7 +9,6 @@ nav_order: 560
 
 Windows 에서 Claude Code 는 사용자 프로필 아래 `.claude` 폴더와 `.claude.json` 파일에 기록·설정·로그인 정보를 평문으로 남기고, 조직이 거는 관리 정책은 `C:\Program Files\ClaudeCode` 폴더나 정책 레지스트리 키에서 읽습니다. 데스크톱 앱에서 Claude Code 나 Cowork 를 썼다면 앱 데이터 폴더에도 세션 정보가 남아서, 두 곳을 함께 수집합니다.
 
-> 확인 날짜: 2026-09. 공식 문서(2026-09-25 열람), 공개 분석 도구 두 가지(claude-forensics v0.1.1, agentsview 2026-09-25 판)의 문서와 코드, 기기 관찰을 함께 썼습니다. 기기 관찰은 폴더·파일 이름과 키 이름만 적고 값은 가렸습니다(확인 범위: Windows 11, 2026-09). 본문의 v2.1.x 같은 판 번호는 공식 문서와 도구 문서에 적힌 번호입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -52,7 +51,7 @@ WinGet·npm 설치는 문서에 실행 파일 위치가 없어서, 검체에서�
 
 ### Windows 에서 생기는 하위 폴더
 
-관찰한 PC 의 `%USERPROFILE%\.claude` 아래에는 다음 항목이 있었습니다(확인 범위: Windows 11, 2026-09). 항목마다의 뜻은 [세션 기록 구조](transcripts.md)와 [설정·권한·훅](settings-permissions.md)에 있습니다.
+관찰한 PC 의 `%USERPROFILE%\.claude` 아래에는 다음 항목이 있었습니다. 항목마다의 뜻은 [세션 기록 구조](transcripts.md)와 [설정·권한·훅](settings-permissions.md)에 있습니다.
 
 ```
 .credentials.json
@@ -97,7 +96,7 @@ Claude 데스크톱 앱에서 Claude Code 나 Cowork(로컬 에이전트 모드)
 
 claude-forensics 는 앱 폴더 전체가 아니라 `claude-code-sessions`, `local-agent-mode-sessions` 와 위 설정 파일만 복사합니다. 약 12GB 인 `vm_bundles\` 와 `Cache\`, `Code Cache\` 같은 캐시는 뺍니다[8]. 선별 수집이라면 이 목록을 최소 범위로 삼으면 되고, 각 파일의 키와 시각, 크롬 계열 저장소까지 넣은 앱 폴더 전체 구조는 [Claude — Windows 앱](../../chat-services/claude/windows.md)에서 다룹니다.
 
-스토어판 패키지 폴더의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래에는 `mcp-logs-` 로 시작하는 폴더가 있었고, 그 안의 JSON Lines 파일 한 줄의 키는 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다(확인 범위: Windows 11, 2026-09). MCP 기록을 읽는 법은 [MCP 서버와 도구 호출 기록](../mcp.md)에서 다룹니다.
+스토어판 패키지 폴더의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래에는 `mcp-logs-` 로 시작하는 폴더가 있었고, 그 안의 JSON Lines 파일 한 줄의 키는 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다. MCP 기록을 읽는 법은 [MCP 서버와 도구 호출 기록](../mcp.md)에서 다룹니다.
 
 ## 구조
 
@@ -117,7 +116,7 @@ agentsview 는 Claude Code 2.1.233 으로 시험해서, `projects\` 아래 폴�
 
 `.credentials.json` 은 사용자 프로필 폴더의 접근 권한을 그대로 물려받아 기본으로 그 사용자 계정만 읽을 수 있고, 파일 자체는 따로 암호화하지 않습니다[5]. [DPAPI](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)나 [자격 증명 관리자](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html)를 거치지 않는 평문 JSON 이라서, 이미지 사본에서도 바로 읽힙니다. macOS 는 같은 정보를 키체인에 넣어서 [macOS](macos.md) 페이지와 비교해 봅니다.
 
-관찰한 파일에는 최상위 키 `claudeAiOauth` 아래에 다음 키가 있었습니다(확인 범위: Windows 11, 2026-09).
+관찰한 파일에는 최상위 키 `claudeAiOauth` 아래에 다음 키가 있었습니다.
 
 ```
 claudeAiOauth
@@ -146,7 +145,7 @@ claudeAiOauth
 
 네이티브 설치는 백그라운드에서 스스로 업데이트하기 때문에, 실행 파일이나 버전 파일의 파일 시스템 시각을 처음 설치한 때로 단정하지 않습니다. `.credentials.json` 의 `expiresAt`, `refreshTokenExpiresAt` 는 정수 시각이고 단위를 적은 공개 자료가 없어서, 13자리면 1970-01-01 UTC 기준 밀리초, 10자리면 초로 보고 파일 시각과 맞는지 확인합니다. 대화 시각은 기록 파일 안의 값이 더 정확하며 [세션 기록 구조](transcripts.md)의 시각 절을 따릅니다. 앱 폴더 쪽 세션 정보의 `createdAt`, `lastActivityAt` 해석은 [Claude — Windows 앱](../../chat-services/claude/windows.md)의 시각 절을 따릅니다.
 
-관찰한 PC 의 `.claude` 폴더 바로 아래에는 이름을 가린 JSON 파일 하나에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 있었습니다(확인 범위: Windows 11, 2026-09). 이 파일을 설명한 공개 자료가 없어서, 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 가늠해 볼 수 있습니다.
+관찰한 PC 의 `.claude` 폴더 바로 아래에는 이름을 가린 JSON 파일 하나에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 있었습니다. 이 파일을 설명한 공개 자료가 없어서, 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 가늠해 볼 수 있습니다.
 
 ## 함정과 한계
 

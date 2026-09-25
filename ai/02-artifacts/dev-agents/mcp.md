@@ -8,7 +8,7 @@ nav_order: 670
 
 MCP(Model Context Protocol)는 AI 앱이 바깥의 도구 서버를 불러 쓰는 규약입니다. 디스크에는 어떤 서버를 붙였는지 적은 설정 파일과 호스트 앱이 받아 둔 서버 로그가 남고, 메모리에는 앱과 서버가 주고받은 JSON-RPC 메시지가 평문으로 남을 수 있습니다.
 
-> 확인 날짜: 2026-09. 규약과 Claude 데스크톱 로그는 MCP 공식 디버깅 문서[3], Cursor 설정은 Cursor 문서[1][2], Codex CLI 설정은 openai/codex 저장소 @406dc92 의 설정 스키마[6], 메모리 흔적은 MCPRecon 논문[4]과 저자 도구 MCPRecon(마지막 커밋 2026-04-12)[5] 기준입니다. 논문은 Ubuntu 24.04 가상 머신에서 Codex CLI 와 VS Code + GitHub Copilot 을 시험했고, 공격 시연은 Cursor 2.4.27 로 했습니다[4]. "관찰" 이라고 적은 것은 Windows 11 PC 한 대에서 본 폴더·키 이름입니다(확인 범위: Windows 11, 2026-09). 앱은 자주 바뀌므로 지금 판과 다를 수 있습니다.
+MCPRecon 논문은 Ubuntu 24.04 가상 머신에서 Codex CLI 와 VS Code + GitHub Copilot 을 시험했고, 공격 시연은 Cursor 2.4.27 로 했습니다[4]. 앱은 자주 바뀌므로 지금 판과 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -36,7 +36,7 @@ MCP 설정과 로그는 호스트 앱마다 따로 둡니다.
 | Claude Code | [Claude Code](claude-code/index.md) 페이지에서 다룸 | 대화 기록 안의 MCP 서버 상태 | 관찰 |
 | Gemini CLI | 관찰한 `~/.gemini/config/mcp_config.json` | — | 관찰 |
 
-Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 오류, 메시지 교환이 남습니다[3]. Windows 에서 Claude 데스크톱의 사용자 데이터 폴더는 스토어(MSIX) 설치면 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`, 스토어 밖 설치나 옛 설치면 `%APPDATA%\Claude` 입니다[7]. claude-forensics 는 Windows 검체에서 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 트리를 모두 떠야 한다고 적습니다[8]. 스토어 앱은 `logs` 폴더도 패키지 안으로 옮겨질 수 있어서, 두 위치를 모두 뒤져 `mcp*.log` 를 찾습니다. 관찰한 스토어 앱에서는 아래 경로에 MCP 흔적이 있었습니다(확인 범위: Windows 11, 2026-09).
+Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 오류, 메시지 교환이 남습니다[3]. Windows 에서 Claude 데스크톱의 사용자 데이터 폴더는 스토어(MSIX) 설치면 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`, 스토어 밖 설치나 옛 설치면 `%APPDATA%\Claude` 입니다[7]. claude-forensics 는 Windows 검체에서 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 트리를 모두 떠야 한다고 적습니다[8]. 스토어 앱은 `logs` 폴더도 패키지 안으로 옮겨질 수 있어서, 두 위치를 모두 뒤져 `mcp*.log` 를 찾습니다. 관찰한 스토어 앱에서는 아래 경로에 MCP 흔적이 있었습니다.
 
 ```
 %LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\
@@ -45,7 +45,7 @@ Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 
   LocalCache\Roaming\Claude\claude_desktop_config.json
 ```
 
-같은 PC 에서 `%APPDATA%\Claude\logs\mcp*.log` 는 보이지 않았습니다(확인 범위: Windows 11, 2026-09). 패키지 폴더 구조의 일반 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [Claude](../chat-services/claude/index.md)에 있습니다.
+같은 PC 에서 `%APPDATA%\Claude\logs\mcp*.log` 는 보이지 않았습니다. 패키지 폴더 구조의 일반 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [Claude](../chat-services/claude/index.md)에 있습니다.
 
 ## 구조
 
@@ -83,17 +83,17 @@ Codex 는 MCP OAuth 토큰을 `mcp_oauth_credentials_store` 설정에 따라 둡
 
 `command` 와 `args` 에서는 어떤 프로그램이 어떤 폴더를 대상으로 떴는지, `url` 에서는 어느 원격 서버에 붙도록 설정했는지 알 수 있습니다. 도구가 건드릴 수 있었던 범위를 여기서부터 좁힙니다.
 
-관찰한 스토어 앱의 `claude_desktop_config.json` 에는 `mcpServers` 키가 없었고 `preferences` 와 `coworkUserFilesPath` 만 있었습니다. 같은 폴더의 `mcp-user-tool-toggles.json` 은 `owners`(사전)와 그 아래 목록, `v`(정수)로 되어 있었습니다(확인 범위: Windows 11, 2026-09). 두 파일의 칸 뜻을 설명한 공개 문서가 없어서, 검체에서는 서버를 붙인 뒤와 뗀 뒤의 파일을 시험 기기에서 비교해 해석합니다.
+관찰한 스토어 앱의 `claude_desktop_config.json` 에는 `mcpServers` 키가 없었고 `preferences` 와 `coworkUserFilesPath` 만 있었습니다. 같은 폴더의 `mcp-user-tool-toggles.json` 은 `owners`(사전)와 그 아래 목록, `v`(정수)로 되어 있었습니다. 두 파일의 칸 뜻을 설명한 공개 문서가 없어서, 검체에서는 서버를 붙인 뒤와 뗀 뒤의 파일을 시험 기기에서 비교해 해석합니다.
 
 ### 호스트 앱이 받은 서버 로그
 
-스토어 앱 패키지의 `mcp-logs-<서버 이름>` 폴더에 있던 JSON Lines 파일은 한 줄의 키가 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다(확인 범위: Windows 11, 2026-09). 폴더 이름에 서버 이름이 들어가서 어느 서버의 로그인지 폴더만 보고 나눌 수 있습니다. `sessionId` 가 어느 세션 기록과 이어지는지는 공개 문서가 없어서, 같은 값이 대화 기록이나 세션 메타 파일에 있는지 검체에서 찾아 맞춥니다.
+스토어 앱 패키지의 `mcp-logs-<서버 이름>` 폴더에 있던 JSON Lines 파일은 한 줄의 키가 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다. 폴더 이름에 서버 이름이 들어가서 어느 서버의 로그인지 폴더만 보고 나눌 수 있습니다. `sessionId` 가 어느 세션 기록과 이어지는지는 공개 문서가 없어서, 같은 값이 대화 기록이나 세션 메타 파일에 있는지 검체에서 찾아 맞춥니다.
 
 ### 대화 기록·세션 메타·훅에 남는 MCP 흔적
 
-Claude Code 대화 기록 줄에서 `attachment.failedMcpServers`, `attachment.pendingMcpServers` 키를 보았습니다(확인 범위: Windows 11, 2026-09). 대화 기록 구조는 [Claude Code](claude-code/index.md)에서 다룹니다. Claude 데스크톱 Cowork 세션 메타 파일(`local_*.json`)에는 `remoteMcpServersConfig` 칸이 있습니다[8]. 도구 문서에는 칸 이름만 있어서, 그 세션에 붙인 원격 MCP 서버 설정이 어떤 모양으로 들어가는지는 검체에서 열어 봅니다.
+Claude Code 대화 기록 줄에서 `attachment.failedMcpServers`, `attachment.pendingMcpServers` 키를 보았습니다. 대화 기록 구조는 [Claude Code](claude-code/index.md)에서 다룹니다. Claude 데스크톱 Cowork 세션 메타 파일(`local_*.json`)에는 `remoteMcpServersConfig` 칸이 있습니다[8]. 도구 문서에는 칸 이름만 있어서, 그 세션에 붙인 원격 MCP 서버 설정이 어떤 모양으로 들어가는지는 검체에서 열어 봅니다.
 
-Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후에 사용자 스크립트를 돌릴 수 있습니다[1]. 조직이 감사 로그를 남겼는지 여기서 확인합니다. 관찰한 PC 의 `~/.cursor/hooks.json` 에도 `beforeMCPExecution` 훅이 있었습니다(확인 범위: Windows 11, 2026-09). 훅 파일 형식은 [Cursor](cursor.md)에 있습니다.
+Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후에 사용자 스크립트를 돌릴 수 있습니다[1]. 조직이 감사 로그를 남겼는지 여기서 확인합니다. 관찰한 PC 의 `~/.cursor/hooks.json` 에도 `beforeMCPExecution` 훅이 있었습니다. 훅 파일 형식은 [Cursor](cursor.md)에 있습니다.
 
 ### 메모리에 남는 JSON-RPC 메시지
 
@@ -122,11 +122,11 @@ Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후
 
 MCP 는 메시지에 시각을 넣으라고 정하지 않습니다[4]. 메모리에서 되살린 메시지는 `id` 와 메모리 위치로 순서를 추정할 뿐이고, JSON-RPC 규격이 `id` 를 차례대로 매기라고 정하지 않아서 `id` 순서를 시간 순서로 단정할 수 없습니다[4]. 메모리 흔적의 시각은 메모리를 뜬 시각과, 같은 호출을 적은 디스크 쪽 기록(호스트 앱 로그, 대화 기록)에서 가져옵니다.
 
-관찰한 JSON Lines 로그에는 `timestamp` 칸이 있었습니다(확인 범위: Windows 11, 2026-09). 형식과 시간대를 설명한 공개 문서가 없어서, 검체에서 몇 줄을 열어 끝에 `Z` 나 `+09:00` 같은 시간대 표시가 있는지 먼저 봅니다. `mcp*.log` 도 같은 방법으로 확인합니다. 설정 파일에는 시각 칸이 없어서, 서버를 언제 등록했는지는 파일 수정 시각이나 백업·볼륨 섀도 사본의 이전 판을 비교해 좁힙니다. 여러 출처를 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+관찰한 JSON Lines 로그에는 `timestamp` 칸이 있었습니다. 형식과 시간대를 설명한 공개 문서가 없어서, 검체에서 몇 줄을 열어 끝에 `Z` 나 `+09:00` 같은 시간대 표시가 있는지 먼저 봅니다. `mcp*.log` 도 같은 방법으로 확인합니다. 설정 파일에는 시각 칸이 없어서, 서버를 언제 등록했는지는 파일 수정 시각이나 백업·볼륨 섀도 사본의 이전 판을 비교해 좁힙니다. 여러 출처를 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
-MCP 설정은 호스트 앱마다, 그리고 전역·프로젝트 범위마다 흩어집니다. 한 앱의 설정만 보고 "MCP 를 쓰지 않았다" 고 쓰기 쉬우므로, 설치된 AI 도구 목록부터 만들고 도구별로 전역 설정과 저장소 안의 프로젝트 설정을 모두 모읍니다. 관찰한 `~/.gemini/config/mcp_config.json` 은 JSON 으로 읽히지 않았습니다(확인 범위: Windows 11, 2026-09). 이런 파일은 바이트를 직접 열어 빈 파일인지 다른 형식인지 판단합니다.
+MCP 설정은 호스트 앱마다, 그리고 전역·프로젝트 범위마다 흩어집니다. 한 앱의 설정만 보고 "MCP 를 쓰지 않았다" 고 쓰기 쉬우므로, 설치된 AI 도구 목록부터 만들고 도구별로 전역 설정과 저장소 안의 프로젝트 설정을 모두 모읍니다. 관찰한 `~/.gemini/config/mcp_config.json` 은 JSON 으로 읽히지 않았습니다. 이런 파일은 바이트를 직접 열어 빈 파일인지 다른 형식인지 판단합니다.
 
 호스트 앱이 받아 두는 것은 stdio 서버의 stderr 이고[3], 서버가 스스로 다른 파일에 로그를 쓰는지는 서버마다 다릅니다. 설정 파일을 사건 뒤에 고치거나 지우면 등록 흔적이 사라지므로, 호스트 앱 로그·대화 기록·세션 메타의 서버 이름을 설정과 맞춰 빈틈을 찾습니다. 논문도 설정을 바꾸고 흔적을 지우는 로컬 공격자를 위협 모델에 넣고, 이때 메모리가 디스크와 별개인 증거원이 된다고 봅니다[4].
 

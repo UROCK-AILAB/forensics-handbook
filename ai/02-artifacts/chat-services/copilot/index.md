@@ -10,8 +10,6 @@ has_toc: false
 
 소비자용 Microsoft Copilot 은 개인 Microsoft 계정으로 웹과 Windows·Mac·iOS·Android 앱에서 쓰는 대화형 AI 서비스이고, 대화 원본은 계정의 개인정보 대시보드에서 보고 내보내고 지울 수 있습니다.
 
-> 확인 날짜: 2026-09-25. Microsoft 공식 문서(개인정보 처리방침, support.microsoft.com, learn.microsoft.com), 모바일 앱을 분석한 논문 한 편과 공개 코드 저장소를 근거로 썼습니다. 개인정보 처리방침의 마지막 갱신은 2026년 9월입니다. 앱 폴더 안의 저장 위치는 OS 마다 하위 페이지에서 다룹니다.
-
 ## 왜 중요한가
 
 Copilot 은 새 Windows 11 PC 에 기본으로 깔려 있고, Copilot 키나 Windows 키 + C 로 바로 열립니다 [7]. Microsoft Edge 와 Xbox 같은 다른 Microsoft 제품 안에도 들어 있습니다 [1]. 사용자가 따로 설치하지 않아도 쓸 수 있는 서비스라서, 설치 기록이 없다고 해서 사용하지 않았다고 보면 안 됩니다.

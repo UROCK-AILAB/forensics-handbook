@@ -1,3 +1,4 @@
+{% if page.last_modified_at %}<p class="last-modified">마지막 수정: {{ page.last_modified_at | date: "%Y-%m-%d" }}</p>{% endif %}
 <script>
   (function () {
     var list = document.querySelector('#site-nav > .nav-list');

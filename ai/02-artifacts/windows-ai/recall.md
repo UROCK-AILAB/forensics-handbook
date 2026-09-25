@@ -8,7 +8,7 @@ nav_order: 490
 
 Recall 은 Copilot+ PC 에서 화면 스냅숏을 주기적으로 저장하고 기기 안에서 분석해 자연어로 다시 찾게 해 주는 Windows 기능이고, 사용자 폴더 아래 `CoreAIPlatform.00\UKP` 에 스냅숏 이미지와 주 DB(`ukg.db`), 의미 검색 색인을 남깁니다.
 
-> 확인 날짜: 2026-09. 기능·보호 방식·정책은 Microsoft 공식 문서(Manage Recall ms.date 2025-12-10, Policy CSP - WindowsAI ms.date 2026-09-10, Decrypt exported snapshots ms.date 2025-12-01)에서 가져왔습니다[1][2][3]. 저장 경로와 DB 구조는 Microsoft 가 공개하지 않았고, 공개 분석 자료 네 가지에서 가져왔습니다. 2024-06 평문 판을 다룬 TotalRecall 첫 판과 Velociraptor 아티팩트[6][7], Windows 11 24H2 를 다룬 Securelist 글(2025-10-14)[8], Windows 11 25H2 Build 26300.8155 ARM64 를 다룬 TotalRecall Reloaded 설명서(2026-04)[5]입니다. Manage Recall(2025-12-10)과 지원 문서는 Recall 을 미리 보기(preview)로 적고, 2025-12-01 에 갱신한 Recall 개발 문서는 2025-04-25 에 정식 출시(GA)했다고 적습니다[1][4][9].
+저장 경로와 DB 구조는 Microsoft 가 공개하지 않았고, 2024-06 평문 판과 Windows 11 24H2·25H2 에서 서로 다릅니다[5][6][8].
 
 ## 무엇을 기록하나 · 왜 생기나
 

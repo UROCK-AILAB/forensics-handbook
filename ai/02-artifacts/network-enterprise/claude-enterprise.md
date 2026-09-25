@@ -10,7 +10,7 @@ nav_order: 790
 
 Claude Enterprise 조직은 로그인, 구성원 초대, 프로젝트·대화·파일의 생성과 삭제 같은 활동을 최근 180일치 감사 로그로 내보낼 수 있고, 이 로그는 서버에만 있어서 PC 이미지가 아니라 조직의 Owner 에게서 받아야 합니다.
 
-확인 날짜는 2026-09이고, 근거는 Claude 도움말 센터의 "How to access audit logs" 문서(2026-06-15)입니다. PC 쪽 흔적은 기기 관찰 결과입니다(확인 범위: Windows 11, 2026-09).
+확인 날짜는 2026-09이고, 근거는 Claude 도움말 센터의 "How to access audit logs" 문서(2026-06-15)입니다. PC 쪽 흔적은 기기 관찰 결과입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -34,7 +34,7 @@ Team 요금제, Claude Code, API 콘솔의 감사 기록은 이 도움말 문서
 
 도움말은 고객 관리 암호화 키를 쓰는 Enterprise 조직이 "Export logs" 버튼으로 내보낼 수 없다고 적었습니다[1]. 이런 조직에는 Compliance API 로 받은 자료를 요청합니다.
 
-감사 로그는 서버에만 있고 PC 이미지에서는 얻을 수 없습니다. PC 에서 볼 수 있는 Claude 데스크톱 앱의 `Network` 폴더(확인 범위: Windows 11, 2026-09)는 접속 흔적일 뿐 감사 로그가 아니고, 그 내용은 [AI 서비스 도메인과 네트워크 기록](network-traces.md)에서 다룹니다. 앱과 웹에 남는 흔적은 [Claude](../chat-services/claude/index.md) 페이지를 봅니다.
+감사 로그는 서버에만 있고 PC 이미지에서는 얻을 수 없습니다. PC 에서 볼 수 있는 Claude 데스크톱 앱의 `Network` 폴더는 접속 흔적일 뿐 감사 로그가 아니고, 그 내용은 [AI 서비스 도메인과 네트워크 기록](network-traces.md)에서 다룹니다. 앱과 웹에 남는 흔적은 [Claude](../chat-services/claude/index.md) 페이지를 봅니다.
 
 ## 구조
 

@@ -8,8 +8,6 @@ nav_order: 420
 
 브라우저를 조작하는 AI 는 웹 페이지를 읽고 누르고 입력하는 일을 사람 대신 하고, 사용자 PC 의 실제 브라우저를 움직이는 경우 에이전트의 방문과 사람의 방문이 같은 브라우저 프로필에 섞여 남습니다.
 
-> 확인 날짜: 2026-09-25. Claude in Chrome 과 Claude Code 연동은 Anthropic 공식 문서 두 개[1][2], 브라우저와 PC 프로그램 사이의 연결 방식은 Chrome 개발자 문서[4]를 근거로 썼습니다. ChatGPT Atlas 는 위키백과[3]를 근거로 썼습니다. Claude 데스크톱 앱 폴더는 관찰한 내용이고, 관찰 범위는 파일 이름과 JSON 키입니다(확인 범위: Windows 11, 2026-09).
-
 ## 무엇을 기록하나 · 왜 생기나
 
 브라우저 에이전트는 브라우저가 어디서 도는지에 따라 흔적이 남는 곳이 달라집니다. 서비스 회사 쪽에서 도는 브라우저라면 방문 흔적은 사용자 PC 에 남지 않고, 사용자 PC 의 브라우저를 움직이면 그 브라우저 프로필에 남습니다. 서비스마다 구조가 다르므로, 검체의 브라우저 프로필에 에이전트가 연 사이트가 남았는지를 먼저 확인합니다. ChatGPT 에이전트는 [ChatGPT 에이전트 모드](chatgpt-agent.md)에서 다룹니다.
@@ -59,7 +57,7 @@ Claude Code 는 작업용 탭을 새로 열고 사용자의 로그인 상태를 
 
 ### Claude 데스크톱 앱(Windows 스토어 앱)
 
-관찰한 PC 의 Claude 데스크톱 스토어 앱 폴더에는 브라우저 연결과 이어지는 파일이 세 가지 있었습니다(확인 범위: Windows 11, 2026-09).
+관찰한 PC 의 Claude 데스크톱 스토어 앱 폴더에는 브라우저 연결과 이어지는 파일이 세 가지 있었습니다.
 
 ```
 %LOCALAPPDATA%\Packages\<Claude 패키지>\LocalCache\Roaming\Claude\ChromeNativeHost\chrome-native-host.exe
@@ -78,7 +76,7 @@ Claude Code 는 작업용 탭을 새로 열고 사용자의 로그인 상태를 
 }
 ```
 
-같은 캐시 폴더 아래 다른 MCP 로그 `.jsonl` 에는 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있었습니다(확인 범위: Windows 11, 2026-09). `mcp-logs-computer-use` 폴더는 이름에 화면 조작(computer use)이 들어 있고, 여기에 브라우저 동작이 적히는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 스토어 앱 폴더의 나머지 구조는 [Claude](../chat-services/claude/index.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)(Windows 판)에 있습니다.
+같은 캐시 폴더 아래 다른 MCP 로그 `.jsonl` 에는 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있었습니다. `mcp-logs-computer-use` 폴더는 이름에 화면 조작(computer use)이 들어 있고, 여기에 브라우저 동작이 적히는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 스토어 앱 폴더의 나머지 구조는 [Claude](../chat-services/claude/index.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)(Windows 판)에 있습니다.
 
 ### ChatGPT Atlas
 
@@ -151,7 +149,7 @@ Chrome 개발자 문서[4]에 따르면 Windows 에서는 설치 프로그램이
 
 네이티브 메시징 설정 파일은 기능을 처음 켤 때 만들어지므로[2], 파일 생성 시각은 처음 켠 시각의 후보입니다. 문서는 다시 쓰는 조건을 적지 않아서 수정 시각을 처음 켠 시각으로 읽지 않습니다. Windows 에서는 호스트 이름 하위 키의 마지막 기록 시각을 함께 봅니다.
 
-브라우저 방문 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다. GIF·스크린샷 파일은 파일 시스템 시각으로 저장 시점을 잡습니다. 관찰한 MCP 로그에는 `timestamp` 키가 있고(확인 범위: Windows 11, 2026-09), 형식과 기준 시각은 검체의 값을 파일 시스템 시각과 맞춰 확인합니다. 여러 기록을 한 줄로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+브라우저 방문 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다. GIF·스크린샷 파일은 파일 시스템 시각으로 저장 시점을 잡습니다. 관찰한 MCP 로그에는 `timestamp` 키가 있고, 형식과 기준 시각은 검체의 값을 파일 시스템 시각과 맞춰 확인합니다. 여러 기록을 한 줄로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

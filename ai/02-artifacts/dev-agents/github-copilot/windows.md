@@ -9,7 +9,7 @@ nav_order: 610
 
 Windows 에서 GitHub Copilot 대화는 쓰는 도구마다 다른 자리에 남습니다. VS Code 는 작업 폴더마다 세션 파일(`.json`·`.jsonl`)을 쓰고 세션 목록은 저장소 키에 따로 두며, Copilot CLI 는 사용자 폴더의 `.copilot` 아래에, Visual Studio 는 임시 폴더의 추적 파일과 솔루션 폴더의 `.vs` 아래에, JetBrains IDE 는 `%APPDATA%\github-copilot` 아래의 Nitrite 데이터베이스에 대화를 둡니다.
 
-> 확인 날짜: 2026-09-25. VS Code 공식 문서(2026-09-16 갱신본), VS Code 소스 `chatSessionStore.ts`(main, 그 파일의 마지막 커밋 2026-08-06), agentsview 파서 코드(main, 2026-09-25 열람), copilot-jetbrains-exporter 코드(마지막 push 2026-03-09)를 근거로 썼습니다. 이 페이지의 경로와 칸 이름은 이 소스 기준이라서 판이 바뀌면 달라질 수 있고, 도구마다 시험한 판은 아래 "위치와 버전별 차이" 에 적었습니다.
+이 쪽의 경로와 칸 이름은 판이 바뀌면 달라질 수 있습니다. 도구별 판 차이는 아래 "위치와 버전별 차이" 에 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 

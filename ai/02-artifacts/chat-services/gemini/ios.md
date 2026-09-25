@@ -11,8 +11,6 @@ nav_order: 310
 
 iOS 에서는 App Store 의 별도 앱 "Google Gemini" 로 Gemini 를 쓰고 대화 원본은 계정의 서버 활동 기록에 있어서, 기기에서는 앱 설치·권한·화면 전환 기록으로 언제 이 앱을 쓸 수 있었는지를 찾고 대화 내용은 계정 쪽에서 확인합니다.
 
-> 확인 날짜: 2026-09-25. Google 도움말(개인정보 안내), App Store 페이지, Tyagi·Gong·Karabiyik(2025) 초록, iLEAPP 저장소(2026-09-23 main)를 바탕으로 썼습니다. 이 쪽에는 iOS 기기에서 직접 관찰한 내용이 없습니다.
-
 ## 무엇을 기록하나 · 왜 생기나
 
 Android 에서는 Google 앱이 Gemini 를 실행하지만([Android 앱](android.md)), iOS 에는 Gemini 를 쓰는 별도 앱이 있습니다 [2][3]. 대화는 활동 저장 (Keep Activity) 설정에 따라 계정 쪽 Gemini 앱 활동에 저장되고, 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 정리했습니다 [1]. 서버와 기기 가운데 어디에 무엇이 남는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다.

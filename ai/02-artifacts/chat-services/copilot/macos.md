@@ -9,8 +9,6 @@ nav_order: 240
 
 Microsoft 는 소비자용 Copilot 을 Mac 앱으로도 제공하고, 이 앱은 Mac App Store 에 번들 ID `com.microsoft.copilot-mac` 으로 올라와 있습니다. 기기 안의 저장 위치와 파일 형식은 공개된 분석 자료가 없어 검체로 확인해야 하므로, 이 페이지는 조사를 시작할 곳과 해석 기준을 적습니다.
 
-> 확인 날짜: 2026-09. 근거는 Microsoft 개인정보 처리방침(2026년 9월 갱신)과 MOFA 저장소 README 의 Mac App Store 목록(2026-09-25 갱신)입니다.
-
 ## 공개 자료로 알 수 있는 것
 
 개인정보 처리방침은 소비자용 Copilot 을 웹(`copilot.microsoft.com`)과 Windows, Mac, iOS, Android 앱으로 제공한다고 적습니다[1]. Microsoft 앱의 배포 정보를 모아 두는 MOFA 저장소의 README 는 Mac App Store 목록에 "Microsoft Copilot" 을 판 `25.7.440902001`, 번들 ID `com.microsoft.copilot-mac` 으로 적어 두었습니다[2]. 판은 목록을 만든 때의 값이라서, 검체에 설치된 판은 앱 번들의 `Info.plist` 에서 따로 읽습니다.

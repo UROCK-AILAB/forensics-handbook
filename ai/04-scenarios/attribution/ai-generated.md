@@ -10,7 +10,7 @@ nav_order: 1000
 
 손에 든 이미지·영상·음성·글 하나를 두고 "AI 가 만들었는가, 만들었다면 어떤 도구로 누가 만들었는가" 를 묻는 조사입니다. 답을 찾는 길은 둘인데, 하나는 파일 자체에 든 출처 표시(C2PA 매니페스트, IPTC 원천 유형 값, 보이지 않는 워터마크)를 읽는 길이고, 다른 하나는 파일을 만든 쪽 기기나 계정에 남은 대화·생성 기록을 찾는 길입니다. 내용만 보고 AI 가 썼는지 가리는 판별기의 한계는 [AI가 만든 글·이미지 판별의 한계](../../03-techniques/analysis/detection-limits.md)에서 따로 다루고, 이 글은 기록으로 확인할 수 있는 흔적에 집중합니다.
 
-이 글에서 기댄 자료와 확인 날짜는 다음과 같습니다. C2PA 는 설명서(Explainer) 2.2 판, IPTC 원천 유형 어휘는 각 값의 수정일(2022-06-14 ~ 2024-10-23) 기준, SynthID 는 Google DeepMind 소개 페이지를 2026-09-25 에 확인했습니다. 기기 쪽 키 이름 가운데 관찰로 알아낸 것에는 "(확인 범위: Windows 11, 2026-09)" 를 붙였습니다.
+이 글에서 기댄 자료와 확인 날짜는 다음과 같습니다. C2PA 는 설명서(Explainer) 2.2 판, IPTC 원천 유형 어휘는 각 값의 수정일(2022-06-14 ~ 2024-10-23) 기준, SynthID 는 Google DeepMind 소개 페이지를 2026-09-25 에 확인했습니다. 기기 쪽 키 이름 가운데 관찰로 알아낸 것에는 "" 를 붙였습니다.
 
 ## 먼저 확인할 것
 
@@ -60,9 +60,9 @@ nav_order: 1000
 
 6. **만든 쪽 기록을 찾습니다.** 용의 기기나 계정이 있으면 생성 서비스의 대화·생성 기록에서 같은 결과물을 찾습니다. 파일 해시가 같거나 프롬프트와 결과물이 짝지어 남아 있어야 "이 계정에서 만든 것" 이라고 말할 수 있고, 비슷한 주제의 대화가 있다는 것만으로는 부족합니다. 기록이 서버에만 있으면 계정 데이터 내보내기로 받습니다. 대화를 한 사람을 좁히는 절차는 [그 대화를 한 사람이 누구인가](user-attribution.md)에서 다룹니다.
 
-7. **코드라면 수정 전후를 맞춰 봅니다.** Claude Code 의 `projects/*.jsonl` 에는 모든 메시지와 도구 호출, 도구 결과가 들어 있고, `file-history/<session>/` 에는 Claude 가 고친 파일의 수정 전 사본이 남습니다. 도구 호출 기록과 수정 전 사본을 현재 파일과 비교하면 어느 줄을 AI 도구가 바꿨는지 가릴 수 있습니다. Windows 11 에서 관찰한 대화 기록에는 `message.model`, `toolUseResult`, `snapshot.trackedFileBackups`, `isSidechain`, `attributionPlugin`, `attributionSkill`, `attributionAgent` 키가 있었습니다 (확인 범위: Windows 11, 2026-09). `attribution` 으로 시작하는 키는 공식 문서에 뜻이 나와 있지 않으므로, 보고서에는 값을 그대로 옮기고 해석을 덧붙이지 않습니다.
+7. **코드라면 수정 전후를 맞춰 봅니다.** Claude Code 의 `projects/*.jsonl` 에는 모든 메시지와 도구 호출, 도구 결과가 들어 있고, `file-history/<session>/` 에는 Claude 가 고친 파일의 수정 전 사본이 남습니다. 도구 호출 기록과 수정 전 사본을 현재 파일과 비교하면 어느 줄을 AI 도구가 바꿨는지 가릴 수 있습니다. Windows 11 에서 관찰한 대화 기록에는 `message.model`, `toolUseResult`, `snapshot.trackedFileBackups`, `isSidechain`, `attributionPlugin`, `attributionSkill`, `attributionAgent` 키가 있었습니다. `attribution` 으로 시작하는 키는 공식 문서에 뜻이 나와 있지 않으므로, 보고서에는 값을 그대로 옮기고 해석을 덧붙이지 않습니다.
 
-8. **조직 훅 로그를 봅니다.** Cursor 의 `hooks.json` 에는 `afterAgentResponse`, `postToolUse`, `beforeSubmitPrompt` 같은 훅 키가 있고, Claude Code `settings.json` 에도 `hooks.PreToolUse`, `hooks.UserPromptSubmit` 같은 키가 있습니다 (확인 범위: Windows 11, 2026-09). 조직이 이 훅에 AI 응답이나 도구 사용을 기록하는 명령을 걸어 두었다면, 그 명령이 쓴 로그가 사용자 기기의 대화 기록과 따로 남는 증거가 됩니다.
+8. **조직 훅 로그를 봅니다.** Cursor 의 `hooks.json` 에는 `afterAgentResponse`, `postToolUse`, `beforeSubmitPrompt` 같은 훅 키가 있고, Claude Code `settings.json` 에도 `hooks.PreToolUse`, `hooks.UserPromptSubmit` 같은 키가 있습니다. 조직이 이 훅에 AI 응답이나 도구 사용을 기록하는 명령을 걸어 두었다면, 그 명령이 쓴 로그가 사용자 기기의 대화 기록과 따로 남는 증거가 됩니다.
 
 9. **결론의 수위를 정합니다.** 서명이 멀쩡한 매니페스트와 AI 원천 유형 값, 만든 쪽 기록이 모두 맞으면 가장 강하게 쓸 수 있고, 표시 하나만 있으면 그 표시가 말하는 만큼만 씁니다. 아무 표시도 기록도 없으면 "판단할 기록이 없다" 로 씁니다.
 

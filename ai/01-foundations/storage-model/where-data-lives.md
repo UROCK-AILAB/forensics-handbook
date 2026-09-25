@@ -6,8 +6,6 @@ nav_order: 0
 
 # AI 서비스의 데이터는 어디에 있나 (서버·기기·동기화)
 
-> 확인 날짜: 2026-09-25. 공식 문서, 공개 분석 도구의 코드(agentsview, ALEAPP, iLEAPP), 논문을 바탕으로 썼습니다. 기기 관찰은 Windows 11 에서 AI 도구 폴더를 읽기 전용으로 열어 폴더·파일 이름과 키 이름만 본 결과이고, 이런 내용에는 "(확인 범위: Windows 11, 2026-09)" 를 붙였습니다. macOS·Linux·Android·iOS 는 문서·도구 코드·논문에 나온 내용만 씁니다.
-
 ## 한 줄 요약
 
 AI 서비스의 대화 원본은 채팅 서비스라면 서버 계정에 있지만 모바일 앱과 데스크톱 앱은 기기에 사본을 두고, 코딩 도구와 로컬 AI 앱은 원본을 기기에 두기도 하므로, 조사는 서비스마다 원본과 사본이 어디에 있는지부터 가리는 순서로 진행합니다.
@@ -54,11 +52,11 @@ Android 의 경로는 앱 데이터 폴더(`/data/data/` 아래 패키지 이름
 
 ### 개발 도구 — 기기에 원본을 두는 도구
 
-Claude Code 는 모든 OS 에서 `~/.claude/` 를 사용자 데이터 폴더로 쓰고(Windows 는 `%USERPROFILE%\.claude`), `CLAUDE_CONFIG_DIR` 환경 변수로 이 폴더를 옮길 수 있습니다 [5]. 세션 기록(대화 전문)은 `~/.claude/projects/` 아래 프로젝트 폴더에 세션마다 `.jsonl` 파일로 평문으로 남고 [4][5], VS Code 확장·JetBrains 플러그인·데스크톱 앱도 같은 `~/.claude/` 에 씁니다 [6]. 웹에서 실행하는 Claude Code(클라우드 세션)는 Anthropic 가상 머신에서 돌아서 사용자 PC 에 세션 기록이 없을 수 있습니다 [4]. Windows 11 의 `%USERPROFILE%\.claude` 에서는 `.credentials.json`, `settings.json`, `stats-cache.json`, `history.jsonl`, `file-history/`, `paste-cache/`, `projects/`, `jobs/`, `feedback/drafts/` 가 보였습니다(확인 범위: Windows 11, 2026-09).
+Claude Code 는 모든 OS 에서 `~/.claude/` 를 사용자 데이터 폴더로 쓰고(Windows 는 `%USERPROFILE%\.claude`), `CLAUDE_CONFIG_DIR` 환경 변수로 이 폴더를 옮길 수 있습니다 [5]. 세션 기록(대화 전문)은 `~/.claude/projects/` 아래 프로젝트 폴더에 세션마다 `.jsonl` 파일로 평문으로 남고 [4][5], VS Code 확장·JetBrains 플러그인·데스크톱 앱도 같은 `~/.claude/` 에 씁니다 [6]. 웹에서 실행하는 Claude Code(클라우드 세션)는 Anthropic 가상 머신에서 돌아서 사용자 PC 에 세션 기록이 없을 수 있습니다 [4]. Windows 11 의 `%USERPROFILE%\.claude` 에서는 `.credentials.json`, `settings.json`, `stats-cache.json`, `history.jsonl`, `file-history/`, `paste-cache/`, `projects/`, `jobs/`, `feedback/drafts/` 가 보였습니다.
 
 다른 개발 도구도 세션 기록을 사용자 폴더 아래에 둡니다. 공개 분석 도구 agentsview(README 2026-09-11, v0.44.0)가 세션을 찾는 기본 위치는 아래와 같습니다 [7]. 같은 표의 오른쪽 칸은 Windows 11 에서 폴더를 열어 본 모습이고, 세션 파일이 없는 PC 도 있으므로 폴더가 있다는 것만으로 대화를 했다고 쓰지 않습니다.
 
-| 도구 | 세션 기록 기본 위치 [7] | Windows 11 에서 본 것(확인 범위: Windows 11, 2026-09) | 자세한 쪽 |
+| 도구 | 세션 기록 기본 위치 [7] | Windows 11 에서 본 것 | 자세한 쪽 |
 |---|---|---|---|
 | Codex CLI | `~/.codex/sessions/`, 보관된 세션은 `~/.codex/archived_sessions/` | `%USERPROFILE%\.codex` 에 `hooks.json`, `skills/` 아래 `SKILL.md` 와 JSON 파일 | [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) |
 | Gemini CLI | `~/.gemini/tmp/` 아래 프로젝트 폴더의 `chats/session-*.json`·`.jsonl` | `%USERPROFILE%\.gemini` 에 `settings.json`, `config/`(`config.json`, `hooks.json`, `mcp_config.json`, `projects/`), `antigravity/`(`antigravity_state.pbtxt`, `installation_id`, `crashes/`) | [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md) |
@@ -70,7 +68,7 @@ Claude Code 는 모든 OS 에서 `~/.claude/` 를 사용자 데이터 폴더로 
 
 로컬 AI 는 모델을 돌리는 백엔드와 대화 화면을 보여 주는 앱으로 나뉩니다. LangurTrace 논문(Jeong·Lee·Park, 2025)은 모델과 백엔드는 대화나 문맥을 스스로 관리하지 않고, 화면 앱이 대화를 쥐고 있다가 매번 백엔드로 다시 보낸다고 설명합니다 [11]. 그래서 Ollama 같은 백엔드에서는 대화 본문보다 API 호출이 적힌 서버 로그와 모델 파일이 중요하고, 대화 본문은 LM Studio(`%UserProfile%/.lmstudio/conversations/`)나 Msty(`%AppData%/Msty/msty.db`) 같은 화면 앱 쪽에서 찾습니다 [11].
 
-LangurTrace 가 Ollama 0.6.5 로 실험해 적은 Windows 위치는 서버 로그 `%LocalAppData%/Ollama/server.log`, 앱 로그 `app.log`, 업그레이드 로그 `upgrade.log`, 명령 입력 이력 `%UserProfile%/.ollama/history`, 모델 매니페스트와 레이어 `%UserProfile%/.ollama/models/` 입니다 [11]. 명령 입력 이력에는 명령줄로 보낸 요청이 시각 순서대로 남지만 모델의 답은 남지 않습니다 [11]. Ollama 는 로컬 모델을 돌릴 때 프롬프트나 데이터를 보지 않고, 클라우드 모델을 쓸 때는 요청을 처리하되 저장·기록·학습에 쓰지 않는다고 적고 있습니다 [3]. 모델 파일 위치는 `OLLAMA_MODELS` 환경 변수로 바꿀 수 있습니다 [3]. Windows 11 의 `%USERPROFILE%\.ollama` 에서는 `cache/` 아래 JSON 한 개, `id_ed25519`, `id_ed25519.pub` 가 보였고 `models` 폴더는 없었습니다(확인 범위: Windows 11, 2026-09). 로그와 이력 파일의 형식은 [Ollama](../../02-artifacts/local-ai/ollama.md) 쪽에서 다룹니다.
+LangurTrace 가 Ollama 0.6.5 로 실험해 적은 Windows 위치는 서버 로그 `%LocalAppData%/Ollama/server.log`, 앱 로그 `app.log`, 업그레이드 로그 `upgrade.log`, 명령 입력 이력 `%UserProfile%/.ollama/history`, 모델 매니페스트와 레이어 `%UserProfile%/.ollama/models/` 입니다 [11]. 명령 입력 이력에는 명령줄로 보낸 요청이 시각 순서대로 남지만 모델의 답은 남지 않습니다 [11]. Ollama 는 로컬 모델을 돌릴 때 프롬프트나 데이터를 보지 않고, 클라우드 모델을 쓸 때는 요청을 처리하되 저장·기록·학습에 쓰지 않는다고 적고 있습니다 [3]. 모델 파일 위치는 `OLLAMA_MODELS` 환경 변수로 바꿀 수 있습니다 [3]. Windows 11 의 `%USERPROFILE%\.ollama` 에서는 `cache/` 아래 JSON 한 개, `id_ed25519`, `id_ed25519.pub` 가 보였고 `models` 폴더는 없었습니다. 로그와 이력 파일의 형식은 [Ollama](../../02-artifacts/local-ai/ollama.md) 쪽에서 다룹니다.
 
 ### OS 별 위치
 
@@ -90,13 +88,13 @@ Electron 으로 만든 데스크톱 앱의 기본 데이터 폴더는 [Electron�
 
 Claude 데스크톱은 설치 방식에 따라 데이터 폴더가 다릅니다. agentsview 코드는 MSIX 패키지로 설치한 경우 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 를, MSIX 가 아니거나 예전 방식으로 설치한 경우 `%APPDATA%\Claude` 를 데이터 폴더로 적습니다 [7]. 두 곳 모두 아래에 Cowork 세션 폴더 `local-agent-mode-sessions` 가 있습니다 [7].
 
-스토어 판을 쓴 Windows 11 에서는 같은 패키지 폴더의 `LocalCache\Local\` 아래에도 파일이 있었습니다. `claude-cli-nodejs\Cache\` 아래 JSONL 파일(키: `cwd`, `debug`, `sessionId`, `timestamp`)과 npm·pip·NuGet 캐시, `GitHub CLI\device-id` 같은 개발 도구 폴더가 보였습니다(확인 범위: Windows 11, 2026-09). 그러니 스토어 판을 쓴 PC 에서는 `%APPDATA%`·`%LOCALAPPDATA%` 바로 아래만 보지 말고 패키지 폴더의 `LocalCache` 아래도 함께 봅니다.
+스토어 판을 쓴 Windows 11 에서는 같은 패키지 폴더의 `LocalCache\Local\` 아래에도 파일이 있었습니다. `claude-cli-nodejs\Cache\` 아래 JSONL 파일(키: `cwd`, `debug`, `sessionId`, `timestamp`)과 npm·pip·NuGet 캐시, `GitHub CLI\device-id` 같은 개발 도구 폴더가 보였습니다. 그러니 스토어 판을 쓴 PC 에서는 `%APPDATA%`·`%LOCALAPPDATA%` 바로 아래만 보지 말고 패키지 폴더의 `LocalCache` 아래도 함께 봅니다.
 
 ### 동기화 — 여러 기기에 같은 대화가 보이는 까닭
 
 같은 계정의 대화가 웹·데스크톱·모바일에 똑같이 보이면 대화 목록의 원본은 서버 계정에 있다고 보고, 기기마다 남은 사본은 따로 수집합니다. Claude Code 의 Remote Control 세션은 실행을 사용자 기기에서 하고, 연결된 동안에는 대화 기록 사본을 서버에도 저장합니다 [4]. 이런 세션은 기기의 세션 기록과 서버 사본이 함께 있습니다.
 
-Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` 키가 있었습니다(확인 범위: Windows 11, 2026-09). 이 파일의 용도를 설명한 공개 문서가 없으므로, 검체에서는 `localSessionId` 와 `remoteSessionId` 값을 세션 기록의 세션 ID 와 대조해 두 세션이 이어졌는지 확인합니다.
+Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` 키가 있었습니다. 이 파일의 용도를 설명한 공개 문서가 없으므로, 검체에서는 `localSessionId` 와 `remoteSessionId` 값을 세션 기록의 세션 ID 와 대조해 두 세션이 이어졌는지 확인합니다.
 
 ## 읽는 법
 

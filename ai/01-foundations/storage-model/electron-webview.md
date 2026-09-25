@@ -6,15 +6,13 @@ nav_order: 10
 
 # Electron·웹뷰 앱의 저장 구조 (Electron·WebView2·WKWebView)
 
-> 확인 날짜: 2026-09. Electron·WebView2 공식 문서는 2026-09-25 판을 기준으로 하고, WebView2 문서의 갱신 날짜는 2026-09-02 입니다. 기기 관찰은 Windows 11(빌드 26200)에서 Claude 데스크톱(스토어 앱) 폴더를 읽기 전용으로 열어 폴더·파일 이름, JSON 키 이름, 데이터베이스 표·칸 이름을 본 결과이고 값은 다루지 않습니다. 관찰에는 앱 버전이 딸려 있지 않으므로, 검체에서는 앱 버전을 먼저 적고 아래 이름과 맞춰 봅니다. 관찰로 확인한 내용에는 "(확인 범위: Windows 11, 2026-09)" 를 붙였습니다.
-
 ## 한 줄 요약
 
 Electron 앱과 WebView2 를 쓰는 앱은 웹 페이지를 앱 창 안에 띄우는 방식이라서 크롬 계열 브라우저와 같은 저장소(쿠키 DB, Local Storage, IndexedDB, 캐시)를 앱 전용 폴더에 따로 만듭니다. Electron 앱은 앱 설정 파일도 같은 폴더에 둡니다 [1].
 
 ## 이 형식을 쓰는 아티팩트
 
-Claude 데스크톱(스토어 앱)의 데이터 폴더는 Electron 앱의 사용자 데이터 폴더와 같은 모양입니다(확인 범위: Windows 11, 2026-09). 다른 AI 데스크톱 앱이 Electron·WebView2·WKWebView 가운데 무엇으로 만들어졌는지는 앱마다 다르므로 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Microsoft Copilot](../../02-artifacts/chat-services/copilot/index.md) 같은 서비스별 쪽을 봅니다. 모바일에서는 Claude Android 앱이 앱 안의 WebView 저장소를 만든다는 공개 자료가 있고, 아래 Android WebView 절에서 다룹니다 [4][5].
+Claude 데스크톱(스토어 앱)의 데이터 폴더는 Electron 앱의 사용자 데이터 폴더와 같은 모양입니다. 다른 AI 데스크톱 앱이 Electron·WebView2·WKWebView 가운데 무엇으로 만들어졌는지는 앱마다 다르므로 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Microsoft Copilot](../../02-artifacts/chat-services/copilot/index.md) 같은 서비스별 쪽을 봅니다. 모바일에서는 Claude Android 앱이 앱 안의 WebView 저장소를 만든다는 공개 자료가 있고, 아래 Android WebView 절에서 다룹니다 [4][5].
 
 크롬 계열 저장소 하나하나의 파일 형식은 다른 판에서 이미 다룹니다. 폴더 공통 구조는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html), LevelDB 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html), SQLite 는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 를 봅니다. 이 쪽은 AI 앱 폴더에서 무엇을 먼저 찾고 어떻게 나눠 읽는지에 집중합니다.
 
@@ -36,7 +34,7 @@ Electron 은 앱이 쓰는 폴더를 이름으로 나눠 부르고, 앱은 `app.
 
 ### AI 앱 폴더에서 본 크롬 계열 항목
 
-Claude 데스크톱 데이터 폴더(스토어 앱은 패키지 폴더 아래 `LocalCache\Roaming\Claude\`)에서 본 항목을 크롬 계열 저장소와 앱 자체 파일로 나누면 아래와 같습니다(확인 범위: Windows 11, 2026-09). "담기는 것" 칸은 Electron 문서의 `sessionData` 설명 [1] 과 폴더 이름으로 맞춘 것이라서, 실제 내용은 검체에서 복사본을 열어 확인합니다.
+Claude 데스크톱 데이터 폴더(스토어 앱은 패키지 폴더 아래 `LocalCache\Roaming\Claude\`)에서 본 항목을 크롬 계열 저장소와 앱 자체 파일로 나누면 아래와 같습니다. "담기는 것" 칸은 Electron 문서의 `sessionData` 설명 [1] 과 폴더 이름으로 맞춘 것이라서, 실제 내용은 검체에서 복사본을 열어 확인합니다.
 
 | 항목 | 모양 | 담기는 것 |
 |---|---|---|
@@ -53,17 +51,17 @@ Claude 데스크톱 데이터 폴더(스토어 앱은 패키지 폴더 아래 `L
 | `Local State`, `DIPS`, `DIPS-wal`, `InterestGroups` | 파일 | 크롬 계열 공통 파일(각 형식은 다른 판 참고) |
 | `Partitions\` 아래 이름별 폴더 | 위 항목을 파티션마다 따로 | 앱이 나눈 세션별 저장소 |
 
-`Partitions\` 아래에는 `cowork-file-preview`, `launch-preview-static` 같은 이름의 폴더가 있었고, 폴더마다 `Network\Cookies` 가 따로 있었습니다(확인 범위: Windows 11, 2026-09). 앱이 세션(파티션)을 나누면 쿠키 DB 도 파티션마다 따로 생겨서, 쿠키를 찾을 때는 기본 `Network\Cookies` 한 곳만 보지 말고 `Partitions\` 아래를 모두 봅니다.
+`Partitions\` 아래에는 `cowork-file-preview`, `launch-preview-static` 같은 이름의 폴더가 있었고, 폴더마다 `Network\Cookies` 가 따로 있었습니다. 앱이 세션(파티션)을 나누면 쿠키 DB 도 파티션마다 따로 생겨서, 쿠키를 찾을 때는 기본 `Network\Cookies` 한 곳만 보지 말고 `Partitions\` 아래를 모두 봅니다.
 
 ### 쿠키 DB 의 표와 칸
 
-파티션 쪽 쿠키 DB 를 열어 보니 `cookies` 표와 `meta` 표가 있었습니다(확인 범위: Windows 11, 2026-09). `cookies` 표의 칸은 `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` 이고, `meta` 표의 칸은 `key`, `value` 입니다. 값이 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉘는 구성과 시각 칸의 해석은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 쪽을 따릅니다. 로그인 세션의 흔적으로서 쿠키가 무엇을 뜻하는지는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
+파티션 쪽 쿠키 DB 를 열어 보니 `cookies` 표와 `meta` 표가 있었습니다. `cookies` 표의 칸은 `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` 이고, `meta` 표의 칸은 `key`, `value` 입니다. 값이 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉘는 구성과 시각 칸의 해석은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 쪽을 따릅니다. 로그인 세션의 흔적으로서 쿠키가 무엇을 뜻하는지는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
 
 ### 앱 자체 JSON 파일
 
-같은 폴더에는 크롬 계열 저장소와 별개로 앱이 직접 쓰는 JSON 파일이 있었습니다. 이름은 `claude_desktop_config.json`, `config.json`, `window-state.json`, `bridge-state.json`, `buddy-tokens.json`, `plan-usage-history.json`, `git-worktrees.json`, `mcp-user-tool-toggles.json`, `extensions-blocklist.json`, `cowork-enabled-cli-ops.json`, `ant-device-registry.json` 입니다(확인 범위: Windows 11, 2026-09). 파일 이름과 키 구성은 앱 버전마다 바뀔 수 있어서 검체의 앱 버전과 함께 적습니다.
+같은 폴더에는 크롬 계열 저장소와 별개로 앱이 직접 쓰는 JSON 파일이 있었습니다. 이름은 `claude_desktop_config.json`, `config.json`, `window-state.json`, `bridge-state.json`, `buddy-tokens.json`, `plan-usage-history.json`, `git-worktrees.json`, `mcp-user-tool-toggles.json`, `extensions-blocklist.json`, `cowork-enabled-cli-ops.json`, `ant-device-registry.json` 입니다. 파일 이름과 키 구성은 앱 버전마다 바뀔 수 있어서 검체의 앱 버전과 함께 적습니다.
 
-조사에 먼저 쓰이는 키는 아래와 같습니다(확인 범위: Windows 11, 2026-09). 키의 뜻을 설명한 공식 문서가 없어서 "짐작" 칸은 키 이름만 보고 짐작한 뜻이고, 보고서에 쓰기 전에 다른 기록과 맞춰 봐야 합니다.
+조사에 먼저 쓰이는 키는 아래와 같습니다. 키의 뜻을 설명한 공식 문서가 없어서 "짐작" 칸은 키 이름만 보고 짐작한 뜻이고, 보고서에 쓰기 전에 다른 기록과 맞춰 봐야 합니다.
 
 | 파일 | 키 | 값 종류 | 짐작 |
 |---|---|---|---|
@@ -135,7 +133,7 @@ LEAF 의 스키마 문서는 Claude Android 앱(`com.anthropic.claude`)이 주�
 
 ## 포렌식에서 중요한 점
 
-**쓰는 중인 파일은 잠겨 있습니다.** 앱이 켜져 있으면 기본 `Network\Cookies` 와 `declarative_performance_observer.db` 를 SQLite 로 바로 열 때 `OperationalError` 가 납니다(확인 범위: Windows 11, 2026-09). 원본을 직접 열지 말고 복사본을 만들어 열며, `-journal`·`-wal` 파일도 함께 복사해 두어야 마지막 변경분을 잃지 않습니다.
+**쓰는 중인 파일은 잠겨 있습니다.** 앱이 켜져 있으면 기본 `Network\Cookies` 와 `declarative_performance_observer.db` 를 SQLite 로 바로 열 때 `OperationalError` 가 납니다. 원본을 직접 열지 말고 복사본을 만들어 열며, `-journal`·`-wal` 파일도 함께 복사해 두어야 마지막 변경분을 잃지 않습니다.
 
 **LevelDB 는 지운 값이 한동안 남습니다.** Local Storage·IndexedDB 는 LevelDB 라서 지운 레코드가 `.log`·`.ldb` 에 남아 있을 수 있고, 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 를 따릅니다. 그 안에 AI 대화 내용이 들어 있는지는 앱마다 다르므로 검체에서 확인하고, 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md) 에서 다룹니다.
 

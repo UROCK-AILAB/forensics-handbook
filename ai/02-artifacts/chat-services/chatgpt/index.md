@@ -10,8 +10,6 @@ has_toc: false
 
 ChatGPT 는 웹·Windows·macOS·Android·iOS 에서 쓰는 대화형 AI 서비스이고, 대화 원본은 계정에 묶여 서버에 있지만 모바일 앱은 그 사본을 기기에 평문으로 남기므로, 기기 흔적과 계정 데이터 내보내기를 함께 봐야 대화 내용과 사용 기기를 모두 설명할 수 있습니다.
 
-> 확인 날짜: 2026-09-25. App Store·Google Play·Microsoft Store 페이지, ALEAPP·iLEAPP·RLEAPP 분석기 코드, 논문 초록과 다른 논문의 요약, 9to5Mac 보도를 바탕으로 썼습니다.
-
 ## 왜 중요한가
 
 ChatGPT 는 여러 기기에서 같은 계정으로 쓰는 서비스라서, 한 기기에 흔적이 없어도 다른 기기나 웹에서 쓴 기록이 계정에 남아 있을 수 있습니다. 서버·기기·동기화에 데이터가 나뉘어 있는 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다.

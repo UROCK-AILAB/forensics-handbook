@@ -55,7 +55,7 @@ Zeek 는 TLS 트래픽을 분석해 `ssl.log` 에 남기고, `server_name` 칸�
 
 ### 기기 안: 데스크톱 앱의 네트워크 폴더
 
-Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습니다(확인 범위: Windows 11, 2026-09). 앱 버전은 검체에서 따로 확인합니다. 패키지 앱이 `AppData` 에 쓴 파일은 사용자·패키지별 전용 위치로 옮겨 저장되므로(참고 문헌 4), 수집할 때는 아래 경로의 앞부분을 그대로 쓰지 말고 사용자 프로필 아래에서 `LocalCache\Roaming\Claude` 가 들어 있는 패키지 폴더를 찾습니다. 자세한 위치는 [Claude](../chat-services/claude/windows.md) Windows 페이지에서 다룹니다.
+Claude 데스크톱(스토어 앱) 폴더에서는 아래 파일을 확인했습니다. 앱 버전은 검체에서 따로 확인합니다. 패키지 앱이 `AppData` 에 쓴 파일은 사용자·패키지별 전용 위치로 옮겨 저장되므로(참고 문헌 4), 수집할 때는 아래 경로의 앞부분을 그대로 쓰지 말고 사용자 프로필 아래에서 `LocalCache\Roaming\Claude` 가 들어 있는 패키지 폴더를 찾습니다. 자세한 위치는 [Claude](../chat-services/claude/windows.md) Windows 페이지에서 다룹니다.
 
 ```
 %USERPROFILE%\Packages\<Claude 패키지>\LocalCache\Roaming\Claude\Network\
@@ -86,7 +86,7 @@ TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypt
 
 ### 앱의 `Cookies` DB
 
-`Partitions\<이름>\Network\Cookies` 를 SQLite 로 열면 표 두 개가 있습니다(확인 범위: Windows 11, 2026-09).
+`Partitions\<이름>\Network\Cookies` 를 SQLite 로 열면 표 두 개가 있습니다.
 
 | 표 | 칸 |
 |---|---|
@@ -113,7 +113,7 @@ Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마�
 - **비슷한 이름의 도메인.** 지원 사이트 목록 자체에 공식 서비스를 흉내 낸 제3자 도메인이 섞여 있습니다. 도메인을 서비스 이름으로 바꿔 적을 때 공식 여부를 따로 적습니다.
 - **ECH 와 TLS 1.3.** ECH 를 쓰는 연결은 `server_name` 이 비고, TLS 1.3 에서는 인증서도 보이지 않습니다. 이런 연결은 DNS 기록이나 목적지 IP 와 묶어서 봐야 합니다.
 - **공유 도메인.** `*.bing.com/chat` 처럼 경로까지 붙은 항목은 DNS·SNI 에서 경로가 보이지 않아서 도메인만으로는 AI 기능을 썼는지 검색만 했는지 나누지 못합니다. `*.github.com/features/copilot` 도 같습니다.
-- **원래 자리에서 열기.** 기본 `Network\Cookies` 를 원래 자리에서 SQLite 로 열면 OperationalError 가 났습니다(확인 범위: Windows 11, 2026-09). 그래서 `Cookies-journal` 과 함께 복사한 사본으로 봅니다. 기기에서 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
+- **원래 자리에서 열기.** 기본 `Network\Cookies` 를 원래 자리에서 SQLite 로 열면 OperationalError 가 났습니다. 그래서 `Cookies-journal` 과 함께 복사한 사본으로 봅니다. 기기에서 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
 - **지우기.** 사용자가 기기에서 앱 폴더를 지워도 기기 밖의 Zeek·프록시 기록과 이미 중앙으로 모은 이벤트 로그 사본은 그대로 남습니다. 기기 안 기록과 기기 밖 기록이 서로 맞지 않으면 그 차이를 지운 흔적의 단서로 적습니다.
 
 ## 직접 분석해 보기

@@ -8,7 +8,7 @@ nav_order: 750
 
 Stable Diffusion WebUI 와 ComfyUI 는 이미지 생성 모델을 자기 컴퓨터에서 돌리는 도구이고, 둘 다 기본 설정에서는 만든 이미지 파일 안에 프롬프트와 시드 같은 생성 설정을 글자로 넣어 저장합니다.
 
-> 확인 범위: 공식 문서(AUTOMATIC1111 위키 "Features", ComfyUI README, 둘 다 2026-09-25 열람)와 소스 코드 기준입니다. Stable Diffusion WebUI 는 AUTOMATIC1111 저장소 master 브랜치(마지막 커밋 2024-07-27, 최신 릴리스 v1.10.1), ComfyUI 는 master 브랜치(2026-09-25 커밋, 최신 릴리스 v0.37.0)의 코드 기준입니다. 기기에서 관찰한 값이 아니므로 검체의 판이 다르면 폴더 이름과 설정 이름이 다를 수 있고, 검체의 설정 파일로 먼저 확인합니다.
+Stable Diffusion WebUI 는 v1.10.1, ComfyUI 는 v0.37.0 무렵 코드 기준이라, 판이 다르면 폴더와 설정 이름이 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 

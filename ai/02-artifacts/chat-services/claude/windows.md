@@ -9,7 +9,7 @@ nav_order: 160
 
 Windows 의 Claude 데스크톱 앱은 사용자 데이터 폴더 하나에 크롬 계열 저장소, 앱 설정 JSON, Claude Code·Cowork 세션 파일을 함께 남깁니다. 일반 대화 원본은 계정 서버에 있지만, Cowork 에이전트 세션은 대화 기록과 계정 정보가 이 폴더에 남습니다.
 
-> 확인 날짜: 2026-09. 공식 도움말과 MCP 문서(2026-09-25 열람), 공개 분석 도구 두 가지의 코드[6][7], 기기 관찰을 함께 썼습니다. 기기 관찰은 스토어에서 받은 앱의 패키지 폴더를 읽기 전용으로 열어 폴더·파일 이름과 키 이름만 본 것이고, 값은 가렸습니다(확인 범위: Windows 11, 2026-09). 앱이 자주 바뀌므로 경로와 키는 검체에서 다시 확인합니다.
+앱이 자주 바뀌어서 경로와 키 이름은 판에 따라 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -130,7 +130,7 @@ agentsview 의 Cowork 형식 메모는 2026-07-19 에 Anthropic 문서를 봤을
 
 ### 앱 설정 JSON
 
-사용자 데이터 폴더에는 앱이 직접 쓰는 JSON 파일이 있고, 키 이름은 다음과 같았습니다(확인 범위: Windows 11, 2026-09). claude-forensics 는 이 가운데 `config.json`, `claude_desktop_config.json`, `buddy-tokens.json`, `cowork-enabled-cli-ops.json` 과 `ant-did` 를 수집 대상으로 둡니다[6]. 키의 뜻을 설명한 공개 자료가 없어서, 아래 셋째 칸은 키 이름이 가리키는 것만 적었고 검체의 값으로 확인해야 합니다.
+사용자 데이터 폴더에는 앱이 직접 쓰는 JSON 파일이 있고, 키 이름은 다음과 같았습니다. claude-forensics 는 이 가운데 `config.json`, `claude_desktop_config.json`, `buddy-tokens.json`, `cowork-enabled-cli-ops.json` 과 `ant-did` 를 수집 대상으로 둡니다[6]. 키의 뜻을 설명한 공개 자료가 없어서, 아래 셋째 칸은 키 이름이 가리키는 것만 적었고 검체의 값으로 확인해야 합니다.
 
 | 파일 | 키(일부) | 키 이름이 가리키는 것 |
 |---|---|---|
@@ -150,7 +150,7 @@ agentsview 의 Cowork 형식 메모는 2026-07-19 에 Anthropic 문서를 봤을
 
 ### 크롬 계열 저장소
 
-스토어판의 `LocalCache\Roaming\Claude\` 아래에는 크롬 계열 브라우저 프로필과 같은 이름의 폴더와 파일이 있었습니다(확인 범위: Windows 11, 2026-09).
+스토어판의 `LocalCache\Roaming\Claude\` 아래에는 크롬 계열 브라우저 프로필과 같은 이름의 폴더와 파일이 있었습니다.
 
 ```
 Cache\            Code Cache\        GPUCache\
@@ -168,7 +168,7 @@ Partitions\이름\...
 ChromeNativeHost\chrome-native-host.exe
 ```
 
-폴더마다의 형식은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)에 있습니다. `Partitions` 아래에는 `cowork-file-preview`, `launch-preview-static` 파티션이 있었고, `Partitions\cowork-file-preview\Network\Cookies` 는 표 `cookies` 와 `meta` 가 있는 SQLite 데이터베이스였습니다(확인 범위: Windows 11, 2026-09). `cookies` 의 칸은 크롬 계열 쿠키 DB 와 같았습니다.
+폴더마다의 형식은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)에 있습니다. `Partitions` 아래에는 `cowork-file-preview`, `launch-preview-static` 파티션이 있었고, `Partitions\cowork-file-preview\Network\Cookies` 는 표 `cookies` 와 `meta` 가 있는 SQLite 데이터베이스였습니다. `cookies` 의 칸은 크롬 계열 쿠키 DB 와 같았습니다.
 
 ```
 cookies: creation_utc, host_key, top_frame_site_key, name, value,
@@ -183,9 +183,9 @@ meta:    key, value
 
 ### 패키지 안의 다른 폴더
 
-스토어판 패키지의 `LocalCache\Local\claude-cli-nodejs\Cache\이름\` 아래에는 `mcp-logs-scheduled-tasks`, `mcp-logs-computer-use` 처럼 `mcp-logs-` 로 시작하는 폴더와 JSON Lines 파일이 있었고, 한 줄의 키는 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다(확인 범위: Windows 11, 2026-09). 이 로그는 [Claude Code — Windows](../../dev-agents/claude-code/windows.md)와 [MCP 서버와 도구 호출 기록](../../dev-agents/mcp.md)에서 다룹니다.
+스토어판 패키지의 `LocalCache\Local\claude-cli-nodejs\Cache\이름\` 아래에는 `mcp-logs-scheduled-tasks`, `mcp-logs-computer-use` 처럼 `mcp-logs-` 로 시작하는 폴더와 JSON Lines 파일이 있었고, 한 줄의 키는 `cwd`, `debug`, `sessionId`, `timestamp` 였습니다. 이 로그는 [Claude Code — Windows](../../dev-agents/claude-code/windows.md)와 [MCP 서버와 도구 호출 기록](../../dev-agents/mcp.md)에서 다룹니다.
 
-같은 `LocalCache\Local` 에는 Android SDK, NuGet, npm-cache, pip cache, GitHub CLI 의 device-id 같은 다른 개발 도구의 캐시 폴더도 있었습니다(확인 범위: Windows 11, 2026-09). 이런 폴더가 보여도 사용자가 그 도구를 따로 설치했다고 바로 쓰지 않고, 앱 밖의 설치 흔적과 비교합니다.
+같은 `LocalCache\Local` 에는 Android SDK, NuGet, npm-cache, pip cache, GitHub CLI 의 device-id 같은 다른 개발 도구의 캐시 폴더도 있었습니다. 이런 폴더가 보여도 사용자가 그 도구를 따로 설치했다고 바로 쓰지 않고, 앱 밖의 설치 흔적과 비교합니다.
 
 ### 관리 정책
 

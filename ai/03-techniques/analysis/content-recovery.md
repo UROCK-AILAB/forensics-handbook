@@ -8,7 +8,7 @@ nav_order: 870
 
 화면이나 목록에서 사라진 AI 대화를 기기에 남은 사본(도구 기록의 이전 판, 앱 로그, SQLite WAL, 앱 캐시, 스냅숏)과 서버에 남은 사본에서 다시 찾는 방법이며, 원본이 어디에 있는지부터 가려야 헛수고를 줄일 수 있습니다.
 
-> 확인 날짜: 2026-09-25. Claude Code 의 폴더와 키 이름은 Windows 11 PC 한 대에서 관찰한 이름까지만 싣고 값은 싣지 않습니다(확인 범위: Windows 11, 2026-09). 로컬 LLM 앱은 LangurTrace 논문[1](Windows 11 Pro 24H2), 모바일 컴패니언 앱은 Ex Machina 논문[2](Android 12 에뮬레이터), Grok Android 는 ALEAPP 분석기[3]의 시험 결과를 근거로 씁니다. 잠금 해제나 암호화 우회, 남은 토큰으로 서버에 접근하는 방법은 다루지 않습니다.
+잠금 해제나 암호화 우회, 남은 토큰으로 서버에 접근하는 방법은 다루지 않습니다.
 
 ## 언제 쓰나
 
@@ -52,7 +52,7 @@ nav_order: 870
 
 세션 기록이 정리된 뒤에도 `history.jsonl` 은 남으므로, 이 파일의 `sessionId` 가운데 기록 파일이 없는 줄이 지워진 세션의 프롬프트입니다. claude-forensics 도구[7]는 이런 줄을 "orphan" 으로 모아 `orphan-prompts.jsonl` 로 내고, 보관 기간보다 오래된 대화에서는 이것이 유일하게 남은 기록인 경우가 많다고 적습니다. 다만 같은 도구 README(2026-06 기준)는 Windows 판 Claude Code 가 `history.jsonl`·`paste-cache/`·`file-history/` 를 쓰지 않는 것으로 보인다고 적었고, 이 핸드북이 관찰한 Windows 11 PC(2026-09)에는 `history.jsonl` 이 있었습니다. 판과 설정에 따라 다를 수 있으니 검체에 이 파일들이 있는지부터 봅니다.
 
-관찰한 PC 에서는 `history.jsonl` 의 `pastedContents.#` 아래에 붙여넣기 본문(`content`)이 있는 줄과 해시(`contentHash`)만 있는 줄이 섞여 있었습니다(확인 범위: Windows 11, 2026-09). 해시와 `paste-cache/` 파일의 연결은 공개 문서에 없으니, 두 곳을 모두 수집하고 연결은 검체의 실제 파일로 확인합니다. 대화를 요약(`/compact`)해도 원래 메시지는 기록 파일에 그대로 남는다고 문서가 적고 있어, 화면에서 요약만 보였다는 진술과 파일 내용이 다를 수 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
+관찰한 PC 에서는 `history.jsonl` 의 `pastedContents.#` 아래에 붙여넣기 본문(`content`)이 있는 줄과 해시(`contentHash`)만 있는 줄이 섞여 있었습니다. 해시와 `paste-cache/` 파일의 연결은 공개 문서에 없으니, 두 곳을 모두 수집하고 연결은 검체의 실제 파일로 확인합니다. 대화를 요약(`/compact`)해도 원래 메시지는 기록 파일에 그대로 남는다고 문서가 적고 있어, 화면에서 요약만 보였다는 진술과 파일 내용이 다를 수 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
 
 Gemini CLI 는 세션 파일에 줄을 덧붙이기만 합니다. 공개 소스(`chatRecordingService.ts`)[8]를 보면 대화를 되감을 때 앞선 메시지 줄을 지우지 않고 `{"$rewindTo": "<메시지 id>"}` 줄을 하나 덧붙이며, 불러올 때 그 id 부터 뒤의 메시지를 빼고 보여 줍니다. 그래서 화면에서 사라진 턴도 파일을 직접 읽으면 나옵니다. 세션 파일의 칸은 [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md)에 있습니다.
 
@@ -77,7 +77,7 @@ Gemini CLI 는 세션 파일에 줄을 덧붙이기만 합니다. 공개 소스(
 
 ### 4. 앱 캐시를 살핍니다
 
-데스크톱 채팅 앱은 대부분 Electron 이나 WebView2 위에서 돌아 브라우저와 같은 저장소를 씁니다. 관찰한 Claude 데스크톱(Windows 스토어 앱)의 패키지 폴더 아래 `LocalCache\Roaming\Claude` 에는 `Cache`, `Code Cache`, `IndexedDB`, `Local Storage\leveldb`, `File System`, `Network` 폴더가 있었습니다(확인 범위: Windows 11, 2026-09). 폴더가 있다는 사실과 그 안에 대화 내용이 있다는 사실은 다르므로, 캐시는 "대화가 있을 수도 있는 곳" 으로 두고 LevelDB·IndexedDB·Chromium 캐시를 읽는 일반 방법으로 살핍니다. 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에 있습니다.
+데스크톱 채팅 앱은 대부분 Electron 이나 WebView2 위에서 돌아 브라우저와 같은 저장소를 씁니다. 관찰한 Claude 데스크톱(Windows 스토어 앱)의 패키지 폴더 아래 `LocalCache\Roaming\Claude` 에는 `Cache`, `Code Cache`, `IndexedDB`, `Local Storage\leveldb`, `File System`, `Network` 폴더가 있었습니다. 폴더가 있다는 사실과 그 안에 대화 내용이 있다는 사실은 다르므로, 캐시는 "대화가 있을 수도 있는 곳" 으로 두고 LevelDB·IndexedDB·Chromium 캐시를 읽는 일반 방법으로 살핍니다. 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에 있습니다.
 
 앱이 실행 중이면 파일이 잠겨 열리지 않을 수 있습니다. 관찰 때도 기본 `Network\Cookies` DB 가 OperationalError 로 열리지 않았으니, 복사본을 만들어 엽니다. 앱을 지운 뒤에도 캐시가 남는지는 앱 형식마다 다릅니다. WebView2 사용자 데이터 폴더는 Win32·.NET·WinUI 앱을 지워도 자동으로 지워지지 않고, 스토어 앱을 지우면 Windows 가 지웁니다. Electron 기반 스토어 앱의 `LocalCache` 가 앱 삭제 때 함께 지워지는지는 공개 문서에 없어 검체로 확인해야 합니다. 저장 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
@@ -109,7 +109,7 @@ SQLite 를 쓰는 저장소는 레코드를 지워도 빈 페이지나 WAL 파�
 
 ### 8. 알림은 시험 기기로 먼저 확인합니다
 
-AI 앱이 OS 알림에 대화 내용을 미리 보기로 싣는지, 그 알림이 OS 알림 저장소에 남는지는 공개된 분석 자료가 없어 검체나 시험 기기로 확인해야 합니다. 같은 OS·같은 앱 판을 시험 기기에 깔고, 알림 미리 보기 설정을 기록한 뒤 알림을 받아 어디에 무엇이 남는지 먼저 봅니다. Claude Code 는 훅 이벤트에 `Notification` 이 있고 관찰한 PC 의 사용자 설정에도 이 이벤트 키가 있었으니(확인 범위: Windows 11, 2026-09), 알림 훅이 부르는 스크립트가 따로 기록을 남기는지도 봅니다. 훅이 받는 값과 스크립트 동작은 설정마다 달라서 스크립트를 직접 읽어 확인합니다.
+AI 앱이 OS 알림에 대화 내용을 미리 보기로 싣는지, 그 알림이 OS 알림 저장소에 남는지는 공개된 분석 자료가 없어 검체나 시험 기기로 확인해야 합니다. 같은 OS·같은 앱 판을 시험 기기에 깔고, 알림 미리 보기 설정을 기록한 뒤 알림을 받아 어디에 무엇이 남는지 먼저 봅니다. Claude Code 는 훅 이벤트에 `Notification` 이 있고 관찰한 PC 의 사용자 설정에도 이 이벤트 키가 있었으니, 알림 훅이 부르는 스크립트가 따로 기록을 남기는지도 봅니다. 훅이 받는 값과 스크립트 동작은 설정마다 달라서 스크립트를 직접 읽어 확인합니다.
 
 ### 9. 서버 사본을 요청합니다
 
@@ -139,7 +139,7 @@ AI 앱 전용 공개 도구는 아래와 같습니다. 모두 시험한 판이 �
 
 캐시 시각은 사용자가 본 시각이 아닙니다. ALEAPP Grok 분석기는 앱이 LRU 가 아닌 캐시 정리 방식을 쓰면 `last_touch_timestamp` 가 전혀 갱신되지 않고, LRU 여도 사용자가 본 때가 아니라 캐시를 읽은 때 갱신된다고 적었습니다[3]. "Not Present" 항목도 캐시 정리로 파일이 지워졌을 수 있어서, 그것만으로 사용자가 지웠다고 쓰지 않습니다.
 
-대화 기록에는 비밀 값이 섞여 있을 수 있습니다. Claude Code 문서는 도구가 `.env` 파일을 읽거나 명령이 자격 증명을 출력하면 그 값이 대화 기록에 그대로 쓰인다고 적고, 기록은 저장할 때 암호화하지 않아 OS 파일 권한이 유일한 보호입니다. 같은 폴더의 `.credentials.json` 에는 `accessToken`·`refreshToken` 키가 있었고(확인 범위: Windows 11, 2026-09), Jan 의 `cortex.log` 에는 등록한 API 키가 평문으로 남습니다[1]. 수집한 사본은 원본과 같은 수준으로 보관하고 보고서에서는 값을 가립니다([API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)).
+대화 기록에는 비밀 값이 섞여 있을 수 있습니다. Claude Code 문서는 도구가 `.env` 파일을 읽거나 명령이 자격 증명을 출력하면 그 값이 대화 기록에 그대로 쓰인다고 적고, 기록은 저장할 때 암호화하지 않아 OS 파일 권한이 유일한 보호입니다. 같은 폴더의 `.credentials.json` 에는 `accessToken`·`refreshToken` 키가 있었고, Jan 의 `cortex.log` 에는 등록한 API 키가 평문으로 남습니다[1]. 수집한 사본은 원본과 같은 수준으로 보관하고 보고서에서는 값을 가립니다([API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)).
 
 앱 판이 결과를 가릅니다. ChatGPT macOS 앱은 2024-07 보도 뒤 저장 방식을 바꿨고 고친 판 번호는 보도에 없으며, Claude Code 도 첨부 이미지 저장 위치를 v2.1.274 뒤로 바꿨습니다. 수집한 앱의 판을 먼저 적고, 판이 다르면 이 페이지의 위치를 그대로 믿지 않습니다.
 

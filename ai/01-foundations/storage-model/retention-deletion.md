@@ -6,8 +6,6 @@ nav_order: 40
 
 # 대화 기록 보관 설정과 삭제 (Retention·Deletion)
 
-> 확인 날짜: 2026-09-25. 공식 문서의 마지막 수정일은 Claude 개인정보 문서 2026-07-01, Gemini 개인정보 문서 2026-09-24, Microsoft Purview 보존 문서 2026-06-25(작성 2025-09-23), eDiscovery 문서 2026-06-29, 감사 보관 문서 2026-06-24 입니다. 기기 쪽 삭제 실험은 논문 두 편의 결과이고, 시험한 OS 와 앱 판은 본문 표에 적었습니다. 기기 관찰은 Windows 11(빌드 26200)에서 설정 파일의 키 이름만 본 결과이고, 그런 문장에는 "(확인 범위: Windows 11, 2026-09)" 를 붙였습니다.
-
 ## 한 줄 요약
 
 AI 대화 기록은 서버에서는 서비스 회사의 보관 정책과 사용자 설정에 따라, 기기에서는 앱의 저장 방식과 자동 정리 설정에 따라 따로 사라집니다. 목록에서 지운 대화가 서버의 보류 폴더나 기기의 WAL·로그 파일에 남는 경우가 있어서 "지웠다" 와 "없다" 를 나눠 적어야 합니다.
@@ -60,9 +58,9 @@ Claude Code 는 세션 기록을 `cleanupPeriodDays` 로 정한 기간이 지나
 }
 ```
 
-`stats-cache.json` 은 자동 정리 대상이 아니고 [4], 관찰한 파일에는 `dailyActivity[].date`·`messageCount`·`sessionCount`·`toolCallCount`, `firstSessionDate`, `hourCounts`, `longestSession`, `modelUsage`, `totalMessages`, `totalSessions` 같은 키가 있었습니다(확인 범위: Windows 11, 2026-09). 세션 기록이 정리된 뒤에도 그 세션의 수치가 통계에 남는지는 정리 전후의 파일을 견주어 검체에서 확인합니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에서 다룹니다.
+`stats-cache.json` 은 자동 정리 대상이 아니고 [4], 관찰한 파일에는 `dailyActivity[].date`·`messageCount`·`sessionCount`·`toolCallCount`, `firstSessionDate`, `hourCounts`, `longestSession`, `modelUsage`, `totalMessages`, `totalSessions` 같은 키가 있었습니다. 세션 기록이 정리된 뒤에도 그 세션의 수치가 통계에 남는지는 정리 전후의 파일을 견주어 검체에서 확인합니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에서 다룹니다.
 
-Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 `preferences.ccAutoArchiveInactiveDays` 키가 있었습니다(확인 범위: Windows 11, 2026-09). 이 설정이 기기의 파일을 지우는지는 값과 데이터 폴더의 세션 파일을 대조해 검체에서 확인합니다.
+Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 `preferences.ccAutoArchiveInactiveDays` 키가 있었습니다. 이 설정이 기기의 파일을 지우는지는 값과 데이터 폴더의 세션 파일을 대조해 검체에서 확인합니다.
 
 ### 기기 쪽 — 앱 화면에서 지운 뒤 남는 것
 

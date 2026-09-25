@@ -8,7 +8,7 @@ nav_order: 440
 
 서버에서 그림을 만드는 서비스는 프롬프트와 생성 원본을 서버에 두고 기기에는 내려받은 이미지 파일만 남기는 반면, PC 에서 돌리는 도구는 프롬프트·시드 같은 생성 정보를 이미지 파일 안에 함께 적어 둡니다.
 
-> 확인 날짜: 2026-09-25. 로컬 도구가 파일을 저장하는 방식은 ComfyUI 와 AUTOMATIC1111 stable-diffusion-webui 의 master 브랜치 소스 코드[1][2]를 따릅니다. 소스는 판마다 바뀔 수 있어서, 검체에 설치된 도구의 판과 맞춰 봅니다. Midjourney·ChatGPT 이미지 생성의 보관 기간·공개 설정과 내려받은 파일의 메타데이터는 이 페이지에서 다루지 않으니, 사건 당시의 공식 도움말과 받은 파일로 직접 확인합니다.
+로컬 도구의 저장 방식은 판마다 바뀔 수 있으니 검체에 설치된 도구의 판과 맞춰 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -106,7 +106,7 @@ ComfyUI 의 `prompt` 값은 JSON 문자열이라 값만 떼어 jq 로 펼치면 
 
 ## 교차 검증
 
-로컬 도구로 만들었다면 [로컬 이미지 생성 도구](../local-ai/image-gen-local.md)의 출력 폴더와 설정, [로컬 모델 파일](../local-ai/model-files.md)에 남은 모델 파일을 함께 보고, 서버 서비스라면 브라우저 방문·다운로드 기록과 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)으로 그 시간대에 서비스에 접속했는지 맞춰 봅니다. AI 개발 도구가 이미지를 다룬 흔적은 도구 기록에 따로 남을 수 있는데, Claude Code 세션 기록의 도구 결과에는 `toolUseResult.isImage` 라는 참·거짓 키가 있었습니다(확인 범위: Windows 11, 2026-09). 이 키의 뜻은 공식 문서에 설명이 없어서 같은 줄의 도구 결과 내용과 맞춰 보고 판단하고, 기록 구조는 [Claude Code](../dev-agents/claude-code/index.md) 페이지에 있습니다. 합성 이미지 사건을 처음부터 따라가는 흐름은 [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md)와 [이 글·이미지는 AI가 만들었나](../../04-scenarios/attribution/ai-generated.md)에 있습니다.
+로컬 도구로 만들었다면 [로컬 이미지 생성 도구](../local-ai/image-gen-local.md)의 출력 폴더와 설정, [로컬 모델 파일](../local-ai/model-files.md)에 남은 모델 파일을 함께 보고, 서버 서비스라면 브라우저 방문·다운로드 기록과 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)으로 그 시간대에 서비스에 접속했는지 맞춰 봅니다. AI 개발 도구가 이미지를 다룬 흔적은 도구 기록에 따로 남을 수 있는데, Claude Code 세션 기록의 도구 결과에는 `toolUseResult.isImage` 라는 참·거짓 키가 있었습니다. 이 키의 뜻은 공식 문서에 설명이 없어서 같은 줄의 도구 결과 내용과 맞춰 보고 판단하고, 기록 구조는 [Claude Code](../dev-agents/claude-code/index.md) 페이지에 있습니다. 합성 이미지 사건을 처음부터 따라가는 흐름은 [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md)와 [이 글·이미지는 AI가 만들었나](../../04-scenarios/attribution/ai-generated.md)에 있습니다.
 
 ## 실습
 

@@ -9,7 +9,7 @@ nav_order: 590
 
 Claude Code 의 설정 파일에는 에이전트가 묻지 않고 실행해도 되는 명령(권한 규칙)과 특정 순간에 자동으로 도는 명령(훅)이 적혀 있어서, 사고 조사에서 "에이전트가 무엇을 할 수 있었나" 와 "사람 모르게 무엇이 돌았나" 를 가르는 근거가 됩니다. 같은 폴더의 `backups/` 에는 전역 상태 파일의 사본이 남아서 로그인한 계정과 프로젝트별 사용량까지 알려 줍니다.
 
-> 확인 날짜: 2026-09. 공식 문서(2026-09-25 열람), 공개 도구 두 개의 코드와 문서, 기기 관찰을 함께 썼습니다. 도구는 ccfx(마지막 커밋 2026-08-18)[9]와 claude-forensics v0.1.1(마지막 커밋 2026-06-16)[10]이고, Claude Code 판이 바뀌면 키가 달라질 수 있습니다. 기기 관찰은 사용자 설정 파일의 키 이름만 본 것이고 값은 가렸습니다(확인 범위: Windows 11, 2026-09). 본문의 v2.1.x 같은 번호는 문서 문장을 그대로 옮긴 것입니다.
+Claude Code 판이 바뀌면 설정 키가 달라질 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -37,7 +37,7 @@ Claude Code 의 설정 파일에는 에이전트가 묻지 않고 실행해도 �
 | `~/.claude/remote-settings.json`, `~/.claude/policy-limits.json` | 서버 관리 설정의 캐시, 로그아웃할 때 지움 | 문서[5] |
 | `~/.claude/.credentials.json` | 로그인 토큰. ccfx 는 있는지와 크기·수정 시각만 봄 | ccfx 문서[9] |
 
-관찰한 PC 의 `backups/` 에도 사본이 여럿 있었습니다(확인 범위: Windows 11, 2026-09). `backups/` 는 `cleanupPeriodDays` 청소 대상이라 오래된 사본은 남아 있지 않을 수 있고, 청소 목록 전체는 [세션 기록 구조](transcripts.md)에 있습니다. claude-forensics 문서는 Windows 의 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 적습니다(2026-06)[10].
+관찰한 PC 의 `backups/` 에도 사본이 여럿 있었습니다. `backups/` 는 `cleanupPeriodDays` 청소 대상이라 오래된 사본은 남아 있지 않을 수 있고, 청소 목록 전체는 [세션 기록 구조](transcripts.md)에 있습니다. claude-forensics 문서는 Windows 의 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 적습니다(2026-06)[10].
 
 설정 파일을 고치면 실행 중인 세션이 바로 다시 읽고, 파일이 바뀔 때마다 `ConfigChange` 훅이 돕니다(MDM 이나 콘솔로 바꾼 관리 정책은 제외)[2]. 지금 어떤 관리 소스가 적용 중인지는 `/status` 의 `Setting sources` 줄에 나옵니다[5].
 
@@ -45,7 +45,7 @@ Claude Code 의 설정 파일에는 에이전트가 묻지 않고 실행해도 �
 
 ### 관찰한 사용자 설정 키
 
-관찰한 `~/.claude/settings.json` 에는 `permissions.allow`, `hooks` 아래 이벤트별 `matcher` 와 `hooks`, `enabledPlugins`, `extraKnownMarketplaces` 아래 이름별 `source.repo` 와 `source.source`, `autoMode.environment`, `autoUpdatesChannel`, `effortLevel`, `modelSettings` 아래 모델별 `effortLevel`, `theme` 같은 키가 있었습니다. 훅 이벤트 키로는 `Notification`, `PermissionRequest`, `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `SessionEnd`, `Stop`, `StopFailure`, `SubagentStart`, `SubagentStop`, `TeammateIdle`, `UserPromptSubmit` 을 보았습니다(확인 범위: Windows 11, 2026-09). `extraKnownMarketplaces` 의 `source.repo` 에는 저장소 이름이 들어 있어서, 외부 플러그인을 어디서 받아 왔는지 따라갈 때 출발점으로 씁니다.
+관찰한 `~/.claude/settings.json` 에는 `permissions.allow`, `hooks` 아래 이벤트별 `matcher` 와 `hooks`, `enabledPlugins`, `extraKnownMarketplaces` 아래 이름별 `source.repo` 와 `source.source`, `autoMode.environment`, `autoUpdatesChannel`, `effortLevel`, `modelSettings` 아래 모델별 `effortLevel`, `theme` 같은 키가 있었습니다. 훅 이벤트 키로는 `Notification`, `PermissionRequest`, `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `SessionEnd`, `Stop`, `StopFailure`, `SubagentStart`, `SubagentStop`, `TeammateIdle`, `UserPromptSubmit` 을 보았습니다. `extraKnownMarketplaces` 의 `source.repo` 에는 저장소 이름이 들어 있어서, 외부 플러그인을 어디서 받아 왔는지 따라갈 때 출발점으로 씁니다.
 
 아래는 키 이름을 문서·관찰과 맞추고 값은 새로 만든 예시입니다.
 
@@ -151,7 +151,7 @@ ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModifi
 
 ## 시각 해석
 
-관찰한 사용자 설정 파일의 키에는 시각 값이 없었습니다(확인 범위: Windows 11, 2026-09). 설정이 언제 바뀌었는지는 파일 시스템의 마지막 쓰기 시각, `backups/` 의 파일 이름에 붙은 시각, 저장소의 git 커밋 시각, 세션 기록의 `permissionMode` 가 바뀐 줄의 시각으로 가늠합니다. 설정 파일은 고칠 때마다 통째로 다시 쓰일 수 있어서, 마지막 쓰기 시각은 마지막 변경만 알려 줍니다.
+관찰한 사용자 설정 파일의 키에는 시각 값이 없었습니다. 설정이 언제 바뀌었는지는 파일 시스템의 마지막 쓰기 시각, `backups/` 의 파일 이름에 붙은 시각, 저장소의 git 커밋 시각, 세션 기록의 `permissionMode` 가 바뀐 줄의 시각으로 가늠합니다. 설정 파일은 고칠 때마다 통째로 다시 쓰일 수 있어서, 마지막 쓰기 시각은 마지막 변경만 알려 줍니다.
 
 `backups/` 사본 이름에 붙은 시각과 `projects` 아래 `lastSessionModified` 값의 형식·시간대는 공개된 명세가 없어서 검체에서 확인해야 합니다. ccfx 코드는 `lastSessionModified` 를 형식을 정하지 않은 JSON 값(`json.RawMessage`)으로 받기만 합니다[9]. 사본 이름의 시각을 파일 시스템의 생성·수정 시각과 나란히 놓으면 어떤 형식인지 가늠할 수 있습니다.
 

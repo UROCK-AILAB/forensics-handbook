@@ -8,7 +8,7 @@ nav_order: 890
 
 글이나 이미지 하나만 보고 AI 가 만들었는지 가리는 방법(출처 메타데이터, 보이지 않는 워터마크, 생성 도구가 남긴 정보, 문체 특징)마다 무엇을 말해 주고 무엇을 말해 주지 못하는지 정리하고, 결론을 결과물 자체보다 생성 기록 쪽에서 찾는 순서를 설명합니다.
 
-> 확인 날짜: 2026-09. C2PA 는 명세 설명서 2.2 판을 기준으로 씁니다(사이트에는 2.4 판까지 올라 있습니다). 서비스마다 C2PA·워터마크를 넣는지는 자주 바뀌어서, 사건 당시 그 서비스의 공지와 받은 파일로 확인합니다. 판별은 파일 자체를 보는 일이라 OS 에 따라 방법이 달라지지 않지만, 생성 기록을 찾는 곳은 OS 와 앱마다 다릅니다.
+C2PA 는 명세 설명서 2.2 판 기준입니다(사이트에는 2.4 판까지 올라 있습니다). 서비스마다 C2PA·워터마크를 넣는지는 자주 바뀝니다.
 
 ## 언제 쓰나
 
@@ -48,7 +48,7 @@ Google SynthID 는 Google 생성형 AI 가 만든 이미지·영상·오디오·
 
 ### 7. 결론은 생성 기록에서 찾습니다
 
-결과물에서 확정을 얻지 못하면 만든 쪽의 기록으로 갑니다. 코딩 도구라면 Claude Code 대화 기록(`~/.claude/projects/<프로젝트>/<세션>.jsonl`)에 모든 메시지, 도구 호출, 도구 결과가 남아서 어떤 파일 변경이 AI 도구 호출에서 나왔는지 대조할 수 있고, `file-history/<세션>/` 의 편집 전 사본과 비교하면 에이전트가 바꾼 부분을 가릴 수 있습니다. 다만 체크포인트는 Claude 의 편집 도구로 바꾼 파일만 추적하고 Bash 명령으로 바꾼 파일이나 사람이 직접 고친 부분은 잡지 않아서, 사본에 없는 변경을 사람이 했다고 단정하지 않습니다. 관찰한 대화 기록에는 `message.model`, `attributionPlugin`, `attributionSkill`, `attributionAgent`, `isSidechain` 키가 있었습니다(확인 범위: Windows 11, 2026-09). `attribution*` 키는 이름만 보고 뜻을 짐작하지 말고, 쓰는 판의 공식 문서와 검체에 든 값으로 확인합니다. 웹 서비스라면 대화 원본이 서버에 있어 [계정 데이터 내보내기로 수집](../acquisition/export-collection.md)이나 [서비스 회사에 대한 데이터 요청](../acquisition/legal-requests.md)으로 얻습니다. 사건 갈래별 흐름은 [AI로 피싱·사기 문구를 만들었나](../../04-scenarios/misuse/phishing.md), [AI로 악성 코드를 만들었나](../../04-scenarios/misuse/malware-development.md), [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md)에 있습니다.
+결과물에서 확정을 얻지 못하면 만든 쪽의 기록으로 갑니다. 코딩 도구라면 Claude Code 대화 기록(`~/.claude/projects/<프로젝트>/<세션>.jsonl`)에 모든 메시지, 도구 호출, 도구 결과가 남아서 어떤 파일 변경이 AI 도구 호출에서 나왔는지 대조할 수 있고, `file-history/<세션>/` 의 편집 전 사본과 비교하면 에이전트가 바꾼 부분을 가릴 수 있습니다. 다만 체크포인트는 Claude 의 편집 도구로 바꾼 파일만 추적하고 Bash 명령으로 바꾼 파일이나 사람이 직접 고친 부분은 잡지 않아서, 사본에 없는 변경을 사람이 했다고 단정하지 않습니다. 관찰한 대화 기록에는 `message.model`, `attributionPlugin`, `attributionSkill`, `attributionAgent`, `isSidechain` 키가 있었습니다. `attribution*` 키는 이름만 보고 뜻을 짐작하지 말고, 쓰는 판의 공식 문서와 검체에 든 값으로 확인합니다. 웹 서비스라면 대화 원본이 서버에 있어 [계정 데이터 내보내기로 수집](../acquisition/export-collection.md)이나 [서비스 회사에 대한 데이터 요청](../acquisition/legal-requests.md)으로 얻습니다. 사건 갈래별 흐름은 [AI로 피싱·사기 문구를 만들었나](../../04-scenarios/misuse/phishing.md), [AI로 악성 코드를 만들었나](../../04-scenarios/misuse/malware-development.md), [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md)에 있습니다.
 
 ## 도구
 

@@ -12,7 +12,7 @@ Codex CLI 는 OpenAI 가 만든 명령줄 코딩 에이전트입니다. 기기�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에 두고, 변수가 없으면 `~/.codex` 를 씁니다[1]. Windows 에서는 `%USERPROFILE%\.codex` 입니다(확인 범위: Windows 11, 2026-09). 기록은 목적에 따라 네 갈래로 나뉩니다.
+Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에 두고, 변수가 없으면 `~/.codex` 를 씁니다[1]. Windows 에서는 `%USERPROFILE%\.codex` 입니다. 기록은 목적에 따라 네 갈래로 나뉩니다.
 
 - **세션 기록(rollout).** 세션을 나중에 다시 열거나 살펴볼 수 있도록 세션 하나를 JSON Lines 파일 하나에 적습니다[2]. 사용자 입력, 모델 응답, 도구 호출과 결과, 턴마다의 모델·작업 폴더·승인 정책이 들어갑니다.
 - **입력 기록 `history.jsonl`.** 모든 세션의 입력을 한 파일에 덧붙이는 전역 기록입니다[2]. 한 줄에 세션 ID, 시각, 입력한 글이 들어갑니다.
@@ -46,7 +46,7 @@ SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는
 
 로그인 정보는 `cli_auth_credentials_store` 로 저장 방식을 고릅니다. `file`(기본)은 `auth.json`, `keyring` 은 OS 키링, `auto` 는 키링을 먼저 쓰고 안 되면 파일, `ephemeral` 은 실행 중인 프로세스 메모리에만 둡니다[3]. MCP 서버의 OAuth 정보는 `mcp_oauth_credentials_store` 가 따로 정하고, 기본값 `auto` 는 키링을 먼저 쓰고 쓸 수 없으면 `.credentials.json` 에 둡니다[3]. 키링에 두었다면 Windows 는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에서 찾습니다. 토큰이 남는 곳 전반은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
-관찰한 PC 의 `%USERPROFILE%\.codex` 에는 파일이 11개 있었습니다. `hooks.json` 하나, `skills/<이름>/SKILL.md` 다섯 개, `skills/<이름>/<파일>.json` 다섯 개이고, `config.toml`·`auth.json`·`history.jsonl`·`sessions/` 는 없었습니다(확인 범위: Windows 11, 2026-09). Codex 를 실행하지 않아도 다른 도구가 이 폴더에 스킬·훅 파일을 둘 수 있으므로, 폴더가 있다는 사실만으로 Codex 를 썼다고 보지 않습니다.
+관찰한 PC 의 `%USERPROFILE%\.codex` 에는 파일이 11개 있었습니다. `hooks.json` 하나, `skills/<이름>/SKILL.md` 다섯 개, `skills/<이름>/<파일>.json` 다섯 개이고, `config.toml`·`auth.json`·`history.jsonl`·`sessions/` 는 없었습니다. Codex 를 실행하지 않아도 다른 도구가 이 폴더에 스킬·훅 파일을 둘 수 있으므로, 폴더가 있다는 사실만으로 Codex 를 썼다고 보지 않습니다.
 
 ## 구조
 
@@ -119,7 +119,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 
 `[otel]` 의 `log_user_prompt` 는 기본이 `false` 라서 프롬프트 내용은 가려진 채 나가고, 켜야만 내용이 남습니다[1]. `[mcp_servers]` 의 `env` 나 `http_headers` 에 비밀 값이 그대로 적혀 있을 수 있으니 보고서에는 키 이름만 옮깁니다. MCP 전반은 [MCP 서버와 도구 호출 기록](mcp.md)에서 다룹니다.
 
-설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. 관찰한 PC 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양이었고, 이벤트는 PermissionRequest, PostToolUse, PreToolUse, Stop, UserPromptSubmit 이었습니다(확인 범위: Windows 11, 2026-09). `skills/<이름>/<파일>.json` 의 키는 `files`, `files.SKILL.md`, `version` 이었고, 이 파일의 용도는 공개 자료에 설명이 없어 검체에서 만든 도구를 먼저 가립니다.
+설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. 관찰한 PC 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양이었고, 이벤트는 PermissionRequest, PostToolUse, PreToolUse, Stop, UserPromptSubmit 이었습니다. `skills/<이름>/<파일>.json` 의 키는 `files`, `files.SKILL.md`, `version` 이었고, 이 파일의 용도는 공개 자료에 설명이 없어 검체에서 만든 도구를 먼저 가립니다.
 
 ### 구조화 로그 이벤트(OpenTelemetry)
 

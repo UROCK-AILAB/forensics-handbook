@@ -8,7 +8,7 @@ nav_order: 640
 
 Cursor 는 AI 채팅과 에이전트가 들어간 VS Code 계열 편집기입니다. 편집기 대화는 앱 데이터 폴더의 전역 `state.vscdb` 에 있는 `cursorDiskKV` 표에 남고, 예전 채팅 패널 대화는 작업 공간별 `state.vscdb` 에 남으며, 사용자 폴더 `~/.cursor` 에는 에이전트 대화 사본과 세션 저장소, 훅·MCP 설정이 남습니다.
 
-> 기준: 2026-09. 저장 구조는 공개 분석 도구의 코드와 설명서에서 왔고, 도구마다 기준으로 삼은 Cursor 판과 날짜가 다릅니다(아래 "출처별 기준" 표). 관찰로 확인한 것은 `~/.cursor/hooks.json` 의 키 모양뿐입니다(확인 범위: Windows 11, 2026-09). 지금 쓰는 판은 구조가 다를 수 있으니 검체의 앱 버전과 `_v` 값을 먼저 적습니다.
+> 기준: 2026-09. 저장 구조는 공개 분석 도구의 코드와 설명서에서 왔고, 도구마다 기준으로 삼은 Cursor 판과 날짜가 다릅니다(아래 "출처별 기준" 표). 관찰로 확인한 것은 `~/.cursor/hooks.json` 의 키 모양뿐입니다. 지금 쓰는 판은 구조가 다를 수 있으니 검체의 앱 버전과 `_v` 값을 먼저 적습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -83,7 +83,7 @@ Windows 에서는 `%USERPROFILE%\.cursor\` 입니다[7].
 
 에이전트 대화가 어디에 "주로" 남는지는 출처끼리 다릅니다. agentsview 설명서(2026-09-11)는 편집기(GUI)가 `agent-transcripts` 를 쓰지 않고 전역 `state.vscdb` 가 편집기 대화의 유일한 저장소이며, `agent-transcripts` 와 `chats/.../store.db` 는 Cursor CLI(Cursor Agent)가 쓴다고 적었습니다[5]. KapeFiles 수집 대상(2026-09-18)은 에이전트 대화가 전역 `state.vscdb` 에 있고, 전체 대화를 `agent-transcripts` 아래 JSONL 로도 쓴다고 적었습니다[7]. la-roca 설명서(2026-09-21)는 지금의 에이전트 대화가 `chats` 아래 세션마다 `store.db` 하나씩 있고 옆에 `meta.json` 이 있으며, 이 저장소로는 데스크톱과 CLI 를 가를 수 없다고 적었고, 전역 `state.vscdb` 는 예전(legacy) 저장소로 부릅니다[8]. 검체에서는 세 곳을 모두 모으고, 같은 대화 ID 가 여러 곳에 있는지 맞춰 봅니다.
 
-관찰한 PC 에는 `%USERPROFILE%\.cursor\hooks.json` 하나만 있었고 `%APPDATA%\Cursor` 폴더는 없었습니다(확인 범위: Windows 11, 2026-09). 그래서 `~/.cursor` 의 파일 하나만 보고 Cursor 를 설치했다고 쓰지 않고, 앱 데이터 폴더와 설치 흔적을 함께 봅니다. 앱 데이터 폴더는 Electron 앱 모양이라서 위 표에 없는 폴더는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 따라 읽습니다.
+관찰한 PC 에는 `%USERPROFILE%\.cursor\hooks.json` 하나만 있었고 `%APPDATA%\Cursor` 폴더는 없었습니다. 그래서 `~/.cursor` 의 파일 하나만 보고 Cursor 를 설치했다고 쓰지 않고, 앱 데이터 폴더와 설치 흔적을 함께 봅니다. 앱 데이터 폴더는 Electron 앱 모양이라서 위 표에 없는 폴더는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 따라 읽습니다.
 
 ## 구조
 
@@ -146,7 +146,7 @@ Claude Code 처럼 도구 호출과 결과를 별도 블록으로 두지 않고,
 - 폴더 배치: `agent-transcripts/<id>/<id>.ext`
 - 하위 에이전트: `agent-transcripts/<parent>/subagents/<id>.ext`
 
-확장자는 예전 텍스트면 `.txt`, 새 형식이면 `.jsonl` 입니다[5]. 사용자 메시지는 맨 앞에 분 단위 시각 꼬리표가 붙고 이어서 질문이 `<user_query>` 태그 안에 들어갑니다[5]. 꼬리표 모양은 `<timestamp>Weekday, Mon D, YYYY, H:MM AM|PM (UTC±H[:MM])</timestamp>` 입니다[5]. 파일은 `{"type":"turn_ended","status":...}` 레코드로 끝납니다(확인 범위: macOS, 2026-09-04)[5].
+확장자는 예전 텍스트면 `.txt`, 새 형식이면 `.jsonl` 입니다[5]. 사용자 메시지는 맨 앞에 분 단위 시각 꼬리표가 붙고 이어서 질문이 `<user_query>` 태그 안에 들어갑니다[5]. 꼬리표 모양은 `<timestamp>Weekday, Mon D, YYYY, H:MM AM|PM (UTC±H[:MM])</timestamp>` 입니다[5]. 파일은 `{"type":"turn_ended","status":...}` 레코드로 끝납니다(macOS 기준)[5].
 
 하위 에이전트를 부른 세션에는 `Subagent` 도구 호출이 남고, 입력 칸은 `description`, `prompt`, `subagent_type`, `run_in_background` 입니다[5]. 같은 관찰에서 도구 호출 블록의 `"id"` 는 모두 `null` 이었고 `tool_result` 블록은 없었으므로, 부모 세션과의 연결은 폴더 위치로만 알 수 있습니다[5]. Cursor 공식 포럼의 JSONL 논의에서도 JSONL 에 도구 출력이 빠진다는 보고가 있습니다[5]. 도구 결과가 필요하면 전역 DB 의 `toolFormerData` 와 `terminals/` 폴더를 함께 봅니다.
 
@@ -183,7 +183,7 @@ agentsview 설명서는 이 저장소에 `blobEncryptionKey` 가 있고 암호�
 
 모든 훅은 입력으로 `conversation_id`, `generation_id`, `model`, `model_id`, `model_params`, `hook_event_name`, `cursor_version`, `workspace_roots`, `user_email`, `transcript_path` 를 받고, workspaceOpen 같은 앱 수명 훅에는 대화 칸이 없습니다[1]. 감사용 훅 스크립트가 이 입력을 그대로 파일에 적었다면, 그 기록에서 대화 ID·모델·Cursor 버전·계정 이메일·작업 폴더를 함께 얻습니다. `transcript_path` 가 가리키는 파일이 위의 `agent-transcripts` 파일과 같은지는 출처마다 설명이 달라서, 검체의 훅 기록에 적힌 경로로 확인합니다.
 
-관찰한 PC 의 `hooks.json` 은 `version`(정수)과 `hooks` 아래 이벤트별 목록으로 되어 있었고, 목록 항목의 키는 `command`(문자열)와 `timeout`(정수)이었습니다. 걸려 있던 이벤트는 afterAgentResponse, beforeMCPExecution, beforeShellExecution, beforeSubmitPrompt, postToolUse, postToolUseFailure, preToolUse, stop 이었고, 문서 형식과 맞았습니다(확인 범위: Windows 11, 2026-09). 아래는 문서 형식대로 새로 만든 예시이고, 관찰한 값이 아닙니다.
+관찰한 PC 의 `hooks.json` 은 `version`(정수)과 `hooks` 아래 이벤트별 목록으로 되어 있었고, 목록 항목의 키는 `command`(문자열)와 `timeout`(정수)이었습니다. 걸려 있던 이벤트는 afterAgentResponse, beforeMCPExecution, beforeShellExecution, beforeSubmitPrompt, postToolUse, postToolUseFailure, preToolUse, stop 이었고, 문서 형식과 맞았습니다. 아래는 문서 형식대로 새로 만든 예시이고, 관찰한 값이 아닙니다.
 
 ```json
 {

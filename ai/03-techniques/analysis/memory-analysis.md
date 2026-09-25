@@ -8,7 +8,7 @@ nav_order: 880
 
 AI 앱이 실행 중일 때 뜬 메모리 이미지에서 대화·도구 호출 메시지를 찾아 떼어 내고, 형식 검사와 요청·응답 짝짓기를 거쳐 증거로 쓸 만한 조각만 남기는 방법입니다.
 
-> 확인 날짜: 2026-09. 절차의 뼈대는 MCP(Model Context Protocol) 메시지를 메모리에서 되살린 Satter 등의 논문[1]과 저자 도구 MCPRecon(마지막 커밋 2026-04-12)[2]에서 가져왔습니다. 논문은 Ubuntu 24.04(커널 6.14.0-36-generic) 가상 머신에서 Codex CLI 와 VS Code + GitHub Copilot 을 시험했고, 공격 시연은 Cursor 2.4.27 로 했습니다[1]. MCPRecon README 가 밝힌 시험 환경은 Linux 의 Python 3.10 입니다[2]. Windows·macOS 와 지금 판의 앱에서도 같은 결과가 나오는지는 검체로 확인해야 합니다.
+논문은 Ubuntu 24.04 가상 머신에서 Codex CLI 와 VS Code + GitHub Copilot 을 시험했고, 공격 시연은 Cursor 2.4.27 로 했습니다[1]. Windows·macOS 나 새 판의 앱에서는 결과가 다를 수 있습니다.
 
 ## 언제 쓰나
 

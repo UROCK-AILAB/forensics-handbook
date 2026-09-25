@@ -26,8 +26,6 @@ Takeout 보관 파일에서 Gemini 활동은 "My Activity" 폴더 아래 "Gemini
 
 이름이 비슷한 Gemini CLI 는 다른 제품이라 [Gemini CLI](../../dev-agents/gemini-cli.md) 에서 따로 다루고, Gmail·문서 같은 업무 도구 안의 Gemini 는 [Google Workspace의 Gemini](../../office-integrations/workspace-gemini.md) 에서 다룹니다.
 
-> 확인 날짜: 2026-09-25. Google 도움말, 앱 스토어, Chromium 소스, 논문 초록, 공개 도구 코드를 바탕으로 썼습니다.
-
 ## 한눈에 보기
 
 | 쓰는 곳 | 기록이 있는 곳 | OS·환경 | 앱 버전 | 알려 주는 것 |

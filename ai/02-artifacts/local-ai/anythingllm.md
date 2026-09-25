@@ -8,7 +8,7 @@ nav_order: 740
 
 AnythingLLM 데스크톱 앱은 대화·워크스페이스·이벤트 기록을 `%APPDATA%\anythingllm-desktop\storage\anythingllm.db` 한 SQLite 파일에 두고, 올린 문서에서 뽑은 본문은 같은 `storage` 폴더 아래 JSON 파일로 따로 둡니다.
 
-> 확인 범위: Windows 10 가상 머신, 앱 판 번호는 자료에 적혀 있지 않음, 샘플 기록 시각 2026-04-30 ~ 2026-05-05(UTC). 이 쪽의 경로·표·칸은 모두 공개 저장소 k0w4lzk1/LangurTrace-Implementation 의 AnythingLLM 보고서·파서·KAPE 파일·샘플 DB 에서 왔습니다[1][2][3][4]. 원래 LangurTrace 가 다루는 여섯 앱(Ollama, Chatbox, LM Studio, Jan, Msty, GPT4All)에는 AnythingLLM 이 없고, 이 저장소의 GAPS.md 가 새로 다룰 앱으로 꼽았습니다[6]. 다른 판은 저장 구조가 다를 수 있으니, 검체마다 아래 방법으로 표와 칸을 다시 읽습니다.
+이 쪽의 경로·표·칸은 Windows 10 에서 쓴 AnythingLLM 데스크톱 앱 자료 기준이고, 다른 판은 저장 구조가 다를 수 있습니다[1].
 
 ## 무엇을 기록하나 · 왜 생기나
 

@@ -8,8 +8,6 @@ nav_order: 860
 
 AI 도구가 기기와 서버, 네트워크에 남긴 시각을 모아 UTC 기준 한 줄로 늘어놓고, 시각마다 무슨 일이 있을 때 바뀌는 값인지를 옆에 적어 두는 분석 방법입니다.
 
-> 확인 날짜: 2026-09. 기기 쪽 파일 이름과 키 이름은 관찰한 것이고(확인 범위: Windows 11, 2026-09), 시각 값의 형식은 도구 소스 코드와 분석 도구 코드, 논문의 공개 샘플을 근거로 적습니다. Claude Code 의 버전 번호는 공식 문서에 적힌 "이 버전부터/까지" 문장을 옮긴 것입니다. macOS·Android·iOS 는 문서 근거만 씁니다.
-
 ## 언제 쓰나
 
 "그 사람이 언제 AI 를 썼고, 그 앞뒤로 무슨 일이 있었나" 를 물을 때 씁니다. 기밀 파일을 연 시각과 AI 에 내용을 붙여 넣은 시각이 가까운지 보거나, 에이전트가 명령을 실행한 시각과 디스크의 파일이 바뀐 시각을 맞춰 보는 일이 대표적입니다. OS 전체 타임라인을 만드는 일반 방법은 OS 별 판의 타임라인 페이지([Windows](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html), [macOS](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/timeline/index.html), [Android](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html), [iOS](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html))에 있고, 이 페이지는 그 위에 AI 흔적을 얹는 부분만 다룹니다.
@@ -60,11 +58,11 @@ Sysmon 이벤트 로그는 시각을 UTC 로 적고, Chromium 쿠키 DB 는 `cre
 | `feedback/drafts/<파일>.json` | `created_at` | 폴더 이름으로 보아 피드백 초안을 만든 시각으로 짐작합니다(추정) |
 | `stats-cache.json` | `firstSessionDate`, `dailyActivity[].date`, `hourCounts`, `longestSession.timestamp` | 날짜별 메시지·세션·도구 호출 수를 모은 집계이고 내용은 없습니다. 날짜를 자르는 시간대는 같은 날의 `history.jsonl` 줄과 맞춰 검체에서 확인합니다 |
 
-위 표의 키 이름은 모두 관찰로 확인했습니다(확인 범위: Windows 11, 2026-09). 세션 기록은 이전 판을 `<세션>.jsonl.superseded-<시각>`, 떼어 둔 기록을 `<세션>.orphaned-<시각>-<접미사>.jsonl` 로 남기기도 해서, 파일 이름 안의 시각도 함께 적어 둡니다.
+위 표의 키 이름은 모두 관찰로 확인했습니다. 세션 기록은 이전 판을 `<세션>.jsonl.superseded-<시각>`, 떼어 둔 기록을 `<세션>.orphaned-<시각>-<접미사>.jsonl` 로 남기기도 해서, 파일 이름 안의 시각도 함께 적어 둡니다.
 
 같은 줄이 두 파일에 나올 수 있습니다. agentsview 문서(2026-08-09 Claude Code 2.1.226 으로 재현)에 따르면 세션을 백그라운드로 넘기면 `claude --resume <기록> --fork-session` 이 돌고, 새 기록 파일에 이전 대화 줄을 `uuid`·`timestamp`·`requestId` 까지 똑같이 다시 적으며 `sessionId` 만 바꿉니다[5]. 새 파일에는 원래 세션을 가리키는 칸이 없으므로, 합칠 때 `uuid` 가 같은 줄은 한 번만 셉니다.
 
-**Claude 데스크톱(Windows 스토어 앱).** 패키지 폴더 아래 `LocalCache\Roaming\Claude` 에 Electron 모양 폴더와 앱 설정 JSON 이 있고, 그 가운데 시각으로 보이는 칸은 `config.json` 의 `first_launch_at`·`version_first_launch.at`, `plan-usage-history.json` 의 `samples[].t` 입니다. 같은 패키지의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래 `mcp-logs-<서버 이름>` 폴더의 JSONL 에는 줄마다 `timestamp` 가 있고, `Partitions\<이름>\Network\Cookies` 의 `cookies` 표에는 `creation_utc`·`last_access_utc`·`last_update_utc`·`expires_utc` 칸이 있습니다(확인 범위: Windows 11, 2026-09). 뜻은 칸 이름으로 짐작한 것이라 근거 등급을 "관찰" 로 둡니다. 폴더 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+**Claude 데스크톱(Windows 스토어 앱).** 패키지 폴더 아래 `LocalCache\Roaming\Claude` 에 Electron 모양 폴더와 앱 설정 JSON 이 있고, 그 가운데 시각으로 보이는 칸은 `config.json` 의 `first_launch_at`·`version_first_launch.at`, `plan-usage-history.json` 의 `samples[].t` 입니다. 같은 패키지의 `LocalCache\Local\claude-cli-nodejs\Cache\` 아래 `mcp-logs-<서버 이름>` 폴더의 JSONL 에는 줄마다 `timestamp` 가 있고, `Partitions\<이름>\Network\Cookies` 의 `cookies` 표에는 `creation_utc`·`last_access_utc`·`last_update_utc`·`expires_utc` 칸이 있습니다. 뜻은 칸 이름으로 짐작한 것이라 근거 등급을 "관찰" 로 둡니다. 폴더 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
 **다른 개발 도구.** Gemini CLI 는 세션을 `~/.gemini/tmp/<project_hash>/chats/` 아래 `session-` 으로 시작하는 JSONL 파일에 대화하는 동안 저장하고, 하위 에이전트 세션은 `chats/<부모 세션 ID>/<세션 ID>.jsonl` 에 둡니다[8]. 첫 줄 메타데이터에 `startTime`·`lastUpdated` 가 있고 메시지마다 `timestamp` 가 있습니다[8]. Codex CLI 는 입력 기록을 `~/.codex/history.jsonl` 에 `session_id`·`ts`·`text` 세 키로 한 줄씩 남기고[7], 세션 전체는 `~/.codex/sessions/YYYY/MM/DD/` 아래 rollout 파일에 남깁니다[6]. 조직이 OpenTelemetry 수집을 켜 두었다면 `codex.user_prompt`·`codex.tool_result` 같은 이벤트가 수집 서버에 따로 있습니다. Cursor 의 지금 Composer·에이전트 대화는 전역 `globalStorage/state.vscdb` 의 `cursorDiskKV` 표에 `composerData:<uuid>`(세션)와 `bubbleId:<composerId>:<bubbleUuid>`(한 턴) 키로 들어 있다고 agentsview 코드(2026-09)가 적고 있습니다[9]. 시각 형식은 1단계 표에 모았고, 이런 도구는 기록 파일 자체의 파일 시스템 시각도 함께 타임라인에 올립니다.
 
@@ -109,9 +107,9 @@ jq -r '[.timestamp, .sessionId, .project] | @tsv' history.jsonl > history_times.
 
 1단계 표의 형식 가운데 Claude Code·Cursor 값은 분석 도구가 읽는 방식이고, 앱 회사가 공개한 규격이 아닙니다. 그래서 변환 규칙을 정한 뒤에는 알고 있는 사건(수집 직전에 한 번 입력해 본 시각 등) 하나로 변환이 맞는지 먼저 시험합니다.
 
-세션 기록의 줄 시각이 모두 사람이 입력한 시각은 아닙니다. 같은 파일에는 모델 응답, 도구 결과, 훅 실행 결과(`attachment.hookEvent` 등), 파일 되돌리기 스냅숏 줄이 섞여 있고, 하위 에이전트 기록은 `subagents/` 아래 다른 파일에 `agentId`·`isSidechain` 키와 함께 따로 쌓입니다(확인 범위: Windows 11, 2026-09). 사람의 입력 시각은 `history.jsonl` 과 맞춰 가립니다.
+세션 기록의 줄 시각이 모두 사람이 입력한 시각은 아닙니다. 같은 파일에는 모델 응답, 도구 결과, 훅 실행 결과(`attachment.hookEvent` 등), 파일 되돌리기 스냅숏 줄이 섞여 있고, 하위 에이전트 기록은 `subagents/` 아래 다른 파일에 `agentId`·`isSidechain` 키와 함께 따로 쌓입니다. 사람의 입력 시각은 `history.jsonl` 과 맞춰 가립니다.
 
-앱 폴더에 AI 와 무관한 흔적이 섞일 수 있습니다. 관찰한 Claude 데스크톱 스토어 앱 패키지의 `LocalCache\Local` 아래에는 Android SDK, NuGet, npm, pip 캐시도 있었고(확인 범위: Windows 11, 2026-09), 이 파일들의 시각을 AI 사용 시각으로 읽으면 안 됩니다. 쿠키 시각도 쿠키가 만들어지거나 쓰인 시각이지 대화 시각은 아닙니다.
+앱 폴더에 AI 와 무관한 흔적이 섞일 수 있습니다. 관찰한 Claude 데스크톱 스토어 앱 패키지의 `LocalCache\Local` 아래에는 Android SDK, NuGet, npm, pip 캐시도 있었고, 이 파일들의 시각을 AI 사용 시각으로 읽으면 안 됩니다. 쿠키 시각도 쿠키가 만들어지거나 쓰인 시각이지 대화 시각은 아닙니다.
 
 기기에 원본이 없는 세션이 있습니다. Claude Code 클라우드 세션은 서비스 쪽 가상 머신에서 돌아 사용자 PC 에 대화 파일이 생기지 않고, 이런 구간은 서버 자료 없이는 채울 수 없다고 보고서에 적습니다.
 

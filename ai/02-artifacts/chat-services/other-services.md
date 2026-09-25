@@ -8,7 +8,7 @@ nav_order: 380
 
 DeepSeek·Grok 처럼 따로 페이지를 두지 않은 대화형 AI 서비스를 모아, 공식 문서로 확인한 수집·보관 규칙과 공개 분석 도구로 확인한 Android 앱의 저장 구조를 같은 기준으로 정리합니다.
 
-> 확인 날짜: 2026-09. DeepSeek 서버 쪽 규칙은 공식 개인정보 처리방침(최종 수정 2026-05-06)[1]을, Grok 의 제공 형태는 위키백과(2차 자료)[2]를 따릅니다. Android 앱의 저장 구조는 ALEAPP 분석기[3][4][5][6]와 LEAF 문서[7]를 따릅니다. LEAF 문서는 Android 15 기기에서 2026-04-20 에 뽑은 자료를 적은 개발 메모라서 보조 근거로만 씁니다. Replika·Character.AI 같은 AI 컴패니언 앱은 [AI 컴패니언 앱](companion-apps.md)에서 다룹니다.
+LEAF 문서는 Android 15 기기에서 뽑은 자료를 적은 개발 메모라서 보조 근거로만 씁니다[7]. Replika·Character.AI 같은 AI 컴패니언 앱은 [AI 컴패니언 앱](companion-apps.md)에서 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 

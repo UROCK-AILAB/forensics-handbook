@@ -8,7 +8,7 @@ nav_order: 660
 
 Gemini CLI 는 Google 의 명령줄 AI 에이전트이고, 대화할 때마다 프롬프트·답변·도구 실행·토큰 사용량을 프로젝트별 폴더 `~/.gemini/tmp/…/chats/` 에 한 줄씩 덧붙여 저장합니다. 기본 설정으로 30일이 지난 세션을 스스로 지우므로, 오래된 기록이 없는 것이 정상일 수 있습니다.
 
-> 확인 날짜: 2026-09. 파일 형식과 경로는 공식 저장소 google-gemini/gemini-cli 의 커밋 `acae712`(2026-07-17, 패키지 판 0.52.0-nightly.20260715)의 소스와 문서[1][2][3][4] 기준입니다. 판에 따라 저장 방식이 바뀌었으므로(아래 "위치와 버전별 차이"), 검체의 판에 맞춰 다시 확인합니다.
+이 쪽의 파일 형식과 경로는 Gemini CLI 0.52.0-nightly.20260715 판 기준이고, 판에 따라 저장 방식이 바뀌었습니다(아래 "위치와 버전별 차이")[1][2][3][4].
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -60,7 +60,7 @@ Gemini CLI 는 대화하는 동안 세션을 자동으로 저장해서, 중간�
 
 `~/.gemini` 는 Gemini CLI 만 쓰는 폴더가 아닙니다. agentsview 는 Google Antigravity(IDE)의 세션 폴더를 `~/.gemini/antigravity/`, Antigravity CLI 의 폴더를 `~/.gemini/antigravity-cli/` 로 적습니다[8]. agentsview 분석기 소스의 설명으로는 IDE 쪽에 `conversations/<uuid>.db`(세션별 SQLite), `annotations/<uuid>.pbtxt`, `brain/<uuid>/`(평문 계획·작업 문서), `implicit/<uuid>.pb`(암호화)가 있습니다[8]. Antigravity CLI 는 새 판이 세션별 SQLite, 옛 판이 AES 로 암호화한 `.pb` 파일을 쓰고, `history.jsonl` 과 `brain/` 이 함께 있습니다[8]. Google 이 저장 형식을 공개하지 않아서 agentsview 도 이 부분을 역분석으로 표시합니다(2026-07-19, 2026-09-02 기준)[8]. 이 페이지는 Gemini CLI 만 다루고, Antigravity 폴더는 다른 제품의 흔적으로 나눠 봅니다.
 
-관찰한 PC 의 `%USERPROFILE%\.gemini` 에는 `tmp/` 가 없고 `antigravity/` 와 `config/` 만 있었습니다(확인 범위: Windows 11, 2026-09). `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 있었습니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 있었고, 이 폴더를 어느 제품이 쓰는지 밝힌 공개 자료가 없어 검체에서 파일 시각과 함께 쓴 프로그램을 확인해야 합니다. 이런 PC 처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
+관찰한 PC 의 `%USERPROFILE%\.gemini` 에는 `tmp/` 가 없고 `antigravity/` 와 `config/` 만 있었습니다. `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 있었습니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 있었고, 이 폴더를 어느 제품이 쓰는지 밝힌 공개 자료가 없어 검체에서 파일 시각과 함께 쓴 프로그램을 확인해야 합니다. 이런 PC 처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
 
 ## 구조
 
@@ -131,7 +131,7 @@ chats/5f0c2a9e-1b2c-4d3e-8f90-a1b2c3d4e5f6/7c1d0e2f-3a4b-4c5d-9e6f-0a1b2c3d4e5f.
 | `general.sessionRetention.minRetention` | 이 기간보다 새 세션은 지우지 않음, 기본 `"1d"` |
 | `model.maxSessionTurns` | 세션 하나에서 주고받을 수 있는 횟수, 기본 `-1`(제한 없음) |
 
-훅은 `hooks` 아래에 사건 이름별 배열로 적고, 각 항목에 `matcher` 와 `hooks` 목록(`type`, `command`, `name`, `timeout`)이 있습니다[5]. 사건 이름은 `SessionStart`, `SessionEnd`, `BeforeAgent`, `AfterAgent`, `BeforeModel`, `AfterModel`, `BeforeToolSelection`, `BeforeTool`, `AfterTool`, `PreCompress`, `Notification` 입니다[5]. 관찰한 PC 의 `settings.json` 에 있던 `hooks.AfterAgent`, `hooks.AfterTool`, `hooks.BeforeAgent`, `hooks.BeforeTool` 도 이 형식이었습니다(확인 범위: Windows 11, 2026-09). 훅의 `command` 가 가리키는 스크립트는 도구 실행 전후에 따로 기록을 남길 수 있어서 열어 봅니다.
+훅은 `hooks` 아래에 사건 이름별 배열로 적고, 각 항목에 `matcher` 와 `hooks` 목록(`type`, `command`, `name`, `timeout`)이 있습니다[5]. 사건 이름은 `SessionStart`, `SessionEnd`, `BeforeAgent`, `AfterAgent`, `BeforeModel`, `AfterModel`, `BeforeToolSelection`, `BeforeTool`, `AfterTool`, `PreCompress`, `Notification` 입니다[5]. 관찰한 PC 의 `settings.json` 에 있던 `hooks.AfterAgent`, `hooks.AfterTool`, `hooks.BeforeAgent`, `hooks.BeforeTool` 도 이 형식이었습니다. 훅의 `command` 가 가리키는 스크립트는 도구 실행 전후에 따로 기록을 남길 수 있어서 열어 봅니다.
 
 ## 증거로서 의미
 

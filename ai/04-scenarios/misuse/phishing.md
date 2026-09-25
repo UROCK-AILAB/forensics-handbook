@@ -28,7 +28,7 @@ OS 마다 앱 데이터를 보호하는 방식이 다르고, 아래 기기 관�
 
 | OS | 이 쪽의 기기 관찰 | 공통 원리 |
 |---|---|---|
-| Windows | 사용자 폴더의 AI 도구 폴더와 Claude 데스크톱(스토어 앱) 폴더를 봤습니다 (확인 범위: Windows 11, 2026-09) | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html), [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) |
+| Windows | 사용자 폴더의 AI 도구 폴더와 Claude 데스크톱(스토어 앱) 폴더를 봤습니다 | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html), [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) |
 | macOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/leveldb-indexeddb.html) |
 | Android | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html), [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html) |
 | iOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html), [iOS 키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) |
@@ -64,11 +64,11 @@ Microsoft 는 이 코드에서 LLM 이 만든 코드로 볼 만한 표시 다섯
 
 웹 서비스로 문구를 만들었다면 기기에서 찾을 수 있는 것은 접속 흔적까지입니다. 서비스별로 계정 데이터를 내보내는 형식과 서버 보관 설정은 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Gemini](../../02-artifacts/chat-services/gemini/index.md), [Claude](../../02-artifacts/chat-services/claude/index.md) 쪽에 있습니다.
 
-Claude 데스크톱(스토어 앱)은 `%USERPROFILE%\Packages\` 아래 Claude 패키지 폴더의 `LocalCache\Roaming\Claude\` 에 `IndexedDB`, `Local Storage\leveldb`, `Cache`, `Network\Cookies` 같은 Electron 형 폴더를 둡니다 (확인 범위: Windows 11, 2026-09). 파티션 쿠키 DB `Partitions\cowork-file-preview\Network\Cookies` 에는 `cookies` 표(칸 `creation_utc`, `host_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `last_access_utc`, `last_update_utc` 등)와 `meta` 표(`key`, `value`)가 있어 Chromium 쿠키 DB 와 모양이 같습니다 (확인 범위: Windows 11, 2026-09). 기본 `Network\Cookies` 는 앱이 실행 중이면 잠겨 있으므로 앱을 끈 상태나 디스크 이미지에서 엽니다. 대화 내용이 이 폴더에 로컬로 남는지는 검체의 `IndexedDB` 와 `Local Storage\leveldb` 를 열어 확인합니다.
+Claude 데스크톱(스토어 앱)은 `%USERPROFILE%\Packages\` 아래 Claude 패키지 폴더의 `LocalCache\Roaming\Claude\` 에 `IndexedDB`, `Local Storage\leveldb`, `Cache`, `Network\Cookies` 같은 Electron 형 폴더를 둡니다. 파티션 쿠키 DB `Partitions\cowork-file-preview\Network\Cookies` 에는 `cookies` 표(칸 `creation_utc`, `host_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `last_access_utc`, `last_update_utc` 등)와 `meta` 표(`key`, `value`)가 있어 Chromium 쿠키 DB 와 모양이 같습니다. 기본 `Network\Cookies` 는 앱이 실행 중이면 잠겨 있으므로 앱을 끈 상태나 디스크 이미지에서 엽니다. 대화 내용이 이 폴더에 로컬로 남는지는 검체의 `IndexedDB` 와 `Local Storage\leveldb` 를 열어 확인합니다.
 
-Claude Code 로 문구를 만들었다면 `%USERPROFILE%\.claude\history.jsonl` 의 `display` 칸과 세션 파일 `projects\` 아래 `.jsonl` 의 `message.content[].text` 칸에서 입력과 응답을 찾습니다 (확인 범위: 칸 이름, Windows 11, 2026-09). 시각은 `history.jsonl` 의 `timestamp` 가 정수, 세션 파일의 `timestamp` 가 문자열로 들어 있고, 에포크 밀리초인지 ISO 8601 인지는 검체의 값을 보고 정합니다. 키 전체의 뜻과 보관 기간은 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에 있습니다.
+Claude Code 로 문구를 만들었다면 `%USERPROFILE%\.claude\history.jsonl` 의 `display` 칸과 세션 파일 `projects\` 아래 `.jsonl` 의 `message.content[].text` 칸에서 입력과 응답을 찾습니다(Windows 11 기준). 시각은 `history.jsonl` 의 `timestamp` 가 정수, 세션 파일의 `timestamp` 가 문자열로 들어 있고, 에포크 밀리초인지 ISO 8601 인지는 검체의 값을 보고 정합니다. 키 전체의 뜻과 보관 기간은 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에 있습니다.
 
-같은 PC 에서 Codex CLI(`%USERPROFILE%\.codex`), Gemini CLI(`%USERPROFILE%\.gemini`), Ollama(`%USERPROFILE%\.ollama`) 폴더에는 대화 기록 파일이 없었습니다 (확인 범위: Windows 11, 2026-09). 이 PC 에서 그랬다는 뜻이지 이 도구들이 기록을 전혀 남기지 않는다는 뜻은 아니고, 도구별 내용은 [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md), [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md), [Ollama](../../02-artifacts/local-ai/ollama.md) 쪽에서 봅니다.
+같은 PC 에서 Codex CLI(`%USERPROFILE%\.codex`), Gemini CLI(`%USERPROFILE%\.gemini`), Ollama(`%USERPROFILE%\.ollama`) 폴더에는 대화 기록 파일이 없었습니다. 이 PC 에서 그랬다는 뜻이지 이 도구들이 기록을 전혀 남기지 않는다는 뜻은 아니고, 도구별 내용은 [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md), [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md), [Ollama](../../02-artifacts/local-ai/ollama.md) 쪽에서 봅니다.
 
 ## 분석 흐름
 

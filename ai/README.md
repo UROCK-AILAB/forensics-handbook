@@ -10,7 +10,7 @@ ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정�
 
 같은 서비스라도 Windows·macOS·Android·iOS 마다 저장 위치와 보호 방식이 다르므로, 주요 서비스는 OS 별로 나눠 설명합니다. 대화 원본이 서버에만 남는 경우가 많아서, 계정 데이터 내보내기와 기업용 감사 기록도 함께 다룹니다.
 
-AI 앱은 자주 바뀝니다. 각 페이지에 적힌 앱 버전과 확인 날짜(2026년 9월)를 먼저 보십시오. OS 자체의 저장 구조는 [Windows](https://urock-ailab.github.io/forensics-handbook-windows/)·[macOS](https://urock-ailab.github.io/forensics-handbook-mac/)·[Android](https://urock-ailab.github.io/forensics-handbook-android/)·[iOS](https://urock-ailab.github.io/forensics-handbook-ios/) 핸드북에서 다룹니다.
+AI 앱은 자주 바뀝니다. 이 핸드북은 2026년 9월 기준입니다. OS 자체의 저장 구조는 [Windows](https://urock-ailab.github.io/forensics-handbook-windows/)·[macOS](https://urock-ailab.github.io/forensics-handbook-mac/)·[Android](https://urock-ailab.github.io/forensics-handbook-android/)·[iOS](https://urock-ailab.github.io/forensics-handbook-ios/) 핸드북에서 다룹니다.
 
 ## 구성
 
@@ -48,7 +48,7 @@ AI 앱은 자주 바뀝니다. 각 페이지에 적힌 앱 버전과 확인 날�
 ## 표기
 
 - 명세나 공식 문서로 확인한 사실은 그대로 씁니다.
-- 직접 관찰로만 알아낸 사실에는 "(확인 범위: Windows 11, 앱 버전, 확인 날짜)"처럼 범위를 붙입니다.
+- 기기에서 본 내용은 Windows 11 기준입니다. 앱 판에 따라 달라지는 경로와 칸은 그 자리에 판을 적습니다.
 - 확인되지 않은 것은 쓰지 않습니다. 버전·기기마다 다를 수 있는 것은 분석가가 직접 확인하는 방법을 적습니다.
 - 특정 회사 제품을 편들지 않고 같은 기준으로 씁니다.
 - 용어는 처음 나올 때 "한국어 (English)"로 한 번 적습니다.
