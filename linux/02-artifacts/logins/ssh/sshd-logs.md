@@ -73,12 +73,12 @@ Accepted|Failed|Partial|Postponed 방식[/하위방식] for [invalid user ]이�
 2025-03-04T09:14:58.000003+09:00 web01 sshd[2201]: Connection closed by invalid user admin 198.51.100.7 port 41022 [preauth]
 2025-03-04T09:15:02.000004+09:00 web01 sshd[2211]: Accepted publickey for alice from 203.0.113.10 port 50122 ssh2: ED25519 SHA256:(생략)
 2025-03-04T09:15:02.000005+09:00 web01 sshd[2211]: pam_unix(sshd:session): session opened for user alice(uid=1001) by (uid=0)
-2025-03-04T09:40:11.000007+09:00 web01 sshd[2211]: Received disconnect from 203.0.113.10 port 50122:11: disconnected by user
-2025-03-04T09:40:11.000008+09:00 web01 sshd[2211]: Disconnected from user alice 203.0.113.10 port 50122
+2025-03-04T09:40:11.000007+09:00 web01 sshd[2215]: Received disconnect from 203.0.113.10 port 50122:11: disconnected by user
+2025-03-04T09:40:11.000008+09:00 web01 sshd[2215]: Disconnected from user alice 203.0.113.10 port 50122
 2025-03-04T09:40:11.000009+09:00 web01 sshd[2211]: pam_unix(sshd:session): session closed for user alice
 ```
 
-같은 접속의 줄은 대괄호 안 PID 와 원격 포트가 같으므로 이 둘로 묶습니다. `Received disconnect` 뒤의 문구는 클라이언트가 보낸 문자열이라 클라이언트마다 다릅니다[2].
+인증 뒤에는 sshd 가 권한을 낮춘 자식 프로세스를 새로 띄워 세션을 맡기므로, 연결이 끝날 때 남는 `Received disconnect`·`Disconnected` 줄의 PID 는 `Accepted` 줄의 PID 와 다릅니다[4]. 그래서 같은 접속의 줄은 PID 가 아니라 원격 주소와 포트로 묶습니다. `Received disconnect` 뒤의 문구는 클라이언트가 보낸 문자열이라 클라이언트마다 다릅니다[2].
 
 ## 증거로서 의미
 
