@@ -1,0 +1,1157 @@
+[
+ {
+  "title": "ext4 (ext4)",
+  "path": "01-foundations/filesystem/ext4/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "슈퍼블록과 블록 그룹 (Superblock·Block Group)",
+    "path": "01-foundations/filesystem/ext4/superblock-block-group.md"
+   },
+   {
+    "title": "아이노드와 익스텐트 (Inode·Extent)",
+    "path": "01-foundations/filesystem/ext4/inode-extent.md"
+   },
+   {
+    "title": "디렉터리 항목과 해시 트리 (Directory Entry·HTree)",
+    "path": "01-foundations/filesystem/ext4/directory-htree.md"
+   },
+   {
+    "title": "저널 (jbd2)",
+    "path": "01-foundations/filesystem/ext4/journal-jbd2.md"
+   },
+   {
+    "title": "시각 값 (atime·mtime·ctime·crtime)",
+    "path": "01-foundations/filesystem/ext4/timestamps.md"
+   },
+   {
+    "title": "지운 파일이 남기는 것 (Deleted Files)",
+    "path": "01-foundations/filesystem/ext4/deleted-files.md"
+   }
+  ]
+ },
+ {
+  "title": "슈퍼블록과 블록 그룹 (Superblock·Block Group)",
+  "path": "01-foundations/filesystem/ext4/superblock-block-group.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": {
+   "title": "ext4 (ext4)",
+   "path": "01-foundations/filesystem/ext4/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "아이노드와 익스텐트 (Inode·Extent)",
+  "path": "01-foundations/filesystem/ext4/inode-extent.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": {
+   "title": "ext4 (ext4)",
+   "path": "01-foundations/filesystem/ext4/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "디렉터리 항목과 해시 트리 (Directory Entry·HTree)",
+  "path": "01-foundations/filesystem/ext4/directory-htree.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": {
+   "title": "ext4 (ext4)",
+   "path": "01-foundations/filesystem/ext4/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "저널 (jbd2)",
+  "path": "01-foundations/filesystem/ext4/journal-jbd2.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": {
+   "title": "ext4 (ext4)",
+   "path": "01-foundations/filesystem/ext4/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "시각 값 (atime·mtime·ctime·crtime)",
+  "path": "01-foundations/filesystem/ext4/timestamps.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": {
+   "title": "ext4 (ext4)",
+   "path": "01-foundations/filesystem/ext4/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "지운 파일이 남기는 것 (Deleted Files)",
+  "path": "01-foundations/filesystem/ext4/deleted-files.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": {
+   "title": "ext4 (ext4)",
+   "path": "01-foundations/filesystem/ext4/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "XFS (XFS)",
+  "path": "01-foundations/filesystem/xfs.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Btrfs (Btrfs)",
+  "path": "01-foundations/filesystem/btrfs.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "디렉터리 구조와 주요 경로 (FHS)",
+  "path": "01-foundations/filesystem/fhs-paths.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "권한·확장 속성·ACL·Capabilities (Permissions·xattr)",
+  "path": "01-foundations/filesystem/permissions-xattr.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "파일 시스템",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "파티션 (MBR·GPT)",
+  "path": "01-foundations/disk-volume/partitions.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크와 볼륨",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "LVM 논리 볼륨 (LVM)",
+  "path": "01-foundations/disk-volume/lvm.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크와 볼륨",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "LUKS 디스크 암호화 (LUKS·dm-crypt)",
+  "path": "01-foundations/disk-volume/luks.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크와 볼륨",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "스왑과 최대 절전 (Swap·Hibernation)",
+  "path": "01-foundations/disk-volume/swap-hibernation.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크와 볼륨",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "계정 파일 (passwd·shadow·group)",
+  "path": "01-foundations/users-auth/passwd-shadow-group.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "사용자와 인증 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "sudo 설정 (sudoers)",
+  "path": "01-foundations/users-auth/sudoers.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "사용자와 인증 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "인증 모듈 (PAM)",
+  "path": "01-foundations/users-auth/pam.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "사용자와 인증 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "syslog 형식과 rsyslog (syslog·rsyslog)",
+  "path": "01-foundations/logging/syslog-rsyslog.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "systemd 저널 (systemd Journal)",
+  "path": "01-foundations/logging/systemd-journal/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "저널 파일 구조 (Journal File Format)",
+    "path": "01-foundations/logging/systemd-journal/file-format.md"
+   },
+   {
+    "title": "journalctl 로 읽기 (journalctl)",
+    "path": "01-foundations/logging/systemd-journal/journalctl.md"
+   },
+   {
+    "title": "손상·삭제된 저널 (Corrupted·Deleted Journals)",
+    "path": "01-foundations/logging/systemd-journal/corruption.md"
+   }
+  ]
+ },
+ {
+  "title": "저널 파일 구조 (Journal File Format)",
+  "path": "01-foundations/logging/systemd-journal/file-format.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": {
+   "title": "systemd 저널 (systemd Journal)",
+   "path": "01-foundations/logging/systemd-journal/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "journalctl 로 읽기 (journalctl)",
+  "path": "01-foundations/logging/systemd-journal/journalctl.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": {
+   "title": "systemd 저널 (systemd Journal)",
+   "path": "01-foundations/logging/systemd-journal/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "손상·삭제된 저널 (Corrupted·Deleted Journals)",
+  "path": "01-foundations/logging/systemd-journal/corruption.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": {
+   "title": "systemd 저널 (systemd Journal)",
+   "path": "01-foundations/logging/systemd-journal/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "감사 로그 형식 (auditd)",
+  "path": "01-foundations/logging/auditd-format.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그 순환 (logrotate)",
+  "path": "01-foundations/logging/logrotate.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그인 기록 파일 형식 (utmp·wtmp·btmp·lastlog)",
+  "path": "01-foundations/logging/utmp-wtmp-format.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Linux 의 시각 값 (epoch·나노초·마이크로초)",
+  "path": "01-foundations/value-decoding/time-values.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 해석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "UID·GID 와 사용자 이름 잇기 (UID·GID)",
+  "path": "01-foundations/value-decoding/uid-gid.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 해석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "배포판과 버전 (os-release)",
+  "path": "02-artifacts/system-info/os-release.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템 정보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "호스트 이름·시간대·로캘 (Hostname·Timezone)",
+  "path": "02-artifacts/system-info/hostname-timezone.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템 정보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "부팅과 종료 기록 (Boot·Shutdown)",
+  "path": "02-artifacts/system-info/boot-shutdown.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템 정보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "설치 날짜 가늠하기 (Install Date)",
+  "path": "02-artifacts/system-info/install-date.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템 정보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "커널 로그 (dmesg·kern.log)",
+  "path": "02-artifacts/system-info/kernel-log.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템 정보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그인 기록 (wtmp·btmp·lastlog)",
+  "path": "02-artifacts/logins/wtmp-btmp-lastlog.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "인증 로그 (auth.log·secure)",
+  "path": "02-artifacts/logins/auth-log.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "SSH (SSH)",
+  "path": "02-artifacts/logins/ssh/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "sshd 로그 (sshd Logs)",
+    "path": "02-artifacts/logins/ssh/sshd-logs.md"
+   },
+   {
+    "title": "authorized_keys (authorized_keys)",
+    "path": "02-artifacts/logins/ssh/authorized-keys.md"
+   },
+   {
+    "title": "known_hosts 와 클라이언트 설정 (known_hosts·ssh_config)",
+    "path": "02-artifacts/logins/ssh/known-hosts.md"
+   },
+   {
+    "title": "sshd 설정 (sshd_config)",
+    "path": "02-artifacts/logins/ssh/sshd-config.md"
+   }
+  ]
+ },
+ {
+  "title": "sshd 로그 (sshd Logs)",
+  "path": "02-artifacts/logins/ssh/sshd-logs.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": {
+   "title": "SSH (SSH)",
+   "path": "02-artifacts/logins/ssh/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "authorized_keys (authorized_keys)",
+  "path": "02-artifacts/logins/ssh/authorized-keys.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": {
+   "title": "SSH (SSH)",
+   "path": "02-artifacts/logins/ssh/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "known_hosts 와 클라이언트 설정 (known_hosts·ssh_config)",
+  "path": "02-artifacts/logins/ssh/known-hosts.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": {
+   "title": "SSH (SSH)",
+   "path": "02-artifacts/logins/ssh/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "sshd 설정 (sshd_config)",
+  "path": "02-artifacts/logins/ssh/sshd-config.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": {
+   "title": "SSH (SSH)",
+   "path": "02-artifacts/logins/ssh/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "sudo·su 사용 기록 (sudo·su)",
+  "path": "02-artifacts/logins/sudo-su.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "계정 생성·변경 흔적 (useradd·usermod)",
+  "path": "02-artifacts/logins/account-changes.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그인과 계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "셸 명령 기록 (Shell History)",
+  "path": "02-artifacts/execution/shell-history/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "bash 기록 (.bash_history)",
+    "path": "02-artifacts/execution/shell-history/bash.md"
+   },
+   {
+    "title": "zsh·fish 기록 (zsh·fish)",
+    "path": "02-artifacts/execution/shell-history/zsh-fish.md"
+   },
+   {
+    "title": "기록 지우기와 끄기 (History Evasion)",
+    "path": "02-artifacts/execution/shell-history/evasion.md"
+   }
+  ]
+ },
+ {
+  "title": "bash 기록 (.bash_history)",
+  "path": "02-artifacts/execution/shell-history/bash.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": {
+   "title": "셸 명령 기록 (Shell History)",
+   "path": "02-artifacts/execution/shell-history/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "zsh·fish 기록 (zsh·fish)",
+  "path": "02-artifacts/execution/shell-history/zsh-fish.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": {
+   "title": "셸 명령 기록 (Shell History)",
+   "path": "02-artifacts/execution/shell-history/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "기록 지우기와 끄기 (History Evasion)",
+  "path": "02-artifacts/execution/shell-history/evasion.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": {
+   "title": "셸 명령 기록 (Shell History)",
+   "path": "02-artifacts/execution/shell-history/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "감사 로그의 실행 기록 (auditd execve)",
+  "path": "02-artifacts/execution/auditd-execve.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "프로세스 회계 (acct·pacct)",
+  "path": "02-artifacts/execution/process-accounting.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "실행 중인 프로세스 (/proc)",
+  "path": "02-artifacts/execution/proc.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "최근 연 파일 (recently-used.xbel)",
+  "path": "02-artifacts/execution/recently-used.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "실행 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "cron·anacron·at (cron)",
+  "path": "02-artifacts/persistence/cron-at.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "systemd 서비스와 타이머 (systemd Units·Timers)",
+  "path": "02-artifacts/persistence/systemd-units.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "init 스크립트와 rc.local (SysV init)",
+  "path": "02-artifacts/persistence/sysv-init.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "셸 시작 파일 (.bashrc·profile)",
+  "path": "02-artifacts/persistence/shell-startup.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "공유 라이브러리 가로채기 (LD_PRELOAD·ld.so.preload)",
+  "path": "02-artifacts/persistence/ld-preload.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "커널 모듈 (Kernel Modules)",
+  "path": "02-artifacts/persistence/kernel-modules.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "udev 규칙 (udev Rules)",
+  "path": "02-artifacts/persistence/udev-rules.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "PAM 모듈 변조 (PAM Backdoor)",
+  "path": "02-artifacts/persistence/pam-backdoor.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "데스크톱 자동 실행 (XDG Autostart)",
+  "path": "02-artifacts/persistence/xdg-autostart.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "지속성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "dpkg·apt 기록 (Debian·Ubuntu)",
+  "path": "02-artifacts/packages/dpkg-apt.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "패키지와 소프트웨어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "rpm·dnf·yum 기록 (RHEL·Fedora)",
+  "path": "02-artifacts/packages/rpm-dnf.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "패키지와 소프트웨어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "snap·flatpak (snap·flatpak)",
+  "path": "02-artifacts/packages/snap-flatpak.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "패키지와 소프트웨어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "언어 패키지 관리자 (pip·npm 등)",
+  "path": "02-artifacts/packages/language-packages.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "패키지와 소프트웨어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "패키지 파일 변조 확인 (debsums·rpm -V)",
+  "path": "02-artifacts/packages/package-verify.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "패키지와 소프트웨어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "임시 폴더와 메모리 파일 시스템 (/tmp·/dev/shm)",
+  "path": "02-artifacts/file-activity/tmp-shm.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 활동",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "휴지통 (Trash)",
+  "path": "02-artifacts/file-activity/trash.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 활동",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "썸네일 캐시 (Thumbnails)",
+  "path": "02-artifacts/file-activity/thumbnails.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 활동",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "감사 로그의 파일 감시 (auditd Watches)",
+  "path": "02-artifacts/file-activity/auditd-watches.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 활동",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "편집기 흔적 (vim·nano·less)",
+  "path": "02-artifacts/file-activity/editor-artifacts.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 활동",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네트워크 설정 (NetworkManager·netplan)",
+  "path": "02-artifacts/network/network-config.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "방화벽 (iptables·nftables·ufw·firewalld)",
+  "path": "02-artifacts/network/firewall.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이름 해석 (hosts·resolv.conf)",
+  "path": "02-artifacts/network/name-resolution.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Wi-Fi 연결 기록 (Wi-Fi)",
+  "path": "02-artifacts/network/wifi.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "VPN (WireGuard·OpenVPN)",
+  "path": "02-artifacts/network/vpn.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "웹 서버 로그 (Apache·Nginx)",
+  "path": "02-artifacts/servers/web-server-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "서버 애플리케이션",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "데이터베이스 서버 로그 (MySQL·PostgreSQL)",
+  "path": "02-artifacts/servers/database-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "서버 애플리케이션",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "메일 서버 로그 (Postfix)",
+  "path": "02-artifacts/servers/mail-server-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "서버 애플리케이션",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Docker (Docker)",
+  "path": "02-artifacts/containers/docker/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "컨테이너와 가상화",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "이미지와 레이어 (Images·Layers)",
+    "path": "02-artifacts/containers/docker/images-layers.md"
+   },
+   {
+    "title": "컨테이너 설정과 로그 (Container Config·Logs)",
+    "path": "02-artifacts/containers/docker/container-logs.md"
+   },
+   {
+    "title": "overlay 파일 시스템 (overlay2)",
+    "path": "02-artifacts/containers/docker/overlay2.md"
+   }
+  ]
+ },
+ {
+  "title": "이미지와 레이어 (Images·Layers)",
+  "path": "02-artifacts/containers/docker/images-layers.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "컨테이너와 가상화",
+  "parent": {
+   "title": "Docker (Docker)",
+   "path": "02-artifacts/containers/docker/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "컨테이너 설정과 로그 (Container Config·Logs)",
+  "path": "02-artifacts/containers/docker/container-logs.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "컨테이너와 가상화",
+  "parent": {
+   "title": "Docker (Docker)",
+   "path": "02-artifacts/containers/docker/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "overlay 파일 시스템 (overlay2)",
+  "path": "02-artifacts/containers/docker/overlay2.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "컨테이너와 가상화",
+  "parent": {
+   "title": "Docker (Docker)",
+   "path": "02-artifacts/containers/docker/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "containerd 와 Kubernetes 노드 (containerd·Kubernetes)",
+  "path": "02-artifacts/containers/containerd-kubernetes.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "컨테이너와 가상화",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Podman (Podman)",
+  "path": "02-artifacts/containers/podman.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "컨테이너와 가상화",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "가상 머신 (KVM·libvirt)",
+  "path": "02-artifacts/containers/kvm-libvirt.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "컨테이너와 가상화",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "GNOME 흔적 (GNOME)",
+  "path": "02-artifacts/desktop/gnome.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "데스크톱 환경",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "KDE 흔적 (KDE Plasma)",
+  "path": "02-artifacts/desktop/kde.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "데스크톱 환경",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "비밀번호 보관함 (GNOME Keyring·KWallet)",
+  "path": "02-artifacts/desktop/keyring.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "데스크톱 환경",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Linux 의 브라우저 프로필 (Firefox·Chrome)",
+  "path": "02-artifacts/desktop/browsers.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "데스크톱 환경",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "USB 장치 연결 기록 (USB)",
+  "path": "02-artifacts/devices/usb.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "마운트 기록 (Mount)",
+  "path": "02-artifacts/devices/mounts.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "조사 절차 (Investigation Process)",
+  "path": "03-techniques/acquisition/investigation-process.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "라이브 응답 수집 (Live Response)",
+  "path": "03-techniques/acquisition/live-response.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "디스크 이미징 (Disk Imaging)",
+  "path": "03-techniques/acquisition/disk-imaging.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "메모리 수집 (Memory Acquisition)",
+  "path": "03-techniques/acquisition/memory-acquisition.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클라우드 가상 머신 수집 (Cloud VM)",
+  "path": "03-techniques/acquisition/cloud-vm.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "컨테이너 수집 (Container Acquisition)",
+  "path": "03-techniques/acquisition/container-acquisition.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "타임라인 만들기 (Timeline)",
+  "path": "03-techniques/analysis/timeline.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그 분석 (Log Analysis)",
+  "path": "03-techniques/analysis/log-analysis.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "지운 파일 되살리기 (File Recovery)",
+  "path": "03-techniques/analysis/file-recovery.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "메모리 분석 (Volatility 3)",
+  "path": "03-techniques/analysis/memory-analysis.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "루트킷 찾기 (Rootkit Detection)",
+  "path": "03-techniques/analysis/rootkit-detection.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "알려진 파일 대조와 YARA (Hash·YARA)",
+  "path": "03-techniques/analysis/hash-yara.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Linux 포렌식 보고서 (Forensic Report)",
+  "path": "03-techniques/reporting/forensic-report.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "SSH 로 들어왔나 (SSH Intrusion)",
+  "path": "04-scenarios/intrusion/ssh-intrusion.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "웹 서버가 뚫렸나 (Web Server Compromise)",
+  "path": "04-scenarios/intrusion/web-compromise.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "권한을 올렸나 (Privilege Escalation)",
+  "path": "04-scenarios/intrusion/privilege-escalation.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "채굴기가 돌았나 (Cryptominer)",
+  "path": "04-scenarios/intrusion/cryptominer.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "랜섬웨어가 돌았나 (Ransomware)",
+  "path": "04-scenarios/intrusion/ransomware.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "무엇이 계속 살아남게 했나 (Persistence Hunt)",
+  "path": "04-scenarios/intrusion/persistence-hunt.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "자료를 밖으로 옮겼나 (Data Exfiltration)",
+  "path": "04-scenarios/insider/data-exfiltration.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "유출·은폐",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "흔적을 지웠나 (Log·History Tampering)",
+  "path": "04-scenarios/insider/anti-forensics.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "유출·은폐",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "시각을 조작했나 (Time Manipulation)",
+  "path": "04-scenarios/insider/time-manipulation.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "유출·은폐",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "누가 그 명령을 실행했나 (User Attribution)",
+  "path": "04-scenarios/attribution/user-attribution.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "사용자",
+  "parent": null,
+  "subpages": []
+ }
+]
