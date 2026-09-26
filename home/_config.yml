@@ -1,0 +1,58 @@
+title: 디지털 포렌식 핸드북
+description: Windows·macOS·Linux·Android·iOS·클라우드·AI 서비스에 남는 흔적을 읽고 해석하는 한국어 디지털 포렌식 핸드북
+lang: ko
+theme: just-the-docs
+search_enabled: true
+search:
+  button: true
+heading_anchors: true
+back_to_top: true
+back_to_top_text: 맨 위로
+color_scheme: light
+exclude:
+  - _work
+  - _manifest.json
+plugins:
+  - jekyll-relative-links
+  - jekyll-sitemap
+relative_links:
+  enabled: true
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+url: https://urock-ailab.github.io
+author:
+  name: 박지민 (Jimin Park)
+  email: jimicro@gmail.com
+  url: https://www.linkedin.com/in/jimicro/
+social:
+  name: 주식회사 유락
+  links:
+    - https://urock.kr/
+nav_external_links:
+  - title: Windows 핸드북
+    url: https://urock-ailab.github.io/forensics-handbook/windows/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: macOS 핸드북
+    url: https://urock-ailab.github.io/forensics-handbook/mac/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: Linux 핸드북
+    url: https://urock-ailab.github.io/forensics-handbook/linux/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: Android 핸드북
+    url: https://urock-ailab.github.io/forensics-handbook/android/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: iOS 핸드북
+    url: https://urock-ailab.github.io/forensics-handbook/ios/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: AI 서비스 핸드북
+    url: https://urock-ailab.github.io/forensics-handbook/ai/
+    hide_icon: true
+    opens_in_new_tab: false
