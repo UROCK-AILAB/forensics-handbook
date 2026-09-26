@@ -18,14 +18,14 @@ dpkg 는 기본 설정 파일 `/etc/dpkg/dpkg.cfg` 의 `log /var/log/dpkg.log` �
 
 ## 위치와 버전별 차이
 
-이 쪽은 Ubuntu 24.04 LTS 등 Debian 계열에 해당합니다. RHEL 9 에는 dpkg·apt 가 없고, 같은 역할의 기록은 [rpm·dnf·yum 기록](rpm-dnf.md)에서 다룹니다. snap 과 flatpak 은 [snap·flatpak](snap-flatpak.md)을 봅니다.
+이 페이지는 Ubuntu 24.04 LTS 등 Debian 계열에 해당합니다. RHEL 9 에는 dpkg·apt 가 없고, 같은 역할의 기록은 [rpm·dnf·yum 기록](rpm-dnf.md)에서 다룹니다. snap 과 flatpak 은 [snap·flatpak](snap-flatpak.md)을 봅니다.
 
 | 경로 | 내용 |
 |---|---|
 | `/var/log/dpkg.log`, `.1`, `.2.gz` … | dpkg 가 상태 변화와 동작을 한 줄씩 기록합니다[1][3] |
 | `/var/log/apt/history.log`, `.N.gz` | apt 실행 한 번마다 `Start-Date`~`End-Date` 한 묶음[7][8] |
 | `/var/log/apt/term.log`, `.N.gz` | dpkg 가 터미널에 낸 출력 원문[7][8] |
-| `/var/log/apt/eipp.log.xz` | 설치 계획(planner) 기록. 내용 구조는 검체로 확인합니다[8] |
+| `/var/log/apt/eipp.log.xz` | 설치 계획(planner) 기록. 내용 구조는 실제 파일로 확인합니다[8] |
 | `/var/lib/dpkg/status` | 패키지마다 한 블록, 지금 상태와 버전[1][18] |
 | `/var/lib/dpkg/available` | 사용 가능한 패키지 목록[1] |
 | `/var/lib/dpkg/info/패키지[:아키텍처].list`, `.md5sums` | 패키지가 설치한 파일 목록과 MD5[6][19] |
@@ -141,17 +141,17 @@ apt 는 이름이 `~`, `.disabled`, `.bak`, `.dpkg-` 뒤 소문자, `.ucf-` 뒤 
 - 패키지를 설치했다는 것은 그 프로그램을 실행했다는 뜻이 아닙니다. 실행 흔적은 [셸 명령 기록](../execution/shell-history/index.md)이나 [감사 로그의 실행 기록](../execution/auditd-execve.md)에서 찾습니다.
 - 로그는 평문 파일이고 root 가 고칠 수 있습니다.
 
-보고서에는 "2024-07-24 16:48:56(현지 시각, 시간대는 Asia/Seoul)에 apt 가 htop 을 설치한 기록이 있고, 요청한 계정은 UID 1000(alice)으로 기록되어 있다"처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2024-07-24 16:48:56(현지 시각, 시간대는 Asia/Seoul)에 apt 가 htop 을 설치한 기록이 있고, 요청한 계정은 UID 1000(alice)으로 기록되어 있다"처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
-dpkg.log, history.log, term.log 의 시각은 모두 현지 시각이고 시간대 표시가 없습니다. dpkg 는 `localtime_r` 과 `%Y-%m-%d %H:%M:%S` 로[2], apt 는 `localtime_r` 과 `%F  %T` 로 시각을 만듭니다[7]. 연도는 있으므로 syslog 전통 형식처럼 연도를 추정할 필요는 없지만, 시간대는 검체의 `/etc/localtime` 으로 정해야 합니다. 시간대 확인은 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md)을 봅니다. 쓰는 도중에 시간대를 바꾼 시스템이라면 바꾸기 전 줄은 예전 시간대 기준입니다.
+dpkg.log, history.log, term.log 의 시각은 모두 현지 시각이고 시간대 표시가 없습니다. dpkg 는 `localtime_r` 과 `%Y-%m-%d %H:%M:%S` 로[2], apt 는 `localtime_r` 과 `%F  %T` 로 시각을 만듭니다[7]. 연도는 있으므로 syslog 전통 형식처럼 연도를 추정할 필요는 없지만, 시간대는 대상 시스템의 `/etc/localtime` 으로 정해야 합니다. 시간대 확인은 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md)을 봅니다. 쓰는 도중에 시간대를 바꾼 시스템이라면 바꾸기 전 줄은 예전 시간대 기준입니다.
 
 history.log 의 `Start-Date` 는 apt 가 dpkg 작업 단계에 들어가 `DPkg::Pre-Invoke` 명령을 돌린 뒤 로그를 연 시각이고, `End-Date` 는 `DPkg::Post-Invoke` 명령을 돌리기 전에 로그를 닫은 시각입니다[7]. 두 시각은 명령을 친 시각이 아니라 dpkg 작업이 시작·끝난 때에 가깝습니다.
 
 `info/패키지.list` 의 수정 시각은 그 패키지의 파일 목록이 마지막으로 바뀐 때, 곧 마지막 설치나 업그레이드 시각입니다[5]. 처음 설치한 시각이 아니라는 점에 주의합니다. `db-fsys:Last-Modified` 와 dissect.target 의 패키지 시각이 모두 이 값입니다[5][19]. 파일 시스템 시각의 해석은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)을 봅니다.
 
-`/var/lib/apt/lists/` 의 `Release`·`InRelease` 파일 수정 시각은 저장소 목록을 마지막으로 받은 때를 가늠하는 데 쓸 수 있습니다[18]. `unattended-upgrades-stamp` 의 수정 시각은 자동 업데이트가 마지막으로 돈 때입니다[15].
+`/var/lib/apt/lists/` 의 `Release`·`InRelease` 파일 수정 시각은 저장소 목록을 마지막으로 받은 때를 추정하는 데 쓸 수 있습니다[18]. `unattended-upgrades-stamp` 의 수정 시각은 자동 업데이트가 마지막으로 돈 때입니다[15].
 
 ## 함정과 한계
 
@@ -179,7 +179,7 @@ history.log 앞부분을 헥스로 보면 아래 모양이 됩니다. apt 코드
 
 1. 0x00 의 `0a` 는 묶음 앞에 apt 가 넣는 빈 줄입니다. 파일 중간에서는 앞 묶음의 `End-Date` 줄 바로 뒤에 이 빈 줄이 옵니다.
 2. 0x17~0x18 의 `20 20` 은 날짜와 시각 사이의 공백 두 칸입니다(`%F  %T`). 검색식이나 파서를 직접 짤 때 공백 하나로 잡으면 맞지 않습니다.
-3. 시각 문자열 끝에 시간대가 없습니다. 이 값을 UTC 로 옮기려면 검체의 시간대를 따로 정합니다.
+3. 시각 문자열 끝에 시간대가 없습니다. 이 값을 UTC 로 옮기려면 대상 시스템의 시간대를 따로 정합니다.
 
 ### 공개 도구로 한 번
 
@@ -207,7 +207,7 @@ popularity-contest 의 ctime 은 패키지를 새 판으로 올리면 다시 정
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 Ubuntu 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 Linux 디스크 이미지(NIST CFReDS 등)나 직접 만든 Ubuntu 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
 1. history.log 에서 `Requested-By:` 가 없는 묶음은 무엇이고, 같은 시각의 인증 로그에서 root 로그인이나 자동 업데이트 흔적을 찾을 수 있는가?
 2. dpkg.log 에는 있지만 history.log 에는 없는 `install` 줄이 있는가? 있다면 `.deb` 파일은 어디서 왔을 가능성이 있는가?

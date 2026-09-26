@@ -41,7 +41,7 @@ ssh 는 접속할 때마다 서버가 내민 호스트 키 (host key) 를 known_
 | 시스템 설정 | `/etc/ssh/ssh_config`, `/etc/ssh/ssh_config.d/*.conf` | 패키지·관리자 |
 | 고치기 전 사본 | `~/.ssh/known_hosts.old` | ssh-keygen `-H`·`-R`, `UpdateHostKeys` |
 
-기본 경로는 매뉴얼 값입니다[1][2]. `UserKnownHostsFile` 은 공백으로 나눠 여러 파일을 적을 수 있고 토큰도 쓸 수 있어서[2], 배포되는 `ssh_config` 에는 `UserKnownHostsFile ~/.ssh/known_hosts.d/%k` 처럼 호스트마다 파일을 나누는 주석 예시가 있습니다[9]. `%k` 는 `HostKeyAlias` 가 있으면 그 값이고, 없으면 명령행에 준 원래 호스트 이름입니다[2]. 검체에서는 설정 파일을 먼저 읽어 실제 경로를 정합니다. `Include` 의 상대 경로는 사용자 설정이면 `~/.ssh`, 시스템 설정이면 `/etc/ssh` 기준입니다[2]. `~/.ssh/config` 는 다른 사람이 쓸 수 없는 권한이어야 합니다[3].
+기본 경로는 매뉴얼 값입니다[1][2]. `UserKnownHostsFile` 은 공백으로 나눠 여러 파일을 적을 수 있고 토큰도 쓸 수 있어서[2], 배포되는 `ssh_config` 에는 `UserKnownHostsFile ~/.ssh/known_hosts.d/%k` 처럼 호스트마다 파일을 나누는 주석 예시가 있습니다[9]. `%k` 는 `HostKeyAlias` 가 있으면 그 값이고, 없으면 명령행에 준 원래 호스트 이름입니다[2]. 분석 대상에서는 설정 파일을 먼저 읽어 실제 경로를 정합니다. `Include` 의 상대 경로는 사용자 설정이면 `~/.ssh`, 시스템 설정이면 `/etc/ssh` 기준입니다[2]. `~/.ssh/config` 는 다른 사람이 쓸 수 없는 권한이어야 합니다[3].
 
 두 기준 배포판의 기본 설정은 아래처럼 다릅니다.
 
@@ -101,7 +101,7 @@ web01.example.net ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI...
 
 - `known_hosts.old` 가 있으면 해시하기 전의 평문 이름이나 지우기 전의 줄이 남아 있을 수 있습니다. 다만 `UpdateHostKeys` 도 `.old` 를 만들므로[4] `.old` 가 있다는 것만으로 사람이 ssh-keygen 을 썼다고 보지 않습니다.
 - 수집 도구마다 경로 목록이 다릅니다. ForensicArtifacts 의 `SSHKnownHostsFiles` 는 `~/.ssh/known_hosts` 와 `/etc/ssh/known_hosts` 만 적어[14] `known_hosts2`, `known_hosts.old` 를 빠뜨리고, 전역 파일 이름이 매뉴얼의 `/etc/ssh/ssh_known_hosts`[1] 와 다릅니다. UAC 는 사용자 홈의 `.ssh/known_hosts*` 를 모읍니다[15]. dissect.target 은 사용자 홈의 `.ssh/known_hosts*` 와 `/etc/ssh/ssh_known_hosts` 를 읽습니다[16]. 이 세 도구와 Velociraptor 모두 설정 파일의 `UserKnownHostsFile` 을 읽지 않으므로, 다른 경로로 바꾼 설정은 설정 파일을 보고 따로 찾아야 합니다.
-- Velociraptor 의 `Linux.Ssh.KnownHosts` 는 줄을 공백으로 나눠 앞 세 칸을 Hostname, Type, PublicKey 로 읽습니다[17]. 줄 앞에 `@revoked` 같은 marker 가 있으면 칸이 하나씩 밀리고, 주석 거르기 조건이 `#` 로 시작하는 줄과 맞지 않아 주석 줄이 결과에 섞일 수 있습니다[17]. dissect.target 은 marker 를 따로 떼고 쉼표로 나눈 이름마다 한 행을 만듭니다[16].
+- Velociraptor 의 `Linux.Ssh.KnownHosts` 는 줄을 공백으로 나눠 앞 세 필드를 Hostname, Type, PublicKey 로 읽습니다[17]. 줄 앞에 `@revoked` 같은 marker 가 있으면 필드가 하나씩 밀리고, 주석 거르기 조건이 `#` 로 시작하는 줄과 맞지 않아 주석 줄이 결과에 섞일 수 있습니다[17]. dissect.target 은 marker 를 따로 떼고 쉼표로 나눈 이름마다 한 행을 만듭니다[16].
 - 해시 후보를 만들 때는 ssh 가 적는 모양 그대로 맞춰야 합니다. 소문자로 바꾸고, 기본 포트가 아니면 `[이름]:포트` 로 감싸고, 별칭이 아니라 `HostName` 값을 씁니다[4][6][8].
 - 전역 파일이나 `@cert-authority` 줄로 확인한 서버는 사용자 파일에 줄이 새로 생기지 않을 수 있습니다[1][2]. 사용자 파일에 없다는 것만으로 접속하지 않았다고 말할 수 없습니다.
 
@@ -116,7 +116,7 @@ web01.example.net ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI...
 00000010: 6773 4d44 5134 5045 4245 5345 7851 3d7c  gsMDQ4PEBESExQ=|
 ```
 
-`7c 31 7c` 가 `|1|` 이고, 다음 `7c` 까지가 salt 의 base64 입니다. 이를 풀면 20바이트 `01 02 … 14` 가 나옵니다. 후보 이름 `web01.example.net` 을 이 salt 로 HMAC-SHA1 한 값을 base64 로 적어 둘째 칸 `pnf7YNGP4aWyz8jgTSTxhlbQ29M=` 와 같으면 이 줄의 호스트가 그 이름입니다[4]. 후보를 하나씩 대입하는 계산은 짧은 스크립트로 충분합니다.
+`7c 31 7c` 가 `|1|` 이고, 다음 `7c` 까지가 salt 의 base64 입니다. 이를 풀면 20바이트 `01 02 … 14` 가 나옵니다. 후보 이름 `web01.example.net` 을 이 salt 로 HMAC-SHA1 한 값을 base64 로 적어 둘째 필드 `pnf7YNGP4aWyz8jgTSTxhlbQ29M=` 와 같으면 이 줄의 호스트가 그 이름입니다[4]. 후보를 하나씩 대입하는 계산은 짧은 스크립트로 충분합니다.
 
 ```
 import base64, hashlib, hmac
@@ -147,12 +147,12 @@ print(base64.b64encode(mac).decode())   # pnf7YNGP4aWyz8jgTSTxhlbQ29M=
 
 ## 실습
 
-공개 검체(NIST CFReDS 의 Linux 디스크 이미지 등)로 아래 질문을 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 의 Linux 디스크 이미지 등)로 아래 질문을 풀어 봅니다.
 
 1. 모든 사용자 홈과 `/root` 에서 `.ssh/known_hosts*`, `.ssh/config` 를 찾고, `/etc/ssh/ssh_config` 와 `ssh_config.d` 에서 `UserKnownHostsFile`·`HashKnownHosts` 를 바꾼 줄이 있는지 확인합니다.
 2. 줄마다 평문인지 해시인지 가르고, 한 파일 안에 둘이 섞여 있는지 봅니다.
 3. 해시 줄은 셸 기록과 `~/.ssh/config` 에서 모은 후보 이름으로 풀어 봅니다.
-4. known_hosts 와 `known_hosts.old` 의 inode, mtime, ctime 을 비교해 마지막으로 파일을 고친 때를 가늠합니다.
+4. known_hosts 와 `known_hosts.old` 의 inode, mtime, ctime 을 비교해 마지막으로 파일을 고친 때를 추정합니다.
 
 ## 참고 문헌
 

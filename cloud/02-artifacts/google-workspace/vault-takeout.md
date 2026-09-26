@@ -83,7 +83,7 @@ Takeout 로그 이벤트의 `events[].type` 은 `USER_TAKEOUT` 이고 이벤트�
 | `DOWNLOADED_USER_TAKEOUT` | `{actor} downloaded a user takeout` | DOWNLOAD_TIME(다운로드 시작 시각), PRODUCTS_REQUESTED, TAKEOUT_ID, USER_EMAIL |
 | `SCHEDULED_USER_TAKEOUT` | `{actor} scheduled user takeout(s)` | PRODUCTS_REQUESTED, SCHEDULED_TAKEOUT_EXPIRATION, TAKEOUT_DESTINATION, TAKEOUT_INTERVAL_UNITS, TAKEOUT_INTERVAL_VALUE, TAKEOUT_STATUS, USER_EMAIL |
 
-`TAKEOUT_DESTINATION` 값은 `BOX`, `DRIVE`, `DROPBOX`, `EMAIL`, `ONEDRIVE`, `UNKNOWN` 이고, `EMAIL` 은 메일로 받은 다운로드 링크로 로컬 저장소에 받았다는 뜻입니다[12]. `TAKEOUT_STATUS` 는 `CANCELED`, `COMPLETED`, `FAILED`, `IN_PROGRESS` 가운데 하나이고, `TAKEOUT_INTERVAL_UNITS` 는 `DAY`, `WEEK`, `MONTH` 가운데 하나입니다[12]. 관리 콘솔에서 `INITIATED_BY` 는 Takeout initiator 로 보이고 값은 `USER` 또는 `TAKEOUT_SCHEDULER` 이며, `USER_EMAIL` 은 Target(자료를 내보낸 사용자), `TAKEOUT_ID` 는 Takeout job ID 로 보입니다[13]. `START_TIME`·`COMPLETION_TIME`·`DOWNLOAD_TIME`·`SCHEDULED_TAKEOUT_EXPIRATION` 은 정수형이고[12], 단위는 검체에서 확인합니다(아래 시각 해석).
+`TAKEOUT_DESTINATION` 값은 `BOX`, `DRIVE`, `DROPBOX`, `EMAIL`, `ONEDRIVE`, `UNKNOWN` 이고, `EMAIL` 은 메일로 받은 다운로드 링크로 로컬 저장소에 받았다는 뜻입니다[12]. `TAKEOUT_STATUS` 는 `CANCELED`, `COMPLETED`, `FAILED`, `IN_PROGRESS` 가운데 하나이고, `TAKEOUT_INTERVAL_UNITS` 는 `DAY`, `WEEK`, `MONTH` 가운데 하나입니다[12]. 관리 콘솔에서 `INITIATED_BY` 는 Takeout initiator 로 보이고 값은 `USER` 또는 `TAKEOUT_SCHEDULER` 이며, `USER_EMAIL` 은 Target(자료를 내보낸 사용자), `TAKEOUT_ID` 는 Takeout job ID 로 보입니다[13]. `START_TIME`·`COMPLETION_TIME`·`DOWNLOAD_TIME`·`SCHEDULED_TAKEOUT_EXPIRATION` 은 정수형이고[12], 단위는 실제 데이터로 확인합니다(아래 시각 해석).
 
 아래는 보고서 API 가 돌려주는 Takeout 시작 활동을 문서의 레코드 모양대로 만든 예시입니다. 메일 주소·IP·ID 는 모두 만든 예시 값입니다.
 
@@ -157,12 +157,12 @@ Takeout 보관 파일은 고른 최대 크기를 넘으면 여러 파일로 나�
 - Vault 는 보존 규칙이나 보류가 없던 기간에 사용자가 지우고 휴지통까지 비운 Drive 항목, 규칙이 끝나기 30일 넘게 전에 지운 Gmail 메시지를 되살리지 못합니다. 앞의 것은 곧바로 Vault 에서 보이지 않고, 뒤의 것은 보존 기간이 끝나는 즉시 지워집니다[2].
 - 외부에서 받은 기밀 모드 메일은 헤더와 제목만 보존·검색·내보내기되고 본문과 첨부는 없습니다[8]. AMP 동적 메일은 HTML·평문·AMP 마크업만 보존되고, 사용자가 열 때 받아 온 동적 내용은 보존되지 않습니다[8].
 
-보고서에는 "2026-03-02 01:15 UTC 에 user@example.com 계정으로 Takeout 내보내기를 시작한 기록이 있고, 전달 대상은 Dropbox 로 기록되어 있다" 처럼 기록이 말하는 만큼만 씁니다. 보고서 문장 전반은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 를 봅니다.
+보고서에는 "2026-03-02 01:15 UTC 에 user@example.com 계정으로 Takeout 내보내기를 시작한 기록이 있고, 전달 대상은 Dropbox 로 기록되어 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 보고서 문장 전반은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 를 봅니다.
 
 ## 시각 해석
 
-- 보고서 API 레코드의 `id.time` 은 문서 설명과 예시가 서로 다르므로, 검체 값의 모양을 보고 판단합니다. 자세한 내용은 [관리 콘솔 감사 로그](admin-audit.md) 에 있습니다.
-- Takeout 이벤트의 `START_TIME`·`COMPLETION_TIME`·`DOWNLOAD_TIME` 은 정수형입니다[12]. 같은 레코드의 `id.time` 과 나란히 놓고 초·밀리초·마이크로초 가운데 어느 것으로 풀어야 두 값이 가까워지는지 검체에서 확인합니다. `DOWNLOAD_TIME` 은 다운로드를 시작한 시각이고 끝난 시각이 아닙니다[12].
+- 보고서 API 레코드의 `id.time` 은 문서 설명과 예시가 서로 다르므로, 실제 값의 모양을 보고 판단합니다. 자세한 내용은 [관리 콘솔 감사 로그](admin-audit.md) 에 있습니다.
+- Takeout 이벤트의 `START_TIME`·`COMPLETION_TIME`·`DOWNLOAD_TIME` 은 정수형입니다[12]. 같은 레코드의 `id.time` 과 나란히 놓고 초·밀리초·마이크로초 가운데 어느 것으로 풀어야 두 값이 가까워지는지 실제 데이터로 확인합니다. `DOWNLOAD_TIME` 은 다운로드를 시작한 시각이고 끝난 시각이 아닙니다[12].
 - 관리 콘솔의 Date 는 브라우저 기본 시간대로 표시되고, 보안 조사 도구는 최고 관리자가 조사 시간대를 바꿀 수 있습니다[11][13]. 화면에서 옮겨 적은 시각은 어느 시간대였는지 함께 적어 둡니다.
 - Takeout 완료 이벤트는 자료 크기에 따라 며칠 늦게 들어올 수 있습니다[17]. 시작 이벤트만 있고 완료 이벤트가 없다고 해서 내보내기가 실패했다고 보지 않습니다. 드물게 이벤트가 더 늦거나 아예 보고되지 않을 수도 있습니다[17].
 - Vault 내보내기의 Gmail 메타데이터 DateSent 는 UTC 이고, DateReceived 는 시간대 설명 없이 형식만 정해져 있습니다[7]. 두 형식 모두 끝의 `ZZZZ` 자리에 시간대 표기가 붙으므로 값 끝의 시간대 표기를 보고 판단합니다. Groups 메타데이터 CSV 는 두 값 모두 UTC 입니다[7].
@@ -217,12 +217,12 @@ Vault 내보내기 사본은 먼저 File checksums 의 MD5 값과 받은 파일�
 - [로그인 기록](login-audit.md) — Takeout 을 시작한 세션의 로그인 IP·시각이 평소와 같은지 봅니다.
 - [OAuth 토큰 기록](token-audit.md) — 외부 앱이 Workspace 자료에 접근하도록 권한을 준 기록을 봅니다. Takeout 을 Dropbox·OneDrive·Box 로 보낼 때의 연결 승인은 Google 쪽이 아니라 그 서비스의 연결된 앱 목록에 "Google Download Your Data" 로 남습니다[15].
 - [Purview eDiscovery와 보존](../m365/purview-ediscovery.md) — Microsoft 365 에서 같은 역할을 하는 보존·내보내기 기능입니다.
-- [퇴사자가 자료를 가져갔나](../../04-scenarios/data-leak/departing-employee.md), [외부 공유 링크로 새어 나갔나](../../04-scenarios/data-leak/external-sharing.md) — 이 쪽의 기록을 조사 흐름으로 묶습니다.
+- [퇴사자가 자료를 가져갔나](../../04-scenarios/data-leak/departing-employee.md), [외부 공유 링크로 새어 나갔나](../../04-scenarios/data-leak/external-sharing.md) — 이 페이지의 기록을 조사 흐름으로 묶습니다.
 - [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) — 보관 기간이 지난 기록이나 조직 밖 계정 자료가 필요할 때 봅니다.
 
 ## 실습
 
-Vault·Takeout 기록은 공개 검체가 드물어서, 조사용이 아닌 시험용 Workspace 조직에서 만들어 풀어 봅니다.
+Vault·Takeout 기록은 공개된 표본 데이터가 드물어서, 조사용이 아닌 시험용 Workspace 조직에서 만들어 풀어 봅니다.
 
 1. 시험 사용자로 Gmail 과 Drive 만 골라 Takeout 을 한 번 실행하고, 전달 방법을 메일 링크로 정합니다. Takeout 로그 이벤트에서 시작·완료·다운로드 세 이벤트를 찾아 `TAKEOUT_ID` 로 묶어 봅니다.
 2. 같은 레코드의 `START_TIME` 과 `id.time` 을 나란히 놓고 정수 시각의 단위를 알아내 봅니다. 완료 이벤트가 시작 이벤트보다 몇 분 늦게 들어왔는지도 적어 봅니다.

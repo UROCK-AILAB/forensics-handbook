@@ -23,7 +23,7 @@ Windows 11 25H2 에서는 `IntelliForms` 키에 값도 하위 키도 없고 `Sto
 |---|---|
 | IE 4~6 | `HKCU\Software\Microsoft\Protected Storage System Provider` (보호 저장소, Protected Storage) |
 | IE 7~9 | `HKCU\Software\Microsoft\Internet Explorer\IntelliForms\Storage2` |
-| IE 10·11, 엣지 | 검체에서 확인 |
+| IE 10·11, 엣지 | 실제 데이터로 확인 |
 | HTTP 기본 인증 (IE 7 이후) | 아래 표의 `Credentials` 폴더 |
 
 | Windows | HTTP 기본 인증 비밀번호 폴더 |
@@ -103,7 +103,7 @@ dwTotalSecrets 를 2 로 나누면 그 사이트에 저장한 쌍의 수가 나�
 - **주소가 한 글자만 달라도 해시가 다릅니다.** IE 가 해시 전에 주소를 소문자로 바꾸는지는 공개된 분석 자료가 없습니다. 그래서 방문 기록에 남은 주소를 끝 `/` 유무, 대소문자, 경로 차이를 바꿔 가며 맞춰 봅니다.
 - **주소를 못 찾으면 풀 수 없습니다.** 방문 기록을 지웠다면 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 의 옛 방문 기록에서 주소 후보를 찾습니다.
 - **DPAPI 를 풀 열쇠가 필요합니다.** 다른 PC 의 드라이브나 이미지에서 풀려면 사용자의 마스터 키와 로그온 비밀번호가 필요합니다. 오프라인으로 푸는 절차는 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
-- **IE 10 이후는 이 키가 비어 있을 수 있습니다.** 위 구조는 IE 4~8 기준이고[2], IE 10 이후 저장 위치는 검체에서 확인합니다. 빈 `IntelliForms` 키를 "저장 비밀번호 없음" 으로 단정하지 않고, [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) 도 함께 봅니다.
+- **IE 10 이후는 이 키가 비어 있을 수 있습니다.** 위 구조는 IE 4~8 기준이고[2], IE 10 이후 저장 위치는 실제 데이터로 확인합니다. 빈 `IntelliForms` 키를 "저장 비밀번호 없음" 으로 단정하지 않고, [자격 증명 관리자와 볼트](../../credentials/credential-manager-windows-vault.md) 도 함께 봅니다.
 - **HTTP 기본 인증 비밀번호는 레지스트리에 없습니다.** `Credentials` 폴더를 따로 수집해야 합니다.
 
 ## 직접 분석해 보기
@@ -135,7 +135,7 @@ C4 A8 D5 F2 D0 39 04 3E 3B E0 82 09 B6 DF A2 36 0A 3F FA F4
 C4A8D5F2D039043E3BE08209B6DFA2360A3FFAF4C8
 ```
 
-이 예시는 16진 글자를 대문자로 적었습니다. 실제 값 이름과 맞출 때는 대소문자를 가리지 않고 비교합니다. 같은 계산을 PowerShell 로 하면 아래와 같습니다.
+이 예시는 16진 글자를 대문자로 적었습니다. 실제 값 이름과 맞출 때는 대소문자를 구분하지 않고 비교합니다. 같은 계산을 PowerShell 로 하면 아래와 같습니다.
 
 ```powershell
 $u = "https://www.example.com/"
@@ -168,7 +168,7 @@ $c = ($h | Measure-Object -Sum).Sum % 256
 
 ## 실습
 
-Windows 7 에서 IE 8·9 를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 프로필을 꺼내 아래 질문을 풀어 봅니다.
+Windows 7 에서 IE 8·9 를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 사용자 프로필을 꺼내 아래 질문을 풀어 봅니다.
 
 1. `IntelliForms\Storage2` 에 값이 몇 개 있습니까? 값 이름은 모두 42글자입니까?
 2. 방문 기록에서 뽑은 주소로 해시를 계산하면 몇 개의 값 이름과 짝이 맞습니까?

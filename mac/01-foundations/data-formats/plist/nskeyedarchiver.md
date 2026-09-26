@@ -15,7 +15,7 @@ NSKeyedArchiver는 객체를 XML이나 바이너리 plist로 바꿔 저장하고
 
 이 형식을 쓰는 macOS 파일의 경로와 버전은 각 아티팩트 페이지에서 다룹니다.
 
-아래 구조는 Apple이 공개한 swift-corelibs-foundation(리눅스 등에서 쓰는 공개 Foundation) 소스 기준입니다 [1][2]. 이 소스는 일부 macOS 동작을 따르지만 [1], macOS의 Foundation과 세부가 다를 수 있습니다. 검체에서 다른 모습이 보이면 macOS 버전과 함께 적습니다.
+아래 구조는 Apple이 공개한 swift-corelibs-foundation(리눅스 등에서 쓰는 공개 Foundation) 소스 기준입니다 [1][2]. 이 소스는 일부 macOS 동작을 따르지만 [1], macOS의 Foundation과 세부가 다를 수 있습니다. 실제 데이터에서 다른 모습이 보이면 macOS 버전과 함께 적습니다.
 
 ## 구조
 
@@ -49,11 +49,11 @@ NSKeyedArchiver는 객체를 XML이나 바이너리 plist로 바꿔 저장하고
 
 NSDictionary는 키 배열을 `NS.keys` 에, 값 배열을 `NS.objects` 에 uid 배열로 담고, 두 배열에서 같은 순번끼리 짝을 짓습니다 [2]. 디코더는 `NS.key.0`, `NS.object.0`, `NS.key.1` 처럼 번호 붙은 옛 방식 키도 읽습니다 [2]. 배열을 인코딩할 때는 원소마다 uid를 만들어 uid 배열로 넣습니다 [1].
 
-NSArray·NSString·NSDate·NSData 같은 다른 클래스가 어떤 키 이름을 쓰는지, NSDate에 어떤 기준의 시각을 넣는지는 공개 자료가 없습니다. 이런 클래스는 검체에서 본 키를 그대로 적고, 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)과 대조해 판단합니다.
+NSArray·NSString·NSDate·NSData 같은 다른 클래스가 어떤 키 이름을 쓰는지, NSDate에 어떤 기준의 시각을 넣는지 밝힌 공개 문서는 없습니다. 이런 클래스는 실제 데이터에서 본 키를 그대로 적고, 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)과 대조해 판단합니다.
 
 ## 읽는 법
 
-아래는 NSDictionary 하나를 `archivedData(withRootObject:)` 로 보관했을 때의 모양을 명세 [1][2]에 맞춰 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. `$objects` 안의 순번과 문자열의 표현 방식은 설명을 위해 정한 것이라 실제 파일과 다를 수 있습니다.
+아래는 NSDictionary 하나를 `archivedData(withRootObject:)` 로 보관했을 때의 모양을 명세 [1][2]에 맞춰 만든 예시이고, 실제 데이터에서 나온 값이 아닙니다. `$objects` 안의 순번과 문자열의 표현 방식은 설명을 위해 정한 것이라 실제 파일과 다를 수 있습니다.
 
 ```
 $archiver = "NSKeyedArchiver"
@@ -84,7 +84,7 @@ $objects  = [
 
 - **`root` 가 없는 아카이브**: 앱이 다른 키로 인코딩하면 `$top` 에 `root` 가 없습니다 [1]. `root` 만 찾는 스크립트는 이런 파일에서 빈 결과를 내니, `$top` 의 키를 모두 확인합니다.
 - **`$$` 키**: 앱 키가 `$` 로 시작하면 `$` 가 하나 더 붙어 있습니다 [1]. 보고서에는 앞의 `$` 하나를 뗀 원래 키 이름을 쓰고, 원본에 적힌 모양도 함께 남깁니다.
-- **uid와 정수**: uid는 일반 정수와 다른 형식(표식 `0x8n`)입니다 [3]. 형식을 가리지 않고 값만 보여 주는 도구에서는 uid가 평범한 숫자로 보여서, 참조 번호를 설정값으로 잘못 읽을 수 있습니다.
+- **uid와 정수**: uid는 일반 정수와 다른 형식(표식 `0x8n`)입니다 [3]. 형식을 구분하지 않고 값만 보여 주는 도구에서는 uid가 평범한 숫자로 보여서, 참조 번호를 설정값으로 잘못 읽을 수 있습니다.
 - **번호 붙은 옛 키**: 사전이 `NS.keys`·`NS.objects` 대신 `NS.key.0`·`NS.object.0` 모양으로 들어 있을 수 있습니다 [2].
 - **구현 차이**: 위 구조는 공개 Foundation 소스 기준입니다 [1][2]. macOS가 만든 아카이브에서는 다른 키가 보일 수 있으니, 보이는 대로 macOS 버전과 함께 적습니다.
 

@@ -8,7 +8,7 @@ nav_order: 780
 
 ## 한 줄 요약
 
-테더링 (Tethering) 은 폰의 모바일 데이터를 다른 기기에 나눠 주는 기능이고 그 가운데 Wi-Fi 로 나눠 주는 방식이 핫스폿 (Hotspot, SoftAP) 이라서, 핫스폿 설정 파일, 데이터 사용량의 테더링 몫, Wi-Fi 상태 기계 기록, 삼성 설정 키를 함께 보면 이 폰이 네트워크를 내어 주는 쪽이었는지와 그 시간대를 가늠할 수 있습니다.
+테더링 (Tethering) 은 폰의 모바일 데이터를 다른 기기에 나눠 주는 기능이고 그 가운데 Wi-Fi 로 나눠 주는 방식이 핫스폿 (Hotspot, SoftAP) 이라서, 핫스폿 설정 파일, 데이터 사용량의 테더링 몫, Wi-Fi 상태 기계 기록, 삼성 설정 키를 함께 보면 이 폰이 네트워크를 내어 주는 쪽이었는지와 그 시간대를 추정할 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -25,7 +25,7 @@ ALEAPP 는 예전 이진 파일과 지금의 XML 파일을 아래 패턴으로 �
 | 예전 이진 형식 | `*/misc/wifi/softap.conf` |
 | XML | `*/misc**/apexdata/com.android.wifi/WifiConfigStoreSoftAp.xml` |
 
-`softap.conf` 는 형식 문서가 없는 이진 파일이고, ALEAPP 는 바이트 위치로 SSID 와 비밀번호를 뽑으므로, 파일 모양이 다르면 틀린 값이 나올 수 있습니다 [1]. 어느 Android 버전에서 XML 로 옮겼는지는 검체에 남은 파일로 확인합니다. ALEAPP 가 이 모듈을 시험한 이미지는 Android 10~16 이며 모두 1행씩 나왔습니다 [1].
+`softap.conf` 는 형식 문서가 없는 이진 파일이고, ALEAPP 는 바이트 위치로 SSID 와 비밀번호를 뽑으므로, 파일 모양이 다르면 틀린 값이 나올 수 있습니다 [1]. 어느 Android 버전에서 XML 로 옮겼는지는 실제 기기에 남은 파일로 확인합니다. ALEAPP 가 이 모듈을 시험한 이미지는 Android 10~16 이며 모두 1행씩 나왔습니다 [1].
 
 adb 일반 권한으로 볼 수 있는 핫스폿 관련 흔적은 아래와 같습니다.
 
@@ -56,24 +56,24 @@ autohotspot_saved_state
 smart_tethering_db_ver
 ```
 
-키마다 뜻을 설명한 삼성 문서는 없습니다. 이름으로 보아 `wifi_ap_most_recent_password` 는 핫스폿 비밀번호, `_history` 로 끝나는 키는 켜고 끈 이력이나 접속 이력일 수 있지만, 이름 이상의 해석은 검체 값을 직접 보고 다른 기록과 맞춘 뒤에만 합니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
+키마다 뜻을 설명한 삼성 문서는 없습니다. 이름으로 보면 `wifi_ap_most_recent_password` 는 핫스폿 비밀번호, `_history` 로 끝나는 키는 켜고 끈 이력이나 접속 이력일 수 있지만, 이름 이상의 해석은 실제 값을 직접 보고 다른 기록과 맞춘 뒤에만 합니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
-XML 파일의 `SoftAp` 요소 아래 칸은 현행 AOSP 기준으로 아래와 같고 [4], 괄호 안은 예전 칸 이름입니다.
+XML 파일의 `SoftAp` 요소 아래 필드는 현행 AOSP 기준으로 아래와 같고 [4], 괄호 안은 예전 필드 이름입니다.
 
-| 묶음 | 칸 이름 |
+| 묶음 | 필드 이름 |
 |---|---|
 | 이름과 주소 | `WifiSsid`(예전 `SSID`), `Bssid`, `HiddenSSID` |
 | 대역과 채널 | `Band`, `Channel`, `BandChannel`, `BandChannelMap`, `ApBand`, `MaxChannelWidth` |
 | 보안 | `SecurityType`, `Passphrase`(예전 `Wpa2Passphrase`) |
 | 접속 기기 제한 | `MaxNumberOfClients`, `ClientControlByUser`, `BlockedClientList`, `AllowedClientList`, `ClientMacAddress`, `ClientIsolation` |
 | 자동 끄기 | `AutoShutdownEnabled`, `ShutdownTimeoutMillis` |
-| 폰 쪽 MAC | `MacRandomizationSetting`, 지속 랜덤 MAC 칸 |
+| 폰 쪽 MAC | `MacRandomizationSetting`, 지속 랜덤 MAC 필드 |
 
-`BlockedClientList` 와 `AllowedClientList` 안의 `ClientMacAddress` 에는 사용자가 막거나 허용한 접속 기기의 MAC 주소가 남을 수 있습니다 [4]. 목록이 실제로 채워진 모양은 검체에서 확인합니다.
+`BlockedClientList` 와 `AllowedClientList` 안의 `ClientMacAddress` 에는 사용자가 막거나 허용한 접속 기기의 MAC 주소가 남을 수 있습니다 [4]. 목록이 실제로 채워진 모양은 실제 데이터로 확인합니다.
 
-ALEAPP 는 이 파일에서 SSID, `Passphrase`, `SecurityType` 세 값만 뽑습니다 [1]. 나머지 칸은 파일을 직접 열어 읽어야 합니다.
+ALEAPP 는 이 파일에서 SSID, `Passphrase`, `SecurityType` 세 값만 뽑습니다 [1]. 나머지 필드는 파일을 직접 열어 읽어야 합니다.
 
 ## 증거로서 의미
 
@@ -83,7 +83,7 @@ ALEAPP 는 이 파일에서 SSID, `Passphrase`, `SecurityType` 세 값만 뽑습
 
 **증명하지 못하는 것**
 
-설정 파일에 핫스폿 이름이 있다고 해서 핫스폿을 실제로 켠 적이 있다는 뜻은 아닙니다. UID -5 사용량은 어느 기기가 받아 갔는지, 그 기기에서 무엇을 했는지 말하지 않습니다. 위 기록으로는 핫스폿에 접속한 기기 목록을 복원할 수 없으니, 보고서에는 "이 시간대에 이 폰이 테더링으로 이만큼 데이터를 넘겨준 기록이 있다" 만큼만 씁니다.
+설정 파일에 핫스폿 이름이 있다고 해서 핫스폿을 실제로 켠 적이 있다는 뜻은 아닙니다. UID -5 사용량으로는 어느 기기가 받아 갔는지, 그 기기에서 무엇을 했는지 알 수 없습니다. 위 기록으로는 핫스폿에 접속한 기기 목록을 복원할 수 없으니, 보고서에는 "이 시간대에 이 폰이 테더링으로 이만큼 데이터를 넘겨준 기록이 있다" 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -109,7 +109,7 @@ netstats 의 UID -5 기록은 구간 시작 시각(유닉스 밀리초)과 구�
 
 ### 파일을 직접 한 번
 
-`WifiConfigStoreSoftAp.xml` 사본을 편집기로 열어 `SoftAp` 요소 아래 칸을 위 구조 표와 맞춰 읽습니다. 예전 `softap.conf` 는 이진 파일이라 헥스 편집기로 열고, 형식 문서가 없으니 SSID 로 짐작되는 글자열이 어디서 시작하는지 눈으로 찾아 도구가 뽑은 값과 같은지만 확인합니다. 형식을 모르는 파일에서 바이트 위치를 넘겨짚어 값을 만들지 않습니다.
+`WifiConfigStoreSoftAp.xml` 사본을 편집기로 열어 `SoftAp` 요소 아래 필드를 위 구조 표와 맞춰 읽습니다. 예전 `softap.conf` 는 이진 파일이라 헥스 편집기로 열고, 형식 문서가 없으니 SSID 로 짐작되는 글자열이 어디서 시작하는지 눈으로 찾아 도구가 뽑은 값과 같은지만 확인합니다. 형식을 모르는 파일에서 바이트 위치를 넘겨짚어 값을 만들지 않습니다.
 
 라이브 기기라면 `dumpsys wifi` 출력에서 핫스폿 명령 줄만 걸러 볼 수 있습니다. 명령은 아래와 같고, 출력을 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
 
@@ -135,10 +135,10 @@ ALEAPP 의 `wifiHotspot` 모듈이 두 형식을 찾아 SSID, 비밀번호, 보�
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에서 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 시험 이미지에서 아래 질문을 풀어 봅니다.
 
 1. 핫스폿 설정이 `softap.conf` 와 `WifiConfigStoreSoftAp.xml` 가운데 어느 형식으로 남아 있습니까?
-2. 핫스폿 이름과 보안 방식은 무엇이고, 비밀번호 칸은 평문입니까?
+2. 핫스폿 이름과 보안 방식은 무엇이고, 비밀번호 필드는 평문입니까?
 3. `BlockedClientList` 나 `AllowedClientList` 에 MAC 주소가 있습니까?
 4. netstats 에 UID -5 행이 있습니까? 있다면 가장 많은 데이터가 나간 구간은 언제입니까?
 

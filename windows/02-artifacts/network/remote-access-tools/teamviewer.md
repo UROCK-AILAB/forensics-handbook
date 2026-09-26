@@ -26,7 +26,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 
 ## 위치와 버전별 차이
 
-아래 경로는 TeamViewer 15.32.3.0 기준입니다[1]. 로그 파일 이름의 숫자 15 는 주 버전과 같아서 주 버전이 다르면 이 숫자도 다르다고 보고, `TeamViewer*_Logfile.log` 꼴로 넓게 찾습니다.
+아래 경로는 TeamViewer 15.32.3.0 기준입니다[1]. 로그 파일 이름의 숫자 15 는 주 버전과 같아서 주 버전이 다르면 이 숫자도 다르다고 보고, `TeamViewer*_Logfile.log` 형식으로 넓게 찾습니다.
 
 ### 파일
 
@@ -41,9 +41,9 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 | 채팅 캐시 | `%LOCALAPPDATA%\TeamViewer\Database\tvchatfilecache.db` | SQLite 3 |
 | 원격 인쇄 작업 | `%LOCALAPPDATA%\TeamViewer\RemotePrinting\tvprint.db` | SQLite 3. 받는 쪽 |
 | 시작 메뉴 바로가기 | `%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\TeamViewer.lnk` | |
-| 용도가 공개되지 않은 경로 | `C:\Users\*\AppData\Roaming\TeamViewer\MRU\RemoteSupport\*tvc` | 흔적 목록에 올라 있습니다[2]. 담긴 내용은 검체에서 확인 |
+| 용도가 공개되지 않은 경로 | `C:\Users\*\AppData\Roaming\TeamViewer\MRU\RemoteSupport\*tvc` | 흔적 목록에 올라 있습니다[2]. 담긴 내용은 실제 데이터로 확인 |
 
-받은 접속 목록은 수집할 때 `C:\Program Files*\TeamViewer\connections*.txt` 꼴로 넓게 찾습니다[2]. 설치 기록에는 설치한 사용자의 SID 가 `User-SID:      S-1-5-21-…-1001` 모양으로 적힙니다. SID 를 사용자 이름에 맞추는 법은 [사용자 프로필 목록](../../system-account/profilelist.md)에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md)에서 다룹니다.
+받은 접속 목록은 수집할 때 `C:\Program Files*\TeamViewer\connections*.txt` 형식으로 넓게 찾습니다[2]. 설치 기록에는 설치한 사용자의 SID 가 `User-SID:      S-1-5-21-…-1001` 모양으로 적힙니다. SID 를 사용자 이름에 맞추는 법은 [사용자 프로필 목록](../../system-account/profilelist.md)에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md)에서 다룹니다.
 
 ### 레지스트리
 
@@ -69,7 +69,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 2022/08/22 16:50:52.967  3476  1492 S0  CommandHandlerRouting[19]::CreatePassiveSession()
 ```
 
-줄 맨 앞에는 날짜와 시각이 밀리초까지 오고 날짜는 년/월/일 순서이며, 줄 끝에는 `CommandHandlerRouting[19]::CreatePassiveSession()` 같은 함수 이름이 옵니다. 그 사이의 숫자 두 칸과 `S0` 칸의 뜻은 공개 자료에 없습니다.
+줄 맨 앞에는 날짜와 시각이 밀리초까지 오고 날짜는 년/월/일 순서이며, 줄 끝에는 `CommandHandlerRouting[19]::CreatePassiveSession()` 같은 함수 이름이 옵니다. 그 사이의 숫자 두 필드와 `S0` 필드의 뜻은 공개 자료에 없습니다.
 
 접속을 찾을 때는 아래 문자열을 검색합니다.
 
@@ -91,7 +91,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 1025538549      mechant_host  22-08-2022 14:50:52     22-08-2022 14:51:09     lab     RemoteControl   {5a0ba592-76be-48de-8015-2365251d6520}
 ```
 
-| 순서 | 칸 | 예시 값 |
+| 순서 | 필드 | 예시 값 |
 |---|---|---|
 | 1 | 상대 TeamViewer ID | 1025538549 |
 | 2 | 상대 호스트 이름 | mechant_host |
@@ -101,7 +101,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 | 6 | 접속 종류 | RemoteControl |
 | 7 | 세션 GUID | {5a0ba592-76be-48de-8015-2365251d6520} |
 
-날짜는 일-월-년 순서입니다. 칸 사이 구분 문자가 탭인지 공백인지는 검체에서 확인합니다.
+날짜는 일-월-년 순서입니다. 필드 사이 구분 문자가 탭인지 공백인지는 실제 데이터로 확인합니다.
 
 ## 증거로서 의미
 
@@ -116,12 +116,12 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 **증명하지 못하는 것**
 
 - TeamViewer ID 와 상대 호스트 이름은 사람을 가리키지 않습니다. 조작한 사람을 특정하려면 다른 근거가 필요합니다.
-- 받은 접속 목록에는 세션 중에 한 일이 없습니다. 칸 일곱 개 가운데 행동을 적는 칸이 없습니다.
+- 받은 접속 목록에는 세션 중에 한 일이 없습니다. 필드 일곱 개 가운데 행동을 적는 필드가 없습니다.
 - 거는 쪽의 나간 접속 목록 파일은 공개 자료에 없습니다. 거는 쪽에서는 동작 로그와 레지스트리를 봅니다.
 - ConnectionHistory 16바이트의 구조는 공개 자료에 없습니다. 이 값만으로 상대 ID 나 시각을 읽어 내지 않습니다.
 - 파일이 없다고 접속이 없었다고 단정하지 않습니다. 휴대용으로 실행했으면 로그가 `%APPDATA%` 아래에 있고, 로그를 지웠을 수도 있습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "`Connections_incoming.txt` 에 TeamViewer ID 1025538549(호스트 이름 mechant_host)에서 로컬 사용자 lab 으로 들어온 RemoteControl 접속이 시작·끝 시각과 함께 적혀 있다. 이 기록만으로는 세션 중에 한 일과 조작한 사람을 알 수 없다." 처럼 씁니다. 예의 값은 참고 문헌 [1] 의 예시입니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "`Connections_incoming.txt` 에 TeamViewer ID 1025538549(호스트 이름 mechant_host)에서 로컬 사용자 lab 으로 들어온 RemoteControl 접속이 시작·끝 시각과 함께 적혀 있다. 이 기록만으로는 세션 중에 한 일과 조작한 사람을 알 수 없다." 처럼 씁니다. 예의 값은 참고 문헌 [1] 의 예시입니다.
 
 ## 시각 해석
 
@@ -130,7 +130,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 - 시험 환경이 프랑스 여름 시간(UTC+2)이었다면, 받은 접속 목록은 UTC 이고 동작 로그는 현지 시각일 수 있습니다. 공식 문서에는 이 내용이 없습니다.
 - 사건에서는 같은 접속을 두 파일에서 찾아 차이를 직접 잽니다. 그 차이를 PC 의 시간대 설정과 맞춰 봅니다. 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
 - 받은 접속 목록의 날짜는 일-월-년 순서입니다. 일이 12 이하이면 월과 헷갈리기 쉽습니다.
-- 설치 기록(`TV15Install.log`)에도 시각이 적힙니다. 이 시각의 시간대도 검체에서 확인합니다.
+- 설치 기록(`TV15Install.log`)에도 시각이 적힙니다. 이 시각의 시간대도 실제 데이터로 확인합니다.
 
 ## 함정과 한계
 
@@ -146,7 +146,7 @@ TeamViewer 를 설치하면 서비스가 하나 등록됩니다. 원격 세션�
 
 이 페이지의 로그와 목록은 텍스트 파일입니다. 이진 구조가 있는 값은 ConnectionHistory(16바이트) 하나입니다. 이 값의 구조는 공개 자료에 없어 헥스 예시를 싣지 않습니다.
 
-텍스트 파일은 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+텍스트 파일은 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 판별하는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -157,7 +157,7 @@ $log = 'E:\mount\Program Files\TeamViewer\TeamViewer15_Logfile.log'   # 마운�
 Select-String -Path $log -Pattern 'CreatePassiveSession','AddParticipant','SessionTerminate','TerminateSession'
 ```
 
-받은 접속 목록은 아래 Python 코드로 표처럼 풉니다. 사용자 이름에 공백이 있어도 되도록 앞 여섯 칸과 뒤 두 칸을 먼저 떼어 냅니다. 파일이 UTF-8 이 아니면 `encoding` 을 바꿉니다.
+받은 접속 목록은 아래 Python 코드로 표처럼 풉니다. 사용자 이름에 공백이 있어도 되도록 앞 여섯 필드와 뒤 두 필드를 먼저 떼어 냅니다. 파일이 UTF-8 이 아니면 `encoding` 을 바꿉니다.
 
 ```python
 from datetime import datetime
@@ -197,7 +197,7 @@ with open(path, encoding="utf-8", errors="replace") as f:
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 TeamViewer 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등) 가운데 TeamViewer 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. `Connections_incoming.txt` 가 있습니까? 줄마다 상대 ID, 시작·끝 시각, 로컬 사용자를 표로 정리합니다.
 2. 같은 접속을 동작 로그의 `CreatePassiveSession` 줄에서 찾습니다. 두 시각은 몇 시간 차이 납니까? 그 차이는 PC 의 시간대 설정과 맞습니까?

@@ -16,7 +16,7 @@ sudo 는 명령을 실행하기 전에 PAM 인증과 PAM 세션을 거칩니다.
 
 두 기준 배포판의 `/usr/bin/su` 는 util-linux 의 su 입니다[10]. su 는 PAM 인증과 계정 확인이 끝난 뒤 성공인지 실패인지를 syslog 의 `auth` 분야로 한 줄 남기고[8], 실패했을 때는 btmp 에도 레코드를 덧붙입니다[8][9]. su 는 lastlog 에 전혀 쓰지 않고, lastlog 를 남길지는 PAM 설정(`pam_lastlog`)으로 정합니다[9]([로그인 기록 (wtmp·btmp·lastlog)](wtmp-btmp-lastlog.md)).
 
-어느 계정이 sudo 를 쓸 수 있었는지를 정하는 규칙은 [sudo 설정 (sudoers)](../../01-foundations/users-auth/sudoers.md) 에서 다루고, 이 쪽은 실제로 쓴 흔적을 다룹니다.
+어느 계정이 sudo 를 쓸 수 있었는지를 정하는 규칙은 [sudo 설정 (sudoers)](../../01-foundations/users-auth/sudoers.md) 에서 다루고, 이 페이지는 실제로 쓴 흔적을 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -33,7 +33,7 @@ sudo 는 명령을 실행하기 전에 PAM 인증과 PAM 세션을 거칩니다.
 | 입출력 기록 | 기본 꺼짐. 켜면 `/var/log/sudo-io/` 아래[1][4] | 같음 | 지우기 전까지 남음 |
 | 감사 기록 | 감사 데몬이 켜져 있으면 `/var/log/audit/audit.log` | 같음 | 감사 설정을 따름 |
 
-RHEL 에서 su 줄과 그 su 의 PAM 줄이 서로 다른 파일에 남는 까닭은 rsyslog 규칙 때문입니다. RHEL 의 secure 규칙은 `authpriv` 만 고르고, util-linux su 는 `auth` 분야로 보냅니다[8]. 분야별 파일 배치와 순환본 이름은 [인증 로그 (auth.log·secure)](auth-log.md) 에서 다룹니다. rsyslog 를 쓰지 않는 시스템에서는 같은 메시지를 저널에서 찾습니다.
+RHEL 에서 su 줄과 그 su 의 PAM 줄이 서로 다른 파일에 남는 이유는 rsyslog 규칙 때문입니다. RHEL 의 secure 규칙은 `authpriv` 만 고르고, util-linux su 는 `auth` 분야로 보냅니다[8]. 분야별 파일 배치와 순환본 이름은 [인증 로그 (auth.log·secure)](auth-log.md) 에서 다룹니다. rsyslog 를 쓰지 않는 시스템에서는 같은 메시지를 저널에서 찾습니다.
 
 시간 기록 파일의 이름은 sudo 1.9.15 부터 사용자 이름이 아니라 UID 입니다[5]. 강의 파일도 UID 이름을 쓰고, 1.9.15p5 부터는 옛 이름 기반 강의 파일을 만나면 UID 이름으로 바꿉니다[3][5]. 두 기준 배포판은 모두 이 판 이후라서 파일 이름이 숫자이고, UID 를 계정 이름으로 잇는 방법은 [UID·GID 와 사용자 이름 잇기](../../01-foundations/value-decoding/uid-gid.md) 에 있습니다. 판을 올리기 전에 만든 파일은 이름이 사용자 이름으로 남아 있을 가능성이 있습니다.
 
@@ -62,7 +62,7 @@ date hostname progname: username : TTY=ttyname ; CHROOT=chroot ; PWD=cwd ; USER=
 
 기록 속의 제어 문자는 `#` 뒤에 8진수로 적고(탭은 `#011`), 명령 경로 안의 공백은 `#040` 으로 적습니다. 공백이 든 인자는 작은따옴표로 감쌉니다[1]. 그래서 `COMMAND=/opt/backup#040tool/run.sh` 는 경로 이름 자체에 공백이 든 프로그램 하나를 실행한 것이고, 인자가 여러 개인 명령과 구분됩니다. syslog 로 보낼 때 태그에 PID 를 붙이는 `syslog_pid` 는 기본으로 꺼져 있어서 태그는 `sudo:` 로만 찍힙니다[1]. 한 메시지의 최대 크기는 `syslog_maxlen` 기본값 980바이트이고, 이보다 긴 메시지는 여러 줄로 나뉘며 이어지는 줄에는 사용자 이름 뒤에 `(command continued)` 가 붙습니다[1].
 
-`log_format` 을 `json` 으로 바꾸면 줄 모양이 JSON 으로 바뀝니다[1]. 검체의 sudoers 에서 `log_format`, `logfile` 설정을 먼저 확인합니다([sudo 설정 (sudoers)](../../01-foundations/users-auth/sudoers.md)).
+`log_format` 을 `json` 으로 바꾸면 줄 모양이 JSON 으로 바뀝니다[1]. 대상 시스템의 sudoers 에서 `log_format`, `logfile` 설정을 먼저 확인합니다([sudo 설정 (sudoers)](../../01-foundations/users-auth/sudoers.md)).
 
 ### sudo 거부 줄
 
@@ -77,7 +77,7 @@ date hostname progname: username : TTY=ttyname ; CHROOT=chroot ; PWD=cwd ; USER=
 | `a password is required` | `-n` 으로 실행했는데 비밀번호가 필요했음 |
 | `sorry, you are not allowed to set the following environment variables` | 허용되지 않은 환경 변수를 명령줄에서 지정함 |
 
-아래는 두 배포판에서 보이는 줄의 만든 예시입니다. 사용자 이름 앞의 공백 개수는 예시일 뿐이므로 검체의 실제 줄로 확인합니다.
+아래는 두 배포판에서 보이는 줄의 만든 예시입니다. 사용자 이름 앞의 공백 개수는 예시일 뿐이므로 실제 줄로 확인합니다.
 
 ```
 (Ubuntu 24.04, 만든 예시)
@@ -108,7 +108,7 @@ Mar 12 11:22:31 web01 su: FAILED SU (to root) bob on pts/2
 
 PAM 서비스 이름은 `su` 이고, 로그인 셸로 바꾸는 `su -` 는 `su-l` 입니다[8]. RHEL 의 util-linux 패키지는 `/etc/pam.d/su`, `su-l`, `runuser`, `runuser-l` 를 함께 싣습니다[10]. su 줄 자체에는 `-c` 로 넘긴 명령이 들어가지 않습니다[8].
 
-인증에 실패하면 su 는 btmp 에 레코드를 하나 덧붙입니다. 사용자 칸에는 대상 계정(계정 정보가 없으면 `(unknown)`), 터미널 칸에는 su 를 실행한 터미널이 들어갑니다[8]. 레코드 형식은 [로그인 기록 (wtmp·btmp·lastlog)](wtmp-btmp-lastlog.md) 에 있습니다.
+인증에 실패하면 su 는 btmp 에 레코드를 하나 덧붙입니다. 사용자 필드에는 대상 계정(계정 정보가 없으면 `(unknown)`), 터미널 필드에는 su 를 실행한 터미널이 들어갑니다[8]. 레코드 형식은 [로그인 기록 (wtmp·btmp·lastlog)](wtmp-btmp-lastlog.md) 에 있습니다.
 
 ### 시간 기록 파일
 
@@ -126,7 +126,7 @@ sudo 는 사용자가 인증에 성공하면 UID 별 파일 하나에 레코드�
 | ts | struct timespec | 시간 기록. 단조 시계 값이고 sudo 로 명령을 실행할 때마다 갱신 |
 | u | dev_t 또는 pid_t | TS_TTY 는 터미널 장치 번호, TS_PPID 는 부모 PID |
 
-x86_64 Linux 에서 이 구조체를 C 배치 규칙대로 놓으면 레코드 하나는 56바이트(0x38)이고 모든 값은 리틀 엔디언입니다. 이 크기는 계산한 값이므로 검체에서는 각 레코드의 `size` 필드로 확인합니다. sudo 는 읽은 레코드의 `version` 이 2 가 아니거나 `size` 가 읽은 크기와 다르면 그 레코드를 만료된 것으로 봅니다[3].
+x86_64 Linux 에서 이 구조체를 C 배치 규칙대로 놓으면 레코드 하나는 56바이트(0x38)이고 모든 값은 리틀 엔디언입니다. 이 크기는 계산한 값이므로 실제 데이터에서는 각 레코드의 `size` 필드로 확인합니다. sudo 는 읽은 레코드의 `version` 이 2 가 아니거나 `size` 가 읽은 크기와 다르면 그 레코드를 만료된 것으로 봅니다[3].
 
 ### 강의 표시 파일과 admin 플래그
 
@@ -140,7 +140,7 @@ Ubuntu 의 sudo 는 강의를 끄고 대신 admin 플래그를 켜고 빌드합�
 
 | 파일 | 내용 |
 |---|---|
-| `log` | 첫 줄은 콜론으로 나눈 실행 시각·실행 사용자·대상 사용자·대상 그룹(선택)·터미널·터미널 줄 수와 칸 수, 둘째 줄은 작업 폴더, 셋째 줄은 명령과 인자[1] |
+| `log` | 첫 줄은 콜론으로 나눈 실행 시각·실행 사용자·대상 사용자·대상 그룹(선택)·터미널·터미널 줄 수와 열 수, 둘째 줄은 작업 폴더, 셋째 줄은 명령과 인자[1] |
 | `log.json` | `log` 와 같은 정보에 더해 `timestamp`(초·나노초), `runargv`, `runenv`, `runuid`, `submituser`, `submithost`, `submitcwd`, `ttyname` 등[1] |
 | `timing` | 줄마다 기록 종류 번호와 앞 기록 뒤로 흐른 시간, 바이트 수 등. 0~4 는 표준 입력·표준 출력·표준 오류·터미널 입력·터미널 출력[1] |
 | `ttyin`·`ttyout` | 터미널 입력(친 키 그대로)과 터미널 출력[1] |
@@ -160,7 +160,7 @@ su 줄은 그 시각에 그 터미널에서 어느 계정이 어느 계정으로
 
 ### 증명하지 못하는 것
 
-sudo 줄은 명령이 성공했는지를 말하지 않습니다. 종료 값은 `log_exit_status` 를 켰을 때만 남고 기본은 꺼져 있습니다(1.9.8 이상)[1]. `sudo -i`·`sudo -s`·`sudo bash` 처럼 셸을 연 경우 sudo 줄에는 셸만 남고, 그 셸 안에서 친 명령은 `log_subcmds`(기본 꺼짐)나 입출력 기록이 켜져 있지 않으면 sudo 기록 어디에도 없습니다[1]. 그런 명령은 [셸 명령 기록](../execution/shell-history/index.md) 과 [감사 로그의 실행 기록](../execution/auditd-execve.md) 에서 찾습니다.
+sudo 줄에는 명령이 성공했는지가 나오지 않습니다. 종료 값은 `log_exit_status` 를 켰을 때만 남고 기본은 꺼져 있습니다(1.9.8 이상)[1]. `sudo -i`·`sudo -s`·`sudo bash` 처럼 셸을 연 경우 sudo 줄에는 셸만 남고, 그 셸 안에서 친 명령은 `log_subcmds`(기본 꺼짐)나 입출력 기록이 켜져 있지 않으면 sudo 기록 어디에도 없습니다[1]. 그런 명령은 [셸 명령 기록](../execution/shell-history/index.md) 과 [감사 로그의 실행 기록](../execution/auditd-execve.md) 에서 찾습니다.
 
 username 은 sudo 를 실행한 계정이지 그 계정을 쓴 사람이 아닙니다. 같은 계정을 여러 사람이 쓰거나 비밀번호가 새었을 가능성은 로그인 기록과 원격 주소로 따로 따져야 합니다([누가 그 명령을 실행했나](../../04-scenarios/attribution/user-attribution.md)). su 줄에는 su 뒤에 무엇을 했는지가 없습니다.
 
@@ -172,7 +172,7 @@ username 은 sudo 를 실행한 계정이지 그 계정을 쓴 사람이 아닙�
 
 sudo 줄의 시각은 정책 판단을 기록한 때이고 명령이 끝난 때가 아닙니다. 세션 닫힘 줄의 시각이 명령이 끝난 시각에 가까울 가능성이 있지만, 명령이 오래 걸린 경우 두 줄 사이에 다른 기록이 많이 끼어듭니다.
 
-시간 기록 파일의 `ts` 는 벽시계 시각이 아니라 단조 시계 값이고, sudo 는 가능하면 잠자기 중에도 흐르는 단조 시계를 씁니다[2]. 그래서 이 값은 부팅한 뒤로 흐른 시간에 가깝고, [부팅 시각](../system-info/boot-shutdown.md) 에 더해야 대략의 시각이 됩니다. 파일은 레코드를 고쳐 쓸 때마다(`pwrite`) 바뀌므로[3], 파일의 수정 시각은 그 사용자가 마지막으로 sudo 인증 기록을 갱신한 때일 가능성이 있습니다.
+시간 기록 파일의 `ts` 는 실제 시각 시계(wall clock) 값이 아니라 단조 시계 값이고, sudo 는 가능하면 잠자기 중에도 흐르는 단조 시계를 씁니다[2]. 그래서 이 값은 부팅한 뒤로 흐른 시간에 가깝고, [부팅 시각](../system-info/boot-shutdown.md) 에 더해야 대략의 시각이 됩니다. 파일은 레코드를 고쳐 쓸 때마다(`pwrite`) 바뀌므로[3], 파일의 수정 시각은 그 사용자가 마지막으로 sudo 인증 기록을 갱신한 때일 가능성이 있습니다.
 
 강의 파일·admin 플래그 파일·입출력 기록 폴더의 시각은 파일 시스템 시각입니다. 해석은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다. `log.json` 의 `timestamp` 는 초와 나노초로 나뉜 값입니다[1].
 
@@ -185,7 +185,7 @@ sudo 줄의 시각은 정책 판단을 기록한 때이고 명령이 끝난 때�
 - Velociraptor 의 `Linux.Users.RootUsers` 는 설명에 `sudo` 그룹 사용자를 찾는다고 적혀 있지만, 질의는 `id -Gn` 결과에 `root` 라는 문자열이 있는지만 봅니다[17]. `sudo`·`wheel`·`admin` 그룹 구성원은 [계정 파일](../../01-foundations/users-auth/passwd-shadow-group.md) 의 `/etc/group` 에서 직접 확인합니다.
 - ForensicArtifacts 의 `UnixSudoersConfigurationFile` 은 `/etc/sudoers` 만 잡고 `/etc/sudoers.d/` 는 잡지 않습니다[15]. 입출력 기록 정의(`LinuxSudoReplayLogs`)는 `/var/log/sudo-io/**` 만 잡으므로[15], sudoers 에서 `iolog_dir` 을 바꿨다면 그 경로를 따로 모아야 합니다.
 - 인증 로그는 텍스트라 줄을 지우기 쉽습니다. sudo 줄이 빠진 구간이 있으면 저널, 감사 로그, 시간 기록 파일, 강의 파일과 맞대어 봅니다([흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md)).
-- 기준 배포판이 아닌 시스템에서는 su 가 shadow 패키지의 su 일 수 있고, 그 경우 줄 모양이 다릅니다. `/usr/bin/su` 가 어느 패키지에 속하는지 검체에서 확인합니다.
+- 기준 배포판이 아닌 시스템에서는 su 가 shadow 패키지의 su 일 수 있고, 그 경우 줄 모양이 다릅니다. `/usr/bin/su` 가 어느 패키지에 속하는지 대상 시스템에서 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -253,10 +253,10 @@ sudo·su 기록을 중심으로 권한 상승을 따라가는 흐름은 [권한�
 
 NIST CFReDS 등에 공개된 Linux 디스크 이미지나 직접 만든 가상 머신 이미지로 다음 질문을 풀어 봅니다.
 
-1. 검체의 sudo 판은 무엇이고, sudoers 에 `logfile`, `log_format`, `log_input`, `log_output`, `log_subcmds` 설정이 있는가?
+1. 대상 시스템의 sudo 판은 무엇이고, sudoers 에 `logfile`, `log_format`, `log_input`, `log_output`, `log_subcmds` 설정이 있는가?
 2. 거부 줄 가운데 `user NOT in sudoers` 가 있는가? 그 계정은 언제 어디서 로그인했는가?
 3. `sudo -i`·`sudo su -`·`sudo bash` 처럼 셸을 연 줄이 있다면, 그 뒤에 실행한 명령을 어느 기록에서 찾을 수 있는가?
-4. RHEL 검체라면 messages 의 `(to root)` 줄 수와 secure 의 `pam_unix(su` 세션 열림 줄 수가 맞는가?
+4. RHEL 시스템이라면 messages 의 `(to root)` 줄 수와 secure 의 `pam_unix(su` 세션 열림 줄 수가 맞는가?
 5. `/var/db/sudo/lectured` 나 `~/.sudo_as_admin_successful` 의 시각은 인증 로그의 첫 sudo 줄 시각과 맞는가? 로그가 순환되어 사라진 기간에도 sudo 를 쓴 흔적이 있는가?
 
 ## 참고 문헌

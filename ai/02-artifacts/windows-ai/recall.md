@@ -28,7 +28,7 @@ Recall 은 Secured-core 기준을 채운 Copilot+ PC 에서만 돌고, 최소 �
 
 원격 데스크톱 클라이언트인 mstsc.exe, VMConnect.exe, Azure Virtual Desktop(MSI), RAIL 의 세션은 기본으로 빠집니다. 다만 클라이언트가 화면 캡처 보호를 구현하지 않으면 저장될 수 있습니다[1]. 앱이 `SetWindowDisplayAffinity` 로 `WDA_EXCLUDEFROMCAPTURE` 나 `WDA_MONITOR` 를 건 창은 스냅숏에 내용이 담기지 않습니다[1][9]. DLP 제품과 연동하면 제공자가 지정한 창만 지우고 나머지 화면은 남기며, 지원하는 DLP 는 Microsoft Purview 하나입니다[1].
 
-캡처 서비스는 찍기 전에 조건 12개를 따집니다[5]. `GameModeActive`, `BatterySaverActive`, `UserActivityIdle`, `UserPresenceIdle`, `StorageLow`, `PrivateWindow`, `BlockedByContentProtection`, `BlockedAppId`, `BlockedExecutable`, `BlockedURL`, `BlockedContentFilePath`, `BitLockerDisabled` 입니다. 조건마다 어떻게 동작하는지는 공개된 설명이 없습니다. 이름으로 보아 절전 모드나 자리 비움도 스냅숏에 빈 구간을 만들 수 있으므로, 검체에서 빈 구간과 전원·자리 비움 기록을 맞춰 보고 판단합니다.
+캡처 서비스는 찍기 전에 조건 12개를 따집니다[5]. `GameModeActive`, `BatterySaverActive`, `UserActivityIdle`, `UserPresenceIdle`, `StorageLow`, `PrivateWindow`, `BlockedByContentProtection`, `BlockedAppId`, `BlockedExecutable`, `BlockedURL`, `BlockedContentFilePath`, `BitLockerDisabled` 입니다. 조건마다 어떻게 동작하는지는 공개된 설명이 없습니다. 이름으로 보면 절전 모드나 자리 비움도 스냅숏에 빈 구간을 만들 수 있으므로, 실제 기기에서 빈 구간과 전원·자리 비움 기록을 맞춰 보고 판단합니다.
 
 ## 위치와 버전별 차이
 
@@ -42,7 +42,7 @@ SemanticTextStore.sidb          텍스트 의미 검색 색인 (DiskANN), 들어
 SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어 있는 폴더는 검체로 확인
 ```
 
-`ukg.db` 와 `ImageStore` 는 같은 `{GUID}` 폴더에 있습니다[6][7]. 두 `.sidb` 파일이 어느 폴더에 있는지는 공개 자료가 없습니다[5][8]. 그래서 검체에서는 `UKP` 아래를 통째로 봅니다. 자료마다 예로 든 GUID 값이 서로 다르므로[6][7], GUID 값을 정해 두고 찾지 말고 `UKP\*\` 로 찾습니다.
+`ukg.db` 와 `ImageStore` 는 같은 `{GUID}` 폴더에 있습니다[6][7]. 두 `.sidb` 파일이 어느 폴더에 있는지는 공개된 설명이 없습니다[5][8]. 그래서 실제 기기에서는 `UKP` 아래를 통째로 봅니다. 자료마다 예로 든 GUID 값이 서로 다르므로[6][7], GUID 값을 정해 두고 찾지 말고 `UKP\*\` 로 찾습니다.
 
 | 판 | 시기 | 저장 형태 | 근거 |
 |---|---|---|---|
@@ -55,7 +55,7 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 
 ### 설정과 정책
 
-사용자 설정은 설정 → 개인 정보 및 보안 → Recall & snapshots 에 있습니다[4]. 저장 켜기, 필터 목록, 보존 기간 같은 사용자 설정이 어느 파일이나 레지스트리에 들어가는지는 공식 문서와 공개 분석에 없어서 검체로 확인해야 합니다.
+사용자 설정은 설정 → 개인 정보 및 보안 → Recall & snapshots 에 있습니다[4]. 저장 켜기, 필터 목록, 보존 기간 같은 사용자 설정이 어느 파일이나 레지스트리에 들어가는지는 공식 문서와 공개 분석에 나오지 않으므로 실제 기기에서 확인해야 합니다.
 
 조직이 거는 정책은 `SOFTWARE\Policies\Microsoft\Windows\WindowsAI` 키에 들어갑니다. ADMX 는 `WindowsCopilot.admx`, 그룹 정책 경로는 Windows Components → Windows AI 이고, 장치와 사용자 둘 다 되는 항목은 HKLM 과 HKCU 양쪽에 올 수 있습니다[2]. 사용자 하이브의 이 키로도 스냅숏 저장을 켜고 끕니다[8].
 
@@ -71,7 +71,7 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 | `SetDataLossPreventionProvider` | 장치, Ent/Edu | DLP 제공자의 레지스트리 위치와 DLL 을 적은 문자열(그룹 정책 이름 `SetDataLossPreventionProviderKey`) |
 | `DisableRecallDataProviders` | 사용자, Ent/Edu, Insider | 앱 작업 제공자가 주는 추가 정보(예: 회의 참석자)를 보일지, Recall 을 다시 시작해야 적용 |
 
-표의 이름은 CSP 정책 이름입니다. `SetDataLossPreventionProvider` 와 `DisableRecallDataProviders` 를 뺀 일곱 개는 `SOFTWARE\Policies\Microsoft\Windows\WindowsAI` 아래 레지스트리 값 이름이 공개돼 있습니다. 두 정책은 값 이름이 공개되지 않았으므로 검체의 같은 키에서 직접 찾아봅니다[2]. `AllowRecallEnablement`, `DisableAIDataAnalysis`, 저장·필터 정책은 Windows 11 24H2 KB5055627(10.0.26100.3915) 이상에서, `SetDataLossPreventionProvider` 는 KB5065789(10.0.26100.6725) 이상에서 적용됩니다[2].
+표의 이름은 CSP 정책 이름입니다. `SetDataLossPreventionProvider` 와 `DisableRecallDataProviders` 를 뺀 일곱 개는 `SOFTWARE\Policies\Microsoft\Windows\WindowsAI` 아래 레지스트리 값 이름이 공개돼 있습니다. 두 정책은 값 이름이 공개되지 않았으므로 실제 기기의 같은 키에서 직접 찾아봅니다[2]. `AllowRecallEnablement`, `DisableAIDataAnalysis`, 저장·필터 정책은 Windows 11 24H2 KB5055627(10.0.26100.3915) 이상에서, `SetDataLossPreventionProvider` 는 KB5065789(10.0.26100.6725) 이상에서 적용됩니다[2].
 
 `AllowRecallEnablement` 의 기본값은 문서 안에서도 엇갈립니다. CSP 값 표는 1(사용 가능)을 기본값으로 적었지만, 같은 CSP 본문은 구성하지 않으면 구성 요소가 꺼진 상태라고 적었고, Manage Recall 은 관리 기기에서 기본으로 꺼지고 제거된다고 적었습니다(CSP 2026-09-10, Manage Recall 2025-12-10)[1][2]. 정책으로 Recall 을 끄거나(`AllowRecallEnablement`=0) 스냅숏 저장을 끄면(`DisableAIDataAnalysis`=1) 이미 있던 스냅숏을 지우고, `AllowRecallEnablement`=0 은 재시작 뒤 구성 요소도 기기에서 지웁니다[1][2]. DLP 정책을 지우면 DLP 제공자를 더 부르지 않을 뿐 이미 저장된 스냅숏은 그대로 둡니다[1].
 
@@ -87,7 +87,7 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 
 용량과 기간을 둘 다 정하면 먼저 닿는 쪽에서 지웁니다[2]. 사용자는 설정에서 스냅숏을 모두 지울 수 있고, 검색 결과나 스냅숏 화면에서 특정 앱이나 웹사이트의 스냅숏만 모두 지울 수도 있습니다[4]. "Reset Recall" 을 하면 스냅숏과 Recall 설정을 모두 지우지만, 이미 폴더로 내보낸 스냅숏은 지우지 않습니다[11]. 알림 영역 아이콘이 저장 중, 일시 정지, 필터링 상태를 보여 주고, 그 아이콘으로 저장을 잠시 멈출 수 있습니다[4]. 보관 설정과 삭제의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
-폴더를 지우는 주체가 사용자나 Recall 만은 아닙니다. 예약 작업 `\Microsoft\Windows\WindowsAI\Recall\PolicyConfiguration` 은 SYSTEM 권한(taskhostw.exe)으로 돌면서 `UKP` 아래 `{GUID}` 모양 폴더를 찾아 지웁니다(2025-11 기준)[12]. 이 작업 정의의 트리거는 `RecallPolicyCheckUpdateTrigger`, `AADStatusChangeTrigger`, `DisableAIDataAnalysisTrigger`, `UserLoginTrigger`(모두 WNF 상태 변경)와 `SessionUnlockTrigger`(세션 잠금 해제)입니다[12]. 이 작업의 동작은 이후 업데이트에서 바뀌었을 수 있으므로 검체의 작업 정의를 직접 봅니다.
+폴더를 지우는 주체가 사용자나 Recall 만은 아닙니다. 예약 작업 `\Microsoft\Windows\WindowsAI\Recall\PolicyConfiguration` 은 SYSTEM 권한(taskhostw.exe)으로 돌면서 `UKP` 아래 `{GUID}` 모양 폴더를 찾아 지웁니다(2025-11 기준)[12]. 이 작업 정의의 트리거는 `RecallPolicyCheckUpdateTrigger`, `AADStatusChangeTrigger`, `DisableAIDataAnalysisTrigger`, `UserLoginTrigger`(모두 WNF 상태 변경)와 `SessionUnlockTrigger`(세션 잠금 해제)입니다[12]. 이 작업의 동작은 이후 업데이트에서 바뀌었을 수 있으므로 실제 기기의 작업 정의를 직접 봅니다.
 
 ### 내보내기(EEA 한정)
 
@@ -108,11 +108,11 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 
 ## 구조
 
-### ukg.db 의 표와 칸
+### ukg.db 의 표와 열
 
-아래 칸 이름은 엔클레이브 바이너리 `storage_support.dll` 안의 CREATE TABLE 문에 있는 것입니다(25H2 26300.8155 기준)[5]. 표 개수는 설명서마다 다릅니다. Securelist 는 `ukg.db` 가 표 20개로 이뤄졌다고 적었지만 어느 판 기준인지는 밝히지 않았고, Reloaded 설명서는 핵심 표 17개를 적었습니다[5][8]. 2024 판 도구가 읽는 `WindowCaptureTextIndex_content` 처럼 FTS5 가 스스로 만드는 표가 있어서 차이가 날 수 있으므로, 검체에서 표 목록을 먼저 뽑아 맞춰 봅니다.
+아래 열 이름은 엔클레이브 바이너리 `storage_support.dll` 안의 CREATE TABLE 문에 있는 것입니다(25H2 26300.8155 기준)[5]. 표 개수는 설명서마다 다릅니다. Securelist 는 `ukg.db` 가 표 20개로 이뤄졌다고 적었지만 어느 판 기준인지는 밝히지 않았고, Reloaded 설명서는 핵심 표 17개를 적었습니다[5][8]. 2024 판 도구가 읽는 `WindowCaptureTextIndex_content` 처럼 FTS5 가 스스로 만드는 표가 있어서 차이가 날 수 있으므로, 실제 DB 에서 표 목록을 먼저 뽑아 맞춰 봅니다.
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `WindowCapture` | Id, Name, ImageToken, IsForeground, WindowId, WindowBounds, WindowTitle, Properties, IsProcessed, Retry, ActivationUri, ActivityId, FallbackUri, TimeStamp, DwellTime |
 | `WindowCaptureAppRelation` | WindowCaptureId, AppId, IsBackground |
@@ -132,23 +132,23 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 | `IdTable` | NextId |
 | `_MigrationMetadata` | Id, Version |
 
-2024 판 기준으로 칸의 뜻은 다음과 같습니다.
+2024 판 기준으로 열의 뜻은 다음과 같습니다.
 
 - `WindowCapture.Name` 은 사건 종류입니다. `WindowCreatedEvent` 는 창이 처음 생긴 때, `WindowChangedEvent` 는 창이 옮겨지거나 크기가 바뀐 때, `WindowCaptureEvent` 는 스냅숏을 찍은 때(`ImageToken` 이 있음), `WindowDestroyedEvent` 는 창을 닫은 때이고, `ForegroundChangedEvent` 도 있습니다[8]. 스냅숏 이미지가 없어도 창이 생기고 바뀌고 닫힌 흐름이 이 표에 남습니다.
 - `WindowCapture.ImageToken` 값이 `ImageStore` 안의 파일 이름입니다[6][7][8].
-- `WindowCaptureTextIndex_content` 는 FTS5 가 `WindowCaptureTextIndex` 의 칸을 c0, c1, c2 로 담은 표입니다. 가상 표의 칸 순서(WindowCaptureId, WindowTitle, OcrText)대로라면 c1 은 창 제목입니다[5]. c0 는 `WindowCapture.Id` 와 이어 붙이고 c2 는 OCR 텍스트로 읽으며, 앱 정보는 `WindowCaptureAppRelation.AppId = App.Id` 로 붙입니다[7][8].
-- `AppDwellTime` 에는 창을 띄운 프로세스의 전체 경로(`WindowsAppId`), 띄운 날짜와 시각(`HourOfDay`, `DayOfWeek`, `HourStartTimestamp`), 창이 화면에 떠 있던 시간(`DwellTime`)이 있습니다[8]. `WebDomainDwellTime` 에도 같은 시각 칸이 있습니다[5]. 칸 이름으로 보아 시간(hour) 단위로 모은 값이지만, 모으는 단위를 밝힌 공개 자료는 없으므로 검체의 값으로 확인합니다.
-- 캡처 입력 구조의 `FileObjectId`, `VolumeId` 는 NTFS 의 영구 파일 식별자이고, `File` 표에도 `ObjectId`, `VolumeId` 칸이 있습니다[5].
+- `WindowCaptureTextIndex_content` 는 FTS5 가 `WindowCaptureTextIndex` 의 열을 c0, c1, c2 로 담은 표입니다. 가상 표의 열 순서(WindowCaptureId, WindowTitle, OcrText)대로라면 c1 은 창 제목입니다[5]. c0 는 `WindowCapture.Id` 와 이어 붙이고 c2 는 OCR 텍스트로 읽으며, 앱 정보는 `WindowCaptureAppRelation.AppId = App.Id` 로 붙입니다[7][8].
+- `AppDwellTime` 에는 창을 띄운 프로세스의 전체 경로(`WindowsAppId`), 띄운 날짜와 시각(`HourOfDay`, `DayOfWeek`, `HourStartTimestamp`), 창이 화면에 떠 있던 시간(`DwellTime`)이 있습니다[8]. `WebDomainDwellTime` 에도 같은 시각 열이 있습니다[5]. 열 이름으로 보면 시간(hour) 단위로 모은 값이지만, 모으는 단위를 밝힌 공개 자료는 없으므로 실제 DB 의 값으로 확인합니다.
+- 캡처 입력 구조의 `FileObjectId`, `VolumeId` 는 NTFS 의 영구 파일 식별자이고, `File` 표에도 `ObjectId`, `VolumeId` 열이 있습니다[5].
 
 ### 의미 검색 색인과 이미지
 
 `.sidb` 파일에는 `si_items`, `si_embedding_metadata`, `si_diskann_graph`, `si_diskann_references`, `si_diskann_config`, `si_diskann_info`, `si_application_values` 표가 있습니다[5]. SQLite 파일 구조 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
 
-2024 판의 `ImageStore` 파일은 확장자 없는 JPEG 이고, TotalRecall 첫 판은 복사본에 `.jpg` 를 붙여 엽니다[6]. 이 JPEG 의 `Exif.Photo.MakerNote`(0x927C) 태그에는 전경 창 경계, 캡처 시각, 창 제목, 창 ID, 창을 띄운 프로세스 전체 경로, 브라우저라면 URI 와 도메인이 들어 있습니다[8]. DB 가 없어도 이미지 한 장에서 이 메타데이터를 얻을 수 있다는 뜻이고, 내보낸 스냅숏도 같은 태그를 씁니다[13]. 다만 이 이미지 설명이 어느 판 기준인지는 밝혀져 있지 않고, 다시 설계한 판은 스냅숏을 늘 암호화합니다[1][8]. 그래서 다시 설계한 판의 `ImageStore` 파일 형식은 검체로 확인해야 합니다.
+2024 판의 `ImageStore` 파일은 확장자 없는 JPEG 이고, TotalRecall 첫 판은 복사본에 `.jpg` 를 붙여 엽니다[6]. 이 JPEG 의 `Exif.Photo.MakerNote`(0x927C) 태그에는 전경 창 경계, 캡처 시각, 창 제목, 창 ID, 창을 띄운 프로세스 전체 경로, 브라우저라면 URI 와 도메인이 들어 있습니다[8]. DB 가 없어도 이미지 한 장에서 이 메타데이터를 얻을 수 있다는 뜻이고, 내보낸 스냅숏도 같은 태그를 씁니다[13]. 다만 이 이미지 설명이 어느 판 기준인지는 밝혀져 있지 않고, 다시 설계한 판은 스냅숏을 늘 암호화합니다[1][8]. 그래서 다시 설계한 판의 `ImageStore` 파일 형식은 실제 기기에서 확인해야 합니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** `CoreAIPlatform.00\UKP` 아래 파일은 암호화와 상관없이 존재, 크기, 파일 시스템 시각이 MFT 와 USN 저널에 남습니다. Recall 은 계정마다 따로 켜야 저장하므로[1][4], 한 사용자 폴더에 이 파일이 생기고 늘어난 기록은 그 계정에서 스냅숏 저장이 켜져 있던 시기를 가늠하는 단서가 됩니다. 정책 키에 `DisableAIDataAnalysis`=1 이나 `AllowRecallEnablement`=0 이 있으면 조직이 저장을 막았다는 사실과 그 뒤 기존 스냅숏이 지워졌을 가능성을 알려 줍니다. 2024 판처럼 평문 DB 를 얻었다면 창 제목, 프로세스 경로, OCR 텍스트, URL, 파일 경로, 시간대별 머문 시간이 기록으로 남습니다. 보고서에는 "이 사용자 폴더에 Recall 저장소가 있고, 이 기간에 그 안의 파일이 생기고 바뀐 기록이 있다" 처럼 씁니다.
+**증명하는 것.** `CoreAIPlatform.00\UKP` 아래 파일은 암호화와 상관없이 존재, 크기, 파일 시스템 시각이 MFT 와 USN 저널에 남습니다. Recall 은 계정마다 따로 켜야 저장하므로[1][4], 한 사용자 폴더에 이 파일이 생기고 늘어난 기록은 그 계정에서 스냅숏 저장이 켜져 있던 시기를 추정하는 단서가 됩니다. 정책 키에 `DisableAIDataAnalysis`=1 이나 `AllowRecallEnablement`=0 이 있으면 조직이 저장을 막았다는 사실과 그 뒤 기존 스냅숏이 지워졌을 가능성을 알려 줍니다. 2024 판처럼 평문 DB 를 얻었다면 창 제목, 프로세스 경로, OCR 텍스트, URL, 파일 경로, 시간대별 머문 시간이 기록으로 남습니다. 보고서에는 "이 사용자 폴더에 Recall 저장소가 있고, 이 기간에 그 안의 파일이 생기고 바뀐 기록이 있다" 처럼 씁니다.
 
 **증명하지 못하는 것.** 다시 설계한 판에서는 디스크 이미지만으로 `ukg.db` 와 스냅숏의 내용을 읽는 공개된 방법이 없습니다(Securelist 2025-10-14 기준)[8]. 폴더가 있어도 무엇이 화면에 떠 있었는지는 알 수 없습니다. 스냅숏이 없다고 그 화면을 보지 않았다는 뜻도 아닙니다. 민감 정보 필터, 비공개 창, DRM, 원격 데스크톱, 앱·URI 차단 목록, 캡처 제외 창, 절전·자리 비움 같은 조건이 저장을 막고, 최대 용량과 보존 기간, 사용자의 삭제, Reset Recall, 정책 변경, 예약 작업이 이미 저장된 스냅숏을 지웁니다. 스냅숏이 있어도 사용자가 그 화면을 읽었다거나 내용을 다른 곳으로 옮겼다는 뜻은 아닙니다. OCR 텍스트는 기계가 읽은 글자라서 원문과 다를 수 있습니다.
 
@@ -156,15 +156,15 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 
 2024 판 `WindowCapture.TimeStamp` 는 Unix epoch(1970-01-01 UTC)부터 센 밀리초입니다. TotalRecall 첫 판은 값을 1000으로 나눠 초로 바꾸고, Velociraptor 는 `timestamp(epoch=TimeStamp)` 로 읽습니다[6][7]. TotalRecall 첫 판은 Python `datetime.fromtimestamp` 로 바꾸므로 결과 파일의 시각은 분석 PC 의 현지 시각입니다[6]. 보고서에 옮길 때는 UTC 로 다시 적습니다.
 
-다시 설계한 판의 칸 형식은 공개 자료가 없어서 검체로 확인해야 합니다. 공개 자료에 나오는 "100나노초 정밀도" 는 WinRT API 가 돌려주는 시각의 정밀도이고, DB 칸 형식이 아닙니다[5]. `HourStartTimestamp` 의 형식도 공개 자료에 없습니다. 내보낸 스냅숏의 `.json` 에 있는 시각은 Microsoft 예제 코드가 WinRT DateTime 을 Unix epoch 밀리초 문자열로 바꿔 쓴 값입니다[13].
+다시 설계한 판의 열 형식은 공개되지 않았으므로 실제 DB 로 확인해야 합니다. 공개 자료에 나오는 "100나노초 정밀도" 는 WinRT API 가 돌려주는 시각의 정밀도이고, DB 열 형식이 아닙니다[5]. `HourStartTimestamp` 의 형식도 공개 자료에 없습니다. 내보낸 스냅숏의 `.json` 에 있는 시각은 Microsoft 예제 코드가 WinRT DateTime 을 Unix epoch 밀리초 문자열로 바꿔 쓴 값입니다[13].
 
-`WindowCapture` 의 시각이 화면을 찍은 순간인지 저장을 마친 순간인지는 공개 자료에 없습니다. 디스크 이미지에서 바로 쓸 수 있는 시각은 파일 시스템 쪽입니다. `ImageStore` 파일의 생성 시각이 스냅숏을 저장한 무렵과 맞는지는 공개 자료가 다루지 않았으므로, 검체에서 DB 시각이나 다른 기록과 맞춰 본 뒤에 추정이라고 밝혀 씁니다. 폴더나 파일이 사라진 USN 기록은 지워진 무렵을 알려 줍니다. 다만 USN 기록만으로는 누가 왜 지웠는지(최대 용량, 보존 기간, 사용자 삭제, Reset Recall, 정책, 예약 작업)를 가를 수 없습니다. 정책 키의 마지막 쓰기 시각은 정책 값이 바뀐 무렵을 알려 줍니다.
+`WindowCapture` 의 시각이 화면을 찍은 순간인지 저장을 마친 순간인지는 공개 자료에 없습니다. 디스크 이미지에서 바로 쓸 수 있는 시각은 파일 시스템 쪽입니다. `ImageStore` 파일의 생성 시각이 스냅숏을 저장한 무렵과 맞는지는 공개 자료가 다루지 않았으므로, 실제 기기에서 DB 시각이나 다른 기록과 맞춰 본 뒤에 추정이라고 밝혀 씁니다. 폴더나 파일이 사라진 USN 기록은 지워진 무렵을 알려 줍니다. 다만 USN 기록만으로는 누가 왜 지웠는지(최대 용량, 보존 기간, 사용자 삭제, Reset Recall, 정책, 예약 작업)를 가를 수 없습니다. 정책 키의 마지막 쓰기 시각은 정책 값이 바뀐 무렵을 알려 줍니다.
 
 ## 함정과 한계
 
-- 초기 미리 보기 판과 다시 설계한 판은 보호 방식이 다릅니다. 2024-06 무렵 자료와 도구가 설명하는 평문 DB 분석이 지금 검체에 그대로 통한다고 여기지 않고, 보고서에는 검체의 Windows 빌드를 함께 적습니다.
-- 표와 칸 이름은 Microsoft 가 공개하지 않은 내부 구조입니다. 2024 판과 25H2 판 사이에 이름이 이어지는 것을 공개 자료로 볼 수 있지만, 빌드가 바뀌면 달라질 수 있습니다.
-- 보존 기간 기본값을 자료마다 다르게 적었으므로, 90일보다 오래된 스냅숏이 있는지 없는지로 결론을 내리기 전에 검체의 정책 값과 설정을 먼저 봅니다.
+- 초기 미리 보기 판과 다시 설계한 판은 보호 방식이 다릅니다. 2024-06 무렵 자료와 도구가 설명하는 평문 DB 분석이 지금 분석하는 기기에 그대로 통한다고 여기지 않고, 보고서에는 분석 대상의 Windows 빌드를 함께 적습니다.
+- 표와 열 이름은 Microsoft 가 공개하지 않은 내부 구조입니다. 2024 판과 25H2 판 사이에 이름이 이어지는 것을 공개 자료로 볼 수 있지만, 빌드가 바뀌면 달라질 수 있습니다.
+- 보존 기간 기본값을 자료마다 다르게 적었으므로, 90일보다 오래된 스냅숏이 있는지 없는지로 결론을 내리기 전에 분석 대상의 정책 값과 설정을 먼저 봅니다.
 - 사용자 설정이 어디에 저장되는지 공개 자료가 없으므로, 정책 키가 비어 있다고 Recall 이 꺼져 있었다고 판단하지 않습니다.
 - Recall 전용 이벤트 로그 채널은 공개 자료에 나오지 않습니다. 파일 접근 감사를 켜 둔 환경이라면 보안 로그 4663 에 `UKP` 폴더 접근이 남고, Splunk 탐지 규칙(2026-05)은 이 이벤트에서 `aixhost.exe`·`aihost.exe` 가 아닌 프로세스의 접근을 찾습니다[14]. `AIXHost.exe` 는 Recall 타임라인 화면을 띄우는 프로세스이고[5], Microsoft 성능 시험 코드도 Recall 을 닫을 때 이 프로세스를 끝냅니다[15].
 - Recall 이 켜진 기기에서는 화면에 떠 있던 다른 AI 서비스의 대화도 스냅숏에 담길 수 있습니다. 대화 원본이 서버에만 있는 서비스라도 화면 기록이 남을 수 있지만, 다시 설계한 판에서는 디스크 이미지에서 그 내용을 읽는 공개된 방법이 없습니다.
@@ -178,7 +178,7 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 00000000  53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00  SQLite format 3.
 ```
 
-이 문자열이 보이면 2024 판처럼 평문 SQLite 로 열어 볼 수 있습니다. 보이지 않으면 암호화된 판일 수 있지만, 암호화된 파일의 머리 모양은 공개 분석 자료가 없어서 검체로 확인해야 합니다. `ImageStore` 파일은 JPEG 명세의 시작 표지 `FF D8 FF` 로 시작하는지 봅니다. 2024 판이라면 이 표지로 시작하고, 그렇지 않으면 암호화된 파일일 수 있습니다.
+이 문자열이 보이면 2024 판처럼 평문 SQLite 로 열어 볼 수 있습니다. 보이지 않으면 암호화된 판일 수 있지만, 암호화된 파일의 머리 모양은 실제 파일로 확인해야 합니다. `ImageStore` 파일은 JPEG 명세의 시작 표지 `FF D8 FF` 로 시작하는지 봅니다. 2024 판이라면 이 표지로 시작하고, 그렇지 않으면 암호화된 파일일 수 있습니다.
 
 내보낸 스냅숏 파일은 공개된 구조대로 처음 16바이트에 네 값이 들어 있습니다. 콘텐츠 키 블록은 nonce 12 + 키 32 + 태그 16 이라서 encryptedKeySize 는 60(0x3C)이어야 합니다[13]. 아래는 만든 예시이고, contentSize 와 contentType 값은 지어낸 값입니다(contentType 값의 뜻은 공개되지 않았습니다).
 
@@ -221,7 +221,7 @@ Recall 폴더의 파일 시각은 [AI 사용 타임라인](../../03-techniques/a
 
 Recall 은 조건을 채운 Copilot+ PC 에서만 돌므로, 시험용 기기를 마련해 다음 질문을 풀어 봅니다.
 
-1. Recall 을 켜기 전과 켠 뒤의 `%LocalAppData%` 파일 목록을 비교해, 새로 생긴 폴더가 이 쪽의 경로와 같은지, `.sidb` 파일이 어느 폴더에 생기는지 봅니다.
+1. Recall 을 켜기 전과 켠 뒤의 `%LocalAppData%` 파일 목록을 비교해, 새로 생긴 폴더가 이 페이지의 경로와 같은지, `.sidb` 파일이 어느 폴더에 생기는지 봅니다.
 2. `ukg.db` 와 `ImageStore` 파일의 처음 16바이트가 평문 SQLite·JPEG 표지로 시작하는지 봅니다.
 3. 비공개 창과 일반 창에서 같은 페이지를 연 뒤 `ImageStore` 파일 수가 어떻게 달라지는지 봅니다.
 4. 특정 앱의 스냅숏을 "모두 삭제" 한 뒤와 Reset Recall 을 한 뒤 USN 저널에 어떤 기록이 남는지 비교합니다.

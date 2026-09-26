@@ -11,7 +11,7 @@ nav_order: 1910
 
 ## 한 줄 요약
 
-클래식 Outlook 에서 첨부를 열면 임시 폴더에 사본이 생긴다는 설명이 흔합니다. 이 폴더를 흔히 OLK 폴더, Content.Outlook 폴더라고 부릅니다. Microsoft 공식 문서에는 이 폴더를 다룬 내용이 없습니다. 그래서 이 페이지는 공식 문서의 내용과 흔한 설명을 나눠 적고, 검체와 가상 머신에서 직접 확인하는 법을 중심으로 씁니다.
+클래식 Outlook 에서 첨부를 열면 임시 폴더에 사본이 생긴다는 설명이 흔합니다. 이 폴더를 흔히 OLK 폴더, Content.Outlook 폴더라고 부릅니다. Microsoft 공식 문서에는 이 폴더를 다룬 내용이 없습니다. 그래서 이 페이지는 공식 문서의 내용과 흔한 설명을 나눠 적고, 실제 기기와 가상 머신에서 직접 확인하는 법을 중심으로 씁니다.
 
 ## 이 페이지 내용의 근거
 
@@ -24,7 +24,7 @@ nav_order: 1910
 | 클래식 Outlook 이 없는 PC 의 상태 | Windows 11 25H2 기준 (아래 "클래식 Outlook 이 없는 PC") |
 | 새 Outlook 의 `Olk` 폴더 | Windows 11 25H2 기준 (아래 "새 Outlook 의 `Olk`") |
 
-"흔한 설명" 은 보고서에 그대로 쓰지 않습니다. 조사하는 검체와 같은 판의 Outlook 으로 재현한 뒤 씁니다(아래 실습).
+"흔한 설명" 은 보고서에 그대로 쓰지 않습니다. 조사하는 기기와 같은 판의 Outlook 으로 재현한 뒤 씁니다(아래 실습).
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -44,7 +44,7 @@ nav_order: 1910
 | Outlook 2007 이후, Windows Vista·7 | `%LOCALAPPDATA%\Microsoft\Windows\Temporary Internet Files\Content.Outlook\<무작위 8글자>\` |
 | Outlook 2007 이후, Windows 8 이후 | `%LOCALAPPDATA%\Microsoft\Windows\INetCache\Content.Outlook\<무작위 8글자>\` |
 
-폴더 위치는 Outlook 의 레지스트리 설정이 정한다는 설명도 흔하지만, 키와 값 이름은 공식 문서에 없어 이 페이지에 적지 않습니다. 검체에서 찾습니다(아래 실습 2번).
+폴더 위치는 Outlook 의 레지스트리 설정이 정한다는 설명도 흔하지만, 키와 값 이름은 공식 문서에 없어 이 페이지에 적지 않습니다. 실제 데이터에서 찾습니다(아래 실습 2번).
 
 - Microsoft 문서 "Change the folder where emails and attachments are saved in Outlook" (옛 KB 823131) 은 이름이 비슷하지만 임시 폴더를 다루지 않습니다. 이 문서의 값 `HKCU\Software\Microsoft\Office\16.0\Outlook\Options` 의 `DefaultPath` 는 "다른 이름으로 저장" 의 기본 폴더(기본값 `Documents`)를 바꿉니다. 이 값을 첨부 임시 폴더 위치로 읽지 않습니다.
 - 위치가 바뀔 수 있으므로 기본 위치만 보지 않습니다. 디스크 전체에서 폴더 이름으로 찾습니다(아래 "직접 분석해 보기").
@@ -142,7 +142,7 @@ NTFS 는 파일 이름을 UTF-16LE 로 적기 때문에 MFT 에서 폴더 이름
 4. 첨부를 연 채로 Outlook 을 정상 종료한 경우와 작업 관리자로 강제 종료한 경우를 비교해 보십시오. 사본이 남습니까?
 5. 첨부를 열지 않고 "다른 이름으로 저장" 만 했을 때도 임시 폴더에 사본이 생깁니까?
 
-**공개 검체(NIST CFReDS 등)** 가운데 클래식 Outlook 을 쓴 이미지에서도 해 봅니다.
+**공개 시험 데이터(NIST CFReDS 등)** 가운데 클래식 Outlook 을 쓴 이미지에서도 해 봅니다.
 
 1. `Content.Outlook` 이나 `OLK` 로 시작하는 폴더가 있습니까? 어느 경로에 있습니까?
 2. 폴더 안 파일 가운데 PST·OST 안 첨부와 해시가 같은 것은 몇 개입니까?

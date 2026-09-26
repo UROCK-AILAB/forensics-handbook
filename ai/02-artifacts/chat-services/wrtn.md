@@ -17,20 +17,20 @@ nav_order: 350
 
 ## 위치와 버전별 차이
 
-회사 공식 주소는 wrtn.io 입니다[1]. 서비스 화면이 이 도메인에서 돌아가는지, 웹·Windows·macOS·Android·iOS 가운데 어느 형태로 제공하는지는 사건 당시 검체와 설치 기록에서 확인합니다. 아래 표는 확인된 위치가 아니라 수집 범위를 정할 때 빠뜨리지 말아야 할 곳의 목록입니다.
+회사 공식 주소는 wrtn.io 입니다[1]. 서비스 화면이 이 도메인에서 돌아가는지, 웹·Windows·macOS·Android·iOS 가운데 어느 형태로 제공하는지는 사건 당시 기기와 설치 기록에서 확인합니다. 아래 표는 확인된 위치가 아니라 수집 범위를 정할 때 빠뜨리지 말아야 할 곳의 목록입니다.
 
-| 쓰는 형태 | 수집할 곳 | 검체에서 확인할 것 |
+| 쓰는 형태 | 수집할 곳 | 기기에서 확인할 것 |
 |---|---|---|
 | 웹 | 쓰던 브라우저의 방문 기록·캐시·쿠키·사이트 저장소 | 뤼튼 쪽 도메인 방문 기록과 사이트 저장소 |
 | Windows·macOS 앱 | 설치 프로그램 목록과 사용자 폴더의 앱 데이터 | 앱이 설치돼 있었는지와 앱 버전 |
 | Android 앱(뤼튼·크랙) | 두 앱의 앱 데이터 폴더 | 패키지 이름과 앱 버전 |
 | iOS 앱(뤼튼·크랙) | 백업·전체 추출본의 앱 컨테이너 | 번들 이름과 앱 버전 |
 
-기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다. 브라우저로 썼다면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지처럼 브라우저별 페이지를 따르고, 데스크톱 앱이 Electron 이나 웹뷰로 만든 것으로 보이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)를 봅니다. 모바일 앱은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [iOS 로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)에서 어디까지 얻을 수 있는지 먼저 가늠합니다. 뤼튼과 크랙이 따로 설치돼 있으면 두 앱의 버전과 설치 시각을 함께 적어 둡니다.
+기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다. 브라우저로 썼다면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지처럼 브라우저별 페이지를 따르고, 데스크톱 앱이 Electron 이나 웹뷰로 만든 것으로 보이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)를 봅니다. 모바일 앱은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [iOS 로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)에서 어디까지 얻을 수 있는지 먼저 따져 봅니다. 뤼튼과 크랙이 따로 설치돼 있으면 두 앱의 버전과 설치 시각을 함께 적어 둡니다.
 
 ## 구조
 
-로컬 대화 기록의 파일 이름, 데이터베이스 표, 설정 키는 공개된 자료가 없어 검체로 확인해야 합니다. 검체에서 뤼튼이나 크랙의 앱 폴더를 찾았다면 안에 든 파일의 형식을 첫 바이트로 먼저 가리고, SQLite 이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html), 설정 XML 이면 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html) 페이지의 방식으로 읽습니다. 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 앱 버전과 함께 무엇을 보았는지만 적습니다.
+로컬 대화 기록의 파일 이름, 데이터베이스 표, 설정 키는 실제 기기로 확인해야 합니다. 기기에서 뤼튼이나 크랙의 앱 폴더를 찾았다면 안에 든 파일의 형식을 첫 바이트로 먼저 판별하고, SQLite 이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html), 설정 XML 이면 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html) 페이지의 방식으로 읽습니다. 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 앱 버전과 함께 무엇을 보았는지만 적습니다.
 
 ## 증거로서 의미
 
@@ -50,7 +50,7 @@ nav_order: 350
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 할당되지 않은 영역이나 메모리 사본에서는 서비스 주소와 한글 서비스 이름의 바이트를 함께 찾습니다. 아래는 문자 인코딩 명세대로 만든 예시이고, 검체에서 뜬 바이트가 아닙니다.
+**헥스로 한 번.** 할당되지 않은 영역이나 메모리 사본에서는 서비스 주소와 한글 서비스 이름의 바이트를 함께 찾습니다. 아래는 문자 인코딩 명세대로 만든 예시이고, 실제 기기에서 뜬 바이트가 아닙니다.
 
 ```
 만든 예시(인코딩 명세로 만든 바이트)
@@ -78,7 +78,7 @@ rg -a -l -e "wrtn.io" -e "뤼튼" "$CASE"
 
 ## 실습
 
-뤼튼 흔적이 든 공개 검체는 알려진 것이 없어서, 시험용 기기와 시험 계정으로 풀어 봅니다.
+뤼튼 흔적이 든 공개 시험 이미지는 알려진 것이 없어서, 시험용 기기와 시험 계정으로 풀어 봅니다.
 
 1. 시험 기기에 뤼튼과 크랙을 모두 설치하고 각각 대화를 하나씩 만든 뒤, 두 앱의 데이터 폴더에 무엇이 생겼는지 비교합니다.
 2. 웹으로 대화를 만든 뒤 지우고, 브라우저 프로필 사본에서 지운 대화의 글이 남는지 찾아봅니다.

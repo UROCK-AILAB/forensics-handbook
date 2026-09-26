@@ -28,7 +28,7 @@ Windows 에는 응용 프로그램 호환성 인프라 (Application Compatibilit
 | RecentFileCache.bcf | 같은 폴더 | Amcache.hve 이전 형식입니다. [구버전 실행 기록](recentfilecache-bcf.md)에서 다룹니다 |
 | AEINV_*.xml·FullCompatReport.xml | 같은 폴더 | 일부 라이브러리 버전에서만 생기는 보고서 파일입니다. 10.0.10586 부터는 보이지 않습니다 |
 | INSTALL_*.xml·INSTALL_*.txt | `%WinDir%\AppCompat\Programs\Install\` | 설치 과정 기록입니다. 6.2~10.0.14913 은 XML 이고, 10.0.16299 에서는 쓰지 않으며, 10.0.17134 부터 TXT 로 다시 생깁니다 |
-| APPRAISER_*.xml·APPRAISER_*.bin | `%WinDir%\AppCompat` 아래 `appraiser` 폴더 | Appraiser 작업이 쓰는 파일입니다. 공개 자료에 위치 표기가 두 가지로 나와 있어 검체에서 확인합니다 |
+| APPRAISER_*.xml·APPRAISER_*.bin | `%WinDir%\AppCompat` 아래 `appraiser` 폴더 | Appraiser 작업이 쓰는 파일입니다. 공개 자료에 위치 표기가 두 가지로 나와 있어 실제 기기에서 확인합니다 |
 
 ### 라이브러리 버전과 키 구성
 
@@ -45,7 +45,7 @@ Windows 에는 응용 프로그램 호환성 인프라 (Application Compatibilit
 | 10.0.16299 | 10 1709 | 옛 키 4개는 남아 있지만 비어 있습니다. 새 키 5개가 생깁니다 |
 | 10.0.17134·10.0.17763 | 10 1803·1809 | 옛 키 4개와 `Device`·`HwItem`·`Metadata` 가 사라집니다. 새 키 11개가 생깁니다 |
 
-ANSSI 의 실험은 10.0.17763 까지입니다. 그 뒤 버전(Windows 10 뒤 버전과 Windows 11)을 라이브러리 버전별로 정리한 공개 연구는 없어 검체에서 확인해야 합니다. 요즘 시스템의 Amcache 에서는 `InventoryApplicationFile`·`InventoryApplication`·`InventoryDriverBinary`·`InventoryApplicationShortcut` 이 중심입니다.
+ANSSI 의 실험은 10.0.17763 까지입니다. 그 뒤 버전(Windows 10 뒤 버전과 Windows 11)을 라이브러리 버전별로 정리한 공개 연구는 없으므로 실제 데이터로 확인해야 합니다. 요즘 시스템의 Amcache 에서는 `InventoryApplicationFile`·`InventoryApplication`·`InventoryDriverBinary`·`InventoryApplicationShortcut` 이 중심입니다.
 
 ### 하이브를 누가 언제 쓰나
 
@@ -58,7 +58,7 @@ Amcache 는 한 곳에서만 쓰는 기록이 아니라, 실행할 때와 설치
 | 10.0.10240 | AeLookupSvc 가 없어지고 DiagTrack 서비스가 씁니다 | PcaSvc | ProgramDataUpdater 가 하이브를 갱신합니다 |
 | 10.0.10586 | DiagTrack | PcaSvc(compattelrunner.exe 를 거쳐 aeinv.dll 호출) | 두 예약 작업 모두 하이브를 쓰지 않습니다 |
 | 10.0.14913 | DiagTrack | PcaSvc 가 `InventoryApplication` 에 적습니다 | 두 작업 모두 하이브를 씁니다. `Programs` 는 ProgramDataUpdater 가, `InventoryApplicationFile`·`InventoryDriverBinary` 는 Appraiser 가 채웁니다 |
-| 10.0.16299 이후 | DiagTrack | PcaSvc | Appraiser 가 사용자 바탕 화면·`Program Files`·`Program Files (x86)` 의 EXE 와 시작 메뉴의 LNK 를 훑어 적습니다. `InventoryApplication` 은 돌 때마다 다시 씁니다. ProgramDataUpdater 는 하이브를 쓰지 않습니다 |
+| 10.0.16299 이후 | DiagTrack | PcaSvc | Appraiser 가 사용자 바탕 화면·`Program Files`·`Program Files (x86)` 의 EXE 와 시작 메뉴의 LNK 를 찾아 적습니다. `InventoryApplication` 은 돌 때마다 다시 씁니다. ProgramDataUpdater 는 하이브를 쓰지 않습니다 |
 
 ## 구조
 
@@ -194,7 +194,7 @@ Root
 4. **도구가 한쪽 형식만 읽습니다.** 도구마다 읽는 키가 다릅니다. 도구 결과에 없는 키가 하이브에 있는지 트리를 직접 열어 확인합니다([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 5. **트랜잭션 로그를 빼고 읽습니다.** 최근 항목이 LOG1·LOG2 에만 있을 수 있습니다. 로그를 반영하는 방법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
 6. **뜻이 밝혀지지 않은 값을 해석합니다.** 옛 형식 값 이름의 뜻은 대부분 코드 분석이 아니라 실험으로 얻은 것입니다. "뜻이 확인되지 않았습니다" 인 값은 보고서 근거로 쓰지 않습니다.
-7. **1809 이후 동작을 옛 연구로 설명합니다.** 이 페이지의 버전별 동작은 10.0.17763 까지의 실험입니다. 뒤 버전에서는 검체에서 다시 확인하고, 어느 버전에서 확인했는지 보고서에 적습니다.
+7. **1809 이후 동작을 옛 연구로 설명합니다.** 이 페이지의 버전별 동작은 10.0.17763 까지의 실험입니다. 뒤 버전에서는 실제 데이터로 다시 확인하고, 어느 버전에서 확인했는지 보고서에 적습니다.
 
 Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 트랜잭션 로그에 남을 수 있습니다([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 섀도 복사본 안의 옛 Amcache.hve 와 비교하면 사라진 항목을 찾을 수 있습니다([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 
@@ -202,7 +202,7 @@ Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 �
 
 ### 헥스로 한 번
 
-먼저 기본 블록에서 하이브 상태를 확인합니다. 아래는 regf 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+먼저 기본 블록에서 하이브 상태를 확인합니다. 아래는 regf 형식 명세를 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -243,10 +243,10 @@ Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 �
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 Amcache.hve 를 꺼내 아래 질문을 풀어 봅니다.
+공개 실습 이미지(NIST CFReDS 등)에서 Amcache.hve 를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 기본 블록의 두 순번이 같은가요? 다르다면 로그를 반영하기 전과 뒤에 `Root` 아래 하위 키 개수가 달라지나요?
-2. `Root` 아래 키 목록으로 라이브러리 세대를 판별하면 어느 것인가요? 그 판별이 검체의 OS 버전과 맞나요?
+2. `Root` 아래 키 목록으로 라이브러리 세대를 판별하면 어느 것인가요? 그 판별이 이미지의 OS 버전과 맞나요?
 3. 옛 형식 하이브라면 `Root` 의 `Sync` 값은 언제인가요? 그 시각이 `File` 아래 키 시각들과 어떻게 겹치나요?
 4. 새 형식 하이브라면 `InventoryApplication` 아래 키들의 마지막 기록 시각이 한 시각에 몰려 있나요? 몰려 있다면 그것이 설치 시각이 아닌 이유를 설명해 봅니다.
 

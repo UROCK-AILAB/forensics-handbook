@@ -6,13 +6,13 @@ nav_order: 390
 
 # IAM 사용자·역할·액세스 키 (IAM)
 
-AWS 계정 안에 어떤 사용자와 역할이 있고, 어떤 자격 증명이 언제 마지막으로 쓰였으며, 누가 어느 역할을 넘겨받아 무엇을 했는지를 IAM 자격 증명 보고서·마지막 접근 정보·CloudTrail 기록으로 이어 붙이는 쪽입니다.
+AWS 계정 안에 어떤 사용자와 역할이 있고, 어떤 자격 증명이 언제 마지막으로 쓰였으며, 누가 어느 역할을 넘겨받아 무엇을 했는지를 IAM 자격 증명 보고서·마지막 접근 정보·CloudTrail 기록으로 이어 붙이는 페이지입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 AWS 의 호출은 모두 자격 증명 하나에 묶여 있습니다. 자격 증명은 IAM 사용자 (IAM user)·루트 사용자 (root user) 가 쓰는 장기 자격 증명과, 역할 (role) 을 넘겨받거나 STS 를 불러 받는 임시 자격 증명으로 나뉩니다. 액세스 키 (access key) 는 IAM 사용자나 루트 사용자의 장기 자격 증명이고, 액세스 키 ID 와 비밀 액세스 키 두 부분으로 되어 있습니다[5]. 비밀 액세스 키는 만들 때만 받아 볼 수 있고, 사용자 한 명에게 액세스 키를 두 개까지 만들 수 있습니다[5].
 
-조사에 쓰는 기록은 세 갈래입니다. 자격 증명 보고서 (credential report) 는 계정의 모든 사용자와 그 비밀번호·액세스 키·MFA 상태를 CSV 한 장에 담습니다[1]. 마지막 접근 정보 (last accessed information) 는 사용자·역할·그룹·정책별로 어느 서비스와 어느 관리 작업에 마지막으로 접근을 시도했는지 보여 줍니다[3]. CloudTrail 은 IAM 과 STS 에 들어온 인증된 요청을 모두 기록하고, 다른 서비스 호출에도 요청한 자격 증명을 `userIdentity` 에 남깁니다[4]. 앞의 둘은 "지금 어떤 상태인가" 를 보여 주는 요약이고, 무엇을 언제 어디서 했는지는 CloudTrail 에서 읽습니다. 사용자·역할·임시 자격 증명의 일반 개념은 [클라우드 계정과 역할](../../01-foundations/identity/users-roles.md) 과 [토큰과 세션](../../01-foundations/identity/tokens-sessions.md) 에서 다룹니다.
+조사에 쓰는 기록은 세 종류입니다. 자격 증명 보고서 (credential report) 는 계정의 모든 사용자와 그 비밀번호·액세스 키·MFA 상태를 CSV 한 장에 담습니다[1]. 마지막 접근 정보 (last accessed information) 는 사용자·역할·그룹·정책별로 어느 서비스와 어느 관리 작업에 마지막으로 접근을 시도했는지 보여 줍니다[3]. CloudTrail 은 IAM 과 STS 에 들어온 인증된 요청을 모두 기록하고, 다른 서비스 호출에도 요청한 자격 증명을 `userIdentity` 에 남깁니다[4]. 앞의 둘은 "지금 어떤 상태인가" 를 보여 주는 요약이고, 무엇을 언제 어디서 했는지는 CloudTrail 에서 읽습니다. 사용자·역할·임시 자격 증명의 일반 개념은 [클라우드 계정과 역할](../../01-foundations/identity/users-roles.md) 과 [토큰과 세션](../../01-foundations/identity/tokens-sessions.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -49,7 +49,7 @@ IAM 은 사용자·그룹·역할·정책 같은 자원을 만들 때 고유 ID 
 | APKA | 공개 키 | ASCA | 인증서 |
 | ABIA | STS 서비스 베어러 토큰 | ACCA | 컨텍스트별 자격 증명 |
 
-ASIA 로 시작하는 키 ID 는 비밀 액세스 키·세션 토큰과 함께일 때만 유일합니다[2]. ARN 은 `arn:partition:service:region:account:resource` 형식이고, IAM 자원은 region 칸이 비어 있으며, 중국(베이징) 리전의 partition 은 `aws-cn` 입니다[2].
+ASIA 로 시작하는 키 ID 는 비밀 액세스 키·세션 토큰과 함께일 때만 유일합니다[2]. ARN 은 `arn:partition:service:region:account:resource` 형식이고, IAM 자원은 region 부분이 비어 있으며, 중국(베이징) 리전의 partition 은 `aws-cn` 입니다[2].
 
 ### 자격 증명 보고서의 열
 
@@ -77,7 +77,7 @@ ASIA 로 시작하는 키 ID 는 비밀 액세스 키·세션 토큰과 함께�
 
 ### CloudTrail 의 `userIdentity`
 
-CloudTrail 레코드 전체 구조와 `userIdentity` 의 모든 필드는 [레코드 구조](cloudtrail/record-structure.md) 에서 다룹니다. 이 쪽에서는 IAM 조사에 바로 쓰는 값만 추립니다.
+CloudTrail 레코드 전체 구조와 `userIdentity` 의 모든 필드는 [레코드 구조](cloudtrail/record-structure.md) 에서 다룹니다. 이 페이지에서는 IAM 조사에 바로 쓰는 값만 추립니다.
 
 | `userIdentity.type` | 뜻 | 사람을 가리키는 값이 있는 곳 |
 |---|---|---|
@@ -139,7 +139,7 @@ CloudTrail 레코드 전체 구조와 `userIdentity` 의 모든 필드는 [레�
 
 콘솔 로그인은 `eventSource` 가 `signin.amazonaws.com`, `eventName` 이 `ConsoleLogin` 이고, 성패는 `responseElements.ConsoleLogin` 의 `Success`·`Failure` 로 남습니다[8]. `additionalEventData` 에는 `LoginTo`, `MobileVersion`, `MFAUsed`(`Yes`·`No`), MFA 를 썼을 때 `MFAIdentifier` 가 들어갑니다[8]. 로그인 중 MFA 확인은 `CheckMfa` 이벤트로 따로 남고 `additionalEventData.MfaType` 에 `Virtual MFA`, `Multiple MFA Devices` 같은 값이 들어갑니다[8]. 페더레이션 사용자는 `mfaAuthenticated` 가 `false`, `MFAUsed` 가 `No` 이고, 이 값이 `true`·`Yes` 가 되는 것은 IAM 사용자나 루트가 MFA 를 썼을 때뿐입니다[8].
 
-로그인 실패 레코드는 원인에 따라 모양이 다릅니다. 비밀번호가 틀리면 `errorMessage` 가 `Failed authentication` 이고 `userName` 이 남습니다[8]. 없는 사용자 이름을 넣으면 입력한 이름 대신 `HIDDEN_DUE_TO_SECURITY_REASONS` 가 남고 `errorMessage` 는 `No username found in supplied account` 입니다[4]. IAM 사용자 로그인 실패 레코드에는 `userIdentity.arn` 이 없는 예시[8][4]와 있는 예시[4]가 모두 있으므로, 성패는 `arn` 유무가 아니라 `responseElements.ConsoleLogin` 으로 가립니다.
+로그인 실패 레코드는 원인에 따라 모양이 다릅니다. 비밀번호가 틀리면 `errorMessage` 가 `Failed authentication` 이고 `userName` 이 남습니다[8]. 없는 사용자 이름을 넣으면 입력한 이름 대신 `HIDDEN_DUE_TO_SECURITY_REASONS` 가 남고 `errorMessage` 는 `No username found in supplied account` 입니다[4]. IAM 사용자 로그인 실패 레코드에는 `userIdentity.arn` 이 없는 예시[8][4]와 있는 예시[4]가 모두 있으므로, 성패는 `arn` 유무가 아니라 `responseElements.ConsoleLogin` 으로 판별합니다.
 
 ## 증거로서 의미
 
@@ -156,7 +156,7 @@ CloudTrail 레코드 전체 구조와 `userIdentity` 의 모든 필드는 [레�
 - 키 ID 나 역할 세션은 사람과 같지 않습니다. 키를 여러 사람이 나눠 쓰거나 역할을 여러 사람이 넘겨받을 수 있어서, `sourceIdentity` 나 세션 이름을 사람과 묶는 규칙이 있을 때만 사람을 좁힐 수 있습니다[4].
 - `mfaAuthenticated: false` 는 MFA 없이 인증했다는 뜻일 수도 있고, 페더레이션 사용자처럼 이 값을 `true` 로 쓰지 않는 경로라는 뜻일 수도 있습니다[8].
 
-보고서에는 "2026년 9월 1일 02:10 UTC 에 액세스 키 AKIAIOSFODNN7EXAMPLE 로 역할 ops-admin 을 세션 이름 dev-kim-ops 로 넘겨받은 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2026년 9월 1일 02:10 UTC 에 액세스 키 AKIAIOSFODNN7EXAMPLE 로 역할 ops-admin 을 세션 이름 dev-kim-ops 로 넘겨받은 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
@@ -189,7 +189,7 @@ CloudTrail 레코드 전체 구조와 `userIdentity` 의 모든 필드는 [레�
 | IAM 사용자, 전역 엔드포인트, 계정 별칭 쿠키 없음 | us-east-1 |
 | IAM 사용자, 리전 엔드포인트 | 그 엔드포인트의 리전 |
 
-- `MFAUsed` 값은 문서 예시에서 `Yes`·`No` 인데, SigmaHQ 규칙 aws_cloudtrail_console_login_success_without_mfa 는 `'NO'` 로 찾습니다[8][9]. 검색할 때는 대소문자를 가리지 않게 합니다.
+- `MFAUsed` 값은 문서 예시에서 `Yes`·`No` 인데, SigmaHQ 규칙 aws_cloudtrail_console_login_success_without_mfa 는 `'NO'` 로 찾습니다[8][9]. 검색할 때는 대소문자를 구분하지 않게 합니다.
 
 ## 직접 분석해 보기
 
@@ -218,7 +218,7 @@ cut -d, -f1,5,8,9,11,12,13 credential_report.csv
 
 MFA 가 꺼진 사용자, 비밀번호가 없는데 키만 쓰이는 사용자, 사고 시각 근처에 `last_used_date` 가 찍힌 키를 먼저 뽑아 CloudTrail 에서 그 키 ID 로 다시 찾습니다.
 
-**탐지 규칙으로 훑기.** SigmaHQ 의 AWS CloudTrail 규칙에는 IAM 흔적을 찾는 조건이 필드 이름 그대로 들어 있습니다. 규칙을 쓰는 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) 에서 다룹니다.
+**탐지 규칙으로 검색하기.** SigmaHQ 의 AWS CloudTrail 규칙에는 IAM 흔적을 찾는 조건이 필드 이름 그대로 들어 있습니다. 규칙을 쓰는 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) 에서 다룹니다.
 
 | 규칙 | 조건 | 찾는 흔적 |
 |---|---|---|
@@ -236,7 +236,7 @@ MFA 가 꺼진 사용자, 비밀번호가 없는데 키만 쓰이는 사용자, 
 - [EC2 인스턴스와 스냅숏](ec2-ebs.md) — `ec2RoleDelivery` 가 있는 역할 세션이면 어느 인스턴스의 역할이었는지 확인합니다.
 - [페더레이션과 SSO](../../01-foundations/identity/federation-sso.md), [다단계 인증과 조건부 접근](../../01-foundations/identity/mfa-conditional-access.md) — SAML·OIDC 로 들어온 역할 세션과 MFA 값을 해석할 때 봅니다.
 - [IAM과 서비스 계정 키](../gcp/iam-keys.md) — Google Cloud 의 같은 역할을 하는 기록입니다.
-- [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md), [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md) — 이 쪽의 기록을 조사 흐름으로 묶습니다.
+- [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md), [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md) — 이 페이지의 기록을 조사 흐름으로 묶습니다.
 - 수집 순서는 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) 과 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 를 따릅니다.
 
 ## 실습
@@ -245,9 +245,9 @@ MFA 가 꺼진 사용자, 비밀번호가 없는데 키만 쓰이는 사용자, 
 
 1. 예시 AssumeRole 레코드에서 역할을 넘겨받은 사용자, 역할, 세션 이름, 새 임시 키 ID 를 각각 어느 필드에서 읽는지 적어 봅니다.
 2. 같은 세션으로 한 뒤 호출은 `userIdentity.type`·`arn`·`principalId` 가 어떤 값일지 적어 봅니다.
-3. 보고서에서 `password_enabled` 가 `FALSE` 인데 `access_key_1_last_used_service` 가 `s3` 이고 `access_key_1_last_used_region` 이 `N/A` 인 사용자가 있다면, 리전이 `N/A` 인 까닭과 이 키가 무엇을 했는지 확인하려면 어디를 봐야 하는지 적어 봅니다.
+3. 보고서에서 `password_enabled` 가 `FALSE` 인데 `access_key_1_last_used_service` 가 `s3` 이고 `access_key_1_last_used_region` 이 `N/A` 인 사용자가 있다면, 리전이 `N/A` 인 이유와 이 키가 무엇을 했는지 확인하려면 어디를 봐야 하는지 적어 봅니다.
 4. 예시 `expiration` 값을 UTC 타임라인에 넣으려면 무엇을 확인해야 하는지 적어 봅니다.
-5. 실제 검체에서는 자기 계정의 자격 증명 보고서를 받아 MFA 가 꺼진 사용자와 90일 넘게 쓰이지 않은 키를 골라 보고, 2018년 5월 공백 구간이 결과에 영향을 주는지 확인합니다.
+5. 실제 데이터로는 자기 계정의 자격 증명 보고서를 받아 MFA 가 꺼진 사용자와 90일 넘게 쓰이지 않은 키를 골라 보고, 2018년 5월 공백 구간이 결과에 영향을 주는지 확인합니다.
 
 ## 참고 문헌
 

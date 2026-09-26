@@ -26,7 +26,7 @@ nav_order: 3010
 |---|---|---|
 | 97-2003 OLE | Word `.doc`·`.dot`, Excel `.xls`, PowerPoint `.ppt` | 파일 안 OLE 저장소. Excel 추가 기능 `.XLA` 에서는 루트의 `Workbook` 스트림 옆에 `_VBA_PROJECT_CUR` 저장소가 있습니다 |
 | 2007 이후 OpenXML | `.docm`·`.dotm`·`.xlsm`·`.xlsb`·`.pptm`·`.ppsm` | ZIP 안의 `vbaProject.bin`. Excel 추가 기능 `.XLAM` 에서는 `xl/vbaProject.bin` 입니다 |
-| 그 밖에 olevba 가 읽는 형식 | Word 2003 XML, MHTML (`.mht`), Publisher (`.pub`), SYLK (`.slk`) | 검체에서 확인 |
+| 그 밖에 olevba 가 읽는 형식 | Word 2003 XML, MHTML (`.mht`), Publisher (`.pub`), SYLK (`.slk`) | 실제 파일로 확인 |
 
 `_VBA_PROJECT_CUR` 아래 구성은 `vbaProject.bin` 의 루트와 같습니다. Word 97-2003 문서의 매크로는 `Macros` 저장소에 들어갑니다(참고 1). `vbaProject.bin` 의 첫 8바이트는 `D0 CF 11 E0 A1 B1 1A E1` 이고, 이는 OLE 복합 파일이라는 뜻이며 이 형식은 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
 
@@ -40,7 +40,7 @@ nav_order: 3010
 | `vbaProjectSignatureAgile.bin` | `.../2014/relationships/vbaProjectSignatureAgile` |
 | `vbaProjectSignatureV3.bin` | `.../2020/07/relationships/vbaProjectSignatureV3` |
 
-97-2003 OLE 파일에서 서명이 들어가는 스트림은 검체에서 확인합니다. `EXPTOOWS.XLA` 에는 서명이 없습니다. 서명 파트가 있다는 것과 서명이 유효하다는 것은 다릅니다.
+97-2003 OLE 파일에서 서명이 들어가는 스트림은 실제 파일로 확인해야 합니다. `EXPTOOWS.XLA` 에는 서명이 없습니다. 서명 파트가 있다는 것과 서명이 유효하다는 것은 다릅니다.
 
 ### 인터넷에서 받은 파일의 매크로 차단 (참고 2)
 
@@ -201,8 +201,8 @@ olevba 가 자동 실행 후보로 찾는 이름입니다.
 
 ## 시각 해석
 
-- VBA 스트림(`PROJECT`, `dir`, 모듈 스트림)에는 코드를 쓴 시각이나 실행한 시각을 담은 칸이 없습니다.
-- OpenXML 파일의 ZIP 항목 시각이 모두 1980-01-01 00:00:00 인 파일이 있습니다(예: `SOLVER.XLAM`). 이 값으로 작성 시각을 말하지 않습니다.
+- VBA 스트림(`PROJECT`, `dir`, 모듈 스트림)에는 코드를 쓴 시각이나 실행한 시각을 담은 필드가 없습니다.
+- OpenXML 파일의 ZIP 항목 시각이 모두 1980-01-01 00:00:00 인 파일이 있습니다(예: `SOLVER.XLAM`). 이 값을 작성 시각으로 보지 않습니다.
 - OLE 저장소 디렉터리 항목의 시각은 [OLE 복합 파일](../../01-foundations/shell-document-formats/compound-file-binary.md) 에서 다룹니다.
 - 문서를 만든 시각·저장한 시각은 [오피스 문서 속성 (OOXML docProps)](document-metadata/ooxml-docprops.md) 과 [옛 오피스 문서 속성 (OLE SummaryInformation)](document-metadata/ole-summaryinformation.md) 에서 봅니다.
 - 매크로를 켠 기록은 [신뢰 문서 기록 (Trust Records)](../file-folder-usage/microsoft-office/trust-records.md) 에서 봅니다. 그 값의 시각이 무엇을 뜻하는지도 그 페이지에서 다룹니다.
@@ -221,7 +221,7 @@ olevba 가 자동 실행 후보로 찾는 이름입니다.
 9. **신뢰할 수 있는 위치의 파일을 같은 기준으로 봅니다.** 신뢰할 수 있는 위치에 저장한 파일은 웹 표시 검사를 건너뜁니다(참고 2).
 10. **네트워크 공유 파일을 로컬 파일처럼 봅니다.** IP 주소로 연 공유의 파일은, 그 공유가 신뢰할 수 있는 사이트나 로컬 인트라넷 영역에 없으면 매크로가 막힙니다(참고 2).
 11. **Excel 추가 기능을 문서와 같게 봅니다.** `.xla`·`.xlam` 은 웹 표시가 있으면 서명이나 게시자 신뢰로도 풀리지 않습니다. 2016년 MS16-088 이후 그렇습니다(참고 2).
-12. **압축 파일·디스크 이미지 안에서 꺼낸 파일에도 웹 표시가 있다고 봅니다.** ISO·ZIP·7z 같은 컨테이너가 웹 표시를 안쪽 파일로 넘기는지는 검체에서 확인합니다.
+12. **압축 파일·디스크 이미지 안에서 꺼낸 파일에도 웹 표시가 있다고 봅니다.** ISO·ZIP·7z 같은 컨테이너가 웹 표시를 안쪽 파일로 넘기는지는 실제 파일로 확인합니다.
 
 ### 지우기와 조작
 
@@ -236,9 +236,9 @@ olevba 가 자동 실행 후보로 찾는 이름입니다.
 
 1. OpenXML 파일이면 ZIP 을 풀어 `vbaProject.bin` 을 꺼냅니다. Excel 파일에서는 `xl/vbaProject.bin` 입니다.
 2. 첫 8바이트가 `D0 CF 11 E0 A1 B1 1A E1` 인지 봅니다. 97-2003 파일이면 파일 전체가 이 형식입니다.
-3. OLE 저장소를 따라가 `PROJECT` 스트림을 읽습니다. 글자로 된 줄이므로 헥스 편집기의 글자 칸에서 바로 읽힙니다.
+3. OLE 저장소를 따라가 `PROJECT` 스트림을 읽습니다. 글자로 된 줄이므로 헥스 편집기의 글자 영역에서 바로 읽힙니다.
 4. `VBA\dir` 스트림의 첫 바이트가 `01` 인지 봅니다. 압축돼 있으므로 도구로 풉니다.
-5. 푼 `dir` 에서 레코드를 차례로 읽습니다. 아래는 레코드 구조에 맞춰 만든 예시입니다. 실제 검체에서 뽑은 값이 아니고, 숫자는 리틀 엔디언으로 적었습니다.
+5. 푼 `dir` 에서 레코드를 차례로 읽습니다. 아래는 레코드 구조에 맞춰 만든 예시입니다. 실제 파일에서 뽑은 값이 아니고, 숫자는 리틀 엔디언으로 적었습니다.
 
 ```
 04 00 | 06 00 00 00 | 53 6F 6C 76 65 72
@@ -285,7 +285,7 @@ oletools 의 olevba 를 예로 듭니다(참고 1).
 4. [콘텐츠 사용] 을 누른 뒤 `TrustRecords` 키에 어떤 값이 생겼는지 보십시오.
 5. `vbaProject.bin` 을 꺼내 모듈 스트림의 MODULEOFFSET 위치 바이트를 헥스로 확인해 보십시오.
 
-**NIST CFReDS 같은 공개 검체의 Windows 디스크 이미지**로도 풀어 봅니다.
+**NIST CFReDS 같은 공개 데이터의 Windows 디스크 이미지**로도 풀어 봅니다.
 
 1. 사용자 폴더에서 `.docm`·`.xlsm`·`.doc`·`.xls` 파일을 찾아 매크로가 든 파일을 가려내 보십시오. 몇 개입니까?
 2. 매크로가 든 파일에 자동 실행 이름이 있습니까? 그 파일에 웹 표시가 있습니까?

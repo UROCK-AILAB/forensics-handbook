@@ -19,7 +19,7 @@ nav_order: 3620
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | 설치된 메신저 | [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md) 에서 메신저를 찾습니다. 설치 목록에 없어도 사용자 프로필 안의 앱 폴더를 봅니다. |
 | 사용자·계정 | 메신저 데이터는 사용자 프로필 안에 있습니다. 한 사용자가 여러 메신저 계정을 썼을 수 있습니다. |
@@ -33,7 +33,7 @@ nav_order: 3620
 
 | 메신저 | 위치 | 그 안의 내용 |
 |---|---|---|
-| 텔레그램 데스크톱 | `%APPDATA%\Telegram Desktop\tdata`, `%USERPROFILE%\Downloads\Telegram Desktop` | `Downloads\Telegram Desktop` 이 받은 파일의 기본 저장 폴더인지는 검체의 설정에서 확인합니다. |
+| 텔레그램 데스크톱 | `%APPDATA%\Telegram Desktop\tdata`, `%USERPROFILE%\Downloads\Telegram Desktop` | `Downloads\Telegram Desktop` 이 받은 파일의 기본 저장 폴더인지는 분석 대상 PC 의 설정에서 확인합니다. |
 | 새 Teams | `%LOCALAPPDATA%\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams\` | 그 아래 `EBWebView\WV2Profile_tfw` 가 WebView2 프로필입니다. `IndexedDB`·`History`·`Network\Cookies`·`Service Worker` 가 들어 있습니다. |
 | 클래식 Teams | `%APPDATA%\Microsoft\Teams` | 새 Teams 만 쓰는 PC 에는 없을 수 있습니다. |
 | 카카오톡 PC | `%LOCALAPPDATA%\Kakao\KakaoTalk` | 그 아래 `users`, `global`, `OpenLinkPreset` 폴더가 있습니다. |
@@ -68,7 +68,7 @@ nav_order: 3620
 
 1. **받은 파일 폴더에 있는 파일을 보낸 파일로 봅니다.** 받은 파일 폴더는 받은 쪽 흔적입니다. 보낸 기록은 대화 DB 에서 찾습니다.
 2. **받은 파일 폴더가 없으니 메신저로 파일을 주고받지 않았다고 봅니다.** 카카오톡이 설치돼 있어도 `Documents\카카오톡 받은 파일` 폴더가 없을 수 있습니다. 폴더가 없다는 것만으로 결론을 내리지 않습니다.
-3. **SRUM 송신량을 파일 전송 증거로 씁니다.** SRUM 네트워크 사용량 표에는 목적지 주소나 파일 이름 칸이 없고[1], 송신량은 그 앱이 그 시간대에 보낸 양일 뿐입니다.
+3. **SRUM 송신량을 파일 전송 증거로 씁니다.** SRUM 네트워크 사용량 표에는 목적지 주소나 파일 이름 열이 없고[1], 송신량은 그 앱이 그 시간대에 보낸 양일 뿐입니다.
 4. **클래식 Teams 폴더만 보고 Teams 를 안 썼다고 봅니다.** 새 Teams 는 `Packages\MSTeams_8wekyb3d8bbwe` 아래에 있습니다.
 5. **대화 DB 를 못 읽었으니 보낸 기록이 없다고 적습니다.** 읽지 못한 것과 기록이 없는 것은 다릅니다. 보고서에는 "암호화로 읽지 못했다" 고 적습니다.
 

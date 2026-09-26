@@ -6,13 +6,13 @@ nav_order: 950
 
 # 컨테이너 수집 (Container Acquisition)
 
-컨테이너는 런타임이 살아 있을 때 런타임 명령으로 상태·로그·변경 목록을 먼저 뜨고, 디스크에서는 데이터 루트와 쓰기층(upperdir)을 통째로 확보하는 두 갈래로 수집합니다.
+컨테이너는 런타임이 실행 중일 때 런타임 명령으로 상태·로그·변경 목록을 먼저 뜨고, 디스크에서는 데이터 루트와 쓰기층(upperdir)을 통째로 확보하는 두 가지 방법으로 수집합니다.
 
 ## 언제 쓰나
 
 Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사할 때 씁니다. 컨테이너 안의 파일 변경은 호스트 파일 시스템의 한 디렉터리에 모여 있고, 컨테이너가 표준 출력으로 낸 로그는 런타임이 따로 보관합니다. 그래서 호스트 디스크 이미지만 떠도 대부분이 남지만, 컨테이너 목록·실행 중 프로세스·네트워크 같은 상태는 런타임에 물어봐야 정확하게 얻습니다.
 
-컨테이너를 지우거나 다시 만들면 쓰기층과 설정 파일이 함께 사라질 가능성이 있으므로, 운영 담당자가 컨테이너를 재배포하기 전에 수집을 끝내는 편이 좋습니다. 호스트 전체의 휘발성 정보를 뜨는 순서는 [조사 절차](investigation-process.md)와 [라이브 응답 수집](live-response.md)을 따르고, 이 쪽은 컨테이너에만 해당하는 부분을 다룹니다.
+컨테이너를 지우거나 다시 만들면 쓰기층과 설정 파일이 함께 사라질 가능성이 있으므로, 운영 담당자가 컨테이너를 재배포하기 전에 수집을 끝내는 편이 좋습니다. 호스트 전체의 휘발성 정보를 뜨는 순서는 [조사 절차](investigation-process.md)와 [라이브 응답 수집](live-response.md)을 따르고, 이 페이지는 컨테이너에만 해당하는 부분을 다룹니다.
 
 ## 절차
 
@@ -52,7 +52,7 @@ Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사�
    - Docker: `docker checkpoint create` 에는 저장 위치를 바꾸는 `--checkpoint-dir` 와 체크포인트 뒤에도 계속 돌게 하는 `--leave-running` 이 있습니다[3].
    - Kubernetes: 기능 게이트 `ContainerCheckpoint` 가 켜진 노드에서 kubelet 에 `POST /checkpoint/NAMESPACE/POD/CONTAINER` 를 보내면, kubelet 루트 디렉터리 아래 `checkpoints`(기본 `/var/lib/kubelet/checkpoints`)에 `checkpoint-<podFullName>-<containerName>-<timestamp>.tar` 이름으로 tar 파일이 생깁니다[5]. 게이트가 꺼져 있으면 404 가 돌아옵니다[5]. tar 안의 구성은 노드의 CRI 구현(containerd, CRI-O 등)마다 다릅니다[5].
 
-5. **디스크에서 데이터 루트를 확보합니다.** 호스트를 [디스크 이미징](disk-imaging.md)으로 뜨면 데이터 루트가 함께 들어오고, 이미징이 어려우면 적어도 1단계에서 찾은 데이터 루트 전체와 볼륨 경로를 복사합니다. overlay2 저장 드라이버에서는 레이어마다 `/var/lib/docker/overlay2/ID/` 아래 `diff` 디렉터리가 있고, 컨테이너의 쓰기층도 이 `diff` 이며 overlay 마운트의 `upperdir` 로 걸립니다[9]. 컨테이너 설정은 `containers/ID/config.v2.json`, overlay2 컨테이너의 마운트 정보는 `image/overlay2/layerdb/mounts/ID` 에 있습니다[6]. Podman 은 `storage/overlay-containers/ID/userdata/config.json`, `storage/overlay/레이어ID`, 그리고 v4 이상이면 컨테이너 목록 SQLite 파일 `storage/db.sql` 을 함께 가져옵니다[7]. 각 파일의 필드 뜻은 [Docker](../../02-artifacts/containers/docker/index.md), [Podman](../../02-artifacts/containers/podman.md) 쪽에 있습니다.
+5. **디스크에서 데이터 루트를 확보합니다.** 호스트를 [디스크 이미징](disk-imaging.md)으로 뜨면 데이터 루트가 함께 들어오고, 이미징이 어려우면 적어도 1단계에서 찾은 데이터 루트 전체와 볼륨 경로를 복사합니다. overlay2 저장 드라이버에서는 레이어마다 `/var/lib/docker/overlay2/ID/` 아래 `diff` 디렉터리가 있고, 컨테이너의 쓰기층도 이 `diff` 이며 overlay 마운트의 `upperdir` 로 걸립니다[9]. 컨테이너 설정은 `containers/ID/config.v2.json`, overlay2 컨테이너의 마운트 정보는 `image/overlay2/layerdb/mounts/ID` 에 있습니다[6]. Podman 은 `storage/overlay-containers/ID/userdata/config.json`, `storage/overlay/레이어ID`, 그리고 v4 이상이면 컨테이너 목록 SQLite 파일 `storage/db.sql` 을 함께 가져옵니다[7]. 각 파일의 필드 뜻은 [Docker](../../02-artifacts/containers/docker/index.md), [Podman](../../02-artifacts/containers/podman.md) 페이지에 있습니다.
 
 6. **컨테이너 로그를 따로 챙깁니다.** Docker 의 json-file 로그 드라이버는 데이터 루트의 `containers` 아래에 `*-json.log*` 파일을 남기고, local 드라이버는 같은 곳에 protobuf 항목으로 된 파일(압축된 `.gz` 포함)을 남깁니다[6]. Podman 은 기본 로그 대상이 syslog 또는 journald 라서 `ctr.log` 파일은 k8s-file 드라이버(또는 그 별칭인 json-file)로 설정한 컨테이너에만 생깁니다[7]. 따라서 Podman 컨테이너 로그를 찾을 때는 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md)을 함께 확보합니다.
 
@@ -76,7 +76,7 @@ Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사�
 
 **`docker cp` 로 꺼낸 파일은 소유자가 바뀝니다.** 호스트로 복사한 파일은 `docker cp` 를 실행한 사용자의 UID·GID 로 만들어지고, `-a` 를 줘야 원래 소유자를 유지합니다[3]. 소유자가 증거가 되는 파일은 `-a` 를 주거나 쓰기층 디렉터리에서 직접 복사합니다.
 
-**데이터 루트가 기본 경로에 없을 수 있습니다.** `daemon.json` 의 `data-root` 를 확인하지 않으면 `/var/lib/docker` 가 비어 있다고 오판합니다[6]. rootless Podman 은 사용자 홈 아래에 있어서 `/var/lib/containers` 만 보면 놓칩니다[7]. Docker Engine 29.0 이상을 새로 설치한 호스트는 containerd 이미지 저장소를 기본으로 쓰고, 이때 containerd 저장소는 Docker 데이터 디렉터리와 다른 경로에 있습니다[10]. `docker info` 의 드라이버 상태가 `io.containerd.snapshotter.v1` 이면 이 경우이므로 [containerd·Kubernetes](../../02-artifacts/containers/containerd-kubernetes.md) 쪽의 경로도 함께 확보합니다[10].
+**데이터 루트가 기본 경로에 없을 수 있습니다.** `daemon.json` 의 `data-root` 를 확인하지 않으면 `/var/lib/docker` 가 비어 있다고 오판합니다[6]. rootless Podman 은 사용자 홈 아래에 있어서 `/var/lib/containers` 만 보면 놓칩니다[7]. Docker Engine 29.0 이상을 새로 설치한 호스트는 containerd 이미지 저장소를 기본으로 쓰고, 이때 containerd 저장소는 Docker 데이터 디렉터리와 다른 경로에 있습니다[10]. `docker info` 의 드라이버 상태가 `io.containerd.snapshotter.v1` 이면 이 경우이므로 [containerd·Kubernetes](../../02-artifacts/containers/containerd-kubernetes.md) 페이지의 경로도 함께 확보합니다[10].
 
 **지운 파일은 쓰기층에 흔적만 남습니다.** 컨테이너 안에서 아래층(이미지)에 있던 파일을 지우면 overlayfs 는 쓰기층에 같은 이름의 whiteout 을 만듭니다[8]. whiteout 은 장치 번호 0/0 인 문자 장치이거나, xattr `trusted.overlay.whiteout` 이 붙은 크기 0 인 일반 파일입니다[8]. 쓰기층 디렉터리에 xattr `trusted.overlay.opaque` 가 `y` 로 붙어 있으면 아래층에 있는 같은 이름 디렉터리의 내용은 가려집니다[8]. 복사 도구가 문자 장치나 `trusted.*` xattr 를 옮기지 못하면 이 흔적이 사라지므로, 쓰기층은 디스크 이미지에서 보거나 xattr 를 보존하는 방식으로 복사합니다. xattr 을 읽는 법은 [권한·확장 속성](../../01-foundations/filesystem/permissions-xattr.md)을 봅니다.
 
@@ -99,7 +99,7 @@ Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사�
 - export·commit 결과에 볼륨이 없다고 해서 볼륨에 데이터가 없었다는 뜻은 아닙니다[3].
 - 체크포인트 tar 의 내부 구성은 런타임마다 달라서, 한 런타임의 해석 방법을 다른 런타임 결과에 그대로 쓸 수 없습니다[5].
 
-보고서에는 "컨테이너 ID ○○의 쓰기층에 `/usr/bin/wget` 에 대한 whiteout 이 있다" 처럼 기록이 말하는 만큼 씁니다. "침입자가 wget 을 지웠다" 는 누가 지웠는지를 다른 기록([실행 중인 프로세스](../../02-artifacts/execution/proc.md), 저널, 셸 기록)으로 뒷받침할 때만 씁니다.
+보고서에는 "컨테이너 ID ○○의 쓰기층에 `/usr/bin/wget` 에 대한 whiteout 이 있다" 처럼 기록으로 확인되는 만큼 씁니다. "침입자가 wget 을 지웠다" 는 누가 지웠는지를 다른 기록([실행 중인 프로세스](../../02-artifacts/execution/proc.md), 저널, 셸 기록)으로 뒷받침할 때만 씁니다.
 
 ## 참고 문헌
 

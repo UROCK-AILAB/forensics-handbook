@@ -33,9 +33,9 @@ Android 시스템 서비스(NetworkStatsService)가 네트워크 사용량을 �
 | 예전 위치 | `Environment.getDataDirectory()` 아래 `system/netstats`, 곧 `/data/system/netstats` | `getLegacyStatsDir` |
 | 현재 위치 | 테더링(Tethering) 모듈 APEX 의 DE 데이터 폴더 아래 `netstats` | `ApexEnvironment.getApexEnvironment(TETHERING_MODULE_NAME).getDeviceProtectedDataDir()` |
 
-어느 쪽을 쓸지는 DeviceConfig 플래그 `netstats_store_files_in_apexdata` 로 정하고 기본값은 true 입니다 [2]. 현재 위치의 실제 경로와 APEX 위치를 쓰기 시작한 Android 버전은 검체에서 확인합니다. 현재 위치는 DE(기기 보호) 영역이고 [2], CE 와 DE 의 차이는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
+어느 쪽을 쓸지는 DeviceConfig 플래그 `netstats_store_files_in_apexdata` 로 정하고 기본값은 true 입니다 [2]. 현재 위치의 실제 경로와 APEX 위치를 쓰기 시작한 Android 버전은 실제 기기에서 확인합니다. 현재 위치는 DE(기기 보호) 영역이고 [2], CE 와 DE 의 차이는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
 
-예전 위치에서 새 위치로 옮길 때는 옛 파일을 가져오는(import) 절차가 돌고, 시도·성공·대체 횟수를 통계 폴더 안의 `import.attempts`, `import.successes`, `import.fallbacks` 파일에 셉니다 [2]. 두 위치에 모두 파일이 있는 검체라면 이 세 파일로 가져오기가 어떻게 끝났는지 확인합니다.
+예전 위치에서 새 위치로 옮길 때는 옛 파일을 가져오는(import) 절차가 돌고, 시도·성공·대체 횟수를 통계 폴더 안의 `import.attempts`, `import.successes`, `import.fallbacks` 파일에 셉니다 [2]. 두 위치에 모두 파일이 있는 기기라면 이 세 파일로 가져오기가 어떻게 끝났는지 확인합니다.
 
 ALEAPP 는 폴더 위치와 상관없이 아래 패턴으로 찾고, UID 를 패키지 이름으로 바꾸려고 `*/system/packages.xml` 도 함께 읽습니다 [1].
 
@@ -55,9 +55,9 @@ ALEAPP 의 netstats 모듈은 AOSP 소스를 따라 이진 파일을 읽고, 아
 
 파일 첫 4바이트는 글자 "ANET" 이고 그다음 4바이트는 빅엔디언 정수로 된 형식 버전입니다. ALEAPP 는 통합 형식 버전 16 만 읽고, 예전 UID 형식(버전 2~4)은 읽지 않습니다 [1].
 
-네트워크 식별 칸은 연결 종류(`net_type`), `rat_type`, `subscriber_id`, `network_id`, 로밍, 요금제 여부(metered), 기본 네트워크 여부(default_network), OEM 기능값, `sub_id`, `transport_type` 이고, 식별 버전이 올라가며 칸이 늘었습니다 [1].
+네트워크 식별 필드는 연결 종류(`net_type`), `rat_type`, `subscriber_id`, `network_id`, 로밍, 요금제 여부(metered), 기본 네트워크 여부(default_network), OEM 기능값, `sub_id`, `transport_type` 이고, 식별 버전이 올라가며 필드가 늘었습니다 [1].
 
-| 식별 버전 | 더해진 칸 |
+| 식별 버전 | 더해진 필드 |
 |---|---|
 | 2 | 로밍 |
 | 3 | `network_id` |
@@ -67,7 +67,7 @@ ALEAPP 의 netstats 모듈은 AOSP 소스를 따라 이진 파일을 읽고, 아
 | 7 | `sub_id` |
 | 8 | `transport_type` |
 
-`network_id` 와 `subscriber_id` 에 실제로 어떤 값(SSID, 가입자 식별값 등)이 들어가는지는 검체에서 값을 읽은 뒤 [와이파이 설정과 접속 기록 (WifiConfigStore)](wifi.md) 의 SSID 목록과 맞춰 보고 뜻을 정합니다.
+`network_id` 와 `subscriber_id` 에 실제로 어떤 값(SSID, 가입자 식별값 등)이 들어가는지는 실제 데이터에서 값을 읽은 뒤 [와이파이 설정과 접속 기록 (WifiConfigStore)](wifi.md) 의 SSID 목록과 맞춰 보고 뜻을 정합니다.
 
 연결 종류 번호는 `ConnectivityManager` 의 옛 `TYPE_` 상수를 씁니다 [1].
 
@@ -83,7 +83,7 @@ ALEAPP 의 netstats 모듈은 AOSP 소스를 따라 이진 파일을 읽고, 아
 
 set 값과 특수 UID 는 아래처럼 풉니다 [1].
 
-| 칸 | 값 | 뜻 |
+| 필드 | 값 | 뜻 |
 |---|---|---|
 | set | -1 | 합계 |
 | set | 0 | 백그라운드 |
@@ -94,7 +94,7 @@ set 값과 특수 UID 는 아래처럼 풉니다 [1].
 | UID | -4 | 삭제된 앱(UID_REMOVED) |
 | UID | -5 | 테더링(UID_TETHERING) |
 
-이력(NetworkStatsHistory) 한 칸에는 구간 시작 시각, 구간 길이, 받은 바이트, 받은 패킷, 보낸 바이트, 보낸 패킷, operations 가 들어 있습니다 [1]. 이력 버전 1 에는 패킷 수와 operations 가 없고, 버전 2·3 은 값을 가변 길이 정수(varlong) 배열로 저장합니다 [1].
+이력(NetworkStatsHistory) 한 항목에는 구간 시작 시각, 구간 길이, 받은 바이트, 받은 패킷, 보낸 바이트, 보낸 패킷, operations 가 들어 있습니다 [1]. 이력 버전 1 에는 패킷 수와 operations 가 없고, 버전 2·3 은 값을 가변 길이 정수(varlong) 배열로 저장합니다 [1].
 
 현행 AOSP 의 기록기별 기본 설정은 아래와 같습니다 [2].
 
@@ -104,13 +104,13 @@ set 값과 특수 UID 는 아래처럼 풉니다 [1].
 | uid | 2시간 | 15일 | 90일 |
 | uid_tag | 2시간 | 5일 | 15일 |
 
-기본값대로라면 xt·uid 기록은 90일, uid_tag 기록은 15일이 지나면 지웁니다. 제조사가 이 값을 바꿨을 수 있으니 검체에 남은 가장 오래된 구간으로 확인합니다.
+기본값대로라면 xt·uid 기록은 90일, uid_tag 기록은 15일이 지나면 지웁니다. 제조사가 이 값을 바꿨을 수 있으니 실제 기기에 남은 가장 오래된 구간으로 확인합니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-한 기록은 "이 구간에 이 UID 가 이 연결 종류로 이만큼 받고 보냈다" 를 말합니다. set 값으로 앱이 앞에 있을 때(포그라운드)인지 뒤에서(백그라운드) 쓴 것인지 나눌 수 있고, UID -5 기록은 테더링으로 다른 기기에 넘겨준 양입니다. 연결 종류 17 과 set 1001·1002 는 ALEAPP 가 VPN 으로 푸는 값이라서 VPN 과 관련된 사용량으로 볼 수 있지만, 두 set 값이 VPN 사용량을 어떻게 나눠 적는지는 공개 자료가 없습니다. 앱 데이터가 지워졌어도 시스템 쪽 기록이라 남아 있을 수 있고, UID -4 는 그 사이 삭제된 앱의 사용량을 모아 둔 값입니다. 평소보다 보낸 바이트가 크게 튄 구간이 있으면 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 시간대를 좁히는 근거가 됩니다.
+한 기록은 "이 구간에 이 UID 가 이 연결 종류로 이만큼 받고 보냈다" 를 뜻합니다. set 값으로 앱이 앞에 있을 때(포그라운드)인지 뒤에서(백그라운드) 쓴 것인지 나눌 수 있고, UID -5 기록은 테더링으로 다른 기기에 넘겨준 양입니다. 연결 종류 17 과 set 1001·1002 는 ALEAPP 가 VPN 으로 푸는 값이라서 VPN 과 관련된 사용량으로 볼 수 있지만, 두 set 값이 VPN 사용량을 어떻게 나눠 적는지는 공개 자료가 없습니다. 앱 데이터가 지워졌어도 시스템 쪽 기록이라 남아 있을 수 있고, UID -4 는 그 사이 삭제된 앱의 사용량을 모아 둔 값입니다. 평소보다 보낸 바이트가 크게 튄 구간이 있으면 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 조사에서 시간대를 좁히는 근거가 됩니다.
 
 **증명하지 못하는 것**
 
@@ -138,7 +138,7 @@ set 값과 특수 UID 는 아래처럼 풉니다 [1].
 
 ### 헥스로 한 번
 
-파일 사본을 헥스 편집기로 열어 첫 8바이트를 봅니다. 아래는 형식 설명으로 만든 예시이고 검체에서 나온 값이 아닙니다.
+파일 사본을 헥스 편집기로 열어 첫 8바이트를 봅니다. 아래는 형식 설명으로 만든 예시이고 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 오프셋  00 01 02 03  04 05 06 07
@@ -146,7 +146,7 @@ set 값과 특수 UID 는 아래처럼 풉니다 [1].
        A  N  E  T   버전 16 (빅엔디언)
 ```
 
-첫 4바이트가 "ANET" 이 아니면 netstats 이진 파일이 아니거나 다른 형식이고, 버전이 16 이 아니면 예전 형식이라 도구가 건너뛸 수 있습니다. 그 뒤 네트워크 식별 묶음부터는 식별 버전과 이력 버전에 따라 칸 수가 달라지니, 직접 끝까지 따라가기보다 머리를 확인한 뒤 도구 결과와 맞춰 봅니다.
+첫 4바이트가 "ANET" 이 아니면 netstats 이진 파일이 아니거나 다른 형식이고, 버전이 16 이 아니면 예전 형식이라 도구가 건너뛸 수 있습니다. 그 뒤 네트워크 식별 묶음부터는 식별 버전과 이력 버전에 따라 필드 수가 달라지니, 직접 끝까지 따라가기보다 머리를 확인한 뒤 도구 결과와 맞춰 봅니다.
 
 ### 공개 도구로 한 번
 
@@ -172,7 +172,7 @@ dumpsys netstats --full --uid --tag --poll --checkin
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에서 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 시험 이미지에서 아래 질문을 풀어 봅니다.
 
 1. netstats 파일이 예전 위치와 APEX 위치 가운데 어디에 있고, 파일 머리의 형식 버전은 몇입니까?
 2. xt 기록에서 가장 이른 구간과 가장 늦은 구간은 언제이고, 그 사이 며칠치가 남아 있습니까?

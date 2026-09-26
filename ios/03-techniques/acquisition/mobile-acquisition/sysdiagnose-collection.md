@@ -52,7 +52,7 @@ sysdiagnose 에는 통합 로그 스냅숏(`system_logs.logarchive`), 크래시 
 
 ## 백업에 남는 진단 흔적
 
-sysdiagnose 결과물 자체가 로컬 백업에 들어가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 로컬 백업에는 진단 기능과 관련된 다음 도메인과 설정 파일이 들어 있을 수 있습니다.
+sysdiagnose 결과물 자체가 로컬 백업에 들어가는지는 실제 백업으로 확인해야 합니다. 로컬 백업에는 진단 기능과 관련된 다음 도메인과 설정 파일이 들어 있을 수 있습니다.
 
 ```
 AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose   (항목 4개)

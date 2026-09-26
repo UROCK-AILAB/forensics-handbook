@@ -6,7 +6,7 @@ nav_order: 730
 
 # 메일 계정을 빼앗겨 송금 사기를 당했나 (BEC)
 
-기업 메일 침해 (Business Email Compromise, BEC) 는 거래처나 임원의 메일 계정에 들어가 대화를 엿본 뒤, 계좌가 바뀌었다는 메일을 보내 돈을 다른 곳으로 보내게 하는 사기입니다. 이 쪽은 Microsoft 365 와 Google Workspace 메일 계정을 중심으로, 로그인부터 받은 편지함 규칙·전달 설정·메일 열람·보낸 메일까지 어느 기록을 어떤 순서로 보는지 다룹니다.
+기업 메일 침해 (Business Email Compromise, BEC) 는 거래처나 임원의 메일 계정에 들어가 대화를 엿본 뒤, 계좌가 바뀌었다는 메일을 보내 돈을 다른 곳으로 보내게 하는 사기입니다. 이 페이지는 Microsoft 365 와 Google Workspace 메일 계정을 중심으로, 로그인부터 받은 편지함 규칙·전달 설정·메일 열람·보낸 메일까지 어느 기록을 어떤 순서로 보는지 다룹니다.
 
 ## 조사 질문
 
@@ -16,7 +16,7 @@ nav_order: 730
 - 이 메일함에서 사기 메일이 나갔나, 나갔다면 누구에게 언제 나갔나?
 - 같은 공격이 다른 계정으로 번졌나?
 
-송금을 지시한 메일이 이 메일함에서 나갔는지, 비슷한 도메인의 다른 메일함에서 왔는지도 먼저 가립니다. 앞의 경우가 이 쪽의 범위이고, 뒤의 경우는 받은 메일의 헤더와 메시지 추적으로 발신 경로만 확인하게 됩니다.
+송금을 지시한 메일이 이 메일함에서 나갔는지, 비슷한 도메인의 다른 메일함에서 왔는지도 먼저 구분합니다. 앞의 경우가 이 페이지의 범위이고, 뒤의 경우는 받은 메일의 헤더와 메시지 추적으로 발신 경로만 확인하게 됩니다.
 
 ## 먼저 확인할 것
 
@@ -44,7 +44,7 @@ nav_order: 730
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 현재 규칙·전달 설정: `Get-InboxRule`, `Get-Mailbox` 전달 필드, `Get-TransportRule` | 지금 살아 있는 규칙과 전달 주소 | [Exchange Online](../../02-artifacts/m365/exchange-online/index.md) |
+| 1 | 현재 규칙·전달 설정: `Get-InboxRule`, `Get-Mailbox` 전달 필드, `Get-TransportRule` | 지금 남아 있는 규칙과 전달 주소 | [Exchange Online](../../02-artifacts/m365/exchange-online/index.md) |
 | 2 | 로그인 기록: Entra 로그인 로그, Google Workspace 로그인 이벤트 | 누가 언제 어느 IP·장치로 들어왔나, 세션 식별자 | [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [로그인 기록](../../02-artifacts/google-workspace/login-audit.md) |
 | 3 | 규칙·전달 변경 기록: UAL `New-InboxRule`·`Set-InboxRule`·`UpdateInboxRules`·`Set-Mailbox`, Google Workspace `email_forwarding_out_of_domain` | 규칙과 전달이 언제 어떤 값으로 생겼나 | [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md) |
 | 4 | 메일 접근 기록: `MailItemsAccessed` | 어느 메시지·폴더에 접근했나 | [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md) |
@@ -55,7 +55,7 @@ nav_order: 730
 
 1. **현재 상태를 받습니다.** `Get-InboxRule` 에는 숨긴 규칙까지 돌려주는 `-IncludeHidden` 스위치가 있습니다[8]. 도구마다 이 스위치를 쓰는지가 다릅니다. Untitled Goose Tool 은 `Get-InboxRule` 을 `IncludeHidden` 을 켜고 불러 `EXO_InboxRules_PowerShell.json` 에 저장하지만[22], Hawk 의 `Get-HawkUserInboxRule` 과 Microsoft-Extractor-Suite 의 `Get-MailboxRules` 는 `-IncludeHidden` 없이 부릅니다[14][20]. 메일함 전달은 `Get-Mailbox` 의 `ForwardingSMTPAddress`·`ForwardingAddress`·`DeliverToMailboxAndForward` 에 있고, Hawk 는 두 전달 주소 중 하나라도 채워진 메일함을 `WhenChangedUTC` 와 함께 `_Investigate_Users_WithForwarding` 파일로 뽑습니다[16]. 조직 전체에 걸리는 전송 규칙 (transport rule) 은 `Get-TransportRule` 로 받고, Microsoft-Extractor-Suite 는 `Name`·`Description`·`CreatedBy`·`WhenChanged`(UTC 로 바꿈)·`State`·`Priority`·`Mode` 를 남깁니다[20].
 
-2. **로그인을 가립니다.** 피해 계정의 로그인에서 평소와 다른 IP·국가·사용자 에이전트·장치를 찾고, 그 로그인의 세션 식별자를 적어 둡니다. 판별 방법은 [이상한 로그인 가려내기](../../03-techniques/analysis/suspicious-sign-ins.md) 에 있습니다. 비밀번호 없이 세션 토큰으로 들어온 흔적은 [토큰을 훔쳐 로그인했나](token-theft.md), 반복된 MFA 요청 끝의 승인은 [MFA 피로 공격을 당했나](mfa-fatigue.md), 메일을 읽는 앱에 권한을 준 경우는 [악성 OAuth 앱에 동의했나](illicit-consent.md) 로 넘어갑니다. 여기서 적어 둔 세션 식별자는 5단계에서 메일 접근 기록과 짝짓는 데 씁니다.
+2. **로그인을 가려냅니다.** 피해 계정의 로그인에서 평소와 다른 IP·국가·사용자 에이전트·장치를 찾고, 그 로그인의 세션 식별자를 적어 둡니다. 판별 방법은 [이상한 로그인 가려내기](../../03-techniques/analysis/suspicious-sign-ins.md) 에 있습니다. 비밀번호 없이 세션 토큰으로 들어온 흔적은 [토큰을 훔쳐 로그인했나](token-theft.md), 반복된 MFA 요청 끝의 승인은 [MFA 피로 공격을 당했나](mfa-fatigue.md), 메일을 읽는 앱에 권한을 준 경우는 [악성 OAuth 앱에 동의했나](illicit-consent.md) 로 넘어갑니다. 여기서 적어 둔 세션 식별자는 5단계에서 메일 접근 기록과 짝짓는 데 씁니다.
 
 3. **규칙이 언제 생겼는지 찾습니다.** UAL 에서 받은 편지함 규칙은 만든 경로에 따라 작업 이름이 다릅니다. Outlook 웹에서 새로 만들면 `New-InboxRule`, Outlook 웹에서 고치면 `Set-InboxRule`, Outlook 클라이언트로 만들거나 고치거나 지우면 `UpdateInboxRules` 입니다[2]. `UpdateInboxRules` 는 관리자·대리인·소유자 로그온 모두 기본으로 기록되는 메일함 감사 동작입니다[1]. Hawk 의 `Get-HawkTenantAdminInboxRuleCreation` 은 `Search-UnifiedAuditLog -RecordType ExchangeAdmin -Operations 'New-InboxRule'` 로 생성 기록을 받습니다[15]. Exchange 관리 레코드의 `Parameters` 는 cmdlet 에 넘긴 매개변수의 이름·값 쌍 목록입니다[4]. 아래는 만든 예시 레코드(필드만 남김)입니다.
 
@@ -90,7 +90,7 @@ nav_order: 730
 
 6. **사기 메일이 나갔는지 봅니다.** 메일함 감사 동작 `Send` 는 메일을 보내거나 답장·전달한 기록으로 관리자·소유자 로그온에서 기본으로 남고, `SendAs`·`SendOnBehalf` 는 다른 사람의 권한으로 보낸 기록으로 관리자·대리인 로그온에서 기본으로 남습니다[1]. Hawk 의 `Get-HawkUserMailSendActivity` 는 사용자에게 `Send` 동작이 켜져 있는지 먼저 확인한 뒤 `Search-UnifiedAuditLog -Operations 'Send' -UserIds` 로 받습니다[18]. 보낸 메일의 수신자와 전달 상태는 메시지 추적으로 확인하고, `Get-MessageTraceV2` 에는 `-SenderAddress`·`-RecipientAddress`·`-FromIP`·`-Status` 같은 거름 조건이 있습니다[10]. 90일이 지난 메일은 추적되지 않으므로 그 전에 결과를 받아 둡니다[10][11]. Google Workspace 의 발송 기록은 [Gmail 기록과 메일 검색](../../02-artifacts/google-workspace/gmail.md) 에서 봅니다.
 
-7. **서비스의 탐지를 확인합니다.** Microsoft Entra ID Protection 의 `suspiciousInboxForwarding`(모든 메일을 외부 주소로 복사해 보내는 규칙 같은 수상한 전달)과 `mcasSuspiciousInboxManipulationRules`(메시지·폴더를 지우거나 옮기는 수상한 규칙)는 Defender for Cloud Apps 정보로 오프라인 계산되는 탐지입니다[13]. `suspiciousSendingPatterns` 는 Defender for Office 365 정보로, 수상한 메일을 보내 발송이 제한되었거나 제한될 위험이 있는 사용자를 중간 위험으로 올리며 Defender for Office 365 를 배포한 조직에서만 나옵니다[13]. Entra ID P2 가 없으면 이런 탐지는 세부 없이 `generic`("Additional risk detected")으로만 보입니다[13]. 탐지 규칙으로 찾을 때는 Sigma `azure_identity_protection_inbox_forwarding_rule`(`riskEventType: suspiciousInboxForwarding`)[23], `azure_identity_protection_inbox_manipulation`(`riskEventType: mcasSuspiciousInboxManipulationRules`)[24], `microsoft365_susp_inbox_forwarding`(`eventSource: SecurityComplianceCenter`, `eventName: Suspicious inbox forwarding`)[25], `microsoft365_user_restricted_from_sending_email`(`eventName: User restricted from sending email`)[26] 을 씁니다. 규칙을 쓰는 법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
+7. **서비스의 탐지를 확인합니다.** Microsoft Entra ID Protection 의 `suspiciousInboxForwarding`(모든 메일을 외부 주소로 복사해 보내는 규칙 같은 수상한 전달)과 `mcasSuspiciousInboxManipulationRules`(메시지·폴더를 지우거나 옮기는 수상한 규칙)는 Defender for Cloud Apps 정보로 오프라인 계산되는 탐지입니다[13]. `suspiciousSendingPatterns` 는 Defender for Office 365 정보로, 수상한 메일을 보내 발송이 제한되었거나 제한될 위험이 있는 사용자를 중간 위험으로 올리며 Defender for Office 365 를 배포한 조직에서만 나옵니다[13]. Entra ID P2 가 없으면 이런 탐지는 세부 없이 `generic`("Additional risk detected")으로만 보입니다[13]. 탐지 규칙으로 찾을 때는 Sigma `azure_identity_protection_inbox_forwarding_rule`(`riskEventType: suspiciousInboxForwarding`)[23], `azure_identity_protection_inbox_manipulation`(`riskEventType: mcasSuspiciousInboxManipulationRules`)[24], `microsoft365_susp_inbox_forwarding`(`eventSource: SecurityComplianceCenter`, `eventName: Suspicious inbox forwarding`)[25], `microsoft365_user_restricted_from_sending_email`(`eventName: User restricted from sending email`)[26] 을 씁니다. 규칙을 쓰는 법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
 
    | 탐지 | 필요한 라이선스(2026년 4월 문서 기준) |
    |---|---|
@@ -122,7 +122,7 @@ nav_order: 730
 
 ## 함께 볼 페이지
 
-- 같은 갈래: [악성 OAuth 앱에 동의했나](illicit-consent.md), [토큰을 훔쳐 로그인했나](token-theft.md), [MFA 피로 공격을 당했나](mfa-fatigue.md)
+- 같은 분류: [악성 OAuth 앱에 동의했나](illicit-consent.md), [토큰을 훔쳐 로그인했나](token-theft.md), [MFA 피로 공격을 당했나](mfa-fatigue.md)
 - 아티팩트: [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md), [Exchange Online](../../02-artifacts/m365/exchange-online/index.md), [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [Google Workspace 로그인 기록](../../02-artifacts/google-workspace/login-audit.md), [Gmail 기록과 메일 검색](../../02-artifacts/google-workspace/gmail.md), [Okta 시스템 로그](../../02-artifacts/saas/okta.md)
 - 개념: [토큰과 세션](../../01-foundations/identity/tokens-sessions.md), [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md)
 - 다른 판: [[windows] 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)

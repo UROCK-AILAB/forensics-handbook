@@ -44,7 +44,7 @@ Credential Guard 가 켜졌을 때 무엇을 보호하는지는 아래와 같습
 | Windows 기능 밖에서 자격증명을 다루는 소프트웨어 | 보호하지 않습니다 |
 | Microsoft 가 아닌 보안 패키지 | 보호하지 않습니다 |
 | NTLM 인증에서 사용자가 창에 직접 입력한 자격증명 | 보호하지 않습니다. 이 값은 LSASS 메모리에서 읽힐 수 있습니다 |
-| 캐시된 도메인 로그온 정보 | 레지스트리에 저장합니다. Credential Guard 가 말하는 "자격증명" 에 들지 않습니다 |
+| 캐시된 도메인 로그온 정보 | 레지스트리에 저장합니다. Credential Guard 의 "자격증명" 범위에 들지 않습니다 |
 
 메모리 분석에서 이 표가 뜻하는 것은 아래와 같습니다.
 
@@ -57,7 +57,7 @@ Credential Guard 가 켜졌을 때 무엇을 보호하는지는 아래와 같습
 
 Volatility 3 에는 메모리에 올라온 레지스트리를 보는 플러그인과 해시·비밀을 다루는 플러그인이 있습니다 [1].
 
-왼쪽 칸의 묶음은 플러그인 이름을 보고 나눈 것입니다.
+왼쪽 열의 묶음은 플러그인 이름을 보고 나눈 것입니다.
 
 | 묻는 것 | 플러그인 [1] |
 |---|---|
@@ -85,7 +85,7 @@ Volatility 3 에는 메모리에 올라온 레지스트리를 보는 플러그�
 ## 절차
 
 1. 이미지를 뜬 Windows 버전과 확보 방법을 확인합니다. [메모리 덤프 확보](memory-acquisition.md) 를 봅니다.
-2. 프로세스 목록에서 lsass.exe 와 LSAIso.exe 를 찾습니다. Credential Guard 가 돌고 있었는지 가늠합니다.
+2. 프로세스 목록에서 lsass.exe 와 LSAIso.exe 를 찾습니다. Credential Guard 가 돌고 있었는지 추정합니다.
 3. 메모리에 있는 하이브 목록을 봅니다(windows.registry.hivelist, windows.registry.hivescan).
 4. 해시·비밀 플러그인을 돌립니다(windows.hashdump, windows.lsadump, windows.cachedump).
 5. 조사 질문에 맞춰 키워드와 YARA 규칙을 정합니다. 대상 프로세스를 정해 windows.vadyarascan 으로 검색합니다.

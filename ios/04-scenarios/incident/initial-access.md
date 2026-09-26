@@ -8,9 +8,9 @@ nav_order: 1610
 
 ## 조사 질문
 
-아이폰에 스파이웨어나 악성 코드가 들어온 흔적이 보일 때, 처음 들어온 길이 메시지 첨부인지, 웹 방문인지, 구성 프로파일이나 App Store 밖에서 설치한 앱인지를 가립니다. 들어온 시점을 좁혀 두면 그 뒤에 무엇이 바뀌었는지를 타임라인에서 차례로 따라갈 수 있습니다. 이 페이지는 공개 사례에 남은 흔적과 그 해석만 다루고, 침투 방법은 다루지 않습니다. 감염 여부 자체를 판단하는 절차는 [스파이웨어 감염 흔적](spyware.md)에 있습니다.
+아이폰에 스파이웨어나 악성 코드가 들어온 흔적이 보일 때, 처음 들어온 길이 메시지 첨부인지, 웹 방문인지, 구성 프로파일이나 App Store 밖에서 설치한 앱인지를 확인합니다. 들어온 시점을 좁혀 두면 그 뒤에 무엇이 바뀌었는지를 타임라인에서 차례로 따라갈 수 있습니다. 이 페이지는 공개 사례에 남은 흔적과 그 해석만 다루고, 침투 방법은 다루지 않습니다. 감염 여부 자체를 판단하는 절차는 [스파이웨어 감염 흔적](spyware.md)에 있습니다.
 
-공개 사례에서 확인된 초기 침투 경로 (initial access)는 크게 세 갈래입니다. 첫째는 사용자가 아무것도 누르지 않아도 되는 무클릭 (zero-click) 메시지 첨부이고, Operation Triangulation 과 FORCEDENTRY 가 이 경우입니다. Triangulation 은 iMessage 로 익스플로잇이 든 첨부를 보냈고, 형식이 깨진 메시지라 알림이 뜨지 않은 채 코드 실행으로 이어졌습니다 [1]. 둘째는 Safari 방문과 리디렉션이고, Pegasus 사례에서는 Safari 방문 기록·파비콘 캐시·SessionResourceLog 에 이 길의 흔적이 남았습니다 [4]. 셋째는 구성 프로파일과 App Store 밖에서 서명한 앱(기업용·개발용 서명)입니다. 이 경우 설치 흔적은 [구성 프로파일과 MDM](../../02-artifacts/credentials-security/configuration-profiles.md) 페이지를 따라 봅니다.
+공개 사례에서 확인된 초기 침투 경로 (initial access)는 크게 세 가지입니다. 첫째는 사용자가 아무것도 누르지 않아도 되는 무클릭 (zero-click) 메시지 첨부이고, Operation Triangulation 과 FORCEDENTRY 가 이 경우입니다. Triangulation 은 iMessage 로 익스플로잇이 든 첨부를 보냈고, 형식이 깨진 메시지라 알림이 뜨지 않은 채 코드 실행으로 이어졌습니다 [1]. 둘째는 Safari 방문과 리디렉션이고, Pegasus 사례에서는 Safari 방문 기록·파비콘 캐시·SessionResourceLog 에 이 길의 흔적이 남았습니다 [4]. 셋째는 구성 프로파일과 App Store 밖에서 서명한 앱(기업용·개발용 서명)입니다. 이 경우 설치 흔적은 [구성 프로파일과 MDM](../../02-artifacts/credentials-security/configuration-profiles.md) 페이지를 따라 봅니다.
 
 ## 먼저 확인할 것
 
@@ -22,11 +22,11 @@ nav_order: 1610
 | FORCEDENTRY (CVE-2021-30860) | iOS 14.8 이전 버전이 영향을 받음 | Citizen Lab 이 2021-09-13 에 공개했습니다. macOS Big Sur 11.6 이전과 watchOS 7.6.2 이전도 영향을 받았습니다 [3] |
 | Operation Triangulation | 확인된 가장 최신 대상은 iOS 15.7 | 다른 버전도 영향을 받았을 수 있습니다. 관련 취약점 하나(CVE-2022-46690 으로 보임)는 iOS 16.2 에서 고쳐졌습니다 [1] |
 | 차단 모드 (Lockdown Mode) | iOS 16 이상 | 켜져 있던 기간에는 들어올 수 있는 길이 좁아집니다(아래 설명) [7] |
-| 재부팅 때 남는 기록(shutdown.log) | 버전에 따라 누적 여부가 다름 | 수집 전에 재부팅하면 안 되는 까닭은 [스파이웨어 감염 흔적](spyware.md)에 정리했습니다 |
+| 재부팅 때 남는 기록(shutdown.log) | 버전에 따라 누적 여부가 다름 | 수집 전에 재부팅하면 안 되는 이유는 [스파이웨어 감염 흔적](spyware.md)에 정리했습니다 |
 
 BlastDoor 가 들어간 iOS 14 이후 버전도 FORCEDENTRY(14.8 이전)와 Triangulation(15.7 까지 확인) 사례의 대상 범위에 들어갑니다. 버전이 높다는 사실만으로 무클릭 경로를 지우지 않습니다.
 
-차단 모드가 켜져 있으면 메시지 첨부는 일부 이미지·영상·오디오 말고 대부분 막히고, 복잡한 웹 기술 일부도 막힙니다. 최근 30일 안에 전화한 적 없는 상대의 FaceTime 수신도 막히고, 구성 프로파일 설치·MDM 등록·감독도 할 수 없습니다. 액세서리나 다른 컴퓨터를 연결하려면 잠금을 해제해야 하고, 보안이 안 된 Wi-Fi 에는 붙지 않으며 2G/3G 는 꺼집니다. 켜져 있는 동안에는 Safari 에 배너가 뜹니다 [7]. 백업에는 `HomeDomain :: Library/Preferences/com.apple.lockdownmoded.plist` 가 있고, 그 안에 키 `LDMExemptCNHistoryToken` 이 있습니다. 차단 모드가 켜졌는지를 담는 키는 공개된 분석 자료가 없어 검체에서 확인해야 합니다. MVT 의 GlobalPreferences 모듈은 `.GlobalPreferences.plist` 에서 차단 모드 상태를 뽑지만 [5], 이 파일에 LDM 이 들어간 키가 없는 백업도 있습니다. 켜짐 여부는 사용자 진술과 Safari 배너 같은 다른 근거로 맞춰 봅니다.
+차단 모드가 켜져 있으면 메시지 첨부는 일부 이미지·영상·오디오 말고 대부분 막히고, 복잡한 웹 기술 일부도 막힙니다. 최근 30일 안에 전화한 적 없는 상대의 FaceTime 수신도 막히고, 구성 프로파일 설치·MDM 등록·감독도 할 수 없습니다. 액세서리나 다른 컴퓨터를 연결하려면 잠금을 해제해야 하고, 보안이 안 된 Wi-Fi 에는 붙지 않으며 2G/3G 는 꺼집니다. 켜져 있는 동안에는 Safari 에 배너가 뜹니다 [7]. 백업에는 `HomeDomain :: Library/Preferences/com.apple.lockdownmoded.plist` 가 있고, 그 안에 키 `LDMExemptCNHistoryToken` 이 있습니다. 차단 모드가 켜졌는지를 담는 키는 밝혀져 있지 않아서 실제 데이터로 확인해야 합니다. MVT 의 GlobalPreferences 모듈은 `.GlobalPreferences.plist` 에서 차단 모드 상태를 뽑지만 [5], 이 파일에 LDM 이 들어간 키가 없는 백업도 있습니다. 켜짐 여부는 사용자 진술과 Safari 배너 같은 다른 근거로 맞춰 봅니다.
 
 수집 범위도 먼저 적어 둡니다. 로컬 백업(가능하면 암호화), sysdiagnose, 가능하면 전체 파일 시스템을 받고, MVT 는 이 셋을 모두 입력으로 받습니다 [5]. 무엇을 어떤 순서로 보존하는지는 [스파이웨어 감염 흔적](spyware.md)과 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)를 따릅니다. 시각은 모두 UTC 로 맞추고, 사용자가 진술한 현지 시각은 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)을 보고 바꿉니다.
 
@@ -47,11 +47,11 @@ BlastDoor 가 들어간 iOS 14 이후 버전도 FORCEDENTRY(14.8 이전)와 Tria
 
 2. **메시지 첨부 폴더를 봅니다.** Triangulation 에서는 `Library/SMS/Attachments` 아래 디렉터리들이 수정 시각만 있고 파일은 없었고, 악성 코드는 실행 뒤 처음 받은 메시지와 첨부 속 익스플로잇을 지웠습니다 [1]. 그래서 메시지와 첨부가 없다는 사실만으로 무클릭 경로를 지울 수 없고, 빈 디렉터리의 수정 시각이 들어온 시점의 후보가 됩니다. 로컬 백업에서 첨부는 `HomeDomain` 이 아니라 `MediaDomain` 에 들어가고, 파일 ID 는 `SHA1("MediaDomain-Library/SMS/Attachments/...")` 로 정해집니다 [6].
 
-3. **확장자와 실제 형식을 견줍니다.** FORCEDENTRY 는 2021년 3월에 받은 iTunes 백업을 다시 분석해 찾았습니다. 첨부 폴더에 확장자가 `.gif` 인 파일이 있었는데, 27개는 같은 파일로 실제로는 748바이트짜리 Adobe PSD 였고 이름은 무작위 열 글자였습니다. 나머지 4개는 실제로는 JBIG2 스트림을 담은 PDF 였습니다 [3]. `sms.db` 의 `attachment` 표에는 `filename`, `uti`, `mime_type`, `transfer_name`, `total_bytes`, `created_date`, `is_outgoing` 칸이 있어서, 이 칸이 말하는 형식과 실제 파일 머리의 시그니처를 나란히 놓으면 이런 불일치를 찾을 수 있습니다.
+3. **확장자와 실제 형식을 비교합니다.** FORCEDENTRY 는 2021년 3월에 받은 iTunes 백업을 다시 분석해 찾았습니다. 첨부 폴더에 확장자가 `.gif` 인 파일이 있었는데, 27개는 같은 파일로 실제로는 748바이트짜리 Adobe PSD 였고 이름은 무작위 열 글자였습니다. 나머지 4개는 실제로는 JBIG2 스트림을 담은 PDF 였습니다 [3]. `sms.db` 의 `attachment` 표에는 `filename`, `uti`, `mime_type`, `transfer_name`, `total_bytes`, `created_date`, `is_outgoing` 열이 있어서, 이 열에 적힌 형식과 실제 파일 머리의 시그니처를 나란히 놓으면 이런 불일치를 찾을 수 있습니다.
 
-4. **데이터 사용량 타임라인을 봅니다.** Triangulation 에서는 데이터 사용량 기록에 `BackupAgent` 프로세스가 나왔는데, 평소 쓰지 않는(deprecated) 바이너리라서 정상 사용 중에는 타임라인에 나오지 않습니다. 그 바로 앞에 첨부를 받는 `IMTransferAgent` 가 나오는 경우가 많았습니다 [1]. `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에는 `ZPROCESS` 와 `ZLIVEUSAGE` 표가 있습니다. 이 표의 `ZTIMESTAMP` 가 어떤 기준 시각인지는 공개된 분석 자료가 없어서, 다른 기록의 시각과 맞춰 보고 나서 기준을 정합니다. 칸 구성과 프로세스 이름 대조는 [스파이웨어 감염 흔적](spyware.md)에서 다룹니다.
+4. **데이터 사용량 타임라인을 봅니다.** Triangulation 에서는 데이터 사용량 기록에 `BackupAgent` 프로세스가 나왔는데, 평소 쓰지 않는(deprecated) 바이너리라서 정상 사용 중에는 타임라인에 나오지 않습니다. 그 바로 앞에 첨부를 받는 `IMTransferAgent` 가 나오는 경우가 많았습니다 [1]. `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에는 `ZPROCESS` 와 `ZLIVEUSAGE` 표가 있습니다. 이 표의 `ZTIMESTAMP` 가 어떤 기준 시각인지는 알려져 있지 않아서, 다른 기록의 시각과 맞춰 보고 나서 기준을 정합니다. 열 구성과 프로세스 이름 대조는 [스파이웨어 감염 흔적](spyware.md)에서 다룹니다.
 
-5. **충돌 기록을 봅니다.** FORCEDENTRY 에서는 PSD 파일마다 `IMTranscoderAgent` 충돌이 기기에 남았습니다 [3]. 백업에는 `HomeDomain :: Library/Preferences/com.apple.ReportCrashService.plist`(키 `memoryExceptionProcesses.bootUUID`, `patternMatchServiceCrashes.bootUUID`)와 `com.apple.ReportCrash.plist`(키 `TrialCache`)가 있습니다. 충돌 로그 파일(`.ips`) 자체가 백업에 들어가는지는 검체에서 확인하고, 충돌 로그는 sysdiagnose 에서도 찾습니다([sysdiagnose 안의 로그](../../02-artifacts/logs/sysdiagnose-logs.md)).
+5. **충돌 기록을 봅니다.** FORCEDENTRY 에서는 PSD 파일마다 `IMTranscoderAgent` 충돌이 기기에 남았습니다 [3]. 백업에는 `HomeDomain :: Library/Preferences/com.apple.ReportCrashService.plist`(키 `memoryExceptionProcesses.bootUUID`, `patternMatchServiceCrashes.bootUUID`)와 `com.apple.ReportCrash.plist`(키 `TrialCache`)가 있습니다. 충돌 로그 파일(`.ips`) 자체가 백업에 들어가는지는 실제 데이터로 확인하고, 충돌 로그는 sysdiagnose 에서도 찾습니다([sysdiagnose 안의 로그](../../02-artifacts/logs/sysdiagnose-logs.md)).
 
 6. **바뀐 설정 파일을 봅니다.** Triangulation 은 `com.apple.ImageIO.plist`, `com.apple.locationd.StatusBarIconManager.plist`, `com.apple.imservice.ids.FaceTime.plist` 를 바꿨고, `com.apple.softwareupdateservicesd.plist` 를 바꿔 iOS 업데이트를 막았습니다 [1]. 정상 기기 백업에서는 이 파일들이 다음과 같이 보입니다.
 
@@ -59,10 +59,10 @@ BlastDoor 가 들어간 iOS 14 이후 버전도 FORCEDENTRY(14.8 이전)와 Tria
    |---|---|---|
    | `com.apple.locationd.StatusBarIconManager.plist` | 있음 | `ShowSystemServices` |
    | `com.apple.imservice.ids.FaceTime.plist` | 있음 | `ActiveAccounts`, `Status`, `OnlineAccounts` |
-   | `com.apple.softwareupdateservicesd.plist` | 있음 | 검체에서 확인 |
+   | `com.apple.softwareupdateservicesd.plist` | 있음 | 실제 데이터로 확인 |
    | `com.apple.ImageIO.plist` | plist 목록에 없음 | — |
 
-   세 파일은 정상 기기에도 있어서 파일이 있다는 것만으로는 수상하지 않고, 수정 시각이 들어온 시점 후보와 겹치는지를 봅니다. 업데이트 쪽으로는 `com.apple.softwareupdateservices.security.plist`(`SUSUIFailedAttemptCountsWhileUnlocked`), `com.apple.softwareupdateservices.ui.ios.plist`(`SUSUISoftwareUpdateOSVersion`, `SUSUISoftwareUpdateState`, `SUSUIState`, `SUSUIOSVersion`), `com.apple.softwareupdatesettings.plist`(`SUCachedScanResultsFingerprint`, `SUCachedScanResultsTTL`)도 같은 폴더에 있습니다. 업데이트를 막은 흔적으로 이 가운데 어떤 값을 봐야 하는지는 공개된 분석 자료가 없으므로, 키 이름만 보고 단정하지 않습니다.
+   세 파일은 정상 기기에도 있어서 파일이 있다는 것만으로는 수상하지 않고, 수정 시각이 들어온 시점 후보와 겹치는지를 봅니다. 업데이트 쪽으로는 `com.apple.softwareupdateservices.security.plist`(`SUSUIFailedAttemptCountsWhileUnlocked`), `com.apple.softwareupdateservices.ui.ios.plist`(`SUSUISoftwareUpdateOSVersion`, `SUSUISoftwareUpdateState`, `SUSUIState`, `SUSUIOSVersion`), `com.apple.softwareupdatesettings.plist`(`SUCachedScanResultsFingerprint`, `SUCachedScanResultsTTL`)도 같은 폴더에 있습니다. 업데이트를 막은 흔적으로 이 가운데 어떤 값을 봐야 하는지는 알려져 있지 않으므로, 키 이름만 보고 단정하지 않습니다.
 
 7. **웹 경로를 봅니다.** Safari 방문 기록과 파비콘 캐시, SessionResourceLog 를 함께 봅니다. 방문 기록에는 리디렉션 경로 전체가 남지 않습니다 [4]. 방문 기록 파일이 암호화 백업에만 들어가는 점과 암호화하지 않은 백업에서 볼 수 있는 도메인 기록은 [스미싱 흔적](smishing.md)에 정리했습니다.
 

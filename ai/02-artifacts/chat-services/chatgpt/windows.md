@@ -7,11 +7,11 @@ nav_order: 90
 
 # Windows 앱 (Windows)
 
-Microsoft Store 에 ChatGPT Windows 앱 항목이 있고, 2026-09-25 에 본 그 항목의 제목은 "ChatGPT Classic" 입니다. 이 앱이 기기에 남기는 파일은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+Microsoft Store 에 ChatGPT Windows 앱 항목이 있고, 2026-09-25 에 본 그 항목의 제목은 "ChatGPT Classic" 입니다. 이 앱이 기기에 남기는 파일은 실제 기기에서 확인해야 합니다.
 
 ## 무엇이 남나 · 왜 생기나
 
-Windows 앱은 브라우저 없이 ChatGPT 를 쓰는 데스크톱 앱입니다. 앱이 대화를 기기에 사본으로 남기는지, 남긴다면 암호화하는지는 검체에서 확인합니다. 대화 원본이 어디에 있는지는 [ChatGPT](index.md) 허브에서 정리했고, 이 페이지는 Windows 에서 앱을 찾는 방법과 해석할 때 주의할 점을 다룹니다.
+Windows 앱은 브라우저 없이 ChatGPT 를 쓰는 데스크톱 앱입니다. 앱이 대화를 기기에 사본으로 남기는지, 남긴다면 암호화하는지는 실제 기기에서 확인합니다. 대화 원본이 어디에 있는지는 [ChatGPT](index.md) 허브에서 정리했고, 이 페이지는 Windows 에서 앱을 찾는 방법과 해석할 때 주의할 점을 다룹니다.
 
 ## 스토어 항목과 앱 이름
 
@@ -25,19 +25,19 @@ Windows 앱은 브라우저 없이 ChatGPT 를 쓰는 데스크톱 앱입니다.
 
 ## 위치 찾기
 
-스토어로 깐 앱은 사용자 프로필의 `%LOCALAPPDATA%\Packages` 아래 패키지마다 폴더를 하나씩 만들고, 그 안의 `LocalState`, `LocalCache` 같은 하위 폴더에 데이터를 둡니다. 이 구조는 스토어 앱 공통입니다. 앱 안에서 웹 화면을 띄우는 구조라면 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 설명하는 폴더가 생기므로, ChatGPT 앱 폴더에 그런 폴더가 있는지 검체에서 봅니다.
+스토어로 깐 앱은 사용자 프로필의 `%LOCALAPPDATA%\Packages` 아래 패키지마다 폴더를 하나씩 만들고, 그 안의 `LocalState`, `LocalCache` 같은 하위 폴더에 데이터를 둡니다. 이 구조는 스토어 앱 공통입니다. 앱 안에서 웹 화면을 띄우는 구조라면 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 설명하는 폴더가 생기므로, ChatGPT 앱 폴더에 그런 폴더가 있는지 실제 기기에서 봅니다.
 
 ChatGPT 앱의 패키지 폴더 이름은 공개 자료에 없으니, `Packages` 아래 폴더 이름에 ChatGPT 나 OpenAI 가 들어간 것이 있는지 찾습니다. 이름으로 찾지 못해도 앱이 없었다고 단정하지 않고, 설치된 앱 목록 같은 다른 흔적으로 한 번 더 확인합니다.
 
 ## 보호 방식
 
-앱이 로컬 파일을 어떻게 보호하는지는 공개 자료가 없어 검체로 확인해야 합니다. Windows 앱이 로그인 정보나 저장소 키를 보호할 때 흔히 쓰는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)와 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html)는 원리만 참고하고, ChatGPT 앱이 이 방식을 쓴다고 단정하지 않습니다. 토큰이 남을 수 있는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다.
+앱이 로컬 파일을 어떻게 보호하는지는 실제 기기에서 확인해야 합니다. Windows 앱이 로그인 정보나 저장소 키를 보호할 때 흔히 쓰는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)와 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html)는 원리만 참고하고, ChatGPT 앱이 이 방식을 쓴다고 단정하지 않습니다. 토큰이 남을 수 있는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 패키지 폴더가 있으면 그 Windows 계정에 앱이 설치돼 있었다고 쓸 수 있습니다. 폴더 안에 사용자가 쓴 흔적(로그인 뒤에 생기는 파일 등)이 있으면 그 계정에서 앱을 실행했다고 쓸 수 있지만, 어떤 파일이 그런 흔적인지는 기기마다 직접 확인해야 합니다.
 
-**증명하지 못하는 것.** 앱 폴더만으로는 무엇을 입력했는지 알 수 없고, 대화 사본이 로컬에 있는지도 검체로 따로 확인해야 합니다. 계정에 로그인된 상태였어도 그 시각에 누가 앱을 썼는지는 [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)에서처럼 다른 기록과 맞춰야 합니다. 앱 폴더가 없어도 웹 판이나 다른 기기에서 썼을 수 있어서, 사용하지 않았다는 근거로 쓰지 않습니다.
+**증명하지 못하는 것.** 앱 폴더만으로는 무엇을 입력했는지 알 수 없고, 대화 사본이 로컬에 있는지도 실제 기기에서 따로 확인해야 합니다. 계정에 로그인된 상태였어도 그 시각에 누가 앱을 썼는지는 [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)에서처럼 다른 기록과 맞춰야 합니다. 앱 폴더가 없어도 웹 판이나 다른 기기에서 썼을 수 있어서, 사용하지 않았다는 근거로 쓰지 않습니다.
 
 ## 시각 해석
 
@@ -59,7 +59,7 @@ Windows 에는 이름이 비슷한 AI 앱이 여럿 있습니다. Windows 에 �
 
 ## 실습
 
-ChatGPT Windows 앱을 담은 공개 검체가 없으니 직접 만들어 봅니다. 가상 머신에 앱을 깔고 시험용 계정으로 가짜 대화를 만든 뒤 다음을 풀어 봅니다.
+ChatGPT Windows 앱을 담은 공개 시험 이미지가 없으니 직접 만들어 봅니다. 가상 머신에 앱을 깔고 시험용 계정으로 가짜 대화를 만든 뒤 다음을 풀어 봅니다.
 
 1. `%LOCALAPPDATA%\Packages` 아래에 어떤 이름의 폴더가 새로 생기는지 적습니다.
 2. 대화를 만들기 전과 후에 바뀐 파일을 비교해, 대화 내용이 로컬에 남는지 확인합니다.

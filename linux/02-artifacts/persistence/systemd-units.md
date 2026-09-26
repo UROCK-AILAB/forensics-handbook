@@ -51,7 +51,7 @@ systemd 는 아래 순서로 유닛을 찾고, 앞쪽 디렉터리의 파일이 
 
 생성기 (generator) 는 부팅 초기와 설정을 다시 읽을 때마다 유닛을 읽기 전에 실행되는 프로그램이고, 결과 유닛을 `/run/systemd/generator*` 에 씁니다[6]. 생성기가 만든 유닛은 `/run` 에 있어 이미지에 남지 않지만, 생성기 실행 파일은 `/etc` 나 `/usr` 에 남으므로 이 디렉터리의 실행 파일을 목록으로 뽑아 패키지 파일과 대조합니다. 호환용 생성기가 SysV 스크립트와 rc.local 을 유닛으로 바꾸는 일은 [init 스크립트와 rc.local](sysv-init.md) 에서, `.desktop` 자동 실행을 유닛으로 바꾸는 일은 [데스크톱 자동 실행](xdg-autostart.md) 에서 다룹니다.
 
-기준 판의 systemd 는 Ubuntu 24.04 가 255, RHEL 9 가 252 입니다[13][14]. 타이머 시각 파일의 경로와 동작은 v252 코드와 현재 코드가 같습니다[7]. `/lib/systemd/system` 과 `/usr/lib/systemd/system` 이 같은 디렉터리인지(usr 병합)는 검체에서 `/lib` 이 링크인지 보고 정합니다. UAC 는 두 경로를 모두 모읍니다[16].
+기준 판의 systemd 는 Ubuntu 24.04 가 255, RHEL 9 가 252 입니다[13][14]. 타이머 시각 파일의 경로와 동작은 v252 코드와 현재 코드가 같습니다[7]. `/lib/systemd/system` 과 `/usr/lib/systemd/system` 이 같은 디렉터리인지(usr 병합)는 실제 시스템에서 `/lib` 이 링크인지 보고 정합니다. UAC 는 두 경로를 모두 모읍니다[16].
 
 ## 구조
 
@@ -148,7 +148,7 @@ linger 파일은 `enable-linger` 를 할 때마다 시각이 새로 찍히므로
 - **`/run` 은 이미지에 없습니다.** 일시 유닛(`systemd-run` 등으로 만든 것)과 `--runtime` 으로 켠 링크는 라이브 수집으로만 얻습니다[1][5].
 - **켜기와 시작은 다릅니다.** 켜지 않은 유닛도 손으로 시작할 수 있고, 켠 유닛도 시작하지 않았을 수 있습니다[5].
 - **stamp 파일은 지우기 쉽습니다.** `systemctl clean --what=state` 로 지울 수 있고[2], 지우면 다음 타이머 시작 때 현재 시각으로 다시 생깁니다[7].
-- 지속성 흔적 전반을 훑는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
+- 지속성 흔적 전반을 살펴보는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -171,7 +171,7 @@ $ stat -c '%y %N' /mnt/evidence/etc/systemd/system/multi-user.target.wants/updat
 
 - 수집: UAC 는 `/etc/systemd`, `/lib/systemd/system`, `/usr/lib/systemd`, `/usr/local/lib/systemd/system`, `/usr/local/lib/systemd/user`, `/usr/local/share/systemd/user`, `/usr/share/systemd/user`, 사용자 홈의 `.config/systemd`·`.local/share/systemd` 를 파일로 모으고, 라이브 시스템에서 `systemctl list-units`, `systemctl list-timers --all`, `systemctl status *.timer`, `systemctl list-unit-files` 를 실행해 둡니다[16].
 - 파싱: dissect.target 의 `services` 는 유닛의 `[절]` 과 키를 `절_키` 이름의 필드로 펼치고, 기록의 시각으로 유닛 파일의 수정 시각을 씁니다(링크를 따라가며, 대상이 없는 링크는 링크 자체의 시각)[17].
-- 라이브: `systemctl list-timers` 는 NEXT, LEFT, LAST, PASSED, UNIT, ACTIVATES 칸을 보여 줍니다[5]. LAST 가 마지막 발동 시각입니다.
+- 라이브: `systemctl list-timers` 는 NEXT, LEFT, LAST, PASSED, UNIT, ACTIVATES 열을 보여 줍니다[5]. LAST 가 마지막 발동 시각입니다.
 - 저널: 아래처럼 유닛 이름과 메시지 ID 로 거릅니다(만든 예시).
 
 ```text
@@ -195,7 +195,7 @@ journalctl -D /mnt/evidence/var/log/journal/MACHINE_ID --utc MESSAGE_ID=be02cf68
 
 ## 실습
 
-공개 검체(NIST CFReDS 의 Linux 침해 검체 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 디스크 이미지(NIST CFReDS 의 Linux 침해 이미지 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
 1. `/etc/systemd/system` 과 사용자 홈의 `.config/systemd/user` 에 있는 유닛 가운데 어느 패키지의 파일 목록에도 없는 것은 무엇입니까?
 2. `*.wants/` 디렉터리의 링크 가운데 대상 파일이 `/usr/lib/systemd/system` 밖에 있는 것은 무엇이고, 링크 자체의 수정 시각은 언제입니까?

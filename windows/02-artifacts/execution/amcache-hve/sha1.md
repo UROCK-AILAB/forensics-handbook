@@ -22,23 +22,23 @@ AmCache (Amcache.hve) 는 실행 흔적을 다루는 자료마다 이름이 나�
 
 키 구성과 판별 차이는 [구조와 버전별 차이](structure-versions.md)에서 다룹니다. 값 하나하나를 읽는 법은 [실행 파일 항목](inventoryapplicationfile.md)에서 다룹니다. 하이브의 저장 형식은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 
-AmCache 의 동작은 Windows 버전이 아니라 호환성 라이브러리의 판에 따라 달라집니다. 이 페이지에서 "판" 은 그 라이브러리의 판을 말합니다. 괄호 안의 Windows 는 그 판이 처음 실린 버전입니다. 동작 설명은 대부분 ANSSI 논문의 실험 결과입니다(라이브러리 10.0.17134 판, Win10 1803 기준). 10.0.17763 판도 같게 동작합니다. 그 뒤 판에서는 검체마다 키 구성부터 확인합니다.
+AmCache 의 동작은 Windows 버전이 아니라 호환성 라이브러리의 판에 따라 달라집니다. 이 페이지에서 "판" 은 그 라이브러리의 판을 말합니다. 괄호 안의 Windows 는 그 판이 처음 실린 버전입니다. 동작 설명은 대부분 ANSSI 논문의 실험 결과입니다(라이브러리 10.0.17134 판, Win10 1803 기준). 10.0.17763 판도 같게 동작합니다. 그 뒤 판에서는 분석 대상마다 키 구성부터 확인합니다.
 
 ## 함정 1 — 항목이 있어도 실행이 아닌 경우
 
-### 항목이 들어오는 세 갈래
+### 항목이 들어오는 세 가지 길
 
-10.0.16299 판(Win10 1709)부터 InventoryApplicationFile 에 파일이 들어오는 길은 셋입니다(ANSSI, Kaspersky). 그 가운데 호환성 보정이 필요한 GUI 실행 파일 갈래(아래 ①)만 실행을 뜻합니다.
+10.0.16299 판(Win10 1709)부터 InventoryApplicationFile 에 파일이 들어오는 길은 셋입니다(ANSSI, Kaspersky). 그 가운데 호환성 보정이 필요한 GUI 실행 파일이 들어오는 길(아래 ①)만 실행을 뜻합니다.
 
-| 갈래 | 들어오는 길 | 실행을 뜻하나 | 키 마지막 기록 시각 |
+| 번호 | 들어오는 길 | 실행을 뜻하나 | 키 마지막 기록 시각 |
 |---|---|---|---|
 | ① | 호환성 보정 (Shimming) 이 필요한 GUI 실행 파일을 실행함 | 뜻합니다 | 첫 실행 시각 |
 | ② | 프로그램을 설치할 때 함께 깔린 EXE·SYS 파일 | 뜻하지 않습니다 | 실행 시각과, 파일이 생긴 뒤 예약 작업이 처음 돈 시각 가운데 이른 쪽 |
-| ③ | 호환성 평가 예약 작업 (Microsoft Compatibility Appraiser) 이 정해진 폴더를 훑어 찾은 EXE 파일 | 뜻하지 않습니다 | ②와 같음 |
+| ③ | 호환성 평가 예약 작업 (Microsoft Compatibility Appraiser) 이 정해진 폴더를 검사해 찾은 EXE 파일 | 뜻하지 않습니다 | ②와 같음 |
 
-③에서 훑는 폴더는 사용자 바탕 화면, `C:\Program Files`, `C:\Program Files (x86)` 입니다. 이 폴더에 파일을 두기만 해도 항목이 생깁니다. 시작 메뉴 폴더는 LNK 파일만 훑습니다. 그 결과는 [바로가기 항목](inventoryapplicationshortcut.md)에 들어갑니다.
+③에서 검사하는 폴더는 사용자 바탕 화면, `C:\Program Files`, `C:\Program Files (x86)` 입니다. 이 폴더에 파일을 두기만 해도 항목이 생깁니다. 시작 메뉴 폴더는 LNK 파일만 찾습니다. 그 결과는 [바로가기 항목](inventoryapplicationshortcut.md)에 들어갑니다.
 
-어느 갈래로 들어왔는지 알려 주는 값은 없습니다. 그래서 갈래는 경로와 다른 기록으로 짐작해야 합니다.
+어느 길로 들어왔는지 알려 주는 값은 없습니다. 그래서 들어온 길은 경로와 다른 기록으로 짐작해야 합니다.
 
 ### 판마다 다른 실행 표시
 
@@ -46,25 +46,25 @@ AmCache 의 동작은 Windows 버전이 아니라 호환성 라이브러리의 �
 |---|---|---|
 | 6.2.9200 (Win8) ~ 10.0.10586 (Win10 1511) | 옛 `File` 키 항목 가운데 `Orphan` 키에도 걸린 파일. 어느 프로그램에도 속하지 않은 파일입니다. | 설치 폴더 아래 있어서 `File` 키에 들어간 파일 |
 | 10.0.14913 (Win10 1607) | 위와 같습니다. 옛 `File`·`Orphan` 키로 판단합니다. | 새 InventoryApplicationFile 항목. 이 판에서는 프로그램에 속한 EXE 만 담습니다. |
-| 10.0.16299 (Win10 1709) 이후 | InventoryApplicationFile 의 ① 갈래 항목 | ②·③ 갈래 항목 |
+| 10.0.16299 (Win10 1709) 이후 | InventoryApplicationFile 에 ①로 들어온 항목 | ②·③으로 들어온 항목 |
 
-10.0.16299 판에서 옛 키 네 개는 비어 있습니다. 옛 `Orphan` 키의 내용은 새 형식 어디에도 옮겨지지 않았습니다(ANSSI). 새 형식에는 "실행했음" 을 바로 보여 주는 표시가 없다는 뜻입니다. 옛 형식과 새 형식이 한 파일에 같이 있을 때 가려 읽는 법은 [구조와 버전별 차이](structure-versions.md)를 봅니다.
+10.0.16299 판에서 옛 키 네 개는 비어 있습니다. 옛 `Orphan` 키의 내용은 새 형식 어디에도 옮겨지지 않았습니다(ANSSI). 새 형식에는 "실행했음" 을 바로 보여 주는 표시가 없다는 뜻입니다. 옛 형식과 새 형식이 한 파일에 같이 있을 때 구분해 읽는 법은 [구조와 버전별 차이](structure-versions.md)를 봅니다.
 
 ### 새 형식에서 ①을 가려내는 점검
 
 아래 순서는 판단을 돕는 점검입니다. 명세가 보장하는 규칙은 아닙니다.
 
-1. `LowerCaseLongPath` 가 ③의 세 폴더 아래인지 봅니다. 그 아래면 폴더를 훑다가 들어왔을 수 있습니다.
-2. `ProgramId` 가 [설치 프로그램 항목](inventoryapplication.md)의 키 하나를 가리키는지 봅니다. InventoryApplication 의 키 이름이 곧 `ProgramId` 입니다. 가리키면 ② 갈래일 수 있습니다.
+1. `LowerCaseLongPath` 가 ③의 세 폴더 아래인지 봅니다. 그 아래면 폴더를 검사하다가 들어왔을 수 있습니다.
+2. `ProgramId` 가 [설치 프로그램 항목](inventoryapplication.md)의 키 하나를 가리키는지 봅니다. InventoryApplication 의 키 이름이 곧 `ProgramId` 입니다. 가리키면 ②로 들어온 항목일 수 있습니다.
 3. GUI 실행 파일인지 봅니다. ①은 GUI 실행 파일만 담습니다. 파일이 남아 있으면 PE 헤더로 확인합니다. 읽는 법은 [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md)를 봅니다.
-4. 같은 설치 폴더의 항목끼리 키 마지막 기록 시각을 견줍니다. 혼자 시각이 다른 파일은 설치 뒤에 끼워 넣은 파일일 수 있습니다(ANSSI).
+4. 같은 설치 폴더의 항목끼리 키 마지막 기록 시각을 비교합니다. 혼자 시각이 다른 파일은 설치 뒤에 끼워 넣은 파일일 수 있습니다(ANSSI).
 5. 1~3에서 ②·③으로 설명되지 않으면 실행 쪽으로 기웁니다. 그래도 다른 실행 흔적으로 확인하기 전에는 "실행했다" 고 쓰지 않습니다.
 
 ### 항목이 없다고 실행하지 않은 것은 아님
 
-- ① 갈래는 호환성 보정이 필요한 GUI 실행 파일만 담습니다. 콘솔 프로그램이나 보정이 필요 없는 파일은 실행해도 항목이 생기지 않을 수 있습니다.
+- ①은 호환성 보정이 필요한 GUI 실행 파일만 담습니다. 콘솔 프로그램이나 보정이 필요 없는 파일은 실행해도 항목이 생기지 않을 수 있습니다.
 - 결론은 항목이 있다는 사실로만 내립니다. 항목이 없을 때 무엇을 뜻하는지는 공개 실험(ANSSI)이 다루지 않았습니다.
-- ③ 갈래는 예약 작업이 돌아야 들어옵니다. 마지막으로 돈 뒤에 생긴 파일은 아직 없을 수 있습니다.
+- ③은 예약 작업이 돌아야 들어옵니다. 마지막으로 돈 뒤에 생긴 파일은 아직 없을 수 있습니다.
 - 최근 변경은 주 파일이 아니라 `.LOG1`·`.LOG2` 에만 있을 수 있습니다. 로그를 반영해 읽는 법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)을 봅니다.
 - Windows 7 의 옛 라이브러리(6.1 판)는 USB 드라이브나 네트워크 공유에서 실행한 파일을 [RecentFileCache.bcf](recentfilecache-bcf.md)에 남기지 않았습니다(ANSSI 실험). 새 형식에서도 그런지 밝힌 공개 실험은 없습니다.
 
@@ -109,12 +109,12 @@ AmCache 의 동작은 Windows 버전이 아니라 호환성 라이브러리의 �
 | 상황 | 잘못 읽기 | 바르게 읽기 |
 |---|---|---|
 | 30MiB 가 넘는 파일의 `FileId` 가 해시셋·위협 정보에 없음 | 알려지지 않은 파일이다 | 전체 파일 해시가 아니라서 원래 맞지 않습니다. 전체 해시 목록과는 비교할 수 없습니다. |
-| 수집한 파일의 전체 SHA-1 과 `FileId` 가 다름 | 기록 뒤에 파일이 바뀌었다 | 먼저 `Size` 를 봅니다. 31,457,280바이트를 넘으면 앞부분만으로 다시 구해 견줍니다. |
+| 수집한 파일의 전체 SHA-1 과 `FileId` 가 다름 | 기록 뒤에 파일이 바뀌었다 | 먼저 `Size` 를 봅니다. 31,457,280바이트를 넘으면 앞부분만으로 다시 구해 비교합니다. |
 | 30MiB 가 넘는 두 파일의 `FileId` 가 같음 | 같은 파일이다 | 앞 30MiB 가 같다는 뜻입니다. 그 뒤 내용은 다를 수 있습니다. |
 | 30MiB 이하 파일의 `FileId` 가 지금 파일의 SHA-1 과 다름 | 계산 범위 탓이다 | 계산 범위로는 설명되지 않습니다. 기록 뒤에 내용이 바뀌었거나 다른 파일입니다. |
 | 키 이름이 `0000` 과 40글자로 되어 있음 | 파일 내용의 해시다 | 10.0.14913 판의 InventoryApplicationFile 키 이름은 소문자 전체 경로(UTF-16LE)의 SHA-1 입니다. 파일 내용의 해시가 아닙니다. |
 | 키 이름이 `파일이름\|해시` 모양 | 뒤쪽이 파일 해시다 | 10.0.16299 판부터 쓰는 이름입니다. 뒤쪽 해시의 계산법은 공개돼 있지 않습니다. 파일 내용이 아니라 이름과 경로로 정해진다는 해석이 있습니다(ANSSI). |
-| 도구마다 `0000` 이 붙거나 빠짐 | 서로 다른 값이다 | 앞 `0000` 을 떼고 견줍니다. |
+| 도구마다 `0000` 이 붙거나 빠짐 | 서로 다른 값이다 | 앞 `0000` 을 떼고 비교합니다. |
 
 해시셋 대조의 일반 절차는 [해시셋 대조와 유사 해시](../../../03-techniques/analysis/hash-set-fuzzy-hash.md)를 봅니다.
 
@@ -129,7 +129,7 @@ AmCache 의 동작은 Windows 버전이 아니라 호환성 라이브러리의 �
 - 항목의 경로에 그 파일이 한때 있었습니다.
 - 파일이 31,457,280바이트 이하이면, `FileId` 는 기록 당시 파일 전체의 SHA-1 입니다.
 - 파일이 그보다 크면, `FileId` 는 앞 30MiB 의 내용만 가리킵니다.
-- 옛 형식의 `Orphan` 항목과 새 형식의 ① 갈래 항목은 실행을 뜻합니다(ANSSI 실험 기준).
+- 옛 형식의 `Orphan` 항목과 새 형식에서 ①로 들어온 항목은 실행을 뜻합니다(ANSSI 실험 기준).
 
 **증명하지 못하는 것**
 
@@ -143,7 +143,7 @@ AmCache 의 동작은 Windows 버전이 아니라 호환성 라이브러리의 �
 
 - 원래 파일을 지워도 AmCache 항목은 남습니다. 파일이 없어도 경로·크기·`FileId` 로 무엇이 있었는지 알 수 있습니다.
 - 하이브에서 키를 지우면 지운 키가 하이브 안이나 로그 파일에 남을 수 있습니다. 찾는 법은 [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)를 봅니다.
-- 섀도 복사본에 남은 옛 Amcache.hve 와 견주면 사라진 항목을 찾을 수 있습니다. 절차는 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
+- 섀도 복사본에 남은 옛 Amcache.hve 와 비교하면 사라진 항목을 찾을 수 있습니다. 절차는 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
 
 ## 직접 분석해 보기
 
@@ -153,7 +153,7 @@ AmCache 의 동작은 Windows 버전이 아니라 호환성 라이브러리의 �
 2. `Root\InventoryApplicationFile` 아래 키 하나를 골라 `FileId`·`Size`·`LowerCaseLongPath` 값의 데이터를 찾습니다. 값 레코드를 따라가는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 3. `FileId` 데이터는 UTF-16LE 문자열입니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)을 봅니다.
 
-아래는 명세로 만든 예시입니다. 모양만 보이려고 빈 입력의 SHA-1(`da39a3ee…`)을 넣었습니다. 검체에서 나온 값이 아닙니다. 왼쪽 숫자는 값 데이터 시작부터 센 바이트 위치입니다.
+아래는 명세로 만든 예시입니다. 모양만 보이려고 빈 입력의 SHA-1(`da39a3ee…`)을 넣었습니다. 실제 데이터에서 나온 값이 아닙니다. 왼쪽 숫자는 값 데이터 시작부터 센 바이트 위치입니다.
 
 ```
 위치  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -174,7 +174,7 @@ sha1sum sample.exe                        # 파일 전체
 
 ### 공개 도구로 한 번
 
-공개 도구로는 AmcacheParser, RegRipper, Plaso 같은 것이 있습니다. 도구마다 `0000` 을 떼고 보여 주기도 하고, 그대로 두기도 합니다. 예를 들어 Plaso 소스는 옛 `101` 값에서는 `0000` 을 떼고, `FileId` 는 `0000` 이 붙은 채로 둡니다. 같은 항목을 두 도구 이상으로 읽어 값을 맞춰 봅니다. 도구 결과를 견주는 법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
+공개 도구로는 AmcacheParser, RegRipper, Plaso 같은 것이 있습니다. 도구마다 `0000` 을 떼고 보여 주기도 하고, 그대로 두기도 합니다. 예를 들어 Plaso 소스는 옛 `101` 값에서는 `0000` 을 떼고, `FileId` 는 `0000` 이 붙은 채로 둡니다. 같은 항목을 두 도구 이상으로 읽어 값을 맞춰 봅니다. 도구 결과를 비교하는 법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 교차 검증
 
@@ -193,17 +193,17 @@ sha1sum sample.exe                        # 파일 전체
 ## 보고서 문장 예
 
 - 쓰지 말 것: "B.exe 는 (시각)에 실행되었다(AmCache)."
-- 쓸 것: "AmCache 의 InventoryApplicationFile 에 `c:\users\(사용자)\desktop\b.exe` 항목이 있다. 이 항목은 이 경로에 파일이 한때 있었음을 보여 준다. 키 마지막 기록 시각은 (시각, UTC)이다. 이 경로는 호환성 평가 예약 작업이 훑는 폴더라서, 이 항목만으로는 실행 여부를 판단할 수 없다."
+- 쓸 것: "AmCache 의 InventoryApplicationFile 에 `c:\users\(사용자)\desktop\b.exe` 항목이 있다. 이 항목은 이 경로에 파일이 한때 있었음을 보여 준다. 키 마지막 기록 시각은 (시각, UTC)이다. 이 경로는 호환성 평가 예약 작업이 검사하는 폴더라서, 이 항목만으로는 실행 여부를 판단할 수 없다."
 - 쓰지 말 것: "C.exe 의 SHA-1 은 (값)이며 알려진 악성 파일과 일치하지 않는다."
 - 쓸 것: "AmCache 의 `FileId` 는 (값)이다. `Size` 는 (크기)바이트로 31,457,280바이트보다 크다. 따라서 이 값은 파일 앞 30MiB 의 SHA-1 이며, 파일 전체의 해시 목록과 직접 비교할 수 없다."
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체에서 Windows 10 이미지를 하나 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 자료에서 Windows 10 이미지를 하나 골라 아래 질문을 풀어 봅니다.
 
 1. Amcache.hve 의 `Root` 아래 키 목록을 봅니다. 옛 키(`File`·`Orphan`)가 있습니까, 비어 있습니까? 이 목록으로 보아 라이브러리 판은 어디쯤입니까?
 2. InventoryApplicationFile 항목 가운데 경로가 사용자 바탕 화면·Program Files·Program Files (x86) 밖인 항목을 고릅니다. 그 가운데 프리페치에도 흔적이 있는 것은 몇 개입니까?
-3. `Size` 가 31,457,280 보다 큰 항목이 있습니까? 이미지 안에 그 파일이 남아 있으면 앞 30MiB 의 SHA-1 과 전체 SHA-1 을 구해 `FileId` 와 견줍니다.
+3. `Size` 가 31,457,280 보다 큰 항목이 있습니까? 이미지 안에 그 파일이 남아 있으면 앞 30MiB 의 SHA-1 과 전체 SHA-1 을 구해 `FileId` 와 비교합니다.
 4. 키 마지막 기록 시각이 몇 초 안에 몰린 항목 무리가 있습니까? 그 무렵에 compattelrunner.exe 가 돈 흔적이 있습니까?
 5. 한 설치 폴더의 항목들 가운데 키 시각이 혼자 다른 파일이 있습니까? 있다면 $MFT 의 생성 시각과 견줘 봅니다.
 
@@ -215,7 +215,7 @@ NIST CFReDS 같은 공개 검체에서 Windows 10 이미지를 하나 골라 아
 
 ## 참고 문헌
 
-- Blanche Lagny (ANSSI), "Analysis of the AmCache" v2, 2019 — 라이브러리 판별 동작, InventoryApplicationFile 의 세 갈래, 키 시각의 뜻, `Orphan` 키, 키 이름 규칙, `Size` 형식. https://cyber.gouv.fr/documents/632/anssi-coriin_2019-analysis_amcache-v2.pdf
+- Blanche Lagny (ANSSI), "Analysis of the AmCache" v2, 2019 — 라이브러리 판별 동작, InventoryApplicationFile 에 항목이 들어오는 세 가지 길, 키 시각의 뜻, `Orphan` 키, 키 이름 규칙, `Size` 형식. https://cyber.gouv.fr/documents/632/anssi-coriin_2019-analysis_amcache-v2.pdf
 - NVISO Labs, "Amcache contains SHA-1 Hash – It Depends!", 2022 — SHA-1 을 앞 31,457,280바이트로만 계산함, Windows 8·10 에서 확인. https://blog.nviso.eu/2022/03/07/amcache-contains-sha-1-hash-it-depends/
-- Cristian Souza (Kaspersky Securelist), "Forensic journey: hunting evil within AmCache", 2025 — 실행을 뜻하는 갈래, 31MB 계산 범위 실험, 드라이버 항목 해석. https://securelist.com/amcache-forensic-artifact/117622/
+- Cristian Souza (Kaspersky Securelist), "Forensic journey: hunting evil within AmCache", 2025 — 실행을 뜻하는 항목 종류, 31MB 계산 범위 실험, 드라이버 항목 해석. https://securelist.com/amcache-forensic-artifact/117622/
 - Plaso, AmCache 레지스트리 파서 소스(amcache.py) — `FileId` 의 `0000`, 옛 `101` 값에서 `0000` 을 떼는 처리. https://github.com/log2timeline/plaso/blob/main/plaso/parsers/winreg_plugins/amcache.py

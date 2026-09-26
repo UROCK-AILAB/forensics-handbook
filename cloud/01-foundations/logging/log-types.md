@@ -6,20 +6,20 @@ nav_order: 80
 
 # 로그의 종류 (관리·데이터·로그인·흐름)
 
-클라우드 로그는 설정을 바꾼 관리 작업, 자원 안 데이터를 읽고 쓴 작업, 로그인, 네트워크 연결의 네 갈래로 나뉘고, 갈래마다 로그 이름과 필드, 기본으로 켜지는지가 다릅니다.
+클라우드 로그는 설정을 바꾼 관리 작업, 자원 안 데이터를 읽고 쓴 작업, 로그인, 네트워크 연결의 네 종류로 나뉘고, 종류마다 로그 이름과 필드, 기본으로 켜지는지가 다릅니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 "레코드 한 줄이 어느 갈래에 속하고, 그 갈래에서 무엇을 말할 수 있는가" 를 다룹니다. 갈래를 어디에 저장하는지와 보관 기간은 [기록은 어디에 남나](../model/where-records-live.md)에서, 요금제별 보관 기간은 [보관 기간과 라이선스](retention-licensing.md)에서 다룹니다.
+이 페이지는 파일 형식이 아니라 "레코드 한 줄이 어느 종류에 속하고, 그 종류에서 무엇을 알 수 있는가" 를 다룹니다. 종류마다 어디에 저장하는지와 보관 기간은 [기록은 어디에 남나](../model/where-records-live.md)에서, 요금제별 보관 기간은 [보관 기간과 라이선스](retention-licensing.md)에서 다룹니다.
 
-| 갈래 | 기록하는 일 | Microsoft 365·Entra | AWS | Azure | Google Cloud | Google Workspace·SaaS |
+| 종류 | 기록하는 일 | Microsoft 365·Entra | AWS | Azure | Google Cloud | Google Workspace·SaaS |
 |---|---|---|---|---|---|---|
 | 관리 (제어 평면, control plane) | 자원을 만들고 바꾸고 지우는 일, 권한·설정 변경 | [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md)의 관리 작업, [Entra 감사 로그](../../02-artifacts/m365/entra-logs/index.md) | [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md) 관리 이벤트 | [활동 로그](../../02-artifacts/azure/activity-log.md) | [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md) Admin Activity·System Event | [관리 콘솔 감사 로그](../../02-artifacts/google-workspace/admin-audit.md) |
 | 데이터 (데이터 평면, data plane) | 자원 안의 데이터를 읽고 쓰는 일 | 통합 감사 로그의 파일·메일 작업 | CloudTrail 데이터 이벤트·네트워크 활동 이벤트, [S3 서버 접근 로그](../../02-artifacts/aws/s3-access-logs.md) | [리소스 로그](../../02-artifacts/azure/resource-logs.md) | Cloud Audit Logs Data Access | Drive·Gmail 로그 이벤트 |
 | 로그인 (신원, identity) | 인증 시도와 결과 | Entra 로그인 로그 | CloudTrail `ConsoleLogin` | Entra 로그인 로그 | — | [로그인 기록](../../02-artifacts/google-workspace/login-audit.md), [Okta 시스템 로그](../../02-artifacts/saas/okta.md), [Slack 액세스 로그](../../02-artifacts/saas/slack.md) |
 | 흐름 (네트워크, flow) | 주소·포트·프로토콜 단위의 연결 요약 | — | [VPC 흐름 로그](../../02-artifacts/aws/vpc-flow-logs.md) | [NSG·VNet 흐름 로그](../../02-artifacts/azure/flow-logs.md) | [VPC 흐름 로그](../../02-artifacts/gcp/vpc-flow-logs.md) | — |
 
-Microsoft 365 통합 감사 로그는 관리 작업과 데이터 작업이 한 로그에 섞여 있어서, 갈래를 레코드마다 `Operation` 과 `Workload` 로 가립니다[13]. Entra ID 의 로그인·감사 로그는 통합 감사 로그와 따로 보관됩니다[20].
+Microsoft 365 통합 감사 로그는 관리 작업과 데이터 작업이 한 로그에 섞여 있어서, 종류를 레코드마다 `Operation` 과 `Workload` 로 구분합니다[13]. Entra ID 의 로그인·감사 로그는 통합 감사 로그와 따로 보관됩니다[20].
 
 ## 구조
 
@@ -41,11 +41,11 @@ Azure 리소스 로그 (resource logs) 는 Key Vault 비밀 읽기나 데이터�
 
 Google Cloud 의 Data Access 감사 로그는 자원 구성·메타데이터를 읽는 호출과, 사용자 데이터를 만들고 바꾸고 읽는 호출을 담고, BigQuery 를 빼면 기본으로 꺼져 있습니다[11]. 로그 이름은 `%2Fdata_access` 로 끝납니다[12]. 보안 정책 때문에 접근을 막은 일은 Policy Denied 감사 로그(`%2Fpolicy`)에 남고, 이 로그는 기본으로 생성됩니다[11][12].
 
-Microsoft 365 에서 SharePoint·OneDrive 파일 작업은 통합 감사 로그의 `ObjectId` 에 파일·폴더 전체 경로를 남깁니다[13]. 메일 열람은 Exchange 사서함 감사의 `MailItemsAccessed` 로 남고, Office 365·Microsoft 365 E3·E5 사용자에게 기본으로 켜집니다[14]. Google Workspace 에서는 Drive 로그 이벤트와 Gmail 로그 이벤트가 이 갈래에 듭니다[16].
+Microsoft 365 에서 SharePoint·OneDrive 파일 작업은 통합 감사 로그의 `ObjectId` 에 파일·폴더 전체 경로를 남깁니다[13]. 메일 열람은 Exchange 사서함 감사의 `MailItemsAccessed` 로 남고, Office 365·Microsoft 365 E3·E5 사용자에게 기본으로 켜집니다[14]. Google Workspace 에서는 Drive 로그 이벤트와 Gmail 로그 이벤트가 이 종류에 듭니다[16].
 
 ### 로그인
 
-Entra ID 로그인 로그는 대화형 사용자, 비대화형 사용자, 서비스 주체, 관리 ID 의 네 종류로 나뉩니다[18]. Microsoft Graph beta 의 로그인 레코드에서는 `signInEventTypes` 값 `interactiveUser`·`nonInteractiveUser`·`servicePrincipal`·`managedIdentity` 로 종류를 가립니다[19]. 옛 로그인 로그 화면은 대화형 사용자 로그인만 보여 줍니다[18]. 통합 감사 로그에도 Entra 레코드가 들어오지만[13] 보관은 Entra 로그와 따로 정해집니다[20].
+Entra ID 로그인 로그는 대화형 사용자, 비대화형 사용자, 서비스 주체, 관리 ID 의 네 종류로 나뉩니다[18]. Microsoft Graph beta 의 로그인 레코드에서는 `signInEventTypes` 값 `interactiveUser`·`nonInteractiveUser`·`servicePrincipal`·`managedIdentity` 로 종류를 구분합니다[19]. 옛 로그인 로그 화면은 대화형 사용자 로그인만 보여 줍니다[18]. 통합 감사 로그에도 Entra 레코드가 들어오지만[13] 보관은 Entra 로그와 따로 정해집니다[20].
 
 AWS 콘솔 로그인은 `eventType` 이 `AwsConsoleSignIn`[2], 이벤트 이름이 `ConsoleLogin`[1] 인 CloudTrail 레코드로 남습니다. 앞에서 본 것처럼 이 레코드는 관리 이벤트로 분류되므로, AWS 에서는 로그인과 관리 작업을 같은 로그에서 봅니다[1].
 
@@ -74,9 +74,9 @@ Google Cloud 흐름 레코드의 기본 필드는 패킷 헤더에서 바로 가
 
 ## 읽는 법
 
-레코드 한 줄을 받으면 먼저 갈래를 정합니다. 서비스마다 갈래를 알려 주는 필드가 있습니다.
+레코드 한 줄을 받으면 먼저 종류를 정합니다. 서비스마다 종류를 알려 주는 필드가 있습니다.
 
-| 서비스 | 갈래를 가리는 필드 | 값 |
+| 서비스 | 종류를 구분하는 필드 | 값 |
 |---|---|---|
 | AWS CloudTrail | `eventCategory` | `Management`·`Data`·`NetworkActivity`[2] |
 | AWS CloudTrail | `eventType` | 콘솔 로그인 `AwsConsoleSignIn`, 네트워크 활동 `AwsVpceEvents`[2] |
@@ -85,7 +85,7 @@ Google Cloud 흐름 레코드의 기본 필드는 패킷 헤더에서 바로 가
 | Entra ID 로그인 | `signInEventTypes`(Graph beta) | `interactiveUser`·`nonInteractiveUser`·`servicePrincipal`·`managedIdentity`[19] |
 | Google Workspace | Reports API `applicationName` | `admin`·`login`·`drive`·`token` 등[30] |
 
-아래는 CloudTrail 레코드에서 갈래를 가리는 필드만 추려 만든 예시입니다. `eventCategory` 가 `Data` 라서, 이 레코드는 데이터 이벤트를 켠 트레일이나 이벤트 데이터 저장소에서만 나옵니다.
+아래는 CloudTrail 레코드에서 종류를 구분하는 필드만 추려 만든 예시입니다. `eventCategory` 가 `Data` 라서, 이 레코드는 데이터 이벤트를 켠 트레일이나 이벤트 데이터 저장소에서만 나옵니다.
 
 ```json
 {
@@ -96,7 +96,7 @@ Google Cloud 흐름 레코드의 기본 필드는 패킷 헤더에서 바로 가
 }
 ```
 
-갈래를 정한 다음에는 그 갈래가 조사 기간에 켜져 있었는지를 확인합니다. 서비스별로 기본으로 켜지는 로그와 설정을 확인하는 곳은 [기록은 어디에 남나](../model/where-records-live.md)의 "기본으로 남는 것과 켜야 남는 것" 표에 있습니다. 레코드 안 필드를 푸는 방법은 [JSON 로그 읽기](json-logs.md)에서, 시각 필드는 [클라우드 로그의 시각](timestamps.md)에서, IP·사용자 에이전트는 [IP·사용자 에이전트·위치 정보](ip-ua-geo.md)에서 다룹니다.
+종류를 정한 다음에는 그 종류가 조사 기간에 켜져 있었는지를 확인합니다. 서비스별로 기본으로 켜지는 로그와 설정을 확인하는 곳은 [기록은 어디에 남나](../model/where-records-live.md)의 "기본으로 남는 것과 켜야 남는 것" 표에 있습니다. 레코드 안 필드를 푸는 방법은 [JSON 로그 읽기](json-logs.md)에서, 시각 필드는 [클라우드 로그의 시각](timestamps.md)에서, IP·사용자 에이전트는 [IP·사용자 에이전트·위치 정보](ip-ua-geo.md)에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
@@ -121,11 +121,11 @@ Google Cloud 흐름 레코드의 기본 필드는 패킷 헤더에서 바로 가
 
 ## 도구
 
-Microsoft 365·Entra·Azure 로그는 Microsoft-Extractor-Suite 가 갈래별 명령으로 받습니다. 통합 감사 로그는 `Get-UAL`·`Get-UALGraph`, Entra 로그인·감사 로그는 `Get-GraphEntraSignInLogs`·`Get-GraphEntraAuditLogs`, 구독 활동 로그는 `Get-ActivityLogs`, 테넌트 단위 활동 로그는 `Get-DirectoryActivityLogs` 입니다[31]. DFIR-O365RC 는 `Get-O365Full`·`Get-O365Light`(통합 감사 로그), `Get-AADLogs`(Entra), `Get-AzRMActivityLogs`(활동 로그)로 나눠 받습니다[32]. 도구 비교는 [Microsoft 365 수집 도구](../../03-techniques/acquisition/m365-collection.md)에서 다룹니다.
+Microsoft 365·Entra·Azure 로그는 Microsoft-Extractor-Suite 가 종류별 명령으로 받습니다. 통합 감사 로그는 `Get-UAL`·`Get-UALGraph`, Entra 로그인·감사 로그는 `Get-GraphEntraSignInLogs`·`Get-GraphEntraAuditLogs`, 구독 활동 로그는 `Get-ActivityLogs`, 테넌트 단위 활동 로그는 `Get-DirectoryActivityLogs` 입니다[31]. DFIR-O365RC 는 `Get-O365Full`·`Get-O365Light`(통합 감사 로그), `Get-AADLogs`(Entra), `Get-AzRMActivityLogs`(활동 로그)로 나눠 받습니다[32]. 도구 비교는 [Microsoft 365 수집 도구](../../03-techniques/acquisition/m365-collection.md)에서 다룹니다.
 
 Google Workspace 는 ALFA 가 Reports API 의 `applicationName` 마다 JSON 파일을 하나씩 만듭니다[30]. Gmail 로그 이벤트는 시작·끝 시각을 넣어야 하고, 그 차이가 30일 이하여야 받을 수 있습니다[30]. AWS·Azure·Google Cloud 로그 수집은 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md)에서 다룹니다.
 
-SigmaHQ 규칙은 로그 소스를 product·service 짝으로 나누고, 클라우드 쪽은 `aws/cloudtrail`, `azure/activitylogs`·`auditlogs`·`signinlogs`·`riskdetection`·`pim`, `gcp/gcp.audit`·`google_workspace.admin`, `m365/audit`·`exchange`·`threat_detection`·`threat_management`, `github/audit`, `okta/okta` 입니다[29]. 어느 규칙이 어느 갈래의 로그를 요구하는지 볼 때 참고가 됩니다. 규칙 활용은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에서 다룹니다.
+SigmaHQ 규칙은 로그 소스를 product·service 짝으로 나누고, 클라우드 쪽은 `aws/cloudtrail`, `azure/activitylogs`·`auditlogs`·`signinlogs`·`riskdetection`·`pim`, `gcp/gcp.audit`·`google_workspace.admin`, `m365/audit`·`exchange`·`threat_detection`·`threat_management`, `github/audit`, `okta/okta` 입니다[29]. 어느 규칙이 어느 종류의 로그를 요구하는지 볼 때 참고가 됩니다. 규칙 활용은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에서 다룹니다.
 
 함께 볼 페이지: [기록은 어디에 남나](../model/where-records-live.md), [보관 기간과 라이선스](retention-licensing.md), [JSON 로그 읽기](json-logs.md), [클라우드 로그의 시각](timestamps.md), [IP·사용자 에이전트·위치 정보](ip-ua-geo.md), [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [활동 로그](../../02-artifacts/azure/activity-log.md), [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md).
 

@@ -27,7 +27,7 @@ Apple이 넣은 OpenSSH에는 키의 암호문구(passphrase)를 키체인에 �
 | 개인 키 | `~/.ssh/id_rsa`, `~/.ssh/id_ecdsa`, `~/.ssh/id_ecdsa_sk`, `~/.ssh/id_ed25519`, `~/.ssh/id_ed25519_sk`, `~/.ssh/id_mldsa44_ed25519` | `IdentityFile` 의 기본값. ssh-add를 인자 없이 실행해도 이 6개 파일을 에이전트에 넣으려 함 | [1][3] |
 | 들어오는 쪽 공개 키 | `~/.ssh/authorized_keys` | 이 사용자로 로그인할 때 쓸 수 있는 공개 키(ECDSA, Ed25519, RSA) 목록 | [2] |
 
-이름이 `_sk` 로 끝나는 키는 보안 키(FIDO 인증 장치)에 기반한 ECDSA·Ed25519 키입니다 [1]. 위 기본값은 기본 키 파일 목록에 `id_mldsa44_ed25519` 가 들어 있는 최근 OpenSSH 기준으로 보입니다. 오래된 macOS에서는 기본값이 이 표와 다를 수 있어서 검체의 OpenSSH 판에 맞춰 다시 확인합니다.
+이름이 `_sk` 로 끝나는 키는 보안 키(FIDO 인증 장치)에 기반한 ECDSA·Ed25519 키입니다 [1]. 위 기본값은 기본 키 파일 목록에 `id_mldsa44_ed25519` 가 들어 있는 최근 OpenSSH 기준으로 보입니다. 오래된 macOS에서는 기본값이 이 표와 다를 수 있어서 분석 대상의 OpenSSH 판에 맞춰 다시 확인합니다.
 
 macOS 판에 따라 키체인과 ssh-agent 동작이 아래처럼 바뀌었습니다.
 
@@ -37,15 +37,15 @@ macOS 판에 따라 키체인과 ssh-agent 동작이 아래처럼 바뀌었습�
 | 10.12.2 | OpenSSH 7.3p1. 의도한 기본값이 아니었던 `UseKeychain` 이 꺼지고, 저장하려면 `UseKeychain yes` 를 직접 써야 함. 키를 ssh-agent에 저절로 넣지 않게 바뀌었고(upstream과 같은 동작), 다시 켜려면 `AddKeysToAgent yes` | [4] |
 | 그 뒤 판 | ssh-add의 키체인 옵션이 `--apple-use-keychain`·`--apple-load-keychain` 이라는 이름으로 있고, `-K` 는 FIDO 인증 장치의 상주 키(resident key)를 불러오는 옵션으로 뜻이 달라짐 | [3] |
 
-두 키체인 옵션이 처음 나온 macOS 판과 10.15 Catalina 이후 판마다 들어 있는 OpenSSH 판은 공개 자료가 없어 검체에서 확인합니다.
+두 키체인 옵션이 처음 나온 macOS 판과 10.15 Catalina 이후 판마다 들어 있는 OpenSSH 판은 실제 기기에서 확인해야 합니다.
 
 ## 구조
 
 ### known_hosts 한 줄
 
-known_hosts는 한 줄에 호스트 키 하나를 적는 텍스트 파일이고, 칸은 공백으로 나뉩니다 [2].
+known_hosts는 한 줄에 호스트 키 하나를 적는 텍스트 파일이고, 필드는 공백으로 나뉩니다 [2].
 
-| 순서 | 칸 | 내용 |
+| 순서 | 필드 | 내용 |
 |---|---|---|
 | 1 | 표시 (marker) | 없어도 됨. `@cert-authority` 는 인증 기관 키, `@revoked` 는 취소된 키라서 받아들이면 안 되는 키 |
 | 2 | 호스트 이름들 | 쉼표로 나눈 패턴 목록. `*`·`?` 와일드카드를 쓰고, 앞에 `!` 를 붙이면 부정(맞으면 거부) |
@@ -53,7 +53,7 @@ known_hosts는 한 줄에 호스트 키 하나를 적는 텍스트 파일이고,
 | 4 | 키 | base64로 적은 공개 키 |
 | 5 | 주석 | 없어도 됨 |
 
-표준이 아닌 포트로 접속한 서버는 호스트 이름 칸에 `[호스트]:포트` 처럼 대괄호로 감싼 뒤 콜론과 포트를 붙여 적습니다 [2]. 호스트 이름을 해시로 저장한 줄은 이름과 주소를 숨기고 `|` 문자로 시작하고, 한 줄에 해시된 이름은 하나만 올 수 있으며 와일드카드와 부정(`!`)을 쓸 수 없습니다 [2].
+표준이 아닌 포트로 접속한 서버는 호스트 이름 필드에 `[호스트]:포트` 처럼 대괄호로 감싼 뒤 콜론과 포트를 붙여 적습니다 [2]. 호스트 이름을 해시로 저장한 줄은 이름과 주소를 숨기고 `|` 문자로 시작하고, 한 줄에 해시된 이름은 하나만 올 수 있으며 와일드카드와 부정(`!`)을 쓸 수 없습니다 [2].
 
 ### known_hosts가 채워지는 방식을 정하는 설정
 
@@ -66,7 +66,7 @@ known_hosts에 어떤 줄이 어떻게 생기는지는 클라이언트 설정에
 | `UpdateHostKeys` | `yes` (`UserKnownHostsFile` 을 바꾸지 않았고 `VerifyHostKeyDNS` 를 켜지 않았을 때) | 인증 뒤 서버가 알려 주는 다른 호스트 키도 받아 넣음 | 한 호스트에 키 종류별 줄이 한꺼번에 여럿 생길 수 있음 |
 | `CheckHostIP` | `no` | `yes` 면 known_hosts에서 호스트 IP 주소도 확인 | 기본값에서는 IP 주소 줄이 따로 생기지 않을 수 있음 |
 
-macOS의 `/etc/ssh/ssh_config` 가 이 값들을 기본값과 다르게 켜 두었을 수 있어서, 검체의 시스템 설정 파일을 직접 읽어 봅니다.
+macOS의 `/etc/ssh/ssh_config` 가 이 값들을 기본값과 다르게 켜 두었을 수 있어서, 분석 대상의 시스템 설정 파일을 직접 읽어 봅니다.
 
 ### config 파일
 
@@ -81,7 +81,7 @@ Host server.example.com
 
 ### authorized_keys 한 줄
 
-authorized_keys는 한 줄에 공개 키 하나를 적고, 칸은 옵션, 키 종류, base64 키, 주석 순서로 공백으로 나뉩니다 [2]. 받아들이는 키 종류는 아래와 같습니다 [2].
+authorized_keys는 한 줄에 공개 키 하나를 적고, 필드는 옵션, 키 종류, base64 키, 주석 순서로 공백으로 나뉩니다 [2]. 받아들이는 키 종류는 아래와 같습니다 [2].
 
 ```
 sk-ecdsa-sha2-nistp256@openssh.com
@@ -92,7 +92,7 @@ ssh-mldsa44-ed25519@openssh.com
 ssh-rsa
 ```
 
-옵션 칸에는 `from=`, `command=`, `environment=`, `expiry-time=`, `no-port-forwarding`, `permitopen=`, `no-pty`, `restrict`, `cert-authority`, `principals=`, `agent-forwarding`, `port-forwarding`, `pty`, `user-rc`, `X11-forwarding`, `tunnel=`, `permitlisten=`, `no-agent-forwarding`, `no-X11-forwarding`, `no-user-rc`, `no-touch-required`, `verify-required` 가 올 수 있습니다 [2]. 침입을 판단할 때 눈여겨볼 `from=`·`command=`·`restrict` 의 뜻은 [SSH 접속 기록 (SSH)](../network/remote-access/ssh.md)에 있습니다. 주석만 보고 키를 만든 사람이나 기기를 단정하지 않습니다.
+옵션 필드에는 `from=`, `command=`, `environment=`, `expiry-time=`, `no-port-forwarding`, `permitopen=`, `no-pty`, `restrict`, `cert-authority`, `principals=`, `agent-forwarding`, `port-forwarding`, `pty`, `user-rc`, `X11-forwarding`, `tunnel=`, `permitlisten=`, `no-agent-forwarding`, `no-X11-forwarding`, `no-user-rc`, `no-touch-required`, `verify-required` 가 올 수 있습니다 [2]. 침입을 판단할 때 눈여겨볼 `from=`·`command=`·`restrict` 의 뜻은 [SSH 접속 기록 (SSH)](../network/remote-access/ssh.md)에 있습니다. 주석만 보고 키를 만든 사람이나 기기를 단정하지 않습니다.
 
 ### ssh-agent와 키체인
 
@@ -100,7 +100,7 @@ ssh-add는 에이전트에 키를 넣고 빼는 명령이고, Apple 판에는 �
 
 에이전트와는 `SSH_AUTH_SOCK` 에 적힌 UNIX 도메인 소켓 경로로 통하고, `-l` 은 에이전트에 든 키의 지문 목록을, `-L` 은 공개 키 목록을 보여 줍니다 [3]. `-D` 는 모두 지우고, `-t` 는 에이전트에 넣는 키의 최대 수명을 정하고, `-c` 는 키를 쓸 때마다 확인을 받게 합니다 [3].
 
-키체인에 저장된 SSH 암호문구가 어떤 종류의 항목으로, 어떤 서비스·계정 이름으로 남는지, 파일 기반 login 키체인과 데이터 보호 키체인 가운데 어디에 들어가는지는 공개 자료가 없어 검체에서 확인합니다. 두 키체인의 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에 있습니다.
+키체인에 저장된 SSH 암호문구가 어떤 종류의 항목으로, 어떤 서비스·계정 이름으로 남는지, 파일 기반 login 키체인과 데이터 보호 키체인 가운데 어디에 들어가는지는 실제 기기에서 확인해야 합니다. 두 키체인의 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -114,11 +114,11 @@ config나 시스템 설정에 `UseKeychain yes` 가 있거나 셸 기록에 `--a
 
 ### 증명하지 못하는 것
 
-known_hosts 줄 형식에는 시각 칸도 횟수 칸도 없어서 [2], 줄 하나로는 언제, 몇 번 접속했는지, 인증에 성공했는지를 알 수 없습니다. `StrictHostKeyChecking` 이 `accept-new`·`no` 면 사용자 확인 없이 줄이 생길 수 있고, `UpdateHostKeys` 가 켜져 있으면 접속 한 번에 줄이 여럿 생길 수 있어서 [1], 줄 수를 접속 수로 읽지 않습니다. `/etc/ssh/ssh_known_hosts` 의 항목은 관리자가 넣어 두는 목록이라 [2] 사용자가 그 호스트에 접속했다는 뜻이 아닙니다.
+known_hosts 줄 형식에는 시각 필드도 횟수 필드도 없어서 [2], 줄 하나로는 언제, 몇 번 접속했는지, 인증에 성공했는지를 알 수 없습니다. `StrictHostKeyChecking` 이 `accept-new`·`no` 면 사용자 확인 없이 줄이 생길 수 있고, `UpdateHostKeys` 가 켜져 있으면 접속 한 번에 줄이 여럿 생길 수 있어서 [1], 줄 수를 접속 수로 읽지 않습니다. `/etc/ssh/ssh_known_hosts` 의 항목은 관리자가 넣어 두는 목록이라 [2] 사용자가 그 호스트에 접속했다는 뜻이 아닙니다.
 
 개인 키 파일이 있어도 실제로 쓴 적이 있는지, 그 공개 키가 어느 서버의 authorized_keys에 등록되어 있는지는 이 맥의 파일만으로는 알 수 없습니다. 해시된 known_hosts 줄은 호스트 이름을 알고 있어야 맞춰 볼 수 있어서, 후보가 없으면 상대가 누구인지 읽지 못합니다.
 
-보고서에는 "이 사용자가 서버 X에 침입했다" 대신 "이 계정의 known_hosts에 `[X]:2222` 로 시작하는 ed25519 호스트 키 줄이 있고, config의 `Host X` 블록이 `~/.ssh/id_ed25519` 를 지정한다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 사용자가 서버 X에 침입했다" 대신 "이 계정의 known_hosts에 `[X]:2222` 로 시작하는 ed25519 호스트 키 줄이 있고, config의 `Host X` 블록이 `~/.ssh/id_ed25519` 를 지정한다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -128,17 +128,17 @@ known_hosts 줄 형식에는 시각 칸도 횟수 칸도 없어서 [2], 줄 하�
 
 ## 함정과 한계
 
-OpenSSH 기본값은 판마다 달라질 수 있고, 이 페이지의 기본값은 최근 OpenSSH 기준으로 보입니다. 그래서 기본값을 근거로 판단하기 전에 검체의 `/etc/ssh/ssh_config` 와 `~/.ssh/config`, 그리고 `Include` 로 불러온 파일을 모두 읽고 실제로 적힌 값을 먼저 봅니다 [1].
+OpenSSH 기본값은 판마다 달라질 수 있고, 이 페이지의 기본값은 최근 OpenSSH 기준으로 보입니다. 그래서 기본값을 근거로 판단하기 전에 분석 대상의 `/etc/ssh/ssh_config` 와 `~/.ssh/config`, 그리고 `Include` 로 불러온 파일을 모두 읽고 실제로 적힌 값을 먼저 봅니다 [1].
 
 셸 기록에서 `ssh-add -K` 를 보면 판에 따라 뜻이 다르다는 점에 주의합니다. 최근 판에서는 FIDO 장치의 상주 키를 불러오는 옵션이지만 예전 macOS의 `-K` 와는 뜻이 달라서 [3], 명령을 친 시점의 macOS 판을 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)에서 확인한 뒤에 해석합니다.
 
-ssh 클라이언트 접속이 통합 로그에 남는지, 남는다면 어떤 서브시스템 이름으로 남는지는 공개 자료가 없어 검체에서 확인합니다. known_hosts·authorized_keys·config는 평범한 텍스트 파일이라 줄을 지우거나 파일째 지우기 쉬워서, 줄이 없다고 접속하지 않았다고 읽지 않고 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 방법으로 예전 사본과 삭제 흔적을 찾습니다.
+ssh 클라이언트 접속이 통합 로그에 남는지, 남는다면 어떤 서브시스템 이름으로 남는지는 실제 기기에서 확인해야 합니다. known_hosts·authorized_keys·config는 평범한 텍스트 파일이라 줄을 지우거나 파일째 지우기 쉬워서, 줄이 없다고 접속하지 않았다고 읽지 않고 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 방법으로 예전 사본과 삭제 흔적을 찾습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 known_hosts 형식 설명 [2]에 맞춰 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. 키 칸은 `AAAA` 로 줄였고, 셋째 줄은 첫 글자만 넣었습니다.
+아래는 known_hosts 형식 설명 [2]에 맞춰 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. 키 필드는 `AAAA` 로 줄였고, 셋째 줄은 첫 글자만 넣었습니다.
 
 ```
 00000000: 5b68 6f73 742e 6578 616d 706c 655d 3a32  [host.example]:2
@@ -148,8 +148,8 @@ ssh 클라이언트 접속이 통합 로그에 남는지, 남는다면 어떤 �
 ```
 
 1. 첫 바이트 `0x5B`(`[`)로 시작해 `0x5D 0x3A`(`]:`) 뒤에 `2222` 가 오면, 표준이 아닌 포트 2222로 접속한 호스트의 줄입니다.
-2. `0x20`(공백) 다음 칸이 키 종류 `ssh-ed25519`, 그다음 칸이 base64 키이고, `0x0A` 에서 줄이 끝납니다.
-3. 둘째 줄은 `0x40`(`@`)으로 시작하는 표시 칸 `@revoked` 가 먼저 오고, 호스트 이름 칸이 `*` 이라서 모든 호스트에 대해 이 키를 거부하라는 줄입니다.
+2. `0x20`(공백) 다음 필드가 키 종류 `ssh-ed25519`, 그다음 필드가 base64 키이고, `0x0A` 에서 줄이 끝납니다.
+3. 둘째 줄은 `0x40`(`@`)으로 시작하는 표시 필드 `@revoked` 가 먼저 오고, 호스트 이름 필드가 `*` 이라서 모든 호스트에 대해 이 키를 거부하라는 줄입니다.
 4. 셋째 줄 첫 바이트가 `0x7C`(`|`)이면 호스트 이름을 해시로 저장한 줄이라 이름을 바로 읽을 수 없습니다.
 
 ### 명령으로 한 번
@@ -170,7 +170,7 @@ grep -niE '^\s*(Host|Match|Include|IdentityFile|UseKeychain|AddKeysToAgent|Stric
   ./copy/Users/USER/.ssh/config ./copy/etc/ssh/ssh_config
 ```
 
-살아 있는 맥에서는 `ssh-add -l` 과 `ssh-add -L` 로 지금 에이전트에 든 키를 볼 수 있습니다 [3]. 명령을 실행하는 것도 시스템을 건드리는 일이라서, 실행 순서와 기록 방법은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
+실행 중인 맥에서는 `ssh-add -l` 과 `ssh-add -L` 로 지금 에이전트에 든 키를 볼 수 있습니다 [3]. 명령을 실행하는 것도 시스템을 건드리는 일이라서, 실행 순서와 기록 방법은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
 
 ## 교차 검증
 
@@ -187,7 +187,7 @@ grep -niE '^\s*(Host|Match|Include|IdentityFile|UseKeychain|AddKeysToAgent|Stric
 
 ## 실습
 
-macOS 공개 검체(NIST CFReDS 등)에서 아래 질문을 풀어 봅니다.
+macOS 공개 데이터셋(NIST CFReDS 등)에서 아래 질문을 풀어 봅니다.
 
 1. 어느 계정의 홈에 `~/.ssh/` 가 있고, 그 안에 개인 키 파일은 몇 개이며 이름이 `_sk` 로 끝나는 키가 있는가?
 2. known_hosts에 해시된 줄과 평문 줄이 섞여 있는가, 평문 줄의 호스트 가운데 표준이 아닌 포트로 적힌 것이 있는가?

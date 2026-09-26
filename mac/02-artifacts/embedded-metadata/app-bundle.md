@@ -43,7 +43,7 @@ nav_order: 1890
 | `PlugIns/` | 앱 기능을 넓히는 적재형 번들 |
 | `SharedSupport/` | 앱 실행에 영향이 없는 부가 리소스 |
 
-서명 정보를 담는 파일과 공증 티켓이 번들 안 어느 경로에 놓이는지는 검체의 번들을 열어 확인합니다.
+서명 정보를 담는 파일과 공증 티켓이 번들 안 어느 경로에 놓이는지는 실제 번들을 열어 확인합니다.
 
 ### Info.plist 키
 
@@ -90,19 +90,19 @@ nav_order: 1890
 | `Contents/Library/LoginItems` | 설치형 로그인 항목 |
 | `Contents/Library/LaunchServices` | ServiceManagement 프레임워크로 설치하는 권한 있는 도우미 도구 |
 
-이 위치에는 코드만 두어야 하고, 데이터 파일을 두면 서명되지 않은 코드로 보고 서명 검사에서 거부합니다 [2]. 조사에서는 이 표가 번들 안에서 실행될 수 있는 코드를 빠짐없이 훑는 목록 구실을 하고, 특히 `Contents/Library/LoginItems` 와 `Contents/Library/LaunchServices` 는 로그인 항목과 권한 있는 도우미 도구가 놓이는 곳이라서 지속성 조사와 이어집니다.
+이 위치에는 코드만 두어야 하고, 데이터 파일을 두면 서명되지 않은 코드로 보고 서명 검사에서 거부합니다 [2]. 조사에서는 이 표가 번들 안에서 실행될 수 있는 코드를 빠짐없이 살펴보는 목록 구실을 하고, 특히 `Contents/Library/LoginItems` 와 `Contents/Library/LaunchServices` 는 로그인 항목과 권한 있는 도우미 도구가 놓이는 곳이라서 지속성 조사와 이어집니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `Info.plist` 는 앱이 스스로 밝히는 정체를 보여 주고, `CFBundleIdentifier` 로 앱을 가리키는 다른 기록(권한 목록, 실행 기록, 설정 파일 이름)과 짝을 맞출 수 있습니다. `CFBundleVersion`·`CFBundleShortVersionString` 은 그 번들이 어느 빌드인지를, `LSMinimumSystemVersion` 은 개발자가 정한 최소 macOS 버전을 보여 줍니다 [1]. 서명 검사를 통과하면 번들이 서명할 때 상태에서 바뀌지 않았다는 뜻이고, `spctl` 검사가 `accepted` 와 `source=Developer ID` 를 돌려주면 Gatekeeper 정책으로도 받아들여지는 Developer ID 서명이라는 뜻입니다 [2].
 
-**증명하지 못하는 것.** `Info.plist` 의 값은 개발자가 적어 넣은 문자열이라서, `CFBundleIdentifier` 나 이름이 알려진 앱과 같아도 그 회사가 만든 앱이라는 증거가 되지 않습니다. 누가 만들었는지는 서명과 지정 요구 사항, 팀 ID 로 판단하고, 그 읽는 법은 [번들 ID와 팀 ID](../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다. 번들이 디스크에 있다는 사실만으로 앱을 실행했다고 말할 수도 없어서, 실행 여부는 [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md)의 기록으로 따로 확인합니다. 서명 검사가 통과해도 앱이 무해하다는 뜻은 아니고, 서명이 말하는 범위는 누가 서명했는지와 그 뒤로 바뀌었는지까지입니다.
+**증명하지 못하는 것.** `Info.plist` 의 값은 개발자가 적어 넣은 문자열이라서, `CFBundleIdentifier` 나 이름이 알려진 앱과 같아도 그 회사가 만든 앱이라는 증거가 되지 않습니다. 누가 만들었는지는 서명과 지정 요구 사항, 팀 ID 로 판단하고, 그 읽는 법은 [번들 ID와 팀 ID](../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다. 번들이 디스크에 있다는 사실만으로 앱을 실행했다고 말할 수도 없어서, 실행 여부는 [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md)의 기록으로 따로 확인합니다. 서명 검사가 통과해도 앱이 무해하다는 뜻은 아니고, 서명으로 알 수 있는 범위는 누가 서명했는지와 그 뒤로 바뀌었는지까지입니다.
 
-보고서에는 "이 앱은 ○○사 제품이다" 가 아니라 "이 번들의 `Info.plist` 에는 `CFBundleIdentifier` 가 이 값으로 적혀 있고, `codesign` 검사 결과 서명은 유효했으며 지정 요구 사항은 이 식이었다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 앱은 ○○사 제품이다" 가 아니라 "이 번들의 `Info.plist` 에는 `CFBundleIdentifier` 가 이 값으로 적혀 있고, `codesign` 검사 결과 서명은 유효했으며 지정 요구 사항은 이 식이었다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-이 페이지에서 다룬 `Info.plist` 키에는 시각을 적는 키가 없습니다 [1]. 번들이 이 맥에 언제 놓였고 언제 바뀌었는지는 번들 폴더와 그 안 파일의 파일 시스템 시각으로 보고, 그 값은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다. `codesign` 출력 칸 설명은 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md)을 봅니다.
+이 페이지에서 다룬 `Info.plist` 키에는 시각을 적는 키가 없습니다 [1]. 번들이 이 맥에 언제 놓였고 언제 바뀌었는지는 번들 폴더와 그 안 파일의 파일 시스템 시각으로 보고, 그 값은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다. `codesign` 출력 필드 설명은 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md)을 봅니다.
 
 `CFBundleVersion` 은 빌드마다 커지는 값이라서 [1] 같은 앱의 번들 여럿을 빌드 순서로 늘어놓는 데는 쓸 수 있지만, 그 빌드가 언제 만들어졌는지는 알려 주지 않습니다.
 
@@ -122,7 +122,7 @@ nav_order: 1890
 
 ### 헥스로 한 번
 
-아래는 [1]의 키 설명으로 만든 예시이고, 특정 검체에서 나온 값이 아닙니다. `Info.plist` 가 XML 로 저장되어 있으면 키와 값이 글자 그대로 보입니다.
+아래는 [1]의 키 설명으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. `Info.plist` 가 XML 로 저장되어 있으면 키와 값이 글자 그대로 보입니다.
 
 ```xml
 <key>CFBundleIdentifier</key>
@@ -133,7 +133,7 @@ nav_order: 1890
 <string>Sample</string>
 ```
 
-헥스 편집기에서는 오른쪽 글자 칸에서 `CFBundleIdentifier` 같은 키 이름을 찾고, 바로 뒤의 값을 읽습니다. `APPL` 네 글자는 ASCII 바이트로 `41 50 50 4C` 입니다. XML 이 아닌 형식으로 저장된 파일이면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 방법으로 먼저 풀어서 읽습니다. 헥스로 찾은 `CFBundleExecutable` 값과 `MacOS/` 폴더 안 파일 이름이 같은지 한 번 대 보면, 도구가 보여 준 값을 그대로 믿지 않고 확인할 수 있습니다.
+헥스 편집기에서는 오른쪽 글자 영역에서 `CFBundleIdentifier` 같은 키 이름을 찾고, 바로 뒤의 값을 읽습니다. `APPL` 네 글자는 ASCII 바이트로 `41 50 50 4C` 입니다. XML 이 아닌 형식으로 저장된 파일이면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 방법으로 먼저 풀어서 읽습니다. 헥스로 찾은 `CFBundleExecutable` 값과 `MacOS/` 폴더 안 파일 이름이 같은지 한 번 대 보면, 도구가 보여 준 값을 그대로 믿지 않고 확인할 수 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -146,7 +146,7 @@ macOS 에 기본으로 들어 있는 `codesign` 과 `spctl` 로 서명을 읽습
 5. `spctl -a -t exec -vv Foo.app` 으로 Gatekeeper 정책 검사를 하고, 통과하면 `Foo.app: accepted` 와 `source=Developer ID` 가 나옵니다 [2].
 6. 위 안에 든 코드 위치 표의 폴더를 하나씩 열어, 각 코드도 같은 방법으로 검사합니다.
 
-의심스러운 번들을 여럿 한꺼번에 훑는 순서는 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md)에서 다룹니다.
+의심스러운 번들을 여럿 한꺼번에 살펴보는 순서는 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md)에서 다룹니다.
 
 ## 교차 검증
 
@@ -166,7 +166,7 @@ macOS 에 기본으로 들어 있는 `codesign` 과 `spctl` 로 서명을 읽습
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 사용자가 설치한 앱이 들어 있는 macOS 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 데이터셋 가운데 사용자가 설치한 앱이 들어 있는 macOS 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 앱 번들 하나를 골라 `CFBundleIdentifier`·`CFBundleVersion`·`CFBundleShortVersionString`·`LSMinimumSystemVersion` 을 적고, 두 버전 값이 무엇을 뜻하는지 구분해 설명할 수 있나요?
 2. `CFBundleExecutable` 값과 `MacOS/` 안 실제 파일 이름이 같은가요?

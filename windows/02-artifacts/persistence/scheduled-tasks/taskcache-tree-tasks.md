@@ -28,7 +28,7 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 
 | 항목 | 내용 |
 |---|---|
-| 살아 있는 시스템 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache` |
+| 실행 중인 시스템 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache` |
 | 오프라인 | SOFTWARE 하이브의 `Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache` |
 | 최소 버전 | Windows Vista |
 
@@ -166,7 +166,7 @@ Triggers 값 안의 FILETIME 은 현지 시각으로 보입니다[2].
 
 - 누가 등록했는지는 여기서 확정하지 못합니다. Author 는 문자열 값입니다. 등록한 계정은 [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md)에서 찾습니다(켜 둔 경우).
 - 오프셋 12 는 마지막 한 번의 실행 시각입니다. 이 값만으로는 그 전에 몇 번, 언제 실행했는지 알 수 없습니다.
-- 오프셋 4 를 작업을 처음 만든 시각으로 단정하지 못합니다. 뜻이 확정되지 않은 칸이고[2], 기본 작업에서는 OS 설치보다 앞선 날짜가 나왔습니다.
+- 오프셋 4 를 작업을 처음 만든 시각으로 단정하지 못합니다. 뜻이 확정되지 않은 필드이고[2], 기본 작업에서는 OS 설치보다 앞선 날짜가 나왔습니다.
 - 실행이 성공했는지는 여기서 알 수 없습니다. 오프셋 20 과 28 의 뜻이 확정되지 않았습니다.
 
 보고서에는 "`Tasks\{GUID}` 의 DynamicInfo 에 이 작업의 마지막 실행 시각이 `<UTC 시각>` 으로 남아 있다" 처럼 씁니다. "이 시각에 악성 프로그램이 실행되었다" 는 실행 흔적을 따로 확인한 다음에 씁니다.
@@ -204,7 +204,7 @@ FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](
 
 ### 헥스로 한 번
 
-아래는 명세로 만든 DynamicInfo 예시(36바이트)입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 명세로 만든 DynamicInfo 예시(36바이트)입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 ```
 00000000  03 00 00 00 00 eb c8 bf e6 6e da 01 80 70 5e 3e  |.........n...p^>|
@@ -215,8 +215,8 @@ FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](
 1. 0x00 의 `03 00 00 00` 은 3 입니다.
 2. 0x04 의 8바이트 `00 eb c8 bf e6 6e da 01` 을 리틀 엔디언으로 읽으면 `0x01DA6EE6BFC8EB00` 입니다. FILETIME 으로 바꾸면 2024-03-05 10:20:30 (UTC) 입니다.
 3. 0x0C 의 8바이트 `80 70 5e 3e 59 6f da 01` 은 `0x01DA6F593E5E7080` 입니다. 2024-03-06 00:00:05 (UTC) 이고, 마지막 실행 시각입니다.
-4. 0x14 와 0x18 의 4바이트 두 칸은 0 입니다.
-5. 0x1C 의 8바이트 `80 ca c0 40 59 6f da 01` 은 `0x01DA6F5940C0CA80` 입니다. 2024-03-06 00:00:09 (UTC) 이고, 뜻이 확정되지 않은 칸입니다.
+4. 0x14 와 0x18 의 4바이트 두 필드는 0 입니다.
+5. 0x1C 의 8바이트 `80 ca c0 40 59 6f da 01` 은 `0x01DA6F5940C0CA80` 입니다. 2024-03-06 00:00:09 (UTC) 이고, 뜻이 확정되지 않은 필드입니다.
 
 ### 공개 도구로 한 번
 
@@ -247,7 +247,7 @@ def xml_hash(path):                       # Tasks\{GUID} 의 Hash 와 비교할 
     return hashlib.sha256(data).hexdigest()
 ```
 
-살아 있는 시스템에서는 PowerShell 로 같은 값을 읽을 수 있습니다. 아래 결과를 `Get-ScheduledTaskInfo` 의 LastRunTime 과 맞춰 봅니다.
+실행 중인 시스템에서는 PowerShell 로 같은 값을 읽을 수 있습니다. 아래 결과를 `Get-ScheduledTaskInfo` 의 LastRunTime 과 맞춰 봅니다.
 
 ```powershell
 $k = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks'
@@ -275,7 +275,7 @@ Get-ChildItem $k | ForEach-Object {
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 SOFTWARE 하이브와 `System32\Tasks` 폴더로 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)의 SOFTWARE 하이브와 `System32\Tasks` 폴더로 아래 질문을 풀어 봅니다.
 
 1. Tree 아래 키 가운데 Id 가 있는 키와 없는 키는 각각 몇 개입니까?
 2. Id 의 GUID 가 Tasks 에 없는 Tree 키가 있습니까? 그 키의 Index 는 몇입니까?

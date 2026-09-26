@@ -16,7 +16,7 @@ GNOME 에서는 로그인할 때 PAM 모듈 pam_gnome_keyring 이 로그인 암�
 
 KWallet 도 PAM 과 이어질 수 있습니다. `ksecretd` 는 환경 변수 `PAM_KWALLET5_LOGIN` 이 있으면 `--pam-login` 인자로 받은 파이프에서 암호 해시를, 소켓에서 환경 변수를 받고, 그 해시로 지갑을 엽니다[13]. PAM 설정 파일을 읽는 법은 [인증 모듈](../../01-foundations/users-auth/pam.md)에서 다룹니다.
 
-Chromium 계열 브라우저는 Linux 에서 쿠키·저장 비밀번호를 암호화하는 키를 이 보관함에 둡니다[14][16]. 보관함에 Chrome 항목이 있는지, 브라우저 DB 의 암호문이 어느 방식으로 암호화됐는지가 서로 맞물리므로, 이 쪽과 [Linux 의 브라우저 프로필](browsers.md)을 함께 봅니다.
+Chromium 계열 브라우저는 Linux 에서 쿠키·저장 비밀번호를 암호화하는 키를 이 보관함에 둡니다[14][16]. 보관함에 Chrome 항목이 있는지, 브라우저 DB 의 암호문이 어느 방식으로 암호화됐는지가 서로 맞물리므로, 이 페이지와 [Linux 의 브라우저 프로필](browsers.md)을 함께 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -42,7 +42,7 @@ KWallet 은 최근 구조가 바뀌었습니다. 지금의 kwallet 프레임워�
 | gkr-pam 줄이 남는 파일 | `/var/log/auth.log` | `/var/log/secure` |
 | PAM 설정 | `/etc/pam.d/` 아래 파일 | `/etc/pam.d/` 아래 파일 |
 
-pam_gnome_keyring 이 어느 서비스에 걸려 있는지는 검체의 `/etc/pam.d/` 에서 `pam_gnome_keyring` 이 들어간 줄을 찾아 확인합니다. 로그 파일 위치와 줄 형식은 [인증 로그](../logins/auth-log.md)에서 다룹니다.
+pam_gnome_keyring 이 어느 서비스에 걸려 있는지는 분석 대상의 `/etc/pam.d/` 에서 `pam_gnome_keyring` 이 들어간 줄을 찾아 확인합니다. 로그 파일 위치와 줄 형식은 [인증 로그](../logins/auth-log.md)에서 다룹니다.
 
 ## 구조
 
@@ -92,7 +92,7 @@ libsecret 파일 백엔드도 같은 16바이트 머리를 쓰지만 그 뒤 두
 
 - 보관함 파일이 있으면 그 계정에서 보관함 데몬이 돌았고 보관함이 만들어졌다는 뜻입니다. `login.keyring` 은 GNOME 로그인으로 로그인 키링을 만든 흔적입니다[3].
 - 평문 부분의 항목 수와 속성 이름으로 비밀이 몇 개 있고 어떤 종류의 속성을 쓰는지 알 수 있습니다[5].
-- GNOME Keyring 의 문자열 속성 값은 MD5 라서, 알려진 값의 MD5 와 견주면 그 값이 있는지 암호 없이 확인할 수 있습니다[6]. 예를 들어 Chromium 계열은 `application` 속성에 브랜드판이면 `chrome`, 오픈 소스판이면 `chromium` 을 넣습니다[14]. `chrome` 의 MD5 는 `554838a8451ac36cb977e719e9d6623c` 이므로, `application` 속성 값이 이 문자열이면 Chrome 이 이 키링에 키를 둔 적이 있다는 뜻입니다.
+- GNOME Keyring 의 문자열 속성 값은 MD5 라서, 알려진 값의 MD5 와 비교하면 그 값이 있는지 암호 없이 확인할 수 있습니다[6]. 예를 들어 Chromium 계열은 `application` 속성에 브랜드판이면 `chrome`, 오픈 소스판이면 `chromium` 을 넣습니다[14]. `chrome` 의 MD5 는 `554838a8451ac36cb977e719e9d6623c` 이므로, `application` 속성 값이 이 문자열이면 Chrome 이 이 키링에 키를 둔 적이 있다는 뜻입니다.
 - `.kwl` 의 폴더 해시도 같은 방식으로 견줄 수 있습니다. Chrome 은 KWallet 에 `Chrome Keys` 폴더와 `Chrome Safe Storage` 키를, Chromium 은 `Chromium Keys` 폴더와 `Chromium Safe Storage` 키를 씁니다[14].
 - gkr-pam 줄은 로그인 때 로그인 키링을 풀었는지, 풀지 못했는지를 보여 줍니다[7]. `the password for the login keyring was invalid.` 는 로그인 암호와 로그인 키링 암호가 달랐다는 뜻이라서, 관리자가 암호를 재설정한 기록과 맞춰 볼 단서가 됩니다.
 
@@ -119,7 +119,7 @@ Unix 초 값을 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-
 
 ## 함정과 한계
 
-GNOME Keyring 머리의 두 시각은 순서가 엇갈립니다. 형식 문서와 읽는 코드는 생성 시각 다음에 수정 시각이 온다고 보지만, 쓰는 코드는 수정 시각을 먼저, 생성 시각을 나중에 적습니다[4][5]. 항목 안쪽 시각은 읽을 때와 쓸 때 모두 생성 다음 수정 순서입니다[5]. 머리의 두 값은 어느 쪽이 생성 시각인지 단정하지 말고 둘 다 기록한 뒤 파일 시스템 시각과 견줍니다.
+GNOME Keyring 머리의 두 시각은 순서가 엇갈립니다. 형식 문서와 읽는 코드는 생성 시각 다음에 수정 시각이 온다고 보지만, 쓰는 코드는 수정 시각을 먼저, 생성 시각을 나중에 적습니다[4][5]. 항목 안쪽 시각은 읽을 때와 쓸 때 모두 생성 다음 수정 순서입니다[5]. 머리의 두 값은 어느 쪽이 생성 시각인지 단정하지 말고 둘 다 기록한 뒤 파일 시스템 시각과 비교합니다.
 
 형식 문서와 코드가 다른 곳이 하나 더 있습니다. 형식 문서는 정수 속성 해시에 `0xdeadbeef` 를 쓴다고 적었지만, 코드는 `0x18273645` 를 씁니다[4][6]. 정수 값을 견줄 때는 코드의 식을 따르면 됩니다.
 
@@ -206,7 +206,7 @@ Chromium 은 `--password-store=` 로 `basic`, `gnome-libsecret`, `kwallet`, `kwa
 
 ## 실습
 
-GNOME 데스크톱이 들어 있는 Linux 디스크 이미지(NIST CFReDS 등 공개 검체)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
+GNOME 데스크톱이 들어 있는 Linux 디스크 이미지(NIST CFReDS 등 공개 시험 데이터)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
 
 1. 각 사용자 홈의 `.local/share/keyrings/` 에 어떤 파일이 있는가? 각 파일의 17·18번째 바이트로 형식을 가르면 무엇인가?
 2. `login.keyring` 머리의 두 시각은 언제이고, 파일 시스템의 생성·수정 시각과 어떻게 맞는가?

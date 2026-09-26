@@ -6,7 +6,7 @@ nav_order: 1670
 
 # 방화벽 (Application Firewall)
 
-macOS 방화벽 (Application Firewall) 은 들어오는 연결을 다루는 기능이고, 그 설정은 macOS 14 까지 `/Library/Preferences/com.apple.alf.plist` 에 남지만 macOS 15 Sequoia 부터는 plist 에 들어 있지 않아서, 조사할 때는 검체의 macOS 버전부터 확인하고 방화벽이 켜져 있었는지, 관리 프로필로 강제한 설정이 있었는지를 봅니다.
+macOS 방화벽 (Application Firewall) 은 들어오는 연결을 다루는 기능이고, 그 설정은 macOS 14 까지 `/Library/Preferences/com.apple.alf.plist` 에 남지만 macOS 15 Sequoia 부터는 plist 에 들어 있지 않아서, 조사할 때는 분석 대상의 macOS 버전부터 확인하고 방화벽이 켜져 있었는지, 관리 프로필로 강제한 설정이 있었는지를 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -31,7 +31,7 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 
 ### com.apple.alf.plist (macOS 14 까지)
 
-속성 목록 파일이고 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)을 따릅니다. 이 파일 안의 키 이름은 공개된 분석 자료가 없어, 검체에서 연 키와 값을 그대로 옮겨 적습니다.
+속성 목록 파일이고 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)을 따릅니다. 이 파일 안의 키 이름은 공개된 분석 자료가 없어, 실제 파일을 열어 나온 키와 값을 그대로 옮겨 적습니다.
 
 ### Firewall 페이로드 (`com.apple.security.firewall`)
 
@@ -46,7 +46,7 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 | `AllowSigned` | boolean, macOS 12.3+ | 내장 소프트웨어의 들어오는 연결을 허용합니다. 없으면 true |
 | `AllowSignedApp` | boolean, macOS 12.3+ | 내려받은 서명된 소프트웨어가 들어오는 연결을 받도록 허용합니다. 없으면 true |
 
-`Firewall.ApplicationsItem` 사전 안의 키는 검체의 프로필에서 확인합니다. 설치된 구성 프로필이 디스크 어디에 남는지는 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 다룹니다.
+`Firewall.ApplicationsItem` 사전 안의 키는 실제 프로필에서 확인합니다. 설치된 구성 프로필이 디스크 어디에 남는지는 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -54,7 +54,7 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 
 **증명하지 못하는 것.** 방화벽 설정 항목은 들어오는 연결을 다루는 것이라 [1], 방화벽이 켜져 있었다는 사실로 나가는 연결을 막았다고 쓰지 않습니다. 설정 기록만으로는 특정 연결이 실제로 막혔는지, 누가 언제 설정을 바꿨는지도 알 수 없습니다. 연결이 실제로 막혔는지는 다른 기록으로 따로 입증합니다.
 
-방화벽을 끄거나 특정 앱을 허용 목록에 넣은 설정은 원격 접속이나 악성 코드의 수신 대기를 쉽게 만든 흔적일 수 있지만, 이 해석은 설정의 뜻에서 끌어낸 판단입니다. 보고서에는 "macOS 14 인 이 맥의 `com.apple.alf.plist` 에 이런 값이 있고, 파일 수정 시각은 이때다" 처럼 기록이 말하는 만큼만 씁니다.
+방화벽을 끄거나 특정 앱을 허용 목록에 넣은 설정은 원격 접속이나 악성 코드의 수신 대기를 쉽게 만든 흔적일 수 있지만, 이 해석은 설정의 뜻에서 끌어낸 판단입니다. 보고서에는 "macOS 14 인 이 맥의 `com.apple.alf.plist` 에 이런 값이 있고, 파일 수정 시각은 이때다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -68,25 +68,25 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 - **떠도는 키 이름.** `com.apple.alf.plist` 의 키 이름은 여러 자료에 돌아다니지만 근거가 분명하지 않습니다. 도구가 키에 뜻을 붙여 보여 주면 그 근거를 확인한 뒤에 씁니다.
 - **수집 정의의 빈틈.** ForensicArtifacts 정의에 방화벽 항목이 없어서 [4], 자동 수집 결과에 설정 파일이 없을 수 있습니다.
 
-### 검체에서 확인할 것
+### 실제 데이터로 확인할 것
 
 | 항목 | 상태 |
 |---|---|
 | macOS 15 이후 설정 저장 위치 | 공개 자료 없음 |
-| `socketfilterfw` 의 전체 경로와 옵션 | 검체에서 확인 |
+| `socketfilterfw` 의 전체 경로와 옵션 | 실제 데이터로 확인 |
 | `com.apple.alf.plist` 의 키 이름 | 공개 자료 없음 |
-| 방화벽 로그(`/var/log/appfirewall.log`, 통합 로그 서브시스템 등) | 검체에서 확인 |
-| `Firewall.ApplicationsItem` 안의 키 | 검체에서 확인 |
+| 방화벽 로그(`/var/log/appfirewall.log`, 통합 로그 서브시스템 등) | 실제 데이터로 확인 |
+| `Firewall.ApplicationsItem` 안의 키 | 실제 데이터로 확인 |
 
 ## 직접 분석해 보기
 
-먼저 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)에서 검체의 macOS 버전을 확인하고, 14 이하라면 `com.apple.alf.plist` 를 파일 시각을 지키는 방식으로 복사해 사본으로 봅니다.
+먼저 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)에서 분석 대상의 macOS 버전을 확인하고, 14 이하라면 `com.apple.alf.plist` 를 파일 시각을 지키는 방식으로 복사해 사본으로 봅니다.
 
 ### 헥스로 한 번
 
-`com.apple.alf.plist` 를 헥스 편집기로 열어 바이너리 plist 인지 XML 인지 첫 바이트로 가리고, 바이너리라면 오프셋 표를 따라 키 문자열이 든 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에 고유한 바이트 구조를 밝힌 공개 자료는 없어서, 검체의 바이트를 그대로 기록합니다.
+`com.apple.alf.plist` 를 헥스 편집기로 열어 바이너리 plist 인지 XML 인지 첫 바이트로 판별하고, 바이너리라면 오프셋 표를 따라 키 문자열이 든 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에 고유한 바이트 구조를 밝힌 공개 자료는 없어서, 실제 파일의 바이트를 그대로 기록합니다.
 
-관리 프로필 쪽은 아래처럼 페이로드 키 [3]로 만든 예시와 설치된 프로필의 내용을 맞춰 봅니다. 실제 검체에서 나온 값이 아니고, 페이로드의 나머지 공통 키는 생략했습니다.
+관리 프로필 쪽은 아래처럼 페이로드 키 [3]로 만든 예시와 설치된 프로필의 내용을 맞춰 봅니다. 실제 데이터에서 나온 값이 아니고, 페이로드의 나머지 공통 키는 생략했습니다.
 
 ```xml
 <dict>
@@ -107,7 +107,7 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 
 ### 공개 도구로 한 번
 
-macOS 14 이하 검체는 macOS 의 `plutil` 로 사본을 열어 키와 값을 모두 옮겨 적습니다.
+macOS 14 이하인 기기는 macOS 의 `plutil` 로 사본을 열어 키와 값을 모두 옮겨 적습니다.
 
 ```
 plutil -p com.apple.alf.plist
@@ -128,9 +128,9 @@ macOS 15 이후 맥을 켠 채로 조사한다면 `socketfilterfw` 로 설정을
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
-1. 검체의 macOS 버전은 무엇이고, 그 버전에서 방화벽 설정을 plist 에서 찾을 수 있나요?
+1. 그 이미지의 macOS 버전은 무엇이고, 그 버전에서 방화벽 설정을 plist 에서 찾을 수 있나요?
 2. `com.apple.alf.plist` 가 있다면 키와 값을 모두 표로 옮기고, 파일 수정 시각을 함께 적어 보세요.
 3. 설치된 구성 프로필 가운데 페이로드 형식이 `com.apple.security.firewall` 인 것이 있나요? 있다면 `EnableFirewall`, `BlockAllIncoming`, `EnableStealthMode` 값을 적어 보세요.
 4. Firewall 페이로드가 든 프로필이 여러 개라면, 합집합 규칙으로 어떤 설정이 적용됐을지 정리해 보세요.

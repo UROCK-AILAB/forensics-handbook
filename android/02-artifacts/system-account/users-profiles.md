@@ -28,11 +28,11 @@ Android 는 한 기기에서 여러 사용자 공간을 나눠 씁니다. 사용
 | 복제 프로필 (clone profile) | 앱을 두 개 띄울 때 쓰는 프로필 |
 | 비공개 프로필 (private profile) | 따로 잠글 수 있는 공간 |
 
-조사에서 이 기록이 중요한 까닭은 데이터가 사용자 번호별로 나뉘어 저장되기 때문입니다. 주 사용자 폴더만 보면 업무 프로필이나 복제 프로필에 있는 메신저 대화와 계정을 놓치고, 반대로 여러 사람이 한 기기를 썼다면 어느 사용자 공간의 기록인지부터 가려야 합니다. 사용자별 앱 데이터 폴더의 구조는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../01-foundations/storage/app-data-layout.md) 페이지에, 삼성 보안 폴더와 업무 프로필은 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에 있습니다.
+조사에서 이 기록이 중요한 이유는 데이터가 사용자 번호별로 나뉘어 저장되기 때문입니다. 주 사용자 폴더만 보면 업무 프로필이나 복제 프로필에 있는 메신저 대화와 계정을 놓치고, 반대로 여러 사람이 한 기기를 썼다면 어느 사용자 공간의 기록인지부터 구분해야 합니다. 사용자별 앱 데이터 폴더의 구조는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../01-foundations/storage/app-data-layout.md) 페이지에, 삼성 보안 폴더와 업무 프로필은 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에 있습니다.
 
 ## 위치와 버전별 차이
 
-사용자 정보는 `/data/system/users` 폴더에 있습니다. 목록 파일은 `userlist.xml` 이고, 사용자마다 사용자 번호에 `.xml` 을 붙인 파일(예: `0.xml`)과 같은 번호의 하위 폴더가 있으며, 하위 폴더에는 `photo.png` 와 이름이 `res_` 로 시작하는 제한(restriction) xml 파일이 들어갑니다 [1]. 사용자별 파일을 고쳐 쓸 때는 이름 끝에 `.backup`, `.reservecopy` 를 붙인 사본도 씁니다 [1]. 두 파일 모두 설정 파일과 같은 `Xml.resolveSerializer` 로 쓰기 때문에 기기 설정에 따라 글자 XML 일 수도 있고 안드로이드 바이너리 XML(ABX)일 수도 있으며 [1], 첫 바이트로 가리는 법은 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
+사용자 정보는 `/data/system/users` 폴더에 있습니다. 목록 파일은 `userlist.xml` 이고, 사용자마다 사용자 번호에 `.xml` 을 붙인 파일(예: `0.xml`)과 같은 번호의 하위 폴더가 있으며, 하위 폴더에는 `photo.png` 와 이름이 `res_` 로 시작하는 제한(restriction) xml 파일이 들어갑니다 [1]. 사용자별 파일을 고쳐 쓸 때는 이름 끝에 `.backup`, `.reservecopy` 를 붙인 사본도 씁니다 [1]. 두 파일 모두 설정 파일과 같은 `Xml.resolveSerializer` 로 쓰기 때문에 기기 설정에 따라 글자 XML 일 수도 있고 안드로이드 바이너리 XML(ABX)일 수도 있으며 [1], 첫 바이트로 구분하는 법은 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
 
 사용자 번호 0 이 시스템 사용자이고, 추가 사용자 번호는 10 부터 붙습니다(상수 MIN_USER_ID 가 UserHandle.MIN_SECONDARY_USER_ID 를 따름) [1].
 
@@ -43,7 +43,7 @@ Android 는 한 기기에서 여러 사용자 공간을 나눠 씁니다. 사용
 | 다중 사용자 켜기 | 기기 설정 `config_multiuserMaximumUsers`(1보다 크게), `config_enableMultiUserUI`(true) | [2] |
 | 휴대폰에 다중 사용자가 들어온 버전 | 공개 자료 없음 | |
 | 삼성 기기의 두 번째 사용자 | 번호가 세 자리이고 parentId 가 붙은 프로필일 수 있음 | |
-| 삼성 보안 폴더·앱 이중 실행이 쓰는 번호 범위 | 공개 자료 없음(검체에서 확인) | |
+| 삼성 보안 폴더·앱 이중 실행이 쓰는 번호 범위 | 공개 자료 없음(실제 기기에서 확인) | |
 
 삼성 기기의 settings 에는 global 표에 `add_users_when_locked`, `lock_add_profile`, `lock_remove_profile`, `lock_reset_profile`, `smartswitch_data_exist_securefolder` 키가, secure 표에 `hide_secure_folder_flag` 키가 있을 수 있습니다. 이름으로 보면 잠금 상태에서 사용자 추가, 프로필 추가·삭제, 보안 폴더와 관련된 값으로 보이지만, 값의 뜻을 밝힌 공개 자료는 없습니다.
 
@@ -64,7 +64,7 @@ Android 는 한 기기에서 여러 사용자 공간을 나눠 씁니다. 사용
 | `seedAccountName`, `seedAccountType` | 사용자를 만들 때 넘겨받은 계정 |
 | `icon` | 사용자 사진 경로 |
 
-사용자별 파일에는 속성 말고도 `name`, `restrictions`, `seedAccountOptions`, `userProperties` 같은 하위 태그가 들어갑니다 [1]. "담긴 것" 칸의 일부(부모 사용자, 만들다 만 사용자 등)는 속성 이름으로 짐작한 뜻이고, 소스에 따로 붙은 설명은 없습니다. `type` 에 들어가는 값의 예는 다음과 같습니다 [2].
+사용자별 파일에는 속성 말고도 `name`, `restrictions`, `seedAccountOptions`, `userProperties` 같은 하위 태그가 들어갑니다 [1]. "담긴 것" 열의 일부(부모 사용자, 만들다 만 사용자 등)는 속성 이름으로 짐작한 뜻이고, 소스에 따로 붙은 설명은 없습니다. `type` 에 들어가는 값의 예는 다음과 같습니다 [2].
 
 ```
 android.os.usertype.full.SYSTEM
@@ -120,11 +120,11 @@ Users:
 | `lastLoggedInFingerprint` | 마지막 로그인 때의 빌드 | 업데이트 이력 전체 |
 | seed 계정 속성 | 사용자를 만들 때 넘겨받은 계정이 있었다는 것 | 지금도 그 계정이 등록되어 있는지 |
 
-보고서에는 "사용자 목록에 번호 ###, 종류 관리 프로필, 부모 사용자 0 인 프로필이 있고, 이 프로필의 마지막 로그인 기록은 이 시각이다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "사용자 목록에 번호 ###, 종류 관리 프로필, 부모 사용자 0 인 프로필이 있고, 이 프로필의 마지막 로그인 기록은 이 시각이다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-`created`, `lastLoggedIn`, `lastEnteredForeground` 는 System.currentTimeMillis() 로 기록하는 유닉스 밀리초이고, 벽시계 기준이라 UTC 입니다 [1]. 벽시계를 쓰기 때문에 기기 시계가 틀린 동안 만든 사용자는 생성 시각이 실제와 다를 수 있습니다. 사용자를 만들 때 시계가 1970년에서 30년(EPOCH_PLUS_30_YEARS)이 지나지 않은 값이면 `created` 를 0 으로 적습니다 [1].
+`created`, `lastLoggedIn`, `lastEnteredForeground` 는 System.currentTimeMillis() 로 기록하는 유닉스 밀리초이고, 실제 시각 시계(wall clock) 기준이라 UTC 입니다 [1]. 이 시계를 쓰기 때문에 기기 시계가 틀린 동안 만든 사용자는 생성 시각이 실제와 다를 수 있습니다. 사용자를 만들 때 시계가 1970년에서 30년(EPOCH_PLUS_30_YEARS)이 지나지 않은 값이면 `created` 를 0 으로 적습니다 [1].
 
 `dumpsys user` 는 이 값들을 날짜로 찍지 않고 출력한 때로부터 얼마 전인지("... ago")로 찍고, 값이 0 이면 `<unknown>` 으로 찍습니다 [1]. 그래서 날짜로 바꾸려면 dumpsys 를 뽑은 시각을 함께 기록해 둬야 합니다. `Start time` 과 `Unlock time` 은 부팅 뒤 흐른 시간(SystemClock.elapsedRealtime)으로 적는 값이라 [1], 파일에 남지 않고 재부팅하면 사라집니다.
 
@@ -134,7 +134,7 @@ Users:
 
 사용자 번호마다 계정·앱 데이터·설정이 따로 있어서 다른 아티팩트를 읽을 때도 번호를 함께 적어야 합니다. `dumpsys account` 출력도 사용자마다 `User UserInfo{...}:` 로 시작하는 블록으로 나뉩니다. 계정 쪽 해석은 [계정 (Accounts)](accounts/index.md) 페이지에 있습니다.
 
-이미 지운 사용자가 목록 파일이나 다른 기록에 흔적을 남기는지는 공개 자료가 없어 검체로 확인해야 합니다. `userlist.xml` 의 `nextSerialNumber` 값과 남아 있는 사용자들의 `serialNumber` 를 비교해 볼 수는 있지만, 번호가 비는 까닭이 소스에 드러나 있지 않아 지운 사용자가 있었다는 근거로 쓰지 않습니다.
+이미 지운 사용자가 목록 파일이나 다른 기록에 흔적을 남기는지는 실제 데이터로 확인해야 합니다. `userlist.xml` 의 `nextSerialNumber` 값과 남아 있는 사용자들의 `serialNumber` 를 비교해 볼 수는 있지만, 번호가 비는 이유가 소스에 드러나 있지 않아 지운 사용자가 있었다는 근거로 쓰지 않습니다.
 
 비공개 프로필처럼 따로 잠글 수 있는 공간은 확보할 때의 잠금 상태에 따라 읽히는 범위가 달라질 수 있어서, 사용자별 암호화 영역을 설명한 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지를 함께 봅니다.
 
@@ -162,15 +162,15 @@ grep -E '^  UserInfo|Type:|Created:|Last logged in|Unlock time:' dumpsys_user.tx
 
 ## 교차 검증
 
-사용자별 계정은 [계정 (Accounts)](accounts/index.md) 에서, 사용자별로 설치된 앱은 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 에서 봅니다. 마지막 로그인 지문은 [기기 정보와 빌드 (build.prop·Build)](device-build.md) 의 현재 빌드와 비교합니다. 여러 사람이 한 기기를 썼는지 가려야 하면 [그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md) 시나리오의 순서를 따릅니다.
+사용자별 계정은 [계정 (Accounts)](accounts/index.md) 에서, 사용자별로 설치된 앱은 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 에서 봅니다. 마지막 로그인 지문은 [기기 정보와 빌드 (build.prop·Build)](device-build.md) 의 현재 빌드와 비교합니다. 여러 사람이 한 기기를 썼는지 구분해야 하면 [그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md) 시나리오의 순서를 따릅니다.
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
+공개된 안드로이드 시험 이미지(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
 
 1. `/data/system/users` 폴더에서 사용자 번호를 모두 적고, 각 번호의 `type` 과 부모 사용자를 표로 만듭니다.
 2. 각 사용자의 `created`·`lastLoggedIn` 을 UTC 날짜로 바꾸고, 사용자 0 의 생성 시각이 다른 초기 설정 기록과 맞는지 봅니다.
-3. `lastLoggedInFingerprint` 가 현재 build.prop 의 지문과 같은지 확인하고, 다르면 무엇을 뜻하는지 기록이 말하는 범위에서 적어 봅니다.
+3. `lastLoggedInFingerprint` 가 현재 build.prop 의 지문과 같은지 확인하고, 다르면 무엇을 뜻하는지 기록으로 확인되는 범위에서 적어 봅니다.
 
 ## 참고 문헌
 

@@ -6,15 +6,15 @@ nav_order: 1620
 
 # 앱별 네트워크 사용량 (netusage)
 
-`netusage.sqlite` 에는 프로세스마다 Wi-Fi·유선·셀룰러로 받은 양과 보낸 양, 처음 본 시각과 마지막으로 본 시각이 남고, 망 연결마다 주고받은 양도 따로 남아서, 어떤 프로세스가 어느 무렵 어느 경로로 네트워크를 썼는지 가늠할 수 있습니다.
+`netusage.sqlite` 에는 프로세스마다 Wi-Fi·유선·셀룰러로 받은 양과 보낸 양, 처음 본 시각과 마지막으로 본 시각이 남고, 망 연결마다 주고받은 양도 따로 남아서, 어떤 프로세스가 어느 무렵 어느 경로로 네트워크를 썼는지 추정할 수 있습니다.
 
-Apple 이 공개한 형식 명세는 없어서, 칸의 뜻은 칸 이름과 공개 도구의 처리 방식에서 읽어 낼 수 있는 만큼만 적습니다 [1].
+Apple 이 공개한 형식 명세는 없어서, 열의 뜻은 열 이름과 공개 도구의 처리 방식에서 읽어 낼 수 있는 만큼만 적습니다 [1].
 
 ## 무엇을 기록하나 · 왜 생기나
 
-macOS 는 프로세스별 네트워크 사용량을 SQLite 데이터베이스에 모아 두고, 이 DB 에는 두 가지가 들어 있습니다 [1]. 하나는 프로세스별 사용량이고, 칸 이름으로 보면 Wi-Fi, 유선, 셀룰러(WWAN) 각각의 받은 양과 보낸 양이 나뉘어 있습니다. 다른 하나는 망 연결(network attachment)별로 주고받은 양입니다 [1].
+macOS 는 프로세스별 네트워크 사용량을 SQLite 데이터베이스에 모아 두고, 이 DB 에는 두 가지가 들어 있습니다 [1]. 하나는 프로세스별 사용량이고, 열 이름으로 보면 Wi-Fi, 유선, 셀룰러(WWAN) 각각의 받은 양과 보낸 양이 나뉘어 있습니다. 다른 하나는 망 연결(network attachment)별로 주고받은 양입니다 [1].
 
-이 DB 를 어느 데몬이 쓰는지, 값을 얼마나 자주 쌓고 언제 지우는지는 공개된 분석 자료가 없습니다. 그래서 이 기록은 "이 프로세스가 네트워크를 이만큼 썼다는 기록이 이 시각 기준으로 있다" 는 데까지 쓰고, 쌓인 기간은 시각 칸으로 따로 따집니다.
+이 DB 를 어느 데몬이 쓰는지, 값을 얼마나 자주 쌓고 언제 지우는지는 공개된 분석 자료가 없습니다. 그래서 이 기록은 "이 프로세스가 네트워크를 이만큼 썼다는 기록이 이 시각 기준으로 있다" 는 데까지 쓰고, 쌓인 기간은 시각 열로 따로 따집니다.
 
 ## 위치와 버전별 차이
 
@@ -23,13 +23,13 @@ macOS 는 프로세스별 네트워크 사용량을 SQLite 데이터베이스에
 | 10.15 Catalina 까지 | `/private/var/networkd/netusage.sqlite` [1] |
 | 11 Big Sur 부터 | `/private/var/networkd/db/netusage.sqlite` [1] |
 
-iOS 에서는 `/private/var/networkd/netusage.sqlite` 에 있습니다 [1]. ForensicArtifacts 의 `MacOSNetworkUsageSQLiteDatabaseFile` 정의에는 옛 경로(`/private/var/networkd/netusage.sqlite`, `/var/networkd/netusage.sqlite`)만 있고 `db/` 아래 경로는 없어서 [2], macOS 11 이후 검체를 이 정의로 수집했다면 DB 가 빠지지 않았는지 확인합니다.
+iOS 에서는 `/private/var/networkd/netusage.sqlite` 에 있습니다 [1]. ForensicArtifacts 의 `MacOSNetworkUsageSQLiteDatabaseFile` 정의에는 옛 경로(`/private/var/networkd/netusage.sqlite`, `/var/networkd/netusage.sqlite`)만 있고 `db/` 아래 경로는 없어서 [2], macOS 11 이후 기기를 이 정의로 수집했다면 DB 가 빠지지 않았는지 확인합니다.
 
 ## 구조
 
-DB 는 SQLite 이고, 표 이름에 `Z` 접두어가 붙는 Core Data 방식입니다 [1]. 파일 형식과 레코드 읽는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따릅니다. 아래는 분석에 쓰는 표와 칸이고 [1], 표마다 다른 칸이 더 있을 수 있습니다.
+DB 는 SQLite 이고, 표 이름에 `Z` 접두어가 붙는 Core Data 방식입니다 [1]. 파일 형식과 레코드 읽는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따릅니다. 아래는 분석에 쓰는 표와 열이고 [1], 표마다 다른 열이 더 있을 수 있습니다.
 
-| 표 | 칸 | 이어지는 곳 |
+| 표 | 열 | 이어지는 곳 |
 |---|---|---|
 | `ZPROCESS` | `Z_PK`, `Z_ENT`, `ZPROCNAME`, `ZFIRSTTIMESTAMP`, `ZTIMESTAMP` | |
 | `ZLIVEUSAGE` | `ZHASPROCESS`, `ZTIMESTAMP`, `ZWIFIIN`, `ZWIFIOUT`, `ZWIREDIN`, `ZWIREDOUT`, `ZWWANIN`, `ZWWANOUT` | `ZHASPROCESS` → `ZPROCESS.Z_PK` |
@@ -37,28 +37,28 @@ DB 는 SQLite 이고, 표 이름에 `Z` 접두어가 붙는 Core Data 방식입�
 | `ZLIVEROUTEPERF` | `ZHASNETWORKATTACHMENT`, `ZTIMESTAMP`, `ZBYTESIN`, `ZBYTESOUT` | `ZHASNETWORKATTACHMENT` → `ZNETWORKATTACHMENT.Z_PK` |
 | `Z_PRIMARYKEY` | `Z_ENT`, `Z_NAME` | 각 표의 `Z_ENT` 가 어떤 종류의 항목인지 이름으로 풀어 줍니다 |
 
-프로세스 사용량은 `ZLIVEUSAGE` 한 줄을 `ZHASPROCESS` 로 `ZPROCESS` 에 이어 읽고, 망 연결 사용량은 `ZLIVEROUTEPERF` 한 줄을 `ZHASNETWORKATTACHMENT` 로 `ZNETWORKATTACHMENT` 에 이어 읽습니다 [1]. `ZPROCNAME` 이 프로세스 이름만 담는지 번들 ID 와 섞인 모양인지, `ZNETWORKATTACHMENT.ZIDENTIFIER` 가 어떤 모양의 값인지는 공개 자료가 없어서, 검체에서 나온 값을 그대로 옮겨 적습니다.
+프로세스 사용량은 `ZLIVEUSAGE` 한 줄을 `ZHASPROCESS` 로 `ZPROCESS` 에 이어 읽고, 망 연결 사용량은 `ZLIVEROUTEPERF` 한 줄을 `ZHASNETWORKATTACHMENT` 로 `ZNETWORKATTACHMENT` 에 이어 읽습니다 [1]. `ZPROCNAME` 이 프로세스 이름만 담는지 번들 ID 와 섞인 모양인지, `ZNETWORKATTACHMENT.ZIDENTIFIER` 가 어떤 모양의 값인지는 알려져 있지 않아서, 실제 데이터의 값을 그대로 옮겨 적습니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** `ZPROCESS` 에 프로세스가 있으면 그 이름으로 네트워크 사용량 기록이 남았다는 뜻이고, `ZFIRSTTIMESTAMP` 와 `ZTIMESTAMP` 는 칸 이름으로 보아 이 DB 가 그 프로세스를 처음 본 때와 마지막으로 본 때입니다 [1]. `ZLIVEUSAGE` 의 여섯 칸은 경로(Wi-Fi·유선·셀룰러)마다 받은 양과 보낸 양을 나눠 적어서, 한 프로세스가 주로 어느 경로로 얼마나 보냈는지 비교할 수 있습니다. 보낸 양이 받은 양보다 크게 많은 프로세스는 자료 유출을 따질 때 먼저 볼 후보가 되지만, 이 판단은 칸 이름에서 끌어낸 해석이라 다른 기록으로 받칩니다.
+**증명하는 것.** `ZPROCESS` 에 프로세스가 있으면 그 이름으로 네트워크 사용량 기록이 남았다는 뜻이고, `ZFIRSTTIMESTAMP` 와 `ZTIMESTAMP` 는 열 이름으로 보면 이 DB 가 그 프로세스를 처음 본 때와 마지막으로 본 때입니다 [1]. `ZLIVEUSAGE` 의 여섯 열은 경로(Wi-Fi·유선·셀룰러)마다 받은 양과 보낸 양을 나눠 적어서, 한 프로세스가 주로 어느 경로로 얼마나 보냈는지 비교할 수 있습니다. 보낸 양이 받은 양보다 크게 많은 프로세스는 자료 유출을 따질 때 먼저 볼 후보가 되지만, 이 판단은 열 이름에서 끌어낸 해석이라 다른 기록으로 받칩니다.
 
-**증명하지 못하는 것.** 이 DB 는 어느 주소와 통신했는지, 무엇을 보냈는지 알려 주지 않습니다. 위 표의 칸에는 사용자 계정 칸이 없어서, 같은 이름의 프로세스를 여러 사용자가 돌렸다면 누구의 사용량인지 이 DB 로는 알 수 없습니다. 망 연결 쪽 칸은 바이트 단위로 알려져 있지만 [1], 프로세스 쪽 값의 단위는 공개 자료가 없어 검체로 확인해야 합니다. 기록을 언제 지우거나 초기화하는지도 알려지지 않아서, 프로세스가 목록에 없다고 네트워크를 쓰지 않았다는 뜻은 아닙니다.
+**증명하지 못하는 것.** 이 DB 는 어느 주소와 통신했는지, 무엇을 보냈는지 알려 주지 않습니다. 위 표의 열에는 사용자 계정 열이 없어서, 같은 이름의 프로세스를 여러 사용자가 돌렸다면 누구의 사용량인지 이 DB 로는 알 수 없습니다. 망 연결 쪽 열은 바이트 단위로 알려져 있지만 [1], 프로세스 쪽 값의 단위는 알려져 있지 않아 실제 데이터로 확인해야 합니다. 기록을 언제 지우거나 초기화하는지도 알려지지 않아서, 프로세스가 목록에 없다고 네트워크를 쓰지 않았다는 뜻은 아닙니다.
 
-보고서에는 "`ZLIVEUSAGE` 에 이 프로세스가 이 시각 이후 Wi-Fi 로 보낸 양이 이만큼 적혀 있다" 처럼 기록이 말하는 만큼만 쓰고, 단위를 확인하지 못했다면 그 점도 함께 적습니다.
+보고서에는 "`ZLIVEUSAGE` 에 이 프로세스가 이 시각 이후 Wi-Fi 로 보낸 양이 이만큼 적혀 있다" 처럼 기록으로 확인되는 만큼만 쓰고, 단위를 확인하지 못했다면 그 점도 함께 적습니다.
 
 ## 시각 해석
 
-이 페이지의 `*TIMESTAMP` 칸은 모두 맥 절대 시각(2001-01-01 기준 초)입니다 [1]. 기준 시각과 시간대 처리는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 도구가 보여 주는 값이 UTC 인지 현지 시각으로 바꾼 값인지 함께 적습니다.
+이 페이지의 `*TIMESTAMP` 열은 모두 맥 절대 시각(2001-01-01 기준 초)입니다 [1]. 기준 시각과 시간대 처리는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 도구가 보여 주는 값이 UTC 인지 현지 시각으로 바꾼 값인지 함께 적습니다.
 
-사용량 칸을 읽을 때는 시각 칸과 짝을 맞춰야 합니다. `ZLIVEUSAGE` 의 여섯 칸은 같은 줄의 `ZTIMESTAMP` 이후에 쌓인 양입니다 [1]. 망 연결 쪽 `ZLIVEROUTEPERF` 의 주고받은 양도 같은 줄의 `ZTIMESTAMP` 를 기준으로 합니다 [1]. 그래서 사용량 수치를 `ZPROCESS.ZFIRSTTIMESTAMP` 부터 쌓인 전체 양으로 읽으면 틀릴 수 있습니다.
+사용량 열을 읽을 때는 시각 열과 짝을 맞춰야 합니다. `ZLIVEUSAGE` 의 여섯 열은 같은 줄의 `ZTIMESTAMP` 이후에 쌓인 양입니다 [1]. 망 연결 쪽 `ZLIVEROUTEPERF` 의 주고받은 양도 같은 줄의 `ZTIMESTAMP` 를 기준으로 합니다 [1]. 그래서 사용량 수치를 `ZPROCESS.ZFIRSTTIMESTAMP` 부터 쌓인 전체 양으로 읽으면 틀릴 수 있습니다.
 
 ## 함정과 한계
 
 - **두 경로.** macOS 11 부터 DB 가 `db/` 아래로 옮겨 가서 [1], 옛 경로만 찾으면 없는 것으로 잘못 봅니다. 업그레이드한 맥이라면 두 경로를 모두 찾아봅니다.
 - **수집 정의의 빈틈.** ForensicArtifacts 정의에 새 경로가 없어서 [2], 이 정의에 기대는 수집 도구가 새 DB 를 빠뜨릴 수 있습니다.
-- **사용량 칸의 기준 시각.** 사용량은 그 줄의 `ZTIMESTAMP` 이후에 쌓인 양이라서 [1], 시각 칸 없이 수치만 옮기면 기간을 잃습니다.
-- **알려지지 않은 단위와 주기.** 값의 단위, 쌓는 주기, 초기화 조건은 공개 자료가 없어 검체에서 확인합니다.
+- **사용량 열의 기준 시각.** 사용량은 그 줄의 `ZTIMESTAMP` 이후에 쌓인 양이라서 [1], 시각 열 없이 수치만 옮기면 기간을 잃습니다.
+- **알려지지 않은 단위와 주기.** 값의 단위, 쌓는 주기, 초기화 조건은 실제 데이터로 확인해야 합니다.
 - **SQLite 부속 파일.** DB 옆에 `-wal`, `-shm` 파일이 있으면 함께 수집해야 최근 기록을 잃지 않고, 지운 레코드를 찾는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)를 따릅니다.
 
 ## 직접 분석해 보기
@@ -67,7 +67,7 @@ DB 는 SQLite 이고, 표 이름에 `Z` 접두어가 붙는 Core Data 방식입�
 
 ### 헥스로 한 번
 
-맥 절대 시각은 2001-01-01 00:00:00 부터 흐른 초라서, Unix 시각으로 바꾸려면 1970-01-01 과 2001-01-01 사이의 초 978307200 을 더합니다. 아래는 이 규칙으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+맥 절대 시각은 2001-01-01 00:00:00 부터 흐른 초라서, Unix 시각으로 바꾸려면 1970-01-01 과 2001-01-01 사이의 초 978307200 을 더합니다. 아래는 이 규칙으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```
 ZTIMESTAMP 값             700000000
@@ -79,7 +79,7 @@ ZTIMESTAMP 값             700000000
 
 ### 공개 도구로 한 번
 
-`sqlite3` 로 사본을 열어 위 표 관계대로 이어 읽습니다. 아래 쿼리는 위 표의 칸 [1]만으로 만든 것입니다.
+`sqlite3` 로 사본을 열어 위 표 관계대로 이어 읽습니다. 아래 쿼리는 위 표의 열 [1]만으로 만든 것입니다.
 
 ```sql
 SELECT p.ZPROCNAME,
@@ -113,9 +113,9 @@ mac_apt NETUSAGE 플러그인 [1]을 돌려 같은 프로세스의 수치와 시
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
-1. 검체의 macOS 버전을 먼저 확인하고, 두 경로 가운데 어디에 `netusage.sqlite` 가 있는지 찾아보세요.
+1. 그 이미지의 macOS 버전을 먼저 확인하고, 두 경로 가운데 어디에 `netusage.sqlite` 가 있는지 찾아보세요.
 2. `Z_PRIMARYKEY` 의 `Z_NAME` 목록을 뽑아 표마다 어떤 항목 종류인지 적어 보세요.
 3. 보낸 양(`ZWIFIOUT`, `ZWIREDOUT`, `ZWWANOUT`의 합)이 가장 큰 프로세스 다섯 개를 뽑고, 각 줄의 `ZTIMESTAMP` 를 함께 적어 보세요.
 4. `ZNETWORKATTACHMENT.ZIDENTIFIER` 값은 어떤 모양인가요? 와이파이 기록의 SSID 와 이어지는 값이 있는지 보세요.

@@ -35,7 +35,7 @@ DownloadHistory                       배열
     └ DownloadEntryRemoveWhenDoneKey
 ```
 
-위 틀은 plaso 가 읽는 키로 만든 그림이고 [1], 실제 파일에는 이보다 많은 키가 있을 수 있습니다. `DownloadEntryIdentifier` 같은 다른 키는 공개된 분석 자료가 없어 검체에서 확인합니다.
+위 틀은 plaso 가 읽는 키로 만든 그림이고 [1], 실제 파일에는 이보다 많은 키가 있을 수 있습니다. `DownloadEntryIdentifier` 같은 다른 키는 실제 데이터로 확인합니다.
 
 | 키 | 뜻 |
 |---|---|
@@ -45,7 +45,7 @@ DownloadHistory                       배열
 | `DownloadEntryDateFinishedKey` | 다운로드가 끝난 시각 [1] |
 | `DownloadEntryProgressBytesSoFar` | 이름으로 보면 지금까지 받은 바이트 수 [1] |
 | `DownloadEntryProgressTotalToLoad` | 이름으로 보면 받을 전체 바이트 수 [1] |
-| `DownloadEntryRemoveWhenDoneKey` | 이름으로 보면 "끝나면 목록에서 제거" 설정. 실제 동작은 검체에서 확인 [1] |
+| `DownloadEntryRemoveWhenDoneKey` | 이름으로 보면 "끝나면 목록에서 제거" 설정. 동작은 실제 기기로 확인 [1] |
 
 ## 증거로서 의미
 
@@ -55,7 +55,7 @@ DownloadHistory                       배열
 
 ## 시각 해석
 
-`DownloadEntryDateAddedKey` 와 `DownloadEntryDateFinishedKey` 는 plist 날짜 값이고, 앞의 것은 시작 시각, 뒤의 것은 끝난 시각입니다 [1]. 사파리의 plist·DB 시각은 대부분 맥 절대 시각(2001-01-01 00:00:00 UTC 기준)으로 저장돼 있고 [2], 읽어 낸 값을 현지 시각으로 옮길 때는 검체의 시간대 설정을 따로 확인합니다. 값을 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md), 시간대 설정은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)을 봅니다.
+`DownloadEntryDateAddedKey` 와 `DownloadEntryDateFinishedKey` 는 plist 날짜 값이고, 앞의 것은 시작 시각, 뒤의 것은 끝난 시각입니다 [1]. 사파리의 plist·DB 시각은 대부분 맥 절대 시각(2001-01-01 00:00:00 UTC 기준)으로 저장돼 있고 [2], 읽어 낸 값을 현지 시각으로 옮길 때는 분석 대상의 시간대 설정을 따로 확인합니다. 값을 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md), 시간대 설정은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -99,7 +99,7 @@ for e in data.get("DownloadHistory", []):
 
 ## 실습
 
-공개 맥 검체에서 `Downloads.plist` 를 찾아 아래 질문을 풀어 봅니다.
+공개 맥 시험 이미지에서 `Downloads.plist` 를 찾아 아래 질문을 풀어 봅니다.
 
 1. `DownloadHistory` 에 항목이 몇 개 있고, 가장 최근 항목의 끝난 시각은 UTC 로 언제인가
 2. 각 항목의 `DownloadEntryPath` 에 지금도 파일이 있는가. 없다면 휴지통이나 다른 폴더에서 같은 이름을 찾을 수 있는가

@@ -11,11 +11,11 @@ nav_order: 1520
 
 ## 조사 질문
 
-지금 기기에 없는 앱 가운데 한때 설치했던 앱이 무엇인지, 그 앱을 언제 지웠는지를 묻습니다. 앱을 완전히 지웠는지, 저장 공간을 비우려고 앱 본체만 내린 "앱 정리 (offload)" 인지도 함께 가립니다. 정리한 앱은 앱 본체만 사라지고 데이터 컨테이너는 남아서 [1], 두 경우는 볼 수 있는 데이터의 양이 크게 다릅니다.
+지금 기기에 없는 앱 가운데 한때 설치했던 앱이 무엇인지, 그 앱을 언제 지웠는지를 묻습니다. 앱을 완전히 지웠는지, 저장 공간을 비우려고 앱 본체만 내린 "앱 정리 (offload)" 인지도 함께 확인합니다. 정리한 앱은 앱 본체만 사라지고 데이터 컨테이너는 남아서 [1], 두 경우는 볼 수 있는 데이터의 양이 크게 다릅니다.
 
 ## 먼저 확인할 것
 
-지운 앱의 흔적을 다룬 공개 자료는 2019년 것이라 [1], iOS 15 이후에도 경로와 동작이 같은지는 검체에서 확인합니다. 검체의 iOS 버전에서 파일이 실제로 있는지부터 봅니다.
+지운 앱의 흔적을 다룬 공개 자료는 2019년 것이라 [1], iOS 15 이후에도 경로와 동작이 같은지는 실제 기기로 확인해야 합니다. 분석 대상의 iOS 버전에서 파일이 실제로 있는지부터 봅니다.
 
 수집 범위가 결과를 크게 가릅니다. 지운 앱을 가장 직접 보여 주는 `UninstalledApplications.plist` 는 전체 파일 시스템 이미지에서만 얻을 수 있고 [1], 로컬 백업에는 이 파일과 `DAAP.sqlitedb` 가 들어 있지 않을 수 있습니다. 로컬 백업만 있다면 설치 목록과 홈 화면 배치를 비교하는 방법이 중심이 됩니다.
 
@@ -31,9 +31,9 @@ nav_order: 1520
 | 4 | 구입 앱 목록 | `/private/var/mobile/Library/Caches/com.apple.appstored/DAAP.sqlitedb` | Apple 계정 기준 구입 앱 목록이고(iOS 12 이후), 기기에 지금 없는 앱도 들어 있습니다 [1] | [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) |
 | 5 | 예전 구입 기록 | `/private/var/mobile/Library/Caches/com.apple.storeservices/AppPurchaseHistory.6.sqlitedb` | 예전 iOS 에서 4번과 비슷한 역할을 했습니다 [1] | [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) |
 
-이 밖에 Mobile Installation 로그, 스크린 타임, PowerLog, KnowledgeC, DataUsage.sqlite, netusage.sqlite, CallHistory.storedata 에도 지운 앱의 흔적이 남을 수 있습니다 [1]. 지운 앱이 이 파일들에 어떤 모양으로 남는지는 공개 자료가 적어 검체에서 확인합니다. 각 파일을 읽는 법은 [화면 사용 시간](../../../02-artifacts/app-usage/screen-time.md), [전원 로그](../../../02-artifacts/app-usage/powerlog.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 에서 다룹니다. 로컬 백업에는 KnowledgeC·바이옴·PowerLog·installd 로그가 들어 있지 않을 수 있습니다.
+이 밖에 Mobile Installation 로그, 스크린 타임, PowerLog, KnowledgeC, DataUsage.sqlite, netusage.sqlite, CallHistory.storedata 에도 지운 앱의 흔적이 남을 수 있습니다 [1]. 지운 앱이 이 파일들에 어떤 모양으로 남는지는 실제 데이터로 확인해야 합니다. 각 파일을 읽는 법은 [화면 사용 시간](../../../02-artifacts/app-usage/screen-time.md), [전원 로그](../../../02-artifacts/app-usage/powerlog.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md), [통화 기록](../../../02-artifacts/communications/call-history.md) 에서 다룹니다. 로컬 백업에는 KnowledgeC·바이옴·PowerLog·installd 로그가 들어 있지 않을 수 있습니다.
 
-로컬 백업에서 앱 지우기와 관련될 만한 파일은 아래와 같습니다. 앱을 지운 뒤 값이 어떻게 바뀌는지는 공개 자료가 없어 검체에서 확인합니다.
+로컬 백업에서 앱 지우기와 관련될 만한 파일은 아래와 같습니다. 앱을 지운 뒤 값이 어떻게 바뀌는지는 시험 기기로 확인해야 합니다.
 
 | 파일(백업) | 표·키 이름 |
 |---|---|
@@ -45,7 +45,7 @@ nav_order: 1520
 | WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZPROCESS`(`ZFIRSTTIMESTAMP`, `ZTIMESTAMP`, `ZBUNDLENAME`, `ZPROCNAME` 등) |
 | 백업 최상위 `Info.plist` | `Installed Applications` |
 
-`SystemAppInstallState.plist` 의 정수 값이 기본 앱을 지웠는지 나타내는지, 백업 `Info.plist` 의 `Installed Applications` 가 백업 시점의 설치 목록인지는 공개 자료가 없어서, 쓰기 전에 시험 기기로 확인합니다. 백업 파일 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+`SystemAppInstallState.plist` 의 정수 값이 기본 앱을 지웠는지 나타내는지, 백업 `Info.plist` 의 `Installed Applications` 가 백업 시점의 설치 목록인지는 밝힌 공개 문서가 없으므로, 쓰기 전에 시험 기기로 확인합니다. 백업 파일 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ## 분석 흐름
 

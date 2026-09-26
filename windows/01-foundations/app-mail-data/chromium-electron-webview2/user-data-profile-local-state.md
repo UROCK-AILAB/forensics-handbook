@@ -13,7 +13,7 @@ nav_order: 430
 
 크롬 계열 브라우저는 사용자 데이터 폴더 (User Data Directory) 하나에 기록을 모으고, 그 아래 프로필 (Profile) 폴더마다 방문 기록·쿠키 같은 파일이 따로 쌓입니다.
 `Local State` 파일에는 프로필 폴더 이름과 사용자가 붙인 이름을 잇는 정보가 들어 있습니다.
-어느 브라우저의 폴더인지는 폴더 모양이 아니라 `Last Version`·`Last Browser` 파일과 `Local State` 의 키로 가립니다.
+어느 브라우저의 폴더인지는 폴더 모양이 아니라 `Last Version`·`Last Browser` 파일과 `Local State` 의 키로 구분합니다.
 
 ## 이 구조를 쓰는 아티팩트
 
@@ -21,7 +21,7 @@ nav_order: 430
 - Electron 앱과 WebView2 앱도 비슷한 구조를 씁니다. 다만 프로필 폴더가 없거나 폴더 층이 다를 수 있습니다. 이 차이는 [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 에서 다룹니다.
 
 아래 폴더·파일 이름, JSON 키 이름, 파일 앞 몇 바이트는 Windows 11(빌드 26200)의 Chrome 153.0.8010.48 과 Edge 151.0.4129.101 기준입니다.
-버전마다 다를 수 있으니 검체에서 확인합니다.
+버전마다 다를 수 있으니 실제 기기에서 확인합니다.
 
 ## 구조
 
@@ -39,7 +39,7 @@ nav_order: 430
 | Edge | `%LOCALAPPDATA%\Microsoft\Edge\User Data` |  |
 
 - Canary 의 폴더 이름에는 "Canary" 가 들어가지 않습니다. `Chrome SxS` 입니다.
-- Brave·Whale·Opera 같은 다른 계열 브라우저의 기본 위치는 판마다 다를 수 있어 검체에서 확인합니다.
+- Brave·Whale·Opera 같은 다른 계열 브라우저의 기본 위치는 판마다 다를 수 있어 실제 기기에서 확인합니다.
 - 실행 인수 `--user-data-dir` 로 이 위치를 바꿀 수 있습니다[1].
 - User Data 폴더에는 두 가지가 함께 들어 있습니다. 하나는 방문 기록·즐겨찾기·쿠키 같은 프로필 데이터입니다. 다른 하나는 브라우저 설치 하나에 딸린 상태 값입니다[1].
 - Windows 에서는 캐시 폴더도 프로필 폴더 안에 있습니다[1]. Chrome 153 에서는 `Default\Cache\Cache_Data` 입니다.
@@ -70,12 +70,12 @@ nav_order: 430
 | `profile.profiles_order` | 목록입니다. 채우는 기준은 공개 자료에 나와 있지 않습니다 |
 | `os_crypt.encrypted_key`, `os_crypt.app_bound_encrypted_key`, `os_crypt.audit_enabled` | 쿠키·비밀번호 암호화에 쓰는 키입니다. [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) 에서 다룹니다 |
 
-Chrome 의 `info_cache` 에서 프로필 하나에 딸린 칸은 아래와 같습니다.
+Chrome 의 `info_cache` 에서 프로필 하나에 딸린 필드는 아래와 같습니다.
 
 `name`, `shortcut_name`, `user_name`, `gaia_id`, `gaia_name`, `gaia_given_name`, `hosted_domain`, `is_managed`, `is_ephemeral`, `avatar_icon`, `active_time`
 
-- 칸마다 뜻을 설명한 공식 문서는 없습니다.
-- `user_name` 과 `gaia_` 로 시작하는 칸은 이름으로 보아 브라우저에 로그인한 계정 정보로 보입니다. 이름에서 짐작한 뜻이므로 다른 기록과 대조합니다.
+- 필드마다 뜻을 설명한 공식 문서는 없습니다.
+- `user_name` 과 `gaia_` 로 시작하는 필드는 이름으로 보면 브라우저에 로그인한 계정 정보로 보입니다. 이름에서 짐작한 뜻이므로 다른 기록과 대조합니다.
 - `active_time` 은 소수점이 있는 숫자입니다. 1970-01-01 UTC 부터 센 초로 바꾸면 프로필을 쓴 날과 맞는 날짜(예: 2026-09-23 UTC)가 나오므로 Unix 초로 보입니다.
 
 ### 프로필 폴더 안 주요 파일
@@ -96,27 +96,27 @@ Chrome 의 `info_cache` 에서 프로필 하나에 딸린 칸은 아래와 같�
 - 캐시도 옛 버전은 `Default\Cache` 바로 아래에 두었습니다. `Cache\Cache_Data` 로 옮긴 버전도 공개 자료에 나와 있지 않습니다. 캐시 파일의 형식은 [캐시 형식](blockfile-simple-cache.md) 에서 다룹니다.
 - `Sessions_Encrypted` 와 `EncryptedBookmarks2` 는 뜻과 처음 생긴 버전이 공개 자료에 나와 있지 않습니다.
 
-### 계열 브라우저를 가리는 단서
+### 계열 브라우저를 구분하는 단서
 
-Chrome 과 Edge 는 폴더 구성이 거의 같아서 폴더 이름만 보고 가리지 않고, 아래 파일과 키를 함께 봅니다.
+Chrome 과 Edge 는 폴더 구성이 거의 같아서 폴더 이름만 보고 구분하지 않고, 아래 파일과 키를 함께 봅니다.
 
 | 단서 | Chrome 153 | Edge 151 |
 |---|---|---|
 | `Last Version` 값 | `153.0.8010.48` | `151.0.4129.101` |
 | `Last Browser` 값 | `C:\Program Files\Google\Chrome\Application\` 아래 실행 파일 경로 | Edge 실행 파일 경로 |
 | `Local State` 최상위 키 | Edge 전용 키 없음 | `edge`, `edge_ci`, `dual_engine`, `smartscreen` 처럼 `edge` 로 시작하거나 Edge 에만 있는 키 |
-| `info_cache` 칸 | 위 목록 | `edge_account_cid`, `edge_account_type`, `edge_account_tenant_id` 같은 `edge_account_*` 칸이 더 있음 |
+| `info_cache` 필드 | 위 목록 | `edge_account_cid`, `edge_account_type`, `edge_account_tenant_id` 같은 `edge_account_*` 필드가 더 있음 |
 | `os_crypt` 키 | `encrypted_key`, `app_bound_encrypted_key`, `audit_enabled` | 여기에 `aster_app_bound_encrypted_key` 가 하나 더 있음. 뜻은 공개 자료에 나와 있지 않습니다 |
 | `profile.last_used` | 있음 | 없음 |
 
-- Brave·Whale·Opera 에서는 이 단서가 다를 수 있어 검체에서 확인합니다.
+- Brave·Whale·Opera 에서는 이 단서가 다를 수 있어 실제 기기에서 확인합니다.
 
 ## 읽는 법
 
 1. **User Data 폴더를 찾습니다.** 사용자 프로필마다 위 기본 위치를 봅니다.
 2. **기본 위치 밖도 찾습니다.** 디스크 전체에서 `Local State` 라는 이름의 파일을 찾습니다. 이 파일이 있는 폴더가 크롬 계열 데이터 폴더 후보입니다. `--user-data-dir` 로 옮긴 폴더와 Electron·WebView2 앱 폴더가 함께 나옵니다. 실행 인수가 남았을 수 있는 [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md) 도 봅니다.
-3. **계열을 가립니다.** `Last Version`, `Last Browser`, `Local State` 최상위 키를 위 표와 맞춰 봅니다.
-4. **프로필 폴더와 표시 이름을 짝짓습니다.** 사본의 `Local State` 를 JSON 으로 엽니다. `profile.info_cache` 아래 키가 폴더 이름입니다. 그 안의 칸에서 표시 이름과 계정 정보를 읽습니다.
+3. **계열을 구분합니다.** `Last Version`, `Last Browser`, `Local State` 최상위 키를 위 표와 맞춰 봅니다.
+4. **프로필 폴더와 표시 이름을 짝짓습니다.** 사본의 `Local State` 를 JSON 으로 엽니다. `profile.info_cache` 아래 키가 폴더 이름입니다. 그 안의 필드에서 표시 이름과 계정 정보를 읽습니다.
 5. **실제 폴더 목록과 비교합니다.** `info_cache` 에 없는 폴더가 있거나 그 반대면 이유를 따로 확인합니다.
 6. **프로필마다 따로 분석합니다.** 방문 기록·쿠키·캐시는 프로필 폴더마다 따로 있습니다. 결과에는 프로필 폴더 이름을 붙입니다.
 
@@ -182,7 +182,7 @@ Chrome 153·Edge 151 의 키 이름으로 만든 예시이고, `<…>` 는 값 �
 - **Canary 를 놓칩니다.** Canary 폴더 이름은 `Chrome SxS` 입니다.
 - **`last_used` 만으로 마지막 프로필을 찾습니다.** Edge 151 의 `Local State` 에는 이 키가 없습니다.
 - **`Guest Profile`·`System Profile` 을 사용자 프로필과 같이 셉니다.** 두 폴더의 쓰임은 공개 자료에 나와 있지 않습니다. 안의 파일을 보고 따로 판단합니다.
-- **폴더 모양으로 브라우저를 가립니다.** Chrome 과 Edge 는 폴더 구성이 거의 같습니다. Electron·WebView2 앱 폴더에도 `Local State` 가 있습니다. 앱 안에 든 폴더를 브라우저 프로필로 착각하지 않습니다. [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 를 봅니다.
+- **폴더 모양으로 브라우저를 구분합니다.** Chrome 과 Edge 는 폴더 구성이 거의 같습니다. Electron·WebView2 앱 폴더에도 `Local State` 가 있습니다. 앱 안에 든 폴더를 브라우저 프로필로 착각하지 않습니다. [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 를 봅니다.
 - **쿠키 파일을 한 자리에서만 찾습니다.** 요즘 버전은 `Network\Cookies`, 옛 버전은 프로필 바로 아래 `Cookies` 입니다.
 - **원본 폴더를 브라우저로 엽니다.** `Last Version` 은 마지막으로 실행한 버전을 적는 파일입니다. 다른 버전의 브라우저로 열면 이런 값이 바뀔 수 있습니다. 사본을 만들고 파일 단위로 읽습니다.
 

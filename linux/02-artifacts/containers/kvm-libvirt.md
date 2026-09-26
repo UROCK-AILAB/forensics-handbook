@@ -12,9 +12,9 @@ libvirt 로 관리하는 KVM 가상 머신은 호스트에 정의 XML·QEMU 로�
 
 libvirt 는 가상 머신을 도메인 (domain) 이라고 부르고, 도메인마다 구성을 XML 로 저장합니다. QEMU 드라이버는 root 권한으로 도는 시스템 모드 (`qemu:///system`) 와 일반 사용자 권한으로 도는 세션 모드 (`qemu:///session`) 로 나뉘며, 모드에 따라 파일이 쌓이는 위치가 다릅니다[1][9].
 
-흔적이 생기는 까닭은 다섯 가지입니다. 도메인을 정의하면 영구 정의 XML 이 생기고, 켜면 실행 상태 XML 과 QEMU 로그 줄이 생깁니다[1][2][4]. 스냅숏·저장(save)·메모리 덤프를 하면 메타데이터와 큰 이미지 파일이 생기고[1][10][12], 가상 네트워크에서 게스트가 주소를 받으면 임대 파일이 바뀝니다[11]. 게스트의 디스크는 호스트 파일 시스템의 이미지 파일(qcow2 등)이거나 호스트의 블록 장치입니다[9][14].
+흔적이 생기는 이유는 다섯 가지입니다. 도메인을 정의하면 영구 정의 XML 이 생기고, 켜면 실행 상태 XML 과 QEMU 로그 줄이 생깁니다[1][2][4]. 스냅숏·저장(save)·메모리 덤프를 하면 메타데이터와 큰 이미지 파일이 생기고[1][10][12], 가상 네트워크에서 게스트가 주소를 받으면 임대 파일이 바뀝니다[11]. 게스트의 디스크는 호스트 파일 시스템의 이미지 파일(qcow2 등)이거나 호스트의 블록 장치입니다[9][14].
 
-libvirt 데몬은 두 가지 구성이 있습니다. 하나는 모든 드라이버를 맡는 단일 데몬 `libvirtd` 이고, 다른 하나는 드라이버마다 따로 도는 모듈형 데몬 `virt${DRIVER}d`(QEMU 는 `virtqemud`)와 원격 접속용 `virtproxyd` 입니다[8]. 둘 다 기본으로 빌드되므로, 검체에서는 어느 쪽 systemd 단위(`libvirtd.service` 또는 `virtqemud.service`)가 켜져 있었는지 먼저 확인합니다[8]. 단위 파일 읽는 법은 [systemd 서비스와 타이머](../persistence/systemd-units.md)에서 다룹니다.
+libvirt 데몬은 두 가지 구성이 있습니다. 하나는 모든 드라이버를 맡는 단일 데몬 `libvirtd` 이고, 다른 하나는 드라이버마다 따로 도는 모듈형 데몬 `virt${DRIVER}d`(QEMU 는 `virtqemud`)와 원격 접속용 `virtproxyd` 입니다[8]. 둘 다 기본으로 빌드되므로, 분석 대상에서는 어느 쪽 systemd 단위(`libvirtd.service` 또는 `virtqemud.service`)가 켜져 있었는지 먼저 확인합니다[8]. 단위 파일 읽는 법은 [systemd 서비스와 타이머](../persistence/systemd-units.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -32,7 +32,7 @@ libvirt 데몬은 두 가지 구성이 있습니다. 하나는 모든 드라이�
 | UEFI 변수 | `/var/lib/libvirt/qemu/nvram/` | `$XDG_CONFIG_HOME/libvirt/qemu/nvram/` |
 | 드라이버 설정 | `/etc/libvirt/qemu.conf` | `$XDG_CONFIG_HOME/libvirt/qemu.conf` |
 
-표의 경로는 libvirt 코드가 정하는 기본값입니다[1][9]. 세션 모드에서 libvirt 는 사용자 설정·캐시·런타임 폴더 아래에 `libvirt` 폴더를 두고 그 아래에 `qemu/…` 를 붙입니다[1][18]. `$XDG_CONFIG_HOME` 이 비어 있으면 `$HOME/.config` 로 봅니다[9]. 로그는 캐시 폴더 쪽에 있으므로, 검체에서는 사용자 홈의 `.cache` 아래 `libvirt` 폴더를 찾습니다.
+표의 경로는 libvirt 코드가 정하는 기본값입니다[1][9]. 세션 모드에서 libvirt 는 사용자 설정·캐시·런타임 폴더 아래에 `libvirt` 폴더를 두고 그 아래에 `qemu/…` 를 붙입니다[1][18]. `$XDG_CONFIG_HOME` 이 비어 있으면 `$HOME/.config` 로 봅니다[9]. 로그는 캐시 폴더 쪽에 있으므로, 분석 대상에서는 사용자 홈의 `.cache` 아래 `libvirt` 폴더를 찾습니다.
 
 시스템 모드에는 이 밖에도 `/var/lib/libvirt/qemu/` 아래 `checkpoint/`·`varstore/`·`ram/`, 캐시 `/var/cache/libvirt/qemu`, 가상 TPM 로그 `/var/log/swtpm/libvirt/qemu` 와 저장 폴더 `/var/lib/libvirt/swtpm` 이 있습니다[1]. 디스크 이미지의 기본 폴더는 `/var/lib/libvirt/images` 입니다[9]. 가상 네트워크의 DHCP 임대 파일은 `/var/lib/libvirt/dnsmasq/인터페이스이름.status` 입니다[11].
 
@@ -46,7 +46,7 @@ libvirt 데몬은 두 가지 구성이 있습니다. 하나는 모든 드라이�
 | 게스트마다 남는 것 | `/etc/apparmor.d/libvirt/libvirt-UUID` 와 `libvirt-UUID.files` | 켜진 게스트의 XML 에 배정된 라벨이 들어갑니다 |
 | 함께 볼 것 | 공통 틀 `/etc/apparmor.d/libvirt/TEMPLATE` | 디스크 폴더 `/var/lib/libvirt/images` 의 라벨 `system_u:object_r:virt_image_t` |
 
-AppArmor sVirt 는 `qemu:///system` 가상 머신을 켤 때 그 UUID 로 된 프로필이 없으면 새로 만들고, 디스크를 붙이는 등 접근할 파일이 바뀌면 `.files` 를 고쳐 씁니다[9]. SELinux sVirt 는 기본 설정에서 게스트를 켤 때마다 `svirt_t` 에 고유 범주를 붙인 라벨(예: `system_u:system_r:svirt_t:s0:c34,c44`)을 배정하고, 그 게스트만 쓰는 디스크 이미지도 같은 범주로 다시 라벨을 붙입니다[9]. 어느 방식이 켜져 있었는지는 검체의 보안 모듈 설정으로 확인합니다.
+AppArmor sVirt 는 `qemu:///system` 가상 머신을 켤 때 그 UUID 로 된 프로필이 없으면 새로 만들고, 디스크를 붙이는 등 접근할 파일이 바뀌면 `.files` 를 고쳐 씁니다[9]. SELinux sVirt 는 기본 설정에서 게스트를 켤 때마다 `svirt_t` 에 고유 범주를 붙인 라벨(예: `system_u:system_r:svirt_t:s0:c34,c44`)을 배정하고, 그 게스트만 쓰는 디스크 이미지도 같은 범주로 다시 라벨을 붙입니다[9]. 어느 방식이 켜져 있었는지는 분석 대상의 보안 모듈 설정으로 확인합니다.
 
 ## 구조
 
@@ -85,7 +85,7 @@ libvirt 를 패키지 판 정보와 함께 빌드했으면 `libvirt version: 판
 | `memory`·`disks` | 메모리를 담았는지, 디스크마다 내부·외부 중 무엇인지 |
 | `domain` | 찍을 때의 비활성 도메인 정의 전체(0.9.5 이후) |
 
-스냅숏은 세 종류입니다. 디스크 스냅숏은 qcow2 한 파일 안에 담는 내부형과 새 파일을 만드는 외부형이 있고, 메모리 상태 스냅숏과 둘을 합친 전체 시스템 스냅숏이 있습니다[10]. 켜진 게스트에서 찍은 디스크 스냅숏은 갑자기 전원이 나간 상태와 같습니다[10]. 메타데이터 파일의 이름과 하위 폴더 구성은 검체의 `snapshot/` 폴더에서 확인합니다[1].
+스냅숏은 세 종류입니다. 디스크 스냅숏은 qcow2 한 파일 안에 담는 내부형과 새 파일을 만드는 외부형이 있고, 메모리 상태 스냅숏과 둘을 합친 전체 시스템 스냅숏이 있습니다[10]. 켜진 게스트에서 찍은 디스크 스냅숏은 갑자기 전원이 나간 상태와 같습니다[10]. 메타데이터 파일의 이름과 하위 폴더 구성은 분석 대상의 `snapshot/` 폴더에서 확인합니다[1].
 
 ### 저장 이미지
 
@@ -99,9 +99,9 @@ libvirt 를 패키지 판 정보와 함께 빌드했으면 `libvirt version: 판
 | 24 | 4 | `was_running` |
 | 28 | 4 | `format` |
 | 32 | 4 | `cookieOffset` |
-| 36 | 56 | 쓰지 않는 칸 |
+| 36 | 56 | 쓰지 않는 필드 |
 
-머리 뒤에 도메인 XML 이 이어지므로, 정의 XML 이 지워졌어도 저장 이미지에서 구성을 되살릴 수 있습니다[12]. 정수의 바이트 순서는 `version` 칸이 2 로 읽히는 쪽으로 판단합니다.
+머리 뒤에 도메인 XML 이 이어지므로, 정의 XML 이 지워졌어도 저장 이미지에서 구성을 되살릴 수 있습니다[12]. 정수의 바이트 순서는 `version` 필드가 2 로 읽히는 쪽으로 판단합니다.
 
 ### 메모리 덤프
 
@@ -139,7 +139,7 @@ libvirt 를 패키지 판 정보와 함께 빌드했으면 `libvirt version: 판
 - 로그 회전으로 밀려난 오래된 시작·종료 기록과, 같은 IP 로 새로 받았거나 지운 임대의 이전 기록.
 - 켠 뒤 붙이거나 뗀 장치. 명령줄은 켤 때 한 번만 적습니다[4].
 
-보고서에는 "2026-01-02 03:20:11 UTC 에 호스트 kvm-host01 에서 도메인 web01 이 시작된 기록이 있고, 그때 디스크 이미지는 `/var/lib/libvirt/images/web01.qcow2` 였다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2026-01-02 03:20:11 UTC 에 호스트 kvm-host01 에서 도메인 web01 이 시작된 기록이 있고, 그때 디스크 이미지는 `/var/lib/libvirt/images/web01.qcow2` 였다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 

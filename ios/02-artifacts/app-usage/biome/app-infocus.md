@@ -13,7 +13,7 @@ iOS 15 까지 KnowledgeC.db 에 있던 앱 전경 사용 기록(`/app/inFocus`)�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJECT` 표에서 `ZSTREAMNAME` 이 `/app/inFocus` 인 행이었습니다[1][3]. iOS 16 에서 이 기록이 바이옴 스트림으로 옮겨졌고[1][7], iOS 16 KnowledgeC.db 의 `ZSTREAMNAME` 칸에는 `app/inFocus` 값이 없습니다[1]. KnowledgeC.db 파일 자체는 iOS 16 에도 남아 있어서[1][7], 파일이 있다고 앱 사용 기록까지 거기 있다고 보면 안 됩니다. 상용 도구 가운데에는 바이옴에서 "Application Focus" 기록을 읽어 보여 주는 것도 있습니다[7].
+iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJECT` 표에서 `ZSTREAMNAME` 이 `/app/inFocus` 인 행이었습니다[1][3]. iOS 16 에서 이 기록이 바이옴 스트림으로 옮겨졌고[1][7], iOS 16 KnowledgeC.db 의 `ZSTREAMNAME` 열에는 `app/inFocus` 값이 없습니다[1]. KnowledgeC.db 파일 자체는 iOS 16 에도 남아 있어서[1][7], 파일이 있다고 앱 사용 기록까지 거기 있다고 보면 안 됩니다. 상용 도구 가운데에는 바이옴에서 "Application Focus" 기록을 읽어 보여 주는 것도 있습니다[7].
 
 스트림 폴더 구조와 SEGB 형식은 [저장 위치와 스트림 (Streams)](streams.md)에서 다루고, 이 페이지는 앱 사용 스트림의 위치와 기록 내용, 해석만 다룹니다.
 
@@ -25,7 +25,7 @@ iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJE
 | 16 | `/private/var/db/biome/streams/restricted/_DKEvent.App.InFocus` | SEGB v1 | [1][3][6] |
 | 17–26 | iOS 16 과 같은 위치 | SEGB v2 | [2][6] |
 
-iLEAPP 파서는 `*/[Bb]iome/streams/restricted/App.InFocus/local/*` 와 `*/[Bb]iome/streams/restricted/App.InFocus/remote/*` 두 경로 규칙으로 이 스트림을 찾습니다[5]. `[Bb]` 로 대소문자를 모두 받아서 `/private/var/db/biome` 과 `/private/var/mobile/Library/Biome` 양쪽을 잡습니다. 스트림 이름이 `_DKEvent.App.InFocus` 인 경우와 `App.InFocus` 인 경우가 각각 어느 iOS 버전, 어느 영역에 해당하는지는 공개 자료로 가려지지 않았으므로, 검체에서는 두 이름을 모두 찾아봅니다. iOS 27 에서의 위치도 검체에서 확인합니다.
+iLEAPP 파서는 `*/[Bb]iome/streams/restricted/App.InFocus/local/*` 와 `*/[Bb]iome/streams/restricted/App.InFocus/remote/*` 두 경로 규칙으로 이 스트림을 찾습니다[5]. `[Bb]` 로 대소문자를 모두 받아서 `/private/var/db/biome` 과 `/private/var/mobile/Library/Biome` 양쪽을 잡습니다. 스트림 이름이 `_DKEvent.App.InFocus` 인 경우와 `App.InFocus` 인 경우가 각각 어느 iOS 버전, 어느 영역에 해당하는지는 공개 자료로 밝혀지지 않았으므로, 실제 데이터에서는 두 이름을 모두 찾아봅니다. iOS 27 에서의 위치도 실제 기기로 확인합니다.
 
 로컬 백업의 HomeDomain `Library/Preferences/com.apple.appstored.plist` 에는 `AppUsageBiomeStartDate` (datetime) 라는 키가 있습니다. 이 키와 `App.InFocus` 의 관계는 밝혀지지 않았고, 로컬 백업에는 `App.InFocus` SEGB 파일이 들어 있지 않습니다. 바이옴을 얻으려면 어떤 수집이 필요한지는 [저장 위치와 스트림 (Streams)](streams.md)의 수집 범위 절에 있습니다.
 
@@ -54,7 +54,7 @@ iLEAPP 는 `App.InFocus` 스트림을 아래처럼 읽습니다[5].
 | 6 | 문자열 | 번들 ID |
 | 2, 9, 10 | — | 읽기만 하고 출력하지 않음 |
 
-iLEAPP 결과표의 칸은 `Timestamp`, `Start Time`, `SEGB State`, `Bundle ID`, `Action`, `Sync Origin`, `Filename`, `Offset` 입니다[5]. `SEGB State` 로 Written·Deleted 를, `Sync Origin` 으로 `local`·`remote` 를 가르고, `Filename` 과 `Offset` 으로 원본 파일의 기록 위치까지 되짚을 수 있습니다.
+iLEAPP 결과표의 열은 `Timestamp`, `Start Time`, `SEGB State`, `Bundle ID`, `Action`, `Sync Origin`, `Filename`, `Offset` 입니다[5]. `SEGB State` 로 Written·Deleted 를, `Sync Origin` 으로 `local`·`remote` 를 가르고, `Filename` 과 `Offset` 으로 원본 파일의 기록 위치까지 거슬러 올라가 찾을 수 있습니다.
 
 iLEAPP 해석대로라면 앱이 앞에 나올 때와 뒤로 갈 때마다 기록이 하나씩 생기고, 사용 구간은 Foreground 기록과 그 뒤의 Background 기록을 짝지어 만들게 됩니다. 이 짝짓기 방식은 공개된 방법이 아니므로, 구간을 계산했다면 보고서에 분석가가 짝지은 결과라고 밝힙니다.
 
@@ -68,11 +68,11 @@ iLEAPP 해석대로라면 앱이 앞에 나올 때와 뒤로 갈 때마다 기�
 
 ## 시각 해석
 
-SEGB 기록 헤더의 시각은 2001-01-01 00:00 UTC 부터 센 초를 double 로 적은 Mac 절대 시각이고[1][3], iLEAPP 는 기록 시각을 UTC 로 둡니다[5]. crush 는 페이로드 안의 시각도 Cocoa 시각으로 자동 변환합니다[3]. 헤더 시각과 페이로드 시각(crush 해석의 시작·끝·기록 시각, iLEAPP 해석의 필드 4)은 서로 다른 값이라서, 보고할 때는 어느 칸의 시각인지 밝힙니다. 현지 시각은 [시간대와 시각 설정 (Time Zone)](../../system-account/time-zone.md)에서 기기 시간대를 확인한 뒤 바꾸고, 단위 변환은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)을 따릅니다.
+SEGB 기록 헤더의 시각은 2001-01-01 00:00 UTC 부터 센 초를 double 로 적은 Mac 절대 시각이고[1][3], iLEAPP 는 기록 시각을 UTC 로 둡니다[5]. crush 는 페이로드 안의 시각도 Cocoa 시각으로 자동 변환합니다[3]. 헤더 시각과 페이로드 시각(crush 해석의 시작·끝·기록 시각, iLEAPP 해석의 필드 4)은 서로 다른 값이라서, 보고할 때는 어느 필드의 시각인지 밝힙니다. 현지 시각은 [시간대와 시각 설정 (Time Zone)](../../system-account/time-zone.md)에서 기기 시간대를 확인한 뒤 바꾸고, 단위 변환은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)을 따릅니다.
 
 iOS 16 의 전환 이유 값에는 `com.apple.SpringBoard.transitionReason.homescreen`, `com.apple.SpringBoard.transitionReason.externalrequest`, `com.apple.SpringBoard.transitionReason.appswitcher`, `com.apple.SpringBoard.transitionReason.spotlight` 가 있습니다[1]. 상용 도구에서도 "SpringBoard 홈 화면에서 Safari 로 전환" 같은 정보를 볼 수 있습니다[7].
 
-보존 기간은 iOS 16 에서 스트림 메타데이터의 `maxAge` 가 2,419,200초(28일)입니다[1]. iOS 17 이후 값은 검체의 메타데이터에서 확인합니다.
+보존 기간은 iOS 16 에서 스트림 메타데이터의 `maxAge` 가 2,419,200초(28일)입니다[1]. iOS 17 이후 값은 실제 기기의 메타데이터에서 확인합니다.
 
 ## 함정과 한계
 
@@ -82,7 +82,7 @@ iOS 16 의 전환 이유 값에는 `com.apple.SpringBoard.transitionReason.homes
 
 ## 직접 분석해 보기
 
-아래 헥스는 iLEAPP 의 필드 해석[5]과 프로토콜 버퍼 인코딩 규칙으로 만든 페이로드 예시이고 실제 검체에서 나온 값이 아닙니다. 필드 2·9·10 은 뺐고, 번들 ID 는 crush 자료의 예[3]를 썼습니다.
+아래 헥스는 iLEAPP 의 필드 해석[5]과 프로토콜 버퍼 인코딩 규칙으로 만든 페이로드 예시이고 실제 기기에서 나온 값이 아닙니다. 필드 2·9·10 은 뺐고, 번들 ID 는 crush 자료의 예[3]를 썼습니다.
 
 ```
 바이트                                              뜻
@@ -103,13 +103,13 @@ iOS 15 이하나 버전을 올린 기기는 [KnowledgeC (knowledgeC.db)](../know
 
 ## 실습
 
-NIST CFReDS 같은 곳에 공개된 iOS 16 이후 전체 파일시스템 검체로 아래를 풀어 봅니다.
+NIST CFReDS 같은 곳에 공개된 iOS 16 이후 전체 파일시스템 이미지로 아래를 풀어 봅니다.
 
 1. `_DKEvent.App.InFocus` 와 `App.InFocus` 가운데 어느 이름의 스트림 폴더가 있고, 시스템 영역과 사용자 영역 가운데 어디에 있는지 찾아봅니다.
 2. 같은 번들 ID 의 Foreground 기록과 바로 뒤 Background 기록을 짝지어 사용 구간을 만들고, 짝이 맞지 않는 기록이 있는지 봅니다.
 3. crush 해석의 전환 이유 필드가 있는 기록을 골라 어떤 값들이 나오는지 세어 봅니다.
 4. `remote` 기록이 있다면 `Sync Origin` 으로 걸러낸 뒤와 전과 타임라인이 어떻게 달라지는지 비교해 봅니다.
-5. 같은 검체의 KnowledgeC.db 에 `/app/inFocus` 행이 남아 있는지 확인합니다.
+5. 같은 이미지의 KnowledgeC.db 에 `/app/inFocus` 행이 남아 있는지 확인합니다.
 
 ## 참고 문헌
 

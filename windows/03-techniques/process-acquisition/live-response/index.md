@@ -24,7 +24,7 @@ has_toc: false
 
 무엇이 필요한지 확신이 서지 않을 때의 원칙과 사건마다 모을 데이터는 [수집 순서와 원칙](order-of-volatility.md)에서 다룹니다. 켜진 디스크를 복사할지 정하는 기준은 [실행 중 시스템 이미징](live-imaging.md)에서 다룹니다.
 
-### 한 일을 모두 적는 까닭
+### 한 일을 모두 적는 이유
 
 증거를 모으는 방법은 투명하고 다시 해 볼 수 있어야 합니다[1]. 모든 단계와 쓴 도구를 자세히 적어 두면 다른 분석관이 나중에 같은 과정을 되풀이할 수 있습니다. 가능하면 현장의 한 사람을 증거 관리 담당으로 정하고, 이 사람이 모은 것을 모두 사진으로 찍고 기록하고 표시하게 합니다. 누가, 어디서, 언제, 무엇을 했는지도 이 사람이 적습니다.
 
@@ -67,7 +67,7 @@ has_toc: false
 
 ## 읽는 순서
 
-1. [수집 순서와 원칙 (Order of Volatility)](order-of-volatility.md) — RFC 3227 과 NIST SP 800-86 의 수집 순서를 견줍니다. 도구 준비, 시각 기록, 끄는 방법, 연속 보관 기록도 다룹니다.
+1. [수집 순서와 원칙 (Order of Volatility)](order-of-volatility.md) — RFC 3227 과 NIST SP 800-86 의 수집 순서를 비교합니다. 도구 준비, 시각 기록, 끄는 방법, 연속 보관 기록도 다룹니다.
 2. [프로세스·DLL·핸들 수집 (Processes·DLLs·Handles)](processes-dlls-handles.md) — `tasklist` 와 `Win32_Process` 로 프로세스 목록, 명령줄, 부모 프로세스를 남깁니다. Handle 로 열린 파일을 봅니다.
 3. [네트워크 상태 수집 (Connections·DNS·ARP·Routes)](connections-dns-arp-routes.md) — 연결 목록, DNS 캐시, ARP 캐시, 라우팅 표, 네트워크 설정을 남깁니다. 수집 중에 DNS 캐시를 지우는 명령도 짚습니다.
 4. [로그온 세션·클립보드·화면 수집 (Sessions·Clipboard·Screen)](sessions-clipboard-screen.md) — 시스템을 만지기 전에 화면을 찍습니다. 그다음 로그온 세션과 클립보드를 남깁니다.

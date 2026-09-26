@@ -12,9 +12,9 @@ nav_order: 650
 
 ## 무엇을 기록하나 · 왜 생기나
 
-시스템은 외부 저장소를 훑어 미디어 파일을 모음(collection)에 넣습니다. 사진이나 스크린샷 같은 이미지는 DCIM/ 과 Pictures/ 에서 MediaStore.Images 모음으로 들어가고, 동영상은 DCIM/·Movies/·Pictures/ 에서 MediaStore.Video 모음으로 들어갑니다 [3]. 이때 MediaProvider 가 파일의 EXIF 에서 촬영 시각(DateTimeOriginal), 방향(Orientation), 노출 시간·조리개·ISO 같은 값을 읽어 files 표의 칸으로 옮기기 때문에 [1], 같은 사진의 정보가 파일 속 EXIF 와 DB 의 칸 두 곳에 남습니다. 두 곳은 담는 범위와 단위가 다르고, 특히 위치는 DB 쪽에 남지 않습니다.
+시스템은 외부 저장소를 살펴 미디어 파일을 모음(collection)에 넣습니다. 사진이나 스크린샷 같은 이미지는 DCIM/ 과 Pictures/ 에서 MediaStore.Images 모음으로 들어가고, 동영상은 DCIM/·Movies/·Pictures/ 에서 MediaStore.Video 모음으로 들어갑니다 [3]. 이때 MediaProvider 가 파일의 EXIF 에서 촬영 시각(DateTimeOriginal), 방향(Orientation), 노출 시간·조리개·ISO 같은 값을 읽어 files 표의 열로 옮기기 때문에 [1], 같은 사진의 정보가 파일 속 EXIF 와 DB 의 열, 두 곳에 남습니다. 두 곳은 담는 범위와 단위가 다르고, 특히 위치는 DB 쪽에 남지 않습니다.
 
-카메라 앱이 어떤 하위 폴더와 파일 이름을 쓰는지는 AOSP 가 정한 규칙이 아니라 카메라 앱마다 다릅니다. 삼성 카메라의 파일 이름 규칙은 공개 자료가 없어 검체에서 확인합니다. files 표의 전체 칸과 표 구조는 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에 있고, 이 페이지는 EXIF 와 그 칸 사이의 관계를 다룹니다.
+카메라 앱이 어떤 하위 폴더와 파일 이름을 쓰는지는 AOSP 가 정한 규칙이 아니라 카메라 앱마다 다릅니다. 삼성 카메라의 파일 이름 규칙은 실제 기기에서 확인해야 합니다. files 표의 전체 열과 표 구조는 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에 있고, 이 페이지는 EXIF 와 그 열 사이의 관계를 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -23,18 +23,18 @@ nav_order: 650
 | 앱이 MediaStore 로 이미지를 넣을 수 있는 최상위 폴더 | DCIM, Pictures (기본값 Pictures) | 현행 AOSP 기준 [2] |
 | 앱이 MediaStore 로 동영상을 넣을 수 있는 최상위 폴더 | DCIM, Movies, Pictures (기본값 Movies) | 현행 AOSP 기준 [2] |
 | EXIF 위치를 가리지 않고 읽는 조건 | ACCESS_MEDIA_LOCATION 권한 선언과 실행 중 요청(사용자 동의) | Android 10(API 29) 이상을 대상으로 하는 앱 [3] |
-| MediaStore 의 latitude·longitude 칸 | 문서상 폐기(deprecated), 항상 NULL | 현행 AOSP 기준 [1][2] |
+| MediaStore 의 latitude·longitude 열 | 문서상 폐기(deprecated), 항상 NULL | 현행 AOSP 기준 [1][2] |
 | `/sdcard/DCIM` 아래 | Camera, Screenshots, media 같은 하위 폴더 | 카메라 앱과 기기마다 다름 |
 
-`/sdcard` 최상위에는 DCIM, Pictures, Movies, Recordings 같은 표준 폴더가 있습니다. DCIM 아래에 Screenshots 폴더를 두는 기기도 있는데, 이 위치는 AOSP 의 스크린샷 기본 위치와 달라서 [스크린샷과 화면 녹화](screenshots.md) 페이지에서 따로 다룹니다. DCIM/media 폴더가 무엇을 담는지는 공개 자료가 없어 검체에서 확인합니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
+`/sdcard` 최상위에는 DCIM, Pictures, Movies, Recordings 같은 표준 폴더가 있습니다. DCIM 아래에 Screenshots 폴더를 두는 기기도 있는데, 이 위치는 AOSP 의 스크린샷 기본 위치와 달라서 [스크린샷과 화면 녹화](screenshots.md) 페이지에서 따로 다룹니다. DCIM/media 폴더가 무엇을 담는지는 실제 기기에서 확인해야 합니다. 공용 저장 공간의 폴더 구성은 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 페이지에 있습니다.
 
 ## 구조
 
-### EXIF 태그와 MediaStore 칸
+### EXIF 태그와 MediaStore 열
 
-MediaStore 칸과 원본의 관계는 다음과 같습니다 [1].
+MediaStore 열과 원본의 관계는 다음과 같습니다 [1].
 
-| MediaStore 칸 | 가져오는 원본 | 단위 |
+| MediaStore 열 | 가져오는 원본 | 단위 |
 |---|---|---|
 | datetaken | MediaMetadataRetriever 의 METADATA_KEY_DATE 또는 EXIF 의 TAG_DATETIME_ORIGINAL | 유닉스 밀리초 |
 | orientation | EXIF 의 TAG_ORIENTATION (동영상은 회전 메타데이터) | 0·90·180·270 도 |
@@ -45,11 +45,11 @@ MediaStore 칸과 원본의 관계는 다음과 같습니다 [1].
 | xmp | XMP 메타데이터 | 원본 그대로 |
 | latitude·longitude | 색인하지 않음 | 항상 NULL |
 
-date_added 와 date_modified 는 EXIF 에서 오지 않습니다. date_added 는 항목이 처음 추가된 시각이고 읽기 전용 칸이며 [1], MediaProvider 의 insertFile() 은 앱이 넣은 값과 상관없이 이 칸을 그 순간의 유닉스 초로 다시 씁니다 [2]. date_modified 는 파일의 File#lastModified() 값을 초 단위로 색인한 것입니다 [1].
+date_added 와 date_modified 는 EXIF 에서 오지 않습니다. date_added 는 항목이 처음 추가된 시각이고 읽기 전용 열이며 [1], MediaProvider 의 insertFile() 은 앱이 넣은 값과 상관없이 이 열을 그 순간의 유닉스 초로 다시 씁니다 [2]. date_modified 는 파일의 File#lastModified() 값을 초 단위로 색인한 것입니다 [1].
 
 ### 위치 정보와 가림
 
-MediaStore 는 개인정보 보호를 위해 위치를 더 이상 색인하지 않아서 latitude·longitude 칸은 항상 NULL 이고, 위치가 필요하면 ExifInterface#getLatLong() 으로 파일에서 직접 읽어야 합니다 [1]. MediaProvider 도 자기 자신이 아닌 앱이 두 칸에 값을 넣으려 하면 NULL 로 바꿉니다 [2]. 현행 소스에는 사진 선택기 검색용으로 두 칸을 다시 채우는 기능 플래그(indexMediaLatitudeLongitude)가 있지만, 이 플래그가 켜져 있어도 MediaProvider 가 아닌 호출자가 조회하면 NULL 을 돌려줍니다 [2]. 이 플래그가 어느 버전과 기기에서 켜져 있는지는 공개 자료가 없습니다. 삼성 기기에는 AOSP 와 별도로 삼성 미디어 제공자의 media.db 에 위도·경도 칸이 있는데, 그 내용은 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에 있습니다.
+MediaStore 는 개인정보 보호를 위해 위치를 더 이상 색인하지 않아서 latitude·longitude 열은 항상 NULL 이고, 위치가 필요하면 ExifInterface#getLatLong() 으로 파일에서 직접 읽어야 합니다 [1]. MediaProvider 도 자기 자신이 아닌 앱이 두 열에 값을 넣으려 하면 NULL 로 바꿉니다 [2]. 현행 소스에는 사진 선택기 검색용으로 두 열을 다시 채우는 기능 플래그(indexMediaLatitudeLongitude)가 있지만, 이 플래그가 켜져 있어도 MediaProvider 가 아닌 호출자가 조회하면 NULL 을 돌려줍니다 [2]. 이 플래그가 어느 버전과 기기에서 켜져 있는지는 공개 자료가 없습니다. 삼성 기기에는 AOSP 와 별도로 삼성 미디어 제공자의 media.db 에 위도·경도 열이 있는데, 그 내용은 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에 있습니다.
 
 파일을 열어 줄 때도 위치를 가립니다. 범위 저장소(scoped storage)를 쓰는 앱이 사진을 열면 시스템이 위치 정보를 기본으로 가리고, 원본 바이트를 받으려면 앱이 ACCESS_MEDIA_LOCATION 권한을 얻은 뒤 MediaStore.setRequireOriginal() 로 바꾼 URI 를 열어야 합니다 [3]. MediaProvider 는 가림이 필요한 호출자에게 RedactionUtils.getRedactionRanges() 로 구한 바이트 구간을 가려서 넘기고, 권한 없이 원본을 요구하면 "Caller must hold ACCESS_MEDIA_LOCATION permission to access original" 예외를 냅니다 [2]. 앱 권한의 일반 구조는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md) 페이지에 있습니다.
 
@@ -63,7 +63,7 @@ MediaStore 는 개인정보 보호를 위해 위치를 더 이상 색인하지 �
 | DCIM 아래 폴더에 파일이 있다는 것 | 어느 카메라 앱이 만들었는지(폴더 이름 규칙은 앱마다 다름) |
 | latitude·longitude 가 NULL 이라는 것 | 사진에 위치가 없다는 것 |
 
-"이 사진을 이곳에서 찍었다" 보다 "이 파일의 EXIF 에 이 위도·경도와 이 촬영 시각이 적혀 있고, MediaStore 에는 이 시각에 처음 색인됐다" 처럼 기록이 말하는 만큼만 씁니다.
+"이 사진을 이곳에서 찍었다" 보다 "이 파일의 EXIF 에 이 위도·경도와 이 촬영 시각이 적혀 있고, MediaStore 에는 이 시각에 처음 색인됐다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -82,13 +82,13 @@ date_added 가 촬영 시각보다 한참 늦으면 파일이 나중에 복사�
 ## 함정과 한계
 
 - 공유하거나 MediaStore 를 거쳐 복사한 사진은 위치가 가려진 사본일 수 있어서 [2][3], 파일 시스템에서 직접 얻은 원본과 EXIF 가 다를 수 있습니다.
-- latitude·longitude 가 비어 있다고 위치 정보가 없다고 판단하면 안 됩니다. 현행 AOSP 는 이 칸을 채우지 않습니다 [1][2].
+- latitude·longitude 가 비어 있다고 위치 정보가 없다고 판단하면 안 됩니다. 현행 AOSP 는 이 열을 채우지 않습니다 [1][2].
 - 라이브 기기에서 앱을 통해 받은 파일은 가림 처리를 거쳤을 수 있으니, 위치를 볼 때는 파일 시스템 수준으로 확보한 원본을 씁니다. 확보 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에 있습니다.
-- 삼성 카메라가 넣는 제조사 전용 값(MakerNote 등)은 공개된 해석 자료가 없어 검체에서 확인합니다.
+- 삼성 카메라가 넣는 제조사 전용 값(MakerNote 등)은 해석이 공개돼 있지 않아 실제 데이터로 확인해야 합니다.
 
 ## 직접 분석해 보기
 
-**헥스로 촬영 시각 찾기.** AOSP 의 스크린샷 코드는 DateTimeOriginal 을 `yyyy:MM:dd HH:mm:ss` 꼴로, OffsetTimeOriginal 을 `+09:00` 꼴로 적습니다 [4]. 카메라 앱도 같은 꼴을 쓴다면 헥스 편집기에서 이런 ASCII 문자열을 찾아 촬영 시각과 시차를 눈으로 확인할 수 있습니다. 아래는 이 형식으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+**헥스로 촬영 시각 찾기.** AOSP 의 스크린샷 코드는 DateTimeOriginal 을 `yyyy:MM:dd HH:mm:ss` 형식으로, OffsetTimeOriginal 을 `+09:00` 형식으로 적습니다 [4]. 카메라 앱도 같은 형식을 쓴다면 헥스 편집기에서 이런 ASCII 문자열을 찾아 촬영 시각과 시차를 눈으로 확인할 수 있습니다. 아래는 이 형식으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```text
 DateTimeOriginal  "2020:12:15 09:06:26"
@@ -98,7 +98,7 @@ OffsetTimeOriginal "+09:00"
 해석: 현지 2020-12-15 09:06:26, 시차 +09:00 → UTC 2020-12-15 00:06:26
 ```
 
-**external.db 와 맞춰 보기.** 확보한 external.db 사본을 SQLite 를 읽는 공개 도구(예: sqlite3 명령줄)로 열어 DCIM 아래 행의 시각 칸을 뽑고, 같은 파일의 EXIF 값과 나란히 놓습니다. 아래 쿼리는 이 페이지의 칸 이름으로 만든 예시입니다.
+**external.db 와 맞춰 보기.** 확보한 external.db 사본을 SQLite 를 읽는 공개 도구(예: sqlite3 명령줄)로 열어 DCIM 아래 행의 시각 열을 뽑고, 같은 파일의 EXIF 값과 나란히 놓습니다. 아래 쿼리는 이 페이지의 열 이름으로 만든 예시입니다.
 
 ```sql
 SELECT _id, _data,
@@ -118,19 +118,19 @@ taken_utc 와 EXIF 의 현지 시각·시차로 계산한 UTC 가 맞지 않으�
 - [미디어 저장소 (MediaStore)](mediastore/index.md) — 같은 파일의 색인 행, 넣은 앱, 휴지통 상태를 봅니다.
 - [섬네일 캐시 (Thumbnails)](thumbnails.md) — 원본이 없어진 뒤에도 작은 사본이 남는지 봅니다.
 - [구글 포토 (Google Photos)](google-photos.md), [삼성 갤러리 (Samsung Gallery)](samsung-gallery.md) — 앱이 따로 적어 둔 촬영 시각·시차·위치와 비교합니다.
-- [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) — Battery History 에는 `+camera`·`-camera` 표시가 붙은 줄이 있을 수 있고, 각 줄 앞에 월-일 시:분:초.밀리초 꼴의 시각이 붙습니다. 이 표시가 카메라 사용의 시작과 끝을 뜻하는지는 공개 자료가 없어 촬영 시각과 맞춰 봅니다.
+- [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) — Battery History 에는 `+camera`·`-camera` 표시가 붙은 줄이 있을 수 있고, 각 줄 앞에 월-일 시:분:초.밀리초 형식의 시각이 붙습니다. 이 표시가 카메라 사용의 시작과 끝을 뜻하는지는 촬영 시각과 맞춰 보고 판단합니다.
 - [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 촬영 시각 무렵 카메라 앱이 앞에 떠 있었는지 봅니다.
 - [설정 값 (Settings)](../system-account/settings.md) — settings system 에 camera_feedback_vibrate, csc_pref_camera_forced_shuttersound_key 같은 카메라 관련 키가 있을 수 있고, 뜻을 적은 공개 자료는 없습니다.
 - [이 사진은 언제 어디서 찍었나 (Photo Origin)](../../04-scenarios/activity/photo-origin.md) — 이 기록을 쓰는 조사 시나리오입니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 Android 이미지를 구할 수 있으면 다음을 풀어 봅니다.
+공개된 시험 자료(NIST CFReDS 등)에서 Android 이미지를 구할 수 있으면 다음을 풀어 봅니다.
 
 1. DCIM 아래 사진 몇 장의 EXIF 에서 DateTimeOriginal 과 OffsetTimeOriginal 을 읽고, external.db 의 datetaken 을 UTC 로 바꾼 값과 같은지 확인합니다.
 2. 시차 태그가 없는 사진을 찾아 datetaken 이 기기 시간대 설정과 어떻게 어긋나는지 봅니다.
-3. latitude·longitude 칸이 모두 NULL 인지 확인하고, 같은 사진의 EXIF 에 GPS 값이 있는지 봅니다.
-4. date_added 가 datetaken 보다 크게 늦은 행을 골라, 그 파일이 다른 앱에서 받거나 옮긴 파일인지 넣은 앱 칸과 함께 확인합니다.
+3. latitude·longitude 열이 모두 NULL 인지 확인하고, 같은 사진의 EXIF 에 GPS 값이 있는지 봅니다.
+4. date_added 가 datetaken 보다 크게 늦은 행을 골라, 그 파일이 다른 앱에서 받거나 옮긴 파일인지 넣은 앱 열과 함께 확인합니다.
 
 ## 참고 문헌
 

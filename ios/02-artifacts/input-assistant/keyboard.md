@@ -12,7 +12,7 @@ nav_order: 1070
 
 ## 무엇을 기록하나 · 왜 생기나
 
-키보드 입력 기록 (Keyboard) 은 기기 키보드가 사용자의 입력 습관을 배우면서 쌓는 자료입니다. 한 파일에 모든 기록이 모여 있지 않고, 역할에 따라 여러 파일로 나뉘어 있습니다. 동적 어휘 파일에는 사용자가 자주 입력한 낱말이 쌓이고, 사용 통계 DB 에는 키와 값, 그리고 만든 시각·고친 시각 칸이 있지만 키와 값에 무엇이 들어가는지 설명한 자료는 없고, 자동 수정 거절 DB 에는 입력한 글자와 그에 대한 자동 수정이 남습니다. 이모지 적응 DB 는 어떤 글자 뒤에 어떤 이모지를 골랐는지를 담는 것으로 보이며, 칸의 뜻을 설명한 공개 자료는 없습니다.
+키보드 입력 기록 (Keyboard) 은 기기 키보드가 사용자의 입력 습관을 배우면서 쌓는 자료입니다. 한 파일에 모든 기록이 모여 있지 않고, 역할에 따라 여러 파일로 나뉘어 있습니다. 동적 어휘 파일에는 사용자가 자주 입력한 낱말이 쌓이고, 사용 통계 DB 에는 키와 값, 그리고 만든 시각·고친 시각 열이 있지만 키와 값에 무엇이 들어가는지 설명한 자료는 없고, 자동 수정 거절 DB 에는 입력한 글자와 그에 대한 자동 수정이 남습니다. 이모지 적응 DB 는 어떤 글자 뒤에 어떤 이모지를 골랐는지를 담는 것으로 보이며, 열의 뜻을 설명한 공개 자료는 없습니다.
 
 앱 쪽에도 흔적이 생깁니다. `UITextInputContextIdentifiers.plist` 에는 입력 문맥 식별자별로 키보드 언어와 시각이 남고, 식별자 형식은 앱이 정합니다. 메신저 앱은 이 식별자에 대화방 식별자를 넣어서 "어느 대화방의 입력창과 관련된 기록인가" 를 보여 줄 수 있습니다 [2].
 
@@ -24,15 +24,15 @@ nav_order: 1070
 
 | 파일 | 담는 것 | iLEAPP 시험 표본의 iOS 범위 | iOS 27.0 로컬 백업에서 |
 |---|---|---|---|
-| `*-dynamic.lm/dynamic-lexicon.dat` | 동적 어휘(자주 입력한 낱말) | 12.4 ~ 17.6.1 [1] | 검체에서 확인 |
-| `app_usage_database.plist` | 앱별 키보드 사용 | 12.4 ~ 16.5 [1] | 검체에서 확인 |
+| `*-dynamic.lm/dynamic-lexicon.dat` | 동적 어휘(자주 입력한 낱말) | 12.4 ~ 17.6.1 [1] | 실제 백업으로 확인 |
+| `app_usage_database.plist` | 앱별 키보드 사용 | 12.4 ~ 16.5 [1] | 실제 백업으로 확인 |
 | `user_model_database.sqlite` | 키보드 사용 통계 | 13.3.1 ~ 18.7.8 [1] | 있음 |
-| `VulgarWordUsage.db` | 비속어 사용 | 17.6.1·18.0·18.7.8 에서 모두 0행 [1] | 검체에서 확인 |
-| `AutocorrectionRejections.db` | 자동 수정·인라인 완성 거절 | iOS 17.1 이후 11개 이미지에 모두 있음, 16.5.1 이하 10개에는 없음. 가장 최근 표본은 26.5.2 [1] | 검체에서 확인 |
+| `VulgarWordUsage.db` | 비속어 사용 | 17.6.1·18.0·18.7.8 에서 모두 0행 [1] | 실제 백업으로 확인 |
+| `AutocorrectionRejections.db` | 자동 수정·인라인 완성 거절 | iOS 17.1 이후 11개 이미지에 모두 있음, 16.5.1 이하 10개에는 없음. 가장 최근 표본은 26.5.2 [1] | 실제 백업으로 확인 |
 | `DynamicPhraseLexicon_ko_KR.db` | 언어별 어구 사전으로 보임 | 다룬 자료 없음 | 있음 |
 | `emoji_adaptation.db` | 이모지 적응 | 다룬 자료 없음 | 있음 |
 
-마지막 칸은 iOS 27.0 에서 만든 암호화하지 않은 로컬 백업의 `KeyboardDomain` 기준이고, 이 도메인에는 항목이 6개 있습니다. "검체에서 확인" 으로 적은 파일은 로컬 백업에 들어가는지 알려지지 않았습니다. `AutocorrectionRejections.db` 의 표본 분포는 이 파일이 생긴 시점을 뜻하지 않습니다 [1].
+마지막 열은 iOS 27.0 에서 만든 암호화하지 않은 로컬 백업의 `KeyboardDomain` 기준이고, 이 도메인에는 항목이 6개 있습니다. "실제 백업으로 확인" 으로 적은 파일은 로컬 백업에 들어가는지 알려지지 않았습니다. `AutocorrectionRejections.db` 의 표본 분포는 이 파일이 생긴 시점을 뜻하지 않습니다 [1].
 
 키보드 폴더 밖에서 함께 볼 자리는 다음과 같습니다.
 
@@ -51,9 +51,9 @@ nav_order: 1070
 
 ### 동적 어휘와 앱 사용 plist
 
-`dynamic-lexicon.dat` 는 구조가 공개되지 않은 바이너리 파일입니다. iLEAPP 도 구조를 풀지 않고, 파일을 UTF-8 로 읽어 출력 가능한 글자가 3자 이상 이어진 문자열만 뽑으며 `DynamicDictionary-9` 라는 문자열은 뺍니다 [1]. 그래서 결과에는 낱말만 있고 시각 칸이 없습니다.
+`dynamic-lexicon.dat` 는 구조가 공개되지 않은 바이너리 파일입니다. iLEAPP 도 구조를 풀지 않고, 파일을 UTF-8 로 읽어 출력 가능한 글자가 3자 이상 이어진 문자열만 뽑으며 `DynamicDictionary-9` 라는 문자열은 뺍니다 [1]. 그래서 결과에는 낱말만 있고 시각 열이 없습니다.
 
-`app_usage_database.plist` 에는 앱마다 항목 목록이 있고, 각 항목에 `startDate`, `appTime`, `keyboardTimes` 가 있습니다. iLEAPP 는 `startDate` 를 날짜 문자열로 읽고, 칸의 단위와 뜻이 문서화되지 않아 값을 저장된 그대로 보여 줍니다 [1].
+`app_usage_database.plist` 에는 앱마다 항목 목록이 있고, 각 항목에 `startDate`, `appTime`, `keyboardTimes` 가 있습니다. iLEAPP 는 `startDate` 를 날짜 문자열로 읽고, 필드의 단위와 뜻이 문서화되지 않아 값을 저장된 그대로 보여 줍니다 [1].
 
 ### 사용 통계 DB
 
@@ -66,19 +66,19 @@ usermodeltransientrecords: ROWID, key, input_mode, value, secondary_value, real_
 sqlite_sequence: name, seq
 ```
 
-iLEAPP 는 `usermodeldurablerecords` 의 `key`, `value`, `creation_date`, `last_update_date` 를 읽습니다 [1]. `usermodeltransientrecords` 는 읽지 않고, 이 표의 칸 뜻을 설명한 공개 자료도 없습니다.
+iLEAPP 는 `usermodeldurablerecords` 의 `key`, `value`, `creation_date`, `last_update_date` 를 읽습니다 [1]. `usermodeltransientrecords` 는 읽지 않고, 이 표의 열 뜻을 설명한 공개 자료도 없습니다.
 
 ### 자동 수정 거절 DB
 
-`AutocorrectionRejections.db` 의 `rejections` 표 칸은 `typed`, `correction`, `hard_rejections`, `soft_rejections`, `performed_count`, `last_hard_rejection`, `last_soft_rejection`, `journaled` 입니다 [1]. `typed` 는 사용자가 처음 입력한 것이고, `correction` 은 수행되었거나 거절된 자동 수정이며, `performed_count` 는 수정을 받아들인(hard acceptance) 횟수입니다 [1]. 소프트 거절과 하드 거절이 어떻게 다른지는 스키마에 정의되어 있지 않습니다 [1]. 같은 DB 의 `inline_completion_rejections` 표도 칸이 같고, 여기서 `correction` 은 수행되었거나 거절된 인라인 완성입니다 [1]. iLEAPP 가 시험한 11개 이미지는 스키마가 모두 같았습니다(`properties.version` 2) [1].
+`AutocorrectionRejections.db` 의 `rejections` 표 열은 `typed`, `correction`, `hard_rejections`, `soft_rejections`, `performed_count`, `last_hard_rejection`, `last_soft_rejection`, `journaled` 입니다 [1]. `typed` 는 사용자가 처음 입력한 것이고, `correction` 은 수행되었거나 거절된 자동 수정이며, `performed_count` 는 수정을 받아들인(hard acceptance) 횟수입니다 [1]. 소프트 거절과 하드 거절이 어떻게 다른지는 스키마에 정의되어 있지 않습니다 [1]. 같은 DB 의 `inline_completion_rejections` 표도 열이 같고, 여기서 `correction` 은 수행되었거나 거절된 인라인 완성입니다 [1]. iLEAPP 가 시험한 11개 이미지는 스키마가 모두 같았습니다(`properties.version` 2) [1].
 
 ### 비속어 사용 DB
 
-`VulgarWordUsage.db` 의 `vword_usage` 표 칸은 `last_use_timestamp`, `app`, `recipient`, `vword`, `word_reading`, `usage_count`, `journaled` 입니다 [1]. 칸 이름으로는 앱과 받는 사람까지 담을 수 있어 보이지만, 값이 채워진 공개 표본이 없어 실제 모습은 알려지지 않았습니다 [1].
+`VulgarWordUsage.db` 의 `vword_usage` 표 열은 `last_use_timestamp`, `app`, `recipient`, `vword`, `word_reading`, `usage_count`, `journaled` 입니다 [1]. 열 이름으로는 앱과 받는 사람까지 담을 수 있어 보이지만, 값이 채워진 공개 표본이 없어 실제 모습은 알려지지 않았습니다 [1].
 
 ### iOS 27.0 백업의 두 DB
 
-아래 두 DB 는 iOS 27.0 백업에 있고, 칸의 뜻을 설명한 공개 자료는 없습니다.
+아래 두 DB 는 iOS 27.0 백업에 있고, 열의 뜻을 설명한 공개 자료는 없습니다.
 
 ```
 DynamicPhraseLexicon_ko_KR.db
@@ -108,11 +108,11 @@ iOS 27.0 백업의 `HomeDomain :: Library/Preferences/UITextInputContextIdentifi
 
 **증명하지 못하는 것**
 
-키보드 기록만으로는 어떤 문장을 언제, 어느 앱에서, 누구에게 보냈는지 알 수 없습니다. 동적 어휘는 순서·시각·앱이 없는 낱말 모음이고 [1], 사용 통계의 두 시각은 칸 이름으로 보아 레코드를 만들고 고친 때이고, 낱말을 입력한 순간이라고 설명한 자료는 없습니다. 자동 수정 거절 DB 의 행 하나는 수정이 수행되었거나 거절되었다는 뜻이라서, 행이 있다는 것만으로 사용자가 수정을 거절했다고 단정할 수 없습니다 [1]. 입력 문맥의 시각이 대화를 연 때인지 키보드를 쓴 때인지는 밝혀지지 않았습니다 [2]. 누가 입력했는지도 이 기록으로는 가릴 수 없고, 이 문제는 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다른 기록과 함께 봅니다.
+키보드 기록만으로는 어떤 문장을 언제, 어느 앱에서, 누구에게 보냈는지 알 수 없습니다. 동적 어휘는 순서·시각·앱이 없는 낱말 모음이고 [1], 사용 통계의 두 시각은 열 이름으로 보면 레코드를 만들고 고친 때이고, 낱말을 입력한 순간이라고 설명한 자료는 없습니다. 자동 수정 거절 DB 의 행 하나는 수정이 수행되었거나 거절되었다는 뜻이라서, 행이 있다는 것만으로 사용자가 수정을 거절했다고 단정할 수 없습니다 [1]. 입력 문맥의 시각이 대화를 연 때인지 키보드를 쓴 때인지는 밝혀지지 않았습니다 [2]. 누가 입력했는지도 이 기록으로는 판별할 수 없고, 이 문제는 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다른 기록과 함께 봅니다.
 
 ## 시각 해석
 
-| 칸 | 기준 | 근거 |
+| 필드 | 기준 | 근거 |
 |---|---|---|
 | `usermodeldurablerecords.creation_date`, `last_update_date` | 유닉스 시각(1970-01-01 기준 초) | iLEAPP 가 `datetime(...,'unixepoch')` 로 바꿈 [1] |
 | `rejections.last_hard_rejection`, `last_soft_rejection` | 유닉스 시각 초. 기본값 -1e10 은 시각 없음 | DB 스키마 설명 [1] |
@@ -121,7 +121,7 @@ iOS 27.0 백업의 `HomeDomain :: Library/Preferences/UITextInputContextIdentifi
 | `UITextInputContextIdentifiers.plist` 의 `_SETTIME` | plist 날짜 값. 무엇이 바뀔 때 적히는지는 밝혀지지 않음 | [2] |
 | `interaction-ko.timestamp`, `Assist.LastUpdateTime` | 공개 자료 없음 | — |
 
-유닉스 시각과 Mac 절대 시각은 978307200초 차이가 나서, 기준을 잘못 고르면 31년쯤 어긋난 날짜가 나옵니다. 두 기준을 가리는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다. 기준을 확인한 값은 모두 UTC 로 읽고, 보고서에서 현지 시각으로 바꿀 때는 [시간대와 시각 설정](../system-account/time-zone.md) 을 확인합니다.
+유닉스 시각과 Mac 절대 시각은 978307200초 차이가 나서, 기준을 잘못 고르면 31년쯤 어긋난 날짜가 나옵니다. 두 기준을 구분하는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다. 기준을 확인한 값은 모두 UTC 로 읽고, 보고서에서 현지 시각으로 바꿀 때는 [시간대와 시각 설정](../system-account/time-zone.md) 을 확인합니다.
 
 iLEAPP 시험 이미지 4개에서는 시각이 있는 Messenger 입력 문맥 식별자 8개 모두 3~136초 뒤에 같은 스레드로 보낸 메시지가 뒤따랐습니다. 그 이미지에서 잰 상관이라 일반 규칙은 아닙니다 [2].
 
@@ -131,7 +131,7 @@ iLEAPP 시험 이미지 4개에서는 시각이 있는 Messenger 입력 문맥 �
 
 버전 문제도 큽니다. 동적 어휘의 iLEAPP 표본에는 iOS 18 이후가 없고 앱 사용 plist 표본은 16.5 가 마지막이라서 [1], 최신 iOS 에서 이 파일이 없을 때 "지웠다" 고 읽으면 안 됩니다. iOS 27.0 백업에는 `DynamicPhraseLexicon_ko_KR.db` 와 `emoji_adaptation.db` 처럼 다룬 자료가 없는 DB 도 있습니다.
 
-사용자가 추가한 텍스트 대치(사용자 사전)는 `com.apple.TextInput.plist` 의 컨테이너 키와 푸시 주제 `com.apple.keyboardServices.textReplacementServer.aps` 로 보아 iCloud 와 이어져 있지만, 목록 자체를 담은 파일의 이름과 위치는 공개 자료가 없어 검체에서 확인합니다. 계정 쪽 자료를 요청하는 방법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에 있습니다.
+사용자가 추가한 텍스트 대치(사용자 사전)는 `com.apple.TextInput.plist` 의 컨테이너 키와 푸시 주제 `com.apple.keyboardServices.textReplacementServer.aps` 로 보아 iCloud 와 이어져 있지만, 목록 자체를 담은 파일의 이름과 위치는 알려져 있지 않아 실제 기기로 확인해야 합니다. 계정 쪽 자료를 요청하는 방법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에 있습니다.
 
 SQLite 파일은 `-wal`, `-shm` 을 함께 수집해야 최근 기록이 빠지지 않습니다. iLEAPP 도 `user_model_database.sqlite*` 처럼 끝에 `*` 을 붙여 찾습니다 [1]. 지운 레코드가 여유 공간에 남는 문제는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를 봅니다.
 
@@ -139,7 +139,7 @@ SQLite 파일은 `-wal`, `-shm` 을 함께 수집해야 최근 기록이 빠지�
 
 ### 헥스로 한 번
 
-키보드 DB 는 모두 SQLite 라서 파일 맨 앞 16바이트가 형식 표지입니다. 아래는 SQLite 명세로 만든 예시이고, 특정 검체에서 뽑은 값이 아닙니다.
+키보드 DB 는 모두 SQLite 라서 파일 맨 앞 16바이트가 형식 표지입니다. 아래는 SQLite 명세로 만든 예시이고, 특정 기기에서 뽑은 값이 아닙니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -147,7 +147,7 @@ SQLite 파일은 `-wal`, `-shm` 을 함께 수집해야 최근 기록이 빠지�
 000010  10 00                                              페이지 크기 0x1000 = 4096
 ```
 
-`KeyboardDomain` 파일을 백업에서 꺼내 이 표지를 확인한 다음 오프셋 16의 2바이트(빅 엔디언)로 페이지 크기를 읽고, 그 뒤는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 의 순서대로 표를 따라갑니다. `rejections` 표의 두 시각 칸 값을 뽑았다면 먼저 -1e10(기본값)인지 보고, 아니면 유닉스 시각으로 바꿉니다.
+`KeyboardDomain` 파일을 백업에서 꺼내 이 표지를 확인한 다음 오프셋 16의 2바이트(빅 엔디언)로 페이지 크기를 읽고, 그 뒤는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 의 순서대로 표를 따라갑니다. `rejections` 표의 두 시각 열 값을 뽑았다면 먼저 -1e10(기본값)인지 보고, 아니면 유닉스 시각으로 바꿉니다.
 
 ### 공개 도구로 한 번
 
@@ -176,7 +176,7 @@ iLEAPP 는 키보드 폴더의 여러 파일(`keyboard.py`)과 입력 문맥 pli
 
 ## 실습
 
-공개 iOS 검체(NIST CFReDS 등)의 파일시스템 추출 이미지를 받아 다음 질문을 풀어 봅니다. 검체마다 들어 있는 파일이 다르니, 먼저 `Library/Keyboard` 목록부터 확인합니다.
+공개 iOS 시험 자료(NIST CFReDS 등)의 파일시스템 추출 이미지를 받아 다음 질문을 풀어 봅니다. 이미지마다 들어 있는 파일이 다르니, 먼저 `Library/Keyboard` 목록부터 확인합니다.
 
 1. `Library/Keyboard` 에 어떤 파일이 있고, 이 페이지의 버전 표와 비교해 빠지거나 더 있는 파일은 무엇입니까?
 2. `usermodeldurablerecords` 에서 `last_update_date` 가 가장 최근인 행 다섯 개의 `key` 는 무엇이고, 그 시각은 UTC 로 언제입니까?

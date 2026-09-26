@@ -27,7 +27,7 @@ VM 을 다루는 관리 작업은 Azure Resource Manager(ARM)를 거치므로 [�
 | `Microsoft.Compute/snapshots/write`, `/delete` | 스냅숏 만들기·수정, 삭제 |
 | `Microsoft.Compute/snapshots/beginGetAccess/action`, `/endGetAccess/action` | 스냅숏을 내려받을 SAS URI 받기, 회수 |
 
-활동 로그의 Resource Health 범주에도 VM 상태 변화가 남습니다. 사용자가 VM 을 시작하면 `details` 가 `VirtualMachineStartInitiatedByControlPlane`, `cause` 가 `UserInitiated` 인 이벤트가 남고, 플랫폼이 일으킨 변화면 `cause` 가 `PlatformInitiated` 입니다[2][3]. VM 이 꺼져 있던 까닭이 사용자 작업인지 플랫폼 사건인지 가를 때 씁니다.
+활동 로그의 Resource Health 범주에도 VM 상태 변화가 남습니다. 사용자가 VM 을 시작하면 `details` 가 `VirtualMachineStartInitiatedByControlPlane`, `cause` 가 `UserInitiated` 인 이벤트가 남고, 플랫폼이 일으킨 변화면 `cause` 가 `PlatformInitiated` 입니다[2][3]. VM 이 꺼져 있던 이유가 사용자 작업인지 플랫폼 사건인지 구분할 때 씁니다.
 
 VM 안쪽에는 Azure VM 에이전트 (VM Agent) 가 남기는 기록이 있습니다. Run Command 와 확장은 이 에이전트를 통해 스크립트를 실행하므로[8][10][14], 활동 로그에 `runCommand/action` 이나 `extensions/write` 가 있으면 게스트 쪽에도 짝이 되는 로그와 스크립트 파일이 생깁니다.
 
@@ -95,7 +95,7 @@ time=2026-09-20T01:15:43Z version=v2.1.6/git@0000000-clean operation=enable seq=
 |---|---|---|
 | `/var/log/azure/custom-script/handler.log` | `time=YYYY-MM-DDTHH:MM:SSZ` | 끝의 `Z` 로 UTC[11] |
 | `/var/log/waagent.log` | `YYYY/MM/DD HH:MM:SS.ffffff` | 표기 없음[11] |
-| 관리형 Run Command 인스턴스 뷰 | 예시 출력이 `10/27/2022 9:10:52 PM` 꼴 | 표기 없음[10] |
+| 관리형 Run Command 인스턴스 뷰 | 예시 출력이 `10/27/2022 9:10:52 PM` 형식 | 표기 없음[10] |
 
 `waagent.log` 는 시간대 표기가 없으므로, 같은 실행의 `handler.log` 줄(`Z` 가 붙은 UTC)과 나란히 놓아 몇 초 안에 맞는지 보고 기준을 정합니다. 시간대를 맞추는 원칙은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)에 있습니다.
 

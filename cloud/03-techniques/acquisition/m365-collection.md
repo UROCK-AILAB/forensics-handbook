@@ -12,7 +12,7 @@ Microsoft 365 의 감사 로그와 Entra ID 로그를 공개 도구로 받을 �
 
 테넌트가 로그를 SIEM 같은 장기 저장소로 보내지 않았다면, 사고가 난 뒤 서비스에 남아 있는 로그를 보존 기간이 끝나기 전에 떠야 합니다[16]. Purview 포털에서 검색해 CSV 로 내보낼 수도 있지만, 한 번 검색할 수 있는 날짜 범위가 최대 180일이고 내보내기 건수에도 상한이 있어서[3] 수만 건이 넘는 테넌트에서는 창을 나눠 반복해서 받는 도구를 씁니다. 보존 조치를 먼저 거는 순서는 [로그부터 지키기](log-preservation.md), 조사 전체의 흐름은 [조사 절차](investigation-process.md), AWS·Azure 구독 쪽 수집은 [AWS·Azure·GCP 수집](iaas-collection.md)에서 다룹니다.
 
-이 쪽의 도구는 모두 서비스 API 가 돌려주는 레코드를 받아 파일로 쓰는 도구입니다. 서비스에 남아 있지 않은 기록을 되살리지는 못하므로, 어느 로그가 며칠 남는지는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에서 먼저 확인합니다.
+이 페이지의 도구는 모두 서비스 API 가 돌려주는 레코드를 받아 파일로 쓰는 도구입니다. 서비스에 남아 있지 않은 기록을 되살리지는 못하므로, 어느 로그가 며칠 남는지는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에서 먼저 확인합니다.
 
 ## 통합 감사 로그를 받는 세 경로
 
@@ -93,9 +93,9 @@ Graph 감사 로그 쿼리의 상태 값은 `notStarted`, `running`, `succeeded`
 
 ## 결과를 어떻게 해석하나
 
-도구 출력은 서비스 API 가 돌려준 레코드의 사본입니다. 도구가 붙인 표시(Hawk 의 `_Investigate_` 파일 같은 것)는 도구의 해석이고, 보고서의 근거는 그 밑의 레코드입니다[24]. 통합 감사 로그에서 어떤 작업이 없다는 결과는 "그 작업이 없었다" 가 아니라 "받은 범위와 그 시점의 감사 설정에서 해당 레코드가 없었다" 까지만 말합니다. 그래서 결과를 쓸 때는 받은 기간, 사용한 경로(`Search-UnifiedAuditLog`·Graph·포털), 누락 경고가 난 창, 수집 시점의 감사 설정을 함께 적습니다.
+도구 출력은 서비스 API 가 돌려준 레코드의 사본입니다. 도구가 붙인 표시(Hawk 의 `_Investigate_` 파일 같은 것)는 도구의 해석이고, 보고서의 근거는 그 밑의 레코드입니다[24]. 통합 감사 로그에서 어떤 작업이 없다는 결과는 "그 작업이 없었다" 가 아니라 "받은 범위와 그 시점의 감사 설정에서 해당 레코드가 없었다" 까지만 뜻합니다. 그래서 결과를 쓸 때는 받은 기간, 사용한 경로(`Search-UnifiedAuditLog`·Graph·포털), 누락 경고가 난 창, 수집 시점의 감사 설정을 함께 적습니다.
 
-두 도구나 두 경로로 같은 기간을 받았다면 `AuditData` 의 `Id` 로 합친 뒤 건수를 비교합니다. 한쪽에만 있는 레코드가 있으면 상한에 걸린 창, 시간대 경계, 반영 지연 가운데 무엇 때문인지 실행 로그로 먼저 확인합니다. 받은 레코드로 의심스러운 작업을 걸러 내는 방법은 [탐지 규칙으로 로그 훑기](../analysis/detection-rules.md), 보고서 문장은 [클라우드 포렌식 보고서](../reporting/forensic-report.md)에서 다룹니다. 다른 판의 공통 절차는 [Windows 포렌식 조사 절차](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html)를 봅니다.
+두 도구나 두 경로로 같은 기간을 받았다면 `AuditData` 의 `Id` 로 합친 뒤 건수를 비교합니다. 한쪽에만 있는 레코드가 있으면 상한에 걸린 창, 시간대 경계, 반영 지연 가운데 무엇 때문인지 실행 로그로 먼저 확인합니다. 받은 레코드로 의심스러운 작업을 걸러 내는 방법은 [탐지 규칙으로 로그 검색하기](../analysis/detection-rules.md), 보고서 문장은 [클라우드 포렌식 보고서](../reporting/forensic-report.md)에서 다룹니다. 다른 판의 공통 절차는 [Windows 포렌식 조사 절차](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html)를 봅니다.
 
 ## 참고 문헌
 

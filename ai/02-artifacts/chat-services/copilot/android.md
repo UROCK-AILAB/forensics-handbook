@@ -15,9 +15,9 @@ Android 용 Microsoft Copilot 앱(패키지 `com.microsoft.copilot`)은 앱 데�
 
 소비자용 Copilot 은 웹과 Windows·Mac·iOS·Android 앱으로 제공됩니다 [8]. 대화 원본은 계정에 쌓이고, 계정 쪽 기록은 [계정 데이터 내보내기](export.md)로 받습니다.
 
-기기에 대화가 남는지는 두 출처가 다르게 말합니다. Tyagi·Gong·Karabiyik(2025)은 Copilot 이 Android 와 iOS 모두에서 대화를 브라우저 데이터와 함께 평문으로 저장한다고 초록에 적었고, Android 에서는 사용자 프롬프트, 브라우저 데이터, 위치 데이터를 되살렸다고 적었습니다 [1]. 초록에는 시험한 앱 판이 나오지 않습니다. 반면 LEAF 문서(2026-04-20, Android 15)는 앱 폴더에 원격 측정 대기열만 있고 대화는 기기에 저장하지 않는다고 적었습니다 [4]. 같은 저장소의 README 는 Copilot 의 형식을 "SQLite 안의 암호화된 JSON" 이라고 적어서 자기 문서끼리도 어긋납니다 [5].
+기기에 대화가 남는지는 두 출처의 설명이 다릅니다. Tyagi·Gong·Karabiyik(2025)은 Copilot 이 Android 와 iOS 모두에서 대화를 브라우저 데이터와 함께 평문으로 저장한다고 초록에 적었고, Android 에서는 사용자 프롬프트, 브라우저 데이터, 위치 데이터를 되살렸다고 적었습니다 [1]. 초록에는 시험한 앱 판이 나오지 않습니다. 반면 LEAF 문서(2026-04-20, Android 15)는 앱 폴더에 원격 측정 대기열만 있고 대화는 기기에 저장하지 않는다고 적었습니다 [4]. 같은 저장소의 README 는 Copilot 의 형식을 "SQLite 안의 암호화된 JSON" 이라고 적어서 자기 문서끼리도 어긋납니다 [5].
 
-LEAF 저장소에 올라온 수집 파일(2026-02, 앱 30.0.440127001)에도 대화 본문을 담은 파일 이름은 보이지 않습니다 [6]. 대신 새 대화를 연 횟수, 대화 차례 수 같은 계수 값과 로그인 계정 정보가 설정 파일에 남습니다. 그래서 검체마다 앱 판을 먼저 적고, 그 판에서 대화 본문이 어디에 있는지 직접 열어 봅니다.
+LEAF 저장소에 올라온 수집 파일(2026-02, 앱 30.0.440127001)에도 대화 본문을 담은 파일 이름은 보이지 않습니다 [6]. 대신 새 대화를 연 횟수, 대화 차례 수 같은 계수 값과 로그인 계정 정보가 설정 파일에 남습니다. 그래서 분석하는 기기마다 앱 판을 먼저 적고, 그 판에서 대화 본문이 어디에 있는지 직접 열어 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -36,7 +36,7 @@ LEAF 저장소에 올라온 수집 파일(2026-02, 앱 30.0.440127001)에도 대
 | `files/datastore/chat_datastore.preferences_pb` | DataStore protobuf | 새 대화 수 계수, 안내문 확인 여부 |
 | `files/datastore/turn_pref.preferences_pb` | DataStore protobuf | `turn_count` |
 | `files/datastore/CookiePersistence.preferences_pb` | DataStore protobuf | 앱이 보관한 쿠키 |
-| `shared_prefs/com.auth0.authentication.storage.xml`, `TOKEN_SHARE_PREF_UNIQUE_ID.xml`, `TokenShare_Configuration_Status.xml` | SharedPreferences XML | 이름으로 보아 로그인·토큰 공유 관련 |
+| `shared_prefs/com.auth0.authentication.storage.xml`, `TOKEN_SHARE_PREF_UNIQUE_ID.xml`, `TokenShare_Configuration_Status.xml` | SharedPreferences XML | 이름으로 보면 로그인·토큰 공유 관련 |
 | `shared_prefs/app_exit_info.xml` | SharedPreferences XML | `last_tracked_timestamp` |
 | `databases/com.microsoft.appcenter.persistence`, `databases/com.google.android.datatransport.events` | SQLite | 분석·오류 보고 도구의 저장소 |
 | `cache/sentry/` 아래 해시 이름 폴더 | JSON | 오류 보고 도구의 세션과 흔적 기록 |
@@ -47,39 +47,39 @@ LEAF 저장소에 올라온 수집 파일(2026-02, 앱 30.0.440127001)에도 대
 
 ## 구조
 
-**원격 측정 DB.** `StorageRecord` 표의 칸은 `id`, `tenantToken`, `latency`, `persistence`, `timestamp`, `retryCount`, `reservedUntil`, `blob` 이고, 설정을 담는 `StorageSetting`(`name`, `value`) 표가 따로 있습니다 [6]. DB 파일 이름은 `tenantToken` 값의 앞부분과 같습니다. `blob` 은 이진 형식이지만 안의 문자열이 그대로 읽히고, 이벤트 이름(`eventName`), 앱 이름과 판, OS 판, 네트워크 종류, 시간대 오프셋, 요금제(`accountTier`), 로그인 방식(`accountType`), 위치 권한 상태(`userCoarseLocationPermissionStatus`, `userFineLocationPermissionStatus`), 학습·개인화 동의 값이 들어 있습니다 [6]. 이 표는 Microsoft 원격 측정 이벤트를 보내기 전에 모아 두는 대기열입니다 [4].
+**원격 측정 DB.** `StorageRecord` 표의 열은 `id`, `tenantToken`, `latency`, `persistence`, `timestamp`, `retryCount`, `reservedUntil`, `blob` 이고, 설정을 담는 `StorageSetting`(`name`, `value`) 표가 따로 있습니다 [6]. DB 파일 이름은 `tenantToken` 값의 앞부분과 같습니다. `blob` 은 이진 형식이지만 안의 문자열이 그대로 읽히고, 이벤트 이름(`eventName`), 앱 이름과 판, OS 판, 네트워크 종류, 시간대 오프셋, 요금제(`accountTier`), 로그인 방식(`accountType`), 위치 권한 상태(`userCoarseLocationPermissionStatus`, `userFineLocationPermissionStatus`), 학습·개인화 동의 값이 들어 있습니다 [6]. 이 표는 Microsoft 원격 측정 이벤트를 보내기 전에 모아 두는 대기열입니다 [4].
 
 **계정 정보.** `user_info.preferences_pb` 에는 `active_account` 와 `re_auth_data` 키가 있고, 값은 JSON 문자열입니다. JSON 안에는 `type`(로그인 방식), `userId`, `email`, `firstName`, `userAgeGroup` 과 함께 `token`, `accessToken`, `expiry`, `expiryEpoch` 가 들어 있습니다 [6]. 토큰과 쿠키가 있는 곳과 보고서에서 가리는 기준은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다.
 
 **사용자·설정 값.** `user_data.preferences_pb` 에는 `picasso_id`, `anid`, `region`, `age_group`, `account_tier`, `is_pro`, `is_new_user`, `user_consent_model_training`, `user_consent_personalization`, `latest_trace_id` 가 있습니다 [6]. `picasso_id` 값은 원격 측정 `blob` 의 `UserInfo.Id` 값과 같아서, 두 파일을 같은 사용자로 묶는 고리가 됩니다. `user_settings.preferences_pb` 에는 `opt_out_of_model_training`, `opt_out_personalization`, `opt_in_of_voice_training`, `first_app_start`, `local_name`, `notif_daily_enabled`, `history_migration_in_progress`, `remaining_research_calls` 같은 키가 있습니다 [6].
 
-**대화 계수.** `chat_datastore.preferences_pb` 의 키는 `create_new_chat_count_20250818`, `last_reset_time_20250818`, `has_viewed_disclaimer` 이고, `turn_pref.preferences_pb` 에는 `turn_count` 가 있습니다 [6]. 키 이름 끝의 8자리 숫자는 공개된 설명이 없어서, 무엇을 뜻하는지 검체로 확인해야 합니다.
+**대화 계수.** `chat_datastore.preferences_pb` 의 키는 `create_new_chat_count_20250818`, `last_reset_time_20250818`, `has_viewed_disclaimer` 이고, `turn_pref.preferences_pb` 에는 `turn_count` 가 있습니다 [6]. 키 이름 끝의 8자리 숫자가 무엇을 뜻하는지는 실제 데이터로 확인해야 합니다.
 
-**쿠키.** `CookiePersistence.preferences_pb` 의 키는 "주소|쿠키 이름" 꼴이고(예: `https://copilot.microsoft.com/` 과 `__cf_bm` 을 `|` 로 이은 것), 값은 Java 직렬화 바이트를 헥스 문자열로 적은 것이라 `aced0005` 로 시작합니다 [6].
+**쿠키.** `CookiePersistence.preferences_pb` 의 키는 "주소|쿠키 이름" 형식이고(예: `https://copilot.microsoft.com/` 과 `__cf_bm` 을 `|` 로 이은 것), 값은 Java 직렬화 바이트를 헥스 문자열로 적은 것이라 `aced0005` 로 시작합니다 [6].
 
 ## 증거로서 의미
 
 **증명하는 것.** 앱 폴더가 있으면 그 기기에 Copilot 앱이 설치되어 있었다고 쓸 수 있습니다. `user_info` 의 계정 정보는 수집 시점에 이 기기에서 로그인해 있던 계정과 로그인 방식을 알려 주고, `user_data`·`user_settings` 는 요금제와 학습·개인화 동의 설정을 알려 줍니다. 원격 측정 대기열의 행은 적힌 시각에 앱이 이벤트를 기록했다는 사실과 그때의 위치 권한 상태, 네트워크 종류를 알려 줍니다. 대화 계수 값은 새 대화를 연 횟수와 대화 차례 수를 알려 줍니다.
 
-**증명하지 못하는 것.** 위 파일들만으로는 무엇을 물었고 무엇을 답받았는지 알 수 없습니다. 대화 본문은 [계정 데이터 내보내기](export.md)나 법적 절차([서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md))로 확보합니다. 위치 권한이 허용되어 있었다는 기록은 위치를 보냈다는 증거가 아닙니다. 로그인 계정과 실제로 대화한 사람이 같은지도 따로 가립니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)).
+**증명하지 못하는 것.** 위 파일들만으로는 무엇을 물었고 무엇을 답받았는지 알 수 없습니다. 대화 본문은 [계정 데이터 내보내기](export.md)나 법적 절차([서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md))로 확보합니다. 위치 권한이 허용되어 있었다는 기록은 위치를 보냈다는 증거가 아닙니다. 로그인 계정과 실제로 대화한 사람이 같은지도 따로 판별합니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)).
 
-보고서에는 "이 기기의 Copilot 앱 폴더에 이 계정의 로그인 정보가 있고, 이 시각에 앱이 이벤트를 기록했다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 기기의 Copilot 앱 폴더에 이 계정의 로그인 정보가 있고, 이 시각에 앱이 이벤트를 기록했다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-| 위치 | 칸·키 | 형식 |
+| 위치 | 열·키 | 형식 |
 |---|---|---|
 | `StorageRecord` 표 | `timestamp` | 1970-01-01 UTC 기준 밀리초 정수(13자리) [6] |
-| 원격 측정 `blob` | 시간대 오프셋 문자열 | 기기의 현지 시간대(`+09:00` 꼴, 만든 예시) [6] |
+| 원격 측정 `blob` | 시간대 오프셋 문자열 | 기기의 현지 시간대(`+09:00` 형식, 만든 예시) [6] |
 | `cache/sentry/` 아래 `session.json` | `started`, `timestamp` | ISO 8601 UTC 문자열(끝에 `Z`) [6] |
 | `shared_prefs/app_exit_info.xml` | `last_tracked_timestamp` | 13자리 정수(밀리초) [6] |
 | `user_info` 의 JSON | `expiry`, `expiryEpoch` | 토큰 만료 시각 |
 
-`StorageRecord.timestamp` 가 이벤트가 생긴 시각인지 대기열에 넣은 시각인지는 칸 이름만으로 알 수 없습니다. 같은 행의 `blob` 에 든 이벤트 이름과 세션 식별자를 Sentry `session.json` 의 시각, 파일 시스템 시각과 맞춰 봅니다. `blob` 에 시간대 오프셋이 있으니 현지 시각으로 바꿀 때는 그 값을 씁니다.
+`StorageRecord.timestamp` 가 이벤트가 생긴 시각인지 대기열에 넣은 시각인지는 열 이름만으로 알 수 없습니다. 같은 행의 `blob` 에 든 이벤트 이름과 세션 식별자를 Sentry `session.json` 의 시각, 파일 시스템 시각과 맞춰 봅니다. `blob` 에 시간대 오프셋이 있으니 현지 시각으로 바꿀 때는 그 값을 씁니다.
 
 ## 함정과 한계
 
-- **출처끼리 어긋남.** Tyagi 외(2025)는 평문 대화를 되살렸고 [1], LEAF 문서(2026-04)는 대화가 없다고 했으며 [4], LEAF README 는 암호화된 JSON 이라고 적었습니다 [5]. 앱 판과 연구 시점이 다르므로 어느 한쪽을 정답으로 삼지 않고, 검체의 앱 판과 함께 결과를 적습니다.
+- **출처끼리 어긋남.** Tyagi 외(2025)는 평문 대화를 되살렸고 [1], LEAF 문서(2026-04)는 대화가 없다고 했으며 [4], LEAF README 는 암호화된 JSON 이라고 적었습니다 [5]. 앱 판과 연구 시점이 다르므로 어느 한쪽을 정답으로 삼지 않고, 분석 대상 기기의 앱 판과 함께 결과를 적습니다.
 - **대기열은 쌓이는 기록이 아님.** `StorageRecord` 는 보낼 이벤트를 모아 두는 표라서, 수집 파일에는 행이 1개뿐이었습니다 [6]. 행이 적다고 앱을 적게 썼다고 보지 않습니다.
 - **WAL 파일.** 원격 측정 DB 는 `-wal` 이 붙은 WAL 모드라서 `-wal`·`-shm` 을 함께 수집합니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)를 따릅니다.
 - **인증 정보.** `user_info`, `CookiePersistence`, `com.auth0.authentication.storage.xml` 에는 토큰과 쿠키가 있을 수 있어서 보고서와 사본 공유 때 가립니다.
@@ -111,7 +111,7 @@ sqlite3 -readonly be6e4c19699f4fdf9f8c0ec9f9b398ef.db \
 
 ## 실습
 
-시험용 Android 기기와 시험용 Microsoft 계정으로 직접 만든 검체에서 다음을 풀어 봅니다.
+시험용 Android 기기와 시험용 Microsoft 계정으로 직접 만든 시험 데이터에서 다음을 풀어 봅니다.
 
 1. 설치 앱 목록에서 `com.microsoft.copilot` 의 앱 판은 무엇인가?
 2. 대화를 몇 번 한 뒤 `chat_datastore` 의 계수 값과 `turn_pref` 의 `turn_count` 는 어떻게 바뀌는가?

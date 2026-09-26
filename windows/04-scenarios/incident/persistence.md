@@ -6,7 +6,7 @@ nav_order: 3690
 
 # 악성코드 지속성(자동실행) 찾기 (Persistence)
 
-이 페이지는 PC 를 다시 켜거나 다시 로그온해도 악성코드가 다시 실행되도록 남긴 자동실행 항목을 찾는 순서를 다룹니다. 이렇게 계속 머무르려고 남긴 장치를 지속성 (Persistence) 이라고 부릅니다. 자동실행 위치를 종류별로 훑고, 등록한 시각과 실제로 실행됐는지를 따로 확인합니다. 위치마다의 키·폴더·칸은 각 아티팩트 페이지에 있습니다. 이 페이지는 어떤 순서로 보고 어떻게 판단하는지를 다룹니다.
+이 페이지는 PC 를 다시 켜거나 다시 로그온해도 악성코드가 다시 실행되도록 남긴 자동실행 항목을 찾는 순서를 다룹니다. 이렇게 계속 머무르려고 남긴 장치를 지속성 (Persistence) 이라고 부릅니다. 자동실행 위치를 종류별로 살펴보고, 등록한 시각과 실제로 실행됐는지를 따로 확인합니다. 위치마다의 키·폴더·필드는 각 아티팩트 페이지에 있습니다. 이 페이지는 어떤 순서로 보고 어떻게 판단하는지를 다룹니다.
 
 ## 조사 질문
 
@@ -17,7 +17,7 @@ nav_order: 3690
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | Windows 버전 | 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 먼저 적습니다. |
 | 시간대 | 이벤트 로그와 레지스트리 시각을 한 기준으로 맞춥니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](../activity/file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
@@ -30,7 +30,7 @@ nav_order: 3690
 
 자동실행 위치에는 시작 프로그램 폴더, Run·RunOnce 와 그 밖의 레지스트리 키, 탐색기 셸 확장, 툴바, 브라우저 도우미 개체 (Browser Helper Object, BHO), Winlogon 알림, 자동 시작 서비스가 있습니다[1]. AppInit DLL, 이미지 하이재크 (Image Hijacks), 부트 실행 이미지, Winsock 계층 서비스 공급자, 미디어 코덱도 자동실행 위치입니다[1].
 
-아래 표는 이 핸드북이 위치를 종류별로 묶은 것입니다. 오른쪽 열의 페이지에 위치마다의 키·폴더·칸이 있습니다.
+아래 표는 이 핸드북이 위치를 종류별로 묶은 것입니다. 오른쪽 열의 페이지에 위치마다의 키·폴더·필드가 있습니다.
 
 | 위치 종류 | 예 | 링크 |
 |---|---|---|
@@ -44,7 +44,7 @@ nav_order: 3690
 
 "그 밖의 위치" 줄은 Autoruns 명령줄판이 나누는 범주입니다[1].
 
-**공개 도구로 한 번에 훑기.** Autoruns 는 자동실행 위치를 한 번에 훑는 공개 도구의 한 예입니다.
+**공개 도구로 한 번에 살펴보기.** Autoruns 는 자동실행 위치를 한 번에 살펴보는 공개 도구의 한 예입니다.
 
 - 서명된 Microsoft 항목을 숨기는 선택이 있습니다[1].
 - 명령줄판에는 디지털 서명 확인(-s), 파일 해시(-h), 오프라인 Windows 시스템 검사(-z) 선택지가 있습니다[1].
@@ -60,9 +60,9 @@ The DFIR Report 사례에서는 원격 관리 프로그램 ScreenConnect 가 자
 
 **등록 시각.**
 
-- 서비스는 설치 이벤트 7045 로 설치 시각을 잡습니다[2]. 칸은 [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) 에 있습니다.
+- 서비스는 설치 이벤트 7045 로 설치 시각을 잡습니다[2]. 필드는 [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) 에 있습니다.
 - 예약 작업은 [예약 작업 이벤트](../../02-artifacts/event-logs/taskscheduler-4698.md) 로 등록 시각을 잡습니다.
-- Sysmon 이 있으면 레지스트리 값 설정(이벤트 13)으로 자동실행 값을 쓴 시각을 봅니다. 칸은 [레지스트리 변경 (Sysmon 12·13·14)](../../02-artifacts/event-logs/sysmon/12-13-14.md) 에 있습니다.
+- Sysmon 이 있으면 레지스트리 값 설정(이벤트 13)으로 자동실행 값을 쓴 시각을 봅니다. 필드는 [레지스트리 변경 (Sysmon 12·13·14)](../../02-artifacts/event-logs/sysmon/12-13-14.md) 에 있습니다.
 - 레지스트리 키의 마지막 기록 시각을 쓸 때는 그 시각이 무엇을 알려 주고 무엇을 알려 주지 않는지 먼저 확인합니다. [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에 정리돼 있습니다.
 
 **가리키는 파일.**
@@ -90,7 +90,7 @@ The DFIR Report 사례에서는 원격 관리 프로그램 ScreenConnect 가 자
 1. **자동실행 항목이 있으니 실행됐다고 봅니다.** 등록과 실행은 다릅니다. 실행은 실행 흔적으로 따로 확인합니다.
 2. **정상 서명 프로그램이니 문제없다고 봅니다.** 공개 사례에서는 정상 원격 관리 프로그램이 서비스로 등록돼 공격자의 접속 통로가 됐습니다[2][3].
 3. **지금 목록에 없으니 지속성이 없었다고 봅니다.** 공격자가 흔적을 지웠을 수 있습니다. 공개 사례에서도 파일 삭제 흔적(Sysmon 23, del 명령)이 있었습니다[2]. 이벤트, 섀도 복사본, 지워진 키 복구로 과거 상태를 봅니다.
-4. **키 마지막 기록 시각을 특정 값을 쓴 시각으로 씁니다.** 그 시각이 어디까지 말해 주는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 확인하고 씁니다.
+4. **키 마지막 기록 시각을 특정 값을 쓴 시각으로 씁니다.** 그 시각으로 어디까지 알 수 있는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 확인하고 씁니다.
 5. **도구 하나의 목록만 보고 끝냅니다.** 도구마다 보는 범위가 정해져 있습니다. 위 표의 위치 종류를 하나씩 지워 가며 확인합니다.
 
 ## 보고서 문장 예
@@ -103,7 +103,7 @@ The DFIR Report 사례에서는 원격 관리 프로그램 ScreenConnect 가 자
 - [로그온 자동실행](../../02-artifacts/persistence/run-runonce-startup-folder.md) · [서비스·드라이버](../../02-artifacts/persistence/services-drivers.md) · [예약 작업](../../02-artifacts/persistence/scheduled-tasks/index.md) · [숨긴 예약 작업 찾기](../../02-artifacts/persistence/scheduled-tasks/sd.md) — 자주 쓰는 자동실행 위치입니다.
 - [WMI 영구 이벤트 구독](../../02-artifacts/persistence/wmi-event-subscription.md) · [BITS 전송 작업](../../02-artifacts/persistence/bits-jobs-qmgr-db.md) · [기타 자동실행 위치](../../02-artifacts/persistence/winlogon-ifeo-appinit-dlls.md) — 덜 드러나는 자동실행 위치입니다.
 - [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) · [예약 작업 이벤트](../../02-artifacts/event-logs/taskscheduler-4698.md) · [레지스트리 변경 (Sysmon 12·13·14)](../../02-artifacts/event-logs/sysmon/12-13-14.md) — 등록 시각을 잡는 이벤트입니다.
-- [실행 파일 메타데이터](../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) · [의심 실행 파일 선별](../../03-techniques/analysis/code-signing-yara.md) — 가리키는 파일을 가립니다.
+- [실행 파일 메타데이터](../../02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md) · [의심 실행 파일 선별](../../03-techniques/analysis/code-signing-yara.md) — 가리키는 파일을 판별합니다.
 - [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) · [지워진 키·값 복구](../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) · [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 시각과 지워진 항목을 봅니다.
 - [어떤 프로그램을 언제 실행했나](../activity/program-execution.md) — 등록한 프로그램이 실행됐는지 확인합니다.
 - [원격 제어 프로그램으로 누가 조작했나](remote-access-tool-abuse.md) — 서비스로 남은 원격 관리 프로그램을 이어서 봅니다.

@@ -41,7 +41,7 @@ Ubuntu 는 netplan 이라는 자체 설정 형식을 함께 씁니다. netplan �
 | 옛 형식 | 이관 전 사본 `/root/NetworkManager.bak/system-connections/`[12] | `/etc/sysconfig/network-scripts/ifcfg-*` 가 남아 있을 수 있음[18] |
 | 옛 Debian 방식 | `/etc/network/interfaces` (ifupdown 플러그인이 읽기 전용으로 읽음)[1] | — |
 
-ifcfg-rh 플러그인은 NetworkManager 1.44 에서 폐기 예고됐고 1.60 에서 제거됐습니다. 최근 Fedora·RHEL 에서는 이미 꺼져 있고, 남은 ifcfg 프로필은 `nmcli connection migrate` 로 keyfile 로 옮기게 돼 있습니다[10]. RHEL 9 검체에서 `ifcfg-*` 와 `.nmconnection` 이 함께 보이면 `NetworkManager.conf` 와 `conf.d` 의 `plugins=` 값, 설치된 NetworkManager 판을 함께 보고 어느 쪽을 읽었는지 가립니다.
+ifcfg-rh 플러그인은 NetworkManager 1.44 에서 폐기 예고됐고 1.60 에서 제거됐습니다. 최근 Fedora·RHEL 에서는 이미 꺼져 있고, 남은 ifcfg 프로필은 `nmcli connection migrate` 로 keyfile 로 옮기게 돼 있습니다[10]. RHEL 9 시스템에서 `ifcfg-*` 와 `.nmconnection` 이 함께 보이면 `NetworkManager.conf` 와 `conf.d` 의 `plugins=` 값, 설치된 NetworkManager 판을 함께 보고 어느 쪽을 읽었는지 판별합니다.
 
 ## 구조
 
@@ -154,7 +154,7 @@ DHCP 줄의 모양은 프로그램과 판마다 다릅니다. dissect.target 은
 - 수집 시점에 어떤 프로필(이름·UUID·종류·고정 주소·DNS·게이트웨이·MAC)이 설정돼 있었는지.
 - 임대 파일이 있으면, 그 UUID 프로필이 그 인터페이스에서 DHCP 로 IPv4 주소를 받은 적이 있고 마지막 주소가 무엇이었는지[7].
 - 감사 기록이 있으면, 어느 uid·pid 가 언제 어느 프로필을 추가·수정·삭제·활성화했는지와 그 요청이 성공했는지[9].
-- Ubuntu 23.10 이후 검체에서 `/root/NetworkManager.bak/system-connections/` 가 있으면, netplan 이관 전에 keyfile 로 저장된 프로필이 있었다는 것[12].
+- Ubuntu 23.10 이후 시스템에서 `/root/NetworkManager.bak/system-connections/` 가 있으면, netplan 이관 전에 keyfile 로 저장된 프로필이 있었다는 것[12].
 
 **증명하지 못하는 것**
 
@@ -163,13 +163,13 @@ DHCP 줄의 모양은 프로그램과 판마다 다릅니다. dissect.target 은
 - 전원을 끈 뒤 뜬 이미지에는 `/run` 아래의 생성된 프로필과 `conf.d` 조각이 없습니다. Ubuntu 24.04 에서 NetworkManager 가 실제로 읽은 `.nmconnection` 은 `/etc/netplan` 의 YAML 에서 다시 만들어 봐야 합니다.
 - 감사 기록의 uid 는 D-Bus 요청을 보낸 프로세스의 uid 입니다. 그 계정을 누가 쓰고 있었는지는 [누가 그 명령을 실행했나](../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 좁힙니다.
 
-보고서에는 "UUID 0b7f... 프로필이 192.0.2.15 고정 주소로 설정돼 있었고, 로그에 uid 1000 이 이 프로필을 수정한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "UUID 0b7f... 프로필이 192.0.2.15 고정 주소로 설정돼 있었고, 로그에 uid 1000 이 이 프로필을 수정한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
 | 값 | 기준 | 바뀌는 때 |
 |---|---|---|
-| NetworkManager 로그 대괄호 값 | Unix epoch 초(UTC), 소수 넷째 자리까지 | 줄을 쓸 때의 벽시계 시각[8] |
+| NetworkManager 로그 대괄호 값 | Unix epoch 초(UTC), 소수 넷째 자리까지 | 줄을 쓸 때의 시스템 시계 시각[8] |
 | `timestamps` 파일 값 | Unix epoch 초(UTC) | 활성 연결이 ACTIVATED 가 되거나 ACTIVATED 에서 벗어날 때[6] |
 | keyfile 의 `[connection] timestamp=` | Unix epoch 초(UTC) | 연결할 때마다 바뀌지 않음(아래 함정)[6] |
 | 설정 파일·임대 파일 mtime | 파일 시스템 시각 | 마지막으로 파일을 다시 쓴 때 |
@@ -226,9 +226,9 @@ DHCP 줄의 모양은 프로그램과 판마다 다릅니다. dissect.target 은
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 Linux 디스크 이미지(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
-1. 이 검체의 프로필은 `/etc/NetworkManager/system-connections`, `/etc/netplan`, `/etc/sysconfig/network-scripts` 가운데 어디에 있는가? `plugins=` 값은 무엇인가?
+1. 이 이미지의 프로필은 `/etc/NetworkManager/system-connections`, `/etc/netplan`, `/etc/sysconfig/network-scripts` 가운데 어디에 있는가? `plugins=` 값은 무엇인가?
 2. 각 프로필의 UUID 에 해당하는 `internal-UUID-인터페이스.lease` 가 있는가? 마지막 주소는 무엇인가?
 3. keyfile 의 `timestamp=` 와 `/var/lib/NetworkManager/timestamps` 의 같은 UUID 값이 다른가? 어느 쪽이 로그의 활성화 줄과 맞는가?
 4. 로그에 `audit: op="connection-add"` 나 `connection-delete` 줄이 있는가? uid 는 어느 계정이고, 그 시각 전후에 무엇이 있었는가?

@@ -46,7 +46,7 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 - 이 경로는 보관 (archived) 처리된 Microsoft 문서 (ms.date 2024-06-06) 에 나온 것이라 지금 버전과 다를 수 있습니다.
 - KAPE 의 OfficeAutosave 타깃은 사용자마다 `AppData\Roaming\Microsoft\` 아래 `Word\`, `Excel\`, `Powerpoint\`, `Publisher\` 를 하위 폴더까지 모두 모읍니다.
 - AutoRecover 폴더 위치를 정하는 레지스트리 값은 알려져 있지 않습니다. Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 의 `Software\Microsoft\Office\<버전>\Word\Options` 키에는 `AutoRecoverySaveIntervalMetadata` (REG_DWORD) 값만 있고 경로 값은 없습니다.
-- 자동 복구의 기본 간격과, 정상 종료나 저장 때 AutoRecover 파일을 지우는 조건은 공개 자료가 없어 실험으로 확인합니다.
+- 자동 복구의 기본 간격과, 정상 종료나 저장 때 AutoRecover 파일을 지우는 조건은 실험으로 확인해야 합니다.
 
 ## 구조
 
@@ -61,7 +61,7 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 - 폴더 이름의 숫자와 `Unsaved-` 뒤 숫자는 서로 다릅니다. 두 숫자의 뜻은 알려져 있지 않습니다.
 - `.xlsb` 파일의 마지막 수정 시각은 폴더의 마지막 수정 시각보다 몇 분 이를 수 있습니다.
 
-이 버전에서 Excel 의 자동 복구 파일은 `.asd` 가 아니라 `.xlsb` 입니다. Excel 자동 복구 형식을 밝힌 공식 자료가 없으므로 검체마다 확인합니다.
+이 버전에서 Excel 의 자동 복구 파일은 `.asd` 가 아니라 `.xlsb` 입니다. Excel 자동 복구 형식을 밝힌 공식 자료가 없으므로 실제 파일마다 확인합니다.
 
 ## 증거로서 의미
 
@@ -74,12 +74,12 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 
 **증명하지 못하는 것**
 
-- 파일이 남은 까닭. 비정상 종료 때문인지, 저장하지 않고 닫았기 때문인지 파일만으로 가르지 못합니다. 파일을 지우는 조건이 알려져 있지 않습니다.
+- 파일이 남은 이유. 비정상 종료 때문인지, 저장하지 않고 닫았기 때문인지 파일만으로 구분하지 못합니다. 파일을 지우는 조건이 알려져 있지 않습니다.
 - 파일이 없다고 작업하지 않았다는 것. 클라우드 문서는 자동 저장을 씁니다. 사용자가 [문서 복구] 창에서 "아니요, 파일을 제거합니다" 를 골랐을 수도 있습니다.
 - 사용자가 문서를 끝내 저장했는지.
 - 누가 작업했는지.
 
-보고서 문장은 기록이 말하는 만큼만 씁니다.
+보고서 문장은 기록으로 확인되는 만큼만 씁니다.
 
 - 쓰지 않을 문장: "사용자가 sales.csv 를 고치고 저장하지 않았다."
 - 쓸 문장: "사용자 kim 의 `AppData\Roaming\Microsoft\Excel` 아래 폴더에 `sales((Unsaved-<숫자>)).xlsb` 파일과 `sales.csv.lnk` 파일이 있다. 바로 가기는 `D:\work\sales.csv` 를 가리킨다. 이는 Excel 이 이 CSV 문서에 대해 이름에 Unsaved 가 들어간 사본을 남긴 기록이다." (예시 문장입니다.)
@@ -108,7 +108,7 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 2. 이름 모양으로 거릅니다. `*.asd`, `Backup of *.wbk`, `~*.tmp`, `*((Unsaved-*` 를 찾습니다.
 3. 파일마다 앞 바이트를 보고 실제 형식을 적습니다.
 4. 폴더 안 `.lnk` 는 바로가기 파서로 풀어 원래 경로를 봅니다 ([바로가기 파일](../lnk.md)).
-5. 사본을 격리된 환경에서 열어 내용을 봅니다. 원래 문서가 남아 있으면 내용을 견줍니다.
+5. 사본을 격리된 환경에서 열어 내용을 봅니다. 원래 문서가 남아 있으면 내용을 비교합니다.
 6. $MFT 와 USN 변경 저널에서 같은 폴더의 지운 파일 이름을 찾습니다.
 
 ## 교차 검증
@@ -126,14 +126,14 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 오피스를 쓴 사용자 프로필이 있는 이미지를 고릅니다. 오피스를 설치한 가상 머신을 직접 만들어도 됩니다.
+NIST CFReDS 같은 공개 시험 이미지 가운데 오피스를 쓴 사용자 프로필이 있는 이미지를 고릅니다. 오피스를 설치한 가상 머신을 직접 만들어도 됩니다.
 
 1. 사용자마다 위 폴더를 모으고 파일을 종류별로 셉니다.
 2. Excel 폴더 안 `.lnk` 가 가리키는 원래 파일이 지금도 있는지 봅니다.
 3. 폴더 이름과 파일 이름의 18자리 숫자를 FILETIME 으로 풀어 봅니다. 파일시스템 시각과 맞나요?
 4. 가상 머신에서 Word 문서를 고치다 작업 관리자로 Word 를 끝냅니다. 어느 폴더에 어떤 파일이 생기는지 봅니다. 다시 실행해 [문서 복구] 창을 닫은 뒤에도 파일이 남는지 봅니다.
-5. Excel 로 같은 실험을 하고 파일 모양을 Word 와 견줍니다.
-6. 결과로 보고서 문장을 하나 씁니다. "저장하지 않았다" 가 아니라 기록이 말하는 만큼만 씁니다.
+5. Excel 로 같은 실험을 하고 파일 모양을 Word 와 비교합니다.
+6. 결과로 보고서 문장을 하나 씁니다. "저장하지 않았다" 가 아니라 기록으로 확인되는 만큼만 씁니다.
 
 ## 참고 문헌
 

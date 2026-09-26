@@ -6,7 +6,7 @@ nav_order: 640
 
 # 임시 폴더와 메모리 파일 시스템 (/tmp·/dev/shm)
 
-`/tmp`·`/var/tmp`·`/dev/shm` 은 누구나 쓸 수 있는 임시 자리라서 내려받은 파일이나 실행 파일이 잠깐 머물다 사라지는 곳이고, 이 쪽은 그 자리가 언제 비워지는지와 전원을 끈 뒤에도 무엇이 남는지를 다룹니다.
+`/tmp`·`/var/tmp`·`/dev/shm` 은 누구나 쓸 수 있는 임시 자리라서 내려받은 파일이나 실행 파일이 잠깐 머물다 사라지는 곳이고, 이 페이지는 그 자리가 언제 비워지는지와 전원을 끈 뒤에도 무엇이 남는지를 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -27,7 +27,7 @@ nav_order: 640
 | `/dev/shm` | tmpfs | 전원을 끌 때, `shm_unlink`, 사용자 로그아웃(RemoveIPC)[4][7][13] |
 | `/run` | tmpfs | 전원을 끌 때[7] |
 | `/tmp/systemd-private-*`, `/var/tmp/systemd-private-*` | `/tmp`·`/var/tmp` 를 따름 | 서비스가 멈출 때, 다음 부팅 때[9][11] |
-| `/run/shm` | 검체에서 확인 | 검체에서 확인(UAC 는 `/dev/shm` 과 따로 모음[1]) |
+| `/run/shm` | 실제 시스템에서 확인 | 실제 시스템에서 확인(UAC 는 `/dev/shm` 과 따로 모음[1]) |
 
 `/dev/shm` 의 마운트 옵션은 upstream 이 `mode=01777` 이고 여기에 사용자 할당량 옵션을 붙이는 함수가 더해지며, 플래그는 `MS_NOSUID|MS_NODEV|MS_STRICTATIME` 입니다[7]. RHEL 9 가 쓰는 systemd 252 는 `mode=1777` 에 같은 세 플래그를 씁니다[7]. 두 판 모두 systemd 가 올리는 기본 마운트에는 noexec 가 없어서, 관리자가 옵션을 바꾸지 않았다면 `/dev/shm` 에 둔 파일은 실행할 수 있습니다. `/run` 은 `mode=0755` 에 nosuid·nodev·strictatime 입니다[7]. `/run` 아래 흔적은 [마운트 기록](../devices/mounts.md)에서 다룹니다.
 
@@ -37,10 +37,10 @@ nav_order: 640
 |---|---|---|
 | `/tmp` 기본 | 디스크. 패키징이 `tmp.mount` 를 `/usr/share/systemd/` 로 옮기고 `local-fs.target.wants/tmp.mount` 링크를 지움[15] | 디스크. `tmp.mount` 유닛 파일은 설치하지만 `local-fs.target.wants/` 링크는 만들지 않음[14][16] |
 | `/tmp` 를 tmpfs 로 켰는지 | `/etc/fstab` 의 `tmpfs` 줄, `/etc/systemd/system/local-fs.target.wants/tmp.mount` | 같음 |
-| 정리 기간 | 검체의 `/usr/lib/tmpfiles.d/tmp.conf` 와 `/etc/tmpfiles.d/tmp.conf` 를 읽어 확인 | `q /tmp 1777 root root 10d`, `q /var/tmp 1777 root root 30d`[9] |
+| 정리 기간 | 분석 대상의 `/usr/lib/tmpfiles.d/tmp.conf` 와 `/etc/tmpfiles.d/tmp.conf` 를 읽어 확인 | `q /tmp 1777 root root 10d`, `q /var/tmp 1777 root root 30d`[9] |
 | `/dev/shm` | tmpfs, systemd 가 마운트[7] | tmpfs, `mode=1777`[7] |
 
-upstream 은 반대로 `tmp.mount` 를 기본으로 켭니다. meson 빌드가 `local-fs.target.wants/` 에 링크를 만들고, 유닛의 옵션은 `mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m,x-systemd.graceful-option=usrquota` 입니다[14]. `/tmp` 가 심볼릭 링크면 이 유닛은 돌지 않습니다(`ConditionPathIsSymbolicLink=!/tmp`)[14]. 두 배포판 모두 관리자가 켤 수 있으므로 검체의 설정을 먼저 읽습니다. 라이브 시스템이면 `findmnt` 출력이 가장 빠르고, UAC 도 이 출력을 받습니다[2].
+upstream 은 반대로 `tmp.mount` 를 기본으로 켭니다. meson 빌드가 `local-fs.target.wants/` 에 링크를 만들고, 유닛의 옵션은 `mode=1777,strictatime,nosuid,nodev,size=50%%,nr_inodes=1m,x-systemd.graceful-option=usrquota` 입니다[14]. `/tmp` 가 심볼릭 링크면 이 유닛은 돌지 않습니다(`ConditionPathIsSymbolicLink=!/tmp`)[14]. 두 배포판 모두 관리자가 켤 수 있으므로 분석 대상의 설정을 먼저 읽습니다. 라이브 시스템이면 `findmnt` 출력이 가장 빠르고, UAC 도 이 출력을 받습니다[2].
 
 ## 구조
 
@@ -48,7 +48,7 @@ upstream 은 반대로 `tmp.mount` 를 기본으로 켭니다. meson 빌드가 `
 
 systemd-tmpfiles 는 `/etc/tmpfiles.d`, `/run/tmpfiles.d`, `/usr/lib/tmpfiles.d` 의 `.conf` 를 읽습니다. 같은 이름의 파일이 여러 곳에 있으면 `/etc` 가 `/run` 과 `/usr/lib` 을 덮고, `/run` 이 `/usr/lib` 을 덮습니다[8]. 관리자가 배포판 파일을 끄려면 `/etc/tmpfiles.d/` 에 같은 이름으로 `/dev/null` 을 가리키는 링크를 둡니다[8]. 그래서 정리 기간이 기본값과 다른지는 `/etc/tmpfiles.d/tmp.conf` 가 있는지부터 보면 됩니다.
 
-한 줄은 `종류 경로 모드 사용자 그룹 나이` 순서입니다. 이 쪽과 관계있는 줄은 아래와 같습니다(upstream 설정 파일에서 옮김)[9].
+한 줄은 `종류 경로 모드 사용자 그룹 나이` 순서입니다. 이 페이지와 관계있는 줄은 아래와 같습니다(upstream 설정 파일에서 옮김)[9].
 
 ```
 # tmp.conf
@@ -74,7 +74,7 @@ x /tmp/.X[0-9]*-lock
 
 `x`·`X` 는 정리에서 뺄 경로이고, `R` 은 경로를 통째로 지우는 줄이며, `D` 는 `--remove` 로 돌 때 폴더 내용을 지우는 줄입니다[8]. 종류 뒤에 `!` 가 붙은 줄은 `--boot` 로 돌 때만, 곧 부팅 때만 실행합니다[8]. `%b` 는 현재 부팅 ID 로 바뀝니다[8]. 따라서 현재 부팅의 사설 폴더는 나이 정리에서 빠지고, 지난 부팅의 사설 폴더는 다음 부팅 때 지워집니다[9].
 
-나이를 잴 때는 파일의 atime·btime·ctime·mtime 을 모두 보고, 그중 하나라도 기준보다 새로우면 지우지 않습니다[8]. 폴더는 ctime 을 보지 않는데, 정리 작업이 안의 파일을 지우면서 폴더의 ctime 을 바꾸기 때문입니다[8]. 이 규칙이 기본값 `abcmABM` 이고, 나이 칸 앞에 `bmA:` 처럼 글자를 붙이면 볼 시각을 바꿀 수 있습니다[8]. 지우려는 파일이나 폴더에 BSD 잠금(flock)이 걸려 있으면 그것과 그 아래 전체를 건너뜁니다[8].
+나이를 잴 때는 파일의 atime·btime·ctime·mtime 을 모두 보고, 그중 하나라도 기준보다 새로우면 지우지 않습니다[8]. 폴더는 ctime 을 보지 않는데, 정리 작업이 안의 파일을 지우면서 폴더의 ctime 을 바꾸기 때문입니다[8]. 이 규칙이 기본값 `abcmABM` 이고, 나이 필드 앞에 `bmA:` 처럼 글자를 붙이면 볼 시각을 바꿀 수 있습니다[8]. 지우려는 파일이나 폴더에 BSD 잠금(flock)이 걸려 있으면 그것과 그 아래 전체를 건너뜁니다[8].
 
 정리는 `systemd-tmpfiles-clean.timer` 가 부팅 15분 뒤(`OnBootSec=15min`)에 한 번, 그 뒤로는 하루에 한 번(`OnUnitActiveSec=1d`) 돌립니다[9].
 
@@ -106,7 +106,7 @@ systemd 는 사설 폴더 이름을 `접두 경로/systemd-private-` 뒤에 부�
 - `/tmp` 에 파일이 없다는 사실만으로 "만든 적이 없다" 고 쓸 수 없습니다. 나이 기준 정리, 부팅 때 정리, 서비스가 멈출 때 사설 폴더 삭제, 로그아웃 때 RemoveIPC 삭제는 모두 정상 동작입니다[8][10][11][13].
 - 파일이 있던 사실만으로 누가 만들었는지는 알 수 없습니다. 소유자는 파일을 만든 프로세스의 계정일 뿐이고, 1777 폴더라 어느 계정이든 쓸 수 있습니다.
 
-보고서에는 "수집 시점에 `/dev/shm` 에 UID 1001 소유의 실행 권한이 있는 파일이 있었다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "수집 시점에 `/dev/shm` 에 UID 1001 소유의 실행 권한이 있는 파일이 있었다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -178,9 +178,9 @@ $ readlink /proc/4242/fd/7
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 Linux 시험 데이터(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
-1. 이 검체의 `/tmp` 는 디스크인가 tmpfs 인가? `/etc/fstab` 과 `local-fs.target.wants/` 중 어디서 답을 찾았는가?
+1. 이 시스템의 `/tmp` 는 디스크인가 tmpfs 인가? `/etc/fstab` 과 `local-fs.target.wants/` 중 어디서 답을 찾았는가?
 2. `/etc/tmpfiles.d/` 에 `tmp.conf` 가 있는가? 있다면 `/tmp`·`/var/tmp` 의 정리 기간은 기본값과 어떻게 다른가?
 3. `systemd-private-*` 폴더가 있다면 부팅 ID 는 몇 개이고, 각각 저널의 어느 부팅과 맞는가? 어떤 유닛이 `PrivateTmp=` 로 돌았는가?
 4. 디스크 `/tmp`·`/var/tmp` 에 남은 파일 중 점으로 시작하거나 실행 권한이 있는 파일이 있는가? 그 소유자는 어느 계정인가?

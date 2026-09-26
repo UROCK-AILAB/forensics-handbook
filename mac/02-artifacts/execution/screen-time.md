@@ -12,27 +12,27 @@ nav_order: 730
 
 화면 사용 시간은 앱별 사용 시간을 모으는 기능이고, 모은 기록은 macOS 와 iOS 모두 위 두 SQLite 데이터베이스에 들어갑니다 [1]. 이 데이터베이스에는 번들 ID, 도메인, 앱 사용 시간(초), 앱 분류, 시간 구간의 시작 시각, 앱을 쓰지 않고 기기를 집어 든 횟수가 들어 있고, 기록마다 기기 이름과 사용자 이름·Apple ID 가 이어져 있습니다 [1]. 사용 기록은 한 시간 단위 구간으로 나뉘어 쌓이는 것으로 보입니다 [1].
 
-APOLLO 에는 같은 데이터베이스를 읽는 모듈이 `screentime_by_category`, `screentime_by_hour`, `screentime_counted_items`, `screentime_timed_items` 네 개 있습니다 [2]. 이 페이지의 표와 칸은 `screentime_timed_items` 쿼리를 기준으로 합니다.
+APOLLO 에는 같은 데이터베이스를 읽는 모듈이 `screentime_by_category`, `screentime_by_hour`, `screentime_counted_items`, `screentime_timed_items` 네 개 있습니다 [2]. 이 페이지의 표와 열은 `screentime_timed_items` 쿼리를 기준으로 합니다.
 
 ## 위치와 버전별 차이
 
-데이터베이스 파일 이름은 `RMAdminStore-Local.sqlite` 와 `RMAdminStore-Cloud.sqlite` 이고, macOS 와 iOS 에서 같은 쿼리로 읽습니다 [1]. macOS 의 전체 경로는 공개 자료에 없으므로, 검체에서는 파일 이름으로 전체 볼륨을 찾고 찾은 경로를 보고서에 그대로 적습니다. Local 과 Cloud 두 파일이 각각 무엇을 담는지(이 기기의 기록인지, iCloud 로 받은 다른 기기의 기록인지)도 공개 자료가 없어서, 두 파일을 모두 수집하고 따로 읽습니다.
+데이터베이스 파일 이름은 `RMAdminStore-Local.sqlite` 와 `RMAdminStore-Cloud.sqlite` 이고, macOS 와 iOS 에서 같은 쿼리로 읽습니다 [1]. macOS 의 전체 경로는 공개 자료에 없으므로, 실제 데이터에서는 파일 이름으로 전체 볼륨을 찾고 찾은 경로를 보고서에 그대로 적습니다. Local 과 Cloud 두 파일이 각각 무엇을 담는지(이 기기의 기록인지, iCloud 로 받은 다른 기기의 기록인지)도 공개 자료가 없어서, 두 파일을 모두 수집하고 따로 읽습니다.
 
 | APOLLO 쿼리가 적은 버전 | 쿼리에서 달라지는 점 [1] |
 |---|---|
-| iOS 12 | `ZCOREDEVICE.ZPLATFORM`, `ZCOREUSER.ZALTDSID` 칸을 읽지 않음 |
-| iOS 13, iOS 14 | 두 칸을 함께 읽음 |
-| macOS 10.15 Catalina | 두 칸을 함께 읽음 |
-| macOS 10.16 (= 11 Big Sur) | 두 칸을 함께 읽음 |
-| macOS 12 Monterey 이후 | 모듈 버전 목록에 없음. 표 구조는 검체에서 확인 |
+| iOS 12 | `ZCOREDEVICE.ZPLATFORM`, `ZCOREUSER.ZALTDSID` 열을 읽지 않음 |
+| iOS 13, iOS 14 | 두 열을 함께 읽음 |
+| macOS 10.15 Catalina | 두 열을 함께 읽음 |
+| macOS 10.16 (= 11 Big Sur) | 두 열을 함께 읽음 |
+| macOS 12 Monterey 이후 | 모듈 버전 목록에 없음. 표 구조는 실제 데이터로 확인 |
 
-macOS 12 이후 검체에서는 아래 표 이름과 칸이 그대로 있는지 `.schema` 로 먼저 확인하고, 없는 칸은 추정해서 채우지 않습니다.
+macOS 12 이후 데이터에서는 아래 표 이름과 열이 그대로 있는지 `.schema` 로 먼저 확인하고, 없는 열은 추정해서 채우지 않습니다.
 
 ## 구조
 
-데이터베이스 형식 자체는 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다루고, 여기서는 APOLLO 쿼리가 쓰는 표와 칸만 정리합니다 [1].
+데이터베이스 형식 자체는 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다루고, 여기서는 APOLLO 쿼리가 쓰는 표와 열만 정리합니다 [1].
 
-| 표 | 칸 | 뜻 |
+| 표 | 열 | 뜻 |
 |---|---|---|
 | `ZUSAGETIMEDITEM` | `ZBUNDLEIDENTIFIER` | 번들 ID |
 | `ZUSAGETIMEDITEM` | `ZDOMAIN` | 도메인(담기는 값은 공개 자료 없음) |
@@ -72,13 +72,13 @@ ZUSAGE.ZDEVICE            = ZCOREDEVICE.Z_PK
 | `DH1008` | Health & Fitness |
 | `DH1009` | Other |
 
-플랫폼 칸 `ZCOREDEVICE.ZPLATFORM` 은 0 이 Unknown, 1 이 macOS, 2 가 iOS, 4 가 Apple Watch 입니다 [1]. 이 칸이 있는 것으로 보아 한 데이터베이스에 같은 Apple 계정의 다른 기기 기록이 섞일 가능성이 있습니다.
+플랫폼 열 `ZCOREDEVICE.ZPLATFORM` 은 0 이 Unknown, 1 이 macOS, 2 가 iOS, 4 가 Apple Watch 입니다 [1]. 이 열이 있는 것으로 보아 한 데이터베이스에 같은 Apple 계정의 다른 기기 기록이 섞일 가능성이 있습니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 행 하나는 이 시간 구간에 이 번들 ID 의 사용 시간이 이만큼(초) 쌓였다는 기록이고, 그 기록이 어느 기기 이름·플랫폼, 어느 사용자 이름·Apple ID 에 묶여 있는지도 함께 보여 줍니다 [1]. 앱을 쓰지 않고 기기를 집어 든 횟수도 시간 구간마다 남아 있습니다 [1].
 
-**증명하지 못하는 것.** 사용 시간은 한 시간 구간 안에서 합친 값이라서, 앱을 정확히 몇 시 몇 분에 열고 닫았는지는 이 기록만으로 알 수 없습니다. 한 행이 정확히 1시간 구간인지는 검체에서 확인합니다. 앱을 쓴 사람이 계정 주인이라는 뜻도 아니라서, 사람을 특정하려면 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)의 방법으로 다른 기록과 맞춰 봅니다. 기기 칸이 이 맥이 아닌 기기를 가리키는 행은 이 맥에서 일어난 사용으로 읽지 않습니다.
+**증명하지 못하는 것.** 사용 시간은 한 시간 구간 안에서 합친 값이라서, 앱을 정확히 몇 시 몇 분에 열고 닫았는지는 이 기록만으로 알 수 없습니다. 한 행이 정확히 1시간 구간인지는 실제 데이터로 확인합니다. 앱을 쓴 사람이 계정 주인이라는 뜻도 아니라서, 사람을 특정하려면 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)의 방법으로 다른 기록과 맞춰 봅니다. 기기 열이 이 맥이 아닌 기기를 가리키는 행은 이 맥에서 일어난 사용으로 읽지 않습니다.
 
 보고서에는 "이 데이터베이스에 2023-03-08 20시(UTC)에 시작하는 구간에 이 번들 ID 의 사용 시간이 N초로 기록되어 있고, 이 기록은 기기 이름 X(플랫폼 1, macOS)에 묶여 있다" 처럼 구간·값·기기를 기록 그대로 씁니다.
 
@@ -90,10 +90,10 @@ ZUSAGE.ZDEVICE            = ZCOREDEVICE.Z_PK
 
 ## 함정과 한계
 
-- **버전 범위.** APOLLO 쿼리가 확인한 macOS 버전은 10.15 와 10.16(11) 뿐입니다 [1]. 이후 버전에서 표가 바뀌었는지는 검체의 `.schema` 로 확인합니다.
-- **두 파일.** Local 과 Cloud 파일의 차이는 공개 자료가 없습니다. 한쪽만 읽으면 기록을 놓칠 수 있어서 둘 다 읽고, 행마다 기기 칸을 봅니다.
+- **버전 범위.** APOLLO 쿼리가 확인한 macOS 버전은 10.15 와 10.16(11) 뿐입니다 [1]. 이후 버전에서 표가 바뀌었는지는 실제 데이터베이스의 `.schema` 로 확인합니다.
+- **두 파일.** Local 과 Cloud 파일의 차이는 공개 자료가 없습니다. 한쪽만 읽으면 기록을 놓칠 수 있어서 둘 다 읽고, 행마다 기기 열을 봅니다.
 - **다른 기기의 기록.** `ZCOREDEVICE.ZPLATFORM` 이 2(iOS)나 4(Apple Watch)인 행은 이 맥에서 쓴 기록이 아닐 수 있습니다 [1].
-- **개인 정보.** `ZCOREUSER` 에 이름·성·Apple ID·DSID 가 들어 있어서 [1], 보고서에 옮길 때는 조사 범위에 필요한 칸만 씁니다.
+- **개인 정보.** `ZCOREUSER` 에 이름·성·Apple ID·DSID 가 들어 있어서 [1], 보고서에 옮길 때는 조사 범위에 필요한 열만 씁니다.
 - **기능을 끈 경우.** 화면 사용 시간 설정을 끄면 기록이 남지 않는지, 기록을 얼마 동안 두는지는 공개 자료가 없습니다. 데이터베이스가 비어 있거나 없다는 사실만으로 앱을 쓰지 않았다고 결론 내리지 않습니다.
 - **지운 행.** 지운 행을 찾는 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
@@ -101,11 +101,11 @@ ZUSAGE.ZDEVICE            = ZCOREDEVICE.Z_PK
 
 ### 값 하나를 손으로 바꿔 보기
 
-명세로 만든 예시로, `ZSTARTDATE` 값이 699998400 이라면 978307200 을 더한 1678305600 이 유닉스 시각이고, 이 값은 2023-03-08 20:00:00 UTC 입니다. 검체에서 읽은 값도 같은 방법으로 바꾸고, 도구가 보여 준 시각과 한 번 맞춰 봅니다. 칸의 저장 형(정수·실수)은 검체마다 다를 수 있어서, 헥스로 볼 때는 SQLite 레코드 헤더의 형 코드를 먼저 봅니다.
+명세로 만든 예시로, `ZSTARTDATE` 값이 699998400 이라면 978307200 을 더한 1678305600 이 유닉스 시각이고, 이 값은 2023-03-08 20:00:00 UTC 입니다. 실제 데이터에서 읽은 값도 같은 방법으로 바꾸고, 도구가 보여 준 시각과 한 번 맞춰 봅니다. 열의 저장 형(정수·실수)은 데이터베이스마다 다를 수 있어서, 헥스로 볼 때는 SQLite 레코드 헤더의 형 코드를 먼저 봅니다.
 
 ### SQL로 한 번
 
-사본을 `sqlite3` 같은 공개 도구로 열고, APOLLO 쿼리와 같은 조인으로 뽑습니다. 먼저 `.tables` 와 `.schema ZUSAGETIMEDITEM` 으로 칸이 있는지 확인합니다.
+사본을 `sqlite3` 같은 공개 도구로 열고, APOLLO 쿼리와 같은 조인으로 뽑습니다. 먼저 `.tables` 와 `.schema ZUSAGETIMEDITEM` 으로 열이 있는지 확인합니다.
 
 ```sql
 SELECT DATETIME(B.ZSTARTDATE + 978307200, 'UNIXEPOCH') AS block_start_utc,
@@ -123,7 +123,7 @@ LEFT JOIN ZCOREDEVICE D ON G.ZDEVICE = D.Z_PK
 ORDER BY B.ZSTARTDATE;
 ```
 
-iOS 12 형식처럼 `ZPLATFORM` 이나 `ZALTDSID` 칸이 없는 데이터베이스에서는 그 칸을 빼고 실행합니다 [1]. APOLLO 를 쓰면 같은 쿼리를 모듈로 돌릴 수 있고, 결과를 위 SQL 결과와 맞춰 보면 도구를 검증할 수 있습니다. 검증 방법은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
+iOS 12 형식처럼 `ZPLATFORM` 이나 `ZALTDSID` 열이 없는 데이터베이스에서는 그 열을 빼고 실행합니다 [1]. APOLLO 를 쓰면 같은 쿼리를 모듈로 돌릴 수 있고, 결과를 위 SQL 결과와 맞춰 보면 도구를 검증할 수 있습니다. 검증 방법은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
@@ -137,10 +137,10 @@ iOS 12 형식처럼 `ZPLATFORM` 이나 `ZALTDSID` 칸이 없는 데이터베이�
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 자료(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. 볼륨 전체에서 `RMAdminStore-Local.sqlite` 와 `RMAdminStore-Cloud.sqlite` 를 찾아 경로를 적어 보세요.
-2. `.schema` 로 이 페이지의 표와 칸이 모두 있는지 확인하고, 없는 칸을 적어 보세요.
+2. `.schema` 로 이 페이지의 표와 열이 모두 있는지 확인하고, 없는 열을 적어 보세요.
 3. `ZCOREDEVICE` 의 행을 모두 뽑아 `ZPLATFORM` 값별로 기기가 몇 대인지 세어 보세요.
 4. 사용 시간이 가장 긴 번들 ID 다섯 개를 골라, 같은 구간에 KnowledgeC 기록이 있는지 찾아보세요.
 

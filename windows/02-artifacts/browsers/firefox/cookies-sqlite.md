@@ -20,22 +20,22 @@ nav_order: 1720
 
 - 위치는 프로필 본 폴더의 `cookies.sqlite` 입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - 파일의 모양은 브라우저 버전을 따릅니다. 쿠키 코드는 스키마 버전을 mozStorage 의 `GetSchemaVersion`·`SetSchemaVersion` 으로 읽고 씁니다. 이 두 함수는 `PRAGMA user_version` 을 씁니다.
-- 아래 스키마와 칸은 파이어폭스 소스 main 가지(2026-09-23 기준)의 것입니다. 이때 스키마 버전 상수는 17 입니다[1].
+- 아래 스키마와 열은 파이어폭스 소스 main 가지(2026-09-23 기준)의 것입니다. 이때 스키마 버전 상수는 17 입니다[1].
 
 ### 스키마 변경 이력
 
-같은 칸이라도 파일 버전에 따라 뜻이나 단위가 다릅니다. 특히 `expiry` 는 버전에 따라 단위가 바뀌었습니다. 분석은 파일의 스키마 버전을 먼저 확인하는 데서 시작합니다.
+같은 열이라도 파일 버전에 따라 뜻이나 단위가 다릅니다. 특히 `expiry` 는 버전에 따라 단위가 바뀌었습니다. 분석은 파일의 스키마 버전을 먼저 확인하는 데서 시작합니다.
 
 | 버전 변화 | 바뀐 점 |
 |---|---|
-| 9 → 10 | `rawSameSite` 칸을 추가하고 `sameSite` 값을 옮겨 담았습니다 |
-| 11 → 12 | `schemeMap` 칸을 추가했습니다 |
-| 12 → 13 | `isPartitionedAttributeSet` 칸을 추가했습니다 |
+| 9 → 10 | `rawSameSite` 열을 추가하고 `sameSite` 값을 옮겨 담았습니다 |
+| 11 → 12 | `schemeMap` 열을 추가했습니다 |
+| 12 → 13 | `isPartitionedAttributeSet` 열을 추가했습니다 |
 | 13 → 14 | `rawSameSite` 에 따라 `sameSite` 값을 고쳤습니다 |
 | 14 → 15 | `expiry` 를 초에서 밀리초로 바꿨습니다 |
-| 15 → 16 | `updateTime` 칸을 추가하고, 기존 행에는 올린 때의 현재 시각을 채웠습니다 |
+| 15 → 16 | `updateTime` 열을 추가하고, 기존 행에는 올린 때의 현재 시각을 채웠습니다 |
 
-- 16 에서 17 로 올릴 때는 칸을 바꾸지 않고 버전 번호만 17 로 씁니다. 현재 `CREATE TABLE` 문에는 `rawSameSite` 가 없습니다. 언제 빠졌는지는 공개 자료가 없으므로, 검체에서 이 칸이 있는지 봅니다.
+- 16 에서 17 로 올릴 때는 열을 바꾸지 않고 버전 번호만 17 로 씁니다. 현재 `CREATE TABLE` 문에는 `rawSameSite` 가 없습니다. 언제 빠졌는지 밝힌 공개 자료가 없으므로, 실제 파일에 이 열이 있는지 봅니다.
 - 각 스키마 버전이 어느 파이어폭스 출시판에 들어갔는지는 공개 자료가 없습니다. 판단은 `PRAGMA user_version` 값으로 합니다.
 
 ## 구조
@@ -46,11 +46,11 @@ nav_order: 1720
 
 쿠키 DB 는 `PRAGMA journal_mode = WAL`, `synchronous = NORMAL` 로 쓰므로 최근 변경이 `cookies.sqlite-wal` 에 아직 합쳐지지 않은 채로 있을 수 있고, 본 파일만 열면 최근 쿠키를 놓칩니다. WAL·롤백 저널의 차이는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
-### `moz_cookies` 의 칸
+### `moz_cookies` 의 열
 
-버전 17 기준 칸은 아래와 같습니다.
+버전 17 기준 열은 아래와 같습니다.
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `id` | 행 번호입니다 |
 | `originAttributes` | 컨테이너·분할 정보입니다. 기본값은 빈 문자열입니다 |
@@ -67,7 +67,7 @@ nav_order: 1720
 | `sameSite` | SameSite 속성입니다 |
 | `schemeMap` | 쿠키를 심은 스킴 표시입니다 |
 | `isPartitionedAttributeSet` | 분할 쿠키 속성이 붙었는지입니다 |
-| `updateTime` | 갱신 시각입니다. 무엇이 바뀔 때 갱신되는지는 검체에서 확인합니다 |
+| `updateTime` | 갱신 시각입니다. 무엇이 바뀔 때 갱신되는지는 실제 데이터로 확인합니다 |
 
 - 고유 조건은 `name, host, path, originAttributes` 입니다. 이름·호스트·경로가 같아도 `originAttributes` 가 다르면 따로 저장됩니다.
 - 크롬 계열과 달리 파이어폭스는 쿠키 값을 암호화하지 않아서 `value` 가 평문입니다.
@@ -93,9 +93,9 @@ nav_order: 1720
 
 ## 시각 해석
 
-파이어폭스의 쿠키 시각은 단위가 칸마다 다릅니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
+파이어폭스의 쿠키 시각은 단위가 열마다 다릅니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
-| 칸 | 단위 | 주의할 점 |
+| 열 | 단위 | 주의할 점 |
 |---|---|---|
 | `creationTime` | 마이크로초 | 1970년 1월 1일 UTC 부터 셉니다 |
 | `lastAccessed` | 마이크로초 | 1970년 1월 1일 UTC 부터 셉니다 |
@@ -103,7 +103,7 @@ nav_order: 1720
 | `updateTime` | 마이크로초 | 스키마 15 이하에서 올라온 행에는 스키마를 올린 때의 시각이 들어 있습니다 |
 
 - `creationTime` 과 `lastAccessed` 는 마이크로초입니다. 파이어폭스의 PRTime 은 1970년 1월 1일 기준 마이크로초입니다[2].
-- `expiry` 는 스키마 15 부터 밀리초입니다. 스키마 14 이하의 파일에서는 초입니다. 같은 칸이 파일 버전에 따라 단위가 다르므로, 변환하기 전에 `PRAGMA user_version` 을 봅니다.
+- `expiry` 는 스키마 15 부터 밀리초입니다. 스키마 14 이하의 파일에서는 초입니다. 같은 열이 파일 버전에 따라 단위가 다르므로, 변환하기 전에 `PRAGMA user_version` 을 봅니다.
 - 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
@@ -114,13 +114,13 @@ nav_order: 1720
 - **세션 쿠키는 파일에 없습니다.** 세션 쿠키는 파일에 쓰지 않으므로 세션 쿠키만 쓰던 사이트는 이 파일에 흔적이 없습니다.
 - **`expiry` 단위를 스키마 버전으로 정합니다.** 스키마 버전을 보지 않고 `expiry` 를 초로 읽으면 밀리초 파일에서 엉뚱한 연도가 나옵니다.
 - **지운 쿠키는 표에서 사라집니다.** 조각이 SQLite 빈 공간이나 WAL 에 남을 수 있습니다. 옛 쿠키를 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, WAL, 메모리도 봅니다.
-- **도구가 스키마 버전을 모를 수 있습니다.** 옛 도구는 빠진 칸(`updateTime` 등)을 못 보여 주거나, `expiry` 단위를 틀리게 변환할 수 있습니다. 결과가 이상하면 `PRAGMA user_version` 부터 봅니다.
+- **도구가 스키마 버전을 모를 수 있습니다.** 옛 도구는 빠진 열(`updateTime` 등)을 못 보여 주거나, `expiry` 단위를 틀리게 변환할 수 있습니다. 결과가 이상하면 `PRAGMA user_version` 부터 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-쿠키 시각은 정수입니다. SQLite 레코드는 정수를 빅엔디언으로 저장합니다. 아래는 2024-01-01 00:00:00 UTC 를 명세대로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다.
+쿠키 시각은 정수입니다. SQLite 레코드는 정수를 빅엔디언으로 저장합니다. 아래는 2024-01-01 00:00:00 UTC 를 명세대로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 creationTime (마이크로초):
@@ -132,7 +132,7 @@ expiry (스키마 15 이후, 밀리초):
 1704067200000 ÷ 1,000 = 1704067200 초 → 2024-01-01 00:00:00 UTC
 ```
 
-- 같은 시각이라도 마이크로초 칸과 밀리초 칸은 저장된 바이트가 다릅니다.
+- 같은 시각이라도 마이크로초 열과 밀리초 열은 저장된 바이트가 다릅니다.
 
 ### 공개 도구로 한 번
 
@@ -167,7 +167,7 @@ ORDER BY creationTime;
 
 ## 실습
 
-파이어폭스를 쓴 공개 검체(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+파이어폭스를 쓴 공개 실습 데이터(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `PRAGMA user_version` 은 몇입니까? 그 버전에서 `expiry` 는 초입니까 밀리초입니까?
 2. `value` 가 평문인 로그인성 쿠키를 골라, 그 도메인의 방문 기록 첫 방문 시각과 `creationTime` 을 비교해 봅니다.
@@ -176,6 +176,6 @@ ORDER BY creationTime;
 
 ## 참고 문헌
 
-1. Mozilla, *CookiePersistentStorage.cpp* (파이어폭스 소스, main 가지 — 스키마 버전, 칸, 저널 방식, 시각 단위, 세션 쿠키 처리). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/netwerk/cookie/CookiePersistentStorage.cpp
+1. Mozilla, *CookiePersistentStorage.cpp* (파이어폭스 소스, main 가지 — 스키마 버전, 열, 저널 방식, 시각 단위, 세션 쿠키 처리). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/netwerk/cookie/CookiePersistentStorage.cpp
 2. Mozilla, *nsINavHistoryService.idl* (파이어폭스 소스, main 가지 — PRTime 정의). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/places/nsINavHistoryService.idl
 3. Mozilla, *mozStorageConnection.cpp* (파이어폭스 소스, main 가지 — 스키마 버전과 `PRAGMA user_version`). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/storage/mozStorageConnection.cpp

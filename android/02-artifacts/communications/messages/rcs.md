@@ -11,13 +11,13 @@ RCS(Rich Communication Services) 채팅과 관련해 기기에 남는 기록을 
 
 ## 한 줄 요약
 
-RCS 대화 본문이 시스템 문자 DB(mmssms.db)에 들어가는지는 공개 자료에 정리되어 있지 않고, 볼 수 있는 기록은 Google 메시지 앱의 bugle_db 와 삼성 IMS 서비스(com.sec.imsservice)의 등록 로그입니다. 공개 파서가 읽는 bugle_db 칸 가운데에는 한 메시지가 SMS·MMS·RCS 가운데 무엇으로 오갔는지 가르는 칸이 없습니다 [1][2].
+RCS 대화 본문이 시스템 문자 DB(mmssms.db)에 들어가는지는 공개 자료에 정리되어 있지 않고, 볼 수 있는 기록은 Google 메시지 앱의 bugle_db 와 삼성 IMS 서비스(com.sec.imsservice)의 등록 로그입니다. 공개 파서가 읽는 bugle_db 열 가운데에는 한 메시지가 SMS·MMS·RCS 가운데 무엇으로 오갔는지 구분하는 열이 없습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나
 
 Google 메시지 앱(com.google.android.apps.messaging)은 mmssms.db 와 별개로 자기 DB 인 bugle_db 를 두고, ALEAPP 도 이 DB 를 mmssms.db 와 다른 모듈로 읽습니다 [1]. RCS 대화가 시스템 문자 DB 에 들어간다는 공개 근거가 없으니, RCS 를 쓸 수 있는 기기라면 문자 앱이 따로 두는 DB 를 반드시 함께 확인합니다. mmssms.db 의 구조는 [문자 DB 구조 (mmssms.db)](mmssms-db.md) 페이지에 있습니다.
 
-삼성 기기에서는 IMS 서비스가 IMS 등록·데이터망·SIM 상태를 로그로 남깁니다. 이 로그는 통화나 메시지 내용이 아니라 등록 상태를 기록합니다 [2]. 이 로그와 RCS 채팅의 관계(예: RCS 등록 여부가 로그에 드러나는지)는 공개 자료가 없어 검체에서 확인합니다.
+삼성 기기에서는 IMS 서비스가 IMS 등록·데이터망·SIM 상태를 로그로 남깁니다. 이 로그는 통화나 메시지 내용이 아니라 등록 상태를 기록합니다 [2]. 이 로그와 RCS 채팅의 관계(예: RCS 등록 여부가 로그에 드러나는지)는 실제 기기에서 확인합니다.
 
 ## 위치
 
@@ -32,18 +32,18 @@ Google 메시지 앱(com.google.android.apps.messaging)은 mmssms.db 와 별개�
 
 ## bugle_db 구조
 
-ALEAPP 가 쓰는 표와 칸은 아래와 같습니다 [1]. DB 에는 이보다 많은 표와 칸이 있을 수 있습니다.
+ALEAPP 가 쓰는 표와 열은 아래와 같습니다 [1]. DB 에는 이보다 많은 표와 열이 있을 수 있습니다.
 
-| 표 | ALEAPP 가 쓰는 칸 |
+| 표 | ALEAPP 가 쓰는 열 |
 |---|---|
 | parts | timestamp, content_type, text, file_size_bytes, local_cache_path, conversation_id, message_id |
 | messages | _id, sender_id |
 | participants | _id, display_destination, sub_id |
 | conversations | _id, name |
 
-오래된 bugle_db 에는 parts.file_size_bytes 와 parts.local_cache_path 칸이 없습니다 [1]. file_size_bytes 가 -1 이면 ALEAPP 는 "N/A" 로 표시합니다 [1].
+오래된 bugle_db 에는 parts.file_size_bytes 와 parts.local_cache_path 열이 없습니다 [1]. file_size_bytes 가 -1 이면 ALEAPP 는 "N/A" 로 표시합니다 [1].
 
-ALEAPP 는 메시지에 딸린 참여자의 sub_id 로 방향을 가립니다 [1]. -2 는 AOSP Messaging 의 OTHER_THAN_SELF_SUB_ID, 곧 기기 주인이 아닌 사람을 뜻합니다 [1].
+ALEAPP 는 메시지에 딸린 참여자의 sub_id 로 방향을 판정합니다 [1]. -2 는 AOSP Messaging 의 OTHER_THAN_SELF_SUB_ID, 곧 기기 주인이 아닌 사람을 뜻합니다 [1].
 
 | participants.sub_id | ALEAPP 판정 |
 |---|---|
@@ -64,9 +64,9 @@ ALEAPP 는 메시지에 딸린 참여자의 sub_id 로 방향을 가립니다 [1
 
 ## 증거로서 의미
 
-**증명하는 것.** bugle_db 의 parts 행은 Google 메시지 앱 DB 에 그 대화·시각·내용(또는 첨부 크기와 캐시 경로)으로 된 메시지 조각이 있다는 기록이고, 참여자의 sub_id 로 받은 것인지 보낸 것인지를 ALEAPP 규칙대로 가릴 수 있습니다. saved_impu.xml 은 어떤 SIM 이 어떤 IMS 식별자로 등록했는지를, RegiMgr.log 는 IMS 등록 상태가 언제 바뀌었는지를 보여 줍니다 [2].
+**증명하는 것.** bugle_db 의 parts 행은 Google 메시지 앱 DB 에 그 대화·시각·내용(또는 첨부 크기와 캐시 경로)으로 된 메시지 조각이 있다는 기록이고, 참여자의 sub_id 로 받은 것인지 보낸 것인지를 ALEAPP 규칙대로 구분할 수 있습니다. saved_impu.xml 은 어떤 SIM 이 어떤 IMS 식별자로 등록했는지를, RegiMgr.log 는 IMS 등록 상태가 언제 바뀌었는지를 보여 줍니다 [2].
 
-**증명하지 못하는 것.** 공개 파서가 읽는 bugle_db 칸 가운데에는 전송 방식을 가르는 칸이 없으니, 행 하나를 두고 "RCS 로 보냈다" 고 쓰지 않습니다. IMS 로그에는 통화나 메시지 내용이 없어서 [2] RCS 채팅이 있었다는 증거로 쓰지 않고, 망 등록 상태의 기록으로만 씁니다. saved_impu.xml 에는 시각이 없어서 그 짝이 언제 생겼는지 알려 주지 않습니다.
+**증명하지 못하는 것.** 공개 파서가 읽는 bugle_db 열 가운데에는 전송 방식을 구분하는 열이 없으니, 행 하나를 두고 "RCS 로 보냈다" 고 쓰지 않습니다. IMS 로그에는 통화나 메시지 내용이 없어서 [2] RCS 채팅이 있었다는 증거로 쓰지 않고, 망 등록 상태의 기록으로만 씁니다. saved_impu.xml 에는 시각이 없어서 그 짝이 언제 생겼는지 알 수 없습니다.
 
 ## 시각 해석
 
@@ -74,11 +74,11 @@ bugle_db 의 parts.timestamp 는 유닉스 밀리초이고, ALEAPP 는 1000으�
 
 ## 함정과 한계
 
-오래된 bugle_db 에는 parts 의 일부 칸이 없어서, 그런 DB 에 새 칸 이름을 넣은 쿼리는 오류가 납니다 [1]. ALEAPP 의 방향 판정은 sub_id 값에 기댄 규칙이고 sub_id 가 NULL 이면 방향을 모릅니다 [1]. IMS 서비스 로그는 삼성 기기의 기록이고 [2], LG 기기용으로는 ALEAPP 에 RCS 모듈(lgRCS.py)이 따로 있습니다 [3]. settings system 의 `rcs_user_setting` 키는 뜻이 공식 문서에 정리되어 있지 않으므로, 이름만 보고 RCS 를 켰다는 뜻으로 읽지 않습니다.
+오래된 bugle_db 에는 parts 의 일부 열이 없어서, 그런 DB 에 새 열 이름을 넣은 쿼리는 오류가 납니다 [1]. ALEAPP 의 방향 판정은 sub_id 값에 기댄 규칙이고 sub_id 가 NULL 이면 방향을 모릅니다 [1]. IMS 서비스 로그는 삼성 기기의 기록이고 [2], LG 기기용으로는 ALEAPP 에 RCS 모듈(lgRCS.py)이 따로 있습니다 [3]. settings system 의 `rcs_user_setting` 키는 뜻이 공식 문서에 정리되어 있지 않으므로, 이름만 보고 RCS 를 켰다는 뜻으로 읽지 않습니다.
 
 ## 직접 분석해 보기
 
-복사본을 열고 `-wal` 파일이 있으면 함께 복사합니다. 아래 쿼리는 ALEAPP 가 쓰는 칸으로 만든 예시이고, 오래된 DB 에서는 file_size_bytes 와 local_cache_path 를 뺍니다.
+복사본을 열고 `-wal` 파일이 있으면 함께 복사합니다. 아래 쿼리는 ALEAPP 가 쓰는 열로 만든 예시이고, 오래된 DB 에서는 file_size_bytes 와 local_cache_path 를 뺍니다.
 
 ```sql
 SELECT datetime(p.timestamp / 1000, 'unixepoch') AS time_utc,
@@ -99,9 +99,9 @@ ORDER BY p.timestamp;
 
 ## 실습
 
-1. 공개 검체에서 bugle_db 를 찾아 위 쿼리를 돌리고, participants.sub_id 값별 건수를 세어 받은 메시지와 보낸 메시지의 비율을 확인합니다.
-2. 같은 검체의 mmssms.db 와 bugle_db 에서 같은 상대 번호의 메시지를 찾아, 한쪽에만 있는 메시지가 있는지 확인합니다.
-3. 삼성 검체라면 IMS 로그 첫 줄의 펌웨어 빌드를 모아 시각 순으로 늘어놓고, 로그 시각이 현지 시각이라는 점을 반영해 UTC 로 바꿔 봅니다.
+1. 공개된 증거물 이미지에서 bugle_db 를 찾아 위 쿼리를 돌리고, participants.sub_id 값별 건수를 세어 받은 메시지와 보낸 메시지의 비율을 확인합니다.
+2. 같은 이미지의 mmssms.db 와 bugle_db 에서 같은 상대 번호의 메시지를 찾아, 한쪽에만 있는 메시지가 있는지 확인합니다.
+3. 삼성 기기 이미지라면 IMS 로그 첫 줄의 펌웨어 빌드를 모아 시각 순으로 늘어놓고, 로그 시각이 현지 시각이라는 점을 반영해 UTC 로 바꿔 봅니다.
 
 ## 참고 문헌
 

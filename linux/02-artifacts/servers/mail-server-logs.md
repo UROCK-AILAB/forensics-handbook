@@ -52,7 +52,7 @@ Mar 12 14:05:11 mx1 postfix/qmgr[900]: 4A1B2C3D4E: removed
 Mar 12 14:05:12 mx1 postfix/smtpd[2101]: disconnect from mail.example.org[203.0.113.25] …
 ```
 
-Ubuntu 24.04 에서는 줄 머리만 `2026-03-12T14:05:09.104233+09:00 mx1 postfix/smtpd[2101]: …` 처럼 바뀌고 뒷부분은 같습니다(만든 예시). `relay=` 값과 끊김 줄 뒤의 명령 통계는 모양을 검체에서 확인합니다.
+Ubuntu 24.04 에서는 줄 머리만 `2026-03-12T14:05:09.104233+09:00 mx1 postfix/smtpd[2101]: …` 처럼 바뀌고 뒷부분은 같습니다(만든 예시). `relay=` 값과 끊김 줄 뒤의 명령 통계는 모양을 실제 로그로 확인합니다.
 
 ### 줄별 필드
 
@@ -93,7 +93,7 @@ Postfix 가 Message-ID 를 직접 붙일 때는 모양이 큐 ID 설정을 따�
 - 받는 사람이 메일을 읽었는지.
 - Message-ID 를 누가 만들었는지. `cleanup` 은 메시지 머리에 있는 값을 그대로 적고[4], 머리에 없고 클라이언트가 `local_header_rewrite_clients` 에 들거나 `always_add_missing_headers = yes` 일 때만 새로 만들어 붙이므로[1][4], 보낸 쪽 프로그램이 넣은 값은 지어낸 값일 수 있습니다.
 
-보고서에는 "이 시각에 이 주소에서 `alice` 로 인증한 SMTP 세션이 `bob@example.net` 앞으로 메시지를 넘겼고 다음 서버가 받았다고 답한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 시각에 이 주소에서 `alice` 로 인증한 SMTP 세션이 `bob@example.net` 앞으로 메시지를 넘겼고 다음 서버가 받았다고 답한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -101,7 +101,7 @@ Postfix 가 Message-ID 를 직접 붙일 때는 모양이 큐 ID 설정을 따�
 
 RHEL 9 는 rsyslog 가 저널에서 줄을 읽어 오므로 같은 줄이 저널에도 있고, 저널 쪽은 UTC 마이크로초 시각이 붙습니다([systemd 저널](../../01-foundations/logging/systemd-journal/index.md)). Ubuntu 는 Postfix 패키지가 rsyslog 에 `/var/spool/postfix/dev/log` 소켓을 따로 열어 chroot 안의 Postfix 데몬 로그를 직접 받으므로[8], 이 길로 들어온 줄은 저널에 없을 가능성이 있습니다. Ubuntu 에서는 `mail.log` 를 먼저 봅니다.
 
-시각을 보정할 단서가 로그 안에도 있습니다. Postfix 가 붙인 Message-ID 의 `YYYYMMDDHHMMSS` 는 UTC 이므로[4], 같은 큐 ID 의 `cleanup` 줄 시각(현지 시각)과 비교하면 서버가 쓰던 시간대를 가늠할 수 있습니다. 위 예시에서 줄 시각 14:05:10 과 Message-ID 의 05:05:10 은 9시간 차이입니다. 또 `delay=` 는 도착부터 전달 완료까지의 시간이라[6], 전달 줄 시각에서 `delay` 를 빼면 메시지가 도착한 때와 거의 맞습니다. 메시지가 오래 `deferred` 로 머물렀다면 같은 큐 ID 의 전달 줄이 여러 번 나오고 `delay` 가 점점 커집니다.
+시각을 보정할 단서가 로그 안에도 있습니다. Postfix 가 붙인 Message-ID 의 `YYYYMMDDHHMMSS` 는 UTC 이므로[4], 같은 큐 ID 의 `cleanup` 줄 시각(현지 시각)과 비교하면 서버가 쓰던 시간대를 추정할 수 있습니다. 위 예시에서 줄 시각 14:05:10 과 Message-ID 의 05:05:10 은 9시간 차이입니다. 또 `delay=` 는 도착부터 전달 완료까지의 시간이라[6], 전달 줄 시각에서 `delay` 를 빼면 메시지가 도착한 때와 거의 맞습니다. 메시지가 오래 `deferred` 로 머물렀다면 같은 큐 ID 의 전달 줄이 여러 번 나오고 `delay` 가 점점 커집니다.
 
 ## 함정과 한계
 
@@ -109,7 +109,7 @@ RHEL 9 는 rsyslog 가 저널에서 줄을 읽어 오므로 같은 줄이 저널
 - `syslog_name` 을 바꾼 서버(여러 인스턴스를 돌리는 서버 등)는 `postfix/` 대신 다른 접두어가 붙으므로, `postfix/` 로만 검색하면 줄을 놓칩니다[1].
 - `maillog_file` 을 켠 서버라도 일부 줄은 syslog 에 남습니다. 데몬이 아닌 프로그램은 설정을 읽기 전의 오류를 syslog 로 보내고, Postfix 가 꺼져 있을 때 `postfix`·`postsuper`·`postmulti`·`postlog` 는 `maillog_file` 에 직접 씁니다[2]. 두 곳을 다 봅니다.
 - `postfix logrotate` 는 옛 파일을 지우지 않습니다[2]. 반대로 syslog 쪽 `mail.log`·`maillog` 는 기본 4세대만 남기므로 한 달쯤 지난 기록은 순환으로 사라졌을 가능성이 있습니다[10][11][12].
-- Ubuntu 의 `mail.err` 는 rsyslog 순환 목록에 없습니다[10]. 검체에서 다른 순환 설정이 있는지 봅니다.
+- Ubuntu 의 `mail.err` 는 rsyslog 순환 목록에 없습니다[10]. 실제 시스템에 다른 순환 설정이 있는지 봅니다.
 - 3.5 이전 판의 로그는 주소를 따옴표 없이 적으므로, 공백이 든 주소는 판에 따라 모양이 다릅니다[1].
 - 여러 서버를 거친 메시지를 Message-ID 로 이을 수는 있지만, Message-ID 는 보통 메시지를 처음 제출받은 쪽이 한 번 정하고 뒤의 서버들은 그대로 넘기므로 중간 서버가 언제 넘겼는지는 드러나지 않는다는 지적이 있습니다[14]. 서버마다 큐 ID 와 시각을 따로 확인해 이어 붙입니다.
 - syslog 파일은 텍스트라서 줄을 지워도 자국이 남지 않습니다. RHEL 은 저널과, 두 배포판 모두 받는 쪽·보내는 쪽 서버 로그와 맞춰 봅니다([흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md)).
@@ -141,7 +141,7 @@ RHEL 9 는 rsyslog 가 저널에서 줄을 읽어 오므로 같은 줄이 저널
 
 ## 실습
 
-Postfix 를 설치한 시험용 가상 머신이나 메일 서버가 들어 있는 공개 검체 이미지로 풀어 봅니다.
+Postfix 를 설치한 시험용 가상 머신이나 메일 서버가 들어 있는 공개 디스크 이미지로 풀어 봅니다.
 
 1. 메일 로그 파일이 어디에 있고 줄 머리 서식이 무엇인가? `maillog_file` 을 켰는가?
 2. 가장 많이 인증에 실패한 주소와 그 주소가 시도한 사용자 이름은 무엇인가?

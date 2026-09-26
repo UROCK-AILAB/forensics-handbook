@@ -8,13 +8,13 @@ nav_order: 160
 
 sudo 는 `/etc/sudoers` 와 그 파일이 끌어오는 `/etc/sudoers.d/` 안의 규칙으로 "누가 어느 호스트에서 누구 권한으로 무엇을 실행할 수 있는지" 정하고, 같은 설정 파일에서 사용 기록을 어디에 어떤 모양으로 남길지도 정합니다.
 
-이 쪽은 설정 파일의 위치, 줄 문법, 파일을 읽는 순서, 배포판 기본 파일, 기록을 좌우하는 설정 키까지 다룹니다. sudo 를 실제로 쓴 기록(허용·거부 줄, I/O 기록, 시간 기록 파일, 강의 파일)의 해석은 [sudo·su 사용 기록](../../02-artifacts/logins/sudo-su.md) 쪽에 있습니다. sudoers 가 가리키는 사용자·그룹은 [계정 파일 (passwd·shadow·group)](passwd-shadow-group.md), sudo 가 인증을 맡기는 PAM 스택은 [인증 모듈 (PAM)](pam.md) 쪽에서 봅니다.
+이 페이지는 설정 파일의 위치, 줄 문법, 파일을 읽는 순서, 배포판 기본 파일, 기록을 좌우하는 설정 키까지 다룹니다. sudo 를 실제로 쓴 기록(허용·거부 줄, I/O 기록, 시간 기록 파일, 강의 파일)의 해석은 [sudo·su 사용 기록](../../02-artifacts/logins/sudo-su.md)에 있습니다. sudoers 가 가리키는 사용자·그룹은 [계정 파일 (passwd·shadow·group)](passwd-shadow-group.md), sudo 가 인증을 맡기는 PAM 스택은 [인증 모듈 (PAM)](pam.md)에서 봅니다.
 
 ## 이 형식을 쓰는 아티팩트
 
 sudoers 자체는 행위 기록이 아니지만, sudo 에서 나오는 흔적이 남을지 말지를 이 파일이 정합니다. 그래서 sudo 흔적을 해석하기 전에 먼저 읽습니다.
 
-| 흔적 | 이 설정과의 관계 | 이어서 볼 쪽 |
+| 흔적 | 이 설정과의 관계 | 이어서 볼 페이지 |
 |---|---|---|
 | 인증 로그의 sudo 허용·거부 줄 | `logfile`, `log_format`, `log_allowed`·`log_denied`, syslog facility 가 기록 여부와 위치를 정함 | [sudo·su 사용 기록](../../02-artifacts/logins/sudo-su.md), [인증 로그](../../02-artifacts/logins/auth-log.md) |
 | 세션 입출력 기록 (I/O log) | `log_input`·`log_output` 이나 태그 `LOG_INPUT`·`LOG_OUTPUT` 이 켜졌을 때만 생김 | [sudo·su 사용 기록](../../02-artifacts/logins/sudo-su.md) |
@@ -116,7 +116,7 @@ sudoers 플러그인 줄의 인자로 `sudoers_file=`(정책 파일 경로), `su
 | admin 플래그 | 켬(`--enable-admin-flag`) | 빌드 옵션에 없음 |
 | 시간 기록 폴더 | `/run/sudo/ts`(`--with-rundir=/run/sudo`) | 빌드 옵션에 없음. 빌드 기본 규칙은 `/run` 이 있으면 `/run/sudo`[6] |
 
-RHEL 9 계열 칸은 CentOS Stream 9 패키지 기준입니다[9]. RHEL 9 의 부 판(minor release)마다 sudo 판이 다를 수 있으니 검체의 패키지 데이터베이스로 판을 확인합니다. 상류 기본 틀에서는 `%wheel`·`%sudo` 줄이 모두 주석 처리돼 있습니다[5].
+RHEL 9 계열 열은 CentOS Stream 9 패키지 기준입니다[9]. RHEL 9 의 부 판(minor release)마다 sudo 판이 다를 수 있으니 분석 대상의 패키지 데이터베이스로 판을 확인합니다. 상류 기본 틀에서는 `%wheel`·`%sudo` 줄이 모두 주석 처리돼 있습니다[5].
 
 ## 읽는 법
 
@@ -158,11 +158,11 @@ deployer ALL=(root) NOPASSWD: /usr/bin/systemctl restart webapp
 
 ### 시각
 
-sudoers 에는 `NOTBEFORE`·`NOTAFTER` 말고 시각 값이 없습니다. 이 두 값은 `Z` 나 시차가 없으면 현지 시각으로 해석하므로[1], 규칙이 유효했던 기간을 따질 때 시스템 시간대를 함께 봅니다([호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)). 파일 자체의 수정·변경 시각은 [ext4](../filesystem/ext4/index.md) 같은 파일 시스템 쪽과 [Linux 의 시각 값](../value-decoding/time-values.md) 쪽 설명을 따릅니다.
+sudoers 에는 `NOTBEFORE`·`NOTAFTER` 말고 시각 값이 없습니다. 이 두 값은 `Z` 나 시차가 없으면 현지 시각으로 해석하므로[1], 규칙이 유효했던 기간을 따질 때 시스템 시간대를 함께 봅니다([호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)). 파일 자체의 수정·변경 시각은 [ext4](../filesystem/ext4/index.md) 같은 파일 시스템 페이지와 [Linux 의 시각 값](../value-decoding/time-values.md) 페이지의 설명을 따릅니다.
 
 ### 바뀐 흔적과 남는 부스러기
 
-- 배포판 패키지에 든 기본 파일[8][9]과 검체의 `/etc/sudoers` 를 비교하면 로컬에서 바꾼 줄이 드러납니다. RHEL 9 계열 패키지는 이 파일을 설정 파일(`%config(noreplace)`)로 싣습니다[9]. 패키지 파일 비교는 [패키지 파일 변조 확인](../../02-artifacts/packages/package-verify.md)을 봅니다.
+- 배포판 패키지에 든 기본 파일[8][9]과 분석 대상의 `/etc/sudoers` 를 비교하면 로컬에서 바꾼 줄이 드러납니다. RHEL 9 계열 패키지는 이 파일을 설정 파일(`%config(noreplace)`)로 싣습니다[9]. 패키지 파일 비교는 [패키지 파일 변조 확인](../../02-artifacts/packages/package-verify.md)을 봅니다.
 - `sudoers.d` 안에서 건너뛰는 이름(`~` 로 끝나는 편집기 백업, `.` 이 든 파일)도 지우지 말고 살핍니다. 규칙으로는 쓰이지 않지만 이전 판 내용이 남아 있을 가능성이 있습니다. 편집기 부스러기는 [편집기 흔적](../../02-artifacts/file-activity/editor-artifacts.md)에서 다룹니다.
 - visudo 가 편집 중 끊기면 `/etc/sudoers.tmp`(또는 편집한 파일 이름 + `.tmp`)가 남아 있을 가능성이 있습니다[2].
 - 문법 오류가 있는 파일은 `parse error in /etc/sudoers near line N` 같은 오류 기록을, 권한이 어긋난 파일은 `/etc/sudoers is owned by uid N, should be 0`·`/etc/sudoers is world writable` 같은 기록을 남깁니다[1]. visudo 를 거치지 않고 파일을 직접 고친 흔적일 가능성이 있습니다.

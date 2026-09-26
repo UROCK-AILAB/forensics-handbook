@@ -16,7 +16,7 @@ nav_order: 170
 
 iOS 에서 이 형식을 가장 자주 만나는 곳은 [바이옴](../../02-artifacts/app-usage/biome/index.md)입니다. 바이옴의 [SEGB](segb.md) 파일은 기록마다 헤더 뒤에 protobuf 페이로드를 붙이고[2][3], iOS 16 에서 쓰던 protobuf 구조를 iOS 17 에서도 그대로 쓰는 스트림이 많습니다[2]. Apple 이 이 페이로드의 스키마를 공개하지 않았기 때문에, 바이옴 페이로드는 대개 스키마 없이 필드 번호로 읽습니다.
 
-그 밖의 iOS 아티팩트에서 protobuf 를 쓰는 곳은 검체에서 확인합니다. 예를 들어 아이폰 로컬 백업의 `AppDomainGroup-group.com.apple.notes` 영역에는 `NoteStore.sqlite` 가 있고, 그 안 `ZICNOTEDATA` 표에 `ZDATA` 칸이 있습니다. 메모 본문의 저장 방식은 [메모](../../02-artifacts/mail-cloud/notes.md)에서 다룹니다. plist 의 bytes 값처럼 겉으로 형식을 알 수 없는 이진 값을 만나면 protobuf 도 후보에 넣고 아래 규칙으로 맞춰 봅니다. plist 쪽 사례는 [속성 목록 파일](plist.md)에 있습니다.
+그 밖의 iOS 아티팩트에서 protobuf 를 쓰는 곳은 실제 데이터로 확인합니다. 예를 들어 아이폰 로컬 백업의 `AppDomainGroup-group.com.apple.notes` 영역에는 `NoteStore.sqlite` 가 있고, 그 안 `ZICNOTEDATA` 표에 `ZDATA` 열이 있습니다. 메모 본문의 저장 방식은 [메모](../../02-artifacts/mail-cloud/notes.md)에서 다룹니다. plist 의 bytes 값처럼 겉으로 형식을 알 수 없는 이진 값을 만나면 protobuf 도 후보에 넣고 아래 규칙으로 맞춰 봅니다. plist 쪽 사례는 [속성 목록 파일](plist.md)에 있습니다.
 
 ## 구조
 
@@ -71,7 +71,7 @@ wire type 2 는 태그 뒤에 길이 varint 가 오고, 그 길이만큼 내용�
 
 ## 포렌식에서 중요한 점
 
-스키마 없이 읽으면 알 수 있는 것은 필드 번호와 wire type 뿐입니다[1]. 이 한계에서 두 가지가 따라 나옵니다. wire type 2 하나가 문자열·bytes·하위 메시지를 모두 싣기 때문에 LEN 필드의 겉모양만으로는 셋을 가를 수 없고, wire type 1 하나가 double 과 fixed64 를 모두 싣기 때문에 I64 필드도 실수인지 정수인지 가를 수 없습니다[1]. 보고서에는 "필드 7 의 값" 처럼 번호로 적고, 뜻을 붙일 때는 무엇을 근거로 붙였는지 함께 씁니다.
+스키마 없이 읽으면 알 수 있는 것은 필드 번호와 wire type 뿐입니다[1]. 이 한계에서 두 가지가 따라 나옵니다. wire type 2 하나가 문자열·bytes·하위 메시지를 모두 싣기 때문에 LEN 필드의 겉모양만으로는 셋을 구분할 수 없고, wire type 1 하나가 double 과 fixed64 를 모두 싣기 때문에 I64 필드도 실수인지 정수인지 구분할 수 없습니다[1]. 보고서에는 "필드 7 의 값" 처럼 번호로 적고, 뜻을 붙일 때는 무엇을 근거로 붙였는지 함께 씁니다.
 
 I64 필드에 들어 있는 double 이 시각일 때가 있습니다. 바이옴 페이로드에서는 이런 값을 Mac 절대 시각으로 읽기도 하지만, 일반 규칙으로 정해진 것은 아닙니다. 같은 값을 double 로도, 정수로도 읽어 보고, 그럴듯한 날짜가 나오는지 [시각 값](../value-decoding/time-values.md)의 기준 시점들로 바꿔 본 뒤 같은 기기의 다른 기록과 맞춰 봅니다.
 

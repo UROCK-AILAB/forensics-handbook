@@ -9,7 +9,7 @@ nav_order: 110
 
 Android 용 ChatGPT 앱(패키지 `com.openai.chatgpt`)은 대화 목록과 메시지를 앱 데이터 폴더의 SQLite 데이터베이스에 평문으로 두고, 계정·요금제·맞춤 지시·채팅 기록 설정은 `files/datastore/` 아래 설정 파일에, 분석 도구 식별자는 `shared_prefs/` 의 XML 에 둡니다 [2][3][4].
 
-아래 경로와 칸은 앱 1.2024.177 까지 다루는 ALEAPP 분석기 기준이라서, 지금 판은 형식이 다를 수 있습니다[3][4].
+아래 경로와 필드는 앱 1.2024.177 까지 다루는 ALEAPP 분석기 기준이라서, 지금 판은 형식이 다를 수 있습니다[3][4].
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -34,30 +34,30 @@ ChatGPT 모바일 앱을 처음 포렌식으로 분석한 연구로는 Dragonas�
 | `shared_prefs/analytics-android-oai.xml` | SharedPreferences XML | 분석 도구(Segment) 식별자, 이메일, 앱 버전 | [3] |
 | `cache/files/` | 이미지 등 | 앱이 캐시한 이미지 | [3] |
 
-ALEAPP 은 대화 DB 파일 이름에서 `_conversations.db` 앞부분을 떼어 "Account" 칸으로 보여 줍니다 [3]. 같은 꼬리의 파일이 여러 개 있으면 앞부분별로 따로 읽고, `_accountuser_state` 의 계정 목록과 검체에서 맞춰 봅니다.
+ALEAPP 은 대화 DB 파일 이름에서 `_conversations.db` 앞부분을 떼어 "Account" 열로 보여 줍니다 [3]. 같은 꼬리의 파일이 여러 개 있으면 앞부분별로 따로 읽고, `_accountuser_state` 의 계정 목록과 실제 데이터에서 맞춰 봅니다.
 
-메시지 표는 앱 판에 따라 두 가지입니다. 예전 판은 `DBMessage` 표의 `messageNode` 칸에 메시지 JSON 을 통째로 두었고, 나중 판은 `DBMessageChunk` 표에 메시지 JSON 을 여러 조각으로 나눠 둡니다 [3][4]. ALEAPP `chatgpt.py` 는 `DBMessage.messageNode` 칸이 없으면 예전 형식 읽기를 건너뛰고 `chatgpt2.py` 가 새 형식을 읽습니다. 시험 이미지(Android 15, 버전 코드 2525902)에서는 예전 형식이 0행, 새 형식이 12행이었습니다 [3][4].
+메시지 표는 앱 판에 따라 두 가지입니다. 예전 판은 `DBMessage` 표의 `messageNode` 열에 메시지 JSON 을 통째로 두었고, 나중 판은 `DBMessageChunk` 표에 메시지 JSON 을 여러 조각으로 나눠 둡니다 [3][4]. ALEAPP `chatgpt.py` 는 `DBMessage.messageNode` 열이 없으면 예전 형식 읽기를 건너뛰고 `chatgpt2.py` 가 새 형식을 읽습니다. 시험 이미지(Android 15, 버전 코드 2525902)에서는 예전 형식이 0행, 새 형식이 12행이었습니다 [3][4].
 
 ## 구조
 
-형식별 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)와 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)에서 다루고, 여기서는 ChatGPT 앱에 해당하는 표·칸·키만 적습니다.
+형식별 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)와 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)에서 다루고, 여기서는 ChatGPT 앱에 해당하는 표·열·키만 적습니다.
 
 ### 대화 목록: `DBConversation`
 
-칸은 `id` 와 `conversation` 이고, `conversation` 칸에 대화 하나의 JSON 이 들어 있습니다 [3].
+열은 `id` 와 `conversation` 이고, `conversation` 열에 대화 하나의 JSON 이 들어 있습니다 [3].
 
 | JSON 키 | 뜻 |
 |---|---|
-| `$.id` | 대화 ID(ALEAPP 칸 이름 Conversation ID, 행의 `id` 칸은 ID) |
-| `$.remote_id` | 원격 ID(ALEAPP 칸 이름 Remote ID) |
+| `$.id` | 대화 ID(ALEAPP 열 이름 Conversation ID, 행의 `id` 열은 ID) |
+| `$.remote_id` | 원격 ID(ALEAPP 열 이름 Remote ID) |
 | `$.title`, `$.has_title` | 대화 제목, 제목이 붙었는지 여부 |
 | `$.creation_date`, `$.modification_date` | 대화를 만든 시각, 고친 시각(ISO 8601) |
 | `$.moderation_results` | 검토(moderation) 결과 |
-| `$.gizmo_id` | ALEAPP 칸 이름 Gizmo ID |
+| `$.gizmo_id` | ALEAPP 열 이름 Gizmo ID |
 
 ### 메시지(예전 형식): `DBMessage`
 
-칸은 `id`, `conversationId`, `messageNode` 이고, `conversationId` 가 `DBConversation.id` 와 이어집니다 [3].
+열은 `id`, `conversationId`, `messageNode` 이고, `conversationId` 가 `DBConversation.id` 와 이어집니다 [3].
 
 | `messageNode` 안 JSON 키 | 뜻 |
 |---|---|
@@ -66,12 +66,12 @@ ALEAPP 은 대화 DB 파일 이름에서 `_conversations.db` 앞부분을 떼어
 | `$.content.date` | 메시지 시각(ISO 8601) |
 | `$.content.attachments` | 첨부 |
 | `$.content.model` | 답한 모델 |
-| `$.content.is_complete`, `is_blocked`, `is_flagged`, `is_interrupted` | ALEAPP 칸 이름 Complete, Blocked, Flagged, Interrupted(참이면 Yes) |
-| `$.content.is_user_system_message`, `is_voice_message` | ALEAPP 칸 이름 User System Message, Voice Message(참이면 Yes) |
+| `$.content.is_complete`, `is_blocked`, `is_flagged`, `is_interrupted` | ALEAPP 열 이름 Complete, Blocked, Flagged, Interrupted(참이면 Yes) |
+| `$.content.is_user_system_message`, `is_voice_message` | ALEAPP 열 이름 User System Message, Voice Message(참이면 Yes) |
 
 ### 메시지(새 형식): `DBMessageChunk`
 
-칸은 `messageId`, `chunkIndex`, `chunk`(BLOB) 입니다 [4]. 같은 `messageId` 의 `chunk` 를 `chunkIndex` 순서로 이어 붙여 UTF-8 로 읽으면 JSON 하나가 됩니다.
+열은 `messageId`, `chunkIndex`, `chunk`(BLOB) 입니다 [4]. 같은 `messageId` 의 `chunk` 를 `chunkIndex` 순서로 이어 붙여 UTF-8 로 읽으면 JSON 하나가 됩니다.
 
 | 이어 붙인 JSON 키 | 뜻 |
 |---|---|
@@ -79,7 +79,7 @@ ALEAPP 은 대화 DB 파일 이름에서 `_conversations.db` 앞부분을 떼어
 | `content.created_date`, `content.modification_date` | 만든 시각, 고친 시각 |
 | `content.content` | 본문. 사전(dict)이면 그 안의 `content` 가 본문이고 `references` 가 참조 목록이며, 일부 도구·음성 메시지는 그냥 문자열입니다 |
 
-조각 JSON 에는 `role`(User 또는 Assistant), `model`, `is_visually_hidden_in_conversation` 도 있고, LEAF 파서는 `is_visually_hidden_in_conversation` 이 참인 조각을 건너뜁니다 [8]. ALEAPP `chatgpt2.py` 는 이 세 키를 읽지 않아서 [4], 도구 결과에는 역할과 숨김 여부가 나오지 않습니다. 이 키가 JSON 의 어느 층에 있는지는 검체에서 확인합니다.
+조각 JSON 에는 `role`(User 또는 Assistant), `model`, `is_visually_hidden_in_conversation` 도 있고, LEAF 파서는 `is_visually_hidden_in_conversation` 이 참인 조각을 건너뜁니다 [8]. ALEAPP `chatgpt2.py` 는 이 세 키를 읽지 않아서 [4], 도구 결과에는 역할과 숨김 여부가 나오지 않습니다. 이 키가 JSON 의 어느 층에 있는지는 실제 데이터에서 확인합니다.
 
 ### 계정·설정 파일: `files/datastore/*.preferences_pb`
 
@@ -99,7 +99,7 @@ ALEAPP 은 대화 DB 파일 이름에서 `_conversations.db` 앞부분을 떼어
 
 `<string>` 항목 가운데 `segment.userId`, `segment.anonymousId`, `segment.device.id`, `segment.app.version`, `segment.traits` 를 씁니다 [3]. `segment.traits` 는 JSON 이고 안에 `email`, `workspace_id`, `account_has_plus`, `plan_type`, `has_active_subscription` 가 있습니다. 이 파일에는 XML 에 쓸 수 없는 제어 문자가 섞여 있을 때가 있어서, ALEAPP 은 첫 읽기가 실패하면 제어 문자를 지우고 다시 읽습니다 [3].
 
-Google Play 데이터 안전 항목에는 "기기 또는 그 밖의 ID 를 제3자와 공유" 가 신고돼 있고 [9], 기기 안에서는 이 파일의 `segment.device.id`·`segment.anonymousId` 같은 식별자 값을 볼 수 있습니다 [3]. 두 값이 신고된 공유 대상과 같은 것인지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+Google Play 데이터 안전 항목에는 "기기 또는 그 밖의 ID 를 제3자와 공유" 가 신고돼 있고 [9], 기기 안에서는 이 파일의 `segment.device.id`·`segment.anonymousId` 같은 식별자 값을 볼 수 있습니다 [3]. 두 값이 신고된 공유 대상과 같은 것인지는 실제 데이터로 확인해야 합니다.
 
 ### 데이터 안전 항목
 
@@ -119,11 +119,11 @@ Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이�
 
 ## 증거로서 의미
 
-**증명하는 것.** `*_conversations.db` 에 대화 행이 있으면 그 계정으로 그 제목의 대화가 있었고, 그 사본이 이 기기에 내려와 있었다고 쓸 수 있습니다. 메시지 행이 있으면 대화 안의 글을 읽을 수 있고(예전 형식은 `role` 칸으로 쓴 쪽을 나눕니다), `created_date`·`modification_date` 로 메시지가 언제 만들어졌는지 알 수 있습니다. `_user`·`_accountuser_state` 파일은 이 기기에 로그인한 계정의 이메일·이름·요금제를 알려 주고, `_custom_instructions` 는 사용자가 모델에 준 지시를 알려 줍니다.
+**증명하는 것.** `*_conversations.db` 에 대화 행이 있으면 그 계정으로 그 제목의 대화가 있었고, 그 사본이 이 기기에 내려와 있었다고 쓸 수 있습니다. 메시지 행이 있으면 대화 안의 글을 읽을 수 있고(예전 형식은 `role` 필드로 쓴 쪽을 나눕니다), `created_date`·`modification_date` 로 메시지가 언제 만들어졌는지 알 수 있습니다. `_user`·`_accountuser_state` 파일은 이 기기에 로그인한 계정의 이메일·이름·요금제를 알려 주고, `_custom_instructions` 는 사용자가 모델에 준 지시를 알려 줍니다.
 
-**증명하지 못하는 것.** 대화 행이 있다는 사실만으로 그 대화를 이 기기에서 입력했다고 쓸 수는 없습니다. 같은 계정을 웹이나 다른 기기에서도 썼다면 그쪽에서 한 대화가 이 DB 에 들어오는지 검체로 가려야 합니다. 또 기기에 대화가 없다고 대화를 하지 않았다고 볼 수 없는데, 채팅 기록을 껐거나(`history_disabled`), 앱에서 지웠거나, 앱을 다시 깔았을 수 있습니다. 기기를 쓴 사람이 누구인지는 [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)에서처럼 다른 기록과 맞춥니다.
+**증명하지 못하는 것.** 대화 행이 있다는 사실만으로 그 대화를 이 기기에서 입력했다고 쓸 수는 없습니다. 같은 계정을 웹이나 다른 기기에서도 썼다면 그쪽에서 한 대화가 이 DB 에 들어오는지 실제 기기로 가려내야 합니다. 또 기기에 대화가 없다고 대화를 하지 않았다고 볼 수 없는데, 채팅 기록을 껐거나(`history_disabled`), 앱에서 지웠거나, 앱을 다시 깔았을 수 있습니다. 기기를 쓴 사람이 누구인지는 [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)에서처럼 다른 기록과 맞춥니다.
 
-보고서에는 "이 기기의 ChatGPT 앱 데이터베이스에 이 계정의 대화 N 건과 메시지 M 건이 있고, 가장 이른 메시지 생성 시각은 이렇다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 기기의 ChatGPT 앱 데이터베이스에 이 계정의 대화 N 건과 메시지 M 건이 있고, 가장 이른 메시지 생성 시각은 이렇다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -141,12 +141,12 @@ Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이�
 ## 함정과 한계
 
 - **WAL 을 함께 수집합니다.** 최근 대화는 `-wal` 파일에만 있을 수 있어서, `*_conversations.db` 하나만 떼어 오면 행이 빠집니다. ALEAPP 도 `*_conversations.db*` 패턴으로 WAL 을 함께 가져옵니다 [3].
-- **메시지 형식을 먼저 가립니다.** `DBMessage` 에서 0행이 나와도 `DBMessageChunk` 에 메시지가 있을 수 있습니다. 두 표를 모두 봅니다.
+- **메시지 형식을 먼저 구분합니다.** `DBMessage` 에서 0행이 나와도 `DBMessageChunk` 에 메시지가 있을 수 있습니다. 두 표를 모두 봅니다.
 - **시험 범위가 좁습니다.** 공개 분석기가 시험한 판은 1.2024.177 까지와 버전 코드 2525902 하나입니다 [3][4]. 다른 판에서 표·키 이름이 바뀌면 도구가 조용히 0행을 낼 수 있어서, 도구 결과가 비면 DB 를 직접 열어 표 목록부터 봅니다.
 - **캐시 이미지는 대화와 이어져 있지 않습니다.** ALEAPP 은 `cache/files/` 안에서 이미지로 열리는 파일을 모을 뿐이라서 [3], 이미지 하나가 어느 대화에서 왔는지는 파일 이름이나 메시지 JSON 의 첨부 값과 따로 맞춰 봅니다.
-- **지운 대화.** GMDSOFT 의 MD-NEXT·MD-RED 는 Android ChatGPT 앱에서 지운 대화방을 복구하고 로그인하지 않은 세션의 흔적도 다루지만, 어느 파일의 어느 칸인지는 공개되지 않았습니다 [5]. 지운 행은 SQLite 의 빈 페이지나 WAL 에 남을 수 있으니 [내용 복구](../../../03-techniques/analysis/content-recovery.md)의 방법으로 찾습니다.
+- **지운 대화.** GMDSOFT 의 MD-NEXT·MD-RED 는 Android ChatGPT 앱에서 지운 대화방을 복구하고 로그인하지 않은 세션의 흔적도 다루지만, 어느 파일의 어느 열인지는 공개되지 않았습니다 [5]. 지운 행은 SQLite 의 빈 페이지나 WAL 에 남을 수 있으니 [내용 복구](../../../03-techniques/analysis/content-recovery.md)의 방법으로 찾습니다.
 - **토큰.** 앱 데이터에서 접근 토큰이 나오면 [API 키와 토큰](../../../01-foundations/storage-model/api-keys-tokens.md)에 따라 보고서에서 가립니다. 서버에 있는 대화는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)이나 [계정 데이터 내보내기](export.md)로 확보합니다.
-- **수집 범위.** 앱 데이터 폴더는 기기를 수집한 방법에 따라 얻을 수도 있고 못 얻을 수도 있습니다. 폴더가 비어 보이면 앱 동작 때문인지 수집 범위 때문인지부터 가립니다. 수집 범위를 정하는 방법은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
+- **수집 범위.** 앱 데이터 폴더는 기기를 수집한 방법에 따라 얻을 수도 있고 못 얻을 수도 있습니다. 폴더가 비어 보이면 앱 동작 때문인지 수집 범위 때문인지부터 구분합니다. 수집 범위를 정하는 방법은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
 - **비슷한 앱.** 브라우저로 쓴 ChatGPT 는 앱이 아니라 [웹 브라우저](web.md) 흔적으로 남습니다. 이름이 비슷한 비공식 앱도 있을 수 있어서, 패키지 이름이 `com.openai.chatgpt` 와 정확히 같은지 확인합니다.
 
 ## 직접 분석해 보기
@@ -159,7 +159,7 @@ Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이�
 00000000  53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00  SQLite format 3.
 ```
 
-`DBMessageChunk.chunk` 한 칸을 헥스로 보면 UTF-8 JSON 의 일부가 그대로 읽힙니다. 아래는 만든 예시이고, 키 순서와 조각 경계는 검체마다 다릅니다.
+`DBMessageChunk.chunk` 한 칸을 헥스로 보면 UTF-8 JSON 의 일부가 그대로 읽힙니다. 아래는 만든 예시이고, 키 순서와 조각 경계는 실제 데이터마다 다릅니다.
 
 ```
 00000000  7B 22 63 6F 6E 74 65 6E 74 22 3A 7B 22 63 6F 6E  {"content":{"con
@@ -199,7 +199,7 @@ ALEAPP 에 앱 데이터 폴더가 든 추출본을 넣으면 "ChatGPT" 분류 �
 
 ## 교차 검증
 
-기기의 대화 사본은 [계정 데이터 내보내기](export.md)로 받은 `conversations.json` 의 같은 대화와 제목·시각을 맞춥니다. `remote_id` 가 내보내기의 대화 ID 와 같은지도 검체로 맞춰 봅니다. 접속 시간대는 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)으로 보고, 같은 사람이 브라우저로도 썼다면 [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) 기록도 함께 봅니다. 같은 계정을 쓴 iPhone 이 있으면 [iOS 앱](ios.md)의 대화 사본과도 맞춥니다.
+기기의 대화 사본은 [계정 데이터 내보내기](export.md)로 받은 `conversations.json` 의 같은 대화와 제목·시각을 맞춥니다. `remote_id` 가 내보내기의 대화 ID 와 같은지도 실제 데이터로 맞춰 봅니다. 접속 시간대는 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)으로 보고, 같은 사람이 브라우저로도 썼다면 [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) 기록도 함께 봅니다. 같은 계정을 쓴 iPhone 이 있으면 [iOS 앱](ios.md)의 대화 사본과도 맞춥니다.
 
 ## 실습
 

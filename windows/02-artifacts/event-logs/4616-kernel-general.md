@@ -8,17 +8,17 @@ nav_order: 2710
 
 ## 한 줄 요약
 
-시스템 시각이 바뀌면 보안 로그에 4616 이, 시스템 로그에 Kernel-General 1 이 남습니다. 두 이벤트 모두 바뀌기 전 시각과 바뀐 뒤 시각을 UTC 로 적는데, 4616 은 감사 정책 설정과 상관없이 늘 남고 Kernel-General 1 에는 바꾼 까닭 (Reason) 과 바뀐 폭이 더 들어 있습니다. 대부분은 Windows 시간 서비스가 하는 보정이므로, 먼저 어느 계정과 어느 프로세스가 바꿨는지를 봅니다.
+시스템 시각이 바뀌면 보안 로그에 4616 이, 시스템 로그에 Kernel-General 1 이 남습니다. 두 이벤트 모두 바뀌기 전 시각과 바뀐 뒤 시각을 UTC 로 적는데, 4616 은 감사 정책 설정과 상관없이 늘 남고 Kernel-General 1 에는 바꾼 이유 (Reason) 과 바뀐 폭이 더 들어 있습니다. 대부분은 Windows 시간 서비스가 하는 보정이므로, 먼저 어느 계정과 어느 프로세스가 바꿨는지를 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 ### 보안 로그 4616
 
-제목은 "4616(S) The system time was changed." 이고, 시스템 시각이 바뀔 때마다 생깁니다. 하위 범주는 보안 상태 변경 감사 (Audit Security State Change) 지만 이 하위 범주를 어떻게 설정하든 늘 남습니다. Subject 칸은 시스템 시각 바꾸기를 요청한 계정입니다. Subject 가 LOCAL SERVICE 인 4616 은 흔히 보는 정상 보정입니다[1].
+제목은 "4616(S) The system time was changed." 이고, 시스템 시각이 바뀔 때마다 생깁니다. 하위 범주는 보안 상태 변경 감사 (Audit Security State Change) 지만 이 하위 범주를 어떻게 설정하든 늘 남습니다. Subject 필드는 시스템 시각 바꾸기를 요청한 계정입니다. Subject 가 LOCAL SERVICE 인 4616 은 흔히 보는 정상 보정입니다[1].
 
 ### 시스템 로그 Kernel-General 1
 
-공급자는 Microsoft-Windows-Kernel-General 이고 채널은 System 입니다. 메시지 틀은 "The system time has changed to %1 from %2." 이며 버전 1 부터 "Change Reason: %3." 이 붙습니다 (Windows 11 25H2 기준). Reason 칸은 시각을 바꾼 까닭을 숫자로 적으며, 공개 도구 EvtxECmd 의 맵은 아래처럼 풉니다[2].
+공급자는 Microsoft-Windows-Kernel-General 이고 채널은 System 입니다. 메시지 틀은 "The system time has changed to %1 from %2." 이며 버전 1 부터 "Change Reason: %3." 이 붙습니다 (Windows 11 25H2 기준). Reason 필드는 시각을 바꾼 이유를 숫자로 적으며, 공개 도구 EvtxECmd 의 맵은 아래처럼 풉니다[2].
 
 | Reason | 맵의 풀이 |
 |---|---|
@@ -27,7 +27,7 @@ nav_order: 2710
 | 3 | 새 시간대로 맞춤 |
 | 그 밖 | "Unknown code" |
 
-Reason 값을 풀이한 Microsoft 공식 자료는 공개 자료가 없습니다.
+Reason 값을 풀이한 Microsoft 공식 자료는 없습니다.
 
 Reason 마다 기록 모습이 다릅니다. 아래는 Windows 11 25H2 의 Kernel-General 1 199건 기준입니다.
 
@@ -41,9 +41,9 @@ Reason 2 뒤 몇 초 안에는 Kernel-Boot 18·25·27·30·32, Kernel-Power 506�
 
 ### 같은 공급자의 다른 시각 이벤트
 
-Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. 메시지 틀과 칸은 공급자 템플릿 기준입니다.
+Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. 메시지 틀과 필드는 공급자 템플릿 기준입니다.
 
-| ID | 메시지 틀 | 주요 칸 |
+| ID | 메시지 틀 | 주요 필드 |
 |---|---|---|
 | 12 | "The operating system started at system time %7." | StartTime 등 |
 | 13 | "The operating system is shutting down at system time %1." | StopTime |
@@ -61,7 +61,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 |---|---|---|
 | 로그 (채널) | 보안 (Security) | 시스템 (System) |
 | 공급자 | Microsoft-Windows-Security-Auditing | Microsoft-Windows-Kernel-General |
-| 공급자 GUID | `{54849625-5478-4994-A5BA-3E3B0328C30D}` | 검체에서 확인 |
+| 공급자 GUID | `{54849625-5478-4994-A5BA-3E3B0328C30D}` | 실제 기록으로 확인 |
 | Task | 12288 (Microsoft 예시) | SystemTimeChange. 맵 예시 값은 5 |
 | Keywords | `0x8020000000000000` (Microsoft 예시) | KERNEL_GENERAL_KEYWORD_TIME. 맵 예시 값은 `0x8000000000000010` |
 | 최소 OS | Windows Vista · Windows Server 2008 | 공개 자료 없음 |
@@ -77,7 +77,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 
 공급자 템플릿에는 버전 0~4 가 있습니다.
 
-| 버전 | 더해진 칸 |
+| 버전 | 더해진 필드 |
 |---|---|
 | 0 | NewTime, OldTime (FILETIME) |
 | 1 | Reason (UInt32) |
@@ -93,9 +93,9 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 
 ## 구조
 
-### 4616 칸
+### 4616 필드
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | SubjectUserSid · SubjectUserName · SubjectDomainName | 시스템 시각 바꾸기를 요청한 계정입니다 |
 | SubjectLogonId | 그 계정의 로그온 ID 입니다. 16진 64비트 정수 (HexInt64) 로, 4624 의 같은 로그온 ID 와 이을 수 있습니다 |
@@ -106,16 +106,16 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 
 PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니다.
 
-### Kernel-General 1 칸 (버전 4)
+### Kernel-General 1 필드 (버전 4)
 
-칸은 아래 순서로 들어 있습니다.
+필드는 아래 순서로 들어 있습니다.
 
-| 순서 | 칸 | 형식 | 뜻 |
+| 순서 | 필드 | 형식 | 뜻 |
 |---|---|---|---|
 | 1 | NewTime | FILETIME | 바뀐 뒤 시각 |
 | 2 | OldTime | FILETIME | 바뀌기 전 시각 |
 | 3 | TimeDeltaInMs | Int64 | 바뀐 폭(밀리초). 음수면 시각을 뒤로 돌린 것입니다 |
-| 4 | Reason | UInt32 | 바꾼 까닭 |
+| 4 | Reason | UInt32 | 바꾼 이유 |
 | 5 | ProcessName | 문자열 | 바꾼 프로세스. `\Device\HarddiskVolume…` 모양의 경로입니다 |
 | 6 | ProcessID | UInt32 | 바꾼 프로세스의 ID. 10진입니다 |
 | 7 | CmosTime | FILETIME | 하드웨어 시계의 시각 |
@@ -123,11 +123,11 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 | 9 | RealTimeIsUniversal | Boolean | 하드웨어 시계가 UTC 인지 |
 | 10 | SystemInCmosMode | Boolean | |
 
-"뜻" 칸은 공식 설명이 아니라 칸 이름과 실제 값으로 본 뜻입니다. SystemInCmosMode 의 뜻은 공개 자료가 없습니다.
+"뜻" 열은 공식 설명이 아니라 필드 이름과 실제 값으로 본 뜻입니다. SystemInCmosMode 의 뜻을 설명한 공개 자료는 없습니다.
 
 ### Microsoft 의 4616 예시 값
 
-| 칸 | 값 |
+| 필드 | 값 |
 |---|---|
 | Version | 1 |
 | Execution ProcessID | 4 |
@@ -147,10 +147,10 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 
 | 항목 | 4616 | Kernel-General 1 |
 |---|---|---|
-| 바뀌기 전·뒤 칸 이름 | PreviousTime · NewTime | OldTime · NewTime |
+| 바뀌기 전·뒤 필드 이름 | PreviousTime · NewTime | OldTime · NewTime |
 | 프로세스 경로 | `C:\Windows\System32\svchost.exe` | `\Device\HarddiskVolume3\Windows\System32\svchost.exe` |
 | 프로세스 ID | `0x1768` (16진) | `5992` (10진) |
-| 까닭·폭 | 없음 | Reason, TimeDeltaInMs |
+| 이유·폭 | 없음 | Reason, TimeDeltaInMs |
 
 ## 증거로서 의미
 
@@ -158,7 +158,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 |---|---|
 | 기록된 시각에 시스템 시각이 PreviousTime 에서 NewTime 으로 바뀌었습니다 | 계정 뒤의 사람이 누구인지 |
 | 시각 바꾸기를 요청한 계정과 로그온 ID, 프로세스 (4616) | Reason 1 이 사람이 손으로 바꾼 것인지. 앱과 시스템 구성 요소가 바꿔도 1 입니다 |
-| 바꾼 까닭의 분류와 바뀐 폭·방향 (Kernel-General 1) | 기록이 없으니 시각이 바뀌지 않았다는 것. 로그가 밀려났을 수 있습니다 |
+| 바꾼 이유의 분류와 바뀐 폭·방향 (Kernel-General 1) | 기록이 없으니 시각이 바뀌지 않았다는 것. 로그가 밀려났을 수 있습니다 |
 | 깨어날 때의 보정인지 (Reason 2 와 전원 이벤트) | 그 사이 다른 기록의 시각이 모두 틀렸다는 것. 어떤 기록이 영향을 받는지는 기록마다 따로 봅니다 |
 
 ### 보고서 문장
@@ -175,7 +175,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 - 이벤트 시각은 `<TimeCreated SystemTime>` 에 들어 있고, 끝에 Z 가 붙은 UTC 값입니다. PreviousTime·NewTime·OldTime 도 UTC 입니다.
 - CmosTime 도 끝에 Z 를 붙여 보여 주지만 RealTimeIsUniversal 이 false 이면 현지 시각입니다. 한국 시간대(UTC+9) PC 에서는 CmosTime 이 NewTime 에 9시간을 더한 값입니다.
 - TimeZoneBias 는 부호 있는 32비트 값입니다. UTC+9 에서는 -540 입니다.
-- TimeDeltaInMs 는 음수가 될 수 있습니다. 예를 들어 -1995 는 약 2초 뒤로 돌린 것이고, 깨어날 때 남은 121010 은 약 2분 앞으로 옮긴 것입니다. 뒤로 간 변경을 찾을 때는 이 칸의 부호를 봅니다.
+- TimeDeltaInMs 는 음수가 될 수 있습니다. 예를 들어 -1995 는 약 2초 뒤로 돌린 것이고, 깨어날 때 남은 121010 은 약 2분 앞으로 옮긴 것입니다. 뒤로 간 변경을 찾을 때는 이 필드의 부호를 봅니다.
 - 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md)을 씁니다.
 - 시각을 되돌리면, 레코드 번호는 늘어나는데 기록 시각은 거꾸로 가는 곳이 생길 수 있습니다. 이 방법으로 되돌림을 찾을 수 있는지는 공개된 검증 자료가 없으니 "실습" 에서 직접 확인해 봅니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
@@ -188,7 +188,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 4. **프로세스 경로를 글자 그대로 맞춥니다.** 4616 은 드라이브 문자 경로, Kernel-General 1 은 `\Device\HarddiskVolume…` 경로입니다.
 5. **프로세스 ID 의 진법을 섞습니다.** 4616 은 16진, Kernel-General 1 은 10진입니다. `0x1768` 과 `5992` 는 같은 값입니다.
 6. **4616 이 없으니 시각 변경도 없었다고 봅니다.** 보안 로그는 빨리 밀려납니다. 시스템 로그의 Kernel-General 1 을 따로 찾습니다.
-7. **깨어날 때도 4616 이 남는다고 봅니다.** Reason 2 때 4616 이 남는지는 공개 자료가 없어 검체에서 확인합니다.
+7. **깨어날 때도 4616 이 남는다고 봅니다.** Reason 2 때 4616 이 남는지는 실제 기록으로 확인해야 합니다.
 8. **TimeZoneBias 를 부호 없이 읽습니다.** -540 을 부호 없는 32비트로 읽으면 4294966756 이 됩니다. 레지스트리의 시간대 Bias 값도 같은 함정이 있습니다.
 9. **CmosTime 의 Z 를 믿습니다.** RealTimeIsUniversal 을 먼저 봅니다.
 10. **Kernel-General 16 을 시각 기록으로 읽습니다.** 16 은 하이브의 접근 기록을 지운 이벤트입니다.
@@ -207,7 +207,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 
 - 시스템 시각을 바꾸려면 시스템 시각 변경 권한 (SeSystemtimePrivilege) 이 있어야 하며, 이 권한을 기본으로 받는 계정은 [시스템 시각을 바꿨나](../../04-scenarios/activity/anti-forensics/system-time-change.md)에서 다룹니다.
 - 보안 로그를 지워도 시스템 로그의 Kernel-General 1 은 따로 남습니다. 로그를 지운 기록은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
-- Windows 11 25H2 에는 Microsoft-Windows-Time-Service/Operational 로그도 켜져 있을 수 있습니다(1MB, ID 257~266·272). 각 ID 의 뜻은 공개 자료가 없어 검체에서 확인합니다.
+- Windows 11 25H2 에는 Microsoft-Windows-Time-Service/Operational 로그도 켜져 있을 수 있습니다(1MB, ID 257~266·272). 각 ID 의 뜻은 실제 기록으로 확인해야 합니다.
 
 ## 직접 분석해 보기
 
@@ -215,7 +215,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 
 PreviousTime·NewTime·OldTime 은 FILETIME 입니다. 값을 시각으로 바꾸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 여기서는 바이트 순서를 뒤집어 저장한다(리틀 엔디언)는 것만 씁니다.
 
-아래는 Microsoft 문서의 예시 값[1]과 실제 기록의 값을 형식대로 옮긴 예시입니다. 검체에서 뽑은 바이트가 아닙니다.
+아래는 Microsoft 문서의 예시 값[1]과 실제 기록의 값을 형식대로 옮긴 예시입니다. 로그 파일에서 그대로 뽑은 바이트가 아닙니다.
 
 ```
 PreviousTime 2015-10-09T05:04:30.0009419Z
@@ -227,7 +227,7 @@ NewTime      2015-10-09T05:04:30.0000000Z
 차이 = 9419 (100ns 단위) = 0.9419 밀리초, NewTime 이 더 이릅니다
 ```
 
-부호 있는 칸은 이렇게 들어갑니다.
+부호 있는 필드는 이렇게 들어갑니다.
 
 ```
 TimeZoneBias  -540   (Int32)  →  E4 FD FF FF
@@ -309,7 +309,7 @@ Get-WinEvent -Path .\System.evtx -FilterXPath "*[System[Provider[@Name='Microsof
 4. 시간대만 바꿉니다. Kernel-General 1 과 24 가운데 무엇이 남는지 비교하십시오.
 5. 2번 뒤의 시스템 로그에서 레코드 번호 순서와 기록 시각 순서가 어긋나는 곳을 찾아보십시오. "시각 해석" 에서 남겨 둔 물음이 여기서 풀립니다.
 
-NIST CFReDS 같은 공개 검체에서 이벤트 로그를 꺼냈다면, 먼저 Kernel-General 1 가운데 ProcessName 이 `svchost.exe` 가 아니고 Reason 이 2 도 아닌 것을 찾아보십시오.
+NIST CFReDS 같은 공개 데이터에서 이벤트 로그를 꺼냈다면, 먼저 Kernel-General 1 가운데 ProcessName 이 `svchost.exe` 가 아니고 Reason 이 2 도 아닌 것을 찾아보십시오.
 
 ## 참고 문헌
 

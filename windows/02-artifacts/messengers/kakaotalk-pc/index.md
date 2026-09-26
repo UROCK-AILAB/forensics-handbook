@@ -14,7 +14,7 @@ has_toc: false
 
 ## 왜 중요한가
 
-대화 DB 에는 대화방마다 메시지와 보낸 사람 ID, 시각이 남으므로 누구와 무엇을 주고받았는지 볼 때 이 파일이 중심입니다. 레지스트리와 계정 폴더의 파일에는 이 기기에서 쓴 계정의 흔적이 남아 있어서, 이 흔적으로 어느 계정을 언제쯤 썼는지 가늠합니다. 받은 사진과 섬네일은 `.cng` 파일로 따로 남기 때문에 대화 DB 와 별개로 이미지를 주고받은 흔적을 볼 수 있습니다.
+대화 DB 에는 대화방마다 메시지와 보낸 사람 ID, 시각이 남으므로 누구와 무엇을 주고받았는지 볼 때 이 파일이 중심입니다. 레지스트리와 계정 폴더의 파일에는 이 기기에서 쓴 계정의 흔적이 남아 있어서, 이 흔적으로 어느 계정을 언제쯤 썼는지 추정합니다. 받은 사진과 섬네일은 `.cng` 파일로 따로 남기 때문에 대화 DB 와 별개로 이미지를 주고받은 흔적을 볼 수 있습니다.
 
 카카오톡 버전에 따라 대화 DB 암호화 방식이 바뀌므로, 버전과 파일 상태를 먼저 확인해야 읽는 방법을 고를 수 있습니다. 카카오톡의 `.edb` 는 Windows 검색 색인 같은 ESE 파일과 확장자만 같아서, ESE 도구로 열면 실패하므로 SQLite 로 엽니다.
 
@@ -36,7 +36,7 @@ has_toc: false
 | 계정별 폴더 | `...\KakaoTalk\users\<계정 폴더>\` | 논문 |
 | 계정 폴더 이름 | 40자리 16진수 문자열 | 카카오톡 PC 26.6.0.5208 |
 | 기기 정보 | `HKEY_CURRENT_USER\SOFTWARE\Kakao\KakaoTalk\DeviceInfo\<DATE>` | 논문, 카카오톡 PC 26.6.0.5208 |
-| 프로그램 설치 폴더 | 검체에서 확인 | — |
+| 프로그램 설치 폴더 | 실제 데이터로 확인 | — |
 
 근거에 버전을 적은 칸은 그 버전 기준이며, 다른 버전에서는 다를 수 있습니다.
 
@@ -71,7 +71,7 @@ has_toc: false
 1. [설치 위치와 파일 구성 (Install Paths·Files)](install-paths-files.md) — 데이터 폴더와 계정 폴더의 위치, 그 안의 DB 와 상태 파일을 정리합니다. 확장자 `.edb` 를 ESE 와 헷갈리지 않는 법도 다룹니다.
 2. [대화 DB 암호화와 버전별 차이 (Chat DB Encryption)](chat-db-encryption.md) — 버전별 암호화 방식과 평문·암호문을 가르는 법을 다룹니다. 전원을 끈 디스크만으로 대화 DB 가 읽히는지도 봅니다.
 3. [받은 파일·사진 폴더 (Received Files)](received-files.md) — 받은 파일과 `.cng` 이미지·섬네일이 어디에 어떻게 남는지 봅니다. 파일 시각과 메시지 시각을 맞춰 보는 법도 다룹니다.
-4. [계정·로그인 흔적 (Account·Login)](account-login.md) — 레지스트리 기기 정보, 로그인 파일, userId 로 이 기기에서 쓴 계정을 찾습니다. 시각이 말해 주는 범위도 다룹니다.
+4. [계정·로그인 흔적 (Account·Login)](account-login.md) — 레지스트리 기기 정보, 로그인 파일, userId 로 이 기기에서 쓴 계정을 찾습니다. 시각으로 알 수 있는 범위도 다룹니다.
 5. [대화 DB가 안 열릴 때 남는 단서 (메모리·캐시·이미지)](when-db-wont-open.md) — 암호화한 대화 DB 를 못 열 때 볼 평문 백업, `.cng`, `ActionLogDB.edb`, `-wal` 파일, 메모리 이미지를 다룹니다. 각 단서가 담는 범위도 밝힙니다.
 
 ## 함께 볼 페이지
@@ -81,7 +81,7 @@ has_toc: false
 - [레지스트리 하이브 구조 (Registry Hive)](../../../01-foundations/database-log-formats/registry-hive/index.md) — `DeviceInfo\<DATE>` 키를 읽을 때 필요한 구조입니다.
 - [암호화 증거 다루기 (Encrypted Evidence)](../../../03-techniques/analysis/encrypted-evidence/index.md) — 암호문으로 남은 증거를 다루는 일반 절차입니다.
 - [메모리 분석 (Memory Forensics)](../../../03-techniques/analysis/memory-forensics/index.md) — 메모리 이미지에 남을 수 있는 단서를 다룹니다.
-- [누구와 연락을 주고받았나 (Communication Reconstruction)](../../../04-scenarios/activity/communication-reconstruction.md) — 여러 메신저와 메일 기록을 묶어 연락 관계를 되짚는 순서입니다.
+- [누구와 연락을 주고받았나 (Communication Reconstruction)](../../../04-scenarios/activity/communication-reconstruction.md) — 여러 메신저와 메일 기록을 묶어 연락 관계를 재구성하는 순서입니다.
 - [그 시각에 PC 를 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md) — 계정 흔적을 실제 사용자와 이어 볼 때 봅니다.
 
 ## 참고 문헌

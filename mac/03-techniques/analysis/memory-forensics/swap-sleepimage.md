@@ -11,7 +11,7 @@ nav_order: 2100
 
 ## 언제 쓰나
 
-메모리를 확보하지 못했거나 이미 꺼진 맥의 디스크 이미지만 있을 때, 메모리에서 디스크로 내려온 흔적을 확인하려고 봅니다. 윈도우의 pagefile.sys·hiberfil.sys와 비슷한 자리에 있는 파일이지만, macOS 쪽은 xnu 소스에 스왑 암호화 코드가 있고 잠자기 이미지 헤더에도 암호화 칸이 있습니다[7][3]. 실행 중인 메모리를 떠내는 방법은 [메모리 확보 (Acquisition)](memory-acquisition.md)에서 다룹니다.
+메모리를 확보하지 못했거나 이미 꺼진 맥의 디스크 이미지만 있을 때, 메모리에서 디스크로 내려온 흔적을 확인하려고 봅니다. 윈도우의 pagefile.sys·hiberfil.sys와 비슷한 자리에 있는 파일이지만, macOS 쪽은 xnu 소스에 스왑 암호화 코드가 있고 잠자기 이미지 헤더에도 암호화 필드가 있습니다[7][3]. 실행 중인 메모리를 떠내는 방법은 [메모리 확보 (Acquisition)](memory-acquisition.md)에서 다룹니다.
 
 ## 스왑 파일 (swapfile)
 
@@ -31,7 +31,7 @@ SWAP_FILE_NAME    SWAP_VOLUME_NAME "/VM/swapfile"
 | macOS | `/System/Volumes/VM/swapfile` 뒤에 번호 |
 | xnu의 그 밖의 대상 OS | `/private/var/vm/swapfile` 뒤에 번호 |
 
-스왑 파일 이름은 기본 이름 뒤에 파일 번호를 붙인(`"%s%d"`) swapfile0, swapfile1 형태입니다[7]. 위 표는 현재 소스 기준이라, 10.15 이전 macOS에서 쓰던 경로는 검체에서 확인합니다.
+스왑 파일 이름은 기본 이름 뒤에 파일 번호를 붙인(`"%s%d"`) swapfile0, swapfile1 형태입니다[7]. 위 표는 현재 소스 기준이라, 10.15 이전 macOS에서 쓰던 경로는 실제 기기에서 확인합니다.
 
 ### 크기와 개수
 
@@ -45,7 +45,7 @@ SWAP_FILE_NAME    SWAP_VOLUME_NAME "/VM/swapfile"
 
 ### 암호화
 
-스왑 암호화는 xnu 소스에서 `#if ENCRYPTED_SWAP` 으로 켜지는 코드이고, AES-XTS(`libkern/crypto/aesxts.h`)를 씁니다. 페이지를 내보낼 때(swapout) `vm_swap_encrypt()` 로 암호화하고 다시 읽을 때(swapin) `vm_swap_decrypt()` 로 복호화합니다[7]. 암호화 키는 스왑 암호화를 초기화할 때 `cc_rand_generate()` 로 무작위로 만들고, 같은 소스에는 이 키를 디스크에 저장하는 코드가 없습니다[7]. 어떤 빌드에서 `ENCRYPTED_SWAP` 이 켜지는지와 재부팅할 때 스왑 파일을 지우는지는 소스만으로 알 수 없어 검체에서 확인합니다. 스왑 코드가 든 소스 파일 이름은 `vm_compressor_backing_store` 이지만[7][8], 스왑 안의 페이지가 메모리 압축기(compressor)로 압축된 형태인지는 공개된 설명이 없습니다.
+스왑 암호화는 xnu 소스에서 `#if ENCRYPTED_SWAP` 으로 켜지는 코드이고, AES-XTS(`libkern/crypto/aesxts.h`)를 씁니다. 페이지를 내보낼 때(swapout) `vm_swap_encrypt()` 로 암호화하고 다시 읽을 때(swapin) `vm_swap_decrypt()` 로 복호화합니다[7]. 암호화 키는 스왑 암호화를 초기화할 때 `cc_rand_generate()` 로 무작위로 만들고, 같은 소스에는 이 키를 디스크에 저장하는 코드가 없습니다[7]. 어떤 빌드에서 `ENCRYPTED_SWAP` 이 켜지는지와 재부팅할 때 스왑 파일을 지우는지는 소스만으로 알 수 없어 실제 기기에서 확인해야 합니다. 스왑 코드가 든 소스 파일 이름은 `vm_compressor_backing_store` 이지만[7][8], 스왑 안의 페이지가 메모리 압축기(compressor)로 압축된 형태인지는 공개된 설명이 없습니다.
 
 ## 잠자기 이미지 (sleepimage)
 
@@ -61,11 +61,11 @@ SWAP_FILE_NAME    SWAP_VOLUME_NAME "/VM/swapfile"
 
 이미지가 실제로 쓰이는지는 `standby` 와 `autopoweroff` 값에도 달려 있습니다[2]. `standby` 는 일정 시간 잠든 뒤 자동으로 hibernate 하는 설정이고, `standbydelayhigh`·`standbydelaylow` 는 이미지를 쓰고 메모리 전원을 끄기까지의 지연(초)입니다. `autopoweroff` 는 `autopoweroffdelay` 초 동안 잠든 뒤 이미지를 쓰고 더 낮은 전력 상태로 가는 설정입니다[2]. `destroyfvkeyonstandby` 를 켜면 standby로 갈 때 FileVault 키를 지우고, 기본값은 키를 유지합니다[2]. FileVault 키를 다루는 방법은 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md)를 봅니다.
 
-이미지 파일의 위치는 `hibernatefile` 설정이 가리키고, 루트 볼륨 위의 파일만 가리킬 수 있습니다[2]. 기본 경로와, Apple 실리콘 맥에서 `hibernatemode` 25나 잠자기 이미지를 쓰는지는 검체의 `pmset` 설정으로 확인합니다. 잠자기에 들고 깬 기록은 [전원·잠자기 기록 (pmset)](../../../02-artifacts/logs/power-events.md)에서 다룹니다.
+이미지 파일의 위치는 `hibernatefile` 설정이 가리키고, 루트 볼륨 위의 파일만 가리킬 수 있습니다[2]. 기본 경로와, Apple 실리콘 맥에서 `hibernatemode` 25나 잠자기 이미지를 쓰는지는 조사 대상 맥의 `pmset` 설정으로 확인합니다. 잠자기에 들고 깬 기록은 [전원·잠자기 기록 (pmset)](../../../02-artifacts/logs/power-events.md)에서 다룹니다.
 
 ### 헤더 구조
 
-이미지 헤더는 xnu의 `iokit/IOKit/IOHibernatePrivate.h` 에 `IOHibernateImageHeader` 구조체로 정의되어 있습니다[3]. 시그니처 칸 `signature`(uint32)에 들어가는 값은 네 가지입니다.
+이미지 헤더는 xnu의 `iokit/IOKit/IOHibernatePrivate.h` 에 `IOHibernateImageHeader` 구조체로 정의되어 있습니다[3]. 시그니처 필드 `signature`(uint32)에 들어가는 값은 네 가지입니다.
 
 | 상수 | 값 |
 |---|---|
@@ -74,9 +74,9 @@ SWAP_FILE_NAME    SWAP_VOLUME_NAME "/VM/swapfile"
 | `kIOHibernateHeaderOpenSignature` | `0xf1e0be9d` |
 | `kIOHibernateHeaderDebugDataSignature` | `0xfcddfcdd` |
 
-암호화와 관련된 칸으로 `encryptStart`·`encryptEnd`(uint64)가 있고, 모드 플래그 `kIOHibernateModeEncrypt` 의 값은 `0x00000004` 입니다[3]. 그 밖에 `imageSize`, `image1Size`, `pageCount`, `sleepTime`(uint64), `compression`, `machineSignature`, `kernelSlide` 같은 칸이 있고, arm64 빌드(`#if defined(__arm64__)`)에만 `imageHeaderHMAC`, `handoffHMAC`, `image1PagesHMAC`, `image2PagesHMAC` 같은 HMAC 칸(크기 `HIBERNATE_HMAC_SIZE`)이 더 있습니다[3]. 구조체 앞쪽 칸의 순서는 `imageSize`(u64), `image1Size`(u64), `restore1CodePhysPage`(u32), `reserved1`(u32), `restore1CodeVirt`(u64)로 시작하고, 칸마다의 바이트 오프셋은 검체에서 확인합니다. `sleepTime` 은 맥 절대 시각일 수도 유닉스 시각일 수도 있으므로, 값을 읽으면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)의 기준들을 모두 대입해 보고 파일 시각과 맞춰 봅니다.
+암호화와 관련된 필드로 `encryptStart`·`encryptEnd`(uint64)가 있고, 모드 플래그 `kIOHibernateModeEncrypt` 의 값은 `0x00000004` 입니다[3]. 그 밖에 `imageSize`, `image1Size`, `pageCount`, `sleepTime`(uint64), `compression`, `machineSignature`, `kernelSlide` 같은 필드가 있고, arm64 빌드(`#if defined(__arm64__)`)에만 `imageHeaderHMAC`, `handoffHMAC`, `image1PagesHMAC`, `image2PagesHMAC` 같은 HMAC 필드(크기 `HIBERNATE_HMAC_SIZE`)이 더 있습니다[3]. 구조체 앞쪽 필드의 순서는 `imageSize`(u64), `image1Size`(u64), `restore1CodePhysPage`(u32), `reserved1`(u32), `restore1CodeVirt`(u64)로 시작하고, 필드별 바이트 오프셋은 실제 데이터로 확인합니다. `sleepTime` 은 맥 절대 시각일 수도 유닉스 시각일 수도 있으므로, 값을 읽으면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)의 기준들을 모두 대입해 보고 파일 시각과 맞춰 봅니다.
 
-아래는 명세의 시그니처 값을 바이트로 풀어 쓴 예시이고, 검체에서 읽은 값이 아닙니다. 파일 안에서는 어느 바이트 순서로도 보일 수 있어 두 순서를 모두 적습니다.
+아래는 명세의 시그니처 값을 바이트로 풀어 쓴 예시이고, 실제 데이터에서 읽은 값이 아닙니다. 파일 안에서는 어느 바이트 순서로도 보일 수 있어 두 순서를 모두 적습니다.
 
 ```
 kIOHibernateHeaderSignature = 0x73696d65
@@ -95,9 +95,9 @@ kIOHibernateHeaderSignature = 0x73696d65
 
 **증명하는 것.** 스왑 파일이 있으면 시스템이 그 파일을 만든 적이 있다는 뜻이고, 개수와 크기는 그 무렵 시스템이 스왑 공간을 얼마나 잡았는지 보여 줍니다. 잠자기 이미지의 존재와 크기, 수정 시각은 마지막으로 hibernate 한 시점의 단서가 될 수 있습니다[3].
 
-**증명하지 못하는 것.** 스왑은 암호화 코드를 거쳐 기록되고, 이미지 헤더에도 암호화 범위 칸과 암호화 모드 플래그가 있습니다. 그래서 두 파일 모두 본문을 그대로 문자열 검색해서 문서 내용이나 암호를 얻기는 어렵고, 볼 수 있는 것은 파일의 존재와 개수, 크기, 시각 수준입니다[7][1][3]. `kIOHibernateHeaderInvalidSignature` 는 이름으로 보면 유효하지 않은 헤더를 뜻하지만 어떤 때 이 값이 들어가는지는 공개된 설명이 없으므로, 이 값만으로 이미지가 복원에 쓰였다거나 지워지려 했다고 쓰지 않습니다. Volatility 같은 도구로 잠자기 이미지를 곧바로 분석할 수 있는지는 도구 문서와 검체로 확인합니다.
+**증명하지 못하는 것.** 스왑은 암호화 코드를 거쳐 기록되고, 이미지 헤더에도 암호화 범위 필드와 암호화 모드 플래그가 있습니다. 그래서 두 파일 모두 본문을 그대로 문자열 검색해서 문서 내용이나 암호를 얻기는 어렵고, 볼 수 있는 것은 파일의 존재와 개수, 크기, 시각 수준입니다[7][1][3]. `kIOHibernateHeaderInvalidSignature` 는 이름으로 보면 유효하지 않은 헤더를 뜻하지만 어떤 때 이 값이 들어가는지는 공개된 설명이 없으므로, 이 값만으로 이미지가 복원에 쓰였다거나 지워지려 했다고 쓰지 않습니다. Volatility 같은 도구로 잠자기 이미지를 곧바로 분석할 수 있는지는 도구 문서와 실제 데이터로 확인합니다.
 
-보고서에는 "VM 볼륨에 스왑 파일이 몇 개 있었고 가장 최근 수정 시각은 이때이다", "`hibernatefile` 이 가리키는 파일의 헤더 시그니처가 이 값이고 수정 시각은 이때이다" 처럼 파일이 보여 주는 만큼만 씁니다.
+보고서에는 "VM 볼륨에 스왑 파일이 몇 개 있었고 가장 최근 수정 시각은 이때이다", "`hibernatefile` 이 가리키는 파일의 헤더 시그니처가 이 값이고 수정 시각은 이때이다" 처럼 파일로 확인되는 만큼만 씁니다.
 
 ## 함정과 한계
 

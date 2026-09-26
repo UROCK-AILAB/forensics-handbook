@@ -10,7 +10,7 @@ nav_order: 620
 
 ## 언제 쓰나
 
-Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 에서 사고를 조사할 때 처음 며칠의 순서를 정하는 데 씁니다. 디스크 조사의 절차(증거 확보 → 이미징 → 분석 → 보고)는 [Windows 판 포렌식 조사 절차](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html)와 [Linux 판 조사 절차](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/investigation-process.html)에서 다루고, 계정 내보내기로 자료를 받는 경우는 [AI 판 조사 절차](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/acquisition/investigation-process.html)와 가깝습니다. 이 쪽은 클라우드라서 순서가 달라지는 부분만 다룹니다.
+Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 에서 사고를 조사할 때 처음 며칠의 순서를 정하는 데 씁니다. 디스크 조사의 절차(증거 확보 → 이미징 → 분석 → 보고)는 [Windows 판 포렌식 조사 절차](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html)와 [Linux 판 조사 절차](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/investigation-process.html)에서 다루고, 계정 내보내기로 자료를 받는 경우는 [AI 판 조사 절차](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/acquisition/investigation-process.html)와 가깝습니다. 이 페이지는 클라우드라서 순서가 달라지는 부분만 다룹니다.
 
 클라우드에서 순서가 달라지는 이유는 셋입니다. 첫째, 증거가 조사자 손이 닿지 않는 서비스 쪽에 있고 서비스가 정한 기간이 지나면 지워집니다. 둘째, 라이선스나 설정에 따라 처음부터 기록되지 않은 활동이 있습니다. 셋째, 조사자가 로그를 조회하고 스냅숏을 뜨는 동작도 같은 로그에 새 레코드로 남습니다. 단말만 봐서는 부족한 이유도 있습니다. 클라우드 드라이브는 일부만 기기에 동기화하고, 판(version)은 클라이언트에 하나만 남고, Google Docs 같은 클라우드 고유 개체 (cloud-native artifact) 는 웹 앱이 상태를 그때그때 내려받아 쓰기 때문에 로컬 저장소에 흔적이 남지 않습니다[4]. Google Docs 는 문서 상태를 사용자 편집 동작의 로그 형태로 유지하는 경우가 많아서, 한 시점의 사본만 뜨면 문서가 바뀌어 온 과정을 놓칩니다[4].
 
@@ -48,7 +48,7 @@ SaaS 조사는 Survey(살피기) → Preserve(보존) → Analyse(분석) → In
 
 7. **받은 사본의 해시와 받지 못한 구간을 기록합니다.** 해시 계산, CloudTrail 다이제스트 검증, 도구 실행 로그에서 누락 구간을 찾는 방법은 [클라우드 포렌식 보고서](../reporting/forensic-report.md)에 모았습니다.
 
-8. **분석하고 보고합니다.** 여러 서비스의 로그를 한 시간축에 올리는 방법은 [클라우드 타임라인](../analysis/timeline.md), 탐지 규칙으로 걸러 내는 방법은 [탐지 규칙으로 로그 훑기](../analysis/detection-rules.md)에 있습니다. 타임라인에서는 3단계 기록부의 주체·시각과 겹치는 레코드를 먼저 표시해 조사자 활동을 걸러 냅니다.
+8. **분석하고 보고합니다.** 여러 서비스의 로그를 한 시간축에 올리는 방법은 [클라우드 타임라인](../analysis/timeline.md), 탐지 규칙으로 걸러 내는 방법은 [탐지 규칙으로 로그 검색하기](../analysis/detection-rules.md)에 있습니다. 타임라인에서는 3단계 기록부의 주체·시각과 겹치는 레코드를 먼저 표시해 조사자 활동을 걸러 냅니다.
 
 ### 조사자 활동이 남기는 기록
 
@@ -63,7 +63,7 @@ SaaS 조사는 Survey(살피기) → Preserve(보존) → Analyse(분석) → In
 | Azure 디스크 사본·명령 실행 | 디스크 SAS 발급은 `Microsoft.Compute/disks/beginGetAccess/action`, 철회는 `Microsoft.Compute/disks/endGetAccess/action`, 스냅숏 생성·수정은 `Microsoft.Compute/snapshots/write`, 스냅숏 SAS 발급은 `Microsoft.Compute/snapshots/beginGetAccess/action`, 게스트 명령 실행은 `Microsoft.Compute/virtualMachines/runCommand/action` 권한에 해당합니다[24]. Azure 감사 로그는 누가 언제 스냅숏을 떴는지 남깁니다[2] | [2][24] |
 | Google Cloud 스냅숏·이미지·직렬 포트 | `v1.compute.disks.createSnapshot`·`v1.compute.snapshots.insert`·`v1.compute.images.insert` 는 ADMIN_WRITE 라서 관리 활동 감사 로그에 남고, `v1.compute.instances.getSerialPortOutput` 은 DATA_READ 라서 데이터 접근 감사 로그를 켠 경우에만 남습니다[10][25] | [10][25] |
 
-Azure 는 위 권한 이름이 활동 로그의 작업 이름에 어떤 문자열로 나타나는지 검체에서 확인한 뒤 걸러 냅니다.
+Azure 는 위 권한 이름이 활동 로그의 작업 이름에 어떤 문자열로 나타나는지 실제 데이터로 확인한 뒤 걸러 냅니다.
 
 ## 도구
 
@@ -72,7 +72,7 @@ Azure 는 위 권한 이름이 활동 로그의 작업 이름에 어떤 문자�
 | Microsoft 365·Entra·Azure | Microsoft-Extractor-Suite[32], Untitled Goose Tool[14], DFIR-O365RC[16], Hawk[31] | 2단계 설정 확인, 6단계 수집. 자세한 동작은 [Microsoft 365 수집 도구](m365-collection.md) |
 | Google Workspace | ALFA: `alfa acquire` 로 감사 로그를 받고 `--start-time`·`--end-time` 에 RFC 3339 시각을 줍니다[30] | 6단계 수집 |
 | AWS | Invictus-AWS[18] | 6단계 수집. 한계는 [AWS·Azure·GCP 수집](iaas-collection.md) |
-| 여러 서비스 | SigmaHQ 규칙[19][20][21] | 8단계 분석. [탐지 규칙으로 로그 훑기](../analysis/detection-rules.md) |
+| 여러 서비스 | SigmaHQ 규칙[19][20][21] | 8단계 분석. [탐지 규칙으로 로그 검색하기](../analysis/detection-rules.md) |
 
 어느 도구든 서비스 API 가 돌려준 범위만 받습니다. 도구마다 기본 기간과 상한이 달라서 한 도구의 결과로 "없음" 을 판단하지 않고, 실행 로그를 함께 보관합니다.
 

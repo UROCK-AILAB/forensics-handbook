@@ -6,7 +6,7 @@ nav_order: 440
 
 # EC2 인스턴스와 스냅숏 (EC2·EBS Snapshots)
 
-EC2 가상 머신을 누가 만들고 멈추고 바꿨는지는 CloudTrail 로, 디스크 안에 무엇이 있었는지는 EBS 스냅숏으로, 부팅할 때 무엇을 실행했는지는 사용자 데이터와 인스턴스 안의 실행 로그로 이어 붙이는 쪽입니다.
+EC2 가상 머신을 누가 만들고 멈추고 바꿨는지는 CloudTrail 로, 디스크 안에 무엇이 있었는지는 EBS 스냅숏으로, 부팅할 때 무엇을 실행했는지는 사용자 데이터와 인스턴스 안의 실행 로그로 이어 붙이는 페이지입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -35,7 +35,7 @@ EC2 인스턴스 조사는 두 층으로 나뉩니다. 바깥층은 AWS 가 남�
 | 사용자 데이터 실행 흔적(Windows) | EC2Launch v2 `C:\ProgramData\Amazon\EC2Launch\log\agent.log`, EC2Launch `C:\ProgramData\Amazon\EC2-Windows\Launch\Log\UserdataExecution.log`, EC2Config `C:\Program Files\Amazon\Ec2ConfigService\Logs\Ec2Config.log`[7] | 에이전트에 따라 다른 파일 | 실행 시작·끝, 매 부팅 실행 여부, 스크립트 출력 |
 | GuardDuty 가 보관한 스냅숏 | GuardDuty 계정 | Malware Protection for EC2 의 스냅숏 보관 옵션을 켰고 악성코드를 찾아 결과가 생겼을 때만 보관[11] | 탐지 당시 디스크 |
 
-콘솔 출력은 Nitro 기반 인스턴스라면 인스턴스가 살아 있는 동안 최신 직렬 콘솔 출력을 받을 수 있습니다[6]. 화면 캡처는 Asia Pacific (Thailand)·Mexico (Central)·GovCloud 리전에서 쓸 수 없습니다[6].
+콘솔 출력은 Nitro 기반 인스턴스라면 인스턴스가 실행 중인 동안 최신 직렬 콘솔 출력을 받을 수 있습니다[6]. 화면 캡처는 Asia Pacific (Thailand)·Mexico (Central)·GovCloud 리전에서 쓸 수 없습니다[6].
 
 ## 구조
 
@@ -132,7 +132,7 @@ IMDS 는 요청 하나에 응답 하나를 주는 IMDSv1 과, PUT 요청으로 �
 - 사용자 데이터를 바꾼 기록은 그 스크립트가 실행됐다는 뜻이 아닙니다. 기본 설정에서는 바꾼 뒤 시작해도 실행되지 않으므로[7], 실행 여부는 인스턴스 안의 cloud-init·EC2Launch 로그로 확인합니다.
 - `ec2RoleDelivery` 는 자격 증명을 어디서 받았는지만 알려 줍니다. 그 자격 증명이 인스턴스 밖으로 빠져나가 다른 곳에서 쓰였는지는 `sourceIPAddress` 와 GuardDuty 결과로 따로 봅니다.
 
-보고서에는 "2026년 9월 2일 14:05 UTC 에 액세스 키 AKIAIOSFODNN7EXAMPLE 로 198.51.100.23 에서 스냅숏 snap-0123456789abcdef0 의 블록을 읽은 데이터 이벤트가 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2026년 9월 2일 14:05 UTC 에 액세스 키 AKIAIOSFODNN7EXAMPLE 로 198.51.100.23 에서 스냅숏 snap-0123456789abcdef0 의 블록을 읽은 데이터 이벤트가 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
@@ -144,7 +144,7 @@ IMDS 는 요청 하나에 응답 하나를 주는 IMDSv1 과, PUT 요청으로 �
 | 콘솔 출력 | 시작·정지·재부팅·종료 같은 상태 전환 직후 버퍼[6] | 계속 갱신되지 않음[6]. 받은 시각과 내용의 시각이 다를 수 있음 |
 | 화면 캡처 | 요청한 순간 | 실행 중에도, 인스턴스가 오류로 멈춘 뒤에도 받을 수 있음[6] |
 | 사용자 데이터 | 시각 값 없음 | 바꾼 때는 `ModifyInstanceAttribute` 의 `eventTime` 으로만 알 수 있음 |
-| cloud-init·EC2Launch 로그 | 인스턴스 안에서 실행한 때 | 인스턴스의 시간대 설정을 따르므로 검체에서 확인 |
+| cloud-init·EC2Launch 로그 | 인스턴스 안에서 실행한 때 | 인스턴스의 시간대 설정을 따르므로 실제 데이터에서 확인 |
 
 CloudTrail 이 트레일 저장소에 파일을 넣기까지 걸리는 시간과 이벤트 기록의 보관 범위는 [트레일과 이벤트 기록](cloudtrail/trails.md) 에서 다룹니다. 클라우드 로그 시각 전반은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 을 봅니다.
 
@@ -189,9 +189,9 @@ zcat *.json.gz | jq -c '.Records[]
   | sort
 ```
 
-스냅숏을 만들고 복사하고 지운 호출도 EC2 API 관리 이벤트라서[5] `eventName` 에 `Snapshot` 이 들어간 줄로 함께 모입니다. 검체에서 실제 작업 이름과 `requestParameters` 안에 `createVolumePermission` 이 어떤 모양으로 들어 있는지 확인한 뒤 걸러 냅니다.
+스냅숏을 만들고 복사하고 지운 호출도 EC2 API 관리 이벤트라서[5] `eventName` 에 `Snapshot` 이 들어간 줄로 함께 모입니다. 실제 로그에서 작업 이름과 `requestParameters` 안에 `createVolumePermission` 이 어떤 모양으로 들어 있는지 확인한 뒤 걸러 냅니다.
 
-**탐지 규칙으로 훑기.** SigmaHQ 의 AWS CloudTrail 규칙에 EC2·EBS 흔적 조건이 필드 이름 그대로 들어 있습니다. Invictus-AWS 의 queries.yaml 에는 이 가운데 스냅숏 권한·VM 내보내기·사용자 데이터·기본 암호화 규칙이 Athena SQL 로 들어 있고, 사용자 데이터 규칙은 `requestParameters LIKE '%userData%'` 로 찾습니다[20]. 규칙을 쓰는 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) 에서 다룹니다.
+**탐지 규칙으로 검색하기.** SigmaHQ 의 AWS CloudTrail 규칙에 EC2·EBS 흔적 조건이 필드 이름 그대로 들어 있습니다. Invictus-AWS 의 queries.yaml 에는 이 가운데 스냅숏 권한·VM 내보내기·사용자 데이터·기본 암호화 규칙이 Athena SQL 로 들어 있고, 사용자 데이터 규칙은 `requestParameters LIKE '%userData%'` 로 찾습니다[20]. 규칙을 쓰는 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) 에서 다룹니다.
 
 | 규칙 | 조건(`eventSource`·`eventName`) | 찾는 흔적 |
 |---|---|---|
@@ -205,21 +205,21 @@ zcat *.json.gz | jq -c '.Records[]
 
 ## 교차 검증
 
-- [CloudTrail](cloudtrail/index.md) — EC2 관리 이벤트와 EBS direct API 데이터 이벤트가 이 쪽 기록의 뼈대입니다.
+- [CloudTrail](cloudtrail/index.md) — EC2 관리 이벤트와 EBS direct API 데이터 이벤트가 이 페이지에서 다루는 기록의 뼈대입니다.
 - [IAM 사용자·역할·액세스 키](iam.md) — `ec2RoleDelivery` 가 있는 세션이면 그 역할이 어느 인스턴스 프로파일에 붙어 있는지 확인해 인스턴스를 좁힙니다.
 - [VPC 흐름 로그](vpc-flow-logs.md) — `instance-id`·인터페이스로 인스턴스의 바깥 통신을 봅니다. 메타데이터 접근은 남지 않습니다[10].
 - [GuardDuty](guardduty.md) — `UnauthorizedAccess:EC2/SSHBruteForce`, `CryptoCurrency:EC2/BitcoinTool.B!DNS`, `UnauthorizedAccess:EC2/MetadataDNSRebind` 같은 EC2 결과와[12], 인스턴스용 자격 증명이 외부 IP 에서 쓰였다는 `UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.OutsideAWS` 를 찾습니다[21]. 악성코드 탐지로 보관한 스냅숏이 있는지도 봅니다[11].
 - [CloudWatch Logs](cloudwatch-logs.md) — 인스턴스 안의 로그를 CloudWatch 로 보내고 있었다면 인스턴스를 지운 뒤에도 로그가 남아 있을 수 있습니다.
 - Linux 판 [인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html)·[SSH](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/ssh/index.html) — `SendSSHPublicKey` 의 `osUser` 와 시각을 인스턴스 안의 SSH 로그인과 맞춰 봅니다.
 - [Azure 가상 머신](../azure/azure-vm.md) — Azure 에서 같은 역할을 하는 기록입니다.
-- [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md), [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md), [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md) — 이 쪽의 기록을 조사 흐름으로 묶습니다.
+- [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md), [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md), [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md) — 이 페이지의 기록을 조사 흐름으로 묶습니다.
 
 ## 실습
 
 위의 만든 예시와 자기 계정의 시험 환경으로 풀어 봅니다.
 
 1. 예시 `GetSnapshotBlock` 레코드가 관리 이벤트가 아니라 데이터 이벤트라는 것을 어느 두 필드로 알 수 있는지 적어 봅니다.
-2. 스냅숏을 다른 계정에 공유했는데 소유자 계정에 `SharedSnapshotVolumeCreated` 만 있고 `GetSnapshotBlock` 은 없다면, 공유받은 쪽이 블록을 직접 읽지 않았다고 쓸 수 있는지 판단하고 까닭을 적어 봅니다.
+2. 스냅숏을 다른 계정에 공유했는데 소유자 계정에 `SharedSnapshotVolumeCreated` 만 있고 `GetSnapshotBlock` 은 없다면, 공유받은 쪽이 블록을 직접 읽지 않았다고 쓸 수 있는지 판단하고 이유를 적어 봅니다.
 3. 예시 사용자 데이터를 디코딩한 결과에서 어떤 계정이 만들어질지 읽고, 그 명령이 실제로 실행됐는지 확인하려면 인스턴스 안의 어느 파일을 봐야 하는지 적어 봅니다.
 4. 시험 계정에서 인스턴스를 멈추고 사용자 데이터를 바꾼 뒤 다시 시작해, CloudTrail 에 남은 이벤트 이름과 순서, `requestParameters.attribute` 값을 확인합니다. 새 스크립트가 실행됐는지 `/var/log/cloud-init-output.log` 로 확인합니다.
 5. 시험 인스턴스에서 IMDSv1 만 허용한 때와 IMDSv2 만 허용한 때 각각 역할 자격 증명으로 API 를 한 번 불러, `ec2RoleDelivery` 값을 비교합니다.

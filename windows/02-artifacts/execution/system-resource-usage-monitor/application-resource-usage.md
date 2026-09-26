@@ -51,13 +51,13 @@ SRUM 은 값을 먼저 메모리 (Tier1) 에 모으고 기본 60초마다 갱신
 
 ### 보관 기간
 
-보관 기간은 Tier2Period × Tier2MaxEntries 로 계산하며, 기본값은 3,600초 × 1,440 으로 60일입니다. Windows Server 에서는 확장마다 Tier2MaxEntries 를 9,000 으로 둔 경우가 많고, 이때는 375일입니다. SRUM 은 이 값들을 SOFTWARE 하이브의 `Microsoft\Windows NT\CurrentVersion\SRUM` 아래에서 읽으며, 검체의 값이 기본값과 다를 수 있으므로 이 키를 확인합니다.
+보관 기간은 Tier2Period × Tier2MaxEntries 로 계산하며, 기본값은 3,600초 × 1,440 으로 60일입니다. Windows Server 에서는 확장마다 Tier2MaxEntries 를 9,000 으로 둔 경우가 많고, 이때는 375일입니다. SRUM 은 이 값들을 SOFTWARE 하이브의 `Microsoft\Windows NT\CurrentVersion\SRUM` 아래에서 읽으며, 분석 대상의 값이 기본값과 다를 수 있으므로 이 키를 확인합니다.
 
 ## 구조
 
-이 표는 ESE 표 하나이고, 페이지·B-트리·카탈로그를 읽는 법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 아래 열 목록은 Windows 10 파일 기준입니다. 다른 버전의 검체는 카탈로그에서 열 구성을 먼저 확인합니다.
+이 표는 ESE 표 하나이고, 페이지·B-트리·카탈로그를 읽는 법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다. 아래 열 목록은 Windows 10 파일 기준입니다. 다른 버전의 파일은 카탈로그에서 열 구성을 먼저 확인합니다.
 
-열은 모두 고정 크기이고, ESE 레코드에서 고정 크기 열 값은 4바이트 머리글 뒤에 열 번호 순서로 붙어 있습니다. "위치" 칸은 이 규칙과 열 크기로 계산한 값으로, 레코드 데이터의 첫 바이트(머리글 시작)부터 셉니다. 정수는 모두 부호 있는 리틀 엔디언입니다.
+열은 모두 고정 크기이고, ESE 레코드에서 고정 크기 열 값은 4바이트 머리글 뒤에 열 번호 순서로 붙어 있습니다. "위치" 열은 이 규칙과 열 크기로 계산한 값으로, 레코드 데이터의 첫 바이트(머리글 시작)부터 셉니다. 정수는 모두 부호 있는 리틀 엔디언입니다.
 
 | 번호 | 열 이름 | 형식 | 위치 | 뜻 |
 |---|---|---|---|---|
@@ -106,7 +106,7 @@ SRUM 은 값을 먼저 메모리 (Tier1) 에 모으고 기본 60초마다 갱신
 | FaceTime 이 0 이 아니면 앱이 앞에 떠 있던 때가 있었다고 볼 수 있습니다 (열 이름 기준) | 사용자가 그 창을 보거나 조작했는지 |
 | | 행이 없으니 실행도 없었다는 것 |
 
-행이 없어도 실행이 없었다고 할 수 없는 까닭은 아래 함정과 한계 절에 모았습니다.
+행이 없어도 실행이 없었다고 할 수 없는 이유는 아래 함정과 한계 절에 모았습니다.
 
 ### 보고서 문장
 
@@ -125,7 +125,7 @@ libesedb 명세는 이 열 형식을 FILETIME 으로 적고 실수라는 설명�
 
 ### 시간대
 
-값에는 시간대 정보가 없고 명세에도 시간대가 없습니다. srum-dump 는 이 값을 UTC 로 풀어 보여 줍니다. 검체에서는 알려진 사건과 한 번 맞춰 보고, 컴퓨터를 끌 때도 행을 적으므로 종료 시각 무렵에 행이 몰려 있는지 봅니다([켜짐·꺼짐](../../event-logs/power-on-off-events.md)). 현지 시각으로 바꾸는 법은 [시간대 설정](../../system-account/time-zone.md)과 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
+값에는 시간대 정보가 없고 명세에도 시간대가 없습니다. srum-dump 는 이 값을 UTC 로 풀어 보여 줍니다. 실제 데이터에서는 알려진 사건과 한 번 맞춰 보고, 컴퓨터를 끌 때도 행을 적으므로 종료 시각 무렵에 행이 몰려 있는지 봅니다([켜짐·꺼짐](../../event-logs/power-on-off-events.md)). 현지 시각으로 바꾸는 법은 [시간대 설정](../../system-account/time-zone.md)과 [시간대·시계 오차 보정](../../../03-techniques/analysis/timeline/time-normalization.md)을 봅니다.
 
 ### 행을 적은 때와 활동한 때
 
@@ -154,7 +154,7 @@ AutoIncId 는 이름대로라면 행을 넣을 때마다 커지는 번호이므�
 
 - **`SRUDB.dat` 를 통째로 지웁니다.** DPS 가 돌아가는 동안에는 서비스가 이 파일을 씁니다. 그래서 지우려면 보통 서비스를 먼저 멈춥니다. 지운 흔적은 [$MFT](../../filesystem/mft.md)와 [$UsnJrnl](../../filesystem/usnjrnl.md)에 남을 수 있습니다. 옛 파일은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
 - **DPS 를 멈추거나 끕니다.** 멈추는 순간 메모리의 값이 파일에 적힙니다. 그래서 정시가 아닌 시각에 행이 몰려 있으면 서비스 중지나 종료를 의심해 봅니다. 서비스를 꺼 두면 그 뒤로는 기록이 쌓이지 않을 것으로 보이지만, 이 동작을 시험한 공개 자료는 없습니다. 서비스 설정은 [서비스·드라이버](../../persistence/services-drivers.md)에서 확인합니다.
-- **행을 지우거나 고칩니다.** ESE 는 지운 레코드가 페이지에 남을 수 있습니다([파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md)). 고친 값은 파일 하나만 봐서는 가리기 어렵습니다. 섀도 복사본의 옛 `SRUDB.dat` 와 비교합니다.
+- **행을 지우거나 고칩니다.** ESE 는 지운 레코드가 페이지에 남을 수 있습니다([파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md)). 고친 값은 파일 하나만 봐서는 판별하기 어렵습니다. 섀도 복사본의 옛 `SRUDB.dat` 와 비교합니다.
 - **시스템 시각을 바꿉니다.** TimeStamp 도 바뀐 시계를 따를 것입니다. 위의 순서 검사를 합니다([시스템 시각을 바꿨나](../../../04-scenarios/activity/anti-forensics/system-time-change.md)).
 - **완전삭제 도구를 씁니다.** 위 3번처럼 쓴 양은 지운 양과 맞지 않을 수 있습니다. 도구의 행이 있다는 사실을 단서로 씁니다([완전삭제 도구를 썼나](../../../04-scenarios/activity/anti-forensics/wiping-tools.md)).
 
@@ -164,7 +164,7 @@ AutoIncId 는 이름대로라면 행을 넣을 때마다 커지는 번호이므�
 
 먼저 사본을 만듭니다. 원본을 도구로 열면 파일이 바뀔 수 있습니다(현장 관찰). 카탈로그에서 표 이름으로 이 표의 페이지를 찾습니다. 그다음 잎 페이지에서 레코드 하나를 꺼냅니다. 페이지 안에서 레코드를 찾는 법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)에서 다룹니다.
 
-아래는 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 레코드 데이터의 앞 48바이트만 보입니다. `..` 은 설명과 관계없어 줄인 바이트입니다.
+아래는 명세를 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다. 레코드 데이터의 앞 48바이트만 보입니다. `..` 은 설명과 관계없어 줄인 바이트입니다.
 
 ```
 위치    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -232,7 +232,7 @@ B-트리가 망가져 도구가 행을 못 찾으면 레코드 단위로 긁어 
 4. 행의 TimeStamp 와 적어 둔 시각은 얼마나 차이 납니까? 종료 시각 무렵에 적힌 행이 있습니까?
 5. 도구 두 가지로 이 표를 열어 행 수가 같은지 봅니다.
 
-**공개 검체**에서도 해 봅니다. NIST CFReDS 등에서 Windows 10 이상 이미지를 하나 고릅니다.
+**공개 데이터 세트**에서도 해 봅니다. NIST CFReDS 등에서 Windows 10 이상 이미지를 하나 고릅니다.
 
 1. `SRUDB.dat` 는 정상 종료 상태입니까?
 2. TimeStamp 가 가장 이른 행과 가장 늦은 행 사이는 며칠입니까? 보관 기간 설정과 맞습니까?

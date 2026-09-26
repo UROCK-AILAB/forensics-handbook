@@ -10,7 +10,7 @@ Cloud Storage 버킷에서 일어난 일은 Cloud Audit Logs 의 감사 로그�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Cloud Storage 는 API 작업을 Cloud Audit Logs 에 남기고, 누가 자원에 접근했는지 추적하는 데는 사용 로그보다 감사 로그를 권장합니다[1][2]. 감사 로그는 관리 활동 (Admin Activity), 데이터 접근 (Data Access), 시스템 이벤트 (System Event) 로 나뉩니다[1]. 버킷 설정을 바꾸는 관리 활동 로그는 늘 남지만, 객체를 읽고 쓰는 데이터 접근 로그는 기본으로 꺼져 있어 따로 켜야 남습니다[1]. 감사 로그 전체의 종류·보관·수집 방법은 [Cloud Audit Logs](./cloud-audit-logs.md)에 있고, 이 쪽에서는 Cloud Storage 에만 해당하는 내용을 다룹니다.
+Cloud Storage 는 API 작업을 Cloud Audit Logs 에 남기고, 누가 자원에 접근했는지 추적하는 데는 사용 로그보다 감사 로그를 권장합니다[1][2]. 감사 로그는 관리 활동 (Admin Activity), 데이터 접근 (Data Access), 시스템 이벤트 (System Event) 로 나뉩니다[1]. 버킷 설정을 바꾸는 관리 활동 로그는 늘 남지만, 객체를 읽고 쓰는 데이터 접근 로그는 기본으로 꺼져 있어 따로 켜야 남습니다[1]. 감사 로그 전체의 종류·보관·수집 방법은 [Cloud Audit Logs](./cloud-audit-logs.md)에 있고, 이 페이지에서는 Cloud Storage 에만 해당하는 내용을 다룹니다.
 
 사용 로그는 지정한 버킷에 들어온 요청을 시간마다 CSV 파일로 적은 기록이고, 저장 로그 (storage logs) 는 그 버킷이 전날 차지한 용량을 하루에 한 번 적은 기록입니다[2]. 두 로그 모두 버킷마다 켜야 생기고, 켜 두면 다른 버킷에 새 객체로 쌓입니다[2]. 감사 로그가 남기지 않는 공개 객체 접근과 객체 수명 주기 관리 (Object Lifecycle Management)·Autoclass 가 한 변경은 사용 로그에 남습니다[1][2].
 
@@ -129,7 +129,7 @@ XML API 로 객체 여러 개를 한 요청에 지우면, 데이터 접근 로�
 | `cs_operation` | 문자열 | Cloud Storage 작업 이름(예 `GET_Object`), 비어 있을 수 있음 |
 | `cs_bucket` / `cs_object` | 문자열 | 요청한 버킷 / 객체(객체는 비어 있을 수 있음) |
 
-저장 로그에는 `bucket` 과 `storage_byte_hours` 두 열이 있고, `storage_byte_hours` 를 24로 나누면 그날 버킷의 평균 크기가 나옵니다[2]. 두 로그의 끝에 새 열이 붙을 수 있으므로 열 개수를 고정하지 말고 첫 줄의 열 이름으로 읽습니다[2]. 사용 로그의 열에는 요청한 계정을 적는 칸이 없습니다[2].
+저장 로그에는 `bucket` 과 `storage_byte_hours` 두 열이 있고, `storage_byte_hours` 를 24로 나누면 그날 버킷의 평균 크기가 나옵니다[2]. 두 로그의 끝에 새 열이 붙을 수 있으므로 열 개수를 고정하지 말고 첫 줄의 열 이름으로 읽습니다[2]. 사용 로그에는 요청한 계정을 적는 열이 없습니다[2].
 
 ### 서명된 URL
 
@@ -162,9 +162,9 @@ XML API 로 객체 여러 개를 한 요청에 지우면, 데이터 접근 로�
 - 사용 로그만으로는 요청한 계정을 알 수 없습니다[2].
 - 데이터 접근 로그가 꺼져 있던 기간의 객체 읽기·쓰기는 감사 로그에 없습니다[1].
 - Google Cloud 콘솔 밖에서 인증된 브라우저로 내려받은 기록은 데이터 접근 로그에서 `principalEmail`·`callerIp` 가 가려집니다[1].
-- 서명된 URL 을 누가 받아서 썼는지는 기록이 말해 주지 않습니다. URL 을 가진 사람이면 누구나 쓸 수 있기 때문입니다[6].
+- 서명된 URL 을 누가 받아서 썼는지는 기록으로 알 수 없습니다. URL 을 가진 사람이면 누구나 쓸 수 있기 때문입니다[6].
 
-보고서에는 "이 계정으로 이 시각에 이 객체를 읽는 요청이 기록되어 있다", "이 IP 에서 이 객체를 GET 으로 요청해 이만큼의 바이트를 응답으로 받은 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 계정으로 이 시각에 이 객체를 읽는 요청이 기록되어 있다", "이 IP 에서 이 객체를 GET 으로 요청해 이만큼의 바이트를 응답으로 받은 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -187,7 +187,7 @@ XML API 로 객체 여러 개를 한 요청에 지우면, 데이터 접근 로�
 - 사용 로그를 끄는 작업은 버킷 메타데이터 변경이라 관리 활동 로그에 남습니다[1][2]. 다만 바뀐 값이 `request` 에 얼마나 담기는지는 상세 감사 로깅 모드에 따라 달라질 수 있으므로[1], 기록과 함께 현재 `logging_config` 를 확인해 대조합니다.
 - 로그 버킷에서 사용 로그 객체를 지워도 소프트 삭제가 켜져 있으면 보존 기간 동안 되살릴 수 있습니다[3]. 로그 객체 삭제 자체는 데이터 접근 로그의 DATA_WRITE 로 남습니다[1].
 - 소프트 삭제된 객체를 복원하면 같은 버킷에 새 세대 (generation) 의 살아 있는 객체가 생기고, 원래의 소프트 삭제 객체는 보존 기간이 끝날 때까지 남으며, 복원한 객체는 원래 클래스와 관계없이 Standard 클래스로 씁니다[3]. 복원으로 생긴 객체의 생성 시각을 원래 업로드 시각으로 읽지 않습니다[4].
-- 객체 버전 관리에서 메타데이터만 바꾸면 세대 번호는 그대로이고 메타세대 (metageneration) 번호만 올라갑니다[4]. 내용이 바뀌었는지는 세대 번호로 가립니다.
+- 객체 버전 관리에서 메타데이터만 바꾸면 세대 번호는 그대로이고 메타세대 (metageneration) 번호만 올라갑니다[4]. 내용이 바뀌었는지는 세대 번호로 구분합니다.
 - 수명 주기 관리가 지운 객체도 소프트 삭제되지만, 이 삭제는 감사 로그에 남지 않습니다[1][3]. 사용 로그의 `cs_user_agent` 가 `GCS Lifecycle Management` 인 줄로 확인합니다[2].
 
 ## 직접 분석해 보기
@@ -221,7 +221,7 @@ protoPayload.authorizationInfo.permission="storage.objects.get"
 protoPayload.resourceName:"example-bucket"
 ```
 
-객체 작업은 권한 이름으로 거른 뒤 검체에서 실제 `methodName` 을 확인합니다. SigmaHQ 의 GCP 규칙은 `gcp.audit.method_name` 필드에서 버킷 목록 훑기를 `storage.buckets.list`·`storage.buckets.listChannels` 로[11], 버킷 변경·삭제를 `storage.buckets.delete`·`storage.buckets.insert`·`storage.buckets.update`·`storage.buckets.patch` 로 찾습니다[12]. 이 가운데 `storage.buckets.list`·`storage.buckets.delete`·`storage.buckets.update` 는 권한 이름과 같은 문자열이므로[5], 규칙을 적용하기 전에 검체의 `methodName` 이 이 모양인지 맞춰 봅니다.
+객체 작업은 권한 이름으로 거른 뒤 실제 로그에서 `methodName` 을 확인합니다. SigmaHQ 의 GCP 규칙은 `gcp.audit.method_name` 필드에서 버킷 목록 살펴보기를 `storage.buckets.list`·`storage.buckets.listChannels` 로[11], 버킷 변경·삭제를 `storage.buckets.delete`·`storage.buckets.insert`·`storage.buckets.update`·`storage.buckets.patch` 로 찾습니다[12]. 이 가운데 `storage.buckets.list`·`storage.buckets.delete`·`storage.buckets.update` 는 권한 이름과 같은 문자열이므로[5], 규칙을 적용하기 전에 실제 로그의 `methodName` 이 이 모양인지 맞춰 봅니다.
 
 사용 로그는 `gcloud storage cp` 로 내려받아 표 계산 도구에서 열 이름으로 읽거나, BigQuery 에 `bq load --skip_leading_rows=1` 로 올려 `cs_method` 별로 묶어 셉니다[2]. 내보낸 감사 로그 JSON 줄 파일은 plaso 의 `gcp_log` 파서로 타임라인에 올릴 수 있습니다[14]. 버킷과 객체의 현재 상태(객체 메타데이터, 버킷 ACL, 버킷 목록·객체 목록, 버킷 크기)는 cloud-forensics-utils(libcloudforensics) 의 `GoogleCloudStorage` 에 있는 `GetObjectMetadata`·`GetBucketACLs`·`ListBuckets`·`ListBucketObjects`·`GetBucketSize` 로 모을 수 있습니다[13].
 
@@ -242,7 +242,7 @@ Google Cloud 문서의 예시와 위의 만든 예시로 풀어 봅니다.
 2. 서명된 URL 문서의 예시 URL 에서 `X-Goog-Credential` 을 URL 디코딩해 서명한 계정과 날짜를 적고, `X-Goog-Date` 와 `X-Goog-Expires` 로 만료 시각을 UTC 로 계산해 봅니다[6].
 3. 어떤 버킷의 데이터 접근 로그에 같은 시각의 기록이 두 건 있고, 한 건은 `storage.objects.get`, 다른 한 건은 `storage.objects.create` 를 검사했습니다. 어떤 작업일 가능성이 있는지, 목적지 버킷을 어디서 확인할지 적어 봅니다[1][5].
 4. 공개 버킷에서 객체가 대량으로 내려받아진 정황이 있는데 감사 로그에는 아무 기록이 없습니다. 이 상황을 설명하는 이유와, 무엇을 먼저 확인해야 하는지 적어 봅니다[1][2].
-5. 실제 검체에서는 조사 대상 버킷마다 `logging_config` 와 소프트 삭제 정책, 객체 버전 관리 설정을 모으고, 조사 기간 가운데 사용 로그·데이터 접근 로그·소프트 삭제 객체가 있어야 할 구간을 나눠 봅니다.
+5. 실제 사건에서는 조사 대상 버킷마다 `logging_config` 와 소프트 삭제 정책, 객체 버전 관리 설정을 모으고, 조사 기간 가운데 사용 로그·데이터 접근 로그·소프트 삭제 객체가 있어야 할 구간을 나눠 봅니다.
 
 ## 참고 문헌
 

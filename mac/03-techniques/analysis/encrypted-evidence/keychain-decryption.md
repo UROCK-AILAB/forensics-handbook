@@ -23,15 +23,15 @@ nav_order: 2200
 
 ## 절차
 
-1. **키체인 파일을 찾아 사본을 뜹니다.** 위 표의 경로에서 파일을 모으고, 파일 기반 키체인이면 오프셋 0에 `kych` 시그니처가 있는지로 형식을 확인합니다 [KC-1]. 머리의 나머지 칸과 표 종류 값은 [키체인 (Keychain)](../../../01-foundations/protection/keychain/index.md)에서 따라 읽습니다.
+1. **키체인 파일을 찾아 사본을 뜹니다.** 위 표의 경로에서 파일을 모으고, 파일 기반 키체인이면 오프셋 0에 `kych` 시그니처가 있는지로 형식을 확인합니다 [KC-1]. 머리의 나머지 필드와 표 종류 값은 [키체인 (Keychain)](../../../01-foundations/protection/keychain/index.md)에서 따라 읽습니다.
 2. **풀기 전에 메타데이터부터 읽습니다.** 계정·서비스·서버 같은 메타데이터는 풀 수단 없이도 보이고, 암호 값만 풀 수단이 있어야 보입니다 [KC-4]. 어떤 서비스와 서버에 쓸 항목이 저장됐는지를 이 단계에서 먼저 목록으로 만들어 두면, 풀 수단을 얻지 못해도 조사에 쓸 수 있습니다. 날짜 속성 `cdat`·`mdat` 는 `YYYYMMDDhhmmssZ` 모양의 UTC 문자열이라 맥 절대 시각이나 유닉스 시각으로 바꾸지 않습니다 [KC-1]. 다른 시각 값과 비교하는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
-3. **풀 수단을 확인합니다.** 파일 기반 키체인을 푸는 수단은 키체인 암호, 메모리에서 얻은 마스터 키, 잠금 해제 파일 SystemKey 세 가지이고, SystemKey는 흔히 `/var/db/SystemKey` 에 있으며 System 키체인에 씁니다 [KC-4]. 메모리에서 마스터 키를 얻는 쪽은 [메모리 분석 (Memory Forensics)](../memory-forensics/index.md)에서 다루고, 키체인 암호는 합법적으로 얻은 것만 씁니다.
+3. **풀 수단을 확인합니다.** 파일 기반 키체인을 푸는 수단은 키체인 암호, 메모리에서 얻은 마스터 키, 잠금 해제 파일 SystemKey 세 가지이고, SystemKey는 흔히 `/var/db/SystemKey` 에 있으며 System 키체인에 씁니다 [KC-4]. 메모리에서 마스터 키를 얻는 방법은 [메모리 분석 (Memory Forensics)](../memory-forensics/index.md)에서 다루고, 키체인 암호는 합법적으로 얻은 것만 씁니다.
 4. **공개 도구로 엽니다.** 예로 chainbreaker는 OS X 10.6부터 macOS 13까지를 지원하고, 데이터 보호 키체인은 다루지 않습니다 [KC-4]. 이 범위 밖의 macOS에서 나온 키체인은 결과를 다른 방법으로 한 번 더 확인하고, 도구 검증은 [도구 검증 (Tool Validation)](../../reporting/tool-validation.md)을 따릅니다.
-5. **다른 암호화 증거와 이어 봅니다.** 파일볼트 개인 복구 키는 키체인에 저장되므로 [FV-1], 키체인을 풀면 개인 복구 키가 나올 수 있습니다. 어느 키체인의 어떤 항목에 들어 있는지는 공개 자료가 없어 검체에서 확인합니다. 파일볼트 쪽은 [파일볼트 이미지 열기 (FileVault)](filevault-images.md)에, 키체인 파일로 디스크 이미지를 여는 경우는 [암호 걸린 디스크 이미지 (Encrypted DMG)](encrypted-dmg.md)에 있습니다.
+5. **다른 암호화 증거와 이어 봅니다.** 파일볼트 개인 복구 키는 키체인에 저장되므로 [FV-1], 키체인을 풀면 개인 복구 키가 나올 수 있습니다. 어느 키체인의 어떤 항목에 들어 있는지는 실제 데이터로 확인해야 합니다. 파일볼트는 [파일볼트 이미지 열기 (FileVault)](filevault-images.md)에, 키체인 파일로 디스크 이미지를 여는 경우는 [암호 걸린 디스크 이미지 (Encrypted DMG)](encrypted-dmg.md)에 있습니다.
 
 ## 데이터 보호 키체인
 
-데이터 보호 키체인은 항목의 비밀 키가 늘 Secure Enclave를 거치는 구조이고 [KC-2], 위에 예로 든 공개 도구도 이 구현은 다루지 않습니다 [KC-4]. Secure Enclave가 있는 맥에서 이 키체인을 기기 밖에서 여는 공개된 방법은 없으므로, 이런 항목이 필요한 조사라면 획득 단계에서 [라이브 대응 (Live Response)](../../process-acquisition/live-response/index.md)을 함께 검토합니다. Secure Enclave의 구조는 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md) 쪽에 정리돼 있습니다.
+데이터 보호 키체인은 항목의 비밀 키가 늘 Secure Enclave를 거치는 구조이고 [KC-2], 위에 예로 든 공개 도구도 이 구현은 다루지 않습니다 [KC-4]. Secure Enclave가 있는 맥에서 이 키체인을 기기 밖에서 여는 공개된 방법은 없으므로, 이런 항목이 필요한 조사라면 획득 단계에서 [라이브 대응 (Live Response)](../../process-acquisition/live-response/index.md)을 함께 검토합니다. Secure Enclave의 구조는 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md) 페이지에 정리돼 있습니다.
 
 ## 도구
 
@@ -46,7 +46,7 @@ nav_order: 2200
 
 ## 결과를 어떻게 해석하나
 
-키체인 항목이 말해 주는 범위는 "이 계정·서비스·서버에 쓸 자격 증명이 이 키체인에 저장돼 있었다" 까지입니다. 항목이 있다는 사실만으로는 사용자가 그 서비스에 언제 접속했는지 알 수 없고, 접속 시각은 브라우저·네트워크·통합 로그 기록과 맞춰 봐야 합니다([웹 사용 행위 재구성 (Web Activity)](../../../04-scenarios/activity/web-activity.md), [정보 탈취 악성 코드 (Infostealer)](../../../04-scenarios/incident/infostealer.md)).
+키체인 항목으로 알 수 있는 범위는 "이 계정·서비스·서버에 쓸 자격 증명이 이 키체인에 저장돼 있었다" 까지입니다. 항목이 있다는 사실만으로는 사용자가 그 서비스에 언제 접속했는지 알 수 없고, 접속 시각은 브라우저·네트워크·통합 로그 기록과 맞춰 봐야 합니다([웹 사용 행위 재구성 (Web Activity)](../../../04-scenarios/activity/web-activity.md), [정보 탈취 악성 코드 (Infostealer)](../../../04-scenarios/incident/infostealer.md)).
 
 보고서에는 "login 키체인에 이 서버용 인터넷 암호 항목이 있고, 항목의 생성 시각(`cdat`)은 UTC 기준 이 시각이다" 처럼 쓰고, 암호 값을 열었다면 어떤 풀 수단과 도구로 열었는지를 함께 적습니다.
 

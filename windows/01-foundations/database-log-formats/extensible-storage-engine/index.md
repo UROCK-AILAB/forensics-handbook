@@ -37,7 +37,7 @@ ESE (Extensible Storage Engine) 는 Windows 에 들어 있는 데이터베이스
 | WebCacheV01.dat | `%LOCALAPPDATA%\Microsoft\Windows\WebCache\WebCacheV01.dat` | IE 10 이후 | [웹캐시 DB](../../../02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md): 방문 기록, 쿠키, 캐시 목록 |
 | Windows.edb | `%ProgramData%\Microsoft\Search\Data\Applications\Windows\Windows.edb` | Vista ~ 10 | [윈도 검색 색인 DB](../../../02-artifacts/file-folder-usage/windows-search/index.md): 색인된 파일의 속성, 지운 파일의 흔적 |
 | qmgr.db | `%ProgramData%\Microsoft\Network\Downloader\qmgr.db` | 10 부터 | [BITS 전송 작업](../../../02-artifacts/persistence/bits-jobs-qmgr-db.md): 내려받기·올리기 작업과 대상 파일 |
-| DataStore.edb | `%SystemRoot%\SoftwareDistribution\DataStore\DataStore.edb` | 검체에서 확인 | [윈도 업데이트 기록](../../../02-artifacts/system-account/windows-update-cbs-log.md) |
+| DataStore.edb | `%SystemRoot%\SoftwareDistribution\DataStore\DataStore.edb` | 실제 파일로 확인 | [윈도 업데이트 기록](../../../02-artifacts/system-account/windows-update-cbs-log.md) |
 | WindowsMail.MSMessageStore | `%USERPROFILE%\AppData\Local\Microsoft\Windows Mail\WindowsMail.MSMessageStore` | Vista (Windows Mail) | [옛 윈도 메일 프로그램](../../../02-artifacts/mail/outlook-express-windows-live-mail.md): 메일 폴더 정보 |
 | ntds.dit | `%SystemRoot%\NTDS\ntds.dit` (기본 위치) | 도메인 컨트롤러 | [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md): 도메인 계정과 비밀번호 해시 |
 

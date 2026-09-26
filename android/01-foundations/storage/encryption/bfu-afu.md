@@ -56,7 +56,7 @@ CE 영역은 사용자가 잠금을 푼 뒤 기기를 다시 시작할 때까지
 
 ## 기기에 남는 흔적
 
-adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 기본 사용자 블록의 `State:` 줄에 현재 상태 이름이 나오고, 같은 블록에 `Start time:`, `Unlock time:`, `Last logged in:` 칸이 있습니다. 잠금이 풀린 상태라면 이 줄에 `State: RUNNING_UNLOCKED` 가 나옵니다.
+adb 일반 셸 권한으로 `dumpsys user` 를 읽으면 기본 사용자 블록의 `State:` 줄에 현재 상태 이름이 나오고, 같은 블록에 `Start time:`, `Unlock time:`, `Last logged in:` 필드가 있습니다. 잠금이 풀린 상태라면 이 줄에 `State: RUNNING_UNLOCKED` 가 나옵니다.
 
 ```
 Current user: #
@@ -68,11 +68,11 @@ Users:
     Unlock time: (가림)
 ```
 
-위 출력은 필요한 줄만 옮긴 것이고, `#` 와 `(가림)` 은 가린 자리입니다. `Unlock time` 은 이름으로 보아 잠금 해제 시각을 적는 칸입니다. 어떤 시계를 기준으로 어떤 형식으로 적는지는 공개된 설명이 없어 검체에서 확인합니다. dumpsys 출력을 읽는 방법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
+위 출력은 필요한 줄만 옮긴 것이고, `#` 와 `(가림)` 은 가린 자리입니다. `Unlock time` 은 이름으로 보면 잠금 해제 시각을 적는 필드입니다. 어떤 시계를 기준으로 어떤 형식으로 적는지는 실제 기기에서 확인해야 합니다. dumpsys 출력을 읽는 방법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
 
 앱 사용 기록의 이벤트에도 `KEYGUARD_SHOWN`·`KEYGUARD_HIDDEN` 줄이 있어서 잠금 화면이 나타나고 사라진 시각의 흔적이 남습니다. 이 이벤트의 해석은 [앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 다룹니다.
 
-설정 값에는 재시작·잠금과 이름이 이어지는 키가 있습니다. 각 키가 무엇을 기록하는지는 공식 문서에 설명이 없어 검체에서 확인합니다.
+설정 값에는 재시작·잠금과 이름이 이어지는 키가 있습니다. 각 키가 무엇을 기록하는지는 공식 문서에 설명이 없어서 실제 기기에서 확인해야 합니다.
 
 - global: `boot_count`, `add_users_when_locked`
 - secure: `lockdown_in_power_menu`, `lock_screen_lock_after_timeout`, `theft_detection_lock_supported`, `remote_lock_setting`, `fmm_unlock_recovery`
@@ -89,7 +89,7 @@ BFU 상태에서는 기기 안에서도 CE 영역을 쓸 수 없어서 복호화
 
 ## 도구
 
-- `adb shell dumpsys user`: 사용자별 상태 이름과 시각 칸
+- `adb shell dumpsys user`: 사용자별 상태 이름과 시각 필드
 - `adb shell dumpsys usagestats`: 잠금 화면 표시·해제 이벤트
 - `adb shell settings list global`, `adb shell settings list secure`: 설정 키와 값
 

@@ -17,7 +17,7 @@ Key Vault 는 비밀 (secret), 키 (key), 인증서 (certificate) 를 보관하�
 | 조사 질문 | 기록 | 작업 이름 예 |
 |---|---|---|
 | 누가 비밀 값을 읽었나 | `AuditEvent` | `SecretGet` |
-| 비밀·키 목록을 훑었나 | `AuditEvent` | `SecretList`, `SecretListVersions`, `KeyList` |
+| 비밀·키 목록을 살펴봤나 | `AuditEvent` | `SecretList`, `SecretListVersions`, `KeyList` |
 | 비밀을 만들거나 바꿨나 | `AuditEvent` | `SecretSet`, `SecretUpdate` |
 | 키로 복호화·서명을 했나 | `AuditEvent` | `KeyDecrypt`, `KeyUnwrap`, `KeySign` |
 | 비밀·키의 백업 파일을 만들었나 | `AuditEvent` | `SecretBackup`, `KeyBackup`, `CertificateBackup` |
@@ -79,11 +79,11 @@ Storage 로 보낸 `AuditEvent` 레코드와 Log Analytics 의 두 표는 필드
 | `resourceId` | `_ResourceId` | `_ResourceId` | 볼트의 리소스 ID(Key Vault 로그는 늘 볼트 ID) |
 | `operationName` | `OperationName` | `OperationName` | `SecretGet` 같은 작업 이름 |
 | `operationVersion` | `OperationVersion` | `OperationVersion` | 클라이언트가 요청한 REST API 버전 |
-| `resultType` | `ResultType` | 검체에서 확인 | REST API 요청의 결과 |
+| `resultType` | `ResultType` | 실제 데이터로 확인 | REST API 요청의 결과 |
 | `resultSignature` | `ResultSignature` | `ResultSignature` | HTTP 상태(예 `OK`, `Forbidden`) |
 | `durationMs` | `DurationMs` | `DurationMs` | 서버가 요청을 처리한 밀리초. 네트워크 지연은 빠짐 |
 | `callerIpAddress` | `CallerIpAddress` | `CallerIPAddress` | 요청한 클라이언트 IP |
-| `correlationId` | `CorrelationId` | 검체에서 확인 | 클라이언트가 넘길 수 있는 선택 GUID |
+| `correlationId` | `CorrelationId` | 실제 데이터로 확인 | 클라이언트가 넘길 수 있는 선택 GUID |
 | `identity` | `Identity` | `identity_claim_*` 열(예 `identity_claim_appid_g`) | 요청에 쓴 토큰의 신원 |
 | `properties.clientInfo` | `ClientInfo` | `clientInfo_s` | User-Agent |
 | `properties.requestUri` | `RequestUri` | `requestUri_s` | 요청 URI |
@@ -119,13 +119,13 @@ Storage 로 보낸 `AuditEvent` 레코드와 Log Analytics 의 두 표는 필드
 | 인증서 | `CertificateGet`, `CertificateCreate`, `CertificateImport`, `CertificateUpdate`, `CertificateList`, `CertificateDelete`, `CertificatePurge`, `CertificateBackup`, `CertificateRestore`, `CertificateRecover`, `CertificatePolicySet`, `CertificateIssuerSet`, `CertificateContactsSet` 등 |
 | 알림 | `SecretNearExpiryEventGridNotification`, `KeyExpiredEventGridNotification`, `CertificateNearExpiryEventGridNotification` 같은 `...EventGridNotification` |
 
-`...EventGridNotification` 작업은 Event Grid 구독이 없어도 기록됩니다[1]. `KeyRotateIfDue` 는 회전 정책에 따라 예약된 자동 키 회전입니다[1]. 볼트 작업은 `VaultGet`·`VaultCreate` 처럼 적는다는 설명도 있지만, 작업 이름 표에는 만들기와 수정이 `VaultPut` 하나로 적혀 있습니다[1]. 검체에서 실제 값을 `summarize count() by OperationName` 으로 먼저 봅니다.
+`...EventGridNotification` 작업은 Event Grid 구독이 없어도 기록됩니다[1]. `KeyRotateIfDue` 는 회전 정책에 따라 예약된 자동 키 회전입니다[1]. 볼트 작업은 `VaultGet`·`VaultCreate` 처럼 적는다는 설명도 있지만, 작업 이름 표에는 만들기와 수정이 `VaultPut` 하나로 적혀 있습니다[1]. 실제 데이터에서 값을 `summarize count() by OperationName` 으로 먼저 봅니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 레코드 한 줄은 어느 UTC 시각에, 어느 토큰 신원(개체 ID·UPN·앱 ID)이, 어느 IP 와 User-Agent 로, 어느 볼트의 어느 객체에, 어떤 작업을 요청했고 HTTP 결과가 무엇이었는지를 보여 줍니다[1]. 권한이 없어 거부된 요청도 남으므로 `ResultSignature` 가 `Forbidden` 인 레코드는 실패한 시도의 흔적입니다[3]. `IsRbacAuthorized`·`AppliedAssignmentId`·`IsAccessPolicyMatch` 로 어떤 역할 할당이나 액세스 정책이 그 접근을 허용했는지까지 좁힐 수 있습니다[4]. `SecretBackup` 은 비밀의 백업 파일을 만드는 요청이고, 이 파일은 같은 구독의 Key Vault 에 복원할 수 있습니다[7]. 비밀·키를 옮기려 한 정황을 볼 때 `SecretGet` 과 함께 찾습니다.
 
-**증명하지 못하는 것.** 비밀 값과 키 재료는 기록에 없어서, 레코드는 "값을 가져가는 요청이 성공했다" 까지만 말합니다. 가져간 비밀로 무엇을 했는지는 그 비밀을 쓰는 서비스의 기록(Storage 연결 문자열이면 [Storage 계정 기록](./storage-logs.md), 앱 비밀이면 [Microsoft Entra 로그](../m365/entra-logs/index.md))에서 따로 찾아야 합니다. 진단 설정이 없던 기간에는 기록이 아예 없습니다[3]. 레코드는 토큰의 주체를 가리킬 뿐 키보드 앞의 사람을 가리키지 않습니다. 보고서에는 "이 시각에 이 IP 에서 이 서비스 주체로 이 비밀의 값을 가져오는 요청이 성공한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
+**증명하지 못하는 것.** 비밀 값과 키 재료는 기록에 없어서, 레코드로는 "값을 가져가는 요청이 성공했다" 까지만 알 수 있습니다. 가져간 비밀로 무엇을 했는지는 그 비밀을 쓰는 서비스의 기록(Storage 연결 문자열이면 [Storage 계정 기록](./storage-logs.md), 앱 비밀이면 [Microsoft Entra 로그](../m365/entra-logs/index.md))에서 따로 찾아야 합니다. 진단 설정이 없던 기간에는 기록이 아예 없습니다[3]. 레코드는 토큰의 주체를 가리킬 뿐 키보드 앞의 사람을 가리키지 않습니다. 보고서에는 "이 시각에 이 IP 에서 이 서비스 주체로 이 비밀의 값을 가져오는 요청이 성공한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
 
 ## 시각 해석
 
@@ -136,7 +136,7 @@ Storage 로 보낸 `AuditEvent` 레코드와 Log Analytics 의 두 표는 필드
 ## 함정과 한계
 
 - **활동 로그만 봐서는 비밀 접근이 보이지 않습니다.** 비밀 값을 가져오는 것 같은 데이터 평면 작업은 리소스 로그에만 남습니다[8]. 활동 로그만 모아 둔 조직이라면 `SecretGet` 기록은 처음부터 없습니다.
-- **Sigma 규칙과 문서의 분류가 다릅니다.** Sigma 의 Key Vault 키·비밀 규칙은 로그 출처를 활동 로그로 두고 `MICROSOFT.KEYVAULT/VAULTS/SECRETS/DELETE`, `.../SECRETS/PURGE/ACTION`, `.../SECRETS/BACKUP/ACTION`, `.../SECRETS/SETSECRET/ACTION`, `.../KEYS/DELETE`, `.../KEYS/CREATE/ACTION`, `.../KEYS/PURGE/ACTION` 같은 이름을 찾습니다[10][11]. 권한 문서는 이 이름들을 데이터 평면 작업(DataAction)으로 분류하고[7], 데이터 평면 작업은 활동 로그에 남지 않습니다[8]. 그래서 이 작업들은 `AuditEvent` 의 `SecretDelete`, `SecretPurge`, `SecretBackup`, `SecretSet`, `KeyDelete`, `KeyCreate`, `KeyPurge` 로 찾습니다. 키 규칙에 있는 `MICROSOFT.KEYVAULT/VAULTS/KEYS/CREATE`(`/ACTION` 없음)는 권한 문서 목록에 없고, 제어 평면 쪽 키 만들기는 `Microsoft.KeyVault/vaults/keys/write` 입니다[7][10]. 비밀 규칙의 `SECRETS/WRITE` 와 볼트 규칙의 네 이름(`VAULTS/WRITE`·`/DELETE`·`/DEPLOY/ACTION`·`/ACCESSPOLICIES/WRITE`)은 제어 평면 작업이라 활동 로그에서 찾습니다[7][11][12]. Sigma 규칙을 쓰는 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
+- **Sigma 규칙과 문서의 분류가 다릅니다.** Sigma 의 Key Vault 키·비밀 규칙은 로그 출처를 활동 로그로 두고 `MICROSOFT.KEYVAULT/VAULTS/SECRETS/DELETE`, `.../SECRETS/PURGE/ACTION`, `.../SECRETS/BACKUP/ACTION`, `.../SECRETS/SETSECRET/ACTION`, `.../KEYS/DELETE`, `.../KEYS/CREATE/ACTION`, `.../KEYS/PURGE/ACTION` 같은 이름을 찾습니다[10][11]. 권한 문서는 이 이름들을 데이터 평면 작업(DataAction)으로 분류하고[7], 데이터 평면 작업은 활동 로그에 남지 않습니다[8]. 그래서 이 작업들은 `AuditEvent` 의 `SecretDelete`, `SecretPurge`, `SecretBackup`, `SecretSet`, `KeyDelete`, `KeyCreate`, `KeyPurge` 로 찾습니다. 키 규칙에 있는 `MICROSOFT.KEYVAULT/VAULTS/KEYS/CREATE`(`/ACTION` 없음)는 권한 문서 목록에 없고, 제어 평면 쪽 키 만들기는 `Microsoft.KeyVault/vaults/keys/write` 입니다[7][10]. 비밀 규칙의 `SECRETS/WRITE` 와 볼트 규칙의 네 이름(`VAULTS/WRITE`·`/DELETE`·`/DEPLOY/ACTION`·`/ACCESSPOLICIES/WRITE`)은 제어 평면 작업이라 활동 로그에서 찾습니다[7][11][12]. Sigma 규칙을 쓰는 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
 - **`Authentication` 401 은 따로 봅니다.** 실패한 요청을 셀 때는 `OperationName == "Authentication"` 이면서 `httpStatusCode_d == 401` 인 레코드를 빼고 셉니다[3]. 이 레코드만 세어 무차별 대입이라고 판단하지 않고, 같은 신원·IP 의 다른 작업 결과와 함께 봅니다.
 - **표가 둘로 나뉠 수 있습니다.** 수집 모드를 바꾼 볼트는 앞 기간이 `AzureDiagnostics`, 뒤 기간이 `AZKVAuditLogs` 에 있고, 앞 기간 기록은 작업 영역 보관 기간이 끝날 때까지 `AzureDiagnostics` 에 남습니다[9]. `AzureDiagnostics` 에서는 `ResourceProvider == "MICROSOFT.KEYVAULT"` 로 걸러야 다른 서비스 기록과 섞이지 않습니다[3]. 이 표는 열이 500개에 이르면 새 열의 값을 `AdditionalFields` 열에 몰아 넣으므로, 필요한 열이 없으면 그 열을 봅니다[5].
 - **레코드 모양이 문서마다 다릅니다.** Key Vault 로깅 문서의 예시는 `{"records": [...]}` 로 감싼 JSON 이고 `durationMs` 가 문자열 `"78"` 입니다[1]. 리소스 로그 문서의 `PT1H.json` 예시는 `records` 로 감싸지 않은 이벤트 한 줄이고[9], `AZKVAuditLogs` 의 `DurationMs` 는 정수입니다[4]. 내려받은 블롭은 첫 몇 줄을 열어 모양을 확인한 뒤 읽는 방법을 정합니다.
@@ -225,7 +225,7 @@ AZKVAuditLogs
 | [Microsoft Entra 로그](../m365/entra-logs/index.md) | `identity` 의 개체 ID·앱 ID 로 로그인 기록과 IP, 서비스 주체 자격 증명 변경 |
 | [Storage 계정 기록](./storage-logs.md) | 비밀로 둔 계정 키·연결 문자열을 읽은 뒤 그 키로 들어온 요청 |
 | [Azure 가상 머신](./azure-vm.md) | 관리 ID 를 쓰는 VM 에서 비밀을 읽은 경우 그 VM 안의 작업 |
-| [CloudTrail](../aws/cloudtrail/index.md) | AWS 쪽 비밀·키 사용 기록과 견줄 때 |
+| [CloudTrail](../aws/cloudtrail/index.md) | AWS 쪽 비밀·키 사용 기록과 비교할 때 |
 
 IP·User-Agent 로 출처를 좁히는 방법은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md), 여러 기록을 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md), 기록이 지워지기 전에 지키는 방법은 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다.
 
@@ -235,9 +235,9 @@ Microsoft 문서 "Azure Key Vault logging" 에 실린 예시 레코드와 "Monit
 
 1. 예시 레코드의 `identity.claim` 에서 개체 ID·UPN·앱 ID 를 찾고, 이 요청이 사용자 토큰인지 서비스 주체 토큰인지 설명해 봅니다.
 2. 예시 레코드의 `properties.clientInfo` 와 `requestUri` 를 보고, 이 요청이 데이터 평면 끝점과 관리 끝점 가운데 어디로 들어왔는지 판단해 봅니다.
-3. 실패 집계 질의가 `Authentication` 401 을 빼는 까닭을 설명하고, 빼지 않으면 결과가 어떻게 달라질지 적어 봅니다.
+3. 실패 집계 질의가 `Authentication` 401 을 빼는 이유를 설명하고, 빼지 않으면 결과가 어떻게 달라질지 적어 봅니다.
 4. 작업 이름 표에서 비밀 값이나 백업 파일을 요청한 쪽에 돌려주는 작업을 골라 목록을 만들어 봅니다.
-5. 실제 검체에서는 조사 기간을 시간 단위로 나눠 `insights-logs-auditevent` 의 `PT1H.json` 이나 `AZKVAuditLogs` 행이 빠진 시간이 있는지 표로 만들고, 같은 시간대 활동 로그에 진단 설정 변경이 있었는지 확인해 봅니다.
+5. 실제 사건에서는 조사 기간을 시간 단위로 나눠 `insights-logs-auditevent` 의 `PT1H.json` 이나 `AZKVAuditLogs` 행이 빠진 시간이 있는지 표로 만들고, 같은 시간대 활동 로그에 진단 설정 변경이 있었는지 확인해 봅니다.
 
 ## 참고 문헌
 

@@ -15,7 +15,7 @@ iOS 에서는 App Store 의 별도 앱 "Google Gemini" 로 Gemini 를 쓰고 대
 
 Android 에서는 Google 앱이 Gemini 를 실행하지만([Android 앱](android.md)), iOS 에는 Gemini 를 쓰는 별도 앱이 있습니다 [2][3]. 대화는 활동 저장 (Keep Activity) 설정에 따라 계정 쪽 Gemini 앱 활동에 저장되고, 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 정리했습니다 [1]. 서버와 기기 가운데 어디에 무엇이 남는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다.
 
-Android·iOS 의 ChatGPT·Copilot·Gemini 앱을 견주면, ChatGPT·Copilot 은 대화를 기기에 평문으로 저장하지만 Gemini 는 대화·브라우저 데이터·이미지를 모두 클라우드에 두고 이를 Google Takeout 으로 받을 수 있습니다 [4]. 2025년 논문의 시험에서는 iOS 기기의 위치 설정을 꺼 둔 상태에서도 Gemini 와 ChatGPT 에서 반경 0.5마일(약 800m) 안의 위치 데이터를 얻을 수 있었습니다 [4]. 이 위치 데이터가 기기의 어느 파일에 있었는지, 클라우드 쪽 자료였는지는 공개되지 않아 검체로 확인합니다.
+Android·iOS 의 ChatGPT·Copilot·Gemini 앱을 비교하면, ChatGPT·Copilot 은 대화를 기기에 평문으로 저장하지만 Gemini 는 대화·브라우저 데이터·이미지를 모두 클라우드에 두고 이를 Google Takeout 으로 받을 수 있습니다 [4]. 2025년 논문의 시험에서는 iOS 기기의 위치 설정을 꺼 둔 상태에서도 Gemini 와 ChatGPT 에서 반경 0.5마일(약 800m) 안의 위치 데이터를 얻을 수 있었습니다 [4]. 이 위치 데이터가 기기의 어느 파일에 있었는지, 클라우드 쪽 자료였는지는 공개되지 않아 실제 기기로 확인합니다.
 
 App Store 의 개인정보 라벨은 앱이 무엇을 모아 사용자와 연결하는지 판매자가 스스로 밝힌 목록이고, 기기 안에 무엇이 남는지와는 다른 이야기입니다. 그래도 어떤 종류의 데이터를 찾아볼지 정하는 데는 쓸 수 있습니다. 2026-09-25 라벨이 "나와 연결된 데이터" 로 적은 항목은 구매, 정확한·대략 위치, 연락처 정보, 사용자 콘텐츠(사진·영상·음성·이메일), 검색·방문 기록, 식별자, 사용 데이터, 민감 정보, 진단이고, 용도는 개발자의 광고·마케팅, 분석, 개인화, 앱 기능, 기타입니다 [3]. 위치가 라벨에 들어 있는 것은 위 시험 결과와 맞지만, 라벨은 수집 종류만 밝히고 저장 위치는 밝히지 않습니다.
 
@@ -28,16 +28,16 @@ App Store 의 개인정보 라벨은 앱이 무엇을 모아 사용자와 연결
 | 2026-09-25 버전 | 1.2026.3770306 (2026-09-24 출시) | App Store 페이지 [3] |
 | 요구 사항 | iOS 17.4 이상, iPadOS 17.4 이상 | App Store 페이지 [3] |
 | 크기 | 364.3 MB | App Store 페이지 [3] |
-| 번들 ID, 컨테이너 안 경로·DB | 공개된 분석 자료가 없어 검체로 확인합니다 | 아래 "구조" 참고 |
-| 위젯·Siri·Live Activities 연동 흔적 | 공개된 분석 자료가 없어 검체로 확인합니다 | — |
+| 번들 ID, 컨테이너 안 경로·DB | 공개 분석 자료 없음, 실제 기기로 확인 | 아래 "구조" 참고 |
+| 위젯·Siri·Live Activities 연동 흔적 | 공개 분석 자료 없음, 실제 기기로 확인 | — |
 
-앱은 자주 새 버전이 나와서 위 버전은 2026-09-25 의 값이고, 분석할 기기의 설치 버전은 따로 확인합니다. App Store ID 는 앱 스토어 안의 번호이고 기기의 앱 컨테이너를 찾는 번들 ID 와 다릅니다. 공개 코드 가운데에는 Gemini 의 번들 ID 를 짐작으로 적은 목록도 있어서, 번들 ID 는 검체의 설치 앱 기록에서 읽은 값만 씁니다.
+앱은 자주 새 버전이 나와서 위 버전은 2026-09-25 의 값이고, 분석할 기기의 설치 버전은 따로 확인합니다. App Store ID 는 앱 스토어 안의 번호이고 기기의 앱 컨테이너를 찾는 번들 ID 와 다릅니다. 공개 코드 가운데에는 Gemini 의 번들 ID 를 짐작으로 적은 목록도 있어서, 번들 ID 는 기기의 설치 앱 기록에서 읽은 값만 씁니다.
 
-앱 컨테이너 안의 파일은 기기 잠금 상태에 따라 보호 등급이 달라서 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 먼저 확인하고, 로그인 정보가 들어가는 곳은 [키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html) 페이지에서 다룹니다. 로컬 백업으로 수집할 때는 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)을 봅니다. Gemini 앱 데이터가 백업에 들어가는지는 공개된 분석 자료가 없어서, 백업 목록에서 이 앱의 도메인이 있는지 검체로 확인합니다.
+앱 컨테이너 안의 파일은 기기 잠금 상태에 따라 보호 등급이 달라서 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 먼저 확인하고, 로그인 정보가 들어가는 곳은 [키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html) 페이지에서 다룹니다. 로컬 백업으로 수집할 때는 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)을 봅니다. Gemini 앱 데이터가 백업에 들어가는지는 백업 목록에 이 앱의 도메인이 있는지로 확인합니다.
 
 ## 구조
 
-Gemini 앱 컨테이너 안의 파일 구조는 공개된 분석 자료가 없습니다. 그래서 iOS 가 모든 앱에 대해 남기는 기록으로 앱을 찾고, 그다음 컨테이너 안을 검체에서 직접 봅니다. 아래 표의 경로와 칸 이름은 iLEAPP 분석기 코드에 적힌 그대로입니다.
+Gemini 앱 컨테이너 안의 파일 구조는 공개된 분석 자료가 없습니다. 그래서 iOS 가 모든 앱에 대해 남기는 기록으로 앱을 찾고, 그다음 컨테이너 안을 직접 열어 봅니다. 아래 표의 경로와 열 이름은 iLEAPP 분석기 코드에 적힌 그대로입니다.
 
 | 기록 | 경로 (iLEAPP 검색 패턴) | 알려 주는 것 | 근거 |
 |---|---|---|---|
@@ -59,15 +59,15 @@ Gemini 대화 시각을 담은 기기 쪽 파일은 공개된 분석 자료가 �
 
 ## 함정과 한계
 
-iOS 에서도 Gemini 를 앱이 아니라 사파리나 크롬으로 열 수 있어서, 앱이 없다고 쓰지 않았다고 볼 수 없습니다. 이 경우 흔적은 [웹 브라우저](web.md)에서 다룬 브라우저 기록 쪽에 남고, iOS 판의 [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html)와 [크롬](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) 쪽에서 읽는 법을 다룹니다.
+iOS 에서도 Gemini 를 앱이 아니라 사파리나 크롬으로 열 수 있어서, 앱이 없다고 쓰지 않았다고 볼 수 없습니다. 이 경우 흔적은 [웹 브라우저](web.md)에서 다룬 브라우저 기록 쪽에 남고, iOS 판의 [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html)와 [크롬](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) 페이지에서 읽는 법을 다룹니다.
 
 iLEAPP 에는 AI 대화 앱 분석기로 ChatGPT 용 `chatgpt.py` 와 Claude 용 `iOSclaude.py` 가 있지만, Gemini 전용 분석기는 없습니다(2026-09-23 main 기준) [5]. ChatGPT 분석기는 앱 1.2024.178 까지 다루고, 두 분석기는 [ChatGPT iOS 앱](../chatgpt/ios.md)과 [Claude iOS 앱](../claude/ios.md)에서 다룹니다. 지금 판의 도구는 다를 수 있으니 쓰기 전에 저장소 목록을 다시 봅니다.
 
-위 논문의 결과는 논문이 시험한 앱 판과 iOS 판에 따른 것이고, 2026-09 의 앱이 같은 동작을 하는지는 검체로 확인합니다 [4].
+위 논문의 결과는 논문이 시험한 앱 판과 iOS 판에 따른 것이고, 2026-09 의 앱이 같은 동작을 하는지는 실제 기기로 확인합니다 [4].
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** Gemini 앱의 Sandbox Path 아래에서 찾은 파일을 헥스 편집기로 열어 앞 16바이트를 봅니다. `53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00`(`SQLite format 3` 과 NUL) 이면 SQLite 이고, `62 70 6C 69 73 74 30 30`(`bplist00`) 이면 이진 속성 목록 파일입니다. 이 두 값은 각 형식의 명세에 정해진 머리 값이고, 형식마다 이어서 읽는 법은 위에 링크한 SQLite·속성 목록 파일 쪽에 있습니다.
+**헥스로 한 번.** Gemini 앱의 Sandbox Path 아래에서 찾은 파일을 헥스 편집기로 열어 앞 16바이트를 봅니다. `53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00`(`SQLite format 3` 과 NUL) 이면 SQLite 이고, `62 70 6C 69 73 74 30 30`(`bplist00`) 이면 이진 속성 목록 파일입니다. 이 두 값은 각 형식의 명세에 정해진 머리 값이고, 형식마다 이어서 읽는 법은 위에 링크한 SQLite·속성 목록 파일 페이지에 있습니다.
 
 **공개 도구로 한 번.** iLEAPP 로 전체 파일 시스템 추출본을 처리한 뒤 "Application State" 보고서에서 Gemini 앱의 Bundle ID 와 Sandbox Path 를 찾고, "Application Permissions" 보고서에서 같은 Bundle ID 의 권한 행을 봅니다(iLEAPP 2026-09-23 main 기준) [6][7].
 
@@ -83,7 +83,7 @@ iLEAPP 에는 AI 대화 앱 분석기로 ChatGPT 용 `chatgpt.py` 와 Claude 용
 
 ## 실습
 
-Gemini 흔적을 담은 공개 iOS 검체는 알려진 것이 없어서, 시험용 기기와 계정으로 아래 질문을 풀어 봅니다.
+Gemini 흔적을 담은 공개 iOS 시험 이미지는 알려진 것이 없어서, 시험용 기기와 계정으로 아래 질문을 풀어 봅니다.
 
 1. 앱을 설치하고 한 번 대화한 뒤 로컬 백업을 만들면, 백업 목록에 Gemini 앱의 파일이 들어갑니까?
 2. 앱 상태 DB 에서 찾은 Sandbox Path 아래에 대화 문장이 담긴 파일이 있습니까, 아니면 위 논문의 결과대로 대화가 클라우드에만 있습니까?

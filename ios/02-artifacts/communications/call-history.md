@@ -12,7 +12,7 @@ nav_order: 500
 
 ## 무엇을 기록하나 · 왜 생기나
 
-iOS 는 전화를 걸거나 받을 때마다 통화 기록 데이터베이스 `CallHistory.storedata` 의 `ZCALLRECORD` 표에 한 행을 씁니다 [1][2]. 이동통신 전화만 들어가는 곳이 아니라서 FaceTime 영상·음성 통화와, 전화 앱과 연동하는 다른 회사 앱(예: WhatsApp)의 통화도 같은 표에 남고, 어느 서비스가 처리했는지는 `ZSERVICE_PROVIDER` 칸에 적힙니다 [1].
+iOS 는 전화를 걸거나 받을 때마다 통화 기록 데이터베이스 `CallHistory.storedata` 의 `ZCALLRECORD` 표에 한 행을 씁니다 [1][2]. 이동통신 전화만 들어가는 곳이 아니라서 FaceTime 영상·음성 통화와, 전화 앱과 연동하는 다른 회사 앱(예: WhatsApp)의 통화도 같은 표에 남고, 어느 서비스가 처리했는지는 `ZSERVICE_PROVIDER` 열에 적힙니다 [1].
 
 한 행에는 통화를 시작한 시각, 통화 시간(초), 건 통화인지 받은 통화인지, 받았는지, 상대 주소(번호), 끊긴 사유, 국가 코드, 위치 문자열이 들어갑니다 [1]. 사용자가 전화 앱에서 보는 최근 기록 목록과 같은 자료라서, "누구와 언제 통화했나" 를 묻는 조사에서 가장 먼저 여는 곳입니다. 조사 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 에서 다룹니다.
 
@@ -27,14 +27,14 @@ iOS 는 전화를 걸거나 받을 때마다 통화 기록 데이터베이스 `C
 | 예전 형식 | `call_history.db` 의 `call` 표. `flags` 값을 풀어 방향을 읽고 시각 기준이 Core Data 시각과 다릅니다. 어느 iOS 까지 이 형식이었는지는 공개 자료가 없습니다 | [1] |
 | 현재 형식 | `CallHistory.storedata` 의 `ZCALLRECORD` 표 (Core Data) | [1][2] |
 | 도구 시험 범위 | iLEAPP 통화 기록 모듈은 iOS 12.4 ~ 18.7.8 표본 15개로 시험되었습니다 | [1] |
-| iOS 26 | `ZAUTOANSWEREDREASON`, `ZCOMMUNICATIONTRUSTSCORE`, `ZORIGINATINGDEVICENAME`, `ZBLOCKEDBYEXTENSIONNAME` 칸이 새로 보입니다 | [1] |
-| iOS 27 | 칸 변화를 다룬 공개 자료가 없어 검체에서 확인합니다 | |
+| iOS 26 | `ZAUTOANSWEREDREASON`, `ZCOMMUNICATIONTRUSTSCORE`, `ZORIGINATINGDEVICENAME`, `ZBLOCKEDBYEXTENSIONNAME` 열이 새로 보입니다 | [1] |
+| iOS 27 | 열 변화는 실제 데이터로 확인해야 합니다 | |
 
 ## 구조
 
-`ZCALLRECORD` 는 통화 한 건이 한 행이고, 분석에 쓰는 칸은 다음과 같습니다 [1].
+`ZCALLRECORD` 는 통화 한 건이 한 행이고, 분석에 쓰는 열은 다음과 같습니다 [1].
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `ZDATE` | 통화 시작 시각. Mac 절대 시각(초) |
 | `ZDURATION` | 통화 시간(초) |
@@ -47,9 +47,9 @@ iOS 는 전화를 걸거나 받을 때마다 통화 기록 데이터베이스 `C
 | `ZFACE_TIME_DATA` | FaceTime 관련 데이터. 담긴 내용은 공개 자료 없음 |
 | `ZISO_COUNTRY_CODE`, `ZLOCATION` | 국가 코드와 위치 문자열 |
 
-`ZDISCONNECTED_CAUSE` 의 뜻은 iLEAPP 의 해석이고 Apple 문서에는 없는 값입니다. 게다가 WhatsApp 통화에서는 iLEAPP 가 6 을 통화 시간과 방향에 따라 종료·부재중·거절로 나눠 읽고 2 를 거절로 읽을 만큼 앱마다 쓰임이 달라서, 보고서에는 "끊긴 사유 값이 6 으로 기록됨" 처럼 저장된 값을 함께 적는 편이 안전합니다 [1]. iOS 26 에서 새로 보인 칸 4개도 iLEAPP 는 저장된 값 그대로만 보여 줍니다 [1].
+`ZDISCONNECTED_CAUSE` 의 뜻은 iLEAPP 의 해석이고 Apple 문서에는 없는 값입니다. 게다가 WhatsApp 통화에서는 iLEAPP 가 6 을 통화 시간과 방향에 따라 종료·부재중·거절로 나눠 읽고 2 를 거절로 읽을 만큼 앱마다 쓰임이 달라서, 보고서에는 "끊긴 사유 값이 6 으로 기록됨" 처럼 저장된 값을 함께 적는 편이 안전합니다 [1]. iOS 26 에서 새로 보인 열 4개도 iLEAPP 는 저장된 값 그대로만 보여 줍니다 [1].
 
-여럿이 함께한 통화는 `ZCALLRECORD` 한 행으로는 드러나지 않습니다. 이 표에는 그룹 통화를 표시하는 칸이 따로 없어서, 참여자 번호를 담은 `ZHANDLE` 표(`Z_PK`, `ZVALUE`)와 연결 표 `Z_2REMOTEPARTICIPANTHANDLES`(칸 `Z_2REMOTEPARTICIPANTCALLS`, `Z_4REMOTEPARTICIPANTHANDLES`)를 이어 읽어야 한 통화에 상대가 여러 명이었는지 알 수 있습니다 [2]. 이 구조는 그룹 FaceTime 통화 시험의 결과이고, 시험한 iOS 버전은 알려져 있지 않습니다 [2]. 연결 표 이름의 숫자는 Core Data 가 붙이는 번호라 버전마다 바뀔 수 있으니, 표 이름을 고정해 두지 말고 `sqlite_master` 에서 먼저 찾습니다.
+여럿이 함께한 통화는 `ZCALLRECORD` 한 행으로는 드러나지 않습니다. 이 표에는 그룹 통화를 표시하는 열이 따로 없어서, 참여자 번호를 담은 `ZHANDLE` 표(`Z_PK`, `ZVALUE`)와 연결 표 `Z_2REMOTEPARTICIPANTHANDLES`(열 `Z_2REMOTEPARTICIPANTCALLS`, `Z_4REMOTEPARTICIPANTHANDLES`)를 이어 읽어야 한 통화에 상대가 여러 명이었는지 알 수 있습니다 [2]. 이 구조는 그룹 FaceTime 통화 시험의 결과이고, 시험한 iOS 버전은 알려져 있지 않습니다 [2]. 연결 표 이름의 숫자는 Core Data 가 붙이는 번호라 버전마다 바뀔 수 있으니, 표 이름을 고정해 두지 말고 `sqlite_master` 에서 먼저 찾습니다.
 
 Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
@@ -64,7 +64,7 @@ Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](
 | `Library/Preferences/com.apple.TelephonyUtilities.plist` | `CallScreeningDisabled`, `ReceptionistDisabled`, `SiriGreetings`, `IntelligentRoutingServiceToken` 등 |
 | `Library/Accessibility/com.apple.RTTTranscripts.sqlite` | `ZTTYHISTORY`(`ZCALLUID`, `ZDATA` 등), `ZTTYCONTACTLIST`(`ZCALLUID`, `ZCONTACTID` 등) 표 |
 
-`CallHistorySyncHelper.plist` 의 `callhistorysync.devices` 키는 이름으로 보아 기기 사이 통화 기록 동기화와 관련된 것으로 보입니다. `RTTTranscripts.sqlite` 는 칸 이름으로 보아 RTT·TTY 통화의 대화 기록을 담는 곳으로 보입니다. 이 밖에 `WirelessDomain :: Library/Preferences/com.apple.commcenter.callservices.plist` 에 `last.known.icloud.id` 키가 있습니다.
+`CallHistorySyncHelper.plist` 의 `callhistorysync.devices` 키는 이름으로 짐작하면 기기 사이 통화 기록 동기화와 관련된 것으로 보입니다. `RTTTranscripts.sqlite` 는 열 이름으로 짐작하면 RTT·TTY 통화의 대화 기록을 담는 곳으로 보입니다. 이 밖에 `WirelessDomain :: Library/Preferences/com.apple.commcenter.callservices.plist` 에 `last.known.icloud.id` 키가 있습니다.
 
 ## 증거로서 의미
 
@@ -82,17 +82,17 @@ Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](
 
 ## 함정과 한계
 
-- **전화 앱 기록을 이동통신 통화로 보는 오해.** `ZCALLTYPE` 0 행은 다른 회사 앱 통화이고 `ZSERVICE_PROVIDER` 에 앱 이름이 들어갑니다 [1]. 통신사 통화 내역과 대조할 때 이런 행을 빼야 개수가 맞습니다. 이동통신·FaceTime 행의 `ZSERVICE_PROVIDER` 에 어떤 문자열이 들어가는지는 검체에서 값을 직접 봅니다.
-- **예전 형식과 섞어 읽는 실수.** 예전 `call_history.db` 는 표·칸·시각 기준이 모두 달라서 [1], 도구가 어느 형식을 읽었는지 확인합니다.
+- **전화 앱 기록을 이동통신 통화로 보는 오해.** `ZCALLTYPE` 0 행은 다른 회사 앱 통화이고 `ZSERVICE_PROVIDER` 에 앱 이름이 들어갑니다 [1]. 통신사 통화 내역과 대조할 때 이런 행을 빼야 개수가 맞습니다. 이동통신·FaceTime 행의 `ZSERVICE_PROVIDER` 에 어떤 문자열이 들어가는지는 실제 데이터에서 값을 직접 봅니다.
+- **예전 형식과 섞어 읽는 실수.** 예전 `call_history.db` 는 표·열·시각 기준이 모두 달라서 [1], 도구가 어느 형식을 읽었는지 확인합니다.
 - **백업에 없는 DB.** 암호화하지 않은 백업에는 이 DB 가 없습니다. 결과가 비었을 때 "통화가 없다" 가 아니라 "수집 범위에 없다" 로 적습니다.
 - **그룹 통화 누락.** `ZADDRESS` 만 보면 여럿이 한 통화의 다른 참여자를 놓칩니다 [2].
-- **해석값에 기대기.** `ZDISCONNECTED_CAUSE` 와 iOS 26 새 칸은 뜻을 밝힌 공식 문서가 없습니다 [1].
+- **해석값에 기대기.** `ZDISCONNECTED_CAUSE` 와 iOS 26 새 열은 뜻을 밝힌 공식 문서가 없습니다 [1].
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 SQLite 파일 형식 명세로 만든 예시이고 실제 검체 값이 아닙니다. Core Data 는 `ZDATE` 를 실수(REAL)로 저장하고, SQLite 레코드 안에서 실수는 형식 번호(serial type) 7, 곧 8바이트 빅 엔디언 IEEE 754 로 들어갑니다.
+아래는 SQLite 파일 형식 명세로 만든 예시이고 실제 기기의 값이 아닙니다. Core Data 는 `ZDATE` 를 실수(REAL)로 저장하고, SQLite 레코드 안에서 실수는 형식 번호(serial type) 7, 곧 8바이트 빅 엔디언 IEEE 754 로 들어갑니다.
 
 ```
 레코드 본문 안의 ZDATE 8바이트
@@ -102,7 +102,7 @@ Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](
 = 2026-05-09 06:13:20 UTC
 ```
 
-같은 레코드의 `ZORIGINATED`, `ZANSWERED` 처럼 작은 정수는 형식 번호 1(1바이트 정수)이나, 값이 0·1 이면 본문 바이트 없이 형식 번호 8·9 로만 표시되기도 합니다. 헥스로 행을 따라갈 때는 레코드 머리의 형식 번호부터 읽어야 칸 경계를 맞출 수 있습니다.
+같은 레코드의 `ZORIGINATED`, `ZANSWERED` 처럼 작은 정수는 형식 번호 1(1바이트 정수)이나, 값이 0·1 이면 본문 바이트 없이 형식 번호 8·9 로만 표시되기도 합니다. 헥스로 행을 따라갈 때는 레코드 머리의 형식 번호부터 읽어야 필드 경계를 맞출 수 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -125,9 +125,9 @@ ORDER BY ZDATE;
 
 ## 실습
 
-NIST CFReDS 등에 공개된 iOS 검체로 풀어 봅니다.
+NIST CFReDS 등에 공개된 iOS 시험 데이터로 풀어 봅니다.
 
-1. 검체에 `CallHistory.storedata` 가 있습니까? 없다면 어떤 수집 방법이었기 때문인지 검체 설명에서 찾아 보십시오.
+1. 시험 데이터에 `CallHistory.storedata` 가 있습니까? 없다면 어떤 수집 방법이었기 때문인지 데이터 설명에서 찾아 보십시오.
 2. `ZCALLTYPE` 값별로 행이 몇 개입니까? 0 인 행의 `ZSERVICE_PROVIDER` 에는 어떤 앱 이름이 들어 있습니까?
 3. 받지 않은 받은 통화(`ZORIGINATED` 0, `ZANSWERED` 0)를 시각순으로 뽑고, 같은 시각대의 알림 기록과 맞춰 보십시오.
 4. 참여자가 두 명 이상인 통화가 있는지 `ZHANDLE` 과 연결 표를 이어 확인해 보십시오.

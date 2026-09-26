@@ -44,7 +44,7 @@ ScreenConnect 는 ScreenConnect 가 돌아가는 관리 서버와 조종당하�
 
 | 흔적 | 경로 | 메모 |
 |---|---|---|
-| 세션 DB | `C:\Program Files*\ScreenConnect\App_Data\Session.db` | 형식(SQLite 인지)과 표 이름은 검체에서 확인 |
+| 세션 DB | `C:\Program Files*\ScreenConnect\App_Data\Session.db` | 형식(SQLite 인지)과 표 이름은 실제 데이터로 확인 |
 | 사용자 설정 | `C:\Program Files*\ScreenConnect\App_Data\User.xml` | |
 
 ### 버전에 따라 달라지는 점
@@ -91,7 +91,7 @@ Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registr
 
 - 두 자료의 이벤트 ID 가 다릅니다. 버전에 따라 바뀐 것으로 보이며, 어느 버전부터인지는 공개 자료에 없습니다. 그래서 이벤트 ID 보다 메시지 문구로 찾습니다.
 - 명령 실행 이벤트에는 명령 내용이 없고 길이만 남습니다.
-- "Cloud Account Administrator" 는 클라우드판의 기본 관리자 이름으로 보입니다. 자체 서버에서 이 자리에 어떤 이름이 들어가는지는 검체에서 확인합니다.
+- "Cloud Account Administrator" 는 클라우드판의 기본 관리자 이름으로 보입니다. 자체 서버에서 이 자리에 어떤 이름이 들어가는지는 실제 데이터로 확인합니다.
 
 ### 명령 실행 스크립트
 
@@ -101,7 +101,7 @@ Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registr
 "cmd.exe" /c "C:\Windows\TEMP\ScreenConnect\23.6.8.8644\3c41d689-…run.cmd"
 ```
 
-스크립트 파일 이름은 UUID 뒤에 `run.cmd` 또는 `run.ps1` 이 붙은 꼴입니다.
+스크립트 파일 이름은 UUID 뒤에 `run.cmd` 또는 `run.ps1` 이 붙은 형식입니다.
 
 ## 증거로서 의미
 
@@ -116,11 +116,11 @@ Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registr
 **증명하지 못하는 것**
 
 - 명령 실행 이벤트만으로는 무슨 명령인지 모릅니다. 스크립트 파일, 4688, Sysmon 1 로 내용을 채웁니다.
-- 스크립트 파일이 실행 뒤에도 남는지는 검체에서 확인합니다. 파일이 없으면 [마스터 파일 테이블](../../filesystem/mft.md)과 [USN 변경 저널](../../filesystem/usnjrnl.md)에서 이름과 시각을 찾습니다.
+- 스크립트 파일이 실행 뒤에도 남는지는 실제 데이터로 확인합니다. 파일이 없으면 [마스터 파일 테이블](../../filesystem/mft.md)과 [USN 변경 저널](../../filesystem/usnjrnl.md)에서 이름과 시각을 찾습니다.
 - 이벤트에 적힌 이름(Cloud Account Administrator 등)은 ScreenConnect 계정 이름입니다. 조작한 사람을 가리키지 않습니다.
 - 서버 쪽 Session.db 의 구조는 공개 자료에 없어, 서버에서 세션 목록을 읽는 법은 이 페이지에서 다루지 않습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "Application 로그에 원본 `ScreenConnect Client (…)` 의 `Executed command of length` 이벤트가 이 시각에 있다. 이 이벤트에는 명령 내용이 없다. 같은 시각의 4688 에는 ScreenConnect.ClientService.exe 가 띄운 cmd.exe 가 `C:\Windows\Temp\ScreenConnect\` 아래 run.cmd 를 실행한 기록이 있다." 처럼 씁니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "Application 로그에 원본 `ScreenConnect Client (…)` 의 `Executed command of length` 이벤트가 이 시각에 있다. 이 이벤트에는 명령 내용이 없다. 같은 시각의 4688 에는 ScreenConnect.ClientService.exe 가 띄운 cmd.exe 가 `C:\Windows\Temp\ScreenConnect\` 아래 run.cmd 를 실행한 기록이 있다." 처럼 씁니다.
 
 ## 시각 해석
 
@@ -172,11 +172,11 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\System.evtx'; Id = 7045 } |
 | PowerShell 실행 기록 | `run.ps1` 로 실행한 PowerShell 명령 | [PowerShell 실행 기록](../../event-logs/powershell-event-logs-4103-4104.md) |
 | 마스터 파일 테이블 · USN 변경 저널 | 지워진 스크립트 파일의 이름과 시각 | [마스터 파일 테이블](../../filesystem/mft.md), [USN 변경 저널](../../filesystem/usnjrnl.md) |
 | 서버의 프로세스 생성 | 서버 프로세스 ScreenConnect.Service.exe 가 cmd.exe·csc.exe 를 띄우면 웹셸 실행으로 의심합니다[4] | [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) |
-| DNS·프록시 기록 | `control.connectwise.com`, `*.connectwise.com`, `*.screenconnect.com`, `live.screenconnect.com`. 중계 서버는 `instance-…-relay.screenconnect.com:443` 꼴입니다[1] | — |
+| DNS·프록시 기록 | `control.connectwise.com`, `*.connectwise.com`, `*.screenconnect.com`, `live.screenconnect.com`. 중계 서버는 `instance-…-relay.screenconnect.com:443` 형식입니다[1] | — |
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 ScreenConnect 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등) 가운데 ScreenConnect 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. `C:\Program Files (x86)\` 아래에 `ScreenConnect Client (…)` 폴더가 있습니까? 괄호 안 문자열은 무엇입니까?
 2. 7045 의 서비스 명령줄에서 `h`, `p`, `e` 값은 무엇입니까?

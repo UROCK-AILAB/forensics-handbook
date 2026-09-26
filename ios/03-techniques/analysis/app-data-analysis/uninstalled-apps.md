@@ -27,7 +27,7 @@ nav_order: 1260
 
 ## 절차
 
-1. **찾을 번들 ID 를 모읍니다.** 앱을 지워도 번들 ID 를 기준으로 여러 DB 에서 흔적을 찾을 수 있어서[3], 먼저 사용 기록에 나오는 번들 ID 를 모아 지금 설치된 앱 목록과 비교합니다. 예를 들어 로컬 백업의 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 의 `ZPROCESS` 표에는 `ZBUNDLENAME` 칸이 있어서 지금은 없는 번들 ID 가 나오는지 볼 수 있습니다. 다만 앱을 지운 뒤에도 이 표의 행이 남는지는 공개된 분석 자료가 없어 검체에서 확인해야 합니다.
+1. **찾을 번들 ID 를 모읍니다.** 앱을 지워도 번들 ID 를 기준으로 여러 DB 에서 흔적을 찾을 수 있어서[3], 먼저 사용 기록에 나오는 번들 ID 를 모아 지금 설치된 앱 목록과 비교합니다. 예를 들어 로컬 백업의 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 의 `ZPROCESS` 표에는 `ZBUNDLENAME` 열이 있어서 지금은 없는 번들 ID 가 나오는지 볼 수 있습니다. 다만 앱을 지운 뒤에도 이 표의 행이 남는지는 실제 데이터로 확인해야 합니다.
 
    ```sql
    SELECT DISTINCT ZBUNDLENAME, ZPROCNAME
@@ -47,15 +47,15 @@ nav_order: 1260
    WHERE k.key = '_UninstallDate';
    ```
 
-   `value` 칸의 바이너리 plist 는 [속성 목록 파일](../../../01-foundations/data-formats/plist.md) 의 방법으로 풀고, 안의 시각은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 에서 기준을 확인합니다. iOS 27.0 백업에서도 네 표의 이름과 칸은 같습니다. `_UninstallDate` key 가 최신 버전에서도 쓰이는지는 검체에서 확인합니다.
+   `value` 열의 바이너리 plist 는 [속성 목록 파일](../../../01-foundations/data-formats/plist.md) 의 방법으로 풀고, 안의 시각은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 에서 기준을 확인합니다. iOS 27.0 백업에서도 네 표의 이름과 열은 같습니다. `_UninstallDate` key 가 최신 버전에서도 쓰이는지는 실제 데이터로 확인합니다.
 
 3. **오프로드와 삭제를 나눕니다.** 앱을 오프로드 (offload) 하면 `applicationState.db` 의 항목이 지워집니다[3]. 그래서 이 DB 에 항목이 없다는 사실만으로는 삭제와 오프로드를 가를 수 없고, `IconState.plist` 를 함께 봅니다. 이 파일에는 있는데 `applicationState.db` 에는 없는 번들 ID 는 오프로드한 앱으로 봅니다[3]. `IconState.plist` 는 로컬 백업에 없을 수 있고, 비슷한 이름의 `HomeDomain :: Library/ControlCenter/ControlsIconState.plist` 는 제어 센터용 다른 파일입니다.
 
-4. **설치 로그를 봅니다.** Mobile Installation 로그는 컨테이너를 만들고 지운 기록을 담고, 보통 `0.log`, `1.log` 두 개만 남습니다[3]. 이 로그는 설치 시각을 보여 주고, 앱을 지운 지 6일이 넘어도 남는 흔적에 들어갑니다[7]. 로그 파일의 정확한 경로와 로그 문장의 모양, 시각 형식은 공개된 분석 자료가 없어 검체에서 확인해야 합니다. 로컬 백업에는 `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인이 들어 있으니 이 도메인의 파일도 함께 엽니다.
+4. **설치 로그를 봅니다.** Mobile Installation 로그는 컨테이너를 만들고 지운 기록을 담고, 보통 `0.log`, `1.log` 두 개만 남습니다[3]. 이 로그는 설치 시각을 보여 주고, 앱을 지운 지 6일이 넘어도 남는 흔적에 들어갑니다[7]. 로그 파일의 정확한 경로와 로그 문장의 모양, 시각 형식은 실제 데이터로 확인해야 합니다. 로컬 백업에는 `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인이 들어 있으니 이 도메인의 파일도 함께 엽니다.
 
 5. **`UninstalledApplications.plist` 를 봅니다.** 이 파일은 `private/var/installd/Library/MobileInstallation/` 에 있고 번들 ID 와 마지막으로 삭제한 날짜를 담습니다. 이 파일은 적어도 9개월 동안 남고, 유료 앱을 사거나 App Store 에 결제 수단을 연결한 뒤에만 채워지는 것으로 보입니다[3].
 
-6. **구매 기록을 봅니다.** 구매 기록은 설치 여부가 아니라 구매 사실을 보여 줍니다. `DAAP.sqlitedb` 는 `private/var/mobile/Library/Caches/com.apple.appstored/` 에 있고 iOS 12 에서 추가되었으며, 설치한 앱이 아니라 구매한 앱을 Apple ID·가족 구매까지 포함해 기록합니다[3]. 예전 iOS 버전에서는 `private/var/mobile/Library/Caches/com.apple.storeservices/AppPurchaseHistory.6.sqlitedb` 를 봅니다[3]. `storeUser.db` 는 여러 기기에 걸친 구매 기록을 담고 앱을 지운 뒤에도 남습니다[7]. 로컬 백업의 `HomeDomain :: Library/com.apple.itunesstored/` 아래 `purchase_intents.sqlitedb` 에도 `app_bundle_id` 칸이 있는 표가 있고, 칸의 뜻은 공개된 분석 자료가 없어 검체에서 확인해야 합니다. 구매 기록 전체는 [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) 에서 다룹니다.
+6. **구매 기록을 봅니다.** 구매 기록은 설치 여부가 아니라 구매 사실을 보여 줍니다. `DAAP.sqlitedb` 는 `private/var/mobile/Library/Caches/com.apple.appstored/` 에 있고 iOS 12 에서 추가되었으며, 설치한 앱이 아니라 구매한 앱을 Apple ID·가족 구매까지 포함해 기록합니다[3]. 예전 iOS 버전에서는 `private/var/mobile/Library/Caches/com.apple.storeservices/AppPurchaseHistory.6.sqlitedb` 를 봅니다[3]. `storeUser.db` 는 여러 기기에 걸친 구매 기록을 담고 앱을 지운 뒤에도 남습니다[7]. 로컬 백업의 `HomeDomain :: Library/com.apple.itunesstored/` 아래 `purchase_intents.sqlitedb` 에도 `app_bundle_id` 열이 있는 표가 있고, 열의 뜻은 실제 데이터로 확인해야 합니다. 구매 기록 전체는 [앱 스토어 기록](../../../02-artifacts/app-usage/app-store.md) 에서 다룹니다.
 
 7. **사용 기록에서 앱을 찾습니다.** 설치·구매 기록으로 앱이 있었다는 것을 확인했으면, 사용 기록으로 언제 썼는지를 봅니다. 볼 기록은 다음과 같습니다.
 
@@ -91,7 +91,7 @@ Biome 의 두 스트림은 보존 기간이 28일이라[4] 오래전에 지운 �
 
 구매 기록은 계정이 그 앱을 얻은 사실을 보여 줄 뿐 이 기기에 설치했다는 증명은 아니고, `storeUser.db` 는 여러 기기에 걸친 기록이라서[7] 다른 기기에서 받은 앱일 수도 있습니다. 설치 로그나 Biome 설치 기록은 이 기기에 설치된 시각을, 사용 기록은 그 앱이 화면에 올라오거나 통신한 시각을 보여 주지만, 그 시각에 누가 폰을 들고 있었는지는 [그 시각에 폰을 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 따로 따집니다. 삭제 시각이 남아 있어도 삭제한 이유까지 알려 주지는 않습니다.
 
-보고서에는 "이 앱을 지워 증거를 없앴다" 대신 "번들 ID `com.example.app` 의 설치 기록이 이 시각에 있고, `applicationState.db` 에 이 시각의 삭제 기록이 있으며, 수집 시점에 이 앱의 컨테이너는 없었다" 처럼 기록마다 말하는 만큼만 씁니다.
+보고서에는 "이 앱을 지워 증거를 없앴다" 대신 "번들 ID `com.example.app` 의 설치 기록이 이 시각에 있고, `applicationState.db` 에 이 시각의 삭제 기록이 있으며, 수집 시점에 이 앱의 컨테이너는 없었다" 처럼 기록마다 확인되는 만큼만 씁니다.
 
 ## 참고 문헌
 

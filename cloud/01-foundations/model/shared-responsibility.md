@@ -14,7 +14,7 @@ nav_order: 0
 
 이 경계에 걸리는 기록은 다음과 같습니다.
 
-| 기록 | 누가 한 일을 담나 | 다루는 쪽 |
+| 기록 | 누가 한 일을 담나 | 다루는 페이지 |
 |---|---|---|
 | Microsoft 365 통합 감사 로그 | 고객 조직 사용자·앱, 그리고 Customer Lockbox 승인 뒤 Microsoft 엔지니어의 작업 | [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md) |
 | Entra ID 로그인 로그 | 고객 테넌트 로그인, Microsoft 지원 담당자·CSP 의 교차 테넌트 로그인 | [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md) |
@@ -48,7 +48,7 @@ Microsoft 는 책임을 영역별로 나눈 표 (responsibility matrix) 를 둡�
 | 회사 | 표현 | 서비스 모델 구분 | 고객에게 늘 남는 것 |
 |---|---|---|---|
 | AWS | 서비스 회사 몫은 클라우드의 보안 (Security of the Cloud), 고객 몫은 클라우드 안의 보안 (Security in the Cloud)[1] | 고른 서비스에 따라 고객 몫이 달라짐. EC2 는 게스트 운영체제·설치한 앱·보안 그룹 설정이 고객 몫, S3·DynamoDB 는 AWS 가 인프라·운영체제·플랫폼을 운영[1] | 데이터(암호화 선택 포함), 자산 분류, IAM 권한[1] |
-| Microsoft | 책임 표와 늘 남는 책임 (Responsibilities you always retain)[2] | 온프레미스·IaaS·PaaS·SaaS 네 칸[2] | 데이터, 단말, 계정, 접근 관리[2] |
+| Microsoft | 책임 표와 늘 남는 책임 (Responsibilities you always retain)[2] | 온프레미스·IaaS·PaaS·SaaS 네 열[2] | 데이터, 단말, 계정, 접근 관리[2] |
 | Google Cloud | 책임 공유에 공동 운명 (shared fate) 을 더함[3] | IaaS·PaaS·SaaS 에 FaaS(서버리스)를 따로 두고, FaaS 의 책임 목록은 SaaS 와 비슷함(2023-08-21 검토 문서 기준)[3] | 접근 정책과 데이터[3] |
 
 서버리스 함수의 자리는 출처마다 다릅니다. Google Cloud 는 Cloud Run functions 를 FaaS 로 두고 SaaS 와 비슷하게 보지만[3], Microsoft 는 Azure Functions 를 PaaS 의 예로 듭니다[2]. 결론은 같아서, 세 회사 모두 데이터와 접근 정책을 고객 몫으로 둡니다[1][2][3].
@@ -67,7 +67,7 @@ Microsoft 는 책임을 영역별로 나눈 표 (responsibility matrix) 를 둡�
 
 ## 읽는 법
 
-책임 공유의 반대편, 곧 서비스 회사 직원과 서비스 자체가 한 일도 고객 쪽 로그에 남는 경우가 있습니다. 조사에서는 레코드마다 "고객 조직 사람이 한 일인가, 서비스 회사 쪽이 한 일인가" 를 먼저 가립니다.
+책임 공유의 반대편, 곧 서비스 회사 직원과 서비스 자체가 한 일도 고객 쪽 로그에 남는 경우가 있습니다. 조사에서는 레코드마다 "고객 조직 사람이 한 일인가, 서비스 회사 쪽이 한 일인가" 를 먼저 구분합니다.
 
 ### Microsoft 365 통합 감사 로그의 UserType
 
@@ -148,7 +148,7 @@ Slack 감사 로그에서 행위자 ID 가 `USLACKSECURITY` 이면 Slack 보안 
 
 ### 시각
 
-통합 감사 로그의 `CreationTime` 은 레코드가 만들어진 UTC 시각입니다[9]. Lockbox 승인 레코드의 시각은 승인·거부한 시각이고, 승인 뒤 엔지니어의 작업은 승인 시각부터 4시간 안에 일어나며, 엔지니어에게 주는 권한은 최대 4시간입니다[8]. 요청은 12시간 안에 응답하지 않으면 만료됩니다[8]. 그래서 `Microsoft Operator` 레코드는 가장 가까운 앞선 승인 레코드와 4시간 창으로 짝을 맞춰 봅니다. Google Workspace 의 Access Transparency 로그 이벤트는 몇 분 안에 들어옵니다(2026년 9월 문서 기준)[7]. 서비스별 시각 형식과 지연은 [클라우드 로그의 시각](../logging/timestamps.md)과 각 아티팩트 쪽에서 다룹니다.
+통합 감사 로그의 `CreationTime` 은 레코드가 만들어진 UTC 시각입니다[9]. Lockbox 승인 레코드의 시각은 승인·거부한 시각이고, 승인 뒤 엔지니어의 작업은 승인 시각부터 4시간 안에 일어나며, 엔지니어에게 주는 권한은 최대 4시간입니다[8]. 요청은 12시간 안에 응답하지 않으면 만료됩니다[8]. 그래서 `Microsoft Operator` 레코드는 가장 가까운 앞선 승인 레코드와 4시간 창으로 짝을 맞춰 봅니다. Google Workspace 의 Access Transparency 로그 이벤트는 몇 분 안에 들어옵니다(2026년 9월 문서 기준)[7]. 서비스별 시각 형식과 지연은 [클라우드 로그의 시각](../logging/timestamps.md)과 각 아티팩트 페이지에서 다룹니다.
 
 ## 함정
 

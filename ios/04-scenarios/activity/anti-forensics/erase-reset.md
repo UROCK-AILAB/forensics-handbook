@@ -11,7 +11,7 @@ nav_order: 1510
 
 ## 조사 질문
 
-이 기기를 초기화한 적이 있는지, 있다면 초기화한 시각이 사건의 어느 지점에 들어가는지를 묻습니다. 초기화 뒤 새 기기로 설정했는지, 백업에서 복원했는지도 함께 가려야 하고, 이 구분에 따라 볼 흔적이 달라집니다.
+이 기기를 초기화한 적이 있는지, 있다면 초기화한 시각이 사건의 어느 지점에 들어가는지를 묻습니다. 초기화 뒤 새 기기로 설정했는지, 백업에서 복원했는지도 함께 판별해야 하고, 이 구분에 따라 볼 흔적이 달라집니다.
 
 ## 초기화가 하는 일
 
@@ -21,9 +21,9 @@ nav_order: 1510
 
 ## 먼저 확인할 것
 
-아래 흔적은 iPhone X, iPhone SE(iOS 13.7), iPhone 6S(iOS 14.2) 에서 시험한 결과입니다 [1]. iOS 15 이후에도 같은지는 검체의 iOS 버전에서 다시 확인하고 씁니다.
+아래 흔적은 iPhone X, iPhone SE(iOS 13.7), iPhone 6S(iOS 14.2) 에서 시험한 결과입니다 [1]. iOS 15 이후에도 같은지는 분석 대상 기기의 iOS 버전에서 다시 확인하고 씁니다.
 
-수집 범위도 먼저 봅니다. 아래 표의 `.obliterated` 파일, containermanagerd 로그, `logd.0.log` 는 전체 파일 시스템 수집에서 얻는 파일이고 [1], 로컬 백업에 들어가는지는 검체에서 확인합니다. 로컬 백업만 있다면 plist 쪽 흔적이 중심이 됩니다.
+수집 범위도 먼저 봅니다. 아래 표의 `.obliterated` 파일, containermanagerd 로그, `logd.0.log` 는 전체 파일 시스템 수집에서 얻는 파일이고 [1], 로컬 백업에 들어가는지는 실제 백업으로 확인합니다. 로컬 백업만 있다면 plist 쪽 흔적이 중심이 됩니다.
 
 시간대도 확인합니다. 초기화 뒤 첫 부팅은 기본값 UTC-8(미국 태평양 시각)로 찍혀서 [1], 이 시각을 실제 현지 시각으로 착각하면 초기화 시점이 몇 시간씩 어긋납니다.
 
@@ -37,9 +37,9 @@ nav_order: 1510
 | 4 | containermanagerd 로그 | `/private/var/root/Library/Logs/MobileContainerManager/containermanagerd.log.0`, `.log.1` … | 숫자가 클수록 오래된 파일이고, 초기화 뒤 첫 부팅 기록에는 OS 빌드 정보가 빠져 있습니다 [1] | — |
 | 5 | logd 로그 | `/private/var/db/diagnostics/logd.0.log` | 시간대 변경과 종료가 남아서, containermanagerd 로그 시각을 UTC 로 바꾸는 데 씁니다 [1] | [통합 로그에서 찾을 것](../../../02-artifacts/logs/unified-log-events.md) |
 
-로컬 백업에서는 `com.apple.purplebuddy.plist` 가 HomeDomain `Library/Preferences/` 에 있고, 키로 `SetupState`(문자열), `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `GuessedCountry`(list), `SetupLastExit`(날짜), `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion`, `CKStartupTime` 이 있습니다. `GuessedCountry` 를 시각 근거로 쓰는 방법이 있지만 [1], 백업에서 이 키는 list 형식일 수 있고 list 안 어디에 시각이 들어 있는지는 공개 자료가 없어 검체에서 확인합니다.
+로컬 백업에서는 `com.apple.purplebuddy.plist` 가 HomeDomain `Library/Preferences/` 에 있고, 키로 `SetupState`(문자열), `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `GuessedCountry`(list), `SetupLastExit`(날짜), `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion`, `CKStartupTime` 이 있습니다. `GuessedCountry` 를 시각 근거로 쓰는 방법이 있지만 [1], 백업에서 이 키는 list 형식일 수 있고 list 안 어디에 시각이 들어 있는지는 실제 데이터로 확인해야 합니다.
 
-백업에는 이름으로 보아 복원·이전과 관련될 만한 값이 더 있습니다. 아래 값들은 뜻이 밝혀지지 않았고 초기화 판단에 쓸 수 있는지도 알려져 있지 않아서, 검체에서 다른 근거와 맞아떨어질 때만 보조로 씁니다.
+백업에는 이름으로 보면 복원·이전과 관련될 만한 값이 더 있습니다. 아래 값들은 뜻이 밝혀지지 않았고 초기화 판단에 쓸 수 있는지도 알려져 있지 않아서, 실제 데이터에서 다른 근거와 맞아떨어질 때만 보조로 씁니다.
 
 | 파일(백업 HomeDomain) | 키·표 이름 |
 |---|---|

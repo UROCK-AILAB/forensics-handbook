@@ -16,7 +16,7 @@ Copilot 은 새 Windows 11 PC 에 기본으로 깔려 있고, Copilot 키나 Win
 
 서비스는 프롬프트와 위치, 언어, 관련 설정을 써서 답을 만들고, 일부 시장에서는 대화 기록(저장한 메모리 포함)을 개인화에도 씁니다. 대화 데이터는 성능 감시, 오류 수정, 악용 방지, 서비스 제공과 개선에도 쓰지만, Copilot 앱에서 쓴 프롬프트·응답·파일 내용은 기반 모델 (foundation model) 학습에 쓰지 않습니다 [1][2][3]. 조사에서는 계정 쪽 기록을 받는 길과 기기에서 사용 사실을 찾는 길을 함께 봅니다.
 
-기기에 대화 사본이 남는지는 공식 문서에 나오지 않고, 공개 연구끼리도 결과가 다릅니다. 2025년 논문은 Copilot 이 Android 와 iOS 모두에서 대화를 브라우저 데이터와 함께 평문으로 저장하고, Android 기기에서 사용자 프롬프트·브라우저 데이터·위치 정보가 복구된다고 했습니다 [10]. 이 논문 초록에는 시험한 앱 판이 나오지 않습니다. 반대로 2026-04-20 에 Android 15 기기에서 뽑은 `com.microsoft.copilot` 폴더에는 대화 저장이 없었고, 그 폴더의 `be6e4c19699f4fdf9f8c0ec9f9b398ef.db` 는 `StorageRecord` 표(`blob` 칸)에 Microsoft 원격 측정 이벤트를 쌓는 대기열이었습니다 [11]. 다만 같은 LEAF 저장소의 README 는 이 앱을 "SQLite 안의 암호화한 JSON" 이라고 적어 문서끼리 어긋나므로, 이 결과는 보조 자료로만 봅니다. 앱 판에 따라 저장 방식이 바뀌었을 수 있으니, 검체에서 앱 판을 먼저 확인하고 폴더를 직접 열어 봅니다. 서버와 기기 가운데 어디에 무엇이 있는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
+기기에 대화 사본이 남는지는 공식 문서에 나오지 않고, 공개 연구끼리도 결과가 다릅니다. 2025년 논문은 Copilot 이 Android 와 iOS 모두에서 대화를 브라우저 데이터와 함께 평문으로 저장하고, Android 기기에서 사용자 프롬프트·브라우저 데이터·위치 정보가 복구된다고 했습니다 [10]. 이 논문 초록에는 시험한 앱 판이 나오지 않습니다. 반대로 2026-04-20 에 Android 15 기기에서 뽑은 `com.microsoft.copilot` 폴더에는 대화 저장이 없었고, 그 폴더의 `be6e4c19699f4fdf9f8c0ec9f9b398ef.db` 는 `StorageRecord` 표(`blob` 열)에 Microsoft 원격 측정 이벤트를 쌓는 대기열이었습니다 [11]. 다만 같은 LEAF 저장소의 README 는 이 앱을 "SQLite 안의 암호화한 JSON" 이라고 적어 문서끼리 어긋나므로, 이 결과는 보조 자료로만 봅니다. 앱 판에 따라 저장 방식이 바뀌었을 수 있으니, 분석 대상 기기에서 앱 판을 먼저 확인하고 폴더를 직접 열어 봅니다. 서버와 기기 가운데 어디에 무엇이 있는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
 
 회사에서 Microsoft Purview 를 쓰면 개인용 Copilot 대화도 회사 쪽에 남을 수 있습니다. Purview 보존 정책의 "Other AI apps" 위치에 "Microsoft Copilot (consumer version)" 이 들어 있고, 조직에 내용을 수집하는 정책(collection policy)이 있어야 프롬프트와 응답이 보존 대상이 됩니다 [9]. 자세한 내용은 [Microsoft Purview로 본 Copilot 기록](../../network-enterprise/purview-copilot.md)에서 다룹니다.
 
@@ -27,39 +27,39 @@ Copilot 은 새 Windows 11 PC 에 기본으로 깔려 있고, Copilot 키나 Win
 | 어디서 | 위치·식별 정보 | 앱 판 | 알려 주는 것 |
 |---|---|---|---|
 | 웹 | `copilot.microsoft.com` | 해당 없음(웹 서비스) | 브라우저 방문 기록으로 본 접속 사실 |
-| Windows | Microsoft Store 앱, AppLocker 규칙의 패키지 이름 `MICROSOFT.COPILOT` [6] | 공식 문서에 판 번호가 없어 검체의 패키지 정보로 확인 | 설치 흔적, 관리 정책, Copilot 키 설정 |
-| macOS | 번들 ID `com.microsoft.copilot-mac` [14] | Mac App Store 판 `25.7.440902001`(2026-09-25 기준) [14] | 앱 폴더 위치는 검체에서 확인 |
-| Android | 패키지 `com.microsoft.copilot` [12][13], 실행 액티비티 `com.microsoft.copilotn.MainActivity` [13] | 공개 자료에 판 번호가 없어 검체에서 확인 | 연구에 따라 평문 대화·프롬프트·위치(2025) [10] 또는 원격 측정 대기열만(2026-04) [11] |
-| iOS | App Store ID `id6472538445` [12], 번들 ID 는 공개 자료가 없어 검체에서 확인 | 공개 자료에 판 번호가 없어 검체에서 확인 | 평문 대화와 브라우저 데이터(2025) [10] |
+| Windows | Microsoft Store 앱, AppLocker 규칙의 패키지 이름 `MICROSOFT.COPILOT` [6] | 공식 문서에 판 번호가 없어 실제 기기의 패키지 정보로 확인 | 설치 흔적, 관리 정책, Copilot 키 설정 |
+| macOS | 번들 ID `com.microsoft.copilot-mac` [14] | Mac App Store 판 `25.7.440902001`(2026-09-25 기준) [14] | 앱 폴더 위치는 실제 기기에서 확인 |
+| Android | 패키지 `com.microsoft.copilot` [12][13], 실행 액티비티 `com.microsoft.copilotn.MainActivity` [13] | 공개 자료에 판 번호가 없어 실제 기기에서 확인 | 연구에 따라 평문 대화·프롬프트·위치(2025) [10] 또는 원격 측정 대기열만(2026-04) [11] |
+| iOS | App Store ID `id6472538445` [12], 번들 ID 는 공개 자료가 없어 실제 기기에서 확인 | 공개 자료에 판 번호가 없어 실제 기기에서 확인 | 평문 대화와 브라우저 데이터(2025) [10] |
 | 계정 | 개인정보 대시보드(`account.microsoft.com/privacy`), CSV 내보내기 [4][5] | 해당 없음 | 서버에 남은 프롬프트와 응답 |
 
 Android 패키지 이름(`copilot`)과 실행 액티비티의 접두어(`copilotn`)가 다르므로, 로그나 실행 기록을 찾을 때는 두 문자열을 모두 검색합니다 [13]. LEAPP 계열 도구(ALEAPP·iLEAPP·RLEAPP)에는 Copilot 전용 분석기가 없어서(2026-09-25 저장소 목록 기준) [16], 앱 폴더는 SQLite·캐시 파일을 직접 열어 봅니다.
 
-계정 내보내기 CSV 는 첫 줄이 `Conversation,Time,Author,Message` 이고, `Author` 값은 `Human` 과 `AI` 입니다. `Time` 칸에는 시간대 표시가 없고, 대화 ID 와 메시지 ID 도 없습니다. 이 형식은 2026년 7월 내보내기 파일 기준입니다 [15]. 줄 순서, BOM, 시각 해석은 [계정 데이터 내보내기](export.md)에서 다룹니다.
+계정 내보내기 CSV 는 첫 줄이 `Conversation,Time,Author,Message` 이고, `Author` 값은 `Human` 과 `AI` 입니다. `Time` 열에는 시간대 표시가 없고, 대화 ID 와 메시지 ID 도 없습니다. 이 형식은 2026년 7월 내보내기 파일 기준입니다 [15]. 줄 순서, BOM, 시각 해석은 [계정 데이터 내보내기](export.md)에서 다룹니다.
 
 앱 폴더를 직접 볼 때 필요한 공통 원리는 OS 별 핸드북을 따릅니다. Windows 는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html), Android 는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html), iOS 는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 봅니다.
 
-### 이름이 같은 회사용 앱 가리기
+### 이름이 같은 회사용 앱 구분하기
 
-Microsoft 는 회사용 앱에도 "Microsoft Copilot app" 이라는 이름을 씁니다. 예전 Microsoft 365 app 이 지금의 Microsoft Copilot app 이고 [6], 이 앱의 AUMID 는 `Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe!Microsoft.MicrosoftOfficeHub` 입니다 [8]. 앱 목록에 보이는 이름만으로는 소비자용인지 회사용인지 가릴 수 없으므로, 아래 식별자로 가립니다.
+Microsoft 는 회사용 앱에도 "Microsoft Copilot app" 이라는 이름을 씁니다. 예전 Microsoft 365 app 이 지금의 Microsoft Copilot app 이고 [6], 이 앱의 AUMID 는 `Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe!Microsoft.MicrosoftOfficeHub` 입니다 [8]. 앱 목록에 보이는 이름만으로는 소비자용인지 회사용인지 구분할 수 없으므로, 아래 식별자로 구분합니다.
 
 | 제품 | Windows | macOS | iOS |
 |---|---|---|---|
 | 소비자용 Microsoft Copilot | 패키지 `Microsoft.Copilot` [6] | `com.microsoft.copilot-mac` [14] | App Store `id6472538445` [12] |
 | 회사용 Microsoft Copilot app(옛 Microsoft 365 app) | 패키지 `Microsoft.MicrosoftOfficeHub` [8] | `com.microsoft.m365copilot` [14] | `com.microsoft.officemobile` [14] |
 
-macOS 의 `com.microsoft.m365copilot` 과 iOS 의 `com.microsoft.officemobile` 도 "Microsoft Copilot" 이라는 이름으로 배포됩니다 [14]. macOS 쪽은 Microsoft 365 Copilot 릴리스 노트로 이어져 회사용 앱임이 드러나지만, iOS 쪽은 이름과 판 번호만으로 가릴 수 없으니 검체의 앱 정보로 어느 쪽 앱인지 한 번 더 확인합니다 [14]. Copilot 키가 어느 앱을 여는지는 정책과 설정에 따라 달라지므로, 키 설정은 [Windows 앱](windows.md) 쪽에서 확인합니다.
+macOS 의 `com.microsoft.m365copilot` 과 iOS 의 `com.microsoft.officemobile` 도 "Microsoft Copilot" 이라는 이름으로 배포됩니다 [14]. macOS 쪽은 Microsoft 365 Copilot 릴리스 노트로 이어져 회사용 앱임이 드러나지만, iOS 쪽은 이름과 판 번호만으로 구분할 수 없으니 실제 기기의 앱 정보로 어느 쪽 앱인지 한 번 더 확인합니다 [14]. Copilot 키가 어느 앱을 여는지는 정책과 설정에 따라 달라지므로, 키 설정은 [Windows 앱](windows.md) 쪽에서 확인합니다.
 
 ## 읽는 순서
 
 1. [웹 브라우저 (Web)](web.md) — `copilot.microsoft.com` 방문 기록과 브라우저 저장소에서 볼 수 있는 것과 없는 것
-2. [Windows 앱 (Windows)](windows.md) — `Microsoft.Copilot` 패키지, Copilot 키와 관리 정책, 이름이 헷갈리는 제품 가리기
-3. [macOS 앱 (macOS)](macos.md) — `com.microsoft.copilot-mac` 앱과 검체에서 확인할 곳
+2. [Windows 앱 (Windows)](windows.md) — `Microsoft.Copilot` 패키지, Copilot 키와 관리 정책, 이름이 헷갈리는 제품 구분하기
+3. [macOS 앱 (macOS)](macos.md) — `com.microsoft.copilot-mac` 앱과 실제 기기에서 확인할 곳
 4. [Android 앱 (Android)](android.md) — `com.microsoft.copilot` 폴더, 논문과 공개 관찰이 서로 다른 점
-5. [iOS 앱 (iOS)](ios.md) — App Store 앱과 검체에서 확인할 곳
+5. [iOS 앱 (iOS)](ios.md) — App Store 앱과 실제 기기에서 확인할 곳
 6. [계정 데이터 내보내기 (Data Export)](export.md) — 개인정보 대시보드의 활동 기록, CSV 형식, 삭제
 
-기기 흔적만으로는 대화 내용을 알 수 없는 경우가 있어서, 어느 기기에서 썼는지 먼저 가린 뒤 계정 데이터 내보내기로 넘어가면 됩니다. 계정 데이터를 사용자 협조 없이 받아야 하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)을 봅니다.
+기기 흔적만으로는 대화 내용을 알 수 없는 경우가 있어서, 어느 기기에서 썼는지 먼저 확인한 뒤 계정 데이터 내보내기로 넘어가면 됩니다. 계정 데이터를 사용자 협조 없이 받아야 하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)을 봅니다.
 
 ## 함께 볼 페이지
 
@@ -68,7 +68,7 @@ macOS 의 `com.microsoft.m365copilot` 과 iOS 의 `com.microsoft.officemobile` �
 - [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) — 기기 기록을 지웠을 때 남는 접속 흔적
 - [계정 데이터 내보내기 형식](../../../01-foundations/storage-model/data-export-formats.md) — 서비스별 내보내기 형식 비교
 - [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md) — 보관과 삭제의 일반 원리
-- [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md) — 계정 기록과 실제 사용자 가리기
+- [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md) — 계정 기록과 실제 사용자 가려내기
 
 ## 참고 문헌
 

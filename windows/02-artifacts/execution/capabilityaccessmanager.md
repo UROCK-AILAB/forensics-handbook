@@ -83,7 +83,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없
 | `LastUsedTimeStart` | REG_QWORD, FILETIME | 그 앱이 장치를 쓰기 시작한 시각 | [2] |
 | `LastUsedTimeStop` | REG_QWORD, FILETIME | 그 앱이 장치 쓰기를 멈춘 시각 | [2] |
 | `LastUserAnnotatedLabel` | REG_DWORD (예: 2) | 공개 자료 없음 | |
-| `PersistedInDatabase` | REG_DWORD (예: 1) | 이름으로 보아 DB 에 옮겨 적었다는 표시로 보입니다 | |
+| `PersistedInDatabase` | REG_DWORD (예: 1) | 이름으로 짐작하면 DB 에 옮겨 적었다는 표시로 보입니다 | |
 
 - 스토어 앱 하위 키에는 `Value` (REG_SZ) 와 `LastSetTime` (REG_QWORD) 도 있습니다. `Value` 에는 `Allow` 나 `Prompt` 가 들어갑니다.
 - 한 번도 장치를 쓰지 않은 앱의 하위 키에는 `LastUsedTime` 값이 없습니다.
@@ -94,26 +94,26 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없
 
 - `Value` 는 설정 화면의 켬·끔으로 보입니다.
 - `LastSetTime` 은 그 설정을 바꾼 시각으로 보입니다.
-- 알려진 `Value` 는 `Allow` 와 `Prompt` 입니다. `Deny` 가 오는지는 공개 자료가 없어 검체에서 확인합니다.
+- 알려진 `Value` 는 `Allow` 와 `Prompt` 입니다. `Deny` 가 오는지는 실제 데이터로 확인해야 합니다.
 
 ### 데이터베이스 표
 
-아래 표 구조는 옛 파일 `CapabilityAccessManager (1).db` (2025년 4월 날짜) 의 것입니다. 지금 쓰는 DB 도 구조가 같은지는 검체에서 표 목록으로 확인합니다.
+아래 표 구조는 옛 파일 `CapabilityAccessManager (1).db` (2025년 4월 날짜) 의 것입니다. 지금 쓰는 DB 도 구조가 같은지는 실제 DB 의 표 목록으로 확인합니다.
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `NonPackagedUsageHistory` | ID, LastUsedTimeStart, LastUsedTimeStop, AccessBlocked, Capability, FileID, ProgramID, BinaryFullPath, UserSid, AppName, ServiceName, AccessGUID, Label |
 | `PackagedUsageHistory` | ID, LastUsedTimeStart, LastUsedTimeStop, AccessBlocked, Capability, PackageFamilyName, UserSid, AccessGUID, Label, AppName |
 | `NonPackagedIdentityRelationship` | ID, BinaryFullPath, FileID, ProgramID, LastObservedTime |
 | `NonPackagedGlobalPromptHistory` | ID, ShownTime, Capability, FileID, ProgramID, UserSid |
-| 문자열 사전 표 (칸은 ID, StringValue) | Capabilities, PackageFamilyNames, BinaryFullPaths, Users, FileIDs, ProgramIDs, AccessGUIDs, AppNames, ServiceNames |
+| 문자열 사전 표 (열은 ID, StringValue) | Capabilities, PackageFamilyNames, BinaryFullPaths, Users, FileIDs, ProgramIDs, AccessGUIDs, AppNames, ServiceNames |
 
-- 사용 기록 표의 Capability, BinaryFullPath, UserSid, FileID 같은 칸에는 숫자 ID 가 들어 있고, 실제 문자열은 같은 이름의 사전 표에서 찾습니다. 예를 들어 Capability 칸의 숫자는 `Capabilities` 표의 ID 입니다.
+- 사용 기록 표의 Capability, BinaryFullPath, UserSid, FileID 같은 열에는 숫자 ID 가 들어 있고, 실제 문자열은 같은 이름의 사전 표에서 찾습니다. 예를 들어 Capability 열의 숫자는 `Capabilities` 표의 ID 입니다.
 - 사전 표 값의 예를 들면, `Capabilities` 에는 `location`, `BinaryFullPaths` 에는 `C:\Windows\System32\dllhost.exe`, `Users` 에는 `S-1-5-21-…-500` 모양의 SID 가 들어갑니다.
 - `FileIDs` 와 `ProgramIDs` 의 값은 `0000` 뒤에 16진수 40자가 붙은 44자 문자열입니다. [AmCache](amcache-hve/index.md) 의 FileId·ProgramId 와 모양이 같습니다. 파일의 SHA-1 인지는 밝혀지지 않았습니다.
-- 시각 칸에는 FILETIME 정수가 들어 있습니다.
+- 시각 열에는 FILETIME 정수가 들어 있습니다.
 
-레지스트리에는 앱마다 마지막 한 쌍만 남습니다. DB 는 사용할 때마다 행을 쌓을 수 있는 표 모양입니다. 여러 번 쓴 기록이 실제로 여러 행으로 남는지는 검체의 DB 에서 확인합니다.
+레지스트리에는 앱마다 마지막 한 쌍만 남습니다. DB 는 사용할 때마다 행을 쌓을 수 있는 표 모양입니다. 여러 번 쓴 기록이 실제로 여러 행으로 남는지는 실제 DB 에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -142,12 +142,12 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없
 | `LastUsedTimeStart` | 앱 하위 키 | 앱이 장치를 쓰기 시작한 때 | FILETIME, UTC |
 | `LastUsedTimeStop` | 앱 하위 키 | 앱이 장치 쓰기를 멈춘 때 | FILETIME, UTC |
 | `LastSetTime` | 권한 키, NonPackaged 키, 스토어 앱 하위 키 | 설정을 바꾼 때로 보입니다 | REG_QWORD |
-| DB 의 시각 칸 | `LastUsedTimeStart`, `LastUsedTimeStop`, `LastObservedTime`, `ShownTime` | 칸 이름이 가리키는 때로 보입니다 | FILETIME 정수 |
+| DB 의 시각 열 | `LastUsedTimeStart`, `LastUsedTimeStop`, `LastObservedTime`, `ShownTime` | 열 이름이 가리키는 때로 보입니다 | FILETIME 정수 |
 
 - 시작·끝 값은 FILETIME 이므로 UTC 로 읽습니다. UTC 로 풀면 시작과 끝의 간격이 몇 초에서 몇 시간으로 나옵니다. 예를 들어 01:16:34 UTC 에 시작해 02:29:28 UTC 에 끝난 항목이 있습니다.
 - 옛 DB 파일의 값 133897659145807372 는 2025-04-22 03:25:14 UTC 입니다.
 - 레지스트리에는 앱마다 시작·끝 한 쌍만 있습니다. 새로 쓰면 이 한 쌍을 덮어쓰는 것으로 보입니다.
-- 장치를 쓰는 동안 `LastUsedTimeStop` 이 0 인지는 공개 자료가 없어 검체에서 확인합니다.
+- 장치를 쓰는 동안 `LastUsedTimeStop` 이 0 인지는 실제 데이터로 확인해야 합니다.
 - 옛 DB 파일의 `NonPackagedUsageHistory` 에서 `AccessBlocked=1` 인 행은 `LastUsedTimeStart` 가 0 이고 `LastUsedTimeStop` 에만 시각이 있습니다. 막힌 접근은 시작 시각 없이 남는 것으로 보입니다. 이런 행이 4개뿐인 예라 일반화하기 어렵습니다.
 - FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
@@ -171,7 +171,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없
 
 ### 헥스로 한 번
 
-아래는 FILETIME 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 FILETIME 명세를 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 `LastUsedTimeStart` 값 (REG_QWORD, 8바이트) 입니다.
 
@@ -219,8 +219,8 @@ LEFT JOIN BinaryFullPaths p ON p.ID = h.BinaryFullPath
 LEFT JOIN Users           u ON u.ID = h.UserSid;
 ```
 
-- 쿼리를 돌리기 전에 표 목록과 칸 이름이 위와 같은지 확인합니다.
-- 시각 칸은 FILETIME 정수이므로 따로 풉니다.
+- 쿼리를 돌리기 전에 표 목록과 열 이름이 위와 같은지 확인합니다.
+- 시각 열은 FILETIME 정수이므로 따로 풉니다.
 - 도구가 보여 준 시각이 UTC 인지, 분석 PC 의 현지 시각인지 확인합니다.
 - 값 한두 개는 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
@@ -242,7 +242,7 @@ LEFT JOIN Users           u ON u.ID = h.UserSid;
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 Windows 10 이후의 이미지를 골라 다음을 풀어 봅니다.
+NIST CFReDS 같은 공개 자료 가운데 Windows 10 이후의 이미지를 골라 다음을 풀어 봅니다.
 
 1. 사용자 NTUSER.DAT 와 SOFTWARE 하이브의 `ConsentStore\webcam`, `ConsentStore\microphone` 아래에 앱 하위 키가 있습니까? 어느 하이브에 시각 값이 있습니까?
 2. NonPackaged 아래 실행 파일 경로를 모두 적어 봅니다. 원격 도구나 화상 회의 프로그램이 있습니까?

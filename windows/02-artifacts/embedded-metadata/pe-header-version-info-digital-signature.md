@@ -8,7 +8,7 @@ nav_order: 3020
 
 ## 한 줄 요약
 
-Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 서명이 들어 있습니다. PE 헤더의 TimeDateStamp 는 빌드 시각처럼 보이지만, Windows 10 을 재현 가능한 빌드로 만든 뒤로 Windows 구성 파일에서는 시각이 아니라 해시입니다(참고 3). 같은 Microsoft 파일이라도 Office 의 `WINWORD.EXE` 처럼 그럴듯한 시각이 든 파일도 있습니다. 버전 정보는 개발자가 적는 값입니다(참고 2). 서명이 유효하면 서명이 덮는 바이트가 서명 뒤로 바뀌지 않았다는 것을 알 수 있습니다. 세 가지를 함께 봐야 "이 파일이 무엇이고 언제 만들었나" 를 기록이 말하는 만큼 적을 수 있습니다.
+Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 서명이 들어 있습니다. PE 헤더의 TimeDateStamp 는 빌드 시각처럼 보이지만, Windows 10 을 재현 가능한 빌드로 만든 뒤로 Windows 구성 파일에서는 시각이 아니라 해시입니다(참고 3). 같은 Microsoft 파일이라도 Office 의 `WINWORD.EXE` 처럼 그럴듯한 시각이 든 파일도 있습니다. 버전 정보는 개발자가 적는 값입니다(참고 2). 서명이 유효하면 서명이 덮는 바이트가 서명 뒤로 바뀌지 않았다는 것을 알 수 있습니다. 세 가지를 함께 봐야 "이 파일이 무엇이고 언제 만들었나" 를 기록으로 확인되는 만큼 적을 수 있습니다.
 
 > 아래 예시 값은 Windows 11 빌드 26200 의 `C:\Windows\System32\notepad.exe`, `C:\Windows\System32\kernel32.dll` 과 설치된 `git-bash.exe`·`python.exe`·`WINWORD.EXE` 의 값입니다. 서명 결과는 PowerShell 5.1 의 `Get-AuthenticodeSignature` 기준이고, 시간대는 KST (UTC+9) 입니다.
 
@@ -21,7 +21,7 @@ Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 �
 | 버전 정보 (VERSIONINFO) | 개발자가 리소스에 적습니다(참고 2) | 파일·제품 버전, 원래 파일 이름, 회사 이름, 설명 |
 | 디지털 서명 (Authenticode) | 서명한 쪽 | 서명자, 서명 뒤로 바뀌지 않았는지, 타임스탬프 |
 
-다른 기록이 이 값들을 옮겨 적습니다. Sysmon 이벤트의 FileVersion·Description·Product·Company·OriginalFileName 은 실행 파일 안의 정보에서 오며, 칸의 뜻은 [프로세스 생성 (이벤트 1)](../event-logs/sysmon/1.md) 에서 다룹니다. Amcache 에 옮겨 적힌 값은 [실행 파일 항목 (InventoryApplicationFile)](../execution/amcache-hve/inventoryapplicationfile.md) 에서 다룹니다.
+다른 기록이 이 값들을 옮겨 적습니다. Sysmon 이벤트의 FileVersion·Description·Product·Company·OriginalFileName 은 실행 파일 안의 정보에서 오며, 필드의 뜻은 [프로세스 생성 (이벤트 1)](../event-logs/sysmon/1.md) 에서 다룹니다. Amcache 에 옮겨 적힌 값은 [실행 파일 항목 (InventoryApplicationFile)](../execution/amcache-hve/inventoryapplicationfile.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -39,7 +39,7 @@ Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 �
 
 MS-DOS 스텁의 0x3C 위치에 PE 서명까지의 파일 오프셋이 있고, 그 오프셋에 4바이트 서명 `PE\0\0`(P, E, 0, 0)이 있습니다. 서명 바로 뒤에 COFF 파일 헤더가 옵니다.
 
-| COFF 헤더 안 위치 | 크기 | 칸 |
+| COFF 헤더 안 위치 | 크기 | 필드 |
 |---|---|---|
 | 0 | 2 | Machine |
 | 2 | 2 | NumberOfSections |
@@ -51,7 +51,7 @@ MS-DOS 스텁의 0x3C 위치에 PE 서명까지의 파일 오프셋이 있고, �
 
 - TimeDateStamp 는 1970-01-01 00:00 부터 센 초의 아래 32비트입니다. C 런타임의 time_t 값이며, 형식 정의로는 파일을 만든 때를 나타냅니다(참고 1). 푸는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - Characteristics 의 0x0002 (IMAGE_FILE_EXECUTABLE_IMAGE) 는 실행할 수 있는 이미지라는 뜻입니다. 0x2000 (IMAGE_FILE_DLL) 은 DLL 이라는 뜻입니다.
-- COFF 헤더 뒤에 선택적 헤더 (Optional Header) 가 옵니다. 첫 칸 Magic 이 0x10B 면 PE32, 0x20B 면 PE32+ 입니다.
+- COFF 헤더 뒤에 선택적 헤더 (Optional Header) 가 옵니다. 첫 필드 Magic 이 0x10B 면 PE32, 0x20B 면 PE32+ 입니다.
 - CheckSum 은 선택적 헤더의 오프셋 64 에 있는 4바이트입니다. 계산법은 IMAGHELP.DLL 에 있습니다. 로드할 때 이 값을 검사하는 것은 모든 드라이버, 부팅 때 읽는 DLL, 중요한 Windows 프로세스가 읽는 DLL 입니다.
 - Subsystem 값 2 는 Windows GUI, 3 은 Windows 콘솔 (CUI) 입니다.
 
@@ -103,7 +103,7 @@ VERSIONINFO 리소스는 파일 버전, 대상 OS, 원래 파일 이름 같은 �
 
 고정 정보입니다.
 
-| 칸 | 내용 |
+| 필드 | 내용 |
 |---|---|
 | FILEVERSION | 16비트 숫자 4개를 32비트 값 2개에 담습니다. 예: `FILEVERSION 3,10,0,61` → 0x0003000A, 0x0000003D |
 | PRODUCTVERSION | 같은 방식으로 적은 제품 버전 |
@@ -132,13 +132,13 @@ StringFileInfo 에는 미리 정한 이름이 있습니다.
 | `WINWORD.EXE` | `000004E4` | Translation 0x0000·0x04E4. LegalTrademarks1·LegalTrademarks2 처럼 미리 정하지 않은 이름도 있습니다 |
 
 - 다섯 파일 모두 VS_FIXEDFILEINFO 서명이 0xFEEF04BD 입니다.
-- 다섯 파일 모두 FileDate 칸이 0 입니다.
+- 다섯 파일 모두 FileDate 필드가 0 입니다.
 
 ### 디지털 서명: WIN_CERTIFICATE (참고 1)
 
 Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집니다.
 
-| 위치 | 크기 | 칸 | 값 |
+| 위치 | 크기 | 필드 | 값 |
 |---|---|---|---|
 | 0 | 4 | dwLength | 항목 길이 |
 | 4 | 2 | wRevision | 0x0100 = WIN_CERT_REVISION_1_0, 0x0200 = WIN_CERT_REVISION_2_0 |
@@ -149,7 +149,7 @@ Certificate Table 이 가리키는 곳에는 WIN_CERTIFICATE 항목이 이어집
 
 서명이 있는 파일 네 개(`kernel32.dll`, `git-bash.exe`, `WINWORD.EXE`, `python.exe`)의 모양입니다.
 
-인증서 표는 파일 맨 끝에 있습니다. 표가 끝나는 곳이 파일 끝이고, 시작 오프셋은 8의 배수입니다. dwLength 는 디렉터리 크기와 같고 wRevision 은 0x0200, wCertificateType 은 0x0002 입니다. CheckSum 칸은 네 파일 모두 다시 계산한 값과 같습니다.
+인증서 표는 파일 맨 끝에 있습니다. 표가 끝나는 곳이 파일 끝이고, 시작 오프셋은 8의 배수입니다. dwLength 는 디렉터리 크기와 같고 wRevision 은 0x0200, wCertificateType 은 0x0002 입니다. CheckSum 필드는 네 파일 모두 다시 계산한 값과 같습니다.
 
 ### 서명이 덮는 범위
 
@@ -270,7 +270,7 @@ Authenticode 타임스탬프는 PKCS #7 연서명 (countersignature) 이며, 서
 
 ### 헥스로 한 번
 
-아래 바이트는 참고 1 의 구조에 맞춰 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `??` 는 이 예시에서 다루지 않는 바이트입니다.
+아래 바이트는 참고 1 의 구조에 맞춰 만든 예시입니다. 실제 파일에서 뽑은 값이 아닙니다. `??` 는 이 예시에서 다루지 않는 바이트입니다.
 
 ```
 오프셋   00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -335,7 +335,7 @@ Authenticode 타임스탬프는 PKCS #7 연서명 (countersignature) 이며, 서
 4. 그 파일의 TimeDateStamp, 타임스탬프 genTime, 파일 시스템 시각을 나란히 놓아 보십시오. 순서가 맞습니까?
 5. 시스템 실행 파일 하나를 다른 이름으로 복사해 버전 정보의 OriginalFilename 과 비교해 보십시오.
 
-**NIST CFReDS 같은 공개 검체의 Windows 디스크 이미지**로도 풀어 봅니다.
+**NIST CFReDS 같은 공개 데이터의 Windows 디스크 이미지**로도 풀어 봅니다.
 
 1. 사용자 폴더(받은 파일, 임시 폴더 등)에 있는 실행 파일을 모아 파일 안 서명이 있는 것과 없는 것으로 나눠 보십시오.
 2. 서명이 없는 파일의 OriginalFilename 과 실제 파일 이름이 다른 것이 있습니까?

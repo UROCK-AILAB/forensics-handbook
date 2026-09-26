@@ -12,7 +12,7 @@ FaceTime 통화는 내용이 종단 간 암호화되어 기기에서 찾을 흔�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-FaceTime 영상·음성 통화는 전화 통화와 같은 통화 기록 데이터베이스(`CallHistory.storedata`)의 `ZCALLRECORD` 표에 한 행씩 남고, 통화 종류 칸 `ZCALLTYPE` 값으로 FaceTime 영상인지 음성인지 가립니다 [1]. 표 구조와 값 목록, 시각 해석은 [통화 기록](call-history.md) 에서 다루고, 이 페이지는 FaceTime 에서 달라지는 점과 통화 기록 밖의 흔적을 다룹니다.
+FaceTime 영상·음성 통화는 전화 통화와 같은 통화 기록 데이터베이스(`CallHistory.storedata`)의 `ZCALLRECORD` 표에 한 행씩 남고, 통화 종류 열 `ZCALLTYPE` 값으로 FaceTime 영상인지 음성인지 구분합니다 [1]. 표 구조와 값 목록, 시각 해석은 [통화 기록](call-history.md) 에서 다루고, 이 페이지는 FaceTime 에서 달라지는 점과 통화 기록 밖의 흔적을 다룹니다.
 
 통화 내용 자체는 흔적으로 기대하기 어렵습니다. FaceTime 음성·영상 내용은 종단 간 암호화되어 보내는 사람과 받는 사람만 볼 수 있습니다 [2]. 연결은 Apple 푸시 알림 서비스(APNs)로 시작하고, 두 기기가 서로의 신원 인증서를 확인해 세션마다 공유 비밀을 만든 뒤, STUN·ICE 로 되도록 기기끼리 바로(P2P) 잇습니다 [2]. 첫 연결은 Apple 서버가 기기 사이의 패킷을 중계해 이어 줍니다 [2]. 그룹 FaceTime 은 Apple 신원 서비스(IDS) 위에서 키를 정하고 전방 보안(forward secrecy)을 써서, 기기가 뚫려도 지난 통화 내용이 새지 않으며 참여자가 들어오면 새 미디어 키를 만듭니다 [2]. 그래서 조사에서는 "누구와, 언제, 얼마나" 를 보여 주는 메타데이터를 찾는 데 힘을 씁니다. 통화를 녹음했다면 이야기가 달라지는데, 이는 [음성 사서함과 통화 녹음](voicemail-recording.md) 에서 다룹니다.
 
@@ -26,20 +26,20 @@ FaceTime 영상·음성 통화는 전화 통화와 같은 통화 기록 데이�
 |---|---|
 | `AppDomain-com.apple.facetime` | FaceTime 앱. 번들 ID 는 `com.apple.facetime` 으로 읽을 수 있습니다 |
 | `AppDomainGroup-group.com.apple.FaceTime` | 앱 그룹 |
-| `AppDomain-com.apple.FaceTimeLinkTrampoline` | 이름으로 보아 FaceTime 링크 처리 관련 |
+| `AppDomain-com.apple.FaceTimeLinkTrampoline` | 이름으로 보면 FaceTime 링크 처리 관련 |
 | `AppDomainPlugin-com.apple.DiagnosticExtensions.FaceTime` | 진단 확장 |
 | `AppDomainPlugin-com.apple.mobilecal.FacetimeExtension` | 캘린더 확장 |
 | `AppDomainPlugin-com.apple.TelephonyUtilities.FaceTimeMessageStoreIntentsExtension` | FaceTime 메시지 저장소 관련 확장 |
 
-FaceTime 링크로 만든 통화의 기록이 어디에 남는지는 공개 자료가 없어 검체에서 확인합니다. 번들 ID 와 도메인 이름의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
+FaceTime 링크로 만든 통화의 기록이 어디에 남는지는 실제 데이터로 확인해야 합니다. 번들 ID 와 도메인 이름의 관계는 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
 
-버전 차이를 FaceTime 만 따로 정리할 자료는 없고, 통화 기록 표의 버전별 칸 변화는 [통화 기록](call-history.md) 을 봅니다.
+버전 차이를 FaceTime 만 따로 정리할 자료는 없고, 통화 기록 표의 버전별 열 변화는 [통화 기록](call-history.md) 을 봅니다.
 
 ## 구조
 
 ### 통화 기록 안의 FaceTime 행
 
-FaceTime 행을 읽을 때 [통화 기록](call-history.md) 의 칸 설명에 더해 볼 점은 두 가지입니다. 첫째, `ZFACE_TIME_DATA` 칸이 따로 있지만 [1] 무엇이 담기는지 밝힌 공개 자료가 없으니 값이 있으면 원본 바이트를 그대로 보존해 둡니다. 둘째, 그룹 FaceTime 처럼 여럿이 한 통화는 `ZADDRESS` 한 칸으로 드러나지 않아서 참여자 표를 이어 읽어야 하며, 그 방법은 [통화 기록](call-history.md) 의 그룹 통화 설명을 따릅니다 [3]. 상대가 전화번호가 아닌 계정 주소(이메일)로 기록될 수도 있으니 검체의 `ZADDRESS` 값 모양을 직접 봅니다.
+FaceTime 행을 읽을 때 [통화 기록](call-history.md) 의 열 설명에 더해 볼 점은 두 가지입니다. 첫째, `ZFACE_TIME_DATA` 열이 따로 있지만 [1] 무엇이 담기는지 밝힌 공개 자료가 없으니 값이 있으면 원본 바이트를 그대로 보존해 둡니다. 둘째, 그룹 FaceTime 처럼 여럿이 한 통화는 `ZADDRESS` 값 하나로 드러나지 않아서 참여자 표를 이어 읽어야 하며, 그 방법은 [통화 기록](call-history.md) 의 그룹 통화 설명을 따릅니다 [3]. 상대가 전화번호가 아닌 계정 주소(이메일)로 기록될 수도 있으니 실제 데이터의 `ZADDRESS` 값 모양을 직접 봅니다.
 
 ### 계정과 설정 파일
 
@@ -63,7 +63,7 @@ plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/pli
 
 **증명하지 못하는 것.** 통화에서 오간 말과 화면은 종단 간 암호화되어 [2] 기기 흔적으로 되살릴 수 있다고 기대하지 않습니다. 영상 통화 행이 있다고 실제로 카메라가 켜져 있었는지, 누가 화면 앞에 있었는지도 알 수 없습니다. 그룹 통화에서 참여자 표를 잇지 않으면 상대가 한 명인 것처럼 잘못 읽을 수 있습니다 [3].
 
-보고서에는 "이 기기의 통화 기록에 FaceTime 영상 통화로 분류된 행이 있고, 상대 주소는 X, 시작 시각은 T, 통화 시간은 N초로 기록되어 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 기기의 통화 기록에 FaceTime 영상 통화로 분류된 행이 있고, 상대 주소는 X, 시작 시각은 T, 통화 시간은 N초로 기록되어 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -73,14 +73,14 @@ FaceTime 행의 시각도 통화 기록의 `ZDATE` 로, Mac 절대 시각(2001-0
 
 - **"FaceTime 앱 DB" 를 찾는 헛수고.** 로컬 백업에는 FaceTime 전용 통화 DB 가 없습니다. 통화 기록은 통화 기록 DB 에서 찾습니다.
 - **음성 통화 분류 누락.** FaceTime 음성 통화는 영상과 다른 `ZCALLTYPE` 값이라서 [1], 영상 값만 걸러 내면 음성 통화를 놓칩니다.
-- **서버 중계와 P2P.** 연결 방식은 보안 설계의 설명이고 [2], 특정 통화가 어느 경로로 이어졌는지 기기 흔적에서 가리는 방법은 알려져 있지 않습니다.
+- **서버 중계와 P2P.** 연결 방식은 보안 설계의 설명이고 [2], 특정 통화가 어느 경로로 이어졌는지 기기 흔적에서 구분하는 방법은 알려져 있지 않습니다.
 - **통화 기록 수집 범위.** 암호화하지 않은 백업에는 통화 기록 DB 자체가 빠질 수 있습니다. FaceTime 행이 안 보이면 수집 범위부터 확인합니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 SQLite 파일 형식 명세로 만든 예시이고 실제 검체 값이 아닙니다. `ZCALLTYPE` 처럼 작은 정수는 레코드 머리에 형식 번호 1(1바이트 정수)로 적히고 본문에 한 바이트로 들어갑니다.
+아래는 SQLite 파일 형식 명세로 만든 예시이고 실제 기기의 값이 아닙니다. `ZCALLTYPE` 처럼 작은 정수는 레코드 머리에 형식 번호 1(1바이트 정수)로 적히고 본문에 한 바이트로 들어갑니다.
 
 ```
 레코드 머리의 이 칸 형식 번호 : 01        (1바이트 정수)
@@ -114,7 +114,7 @@ iLEAPP 의 통화 기록 모듈 결과에서 같은 종류의 행 수가 맞는�
 
 ## 실습
 
-NIST CFReDS 등에 공개된 iOS 검체로 풀어 봅니다.
+NIST CFReDS 등에 공개된 iOS 시험 데이터로 풀어 봅니다.
 
 1. 통화 기록에서 FaceTime 영상 행과 음성 행은 각각 몇 개입니까?
 2. FaceTime 행의 `ZADDRESS` 는 어떤 모양입니까? 전화번호 말고 다른 형식이 있습니까?

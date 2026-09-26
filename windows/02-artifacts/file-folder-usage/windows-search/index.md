@@ -66,7 +66,7 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 
 1. [위치와 형식 (Windows.edb·Windows.db)](windows-edb-windows-db.md) — 색인 폴더에서 무엇을 모을지 정리합니다. Windows 버전별 파일과 표 목록, 바이트 순서, Windows 11 의 `AesGcm1 SQLite3` 헤더를 다룹니다.
 2. [파일 속성 되살리기 (PropertyStore)](propertystore.md) — 파일마다 남은 이름·경로·크기·시각을 읽습니다. 압축된 문자열, IE·Edge 주소, 활동 기록, GatherTime 의 뜻도 다룹니다.
-3. [수집 기록 (SystemIndex_Gthr)](systemindex-gthr.md) — 수집기가 파일을 어떻게 찾아 처리하는지 설명합니다. 수집 기록 표의 칸과 GatherLogs 글자 로그를 읽는 법을 다룹니다.
+3. [수집 기록 (SystemIndex_Gthr)](systemindex-gthr.md) — 수집기가 파일을 어떻게 찾아 처리하는지 설명합니다. 수집 기록 표의 열과 GatherLogs 글자 로그를 읽는 법을 다룹니다.
 4. [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) — 지금 디스크에 없는 파일의 기록을 찾습니다. WAL 파일과 지운 문서 번호 표를 다루고, 라이브 수집 때 조심할 점을 짚습니다.
 5. [색인 해석 함정 (색인 범위·재구성)](pitfalls.md) — "색인에 없다" 를 어디까지 말할 수 있는지 정리합니다. 색인 범위 규칙, 색인 방식, 초기화, 사용자 구분 문제를 다룹니다.
 

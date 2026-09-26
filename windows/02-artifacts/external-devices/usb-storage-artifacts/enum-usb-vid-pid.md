@@ -13,7 +13,7 @@ SYSTEM 하이브의 `Enum\USB` 키에는 이 PC 에 연결된 USB 장치가 스�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-USB 장치를 꽂으면 PC 는 먼저 장치에서 장치 설명자 (Device Descriptor) 를 받습니다. 장치 설명자에는 제조사 번호 (Vendor ID, VID), 제품 번호 (Product ID, PID), 장치 개정 번호 (bcdDevice) 가 들어 있고, 일련번호 문자열이 있는지는 `iSerialNumber` 칸이 알려 줍니다. Windows 의 USB 허브 드라이버는 VID·PID·개정 번호로 장치 ID (Device ID) 를 만들고, 플러그 앤 플레이 관리자 (PnP Manager) 는 장치 ID 에 인스턴스 ID (Instance ID) 를 이어 붙여 장치 인스턴스 ID (Device Instance ID) 를 만듭니다. 장치 인스턴스 ID 는 재부팅해도 바뀌지 않으며, Windows 는 이 값을 경로로 삼아 `Enum` 아래에 장치 키를 만듭니다.
+USB 장치를 꽂으면 PC 는 먼저 장치에서 장치 설명자 (Device Descriptor) 를 받습니다. 장치 설명자에는 제조사 번호 (Vendor ID, VID), 제품 번호 (Product ID, PID), 장치 개정 번호 (bcdDevice) 가 들어 있고, 일련번호 문자열이 있는지는 `iSerialNumber` 필드로 알 수 있습니다. Windows 의 USB 허브 드라이버는 VID·PID·개정 번호로 장치 ID (Device ID) 를 만들고, 플러그 앤 플레이 관리자 (PnP Manager) 는 장치 ID 에 인스턴스 ID (Instance ID) 를 이어 붙여 장치 인스턴스 ID (Device Instance ID) 를 만듭니다. 장치 인스턴스 ID 는 재부팅해도 바뀌지 않으며, Windows 는 이 값을 경로로 삼아 `Enum` 아래에 장치 키를 만듭니다.
 
 VID 는 USB 표준 단체 (USB-IF) 가 제조사에 나눠 주고, PID 는 제조사가 제품마다 정합니다.
 
@@ -31,9 +31,9 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 - 이미지에서 꺼낸 하이브에는 `CurrentControlSet` 이 없습니다. `Select` 키에서 쓰던 컨트롤셋 번호를 먼저 확인합니다. → [컨트롤셋 고르기](../../../01-foundations/database-log-formats/registry-hive/controlset-select.md)
 - `vvvv`·`pppp` 는 16진수 네 자리입니다.
 - `MI_zz` 의 `zz` 는 인터페이스 번호입니다.
-- 키 이름을 비교할 때는 대소문자를 가리지 않습니다.
+- 키 이름을 비교할 때는 대소문자를 구분하지 않습니다.
 
-`Enum` 트리는 운영체제 전용이고 구조가 바뀔 수 있으므로 값 이름과 하위 키는 검체의 Windows 버전에서 직접 확인합니다.
+`Enum` 트리는 운영체제 전용이고 구조가 바뀔 수 있으므로 값 이름과 하위 키는 분석 대상의 Windows 버전에서 직접 확인합니다.
 
 | 항목 | Windows 버전 | 비고 |
 |---|---|---|
@@ -68,7 +68,7 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 | 값 | 형식 | 읽는 법 |
 |---|---|---|
 | `HardwareID` | REG_MULTI_SZ | `USB\VID_vvvv&PID_pppp&REV_rrrr` 와 `USB\VID_vvvv&PID_pppp` 가 들어 있습니다. 개정 번호는 여기서 봅니다. |
-| `CompatibleIDs` | REG_MULTI_SZ | 클래스 코드가 들어 있습니다. 장치 종류를 가리는 데 씁니다. |
+| `CompatibleIDs` | REG_MULTI_SZ | 클래스 코드가 들어 있습니다. 장치 종류를 구분하는 데 씁니다. |
 | `Service` | REG_SZ | 이 장치에 붙은 드라이버 서비스입니다. 예: `USBSTOR`, `UASPStor`, `usbccgp`, `HidUsb` |
 | `DeviceDesc`·`Mfg` | REG_SZ | 드라이버 설치 파일 (INF) 이 정한 이름과 제조사입니다. `@usb.inf,...;표시 문자열` 처럼 INF 참조 뒤에 표시 문자열이 붙기도 합니다. |
 | `ClassGUID`·`Class` | REG_SZ | 장치 설치 클래스입니다. → [GUID 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) |
@@ -115,7 +115,7 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 - 겉에 찍힌 상표를 증명하지 않습니다. VID·PID·일련번호는 장치 펌웨어가 스스로 보고한 값입니다. 펌웨어를 고친 장치는 다른 번호를 댈 수 있습니다.
 - 키가 없다고 연결한 적이 없다는 뜻은 아닙니다. 흔적 정리, 재설치, 초기화 뒤에는 키가 없을 수 있습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다.
 예: "SYSTEM 하이브 `ControlSet001\Enum\USB\VID_1234&PID_5678` 아래에 인스턴스 ID 가 `ABC0123456789` 인 장치 키가 있다. 이 키의 `Service` 값은 `USBSTOR` 이다." (값은 설명용으로 만든 예시입니다.)
 
 ## 시각 해석
@@ -143,7 +143,7 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 
 **1) 장치 설명자에서 키 이름으로**
 
-아래 18바이트는 명세의 구조로 만든 예시이고 실제 검체에서 나온 값이 아닙니다. 장치 설명자는 디스크에 저장되지 않으며, 레지스트리 값이 어디서 왔는지 보여 주려고 넣었습니다.
+아래 18바이트는 명세의 구조로 만든 예시이고 실제 데이터에서 나온 값이 아닙니다. 장치 설명자는 디스크에 저장되지 않으며, 레지스트리 값이 어디서 왔는지 보여 주려고 넣었습니다.
 
 ```text
 12 01 00 02 00 00 00 40 34 12 78 56 00 01 01 02 03 01
@@ -166,7 +166,7 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 | 0x10 | 1 | iSerialNumber | 0x03 | 일련번호 문자열이 있다는 뜻입니다. 인스턴스 ID 가 됩니다. |
 | 0x11 | 1 | bNumConfigurations | 0x01 | — |
 
-2바이트 칸은 리틀 엔디언이라서 `34 12` 는 0x1234 로 읽습니다. `iSerialNumber` 가 0 이면 일련번호 문자열이 없고, 이때 Windows 는 인스턴스 ID 를 스스로 만듭니다.
+2바이트 필드는 리틀 엔디언이라서 `34 12` 는 0x1234 로 읽습니다. `iSerialNumber` 가 0 이면 일련번호 문자열이 없고, 이때 Windows 는 인스턴스 ID 를 스스로 만듭니다.
 
 **2) `HardwareID` 값**
 
@@ -198,7 +198,7 @@ SYSTEM\ControlSet00X\Enum\USB\VID_vvvv&PID_pppp&MI_zz\<인스턴스 ID>    (복�
 3. 인스턴스 ID 마다 일련번호인지, 시스템이 만든 값인지 적습니다.
 4. `Service`·`CompatibleIDs` 로 장치 종류를 적습니다.
 5. `ContainerID` 가 같은 키끼리 묶어 물리 장치 단위로 정리합니다.
-6. 저장장치는 USBSTOR 인스턴스 ID 와 일련번호를 맞춥니다. USBSTOR 인스턴스 ID 는 일련번호 뒤에 `&0` 같은 꼬리가 붙은 꼴이 많습니다. 긴 일련번호가 잘리거나 `&0` 이 없는 이름도 있으니 `ContainerID` 도 함께 맞춥니다. → [USBSTOR](usbstor.md)
+6. 저장장치는 USBSTOR 인스턴스 ID 와 일련번호를 맞춥니다. USBSTOR 인스턴스 ID 는 일련번호 뒤에 `&0` 같은 꼬리가 붙은 형식이 많습니다. 긴 일련번호가 잘리거나 `&0` 이 없는 이름도 있으니 `ContainerID` 도 함께 맞춥니다. → [USBSTOR](usbstor.md)
 7. `Control\usbflags` 에서 `IgnoreHWSerNum` 설정을 확인합니다.
 
 ### 공개 도구로 한 번
@@ -228,10 +228,10 @@ USB 흔적 전체의 읽는 순서는 [USB 저장장치 흔적](index.md) 에 �
 
 ## 실습
 
-USB 사용이 들어 있는 공개 검체 (예: NIST CFReDS 의 Data Leakage Case) 에서 SYSTEM 하이브를 꺼내 아래 질문을 풀어 봅니다.
+USB 사용이 들어 있는 공개 실습 이미지 (예: NIST CFReDS 의 Data Leakage Case) 에서 SYSTEM 하이브를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `Enum\USB` 아래 VID·PID 키는 몇 개입니까? 루트 허브와 내장 장치를 빼면 몇 개가 남습니까?
-2. 인스턴스 ID 의 두 번째 글자가 `&` 인 장치는 무엇입니까? 그 장치가 일련번호를 보내지 않은 것인지, `IgnoreHWSerNum` 때문인지 가려 보십시오.
+2. 인스턴스 ID 의 두 번째 글자가 `&` 인 장치는 무엇입니까? 그 장치가 일련번호를 보내지 않은 것인지, `IgnoreHWSerNum` 때문인지 가려내 보십시오.
 3. 같은 VID·PID 아래 인스턴스 키가 여러 개인 장치가 있습니까? 장치가 여러 개인지, 포트가 달랐는지 무엇으로 가릴 수 있습니까?
 4. `Service` 가 `USBSTOR` 인 장치의 일련번호를 USBSTOR 인스턴스 ID 와 맞춰 보십시오. 맞지 않는 장치가 있다면 이유는 무엇입니까?
 5. `ContainerID` 로 묶으면 물리 장치는 몇 개입니까?

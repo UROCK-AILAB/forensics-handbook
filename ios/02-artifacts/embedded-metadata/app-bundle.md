@@ -51,11 +51,11 @@ iOS 버전에 따라 위치가 다를 수 있으므로, 다른 버전의 백업�
 | 백업 `Info.plist` | `Applications`, `Installed Applications`, `iTunes Files`, `iTunes Settings` | `Build Version`, `Product Version`, `Product Type`, `Last Backup Date`, `Serial Number`, `IMEI`, `MEID`, `Unique Identifier`, `Target Identifier` |
 | `Manifest.plist` | `Applications` | `IsEncrypted`, `Version`, `Containers`, `Date`, `SystemDomainsVersion`, `WasPasscodeSet`, `Lockdown`, `BackupKeyBag` |
 
-`Applications` 아래의 하위 키는 검체에서 확인합니다. 기기 식별 키는 [기기 정보 (Device Info·Lockdown)](../system-account/device-info.md)에서 다룹니다.
+`Applications` 아래의 하위 키는 실제 데이터로 확인합니다. 기기 식별 키는 [기기 정보 (Device Info·Lockdown)](../system-account/device-info.md)에서 다룹니다.
 
 ### 도메인 이름 규칙
 
-Manifest.db 의 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)는 백업에 들어간 파일마다 한 행이고, `domain` 칸의 이름으로 앱을 가를 수 있습니다.
+Manifest.db 의 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)는 백업에 들어간 파일마다 한 행이고, `domain` 열의 이름으로 앱을 구분할 수 있습니다.
 
 ```
 AppDomain-<번들 ID>          앱 데이터
@@ -69,7 +69,7 @@ AppDomainPlugin-<번들 ID>    앱 확장(플러그인)
 
 InstallDomain 에는 항목이 6개 있고, 그 가운데 `SystemAppInstallState.plist` 와 `BackupSystemAppInstallState.plist` 는 Apple 기본 앱의 번들 ID(`com.apple.iBooks`, `com.apple.DocumentsApp`, `com.apple.mobilesafari` 등)를 키로, int 를 값으로 적습니다. int 값이 설치됨·삭제됨 같은 상태를 뜻하는지는 공개된 자료가 없습니다. HomeDomain 의 `com.apple.mobile.installation.plist` 에는 `ExtensionDataContainerParentIDUpdateVersion`(int) 키 하나만 있습니다.
 
-`applicationState.db` 는 번들 ID 와 앱 상태 값을 잇는 DB 이고, 표 구조와 해석은 [설치된 앱 (Installed Apps·applicationState.db)](../app-usage/installed-apps.md)에서 다룹니다. 설치 도우미 로그 도메인 안의 파일 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+`applicationState.db` 는 번들 ID 와 앱 상태 값을 잇는 DB 이고, 표 구조와 해석은 [설치된 앱 (Installed Apps·applicationState.db)](../app-usage/installed-apps.md)에서 다룹니다. 설치 도우미 로그 도메인 안의 파일 형식은 실제 데이터로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -81,7 +81,7 @@ InstallDomain 에는 항목이 6개 있고, 그 가운데 `SystemAppInstallState
 
 도메인이 있다고 해서 사용자가 그 앱을 실행했거나 언제 설치했는지까지 알 수는 없고, 누가 설치했는지도 이 기록만으로는 알 수 없습니다. 실행과 사용은 [KnowledgeC (knowledgeC.db)](../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../app-usage/biome/index.md)으로, 내려받기는 [앱 스토어 기록 (App Store)](../app-usage/app-store.md)으로 따로 확인합니다. 로컬 백업에는 앱 번들 경로가 보이지 않으므로, 백업만으로 번들의 서명 인증서나 팀 식별자를 직접 읽을 수 있다고 쓰지 않습니다.
 
-보고서에는 "백업에 이 번들 ID 의 앱 데이터 도메인이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "백업에 이 번들 ID 의 앱 데이터 도메인이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -89,9 +89,9 @@ InstallDomain 에는 항목이 6개 있고, 그 가운데 `SystemAppInstallState
 
 | 키 | 위치 | 주의 |
 |---|---|---|
-| `Last Backup Date` | 백업 `Info.plist` | 이름으로 보아 백업 시각이지만, UTC 인지 현지 시각인지는 검체에서 가립니다. |
+| `Last Backup Date` | 백업 `Info.plist` | 이름으로 보면 백업 시각이지만, UTC 인지 현지 시각인지는 실제 데이터로 판별합니다. |
 | `Date` | `Manifest.plist` | 뜻을 밝힌 공개 자료가 없습니다. |
-| `LastOSInstallDate`(datetime) | HomeDomain :: `Library/Preferences/com.apple.appstored.plist` | 이름으로 보아 앱이 아니라 OS 설치 날짜이고, 뜻을 밝힌 공개 자료는 없습니다. |
+| `LastOSInstallDate`(datetime) | HomeDomain :: `Library/Preferences/com.apple.appstored.plist` | 이름으로 보면 앱이 아니라 OS 설치 날짜이고, 뜻을 밝힌 공개 자료는 없습니다. |
 | `lastAppInstallDate`(datetime) | HomeDomain :: `Library/Preferences/com.apple.siri.sirisuggestions.plist` | 앱 설치 기록 파일이 아니라 시리 제안 설정 파일에 있고, 뜻을 밝힌 공개 자료는 없습니다. |
 
 plist 의 날짜 값을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다. 앱별 설치 시각은 이 표의 키로 정하지 말고 설치된 앱·앱 스토어 페이지의 기록과 함께 봅니다.
@@ -102,7 +102,7 @@ plist 의 날짜 값을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기�
 
 `LastOSInstallDate` 와 `lastAppInstallDate` 는 이름만 보면 설치 시각처럼 읽히지만, 앞의 것은 OS 쪽 키로 보이고 뒤의 것은 시리 제안 설정 파일에 들어 있습니다. 두 키 모두 뜻이 알려지지 않았으므로 앱 설치 시각의 근거로 쓰지 않습니다. `SystemAppInstallState.plist` 의 int 값도 같은 이유로 해석하지 않고 그대로 인용합니다.
 
-도메인이 없다는 사실만으로 앱이 없었다고 말하지 않습니다. 앱 도메인이 백업에서 빠지는 조건과 앱을 지운 뒤 백업에 남는 것은 공개된 분석 자료가 없어 검체로 확인해야 합니다. 지우기 흔적 전반은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+도메인이 없다는 사실만으로 앱이 없었다고 말하지 않습니다. 앱 도메인이 백업에서 빠지는 조건과 앱을 지운 뒤 백업에 남는 것은 실제 데이터로 확인해야 합니다. 지우기 흔적 전반은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -138,7 +138,7 @@ WHERE domain = 'InstallDomain';
 
 ## 실습
 
-공개 검체(NIST CFReDS 등에서 받을 수 있는 아이폰 로컬 백업)나 직접 만든 시험 기기의 백업으로 아래 질문을 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등에서 받을 수 있는 아이폰 로컬 백업)나 직접 만든 시험 기기의 백업으로 아래 질문을 풀어 봅니다.
 
 1. Manifest.db 에서 `AppDomain-` 도메인은 몇 개이고, `AppDomainGroup-`·`AppDomainPlugin-` 까지 합치면 몇 개인가? 두 숫자의 차이는 무엇 때문인가?
 2. 백업 `Info.plist` 의 `Installed Applications` 에 있는 번들 ID 가운데 `AppDomain-` 도메인이 없는 것이 있는가? 있다면 어떤 이유를 생각해 볼 수 있는가?

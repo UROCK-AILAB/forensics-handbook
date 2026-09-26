@@ -141,11 +141,11 @@ Jira 는 2024년 8월에 감사 로그를 손봤고, 그 전에 생긴 이벤트
 | `attributes.context` / `container` | 동작 대상 / 대상이 속한 사이트·스페이스 |
 | `attributes.location` | `ip`, `geo`, `countryName`, `regionName`, `city` |
 
-API 는 네 가지입니다[9]. `GET https://api.atlassian.com/admin/v1/orgs/{orgId}/events` 는 `q`, `from`, `to`, `action`, `actor`, `ip`, `product`, `location` 으로 세밀하게 거르고, `…/events-stream` 은 `from`, `to`, `sortOrder`, `cursor` 로 시간 순서대로 훑으며, `…/events/{eventId}` 는 한 건을, `…/event-actions` 는 활동 이름 목록을 줍니다. `/events` 는 2025년 5월 말부터 사용자당·경로당 분당 10회로 제한하므로 대량 수집에는 `/events-stream` 을 씁니다[9].
+API 는 네 가지입니다[9]. `GET https://api.atlassian.com/admin/v1/orgs/{orgId}/events` 는 `q`, `from`, `to`, `action`, `actor`, `ip`, `product`, `location` 으로 세밀하게 거르고, `…/events-stream` 은 `from`, `to`, `sortOrder`, `cursor` 로 시간 순서대로 차례로 읽으며, `…/events/{eventId}` 는 한 건을, `…/event-actions` 는 활동 이름 목록을 줍니다. `/events` 는 2025년 5월 말부터 사용자당·경로당 분당 10회로 제한하므로 대량 수집에는 `/events-stream` 을 씁니다[9].
 
 조사에 쓰는 활동 이름은 "Audit log activities database" 에서 찾습니다[4]. 예를 들면 다음과 같습니다.
 
-| 갈래 | 활동 이름 |
+| 분류 | 활동 이름 |
 |---|---|
 | 로그인 | Logged in to account, Logged out of account |
 | 보기 | Viewed Confluence page, Viewed Confluence blog, Viewed Jira issue |
@@ -200,7 +200,7 @@ Completed Confluence space export 는 내보내기 파일이 만들어진 것이
 
 ## 시각 해석
 
-Atlassian Events API 의 `time` 은 밀리초까지 적은 ISO 8601 UTC(`Z`) 값이고, `/events-stream` 에는 처리 시각 `processedAt` 이 따로 있습니다[9]. 두 값이 다르면 `time` 을 활동 시각으로, `processedAt` 을 수집 순서를 가늠하는 값으로 씁니다. Jira 사이트 레코드의 `created` 는 문서 예시에서 `2014-03-19T18:45:42.967+0000` 처럼 오프셋이 콜론 없이 붙어 있어[12], 콜론이 있는 ISO 8601 만 받는 도구는 이 값을 읽지 못할 수 있습니다. Notion 과 Confluence 사이트 로그의 CSV 시각이 UTC 인지 내보낸 사람의 현지 시각인지는, 시각을 아는 동작(예: 시험 계정 로그인)을 하나 남기고 CSV 에 찍힌 값과 비교해 확인합니다. 시간대를 맞추는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 에 있습니다.
+Atlassian Events API 의 `time` 은 밀리초까지 적은 ISO 8601 UTC(`Z`) 값이고, `/events-stream` 에는 처리 시각 `processedAt` 이 따로 있습니다[9]. 두 값이 다르면 `time` 을 활동 시각으로, `processedAt` 을 수집 순서를 추정하는 값으로 씁니다. Jira 사이트 레코드의 `created` 는 문서 예시에서 `2014-03-19T18:45:42.967+0000` 처럼 오프셋이 콜론 없이 붙어 있어[12], 콜론이 있는 ISO 8601 만 받는 도구는 이 값을 읽지 못할 수 있습니다. Notion 과 Confluence 사이트 로그의 CSV 시각이 UTC 인지 내보낸 사람의 현지 시각인지는, 시각을 아는 동작(예: 시험 계정 로그인)을 하나 남기고 CSV 에 찍힌 값과 비교해 확인합니다. 시간대를 맞추는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 에 있습니다.
 
 두 서비스 모두 동작 뒤 로그에 나타나기까지 시간이 걸립니다. Notion 감사 로그는 동작 뒤 화면에 나타나기까지 시간이 걸릴 수 있고, 실시간으로 받으려면 SIEM 연동을 씁니다[1]. Notion 내보내기는 내보내는 시각 2시간 전까지만 담습니다[1]. Atlassian 은 새 활동이 나타나기까지 몇 분 걸릴 수 있습니다[3]. 방금 일어난 일을 확인할 때는 조금 뒤에 다시 조회합니다.
 
@@ -250,7 +250,7 @@ Atlassian Events API 의 `time` 은 밀리초까지 적은 ISO 8601 UTC(`Z`) 값
 
 4. **Confluence·Jira 사이트 CSV.** 각 관리 화면에서 전체를 내보냅니다[10][11]. 두 CSV 와 조직 감사 로그를 한 타임라인에 놓는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에 있습니다.
 
-SigmaHQ 에는 자체 설치형 Bitbucket 감사 로그 규칙이 있습니다[13]. 이 규칙들은 `product: bitbucket`, `service: audit` 로그의 `auditType.category`·`auditType.action` 을 보고(예: `Data pipeline` / `Full data export triggered`, `Authentication` / `User login failed`), 규칙마다 Basic 또는 Advance 로그 수준이 필요합니다[13]. Cloud 조직 감사 로그와는 필드 구조가 다릅니다. 규칙을 로그에 거는 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
+SigmaHQ 에는 자체 설치형 Bitbucket 감사 로그 규칙이 있습니다[13]. 이 규칙들은 `product: bitbucket`, `service: audit` 로그의 `auditType.category`·`auditType.action` 을 보고(예: `Data pipeline` / `Full data export triggered`, `Authentication` / `User login failed`), 규칙마다 Basic 또는 Advance 로그 수준이 필요합니다[13]. Cloud 조직 감사 로그와는 필드 구조가 다릅니다. 규칙을 로그에 거는 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
 
 ## 교차 검증
 
@@ -284,7 +284,7 @@ SigmaHQ 에는 자체 설치형 Bitbucket 감사 로그 규칙이 있습니다[1
 4. 같은 계정의 Notion SIEM 사본에 02:20 기록이 없고 화면에는 있다면 어떤 원인을 먼저 의심합니까?
 5. 이 조직이 Guard Standard 만 쓴다면 위 Atlassian 기록 가운데 어느 것이 남지 않을 수 있는지 요금제 표와 활동 목록으로 따져 봅니다.
 
-보고서에는 "2026-09-01 02:13 UTC 에 계정 user@example.com 으로 Confluence 스페이스 내보내기 파일을 내려받은 기록이 있다(IP 203.0.113.10)" 처럼 기록이 말하는 만큼만 씁니다(만든 예시). 문장 짜는 요령은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에 있습니다.
+보고서에는 "2026-09-01 02:13 UTC 에 계정 user@example.com 으로 Confluence 스페이스 내보내기 파일을 내려받은 기록이 있다(IP 203.0.113.10)" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시). 문장 짜는 요령은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에 있습니다.
 
 ## 참고 문헌
 

@@ -13,15 +13,15 @@ nav_order: 1960
 
 확보를 마친 직후부터 사건이 끝날 때까지 씁니다. 확보 방법마다 사본의 수준이 달라서 해시를 계산하는 단위도 달라지고, 방법을 고르는 순서는 [확보 방법 고르기 (T2·Apple Silicon)](choosing-method.md)에 있습니다.
 
-## 증거 보관 기록의 정의와 칸
+## 증거 보관 기록의 정의와 항목
 
 NIST 용어집은 증거 보관 기록을 NIST SP 800-72에서 가져와 이렇게 정의합니다 [1].
 
 > "A process that tracks the movement of evidence through its collection, safeguarding, and analysis lifecycle by documenting each person who handled the evidence, the date/time it was collected or transferred, and the purpose for the transfer."
 
-NIST SP 800-101 Rev. 1의 정의도 거의 같고, 끝부분만 "the purpose for any transfers" 로 다릅니다 [1]. 정의가 요구하는 칸은 증거를 다룬 사람, 수집하거나 넘긴 날짜와 시각, 넘긴 목적입니다 [1]. 맥 사건에서는 사본이 바뀌지 않았음을 보이고 시각을 다시 읽을 수 있도록 몇 칸을 더 두면 좋습니다. 아래 표에서 "출처" 칸은 그 구분을 보여 줍니다.
+NIST SP 800-101 Rev. 1의 정의도 거의 같고, 끝부분만 "the purpose for any transfers" 로 다릅니다 [1]. 정의가 요구하는 항목은 증거를 다룬 사람, 수집하거나 넘긴 날짜와 시각, 넘긴 목적입니다 [1]. 맥 사건에서는 사본이 바뀌지 않았음을 보이고 시각을 다시 읽을 수 있도록 몇 항목을 더 두면 좋습니다. 아래 표에서 "출처" 열은 그 구분을 보여 줍니다.
 
-| 칸 | 적을 내용 | 출처 |
+| 항목 | 적을 내용 | 출처 |
 |---|---|---|
 | 다룬 사람 | 수집·인계·인수한 사람 | NIST 정의 [1] |
 | 날짜·시각 | 수집하거나 넘긴 날짜와 시각 | NIST 정의 [1] |
@@ -40,7 +40,7 @@ NIST SP 800-101 Rev. 1의 정의도 거의 같고, 끝부분만 "the purpose for
 ## 절차
 
 1. 확보가 끝나면 곧바로 결과물의 해시를 계산하고, 알고리즘과 값, 계산에 쓴 도구와 버전을 적습니다.
-2. 위 칸으로 첫 줄을 씁니다. 날짜·시각에는 기준 시간대를 붙입니다.
+2. 위 항목으로 첫 줄을 씁니다. 날짜·시각에는 기준 시간대를 붙입니다.
 3. 증거를 넘길 때마다 한 줄을 더하고, 받은 쪽이 해시를 다시 계산해 첫 값과 같은지 적습니다.
 4. 분석은 사본의 사본으로 하고, 분석을 시작하기 전과 마친 뒤에 원래 사본의 해시가 그대로인지 확인합니다.
 

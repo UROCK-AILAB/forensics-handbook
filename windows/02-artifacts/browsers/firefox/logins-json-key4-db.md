@@ -36,15 +36,15 @@ nav_order: 1740
 
 ### `logins.json`
 
-`logins.json` 은 텍스트 JSON 파일입니다. 로그인마다 `hostname`, `encryptedUsername`, `encryptedPassword` 칸이 있습니다[2]. `hostname` 은 평문이라 어느 사이트에 로그인 정보를 저장했는지는 값을 풀지 않아도 알 수 있고, `encryptedUsername`·`encryptedPassword` 는 암호화한 값입니다.
+`logins.json` 은 텍스트 JSON 파일입니다. 로그인마다 `hostname`, `encryptedUsername`, `encryptedPassword` 필드가 있습니다[2]. `hostname` 은 평문이라 어느 사이트에 로그인 정보를 저장했는지는 값을 풀지 않아도 알 수 있고, `encryptedUsername`·`encryptedPassword` 는 암호화한 값입니다.
 
-그 밖의 칸(`httpRealm`, `formSubmitURL`, `timeCreated`, `timeLastUsed`, `timePasswordChanged`, `timesUsed` 등)과 시각 단위는 판마다 다를 수 있어 검체에서 확인합니다.
+그 밖의 필드(`httpRealm`, `formSubmitURL`, `timeCreated`, `timeLastUsed`, `timePasswordChanged`, `timesUsed` 등)과 시각 단위는 판마다 다를 수 있어 실제 데이터로 확인합니다.
 
 ### `key4.db`
 
 `key4.db` 는 SQLite 파일입니다. 페이지와 레코드를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다. 로그인 값을 푸는 키가 여기에 두 조각으로 들어 있습니다.
 
-| 표 | 칸 | 담는 것 |
+| 표 | 열 | 담는 것 |
 |---|---|---|
 | `metadata` | `item1` | 전역 솔트 (global salt) 입니다 |
 | `metadata` | `item2` | 암호화한 확인값입니다. 풀면 `password-check` 문자열이 나옵니다 |
@@ -72,7 +72,7 @@ nav_order: 1740
 
 ### 증명하는 것
 
-- `logins.json` 에 행이 있으면 이 프로필에 그 사이트의 로그인 정보가 저장돼 있었습니다. 사용자가 직접 저장했는지, 다른 브라우저에서 가져왔는지, 동기화로 받았는지는 다른 흔적으로 따로 가립니다.
+- `logins.json` 에 행이 있으면 이 프로필에 그 사이트의 로그인 정보가 저장돼 있었습니다. 사용자가 직접 저장했는지, 다른 브라우저에서 가져왔는지, 동기화로 받았는지는 다른 흔적으로 따로 확인합니다.
 - `hostname` 이 평문이므로 어느 사이트에 계정을 저장했는지는 값을 풀지 않아도 목록으로 뽑을 수 있습니다.
 - 확인값이 빈 기본 비밀번호로 풀리면 이 프로필에는 기본 비밀번호가 걸려 있지 않습니다.
 
@@ -87,7 +87,7 @@ nav_order: 1740
 
 ## 시각 해석
 
-- `logins.json` 의 시각 칸(`timeCreated`·`timeLastUsed`·`timePasswordChanged`)은 1970년 기준 밀리초로 알려져 있으므로, 검체에서 다른 아티팩트의 시각과 맞춰 확인합니다.
+- `logins.json` 의 시각 필드(`timeCreated`·`timeLastUsed`·`timePasswordChanged`)은 1970년 기준 밀리초로 알려져 있으므로, 실제 데이터에서 다른 아티팩트의 시각과 맞춰 확인합니다.
 - 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
@@ -104,7 +104,7 @@ nav_order: 1740
 
 ### 헥스로 한 번
 
-`key4.db` 의 확인값을 풀면 아래 문자열이 나와야 합니다. 이 값은 명세로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다.
+`key4.db` 의 확인값을 풀면 아래 문자열이 나와야 합니다. 이 값은 명세로 만든 예시입니다. 특정 기기에서 나온 값이 아닙니다.
 
 ```
 70 61 73 73 77 6F 72 64 2D 63 68 65 63 6B 02 02
@@ -132,7 +132,7 @@ nav_order: 1740
 
 ## 실습
 
-파이어폭스를 쓴 공개 검체(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+파이어폭스를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `logins.json` 을 텍스트로 열어 `hostname` 을 모읍니다. 몇 개 사이트의 로그인이 저장돼 있습니까?
 2. 키 파일이 `key4.db` 입니까, `key3.db` 입니까? 파이어폭스 판을 짐작할 수 있습니까?
@@ -142,4 +142,4 @@ nav_order: 1740
 ## 참고 문헌
 
 1. lclevy, *firepwd — README* (GitHub — 버전별 파일, CKA_ID, ASN.1 OID, 공개 도구 설명). https://github.com/lclevy/firepwd
-2. lclevy, *firepwd.py* (master 가지 — `metadata`·`nssPrivate` 조회, 확인값, `logins.json` 칸, 키 풀이 흐름). https://raw.githubusercontent.com/lclevy/firepwd/master/firepwd.py
+2. lclevy, *firepwd.py* (master 가지 — `metadata`·`nssPrivate` 조회, 확인값, `logins.json` 필드, 키 풀이 흐름). https://raw.githubusercontent.com/lclevy/firepwd/master/firepwd.py

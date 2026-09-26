@@ -129,13 +129,13 @@ API 에서는 집계 간격을 `INTERVAL_5_SEC`, `INTERVAL_30_SEC`, `INTERVAL_1_
 
 **증명하지 못하는 것.** 흐름 로그는 패킷 방향만 알려 주고 어느 쪽이 연결을 먼저 열었는지는 알려 주지 않습니다[1]. 페이로드가 없으므로 무엇을 보냈는지도 알 수 없습니다. 표본이라 양이 아주 적은 흐름은 빠질 수 있고, 바이트·패킷 수는 추정치입니다[2][4]. 들어오는 쪽 방화벽이 막은 시도는 기록되지 않습니다[1]. 켜지 않은 서브넷, 필터로 버린 흐름, 2차 표본에서 떨어진 기록은 남지 않으므로 "기록이 없다" 가 "통신이 없었다" 를 뜻하지 않습니다. 사람 계정과 흐름을 잇는 필드는 없으므로, 누가 그 VM 을 조작했는지는 [Cloud Audit Logs](cloud-audit-logs.md) 와 VM 안의 기록으로 따로 밝혀야 합니다.
 
-보고서에는 "2026-09-01 02:14:03~02:14:08 UTC 에 VM web-01 에서 203.0.113.40:443 으로 나가는 TCP 흐름이 표본으로 기록되어 있고, 추정 전송량은 약 1.8MB 이다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2026-09-01 02:14:03~02:14:08 UTC 에 VM web-01 에서 203.0.113.40:443 으로 나가는 TCP 흐름이 표본으로 기록되어 있고, 추정 전송량은 약 1.8MB 이다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
 `start_time`·`end_time` 은 집계 간격 안에서 처음·마지막으로 관찰한 패킷의 시각이고 RFC 3339 문자열입니다[2]. 실제 통신은 이 구간보다 먼저 시작해 더 늦게 끝났을 수 있고, 집계 간격(5초~15분)이 곧 시간 해상도의 한계입니다[1][2]. 긴 연결은 여러 집계 간격에 걸쳐 여러 건으로 나뉘므로 한 흐름의 전체 기간과 전체 양은 같은 5-튜플의 기록을 이어 붙여 봅니다.
 
-LogEntry 의 `timestamp`·`receiveTimestamp` 는 UTC(`Z`)로 정규화한 RFC 3339 값이고, `receiveTimestamp` 는 Logging 이 항목을 받은 시각입니다[7]. 흐름 기록의 `timestamp` 가 `start_time`·`end_time` 중 무엇과 같은지는 검체에서 몇 건을 비교해 확인하고, 통신 시각은 `jsonPayload.start_time`·`end_time` 을 기준으로 삼습니다. `gcloud logging read` 의 시각 조건은 `timestamp` 에 걸리므로 찾는 구간 앞뒤로 집계 간격만큼 넉넉하게 잡습니다[8]. 여러 로그의 시각을 맞추는 일반 원칙은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 에 있습니다.
+LogEntry 의 `timestamp`·`receiveTimestamp` 는 UTC(`Z`)로 정규화한 RFC 3339 값이고, `receiveTimestamp` 는 Logging 이 항목을 받은 시각입니다[7]. 흐름 기록의 `timestamp` 가 `start_time`·`end_time` 중 무엇과 같은지는 실제 데이터에서 몇 건을 비교해 확인하고, 통신 시각은 `jsonPayload.start_time`·`end_time` 을 기준으로 삼습니다. `gcloud logging read` 의 시각 조건은 `timestamp` 에 걸리므로 찾는 구간 앞뒤로 집계 간격만큼 넉넉하게 잡습니다[8]. 여러 로그의 시각을 맞추는 일반 원칙은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -147,11 +147,11 @@ LogEntry 의 `timestamp`·`receiveTimestamp` 는 UTC(`Z`)로 정규화한 RFC 33
 
 **GKE 흐름은 일부가 빠지거나 노드 주소로 보입니다.** 같은 노드 위 Pod 끼리의 흐름은 클러스터에 노드 내 가시성(intranode visibility)을 켜야 기록됩니다[1]. Pod 에서 인터넷으로 나가는 패킷은 흐름 로그가 보기 전에 마스커레이드 에이전트가 노드 IP 로 바꾸므로 Pod 정보가 붙지 않습니다[2].
 
-**지원 프로토콜 설명이 문서마다 다릅니다.** 개요 문서는 TCP·UDP·ICMP·ESP·GRE·RDMA 를 표본으로 뽑는다고 적고, 로그 조회 문서의 문제 해결 절은 TCP·UDP·ICMP·ESP·GRE 만 지원한다고 적습니다(둘 다 2026-09-18 갱신)[1][4]. RDMA 흐름이 쟁점이면 검체에 `rdma_traffic_type` 이 있는 기록이 있는지 먼저 봅니다. 레거시 네트워크와 프록시 전용 서브넷(`INTERNAL_HTTPS_LOAD_BALANCER`)은 흐름 로그를 지원하지 않습니다[1].
+**지원 프로토콜 설명이 문서마다 다릅니다.** 개요 문서는 TCP·UDP·ICMP·ESP·GRE·RDMA 를 표본으로 뽑는다고 적고, 로그 조회 문서의 문제 해결 절은 TCP·UDP·ICMP·ESP·GRE 만 지원한다고 적습니다(둘 다 2026-09-18 갱신)[1][4]. RDMA 흐름이 쟁점이면 수집한 로그에 `rdma_traffic_type` 이 있는 기록이 있는지 먼저 봅니다. 레거시 네트워크와 프록시 전용 서브넷(`INTERNAL_HTTPS_LOAD_BALANCER`)은 흐름 로그를 지원하지 않습니다[1].
 
 **서브넷 설정만 보고 꺼져 있다고 판단하면 안 됩니다.** Network Management API 로 만든 설정은 서브넷의 `enableFlowLogs`·`logConfig.enable` 필드를 채우지 않습니다[3]. 서브넷 목록에서 `logConfig.enable` 이 비어 있어도 네트워크·조직 단위 설정으로 기록이 쌓이고 있을 수 있으므로, 자원마다 실제로 걸린 설정을 `show-effective-flow-logs-configs` 로 확인합니다[3]. 반대로 설정이 있어도 필터 식이 `false` 이거나 Log Router 의 제외 필터가 흐름 로그를 버리면 기록이 없습니다[4].
 
-**끄거나 줄인 흔적은 감사 로그에 남습니다.** Compute Engine API 로 서브넷 흐름 로그를 끄는 요청은 `logConfig.enable` 을 `false` 로 바꾸는 서브넷 `PATCH` 이고[3], 이 호출은 관리 활동 감사 로그에 `v1.compute.subnetworks.patch` 로 남습니다[5]. Network Management API 설정은 일시 중지(`--state=disabled`)·집계 간격·필터·표본 비율을 `vpcFlowLogsConfigs` 에 대한 `PATCH` 로 바꾸고, 설정을 지우면(`gcloud network-management vpc-flow-logs-configs delete`) 수집이 멈추고 설정도 사라집니다[3]. 이 쪽은 감사 로그에서 `protoPayload.serviceName="networkmanagement.googleapis.com"` 으로 거른 뒤 `methodName` 과 요청 본문을 검체에서 확인합니다. 감사 로그 읽는 법은 [Cloud Audit Logs](cloud-audit-logs.md) 에 있습니다.
+**끄거나 줄인 흔적은 감사 로그에 남습니다.** Compute Engine API 로 서브넷 흐름 로그를 끄는 요청은 `logConfig.enable` 을 `false` 로 바꾸는 서브넷 `PATCH` 이고[3], 이 호출은 관리 활동 감사 로그에 `v1.compute.subnetworks.patch` 로 남습니다[5]. Network Management API 설정은 일시 중지(`--state=disabled`)·집계 간격·필터·표본 비율을 `vpcFlowLogsConfigs` 에 대한 `PATCH` 로 바꾸고, 설정을 지우면(`gcloud network-management vpc-flow-logs-configs delete`) 수집이 멈추고 설정도 사라집니다[3]. 이 쪽은 감사 로그에서 `protoPayload.serviceName="networkmanagement.googleapis.com"` 으로 거른 뒤 `methodName` 과 요청 본문을 실제 로그에서 확인합니다. 감사 로그 읽는 법은 [Cloud Audit Logs](cloud-audit-logs.md) 에 있습니다.
 
 ## 직접 분석해 보기
 

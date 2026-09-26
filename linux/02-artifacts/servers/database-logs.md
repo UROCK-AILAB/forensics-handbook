@@ -32,7 +32,7 @@ MySQL 과 PostgreSQL 서버가 남기는 오류 로그·연결 기록·쿼리 �
 | 바이너리 로그 | 켜짐(서버 기본값). `max_binlog_size = 100M`[1][9] | 켜짐(서버 기본값)[1] |
 | 로그 순환 | `/var/log/mysql.log`, `/var/log/mysql/*log` 를 `daily`, `rotate 7`, `compress`, `create 640 mysql adm` 으로 돌리고 끝나면 `mysqladmin flush-logs` 를 부름[9] | `/etc/logrotate.d/mysqld` 로 설치하는 upstream 파일은 모든 줄이 주석[8][10] |
 
-RHEL 9 에서 MariaDB 를 쓰면 오류 로그는 `/var/log/mariadb/mariadb.log` 입니다[11]. MariaDB 의 로그 줄 모양은 이 쪽에서 설명하는 MySQL 8.0 형식과 다를 수 있으므로 검체의 파일을 열어 형식부터 확인합니다.
+RHEL 9 에서 MariaDB 를 쓰면 오류 로그는 `/var/log/mariadb/mariadb.log` 입니다[11]. MariaDB 의 로그 줄 모양은 이 페이지에서 설명하는 MySQL 8.0 형식과 다를 수 있으므로 실제 파일을 열어 형식부터 확인합니다.
 
 일반 쿼리 로그와 느린 쿼리 로그를 켜면서 파일 이름을 주지 않으면, 데이터 디렉터리 안에 호스트 이름을 딴 `호스트이름.log` 와 `호스트이름-slow.log` 가 생깁니다[3][2]. `log_output` 이 `TABLE` 이면 두 로그는 파일이 아니라 `mysql` 스키마 안의 로그 테이블에 쌓입니다[1][3].
 
@@ -59,7 +59,7 @@ RHEL 9 패키지는 로그 수집기(`logging_collector = on`)를 켜고 파일 
 | `mysql` | `/.mysql_history`, `/root/.mysql_history`, 각 사용자 홈의 `.mysql_history`[17] |
 | `psql` | `/.psql_history`, `/root/.psql_history`, `/var/lib/postgresql/.psql_history`, `/var/lib/pgsql/.psql_history`, 각 사용자 홈의 `.psql_history`[17] |
 
-RHEL 9 에서 postgres 계정의 홈은 `/var/lib/pgsql` 이라서, `sudo -u postgres psql` 로 들어간 기록은 `/var/lib/pgsql/.psql_history` 에 남습니다[16][17]. Ubuntu 는 검체의 `/etc/passwd` 에서 postgres 계정의 홈을 확인하고 그 아래를 봅니다. 셸 기록 파일과 같은 방식으로 읽는 점은 [셸 명령 기록](../execution/shell-history/index.md)에서 다룹니다.
+RHEL 9 에서 postgres 계정의 홈은 `/var/lib/pgsql` 이라서, `sudo -u postgres psql` 로 들어간 기록은 `/var/lib/pgsql/.psql_history` 에 남습니다[16][17]. Ubuntu 는 분석 대상의 `/etc/passwd` 에서 postgres 계정의 홈을 확인하고 그 아래를 봅니다. 셸 기록 파일과 같은 방식으로 읽는 점은 [셸 명령 기록](../execution/shell-history/index.md)에서 다룹니다.
 
 ## 구조
 
@@ -73,13 +73,13 @@ RHEL 9 에서 postgres 계정의 홈은 `/var/lib/pgsql` 이라서, `sudo -u pos
 
 시각은 `2026-03-12T05:05:09.123456Z` 처럼 마이크로초까지 적는 ISO 8601 형식이고, 끝은 UTC 면 `Z`, 현지 시각이면 `+09:00` 같은 차이입니다[5]. 날짜는 만든 예시입니다.
 
-가동 구간은 시작·종료 메시지로 가늠합니다. 시작 메시지는 `%s: ready for connections. Version: '%s'  socket: '%s'  port: %d  %s.`, 정상 종료 메시지는 `%s: Shutdown complete (mysqld %s)  %s.` 입니다[7].
+가동 구간은 시작·종료 메시지로 추정합니다. 시작 메시지는 `%s: ready for connections. Version: '%s'  socket: '%s'  port: %d  %s.`, 정상 종료 메시지는 `%s: Shutdown complete (mysqld %s)  %s.` 입니다[7].
 
 로그인 실패는 오류 로그 상세 수준(`log_error_verbosity`)이 3 일 때만 오류 로그에 `Access denied for user '%-.48s'@'%-.64s' (using password: %s)` 로 남습니다[6][7]. 기본값은 2(오류와 경고)라서 기본 설정에서는 오류 로그에 로그인 실패가 없습니다[1].
 
 ### MySQL 일반 쿼리 로그
 
-파일을 열 때 서버 이름·판과 함께 `started with:` 줄, `Tcp port: %d  Unix socket: %s` 줄, 그리고 `Time                 Id Command    Argument` 머리 줄을 씁니다[3]. 그 뒤 한 사건이 한 줄이고, 시각·탭·다섯 칸으로 맞춘 스레드 ID·공백·명령 종류·탭·인자 순서입니다[3].
+파일을 열 때 서버 이름·판과 함께 `started with:` 줄, `Tcp port: %d  Unix socket: %s` 줄, 그리고 `Time                 Id Command    Argument` 머리 줄을 씁니다[3]. 그 뒤 한 사건이 한 줄이고, 시각·탭·다섯 자리로 맞춘 스레드 ID·공백·명령 종류·탭·인자 순서입니다[3].
 
 ```
 시각(탭)스레드ID 명령종류(탭)인자
@@ -89,7 +89,7 @@ RHEL 9 에서 postgres 계정의 홈은 `/var/lib/pgsql` 이라서, `sudo -u pos
 
 ### MySQL 느린 쿼리 로그
 
-한 사건은 `# Time: 시각`, `# User@Host: 사용자정보  Id: 스레드ID`, `# Query_time: … Lock_time: … Rows_sent: … Rows_examined: …` 세 줄 뒤에 SQL 문이 옵니다[3]. `log_slow_extra` 를 켜면 셋째 줄에 `Thread_id`, `Errno`, `Bytes_received`, `Bytes_sent`, `Start:`, `End:` 같은 칸이 더 붙습니다[1][3]. `long_query_time` 보다 오래 걸린 문장만 남으므로 전체 실행 기록이 아닙니다.
+한 사건은 `# Time: 시각`, `# User@Host: 사용자정보  Id: 스레드ID`, `# Query_time: … Lock_time: … Rows_sent: … Rows_examined: …` 세 줄 뒤에 SQL 문이 옵니다[3]. `log_slow_extra` 를 켜면 셋째 줄에 `Thread_id`, `Errno`, `Bytes_received`, `Bytes_sent`, `Start:`, `End:` 같은 필드가 더 붙습니다[1][3]. `long_query_time` 보다 오래 걸린 문장만 남으므로 전체 실행 기록이 아닙니다.
 
 ### MySQL 바이너리 로그
 
@@ -143,13 +143,13 @@ RHEL 9 에서 postgres 계정의 홈은 `/var/lib/pgsql` 이라서, `sudo -u pos
 - 데이터베이스 계정 이름은 운영체제 계정이 아닙니다. 웹 애플리케이션이 공용 계정 하나로 접속하면 로그의 사용자 이름으로 사람을 가를 수 없습니다.
 - 클라이언트 기록 파일에는 시각이 없고, 원격 애플리케이션이 드라이버로 접속한 경우는 남지 않습니다.
 
-보고서에는 "2026-03-12 14:05 KST 에 `appuser` 계정으로 `shopdb` 에 연결한 기록이 있다" 처럼 로그가 말하는 만큼만 씁니다(값은 만든 예시).
+보고서에는 "2026-03-12 14:05 KST 에 `appuser` 계정으로 `shopdb` 에 연결한 기록이 있다" 처럼 로그로 확인되는 만큼만 씁니다(값은 만든 예시).
 
 ## 시각 해석
 
 MySQL 파일 로그의 시각은 `log_timestamps` 로 정하고, 기본값 `UTC` 면 끝에 `Z` 가 붙습니다[1][2][5]. `SYSTEM` 으로 바꾸면 시스템 현지 시각에 `+hh:mm` 차이를 붙입니다[5]. 이 설정은 파일 로그에만 영향을 주고 로그 테이블에는 영향이 없습니다[1]. 오류 로그·일반 쿼리 로그·느린 쿼리 로그가 모두 같은 설정을 따릅니다[3][5].
 
-PostgreSQL 로그의 시각은 `log_timezone` 기준 현지 시각이고, 시간대는 약어로만 적습니다[14][13]. 내장 기본값은 GMT 이지만 `initdb` 가 클러스터를 만들 때 시스템 시간대를 `postgresql.conf` 의 `timezone`·`log_timezone` 에 적어 둡니다[13][14]. 그래서 클러스터를 만든 뒤 시스템 시간대를 바꿨다면 로그 시간대가 옛 값일 가능성이 있습니다. 검체의 `postgresql.conf` 에서 `log_timezone` 을 먼저 읽고, 시스템 시간대는 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md)에서 확인합니다.
+PostgreSQL 로그의 시각은 `log_timezone` 기준 현지 시각이고, 시간대는 약어로만 적습니다[14][13]. 내장 기본값은 GMT 이지만 `initdb` 가 클러스터를 만들 때 시스템 시간대를 `postgresql.conf` 의 `timezone`·`log_timezone` 에 적어 둡니다[13][14]. 그래서 클러스터를 만든 뒤 시스템 시간대를 바꿨다면 로그 시간대가 옛 값일 가능성이 있습니다. 분석 대상의 `postgresql.conf` 에서 `log_timezone` 을 먼저 읽고, 시스템 시간대는 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md)에서 확인합니다.
 
 RHEL 9 의 요일 이름 파일은 이름에 날짜가 없습니다. `postgresql-Mon.log` 가 어느 날짜의 월요일인지는 파일 안 첫 줄과 마지막 줄의 시각으로 정합니다.
 
@@ -159,7 +159,7 @@ RHEL 9 의 요일 이름 파일은 이름에 날짜가 없습니다. `postgresql
 - RHEL 9 의 PostgreSQL 로그는 `/var/log` 밖에 있습니다. UAC 의 `/var/log` 수집 항목은 이 파일을 담지 못하므로 데이터 디렉터리의 `log` 폴더를 따로 모읍니다[20]. MySQL 바이너리 로그와 기본 이름의 일반·느린 쿼리 로그도 데이터 디렉터리에 있습니다.
 - Ubuntu 의 PostgreSQL 로그는 `copytruncate` 로 돌리므로 복사와 자르기 사이의 줄을 잃을 수 있습니다[15]. 회전 방식은 [로그 순환](../../01-foundations/logging/logrotate.md)에서 다룹니다.
 - Ubuntu 의 MySQL logrotate 파일에는 "The error log is obsolete, messages go to syslog now." 라는 주석이 있지만, 같은 패키지의 `mysqld.cnf` 는 `log_error = /var/log/mysql/error.log` 로 파일에 씁니다[9]. 로그가 어디로 가는지는 설정 파일로 판단합니다.
-- RHEL 9 의 MySQL 오류 로그는 logrotate 파일이 upstream 판처럼 모두 주석이면 돌지 않아서, 오래된 기록이 한 파일에 남아 있을 수 있습니다[8][10]. 검체의 `/etc/logrotate.d/mysqld` 를 열어 주석이 풀렸는지 확인합니다. Ubuntu 는 7일치입니다[9].
+- RHEL 9 의 MySQL 오류 로그는 logrotate 파일이 upstream 판처럼 모두 주석이면 돌지 않아서, 오래된 기록이 한 파일에 남아 있을 수 있습니다[8][10]. 실제 시스템의 `/etc/logrotate.d/mysqld` 를 열어 주석이 풀렸는지 확인합니다. Ubuntu 는 7일치입니다[9].
 - `log_output = TABLE` 이면 쿼리 로그가 데이터베이스 안에 있어서 파일만 모으면 빠집니다[1].
 - PostgreSQL 은 문장 기록에 비밀번호가 평문으로 들어갈 수 있습니다[13]. 보고서에 로그를 옮길 때 가립니다.
 - 시간대 약어는 겹칠 수 있습니다. plaso 의 PostgreSQL 플러그인은 `IST` 를 `Asia/Jerusalem` 으로 바꾸므로, 인도 표준시로 쓴 로그라면 변환 결과를 다시 봅니다[19].
@@ -170,7 +170,7 @@ RHEL 9 의 요일 이름 파일은 이름에 날짜가 없습니다. `postgresql
 
 ### 헥스로 한 번
 
-MySQL 일반 쿼리 로그는 칸을 탭(`09`)으로 나누고 스레드 ID 를 공백으로 채웁니다[3]. 아래는 형식으로 만든 예시 줄의 앞부분입니다.
+MySQL 일반 쿼리 로그는 필드를 탭(`09`)으로 나누고 스레드 ID 를 공백으로 채웁니다[3]. 아래는 형식으로 만든 예시 줄의 앞부분입니다.
 
 ```
 00000000: 3230 3236 2d30 332d 3132 5430 353a 3035  2026-03-12T05:05
@@ -178,7 +178,7 @@ MySQL 일반 쿼리 로그는 칸을 탭(`09`)으로 나누고 스레드 ID 를 
 00000020: 3220                                     2
 ```
 
-`5a`(`Z`) 가 UTC 시각임을 뜻하고, 바로 뒤 `09` 가 첫 칸 구분자입니다. 그 뒤 `20 20 20 31 32 20` 은 다섯 칸으로 맞춘 스레드 ID 12 와 공백입니다.
+`5a`(`Z`) 가 UTC 시각임을 뜻하고, 바로 뒤 `09` 가 첫 필드 구분자입니다. 그 뒤 `20 20 20 31 32 20` 은 다섯 자리로 맞춘 스레드 ID 12 와 공백입니다.
 
 PostgreSQL 줄은 심각도 뒤에 공백이 두 칸입니다[14]. 아래도 형식으로 만든 예시입니다.
 
@@ -197,16 +197,16 @@ plaso 의 `postgresql` 텍스트 플러그인은 PostgreSQL 서버 로그를 읽
 
 ## 교차 검증
 
-- 웹 서버 로그의 요청 시각과 데이터베이스 로그의 오류 줄을 맞춰 보면, 웹 요청이 SQL 오류를 일으켰는지 가늠할 수 있습니다. 웹 쪽 기록은 [웹 서버 로그](web-server-logs.md), 판단 흐름은 [웹 서버가 뚫렸나](../../04-scenarios/intrusion/web-compromise.md)에서 다룹니다.
+- 웹 서버 로그의 요청 시각과 데이터베이스 로그의 오류 줄을 맞춰 보면, 웹 요청이 SQL 오류를 일으켰는지 추정할 수 있습니다. 웹 쪽 기록은 [웹 서버 로그](web-server-logs.md), 판단 흐름은 [웹 서버가 뚫렸나](../../04-scenarios/intrusion/web-compromise.md)에서 다룹니다.
 - 로컬에서 `sudo -u postgres psql` 로 들어갔다면 [sudo·su 사용 기록](../logins/sudo-su.md)과 [인증 로그](../logins/auth-log.md)의 시각이 `.psql_history` 사용 시점과 맞는지 봅니다.
 - 서버 시작·종료 시각은 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md)의 서비스 시작·정지 기록과 맞춰 봅니다.
 - 여러 로그의 시각을 시간순으로 합치는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 실습
 
-MySQL 이나 PostgreSQL 이 설치된 Linux 검체(NIST CFReDS 등 공개 검체)를 골라 다음 질문을 풀어 봅니다.
+MySQL 이나 PostgreSQL 이 설치된 Linux 디스크 이미지(NIST CFReDS 등 공개 이미지)를 골라 다음 질문을 풀어 봅니다.
 
-1. 검체의 배포판을 확인하고, 이 쪽의 표에서 서버 설정 파일과 로그 경로를 찾습니다. 설정 파일의 로그 경로가 표와 다른가요?
+1. 이미지의 배포판을 확인하고, 이 페이지의 표에서 서버 설정 파일과 로그 경로를 찾습니다. 설정 파일의 로그 경로가 표와 다른가요?
 2. MySQL 이라면 `log_timestamps`, `general_log`, `log_error_verbosity` 값은 무엇이고, 그 값으로 볼 때 오류 로그에 로그인 실패가 남을 수 있나요?
 3. PostgreSQL 이라면 `log_timezone` 과 `log_line_prefix` 값은 무엇이고, 로그 첫 줄의 시각을 UTC 로 바꾸면 몇 시인가요?
 4. 데이터 디렉터리에 `binlog.` 로 시작하는 파일이 있나요? 가장 오래된 파일의 첫 사건 시각은 언제이고, 30일 보관 기본값과 맞나요?

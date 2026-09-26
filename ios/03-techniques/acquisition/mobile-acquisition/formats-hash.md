@@ -35,7 +35,7 @@ nav_order: 1210
 
 ## 해시를 계산하는 예
 
-아래는 해시를 남기는 방법의 예시이고, 결과 값은 검체마다 다릅니다.
+아래는 해시를 남기는 방법의 예시이고, 결과 값은 기기마다 다릅니다.
 
 ```
 # sysdiagnose 처럼 파일 하나인 결과물
@@ -61,7 +61,7 @@ sha256sum -c ../backup-files.sha256
 
 ## 시각 표기
 
-결과물에 붙은 시각은 기준이 서로 달라서 수집 기록에 옮길 때 기준을 함께 적습니다. sysdiagnose 파일 이름의 시각은 현지 시각에 UTC 와의 차이(예: `+0200`)를 붙인 값입니다. 백업 plist 의 `Date`·`Last Backup Date` 값이 어떤 시간대로 적히는지는 검체에서 확인하고, plist 날짜 형식의 일반 원리는 [시각 값](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+결과물에 붙은 시각은 기준이 서로 달라서 수집 기록에 옮길 때 기준을 함께 적습니다. sysdiagnose 파일 이름의 시각은 현지 시각에 UTC 와의 차이(예: `+0200`)를 붙인 값입니다. 백업 plist 의 `Date`·`Last Backup Date` 값이 어떤 시간대로 적히는지는 실제 백업에서 확인하고, plist 날짜 형식의 일반 원리는 [시각 값](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 ## 결과를 어떻게 해석하나
 

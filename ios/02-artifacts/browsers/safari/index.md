@@ -23,7 +23,7 @@ has_toc: false
 | 방문 기록 | 기기 `/private/var/mobile/Library/Safari/History.db`[1][2], 프로필별 `Safari/Profiles/*/History.db`[6] | 프로필별 DB 는 iLEAPP 가 iOS 17 이후용으로 찾습니다[6] | 방문 URL·시각·제목·방문 횟수, 넘겨주기, 이 기기인지 다른 기기인지 |
 | 탭 | 같은 폴더의 `SafariTabs.db`, `BrowserState.db`, `CloudTabs.db`[1][3] | iOS 16 부터 BrowserState.db 는 닫은 탭만 담음[5] | 열린 탭·닫은 탭·다른 기기 탭, 마지막으로 본 시각 |
 | 북마크 | 기기 `/private/var/mobile/Library/Safari/Bookmarks.db`[1][2], 백업 HomeDomain `Library/Safari/Bookmarks.db` | — | 저장한 URL 과 폴더 구조, iCloud 동기화 상태 |
-| 개인 정보 보호 탭 | SafariTabs.db 안의 개인 정보 보호 폴더[3], BrowserState.db `private_browsing` 칸[3] | 잠긴 개인 정보 보호 브라우징은 iOS 17 부터 | 방문 기록에 남지 않는 개인 정보 보호 모드 탭 |
+| 개인 정보 보호 탭 | SafariTabs.db 안의 개인 정보 보호 폴더[3], BrowserState.db `private_browsing` 열[3] | 잠긴 개인 정보 보호 브라우징은 iOS 17 부터 | 방문 기록에 남지 않는 개인 정보 보호 모드 탭 |
 | 내려받기 목록 | `/private/var/mobile/Containers/Data/Application/<GUID>/Library/Safari/Downloads/Downloads.plist`[1] | iOS 15 이미지 기준[1] | 내려받은 파일 목록. 관찰한 백업에는 이 파일이 없었습니다 |
 | 캐시 | `/private/var/mobile/Containers/Data/Application/<GUID>/Library/Caches/com.apple.mobilesafari/Cache.db`[1] | iOS 15 이미지 기준[1] | 불러온 웹 자원의 캐시 |
 | 파비콘 | `/private/var/mobile/Containers/Data/Application/<App_GUID>/Library/Image Cache/Favicons/Favicons.db`[2] | — | 사이트 아이콘 |
@@ -44,8 +44,8 @@ has_toc: false
 ## 읽는 순서
 
 1. [방문 기록 (History.db)](history.md) — `history_visits`·`history_items` 를 이어 방문을 읽는 법, 이 기기와 다른 기기의 방문을 가르는 `origin`, 두 가지 시각 기준, History.db 가 없는 백업에서 볼 다른 DB 를 다룹니다.
-2. [탭과 세션 (Tabs)](tabs.md) — SafariTabs.db·BrowserState.db·CloudTabs.db 가 각각 맡는 탭과 BLOB 칸 안의 plist, 버전마다 바뀐 시각 기준을 다룹니다.
-3. [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks-reading-list.md) — 암호화하지 않은 백업에도 들어가는 Bookmarks.db 의 표와 칸, 폴더를 따라가는 법, 읽기 목록을 가려낼 때 확인할 점을 다룹니다.
+2. [탭과 세션 (Tabs)](tabs.md) — SafariTabs.db·BrowserState.db·CloudTabs.db 가 각각 맡는 탭과 BLOB 열 안의 plist, 버전마다 바뀐 시각 기준을 다룹니다.
+3. [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks-reading-list.md) — 암호화하지 않은 백업에도 들어가는 Bookmarks.db 의 표와 열, 폴더를 따라가는 법, 읽기 목록을 가려낼 때 확인할 점을 다룹니다.
 4. [개인 정보 보호 브라우징 (Private Browsing)](private-browsing.md) — 방문 기록에는 없지만 탭 DB 에 남는 개인 정보 보호 탭을 찾는 기준과 잠긴 개인 정보 보호 브라우징을 다룹니다.
 
 ## 함께 볼 페이지

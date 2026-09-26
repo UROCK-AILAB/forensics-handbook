@@ -88,13 +88,13 @@ Known Packages:
 | secure | `appprotection_package_uid`, `appprotection_auto_scan_updated`, `appprotection_permission_function_usage` 등 `appprotection_permission_` 으로 시작하는 키 6개 |
 | secure | `rampart_blocked_adb_cmd`, `rampart_blocked_unknown_apps`, `rampart_snapshot_adb_enabled` 등 `rampart_` 으로 시작하는 키 |
 
-`appprotection_` 키는 이름으로 보아 삼성의 앱 검사 기능 설정으로 보이고, `rampart_` 키는 삼성의 자동 차단(Auto Blocker) 기능과 이름이 이어져 보입니다. 둘 다 뜻을 밝힌 공개 문서가 없어 값과 동작은 검체에서 확인합니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를, dumpsys 출력을 읽는 법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
+`appprotection_` 키는 이름으로 보면 삼성의 앱 검사 기능 설정으로 보이고, `rampart_` 키는 삼성의 자동 차단(Auto Blocker) 기능과 이름이 이어져 보입니다. 둘 다 뜻을 밝힌 공개 문서가 없어 값과 동작은 실제 기기에서 확인해야 합니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를, dumpsys 출력을 읽는 법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
 
 ## 포렌식에서 중요한 점
 
 앱 데이터는 앱마다, 또 사용자마다 따로 놓이고, 한 앱의 데이터를 찾을 때는 주 사용자 폴더만 보지 말고 기기에 있는 모든 사용자와 프로필의 폴더를 함께 봐야 합니다. 프로필이 있는지 확인하는 법은 [보안 폴더와 작업 프로필](secure-folder-work-profile.md) 페이지에서 다룹니다.
 
-`runtime-permissions.xml` 은 파일을 마지막으로 쓴 시점에 어떤 권한이 허용된 상태였는지를 보여 주지만, 소스가 쓰는 속성 가운데 시각을 적는 칸은 없어서 권한을 언제 허용했는지는 이 파일만으로 알 수 없습니다. 허용 시각은 시각이 남는 다른 기록에서 따로 찾아야 하고, 여러 기록을 한 줄로 맞추는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 페이지에서 다룹니다. 예비 사본도 본 파일과 함께 수집해 둡니다.
+`runtime-permissions.xml` 은 파일을 마지막으로 쓴 시점에 어떤 권한이 허용된 상태였는지를 보여 주지만, 소스가 쓰는 속성 가운데 시각을 적는 것은 없어서 권한을 언제 허용했는지는 이 파일만으로 알 수 없습니다. 허용 시각은 시각이 남는 다른 기록에서 따로 찾아야 하고, 여러 기록을 한 줄로 맞추는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 페이지에서 다룹니다. 예비 사본도 본 파일과 함께 수집해 둡니다.
 
 ## 함정
 

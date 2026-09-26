@@ -13,7 +13,7 @@ Chrome for Android 의 방문 기록은 프로필 폴더의 `History` SQLite 파
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Chrome 은 페이지를 열 때마다 방문 한 건을 visits 표에 적고, 같은 URL 의 누적 정보(제목, 방문 횟수, 마지막 방문 시각)는 urls 표 한 행에 모읍니다 [1]. 방문마다 "어떻게 들어왔는지"를 적는 전환 값(transition)과 바로 앞 방문을 가리키는 번호(from_visit)가 붙어서, 사용자가 주소창에 직접 입력했는지, 링크를 눌렀는지, 리다이렉트로 넘어갔는지를 가려 볼 수 있습니다 [1].
+Chrome 은 페이지를 열 때마다 방문 한 건을 visits 표에 적고, 같은 URL 의 누적 정보(제목, 방문 횟수, 마지막 방문 시각)는 urls 표 한 행에 모읍니다 [1]. 방문마다 "어떻게 들어왔는지"를 적는 전환 값(transition)과 바로 앞 방문을 가리키는 번호(from_visit)가 붙어서, 사용자가 주소창에 직접 입력했는지, 링크를 눌렀는지, 리다이렉트로 넘어갔는지를 구분할 수 있습니다 [1].
 
 같은 `History` 파일에는 다운로드 표도 들어 있지만, 다운로드는 [다운로드 (Downloads)](downloads.md) 페이지에서 따로 다룹니다. 열려 있던 탭은 이 파일이 아니라 탭 상태 파일에 남고, [탭과 세션 (Tabs·Sessions)](tabs-sessions.md) 페이지에 정리했습니다.
 
@@ -33,14 +33,14 @@ Chrome 은 페이지를 열 때마다 방문 한 건을 visits 표에 적고, �
 
 ### urls 표
 
-URL 한 개에 한 행이고, ALEAPP 는 아래 칸을 읽습니다 [1].
+URL 한 개에 한 행이고, ALEAPP 는 아래 열을 읽습니다 [1].
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | id | URL 번호. visits.url 과 keyword_search_terms.url_id 가 이 값을 가리킵니다 |
 | url, title | 주소와 페이지 제목 |
 | visit_count | 방문 횟수 |
-| typed_count | 주소창에 직접 입력해 들어간 횟수를 세는 칸으로 보입니다 |
+| typed_count | 주소창에 직접 입력해 들어간 횟수를 세는 열로 보입니다 |
 | last_visit_time | 마지막 방문 시각(1601-01-01 UTC 부터의 마이크로초) |
 | hidden | 0 이면 목록에 보이는 기록, 1 이면 숨긴 기록 |
 
@@ -48,7 +48,7 @@ URL 한 개에 한 행이고, ALEAPP 는 아래 칸을 읽습니다 [1].
 
 방문 한 번에 한 행입니다 [1].
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | visit_time | 방문 시각(1601-01-01 UTC 부터의 마이크로초) |
 | url | urls.id 를 가리킵니다 |
@@ -88,7 +88,7 @@ transition 은 낮은 1바이트(`transition & 0xff`)가 핵심 유형이고, �
 
 ### 검색어
 
-keyword_search_terms 표에는 url_id(urls.id 를 가리킴)와 term 칸이 있고, ALEAPP 는 urls 와 이어 붙여 검색어와 URL, last_visit_time 을 함께 보여 줍니다 [1]. ALEAPP 의 "Search Terms" 결과는 이 표와 다르게, urls.url 에 `search?q=` 가 들어간 행에서 `q=` 뒤의 값을 잘라 URL 디코딩한 것이라서 [1], 두 결과는 출처가 다르다는 점을 알고 씁니다.
+keyword_search_terms 표에는 url_id(urls.id 를 가리킴)와 term 열이 있고, ALEAPP 는 urls 와 이어 붙여 검색어와 URL, last_visit_time 을 함께 보여 줍니다 [1]. ALEAPP 의 "Search Terms" 결과는 이 표와 다르게, urls.url 에 `search?q=` 가 들어간 행에서 `q=` 뒤의 값을 잘라 URL 디코딩한 것이라서 [1], 두 결과는 출처가 다르다는 점을 알고 씁니다.
 
 ## 증거로서 의미
 
@@ -101,7 +101,7 @@ keyword_search_terms 표에는 url_id(urls.id 를 가리킴)와 term 칸이 있�
 | keyword_search_terms 의 term | 그 검색어가 URL 과 함께 기록되었다 | 검색 결과에서 무엇을 열었는지(visits 로 따로 확인) |
 | 기록이 없음 | — | 그 사이트에 가지 않았다는 것 |
 
-보고서에는 "이 시각에 이 URL 방문 기록이 있다" 처럼 표가 말하는 만큼만 씁니다. 방문자를 특정하는 문제는 [그 시각에 폰을 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 시나리오를 봅니다.
+보고서에는 "이 시각에 이 URL 방문 기록이 있다" 처럼 표로 확인되는 만큼만 씁니다. 방문자를 특정하는 문제는 [그 시각에 폰을 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 시나리오를 봅니다.
 
 ## 시각 해석
 
@@ -111,7 +111,7 @@ visits 에는 방문마다 시각이 남고 urls 에는 마지막 방문 시각 
 
 ## 함정과 한계
 
-Chromium 의 기록 만료 기준(kExpireDaysThreshold)은 90일이고, HistoryBackend 가 이 일수를 기준으로 오래된 기록을 지우기 시작합니다 [2]. Android 판에 같은 90일이 적용되는지, 다른 기기에서 동기화된 방문이 이 파일에 들어오는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 따라서 오래전 방문이 없다는 사실만으로 사용자가 지웠다고 판단하지 않습니다.
+Chromium 의 기록 만료 기준(kExpireDaysThreshold)은 90일이고, HistoryBackend 가 이 일수를 기준으로 오래된 기록을 지우기 시작합니다 [2]. Android 판에 같은 90일이 적용되는지, 다른 기기에서 동기화된 방문이 이 파일에 들어오는지는 실제 기기로 확인해야 합니다. 따라서 오래전 방문이 없다는 사실만으로 사용자가 지웠다고 판단하지 않습니다.
 
 원본 `History` 옆에 `-journal` 파일이 있으면 읽기 전용으로 열 때 실패할 수 있는데, SQLite 가 저널을 되감으려면 파일에 써야 하기 때문입니다. ALEAPP 는 이런 파일을 건너뛰고 기록을 남깁니다 [1]. 원본은 건드리지 말고 사본을 만들어 곁 파일과 함께 열고, 저널과 지운 행의 흔적은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md) 페이지를 봅니다. ALEAPP 는 Magisk 미러 경로(`.magisk` … `mirror`)에 있는 사본은 중복이라 건너뜁니다 [1].
 
@@ -121,7 +121,7 @@ hidden 이 1 인 행은 ALEAPP 가 "Yes" 로 표시하니 [1], 도구 화면에�
 
 ### 헥스로 한 번
 
-아래는 명세로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. 2025-01-01 00:00:00 UTC 를 Chrome 시각으로 바꾸면 (1,735,689,600 + 11,644,473,600) × 1,000,000 = 13,380,163,200,000,000 이고, 16진수로 `0x2F89300292A000` 입니다. SQLite 레코드 안에서는 이 값이 8바이트 큰 쪽 먼저(big-endian) 정수로 들어가서 아래처럼 보입니다.
+아래는 명세로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. 2025-01-01 00:00:00 UTC 를 Chrome 시각으로 바꾸면 (1,735,689,600 + 11,644,473,600) × 1,000,000 = 13,380,163,200,000,000 이고, 16진수로 `0x2F89300292A000` 입니다. SQLite 레코드 안에서는 이 값이 8바이트 큰 쪽 먼저(big-endian) 정수로 들어가서 아래처럼 보입니다.
 
 ```
 00 2F 89 30 02 92 A0 00    visit_time = 13380163200000000
@@ -154,7 +154,7 @@ ORDER BY v.visit_time;
 
 ## 실습
 
-Chrome 이 깔린 공개 Android 검체(NIST CFReDS 등에서 고른 것)로 아래 질문을 풀어 봅니다.
+Chrome 이 깔린 공개 Android 실습 이미지(NIST CFReDS 등에서 고른 것)로 아래 질문을 풀어 봅니다.
 
 1. visits 에서 transition 의 낮은 1바이트가 1(TYPED)인 방문을 모두 뽑고, 그 가운데 FROM_ADDRESS_BAR 비트가 켜진 것이 몇 건인지 셉니다.
 2. from_visit 를 따라가 리다이렉트 비트가 켜진 방문이 어느 방문에서 이어졌는지 사슬로 그려 봅니다.

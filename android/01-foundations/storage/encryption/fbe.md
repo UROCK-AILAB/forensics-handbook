@@ -70,7 +70,7 @@ fileencryption=aes-256-xts:aes-256-cts:inlinecrypt_optimized
 
 ## 읽는 법
 
-FBE 를 쓰는 기기에서는 시스템 속성 `ro.crypto.state` 가 `encrypted`, `ro.crypto.type` 이 `file` 이어야 합니다 [1]. 라이브 기기라면 이 두 속성과 fstab 의 `fileencryption`·`metadata_encryption` 줄을 함께 보면 암호화 방식과 알고리즘을 확인할 수 있고, 확인한 값과 방법은 확보 기록에 남깁니다. 삼성 기기처럼 제조사가 손본 기기에서도 값이 문서와 같게 나오는지는 검체에서 확인합니다.
+FBE 를 쓰는 기기에서는 시스템 속성 `ro.crypto.state` 가 `encrypted`, `ro.crypto.type` 이 `file` 이어야 합니다 [1]. 라이브 기기라면 이 두 속성과 fstab 의 `fileencryption`·`metadata_encryption` 줄을 함께 보면 암호화 방식과 알고리즘을 확인할 수 있고, 확인한 값과 방법은 확보 기록에 남깁니다. 삼성 기기처럼 제조사가 손본 기기에서도 값이 문서와 같게 나오는지는 실제 기기에서 확인합니다.
 
 버전마다 달라진 점은 아래와 같습니다.
 
@@ -80,7 +80,7 @@ FBE 를 쓰는 기기에서는 시스템 속성 `ro.crypto.state` 가 `encrypted
 | 9 | 메타데이터 암호화 도입 [2][3] |
 | 10 | 새로 나오는 기기는 FBE 필수 [1] |
 | 11 | 새로 나오는 기기는 내부 저장소 메타데이터 암호화 필수, fscrypt 정책 기본값 v2 [1][2] |
-| 삼성 One UI | AOSP 의 FBE 와 다르게 구현한 부분은 공개 자료 없음, 검체에서 확인 |
+| 삼성 One UI | AOSP 의 FBE 와 다르게 구현한 부분은 공개 자료 없음, 실제 기기에서 확인 |
 
 ## 포렌식에서 중요한 점
 

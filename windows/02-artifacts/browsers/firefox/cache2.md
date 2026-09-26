@@ -31,9 +31,9 @@ nav_order: 1730
 
 ### 메타데이터 헤더
 
-항목 파일 안의 메타데이터 헤더 (CacheFileMetadataHeader) 는 칸이 모두 32비트 정수이고, 네트워크 바이트 순서, 곧 빅엔디언 (big-endian) 으로 저장됩니다.
+항목 파일 안의 메타데이터 헤더 (CacheFileMetadataHeader) 는 필드가 모두 32비트 정수이고, 네트워크 바이트 순서, 곧 빅엔디언 (big-endian) 으로 저장됩니다.
 
-| 순서 | 칸 | 뜻 |
+| 순서 | 필드 | 뜻 |
 |---|---|---|
 | 1 | `mVersion` | 항목 버전입니다 |
 | 2 | `mFetchCount` | 캐시 항목을 연 횟수입니다 |
@@ -51,7 +51,7 @@ nav_order: 1730
 | `1 << 0` | kCacheEntryIsPinned | 고정된 항목입니다 |
 | `1 << 1` | kCacheEntryIsEncrypted | 데이터 조각과 메타데이터를 암호화해 저장합니다 |
 
-- 암호화된 항목은 메타데이터 전체를 한 덩어리로 암호화하고 파일 끝의 오프셋 값에 암호화 표시를 싣습니다. 이 암호화가 어느 출시판부터 켜지는지, 기본으로 켜지는지는 공개 자료가 없어 검체의 `mFlags` 로 확인합니다.
+- 암호화된 항목은 메타데이터 전체를 한 덩어리로 암호화하고 파일 끝의 오프셋 값에 암호화 표시를 싣습니다. 이 암호화가 어느 출시판부터 켜지는지, 기본으로 켜지는지는 실제 데이터의 `mFlags` 로 확인합니다.
 
 ### 정규화된 메타데이터 모양
 
@@ -63,9 +63,9 @@ nav_order: 1730
 
 - `header` 는 위의 메타데이터 헤더입니다.
 - `key` 는 이 항목의 키 문자열입니다. 원래 주소가 여기에 들어갑니다.
-- `elements` 는 이름·값 쌍의 묶음입니다. 요청 방식이나 응답 헤더가 여기에 담기는 것으로 알려져 있습니다. 키 이름과 값 형식은 판마다 다를 수 있어 검체에서 확인합니다.
+- `elements` 는 이름·값 쌍의 묶음입니다. 요청 방식이나 응답 헤더가 여기에 담기는 것으로 알려져 있습니다. 키 이름과 값 형식은 판마다 다를 수 있어 실제 데이터에서 확인합니다.
 
-### 검체에서 확인할 것
+### 실제 데이터에서 확인할 것
 
 - 항목 파일 전체의 배치입니다. 파일 끝에 오프셋 워드가 있다는 것 말고는 본문 데이터와 메타데이터의 크기·위치를 설명한 공개 자료가 없습니다.
 - `cache2` 폴더 안의 구성입니다. `entries` 폴더, 색인 파일, 삭제 예정 항목 폴더의 이름과 역할을 봅니다.
@@ -92,7 +92,7 @@ nav_order: 1730
 
 ## 시각 해석
 
-- 메타데이터 헤더의 시각 칸은 빅엔디언으로 저장되는 32비트 정수입니다.
+- 메타데이터 헤더의 시각 필드는 빅엔디언으로 저장되는 32비트 정수입니다.
 - `mLastFetched`·`mLastModified`·`mExpirationTime` 은 1970년 1월 1일 (UTC) 부터 센 초입니다[3].
 - `mLastFetched` 는 항목을 열 때, `mLastModified` 는 항목을 고칠 때 바뀝니다. 서버 쪽 수정 시각은 응답 헤더에서 따로 봅니다.
 - 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
@@ -103,13 +103,13 @@ nav_order: 1730
 - **`mLastModified` 를 서버 수정 시각으로 읽지 않습니다.** 이 값은 캐시 항목을 고친 시각입니다.
 - **캐시는 용량을 넘으면 항목을 지웁니다.** 캐시가 없다고 받지 않은 것은 아닙니다.
 - **지운 항목은 되살리기 어렵습니다.** 옛 캐시를 찾으려면 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md), 섀도 복사본, 메모리도 봅니다.
-- **버전 1 캐시일 수 있습니다.** Firefox 32 전 검체는 `Cache` 폴더를 씁니다. `cache2` 만 찾고 끝내지 않습니다.
+- **버전 1 캐시일 수 있습니다.** Firefox 32 전 프로필은 `Cache` 폴더를 씁니다. `cache2` 만 찾고 끝내지 않습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-메타데이터 헤더는 빅엔디언 32비트 정수 여덟 개입니다. 아래는 명세대로 만든 예시이며 특정 검체에서 나온 값이 아닙니다.
+메타데이터 헤더는 빅엔디언 32비트 정수 여덟 개입니다. 아래는 명세대로 만든 예시이며 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 00 00 00 04    mVersion       = 4
@@ -143,7 +143,7 @@ nav_order: 1730
 
 ## 실습
 
-파이어폭스를 쓴 공개 검체(NIST CFReDS 등)에서 프로필 로컬 폴더를 꺼내 아래 질문을 풀어 봅니다.
+파이어폭스를 쓴 공개 실습 데이터(NIST CFReDS 등)에서 프로필 로컬 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `cache2` 폴더가 있습니까, `Cache` 폴더가 있습니까? 어느 캐시 버전입니까?
 2. 항목 파일 하나를 헥스로 열어 메타데이터 헤더의 `mFetchCount` 와 `mFlags` 를 읽어 봅니다.
@@ -152,6 +152,6 @@ nav_order: 1730
 
 ## 참고 문헌
 
-1. Mozilla, *CacheFileMetadata.h* (파이어폭스 소스, main 가지 — 항목 버전, 헤더 칸, 바이트 순서, 플래그, 정규화된 메타데이터 모양). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/netwerk/cache2/CacheFileMetadata.h
+1. Mozilla, *CacheFileMetadata.h* (파이어폭스 소스, main 가지 — 항목 버전, 헤더 필드, 바이트 순서, 플래그, 정규화된 메타데이터 모양). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/netwerk/cache2/CacheFileMetadata.h
 2. *Mozilla Firefox — Forensics Wiki* (캐시 버전 2 도입, 폴더 위치). https://forensics.wiki/mozilla_firefox/
-3. Mozilla, *nsICacheEntry.idl* (파이어폭스 소스, main 가지 — 연 횟수·시각 칸의 뜻과 단위). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/netwerk/cache2/nsICacheEntry.idl
+3. Mozilla, *nsICacheEntry.idl* (파이어폭스 소스, main 가지 — 연 횟수·시각 필드의 뜻과 단위). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/netwerk/cache2/nsICacheEntry.idl

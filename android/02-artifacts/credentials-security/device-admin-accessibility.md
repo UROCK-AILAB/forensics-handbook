@@ -62,7 +62,7 @@ accessibility_qs_targets
 notified_non_accessibility_category_services
 ```
 
-이 밖에 확대(magnification)·자막(captioning) 관련 키도 있습니다. `enabled_accessibility_services` 값의 형식은 검체에서 값을 읽어 확인합니다. 설정 값의 저장 파일과 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
+이 밖에 확대(magnification)·자막(captioning) 관련 키도 있습니다. `enabled_accessibility_services` 값의 형식은 실제 기기에서 값을 읽어 확인합니다. 설정 값의 저장 파일과 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
 
 ### 버전별 차이
 
@@ -76,7 +76,7 @@ notified_non_accessibility_category_services
 
 ### device_policies.xml
 
-활성 관리자 한 개가 `<admin>` 태그 하나로 저장되고, `name` 속성에 컴포넌트 이름이 "패키지/클래스" 모양으로 들어갑니다 [3]. 관리자별 정책은 그 아래에 따로 씁니다. 아래는 소스의 태그 이름으로 만든 모양 예시이고, 실제 검체에서 가져온 값이 아닙니다.
+활성 관리자 한 개가 `<admin>` 태그 하나로 저장되고, `name` 속성에 컴포넌트 이름이 "패키지/클래스" 모양으로 들어갑니다 [3]. 관리자별 정책은 그 아래에 따로 씁니다. 아래는 소스의 태그 이름으로 만든 모양 예시이고, 실제 기기에서 가져온 값이 아닙니다.
 
 ```xml
 <admin name="com.example.app/com.example.app.AdminReceiver">
@@ -98,7 +98,7 @@ keep-profiles-running
 
 속성 이름으로는 `value`, `alias`, `id`, `permission-provider`, `name`, `disabled`, `setup-complete`, `provisioning-state`, `permission-policy`, `device-provisioning-config-applied`, `device-paired`, `new-user-disclaimer`, `factory-reset-flags`, `factory-reset-reason` 이 있습니다 [3]. `accepted-ca-certificate` 와 `owner-installed-ca-cert` 는 인증서 쪽 기록이라서 [설치된 인증서 (User Certificates)](user-certificates.md) 페이지에서 함께 봅니다. 파일이 텍스트 XML 로 열리지 않으면 [안드로이드 바이너리 XML (ABX)](../../01-foundations/data-formats/abx.md) 페이지를 봅니다.
 
-기기 소유자·프로필 소유자 정보는 위 폴더에 따로 저장됩니다 [5]. `dumpsys user` 출력에는 사용자마다 `Has profile owner`, `Device policy restrictions`, `Effective restrictions` 줄이 있고, UserProperties 안에 `mInheritDevicePolicy` 칸이 있습니다. 이 줄로 프로필 소유자 유무와 정책에서 나온 제한을 사용자 단위로 볼 수 있습니다.
+기기 소유자·프로필 소유자 정보는 위 폴더에 따로 저장됩니다 [5]. `dumpsys user` 출력에는 사용자마다 `Has profile owner`, `Device policy restrictions`, `Effective restrictions` 줄이 있고, UserProperties 안에 `mInheritDevicePolicy` 필드가 있습니다. 이 줄로 프로필 소유자 유무와 정책에서 나온 제한을 사용자 단위로 볼 수 있습니다.
 
 ### 접근성 서비스 설정 XML
 
@@ -120,7 +120,7 @@ APK 안의 `<accessibility-service>` XML 에는 아래 속성이 올 수 있고,
 
 **증명하지 못하는 것**
 
-두 기록 모두 누가 허용했는지는 알려 주지 않고, 언제 켰는지를 담은 칸도 알려져 있지 않습니다. 능력을 선언했다는 사실은 그 능력을 실제로 썼다는 증거가 아니라서, 화면을 읽었다거나 제스처를 보냈다고 쓰려면 앱 자체의 데이터나 로그 같은 다른 기록이 필요합니다. 기기 관리자나 접근성 권한을 쓰는 앱이 곧 악성 앱이라는 뜻도 아닙니다. TalkBack 같은 보조 앱도 접근성 권한을 쓰고 [2], 기기 관리자 정책도 비밀번호·잠금을 관리하려고 만든 기능입니다 [1].
+두 기록 모두 누가 허용했는지는 알려 주지 않고, 언제 켰는지를 담은 필드도 알려져 있지 않습니다. 능력을 선언했다는 사실은 그 능력을 실제로 썼다는 증거가 아니라서, 화면을 읽었다거나 제스처를 보냈다고 쓰려면 앱 자체의 데이터나 로그 같은 다른 기록이 필요합니다. 기기 관리자나 접근성 권한을 쓰는 앱이 곧 악성 앱이라는 뜻도 아닙니다. TalkBack 같은 보조 앱도 접근성 권한을 쓰고 [2], 기기 관리자 정책도 비밀번호·잠금을 관리하려고 만든 기능입니다 [1].
 
 현재 설정만 보이니, 한때 켰다가 끈 앱은 이 두 곳에서 드러나지 않을 수 있습니다. 관리자 앱 패키지가 사라지면 서비스가 "Admin package %s not found for user %d, removing active admin" 로그를 남기고 활성 관리자에서 빼므로 [4], 로그가 남아 있다면 사라진 관리자 앱의 단서가 됩니다. logcat 에서는 태그보다 이 문구로 찾습니다.
 
@@ -136,7 +136,7 @@ APK 안의 `<accessibility-service>` XML 에는 아래 속성이 올 수 있고,
 
 둘째, 접근성 키가 있다는 사실은 서비스가 켜져 있다는 뜻이 아니고, 값을 직접 읽어야 합니다.
 
-셋째, 삼성 One UI 에서 기기 관리자·접근성에 관한 추가 기록이 있는지는 공개 자료가 없어 검체로 확인해야 합니다. 녹스 구조는 [삼성 녹스 (Samsung Knox)](../../01-foundations/security-model/samsung-knox.md), 작업 프로필은 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에서 다룹니다.
+셋째, 삼성 One UI 에서 기기 관리자·접근성에 관한 추가 기록이 있는지는 실제 기기로 확인해야 합니다. 녹스 구조는 [삼성 녹스 (Samsung Knox)](../../01-foundations/security-model/samsung-knox.md), 작업 프로필은 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -169,9 +169,9 @@ settings 출력에서 `enabled_accessibility_services`, `accessibility_enabled`,
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에서 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 이미지에서 아래 질문을 풀어 봅니다.
 
-1. 검체에 `device_policies.xml` 이 있습니까? 있다면 `<admin>` 이 몇 개이고, `name` 속성의 패키지는 무엇입니까?
+1. 이미지에 `device_policies.xml` 이 있습니까? 있다면 `<admin>` 이 몇 개이고, `name` 속성의 패키지는 무엇입니까?
 2. 그 패키지의 APK 정책 XML 에서 요청한 정책은 무엇이고, 그 가운데 `wipe-data` 나 `force-lock` 이 있습니까?
 3. settings secure 의 `enabled_accessibility_services` 값에는 어떤 서비스가 있고, 각 서비스의 설정 XML 에서 `canRetrieveWindowContent` 와 `canPerformGestures` 값은 무엇입니까?
 4. 관리자·접근성 앱의 설치 시각과 `device_policies.xml` 파일 수정 시각은 얼마나 떨어져 있습니까?

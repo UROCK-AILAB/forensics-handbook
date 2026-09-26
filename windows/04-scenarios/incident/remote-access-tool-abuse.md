@@ -6,7 +6,7 @@ nav_order: 3710
 
 # 원격 제어 프로그램으로 누가 조작했나 (Remote Access Tool Abuse)
 
-이 페이지는 원격 제어 프로그램으로 누군가 이 PC 를 조작했는지 확인하는 순서를 다룹니다. 어떤 도구가 있었는지, 언제 누가 접속했는지를 먼저 찾습니다. 그다음 접속 구간 안의 행위가 원격 쪽이 한 일인지, 현장 사용자가 한 일인지를 가립니다. 도구별 로그 위치와 칸은 [원격 제어 프로그램](../../02-artifacts/network/remote-access-tools/index.md) 과 그 하위 페이지에 있습니다.
+이 페이지는 원격 제어 프로그램으로 누군가 이 PC 를 조작했는지 확인하는 순서를 다룹니다. 어떤 도구가 있었는지, 언제 누가 접속했는지를 먼저 찾습니다. 그다음 접속 구간 안의 행위가 원격 쪽이 한 일인지, 현장 사용자가 한 일인지를 구분합니다. 도구별 로그 위치와 필드는 [원격 제어 프로그램](../../02-artifacts/network/remote-access-tools/index.md) 과 그 하위 페이지에 있습니다.
 
 ## 조사 질문
 
@@ -18,7 +18,7 @@ nav_order: 3710
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | Windows 버전 | 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 적습니다. |
 | 시간대 | 도구 로그, 이벤트 로그, 파일 시스템의 시각을 한 기준으로 맞춥니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. 도구 로그의 시각 기준은 [원격 제어 프로그램](../../02-artifacts/network/remote-access-tools/index.md) 의 "시각을 읽을 때" 에서 확인합니다. |
@@ -53,7 +53,7 @@ MITRE ATT&CK 의 T1219 Remote Access Tools 는 공격자가 정상 원격 접속
 | 5 | 프로세스 생성 | 구간 안의 행위와 부모 프로세스 | [프로세스 생성 (Sysmon 1)](../../02-artifacts/event-logs/sysmon/1.md) · [프로세스 생성](../../02-artifacts/event-logs/4688.md) |
 | 6 | 다운로드 흔적 | 도구를 받은 경로 | [이 파일은 어디서 왔나](../activity/file-origin.md) |
 
-1~2 로 도구가 있었는지 확인합니다. 3~4 로 접속 구간을 만듭니다. 5 로 구간 안의 행위를 가립니다. 6 은 도구가 처음 들어온 길을 봅니다.
+1~2 로 도구가 있었는지 확인합니다. 3~4 로 접속 구간을 만듭니다. 5 로 구간 안의 행위를 확인합니다. 6 은 도구가 처음 들어온 길을 봅니다.
 
 ## 설치형과 휴대용
 
@@ -111,7 +111,7 @@ The DFIR Report 사례(2023-09-25)에서 ScreenConnect 는 스크립트를 디�
 ## 함께 볼 페이지
 
 - [원격 제어 프로그램](../../02-artifacts/network/remote-access-tools/index.md) — 도구별 흔적의 길잡이입니다.
-- [팀뷰어](../../02-artifacts/network/remote-access-tools/teamviewer.md) · [애니데스크](../../02-artifacts/network/remote-access-tools/anydesk.md) · [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) · [기타 원격 제어 도구](../../02-artifacts/network/remote-access-tools/rustdesk-splashtop-chrome-remote-desktop.md) — 도구 자체 로그의 위치와 칸입니다.
+- [팀뷰어](../../02-artifacts/network/remote-access-tools/teamviewer.md) · [애니데스크](../../02-artifacts/network/remote-access-tools/anydesk.md) · [스크린커넥트](../../02-artifacts/network/remote-access-tools/screenconnect.md) · [기타 원격 제어 도구](../../02-artifacts/network/remote-access-tools/rustdesk-splashtop-chrome-remote-desktop.md) — 도구 자체 로그의 위치와 필드입니다.
 - [서비스 설치](../../02-artifacts/event-logs/7045-4697.md) · [프로그램 설치·삭제 이벤트](../../02-artifacts/event-logs/msiinstaller.md) — 설치형 도구의 흔적입니다.
 - [프로세스 생성 (Sysmon 1)](../../02-artifacts/event-logs/sysmon/1.md) · [네트워크 연결·DNS 질의 (Sysmon 3·22)](../../02-artifacts/event-logs/sysmon/3-22.md) — 실행과 연결을 봅니다.
 - [프리페치](../../02-artifacts/execution/prefetch/index.md) · [AmCache](../../02-artifacts/execution/amcache-hve/index.md) · [네트워크 사용량](../../02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md) — 휴대용 도구의 흔적입니다.

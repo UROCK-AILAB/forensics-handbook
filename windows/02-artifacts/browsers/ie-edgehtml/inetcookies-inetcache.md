@@ -63,7 +63,7 @@ Windows 11 25H2 의 폴더 모습입니다.
 
 ### IE 4~9: 캐시 폴더 표로 잇기
 
-`index.dat` 머리글의 오프셋 72부터 캐시 폴더 표가 있습니다. 표는 4바이트 개수 뒤에 12바이트 항목이 이어지는 모양입니다. 머리글의 나머지 칸은 [옛 기록 파일 (index.dat)](index-dat.md) 에서 다룹니다.
+`index.dat` 머리글의 오프셋 72부터 캐시 폴더 표가 있습니다. 표는 4바이트 개수 뒤에 12바이트 항목이 이어지는 모양입니다. 머리글의 나머지 필드는 [옛 기록 파일 (index.dat)](index-dat.md) 에서 다룹니다.
 
 | 오프셋 | 크기 | 내용 |
 |---|---|---|
@@ -74,10 +74,10 @@ Windows 11 25H2 의 폴더 모습입니다.
 | 92 (0x5C) | 8 | 1번 폴더 이름 |
 | … | | 폴더마다 12바이트씩 이어집니다 |
 
-URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
+URL 레코드는 두 필드로 캐시 파일을 가리킵니다.
 
 - **캐시 폴더 번호** — 위 표에서 몇 번째 폴더인지 가리킵니다. 0 이 첫 폴더입니다. 4.7 판은 레코드 오프셋 60, 5.2 판은 오프셋 56 에 있습니다. 5.2 판에서 0xfe·0xff 는 특수값입니다.
-- **파일 이름 위치** — 레코드 안에서 캐시 파일 이름을 찾는 칸입니다. 4.7 판은 오프셋 64~67 에 있습니다.
+- **파일 이름 위치** — 레코드 안에서 캐시 파일 이름을 찾는 필드입니다. 4.7 판은 오프셋 64~67 에 있습니다.
 
 캐시 파일의 경로는 이렇게 조립합니다.
 
@@ -85,12 +85,12 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 <캐시 폴더>\<폴더 표에서 찾은 8글자 이름>\<레코드의 파일 이름>
 ```
 
-### IE 10 이후: WebCache 의 칸으로 잇기
+### IE 10 이후: WebCache 의 열로 잇기
 
-- WebCache DB 의 `Container_#` 표에는 캐시 파일과 관련된 칸이 있습니다. Filename, FileExtension, FileSize, CacheId, ResponseHeaders, RequestHeaders 입니다.
-- `Containers` 표에도 Directory 칸이 있습니다. 이 칸과 실제 캐시 폴더의 관계는 공개된 분석 자료가 없으므로, Filename 칸 값으로 실제 폴더를 검색해 맞춰 봅니다.
-- 쿠키는 `CookieEntryEx_#` 표의 Name, Value, RDomain, Expires, LastModified 같은 칸에 들어갑니다.
-- 표와 칸 전체는 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에서 다룹니다.
+- WebCache DB 의 `Container_#` 표에는 캐시 파일과 관련된 열이 있습니다. Filename, FileExtension, FileSize, CacheId, ResponseHeaders, RequestHeaders 입니다.
+- `Containers` 표에도 Directory 열이 있습니다. 이 열과 실제 캐시 폴더의 관계는 공개된 분석 자료가 없으므로, Filename 열 값으로 실제 폴더를 검색해 맞춰 봅니다.
+- 쿠키는 `CookieEntryEx_#` 표의 Name, Value, RDomain, Expires, LastModified 같은 열에 들어갑니다.
+- 표와 열 전체는 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -111,7 +111,7 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 
 ## 시각 해석
 
-- 주소와 캐시 파일의 시각 칸은 기록 파일에 있습니다. [웹캐시 DB](webcachev01-dat.md) 와 [index.dat](index-dat.md) 의 시각 해석을 따릅니다.
+- 주소와 캐시 파일의 시각 값은 기록 파일에 있습니다. [웹캐시 DB](webcachev01-dat.md) 와 [index.dat](index-dat.md) 의 시각 해석을 따릅니다.
 - 캐시 파일 자체의 파일 시스템 시각은 [$MFT](../../filesystem/mft.md) 에서 봅니다.
 - 두 시각이 크게 어긋나면 파일을 옮기거나 복사한 흔적인지 확인합니다. 파일 생성과 삭제 순서는 [$UsnJrnl](../../filesystem/usnjrnl.md) 로 확인합니다.
 
@@ -167,17 +167,17 @@ URL 레코드는 두 칸으로 캐시 파일을 가리킵니다.
 
 ## 실습
 
-IE 를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+IE 를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 캐시 폴더는 `Content.IE5` 입니까, `INetCache\IE` 입니까? 연결 폴더가 있습니까?
-2. IE 9 이전 검체라면 캐시 `index.dat` 의 폴더 표에 폴더가 몇 개 있습니까? 실제 하위 폴더 수와 같습니까?
+2. 분석 대상이 IE 9 이전이라면 캐시 `index.dat` 의 폴더 표에 폴더가 몇 개 있습니까? 실제 하위 폴더 수와 같습니까?
 3. 폴더 표의 파일 수와 실제 하위 폴더의 파일 수가 맞습니까?
 4. 기록에는 있는데 폴더에 없는 캐시 파일이 몇 개입니까? 그 파일은 할당 해제 영역에서 찾을 수 있습니까?
-5. IE 10 이후 검체라면 `CookieEntryEx_#` 표에 쿠키가 몇 개 있습니까? `INetCookies` 폴더에는 무엇이 남아 있습니까?
+5. 분석 대상이 IE 10 이후라면 `CookieEntryEx_#` 표에 쿠키가 몇 개 있습니까? `INetCookies` 폴더에는 무엇이 남아 있습니까?
 
 ## 참고 문헌
 
 1. ForensicArtifacts, *artifacts/data/webbrowser.yaml* (IE 버전별 캐시·쿠키 경로). https://raw.githubusercontent.com/ForensicArtifacts/artifacts/main/artifacts/data/webbrowser.yaml
-2. libyal/libmsiecf, *MSIE Cache File (index.dat) format* (캐시 폴더 표, URL 레코드의 폴더 번호와 파일 이름 칸). https://raw.githubusercontent.com/libyal/libmsiecf/main/documentation/MSIE%20Cache%20File%20(index.dat)%20format.asciidoc
-3. log2timeline/plaso, *plaso/parsers/esedb_plugins/msie_webcache.py* (WebCache 의 캐시·쿠키 칸). https://raw.githubusercontent.com/log2timeline/plaso/main/plaso/parsers/esedb_plugins/msie_webcache.py
+2. libyal/libmsiecf, *MSIE Cache File (index.dat) format* (캐시 폴더 표, URL 레코드의 폴더 번호와 파일 이름 필드). https://raw.githubusercontent.com/libyal/libmsiecf/main/documentation/MSIE%20Cache%20File%20(index.dat)%20format.asciidoc
+3. log2timeline/plaso, *plaso/parsers/esedb_plugins/msie_webcache.py* (WebCache 의 캐시·쿠키 열). https://raw.githubusercontent.com/log2timeline/plaso/main/plaso/parsers/esedb_plugins/msie_webcache.py
 4. Forensafe 블로그, 옛 엣지(EdgeHTML) 아티팩트 설명 글 (옛 엣지 쿠키 폴더와 WebCacheV01.dat). https://www.forensafe.com/blogs/microsoftedge.html

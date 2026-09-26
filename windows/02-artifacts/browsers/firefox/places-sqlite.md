@@ -21,8 +21,8 @@ nav_order: 1710
 
 - 위치는 프로필 본 폴더의 `places.sqlite` 입니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 - Vista·7 의 실제 경로 예는 `C:\Users\%USERNAME%\AppData\Roaming\Mozilla\Firefox\Profiles\%PROFILE%.default\places.sqlite` 입니다.
-- Firefox 21 전에는 다운로드 기록이 `downloads.sqlite` 의 `moz_downloads` 표에 있었습니다. 이 표에는 `startTime`, `endTime`, `source`, `currBytes`, `maxBytes` 칸이 있었습니다. 옛 검체를 만나면 이 파일도 찾습니다.
-- 아래 표와 칸 이름은 파이어폭스 개발 중인 최신 코드(main 가지) 기준입니다[1]. 예전 출시판에는 없는 칸이 있을 수 있으므로, 옛 검체에서는 표와 칸을 먼저 확인합니다.
+- Firefox 21 전에는 다운로드 기록이 `downloads.sqlite` 의 `moz_downloads` 표에 있었습니다. 이 표에는 `startTime`, `endTime`, `source`, `currBytes`, `maxBytes` 열이 있었습니다. 오래된 데이터를 분석할 때는 이 파일도 찾습니다.
+- 아래 표와 열 이름은 파이어폭스 개발 중인 최신 코드(main 가지) 기준입니다[1]. 예전 출시판에는 없는 열이 있을 수 있으므로, 오래된 데이터에서는 표와 열을 먼저 확인합니다.
 
 ## 구조
 
@@ -43,18 +43,18 @@ nav_order: 1710
 | `moz_places_metadata` | 페이지를 본 시간, 스크롤, 키 입력 같은 상호작용 기록입니다 |
 | `moz_places_metadata_search_queries` | 검색어(`terms`)입니다. `moz_places_metadata.search_query_id` 가 이 표를 가리킵니다 |
 
-### `moz_places` 의 칸
+### `moz_places` 의 열
 
 - `id`, `url`, `title`, `rev_host`, `visit_count`, `hidden`, `typed`, `frecency`, `last_visit_date`, `guid`, `foreign_count`, `url_hash`, `description`, `preview_image_url`, `site_name`, `origin_id`, `recalc_frecency`, `alt_frecency`, `recalc_alt_frecency` 입니다.
 - `rev_host` 는 호스트 이름을 거꾸로 뒤집은 문자열입니다. 같은 도메인의 주소를 빨리 모으려는 색인용입니다.
 - `visit_count` 는 방문 횟수입니다. `typed` 는 주소창에 직접 친 적이 있는지 표시합니다.
 - `frecency` 는 자주·최근 방문을 함께 셈한 점수입니다. 주소창 자동완성 순서를 정하는 값입니다.
 
-### `moz_historyvisits` 의 칸
+### `moz_historyvisits` 의 열
 
 - `id`, `from_visit`, `place_id`, `visit_date`, `visit_type`, `session`, `source`, `triggeringPlaceId` 입니다.
 - `place_id` 는 `moz_places.id` 를 가리키며, 어느 주소를 방문했는지 잇는 열쇠입니다.
-- `from_visit` 은 이 방문의 바로 앞 방문을 가리키므로 링크를 눌러 넘어온 경로를 되짚을 수 있습니다.
+- `from_visit` 은 이 방문의 바로 앞 방문을 가리키므로 링크를 눌러 넘어온 경로를 거슬러 올라가 찾을 수 있습니다.
 - `visit_date` 는 방문 시각입니다.
 
 ### `visit_type` 값
@@ -90,8 +90,8 @@ nav_order: 1710
 
 - `moz_historyvisits` 의 한 행은 그 시각에 브라우저가 그 주소를 불러왔다는 기록입니다.
 - `visit_type` 이 2(TYPED) 면 사용자가 주소창에 직접 쳤거나 자동완성을 골랐습니다.
-- `from_visit` 을 따라가면 어느 페이지에서 링크를 눌러 이 페이지로 왔는지 되짚을 수 있습니다.
-- `moz_bookmarks` 에 즐겨찾기가 있으면 이 프로필에 그 주소가 저장돼 있었습니다. 사용자가 직접 저장했는지, 설치 때 들어간 기본 즐겨찾기인지, 다른 브라우저에서 가져왔는지는 따로 가립니다.
+- `from_visit` 을 따라가면 어느 페이지에서 링크를 눌러 이 페이지로 왔는지 거슬러 올라가 찾을 수 있습니다.
+- `moz_bookmarks` 에 즐겨찾기가 있으면 이 프로필에 그 주소가 저장돼 있었습니다. 사용자가 직접 저장했는지, 설치 때 들어간 기본 즐겨찾기인지, 다른 브라우저에서 가져왔는지는 따로 확인합니다.
 - 다운로드 주석이 있으면 이 브라우저로 그 파일을 내려받은 기록이 있습니다. `downloads/destinationFileURI` 에 저장 위치가, `downloads/metaData` 에 상태·끝난 시각·파일 크기 같은 값이 JSON 으로 남습니다.
 - 사생활 보호 창에서 내려받은 파일은 다운로드 기록에 넣지 않습니다. `download.source.isPrivate` 가 참이면 기록하지 않습니다[4].
 
@@ -108,7 +108,7 @@ nav_order: 1710
 
 - `moz_historyvisits.visit_date` 는 1970년 1월 1일 00:00 UTC 부터 센 마이크로초입니다. 파이어폭스에서는 이 단위를 PRTime 이라고 부릅니다[2].
 - 현지 시각이 아닙니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
-- `moz_places.last_visit_date`, `moz_bookmarks.dateAdded`·`lastModified`, `moz_annos.dateAdded`·`lastModified` 도 같은 단위로 알려져 있으므로, 검체에서 다른 시각과 맞춰 확인합니다.
+- `moz_places.last_visit_date`, `moz_bookmarks.dateAdded`·`lastModified`, `moz_annos.dateAdded`·`lastModified` 도 같은 단위로 알려져 있으므로, 실제 데이터에서 다른 시각과 맞춰 확인합니다.
 - 여러 기록을 한 시간 축에 놓을 때는 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 
 ## 함정과 한계
@@ -123,7 +123,7 @@ nav_order: 1710
 
 ### 헥스로 한 번
 
-`visit_date` 는 마이크로초 정수입니다. SQLite 레코드는 정수를 빅엔디언으로 저장합니다. 아래는 2024-01-01 00:00:00 UTC 를 명세대로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다.
+`visit_date` 는 마이크로초 정수입니다. SQLite 레코드는 정수를 빅엔디언으로 저장합니다. 아래는 2024-01-01 00:00:00 UTC 를 명세대로 만든 예시입니다. 특정 기기에서 나온 값이 아닙니다.
 
 ```
 00 06 0D D7 10 21 20 00    = 1704067200000000 (마이크로초)
@@ -162,16 +162,16 @@ ORDER BY v.visit_date;
 
 ## 실습
 
-파이어폭스를 쓴 공개 검체(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+파이어폭스를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `moz_historyvisits` 에서 `visit_type` 이 2(TYPED) 인 방문만 골라 시간순으로 늘어놓습니다. 사용자가 손으로 연 사이트는 무엇입니까?
-2. 한 방문을 골라 `from_visit` 을 따라 앞 방문을 되짚습니다. 어느 페이지에서 링크를 눌러 왔습니까?
+2. 한 방문을 골라 `from_visit` 을 따라 앞 방문으로 거슬러 올라갑니다. 어느 페이지에서 링크를 눌러 왔습니까?
 3. `moz_places` 의 `visit_count` 가 가장 큰 주소는 무엇입니까? 그 주소의 첫 방문과 마지막 방문 시각은 언제입니까?
 4. 다운로드 주석(`moz_annos` 의 `downloads/destinationFileURI`)에서 내려받은 파일의 저장 위치를 모읍니다. 그 파일이 $MFT 에 있습니까?
 
 ## 참고 문헌
 
-1. Mozilla, *nsPlacesTables.h* (파이어폭스 소스, main 가지 — 표와 칸 정의). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/places/nsPlacesTables.h
+1. Mozilla, *nsPlacesTables.h* (파이어폭스 소스, main 가지 — 표와 열 정의). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/places/nsPlacesTables.h
 2. Mozilla, *nsINavHistoryService.idl* (파이어폭스 소스, main 가지 — 방문 유형·출처 값, PRTime 정의). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/places/nsINavHistoryService.idl
 3. *Mozilla Firefox — Forensics Wiki* (파일 위치, downloads.sqlite 이력, 시각 단위). https://forensics.wiki/mozilla_firefox/
 4. Mozilla, *DownloadHistory.sys.mjs* (파이어폭스 소스, main 가지 — 다운로드 주석 이름과 내용, 사생활 보호 창 다운로드 제외). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/downloads/DownloadHistory.sys.mjs

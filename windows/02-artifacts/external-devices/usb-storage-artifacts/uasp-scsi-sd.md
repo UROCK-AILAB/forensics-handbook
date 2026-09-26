@@ -21,7 +21,7 @@ USBSTOR 를 거치지 않는 경우는 세 가지입니다.
 
 **1. UASP 장치.** USB 연결 SCSI 프로토콜 (USB Attached SCSI Protocol, UASP) 을 쓰는 장치는 Uaspstor.sys 가 맡습니다. 이 드라이버는 벌크 스트림 (Bulk Stream) 을 지원하는 SuperSpeed USB 장치용 클래스 드라이버입니다. 대상은 USB 대용량 저장 클래스 (08h) 가운데 하위 클래스 06h·프로토콜 62h 인 장치입니다. 이 장치의 설치 클래스는 USB 가 아니라 SCSIAdapter 입니다. 그래서 그 아래 디스크는 내장 디스크처럼 `Enum\SCSI` 에 남습니다. UASP 를 지원하는 외장 SSD 와 디스크 케이스가 여기에 해당합니다.
 
-**2. USB 가 아닌 버스로 붙은 디스크.** eSATA 외장 디스크는 내장 SATA 디스크와 같은 드라이버를 씁니다. 썬더볼트 외장 NVMe 디스크는 PCIe 장치로 붙으므로 내장 NVMe 디스크와 같은 드라이버를 씁니다. 두 경우 모두 내장 디스크가 남는 열거자에 남습니다. Windows 8 이후 기본 AHCI·NVMe 드라이버에서는 `Enum\SCSI` 입니다. 드라이버에 따라 `Enum\IDE` 같은 다른 열거자에 남을 수 있으므로 검체의 내장 디스크 위치부터 봅니다.
+**2. USB 가 아닌 버스로 붙은 디스크.** eSATA 외장 디스크는 내장 SATA 디스크와 같은 드라이버를 씁니다. 썬더볼트 외장 NVMe 디스크는 PCIe 장치로 붙으므로 내장 NVMe 디스크와 같은 드라이버를 씁니다. 두 경우 모두 내장 디스크가 남는 열거자에 남습니다. Windows 8 이후 기본 AHCI·NVMe 드라이버에서는 `Enum\SCSI` 입니다. 드라이버에 따라 `Enum\IDE` 같은 다른 열거자에 남을 수 있으므로 분석 대상 PC 의 내장 디스크 위치부터 봅니다.
 
 **3. 내장 SD 슬롯.** PCI 버스에 붙은 SD 호스트 컨트롤러 (SD Host Controller) 는 SD 버스 드라이버 sdbus.sys 가 맡습니다. 여기에 메모리 카드를 꽂으면 카드 항목이 `Enum\SD` 에 생깁니다. USB 로 붙은 카드 리더는 다릅니다. 이 리더는 Usbstor.sys 가 맡으므로 USBSTOR 에 남습니다. 노트북 내장 리더라도 안에서 USB 로 붙어 있으면 USBSTOR 에 남습니다.
 
@@ -54,7 +54,7 @@ Windows 7 에는 UASP 기본 드라이버가 없어서 같은 장치도 Windows 
 
 UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁니다. `Enum\USB` 항목은 USB 장치 자체이고 `Enum\SCSI` 항목은 그 안의 디스크이므로, 두 항목을 이어야 VID·PID·시리얼 번호와 디스크 모델명·시각을 한 장치로 묶을 수 있습니다.
 
-이 절의 키 이름 꼴과 값은 Windows 11 빌드 26200 기준입니다. 공식 문서에 없는 내용이 많아 판마다 검체에서 확인합니다.
+이 절의 키 이름 형식과 값은 Windows 11 빌드 26200 기준입니다. 공식 문서에 없는 내용이 많아 판마다 실제 데이터로 확인합니다.
 
 > 그림 자리: `Enum\USB\VID_…&PID_…\MSFT30<시리얼>` (Service=UASPStor, ParentIdPrefix=P, ContainerID=C) → `Enum\SCSI\Disk&Ven_…&Prod_…\P&000000` (ContainerID=C, Partmgr DiskId=D) → `Enum\STORAGE\Volume\{D}#…`·WPD 키 `SWD#WPDBUSENUM#{D}#…` 로 이어지는 그림
 
@@ -67,12 +67,12 @@ UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁�
 | 인스턴스 ID | `MSFT30` 뒤에 시리얼 번호 | 시리얼 번호 |
 | ParentIdPrefix | 있음 | 장치에 따라 다름 |
 
-`MSFT30` 여섯 글자는 장치 시리얼 번호가 아니므로 다른 기록과 맞출 때는 이 접두어를 떼고 비교합니다. 이 접두어가 붙는 조건은 공식 문서에 없으므로 UASP 여부는 접두어가 아니라 Service 값과 ClassGUID 값으로 가립니다. 시리얼 번호와 VID·PID 를 읽는 법은 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) 에서 다룹니다.
+`MSFT30` 여섯 글자는 장치 시리얼 번호가 아니므로 다른 기록과 맞출 때는 이 접두어를 떼고 비교합니다. 이 접두어가 붙는 조건은 공식 문서에 없으므로 UASP 여부는 접두어가 아니라 Service 값과 ClassGUID 값으로 구분합니다. 시리얼 번호와 VID·PID 를 읽는 법은 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md) 에서 다룹니다.
 
 ### Enum\SCSI 인스턴스 키
 
-- 키 경로는 `Enum\SCSI\Disk&Ven_<제조사>&Prod_<제품>\<인스턴스 ID>` 꼴입니다.
-- 인스턴스 ID 는 `Enum\USB` 쪽 ParentIdPrefix 값 뒤에 `&` 와 16진수 6자리가 붙은 꼴입니다.
+- 키 경로는 `Enum\SCSI\Disk&Ven_<제조사>&Prod_<제품>\<인스턴스 ID>` 형식입니다.
+- 인스턴스 ID 는 `Enum\USB` 쪽 ParentIdPrefix 값 뒤에 `&` 와 16진수 6자리가 붙은 형식입니다.
 - 두 키의 ContainerID 값은 같습니다. 한 물리 장치에 속한 장치 노드는 모두 같은 컨테이너 ID 를 쓰기 때문입니다.
 - 사람이 읽는 장치 이름은 FriendlyName 값에 있습니다.
 - `Properties\{83da6326-97a6-4088-9453-a1923f573b29}\0064`~`0067` 에 설치·연결·해제 시각이 있습니다.
@@ -82,7 +82,7 @@ UASP 장치 하나는 `Enum\USB` 와 `Enum\SCSI` 에 항목을 하나씩 남깁�
 
 UASP 디스크의 볼륨 기록은 키 이름에 시리얼 번호 대신 DiskId 를 씁니다.
 
-| 하이브 | 위치 | 키 이름 꼴 |
+| 하이브 | 위치 | 키 이름 형식 |
 |---|---|---|
 | SYSTEM | `ControlSet00X\Enum\STORAGE\Volume` | `{DiskId}#<16진수 16자리>` |
 | SYSTEM | `ControlSet00X\Enum\SWD\WPDBUSENUM` | `{DiskId}#<16진수 16자리>` |
@@ -95,9 +95,9 @@ MountedDevices 값 데이터에는 `SCSI#Disk…` 장치 경로 문자열이 없
 
 ### Enum\SD 인스턴스 키
 
-SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID_o(4)&PID_p(0~5)&REV_n.m` 꼴입니다. 레지스트리에서는 `Enum\SD\VID_…&OID_…&PID_…&REV_…\<인스턴스 ID>` 가 됩니다.
+SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID_o(4)&PID_p(0~5)&REV_n.m` 형식입니다. 레지스트리에서는 `Enum\SD\VID_…&OID_…&PID_…&REV_…\<인스턴스 ID>` 가 됩니다.
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | VID | SD 카드 협회 (SD Card Association, SDA) 가 정한 제조사 번호. 16진수 2자리 |
 | OID | SDA 가 정한 OEM·카드 내용 번호. 16진수 4자리 |
@@ -108,7 +108,7 @@ SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID_o(4)&PID_p(0~5)&REV_n.m` �
 
 이 식별자는 카드 모델을 가리키며, 장치 ID 에는 카드 한 장을 가리키는 시리얼 번호가 없습니다. 인스턴스 ID 에 무엇이 들어가는지는 문서에 없으므로 인스턴스 ID 를 카드 시리얼 번호로 단정하지 않습니다.
 
-카드 위에는 sffdisk.sys 와 sffp_sd.sys 가 올라가고, Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다. 카드 아래 디스크 항목이 어느 열거자에 생기는지는 공개 자료가 없으므로, 같은 ContainerID 를 쓰는 항목을 찾아 잇습니다.
+카드 위에는 sffdisk.sys 와 sffp_sd.sys 가 올라가고, Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다. 카드 아래 디스크 항목이 어느 열거자에 생기는지는 공개 문서에 나와 있지 않으므로, 같은 ContainerID 를 쓰는 항목을 찾아 잇습니다.
 
 ### USB 카드 리더
 
@@ -160,7 +160,7 @@ CF 슬롯과 스마트미디어 슬롯이 있는 리더는 장치 객체를 두 
 5. 할당되지 않은 셀에서 찾은 결과는 지워진 키일 수 있습니다. 이런 결과는 따로 표시해 둡니다.
 
 ```text
-아래는 문자 인코딩 규칙으로 만든 검색 패턴 예시입니다. 특정 검체에서 나온 값이 아닙니다.
+아래는 문자 인코딩 규칙으로 만든 검색 패턴 예시입니다. 특정 기기에서 나온 값이 아닙니다.
 
 "MSFT30"    1바이트 문자 (키 이름)
 4D 53 46 54 33 30
@@ -197,7 +197,7 @@ CF 슬롯과 스마트미디어 슬롯이 있는 리더는 장치 객체를 두 
 ## 실습
 
 1. NIST CFReDS 에서 Windows 7 이후 시스템 이미지를 하나 골라 SYSTEM 하이브를 꺼냅니다. `Enum\SCSI` 에 어떤 항목이 있습니까? 각 항목이 내장인지 외장인지 무엇으로 가렸습니까?
-2. 같은 검체에서 USBSTOR 항목 수와 `Enum\USB` 의 저장장치 항목 수가 맞습니까? 맞지 않으면 남는 `Enum\USB` 항목의 Service 값은 무엇입니까?
+2. 같은 이미지에서 USBSTOR 항목 수와 `Enum\USB` 의 저장장치 항목 수가 맞습니까? 맞지 않으면 남는 `Enum\USB` 항목의 Service 값은 무엇입니까?
 3. 시험용 실제 PC (Windows 10·11) 에 UASP 디스크 케이스를 USB 3 포트에 꽂습니다. 그다음 USB 2.0 포트에도 꽂습니다. 두 번 연결한 뒤 USBSTOR·`Enum\USB`·`Enum\SCSI` 에 각각 무엇이 생겼습니까? 가상 머신에서는 결과가 달라질 수 있으므로 실제 PC 에서 합니다.
 4. 3번에서 찾은 UASP 디스크의 DiskId 로 `Enum\STORAGE\Volume` 과 WPD 키를 찾습니다. 드라이브 문자와 볼륨 이름까지 이어집니까?
 5. 내장 SD 슬롯이 있는 노트북에 같은 모델 카드 두 장과 다른 모델 카드 한 장을 차례로 꽂습니다. `Enum\SD` 항목은 어떻게 달라집니까? 인스턴스 ID 로 같은 모델 카드 두 장을 구별할 수 있습니까?

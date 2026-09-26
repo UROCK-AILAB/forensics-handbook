@@ -9,7 +9,7 @@ nav_order: 490
 
 ## 한 줄 요약
 
-iOS 16 부터 메시지 앱에 최근 삭제된 항목 복구와 보낸 메시지 취소·편집이 생기면서 sms.db 에 삭제·복구용 표가 늘었고, 취소하거나 편집한 메시지는 `message.text` 가 비는 대신 다른 칸과 바이옴·알림 기록에 흔적이 남을 수 있습니다.
+iOS 16 부터 메시지 앱에 최근 삭제된 항목 복구와 보낸 메시지 취소·편집이 생기면서 sms.db 에 삭제·복구용 표가 늘었고, 취소하거나 편집한 메시지는 `message.text` 가 비는 대신 다른 열과 바이옴·알림 기록에 흔적이 남을 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -26,9 +26,9 @@ sms.db 의 기본 구조는 [대화 DB 구조 (sms.db)](sms-db.md)에서, 첨부
 | iOS 15 까지 | 최근 삭제된 항목 복구, 보낸 메시지 취소·편집 기능이 없습니다 | [2][3] |
 | iOS 16 이후 | 최근 삭제된 항목(30~40일 안 복구), 취소(2분 안), 편집(15분 안)이 생겼고 `chat_recoverable_message_join` 이 쓰입니다 | [1][2][3][4][5] |
 
-sms.db 에서 삭제와 이어진 표와 칸은 아래와 같습니다.
+sms.db 에서 삭제와 이어진 표와 열은 아래와 같습니다.
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `chat_recoverable_message_join` | `chat_id`, `message_id`, `delete_date`, `ck_sync_state` |
 | `recoverable_message_part` | `chat_id`, `message_id`, `part_index`, `delete_date`, `part_text`, `ck_sync_state` |
@@ -42,11 +42,11 @@ sms.db 에서 삭제와 이어진 표와 칸은 아래와 같습니다.
 
 ## 구조
 
-`chat_recoverable_message_join` 은 최근 삭제된 항목에 들어간 메시지를 대화방과 이어 두는 표이지만, `delete_date` 는 늘 채워지지는 않아서 칸이 있는지와 값이 있는지를 먼저 확인합니다[5]. `recoverable_message_part`, `deleted_messages`, `sync_deleted_*` 표가 정확히 무엇을 담는지는 공개된 설명이 없어 검체로 확인해야 합니다. 특히 `recoverable_message_part.part_text` 는 이름만 보면 지운 본문이 남을 것 같지만, 실제 검체에서 값을 보고 판단합니다.
+`chat_recoverable_message_join` 은 최근 삭제된 항목에 들어간 메시지를 대화방과 이어 두는 표이지만, `delete_date` 는 늘 채워지지는 않아서 열이 있는지와 값이 있는지를 먼저 확인합니다[5]. `recoverable_message_part`, `deleted_messages`, `sync_deleted_*` 표가 정확히 무엇을 담는지는 공개된 설명이 없어 실제 데이터로 확인해야 합니다. 특히 `recoverable_message_part.part_text` 는 이름만 보면 지운 본문이 남을 것 같지만, 실제 데이터에서 값을 보고 판단합니다.
 
-취소하거나 편집한 메시지는 `message.text` 칸이 비워집니다[1][4]. 두 경우 모두 `date_edited` 칸에 바뀐 시각이 남는다는 설명이 있지만[4], `date_edited` 칸이 없는 `message` 표도 있어서 칸이 있는지 먼저 확인합니다. 편집 기록과 취소 정보는 `message_summary_info` 에 들어가고[5], D20 의 시험에서는 `attributedBody` 와 `message_summary_info` 에서 편집 기록을 찾았으며 편집할 때마다 따로 기록되었습니다[1].
+취소하거나 편집한 메시지는 `message.text` 열이 비워집니다[1][4]. 두 경우 모두 `date_edited` 열에 바뀐 시각이 남는다는 설명이 있지만[4], `date_edited` 열이 없는 `message` 표도 있어서 열이 있는지 먼저 확인합니다. 편집 기록과 취소 정보는 `message_summary_info` 에 들어가고[5], D20 의 시험에서는 `attributedBody` 와 `message_summary_info` 에서 편집 기록을 찾았으며 편집할 때마다 따로 기록되었습니다[1].
 
-설정 파일에도 삭제와 이어진 이름의 키가 있습니다. 값과 뜻은 공개된 설명이 없어 검체에서 확인합니다.
+설정 파일에도 삭제와 이어진 이름의 키가 있습니다. 값과 뜻은 공개된 설명이 없어 실제 데이터로 확인합니다.
 
 | 파일(HomeDomain, `Library/Preferences/`) | 키 |
 |---|---|
@@ -54,7 +54,7 @@ sms.db 에서 삭제와 이어진 표와 칸은 아래와 같습니다.
 | `com.apple.madrid.plist` | `LocalDBStats` 아래 `deletedMessages`, `deletedRecoverableMessages`, `deletedAttachments`, `deletedChats`, 그리고 `Server.TotalRecords.recoverableMessageDeleteZone` |
 | `com.apple.imdsmsrecordstore.plist` | `DeleteSequenceNumber` |
 
-`KeepMessageForDays` 와 `SSKeepMessages` 는 이름으로 보아 메시지 보관 기간 설정과 이어져 보이지만, 설정할 수 있는 값과 자동 삭제가 일어나는 방식은 공개된 설명이 없습니다. `DeleteVerificationCodes` 도 이름으로는 인증 코드 자동 삭제 설정으로 보일 뿐입니다. 설정 plist 를 읽는 법은 [설정 값 (Preferences)](../../system-account/preferences.md)에 있습니다.
+`KeepMessageForDays` 와 `SSKeepMessages` 는 이름으로 보면 메시지 보관 기간 설정과 이어져 보이지만, 설정할 수 있는 값과 자동 삭제가 일어나는 방식은 공개된 설명이 없습니다. `DeleteVerificationCodes` 도 이름으로는 인증 코드 자동 삭제 설정으로 보일 뿐입니다. 설정 plist 를 읽는 법은 [설정 값 (Preferences)](../../system-account/preferences.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -62,7 +62,7 @@ sms.db 에서 삭제와 이어진 표와 칸은 아래와 같습니다.
 
 **증명하지 못하는 것.** `delete_date` 가 비어 있을 수 있어서[5] 언제 지웠는지를 이 표만으로 늘 알 수는 없습니다. 복구 표에 없다고 지운 메시지가 없었다는 뜻도 아니고, 30~40일이 지난 항목은 복구할 수 없게 됩니다[2]. 취소한 메시지가 상대 기기에서 정말 사라졌는지도 상대 OS 버전에 따라 달라서[3] 이 기기의 기록만으로는 알 수 없습니다. 누가 지웠는지도 이 DB 로는 알 수 없습니다.
 
-보고서에는 "이 대화방의 메시지 몇 건이 수집 시점에 최근 삭제된 항목으로 기록되어 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 대화방의 메시지 몇 건이 수집 시점에 최근 삭제된 항목으로 기록되어 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -72,9 +72,9 @@ sms.db 에서 삭제와 이어진 표와 칸은 아래와 같습니다.
 
 WAL 파일을 빼고 열면 최근 메시지가 경고 없이 빠져서[5] WAL 을 반드시 함께 수집합니다. SQLite 의 WAL 과 빈 페이지에서 지운 행을 되살리는 방법은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)와 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
-한 기기에서 복구하면 Messages in iCloud 로 다른 기기에도 반영된다는 설명과 편집을 "최대 5번" 할 수 있다는 설명도 있지만, 공식 자료로 뒷받침되지 않으니 검체로 확인하고 씁니다.
+한 기기에서 복구하면 Messages in iCloud 로 다른 기기에도 반영된다는 설명과 편집을 "최대 5번" 할 수 있다는 설명도 있지만, 공식 자료로 뒷받침되지 않으니 실제 기기로 확인하고 씁니다.
 
-취소·편집 흔적은 sms.db 밖에도 남습니다. D20 의 iOS 16 시험에서는 취소한 메시지의 날짜·시각·내용·상대가 바이옴의 AppIntent 스트림(`/private/var/mobile/Library/Biome/streams/public/AppIntent/local`)에 남을 수 있었고, 알림 기록(`/private/var/mobile/Library/DuetExpertCenter/streams/UserNotificationEvents/local/`)에도 내용이 남았지만 알림 시각이 원래 메시지 시각과 늘 맞지는 않았습니다[1]. 편집한 메시지도 같은 곳에 남았습니다[1]. KnowledgeC.db 에서는 보통의 파싱으로는 나오지 않았고 카빙으로 찾을 수 있었습니다[1]. 이 결과는 iOS 16 에서 시험한 것이고 세부 버전은 밝혀져 있지 않아서, 다른 버전에서는 검체로 다시 확인합니다.
+취소·편집 흔적은 sms.db 밖에도 남습니다. D20 의 iOS 16 시험에서는 취소한 메시지의 날짜·시각·내용·상대가 바이옴의 AppIntent 스트림(`/private/var/mobile/Library/Biome/streams/public/AppIntent/local`)에 남을 수 있었고, 알림 기록(`/private/var/mobile/Library/DuetExpertCenter/streams/UserNotificationEvents/local/`)에도 내용이 남았지만 알림 시각이 원래 메시지 시각과 늘 맞지는 않았습니다[1]. 편집한 메시지도 같은 곳에 남았습니다[1]. KnowledgeC.db 에서는 보통의 파싱으로는 나오지 않았고 카빙으로 찾을 수 있었습니다[1]. 이 결과는 iOS 16 에서 시험한 것이고 세부 버전은 밝혀져 있지 않아서, 다른 버전에서는 실제 기기로 다시 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -106,7 +106,7 @@ ORDER BY date;
 
 ## 실습
 
-NIST CFReDS 같은 곳에 공개된 iOS 16 이후 검체로 아래를 풀어 봅니다.
+NIST CFReDS 같은 곳에 공개된 iOS 16 이후 시험 데이터로 아래를 풀어 봅니다.
 
 1. `chat_recoverable_message_join` 의 행 가운데 `delete_date` 가 빈 행이 몇 개인지 세어 봅니다.
 2. `recoverable_message_part.part_text` 에 무엇이 들어 있는지 보고, 같은 `message_id` 의 `message` 행과 비교해 봅니다.

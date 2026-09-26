@@ -6,7 +6,7 @@ nav_order: 300
 
 # 보안 폴더와 작업 프로필 (Secure Folder·Work Profile)
 
-작업 프로필 (Work Profile) 은 Android 다중 사용자 구조 위에서 주 사용자에 딸린 보조 사용자로 동작하며 앱 데이터와 계정을 따로 둡니다[1]. 삼성 보안 폴더 (Secure Folder) 도 기기에서 주 사용자에 딸린 사용자로 보일 수 있지만, 그 구조를 설명한 공개 삼성 문서가 없어 검체에서 확인해야 합니다.
+작업 프로필 (Work Profile) 은 Android 다중 사용자 구조 위에서 주 사용자에 딸린 보조 사용자로 동작하며 앱 데이터와 계정을 따로 둡니다[1]. 삼성 보안 폴더 (Secure Folder) 도 기기에서 주 사용자에 딸린 사용자로 보일 수 있지만, 그 구조를 설명한 삼성 공개 문서는 없어서 실제 기기에서 확인해야 합니다.
 
 ## 이 구조가 드러나는 아티팩트
 
@@ -28,18 +28,18 @@ nav_order: 300
 
 작업 프로필을 관리하는 쪽은 프로필 소유자 (profile owner) 인 기기 정책 클라이언트(DPC) 앱이고, 이 앱이 DevicePolicyManager API 로 정책을 겁니다. 작업 프로필 앱의 아이콘에는 파란 배지가 붙고, Android 9 이상에서 그 색은 `#1A73E8` 입니다. 사용자는 설정이나 빠른 설정에서 작업 프로필을 켜고 끌 수 있습니다. 정책을 거는 앱의 흔적은 [기기 관리자와 접근성 권한](../../02-artifacts/credentials-security/device-admin-accessibility.md) 페이지에서 다룹니다.
 
-작업 프로필에 붙는 userid 값과 프로필마다 남는 파일은 검체에서 확인합니다.
+작업 프로필에 붙는 userid 값과 프로필마다 남는 파일은 실제 기기에서 확인합니다.
 
 ## 보안 폴더에서 확인할 것
 
-보안 폴더의 구조를 설명한 공개 삼성 문서가 없어서, 조사할 때 아래 질문을 검체에서 확인합니다.
+보안 폴더의 구조를 설명한 삼성 공개 문서는 없어서, 조사할 때 아래 질문을 실제 기기에서 확인합니다.
 
 | 질문 | 상태 |
 |---|---|
-| 보안 폴더가 별도 Android 사용자(프로필)로 만들어지는가, 그렇다면 userid 는 몇인가 | 검체에서 확인 |
-| 보안 폴더의 앱 데이터가 `/data/user/<userid>` 아래에 따로 놓이는가 | 검체에서 확인 |
-| 보안 폴더가 주 사용자와 다른 암호화 키를 쓰는가 | 검체에서 확인 |
-| 보안 폴더를 숨기는 기능이 어떤 흔적을 남기는가 | 검체에서 확인(관련 설정 키는 아래에 있음) |
+| 보안 폴더가 별도 Android 사용자(프로필)로 만들어지는가, 그렇다면 userid 는 몇인가 | 실제 기기에서 확인 |
+| 보안 폴더의 앱 데이터가 `/data/user/<userid>` 아래에 따로 놓이는가 | 실제 기기에서 확인 |
+| 보안 폴더가 주 사용자와 다른 암호화 키를 쓰는가 | 실제 기기에서 확인 |
+| 보안 폴더를 숨기는 기능이 어떤 흔적을 남기는가 | 실제 기기에서 확인(관련 설정 키는 아래에 있음) |
 
 ## 기기에서 보이는 흔적
 
@@ -57,11 +57,11 @@ Users:
     Flags: <값>
 ```
 
-둘째 사용자는 userid 가 세 자리이고 `parentId` 가 있어서 주 사용자에 딸린 프로필로 보입니다. 이 사용자가 보안 폴더인지 작업 프로필인지는 `Type` 값으로 가립니다.
+둘째 사용자는 userid 가 세 자리이고 `parentId` 가 있어서 주 사용자에 딸린 프로필로 보입니다. 이 사용자가 보안 폴더인지 작업 프로필인지는 `Type` 값으로 구분합니다.
 
-사용자 항목에는 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground`, `Has profile owner`, `Restrictions`, `Device policy restrictions`, `Effective restrictions`, `Can have profile`, `UserProperties`, `Ignore errors preparing storage` 칸이 있습니다. 이 가운데 `Has profile owner` 는 앞에서 말한 프로필 소유자가 있는지와 이름이 이어지고, 각 칸의 뜻과 시각 형식은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
+사용자 항목에는 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground`, `Has profile owner`, `Restrictions`, `Device policy restrictions`, `Effective restrictions`, `Can have profile`, `UserProperties`, `Ignore errors preparing storage` 필드가 있습니다. 이 가운데 `Has profile owner` 는 앞에서 말한 프로필 소유자가 있는지와 이름이 이어지고, 각 필드의 뜻과 시각 형식은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
 
-`UserProperties` 아래에는 프로필이 주 사용자와 무엇을 나눠 쓰는지 이름으로 드러나는 칸이 있습니다.
+`UserProperties` 아래에는 프로필이 주 사용자와 무엇을 나눠 쓰는지 이름으로 드러나는 필드가 있습니다.
 
 ```
 mShowInLauncher
@@ -83,7 +83,7 @@ mProfileApiVisibility
 mItemsRestrictedOnHomeScreen
 ```
 
-이름으로 보아 `mUseParentsContacts` 는 연락처, `mMediaSharedWithParent` 는 미디어, `mCredentialShareableWithParent` 는 자격 증명을 주 사용자와 나눠 쓰는지와 이어져 있어서, 프로필 안의 데이터가 주 사용자 쪽 기록에도 섞였을지 판단할 때 확인할 곳입니다.
+이름으로 보면 `mUseParentsContacts` 는 연락처, `mMediaSharedWithParent` 는 미디어, `mCredentialShareableWithParent` 는 자격 증명을 주 사용자와 나눠 쓰는지와 이어져 있어서, 프로필 안의 데이터가 주 사용자 쪽 기록에도 섞였을지 판단할 때 확인할 곳입니다.
 
 ### 설정 값
 
@@ -95,29 +95,29 @@ mItemsRestrictedOnHomeScreen
 | global | `smartswitch_data_exist_securefolder` |
 | system | `caller_id_to_show_Secure Folder` |
 
-`hide_secure_folder_flag` 는 이름으로 보아 보안 폴더 숨기기와 이어지고, 값의 뜻은 공개 자료가 없어 검체에서 확인합니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다.
+`hide_secure_folder_flag` 는 이름으로 보면 보안 폴더 숨기기와 이어지고, 값의 뜻은 실제 기기에서 확인해야 합니다. 설정 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 봅니다.
 
 ### 계정과 알림
 
-`dumpsys account` 는 사용자마다 `User UserInfo{...}:` 머리 아래에 계정 목록과 계정 변경 이력(Accounts History)을 보여 주고, 이력의 칸은 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다. 이력 해석은 [계정](../../02-artifacts/system-account/accounts/index.md) 페이지에서 다룹니다.
+`dumpsys account` 는 사용자마다 `User UserInfo{...}:` 머리 아래에 계정 목록과 계정 변경 이력(Accounts History)을 보여 주고, 이력의 필드는 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다. 이력 해석은 [계정](../../02-artifacts/system-account/accounts/index.md) 페이지에서 다룹니다.
 
-`dumpsys notification` 의 알림 항목에는 `userId=` 칸이 있고, `userId=-#` 처럼 음수인 값도 나올 수 있습니다. 음수 userId 의 뜻은 검체에서 확인합니다.
+`dumpsys notification` 의 알림 항목에는 `userId=` 필드가 있고, `userId=-#` 처럼 음수인 값도 나올 수 있습니다. 음수 userId 의 뜻은 실제 기기에서 확인합니다.
 
 ## 포렌식에서 중요한 점
 
 작업 프로필은 앱 데이터와 계정을 주 사용자와 따로 두기 때문에, 수집과 분석을 주 사용자 기준으로만 하면 프로필 안의 앱 데이터와 계정을 놓칩니다. 먼저 `dumpsys user` 나 수집한 이미지로 사용자가 몇 명인지 확인하고, 사용자마다 앱 데이터·계정·알림을 따로 봅니다.
 
-반대로 입력기와 접근성 서비스는 프로필과 주 사용자가 함께 쓰고 작업 프로필 앱의 알림은 주 사용자 쪽에 보이기 때문에, 주 사용자 쪽 기록에 프로필 앱의 흔적이 섞여 있을 수 있습니다. 한 기록이 어느 사용자에서 나왔는지는 UID 나 `userId` 칸으로 구분해서 보고서에 적습니다.
+반대로 입력기와 접근성 서비스는 프로필과 주 사용자가 함께 쓰고 작업 프로필 앱의 알림은 주 사용자 쪽에 보이기 때문에, 주 사용자 쪽 기록에 프로필 앱의 흔적이 섞여 있을 수 있습니다. 한 기록이 어느 사용자에서 나왔는지는 UID 나 `userId` 필드로 구분해서 보고서에 적습니다.
 
 ## 함정
 
-userid 가 세 자리이고 주 사용자에 딸린 프로필이라는 것만으로 그 사용자를 보안 폴더로 단정하지 않습니다. 종류는 `Type` 값으로 가립니다.
+userid 가 세 자리이고 주 사용자에 딸린 프로필이라는 것만으로 그 사용자를 보안 폴더로 단정하지 않습니다. 종류는 `Type` 값으로 구분합니다.
 
-작업 프로필이 꺼져 있을 때 데이터가 어떤 상태로 남는지, 보안 폴더가 잠겨 있을 때 무엇을 읽을 수 있는지는 검체에서 확인합니다. 두 경우 모두 수집 결과에 프로필 데이터가 없다고 해서 프로필에 데이터가 없었다고 말하지 않습니다.
+작업 프로필이 꺼져 있을 때 데이터가 어떤 상태로 남는지, 보안 폴더가 잠겨 있을 때 무엇을 읽을 수 있는지는 실제 기기에서 확인합니다. 두 경우 모두 수집 결과에 프로필 데이터가 없다고 해서 프로필에 데이터가 없었다고 말하지 않습니다.
 
 ## 도구
 
-adb 일반 셸 권한으로 `dumpsys user`, `dumpsys account`, `dumpsys notification`, `settings list` 를 읽으면 위 칸과 키를 볼 수 있습니다. dumpsys 출력을 읽는 법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 페이지를, 수집 방식별로 얻을 수 있는 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
+adb 일반 셸 권한으로 `dumpsys user`, `dumpsys account`, `dumpsys notification`, `settings list` 를 읽으면 위 필드와 키를 볼 수 있습니다. dumpsys 출력을 읽는 법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md) 페이지를, 수집 방식별로 얻을 수 있는 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 
 ## 참고 문헌
 

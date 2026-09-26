@@ -52,7 +52,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 
 아래 속성은 Windows 11 PC 한 대의 클래스 정의에 있는 것입니다.
 
-| 클래스 | 속성 | 분석 때 볼 칸 |
+| 클래스 | 속성 | 분석 때 볼 속성 |
 |---|---|---|
 | `__EventFilter` | CreatorSID, EventAccess, EventNamespace, Name, Query, QueryLanguage | Query, EventNamespace |
 | `__FilterToConsumerBinding` | Consumer, CreatorSID, DeliverSynchronously, DeliveryQoS, Filter, MaintainSecurityContext, SlowDownProviders | Filter, Consumer(두 객체의 경로) |
@@ -68,7 +68,7 @@ WMI 영구 이벤트 구독은 필터·소비자·바인딩 세 객체로 이루
 | `NTEventLogEventConsumer` | Application 이벤트 로그에 메시지를 씁니다 |
 | `SMTPEventConsumer` | SMTP 로 메일을 보냅니다 |
 
-- 소비자가 어느 계정 권한으로 도는지, 스크립트를 돌리는 호스트 프로세스가 무엇인지는 검체에서 확인합니다.
+- 소비자가 어느 계정 권한으로 도는지, 스크립트를 돌리는 호스트 프로세스가 무엇인지는 실제 기기에서 확인합니다.
 
 ### 한 PC 에 있던 구독
 
@@ -81,7 +81,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 | `__FilterToConsumerBinding` | 위 둘을 잇습니다 |
 
 - 필터의 `CreatorSID` 는 S-1-5-32-544(Administrators) 였습니다.
-- 이 한 벌이 Windows 기본 설치에 들어 있는 구독인지는 공개 자료가 없습니다. 다른 검체에서 같은 구독을 보면 악성으로 단정하기 전에 이 표와 맞춰 봅니다.
+- 이 한 벌이 Windows 기본 설치에 들어 있는 구독인지는 공개 자료가 없습니다. 다른 기기에서 같은 구독을 보면 악성으로 단정하기 전에 이 표와 맞춰 봅니다.
 
 ### 실패 기록
 
@@ -103,7 +103,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 - **동작했나.** 구독이 있다는 것만 알려 줍니다. 소비자가 실제로 실행한 프로그램은 [프로세스 생성](../event-logs/4688.md) 이나 [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 에서 따로 찾습니다.
 - **언제 만들었나.** 저장소 파일 안에 객체별 생성 시각이 있는지는 공개 자료가 없습니다.
 - **바인딩이 없는 필터나 소비자가 동작하나.** 바인딩이 필터와 소비자를 잇습니다. 바인딩 없이 남은 객체만으로 동작했다고 보지 않습니다.
-- **지운 구독이 있었나.** 지운 구독이 OBJECTS.DATA 에 남는지는 공개 자료가 없어 검체에서 확인합니다.
+- **지운 구독이 있었나.** 지운 구독이 OBJECTS.DATA 에 남는지는 실제 저장소 파일로 확인해야 합니다.
 
 보고서에는 "수집 시점에 `root\subscription` 에 이 Query 의 필터와 이 명령줄의 `CommandLineEventConsumer` 가 바인딩으로 묶여 있다" 처럼 씁니다.
 
@@ -111,10 +111,10 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 
 - 객체별 시각이 알려져 있지 않으므로, 쓸 수 있는 시각은 저장소 파일의 파일 시스템 시각뿐일 수 있습니다. 파일 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
 - Windows 11 PC 한 대에서 세 MAPPING 파일의 마지막 수정 시각이 서로 달랐습니다. 가장 최근 것이 INDEX.BTR·OBJECTS.DATA 와 같은 시각이었습니다.
-- 파일 시각은 저장소 전체가 마지막으로 바뀐 때를 말할 뿐, 어느 객체가 바뀌었는지 말하지 않습니다.
-- WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 칸 이름은 Windows 11 PC 한 대의 공급자 메시지 기준입니다.
+- 파일 시각으로는 저장소 전체가 마지막으로 바뀐 때만 알 수 있고, 어느 객체가 바뀌었는지는 알 수 없습니다.
+- WMI-Activity/Operational 로그의 이벤트는 아래와 같습니다. 필드 이름은 Windows 11 PC 한 대의 공급자 메시지 기준입니다.
 
-| 이벤트 | 칸 |
+| 이벤트 | 필드 |
 |---|---|
 | 5857 | 공급자 시작. ProviderPath, HostProcess, ProcessID |
 | 5858 | 오류. ClientMachine, User, ClientProcessId, Operation, ResultCode |
@@ -134,13 +134,13 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 - **정상 구독도 있습니다.** 위 "한 PC 에 있던 구독" 과 같은 한 벌을 악성으로 단정하지 않습니다.
 - **네임스페이스는 한 곳만 보지 않습니다.** 표준 소비자의 기본 네임스페이스가 OS 마다 다르고, 필터는 `EventNamespace` 로 다른 네임스페이스를 가리킬 수 있습니다.
 - **저장소 내부 구조는 공식 문서가 없습니다.** OBJECTS.DATA 의 페이지 크기와 매핑 방식이 공개되어 있지 않으므로, 오프라인 분석 결과는 켜진 PC 에서 읽은 결과나 다른 도구와 맞춰 봅니다.
-- **호스트 프로세스로 잡는 탐지는 따로 확인합니다.** 소비자를 실행하는 프로세스와 계정은 검체에서 확인한 뒤 탐지 기준으로 씁니다.
+- **호스트 프로세스로 잡는 탐지는 따로 확인합니다.** 소비자를 실행하는 프로세스와 계정은 실제 기기에서 확인한 뒤 탐지 기준으로 씁니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-저장소 파일의 구조는 공식 문서가 없어, 구조를 따라가는 헥스 풀이 대신 클래스 이름을 문자열로 찾을 때 쓸 바이트 모양을 싣습니다. 인코딩 규칙으로 만든 예시이며, 특정 검체에서 꺼낸 값이 아닙니다.
+저장소 파일의 구조는 공식 문서가 없어, 구조를 따라가는 헥스 풀이 대신 클래스 이름을 문자열로 찾을 때 쓸 바이트 모양을 싣습니다. 인코딩 규칙으로 만든 예시이며, 특정 기기에서 꺼낸 값이 아닙니다.
 
 **`CommandLine` 의 ASCII 바이트.**
 
@@ -156,7 +156,7 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 ```
 
 1. 이 이름이 OBJECTS.DATA 안에 어느 인코딩으로 저장되는지 알려져 있지 않으므로 두 모양을 모두 찾습니다.
-2. 찾은 문자열이 살아 있는 구독인지, 지운 구독의 잔재인지는 구조를 풀지 않고는 가릴 수 없습니다.
+2. 찾은 문자열이 유효한 구독인지, 지운 구독의 잔재인지는 구조를 풀지 않고는 구분할 수 없습니다.
 3. 문자열 검색으로 나온 결과는 "이 문자열이 파일 안에 있다" 까지만 씁니다.
 
 ### 공개 도구로 한 번
@@ -181,11 +181,11 @@ Windows 11 PC 한 대의 `root\subscription` 에는 구독이 딱 한 벌 있었
 | 프리페치 | 소비자가 가리킨 프로그램의 실행 흔적 | [프리페치](../execution/prefetch/index.md) |
 | 예약 작업 | 같은 명령이 다른 자동실행 자리에도 있나 | [예약 작업](scheduled-tasks/index.md) |
 
-원격에서 WMI 로 명령을 실행한 흐름은 [PsExec·WMI·WinRM](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에, 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
+원격에서 WMI 로 명령을 실행한 흐름은 [PsExec·WMI·WinRM](../../04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md) 에, 자동실행 위치 전체를 살펴보는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 WMI 저장소 폴더와 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)에서 WMI 저장소 폴더와 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 저장소 폴더에 어떤 파일이 있습니까? 파일마다 마지막 수정 시각은 언제입니까?
 2. 저장소에서 `CommandLineEventConsumer`·`ActiveScriptEventConsumer` 문자열을 찾아봅니다. 몇 군데에서 나옵니까?

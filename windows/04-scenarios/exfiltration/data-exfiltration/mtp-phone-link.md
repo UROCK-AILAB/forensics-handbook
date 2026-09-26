@@ -19,10 +19,10 @@ nav_order: 3600
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | USBSTOR 만 보지 않기 | MTP 로 붙는 휴대폰은 USBSTOR 가 아닌 다른 위치에 남습니다([USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md)). |
-| 앱 버전 | 아래 Phone Link DB 위치는 2019년 연구 기준입니다. 검체에 설치된 Phone Link 판을 먼저 봅니다([스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md)). |
+| 앱 버전 | 아래 Phone Link DB 위치는 2019년 연구 기준입니다. 분석 대상 PC 에 설치된 Phone Link 판을 먼저 봅니다([스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md)). |
 | 시간대 | 레지스트리 장치 속성 시각과 이벤트 시각을 같은 기준으로 맞춥니다([시간대 설정](../../../02-artifacts/system-account/time-zone.md)). |
 | 사용자 | 휴대폰 연결 기록이 남는 SYSTEM·SOFTWARE 하이브에는 사용자 정보가 없습니다. Phone Link 폴더는 사용자 프로필 안에 있으므로 사용자별로 봅니다. |
 | 수집 범위 | SYSTEM·SOFTWARE 하이브, WPD-MTPClassDriver/Operational·Kernel-PnP/Configuration 이벤트 로그, 사용자마다 `%LocalAppData%\Packages\Microsoft.YourPhone_8wekyb3d8bbwe` 폴더 전체를 확보합니다. |
@@ -61,7 +61,7 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 
 ### WPD-MTPClassDriver/Operational 로그
 
-`Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그에는 1000~1006 이벤트가 남습니다. 이 로그가 기본으로 켜져 있는지, 어느 Windows 버전부터 있는지는 공개된 자료가 없으므로 검체에서 로그가 있는지부터 봅니다.
+`Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그에는 1000~1006 이벤트가 남습니다. 이 로그가 기본으로 켜져 있는지, 어느 Windows 버전부터 있는지는 공개 문서에 나와 있지 않으므로, 분석 대상 PC 에 로그가 있는지부터 봅니다.
 
 | ID | 메시지 |
 |---|---|
@@ -71,7 +71,7 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 | 1003 | 유휴 상태에서 돌아왔다는 기록 |
 | 1006 | "Driver has failed to start, HRESULT …" |
 
-1000 에는 EventData 칸이 없어서 어느 휴대폰이 붙었는지 이 이벤트만으로는 알 수 없습니다. 기록한 계정은 S-1-5-19 (LOCAL SERVICE) 이고, 이 계정은 사용자를 가리키지 않습니다. 그래서 이 로그는 "그 시각에 MTP 장치가 붙었다" 까지만 말해 주며, 어느 장치인지는 `Enum\USB` 의 장치 속성 시각, Kernel-PnP/Configuration 이벤트와 시각을 맞춰 정합니다.
+1000 에는 EventData 필드가 없어서 어느 휴대폰이 붙었는지 이 이벤트만으로는 알 수 없습니다. 기록한 계정은 S-1-5-19 (LOCAL SERVICE) 이고, 이 계정은 사용자를 가리키지 않습니다. 그래서 이 로그로는 "그 시각에 MTP 장치가 붙었다" 까지만 알 수 있으며, 어느 장치인지는 `Enum\USB` 의 장치 속성 시각, Kernel-PnP/Configuration 이벤트와 시각을 맞춰 정합니다.
 
 ### 파일을 옮겼나
 
@@ -101,7 +101,7 @@ Windows 10 1809·1903·빌드 18932, Your Phone 1.19041.481.0·1.19061.410.0 에
 
 - 동기화된 사진은 두 곳에 남습니다[1]. 하나는 Photos.db 안의 원본 이미지 blob 입니다. 다른 하나는 파일 시스템의 `User\<휴대폰 이름>\Recent Photos` 폴더입니다.
 - .heic 사진도 동기화되지만 앱 화면에는 보이지 않습니다[1]. 앱 화면으로 사진 목록을 정하지 말고 DB 와 폴더를 직접 봅니다.
-- 이 DB 들에 든 것은 휴대폰에서 PC 로 온 자료입니다. PC 의 파일을 휴대폰으로 보낸(끌어 놓은) 기록이 어디 남는지는 공개된 자료가 없어 검체에서 확인해야 합니다.
+- 이 DB 들에 든 것은 휴대폰에서 PC 로 온 자료입니다. PC 의 파일을 휴대폰으로 보낸(끌어 놓은) 기록이 어디 남는지는 실제 기기에서 확인해야 합니다.
 
 ### 최신 판
 
@@ -123,7 +123,7 @@ Phone Link 패키지 1.26072.255.0 에서는 패키지 폴더에 `LocalCache\Ind
 ## 흔한 오판
 
 1. **USBSTOR 에 없으니 휴대폰을 연결하지 않았다고 봅니다.** MTP 휴대폰은 `Enum\USB` 와 WPD 장치 목록에 남습니다.
-2. **MTPClassDriver 1000 을 특정 휴대폰의 연결로 봅니다.** 이 이벤트에는 장치를 가리키는 칸이 없습니다. 다른 기록과 시각을 맞춘 뒤에만 장치를 적습니다.
+2. **MTPClassDriver 1000 을 특정 휴대폰의 연결로 봅니다.** 이 이벤트에는 장치를 가리키는 필드가 없습니다. 다른 기록과 시각을 맞춘 뒤에만 장치를 적습니다.
 3. **기기 이름 속 사람 이름을 주인으로 단정합니다.** 기기 이름은 사용자가 바꿀 수 있습니다.
 4. **연결 기록을 파일 복사 증거로 씁니다.** 연결 기록은 휴대폰이 붙었다는 것만 보여 줍니다.
 5. **Phone Link 의 사진을 PC 에서 보낸 파일로 봅니다.** Photos.db 에는 휴대폰 속 위치가 적힌 동기화 사진이 들어 있습니다[1]. 방향은 휴대폰에서 PC 쪽입니다.

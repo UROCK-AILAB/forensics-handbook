@@ -80,13 +80,13 @@ SruDbIdMapTable 의 한 행에는 번호 하나와 이름 하나가 짝지어 �
 
 - 이 표에는 시각 열이 없습니다.
 - IdBlob 은 긴 이진 형식입니다. 이 형식의 값은 크면 레코드 밖의 긴 값 (Long Value) 으로 따로 저장될 수 있습니다. 저장 방식은 [긴 값과 압축 열](../../../01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md) 에 있습니다.
-- 열 번호가 고정·가변·태그 열 가운데 무엇인지 가리는 규칙은 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
+- 열 번호가 고정·가변·태그 열 가운데 무엇인지 구분하는 규칙은 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
 
 ### IdType 값
 
 | IdType | libyal 명세 | SrumECmd 라이브러리의 이름 | IdBlob 내용 |
 |---|---|---|---|
-| 0 | 뜻 모름. UTF-16 문자열 | NormalApp (일반 프로그램) | 실행 파일 경로. `\Device\HarddiskVolume번호\…` 꼴과 `!!` 로 시작하는 꼴이 있습니다 |
+| 0 | 뜻 모름. UTF-16 문자열 | NormalApp (일반 프로그램) | 실행 파일 경로. `\Device\HarddiskVolume번호\…` 형식과 `!!` 로 시작하는 형식이 있습니다 |
 | 1 | 뜻 모름. UTF-16 문자열 | Service (서비스) | UTF-16 문자열 |
 | 2 | 뜻 모름. UTF-16 문자열 | ModernApp (스토어 앱) | UTF-16 문자열 |
 | 3 | 사용자 식별자 (UserId) | Sid | 이진 SID |
@@ -107,11 +107,11 @@ SruDbIdMapTable 의 한 행에는 번호 하나와 이름 하나가 짝지어 �
 !!svchost.exe!1972/12/14:16:22:50!1c364![LocalService] [nsi]
 ```
 
-- SrumECmd 라이브러리는 앞의 `!!` 를 떼고 나머지를 `!` 로 나눈 뒤, 뒤에서 세 조각을 차례로 시각, 뜻 모를 칸, 설명으로 읽습니다.
+- SrumECmd 라이브러리는 앞의 `!!` 를 떼고 나머지를 `!` 로 나눈 뒤, 뒤에서 세 조각을 차례로 시각, 뜻 모를 필드, 설명으로 읽습니다.
 - 그 앞의 조각은 모두 파일 이름으로 다시 잇는데, 파일 이름 안에 `!` 가 있어도 되게 한 처리입니다.
-- 시각 조각은 `yyyy/MM/dd:HH:mm:ss` 꼴로 읽고 UTC 로 보지만, 이 꼴의 뜻을 설명한 명세나 Microsoft 문서는 없습니다.
-- 위 예의 시각은 1972년입니다. 그래서 이 칸을 실행 시각으로 읽을 수 없습니다.
-- 위 예의 마지막 칸은 svchost 서비스 그룹 이름과 서비스 이름처럼 보입니다. 이 해석을 확인한 자료는 없습니다.
+- 시각 조각은 `yyyy/MM/dd:HH:mm:ss` 형식으로 읽고 UTC 로 보지만, 이 형식의 뜻을 설명한 명세나 Microsoft 문서는 없습니다.
+- 위 예의 시각은 1972년입니다. 그래서 이 필드를 실행 시각으로 읽을 수 없습니다.
+- 위 예의 마지막 필드는 svchost 서비스 그룹 이름과 서비스 이름처럼 보입니다. 이 해석을 확인한 자료는 없습니다.
 
 ### 기록 표와 잇는 법
 
@@ -140,7 +140,7 @@ SruDbIdMapTable 의 한 행에는 번호 하나와 이름 하나가 짝지어 �
 **증명하지 못하는 것**
 
 - 매핑 행만으로는 그 이름이 언제 쓰였는지 모릅니다. 이 표에는 시각 열이 없습니다.
-- 매핑 행만으로 실행이나 사용량을 말하지 않습니다. 그 판단은 기록 표의 행으로 합니다.
+- 매핑 행만으로 실행이나 사용량을 판단하지 않습니다. 그 판단은 기록 표의 행으로 합니다.
 - 매핑 표에는 해시·크기 같은 파일 식별 정보가 없습니다. 그래서 그 경로에 있던 파일이 지금 디스크의 파일과 같은지는 이 표로 말할 수 없습니다.
 - SID 는 계정을 가리킵니다. 그 계정을 쓴 사람이 누구인지는 가리키지 않습니다.
 - 매핑 행이 언제 지워지는지는 공개 자료가 없습니다. 그래서 기록 표가 가리키지 않는 매핑 행의 뜻을 단정하지 않습니다.
@@ -174,7 +174,7 @@ SruDbIdMapTable 의 한 행에는 번호 하나와 이름 하나가 짝지어 �
 
 ### 헥스로 한 번
 
-아래 바이트는 **명세로 만든 예시**이며 실제 검체에서 나온 값이 아닙니다.
+아래 바이트는 **명세로 만든 예시**이며 실제 데이터에서 나온 값이 아닙니다.
 ESE 페이지에서 레코드와 열 값을 꺼내는 과정은 [파일 구조 (Page·B+Tree·Catalog)](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md) 에 있습니다.
 여기서는 꺼낸 열 값부터 시작합니다.
 
@@ -244,13 +244,13 @@ ESE 를 직접 여는 도구와 SRUM 전용 도구를 하나씩 골라 아래를
 - 기록 표에서 이름이 빈칸으로 나온 행 수
 - SRUM 전용 도구가 남긴 경고 기록
 
-값이 다르면 위 헥스 절차로 IdBlob 을 직접 풀어 어느 쪽이 맞는지 가립니다.
+값이 다르면 위 헥스 절차로 IdBlob 을 직접 풀어 어느 쪽이 맞는지 판별합니다.
 
 ## 교차 검증
 
 - [사용자 프로필 목록 (ProfileList)](../../system-account/profilelist.md): IdType 3 의 SID 를 프로필 폴더와 잇습니다.
 - [사용자 계정 (SAM)](../../system-account/sam.md): 로컬 계정 SID 의 RID 와 계정 이름을 확인합니다.
-- [BAM·DAM (Background Activity Moderator)](../background-activity-moderator.md): 같은 `\Device\HarddiskVolume번호\` 꼴 경로로 실행 파일을 적습니다. 경로를 그대로 맞춰 볼 수 있습니다.
+- [BAM·DAM (Background Activity Moderator)](../background-activity-moderator.md): 같은 `\Device\HarddiskVolume번호\` 형식의 경로로 실행 파일을 적습니다. 경로를 그대로 맞춰 볼 수 있습니다.
 - [실행 파일 항목 (InventoryApplicationFile)](../amcache-hve/inventoryapplicationfile.md): 드라이브 문자 경로와 SHA1 이 있습니다. 볼륨 번호를 드라이브 문자와 맞추고, 파일이 같은지 확인할 때 씁니다.
 - [Wi-Fi 프로필 (WLAN Profiles)](../../network/wlan-profiles.md): 네트워크 표의 L2ProfileId 를 푸는 데 씁니다.
 - [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md): 이진 SID 해석입니다.
@@ -258,7 +258,7 @@ ESE 를 직접 여는 도구와 SRUM 전용 도구를 하나씩 골라 아래를
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 Windows 10 이상 이미지를 골라 풀어 봅니다.
+공개 데이터 세트(NIST CFReDS 등)에서 Windows 10 이상 이미지를 골라 풀어 봅니다.
 
 1. SRUDB.dat 의 표 목록과 SOFTWARE 하이브 `SRUM\Extensions` 의 GUID 목록을 나란히 적습니다. 한쪽에만 있는 GUID 가 있습니까?
 2. SruDbIdMapTable 의 행을 IdType 별로 셉니다. 0~3 밖의 값이 있습니까?

@@ -14,7 +14,7 @@ Docker 데몬(dockerd)은 이미지·컨테이너 설정·표준 출력 로그·
 
 컨테이너 안에서 벌어진 일은 호스트의 일반 로그에 잘 남지 않습니다. 컨테이너가 표준 출력으로 내보낸 내용, 컨테이너를 만들 때 준 명령·환경 변수·마운트, 컨테이너가 새로 만들거나 바꾼 파일은 모두 Docker 데이터 루트 아래 파일로 남아 있어서, 호스트 디스크 이미지만 있어도 데몬 없이 읽을 수 있습니다. 웹 애플리케이션을 컨테이너로 돌리는 서버라면 침입 흔적의 상당 부분이 여기에 있습니다.
 
-반대로 Docker 에는 "누가 어떤 명령을 쳤는가" 를 디스크에 남기는 기록이 없습니다. `docker events` 로 보는 데몬 이벤트는 메모리에 최근 256개만 보관하고 파일로 쓰지 않습니다[8]. 그래서 오프라인 검체에서는 컨테이너를 만들고 지운 순서를 이벤트로 되짚을 수 없고, 설정 파일의 시각 필드와 파일 시스템 시각, 저널로 맞춰야 합니다.
+반대로 Docker 에는 "누가 어떤 명령을 쳤는가" 를 디스크에 남기는 기록이 없습니다. `docker events` 로 보는 데몬 이벤트는 메모리에 최근 256개만 보관하고 파일로 쓰지 않습니다[8]. 그래서 오프라인 분석 대상에서는 컨테이너를 만들고 지운 순서를 이벤트로 거슬러 올라가 확인할 수 없고, 설정 파일의 시각 필드와 파일 시스템 시각, 저널로 맞춰야 합니다.
 
 ### 증명하는 것과 증명하지 못하는 것
 
@@ -34,10 +34,10 @@ Docker 파일만으로는 다음을 말할 수 없습니다.
 | `/var/lib/docker/containers/컨테이너ID/` | 컨테이너 설정·상태(`config.v2.json`, `hostconfig.json`)와 표준 출력 로그 | [컨테이너 설정과 로그](container-logs.md) |
 | `/var/lib/docker/overlay2/` | 이미지 레이어 내용과 컨테이너가 바꾼 파일 | [overlay 파일 시스템](overlay2.md) |
 | `/var/lib/containerd/` | containerd 이미지 저장소를 쓰는 경우의 이미지 내용과 컨테이너 스냅숏 | [containerd 와 Kubernetes 노드](../containerd-kubernetes.md) |
-| `/var/lib/docker/volumes/볼륨이름/_data` | 볼륨에 쓴 실제 데이터. 옵션은 같은 폴더의 `opts.json`, 볼륨 목록은 BoltDB 파일 `volumes/metadata.db`[11] | 이 쪽 |
-| `/etc/docker/daemon.json` | 데이터 루트(`data-root`), 기본 로그 드라이버, 저장 방식 같은 데몬 설정[3] | 이 쪽 |
+| `/var/lib/docker/volumes/볼륨이름/_data` | 볼륨에 쓴 실제 데이터. 옵션은 같은 폴더의 `opts.json`, 볼륨 목록은 BoltDB 파일 `volumes/metadata.db`[11] | 이 페이지 |
+| `/etc/docker/daemon.json` | 데이터 루트(`data-root`), 기본 로그 드라이버, 저장 방식 같은 데몬 설정[3] | 이 페이지 |
 | 저널의 `docker.service` 단위 | 데몬 시작·중지·오류[7] | [systemd 저널](../../../01-foundations/logging/systemd-journal/index.md) |
-| `~/.docker/config.json` | 레지스트리 로그인 흔적. 자격 증명 저장소를 설정하지 않았으면 인증 정보가 base64 로 인코딩된 채 이 파일에 들어간다[9] | 이 쪽 |
+| `~/.docker/config.json` | 레지스트리 로그인 흔적. 자격 증명 저장소를 설정하지 않았으면 인증 정보가 base64 로 인코딩된 채 이 파일에 들어간다[9] | 이 페이지 |
 
 ### 데이터 루트와 설정 파일 위치
 
@@ -47,7 +47,7 @@ Docker 파일만으로는 다음을 말할 수 없습니다.
 | rootless 모드 | `$XDG_DATA_HOME/docker`(보통 `~/.local/share/docker`), 실행 상태는 `$XDG_RUNTIME_DIR/docker`[1] | `~/.config/docker/daemon.json`, `XDG_CONFIG_HOME` 이 있으면 `$XDG_CONFIG_HOME/docker/daemon.json`[3] |
 | snap 패키지 | `/var/snap/docker/common/var-lib-docker`[12] | `/var/snap/docker/current/config/daemon.json`[12] |
 
-`daemon.json` 의 `data-root` 키로 데이터 루트를 옮길 수 있고[2][3], `dockerd --config-file` 로 설정 파일 자체를 다른 곳에 둘 수도 있습니다[3]. 그래서 검체에서는 설정 파일과 `docker.service` 단위 파일의 실행 줄을 먼저 읽고 실제 데이터 루트를 정합니다. snap 설치 흔적은 [snap·flatpak](../../packages/snap-flatpak.md) 에서 함께 봅니다.
+`daemon.json` 의 `data-root` 키로 데이터 루트를 옮길 수 있고[2][3], `dockerd --config-file` 로 설정 파일 자체를 다른 곳에 둘 수도 있습니다[3]. 그래서 분석 대상에서는 설정 파일과 `docker.service` 단위 파일의 실행 줄을 먼저 읽고 실제 데이터 루트를 정합니다. snap 설치 흔적은 [snap·flatpak](../../packages/snap-flatpak.md) 에서 함께 봅니다.
 
 데몬 로그는 저널의 `docker.service` 단위에 있고, 배포판에 따라 `/var/log/syslog` 나 `/var/log/messages` 에도 있습니다[7]. 어느 파일로 가는지는 [syslog 형식과 rsyslog](../../../01-foundations/logging/syslog-rsyslog.md) 에 배포판별로 나와 있습니다. 로그 수준 기본값은 `info` 이고, `daemon.json` 에 `"debug": true` 가 있으면 디버그 줄까지 남습니다[7].
 
@@ -60,7 +60,7 @@ Docker 는 이미지와 컨테이너 파일 시스템을 두 방식 가운데 �
 | 그래프 드라이버 overlay2 (graph driver) | 29.0 이전 판, 그리고 옛 판에서 올린 호스트[3][4] | 모두 `/var/lib/docker` 아래[3] |
 | containerd 이미지 저장소 (containerd image store) | 2025-11-10 에 나온 29.0 부터 새로 설치한 호스트의 기본값[5] | 이미지 내용과 컨테이너 스냅숏은 `/var/lib/containerd`, 볼륨·설정 같은 나머지는 `/var/lib/docker`[3] |
 
-`userns-remap` 을 켠 데몬에서는 containerd 이미지 저장소를 쓰지 않습니다[4][5]. 데몬 코드는 기본으로 containerd 저장소를 고르지만, 데이터 루트에 예전 그래프 드라이버의 흔적이 있으면 그래프 드라이버를 계속 쓰고, `daemon.json` 의 `"features": {"containerd-snapshotter": true}`(또는 `false`), `storage-driver` 설정, `DOCKER_DRIVER` 환경 변수가 있으면 그 설정을 따릅니다[6]. 실행 중인 호스트에서는 `docker info` 의 드라이버 상태(DriverStatus)에 `driver-type` 이 `io.containerd.snapshotter.v1` 으로 나오면 containerd 저장소입니다[4]. 오프라인 검체에서는 `/var/lib/docker/image/overlay2/` 와 `/var/lib/containerd/` 가운데 어느 쪽에 내용이 차 있는지로 가립니다.
+`userns-remap` 을 켠 데몬에서는 containerd 이미지 저장소를 쓰지 않습니다[4][5]. 데몬 코드는 기본으로 containerd 저장소를 고르지만, 데이터 루트에 예전 그래프 드라이버의 흔적이 있으면 그래프 드라이버를 계속 쓰고, `daemon.json` 의 `"features": {"containerd-snapshotter": true}`(또는 `false`), `storage-driver` 설정, `DOCKER_DRIVER` 환경 변수가 있으면 그 설정을 따릅니다[6]. 실행 중인 호스트에서는 `docker info` 의 드라이버 상태(DriverStatus)에 `driver-type` 이 `io.containerd.snapshotter.v1` 으로 나오면 containerd 저장소입니다[4]. 오프라인 분석 대상에서는 `/var/lib/docker/image/overlay2/` 와 `/var/lib/containerd/` 가운데 어느 쪽에 내용이 차 있는지로 판별합니다.
 
 containerd 저장소로 바꾸면 기존 overlay2 이미지와 컨테이너는 디스크에 그대로 남고 목록에서만 숨겨지며, 다시 overlay2 로 돌리면 보입니다[4]. 따라서 한 호스트에 두 방식의 흔적이 함께 있을 수 있고, `docker` 명령으로 본 목록이 디스크에 있는 전부가 아닐 수 있습니다. containerd 안에서 Docker 가 쓰는 네임스페이스 이름은 `moby` 이고, 플러그인용은 `plugins.moby` 입니다[2].
 

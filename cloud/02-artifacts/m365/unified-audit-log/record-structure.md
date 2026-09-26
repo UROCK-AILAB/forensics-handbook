@@ -89,7 +89,7 @@ Graph auditLogRecord 의 userType 은 같은 개념을 regular·admin·dcAdmin·
 
 ## 서비스별로 붙는 필드
 
-서비스 스키마의 필드 가운데 해석에 자주 쓰는 것만 추렸습니다. 각 서비스의 세부 해석은 해당 쪽으로 링크합니다.
+서비스 스키마의 필드 가운데 해석에 자주 쓰는 것만 추렸습니다. 각 서비스의 세부 해석은 해당 페이지로 링크합니다.
 
 | 서비스 스키마 | 눈여겨볼 필드 | 자세히 |
 |---|---|---|
@@ -133,13 +133,13 @@ SharePoint 파일 레코드에서는 SiteUrl, SourceRelativeUrl, SourceFileName 
 
 **증명하는 것.** 이 테넌트(OrganizationId)에서 이 계정(UserId)으로 이 작업(Operation)이 이 대상(ObjectId)에 대해 서비스에 기록되었고, 레코드가 CreationTime(UTC)에 만들어졌다는 사실입니다[1]. UserType 과 LogonType 으로 사람 계정·시스템·서비스 주체·위임 접근을 가를 수 있습니다[1][5].
 
-**증명하지 못하는 것.** UserId 는 자격 증명을 쓴 계정일 뿐 키보드 앞의 사람을 말하지 않습니다. ClientIP 가 사용자 기기의 주소라는 보장이 없습니다[1]. ResultStatus 가 Succeeded 여도 서비스에 따라 작업 결과가 성공이었다는 뜻이 아닐 수 있습니다[1]. 레코드가 없다는 사실만으로 작업이 없었다고 할 수 없고, 감사 설정·보존 기간·라이선스를 함께 확인해야 합니다([통합 감사 로그 허브](index.md)).
+**증명하지 못하는 것.** UserId 는 자격 증명을 쓴 계정일 뿐 키보드 앞의 사람을 뜻하지 않습니다. ClientIP 가 사용자 기기의 주소라는 보장이 없습니다[1]. ResultStatus 가 Succeeded 여도 서비스에 따라 작업 결과가 성공이었다는 뜻이 아닐 수 있습니다[1]. 레코드가 없다는 사실만으로 작업이 없었다고 할 수 없고, 감사 설정·보존 기간·라이선스를 함께 확인해야 합니다([통합 감사 로그 허브](index.md)).
 
 ## 시각 해석
 
 CreationTime 은 UTC 이고, 감사 레코드가 만들어진 시각입니다[1][5]. Graph auditLogRecord 의 createdDateTime 은 활동이 일어난 시각입니다[3]. Management Activity API 의 contentCreated 는 레코드를 담은 묶음(blob)을 받을 수 있게 된 시각이라서 이벤트 시각으로 쓰면 안 됩니다[6]. 핵심 서비스(Exchange·SharePoint·OneDrive·Teams)의 레코드는 보통 이벤트 뒤 60~90분이 지나야 검색되고, Microsoft 는 특정 시간을 보장하지 않습니다[7].
 
-내보낸 파일을 도구로 읽을 때는 시각이 현지 시각으로 바뀌지 않았는지, 검체에서 한 건을 골라 포털 화면의 Date (UTC) 열과 맞춰 봅니다[7]. 여러 로그를 시간순으로 합치는 방법은 [클라우드 로그의 시각](../../../01-foundations/logging/timestamps.md) 과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) 을 봅니다.
+내보낸 파일을 도구로 읽을 때는 시각이 현지 시각으로 바뀌지 않았는지, 실제 데이터에서 한 건을 골라 포털 화면의 Date (UTC) 열과 맞춰 봅니다[7]. 여러 로그를 시간순으로 합치는 방법은 [클라우드 로그의 시각](../../../01-foundations/logging/timestamps.md) 과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) 을 봅니다.
 
 ## 함정과 한계
 
@@ -157,7 +157,7 @@ CreationTime 은 UTC 이고, 감사 레코드가 만들어진 시각입니다[1]
 
 ### 출처끼리 다른 점
 
-UserKey 설명이 문서마다 다릅니다. Management Activity API 스키마 문서는 SharePoint·OneDrive·Exchange 사용자 이벤트의 UserKey 를 passport unique ID(PUID)로 설명하고[1], Purview 의 속성 설명 문서는 GUID 형식이나 16진수 형식의 Entra 개체 ID 로 설명합니다[5]. 검체에서 값이 GUID 모양인지 16진수 문자열인지 보고, 같은 사용자의 Entra 개체 ID 와 대조해 판단합니다.
+UserKey 설명이 문서마다 다릅니다. Management Activity API 스키마 문서는 SharePoint·OneDrive·Exchange 사용자 이벤트의 UserKey 를 passport unique ID(PUID)로 설명하고[1], Purview 의 속성 설명 문서는 GUID 형식이나 16진수 형식의 Entra 개체 ID 로 설명합니다[5]. 실제 데이터에서 값이 GUID 모양인지 16진수 문자열인지 보고, 같은 사용자의 Entra 개체 ID 와 대조해 판단합니다.
 
 ## 직접 분석해 보기
 

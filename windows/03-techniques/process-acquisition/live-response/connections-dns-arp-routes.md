@@ -9,7 +9,7 @@ nav_order: 3140
 
 ## 한 줄 요약
 
-켜진 시스템의 네트워크 연결, DNS 캐시, ARP 캐시, 라우팅 표, 네트워크 설정을 글자 파일로 남깁니다. 연결 목록은 몇 초 만에도 바뀌므로 가장 먼저 모읍니다. `netstat` 결과에는 시각 칸이 없고, 수집 중에 `ipconfig /flushdns` 를 돌리면 DNS 캐시가 지워집니다.
+켜진 시스템의 네트워크 연결, DNS 캐시, ARP 캐시, 라우팅 표, 네트워크 설정을 글자 파일로 남깁니다. 연결 목록은 몇 초 만에도 바뀌므로 가장 먼저 모읍니다. `netstat` 결과에는 시각 열이 없고, 수집 중에 `ipconfig /flushdns` 를 돌리면 DNS 캐시가 지워집니다.
 
 ## 언제 쓰나
 
@@ -61,7 +61,7 @@ NIST SP 800-86 순서에서 네트워크 연결은 첫째, 네트워크 설정�
 
 `-b` 는 시간이 걸리고, 권한이 모자라면 실패합니다. 실행 파일 하나에 구성 요소가 여럿 들어 있으면 구성 요소 순서를 먼저 보여 주고, 실행 파일 이름은 맨 아래 `[]` 안에 나옵니다.
 
-칸은 Proto, Local Address, Foreign Address, State 인데, 문서에 적힌 상태 값과 실제 출력은 조금 다릅니다.
+열은 Proto, Local Address, Foreign Address, State 인데, 문서에 적힌 상태 값과 실제 출력은 조금 다릅니다.
 
 | 문서의 값 | 실제 출력 |
 |---|---|
@@ -89,9 +89,9 @@ TCP 항목에는 `CreationTime` 값이 채워져 나옵니다. `Bound` 상태 �
 
 DNS Client 서비스는 이 캐시로 자주 찾는 이름을 DNS 서버에 묻기 전에 바로 풉니다. hosts 파일 자체는 [hosts 파일](../../../02-artifacts/network/hosts.md)에서 다룹니다.
 
-두 명령이 보여 주는 칸은 아래와 같습니다.
+두 명령이 보여 주는 필드는 아래와 같습니다.
 
-| 명령 | 칸·속성 |
+| 명령 | 필드·속성 |
 |---|---|
 | `ipconfig /displaydns` | Record Name, Record Type, Time To Live, Data Length, Section, 그리고 A (Host) Record 나 CNAME Record 같은 값 줄 |
 | `Get-DnsClientCache` | Entry, Name, Type, Status, Section, TimeToLive, DataLength, Data |
@@ -100,7 +100,7 @@ DNS Client 서비스는 이 캐시로 자주 찾는 이름을 DNS 서버에 묻�
 
 RFC 3227 은 ARP 캐시를 메모리와 같은 둘째 단계에 둡니다. 한국어 Windows 의 `arp -a` 출력은 아래 모양입니다.
 
-인터페이스마다 "인터페이스: `<IP>` --- 0x<번호>" 줄이 먼저 나오고, 그 아래에 인터넷 주소, 물리적 주소, 유형 칸이 옵니다. 유형은 동적 또는 정적입니다.
+인터페이스마다 "인터페이스: `<IP>` --- 0x<번호>" 줄이 먼저 나오고, 그 아래에 인터넷 주소, 물리적 주소, 유형 열이 옵니다. 유형은 동적 또는 정적입니다.
 
 `Get-NetNeighbor` 의 `State` 에는 `Permanent`, `Reachable`, `Stale`, `Unreachable` 이 나옵니다.
 
@@ -112,7 +112,7 @@ RFC 3227 은 ARP 캐시를 메모리와 같은 둘째 단계에 둡니다. 한�
 2. IPv4 경로 테이블 — 활성 경로, 영구 경로
 3. IPv6 경로 테이블 — 활성 경로, 영구 경로
 
-IPv4 활성 경로의 칸은 네트워크 대상, 네트워크 마스크, 게이트웨이, 인터페이스, 메트릭입니다. `Get-NetRoute` 는 DestinationPrefix, NextHop, InterfaceAlias, InterfaceIndex, RouteMetric, IsStatic, TypeOfRoute 같은 속성을 돌려줍니다.
+IPv4 활성 경로의 열은 네트워크 대상, 네트워크 마스크, 게이트웨이, 인터페이스, 메트릭입니다. `Get-NetRoute` 는 DestinationPrefix, NextHop, InterfaceAlias, InterfaceIndex, RouteMetric, IsStatic, TypeOfRoute 같은 속성을 돌려줍니다.
 
 ### 네트워크 설정
 
@@ -121,7 +121,7 @@ IPv4 활성 경로의 칸은 네트워크 대상, 네트워크 마스크, 게이
 ## 함정과 한계
 
 1. **`ipconfig /flushdns` 를 돌립니다.** 캐시를 비우는 명령입니다. 수집 중에 돌리면 증거를 지웁니다.
-2. **`netstat` 결과에서 연결 시각을 찾습니다.** `netstat` 출력에는 시각 칸이 없습니다. 명령을 돌린 시각을 따로 적어야 합니다.
+2. **`netstat` 결과에서 연결 시각을 찾습니다.** `netstat` 출력에는 시각 열이 없습니다. 명령을 돌린 시각을 따로 적어야 합니다.
 3. **`CreationTime` 을 연결 시작 시각으로 씁니다.** 이 값이 정확히 무엇의 시각인지는 공식 문서에 나와 있지 않습니다. 보고서에는 속성 이름 그대로 적습니다.
 4. **두 명령의 결과가 같다고 봅니다.** 두 명령을 몇 초 차이로 돌려도 상태별 개수가 조금 다를 수 있습니다. 네트워크 상태는 몇 초 만에도 바뀝니다. 명령마다 돌린 시각을 적습니다.
 5. **`netstat -ano` 에 모든 포트가 나온다고 봅니다.** 바인딩만 하고 대기하지 않는 TCP 포트는 `-q` 를 줘야 나옵니다.

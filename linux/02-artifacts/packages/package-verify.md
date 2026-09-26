@@ -10,9 +10,9 @@ nav_order: 630
 
 ## 무엇을 기록하나 · 왜 생기나
 
-이 쪽이 다루는 것은 따로 남는 로그가 아니라, 패키지 데이터베이스에 적힌 기준값과 실제 파일을 맞춰 본 결과입니다. dpkg 는 패키지를 풀 때 패키지 안의 메타데이터를 파일 데이터베이스에 모아 두고, `dpkg -V` (`--verify`) 는 이 값과 설치된 파일을 비교합니다[1]. 기준값은 패키지마다 `/var/lib/dpkg/info/패키지.md5sums` (다중 아키텍처 패키지는 `패키지:아키텍처` 이름)에 있습니다[4][11]. rpm 은 패키지 메타데이터를 rpm 데이터베이스에 저장하고, `rpm -V` 는 그 안의 크기·다이제스트·권한·파일 형식·소유자·그룹 등을 디스크의 파일과 비교합니다[5][6].
+이 페이지가 다루는 것은 따로 남는 로그가 아니라, 패키지 데이터베이스에 적힌 기준값과 실제 파일을 맞춰 본 결과입니다. dpkg 는 패키지를 풀 때 패키지 안의 메타데이터를 파일 데이터베이스에 모아 두고, `dpkg -V` (`--verify`) 는 이 값과 설치된 파일을 비교합니다[1]. 기준값은 패키지마다 `/var/lib/dpkg/info/패키지.md5sums` (다중 아키텍처 패키지는 `패키지:아키텍처` 이름)에 있습니다[4][11]. rpm 은 패키지 메타데이터를 rpm 데이터베이스에 저장하고, `rpm -V` 는 그 안의 크기·다이제스트·권한·파일 형식·소유자·그룹 등을 디스크의 파일과 비교합니다[5][6].
 
-조사에서 이 비교가 쓸모 있는 까닭은, 침입자가 `sshd`, `ls`, 공유 라이브러리, PAM 모듈처럼 패키지가 설치한 파일을 바꿔치기하는 경우가 있기 때문입니다. 바뀐 파일이 어디에 흔적을 남기는지는 [공유 라이브러리 가로채기](../persistence/ld-preload.md)·[PAM 모듈 변조](../persistence/pam-backdoor.md) 쪽에서 다룹니다.
+조사에서 이 비교가 쓸모 있는 이유는, 침입자가 `sshd`, `ls`, 공유 라이브러리, PAM 모듈처럼 패키지가 설치한 파일을 바꿔치기하는 경우가 있기 때문입니다. 바뀐 파일이 어디에 흔적을 남기는지는 [공유 라이브러리 가로채기](../persistence/ld-preload.md)·[PAM 모듈 변조](../persistence/pam-backdoor.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -24,7 +24,7 @@ nav_order: 630
 | 설정 파일 | `dpkg -V` 는 함께 보고 `c` 로 표시, `debsums` 는 기본으로 뺌[1][4] | 함께 보고 `c` 로 표시[6][7] |
 | 바뀐 파일이 있을 때 종료 코드 | `dpkg -V` 는 0, `debsums` 는 2[2][4] | 0 이 아닌 값[5][7] |
 
-`dpkg -V` 는 dpkg 1.17.2 부터 있고, 두 번째 자리의 `M` 검사는 dpkg 1.21.0 부터 들어갔습니다[1]. 검체에 `debsums` 가 없으면 분석 PC 의 것을 씁니다. rpm 데이터베이스 파일 이름(`rpmdb.sqlite` 또는 `Packages`)과 WAL 파일을 함께 떠야 하는 이유는 [rpm·dnf·yum 기록](rpm-dnf.md) 쪽을 봅니다.
+`dpkg -V` 는 dpkg 1.17.2 부터 있고, 두 번째 자리의 `M` 검사는 dpkg 1.21.0 부터 들어갔습니다[1]. 대상 시스템에 `debsums` 가 없으면 분석 PC 의 것을 씁니다. rpm 데이터베이스 파일 이름(`rpmdb.sqlite` 또는 `Packages`)과 WAL 파일을 함께 떠야 하는 이유는 [rpm·dnf·yum 기록](rpm-dnf.md)에 있습니다.
 
 ## 구조
 
@@ -82,7 +82,7 @@ missing     /usr/libexec/example-helper
 | 8 | `T` | mtime |
 | 9 | `P` | capabilities |
 
-`.` 은 통과, `?` 는 권한 부족 등으로 검사하지 못했다는 뜻입니다[5][6]. 속성 글자는 `%doc`·`%config`·spec·`%missingok`·`%config(noreplace)`·`%ghost`·`%license`·`%readme`·`%artifact` 순서로 따져 처음 해당하는 하나만 찍습니다(`d`, `c`, `s`, `m`, `n`, `g`, `l`, `r`, `a`)[7]. 그래서 `%config(noreplace)` 파일은 `n` 이 아니라 `c` 로 나옵니다[7]. rpm 4.16 의 man 페이지는 `c`·`d`·`g`·`l`·`r` 만 설명하고, 최신 man 페이지는 `a`·`m`·`n`·`s` 까지 설명합니다[5][6]. 다른 패키지가 이 파일을 대신 설치해 상태가 "replaced" 이면 파일이 있는지만 보고 줄 끝에 `(replaced)` 를 붙입니다[7]. 권한·파일 형식 같은 속성이 실제로 무엇이 됐는지는 [권한·확장 속성·ACL·Capabilities](../../01-foundations/filesystem/permissions-xattr.md) 쪽에서 확인합니다.
+`.` 은 통과, `?` 는 권한 부족 등으로 검사하지 못했다는 뜻입니다[5][6]. 속성 글자는 `%doc`·`%config`·spec·`%missingok`·`%config(noreplace)`·`%ghost`·`%license`·`%readme`·`%artifact` 순서로 따져 처음 해당하는 하나만 찍습니다(`d`, `c`, `s`, `m`, `n`, `g`, `l`, `r`, `a`)[7]. 그래서 `%config(noreplace)` 파일은 `n` 이 아니라 `c` 로 나옵니다[7]. rpm 4.16 의 man 페이지는 `c`·`d`·`g`·`l`·`r` 만 설명하고, 최신 man 페이지는 `a`·`m`·`n`·`s` 까지 설명합니다[5][6]. 다른 패키지가 이 파일을 대신 설치해 상태가 "replaced" 이면 파일이 있는지만 보고 줄 끝에 `(replaced)` 를 붙입니다[7]. 권한·파일 형식 같은 속성이 실제로 무엇이 됐는지는 [권한·확장 속성·ACL·Capabilities](../../01-foundations/filesystem/permissions-xattr.md)에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -104,7 +104,7 @@ missing     /usr/libexec/example-helper
 
 검사 결과에는 시각이 없고, 결과는 검사를 돌린 순간의 상태입니다. `dpkg -V` 와 `debsums` 는 시각을 비교하지 않습니다[2][4].
 
-`rpm -V` 의 `T` 는 헤더의 `Filemtimes` 값과 디스크 파일의 mtime 이 다르다는 표시일 뿐, 언제 바뀌었는지는 알려 주지 않습니다[7][8]. `Filemtimes` 는 Unix 시각(UTC 기준 초)이라 `--queryformat` 으로 뽑아 보면 패키지가 만든 파일의 원래 mtime 을 알 수 있습니다[8][10]. 여러 패키지가 함께 소유한 파일은 mtime 차이를 결과에서 뺍니다[7]. 바뀐 파일의 실제 시각은 파일 시스템에서 읽어야 하므로 [ext4](../../01-foundations/filesystem/ext4/index.md) 쪽과 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 쪽을 봅니다. 패키지가 언제 설치·업그레이드됐는지는 [dpkg·apt 기록](dpkg-apt.md)·[rpm·dnf·yum 기록](rpm-dnf.md) 에서 확인하고, 바뀐 파일의 시각이 그 뒤인지 따져 봅니다.
+`rpm -V` 의 `T` 는 헤더의 `Filemtimes` 값과 디스크 파일의 mtime 이 다르다는 표시일 뿐, 언제 바뀌었는지는 알려 주지 않습니다[7][8]. `Filemtimes` 는 Unix 시각(UTC 기준 초)이라 `--queryformat` 으로 뽑아 보면 패키지가 만든 파일의 원래 mtime 을 알 수 있습니다[8][10]. 여러 패키지가 함께 소유한 파일은 mtime 차이를 결과에서 뺍니다[7]. 바뀐 파일의 실제 시각은 파일 시스템에서 읽어야 하므로 [ext4](../../01-foundations/filesystem/ext4/index.md)와 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)을 봅니다. 패키지가 언제 설치·업그레이드됐는지는 [dpkg·apt 기록](dpkg-apt.md)·[rpm·dnf·yum 기록](rpm-dnf.md) 에서 확인하고, 바뀐 파일의 시각이 그 뒤인지 따져 봅니다.
 
 ## 함정과 한계
 
@@ -112,12 +112,12 @@ missing     /usr/libexec/example-helper
 - `dpkg -V` 는 바뀐 파일이 있어도 종료 코드 0 을 돌려주고, 이름을 댄 패키지가 설치돼 있지 않을 때만 1 을 돌려줍니다[2]. 스크립트에서 종료 코드만 보면 결과를 놓칩니다.
 - `debsums` 는 기본으로 설정 파일을 빼므로 `-a` 를 붙이거나 `-ce` 로 설정 파일만 따로 봅니다[4].
 - prelink·localepurge 가 설정돼 있으면 `debsums` 는 바뀐 ELF 파일과 지워진 로캘 파일을 기본으로 알리지 않습니다. `--no-prelink`, `--no-locale-purge` 를 붙이면 알립니다[4].
-- `debsums -g ...,keep` 과 `debsums_init` 은 `/var/lib/dpkg/info/패키지.md5sums` 를 새로 씁니다[4]. 검체에서 돌리면 기준값 자체가 바뀝니다.
+- `debsums -g ...,keep` 과 `debsums_init` 은 `/var/lib/dpkg/info/패키지.md5sums` 를 새로 씁니다[4]. 대상 시스템에서 돌리면 기준값 자체가 바뀝니다.
 - `debsums` 는 다른 패키지가 덮어쓴 파일을 바뀐 것으로 잘못 알릴 수 있습니다[4].
 - `rpm -V` 는 `%ghost` 파일의 내용·크기·mtime·링크 대상을 보지 않고, `%ghost`·`%missingok` 파일이 없는 것은 `--verbose` 가 아니면 알리지 않습니다[7]. 일반 파일이 아닌 경로는 다이제스트·크기·mtime·capabilities 를 보지 않습니다[7].
 - rpm 의 소유자·그룹 비교는 로컬 `passwd`·`group` 만 봅니다[5].
 - 다이제스트 알고리즘은 헤더의 `Filedigestalgo` 가 정하고, 이 값이 없으면 MD5 로 봅니다[8].
-- `rpm --root` 로 이미지를 검사하면 스크립틀릿이 그 디렉터리로 chroot 한 뒤 실행되고, 검사 모드는 `%verifyscript` 를 돌립니다[6]. 검체 안의 스크립트가 분석 PC 에서 돌지 않게 `--noscripts` 를 붙입니다[6].
+- `rpm --root` 로 이미지를 검사하면 스크립틀릿이 그 디렉터리로 chroot 한 뒤 실행되고, 검사 모드는 `%verifyscript` 를 돌립니다[6]. 이미지 안의 스크립트가 분석 PC 에서 돌지 않게 `--noscripts` 를 붙입니다[6].
 - `rpmdb --verifydb` 는 데이터베이스 파일 자체의 낮은 수준 검사이고, 설치된 파일을 보는 것은 `rpm --verify -a` 입니다[9].
 - 결과가 깨끗해도 기준값까지 함께 고쳤을 가능성은 남습니다. 같은 이름·버전·아키텍처의 원본 `.deb`·`.rpm` 을 배포처에서 받아 그 안의 해시와 대조해야 이 가능성을 지울 수 있습니다.
 
@@ -125,7 +125,7 @@ missing     /usr/libexec/example-helper
 
 ### 손으로 한 번: 기준값과 해시를 직접 대조
 
-검체를 `/mnt/evidence` 에 읽기 전용으로 마운트했다고 두고, `.md5sums` 의 한 줄과 실제 파일의 MD5 를 나란히 놓습니다.
+증거 이미지를 `/mnt/evidence` 에 읽기 전용으로 마운트했다고 두고, `.md5sums` 의 한 줄과 실제 파일의 MD5 를 나란히 놓습니다.
 
 ```
 $ grep 'usr/sbin/example-daemon$' /mnt/evidence/var/lib/dpkg/info/example.md5sums
@@ -143,7 +143,7 @@ $ rpm --root /mnt/evidence -q --qf '[%{FILEDIGESTS} %{FILEMTIMES} %{FILENAMES}\n
 5e0b7c2a91d4f836b2a7e1c09f5d3b684c2e7a19d0f6b3852a9e4c7d1b0f2a63 1700000000 /usr/bin/example
 ```
 
-위 출력은 만든 예시입니다. 헤더의 `Filedigestalgo` 가 정한 알고리즘(값이 없으면 MD5)으로 디스크 파일의 해시를 계산해 첫 칸과 비교하고, 두 번째 칸의 Unix 시각을 디스크 파일의 mtime 과 견줍니다[8].
+위 출력은 만든 예시입니다. 헤더의 `Filedigestalgo` 가 정한 알고리즘(값이 없으면 MD5)으로 디스크 파일의 해시를 계산해 첫 필드와 비교하고, 두 번째 필드의 Unix 시각은 디스크 파일의 mtime 과 맞춰 봅니다[8].
 
 ### 공개 도구로 한 번
 
@@ -151,7 +151,7 @@ $ rpm --root /mnt/evidence -q --qf '[%{FILEDIGESTS} %{FILEMTIMES} %{FILENAMES}\n
 - `debsums -ca` 는 설정 파일을 포함해 바뀐 파일만 나열하고, `-r` 로 루트, `-d` 로 관리 폴더를 지정합니다[4]. `--generate=all` 은 디스크의 `.md5sums` 를 무시하고 `.deb` 안의 값(없으면 `.deb` 에서 만든 값)으로 검사하고, `-p` 로 `.deb` 를 찾을 폴더를 줍니다[4]. `keep` 을 붙이지 않으면 기준값 파일을 덮어쓰지 않습니다[4].
 - RHEL 은 `rpm --root /mnt/evidence -Va --noscripts` 로 전체를 검사합니다[6].
 - dissect.target 의 `dpkg.packages --output-files` 는 `.md5sums` 의 값과 실제 파일의 MD5 를 비교해 파일마다 `digest_match` 를 냅니다[11].
-- UAC 는 라이브 수집에서 `dpkg -V`, `rpm -V -a` 결과를 `dpkg_-V.txt`, `rpm_-V_-a.txt` 로 남기고, `/bin`·`/usr/bin`·`/usr/local/bin` 등의 파일마다 `dpkg -S`·`rpm -q -f` 로 소속 패키지를 찾아 둡니다[12][13][14]. 라이브 수집 전반은 [라이브 응답 수집](../../03-techniques/acquisition/live-response.md) 쪽을 봅니다.
+- UAC 는 라이브 수집에서 `dpkg -V`, `rpm -V -a` 결과를 `dpkg_-V.txt`, `rpm_-V_-a.txt` 로 남기고, `/bin`·`/usr/bin`·`/usr/local/bin` 등의 파일마다 `dpkg -S`·`rpm -q -f` 로 소속 패키지를 찾아 둡니다[12][13][14]. 라이브 수집 전반은 [라이브 응답 수집](../../03-techniques/acquisition/live-response.md)을 봅니다.
 
 ## 교차 검증
 
@@ -164,11 +164,11 @@ $ rpm --root /mnt/evidence -q --qf '[%{FILEDIGESTS} %{FILEMTIMES} %{FILENAMES}\n
 | [셸 명령 기록](../execution/shell-history/index.md) | 파일을 덮어쓰거나 `chmod`·`chown` 한 명령이 있는가 |
 | [타임라인 만들기](../../03-techniques/analysis/timeline.md) | 바뀐 파일의 시각 앞뒤로 무엇이 있었는가 |
 
-지속성 전반의 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 쪽에서 다룹니다.
+지속성 전반의 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md)에서 다룹니다.
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 모음에서 Ubuntu 나 RHEL 계열 서버 이미지를 골라 풀어 봅니다.
+NIST CFReDS 같은 공개 이미지 모음에서 Ubuntu 나 RHEL 계열 서버 이미지를 골라 풀어 봅니다.
 
 1. 이미지를 마운트해 `dpkg --root` 나 `rpm --root ... --noscripts` 로 검사했을 때, 속성 `c` 가 없는 결과 줄은 몇 개이고 어느 폴더에 몰려 있는가?
 2. 결과 줄에 나온 실행 파일의 파일 시스템 mtime·ctime 은 그 패키지의 마지막 설치·업그레이드 기록보다 뒤인가?

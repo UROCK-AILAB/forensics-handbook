@@ -11,13 +11,13 @@ SQLite 는 행을 지워도 바이트를 곧바로 없애지 않아서, 페이�
 
 ## 이 형식을 쓰는 아티팩트
 
-iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고, 페이지·셀·레코드 구조는 [페이지와 레코드](b-tree-record.md)를 먼저 보면 됩니다. iOS 의 `sms.db` 같은 DB 에서 얼마나 되살아나는지와 iOS 버전별 차이는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 지운 대화·사진을 찾는 조사 전체 흐름은 [지운 대화와 사진 찾기](../../../04-scenarios/activity/deleted-content.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고, 페이지·셀·레코드 구조는 [페이지와 레코드](b-tree-record.md)를 먼저 보면 됩니다. iOS 의 `sms.db` 같은 DB 에서 얼마나 되살아나는지와 iOS 버전별 차이는 실제 DB 로 확인해야 합니다. 지운 대화·사진을 찾는 조사 전체 흐름은 [지운 대화와 사진 찾기](../../../04-scenarios/activity/deleted-content.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
-앱이 직접 만든 삭제 기록 표는 SQLite 빈 공간과 다른 층입니다. 예를 들어 `sms.db` 에는 `deleted_messages`(`ROWID`, `guid`)와 `chat_recoverable_message_join`(`chat_id`, `message_id`, `delete_date`, `ck_sync_state`) 같은 표가 있고, 이런 표는 SQL 로 그대로 읽히는 살아 있는 행입니다. 두 표의 칸이 무엇을 뜻하는지는 [메시지](../../../02-artifacts/communications/messages/index.md) 페이지에서 다룹니다.
+앱이 직접 만든 삭제 기록 표는 SQLite 빈 공간과 다른 층입니다. 예를 들어 `sms.db` 에는 `deleted_messages`(`ROWID`, `guid`)와 `chat_recoverable_message_join`(`chat_id`, `message_id`, `delete_date`, `ck_sync_state`) 같은 표가 있고, 이런 표는 SQL 로 그대로 읽히는 유효한 행입니다. 두 표의 열이 무엇을 뜻하는지는 [메시지](../../../02-artifacts/communications/messages/index.md) 페이지에서 다룹니다.
 
 ## 구조 — 지운 데이터가 남는 자리
 
-살아 있는 레코드, 페이지 헤더, 셀 포인터 배열이 아닌 곳이라면 어디든 지운 흔적이 있을 수 있습니다.
+유효한 레코드, 페이지 헤더, 셀 포인터 배열이 아닌 곳이라면 어디든 지운 흔적이 있을 수 있습니다.
 
 | 자리 | 찾는 법 | 남는 것 |
 |---|---|---|
@@ -31,13 +31,13 @@ iOS 의 SQLite 아티팩트라면 어느 것이든 이 방법을 쓸 수 있고,
 
 행을 지우면 셀 앞 4바이트가 freeblock 헤더로 덮입니다. 앞 2바이트는 다음 freeblock 의 위치이고 뒤 2바이트는 이 freeblock 의 길이(4바이트 헤더 포함)입니다. freeblock 은 최소 4바이트이고 위치가 커지는 순서로 연결되며, 마지막 freeblock 은 다음 위치가 0 입니다. 1~3바이트짜리 빈 조각은 freeblock 이 되지 못하고 페이지 헤더 오프셋 7 에 합계만 남는데, 정상 페이지라면 이 합계가 60바이트를 넘지 않습니다.
 
-덮이는 4바이트에는 셀의 페이로드 길이, rowid, 레코드 헤더 길이, 앞쪽 serial type 이 들어 있습니다. varint 길이가 셀마다 달라서 덮이는 칸 수도 그때그때 다르고, 복원이 어디까지 되는지도 여기에 달려 있습니다.
+덮이는 4바이트에는 셀의 페이로드 길이, rowid, 레코드 헤더 길이, 앞쪽 serial type 이 들어 있습니다. varint 길이가 셀마다 달라서 덮이는 필드 수도 그때그때 다르고, 복원이 어디까지 되는지도 여기에 달려 있습니다.
 
 | 덮인 범위 | 복원 |
 |---|---|
 | 페이로드 길이와 rowid 만 | 레코드 내용은 늘 완전히 복원된다(원래 rowid 는 알 수 없다) |
 | 레코드 헤더 길이까지 | 남은 헤더에서 추정할 수 있다 |
-| 첫 칸의 serial type 까지 | 어려워지고, 이웃 레코드나 스키마로 추정한다 |
+| 첫 열의 serial type 까지 | 어려워지고, 이웃 레코드나 스키마로 추정한다 |
 | 그보다 더 | 자동 복원이 어렵다 |
 
 ### 할당되지 않은 영역
@@ -60,7 +60,7 @@ freelist 잎 페이지는 정보를 담지 않는 페이지라서, SQLite 는 �
 | secure_delete = 1 | 지운 내용을 0 으로 덮어쓴다 | 파일에 기록되지 않음 |
 | secure_delete = FAST | 입출력이 늘지 않을 때만 덮어써서, b-tree 페이지의 옛 내용은 지우지만 freelist 페이지에는 흔적을 남긴다 | 파일에 기록되지 않음 |
 
-auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 실행해야 하고, FULL 로 켜져 있으면 빈 페이지를 파일 끝으로 모아 잘라 내서 freelist 쪽 복원 여지가 줄어듭니다. 이 설정은 페이지 단위로만 정리하니, 살아 있는 페이지 안의 freeblock 까지 지우지는 않습니다. secure_delete 기본값은 컴파일 옵션 `SQLITE_SECURE_DELETE` 로 정해지며 보통 꺼져 있습니다. iOS 시스템 SQLite 의 secure_delete·auto_vacuum 기본값과 컴파일 옵션은 공개된 자료가 없습니다.
+auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 실행해야 하고, FULL 로 켜져 있으면 빈 페이지를 파일 끝으로 모아 잘라 내서 freelist 쪽 복원 여지가 줄어듭니다. 이 설정은 페이지 단위로만 정리하니, 사용 중인 페이지 안의 freeblock 까지 지우지는 않습니다. secure_delete 기본값은 컴파일 옵션 `SQLITE_SECURE_DELETE` 로 정해지며 보통 꺼져 있습니다. iOS 시스템 SQLite 의 secure_delete·auto_vacuum 기본값과 컴파일 옵션은 공개된 자료가 없습니다.
 
 ## 읽는 법
 
@@ -75,7 +75,7 @@ auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 �
 페이지 헤더 오프셋 1:  0f f8   (첫 freeblock 위치)
 ```
 
-앞 4바이트가 덮이면서 페이로드 길이(`06`), rowid(`07`), 헤더 길이(`03`), 첫 칸의 serial type(`01`)이 사라졌고, 둘째 칸의 serial type `11`(2바이트 TEXT)과 본문 `05 68 69` 는 남았습니다. 첫 칸의 serial type 까지 덮였으니 위 표의 세 번째 경우에 해당하고, 이웃 셀(0x0ff0)의 헤더가 `03 01 11` 인 것을 근거로 "첫 칸은 1바이트 정수 5, 둘째 칸은 TEXT hi" 라고 추정합니다. 이 추정은 이웃 레코드가 같은 모양이라는 가정 위에 서 있어서, 보고서에는 추정이라고 적습니다.
+앞 4바이트가 덮이면서 페이로드 길이(`06`), rowid(`07`), 헤더 길이(`03`), 첫 열의 serial type(`01`)이 사라졌고, 둘째 열의 serial type `11`(2바이트 TEXT)과 본문 `05 68 69` 는 남았습니다. 첫 열의 serial type 까지 덮였으니 위 표의 세 번째 경우에 해당하고, 이웃 셀(0x0ff0)의 헤더가 `03 01 11` 인 것을 근거로 "첫 열은 1바이트 정수 5, 둘째 열은 TEXT hi" 라고 추정합니다. 이 추정은 이웃 레코드가 같은 모양이라는 가정에 기댄 것이라, 보고서에는 추정이라고 적습니다.
 
 ### 절차
 
@@ -84,11 +84,11 @@ auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 �
 3. 테이블 잎 페이지마다 페이지 헤더 오프셋 1 에서 freeblock 연결을 따라가고, 오프셋 7 의 조각 합계와, 셀 포인터 배열 끝부터 셀 내용 영역 시작까지의 할당되지 않은 영역을 살핍니다.
 4. freelist 트렁크 페이지를 따라가 잎 페이지 번호를 모으고, 잎 페이지의 옛 내용을 b-tree 페이지처럼 풀어 봅니다.
 5. WAL 프레임과 롤백 저널의 페이지도 같은 방법으로 풉니다.
-6. 되살린 레코드의 serial type 순서가 어느 표의 칸 순서와 맞는지 `sqlite_schema` 의 `sql` 과 비교해, 레코드가 어느 표의 것인지 정합니다.
+6. 되살린 레코드의 serial type 순서가 어느 표의 열 순서와 맞는지 `sqlite_schema` 의 `sql` 과 비교해, 레코드가 어느 표의 것인지 정합니다.
 
 ## 포렌식에서 중요한 점
 
-되살린 레코드는 "이 DB 에 언젠가 이 내용의 레코드가 있었다"까지만 말해 줍니다. freeblock·freelist 구조에는 시각 칸이 없어서 언제 지웠는지는 레코드 안의 시각 값이나 다른 아티팩트로 따로 맞춰야 하고, rowid 가 덮였다면 원래 rowid 도 알 수 없습니다.
+되살린 레코드로 알 수 있는 것은 "이 DB 에 언젠가 이 내용의 레코드가 있었다"까지입니다. freeblock·freelist 구조에는 시각 필드가 없어서 언제 지웠는지는 레코드 안의 시각 값이나 다른 아티팩트로 따로 맞춰야 하고, rowid 가 덮였다면 원래 rowid 도 알 수 없습니다.
 
 `DROP` 으로 표를 통째로 지우면 freeblock 정보도 덮여서 셀 포인터로는 지운 레코드를 찾을 수 없습니다. 반대로 빈 공간에서 아무것도 나오지 않았다고 해서 지운 적이 없다고 말할 수는 없는데, auto_vacuum·secure_delete·덮어쓰기가 흔적을 없앨 수 있기 때문입니다. 지우기 흔적을 조사 전체에서 어떻게 해석하는지는 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 

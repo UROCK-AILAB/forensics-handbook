@@ -191,7 +191,7 @@ Get-Mailbox -Identity user@contoso.com | Select-Object -ExpandProperty AuditAdmi
 - 레코드가 없다는 사실만으로 접근이 없었다고 할 수 없습니다. 감사를 끄거나, 우회 대상으로 지정하거나, 작업 목록을 바꾸거나, 보존 기간이 지났을 수 있습니다[1].
 - 레코드 수는 접근 횟수가 아닙니다. 2분 묶음과 한 시간 중복 제거를 거친 결과입니다[2].
 
-보고서에는 "2026-03-02 01:15(UTC) 무렵 203.0.113.25 에서 kim@contoso.com 계정의 세션으로 메시지 2통에 바인드 접근한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2026-03-02 01:15(UTC) 무렵 203.0.113.25 에서 kim@contoso.com 계정의 세션으로 메시지 2통에 바인드 접근한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
@@ -201,9 +201,9 @@ Get-Mailbox -Identity user@contoso.com | Select-Object -ExpandProperty AuditAdmi
 
 - **감사 설정 자체를 먼저 봅니다.** `AuditDisabled`, `Get-MailboxAuditBypassAssociation`, `DefaultAuditSet` 을 확인하지 않고 "기록이 없다" 고 쓰면 안 됩니다[1]. Exchange 관리 작업 레코드는 `Operation` 에 실행한 cmdlet 이름이 적히므로[3], `Set-OrganizationConfig`·`Set-MailboxAuditBypassAssociation`·`Set-Mailbox` 로 설정을 바꾼 기록도 함께 검색합니다.
 - **기본 감사가 켜져 있어도 일부 사용자의 메일함 감사 이벤트가 Purview 검색이나 관리 API 에서 보이지 않을 수 있습니다**[5].
-- **라이선스에 따라 기록이 다릅니다.** `MailItemsAccessed` 는 Audit (Standard) 기능이고 E3/E5 사용자에게 기본으로 켜집니다(2026년 9월 문서 기준)[2]. 다만 Hawk 의 `Get-HawkUserMailItemsAccessed` 주석에는 E5·G5 라이선스와 고급 감사 (Advanced Auditing) 가 필요하다고 적혀 있어 출처끼리 다르므로, 검체의 라이선스와 실제 레코드로 확인합니다[7]. `MessageBind` 는 E5·A5·G5 가 아닌 사용자에게만 있습니다[1]. `SearchQueryInitiated` 는 소유자 작업 가운데 기본으로 꺼진 작업이고[1], Exchange Online 검색 기록은 Audit (Premium) 이벤트입니다[4]. Hawk 는 이 기록을 `SearchQueryInitiatedExchange` 작업 이름으로 검색합니다[7].
+- **라이선스에 따라 기록이 다릅니다.** `MailItemsAccessed` 는 Audit (Standard) 기능이고 E3/E5 사용자에게 기본으로 켜집니다(2026년 9월 문서 기준)[2]. 다만 Hawk 의 `Get-HawkUserMailItemsAccessed` 주석에는 E5·G5 라이선스와 고급 감사 (Advanced Auditing) 가 필요하다고 적혀 있어 출처끼리 다르므로, 조사 대상 계정의 라이선스와 실제 레코드로 확인합니다[7]. `MessageBind` 는 E5·A5·G5 가 아닌 사용자에게만 있습니다[1]. `SearchQueryInitiated` 는 소유자 작업 가운데 기본으로 꺼진 작업이고[1], Exchange Online 검색 기록은 Audit (Premium) 이벤트입니다[4]. Hawk 는 이 기록을 `SearchQueryInitiatedExchange` 작업 이름으로 검색합니다[7].
 - **복구 가능한 항목 폴더가 가득 차면** 메일함의 `Audits` 하위 폴더에 감사 항목을 더 저장할 수 없습니다[9]. 보존·보류와 복구 가능한 항목 폴더 구조는 [Purview eDiscovery와 보존](../purview-ediscovery.md)에 있습니다.
-- **`IsThrottled`**: Microsoft-Extractor-Suite 는 `OperationProperties` 에서 `MailAccessType` 과 함께 `IsThrottled` 값을 따로 뽑습니다[6]. 이 값의 뜻은 검체에서 다른 필드와 함께 확인한 뒤 해석합니다.
+- **`IsThrottled`**: Microsoft-Extractor-Suite 는 `OperationProperties` 에서 `MailAccessType` 과 함께 `IsThrottled` 값을 따로 뽑습니다[6]. 이 값의 뜻은 실제 데이터에서 다른 필드와 함께 확인한 뒤 해석합니다.
 - **검색 cmdlet 두 가지**: `Search-MailboxAuditLog` 는 온프레미스 Exchange 와 Exchange Online 양쪽에 있고 메일함 하나 이상의 감사 기록을 검색하지만, 클라우드 서비스에서는 폐지될 예정입니다[10]. 다른 서비스 기록과 한 흐름으로 보려면 `Search-UnifiedAuditLog` 로 통합 감사 로그를 검색합니다[2].
 
 ## 직접 분석해 보기

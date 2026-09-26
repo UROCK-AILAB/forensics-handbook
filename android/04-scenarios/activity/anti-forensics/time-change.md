@@ -33,15 +33,15 @@ nav_order: 1680
 | 자동 시간대 감지(통신사 NITZ) | — | 셀룰러 기기, 11 이하에서는 이 방식만 씀 |
 | 자동 시간대 감지(위치) | 12 이상 | 위치 서비스가 켜져 있어야 함 |
 
-time_detector 서비스의 상태는 제안을 받은 "certain" 과 제안이 없거나 오래된 "uncertain" 두 가지이고, time_zone_detector 서비스도 같은 두 상태를 씁니다 [3]. `adb shell cmd time_detector dump` 는 출처 우선순위, 자동 감지가 켜져 있는지, 시각 변경 기록(time change logs), 출처별 제안 이력을 보여 줍니다 [3]. 일반 권한으로 실행되는지는 검체에서 확인합니다.
+time_detector 서비스의 상태는 제안을 받은 "certain" 과 제안이 없거나 오래된 "uncertain" 두 가지이고, time_zone_detector 서비스도 같은 두 상태를 씁니다 [3]. `adb shell cmd time_detector dump` 는 출처 우선순위, 자동 감지가 켜져 있는지, 시각 변경 기록(time change logs), 출처별 제안 이력을 보여 줍니다 [3]. 일반 권한으로 실행되는지는 실제 기기에서 확인합니다.
 
 ## usagestats 가 시각 변경을 다루는 방식
 
 앱 사용 기록(usagestats) 서비스는 시각 변경을 스스로 알아채고 저장 파일의 이름까지 옮겨서, 시각 조작을 볼 때 따로 알아 둘 만합니다.
 
-서비스는 `checkAndGetTimeLocked()` 에서 기대 시각을 "(지금 elapsedRealtime − 기준 elapsedRealtime) + 기준 벽시계 시각" 으로 셈하고, 실제 벽시계와 기대 시각의 차이가 2초(`TIME_CHANGE_THRESHOLD_MILLIS = 2 * 1000`)를 넘으면 시각이 바뀐 것으로 봅니다 [1][4]. 이 보정을 켤지는 시스템 속성 `persist.debug.time_correction` 으로 정하고 기본값은 true 입니다 [4]. 시각이 바뀌었다고 보면 `Time changed in by ... seconds` 로그를 남기고 `onTimeChanged()` 로 넘어가서, 캐시해 둔 이른 이벤트를 비우고, 현재 통계를 저장하고, 데이터베이스에 차이값을 넘긴 뒤 새 시각으로 현재 통계를 다시 엽니다 [1].
+서비스는 `checkAndGetTimeLocked()` 에서 기대 시각을 "(지금 elapsedRealtime − 기준 elapsedRealtime) + 기준 시스템 시계(wall clock) 시각" 으로 셈하고, 실제 시스템 시계와 기대 시각의 차이가 2초(`TIME_CHANGE_THRESHOLD_MILLIS = 2 * 1000`)를 넘으면 시각이 바뀐 것으로 봅니다 [1][4]. 이 보정을 켤지는 시스템 속성 `persist.debug.time_correction` 으로 정하고 기본값은 true 입니다 [4]. 시각이 바뀌었다고 보면 `Time changed in by ... seconds` 로그를 남기고 `onTimeChanged()` 로 넘어가서, 캐시해 둔 이른 이벤트를 비우고, 현재 통계를 저장하고, 데이터베이스에 차이값을 넘긴 뒤 새 시각으로 현재 통계를 다시 엽니다 [1].
 
-데이터베이스 쪽 `UsageStatsDatabase.onTimeChanged(차이)` 는 모든 통계 파일의 이름, 곧 구간 시작 유닉스 밀리초에 차이를 더해 이름을 바꾸고, 새 값이 0보다 작으면 그 파일을 지웁니다 [2]. 체크인 접미사(`CHECKED_IN_SUFFIX`)는 그대로 두고, 지운 파일 수와 옮긴 파일 수를 로그에 남깁니다(` files deleted: `, ` files moved: `) [2]. 시각을 바꾸면 이미 저장된 usagestats 파일의 이름도 같이 옮겨지니, 파일 이름만 보고 "그 시각에 기록됐다" 고 단정하지 않습니다(해석). 파일 이름과 시각 칸의 관계는 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 에 있습니다.
+데이터베이스 쪽 `UsageStatsDatabase.onTimeChanged(차이)` 는 모든 통계 파일의 이름, 곧 구간 시작 유닉스 밀리초에 차이를 더해 이름을 바꾸고, 새 값이 0보다 작으면 그 파일을 지웁니다 [2]. 체크인 접미사(`CHECKED_IN_SUFFIX`)는 그대로 두고, 지운 파일 수와 옮긴 파일 수를 로그에 남깁니다(` files deleted: `, ` files moved: `) [2]. 시각을 바꾸면 이미 저장된 usagestats 파일의 이름도 같이 옮겨지니, 파일 이름만 보고 "그 시각에 기록됐다" 고 단정하지 않습니다(해석). 파일 이름과 시각 필드의 관계는 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 에 있습니다.
 
 UsageStatsService.java 에는 `Intent.ACTION_TIME_CHANGED` 방송을 직접 받는 코드가 없습니다 [4].
 
@@ -65,9 +65,9 @@ User[#] Time changed. actualSystemTime:... expectedSystemTime:... actualRealtime
 User[#] rolloverStats by event Type:#/ init elapsed time:/ timeStamp:/ ExpiryDate:/ realTime:/ systemTime:
 ```
 
-`Time changed. actualSystemTime` 줄의 모양은 AOSP 소스의 로그 문자열 `Time changed in by ... seconds` 와 다르고, 소스 로그 문자열에는 actualSystemTime 같은 칸 이름이 없습니다 [1]. 다만 `actualSystemTime`, `expectedSystemTime`, `actualRealtime` 은 AOSP `checkAndGetTimeLocked()` 안의 변수 이름과 같아서 [1], 같은 판정 결과를 제조사가 따로 적은 기록일 가능성이 있습니다. 이 줄은 실제 벽시계(actualSystemTime)와 서비스가 기대한 시각(expectedSystemTime)을 나란히 적는 모양이라서, 값이 보이는 기기라면 두 값의 차이로 시각이 얼마나 옮겨졌는지를 가늠할 수 있습니다(해석). 이 절이 몇 건까지, 언제까지 남는지는 공개된 자료가 없어 검체에서 확인합니다.
+`Time changed. actualSystemTime` 줄의 모양은 AOSP 소스의 로그 문자열 `Time changed in by ... seconds` 와 다르고, 소스 로그 문자열에는 actualSystemTime 같은 필드 이름이 없습니다 [1]. 다만 `actualSystemTime`, `expectedSystemTime`, `actualRealtime` 은 AOSP `checkAndGetTimeLocked()` 안의 변수 이름과 같아서 [1], 같은 판정 결과를 제조사가 따로 적은 기록일 가능성이 있습니다. 이 줄은 실제 시스템 시계(actualSystemTime)와 서비스가 기대한 시각(expectedSystemTime)을 나란히 적는 모양이라서, 값이 보이는 기기라면 두 값의 차이로 시각이 얼마나 옮겨졌는지를 추정할 수 있습니다(해석). 이 절이 몇 건까지, 언제까지 남는지는 실제 기기로 확인해야 합니다.
 
-logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 모양이고, 버퍼는 main, system, events, crash, radio 등이 있습니다. `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]: time=...` 줄, `dumpsys bluetooth_manager` 의 기록 줄도 같은 "월-일 시:분:초.밀리초" 모양입니다. 연도가 없어서 해를 넘는 판단은 다른 기록과 맞춰야 합니다(해석). batterystats 에는 "Battery History" 첫 줄 가까이에 `RESET:TIME:` 줄이 있습니다. 시각이 바뀔 때 따로 줄이 생기는지는 검체에서 확인합니다.
+logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 모양이고, 버퍼는 main, system, events, crash, radio 등이 있습니다. `dumpsys batterystats` 의 기록 줄, `dumpsys wifi` 의 `rec[#]: time=...` 줄, `dumpsys bluetooth_manager` 의 기록 줄도 같은 "월-일 시:분:초.밀리초" 모양입니다. 연도가 없어서 해를 넘는 판단은 다른 기록과 맞춰야 합니다(해석). batterystats 에는 "Battery History" 첫 줄 가까이에 `RESET:TIME:` 줄이 있습니다. 시각이 바뀔 때 따로 줄이 생기는지는 실제 기기에서 확인합니다.
 
 ## 분석 흐름
 
@@ -94,7 +94,7 @@ logcat 한 줄은 `월-일 시:분:초.밀리초 PID TID 등급 태그: 내용` 
 
 ## 함께 볼 페이지
 
-- 이 묶음 전체의 길잡이는 [증거를 없애려 했나](index.md) 입니다. 초기화 사유 시각과 휴지통 파일 이름의 만료 시각도 기기 벽시계로 만든 값이라서, [초기화](factory-reset.md) 와 [메시지·사진 지우기](content-deletion.md) 를 볼 때 이 페이지의 점검을 먼저 거칩니다.
+- 이 묶음 전체의 길잡이는 [증거를 없애려 했나](index.md) 입니다. 초기화 사유 시각과 휴지통 파일 이름의 만료 시각도 기기 시스템 시계로 만든 값이라서, [초기화](factory-reset.md) 와 [메시지·사진 지우기](content-deletion.md) 를 볼 때 이 페이지의 점검을 먼저 거칩니다.
 - 시각 값의 형식은 [시각 값](../../../01-foundations/value-decoding/time-values.md), 폰 사용 시간을 재구성하는 흐름은 [폰 사용 시간 재구성](../usage-time.md) 에 있습니다.
 
 ## 참고 문헌

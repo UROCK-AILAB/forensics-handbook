@@ -130,12 +130,12 @@ insights-activity-logs/resourceId=/SUBSCRIPTIONS/{subscription ID}/y={yyyy}/m={M
 | `operationId` | 한 작업의 이벤트들이 공유하는 GUID | 시작·끝 이벤트를 짝짓는 열쇠 |
 | `eventDataId` | 이벤트 하나의 고유 ID | `id` 안에도 들어 있음 |
 | `eventName` | `BeginRequest`·`EndRequest` 등 | 시작과 끝 구분 |
-| `operationName` | ARM 작업 이름. `Microsoft.공급자/형식/.../write` 꼴 | 탐지 규칙이 거는 필드 |
+| `operationName` | ARM 작업 이름. `Microsoft.공급자/형식/.../write` 형식 | 탐지 규칙이 거는 필드 |
 | `status`·`subStatus` | `Started`·`Succeeded`·`Failed` 등, 그리고 대개 HTTP 상태(`Created`, `Conflict` 등) | 성공 여부는 둘을 함께 봄 |
 | `level` | `Critical`·`Error`·`Warning`·`Information`/`Informational` | 수준은 리소스 공급자 개발자가 정함 |
 | `eventTimestamp`·`submissionTimestamp` | 이벤트 생성 시각과 조회 가능해진 시각 | 아래 "시각 해석" 참고 |
 
-문서 예시에서 `id` 는 `.../events/{eventDataId}/ticks/{ticks}` 꼴이고, 끝의 ticks 는 `eventTimestamp` 와 같은 순간을 .NET 틱(100나노초 단위)으로 적은 값입니다[2]. 이 스키마는 강제되지 않아서 서비스나 국가 클라우드에 따라 필드가 더 붙을 수 있습니다[2]. 범주마다 쓰는 필드도 다르고, 예를 들어 Alert 이벤트의 `caller` 는 늘 `Microsoft.Insights/alertRules` 입니다[2].
+문서 예시에서 `id` 는 `.../events/{eventDataId}/ticks/{ticks}` 형식이고, 끝의 ticks 는 `eventTimestamp` 와 같은 순간을 .NET 틱(100나노초 단위)으로 적은 값입니다[2]. 이 스키마는 강제되지 않아서 서비스나 국가 클라우드에 따라 필드가 더 붙을 수 있습니다[2]. 범주마다 쓰는 필드도 다르고, 예를 들어 Alert 이벤트의 `caller` 는 늘 `Microsoft.Insights/alertRules` 입니다[2].
 
 ### Storage·Event Hubs 로 내보낸 형식
 
@@ -165,9 +165,9 @@ Log Analytics 로 보내면 `AzureActivity` 표에 들어가고 열 이름이 �
 
 ## 증거로서 의미
 
-**증명하는 것.** 이 시각에 이 주체(`caller`, 클레임의 `objectidentifier`·`appid`)가 이 리소스(`resourceId`)에 이 ARM 작업(`operationName`)을 요청했고 결과가 어땠는지(`status`·`subStatus`)를 보여 줍니다[2]. `authorization.evidence` 가 있으면 어떤 역할 할당 덕분에 허용됐는지도 보입니다[2]. 클레임의 `authnmethodsreferences` 에 든 `pwd`, `rsa,mfa` 같은 값은 인증 방법을 가늠하는 단서입니다[2]. 리소스를 누가 만들었는지는 활동 로그에만 남으므로, 생성자를 밝히는 근거는 이 기록입니다[1].
+**증명하는 것.** 이 시각에 이 주체(`caller`, 클레임의 `objectidentifier`·`appid`)가 이 리소스(`resourceId`)에 이 ARM 작업(`operationName`)을 요청했고 결과가 어땠는지(`status`·`subStatus`)를 보여 줍니다[2]. `authorization.evidence` 가 있으면 어떤 역할 할당 덕분에 허용됐는지도 보입니다[2]. 클레임의 `authnmethodsreferences` 에 든 `pwd`, `rsa,mfa` 같은 값은 인증 방법을 추정하는 단서입니다[2]. 리소스를 누가 만들었는지는 활동 로그에만 남으므로, 생성자를 밝히는 근거는 이 기록입니다[1].
 
-**증명하지 못하는 것.** 데이터 평면 작업은 남지 않습니다. 블롭을 내려받았는지, 비밀 값을 읽었는지는 활동 로그로 알 수 없습니다[1]. 읽기 작업도 대개 없습니다[1]. 예를 들어 `listKeys/action` 이 남아 있으면 키 목록을 요청했다는 것까지이고, 그 키로 무엇을 했는지는 Storage·Key Vault 기록을 따로 봐야 합니다([Storage 계정 기록](./storage-logs.md), [Key Vault 기록](./key-vault.md)). 90일을 넘은 기록은 내보내 두지 않았으면 없습니다[1]. `level` 은 공급자 개발자가 정한 값이라 사건의 심각도를 판단하는 근거로 삼기 어렵습니다[2]. 레코드는 계정이나 서비스 주체를 가리킬 뿐 키보드 앞의 사람을 가리키지 않습니다. 보고서에는 "이 시각에 이 계정으로 구독에 역할 할당을 만든 요청이 성공한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
+**증명하지 못하는 것.** 데이터 평면 작업은 남지 않습니다. 블롭을 내려받았는지, 비밀 값을 읽었는지는 활동 로그로 알 수 없습니다[1]. 읽기 작업도 대개 없습니다[1]. 예를 들어 `listKeys/action` 이 남아 있으면 키 목록을 요청했다는 것까지이고, 그 키로 무엇을 했는지는 Storage·Key Vault 기록을 따로 봐야 합니다([Storage 계정 기록](./storage-logs.md), [Key Vault 기록](./key-vault.md)). 90일을 넘은 기록은 내보내 두지 않았으면 없습니다[1]. `level` 은 공급자 개발자가 정한 값이라 사건의 심각도를 판단하는 근거로 삼기 어렵습니다[2]. 레코드는 계정이나 서비스 주체를 가리킬 뿐 키보드 앞의 사람을 가리키지 않습니다. 보고서에는 "이 시각에 이 계정으로 구독에 역할 할당을 만든 요청이 성공한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
 
 ## 시각 해석
 
@@ -185,8 +185,8 @@ Storage 로 내보낸 `PT1H.json` 은 그 시간에 **받은** 이벤트를 담�
 
 - **경로마다 다른 필드 이름.** 같은 이벤트가 REST 에서는 `eventTimestamp`·`operationName.value`, Storage 에서는 `time`·`operationName`·`resultType`, Log Analytics 에서는 `TimeGenerated`·`OperationNameValue`·`ActivityStatusValue` 입니다[2][4]. 도구 출력마다 필드 대응표를 먼저 맞춥니다.
 - **대소문자.** `AzureActivity` 의 문자열 값은 같은 값이라도 대소문자가 다를 수 있어서 `=~` 나 `tolower()` 로 비교합니다[1]. Sigma 규칙도 `MICROSOFT.KEYVAULT/VAULTS/WRITE` 처럼 대문자로 적은 것이 있어서[6] 대소문자를 무시하고 비교합니다.
-- **`caller` 의 모양.** REST 스키마는 `caller` 를 메일 주소·UPN·SPN 가운데 있는 것이라고 하고[2], `AzureActivity` 표 설명은 "호출자의 GUID" 라고 합니다[4]. 검체의 값이 어떤 모양인지 보고 판단하고, 주체를 확정할 때는 클레임의 `objectidentifier` 를 씁니다.
-- **내보낸 형식의 설명과 예시가 다름.** 대응표 설명으로는 `category` 가 늘 "Administrative", `durationMs` 가 늘 0 이지만, 같은 문서의 예시에는 `"category": "Write"`, `"durationMs": 2826` 이 들어 있습니다[2]. 검체에서 실제 값을 확인하고, `category` 대신 `properties.eventCategory` 로 범주를 가립니다.
+- **`caller` 의 모양.** REST 스키마는 `caller` 를 메일 주소·UPN·SPN 가운데 있는 것이라고 하고[2], `AzureActivity` 표 설명은 "호출자의 GUID" 라고 합니다[4]. 실제 데이터의 값이 어떤 모양인지 보고 판단하고, 주체를 확정할 때는 클레임의 `objectidentifier` 를 씁니다.
+- **내보낸 형식의 설명과 예시가 다름.** 대응표 설명으로는 `category` 가 늘 "Administrative", `durationMs` 가 늘 0 이지만, 같은 문서의 예시에는 `"category": "Write"`, `"durationMs": 2826` 이 들어 있습니다[2]. 실제 데이터에서 값을 확인하고, `category` 대신 `properties.eventCategory` 로 범주를 구분합니다.
 - **수준 값.** REST 스키마의 수준은 `Critical`·`Error`·`Warning`·`Information`/`Informational` 이고[2], `AzureActivity` 표 설명에는 `Verbose` 도 있습니다[4]. `Information` 과 `Informational` 을 같은 값으로 묶습니다.
 - **중복 이벤트.** 관리 그룹과 그 아래 구독에 모두 진단 설정이 있으면 같은 이벤트가 두 번 들어옵니다[1]. Log Analytics 에서는 모든 필드의 해시로 걷어 냅니다[1].
 
@@ -201,7 +201,7 @@ Storage 로 내보낸 `PT1H.json` 은 그 시간에 **받은** 이벤트를 담�
 
 ## 직접 분석해 보기
 
-**`id` 의 ticks 로 시각을 한 번 확인하기.** 문서 예시의 `id` 끝 ticks `636528553513810679` 는 0001-01-01 부터 센 100나노초 단위 값입니다. 여기서 1970-01-01 의 ticks `621355968000000000` 을 빼면 `15172585513810679` 이고, 10,000,000 으로 나누면 유닉스 시각 `1517258551.3810679` 초가 됩니다. 이 값은 UTC `2018-01-29T20:42:31.3810679Z` 로, 같은 이벤트의 `eventTimestamp` 와 같습니다[2]. `eventTimestamp` 가 빠지거나 가공된 사본에서 `id` 만 남아 있을 때 이렇게 되짚을 수 있습니다.
+**`id` 의 ticks 로 시각을 한 번 확인하기.** 문서 예시의 `id` 끝 ticks `636528553513810679` 는 0001-01-01 부터 센 100나노초 단위 값입니다. 여기서 1970-01-01 의 ticks `621355968000000000` 을 빼면 `15172585513810679` 이고, 10,000,000 으로 나누면 유닉스 시각 `1517258551.3810679` 초가 됩니다. 이 값은 UTC `2018-01-29T20:42:31.3810679Z` 로, 같은 이벤트의 `eventTimestamp` 와 같습니다[2]. `eventTimestamp` 가 빠지거나 가공된 사본에서 `id` 만 남아 있을 때 이렇게 시각을 거꾸로 계산할 수 있습니다.
 
 ```sh
 python3 -c "import datetime;t=636528553513810679-621355968000000000;print(datetime.datetime(1970,1,1)+datetime.timedelta(microseconds=t//10))"
@@ -240,7 +240,7 @@ AzureActivity
 
 DFIR-O365RC 로 받으려면 대상 구독에 `Microsoft.Insights/eventtypes/*` 를 읽을 수 있는 Reader 권한이 필요합니다[11]. 도구 선택과 수집 순서는 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md)에 있습니다.
 
-**탐지 규칙으로 훑기.** SigmaHQ 의 Azure 활동 로그 규칙은 `operationName` 이나 키워드로 다음 작업을 찾습니다. 작업 이름의 대소문자는 규칙 원문 그대로입니다.
+**탐지 규칙으로 검색하기.** SigmaHQ 의 Azure 활동 로그 규칙은 `operationName` 이나 키워드로 다음 작업을 찾습니다. 작업 이름의 대소문자는 규칙 원문 그대로입니다.
 
 | 찾는 것 | 작업 이름 |
 |---|---|
@@ -250,14 +250,14 @@ DFIR-O365RC 로 받으려면 대상 구독에 `Microsoft.Insights/eventtypes/*` 
 | Cloud Shell 생성 | `MICROSOFT.PORTAL/CONSOLES/WRITE`[17] |
 | Key Vault 수정·삭제 | `MICROSOFT.KEYVAULT/VAULTS/WRITE`, `/DELETE`, `/DEPLOY/ACTION`, `/ACCESSPOLICIES/WRITE`[6] |
 
-규칙이 걸린다고 공격이 있었다는 뜻은 아니고, 관리자의 정상 작업도 같은 이름으로 남습니다[14][16]. 규칙 활용법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에, 역할 할당을 시간 순으로 따라가는 방법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md)에 있습니다.
+규칙이 걸린다고 공격이 있었다는 뜻은 아니고, 관리자의 정상 작업도 같은 이름으로 남습니다[14][16]. 규칙 활용법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에, 역할 할당을 시간 순으로 따라가는 방법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md)에 있습니다.
 
 ## 교차 검증
 
 - **로그인 기록.** 클레임의 `objectidentifier`·`appid` 와 시각으로 Entra ID 로그인 로그의 해당 로그인을 찾으면, 그 토큰을 어디서 어떤 인증으로 받았는지 이어 볼 수 있습니다. [Entra ID 로그](../m365/entra-logs/index.md)를 봅니다.
 - **데이터 평면 기록.** 활동 로그의 `listKeys/action`, 디스크·스냅숏 작업 뒤에 실제 데이터 접근이 있었는지는 [Storage 계정 기록](./storage-logs.md), [Key Vault 기록](./key-vault.md), [Azure 가상 머신](./azure-vm.md)에서 확인합니다.
 - **네트워크 설정 변경.** NSG 규칙이 바뀐 시각 전후의 실제 트래픽은 [네트워크 흐름 로그](./flow-logs.md)에 남습니다.
-- **다른 클라우드와 견주기.** AWS 의 대응 기록은 [CloudTrail](../aws/cloudtrail/index.md)입니다. 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)과 [Windows 판의 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)을 봅니다.
+- **다른 클라우드와 비교하기.** AWS 의 대응 기록은 [CloudTrail](../aws/cloudtrail/index.md)입니다. 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)과 [Windows 판의 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)을 봅니다.
 - IP 주소 해석은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md), JSON 을 읽는 일반 원칙은 [JSON 로그 읽기](../../01-foundations/logging/json-logs.md)에 있습니다.
 
 ## 실습
@@ -265,7 +265,7 @@ DFIR-O365RC 로 받으려면 대상 구독에 `Microsoft.Insights/eventtypes/*` 
 시험용 구독을 하나 만들어 아래 작업을 한 뒤 활동 로그를 받아 풀어 봅니다.
 
 1. 리소스 그룹에 스토리지 계정을 만들고 지웁니다. 만들기 작업에서 `BeginRequest` 와 `EndRequest` 이벤트는 몇 개 남고, 어느 필드로 짝을 지을 수 있나요?
-2. 포털 화면에서 본 이벤트와 REST 로 받은 같은 이벤트를 견줘 봅니다. 포털에서 빠진 필드는 무엇인가요?
+2. 포털 화면에서 본 이벤트와 REST 로 받은 같은 이벤트를 비교해 봅니다. 포털에서 빠진 필드는 무엇인가요?
 3. 스토리지 계정의 액세스 키를 포털에서 한 번 봅니다. 활동 로그에 어떤 `operationName` 이 남고, 키를 써서 블롭을 읽은 일은 어디에 남나요?
 4. 활동 로그용 진단 설정을 Storage 로 만든 뒤 한 시간 넘게 기다립니다. `PT1H.json` 경로의 `h=` 값과 안에 든 `time` 값이 어긋나는 레코드가 있나요?
 5. `id` 끝의 ticks 를 시각으로 바꿔 `eventTimestamp` 와 같은지 확인합니다.

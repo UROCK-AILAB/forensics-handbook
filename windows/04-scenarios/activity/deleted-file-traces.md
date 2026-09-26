@@ -8,7 +8,7 @@ nav_order: 3810
 
 파일이 지금 디스크에 없을 때 "이런 파일이 있었나, 언제 어떻게 없어졌나, 내용을 되살릴 수 있나" 를 묻는 조사를 다룹니다. 지운 파일의 흔적은 한곳에 모여 있지 않습니다. 휴지통, 파일 시스템 메타데이터, 변경 저널, 사용 흔적, 이벤트 로그에 조각으로 흩어져 남습니다. 이 페이지는 이 조각을 어떤 순서로 모으는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다. 아티팩트마다의 구조는 각 아티팩트 페이지에 있습니다.
 
-"(현장 관찰)" 을 붙인 내용은 공식 문서에 없는 내용이므로 검체마다 다시 확인합니다.
+"(현장 관찰)" 을 붙인 내용은 공식 문서에 없는 내용이므로 분석 대상마다 다시 확인합니다.
 
 ## 조사 질문
 
@@ -20,7 +20,7 @@ nav_order: 3810
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | Windows 버전 | 휴지통 `$I` 형식과 변경 저널 레코드의 버전이 Windows 버전마다 다릅니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
 | 시간대 | [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
@@ -55,18 +55,18 @@ Vista 이후 휴지통으로 보낸 항목마다 `\$Recycle.Bin\<SID>\` 에 `$R`
 
 ## MFT 레코드
 
-MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리는 칸은 셋입니다[1].
+MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 판별하는 필드는 셋입니다[1].
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | Flags | FILE_RECORD_SEGMENT_IN_USE(0x0001)가 켜져 있으면 쓰는 레코드입니다. 이 밖에 FILE_FILE_NAME_INDEX_PRESENT(0x0002)가 있습니다. |
 | SequenceNumber | 레코드가 해제될 때마다 1씩 늘어납니다. 쓰이지 않은 레코드는 0 입니다. |
 | BaseFileRecordSegment | 확장 레코드이면 기본 레코드를 가리킵니다. 기본 레코드이면 0 입니다. |
 
 - 0x0002 를 "폴더" 로 읽는 설명이 흔하지만, 공식 정의는 이름(FILE_FILE_NAME_INDEX_PRESENT)뿐입니다[1].
-- 칸은 MultiSectorHeader, Reserved1(8), SequenceNumber(2), Reserved2(2), FirstAttributeOffset(2), Flags(2), Reserved3(8), BaseFileRecordSegment(8), Reserved4(2), UpdateSequenceArray 순서입니다[1].
+- 필드는 MultiSectorHeader, Reserved1(8), SequenceNumber(2), Reserved2(2), FirstAttributeOffset(2), Flags(2), Reserved3(8), BaseFileRecordSegment(8), Reserved4(2), UpdateSequenceArray 순서입니다[1].
 - MultiSectorHeader 에는 "FILE" 서명과 업데이트 시퀀스 배열의 위치·크기가 있습니다[1].
-- 칸의 오프셋은 [파일 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 확인합니다.
+- 필드의 오프셋은 [파일 레코드와 속성](../../01-foundations/disk-volume/ntfs/file-record-attribute.md) 에서 확인합니다.
 - 이 구조는 NTFS 주 버전 3, 부 버전 0 또는 1 에만 맞습니다[1].
 
 **Flags 값 읽기.** 아래는 두 비트를 조합해 만든 예시 값입니다.
@@ -78,7 +78,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 | 0x0002 | FILE_NAME_INDEX_PRESENT | 해제됨 |
 | 0x0003 | IN_USE, FILE_NAME_INDEX_PRESENT | 쓰는 중 |
 
-**순번으로 레코드 재사용을 가립니다.**
+**순번으로 레코드 재사용을 판별합니다.**
 
 파일 참조의 순번이 지금 레코드의 SequenceNumber 와 다르면 그 참조는 낡은 것입니다[1]. 셸백·바로가기 파일·$UsnJrnl 에는 파일 참조가 남으므로 이 순번을 지금 $MFT 와 비교하면 그 레코드를 다른 파일이 다시 썼는지 알 수 있습니다. 레코드를 다른 파일이 다시 쓰면 옛 파일의 정보는 덮입니다.
 
@@ -88,7 +88,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 
 ## $UsnJrnl (변경 저널)
 
-변경 저널 레코드 (USN_RECORD_V2) 의 칸은 RecordLength, MajorVersion, MinorVersion, FileReferenceNumber, ParentFileReferenceNumber, Usn, TimeStamp, Reason, SourceInfo, SecurityId, FileAttributes, FileNameLength, FileNameOffset, FileName 입니다[2].
+변경 저널 레코드 (USN_RECORD_V2) 의 필드는 RecordLength, MajorVersion, MinorVersion, FileReferenceNumber, ParentFileReferenceNumber, Usn, TimeStamp, Reason, SourceInfo, SecurityId, FileAttributes, FileNameLength, FileNameOffset, FileName 입니다[2].
 
 - TimeStamp 는 64비트 UTC FILETIME 입니다[2].
 - MajorVersion 2·3·4 가 각각 V2·V3·V4 구조입니다[2].
@@ -124,7 +124,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 
 **휴지통으로 보낸 파일.**
 
-`$R` 은 원래 파일의 파일 ID 를 그대로 쓰므로 휴지통으로 보낸 때에는 저널에 USN_REASON_FILE_DELETE 가 아니라 이름 바꾸기 레코드가 남을 것으로 보입니다. 이 동작과, 휴지통을 비울 때 USN_REASON_FILE_DELETE 가 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 검체에서 `$R` 이름이 든 레코드를 찾아 어떤 값이 켜졌는지 확인합니다.
+`$R` 은 원래 파일의 파일 ID 를 그대로 쓰므로 휴지통으로 보낸 때에는 저널에 USN_REASON_FILE_DELETE 가 아니라 이름 바꾸기 레코드가 남을 것으로 보입니다. 이 동작과, 휴지통을 비울 때 USN_REASON_FILE_DELETE 가 남는지는 실제 데이터로 확인해야 합니다. 저널에서 `$R` 이름이 든 레코드를 찾아 어떤 값이 켜졌는지 확인합니다.
 
 **$J 를 뽑을 때 (현장 관찰).** `$UsnJrnl:$J` 는 앞부분이 비어 있는 희소 스트림인데(현장 관찰), 빈 구간을 0 으로 채워 뽑으면 논리 크기(수 GB)만큼의 파일이 나오고(현장 관찰), 빈 구간을 건너뛰어 뽑으면 실제 데이터만 남습니다(현장 관찰). 두 방법은 크기와 해시가 다르므로 어떤 방법으로 뽑았는지 기록에 적습니다. 희소 파일의 구조는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 에서 봅니다.
 
@@ -133,7 +133,7 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 | 기록 | 남는 것 | 링크 |
 |---|---|---|
 | 바로가기 파일·점프리스트 | 대상을 지운 뒤에도 대상 경로와 시각이 남습니다. | [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) · [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) |
-| 셸백 | 폴더를 지워도 남습니다. 항목의 NTFS 파일 참조를 지금 $MFT 와 맞추면 지웠는지·옮겼는지·이름만 바꿨는지 가를 수 있습니다. | [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) |
+| 셸백 | 폴더를 지워도 남습니다. 항목의 NTFS 파일 참조를 지금 $MFT 와 맞추면 지웠는지·옮겼는지·이름만 바꿨는지 구분할 수 있습니다. | [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) |
 | 윈도 검색 색인 | 지금 없는 파일의 기록이 남을 수 있습니다. | [윈도 검색 색인 DB](../../02-artifacts/file-folder-usage/windows-search/index.md) |
 | 프리페치·AmCache | 지운 실행 파일의 경로와 SHA-1 이 남을 수 있습니다. | [프리페치](../../02-artifacts/execution/prefetch/index.md) · [AmCache](../../02-artifacts/execution/amcache-hve/index.md) |
 | 썸네일 캐시 | 미리 보기 그림(세부는 링크 페이지) | [썸네일 캐시](../../02-artifacts/file-folder-usage/thumbcache-db-thumbs-db.md) |
@@ -156,8 +156,8 @@ MFT 레코드 머리 (FILE_RECORD_SEGMENT_HEADER) 에서 지운 파일을 가리
 | 0x40 | DeleteChild | %%4422 |
 
 - 4663 은 SACL 이 걸린 개체에서만 남고[3], 접근 권한에 DELETE 가 있으면 삭제 권한을 썼다는 기록입니다[3].
-- 4663 의 다른 칸과 다른 이벤트와 잇는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "보안 로그 4663" 절에 있습니다.
-- 개체 삭제 이벤트 4660 의 뜻과 칸은 [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) 에서 봅니다.
+- 4663 의 다른 필드와 다른 이벤트와 잇는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "보안 로그 4663" 절에 있습니다.
+- 개체 삭제 이벤트 4660 의 뜻과 필드는 [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) 에서 봅니다.
 
 **Sysmon.**
 
@@ -197,14 +197,14 @@ NTFS 에서 TRIM(삭제 알림)은 관리자가 끄지 않는 한 기본으로 �
 2. **흔적이 없으니 지우지 않았다고 봅니다.** 휴지통을 거치지 않는 삭제가 많습니다. 저널에서도 오래된 레코드는 없어질 수 있습니다.
 3. **`$I` 만 있고 `$R` 이 없으니 휴지통을 비웠다고 봅니다.** 복원한 뒤에도 `$I` 가 남습니다.
 4. **이름 바꾸기·옮기기를 삭제로 읽습니다.** 이름 바꾸기와 옮기기는 저널에 레코드 두 개를 남깁니다[2]. 새 이름 쪽 레코드를 찾아 확인합니다.
-5. **다시 쓰인 레코드의 정보를 옛 파일의 정보로 씁니다.** 레코드를 다른 파일이 다시 쓰면 옛 정보는 덮입니다. 파일 참조의 순번으로 가립니다[1].
+5. **다시 쓰인 레코드의 정보를 옛 파일의 정보로 씁니다.** 레코드를 다른 파일이 다시 쓰면 옛 정보는 덮입니다. 파일 참조의 순번으로 판별합니다[1].
 6. **기본 레코드에 긴 이름이 없으니 그 파일이 없었다고 봅니다.** 긴 이름이 확장 레코드에만 있을 수 있습니다(현장 관찰).
 7. **4663 이 없으니 지우지 않았다고 봅니다.** 감사가 꺼져 있었거나 SACL 이 없었을 수 있습니다[3].
 
 ## 보고서 문장 예
 
 - 쓰지 않을 문장: "피조사자는 ○○ 에 계약서.docx 를 삭제했습니다."
-- 휴지통 기록이 있을 때: "`C:\$Recycle.Bin\○○\`(사용자 ○○ 의 SID) 에 `$I○○.docx` 가 있습니다. 이 파일에 적힌 원래 경로는 `○○\계약서.docx` 입니다. 휴지통으로 옮긴 시각은 ○○(UTC) 입니다. 짝이 되는 `$R○○.docx` 는 없습니다. 이 기록은 이 파일이 이 계정의 휴지통 폴더로 들어갔음을 보여 줍니다. `$R` 이 없는 까닭과 옮긴 사람은 이 기록만으로 정할 수 없습니다."
+- 휴지통 기록이 있을 때: "`C:\$Recycle.Bin\○○\`(사용자 ○○ 의 SID) 에 `$I○○.docx` 가 있습니다. 이 파일에 적힌 원래 경로는 `○○\계약서.docx` 입니다. 휴지통으로 옮긴 시각은 ○○(UTC) 입니다. 짝이 되는 `$R○○.docx` 는 없습니다. 이 기록은 이 파일이 이 계정의 휴지통 폴더로 들어갔음을 보여 줍니다. `$R` 이 없는 이유와 옮긴 사람은 이 기록만으로 정할 수 없습니다."
 - 저널 기록이 있을 때: "C: 볼륨의 $UsnJrnl 에 파일 이름 `계약서.docx` 의 레코드가 있습니다. Reason 에 USN_REASON_FILE_DELETE 가 켜진 레코드의 TimeStamp 는 ○○(UTC) 입니다. 이 기록은 이 시각에 이 볼륨에서 이 파일이 지워졌음을 보여 줍니다. 어느 프로세스와 계정이 지웠는지는 이 기록만으로 정할 수 없습니다."
 
 ## 함께 볼 페이지

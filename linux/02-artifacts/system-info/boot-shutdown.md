@@ -10,9 +10,9 @@ Linux 는 부팅과 종료를 한 곳에 모아 두지 않고 저널·wtmp·감�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-systemd 저널은 항목마다 그 항목이 나온 부팅의 ID 를 붙이고, 부팅 완료·종료 시작·절전 같은 순간에는 정해진 메시지 ID 가 있는 항목을 남깁니다[2][3]. wtmp 에는 부팅할 때마다 `reboot` 라는 가짜 사용자가 로그인한 레코드가 쌓이고, 종료와 런레벨 변화도 들어갑니다[5][6]. systemd 환경에서는 systemd-update-utmp.service 가 재부팅과 종료 요청을 utmp·wtmp 와 감사 로그에 함께 씁니다[7]. ext4 슈퍼블록에는 마지막으로 마운트한 시각과 제대로 마운트 해제했는지가 남습니다[11]. 살아 있는 시스템에서는 커널이 부팅 시각과 부팅 ID 를 `/proc` 로 보여 줍니다[13][14].
+systemd 저널은 항목마다 그 항목이 나온 부팅의 ID 를 붙이고, 부팅 완료·종료 시작·절전 같은 순간에는 정해진 메시지 ID 가 있는 항목을 남깁니다[2][3]. wtmp 에는 부팅할 때마다 `reboot` 라는 가짜 사용자가 로그인한 레코드가 쌓이고, 종료와 런레벨 변화도 들어갑니다[5][6]. systemd 환경에서는 systemd-update-utmp.service 가 재부팅과 종료 요청을 utmp·wtmp 와 감사 로그에 함께 씁니다[7]. ext4 슈퍼블록에는 마지막으로 마운트한 시각과 제대로 마운트 해제했는지가 남습니다[11]. 실행 중인 시스템에서는 커널이 부팅 시각과 부팅 ID 를 `/proc` 로 보여 줍니다[13][14].
 
-이 기록들은 쓰는 주체가 다르고 사라지는 조건도 달라서, 하나가 지워지거나 비어 있어도 다른 쪽이 남는 경우가 많습니다. 어느 부팅에 어떤 일이 있었는지, 전원이 비정상으로 끊겼는지, 시스템이 꺼져 있던 공백이 있는지를 가릴 때 이 쪽의 기록을 씁니다.
+이 기록들은 쓰는 주체가 다르고 사라지는 조건도 달라서, 하나가 지워지거나 비어 있어도 다른 쪽이 남는 경우가 많습니다. 어느 부팅에 어떤 일이 있었는지, 전원이 비정상으로 끊겼는지, 시스템이 꺼져 있던 공백이 있는지를 판별할 때 이 페이지의 기록을 씁니다.
 
 ## 위치와 버전별 차이
 
@@ -20,10 +20,10 @@ systemd 저널은 항목마다 그 항목이 나온 부팅의 ID 를 붙이고, 
 |---|---|---|---|
 | systemd 저널 | `/var/log/journal/` 아래, 휘발 저장이면 `/run/log/journal/` 아래[18] | 공통 | 공통. 아래 메시지 ID 가 RHEL 9 카탈로그에도 같음[4] |
 | wtmp | `/var/log/wtmp` (순환본 포함)[6][17] | 공통 | 공통 |
-| wtmpdb | `/var/lib/wtmpdb/` 아래 SQLite[8] | 검체에 있는지 확인 | 검체에 있는지 확인 |
-| 감사 로그 | `/var/log/audit/` 아래[19] | 검체에서 auditd 사용 여부 확인 | 검체에서 auditd 사용 여부 확인 |
-| boot.log | `/var/log/boot.log` | 검체의 `/etc/rsyslog.d/` 에 `local7` 규칙이 있는지 확인 | rsyslog 기본 설정에 `local7.*` 를 이 파일로 보내는 규칙이 있음[10] |
-| ext4 슈퍼블록 | 각 볼륨 시작에서 1024바이트 뒤[11] | 루트가 ext4 인 경우 | 루트 파일 시스템 종류를 검체에서 확인 |
+| wtmpdb | `/var/lib/wtmpdb/` 아래 SQLite[8] | 분석 대상에 있는지 확인 | 분석 대상에 있는지 확인 |
+| 감사 로그 | `/var/log/audit/` 아래[19] | 분석 대상에서 auditd 사용 여부 확인 | 분석 대상에서 auditd 사용 여부 확인 |
+| boot.log | `/var/log/boot.log` | 분석 대상의 `/etc/rsyslog.d/` 에 `local7` 규칙이 있는지 확인 | rsyslog 기본 설정에 `local7.*` 를 이 파일로 보내는 규칙이 있음[10] |
+| ext4 슈퍼블록 | 각 볼륨 시작에서 1024바이트 뒤[11] | 루트가 ext4 인 경우 | 루트 파일 시스템 종류를 분석 대상에서 확인 |
 | 라이브 | `/proc/stat` 의 `btime`, `/proc/uptime`, `/proc/sys/kernel/random/boot_id` | 같음 | 같음 |
 
 저널이 디스크에 남는지, 기본 보존 한도가 얼마인지는 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md) 에서 다룹니다. `/run/log/journal/` 에 둔 휘발 저널은 재부팅하면 사라지므로[18], 휘발 저장만 쓰는 시스템을 끈 뒤 만든 이미지에는 이전 부팅의 저널이 없습니다. `_RUNTIME_SCOPE=` 필드는 systemd 252 부터 있고, `initrd` 면 initrd 안에서, `system` 이면 실제 루트 파일 시스템으로 넘어간 뒤 만든 항목입니다[2].
@@ -32,7 +32,7 @@ systemd 저널은 항목마다 그 항목이 나온 부팅의 ID 를 붙이고, 
 
 ### 저널: 부팅 ID 와 카탈로그 메시지
 
-`_BOOT_ID=` 는 그 항목이 만들어진 부팅의 커널 부팅 ID 이고 128비트 16진 문자열입니다[2]. `__MONOTONIC_TIMESTAMP=` 는 journald 가 항목을 받은 순간의 monotonic 시계 값(마이크로초)이고, 항목을 가리키는 주소로 쓰려면 `_BOOT_ID` 와 짝을 지어야 합니다[2]. `journalctl --list-boots` 는 부팅 순번(현재 부팅 기준 상대값), 부팅 ID, 그 부팅의 첫 메시지와 마지막 메시지 시각을 표로 냅니다[1]. 순번이 검체에서 어떻게 풀리는지는 [journalctl 로 읽기](../../01-foundations/logging/systemd-journal/journalctl.md) 에서 다룹니다.
+`_BOOT_ID=` 는 그 항목이 만들어진 부팅의 커널 부팅 ID 이고 128비트 16진 문자열입니다[2]. `__MONOTONIC_TIMESTAMP=` 는 journald 가 항목을 받은 순간의 monotonic 시계 값(마이크로초)이고, 항목을 가리키는 주소로 쓰려면 `_BOOT_ID` 와 짝을 지어야 합니다[2]. `journalctl --list-boots` 는 부팅 순번(현재 부팅 기준 상대값), 부팅 ID, 그 부팅의 첫 메시지와 마지막 메시지 시각을 표로 냅니다[1]. 순번이 실제 데이터에서 어떻게 풀리는지는 [journalctl 로 읽기](../../01-foundations/logging/systemd-journal/journalctl.md) 에서 다룹니다.
 
 부팅·종료와 관련된 카탈로그 메시지는 다음과 같습니다. 여덟 개 모두 RHEL 9 의 systemd 252 카탈로그에도 같은 ID 로 있습니다[3][4].
 
@@ -49,17 +49,17 @@ systemd 저널은 항목마다 그 항목이 나온 부팅의 ID 를 붙이고, 
 
 ### wtmp·wtmpdb
 
-wtmp 에서 터미널 이름이 `~` 이고 사용자 이름이 `reboot` 나 `shutdown` 인 레코드가 재부팅과 종료입니다[5]. 레코드 종류 가운데 1(RUN_LVL)은 런레벨 변화, 2(BOOT_TIME)는 부팅 시각이고, 런레벨 레코드의 `ut_host` 칸에는 원격 호스트 대신 커널 판이 들어갑니다[5]. 그래서 런레벨 레코드를 차례로 보면 그때 돌던 커널 판까지 알 수 있습니다. 레코드의 바이트 배치는 [로그인 기록 파일 형식](../../01-foundations/logging/utmp-wtmp-format.md) 에서 다룹니다.
+wtmp 에서 터미널 이름이 `~` 이고 사용자 이름이 `reboot` 나 `shutdown` 인 레코드가 재부팅과 종료입니다[5]. 레코드 종류 가운데 1(RUN_LVL)은 런레벨 변화, 2(BOOT_TIME)는 부팅 시각이고, 런레벨 레코드의 `ut_host` 필드에는 원격 호스트 대신 커널 판이 들어갑니다[5]. 그래서 런레벨 레코드를 차례로 보면 그때 돌던 커널 판까지 알 수 있습니다. 레코드의 바이트 배치는 [로그인 기록 파일 형식](../../01-foundations/logging/utmp-wtmp-format.md) 에서 다룹니다.
 
 SQLite 형식인 wtmpdb 는 종류 번호가 1 BOOT_TIME, 2 RUNLEVEL 이라 utmp 와 1·2 가 뒤바뀌어 있습니다[8]. 두 형식을 한 표에 섞을 때는 번호가 아니라 이름으로 맞춥니다.
 
 ### 감사 로그
 
-감사 이벤트 종류 1127 `SYSTEM_BOOT`, 1128 `SYSTEM_SHUTDOWN`, 1129 `SYSTEM_RUNLEVEL` 이 부팅·종료·런레벨 변화이고, 셋 다 발생원(ORIGIN)이 USER 인 메시지입니다[9]. 레코드 줄의 모양과 시각 칸은 [감사 로그 형식](../../01-foundations/logging/auditd-format.md) 에서 다룹니다.
+감사 이벤트 종류 1127 `SYSTEM_BOOT`, 1128 `SYSTEM_SHUTDOWN`, 1129 `SYSTEM_RUNLEVEL` 이 부팅·종료·런레벨 변화이고, 셋 다 발생원(ORIGIN)이 USER 인 메시지입니다[9]. 레코드 줄의 모양과 시각 필드는 [감사 로그 형식](../../01-foundations/logging/auditd-format.md) 에서 다룹니다.
 
 ### ext4 슈퍼블록
 
-슈퍼블록은 볼륨 시작에서 1024바이트 뒤에 있습니다[11]. 부팅·종료와 관련된 칸은 다음과 같고, 오프셋은 슈퍼블록 시작 기준입니다[11]. 슈퍼블록 전체 구조는 [ext4](../../01-foundations/filesystem/ext4/index.md) 에서 다룹니다.
+슈퍼블록은 볼륨 시작에서 1024바이트 뒤에 있습니다[11]. 부팅·종료와 관련된 필드는 다음과 같고, 오프셋은 슈퍼블록 시작 기준입니다[11]. 슈퍼블록 전체 구조는 [ext4](../../01-foundations/filesystem/ext4/index.md) 에서 다룹니다.
 
 | 오프셋 | 크기 | 필드 | 뜻 |
 |---|---|---|---|
@@ -86,7 +86,7 @@ SQLite 형식인 wtmpdb 는 종류 번호가 1 BOOT_TIME, 2 RUNLEVEL 이라 utmp
 
 저널의 부팅 ID 별 첫·마지막 메시지 시각은 그 부팅 동안 저널이 기록을 받은 범위입니다[1]. "System start-up is now complete" 는 부팅 때 걸린 서비스가 모두 시작된 시각이고, "System shutdown initiated" 는 종료가 시작된 시각입니다[3]. wtmp 의 `reboot` 레코드와 감사 로그의 `SYSTEM_BOOT` 는 systemd-update-utmp 같은 프로그램이 그 시각에 부팅을 기록했다는 뜻입니다[5][7][9]. ext4 슈퍼블록의 `s_state` 에 0x0001 이 없거나 `s_feature_incompat` 에 0x4 가 켜져 있으면, 이미지를 만든 순간 이 파일 시스템은 제대로 마운트 해제된 상태가 아니었습니다[11].
 
-보고서에는 "이 부팅 ID 의 저널 기록은 이 시각부터 이 시각까지 있다", "이 시각에 종료가 시작되었다는 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 부팅 ID 의 저널 기록은 이 시각부터 이 시각까지 있다", "이 시각에 종료가 시작되었다는 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ### 증명하지 못하는 것
 
@@ -107,7 +107,7 @@ SQLite 형식인 wtmpdb 는 종류 번호가 1 BOOT_TIME, 2 RUNLEVEL 이라 utmp
 
 저널 시각을 바꾸는 법은 [journalctl 로 읽기](../../01-foundations/logging/systemd-journal/journalctl.md), epoch 값을 날짜로 바꾸는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md), syslog 줄의 시각은 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md) 에서 다룹니다.
 
-부팅 직후에는 시계가 아직 NTP 로 맞춰지지 않았을 수 있습니다. 이 구간의 벽시계 시각은 "Initial clock synchronization" 메시지[3] 앞뒤를 비교해 어긋남을 가늠하고, 같은 부팅 안에서는 monotonic 값으로 순서를 잡습니다. `journalctl --header` 는 시계가 틀린 채 부팅해 순서가 어긋난 항목을 찾는 데 쓸모가 있습니다[1].
+부팅 직후에는 시계가 아직 NTP 로 맞춰지지 않았을 수 있습니다. 이 구간의 시스템 시계 시각은 "Initial clock synchronization" 메시지[3] 앞뒤를 비교해 어긋남을 추정하고, 같은 부팅 안에서는 monotonic 값으로 순서를 잡습니다. `journalctl --header` 는 시계가 틀린 채 부팅해 순서가 어긋난 항목을 찾는 데 쓸모가 있습니다[1].
 
 ## 함정과 한계
 
@@ -122,7 +122,7 @@ SQLite 형식인 wtmpdb 는 종류 번호가 1 BOOT_TIME, 2 RUNLEVEL 이라 utmp
 
 ### 헥스로 한 번: ext4 슈퍼블록
 
-아래는 명세로 만든 슈퍼블록 일부입니다(만든 예시). 오프셋은 파티션 시작 기준이고, 부팅·종료와 관계없는 칸은 0 으로 두었습니다.
+아래는 명세로 만든 슈퍼블록 일부입니다(만든 예시). 오프셋은 파티션 시작 기준이고, 부팅·종료와 관계없는 필드는 0 으로 두었습니다.
 
 ```
 00000420: 0000 0000 0000 0000 0000 0000 94a5 6869  ..............hi
@@ -148,7 +148,7 @@ last -f wtmp -F -w -x
 fsstat -o 2048 disk.raw
 ```
 
-첫 줄은 검체 저널의 부팅 목록을 뽑고, 둘째 줄은 종료 시작 메시지만 거릅니다. 다른 메시지 ID 로 바꿔 부팅 완료·절전을 차례로 뽑을 수 있습니다. `last -x` 는 종료와 런레벨 변화 레코드까지 보여 주고[6], UAC 도 라이브에서 `last -a -F`·`last -i` 와 순환본을 `-f` 로 돌린 결과를 받습니다[17]. TSK `fsstat` 는 ext4 에서 `Last Written at`, `Last Checked at`, `Last Mounted at`, `Unmounted properly` 또는 `Unmounted Improperly`, `Last mounted on` 을 찍고, `InCompat Features:` 줄에 `Needs Recovery` 를 표시합니다[12]. 메모리 이미지는 Volatility 3 `linux.boottime` 으로 부팅 시각을 뽑습니다[15].
+첫 줄은 분석 대상 저널의 부팅 목록을 뽑고, 둘째 줄은 종료 시작 메시지만 거릅니다. 다른 메시지 ID 로 바꿔 부팅 완료·절전을 차례로 뽑을 수 있습니다. `last -x` 는 종료와 런레벨 변화 레코드까지 보여 주고[6], UAC 도 라이브에서 `last -a -F`·`last -i` 와 순환본을 `-f` 로 돌린 결과를 받습니다[17]. TSK `fsstat` 는 ext4 에서 `Last Written at`, `Last Checked at`, `Last Mounted at`, `Unmounted properly` 또는 `Unmounted Improperly`, `Last mounted on` 을 찍고, `InCompat Features:` 줄에 `Needs Recovery` 를 표시합니다[12]. 메모리 이미지는 Volatility 3 `linux.boottime` 으로 부팅 시각을 뽑습니다[15].
 
 ## 교차 검증
 

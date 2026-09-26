@@ -21,7 +21,7 @@ has_toc: false
 | 구성 | 위치 | macOS 버전 | 알려 주는 것 |
 |---|---|---|---|
 | tracev3 | `/private/var/db/diagnostics/` 아래 `Persist`·`Special`·`Signpost`·`HighVolume` | 10.12부터. SimpleDump 청크는 12부터 | 어느 프로세스가 언제 어떤 수준의 로그를 남겼는지 |
-| timesync | `/private/var/db/diagnostics/timesync/` | 10.12부터 | 로그의 연속 시각을 벽시계 시각으로 바꾸는 기준, 부팅 구간 |
+| timesync | `/private/var/db/diagnostics/timesync/` | 10.12부터 | 로그의 연속 시각을 실제 시각(wall clock)으로 바꾸는 기준, 부팅 구간 |
 | uuidtext | `/private/var/db/uuidtext/` 아래 `00`~`FF` | 10.12부터 | 형식 문자열과 그 문자열이 나온 실행 파일 경로 |
 | dsc | `/private/var/db/uuidtext/dsc/` | 11까지 v1, 12부터 v2 | 시스템 라이브러리의 형식 문자열 |
 | 로깅 설정 | `/Library/Preferences/Logging/Subsystems/` | 10.12부터(구성 프로필 페이로드 기준) | 기본보다 더 많이 기록하게 바꿨는지 |

@@ -16,7 +16,7 @@ nav_order: 470
 
 공식 문서에는 저장 위치와 파일 형식이 없습니다[1].
 이 페이지의 경로·파일 형식·개수는 Windows 11 25H2(빌드 26200) 기준이고, settings.dat 수치는 LOG1·LOG2 로그를 적용하지 않은 사본 75개 기준입니다.
-판마다 다를 수 있어 검체에서 확인합니다.
+판마다 다를 수 있어 실제 데이터로 확인해야 합니다.
 
 ## 이 형식을 쓰는 아티팩트
 
@@ -53,7 +53,7 @@ nav_order: 470
 | ResourceId | 리소스 구분 | 0~30자. 번들은 늘 `~` |
 | Publisher | 서명 인증서의 주체 이름 | 이름 안에는 게시자 ID 로 들어갑니다 |
 
-이름은 두 가지 꼴로 씁니다[3].
+이름은 두 가지 형식으로 씁니다[3].
 
 | 이름 | 형식 | 문서의 예 |
 |---|---|---|
@@ -63,7 +63,7 @@ nav_order: 470
 전체 이름의 예에서는 ResourceId 가 비어 있어서 밑줄이 두 개 이어집니다. 패밀리 이름에는 버전, 아키텍처, ResourceId 가 없습니다.
 
 게시자 ID (PublisherId) 는 Publisher 에서 만든 13자 문자열이고, Crockford 방식 Base32 글자를 쓰며 I·L·O·U 는 쓰지 않습니다. `8wekyb3d8bbwe` 는 Microsoft 의 게시자 ID 입니다[3].
-Publisher 만 대소문자를 가리고, 나머지(Name, ResourceId, 게시자 ID, 전체 이름, 패밀리 이름)는 가리지 않습니다.
+Publisher 만 대소문자를 구분하고, 나머지(Name, ResourceId, 게시자 ID, 전체 이름, 패밀리 이름)는 구분하지 않습니다.
 
 데이터와 보안은 보통 패키지 패밀리 단위로 묶입니다. 앱 버전이 올라가도 설정을 이어 쓰게 하려는 것입니다[3].
 앱 식별자 (AUMID) 는 패키지 패밀리 이름과 매니페스트의 앱 ID 로 만듭니다.
@@ -71,21 +71,21 @@ Publisher 만 대소문자를 가리고, 나머지(Name, ResourceId, 게시자 I
 
 ### 관련 위치
 
-| 위치 | 하위 이름의 꼴 | 내용 |
+| 위치 | 하위 이름의 형식 | 내용 |
 |---|---|---|
 | `%LOCALAPPDATA%\Packages\` | 패키지 패밀리 이름 (예: `Microsoft.Paint_8wekyb3d8bbwe`) | 사용자별 앱 데이터. 폴더 138개 |
 | `C:\Program Files\WindowsApps\` | 패키지 전체 이름 | 설치 폴더 |
 | `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages` | 패키지 전체 이름 | 하위 키 221개 |
 | `C:\ProgramData\Microsoft\Windows\AppRepository\` | `StateRepository-Machine.srd`, `StateRepository-Deployment.srd` | 앞 16바이트가 `SQLite format 3` 인 파일. `-wal`·`-shm` 파일이 함께 있었습니다 |
 
-번들 설치 폴더는 ResourceId 자리에 `~` 가 있었고 꼴은 `<Name>_<Version>_neutral_~_<PublisherId>` 였습니다. 리소스 패키지 설치 폴더는 그 자리에 `split.language-ko` 가 있었습니다.
+번들 설치 폴더는 ResourceId 자리에 `~` 가 있었고 형식은 `<Name>_<Version>_neutral_~_<PublisherId>` 였습니다. 리소스 패키지 설치 폴더는 그 자리에 `split.language-ko` 가 있었습니다.
 Repository 키 아래 값의 예는 아래와 같습니다.
 
 | 값 이름 | 형식 | 내용 |
 |---|---|---|
 | `PackageRootFolder` | REG_SZ | 설치 폴더 전체 경로 |
 | `PackageID` | — | 패키지 ID |
-| `DisplayName` | — | `ms-resource:` 꼴 문자열 |
+| `DisplayName` | — | `ms-resource:` 형식 문자열 |
 | `PackageSid` | REG_BINARY | 패키지 SID |
 | `OSMinVersion`, `OSMaxVersionTested` | REG_QWORD | OS 버전 값 |
 
@@ -120,10 +120,10 @@ Repository 키 아래 값의 예는 아래와 같습니다.
 ### settings.dat 의 뼈대
 
 settings.dat 는 일반 레지스트리 하이브 형식이어서 앞 4바이트가 `regf` 였고, 형식 버전은 75개 모두 1.3, 루트 셀 위치는 0x20, 파일 크기는 8KB 에서 128KB 사이였습니다.
-기본 블록의 파일 이름 칸에는 경로 끝부분(`…\Settings\settings.dat`)이 UTF-16 으로 들어 있었습니다.
+기본 블록의 파일 이름 필드에는 경로 끝부분(`…\Settings\settings.dat`)이 UTF-16 으로 들어 있었습니다.
 regf·hbin·셀의 배치는 [레지스트리 하이브 구조](../database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
-키 트리는 아래 꼴이었습니다.
+키 트리는 아래와 같았습니다.
 
 ```
 Test                        ← 루트 키. 75개 모두 이 이름
@@ -138,10 +138,10 @@ Test                        ← 루트 키. 75개 모두 이 이름
 
 ### 값 형식 번호
 
-값 (vk) 의 형식 칸에는 REG_SZ 같은 일반 번호가 아니라 `0x05F5E1xx` 꼴 수가 있었습니다. `0x05F5E100` 은 10진수로 100,000,000 이고, 형식 칸에서 이 수를 빼면 `Windows.Foundation.PropertyType` 번호와 맞아떨어졌습니다.
-값 데이터는 실제 값 뒤에 8바이트가 더 붙은 꼴이었습니다.
+값 (vk) 의 형식 필드에는 REG_SZ 같은 일반 번호가 아니라 `0x05F5E1xx` 모양의 수가 있었습니다. `0x05F5E100` 은 10진수로 100,000,000 이고, 형식 필드에서 이 수를 빼면 `Windows.Foundation.PropertyType` 번호와 맞아떨어졌습니다.
+값 데이터는 실제 값 뒤에 8바이트가 더 붙어 있었습니다.
 
-| 형식 칸 | 뺀 나머지 | PropertyType | 데이터 크기(바이트) | 개수 |
+| 형식 필드 | 뺀 나머지 | PropertyType | 데이터 크기(바이트) | 개수 |
 |---|---|---|---|---|
 | `0x05F5E103` | 3 | UInt16 | 10 (2 + 8) | 4 |
 | `0x05F5E104` | 4 | Int32 | 12 (4 + 8) | 266 |
@@ -155,7 +155,7 @@ Test                        ← 루트 키. 75개 모두 이 이름
 | `0x05F5E10E` | 14 | DateTime | 16 (8 + 8) | 8 |
 | `0x05F5E110` | 16 | Guid | 24 (16 + 8) | 3 |
 
-PropertyType 에는 위 표에 없는 번호도 있습니다[2]. Empty 0, UInt8 1, Int16 2, Single 8, Char16 10, TimeSpan 15, Point 17, Size 18, Rect 19, OtherType 20 입니다. 배열 형식은 1025 (UInt8Array) 부터 1044 (OtherTypeArray) 까지입니다. 이 번호들이 settings.dat 에 어떤 꼴로 들어가는지는 검체에서 확인합니다.
+PropertyType 에는 위 표에 없는 번호도 있습니다[2]. Empty 0, UInt8 1, Int16 2, Single 8, Char16 10, TimeSpan 15, Point 17, Size 18, Rect 19, OtherType 20 입니다. 배열 형식은 1025 (UInt8Array) 부터 1044 (OtherTypeArray) 까지입니다. 이 번호들이 settings.dat 에 어떤 형식으로 들어가는지는 실제 데이터로 확인해야 합니다.
 
 설정 값에 쓸 수 있는 형식은 UInt8, Int16, UInt16, Int32, UInt32, Int64, UInt64, Single, Double, Boolean, Char16, String, DateTime, TimeSpan, GUID, Point, Size, Rect, 합성 값 (ApplicationDataCompositeValue) 입니다[1].
 
@@ -168,9 +168,9 @@ DateTime 값 4건은 값 자체도 FILETIME 으로 풀렸고, 값과 끝 시각�
 
 ### 합성 값의 예
 
-104바이트짜리 합성 값의 예입니다. 항목 이름은 A·R·G·B 넷이고, 항목마다 아래 칸이 차례로 이어집니다.
+104바이트짜리 합성 값의 예입니다. 항목 이름은 A·R·G·B 넷이고, 항목마다 아래 필드가 차례로 이어집니다.
 
-| 칸 | 크기 | 이 예의 값 |
+| 필드 | 크기 | 이 예의 값 |
 |---|---|---|
 | 항목 크기 | 4바이트 | 17 |
 | 형식 (PropertyType 번호) | 4바이트 | 1 (UInt8) |
@@ -178,9 +178,9 @@ DateTime 값 4건은 값 자체도 FILETIME 으로 풀렸고, 값과 끝 시각�
 | 이름 | UTF-16 글자 + NUL | `A` |
 | 값 | 형식에 따른 크기 | 1바이트 |
 
-항목 크기 17 은 4 + 4 + 4 + 4 + 1 로, 크기 칸 자신도 셉니다.
+항목 크기 17 은 4 + 4 + 4 + 4 + 1 로, 크기 필드 자신도 셉니다.
 항목은 8바이트 경계에 맞춰 이어져서 17바이트 항목 하나가 24바이트 자리를 쓰고, 맨 끝에 8바이트 시각이 있었습니다. 4 × 24 + 8 = 104 로 전체 크기와 맞습니다.
-다른 형식이 섞인 합성 값도 같은 꼴인지는 검체에서 확인합니다.
+다른 형식이 섞인 합성 값도 같은 형식인지는 실제 데이터로 확인해야 합니다.
 합성 값은 한꺼번에 저장하고 읽어야 하는 설정 묶음이며, 적은 양에 맞춘 형식입니다[1].
 
 ### 값 이름
@@ -201,16 +201,16 @@ DateTime 값 4건은 값 자체도 FILETIME 으로 풀렸고, 값과 끝 시각�
 2. **폴더 이름을 나눕니다.** 패밀리 이름은 마지막 밑줄 뒤 13자가 게시자 ID 이고, 그 앞이 Name 입니다.
 3. **설치 기록과 짝짓습니다.** 설치 폴더 이름과 Repository 키 이름은 전체 이름입니다. 여기서 버전과 아키텍처를 읽습니다.
 4. **하이브로 엽니다.** 하이브 도구나 헥스 편집기로 `Test\LocalState` 아래를 봅니다. 로그를 적용했는지 결과에 적어 둡니다.
-5. **형식 번호를 풉니다.** 형식 칸이 `0x05F5E1xx` 꼴이면 `0x05F5E100` 을 뺍니다. 남은 수를 위 표의 PropertyType 으로 읽습니다.
+5. **형식 번호를 풉니다.** 형식 필드가 `0x05F5E1xx` 모양이면 `0x05F5E100` 을 뺍니다. 남은 수를 위 표의 PropertyType 으로 읽습니다.
 6. **끝 8바이트를 떼어 냅니다.** 앞부분은 값으로 읽고, 끝 8바이트는 FILETIME 으로 풉니다. 푸는 법은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
-7. **합성 값은 항목 단위로 풉니다.** 크기 칸을 따라가며 8바이트 경계마다 다음 항목을 읽습니다.
+7. **합성 값은 항목 단위로 풉니다.** 크기 필드를 따라가며 8바이트 경계마다 다음 항목을 읽습니다.
 8. **폴더 안 파일도 봅니다.** `LocalState` 같은 폴더 안 파일의 형식은 앱마다 따로 확인합니다.
 
 ### 헥스로 한 번 따라가기
 
 아래 바이트는 위 규칙대로 만든 예시이며 실제 파일에서 옮긴 바이트가 아닙니다. `vv` 는 값 자리, `tt` 는 끝 시각 8바이트 자리입니다.
 
-**vk 셀의 형식 칸 (4바이트, 리틀 엔디언)**
+**vk 셀의 형식 필드 (4바이트, 리틀 엔디언)**
 
 ```
 0B E1 F5 05
@@ -257,7 +257,7 @@ DateTime 값 4건은 값 자체도 FILETIME 으로 풀렸고, 값과 끝 시각�
 | 항목 | Windows 10 | Windows 11 |
 |---|---|---|
 | 로밍 데이터·설정 | 문서가 지원 중단을 밝히지 않은 버전입니다. 스토어 업데이트 때 RoamingSettings 가 남지 않을 수 있습니다 | 지원하지 않습니다[1] |
-| settings.dat 의 `RoamingState` 키 | 검체에서 확인 | 25H2(빌드 26200) 에서 75개 모두 값 없음 |
+| settings.dat 의 `RoamingState` 키 | 실제 데이터로 확인 | 25H2(빌드 26200) 에서 75개 모두 값 없음 |
 
 ### 비정상 종료와 LOG1·LOG2
 
@@ -281,7 +281,7 @@ settings.dat 는 일반 하이브 형식이어서 하이브에서 지운 키·�
 
 ### 설정 파일 속 비밀 값
 
-앱에 따라 settings.dat 에 PEM 꼴 개인 키 문자열이 String 값으로 들어 있습니다. 한 예로 값 이름이 `CertificateHelper_PrivateKey` 인 값이 있습니다.
+앱에 따라 settings.dat 에 PEM 형식 개인 키 문자열이 String 값으로 들어 있습니다. 한 예로 값 이름이 `CertificateHelper_PrivateKey` 인 값이 있습니다.
 설정 파일에 비밀 값이 평문으로 있을 수 있으므로 결과를 넘길 때 값 내용을 가립니다.
 
 ### 라이브 수집
@@ -297,7 +297,7 @@ settings.dat 는 일반 하이브 형식이어서 하이브에서 지운 키·�
 - **게시자 ID 를 게시자 이름으로 적습니다.** 게시자 ID 는 서명 인증서의 주체 이름에서 만든 13자 값입니다. 게시자 이름은 설치 기록의 Publisher 와 짝지어 적습니다.
 - **`RoamingState` 가 비어 있어 이상하다고 봅니다.** Windows 11 은 로밍을 지원하지 않습니다. 25H2 에서는 75개 모두 값이 없습니다.
 - **2012-05-22 키 시각을 앱 사용 시각으로 봅니다.** 빈 틀 파일의 시각으로 보입니다.
-- **도구가 보여 준 형식을 그대로 믿습니다.** 형식 칸이 `0x05F5E1xx` 꼴이면 일반 레지스트리 형식이 아닙니다. 이 번호를 보여 주는 방식은 도구마다 다를 수 있습니다. 헥스로 형식 칸과 데이터 크기를 확인합니다.
+- **도구가 보여 준 형식을 그대로 믿습니다.** 형식 필드가 `0x05F5E1xx` 모양이면 일반 레지스트리 형식이 아닙니다. 이 번호를 보여 주는 방식은 도구마다 다를 수 있습니다. 헥스로 형식 필드와 데이터 크기를 확인합니다.
 - **끝 8바이트까지 값으로 읽습니다.** Int32 값의 데이터 12바이트를 통째로 정수로 읽으면 값이 틀립니다. String 은 NUL 뒤 8바이트를 떼어 냅니다.
 - **경로가 늘 같다고 봅니다.** 공식 문서에는 위치가 없습니다[1]. 다른 Windows 버전에서는 폴더를 직접 확인합니다.
 
@@ -307,7 +307,7 @@ settings.dat 는 일반 하이브 형식이어서 하이브에서 지운 키·�
 
 | 도구 | 쓰임 |
 |---|---|
-| 헥스 편집기 | 형식 칸, 끝 8바이트, 합성 값 항목을 직접 봅니다 |
+| 헥스 편집기 | 형식 필드, 끝 8바이트, 합성 값 항목을 직접 봅니다 |
 | 레지스트리 하이브 도구 (Registry Explorer, regipy 등) | 키 트리와 값 목록을 봅니다. 형식 번호와 끝 시각은 직접 풀어 대조합니다 |
 | SQLite 조회 도구 | StateRepository 파일을 엽니다. 형식은 [SQLite 데이터베이스](../database-log-formats/sqlite/index.md) 에서 다룹니다 |
 

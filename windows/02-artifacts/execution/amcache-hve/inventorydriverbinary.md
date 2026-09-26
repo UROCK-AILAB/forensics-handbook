@@ -61,7 +61,7 @@ AmCache 형식은 OS 버전이 아니라 이 파일을 채우는 라이브러리
 
 ### 값
 
-"공식 설명" 칸은 Microsoft 진단 데이터 문서의 필드 설명을 옮긴 것입니다.
+"공식 설명" 열은 Microsoft 진단 데이터 문서의 필드 설명을 옮긴 것입니다.
 
 | 값 | 공식 설명 | 읽을 때 주의 |
 |---|---|---|
@@ -76,7 +76,7 @@ AmCache 형식은 OS 버전이 아니라 이 파일을 채우는 라이브러리
 | `DriverType` | 드라이버 속성을 나타내는 비트 값 | 아래 표를 봅니다 |
 | `DriverTimeStamp` | 드라이버 파일 시각의 하위 32비트 | Unix 형식의 컴파일 날짜입니다(ANSSI). 아래 시각 해석을 봅니다 |
 | `DriverLastWriteTime` | (공식 필드 목록에 없음) 드라이버 파일의 마지막 수정 시각 | 문자열입니다 |
-| `DriverCheckSum` | 드라이버 파일의 체크섬 | 이름으로 보아 PE 선택 헤더의 `CheckSum` 으로 보입니다. 아래 헥스 절에서 맞춰 봅니다 |
+| `DriverCheckSum` | 드라이버 파일의 체크섬 | 이름으로 짐작하면 PE 선택 헤더의 `CheckSum` 으로 보입니다. 아래 헥스 절에서 맞춰 봅니다 |
 | `ImageSize` | 드라이버 파일의 크기 | 아래 함정과 한계 4번을 봅니다 |
 | `Inf` | INF 파일 이름 | |
 | `Service` | 장치용으로 설치된 서비스 이름 | [서비스·드라이버](../../persistence/services-drivers.md) 키와 잇습니다 |
@@ -108,7 +108,7 @@ AmCache 형식은 OS 버전이 아니라 이 파일을 채우는 라이브러리
 
 6.2 라이브러리의 `AEINV_AMI_WER` XML 드라이버 목록에 적힌 `1394ohci.sys` 의 `Type` 값 `0x0004001A` 를 예로 듭니다(ANSSI). 같은 비트 정의를 씁니다. 이 값은 0x40000 + 0x10 + 0x8 + 0x2 입니다. x64, 기본 포함, 서명됨, 커널 모드라는 뜻입니다.
 
-`DriverSigned`·`DriverInBox`·`DriverIsKernelMode` 와 이 비트가 서로 맞는지도 봅니다. 어긋나면 어느 쪽이 맞는지 문서로는 가릴 수 없습니다. 드라이버 파일이 남아 있으면 파일을 직접 확인합니다.
+`DriverSigned`·`DriverInBox`·`DriverIsKernelMode` 와 이 비트가 서로 맞는지도 봅니다. 어긋나면 어느 쪽이 맞는지 문서로는 판별할 수 없습니다. 드라이버 파일이 남아 있으면 파일을 직접 확인합니다.
 
 ### 함께 보는 두 키
 
@@ -165,12 +165,12 @@ AmCache 형식은 OS 버전이 아니라 이 파일을 채우는 라이브러리
 
 이 값을 날짜로 믿기 전에 두 가지를 확인합니다.
 
-- **재현 가능한 빌드 (Reproducible Build)** 입니다. Windows 10 부터 Microsoft 는 모듈의 이 칸에 실제 시각 대신 결과 파일의 해시를 넣습니다(Raymond Chen). 이런 파일은 날짜로 바꾸면 엉뚱한 날짜가 나옵니다. Windows 10 이후 `DriverInBox` 가 1 인 드라이버는 이 값을 날짜로 읽지 않습니다. 같은 방식으로 빌드한 다른 회사 드라이버도 같을 수 있습니다.
+- **재현 가능한 빌드 (Reproducible Build)** 입니다. Windows 10 부터 Microsoft 는 모듈의 이 필드에 실제 시각 대신 결과 파일의 해시를 넣습니다(Raymond Chen). 이런 파일은 날짜로 바꾸면 엉뚱한 날짜가 나옵니다. Windows 10 이후 `DriverInBox` 가 1 인 드라이버는 이 값을 날짜로 읽지 않습니다. 같은 방식으로 빌드한 다른 회사 드라이버도 같을 수 있습니다.
 - **조작**입니다. 이 값은 PE 헤더의 4바이트입니다. 빌드한 PC 의 시계를 따르고, 헤더를 고치면 바뀝니다.
 
 ### DriverLastWriteTime
 
-이 값은 날짜와 시각을 적은 문자열입니다. 공개 파서 AmcacheParser 는 이 문자열을 날짜로 읽고 UTC 로 다룹니다. 이 문자열의 시간대를 밝힌 공식 문서는 없습니다. 그래서 검체마다 [$MFT](../../filesystem/mft.md)의 파일 수정 시각과 한 번 맞춰 보고, 그 결과를 보고서에 적습니다.
+이 값은 날짜와 시각을 적은 문자열입니다. 공개 파서 AmcacheParser 는 이 문자열을 날짜로 읽고 UTC 로 다룹니다. 이 문자열의 시간대를 밝힌 공식 문서는 없습니다. 그래서 분석 대상마다 [$MFT](../../filesystem/mft.md)의 파일 수정 시각과 한 번 맞춰 보고, 그 결과를 보고서에 적습니다.
 
 윈도 API 가 돌려주는 파일 수정 시각은 보통 $STANDARD_INFORMATION 의 값입니다. 그래서 이 값도 시각 조작 도구의 영향을 받을 수 있다고 봅니다([두 벌의 시각](../../../01-foundations/disk-volume/ntfs/standard-information-file-name.md)).
 
@@ -201,11 +201,11 @@ UTC 값은 그 PC 의 [시간대 설정](../../system-account/time-zone.md)으�
 
 ### 헥스로 한 번 — 드라이버 파일의 PE 헤더와 맞춰 보기
 
-하이브 안의 키와 값을 헥스로 따라가는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 드라이버 파일이 남아 있을 때 `DriverTimeStamp`·`ImageSize`·`DriverCheckSum` 에 대응하는 칸을 파일에서 직접 찾습니다.
+하이브 안의 키와 값을 헥스로 따라가는 법은 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다. 여기서는 드라이버 파일이 남아 있을 때 `DriverTimeStamp`·`ImageSize`·`DriverCheckSum` 에 대응하는 필드를 파일에서 직접 찾습니다.
 
-PE 형식에서 각 칸의 위치는 다음과 같습니다.
+PE 형식에서 각 필드의 위치는 다음과 같습니다.
 
-| 칸 | 위치 | 크기 |
+| 필드 | 위치 | 크기 |
 |---|---|---|
 | PE 서명 위치 (`e_lfanew`) | 파일 0x3C | 4바이트 |
 | PE 서명 `PE\0\0` | `e_lfanew` | 4바이트 |
@@ -215,7 +215,7 @@ PE 형식에서 각 칸의 위치는 다음과 같습니다.
 | `SizeOfImage` | 선택 헤더 + 56 | 4바이트 |
 | `CheckSum` | 선택 헤더 + 64 | 4바이트 |
 
-아래는 형식 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `e_lfanew` 는 설명을 위해 0xE8 로 정했습니다. 세 값은 `AEINV_AMI_WER` XML 에 적힌 `1394ohci.sys` 예시 값입니다(ANSSI). `..` 은 이 풀이와 관계없는 바이트입니다.
+아래는 형식 명세를 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다. `e_lfanew` 는 설명을 위해 0xE8 로 정했습니다. 세 값은 `AEINV_AMI_WER` XML 에 적힌 `1394ohci.sys` 예시 값입니다(ANSSI). `..` 은 이 풀이와 관계없는 바이트입니다.
 
 ```
 오프셋   00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -235,7 +235,7 @@ PE 형식에서 각 칸의 위치는 다음과 같습니다.
 6. 이 수를 1970-01-01 00:00:00 UTC 에 초로 더하면 2012-07-26 02:26:46 UTC 입니다. 이 값이 `DriverTimeStamp` 와 같은지 봅니다.
 7. 선택 헤더는 0x100(= 0xE8 + 24)에서 시작합니다. 0x138 의 `00 D0 03 00` 은 `SizeOfImage` 0x0003D000(249,856)입니다.
 8. 0x140 의 `21 70 04 00` 은 `CheckSum` 0x00047021(290,849)입니다. 이 값이 `DriverCheckSum` 과 같은지 봅니다.
-9. 이 예시에서는 `SizeOfImage` 와 `ImageSize` 예시 값이 같게 만들었습니다. 실제 검체에서는 `ImageSize` 가 `SizeOfImage` 와 같은지, 파일 크기와 같은지 직접 확인합니다.
+9. 이 예시에서는 `SizeOfImage` 와 `ImageSize` 예시 값이 같게 만들었습니다. 실제 데이터에서는 `ImageSize` 가 `SizeOfImage` 와 같은지, 파일 크기와 같은지 직접 확인합니다.
 
 > 그림 자리: 드라이버 파일 헤더에서 0x3C(e_lfanew), TimeDateStamp, SizeOfImage, CheckSum 자리를 색으로 나누고, 각각 InventoryDriverBinary 의 DriverTimeStamp·ImageSize·DriverCheckSum 과 선으로 잇는 그림
 
@@ -268,7 +268,7 @@ AmcacheParser, Registry Explorer 같은 공개 도구로 이 키를 볼 수 있�
 
 ## 실습
 
-**공개 검체** — NIST CFReDS 등에서 Windows 10 이상 PC 이미지를 하나 고릅니다.
+**공개 실습 이미지** — NIST CFReDS 등에서 Windows 10 이상 PC 이미지를 하나 고릅니다.
 
 1. `InventoryDriverBinary` 의 하위 키 이름은 해시입니까, 경로입니까? 위 표에서 어느 라이브러리 형식인지 짐작해 보십시오.
 2. `DriverInBox` 가 0 인 항목만 골라 목록을 만드십시오. 각 항목의 `Service` 이름이 SYSTEM 하이브의 서비스 목록에 있습니까?

@@ -29,7 +29,7 @@ nav_order: 420
 
 ### 파일과 SystemKey
 
-System 키체인 파일은 [로그인 키체인 파일 (login.keychain-db)](login-keychain.md)과 같은 파일 기반 키체인 형식이라서, 파일 머리와 표 구조는 그 페이지를 따라 읽습니다. System 키체인은 잠금 해제 파일 SystemKey로 풀 수 있고, 이 파일은 흔히 `/var/db/SystemKey` 에 있습니다 [3]. chainbreaker는 SystemKey 파일 전체를 읽어 그 안의 MasterKey 칸을 씁니다 [4].
+System 키체인 파일은 [로그인 키체인 파일 (login.keychain-db)](login-keychain.md)과 같은 파일 기반 키체인 형식이라서, 파일 머리와 표 구조는 그 페이지를 따라 읽습니다. System 키체인은 잠금 해제 파일 SystemKey로 풀 수 있고, 이 파일은 흔히 `/var/db/SystemKey` 에 있습니다 [3]. chainbreaker는 SystemKey 파일 전체를 읽어 그 안의 MasterKey 필드를 씁니다 [4].
 
 System 키체인을 분석하려면 SystemKey 파일도 함께 확보해 두어야 비밀 값까지 살필 수 있고, 확보 순서는 [맥 증거 확보 (Acquisition)](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)를 따릅니다.
 
@@ -54,7 +54,7 @@ Safari 사용자 데이터(사용자 이름·암호·카드 번호), Wi-Fi 암�
 
 ### 보호 방식
 
-아래 설명은 iOS를 중심으로 쓴 Apple 플랫폼 보안 설명서에서 나온 것이라서, Mac에서도 똑같이 동작하는지는 검체에서 확인합니다 [2].
+아래 설명은 iOS를 중심으로 쓴 Apple 플랫폼 보안 설명서에서 나온 것이라서, Mac에서도 똑같이 동작하는지는 실제 기기에서 확인합니다 [2].
 
 키체인은 파일 시스템에 저장한 SQLite 데이터베이스이고, securityd 데몬이 앱의 권한(`keychain-access-groups`, `application-identifier`, `application-group`)을 보고 어떤 앱이 어떤 항목에 접근할지 정합니다 [2]. 항목은 AES-256-GCM 키 두 개로 암호화하는데, 메타데이터에는 표 전체에 쓰는 메타데이터 키 (metadata key)를 쓰고 비밀 값에는 행마다 다른 비밀 키 (secret key)를 씁니다 [2]. 메타데이터 키는 Secure Enclave가 보호하지만 검색을 빠르게 하려고 응용 프로세서에 캐시해 두고, 비밀 키는 늘 Secure Enclave를 거칩니다 [2].
 
@@ -67,7 +67,7 @@ Safari 사용자 데이터(사용자 이름·암호·카드 번호), Wi-Fi 암�
 | `kSecAttrAccessibleAlways` | |
 | `kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly` | iCloud 키체인으로 동기화하지 않고 백업하지 않으며, 암호를 없애면 쓸 수 없게 됨 |
 
-SQLite 형식 자체는 [SQLite 데이터베이스 (SQLite)](../../data-formats/sqlite/index.md)에서 다루지만, Mac에서 이 데이터베이스 파일의 경로와 표 이름은 공개된 분석 자료가 없어 검체에서 확인해야 합니다.
+SQLite 형식 자체는 [SQLite 데이터베이스 (SQLite)](../../data-formats/sqlite/index.md)에서 다루지만, Mac에서 이 데이터베이스 파일의 경로와 표 이름은 실제 기기에서 확인해야 합니다.
 
 ## 포렌식에서 중요한 점
 

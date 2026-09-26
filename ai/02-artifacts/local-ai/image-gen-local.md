@@ -22,7 +22,7 @@ ComfyUI 는 기본으로 오프라인에서 돌고, 사용자가 요청하지 �
 
 ### LLM 채팅 앱이 만들거나 받은 이미지
 
-이미지는 로컬 확산 모델 도구에서만 나오지 않습니다. LangurTrace 시험(Chatbox 1.11.8, 2025-04-05 출시, 이미지 생성은 DALL·E 3)에서는 생성을 클라우드에서 해도 결과 사본이 `%AppData%/xyz.chatboxapp.app/chatbox-blobs/` 에 남았습니다[5 §4.1, §4.5, 부록 A]. 지금 판에서는 검체에서 이 폴더가 있는지 먼저 봅니다. 사용자가 올린 이미지도 같은 폴더에 이름만 달리해 남고, 같은 시험에서 앱 화면으로 지운 뒤에도 올린 파일과 생성 파일 모두 50개 중 50개가 되살아났습니다[5 §4.5, 표 8]. 이런 생성 파일은 CSAM 처럼 불법 이미지를 만들거나 퍼뜨린 사건에서 직접 증거가 될 수 있습니다[5 초록, §4.3, §6.1]. 파일 이름 규칙과 인코딩을 푸는 방법은 [Chatbox](chatbox.md)에 있고, 사용자가 올린 파일은 [Msty](msty.md)의 `attachments` 폴더와 [LM Studio](lm-studio.md)의 `user-files` 폴더에도 남습니다.
+이미지는 로컬 확산 모델 도구에서만 나오지 않습니다. LangurTrace 시험(Chatbox 1.11.8, 2025-04-05 출시, 이미지 생성은 DALL·E 3)에서는 생성을 클라우드에서 해도 결과 사본이 `%AppData%/xyz.chatboxapp.app/chatbox-blobs/` 에 남았습니다[5 §4.1, §4.5, 부록 A]. 지금 판에서는 실제 기기에서 이 폴더가 있는지 먼저 봅니다. 사용자가 올린 이미지도 같은 폴더에 이름만 달리해 남고, 같은 시험에서 앱 화면으로 지운 뒤에도 올린 파일과 생성 파일 모두 50개 중 50개가 되살아났습니다[5 §4.5, 표 8]. 이런 생성 파일은 CSAM 처럼 불법 이미지를 만들거나 퍼뜨린 사건에서 직접 증거가 될 수 있습니다[5 초록, §4.3, §6.1]. 파일 이름 규칙과 인코딩을 푸는 방법은 [Chatbox](chatbox.md)에 있고, 사용자가 올린 파일은 [Msty](msty.md)의 `attachments` 폴더와 [LM Studio](lm-studio.md)의 `user-files` 폴더에도 남습니다.
 
 ## 위치와 버전별 차이
 
@@ -44,11 +44,11 @@ WebUI 는 사용자가 저장소를 받은 폴더에서 돌리는 방식이라 �
 
 출력 폴더는 설정에서 바꿀 수 있으므로 `config.json` 의 `outdir_txt2img_samples`, `outdir_save` 같은 값을 먼저 읽고 실제 경로를 정합니다[4]. "Save images to a subdirectory" 설정(`save_to_dirs`)이 기본으로 켜져 있어서, 결과 이미지는 출력 폴더 아래 `[date]` 규칙의 하위 폴더, 즉 `2026-09-25` 같은 날짜 폴더에 들어갑니다[4][3].
 
-파일 이름은 "Images filename pattern" 설정(`samples_filename_pattern`)이 정합니다. 이 값이 비어 있으면, 하위 폴더를 쓰는 기본 상태에서는 `[seed]`, 하위 폴더를 끄면 `[seed]-[prompt_spaces]` 를 씁니다[3]. 위키는 기본값을 `[seed]-[prompt_spaces]` 로 적었으므로 두 설명을 함께 알아 둡니다. "Add number to filename when saving" 설정이 기본으로 켜져 있어서 파일 이름 맨 앞에 다섯 자리 번호가 붙고, 기본 상태의 이름은 `00012-1234567890.png` 꼴이 됩니다(만든 예시)[3][4]. 쓸 수 있는 태그에는 `[seed]`, `[steps]`, `[cfg]`, `[width]`, `[height]`, `[sampler]`, `[model_name]`, `[prompt]` 가 있어서, 설정에 따라 파일 이름에 시드·단계 수·크기·모델 이름·프롬프트가 들어갑니다[1].
+파일 이름은 "Images filename pattern" 설정(`samples_filename_pattern`)이 정합니다. 이 값이 비어 있으면, 하위 폴더를 쓰는 기본 상태에서는 `[seed]`, 하위 폴더를 끄면 `[seed]-[prompt_spaces]` 를 씁니다[3]. 위키는 기본값을 `[seed]-[prompt_spaces]` 로 적었으므로 두 설명을 함께 알아 둡니다. "Add number to filename when saving" 설정이 기본으로 켜져 있어서 파일 이름 맨 앞에 다섯 자리 번호가 붙고, 기본 상태의 이름은 `00012-1234567890.png` 형식이 됩니다(만든 예시)[3][4]. 쓸 수 있는 태그에는 `[seed]`, `[steps]`, `[cfg]`, `[width]`, `[height]`, `[sampler]`, `[model_name]`, `[prompt]` 가 있어서, 설정에 따라 파일 이름에 시드·단계 수·크기·모델 이름·프롬프트가 들어갑니다[1].
 
 ### ComfyUI
 
-ComfyUI 는 Windows·macOS 데스크톱 앱과 Windows 휴대용 판(NVIDIA·AMD·Intel GPU 용)으로 배포합니다[2]. 아래는 저장소 폴더 기준이고, `--base-directory` 를 주면 이 폴더들이 그 아래로 옮겨 갑니다[8]. 데스크톱 앱이 데이터를 어디에 두는지는 공개된 분석 자료가 없어서, 검체에서 아래 폴더 이름으로 찾아 확인합니다.
+ComfyUI 는 Windows·macOS 데스크톱 앱과 Windows 휴대용 판(NVIDIA·AMD·Intel GPU 용)으로 배포합니다[2]. 아래는 저장소 폴더 기준이고, `--base-directory` 를 주면 이 폴더들이 그 아래로 옮겨 갑니다[8]. 데스크톱 앱이 데이터를 어디에 두는지는 실제 기기에서 아래 폴더 이름으로 찾아 확인합니다.
 
 | 경로 | 담긴 것 | 바꾸는 옵션 |
 |---|---|---|
@@ -63,7 +63,7 @@ ComfyUI 는 Windows·macOS 데스크톱 앱과 Windows 휴대용 판(NVIDIA·AMD
 
 폴더 기본값과 옵션은 `folder_paths.py` 와 `comfy/cli_args.py`, 설정 파일 이름은 `app/app_settings.py` 에 있습니다[8][11]. 모델과 추가 노드 폴더는 README 에 나옵니다[2].
 
-저장 노드(SaveImage)는 파일 이름을 `ComfyUI_00001_.png` 꼴로 짓습니다. 앞부분은 노드의 `filename_prefix` 값이고 기본값이 `ComfyUI` 이며, 뒤에 다섯 자리 번호와 밑줄이 붙습니다[6]. `filename_prefix` 에 `%year%`, `%month%`, `%day%`, `%hour%` 같은 변수나 `/` 를 넣으면 날짜 폴더나 하위 폴더를 만들 수 있습니다[11]. 미리 보기 노드(PreviewImage)는 `temp` 폴더에 `ComfyUI_temp_` 와 영문 다섯 자가 붙은 이름으로 저장합니다[6]. 자산 관리 기능이 꺼져 있으면 시작할 때 `temp` 폴더를 통째로 지우므로[12], 미리 보기 이미지는 다음 실행 전까지만 남는다고 보고 찾습니다.
+저장 노드(SaveImage)는 파일 이름을 `ComfyUI_00001_.png` 형식으로 짓습니다. 앞부분은 노드의 `filename_prefix` 값이고 기본값이 `ComfyUI` 이며, 뒤에 다섯 자리 번호와 밑줄이 붙습니다[6]. `filename_prefix` 에 `%year%`, `%month%`, `%day%`, `%hour%` 같은 변수나 `/` 를 넣으면 날짜 폴더나 하위 폴더를 만들 수 있습니다[11]. 미리 보기 노드(PreviewImage)는 `temp` 폴더에 `ComfyUI_temp_` 와 영문 다섯 자가 붙은 이름으로 저장합니다[6]. 자산 관리 기능이 꺼져 있으면 시작할 때 `temp` 폴더를 통째로 지우므로[12], 미리 보기 이미지는 다음 실행 전까지만 남는다고 보고 찾습니다.
 
 `extra_model_paths.yaml` 이 있으면 모델을 ComfyUI 폴더 밖, 예를 들어 WebUI 모델 폴더에 두고 함께 썼을 수 있어서 이 파일에 적힌 경로를 따라가 봅니다[2]. 출력은 16비트 PNG, 32비트 EXR, 10비트 AVIF 도 지원하고[2], 이 형식에 들어가는 메타데이터는 아래 "구조" 에 적습니다.
 
@@ -141,7 +141,7 @@ infotext, `log.csv`, ComfyUI 메타데이터에는 생성 시각이 들어가지
 - **API 노드.** ComfyUI 워크플로에 API 노드가 있으면 프롬프트가 외부로 나갔을 수 있습니다. `prompt` 의 `class_type` 과 네트워크 기록을 함께 봅니다.
 - **추가 노드.** `custom_nodes` 나 WebUI 확장에 깐 코드는 저마다 따로 파일을 쓰거나 통신할 수 있고, 메타데이터 형식을 바꿀 수도 있습니다.
 - **워크플로 되살리기.** 이미지를 ComfyUI 에 불러오면 워크플로를 되살리지만, 원본 증거가 아니라 사본을 격리한 분석 환경에서 엽니다.
-- **출처 정보와 다름.** 여기서 말하는 생성 설정은 도구가 편의로 넣는 글자이고, 서명으로 위조를 가리는 출처 정보와 다릅니다. 출처 정보는 [AI 생성물의 출처 정보](../../01-foundations/concepts/c2pa-provenance.md)에서 다룹니다.
+- **출처 정보와 다름.** 여기서 말하는 생성 설정은 도구가 편의로 넣는 글자이고, 서명으로 위조를 가려내는 출처 정보와 다릅니다. 출처 정보는 [AI 생성물의 출처 정보](../../01-foundations/concepts/c2pa-provenance.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
@@ -178,7 +178,7 @@ Python 과 Pillow 가 있는 분석 PC 라면 `Image.open(경로).text` 가 텍�
 
 ## 실습
 
-두 도구가 든 공개 검체는 알려진 것이 없어서, 시험용 가상 머신에 직접 깔고 가짜 프롬프트 "a red bicycle on a sample street" 로 이미지를 몇 장 만든 다음 아래 질문을 풀어 봅니다. Chatbox 이미지는 LangurTrace 저장소(`github.com/jeongramon/LangurTrace`)의 `sample_dataset` 으로 풀어 볼 수 있습니다.
+두 도구가 들어 있는 공개 시험 데이터는 알려진 것이 없으므로, 시험용 가상 머신에 직접 깔고 가짜 프롬프트 "a red bicycle on a sample street" 로 이미지를 몇 장 만든 다음 아래 질문을 풀어 봅니다. Chatbox 이미지는 LangurTrace 저장소(`github.com/jeongramon/LangurTrace`)의 `sample_dataset` 으로 풀어 볼 수 있습니다.
 
 1. WebUI 에서 이미지 세 장을 Save 버튼으로 하나씩 저장한 뒤 가운데 한 장을 지우면, `log.csv` 와 파일 번호에는 무엇이 남습니까? 마지막 한 장을 지우고 새로 저장하면 번호는 어떻게 됩니까?
 2. 한글 프롬프트로 만든 WebUI 이미지와 ComfyUI 이미지를 헥스로 열면, 한글이 각각 어떤 모양으로 보입니까?

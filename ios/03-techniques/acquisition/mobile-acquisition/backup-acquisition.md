@@ -11,7 +11,7 @@ nav_order: 1190
 
 ## 언제 쓰나
 
-로컬 백업은 아이폰 수집에서 가장 먼저 시도하는 방식입니다. 백업이 다른 방식과 견줘 무엇을 담고 빠뜨리는지, 암호화 백업을 만들지는 [수집 방식 비교](methods.md)에서 정하고 여기서는 절차와 결과물을 봅니다. 기기를 새로 백업하지 못하더라도 사용자가 쓰던 컴퓨터에 예전 백업이 남아 있을 수 있어서, 컴퓨터를 함께 확보했다면 그쪽도 찾습니다.
+로컬 백업은 아이폰 수집에서 가장 먼저 시도하는 방식입니다. 백업이 다른 방식과 비교해 무엇을 담고 빠뜨리는지, 암호화 백업을 만들지는 [수집 방식 비교](methods.md)에서 정하고 여기서는 절차와 결과물을 봅니다. 기기를 새로 백업하지 못하더라도 사용자가 쓰던 컴퓨터에 예전 백업이 남아 있을 수 있어서, 컴퓨터를 함께 확보했다면 그쪽도 찾습니다.
 
 ## 백업이 저장되는 곳
 
@@ -21,7 +21,7 @@ nav_order: 1190
 | Windows (Apple 기기 앱, Microsoft Store 판 iTunes) | `%USERPROFILE%` 에서 시작 |
 | Windows (예전 iTunes) | `%AppData%` 에서 시작 |
 
-Windows 에서는 찾아 들어갈 시작 폴더만 알려져 있어서, 그 아래 전체 경로는 검체에서 직접 확인합니다. Finder 나 Apple 기기 앱에서 백업을 오른쪽 클릭하면 삭제, 보관(Archive), 위치 보기를 할 수 있습니다. Windows 의 Apple 기기 앱으로 만든 백업은 Info.plist 에 `Windows OS Version` 키가 있습니다.
+Windows 에서는 찾아 들어갈 시작 폴더만 알려져 있어서, 그 아래 전체 경로는 실제 컴퓨터에서 직접 확인합니다. Finder 나 Apple 기기 앱에서 백업을 오른쪽 클릭하면 삭제, 보관(Archive), 위치 보기를 할 수 있습니다. Windows 의 Apple 기기 앱으로 만든 백업은 Info.plist 에 `Windows OS Version` 키가 있습니다.
 
 ## 절차
 
@@ -68,7 +68,7 @@ CREATE TABLE Properties (key TEXT PRIMARY KEY, value BLOB)
 CREATE INDEX FilesDomainsRelativePathIdx ON Files(domain, relativePath)
 ```
 
-`Files` 표 한 행이 백업 안 파일 하나이고, `domain` 과 `relativePath` 로 원래 위치를 알 수 있습니다. `file` 칸에는 파일 속성을 담은 바이너리 plist 가 들어 있고, `flags` 는 유닉스 파일 플래그이고, 값마다의 뜻은 공개 자료가 없어 검체에서 확인해야 합니다. 이 DB 를 여는 법은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md)에서, `file` 칸의 plist 를 읽는 법은 [속성 목록 파일](../../../01-foundations/data-formats/plist.md)에서 다룹니다.
+`Files` 표 한 행이 백업 안 파일 하나이고, `domain` 과 `relativePath` 로 원래 위치를 알 수 있습니다. `file` 열에는 파일 속성을 담은 바이너리 plist 가 들어 있고, `flags` 는 유닉스 파일 플래그이고, 값마다의 뜻은 실제 데이터로 확인해야 합니다. 이 DB 를 여는 법은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md)에서, `file` 열의 plist 를 읽는 법은 [속성 목록 파일](../../../01-foundations/data-formats/plist.md)에서 다룹니다.
 
 ## Manifest.plist 와 Info.plist
 
@@ -91,7 +91,7 @@ Info.plist
 
 ## 백업 안에서 먼저 볼 흔적
 
-암호화하지 않은 백업에도 `KeychainDomain` 항목(예: 2개)이 들어 있을 수 있고, 그 안의 `keychain-backup.plist` 에는 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있습니다. 이 파일 내용을 풀어 읽을 수 있는지는 검체에서 확인하고, 키체인 구조는 [키체인](../../../01-foundations/storage/keychain.md)에서 다룹니다.
+암호화하지 않은 백업에도 `KeychainDomain` 항목(예: 2개)이 들어 있을 수 있고, 그 안의 `keychain-backup.plist` 에는 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있습니다. 이 파일 내용을 풀어 읽을 수 있는지는 실제 백업으로 확인하고, 키체인 구조는 [키체인](../../../01-foundations/storage/keychain.md)에서 다룹니다.
 
 기기가 예전에 백업에서 복원된 적이 있는지는 수집한 자료의 출처를 판단할 때 중요합니다. 아래 두 plist 에 복원 관련 키가 있습니다.
 
@@ -110,11 +110,11 @@ HomeDomain :: Library/Preferences/com.apple.mobileSMS.plist
 
 ## 함정과 한계
 
-암호화하지 않은 백업에는 암호화 백업에만 들어가는 영역이 빠지고, 어떤 영역인지는 [수집 방식 비교](methods.md)에 정리했습니다. 원본 백업 폴더를 분석 도구로 바로 열지 않는 까닭은 [결과물 형식과 해시](formats-hash.md)에서 다룹니다.
+암호화하지 않은 백업에는 암호화 백업에만 들어가는 영역이 빠지고, 어떤 영역인지는 [수집 방식 비교](methods.md)에 정리했습니다. 원본 백업 폴더를 분석 도구로 바로 열지 않는 이유는 [결과물 형식과 해시](formats-hash.md)에서 다룹니다.
 
 ## 결과를 어떻게 해석하나
 
-백업에서 찾은 파일은 "이 백업을 만든 시점에 기기에 있던 파일" 입니다. 백업 시각은 키 이름으로 보아 `Manifest.plist` 의 `Date` 와 `Info.plist` 의 `Last Backup Date` 에서 찾을 수 있고, 이 값의 시간대 표기는 [시각 값](../../../01-foundations/value-decoding/time-values.md)을 보고 확인합니다. 컴퓨터에서 찾은 예전 백업은 그 백업 시점의 상태를 보여 주므로, 지금 기기에서 지워진 자료가 남아 있을 수 있습니다. 여러 백업이 있으면 `Info.plist` 의 기기 정보로 같은 기기의 백업인지부터 확인합니다.
+백업에서 찾은 파일은 "이 백업을 만든 시점에 기기에 있던 파일" 입니다. 백업 시각은 키 이름으로 보면 `Manifest.plist` 의 `Date` 와 `Info.plist` 의 `Last Backup Date` 에서 찾을 수 있고, 이 값의 시간대 표기는 [시각 값](../../../01-foundations/value-decoding/time-values.md)을 보고 확인합니다. 컴퓨터에서 찾은 예전 백업은 그 백업 시점의 상태를 보여 주므로, 지금 기기에서 지워진 자료가 남아 있을 수 있습니다. 여러 백업이 있으면 `Info.plist` 의 기기 정보로 같은 기기의 백업인지부터 확인합니다.
 
 ## 참고 문헌
 

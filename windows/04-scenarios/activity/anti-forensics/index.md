@@ -38,7 +38,7 @@ has_toc: false
 | [완전삭제 도구](wiping-tools.md) | 프리패치·UserAssist·사용자 하이브, USN 변경 저널[4] | 도구마다 다름. SDelete 는 Windows 10·Server 2012 이상에서 돕니다[3] | 도구를 실행한 때, 지울 파일의 이름을 바꾼 기록 |
 | [초기화·재설치](reset-reinstall.md) | 새로 만든 `\Windows`·`\Program Files`·`\ProgramData`·각 사용자 AppData, `C:\Windows.old`[5] | Windows 10·11[5] | 초기화 옵션, 초기화 전 기록이 남은 곳 |
 | [시각 바꾸기](system-time-change.md) | 보안 로그의 4616. 감사 설정과 상관없이 항상 남습니다[6] | Windows Vista·Server 2008 부터[6] | 바뀌기 전후 시각, 바꾼 계정과 프로세스 |
-| [보안 프로그램 끄기](defense-evasion.md) | `Microsoft-Windows-Windows Defender/Operational` 채널의 5001·5007·5013[8] | 검체에서 확인 | 실시간 보호가 꺼진 구간, 바뀐 설정, 막힌 변경 시도 |
+| [보안 프로그램 끄기](defense-evasion.md) | `Microsoft-Windows-Windows Defender/Operational` 채널의 5001·5007·5013[8] | 실제 기기에서 확인 | 실시간 보호가 꺼진 구간, 바뀐 설정, 막힌 변경 시도 |
 
 ### 어느 경우든 같이 볼 기록
 
@@ -50,9 +50,9 @@ has_toc: false
 ## 읽는 순서
 
 1. [이벤트 로그를 지웠나 (Log Clearing)](log-clearing.md) — 1102·104 로 로그를 지운 때와 계정을 찾습니다. 원격에서 지운 경우와 지운 뒤 .evtx 파일에서 레코드를 되살리는 법도 다룹니다.
-2. [완전삭제 도구를 썼나 (Wiping Tools)](wiping-tools.md) — SDelete 와 `cipher /w` 를 예로 도구 실행 기록과 파일 이름을 바꾼 기록을 찾습니다. 파일을 골라 지웠는지, 빈 공간을 지웠는지도 가립니다.
+2. [완전삭제 도구를 썼나 (Wiping Tools)](wiping-tools.md) — SDelete 와 `cipher /w` 를 예로 도구 실행 기록과 파일 이름을 바꾼 기록을 찾습니다. 파일을 골라 지웠는지, 빈 공간을 지웠는지도 가려냅니다.
 3. [PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)](reset-reinstall.md) — 초기화 옵션마다 남는 것과 지워지는 것을 정리합니다. `C:\Windows.old` 와 OS 가 아닌 파티션에서 초기화 전 기록을 찾습니다.
-4. [시스템 시각을 바꿨나 (System Time Change)](system-time-change.md) — 4616 으로 누가 어느 프로세스로 시각을 바꿨는지 가립니다. 정상 시각 보정과 나누고, 시각이 틀어진 구간을 표시합니다.
+4. [시스템 시각을 바꿨나 (System Time Change)](system-time-change.md) — 4616 으로 누가 어느 프로세스로 시각을 바꿨는지 가려냅니다. 정상 시각 보정과 나누고, 시각이 틀어진 구간을 표시합니다.
 5. [보안 프로그램을 끄거나 지웠나 (Defense Evasion)](defense-evasion.md) — Defender 운영 로그로 실시간 보호가 꺼진 구간과 바뀐 설정을 찾습니다. 사람이 끈 것과 오류로 멈춘 것을 나눕니다.
 
 ## 함께 볼 페이지

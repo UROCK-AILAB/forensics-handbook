@@ -6,7 +6,7 @@ nav_order: 3800
 
 # 이 파일은 어디서 왔나 (File Origin)
 
-파일 하나를 두고 "이 파일이 어떤 길로 이 PC 에 들어왔나" 를 묻는 조사를 다룹니다. 인터넷에서 받았는지, 메일이나 메신저로 왔는지, USB 나 공유 폴더에서 옮겨 왔는지를 가립니다. 이 페이지는 출처를 알려 주는 기록을 어떤 순서로 보는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다. 아티팩트마다의 구조는 각 아티팩트 페이지에 있습니다.
+파일 하나를 두고 "이 파일이 어떤 길로 이 PC 에 들어왔나" 를 묻는 조사를 다룹니다. 인터넷에서 받았는지, 메일이나 메신저로 왔는지, USB 나 공유 폴더에서 옮겨 왔는지를 가려냅니다. 이 페이지는 출처를 알려 주는 기록을 어떤 순서로 보는지, 그 기록으로 어디까지 말할 수 있는지를 정리합니다. 아티팩트마다의 구조는 각 아티팩트 페이지에 있습니다.
 
 ## 조사 질문
 
@@ -17,9 +17,9 @@ nav_order: 3800
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
-| Windows 버전 | 스트림과 기록의 모양은 버전마다 다를 수 있습니다. 검체의 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 먼저 적습니다. |
+| Windows 버전 | 스트림과 기록의 모양은 버전마다 다를 수 있습니다. 분석 대상 PC 의 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 먼저 적습니다. |
 | 시간대 | 브라우저 기록·이벤트 로그·파일 시스템의 시각 기준이 서로 다릅니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
 | 사용자 | 브라우저 기록과 바로가기 파일은 사용자 프로필마다 따로 남습니다. [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 으로 SID 와 프로필 폴더를 짝지어 둡니다. |
 | 파일 시스템 | 출처 표시는 NTFS 의 이름 있는 스트림에 남습니다. 파일이 지금 있는 볼륨과 거쳐 온 저장 장치의 파일 시스템을 적어 둡니다. |
@@ -49,7 +49,7 @@ nav_order: 3800
 
 첨부 파일 관리자 (Attachment Manager) 는 파일을 열기 전에 경고를 띄울지 정합니다[1]. 이때 "웹 표시 (Mark of the Web, MOTW)" 라고 부르는 보안 정보를 봅니다[1]. 이 동작은 Windows 11·Windows 10 에 해당합니다[1].
 
-파일이 차단돼 있는지는 탐색기의 파일 속성 → 일반 탭 아래쪽 보안 메시지로 보며, 차단돼 있으면 "차단 해제 (Unblock)" 를 고를 수 있습니다[1]. 차단 해제 뒤 Zone.Identifier 스트림이 남는지는 검체에서 확인합니다. 브라우저가 붙이는 `Zone.Identifier` 스트림이 곧 웹 표시 (mark of the web) 입니다[2].
+파일이 차단돼 있는지는 탐색기의 파일 속성 → 일반 탭 아래쪽 보안 메시지로 보며, 차단돼 있으면 "차단 해제 (Unblock)" 를 고를 수 있습니다[1]. 차단 해제 뒤 Zone.Identifier 스트림이 남는지는 실제 기기에서 확인해야 합니다. 브라우저가 붙이는 `Zone.Identifier` 스트림이 곧 웹 표시 (mark of the web) 입니다[2].
 
 **ZoneId 값.** ZoneId 번호는 URLZONE 열거와 같은 번호로 알려져 있습니다.
 
@@ -69,7 +69,7 @@ nav_order: 3800
 
 스트림은 `[ZoneTransfer]` 와 줄바꿈(CRLF)으로 시작하는 ASCII 글자이고, 크기는 수백 바이트 정도입니다(예: 192바이트). 스트림에는 시각을 적은 키가 없습니다.
 
-아래는 이 절 이름과 키 이름으로 만든 예시입니다. 실제 검체에서 떼어 온 내용이 아닙니다. 주소는 예시 주소이고, 줄 순서도 예시입니다.
+아래는 이 절 이름과 키 이름으로 만든 예시입니다. 실제 기기에서 떼어 온 내용이 아닙니다. 주소는 예시 주소이고, 줄 순서도 예시입니다.
 
 ```
 [ZoneTransfer]
@@ -88,17 +88,17 @@ HostUrl=https://example.com/files/sample.zip
 
 **스트림이 붙은 시각은 저널로 좁힙니다.**
 
-이름 있는 스트림이 더해지거나 없어지면 $UsnJrnl 에 USN_REASON_STREAM_CHANGE(0x00200000)가 남고[4], 이름 있는 스트림에 데이터가 늘면 USN_REASON_NAMED_DATA_EXTEND(0x00000020)가 남습니다[4]. 스트림 안에 시각이 없으므로, 저널이 남아 있으면 이 두 값이 켜진 레코드로 스트림이 붙은 시각을 좁힙니다. 저널 레코드의 다른 칸과 추출 방법은 [지운 파일의 흔적 찾기](deleted-file-traces.md) 의 "$UsnJrnl" 절에 있습니다.
+이름 있는 스트림이 더해지거나 없어지면 $UsnJrnl 에 USN_REASON_STREAM_CHANGE(0x00200000)가 남고[4], 이름 있는 스트림에 데이터가 늘면 USN_REASON_NAMED_DATA_EXTEND(0x00000020)가 남습니다[4]. 스트림 안에 시각이 없으므로, 저널이 남아 있으면 이 두 값이 켜진 레코드로 스트림이 붙은 시각을 좁힙니다. 저널 레코드의 다른 필드와 추출 방법은 [지운 파일의 흔적 찾기](deleted-file-traces.md) 의 "$UsnJrnl" 절에 있습니다.
 
 **NTFS 밖을 거친 파일.**
 
-FAT 처럼 NTFS 가 아닌 파일 시스템으로 옮기면 이름 있는 스트림이 없어지므로, FAT·exFAT 로 포맷한 USB 를 거친 파일에는 출처 표시가 없을 수 있습니다. 압축 파일을 풀 때 풀린 파일에도 출처 표시가 붙는지는 검체에서 확인합니다. 압축 파일 자체의 출처 표시와 [압축 프로그램 사용 기록](../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 을 함께 봅니다.
+FAT 처럼 NTFS 가 아닌 파일 시스템으로 옮기면 이름 있는 스트림이 없어지므로, FAT·exFAT 로 포맷한 USB 를 거친 파일에는 출처 표시가 없을 수 있습니다. 압축 파일을 풀 때 풀린 파일에도 출처 표시가 붙는지는 실제 기기에서 확인해야 합니다. 압축 파일 자체의 출처 표시와 [압축 프로그램 사용 기록](../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) 을 함께 봅니다.
 
 ## 브라우저 다운로드 기록
 
-크롬 계열 (Chrome·Edge·Whale) 브라우저는 사용자 프로필의 History 파일에 다운로드를 남깁니다. 표 구조는 [크롬 계열 브라우저](../../02-artifacts/browsers/chrome-edge-whale/index.md) 에 있습니다. 아래는 출처 조사에 쓰는 칸만 추린 것입니다.
+크롬 계열 (Chrome·Edge·Whale) 브라우저는 사용자 프로필의 History 파일에 다운로드를 남깁니다. 표 구조는 [크롬 계열 브라우저](../../02-artifacts/browsers/chrome-edge-whale/index.md) 에 있습니다. 아래는 출처 조사에 쓰는 열만 추린 것입니다.
 
-| 묻는 것 | `downloads` 표의 칸 |
+| 묻는 것 | `downloads` 표의 열 |
 |---|---|
 | 어디에 저장했나 | target_path, current_path |
 | 언제 받았나 | 시작 시각, 끝 시각 |
@@ -126,7 +126,7 @@ FAT 처럼 NTFS 가 아닌 파일 시스템으로 옮기면 이름 있는 스트
 
 **공유 폴더.** 바로가기 파일에 네트워크 위치가 남을 수 있습니다. 파일 서버가 있으면 서버의 [공유 폴더 접근](../../02-artifacts/event-logs/5140-5145.md) 이벤트를 봅니다.
 
-**같은 파일인지 가리기.**
+**같은 파일인지 판별하기.**
 
 AmCache 에는 파일의 SHA-1 이 남고([AmCache](../../02-artifacts/execution/amcache-hve/index.md)), 크롬 계열 다운로드 기록의 `hash` 도 비교에 씁니다. 알려진 파일 목록과 맞추는 법은 [해시셋 대조와 유사 해시](../../03-techniques/analysis/hash-set-fuzzy-hash.md) 에 있습니다.
 
@@ -174,7 +174,7 @@ AmCache 에는 파일의 SHA-1 이 남고([AmCache](../../02-artifacts/execution
 - [대체 데이터 스트림](../../01-foundations/disk-volume/ntfs/ads.md) — 이름 있는 스트림이 저장되는 방식입니다.
 - [크롬 계열 브라우저](../../02-artifacts/browsers/chrome-edge-whale/index.md) · [파이어폭스](../../02-artifacts/browsers/firefox/index.md) · [인터넷 익스플로러·옛 엣지](../../02-artifacts/browsers/ie-edgehtml/index.md) — 다운로드 기록의 구조입니다.
 - [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) — 파일과 스트림이 생긴 시각의 단서입니다.
-- [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) · [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) — 외부 장치에서 온 파일을 가립니다.
+- [USB 저장장치 흔적](../../02-artifacts/external-devices/usb-storage-artifacts/index.md) · [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) — 외부 장치에서 온 파일을 가려냅니다.
 - [웹 사용 행위 재구성](web-activity.md) — 받기 전후의 웹 사용을 봅니다.
 - [악성코드는 어디서 들어왔나](../incident/initial-access.md) — 악성 파일의 유입 경로를 봅니다.
 - [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) — 계정에서 사람으로 좁힙니다.

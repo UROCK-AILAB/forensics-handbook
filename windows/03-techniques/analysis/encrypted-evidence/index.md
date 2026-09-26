@@ -19,7 +19,7 @@ has_toc: false
 
 암호화된 자료는 비밀 없이는 내용을 읽을 수 없으므로 열쇠를 구하는 일이 분석의 갈림길이 됩니다.
 열쇠 가운데 일부는 전원을 끄면 얻기 어려워집니다. BitLocker 키 패키지는 잠금이 풀린 볼륨에서만 새로 만들 수 있고, EFS 인증서와 키는 켜진 시스템에서 백업할 수 있습니다.
-그래서 켜진 PC 앞에서는 끄기 전에 암호화 여부를 확인하고, 잠금이 풀린 상태에서 할 일을 먼저 합니다(위 두 사실에서 끌어낸 판단).
+그래서 켜진 PC 를 다룰 때는 끄기 전에 암호화 여부를 확인하고, 잠금이 풀린 상태에서 할 일을 먼저 합니다(위 두 사실에서 끌어낸 판단).
 켜진 시스템에서 데이터를 모으는 순서는 [라이브 응답](../../process-acquisition/live-response/index.md) 을 봅니다.
 
 ## 한눈에 보기
@@ -29,7 +29,7 @@ has_toc: false
 - 볼륨 단위 암호화는 볼륨 전체를 감쌉니다. BitLocker 가 그 예입니다.
 - 파일 단위 암호화는 NTFS 파일을 하나씩 감쌉니다. EFS (Encrypting File System) 가 그 예입니다.
 - 문서와 압축 파일의 암호는 그 파일 형식 안에 표시됩니다.
-- DRM 보안 문서는 사용자 비밀번호로 여는 문서와 따로 가립니다. 한글(HWP)은 두 경우를 서로 다른 비트로 표시합니다.
+- DRM 보안 문서는 사용자 비밀번호로 여는 문서와 따로 구분합니다. 한글(HWP)은 두 경우를 서로 다른 비트로 표시합니다.
 
 | 하위 페이지 | 다루는 대상 | 알아보는 단서 | 여는 열쇠를 찾는 곳 |
 |---|---|---|---|
@@ -57,8 +57,8 @@ has_toc: false
 - [라이브 응답](../../process-acquisition/live-response/index.md) — 켜진 시스템에서 잠금이 풀린 볼륨과 키를 먼저 다룹니다.
 - [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) · [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) — EFS 파일의 암호화 표시가 MFT 어디에 있는지 봅니다.
 - [OLE 복합 파일](../../../01-foundations/shell-document-formats/compound-file-binary.md) — 암호 걸린 오피스 문서와 한글 문서의 스트림을 봅니다.
-- [파일 내용 검색](../content-search/index.md) — 확장자와 실제 형식이 어긋난 파일을 서명으로 가립니다.
-- [파티션 구조](../../../01-foundations/disk-volume/mbr-gpt.md) — 파일 시스템으로 읽히지 않는 파티션을 셉니다.
+- [파일 내용 검색](../content-search/index.md) — 확장자와 실제 형식이 어긋난 파일을 서명으로 판별합니다.
+- [파티션 구조](../../../01-foundations/disk-volume/mbr-gpt.md) — 파일 시스템으로 읽히지 않는 파티션을 찾습니다.
 - [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) — EFS 개인 키와 DPAPI 마스터키를 보호하는 구조를 봅니다.
 - [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) · [자격 증명 관리자와 볼트](../../../02-artifacts/credentials/credential-manager-windows-vault.md) · [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) — 후보 비밀번호와 해시를 찾습니다.
 - [압축 프로그램 사용 기록](../../../02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md) — 어떤 압축 프로그램을 썼는지 찾습니다.

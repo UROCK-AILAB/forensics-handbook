@@ -10,7 +10,7 @@ nav_order: 790
 
 클라우드 계정에서 주인이 모르는 컴퓨팅 자원(가상 머신·컨테이너·함수)이 생겼을 때 세 가지를 차례로 묻습니다. 누가 어떤 자격 증명으로 언제 어느 리전·구독·프로젝트에 그 자원을 만들었는지, 그 자원이 채굴과 관련된 통신이나 프로세스를 보였는지, 자원 안에서 무엇을 실행했는지입니다. 앞의 두 질문은 공급자의 관리 로그와 위협 탐지 결과로 답하고, 마지막 질문은 디스크·메모리를 수집해야 답할 수 있습니다.
 
-이 쪽은 컴퓨팅 자원을 만드는 AWS·Azure·Google Cloud 를 다룹니다. 자원을 만든 자격 증명이 어디서 새었는지는 [액세스 키가 새어 나갔나](leaked-keys.md)에서, 그 자격 증명이 권한을 넓혔는지는 [권한을 올렸나](privilege-escalation.md)에서 이어 봅니다.
+이 페이지는 컴퓨팅 자원을 만드는 AWS·Azure·Google Cloud 를 다룹니다. 자원을 만든 자격 증명이 어디서 새었는지는 [액세스 키가 새어 나갔나](leaked-keys.md)에서, 그 자격 증명이 권한을 넓혔는지는 [권한을 올렸나](privilege-escalation.md)에서 이어 봅니다.
 
 ## 먼저 확인할 것
 
@@ -120,7 +120,7 @@ nav_order: 790
 - [권한을 올렸나](privilege-escalation.md) — 자원을 만들 권한을 스스로 넓혔는지
 - [로그를 끄거나 지웠나](log-tampering.md) — 트레일·탐지 서비스를 끄거나 결과를 억제한 흔적
 - [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) — 관리 로그와 탐지 결과를 받는 방법
-- [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) — 위 Sigma 규칙을 로그에 돌리는 방법
+- [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) — 위 Sigma 규칙을 로그에 돌리는 방법
 - [IAM 사용자·역할·액세스 키](../../02-artifacts/aws/iam.md) — 호출한 주체와 키의 주인 찾기
 
 ## 참고 문헌

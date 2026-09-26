@@ -11,7 +11,7 @@ nav_order: 1360
 
 ## 한 줄 요약
 
-Word 는 `Reading Locations` 키 아래에 문서마다 하위 키를 하나씩 두고 문서 경로와 시각을 적습니다. 이 시각은 분 단위 로컬 시각이고 시간대 표시가 없습니다. 키 이름으로 보아 문서에서 읽던 자리를 적는 곳으로 보이지만, 공개된 공식 설명은 없습니다.
+Word 는 `Reading Locations` 키 아래에 문서마다 하위 키를 하나씩 두고 문서 경로와 시각을 적습니다. 이 시각은 분 단위 로컬 시각이고 시간대 표시가 없습니다. 키 이름으로 보면 문서에서 읽던 자리를 적는 곳으로 보이지만, 공개된 공식 설명은 없습니다.
 
 > 16.0 의 값 모양은 Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 기준입니다.
 
@@ -38,7 +38,7 @@ HKCU\Software\Microsoft\Office\<버전>\Word\Reading Locations\<하위 키>
 
 ## 구조
 
-**하위 키 이름.** `Document 0`, `Document 7` 처럼 `Document <번호>` 꼴이며, 중간 번호가 빠질 수 있습니다. 예를 들어 `Document 0`, `Document 7` ~ `Document 14` 로 1~6 번이 빠진 9개가 남기도 합니다. 번호가 빠지는 까닭과 하위 키가 몇 개까지 생기는지는 공개 자료에 없습니다.
+**하위 키 이름.** `Document 0`, `Document 7` 처럼 `Document <번호>` 형식이며, 중간 번호가 빠질 수 있습니다. 예를 들어 `Document 0`, `Document 7` ~ `Document 14` 로 1~6 번이 빠진 9개가 남기도 합니다. 번호가 빠지는 이유와 하위 키가 몇 개까지 생기는지는 공개 자료에 없습니다.
 
 **값.** 세 값은 모두 REG_SZ (문자열) 입니다.
 
@@ -64,7 +64,7 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 - Word 로 연 문서가 모두 여기 남는다는 것. 여기 없다고 열지 않았다고 말할 수 없습니다.
 - 초 단위의 앞뒤. 분까지만 적기 때문입니다.
 
-보고서 문장은 기록이 말하는 만큼만 씁니다.
+보고서 문장은 기록으로 확인되는 만큼만 씁니다.
 
 - 쓰지 않을 문장: "사용자가 2024-03-15 11:19 에 report.docx 를 읽었다."
 - 쓸 문장: "사용자 kim 의 NTUSER.DAT, Word `Reading Locations` 의 한 하위 키에 File Path `C:\Users\kim\Documents\report.docx` 와 Datetime `2024-03-15T11:19` 이 있다. Datetime 에는 시간대 표시가 없다. 이 PC 의 시간대(UTC+9)로 옮기면 2024-03-15 02:19 UTC 이다." (예시 문장이며 숫자는 아래 헥스 예시와 같습니다.)
@@ -76,9 +76,9 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 | 시각 | 형식 | 근거와 뜻 |
 |---|---|---|
 | `Datetime` 값 | 문자열, 분 단위, 로컬 시각 | 분 단위 로컬 시스템 시각이라는 해석이 있습니다. 시간대가 UTC+9 인 PC 에서는 같은 파일의 File MRU T 값 (UTC) 에 9시간을 더한 값과 몇 분 안에서 맞습니다. 예: T 02:19:30Z, Datetime 11:19. |
-| 하위 키의 마지막 쓰기 시각 | FILETIME, UTC | RegRipper 는 이 시각을 `Datetime` 과 함께 보여 줍니다. Registry Explorer 는 이 시각을 문서의 `lastOpen` 칸에 넣습니다. |
+| 하위 키의 마지막 쓰기 시각 | FILETIME, UTC | RegRipper 는 이 시각을 `Datetime` 과 함께 보여 줍니다. Registry Explorer 는 이 시각을 문서의 `lastOpen` 열에 넣습니다. |
 
-**Registry Explorer 의 `lastOpen`.** Registry Explorer 는 File MRU 항목마다 `Reading Locations` 에서 `File Path` 가 같은 하위 키를 찾습니다. 찾으면 그 하위 키의 마지막 쓰기 시각을 그 문서의 `lastOpen` 칸에 넣습니다. `lastOpen` 은 도구가 붙인 이름입니다. 키 시각은 그 키에 마지막으로 무언가를 쓴 때일 뿐입니다. 어떤 동작이 그 쓰기를 일으켰는지는 키만으로 알 수 없습니다.
+**Registry Explorer 의 `lastOpen`.** Registry Explorer 는 File MRU 항목마다 `Reading Locations` 에서 `File Path` 가 같은 하위 키를 찾습니다. 찾으면 그 하위 키의 마지막 쓰기 시각을 그 문서의 `lastOpen` 열에 넣습니다. `lastOpen` 은 도구가 붙인 이름입니다. 키 시각은 그 키에 마지막으로 무언가를 쓴 때일 뿐입니다. 어떤 동작이 그 쓰기를 일으켰는지는 키만으로 알 수 없습니다.
 
 **시간대.** `Datetime` 에는 `Z` 나 `+09:00` 같은 시간대 표시가 없습니다. 먼저 그 PC 의 [시간대 설정](../../system-account/time-zone.md) 을 확인합니다. UTC 로 옮긴 값을 [타임라인](../../../03-techniques/analysis/timeline/index.md) 에 넣습니다.
 
@@ -86,16 +86,16 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 
 - **UTC 타임라인에 그대로 넣으면 어긋납니다.** `Datetime` 은 로컬 시각입니다. 시간대가 UTC+9 이면 9시간이 어긋납니다.
 - **분 단위입니다.** 초 단위 기록과 앞뒤를 가릴 때 쓰지 않습니다.
-- **하위 키 번호가 빠집니다.** 빠진 번호를 지운 흔적으로 단정하지 않습니다. 까닭이 알려지지 않았습니다.
+- **하위 키 번호가 빠집니다.** 빠진 번호를 지운 흔적으로 단정하지 않습니다. 이유가 알려지지 않았습니다.
 - **Word 에만 있습니다.** Excel·PowerPoint 문서는 이 키로 볼 수 없습니다.
-- **`Position` 을 짐작으로 풀지 않습니다.** "몇 쪽까지 읽었다" 같은 문장을 쓰지 않습니다.
-- **도구 칸 이름은 뜻이 아닙니다.** `lastOpen` 을 "마지막으로 연 시각" 으로 옮겨 적지 않습니다. "하위 키의 마지막 쓰기 시각" 이라고 씁니다.
+- **`Position` 을 짐작으로 풀지 않습니다.** "몇 페이지까지 읽었다" 같은 문장을 쓰지 않습니다.
+- **도구의 열 이름은 뜻이 아닙니다.** `lastOpen` 을 "마지막으로 연 시각" 으로 옮겨 적지 않습니다. "하위 키의 마지막 쓰기 시각" 이라고 씁니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 위 값 형식으로 만든 예시입니다. 실제 검체에서 나온 값이 아닙니다. 같은 문서를 가리키는 File MRU 값과 Reading Locations 하위 키가 있다고 합시다.
+아래는 위 값 형식으로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다. 같은 문서를 가리키는 File MRU 값과 Reading Locations 하위 키가 있다고 합시다.
 
 - File MRU 값 데이터: `[F00000000][T01DA767F3603E500][O00000000]*C:\Users\kim\Documents\report.docx` (형식은 [오피스 최근 파일](file-mru-place-mru.md) 에 있습니다)
 - Reading Locations 하위 키의 `File Path`: `C:\Users\kim\Documents\report.docx`
@@ -109,7 +109,7 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 ```
 
 1. 글자마다 00 을 건너뛰면 `2024-03-15T11:19` 입니다. 16글자, 32바이트입니다.
-2. 초 칸이 없습니다. `Z` 나 `+09:00` 같은 시간대 표시도 없습니다.
+2. 초 자리가 없습니다. `Z` 나 `+09:00` 같은 시간대 표시도 없습니다.
 3. File MRU 의 T 값 0x01DA767F3603E500 을 풀면 2024-03-15 02:19:30 UTC 입니다 ([시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)).
 4. T 값에 9시간을 더하면 11:19:30 입니다. `Datetime` 의 11:19 와 분까지 같습니다.
 5. 그 PC 의 시간대가 UTC+9 라면 두 기록은 같은 때를 가리킨다고 볼 수 있습니다.
@@ -117,7 +117,7 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 ### 공개 도구로 한 번
 
 - RegRipper 의 msoffice 플러그인은 하위 키마다 마지막 쓰기 시각 (UTC) 과 `Datetime` 을 함께 보여 줍니다.
-- Registry Explorer 의 OfficeMRU 플러그인은 File MRU 결과의 `lastOpen` 칸에 이 키의 시각을 넣습니다.
+- Registry Explorer 의 OfficeMRU 플러그인은 File MRU 결과의 `lastOpen` 열에 이 키의 시각을 넣습니다.
 
 1. NTUSER.DAT 과 트랜잭션 로그 (.LOG1·.LOG2) 를 함께 뽑습니다.
 2. RegRipper 결과에서 `Datetime` 과 하위 키 시각을 나란히 적습니다.
@@ -139,14 +139,14 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 오피스를 쓴 사용자 프로필이 있는 이미지를 고릅니다. 오피스를 설치한 가상 머신을 직접 만들어도 됩니다.
+NIST CFReDS 같은 공개 시험 이미지 가운데 오피스를 쓴 사용자 프로필이 있는 이미지를 고릅니다. 오피스를 설치한 가상 머신을 직접 만들어도 됩니다.
 
 1. Word 버전 키마다 `Reading Locations` 하위 키 이름을 모두 적습니다. 빠진 번호가 있나요?
 2. 각 `File Path` 를 File MRU 목록과 맞춥니다. File MRU 에만 있는 Word 문서는 몇 개인가요?
 3. 같은 문서의 `Datetime` 과 T 값을 견줘 시간 차이를 셈합니다. 시간대 설정과 맞나요?
-4. 하위 키의 마지막 쓰기 시각과 `Datetime` 을 견줍니다.
+4. 하위 키의 마지막 쓰기 시각과 `Datetime` 을 비교합니다.
 5. 가상 머신에서 긴 문서를 열어 가운데까지 내려 본 뒤 닫습니다. `Position` 의 두 수가 어떻게 바뀌는지 적습니다.
-6. 결과로 보고서 문장을 하나 씁니다. "읽었다" 가 아니라 기록이 말하는 만큼만 씁니다.
+6. 결과로 보고서 문장을 하나 씁니다. "읽었다" 가 아니라 기록으로 확인되는 만큼만 씁니다.
 
 ## 참고 문헌
 

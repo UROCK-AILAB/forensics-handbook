@@ -6,11 +6,11 @@ nav_order: 270
 
 # UID·GID 와 사용자 이름 잇기 (UID·GID)
 
-Linux 의 파일 시스템·로그·메모리에는 사용자 이름이 아니라 숫자인 사용자 ID (UID, User ID) 와 그룹 ID (GID, Group ID) 가 남고, 이 숫자를 이름으로 바꾸려면 검체의 계정 데이터베이스를 따로 읽어야 합니다.
+Linux 의 파일 시스템·로그·메모리에는 사용자 이름이 아니라 숫자인 사용자 ID (UID, User ID) 와 그룹 ID (GID, Group ID) 가 남고, 이 숫자를 이름으로 바꾸려면 분석 대상의 계정 데이터베이스를 따로 읽어야 합니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-파일 소유자, 로그를 남긴 프로세스의 자격, 로그인 기록의 칸 번호가 모두 UID·GID 숫자입니다. 아래 표는 숫자가 저장되는 곳과 그 폭입니다.
+파일 소유자, 로그를 남긴 프로세스의 자격, 로그인 기록의 ID 필드가 모두 UID·GID 숫자입니다. 아래 표는 숫자가 저장되는 곳과 그 폭입니다.
 
 | 어디 | 필드 | 값의 모양 |
 |---|---|---|
@@ -21,7 +21,7 @@ Linux 의 파일 시스템·로그·메모리에는 사용자 이름이 아니�
 | systemd 저널 | `_UID=`·`_GID=`·`_AUDIT_LOGINUID=`·`_SYSTEMD_OWNER_UID=`·`OBJECT_UID=`·`OBJECT_GID=` | 10진 문자열[16] |
 | 저널 파일 이름 | `user-UID.journal` | 파일 이름 안의 10진 UID[17][33] |
 | 감사 로그 (auditd) | `auid`·`uid`·`euid`·`fsuid`·`ouid`·`ogid`·`inode_uid`·`obj_uid`·`oauid`·`old-auid`·`id` | 10진 숫자, `acct` 만 이름[22] |
-| lastlog | 레코드 순번 자체가 UID(오프셋 = UID × 292) | 이름 칸 없음[10][25] |
+| lastlog | 레코드 순번 자체가 UID(오프셋 = UID × 292) | 이름 필드 없음[10][25] |
 | `/proc/PID/status` | `Uid:`·`Gid:` 줄 | real·effective·saved set·filesystem 네 값[21] |
 | `/proc/PID/loginuid` | 감사용 로그인 UID | 정하지 않았으면 4294967295[26] |
 | 메모리 (Volatility 3 `linux.pslist`) | `task.cred` 의 uid·gid·euid·egid | 정수[31] |
@@ -40,8 +40,8 @@ Linux 의 파일 시스템·로그·메모리에는 사용자 이름이 아니�
 
 | 파일 | 줄 모양 | 쓰임 |
 |---|---|---|
-| `/etc/passwd` | `name:password:UID:GID:GECOS:directory:shell` | UID → 이름, 네 번째 칸은 기본 그룹[5] |
-| `/etc/group` | `group_name:password:GID:user_list` | GID → 그룹 이름, 네 번째 칸은 쉼표로 나눈 구성원[6] |
+| `/etc/passwd` | `name:password:UID:GID:GECOS:directory:shell` | UID → 이름, 네 번째 필드는 기본 그룹[5] |
+| `/etc/group` | `group_name:password:GID:user_list` | GID → 그룹 이름, 네 번째 필드는 쉼표로 나눈 구성원[6] |
 | `/etc/passwd-` | passwd 와 같음 | shadow 도구 모음이 남기는 백업, 모든 관리 도구가 쓰지는 않음[8] |
 | `/etc/nsswitch.conf` | `passwd:`·`group:` 줄에 `files`·`db`·`nis`·`compat` 같은 조회 방식 | 어느 데이터베이스를 어떤 순서로 묻는지[7] |
 | `/etc/subuid`·`/etc/subgid` | `로그인이름또는UID:시작ID:개수` | 사용자 네임스페이스에 넘겨줄 하위 ID 범위, 한 사용자에 여러 줄 가능[12][13] |
@@ -68,7 +68,7 @@ Linux 의 파일 시스템·로그·메모리에는 사용자 이름이 아니�
 
 GID 도 같은 범위를 따르고, `tty` 그룹만은 devpts 마운트 인자에 들어가야 해서 GID 5 로 고정입니다[14]. 2147483648(2^31) 이상은 커널의 devpts 파일 시스템처럼 UID 를 부호 있는 정수로 다루는 코드가 제대로 처리하지 못합니다[14].
 
-shadow 도구의 기본값은 `UID_MIN` 1000, `UID_MAX` 60000, `SYS_UID_MIN` 101, `SYS_UID_MAX` 는 `UID_MIN` 빼기 1 이고 GID 도 같습니다[11]. shadow 가 함께 배포하는 예시 `login.defs` 의 값은 `SYS_UID_MAX 999`, `SUB_UID_MIN 100000`, `SUB_UID_MAX 600100000`, `SUB_UID_COUNT 65536` 입니다[12]. 실제 값은 검체의 `/etc/login.defs` 에서 읽습니다.
+shadow 도구의 기본값은 `UID_MIN` 1000, `UID_MAX` 60000, `SYS_UID_MIN` 101, `SYS_UID_MAX` 는 `UID_MIN` 빼기 1 이고 GID 도 같습니다[11]. shadow 가 함께 배포하는 예시 `login.defs` 의 값은 `SYS_UID_MAX 999`, `SUB_UID_MIN 100000`, `SUB_UID_MAX 600100000`, `SUB_UID_COUNT 65536` 입니다[12]. 실제 값은 분석 대상의 `/etc/login.defs` 에서 읽습니다.
 
 기준 배포판의 systemd 빌드 설정은 아래처럼 다릅니다.
 
@@ -81,7 +81,7 @@ shadow 도구의 기본값은 `UID_MIN` 1000, `UID_MAX` 60000, `SYS_UID_MIN` 101
 ## 읽는 법
 
 1. 파일 시스템 메타데이터나 로그에서 숫자 UID·GID 를 뽑습니다. ext4 는 `i_uid` + (`l_i_uid_high` × 65536) 으로 합칩니다[2].
-2. 검체의 `/etc/passwd`·`/etc/passwd-`·`/etc/group`·`/etc/login.defs`·`/etc/nsswitch.conf`·`/etc/subuid`·`/etc/subgid` 를 모아 숫자 → 이름 표를 만듭니다.
+2. 분석 대상의 `/etc/passwd`·`/etc/passwd-`·`/etc/group`·`/etc/login.defs`·`/etc/nsswitch.conf`·`/etc/subuid`·`/etc/subgid` 를 모아 숫자 → 이름 표를 만듭니다.
 3. 표에 없는 숫자는 위 범위표에 대어 봅니다. 동적 서비스 사용자, 컨테이너 범위, subuid 범위, nobody 가운데 어디에 드는지 적습니다.
 4. `nsswitch.conf` 의 `passwd:` 줄에 `files` 말고 다른 방식(`nis`, `ldap` 같은 모듈)이 있으면 원격 계정일 가능성을 적습니다[7][14].
 
@@ -99,11 +99,11 @@ shadow 도구의 기본값은 `UID_MIN` 1000, `UID_MAX` 60000, `SYS_UID_MIN` 101
 UID = 0x86A0 + (0x0001 << 16) = 0x186A0 = 100000
 ```
 
-하위 16비트만 읽으면 34464 가 나오므로, 상위 칸을 빠뜨리면 전혀 다른 사용자로 잇게 됩니다. 같은 값을 XFS `di_uid` 에서 보면 빅엔디언이라 `00 01 86 A0` 순서로 나옵니다[3]. 100000 은 shadow 예시 `login.defs` 의 `SUB_UID_MIN` 과 같은 값이라, 이런 숫자가 passwd 에 없으면 컨테이너 안 사용자일 가능성부터 봅니다[12][13].
+하위 16비트만 읽으면 34464 가 나오므로, 상위 필드를 빠뜨리면 전혀 다른 사용자로 잇게 됩니다. 같은 값을 XFS `di_uid` 에서 보면 빅엔디언이라 `00 01 86 A0` 순서로 나옵니다[3]. 100000 은 shadow 예시 `login.defs` 의 `SUB_UID_MIN` 과 같은 값이라, 이런 숫자가 passwd 에 없으면 컨테이너 안 사용자일 가능성부터 봅니다[12][13].
 
 ### 명령으로 한 번
 
-검체를 분석 PC 에 마운트한 뒤 `ls -l` 이나 `stat` 을 그대로 쓰면, 도구가 분석 PC 의 `/etc/passwd` 로 이름을 붙입니다[5]. 그래서 `ls -n` 이나 `stat -c '%u %g'` 처럼 숫자로 출력한 뒤 검체의 표로 잇습니다[32]. The Sleuth Kit 의 `istat` 도 ext4 UID·GID 를 위 식대로 합친 숫자로 보여 줍니다[30].
+증거물 이미지를 분석 PC 에 마운트한 뒤 `ls -l` 이나 `stat` 을 그대로 쓰면, 도구가 분석 PC 의 `/etc/passwd` 로 이름을 붙입니다[5]. 그래서 `ls -n` 이나 `stat -c '%u %g'` 처럼 숫자로 출력한 뒤 분석 대상의 표로 잇습니다[32]. The Sleuth Kit 의 `istat` 도 ext4 UID·GID 를 위 식대로 합친 숫자로 보여 줍니다[30].
 
 ## 포렌식에서 중요한 점
 
@@ -113,7 +113,7 @@ UID = 0x86A0 + (0x0001 << 16) = 0x186A0 = 100000
 
 ### 증명하지 못하는 것
 
-숫자가 기록 당시 어떤 이름이었는지는 숫자만으로 알 수 없습니다. 검체의 passwd 는 분석 시점의 상태이고, 그 사이 계정을 지우거나 번호를 바꿨을 수 있습니다. 같은 UID 를 여러 이름이 나눠 쓸 수도 있고, 사람이 누구였는지는 계정 공유 여부를 따로 봐야 합니다. 파일 소유자는 `chown` 으로 바뀔 수 있으므로, 소유자가 곧 만든 사람이라고 쓰지 않습니다[1].
+숫자가 기록 당시 어떤 이름이었는지는 숫자만으로 알 수 없습니다. 분석 대상의 passwd 는 분석 시점의 상태이고, 그 사이 계정을 지우거나 번호를 바꿨을 수 있습니다. 같은 UID 를 여러 이름이 나눠 쓸 수도 있고, 사람이 누구였는지는 계정 공유 여부를 따로 봐야 합니다. 파일 소유자는 `chown` 으로 바뀔 수 있으므로, 소유자가 곧 만든 사람이라고 쓰지 않습니다[1].
 
 ### 지운 계정과 번호 재사용
 
@@ -131,7 +131,7 @@ lastlog 에는 지운 사용자의 레코드가 남을 수 있고, `lastlog` 명
 - **컨테이너와 사용자 네임스페이스**: `uid_map` 한 줄은 "네임스페이스 안 시작 ID, 바깥 시작 ID, 길이" 세 수이고, 루트 네임스페이스는 `0 0 4294967295` 입니다[20]. `stat`·`getuid`·`/proc/PID/status` 는 매핑 안 된 ID 를 overflow UID(기본 65534)로 돌려줍니다[20]. systemd-nspawn 방식은 바깥 UID 의 하위 16비트가 안쪽 UID 라서 `INTERNAL_UID = EXTERNAL_UID & 0x0000FFFF` 로 풉니다[14].
 - **65534 와 4294967295**: 65534 는 16비트만 지원하는 파일 시스템, NFS, 사용자 네임스페이스에서 매핑할 수 없는 사용자가 떨어지는 값입니다[14]. 감사 로그와 `/proc/PID/loginuid` 의 4294967295 는 "정하지 않음" 입니다[23][26].
 - **도구 필드 이름**: dissect.target 의 프로세스 플러그인 `uid` 속성은 실제로 `loginuid` 파일을 읽고, 4294967295 면 -1 을 돌려줍니다[26]. 같은 플러그인의 `owner` 는 UID 가 0 이면 이름 조회를 건너뜁니다[26].
-- **lastlog 의 이름**: lastlog 레코드에는 이름이 없어서 도구가 분석 시점의 사용자 목록으로 붙이고, 지운 사용자의 칸은 이름 없이 나옵니다[25].
+- **lastlog 의 이름**: lastlog 레코드에는 이름이 없어서 도구가 분석 시점의 사용자 목록으로 붙이고, 지운 사용자의 줄은 이름 없이 나옵니다[25].
 - **Velociraptor `Linux.Users.RootUsers`**: 설명은 sudo 그룹 사용자를 찾는다고 하지만, 쿼리는 라이브 시스템에서 `id -Gn` 을 실행해 출력에 `root` 가 있는지만 봅니다[27].
 - **ENRICHED 감사 로그**: 이름을 풀어 붙인 값은 로그를 쓴 기계에서 그 순간 푼 것입니다. 분석 PC 에서 다시 풀면 다른 이름이 나올 수 있습니다([감사 로그 형식](../logging/auditd-format.md)).
 
@@ -141,7 +141,7 @@ lastlog 에는 지운 사용자의 레코드가 남을 수 있고, `lastlog` 명
 |---|---|
 | ForensicArtifacts | `/etc/passwd`·`/etc/group`·`/etc/nsswitch.conf` 수집 경로 정의[28] |
 | UAC | `/etc` 를 통째로 모으되 `shadow`·`gshadow` 류는 빼고 모음[29] |
-| Velociraptor | `Linux.Sys.Users` 가 `/etc/passwd` 를, `Linux.Sys.Groups` 가 `/etc/group` 을 칸별로 나눔[27] |
+| Velociraptor | `Linux.Sys.Users` 가 `/etc/passwd` 를, `Linux.Sys.Groups` 가 `/etc/group` 을 필드별로 나눔[27] |
 | dissect.target | `/etc/passwd`·`/etc/passwd-`·`/etc/master.passwd` 를 모두 읽고 이름·홈·셸이 같은 줄은 한 번만 냄[24] |
 | The Sleuth Kit `istat` | 아이노드의 숫자 UID·GID 출력[30] |
 | Volatility 3 `linux.pslist` | 메모리의 프로세스별 UID·GID·EUID·EGID[31] |

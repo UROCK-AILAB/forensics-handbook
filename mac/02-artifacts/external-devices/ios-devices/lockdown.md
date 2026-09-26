@@ -42,7 +42,7 @@ nav_order: 1100
 | `HostID` | 호스트 식별값 |
 | `SystemBUID` | 맥을 가리키는 값이라는 설명이 있음 |
 
-`SystemBUID` 는 맥을 가리키는 값으로 `SystemConfiguration.plist` 와 각 페어링 기록에 함께 들어간다는 설명이 있습니다. 페어링 기록에 `EscrowBag` 과 `WiFiMACAddress` 키도 있다는 설명이 많으니, 이 키들이 있는지는 검체에서 확인합니다. 파일을 plist로 읽는 방법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
+`SystemBUID` 는 맥을 가리키는 값으로 `SystemConfiguration.plist` 와 각 페어링 기록에 함께 들어간다는 설명이 있습니다. 페어링 기록에 `EscrowBag` 과 `WiFiMACAddress` 키도 있다는 설명이 많으니, 이 키들이 있는지는 실제 파일에서 확인합니다. 파일을 plist로 읽는 방법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -54,7 +54,7 @@ nav_order: 1100
 | | 지금도 기기가 이 맥을 신뢰하고 있는지 |
 | | USB로 연결했는지 Wi-Fi로 연결했는지 |
 
-페어링 기록은 맥 전체에 하나라서 사용자 계정을 가려 주지 않습니다. 어느 계정에서 기기를 백업했는지는 사용자 홈 아래에 남는 [기기 백업 (MobileSync)](mobilesync.md)에서 확인합니다.
+페어링 기록은 맥 전체에 하나라서 사용자 계정을 구분해 주지 않습니다. 어느 계정에서 기기를 백업했는지는 사용자 홈 아래에 남는 [기기 백업 (MobileSync)](mobilesync.md)에서 확인합니다.
 
 ## 시각 해석
 
@@ -70,7 +70,7 @@ plist 안에 페어링 시각을 적는 키가 있다는 공개 자료는 없습
 
 ## 직접 분석해 보기
 
-헥스로 볼 때는 `<UDID>.plist` 파일을 헥스 편집기로 열어 첫 바이트로 plist 형식을 가리고, 그 형식에 맞는 방법으로 키를 따라갑니다. 형식별 머리와 읽는 순서는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다. 아래는 키 목록만 명세로 만든 예시이고, 특정 검체에서 나온 값이 아닙니다.
+헥스로 볼 때는 `<UDID>.plist` 파일을 헥스 편집기로 열어 첫 바이트로 plist 형식을 구분하고, 그 형식에 맞는 방법으로 키를 따라갑니다. 형식별 머리와 읽는 순서는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다. 아래는 키 목록만 명세로 만든 예시이고, 특정 기기에서 나온 값이 아닙니다.
 
 ```
 private/var/db/lockdown/
@@ -89,11 +89,11 @@ private/var/db/lockdown/
 
 ## 교차 검증
 
-UDID를 [기기 백업 (MobileSync)](mobilesync.md)의 백업 폴더 이름, `Info.plist` 식별값과 맞춰 보면 페어링과 백업을 같은 기기로 묶을 수 있고, 맞춰 보는 방법은 그 페이지에 있습니다. 연결 시각은 페어링 기록에서 얻기 어려워서 다른 기록으로 채웁니다. 통합 로그에서 usbmuxd·AMPDevicesAgent 프로세스 항목으로 기기 연결을 찾는다는 설명이 있으니 서브시스템 이름은 검체에서 확인합니다. 로그를 다루는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에 있습니다. 다른 외장 장치 기록과 한 시간축에 놓을 때는 [USB 저장 장치 (USB Storage)](../usb/index.md)와 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)을 함께 봅니다.
+UDID를 [기기 백업 (MobileSync)](mobilesync.md)의 백업 폴더 이름, `Info.plist` 식별값과 맞춰 보면 페어링과 백업을 같은 기기로 묶을 수 있고, 맞춰 보는 방법은 그 페이지에 있습니다. 연결 시각은 페어링 기록에서 얻기 어려워서 다른 기록으로 채웁니다. 통합 로그에서 usbmuxd·AMPDevicesAgent 프로세스 항목으로 기기 연결을 찾는다는 설명이 있으니 서브시스템 이름은 실제 로그에서 확인합니다. 로그를 다루는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에 있습니다. 다른 외장 장치 기록과 한 시간축에 놓을 때는 [USB 저장 장치 (USB Storage)](../usb/index.md)와 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)을 함께 봅니다.
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 iOS 기기를 연결한 흔적이 있는 맥 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 자료 가운데 iOS 기기를 연결한 흔적이 있는 맥 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. `private/var/db/lockdown` 폴더에서 페어링한 기기의 UDID를 모두 적어 보세요. 몇 대인가요?
 2. 각 UDID와 같은 이름의 백업 폴더가 어느 사용자 홈에 있나요? 페어링 기록은 있는데 백업이 없는 기기는 무엇을 뜻할 수 있나요?

@@ -42,13 +42,13 @@ Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 에서는 이 폴더 아래�
 
 ## 구조
 
-아래 구조는 Microsoft 365 앱 16.0.20326.20158 기준입니다. 각 칸의 공식 설명은 알려져 있지 않습니다.
+아래 구조는 Microsoft 365 앱 16.0.20326.20158 기준입니다. 각 필드의 공식 설명은 알려져 있지 않습니다.
 
 **인코딩.** JSON 은 UTF-16LE 로 저장됩니다. 첫 바이트는 `7B 00 22 00` 이고 BOM 이 없습니다. UTF-8 로 읽으면 깨집니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
 
-**맨 위 칸.**
+**맨 위 필드.**
 
-| 칸 | 내용 |
+| 필드 | 내용 |
 |---|---|
 | `LCID` | 언어 코드입니다. 예: 1042 (한국어) |
 | `ContainerUrl` | 백스테이지에서 본 폴더 경로입니다. |
@@ -57,7 +57,7 @@ Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 에서는 이 폴더 아래�
 | `Files` | 파일 항목 배열입니다. |
 | `FetchedUrl`, `RetryAfter`, `ContainerIsDefaultDrive`, `ContainerResourceId`, `Metadata` | 뜻이 알려져 있지 않습니다. |
 
-**`Files`·`Folders` 항목의 칸.** `Url`, `DisplayName`, `Author`, `ResourceId`, `RootResourceId`, `LastModified`, `SharingLevelDescription`, `OneNoteItem`, `RemoteItem`, `ThumbnailUrl`, `IsDefaultDrive`, `IsTeamChannel`, `IsPrivateChannel`, `IsSharedChannel` 이 있습니다.
+**`Files`·`Folders` 항목의 필드.** `Url`, `DisplayName`, `Author`, `ResourceId`, `RootResourceId`, `LastModified`, `SharingLevelDescription`, `OneNoteItem`, `RemoteItem`, `ThumbnailUrl`, `IsDefaultDrive`, `IsTeamChannel`, `IsPrivateChannel`, `IsSharedChannel` 이 있습니다.
 
 `LastModified` 도 FILETIME 을 10진 정수로 적은 값입니다. 실제 파일의 수정 시각 (UTC) 과 1초 안에서 맞습니다 (`MyComputer` JSON 의 파일 39개 모두).
 
@@ -77,7 +77,7 @@ Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 에서는 이 폴더 아래�
 - 캐시가 지금 상태라는 것. 캐시가 두 달 넘게 그대로인 경우가 있습니다 (아래 "시각 해석").
 - 폴더를 둘러본 정확한 때. `LastReadOn` 은 목록을 받아 둔 시각으로 보일 뿐 공식 근거가 없습니다.
 
-보고서 문장은 기록이 말하는 만큼만 씁니다.
+보고서 문장은 기록으로 확인되는 만큼만 씁니다.
 
 - 쓰지 않을 문장: "사용자가 오피스로 setup.exe 를 열었다."
 - 쓸 문장: "사용자 kim 의 `BackstageInAppNavCache\MyComputer` 아래 JSON 파일에 ContainerUrl `C:\Users\kim\Downloads` 와 Files 항목 `setup.exe` 가 있다. 이 JSON 의 LastReadOn 은 2026-07-07 00:26:16 UTC 이다. 이는 그 무렵 오피스 백스테이지 캐시에 이 폴더의 내용 목록이 있었다는 기록이다." (예시 문장입니다. 시각은 아래 풀이 예와 같습니다.)
@@ -101,14 +101,14 @@ FILETIME 푸는 법은 [시각 값 형식](../../../01-foundations/value-decodin
 - **UTF-8 검색으로는 못 찾습니다.** BOM 없는 UTF-16LE 입니다. 파일 이름이나 경로를 키워드로 찾을 때 두 인코딩으로 모두 찾습니다 ([파일 내용 검색](../../../03-techniques/analysis/content-search/index.md)).
 - **연 파일 목록이 아닙니다.** `Files` 항목을 "오피스로 열었다" 로 옮기지 않습니다.
 - **캐시가 오래됐을 수 있습니다.** `LastReadOn` 을 보고 캐시가 언제 적 목록인지 먼저 적습니다.
-- **칸 목록은 달라질 수 있습니다.** 위 칸 목록은 Microsoft 365 앱 16.0.20326.20158 기준이라, 버전과 계정 종류에 따라 칸이 다를 수 있습니다.
+- **필드 목록은 달라질 수 있습니다.** 위 필드 목록은 Microsoft 365 앱 16.0.20326.20158 기준이라, 버전과 계정 종류에 따라 필드가 다를 수 있습니다.
 - **폴더 이름에 계정이 들어갑니다.** 보고서에 옮길 때 개인정보 처리 기준을 따릅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 바이트는 위 첫 바이트 모양과 칸 이름으로 만든 예시입니다. 실제 파일의 칸 순서와 값은 다를 수 있습니다.
+아래 바이트는 위 첫 바이트 모양과 필드 이름으로 만든 예시입니다. 실제 파일의 필드 순서와 값은 다를 수 있습니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
@@ -138,7 +138,7 @@ FILETIME 푸는 법은 [시각 값 형식](../../../01-foundations/value-decodin
 1. `BackstageInAppNavCache` 폴더를 하위 폴더까지 통째로 수집합니다.
 2. 도구로 `ContainerUrl`, `LastReadOn`, `Files` 의 `DisplayName`·`LastModified` 를 뽑습니다.
 3. JSON 파일 하나를 직접 열어 도구 결과와 항목 수, 시각을 맞춰 봅니다.
-4. `LastReadOn` 을 그 JSON 파일의 파일시스템 수정 시각과 견줍니다.
+4. `LastReadOn` 을 그 JSON 파일의 파일시스템 수정 시각과 비교합니다.
 5. 결과가 다르면 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
 ## 교차 검증
@@ -155,14 +155,14 @@ FILETIME 푸는 법은 [시각 값 형식](../../../01-foundations/value-decodin
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 오피스를 쓴 사용자 프로필이 있는 이미지를 고릅니다. 오피스를 설치한 가상 머신을 직접 만들어도 됩니다.
+NIST CFReDS 같은 공개 시험 이미지 가운데 오피스를 쓴 사용자 프로필이 있는 이미지를 고릅니다. 오피스를 설치한 가상 머신을 직접 만들어도 됩니다.
 
 1. 사용자마다 `BackstageInAppNavCache` 의 하위 폴더 이름을 적습니다. 어떤 계정이 보이나요?
 2. JSON 파일 하나를 UTF-8 과 UTF-16LE 로 각각 열어 봅니다.
 3. `MyComputer` 의 `ContainerUrl` 과 `Files` 목록을 뽑고, 지금 디스크에 없는 파일을 고릅니다.
-4. `LastModified` 와 $MFT 의 수정 시각을 견줍니다.
-5. `LastReadOn` 과 File MRU 의 가장 최근 T 값을 견줍니다. 캐시가 마지막 오피스 사용보다 오래됐나요?
-6. 결과로 보고서 문장을 하나 씁니다. "열었다" 가 아니라 기록이 말하는 만큼만 씁니다.
+4. `LastModified` 와 $MFT 의 수정 시각을 비교합니다.
+5. `LastReadOn` 과 File MRU 의 가장 최근 T 값을 비교합니다. 캐시가 마지막 오피스 사용보다 오래됐나요?
+6. 결과로 보고서 문장을 하나 씁니다. "열었다" 가 아니라 기록으로 확인되는 만큼만 씁니다.
 
 ## 참고 문헌
 

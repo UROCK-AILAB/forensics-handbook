@@ -49,7 +49,7 @@ Windows 11 의 폴더 내용 예시입니다.
 | edbres00001.jrs, edbres00002.jrs | 각 1,310,720 |
 
 - Windows 11 의 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\BITS` 에는 `JobInactivityTimeout`=7,776,000 과 `JobNoProgressTimeout`=1,209,600 같은 값이 있습니다. 초로 읽으면 90일과 14일입니다.
-- 완료된 작업이 DB 에 얼마나 남는지는 검체에서 확인합니다.
+- 완료된 작업이 DB 에 얼마나 남는지는 실제 데이터로 확인합니다.
 - 이벤트 로그 채널은 `Microsoft-Windows-Bits-Client/Operational` 입니다. 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Bits-Client%4Operational.evtx` 입니다.
 
 ## 구조
@@ -108,7 +108,7 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 | 작업 식별 | `{8F5657D0-012C-4E3E-AD2C-F4A5D7656FAF}` |
 | 작업 식별 | `{94416750-0357-461D-A4CC-5DD9990706E4}` |
 
-- GUID 를 바이트로 적는 규칙은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. `qmgr.db` 안에서 이 GUID 가 어떤 바이트 순서로 들어 있는지는 검체에서 확인합니다.
+- GUID 를 바이트로 적는 규칙은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다. `qmgr.db` 안에서 이 GUID 가 어떤 바이트 순서로 들어 있는지는 실제 파일로 확인합니다.
 - ESE 파일 안에 지운 행이 어떻게 남는지는 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md) 에서 다룹니다.
 
 ## 증거로서 의미
@@ -132,19 +132,19 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 
 - 켜진 PC 의 API(`Get-BitsTransfer`)는 CreationTime·ModificationTime·TransferCompletionTime 속성을 보여 줍니다. 같은 API 는 NotifyCmdLine·OwnerAccount·FileList·JobState 도 보여 줍니다.
 - 오프라인 DB 에서는 시각을 이벤트 로그와 파일 시스템 시각으로 보탭니다.
-- `Microsoft-Windows-Bits-Client/Operational` 의 주요 이벤트는 아래와 같습니다. 메시지와 칸은 Windows 11 의 공급자 메시지 기준입니다.
+- `Microsoft-Windows-Bits-Client/Operational` 의 주요 이벤트는 아래와 같습니다. 메시지와 필드는 Windows 11 의 공급자 메시지 기준입니다.
 
-| 이벤트 | 뜻 | 칸 |
+| 이벤트 | 뜻 | 필드 |
 |---|---|---|
 | 3 | 새 작업을 만들었습니다 | jobTitle, jobId, jobOwner, processPath, processId, ClientProcessStartKey |
 | 4 | 전송 작업을 마쳤습니다 | User, jobTitle, jobId, jobOwner, fileCount, bytesTransferred, bytesTransferredFromPeer |
 | 5 | 작업을 취소했습니다 | |
 | 59 | 이 URL 의 전송을 시작했습니다 | transferId, name, Id, url, peer, fileTime, fileLength, bytesTotal, bytesTransferred, bytesTransferredFromPeer |
-| 60 | 이 URL 의 전송을 멈췄습니다. 상태 코드가 함께 남습니다 | 59 의 칸에 hr(상태 코드), proxy 등이 더 있습니다 |
+| 60 | 이 URL 의 전송을 멈췄습니다. 상태 코드가 함께 남습니다 | 59 의 필드에 hr(상태 코드), proxy 등이 더 있습니다 |
 | 61 | 60 과 메시지 문구가 같습니다 | |
 | 64 | 전송 뒤 실행하도록 설정된 프로그램을 띄우지 못했습니다. BITS 는 성공할 때까지 주기적으로 다시 시도합니다 | |
 
-- 이벤트 3 은 버전마다 칸이 다릅니다. 버전 0 에는 작업 이름과 소유자만 있고, 버전 2 부터 Process Path·Process ID 가 있습니다. Windows 11 에서는 템플릿이 버전 3 입니다.
+- 이벤트 3 은 버전마다 필드가 다릅니다. 버전 0 에는 작업 이름과 소유자만 있고, 버전 2 부터 Process Path·Process ID 가 있습니다. Windows 11 에서는 템플릿이 버전 3 입니다.
 - 먼저 볼 이벤트는 3(작업 생성), 61(전송 중지 경고), 64(알림 명령 경고) 입니다[1]. 64 에는 작업 이름·대상 실행 파일·URL 이 보입니다.
 - 이벤트 로그 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
@@ -157,13 +157,13 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 - **압수 이미지의 `qmgr.db` 는 비정상 종료 상태일 수 있습니다.** 손상된 ESE DB 는 읽는 방식마다 행 수가 다를 수 있습니다. 로그를 함께 수집하고 [트랜잭션 로그와 비정상 종료 상태](../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md) 를 봅니다.
 - **이벤트 64 는 실패의 기록입니다.** 알림 명령이 성공했을 때 남는 BITS 이벤트는 공개 자료에 없으므로, 실행은 프로세스 생성 기록으로 봅니다.
 - **이벤트 61 과 60 은 메시지 문구가 같습니다.** 이벤트 ID 로 구별합니다.
-- **Windows 10 이전 검체는 형식이 다릅니다.** `qmgr0.dat`·`qmgr1.dat` 를 찾습니다.
+- **Windows 10 이전 시스템은 형식이 다릅니다.** `qmgr0.dat`·`qmgr1.dat` 를 찾습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 바이트는 형식에 맞춰 만든 예시입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+아래 바이트는 형식에 맞춰 만든 예시입니다. 특정 기기에서 꺼낸 값이 아닙니다.
 
 **`qmgr.db` 앞 12바이트.**
 
@@ -204,16 +204,16 @@ ESE 데이터베이스 자체의 구조는 [ESE 데이터베이스](../../01-fou
 | 마스터 파일 테이블 | 목적지 파일이 만들어진 시각 | [마스터 파일 테이블](../filesystem/mft.md) |
 | 다른 자동실행 위치 | 같은 명령이 다른 자리에도 있나 | [로그온 자동실행](run-runonce-startup-folder.md), [예약 작업](scheduled-tasks/index.md) |
 
-자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
+자동실행 위치 전체를 살펴보는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 `Downloader` 폴더와 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)에서 `Downloader` 폴더와 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
 
-1. 검체의 Windows 버전으로 보아 어느 파일을 찾아야 합니까? 그 파일이 있습니까?
+1. 이미지의 Windows 버전으로 보면 어느 파일을 찾아야 합니까? 그 파일이 있습니까?
 2. `qmgr.db` 의 오프셋 4 에 ESE 서명이 있습니까? 헤더로 보아 비정상 종료 상태입니까?
 3. 파서로 읽은 작업 가운데 알림 명령이 있는 작업이 있습니까? 명령은 무엇을 가리킵니까?
-4. 지운 작업을 복구한 결과와 살아 있는 작업 목록이 어떻게 다릅니까?
+4. 지운 작업을 복구한 결과와 남아 있는 작업 목록이 어떻게 다릅니까?
 5. Bits-Client/Operational 로그는 며칠 치를 담고 있습니까? 이벤트 3 의 processPath 에는 어떤 프로그램들이 나옵니까?
 
 ## 참고 문헌

@@ -143,7 +143,7 @@ odl.py 와 OneDriveExplorer 는 지원 확장자를 `.odl`, `.odlgz`, `.odlsent`
 
 ### 새 방식: general.keystore 와 AES
 
-적어도 2022년 4월 이후 버전은 사전을 쓰지 않고 가릴 값을 AES 로 암호화합니다. 키는 `general.keystore` 에 있는데, 이 파일은 JSON 이고 `"Key"`(base64)와 `"Version"` 칸이 있습니다. 푸는 법은 AES-CBC 이며 IV 는 0 으로 채운 16바이트이고, 푼 뒤 끝의 패딩을 떼어 냅니다. 암호문 base64 는 `_` 를 `/` 로, `-` 를 `+` 로 바꾼 뒤 읽습니다. OneDriveExplorer 는 `general.keystore` 말고 `vault.keystore` 도 받습니다.
+적어도 2022년 4월 이후 버전은 사전을 쓰지 않고 가릴 값을 AES 로 암호화합니다. 키는 `general.keystore` 에 있는데, 이 파일은 JSON 이고 `"Key"`(base64)와 `"Version"` 필드가 있습니다. 푸는 법은 AES-CBC 이며 IV 는 0 으로 채운 16바이트이고, 푼 뒤 끝의 패딩을 떼어 냅니다. 암호문 base64 는 `_` 를 `/` 로, `-` 를 `+` 로 바꾼 뒤 읽습니다. OneDriveExplorer 는 `general.keystore` 말고 `vault.keystore` 도 받습니다.
 
 `general.keystore` 는 `logs\Personal`, `logs\Business1`, `logs\Common` 에 각각 있습니다.
 
@@ -161,7 +161,7 @@ odl.py 와 OneDriveExplorer 는 지원 확장자를 `.odl`, `.odlgz`, `.odlsent`
 
 ### 증명하지 못하는 것
 
-- 사용자가 직접 한 동작인지, 앱이 스스로 한 동기화인지는 함수 이름만으로 가리기 어렵습니다.
+- 사용자가 직접 한 동작인지, 앱이 스스로 한 동기화인지는 함수 이름만으로 구분하기 어렵습니다.
 - 넘긴 값의 형식이 다 밝혀지지 않았습니다. 도구가 보여 주는 값의 뜻을 단정하지 않습니다.
 - 키 파일이 없으면 어느 파일인지 알 수 없습니다.
 - 로그가 없다고 활동이 없었던 것은 아닙니다. 계정 폴더 로그는 4~5일 치만 남기도 합니다.
@@ -185,13 +185,13 @@ OneDrive 레지스트리와 동기화 DB 의 시각은 Unix **초** 이고 로�
 - **사전 방식의 키는 다시 쓰입니다.** 옛 로그를 지금 사전으로 풀면 다른 이름이 나올 수 있습니다.
 - **로그는 금방 지워집니다.** 사건 뒤 시간이 지났다면 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 이나 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 로 옛 로그 파일을 찾습니다.
 - **형식이 앱 버전에 따라 바뀝니다.** 파일 머리의 `odl_version` 을 먼저 보고, 도구가 그 버전을 읽는지 확인합니다.
-- **빈 곳을 짐작으로 채우지 않습니다.** 파일 머리의 unknown 칸과 레코드 머리의 unk 칸은 뜻이 밝혀지지 않았습니다.
+- **빈 곳을 짐작으로 채우지 않습니다.** 파일 머리의 unknown 필드와 레코드 머리의 unk 필드는 뜻이 밝혀지지 않았습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 odl.py 의 구조 정의로 만든 예시입니다. 특정 파일에서 나온 값이 아닙니다. `vv`·`uu` 는 버전과 unknown 칸 자리입니다.
+아래는 odl.py 의 구조 정의로 만든 예시입니다. 특정 파일에서 나온 값이 아닙니다. `vv`·`uu` 는 버전과 unknown 필드 자리입니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -203,7 +203,7 @@ OneDrive 레지스트리와 동기화 DB 의 시각은 Unix **초** 이고 로�
 
 1. 0x00 의 8바이트가 `EBFGONED` 인지 봅니다. 아니면 ODL 파일이 아닙니다.
 2. 0x08 의 `odl_version` 으로 레코드 머리가 32바이트인지 56바이트인지 정합니다.
-3. 0x100 의 네 바이트로 압축 여부를 가립니다. `1F 8B 08 00` 이면 그 뒤를 풀고 나서 레코드를 찾습니다.
+3. 0x100 의 네 바이트로 압축 여부를 판별합니다. `1F 8B 08 00` 이면 그 뒤를 풀고 나서 레코드를 찾습니다.
 4. 레코드 머리의 `timestamp` 를 Unix 밀리초로 바꿉니다. 예를 들어 1704067200000 이면 1000 으로 나눈 1704067200 초이고, 2024-01-01 00:00:00 UTC 입니다.
 
 ### 공개 도구로 한 번
@@ -227,7 +227,7 @@ OneDrive 레지스트리와 동기화 DB 의 시각은 Unix **초** 이고 로�
 
 ## 실습
 
-OneDrive 를 쓴 공개 검체(NIST CFReDS 등)에서 사용자의 `AppData\Local\Microsoft\OneDrive\logs` 폴더를 통째로 꺼내 아래 질문을 풀어 봅니다.
+OneDrive 를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 사용자의 `AppData\Local\Microsoft\OneDrive\logs` 폴더를 통째로 꺼내 아래 질문을 풀어 봅니다.
 
 1. 하위 폴더마다 확장자별 파일 수는 몇 개입니까? `.aodl` 과 `.aold` 가운데 어느 표기입니까?
 2. 파일 하나를 골라 0x08 의 `odl_version` 과 0x1C·0x5C 의 버전 문자열을 읽습니다.

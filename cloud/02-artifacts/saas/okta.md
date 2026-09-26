@@ -32,13 +32,13 @@ API 인자는 다음과 같습니다[2].
 |---|---|---|
 | `since` | 아래쪽 시각 경계. 경계 요청이면 `published`, 폴링 요청이면 내부 저장 시각에 적용 | `until` 의 7일 전 |
 | `until` | 위쪽 시각 경계 | 현재 시각 |
-| `after` | 다음 쪽 커서. 응답 `Link` 헤더의 `rel="next"` 주소에 들어 있는 불투명한 값 | 없음 |
+| `after` | 다음 페이지 커서. 응답 `Link` 헤더의 `rel="next"` 주소에 들어 있는 불투명한 값 | 없음 |
 | `filter` | SCIM 필터 식. `[ ]` 를 뺀 연산자를 씀 | 없음 |
-| `q` | 대소문자를 가리지 않는 키워드. 키워드 하나에 40자, 최대 10개 | 없음 |
+| `q` | 대소문자를 구분하지 않는 키워드. 키워드 하나에 40자, 최대 10개 | 없음 |
 | `limit` | 한 번에 돌려받을 개수, 0~1000 | 100 |
 | `sortOrder` | `ASCENDING` 또는 `DESCENDING` | `ASCENDING` |
 
-API 요청은 두 종류로 나뉘고 정렬 기준이 다릅니다[1]. `until` 을 비우고 `ASCENDING` 으로 보내면 폴링 요청 (polling request) 이고, 이벤트가 로그에 실제로 저장된 내부 시각 (persistence time) 순으로 나오므로 `published` 순서와 어긋날 수 있으며 `next` 링크가 끝없이 붙습니다. `since` 와 `until` 을 모두 주면 경계 요청 (bounded request) 이고, `published` 로 거르고 정렬하며 마지막 쪽에는 `next` 링크가 없습니다. 경계 요청에서도 늦게 들어온 이벤트는 드물게 빠질 수 있습니다[1]. 질의 하나의 제한 시간은 30초입니다[1].
+API 요청은 두 종류로 나뉘고 정렬 기준이 다릅니다[1]. `until` 을 비우고 `ASCENDING` 으로 보내면 폴링 요청 (polling request) 이고, 이벤트가 로그에 실제로 저장된 내부 시각 (persistence time) 순으로 나오므로 `published` 순서와 어긋날 수 있으며 `next` 링크가 끝없이 붙습니다. `since` 와 `until` 을 모두 주면 경계 요청 (bounded request) 이고, `published` 로 거르고 정렬하며 마지막 페이지에는 `next` 링크가 없습니다. 경계 요청에서도 늦게 들어온 이벤트는 드물게 빠질 수 있습니다[1]. 질의 하나의 제한 시간은 30초입니다[1].
 
 ## 구조
 
@@ -89,7 +89,7 @@ JSON 로그를 읽는 일반 방법은 [JSON 로그 읽기](../../01-foundations
 
 ## 조사에 쓰는 이벤트
 
-| 갈래 | eventType | 뜻 |
+| 분류 | eventType | 뜻 |
 |---|---|---|
 | 로그인·세션 | `user.session.start` | Okta 로그인. 실패는 `outcome.result` 가 `FAILURE`[1][3] |
 | | `user.session.end`, `user.session.clear` | 로그아웃, 세션 지움[3] |
@@ -147,8 +147,8 @@ JSON 로그를 읽는 일반 방법은 [JSON 로그 읽기](../../01-foundations
 - 전체를 옮길 때 `since`·`until` 로 기간을 직접 잘라 가며 받으면 이벤트가 빠지거나 겹칠 수 있습니다[1]. `since` 만 주고 `next` 링크를 끝까지 따라갑니다.
 - `target` 배열 안에서 위치(첫 번째, 두 번째)로 값을 찾으면 안 됩니다. 대상 종류가 늘 같은 자리에 있지 않으므로 `type` 으로 찾습니다[2].
 - 로그인 실패는 세션이 생기지 않아 `externalSessionId` 가 `null` 입니다[1]. 세션 ID 로만 묶으면 실패 이벤트가 빠집니다.
-- Okta 시스템 행위자가 사용자 대신 한 동작은 `externalSessionId` 가 다를 수 있습니다[1]. 이런 이벤트는 `authenticationContext.rootSessionId` 로 한데 묶습니다[1]. 이 필드는 API 명세의 응답 예에는 나오지만 `LogAuthenticationContext` 속성 목록에는 없으므로[2], 검체에 실제로 있는지 먼저 봅니다.
-- 로그 스트림 대상이 응답하지 않으면 Okta 는 전달을 두 번 시도해 실패하면 스트림을 끄고 `system.log_stream.lifecycle.deactivate` 를 남깁니다[9]. 관리자가 다시 켜기 전까지는 전송이 멈추고 재전송 기능도 없습니다[9]. SIEM 에 빈 구간이 있으면 이 이벤트부터 찾고, 빈 구간은 90일 안이라면 API 로 채웁니다. 누가 일부러 껐는지는 같은 이벤트의 `actor` 로 가립니다([로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)).
+- Okta 시스템 행위자가 사용자 대신 한 동작은 `externalSessionId` 가 다를 수 있습니다[1]. 이런 이벤트는 `authenticationContext.rootSessionId` 로 한데 묶습니다[1]. 이 필드는 API 명세의 응답 예에는 나오지만 `LogAuthenticationContext` 속성 목록에는 없으므로[2], 실제 데이터에 있는지 먼저 봅니다.
+- 로그 스트림 대상이 응답하지 않으면 Okta 는 전달을 두 번 시도해 실패하면 스트림을 끄고 `system.log_stream.lifecycle.deactivate` 를 남깁니다[9]. 관리자가 다시 켜기 전까지는 전송이 멈추고 재전송 기능도 없습니다[9]. SIEM 에 빈 구간이 있으면 이 이벤트부터 찾고, 빈 구간은 90일 안이라면 API 로 채웁니다. 누가 일부러 껐는지는 같은 이벤트의 `actor` 로 구분합니다([로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)).
 - `user.authentication.auth_via_mfa` 는 Classic 과 Identity Engine 에서 생기는 범위가 달라, 두 조직의 개수를 그대로 비교하면 안 됩니다[3].
 - 관리 콘솔의 `contains` 연산자는 `debugContext.debugData.url`·`requestUri` 에 쓸 수 없습니다[8]. `changeDetails` 와 그 안의 `from`·`to` 도 질의 조건으로 쓸 수 없습니다[2].
 - 조회 가이드의 오류 예시에는 "180 days" 라는 문구가 있지만, 같은 가이드의 보관 절과 다른 문서는 모두 90일입니다[1][6][8]. 보관 기간은 90일로 봅니다.
@@ -186,7 +186,7 @@ GET /api/v1/logs?since=2026-02-01T00:00:00.000Z&until=2026-03-01T00:00:00.000Z&f
 | Okta User Account Locked Out | `displayMessage: Max sign in attempts exceeded` |
 | MFA 해제, 관리자 역할 할당, API 토큰 생성·폐기, IdP 생성, 네트워크 영역 비활성·삭제, 정책·규칙 변경, 위협 감지, 사용자 신고, 사용자 생성 | `eventType` 하나 또는 몇 개(위 이벤트 표에 없는 `policy.lifecycle.update`·`.delete` 도 씀) |
 
-Potential Okta Password in AlternateID Field 규칙은 사용자가 아이디 칸에 비밀번호를 넣어 그 비밀번호가 로그에 남은 경우를 찾습니다[10]. 이 규칙에 걸린 레코드의 `actor.alternateId` 에는 실제 비밀번호가 들어 있을 가능성이 있습니다. 이런 레코드는 보고서·공유 자료에서 가립니다. 규칙 적용 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
+Potential Okta Password in AlternateID Field 규칙은 사용자가 아이디 입력란에 비밀번호를 넣어 그 비밀번호가 로그에 남은 경우를 찾습니다[10]. 이 규칙에 걸린 레코드의 `actor.alternateId` 에는 실제 비밀번호가 들어 있을 가능성이 있습니다. 이런 레코드는 보고서·공유 자료에서 가립니다. 규칙 적용 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
 
 ## 교차 검증
 
@@ -209,7 +209,7 @@ Potential Okta Password in AlternateID Field 규칙은 사용자가 아이디 �
 4. SIEM 에서 사흘 동안 Okta 이벤트가 비어 있다. 어떤 이벤트를 먼저 찾고, 빈 구간은 어디서 채우는가?
 5. 넉 달 전의 관리자 역할 할당을 확인해야 한다. Okta 에서 직접 받을 수 있는가? 받을 수 없다면 어디를 찾는가?
 
-보고서 문장 예는 "2026-03-02 01:14:07 UTC 에 user@example.com 계정으로 IP 203.0.113.25 에서 비밀번호 로그인에 실패한 기록(`outcome.reason` INVALID_CREDENTIALS)이 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시). 계정 탈취 흐름은 [토큰을 훔쳐 로그인했나](../../04-scenarios/account-compromise/token-theft.md)와 [MFA 피로 공격을 당했나](../../04-scenarios/account-compromise/mfa-fatigue.md)에서 이어집니다.
+보고서 문장 예는 "2026-03-02 01:14:07 UTC 에 user@example.com 계정으로 IP 203.0.113.25 에서 비밀번호 로그인에 실패한 기록(`outcome.reason` INVALID_CREDENTIALS)이 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시). 계정 탈취 흐름은 [토큰을 훔쳐 로그인했나](../../04-scenarios/account-compromise/token-theft.md)와 [MFA 피로 공격을 당했나](../../04-scenarios/account-compromise/mfa-fatigue.md)에서 이어집니다.
 
 ## 참고 문헌
 

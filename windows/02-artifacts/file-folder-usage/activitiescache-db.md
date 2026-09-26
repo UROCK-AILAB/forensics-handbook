@@ -8,7 +8,7 @@ nav_order: 1320
 
 ## 한 줄 요약
 
-윈도 타임라인 (Windows Timeline) 의 활동 기록은 계정마다 SQLite 데이터베이스 `ActivitiesCache.db` 에 남습니다. 앱을 열거나 쓴 활동, 파일과 웹페이지를 연 활동, 클립보드 활동이 행 하나씩 들어갑니다. 다른 기기에서 동기화된 행이 섞일 수 있고, 시각 칸은 Unix 초로 풀립니다.
+윈도 타임라인 (Windows Timeline) 의 활동 기록은 계정마다 SQLite 데이터베이스 `ActivitiesCache.db` 에 남습니다. 앱을 열거나 쓴 활동, 파일과 웹페이지를 연 활동, 클립보드 활동이 행 하나씩 들어갑니다. 다른 기기에서 동기화된 행이 섞일 수 있고, 시각 열은 Unix 초로 풀립니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -48,7 +48,7 @@ nav_order: 1320
 %LOCALAPPDATA%\ConnectedDevicesPlatform\<계정 폴더>\ActivitiesCache.db
 ```
 
-- `ConnectedDevicesPlatform` 폴더 아래에 계정마다 폴더가 하나씩 있습니다. 로컬 계정은 `L.<사용자>` 폴더, 그 밖의 계정은 AAD·MSA 이름 규칙의 폴더를 쓴다는 설명이 널리 쓰입니다. 이 규칙을 뒷받침하는 공개 문서가 드물어 검체의 폴더를 모두 확인합니다.
+- `ConnectedDevicesPlatform` 폴더 아래에 계정마다 폴더가 하나씩 있습니다. 로컬 계정은 `L.<사용자>` 폴더, 그 밖의 계정은 AAD·MSA 이름 규칙의 폴더를 쓴다는 설명이 널리 쓰입니다. 이 규칙을 뒷받침하는 공개 문서가 드물므로 실제 이미지의 폴더를 모두 확인합니다.
 - DB 옆에 `ActivitiesCache.db-wal` 과 `ActivitiesCache.db-shm` 이 함께 있습니다. 세 파일을 함께 수집하며, 이유는 "구조" 에서 설명합니다.
 - 사용자 프로필 폴더 안이라 어느 Windows 사용자의 기록인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
@@ -72,7 +72,7 @@ GUID 표기는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid
 
 - Windows 11 에서 타임라인 화면이 없어졌다는 설명이 널리 쓰이지만, Microsoft 문서[2]에는 그런 설명이 없습니다.
 - 화면이 없어도 DB 는 남고 계속 기록됩니다. Windows 11 25H2 에서 16진수 이름 폴더의 `-wal` 크기가 몇 분 사이에 4,152 바이트에서 935,272 바이트로 늘어난 예가 있습니다.
-- 검체의 버전은 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 먼저 확인합니다.
+- 분석 대상의 버전은 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 먼저 확인합니다.
 
 ## 구조
 
@@ -90,26 +90,26 @@ WAL 파일을 읽는 방법과 지운 행이 남는 자리는 [SQLite 데이터�
 
 Windows 11 25H2 의 DB 에는 다음 표가 있습니다.
 
-| 표 | 칸 또는 내용 |
+| 표 | 열 또는 내용 |
 |---|---|
-| `Activity` | 활동 행. 아래 표에 칸을 적었습니다 |
-| `ActivityOperation` | `Activity` 와 비슷한 칸에 `OperationOrder`, `OperationType`, `CreatedTime`, `OperationExpirationTime`, `CorrelationVector`, `UploadAllowedByPolicy`, `PatchFields`, `ThrottleReleaseTime`, `PublishProcessStatus` 가 더 있습니다 |
+| `Activity` | 활동 행. 아래 표에 열을 적었습니다 |
+| `ActivityOperation` | `Activity` 와 비슷한 열에 `OperationOrder`, `OperationType`, `CreatedTime`, `OperationExpirationTime`, `CorrelationVector`, `UploadAllowedByPolicy`, `PatchFields`, `ThrottleReleaseTime`, `PublishProcessStatus` 가 더 있습니다 |
 | `Activity_PackageId` | `ActivityId`, `Platform`, `PackageName`, `ExpirationTime` |
-| `SmartLookup` | `Activity` 와 거의 같은 칸에 `IsInUploadQueue` 가 더 있습니다 |
+| `SmartLookup` | `Activity` 와 거의 같은 열에 `IsInUploadQueue` 가 더 있습니다 |
 | `Metadata` | DB 설정. 키는 `CurrentEtag`, `CurrentSettings`, `DatabaseActivityPolicies`, `DatabaseInstanceId`, `DatabaseInstanceIdUpdateTime`, `DatabaseNotificationSubscriptionInfo`, `PendingFirstDEKUpload` 입니다 |
-| `AppSettings`, `Asset`, `DataEncryptionKeys`, `ManualSequence` | 칸의 뜻은 공개 자료에 나와 있지 않습니다 |
+| `AppSettings`, `Asset`, `DataEncryptionKeys`, `ManualSequence` | 열의 뜻은 공개 자료에 나와 있지 않습니다 |
 
 분석에서 주로 다루는 표는 `Activity` ("Activities" 로 적기도 합니다), `Activity_PackageID`, `ActivityOperation` 입니다[1].
 
-### Activity 표의 칸
+### Activity 표의 열
 
-Windows 11 25H2 에서 `Activity` 표의 칸은 다음과 같습니다.
+Windows 11 25H2 에서 `Activity` 표의 열은 다음과 같습니다.
 
 `Id`, `AppId`, `PackageIdHash`, `AppActivityId`, `ActivityType`, `ActivityStatus`, `ParentActivityId`, `Tag`, `Group`, `MatchId`, `LastModifiedTime`, `ExpirationTime`, `Payload`, `Priority`, `IsLocalOnly`, `PlatformDeviceId`, `DdsDeviceId`, `CreatedInCloud`, `StartTime`, `EndTime`, `LastModifiedOnClient`, `GroupAppActivityId`, `ClipboardPayload`, `EnterpriseId`, `OriginalPayload`, `UserActionState`, `IsRead`, `OriginalLastModifiedOnClient`, `GroupItems`, `LocalExpirationTime`, `ETag`
 
-분석에 자주 쓰는 칸은 다음과 같습니다.
+분석에 자주 쓰는 열은 다음과 같습니다.
 
-| 칸 | 형태 | 알려진 내용 |
+| 열 | 형태 | 알려진 내용 |
 |---|---|---|
 | `Id` | GUID | 행 식별자 |
 | `AppId` | `[{"application":…, "platform":…}]` 모양의 JSON 배열 문자열 | 활동과 연결된 앱 |
@@ -117,7 +117,7 @@ Windows 11 25H2 에서 `Activity` 표의 칸은 다음과 같습니다.
 | `Payload` | BLOB | JSON 으로 알려져 있습니다[1]. 전체를 조회하려면 SQLite JSON1 확장이 필요합니다 |
 | `ClipboardPayload` | BLOB | Base64 로 인코딩한 텍스트 |
 | `PlatformDeviceId` | — | 활동이 나온 기기. 이 값을 HKCU 의 DeviceCache 항목과 맞춰 기기를 찾습니다. 같은 기기의 값도 시간이 지나면 바뀝니다[1] |
-| `StartTime`, `EndTime`, `LastModifiedTime`, `ExpirationTime`, `CreatedInCloud`, `LastModifiedOnClient` | `StartTime`·`LastModifiedTime` 은 INTEGER | Unix 초로 풀립니다. 칸마다의 정확한 뜻은 아래 "시각 해석" 을 봅니다 |
+| `StartTime`, `EndTime`, `LastModifiedTime`, `ExpirationTime`, `CreatedInCloud`, `LastModifiedOnClient` | `StartTime`·`LastModifiedTime` 은 INTEGER | Unix 초로 풀립니다. 열마다의 정확한 뜻은 아래 "시각 해석" 을 봅니다 |
 
 - DeviceCache 의 전체 키 경로는 공개 자료에 나와 있지 않습니다. 흔히 `HKCU\Software\Microsoft\Windows\CurrentVersion\TaskFlow\DeviceCache` 로 설명하는 키가 Windows 11 25H2 에는 없을 수 있습니다.
 - `Metadata` 의 `CurrentSettings` 값은 `{"ActivityTypes":[0,1,3,4,7,11,12,13,15,16],"Environment":"prod"}` 와 같은 모양입니다. `AAD.<GUID>` 폴더 DB 에서는 `ActivityTypes` 가 `[0,1,3,4,7,13,16]` 인 예가 있습니다.
@@ -129,12 +129,12 @@ Windows 11 25H2 에서 `Activity` 표의 칸은 다음과 같습니다.
 | 이 계정 폴더의 DB 에 이 활동 행이 있습니다 | 그 행이 이 PC 에서 생겼는지. 다른 기기에서 동기화된 행일 수 있습니다 |
 | 유형 5 행이 있으면, 활동 기록에 앱·파일·웹페이지를 연 활동이 올라갔습니다 | 파일 내용을 읽거나 고쳤는지 |
 | 유형 6 행이 있으면, 활동 기록에 그 앱을 쓰던 활동이 올라갔습니다 | 그 계정 앞에 실제로 누가 앉아 있었는지 |
-| `PlatformDeviceId` 로 행이 어느 기기에서 왔는지 가를 실마리. 같은 기기의 값도 시간이 지나면 바뀔 수 있습니다 | 시각 칸 하나하나의 정확한 뜻 |
+| `PlatformDeviceId` 로 행이 어느 기기에서 왔는지 가를 실마리. 같은 기기의 값도 시간이 지나면 바뀔 수 있습니다 | 시각 열 하나하나의 정확한 뜻 |
 | 유형 10 행에 `ClipboardPayload` 가 있으면 그 클립보드 텍스트 | 행이 없으니 활동도 없었다는 것 |
 | | 암호화된 `Payload` 의 내용 |
 
 - 행이 없는 이유는 여러 가지입니다. 설정을 껐을 수 있고, 기록을 지웠을 수 있고, DB 가 그 유형을 모으지 않았을 수 있습니다.
-- 다른 기기의 행을 이 PC 의 행과 섞어 읽지 않고, 기기를 먼저 가른 뒤에 해석합니다. 사람을 가리는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- 다른 기기의 행을 이 PC 의 행과 섞어 읽지 않고, 기기를 먼저 가른 뒤에 해석합니다. 사람을 가려내는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 ### 보고서 문장
 
@@ -145,7 +145,7 @@ Windows 11 25H2 에서 `Activity` 표의 칸은 다음과 같습니다.
 
 ## 시각 해석
 
-| 칸 | 형식 | 알려진 것 |
+| 열 | 형식 | 알려진 것 |
 |---|---|---|
 | `StartTime` | Unix 초, INTEGER | 이름은 시작 시각이지만, 정확한 뜻은 공개 자료에 나와 있지 않습니다 |
 | `EndTime` | Unix 초 | Windows 11 25H2 에서 모든 행이 0 인 예가 있습니다 |
@@ -177,12 +177,12 @@ Windows 11 25H2 에서 `Activity` 표의 칸은 다음과 같습니다.
    - `AAD.<GUID>` 폴더 DB 는 `Activity` 와 `ActivityOperation` 이 모두 0행입니다.
 
    두 DB 의 `CurrentSettings` 에 있는 `ActivityTypes` 목록에도 5 와 6 이 없습니다. 이 목록과 유형 5·6 행이 없는 것이 관계있는지는 알려져 있지 않습니다.
-5. **`Payload` 를 모두 JSON 으로 읽습니다.** Windows 11 25H2 에서 `Payload` 는 BLOB 칸에 Base64 ASCII 텍스트로 들어 있을 수 있습니다.
+5. **`Payload` 를 모두 JSON 으로 읽습니다.** Windows 11 25H2 에서 `Payload` 는 BLOB 열에 Base64 ASCII 텍스트로 들어 있을 수 있습니다.
    - 유형 15 는 Base64 를 풀면 DER 로 된 CMS EnvelopedData (OID 1.2.840.113549.1.7.3) 입니다.
    - 유형 11·12 는 Base64 를 풀면 `43 42 01 00` 으로 시작하는 이진 데이터입니다.
 
    이 유형들은 JSON 이 아니고 암호화된 것으로 보입니다. `DataEncryptionKeys` 표와의 관계는 알려져 있지 않습니다.
-6. **클립보드 칸에 값이 있으면 내용도 있다고 봅니다.** `ClipboardPayload` 에 값이 든 137행이 모두 `[]` 인 예가 있습니다.
+6. **클립보드 열에 값이 있으면 내용도 있다고 봅니다.** `ClipboardPayload` 에 값이 든 137행이 모두 `[]` 인 예가 있습니다.
 7. **계정 폴더 이름을 규칙대로만 찾습니다.** `L.` 폴더가 없을 수도 있습니다. `ConnectedDevicesPlatform` 아래 폴더를 모두 열어 봅니다.
 
 ### 지우기와 조작
@@ -195,7 +195,7 @@ Windows 11 25H2 에서 `Activity` 표의 칸은 다음과 같습니다.
 
 ### 헥스로 한 번
 
-아래는 SQLite 파일 헤더 문자열로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 SQLite 파일 헤더 문자열로 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -268,7 +268,7 @@ kacos2000 의 WindowsTimeline 저장소에는 이 DB 의 표와 활동 종류를
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 Windows 10 1803 이후 이미지를 골라 다음을 풀어 봅니다.
+NIST CFReDS 같은 공개 실습 이미지 가운데 Windows 10 1803 이후 이미지를 골라 다음을 풀어 봅니다.
 
 1. `ConnectedDevicesPlatform` 아래에 계정 폴더가 몇 개 있습니까? 폴더 이름은 어떤 규칙을 따릅니까?
 2. 각 폴더에 `-wal` 파일이 있습니까? 사본을 만들 때 세 파일을 모두 가져왔습니까?

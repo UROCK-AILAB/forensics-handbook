@@ -10,7 +10,7 @@ nav_order: 2230
 
 드롭박스 PC 앱은 동기화 폴더 위치와 계정 종류를 `info.json` 에 적습니다. 앱의 DB 는 확장자가 `.dbx` 인 파일입니다. 이 파일은 암호화한 SQLite 인데, 암호화하지 않은 것도 있습니다. DB 를 푸는 키는 사용자 레지스트리에 DPAPI 로 보호해 둡니다. 그래서 DB 를 열려면 먼저 DPAPI 를 풀어야 하고, 이때 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 필요합니다. `.dbx` 에 관한 내용은 2017년 앱 기준입니다[1].
 
-> **(구현)** 표시는 한 포렌식 분석 구현이 읽는 파일·표·칸 이름입니다. 어느 앱 버전 것인지 알려지지 않은 후보이므로 검체에서 이름을 확인합니다.
+> **(구현)** 표시는 한 포렌식 분석 구현이 읽는 파일·표·열 이름입니다. 어느 앱 버전 것인지 알려지지 않은 후보이므로 실제 데이터로 이름을 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -98,7 +98,7 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 
 ### `.dbx` 안 표 (구현)
 
-| 파일 | 표 | 칸 |
+| 파일 | 표 | 열 |
 |---|---|---|
 | `config.dbx` | `config` | `key` 가 `email` 인 행에 계정 메일이 있습니다 |
 | `filecache.dbx` | `file_journal` | `local_filename`, `local_timestamp`, `local_size`, `local_mtime`, `local_ctime`, `server_path` |
@@ -108,7 +108,7 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 
 ### 새 버전 파일 (구현)
 
-구현은 `%LOCALAPPDATA%\Dropbox\instance<N>\sync_history.db` 를 암호화하지 않은 SQLite 로 봅니다. 이 파일에는 표 `sync_history` 가 있고, 칸 `local_path`, `file_event_type`, `direction`, `timestamp` 가 있습니다 (구현). `direction` 은 올리기·내려받기 방향으로 보이며, 값 목록은 검체에서 확인합니다. 흔히 거론하는 `aggregation.dbx`, `home.db`, `nucleus.sqlite3` 같은 이름은 공개 분석 자료가 없어 검체에서 확인해야 합니다.
+구현은 `%LOCALAPPDATA%\Dropbox\instance<N>\sync_history.db` 를 암호화하지 않은 SQLite 로 봅니다. 이 파일에는 표 `sync_history` 가 있고, 열 `local_path`, `file_event_type`, `direction`, `timestamp` 가 있습니다 (구현). `direction` 은 올리기·내려받기 방향으로 보이며, 값 목록은 실제 데이터로 확인합니다. 흔히 거론하는 `aggregation.dbx`, `home.db`, `nucleus.sqlite3` 같은 이름을 분석한 공개 자료는 없으므로 실제 데이터로 확인해야 합니다.
 
 - SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
@@ -120,7 +120,7 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 - `path` 로 동기화 폴더가 어디 있었는지 봅니다.
 - 최상위 키로 개인 계정과 회사 계정 가운데 무엇을 연결했는지 봅니다.
 - `is_team` 과 `subscription_type` 으로 팀 소속 여부와 요금제를 봅니다.
-- `host` 는 사용자 계정과 컴퓨터 조합을 가리킵니다. 같은 계정이 쓴 다른 컴퓨터와 이 컴퓨터를 가르는 데 쓸 수 있을 것으로 보입니다[3].
+- `host` 는 사용자 계정과 컴퓨터 조합을 가리킵니다. 같은 계정이 쓴 다른 컴퓨터와 이 컴퓨터를 구분하는 데 쓸 수 있을 것으로 보입니다[3].
 - `ks`, `ks1` 키가 있으면 이 사용자 프로필에 드롭박스 DB 키 재료가 적힌 적이 있습니다 (2017년 앱 기준)[1].
 
 ### 증명하지 못하는 것
@@ -129,30 +129,30 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 - `host` 값을 드롭박스 서버 쪽 기록과 맞춰 보는 방법은 공개 자료가 없습니다.
 - 동기화 폴더에 파일이 있다고 그 파일을 올렸다고 단정하지 않습니다. 동기화는 앱이 스스로 합니다.
 - 암호화한 DB 를 풀지 못하면 파일 단위 기록은 볼 수 없습니다.
-- 구현이 읽는 표와 칸으로 무엇을 증명할 수 있는지는 검체에서 이름과 뜻을 확인한 뒤에 판단합니다.
+- 구현이 읽는 표와 열로 무엇을 증명할 수 있는지는 실제 데이터로 이름과 뜻을 확인한 뒤에 판단합니다.
 
 ## 시각 해석
 
 - `info.json` 의 키에는 시각이 없습니다.
-- `info.json` 파일의 파일 시스템 시각이 무엇이 바뀔 때 바뀌는지는 공개 자료가 없어 검체에서 확인합니다.
-- 구현이 읽는 시각 칸(`local_timestamp`, `local_mtime`, `local_ctime`, `date_added`, `timestamp`)은 단위와 시간대가 알려지지 않았습니다.
-- 값의 자릿수로 단위를 먼저 가립니다. 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- `info.json` 파일의 파일 시스템 시각이 무엇이 바뀔 때 바뀌는지는 실제 기기에서 확인해야 합니다.
+- 구현이 읽는 시각 열(`local_timestamp`, `local_mtime`, `local_ctime`, `date_added`, `timestamp`)은 단위와 시간대가 알려지지 않았습니다.
+- 값의 자릿수로 단위를 먼저 구분합니다. 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - `local_mtime`, `local_ctime` 은 이름으로 보면 로컬 파일의 시각입니다. `mtime` 은 수정 시각으로 보이지만, `ctime` 이 만든 시각인지 메타데이터를 바꾼 시각인지는 이름만으로 알 수 없습니다. 같은 파일의 MFT 시각과 맞춰 본 뒤에 뜻을 정합니다.
 
 ## 함정과 한계
 
-- **2017년 앱 기준입니다.** 암호화와 키 저장 방식은 2017년 앱 기준이라[1] 지금 버전 앱에서는 달라졌을 수 있습니다. 검체의 앱 버전을 먼저 적고, 그 버전에서 키 위치가 맞는지 확인합니다.
+- **2017년 앱 기준입니다.** 암호화와 키 저장 방식은 2017년 앱 기준이라[1] 지금 버전 앱에서는 달라졌을 수 있습니다. 설치된 앱 버전을 먼저 적고, 그 버전에서 키 위치가 맞는지 확인합니다.
 - **`info.json` 은 두 곳을 봅니다.** `%APPDATA%` 와 `%LOCALAPPDATA%` 가운데 한쪽에만 있을 수 있습니다.
-- **모든 `.dbx` 가 암호화돼 있지는 않습니다.** 파일 앞머리를 먼저 보고 SQLite 인지, base64 인지, 암호화한 파일인지 가립니다. SQLite 파일 머리 모양은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
+- **모든 `.dbx` 가 암호화돼 있지는 않습니다.** 파일 앞머리를 먼저 보고 SQLite 인지, base64 인지, 암호화한 파일인지 확인합니다. SQLite 파일 머리 모양은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 - **오프라인에서는 DPAPI 부터 풀어야 합니다.** 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 필요합니다[1]. 셋 다 없으면 이 방법으로는 풀지 못합니다. 비밀번호 없이 다루는 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에 있습니다.
-- **살아 있는 PC 에서 키를 뽑을 때는 기록을 남깁니다.** decwindbx 에는 이름에 `live` 가 붙은 스크립트가 있습니다. 살아 있는 PC 에서 도구를 돌리면 PC 에 흔적이 남습니다. 절차는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 을 따릅니다.
-- **클라우드 파일 API 사용 여부는 검체로 가립니다.** 드롭박스가 Windows 에서 이 API 로 온라인 전용 파일을 만드는지는 공개 자료가 없습니다. `SyncRootManager` 에 드롭박스 공급자 키가 있는지, 동기화 폴더 파일의 특성이 어떤지 검체에서 확인합니다. 방법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
+- **실행 중인 PC 에서 키를 뽑을 때는 기록을 남깁니다.** decwindbx 에는 이름에 `live` 가 붙은 스크립트가 있습니다. 실행 중인 PC 에서 도구를 돌리면 PC 에 흔적이 남습니다. 절차는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 을 따릅니다.
+- **클라우드 파일 API 사용 여부는 실제 기기에서 판별합니다.** 드롭박스가 Windows 에서 이 API 로 온라인 전용 파일을 만드는지는 공개 자료가 없습니다. `SyncRootManager` 에 드롭박스 공급자 키가 있는지, 동기화 폴더 파일의 특성이 어떤지 실제 기기에서 확인합니다. 방법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-**`Client` 값 배치.** 아래는 `Client` 값 설명[1]으로 그린 배치입니다. 실제 바이트가 아니며, 각 부분의 길이는 검체에서 확인합니다.
+**`Client` 값 배치.** 아래는 `Client` 값 설명[1]으로 그린 배치입니다. 실제 바이트가 아니며, 각 부분의 길이는 실제 데이터로 확인합니다.
 
 ```
 HKCU\SOFTWARE\Dropbox\ks1  값 Client
@@ -181,7 +181,7 @@ PBKDF2 솔트:     0d 63 8c 09 2e 8b 82 fc 45 28 83 f9 5f 35 5b 8e
 1. 사용자 프로필에서 `info.json` 두 위치와 `AppData\Local\Dropbox\` 폴더 전체를 사본으로 뜹니다.
 2. 사용자 `NTUSER.DAT` 와 트랜잭션 로그를 사본으로 뜹니다. 레지스트리 하이브 뷰어로 `SOFTWARE\Dropbox\ks`, `SOFTWARE\Dropbox\ks1` 의 `Client` 값을 내보냅니다.
 3. 사용자 DPAPI 마스터 키 폴더를 함께 모읍니다. 위치는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에 있습니다.
-4. decwindbx 로 키를 풉니다. 이름으로 보면 오프라인 DPAPI 용 스크립트와 살아 있는 PC 용 스크립트가 따로 있습니다. 쓰는 법은 저장소 설명을 따릅니다.
+4. decwindbx 로 키를 풉니다. 이름으로 보면 오프라인 DPAPI 용 스크립트와 실행 중인 PC 용 스크립트가 따로 있습니다. 쓰는 법은 저장소 설명을 따릅니다.
 5. 푼 키로 `.dbx` 사본을 엽니다. 표 이름 목록을 먼저 보고, 위 구현 후보가 실제로 있는지 확인합니다.
 
 ## 교차 검증
@@ -199,12 +199,12 @@ PBKDF2 솔트:     0d 63 8c 09 2e 8b 82 fc 45 28 83 f9 5f 35 5b 8e
 
 ## 실습
 
-드롭박스를 쓴 공개 검체(NIST CFReDS 등)나 직접 만든 시험 PC 에서 아래 질문을 풀어 봅니다.
+드롭박스를 쓴 공개 시험 데이터(NIST CFReDS 등)나 직접 만든 시험 PC 에서 아래 질문을 풀어 봅니다.
 
 1. `info.json` 은 `%APPDATA%` 와 `%LOCALAPPDATA%` 가운데 어디에 있습니까? 최상위 키는 몇 개입니까?
 2. `path` 가 가리키는 폴더가 디스크에 있습니까? 폴더 안 파일 수는 몇 개입니까?
 3. `AppData\Local\Dropbox\` 아래 `.dbx` 파일 가운데 그냥 SQLite 로 열리는 것, base64 인 것, 암호화한 것은 각각 몇 개입니까?
-4. `NTUSER.DAT` 에 `SOFTWARE\Dropbox\ks`, `ks1` 키가 있습니까? 없다면 검체의 앱 버전은 무엇입니까?
+4. `NTUSER.DAT` 에 `SOFTWARE\Dropbox\ks`, `ks1` 키가 있습니까? 없다면 설치된 앱 버전은 무엇입니까?
 5. 키를 풀었다면 `.dbx` 안의 표 이름을 이 페이지의 구현 후보와 맞춰 봅니다. 없는 이름은 무엇입니까?
 6. `sync_history.db` 같은 암호화하지 않은 SQLite 가 `instance<N>` 폴더에 있습니까?
 

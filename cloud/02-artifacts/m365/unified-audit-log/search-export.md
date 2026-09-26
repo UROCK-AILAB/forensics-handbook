@@ -44,7 +44,7 @@ Graph 감사 검색 API 가 돌려주는 `auditLogRecord` 에는 `createdDateTim
 
 ## 증거로서 의미
 
-**증명하는 것**: 내보낸 파일의 행은 검색 시점에 그 조건으로 조회된 감사 기록이 있었다는 것을 보여 줍니다. 레코드 안의 사용자·작업·시각이 말하는 범위는 [레코드 구조](record-structure.md)와 같습니다.
+**증명하는 것**: 내보낸 파일의 행은 검색 시점에 그 조건으로 조회된 감사 기록이 있었다는 것을 보여 줍니다. 레코드 안의 사용자·작업·시각으로 알 수 있는 범위는 [레코드 구조](record-structure.md)와 같습니다.
 
 **증명하지 못하는 것**: 결과에 행이 없다고 해서 그 활동이 없었다는 뜻은 아닙니다. 건수 한도에서 잘렸거나, 제한된 관리자로 검색했거나, 기록이 아직 들어오지 않았거나, `-HighCompleteness` 없이 빠른 검색을 했을 수 있습니다[1][3]. 키워드 검색은 공통 스키마로 색인한 내용만 찾고 `AuditData` 본문은 찾지 않아서, 본문에만 있는 값으로는 걸리지 않습니다[1].
 
@@ -52,7 +52,7 @@ Graph 감사 검색 API 가 돌려주는 `auditLogRecord` 에는 `createdDateTim
 
 ## 시각 해석
 
-포털의 날짜·시간 조건과 Date (UTC) 열은 UTC 입니다[1]. `Search-UnifiedAuditLog` 는 기록을 UTC 로 저장하고, 시간대 없이 넣은 `-StartDate`·`-EndDate` 값도 UTC 로 받아들입니다[3]. 현지 시각으로 범위를 잡으려면 `"2018-05-06 14:30:00z"` 처럼 UTC 로 적거나 `(Get-Date "5/6/2018 9:30 AM").ToUniversalTime()` 으로 바꿔서 넣습니다[3]. 내보낸 CSV 의 `CreationDate` 열이 UTC 인지는 같은 행 `AuditData` 안의 `CreationTime` 과 견주어 검체에서 확인합니다.
+포털의 날짜·시간 조건과 Date (UTC) 열은 UTC 입니다[1]. `Search-UnifiedAuditLog` 는 기록을 UTC 로 저장하고, 시간대 없이 넣은 `-StartDate`·`-EndDate` 값도 UTC 로 받아들입니다[3]. 현지 시각으로 범위를 잡으려면 `"2018-05-06 14:30:00z"` 처럼 UTC 로 적거나 `(Get-Date "5/6/2018 9:30 AM").ToUniversalTime()` 으로 바꿔서 넣습니다[3]. 내보낸 CSV 의 `CreationDate` 열이 UTC 인지는 같은 행 `AuditData` 안의 `CreationTime` 과 비교해 실제 데이터로 확인합니다.
 
 Graph `createdDateTime` 은 활동을 수행한 시각입니다[6]. 관리 활동 API 의 `contentCreated` 는 블롭을 받을 수 있게 된 시각이지 이벤트 시각이 아니고, 블롭 안 이벤트는 순서가 보장되지 않아 앞 블롭보다 이른 이벤트가 뒤 블롭에 들어 있을 수 있습니다[7]. 핵심 서비스(Exchange·SharePoint·OneDrive·Teams) 기록은 보통 이벤트 뒤 60~90분 지나야 검색되고, 그보다 늦는 서비스도 있습니다[1]. 방금 일어난 일은 몇 시간 뒤 다시 검색합니다.
 
@@ -88,7 +88,7 @@ do {
 
 공개 도구도 같은 원리로 창을 나눕니다. Microsoft-Extractor-Suite 의 `Get-UAL` 은 창 하나에 목표 3,000건을 두고, 받은 건수가 5,000건 한도에 닿으면 창을 절반으로 줄여 다시 받으며, 가장 작은 창에서도 5,000건 이상이면 로그에 `[ERROR] ... has 5000+ events` 를 남깁니다[9]. 출력은 CSV·JSON·JSONL·SOF-ELK 형식이고 병합하면 `UAL-Combined.csv` 같은 파일이 됩니다[9]. 도구로 받은 결과를 쓸 때는 이 오류·경고 줄이 있는지 먼저 확인합니다. DFIR-O365RC 는 `ReturnLargeSet` 과 `-ResultSize 5000` 으로 받고 한 창이 50,000건을 넘는지 확인합니다[10]. 도구별 수집 설정은 [Microsoft 365 수집 도구](../../../03-techniques/acquisition/m365-collection.md)에서 다룹니다.
 
-Graph 감사 검색 API 는 Microsoft-Extractor-Suite 가 기본으로 `https://graph.microsoft.com/beta/security/auditLog/queries` 를 쓰고 `-UseV1` 을 주면 v1.0 을 씁니다[9]. 이 경로로 받으려면 `AuditLogsQuery.Read.All` 권한이 필요합니다[10]. DFIR-O365RC 는 이 경로가 아직 베타이고 백엔드 버그 때문에 지금은 쓸 수 없다고 봅니다[10]. 두 도구의 판단이 달라서, Graph 로 받은 결과는 같은 기간을 `Search-UnifiedAuditLog` 로 받은 건수와 견주어 봅니다.
+Graph 감사 검색 API 는 Microsoft-Extractor-Suite 가 기본으로 `https://graph.microsoft.com/beta/security/auditLog/queries` 를 쓰고 `-UseV1` 을 주면 v1.0 을 씁니다[9]. 이 경로로 받으려면 `AuditLogsQuery.Read.All` 권한이 필요합니다[10]. DFIR-O365RC 는 이 경로가 아직 베타이고 백엔드 버그 때문에 지금은 쓸 수 없다고 봅니다[10]. 두 도구의 판단이 달라서, Graph 로 받은 결과는 같은 기간을 `Search-UnifiedAuditLog` 로 받은 건수와 비교해 봅니다.
 
 ## 교차 검증
 

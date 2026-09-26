@@ -19,7 +19,7 @@ systemd-journald 가 쓰는 모든 저널 파일이 이 형식입니다. 활성 
 
 ### 기본 규칙
 
-오프셋·크기·시각·해시 같은 정수 값은 리틀 엔디언 (little-endian) 이고, 오프셋은 파일 처음부터 셉니다[1]. 구조체는 8바이트 경계에 맞춰 놓고 8바이트 배수로 채웁니다[1]. 시각 값은 모두 마이크로초 단위이고, 벽시계 시각 (realtime) 은 1970-01-01 UTC 부터 센 값, 단조 시각 (monotonic) 은 커널 부팅 ID 와 짝을 이루는 값입니다[1]. 단조 시각은 보통 부팅 시점부터 세지만 컨테이너에서는 그렇지 않습니다[1].
+오프셋·크기·시각·해시 같은 정수 값은 리틀 엔디언 (little-endian) 이고, 오프셋은 파일 처음부터 셉니다[1]. 구조체는 8바이트 경계에 맞춰 놓고 8바이트 배수로 채웁니다[1]. 시각 값은 모두 마이크로초 단위이고, 실제 시각 시계(wall clock) 값 (realtime) 은 1970-01-01 UTC 부터 센 값, 단조 시각 (monotonic) 은 커널 부팅 ID 와 짝을 이루는 값입니다[1]. 단조 시각은 보통 부팅 시점부터 세지만 컨테이너에서는 그렇지 않습니다[1].
 
 파일은 머리 (Header) 로 시작하고 바로 뒤에 객체가 이어집니다[1]. 새 데이터를 쓸 때는 새 객체를 먼저 파일 끝에 덧붙이고, 다 쓴 뒤에 앞쪽 색인에 연결합니다[1]. 한 번 쓴 데이터는 색인용 연결 값 말고는 대부분 다시 고치지 않습니다[1].
 
@@ -48,8 +48,8 @@ systemd-journald 가 쓰는 모든 저널 파일이 이 형식입니다. 활성 
 | 0xA0 | 8 | tail_entry_seqnum | 마지막 항목 일련번호 |
 | 0xA8 | 8 | head_entry_seqnum | 첫 항목 일련번호 |
 | 0xB0 | 8 | entry_array_offset | 전체 항목 배열 사슬의 첫 배열 |
-| 0xB8 | 8 | head_entry_realtime | 첫 항목 벽시계 시각 |
-| 0xC0 | 8 | tail_entry_realtime | 마지막 항목 벽시계 시각 |
+| 0xB8 | 8 | head_entry_realtime | 첫 항목 실제 시각 |
+| 0xC0 | 8 | tail_entry_realtime | 마지막 항목 실제 시각 |
 | 0xC8 | 8 | tail_entry_monotonic | 마지막 항목 단조 시각 |
 | 0xD0 | 8 | n_data | systemd 187 에서 추가 |
 | 0xD8 | 8 | n_fields | 187 |
@@ -61,7 +61,7 @@ systemd-journald 가 쓰는 모든 저널 파일이 이 형식입니다. 활성 
 | 0x104 | 4 | tail_entry_array_n_entries | 252 |
 | 0x108 | 8 | tail_entry_offset | 254 |
 
-`n_data` 부터는 나중에 붙은 필드라서 `header_size` 를 먼저 보고 그 안에 들어 있을 때만 읽습니다[1]. 판마다 머리 크기는 187 이전 208, 187 은 224, 189 는 240, 246 은 256, 252 는 264, 254 는 272 바이트입니다[1][7]. RHEL 9 의 systemd 는 252 라서[3] 새로 만든 파일의 머리는 264 바이트일 가능성이 높습니다. Ubuntu 24.04 검체는 `header_size` 값으로 같은 방식으로 가늠합니다.
+`n_data` 부터는 나중에 붙은 필드라서 `header_size` 를 먼저 보고 그 안에 들어 있을 때만 읽습니다[1]. 판마다 머리 크기는 187 이전 208, 187 은 224, 189 는 240, 246 은 256, 252 는 264, 254 는 272 바이트입니다[1][7]. RHEL 9 의 systemd 는 252 라서[3] 새로 만든 파일의 머리는 264 바이트일 가능성이 높습니다. Ubuntu 24.04 시스템도 `header_size` 값으로 같은 방식으로 추정합니다.
 
 `compatible_flags` 도 판에 따라 다릅니다. 최신 코드는 새 파일에 TAIL_ENTRY_BOOT_ID 를 늘 켜고, 봉인할 때는 SEALED 와 SEALED_CONTINUOUS(4) 를 함께 켭니다[2][11]. RHEL 9 코드는 봉인할 때 SEALED 만 켜고 TAIL_ENTRY_BOOT_ID 는 켜지 않습니다[3].
 
@@ -84,12 +84,12 @@ systemd-journald 가 쓰는 모든 저널 파일이 이 형식입니다. 활성 
 |---|---|---|
 | DATA | hash(8), next_hash_offset(8), next_field_offset(8), entry_offset(8, 이 값을 쓰는 첫 ENTRY), entry_array_offset(8), n_entries(8), +64 payload(`필드이름=값`) | +64 tail_entry_array_offset(4), +68 tail_entry_array_n_entries(4), +72 payload |
 | FIELD | hash(8), next_hash_offset(8), head_data_offset(8), +40 payload(필드 이름만) | 같음 |
-| ENTRY | seqnum(8), realtime(8), monotonic(8), boot_id(16), xor_hash(8), +64 items | items 한 칸이 object_offset(8)+hash(8) 16바이트에서 object_offset(4) 4바이트로 줄어듦 |
-| DATA_HASH_TABLE·FIELD_HASH_TABLE | 칸마다 head_hash_offset(8), tail_hash_offset(8) | 같음 |
+| ENTRY | seqnum(8), realtime(8), monotonic(8), boot_id(16), xor_hash(8), +64 items | items 원소 하나가 object_offset(8)+hash(8) 16바이트에서 object_offset(4) 4바이트로 줄어듦 |
+| DATA_HASH_TABLE·FIELD_HASH_TABLE | 버킷마다 head_hash_offset(8), tail_hash_offset(8) | 같음 |
 | ENTRY_ARRAY | next_entry_array_offset(8), +24 items(ENTRY 오프셋 8바이트씩) | items 가 4바이트씩 |
 | TAG | seqnum(8), epoch(8), tag(32, SHA-256 HMAC) | 같음 |
 
-항목 (ENTRY) 하나는 필드 값 (DATA) 여러 개를 오프셋으로 묶은 것입니다[1]. 같은 `필드이름=값` 은 파일 안에 DATA 객체 하나로만 저장하고, 여러 항목이 그 객체를 함께 가리킵니다[1]. 해시 표 두 개는 파일을 만들 때 첫 두 객체로 만들고, 머리의 해시 표 오프셋은 객체 머리가 아니라 칸이 시작하는 곳을 가리킵니다[1]. 해시 표 칸 수는 DATA 가 최소 2047, FIELD 가 1023 입니다[2].
+항목 (ENTRY) 하나는 필드 값 (DATA) 여러 개를 오프셋으로 묶은 것입니다[1]. 같은 `필드이름=값` 은 파일 안에 DATA 객체 하나로만 저장하고, 여러 항목이 그 객체를 함께 가리킵니다[1]. 해시 표 두 개는 파일을 만들 때 첫 두 객체로 만들고, 머리의 해시 표 오프셋은 객체 머리가 아니라 버킷이 시작하는 곳을 가리킵니다[1]. 해시 표 버킷 수는 DATA 가 최소 2047, FIELD 가 1023 입니다[2].
 
 해시는 KEYED_HASH 가 켜진 파일이면 `file_id` 를 키로 쓰는 siphash24 이고, 아니면 Jenkins lookup3 입니다[1]. ENTRY 의 `xor_hash` 만은 KEYED_HASH 파일에서도 Jenkins 해시를 씁니다[1].
 
@@ -107,7 +107,7 @@ journald 는 쓰려고 파일을 열면 `state` 를 ONLINE(1) 으로, 쓰기를 
 system@44444444444444444444444444444444-000000000000002a-00064861e7e78000.journal
 ```
 
-위 줄은 이름 짜임을 보여 주려고 만든 예시입니다. 마지막 칸 `00064861e7e78000` 은 1768435200000000 마이크로초, 곧 2026-01-15 00:00:00 UTC 이고, 이 시각은 파일의 첫 항목 시각입니다. `.journal~` 이름이 무엇을 뜻하는지는 [손상·삭제된 저널](corruption.md) 에서 다룹니다.
+위 줄은 이름 짜임을 보여 주려고 만든 예시입니다. 마지막 필드 `00064861e7e78000` 은 1768435200000000 마이크로초, 곧 2026-01-15 00:00:00 UTC 이고, 이 시각은 파일의 첫 항목 시각입니다. `.journal~` 이름이 무엇을 뜻하는지는 [손상·삭제된 저널](corruption.md) 에서 다룹니다.
 
 ## 읽는 법
 
@@ -116,7 +116,7 @@ system@44444444444444444444444444444444-000000000000002a-00064861e7e78000.journa
 1. 0x00 의 8바이트가 `LPKSHHRH` 인지 봅니다.
 2. `incompatible_flags` 에서 압축 알고리즘과 COMPACT 여부를 확인합니다. 모르는 비트가 있으면 읽지 않고 멈춥니다[1].
 3. `header_size` 로 머리 뒤쪽 필드가 있는지 판단합니다.
-4. `entry_array_offset` 의 ENTRY_ARRAY 부터 `next_entry_array_offset` 이 0 이 될 때까지 사슬을 따라가며 ENTRY 오프셋을 모읍니다. 배열 끝의 0 칸은 아직 쓰지 않은 칸입니다.
+4. `entry_array_offset` 의 ENTRY_ARRAY 부터 `next_entry_array_offset` 이 0 이 될 때까지 사슬을 따라가며 ENTRY 오프셋을 모읍니다. 배열 끝의 0 값은 아직 쓰지 않은 자리입니다.
 5. ENTRY 마다 `items` 의 오프셋을 따라가 DATA 의 payload 를 읽고, 압축 플래그가 있으면 풉니다.
 
 아래는 명세로 만든 헥스 예시이고, 값은 모두 지어낸 것입니다. 머리의 앞 0x68 바이트입니다.
@@ -149,11 +149,11 @@ realtime `0x00064861E7E78000` 은 1768435200000000 마이크로초라서 2026-01
 
 머리만으로 파일의 요약을 얻을 수 있습니다. `head_entry_realtime`·`tail_entry_realtime` 은 파일이 담은 첫 항목과 마지막 항목의 시각이고, `n_entries` 는 항목 수입니다[1]. 두 시각 모두 UTC 기준 마이크로초입니다[1]. 파일이 닫힌 시각이나 회전한 시각은 머리 어디에도 없습니다.
 
-`state` 는 파일이 어떻게 끝났는지 알려 줍니다. 수집한 보관 파일이 ARCHIVED 가 아니라 ONLINE 이면 쓰는 도중에 멈춘 파일일 가능성이 있습니다[1][2]. 살아 있는 시스템에서 활성 파일을 복사해도 ONLINE 이 정상이고, 동기화 규칙이 느슨해서 끝부분 구조가 잠시 어긋나 보일 수 있습니다[1].
+`state` 는 파일이 어떻게 끝났는지 알려 줍니다. 수집한 보관 파일이 ARCHIVED 가 아니라 ONLINE 이면 쓰는 도중에 멈춘 파일일 가능성이 있습니다[1][2]. 실행 중인 시스템에서 활성 파일을 복사해도 ONLINE 이 정상이고, 동기화 규칙이 느슨해서 끝부분 구조가 잠시 어긋나 보일 수 있습니다[1].
 
 `machine_id` 는 파일을 쓴 기계를 가리킵니다. journald 는 머리의 `machine_id` 가 자기 기계와 다르면 그 파일에 쓰지 않고 회전합니다[1]. 다른 곳에서 옮겨 온 파일인지 볼 때 폴더 이름의 기계 ID 와 비교합니다. `seqnum_id` 가 같은 파일끼리는 일련번호가 1부터 이어지고 겹치지 않으므로, 시스템 파일과 사용자 파일을 한 흐름으로 맞출 때 씁니다[1]. 같은 번호 묶음을 시스템 파일과 사용자 파일이 나눠 쓰므로, 한 파일 안에서 번호가 건너뛴 것만으로 항목이 빠졌다고 볼 수는 없습니다[1].
 
-항목은 일련번호 순서로 쓰고, 같은 부팅 안에서는 단조 시각도 커집니다[1]. 벽시계 시각은 시계를 고치지 않는 한 커지므로[1], 일련번호는 이어지는데 realtime 만 뒤로 가면 시계가 바뀐 지점일 가능성이 있습니다. `journalctl --header` 로 머리를 보면 시계가 틀린 채 부팅해 순서가 어긋난 항목을 찾는 데 도움이 됩니다[5].
+항목은 일련번호 순서로 쓰고, 같은 부팅 안에서는 단조 시각도 커집니다[1]. realtime 시각은 시계를 고치지 않는 한 커지므로[1], 일련번호는 이어지는데 realtime 만 뒤로 가면 시계가 바뀐 지점일 가능성이 있습니다. `journalctl --header` 로 머리를 보면 시계가 틀린 채 부팅해 순서가 어긋난 항목을 찾는 데 도움이 됩니다[5].
 
 봉인 (Forward Secure Sealing) 을 쓰는 파일은 `compatible_flags` 에 SEALED 가 켜지고 TAG 객체가 들어 있습니다[1][2]. TAG 의 HMAC 은 앞 태그 이후에 쓴 객체들로 계산하지만, 나중에 바뀔 수 있는 연결 오프셋 같은 필드는 계산에서 뺍니다[1].
 
@@ -165,17 +165,17 @@ realtime `0x00064861E7E78000` 은 1768435200000000 마이크로초라서 2026-01
 - 회전한 파일 이름의 16진 시각은 첫 항목 시각입니다[2]. 파일을 닫은 시각으로 읽으면 안 됩니다.
 - `tail_entry_monotonic` 은 `compatible_flags` 에 TAIL_ENTRY_BOOT_ID 가 없으면 `tail_entry_boot_id` 와 다른 부팅의 값일 수 있습니다[1]. RHEL 9 가 만든 파일에는 이 비트가 없습니다[3].
 - 해시 값은 KEYED_HASH 파일이면 `file_id` 를 키로 계산하므로 같은 값이라도 파일마다 해시가 다릅니다[1]. 파일끼리 해시로 항목을 맞추면 안 됩니다.
-- 분석 PC 의 systemd 가 검체보다 오래되면 모르는 `incompatible_flags` 비트(COMPACT·ZSTD 등) 때문에 파일을 못 열 수 있습니다[1].
+- 분석 PC 의 systemd 가 분석 대상보다 오래되면 모르는 `incompatible_flags` 비트(COMPACT·ZSTD 등) 때문에 파일을 못 열 수 있습니다[1].
 - 파일 뒤쪽 0 구역은 미리 할당한 빈 공간입니다[2]. dissect.target 은 사슬이 가리키는 곳에서 UNUSED(0) 객체를 만나면 "아직 쓰지 않은 할당 공간" 이라는 경고를 내고 멈춥니다[8].
 
 ## 도구
 
 | 도구 | 읽는 방식 | 참고 |
 |---|---|---|
-| `journalctl --header --file=파일` | 머리 필드를 사람이 읽는 꼴로 출력(State, Compatible flags, Incompatible flags, Header size, Head/Tail realtime timestamp 등)[2][5] | 읽는 방법 전반은 [journalctl 로 읽기](journalctl.md) |
+| `journalctl --header --file=파일` | 머리 필드를 사람이 읽는 형식으로 출력(State, Compatible flags, Incompatible flags, Header size, Head/Tail realtime timestamp 등)[2][5] | 읽는 방법 전반은 [journalctl 로 읽기](journalctl.md) |
 | plaso `systemd_journal` 파서 | `entry_array_offset` 부터 ENTRY_ARRAY 사슬을 따라감, 머리 크기 208·224·240·256·264·272 만 받음[7] | |
 | dissect.target journal 플러그인 | ENTRY_ARRAY 사슬을 따라감, LZ4·XZ·ZSTD 해제[8] | |
-| Velociraptor `parse_journald`(go-journalctl) | `header_size` 부터 객체를 차례로 훑어 ENTRY 를 모두 냄[9] | 색인에 연결되지 않은 ENTRY 도 낼 수 있음 |
+| Velociraptor `parse_journald`(go-journalctl) | `header_size` 부터 객체를 차례로 읽어 ENTRY 를 모두 냄[9] | 색인에 연결되지 않은 ENTRY 도 낼 수 있음 |
 
 도구마다 항목을 찾는 방식이 달라서 같은 파일에서도 결과 항목 수가 다를 수 있습니다. 손상 파일에서 도구별 차이는 [손상·삭제된 저널](corruption.md) 에 정리했습니다. 파일 구조가 아니라 스트림으로 내보낼 때는 `journalctl -o export` 형식을 쓰며, 항목 사이는 줄바꿈 두 번(빈 줄 하나)으로 나누고 이진 필드는 이름·줄바꿈 뒤에 64비트 리틀 엔디언 길이와 데이터를 붙입니다[6].
 

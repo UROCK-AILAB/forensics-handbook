@@ -14,10 +14,10 @@ nav_order: 1750
 
 ## 먼저 확인할 것
 
-- **OS 버전과 제조사** — 이 페이지의 설치 출처 속성과 값은 AOSP 소스의 main 가지 기준이라서 특정 Android 버전의 값이 아닙니다 [1][2]. `packageSource` 가 들어온 버전은 공개 자료에 없으니, 검체의 Android 버전과 One UI 버전을 먼저 적어 두고 속성이 없는 경우도 염두에 둡니다. 삼성 자동 차단(Auto Blocker)은 One UI 6.0(Android 14) 이후 갤럭시에만 있습니다 [4].
+- **OS 버전과 제조사** — 이 페이지의 설치 출처 속성과 값은 AOSP 소스의 main 가지 기준이라서 특정 Android 버전의 값이 아닙니다 [1][2]. `packageSource` 가 들어온 버전은 공개 자료에 없으니, 분석 대상 기기의 Android 버전과 One UI 버전을 먼저 적어 두고 속성이 없는 경우도 염두에 둡니다. 삼성 자동 차단(Auto Blocker)은 One UI 6.0(Android 14) 이후 갤럭시에만 있습니다 [4].
 - **시간대와 시각 단위** — 설치 기록 파일의 시각 속성은 16진수로 적은 long 값이고 단위는 소스에 적혀 있지 않지만, `dumpsys package` 는 같은 시각을 날짜 문자열로 바꿔 찍습니다 [2]. 내려받은 파일의 `date_added` 는 유닉스 초라서 [3] 두 기록을 한 줄에 놓기 전에 단위부터 맞춥니다. 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md), 기기 시간대는 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 에서 봅니다.
 - **사용자와 프로필** — `dumpsys package` 는 첫 설치 시각(`firstInstallTime=`)과 설치 이유(`installReason=`)를 사용자별 줄로 찍습니다 [2]. 보안 폴더나 작업 프로필이 있으면 어느 사용자에게 설치됐는지부터 나눠 봅니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
-- **수집 범위** — 시스템 앱 486개와 사용자가 설치한 앱 168개가 있는 기기도 있어서, 설치 시각이나 설치자로 먼저 좁힌 뒤 한 앱씩 봅니다. 설치 기록 파일을 adb 일반 권한으로 읽을 수 있는지는 검체에서 확인해야 하니 확보 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 정합니다.
+- **수집 범위** — 시스템 앱 486개와 사용자가 설치한 앱 168개가 있는 기기도 있어서, 설치 시각이나 설치자로 먼저 좁힌 뒤 한 앱씩 봅니다. 설치 기록 파일을 adb 일반 권한으로 읽을 수 있는지는 실제 기기에서 확인해야 하니 확보 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 정합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -42,7 +42,7 @@ nav_order: 1750
 
 ## 분석 흐름
 
-1. **설치자 세 칸을 나눠 읽습니다.** PackageManager 는 설치 기록을 `dataDir/system/packages.xml` 에 쓰고, 같은 폴더에 `packages.xml.reservecopy` 와 `packages.list` 를 둡니다 [2]. `<package>` 요소에는 `installer`, `installerUid`, `updateOwner`, `installerAttributionTag`, `packageSource`, `installInitiator`, `installOriginator` 속성이 있고, `isOrphaned` 와 `installInitiatorUninstalled` 는 값이 true 일 때만 적힙니다 [2]. `installer` 는 기록상 설치자, `installInitiator` 는 설치를 요청한 패키지, `installOriginator` 는 설치를 요청한 패키지가 누구를 대신해 요청했는지를 가리키는 패키지이고, 소스의 필드 이름은 각각 `mInstallerPackageName`, `mInitiatingPackageName`, `mOriginatingPackageName` 입니다 [2][5]. 공개 API 에서도 세 값은 기록상 설치자(installer of record), 설치를 요청한 패키지, 요청한 패키지가 대신한 패키지입니다 [5]. 세 값이 서로 다르면 어느 앱이 어느 앱을 거쳐 설치했는지 순서를 그려 볼 수 있습니다. 설치자가 바뀐 뒤에 각 칸이 어떻게 남는지는 [설치된 앱](../../02-artifacts/app-usage/packages/index.md) 에서 봅니다.
+1. **설치자 세 값을 나눠 읽습니다.** PackageManager 는 설치 기록을 `dataDir/system/packages.xml` 에 쓰고, 같은 폴더에 `packages.xml.reservecopy` 와 `packages.list` 를 둡니다 [2]. `<package>` 요소에는 `installer`, `installerUid`, `updateOwner`, `installerAttributionTag`, `packageSource`, `installInitiator`, `installOriginator` 속성이 있고, `isOrphaned` 와 `installInitiatorUninstalled` 는 값이 true 일 때만 적힙니다 [2]. `installer` 는 기록상 설치자, `installInitiator` 는 설치를 요청한 패키지, `installOriginator` 는 설치를 요청한 패키지가 누구를 대신해 요청했는지를 가리키는 패키지이고, 소스의 필드 이름은 각각 `mInstallerPackageName`, `mInitiatingPackageName`, `mOriginatingPackageName` 입니다 [2][5]. 공개 API 에서도 세 값은 기록상 설치자(installer of record), 설치를 요청한 패키지, 요청한 패키지가 대신한 패키지입니다 [5]. 세 값이 서로 다르면 어느 앱이 어느 앱을 거쳐 설치했는지 순서를 그려 볼 수 있습니다. 설치자가 바뀐 뒤에 각 값이 어떻게 남는지는 [설치된 앱](../../02-artifacts/app-usage/packages/index.md) 에서 봅니다.
 
 2. **설치 앱이 알린 출처를 읽습니다.** `packageSource` 는 설치 앱이 `PackageInstaller.SessionParams#setPackageSource(int)` 로 알리는 값입니다. 정보용 값이고, 시스템이 신호로 쓸 수 있습니다 [1].
 
@@ -56,17 +56,17 @@ nav_order: 1750
 
    값을 알리지 않는 설치 앱을 거치면 0 으로 남아서, 0 은 "출처가 수상하다" 가 아니라 "설치 앱이 알리지 않았다" 로 읽습니다.
 
-3. **설치 시각을 확인합니다.** 설치 기록 파일은 `ft`(마지막 수정 시각)와 `ut`(마지막 업데이트 시각)를 16진수 long 으로 쓰고, 읽을 때는 `it`(첫 설치 시각)도 16진수로 읽습니다 [2]. `dumpsys package` 는 패키지별로 `timeStamp=`, `lastUpdateTime=`, `installerPackageName=`, `installerPackageUid=`, `initiatingPackageName=`, `originatingPackageName=`, `packageSource=` 줄을 찍고 `updateOwnerPackageName=`, `installerAttributionTag=` 는 값이 있을 때만 찍으며, 사용자별로 `installReason=`, `dataDir=`, `firstInstallTime=` 을 찍습니다 [2]. `dumpsys package` 요약 출력에서는 이 패키지별 줄이 생략될 수 있으니, 위 줄 이름은 소스 기준으로 보고 검체의 실제 출력에서 다시 확인합니다. 파일의 16진수 값과 `dumpsys` 의 날짜 문자열을 같은 앱에서 나란히 놓으면 파일 값의 단위를 검체에서 직접 맞춰 볼 수 있습니다.
+3. **설치 시각을 확인합니다.** 설치 기록 파일은 `ft`(마지막 수정 시각)와 `ut`(마지막 업데이트 시각)를 16진수 long 으로 쓰고, 읽을 때는 `it`(첫 설치 시각)도 16진수로 읽습니다 [2]. `dumpsys package` 는 패키지별로 `timeStamp=`, `lastUpdateTime=`, `installerPackageName=`, `installerPackageUid=`, `initiatingPackageName=`, `originatingPackageName=`, `packageSource=` 줄을 찍고 `updateOwnerPackageName=`, `installerAttributionTag=` 는 값이 있을 때만 찍으며, 사용자별로 `installReason=`, `dataDir=`, `firstInstallTime=` 을 찍습니다 [2]. `dumpsys package` 요약 출력에서는 이 패키지별 줄이 생략될 수 있으니, 위 줄 이름은 소스 기준으로 보고 실제 기기의 출력에서 다시 확인합니다. 파일의 16진수 값과 `dumpsys` 의 날짜 문자열을 같은 앱에서 나란히 놓으면 파일 값의 단위를 실제 데이터로 직접 맞춰 볼 수 있습니다.
 
-4. **설치 파일이 어디서 왔는지 찾습니다.** 미디어 저장소의 내려받은 항목(`MediaStore.Downloads`)에는 받은 주소 `download_uri` 와 그 주소의 HTTP 리퍼러 `referer_uri` 칸이 있고, 둘 다 문자열입니다 [3]. 모든 미디어 항목에는 내려받은 것인지 표시하는 `is_download`, 항목을 넣은 패키지 `owner_package_name`, 처음 추가된 시각 `date_added`(유닉스 초) 칸이 있습니다 [3]. 3단계의 설치 시각 바로 앞에 추가된 APK 항목을 찾아 두 주소를 적고, `owner_package_name` 으로 어느 앱이 파일을 넣었는지 봅니다. 미디어 저장소 DB 파일의 경로와 크롬 자체의 내려받기 기록은 [미디어 저장소](../../02-artifacts/media/mediastore/index.md) 와 [크롬](../../02-artifacts/browsers/chrome/index.md) 페이지에서 봅니다.
+4. **설치 파일이 어디서 왔는지 찾습니다.** 미디어 저장소의 내려받은 항목(`MediaStore.Downloads`)에는 받은 주소 `download_uri` 와 그 주소의 HTTP 리퍼러 `referer_uri` 열이 있고, 둘 다 문자열입니다 [3]. 모든 미디어 항목에는 내려받은 것인지 표시하는 `is_download`, 항목을 넣은 패키지 `owner_package_name`, 처음 추가된 시각 `date_added`(유닉스 초) 열이 있습니다 [3]. 3단계의 설치 시각 바로 앞에 추가된 APK 항목을 찾아 두 주소를 적고, `owner_package_name` 으로 어느 앱이 파일을 넣었는지 봅니다. 미디어 저장소 DB 파일의 경로와 크롬 자체의 내려받기 기록은 [미디어 저장소](../../02-artifacts/media/mediastore/index.md) 와 [크롬](../../02-artifacts/browsers/chrome/index.md) 페이지에서 봅니다.
 
 5. **내려받기 전후의 페이지를 잇습니다.** `referer_uri` 에 적힌 페이지와 같은 시간대의 브라우저 기록, 문자·메신저에서 받은 링크를 나란히 놓습니다. 링크를 받은 쪽은 [스미싱 흔적](smishing.md), 웹 기록을 시간순으로 정리하는 법은 [웹 사용 행위 재구성](../activity/web-activity.md) 에 있습니다.
 
-6. **설치를 허용하거나 막는 설정을 봅니다.** 설정 키 가운데 secure 쪽에는 `install_non_market_apps`, `unknown_sources_default_reversed` 와 `appprotection_auto_scan_updated`, `appprotection_package_uid`, `appprotection_permission_function_install_auto_scan_agreed`, `appprotection_permission_function_background_auto_scan_agreed` 같은 `appprotection_` 키가 있고, global 쪽에는 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `adb_enabled`, `adb_wifi_enabled` 가 있습니다. 각 키의 뜻과 쓰임은 공개 자료가 없으니, 검체에서 값을 읽더라도 "이 키가 이 값이었다" 까지만 적고 기능이 켜져 있었다고 풀어 쓰지 않습니다. `appprotection_` 키는 이름으로 보아 삼성의 앱 보호 기능과 이어질 가능성이 있습니다.
+6. **설치를 허용하거나 막는 설정을 봅니다.** 설정 키 가운데 secure 쪽에는 `install_non_market_apps`, `unknown_sources_default_reversed` 와 `appprotection_auto_scan_updated`, `appprotection_package_uid`, `appprotection_permission_function_install_auto_scan_agreed`, `appprotection_permission_function_background_auto_scan_agreed` 같은 `appprotection_` 키가 있고, global 쪽에는 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `adb_enabled`, `adb_wifi_enabled` 가 있습니다. 각 키의 뜻과 쓰임을 밝힌 공개 자료는 없으니, 실제 기기에서 값을 읽더라도 "이 키가 이 값이었다" 까지만 적고 기능이 켜져 있었다고 풀어 쓰지 않습니다. `appprotection_` 키는 이름으로 보면 삼성의 앱 보호 기능과 이어질 가능성이 있습니다.
 
-7. **삼성 자동 차단의 영향을 따집니다.** 자동 차단은 One UI 6.0(Android 14) 이후 갤럭시 기기에만 있고, 기본으로 켜져 있습니다 [4]. 켜 두면 Google Play 스토어와 Galaxy Store 같은 공식 스토어 앱만 설치되고, USB 케이블로 오는 명령과 USB 소프트웨어 업데이트를 막고, 메시지로 받은 이미지로 위장한 악성 데이터를 막습니다 [4]. "최대 제한(Maximum restrictions)" 을 켜면 앱 보호(설치 중과 설치 뒤의 의심 앱 검사, 백신은 지역마다 다름)가 켜지고, 기기 관리자 앱과 업무 프로필, 첨부 자동 내려받기, 하이퍼링크와 미리보기, 공유 앨범을 막고, 사진을 공유할 때 위치 정보를 지웁니다 [4]. 자동 차단이 남기는 기록이나 로그, 설정 키 이름은 공개 자료에 없으니, 검체에서 이 기능이 그때 켜져 있었는지는 다른 근거로 따로 확인합니다.
+7. **삼성 자동 차단의 영향을 따집니다.** 자동 차단은 One UI 6.0(Android 14) 이후 갤럭시 기기에만 있고, 기본으로 켜져 있습니다 [4]. 켜 두면 Google Play 스토어와 Galaxy Store 같은 공식 스토어 앱만 설치되고, USB 케이블로 오는 명령과 USB 소프트웨어 업데이트를 막고, 메시지로 받은 이미지로 위장한 악성 데이터를 막습니다 [4]. "최대 제한(Maximum restrictions)" 을 켜면 앱 보호(설치 중과 설치 뒤의 의심 앱 검사, 백신은 지역마다 다름)가 켜지고, 기기 관리자 앱과 업무 프로필, 첨부 자동 내려받기, 하이퍼링크와 미리보기, 공유 앨범을 막고, 사진을 공유할 때 위치 정보를 지웁니다 [4]. 자동 차단이 남기는 기록이나 로그, 설정 키 이름은 공개 자료에 없으니, 분석 대상 기기에서 이 기능이 그때 켜져 있었는지는 다른 근거로 따로 확인합니다.
 
-8. **한 줄로 정리합니다.** 링크를 받은 시각, 파일을 내려받은 시각과 주소, 설치 시각과 설치자 세 칸, 설치 앱이 알린 출처를 시간순으로 적고, 비어 있는 칸은 비어 있다고 남깁니다. 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
+8. **한 줄로 정리합니다.** 링크를 받은 시각, 파일을 내려받은 시각과 주소, 설치 시각과 설치자 세 값, 설치 앱이 알린 출처를 시간순으로 적고, 비어 있는 항목은 비어 있다고 남깁니다. 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 > 그림 자리: 왼쪽부터 "링크 받음 → 페이지 열람 → 파일 내려받음(download_uri·referer_uri) → 설치(installer·installInitiator·packageSource)" 를 시간 축에 놓고, 각 단계 아래에 근거 기록 이름을 적은 그림
 
@@ -76,9 +76,9 @@ nav_order: 1750
 
 **`packageSource` 를 시스템이 확인한 사실로 읽는 경우**도 조심합니다. 이 값은 설치 앱이 스스로 알리는 정보용 값이라서 [1], 값이 3이나 4라도 시스템이 파일 출처를 따로 검증했다는 뜻은 아닙니다.
 
-**`owner_package_name` 이 비어 있으면 파일의 주인이 없다고 보는 것**은 지나칩니다. 소유를 믿을 만하게 정할 수 없을 때 이 칸은 NULL 일 수 있습니다 [3].
+**`owner_package_name` 이 비어 있으면 파일의 주인이 없다고 보는 것**은 지나칩니다. 소유를 믿을 만하게 정할 수 없을 때 이 열은 NULL 일 수 있습니다 [3].
 
-**단위가 다른 시각을 그대로 비교하는 실수**도 있습니다. `date_added` 는 유닉스 초이고 [3], 설치 기록 파일의 시각은 16진수로 적은 long 값이며 단위가 소스에 적혀 있지 않아서 [2], 10진수로 바꾸고 단위를 검체에서 맞춘 뒤에 나란히 놓습니다.
+**단위가 다른 시각을 그대로 비교하는 실수**도 있습니다. `date_added` 는 유닉스 초이고 [3], 설치 기록 파일의 시각은 16진수로 적은 long 값이며 단위가 소스에 적혀 있지 않아서 [2], 10진수로 바꾸고 단위를 실제 데이터로 맞춘 뒤에 나란히 놓습니다.
 
 **자동 차단의 흔적이 없으니 꺼져 있었다고 단정하는 것**도 근거가 없습니다. 이 기능이 남기는 기록은 공개 자료에 없습니다 [4].
 

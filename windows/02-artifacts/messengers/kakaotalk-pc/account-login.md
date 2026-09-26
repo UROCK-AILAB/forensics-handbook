@@ -11,7 +11,7 @@ nav_order: 2020
 
 ## 한 줄 요약
 
-카카오톡 PC 는 레지스트리 `HKEY_CURRENT_USER\SOFTWARE\Kakao\KakaoTalk\DeviceInfo\<DATE>` 에 기기 정보를 남기고, 계정 폴더의 `login_list.dat` 와 `last_pc_login.dat` 에는 로그인했던 이메일이 남습니다(26.6.0.5208 기준). 계정 userId 는 `ActionLogDB.edb` 의 `Common` 표 `userid` 칸에 있습니다[1]. 이 흔적으로 이 기기에서 어느 계정을 썼는지와 대략의 시기를 가늠합니다.
+카카오톡 PC 는 레지스트리 `HKEY_CURRENT_USER\SOFTWARE\Kakao\KakaoTalk\DeviceInfo\<DATE>` 에 기기 정보를 남기고, 계정 폴더의 `login_list.dat` 와 `last_pc_login.dat` 에는 로그인했던 이메일이 남습니다(26.6.0.5208 기준). 계정 userId 는 `ActionLogDB.edb` 의 `Common` 표 `userid` 열에 있습니다[1]. 이 흔적으로 이 기기에서 어느 계정을 썼는지와 대략의 시기를 추정합니다.
 
 ## 무엇을 기록하나
 
@@ -22,7 +22,7 @@ nav_order: 2020
 | `last_pc_login.dat` | 계정 폴더 | 이메일과 base64 토큰 (구조 절 참고) |  |
 | `profile.dat` | 계정 폴더 | 키로 감싼 계정 키 재료. 40바이트입니다 |  |
 | `appstate.dat` | 계정 폴더 | 앱 상태. CBOR 구조이고 약 99KB 입니다 |  |
-| `ActionLogDB.edb` | 계정 폴더 | 행동 로그와 `Common` 표의 `userid` 칸 | [1] |
+| `ActionLogDB.edb` | 계정 폴더 | 행동 로그와 `Common` 표의 `userid` 열 | [1] |
 | 계정 폴더 이름 | `users\<40자리 16진수>` | 계정을 가리키는 고유 식별자 |  |
 
 근거 칸이 빈 항목은 카카오톡 PC 26.6.0.5208(Windows 11) 기준입니다.
@@ -31,7 +31,7 @@ nav_order: 2020
 
 - `HKEY_CURRENT_USER` 는 그 Windows 사용자의 하이브입니다. 증거 이미지에서 사용자 하이브를 찾고 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - 계정 폴더의 전체 경로는 [설치 위치와 파일 구성](install-paths-files.md) 에 있습니다.
-- `.dat` 파일과 계정 폴더 이름은 26.6.0.5208 기준입니다. 다른 버전은 검체에서 확인합니다.
+- `.dat` 파일과 계정 폴더 이름은 26.6.0.5208 기준입니다. 다른 버전은 실제 데이터로 확인합니다.
 
 카카오톡 PC 26.6.0.5208 은 키를 Windows DPAPI 로 저장하지 않습니다. 카카오 폴더와 레지스트리에 DPAPI blob 시그니처가 한 건도 없습니다.
 DPAPI blob 을 알아보는 법은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
@@ -50,15 +50,15 @@ DPAPI blob 을 알아보는 법은 [DPAPI 구조](../../../01-foundations/protec
 
 ### `last_pc_login.dat`
 
-파일은 아래 꼴입니다. 실제 값 대신 자리 표시로 적습니다.
+파일은 아래 형식입니다. 실제 값 대신 자리 표시로 적습니다.
 
 ```
 1|<이메일>|<base64 토큰>
 ```
 
-- 칸은 `|` 로 나뉩니다.
-- 세 번째 칸에는 자동 로그인 토큰으로 보이는 값이 들어 있습니다.
-- 첫 칸 `1` 의 뜻과 토큰의 만료·범위는 공개 자료에 없습니다.
+- 필드는 `|` 로 나뉩니다.
+- 세 번째 필드에는 자동 로그인 토큰으로 보이는 값이 들어 있습니다.
+- 첫 필드 `1` 의 뜻과 토큰의 만료·범위는 공개 자료에 없습니다.
 
 ### `profile.dat` 와 `appstate.dat`
 
@@ -68,7 +68,7 @@ DPAPI blob 을 알아보는 법은 [DPAPI 구조](../../../01-foundations/protec
 
 ### `ActionLogDB.edb` 의 userid
 
-- 복호한 `ActionLogDB.edb` 의 `Common` 표 `userid` 칸에 계정 userId 가 있습니다[1].
+- 복호한 `ActionLogDB.edb` 의 `Common` 표 `userid` 열에 계정 userId 가 있습니다[1].
 - userId 는 대화 DB 키의 재료이기도 합니다.
 - 계정별 키 없이 이 DB 를 읽을 수 있는 경우는 [대화 DB가 안 열릴 때 남는 단서](when-db-wont-open.md) 에서 다룹니다.
 
@@ -119,7 +119,7 @@ DPAPI blob 을 알아보는 법은 [DPAPI 구조](../../../01-foundations/protec
 
 1. 사용자 하이브를 공개 레지스트리 뷰어로 엽니다.
 2. `SOFTWARE\Kakao\KakaoTalk\DeviceInfo` 아래 하위 키 이름과 마지막 쓰기 시각을 적습니다.
-3. `ActionLogDB.edb` 가 평문인지 먼저 가립니다. 가리는 법은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
+3. `ActionLogDB.edb` 가 평문인지 먼저 판별합니다. 판별하는 법은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
 4. 평문이면 사본을 `sqlite3` 로 열어 userId 를 봅니다.
 
 ```sql
@@ -132,13 +132,13 @@ SELECT userid FROM Common;
 |---|---|
 | [사용자 프로필 목록](../../system-account/profilelist.md) | 하이브와 데이터 폴더가 어느 Windows 계정의 것인지 |
 | [로그온·로그오프](../../event-logs/logon-events/index.md) | 파일·키 시각 무렵 Windows 에 누가 로그온했는지 |
-| [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) | 계정을 쓴 사람을 가리는 흐름 |
+| [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) | 계정을 쓴 사람을 가려내는 흐름 |
 | [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) | DPAPI blob 이 무엇이고 어떻게 알아보는지 |
 | [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) | 기기 정보 값과 userId 가 키 재료로 쓰이는 방식 |
 
 ## 실습
 
-카카오톡 PC 가 든 공개 검체가 없으면 시험용 PC 에 카카오톡 PC 를 깔고 아래 질문을 풀어 봅니다.
+카카오톡 PC 가 든 공개 시험 이미지가 없으면 시험용 PC 에 카카오톡 PC 를 깔고 아래 질문을 풀어 봅니다.
 
 1. 처음 로그인한 날과 `DeviceInfo` 하위 키 이름의 날짜를 비교합니다. 같습니까?
 2. 로그아웃하고 다시 로그인하면 `last_pc_login.dat`·`login_list.dat` 의 수정 시각이 바뀝니까?

@@ -15,7 +15,7 @@ nav_order: 2390
 
 ## 무엇을 기록하나 · 왜 생기나
 
-AnyDesk 의 흔적은 세 갈래입니다.
+AnyDesk 의 흔적은 세 종류입니다.
 
 - 접속 목록 (`connection_trace.txt`): 들어온 접속만 적습니다. 받는 쪽에만 생깁니다.
 - trace 로그: 사용자 화면 쪽 로그(`ad.trace`)와 서비스 로그(`ad_svc.trace`)가 따로 있습니다. 접속과 IP 는 두 로그에 같은 내용으로 남습니다.
@@ -39,7 +39,7 @@ AnyDesk 의 흔적은 세 갈래입니다.
 | 채팅 | `%APPDATA%\AnyDesk\chat\*.txt` | 채팅을 쓴 경우 |
 | 프린터 드라이버 설치 파일 | `%APPDATA%\AnyDesk\printer_driver` | |
 | 시작 프로그램 바로가기 | `%PROGRAMDATA%\Microsoft\Windows\Start Menu\Programs\StartUp\AnyDesk.lnk` | |
-| 그 밖의 경로 | `C:\Users\*\Videos\AnyDesk\*.anydesk`, `C:\Windows\SysWOW64\config\systemprofile\AppData\Roaming\AnyDesk\*` | 흔적 목록에 있는 경로입니다[2]. 무엇을 담는지는 검체에서 확인합니다 |
+| 그 밖의 경로 | `C:\Users\*\Videos\AnyDesk\*.anydesk`, `C:\Windows\SysWOW64\config\systemprofile\AppData\Roaming\AnyDesk\*` | 흔적 목록에 있는 경로입니다[2]. 무엇을 담는지는 실제 데이터로 확인합니다 |
 
 ### 레지스트리
 
@@ -56,9 +56,9 @@ AnyDesk 의 흔적은 세 갈래입니다.
 | Security 4697 | 같은 서비스 설치. 감사 정책이 켜져 있을 때만 남습니다 |
 | Microsoft-Windows-Shell-Core/Operational 28115 | 앱 목록(App Resolver Cache)에 AnyDesk 바로가기가 추가된 기록. 설치 날짜와 설치한 사용자의 SID 를 알 수 있습니다. 예: `"AppID":"prokzult ad","Flags":49,"Name":"AnyDesk"` |
 | `C:\Windows\inf\setupapi.dev.log` | 기본 AnyDesk 프린터 드라이버 설치 기록 |
-| 프로세스 명령줄 | 조용한 설치는 `--install`, `--start-with-win`, `--silent` 인자를 함께 씁니다. 명령줄로 비밀번호를 넣으면 `echo <비밀번호> \| anydesk.exe --set-password` 꼴이 됩니다 |
+| 프로세스 명령줄 | 조용한 설치는 `--install`, `--start-with-win`, `--silent` 인자를 함께 씁니다. 명령줄로 비밀번호를 넣으면 `echo <비밀번호> \| anydesk.exe --set-password` 형식이 됩니다 |
 
-Sigma 규칙 "Suspicious Application Installed" 는 28115 에서 AppID `prokzult ad` 를 찾습니다. 명령줄 두 꼴도 각각 Sigma 규칙이 있습니다[3]. 서비스 설치 이벤트 자체는 [서비스 설치](../../event-logs/7045-4697.md)에서 다룹니다.
+Sigma 규칙 "Suspicious Application Installed" 는 28115 에서 AppID `prokzult ad` 를 찾습니다. 명령줄 두 형식에도 각각 Sigma 규칙이 있습니다[3]. 서비스 설치 이벤트 자체는 [서비스 설치](../../event-logs/7045-4697.md)에서 다룹니다.
 
 ## 구조
 
@@ -83,7 +83,7 @@ Incoming 2022-09-28, 12:39 User 442226597 442226597
 info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet.any_socket - …
 ```
 
-앞에서부터 수준(info), 날짜와 시각(밀리초까지), 구성 요소(lsvc), 숫자 칸(프로세스·스레드 번호 등)이 옵니다. 그 뒤에 모듈 이름과 내용이 옵니다. 칸마다 정확한 이름과 뜻은 공식 자료가 없어 검체에서 맞춰 봅니다.
+앞에서부터 수준(info), 날짜와 시각(밀리초까지), 구성 요소(lsvc), 숫자 필드(프로세스·스레드 번호 등)이 옵니다. 그 뒤에 모듈 이름과 내용이 옵니다. 필드마다 정확한 이름과 뜻을 밝힌 공식 자료가 없어 실제 데이터로 맞춰 봅니다.
 
 접속을 찾을 때는 아래 문자열을 검색합니다. 예시 값은 공개 자료의 것입니다.
 
@@ -125,14 +125,14 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 - 비밀번호 해시는 솔트를 섞은 값입니다. 비밀번호 자체를 보여 주지 않습니다.
 - 4697 은 감사 정책이 켜져 있을 때만 남습니다. 4697 이 없다고 설치가 없었다고 단정하지 않습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "`connection_trace.txt` 에 2022-09-28 12:39(시간대 미확인), 승인 방식 User, ID 442226597 인 들어온 접속 기록이 있다. 이 기록만으로는 수락한 사람과 세션 중에 한 일을 알 수 없다." 처럼 씁니다. 예의 값은 공개 예시입니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "`connection_trace.txt` 에 2022-09-28 12:39(시간대 미확인), 승인 방식 User, ID 442226597 인 들어온 접속 기록이 있다. 이 기록만으로는 수락한 사람과 세션 중에 한 일을 알 수 없다." 처럼 씁니다. 예의 값은 공개 예시입니다.
 
 ## 시각 해석
 
 - 접속 목록의 시각은 분까지만 있습니다. 다른 기록과 맞출 때는 1분 폭으로 봅니다.
-- 접속 목록과 trace 로그의 시각이 UTC 인지는 공개 자료가 없어 검체에서 확인합니다.
+- 접속 목록과 trace 로그의 시각이 UTC 인지는 실제 데이터로 확인해야 합니다.
 - 28115 와 7045 의 기록 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
-- 설치 직후에 trace 로그 줄이 있으면, 그 시각을 7045 기록 시각과 견주어 trace 로그의 시간대를 가늠합니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
+- 설치 직후에 trace 로그 줄이 있으면, 그 시각을 7045 기록 시각과 비교해 trace 로그의 시간대를 추정합니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
 
 ## 함정과 한계
 
@@ -140,13 +140,13 @@ info 2022-09-28 12:39:26.845       lsvc   9952   9944   21                anynet
 - **접속 목록이 두 곳에 있을 수 있습니다.** `%PROGRAMDATA%\AnyDesk\` 와 `%APPDATA%\AnyDesk\` 를 모두 수집합니다.
 - **끝의 두 숫자의 뜻이 확정되지 않았습니다.** 상대 ID 로 단정하기 전에 trace 로그와 맞춰 봅니다.
 - **trace 로그 두 개는 접속·IP 내용이 같습니다.** 한쪽이 지워졌으면 다른 쪽을 봅니다.
-- **시각이 분 단위입니다.** 짧은 접속 여러 개가 같은 분에 몰리면 순서를 가리기 어렵습니다.
+- **시각이 분 단위입니다.** 짧은 접속 여러 개가 같은 분에 몰리면 순서를 구분하기 어렵습니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-이 페이지의 파일은 모두 텍스트입니다. 헥스로 풀어야 할 이진 구조가 없어 헥스 예시를 싣지 않습니다. 인코딩은 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 가리는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
+이 페이지의 파일은 모두 텍스트입니다. 헥스로 풀어야 할 이진 구조가 없어 헥스 예시를 싣지 않습니다. 인코딩은 파일 앞 몇 바이트를 헥스로 보고 BOM 이 있는지 확인한 뒤 읽습니다. 인코딩을 판별하는 법은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
@@ -158,7 +158,7 @@ Get-ChildItem "$root\ProgramData\AnyDesk\*.trace", "$root\Users\*\AppData\Roamin
   Select-String -Pattern 'Client-ID:', 'Logged in from', 'External address', 'files completed'
 ```
 
-접속 목록은 아래 Python 코드로 칸을 나눕니다.
+접속 목록은 아래 Python 코드로 필드를 나눕니다.
 
 ```python
 import re
@@ -200,7 +200,7 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Shell-Core-Operational.evtx'; I
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 AnyDesk 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등) 가운데 AnyDesk 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. `connection_trace.txt` 는 `%PROGRAMDATA%` 와 `%APPDATA%` 가운데 어디에 있습니까? 줄은 몇 개입니까?
 2. 승인 방식이 `Passwd` 인 줄과 `User` 인 줄은 각각 몇 개입니까?

@@ -26,13 +26,13 @@ nav_order: 400
 | 설정 값 | settings global·secure 의 키 | 현행 AOSP 기준 [5] |
 | dumpsys 출력 | `dumpsys user`, `dumpsys account`, `dumpsys batterystats`, `dumpsys package` | |
 
-bootstat 폴더는 권한이 0700 이고 소유자가 system 이라서 [3], adb 일반 셸로는 읽을 수 없고 루트 권한이나 전체 파일 시스템 추출이 있어야 할 것으로 보입니다. 추출 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다. `/data/misc/bootstat`, `/data/misc/recovery`, `/data/system/frp_secret` 이 실제 기기에 그대로 있는지는 검체에서 확인합니다.
+bootstat 폴더는 권한이 0700 이고 소유자가 system 이라서 [3], adb 일반 셸로는 읽을 수 없고 루트 권한이나 전체 파일 시스템 추출이 있어야 할 것으로 보입니다. 추출 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다. `/data/misc/bootstat`, `/data/misc/recovery`, `/data/system/frp_secret` 이 실제 기기에 그대로 있는지는 직접 확인해야 합니다.
 
 버전과 제조사에 따라 달라지는 부분은 아래와 같습니다. 근거가 특정 버전 태그가 아닌 현행 AOSP 소스라서, 대부분의 항목은 도입 버전이 알려져 있지 않습니다.
 
 | 항목 | 차이 |
 |---|---|
-| bootstat 의 초기화 기록 | 현행 AOSP 에 있습니다. 도입 버전과 삼성 기기에도 그대로 남는지는 검체에서 확인합니다. |
+| bootstat 의 초기화 기록 | 현행 AOSP 에 있습니다. 도입 버전과 삼성 기기에도 그대로 남는지는 실제 기기에서 확인합니다. |
 | `/data/misc/recovery` 로 옮기는 동작 | `/cache` 파티션이 없는 기기에서만 옮깁니다. `/cache` 가 있으면 `--force-persist` 옵션이 있을 때만 옮깁니다. [4] |
 | FRP secret 확인 강제 | 기능 플래그로 켜고, 소스에 "Upgrading from Android 14 or lower" 처리가 있어 Android 15 부터의 동작으로 보입니다. [6] |
 | 앱마다 다른 Android ID | Android 8.0(API 26)부터입니다. [5] |
@@ -79,7 +79,7 @@ recovery-persist 는 시스템으로 다시 부팅해 `/data` 가 올라온 뒤,
 | `LAST_PMSG_FILE` | `/sys/fs/pstore/pmsg-ramoops-0` |
 | `LAST_CONSOLE_FILE` | `/sys/fs/pstore/console-ramoops-0` (없으면 `/sys/fs/pstore/console-ramoops`) |
 
-초기화도 복구 모드에서 돌기 때문에 그 기록이 pmsg 를 거쳐 초기화 뒤 새 `/data/misc/recovery/` 에 남을 수 있습니다. 실제 기기의 `last_log` 에 초기화 요청 줄이 남는지, 삼성 기기가 pstore 를 쓰는지는 검체에서 확인합니다.
+초기화도 복구 모드에서 돌기 때문에 그 기록이 pmsg 를 거쳐 초기화 뒤 새 `/data/misc/recovery/` 에 남을 수 있습니다. 실제 기기의 `last_log` 에 초기화 요청 줄이 남는지, 삼성 기기가 pstore 를 쓰는지는 실제 기기에서 확인합니다.
 
 ### FRP 데이터
 
@@ -114,13 +114,13 @@ PersistentDataBlockService 는 persistent 파티션을 읽고 씁니다. 이 데
 | `last_setup_shown` | secure | 설정 마법사가 마지막으로 보인 버전 | 있음 |
 | `android_id` | secure | 앱 서명 키·사용자·기기 조합마다 다른 64비트 값이고, 초기화하거나 APK 서명 키가 바뀌면 달라질 수 있음 | 있음 |
 
-`boot_count` 설명에는 "초기화 이후" 라는 말이 없어서, 초기화 때 0 부터 다시 세는지는 검체에서 확인합니다. Android ID 의 성질은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
+`boot_count` 설명에는 "초기화 이후" 라는 말이 없어서, 초기화 때 0 부터 다시 세는지는 실제 기기에서 확인합니다. Android ID 의 성질은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
 
-삼성 기기에는 이름으로 보아 초기 설정과 관련된 키가 더 있습니다. global 에 `setup_skipped`, `setup_type`, `euicc_factory_reset_timeout_millis`, `lock_reset_profile`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `quick_start_flow_type`, `quick_start_source_manufacturer`, `previous_version_pda` 가 있고, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `rampart_is_reset_by_at_command` 가 있습니다. 이름만 보면 초기 설정 중 다른 기기에서 옮기기나 AT 명령으로 한 초기화를 가리키는 것처럼 읽히지만, 뜻을 설명한 공개 자료는 없습니다.
+삼성 기기에는 이름으로 보면 초기 설정과 관련된 키가 더 있습니다. global 에 `setup_skipped`, `setup_type`, `euicc_factory_reset_timeout_millis`, `lock_reset_profile`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `quick_start_flow_type`, `quick_start_source_manufacturer`, `previous_version_pda` 가 있고, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `rampart_is_reset_by_at_command` 가 있습니다. 이름만 보면 초기 설정 중 다른 기기에서 옮기기나 AT 명령으로 한 초기화를 가리키는 것처럼 읽히지만, 뜻을 설명한 공개 자료는 없습니다.
 
-### adb 로 보이는 칸
+### adb 로 보이는 필드
 
-루트 없이 adb 일반 셸로도 아래 칸을 볼 수 있습니다. `<값>`·`#` 자리에 실제 값이 들어갑니다.
+루트 없이 adb 일반 셸로도 아래 필드를 볼 수 있습니다. `<값>`·`#` 자리에 실제 값이 들어갑니다.
 
 ```
 dumpsys user
@@ -149,17 +149,17 @@ dumpsys package
       com.google.android.setupwizard
 ```
 
-주 사용자의 `Created:` 칸이 `<unknown>` 으로 나올 수 있고, 왜 비는지 설명한 공개 자료는 없습니다. 배터리 기록의 `RESET:TIME` 은 배터리 통계를 비운 시각으로 보이지만, 초기화와 같은 뜻인지는 다른 기록과 맞춰 봐야 합니다. 각 출력은 [사용자와 프로필](users-profiles.md), [계정](accounts/index.md), [배터리 사용 기록](../app-usage/batterystats.md), [dumpsys 출력](../logs/dumpsys.md) 에서 자세히 다룹니다.
+주 사용자의 `Created:` 필드가 `<unknown>` 으로 나올 수 있고, 왜 비는지 설명한 공개 자료는 없습니다. 배터리 기록의 `RESET:TIME` 은 배터리 통계를 비운 시각으로 보이지만, 초기화와 같은 뜻인지는 다른 기록과 맞춰 봐야 합니다. 각 출력은 [사용자와 프로필](users-profiles.md), [계정](accounts/index.md), [배터리 사용 기록](../app-usage/batterystats.md), [dumpsys 출력](../logs/dumpsys.md) 에서 자세히 다룹니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** `factory_reset` 파일이 있으면 그 수정 시각은 가장 최근 초기화 뒤 bootstat 이 첫 부팅을 마친 시각을 기기 시계 기준으로 알려 줍니다. [1] `database_creation_buildid` 는 지금의 설정 데이터베이스를 어떤 빌드에서 만들었는지 알려 주고, 이 값이 현재 빌드와 다르면 데이터베이스를 만든 뒤 OTA 가 있었다는 단서가 될 수 있습니다. FRP 가 켜진 흔적은 설정 화면을 거치지 않은 초기화였을 가능성을 가리킵니다. 이 상태가 로그로 남는지는 검체에서 확인합니다.
+**증명하는 것.** `factory_reset` 파일이 있으면 그 수정 시각은 가장 최근 초기화 뒤 bootstat 이 첫 부팅을 마친 시각을 기기 시계 기준으로 알려 줍니다. [1] `database_creation_buildid` 는 지금의 설정 데이터베이스를 어떤 빌드에서 만들었는지 알려 주고, 이 값이 현재 빌드와 다르면 데이터베이스를 만든 뒤 OTA 가 있었다는 단서가 될 수 있습니다. FRP 가 켜진 흔적은 설정 화면을 거치지 않은 초기화였을 가능성을 가리킵니다. 이 상태가 로그로 남는지는 실제 기기에서 확인합니다.
 
-**증명하지 못하는 것.** 초기화를 누가 했는지, 왜 했는지는 이 흔적들로 알 수 없습니다. 초기화하면 `/data` 가 지워져 `factory_reset` 파일도 함께 사라지므로, 지금 있는 파일은 가장 최근 초기화 한 번만 알려 주고 몇 번 초기화했는지는 알려 주지 않습니다. 초기화 전에 무엇이 있었는지도 이 흔적으로는 알 수 없습니다. 보고서에는 "이 기기는 이 시각에 초기화했다" 가 아니라 "기기 시계 기준으로 이 시각에 초기화 뒤 첫 부팅을 마친 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+**증명하지 못하는 것.** 초기화를 누가 했는지, 왜 했는지는 이 흔적들로 알 수 없습니다. 초기화하면 `/data` 가 지워져 `factory_reset` 파일도 함께 사라지므로, 지금 있는 파일은 가장 최근 초기화 한 번만 알려 주고 몇 번 초기화했는지는 알려 주지 않습니다. 초기화 전에 무엇이 있었는지도 이 흔적으로는 알 수 없습니다. 보고서에는 "이 기기는 이 시각에 초기화했다" 가 아니라 "기기 시계 기준으로 이 시각에 초기화 뒤 첫 부팅을 마친 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-같은 bootstat 폴더 안에서도 파일마다 수정 시각의 기준이 다릅니다. 모두 날짜처럼 보이는 수정 시각 칸에 들어 있어서, 기준을 가리지 않고 한 줄로 늘어놓으면 엉뚱한 날짜가 섞입니다.
+같은 bootstat 폴더 안에서도 파일마다 수정 시각의 기준이 다릅니다. 모두 날짜처럼 보이는 수정 시각 필드에 들어 있어서, 기준을 구분하지 않고 한 줄로 늘어놓으면 엉뚱한 날짜가 섞입니다.
 
 | 기준 | 해당 파일 | 날짜로 그대로 읽었을 때 |
 |---|---|---|
@@ -175,7 +175,7 @@ dumpsys package
 
 파일이 비어 있다고 해서 쓸모없는 파일로 넘기기 쉽습니다. 크기 0 인 파일이 한 폴더에 여러 개 있을 뿐이라, 파일 목록에서 수정 시각 열을 같이 보지 않으면 놓칩니다.
 
-이 페이지의 bootstat·recovery·FRP 내용은 현행 AOSP 소스 기준이라, 삼성 기기에서 같은 파일이 같은 이름으로 남는지는 검체에서 확인합니다. 초기화 전 기록이 필요하면 기기 밖, 곧 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 나 [구글 백업](../mail-cloud/google-backup.md) 쪽을 봐야 합니다.
+이 페이지의 bootstat·recovery·FRP 내용은 현행 AOSP 소스 기준이라, 삼성 기기에서 같은 파일이 같은 이름으로 남는지는 실제 기기에서 확인합니다. 초기화 전 기록이 필요하면 기기 밖, 곧 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 나 [구글 백업](../mail-cloud/google-backup.md) 쪽을 봐야 합니다.
 
 ## 직접 분석해 보기
 
@@ -198,7 +198,7 @@ stat -c '%n %s %Y' /추출본/data/misc/bootstat/*
 date -u -d @1767225600
 ```
 
-루트 없이 기기에 연결했을 때는 bootstat 폴더를 읽을 수 없으므로, 설정 키와 dumpsys 칸을 먼저 모읍니다.
+루트 없이 기기에 연결했을 때는 bootstat 폴더를 읽을 수 없으므로, 설정 키와 dumpsys 필드를 먼저 모읍니다.
 
 ```
 adb shell settings list global
@@ -216,20 +216,20 @@ bootstat 폴더를 읽는 공개 분석 도구 모듈은 알려진 것이 없어
 | 계정 추가 기록 | `Accounts History` 에서 가장 오래된 `action_account_add` 시각이 초기 설정 시점의 단서가 될 수 있습니다. | [계정](accounts/index.md) |
 | 설정 값 | `database_creation_buildid`, `user_setup_complete`, `secure_frp_mode` | [설정 값](settings.md) |
 | 빌드 정보 | 현재 빌드 ID·빌드 날짜와 `database_creation_buildid`·`build_date` 비교 | [기기 정보와 빌드](device-build.md) |
-| 사용자 정보 | 사용자 생성·첫 로그인 칸 | [사용자와 프로필](users-profiles.md) |
+| 사용자 정보 | 사용자 생성·첫 로그인 필드 | [사용자와 프로필](users-profiles.md) |
 | 배터리 기록 | `RESET:TIME` 줄 | [배터리 사용 기록](../app-usage/batterystats.md) |
 
 초기화 시점을 좁힐 때는 `factory_reset` 의 수정 시각을 먼저 보고, 설정 데이터베이스 생성 빌드·계정 추가 시각·사용자 설정 완료 값을 그다음에 보며, 마지막으로 여러 기록 가운데 가장 오래된 시각을 모아 맞춰 봅니다. 여러 기록을 한 줄로 엮는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 ## 실습
 
-Android 전체 파일 시스템 추출본이 들어 있는 공개 검체(NIST CFReDS 등)를 골라 아래 질문을 풀어 봅니다.
+Android 전체 파일 시스템 추출본이 들어 있는 공개 시험 자료(NIST CFReDS 등)를 골라 아래 질문을 풀어 봅니다.
 
 1. `/data/misc/bootstat/` 에 어떤 파일이 있고, 각 파일의 수정 시각을 유닉스 초와 UTC 날짜로 적으면 무엇인가?
 2. `factory_reset`, `build_date`, `factory_reset_boot_complete` 의 수정 시각 가운데 날짜로 읽으면 안 되는 것은 무엇이고, 왜 그런가?
 3. `factory_reset` 시각과 계정 기록에서 가장 오래된 계정 추가 시각은 얼마나 떨어져 있는가?
 4. `database_creation_buildid` 와 현재 빌드 ID 가 같은가? 다르다면 그 사이에 무슨 일이 있었다고 볼 수 있는가?
-5. 검체에 `/data/misc/recovery/last_log` 가 있다면 그 안에 초기화와 관련된 줄이 있는가?
+5. 이미지에 `/data/misc/recovery/last_log` 가 있다면 그 안에 초기화와 관련된 줄이 있는가?
 
 ## 참고 문헌
 

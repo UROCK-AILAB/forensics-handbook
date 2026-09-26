@@ -78,7 +78,7 @@ predicate 조건에는 `eventMessage`, `eventType`, `messageType`, `process`, `p
 
 ### 그 밖의 하위 명령
 
-`log` 에는 `show` 와 `collect`, `config` 말고도 저장소나 아카이브의 이벤트 분포를 보여 주는 `stats`, 실시간으로 보는 `stream`, 로그 데이터를 지우는 `erase` 가 있습니다 [1]. `stats` 로 아카이브의 이벤트 분포를 먼저 보면 어느 프로세스와 서브시스템의 로그가 많은지 가늠하고 나서 predicate를 짤 수 있습니다.
+`log` 에는 `show` 와 `collect`, `config` 말고도 저장소나 아카이브의 이벤트 분포를 보여 주는 `stats`, 실시간으로 보는 `stream`, 로그 데이터를 지우는 `erase` 가 있습니다 [1]. `stats` 로 아카이브의 이벤트 분포를 먼저 보면 어느 프로세스와 서브시스템의 로그가 많은지 파악하고 나서 predicate를 짤 수 있습니다.
 
 ### 프로그램으로 읽기 (OSLogStore)
 
@@ -92,7 +92,7 @@ Mandiant의 공개 파서 macos-unifiedlogs에 든 `unifiedlog_iterator` 는 로
 
 아카이브로 알 수 있는 범위는 수집한 시점에 저장소와 메모리에 남아 있던 로그까지입니다. 용량 한도로 이미 지워진 로그는 아카이브에도 없고, `--last`·`--size` 로 범위를 줄였다면 그만큼 빠집니다.
 
-`log erase` 는 로그 데이터를 지우는 명령이고, 옵션 없이 쓰면 주 저장소와 아직 기록 중인 로그를, `--all` 을 붙이면 TTL 로그와 fault·error 내용까지 지웁니다 [1]. 그래서 로그가 있어야 할 기간에 공백이 보이면 이 명령을 쓴 흔적일 가능성도 따져 봅니다. 공백만으로는 삭제를 단정하지 않고, 용량 한도에 따른 정상 삭제와 가려 보려면 다른 기록과 맞춰 봐야 합니다. 그 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+`log erase` 는 로그 데이터를 지우는 명령이고, 옵션 없이 쓰면 주 저장소와 아직 기록 중인 로그를, `--all` 을 붙이면 TTL 로그와 fault·error 내용까지 지웁니다 [1]. 그래서 로그가 있어야 할 기간에 공백이 보이면 이 명령을 쓴 흔적일 가능성도 따져 봅니다. 공백만으로는 삭제를 단정하지 않고, 용량 한도에 따른 정상 삭제와 구분하려면 다른 기록과 맞춰 봐야 합니다. 그 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 함정
 

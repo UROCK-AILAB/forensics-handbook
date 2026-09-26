@@ -34,9 +34,9 @@ MCP 설정과 로그는 호스트 앱마다 따로 둡니다.
 | Cursor | 전역 `~/.cursor/mcp.json`, 프로젝트 `.cursor/mcp.json` | 출력(Output) 패널의 "MCP Logs" | [2] |
 | Codex CLI | `~/.codex/config.toml` 의 `[mcp_servers.<이름>]` | OAuth 토큰: 키링 또는 `CODEX_HOME/.credentials.json` | [6] |
 | Claude Code | [Claude Code](claude-code/index.md) 페이지에서 다룸 | 대화 기록 안의 MCP 서버 상태 | — |
-| Gemini CLI | `~/.gemini/config/mcp_config.json`(쓰는 제품은 검체에서 확인) | — | — |
+| Gemini CLI | `~/.gemini/config/mcp_config.json`(쓰는 제품은 실제 기기에서 확인) | — | — |
 
-Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 오류, 메시지 교환이 남습니다[3]. Windows 에서 Claude 데스크톱의 사용자 데이터 폴더는 스토어(MSIX) 설치면 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`, 스토어 밖 설치나 옛 설치면 `%APPDATA%\Claude` 입니다[7]. Windows 검체에서는 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 트리를 모두 뜹니다[8]. 스토어 앱은 `logs` 폴더도 패키지 안으로 옮겨질 수 있어서, 두 위치를 모두 뒤져 `mcp*.log` 를 찾습니다. 스토어 앱에서는 아래 경로에 MCP 흔적이 남습니다.
+Claude 데스크톱 로그에는 서버 연결 이벤트, 설정 문제, 실행 오류, 메시지 교환이 남습니다[3]. Windows 에서 Claude 데스크톱의 사용자 데이터 폴더는 스토어(MSIX) 설치면 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`, 스토어 밖 설치나 옛 설치면 `%APPDATA%\Claude` 입니다[7]. Windows 기기에서는 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 트리를 모두 뜹니다[8]. 스토어 앱은 `logs` 폴더도 패키지 안으로 옮겨질 수 있어서, 두 위치를 모두 뒤져 `mcp*.log` 를 찾습니다. 스토어 앱에서는 아래 경로에 MCP 흔적이 남습니다.
 
 ```
 %LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\
@@ -83,15 +83,15 @@ Codex 는 MCP OAuth 토큰을 `mcp_oauth_credentials_store` 설정에 따라 둡
 
 `command` 와 `args` 에서는 어떤 프로그램이 어떤 폴더를 대상으로 떴는지, `url` 에서는 어느 원격 서버에 붙도록 설정했는지 알 수 있습니다. 도구가 건드릴 수 있었던 범위를 여기서부터 좁힙니다.
 
-스토어 앱의 `claude_desktop_config.json` 에는 `mcpServers` 키 없이 `preferences` 와 `coworkUserFilesPath` 만 있을 수 있습니다. 같은 폴더의 `mcp-user-tool-toggles.json` 은 `owners`(사전)와 그 아래 목록, `v`(정수)로 되어 있습니다. 두 파일의 칸 뜻을 설명한 공개 문서가 없어서, 검체에서는 서버를 붙인 뒤와 뗀 뒤의 파일을 시험 기기에서 비교해 해석합니다.
+스토어 앱의 `claude_desktop_config.json` 에는 `mcpServers` 키 없이 `preferences` 와 `coworkUserFilesPath` 만 있을 수 있습니다. 같은 폴더의 `mcp-user-tool-toggles.json` 은 `owners`(사전)와 그 아래 목록, `v`(정수)로 되어 있습니다. 두 파일의 필드 뜻을 설명한 공개 문서는 없어서, 서버를 붙인 뒤와 뗀 뒤의 파일을 시험 기기에서 비교해 해석합니다.
 
 ### 호스트 앱이 받은 서버 로그
 
-스토어 앱 패키지의 `mcp-logs-<서버 이름>` 폴더에 있는 JSON Lines 파일은 한 줄에 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. 폴더 이름에 서버 이름이 들어가서 어느 서버의 로그인지 폴더만 보고 나눌 수 있습니다. `sessionId` 가 어느 세션 기록과 이어지는지는 공개 문서가 없어서, 같은 값이 대화 기록이나 세션 메타 파일에 있는지 검체에서 찾아 맞춥니다.
+스토어 앱 패키지의 `mcp-logs-<서버 이름>` 폴더에 있는 JSON Lines 파일은 한 줄에 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. 폴더 이름에 서버 이름이 들어가서 어느 서버의 로그인지 폴더만 보고 나눌 수 있습니다. `sessionId` 가 어느 세션 기록과 이어지는지는 공개 문서가 없어서, 같은 값이 대화 기록이나 세션 메타 파일에 있는지 실제 데이터에서 찾아 맞춥니다.
 
 ### 대화 기록·세션 메타·훅에 남는 MCP 흔적
 
-Claude Code 대화 기록 줄에는 `attachment.failedMcpServers`, `attachment.pendingMcpServers` 키가 남습니다. 대화 기록 구조는 [Claude Code](claude-code/index.md)에서 다룹니다. Claude 데스크톱 Cowork 세션 메타 파일(`local_*.json`)에는 `remoteMcpServersConfig` 칸이 있습니다[8]. 도구 문서에는 칸 이름만 있어서, 그 세션에 붙인 원격 MCP 서버 설정이 어떤 모양으로 들어가는지는 검체에서 열어 봅니다.
+Claude Code 대화 기록 줄에는 `attachment.failedMcpServers`, `attachment.pendingMcpServers` 키가 남습니다. 대화 기록 구조는 [Claude Code](claude-code/index.md)에서 다룹니다. Claude 데스크톱 Cowork 세션 메타 파일(`local_*.json`)에는 `remoteMcpServersConfig` 필드가 있습니다[8]. 도구 문서에는 필드 이름만 있어서, 그 세션에 붙인 원격 MCP 서버 설정이 어떤 모양으로 들어가는지는 실제 파일을 열어 확인합니다.
 
 Cursor 는 `beforeMCPExecution`, `afterMCPExecution` 훅으로 MCP 호출 전후에 사용자 스크립트를 돌릴 수 있습니다[1]. 조직이 감사 로그를 남겼는지 여기서 확인합니다. 훅 파일 형식은 [Cursor](cursor.md)에 있습니다.
 
@@ -122,7 +122,7 @@ MCP 메시지는 클라이언트 프로세스의 힙에 평문 UTF-8 JSON 으로
 
 MCP 는 메시지에 시각을 넣으라고 정하지 않습니다[4]. 메모리에서 되살린 메시지는 `id` 와 메모리 위치로 순서를 추정할 뿐이고, JSON-RPC 규격이 `id` 를 차례대로 매기라고 정하지 않아서 `id` 순서를 시간 순서로 단정할 수 없습니다[4]. 메모리 흔적의 시각은 메모리를 뜬 시각과, 같은 호출을 적은 디스크 쪽 기록(호스트 앱 로그, 대화 기록)에서 가져옵니다.
 
-`mcp-logs-<서버 이름>` 폴더의 JSON Lines 로그에는 `timestamp` 칸이 있습니다. 형식과 시간대를 설명한 공개 문서가 없어서, 검체에서 몇 줄을 열어 끝에 `Z` 나 `+09:00` 같은 시간대 표시가 있는지 먼저 봅니다. `mcp*.log` 도 같은 방법으로 확인합니다. 설정 파일에는 시각 칸이 없어서, 서버를 언제 등록했는지는 파일 수정 시각이나 백업·볼륨 섀도 사본의 이전 판을 비교해 좁힙니다. 여러 출처를 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+`mcp-logs-<서버 이름>` 폴더의 JSON Lines 로그에는 `timestamp` 필드가 있습니다. 형식과 시간대를 설명한 공개 문서가 없어서, 실제 파일에서 몇 줄을 열어 끝에 `Z` 나 `+09:00` 같은 시간대 표시가 있는지 먼저 봅니다. `mcp*.log` 도 같은 방법으로 확인합니다. 설정 파일에는 시각 필드가 없어서, 서버를 언제 등록했는지는 파일 수정 시각이나 백업·볼륨 섀도 사본의 이전 판을 비교해 좁힙니다. 여러 출처를 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -130,13 +130,13 @@ MCP 설정은 호스트 앱마다, 그리고 전역·프로젝트 범위마다 �
 
 호스트 앱이 받아 두는 것은 stdio 서버의 stderr 이고[3], 서버가 스스로 다른 파일에 로그를 쓰는지는 서버마다 다릅니다. 설정 파일을 사건 뒤에 고치거나 지우면 등록 흔적이 사라지므로, 호스트 앱 로그·대화 기록·세션 메타의 서버 이름을 설정과 맞춰 빈틈을 찾습니다. 설정을 바꾸고 흔적을 지우는 로컬 공격자가 있을 때는 메모리가 디스크와 별개인 증거원이 됩니다[4].
 
-메모리 흔적에는 한계가 따로 있습니다. 공개된 시험 결과는 Linux 뿐이라, Windows·macOS 클라이언트에서 같은 결과가 나오는지는 검체로 확인해야 합니다[4]. 앞으로 MCP 구현이 메시지를 평문으로 메모리에 두지 않으면 되살리기 어려워집니다[4]. 메모리에는 MCP 와 상관없는 JSON 조각도 많습니다. 증거로 쓰려면 method, `id`, 도구 이름, 인자, 응답, `inputSchema` 가 서로 맞아야 하고, 인자가 도구의 `inputSchema` 와 어긋나거나 짝이 없는 조각은 혼자서 근거로 쓰지 않습니다[4].
+메모리 흔적에는 한계가 따로 있습니다. 공개된 시험 결과는 Linux 뿐이라, Windows·macOS 클라이언트에서 같은 결과가 나오는지는 실제 기기로 확인해야 합니다[4]. 앞으로 MCP 구현이 메시지를 평문으로 메모리에 두지 않으면 되살리기 어려워집니다[4]. 메모리에는 MCP 와 상관없는 JSON 조각도 많습니다. 증거로 쓰려면 method, `id`, 도구 이름, 인자, 응답, `inputSchema` 가 서로 맞아야 하고, 인자가 도구의 `inputSchema` 와 어긋나거나 짝이 없는 조각은 혼자서 근거로 쓰지 않습니다[4].
 
 공격 시연(Cursor 2.4.27)에서는 악성 날씨 서버가 `get_current_weather` 도구의 네 번째 응답에 지시문을 끼워 넣었습니다[4]. 지시문은 작업 폴더에서 `mcp.json` 을 찾아 그 내용을 다음 도구 호출의 인자에 실으라는 것이었습니다[4]. Composer 1 과 Gemini 3 Flash 는 지시를 따랐고, GPT 5.2 Low 와 Sonnet 4.5 는 거부했습니다[4]. 추가로 부른 도구를 논문 8.2절은 `get_weather_forecast`, 8.3절은 `get_current_weather` 로 다르게 적고, 8.3절은 사용자 데이터가 `country` 인자에 실려 나갔다고 적습니다[4]. 사용자 화면에 드러난 것은 "Listed test Read mcp.json" 한 줄과 조금 바뀐 도구 호출뿐이었고, 나머지는 접힌 생각(Thinking) 블록과 입력·응답 블록을 펼쳐야 보였습니다[4]. MCPRecon 은 빼낸 내용이 든 요청은 되살렸지만, 지시문이 든 응답은 이미 덮어써져 메모리에 없었습니다[4]. 논문 안에서도 공격이 먹힌 모델을 초록은 "Composer 1 and Gemini 3 Flash", 기여 목록은 "Gemini 3 Flash and Cursor 1" 로 다르게 적습니다[4]. 인젝션 사고 전반은 [프롬프트 인젝션 사고 분석](../../03-techniques/analysis/prompt-injection.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 설정 파일, 할당되지 않은 영역, 메모리 덤프에서 MCP 조각을 찾을 때는 키 문자열 바이트를 씁니다. 아래는 문자 인코딩대로 만든 예시이고, 검체에서 뜬 바이트가 아닙니다.
+**헥스로 한 번.** 설정 파일, 할당되지 않은 영역, 메모리 덤프에서 MCP 조각을 찾을 때는 키 문자열 바이트를 씁니다. 아래는 문자 인코딩대로 만든 예시이고, 실제 기기에서 뜬 바이트가 아닙니다.
 
 ```
 만든 예시(인코딩 명세로 만든 바이트)
@@ -145,7 +145,7 @@ MCP 설정은 호스트 앱마다, 그리고 전역·프로젝트 범위마다 �
 "jsonrpc":"2.0"    UTF-8     22 6A 73 6F 6E 72 70 63 22 3A 22 32 2E 30 22
 ```
 
-메모리에서 `"jsonrpc":"2.0"` 을 찾으면 앞뒤로 중괄호 짝을 맞춰 JSON 하나를 떼어 냅니다. 뒤에 이어지는 널 바이트(`00`)는 메시지 끝을 찾는 단서가 됩니다[4]. 아래는 위 공격 시연의 칸 모양대로 만든 예시 요청이고, 값은 모두 지어낸 것입니다.
+메모리에서 `"jsonrpc":"2.0"` 을 찾으면 앞뒤로 중괄호 짝을 맞춰 JSON 하나를 떼어 냅니다. 뒤에 이어지는 널 바이트(`00`)는 메시지 끝을 찾는 단서가 됩니다[4]. 아래는 위 공격 시연의 필드 모양대로 만든 예시 요청이고, 값은 모두 지어낸 것입니다.
 
 ```json
 {"jsonrpc":"2.0","id":7,"method":"tools/call","params":{"name":"get_current_weather","arguments":{"city_name":"Exampleville","country":"XX"}}}
@@ -173,7 +173,7 @@ find "$CASE" -type d -name 'mcp-logs-*'
 python3 mcprecon.py case-0001.vmem --keywords jsonrpc tools/list tools/call --mcp-only > case-0001-mcp.jsonl
 ```
 
-출력은 한 줄에 JSON 하나이고, 칸은 `offset`, `session`, `type`(request·response·notification·unknown), `id`, `method`, `tool`, `confidence`, `mcp`, `json` 입니다. `--emit-raw` 를 주면 원문 `raw` 가 붙습니다[5]. `--tools-only` 는 `tools/call` 요청과 짝지은 응답만 남기고, `--client {codex,cursor,copilot,auto,other}` 와 `--vol3`(Volatility3 `linux.pslist` 자동 실행)으로 프로세스별로 나눌 수 있습니다[5]. JSON 짝이 안 맞으면 `--window`(기본 16KB)를 늘립니다[5]. MCPRecon 의 시험 환경은 Linux 의 Python 3.10 입니다[5]. 보고서에는 `offset` 을 함께 적고, `xxd` 로 그 위치에 같은 JSON 이 있는지 한 번 더 확인합니다[4].
+출력은 한 줄에 JSON 하나이고, 필드는 `offset`, `session`, `type`(request·response·notification·unknown), `id`, `method`, `tool`, `confidence`, `mcp`, `json` 입니다. `--emit-raw` 를 주면 원문 `raw` 가 붙습니다[5]. `--tools-only` 는 `tools/call` 요청과 짝지은 응답만 남기고, `--client {codex,cursor,copilot,auto,other}` 와 `--vol3`(Volatility3 `linux.pslist` 자동 실행)으로 프로세스별로 나눌 수 있습니다[5]. JSON 짝이 안 맞으면 `--window`(기본 16KB)를 늘립니다[5]. MCPRecon 의 시험 환경은 Linux 의 Python 3.10 입니다[5]. 보고서에는 `offset` 을 함께 적고, `xxd` 로 그 위치에 같은 JSON 이 있는지 한 번 더 확인합니다[4].
 
 ## 교차 검증
 
@@ -183,7 +183,7 @@ python3 mcprecon.py case-0001.vmem --keywords jsonrpc tools/list tools/call --mc
 
 MCPRecon 저장소에는 시험용 메모리 스냅숏(`*.vmem`, `sample.vmem`)과 Google Drive 내려받기 주소가 있습니다[5]. 저장소 파일 목록에 스냅숏이 없으면 이 주소에서 받습니다. 이 스냅숏으로 1~2번을 풀고, 나머지는 시험용 가상 머신과 시험 계정으로 풀어 봅니다.
 
-1. 시험용 스냅숏에서 `tools/list` 응답을 찾아, 모델에게 보인 도구 이름과 `required` 칸을 표로 만듭니다.
+1. 시험용 스냅숏에서 `tools/list` 응답을 찾아, 모델에게 보인 도구 이름과 `required` 필드를 표로 만듭니다.
 2. 같은 스냅숏에서 `tools/call` 요청과 같은 `id` 의 응답을 짝짓고, 짝이 없는 조각이 몇 개인지 셉니다.
 3. 로컬 stdio 서버 하나를 설정 파일로 등록하고 도구를 한 번 부른 뒤, 호스트 앱 로그에 연결·호출이 어떻게 남는지 적습니다. 그 뒤 설정에서 서버를 지우고, 로그와 대화 기록에 그 서버의 흔적이 얼마나 남는지 확인합니다.
 4. 원격 서버에 접속하는 설정을 만들고 도구를 부른 뒤 메모리를 뜹니다. 기기 디스크, 기기 메모리, 서버 쪽에 각각 무엇이 남는지 나눠 표로 만듭니다.

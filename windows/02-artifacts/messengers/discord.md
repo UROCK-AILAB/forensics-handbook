@@ -32,14 +32,14 @@ nav_order: 2080
 - `%APPDATA%\discord` 는 Electron 의 기본 규칙 `%APPDATA%\<앱 이름>` 과 맞습니다.
 - Electron 앱 폴더의 일반 구조는 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
 - `%APPDATA%\discord\1.0.9253` 처럼 버전 번호 이름의 빈 폴더가 있을 수 있습니다. 앱 버전 번호의 단서로 보입니다.
-- PTB·Canary 같은 다른 판의 폴더 이름은 공개 자료가 없어 검체에서 확인합니다.
+- PTB·Canary 같은 다른 판의 폴더 이름은 실제 데이터로 확인합니다.
 - 두 폴더 모두 사용자 프로필 아래에 있습니다. 사용자마다 따로 봅니다.
 
 ### 프로그램이 지워진 경우
 
 `%LOCALAPPDATA%\Discord` 에 `Update.exe` 와 1바이트 `.dead` 파일만 있고 `app-*` 폴더가 없어도, `%APPDATA%\discord` 의 데이터는 그대로 남아 있을 수 있습니다.
 
-이 상태는 프로그램이 지워졌거나 지워지는 중이라는 뜻으로 보이지만, 단정하지 않습니다. `.dead` 파일의 뜻과 정상 설치 때 `%LOCALAPPDATA%\Discord\app-<버전>` 이 생기는지는 공개 자료가 없어 검체에서 확인합니다.
+이 상태는 프로그램이 지워졌거나 지워지는 중이라는 뜻으로 보이지만, 단정하지 않습니다. `.dead` 파일의 뜻과 정상 설치 때 `%LOCALAPPDATA%\Discord\app-<버전>` 이 생기는지는 실제 데이터로 확인해야 합니다.
 
 ## 구조
 
@@ -76,7 +76,7 @@ nav_order: 2080
 
 `SelectedGuildStore`, `MultiAccountStore`, `user_id_cache`, `FriendGroupsStoreV2`, `GuildRoomStore`, `tokens`
 
-- 키 이름으로 보아 선택한 서버, 여러 계정, 친구 그룹 같은 상태가 담긴 것으로 보입니다.
+- 키 이름으로 보면 선택한 서버, 여러 계정, 친구 그룹 같은 상태가 담긴 것으로 보입니다.
 - `tokens` 키가 있으므로 인증 정보가 들어 있을 가능성이 있습니다. 값을 보고서에 옮기지 않습니다.
 - 이 파일이 Local Storage 의 사본인지, 언제 쓰이는지는 공개 자료가 없습니다.
 
@@ -84,7 +84,7 @@ nav_order: 2080
 
 `DiscordSystemHelper_user_rCURRENT.log`, `Discord_updater_rCURRENT.log`, `discord-webrtc_0`, `discord_krisp.log`, `discord_media_rCURRENT.log`, `discord_utils.log`, `renderer_js.log`
 
-로그 줄의 형식과 시각 표기는 공개 자료가 없어 검체에서 확인합니다.
+로그 줄의 형식과 시각 표기는 실제 데이터로 확인합니다.
 
 ### 캐시에 남는 것
 
@@ -119,7 +119,7 @@ nav_order: 2080
 
 - **사용자가 메시지를 읽었는지.** 캐시에는 앱이 받아 온 응답이 남습니다. 화면에서 읽었다는 뜻은 아닙니다.
 - **메시지가 지금도 서버에 있는지.** 캐시는 받아 온 시점의 사본입니다.
-- **사용자가 보냈는지.** 보낸 사람은 응답 JSON 안의 칸을 보고 판단합니다.
+- **사용자가 보냈는지.** 보낸 사람은 응답 JSON 안의 필드를 보고 판단합니다.
 - **캐시에 없는 대화.** 캐시 크기와 교체에 따라 얼마나 남는지 달라집니다. 없다고 대화가 없었다고 말할 수 없습니다.
 - **누가 자판 앞에 있었는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
@@ -132,7 +132,7 @@ nav_order: 2080
 | 시각 | 무엇이 바뀔 때 | 주의 |
 |---|---|---|
 | 캐시 항목의 시각 | 앱이 응답을 받아 캐시에 적을 때 | 형식과 기준은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 캐시 형식에서 다룹니다 |
-| 응답 JSON 안의 시각 | 서버가 적은 값 | 칸 이름과 형식은 공개 자료가 없습니다. [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 후보 형식을 봅니다 |
+| 응답 JSON 안의 시각 | 서버가 적은 값 | 필드 이름과 형식은 공개 자료가 없습니다. [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 후보 형식을 봅니다 |
 | 로그 줄 시각 | 로그를 쓸 때 | UTC 인지 현지 시각인지 파일 수정 시각과 맞춰 봅니다 |
 | 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](../filesystem/mft.md) 에서 봅니다 |
 
@@ -153,7 +153,7 @@ nav_order: 2080
 
 ### 헥스로 한 번
 
-아래 검색 문자열은 ASCII 로 만든 예시입니다. 실제 검체에서 나온 값이 아닙니다.
+아래 검색 문자열은 ASCII 로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다.
 
 1. `Cache\Cache_Data` 폴더를 통째로 복사합니다.
 2. `data_*` 와 `f_*` 파일에서 아래 바이트를 찾습니다. `/api/v9/channels/` 를 ASCII 로 적은 것입니다.

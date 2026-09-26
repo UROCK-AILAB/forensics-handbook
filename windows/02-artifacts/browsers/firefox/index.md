@@ -29,7 +29,7 @@ has_toc: false
 
 ## 한눈에 보기
 
-> 그림 자리: `profiles.ini` 에서 프로필 본 폴더와 로컬 폴더로 이어지고, 각 폴더 아래 주요 파일(`places.sqlite`·`cookies.sqlite`·`logins.json`·`key4.db`·세션 파일·`formhistory.sqlite`·`extensions.json`·`storage`·`cache2`)이 달린 나무 그림. 파일마다 어느 폴더에 있는지는 검체에서 확인한 뒤 그린다
+> 그림 자리: `profiles.ini` 에서 프로필 본 폴더와 로컬 폴더로 이어지고, 각 폴더 아래 주요 파일(`places.sqlite`·`cookies.sqlite`·`logins.json`·`key4.db`·세션 파일·`formhistory.sqlite`·`extensions.json`·`storage`·`cache2`)이 달린 나무 그림. 파일마다 어느 폴더에 있는지는 실제 데이터로 확인한 뒤 그린다
 
 ### 위치
 
@@ -75,7 +75,7 @@ Windows 판보다 파이어폭스 판에 따른 차이가 더 큽니다.
 | 받아 둔 웹 자원 | `cache2\` (로컬 폴더) | 캐시 전용 형식 | [캐시](cache2.md) |
 | 사이트별로 저장한 로그인 | `logins.json`·`key4.db` | JSON·SQLite | [저장 비밀번호](logins-json-key4-db.md) |
 | 열려 있던 창과 탭 | `sessionstore.jsonlz4`, `sessionstore-backups\` | LZ4 로 압축한 JSON | [세션 복원](sessionstore-jsonlz4.md) |
-| 사이트가 브라우저에 넣어 둔 값 | `storage\` | 검체에서 확인 | [웹 저장소](storage.md) |
+| 사이트가 브라우저에 넣어 둔 값 | `storage\` | 실제 데이터로 확인 | [웹 저장소](storage.md) |
 | 입력란에 친 값 | `formhistory.sqlite` | SQLite | [양식 기록](formhistory-sqlite.md) |
 | 설치한 추가 기능 | `extensions.json` | JSON | [확장 프로그램](extensions-json.md) |
 
@@ -83,15 +83,15 @@ Windows 판보다 파이어폭스 판에 따른 차이가 더 큽니다.
 
 ## 읽는 순서
 
-1. [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) — `profiles.ini` 로 프로필 폴더를 찾고, 본 폴더와 로컬 폴더를 가립니다. 모든 분석이 여기서 시작합니다.
+1. [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) — `profiles.ini` 로 프로필 폴더를 찾고, 본 폴더와 로컬 폴더를 구분합니다. 모든 분석이 여기서 시작합니다.
 2. [방문·다운로드·즐겨찾기 (places.sqlite)](places-sqlite.md) — 방문한 주소, 방문 시각, 방문 유형을 읽습니다. 즐겨찾기와 다운로드 기록도 같은 파일에서 다룹니다.
 3. [쿠키 (cookies.sqlite)](cookies-sqlite.md) — 사이트별 쿠키의 만든 시각, 마지막으로 쓴 시각, 만료 시각을 읽습니다. 스키마 버전에 따라 만료 시각의 단위가 다릅니다.
 4. [캐시 (cache2)](cache2.md) — 받아 둔 웹 자원과 항목 메타데이터를 읽습니다. 캐시는 로컬 폴더에 있습니다.
 5. [저장 비밀번호 (logins.json·key4.db)](logins-json-key4-db.md) — 사이트별 저장 로그인과 그 값을 푸는 키를 읽습니다. 파이어폭스 판에 따라 파일과 암호 방식이 다릅니다.
 6. [세션 복원 (sessionstore.jsonlz4)](sessionstore-jsonlz4.md) — 열려 있던 창과 탭을 여러 판의 세션 파일에서 꺼냅니다. 파일마다 쓰는 때가 다른 점을 다룹니다.
-7. [웹 저장소 (storage 폴더)](storage.md) — 사이트가 브라우저에 넣어 둔 값을 찾습니다. 구조를 검체에서 직접 확인하는 순서를 다룹니다.
+7. [웹 저장소 (storage 폴더)](storage.md) — 사이트가 브라우저에 넣어 둔 값을 찾습니다. 구조를 실제 데이터로 직접 확인하는 순서를 다룹니다.
 8. [양식 기록 (formhistory.sqlite)](formhistory-sqlite.md) — 입력란에 친 값, 쓴 횟수, 처음·마지막으로 쓴 시각을 읽습니다. 지운 항목의 흔적도 다룹니다.
-9. [확장 프로그램 (extensions.json)](extensions-json.md) — 설치한 추가 기능, 켜짐·꺼짐 상태, 설치 시각을 읽습니다. 파이어폭스 밖에서 설치한 확장을 가리는 법도 다룹니다.
+9. [확장 프로그램 (extensions.json)](extensions-json.md) — 설치한 추가 기능, 켜짐·꺼짐 상태, 설치 시각을 읽습니다. 파이어폭스 밖에서 설치한 확장을 가려내는 법도 다룹니다.
 
 ## 함께 볼 페이지
 

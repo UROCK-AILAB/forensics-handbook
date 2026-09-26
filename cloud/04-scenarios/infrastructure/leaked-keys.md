@@ -40,7 +40,7 @@ AWS 액세스 키, Microsoft Entra 앱 비밀·인증서, Azure Storage 계정 �
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
 | 1 | 공급자의 유출 표시: GuardDuty 결과, Entra 워크로드 ID 위험 검색, Google Cloud 키의 `disableReason`·`extendedStatus`, SCC 결과 | 공급자가 노출이나 오용을 감지했는지, 감지한 시각과 쓰인 키 | [GuardDuty](../../02-artifacts/aws/guardduty.md), [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [IAM과 서비스 계정 키](../../02-artifacts/gcp/iam-keys.md) |
-| 2 | 키의 요약 정보: AWS 자격 증명 보고서·`GetAccessKeyLastUsed`, Google Cloud Activity Analyzer | 키가 살아 있는지, 마지막으로 쓰인 날짜와 서비스·리전 | [IAM](../../02-artifacts/aws/iam.md), [IAM과 서비스 계정 키](../../02-artifacts/gcp/iam-keys.md) |
+| 2 | 키의 요약 정보: AWS 자격 증명 보고서·`GetAccessKeyLastUsed`, Google Cloud Activity Analyzer | 키가 아직 유효한지, 마지막으로 쓰인 날짜와 서비스·리전 | [IAM](../../02-artifacts/aws/iam.md), [IAM과 서비스 계정 키](../../02-artifacts/gcp/iam-keys.md) |
 | 3 | 키 ID 로 거른 호출 기록: CloudTrail `userIdentity.accessKeyId`, Entra 로그인의 `servicePrincipalCredentialKeyId`, Google Cloud `serviceAccountKeyName`, Storage 로그의 키 해시 | 이 키로 서명한 요청이 언제·어디서·무엇을 불렀나 | [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [Storage 계정 기록](../../02-artifacts/azure/storage-logs.md), [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md) |
 | 4 | 키로 만든 다른 자격 증명: STS `AssumeRole`·`GetSessionToken` 응답, `CreateAccessKey`, 서비스 주체 자격 증명 추가, `CreateServiceAccountKey`, `GenerateAccessToken` | 새어 나간 키에서 이어진 두 번째·세 번째 키 | [토큰과 세션](../../01-foundations/identity/tokens-sessions.md), [권한을 올렸나](privilege-escalation.md) |
 | 5 | 키를 쓴 뒤의 자원 변화: 인스턴스·함수 생성, 로그 설정 변경 | 키로 한 일의 결과 | [채굴용 자원을 만들었나](cryptomining.md), [로그를 끄거나 지웠나](log-tampering.md) |
@@ -72,7 +72,7 @@ AWS 액세스 키, Microsoft Entra 앱 비밀·인증서, Azure Storage 계정 �
    }
    ```
 
-   `sts:GetCallerIdentity` 는 권한이 없어도 부를 수 있고, 명시적 거부 정책이 붙어 있어도 부를 수 있습니다[6]. 그래서 새어 나간 키가 살아 있는지 확인하는 첫 호출로 이 이벤트가 나올 수 있습니다. Sigma 규칙 `aws_sts_getcalleridentity_trufflehog` 는 `eventSource` 가 `sts.amazonaws.com`, `eventName` 이 `GetCallerIdentity` 이고 `userAgent` 에 `TruffleHog` 가 들어간 레코드를 찾고, `aws_cloudtrail_pua_trufflehog` 는 `userAgent` 가 `TruffleHog` 인 레코드를 찾습니다(두 규칙 모두 experimental)[12][13]. Entra 에서는 서비스 주체 로그인의 `servicePrincipalCredentialKeyId`(인증에 쓴 키 자격 증명 ID)와 `servicePrincipalCredentialThumbprint`(인증서 지문), `clientCredentialType`(`clientSecret`, `certificate`, `clientAssertion` 등)으로 어느 비밀·인증서가 쓰였는지 좁힙니다[19]. Google Cloud 에서는 대상 서비스 감사 로그의 `authenticationInfo.serviceAccountKeyName` 이 `//iam.googleapis.com/projects/PROJECT/serviceAccounts/EMAIL/keys/KEY_ID` 모양으로 키를 가리킵니다[26]. Azure Storage 에서는 요청 기록의 인증 방식이 계정 키일 때 토큰 해시가 `key1(SHA-256)` 이나 `key2(...)` 모양이라 어느 계정 키였는지 드러나고, SAS 면 `key1(...),SasSignature(...)` 모양으로 SAS 서명의 해시가 함께 남습니다[24]. 세부 필드와 쿼리는 [Storage 계정 기록](../../02-artifacts/azure/storage-logs.md) 에 있습니다.
+   `sts:GetCallerIdentity` 는 권한이 없어도 부를 수 있고, 명시적 거부 정책이 붙어 있어도 부를 수 있습니다[6]. 그래서 새어 나간 키가 아직 유효한지 확인하는 첫 호출로 이 이벤트가 나올 수 있습니다. Sigma 규칙 `aws_sts_getcalleridentity_trufflehog` 는 `eventSource` 가 `sts.amazonaws.com`, `eventName` 이 `GetCallerIdentity` 이고 `userAgent` 에 `TruffleHog` 가 들어간 레코드를 찾고, `aws_cloudtrail_pua_trufflehog` 는 `userAgent` 가 `TruffleHog` 인 레코드를 찾습니다(두 규칙 모두 experimental)[12][13]. Entra 에서는 서비스 주체 로그인의 `servicePrincipalCredentialKeyId`(인증에 쓴 키 자격 증명 ID)와 `servicePrincipalCredentialThumbprint`(인증서 지문), `clientCredentialType`(`clientSecret`, `certificate`, `clientAssertion` 등)으로 어느 비밀·인증서가 쓰였는지 좁힙니다[19]. Google Cloud 에서는 대상 서비스 감사 로그의 `authenticationInfo.serviceAccountKeyName` 이 `//iam.googleapis.com/projects/PROJECT/serviceAccounts/EMAIL/keys/KEY_ID` 모양으로 키를 가리킵니다[26]. Azure Storage 에서는 요청 기록의 인증 방식이 계정 키일 때 토큰 해시가 `key1(SHA-256)` 이나 `key2(...)` 모양이라 어느 계정 키였는지 드러나고, SAS 면 `key1(...),SasSignature(...)` 모양으로 SAS 서명의 해시가 함께 남습니다[24]. 세부 필드와 쿼리는 [Storage 계정 기록](../../02-artifacts/azure/storage-logs.md) 에 있습니다.
 
 5. **새어 나간 키에서 이어진 자격 증명을 따라갑니다.** AWS 에서 장기 키로 `AssumeRole`·`GetSessionToken` 을 부르면 응답의 `responseElements.credentials.accessKeyId` 에 `ASIA` 로 시작하는 임시 키가 나오고, 그 뒤의 호출은 이 임시 키로 찍힙니다[5][38]. 두 API 모두 CloudTrail 레코드에 응답 요소가 들어가고, `AssumeRole` 은 `secretAccessKey` 만 빼고 남깁니다[38]. 그러니 임시 키 ID 를 다시 검색어로 넣어 호출 기록을 이어 붙입니다. 다른 사용자에게 새 액세스 키를 만든 흔적은 `iam.amazonaws.com` 의 `CreateAccessKey` 이벤트에서 `userIdentity.arn` 이 `responseElements.accessKey.userName` 을 포함하지 않는 레코드로 찾습니다(Sigma `aws_iam_backdoor_users_keys`)[14]. Entra 에서는 감사 로그 범주 ApplicationManagement 의 `Add service principal credentials`, `Update application - Certificates and secrets management` 가 앱·서비스 주체에 비밀이나 인증서를 더한 기록입니다[18][36]. Google Cloud 에서는 관리 활동 로그의 `google.iam.admin.v1.CreateServiceAccountKey` 가 키 생성이고, `authenticationInfo.principalEmail` 이 만든 주체입니다[26]. 서비스 계정 가장 (impersonation) 으로 받은 단기 토큰은 `iamcredentials.googleapis.com` 의 `GenerateAccessToken` 으로 데이터 접근 로그에 남는데, IAM 데이터 접근 로그를 켜 두었을 때만 남습니다[26]. 권한이 바뀐 기록을 읽는 법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md) 에 있습니다.
 
@@ -90,7 +90,7 @@ AWS 액세스 키, Microsoft Entra 앱 비밀·인증서, Azure Storage 계정 �
 - **"`serviceAccountKeyName` 이 없으니 그 키는 쓰이지 않았다."** App Engine·Compute Engine 처럼 키 이름을 기록하지 않는 서비스가 있습니다[26]. 단기 토큰 생성도 IAM 데이터 접근 로그를 켜지 않았으면 남지 않습니다[26].
 - **"Entra 로그인 기록에 서비스 주체 로그인이 없다."** Graph 로그인 API 는 필터를 주지 않으면 대화형 로그인만 돌려주고, 사용자 로그인과 서비스 주체 로그인을 한 필터로 함께 받는 것도 지원하지 않습니다[19]. Microsoft-Extractor-Suite 의 `Get-GraphEntraSignInLogs` 는 `servicePrincipal` 을 따로 골라 받을 수 있습니다[22].
 - **"SAS 발급 기록을 찾으면 누가 받았는지 안다."** SAS 토큰은 클라이언트 쪽에서 만드는 문자열이라 Azure Storage 가 발급을 추적하지 않고, 몇 개를 만들었는지 알려 주는 API 도 없습니다[25]. 활동 로그에 남는 것은 계정 키를 받아 간 `Microsoft.Storage/storageAccounts/listkeys/action` 같은 제어 평면 작업이고[23], 새어 나간 SAS 는 가진 사람 누구나 씁니다.
-- **"탐지 도구 결과가 서로 같다."** 같은 이름의 규칙도 도구마다 번역이 다릅니다. Sigma `aws_iam_backdoor_users_keys` 는 두 필드의 값을 비교(`fieldref`)하지만[14], Invictus-AWS 의 같은 이름 쿼리는 `userIdentity.arn LIKE '%userName%'` 로 번역되어 글자 `userName` 을 찾습니다[15]. 규칙을 쓰기 전에 실제 조건을 열어 봅니다([탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)).
+- **"탐지 도구 결과가 서로 같다."** 같은 이름의 규칙도 도구마다 번역이 다릅니다. Sigma `aws_iam_backdoor_users_keys` 는 두 필드의 값을 비교(`fieldref`)하지만[14], Invictus-AWS 의 같은 이름 쿼리는 `userIdentity.arn LIKE '%userName%'` 로 번역되어 글자 `userName` 을 찾습니다[15]. 규칙을 쓰기 전에 실제 조건을 열어 봅니다([탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)).
 
 ## 보고서 문장 예
 
@@ -101,7 +101,7 @@ AWS 액세스 키, Microsoft Entra 앱 비밀·인증서, Azure Storage 계정 �
 
 ## 함께 볼 페이지
 
-- 같은 갈래: [권한을 올렸나](privilege-escalation.md), [채굴용 자원을 만들었나](cryptomining.md), [로그를 끄거나 지웠나](log-tampering.md)
+- 같은 분류: [권한을 올렸나](privilege-escalation.md), [채굴용 자원을 만들었나](cryptomining.md), [로그를 끄거나 지웠나](log-tampering.md)
 - 사람 계정의 토큰이 새어 나간 경우: [토큰을 훔쳐 로그인했나](../account-compromise/token-theft.md), [악성 OAuth 앱에 동의했나](../account-compromise/illicit-consent.md)
 - 개념: [클라우드 계정과 역할](../../01-foundations/identity/users-roles.md), [토큰과 세션](../../01-foundations/identity/tokens-sessions.md)
 - 수집: [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md), [Microsoft 365 수집 도구](../../03-techniques/acquisition/m365-collection.md)

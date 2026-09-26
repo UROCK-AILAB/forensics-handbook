@@ -39,19 +39,19 @@ Android 8.0(API 26)부터 앱이 보는 `ANDROID_ID` 는 앱 서명 키와 사�
 | 8.0 이후 같은 서명 키로 재설치 | 바뀌지 않음 |
 | 8.0 이후 시스템 업데이트로 서명 키 변경 | 바뀌지 않음 |
 
-settings secure 에는 `android_id` 키가 있습니다. 이 키의 값과 앱마다 나뉜 Android ID 의 관계, 앱별 Android ID 를 저장하는 파일의 이름과 경로, 값의 길이와 표기 방식은 공개된 분석 자료가 없어 검체에서 확인해야 합니다.
+settings secure 에는 `android_id` 키가 있습니다. 이 키의 값과 앱마다 나뉜 Android ID 의 관계, 앱별 Android ID 를 저장하는 파일의 이름과 경로, 값의 길이와 표기 방식은 실제 기기에서 확인해야 합니다.
 
 ### IMEI 와 일련번호
 
-Android 10(API 29)부터 IMEI 와 일련번호는 "재설정할 수 없는 식별자" 로 묶여 읽기가 제한됩니다. 기기 소유자 앱이나 프로필 소유자 앱, 통신사 특권이 있는 앱, 또는 `READ_PRIVILEGED_PHONE_STATE` 권한이 있는 앱만 읽을 수 있습니다[2]. 기기 이미지 안에서 IMEI 가 남는 파일이나 데이터베이스는 공개된 분석 자료가 없어 검체에서 확인합니다.
+Android 10(API 29)부터 IMEI 와 일련번호는 "재설정할 수 없는 식별자" 로 묶여 읽기가 제한됩니다. 기기 소유자 앱이나 프로필 소유자 앱, 통신사 특권이 있는 앱, 또는 `READ_PRIVILEGED_PHONE_STATE` 권한이 있는 앱만 읽을 수 있습니다[2]. 기기 이미지 안에서 IMEI 가 남는 파일이나 데이터베이스는 실제 기기에서 확인해야 합니다.
 
 ### MAC 주소
 
-Android 6 부터 MAC 주소는 시스템 앱만 읽을 수 있고, 서드파티 앱은 읽지 못합니다[2]. Android 11 이상을 대상으로 하는 앱에서는 Passpoint 망의 MAC 무작위화가 Passpoint 프로필 단위로 이뤄집니다[2]. settings global 에는 `non_persistent_mac_randomization_force_enabled` 키가 있고, 이 키의 값과 뜻은 검체에서 확인합니다. 무작위화된 주소가 접속 기록에 어떻게 남는지는 [와이파이 설정과 접속 기록](../../02-artifacts/network/wifi.md)에서 다룹니다.
+Android 6 부터 MAC 주소는 시스템 앱만 읽을 수 있고, 서드파티 앱은 읽지 못합니다[2]. Android 11 이상을 대상으로 하는 앱에서는 Passpoint 망의 MAC 무작위화가 Passpoint 프로필 단위로 이뤄집니다[2]. settings global 에는 `non_persistent_mac_randomization_force_enabled` 키가 있고, 이 키의 값과 뜻은 실제 기기에서 확인합니다. 무작위화된 주소가 접속 기록에 어떻게 남는지는 [와이파이 설정과 접속 기록](../../02-artifacts/network/wifi.md)에서 다룹니다.
 
 ### 광고 ID
 
-광고 ID 는 사용자가 재설정할 수 있는 식별자입니다. 2021년 말 Google Play 서비스 업데이트부터는 사용자가 Android 설정에서 광고 ID 맞춤설정을 끄면 ID 가 제거되고, 앱이 조회하면 0 으로 채운 문자열을 받습니다[2]. 앱은 광고 ID 를 SSAID·MAC·IMEI 같은 영구 식별자와 연결하지 않고, 사용자 동의 없이 재설정 전후의 광고 ID 를 이어 붙이지 않도록 되어 있습니다[2]. 광고 ID 가 기기 어디에 저장되는지는 공개된 분석 자료가 없어 검체에서 확인합니다.
+광고 ID 는 사용자가 재설정할 수 있는 식별자입니다. 2021년 말 Google Play 서비스 업데이트부터는 사용자가 Android 설정에서 광고 ID 맞춤설정을 끄면 ID 가 제거되고, 앱이 조회하면 0 으로 채운 문자열을 받습니다[2]. 앱은 광고 ID 를 SSAID·MAC·IMEI 같은 영구 식별자와 연결하지 않고, 사용자 동의 없이 재설정 전후의 광고 ID 를 이어 붙이지 않도록 되어 있습니다[2]. 광고 ID 가 기기 어디에 저장되는지는 실제 기기에서 확인해야 합니다.
 
 ### 앱이 스스로 만든 ID
 
@@ -59,9 +59,9 @@ Android 6 부터 MAC 주소는 시스템 앱만 읽을 수 있고, 서드파티 
 
 ## 읽는 법
 
-adb 일반 권한으로 읽으면 식별자와 관련된 칸은 아래처럼 보입니다. 이 출력에는 IMEI 와 광고 ID 의 칸이 나오지 않습니다.
+adb 일반 권한으로 읽으면 식별자와 관련된 필드는 아래처럼 보입니다. 이 출력에는 IMEI 와 광고 ID 의 필드가 나오지 않습니다.
 
-| 출력 | 칸·키 | 알려 주는 것 |
+| 출력 | 필드·키 | 알려 주는 것 |
 |---|---|---|
 | settings secure | `android_id` | Android ID 계열 값 |
 | settings secure | `bluetooth_address`, `bluetooth_name`, `bluetooth_addr_valid` | 블루투스 주소와 이름 |
@@ -83,7 +83,7 @@ adb 일반 권한으로 읽으면 식별자와 관련된 칸은 아래처럼 보
 
 공장 초기화 때 Android ID 가 바뀌는지는 공식 문서에 적혀 있지 않습니다. 초기화 전후 기록을 식별자로 이을 때는 이 점을 보고서에 밝히고, 초기화 흔적 자체는 [초기화 흔적](../../02-artifacts/system-account/factory-reset.md)에서 따로 확인합니다.
 
-보고서에는 "같은 기기다" 대신 "앱 A 의 기록과 앱 B 의 기록에 같은 블루투스 주소가 남아 있다" 처럼 기록이 말하는 만큼만 씁니다. 기기를 쓴 사람을 가리는 흐름은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)에 있습니다.
+보고서에는 "같은 기기다" 대신 "앱 A 의 기록과 앱 B 의 기록에 같은 블루투스 주소가 남아 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 기기를 쓴 사람을 가려내는 흐름은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)에 있습니다.
 
 ## 함정
 
@@ -97,7 +97,7 @@ MAC 주소가 무작위화돼 있으면 접속 기록의 주소가 하드웨어 
 
 ## 도구
 
-- `adb shell settings list secure`, `settings list global`: 살아 있는 기기에서 식별자와 관련된 키를 봅니다. 값은 수집 시점의 상태입니다.
+- `adb shell settings list secure`, `settings list global`: 실행 중인 기기에서 식별자와 관련된 키를 봅니다. 값은 수집 시점의 상태입니다.
 - `adb shell dumpsys bluetooth_manager`, `dumpsys package`, `dumpsys account`: 블루투스 주소, 빌드 지문, 계정 목록을 봅니다. 출력의 모양은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에서 다룹니다.
 - 설정 값이 파일로 남은 경우에는 [설정 XML과 SharedPreferences](../data-formats/shared-preferences.md)나 [안드로이드 바이너리 XML](../data-formats/abx.md)에 나온 방법으로 읽습니다.
 

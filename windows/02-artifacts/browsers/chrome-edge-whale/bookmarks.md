@@ -19,7 +19,7 @@ nav_order: 1670
 
 동기화를 켜면 다른 기기에서 만든 즐겨찾기도 이 파일에 들어오고, 시크릿 창에서 만든 즐겨찾기도 일반 프로필에 저장됩니다. 시크릿 모드를 나가도 저장한 북마크는 남습니다([시크릿 모드로 무엇을 했나](../../../04-scenarios/activity/private-browsing.md)).
 
-프로필 폴더를 찾고 계열 브라우저를 가리는 법은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다. 이 페이지는 즐겨찾기 파일만 다룹니다.
+프로필 폴더를 찾고 계열 브라우저를 구분하는 법은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md)에서 다룹니다. 이 페이지는 즐겨찾기 파일만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -51,13 +51,13 @@ nav_order: 1670
 
 현재 Chromium 소스(2026년 9월 main 가지)에는 즐겨찾기 암호화 기능이 기본으로 켜져 있습니다. 기본 단계는 평문 파일과 암호화 파일을 둘 다 쓰고 읽을 때는 평문 파일만 읽는 단계이며, 소스에는 암호화 파일만 쓰는 단계도 정의돼 있습니다. 암호화는 쿠키·비밀번호와 같은 운영체제 암호화 계층(OSCrypt)을 씁니다. 키를 구하는 법은 [쿠키·비밀번호 암호화](../../../01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md)에서 다룹니다.
 
-이 기능이 켜진 안정 버전과 엣지·웨일의 설정은 판마다 다를 수 있어 검체에서 확인합니다. 검체에 암호화 파일이 있으면 평문 파일과 저장 시각을 비교합니다. 옛 이름인 `EncryptedBookmarks` · `EncryptedAccountBookmarks` 가 남아 있을 수도 있습니다.
+이 기능이 켜진 안정 버전과 엣지·웨일의 설정은 판마다 다를 수 있어 실제 데이터로 확인해야 합니다. 실제 데이터에 암호화 파일이 있으면 평문 파일과 저장 시각을 비교합니다. 옛 이름인 `EncryptedBookmarks` · `EncryptedAccountBookmarks` 가 남아 있을 수도 있습니다.
 
-### 버전에 따라 달라지는 칸
+### 버전에 따라 달라지는 필드
 
 파일 형식은 Windows 버전이 아니라 브라우저 버전에 따라 달라집니다.
 
-옛 버전이 쓴 파일에는 `guid` 나 `date_last_used` 가 없을 수 있습니다. 현재 Chromium 은 파일을 읽을 때 `date_last_used` 가 없으면 0 으로 채우고, `date_added` 가 없으면 파일을 읽은 순간의 시각으로 채우며 이 값은 다음 저장 때 파일에 적힙니다. 마지막으로 연 시각을 동기화하는 칸은 M106 에 들어왔습니다.
+옛 버전이 쓴 파일에는 `guid` 나 `date_last_used` 가 없을 수 있습니다. 현재 Chromium 은 파일을 읽을 때 `date_last_used` 가 없으면 0 으로 채우고, `date_added` 가 없으면 파일을 읽은 순간의 시각으로 채우며 이 값은 다음 저장 때 파일에 적힙니다. 마지막으로 연 시각을 동기화하는 필드는 M106 에 들어왔습니다.
 
 ## 구조
 
@@ -88,7 +88,7 @@ nav_order: 1670
 | `children` | — | ○ | 하위 항목 배열. 배열 순서가 화면 순서입니다 |
 | `meta_info` | 선택 | 선택 | 브라우저 기능이 덧붙인 키-값 쌍 |
 
-시각 세 칸은 숫자가 아니라 따옴표로 감싼 10진 문자열입니다. 최상위 폴더의 `name` 은 브라우저 화면 언어를 따릅니다. 그래서 폴더를 가릴 때는 이름 대신 `roots` 아래 키를 씁니다.
+시각 세 필드는 숫자가 아니라 따옴표로 감싼 10진 문자열입니다. 최상위 폴더의 `name` 은 브라우저 화면 언어를 따릅니다. 그래서 폴더를 구분할 때는 이름 대신 `roots` 아래 키를 씁니다.
 
 `checksum` 은 항목을 파일에 적는 순서대로 계산합니다. 순서는 `bookmark_bar` → `other` → `synced` 이고, 폴더는 자기 자신을 먼저 넣고 하위 항목을 넣습니다. 항목마다 넣는 값은 아래와 같습니다.
 
@@ -97,7 +97,7 @@ nav_order: 1670
 | URL 항목 | `id`(UTF-8) · `name`(UTF-16LE) · 글자 `url` · `url`(UTF-8) |
 | 폴더 | `id`(UTF-8) · `name`(UTF-16LE) · 글자 `folder` |
 
-`guid` 와 시각 세 칸은 계산에 들어가지 않습니다.
+`guid` 와 시각 세 필드는 계산에 들어가지 않습니다.
 
 ## 증거로서 의미
 
@@ -121,7 +121,7 @@ nav_order: 1670
 
 아래는 현재 Chromium 의 동작입니다.
 
-| 칸 | 바뀌는 때 | 바뀌지 않는 때 |
+| 필드 | 바뀌는 때 | 바뀌지 않는 때 |
 |---|---|---|
 | `date_added` | 항목을 만들 때. 동기화로 들어온 항목은 원래 기기의 값을 받습니다 | 이름·URL 을 고칠 때, 다른 폴더로 옮길 때 |
 | `date_last_used` | 항목을 열 때. 방문 기록을 지우면 그 범위에 든 값이 0 으로 돌아갑니다 | 이름·URL 을 고칠 때 |
@@ -147,11 +147,11 @@ nav_order: 1670
 
 ## 함정과 한계
 
-1. **`date_last_used` 가 0 이면 한 번도 안 열었다고 봅니다.** 방문 기록 삭제로 0 이 됐을 수 있습니다. 옛 버전이 쓴 파일에는 이 칸이 아예 없습니다.
-2. **동기화 항목을 이 PC 의 행위로 씁니다.** 파일만으로는 항목마다 어느 기기에서 만들었는지 가리기 어렵습니다. `sync_metadata` 가 있으면 동기화를 쓴 프로필입니다.
+1. **`date_last_used` 가 0 이면 한 번도 안 열었다고 봅니다.** 방문 기록 삭제로 0 이 됐을 수 있습니다. 옛 버전이 쓴 파일에는 이 필드가 아예 없습니다.
+2. **동기화 항목을 이 PC 의 행위로 씁니다.** 파일만으로는 항목마다 어느 기기에서 만들었는지 판별하기 어렵습니다. `sync_metadata` 가 있으면 동기화를 쓴 프로필입니다.
 3. **파일 하나만 봅니다.** 프로필마다 `Bookmarks`, `.bak`, `AccountBookmarks`, 암호화 파일이 있을 수 있습니다. 도구가 어느 파일을 읽었는지 확인합니다.
-4. **`date_added` 를 그대로 믿습니다.** 이 칸이 없던 파일은 브라우저가 읽은 순간의 시각으로 채웁니다. 여러 항목의 `date_added` 가 한 시각에 몰려 있으면 가져오기·동기화·파일 복원을 먼저 의심합니다.
-5. **`id` 의 빈 번호를 지운 항목으로 단정합니다.** 번호는 새 항목마다 커지지만, 빈 번호가 생기는 까닭은 삭제 말고도 있을 수 있습니다. 단서로만 씁니다.
+4. **`date_added` 를 그대로 믿습니다.** 이 필드가 없던 파일은 브라우저가 읽은 순간의 시각으로 채웁니다. 여러 항목의 `date_added` 가 한 시각에 몰려 있으면 가져오기·동기화·파일 복원을 먼저 의심합니다.
+5. **`id` 의 빈 번호를 지운 항목으로 단정합니다.** 번호는 새 항목마다 커지지만, 빈 번호가 생기는 이유는 삭제 말고도 있을 수 있습니다. 단서로만 씁니다.
 6. **화면 이름으로 폴더를 찾습니다.** 최상위 폴더 이름은 화면 언어를 따릅니다. `roots` 아래 키로 찾습니다.
 
 ### 지우기와 조작
@@ -164,7 +164,7 @@ nav_order: 1670
 
 ### 원시 바이트로 한 번
 
-아래는 설명을 위해 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `guid` 는 줄였습니다.
+아래는 설명을 위해 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다. `guid` 는 줄였습니다.
 
 ```json
 {
@@ -204,7 +204,7 @@ nav_order: 1670
 3. 날짜로 바꾸면 2025-03-14 01:23:45 UTC 입니다. 한국 시각(UTC+9)으로는 같은 날 10:23:45 입니다.
 4. `date_last_used` 도 같은 방법으로 읽습니다. 2025-03-20 06:05:10 UTC 입니다.
 5. 북마크바의 `date_modified` 는 하위 항목의 `date_added` 와 같습니다. URL 항목을 추가할 때 부모 폴더 시각이 따라 바뀐다는 규칙과 맞습니다.
-6. 북마크바의 `date_last_used` 는 0 입니다. 폴더는 이 칸을 관리하지 않습니다.
+6. 북마크바의 `date_last_used` 는 0 입니다. 폴더는 이 필드를 관리하지 않습니다.
 
 비할당 영역이나 섀도 복사본에서 옛 파일을 찾을 때는 아래 바이트를 검색합니다. 모두 ASCII 글자입니다.
 
@@ -243,7 +243,7 @@ print("계산한 값:", m.hexdigest())
 
 두 값이 다르면 그 파일은 브라우저가 마지막으로 쓴 모습이 아닙니다. 사본을 만들 때 글자 인코딩이나 줄바꿈을 바꾸지 않았는지 먼저 확인합니다.
 
-> 그림 자리: 예시 JSON 에서 `roots` 아래 세 폴더, 폴더와 URL 항목의 키, 시각 세 칸을 색으로 나눠 보여 주는 그림
+> 그림 자리: 예시 JSON 에서 `roots` 아래 세 폴더, 폴더와 URL 항목의 키, 시각 세 필드를 색으로 나눠 보여 주는 그림
 
 ### 공개 도구로 한 번
 
@@ -260,7 +260,7 @@ print("계산한 값:", m.hexdigest())
 |---|---|
 | [방문·다운로드 기록 (History)](history.md) | 즐겨찾기 URL 을 실제로 방문했는지, 언제 방문했는지. 방문의 이동 유형에는 `AUTO_BOOKMARK`(2) 값이 있습니다 |
 | [세션·탭 복원 (Sessions)](sessions.md) | `date_last_used` 무렵에 그 주소가 탭에 열려 있었는지 |
-| [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) | 프로필에 로그인한 계정. 동기화 항목일 가능성을 가립니다 |
+| [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) | 프로필에 로그인한 계정. 동기화 항목일 가능성을 판별합니다 |
 | [$MFT](../../filesystem/mft.md) · [$UsnJrnl](../../filesystem/usnjrnl.md) | `Bookmarks` 를 다시 쓴 시각들. 저널이 남은 기간의 저장 이력 |
 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) | 옛 `Bookmarks`. 지금 파일과 비교해 지운 항목을 찾습니다 |
 | [레코드 카빙](../../../03-techniques/analysis/data-recovery/record-carving.md) | 비할당 영역에 남은 옛 JSON 조각 |
@@ -279,7 +279,7 @@ print("계산한 값:", m.hexdigest())
 5. 브라우저를 닫은 채 메모장으로 즐겨찾기 이름 하나를 고칩니다. 위 파이썬 코드로 `checksum` 이 맞는지 보십시오. 브라우저를 한 번 열고 즐겨찾기를 하나 연 뒤 닫고, 다시 확인해 보십시오.
 6. $UsnJrnl 에서 프로필 폴더에 생겼다가 사라진 임시 파일과 `Bookmarks` 의 이름 바꾸기 기록을 찾아보십시오.
 
-**공개 검체(NIST CFReDS 등)** 가운데 크롬 계열 브라우저가 든 이미지에서도 해 봅니다.
+**공개 시험 이미지(NIST CFReDS 등)** 가운데 크롬 계열 브라우저가 든 이미지에서도 해 봅니다.
 
 1. 프로필마다 즐겨찾기 파일이 몇 개 있습니까?
 2. `Bookmarks` 와 `Bookmarks.bak` 의 항목 차이를 표로 만들어 보십시오.
@@ -289,7 +289,7 @@ print("계산한 값:", m.hexdigest())
 
 - Chromium 소스, `components/bookmarks/browser/bookmark_codec.cc` (JSON 키·시각 표현·checksum 계산) — https://github.com/chromium/chromium/blob/main/components/bookmarks/browser/bookmark_codec.cc
 - Chromium 소스, `bookmark_storage.cc`·`bookmark_storage.h`·`bookmark_constants.cc`·`bookmark_features.cc` (저장 간격·`.bak` 생성·파일 이름·암호화 파일) — https://github.com/chromium/chromium/blob/main/components/bookmarks/browser/bookmark_storage.cc , https://github.com/chromium/chromium/blob/main/components/bookmarks/common/bookmark_constants.cc , https://github.com/chromium/chromium/blob/main/components/bookmarks/common/bookmark_features.cc
-- Chromium 소스, `bookmark_model.cc`·`bookmark_node.h`·`sync/protocol/bookmark_specifics.proto` (시각이 바뀌는 때·동기화 칸) — https://github.com/chromium/chromium/blob/main/components/bookmarks/browser/bookmark_model.cc , https://github.com/chromium/chromium/blob/main/components/sync/protocol/bookmark_specifics.proto
+- Chromium 소스, `bookmark_model.cc`·`bookmark_node.h`·`sync/protocol/bookmark_specifics.proto` (시각이 바뀌는 때·동기화 필드) — https://github.com/chromium/chromium/blob/main/components/bookmarks/browser/bookmark_model.cc , https://github.com/chromium/chromium/blob/main/components/sync/protocol/bookmark_specifics.proto
 - Chromium 문서, "User Data Directory" — https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md
 - Microsoft Learn, "Microsoft Edge Browser Policy Documentation: UserDataDir" — https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies/userdatadir
 - Google Chrome 고객센터, "How private browsing works in Chrome" — https://support.google.com/chrome/answer/95464

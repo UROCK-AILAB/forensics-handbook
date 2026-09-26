@@ -101,7 +101,7 @@ version account-id interface-id srcaddr dstaddr srcport dstport protocol packets
 
 **증명하지 못하는 것.** 페이로드가 없으므로 무엇을 보냈는지는 알 수 없습니다[3]. 어느 프로세스·사용자·IAM 주체가 만든 트래픽인지도 담지 않으므로, 사람과 이어 붙이려면 CloudTrail 이나 인스턴스 안의 기록이 필요합니다. Amazon DNS 서버로 간 질의, 169.254.169.254 의 인스턴스 메타데이터 접근, 169.254.169.123 의 Time Sync, DHCP, ARP, 기본 VPC 라우터 예약 주소로 간 트래픽, Windows 라이선스 활성화 트래픽, 끝점 인터페이스와 Network Load Balancer 인터페이스 사이 트래픽은 기록하지 않습니다[5]. 트래픽 미러링의 원본 쪽 트래픽과 만들고 몇 분 만에 지운 리전 NAT 게이트웨이의 트래픽도 빠집니다[5]. 그래서 흐름 로그에 없다고 해서 그 통신이 없었다고 쓰면 안 됩니다. `SKIPDATA` 한 줄은 기록하지 못한 흐름 여러 개를 대신할 수 있어서[4], 그 간격에 흐름이 몇 개 빠졌는지는 이 줄로 알 수 없습니다.
 
-보고서에는 "2026-09-01 03:10 UTC 전후 1분 창에 203.0.113.25 에서 인스턴스의 22번 포트로 TCP 패킷 18개(3,120바이트)가 들어왔고 허용된 기록이 있다" 처럼 레코드가 말하는 만큼만 씁니다(만든 예시). 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
+보고서에는 "2026-09-01 03:10 UTC 전후 1분 창에 203.0.113.25 에서 인스턴스의 22번 포트로 TCP 패킷 18개(3,120바이트)가 들어왔고 허용된 기록이 있다" 처럼 레코드로 확인되는 만큼만 씁니다(만든 예시). 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
 
 ## 시각 해석
 
@@ -145,7 +145,7 @@ zcat *.log.gz | awk '$4=="198.51.100.10" && $13=="ACCEPT" {b[$5]+=$10} END {for 
 
 CloudWatch Logs 로 보낸 흐름 로그는 로그 그룹에서 스트림(인터페이스)별로 받아 같은 방식으로 읽고, 받는 방법은 [CloudWatch Logs](cloudwatch-logs.md) 와 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) 에서 다룹니다.
 
-**공개 도구로 읽기.** Invictus-AWS 는 계정의 흐름 로그 설정을 훑어 S3 로 보내는 흐름 로그의 버킷 이름을 모읍니다[10]. 그 버킷에서 위 경로 규칙으로 날짜 범위의 파일을 받고, 위의 명령으로 거릅니다.
+**공개 도구로 읽기.** Invictus-AWS 는 계정의 흐름 로그 설정을 살펴 S3 로 보내는 흐름 로그의 버킷 이름을 모읍니다[10]. 그 버킷에서 위 경로 규칙으로 날짜 범위의 파일을 받고, 위의 명령으로 거릅니다.
 
 ## 교차 검증
 
@@ -154,7 +154,7 @@ CloudWatch Logs 로 보낸 흐름 로그는 로그 그룹에서 스트림(인터
 - [S3 접근 기록](s3-access-logs.md) — `pkt-dst-aws-service` 가 `S3` 인 큰 흐름이 있으면 같은 시간대의 S3 요청 기록에서 어느 객체였는지 찾습니다.
 - [EC2 인스턴스와 스냅숏](ec2-ebs.md) — `instance-id`·인터페이스 ID 로 인스턴스를 찾고, 인스턴스 안의 기록은 [클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html) 으로 확보해 [인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html) 의 SSH 로그인과 맞춰 봅니다.
 - [네트워크 흐름 로그](../azure/flow-logs.md), [VPC 흐름 로그 (Google Cloud)](../gcp/vpc-flow-logs.md) — 다른 클라우드의 같은 역할을 하는 기록입니다.
-- [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md) — 이 쪽의 기록을 조사 흐름으로 묶습니다.
+- [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md) — 이 페이지의 기록을 조사 흐름으로 묶습니다.
 
 ## 실습
 

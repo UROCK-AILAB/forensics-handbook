@@ -15,7 +15,7 @@ SYSTEM 하이브의 `Enum\USBSTOR` 키에는 USB 대용량 저장장치 드라�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-USB 장치가 대용량 저장장치 부류이면 Windows 는 USB 저장 포트 드라이버 `Usbstor.sys` 를 올립니다. Windows 2000 부터 들어 있는 드라이버입니다. `Usbstor.sys` 는 장치 안의 논리 장치 (Logical Unit) 마다 물리 장치 객체 (PDO) 를 하나씩 만들며, 논리 장치는 16개까지입니다. 칸이 두 개인 카드 리더라면 PDO 가 칸마다 하나씩 생깁니다.
+USB 장치가 대용량 저장장치 부류이면 Windows 는 USB 저장 포트 드라이버 `Usbstor.sys` 를 올립니다. Windows 2000 부터 들어 있는 드라이버입니다. `Usbstor.sys` 는 장치 안의 논리 장치 (Logical Unit) 마다 물리 장치 객체 (PDO) 를 하나씩 만들며, 논리 장치는 16개까지입니다. 슬롯이 두 개인 카드 리더라면 PDO 가 슬롯마다 하나씩 생깁니다.
 
 이 PDO 의 식별 문자열은 장치가 SCSI 조회 명령 (INQUIRY) 에 답한 데이터로 만듭니다. 플러그 앤 플레이 관리자 (PnP Manager) 는 장치마다 `Enum` 아래에 키를 만들고 이 정보를 적습니다. 장치를 뺀 뒤에도 키는 남지만, Windows 8.1 이후는 오래 안 보인 장치의 키를 스스로 지웁니다(아래 "함정과 한계").
 
@@ -60,9 +60,9 @@ Enum\USBSTOR
 
 ### 장치 항목 키 이름
 
-키 이름은 `<종류>&Ven_<제조사>&Prod_<제품>&Rev_<리비전>` 꼴입니다. 네 칸은 장치가 SCSI 조회 명령에 답한 문자열입니다. 종류 칸에 들어가는 말은 아래와 같습니다.
+키 이름은 `<종류>&Ven_<제조사>&Prod_<제품>&Rev_<리비전>` 형식입니다. 네 필드는 장치가 SCSI 조회 명령에 답한 문자열입니다. 종류 필드에 들어가는 말은 아래와 같습니다.
 
-| SCSI 장치 유형 코드 | 종류 칸 | 일반 이름 (Generic Type) |
+| SCSI 장치 유형 코드 | 종류 필드 | 일반 이름 (Generic Type) |
 |---|---|---|
 | 0 (직접 접근 장치) | `Disk` 또는 `SFloppy` | `GenDisk` 또는 `GenSFloppy` |
 | 1 (순차 접근 장치) | `Sequential` | `GenSequential` |
@@ -72,11 +72,11 @@ Enum\USBSTOR
 | 8 (매체 교환 장치) | `Changer` | `GenChanger` |
 | 그 밖의 값 | `Other` | `UsbstorOther` |
 
-하드웨어 ID 는 칸 사이에 구분자 없이 고정 길이로 붙여 씁니다. 제조사는 8자, 제품은 16자, 리비전은 4자입니다. 공백 같은 특수 문자는 밑줄로 바꿉니다. 제품 문자열이 `U3 Cruzer Micro` 라고 가정하고 위 예를 이 규칙으로 쓰면 `USBSTOR\DiskSanDisk_U3_Cruzer_Micro_3.27` 입니다.
+하드웨어 ID 는 필드 사이에 구분자 없이 고정 길이로 붙여 씁니다. 제조사는 8자, 제품은 16자, 리비전은 4자입니다. 공백 같은 특수 문자는 밑줄로 바꿉니다. 제품 문자열이 `U3 Cruzer Micro` 라고 가정하고 위 예를 이 규칙으로 쓰면 `USBSTOR\DiskSanDisk_U3_Cruzer_Micro_3.27` 입니다.
 
-키 이름은 이 꼴과 다릅니다. 키 이름에는 `&Ven_`·`&Prod_`·`&Rev_` 구분자가 있고 칸 끝을 채운 밑줄은 없습니다. 같은 인스턴스 키의 `HardwareID` 값 첫 줄은 위의 고정 길이 꼴입니다.
+키 이름은 이 형식과 다릅니다. 키 이름에는 `&Ven_`·`&Prod_`·`&Rev_` 구분자가 있고 필드 끝을 채운 밑줄은 없습니다. 같은 인스턴스 키의 `HardwareID` 값 첫 줄은 위의 고정 길이 형식입니다.
 
-이 문자열은 장치가 스스로 알린 값입니다. 상표 이름과 다를 수 있습니다. 제조사 칸에 `USB` 라고 적고 상표와 모델은 제품 칸에 적는 USB 메모리도 있습니다. 실제 제조사는 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md)의 VID 로 다시 확인합니다.
+이 문자열은 장치가 스스로 알린 값입니다. 상표 이름과 다를 수 있습니다. 제조사 필드에 `USB` 라고 적고 상표와 모델은 제품 필드에 적는 USB 메모리도 있습니다. 실제 제조사는 [USB 장치 식별자 (Enum\USB VID·PID)](enum-usb-vid-pid.md)의 VID 로 다시 확인합니다.
 
 ### 인스턴스 키 이름
 
@@ -93,7 +93,7 @@ Windows 11 빌드 26200 에서 두 장치는 이렇게 남았습니다.
 
 `Capabilities` 값은 장치 능력 플래그 (`CM_DEVCAP_*`) 이고 `cfgmgr32.h` 에서 0x10 은 UniqueID 입니다. 두 장치 모두 레지스트리 값과 PnP API 가 돌려준 값이 같았습니다.
 
-둘째 장치는 일련번호가 있었는데도 UniqueID 가 꺼져 있었고, 이름은 둘째 글자가 `&` 인 꼴이었습니다. 앞의 인스턴스 ID 설명과 맞습니다. 그러므로 `&` 형 이름은 "일련번호가 없다" 보다 "이 PC 의 PnP 관리자가 만든 이름" 으로 읽습니다. 이름 안에 일련번호가 섞여 있을 수 있고, 이런 이름은 다른 PC 에서 같은 장치를 꽂았을 때 같게 나온다는 보장이 없습니다.
+둘째 장치는 일련번호가 있었는데도 UniqueID 가 꺼져 있었고, 이름은 둘째 글자가 `&` 인 모양이었습니다. 앞의 인스턴스 ID 설명과 맞습니다. 그러므로 `&` 형 이름은 "일련번호가 없다" 보다 "이 PC 의 PnP 관리자가 만든 이름" 으로 읽습니다. 이름 안에 일련번호가 섞여 있을 수 있고, 이런 이름은 다른 PC 에서 같은 장치를 꽂았을 때 같게 나온다는 보장이 없습니다.
 
 첫째 장치처럼 긴 일련번호는 잘릴 수 있으므로 `Enum\USB` 쪽과 맞출 때는 앞부분이 같은지, `ContainerID` 가 같은지를 봅니다.
 
@@ -107,7 +107,7 @@ Windows 11 빌드 26200 에서 두 장치는 이렇게 남았습니다.
 
 | 값 | 뜻 | 분석에 쓰는 곳 |
 |---|---|---|
-| `FriendlyName` | 장치 표시 이름 | 제조사·제품 문자열 뒤에 ` USB Device` 가 붙은 꼴입니다. |
+| `FriendlyName` | 장치 표시 이름 | 제조사·제품 문자열 뒤에 ` USB Device` 가 붙은 형식입니다. |
 | `HardwareID`·`CompatibleIDs` | 하드웨어 ID 목록, 호환 ID 목록 (REG_MULTI_SZ) | 호환 ID 는 `USBSTOR\Disk`·`USBSTOR\RAW`·`GenDisk` 입니다. |
 | `ContainerID` | 한 물리 장치에서 나온 장치 노드를 묶는 GUID | `Enum\USB`·AmCache·휴대용 장치 기록과 같은 PC 안에서 잇습니다. |
 | `ClassGUID` | 장치 설치 클래스 GUID | 디스크는 `{4d36e967-e325-11ce-bfc1-08002be10318}` 입니다. |
@@ -134,7 +134,7 @@ Forensics Wiki 는 인스턴스 키의 `ParentIdPrefix` 값으로 MountedDevices
 
 - 이 장치 항목 문자열과 인스턴스 ID 로 등록된 저장장치가 이 PC 에 USB 대용량 저장장치로 설치된 적이 있습니다.
 - 장치를 특정할 단서가 남습니다. 종류·제조사·제품·리비전 문자열과 Windows 에 보고된 일련번호입니다.
-- 인스턴스 이름이 일련번호 꼴이면 다른 PC 의 기록이나 압수한 장치와 맞춰 볼 수 있습니다.
+- 인스턴스 이름이 일련번호 형식이면 다른 PC 의 기록이나 압수한 장치와 맞춰 볼 수 있습니다.
 - `ContainerID` 로 같은 PC 안의 다른 장치 기록과 이을 수 있습니다.
 
 ### 증명하지 못하는 것
@@ -165,15 +165,15 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 
 키 시각이 무엇에 따라 바뀌는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
-2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 한 번만 꽂은 장치에서는 인스턴스 키 시각이 속성의 설치 시각·마지막 연결 시각과 같고, PC 를 다시 켜도 키 시각은 바뀌지 않습니다. 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지는 공개 자료가 없습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
+2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 한 번만 꽂은 장치에서는 인스턴스 키 시각이 속성의 설치 시각·마지막 연결 시각과 같고, PC 를 다시 켜도 키 시각은 바뀌지 않습니다. 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지 설명한 공개 문서는 없습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
 - Windows 8.1 이후는 바뀐 내용을 트랜잭션 로그에 먼저 씁니다. 하이브 파일만 보면 최근 연결이 빠질 수 있습니다. → [.LOG1·.LOG2](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)
 
 ## 함정과 한계
 
-1. **Windows 가 스스로 지웁니다.** Windows 8.1·10 에서는 30일 넘게 안 보인 장치의 키가 지워집니다. 지운 기록은 `setupapi.dev.log` 에 남습니다. Windows 11 에서는 한 번의 정리로 장치 16개가 지워진 예가 있습니다. 로그에서 이 정리는 `[Device and Driver Disk Cleanup Handler - {GUID}]` 구역으로 시작하고, 그 안에 장치마다 "`Device <장치 인스턴스 ID> was removed.`" 줄이 있습니다. 키가 없을 때는 사용자가 지운 것인지 Windows 가 지운 것인지부터 가립니다.
+1. **Windows 가 스스로 지웁니다.** Windows 8.1·10 에서는 30일 넘게 안 보인 장치의 키가 지워집니다. 지운 기록은 `setupapi.dev.log` 에 남습니다. Windows 11 에서는 한 번의 정리로 장치 16개가 지워진 예가 있습니다. 로그에서 이 정리는 `[Device and Driver Disk Cleanup Handler - {GUID}]` 구역으로 시작하고, 그 안에 장치마다 "`Device <장치 인스턴스 ID> was removed.`" 줄이 있습니다. 키가 없을 때는 사용자가 지운 것인지 Windows 가 지운 것인지부터 확인합니다.
 2. **UASP 장치는 USBSTOR 에 없습니다.** → [USBSTOR 에 안 남는 장치](uasp-scsi-sd.md)
 3. **이름이 `Enum\USB` 쪽 일련번호와 똑같지 않을 수 있습니다.** 일련번호가 잘리거나 앞에 다른 문자열이 붙습니다(위 "인스턴스 키 이름").
-4. **제조사 칸과 `Mfg` 값으로 제조사를 정하지 않습니다.** 제조사 칸은 장치가 알린 문자열입니다. `Mfg` 는 드라이버 INF 의 일반 문자열입니다.
+4. **제조사 필드와 `Mfg` 값으로 제조사를 정하지 않습니다.** 제조사 필드는 장치가 알린 문자열입니다. `Mfg` 는 드라이버 INF 의 일반 문자열입니다.
 5. **도구마다 시각 열이 다릅니다.** 한 공개 플러그인(RegistryPlugin.USBSTOR)은 "시각" 열에 장치 항목 키의 마지막 기록 시각을 넣습니다. 같은 플러그인은 `DiskId` 를 장치 항목 키 아래 첫 번째 인스턴스에서만 읽습니다. 그래서 한 장치 항목 아래 인스턴스가 여럿이면 `DiskId` 가 모두 같게 나옵니다. 속성 `0064`·`0065` 이름을 바꿔 적는 도구도 있습니다. 이 내용은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
 6. **컨트롤셋이 여럿이면 모두 봅니다.** 한쪽에만 남은 장치가 있을 수 있습니다.
 7. **누가 지운 경우에도 흔적이 남습니다.** 하이브 안의 [지워진 셀](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md), 트랜잭션 로그, [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 속 옛 SYSTEM 하이브, `setupapi.dev.log`, [AmCache 장치 항목](../../execution/amcache-hve/inventorydevicepnp.md)을 봅니다. Cowen 은 `SYSTEM\Setup\Upgrade\PnP\CurrentControlSet\Control\DeviceMigration\Devices\USBSTOR` 에도 장치가 남는다고 보고했지만, Windows 11 에서는 `DeviceMigration\Devices` 키는 있어도 그 아래에 `USBSTOR` 가 없을 수 있습니다.
@@ -184,10 +184,10 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 
 1. SYSTEM 하이브와 `.LOG1`·`.LOG2` 를 사본으로 확보합니다.
 2. 하이브에서 ASCII 문자열 `Disk&Ven_`(`44 69 73 6B 26 56 65 6E 5F`)를 찾습니다. 장치 항목 키의 키 노드(`nk`) 셀이 걸립니다. 같은 문자열은 `DeviceClasses` 하위 키 이름에도 들어 있으니 셀의 서명을 확인합니다.
-3. 셀 맨 앞 4바이트 크기 칸의 부호를 봅니다. 음수는 쓰는 셀, 양수는 빈 셀입니다. 빈 셀에서 걸린 키는 지워진 키일 수 있습니다.
+3. 셀 맨 앞 4바이트 크기 필드의 부호를 봅니다. 음수는 쓰는 셀, 양수는 빈 셀입니다. 빈 셀에서 걸린 키는 지워진 키일 수 있습니다.
 4. 장치 항목 키의 하위 키 목록을 따라가 인스턴스 키의 `nk` 셀을 읽습니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 
-아래는 libregf 형식 명세로 만든 예시입니다. 검체에서 나온 값이 아닙니다. 인스턴스 키 이름은 `AB12CD34&0` 이라고 가정했습니다. 목록 위치를 가리키는 오프셋들도 지어낸 값입니다.
+아래는 libregf 형식 명세로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다. 인스턴스 키 이름은 `AB12CD34&0` 이라고 가정했습니다. 목록 위치를 가리키는 오프셋들도 지어낸 값입니다.
 
 ```
 00000000  a0 ff ff ff 6e 6b 20 00 80 e6 1b c4 9b 6e da 01  |....nk ......n..|
@@ -236,7 +236,7 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 USB 저장장치를 쓴 시나리오 이미지를 골라 풀어 봅니다.
+NIST CFReDS 같은 공개 실습 이미지 가운데 USB 저장장치를 쓴 시나리오 이미지를 골라 풀어 봅니다.
 
 1. `Select` 키로 쓰던 컨트롤셋을 정하고 `Enum\USBSTOR` 의 장치 항목 키와 인스턴스 키를 모두 적습니다. 장치는 몇 개입니까?
 2. 인스턴스 키 이름의 둘째 글자가 `&` 인 장치가 있습니까? 그 장치의 `Capabilities` 값은 얼마입니까?

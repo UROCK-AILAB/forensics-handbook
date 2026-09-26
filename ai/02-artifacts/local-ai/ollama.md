@@ -8,7 +8,7 @@ nav_order: 680
 
 Ollama 는 내려받은 언어 모델을 자기 컴퓨터에서 돌리는 백엔드 런타임이고, 대화 본문은 남기지 않지만 서버 로그에 모델을 받고 올리고 부른 시각이 줄마다 남고 `.ollama` 폴더에 모델 매니페스트와 레이어, CLI 입력 기록이 남습니다.
 
-이 쪽의 경로와 로그 모양은 Ollama 0.6.5 기준이고[1], 뒤의 판은 로그 줄 모양과 파일이 다를 수 있습니다.
+이 페이지의 경로와 로그 모양은 Ollama 0.6.5 기준이고[1], 뒤의 판은 로그 줄 모양과 파일이 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -50,9 +50,9 @@ Windows 에서 Ollama 가 쓰는 경로는 아래와 같습니다[1, 부록 A][5
 | `%LocalAppData%\Programs\Ollama` | 실행 파일(설치할 때 PATH 에 추가) | 문서, 샘플 |
 | `%TEMP%` 아래 `ollama` 로 시작하는 폴더 | 임시 파일 | 문서 |
 
-매니페스트 경로의 마지막 자리(`{parameters}`)에는 `llama3.2\latest` 처럼 태그 이름(`latest`)이 오고, LangurTrace 출력은 이 값을 `parameter` 칸에 넣습니다[1, 부록 A][2].
+매니페스트 경로의 마지막 자리(`{parameters}`)에는 `llama3.2\latest` 처럼 태그 이름(`latest`)이 오고, LangurTrace 출력은 이 값을 `parameter` 열에 넣습니다[1, 부록 A][2].
 
-앱 로그에는 `%LocalAppData%\Ollama\config.json` 을 썼다는 줄(`msg="wrote store: …\\config.json"`)과, 업데이트 설치 파일을 `%LocalAppData%\Ollama\updates\` 아래 폴더에 받았다는 줄도 남습니다[2]. `config.json` 의 내용은 공개된 분석 자료가 없어 검체에서 열어 확인합니다.
+앱 로그에는 `%LocalAppData%\Ollama\config.json` 을 썼다는 줄(`msg="wrote store: …\\config.json"`)과, 업데이트 설치 파일을 `%LocalAppData%\Ollama\updates\` 아래 폴더에 받았다는 줄도 남습니다[2]. `config.json` 의 내용은 실제 기기에서 열어 확인합니다.
 
 Windows 판은 관리자 권한 없이 사용자 폴더 아래에 깔리고, 설치 프로그램을 `OllamaSetup.exe /DIR="d:\some\location"` 처럼 실행하면 다른 폴더에 깔립니다[5]. 설치하지 않고 압축만 풀어 쓰는 명령줄 판(`ollama-windows-amd64.zip`, `ollama-windows-amd64-rocm.zip`, `ollama-windows-amd64-mlx.zip`)도 공식으로 받을 수 있습니다[5].
 
@@ -104,9 +104,9 @@ AppData/Local/Ollama/
 
 ### 모델 매니페스트와 레이어
 
-매니페스트는 Docker 방식의 매니페스트 파일이고, 모델 본체·템플릿·라이선스·매개변수 레이어를 SHA-256 digest 와 크기로 적습니다[1, §4.4]. 모델 이름은 파일 안이 아니라 경로에 있고, `library\{모델 이름}\{parameters}` 의 마지막 파일이 매니페스트 자체입니다. 레이어 파일은 digest 를 이름으로 삼아서 `blobs\sha256-{digest}` 로 저장되고, 매니페스트의 `sha256:` 뒤 값과 파일 이름의 `sha256-` 뒤 값이 같습니다[1, §4.4][2]. 매니페스트의 칸은 아래와 같습니다[2].
+매니페스트는 Docker 방식의 매니페스트 파일이고, 모델 본체·템플릿·라이선스·매개변수 레이어를 SHA-256 digest 와 크기로 적습니다[1, §4.4]. 모델 이름은 파일 안이 아니라 경로에 있고, `library\{모델 이름}\{parameters}` 의 마지막 파일이 매니페스트 자체입니다. 레이어 파일은 digest 를 이름으로 삼아서 `blobs\sha256-{digest}` 로 저장되고, 매니페스트의 `sha256:` 뒤 값과 파일 이름의 `sha256-` 뒤 값이 같습니다[1, §4.4][2]. 매니페스트의 필드는 아래와 같습니다[2].
 
-| 칸 | 샘플 값 |
+| 필드 | 샘플 값 |
 |---|---|
 | `schemaVersion` | `2` |
 | `mediaType` | `application/vnd.docker.distribution.manifest.v2+json` |
@@ -123,7 +123,7 @@ AppData/Local/Ollama/
 | `application/vnd.ollama.image.license` | 라이선스(샘플에서는 두 개) |
 | `application/vnd.ollama.image.params` | 매개변수 |
 
-LangurTrace 는 이 네 이름으로 레이어를 나눕니다[2, `manifest_reporter.py`]. `config` 레이어는 JSON 이고 `model_format`(`gguf`), `model_family`, `model_families`, `model_type`, `file_type`, `architecture`, `os`, `rootfs.diff_ids` 칸이 있으며, `params` 레이어도 JSON 입니다(`stop` 칸)[2]. 모델 본체 레이어가 GGUF 라는 점은 서버 로그의 `(version GGUF V3 (latest))` 로도 드러납니다[2]. 모델 본체를 바이트로 읽는 법은 [로컬 모델 파일](model-files.md)에서 다룹니다.
+LangurTrace 는 이 네 이름으로 레이어를 나눕니다[2, `manifest_reporter.py`]. `config` 레이어는 JSON 이고 `model_format`(`gguf`), `model_family`, `model_families`, `model_type`, `file_type`, `architecture`, `os`, `rootfs.diff_ids` 필드가 있으며, `params` 레이어도 JSON 입니다(`stop` 필드)[2]. 모델 본체 레이어가 GGUF 라는 점은 서버 로그의 `(version GGUF V3 (latest))` 로도 드러납니다[2]. 모델 본체를 바이트로 읽는 법은 [로컬 모델 파일](model-files.md)에서 다룹니다.
 
 모양을 보여 주려고 만든 예시입니다. digest 는 지어낸 값을 줄였습니다.
 
@@ -193,11 +193,11 @@ API 호출 줄에는 API 종류, 시각, 성공 여부, 걸린 시간, 호출 IP
 
 ### CLI 기록
 
-`history` 는 명령줄로 친 입력을 시각 순서대로 쌓고 모델의 답은 넣지 않습니다[1, §4.4]. `/help`, `/bye` 같은 CLI 명령도 입력과 함께 한 줄씩 들어가고, 추출한 결과에는 시각 칸이 없습니다[3]. LangurTrace 공개 샘플의 `history` 는 0바이트이지만 같은 샘플의 서버 로그에는 대화 요청 줄이 남아 있습니다[2]. 그래서 `history` 가 비었다고 대화가 없었다고 보지 않습니다.
+`history` 는 명령줄로 친 입력을 시각 순서대로 쌓고 모델의 답은 넣지 않습니다[1, §4.4]. `/help`, `/bye` 같은 CLI 명령도 입력과 함께 한 줄씩 들어가고, 추출한 결과에는 시각 필드가 없습니다[3]. LangurTrace 공개 샘플의 `history` 는 0바이트이지만 같은 샘플의 서버 로그에는 대화 요청 줄이 남아 있습니다[2]. 그래서 `history` 가 비었다고 대화가 없었다고 보지 않습니다.
 
 ### 캐시 JSON
 
-`.ollama\cache\` JSON 의 키 이름과 값 종류는 아래와 같습니다. 이 파일을 어느 기능이 쓰는지 밝힌 공개 자료가 없어, 쓰임은 검체에서 앱 동작과 맞춰 확인해야 합니다.
+`.ollama\cache\` JSON 의 키 이름과 값 종류는 아래와 같습니다. 이 파일을 어느 기능이 쓰는지는 실제 기기에서 앱 동작과 맞춰 확인해야 합니다.
 
 | 키 | 값 종류 |
 |---|---|
@@ -228,21 +228,21 @@ API 호출 줄에는 API 종류, 시각, 성공 여부, 걸린 시간, 호출 IP
 
 같은 사건의 `[GIN]` 줄과 `time=` 줄 시각이 맞으므로[2], 오프셋 없는 줄도 같은 현지 시각으로 읽으면 됩니다. 다른 PC 의 시간대는 `time=` 줄의 오프셋에서 읽고, `llama_model_loader:` 줄처럼 시각이 없는 줄은 앞뒤 줄 시각으로 자리를 잡습니다.
 
-`[GIN]` 시각은 요청이 끝난 때에 가깝습니다. Chatbox 가 저장한 답 메시지의 `timestamp`(Unix 밀리초, UTC)를 현지 시각으로 바꾸면 같은 대화 요청의 `[GIN]` 시각과 1초 안팎으로 맞고, `[GIN]` 시각에서 걸린 시간을 빼면 사용자 메시지 시각 근처가 됩니다[2]. 그래서 요청이 시작된 때는 `[GIN]` 시각에서 걸린 시간을 빼서 가늠합니다.
+`[GIN]` 시각은 요청이 끝난 때에 가깝습니다. Chatbox 가 저장한 답 메시지의 `timestamp`(Unix 밀리초, UTC)를 현지 시각으로 바꾸면 같은 대화 요청의 `[GIN]` 시각과 1초 안팎으로 맞고, `[GIN]` 시각에서 걸린 시간을 빼면 사용자 메시지 시각 근처가 됩니다[2]. 그래서 요청이 시작된 때는 `[GIN]` 시각에서 걸린 시간을 빼서 추정합니다.
 
-모델은 기본 5분 동안 메모리에 남습니다[4]. 로그의 올리기 줄이 모델이 올라간 때를 직접 보여 주므로, 메모리에 모델이 있었는지로 요청 시각을 짐작하지 않고 로그 줄로 씁니다. 캐시 JSON 에는 시각 칸이 없어서 파일 시스템 시각만 남고, 이 시각은 앱이 그 파일을 마지막으로 쓴 때입니다. `history` 는 줄마다 시각이 붙는지 검체 파일을 열어 확인하고, 시각이 없으면 파일 수정 시각을 마지막 입력 무렵으로만 봅니다.
+모델은 기본 5분 동안 메모리에 남습니다[4]. 로그의 올리기 줄이 모델이 올라간 때를 직접 보여 주므로, 메모리에 모델이 있었는지로 요청 시각을 짐작하지 않고 로그 줄로 씁니다. 캐시 JSON 에는 시각 필드가 없어서 파일 시스템 시각만 남고, 이 시각은 앱이 그 파일을 마지막으로 쓴 때입니다. `history` 는 줄마다 시각이 붙는지 실제 파일을 열어 확인하고, 시각이 없으면 파일 수정 시각을 마지막 입력 무렵으로만 봅니다.
 
 ## 함정과 한계
 
 - **LangurTrace 출력의 시각.** `server_log.csv` 는 `time=` 줄의 오프셋을 버리고 시각만 옮기고, 정규식이 `+HH:MM` 오프셋만 받도록 짜여 있어서 `-05:00` 처럼 음수 오프셋이 붙은 줄은 받기 행이 빠집니다[2, `log_reporter.py`]. API 호출 행의 시각은 `2025/05/23 - 19:26:12`, 받기 행은 `2025-05-23 - 20:24:41.663` 으로 모양도 다릅니다[2].
-- **LangurTrace 출력의 모델 올리기 행.** 올리기 행의 시각은 바로 앞의 `status="llm server loading model"` 줄에서 가져옵니다. 샘플에서는 러너를 띄우기 전에 한 번 더 찍히는 `llama_model_loader:` 줄들이 그 앞 모델의 시각을 받아, 2분 넘게 앞선 시각으로 기록된 행이 있습니다[2]. `general.name` 은 띄어쓰기 없는 이름만 잡아서 `Llama 3.2 3B Instruct` 같은 이름은 빠지고, `--ollama-engine` 으로 올린 모델은 `llama_model_loader:` 줄이 찍히지 않아 올리기 행이 아예 없습니다[2]. 올리기 시각과 이름은 CSV 의 `Original Line` 칸과 원본 로그의 `starting llama server` 줄로 다시 맞춥니다.
-- **도구가 다 읽지 않는 파일.** LangurTrace KAPE 타깃은 `%LocalAppData%\Ollama\` 의 `*.log` 전부와 매니페스트, 레이어, `history` 를 모으지만, 파서는 `server*.log`, 매니페스트, 레이어 이름만 읽습니다[2, `Ollama.tkape`, `ollama.py`]. `app.log`·`upgrade.log`·`history` 는 직접 엽니다. API 호출 행의 `Content` 칸에는 경로만 들어가고 상태·걸린 시간·IP·메서드는 `Original Line` 에만 있습니다.
+- **LangurTrace 출력의 모델 올리기 행.** 올리기 행의 시각은 바로 앞의 `status="llm server loading model"` 줄에서 가져옵니다. 샘플에서는 러너를 띄우기 전에 한 번 더 찍히는 `llama_model_loader:` 줄들이 그 앞 모델의 시각을 받아, 2분 넘게 앞선 시각으로 기록된 행이 있습니다[2]. `general.name` 은 띄어쓰기 없는 이름만 잡아서 `Llama 3.2 3B Instruct` 같은 이름은 빠지고, `--ollama-engine` 으로 올린 모델은 `llama_model_loader:` 줄이 찍히지 않아 올리기 행이 아예 없습니다[2]. 올리기 시각과 이름은 CSV 의 `Original Line` 열과 원본 로그의 `starting llama server` 줄로 다시 맞춥니다.
+- **도구가 다 읽지 않는 파일.** LangurTrace KAPE 타깃은 `%LocalAppData%\Ollama\` 의 `*.log` 전부와 매니페스트, 레이어, `history` 를 모으지만, 파서는 `server*.log`, 매니페스트, 레이어 이름만 읽습니다[2, `Ollama.tkape`, `ollama.py`]. `app.log`·`upgrade.log`·`history` 는 직접 엽니다. API 호출 행의 `Content` 열에는 경로만 들어가고 상태·걸린 시간·IP·메서드는 `Original Line` 에만 있습니다.
 - **모델 위치.** 수집 경로가 `C:\Users\%user%\…` 로 고정이라 `OLLAMA_MODELS` 로 옮긴 모델은 모으지 않습니다[2]. `OLLAMA_MODELS` 를 바꾼 경우 제거 프로그램은 받은 모델을 지우지 않으므로[5], Ollama 를 지운 뒤에도 다른 드라이브에 모델이 남아 있을 수 있습니다.
-- **로그가 돌아감.** 서버와 앱이 뜰 때마다 새 로그가 시작되고 앞선 파일은 `-1`, `-2` 로 밀립니다. 샘플에는 `-2` 까지 있었으니[2], 검체에서 몇 개까지 남는지 보고 오래된 받기 기록이 이미 밀려났을 수 있다는 점을 보고서에 적습니다.
+- **로그가 돌아감.** 서버와 앱이 뜰 때마다 새 로그가 시작되고 앞선 파일은 `-1`, `-2` 로 밀립니다. 샘플에는 `-2` 까지 있었으니[2], 실제 기기에서 몇 개까지 남는지 보고 오래된 받기 기록이 이미 밀려났을 수 있다는 점을 보고서에 적습니다.
 - **설치하지 않은 실행.** 압축 파일 판을 풀어 쓰면 설치 기록 없이 실행 흔적만 남을 수 있고, `/DIR` 로 다른 곳에 깐 경우도 기본 경로에 실행 파일이 없습니다. `starting llama server` 줄에는 실행 파일 경로가 통째로 찍히므로 이 경로도 봅니다[2]. [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)의 실행 흔적을 함께 봅니다.
-- **외부에 열린 서버.** `OLLAMA_HOST` 를 `0.0.0.0:11434` 처럼 바꾸면 다른 기기에서도 서버를 부를 수 있습니다[4]. 이때는 `[GIN]` 줄의 호출 IP 칸을 먼저 보고, 127.0.0.1 이 아닌 줄은 그 PC 사용자의 요청이라고 바로 보지 않습니다. 설정 줄의 `OLLAMA_HOST` 값으로 그 시기에 서버가 밖에 열려 있었는지도 확인합니다.
+- **외부에 열린 서버.** `OLLAMA_HOST` 를 `0.0.0.0:11434` 처럼 바꾸면 다른 기기에서도 서버를 부를 수 있습니다[4]. 이때는 `[GIN]` 줄의 호출 IP 필드를 먼저 보고, 127.0.0.1 이 아닌 줄은 그 PC 사용자의 요청이라고 바로 보지 않습니다. 설정 줄의 `OLLAMA_HOST` 값으로 그 시기에 서버가 밖에 열려 있었는지도 확인합니다.
 - **개인키.** `id_ed25519` 의 내용은 보고서나 공유 자료에 싣지 않고, 파일이 있었다는 사실과 파일 시각만 적습니다. 키와 토큰을 다루는 기준은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다.
-- **판 차이.** 이 쪽의 로그 줄 모양과 소스 위치(`routes.go:1231`, `download.go:177`)는 0.6.5 기준이라 판이 바뀌면 달라질 수 있습니다. 0.6.5 뒤 판의 데스크톱 앱이 대화를 따로 저장하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 검체의 판은 `Listening on … (version …)` 줄에서 읽습니다.
+- **판 차이.** 이 페이지의 로그 줄 모양과 소스 위치(`routes.go:1231`, `download.go:177`)는 0.6.5 기준이라 판이 바뀌면 달라질 수 있습니다. 0.6.5 뒤 판의 데스크톱 앱이 대화를 따로 저장하는지는 실제 기기에서 확인해야 합니다. 분석 대상의 판은 `Listening on … (version …)` 줄에서 읽습니다.
 
 ## 직접 분석해 보기
 
@@ -257,7 +257,7 @@ grep -h "server config env=" server*.log
 
 받기 줄의 digest 앞 12자를 `blobs` 폴더의 파일 이름, 매니페스트의 `layers[].digest` 와 차례로 맞춰 보면, 남은 모델과 지워진 모델이 나뉩니다. LangurTrace 샘플에서는 받기 줄에 모델 본체 크기의 레이어가 세 번 나오지만 매니페스트는 `llama3.2\latest` 하나만 남아 있습니다[2]. 모델 본체 레이어가 남아 있으면 헥스 보기로 첫 4바이트가 `47 47 55 46`(글자로 `GGUF`)인지 보고, 맞으면 [로컬 모델 파일](model-files.md)의 GGUF 헤더 읽는 법을 따릅니다. 매니페스트·`config`·`params` 레이어는 글자 파일이라 JSON 으로 읽으면 됩니다.
 
-**공개 도구로.** LangurTrace 는 KAPE 타깃(`Ollama.tkape`)과 모듈(`Ollama.mkape`)로 배포되고, 모듈은 `LangurTrace.exe --src %sourceDirectory% --dst %destinationDirectory% --app ollama` 를 실행합니다[2]. 결과는 `server_log.csv`(칸: `Type`, `Timestamp`, `Content`, 파일, `Original Line`; `Type` 은 `API Call`, `Model Download`, `Model Load: …`)와 `model_manifest.csv`(칸: `model_name`, `parameter`, `layer_name`, `digest`, `size`, `path`)입니다[2]. 매니페스트에 없는 레이어 파일은 `model_name` 이 `-` 인 행으로 붙습니다[2, `layer_reporter.py`]. 함정 절의 시각·이름 문제가 있으니 CSV 는 원본 줄과 맞춰 씁니다.
+**공개 도구로.** LangurTrace 는 KAPE 타깃(`Ollama.tkape`)과 모듈(`Ollama.mkape`)로 배포되고, 모듈은 `LangurTrace.exe --src %sourceDirectory% --dst %destinationDirectory% --app ollama` 를 실행합니다[2]. 결과는 `server_log.csv`(열: `Type`, `Timestamp`, `Content`, 파일, `Original Line`; `Type` 은 `API Call`, `Model Download`, `Model Load: …`)와 `model_manifest.csv`(열: `model_name`, `parameter`, `layer_name`, `digest`, `size`, `path`)입니다[2]. 매니페스트에 없는 레이어 파일은 `model_name` 이 `-` 인 행으로 붙습니다[2, `layer_reporter.py`]. 함정 절의 시각·이름 문제가 있으니 CSV 는 원본 줄과 맞춰 씁니다.
 
 라이브 시스템이라면 `11434` 포트에서 듣는 프로세스가 있는지, `OLLAMA_HOST` 에 다른 주소가 걸려 있는지를 수집 기록에 남깁니다.
 
@@ -276,7 +276,7 @@ Ollama 로그만으로는 대화 내용과 부른 프로그램을 알 수 없어
 
 ## 실습
 
-공개 검체는 LangurTrace 저장소의 `sample_dataset` 입니다[2]. `collect/C/Users/USER/AppData/Local/Ollama/` 에 서버·앱 로그 여섯 개가, `collect/C/Users/USER/.ollama/` 에 매니페스트 하나와 작은 레이어 다섯 개, 빈 `history` 가 있고, `parse/LLM application artifacts/ollama/` 에 LangurTrace 출력이 있습니다. 모델 본체 GGUF 는 크기 때문에 빠져 있습니다.
+공개 시험 데이터는 LangurTrace 저장소의 `sample_dataset` 입니다[2]. `collect/C/Users/USER/AppData/Local/Ollama/` 에 서버·앱 로그 여섯 개가, `collect/C/Users/USER/.ollama/` 에 매니페스트 하나와 작은 레이어 다섯 개, 빈 `history` 가 있고, `parse/LLM application artifacts/ollama/` 에 LangurTrace 출력이 있습니다. 모델 본체 GGUF 는 크기 때문에 빠져 있습니다.
 
 1. `server-2.log`, `server-1.log`, `server.log` 가 시작한 시각과 그때의 Ollama 판은 무엇입니까?
 2. 받기 줄에 나온 모델 본체 레이어는 몇 개이고, 그 가운데 매니페스트가 남은 것은 무엇입니까? `/api/delete` 줄의 시각과 함께 적어 봅니다.

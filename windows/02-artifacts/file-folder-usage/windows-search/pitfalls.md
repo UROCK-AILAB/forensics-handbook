@@ -41,13 +41,13 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 | `SearchRoots` | 5개 |
 
 - 규칙 하나마다 `URL`, `Include`, `Default`, `Policy`, `Suppress`, `NoContent`, `Container`, `IntelligentlyAdded` 값이 있습니다.
-- 규칙 URL 은 드라이브 문자 뒤에 볼륨 GUID 를 대괄호로 붙인 꼴입니다. 예: `file:///C:\[64b506ce-…]\Users\*\AppData\` (`Include=0`, `Default=1`).
+- 규칙 URL 은 드라이브 문자 뒤에 볼륨 GUID 를 대괄호로 붙인 형식입니다. 예: `file:///C:\[64b506ce-…]\Users\*\AppData\` (`Include=0`, `Default=1`).
 - `WorkingSetRules` 에는 `Default=1` 규칙과 `Default=0` 규칙이 섞여 있습니다.
 - 예를 들어 사용자 폴더의 `.android`, `.aws` 를 빼는 규칙은 `Default=0` 입니다.
 - `SearchRoots` 에는 `defaultroot://{사용자 SID}/`, `winrt://{사용자 SID}/` 처럼 사용자 SID 가 든 루트가 있습니다.
 - 각 값의 정확한 뜻과 우선순위는 공개된 자료가 없습니다. 값 이름으로 뜻을 짐작해 보고서에 쓰지 않습니다.
 
-검체에서는 SOFTWARE 하이브의 이 키를 먼저 읽어 둡니다. 조사하는 폴더가 규칙 목록에 들어 있는지, 빠져 있는지를 적습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서, 볼륨 GUID 는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
+분석할 때는 SOFTWARE 하이브의 이 키를 먼저 읽어 둡니다. 조사하는 폴더가 규칙 목록에 들어 있는지, 빠져 있는지를 적습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서, 볼륨 GUID 는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
 ## 색인 방식 — 속성만, 또는 속성과 본문
 
@@ -74,7 +74,7 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 |---|---|
 | 수집 시각을 파일을 연 시각으로 읽는 것 | [파일 속성 되살리기](propertystore.md) |
 | XP·7 의 빅엔디언 FILETIME 을 리틀엔디언으로 읽어 엉뚱한 날짜를 얻는 것 | [위치와 형식](windows-edb-windows-db.md) |
-| 수집 로그의 상위·하위 32비트 칸을 거꾸로 합치는 것 | [수집 기록](systemindex-gthr.md) |
+| 수집 로그의 상위·하위 32비트 필드를 거꾸로 합치는 것 | [수집 기록](systemindex-gthr.md) |
 | 지운 파일 행의 수집 시각을 삭제 시각으로 읽는 것 | [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) |
 
 ## 크기와 분량
@@ -85,9 +85,9 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 
 - `SearchRoots` 에는 사용자별 SID 가 든 루트가 있습니다.
 - 검색 프로토콜 호스트는 시스템용과 사용자용으로 나뉩니다. 자세한 내용은 [수집 기록](systemindex-gthr.md) 에 있습니다.
-- 속성 저장소에는 `System_FileOwner` 칸이 있습니다[6].
-- 수집 기록 표에는 `SDID`·`RequiredSIDs` 칸이 있습니다[7].
-- 이 칸들로 색인 기록을 특정 사용자와 잇는 구체적 방법은 공개된 자료가 없습니다.
+- 속성 저장소에는 `System_FileOwner` 열이 있습니다[6].
+- 수집 기록 표에는 `SDID`·`RequiredSIDs` 열이 있습니다[7].
+- 이 열들로 색인 기록을 특정 사용자와 잇는 구체적 방법은 공개된 자료가 없습니다.
 
 그래서 기록마다 "어느 사용자의 파일" 인지 적을 때는 경로(`C:\Users\<이름>\…`)나 SID 루트 같은 근거를 함께 적습니다. 근거가 경로뿐이면 "이 사용자 프로필 폴더 아래의 파일" 이라고만 씁니다. SID 를 계정과 잇는 일은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 합니다.
 
@@ -99,7 +99,7 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 | "수집 시각에 사용자가 파일을 열었다." | 수집 시각은 색인이 파일을 처리한 시각입니다. | "색인이 이 파일의 속성을 ○○ 에 처리한 기록이 있습니다." |
 | "색인 기록이 지난달부터 있으니 PC 를 지난달부터 썼다." | 초기화 전 기록이 이어지는지 알 수 없습니다. | "색인 DB 에서 가장 이른 수집 시각은 ○○ 입니다." |
 | "본문 검색에 걸리지 않으니 그 낱말은 문서에 없었다." | 속성만 색인한 파일이나 본문 색인 안 함 파일이 있습니다. | "색인에서 그 낱말로 찾은 결과는 없습니다. 파일 본문은 따로 확인했습니다." |
-| "소유자 칸이 A 이니 A 가 만든 파일이다." | 소유자 칸을 사용자 행동과 잇는 방법은 알려져 있지 않습니다. | "속성 저장소의 소유자 칸 값은 ○○ 입니다." |
+| "소유자 열이 A 이니 A 가 만든 파일이다." | 소유자 열을 사용자 행동과 잇는 방법은 알려져 있지 않습니다. | "속성 저장소의 소유자 열 값은 ○○ 입니다." |
 
 ## 직접 확인해 보기
 
@@ -122,7 +122,7 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 Windows 10 또는 11 이미지를 골라 풀어 봅니다.
+공개 자료(NIST CFReDS 등)에서 Windows 10 또는 11 이미지를 골라 풀어 봅니다.
 
 1. `CrawlScopeManager` 키 아래 규칙은 몇 개입니까? 사용자 폴더 전체가 들어 있습니까, 일부만 들어 있습니까?
 2. `Include=0` 인 규칙은 어떤 폴더입니까?

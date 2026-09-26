@@ -8,19 +8,19 @@ nav_order: 3000
 
 ## 한 줄 요약
 
-EXIF 는 사진 파일 안에 들어가는 메타데이터입니다. 기기 제조사와 모델, 저장한 프로그램 이름, 찍은 시각 같은 값이 칸마다 따로 들어갑니다(참고 1). 날짜 글자열에는 시간대가 없습니다(참고 1). 값은 나중에 고칠 수 있고, 한 파일 안에서도 칸끼리 값이 어긋날 수 있습니다. 그래서 칸 하나만 보고 찍은 시각이나 기기를 단정하지 않습니다.
+EXIF 는 사진 파일 안에 들어가는 메타데이터입니다. 기기 제조사와 모델, 저장한 프로그램 이름, 찍은 시각 같은 값이 필드마다 따로 들어갑니다(참고 1). 날짜 글자열에는 시간대가 없습니다(참고 1). 값은 나중에 고칠 수 있고, 한 파일 안에서도 필드끼리 값이 어긋날 수 있습니다. 그래서 필드 하나만 보고 찍은 시각이나 기기를 단정하지 않습니다.
 
 > 아래 예시 값은 Windows 에 기본으로 들어 있는 JPEG 두 개와 Pillow 12.3.0 으로 만든 JPEG 세 개의 값입니다. 탐색기 동작은 Windows 11 빌드 26200, 시간대 KST (UTC+9) 기준입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-### 칸은 목록 몇 개에 나뉘어 들어갑니다
+### 필드는 목록 몇 개에 나뉘어 들어갑니다
 
-EXIF 의 칸은 태그 (tag) 번호로 구분하며, 칸들은 이미지 파일 디렉터리 (Image File Directory, IFD) 라는 목록에 모여 있습니다. IFD0 에는 기기와 파일에 관한 칸이 있고, 그 안의 ExifOffset 칸이 Exif IFD 를, GPSInfo 칸이 GPS IFD 를 가리킵니다(참고 1). IFD1 에는 섬네일 (thumbnail) 의 위치와 길이가 있습니다(참고 1). 칸 이름을 보면 기기가 채우는 칸(Make·Model·SerialNumber·LensModel)과 프로그램이 채우는 칸(Software)이 섞여 있습니다.
+EXIF 의 필드는 태그 (tag) 번호로 구분하며, 필드들은 이미지 파일 디렉터리 (Image File Directory, IFD) 라는 목록에 모여 있습니다. IFD0 에는 기기와 파일에 관한 필드가 있고, 그 안의 ExifOffset 필드가 Exif IFD 를, GPSInfo 필드가 GPS IFD 를 가리킵니다(참고 1). IFD1 에는 섬네일 (thumbnail) 의 위치와 길이가 있습니다(참고 1). 필드 이름을 보면 기기가 채우는 필드(Make·Model·SerialNumber·LensModel)과 프로그램이 채우는 필드(Software)이 섞여 있습니다.
 
-### 포렌식에서 자주 보는 칸
+### 포렌식에서 자주 보는 필드
 
-아래 이름은 ExifTool 표의 이름입니다. Exif 명세의 이름과 다른 칸은 괄호에 명세 이름을 적었습니다(참고 1).
+아래 이름은 ExifTool 표의 이름입니다. Exif 명세의 이름과 다른 필드는 괄호에 명세 이름을 적었습니다(참고 1).
 
 | 자리 | 태그 번호 | 이름 (명세 이름) | 뜻 |
 |---|---|---|---|
@@ -34,10 +34,10 @@ EXIF 의 칸은 태그 (tag) 번호로 구분하며, 칸들은 이미지 파일 
 | IFD0 | 0x0112 | Orientation | 방향 |
 | IFD0 | 0x8769 | ExifOffset | Exif IFD 위치 |
 | IFD0 | 0x8825 | GPSInfo | GPS IFD 위치 |
-| IFD0 | 0x9C9B~0x9C9F | XPTitle·XPComment·XPAuthor·XPKeywords·XPSubject | Windows 탐색기가 쓰는 칸 |
+| IFD0 | 0x9C9B~0x9C9F | XPTitle·XPComment·XPAuthor·XPKeywords·XPSubject | Windows 탐색기가 쓰는 필드 |
 | Exif IFD | 0x9000 | ExifVersion | Exif 판 |
 | Exif IFD | 0x9003 | DateTimeOriginal | 원본 사진을 찍은 시각 |
-| Exif IFD | 0x9004 | CreateDate (DateTimeDigitized) | 시각 칸. 아래 "시각 해석" 을 봅니다 |
+| Exif IFD | 0x9004 | CreateDate (DateTimeDigitized) | 시각 필드. 아래 "시각 해석" 을 봅니다 |
 | Exif IFD | 0x9010~0x9012 | OffsetTime·OffsetTimeOriginal·OffsetTimeDigitized | 시간대 |
 | Exif IFD | 0x9290~0x9292 | SubSecTime·SubSecTimeOriginal·SubSecTimeDigitized | 1초 아래 단위 |
 | Exif IFD | 0x9286 | UserComment | 사용자 설명 |
@@ -71,7 +71,7 @@ EXIF 는 파일 안에 들어 있습니다. 그래서 값 자체는 Windows 버�
 
 | 항목 | 범위 | 근거 |
 |---|---|---|
-| 파일의 Exif 판 | 파일마다 ExifVersion 칸에 적습니다 | 참고 1 |
+| 파일의 Exif 판 | 파일마다 ExifVersion 필드에 적습니다 | 참고 1 |
 | 탐색기 "찍은 날짜" 가 OffsetTimeOriginal 을 무시함 | Windows 11 빌드 26200 | — |
 
 ## 구조
@@ -97,17 +97,17 @@ TIFF 머리는 이렇게 읽습니다.
 ### IFD 읽기
 
 - IFD 안의 오프셋은 파일 처음이 아니라 TIFF 머리부터 센 값입니다.
-- 칸 하나는 12바이트입니다.
+- 필드 하나는 12바이트입니다.
 
-| 칸 안 위치 | 크기 | 내용 |
+| 필드 안 위치 | 크기 | 내용 |
 |---|---|---|
 | 0 | 2 | 태그 번호 |
 | 2 | 2 | 자료형 |
 | 4 | 4 | 개수 |
 | 8 | 4 | 값, 또는 값이 있는 곳의 오프셋 |
 
-- 4바이트보다 긴 값(글자열 등)은 칸 밖에 따로 두고 오프셋으로 가리킵니다.
-- 칸들이 끝난 뒤 4바이트는 다음 IFD (IFD1) 의 오프셋입니다. 이 파일에서는 300 이었습니다.
+- 4바이트보다 긴 값(글자열 등)은 필드 밖에 따로 두고 오프셋으로 가리킵니다.
+- 필드들이 끝난 뒤 4바이트는 다음 IFD (IFD1) 의 오프셋입니다. 이 파일에서는 300 이었습니다.
 - 자료형 번호의 뜻은 이 페이지에서 다루지 않습니다.
 
 ### 한 파일 안에서 값이 어긋난 예
@@ -119,18 +119,18 @@ TIFF 머리는 이렇게 읽습니다.
 | 프로그램 이름 | IFD0 Software = `Adobe Photoshop 21.1 (Windows)` | XMP CreatorTool = `Adobe Photoshop 22.0 (Windows)` |
 | 이미지 크기 | IFD0 ImageWidth·ImageLength = 4096 × 2304 | Exif IFD PixelXDimension·PixelYDimension = 2736 × 1539 |
 
-실제 이미지 크기는 2736 × 1539 로 Exif IFD 쪽 값과 맞았고, IFD1 에는 JPEG 섬네일(Compression 값 6, 오프셋 394, 길이 2070)이 따로 있었습니다. 편집 프로그램이 모든 칸을 함께 고치지는 않는다는 뜻입니다.
+실제 이미지 크기는 2736 × 1539 로 Exif IFD 쪽 값과 맞았고, IFD1 에는 JPEG 섬네일(Compression 값 6, 오프셋 394, 길이 2070)이 따로 있었습니다. 편집 프로그램이 모든 필드를 함께 고치지는 않는다는 뜻입니다.
 
-> 그림 자리: JPEG 한 파일 안에서 APP1(Exif: IFD0 → Exif IFD, IFD1 섬네일), APP13, APP1(XMP) 조각을 나란히 그리고, 같은 뜻의 칸(프로그램 이름·이미지 크기·시각)을 선으로 이어 값이 다른 곳을 표시
+> 그림 자리: JPEG 한 파일 안에서 APP1(Exif: IFD0 → Exif IFD, IFD1 섬네일), APP13, APP1(XMP) 조각을 나란히 그리고, 같은 뜻의 필드(프로그램 이름·이미지 크기·시각)을 선으로 이어 값이 다른 곳을 표시
 
 ## 증거로서 의미
 
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
 | 파일 안 어느 자리(IFD0·Exif IFD·XMP)에 어떤 값이 적혀 있는지 | 적힌 값이 사실인지. 값은 나중에 고칠 수 있습니다 |
-| 시간대 칸이 있으면, 값을 적은 쪽이 밝힌 UTC 와의 차이 | 시간대 칸이 없을 때 그 시각이 현지 시각인지 UTC 인지(참고 1) |
+| 시간대 필드가 있으면, 값을 적은 쪽이 밝힌 UTC 와의 차이 | 시간대 필드가 없을 때 그 시각이 현지 시각인지 UTC 인지(참고 1) |
 | Make·Model·SerialNumber 에 적힌 기기 정보 | 그 기기로 찍었는지, 누가 찍었는지 |
-| Software·CreatorTool 에 적힌 프로그램 이름 | 그 프로그램이 마지막으로 저장했는지. 칸마다 따로 남습니다 |
+| Software·CreatorTool 에 적힌 프로그램 이름 | 그 프로그램이 마지막으로 저장했는지. 필드마다 따로 남습니다 |
 | | 기기 시계가 맞았는지 |
 | | 이 PC 로 사진을 옮기거나 연 시각 |
 
@@ -138,20 +138,20 @@ TIFF 머리는 이렇게 읽습니다.
 
 아래 파일 이름과 값은 설명을 위해 만든 예입니다.
 
-- 쓸 수 있는 문장: "`IMG_0001.jpg` 의 Exif IFD 에는 DateTimeOriginal 값 `2020:01:02 03:04:05` 가 있습니다. 같은 IFD 에 OffsetTimeOriginal 칸은 없습니다. 그래서 이 값이 어느 시간대의 시각인지 파일만으로는 알 수 없습니다."
+- 쓸 수 있는 문장: "`IMG_0001.jpg` 의 Exif IFD 에는 DateTimeOriginal 값 `2020:01:02 03:04:05` 가 있습니다. 같은 IFD 에 OffsetTimeOriginal 필드는 없습니다. 그래서 이 값이 어느 시간대의 시각인지 파일만으로는 알 수 없습니다."
 - 쓰면 안 되는 문장: "이 사진은 2020년 1월 2일 오전 3시 4분에 찍었다."
 
 ## 시각 해석
 
-### 시각 칸 (참고 1)
+### 시각 필드 (참고 1)
 
-| 시각 칸 | 자리 | 시간대 칸 | 1초 아래 칸 |
+| 시각 필드 | 자리 | 시간대 필드 | 1초 아래 필드 |
 |---|---|---|---|
 | ModifyDate (DateTime), 0x0132 | IFD0 | OffsetTime, 0x9010 | SubSecTime, 0x9290 |
 | DateTimeOriginal, 0x9003 | Exif IFD | OffsetTimeOriginal, 0x9011 | SubSecTimeOriginal, 0x9291 |
 | CreateDate (DateTimeDigitized), 0x9004 | Exif IFD | OffsetTimeDigitized, 0x9012 | SubSecTimeDigitized, 0x9292 |
 
-날짜 글자열 형식은 `YYYY:mm:dd HH:MM:SS` 이고 시간대가 없어서, 시간대는 OffsetTime 계열 칸에 따로 적습니다(참고 1). DateTimeOriginal 은 원본 사진을 찍은 시각인데(참고 1), 기기 시계가 맞았는지는 이 값만으로 알 수 없습니다.
+날짜 글자열 형식은 `YYYY:mm:dd HH:MM:SS` 이고 시간대가 없어서, 시간대는 OffsetTime 계열 필드에 따로 적습니다(참고 1). DateTimeOriginal 은 원본 사진을 찍은 시각인데(참고 1), 기기 시계가 맞았는지는 이 값만으로 알 수 없습니다.
 
 ### EXIF 와 XMP 의 시각
 
@@ -184,13 +184,13 @@ DateTimeOriginal 과 CreateDate 가 모두 `2020:01:02 03:04:05` 이고 OffsetTi
 
 ## 함정과 한계
 
-1. **시간대 없는 시각을 UTC 로 읽습니다.** EXIF 날짜 글자열에는 시간대가 없습니다(참고 1). OffsetTime 계열 칸이 있으면 그 값을 씁니다. 없으면 "시간대 모름" 으로 적습니다.
-2. **탐색기 "찍은 날짜" 를 그대로 옮겨 적습니다.** 탐색기는 OffsetTimeOriginal 을 무시합니다. 화면 값 대신 원래 칸을 읽습니다.
-3. **칸 하나만 봅니다.** 한 파일 안에서 IFD0·Exif IFD·XMP·섬네일 값이 서로 다를 수 있습니다.
+1. **시간대 없는 시각을 UTC 로 읽습니다.** EXIF 날짜 글자열에는 시간대가 없습니다(참고 1). OffsetTime 계열 필드가 있으면 그 값을 씁니다. 없으면 "시간대 모름" 으로 적습니다.
+2. **탐색기 "찍은 날짜" 를 그대로 옮겨 적습니다.** 탐색기는 OffsetTimeOriginal 을 무시합니다. 화면 값 대신 원래 필드를 읽습니다.
+3. **필드 하나만 봅니다.** 한 파일 안에서 IFD0·Exif IFD·XMP·섬네일 값이 서로 다를 수 있습니다.
 4. **EXIF 조각이 파일 맨 앞에 있다고 봅니다.** APP0 조각이 먼저 오는 파일이 있습니다. 조각 표시를 차례로 따라가며 찾습니다.
 5. **오프셋을 파일 처음부터 셉니다.** IFD 안의 오프셋은 TIFF 머리부터 셉니다.
 6. **도구가 보여 주는 이름으로 명세를 찾습니다.** ExifTool 은 명세의 DateTimeDigitized 를 CreateDate 라고 부릅니다(참고 1). 보고서에는 두 이름을 함께 적습니다.
-7. **EXIF 가 없다는 것만으로 결론을 냅니다.** 메신저·SNS 로 보낸 사진에서 EXIF 가 지워지는지는 서비스마다 다를 수 있어 검체에서 확인합니다.
+7. **EXIF 가 없다는 것만으로 결론을 냅니다.** 메신저·SNS 로 보낸 사진에서 EXIF 가 지워지는지는 서비스마다 다를 수 있어 실제 데이터로 확인합니다.
 
 ### 지우기와 조작
 
@@ -202,7 +202,7 @@ DateTimeOriginal 과 CreateDate 가 모두 `2020:01:02 03:04:05` 이고 OffsetTi
 
 ### 헥스로 한 번
 
-아래 바이트는 이 페이지의 구조 설명에 맞춰 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 길이 칸에는 예로 2472(`09 A8`)를 넣었습니다.
+아래 바이트는 이 페이지의 구조 설명에 맞춰 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다. 길이 필드에는 예로 2472(`09 A8`)를 넣었습니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -216,15 +216,15 @@ DateTimeOriginal 과 CreateDate 가 모두 `2020:01:02 03:04:05` 이고 OffsetTi
 4. 0x0C 부터 TIFF 머리입니다. 이 위치를 기준점으로 적어 둡니다.
 5. `49 49` 이므로 뒤의 숫자는 리틀 엔디언으로 읽습니다. `2A 00` 은 42 입니다.
 6. 0x10 의 `08 00 00 00` 은 8 입니다. IFD0 은 기준점 + 8, 즉 파일 오프셋 0x14 에 있습니다.
-7. IFD0 의 칸을 12바이트씩 읽으며 태그 번호 `69 87`(0x8769, ExifOffset)을 찾습니다. 이 칸의 마지막 4바이트가 Exif IFD 위치입니다. 기준점을 더해 파일 오프셋으로 바꿉니다.
-8. Exif IFD 에서 `03 90`(0x9003, DateTimeOriginal) 칸을 찾습니다. 날짜 글자열은 4바이트보다 길어서, 칸의 마지막 4바이트가 글자열 위치를 가리킵니다.
+7. IFD0 의 필드를 12바이트씩 읽으며 태그 번호 `69 87`(0x8769, ExifOffset)을 찾습니다. 이 필드의 마지막 4바이트가 Exif IFD 위치입니다. 기준점을 더해 파일 오프셋으로 바꿉니다.
+8. Exif IFD 에서 `03 90`(0x9003, DateTimeOriginal) 필드를 찾습니다. 날짜 글자열은 4바이트보다 길어서, 필드의 마지막 4바이트가 글자열 위치를 가리킵니다.
 9. 글자열 `2020:01:02 03:04:05` 는 바이트로 `32 30 32 30 3A 30 31 3A 30 32 20 30 33 3A 30 34 3A 30 35` 입니다.
-10. 같은 Exif IFD 에 `11 90`(0x9011, OffsetTimeOriginal) 칸이 있는지 봅니다. 없으면 시간대를 모르는 값입니다.
+10. 같은 Exif IFD 에 `11 90`(0x9011, OffsetTimeOriginal) 필드가 있는지 봅니다. 없으면 시간대를 모르는 값입니다.
 
 ### 공개 도구로 한 번
 
-- ExifTool 은 칸 이름을 참고 1 의 표 이름으로 보여 줍니다(참고 1). 그래서 명세 이름과 다른 칸이 있습니다.
-- Python 의 Pillow 로도 칸을 읽을 수 있습니다.
+- ExifTool 은 필드 이름을 참고 1 의 표 이름으로 보여 줍니다(참고 1). 그래서 명세 이름과 다른 필드가 있습니다.
+- Python 의 Pillow 로도 필드를 읽을 수 있습니다.
 
 어느 도구를 쓰든 아래를 확인합니다.
 
@@ -238,7 +238,7 @@ DateTimeOriginal 과 CreateDate 가 모두 `2020:01:02 03:04:05` 이고 OffsetTi
 
 | 함께 볼 아티팩트 | 무엇을 맞춰 보나 |
 |---|---|
-| [썸네일 캐시](../file-folder-usage/thumbcache-db-thumbs-db.md) | 사진의 작은 그림이 캐시에 남았는지. `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 에 `thumbcache_exif.db` 가 생길 수 있으며, 담긴 내용은 검체에서 확인합니다 |
+| [썸네일 캐시](../file-folder-usage/thumbcache-db-thumbs-db.md) | 사진의 작은 그림이 캐시에 남았는지. `%LOCALAPPDATA%\Microsoft\Windows\Explorer` 에 `thumbcache_exif.db` 가 생길 수 있으며, 담긴 내용은 실제 데이터로 확인합니다 |
 | [파일 속성 되살리기 (PropertyStore)](../file-folder-usage/windows-search/propertystore.md) | 색인에 들어간 파일 속성 |
 | [시간대 설정](../system-account/time-zone.md) | 분석 대상 PC 의 시간대 |
 | [두 벌의 시각](../../01-foundations/disk-volume/ntfs/standard-information-file-name.md) | 파일을 만들거나 옮긴 시각 |
@@ -251,13 +251,13 @@ DateTimeOriginal 과 CreateDate 가 모두 `2020:01:02 03:04:05` 이고 OffsetTi
 
 **직접 만든 Windows 10·11 가상 머신**에서 해 봅니다.
 
-1. 스마트폰이나 카메라로 찍은 사진 하나를 PC 로 옮겨 DateTimeOriginal 과 OffsetTimeOriginal 을 읽어 보십시오. 시간대 칸이 있습니까?
-2. 같은 사진을 탐색기 세부 정보에서 보십시오. "찍은 날짜" 가 원래 칸 값과 같습니까?
+1. 스마트폰이나 카메라로 찍은 사진 하나를 PC 로 옮겨 DateTimeOriginal 과 OffsetTimeOriginal 을 읽어 보십시오. 시간대 필드가 있습니까?
+2. 같은 사진을 탐색기 세부 정보에서 보십시오. "찍은 날짜" 가 원래 필드 값과 같습니까?
 3. PC 의 시간대를 바꾼 뒤 다시 보십시오. "찍은 날짜" 가 바뀝니까? System.Photo.DateTaken 은 어떻게 됩니까?
 4. 사본을 편집 프로그램으로 다시 저장해 보십시오. IFD0 Software, XMP CreatorTool, 섬네일 가운데 무엇이 바뀌었습니까?
 5. 사진을 메신저로 보냈다가 받은 사본에서 EXIF 가 남았는지 보십시오.
 
-**NIST CFReDS 같은 공개 검체의 Windows 디스크 이미지**로도 풀어 봅니다.
+**NIST CFReDS 같은 공개 데이터셋의 Windows 디스크 이미지**로도 풀어 봅니다.
 
 1. 사용자 사진 폴더의 JPEG 가운데 EXIF 가 있는 파일은 몇 개입니까? Make·Model 은 어떤 값들입니까?
 2. DateTimeOriginal 과 파일 시스템 시각을 나란히 놓으면 어느 쪽이 앞섭니까? 그 차이를 어떤 기록으로 설명할 수 있습니까?

@@ -8,7 +8,7 @@ nav_order: 660
 
 기업 클라우드에서는 조직이 스스로 받을 수 있는 기록을 먼저 받고, 서비스 회사에 대한 법적 요청은 조직 밖의 기록이 필요할 때 씁니다. 큰 클라우드 회사는 기업 고객 데이터를 달라는 요청을 받으면 그 고객 조직에 직접 요청하도록 돌려보내려 하고, 고객에게 요청 사실을 알립니다[1][2].
 
-이 쪽은 법률 자문이 아니고, 조사자가 요청 경로를 고르고 받은 자료를 해석하는 데 필요한 사실만 모았습니다. 요청서를 쓰고 내는 절차는 관할 기관과 법무 담당의 안내를 따릅니다. 개인 계정을 대상으로 한 Google 의 법적 절차별 제공 자료 표, 사용자 통지, 긴급 공개는 [AI 판의 서비스 회사에 대한 데이터 요청](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/acquisition/legal-requests.html)에 있고, 여기서는 기업이 쓰는 IaaS·Microsoft 365·Google Workspace·업무용 SaaS 관점만 다룹니다.
+이 페이지는 법률 자문이 아니고, 조사자가 요청 경로를 고르고 받은 자료를 해석하는 데 필요한 사실만 모았습니다. 요청서를 쓰고 내는 절차는 관할 기관과 법무 담당의 안내를 따릅니다. 개인 계정을 대상으로 한 Google 의 법적 절차별 제공 자료 표, 사용자 통지, 긴급 공개는 [AI 판의 서비스 회사에 대한 데이터 요청](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/acquisition/legal-requests.html)에 있고, 여기서는 기업이 쓰는 IaaS·Microsoft 365·Google Workspace·업무용 SaaS 관점만 다룹니다.
 
 ## 언제 쓰나
 
@@ -78,9 +78,9 @@ AWS 는 고객 콘텐츠와 계정 정보를 나눕니다. 고객 콘텐츠는 �
 
 ## 도구
 
-서비스 회사에 대한 요청 자체에는 도구가 없고, 요청 대신 조직이 쓰는 수집 도구가 이 쪽의 앞 단계입니다.
+서비스 회사에 대한 요청 자체에는 도구가 없고, 요청 대신 조직이 쓰는 수집 도구가 이 페이지의 앞 단계입니다.
 
-| 목적 | 쓰는 것 | 자세한 쪽 |
+| 목적 | 쓰는 것 | 자세한 페이지 |
 |---|---|---|
 | Microsoft 365 메일·문서 보존과 내보내기 | Purview eDiscovery 사건(검색·보존·검토·내보내기)[8] | [Purview eDiscovery와 보존](../../02-artifacts/m365/purview-ediscovery.md) |
 | Google Workspace 데이터 보존과 내보내기 | Vault 사건(matter)·보존(hold)·내보내기[7] | [Vault와 Takeout](../../02-artifacts/google-workspace/vault-takeout.md) |
@@ -96,16 +96,16 @@ AWS 는 고객 콘텐츠와 계정 정보를 나눕니다. 고객 콘텐츠는 �
 3. **회사가 줄 수 있는 자료도 회사가 모은 것뿐입니다.** GitHub 에서는 사용자가 넣지 않아도 되는 항목이라 비어 있거나, 처음부터 모으지 않았거나 보관하지 않은 정보가 있을 수 있습니다[6].
 4. **조직 계정 요청은 소유자에 대한 자료로 끝날 수 있습니다.** 구성원마다 따로 요청해야 하는 회사가 있습니다[6].
 5. **공개 API 에만 기대는 수집은 회사가 정한 범위에 묶입니다[9].** 사용자 자격 증명으로 받는 경로는 쓰기 전에 법적 권한부터 확인해야 합니다.
-6. **공개 정책과 수치는 바뀝니다.** 이 쪽의 정책은 위 표의 문서 기준 시점 값이라서 요청 직전에 각 회사의 현재 안내를 다시 확인합니다.
+6. **공개 정책과 수치는 바뀝니다.** 이 페이지의 정책은 위 표의 문서 기준 시점 값이라서 요청 직전에 각 회사의 현재 안내를 다시 확인합니다.
 7. **내보내기 파일은 기간이 지나면 지워집니다.** Vault 내보내기처럼 받을 수 있는 기간이 정해진 경로는 받는 즉시 해시를 기록하고 보관합니다[7].
 
 ## 결과를 어떻게 해석하나
 
 서비스 회사가 준 자료는 요청을 처리한 시점에 회사가 보관하던 기록입니다. 자료에 어떤 기록이 없다는 것은 처음부터 활동이 없었다는 뜻이 아니고, 삭제·보관 기간 만료·요청 범위 밖일 가능성을 함께 따져야 합니다.
 
-가입자 정보와 접속 IP 는 그 계정이 어느 네트워크에서 쓰였는지까지 알려 주고, 그 계정을 누가 썼는지는 알려 주지 않습니다. 보고서에는 "이 계정에 이 시각 이 IP 로 접속한 기록이 회사 제공 자료에 있다" 처럼 기록이 말하는 만큼만 씁니다. 회사 자료의 시각은 조직이 직접 받은 감사 로그와 [클라우드 타임라인](../analysis/timeline.md)에 합쳐 비교하고, 시간대 표기는 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)에 따라 UTC 로 맞춥니다. 회사 자료에 시간대가 적혀 있지 않으면 회사에 확인하고, 확인한 내용을 보고서에 남깁니다.
+가입자 정보와 접속 IP 는 그 계정이 어느 네트워크에서 쓰였는지까지 알려 주고, 그 계정을 누가 썼는지는 알려 주지 않습니다. 보고서에는 "이 계정에 이 시각 이 IP 로 접속한 기록이 회사 제공 자료에 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 회사 자료의 시각은 조직이 직접 받은 감사 로그와 [클라우드 타임라인](../analysis/timeline.md)에 합쳐 비교하고, 시간대 표기는 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)에 따라 UTC 로 맞춥니다. 회사 자료에 시간대가 적혀 있지 않으면 회사에 확인하고, 확인한 내용을 보고서에 남깁니다.
 
-함께 볼 쪽: [조사 절차](investigation-process.md), [책임 공유와 조사 범위](../../01-foundations/model/shared-responsibility.md), [기록은 어디에 남나](../../01-foundations/model/where-records-live.md), [Linux 판 조사 절차](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/investigation-process.html).
+함께 볼 페이지: [조사 절차](investigation-process.md), [책임 공유와 조사 범위](../../01-foundations/model/shared-responsibility.md), [기록은 어디에 남나](../../01-foundations/model/where-records-live.md), [Linux 판 조사 절차](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/investigation-process.html).
 
 ## 참고 문헌
 

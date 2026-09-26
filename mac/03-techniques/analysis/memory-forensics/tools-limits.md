@@ -93,7 +93,7 @@ Secure Enclave는 DRAM의 전용 영역에서 돌고, 메모리 보호 엔진 (M
 
 메모리에서 얻은 결과는 디스크 흔적과 맞춰 본 뒤에 보고서에 씁니다. 프로세스 목록은 [통합 로그의 프로세스 실행 기록 (Process Events)](../../../02-artifacts/execution/unified-log-process.md)과, 커널 확장 목록은 [커널·시스템 확장 (KEXT·System Extension)](../../../02-artifacts/persistence/kext-system-extension.md)과, 네트워크 결과는 [네트워크 인터페이스와 설정 (SystemConfiguration)](../../../02-artifacts/network/network-interfaces.md)과 대조합니다. 메모리에만 있고 디스크에 흔적이 없는 프로세스를 찾았다면 [악성 코드 흔적 분석 (Malware Triage)](../malware-triage/index.md)으로 넘깁니다.
 
-보고서 문장은 "메모리 이미지에서 이 도구의 이 버전과 이 심볼 파일로 mac.pslist를 실행한 결과, 이 이름의 프로세스가 이 PID로 나타났다" 처럼 도구와 조건, 기록이 말하는 만큼만 씁니다.
+보고서 문장은 "메모리 이미지에서 이 도구의 이 버전과 이 심볼 파일로 mac.pslist를 실행한 결과, 이 이름의 프로세스가 이 PID로 나타났다" 처럼 도구와 조건, 기록으로 확인되는 만큼만 씁니다.
 
 ## 참고 문헌
 

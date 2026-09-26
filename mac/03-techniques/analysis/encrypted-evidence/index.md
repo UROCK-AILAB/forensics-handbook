@@ -21,7 +21,7 @@ T2·Apple silicon 맥은 파일볼트를 켜지 않아도 내장 볼륨이 암�
 | 대상 | 위치 | macOS 버전 | 알려 주는 것 |
 |---|---|---|---|
 | 파일볼트(CoreStorage) | 디스크의 CoreStorage 물리 볼륨, "Recovery HD" 파티션의 `EncryptedRoot.plist.wipekey` | 10.7 Lion 도입, libfvde 시험 범위 10.7~10.15 [3] | 옛 맥 디스크의 잠긴 볼륨과 그 키 구조 |
-| 파일볼트(APFS) | APFS 컨테이너 안 볼륨 | macOS 10.13 이후 [FV-2], macOS 11 이후 시스템 볼륨은 서명된 시스템 볼륨이고 데이터 볼륨만 암호화 [FV-1] | 데이터 볼륨의 잠금 상태, 살아 있는 맥에서는 `fdesetup` 으로 사용자와 복구 키 설정 |
+| 파일볼트(APFS) | APFS 컨테이너 안 볼륨 | macOS 10.13 이후 [FV-2], macOS 11 이후 시스템 볼륨은 서명된 시스템 볼륨이고 데이터 볼륨만 암호화 [FV-1] | 데이터 볼륨의 잠금 상태, 실행 중인 맥에서는 `fdesetup` 으로 사용자와 복구 키 설정 |
 | 암호 걸린 디스크 이미지 | 사용자 폴더·외장 저장장치의 `.dmg`, `.sparseimage`, `.sparsebundle` 등 | `hdiutil` 기본 암호화(AES-128 CBC, 512바이트 블록)는 OS X 10.7 이후 [1] | 사용자가 따로 암호를 걸어 담아 둔 자료 |
 | 파일 기반 키체인 | `/Users/<사용자>/Library/Keychains/login.keychain-db`, `/Library/Keychains/System.keychain` | 파일 이름이 macOS 10.12부터 `.keychain` 에서 `.keychain-db` 로 바뀜 [KC-1] | 저장된 암호·인증서, 풀기 전에도 계정·서비스·서버 |
 | 데이터 보호 키체인 | Local Items·iCloud Keychain | macOS 10.9에서 iCloud 키체인과 함께 도입 [KC-3] | Secure Enclave를 거치는 항목 |
@@ -30,7 +30,7 @@ T2·Apple silicon 맥은 파일볼트를 켜지 않아도 내장 볼륨이 암�
 
 ## 읽는 순서
 
-1. [파일볼트 이미지 열기 (FileVault)](filevault-images.md) — CoreStorage와 APFS 파일볼트를 가르고, 살아 있는 맥에서 `fdesetup` 으로 상태를 기록한 뒤 사본을 읽기 전용으로 연결하는 순서
+1. [파일볼트 이미지 열기 (FileVault)](filevault-images.md) — CoreStorage와 APFS 파일볼트를 구분하고, 실행 중인 맥에서 `fdesetup` 으로 상태를 기록한 뒤 사본을 읽기 전용으로 연결하는 순서
 2. [암호 걸린 디스크 이미지 (Encrypted DMG)](encrypted-dmg.md) — `encrcdsa`·`cdsaencr` 시그니처로 암호 걸린 이미지를 골라내고 `hdiutil` 로 읽기 전용으로 붙이는 방법
 3. [키체인 풀기 (Keychain)](keychain-decryption.md) — 풀기 전에 읽을 수 있는 메타데이터와 풀 수단이 있어야 보이는 암호 값을 나눠 분석하는 순서
 

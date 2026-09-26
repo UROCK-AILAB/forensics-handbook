@@ -8,9 +8,9 @@ nav_order: 2760
 
 ## 한 줄 요약
 
-Windows Installer (MSI) 로 프로그램을 설치하거나 제거하거나 구성을 바꾸면 응용 프로그램 로그 (Application) 에 이벤트가 남습니다. 이벤트의 원본 (Source) 이름은 MsiInstaller 이고, 제품 이름, 버전, 제조사, 결과 상태가 적힙니다. Windows 11 25H2 에서는 Binary 칸에 제품 코드 (ProductCode) 가 들어 있습니다. 제품을 지운 뒤에도 이벤트는 남으므로 레지스트리 설치 목록에서 사라진 앱의 이력을 찾을 수 있습니다. 시각은 UTC 이며, 로그가 순환하면 오래된 기록부터 사라집니다.
+Windows Installer (MSI) 로 프로그램을 설치하거나 제거하거나 구성을 바꾸면 응용 프로그램 로그 (Application) 에 이벤트가 남습니다. 이벤트의 원본 (Source) 이름은 MsiInstaller 이고, 제품 이름, 버전, 제조사, 결과 상태가 적힙니다. Windows 11 25H2 에서는 Binary 필드에 제품 코드 (ProductCode) 가 들어 있습니다. 제품을 지운 뒤에도 이벤트는 남으므로 레지스트리 설치 목록에서 사라진 앱의 이력을 찾을 수 있습니다. 시각은 UTC 이며, 로그가 순환하면 오래된 기록부터 사라집니다.
 
-> 이 쪽의 예시 레코드는 Windows 11 25H2, 시간대 Korea Standard Time(UTC+9) PC 의 것입니다.
+> 이 페이지의 예시 레코드는 Windows 11 25H2, 시간대 Korea Standard Time(UTC+9) PC 의 것입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -25,9 +25,9 @@ Windows Installer 의 오류 메시지 표 (Error table) 에 있는 일반 메�
 | 11707 | 1707 | Installation operation completed successfully. | Microsoft 이벤트 표에 있습니다 |
 | 11708 | 1708 | Installation operation failed. | Microsoft 이벤트 표에 있습니다 |
 | 11724 | 1724 | Removal completed successfully. | Microsoft 이벤트 표에는 없습니다. Win11 25H2 에서 실제로 남습니다 |
-| 11725 | 1725 | Removal failed. | 번호 규칙으로 계산한 값입니다. 실제 기록은 검체에서 확인합니다 |
+| 11725 | 1725 | Removal failed. | 번호 규칙으로 계산한 값입니다. 실제 기록은 분석 대상에서 확인합니다 |
 | 11728 | 1728 | Configuration completed successfully. | Microsoft 이벤트 표에 있습니다 |
-| 11729 | 1729 | Configuration failed. | 번호 규칙으로 계산한 값입니다. 실제 기록은 검체에서 확인합니다 |
+| 11729 | 1729 | Configuration failed. | 번호 규칙으로 계산한 값입니다. 실제 기록은 분석 대상에서 확인합니다 |
 
 11724 의 예는 "Product: DB Browser for SQLite -- Removal completed successfully." 입니다. 문서 표에 없는 번호도 실제로 남습니다. 도구가 알려진 번호만 뽑는다면 이 기록을 놓칩니다.
 
@@ -44,7 +44,7 @@ Microsoft 문서에 나온 메시지 틀입니다[1].
 | 1037 | 업데이트 제거 결과 | 1036 과 같은 틀 |
 | 1038 | 재부팅이 필요함 | 재부팅 종류 (Reboot Type) 와 재부팅 이유 (Reboot Reason) 를 적습니다 |
 
-1033 의 칸은 차례로 ProductName, ProductVersion, ProductLanguage, 상태, Manufacturer 입니다. 1036·1037 의 Update 칸에는 패치 이름이 들어가는데, 패치에 MsiPatchMetadata 표가 있으면 알아보기 쉬운 이름이, 없으면 패치 코드 GUID 가 들어갑니다.
+1033 의 필드는 차례로 ProductName, ProductVersion, ProductLanguage, 상태, Manufacturer 입니다. 1036·1037 의 Update 필드에는 패치 이름이 들어가는데, 패치에 MsiPatchMetadata 표가 있으면 알아보기 쉬운 이름이, 없으면 패치 코드 GUID 가 들어갑니다.
 
 1038 의 두 값은 아래와 같습니다.
 
@@ -116,7 +116,7 @@ Microsoft 이벤트 표에 있는 이벤트입니다.
 ### Windows Installer 판에 따른 차이
 
 - Windows Installer 3.1 이하에는 1033·1034·1036·1037·1038 이 없습니다.
-- Windows Installer 4.5 이하에는 Manufacturer 칸이 없습니다.
+- Windows Installer 4.5 이하에는 Manufacturer 필드가 없습니다.
 
 ### 문서의 문장과 실제 문장이 다르다
 
@@ -145,7 +145,7 @@ Win11 25H2 의 1033·1034·1035 문장은 Microsoft 문서의 틀과 다릅니�
 | 5 | 제조사 | `Microsoft Corporation` |
 | 6 | 비어 있음 | `(NULL)` |
 
-제품 이름은 설치 패키지의 ProductName 속성 값이라서 실제 프로그램과 다를 수 있습니다. 언어 칸의 1033 은 이벤트 ID 1033 과 다른 값이므로 둘을 헷갈리지 않습니다. 1035 에는 언어 칸이 0 인 레코드도 있습니다(Office 16 Click-to-Run Extensibility Component).
+제품 이름은 설치 패키지의 ProductName 속성 값이라서 실제 프로그램과 다를 수 있습니다. 언어 필드의 1033 은 이벤트 ID 1033 과 다른 값이므로 둘을 헷갈리지 않습니다. 1035 에는 언어 필드가 0 인 레코드도 있습니다(Office 16 Click-to-Run Extensibility Component).
 
 ### 상태 값
 
@@ -165,15 +165,15 @@ Win11 25H2 의 1033·1034·1035 문장은 Microsoft 문서의 틀과 다릅니�
 | 1641 | ERROR_SUCCESS_REBOOT_INITIATED | 성공했고 다시 시작을 시작했습니다 |
 | 3010 | ERROR_SUCCESS_REBOOT_REQUIRED | 성공했고 다시 시작이 필요합니다 |
 
-0, 1641, 3010 이 성공입니다. 1033 의 상태 칸에 이 반환 코드가 그대로 들어가는지는 공개된 설명이 없어 검체에서 확인합니다. 예시 PC 의 1033·1034·1035 는 상태가 모두 0 입니다.
+0, 1641, 3010 이 성공입니다. 1033 의 상태 필드에 이 반환 코드가 그대로 들어가는지 설명한 공개 문서는 없습니다. 실제 데이터로 확인해야 합니다. 예시 PC 의 1033·1034·1035 는 상태가 모두 0 입니다.
 
 ### 11707·11724·11728 의 EventData
 
 첫 Data 에 완성된 문장이 들어 있고 나머지 Data 5개는 `(NULL)` 입니다. 문장이 레코드 안에 그대로 저장되므로 한 로그 안에서 언어가 섞일 수 있습니다. 예를 들어 한 PC 에서 11707 은 영어(`Product: … -- Installation completed successfully.`)로, 11728 은 한국어(`제품: Office 16 Click-to-Run Extensibility Component -- 구성을 마쳤습니다.`)로 남았습니다. 패키지에 이벤트용 오류 문자열이 없으면 설치 관리자는 ProductLanguage 속성의 언어로 된 문자열을 불러옵니다[1].
 
-### Binary 칸과 제품 코드
+### Binary 필드와 제품 코드
 
-| 이벤트 | Binary 칸을 ASCII 로 풀면 |
+| 이벤트 | Binary 필드를 ASCII 로 풀면 |
 |---|---|
 | 11707, 11724, 11728 | 제품 코드 GUID 문자열 |
 | 1033, 1034, 1035 | 제품 코드 뒤에 `0000` + 16진 32자 + 16진 8자 |
@@ -213,7 +213,7 @@ SID 의 모양과 읽는 법은 [윈도 식별자 형식](../../01-foundations/v
 
 아래 시각과 이름은 설명을 위해 만든 예입니다.
 
-- 쓸 수 있는 문장: "응용 프로그램 로그에는 <시각> UTC 에 MsiInstaller 1033 이 있습니다. 제품 이름은 ○○, 버전은 ○○, 상태 값은 0 입니다. 같은 시각의 11707 Binary 칸을 풀면 제품 코드 {…} 입니다. 레코드의 SID 는 사용자 ○○ 의 SID 입니다."
+- 쓸 수 있는 문장: "응용 프로그램 로그에는 <시각> UTC 에 MsiInstaller 1033 이 있습니다. 제품 이름은 ○○, 버전은 ○○, 상태 값은 0 입니다. 같은 시각의 11707 Binary 필드를 풀면 제품 코드 {…} 입니다. 레코드의 SID 는 사용자 ○○ 의 SID 입니다."
 - 쓰면 안 되는 문장: "○○ 이 이 프로그램을 설치해 사용했다."
 
 두 번째 문장은 사람과 사용을 단정합니다. 이벤트에는 설치 결과와 SID 만 있습니다. 실행은 다른 기록으로 확인합니다.
@@ -247,10 +247,10 @@ Teams Meeting Add-in 1033 의 예는 `2026-09-07 02:53:35Z`(한국 시각으로 
 1. **메시지 문장으로 검색합니다.** Win11 의 1033 문장은 문서의 틀과 다릅니다. 11707·11728 문장은 레코드마다 언어가 다를 수 있습니다. 원본 이름과 이벤트 ID 로 거릅니다.
 2. **`Uninstall` 키가 없으면 제거했다고 봅니다.** 예를 들어 2026-09-21 에 제거(1034)된 DB Browser for SQLite `{541AE182-7C1D-426C-8155-4867303B75A4}` 는 HKLM(64비트·32비트)과 HKCU 어디에도 키가 없었습니다. 그런데 설치 기록(1033)만 있는 .NET Workloads `{4D85867C-3C0F-4100-BCD2-F1E7A383BB23}` 도 키가 없었습니다. 키가 없는 이유는 이벤트만으로 알 수 없습니다. 제거는 1034·11724 로 확인합니다.
 3. **SID 를 설치한 사람으로 읽습니다.** SYSTEM 으로 남는 기록이 있습니다. 한 트랜잭션 안에서도 SID 가 바뀐 예가 있습니다.
-4. **상태 칸을 반환 코드표로 바로 풉니다.** 상태 칸이 반환 코드라는 공개된 설명은 없습니다. 0 이 아닌 값이 나오면 같은 시각의 11708 같은 실패 이벤트와 함께 봅니다.
+4. **상태 필드를 반환 코드표로 바로 풉니다.** 상태 필드가 반환 코드라는 공개된 설명은 없습니다. 0 이 아닌 값이 나오면 같은 시각의 11708 같은 실패 이벤트와 함께 봅니다.
 5. **문서 표에 없는 번호를 버립니다.** 11724·1040·1042 는 Microsoft 이벤트 표에 없지만 실제로 남았습니다.
 6. **1033 Binary 가 같으니 같은 설치로 묶습니다.** 같은 제품을 다시 설치해도 Binary 가 같았습니다. 시각으로 나눕니다.
-7. **MSI 가 아닌 설치도 여기 남는다고 봅니다.** 자체 EXE 설치 프로그램, 압축만 푸는 프로그램, 스토어 앱이 이 이벤트를 남기는지는 공개된 자료가 없어 검체에서 확인합니다. 스토어 앱은 [스토어 앱 설치 목록](../system-account/appx-staterepository.md)을 따로 봅니다.
+7. **MSI 가 아닌 설치도 여기 남는다고 봅니다.** 자체 EXE 설치 프로그램, 압축만 푸는 프로그램, 스토어 앱이 이 이벤트를 남기는지는 실제 데이터로 확인해야 합니다. 스토어 앱은 [스토어 앱 설치 목록](../system-account/appx-staterepository.md)을 따로 봅니다.
 8. **오래된 설치를 찾습니다.** 응용 프로그램 로그가 한 달쯤만 남으면 그보다 오래된 설치·제거는 이벤트로 볼 수 없습니다. 가장 오래된 레코드의 시각을 먼저 적어 둡니다.
 
 ### 지우기와 조작
@@ -262,9 +262,9 @@ Teams Meeting Add-in 1033 의 예는 `2026-09-07 02:53:35Z`(한국 시각으로 
 
 ## 직접 분석해 보기
 
-### 헥스로 한 번 — Binary 칸을 제품 코드로 풀기
+### 헥스로 한 번 — Binary 필드를 제품 코드로 풀기
 
-Binary 칸은 제품 코드 GUID 문자열을 ASCII 바이트로 담습니다. XML 에서 Binary 칸 값은 `7B34443835…7D` 처럼 16진으로 보입니다.
+Binary 필드는 제품 코드 GUID 문자열을 ASCII 바이트로 담습니다. XML 에서 Binary 필드 값은 `7B34443835…7D` 처럼 16진으로 보입니다.
 
 아래는 제품 코드 `{4D85867C-3C0F-4100-BCD2-F1E7A383BB23}` 를 ASCII 표대로 바이트로 옮긴 예시입니다. 레코드에서 그대로 떠 온 바이트가 아닙니다.
 
@@ -275,17 +275,17 @@ Binary 칸은 제품 코드 GUID 문자열을 ASCII 바이트로 담습니다. X
 ```
 
 1. 이벤트 뷰어에서 11707 한 건을 열고 "자세히 → XML 보기" 로 갑니다.
-2. Binary 칸의 16진 글자를 두 글자씩 끊습니다.
+2. Binary 필드의 16진 글자를 두 글자씩 끊습니다.
 3. 두 글자를 한 바이트로 보고 ASCII 로 바꿉니다. `7B` 는 `{`, `7D` 는 `}` 입니다.
 4. 처음 38바이트가 중괄호를 포함한 제품 코드입니다.
 5. 1033 이면 38바이트 뒤에 `0000` 과 16진 글자가 더 이어집니다. 이 부분은 뜻이 알려져 있지 않으므로 그대로 옮겨 적습니다.
 6. 풀어 낸 제품 코드로 `Uninstall` 키를 찾습니다.
 
-EVTX 파일 안에서 이 칸이 저장되는 방식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+EVTX 파일 안에서 이 필드가 저장되는 방식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 
-Windows 에 들어 있는 PowerShell 로 사본 파일에서 MsiInstaller 이벤트를 뽑고, Binary 칸을 제품 코드로 풀 수 있습니다.
+Windows 에 들어 있는 PowerShell 로 사본 파일에서 MsiInstaller 이벤트를 뽑고, Binary 필드를 제품 코드로 풀 수 있습니다.
 
 ```powershell
 Get-WinEvent -Path .\Application.evtx -FilterXPath "*[System[Provider[@Name='MsiInstaller']]]" -Oldest |
@@ -305,7 +305,7 @@ Get-WinEvent -Path .\Application.evtx -FilterXPath "*[System[Provider[@Name='Msi
 
 - 결과에서 같은 제품 코드끼리 모으면 설치·제거·다시 설치의 순서가 보입니다.
 - 1033·1034·1035 의 Data 1 은 제품 이름이고, 11707·11724·11728 의 Data 1 은 완성된 문장입니다.
-- EvtxECmd, python-evtx 같은 공개 도구도 이 레코드를 읽습니다. 도구가 Binary 칸을 빼고 보여 주는지 확인합니다. 도구의 풀이는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- EvtxECmd, python-evtx 같은 공개 도구도 이 레코드를 읽습니다. 도구가 Binary 필드를 빼고 보여 주는지 확인합니다. 도구의 풀이는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
@@ -313,7 +313,7 @@ Get-WinEvent -Path .\Application.evtx -FilterXPath "*[System[Provider[@Name='Msi
 |---|---|---|
 | 설치 프로그램 목록 | 같은 제품 코드의 키가 있는지, `InstallDate` 와 `InstallSource` | [설치 프로그램](../system-account/uninstall.md) |
 | AmCache 설치 프로그램 항목 | 같은 앱이 AmCache 에도 설치 프로그램으로 남아 있는지 | [설치 프로그램 항목 (InventoryApplication)](../execution/amcache-hve/inventoryapplication.md) |
-| 프로세스 생성 (4688) | 1040 의 Client Process Id 와 같은 번호의 프로세스. 1040 은 10진(예: 27940), 4688 은 16진(예: `0x6D24`)이라 진법을 맞춥니다. 두 번호가 같은 프로세스를 가리키는지는 검체에서 확인합니다 | [프로세스 생성](4688.md) |
+| 프로세스 생성 (4688) | 1040 의 Client Process Id 와 같은 번호의 프로세스. 1040 은 10진(예: 27940), 4688 은 16진(예: `0x6D24`)이라 진법을 맞춥니다. 두 번호가 같은 프로세스를 가리키는지는 실제 데이터로 확인합니다 | [프로세스 생성](4688.md) |
 | 이벤트 로그 삭제 | 응용 프로그램 로그가 지워진 적이 있는지 | [이벤트 로그 삭제](1102-104.md) |
 | 메시지 파일 | 도구가 문장을 제대로 풀었는지 | [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md) |
 
@@ -323,14 +323,14 @@ Get-WinEvent -Path .\Application.evtx -FilterXPath "*[System[Provider[@Name='Msi
 
 직접 만든 Windows 10·11 가상 머신에서 해 봅니다. 각 단계의 시각을 적어 둡니다.
 
-1. 공개된 MSI 설치 파일 하나로 프로그램을 설치합니다. 11707 과 1033 이 짝으로 남는지, 두 레코드의 Binary 칸이 어떻게 다른지 보십시오.
-2. 설치 도중에 취소합니다. 1033 의 상태 칸에 어떤 값이 남는지 보십시오. 상태 칸에 반환 코드가 들어가는지 여기서 확인합니다.
+1. 공개된 MSI 설치 파일 하나로 프로그램을 설치합니다. 11707 과 1033 이 짝으로 남는지, 두 레코드의 Binary 필드가 어떻게 다른지 보십시오.
+2. 설치 도중에 취소합니다. 1033 의 상태 필드에 어떤 값이 남는지 보십시오. 상태 필드에 반환 코드가 들어가는지 여기서 확인합니다.
 3. 같은 프로그램을 제거합니다. 11724·1034 가 남는지, `Uninstall` 키가 사라지는지 보십시오.
 4. 1040 이 남았다면 같은 설치의 1033 과 시각 차이를 재 보십시오.
 5. EXE 설치 프로그램과 스토어 앱을 하나씩 설치합니다. MsiInstaller 이벤트가 남는지 보십시오. 함정 7번의 답이 여기서 나옵니다.
 6. 관리자 계정과 일반 계정으로 각각 설치합니다. 레코드의 SID 가 어떻게 남는지 비교하십시오.
 
-NIST CFReDS 같은 공개 검체에서 응용 프로그램 로그를 꺼냈다면 아래를 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터에서 응용 프로그램 로그를 꺼냈다면 아래를 풀어 봅니다.
 
 - 가장 오래된 레코드는 언제입니까? 그보다 오래된 설치는 이 로그로 볼 수 없습니다.
 - 1034 나 11724 가 있는 제품 가운데 지금 `Uninstall` 키가 없는 제품은 무엇입니까?

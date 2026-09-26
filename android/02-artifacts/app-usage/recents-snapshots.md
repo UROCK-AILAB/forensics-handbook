@@ -12,13 +12,13 @@ nav_order: 510
 
 ## 무엇을 기록하나 · 왜 생기나
 
-최근 앱 버튼을 누르면 방금 쓰던 앱들이 화면 미리보기와 함께 나열되고, 시스템은 이 목록과 미리보기에 쓰는 태스크 정보와 화면 그림을 파일로도 남깁니다. 이 저장물은 세 갈래로 나뉩니다 [1]. `recent_tasks` 에는 태스크마다 XML 이, `recent_images` 에는 태스크 설명 아이콘 그림이, `snapshots` 에는 화면 스냅샷 이미지와 그 속성 파일이 들어 있습니다 [1].
+최근 앱 버튼을 누르면 방금 쓰던 앱들이 화면 미리보기와 함께 나열되고, 시스템은 이 목록과 미리보기에 쓰는 태스크 정보와 화면 그림을 파일로도 남깁니다. 이 저장물은 세 종류로 나뉩니다 [1]. `recent_tasks` 에는 태스크마다 XML 이, `recent_images` 에는 태스크 설명 아이콘 그림이, `snapshots` 에는 화면 스냅샷 이미지와 그 속성 파일이 들어 있습니다 [1].
 
 포렌식에서 특히 눈여겨볼 곳은 스냅샷 이미지입니다. 사용자가 앱을 닫거나 대화를 지운 뒤에도 그 앱의 화면 그림이 남아 있을 수 있어서, 앱 DB 에서 사라진 내용을 화면 모습으로 확인할 여지가 있습니다.
 
 ## 위치와 버전별 차이
 
-세 폴더는 `system_ce` 아래에 있고, `system_ce` 다음 칸은 사용자 번호입니다 [1].
+세 폴더는 `system_ce` 아래에 있고, `system_ce` 다음 디렉터리 이름은 사용자 번호입니다 [1].
 
 ```
 /data/system_ce/<사용자ID>/recent_tasks/
@@ -31,15 +31,15 @@ nav_order: 510
 | 기기 | 최근 앱 화면을 맡는 쪽 | 알려진 것 |
 |---|---|---|
 | AOSP | 공개 자료 없음 | 경로와 파일 구성(ALEAPP 기준) [1] |
-| 삼성 One UI | `com.sec.android.app.launcher` (One UI 홈) | 역할 패키지 이름. 경로와 형식은 검체에서 확인 |
+| 삼성 One UI | `com.sec.android.app.launcher` (One UI 홈) | 역할 패키지 이름. 경로와 형식은 실제 기기에서 확인 |
 
-삼성 기기의 `dumpsys package` 출력에서 "Known Packages" 의 `Recents:` 역할은 `com.sec.android.app.launcher` 가 맡습니다. 최근 앱 화면을 그리는 앱이 삼성 홈이라는 뜻입니다. 삼성 기기에서 스냅샷 경로와 형식이 AOSP 와 다른지는 공개 자료가 없어 검체에서 확인합니다.
+삼성 기기의 `dumpsys package` 출력에서 "Known Packages" 의 `Recents:` 역할은 `com.sec.android.app.launcher` 가 맡습니다. 최근 앱 화면을 그리는 앱이 삼성 홈이라는 뜻입니다. 삼성 기기에서 스냅샷 경로와 형식이 AOSP 와 다른지는 실제 기기에서 확인합니다.
 
 ## 구조
 
 ### recent_tasks — 태스크 XML
 
-태스크 XML 에는 다음 속성이 있습니다 [1]. 파일 이름 형식과, 이 XML 이 일반 XML 인지 안드로이드 바이너리 XML 인지는 공개 자료가 없어 검체에서 확인합니다. 파일 앞부분이 글자로 읽히지 않으면 [안드로이드 바이너리 XML (ABX)](../../01-foundations/data-formats/abx.md) 페이지를 참고합니다.
+태스크 XML 에는 다음 속성이 있습니다 [1]. 파일 이름 형식과, 이 XML 이 일반 XML 인지 안드로이드 바이너리 XML 인지는 실제 기기에서 확인합니다. 파일 앞부분이 글자로 읽히지 않으면 [안드로이드 바이너리 XML (ABX)](../../01-foundations/data-formats/abx.md) 페이지를 참고합니다.
 
 | 속성 | 담긴 것 |
 |---|---|
@@ -62,7 +62,7 @@ nav_order: 510
 | `{task_id}_reduced.jpg` | 저해상도 스냅샷 |
 | `{task_id}.proto` | 스냅샷 속성 |
 
-폴더 안이 평평하게 놓인 경우와 한 단계 더 들어간 경우가 둘 다 있어서 두 구조를 모두 찾아봅니다 [1]. `.proto` 에 담긴 칸은 Snapshot ID, Capture Time, Top Activity, Is Real Snapshot, Orientation, Rotation, Task Size, Windowing Mode, Translucency, Content/Letterbox Insets, Appearance, UI Mode 입니다 [1]. 각 칸의 필드 번호와 Capture Time 의 단위는 공개 자료가 없어 검체에서 확인합니다. 프로토콜 버퍼를 스키마 없이 읽는 법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에서 다룹니다.
+폴더 안이 평평하게 놓인 경우와 한 단계 더 들어간 경우가 둘 다 있어서 두 구조를 모두 찾아봅니다 [1]. `.proto` 에 담긴 필드는 Snapshot ID, Capture Time, Top Activity, Is Real Snapshot, Orientation, Rotation, Task Size, Windowing Mode, Translucency, Content/Letterbox Insets, Appearance, UI Mode 입니다 [1]. 각 필드의 번호와 Capture Time 의 단위는 실제 데이터로 확인해야 합니다. 프로토콜 버퍼를 스키마 없이 읽는 법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에서 다룹니다.
 
 ### recent_images — 설명 아이콘
 
@@ -76,17 +76,17 @@ nav_order: 510
 
 **증명하지 못하는 것**
 
-스냅샷은 화면 그림일 뿐이라 그 순간 사용자가 화면을 봤는지, 화면에 나온 메시지를 보냈는지는 알려 주지 않습니다. 스냅샷 한 장이 그 태스크의 유일한 화면도 아니어서, 그 사이에 오간 다른 화면은 남지 않습니다. 태스크가 목록에 있다는 기록도 그 앱을 얼마나 오래 썼는지는 말하지 않으니 사용 시간은 [앱 사용 기록 (usagestats)](usagestats/index.md) 에서 구합니다.
+스냅샷은 화면 그림일 뿐이라 그 순간 사용자가 화면을 봤는지, 화면에 나온 메시지를 보냈는지는 알려 주지 않습니다. 스냅샷 한 장이 그 태스크의 유일한 화면도 아니어서, 그 사이에 오간 다른 화면은 남지 않습니다. 태스크가 목록에 있다는 기록도 그 앱을 얼마나 오래 썼는지는 알 수 없으니 사용 시간은 [앱 사용 기록 (usagestats)](usagestats/index.md) 에서 구합니다.
 
 ## 시각 해석
 
-태스크 XML 의 `first_active_time`, `last_active_time`, `last_time_moved` 는 유닉스 에포크 밀리초이고, ALEAPP 는 1000 으로 나눠 UTC 로 바꾸며 0 이나 빈 값은 비워 둡니다 [1]. 세 값이 각각 정확히 어떤 동작에서 바뀌는지는 공개 자료가 없으니, 보고서에는 속성 이름을 그대로 적고 뜻을 넘겨짚지 않습니다. 스냅샷 속성의 Capture Time 은 단위가 알려져 있지 않아 다른 시각 기록과 맞춰 보고 읽습니다.
+태스크 XML 의 `first_active_time`, `last_active_time`, `last_time_moved` 는 유닉스 에포크 밀리초이고, ALEAPP 는 1000 으로 나눠 UTC 로 바꾸며 0 이나 빈 값은 비워 둡니다 [1]. 세 값이 각각 정확히 어떤 동작에서 바뀌는지는 알려져 있지 않으니, 보고서에는 속성 이름을 그대로 적고 뜻을 넘겨짚지 않습니다. 스냅샷 속성의 Capture Time 은 단위가 알려져 있지 않아 다른 시각 기록과 맞춰 보고 읽습니다.
 
 스냅샷 이미지 파일의 파일 시스템 시각(수정 시각 등)도 참고할 수 있지만, 수집 과정에서 파일을 복사하며 바뀌지 않았는지 먼저 확인합니다. 시각 값 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-첫째, 사용자가 최근 앱 목록에서 앱을 밀어 없애면 태스크와 스냅샷도 함께 지워질 수 있지만, 그 동작과 파일 삭제가 어떻게 이어지는지는 공개 자료가 없습니다. 파일이 지워졌다면 파일 시스템 수준 복구를 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 에서 시도해 볼 수 있습니다.
+첫째, 사용자가 최근 앱 목록에서 앱을 밀어 없애면 태스크와 스냅샷도 함께 지워질 수 있지만, 그 동작과 파일 삭제가 어떻게 이어지는지는 공개 문서에 나와 있지 않습니다. 파일이 지워졌다면 파일 시스템 수준 복구를 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 에서 시도해 볼 수 있습니다.
 
 둘째, 앱이 화면 보안 플래그(`FLAG_SECURE`)를 쓰면 스냅샷이 남지 않거나 가려진다는 설명이 흔합니다. 은행·메신저 앱의 스냅샷이 비어 있다면 이 가능성을 열어 두고, 스냅샷이 없다는 사실만으로 앱을 안 썼다고 결론 내리지 않습니다.
 
@@ -101,7 +101,7 @@ nav_order: 510
 1. 수집한 사본에서 `system_ce/<사용자ID>/snapshots` 폴더의 파일 목록을 뽑고 이름에서 태스크 번호를 모읍니다.
 2. `recent_tasks` 의 XML 을 열어 `task_id` 가 같은 태스크를 찾고 `real_activity`, `effective_uid`, `last_active_time` 을 적습니다.
 3. 같은 번호의 `.jpg` 를 열어 화면 내용을 보고, 저해상도 판만 있으면 그 사실을 적습니다.
-4. `.proto` 는 스키마 없이 필드 번호와 값 종류만 풀어 볼 수 있습니다(방법은 프로토콜 버퍼 페이지). 필드 번호와 칸 이름의 짝은 공개 자료가 없으니 도구 결과와 맞춰 봅니다.
+4. `.proto` 는 스키마 없이 필드 번호와 값 종류만 풀어 볼 수 있습니다(방법은 프로토콜 버퍼 페이지). 필드 번호와 이름의 짝은 알려져 있지 않으니 도구 결과와 맞춰 봅니다.
 
 `.jpg` 파일은 JPEG 파일 서명(`FF D8 FF`)으로 시작하는지 헥스 편집기로 먼저 확인하면, 확장자만 jpg 이고 내용이 다른 파일을 걸러 낼 수 있습니다.
 
@@ -122,7 +122,7 @@ ALEAPP 의 recentactivity 모듈이 태스크 XML, 스냅샷 이미지, `.proto`
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 등)의 `/data/system_ce/` 아래에 이 폴더들이 있으면 아래 질문을 풀어 봅니다.
+공개 안드로이드 시험 데이터(NIST CFReDS 등)의 `/data/system_ce/` 아래에 이 폴더들이 있으면 아래 질문을 풀어 봅니다.
 
 1. 스냅샷이 남아 있는 태스크는 몇 개이고, 각각 어떤 앱의 어떤 액티비티입니까?
 2. `last_active_time` 이 가장 늦은 태스크는 무엇이고, 그 시각은 UTC 로 언제입니까?

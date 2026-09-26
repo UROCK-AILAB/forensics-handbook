@@ -34,7 +34,7 @@ USB 장치만 들어가는 것도 아닙니다. 프로세서·디스플레이·�
 | 6.2·6.3 (Windows 8·8.1) | 키가 없습니다. 8.1 판은 연결된 장치 목록을 `FullCompatReport.xml` 에 적었습니다. | ANSSI |
 | 10.0.14913 (Windows 10 1607) | `InventoryDevicePnp`·`InventoryDeviceContainer` 가 처음 보입니다. | ANSSI |
 | 10.0.16299 (Windows 10 1709) | 공개 연구가 USB 흔적으로 이 키를 다루기 시작한 판입니다. | Zimmerman·df-stream (2017) |
-| Windows 11 | 공개된 명세나 연구가 없습니다. 검체에서 키가 있는지부터 봅니다. | — |
+| Windows 11 | 공개된 명세나 연구가 없습니다. 실제 데이터에서 키가 있는지부터 봅니다. | — |
 
 라이브러리를 업데이트한 Windows 7·8.1 에도 같은 형식이 생길 수 있습니다(ANSSI).
 
@@ -142,7 +142,7 @@ storage/volume/_??_usbstor#disk&ven_…&prod_…&rev_…#{일련번호 또는 UI
 5. nk 셀에서 값 목록을 따라가 vk 셀을 읽습니다. vk 셀 안에는 값 이름이 있고, 데이터는 따로 떨어진 셀에 있습니다. 셀 구조는 [하이브 내부 구조 (regf·hbin·Cell)](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)를 봅니다.
 6. nk 셀에서 마지막 기록 시각(FILETIME)을 읽고 UTC 로 풉니다.
 
-아래는 문자 인코딩 규칙으로 만든 예시입니다. 검체에서 나온 값이 아닙니다. 일련번호가 `AB12CD34` 라고 가정합니다.
+아래는 문자 인코딩 규칙으로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다. 일련번호가 `AB12CD34` 라고 가정합니다.
 
 ```
 찾는 것                    바이트                                              글자
@@ -176,7 +176,7 @@ USB 흔적 전체 흐름은 [USB 저장장치 흔적](../../external-devices/usb
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 Windows 10 1709 이후 이미지를 골라 풀어 봅니다.
+NIST CFReDS 같은 공개 자료 가운데 Windows 10 1709 이후 이미지를 골라 풀어 봅니다.
 
 1. `InventoryDevicePnp` 에서 `usbstor/` 로 시작하는 하위 키를 모두 찾습니다. 같은 `ContainerId` 를 가진 하위 키를 묶으면 장치가 몇 개인가요?
 2. 각 장치의 일련번호를 SYSTEM 하이브 `Enum\USBSTOR` 와 맞춰 봅니다. 한쪽에만 있는 장치가 있나요? 있다면 왜 그럴까요?

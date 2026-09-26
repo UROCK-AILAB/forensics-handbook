@@ -80,11 +80,11 @@ iOS 18 이하에서는 containermanagerd 로그의 부팅 기록과 Shutdown.log
 | iOS 18 까지 | 재부팅할 때마다 항목이 덧붙어 기록이 쌓임 | [4] |
 | iOS 26 | 재부팅할 때마다 덮어써서 이전 기록이 사라짐 | [4] |
 
-그래서 iOS 26 으로 올리기 전에 sysdiagnose 를 만들어 저장해 두면 옛 재부팅 기록을 지킬 수 있습니다 [4]. 업데이트 뒤에 받은 묶음에서 옛 재부팅 기록이 없더라도 흔적을 지운 것으로 단정하지 않습니다. iOS 27 에서 Shutdown.log 가 어떻게 동작하는지, iOS 15~18 사이에 묶음 안 폴더 구성이 바뀌었는지는 공개 자료가 없어 검체로 확인합니다.
+그래서 iOS 26 으로 올리기 전에 sysdiagnose 를 만들어 저장해 두면 옛 재부팅 기록을 지킬 수 있습니다 [4]. 업데이트 뒤에 받은 묶음에서 옛 재부팅 기록이 없더라도 흔적을 지운 것으로 단정하지 않습니다. iOS 27 에서 Shutdown.log 가 어떻게 동작하는지, iOS 15~18 사이에 묶음 안 폴더 구성이 바뀌었는지는 실제 기기로 확인해야 합니다.
 
 ### 로컬 백업에 남는 관련 흔적
 
-로컬 백업에는 sysdiagnose 묶음 파일이 들어가지 않고, 도메인 목록에 `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose`(항목 4개)가 있을 뿐입니다. 같은 백업에는 `…DiagnosticExtensions.CrashLogs`, `.Panic`, `.StackShot`, `.WiFi`, `.Cellular`, `.CoreLocation`, `.ScreenTime`, `.VPN`, `.Messages` 같은 진단 확장 컨테이너도 많습니다. 각 컨테이너에 무엇이 있는지와 sysdiagnose 의 어느 부분을 채우는지는 공개 자료가 없어 검체에서 확인합니다.
+로컬 백업에는 sysdiagnose 묶음 파일이 들어가지 않고, 도메인 목록에 `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose`(항목 4개)가 있을 뿐입니다. 같은 백업에는 `…DiagnosticExtensions.CrashLogs`, `.Panic`, `.StackShot`, `.WiFi`, `.Cellular`, `.CoreLocation`, `.ScreenTime`, `.VPN`, `.Messages` 같은 진단 확장 컨테이너도 많습니다. 각 컨테이너에 무엇이 있는지와 sysdiagnose 의 어느 부분을 채우는지는 실제 데이터로 확인해야 합니다.
 
 진단과 관련된 설정 plist 도 백업에 들어옵니다. 키의 뜻을 풀이한 공개 자료는 없습니다.
 

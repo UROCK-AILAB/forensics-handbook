@@ -10,9 +10,9 @@ nav_order: 230
 
 ## 이 형식을 쓰는 아티팩트
 
-감사 로그는 규칙에 걸린 시스템 콜을 커널이 기록한 레코드와, 로그인·인증·계정 변경처럼 사용자 공간 프로그램이 보낸 레코드를 한 파일에 모읍니다[10]. 같은 형식을 읽는 쪽이 여럿이라 형식 설명은 이 쪽에 두고, 무엇을 알아내는지는 각 쪽에서 다룹니다.
+감사 로그는 규칙에 걸린 시스템 콜을 커널이 기록한 레코드와, 로그인·인증·계정 변경처럼 사용자 공간 프로그램이 보낸 레코드를 한 파일에 모읍니다[10]. 같은 형식을 읽는 쪽이 여럿이라 형식 설명은 이 페이지에 두고, 무엇을 알아내는지는 각 페이지에서 다룹니다.
 
-| 쓰는 곳 | 주로 보는 레코드 | 쪽 |
+| 쓰는 곳 | 주로 보는 레코드 | 페이지 |
 |---|---|---|
 | 프로그램 실행 기록 | SYSCALL, EXECVE, PROCTITLE, CWD, PATH | [감사 로그의 실행 기록](../../02-artifacts/execution/auditd-execve.md) |
 | 파일 감시 | SYSCALL, PATH (규칙의 `key`) | [감사 로그의 파일 감시](../../02-artifacts/file-activity/auditd-watches.md) |
@@ -33,7 +33,7 @@ auditd 설정 파일 `/etc/audit/auditd.conf` 의 `log_file` 이 로그 경로�
 | `/etc/audit/audit-stop.rules` | auditd 가 멈출 때 넣는 규칙 |
 | `/run/audit/auditd.state` | auditd 가 SIGCONT 를 받으면 내부 상태를 적는 보고 파일 |
 
-이 파일들은 auditd 패키지가 깔려 있어야 생기므로, 검체에 `/etc/audit/auditd.conf` 와 `/var/log/audit/` 가 있는지 먼저 보고, `log_file` 값이 기본값과 다르면 그 경로를 따라갑니다. 설치 여부는 패키지 기록([dpkg·apt 기록](../../02-artifacts/packages/dpkg-apt.md), [rpm·dnf·yum 기록](../../02-artifacts/packages/rpm-dnf.md))으로 확인합니다.
+이 파일들은 auditd 패키지가 깔려 있어야 생기므로, 분석 대상에 `/etc/audit/auditd.conf` 와 `/var/log/audit/` 가 있는지 먼저 보고, `log_file` 값이 기본값과 다르면 그 경로를 따라갑니다. 설치 여부는 패키지 기록([dpkg·apt 기록](../../02-artifacts/packages/dpkg-apt.md), [rpm·dnf·yum 기록](../../02-artifacts/packages/rpm-dnf.md))으로 확인합니다.
 
 ### audit-userspace 기본 설정
 
@@ -52,7 +52,7 @@ audit-userspace 가 싣는 기본 `auditd.conf` 에서 분석에 영향을 주�
 | `name_format` | `NONE` | 레코드 앞에 `node=` 를 붙이지 않음[1] |
 | `end_of_event_timeout` | `2` | 이벤트가 끝났다고 보는 시간 (초)[1] |
 
-man 페이지는 설정 파일에 `num_logs` 가 없을 때 기본값을 0(회전 안 함)이라고 적어서, 배포되는 설정 파일의 5 와 다릅니다[1][2]. 검체에서는 실제 `auditd.conf` 의 값을 읽고 판단합니다.
+man 페이지는 설정 파일에 `num_logs` 가 없을 때 기본값을 0(회전 안 함)이라고 적어서, 배포되는 설정 파일의 5 와 다릅니다[1][2]. 분석할 때는 실제 `auditd.conf` 의 값을 읽고 판단합니다.
 
 ## 구조
 
@@ -187,11 +187,11 @@ audit-userspace 의 `ausearch` 는 이 작업을 해 줍니다. `-if 파일|폴�
 
 ### 증명하지 못하는 것
 
-감사 로그는 규칙이 있던 행위만 적으므로, 기록이 없다고 해서 그 행위가 없었다고 볼 수 없습니다. 그 시점의 규칙은 `/etc/audit/audit.rules`·`rules.d/` 로 가늠하고, 라이브 시스템이면 `auditctl -l` 로 커널에 실제로 들어간 규칙을 확인합니다[21]. `auid` 는 로그인 프로그램의 PAM 설정에 `pam_loginuid` 가 있어야 정확합니다[4]([인증 모듈 (PAM)](../users-auth/pam.md)). RAW 형식 로그의 uid 는 원래 기계의 계정 파일 없이는 이름으로 제대로 바꿀 수 없습니다[4]. PATH 레코드처럼 호스트 이름이나 로그인 ID 를 담지 않는 레코드도 있습니다[4].
+감사 로그는 규칙이 있던 행위만 적으므로, 기록이 없다고 해서 그 행위가 없었다고 볼 수 없습니다. 그 시점의 규칙은 `/etc/audit/audit.rules`·`rules.d/` 로 추정하고, 라이브 시스템이면 `auditctl -l` 로 커널에 실제로 들어간 규칙을 확인합니다[21]. `auid` 는 로그인 프로그램의 PAM 설정에 `pam_loginuid` 가 있어야 정확합니다[4]([인증 모듈 (PAM)](../users-auth/pam.md)). RAW 형식 로그의 uid 는 원래 기계의 계정 파일 없이는 이름으로 제대로 바꿀 수 없습니다[4]. PATH 레코드처럼 호스트 이름이나 로그인 ID 를 담지 않는 레코드도 있습니다[4].
 
 ### 시각 해석
 
-`audit(...)` 의 시각은 커널이 시스템 콜에 들어갈 때 읽은 벽시계 (CLOCK_REALTIME) 값이고, UTC 기준 Unix epoch 초에 밀리초를 붙인 것입니다[12][13]. 시간대 정보가 없고 로캘에도 따르지 않으므로 UTC 로 바꿔 적고, 현지 시각은 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md) 로 따로 맞춥니다. 시스템 시계를 바꾸면 그 뒤 레코드의 시각도 함께 바뀝니다. 시각 형식 일반은 [Linux 의 시각 값](../value-decoding/time-values.md) 을 봅니다.
+`audit(...)` 의 시각은 커널이 시스템 콜에 들어갈 때 읽은 실제 시각 시계(wall clock, CLOCK_REALTIME) 값이고, UTC 기준 Unix epoch 초에 밀리초를 붙인 것입니다[12][13]. 시간대 정보가 없고 로캘에도 따르지 않으므로 UTC 로 바꿔 적고, 현지 시각은 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md) 로 따로 맞춥니다. 시스템 시계를 바꾸면 그 뒤 레코드의 시각도 함께 바뀝니다. 시각 형식 일반은 [Linux 의 시각 값](../value-decoding/time-values.md) 을 봅니다.
 
 `ausearch -ts`·`-te` 의 날짜는 분석하는 기계의 로캘 형식(`date '+%x'`)을 따르고, `boot` 은 지금 시각에서 `/proc/uptime` 을 뺀 값이라 부팅 뒤 시계를 맞췄으면 틀립니다[4]. 이미지를 분석할 때는 `boot` 대신 시각을 직접 적습니다.
 

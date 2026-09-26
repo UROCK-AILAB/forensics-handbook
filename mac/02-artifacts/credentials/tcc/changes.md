@@ -17,7 +17,7 @@ TCC.db `access` 표의 행마다 마지막으로 바뀐 시각(`last_modified`)�
 시각,tcc_(auth_value 이름),서비스 이름,클라이언트
 ```
 
-칸 구조와 버전 판별은 [권한 DB 구조](tcc-db.md)에, `auth_value`·`auth_reason` 값의 이름은 [권한 기록 해석](interpretation.md)에 있습니다.
+열 구조와 버전 판별은 [권한 DB 구조](tcc-db.md)에, `auth_value`·`auth_reason` 값의 이름은 [권한 기록 해석](interpretation.md)에 있습니다.
 
 ## 시각 해석
 
@@ -62,7 +62,7 @@ TCC.db를 직접 고쳐 권한을 넣은 흔적을 가르는 기준은 확인한
 
 ## 함정과 한계
 
-`tccutil reset`으로 권한을 지웠을 때 어떤 흔적이 남는지, TCC 판단이 통합 로그에 어떻게 남는지는 확인한 자료가 없습니다. 행이 없다는 사실만으로 권한을 준 적이 없다고 말하지 않습니다.
+`tccutil reset`으로 권한을 지웠을 때 어떤 흔적이 남는지, TCC 판단이 통합 로그에 어떻게 남는지는 알려져 있지 않습니다. 행이 없다는 사실만으로 권한을 준 적이 없다고 말하지 않습니다.
 
 지난 상태를 알고 싶으면 [스냅숏과 백업 비교](../../../03-techniques/analysis/snapshot-diff.md)의 방법으로 [타임 머신](../../filesystem/time-machine/index.md) 백업이나 스냅숏 안의 TCC.db 사본을 지금 파일과 비교합니다. 사본마다 같은 `service`·`client` 짝의 값과 `last_modified`가 어떻게 달라졌는지 보면 이력을 일부 되살릴 수 있습니다. 파일 자체를 지우거나 바꿔치기한 흔적은 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
@@ -81,7 +81,7 @@ WHERE auth_value = 2
 ORDER BY last_modified;
 ```
 
-공개 도구로는 APOLLO `tcc_db` 모듈이나 Aftermath의 `tcc.csv`·storyline 출력을 쓰면 다른 아티팩트와 한 타임라인에 합치기 쉽습니다 [2][3]. 보고서에는 기록이 말하는 만큼만 씁니다.
+공개 도구로는 APOLLO `tcc_db` 모듈이나 Aftermath의 `tcc.csv`·storyline 출력을 쓰면 다른 아티팩트와 한 타임라인에 합치기 쉽습니다 [2][3]. 보고서에는 기록으로 확인되는 만큼만 씁니다.
 
 > 사용자 A의 TCC.db에 앱 `/Users/A/Downloads/example`의 화면 기록(`kTCCServiceScreenCapture`) 권한이 허용(`auth_value` 2) 상태로 있고, 이 행의 마지막 기록 시각은 2026-01-01 10:00:00 UTC이며, 기록된 사유 값은 3(Aftermath 대응표에서 userSet)입니다.
 

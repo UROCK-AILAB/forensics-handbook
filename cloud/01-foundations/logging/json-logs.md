@@ -10,7 +10,7 @@ nav_order: 100
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식 하나가 아니라 여러 서비스가 JSON 으로 내보내는 로그 레코드를 읽는 방법을 다룹니다. [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [통합 감사 로그 (Unified Audit Log, UAL)](../../02-artifacts/m365/unified-audit-log/index.md), [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [Azure 활동 로그](../../02-artifacts/azure/activity-log.md)와 [리소스 로그](../../02-artifacts/azure/resource-logs.md), [Google Cloud 감사 로그](../../02-artifacts/gcp/cloud-audit-logs.md), [Google Workspace 로그인 기록](../../02-artifacts/google-workspace/login-audit.md), [Okta](../../02-artifacts/saas/okta.md), [Slack](../../02-artifacts/saas/slack.md), [Dropbox·Box](../../02-artifacts/saas/dropbox-box.md)가 모두 여기에 해당합니다. 어떤 로그가 어떤 일을 기록하는지는 [로그의 종류](log-types.md), 얼마나 오래 남는지는 [보관 기간과 라이선스](retention-licensing.md)에서 다룹니다. 시각 필드와 IP·사용자 에이전트 필드는 각각 [클라우드 로그의 시각](timestamps.md)과 [IP·사용자 에이전트·위치 정보](ip-ua-geo.md)에서 따로 다룹니다.
+이 페이지는 파일 형식 하나가 아니라 여러 서비스가 JSON 으로 내보내는 로그 레코드를 읽는 방법을 다룹니다. [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [통합 감사 로그 (Unified Audit Log, UAL)](../../02-artifacts/m365/unified-audit-log/index.md), [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [Azure 활동 로그](../../02-artifacts/azure/activity-log.md)와 [리소스 로그](../../02-artifacts/azure/resource-logs.md), [Google Cloud 감사 로그](../../02-artifacts/gcp/cloud-audit-logs.md), [Google Workspace 로그인 기록](../../02-artifacts/google-workspace/login-audit.md), [Okta](../../02-artifacts/saas/okta.md), [Slack](../../02-artifacts/saas/slack.md), [Dropbox·Box](../../02-artifacts/saas/dropbox-box.md)가 모두 여기에 해당합니다. 어떤 로그가 어떤 일을 기록하는지는 [로그의 종류](log-types.md), 얼마나 오래 남는지는 [보관 기간과 라이선스](retention-licensing.md)에서 다룹니다. 시각 필드와 IP·사용자 에이전트 필드는 각각 [클라우드 로그의 시각](timestamps.md)과 [IP·사용자 에이전트·위치 정보](ip-ua-geo.md)에서 따로 다룹니다.
 
 ## 구조
 
@@ -53,7 +53,7 @@ CloudTrail 레코드는 필드 하나하나가 이름 그대로 최상위에 있
 }
 ```
 
-UAL 은 JSON 이 두 겹입니다. CSV 한 줄의 `AuditData` 칸에 JSON 이 문자열로 들어 있어서, 칸을 한 번 더 JSON 으로 풀어야 필드가 보입니다. 아래는 만든 예시입니다.
+UAL 은 JSON 이 두 겹입니다. CSV 한 줄의 `AuditData` 열에 JSON 이 문자열로 들어 있어서, 이 열을 한 번 더 JSON 으로 풀어야 필드가 보입니다. 아래는 만든 예시입니다.
 
 ```text
 CreationDate,UserIds,Operations,AuditData
@@ -74,7 +74,7 @@ Google Workspace 의 `events[].parameters[]` 는 이름과 값의 쌍으로 된 
 |---|---|---|---|
 | CloudTrail | `eventID`(GUID) | 드물게 로그 파일에 중복 이벤트가 들어 있을 수 있고, 중복 이벤트는 대부분 `eventID` 가 같습니다. 특정 시각에 배달된 파일에 그 이전 아무 시각의 레코드가 들어 있을 수 있습니다. | [1][2][3] |
 | CloudTrail 교차 계정 | `sharedEventID` | 한 동작이 두 계정에 따로 배달되면 `sharedEventID` 는 같고 `eventID`·`recipientAccountId` 는 다릅니다. 호출한 계정과 자원 소유 계정이 같으면 이 필드가 없습니다. | [1] |
-| M365 UAL | `Id` | `Search-UnifiedAuditLog` 결과에 같은 레코드가 여러 번 나올 수 있어 Untitled Goose Tool 은 `AuditData` 의 `Id` 로 중복을 셉니다. Management Activity API 의 콘텐츠 묶음 안 이벤트는 발생 순서대로 온다는 보장이 없고, 먼저 만든 묶음보다 이른 이벤트가 나중 묶음에 들어갈 수 있으며, 알림도 재시도 때문에 같은 콘텐츠에 여러 번 올 수 있습니다. | [11][24] |
+| M365 UAL | `Id` | `Search-UnifiedAuditLog` 결과에 같은 레코드가 여러 번 나올 수 있어 Untitled Goose Tool 은 `AuditData` 의 `Id` 로 중복을 판별합니다. Management Activity API 의 콘텐츠 묶음 안 이벤트는 발생 순서대로 온다는 보장이 없고, 먼저 만든 묶음보다 이른 이벤트가 나중 묶음에 들어갈 수 있으며, 알림도 재시도 때문에 같은 콘텐츠에 여러 번 올 수 있습니다. | [11][24] |
 | Azure 활동 로그 | `eventDataId` | 한 작업에 속한 이벤트들은 `operationId` 를 공유하고, 같은 상위 동작에 속한 이벤트들은 `correlationId` 를 공유합니다. | [5] |
 | Entra 로그인 | — | 포털에서 한 줄로 보이는 MFA 로그인이 Azure Monitor 로 보낸 로그에서는 `correlationId` 가 같은 여러 줄로 나옵니다. | [21] |
 | Entra 비대화형 로그인 | — | 포털은 애플리케이션·사용자·IP 주소·상태·자원 ID 가 같은 로그인을 한 줄로 묶어 "# sign-ins" 열에 개수를 적고, 펼치면 각 시각이 보입니다. | [20] |

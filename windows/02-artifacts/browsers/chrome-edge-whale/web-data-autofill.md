@@ -13,7 +13,7 @@ nav_order: 1660
 
 ## 무엇을 기록하나 · 왜 생기나
 
-브라우저는 예전에 입력한 값을 다시 제안해서 입력을 줄여 줍니다. 이 기능은 두 갈래입니다.
+브라우저는 예전에 입력한 값을 다시 제안해서 입력을 줄여 줍니다. 이 기능은 두 가지입니다.
 
 | 기능 | 저장하는 것 | 주요 표 |
 |---|---|---|
@@ -87,9 +87,9 @@ Chromium 소스를 보면 자동완성 항목은 아래 조건에서만 생깁�
 | 표 | 열 | 뜻 |
 |---|---|---|
 | `addresses` | `guid`, `use_count`, `use_date`, `date_modified`, `language_code`, `label`, `initial_creator_id`, `record_type` | 주소 하나의 정보입니다. 기기 주소인지 계정 주소인지는 `record_type` 이 가릅니다 |
-| `address_type_tokens` | `guid`, `type`, `value`, `verification_status`, `observations` | 주소 하나를 이루는 칸들입니다. `guid` 로 `addresses` 와 잇습니다 |
+| `address_type_tokens` | `guid`, `type`, `value`, `verification_status`, `observations` | 주소 하나를 이루는 필드들입니다. `guid` 로 `addresses` 와 잇습니다 |
 
-`type` 은 칸의 종류를 숫자로 적은 것입니다. Chromium 소스는 이 번호를 서버와 맞출 때 말고는 바꾸지 말라고 적어 둡니다. 자주 보는 번호는 아래와 같습니다.
+`type` 은 필드의 종류를 숫자로 적은 것입니다. Chromium 소스는 이 번호를 서버와 맞출 때 말고는 바꾸지 말라고 적어 둡니다. 자주 보는 번호는 아래와 같습니다.
 
 | `type` | 뜻 | `type` | 뜻 |
 |---|---|---|---|
@@ -184,7 +184,7 @@ Chromium 은 자동완성·주소·카드 시각을 `ToTimeT()` 로 써서 1970�
 
 ### 헥스로 한 번
 
-아래는 SQLite 레코드 형식 명세로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. `sqlite_master` 의 `autofill` 표 정의에 `WITHOUT ROWID` 가 없으면 보통의 rowid 표입니다. 아래는 그 경우의 표 잎 페이지 셀 하나입니다.
+아래는 SQLite 레코드 형식 명세로 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다. `sqlite_master` 의 `autofill` 표 정의에 `WITHOUT ROWID` 가 없으면 보통의 rowid 표입니다. 아래는 그 경우의 표 잎 페이지 셀 하나입니다.
 
 ```
 셀 시작 기준
@@ -208,7 +208,7 @@ Chromium 은 자동완성·주소·카드 시각을 `ToTimeT()` 로 써서 1970�
 11. 오프셋 0x30 의 `65 FA 39 C0` 은 1710897600 입니다. 2024-03-20 01:20:00 UTC 입니다.
 12. 오프셋 0x34 의 `03` 은 `count` 3 입니다.
 
-SQLite 정수는 빅 엔디언입니다. 윈도 레지스트리 값처럼 리틀 엔디언으로 읽으면 엉뚱한 수가 나옵니다. 정수 칸의 크기는 값에 따라 1·2·3·4·6·8바이트로 바뀝니다. 값이 0 이나 1 이면 형식 번호 8·9 로 적고 본문 바이트가 없을 수도 있습니다. 그래서 항상 머리부터 읽습니다.
+SQLite 정수는 빅 엔디언입니다. 윈도 레지스트리 값처럼 리틀 엔디언으로 읽으면 엉뚱한 수가 나옵니다. 정수 값의 크기는 값에 따라 1·2·3·4·6·8바이트로 바뀝니다. 값이 0 이나 1 이면 형식 번호 8·9 로 적고 본문 바이트가 없을 수도 있습니다. 그래서 항상 머리부터 읽습니다.
 
 ### 공개 도구로 한 번
 
@@ -231,7 +231,7 @@ SQLite 정수는 빅 엔디언입니다. 윈도 레지스트리 값처럼 리틀
    ORDER BY date_last_used DESC;
    ```
 
-5. 스키마 134 이후라면 주소를 칸별로 뽑습니다.
+5. 스키마 134 이후라면 주소를 필드별로 뽑습니다.
 
    ```sql
    SELECT a.guid, a.use_count,
@@ -267,7 +267,7 @@ SQLite 정수는 빅 엔디언입니다. 윈도 레지스트리 값처럼 리틀
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체에서 크롬 계열 브라우저를 쓴 윈도 이미지를 하나 고릅니다. 가상 머신에서 직접 폼을 제출하며 파일을 비교해도 됩니다.
+NIST CFReDS 같은 공개 실습 데이터에서 크롬 계열 브라우저를 쓴 윈도 이미지를 하나 고릅니다. 가상 머신에서 직접 폼을 제출하며 파일을 비교해도 됩니다.
 
 1. `meta` 표의 `version` 은 얼마입니까? 주소는 어느 표에 있습니까?
 2. `autofill` 표에서 `count` 가 가장 큰 행 다섯 개를 고릅니다. 각 행의 두 시각을 UTC 와 현지 시각으로 바꿔 봅니다.
@@ -280,7 +280,7 @@ NIST CFReDS 같은 공개 검체에서 크롬 계열 브라우저를 쓴 윈도 
 
 - Chromium 소스, `autocomplete_table.cc`(자동완성 표 정의·갱신·기간 삭제) · `autocomplete_sync_bridge.cc`(동기화 병합) — https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/webdata/autocomplete/autocomplete_table.cc , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/webdata/autocomplete/autocomplete_sync_bridge.cc
 - Chromium 소스, `autocomplete_history_manager.cc`(저장 조건·보존 정리) · `browser_autofill_manager.cc`(시크릿 창) · `autofill_constants.h`(보존 기간) — https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/single_field_fillers/autocomplete/autocomplete_history_manager.cc , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/foundations/browser_autofill_manager.cc , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/common/autofill_constants.h
-- Chromium 소스, `address_autofill_table.cc` · `payments_autofill_table.cc` · `field_types.h` · `usage_history_information.h`(주소·결제 표와 칸 번호) — https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/webdata/addresses/address_autofill_table.cc , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/webdata/payments/payments_autofill_table.cc , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/field_types.h , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/data_model/usage_history_information.h
+- Chromium 소스, `address_autofill_table.cc` · `payments_autofill_table.cc` · `field_types.h` · `usage_history_information.h`(주소·결제 표와 필드 번호) — https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/webdata/addresses/address_autofill_table.cc , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/webdata/payments/payments_autofill_table.cc , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/field_types.h , https://raw.githubusercontent.com/chromium/chromium/main/components/autofill/core/browser/data_model/usage_history_information.h
 - Chromium 소스, `keyword_table.cc` · `sql/statement.cc` · `third_party/sqlite/sqlite_common_configuration_flags.gni`(keywords 시각 형식·SQLite 빌드 설정) — https://raw.githubusercontent.com/chromium/chromium/main/components/search_engines/keyword_table.cc , https://raw.githubusercontent.com/chromium/chromium/main/sql/statement.cc , https://raw.githubusercontent.com/chromium/chromium/main/third_party/sqlite/sqlite_common_configuration_flags.gni
 - Chromium 문서, "User Data Directory" — https://chromium.googlesource.com/chromium/src/+/HEAD/docs/user_data_dir.md
 - Ryan Benson, Hindsight 소스 `pyhindsight/browsers/chrome.py` — https://raw.githubusercontent.com/obsidianforensics/hindsight/master/pyhindsight/browsers/chrome.py

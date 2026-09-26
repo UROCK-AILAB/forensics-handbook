@@ -11,7 +11,7 @@ knowledgeC.db의 `/display/isBacklit` 과 `/device/isLocked` 스트림은 화면
 
 ## 무엇을 기록하나
 
-상태형 스트림은 값을 `ZVALUEINTEGER` 칸에 0 또는 1로 적고, 그 값이 이어진 구간을 `ZSTARTDATE` 와 `ZENDDATE` 로 남깁니다. 칸 전체와 표 관계는 [표와 스트림 구조 (ZOBJECT·Stream)](structure.md)에 있습니다.
+상태형 스트림은 값을 `ZVALUEINTEGER` 열에 0 또는 1로 적고, 그 값이 이어진 구간을 `ZSTARTDATE` 와 `ZENDDATE` 로 남깁니다. 열 전체와 표 관계는 [표와 스트림 구조 (ZOBJECT·Stream)](structure.md)에 있습니다.
 
 | 스트림 | 기록하는 것 | 0 | 1 | 근거 |
 |---|---|---|---|---|
@@ -29,13 +29,13 @@ knowledgeC.db의 `/display/isBacklit` 과 `/device/isLocked` 스트림은 화면
 | `/device/isLocked` | APOLLO 목록 10.15·10.16 | [4] |
 | `/device/isPluggedIn` | 10.13 블로그 목록 | [1] |
 
-`/device/isLocked` 는 macOS 10.13·iOS 11 무렵에는 iOS에만 있었고 [1], macOS에는 10.15부터 나옵니다 [4]. 그래서 10.14 이전 검체에 이 스트림이 없더라도 이상하게 볼 일이 아닙니다. APOLLO 목록에 적힌 macOS 번호는 10.16까지라서, 그 뒤 버전에서는 `ZSTREAMNAME` 목록으로 스트림이 있는지 먼저 봅니다. 목록 읽는 법은 [표와 스트림 구조](structure.md)에 있습니다.
+`/device/isLocked` 는 macOS 10.13·iOS 11 무렵에는 iOS에만 있었고 [1], macOS에는 10.15부터 나옵니다 [4]. 그래서 10.14 이전 기기에 이 스트림이 없더라도 이상하게 볼 일이 아닙니다. APOLLO 목록에 적힌 macOS 번호는 10.16까지라서, 그 뒤 버전에서는 `ZSTREAMNAME` 목록으로 스트림이 있는지 먼저 봅니다. 목록 읽는 법은 [표와 스트림 구조](structure.md)에 있습니다.
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
-`/display/isBacklit` 이 1인 구간은 그 시간대에 화면이 켜져 있었다는 기록이고 [1][3], `/device/isLocked` 가 0인 구간은 그 시간대에 기기 잠금이 풀려 있었다는 기록입니다 [4]. 두 구간을 [앱 사용 기록 (App Usage)](app-usage.md)의 앱 구간과 한 타임라인에 겹쳐 놓으면, 앱이 앞에 있던 시간 중 화면이 꺼져 있었거나 잠겨 있던 부분을 가려낼 수 있습니다. 다만 겹쳐 보고 내린 결론도 각 기록이 말하는 만큼만 씁니다.
+`/display/isBacklit` 이 1인 구간은 그 시간대에 화면이 켜져 있었다는 기록이고 [1][3], `/device/isLocked` 가 0인 구간은 그 시간대에 기기 잠금이 풀려 있었다는 기록입니다 [4]. 두 구간을 [앱 사용 기록 (App Usage)](app-usage.md)의 앱 구간과 한 타임라인에 겹쳐 놓으면, 앱이 앞에 있던 시간 중 화면이 꺼져 있었거나 잠겨 있던 부분을 가려낼 수 있습니다. 다만 겹쳐 보고 내린 결론도 각 기록으로 확인되는 만큼만 씁니다.
 
 ### 증명하지 못하는 것
 
@@ -49,7 +49,7 @@ knowledgeC.db의 `/display/isBacklit` 과 `/device/isLocked` 스트림은 화면
 
 ## 함정과 한계
 
-APOLLO 저장소에는 잠금 관련 모듈로 `knowledge_device_locked.txt` 말고도 `knowledge_device_locked_imputed.txt`, `knowledge_device_keybag_locked.txt` 가 있고, `knowledge_device_pluggedin.txt`, `knowledge_user_first_backlight_after_wakeup.txt`, `knowledge_system_userwakingevent.txt` 모듈도 있습니다 [2]. 이 모듈들이 무엇을 뽑는지와 macOS 검체에서 결과를 내는지는 직접 돌려 보고 확인합니다.
+APOLLO 저장소에는 잠금 관련 모듈로 `knowledge_device_locked.txt` 말고도 `knowledge_device_locked_imputed.txt`, `knowledge_device_keybag_locked.txt` 가 있고, `knowledge_device_pluggedin.txt`, `knowledge_user_first_backlight_after_wakeup.txt`, `knowledge_system_userwakingevent.txt` 모듈도 있습니다 [2]. 이 모듈들이 무엇을 뽑는지와 macOS 데이터에서 결과를 내는지는 직접 돌려 보고 확인합니다.
 
 macOS 10.13에서 ZOBJECT에 약 4주치 기록이 들어 있었다는 점은 표 전체에 해당해서 이 스트림에도 걸립니다. 오래된 사건이면 구간이 비어 있는 것을 "화면을 켜지 않았다" 로 읽지 않습니다. 보관 기간은 [앱 사용 기록](app-usage.md)에서 다룹니다.
 
@@ -78,7 +78,7 @@ WHERE ZOBJECT.ZSTREAMNAME IN ('/display/isBacklit', '/device/isLocked')
 ORDER BY ZOBJECT.ZSTARTDATE;
 ```
 
-결과에서 `ZDEVICEID` 가 여러 값으로 나오면 한 기기의 기록이 아닐 수 있으니, 이 칸을 읽는 주의는 [표와 스트림 구조](structure.md)를 따릅니다.
+결과에서 `ZDEVICEID` 가 여러 값으로 나오면 한 기기의 기록이 아닐 수 있으니, 이 열을 읽는 주의는 [표와 스트림 구조](structure.md)를 따릅니다.
 
 ## 교차 검증
 
@@ -94,9 +94,9 @@ ORDER BY ZOBJECT.ZSTARTDATE;
 
 ## 실습
 
-macOS 공개 검체(NIST CFReDS 등)에서 knowledgeC.db를 찾았다면 아래 질문을 풀어 봅니다.
+macOS 공개 시험 자료(NIST CFReDS 등)에서 knowledgeC.db를 찾았다면 아래 질문을 풀어 봅니다.
 
-1. 검체의 macOS 버전에서 `/device/isLocked` 스트림이 있는가, 없다면 버전 표와 맞는가?
+1. 이미지의 macOS 버전에서 `/device/isLocked` 스트림이 있는가, 없다면 버전 표와 맞는가?
 2. 하루 동안 `/display/isBacklit` 값이 1인 구간을 모두 더하면 몇 시간인가?
 3. 앱 사용 구간 가운데 `/device/isLocked` 값이 1인 구간과 겹치는 것이 있는가, 있다면 어떻게 설명할 수 있는가?
 

@@ -6,11 +6,11 @@ nav_order: 1460
 
 # 웹 사용 행위 재구성 (Web Activity)
 
-아이폰에서 언제 어떤 웹 페이지를 열었는지, 무엇을 검색했는지를 브라우저와 시스템 기록으로 되짚는 시나리오입니다. Safari·크롬 DB 하나하나의 구조는 브라우저 페이지에서 다루고, 이 페이지는 수집 범위에 따라 볼 수 있는 기록을 고르고, 브라우저 기록과 바이옴 (Biome) 을 겹쳐 지운 방문까지 찾는 순서에 집중합니다.
+아이폰에서 언제 어떤 웹 페이지를 열었는지, 무엇을 검색했는지를 브라우저와 시스템 기록으로 거슬러 올라가 찾는 시나리오입니다. Safari·크롬 DB 하나하나의 구조는 브라우저 페이지에서 다루고, 이 페이지는 수집 범위에 따라 볼 수 있는 기록을 고르고, 브라우저 기록과 바이옴 (Biome) 을 겹쳐 지운 방문까지 찾는 순서에 집중합니다.
 
 ## 조사 질문
 
-"사건 전에 특정 사이트를 방문했나", "이 검색어를 언제 입력했나", "방문 기록을 지웠나", "개인 정보 보호 모드로 무엇을 봤나" 같은 질문입니다. 답은 방문한 URL 과 시각, 방문한 기기(이 기기인지 iCloud 로 동기화된 다른 기기인지), 방문을 연 앱, 기록을 지운 흔적으로 나뉩니다. Safari 방문 기록 하나로는 동기화된 방문과 지운 방문을 가리기 어려워서 바이옴의 웹 사용 스트림과 탭 기록을 함께 봅니다.
+"사건 전에 특정 사이트를 방문했나", "이 검색어를 언제 입력했나", "방문 기록을 지웠나", "개인 정보 보호 모드로 무엇을 봤나" 같은 질문입니다. 답은 방문한 URL 과 시각, 방문한 기기(이 기기인지 iCloud 로 동기화된 다른 기기인지), 방문을 연 앱, 기록을 지운 흔적으로 나뉩니다. Safari 방문 기록 하나로는 동기화된 방문과 지운 방문을 구분하기 어려워서 바이옴의 웹 사용 스트림과 탭 기록을 함께 봅니다.
 
 ## 먼저 확인할 것
 
@@ -34,22 +34,22 @@ nav_order: 1460
 
 | 순서 | 아티팩트 | 알려 주는 것 | 자세히 |
 |---|---|---|---|
-| 1 | Safari `History.db` — `/private/var/mobile/Library/Safari/History.db` [1] | `history_visits` 는 방문 한 번마다 한 행으로 `visit_time`, `title`, `redirect_source`, `redirect_destination`, `origin` 칸이 있고, `history_items` 는 URL 하나마다 한 행으로 `url`, `visit_count` 칸이 있습니다. `origin` 이 0 이면 이 기기, 1 이면 iCloud 로 동기화된 다른 기기의 방문입니다 [2] | [사파리](../../02-artifacts/browsers/safari/index.md) |
+| 1 | Safari `History.db` — `/private/var/mobile/Library/Safari/History.db` [1] | `history_visits` 는 방문 한 번마다 한 행으로 `visit_time`, `title`, `redirect_source`, `redirect_destination`, `origin` 열이 있고, `history_items` 는 URL 하나마다 한 행으로 `url`, `visit_count` 열이 있습니다. `origin` 이 0 이면 이 기기, 1 이면 iCloud 로 동기화된 다른 기기의 방문입니다 [2] | [사파리](../../02-artifacts/browsers/safari/index.md) |
 | 2 | Safari 탭 — `SafariTabs.db` [1] | 열려 있던 탭. 개인 정보 보호 모드 방문은 `History.db` 에 저장되지 않지만 개인 정보 보호 탭은 이 파일에 남습니다 [1][4] | [사파리](../../02-artifacts/browsers/safari/index.md) |
 | 3 | 바이옴 `App.WebUsage` — `/private/var/mobile/Library/Biome/streams/restricted/` [6] | 시각, 제목, URL, 도메인, 번들 ID, GUID, 보관 28일 [6]. 비슷한 스트림으로 `Safari.Navigations`, `_DKEvent.Safari.History` 가 있습니다 [6] | [바이옴](../../02-artifacts/app-usage/biome/index.md) |
 | 4 | 크롬 — 백업 `AppDomain-com.google.chrome.ios` 의 `Library/Application Support/Google/Chrome/Default/History` [9] | 크롬 방문 기록. 시각은 1601 기준 마이크로초 [8] | [크롬](../../02-artifacts/browsers/chrome.md) |
 | 5 | 다른 앱 안의 웹 기록 | 네이버 앱 같은 앱의 자체 기록 | [네이버 앱](../../02-artifacts/browsers/naver.md) |
 | 6 | 암호 없는 백업의 Safari 곁 기록 | 아래 "로컬 백업에서 보이는 것" | 이 페이지 |
 
-바이옴 `App.WebUsage` 는 자료마다 필드가 조금씩 다릅니다. iLEAPP 는 경로 패턴 `*/Biome/streams/restricted/App.WebUsage/local/*` 에서 필드 1 을 GUID, 2 를 시각, 4 를 전체 URL, 5 를 도메인, 6 을 번들 ID(예: `com.apple.mobilesafari`)로 읽고, 필드 3·8 은 뜻을 모르는 정수로 남겨 둡니다 [7]. 제목 필드는 한 자료에 있지만 [6] iLEAPP 필드 목록에는 없습니다 [7]. 번들 ID 칸이 있어서 Safari 말고 다른 앱의 웹 사용도 담길 수 있지만, 다른 회사 앱 값이 실제로 들어가는지는 검체에서 확인합니다.
+바이옴 `App.WebUsage` 는 자료마다 필드가 조금씩 다릅니다. iLEAPP 는 경로 패턴 `*/Biome/streams/restricted/App.WebUsage/local/*` 에서 필드 1 을 GUID, 2 를 시각, 4 를 전체 URL, 5 를 도메인, 6 을 번들 ID(예: `com.apple.mobilesafari`)로 읽고, 필드 3·8 은 뜻을 모르는 정수로 남겨 둡니다 [7]. 제목 필드는 한 자료에 있지만 [6] iLEAPP 필드 목록에는 없습니다 [7]. 번들 ID 필드가 있어서 Safari 말고 다른 앱의 웹 사용도 담길 수 있지만, 다른 회사 앱 값이 실제로 들어가는지는 실제 데이터로 확인합니다.
 
 ### 로컬 백업에서 보이는 것
 
-암호를 걸지 않은 로컬 백업에는 방문 기록 DB 가 없는 대신 아래 파일이 있습니다. 칸의 시각 기준과, 이 기록이 방문 기록을 얼마나 대신할 수 있는지는 알려져 있지 않아서 "`History.db` 가 없어도 방문한 도메인의 흔적이 남는 곳" 으로만 씁니다.
+암호를 걸지 않은 로컬 백업에는 방문 기록 DB 가 없는 대신 아래 파일이 있습니다. 필드의 시각 기준과, 이 기록이 방문 기록을 얼마나 대신할 수 있는지는 알려져 있지 않아서 "`History.db` 가 없어도 방문한 도메인의 흔적이 남는 곳" 으로만 씁니다.
 
-| 파일 | 표·칸·키 이름 |
+| 파일 | 표·열·키 이름 |
 |---|---|
-| HomeDomain `Library/Safari/Bookmarks.db` | `bookmarks` 표(칸 37개). 읽기 목록이 이 표에 드는지는 검체에서 확인합니다 |
+| HomeDomain `Library/Safari/Bookmarks.db` | `bookmarks` 표(열 37개). 읽기 목록이 이 표에 드는지는 실제 데이터로 확인합니다 |
 | `AppDomain-com.apple.mobilesafari` 의 `Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` | `ObservedDomains` 표의 `registrableDomain`, `lastSeen`, `hadUserInteraction`, `mostRecentUserInteractionTime` 등 |
 | `AppDomain-com.apple.mobilesafari` 의 `Library/Metadata Cache/LPLinkMetadata.db` | `page_url` 표의 `url`, `uuid`, `last_fetch_date` 등 |
 | `AppDomain-com.apple.mobilesafari` 의 `Library/Safari/IgnoredSiriSuggestedSites.db` | `ignored_siri_suggested_sites` 표의 `siriSuggestedSiteURL`, `query`, `timestamp`, `visitedURL` 등 |
@@ -61,7 +61,7 @@ nav_order: 1460
 ## 분석 흐름
 
 1. iOS 버전, 시간대, 수집 방법을 적고, 쓰던 브라우저를 백업 `Info.plist` 의 `Installed Applications` 나 `AppDomain-` 도메인 이름으로 확인합니다.
-2. `History.db` 가 있으면 `history_visits` 와 `history_items` 를 이어 방문을 시각 순으로 늘어놓고, `origin` 으로 이 기기의 방문만 가립니다 [2].
+2. `History.db` 가 있으면 `history_visits` 와 `history_items` 를 이어 방문을 시각 순으로 늘어놓고, `origin` 으로 이 기기의 방문만 골라냅니다 [2].
 
    ```sql
    SELECT hi.url, hv.title, hv.origin,
@@ -73,7 +73,7 @@ nav_order: 1460
    ORDER BY hv.visit_time;
    ```
 
-   시각 판별식과 `history_visits.history_item` 을 `history_items.id` 와 잇는 방식은 iLEAPP 쿼리를 따른 것입니다 [2]. 버전에 따라 칸이 다를 수 있어서 쿼리가 칸 이름 오류로 멈추면 `PRAGMA table_info(history_visits);` 로 칸을 먼저 확인합니다.
+   시각 판별식과 `history_visits.history_item` 을 `history_items.id` 와 잇는 방식은 iLEAPP 쿼리를 따른 것입니다 [2]. 버전에 따라 열이 다를 수 있어서 쿼리가 열 이름 오류로 멈추면 `PRAGMA table_info(history_visits);` 로 열을 먼저 확인합니다.
 3. `SafariTabs.db` 에서 열린 탭과 개인 정보 보호 탭을 봅니다 [1][4]. 탭 시각 형식은 iOS 버전에 따라 달라서 [3], 푼 값이 앞뒤 기록과 맞는지 확인합니다.
 4. 전체 파일 시스템 추출이 있으면 바이옴 `App.WebUsage` 와 `_DKEvent.Safari.History` 를 `History.db` 와 겹칩니다. 바이옴에만 있고 `History.db` 에 없는 방문은 지운 방문일 수 있습니다. iOS 16 에서는 사용자가 기록을 하나씩 지워도 바이옴 SEGB 의 해당 기록이 곧바로 지워지지 않고, "전체 삭제" 때는 SEGB 안의 protobuf 가 그 자리에서 0x00 으로 덮어 써집니다 [4]. 0x00 으로 채워진 레코드가 몰려 있다면 전체 삭제를 했을 가능성으로 적고 [증거를 없애려 했나](anti-forensics/index.md) 와 이어 봅니다. SEGB 를 직접 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 을 따릅니다.
 5. 바이옴 `remote` 폴더의 기록은 같은 Apple 계정의 다른 기기에서 온 것이라 [13][14] 빼고, iLEAPP 의 `App.WebUsage` 파서는 `local` 폴더만 읽고 `tombstone` 폴더는 건너뛰어서 [7], `tombstone` 폴더는 따로 열어 봅니다.
@@ -89,7 +89,7 @@ nav_order: 1460
 
 바이옴과 `History.db` 의 시각 차이를 조작 흔적으로 보는 실수도 있습니다. iOS 16 에서 `_DKEvent.Safari.History` 는 `History.db` 보다 몇 초 늦게 찍혀서 [4], 몇 초 차이는 같은 방문으로 묶습니다.
 
-URL 이 있다고 "사용자가 그 페이지를 읽었다" 로 적는 일도 있습니다. `history_visits` 에는 `redirect_source`·`redirect_destination` 칸이 있어서 [2], 리디렉션으로 이어진 방문인지 이 칸과 앞뒤 행으로 확인한 뒤 사용자가 머문 페이지를 가립니다.
+URL 이 있다고 "사용자가 그 페이지를 읽었다" 로 적는 일도 있습니다. `history_visits` 에는 `redirect_source`·`redirect_destination` 열이 있어서 [2], 리디렉션으로 이어진 방문인지 이 열과 앞뒤 행으로 확인한 뒤 사용자가 머문 페이지를 가려냅니다.
 
 ## 보고서 문장 예
 

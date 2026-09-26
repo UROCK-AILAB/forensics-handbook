@@ -15,7 +15,7 @@ nav_order: 800
 
 카카오톡의 번들 ID 는 `com.iwilab.KakaoTalk` 이고[3], 앱이 쓰는 파일은 이 앱의 데이터 컨테이너 안에 모입니다. 카카오톡 DB 파일은 모두 `Library/PrivateDocuments/` 아래에 있고[2][3], 메시지는 `Message.sqlite` 에, 채팅방·사용자·연락처는 `Talk.sqlite` 에 들어 있습니다[2][3]. 받은 사진·영상·음성은 DB 밖의 폴더에 파일로 남습니다[2].
 
-각 파일의 안쪽은 하위 페이지에서 나눠 다룹니다. 표와 칸, 암호화는 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에, 미디어 폴더는 [받은 파일 (Received Files)](received-files.md)에, 사용자와 연락처 표는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
+각 파일의 안쪽은 하위 페이지에서 나눠 다룹니다. 표와 열, 암호화는 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에, 미디어 폴더는 [받은 파일 (Received Files)](received-files.md)에, 사용자와 연락처 표는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -37,11 +37,11 @@ nav_order: 800
 
 아이튠즈(로컬) 백업에서 카카오톡 파일은 `AppDomain-com.iwilab.KakaoTalk` 도메인에 들어가고, 상대 경로는 기기와 같은 `Library/PrivateDocuments/Message.sqlite`, `Library/PrivateDocuments/Talk.sqlite` 입니다[3]. 백업의 `Manifest.db` 에는 `Files` 표(`fileID`, `domain`, `relativePath`, `flags`, `file`)가 있어서, 이 표에서 `domain` 과 `relativePath` 로 파일을 찾습니다[3]. 백업 파일 ID 를 구하는 방법과 백업 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에 있습니다.
 
-로컬 백업만으로 DB 와 미디어 파일을 꺼내 분석할 수 있습니다[3]. 암호화 백업이어야 이 파일들이 들어가는지는 공개 자료에 없어서 검체로 확인합니다.
+로컬 백업만으로 DB 와 미디어 파일을 꺼내 분석할 수 있습니다[3]. 암호화 백업이어야 이 파일들이 들어가는지는 실제 백업으로 확인합니다.
 
 ### 버전별 차이
 
-시험한 iOS 버전과 카카오톡 앱 버전을 밝힌 공개 자료가 없어서, 경로가 버전에 따라 달라지는지는 검체에서 확인합니다. 앱 버전에 따라 `Talk.sqlite` 의 칸 구성이 다른 사례는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
+시험한 iOS 버전과 카카오톡 앱 버전을 밝힌 공개 자료가 없어서, 경로가 버전에 따라 달라지는지는 실제 기기에서 확인합니다. 앱 버전에 따라 `Talk.sqlite` 의 열 구성이 다른 사례는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
 
 ## 구조
 
@@ -54,9 +54,9 @@ nav_order: 800
 | 받은 영상 | `chatVideo/` 아래 채팅방별 폴더 | 영상 파일[2] |
 | 받은 음성 | `chatAudio/` 아래 채팅방별 폴더 | 음성 파일[2] |
 
-`Message.sqlite` 와 `Talk.sqlite` 는 흔한 이름이라 다른 앱의 파일과 헷갈릴 수 있습니다. `Message` 표에 `sentAt`·`chatId`·`serverLogId`·`clientMsgId` 칸이 있는지, `Talk.sqlite` 에 `ZCHAT`·`ZUSER` 표가 있는지를 보면 카카오톡 파일인지 가릴 수 있습니다[2]. 경로만 보고 고른 파일도 같은 방법으로 한 번 더 확인하는 편이 안전합니다.
+`Message.sqlite` 와 `Talk.sqlite` 는 흔한 이름이라 다른 앱의 파일과 헷갈릴 수 있습니다. `Message` 표에 `sentAt`·`chatId`·`serverLogId`·`clientMsgId` 열이 있는지, `Talk.sqlite` 에 `ZCHAT`·`ZUSER` 표가 있는지를 보면 카카오톡 파일인지 가려낼 수 있습니다[2]. 경로만 보고 고른 파일도 같은 방법으로 한 번 더 확인하는 편이 안전합니다.
 
-카카오톡 설정 plist 가 있는지, 앱 그룹 컨테이너를 쓰는지, 카카오 서버로 올리는 대화 백업 기능이 기기에 파일을 남기는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+카카오톡 설정 plist 가 있는지, 앱 그룹 컨테이너를 쓰는지, 카카오 서버로 올리는 대화 백업 기능이 기기에 파일을 남기는지는 실제 기기로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -74,13 +74,13 @@ WAL 파일을 빠뜨리면 메시지가 크게 빠집니다. `Message.sqlite` �
 
 ### 헥스로 한 번
 
-SQLite 파일은 첫 16바이트가 정해진 문자열이라서, 확장자나 이름과 상관없이 DB 파일인지 가릴 수 있습니다. 아래는 SQLite 파일 형식 명세로 만든 예시이고 실제 검체에서 나온 값이 아닙니다.
+SQLite 파일은 첫 16바이트가 정해진 문자열이라서, 확장자나 이름과 상관없이 DB 파일인지 가려낼 수 있습니다. 아래는 SQLite 파일 형식 명세로 만든 예시이고 실제 기기에서 나온 값이 아닙니다.
 
 ```
 00000000  53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00  SQLite format 3.
 ```
 
-`Message.sqlite` 와 `Talk.sqlite` 첫머리에 이 문자열이 있는지 확인한 뒤, 표 이름으로 카카오톡 DB 인지 가립니다.
+`Message.sqlite` 와 `Talk.sqlite` 첫머리에 이 문자열이 있는지 확인한 뒤, 표 이름으로 카카오톡 DB 인지 확인합니다.
 
 ### 백업에서 파일 찾기
 
@@ -110,7 +110,7 @@ iLEAPP 의 카카오톡 분석기(`scripts/artifacts/kakaoTalk.py`)는 위 경�
 
 ## 실습
 
-공개된 iOS 검체 가운데 카카오톡이 설치된 것으로 아래를 풀어 봅니다.
+공개된 iOS 시험 이미지 가운데 카카오톡이 설치된 것으로 아래를 풀어 봅니다.
 
 1. 백업이나 파일 시스템 추출본에서 `Library/PrivateDocuments/` 아래 파일 목록을 뽑아 `-wal` 파일이 있는지 확인해 봅니다.
 2. `Message.sqlite` 를 `-wal` 없이 연 결과와 함께 연 결과의 `Message` 행 수를 비교해 봅니다.

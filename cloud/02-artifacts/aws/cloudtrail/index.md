@@ -35,7 +35,7 @@ CloudTrail Lake 는 2026년 5월 31일부터 새 고객을 받지 않고, 이미
 
 ## 읽는 순서
 
-1. [레코드 구조 (Event Record)](./record-structure.md) — 레코드 한 건의 필드, `userIdentity` 로 호출 주체를 가리는 법, 시각 필드를 읽는 법을 다룹니다.
+1. [레코드 구조 (Event Record)](./record-structure.md) — 레코드 한 건의 필드, `userIdentity` 로 호출 주체를 구분하는 법, 시각 필드를 읽는 법을 다룹니다.
 2. [관리 이벤트와 데이터 이벤트 (Management·Data Events)](./event-types.md) — 이벤트 종류마다 무엇이 기록되고 무엇이 기본으로 빠지는지, 당시 설정을 어떻게 확인하는지를 다룹니다.
 3. [트레일과 이벤트 기록 (Trails·Event History·Lake)](./trails.md) — 기록이 저장되는 곳과 보관 기간, S3 경로와 파일 이름, 다이제스트 파일로 무결성을 확인하는 법을 다룹니다.
 

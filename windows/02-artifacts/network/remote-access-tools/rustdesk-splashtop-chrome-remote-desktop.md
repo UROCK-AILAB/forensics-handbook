@@ -52,7 +52,7 @@ nav_order: 2410
 
 **증명하지 못하는 것**
 
-- 로그 안에 상대 ID·IP 가 어떤 모양으로 남는지는 공개된 분석 자료가 없어 검체에서 확인합니다. 확인한 버전을 보고서에 적습니다.
+- 로그 안에 상대 ID·IP 가 어떤 모양으로 남는지는 실제 데이터로 확인해야 합니다. 확인한 버전을 보고서에 적습니다.
 - 중계 서버를 직접 둔 경우, 서버 로그는 그 서버에 있습니다. 조사하는 PC 만으로는 서버 쪽 기록을 볼 수 없습니다.
 
 ## Splashtop
@@ -68,7 +68,7 @@ nav_order: 2410
 | 주 로그 | `C:\Program Files (x86)\Splashtop\Splashtop Remote\Server\log\SPLog.txt` | 접속한 호스트 이름, 표시 이름, 상대 공인 IP, 파일 전송, 채팅 |
 | 파일 전송 로그 | `%PROGRAMDATA%\Splashtop\Temp\log\FTCLog.txt` | |
 | 디버그·내부 로그 | 주 로그와 같은 폴더의 `agent_log.txt`, `svcinfo.txt` | 포렌식 가치가 낮습니다[1] |
-| 저장한 채팅 | `Splashtop_Chat_[YYYYMMDD]_[HHMM].txt` | 사용자가 채팅을 저장한 경우. 저장 위치는 검체에서 확인 |
+| 저장한 채팅 | `Splashtop_Chat_[YYYYMMDD]_[HHMM].txt` | 사용자가 채팅을 저장한 경우. 저장 위치는 실제 데이터로 확인 |
 | 암호화된 파일 | `...\Server\db\SRAgent.sqlite3`, `%PROGRAMDATA%\Splashtop\Splashtop Remote Server\Credential\<무작위 이름>` | 암호화돼 있어 바로 읽지 못합니다 |
 | 전용 이벤트 로그 | `C:\Windows\System32\winevt\Logs\Splashtop-Splashtop Streamer-Remote Session%4Operational.evtx`, `Splashtop-Splashtop Streamer-Status%4Operational.evtx` | |
 
@@ -92,7 +92,7 @@ nav_order: 2410
 
 ### 텍스트 로그
 
-**FTCLog.txt** 는 파일 전송 로그입니다. 칸은 날짜·시각, 파일 경로, 크기(KB), 전송 종류, 상태, 사용자 이름, (IP) 순서입니다.
+**FTCLog.txt** 는 파일 전송 로그입니다. 필드는 날짜·시각, 파일 경로, 크기(KB), 전송 종류, 상태, 사용자 이름, (IP) 순서입니다.
 
 ```
 2022-09-01 11:42:14 C:\Users\lab\Desktop\mechant.7z 0.0 KB Upload Completed john doe (123.231.123.231)
@@ -134,7 +134,7 @@ nav_order: 2410
 | 이벤트 로그 이름 | 호스트는 시스템 이벤트 로그에 "chromoting" 이라는 이름(kApplicationName 값)으로 기록합니다[7] |
 | 접속 도메인·포트 | `remotedesktop.google.com`, `*.remotedesktop.google.com`, `remotedesktop-pa.googleapis.com`, `chromoting-host.talkgadget.google.com` 등. 포트 443, 3478 |
 
-Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IPC 로 넘기면 다른 프로세스가 이벤트를 기록합니다. 그래서 실제 원본 이름과 로그 이름(Application 인지)은 검체에서 확인합니다. 로그 전체에서 원본 이름에 "chromoting" 이 든 이벤트를 찾습니다.
+Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IPC 로 넘기면 다른 프로세스가 이벤트를 기록합니다. 그래서 실제 원본 이름과 로그 이름(Application 인지)은 실제 데이터로 확인합니다. 로그 전체에서 원본 이름에 "chromoting" 이 든 이벤트를 찾습니다.
 
 ### 이벤트 ID
 
@@ -149,7 +149,7 @@ Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IP
 | 5 | MSG_HOST_STARTED | 정보 | `Host started for user: <호스트 계정>.` |
 | 6 | MSG_HOST_LOG_EVENT | 정보 | 원래 로그 문구를 그대로 적습니다 |
 
-- 소스의 예시 값에서 상대 사용자는 `client@email.com` 꼴입니다. 이벤트 4 의 예시는 `client@email.com/TalkGadgetABCDABCD`, `127.0.0.1:1000`, `mux`, `direct` 입니다.
+- 소스의 예시 값에서 상대 사용자는 `client@email.com` 형식입니다. 이벤트 4 의 예시는 `client@email.com/TalkGadgetABCDABCD`, `127.0.0.1:1000`, `mux`, `direct` 입니다.
 - 이벤트 4 는 채널이 새로 열릴 때마다 남습니다. 연결 하나 위에 채널 여러 개가 겹칠 수 있습니다.
 - 메시지 파일은 언어별로 만들어집니다. 그래서 문구는 OS 언어에 따라 다를 수 있습니다.
 - 문구 목록에는 IDS_HOST_STOPPED("Host stopped.")도 있습니다. 그러나 메시지 파일에는 이 ID 가 없습니다. 호스트가 멈춘 이벤트를 이 ID 목록에서 찾지 않습니다.
@@ -166,7 +166,7 @@ Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IP
 
 **증명하지 못하는 것**
 
-- 상대 사용자 칸에는 계정 식별자가 남습니다(소스 예시는 이메일 주소 꼴). 그 계정을 쓴 사람은 이 칸으로 특정하지 못합니다.
+- 상대 사용자 필드에는 계정 식별자가 남습니다(소스 예시는 이메일 주소 형식). 그 계정을 쓴 사람은 이 필드로 특정하지 못합니다.
 - 이벤트 4 는 채널마다 남습니다. 이벤트 4 의 개수는 접속 횟수가 아닙니다.
 - 세션 중에 한 일은 이 이벤트들에 없습니다.
 
@@ -183,7 +183,7 @@ Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IP
 - **Splashtop 은 다른 제품에 딸려 설치될 수 있습니다.** Synacktiv 시험에서는 Atera 에 딸려 설치됐습니다[1]. 사용자가 Splashtop 을 따로 설치하지 않았어도 흔적이 있을 수 있습니다.
 - **Splashtop 이벤트 ID 는 공개 자료에 없습니다.** 로그 이름과 메시지 문구로 찾습니다.
 - **SPLog.txt 에 연도가 없습니다.** 해를 넘긴 로그는 순서가 헷갈립니다.
-- **Chrome Remote Desktop 이벤트의 원본 이름과 로그 이름은 검체에서 확인합니다.** 특정 로그 하나만 보지 말고 로그 전체에서 "chromoting" 을 찾습니다.
+- **Chrome Remote Desktop 이벤트의 원본 이름과 로그 이름은 실제 데이터로 확인합니다.** 특정 로그 하나만 보지 말고 로그 전체에서 "chromoting" 을 찾습니다.
 - **Chrome Remote Desktop 문구는 OS 언어에 따라 다를 수 있습니다.** 문구보다 이벤트 ID 와 원본 이름을 함께 봅니다.
 
 ## 직접 분석해 보기
@@ -202,7 +202,7 @@ Get-WinEvent -Path "$logs\Splashtop-Splashtop Streamer-Remote Session%4Operation
   Select-Object @{ n = 'UTC'; e = { $_.TimeCreated.ToUniversalTime() } }, Id, Message
 ```
 
-Chrome Remote Desktop 이벤트는 어느 로그에 남는지 검체마다 확인해야 하므로, 수집한 evtx 파일 전체에서 원본 이름으로 찾습니다.
+Chrome Remote Desktop 이벤트는 어느 로그에 남는지 분석 대상마다 확인해야 하므로, 수집한 evtx 파일 전체에서 원본 이름으로 찾습니다.
 
 ```powershell
 Get-ChildItem 'E:\case\winevt\Logs\*.evtx' | ForEach-Object {
@@ -225,7 +225,7 @@ Get-ChildItem 'E:\case\winevt\Logs\*.evtx' | ForEach-Object {
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 이 도구들의 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등) 가운데 이 도구들의 흔적이 있는 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. RustDesk 로그가 `%AppData%\RustDesk\log\` 와 `log\server\` 가운데 어디에 있습니까? 이 PC 는 받는 쪽입니까, 거는 쪽입니까?
 2. Splashtop Remote Session 로그에서 파일 전송 이벤트를 찾습니다. 같은 전송이 `FTCLog.txt` 에도 있습니까? 두 시각은 몇 초 차이 납니까?

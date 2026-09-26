@@ -58,11 +58,11 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 | `PersonalUnlinkedTimeStamp`, `LastPersonalUnlinkedTimeStamp` | QWORD | 개인 계정 연결을 끊은 시각입니다. Unix 초입니다 |
 | `LastPersonalUnlinkedReason` | REG_SZ | 개인 계정 연결을 끊은 이유입니다. 예: `12-DeleteAccountSettingsReason::UserTriggeredUnlink` |
 | `OneAuthUnrecoverableTimestamp` | — | 아래 SysPrep 안내에 나오는 값입니다 |
-| `MachineGuidCollection`, `HostNameCollection`, `UserNameCollection`, `UserDomainCollection` | — | 내용에 관한 공개 자료가 없어 검체에서 확인합니다 |
+| `MachineGuidCollection`, `HostNameCollection`, `UserNameCollection`, `UserDomainCollection` | — | 내용은 실제 데이터로 확인합니다 |
 
 이미지를 준비(SysPrep)하기 전에는 이 키의 값 네 개를 지웁니다[2]. `SilentBusinessConfigCompleted`, `ClientEverSignedIn`, `PersonalUnlinkedTimeStamp`, `OneAuthUnrecoverableTimestamp` 입니다.
 
-`LastPersonalUnlinkedReason` 의 `UserTriggeredUnlink` 는 이름으로 보아 사용자가 직접 연결을 끊은 경우로 보입니다. 다른 이유 문자열은 공개 자료가 없어 검체에서 확인합니다.
+`LastPersonalUnlinkedReason` 의 `UserTriggeredUnlink` 는 이름으로 보면 사용자가 직접 연결을 끊은 경우로 보입니다. 다른 이유 문자열은 실제 데이터로 확인합니다.
 
 ### 계정 키 `Accounts\<계정>`
 
@@ -127,7 +127,7 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 | `Tenants\<동기화 폴더 표시 이름>` | 값 이름이 동기화 폴더 경로입니다. 예: `Personal\Tenants\OneDrive`, `Business1\Tenants\OneDrive - <회사 이름>` |
 | `ScopeIdToMountPointPathCache` | 값 이름이 32자리 16진수 범위 ID (scope ID) 입니다 |
 | `AuthenticationURLs` | `Authority`, `DiscoveryResourceId`, `DiscoveryApi`, `GraphApi`, `FederationProvider`, `NextEmailHRDUpdate` |
-| `USQInformation` (개인 계정) | 저장 공간 정보입니다. 값은 `total`, `used`, `remaining`, `state`, `lastFetchTime` 입니다. 하위 키 `services\OneDrive`, `services\Outlook` 에 `used` 가 있습니다. 단위는 공개 자료가 없어 검체에서 확인합니다 |
+| `USQInformation` (개인 계정) | 저장 공간 정보입니다. 값은 `total`, `used`, `remaining`, `state`, `lastFetchTime` 입니다. 하위 키 `services\OneDrive`, `services\Outlook` 에 `used` 가 있습니다. 단위는 실제 데이터로 확인합니다 |
 | `WindowsSecurityCenterIntegration` | `WscRegistrationGuid` |
 
 연결을 끊은 계정의 키에는 값이 거의 남지 않을 수 있습니다. 예를 들어 `Accounts\Business2` 에 `KFMOnboardingEnabledStartTime` 하나만 남기도 합니다.
@@ -264,7 +264,7 @@ OneDrive!S-1-5-21-…-1001!Business1|0123456789abcdef0123456789abcdef
 3. 시각 값은 Unix 초로 변환합니다. 도구가 자동으로 바꿔 준 값은 위 헥스 예시처럼 한 번 직접 맞춰 봅니다.
 4. `SOFTWARE` 하이브의 `Microsoft\Windows\CurrentVersion\Explorer\SyncRootManager` 에서 `OneDrive!` 로 시작하는 키를 모읍니다.
 
-살아 있는 PC 에서는 Windows 에 들어 있는 `reg` 명령으로도 볼 수 있습니다.
+실행 중인 PC 에서는 Windows 에 들어 있는 `reg` 명령으로도 볼 수 있습니다.
 
 ```
 reg query "HKCU\Software\Microsoft\OneDrive\Accounts" /s
@@ -286,10 +286,10 @@ reg query "HKCU\Software\Microsoft\OneDrive\Accounts" /s
 
 ## 실습
 
-OneDrive 를 쓴 공개 검체(NIST CFReDS 등)에서 `NTUSER.DAT` 와 `SOFTWARE` 하이브를 꺼내 아래 질문을 풀어 봅니다.
+OneDrive 를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 `NTUSER.DAT` 와 `SOFTWARE` 하이브를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `Accounts` 아래에 어떤 계정 키가 있습니까? 값이 거의 없는 키가 있다면 어떤 값이 남아 있습니까?
-2. 계정마다 `cid` 는 몇 자리입니까? 개인 계정과 회사 계정을 `cid` 형식만으로 가를 수 있습니까?
+2. 계정마다 `cid` 는 몇 자리입니까? 개인 계정과 회사 계정을 `cid` 형식만으로 구분할 수 있습니까?
 3. `settings` 폴더의 ini 파일 이름이 `cid` 와 같습니까?
 4. `ClientFirstSignInTimestamp` 와 `LastSignInTime` 을 UTC 로 바꿉니다. 같은 날 Windows 로그온 기록과 몇 분 차이가 납니까?
 5. `SyncRootManager` 에서 `OneDrive!` 로 시작하는 키는 몇 개입니까? 사용자 SID 는 몇 명입니까?

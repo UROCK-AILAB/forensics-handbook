@@ -11,15 +11,15 @@ SSH 서버 데몬 sshd 가 인증 성공·실패와 연결 끊김을 syslog 로 
 
 ## 무엇을 기록하나 · 왜 생기나
 
-sshd 는 인증 한 번이 끝날 때마다 결과를 한 줄로 남깁니다[1]. 여기에 없는 사용자 이름으로 들어온 시도, 설정으로 막힌 계정, 연결을 끊은 이유가 함께 남습니다[1][2]. 무엇이 남는지는 `LogLevel` 값에 따라 다르고 기본값은 `INFO` 입니다[7]. 연결 시작, 세션 열고 닫음, 어느 authorized_keys 몇 번째 줄이 맞았는지는 한 단계 위인 `VERBOSE` 에서만 나오므로, 분석 전에 검체의 `LogLevel` 부터 확인합니다([sshd 설정](sshd-config.md)).
+sshd 는 인증 한 번이 끝날 때마다 결과를 한 줄로 남깁니다[1]. 여기에 없는 사용자 이름으로 들어온 시도, 설정으로 막힌 계정, 연결을 끊은 이유가 함께 남습니다[1][2]. 무엇이 남는지는 `LogLevel` 값에 따라 다르고 기본값은 `INFO` 입니다[7]. 연결 시작, 세션 열고 닫음, 어느 authorized_keys 몇 번째 줄이 맞았는지는 한 단계 위인 `VERBOSE` 에서만 나오므로, 분석 전에 대상 시스템의 `LogLevel` 부터 확인합니다([sshd 설정](sshd-config.md)).
 
-이 쪽은 sshd 가 쓰는 문구와 그 해석만 다룹니다. 줄이 어느 파일로 가는지, 시각 형식, PAM 줄(`pam_unix(sshd:session)` 등)은 [인증 로그](../auth-log.md)에서 다룹니다.
+이 페이지는 sshd 가 쓰는 문구와 그 해석만 다룹니다. 줄이 어느 파일로 가는지, 시각 형식, PAM 줄(`pam_unix(sshd:session)` 등)은 [인증 로그](../auth-log.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
 | 항목 | Ubuntu 24.04 | RHEL 9 계열 |
 |---|---|---|
-| OpenSSH 판 | 9.6p1[10] | CentOS Stream 9 의 현재 패키지는 9.9p1 이고 그 전은 8.7p1 입니다[9]. 검체에서 `rpm -q openssh-server` 로 판을 확인합니다 |
+| OpenSSH 판 | 9.6p1[10] | CentOS Stream 9 의 현재 패키지는 9.9p1 이고 그 전은 8.7p1 입니다[9]. 대상 시스템에서 `rpm -q openssh-server` 로 판을 확인합니다 |
 | 기록 facility | 기본값 `AUTH`[7] | `/etc/ssh/sshd_config.d/50-redhat.conf` 의 `SyslogFacility AUTHPRIV`[9] |
 | 파일 | `/var/log/auth.log` | `/var/log/secure` |
 | 줄의 태그 | `sshd` | 9.9p1 패키지에는 `/usr/libexec/openssh/sshd-session` 이 들어 있어[9] 인증 줄의 태그가 `sshd-session` 일 수 있습니다 |
@@ -86,7 +86,7 @@ Accepted|Failed|Partial|Postponed 방식[/하위방식] for [invalid user ]이�
 
 **증명하지 못하는 것.** 로그인 뒤에 무엇을 했는지는 남지 않습니다. 기본 `INFO` 에서는 `Starting session` 이 없어서 셸을 열었는지 명령 하나만 돌렸는지도 알 수 없고, 이 판단은 [로그인 기록](../wtmp-btmp-lastlog.md)의 터미널 세션과 함께 합니다. 공개 키 실패 초반 시도는 앞에서 본 대로 빠집니다. 원격 주소는 마지막으로 연결한 기계의 주소이지 사람의 위치가 아니며, 중계 서버를 거쳤을 수 있습니다([known_hosts 와 클라이언트 설정](known-hosts.md)). 실패 줄의 사용자 이름은 클라이언트가 보낸 문자열이라 그 계정이 있다는 뜻이 아닙니다[11].
 
-보고서에는 "2025-03-04 09:15:02(+09:00)에 203.0.113.10 에서 alice 계정으로 ED25519 키 공개 키 인증에 성공한 기록이 있다" 처럼 줄이 말하는 만큼만 씁니다.
+보고서에는 "2025-03-04 09:15:02(+09:00)에 203.0.113.10 에서 alice 계정으로 ED25519 키 공개 키 인증에 성공한 기록이 있다" 처럼 줄로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -98,7 +98,7 @@ Ubuntu 는 소켓 활성화가 기본이라서[10] 연결이 올 때 sshd 가 �
 
 - **태그 필터.** OpenSSH 9.8 이상에서는 태그가 `sshd-session` 일 수 있습니다[11]. Velociraptor `Linux.Syslog.SSHLogin` 은 전통형 시각(`SYSLOGTIMESTAMP`)만 받고 프로그램이 `sshd` 인 줄만 고르므로[14], Ubuntu 24.04 의 RFC 3339 줄이나 `sshd-session` 줄이 빠질 가능성이 있습니다. dissect `authlog` 도 필드를 더 뽑는 서비스 목록에 `sshd` 만 있어서[12] `sshd-session` 줄은 사용자·주소가 따로 나뉘지 않습니다.
 - **방식 분류.** plaso 는 `Failed`·`Accepted` 줄의 방식으로 `password`·`publickey` 만 알아보므로[11] `keyboard-interactive/pam` 줄은 구조화되지 않습니다. dissect 는 줄에 `password` 가 없으면 publickey 로 분류하므로[12] `keyboard-interactive/pam` 이 publickey 로 잡힐 가능성이 있습니다.
-- **plaso 의 연결 줄.** plaso 는 `Connection from IP port N` 을 따로 파싱하지만[11], 실제 줄은 `Connection from IP port N on IP port N` 이고 `VERBOSE` 에서만 나옵니다[4][8]. 기본 설정 검체에서는 이 이벤트가 없다고 해서 연결이 없었다는 뜻이 아닙니다.
+- **plaso 의 연결 줄.** plaso 는 `Connection from IP port N` 을 따로 파싱하지만[11], 실제 줄은 `Connection from IP port N on IP port N` 이고 `VERBOSE` 에서만 나옵니다[4][8]. 기본 설정 시스템에서는 이 이벤트가 없다고 해서 연결이 없었다는 뜻이 아닙니다.
 - **건수 세기.** `UsePAM yes` 인 기본 설정에서[9][10] 비밀번호 실패는 sshd 의 `Failed password` 줄과 `pam_unix(sshd:auth)` 줄이 따로 남으므로, 두 줄을 같이 세면 실패 건수가 두 배로 보일 가능성이 있습니다.
 - **꾸민 줄.** syslog 태그와 facility 는 보낸 쪽이 정하는 값이라, 로컬 사용자가 `sshd` 태그를 단 가짜 줄을 넣을 수 있습니다. 저널이 남아 있으면 `_EXE`·`_COMM` 같은 신뢰 필드로 실제로 보낸 프로그램을 확인합니다([systemd 저널](../../../01-foundations/logging/systemd-journal/index.md)).
 - **지우기.** 줄을 지우거나 파일을 비워도 저널, 순환된 옛 파일, 원격 로그 서버, wtmp 에 같은 접속이 남아 있을 수 있습니다. 한 곳에만 있고 다른 곳에 없는 접속이 조작을 가리키는 단서가 됩니다([안티포렌식](../../../04-scenarios/insider/anti-forensics.md)).
@@ -127,13 +127,13 @@ zgrep -hE 'sshd(-session)?\[[0-9]+\]: (Accepted|Failed|Invalid user)' /mnt/evide
 | [셸 명령 기록](../../execution/shell-history/index.md) | 로그인 뒤 무엇을 했는지 |
 | [감사 로그 형식](../../../01-foundations/logging/auditd-format.md) | `USER_LOGIN`, `CRYPTO_KEY_USER`(2404), `CRYPTO_SESSION`(2407) 레코드[15] |
 
-RHEL 9 계열 openssh 패키지는 감사 패치를 넣고 `--with-audit=linux` 로 빌드하므로[9] audit.log 에 SSH 로그인 레코드가 함께 남을 가능성이 있고, 검체의 audit.log 에서 확인합니다. 흐름 전체는 [SSH 로 들어왔나](../../../04-scenarios/intrusion/ssh-intrusion.md)에서 다룹니다.
+RHEL 9 계열 openssh 패키지는 감사 패치를 넣고 `--with-audit=linux` 로 빌드하므로[9] audit.log 에 SSH 로그인 레코드가 함께 남을 가능성이 있고, 실제 audit.log 에서 확인합니다. 흐름 전체는 [SSH 로 들어왔나](../../../04-scenarios/intrusion/ssh-intrusion.md)에서 다룹니다.
 
 ## 실습
 
-SSH 로 들어온 흔적이 있는 공개 Linux 검체에서 아래 질문을 풀어 봅니다.
+SSH 로 들어온 흔적이 있는 공개 Linux 디스크 이미지에서 아래 질문을 풀어 봅니다.
 
-1. 검체의 OpenSSH 판과 `LogLevel`·`SyslogFacility` 는 무엇이고, sshd 줄은 어느 파일에 남았습니까?
+1. 이미지의 OpenSSH 판과 `LogLevel`·`SyslogFacility` 는 무엇이고, sshd 줄은 어느 파일에 남았습니까?
 2. `Accepted` 줄은 몇 개이고, 원격 주소·계정·방식별로 나누면 어떻게 됩니까?
 3. 실패가 몰린 주소 중에서 뒤이어 성공한 주소가 있습니까?
 4. `Accepted publickey` 줄의 지문은 어느 계정의 authorized_keys 몇 번째 줄과 맞습니까?

@@ -44,8 +44,8 @@ Windows Vista 부터 이벤트 로그는 EVTX 형식으로 저장됩니다. XP·
 | | EVTX | EVT | ETL |
 |---|---|---|---|
 | 파일 머리 | 4096바이트 파일 헤더 | 48바이트 헤더 | 첫 이벤트에 세션 머리 정보 (TRACE_LOGFILE_HEADER) |
-| 그 뒤 | 65536바이트 청크 여러 개 | 레코드들과 파일 끝 레코드 | 같은 크기의 버퍼들(검체에서 확인) |
-| 레코드 본문 | 이진 XML | 고정 칸 뒤에 문자열과 데이터 | 공급자 종류마다 형식이 다릅니다 |
+| 그 뒤 | 65536바이트 청크 여러 개 | 레코드들과 파일 끝 레코드 | 같은 크기의 버퍼들(실제 파일로 확인) |
+| 레코드 본문 | 이진 XML | 고정 필드 뒤에 문자열과 데이터 | 공급자 종류마다 형식이 다릅니다 |
 | 시각 | FILETIME, UTC | 32비트 유닉스 시각, UTC | 1601-01-01 부터 센 100ns 단위(FILETIME 과 같은 단위) |
 
 시각 값을 푸는 법은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
@@ -61,12 +61,12 @@ Windows 11 PC 한 대의 예입니다.
 - `WINEVT\Channels` 아래 채널 키는 1,169개, `WINEVT\Publishers` 아래 공급자 키는 933개였습니다.
 - 채널 키 수와 `.evtx` 파일 수는 같지 않았습니다.
 - `Microsoft-Windows-TaskScheduler/Operational` 채널 키에는 OwningPublisher·Enabled(0)·MaxSize(0xa00000)·Type(1) 값이 있었습니다. 이 채널의 이벤트는 [예약 작업 이벤트](../../../02-artifacts/event-logs/taskscheduler-4698.md) 에서 다룹니다.
-- 채널 키의 Type 숫자가 어느 채널 종류에 대응하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+- 채널 키의 Type 숫자가 어느 채널 종류에 대응하는지는 실제 시스템에서 확인해야 합니다.
 
 ## 읽는 순서
 
 1. [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) — 파일 헤더·청크·레코드를 헥스로 따라갑니다. 체크섬 범위, 한 바퀴 돈 로그의 헤더 모양, 로그 크기·덮어쓰기 설정 키를 다룹니다.
-2. [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) — 토큰과 템플릿으로 레코드 본문을 XML 로 되살립니다. 레코드 하나만 떼어 내면 풀 수 없는 까닭도 다룹니다.
+2. [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) — 토큰과 템플릿으로 레코드 본문을 XML 로 되살립니다. 레코드 하나만 떼어 내면 풀 수 없는 이유도 다룹니다.
 3. [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) — 레지스트리로 메시지 파일을 찾고, 이벤트 식별자로 설명 문장을 고릅니다. WEVT_TEMPLATE 리소스 구조도 다룹니다.
 4. [구형 EVT 형식 (Windows XP·2003)](windows-xp-2003.md) — 48바이트 헤더, 레코드, 파일 끝 레코드와 원형 버퍼 동작을 다룹니다.
 5. [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](chunk-slack-corrupted-evtx.md) — 청크 빈 공간에서 진짜 레코드를 골라내는 조건을 다룹니다. 손상 파일을 도구마다 다르게 읽은 사례도 다룹니다.

@@ -25,9 +25,9 @@ nav_order: 3290
 2. **출처를 고릅니다.** 파일시스템([파일시스템 타임라인](filesystem-timeline-mft-usnjrnl-logfile.md)), 레지스트리([레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)), 이벤트 로그([이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)), 실행 흔적([프리페치](../../../02-artifacts/execution/prefetch/index.md)), 브라우저([크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md))가 흔한 출처입니다. 수집 범위에 없는 출처는 따로 적어 둡니다.
 3. **시간 기준을 맞춥니다.** 출처마다 시각을 저장하는 기준이 다릅니다. 합치기 전에 [시간대·시계 오차 보정](time-normalization.md)에 따라 한 기준으로 맞춥니다.
 4. **시각을 뽑아 모읍니다.** 공개 도구 plaso 가 그 예입니다. plaso 에서는 psort 가 결과를 여러 형식으로 내보냅니다(참고 1).
-5. **출력 형식과 칸을 고릅니다.** 아래 "출력 형식" 절을 봅니다.
+5. **출력 형식과 필드를 고릅니다.** 아래 "출력 형식" 절을 봅니다.
 6. **걸러 냅니다.** 시간 창, 출처 종류(source·sourcetype), 사용자, 키워드로 줄 수를 줄입니다.
-7. **줄마다 시각의 뜻을 확인합니다.** timestamp_desc 칸이나 l2t_csv 의 type 칸을 읽습니다.
+7. **줄마다 시각의 뜻을 확인합니다.** timestamp_desc 필드나 l2t_csv 의 type 열을 읽습니다.
 8. **중요한 줄은 원래 아티팩트로 돌아가 확인합니다.** 도구가 해석한 값과 원본 값을 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../reporting/tool-validation.md)을 봅니다.
 
 ## 출력 형식
@@ -38,13 +38,13 @@ plaso 문서에 나온 psort 출력 형식은 아래 열두 가지입니다(참�
 
 `dynamic`, `json`, `json_line`, `kml`, `l2tcsv`, `l2ttln`, `null`, `rawpy`, `opensearch`, `opensearch_ts`, `tln`, `xlsx`
 
-dynamic 형식에서는 내보낼 칸을 고를 수 있으며(참고 1), 고를 수 있는 칸은 date, datetime, display_name, filename, hostname, inode, macb, message, message_short, source, source_long, tag, time, timestamp_desc, timezone, username 입니다(참고 1). timestamp_desc 칸은 그 이벤트 시각이 무엇을 뜻하는지 적는데, "Creation Time", "Program Execution Duration" 이 그 예입니다(참고 1). 출력 시각이 어느 시간대인지는 결과 파일의 timezone 칸으로 확인합니다.
+dynamic 형식에서는 내보낼 필드를 고를 수 있으며(참고 1), 고를 수 있는 필드는 date, datetime, display_name, filename, hostname, inode, macb, message, message_short, source, source_long, tag, time, timestamp_desc, timezone, username 입니다(참고 1). timestamp_desc 필드는 그 이벤트 시각이 무엇을 뜻하는지 적는데, "Creation Time", "Program Execution Duration" 이 그 예입니다(참고 1). 출력 시각이 어느 시간대인지는 결과 파일의 timezone 필드로 확인합니다.
 
-### l2t_csv 의 17칸
+### l2t_csv 의 열 17개
 
-l2t_csv 는 칸 17개가 순서대로 고정된 CSV 형식입니다(참고 1, 참고 2).
+l2t_csv 는 열 17개가 순서대로 고정된 CSV 형식입니다(참고 1, 참고 2).
 
-| 순서 | 칸 | 뜻 (참고 2) |
+| 순서 | 열 | 뜻 (참고 2) |
 |---|---|---|
 | 1 | date | 날짜. MM/DD/YYYY |
 | 2 | time | 시각. 24시간제 HH:MM:SS |
@@ -62,9 +62,9 @@ l2t_csv 는 칸 17개가 순서대로 고정된 CSV 형식입니다(참고 1, �
 | 14 | inode | — |
 | 15 | notes | — |
 | 16 | format | 파일을 해석한 입력 모듈 이름 |
-| 17 | extra | 나머지 해석 정보를 이어 붙인 칸 |
+| 17 | extra | 나머지 해석 정보를 이어 붙인 열 |
 
-- date 칸은 월/일/연 순서입니다. 연-월-일 순서와 헷갈리지 않도록 옮겨 적을 때 주의합니다.
+- date 열은 월/일/연 순서입니다. 연-월-일 순서와 헷갈리지 않도록 옮겨 적을 때 주의합니다.
 - 이 형식은 초 단위까지만 담기 때문에 정밀도가 떨어지고 MACB 묶음에도 영향을 줍니다(참고 2). 초 아래 자리가 필요한 분석이면 다른 출력 형식을 고릅니다.
 
 ## 함정과 한계
@@ -72,10 +72,10 @@ l2t_csv 는 칸 17개가 순서대로 고정된 CSV 형식입니다(참고 1, �
 1. **시간 기준이 섞입니다.** 출처마다 UTC 로 적기도 하고 현지 시각으로 적기도 합니다. 맞추지 않고 합치면 순서가 뒤바뀝니다.
 2. **같은 파일이 여러 줄로 나옵니다.** 한 파일의 $SI·$FN 시각과 USN 레코드가 모두 들어오기 때문입니다. 줄이 여러 개라고 같은 행동이 여러 번 있었다고 읽지 않습니다.
 3. **해상도가 다른 출처가 섞입니다.** l2t_csv 는 초 단위입니다(참고 2). FAT 처럼 시각이 더 거친 출처도 있습니다([파일 시각 네 가지와 변화 규칙](macb-timestamp-rules.md)). 같은 초 안의 줄끼리는 순서를 단정할 수 없습니다.
-4. **이웃한 줄을 원인과 결과로 읽습니다.** 시각이 가깝다는 사실은 순서만 말합니다. 인과는 다른 근거로 보입니다.
+4. **이웃한 줄을 원인과 결과로 읽습니다.** 시각이 가깝다는 사실로는 순서만 알 수 있습니다. 인과는 다른 근거로 보입니다.
 5. **기록 시각을 행동 시각으로 읽습니다.** type 이 "Last Written" 이면 그 기록이 쓰인 때입니다. 사용자가 그때 무엇을 했다고 단정하지 않습니다.
 6. **도구가 읽지 못한 출처는 빠집니다.** 표의 빈 구간이 "아무 일도 없었다" 는 뜻은 아닙니다. 어떤 출처를 넣었는지 보고서에 적습니다.
-7. **시간대 표시를 확인하지 않습니다.** l2t_csv 의 timezone 칸은 출력 시간대일 수도 있고 입력 파일의 시간대일 수도 있습니다(참고 2).
+7. **시간대 표시를 확인하지 않습니다.** l2t_csv 의 timezone 열은 출력 시간대일 수도 있고 입력 파일의 시간대일 수도 있습니다(참고 2).
 8. **조작된 시각도 그대로 들어옵니다.** 도구는 적힌 값을 정렬할 뿐입니다. 의심 가는 파일은 [시각 조작 탐지](timestomping.md)로 따로 봅니다.
 
 ## 결과를 어떻게 해석하나

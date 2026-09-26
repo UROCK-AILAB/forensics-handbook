@@ -18,7 +18,7 @@ AI 서비스의 기록은 회사 서버, 사용자 계정, 사용자 기기 세 
 
 ### 1. 조사 질문과 범위를 정합니다
 
-어느 서비스를 어느 계정으로, 어느 기기에서 썼는지 먼저 목록으로 만듭니다. 같은 서비스라도 웹 브라우저, Windows·macOS 데스크톱 앱, Android·iOS 앱, 명령줄 개발 도구, 기기 안에서 도는 로컬 모델에 따라 기록이 남는 곳이 다르고, 서비스마다 어디에 무엇이 있는지는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 정리되어 있습니다. 개인 계정인지 회사 계정인지도 이 단계에서 가립니다. 회사 계정이면 조직 쪽에 감사 기록이 있는지도 확인하고, [Claude 기업용 감사 로그](../../02-artifacts/network-enterprise/claude-enterprise.md)나 [ChatGPT 기업용 감사 기록](../../02-artifacts/network-enterprise/chatgpt-enterprise.md) 같은 페이지를 함께 봅니다.
+어느 서비스를 어느 계정으로, 어느 기기에서 썼는지 먼저 목록으로 만듭니다. 같은 서비스라도 웹 브라우저, Windows·macOS 데스크톱 앱, Android·iOS 앱, 명령줄 개발 도구, 기기 안에서 도는 로컬 모델에 따라 기록이 남는 곳이 다르고, 서비스마다 어디에 무엇이 있는지는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 정리되어 있습니다. 개인 계정인지 회사 계정인지도 이 단계에서 구분합니다. 회사 계정이면 조직 쪽에 감사 기록이 있는지도 확인하고, [Claude 기업용 감사 로그](../../02-artifacts/network-enterprise/claude-enterprise.md)나 [ChatGPT 기업용 감사 기록](../../02-artifacts/network-enterprise/chatgpt-enterprise.md) 같은 페이지를 함께 봅니다.
 
 ### 2. 기록이 어디에 있는지 나눕니다
 
@@ -82,7 +82,7 @@ AI 서비스의 기록은 회사 서버, 사용자 계정, 사용자 기기 세 
 
 기기에서 모은 파일에는 인증 토큰이 들어 있을 수 있습니다. Windows 11 의 Claude Code 폴더에는 `.credentials.json` 이 있고, 그 안에 `accessToken`·`refreshToken` 키가 있습니다. 수집물은 비밀 자료로 보관하고, 토큰으로 계정에 들어가지 않습니다. 토큰이 남는 곳은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에서 다룹니다.
 
-기기에 무엇이 남는지는 서비스와 앱, 앱 버전마다 다릅니다. 수집할 경로는 각 서비스 페이지에서 확인하고, 검체의 앱 판이 그 페이지에 적힌 판과 다르면 검체에서 경로가 있는지부터 확인합니다.
+기기에 무엇이 남는지는 서비스와 앱, 앱 버전마다 다릅니다. 수집할 경로는 각 서비스 페이지에서 확인하고, 실제 기기의 앱 판이 그 페이지에 적힌 판과 다르면 그 기기에서 경로가 있는지부터 확인합니다.
 
 ## 결과를 어떻게 해석하나
 

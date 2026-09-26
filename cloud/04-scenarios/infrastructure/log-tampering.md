@@ -13,7 +13,7 @@ nav_order: 800
 - 기록 장치를 끄거나, 기록 범위를 좁히거나, 보관 기간을 줄이거나, 저장된 로그를 지운 작업이 있었나?
 - 그 작업을 한 주체·시각·IP 는 무엇인가?
 - 기록이 빈 기간은 언제부터 언제까지이고, 그 기간을 어느 기록으로 메울 수 있나?
-- 로그가 없는 까닭이 조작인가, 처음부터 켜져 있지 않았거나 보관 기간이 지난 것인가?
+- 로그가 없는 이유가 조작인가, 처음부터 켜져 있지 않았거나 보관 기간이 지난 것인가?
 
 ## 먼저 확인할 것
 
@@ -25,7 +25,7 @@ nav_order: 800
 |---|---|---|---|
 | AWS | CloudTrail 이벤트 기록 (Event history) — 리전별 관리 이벤트 | 90일 | 트레일·이벤트 데이터 저장소와 별개라 트레일을 바꿔도 영향을 받지 않고, KMS·RDS Data API 이벤트 제외 설정도 적용되지 않습니다[1][2]. |
 | Azure | 활동 로그 (Activity Log) | 90일 | 기본으로 수집하고 바꾸거나 지울 수 없습니다[11]. |
-| Google Cloud | 관리 활동·시스템 이벤트 감사 로그 | `_Required` 버킷 400일[32] | 늘 기록하고 설정·제외·끄기가 안 되며, Cloud Audit Logs 가 쓴 항목은 바꿀 수 없습니다[22]. 보관 기간은 [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md) 쪽에 있습니다. |
+| Google Cloud | 관리 활동·시스템 이벤트 감사 로그 | `_Required` 버킷 400일[32] | 늘 기록하고 설정·제외·끄기가 안 되며, Cloud Audit Logs 가 쓴 항목은 바꿀 수 없습니다[22]. 보관 기간은 [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md) 페이지에 있습니다. |
 | Google Workspace | 관리 콘솔 로그 등 감사 로그 | 대개 6개월 | 관리자가 로그 데이터를 지우거나 보관 기간을 바꿀 수 없습니다[26]. |
 
 Microsoft 365 통합 감사 로그는 관리자가 끌 수 있지만, 켜고 끈 작업 자체가 감사 기록으로 남습니다[17]. Okta 와 GitHub 는 로그 스트림을 멈추거나 지운 작업이 각 서비스의 감사 로그에 남습니다[27][31]. (2026년 9월 문서 기준)
@@ -41,11 +41,11 @@ Microsoft 365 통합 감사 로그는 관리자가 끌 수 있지만, 켜고 끈
 | Google Cloud | BigQuery 를 뺀 데이터 접근 감사 로그는 기본으로 꺼져 있습니다[22]. |
 | Azure | 리소스 로그는 진단 설정을 만들기 전에는 수집되지 않습니다[12]. |
 
-요금제별 보관 기간 전체는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md) 쪽에서 봅니다.
+요금제별 보관 기간 전체는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md) 페이지에서 봅니다.
 
 ### 수집 전에 보관 설정을 건드리지 않는다
 
-보관 기간을 줄인 경우 실제 삭제까지 유예가 있어서, 발견한 시점에 따라 되살릴 수 있습니다. CloudWatch Logs 는 보관 기간이 지난 이벤트를 보통 72시간 안에 지우고(드물게 더 걸림)[8], Google Cloud 로그 버킷은 보관 기간을 줄이면 7일 동안 만료분을 지우지 않고[24], Azure Log Analytics 는 테이블의 전체 보관 기간을 줄이면 30일 기다린 뒤 지웁니다[13]. 보관 설정을 되돌리거나 사본을 뜨는 절차는 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 쪽을 따릅니다. 이때 조사자가 한 설정 변경도 같은 작업 이름으로 기록되므로, 누가 언제 무엇을 바꿨는지 따로 적어 둡니다.
+보관 기간을 줄인 경우 실제 삭제까지 유예가 있어서, 발견한 시점에 따라 되살릴 수 있습니다. CloudWatch Logs 는 보관 기간이 지난 이벤트를 보통 72시간 안에 지우고(드물게 더 걸림)[8], Google Cloud 로그 버킷은 보관 기간을 줄이면 7일 동안 만료분을 지우지 않고[24], Azure Log Analytics 는 테이블의 전체 보관 기간을 줄이면 30일 기다린 뒤 지웁니다[13]. 보관 설정을 되돌리거나 사본을 뜨는 절차는 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 페이지를 따릅니다. 이때 조사자가 한 설정 변경도 같은 작업 이름으로 기록되므로, 누가 언제 무엇을 바꿨는지 따로 적어 둡니다.
 
 ## 볼 아티팩트와 순서
 
@@ -83,7 +83,7 @@ GuardDuty 를 켜 두었다면 결과 (Finding) 로도 드러납니다. `Stealth
 
 ### 2. AWS — 다이제스트로 빈 기간과 변조 확인
 
-로그 파일 무결성 검증 (Log file integrity validation) 을 켜 두었다면 다이제스트 파일로 로그 파일이 전달 뒤 바뀌었는지·지워졌는지, 어떤 시간에 로그 파일이 전달되지 않았는지를 확인할 수 있습니다[3]. 다이제스트 파일은 한 시간마다 나오고 그 시간에 API 활동이 없어도 나오므로, "이 시간에는 전달된 로그 파일이 없었다" 를 말할 수 있습니다[4]. 파일 구조와 경로는 [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md) 쪽에 있습니다.
+로그 파일 무결성 검증 (Log file integrity validation) 을 켜 두었다면 다이제스트 파일로 로그 파일이 전달 뒤 바뀌었는지·지워졌는지, 어떤 시간에 로그 파일이 전달되지 않았는지를 확인할 수 있습니다[3]. 다이제스트 파일은 한 시간마다 나오고 그 시간에 API 활동이 없어도 나오므로, "이 시간에는 전달된 로그 파일이 없었다" 를 말할 수 있습니다[4]. 파일 구조와 경로는 [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md) 페이지에 있습니다.
 
 빈 기간은 다이제스트 사슬이 끊긴 곳으로 찾습니다. 로깅을 멈추거나 트레일을 지우면 CloudTrail 은 `StopLogging` 이벤트까지 담은 마지막 다이제스트를 보내고, 검증을 끈 동안이나 로깅을 멈춘 동안 전달된 로그 파일에는 다이제스트를 만들지 않습니다[4]. 다시 켜면 이전 다이제스트를 가리키는 필드(`previousDigestS3Bucket`, `previousDigestS3Object`, `previousDigestHashValue`, `previousDigestHashAlgorithm`, `previousDigestSignature`)가 null 인 시작 다이제스트가 생깁니다[4]. 따라서 "마지막 다이제스트의 끝 시각" 과 "다음 시작 다이제스트의 시각" 사이가 빈 기간의 후보입니다.
 
@@ -104,7 +104,7 @@ AWS CLI 는 CloudTrail 이 전달한 위치에 있는 파일만 검증하므로,
 
 진단 설정을 다시 만들면 데이터가 흐르기까지 90분 안쪽이 걸리므로[12], 복구 직후의 짧은 공백은 조작이 아닐 수 있습니다. Log Analytics 는 분석 보관 기간을 API·CLI 로 최소 4일까지 줄일 수 있고, 작업 영역 보관이 30일일 때 `immediatePurgeDataOn30Days` 속성을 켜면 30일 뒤 바로 지워 되살릴 수 없습니다[13]. 작업 영역 설정에서 이 두 값을 확인합니다.
 
-가상 머신 안에서 감사를 끈 경우는 Defender for Cloud 경고 "Disabling of auditd logging" 으로 나올 수 있고[16], 머신 안의 기록은 [클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html) 과 [인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html) 쪽 방법으로 봅니다.
+가상 머신 안에서 감사를 끈 경우는 Defender for Cloud 경고 "Disabling of auditd logging" 으로 나올 수 있고[16], 머신 안의 기록은 [클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html) 과 [인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html) 페이지의 방법으로 봅니다.
 
 ### 4. Microsoft 365 — 감사 끄기·우회·짧은 보존
 
@@ -134,7 +134,7 @@ Microsoft-Extractor-Suite 의 `Get-MailboxAuditStatus` 는 조직 설정(`Get-Or
 Get-UnifiedAuditLogRetentionPolicy | Sort-Object -Property Priority -Descending | FL Priority,Name,Description,RecordTypes,Operations,UserIds,RetentionDuration
 ```
 
-Entra ID 로그는 보관이 짧아서 진단 설정으로 내보내 두어야 오래 남습니다. 내보내는 방법은 [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md) 쪽에 있습니다.
+Entra ID 로그는 보관이 짧아서 진단 설정으로 내보내 두어야 오래 남습니다. 내보내는 방법은 [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md) 페이지에 있습니다.
 
 ### 5. Google Cloud — 싱크·제외 규칙·버킷
 
@@ -166,7 +166,7 @@ GitHub Enterprise 감사 로그의 `action` 에서 `audit_log_streaming.destroy`
 
 ### 7. 빈 기간을 메운다
 
-끄는 작업을 찾았으면 그 시각부터 다시 켠 시각까지를 빈 기간으로 정하고, 끌 수 없는 기록(이벤트 기록·활동 로그·`_Required` 버킷)과 흐름 로그, GuardDuty·Defender 결과, 가상 머신 안의 로그로 그 기간을 메웁니다. 모든 원천의 시각을 UTC 로 맞춰 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 과 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 쪽에 있습니다. 끄는 작업을 한 주체가 어떻게 그 권한을 얻었는지는 [권한을 올렸나](privilege-escalation.md), 그 자격 증명이 어디서 왔는지는 [액세스 키가 새어 나갔나](leaked-keys.md) 로 이어서 봅니다.
+끄는 작업을 찾았으면 그 시각부터 다시 켠 시각까지를 빈 기간으로 정하고, 끌 수 없는 기록(이벤트 기록·활동 로그·`_Required` 버킷)과 흐름 로그, GuardDuty·Defender 결과, 가상 머신 안의 로그로 그 기간을 메웁니다. 모든 원천의 시각을 UTC 로 맞춰 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 과 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 페이지에 있습니다. 끄는 작업을 한 주체가 어떻게 그 권한을 얻었는지는 [권한을 올렸나](privilege-escalation.md), 그 자격 증명이 어디서 왔는지는 [액세스 키가 새어 나갔나](leaked-keys.md) 로 이어서 봅니다.
 
 ## 증명하는 것 / 증명하지 못하는 것
 
@@ -191,14 +191,14 @@ GitHub Enterprise 감사 로그의 `action` 에서 `audit_log_streaming.destroy`
 - "2026-03-05 11:02 UTC 에 admin@contoso.com 계정이 IP 198.51.100.7 에서 `Set-AdminAuditLogConfig` 를 실행했고, 해당 감사 기록의 `UnifiedAuditLogIngestionEnabled` 값은 False 다. 이 시각부터 감사가 다시 켜진 시각까지 통합 감사 로그에는 기록이 없다."
 - "테넌트는 Business Standard 요금제이고 감사를 켜거나 끈 기록이 없으므로, 통합 감사 로그가 비어 있는 것은 기본 설정에 따른 것으로 보이며 조작 여부는 이 기록으로 판단할 수 없다."
 
-보고서 전체의 짜임은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 쪽에 있습니다.
+보고서 전체의 짜임은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 페이지에 있습니다.
 
 ## 함께 볼 페이지
 
 - [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) — 보관 설정을 되돌리고 사본을 뜨는 절차
 - [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) — 이벤트 기록·활동 로그·감사 로그 내려받기
 - [Microsoft 365 수집 도구](../../03-techniques/acquisition/m365-collection.md) — 통합 감사 로그와 감사 설정 수집
-- [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) — Sigma 규칙을 로그에 돌리는 법
+- [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) — Sigma 규칙을 로그에 돌리는 법
 - [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md) — 서비스·요금제별 보관 기간
 - [권한을 올렸나](privilege-escalation.md), [액세스 키가 새어 나갔나](leaked-keys.md), [채굴용 자원을 만들었나](cryptomining.md) — 로그를 끄는 작업과 함께 자주 나오는 행위
 

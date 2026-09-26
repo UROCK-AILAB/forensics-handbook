@@ -10,13 +10,13 @@ nav_order: 1000
 
 ## 무엇을 기록하나 · 왜 생기나
 
-이 속성은 항목을 얻은 곳을 나타내는 Spotlight 메타데이터 속성입니다 [1]. 내려받은 파일이면 URL을 담고, 메일로 받은 파일이면 보낸 사람의 이메일 주소나 메시지 제목 같은 값을 담을 수 있습니다 [1]. 메일 첨부파일의 배열 순서와 모양은 공개 자료가 없어 검체에서 확인합니다.
+이 속성은 항목을 얻은 곳을 나타내는 Spotlight 메타데이터 속성입니다 [1]. 내려받은 파일이면 URL을 담고, 메일로 받은 파일이면 보낸 사람의 이메일 주소나 메시지 제목 같은 값을 담을 수 있습니다 [1]. 메일 첨부파일의 배열 순서와 모양은 실제 데이터로 확인해야 합니다.
 
 속성을 쓰는 쪽은 파일을 저장하는 앱입니다. Chromium(크롬 계열 브라우저)은 받은 파일을 격리 처리하는 `QuarantineFile` 안에서 `AddOriginMetadataToFile` 함수로 이 속성을 씁니다 [2]. 순서를 보면 먼저 파일이 있는지 확인하고, 원본 URL과 referrer URL을 `SanitizeUrlForQuarantine()` 으로 정리한 뒤 출처 속성을 쓰고, 그다음에 격리 속성을 씁니다 [2]. 원본 URL이 비어 있고 다운로드를 시작한 쪽의 출처(request initiator)를 알면 그 출처 주소를 원본 URL 자리에 대신 씁니다 [2]. 두 속성 쓰기는 모두 되면 좋고 안 돼도 그만인 동작(best-effort)이라서, 쓰기에 실패해도 다운로드는 그대로 끝납니다 [2].
 
 이 속성이 있으면 원본 URL이나 referrer URL로 Spotlight를 검색해 내려받은 파일을 찾을 수 있습니다 [2]. Spotlight 쪽 색인은 [스포트라이트 (Spotlight)](../file-folder-usage/spotlight/index.md)에서 다룹니다.
 
-Safari, AirDrop, 메시지, curl 같은 명령줄 도구가 이 속성을 쓰는지, 쓴다면 무엇을 넣는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 아래 배열 해석은 Chromium 기준입니다.
+Safari, AirDrop, 메시지, curl 같은 명령줄 도구가 이 속성을 쓰는지, 쓴다면 무엇을 넣는지는 실제 데이터로 확인해야 합니다. 아래 배열 해석은 Chromium 기준입니다.
 
 ## 위치와 버전별 차이
 
@@ -28,7 +28,7 @@ Safari, AirDrop, 메시지, curl 같은 명령줄 도구가 이 속성을 쓰는
 | macOS Sierra·High Sierra | `com.apple.metadata:kMDItemWhereFroms` 확장 속성으로 남음 | [3] |
 | 버전 표시 없음 | 현재 Chromium이 이 속성을 씀 | [2] |
 
-macOS 10.15 Catalina부터 최신 버전까지 이 속성의 형식이나 동작이 달라졌는지는 공개 자료가 없습니다. Catalina 이후 검체에서는 형식이 같다고 가정하지 말고, 아래 구조와 맞는지 한 번 확인한 뒤 해석합니다.
+macOS 10.15 Catalina부터 최신 버전까지 이 속성의 형식이나 동작이 달라졌는지는 공개 자료가 없습니다. Catalina 이후 기기에서는 형식이 같다고 가정하지 말고, 아래 구조와 맞는지 한 번 확인한 뒤 해석합니다.
 
 ## 구조
 
@@ -57,9 +57,9 @@ Chromium은 빈 URL을 배열에 넣지 않습니다. 시크릿 모드로 받은
 
 ## 시각 해석
 
-출처 속성에는 시각이 없으므로 받은 시각은 다른 기록에서 찾습니다. 먼저 볼 곳은 사용자별 격리 이벤트 DB `~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2` 이고, 이 SQLite DB의 `LSQuarantineEvent` 표에 있는 `LSQuarantineTimeStamp` 가 이벤트 시각입니다 [6]. 이 값은 2001-01-01부터 센 초인 맥 절대 시각이라서 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 따라 바꿉니다 [6]. DB의 나머지 칸과 격리 속성은 [격리 속성과 다운로드 기록 (Quarantine)](quarantine/index.md)에서 다룹니다.
+출처 속성에는 시각이 없으므로 받은 시각은 다른 기록에서 찾습니다. 먼저 볼 곳은 사용자별 격리 이벤트 DB `~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2` 이고, 이 SQLite DB의 `LSQuarantineEvent` 표에 있는 `LSQuarantineTimeStamp` 가 이벤트 시각입니다 [6]. 이 값은 2001-01-01부터 센 초인 맥 절대 시각이라서 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 따라 바꿉니다 [6]. DB의 나머지 열과 격리 속성은 [격리 속성과 다운로드 기록 (Quarantine)](quarantine/index.md)에서 다룹니다.
 
-`kMDItemDownloadedDate` 라는 별도 속성은 Apple 속성 문서에 없어서 [1], 여기서 받은 시각을 찾을 수 있는지는 검체에서 확인합니다.
+`kMDItemDownloadedDate` 라는 별도 속성은 Apple 속성 문서에 없어서 [1], 여기서 받은 시각을 찾을 수 있는지는 실제 데이터로 확인합니다.
 
 ## 함정과 한계
 
@@ -81,7 +81,7 @@ Chromium은 빈 URL을 배열에 넣지 않습니다. 시크릿 모드로 받은
 | SYNC | 같은 사용자의 다른 저장소로 동기화 | 동기화 대상 |
 | BACKUP | 백업 | 플래그 정의로는 판단하지 못함 |
 
-이 표는 플래그 정의로 미루어 본 결과입니다. AirDrop, 메일 첨부, iCloud Drive, zip 압축, FAT·exFAT 매체로 옮길 때 실제로 무엇이 남는지는 공개된 시험 자료가 없어 검체로 확인해야 합니다. 같은 표에서 격리 속성 `com.apple.quarantine` 은 `PCS` 라서 C 플래그가 더 붙어 있고, 두 속성이 같은 규칙으로 움직인다고 가정하지 않습니다 [4]. 이 플래그 API는 macOS 10.10부터 있습니다 [5].
+이 표는 플래그 정의로 미루어 본 결과입니다. AirDrop, 메일 첨부, iCloud Drive, zip 압축, FAT·exFAT 매체로 옮길 때 실제로 무엇이 남는지는 공개된 시험 자료가 없어 실제 데이터로 확인해야 합니다. 같은 표에서 격리 속성 `com.apple.quarantine` 은 `PCS` 라서 C 플래그가 더 붙어 있고, 두 속성이 같은 규칙으로 움직인다고 가정하지 않습니다 [4]. 이 플래그 API는 macOS 10.10부터 있습니다 [5].
 
 **속성은 지우거나 고쳐 쓸 수 있습니다.** 확장 속성은 파일에 쓸 권한만 있으면 `xattr` 같은 명령줄 도구로 지우거나 다른 값으로 바꿔 쓸 수 있고, 값 안에는 누가 언제 썼는지 적혀 있지 않습니다. 그래서 속성의 URL은 격리 이벤트 DB나 브라우저 다운로드 기록처럼 따로 남는 기록과 맞춰 본 뒤에 믿습니다.
 
@@ -93,7 +93,7 @@ Chromium은 빈 URL을 배열에 넣지 않습니다. 시크릿 모드로 받은
 
 ### 헥스로 한 번
 
-아래는 명세를 바탕으로 만든 예시이고, 특정 검체에서 나온 값이 아닙니다. 속성 값을 꺼내 16진수로 보면 첫 8바이트에 `bplist00` 이 보이고, 그 뒤 어딘가에 URL 문자열이 UTF-8 글자 그대로 보입니다 [3].
+아래는 명세를 바탕으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. 속성 값을 꺼내 16진수로 보면 첫 8바이트에 `bplist00` 이 보이고, 그 뒤 어딘가에 URL 문자열이 UTF-8 글자 그대로 보입니다 [3].
 
 ```text
 62 70 6C 69 73 74 30 30   bplist00        ← 이진 plist 앞머리
@@ -108,7 +108,7 @@ URL이 눈으로 보인다고 해서 배열 순서까지 헥스에서 짐작하�
 
 ### 공개 도구로 한 번
 
-1. 살아 있는 시스템이나 마운트한 이미지에서 `xattr` 명령줄 도구나 xattred로 `com.apple.metadata:kMDItemWhereFroms` 값을 꺼냅니다 [3].
+1. 실행 중인 시스템이나 마운트한 이미지에서 `xattr` 명령줄 도구나 xattred로 `com.apple.metadata:kMDItemWhereFroms` 값을 꺼냅니다 [3].
 2. 꺼낸 값을 이진 plist로 풀어 문자열 배열을 읽습니다. 풀이 방법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)을 따릅니다.
 3. Finder 정보 가져오기 창의 "출처"와 비교해 값이 같은지 봅니다 [3].
 4. 같은 사용자의 격리 이벤트 DB를 mac_apt의 quarantine 플러그인 같은 도구로 읽어 같은 URL이 있는 행을 찾고 시각을 확인합니다 [6].
@@ -132,12 +132,12 @@ Chromium은 출처 속성과 격리 속성을 한 함수 안에서 차례로 쓰
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 macOS 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 자료 가운데 macOS 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 사용자의 다운로드 폴더에서 출처 속성이 붙은 파일과 붙지 않은 파일을 나눠 보고, 붙지 않은 파일이 왜 없는지 이 페이지의 함정 절에 비춰 설명할 수 있나요?
 2. 출처 배열에 값이 두 개인 파일을 골라, 둘째 값의 페이지가 브라우저 방문 기록에도 있는지 확인할 수 있나요?
-3. 같은 URL이 격리 이벤트 DB에 있다면, 그 행의 시각을 UTC와 검체의 현지 시각으로 각각 적을 수 있나요?
-4. 검체의 macOS 버전이 Catalina 이후라면, 속성 값이 이 페이지의 구조(이진 plist 안 문자열 배열)와 같은지 확인할 수 있나요?
+3. 같은 URL이 격리 이벤트 DB에 있다면, 그 행의 시각을 UTC와 그 기기의 현지 시각으로 각각 적을 수 있나요?
+4. 이미지의 macOS 버전이 Catalina 이후라면, 속성 값이 이 페이지의 구조(이진 plist 안 문자열 배열)와 같은지 확인할 수 있나요?
 
 ## 참고 문헌
 

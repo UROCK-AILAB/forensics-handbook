@@ -27,7 +27,7 @@ Entra ID 를 Free 에서 P1 으로 올려도 이미 지난 기록은 돌아오�
 
 **사건 전에 감사가 켜져 있었는지.** 앱이 메일함에서 무엇을 했는지 보려면 공격 전에 메일함 감사와 관리자·사용자 활동 감사가 켜져 있어야 합니다[3][2]. Graph 활동 로그는 진단 설정에서 로그 범주를 켠 뒤부터 모읍니다[4].
 
-**사건 당시 동의 설정.** Entra ID 의 사용자 동의 설정에서 기본으로 고를 수 있는 것은 "사용자 동의 끄기", "확인된 게시자 (verified publisher) 와 자기 조직 앱에 한해 저영향으로 분류한 권한만 허용", "관리자 동의가 필요 없는 권한이면 모든 앱에 동의 허용" 세 가지이고, 사용자 지정 앱 동의 정책을 만들어 쓸 수도 있습니다[10]. Entra 감사 로그의 Core Directory 서비스에는 AuthorizationPolicy 범주의 `Update authorization policy` 활동이 있으므로[1], 사건 전후에 이 활동이 있었는지, 그 변경 내용에 동의 설정이 들어 있는지를 검체에서 확인합니다. 설정이 느슨했으면 일반 사용자 혼자 동의할 수 있었고, 조였으면 관리자 계정이 동의했을 가능성을 먼저 봅니다. 관리자 동의는 Application Administrator, Cloud Application Administrator 역할도 할 수 있습니다[2].
+**사건 당시 동의 설정.** Entra ID 의 사용자 동의 설정에서 기본으로 고를 수 있는 것은 "사용자 동의 끄기", "확인된 게시자 (verified publisher) 와 자기 조직 앱에 한해 저영향으로 분류한 권한만 허용", "관리자 동의가 필요 없는 권한이면 모든 앱에 동의 허용" 세 가지이고, 사용자 지정 앱 동의 정책을 만들어 쓸 수도 있습니다[10]. Entra 감사 로그의 Core Directory 서비스에는 AuthorizationPolicy 범주의 `Update authorization policy` 활동이 있으므로[1], 사건 전후에 이 활동이 있었는지, 그 변경 내용에 동의 설정이 들어 있는지를 실제 로그로 확인합니다. 설정이 느슨했으면 일반 사용자 혼자 동의할 수 있었고, 조였으면 관리자 계정이 동의했을 가능성을 먼저 봅니다. 관리자 동의는 Application Administrator, Cloud Application Administrator 역할도 할 수 있습니다[2].
 
 **시각의 기준.** Purview 감사 검색 화면의 날짜 범위와 결과의 "Date (UTC)" 는 UTC 로 나옵니다[6]. Google 관리 콘솔의 OAuth 로그 이벤트 화면은 브라우저의 기본 시간대로 날짜를 보여 주므로[24], 같은 기록도 API 로 받은 값과 화면 값이 다르게 보일 수 있습니다. 자세한 내용은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)에 있습니다.
 
@@ -67,7 +67,7 @@ Entra ID 를 Free 에서 P1 으로 올려도 이미 지난 기록은 돌아오�
 
 2. **통합 감사 로그에서 같은 활동을 찾습니다.** 통합 감사 로그에서는 작업 이름 끝에 마침표가 붙고, 위임 권한 부여는 이름도 다릅니다. Hawk 는 `Search-UnifiedAuditLog -RecordType 'AzureActiveDirectory' -Operations 'Add OAuth2PermissionGrant.','Consent to application.'` 로 검색하고, 결과에서 Id, Operation, ResultStatus, Workload, ClientIP, UserID 와 ExtendedProperties 안의 actorUPN, targetName, env_time, correlationId 를 뽑습니다[12]. Entra 감사 로그의 이름(`Add delegated permission grant`)만 넣고 통합 감사 로그를 검색하면 Hawk 가 찾는 `Add OAuth2PermissionGrant.` 레코드를 놓칩니다.
 
-3. **관리자 동의인지 가립니다.** 동의 레코드의 세부 정보에서 `IsAdminConsent` 가 True 이면 전역 관리자 (Global Administrator) 권한이 있는 누군가가 데이터에 넓은 접근을 허용했을 가능성이 있습니다[3]. Sigma 규칙은 같은 값을 `ConsentContext.IsAdminConsent` 필드로 찾고, `'false'` 이면 일반 사용자 동의로 봅니다[16]. Microsoft 의 앱 동의 대응 문서 한 곳에는 이 이름이 "IsAdminContent" 로 적혀 있는데[2], 다른 문서와 Sigma 규칙은 `IsAdminConsent` 를 씁니다[3][16].
+3. **관리자 동의인지 구분합니다.** 동의 레코드의 세부 정보에서 `IsAdminConsent` 가 True 이면 전역 관리자 (Global Administrator) 권한이 있는 누군가가 데이터에 넓은 접근을 허용했을 가능성이 있습니다[3]. Sigma 규칙은 같은 값을 `ConsentContext.IsAdminConsent` 필드로 찾고, `'false'` 이면 일반 사용자 동의로 봅니다[16]. Microsoft 의 앱 동의 대응 문서 한 곳에는 이 이름이 "IsAdminContent" 로 적혀 있는데[2], 다른 문서와 Sigma 규칙은 `IsAdminConsent` 를 씁니다[3][16].
 
 4. **막힌 동의도 봅니다.** 위험 기반 단계 상향 동의 (risk-based step-up consent) 가 위험한 요청을 막으면 사용자는 AADSTS90094(AdminConsentRequired) 메시지를 받고[2][11], 감사 로그에는 Category "ApplicationManagement", Activity Type "Consent to application", Status Reason "Risky application detected" 레코드가 남습니다[2]. Sigma 규칙은 이 경우를 `failure_status_reason: 'Microsoft.online.Security.userConsentBlockedForRiskyAppsExceptions'` 로 찾습니다[17]. 막힌 기록이 있으면 같은 앱이 다른 사용자나 관리자에게서 동의를 받았는지 이어서 찾습니다.
 
@@ -121,7 +121,7 @@ Entra ID 를 Free 에서 P1 으로 올려도 이미 지난 기록은 돌아오�
 
 **Azure 포털 화면만 보고 관리자 동의가 없다고 판단하기.** Azure 포털은 최근 90일 관리자 동의만 보여 줍니다[2].
 
-**비밀번호를 바꿨으니 앱 접근도 끊겼다고 보기.** 기밀 클라이언트 (confidential client) 에게 발급한 새로 고침 토큰은 사용자의 비밀번호 변경, 셀프 서비스 재설정, Azure 포털에서 관리자 재설정을 해도 살아 있고, Entra·Microsoft 365 관리 센터에서 관리자가 재설정하거나 새로 고침 토큰을 모두 폐기하면 끊깁니다[9]. 비밀번호 재설정이나 MFA 요구는 이 공격에 효과가 없습니다[3]. 재설정 뒤에도 앱 호출이 이어지면 이 차이로 설명될 가능성이 있습니다. 토큰 수명과 폐기는 [토큰과 세션](../../01-foundations/identity/tokens-sessions.md)에 있습니다.
+**비밀번호를 바꿨으니 앱 접근도 끊겼다고 보기.** 기밀 클라이언트 (confidential client) 에게 발급한 새로 고침 토큰은 사용자의 비밀번호 변경, 셀프 서비스 재설정, Azure 포털에서 관리자 재설정을 해도 유효하고, Entra·Microsoft 365 관리 센터에서 관리자가 재설정하거나 새로 고침 토큰을 모두 폐기하면 끊깁니다[9]. 비밀번호 재설정이나 MFA 요구는 이 공격에 효과가 없습니다[3]. 재설정 뒤에도 앱 호출이 이어지면 이 차이로 설명될 가능성이 있습니다. 토큰 수명과 폐기는 [토큰과 세션](../../01-foundations/identity/tokens-sessions.md)에 있습니다.
 
 **앱 이름으로 Microsoft 앱이라고 믿기.** 공격자는 같은 생태계에서 널리 쓰는 제품의 이름을 붙일 수 있습니다[2]. `AppOwnerOrganizationId` 로 판단합니다[14].
 
@@ -135,7 +135,7 @@ Entra ID 를 Free 에서 P1 으로 올려도 이미 지난 기록은 돌아오�
 
 > 2026-03-02 01:14:07 UTC 에 통합 감사 로그에 사용자 kim@contoso.com 의 `Consent to application.` 레코드가 있고, 대상 앱은 "Doc Viewer"(AppId 00000000-0000-0000-0000-000000000abc) 이며 `IsAdminConsent` 는 False 입니다. 수집 시점(2026-03-05)의 권한 목록에는 이 앱에 대해 kim@contoso.com 한 명에 대한 `Mail.Read`·`offline_access` 위임 권한이 남아 있습니다. 같은 AppId 로 Microsoft Graph 활동 로그를 거르면 2026-03-02 01:20 부터 03-04 22:41 UTC 까지 203.0.113.25 에서 `/me/messages` 요청 기록이 있습니다. 앱 운영자의 신원은 이 기록으로 알 수 없습니다.
 
-쓸 때는 "메일을 훔쳤다" 가 아니라 "이 앱으로 이 기간에 이 리소스를 요청한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다. 보고서 틀은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
+쓸 때는 "메일을 훔쳤다" 가 아니라 "이 앱으로 이 기간에 이 리소스를 요청한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 보고서 틀은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
 
 ## 함께 볼 페이지
 
@@ -145,7 +145,7 @@ Entra ID 를 Free 에서 P1 으로 올려도 이미 지난 기록은 돌아오�
 - [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md)
 - [OAuth 토큰 기록](../../02-artifacts/google-workspace/token-audit.md)
 - [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)
-- [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)
+- [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)
 - [메일 계정을 빼앗겨 송금 사기를 당했나](bec.md)
 - [토큰을 훔쳐 로그인했나](token-theft.md)
 

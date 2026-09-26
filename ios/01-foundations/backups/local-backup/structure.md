@@ -100,16 +100,16 @@ CREATE TABLE Properties (key TEXT PRIMARY KEY, value BLOB)
 CREATE INDEX FilesDomainsRelativePathIdx ON Files(domain, relativePath)
 ```
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | Files.fileID | 백업 폴더 안 파일 이름. 도메인과 경로로 만든 해시 |
 | Files.domain | 파일이 속한 영역 이름(예: HomeDomain) |
 | Files.relativePath | 도메인 안에서의 상대 경로 |
 | Files.flags | Unix 파일 플래그 [2] |
 | Files.file | 이진 plist 속성 [2] |
-| Properties.key / value | 이름과 값 한 쌍. 들어가는 key 는 검체에서 확인 |
+| Properties.key / value | 이름과 값 한 쌍. 들어가는 key 는 실제 백업으로 확인 |
 
-flags 칸에는 1, 2, 4 같은 값이 나옵니다 [3]. 이 값을 파일·폴더·심볼릭 링크로 나누는 해석이 있으니, 값의 뜻은 실제 항목과 맞춰 보고 씁니다. file 칸 BLOB 은 이진 plist 이고 [2][3], 그 안쪽 구조와 시각 값의 기준은 검체에서 확인합니다. plist 를 읽는 방법은 [속성 목록 파일](../../data-formats/plist.md) 을 봅니다.
+flags 열에는 1, 2, 4 같은 값이 나옵니다 [3]. 이 값을 파일·폴더·심볼릭 링크로 나누는 해석이 있으니, 값의 뜻은 실제 항목과 맞춰 보고 씁니다. file 열 BLOB 은 이진 plist 이고 [2][3], 그 안쪽 구조와 시각 값의 기준은 실제 백업으로 확인합니다. plist 를 읽는 방법은 [속성 목록 파일](../../data-formats/plist.md) 을 봅니다.
 
 ### 기기 안에 남는 백업 설정
 

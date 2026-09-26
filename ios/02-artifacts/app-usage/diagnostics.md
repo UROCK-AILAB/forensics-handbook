@@ -12,7 +12,7 @@ nav_order: 440
 
 ## 무엇을 기록하나 · 왜 생기나
 
-기기 안에서 만들어진 충돌 보고서와 진단 로그는 설정의 "분석 및 향상 (Analytics & Improvements)" 아래 "분석 데이터 (Analytics Data)" 에서 볼 수 있고, 기기를 Mac 이나 Windows 컴퓨터에 연결해 옮길 수도 있습니다[1]. 로그 이름은 충돌 보고서가 앱 실행 파일 이름 뒤에 날짜·시각을 붙인 꼴이고, 메모리를 너무 많이 써서 종료된 경우는 `JetsamEvent_` 로 시작합니다[1]. 확장자는 흔히 `.crash` 와 `.ips` 입니다[1]. 짝 지은 Apple Watch 의 충돌 보고서도 iPhone 에서 볼 수 있습니다[1].
+기기 안에서 만들어진 충돌 보고서와 진단 로그는 설정의 "분석 및 향상 (Analytics & Improvements)" 아래 "분석 데이터 (Analytics Data)" 에서 볼 수 있고, 기기를 Mac 이나 Windows 컴퓨터에 연결해 옮길 수도 있습니다[1]. 로그 이름은 충돌 보고서가 앱 실행 파일 이름 뒤에 날짜·시각을 붙인 형식이고, 메모리를 너무 많이 써서 종료된 경우는 `JetsamEvent_` 로 시작합니다[1]. 확장자는 흔히 `.crash` 와 `.ips` 입니다[1]. 짝 지은 Apple Watch 의 충돌 보고서도 iPhone 에서 볼 수 있습니다[1].
 
 ```
 <앱 실행 파일 이름>_<날짜시각>.ips
@@ -29,7 +29,7 @@ Xcode 의 Organizer 로는 오지 않아 기기에서 따로 얻어야 하는 �
 
 | iOS | 충돌 보고서 형식 | 출처 |
 |---|---|---|
-| 버전 밝히지 않음 | 확장자는 흔히 `.crash`·`.ips`. iOS 14 이하 본문 형식은 검체에서 확인 | [1] |
+| 버전 밝히지 않음 | 확장자는 흔히 `.crash`·`.ips`. iOS 14 이하 본문 형식은 실제 파일로 확인 | [1] |
 | 15 이후 | `.ips` 확장자의 JSON. iOS 15·macOS 12 부터 | [2] |
 
 ### MVT 가 읽는 분석 데이터
@@ -43,7 +43,7 @@ MVT 모듈별 경로와 수집 방식은 다음과 같습니다[3].
 | IOSVersionHistory | `private/var/db/analyticsd/Analytics-Journal-*.ips` | iOS 업데이트 이력 | 일반 백업, 전체 덤프 |
 | ShutdownLog | `private/var/db/diagnostics/shutdown.log` | 종료 때 끝나지 않은 프로세스의 PID·경로 | 암호화 백업, 전체 덤프 |
 
-`shutdown.log` 를 읽는 법과 버전별 동작은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에서 다룹니다. 앱 충돌 보고서 `.ips` 가 기기 안 어느 폴더에 저장되는지는 수집한 검체에서 `.ips` 파일을 이름으로 찾아 실제 경로를 적습니다.
+`shutdown.log` 를 읽는 법과 버전별 동작은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에서 다룹니다. 앱 충돌 보고서 `.ips` 가 기기 안 어느 폴더에 저장되는지는 수집한 데이터에서 `.ips` 파일을 이름으로 찾아 실제 경로를 적습니다.
 
 ### 로컬 백업에 보이는 것
 
@@ -92,7 +92,7 @@ iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 
 
 ## 시각 해석
 
-실행과 종료 시각은 본문의 `procLaunch` 와 `captureTime` 을 쓰고, 메타데이터의 `timestamp` 는 기록을 관리하려는 값이라 사건 시각으로 쓰지 않습니다[2]. 두 칸의 문자열 형식과 시간대 표기는 검체에서 확인합니다. 값을 그대로 옮기고, 시간대 표시가 있는지부터 봅니다.
+실행과 종료 시각은 본문의 `procLaunch` 와 `captureTime` 을 쓰고, 메타데이터의 `timestamp` 는 기록을 관리하려는 값이라 사건 시각으로 쓰지 않습니다[2]. 두 필드의 문자열 형식과 시간대 표기는 실제 파일로 확인합니다. 값을 그대로 옮기고, 시간대 표시가 있는지부터 봅니다.
 
 `uptime` 은 부팅 뒤 흐른 초라서[2], `captureTime` 에서 `uptime` 을 빼면 그 보고서 기준으로 기기를 켠 무렵을 어림할 수 있습니다. 여러 보고서에서 어림한 부팅 시각이 크게 다르면 그 사이에 재부팅이 있었다는 뜻일 수 있고, 재부팅 기록은 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 과 맞춰 봅니다.
 
@@ -114,14 +114,14 @@ iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 
 
 ### 헥스로 한 번
 
-아래는 명세로 만든 예시이고 특정 검체에서 나온 값이 아닙니다. JSON 형식 `.ips` 는 첫 바이트가 `{`(`0x7B`)이고, 메타데이터 객체가 한 줄로 끝나 줄바꿈(`0x0A`) 뒤에 본문 객체가 다시 `{` 로 시작합니다[2].
+아래는 명세로 만든 예시이고 특정 기기에서 나온 값이 아닙니다. JSON 형식 `.ips` 는 첫 바이트가 `{`(`0x7B`)이고, 메타데이터 객체가 한 줄로 끝나 줄바꿈(`0x0A`) 뒤에 본문 객체가 다시 `{` 로 시작합니다[2].
 
 ```
 00000000  7B ...                     {  (메타데이터 한 줄)
           ... 7D 0A 7B ...           } 줄바꿈 {  (본문 시작)
 ```
 
-키 모양은 다음과 같고, 값은 모두 줄임표로 비워 두었습니다. 값이 문자열인지 숫자인지도 검체에서 확인합니다.
+키 모양은 다음과 같고, 값은 모두 줄임표로 비워 두었습니다. 값이 문자열인지 숫자인지도 실제 파일로 확인합니다.
 
 ```
 {"name":"…","bug_type":"…","bundleID":"…","build_version":"…","incident_id":"…","platform":…,"timestamp":"…"}
@@ -158,7 +158,7 @@ print(body.get("termination"), body.get("crashReporterKey"))
 
 ## 실습
 
-공개 검체(NIST CFReDS 등의 iOS 이미지)나 직접 받은 sysdiagnose 에 `.ips` 파일이 있다면 다음 질문을 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등의 iOS 이미지)나 직접 받은 sysdiagnose 에 `.ips` 파일이 있다면 다음 질문을 풀어 봅니다.
 
 1. `.ips` 파일이 모두 몇 개이고, `bug_type` 별로 몇 개씩입니까?
 2. `bug_type` 309 보고서 가운데 가장 이른 `captureTime` 과 가장 늦은 `captureTime` 은 언제입니까?

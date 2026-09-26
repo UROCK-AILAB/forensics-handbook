@@ -9,7 +9,7 @@ nav_order: 1160
 
 ## 한 줄 요약
 
-셸백 (ShellBags) 은 사용자 하이브 두 개에 BagMRU 와 Bags 라는 두 갈래 키로 남습니다. BagMRU 는 폴더 경로를 키 트리로 적고, Bags 는 그 폴더를 어떤 보기 설정으로 열었는지 적으며, 두 갈래는 NodeSlot 이라는 번호 하나로 이어집니다.
+셸백 (ShellBags) 은 사용자 하이브 두 개에 BagMRU 와 Bags 라는 두 키로 남습니다. BagMRU 는 폴더 경로를 키 트리로 적고, Bags 는 그 폴더를 어떤 보기 설정으로 열었는지 적으며, 두 키는 NodeSlot 이라는 번호 하나로 이어집니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -28,7 +28,7 @@ Lo 의 실험에서 Vista~8.1 은 폴더를 두 번 클릭해 열지 않아도 �
 
 - 하이브 파일의 쓰임새와 옛 버전 위치는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에 있습니다.
 - UsrClass.dat 옆에도 `UsrClass.dat.LOG1`·`UsrClass.dat.LOG2` 가 있습니다.
-- 하이브 파일만 뽑지 말고 같은 폴더의 로그 파일도 함께 수집합니다. 까닭은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) 에 있습니다.
+- 하이브 파일만 뽑지 말고 같은 폴더의 로그 파일도 함께 수집합니다. 이유는 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) 에 있습니다.
 
 ### 키 경로
 
@@ -40,12 +40,12 @@ Lo 의 실험에서 Vista~8.1 은 폴더를 두 번 클릭해 열지 않아도 �
 | Vista (32비트) | `Software\Microsoft\Windows\Shell\BagMRU`·`Bags` | `Local Settings\Software\Microsoft\Windows\Shell\BagMRU`·`Bags` | Lo |
 | Vista (64비트) | 위와 같음 | 위 경로에 더해 `Wow6432Node\Local Settings\Software\Microsoft\Windows\Shell\BagMRU`·`Bags` | Lo |
 | 7·8·8.1 | `Software\Microsoft\Windows\Shell\BagMRU`·`Bags` | `Local Settings\Software\Microsoft\Windows\Shell\BagMRU`·`Bags` | Lo |
-| 10 | 검체에서 확인 | 검체에서 확인 | — |
+| 10 | 실제 데이터로 확인 | 실제 데이터로 확인 | — |
 | 11 (25H2) | `Software\Microsoft\Windows\Shell\BagMRU`·`Bags` | `Local Settings\Software\Microsoft\Windows\Shell\BagMRU`·`Bags` | — |
 
 - Vista 의 NTUSER.DAT 에도 `ShellNoRoam` 키가 있습니다. 그 안에는 `BagMRU Size` 라는 DWORD 값 하나만 있습니다.
 - Windows 7 부터는 `ShellNoRoam` 을 쓰지 않습니다.
-- winreg-kb 는 UsrClass.dat 쪽에도 `ShellNoRoam\BagMRU` 경로와 `Wow6432Node` 아래 `ShellNoRoam\BagMRU` 경로를 적었지만, Lo 의 실험에서는 이 키들이 나오지 않았습니다. 검체에 이런 키가 있으면 같은 방법으로 읽습니다.
+- winreg-kb 는 UsrClass.dat 쪽에도 `ShellNoRoam\BagMRU` 경로와 `Wow6432Node` 아래 `ShellNoRoam\BagMRU` 경로를 적었지만, Lo 의 실험에서는 이 키들이 나오지 않았습니다. 분석 대상에 이런 키가 있으면 같은 방법으로 읽습니다.
 - Windows 11 25H2 에서는 `ShellNoRoam` 키와 `Wow6432Node` 쪽 셸백 키가 없을 수 있습니다.
 - Windows 10 은 공개된 키 목록이 없으므로 두 하이브에서 위 경로를 모두 찾아봅니다.
 
@@ -109,21 +109,21 @@ Windows 11 25H2 에서는 다음과 같습니다.
 
 Vista~8.1 에서 `ComDlg` 는 대화상자로 폴더를 열었다가 닫거나 대화상자 안에서 다른 폴더로 옮겨 가야 생깁니다. 그래서 `ComDlg` 가 있는 슬롯은 그 폴더를 대화상자로 다룬 적이 있다는 단서가 되며, 대화상자 기록은 [열기·저장 대화상자 기록](../comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) 과 맞춰 봅니다.
 
-- Windows 11 25H2 의 NTUSER.DAT `Bags\1\Desktop` 에는 `IconLayouts` 값이 있습니다. 이름으로 보아 바탕 화면 아이콘 배치입니다.
+- Windows 11 25H2 의 NTUSER.DAT `Bags\1\Desktop` 에는 `IconLayouts` 값이 있습니다. 이름으로 보면 바탕 화면 아이콘 배치입니다.
 
 #### `Shell` 키의 값
 
 | 값 | 형식 | 내용 | 근거 |
 |---|---|---|---|
 | `SniffedFolderType` | REG_SZ | 탐색기가 폴더 내용을 보고 고른 폴더 유형 이름. 그림 파일이 있으면 Pictures, 문서가 있으면 Documents 가 됩니다 | Lo |
-| `KnownFolderDerivedFolderType` | REG_SZ | 공개 자료에는 이름만 있습니다. 이름으로 보아 알려진 폴더 (Known Folder) 에서 정한 폴더 유형입니다 | Lo |
+| `KnownFolderDerivedFolderType` | REG_SZ | 공개 자료에는 이름만 있습니다. 이름으로 보면 알려진 폴더 (Known Folder) 에서 정한 폴더 유형입니다 | Lo |
 
 - 한 폴더에 폴더 유형 GUID 하위 키가 여럿일 수 있습니다. 지금 쓰는 설정이 어느 GUID 에 있는지는 `SniffedFolderType` 이 알려 줍니다.
-- Windows 11 25H2 의 `{폴더 유형 GUID}` 키에는 `Mode`·`LogicalViewMode`·`Vid`·`IconSize`·`Sort`·`GroupView`·`GroupByKey:FMTID`·`GroupByKey:PID`·`GroupByDirection`·`FFlags`·`Rev`·`ColInfo` 값이 있습니다. 이름으로 보아 보기 방식·아이콘 크기·정렬·묶기·열 배치 값입니다. 각 값의 형식을 밝힌 공개 명세는 없습니다.
+- Windows 11 25H2 의 `{폴더 유형 GUID}` 키에는 `Mode`·`LogicalViewMode`·`Vid`·`IconSize`·`Sort`·`GroupView`·`GroupByKey:FMTID`·`GroupByKey:PID`·`GroupByDirection`·`FFlags`·`Rev`·`ColInfo` 값이 있습니다. 이름으로 보면 보기 방식·아이콘 크기·정렬·묶기·열 배치 값입니다. 각 값의 형식을 밝힌 공개 명세는 없습니다.
 
 #### 폴더 유형 GUID
 
-GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{GUID}` 키에 있고, 이름은 그 키의 `CanonicalName` 값에 있습니다. 그래서 검체 자신의 SOFTWARE 하이브로 GUID 를 풀 수 있습니다.
+GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Explorer\FolderTypes\{GUID}` 키에 있고, 이름은 그 키의 `CanonicalName` 값에 있습니다. 그래서 분석 대상 PC 의 SOFTWARE 하이브로 GUID 를 풀 수 있습니다.
 
 | GUID | `CanonicalName` |
 |---|---|
@@ -144,7 +144,7 @@ GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersio
 #### `AllFolders\Shell` 의 창 위치 값
 
 - `Bags\<번호>\Shell` 에는 `MinPos1100x705(1).x` 처럼 화면 크기가 이름에 들어간 값이 있습니다.
-- Windows 11 25H2 에서는 이런 값이 `Bags\AllFolders\Shell` 에 있고, 값 이름은 `WinPos<가로>x<세로>x<숫자>(<번호>).left` 꼴입니다. 세 번째 숫자의 뜻은 공개 자료가 없습니다.
+- Windows 11 25H2 에서는 이런 값이 `Bags\AllFolders\Shell` 에 있고, 값 이름은 `WinPos<가로>x<세로>x<숫자>(<번호>).left` 형식입니다. 세 번째 숫자의 뜻은 공개 자료가 없습니다.
 - 값 이름에 화면 크기가 여럿 보이면 그 크기의 화면에서 탐색기 창을 쓴 적이 있다고 추정할 수 있습니다. 어떤 모니터였는지는 다른 기록과 맞춰 봅니다.
 
 ### 경로를 되살리는 순서
@@ -184,14 +184,14 @@ GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersio
 - **하이브를 건너 NodeSlot 을 잇는 실수.** NTUSER.DAT 의 `NodeSlot` 은 NTUSER.DAT 의 `Bags` 만 가리킵니다.
 - **덜 알려진 경로를 빠뜨리는 실수.** Vista 64비트의 `Wow6432Node` 경로와 XP 의 `ShellNoRoam` 경로도 찾아봅니다.
 - **같은 이름 폴더.** Lo 의 실험에서 폴더를 지우고 같은 이름으로 다시 만들면 새 폴더가 옛 셸백을 그대로 이어받았습니다. 셸백 경로 하나가 서로 다른 두 폴더를 가리킬 수 있습니다.
-- **풀지 못하는 셸 아이템.** 셸 아이템에는 공개 명세에서도 뜻이 밝혀지지 않은 칸이 남아 있습니다. 도구마다 모르는 셸 아이템을 다르게 처리할 수 있습니다. 도구 두 개로 풀어 비교합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
+- **풀지 못하는 셸 아이템.** 셸 아이템에는 공개 명세에서도 뜻이 밝혀지지 않은 필드가 남아 있습니다. 도구마다 모르는 셸 아이템을 다르게 처리할 수 있습니다. 도구 두 개로 풀어 비교합니다. 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에 있습니다.
 - **지운 키.** 셸백 키를 지우는 도구가 있습니다. 지운 키는 하이브의 빈 공간에 남을 수 있습니다. [지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md) 를 함께 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 바이트는 명세(winreg-kb·libfwsi)로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래 바이트는 명세(winreg-kb·libfwsi)로 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 UsrClass.dat 의 `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` 키에 다음 값이 있다고 합시다.
 
@@ -235,8 +235,8 @@ UsrClass.dat 의 `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` 키에
 |---|---|---|
 | 0 | `19 00` | 셸 아이템 크기 0x19 = 25바이트 |
 | 2 | `2F` | 종류 표시. 0x70 으로 거르면 0x20 이라 볼륨 셸 아이템입니다. 0x01 비트는 이름이 있다는 뜻입니다 |
-| 3 | `43 3A 5C 00` 뒤로 0 | 볼륨 이름 `C:\`. 20바이트 칸에 ASCII 로 들어 있습니다 |
-| 23 | `00 00` | 뜻이 알려지지 않은 칸 |
+| 3 | `43 3A 5C 00` 뒤로 0 | 볼륨 이름 `C:\`. 20바이트 필드에 ASCII 로 들어 있습니다 |
+| 23 | `00 00` | 뜻이 알려지지 않은 필드 |
 | 25 | `00 00` | 셸 아이템 목록 끝 |
 
 따라서 `BagMRU\0\0` 은 "바탕 화면 > 내 PC > C:\" 이고, 이 폴더의 보기 설정은 `NodeSlot` 2 가 가리키는 `Bags\2` 에 있습니다. `BagMRU\0\0` 아래 하위 키가 있으면 그 값은 `C:\` 아래 폴더이며 파일 항목 셸 아이템 (종류 0x31 등) 입니다. 그 안의 이름과 시각은 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 풉니다.
@@ -244,7 +244,7 @@ UsrClass.dat 의 `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` 키에
 ### 공개 도구로 한 번
 
 - 셸백 전용 공개 도구로는 Eric Zimmerman 의 ShellBags Explorer 와 명령줄판 SBECmd 가 있습니다. RegRipper 에도 셸백 플러그인이 있습니다.
-도구가 낸 경로 한두 개를 위 순서대로 손으로 따라가며 폴더 이름과 `NodeSlot` 이 맞는지 확인합니다. 도구가 UsrClass.dat 와 NTUSER.DAT 를 둘 다 읽었는지, 로그 파일을 반영했는지도 봅니다. 이름을 풀지 못한 항목이 있으면 그 값의 바이트를 직접 보고, 종류 표시 바이트로 어떤 셸 아이템인지부터 가립니다.
+도구가 낸 경로 한두 개를 위 순서대로 손으로 따라가며 폴더 이름과 `NodeSlot` 이 맞는지 확인합니다. 도구가 UsrClass.dat 와 NTUSER.DAT 를 둘 다 읽었는지, 로그 파일을 반영했는지도 봅니다. 이름을 풀지 못한 항목이 있으면 그 값의 바이트를 직접 보고, 종류 표시 바이트로 어떤 셸 아이템인지부터 확인합니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
@@ -258,11 +258,11 @@ UsrClass.dat 의 `Local Settings\Software\Microsoft\Windows\Shell\BagMRU` 키에
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체의 사용자 프로필에서 풀어 볼 질문입니다.
+NIST CFReDS 같은 공개 이미지의 사용자 프로필에서 풀어 볼 질문입니다.
 
 1. NTUSER.DAT 와 UsrClass.dat 의 BagMRU 에서 각각 폴더가 몇 개 나옵니까? 로컬 폴더는 어느 쪽에 많습니까?
 2. `.LOG1`·`.LOG2` 를 반영하기 전과 후에 BagMRU 키 개수가 달라집니까?
-3. 경로 하나를 골라 `NodeSlot` 으로 `Bags` 슬롯을 찾습니다. 슬롯의 폴더 유형 GUID 를 같은 검체의 SOFTWARE 하이브 `FolderTypes` 에서 풀어 봅니다. `SniffedFolderType` 과 같습니까?
+3. 경로 하나를 골라 `NodeSlot` 으로 `Bags` 슬롯을 찾습니다. 슬롯의 폴더 유형 GUID 를 같은 이미지의 SOFTWARE 하이브 `FolderTypes` 에서 풀어 봅니다. `SniffedFolderType` 과 같습니까?
 4. `NodeSlot` 이 없는 BagMRU 키가 있습니까? 있다면 그 키에 하위 키가 있습니까?
 5. `ComDlg` 가 있는 슬롯을 찾아 그 폴더가 열기·저장 대화상자 기록에도 나오는지 확인합니다.
 

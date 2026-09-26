@@ -11,7 +11,7 @@ nav_order: 820
 
 ## 무엇을 기록하나
 
-최근 앱·서버 목록과 파인더의 "최근 폴더", "서버에 연결", "폴더로 이동" 같은 기능은 각자 최근에 쓴 대상을 목록으로 남깁니다. 앱과 서버, 볼륨 목록은 최근 문서와 같은 SFL 파일에 들어 있고, 폴더·검색·열기 대화상자 위치 같은 것은 plist 키에 들어 있습니다 [1][2]. 이 페이지는 두 갈래를 차례로 정리하고, 앱마다 따로 있는 문서 목록은 [앱별 최근 문서 (Recent Documents)](app-recent-documents.md)에서 다룹니다.
+최근 앱·서버 목록과 파인더의 "최근 폴더", "서버에 연결", "폴더로 이동" 같은 기능은 각자 최근에 쓴 대상을 목록으로 남깁니다. 앱과 서버, 볼륨 목록은 최근 문서와 같은 SFL 파일에 들어 있고, 폴더·검색·열기 대화상자 위치 같은 것은 plist 키에 들어 있습니다 [1][2]. 이 페이지는 두 종류를 차례로 정리하고, 앱마다 따로 있는 문서 목록은 [앱별 최근 문서 (Recent Documents)](app-recent-documents.md)에서 다룹니다.
 
 ## SFL 목록 파일
 
@@ -30,9 +30,9 @@ nav_order: 820
 
 ### 최근 서버를 읽는 법
 
-서버 항목도 북마크를 담고 있고, 북마크의 URL 칸(0x1003)이 `file:///` 가 아니라 `smb://`·`afp://`·`ftp://` 같은 값이면 그 URL 이 서버 주소입니다 [1][3]. 그래서 RecentServers 뿐 아니라 RecentDocuments 항목에서도 URL 이 파일 밖을 가리키면 네트워크 공유 위의 문서였다는 단서가 됩니다. 서버 연결 자체의 기록은 [공유 폴더 연결 기록 (SMB·AFP)](../../network/network-shares.md)에서 봅니다.
+서버 항목도 북마크를 담고 있고, 북마크의 URL 필드(0x1003)이 `file:///` 가 아니라 `smb://`·`afp://`·`ftp://` 같은 값이면 그 URL 이 서버 주소입니다 [1][3]. 그래서 RecentServers 뿐 아니라 RecentDocuments 항목에서도 URL 이 파일 밖을 가리키면 네트워크 공유 위의 문서였다는 단서가 됩니다. 서버 연결 자체의 기록은 [공유 폴더 연결 기록 (SMB·AFP)](../../network/network-shares.md)에서 봅니다.
 
-RecentHosts 항목에는 북마크가 없어서 이름 말고는 읽을 칸이 적습니다 [2]. 10.10(Yosemite) 전의 RecentServers 는 옛 별칭 형식(`Alias`)을 썼고 Yosemite 부터 `Bookmark` 를 씁니다 [1]. 옛 Alias 안의 날짜는 HFS 시각이며 [1], HFS 시각의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
+RecentHosts 항목에는 북마크가 없어서 이름 말고는 읽을 필드가 적습니다 [2]. 10.10(Yosemite) 전의 RecentServers 는 옛 별칭 형식(`Alias`)을 썼고 Yosemite 부터 `Bookmark` 를 씁니다 [1]. 옛 Alias 안의 날짜는 HFS 시각이며 [1], HFS 시각의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
 
 ### 10.10 이하의 `com.apple.recentitems.plist`
 
@@ -74,7 +74,7 @@ RecentHosts 항목에는 북마크가 없어서 이름 말고는 읽을 칸이 �
 
 ### 그 밖에 함께 읽히는 기록
 
-mac_apt 는 `~/.ssh/known_hosts` 와 `known_hosts.old` 의 호스트 이름을 파일 수정 시각과 함께 최근 항목으로 내고 [1], 이 파일의 해석은 [SSH 키와 접속 목록 (SSH Keys·known_hosts)](../../credentials/ssh-keys.md)에서 다룹니다. `~/Library/Application Support/com.apple.spotlight.Shortcuts` 에도 항목(`DISPLAY_NAME`, `LAST_USED`, `URL`)이 남는데 [2], 지금 macOS 에서도 같은 경로인지는 검체에서 확인합니다. 스포트라이트 쪽 기록은 [스포트라이트 (Spotlight)](../spotlight/index.md)를 봅니다.
+mac_apt 는 `~/.ssh/known_hosts` 와 `known_hosts.old` 의 호스트 이름을 파일 수정 시각과 함께 최근 항목으로 내고 [1], 이 파일의 해석은 [SSH 키와 접속 목록 (SSH Keys·known_hosts)](../../credentials/ssh-keys.md)에서 다룹니다. `~/Library/Application Support/com.apple.spotlight.Shortcuts` 에도 항목(`DISPLAY_NAME`, `LAST_USED`, `URL`)이 남는데 [2], 지금 macOS 에서도 같은 경로인지는 실제 데이터로 확인해야 합니다. 스포트라이트 쪽 기록은 [스포트라이트 (Spotlight)](../spotlight/index.md)를 봅니다.
 
 ## 증거로서 의미
 
@@ -84,7 +84,7 @@ mac_apt 는 `~/.ssh/known_hosts` 와 `known_hosts.old` 의 호스트 이름을 �
 
 ## 시각 해석
 
-SFL 항목과 파인더 plist 항목에는 "연 시각" 이나 "연결한 시각" 칸이 있다는 근거가 공개 자료에 없습니다. 북마크 안 시각의 뜻과 어림하는 법은 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 이 페이지의 기록에서 시각으로 쓸 만한 값은 아래 정도이고, 모두 "그 대상을 쓴 시각" 과는 다른 값입니다.
+SFL 항목과 파인더 plist 항목에는 "연 시각" 이나 "연결한 시각" 필드가 있다는 근거가 공개 자료에 없습니다. 북마크 안 시각의 뜻과 어림하는 법은 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 이 페이지의 기록에서 시각으로 쓸 만한 값은 아래 정도이고, 모두 "그 대상을 쓴 시각" 과는 다른 값입니다.
 
 | 값 | 뜻 | 기준 |
 |---|---|---|
@@ -96,13 +96,13 @@ SFL 항목과 파인더 plist 항목에는 "연 시각" 이나 "연결한 시각
 ## 함정과 한계
 
 - 같은 사실이 여러 곳에 겹쳐 남습니다. 파인더에서 서버에 연결하면 RecentServers 와 `FXConnectToLastURL` 에 함께 보일 수 있고, 두 곳의 값이 다르면 어느 쪽이 더 나중에 바뀌었는지 파일 수정 시각으로 따집니다.
-- 10.12 이하의 `com.apple.sidebarlists.plist`, 10.10 이하의 `com.apple.recentitems.plist` 처럼 이전 버전 파일이 업그레이드한 뒤에도 남아 있을 수 있어서, 검체의 macOS 버전과 파일 형식이 맞지 않으면 예전 기록일 가능성을 먼저 봅니다.
+- 10.12 이하의 `com.apple.sidebarlists.plist`, 10.10 이하의 `com.apple.recentitems.plist` 처럼 이전 버전 파일이 업그레이드한 뒤에도 남아 있을 수 있어서, 분석 대상의 macOS 버전과 파일 형식이 맞지 않으면 예전 기록일 가능성을 먼저 봅니다.
 - RecentHosts 는 북마크가 없어서 경로·볼륨으로 교차 확인하기 어렵습니다 [2].
 - `.GlobalPreferences.plist` 의 볼륨 이름 추정과 `FXDesktopVolumePositions` 의 시각은 mac_apt 가 정한 해석이라서, 보고서에는 도구 이름과 해석 근거를 함께 적습니다 [1].
 
 ## 직접 분석해 보기
 
-SFL 목록 파일은 [파일 형식 (SFL2·SFL3)](sfl-format.md)의 헥스 예시대로 북마크를 풀고, RecentServers 에서는 0x1003 URL 칸을 먼저 봅니다. 파인더·전역 설정 plist 는 바이너리 plist 를 읽는 도구로 열어 위 표의 키를 찾고, 값이 북마크나 Alias 데이터이면 [파일 참조 데이터 (Alias·Bookmark)](../../../01-foundations/value-decoding/alias-bookmark.md)의 방법으로 풉니다. plist 를 여는 법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
+SFL 목록 파일은 [파일 형식 (SFL2·SFL3)](sfl-format.md)의 헥스 예시대로 북마크를 풀고, RecentServers 에서는 0x1003 URL 필드를 먼저 봅니다. 파인더·전역 설정 plist 는 바이너리 plist 를 읽는 도구로 열어 위 표의 키를 찾고, 값이 북마크나 Alias 데이터이면 [파일 참조 데이터 (Alias·Bookmark)](../../../01-foundations/value-decoding/alias-bookmark.md)의 방법으로 풉니다. plist 를 여는 법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 공개 도구로는 mac_apt `RECENTITEMS` 플러그인이 이 페이지의 SFL 파일, 파인더·전역 설정 plist, `known_hosts` 를 한 번에 읽고 [1], macMRU 는 SFL 파일과 관련 plist, Spotlight Shortcuts 를 읽습니다 [2]. `FXConnectToLastURL` 처럼 한 줄짜리 값은 도구 결과에서 빠지기 쉬우니 원본 plist 에서도 한 번 찾아봅니다.
 
@@ -117,7 +117,7 @@ SFL 목록 파일은 [파일 형식 (SFL2·SFL3)](sfl-format.md)의 헥스 예�
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 macOS 사용자 폴더가 들어 있는 이미지로 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터 가운데 macOS 사용자 폴더가 들어 있는 이미지로 풀어 봅니다.
 
 1. RecentServers 목록과 `com.apple.finder.plist` 의 `FXConnectToLastURL` 을 모두 읽고, 두 값이 같은지 다른지 확인합니다.
 2. `RecentMoveAndCopyDestinations` 와 `GoToFieldHistory` 에 나온 경로 가운데 사용자 폴더 밖(외장 볼륨·네트워크)을 가리키는 것을 골라 봅니다.

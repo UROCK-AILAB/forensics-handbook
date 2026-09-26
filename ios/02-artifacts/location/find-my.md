@@ -31,7 +31,7 @@ nav_order: 620
 | `SafeLocations.data` | 위도·경도, 주소, 장소 이름, 추가된 시각 |
 | `Owner.data` | 공개 자료 없음 |
 
-이 파일들의 저장 형식과 암호화 여부, 해당 iOS 버전은 공개된 자료가 없어 검체에서 확인합니다.
+이 파일들의 저장 형식과 암호화 여부, 해당 iOS 버전은 실제 데이터로 확인해야 합니다.
 
 ### 나의 찾기 네트워크 데몬
 
@@ -76,7 +76,7 @@ iOS 27.0 로컬 백업에는 나의 찾기 관련 도메인으로 `AppDomain-com
 | `HomeDomain :: Library/Preferences/systemgroup.com.apple.icloud.searchpartyd.sharedsettings.plist` | `SPSettingsServiceDisabledReasonsKey`(list), `SPBeaconZoneCreationDateKey`(datetime) |
 | `HomeDomain :: Library/Preferences/com.apple.findmy.plist` | `tabInfo`, `CustomMapStyle`, `restoreState`, `CustomMapMode_Options_explore` |
 
-키 이름으로 보아 `fmipActive` 는 나의 iPhone 찾기가 켜져 있는지, `fmipLostModeType` 은 분실 모드 종류, `command-locate-*` 는 원격 위치 조회 명령과 관련 있어 보입니다. 각 값의 뜻(예: `fmipLostModeType` 숫자가 무엇을 뜻하는지)은 공개된 자료가 없어 검체에서 확인합니다. 파일 이름에 `notbackedup` 이 들어간 plist 도 로컬 백업에 들어갑니다. plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+키 이름으로 보면 `fmipActive` 는 나의 iPhone 찾기가 켜져 있는지, `fmipLostModeType` 은 분실 모드 종류, `command-locate-*` 는 원격 위치 조회 명령과 관련 있어 보입니다. 각 값의 뜻(예: `fmipLostModeType` 숫자가 무엇을 뜻하는지)은 실제 데이터로 확인해야 합니다. 파일 이름에 `notbackedup` 이 들어간 plist 도 로컬 백업에 들어갑니다. plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ### 다른 곳에 남는 흔적
 
@@ -101,7 +101,7 @@ iOS 27.0 로컬 백업에는 나의 찾기 관련 도메인으로 `AppDomain-com
 
 ## 시각 해석
 
-`searchpartyd` DB 의 시각은 유닉스 시각이라는 설명이 있지만 뒷받침하는 원 자료는 없고, `fmipcore` 캐시 파일의 시각 형식은 공개된 자료가 없습니다. 값을 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 가리고, 같은 시각대의 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 현지 시각 변환은 [시간대와 시각 설정](../system-account/time-zone.md) 을 봅니다.
+`searchpartyd` DB 의 시각은 유닉스 시각이라는 설명이 있지만 뒷받침하는 원 자료는 없고, `fmipcore` 캐시 파일의 시각 형식은 알려져 있지 않습니다. 값을 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 판별하고, 같은 시각대의 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 현지 시각 변환은 [시간대와 시각 설정](../system-account/time-zone.md) 을 봅니다.
 
 기기가 정지해 있을 때 관찰이 늘고, 한 비콘이 2~4초 간격으로 기록된 예가 있습니다 [3]. 관찰 간격이 촘촘한 구간은 이동보다 머문 구간일 수 있어서 [위치 기록 데몬](routined.md) 의 위치 점과 함께 봅니다.
 
@@ -115,11 +115,11 @@ iOS 16.x 이상에서는 DB 가 암호화되어 있어서 [3] 파일을 확보�
 
 ### 헥스로 확인하기
 
-암호화된 DB 인지 먼저 가립니다. 헥스 편집기로 `Observations.db` 사본의 첫 16바이트를 보고, SQLite 머리 문자열이 보이지 않으면 암호화되었을 가능성이 큽니다. 머리 문자열과 머리 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다. 이 판단은 파일이 평문 SQLite 인지 아닌지까지만 알려 주고, 복호화는 이 페이지에서 다루지 않습니다.
+암호화된 DB 인지 먼저 판별합니다. 헥스 편집기로 `Observations.db` 사본의 첫 16바이트를 보고, SQLite 머리 문자열이 보이지 않으면 암호화되었을 가능성이 큽니다. 머리 문자열과 머리 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다. 이 판단은 파일이 평문 SQLite 인지 아닌지까지만 알려 주고, 복호화는 이 페이지에서 다루지 않습니다.
 
 ### 공개 도구로 읽기
 
-평문으로 읽을 수 있는 경우 `sqlite3` 명령행 도구로 관찰 기록을 시간순으로 뽑습니다. 칸 이름은 검체에서 `.schema` 로 확인한 것으로 바꿔 씁니다.
+평문으로 읽을 수 있는 경우 `sqlite3` 명령행 도구로 관찰 기록을 시간순으로 뽑습니다. 열 이름은 실제 데이터에서 `.schema` 로 확인한 것으로 바꿔 씁니다.
 
 ```sql
 .schema ObservedAdvertisement
@@ -128,7 +128,7 @@ FROM ObservedAdvertisement
 ORDER BY 스캔_시각_칸;
 ```
 
-로컬 백업이면 `Manifest.db` 의 `Files` 표에서 위 도메인들의 파일 목록을 뽑아 plist 를 꺼내고, `plutil` 같은 plist 도구로 키와 값을 확인합니다. `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다.
+로컬 백업이면 `Manifest.db` 의 `Files` 표에서 위 도메인들의 파일 목록을 뽑아 plist 를 꺼내고, `plutil` 같은 plist 도구로 키와 값을 확인합니다. `Files` 표의 열은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다.
 
 ```sql
 SELECT fileID, domain, relativePath
@@ -151,9 +151,9 @@ ORDER BY domain, relativePath;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)나 연습용 기기로 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)나 연습용 기기로 풀어 봅니다.
 
-1. 검체의 iOS 버전은 무엇이고, `searchpartyd` 폴더의 DB 첫 부분에 SQLite 머리 문자열이 보입니까?
+1. 기기의 iOS 버전은 무엇이고, `searchpartyd` 폴더의 DB 첫 부분에 SQLite 머리 문자열이 보입니까?
 2. `fmipcore` 캐시가 있다면 `Devices.data` 에 기기가 몇 대 있고, 그중 이 기기 자신은 어느 것입니까?
 3. 로컬 백업에서 `FMIPStateInfo.plist` 와 `com.apple.icloud.searchpartyd.plist` 를 꺼내 키 목록이 위 표와 같은지 비교합니다.
 4. 연습용 기기에서 나의 iPhone 찾기를 껐다 켠 뒤 백업을 다시 떠서 `fmipActive` 값이 어떻게 바뀌는지 기록합니다.

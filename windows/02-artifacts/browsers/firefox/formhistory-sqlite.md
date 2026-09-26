@@ -21,9 +21,9 @@ nav_order: 1770
 ## 위치와 버전별 차이
 
 - 파일 이름은 `formhistory.sqlite` 입니다. 프로필 폴더에서 찾습니다. 프로필 폴더를 찾는 법은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
-- 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 검체에서 확인합니다.
-- 아래 표와 칸은 파이어폭스 소스 main 가지(2026-09-23 기준)의 것입니다. 이때 DB 스키마 버전 상수(`DB_SCHEMA_VERSION`)는 5 입니다[1].
-- 예전 스키마 버전에 어느 표와 칸이 있었는지, 각 버전이 어느 출시판에 들어갔는지는 공개 자료가 없어 검체에서 확인합니다.
+- 본 폴더와 로컬 폴더 중 어느 쪽에 있는지는 실제 데이터로 확인합니다.
+- 아래 표와 열은 파이어폭스 소스 main 가지(2026-09-23 기준)의 것입니다. 이때 DB 스키마 버전 상수(`DB_SCHEMA_VERSION`)는 5 입니다[1].
+- 예전 스키마 버전에 어느 표와 열이 있었는지, 각 버전이 어느 출시판에 들어갔는지는 실제 데이터로 확인해야 합니다.
 
 ## 구조
 
@@ -35,12 +35,12 @@ nav_order: 1770
 |---|---|
 | `moz_formhistory` | 입력란 이름과 값 한 쌍마다 한 행입니다 |
 | `moz_deleted_formhistory` | 지운 항목의 `guid` 와 지운 시각입니다. 안드로이드판만 씁니다 |
-| `moz_sources` | 출처 문자열입니다. 값의 뜻은 검체에서 확인합니다 |
+| `moz_sources` | 출처 문자열입니다. 값의 뜻은 실제 데이터로 확인합니다 |
 | `moz_history_to_sources` | `moz_formhistory` 행과 `moz_sources` 행을 잇습니다 |
 
-### `moz_formhistory` 의 칸
+### `moz_formhistory` 의 열
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `id` | 행 번호입니다 |
 | `fieldname` | 입력란 이름입니다. 비워 둘 수 없습니다 (TEXT NOT NULL) |
@@ -50,14 +50,14 @@ nav_order: 1770
 | `lastUsed` | 마지막으로 쓴 시각입니다 |
 | `guid` | 항목 식별자입니다. 지운 항목 표와 이 값으로 이어집니다 |
 
-- 이 표에는 사이트 주소 칸이 없습니다. 어느 사이트에서 친 값인지는 이 표만으로 알 수 없습니다.
-- `value` 는 텍스트 칸입니다. 친 값을 글자 그대로 읽을 수 있습니다.
+- 이 표에는 사이트 주소 열이 없습니다. 어느 사이트에서 친 값인지는 이 표만으로 알 수 없습니다.
+- `value` 는 텍스트 열입니다. 친 값을 글자 그대로 읽을 수 있습니다.
 
-### `moz_deleted_formhistory` 의 칸
+### `moz_deleted_formhistory` 의 열
 
 - `id`, `timeDeleted`, `guid` 입니다.
 - 입력란 이름과 값은 이 표에 없고 지운 항목은 `guid` 로만 가리킵니다.
-- Windows 판은 이 표에 행을 쓰지 않으므로 Windows 검체에서 이 표가 비어 있어도 지운 항목이 없다는 뜻이 아닙니다.
+- Windows 판은 이 표에 행을 쓰지 않으므로 Windows 기기에서 이 표가 비어 있어도 지운 항목이 없다는 뜻이 아닙니다.
 
 ### 색인
 
@@ -69,12 +69,12 @@ nav_order: 1770
 
 - 파이어폭스는 `browser.formfill` 아래 설정을 읽습니다[1]. `enable`, `expire_days`, `agedWeight`, `boundaryWeight`, `bucketSize`, `debug`, `maxTimeGroupings`, `prefixWeight`, `timeGroupingSize` 입니다.
 - 분석에서 먼저 볼 설정은 `enable` 과 `expire_days` 입니다. `expire_days` 는 항목을 며칠 뒤에 지울지 정합니다.
-- `expire_days` 값은 검체의 설정 파일에서 확인합니다. 설정 파일은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
+- `expire_days` 값은 분석 대상의 설정 파일에서 확인합니다. 설정 파일은 [프로필 구조 (profiles.ini·prefs.js)](profiles-ini-prefs-js.md) 에서 다룹니다.
 
-### 검체에서 확인할 것
+### 실제 데이터로 확인할 것
 
 - `moz_sources.source` 에 들어가는 값의 뜻입니다.
-- 비밀번호 칸이나 카드 번호 칸의 값을 저장하지 않는지입니다.
+- 비밀번호 입력란이나 카드 번호 입력란의 값을 저장하지 않는지입니다.
 - 브라우저 검색창에 친 검색어가 이 파일에 어떤 입력란 이름으로 들어가는지입니다.
 - 사생활 보호 창 (Private Browsing) 에서 친 값을 저장하는지입니다. `FormHistory.sys.mjs` 에는 사생활 보호 창을 다루는 코드가 없지만 다른 곳에서 처리할 수 있으므로, 어느 쪽으로도 단정하지 않습니다.
 
@@ -119,7 +119,7 @@ nav_order: 1770
 
 ### 헥스로 한 번
 
-`lastUsed` 는 마이크로초 정수입니다. SQLite 레코드는 정수를 빅엔디언으로 저장합니다. 아래는 2024-03-15 09:30:00 UTC 를 명세대로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다.
+`lastUsed` 는 마이크로초 정수입니다. SQLite 레코드는 정수를 빅엔디언으로 저장합니다. 아래는 2024-03-15 09:30:00 UTC 를 명세대로 만든 예시입니다. 특정 기기에서 나온 값이 아닙니다.
 
 ```
 00 06 13 AF A6 DD 76 00    = 1710495000000000 (마이크로초)
@@ -168,7 +168,7 @@ WHERE o.guid NOT IN (SELECT guid FROM main.moz_formhistory);
 |---|---|---|
 | 방문·다운로드·즐겨찾기 | `lastUsed` 무렵에 연 페이지로 어느 사이트에서 쳤는지 좁힙니다 | [places.sqlite](places-sqlite.md) |
 | 세션 복원 | 그 시각에 열려 있던 탭을 봅니다 | [세션 복원 (sessionstore.jsonlz4)](sessionstore-jsonlz4.md) |
-| 저장 비밀번호 | 로그인 정보를 저장한 사이트 목록과 견줍니다 | [저장 비밀번호 (logins.json·key4.db)](logins-json-key4-db.md) |
+| 저장 비밀번호 | 로그인 정보를 저장한 사이트 목록과 비교합니다 | [저장 비밀번호 (logins.json·key4.db)](logins-json-key4-db.md) |
 | 섀도 복사본 | 지운 항목이 남은 옛 파일을 꺼냅니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 | 크롬 계열 자동완성 | 같은 값을 다른 브라우저에도 쳤는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md) |
 
@@ -176,14 +176,14 @@ WHERE o.guid NOT IN (SELECT guid FROM main.moz_formhistory);
 
 ## 실습
 
-파이어폭스를 쓴 공개 검체(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+파이어폭스를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `moz_formhistory` 에서 `timesUsed` 가 가장 큰 항목은 무엇입니까? 처음과 마지막으로 쓴 시각은 언제입니까?
-2. `moz_deleted_formhistory` 에 행이 있습니까? 검체가 Windows 판이라면 행이 없는 것이 맞는지 확인합니다.
+2. `moz_deleted_formhistory` 에 행이 있습니까? 분석 대상이 Windows 판이라면 행이 없는 것이 맞는지 확인합니다.
 3. 섀도 복사본 속 옛 파일에만 있는 `guid` 를 찾아봅니다. 그 항목의 `lastUsed` 로 보아 만료로 사라졌을 수 있습니까?
 4. 한 항목의 `lastUsed` 전후 몇 분의 방문 기록을 봅니다. 그 값을 어느 사이트에서 쳤다고 좁힐 수 있습니까?
 
 ## 참고 문헌
 
-1. Mozilla, *FormHistory.sys.mjs* (파이어폭스 소스, main 가지 — 파일 이름, 스키마 버전, 표·칸·색인, 시각 단위, `browser.formfill` 설정, 만료 처리, 칸 갱신, 안드로이드에서만 지운 항목 표에 쓰는 조건). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/satchel/FormHistory.sys.mjs
+1. Mozilla, *FormHistory.sys.mjs* (파이어폭스 소스, main 가지 — 파일 이름, 스키마 버전, 표·열·색인, 시각 단위, `browser.formfill` 설정, 만료 처리, 열 갱신, 안드로이드에서만 지운 항목 표에 쓰는 조건). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/satchel/FormHistory.sys.mjs
 2. Mozilla, *nsINavHistoryService.idl* (파이어폭스 소스, main 가지 — PRTime 정의). https://raw.githubusercontent.com/mozilla-firefox/firefox/main/toolkit/components/places/nsINavHistoryService.idl

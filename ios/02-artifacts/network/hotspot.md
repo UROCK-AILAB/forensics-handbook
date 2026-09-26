@@ -30,7 +30,7 @@ nav_order: 710
 | 백업 `HomeDomain :: Library/Preferences/com.apple.networkserviceproxy.plist` | 위 파일의 백업 속 위치 | |
 | 백업 `HomeDomain :: Library/Preferences/com.apple.wifi.removed-networks.plist` | 지운 Wi-Fi 네트워크 목록 | |
 
-암호화하지 않은 로컬 백업에는 `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi-private-mac-networks.plist` 가 없을 수 있습니다. 그 대신 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-class-d-private-mac-networks.plist`(list 하나)와 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-networks.plist`(비어 있음)가 들어 있습니다. 암호화 백업이면 달라지는지는 공개 자료가 없으니, 파일 시스템 추출본과 백업을 나눠서 봅니다.
+암호화하지 않은 로컬 백업에는 `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi-private-mac-networks.plist` 가 없을 수 있습니다. 그 대신 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-class-d-private-mac-networks.plist`(list 하나)와 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-networks.plist`(비어 있음)가 들어 있습니다. 암호화 백업이면 달라지는지는 알려져 있지 않으니, 파일 시스템 추출본과 백업을 나눠서 봅니다.
 
 ### 제공 기기(핫스폿을 켠 아이폰)
 
@@ -51,7 +51,7 @@ netusage.sqlite 는 파일 시스템 추출에서만 얻을 수 있고 [2], 로�
 | 16.7 | 접속 기기의 known-networks·private-mac-networks·networkserviceproxy 흔적, 제공 기기의 DataUsage 지운 레코드 | [1] |
 | 27.0 | 로컬 백업 속 파일 경로와 키 이름 | |
 
-그 밖의 버전에서 경로나 키가 어떻게 다른지는 공개 자료가 없어 검체에서 확인합니다.
+그 밖의 버전에서 경로나 키가 어떻게 다른지는 실제 데이터로 확인해야 합니다.
 
 ## 구조
 
@@ -91,15 +91,15 @@ wifi.network.ssid.<SSID>: {RemovedAt, SSID, SupportedSecurityTypes}
 
 ### 제공 기기: DataUsage.sqlite
 
-DataUsage.sqlite 의 표 구조와 사용량 해석은 [앱별 데이터 사용량](data-usage.md) 페이지에서 다룹니다. 핫스폿과 관련해서는 ZPROCESS 표를 보고, iOS 27.0 백업의 칸 이름은 아래와 같습니다.
+DataUsage.sqlite 의 표 구조와 사용량 해석은 [앱별 데이터 사용량](data-usage.md) 페이지에서 다룹니다. 핫스폿과 관련해서는 ZPROCESS 표를 보고, iOS 27.0 백업의 열 이름은 아래와 같습니다.
 
 ```
 ZPROCESS: Z_PK, Z_ENT, Z_OPT, ZFIRSTTIMESTAMP, ZTIMESTAMP, ZBUNDLENAME, ZEXTENSIONNAME, ZPROCNAME
 ```
 
-ZTIMESTAMP 는 가장 최근 활동, ZFIRSTTIMESTAMP 는 처음 쓴 때입니다 [2]. ZPROCESS 에서 지워진 레코드에 ZTIMESTAMP 값이 남아 있으면 핫스폿이 켜졌던 것으로 보는 해석이 있습니다 [1]. 참고 문헌 [1] 에는 칸 이름이 "ZTIMESTMAP" 로 적혀 있을 수 있지만, 실제 칸 이름은 ZTIMESTAMP 입니다. 핫스폿 트래픽이 ZPROCNAME 에 어떤 프로세스 이름으로 잡히는지는 공개 자료가 없어 검체에서 확인합니다.
+ZTIMESTAMP 는 가장 최근 활동, ZFIRSTTIMESTAMP 는 처음 쓴 때입니다 [2]. ZPROCESS 에서 지워진 레코드에 ZTIMESTAMP 값이 남아 있으면 핫스폿이 켜졌던 것으로 보는 해석이 있습니다 [1]. 참고 문헌 [1] 에는 열 이름이 "ZTIMESTMAP" 로 적혀 있을 수 있지만, 실제 열 이름은 ZTIMESTAMP 입니다. 핫스폿 트래픽이 ZPROCNAME 에 어떤 프로세스 이름으로 잡히는지는 실제 데이터로 확인해야 합니다.
 
-DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], iOS 27.0 의 ZLIVEUSAGE 표에도 Wi-Fi 칸 없이 ZWWANIN·ZWWANOUT 만 있습니다.
+DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], iOS 27.0 의 ZLIVEUSAGE 표에도 Wi-Fi 열 없이 ZWWANIN·ZWWANOUT 만 있습니다.
 
 ### 뜻이 알려지지 않은 항목
 
@@ -107,13 +107,13 @@ DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], iOS 27.0 의 ZLIVEUSAG
 
 | 위치 | 키·항목 | 비고 |
 |---|---|---|
-| `HomeDomain :: Library/Preferences/com.apple.MobileInternetSharing.plist` | `State` (int), `UState` (int), `Version` (int) | 켜짐·꺼짐을 나타내는 값인지 검체에서 확인 |
+| `HomeDomain :: Library/Preferences/com.apple.MobileInternetSharing.plist` | `State` (int), `UState` (int), `Version` (int) | 켜짐·꺼짐을 나타내는 값인지 실제 데이터로 확인 |
 | `HomeDomain :: Library/Preferences/com.apple.Preferences.plist` | `PersonalHotspotDiabled` (bool) | 철자가 "Diabled" 그대로라서 검색할 때 이 철자로 찾아야 함 |
 | 백업 도메인 `AppDomainPlugin-com.apple.WiFiKit.PersonalHotspotControl` | 항목 4개 | 이름으로는 제어 센터용 핫스폿 컨트롤 확장으로 보임 |
-| `HomeDomain :: Library/Preferences/com.apple.MobileBluetooth.debug.plist` | `NETSHARING`, `NETWORKCONSUMER` 항목과 그 안의 `BtConnectionTypeCounter`, `BtConnectionTypeDuration`, `BtConnectionTypeStartTimeStamp` | 블루투스 핫스폿 공유 횟수·시간인지 검체에서 확인 |
+| `HomeDomain :: Library/Preferences/com.apple.MobileBluetooth.debug.plist` | `NETSHARING`, `NETWORKCONSUMER` 항목과 그 안의 `BtConnectionTypeCounter`, `BtConnectionTypeDuration`, `BtConnectionTypeStartTimeStamp` | 블루투스 핫스폿 공유 횟수·시간인지 실제 데이터로 확인 |
 | `SysSharedContainerDomain-systemgroup.com.apple.bluetooth :: Library/Preferences/com.apple.MobileBluetooth.devices.plist` | 기기별 항목의 `ServiceNetSharingUser` | 블루투스 기기 목록은 [블루투스 장치](bluetooth.md) 참고 |
-| `SystemPreferencesDomain :: SystemConfiguration/preferences.plist` | `Sets`, `NetworkServices`, `CurrentSet`, `__VERSION__`, `Model`, `System` | 핫스폿용 네트워크 서비스가 남는지 검체에서 확인 |
-| `DatabaseDomain :: com.apple.xpc.launchd/disabled.plist` | `com.apple.bootpd` (bool) | 핫스폿 주소 할당과 관계가 있는지 검체에서 확인 |
+| `SystemPreferencesDomain :: SystemConfiguration/preferences.plist` | `Sets`, `NetworkServices`, `CurrentSet`, `__VERSION__`, `Model`, `System` | 핫스폿용 네트워크 서비스가 남는지 실제 데이터로 확인 |
+| `DatabaseDomain :: com.apple.xpc.launchd/disabled.plist` | `com.apple.bootpd` (bool) | 핫스폿 주소 할당과 관계가 있는지 실제 데이터로 확인 |
 
 ## 증거로서 의미
 
@@ -123,15 +123,15 @@ DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], iOS 27.0 의 ZLIVEUSAG
 
 ### 증명하지 못하는 것
 
-인스턴트 핫스폿은 같은 Apple 계정 기기와 가족 구성원 기기에 암호를 묻지 않아서 [4], 인스턴트 핫스폿으로 붙은 기록이라면 사용자가 암호를 알고 직접 입력했다는 근거가 되지 않습니다. 네트워크 이름은 제공 기기의 기기 이름이지만 접속한 뒤에 기기 이름을 바꾸면 기록과 달라질 수 있고 [1], 이름이 맞는다는 사실만으로 특정 기기를 가리킬 수는 없으니 다른 흔적과 맞춰 봐야 합니다. 핫스폿을 통해 무엇을 주고받았는지, 제공 기기에 어떤 기기(MAC 주소·이름)가 붙었는지를 알려 주는 기록은 알려져 있지 않습니다. ZPROCESS 의 지운 레코드는 늘 생기지는 않으니 [1], 레코드가 없다는 사실을 핫스폿을 켜지 않았다는 증거로 쓰지 않습니다.
+인스턴트 핫스폿은 같은 Apple 계정 기기와 가족 구성원 기기에 암호를 묻지 않아서 [4], 인스턴트 핫스폿으로 붙은 기록이라면 사용자가 암호를 알고 직접 입력했다는 근거가 되지 않습니다. 네트워크 이름은 제공 기기의 기기 이름이지만 접속한 뒤에 기기 이름을 바꾸면 기록과 달라질 수 있고 [1], 이름이 맞는다는 사실만으로 특정 기기를 가리킬 수는 없으니 다른 흔적과 맞춰 봐야 합니다. 핫스폿을 통해 무엇을 주고받았는지, 제공 기기에 어떤 기기(MAC 주소·이름)가 붙었는지가 나와 있는 기록은 알려져 있지 않습니다. ZPROCESS 의 지운 레코드는 늘 생기지는 않으니 [1], 레코드가 없다는 사실을 핫스폿을 켜지 않았다는 증거로 쓰지 않습니다.
 
-보고서에는 "피의자 기기로 인터넷을 썼다" 가 아니라 "접속 기기의 Wi-Fi 기록에 제공 기기 이름과 같은 네트워크가 있고, 처음 연결 시각과 자동 재연결 시각이 이러하다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "피의자 기기로 인터넷을 썼다" 가 아니라 "접속 기기의 Wi-Fi 기록에 제공 기기 이름과 같은 네트워크가 있고, 처음 연결 시각과 자동 재연결 시각이 이러하다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
 known-networks, private-mac-networks, networkserviceproxy 의 시각 값은 CFAbsoluteTime(Mac 절대 시각)이고, 2001-01-01 00:00:00 UTC 부터 센 초라서 UTC 기준입니다 [1]. 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
 
-연결·끊김 시각은 실제로 끊긴 뒤에 갱신되기도 하고 `UpdatedAt` 은 나중에 다시 바뀔 수 있어서, 이 값들은 참고용으로만 씁니다 [1]. 끊긴 시각을 분 단위로 단정하지 말고, 처음 연결 시각과 재연결 시작 시각을 중심으로 시간 범위를 잡는 편이 안전합니다. DataUsage.sqlite 의 시각 값 형식은 [앱별 데이터 사용량](data-usage.md) 페이지를 따르고, removed-networks 의 `RemovedAt` 형식은 공개 자료가 없어 검체에서 확인합니다.
+연결·끊김 시각은 실제로 끊긴 뒤에 갱신되기도 하고 `UpdatedAt` 은 나중에 다시 바뀔 수 있어서, 이 값들은 참고용으로만 씁니다 [1]. 끊긴 시각을 분 단위로 단정하지 말고, 처음 연결 시각과 재연결 시작 시각을 중심으로 시간 범위를 잡는 편이 안전합니다. DataUsage.sqlite 의 시각 값 형식은 [앱별 데이터 사용량](data-usage.md) 페이지를 따르고, removed-networks 의 `RemovedAt` 형식은 실제 데이터로 확인해야 합니다.
 
 ## 함정과 한계
 
@@ -141,13 +141,13 @@ known-networks, private-mac-networks, networkserviceproxy 의 시각 값은 CFAb
 
 제공 기기의 핵심 흔적은 지운 레코드라서 SQLite 여유 공간이나 WAL 에서 복구해야 합니다. 복구 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지를 봅니다.
 
-사용자가 Wi-Fi 네트워크 목록에서 네트워크를 지우면 `com.apple.wifi.removed-networks.plist` 에 `RemovedAt` 이 붙은 항목이 생길 수 있고, 핫스폿도 이 목록에 들어가는지는 검체에서 확인합니다. 핫스폿 기본 주소 대역, 통합 로그에서 핫스폿 켜기·클라이언트 접속을 찾을 프로세스 이름, KnowledgeC·바이옴에 핫스폿 상태가 남는지도 공개 자료가 없으니, 이런 내용을 보고서에 쓸 때는 직접 검증한 결과만 씁니다.
+사용자가 Wi-Fi 네트워크 목록에서 네트워크를 지우면 `com.apple.wifi.removed-networks.plist` 에 `RemovedAt` 이 붙은 항목이 생길 수 있고, 핫스폿도 이 목록에 들어가는지는 실제 데이터로 확인해야 합니다. 핫스폿 기본 주소 대역, 통합 로그에서 핫스폿 켜기·클라이언트 접속을 찾을 프로세스 이름, KnowledgeC·바이옴에 핫스폿 상태가 남는지도 알려져 있지 않으니, 이런 내용을 보고서에 쓸 때는 직접 검증한 결과만 씁니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-이 페이지에는 검체에서 뽑은 바이트를 싣지 않습니다. 아래 순서로 직접 따라가 봅니다.
+이 페이지에는 실제 기기에서 뽑은 바이트를 싣지 않습니다. 아래 순서로 직접 따라가 봅니다.
 
 1. networkserviceproxy.plist 를 plist 도구로 열어 `NSPServiceStatusManagerInfo` 의 bytes 값을 파일로 따로 저장합니다.
 2. 저장한 바이트를 헥스 편집기로 열어 맨 앞 머리가 plist 형식인지 확인합니다. 형식 머리와 오프셋 표 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 페이지에 있습니다.
@@ -173,9 +173,9 @@ APOLLO 에는 DataUsage.sqlite 와 netusage.sqlite 를 읽는 모듈 `datausage_
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 아이폰 이미지로 아래 질문을 풀어 봅니다. 검체에 핫스폿 흔적이 없을 수도 있으니, 없으면 없다는 사실과 그 이유(수집 범위, iOS 버전)를 적는 것까지 연습합니다.
+공개 시험 데이터(NIST CFReDS 등)의 아이폰 이미지로 아래 질문을 풀어 봅니다. 이 데이터에 핫스폿 흔적이 없을 수도 있으니, 없으면 없다는 사실과 그 이유(수집 범위, iOS 버전)를 적는 것까지 연습합니다.
 
-1. 검체의 iOS 버전과 수집 방식(로컬 백업인지 파일 시스템 추출인지)을 확인하고, 위 표의 파일 가운데 어느 것이 들어 있는지 적어 봅니다.
+1. 분석 대상의 iOS 버전과 수집 방식(로컬 백업인지 파일 시스템 추출인지)을 확인하고, 위 표의 파일 가운데 어느 것이 들어 있는지 적어 봅니다.
 2. known-networks 에서 이름이 아이폰 기기 이름처럼 보이는 네트워크를 찾아 `AddedAt`, `JoinedBySystemAt`, `JoinedByUserAt` 을 UTC 로 바꿔 봅니다.
 3. networkserviceproxy.plist 안쪽 plist 에서 세션 시작·끝 시각을 꺼내 2번의 시각과 맞춰 봅니다.
 4. DataUsage.sqlite 와 WAL 에서 ZPROCESS 의 지운 레코드를 찾아보고, 찾지 못했다면 그 결과를 보고서에 어떻게 적을지 써 봅니다.

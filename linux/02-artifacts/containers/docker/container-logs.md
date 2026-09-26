@@ -43,7 +43,7 @@ Docker 컨테이너 하나마다 데이터 루트의 `containers/컨테이너ID/
 | `container-cached.log` | 이중 로깅 캐시[1] |
 | `checkpoints/`, `mounts/` | 체크포인트, 컨테이너 전용 마운트[1] |
 
-hostname·hosts·resolv.conf 로 쓰는 파일의 경로는 `config.v2.json` 의 `HostnamePath`·`HostsPath`·`ResolvConfPath` 필드에 적혀 있습니다[1]. 파일 이름은 검체에서 이 필드로 확인합니다.
+hostname·hosts·resolv.conf 로 쓰는 파일의 경로는 `config.v2.json` 의 `HostnamePath`·`HostsPath`·`ResolvConfPath` 필드에 적혀 있습니다[1]. 파일 이름은 실제 데이터에서 이 필드로 확인합니다.
 
 ### config.v2.json
 
@@ -65,7 +65,7 @@ JSON 한 덩어리이고, 조사에 쓰는 필드는 다음과 같습니다[1][2
 | `AppArmorProfile`, `SeccompProfile`, `NoNewPrivileges` | 보안 옵션 |
 | `State` | `Running`, `Paused`, `Restarting`, `OOMKilled`, `Dead`, `Pid`, `ExitCode`, `Error`, `StartedAt`, `FinishedAt`, `Health` |
 
-`State` 의 `Running` 과 `Paused` 는 동시에 참일 수 있습니다. 일시 정지한 컨테이너는 프로세스가 살아 있는 채로 얼린 것이기 때문입니다[2]. 아래는 필드 일부만 추린 만든 예시입니다.
+`State` 의 `Running` 과 `Paused` 는 동시에 참일 수 있습니다. 일시 정지한 컨테이너는 프로세스를 끝내지 않은 채로 얼린 것이기 때문입니다[2]. 아래는 필드 일부만 추린 만든 예시입니다.
 
 ```json
 {"ID":"4be1...(64자리)","Created":"2026-03-02T01:10:44.918273645Z","Path":"/docker-entrypoint.sh","Args":["nginx","-g","daemon off;"],
@@ -128,7 +128,7 @@ journald 드라이버를 쓰면 로그가 컨테이너 폴더가 아니라 호�
 - 여러 번 재시작한 컨테이너의 이전 실행 시각. `StartedAt`·`FinishedAt` 은 값이 하나씩이라 시작·종료할 때마다 덮어씁니다[2].
 - 애플리케이션이 파일에 따로 쓴 로그. 그런 로그는 컨테이너 쓰기 층이나 볼륨에 있습니다([overlay 파일 시스템](overlay2.md)).
 
-보고서에는 "컨테이너 web01 의 표준 출력 로그에 2026-03-02 01:15:07(UTC) 에 데몬이 받은 요청 줄이 있다" 처럼 로그가 말하는 만큼만 씁니다.
+보고서에는 "컨테이너 web01 의 표준 출력 로그에 2026-03-02 01:15:07(UTC) 에 데몬이 받은 요청 줄이 있다" 처럼 로그로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -150,7 +150,7 @@ journald 드라이버를 쓰면 로그가 컨테이너 폴더가 아니라 호�
 - **컨테이너를 지우면 폴더째 사라집니다.** `docker rm` 은 설정·json-file 로그·local 로그가 든 컨테이너 폴더를 통째로 지웁니다[10]. `hostconfig.json` 의 `AutoRemove` 가 `true` 인 컨테이너(`docker run --rm`)는 끝나는 즉시 이렇게 지워집니다[4]. 지운 뒤 남는 것은 저널(journald 드라이버를 썼다면), 볼륨, 셸 기록 정도이고, 볼륨이 남는 조건은 [Docker 허브](index.md) 에 정리했습니다.
 - **회전으로 오래된 로그가 지워집니다.** `max-size`·`max-file` 을 정한 json-file 과 기본값의 local 드라이버는 가장 오래된 파일을 지웁니다[12][13]. 반대로 json-file 기본값(회전 없음)이면 파일 하나가 매우 커질 수 있습니다[11].
 - **도구마다 "컨테이너 이름" 이 다릅니다.** dissect.target 은 `Name` 에서 앞의 `/` 를 뗀 값을 이름으로 쓰고[16], plaso 는 `Config.Hostname` 을 container_name 으로 씁니다[17]. 두 도구의 결과를 섞어 볼 때는 `ID` 로 맞춥니다.
-- **dissect.target 의 `docker.logs` 가 폴더 이름으로 컨테이너 ID 를 정합니다.** `containers/` 아래 `*.log*` 를 모두 훑어, 파일 이름에 `-json.log` 가 있으면 바로 위 폴더를, 없으면 local 형식으로 읽고 두 단계 위 폴더를 컨테이너 ID 로 씁니다[16]. `local-logs/container.log` 에는 맞지만, 컨테이너 폴더 바로 아래 있는 `container-cached.log` 는 이 규칙대로면 ID 칸에 `containers` 가 들어가므로 `source` 경로로 컨테이너를 다시 확인합니다.
+- **dissect.target 의 `docker.logs` 가 폴더 이름으로 컨테이너 ID 를 정합니다.** `containers/` 아래 `*.log*` 를 모두 찾아, 파일 이름에 `-json.log` 가 있으면 바로 위 폴더를, 없으면 local 형식으로 읽고 두 단계 위 폴더를 컨테이너 ID 로 씁니다[16]. `local-logs/container.log` 에는 맞지만, 컨테이너 폴더 바로 아래 있는 `container-cached.log` 는 이 규칙대로면 ID 필드에 `containers` 가 들어가므로 `source` 경로로 컨테이너를 다시 확인합니다.
 - **dissect.target 은 기본으로 로그를 손봅니다.** ANSI 이스케이프를 지우고 백스페이스를 `[BS]`, 탭을 `[TAB]` 으로 바꿉니다[16]. 원문 그대로가 필요하면 `--raw-messages` 를 줍니다[16].
 - **ForensicArtifacts 의 로그 정의 이름이 GKE 용입니다.** `GKEDockerContainerLogs` 가 `/var/lib/docker/containers/*/*-json.log*` 를 모으는 정의이고[18], 일반 호스트에서도 같은 경로를 모으면 됩니다. `DockerContainerConfig` 는 `config.v2.json` 과 `config.json` 만 모으므로 `hostconfig.json` 과 local 드라이버 로그는 따로 챙깁니다[18].
 - **실행 중인 호스트에서는 로그 파일을 직접 건드리지 않습니다.** json-file 로그는 데몬 혼자 쓰도록 만든 파일이라 다른 도구가 만지면 로깅이 어긋날 수 있습니다[12]. 사본을 떠서 분석합니다. 순서는 [컨테이너 수집](../../../03-techniques/acquisition/container-acquisition.md) 을 따릅니다.
@@ -197,7 +197,7 @@ json-file 로그는 JSON Lines 라서 `jq -r '[.time, .stream, .log] | @tsv' 컨
 
 ## 실습
 
-공개 검체 대신 실험용 가상 머신에 Docker 를 설치해 따라 합니다.
+공개 증거물 이미지 대신 실험용 가상 머신에 Docker 를 설치해 따라 합니다.
 
 1. 기본 설정으로 nginx 컨테이너를 만들어 몇 번 요청을 보내고 멈춘 뒤, `config.v2.json` 의 `Created`·`StartedAt`·`FinishedAt` 과 json-file 로그 첫 줄·마지막 줄의 `time` 을 나란히 놓으면 어떤 순서가 나오나?
 2. 같은 컨테이너를 두 번 더 시작·정지하면 `StartedAt`·`FinishedAt`·`RestartCount` 가 어떻게 바뀌나? 첫 실행의 시각은 어디에 남나?

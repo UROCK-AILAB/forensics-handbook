@@ -61,7 +61,7 @@ nav_order: 2670
 | 전역 그룹 | | 4728 | 4729 | | | |
 | 유니버설 그룹 | | 4756 | 4757 | | | |
 
-### 이 기록이 필요한 까닭
+### 이 기록이 필요한 이유
 
 로컬 계정을 만든 시각은 레지스트리에 직접 적혀 있지 않아서 다른 흔적으로 추정해야 합니다. 추정 방법은 [사용자 계정](../system-account/sam.md)에서 다룹니다. 4720 이 남아 있으면 계정을 만든 때를 이벤트 기록 시각으로 바로 알 수 있습니다.
 
@@ -72,7 +72,7 @@ nav_order: 2670
 | 4720 | Audit User Account Management | Windows Vista · Windows Server 2008 | 0. 매니페스트에도 버전 0 하나뿐입니다 |
 | 4732 | Audit Security Group Management | Windows Vista · Windows Server 2008 | 문서는 0. 매니페스트에는 버전 1 도 있습니다 |
 
-4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다. 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 칸을 더합니다 (Windows 11 25H2 기준). 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 판마다 다를 수 있습니다.
+4720 과 4732 는 도메인 컨트롤러·멤버 서버·워크스테이션 모두에서 생깁니다. 4732·4728·4756 의 버전 1 은 MembershipExpirationTime 필드를 더합니다 (Windows 11 25H2 기준). 4732 버전 1 이 어느 Windows 버전부터 쓰였는지는 판마다 다를 수 있습니다.
 
 Windows XP · 2003 의 옛 로그 형식은 [구형 EVT 형식 (Windows XP·2003)](../../01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md)에서 다룹니다.
 
@@ -88,9 +88,9 @@ User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Gr
 
 ## 구조
 
-### 4720 칸
+### 4720 필드
 
-| 무리 | XML 칸 | 읽을 때 주의 |
+| 무리 | XML 필드 | 읽을 때 주의 |
 |---|---|---|
 | 새 계정 | TargetUserName, TargetDomainName, TargetSid | 로컬 계정이면 TargetDomainName 에 컴퓨터 이름이 들어갑니다 |
 | 만든 계정 | SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId | 계정입니다. 사람이 아닙니다 |
@@ -99,7 +99,7 @@ User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Gr
 
 로컬 계정을 만들 때 흔히 보이는 값은 다음과 같습니다.
 
-| 칸 (화면 이름) | 흔한 값 |
+| 필드 (화면 이름) | 흔한 값 |
 |---|---|
 | Display Name · Home Directory · Script Path · Profile Path | `<value not set>` |
 | User Principal Name | `-` |
@@ -114,7 +114,7 @@ User Account Management `{0CCE9235-69AE-11D9-BED3-505054503030}` 와 Security Gr
 
 ### 메시지 번호
 
-XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파일의 문구를 가리킵니다. msobjs.dll 메시지 표의 문구는 다음과 같습니다.
+XML 에는 `%%1794` 형식의 값이 들어갑니다. 이 번호는 메시지 파일의 문구를 가리킵니다. msobjs.dll 메시지 표의 문구는 다음과 같습니다.
 
 | 번호 | 문구 |
 |---|---|
@@ -131,7 +131,7 @@ XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파�
 
 ### Microsoft 예시
 
-[1] 에 실린 4720 예시 가운데 일부입니다. 검체에서 나온 값이 아닙니다. 예시의 새 계정은 도메인 계정입니다.
+[1] 에 실린 4720 예시 가운데 일부입니다. 실제 기록에서 나온 값이 아닙니다. 예시의 새 계정은 도메인 계정입니다.
 
 | 항목 | 값 |
 |---|---|
@@ -143,26 +143,26 @@ XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파�
 | NewUacValue | `0x15` |
 | UserAccountControl | `%%2080 %%2082 %%2084` |
 
-예시 XML 의 LogonHours 값 `%%1793` 은 메시지 표에서 `<value not set>` 입니다. 새 도메인 계정이면 Logon Hours 가 `<value not set>`, 새 로컬 계정이면 "All" 입니다[1]. 도메인 계정 예시이므로 설명과 맞습니다. Logon Hours 값을 읽을 때는 로컬 계정인지 도메인 계정인지 먼저 가립니다.
+예시 XML 의 LogonHours 값 `%%1793` 은 메시지 표에서 `<value not set>` 입니다. 새 도메인 계정이면 Logon Hours 가 `<value not set>`, 새 로컬 계정이면 "All" 입니다[1]. 도메인 계정 예시이므로 설명과 맞습니다. Logon Hours 값을 읽을 때는 로컬 계정인지 도메인 계정인지 먼저 확인합니다.
 
-### 다른 사용자 계정 이벤트의 칸
+### 다른 사용자 계정 이벤트의 필드
 
-아래 표는 공급자 매니페스트의 칸 목록입니다.
+아래 표는 공급자 매니페스트의 필드 목록입니다.
 
-| ID | 칸 |
+| ID | 필드 |
 |---|---|
-| 4722 · 4725 · 4724 · 4740 · 4767 | TargetUserName, TargetDomainName, TargetSid, Subject 네 칸 |
-| 4723 · 4726 | 위 칸 + PrivilegeList |
-| 4738 | 맨 앞에 Dummy 칸이 있고, 그 뒤는 4720 과 같은 속성 칸 목록 |
-| 4781 | OldTargetUserName, NewTargetUserName, TargetDomainName, TargetSid, Subject 네 칸, PrivilegeList |
-| 4798 | Target 세 칸, Subject 네 칸, CallerProcessId, CallerProcessName |
+| 4722 · 4725 · 4724 · 4740 · 4767 | TargetUserName, TargetDomainName, TargetSid, Subject 필드 네 개 |
+| 4723 · 4726 | 위 필드 + PrivilegeList |
+| 4738 | 맨 앞에 Dummy 필드가 있고, 그 뒤는 4720 과 같은 속성 필드 목록 |
+| 4781 | OldTargetUserName, NewTargetUserName, TargetDomainName, TargetSid, Subject 필드 네 개, PrivilegeList |
+| 4798 | Target 필드 세 개, Subject 필드 네 개, CallerProcessId, CallerProcessName |
 
-### 4732 칸
+### 4732 필드
 
-| XML 칸 | 뜻 | 읽을 때 주의 |
+| XML 필드 | 뜻 | 읽을 때 주의 |
 |---|---|---|
 | MemberName | 더해진 구성원의 고유 이름 (DN, 예: `CN=○○,CN=Users,DC=○○`) | 로컬 그룹이면 보통 `-` 입니다. 새 구성원이 도메인 계정이어도 그렇습니다 |
-| MemberSid | 더해진 구성원 SID | 누가 더해졌는지는 이 칸으로 봅니다 |
+| MemberSid | 더해진 구성원 SID | 누가 더해졌는지는 이 필드로 봅니다 |
 | TargetUserName | 그룹 이름 | 더해진 계정이 아닙니다 |
 | TargetDomainName | 그룹 도메인 | 기본 제공 그룹이면 `Builtin` 입니다 |
 | TargetSid | 그룹 SID | |
@@ -176,7 +176,7 @@ XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파�
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
 | 기록 시각에 이 이름·SID 의 계정이 만들어졌다는 것 (4720) | 그 요청을 한 계정 뒤에 있던 사람이 누구인지 |
-| 계정을 만든 요청이 어느 계정·로그온 세션에서 왔는지 (4720 의 Subject) | 어떤 프로그램으로 만들었는지. 4720 칸 목록에 프로그램 칸이 없습니다 |
+| 계정을 만든 요청이 어느 계정·로그온 세션에서 왔는지 (4720 의 Subject) | 어떤 프로그램으로 만들었는지. 4720 필드 목록에 프로그램 필드가 없습니다 |
 | 만들 때의 계정 속성과 플래그 (4720) | 만든 계정으로 그 뒤에 로그온했는지 (4624 에서 따로 봅니다) |
 | 기록 시각에 계정 속성이 바뀌었다는 것 (4738) | 감사가 꺼져 있던 기간이나 로그가 밀려난 기간에 계정 변경이 없었다는 것 |
 | 이 SID 의 계정이 이 그룹에 더해졌다는 것 (4732) | 더해진 계정이 그 권한을 실제로 썼는지 |
@@ -205,21 +205,21 @@ XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파�
 ## 시각 해석
 
 - 4720 의 기록 시각은 계정이 만들어진 때이고, 4738 은 계정이 바뀐 때, 4732 는 구성원이 더해진 때입니다.
-- 4720 의 PasswordLastSet 칸은 이벤트 시각과 따로 적힌 값이며, 이 값이 미래 시각이면 살펴봅니다[1].
+- 4720 의 PasswordLastSet 필드는 이벤트 시각과 따로 적힌 값이며, 이 값이 미래 시각이면 살펴봅니다[1].
 - 레코드의 기록 시각을 저장하는 형식은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 방법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md)에서 다룹니다.
 - 보안 로그는 크기 한도에 이르면 오래된 기록부터 밀려나서 약 2일치만 남기도 합니다. 오래전에 만든 계정의 4720 은 남아 있지 않을 때가 많습니다.
 
 ## 함정과 한계
 
-1. **4732 의 TargetUserName 을 더해진 계정으로 읽습니다.** 이 칸은 그룹 이름입니다. 더해진 계정은 MemberSid 로 봅니다.
+1. **4732 의 TargetUserName 을 더해진 계정으로 읽습니다.** 이 필드는 그룹 이름입니다. 더해진 계정은 MemberSid 로 봅니다.
 2. **MemberName 이 `-` 라서 구성원을 모른다고 봅니다.** 로컬 그룹이면 MemberName 은 보통 `-` 입니다. MemberSid 를 [사용자 프로필 목록](../system-account/profilelist.md)이나 다른 이벤트의 SID 와 맞춥니다.
 3. **4735 하나를 그룹 조작으로 봅니다.** 4732 앞에는 아무것도 바뀌지 않은 4735 가 보통 먼저 보입니다.
-4. **4738 이 있으면 사람이 계정을 바꿨다고 봅니다.** Subject 가 S-1-5-18 (SYSTEM) 인 4738 도 있습니다. RID 1001 계정을 대상으로, `-` 가 아닌 속성 칸이 DisplayName 하나뿐이고 Old·New UAC 가 `-` 인 4738 이 4건 남는 경우가 있습니다. 사용자 조작 없이 SYSTEM 이 표시 이름을 바꾼 기록으로 보입니다.
-5. **4720 과 함께 4722·4738 이 반드시 남는다고 봅니다.** 계정을 만들 때 4722·4738 이 함께 남는다는 설명이 있습니다. [1] 에는 이 내용이 없으므로 검체에서 직접 확인합니다.
+4. **4738 이 있으면 사람이 계정을 바꿨다고 봅니다.** Subject 가 S-1-5-18 (SYSTEM) 인 4738 도 있습니다. RID 1001 계정을 대상으로, `-` 가 아닌 속성 필드가 DisplayName 하나뿐이고 Old·New UAC 가 `-` 인 4738 이 4건 남는 경우가 있습니다. 사용자 조작 없이 SYSTEM 이 표시 이름을 바꾼 기록으로 보입니다.
+5. **4720 과 함께 4722·4738 이 반드시 남는다고 봅니다.** 계정을 만들 때 4722·4738 이 함께 남는다는 설명이 있습니다. [1] 에는 이 내용이 없으므로 실제 기록으로 직접 확인합니다.
 6. **New UAC Value 를 액티브 디렉터리 기준으로 풉니다.** 이 값은 SAM 쪽 계정 플래그입니다. userAccountControl 과 정의가 다릅니다.
-7. **컴퓨터 계정의 기록을 사용자 계정으로 읽습니다.** 4722·4725·4724·4781 같은 이벤트는 컴퓨터 계정에도 생깁니다. TargetSid 와 TargetUserName 으로 어떤 계정인지 먼저 가립니다.
-8. **분석 PC 의 매니페스트를 검체에 그대로 씁니다.** 검체의 Windows 버전이 다르면 이벤트 버전과 칸 구성이 다를 수 있습니다. 레코드의 Version 값을 먼저 봅니다.
+7. **컴퓨터 계정의 기록을 사용자 계정으로 읽습니다.** 4722·4725·4724·4781 같은 이벤트는 컴퓨터 계정에도 생깁니다. TargetSid 와 TargetUserName 으로 어떤 계정인지 먼저 확인합니다.
+8. **분석 PC 의 매니페스트를 분석 대상에 그대로 씁니다.** 분석 대상의 Windows 버전이 다르면 이벤트 버전과 필드 구성이 다를 수 있습니다. 레코드의 Version 값을 먼저 봅니다.
 
 ### 지우기와 조작
 
@@ -232,7 +232,7 @@ XML 에는 `%%1794` 꼴의 값이 들어갑니다. 이 번호는 메시지 파�
 
 ### 헥스로 한 번
 
-Microsoft 예시의 NewUacValue `0x15` 를 손으로 풀어 봅니다. 이 값은 문서 예시이며 검체에서 나온 값이 아닙니다.
+Microsoft 예시의 NewUacValue `0x15` 를 손으로 풀어 봅니다. 이 값은 문서 예시이며 실제 기록에서 나온 값이 아닙니다.
 
 ```
 0x15 = 0001 0101 (2진)
@@ -266,7 +266,7 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Security.evtx'; Id = 4732 } | F
 }
 ```
 
-칸 구성은 공급자 매니페스트에서 확인할 수 있습니다.
+필드 구성은 공급자 매니페스트에서 확인할 수 있습니다.
 
 ```powershell
 (Get-WinEvent -ListProvider Microsoft-Windows-Security-Auditing).Events |
@@ -300,17 +300,17 @@ auditpol /get /subcategory:{0CCE9237-69AE-11D9-BED3-505054503030} /r
 **직접 만든 Windows 10·11 가상 머신**에서 해 봅니다. 각 단계의 시각을 적어 둡니다.
 
 1. 위 `auditpol` 명령으로 두 하위 범주의 설정을 봅니다. 꺼져 있으면 `/set ... /success:enable /failure:enable` 로 켭니다.
-2. 로컬 계정을 하나 만듭니다. 4720 의 속성 칸을 위 "흔한 값" 표와 비교합니다.
+2. 로컬 계정을 하나 만듭니다. 4720 의 속성 필드를 위 "흔한 값" 표와 비교합니다.
 3. 같은 시각 무렵에 4722·4738 이 함께 남는지 봅니다.
 4. 그 계정을 Administrators 그룹에 넣습니다. 4735 와 4732 가 어떤 순서로 남는지, MemberName 이 `-` 인지 봅니다.
 5. 계정 이름을 바꾸고 4781 을, 계정을 지우고 4726 을 봅니다. 모든 이벤트를 TargetSid 로 묶어 봅니다.
 6. 새 계정으로 한 번 로그온한 뒤 NTUSER.DAT 의 생성 시각과 4720 의 시각을 비교합니다.
 
-**NIST CFReDS 같은 공개 검체**에서는 다음을 풀어 봅니다.
+**NIST CFReDS 같은 공개 시험 자료**에서는 다음을 풀어 봅니다.
 
 1. 보안 로그에 4720 이 있습니까? 없다면 감사 설정과 로그가 남아 있는 기간부터 확인합니다.
 2. 4732 에서 기본 제공 Administrators 그룹에 더해진 MemberSid 가 있습니까? 그 SID 는 SAM 의 어느 계정입니까?
-3. 4738 의 Subject 가 SYSTEM 인 기록과 사용자 계정인 기록을 나눕니다. 각각 어떤 칸이 `-` 가 아닙니까?
+3. 4738 의 Subject 가 SYSTEM 인 기록과 사용자 계정인 기록을 나눕니다. 각각 어떤 필드가 `-` 가 아닙니까?
 
 ## 참고 문헌
 

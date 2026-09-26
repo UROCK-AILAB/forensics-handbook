@@ -26,7 +26,7 @@ Echap 의 stalkerware-indicators 저장소는 Android 와 iOS 감시 앱의 지�
 | `samples.csv` | 샘플 해시, 패키지 이름, 인증서, 버전 |
 | `generated/` 아래 | `hosts`, `hosts_full`, `quad9_blocklist.txt`, `stalkerware.stix2`, `suricata.rules`, `misp_event.json`, `indicators-for-tinycheck.json`, `network.csv` |
 
-`generated/` 아래 파일은 이름으로 보아 hosts 파일, STIX, Suricata 규칙, MISP 이벤트 같은 형식입니다. APK 해시와 인증서를 이 목록과 맞추는 방법은 [APK 확인](apk-check.md) 에 있습니다.
+`generated/` 아래 파일은 이름으로 보면 hosts 파일, STIX, Suricata 규칙, MISP 이벤트 같은 형식입니다. APK 해시와 인증서를 이 목록과 맞추는 방법은 [APK 확인](apk-check.md) 에 있습니다.
 
 ## 절차
 
@@ -44,7 +44,7 @@ Echap 의 stalkerware-indicators 저장소는 Android 와 iOS 감시 앱의 지�
 
 `dumpsys usagestats` 이벤트에는 아래 종류가 있습니다.
 
-| 이벤트 종류 | 함께 나오는 칸 |
+| 이벤트 종류 | 함께 나오는 필드 |
 |---|---|
 | `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP` | time, type, package, class, flags |
 | `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED` | package, class, instanceId, taskRootPackage, taskRootClass |
@@ -54,17 +54,17 @@ Echap 의 stalkerware-indicators 저장소는 Android 와 iOS 감시 앱의 지�
 | `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN` | — |
 | `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE` | — |
 
-같은 출력의 "In-memory daily stats" 에는 패키지마다 `totalTimeUsed`, `lastTimeUsed`, `totalTimeVisible`, `lastTimeVisible`, `lastTimeComponentUsed`, `totalTimeFS` 칸이 있습니다.
+같은 출력의 "In-memory daily stats" 에는 패키지마다 `totalTimeUsed`, `lastTimeUsed`, `totalTimeVisible`, `lastTimeVisible`, `lastTimeComponentUsed`, `totalTimeFS` 필드가 있습니다.
 
 화면에 한 번도 보이지 않았는데 포그라운드 서비스 시작·종료 이벤트만 되풀이되는 패키지는 살펴볼 후보로 삼을 수 있습니다. 이는 추론이라서 후보를 고르는 데만 쓰고 결론의 근거로 쓰지 않습니다. dumpsys 출력의 `time` 값은 한글이 섞인 현지 표기로 찍히고, 이벤트 시각의 기준과 보존 기간은 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 봅니다.
 
 ### 알림 기록
 
-`dumpsys notification` 의 NotificationRecord 에는 `pkg`, `importance`, `key`, `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs` 칸이 있습니다. 늘 떠 있는 알림을 띄우는 앱을 찾을 때 이 칸들로 패키지와 알림이 만들어진 때를 볼 수 있습니다. dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md), 지난 알림은 [알림 기록](../../../02-artifacts/app-usage/notification-history.md) 페이지에 있습니다.
+`dumpsys notification` 의 NotificationRecord 에는 `pkg`, `importance`, `key`, `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs` 필드가 있습니다. 늘 떠 있는 알림을 띄우는 앱을 찾을 때 이 필드들로 패키지와 알림이 만들어진 때를 볼 수 있습니다. dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md), 지난 알림은 [알림 기록](../../../02-artifacts/app-usage/notification-history.md) 페이지에 있습니다.
 
 ### 계정 기록
 
-`dumpsys account` 에는 "Accounts History" 절이 있고, 칸 순서는 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다. 동작 값으로는 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 나옵니다. 칸 이름으로 보아 UID 칸으로 어느 앱이 계정 동작을 불렀는지 좁혀 볼 수 있을 것으로 보입니다. 계정 기록의 해석은 [계정](../../../02-artifacts/system-account/accounts/index.md) 페이지에 있습니다.
+`dumpsys account` 에는 "Accounts History" 절이 있고, 필드 순서는 `AccountId, Action_Type, timestamp, UID, TableName, Key` 입니다. 동작 값으로는 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 나옵니다. 필드 이름으로 보면 UID 필드로 어느 앱이 계정 동작을 불렀는지 좁혀 볼 수 있을 것으로 보입니다. 계정 기록의 해석은 [계정](../../../02-artifacts/system-account/accounts/index.md) 페이지에 있습니다.
 
 ## 도구
 
@@ -74,7 +74,7 @@ stalkerware-indicators 는 파일을 내려받아 패키지 이름·해시·인�
 
 지표 목록은 누군가 찾아 올린 앱만 담습니다. 목록에 없다는 사실은 감시 앱이 없다는 뜻이 아니고, 새로 나온 앱이나 이름을 바꾼 변종은 빠져 있을 수 있어서 권한·설정과 활동 흔적을 함께 봐야 합니다.
 
-`watchware.yaml` 의 앱은 숨지 않는 감시 앱이라, 걸렸다고 해서 몰래 설치했다는 뜻은 아닙니다. 당사자가 알고 쓰는 앱일 수도 있어서, 누가 설치했고 당사자가 알았는지는 다른 기록으로 가려야 합니다.
+`watchware.yaml` 의 앱은 숨지 않는 감시 앱이라, 걸렸다고 해서 몰래 설치했다는 뜻은 아닙니다. 당사자가 알고 쓰는 앱일 수도 있어서, 누가 설치했고 당사자가 알았는지는 다른 기록으로 판별해야 합니다.
 
 런처에 아이콘이 없다고 해서 설치되지 않았다고 보지 않습니다. 설치 여부는 패키지 목록으로 확인합니다.
 

@@ -19,7 +19,7 @@ ChatGPT 와 Copilot 이 대화를 기기에 평문으로 두는 것과 달리, G
 
 Google 앱을 기본 어시스턴트 앱으로 둔 휴대폰에서는 Gemini 를 모바일 어시스턴트로 고를 수 있고, 고르면 Google Assistant 대신 Gemini 가 답합니다 [2]. 휴대폰이 아닌 기기에서는 "Hey Google" 에 계속 Google Assistant 가 답합니다 [2]. 여는 길도 여럿이라 전원 버튼 길게 누르기, "Hey Google", 화면 아래 모서리에서 위로 쓸기, Gemini 앱을 직접 여는 방법이 있습니다 [2].
 
-Gemini 가 모으는 항목 가운데 휴대폰과 관련된 것은 통화·메시지 기록, 연락처, 설치된 앱, 언어 같은 기기 정보입니다 [1]. 위치는 기기·IP·계정의 집·직장 주소로 대략 잡습니다 [1]. 이 항목들은 서버 쪽에 모이는 데이터라서 기기에 어떤 모양으로 남는지는 검체로 확인해야 합니다.
+Gemini 가 모으는 항목 가운데 휴대폰과 관련된 것은 통화·메시지 기록, 연락처, 설치된 앱, 언어 같은 기기 정보입니다 [1]. 위치는 기기·IP·계정의 집·직장 주소로 대략 잡습니다 [1]. 이 항목들은 서버 쪽에 모이는 데이터라서 기기에 어떤 모양으로 남는지는 실제 기기로 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
@@ -33,15 +33,15 @@ Gemini 가 모으는 항목 가운데 휴대폰과 관련된 것은 통화·메�
 | 필요 조건 | Gemini 를 쓸 수 있는 개인 계정 또는 회사·학교 계정 로그인, 지원 언어·국가의 기기 | [2] |
 | 나이 제한 | Family Link 로 13세 미만(나라마다 나이 기준 다름) 사용을 끌 수 있음 | [2] |
 
-SwitchAI 의 액티비티 이름은 2026-03-29 판 코드 기준입니다 [4]. Google 앱 판이 바뀌면 이름도 바뀔 수 있어서, 검체의 앱 판에서 다시 확인합니다.
+SwitchAI 의 액티비티 이름은 2026-03-29 판 코드 기준입니다 [4]. Google 앱 판이 바뀌면 이름도 바뀔 수 있어서, 분석 대상 기기의 앱 판에서 다시 확인합니다.
 
-Gemini 앱 폴더는 `/data/data/com.google.android.apps.bard/` 입니다. LEAF 저장소의 기록에는 Android 15 기기에서 2026-04-20 에 뽑은 이 폴더에 SQLite 데이터베이스가 하나도 없었고, 파일 13개가 모두 웹뷰(WebView) 캐시와 미리 컴파일한 OAT 파일이었다고 적혀 있습니다 [5]. 같은 저장소의 README 는 Gemini 를 "SQLite 안에 Protocol Buffer 로 인코딩" 한다고 적어 두 문서가 서로 어긋납니다 [5]. 이 저장소는 학생 과제 수준이라 두 기록 모두 검체로 다시 확인하고, 어느 쪽이든 대화 전문이 앱 폴더에 있다는 근거로 쓰지 않습니다.
+Gemini 앱 폴더는 `/data/data/com.google.android.apps.bard/` 입니다. LEAF 저장소의 기록에는 Android 15 기기에서 2026-04-20 에 뽑은 이 폴더에 SQLite 데이터베이스가 하나도 없었고, 파일 13개가 모두 웹뷰(WebView) 캐시와 미리 컴파일한 OAT 파일이었다고 적혀 있습니다 [5]. 같은 저장소의 README 는 Gemini 를 "SQLite 안에 Protocol Buffer 로 인코딩" 한다고 적어 두 문서가 서로 어긋납니다 [5]. 이 저장소는 학생 과제 수준이라 두 기록 모두 실제 기기로 다시 확인하고, 어느 쪽이든 대화 전문이 앱 폴더에 있다는 근거로 쓰지 않습니다.
 
-Google 앱 폴더 `/data/data/com.google.android.googlequicksearchbox/` 안에서 Gemini 대화가 어느 파일에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다. 웹뷰 캐시를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+Google 앱 폴더 `/data/data/com.google.android.googlequicksearchbox/` 안에서 Gemini 대화가 어느 파일에 남는지는 실제 기기로 확인해야 합니다. 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다. 웹뷰 캐시를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
 ## 구조
 
-Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google 앱 쪽에는 ALEAPP 이 읽는 파일이 두 종류 있고, 검색 위젯과 어시스턴트의 검색 세션, 최근 검색어를 담습니다 [6][7]. 두 분석기 모두 Gemini 를 언급하지 않아서, 이 파일에 Gemini 대화가 들어가는지는 검체에서 따로 확인합니다.
+Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google 앱 쪽에는 ALEAPP 이 읽는 파일이 두 종류 있고, 검색 위젯과 어시스턴트의 검색 세션, 최근 검색어를 담습니다 [6][7]. 두 분석기 모두 Gemini 를 언급하지 않아서, 이 파일에 Gemini 대화가 들어가는지는 실제 데이터로 따로 확인합니다.
 
 | 경로(Google 앱 폴더 안) | 형식 | ALEAPP 이 꺼내는 것 | 근거 |
 |---|---|---|---|
@@ -63,7 +63,7 @@ Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google �
 
 Gemini 대화의 메시지 단위 시각은 서버 기록에 있어서 [계정 데이터 내보내기](export.md)로 받아 맞춰 봅니다 [3]. 설치 시각과 앱 실행 시각은 Android 의 일반 기록을 따르고 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
-Google 앱 쪽 파일의 시각은 파일마다 뜻이 다릅니다. `app_session/*.binarypb` 에는 ALEAPP 이 읽는 시각 필드가 없고, 분석기는 파일 수정 시각을 UTC 로 바꿔 "File Timestamp" 칸에 넣습니다 [6]. 그래서 이 값은 파일을 마지막으로 쓴 시각이고, 복사하면서 수정 시각이 바뀌면 틀어집니다. `RecentsDataStore.pb` 의 필드 `4` 는 1970년부터 센 밀리초로, ALEAPP 이 UTC 로 바꿔 "Timestamp" 칸에 넣습니다 [7]. 필드 `17` 은 이름만 "timestamp2" 로 붙어 있고 분석기가 뜻을 적지 않았습니다 [7].
+Google 앱 쪽 파일의 시각은 파일마다 뜻이 다릅니다. `app_session/*.binarypb` 에는 ALEAPP 이 읽는 시각 필드가 없고, 분석기는 파일 수정 시각을 UTC 로 바꿔 "File Timestamp" 열에 넣습니다 [6]. 그래서 이 값은 파일을 마지막으로 쓴 시각이고, 복사하면서 수정 시각이 바뀌면 틀어집니다. `RecentsDataStore.pb` 의 필드 `4` 는 1970년부터 센 밀리초로, ALEAPP 이 UTC 로 바꿔 "Timestamp" 열에 넣습니다 [7]. 필드 `17` 은 이름만 "timestamp2" 로 붙어 있고 분석기가 뜻을 적지 않았습니다 [7].
 
 ## 함정과 한계
 
@@ -73,11 +73,11 @@ Gemini 앱을 지운 뒤에도 Google 앱은 남아 있을 수 있고, Gemini �
 
 ALEAPP 의 Google 앱 분석기가 시험한 판도 오래됐습니다. `googleQuickSearchbox.py` 는 Android 13·14 의 Google 앱 버전 코드 301246250·301381725 에서 각각 2행·1행을 읽었다고 적었습니다 [6]. `googleQuickSearchboxRecent.py` 는 Android 10·13·14 이미지 7개에서 모두 0행이었다고 적었습니다 [7]. 지금 Google 앱 판에서는 파일 이름이나 필드 번호가 다를 수 있습니다.
 
-LEAF 기록은 기기 하나, 날짜 하루의 관찰이고 README 와 서로 어긋납니다 [5]. 앱 폴더에 데이터베이스가 없다는 기록은 참고로만 쓰고, 검체의 폴더 목록을 직접 봅니다.
+LEAF 기록은 기기 하나, 날짜 하루의 관찰이고 README 와 서로 어긋납니다 [5]. 앱 폴더에 데이터베이스가 없다는 기록은 참고로만 쓰고, 분석 대상 기기의 폴더 목록을 직접 봅니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** `app_session/*.binarypb` 를 헥스 편집기로 열면 protobuf 필드 머리가 보입니다. 필드 번호를 왼쪽으로 3비트 밀고 형식 번호(길이가 붙은 값은 2)를 더한 값을 varint 로 적은 것이 필드 머리라서, 필드 `3` 은 `1A`, 필드 `132269847` 은 `BA F1 C8 F8 03`, 필드 `132269388` 은 `E2 D4 C8 F8 03` 으로 시작합니다. 아래는 필드 머리 계산으로 만든 예시이고 실제 검체 값이 아닙니다.
+**헥스로 한 번.** `app_session/*.binarypb` 를 헥스 편집기로 열면 protobuf 필드 머리가 보입니다. 필드 번호를 왼쪽으로 3비트 밀고 형식 번호(길이가 붙은 값은 2)를 더한 값을 varint 로 적은 것이 필드 머리라서, 필드 `3` 은 `1A`, 필드 `132269847` 은 `BA F1 C8 F8 03`, 필드 `132269388` 은 `E2 D4 C8 F8 03` 으로 시작합니다. 아래는 필드 머리 계산으로 만든 예시이고 실제 기기의 값이 아닙니다.
 
 ```text
 1A 05 76 6F 69 63 65                          필드 3, 길이 5, "voice" (만든 예시)
@@ -100,7 +100,7 @@ BA F1 C8 F8 03 09 0A 07 12 05 68 65 6C 6C 6F  필드 132269847 > 1 > 2, "hello" 
 
 ## 실습
 
-Gemini 흔적을 담은 공개 Android 검체는 알려진 것이 없어서, 시험용 기기와 계정으로 아래 질문을 풀어 봅니다.
+Gemini 흔적을 담은 공개 Android 시험 이미지는 알려진 것이 없어서, 시험용 기기와 계정으로 아래 질문을 풀어 봅니다.
 
 1. Gemini 앱을 설치하고 한 번 대화한 뒤 Gemini 앱 폴더와 Google 앱 폴더 가운데 어느 쪽 파일의 수정 시각이 바뀝니까?
 2. 어시스턴트를 Gemini 로 바꾸기 전과 후에 달라지는 설정 파일이 있습니까?

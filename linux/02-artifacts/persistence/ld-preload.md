@@ -6,7 +6,7 @@ nav_order: 540
 
 # 공유 라이브러리 가로채기 (LD_PRELOAD·ld.so.preload)
 
-동적 링커가 프로그램보다 먼저 싣는 공유 라이브러리 목록은 환경 변수 `LD_PRELOAD` 와 파일 `/etc/ld.so.preload` 에 들어가고, 이 쪽은 그 목록이 어디에 남고 실제로 실렸는지를 어떻게 확인하는지 다룹니다.
+동적 링커가 프로그램보다 먼저 싣는 공유 라이브러리 목록은 환경 변수 `LD_PRELOAD` 와 파일 `/etc/ld.so.preload` 에 들어가고, 이 페이지는 그 목록이 어디에 남고 실제로 실렸는지를 어떻게 확인하는지 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -65,11 +65,11 @@ nav_order: 540
 - 라이브 시스템에서 `cat /etc/ld.so.preload` 가 아무것도 돌려주지 않아도 파일이 없다고 할 수 없습니다. 미리 실린 루트킷 라이브러리가 이 파일을 숨길 수 있어서, UAC 는 파일 시스템을 직접 읽는 방식으로 이 파일을 다시 꺼냅니다[5].
 - 누가 파일을 만들었는지, 라이브러리가 무엇을 했는지는 이 흔적만으로 알 수 없습니다. 작성자는 감사 로그·인증 로그와, 동작은 라이브러리 파일 자체를 분석해서 따로 확인합니다.
 
-보고서에는 "이 시각 이후 `/etc/ld.so.preload` 에 이 경로가 적혀 있었고, 수집 시점에 PID 1234 프로세스의 매핑에 같은 파일이 있었다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "이 시각 이후 `/etc/ld.so.preload` 에 이 경로가 적혀 있었고, 수집 시점에 PID 1234 프로세스의 매핑에 같은 파일이 있었다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
-`/etc/ld.so.preload` 와 목록의 `.so` 파일에는 이 목록만의 시각 값이 없고, 파일 시스템의 아이노드 시각을 씁니다. mtime 은 내용을 쓸 때, ctime 은 내용을 쓰거나 소유자·권한·링크 수 같은 아이노드 정보를 바꿀 때 바뀌고, 생성 시각(btime)은 만들 때 정한 뒤 바뀌지 않습니다[3]. 이 값들은 UTC 기준 epoch 에서 센 값이라 시간대가 붙지 않습니다[3]. 생성 시각을 어디에 두는지는 [ext4](../../01-foundations/filesystem/ext4/index.md)·[XFS](../../01-foundations/filesystem/xfs.md) 쪽에서, 값 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+`/etc/ld.so.preload` 와 목록의 `.so` 파일에는 이 목록만의 시각 값이 없고, 파일 시스템의 아이노드 시각을 씁니다. mtime 은 내용을 쓸 때, ctime 은 내용을 쓰거나 소유자·권한·링크 수 같은 아이노드 정보를 바꿀 때 바뀌고, 생성 시각(btime)은 만들 때 정한 뒤 바뀌지 않습니다[3]. 이 값들은 UTC 기준 epoch 에서 센 값이라 시간대가 붙지 않습니다[3]. 생성 시각을 어디에 두는지는 [ext4](../../01-foundations/filesystem/ext4/index.md)·[XFS](../../01-foundations/filesystem/xfs.md) 페이지에서, 값 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 dissect 의 `environ` 기록에 붙는 `ts` 는 procfs 의 `environ` 파일 수정 시각입니다[7]. procfs 가 내는 값이라서 환경 변수를 넣은 시각으로 읽지 않습니다. 프로세스가 언제 시작했는지는 [실행 중인 프로세스](../execution/proc.md)에서 다룹니다.
 
@@ -132,11 +132,11 @@ vol -f memory.lime linux.library_list --pids 1234
 | [루트킷 찾기](../../03-techniques/analysis/rootkit-detection.md) | 숨김이 있는지 라이브·이미지 결과를 맞춰 보는 방법 |
 | [라이브 응답 수집](../../03-techniques/acquisition/live-response.md) | 수집 도구 자신이 영향을 받지 않게 모으는 순서 |
 
-지속성 흔적 전체를 한 번에 훑는 흐름은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md)에서 다룹니다.
+지속성 흔적 전체를 한 번에 살펴보는 흐름은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md)에서 다룹니다.
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 Linux 침해 이미지나 메모리 이미지로 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 이미지 가운데 Linux 침해 이미지나 메모리 이미지로 아래 질문을 풀어 봅니다.
 
 1. `/etc/ld.so.preload` 가 있는가. 있다면 적힌 경로를 헥스로 보고, 공백이 아닌 구분 문자가 섞였는지 확인합니다.
 2. 목록의 `.so` 파일과 `/etc/ld.so.preload` 의 mtime·ctime·생성 시각은 서로 어떤 순서인가. 같은 시간대에 다른 지속성 흔적이 생겼는가.

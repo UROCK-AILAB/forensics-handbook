@@ -33,9 +33,9 @@ Sysmon (System Monitor) 은 설정 파일이 정한 시스템 활동을 Windows 
 | 채널 (Vista 이후) | Microsoft-Windows-Sysmon/Operational |
 | 이벤트 뷰어 위치 | 응용 프로그램 및 서비스 로그 > Microsoft > Windows > Sysmon > Operational |
 | Vista 이전 OS | System 로그에 씁니다 |
-| 로그 파일 | `%SystemRoot%\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx` (채널 이름 규칙에서 나온 경로라 검체에서 확인합니다) |
-| 시각 | UTC. 이벤트마다 UtcTime 칸이 있습니다 |
-| 이벤트 종류 표시 | 이벤트 뷰어의 "작업 범주" 칸에 아래 필터 태그 이름이 보입니다 |
+| 로그 파일 | `%SystemRoot%\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx` (채널 이름 규칙에서 나온 경로라 실제 시스템에서 확인합니다) |
+| 시각 | UTC. 이벤트마다 UtcTime 필드가 있습니다 |
+| 이벤트 종류 표시 | 이벤트 뷰어의 "작업 범주" 열에 아래 필터 태그 이름이 보입니다 |
 | 무엇을 남길지 | 설정 파일이 정합니다 |
 
 로그 파일 경로의 근거, 설치 흔적, 채널 기본값은 [Sysmon 개념과 설정 확인](sysmon-config.md)에서 다룹니다. EVTX 파일 형식은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
@@ -101,7 +101,7 @@ v15.22 기준입니다. 필터 태그는 설정 파일에서 이벤트를 가리
 
 1. [Sysmon 개념과 설정 확인 (Sysmon Config)](sysmon-config.md) — 설치 흔적, 설정이 남는 레지스트리 값, 설정 파일 읽는 법, 이벤트 4·16·255 를 다룹니다. 다른 이벤트를 읽기 전에 기록 범위부터 이 페이지로 확인합니다.
 2. [프로세스 생성 (이벤트 1)](1.md) — 명령줄, 해시, 부모 프로세스를 읽습니다. ProcessGuid 로 프로세스 나무를 잇고, 종료 이벤트 5 로 실행 시간을 구합니다.
-3. [네트워크 연결·DNS 질의 (이벤트 3·22)](3-22.md) — 어느 프로세스가 어디로 연결하고 어떤 이름을 물었는지 읽습니다. 호스트 이름 칸을 역방향 조회로 채운다는 점을 조심합니다.
+3. [네트워크 연결·DNS 질의 (이벤트 3·22)](3-22.md) — 어느 프로세스가 어디로 연결하고 어떤 이름을 물었는지 읽습니다. 호스트 이름 필드를 역방향 조회로 채운다는 점을 조심합니다.
 4. [파일 생성·삭제 (이벤트 11·23·26)](11-23-26.md) — 파일을 만들고 지운 프로세스를 찾고, 보관 폴더의 지운 파일 사본을 찾습니다. 이벤트 2·15·27~29 도 함께 봅니다.
 5. [레지스트리 변경 (이벤트 12·13·14)](12-13-14.md) — 키·값의 생성, 삭제, 수정, 이름 바꿈을 읽습니다. Sysmon 이 루트 키를 줄여 적는 방식도 다룹니다.
 6. [이미지 로드·프로세스 접근 (이벤트 7·8·10)](7-8-10.md) — 올라온 모듈, 다른 프로세스 열기, 원격 스레드 생성을 읽습니다. 드라이버 로드 (6) 와 GrantedAccess 비트를 푸는 법도 다룹니다.
@@ -113,7 +113,7 @@ v15.22 기준입니다. 필터 태그는 설정 파일에서 이벤트를 가리
 - [프로세스 생성 (4688)](../4688.md) — Sysmon 이 없거나 꺼져 있던 구간의 실행 기록을 보안 로그에서 찾습니다.
 - [이벤트 로그 삭제](../1102-104.md) · [서비스 설치](../7045-4697.md) — Sysmon 채널을 지운 흔적과 Sysmon 을 설치한 흔적을 찾습니다.
 - [서비스·드라이버](../../persistence/services-drivers.md) — Sysmon 서비스 키와 드라이버 키를 읽습니다.
-- [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) — 여러 대의 Sysmon 로그를 규칙으로 훑습니다.
+- [이벤트 로그 규칙 검색](../../../03-techniques/analysis/sigma-rules.md) — 여러 대의 Sysmon 로그를 규칙으로 검색합니다.
 - [타임라인 작성](../../../03-techniques/analysis/timeline/index.md) — Sysmon 이벤트를 다른 기록과 한 줄로 놓습니다.
 - [어떤 프로그램을 언제 실행했나](../../../04-scenarios/activity/program-execution.md) · [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) · [계정 탈취와 측면 이동](../../../04-scenarios/incident/credential-theft-lateral-movement/index.md) — 조사에서 Sysmon 로그를 다른 흔적과 함께 읽는 순서입니다.
 - [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) — Sysmon 을 멈추거나 로그를 지운 흔적을 다른 흔적과 모아 판단합니다.

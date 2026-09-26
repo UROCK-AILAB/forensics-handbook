@@ -24,7 +24,7 @@ Apple silicon 맥과 T2 맥은 파일볼트 키를 전부 보안 영역(Secure E
 | 파일볼트 꺼짐 | 암호화돼 있음 | 보안 영역 안의 하드웨어 UID만 |
 | 파일볼트 켜짐 | 암호화돼 있음 | 사용자 암호와 하드웨어 UID를 합친 값 |
 
-파일볼트가 꺼져 있어도 볼륨은 암호화돼 있고, 볼륨 암호화 키는 보안 영역 안의 하드웨어 UID로만 보호됩니다 [1]. 파일볼트를 켤 때는 재사용 방지(anti-replay) 장치가 있어서 하드웨어 UID만으로 만든 옛 키로는 볼륨을 풀 수 없고, 볼륨을 지우면 보안 영역이 그 볼륨의 암호화 키를 안전하게 삭제합니다 [1]. 지운 볼륨은 이미징해도 복구를 기대하기 어렵다고 판단합니다. 시스템·데이터 볼륨 암호화는 macOS 10.15 Catalina와 macOS 11 Big Sur 이후 판에 해당하는 내용이고 [1], 버전별 세부 차이는 판마다 다를 수 있어 검체의 macOS 버전에 맞춰 확인합니다. 키 구조 자체는 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md), 볼륨 배치는 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../../../01-foundations/disk-volume/volume-group-firmlinks.md)에서 다룹니다.
+파일볼트가 꺼져 있어도 볼륨은 암호화돼 있고, 볼륨 암호화 키는 보안 영역 안의 하드웨어 UID로만 보호됩니다 [1]. 파일볼트를 켤 때는 재사용 방지(anti-replay) 장치가 있어서 하드웨어 UID만으로 만든 옛 키로는 볼륨을 풀 수 없고, 볼륨을 지우면 보안 영역이 그 볼륨의 암호화 키를 안전하게 삭제합니다 [1]. 지운 볼륨은 이미징해도 복구를 기대하기 어렵다고 판단합니다. 시스템·데이터 볼륨 암호화는 macOS 10.15 Catalina와 macOS 11 Big Sur 이후 판에 해당하는 내용이고 [1], 버전별 세부 차이는 판마다 다를 수 있어 분석 대상 맥의 macOS 버전에 맞춰 확인합니다. 키 구조 자체는 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md), 볼륨 배치는 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../../../01-foundations/disk-volume/volume-group-firmlinks.md)에서 다룹니다.
 
 ## 칩에 따라 다른 부팅 제한
 

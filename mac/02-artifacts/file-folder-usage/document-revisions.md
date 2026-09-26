@@ -6,7 +6,7 @@ nav_order: 900
 
 # 문서 버전 (DocumentRevisions-V100)
 
-버전 기능을 지원하는 앱이 문서를 저장할 때마다 macOS 는 볼륨 루트의 숨김 폴더 `.DocumentRevisions-V100` 에 그 시점의 버전을 쌓아 두고, 그 안의 데이터베이스에 파일 경로와 버전이 추가된 시각이 남아서 문서가 언제 어떤 모습으로 저장됐는지 되짚을 수 있습니다.
+버전 기능을 지원하는 앱이 문서를 저장할 때마다 macOS 는 볼륨 루트의 숨김 폴더 `.DocumentRevisions-V100` 에 그 시점의 버전을 쌓아 두고, 그 안의 데이터베이스에 파일 경로와 버전이 추가된 시각이 남아서 문서가 언제 어떤 모습으로 저장됐는지 거슬러 올라가 찾을 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -43,15 +43,15 @@ iOS 이미지에서는 `/private/var/mobile/.DocumentRevisions-V100/db-V1/db.sql
 | 10.15 Catalina 이후 | 시스템 볼륨 루트와 `/System/Volumes/Data` 두 곳을 모두 찾아야 함 | [2] |
 | 10.15 Catalina 까지 | Time Machine 이 이 폴더를 백업했지만 제대로 복원하지는 못함 | [1] |
 | 15 Sequoia (15.6.1) | 사용자별 번호 폴더가 든 `PerUID` 가 보인다는 독자 댓글. 댓글이라 믿을 정도가 낮음 | [1] |
-| 검체에서 확인 | 썸네일 파일이 `thumbnail.png` 인지 `thumbnail.jpeg` 인지가 macOS 버전에 따라 갈리는지 | [2] |
+| 실제 데이터로 확인 | 썸네일 파일이 `thumbnail.png` 인지 `thumbnail.jpeg` 인지가 macOS 버전에 따라 갈리는지 | [2] |
 
 ## 구조
 
 ### 버전 데이터베이스 (db.sqlite)
 
-`db-V1/db.sqlite` 는 SQLite 파일이라서 읽는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따르고, 여기서는 버전 분석에 쓰는 표와 칸만 봅니다 [2].
+`db-V1/db.sqlite` 는 SQLite 파일이라서 읽는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따르고, 여기서는 버전 분석에 쓰는 표와 열만 봅니다 [2].
 
-| 표 | 칸 | 뜻 |
+| 표 | 열 | 뜻 |
 |---|---|---|
 | `files` | `file_inode` | 원본 파일의 inode |
 | | `file_path` | 원본 파일 경로 |
@@ -71,7 +71,7 @@ iOS 이미지에서는 `/private/var/mobile/.DocumentRevisions-V100/db-V1/db.sql
 
 버전 내용 일부는 `.cs` 아래 조각 저장소에 나뉘어 들어가고, 조각은 아래 두 표로 찾아 이어 붙입니다 [2].
 
-| 표 | 칸 | 뜻 |
+| 표 | 열 | 뜻 |
 |---|---|---|
 | `CSStorageChunkListTable` | `clt_rowid`, `clt_count` | 행 번호, 조각 개수 |
 | | `clt_inode` | 저장된 버전 파일의 inode 와 맞추는 값 |
@@ -95,9 +95,9 @@ iOS 이미지에서는 `/private/var/mobile/.DocumentRevisions-V100/db-V1/db.sql
 
 **증명하는 것.** `files` 에 경로가 있고 `generations` 에 버전이 딸려 있으면, 그 경로의 파일을 버전 기능을 지원하는 앱이 저장한 기록이 이 볼륨에 있다는 뜻입니다 [1][2]. 버전 파일이나 조각을 되살리면 그 시점의 내용을 직접 볼 수 있고, 버전이 여러 개면 문서가 어떤 순서로 바뀌어 왔는지 비교할 수 있습니다. 원본 파일이 이미 없어도 버전 파일의 확장 속성으로 원래 이름을 확인할 수 있습니다 [2].
 
-**증명하지 못하는 것.** 이 기록만으로는 어느 사용자 계정의 것인지 가리기 어렵습니다(사용자별 `PerUID` 폴더가 보인다는 독자 댓글이 있을 뿐입니다 [1]). 저장하지 않고 열어만 본 문서, 버전 기능을 지원하지 않는 앱으로 고친 문서는 이 기록에 나타나지 않을 수 있습니다. 반대로 기록이 없다고 해서 문서를 고친 적이 없다고 말할 수도 없는데, 원본 삭제·복제 뒤 이름 바꾸기·개별 삭제로 버전이 사라지기 때문입니다 [1]. 버전의 존재는 앱이 그 시각에 저장했다는 기록일 뿐이라서, 사람이 저장 단추를 눌렀는지 앱이 스스로 저장했는지는 따로 판단합니다.
+**증명하지 못하는 것.** 이 기록만으로는 어느 사용자 계정의 것인지 구분하기 어렵습니다(사용자별 `PerUID` 폴더가 보인다는 독자 댓글이 있을 뿐입니다 [1]). 저장하지 않고 열어만 본 문서, 버전 기능을 지원하지 않는 앱으로 고친 문서는 이 기록에 나타나지 않을 수 있습니다. 반대로 기록이 없다고 해서 문서를 고친 적이 없다고 말할 수도 없는데, 원본 삭제·복제 뒤 이름 바꾸기·개별 삭제로 버전이 사라지기 때문입니다 [1]. 버전의 존재는 앱이 그 시각에 저장했다는 기록일 뿐이라서, 사람이 저장 단추를 눌렀는지 앱이 스스로 저장했는지는 따로 판단합니다.
 
-보고서에는 "이 볼륨의 버전 데이터베이스에 이 경로의 파일 버전 N개가 있고, 버전이 추가된 시각은 아래와 같다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 볼륨의 버전 데이터베이스에 이 경로의 파일 버전 N개가 있고, 버전이 추가된 시각은 아래와 같다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -105,9 +105,9 @@ iOS 이미지에서는 `/private/var/mobile/.DocumentRevisions-V100/db-V1/db.sql
 |---|---|---|
 | `generation_add_time` | 유닉스 시각 (mac_apt `ReadUnixTime`) | UTC 로 출력 (`Generation_Added_UTC`) |
 | `file_last_seen` | 유닉스 시각 (mac_apt `ReadUnixTime`) | UTC 로 출력 (`File_Last_Seen_UTC`) |
-| `CSChunkTable.timeStamp` | 공개 자료 없음 | 검체에서 확인 |
+| `CSChunkTable.timeStamp` | 공개 자료 없음 | 실제 데이터로 확인 |
 
-두 시각 모두 유닉스 시각이고 UTC 로 읽습니다 [2]. `generation_add_time` 은 칸 이름과 mac_apt 출력 이름대로라면 버전이 추가된 시각이지만, `file_last_seen` 이 정확히 어떤 일이 있을 때 바뀌는지는 공개된 설명이 없어서 이름 그대로 "마지막으로 본 시각" 정도로만 적습니다. 값의 단위와 기준 시점은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 확인합니다. `timeStamp` 칸은 기준이 알려져 있지 않아서 다른 시각과 섞어 타임라인에 넣지 않습니다.
+두 시각 모두 유닉스 시각이고 UTC 로 읽습니다 [2]. `generation_add_time` 은 열 이름과 mac_apt 출력 이름대로라면 버전이 추가된 시각이지만, `file_last_seen` 이 정확히 어떤 일이 있을 때 바뀌는지는 공개된 설명이 없어서 이름 그대로 "마지막으로 본 시각" 정도로만 적습니다. 값의 단위와 기준 시점은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 확인합니다. `timeStamp` 열은 기준이 알려져 있지 않아서 다른 시각과 섞어 타임라인에 넣지 않습니다.
 
 ## 함정과 한계
 
@@ -125,7 +125,7 @@ iOS 이미지에서는 `/private/var/mobile/.DocumentRevisions-V100/db-V1/db.sql
 
 ### 헥스로 한 번
 
-아래 바이트는 mac_apt 가 읽는 조각 머리 구조에 맞춰 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. 조각 파일에서 `offset` 위치로 가면 이런 머리가 보입니다.
+아래 바이트는 mac_apt 가 읽는 조각 머리 구조에 맞춰 만든 예시이고, 실제 데이터에서 나온 값이 아닙니다. 조각 파일에서 `offset` 위치로 가면 이런 머리가 보입니다.
 
 ```
 조각 하나 (예시)
@@ -134,7 +134,7 @@ iOS 이미지에서는 `/private/var/mobile/.DocumentRevisions-V100/db-V1/db.sql
 .. .. .. .. .. .. ..                          내용 (32 - 25 = 7바이트)
 ```
 
-앞 4바이트 크기에서 25를 빼면 내용 길이가 나오고, 이 값을 `CSChunkTable` 의 `dataLen` 과 견주어 도구가 머리를 빼고 읽는지 확인합니다. `clt_chunkRowIDs` 는 리틀엔디언 8바이트 정수가 이어진 값이라서, 헥스로 볼 때는 8바이트씩 끊고 바이트 순서를 뒤집어 행 번호를 읽습니다 [2].
+앞 4바이트 크기에서 25를 빼면 내용 길이가 나오고, 이 값을 `CSChunkTable` 의 `dataLen` 과 비교해 도구가 머리를 빼고 읽는지 확인합니다. `clt_chunkRowIDs` 는 리틀엔디언 8바이트 정수가 이어진 값이라서, 헥스로 볼 때는 8바이트씩 끊고 바이트 순서를 뒤집어 행 번호를 읽습니다 [2].
 
 ### 공개 도구로 한 번
 
@@ -167,7 +167,7 @@ ORDER BY f.file_path, g.generation_add_time;
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 맥 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터 가운데 맥 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 이미지 안의 볼륨마다 `.DocumentRevisions-V100` 이 있나요? Catalina 이후 이미지라면 두 경로 가운데 어디에 있나요?
 2. `files` 에 나온 경로 가운데 지금 파일 시스템에 없는 파일은 몇 개인가요?

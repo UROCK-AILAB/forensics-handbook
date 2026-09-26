@@ -21,7 +21,7 @@ Secure Enclave 는 iPad, iPhone, Mac, Apple TV, Apple Vision Pro, Apple Watch, H
 
 UID 는 제조할 때 SoC 에 새기는 무작위 값이고, A9 부터는 제조 중에 SEP 의 난수 생성기로 만듭니다[2]. UID 와 GID 는 JTAG 같은 디버그 경로로도 볼 수 없고, SEP AES 엔진의 하드웨어 키는 엔진 안에 머물러 sepOS 에도 보이지 않습니다[2].
 
-칩 세대에 따라 더해진 기능이 다르니, 검체의 칩을 먼저 확인합니다.
+칩 세대에 따라 더해진 기능이 다르니, 분석 대상 기기의 칩을 먼저 확인합니다.
 
 | 칩 | 더해진 기능 |
 |---|---|
@@ -34,7 +34,7 @@ UID 는 제조할 때 SoC 에 새기는 무작위 값이고, A9 부터는 제조
 
 (출처: [2])
 
-메모리 보호 엔진은 SEP 메모리를 AES XEX 로 암호화하고 CMAC 으로 인증합니다[2]. 암호 입력 지연과, UID 와 사용자 암호를 얽는 방식은 이 쪽에서 다루지 않습니다.
+메모리 보호 엔진은 SEP 메모리를 AES XEX 로 암호화하고 CMAC 으로 인증합니다[2]. 암호 입력 지연과, UID 와 사용자 암호를 얽는 방식은 이 페이지에서 다루지 않습니다.
 
 > 그림 자리: SoC 안의 Secure Enclave(SEP·AES 엔진·UID) 와 칩 밖의 Secure Storage Component, 응용 프로세서를 나란히 두고, UID 가 SEP 밖으로 나가지 않는다는 점을 보여 주는 그림
 
@@ -50,7 +50,7 @@ UID 는 제조할 때 SoC 에 새기는 무작위 값이고, A9 부터는 제조
 
 (출처: [1])
 
-사용자 키 가방은 No Protection 등급으로 저장한 바이너리 plist 파일이고, A9 이전 기기에서는 암호를 바꿀 때 이전 키를 지우고 새로 만듭니다[1]. 맥에서는 경로가 `~/Library/Keychains/[UUID]/user.kb` 입니다[1]. 아이폰 기기 안의 경로는 공개된 자료가 없어 검체에서 확인해야 합니다.
+사용자 키 가방은 No Protection 등급으로 저장한 바이너리 plist 파일이고, A9 이전 기기에서는 암호를 바꿀 때 이전 키를 지우고 새로 만듭니다[1]. 맥에서는 경로가 `~/Library/Keychains/[UUID]/user.kb` 입니다[1]. 아이폰 기기 안의 경로는 실제 기기로 확인해야 합니다.
 
 백업 키 가방은 암호화 백업을 만들 때마다 새 키 묶음으로 새로 만들고, 백업 데이터를 그 키로 다시 암호화합니다[1]. 다른 기기로 옮길 수 없는 키체인 항목은 암호화 백업 안에서도 UID 에서 파생한 키로 감싼 채 남고, 암호화하지 않은 백업에서는 파일은 암호화되지 않지만 키체인은 UID 파생 키로 보호된 채입니다[1]. 키체인 등급과 "ThisDeviceOnly" 항목은 [보호 등급 (Protection Classes)](protection-classes.md) 에 정리했습니다.
 
@@ -72,7 +72,7 @@ cert (list)
 keys (list)
 ```
 
-이름으로 보아 `keybag-uuid` 는 키 가방 UUID, 나머지는 키체인 항목 종류별 목록으로 보입니다. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에 있습니다.
+이름으로 보면 `keybag-uuid` 는 키 가방 UUID, 나머지는 키체인 항목 종류별 목록으로 보입니다. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에 있습니다.
 
 ## 포렌식에서 중요한 점
 

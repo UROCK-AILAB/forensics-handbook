@@ -14,7 +14,7 @@ nav_order: 310
 
 ## 무엇을 기록하나 · 왜 생기나
 
-`android.os.Build` 클래스는 모델 이름이나 Android 버전 같은 값을 따로 저장하지 않고 시스템 속성에서 읽어 옵니다 [1]. 그래서 앱이 기기 정보를 어떻게 얻든 근원은 같은 속성이고, 분석할 때도 속성 이름을 기준으로 삼으면 도구마다 칸 이름이 달라도 헷갈리지 않습니다.
+`android.os.Build` 클래스는 모델 이름이나 Android 버전 같은 값을 따로 저장하지 않고 시스템 속성에서 읽어 옵니다 [1]. 그래서 앱이 기기 정보를 어떻게 얻든 근원은 같은 속성이고, 분석할 때도 속성 이름을 기준으로 삼으면 도구마다 필드 이름이 달라도 헷갈리지 않습니다.
 
 조사에서 이 값이 필요한 이유는 두 가지입니다. 보고서 첫머리에 어떤 기기를 분석했는지 적어야 하고, 이 핸드북의 다른 페이지들이 Android 버전과 제조사에 따라 해석을 나누기 때문에 어느 표를 따를지 먼저 정해야 합니다. 사용자 식별과 관련된 일련번호·IMEI·Android ID 는 [기기 식별자 (Android ID·IMEI·광고 ID)](../../01-foundations/value-decoding/device-identifiers.md) 페이지에서 다룹니다.
 
@@ -23,12 +23,12 @@ nav_order: 310
 | 어디서 읽나 | 얻는 것 | 참고 |
 |---|---|---|
 | 이미지의 `*/system/build.prop`, `*/vendor/build.prop` | 제조사·브랜드·모델·기기 이름·Android 버전·SDK 번호 | ALEAPP Build 모듈이 찾는 경로 [2] |
-| 그 밖의 파티션(product, odm 등)의 build.prop | 파티션별 값 | 경로는 검체에서 확인 |
+| 그 밖의 파티션(product, odm 등)의 build.prop | 파티션별 값 | 경로는 실제 기기에서 확인 |
 | `dumpsys package` 맨 앞 "Database versions:" | SDK 번호와 빌드 지문 두 개 | |
 | `dumpsys user` 의 "Last logged in fingerprint:" | 사용자가 마지막으로 로그인할 때의 빌드 지문 | |
 | settings 의 빌드·부팅 관련 키 | 빌드·부팅 관련으로 보이는 키, 값의 뜻은 공개 자료 없음 | |
 
-ALEAPP 의 Build 모듈은 `*/vendor/build.prop` 와 `*/system/build.prop` 를 읽고, 두 파일에 같은 항목이 있으면 vendor 쪽 값을 보고합니다 [2]. 뽑는 키는 `ro.product.vendor.manufacturer`·`ro.product.system.manufacturer` 처럼 vendor 와 system 이 짝을 이루는 이름들이고, 버전은 `ro.vendor.build.version.release`, `ro.build.version.release`, `ro.system.build.version.release` 를, SDK 번호는 `ro.vendor.build.version.sdk`, `ro.build.version.sdk` 를 봅니다 [2]. 다른 파티션의 build.prop 는 검체에서 파일 이름으로 찾습니다.
+ALEAPP 의 Build 모듈은 `*/vendor/build.prop` 와 `*/system/build.prop` 를 읽고, 두 파일에 같은 항목이 있으면 vendor 쪽 값을 보고합니다 [2]. 뽑는 키는 `ro.product.vendor.manufacturer`·`ro.product.system.manufacturer` 처럼 vendor 와 system 이 짝을 이루는 이름들이고, 버전은 `ro.vendor.build.version.release`, `ro.build.version.release`, `ro.system.build.version.release` 를, SDK 번호는 `ro.vendor.build.version.sdk`, `ro.build.version.sdk` 를 봅니다 [2]. 다른 파티션의 build.prop 는 실제 이미지에서 파일 이름으로 찾습니다.
 
 라이브 기기에서 흔히 쓰는 `getprop` 로 adb 일반 권한에서 속성이 모두 읽히는지는 기기마다 확인합니다. adb 일반 권한으로 읽은 `dumpsys package` 출력 맨 앞에는 다음 모양의 줄이 있습니다(값은 가려 적었습니다).
 
@@ -42,9 +42,9 @@ Database versions:
 
 `buildFingerprint` 와 `fingerprint` 가 각각 무엇을 가리키는지는 공개 자료에 없습니다. `dumpsys user` 의 "Last logged in fingerprint:" 줄은 사용자 파일의 `lastLoggedInFingerprint` 속성과 짝을 이루고, 자세한 내용은 [사용자와 프로필 (Multi-user·users)](users-profiles.md) 페이지에 있습니다.
 
-settings 에는 global 표에 `database_creation_buildid`, `boot_count`, `Phenotype_boot_count`, `device_name`, `default_device_name` 키가, system 표에 `IsFotaUpgrade` 키가 있습니다. 이름으로 보아 설정 DB 를 만들 때의 빌드, 부팅 횟수, 사용자가 붙인 기기 이름, 무선 업데이트 여부와 관련된 키로 보이지만, 값의 뜻은 공개 자료에 없습니다. settings 파일 자체의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
+settings 에는 global 표에 `database_creation_buildid`, `boot_count`, `Phenotype_boot_count`, `device_name`, `default_device_name` 키가, system 표에 `IsFotaUpgrade` 키가 있습니다. 이름으로 짐작하면 설정 DB 를 만들 때의 빌드, 부팅 횟수, 사용자가 붙인 기기 이름, 무선 업데이트 여부와 관련된 키이지만, 값의 뜻은 공개 자료에 없습니다. settings 파일 자체의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
 
-삼성 기기는 One UI 버전을 따로 표시하지만, 그 값을 담은 삼성 전용 속성 이름은 공개 자료에 없어 검체에서 확인합니다. 위의 dumpsys·settings 내용은 Android 16(SDK 36), One UI 8.5 기기 기준입니다.
+삼성 기기는 One UI 버전을 따로 표시하지만, 그 값을 담은 삼성 전용 속성 이름은 공개 자료에 없어 실제 기기로 확인해야 합니다. 위의 dumpsys·settings 내용은 Android 16(SDK 36), One UI 8.5 기기 기준입니다.
 
 ## 구조
 
@@ -96,7 +96,7 @@ ALEAPP Build 모듈은 vendor 와 system 값이 다르면 vendor 값을 보고�
 
 build.prop 는 확보 시점의 소프트웨어 상태만 보여 줍니다. 무선 업데이트를 거치면 값이 새 빌드로 바뀌어서, 사건 당시의 버전을 말하려면 사용자별 마지막 로그인 지문이나 앱 오류 기록 같은 다른 기록의 시각과 맞춰 봐야 합니다. `IsFotaUpgrade`, `database_creation_buildid` 같은 settings 키도 이런 단서가 될 수 있어 보이지만 값의 뜻이 공개 자료에 없어서 보고서에 해석을 적지 않습니다.
 
-속성 값은 소프트웨어가 적은 것이라, 펌웨어가 바뀌지 않았다는 점은 이 값만으로 말하지 않고 [부트로더와 검증 부팅 (Bootloader·Verified Boot)](../../01-foundations/security-model/verified-boot.md) 페이지의 흔적과 함께 봅니다. `ro.build.type`, `ro.build.tags` 에 어떤 값이 들어가는지는 여기서 다루지 않으므로, 이 값만으로 판매용 빌드인지 가리지 않습니다.
+속성 값은 소프트웨어가 적은 것이라, 펌웨어가 바뀌지 않았다는 점은 이 값만으로 말하지 않고 [부트로더와 검증 부팅 (Bootloader·Verified Boot)](../../01-foundations/security-model/verified-boot.md) 페이지의 흔적과 함께 봅니다. `ro.build.type`, `ro.build.tags` 에 어떤 값이 들어가는지는 여기서 다루지 않으므로, 이 값만으로 판매용 빌드인지 판별하지 않습니다.
 
 ## 직접 분석해 보기
 
@@ -124,11 +124,11 @@ ALEAPP 의 Build 모듈 결과와 이 목록을 비교해 vendor 와 system 의 
 
 ## 교차 검증
 
-사용자별 마지막 로그인 지문과 사용자 생성 시각은 [사용자와 프로필 (Multi-user·users)](users-profiles.md) 에서, 앱 설치 시각은 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 에서 확인해 업데이트 전후를 가릅니다. 공장 초기화 뒤 다시 설정한 기기인지는 [초기화 흔적 (Factory Reset)](factory-reset.md) 과 함께 봅니다. 앱 오류 기록에 빌드 지문이 함께 적히는 경우가 있는지는 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../app-usage/crash-records.md) 에서 확인합니다.
+사용자별 마지막 로그인 지문과 사용자 생성 시각은 [사용자와 프로필 (Multi-user·users)](users-profiles.md) 에서, 앱 설치 시각은 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 에서 확인해 업데이트 전후를 구분합니다. 공장 초기화 뒤 다시 설정한 기기인지는 [초기화 흔적 (Factory Reset)](factory-reset.md) 과 함께 봅니다. 앱 오류 기록에 빌드 지문이 함께 적히는 경우가 있는지는 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../app-usage/crash-records.md) 에서 확인합니다.
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
+공개된 안드로이드 시험 자료(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
 
 1. 이미지 안의 build.prop 를 모두 찾아 경로를 적고, 각 파일의 `ro.build.version.release` 값이 같은지 비교합니다.
 2. system 과 vendor 의 빌드 지문을 비교하고, 다르다면 어느 부분(버전·incremental·날짜)이 다른지 적습니다.

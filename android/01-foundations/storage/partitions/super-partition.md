@@ -19,7 +19,7 @@ super 가 담는 논리 파티션에는 사용자가 만든 데이터가 없고,
 
 ### 도입과 구현
 
-동적 파티션 (Dynamic Partitions)은 Android 10 에 도입되었고, Android 10 으로 출시하는 기기는 super 라는 파티션을 만듭니다[1]. AOSP 파티션 개요 문서에는 Android 11 이상 기기가 지원할 수 있다고 적혀 있어, 두 문서가 말하는 도입 버전이 다릅니다[1][3].
+동적 파티션 (Dynamic Partitions)은 Android 10 에 도입되었고, Android 10 으로 출시하는 기기는 super 라는 파티션을 만듭니다[1]. AOSP 파티션 개요 문서에는 Android 11 이상 기기가 지원할 수 있다고 적혀 있어, 두 문서에 적힌 도입 버전이 다릅니다[1][3].
 
 super 안의 메타데이터에는 동적 파티션마다 이름과 블록 범위가 적혀 있고, 커널은 리눅스 device-mapper 의 dm-linear 모듈로 그 블록 범위를 논리 파티션 하나로 이어 보여 줍니다. A/B 기기에서도 super 는 하나뿐이라서 super_a·super_b 를 따로 두지 않고, 슬롯은 super 안에서 다룹니다.
 
@@ -45,7 +45,7 @@ fstab 에서 논리 파티션 줄의 fs_mgr 플래그에는 `logical` 과 `first
 
 ### super 메타데이터 형식
 
-메타데이터 형식은 AOSP liblp 의 헤더 `metadata_format.h` 에 정의되어 있고, 아래 상수와 칸 이름은 그 헤더의 정의입니다[2].
+메타데이터 형식은 AOSP liblp 의 헤더 `metadata_format.h` 에 정의되어 있고, 아래 상수와 필드 이름은 그 헤더의 정의입니다[2].
 
 | 상수 | 값 | 뜻 |
 |---|---|---|
@@ -55,19 +55,19 @@ fstab 에서 논리 파티션 줄의 fs_mgr 플래그에는 `logical` 과 `first
 | `LP_METADATA_HEADER_MAGIC` | 0x414C5030 | 메타데이터 헤더를 알아보는 매직 값 |
 | 메타데이터 버전 | MAJOR 10, MINOR 0~2 | 헤더가 정의한 버전 범위 |
 
-geometry 구조 (`LpMetadataGeometry`)의 칸은 다음 순서로 정의되어 있습니다.
+geometry 구조 (`LpMetadataGeometry`)의 필드는 다음 순서로 정의되어 있습니다.
 
 ```
 magic, struct_size, checksum[32], metadata_max_size, metadata_slot_count, logical_block_size
 ```
 
-파티션 표의 한 줄 (`LpMetadataPartition`)에는 다음 칸이 있습니다. `name` 은 36바이트이고 영숫자와 밑줄만 씁니다. `first_extent_index` 와 `num_extents` 는 extent 목록에서 이 파티션이 쓰는 범위를 가리키고, `group_index` 는 파티션이 속한 묶음을 가리킵니다.
+파티션 표의 한 줄 (`LpMetadataPartition`)에는 다음 필드가 있습니다. `name` 은 36바이트이고 영숫자와 밑줄만 씁니다. `first_extent_index` 와 `num_extents` 는 extent 목록에서 이 파티션이 쓰는 범위를 가리키고, `group_index` 는 파티션이 속한 묶음을 가리킵니다.
 
 ```
 name[36], attributes, first_extent_index, num_extents, group_index
 ```
 
-`attributes` 칸의 비트는 다음과 같습니다.
+`attributes` 필드의 비트는 다음과 같습니다.
 
 | 비트 | 이름 | 뜻 |
 |---|---|---|
@@ -94,9 +94,9 @@ super 는 맨 앞 4096바이트를 예약해 두고, 그 뒤에 geometry, 예비
 
 A/B 기기에서는 super 하나 안에 이름에 슬롯 접미사가 붙은 논리 파티션이 함께 있을 수 있고, `SLOT_SUFFIXED` 비트가 그 표시입니다. 이때 어느 쪽이 기기가 실제로 부팅한 슬롯이었는지는 super 메타데이터만으로 정하지 않고 [A/B 슬롯](ab-slots.md)의 방법으로 확인합니다.
 
-`UPDATED` 비트는 스냅샷 기반 업데이트로 만들어지거나 바뀐 파티션이라는 표시입니다[2]. 이 비트만으로는 업데이트 시각이나 업데이트 내용을 알 수 없습니다. 보고서에는 "이 논리 파티션에 UPDATED 표시가 있다" 처럼 기록이 말하는 만큼만 적습니다.
+`UPDATED` 비트는 스냅샷 기반 업데이트로 만들어지거나 바뀐 파티션이라는 표시입니다[2]. 이 비트만으로는 업데이트 시각이나 업데이트 내용을 알 수 없습니다. 보고서에는 "이 논리 파티션에 UPDATED 표시가 있다" 처럼 기록으로 확인되는 만큼만 적습니다.
 
-Virtual A/B 기기는 COW 이미지를 super 의 빈 공간에 둘 수 있어서, 메타데이터가 가리키지 않는 영역도 비어 있다고 단정하지 않습니다. geometry 에는 `checksum` 칸이 있어서 geometry 가 손상되었는지 확인할 때 씁니다. 손상된 메타데이터로 만든 논리 파티션 이미지는 블록이 엉뚱하게 이어질 수 있고, 그 위에서 읽은 파일 시스템 결과도 믿기 어렵습니다.
+Virtual A/B 기기는 COW 이미지를 super 의 빈 공간에 둘 수 있어서, 메타데이터가 가리키지 않는 영역도 비어 있다고 단정하지 않습니다. geometry 에는 `checksum` 필드가 있어서 geometry 가 손상되었는지 확인할 때 씁니다. 손상된 메타데이터로 만든 논리 파티션 이미지는 블록이 엉뚱하게 이어질 수 있고, 그 위에서 읽은 파일 시스템 결과도 믿기 어렵습니다.
 
 ## 함정
 
@@ -104,8 +104,8 @@ Virtual A/B 기기는 COW 이미지를 super 의 빈 공간에 둘 수 있어서
 
 | 항목 | AOSP 문서 | 삼성 갤럭시 (One UI) |
 |---|---|---|
-| super 파티션 사용 | Android 10 이상으로 출시한 기기는 만듦 | 검체에서 확인 |
-| super 안의 논리 파티션 목록 | system, vendor, product, system_ext, odm 가운데 | 검체에서 확인 |
+| super 파티션 사용 | Android 10 이상으로 출시한 기기는 만듦 | 실제 기기에서 확인 |
+| super 안의 논리 파티션 목록 | system, vendor, product, system_ext, odm 가운데 | 실제 기기에서 확인 |
 
 ## 도구
 

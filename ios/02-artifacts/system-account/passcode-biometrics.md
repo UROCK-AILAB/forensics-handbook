@@ -46,7 +46,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 소프트웨어 업데이트, 기기 지우기, 암호 설정을 보거나 바꾸는 일, 구성 프로파일 설치는 생체 인증과 관계없이 늘 암호를 요구합니다[4]. Touch ID 가 있어도 기기를 켜거나 재시동한 뒤에는 암호가 필요하고, 암호를 바꾸거나 지문을 등록·삭제할 때도 암호가 필요합니다[3]. 마스크를 쓴 채 쓰는 Face ID 는 Face ID 매칭에 성공하거나 암호를 넣거나 Apple Watch 로 잠금을 푼 뒤 6.5시간 동안 쓸 수 있습니다[4].
 
-지문(Touch ID) 템플릿 데이터는 기기를 떠나지 않고, Apple 로 보내지지 않으며, 기기 백업에도 들어가지 않습니다[3]. 이 설명은 Touch ID 지문 데이터를 두고 한 것이고, Face ID 얼굴 데이터도 같은지는 공개 자료가 없습니다. 그래서 추출물에서 찾을 대상은 생체 데이터가 아니라 "생체 인증을 설정했다·쓸 수 있었다" 는 설정 흔적입니다.
+지문(Touch ID) 템플릿 데이터는 기기를 떠나지 않고, Apple 로 보내지지 않으며, 기기 백업에도 들어가지 않습니다[3]. 이 설명은 Touch ID 지문 데이터를 두고 한 것이고, Face ID 얼굴 데이터도 같은지 설명한 공개 문서는 없습니다. 그래서 추출물에서 찾을 대상은 생체 데이터가 아니라 "생체 인증을 설정했다·쓸 수 있었다" 는 설정 흔적입니다.
 
 ## 위치와 버전별 차이
 
@@ -63,7 +63,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 | `AppDomain-com.apple.mobilesafari :: Library/Preferences/com.apple.mobilesafari.plist` | `BiometricAuthenticationIsAvailable` (bool), `BiometricAuthenticationTypeIfAvailable` (int), `PasscodeIsAvailable` (bool) | 사파리가 본 생체 인증·암호 사용 가능 여부와 종류 |
 | `com.apple.purplebuddy.plist` | `FaceIDPeriocularPresented` (bool) | 첫 설정 때 마스크 착용 Face ID 화면을 보여 줬는지 |
 
-모두 이름으로 짐작한 뜻이고, 숫자 값이 무엇을 뜻하는지(예: `BiometricAuthenticationTypeIfAvailable` 의 값마다 Touch ID 인지 Face ID 인지)는 공개 자료가 없어 검체에서 확인합니다. `Manifest.plist` 의 다른 키는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), `com.apple.purplebuddy.plist` 의 다른 키는 [초기화와 복원 흔적](erase-restore.md) 에서 다룹니다.
+모두 이름으로 짐작한 뜻이고, 숫자 값이 무엇을 뜻하는지(예: `BiometricAuthenticationTypeIfAvailable` 의 값마다 Touch ID 인지 Face ID 인지)는 실제 데이터로 확인해야 합니다. `Manifest.plist` 의 다른 키는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), `com.apple.purplebuddy.plist` 의 다른 키는 [초기화와 복원 흔적](erase-restore.md) 에서 다룹니다.
 
 도메인 이름으로는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic` 과 `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 이 있습니다. 백업 안 키체인 파일 `KeychainDomain :: keychain-backup.plist` 에는 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있고, 해석은 [키체인](../../01-foundations/storage/keychain.md) 에서 다룹니다.
 
@@ -80,7 +80,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 ### 공개 자료가 없는 것
 
-암호 실패 횟수나 마지막 잠금 해제 시각이 어느 파일에 남는지, 시스템 키 가방 파일의 위치와 내용은 공개 자료가 없어 검체에서 확인해야 합니다. 위 키가 iOS 몇 판부터 생겼는지도 알려져 있지 않고, 위 표는 iOS 27.0 백업 기준입니다. 도난 기기 보호(Stolen Device Protection)는 이 쪽에서 다루지 않습니다.
+암호 실패 횟수나 마지막 잠금 해제 시각이 어느 파일에 남는지, 시스템 키 가방 파일의 위치와 내용은 실제 데이터로 확인해야 합니다. 위 키가 iOS 몇 판부터 생겼는지도 알려져 있지 않고, 위 표는 iOS 27.0 백업 기준입니다. 도난 기기 보호(Stolen Device Protection)는 이 페이지에서 다루지 않습니다.
 
 ## 구조
 
@@ -90,7 +90,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 **증명하는 것.** 값을 확인했을 때, 여러 구성 요소가 적어 둔 암호·생체 인증 상태가 서로 맞으면 수집 전에 기기에 암호가 설정되어 있었고 생체 인증을 쓸 수 있는 상태였다는 판단을 받쳐 줍니다. 프로파일 쪽 정책 값은 조직이 기기에 암호 규칙을 걸었는지 보여 줄 수 있습니다. 보고서에는 "이 파일의 이 키 값이 이렇다" 를 적고, 그 값에서 끌어낸 해석은 해석이라고 밝혀 씁니다.
 
-**증명하지 못하는 것.** 이 흔적은 설정 상태일 뿐이고, 특정 시각에 누가 암호나 얼굴로 잠금을 풀었는지는 말해 주지 않습니다. 생체 인증이 켜져 있었다는 사실도 등록된 얼굴이나 지문이 누구 것인지 알려 주지 않습니다. 기기 암호 값 자체나 암호를 몇 번 틀렸는지도 이 흔적에서는 알 수 없습니다.
+**증명하지 못하는 것.** 이 흔적은 설정 상태일 뿐이고, 특정 시각에 누가 암호나 얼굴로 잠금을 풀었는지는 알 수 없습니다. 생체 인증이 켜져 있었다는 사실도 등록된 얼굴이나 지문이 누구 것인지 알려 주지 않습니다. 기기 암호 값 자체나 암호를 몇 번 틀렸는지도 이 흔적에서는 알 수 없습니다.
 
 ## 시각 해석
 
@@ -100,7 +100,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 ## 함정과 한계
 
-**이름이 닮은 다른 설정과 섞지 않습니다.** `com.apple.onetimepasscodes.plist` 에는 `DeleteVerificationCodes` 키가 있고, 이름으로 보아 일회용 인증 코드 설정이고 기기 암호 설정과는 다른 것으로 보입니다. 파일 이름에 "passcode" 가 들어 있다고 기기 암호 흔적으로 묶지 않습니다.
+**이름이 닮은 다른 설정과 섞지 않습니다.** `com.apple.onetimepasscodes.plist` 에는 `DeleteVerificationCodes` 키가 있고, 이름으로 보면 일회용 인증 코드 설정이고 기기 암호 설정과는 다른 것으로 보입니다. 파일 이름에 "passcode" 가 들어 있다고 기기 암호 흔적으로 묶지 않습니다.
 
 **`WasPasscodeSet` 하나로 결론 내리지 않습니다.** 이 키는 백업 폴더에 있어서 백업을 만든 때의 상태로 보이고, 값의 뜻도 이름으로 짐작한 것입니다. 기기 암호 설정 여부는 사파리의 `PasscodeIsAvailable` 같은 다른 구성 요소의 기록과 함께 봅니다.
 
@@ -112,7 +112,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 ### 헥스로 한 번
 
-아래는 이진 plist 명세로 만든 예시이고 특정 검체에서 나온 바이트가 아닙니다. 이진 plist 에서 참거짓 값은 1바이트 객체로, `08` 이 거짓, `09` 가 참입니다. `WasPasscodeSet` 은 14글자라서 표시 바이트 `5E`(하위 4비트 `1110` = 길이 14) 뒤에 글자가 바로 옵니다.
+아래는 이진 plist 명세로 만든 예시이고 특정 기기에서 나온 바이트가 아닙니다. 이진 plist 에서 참거짓 값은 1바이트 객체로, `08` 이 거짓, `09` 가 참입니다. `WasPasscodeSet` 은 14글자라서 표시 바이트 `5E`(하위 4비트 `1110` = 길이 14) 뒤에 글자가 바로 옵니다.
 
 ```
 5E 57 61 73 50 61 73 73 63 6F 64 65 53 65 74     ^WasPasscodeSet
@@ -166,17 +166,17 @@ for k, v in truth.get("restrictedValue", {}).items():
 
 ## 교차 검증
 
-잠금·잠금 해제 시각은 [전원 로그](../app-usage/powerlog.md), [KnowledgeC](../app-usage/knowledgec/index.md), [통합 로그에서 찾을 것](../logs/unified-log-events.md) 과 맞춰 보고, 암호 정책을 건 프로파일은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 확인합니다. 암호가 데이터 보호와 키체인에 어떻게 얽히는지는 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 와 [키체인](../../01-foundations/storage/keychain.md), 사파리 암호 자동 입력은 [저장된 암호](../credentials-security/saved-passwords.md) 에서 봅니다. 기기를 쓴 사람을 가리는 흐름은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 를 따릅니다.
+잠금·잠금 해제 시각은 [전원 로그](../app-usage/powerlog.md), [KnowledgeC](../app-usage/knowledgec/index.md), [통합 로그에서 찾을 것](../logs/unified-log-events.md) 과 맞춰 보고, 암호 정책을 건 프로파일은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 확인합니다. 암호가 데이터 보호와 키체인에 어떻게 얽히는지는 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 와 [키체인](../../01-foundations/storage/keychain.md), 사파리 암호 자동 입력은 [저장된 암호](../credentials-security/saved-passwords.md) 에서 봅니다. 기기를 쓴 사람을 가려내는 흐름은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 를 따릅니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등의 iOS 이미지나 백업)로 다음 질문을 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등의 iOS 이미지나 백업)로 다음 질문을 풀어 봅니다.
 
 1. 백업 `Manifest.plist` 의 `WasPasscodeSet` 값은 무엇이고, 사파리 설정의 `PasscodeIsAvailable` 값과 맞습니까?
 2. `BiometricAuthenticationIsAvailable`, `BiometricState`, `AMSDeviceBiometricsState` 값을 나란히 놓으면 서로 어긋나는 곳이 있습니까?
-3. 검체 기종에는 Touch ID 와 Face ID 가운데 무엇이 있고, `BiometricAuthenticationTypeIfAvailable` 값과 어떻게 대응해 보입니까? 대응을 단정할 근거가 있습니까?
+3. 분석한 기기의 기종에는 Touch ID 와 Face ID 가운데 무엇이 있고, `BiometricAuthenticationTypeIfAvailable` 값과 어떻게 대응해 보입니까? 대응을 단정할 근거가 있습니까?
 4. `UserConfigurationProfiles/Truth.plist` 의 `restrictedValue` 아래 암호 관련 키 값은 무엇이고, 설치된 프로파일이 있습니까?
-5. 검체 기기가 초기화된 흔적이 있다면, "데이터 지우기" 설정으로 지워졌을 가능성을 어떤 기록으로 따져 볼 수 있습니까?
+5. 분석한 기기가 초기화된 흔적이 있다면, "데이터 지우기" 설정으로 지워졌을 가능성을 어떤 기록으로 따져 볼 수 있습니까?
 
 ## 참고 문헌
 

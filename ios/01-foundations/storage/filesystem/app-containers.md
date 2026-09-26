@@ -59,7 +59,7 @@ iOS 앱은 샌드박스 안의 자기 컨테이너에만 파일을 두고, 실�
 기기에서 뽑은 파일 시스템에서는 UUID 폴더가 어느 앱의 것인지부터 알아내야 하고, 아래 세 곳을 씁니다.
 
 1. **컨테이너 메타데이터 plist.** 각 컨테이너 폴더 맨 위에 `.com.apple.mobile_container_manager.metadata.plist` 가 있고, 여기에 번들 ID(그룹 컨테이너면 그룹 ID)가 들어 있습니다 [4][5].
-2. **applicationState.db.** `/private/var/mobile/Library/FrontBoard/applicationState.db` 가 앱 컨테이너 UUID 와 번들 ID 를 이어 주지만, 앱 그룹 경로 정보는 없습니다 [4]. 백업에서는 `HomeDomain` 의 `Library/FrontBoard/applicationState.db` 로 들어 있고, 표는 `application_identifier_tab(id, application_identifier)`, `key_tab(id, key)`, `kvs(id, application_identifier, key, value)`, `schema(version)` 입니다. `key` 의 값 목록과 `value` 의 형식은 검체에서 확인합니다.
+2. **applicationState.db.** `/private/var/mobile/Library/FrontBoard/applicationState.db` 가 앱 컨테이너 UUID 와 번들 ID 를 이어 주지만, 앱 그룹 경로 정보는 없습니다 [4]. 백업에서는 `HomeDomain` 의 `Library/FrontBoard/applicationState.db` 로 들어 있고, 표는 `application_identifier_tab(id, application_identifier)`, `key_tab(id, key)`, `kvs(id, application_identifier, key, value)`, `schema(version)` 입니다. `key` 의 값 목록과 `value` 의 형식은 실제 파일로 확인합니다.
 3. **containers.sqlite3.** `/private/var/root/Library/MobileContainerManager/containers.sqlite3` 의 `child_bundles` 표에는 확장과 부모 앱의 관계가, `code_signing_data` 표에는 entitlements 를 담은 바이너리 plist 가 있고, 그 안의 `com.apple.security.application-groups` 키에 앱이 속한 그룹 ID 목록이 있습니다 [5]. 이 파일은 로컬 백업의 `RootDomain` 에 없을 수 있어 기기 파일 시스템에서 찾습니다.
 
 설치된 앱 목록을 만드는 방법은 [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md) 에서 다룹니다.
@@ -86,7 +86,7 @@ iOS 앱은 샌드박스 안의 자기 컨테이너에만 파일을 두고, 실�
 |---|---|
 | `InstallDomain` :: `Library/MobileInstallation/BackedUpState/SystemAppInstallState.plist`, `BackupSystemAppInstallState.plist` | 키는 번들 ID(예: `com.apple.iBooks`, `com.apple.VoiceMemos`, `com.apple.mobilesafari`), 값은 정수. 값의 뜻은 공개 자료 없음 |
 | `HomeDomain` :: `Library/Preferences/com.apple.mobile.installation.plist` | 키 `ExtensionDataContainerParentIDUpdateVersion`(정수) |
-| 백업 폴더의 `Manifest.plist` | `Applications`, `Containers` 키. 안의 구조는 검체에서 확인 |
+| 백업 폴더의 `Manifest.plist` | `Applications`, `Containers` 키. 안의 구조는 실제 파일로 확인 |
 | 백업 폴더의 `Info.plist` | `Installed Applications`, `Applications` 키 |
 | `MobileDeviceDomain` :: `ProvisioningProfiles/mis.db` | 파일이 있음 |
 

@@ -12,7 +12,7 @@ nav_order: 680
 
 클라우드 사고는 로그 하나로 끝나는 일이 드뭅니다. 계정 탈취를 예로 들면 로그인은 Entra ID 로그에, 받은편지함 규칙 생성은 통합 감사 로그에, 가상 머신 조작은 Azure 활동 로그나 CloudTrail 에 남습니다. 이렇게 흩어진 기록을 한 표에 모아야 "로그인 → 권한 변경 → 데이터 접근" 순서가 보이고, 어느 단계부터 기록이 비는지도 드러납니다.
 
-로그마다 사건 시각을 담는 필드 이름과 형식이 다르고, 수집 도구가 돌려주는 순서가 사건 순서와 다르고, 관리 화면이 시각을 현지 시간대로 바꿔 보여 주는 경우가 있습니다. 그래서 파일을 이어 붙이기만 해서는 타임라인이 되지 않고, 아래 절차처럼 열을 고르고 형식을 맞추고 다시 정렬하는 과정을 거쳐야 합니다. 시각 필드의 일반 원리는 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)에서 다루고, 이 쪽은 여러 로그를 엮는 방법만 다룹니다. 디스크·메모리 아티팩트로 타임라인을 만드는 공통 원리는 [Windows 판 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [Linux 판 타임라인 만들기](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/analysis/timeline.html)를 보면 됩니다.
+로그마다 사건 시각을 담는 필드 이름과 형식이 다르고, 수집 도구가 돌려주는 순서가 사건 순서와 다르고, 관리 화면이 시각을 현지 시간대로 바꿔 보여 주는 경우가 있습니다. 그래서 파일을 이어 붙이기만 해서는 타임라인이 되지 않고, 아래 절차처럼 열을 고르고 형식을 맞추고 다시 정렬하는 과정을 거쳐야 합니다. 시각 필드의 일반 원리는 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)에서 다루고, 이 페이지는 여러 로그를 엮는 방법만 다룹니다. 디스크·메모리 아티팩트로 타임라인을 만드는 공통 원리는 [Windows 판 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [Linux 판 타임라인 만들기](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/analysis/timeline.html)를 보면 됩니다.
 
 ## 절차
 
@@ -70,7 +70,7 @@ Slack Access Logs 는 한 줄이 사건 하나가 아니라 사용자·IP 주소
 
 ### 4. 시각 형식을 UTC ISO 8601 하나로 맞춘다
 
-로그마다 시각 형식이 ISO 8601 확장형, ISO 8601 기본형, Unix 초, Unix 밀리초, 마이크로초 정수로 섞여 있습니다. 한 열로 합치기 전에 모두 `YYYY-MM-DDThh:mm:ss.sssZ` 꼴의 UTC 로 바꿉니다. 아래는 같은 순간을 서로 다른 형식으로 적은 만든 예시입니다.
+로그마다 시각 형식이 ISO 8601 확장형, ISO 8601 기본형, Unix 초, Unix 밀리초, 마이크로초 정수로 섞여 있습니다. 한 열로 합치기 전에 모두 `YYYY-MM-DDThh:mm:ss.sssZ` 형식의 UTC 로 바꿉니다. 아래는 같은 순간을 서로 다른 형식으로 적은 만든 예시입니다.
 
 | 원래 값 (만든 예시) | 어느 필드의 형식인가 | 맞춘 값 |
 |---|---|---|
@@ -82,9 +82,9 @@ Slack Access Logs 는 한 줄이 사건 하나가 아니라 사용자·IP 주소
 
 자릿수로 단위를 가려낼 수 있습니다. 2026년 무렵의 Unix 시각은 초 단위면 10자리, 밀리초면 13자리, 마이크로초면 16자리입니다.
 
-형식이 문서끼리 다르게 적힌 필드가 둘 있습니다. CloudTrail 의 `creationDate` 는 userIdentity 문서가 "ISO 8601 basic notation" 이라고 설명하고 `20131102T010628Z` 를 예로 들지만, 같은 문서의 다른 예시와 콘솔 로그인 이벤트 문서의 예시는 `2023-07-15T03:51:12Z` 같은 확장형입니다[20][21]. Google Workspace 의 `id.time` 은 Reports API 참조 문서(activities.list)가 "UNIX epoch time in seconds" 라고 적고, 같은 API 의 관리 활동 안내서 예시 응답은 `"2011-06-17T15:39:18.460Z"` 문자열입니다[25][26]. 두 필드 모두 변환기가 두 형식을 다 읽도록 만들고, 실제 형식은 검체에서 확인합니다.
+형식이 문서끼리 다르게 적힌 필드가 둘 있습니다. CloudTrail 의 `creationDate` 는 userIdentity 문서가 "ISO 8601 basic notation" 이라고 설명하고 `20131102T010628Z` 를 예로 들지만, 같은 문서의 다른 예시와 콘솔 로그인 이벤트 문서의 예시는 `2023-07-15T03:51:12Z` 같은 확장형입니다[20][21]. Google Workspace 의 `id.time` 은 Reports API 참조 문서(activities.list)가 "UNIX epoch time in seconds" 라고 적고, 같은 API 의 관리 활동 안내서 예시 응답은 `"2011-06-17T15:39:18.460Z"` 문자열입니다[25][26]. 두 필드 모두 변환기가 두 형식을 다 읽도록 만들고, 실제 형식은 실제 로그로 확인합니다.
 
-한 레코드에 같은 순간이 두 형식으로 들어 있는 SaaS 로그도 있습니다. `EVENT_TYPE`·`TIMESTAMP`·`REQUEST_ID` 열로 시작하는 SaaS 이벤트 로그 파일 한 줄에는 구분자 없는 숫자형 `TIMESTAMP`(`YYYYMMDDhhmmss.sss` 꼴)와 Z 로 끝나는 ISO 8601 `TIMESTAMP_DERIVED` 가 함께 있습니다[43]. 이런 경우에는 시간대가 명시된 쪽을 씁니다.
+한 레코드에 같은 순간이 두 형식으로 들어 있는 SaaS 로그도 있습니다. `EVENT_TYPE`·`TIMESTAMP`·`REQUEST_ID` 열로 시작하는 SaaS 이벤트 로그 파일 한 줄에는 구분자 없는 숫자형 `TIMESTAMP`(`YYYYMMDDhhmmss.sss` 형식)와 Z 로 끝나는 ISO 8601 `TIMESTAMP_DERIVED` 가 함께 있습니다[43]. 이런 경우에는 시간대가 명시된 쪽을 씁니다.
 
 변환하면서 원래 값은 지우지 않고 옆 열에 남깁니다. 보고서에서 "원본 레코드의 이 값" 을 가리킬 수 있어야 하기 때문입니다.
 
@@ -148,7 +148,7 @@ Slack Access Logs 는 한 줄이 사건 하나가 아니라 사용자·IP 주소
 | Untitled Goose Tool | Entra 로그인·감사 로그를 하루 단위로 나눠 받고 `createdDateTime`·`activityDateTime` 으로 정렬해 달라고 요청합니다. 날짜를 주지 않으면 29일 전부터 받습니다. | [38] |
 | DFIR-O365RC | 결과를 JSON 으로 남깁니다. 수단별 조회 기간을 통합 감사 로그 Exchange Online PowerShell 90일, Purview 180일, Management API 7일, Entra 로그 Graph 30일로 정리해 둡니다. | [39] |
 | Hawk `Get-HawkUserUALSignInLog` | 통합 감사 로그에서 RecordType `AzureActiveDirectoryAccountLogon`, `AzureActiveDirectory`, `AzureActiveDirectoryStsLogon` 를 모아 `Converted_Authentication_Logs.csv` 로 만듭니다. Entra 로그인 로그를 따로 받기 어려울 때 로그인 줄을 채우는 데 씁니다. | [42] |
-| ALFA (Google Workspace) | `alfa acquire` 의 `--start-time`·`--end-time` 은 RFC 3339 이고, 시간대 없는 값은 UTC 로 보고 정규화합니다. `alfa analyze` 는 이벤트를 MITRE ATT&CK 클라우드 기법에 대응시킨 뒤 시간순으로 훑어 공격 흐름의 부분열(subchain)을 점수로 매기고, `id.uniqueQualifier` 를 레코드 색인으로 씁니다. | [40][41] |
+| ALFA (Google Workspace) | `alfa acquire` 의 `--start-time`·`--end-time` 은 RFC 3339 이고, 시간대 없는 값은 UTC 로 보고 정규화합니다. `alfa analyze` 는 이벤트를 MITRE ATT&CK 클라우드 기법에 대응시킨 뒤 시간순으로 살펴 공격 흐름의 부분열(subchain)을 점수로 매기고, `id.uniqueQualifier` 를 레코드 색인으로 씁니다. | [40][41] |
 
 도구가 만든 CSV 는 열을 줄이거나 시각을 현지 형식으로 바꿔 쓸 수 있으므로, 도구 출력만으로 타임라인을 만들지 말고 원본 JSON 과 열 하나씩 대조합니다. 레코드 겉모양과 JSON 을 펼치는 방법은 [JSON 로그 읽기](../../01-foundations/logging/json-logs.md)를 봅니다.
 
@@ -174,7 +174,7 @@ Slack Access Logs 는 한 줄이 사건 하나가 아니라 사용자·IP 주소
 
 **증명하지 못하는 것**: 서로 다른 서비스의 기록 사이에서 몇 초 안쪽의 정확한 선후는 가를 수 없습니다. 수집 도구가 돌려준 순서가 사건 순서라는 것도 아닙니다. 1단계 표의 지연 시간 안쪽 구간에서 기록이 없다는 것은 사건이 없었다는 뜻이 아닙니다. 비대화형 로그인의 IP 가 실제 요청의 출발지라는 것도 증명하지 못합니다[2].
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "2026-09-01 02:10:33 (UTC) 에 user@contoso.com 계정으로 203.0.113.10 에서 로그인한 기록이 있고, 같은 세션 ID 로 02:14:05 (UTC) 에 받은편지함 규칙을 만든 기록이 있다" 처럼 씁니다(계정·IP·시각은 만든 예시). "공격자가 규칙을 만들었다" 는 사람을 특정하는 문장이라 이 기록만으로는 쓸 수 없습니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "2026-09-01 02:10:33 (UTC) 에 user@contoso.com 계정으로 203.0.113.10 에서 로그인한 기록이 있고, 같은 세션 ID 로 02:14:05 (UTC) 에 받은편지함 규칙을 만든 기록이 있다" 처럼 씁니다(계정·IP·시각은 만든 예시). "공격자가 규칙을 만들었다" 는 사람을 특정하는 문장이라 이 기록만으로는 쓸 수 없습니다.
 
 보고서에는 어느 열을 사건 시각으로 썼는지, 적재 시각은 어떻게 다뤘는지, 모든 시각을 UTC 로 맞췄는지, 화면에서 옮긴 값은 어느 시간대였는지를 함께 적습니다. 보고서 틀은 [클라우드 포렌식 보고서](../reporting/forensic-report.md)를 봅니다.
 

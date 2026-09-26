@@ -24,16 +24,16 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 |---|---|---|
 | 대상 | Android 6 이상[1] | Android 10·One UI 2.1 이상 갤럭시[1] |
 | 필요한 무선 | 블루투스. Android 12 이하는 위치도. iPhone·iPad·Mac 과는 Wi-Fi[1] | 공개 자료 없음 |
-| 받은 파일 | 파일 앱의 Downloads 안 Quick Share 폴더[1]. 실제 저장 경로는 검체에서 확인 | 공개 자료 없음 |
-| 패키지 이름 | 검체에서 확인 | 검체에서 확인 |
-| 전송 기록 DB·표·칸 | 공개 자료 없음 | 공개 자료 없음 |
+| 받은 파일 | 파일 앱의 Downloads 안 Quick Share 폴더[1]. 실제 저장 경로는 실제 기기에서 확인 | 공개 자료 없음 |
+| 패키지 이름 | 실제 기기에서 확인 | 실제 기기에서 확인 |
+| 전송 기록 DB·표·열 | 공개 자료 없음 | 공개 자료 없음 |
 | 전송 기술(BLE·Wi-Fi Direct 등) 목록 | 공개 자료 없음 | 공개 자료 없음 |
 
-받은 파일이 공용 저장 공간의 어느 폴더에 실제로 놓이는지는 검체에서 직접 찾아야 합니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 에 있습니다.
+받은 파일이 공용 저장 공간의 어느 폴더에 실제로 놓이는지는 실제 기기에서 직접 찾아야 합니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 에 있습니다.
 
 ## 구조
 
-전송 기록 파일의 구조는 공개 자료가 없어서, 대신 이름이 파일 공유와 닿아 있어 보이는 설정 키와 서비스 등록 목록을 정리합니다. 키마다 뜻과 값 형식은 공개 자료가 없어 검체에서 확인합니다.
+전송 기록 파일의 구조는 공개 자료가 없어서, 대신 이름이 파일 공유와 닿아 있어 보이는 설정 키와 서비스 등록 목록을 정리합니다. 키마다 뜻과 값 형식은 실제 데이터로 확인해야 합니다.
 
 | 설정 영역 | 키 이름 |
 |---|---|
@@ -41,7 +41,7 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 | Secure | `nearby_sharing_component`, `mcf_continuity_nearby_device_state`, `autohotspot_saved_nearby_state` |
 | System | `quickshare_enabled`, `direct_share`, `mcf_continuity`, `mcf_family_device_share_enabled`, `mcf_mydevice_activated` |
 
-`quickshare_enabled` 와 `mcf_quick_share_visibility` 는 이름으로 보아 Quick Share 를 켰는지와 공개 범위에 닿아 있는 키로 보입니다. `nearby_sharing_component` 가 어떤 구성 요소를 가리키는지, `mcf_` 로 시작하는 키들이 Quick Share 와 어떤 관계인지는 공개 자료가 없습니다. 설정 값을 읽는 법과 파일 위치는 [설정 값](../system-account/settings.md) 에 있습니다.
+`quickshare_enabled` 와 `mcf_quick_share_visibility` 는 이름으로 보면 Quick Share 를 켰는지와 공개 범위에 닿아 있는 키 같습니다. `nearby_sharing_component` 가 어떤 구성 요소를 가리키는지, `mcf_` 로 시작하는 키들이 Quick Share 와 어떤 관계인지는 공개 자료가 없습니다. 설정 값을 읽는 법과 파일 위치는 [설정 값](../system-account/settings.md) 에 있습니다.
 
 삼성 기기의 `dumpsys bluetooth_manager` 출력에는 "Ble app registered:" 목록이 있고, 여기에 `com.samsung.android.mcfserver`, `com.samsung.android.mcfds`, `com.samsung.android.beaconmanager`, `com.samsung.android.mdx.kit` 가 나옵니다. BLE 를 쓰려고 등록한 삼성 구성 요소들이고, 이 가운데 어느 것이 Quick Share 를 맡는지는 공개 자료가 없습니다. 블루투스 쪽 흔적은 [블루투스 장치](bluetooth.md) 에서 다룹니다.
 
@@ -49,25 +49,25 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 
 **증명하는 것**
 
-받은 파일이 검체에 남아 있으면 그 파일이 기기에 있었다는 사실과 파일 시스템·미디어 저장소의 시각을 알 수 있습니다. 앱 사용 기록에는 앱 화면이 앞에 나온 때(`ACTIVITY_RESUMED`)와 포그라운드 서비스가 시작·종료한 때(`FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`), 알림이 뜬 때(`NOTIFICATION_INTERRUPTION`, `channelId` 포함)가 남습니다. 보내는 화면을 벗어나면 전송 상태 알림이 뜨므로[1], 공유를 맡은 패키지를 찾아낸 뒤에는 그 패키지의 알림·서비스 이벤트가 전송 시점의 간접 흔적이 될 수 있습니다.
+받은 파일이 남아 있으면 그 파일이 기기에 있었다는 사실과 파일 시스템·미디어 저장소의 시각을 알 수 있습니다. 앱 사용 기록에는 앱 화면이 앞에 나온 때(`ACTIVITY_RESUMED`)와 포그라운드 서비스가 시작·종료한 때(`FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`), 알림이 뜬 때(`NOTIFICATION_INTERRUPTION`, `channelId` 포함)가 남습니다. 보내는 화면을 벗어나면 전송 상태 알림이 뜨므로[1], 공유를 맡은 패키지를 찾아낸 뒤에는 그 패키지의 알림·서비스 이벤트가 전송 시점의 간접 흔적이 될 수 있습니다.
 
 **증명하지 못하는 것**
 
 설정 키는 확보 시점의 설정 상태만 보여 주고 전송이 있었다는 증거가 되지 못합니다. 공개 범위 "10분 동안 모두" 는 10분 뒤 저절로 돌아가므로[1], 확보 시점의 값으로 사건 당시의 공개 범위를 말할 수 없습니다. Downloads 폴더에 있는 파일은 Quick Share 말고도 브라우저·메신저 등 여러 경로로 들어올 수 있으므로, 폴더 위치만으로 "Quick Share 로 받았다" 고 쓸 수 없습니다. 상대 기기가 누구인지, 무엇을 보냈는지(보낸 쪽 기록)는 위 흔적으로 알 수 없습니다.
 
-보고서에는 "Quick Share 로 파일을 보냈다" 가 아니라 "이 시간대에 이 패키지가 포그라운드 서비스를 시작하고 알림을 띄운 기록이 있고, 같은 시간대에 이 파일이 Download 아래에 생겼다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "Quick Share 로 파일을 보냈다" 가 아니라 "이 시간대에 이 패키지가 포그라운드 서비스를 시작하고 알림을 띄운 기록이 있고, 같은 시간대에 이 파일이 Download 아래에 생겼다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-전송 기록 자체의 시각 칸은 공개 자료가 없어서 둘레 흔적의 시각을 씁니다. 받은 파일은 파일 시스템 시각과 [미디어 저장소](../media/mediastore/index.md) 의 시각을, 앱 사용과 알림은 [앱 사용 기록](../app-usage/usagestats/index.md) 과 [알림 기록](../app-usage/notification-history.md) 의 시각을 봅니다. usagestats dump 는 시각을 `time="…"` 칸에 적고, 표시 형식과 시간대는 검체 출력에서 확인합니다. 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에, 기기 시간대 확인은 [시간대와 시각 설정](../system-account/time-zone.md) 에 있습니다.
+전송 기록 자체의 시각 필드는 공개 자료가 없어서 둘레 흔적의 시각을 씁니다. 받은 파일은 파일 시스템 시각과 [미디어 저장소](../media/mediastore/index.md) 의 시각을, 앱 사용과 알림은 [앱 사용 기록](../app-usage/usagestats/index.md) 과 [알림 기록](../app-usage/notification-history.md) 의 시각을 봅니다. usagestats dump 는 시각을 `time="…"` 필드에 적고, 표시 형식과 시간대는 실제 출력에서 확인합니다. 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에, 기기 시간대 확인은 [시간대와 시각 설정](../system-account/time-zone.md) 에 있습니다.
 
 파일을 받은 시각과 파일 시스템에 찍힌 시각이 같은지, 원본 파일의 수정 시각을 넘겨받는지는 공개 자료가 없으니 한 가지 시각에 기대지 말고 여러 흔적을 맞춰 봅니다.
 
 ## 함정과 한계
 
-가장 큰 함정은 이름입니다. Google 의 Quick Share(예전 Nearby Share)와 삼성의 Quick Share 는 이름은 같아도 설정과 기능이 다를 수 있으므로[1], 한쪽에서 알아낸 경로나 패키지를 다른 쪽 검체에 그대로 대입하지 않습니다. 설정 키 이름에 `quickshare`, `nearby` 가 들어 있다고 해서 그 키가 어느 쪽 기능의 것인지도 이름만으로는 알 수 없습니다.
+가장 큰 함정은 이름입니다. Google 의 Quick Share(예전 Nearby Share)와 삼성의 Quick Share 는 이름은 같아도 설정과 기능이 다를 수 있으므로[1], 한쪽에서 알아낸 경로나 패키지를 다른 쪽 기기에 그대로 대입하지 않습니다. 설정 키 이름에 `quickshare`, `nearby` 가 들어 있다고 해서 그 키가 어느 쪽 기능의 것인지도 이름만으로는 알 수 없습니다.
 
-usagestats 에 Quick Share 이벤트가 어떤 패키지 이름으로 찍히는지는 검체에서 확인합니다. 오래된 전송이라면 둘레 흔적도 남아 있지 않을 수 있으니, 앱 사용 기록이 얼마 동안 남는지는 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 확인합니다.
+usagestats 에 Quick Share 이벤트가 어떤 패키지 이름으로 찍히는지는 실제 데이터로 확인합니다. 오래된 전송이라면 둘레 흔적도 남아 있지 않을 수 있으니, 앱 사용 기록이 얼마 동안 남는지는 [앱 사용 기록](../app-usage/usagestats/index.md) 에서 확인합니다.
 
 받은 파일을 사용자가 지우거나 다른 폴더로 옮기면 Download 아래 흔적은 사라지거나 바뀝니다. 지운 파일을 찾는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를, 흔적을 없애려 한 정황을 판단하는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 를 봅니다.
 
@@ -105,10 +105,10 @@ time="…" type=FOREGROUND_SERVICE_STOP package=<패키지> class=<패키지> fl
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 안드로이드 이미지를 하나 골라 아래 질문을 풀어 봅니다. 검체에 Quick Share 사용 흔적이 없을 수도 있으니 먼저 찾아봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 안드로이드 이미지를 하나 골라 아래 질문을 풀어 봅니다. 그 이미지에 Quick Share 사용 흔적이 없을 수도 있으니 먼저 찾아봅니다.
 
 1. 공용 저장 공간의 Download 아래에 "Quick Share" 라는 이름의 폴더가 있는가? 있다면 그 안의 파일은 언제 생겼는가?
-2. 검체의 Settings 에 위 표의 키가 있는가? 없다면 Google 쪽 기능과 삼성 쪽 기능 가운데 어느 쪽 기기로 보이는가?
+2. 이미지의 Settings 에 위 표의 키가 있는가? 없다면 Google 쪽 기능과 삼성 쪽 기능 가운데 어느 쪽 기기로 보이는가?
 3. 앱 사용 기록에서 공유를 맡은 것으로 보이는 패키지의 포그라운드 서비스 시작·종료 짝을 찾고, 그 사이에 뜬 알림의 `channelId` 는 무엇인가?
 4. 그 시간대에 받은 파일의 시각과 블루투스 기록이 서로 맞는가?
 

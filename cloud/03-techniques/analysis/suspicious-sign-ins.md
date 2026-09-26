@@ -10,9 +10,9 @@ nav_order: 690
 
 ## 언제 쓰나
 
-계정 침해가 의심될 때 가장 먼저 씁니다. 메일 규칙이 몰래 생겼거나 송금 요청 메일이 나갔을 때, 외부에서 특정 IP 를 알려 왔을 때, 서비스가 위험 경고를 띄웠을 때가 여기에 해당합니다. 사건별 흐름은 [메일 계정을 빼앗겨 송금 사기를 당했나](../../04-scenarios/account-compromise/bec.md), [토큰을 훔쳐 로그인했나](../../04-scenarios/account-compromise/token-theft.md), [MFA 피로 공격을 당했나](../../04-scenarios/account-compromise/mfa-fatigue.md), [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md) 시나리오에 있고, 이 쪽은 그 시나리오들이 함께 쓰는 로그인 판별 방법만 다룹니다.
+계정 침해가 의심될 때 가장 먼저 씁니다. 메일 규칙이 몰래 생겼거나 송금 요청 메일이 나갔을 때, 외부에서 특정 IP 를 알려 왔을 때, 서비스가 위험 경고를 띄웠을 때가 여기에 해당합니다. 사건별 흐름은 [메일 계정을 빼앗겨 송금 사기를 당했나](../../04-scenarios/account-compromise/bec.md), [토큰을 훔쳐 로그인했나](../../04-scenarios/account-compromise/token-theft.md), [MFA 피로 공격을 당했나](../../04-scenarios/account-compromise/mfa-fatigue.md), [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md) 시나리오에 있고, 이 페이지는 그 시나리오들이 함께 쓰는 로그인 판별 방법만 다룹니다.
 
-서비스마다 로그인 기록이 있는 곳과 결과를 가르는 필드가 다릅니다. 아래 표는 이 쪽에서 쓰는 필드만 모은 것이고, 각 로그의 전체 구조는 표 첫 열의 아티팩트 쪽에 있습니다.
+서비스마다 로그인 기록이 있는 곳과 결과를 가르는 필드가 다릅니다. 아래 표는 이 페이지에서 쓰는 필드만 모은 것이고, 각 로그의 전체 구조는 표 첫 열의 아티팩트 페이지에 있습니다.
 
 | 서비스 | 로그인 기록 | 성공·실패 | 다단계 인증(MFA) 흔적 | 서비스가 붙인 판정 |
 |---|---|---|---|---|
@@ -31,7 +31,7 @@ Azure 테넌트로 들어오는 로그인은 모두 Entra 로그인 로그에 �
 
 사용자가 직접 암호나 인증 요소를 입력한 대화형 로그인만 받으면 토큰으로 이어진 접속이 빠집니다. Entra 는 리프레시 토큰으로 액세스 토큰을 받는 경우, 인가 코드로 토큰을 받는 경우, 같은 앱 계열(FOCI, Family of Client IDs)로 두 번째 Office 앱에 로그인하는 경우를 비대화형 로그인(non-interactive sign-in)으로 따로 남깁니다[2]. Graph 의 `signInEventTypes` 값은 `interactiveUser`, `nonInteractiveUser`, `servicePrincipal`, `managedIdentity` 네 가지입니다[4]. 필터를 따로 주지 않으면 Graph 는 대화형 로그인만 돌려주므로[4], 종류마다 필터를 주어 받습니다. 서비스 주체와 관리 ID 의 로그인까지 받아야 앱 자격 증명이 쓰인 흔적도 보입니다.
 
-Microsoft-Extractor-Suite 의 `Get-GraphEntraSignInLogs` 는 `-EventTypes` 기본값이 `All` 이고 종류마다 `signInEventTypes/any(...)` 필터로 나눠 받습니다[23]. Untitled Goose Tool 은 `adfs`·`rt`·`sp`·`msi` 네 갈래로 나눠 `signin_` 으로 시작하는 폴더에 저장합니다[24]. Graph 로 로그인 로그를 받으려면 Entra ID P1 또는 P2 라이선스가 필요합니다[3]. 수집 경로와 한도는 [Microsoft 365 수집 도구](../acquisition/m365-collection.md), 보관 기간은 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에 있습니다. Okta System Log 는 90일 넘은 데이터를 돌려주지 않고[18][19], Slack 감사 로그는 2018년 3월 이전 데이터가 없습니다(2026년 9월 문서 기준)[21].
+Microsoft-Extractor-Suite 의 `Get-GraphEntraSignInLogs` 는 `-EventTypes` 기본값이 `All` 이고 종류마다 `signInEventTypes/any(...)` 필터로 나눠 받습니다[23]. Untitled Goose Tool 은 `adfs`·`rt`·`sp`·`msi` 네 종류로 나눠 `signin_` 으로 시작하는 폴더에 저장합니다[24]. Graph 로 로그인 로그를 받으려면 Entra ID P1 또는 P2 라이선스가 필요합니다[3]. 수집 경로와 한도는 [Microsoft 365 수집 도구](../acquisition/m365-collection.md), 보관 기간은 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에 있습니다. Okta System Log 는 90일 넘은 데이터를 돌려주지 않고[18][19], Slack 감사 로그는 2018년 3월 이전 데이터가 없습니다(2026년 9월 문서 기준)[21].
 
 ### 2. 계정마다 평소 모습을 잡는다
 
@@ -44,7 +44,7 @@ Microsoft-Extractor-Suite 의 `Get-GraphEntraSignInLogs` 는 `-EventTypes` 기�
 | 코드 | 뜻 | 읽는 법 |
 |---|---|---|
 | 50126 | 사용자 이름 또는 암호가 틀림 | 사용자 실수로도 어느 정도는 생깁니다. 한 IP 에서 여러 계정으로 나오면 4단계로 넘어갑니다 |
-| 50053 | 잘못된 ID·암호를 되풀이해 잠김, 또는 악성 활동이 있던 IP 에서 온 로그인이라 차단 | 두 원인 중 어느 쪽인지는 로그인 로그의 실패 이유(Failure reason)로 가립니다 |
+| 50053 | 잘못된 ID·암호를 되풀이해 잠김, 또는 악성 활동이 있던 IP 에서 온 로그인이라 차단 | 두 원인 중 어느 쪽인지는 로그인 로그의 실패 이유(Failure reason)로 구분합니다 |
 | 50074 | 강한 인증이 필요했는데 MFA 챌린지를 통과하지 못함 | 같은 시각 전후 기록에서 1차 인증 결과를 함께 봅니다 |
 | 50076 | 관리자 설정(조건부 접근, 사용자별 MFA, 위치 변경)으로 MFA 가 필요함 | 곧이어 같은 세션의 성공이 있는지 봅니다 |
 | 50140 | "로그인 상태 유지" 질문으로 끊김 | 정상 로그인 흐름의 일부입니다 |
@@ -68,11 +68,11 @@ SigninLogs
   by IPAddress
 ```
 
-`ResultType` 은 문자열 열이라 따옴표로 비교합니다[5]. 비대화형 로그인은 `AADNonInteractiveUserSignInLogs` 에 따로 있으므로 같은 쿼리를 한 번 더 돌립니다[31]. 이 표의 `ResultType` 설명은 "Success 또는 Failure" 로 `SigninLogs` 의 설명(0 이면 성공)과 다르므로[5][31], 검체에서 실제 값을 먼저 확인합니다. 반대로 계정 하나를 두고 IP·ASN·국가·기기 조합이 바뀐 시점을 찾으면 접속 환경이 바뀐 때가 드러납니다.
+`ResultType` 은 문자열 열이라 따옴표로 비교합니다[5]. 비대화형 로그인은 `AADNonInteractiveUserSignInLogs` 에 따로 있으므로 같은 쿼리를 한 번 더 돌립니다[31]. 이 표의 `ResultType` 설명은 "Success 또는 Failure" 로 `SigninLogs` 의 설명(0 이면 성공)과 다르므로[5][31], 실제 로그에서 값을 먼저 확인합니다. 반대로 계정 하나를 두고 IP·ASN·국가·기기 조합이 바뀐 시점을 찾으면 접속 환경이 바뀐 때가 드러납니다.
 
 ### 5. 성공한 로그인이 어떻게 통과했는지 본다
 
-실패 뒤에 성공이 이어지면, 그 성공이 어떤 방식으로 인증을 통과했는지 봅니다. 로그인 한 건은 누가(사용자), 어떻게(인증 요구·클라이언트 앱·자격 증명 유형), 무엇에(자원) 세 갈래로 나눠 읽으면 볼 범위가 좁아집니다[1]. Entra 로그인 레코드에서 볼 필드는 아래와 같습니다.
+실패 뒤에 성공이 이어지면, 그 성공이 어떤 방식으로 인증을 통과했는지 봅니다. 로그인 한 건은 누가(사용자), 어떻게(인증 요구·클라이언트 앱·자격 증명 유형), 무엇에(자원) 세 부분으로 나눠 읽으면 볼 범위가 좁아집니다[1]. Entra 로그인 레코드에서 볼 필드는 아래와 같습니다.
 
 | 필드 | 값 | 가려낼 점 |
 |---|---|---|
@@ -91,7 +91,7 @@ SigninLogs
 
 ### 6. 서비스가 붙인 판정과 맞춰 본다
 
-서비스가 스스로 위험하다고 표시한 기록을 5단계에서 고른 로그인과 맞춰 봅니다. 판정은 라이선스에 따라 보이는 범위가 달라서, 빈 칸이 "위험 없음" 인지 "볼 권한 없음" 인지를 먼저 가립니다.
+서비스가 스스로 위험하다고 표시한 기록을 5단계에서 고른 로그인과 맞춰 봅니다. 판정은 라이선스에 따라 보이는 범위가 달라서, 빈 값이 "위험 없음" 인지 "볼 권한 없음" 인지를 먼저 구분합니다.
 
 | Entra ID 라이선스 | 받는 로그인 위험 탐지(`riskEventType`) | 로그인 로그의 위험 필드 |
 |---|---|---|
@@ -108,12 +108,12 @@ SigninLogs
 
 ## 도구
 
-| 도구 | 이 쪽에서 쓰는 기능 |
+| 도구 | 이 페이지에서 쓰는 기능 |
 |---|---|
 | Microsoft-Extractor-Suite | `Get-GraphEntraSignInLogs -EventTypes` 로 대화형·비대화형·서비스 주체·관리 ID 로그인을 종류별로 받습니다[23] |
 | Untitled Goose Tool | 로그인 로그를 `adfs`·`rt`·`sp`·`msi` 로 나눠 받습니다[24] |
 | Hawk | `Search-HawkTenantActivityByIP` 가 `Search-UnifiedAuditLog -IPAddresses` 로 한 IP 의 통합 감사 로그 기록을 모아 `Success_Events`, `Unique_Users_Attempted`, `Unique_Users_Success` 파일로 나눠 냅니다[22] |
-| SigmaHQ 규칙 | AWS 콘솔 로그인 실패(`eventName: ConsoleLogin` + `errorMessage: Failed authentication`)[26], MFA 없는 콘솔 로그인 성공(`additionalEventData.MFAUsed: 'NO'` + `responseElements.ConsoleLogin: 'Success'`)[25], Google Workspace 의심 로그인[29] 등. 규칙을 로그에 돌리는 법은 [탐지 규칙으로 로그 훑기](detection-rules.md)에 있습니다 |
+| SigmaHQ 규칙 | AWS 콘솔 로그인 실패(`eventName: ConsoleLogin` + `errorMessage: Failed authentication`)[26], MFA 없는 콘솔 로그인 성공(`additionalEventData.MFAUsed: 'NO'` + `responseElements.ConsoleLogin: 'Success'`)[25], Google Workspace 의심 로그인[29] 등. 규칙을 로그에 돌리는 법은 [탐지 규칙으로 로그 검색하기](detection-rules.md)에 있습니다 |
 | Okta System Log 필터 | `eventType eq "user.session.start" and outcome.result eq "FAILURE"`[18] |
 
 Hawk 는 `ResultStatus` 가 `success` 인 레코드를 성공으로 셉니다[22]. 통합 감사 로그의 Entra STS 로그인 레코드에서 `ResultStatus` 가 `Succeeded` 인 것은 HTTP 작업이 성공했다는 뜻일 뿐 로그인 성공이 아니라서, 로그인 성공 여부는 `LogonError`·`ErrorCode` 로 다시 확인합니다[9].
@@ -127,8 +127,8 @@ Hawk 는 `ResultStatus` 가 `success` 인 레코드를 성공으로 셉니다[22
 - 관리 센터의 비대화형 로그인 로그는 앱·사용자·IP·상태·자원 ID 가 같고 시각만 다르면 한 줄로 묶고, 묶인 수는 로그인 수 열에 나옵니다[2]. 기밀 클라이언트(confidential client)의 비대화형 로그인 IP 는 리프레시 토큰을 요청한 실제 출발지가 아니라 처음 토큰을 받을 때의 IP 입니다[2].
 - 게스트 사용자는 사용자 객체에 `AdeleVance_fabrikam.com#EXT#@contoso.com` 처럼 저장되지만 로그인 로그에는 `adelevance@fabrikam.com` 처럼 원래 형식의 소문자로 남습니다[3]. 사용자 목록과 이어 붙일 때 문자열이 맞지 않습니다. 교차 테넌트 로그인에서는 홈 테넌트 이름을 채우지 않습니다[1].
 - `incomingTokenType` 목록에 없는 토큰으로도 인증했을 수 있어서, 값이 `none` 이라고 토큰이 없었다고 볼 수 없습니다[4].
-- 위험 탐지 이름이 출처마다 다릅니다. Entra 문서의 불가능 이동은 `mcasImpossibleTravel` 인데[7], SigmaHQ 규칙은 `impossibleTravel` 로 찾습니다[27]. 규칙을 그대로 쓰기 전에 검체의 실제 값을 확인합니다. 통합 감사 로그 쪽 Sigma 규칙은 원시 로그인이 아니라 `eventSource: SecurityComplianceCenter` 의 경고 이름을 찾으므로, 서비스가 이미 판정한 결과를 다시 거르는 셈입니다[28].
-- AWS `MFAUsed` 는 IAM 사용자나 루트 사용자가 MFA 를 쓴 경우에만 참이 되고, 페더레이션 사용자의 요청은 `No` 로 남습니다[11]. IdP 쪽에서 MFA 를 했는지는 IdP 로그로 확인합니다. 값은 `Yes`·`No` 인데 Sigma 규칙은 `'NO'` 로 적습니다[11][25]. Sigma 는 대소문자를 가리지 않지만[30], jq·grep 으로 직접 찾을 때는 대소문자를 맞춥니다.
+- 위험 탐지 이름이 출처마다 다릅니다. Entra 문서의 불가능 이동은 `mcasImpossibleTravel` 인데[7], SigmaHQ 규칙은 `impossibleTravel` 로 찾습니다[27]. 규칙을 그대로 쓰기 전에 실제 로그의 값을 확인합니다. 통합 감사 로그 쪽 Sigma 규칙은 원시 로그인이 아니라 `eventSource: SecurityComplianceCenter` 의 경고 이름을 찾으므로, 서비스가 이미 판정한 결과를 다시 거르는 셈입니다[28].
+- AWS `MFAUsed` 는 IAM 사용자나 루트 사용자가 MFA 를 쓴 경우에만 참이 되고, 페더레이션 사용자의 요청은 `No` 로 남습니다[11]. IdP 쪽에서 MFA 를 했는지는 IdP 로그로 확인합니다. 값은 `Yes`·`No` 인데 Sigma 규칙은 `'NO'` 로 적습니다[11][25]. Sigma 는 대소문자를 구분하지 않지만[30], jq·grep 으로 직접 찾을 때는 대소문자를 맞춥니다.
 - AWS 콘솔 로그인이 기록되는 리전은 사용자 유형과 엔드포인트에 따라 다릅니다. 루트는 `us-east-1`·`us-east-2`·`us-west-2` 가운데 하나이고, IAM 사용자가 전역 엔드포인트로 로그인하면 브라우저에 계정 별칭 쿠키가 있을 때 `us-east-2`·`eu-north-1`·`ap-southeast-2` 가운데 하나, 없을 때 `us-east-1` 입니다[11]. 한 리전만 조회하면 로그인이 빠집니다.
 - CloudTrail 은 교차 계정 역할 전환과 `AssumeRoot` 로 여는 권한 세션에서 거부된 STS 요청을 대상 계정에 남기지 않고, 유효성이 모자란 일부 비인증 STS 요청도 남기지 않습니다[12].
 - Google Workspace `login_type` 이 `exchange` 이면 기존 자격 증명을 다른 유형으로 바꾼 것이고, 이미 로그인한 세션과 합쳐졌을 수 있습니다[14].
@@ -156,7 +156,7 @@ Entra 로그인 레코드의 `createdDateTime`(`SigninLogs` 의 `CreatedDateTime
 
 ### 보고서 문장
 
-기록이 말하는 만큼만 씁니다. "공격자가 로그인했다" 가 아니라 "2026-09-03 02:14(UTC)에 `user@contoso.com` 계정으로 IP 203.0.113.45 에서 단일 요소 인증으로 로그인에 성공한 기록이 있다. 같은 IP 에서 앞선 40분 동안 다른 계정 12개로 50126 오류가 났다." 처럼 씁니다(값은 모두 만든 예시). 보고서 전체 틀은 [클라우드 포렌식 보고서](../reporting/forensic-report.md)에 있습니다.
+기록으로 확인되는 만큼만 씁니다. "공격자가 로그인했다" 가 아니라 "2026-09-03 02:14(UTC)에 `user@contoso.com` 계정으로 IP 203.0.113.45 에서 단일 요소 인증으로 로그인에 성공한 기록이 있다. 같은 IP 에서 앞선 40분 동안 다른 계정 12개로 50126 오류가 났다." 처럼 씁니다(값은 모두 만든 예시). 보고서 전체 틀은 [클라우드 포렌식 보고서](../reporting/forensic-report.md)에 있습니다.
 
 ## 참고 문헌
 

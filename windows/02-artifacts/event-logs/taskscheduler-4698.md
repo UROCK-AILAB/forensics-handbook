@@ -19,7 +19,7 @@ nav_order: 2650
 | 보안 로그 4698~4702 | 작업을 만들 때, 지울 때, 사용·사용 안 함으로 바꿀 때, 수정할 때 | 요청한 계정과 로그온 ID, 작업 이름, 작업 XML |
 | TaskScheduler/Operational | 작업을 등록·수정·삭제할 때, 작업과 동작 (Action) 이 시작하고 끝날 때 | 작업 이름, 사용자 이름, 실행 인스턴스, 반환 코드 |
 
-4698 은 새 예약 작업이 만들어질 때마다 남고, TaskContent 칸에 새 작업의 XML 전체가 들어가며 실행할 명령도 이 XML 안에 있습니다. Operational 로그의 등록 이벤트 106 에는 작업 이름과 사용자만 있고 작업 내용은 없습니다. 그래서 "무엇을 실행하게 했나" 는 4698 에서 찾고, "실제로 실행했나" 는 Operational 로그에서 찾습니다.
+4698 은 새 예약 작업이 만들어질 때마다 남고, TaskContent 필드에 새 작업의 XML 전체가 들어가며 실행할 명령도 이 XML 안에 있습니다. Operational 로그의 등록 이벤트 106 에는 작업 이름과 사용자만 있고 작업 내용은 없습니다. 그래서 "무엇을 실행하게 했나" 는 4698 에서 찾고, "실제로 실행했나" 는 Operational 로그에서 찾습니다.
 
 작업 정의 파일과 레지스트리에 남는 흔적은 [예약 작업](../persistence/scheduled-tasks/index.md)에서 다룹니다. 이 페이지는 이벤트만 다룹니다.
 
@@ -49,27 +49,27 @@ nav_order: 2650
 
 ### 이벤트 버전
 
-| 이벤트 | 버전 | Windows | 더해진 칸 |
+| 이벤트 | 버전 | Windows | 더해진 필드 |
 |---|---|---|---|
 | 4698 | 0 | Windows Vista · Windows Server 2008 부터 | — |
 | 4698 | 1 | Windows 10 1903 부터 | ClientProcessStartKey, ClientProcessId, ParentProcessId, RpcCallClientLocality, FQDN |
-| 4699~4702 | 0 · 1 | 매니페스트에 두 버전이 모두 있습니다 | 버전 1 에 위와 같은 다섯 칸 |
+| 4699~4702 | 0 · 1 | 매니페스트에 두 버전이 모두 있습니다 | 버전 1 에 위와 같은 다섯 필드 |
 
 - Windows XP · 2003 의 옛 작업 형식은 [옛 작업 파일 (.job·at)](../persistence/scheduled-tasks/job-at.md)에서 다룹니다.
 
 ## 구조
 
-### 4698 칸
+### 4698 필드
 
-| 칸 (XML 이름) | 뜻 | 읽을 때 주의 |
+| 필드 (XML 이름) | 뜻 | 읽을 때 주의 |
 |---|---|---|
 | SubjectUserSid · SubjectUserName · SubjectDomainName | 작업을 만든 계정 | 계정입니다. 사람이 아닙니다 |
 | SubjectLogonId | 그 계정의 로그온 ID | 4624 의 Logon ID 와 이을 수 있습니다 |
-| TaskName | 작업 경로와 이름 | `\task_path\task_name` 꼴입니다. 경로는 작업 스케줄러의 "Task Scheduler Library" 뿌리부터 적습니다 |
+| TaskName | 작업 경로와 이름 | `\task_path\task_name` 형식입니다. 경로는 작업 스케줄러의 "Task Scheduler Library" 뿌리부터 적습니다 |
 | TaskContent | 새 작업의 XML 전체 | 명령, 트리거, 실행 계정 설정이 여기 있습니다 |
-| ClientProcessStartKey · ClientProcessId · ParentProcessId · RpcCallClientLocality · FQDN | 버전 1 에만 있는 칸 | 값의 모양은 검체에서 확인합니다 |
+| ClientProcessStartKey · ClientProcessId · ParentProcessId · RpcCallClientLocality · FQDN | 버전 1 에만 있는 필드 | 값의 모양은 실제 기록으로 확인합니다 |
 
-Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보여 주는 예시이며 검체에서 나온 값이 아닙니다.
+Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보여 주는 예시이며 실제 기록에서 나온 값이 아닙니다.
 
 ```xml
 <Provider Name="Microsoft-Windows-Security-Auditing" Guid="{54849625-5478-4994-A5BA-3E3B0328C30D}" />
@@ -88,11 +88,11 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보
 
 작업 XML 의 각 요소가 무슨 뜻인지는 [작업 정의 파일 (System32\Tasks XML)](../persistence/scheduled-tasks/system32-tasks-xml.md)에서 다룹니다.
 
-### 4699~4702 칸
+### 4699~4702 필드
 
-네 이벤트 모두 Subject 네 칸과 TaskName 이 있습니다. 작업 내용이 들어가는 칸 이름은 이벤트마다 다릅니다. (Windows 11 25H2 매니페스트 기준)
+네 이벤트 모두 Subject 필드 네 개와 TaskName 이 있습니다. 작업 내용이 들어가는 필드 이름은 이벤트마다 다릅니다. (Windows 11 25H2 매니페스트 기준)
 
-| ID | 메시지 | 작업 내용 칸 |
+| ID | 메시지 | 작업 내용 필드 |
 |---|---|---|
 | 4699 | A scheduled task was deleted. (작업 삭제) | TaskContent |
 | 4700 | A scheduled task was enabled. (작업 사용) | TaskContent |
@@ -100,13 +100,13 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보
 | 4702 | A scheduled task was updated. (작업 수정) | TaskContentNew |
 
 - 4702 에는 수정한 뒤의 내용만 있습니다. 수정하기 전 내용은 앞선 4698 이나 4702 에서 찾습니다.
-- 4699 에도 TaskContent 칸이 있습니다. 지운 작업의 XML 이 실제로 들어가는지는 검체에서 확인합니다.
+- 4699 에도 TaskContent 필드가 있습니다. 지운 작업의 XML 이 실제로 들어가는지는 실제 기록으로 확인합니다.
 
 ### TaskScheduler/Operational 이벤트
 
 아래 표는 한 PC 의 공급자 매니페스트에서 읽었습니다.
 
-| ID | 뜻 | 칸 |
+| ID | 뜻 | 필드 |
 |---|---|---|
 | 106 | 작업 등록 | TaskName, UserContext |
 | 140 | 작업 수정 | TaskName, UserName |
@@ -135,10 +135,10 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보
 읽을 때 다음을 기억합니다.
 
 - 106·140·141 에는 작업 이름과 사용자만 있습니다. 작업 XML 과 명령은 없습니다.
-- 200 의 ActionName 에 무엇이 들어가는지는 매니페스트로 알 수 없습니다. 매니페스트는 칸 이름만 알려 줍니다.
-- 129 의 Path 칸도 같습니다. 무엇이 들어가는지는 검체에서 확인합니다.
+- 200 의 ActionName 에 무엇이 들어가는지는 매니페스트로 알 수 없습니다. 매니페스트에는 필드 이름만 나와 있습니다.
+- 129 의 Path 필드도 같습니다. 무엇이 들어가는지는 실제 기록으로 확인합니다.
 - 201 의 반환 코드는 버전 1 부터 있습니다. 버전 0 기록에서는 성공·실패를 201 로 가릴 수 없습니다.
-- 100·102·107~110·118·119 의 InstanceId 와 200~203 의 TaskInstanceId 는 이름으로 보아 같은 실행 인스턴스를 가리킵니다. 같은 값끼리 묶으면 한 번의 실행을 처음부터 끝까지 볼 수 있습니다. 이 방법은 칸 이름에서 나온 해석입니다.
+- 100·102·107~110·118·119 의 InstanceId 와 200~203 의 TaskInstanceId 는 이름으로 보면 같은 실행 인스턴스를 가리킵니다. 같은 값끼리 묶으면 한 번의 실행을 처음부터 끝까지 볼 수 있습니다. 이 방법은 필드 이름에서 나온 해석입니다.
 
 ## 증거로서 의미
 
@@ -172,10 +172,10 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보
 
 1. **로그가 없는 것을 작업이 없었다는 뜻으로 읽습니다.** 4698 과 Operational 로그는 기본으로 꺼져 있습니다. 먼저 설정을 확인합니다.
 2. **106 에서 명령을 찾습니다.** 106·140·141 에는 작업 이름과 사용자뿐입니다. 명령은 4698 의 TaskContent 나 작업 정의 파일에서 찾습니다.
-3. **TaskContent 로만 검색합니다.** 4702 는 칸 이름이 TaskContentNew 입니다. 칸 이름으로 거르면 수정 이벤트가 빠집니다.
+3. **TaskContent 로만 검색합니다.** 4702 는 필드 이름이 TaskContentNew 입니다. 필드 이름으로 거르면 수정 이벤트가 빠집니다.
 4. **129 의 PID 를 4688 과 그대로 맞춥니다.** 129 의 ProcessID 는 10진 정수입니다. 4688 의 PID 는 16진으로 적힙니다([프로세스 생성 (4688)](4688.md)). 진법을 맞춘 뒤 비교합니다.
 5. **작업 목록에 없으면 작업이 없다고 봅니다.** Tarrask 악성 코드는 레지스트리 SD 값을 지워 작업을 목록에서 감춥니다. 감춘 작업도 트리거대로 계속 실행됩니다[3]. 이벤트에 나온 작업 이름을 `TaskCache\Tree` 와 대조합니다. 자세한 방법은 [숨긴 예약 작업 찾기 (SD 값 삭제)](../persistence/scheduled-tasks/sd.md)에서 다룹니다.
-6. **뿌리에 있는 작업을 흘려봅니다.** TaskName 이 `\TASK_NAME` 꼴인 작업, 곧 뿌리에 바로 있는 작업을 살핍니다. 사람이 손으로 만든 작업과 악성 코드가 만든 작업이 흔히 뿌리에 있습니다[1].
+6. **뿌리에 있는 작업을 흘려봅니다.** TaskName 이 `\TASK_NAME` 형식인 작업, 곧 뿌리에 바로 있는 작업을 살핍니다. 사람이 손으로 만든 작업과 악성 코드가 만든 작업이 흔히 뿌리에 있습니다[1].
 7. **`<LogonType>Password</LogonType>` 를 흘려봅니다.** TaskContent 에 이 값이 있으면 경보 대상으로 봅니다. 이때 작업 실행 계정의 비밀번호가 자격 증명 관리자에 평문 형식 (cleartext format) 으로 저장되고, 관리자 권한으로 꺼낼 수 있습니다[1]. 저장 위치는 [자격 증명 관리자와 볼트](../credentials/credential-manager-windows-vault.md)에서 다룹니다.
 8. **순환 로그의 앞부분을 끝까지 믿습니다.** 한 PC 에서 Operational 로그는 10,485,760바이트 순환 설정이었습니다. 크기 한도에 이르면 오래된 기록부터 밀려납니다.
 9. **원격 등록을 한 컴퓨터에서만 찾습니다.** 다른 컴퓨터에 작업을 등록하면 실행한 쪽과 대상 쪽에 서로 다른 기록이 남습니다. 아래 "교차 검증" 의 JPCERT/CC 시험 결과를 봅니다.
@@ -190,9 +190,9 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보
 
 ### 헥스로 한 번
 
-이벤트 칸의 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류 번호와 배열 구조는 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다. 여기서는 값 데이터 두 개만 봅니다.
+이벤트 필드의 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류 번호와 배열 구조는 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다룹니다. 여기서는 값 데이터 두 개만 봅니다.
 
-아래 바이트는 설명을 위해 만든 예시입니다. 작업 이름과 PID 는 지어낸 값이며, 검체에서 나온 값이 아닙니다.
+아래 바이트는 설명을 위해 만든 예시입니다. 작업 이름과 PID 는 지어낸 값이며, 실제 기록에서 나온 값이 아닙니다.
 
 **1) 뿌리 작업의 TaskName**
 
@@ -217,10 +217,10 @@ Microsoft 문서의 예시 이벤트 가운데 일부입니다[1]. 문서가 보
 
 1. 리틀 엔디언으로 읽으면 0x00001A9C 입니다.
 2. 0x1A9C 는 10진으로 6,812 입니다.
-3. 129 의 메시지 `%3` 자리에는 10진 `6812` 로 보일 가능성이 큽니다. 칸 형식에서 나온 추측입니다.
+3. 129 의 메시지 `%3` 자리에는 10진 `6812` 로 보일 가능성이 큽니다. 필드 형식에서 나온 추측입니다.
 4. 같은 프로세스의 4688 에는 New Process ID 가 `0x1a9c` 로 적힙니다.
 
-> 그림 자리: 129 레코드의 ProcessID 4바이트와, 같은 프로세스의 4688 New Process ID 칸을 나란히 놓고 10진·16진 변환을 보여 주는 그림
+> 그림 자리: 129 레코드의 ProcessID 4바이트와, 같은 프로세스의 4688 New Process ID 필드를 나란히 놓고 10진·16진 변환을 보여 주는 그림
 
 ### 공개 도구로 한 번
 
@@ -238,14 +238,14 @@ $e = Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Security.evtx'; Id = 4698 
 ([xml]$e.ToXml()).Event.EventData.Data | Where-Object { $_.Name -in 'TaskName', 'TaskContent' }
 ```
 
-칸 구성은 공급자 매니페스트에서 확인할 수 있습니다.
+필드 구성은 공급자 매니페스트에서 확인할 수 있습니다.
 
 ```powershell
 (Get-WinEvent -ListProvider Microsoft-Windows-TaskScheduler).Events |
   Where-Object Id -eq 201 | Select-Object Id, Version, Template
 ```
 
-이 명령은 분석 PC 의 매니페스트를 읽습니다. 검체의 Windows 버전과 분석 PC 의 버전이 다르면 칸 구성이 다를 수 있습니다. 라이브 시스템의 감사 설정은 `auditpol /get /subcategory:{0CCE9227-69AE-11D9-BED3-505054503030} /r` 로 확인합니다.
+이 명령은 분석 PC 의 매니페스트를 읽습니다. 분석 대상의 Windows 버전과 분석 PC 의 버전이 다르면 필드 구성이 다를 수 있습니다. 라이브 시스템의 감사 설정은 `auditpol /get /subcategory:{0CCE9227-69AE-11D9-BED3-505054503030} /r` 로 확인합니다.
 
 도구가 TaskContent 를 한 줄로 줄이거나 잘라 보여 주는지 확인합니다. 레코드 한두 개는 XML 원문과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
@@ -293,7 +293,7 @@ JPCERT/CC 가 실행 성공을 판단한 기준은 다음과 같습니다.
 6. 작업을 수정하고, 사용 안 함으로 바꾸고, 지웁니다. 4702·4701·4699 와 140·142·141 이 짝을 지어 남는지 봅니다. 4699 의 TaskContent 에 무엇이 들어가는지도 봅니다.
 7. 4699~4702 가 어느 감사 하위 범주를 켰을 때 남는지 확인합니다.
 
-**NIST CFReDS 같은 공개 검체**에서는 다음을 풀어 봅니다.
+**NIST CFReDS 같은 공개 데이터 세트**에서는 다음을 풀어 봅니다.
 
 1. 보안 로그에 4698 이 있습니까? 없다면 감사 설정이 꺼져 있었는지부터 확인합니다.
 2. Operational 로그가 있다면 106 의 작업 이름 목록을 뽑고, `TaskCache\Tree` 의 작업 목록과 비교합니다. 한쪽에만 있는 이름은 무엇입니까?

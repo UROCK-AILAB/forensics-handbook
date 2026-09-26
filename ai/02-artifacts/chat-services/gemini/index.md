@@ -20,7 +20,7 @@ Gemini 는 웹(gemini.google.com)과 Android·iOS 앱에서 쓰고, Chrome 브�
 
 Gemini 가 모으는 항목은 넓습니다. 프롬프트와 음성 입력, 올린 파일·사진·화면, Gemini Live 대화 녹취와 녹음, 맞춤 지시 (custom instructions), 생성 결과물, 연결된 앱의 데이터(검색·YouTube·Chrome 기록 등), 기기 정보(통화·메시지 기록, 연락처, 설치된 앱, 언어), 위치, 구독 정보가 들어 있습니다 [1]. 위치는 활동 기록에 저장하기 전에 3제곱킬로미터보다 넓고 사용자가 1,000명 이상인 구역으로 뭉개고, 정확한 위치는 기기 권한이 있을 때만 씁니다 [1]. 2025년 논문의 시험에서는 iOS 기기의 위치 설정을 꺼 둔 상태에서도 Gemini 와 ChatGPT 에서 반경 0.5마일(약 800m) 안의 위치 데이터를 얻을 수 있었습니다 [9]. Google Labs 의 실험 기능 Opal 에서 만든 Gems 는 Gemini 앱에 속하지 않고, Google Drive 의 "Opal" 폴더에 저장되며 활동 기록에 나오지 않습니다 [1].
 
-Takeout 보관 파일에서 Gemini 활동은 "My Activity" 폴더 아래 "Gemini Apps" 폴더에 들어갑니다. 공개 변환 도구들은 My Activity 형식을 JSON 으로 골랐을 때 경로를 `Takeout/My Activity/Gemini Apps/MyActivity.json` 으로 적었고 [12][13], 다른 도구는 `My Activity.json` 을 적고 `MyActivity.json` 은 예전 이름이라고 적었습니다 [11]. 파일 이름은 언어 설정에 따라 바뀌고, 폴더 이름까지 그리스어로 된 경로 예가 있습니다 [13]. 기록은 가지가 있는 대화가 아니라 활동을 하나씩 늘어놓은 목록이고 항목마다 따로 떨어져 있어서, 공개 도구는 30분 간격 같은 시간 기준으로 묶어 대화를 추정합니다 [13]. 답변이 보관 파일에 들어가는지는 도구끼리 다릅니다. 한 도구는 Takeout 이 답변을 내보내지 않는다고 적었고 [11], 다른 두 도구는 `safeHtmlItem` 칸을 답변으로 읽습니다 [12][13]. 그러니 실제 보관 파일에서 답변 칸이 있는지 먼저 봅니다. 파일 구조와 칸은 [계정 데이터 내보내기](export.md) 에서 다룹니다.
+Takeout 보관 파일에서 Gemini 활동은 "My Activity" 폴더 아래 "Gemini Apps" 폴더에 들어갑니다. 공개 변환 도구들은 My Activity 형식을 JSON 으로 골랐을 때 경로를 `Takeout/My Activity/Gemini Apps/MyActivity.json` 으로 적었고 [12][13], 다른 도구는 `My Activity.json` 을 적고 `MyActivity.json` 은 예전 이름이라고 적었습니다 [11]. 파일 이름은 언어 설정에 따라 바뀌고, 폴더 이름까지 그리스어로 된 경로 예가 있습니다 [13]. 기록은 가지가 있는 대화가 아니라 활동을 하나씩 늘어놓은 목록이고 항목마다 따로 떨어져 있어서, 공개 도구는 30분 간격 같은 시간 기준으로 묶어 대화를 추정합니다 [13]. 답변이 보관 파일에 들어가는지는 도구끼리 다릅니다. 한 도구는 Takeout 이 답변을 내보내지 않는다고 적었고 [11], 다른 두 도구는 `safeHtmlItem` 필드를 답변으로 읽습니다 [12][13]. 그러니 실제 보관 파일에서 답변 필드가 있는지 먼저 봅니다. 파일 구조와 필드는 [계정 데이터 내보내기](export.md) 에서 다룹니다.
 
 공개 분석 도구 가운데 ALEAPP·iLEAPP·RLEAPP 에는 Gemini 전용 분석기가 없습니다(2026-09-25 main 브랜치 기준) [14]. RLEAPP 의 `takeoutMyActivity.py`(2026-07-09 갱신)는 `*/My Activity/*/MyActivity.html` 을 서비스 폴더 이름별로 보고서에 붙이기만 하고, 내용을 행으로 풀지는 않습니다 [15]. 지금 판의 도구는 다를 수 있으니 쓰기 전에 저장소를 다시 봅니다.
 
@@ -30,13 +30,13 @@ Takeout 보관 파일에서 Gemini 활동은 "My Activity" 폴더 아래 "Gemini
 
 | 쓰는 곳 | 기록이 있는 곳 | OS·환경 | 앱 버전 | 알려 주는 것 |
 |---|---|---|---|---|
-| 웹 브라우저 | 서버 활동 기록. 브라우저 쪽 흔적은 공개된 분석 자료가 없어 검체의 브라우저 프로필에서 확인 | 브라우저 | 웹 서비스라 앱 버전 없음 | 서버에 남은 프롬프트와 대화, 공개 링크 목록, Gems 관리 페이지 [1][3] |
-| Android 앱 | 서버 활동 기록. 앱 패키지는 `com.google.android.apps.bard` 이고 [10], 앱을 받아도 Google 앱이 Gemini 를 실행 [5] | Android | 버전은 검체의 패키지 정보에서 확인 | 권한을 Google 앱 설정에서 관리하는 구조, 기본 어시스턴트로 골랐는지 [5]. Android 15(2026-04 수집본)의 앱 폴더에 SQLite DB 없음 [10] |
+| 웹 브라우저 | 서버 활동 기록. 브라우저 쪽 흔적은 공개 분석 자료가 없어 실제 브라우저 프로필에서 확인 | 브라우저 | 웹 서비스라 앱 버전 없음 | 서버에 남은 프롬프트와 대화, 공개 링크 목록, Gems 관리 페이지 [1][3] |
+| Android 앱 | 서버 활동 기록. 앱 패키지는 `com.google.android.apps.bard` 이고 [10], 앱을 받아도 Google 앱이 Gemini 를 실행 [5] | Android | 버전은 기기의 패키지 정보에서 확인 | 권한을 Google 앱 설정에서 관리하는 구조, 기본 어시스턴트로 골랐는지 [5]. Android 15(2026-04 수집본)의 앱 폴더에 SQLite DB 없음 [10] |
 | iOS 앱 | 서버 활동 기록. 별도 앱 "Google Gemini" | iOS·iPadOS 17.4 이상 | 1.2026.3770306(2026-09 App Store) | App Store 개인정보 라벨이 적은 수집 항목 [6], 위치 설정을 끈 상태에서도 반경 0.5마일 안 위치 [9] |
 | Chrome 통합 | 서버 활동 기록, Chrome 설정 파일(Preferences·Local State)의 설정 키 | Windows·Mac·Chromebook Plus | 관리 정책은 Windows·macOS Chrome 137 부터 | 내부 이름 glic 으로 시작하는 설정 키, 기업 관리 정책 [2][7][8] |
 | 계정 데이터 내보내기 | Google Takeout 보관 파일(.zip 또는 .tgz). JSON 이면 `Takeout/My Activity/Gemini Apps/MyActivity.json` | 계정 단위 | 해당 없음 | 활동 기록의 채팅·생성 미디어·올린 파일, Gems 데이터 [4][12][13] |
 
-Chrome 설정 키 이름은 Chromium 소스(2026-09 main 브랜치)에 정의돼 있습니다 [8]. 키에 어떤 값이 들어가는지는 검체의 Preferences·Local State 파일을 열어 확인합니다.
+Chrome 설정 키 이름은 Chromium 소스(2026-09 main 브랜치)에 정의돼 있습니다 [8]. 키에 어떤 값이 들어가는지는 실제 Preferences·Local State 파일을 열어 확인합니다.
 
 ## 읽는 순서
 
@@ -44,7 +44,7 @@ Chrome 설정 키 이름은 Chromium 소스(2026-09 main 브랜치)에 정의돼
 2. [Android 앱 (Android)](android.md) — Google 앱이 Gemini 를 실행하는 구조, 기본 어시스턴트 설정, 여는 방법과 권한, 앱 폴더에 남는 파일을 다룹니다.
 3. [iOS 앱 (iOS)](ios.md) — 별도 앱의 버전·요구 사항, App Store 개인정보 라벨, 위치 데이터를 다룹니다.
 4. [Chrome 통합 (Gemini in Chrome)](chrome.md) — 탭 내용을 공유하는 방식, glic 설정 키, 기업 관리 정책을 다룹니다.
-5. [계정 데이터 내보내기 (Data Export)](export.md) — Google Takeout 에서 고르는 항목과 받는 방법, 보관 파일의 경로와 칸, 내보내기에 빠질 수 있는 기록을 다룹니다.
+5. [계정 데이터 내보내기 (Data Export)](export.md) — Google Takeout 에서 고르는 항목과 받는 방법, 보관 파일의 경로와 필드, 내보내기에 빠질 수 있는 기록을 다룹니다.
 
 ## 함께 볼 페이지
 

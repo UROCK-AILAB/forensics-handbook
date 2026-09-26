@@ -26,7 +26,7 @@ bash·zsh·fish 같은 대화형 셸이 사용자가 입력한 명령 줄을 계
 - 누가 키보드 앞에 있었는지. 기록 파일은 계정 단위로만 나뉩니다.
 - 명령별 시각. bash 와 zsh 는 설정을 켜야 시각을 남깁니다(아래 표).
 - 스크립트나 `ssh 호스트 명령` 처럼 비대화형으로 실행한 명령. bash 의 기록 기능은 대화형 셸에서만 기본으로 켜집니다[1].
-- 아직 살아 있는 셸에서 입력한 명령. bash 는 셸이 끝날 때 목록을 파일에 씁니다[1]. 이 부분은 메모리에서 찾습니다(아래 "시각과 메모리").
+- 아직 실행 중인 셸에서 입력한 명령. bash 는 셸이 끝날 때 목록을 파일에 씁니다[1]. 이 부분은 메모리에서 찾습니다(아래 "시각과 메모리").
 
 ## 한눈에 보기
 
@@ -35,8 +35,8 @@ bash·zsh·fish 같은 대화형 셸이 사용자가 입력한 명령 줄을 계
 | bash | `~/.bash_history` (`HISTFILE` 기본값)[1] | `HISTTIMEFORMAT` 이 설정돼 있을 때만 `#` 뒤에 epoch 초가 붙은 줄을 명령 앞에 씀[1][2] | 대화형 셸에서 입력한 명령 줄 |
 | zsh | 기본 파일 없음. `HISTFILE` 을 설정해야 저장[3]. 수집 도구가 기본으로 찾는 이름은 `~/.zsh_history`, `~/.zhistory`[9][10], 초기 설정 도우미가 제안하는 이름은 `~/.histfile`[4] | `EXTENDED_HISTORY` 를 켜면 `: 시작시각:걸린초;명령` 모양으로 저장[3] | 명령 줄. 켜면 시작 시각과 걸린 시간 |
 | fish | `~/.local/share/fish/fish_history` (`XDG_DATA_HOME` 이 있으면 `$XDG_DATA_HOME/fish/fish_history`)[5] | 항목마다 `when:` 줄에 epoch 초[6] | 명령 줄과 입력 시각 |
-| sh·ksh | `~/.sh_history`[9][10] | 하위 쪽에서 다루지 않음 | 명령 줄 |
-| tcsh | `~/.history`[10] | 하위 쪽에서 다루지 않음 | 명령 줄 |
+| sh·ksh | `~/.sh_history`[9][10] | 하위 페이지에서 다루지 않음 | 명령 줄 |
+| tcsh | `~/.history`[10] | 하위 페이지에서 다루지 않음 | 명령 줄 |
 
 root 계정의 기록은 `/root` 아래에 따로 있습니다[9]. `sudo -i` 로 연 root 셸이 어느 파일에 쓰는지는 [sudo·su 사용 기록](../../logins/sudo-su.md) 과 [bash 기록](bash.md) 에서 다룹니다.
 
@@ -69,9 +69,9 @@ bash 는 `HISTTIMEFORMAT` 과 상관없이 목록에 넣는 항목마다 `#숫�
 | dissect.target `commandhistory` | `.bash_history`, `.zsh_history`, `.zsh_sessions/*.history`, `.local/share/fish/fish_history`, `.ash_history`와 `.mysql_history`·`.psql_history`·`.python_history`·`.sqlite_history`·`.dbshell`[11] | `.zhistory`, `.sh_history` |
 | Velociraptor `Linux.Sys.BashHistory` | 기본 glob `/{root,home/*}/.*_history`[12] | fish 기록, `.zhistory`, `/home` 밖의 홈 폴더 |
 
-zsh 초기 설정 도우미가 제안하는 `~/.histfile`[4] 은 위 네 도구의 기본 목록 어디에도 없습니다. 검체에서는 셸 설정 파일의 `HISTFILE` 값을 먼저 확인하고, 그 경로를 따로 모읍니다. 설정 파일 위치는 [셸 시작 파일](../../persistence/shell-startup.md) 을 봅니다.
+zsh 초기 설정 도우미가 제안하는 `~/.histfile`[4] 은 위 네 도구의 기본 목록 어디에도 없습니다. 분석 대상에서는 셸 설정 파일의 `HISTFILE` 값을 먼저 확인하고, 그 경로를 따로 모읍니다. 설정 파일 위치는 [셸 시작 파일](../../persistence/shell-startup.md) 을 봅니다.
 
-Windows 의 WSL 배포판도 셸 기록을 남깁니다. ForensicArtifacts 는 Windows 쪽 경로 `%%users.localappdata%%\Packages\*\LocalState\rootfs\home\*\.bash_history` 를 따로 정의합니다[9]. `wsl.exe` 로 실행한 Linux 명령은 `~/.bash_history`·`~/.sh_history` 에 저장되지 않는다는 주장이 Matadar 의 DFRWS 2020 발표에 있습니다[14]. 어떤 조건에서 그런지는 발표에 나오지 않으므로, 검체의 프로세스 명령 줄 기록과 함께 확인합니다.
+Windows 의 WSL 배포판도 셸 기록을 남깁니다. ForensicArtifacts 는 Windows 쪽 경로 `%%users.localappdata%%\Packages\*\LocalState\rootfs\home\*\.bash_history` 를 따로 정의합니다[9]. `wsl.exe` 로 실행한 Linux 명령은 `~/.bash_history`·`~/.sh_history` 에 저장되지 않는다는 주장이 Matadar 의 DFRWS 2020 발표에 있습니다[14]. 어떤 조건에서 그런지는 발표에 나오지 않으므로, 분석 대상의 프로세스 명령 줄 기록과 함께 확인합니다.
 
 ## 읽는 순서
 
@@ -83,7 +83,7 @@ Windows 의 WSL 배포판도 셸 기록을 남깁니다. ForensicArtifacts 는 W
 
 - [감사 로그의 실행 기록 (auditd execve)](../auditd-execve.md) — 셸 기록과 달리 실행된 프로그램과 인수를 커널이 남김
 - [프로세스 회계 (acct·pacct)](../process-accounting.md) — 끝난 프로세스의 명령 이름과 시각
-- [실행 중인 프로세스 (/proc)](../proc.md) — 살아 있는 셸과 그 명령 줄
+- [실행 중인 프로세스 (/proc)](../proc.md) — 실행 중인 셸과 그 명령 줄
 - [셸 시작 파일 (.bashrc·profile)](../../persistence/shell-startup.md) — `HISTFILE`·`HISTCONTROL` 을 바꾸는 줄이 들어가는 곳
 - [편집기 흔적 (vim·nano·less)](../../file-activity/editor-artifacts.md) — `.lesshst` 처럼 다른 프로그램이 남기는 기록 파일
 - [sudo·su 사용 기록](../../logins/sudo-su.md), [SSH](../../logins/ssh/index.md)

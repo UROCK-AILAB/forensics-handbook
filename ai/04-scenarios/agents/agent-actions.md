@@ -6,7 +6,7 @@ nav_order: 970
 
 # AI 에이전트가 무엇을 실행했나 (Agent Actions)
 
-AI 개발 도구는 판이 자주 바뀌므로 검체의 도구 버전을 먼저 보고 이 페이지와 맞춰 봅니다.
+AI 개발 도구는 판이 자주 바뀌므로 분석 대상 기기의 도구 버전을 먼저 보고 이 페이지와 맞춰 봅니다.
 
 ## 조사 질문
 
@@ -16,9 +16,9 @@ AI 에이전트(AI agent)가 사용자 컴퓨터에서 어떤 명령을 실행�
 
 ## 먼저 확인할 것
 
-- **OS 와 사용자 계정**: 여기서 다루는 CLI 도구는 모두 사용자 홈 폴더 아래에 기록을 둡니다. macOS·Linux 에서는 `~/.claude`, `~/.codex`, `~/.gemini`, `~/.cursor`, `~/.copilot` 이고, Windows 에서는 같은 이름의 폴더가 `%USERPROFILE%` 아래에 생깁니다. Codex 는 `CODEX_HOME` 환경 변수로 폴더를 옮길 수 있어서, 기본 위치에 없으면 환경 변수 설정부터 찾습니다. Claude 데스크톱 앱은 이와 별도로 macOS 의 `~/Library/Application Support/Claude/`, Windows 의 `%APPDATA%\Claude\` 에 데이터를 두고[6], 스토어판은 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 에 둡니다[7]. Windows 검체에서는 `.claude` 와 데스크톱 앱 폴더를 둘 다 뜹니다[6].
+- **OS 와 사용자 계정**: 여기서 다루는 CLI 도구는 모두 사용자 홈 폴더 아래에 기록을 둡니다. macOS·Linux 에서는 `~/.claude`, `~/.codex`, `~/.gemini`, `~/.cursor`, `~/.copilot` 이고, Windows 에서는 같은 이름의 폴더가 `%USERPROFILE%` 아래에 생깁니다. Codex 는 `CODEX_HOME` 환경 변수로 폴더를 옮길 수 있어서, 기본 위치에 없으면 환경 변수 설정부터 찾습니다. Claude 데스크톱 앱은 이와 별도로 macOS 의 `~/Library/Application Support/Claude/`, Windows 의 `%APPDATA%\Claude\` 에 데이터를 두고[6], 스토어판은 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 에 둡니다[7]. Windows 기기에서는 `.claude` 와 데스크톱 앱 폴더를 둘 다 뜹니다[6].
 - **도구 버전**: Claude Code 세션 기록은 줄마다 `version` 키를 적고, Cursor 훅이 받는 입력에는 `cursor_version` 이 들어갑니다[5]. 같은 도구라도 판에 따라 저장 위치가 바뀝니다. 예를 들어 Claude Code 는 v2.1.274 까지 첨부 이미지를 `~/.claude/image-cache/<session>/` 에 두었고, 그 뒤 판은 `~/.claude` 밖의 임시 폴더 아래 세션별 `images/` 에 둡니다[1].
-- **Windows 에서 생기는 파일**: 출처끼리 다릅니다. claude-forensics(v0.1.1, 2026-06)는 2026년 중반 Windows 의 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 했지만[6], 2026-09 Windows 11 관찰에서는 `history.jsonl` 이 있었습니다. 판에 따라 다를 수 있으므로 검체에서 네 가지가 있는지 먼저 확인합니다.
+- **Windows 에서 생기는 파일**: 출처끼리 다릅니다. claude-forensics(v0.1.1, 2026-06)는 2026년 중반 Windows 의 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 했지만[6], 2026-09 Windows 11 관찰에서는 `history.jsonl` 이 있었습니다. 판에 따라 다를 수 있으므로 실제 기기에서 네 가지가 있는지 먼저 확인합니다.
 - **시각 형식과 시간대**: 도구마다 다르고, 같은 도구 안에서도 파일마다 다릅니다.
 
   | 도구 | 값 | 형식 |
@@ -32,7 +32,7 @@ AI 에이전트(AI agent)가 사용자 컴퓨터에서 어떤 명령을 실행�
 
   Codex 는 파일 이름과 폴더가 현지 시각이라서, 분석 PC 의 시간대로 풀면 날짜가 하루 어긋날 수 있습니다. Codex CLI 기록에는 기록한 곳의 시간대가 남습니다[11]. 여러 도구를 한 기준으로 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 - **수집 범위**: 세션 기록 옆에 하위 에이전트 기록과 큰 도구 출력이 따로 있어서 도구 폴더를 통째로 모읍니다. SQLite 저장소(Cursor 의 `state.vscdb`·`store.db`, Copilot CLI 의 `session-store.db`)는 `-wal` 파일을 함께 떠야 하고[7][11], Visual Studio 의 Copilot 은 사용자 폴더가 아니라 솔루션 폴더의 `.vs\` 에 기록합니다[11]. 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다. 세션 기록에는 명령 출력과 파일 내용이 그대로 들어가서 비밀 값이 섞여 있을 수 있고, 다루는 방법은 [에이전트가 자격 증명을 건드렸나](agent-credentials.md)에 있습니다.
-- **보관 기간 설정**: 기록이 없을 때 이유를 가리려면 당시 보관 설정을 알아야 합니다. Claude Code 는 `cleanupPeriodDays`(기본 30일), Claude 데스크톱 앱은 `desktopSessionCleanupPeriodDays` 로 정하고[1], 마지막으로 정리한 시각은 `~/.claude/.last-cleanup` 에 남습니다[6]. Gemini CLI 는 `settings.json` 의 `sessionRetention`(기본 30일)[4], Codex 는 `[history]` 절의 `persistence`·`max_bytes` 로 정합니다[2]. 설정 전체는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
+- **보관 기간 설정**: 기록이 없을 때 이유를 판별하려면 당시 보관 설정을 알아야 합니다. Claude Code 는 `cleanupPeriodDays`(기본 30일), Claude 데스크톱 앱은 `desktopSessionCleanupPeriodDays` 로 정하고[1], 마지막으로 정리한 시각은 `~/.claude/.last-cleanup` 에 남습니다[6]. Gemini CLI 는 `settings.json` 의 `sessionRetention`(기본 30일)[4], Codex 는 `[history]` 절의 `persistence`·`max_bytes` 로 정합니다[2]. 설정 전체는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -55,14 +55,14 @@ AI 에이전트(AI agent)가 사용자 컴퓨터에서 어떤 명령을 실행�
 
 | 도구 | 실행 기록 위치 | 도구 호출을 읽는 곳 | 자세히 |
 |---|---|---|---|
-| Codex CLI | `$CODEX_HOME/sessions/YYYY/MM/DD/rollout-YYYY-MM-DDThh-mm-ss-<uuid>.jsonl`, 보관한 세션은 `archived_sessions/`[8]. 프롬프트는 `history.jsonl`(`session_id`, `ts`, `text`)[7] | `response_item` 가운데 `function_call`·`custom_tool_call` 의 `name`·`call_id`·인자와, 같은 `call_id` 의 `function_call_output`. `apply_patch` 는 파일 경로 칸이 없고 본문의 `*** Add File:`·`*** Update File:`·`*** Delete File:`·`*** Move to:` 줄이 파일을 가리킴[7] | [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) |
+| Codex CLI | `$CODEX_HOME/sessions/YYYY/MM/DD/rollout-YYYY-MM-DDThh-mm-ss-<uuid>.jsonl`, 보관한 세션은 `archived_sessions/`[8]. 프롬프트는 `history.jsonl`(`session_id`, `ts`, `text`)[7] | `response_item` 가운데 `function_call`·`custom_tool_call` 의 `name`·`call_id`·인자와, 같은 `call_id` 의 `function_call_output`. `apply_patch` 는 파일 경로 필드가 없고 본문의 `*** Add File:`·`*** Update File:`·`*** Delete File:`·`*** Move to:` 줄이 파일을 가리킴[7] | [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) |
 | Gemini CLI | `~/.gemini/tmp/<project>/chats/session-<YYYY-MM-DDTHH-MM>-<sessionId 앞 8자>.jsonl`, 하위 에이전트는 `chats/<parentSessionId>/<sessionId>.jsonl`[9] | `type` 이 `gemini` 인 메시지의 `toolCalls[]`. 되감기는 `$rewindTo` 줄로 남음[9] | [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md) |
 | Cursor 편집기 | `…/Cursor/User/globalStorage/state.vscdb` 의 `cursorDiskKV` 표[7] | `bubbleId:<composerId>:<bubbleUuid>` 값의 `toolFormerData`(`name`, `rawArgs`, `result`)[7] | [Cursor](../../02-artifacts/dev-agents/cursor.md) |
 | Cursor CLI | `~/.cursor/projects/<project>/agent-transcripts/`[7] | 대화 파일. 하위 에이전트는 `<parent>/subagents/<id>` 아래[7] | [Cursor](../../02-artifacts/dev-agents/cursor.md) |
 | VS Code 의 Copilot | `…/Code/User/workspaceStorage/<hash>/chatSessions/*.json`·`*.jsonl`[7] | `response[]` 의 `toolId`·`toolCallId`, 터미널 명령은 `toolSpecificData.commandLine.original`[7] | [GitHub Copilot](../../02-artifacts/dev-agents/github-copilot/index.md) |
 | Copilot CLI | `~/.copilot/session-state/<uuid>.jsonl` 또는 `<uuid>/events.jsonl`[7] | `tool.execution_start`·`tool.execution_complete` 이벤트의 `data.toolCallId`[7] | [GitHub Copilot](../../02-artifacts/dev-agents/github-copilot/index.md) |
 
-Cursor 편집기 DB 의 키는 공개 문서가 없고, 표의 키는 macOS 판 DB(`composerData` 의 `_v` 가 16) 기준입니다[7]. 다른 판에서는 검체로 확인합니다.
+Cursor 편집기 DB 의 키는 공개 문서가 없고, 표의 키는 macOS 판 DB(`composerData` 의 `_v` 가 16) 기준입니다[7]. 다른 판에서는 실제 데이터로 확인합니다.
 
 ## 분석 흐름
 
@@ -80,16 +80,16 @@ Cursor 편집기 DB 의 키는 공개 문서가 없고, 표의 키는 macOS 판 
            | .input.file_path' *.jsonl | sort -u
    ```
 
-   다른 도구는 위 표의 칸으로 같은 일을 합니다. Codex 는 `call_id` 로, Copilot CLI 는 `toolCallId` 로 호출과 결과를 잇고, Cursor 편집기는 한 턴 안의 `toolFormerData` 에 입력과 결과를 함께 둡니다[7].
+   다른 도구는 위 표의 필드로 같은 일을 합니다. Codex 는 `call_id` 로, Copilot CLI 는 `toolCallId` 로 호출과 결과를 잇고, Cursor 편집기는 한 턴 안의 `toolFormerData` 에 입력과 결과를 함께 둡니다[7].
 4. **누가 시켰는지 따라갑니다.** `parentUuid` 를 거슬러 올라가 그 호출 직전의 사용자 메시지를 찾고, `history.jsonl` 에 같은 프롬프트가 있는지 대조합니다. `type` 이 `user` 인 줄이 모두 사람의 입력은 아닙니다. 도구 결과(`tool_result`)도 이 줄에 들어가고[6], VS Code 확장은 `ide_opened_file`·`ide_selection` 태그로 싼 편집기 정보를 user 줄로 씁니다[7]. 사용자 턴마다 `promptSource`(`"typed"`, `"queued"`, `"system"`, `"sdk"`)가, 백그라운드 세션에는 `sessionKind:"bg"` 가 붙고, 이 키들은 공개 문서가 없습니다[7]. Codex 는 `session_meta.payload.originator` 가 `codex_exec` 이면 사람이 대화하지 않는 `codex exec` 실행입니다[7].
 5. **승인이 있었는지 봅니다.** Claude Code 는 줄마다 적힌 `permissionMode` 와 설정의 `permissions.allow` 목록으로 판단하고, 데스크톱 앱이면 `claude_desktop_config.json` 의 `preferences.localAgentModeTrustedFolders`, 계정별 `bypassPermissionsGateByAccount`·`bypassPermissionsOptInByAccount` 값도 봅니다. 데스크톱 앱 세션 메타에도 `permissionMode` 가 남습니다[6]. Codex 는 `config.toml` 의 `sandbox_mode`(예: `"workspace-write"`, `"danger-full-access"`)와 `approval_policy`(예: `"on-request"`, `"never"`)가 같은 역할을 합니다[2]. 설정 파일은 조사 시점의 값이라서, 사고 당시 값과 같은지는 파일 수정 시각과 백업으로 따로 확인합니다.
 6. **하위 에이전트와 백그라운드 작업을 더합니다.** 하위 에이전트 기록은 `projects/<project>/<부모 세션 ID>/subagents/agent-<id>.jsonl` 에 따로 있고, 워크플로 도구가 띄운 것은 `workflows/<워크플로 ID>/` 아래로 한 단계 더 들어갑니다. 모든 줄에 `isSidechain: true` 와 부모 세션의 `sessionId` 가 붙습니다[7]. `agentId`·`attributionAgent` 키도 있고, 백그라운드 작업은 `jobs/<이름>/state.json`(`cwd`, `intent`, `state`, `createdAt`, `updatedAt`, `sessionId`)과 `timeline.jsonl`(`at`, `state`, `detail`, `text`)에 상태가 남습니다. Codex 하위 에이전트는 `session_meta` 의 `source.subagent` 와 `parent_thread_id` 로 부모를 가리킵니다[7]. 메인 세션 기록만 보면 이쪽 실행을 빠뜨립니다.
-7. **이어받은 기록의 중복을 걸러냅니다.** Claude Code 는 세션을 백그라운드로 돌리면 `claude --resume <transcript> --fork-session` 을 띄우고, 새 기록 파일에 이전 대화 줄을 `uuid`·`timestamp`·`requestId`·usage 까지 똑같이 다시 적습니다. `sessionId` 는 새 값으로 바뀌고, 백그라운드 실행기가 띄운 경우에는 줄마다 `sessionKind:"bg"` 가 붙습니다. 원본 세션을 가리키는 칸은 없습니다(Claude Code 2.1.226 기준)[7]. Codex 의 fork 와 하위 에이전트 rollout 도 부모 대화 줄을 다시 적은 채로 시작할 수 있고, fork 는 `forked_from_id` 로 원본을 가리킵니다[7]. 두 파일의 도구 호출을 그대로 더하면 같은 명령이 두 번 셉니다. 같은 `uuid` 나 `call_id` 는 한 번만 셉니다.
+7. **이어받은 기록의 중복을 걸러냅니다.** Claude Code 는 세션을 백그라운드로 돌리면 `claude --resume <transcript> --fork-session` 을 띄우고, 새 기록 파일에 이전 대화 줄을 `uuid`·`timestamp`·`requestId`·usage 까지 똑같이 다시 적습니다. `sessionId` 는 새 값으로 바뀌고, 백그라운드 실행기가 띄운 경우에는 줄마다 `sessionKind:"bg"` 가 붙습니다. 원본 세션을 가리키는 필드는 없습니다(Claude Code 2.1.226 기준)[7]. Codex 의 fork 와 하위 에이전트 rollout 도 부모 대화 줄을 다시 적은 채로 시작할 수 있고, fork 는 `forked_from_id` 로 원본을 가리킵니다[7]. 두 파일의 도구 호출을 그대로 더하면 같은 명령을 두 번 세게 됩니다. 같은 `uuid` 나 `call_id` 는 한 번만 셉니다.
 8. **훅 기록을 확인합니다.** 훅(hook)은 도구 실행 앞뒤에 사용자가 건 명령이고, 설정 파일에는 어떤 이벤트에 걸었는지만 남습니다. 실제로 돌았는지는 Claude Code 세션 기록의 `attachment.hookEvent`·`hookName`·`command`·`exitCode`·`stdout`·`stderr`·`durationMs`, 그리고 `hookErrors`·`preventedContinuation` 으로 봅니다. Cursor 훅은 종료 코드 2 일 때 막고 0 이면 성공이며 그 밖의 코드는 기본으로 통과시켜서, 훅이 오류로 끝났다면 동작이 막히지 않았을 수 있습니다[5]. Codex 는 관리자 설정 `requirements.toml` 에 `allow_managed_hooks_only = true` 가 있으면 사용자·프로젝트·세션 훅을 무시하고 관리자 훅만 돌립니다[3]. Cursor 훅이 받는 `command`·`cwd`·`file_path`·`tool_name`·`tool_input`·`tool_output` 은 훅 스크립트가 따로 파일로 적어 두었을 때만 남으므로, 훅 스크립트의 출력 경로를 찾아봅니다[5].
-9. **파일 변화와 맞춰 봅니다.** `file-history/<session>/` 의 사본은 파일마다 `<hash>@v<N>` 이름으로 판이 쌓입니다. 해시와 원래 경로의 대응은 `.claude` 에 따로 저장되지 않는다는 해석이 있어서[6], 3단계의 Read·Write·Edit 파일 목록으로 되짚습니다. 세션 기록에는 `snapshot.trackedFileBackups` 키도 있는데, 이 값이 원래 경로와 사본 파일을 잇는지는 검체에서 값을 보고 확인한 뒤 씁니다. Codex 는 `apply_patch` 본문의 파일 표시 줄로 바뀐 파일을 알 수 있습니다[7]. 어느 폴더와 브랜치에서 일했는지는 Claude Code 세션 기록의 `cwd`·`gitBranch`와 Codex `session_meta` 의 `cwd`·`git.branch`[7]로 알 수 있고, 마지막으로 대상 파일의 파일 시스템 시각이나 저장소 커밋 기록과 대조합니다.
+9. **파일 변화와 맞춰 봅니다.** `file-history/<session>/` 의 사본은 파일마다 `<hash>@v<N>` 이름으로 판이 쌓입니다. 해시와 원래 경로의 대응은 `.claude` 에 따로 저장되지 않는다는 해석이 있어서[6], 3단계의 Read·Write·Edit 파일 목록으로 거슬러 올라가 찾습니다. 세션 기록에는 `snapshot.trackedFileBackups` 키도 있는데, 이 값이 원래 경로와 사본 파일을 잇는지는 실제 데이터에서 값을 보고 확인한 뒤 씁니다. Codex 는 `apply_patch` 본문의 파일 표시 줄로 바뀐 파일을 알 수 있습니다[7]. 어느 폴더와 브랜치에서 일했는지는 Claude Code 세션 기록의 `cwd`·`gitBranch`와 Codex `session_meta` 의 `cwd`·`git.branch`[7]로 알 수 있고, 마지막으로 대상 파일의 파일 시스템 시각이나 저장소 커밋 기록과 대조합니다.
 10. **셸 환경을 확인합니다.** 명령이 뜻과 다르게 동작했다면 `shell-snapshots/` 의 alias 가 `git`·`curl` 같은 명령을 덮어쓰지 않았는지 봅니다[6]. 이 파일에는 export 한 환경 변수가 들어가서 토큰이 섞일 수 있습니다. 보고서에서는 값을 가리고, 다루는 방법은 [에이전트가 자격 증명을 건드렸나](agent-credentials.md)를 따릅니다.
 11. **다른 기록원도 봅니다.** Codex 는 OpenTelemetry 를 켠 환경이면 `codex.tool_decision`(승인·거부)과 `codex.tool_result`(실행 결과) 이벤트가 수집 서버에 남고, 사용자 프롬프트는 `log_user_prompt = true` 일 때만 내용이 들어갑니다[3]. 디스크 기록이 없고 메모리 이미지가 있으면 MCP 요청·응답을 메모리에서 되살릴 수 있습니다. MCPRecon 논문의 시험(Ubuntu 24.04 가상 머신, stdio·HTTP 두 방식)에서는 Codex CLI 와 VS Code Copilot 의 프로세스 메모리에서 `tools/call` 인자와 도구 결과가 되살아났습니다[12]. 방법은 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md)과 [메모리에서 AI 흔적 찾기](../../03-techniques/analysis/memory-analysis.md)를 봅니다.
-12. **기록이 없으면 이유를 가립니다.** 보관 기간이 지났거나, `claude project purge` 로 지웠거나(`projects/` 기록, 세션별 `tasks/`·`debug/`·`file-history/`, `history.jsonl` 의 해당 줄, `~/.claude.json` 의 프로젝트 항목이 함께 지워짐), `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜서 처음부터 쓰지 않았을 수 있습니다[1]. Gemini CLI 는 `--delete-session` 으로[4], Codex 는 `persistence = "none"` 이면 프롬프트 기록(`history.jsonl`)을 쓰지 않습니다[2]. `history.jsonl` 의 `sessionId` 가운데 세션 기록 파일이 없는 것을 모으고 `.last-cleanup` 시각과 맞춰 보면 정리로 사라졌는지 가릴 수 있습니다[6]. 세션 기록은 약 30일 주기로 정리되고 `history.jsonl` 은 몇 달 남습니다[6]. 세션 기록이 없어도 그날 도구 호출이 있었는지는 `stats-cache.json` 의 `dailyActivity[].toolCallCount` 로 알 수 있습니다.
+12. **기록이 없으면 이유를 확인합니다.** 보관 기간이 지났거나, `claude project purge` 로 지웠거나(`projects/` 기록, 세션별 `tasks/`·`debug/`·`file-history/`, `history.jsonl` 의 해당 줄, `~/.claude.json` 의 프로젝트 항목이 함께 지워짐), `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜서 처음부터 쓰지 않았을 수 있습니다[1]. Gemini CLI 는 `--delete-session` 으로[4], Codex 는 `persistence = "none"` 이면 프롬프트 기록(`history.jsonl`)을 쓰지 않습니다[2]. `history.jsonl` 의 `sessionId` 가운데 세션 기록 파일이 없는 것을 모으고 `.last-cleanup` 시각과 맞춰 보면 정리로 사라졌는지 가릴 수 있습니다[6]. 세션 기록은 약 30일 주기로 정리되고 `history.jsonl` 은 몇 달 남습니다[6]. 세션 기록이 없어도 그날 도구 호출이 있었는지는 `stats-cache.json` 의 `dailyActivity[].toolCallCount` 로 알 수 있습니다.
 13. **타임라인에 합칩니다.** 세션 기록의 시각을 파일 시스템·이벤트 로그·네트워크 기록과 시간순으로 합칩니다. 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Windows 판 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)을 봅니다.
 
 ## 흔한 오판

@@ -6,7 +6,7 @@ nav_order: 1050
 
 # 권한을 올렸나 (Privilege Escalation)
 
-일반 계정이나 웹 서버 계정으로 들어온 사람이 root 권한을 얻었는지, 얻었다면 sudo·su·pkexec 같은 정해진 통로를 썼는지 아니면 설정 약점이나 취약점을 썼는지, 그리고 언제였는지를 가리는 절차입니다.
+일반 계정이나 웹 서버 계정으로 들어온 사람이 root 권한을 얻었는지, 얻었다면 sudo·su·pkexec 같은 정해진 통로를 썼는지 아니면 설정 약점이나 취약점을 썼는지, 그리고 언제였는지를 판별하는 절차입니다.
 
 ## 조사 질문
 
@@ -16,7 +16,7 @@ nav_order: 1050
 
 ## 먼저 확인할 것
 
-**배포판과 sudo 판.** 기록이 남는 파일과 첫 사용 흔적이 배포판마다 다르므로, 검체의 배포판과 sudo 판부터 확인합니다. 두 기준 배포판 모두 sudo 를 syslog 의 `authpriv` 분야로 기록하고 Linux 감사 연동을 켜서 빌드합니다[2][3].
+**배포판과 sudo 판.** 기록이 남는 파일과 첫 사용 흔적이 배포판마다 다르므로, 분석 대상의 배포판과 sudo 판부터 확인합니다. 두 기준 배포판 모두 sudo 를 syslog 의 `authpriv` 분야로 기록하고 Linux 감사 연동을 켜서 빌드합니다[2][3].
 
 | 항목 | Ubuntu 24.04 LTS | RHEL 9 계열 |
 |---|---|---|
@@ -77,7 +77,7 @@ RHEL 의 `#includedir` 는 주석이 아니라 sudo 1.9.1 이전 판과 맞추�
 
 4. **설정 쪽 변화를 봅니다.** `/etc/sudoers.d/` 에 새 파일이 생겼는지, 기존 규칙에 `NOPASSWD` 가 붙었는지 봅니다. 이 폴더에서 이름에 `.` 이 들어가거나 `~` 로 끝나는 파일은 sudo 가 읽지 않으므로, 파일이 있다고 규칙이 적용된 것은 아닙니다([sudo 설정](../../01-foundations/users-auth/sudoers.md)). `/etc/passwd` 에서 UID 0 인 둘째 계정, 그룹 파일에서 sudo·wheel·admin 그룹에 새로 들어간 계정을 찾고, 인증 로그의 `add '…' to group '…'` 같은 줄로 시각을 잡습니다([계정 생성·변경 흔적](../../02-artifacts/logins/account-changes.md)). polkit 설정 폴더(`/etc/polkit-1`, `/usr/share/polkit-1`, `/usr/lib/polkit-1`, `/var/lib/polkit-1`)도 공개 수집 도구가 지속성 후보로 모으는 곳이라 함께 봅니다[8].
 
-5. **권한 파일을 봅니다.** SUID·SGID 비트가 켜진 파일과 capability 가 붙은 파일 목록을 만들고, 패키지가 설치한 파일과 대조해 나머지를 가립니다([패키지 파일 변조 확인](../../02-artifacts/packages/package-verify.md)). `/tmp`, `/dev/shm`, 홈 폴더, 웹 문서 폴더에 있는 SUID 파일은 먼저 봅니다([임시 폴더와 메모리 파일 시스템](../../02-artifacts/file-activity/tmp-shm.md)). 파일 capability 로 권한이 늘어난 실행은 감사 규칙이 있었다면 `BPRM_FCAPS` 로 남습니다[6].
+5. **권한 파일을 봅니다.** SUID·SGID 비트가 켜진 파일과 capability 가 붙은 파일 목록을 만들고, 패키지가 설치한 파일과 대조해 나머지를 골라냅니다([패키지 파일 변조 확인](../../02-artifacts/packages/package-verify.md)). `/tmp`, `/dev/shm`, 홈 폴더, 웹 문서 폴더에 있는 SUID 파일은 먼저 봅니다([임시 폴더와 메모리 파일 시스템](../../02-artifacts/file-activity/tmp-shm.md)). 파일 capability 로 권한이 늘어난 실행은 감사 규칙이 있었다면 `BPRM_FCAPS` 로 남습니다[6].
 
 6. **취약점 흔적을 봅니다.** 로그인 시각 뒤에 생긴 실행 파일을 찾고, 그 무렵 프로세스가 비정상으로 끝난 기록을 봅니다. systemd-coredump 가 코어 덤프를 받는 시스템이면 저널에 `MESSAGE_ID=fc2e22bc6ee647b6b90729ab34a250b1` 항목이 남고, `COREDUMP_PID`·`COREDUMP_UID`·`COREDUMP_SIGNAL_NAME`·`COREDUMP_EXE`·`COREDUMP_CMDLINE`·`COREDUMP_FILENAME` 에 죽은 프로세스와 덤프 파일이 적힙니다[10]. 덤프 파일은 `/var/lib/systemd/coredump/` 에 저장되고 기본으로 며칠 뒤 지워지며, 저널 항목과 덤프 파일은 따로 지워지므로 한쪽만 남아 있을 수 있습니다[10]. 코어 덤프를 systemd-coredump 가 받는지는 `/proc/sys/kernel/core_pattern` 으로 정해지고 systemd 는 `/usr/lib/sysctl.d/50-coredump.conf` 로 이 값을 설정하므로[10], 라이브 응답 결과나 설정 파일에서 이 값을 확인합니다. 커널 쪽 이상은 커널 로그의 Oops 줄과 taint 값으로 봅니다([커널 로그](../../02-artifacts/system-info/kernel-log.md)).
 
@@ -104,9 +104,9 @@ RHEL 의 `#includedir` 는 주석이 아니라 sudo 1.9.1 이전 판과 맞추�
 - "2026-03-12 14:31:40(+09:00)에 계정 alice 가 pts/1 에서 sudo 로 root 권한의 `/usr/bin/bash` 실행을 요청해 허용된 기록이 `/var/log/auth.log` 에 있다."
 - "같은 날 14:31:02(+09:00)에 계정 www-data 가 sudo 로 root 권한 실행을 요청했으나 `user NOT in sudoers` 로 거부된 기록이 있다."
 - "감사 로그에 auid 1001, euid 0 인 실행 레코드가 14:52 부터 이어지고, 같은 시간대에 이 계정의 sudo·su 기록은 없다."
-- "`/tmp/.cache/x`(만든 예시)는 소유자가 root 이고 SUID 비트가 켜져 있으며, 패키지 관리자가 설치한 파일이 아니다. 이 파일을 실행한 기록은 이 검체에서 나오지 않는다."
+- "`/tmp/.cache/x`(만든 예시)는 소유자가 root 이고 SUID 비트가 켜져 있으며, 패키지 관리자가 설치한 파일이 아니다. 이 파일을 실행한 기록은 이 증거물에서 나오지 않는다."
 
-"alice 가 root 권한을 탈취했다" 처럼 쓰지 않고, 기록이 말하는 계정·시각·통로까지만 씁니다.
+"alice 가 root 권한을 탈취했다" 처럼 쓰지 않고, 기록으로 확인되는 계정·시각·통로까지만 씁니다.
 
 ## 함께 볼 페이지
 

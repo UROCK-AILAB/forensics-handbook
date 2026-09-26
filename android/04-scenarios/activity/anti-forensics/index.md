@@ -10,7 +10,7 @@ has_toc: false
 
 ## 한 줄 요약
 
-기기를 초기화하거나, 앱을 지우거나, 대화·사진을 지우거나, 기기 시각을 바꾼 흔적을 찾고, 그 흔적이 말하는 만큼만 해석하는 흐름을 모았습니다.
+기기를 초기화하거나, 앱을 지우거나, 대화·사진을 지우거나, 기기 시각을 바꾼 흔적을 찾고, 그 흔적으로 확인되는 만큼만 해석하는 흐름을 모았습니다.
 
 ## 왜 중요한가
 
@@ -22,18 +22,18 @@ has_toc: false
 
 | 행위 | 주로 보는 곳 | Android 버전 | 알려 주는 것 |
 |---|---|---|---|
-| 초기화 | 복구 모드 기록(`/cache/recovery` 의 `last_` 파일), `dumpsys user`, 설정 값, 각 기록의 가장 오래된 시각 | `/cache` 파티션이 없는 기기의 기록 위치는 검체에서 확인 | 초기화가 있었을 무렵, 초기화 이후 기록의 시작점 |
+| 초기화 | 복구 모드 기록(`/cache/recovery` 의 `last_` 파일), `dumpsys user`, 설정 값, 각 기록의 가장 오래된 시각 | `/cache` 파티션이 없는 기기의 기록 위치는 실제 기기에서 확인 | 초기화가 있었을 무렵, 초기화 이후 기록의 시작점 |
 | 앱 지우기 | usagestats 와 mappings, 공용 저장 공간의 주인 없는 파일, 설치된 앱 목록 | 보관(archiving)은 Android 15 이상 | 지운 앱의 이름과 마지막 흔적 시각, 지운 것인지 보관한 것인지 |
 | 메시지·사진 지우기 | `.trashed-` 파일 이름, MediaStore, 알림 기록 | 미디어 휴지통은 Android 11 이상 | 휴지통으로 보낸 무렵, 메시지가 도착했던 흔적 |
 | 시각 바꾸기 | `dumpsys usagestats` 의 시각 변경 줄, 자동 시각 설정, 연도 없는 로그 줄 | 자동 시각 출처와 설정 이름이 버전마다 다름 | 기기 시각이 옮겨진 흔적과 그 크기 |
 
-초기화·삭제·시각 변경을 볼 때 쓰는 adb 일반 권한 출력은 `dumpsys user`, `dumpsys package`, `dumpsys usagestats`, `dumpsys batterystats`, `settings global/secure/system` 이고, 칸마다의 뜻은 각 하위 페이지에 있습니다.
+초기화·삭제·시각 변경을 볼 때 쓰는 adb 일반 권한 출력은 `dumpsys user`, `dumpsys package`, `dumpsys usagestats`, `dumpsys batterystats`, `settings global/secure/system` 이고, 필드의 뜻은 각 하위 페이지에 있습니다.
 
 > 그림 자리: 네 행위를 가로로 놓고, 각 행위에서 "없어지는 것" 과 "남는 흔적" 을 위아래로 나눠 보여 주는 표 그림
 
 ## 읽는 순서
 
-1. [초기화 (Factory Reset)](factory-reset.md) — 기기 전체를 지웠는지, 남은 기록의 시작점으로 그 무렵을 가늠하는 흐름입니다.
+1. [초기화 (Factory Reset)](factory-reset.md) — 기기 전체를 지웠는지, 남은 기록의 시작점으로 그 무렵을 추정하는 흐름입니다.
 2. [앱 지우기 (App Removal)](app-removal.md) — 지금 없는 앱의 흔적을 usagestats·공용 저장 공간에서 찾고, 지운 것과 보관한 것을 가르는 흐름입니다.
 3. [메시지·사진 지우기 (Content Deletion)](content-deletion.md) — 휴지통 파일 이름으로 지운 무렵을 셈하고, 알림 기록으로 사라진 메시지의 흔적을 찾는 흐름입니다.
 4. [시각 바꾸기 (Time Change)](time-change.md) — 기기 시각이 옮겨진 흔적을 찾고, 앞의 세 페이지에서 얻은 시각을 믿어도 되는지 점검하는 흐름입니다.

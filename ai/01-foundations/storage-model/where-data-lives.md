@@ -8,7 +8,7 @@ nav_order: 0
 
 ## 한 줄 요약
 
-AI 서비스의 대화 원본은 채팅 서비스라면 서버 계정에 있지만 모바일 앱과 데스크톱 앱은 기기에 사본을 두고, 코딩 도구와 로컬 AI 앱은 원본을 기기에 두기도 하므로, 조사는 서비스마다 원본과 사본이 어디에 있는지부터 가리는 순서로 진행합니다.
+AI 서비스의 대화 원본은 채팅 서비스라면 서버 계정에 있지만 모바일 앱과 데스크톱 앱은 기기에 사본을 두고, 코딩 도구와 로컬 AI 앱은 원본을 기기에 두기도 하므로, 조사는 서비스마다 원본과 사본이 어디에 있는지부터 가려내는 순서로 진행합니다.
 
 ## 이 형식을 쓰는 아티팩트
 
@@ -27,7 +27,7 @@ ChatGPT 같은 AI 앱의 증거는 로컬 저장소와 클라우드 서비스에
 
 ### 서버 쪽 — 계정에 남는 대화
 
-Claude 개인용(Free·Pro·Max)은 대화를 지웠을 때의 처리와 보관 기간이 서버 저장소를 기준으로 정해지고 [1], Gemini 앱은 "Keep Activity" 가 켜져 있을 때 대화를 계정의 "Gemini Apps Activity" 에 저장합니다 [2]. 기록 설정을 끈 상태에서도 서버에 잠시 남는 대화가 있습니다. 서비스별 보관 기간과 삭제 뒤 처리는 [대화 기록 보관 설정과 삭제](retention-deletion.md) 에, ChatGPT 의 서버 쪽 기록은 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md) 쪽에 모았습니다.
+Claude 개인용(Free·Pro·Max)은 대화를 지웠을 때의 처리와 보관 기간이 서버 저장소를 기준으로 정해지고 [1], Gemini 앱은 "Keep Activity" 가 켜져 있을 때 대화를 계정의 "Gemini Apps Activity" 에 저장합니다 [2]. 기록 설정을 끈 상태에서도 서버에 잠시 남는 대화가 있습니다. 서비스별 보관 기간과 삭제 뒤 처리는 [대화 기록 보관 설정과 삭제](retention-deletion.md) 에, ChatGPT 의 서버 쪽 기록은 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md) 페이지에 모았습니다.
 
 서버에 있는 원본은 사용자가 스스로 내려받는 [계정 데이터 내보내기](data-export-formats.md) 로 얻거나, 서비스 회사에 [데이터를 요청](../../03-techniques/acquisition/legal-requests.md) 해서 얻습니다. 기기만 확보한 조사라면 서버 원본은 손에 없다는 점을 처음부터 보고서에 적어 둡니다.
 
@@ -41,34 +41,34 @@ Claude 개인용(Free·Pro·Max)은 대화를 지웠을 때의 처리와 보관 
 |---|---|---|---|---|---|
 | ChatGPT | Android | `com.openai.chatgpt/databases/` 아래 `*_conversations.db` | SQLite | 앱 1.2024.177 까지, Android 15 시험 이미지(vc 2525902) | [8] |
 | ChatGPT | iOS | `Library/Application Support/conversations-*/` 아래 `*.json` | 대화마다 JSON 파일 하나 | 앱 1.2024.178 까지, 시험 이미지 1.2024.219·1.2024.233(iOS 17) | [9] |
-| Claude | Android | `com.anthropic.claude/databases/` 아래 `acc_*_claude_cache.db` | SQLite, 칸 안에 JSON | Android 13·17 시험 이미지, 앱 버전 기록 없음 | [8] |
+| Claude | Android | `com.anthropic.claude/databases/` 아래 `acc_*_claude_cache.db` | SQLite, 열 안에 JSON | Android 13·17 시험 이미지, 앱 버전 기록 없음 | [8] |
 | Claude | iOS | `Library/Application Support/ClaudeCache/` 아래 `cache_*.sqlite` | SQLite | iOS 18.7.8·26.5.2 시험 이미지 | [9] |
 | Gemini | Android·iOS | 기기 쪽 공개 분석기 없음 | 대화는 클라우드, Takeout 으로 받음 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
 | Copilot | Android·iOS | 기기 쪽 공개 분석기 없음 | 평문 대화와 브라우저 데이터 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
 
 Android 의 경로는 앱 데이터 폴더(`/data/data/` 아래 패키지 이름 폴더) 기준이고, iOS 의 경로는 `Containers/Data/Application/` 아래 UUID 이름의 앱 폴더 기준입니다. 앱 폴더의 공통 구조와 보호 방식은 [앱 데이터 폴더 구조 (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html) 와 [데이터 보호 (iOS)](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html) 를 봅니다.
 
-분석기가 시험한 판은 2024~2026 년의 몇 판뿐이라서 지금 판의 파일 구성과 다를 수 있습니다. 검체에서는 앱 판을 먼저 적고, 표의 파일이 그 자리에 있는지 확인합니다. Claude 앱의 파일은 이름대로 캐시라서 계정의 대화 전체가 들어 있다고 단정하지 않고 계정 내보내기와 견줘 봅니다. Copilot 은 기기에 대화가 남는지를 두고 출처끼리 다르게 적었으므로 [Copilot](../../02-artifacts/chat-services/copilot/index.md) 쪽의 대조를 봅니다. 표·칸·시각 형식은 [ChatGPT Android](../../02-artifacts/chat-services/chatgpt/android.md), [ChatGPT iOS](../../02-artifacts/chat-services/chatgpt/ios.md), [Claude Android](../../02-artifacts/chat-services/claude/android.md), [Claude iOS](../../02-artifacts/chat-services/claude/ios.md) 쪽에서 다룹니다.
+분석기가 시험한 판은 2024~2026 년의 몇 판뿐이라서 지금 판의 파일 구성과 다를 수 있습니다. 실제 기기에서는 앱 판을 먼저 적고, 표의 파일이 그 자리에 있는지 확인합니다. Claude 앱의 파일은 이름대로 캐시라서 계정의 대화 전체가 들어 있다고 단정하지 않고 계정 내보내기와 비교해 봅니다. Copilot 은 기기에 대화가 남는지를 두고 출처끼리 다르게 적었으므로 [Copilot](../../02-artifacts/chat-services/copilot/index.md) 페이지의 대조를 봅니다. 표·열·시각 형식은 [ChatGPT Android](../../02-artifacts/chat-services/chatgpt/android.md), [ChatGPT iOS](../../02-artifacts/chat-services/chatgpt/ios.md), [Claude Android](../../02-artifacts/chat-services/claude/android.md), [Claude iOS](../../02-artifacts/chat-services/claude/ios.md) 페이지에서 다룹니다.
 
 ### 개발 도구 — 기기에 원본을 두는 도구
 
 Claude Code 는 모든 OS 에서 `~/.claude/` 를 사용자 데이터 폴더로 쓰고(Windows 는 `%USERPROFILE%\.claude`), `CLAUDE_CONFIG_DIR` 환경 변수로 이 폴더를 옮길 수 있습니다 [5]. 세션 기록(대화 전문)은 `~/.claude/projects/` 아래 프로젝트 폴더에 세션마다 `.jsonl` 파일로 평문으로 남고 [4][5], VS Code 확장·JetBrains 플러그인·데스크톱 앱도 같은 `~/.claude/` 에 씁니다 [6]. 웹에서 실행하는 Claude Code(클라우드 세션)는 Anthropic 가상 머신에서 돌아서 사용자 PC 에 세션 기록이 없을 수 있습니다 [4]. Windows 11 의 `%USERPROFILE%\.claude` 에는 `.credentials.json`, `settings.json`, `stats-cache.json`, `history.jsonl`, `file-history/`, `paste-cache/`, `projects/`, `jobs/`, `feedback/drafts/` 같은 항목이 생깁니다.
 
-다른 개발 도구도 세션 기록을 사용자 폴더 아래에 두고, 기본 위치는 아래와 같습니다 [7]. 오른쪽 칸은 Windows 11 의 도구 폴더에 생기는 항목의 예입니다. 도구 폴더가 있어도 세션 파일은 없을 수 있으므로, 폴더가 있다는 것만으로 대화를 했다고 쓰지 않습니다.
+다른 개발 도구도 세션 기록을 사용자 폴더 아래에 두고, 기본 위치는 아래와 같습니다 [7]. 오른쪽 열은 Windows 11 의 도구 폴더에 생기는 항목의 예입니다. 도구 폴더가 있어도 세션 파일은 없을 수 있으므로, 폴더가 있다는 것만으로 대화를 했다고 쓰지 않습니다.
 
-| 도구 | 세션 기록 기본 위치 [7] | Windows 11 폴더의 항목 예 | 자세한 쪽 |
+| 도구 | 세션 기록 기본 위치 [7] | Windows 11 폴더의 항목 예 | 자세한 페이지 |
 |---|---|---|---|
 | Codex CLI | `~/.codex/sessions/`, 보관된 세션은 `~/.codex/archived_sessions/` | `%USERPROFILE%\.codex` 에 `hooks.json`, `skills/` 아래 `SKILL.md` 와 JSON 파일 | [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) |
 | Gemini CLI | `~/.gemini/tmp/` 아래 프로젝트 폴더의 `chats/session-*.json`·`.jsonl` | `%USERPROFILE%\.gemini` 에 `settings.json`, `config/`(`config.json`, `hooks.json`, `mcp_config.json`, `projects/`), `antigravity/`(`antigravity_state.pbtxt`, `installation_id`, `crashes/`) | [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md) |
 | Cursor | `~/.cursor/projects/` | `%USERPROFILE%\.cursor` 에 `hooks.json` 한 개 | [Cursor](../../02-artifacts/dev-agents/cursor.md) |
 
-기록 구조는 도구별 쪽에서, 보관 기간은 [대화 기록 보관 설정과 삭제](retention-deletion.md) 에서, 로그인 정보는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
+기록 구조는 도구별 페이지에서, 보관 기간은 [대화 기록 보관 설정과 삭제](retention-deletion.md) 에서, 로그인 정보는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
 
 ### 로컬 AI — 대화를 쥐는 쪽은 화면 앱
 
 로컬 AI 는 모델을 돌리는 백엔드와 대화 화면을 보여 주는 앱으로 나뉩니다. 모델과 백엔드는 대화나 문맥을 스스로 관리하지 않고, 화면 앱이 대화를 쥐고 있다가 매번 백엔드로 다시 보냅니다 [11]. 그래서 Ollama 같은 백엔드에서는 대화 본문보다 API 호출이 적힌 서버 로그와 모델 파일이 중요하고, 대화 본문은 LM Studio(`%UserProfile%/.lmstudio/conversations/`)나 Msty(`%AppData%/Msty/msty.db`) 같은 화면 앱 쪽에서 찾습니다 [11].
 
-Ollama 0.6.5 의 Windows 위치는 서버 로그 `%LocalAppData%/Ollama/server.log`, 앱 로그 `app.log`, 업그레이드 로그 `upgrade.log`, 명령 입력 이력 `%UserProfile%/.ollama/history`, 모델 매니페스트와 레이어 `%UserProfile%/.ollama/models/` 입니다 [11]. 명령 입력 이력에는 명령줄로 보낸 요청이 시각 순서대로 남지만 모델의 답은 남지 않습니다 [11]. Ollama 는 로컬 모델을 돌릴 때 프롬프트나 데이터를 보지 않고, 클라우드 모델을 쓸 때는 요청을 처리하되 저장·기록·학습에 쓰지 않습니다 [3]. 모델 파일 위치는 `OLLAMA_MODELS` 환경 변수로 바꿀 수 있습니다 [3]. Windows 11 의 `%USERPROFILE%\.ollama` 에는 `cache/` 아래 JSON 파일, `id_ed25519`, `id_ed25519.pub` 가 생기고, `models` 폴더는 없을 수도 있습니다. 로그와 이력 파일의 형식은 [Ollama](../../02-artifacts/local-ai/ollama.md) 쪽에서 다룹니다.
+Ollama 0.6.5 의 Windows 위치는 서버 로그 `%LocalAppData%/Ollama/server.log`, 앱 로그 `app.log`, 업그레이드 로그 `upgrade.log`, 명령 입력 이력 `%UserProfile%/.ollama/history`, 모델 매니페스트와 레이어 `%UserProfile%/.ollama/models/` 입니다 [11]. 명령 입력 이력에는 명령줄로 보낸 요청이 시각 순서대로 남지만 모델의 답은 남지 않습니다 [11]. Ollama 는 로컬 모델을 돌릴 때 프롬프트나 데이터를 보지 않고, 클라우드 모델을 쓸 때는 요청을 처리하되 저장·기록·학습에 쓰지 않습니다 [3]. 모델 파일 위치는 `OLLAMA_MODELS` 환경 변수로 바꿀 수 있습니다 [3]. Windows 11 의 `%USERPROFILE%\.ollama` 에는 `cache/` 아래 JSON 파일, `id_ed25519`, `id_ed25519.pub` 가 생기고, `models` 폴더는 없을 수도 있습니다. 로그와 이력 파일의 형식은 [Ollama](../../02-artifacts/local-ai/ollama.md) 페이지에서 다룹니다.
 
 ### OS 별 위치
 
@@ -82,7 +82,7 @@ OS 별 위치는 아래와 같습니다.
 | Ollama 모델 | `C:\Users\%username%\.ollama\models` | `~/.ollama/models` | `/usr/share/ollama/.ollama/models` | [3] |
 | Ollama 서버 로그 | `%LocalAppData%/Ollama/server.log` | 공개 자료 없음 | 공개 자료 없음 | [11] |
 
-Electron 으로 만든 데스크톱 앱의 기본 데이터 폴더는 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 에서, Claude 데스크톱 폴더의 내용은 [Claude](../../02-artifacts/chat-services/claude/index.md) 쪽에서 다룹니다. 표에서 "공개 자료 없음" 인 칸은 검체에서 기본 위치와 설정을 보고 확인합니다.
+Electron 으로 만든 데스크톱 앱의 기본 데이터 폴더는 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 에서, Claude 데스크톱 폴더의 내용은 [Claude](../../02-artifacts/chat-services/claude/index.md) 페이지에서 다룹니다. 표에서 "공개 자료 없음" 인 칸은 실제 기기에서 기본 위치와 설정을 보고 확인합니다.
 
 ### Windows 스토어(MSIX) 앱의 위치
 
@@ -90,16 +90,16 @@ Claude 데스크톱은 설치 방식에 따라 데이터 폴더가 다릅니다.
 
 스토어 판은 같은 패키지 폴더의 `LocalCache\Local\` 아래에도 파일을 둡니다. `claude-cli-nodejs\Cache\` 아래 JSONL 파일(키: `cwd`, `debug`, `sessionId`, `timestamp`)과 npm·pip·NuGet 캐시, `GitHub CLI\device-id` 같은 개발 도구 폴더가 생길 수 있습니다. 그래서 스토어 판을 쓴 PC 에서는 `%APPDATA%`·`%LOCALAPPDATA%` 바로 아래만 보지 말고 패키지 폴더의 `LocalCache` 아래도 함께 봅니다.
 
-### 동기화 — 여러 기기에 같은 대화가 보이는 까닭
+### 동기화 — 여러 기기에 같은 대화가 보이는 이유
 
 같은 계정의 대화가 웹·데스크톱·모바일에 똑같이 보이면 대화 목록의 원본은 서버 계정에 있다고 보고, 기기마다 남은 사본은 따로 수집합니다. Claude Code 의 Remote Control 세션은 실행을 사용자 기기에서 하고, 연결된 동안에는 대화 기록 사본을 서버에도 저장합니다 [4]. 이런 세션은 기기의 세션 기록과 서버 사본이 함께 있습니다.
 
-Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` 키가 있습니다. 이 파일의 용도를 설명한 공개 자료가 없으므로, 검체에서는 `localSessionId` 와 `remoteSessionId` 값을 세션 기록의 세션 ID 와 대조해 두 세션이 이어졌는지 확인합니다.
+Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` 키가 있습니다. 이 파일의 용도를 설명한 공개 자료는 없습니다. 실제 데이터에서 `localSessionId` 와 `remoteSessionId` 값을 세션 기록의 세션 ID 와 대조해 두 세션이 이어졌는지 확인합니다.
 
 ## 읽는 법
 
 1. 기기에서 어떤 방식으로 AI 서비스를 썼는지 먼저 확인합니다. 설치된 앱, 브라우저 방문 기록, 사용자 폴더 아래 `.claude`·`.codex`·`.gemini`·`.cursor`·`.ollama` 같은 도구 폴더, 스토어 앱 패키지 폴더, 휴대전화의 앱 폴더를 봅니다. 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md) 를 따릅니다.
-2. 서비스마다 원본이 서버에 있는지 기기에 있는지 가립니다. 원본이 서버에 있다면 계정 내보내기 파일이나 서비스 회사 회신이 있는지 확인하고, 없다면 기기에서 찾은 대화는 사본이라고 적어 둡니다.
+2. 서비스마다 원본이 서버에 있는지 기기에 있는지 구분합니다. 원본이 서버에 있다면 계정 내보내기 파일이나 서비스 회사 회신이 있는지 확인하고, 없다면 기기에서 찾은 대화는 사본이라고 적어 둡니다.
 3. 원본이나 사본이 기기에 있다면 폴더째 복사한 사본에서 분석합니다. 앱이 쓰고 있는 데이터베이스는 잠겨서 열리지 않을 수 있고, SQLite 는 `-wal`·`-shm` 파일을 함께 가져와야 합니다(자세한 내용은 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)).
 4. 서버 쪽 기록과 기기 쪽 기록의 시각을 한 표에 놓고 맞춰 봅니다. 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md) 에 있습니다.
 
@@ -117,9 +117,9 @@ Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `e
 
 **모바일 앱에 대화가 없다고 서비스를 안 썼다고 쓰지 않습니다.** Gemini 앱은 대화를 클라우드에 두므로 [10] 기기에서는 설치와 사용 흔적만 찾고 대화는 Takeout 이나 서비스 회사 회신으로 확인합니다. ChatGPT·Claude 앱도 분석기가 시험한 판과 지금 판이 다를 수 있습니다 [8][9].
 
-**계정에 대화가 보인다고 그 기기에서 대화했다고 쓸 수 없습니다.** 동기화된 서비스는 어느 기기에서든 같은 대화 목록을 보여 주고, 기기의 사본도 다른 기기에서 한 대화를 받아 온 것일 수 있습니다. 입력한 기기와 사람을 가리는 일은 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md) 의 방법을 따릅니다.
+**계정에 대화가 보인다고 그 기기에서 대화했다고 쓸 수 없습니다.** 동기화된 서비스는 어느 기기에서든 같은 대화 목록을 보여 주고, 기기의 사본도 다른 기기에서 한 대화를 받아 온 것일 수 있습니다. 입력한 기기와 사람을 가려내는 일은 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md) 의 방법을 따릅니다.
 
-**앱 버전에 따라 폴더 구성이 바뀝니다.** 이 쪽의 Windows 폴더 구성은 2026-09 판 기준입니다. 검체를 볼 때는 그 검체의 앱 버전을 따로 확인해 함께 적습니다.
+**앱 버전에 따라 폴더 구성이 바뀝니다.** 이 페이지의 Windows 폴더 구성은 2026-09 판 기준입니다. 실제 기기를 볼 때는 그 기기의 앱 버전을 따로 확인해 함께 적습니다.
 
 ## 도구
 

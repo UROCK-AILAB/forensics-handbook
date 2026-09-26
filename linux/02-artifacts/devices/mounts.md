@@ -10,7 +10,7 @@ nav_order: 890
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Linux 는 USB 저장 장치를 꽂는 것만으로 파일을 읽을 수 있게 되지 않습니다. 커널이 장치를 블록 장치(`sdb` 등)로 잡은 뒤, 누군가 그 위의 파일 시스템을 디렉터리에 마운트 (mount) 해야 합니다. 장치를 잡는 과정의 흔적은 [USB 장치 연결 기록](usb.md)에서 다루고, 이 쪽은 그다음 단계인 마운트의 흔적을 다룹니다.
+Linux 는 USB 저장 장치를 꽂는 것만으로 파일을 읽을 수 있게 되지 않습니다. 커널이 장치를 블록 장치(`sdb` 등)로 잡은 뒤, 누군가 그 위의 파일 시스템을 디렉터리에 마운트 (mount) 해야 합니다. 장치를 잡는 과정의 흔적은 [USB 장치 연결 기록](usb.md)에서 다루고, 이 페이지는 그다음 단계인 마운트의 흔적을 다룹니다.
 
 마운트를 하는 주체는 셋으로 나뉩니다. 부팅 때는 systemd 가 `/etc/fstab` 을 읽어 마운트 단위 (mount unit) 로 바꾼 뒤 마운트합니다[6]. 관리자는 `mount` 명령으로 직접 붙입니다[2]. 데스크톱에서는 udisks2 데몬(udisksd)이 사용자를 대신해 이동식 매체를 `/media` 나 `/run/media` 아래에 붙입니다[13]. 주체마다 남기는 로그 줄이 다르고, 파일 시스템 드라이버(ext4, XFS)는 주체와 상관없이 커널 로그에 따로 줄을 남깁니다[10][12].
 
@@ -99,7 +99,7 @@ systemd-fstab-generator 는 fstab 줄마다 마운트 단위를 만들고, 단�
 | 다시 마운트 | `re-mounted. Opts: %s. Quota mode: %s.` | `re-mounted %pU %s. Quota mode: %s.` |
 | 해제 | 줄 없음 | `unmounting filesystem %pU.` |
 
-v6.8 형식의 둘째 `%s` 는 `ro` 나 `r/w` 이고, `with%s` 는 ` ordered data mode` 같은 데이터 모드가 붙어 `with ordered data mode` 가 되며 저널이 없으면 `without journal` 이 됩니다[10][11]. v5.14 형식에는 UUID 가 없고 대신 옵션 문자열이 들어갑니다[11]. 최신 커널(master)은 다시 마운트 줄이 `re-mounted %pU%s.` 로 또 바뀌었습니다[10]. 어느 형식인지는 검체의 줄을 보고 정합니다.
+v6.8 형식의 둘째 `%s` 는 `ro` 나 `r/w` 이고, `with%s` 는 ` ordered data mode` 같은 데이터 모드가 붙어 `with ordered data mode` 가 되며 저널이 없으면 `without journal` 이 됩니다[10][11]. v5.14 형식에는 UUID 가 없고 대신 옵션 문자열이 들어갑니다[11]. 최신 커널(master)은 다시 마운트 줄이 `re-mounted %pU%s.` 로 또 바뀌었습니다[10]. 어느 형식인지는 실제 로그 줄을 보고 정합니다.
 
 쓰기 가능으로 마운트할 때 볼륨 상태에 따라 `warning: mounting unchecked fs, running e2fsck is recommended`, `warning: mounting fs with errors, running e2fsck is recommended`, `warning: maximal mount count reached, ...`, `warning: checktime reached, ...` 가운데 한 줄이 남을 수 있습니다[10]. 첫 줄은 s_state 의 정상 해제 비트가 꺼진 볼륨에서, 둘째 줄은 오류 비트가 켜진 볼륨에서 남습니다[10]. 저널이 있는 ext4 는 마운트 중에도 정상 해제 비트를 끄지 않으므로, 첫 줄은 주로 저널 없는 볼륨을 정상 해제하지 않았다는 단서입니다.
 
@@ -115,7 +115,7 @@ v6.8 형식의 둘째 `%s` 는 `ro` 나 `r/w` 이고, `with%s` 는 ` ordered dat
 | 2.10.1 | `Mounted %s%s at %s on behalf of uid %u` (둘째 `%s` 가 ` (system)`) | 2.9.4 와 같음 |
 | 최신(master) | 같은 문구에 요청자가 다르면 ` (requested by uid %u)` 가 붙음 | 같은 문구 |
 
-2.9.4 와 2.10.1 은 이 줄을 notice 매크로로 남기고, 이 매크로는 GLib 의 MESSAGE 수준입니다[13][14]. 최신 코드는 같은 줄을 info 매크로로 바꿨는데, 이 매크로는 디버그 빌드에서만 코드가 들어가고 기본 빌드에서는 빈 매크로입니다[13]. 그래서 udisks 판에 따라 이 줄이 아예 없을 수 있으므로, 검체의 udisks2 패키지 판을 먼저 봅니다. 암호화 볼륨을 열고 닫으면 `Unlocked device %s as %s`, `Locked device %s (was unlocked as %s)` 도 남습니다[13].
+2.9.4 와 2.10.1 은 이 줄을 notice 매크로로 남기고, 이 매크로는 GLib 의 MESSAGE 수준입니다[13][14]. 최신 코드는 같은 줄을 info 매크로로 바꿨는데, 이 매크로는 디버그 빌드에서만 코드가 들어가고 기본 빌드에서는 빈 매크로입니다[13]. 그래서 udisks 판에 따라 이 줄이 아예 없을 수 있으므로, 분석 대상의 udisks2 패키지 판을 먼저 봅니다. 암호화 볼륨을 열고 닫으면 `Unlocked device %s as %s`, `Locked device %s (was unlocked as %s)` 도 남습니다[13].
 
 아래는 2.10.1 형식으로 만든 예시입니다.
 
@@ -129,7 +129,7 @@ Mounted /dev/sdb1 at /media/alice/EXAMPLE on behalf of uid 1000
 
 ### ext 계열 슈퍼블록
 
-슈퍼블록은 볼륨 시작에서 1024바이트(0x400) 위치에 있습니다[9]. 아래 절대 위치는 0x400 에 필드 오프셋을 더해 계산한 값이고, 전체 필드 설명은 [슈퍼블록과 블록 그룹](../../01-foundations/filesystem/ext4/superblock-block-group.md) 쪽에 있습니다.
+슈퍼블록은 볼륨 시작에서 1024바이트(0x400) 위치에 있습니다[9]. 아래 절대 위치는 0x400 에 필드 오프셋을 더해 계산한 값이고, 전체 필드 설명은 [슈퍼블록과 블록 그룹](../../01-foundations/filesystem/ext4/superblock-block-group.md) 페이지에 있습니다.
 
 | 필드 | 오프셋 | 절대 위치 | 크기 | 뜻 |
 |---|---|---|---|---|
@@ -151,7 +151,7 @@ Mounted /dev/sdb1 at /media/alice/EXAMPLE on behalf of uid 1000
 커널 코드로 보면 각 값은 이렇게 바뀝니다[10].
 
 - **s_mnt_count, s_mtime**: 마운트할 때 횟수를 1 올리고 현재 시각을 적습니다. 읽기 전용 마운트는 이 과정을 건너뛰므로 두 값이 바뀌지 않습니다.
-- **s_last_mounted**: 마운트하는 순간이 아니라, 마운트 뒤 처음 파일을 열 때 한 번 마운트 지점 경로를 적습니다. 읽기 전용이면 적지 않습니다. 경로를 담는 칸은 64바이트입니다.
+- **s_last_mounted**: 마운트하는 순간이 아니라, 마운트 뒤 처음 파일을 열 때 한 번 마운트 지점 경로를 적습니다. 읽기 전용이면 적지 않습니다. 경로를 담는 필드는 64바이트입니다.
 - **s_wtime**: 슈퍼블록을 디스크에 쓸 때마다 바뀝니다. 읽기 전용이면 바꾸지 않습니다.
 - **needs recovery (0x4)**: 저널이 있는 볼륨을 쓰기 가능으로 마운트하면 켜고, 정상 해제하면 끕니다.
 - **s_state**: 저널이 있는 ext4 는 마운트 중에도 s_state 의 정상 해제 비트를 끄지 않고, 저널이 없을 때만 끕니다.
@@ -168,16 +168,16 @@ Mounted /dev/sdb1 at /media/alice/EXAMPLE on behalf of uid 1000
 
 **증명하지 못하는 것**
 
-- 마운트는 파일을 열람하거나 복사했다는 뜻이 아닙니다. s_last_mounted 가 채워졌다면 파일이 하나 이상 열렸다는 것까지만 말하고, 어떤 파일인지는 알 수 없습니다[10].
+- 마운트는 파일을 열람하거나 복사했다는 뜻이 아닙니다. s_last_mounted 가 채워졌다면 파일이 하나 이상 열렸다는 것까지만 알 수 있고, 어떤 파일인지는 알 수 없습니다[10].
 - s_mtime 과 s_last_mounted 는 마지막 값 하나만 남고 이전 값은 덮어씁니다. 읽기 전용 마운트는 두 값을 바꾸지 않습니다[10].
 - s_last_mounted 에는 경로만 있고 어느 컴퓨터에서 마운트했는지는 없습니다. `/media/alice/EXAMPLE` 같은 경로가 있다면 사용자 이름이 `alice` 인 컴퓨터에서 udisks 가 붙였을 가능성이 있다는 정도로만 씁니다.
 - fstab 에 없다고 해서 마운트가 없었던 것은 아닙니다. 수동 마운트와 udisks 마운트는 fstab 을 거치지 않습니다.
 
-보고서에는 "2024-07-24 07:48:16 UTC 에 커널 로그에 sdb1 볼륨을 쓰기 가능으로 마운트한 기록이 있다"처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2024-07-24 07:48:16 UTC 에 커널 로그에 sdb1 볼륨을 쓰기 가능으로 마운트한 기록이 있다"처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
-로그 줄의 시각은 어디에 저장되었는지에 따라 다릅니다. 저널은 UTC 기준 마이크로초 값을 저장하고, rsyslog 전통 형식 파일은 연도와 시간대가 없는 현지 시각을 적습니다. 자세한 내용은 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md), [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md), [시간대](../system-info/hostname-timezone.md) 쪽을 봅니다.
+로그 줄의 시각은 어디에 저장되었는지에 따라 다릅니다. 저널은 UTC 기준 마이크로초 값을 저장하고, rsyslog 전통 형식 파일은 연도와 시간대가 없는 현지 시각을 적습니다. 자세한 내용은 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md), [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md), [시간대](../system-info/hostname-timezone.md) 페이지를 봅니다.
 
 ext 슈퍼블록 시각은 epoch 초로 적은 UTC 기준 값입니다[9]. 커널은 하위 32비트를 부호 없는 값으로 적고 그 위 자리를 상위 8비트(`_hi`)에 적으므로[10], 2106년 이후 값은 둘을 합쳐야 맞습니다. 커널은 적을 때 시스템 시계를 그대로 쓰므로 시계가 틀리면 값도 틀립니다[10]. Windows 와 맞추려고 하드웨어 시계를 현지 시각으로 두는 컴퓨터는 시계가 시간대만큼 앞서 있을 수 있으므로[10], 이중 부팅 컴퓨터에서 쓴 매체는 시간대만큼 어긋났을 가능성을 따져 봅니다. 값 변환은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)을 봅니다.
 
@@ -243,7 +243,7 @@ ext4 볼륨 이미지의 0x420 부터를 헥스로 보면 아래와 같은 모�
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 Linux 시험 이미지(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
 1. `/etc/fstab` 에 `noauto` 나 `user` 옵션이 붙은 줄이 있는가? 있다면 그 장치는 부팅 뒤 누가 붙였을 가능성이 있는가?
 2. 커널 로그의 `EXT4-fs (` 줄은 v5.14 형식인가 v6.8 형식인가? 해제 줄이 있는가?

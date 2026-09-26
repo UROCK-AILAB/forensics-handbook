@@ -20,7 +20,7 @@ VPN 흔적은 한 파일에 모여 있지 않고 항상 켜짐 VPN 설정 값, �
 | `TYPE_VPN_PLATFORM` | IKEv2 같은 플랫폼 VPN 프로필 |
 | `TYPE_VPN_LEGACY` | 예전 내장 VPN |
 
-앱이 VPN 을 쓰려면 사용자 동의가 필요하고, 동의는 앱 권한 기록(AppOps)에 `OPSTR_ACTIVATE_VPN`(VpnService 앱) 또는 `OPSTR_ACTIVATE_PLATFORM_VPN`(플랫폼 VPN) 으로 남습니다 [1]. VPN 이 실제로 연결된 동안에는 시스템이 AppOps 의 `OPSTR_ESTABLISH_VPN_SERVICE`(VpnService 앱) 또는 `OPSTR_ESTABLISH_VPN_MANAGER`(플랫폼 VPN) 을 시작(startOp)하고, 연결이 끝나면 마칩니다(finishOp) [1]. 그래서 AppOps 기록에는 동의했다는 사실과 연결 구간이 따로 남을 수 있습니다. AppOps 저장 파일과 연결 구간이 파일에 얼마나 남는지는 검체에서 확인합니다. 앱 권한의 짜임새는 [앱 샌드박스와 권한 (Sandbox·Permissions)](../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다.
+앱이 VPN 을 쓰려면 사용자 동의가 필요하고, 동의는 앱 권한 기록(AppOps)에 `OPSTR_ACTIVATE_VPN`(VpnService 앱) 또는 `OPSTR_ACTIVATE_PLATFORM_VPN`(플랫폼 VPN) 으로 남습니다 [1]. VPN 이 실제로 연결된 동안에는 시스템이 AppOps 의 `OPSTR_ESTABLISH_VPN_SERVICE`(VpnService 앱) 또는 `OPSTR_ESTABLISH_VPN_MANAGER`(플랫폼 VPN) 을 시작(startOp)하고, 연결이 끝나면 마칩니다(finishOp) [1]. 그래서 AppOps 기록에는 동의했다는 사실과 연결 구간이 따로 남을 수 있습니다. AppOps 저장 파일과 연결 구간이 파일에 얼마나 남는지는 실제 기기에서 확인합니다. 앱 권한의 짜임새는 [앱 샌드박스와 권한 (Sandbox·Permissions)](../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다.
 
 사용자가 특정 VPN 을 늘 켜 두도록 고르면 항상 켜짐(Always-on) VPN 설정이 생기고, 현행 AOSP 는 이 설정을 사용자별 Settings.Secure 에 저장합니다 [1].
 
@@ -36,12 +36,12 @@ VPN 흔적은 한 파일에 모여 있지 않고 항상 켜짐 VPN 설정 값, �
 
 | 흔적 | 저장하는 곳 | 알려진 것 |
 |---|---|---|
-| 항상 켜짐 설정 | 사용자별 Settings.Secure | 상수 이름 [1], 실제 키 문자열은 검체에서 확인 |
-| VPN 동의와 연결 구간 | AppOps | op 이름 [1], 저장 파일은 검체에서 확인 |
-| 플랫폼 VPN 프로필 | VpnProfileStore | 저장 이름 규칙 [1], 실제 저장 위치는 검체에서 확인 |
+| 항상 켜짐 설정 | 사용자별 Settings.Secure | 상수 이름 [1], 실제 키 문자열은 실제 기기에서 확인 |
+| VPN 동의와 연결 구간 | AppOps | op 이름 [1], 저장 파일은 실제 기기에서 확인 |
+| 플랫폼 VPN 프로필 | VpnProfileStore | 저장 이름 규칙 [1], 실제 저장 위치는 실제 기기에서 확인 |
 | VPN 사용량 | netstats | 연결 종류 17, set 1001·1002 [2] |
 
-플랫폼 VPN 프로필은 VpnProfileStore 에 `Credentials.PLATFORM_VPN` + 사용자 ID + `_` + 패키지 이름이라는 이름으로 저장하고, 프로필 하나는 최대 128kB 입니다 [1]. 앱별 VPN 제외 설정도 같은 저장소에 `VPNAPPEXCLUDED_` + 사용자 ID + `_` + 패키지 이름으로 저장합니다 [1]. VpnProfileStore 의 실제 저장 위치(키스토어 등)와 `Credentials.PLATFORM_VPN` 문자열 값은 검체에서 확인합니다. 예전 내장 VPN 은 패키지 이름 자리에 `VpnConfig.LEGACY_VPN` 을 쓰고, 예전 VPN 데몬은 VPN_UID 로 돌며 키스토어 키를 넘겨받습니다(`keystore2.grant`) [1].
+플랫폼 VPN 프로필은 VpnProfileStore 에 `Credentials.PLATFORM_VPN` + 사용자 ID + `_` + 패키지 이름이라는 이름으로 저장하고, 프로필 하나는 최대 128kB 입니다 [1]. 앱별 VPN 제외 설정도 같은 저장소에 `VPNAPPEXCLUDED_` + 사용자 ID + `_` + 패키지 이름으로 저장합니다 [1]. VpnProfileStore 의 실제 저장 위치(키스토어 등)와 `Credentials.PLATFORM_VPN` 문자열 값은 실제 기기에서 확인합니다. 예전 내장 VPN 은 패키지 이름 자리에 `VpnConfig.LEGACY_VPN` 을 쓰고, 예전 VPN 데몬은 VPN_UID 로 돌며 키스토어 키를 넘겨받습니다(`keystore2.grant`) [1].
 
 위 구조는 AOSP main 기준입니다. 저장 이름에 사용자 ID 가 들어가니 사용자가 여럿인 기기에서는 [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md) 에서 사용자 번호를 먼저 확인합니다.
 
@@ -51,27 +51,27 @@ settings secure 키 목록에는 기기에 실제로 저장된 키만 나오므�
 
 VPN 흔적은 전용 파일 형식이 아니라 각 저장소의 형식을 따릅니다. 항상 켜짐 설정은 설정 값 한 줄씩이고, 사용량은 netstats 이진 파일의 한 행입니다. netstats 에서 VPN 과 관련된 값은 아래 셋이고 [2], 파일 형식 전체는 [데이터 사용량 (netstats)](netstats.md) 페이지에서 다룹니다.
 
-| 칸 | 값 | 뜻 |
+| 필드 | 값 | 뜻 |
 |---|---|---|
 | 연결 종류 | 17 | VPN |
 | set | 1001 | VPN_IN |
 | set | 1002 | VPN_OUT |
 
-VPN 상태가 바뀌면 시스템은 `VpnManager.ACTION_VPN_MANAGER_EVENT` 를 VPN 앱에 보내고, 이 알림에는 `EXTRA_TIMESTAMP_MILLIS`(System.currentTimeMillis 값, 유닉스 밀리초)가 들어 있습니다 [1]. 이 이벤트가 파일로 남는지는 검체에서 확인합니다. 연결이 끊기면 시스템은 `NOTE_VPN_DISCONNECTED` 알림을 띄우니 [1], 알림 기록이 남는 기기라면 끊긴 시각을 찾는 단서가 될 수 있습니다.
+VPN 상태가 바뀌면 시스템은 `VpnManager.ACTION_VPN_MANAGER_EVENT` 를 VPN 앱에 보내고, 이 알림에는 `EXTRA_TIMESTAMP_MILLIS`(System.currentTimeMillis 값, 유닉스 밀리초)가 들어 있습니다 [1]. 이 이벤트가 파일로 남는지는 실제 기기에서 확인합니다. 연결이 끊기면 시스템은 `NOTE_VPN_DISCONNECTED` 알림을 띄우니 [1], 알림 기록이 남는 기기라면 끊긴 시각을 찾는 단서가 될 수 있습니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-항상 켜짐 설정에 패키지 이름이 있으면 사용자(또는 기기 관리 주체)가 그 앱을 항상 켜짐 VPN 으로 지정해 둔 상태였다는 뜻이고, 잠금 값이 1 이면 VPN 없이는 인터넷이 막히도록 설정돼 있었다는 뜻입니다 [1]. AppOps 에 VPN 동의 기록이 있으면 그 앱에 VPN 을 허락했다는 기록이고, 연결 구간 기록이 남아 있다면 VPN 이 연결돼 있던 시간대를 가늠할 수 있습니다 [1]. netstats 에 연결 종류 17 이나 set 1001·1002 행이 있으면 그 구간에 VPN 과 관련된 사용량이 잡혔다는 기록입니다 [2]. 두 set 값이 VPN 사용량을 어떤 방식으로 나눠 적는지 밝힌 공개 자료가 없으니, 앱별 행과 더해 합계를 내지 않습니다.
+항상 켜짐 설정에 패키지 이름이 있으면 사용자(또는 기기 관리 주체)가 그 앱을 항상 켜짐 VPN 으로 지정해 둔 상태였다는 뜻이고, 잠금 값이 1 이면 VPN 없이는 인터넷이 막히도록 설정돼 있었다는 뜻입니다 [1]. AppOps 에 VPN 동의 기록이 있으면 그 앱에 VPN 을 허락했다는 기록이고, 연결 구간 기록이 남아 있다면 VPN 이 연결돼 있던 시간대를 추정할 수 있습니다 [1]. netstats 에 연결 종류 17 이나 set 1001·1002 행이 있으면 그 구간에 VPN 과 관련된 사용량이 잡혔다는 기록입니다 [2]. 두 set 값이 VPN 사용량을 어떤 방식으로 나눠 적는지 밝힌 공개 자료가 없으니, 앱별 행과 더해 합계를 내지 않습니다.
 
 **증명하지 못하는 것**
 
-VPN 설정이나 사용량 기록은 VPN 너머에서 어느 사이트에 접속했는지, 무엇을 주고받았는지 말하지 않습니다. VPN 앱이 깔려 있거나 동의 기록이 있다는 사실만으로 사건 시각에 VPN 이 켜져 있었다고 쓸 수 없고, 반대로 항상 켜짐 설정이 없다고 VPN 을 쓰지 않았다고 볼 수도 없습니다. VPN 을 썼다는 사실 자체는 흔한 일이라서 숨기려는 의도로 읽으려면 다른 정황이 따로 필요합니다.
+VPN 설정이나 사용량 기록으로는 VPN 너머에서 어느 사이트에 접속했는지, 무엇을 주고받았는지 알 수 없습니다. VPN 앱이 깔려 있거나 동의 기록이 있다는 사실만으로 사건 시각에 VPN 이 켜져 있었다고 쓸 수 없고, 반대로 항상 켜짐 설정이 없다고 VPN 을 쓰지 않았다고 볼 수도 없습니다. VPN 을 썼다는 사실 자체는 흔한 일이라서 숨기려는 의도로 읽으려면 다른 정황이 따로 필요합니다.
 
 ## 시각 해석
 
-항상 켜짐 설정 값에는 시각이 없고, 확보 시점의 상태만 알려 줍니다. VPN 을 거친 사용량의 시각은 netstats 구간 시작 시각(유닉스 밀리초)과 구간 길이로 읽으며 [2], 1~2시간 단위라서 연결한 순간을 짚지 못합니다. `ACTION_VPN_MANAGER_EVENT` 의 시각은 유닉스 밀리초이지만 [1] 파일에 남는지는 검체마다 다를 수 있으니, 그 값을 찾았다면 어디서 찾았는지 함께 적습니다. 값을 읽는 일반 방법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮기는 법은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+항상 켜짐 설정 값에는 시각이 없고, 확보 시점의 상태만 알려 줍니다. VPN 을 거친 사용량의 시각은 netstats 구간 시작 시각(유닉스 밀리초)과 구간 길이로 읽으며 [2], 1~2시간 단위라서 연결한 순간을 짚지 못합니다. `ACTION_VPN_MANAGER_EVENT` 의 시각은 유닉스 밀리초이지만 [1] 파일에 남는지는 기기마다 다를 수 있으니, 그 값을 찾았다면 어디서 찾았는지 함께 적습니다. 값을 읽는 일반 방법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮기는 법은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
@@ -95,7 +95,7 @@ VPN 설정이나 사용량 기록은 VPN 너머에서 어느 사이트에 접속
 adb shell settings list secure | grep -i vpn
 ```
 
-키가 나오면 값에 적힌 패키지 이름을 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 목록에서 찾아 설치 시각과 설치한 곳을 확인합니다. 이미지로 확보한 검체라면 설정 저장 파일에서 같은 키를 찾고, 설정 저장 형식은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지를 따릅니다.
+키가 나오면 값에 적힌 패키지 이름을 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 목록에서 찾아 설치 시각과 설치한 곳을 확인합니다. 이미지로 확보했다면 설정 저장 파일에서 같은 키를 찾고, 설정 저장 형식은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지를 따릅니다.
 
 ### netstats 로 한 번
 
@@ -115,7 +115,7 @@ netstats 이진 파일의 헥스 따라가기는 [데이터 사용량 (netstats)
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에서 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 시험 이미지에서 아래 질문을 풀어 봅니다.
 
 1. secure 설정에 VPN 관련 키가 있습니까? 있다면 어느 패키지가 항상 켜짐으로 지정돼 있고, 잠금 값은 무엇입니까?
 2. 지정된 VPN 앱은 언제 설치됐습니까?

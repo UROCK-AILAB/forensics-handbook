@@ -30,7 +30,7 @@ Apache 는 Ubuntu 에서 패키지·프로세스 이름이 `apache2` 이고, RHE
 | Nginx 설정 | `/etc/nginx/nginx.conf`, `conf.d/*.conf`, `sites-enabled/*`[17] | `/etc/nginx/nginx.conf`, `conf.d/*.conf`, `default.d/*.conf`[18] |
 | Nginx 로그 | `/var/log/nginx/access.log`(형식 이름 없음, 곧 combined), `/var/log/nginx/error.log`[17] | `/var/log/nginx/access.log`(`main` 형식), `/var/log/nginx/error.log`[18] |
 
-RHEL 의 `httpd.conf` 는 로그 경로를 `logs/error_log` 처럼 `ServerRoot` 기준 상대 경로로 적습니다[11]. 검체에서 설정을 따라갈 때는 `/etc/httpd/logs` 링크가 `/var/log/httpd` 로 풀린다는 점을 기억하면 됩니다.
+RHEL 의 `httpd.conf` 는 로그 경로를 `logs/error_log` 처럼 `ServerRoot` 기준 상대 경로로 적습니다[11]. 실제 시스템에서 설정을 따라갈 때는 `/etc/httpd/logs` 링크가 `/var/log/httpd` 로 풀린다는 점을 기억하면 됩니다.
 
 로그 순환 (log rotation) 설정도 배포판마다 다릅니다.
 
@@ -39,7 +39,7 @@ RHEL 의 `httpd.conf` 는 로그 경로를 `logs/error_log` 처럼 `ServerRoot` 
 | Apache | `/var/log/apache2/*.log`: daily, rotate 14, compress, delaycompress, create 640 root adm[10] | `/var/log/httpd/*log`: missingok, notifempty, delaycompress, 주기·개수·압축은 적지 않아 전역 `/etc/logrotate.conf` 를 따름(weekly, rotate 4, dateext, `#compress`)[11][19][20] |
 | Nginx | `/var/log/nginx/*.log`: daily, rotate 14, compress, delaycompress, create 0640 www-data adm[17] | `/var/log/nginx/*.log`: daily, rotate 10, compress, delaycompress, create 0640 nginx root[18] |
 
-Ubuntu 에서는 `delaycompress` 때문에 가장 최근 회전본 하나는 평문으로 남고 그보다 오래된 회전본부터 gzip 으로 압축됩니다[10][17]. 회전본 이름에 날짜가 붙는지는 전역 `/etc/logrotate.conf` 의 `dateext` 가 정하므로 검체에서 확인합니다. RHEL 의 Apache 로그는 전역 설정의 `dateext` 를 따라 날짜가 붙은 이름으로 회전하고, 전역 설정에서 `compress` 가 주석 처리돼 있어 압축하지 않습니다[19][20]. 회전본 이름 규칙과 시각 변화는 [로그 순환](../../01-foundations/logging/logrotate.md) 에서 다룹니다.
+Ubuntu 에서는 `delaycompress` 때문에 가장 최근 회전본 하나는 평문으로 남고 그보다 오래된 회전본부터 gzip 으로 압축됩니다[10][17]. 회전본 이름에 날짜가 붙는지는 전역 `/etc/logrotate.conf` 의 `dateext` 가 정하므로 실제 시스템에서 확인합니다. RHEL 의 Apache 로그는 전역 설정의 `dateext` 를 따라 날짜가 붙은 이름으로 회전하고, 전역 설정에서 `compress` 가 주석 처리돼 있어 압축하지 않습니다[19][20]. 회전본 이름 규칙과 시각 변화는 [로그 순환](../../01-foundations/logging/logrotate.md) 에서 다룹니다.
 
 RHEL 의 httpd 패키지에는 `CustomLog` 대상에 `journald:` 접두어를 쓰면 접근 로그를 파일 대신 systemd 저널로 보내는 패치가 들어 있습니다[11]. 이 설정을 쓴 서버는 `/var/log/httpd` 에 접근 로그 파일이 없을 수 있으므로 `CustomLog` 줄을 먼저 확인하고, 저널 읽는 법은 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md) 을 봅니다. Nginx 도 `access_log` 에 `syslog:` 접두어를 쓰면 syslog 로 보낼 수 있습니다[15]. 이 경우는 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md) 의 저장 위치를 따라갑니다.
 
@@ -47,7 +47,7 @@ RHEL 의 httpd 패키지에는 `CustomLog` 대상에 `journald:` 접두어를 �
 
 ### Apache 접근 로그
 
-형식은 `LogFormat` 지시어가 이름을 붙여 정의하고, `CustomLog` 가 그 이름을 골라 씁니다. 배포판 기본 설정의 combined 는 크기 칸 하나가 다릅니다.
+형식은 `LogFormat` 지시어가 이름을 붙여 정의하고, `CustomLog` 가 그 이름을 골라 씁니다. 배포판 기본 설정의 combined 는 크기 필드 하나가 다릅니다.
 
 ```
 # Ubuntu 24.04 apache2.conf
@@ -60,7 +60,7 @@ LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combine
 LogFormat "%h %l %u %t \"%r\" %>s %b" common
 ```
 
-Ubuntu 는 `%b` 로는 중간에 끊긴 요청을 알아낼 수 없어서, `%b` 대신 헤더까지 포함해 실제로 보낸 바이트인 `%O` 를 씁니다[10]. RHEL 과 Apache 원본 예시 설정은 `%b` 를 쓰고, 원본 예시는 기본 `CustomLog` 로 common 을, RHEL 은 combined 를 고릅니다[6][11]. 같은 "combined" 라도 7번째 칸의 뜻이 달라진다는 말입니다.
+Ubuntu 는 `%b` 로는 중간에 끊긴 요청을 알아낼 수 없어서, `%b` 대신 헤더까지 포함해 실제로 보낸 바이트인 `%O` 를 씁니다[10]. RHEL 과 Apache 원본 예시 설정은 `%b` 를 쓰고, 원본 예시는 기본 `CustomLog` 로 common 을, RHEL 은 combined 를 고릅니다[6][11]. 같은 "combined" 라도 7번째 필드의 뜻이 달라진다는 말입니다.
 
 각 항목의 뜻은 다음과 같습니다[7].
 
@@ -103,7 +103,7 @@ ErrorLogFormat "[%{u}t] [%-m:%l] [pid %P:tid %T] %7F: %E: [client\ %a] %M% ,\ re
 [Thu May 12 08:28:57.652118 2011] [core:error] [pid 8777:tid 4326490112] [client ::1:58619] AH00124: Request exceeded the limit of 10 internal redirects due to probable configuration error
 ```
 
-두 번째 칸은 `모듈:수준`, 세 번째 칸은 프로세스·스레드 번호이고, `[client …]` 에는 원격 IP 와 포트가 들어갑니다. 값이 없는 항목은 둘러싼 대괄호째 빠지므로 줄마다 칸 수가 다를 수 있습니다[9].
+두 번째 필드는 `모듈:수준`, 세 번째 필드는 프로세스·스레드 번호이고, `[client …]` 에는 원격 IP 와 포트가 들어갑니다. 값이 없는 항목은 둘러싼 대괄호째 빠지므로 줄마다 필드 수가 다를 수 있습니다[9].
 
 ### Nginx 접근 로그
 
@@ -115,7 +115,7 @@ log_format combined '$remote_addr - $remote_user [$time_local] '
                     '"$http_referer" "$http_user_agent"';
 ```
 
-RHEL 의 `nginx.conf` 가 쓰는 `main` 형식은 combined 끝에 `"$http_x_forwarded_for"` 한 칸을 더 붙입니다[18]. Ubuntu 는 형식 이름 없이 `access_log` 를 적어 combined 를 씁니다[17]. 시각·크기와 관련된 변수의 뜻은 다음과 같습니다[12][15].
+RHEL 의 `nginx.conf` 가 쓰는 `main` 형식은 combined 끝에 `"$http_x_forwarded_for"` 필드 하나를 더 붙입니다[18]. Ubuntu 는 형식 이름 없이 `access_log` 를 적어 combined 를 씁니다[17]. 시각·크기와 관련된 변수의 뜻은 다음과 같습니다[12][15].
 
 | 변수 | 뜻 |
 |---|---|
@@ -135,7 +135,7 @@ RHEL 의 `nginx.conf` 가 쓰는 `main` 형식은 combined 끝에 `"$http_x_forw
 
 한 줄은 시각, `[수준]`, `프로세스번호#스레드번호:`, 연결이 있을 때만 `*연결번호`, 메시지 순서로 이어집니다[13]. 수준은 debug, info, notice, warn, error, crit, alert, emerg 이고, 지시어를 적지 않았을 때의 기본값은 `logs/error.log error` 입니다[16].
 
-만든 예시(메시지 부분은 검체에서 실제 모양을 확인합니다):
+만든 예시(메시지 부분의 실제 모양은 실제 로그로 확인합니다):
 
 ```
 2026/03/12 14:05:09 [error] 1234#1234: *57 open() "/var/www/html/admin.php" failed (2: No such file or directory)
@@ -159,7 +159,7 @@ RHEL 의 `nginx.conf` 가 쓰는 `main` 형식은 combined 끝에 `"$http_x_forw
 - 실제로 네트워크로 보낸 양. `%b` 는 응답 크기일 뿐이고 헤더를 포함한 전송량은 `%O` 가 기록합니다[7][10].
 - 줄이 없다는 사실이 요청이 없었다는 뜻이라는 것. 조건부 기록(Nginx `if=`), 버퍼에 남아 있다가 비정상 종료로 사라진 줄, 가상 호스트마다 다른 파일, 저널이나 syslog 로 보낸 로그가 있을 수 있습니다[11][15].
 
-보고서에는 "이 시간대에 이 주소에서 이 경로로 POST 요청이 들어왔고 서버가 200 으로 답한 기록이 있다" 처럼 로그가 말하는 만큼만 씁니다.
+보고서에는 "이 시간대에 이 주소에서 이 경로로 POST 요청이 들어왔고 서버가 200 으로 답한 기록이 있다" 처럼 로그로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -182,8 +182,8 @@ RHEL 의 `nginx.conf` 가 쓰는 `main` 형식은 combined 끝에 `"$http_x_forw
 
 - 파일 이름이 배포판마다 다릅니다(`access.log`·`error.log` 대 `access_log`·`error_log`). 수집 도구의 경로 목록도 서로 다릅니다. ForensicArtifacts 의 `ApacheErrorLogs` 는 `/var/log/httpd/error*` 로 넓게 잡지만 RHEL 의 `ssl_error_log`, `ssl_access_log`, `ssl_request_log` 는 Apache 접근·오류 로그 정의에 걸리지 않고, `ApacheConfigurationFolder` 의 `/etc/httpd/*.conf` 는 한 단계 아래의 `/etc/httpd/conf/httpd.conf` 를 잡지 않습니다[1]. dissect.target 은 기본 오류 로그 이름으로 `error.log` 만 찾으므로 RHEL 의 `error_log` 는 설정 파일의 `ErrorLog` 를 따라가야 찾습니다[4]. 수집 뒤에는 `/var/log/httpd`, `/var/log/apache2`, `/var/log/nginx` 폴더 전체 목록과 대조합니다.
 - Ubuntu 는 자체 `CustomLog` 가 없는 가상 호스트의 요청을 `other_vhosts_access.log` 에 모읍니다. 설치 스크립트가 이 설정을 기본으로 켭니다[10].
-- 형식이 기본과 다르면 파서가 줄을 놓칩니다. plaso 의 `apache_access` 파서는 common, combined, vhost_combined 세 문법만 알고 줄 끝까지 맞아야 하므로, RHEL Nginx 의 `main`(칸 하나 더)이나 `%D` 를 덧붙인 형식은 읽지 못합니다. 이 파서는 HTTP 방법도 CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, TRACE 만 받아서, 그 밖의 방법이나 깨진 요청 줄은 건너뜁니다[5]. 스캐너가 남긴 이상한 요청은 바로 이런 줄이므로 파서 결과만 보지 말고 원문을 함께 검색합니다.
-- 크기 칸의 뜻이 배포판마다 다릅니다. 숫자라서 파서는 똑같이 읽지만 Ubuntu 는 헤더 포함 전송량(`%O`), RHEL 은 본문 크기(`%b`)입니다[5][10][11].
+- 형식이 기본과 다르면 파서가 줄을 놓칩니다. plaso 의 `apache_access` 파서는 common, combined, vhost_combined 세 문법만 알고 줄 끝까지 맞아야 하므로, RHEL Nginx 의 `main`(필드 하나 더)이나 `%D` 를 덧붙인 형식은 읽지 못합니다. 이 파서는 HTTP 방법도 CONNECT, DELETE, GET, HEAD, OPTIONS, PATCH, POST, PUT, TRACE 만 받아서, 그 밖의 방법이나 깨진 요청 줄은 건너뜁니다[5]. 스캐너가 남긴 이상한 요청은 바로 이런 줄이므로 파서 결과만 보지 말고 원문을 함께 검색합니다.
+- 크기 필드의 뜻이 배포판마다 다릅니다. 숫자라서 파서는 똑같이 읽지만 Ubuntu 는 헤더 포함 전송량(`%O`), RHEL 은 본문 크기(`%b`)입니다[5][10][11].
 - dissect.target 은 주석 처리된(`#`) `CustomLog`, `access_log` 지시어도 로그 경로 후보로 찾습니다[4]. 결과에 경로가 보인다고 그 설정이 켜져 있었다고 보면 안 됩니다.
 - 순환 때문에 오래된 기록이 이미 지워졌을 수 있습니다. Ubuntu 기본값은 매일 회전해 14개, RHEL 의 Apache 는 매주 회전해 4개, RHEL 의 Nginx 는 매일 회전해 10개를 남깁니다[10][17][18][19]. 지운 회전본은 [지운 파일 되살리기](../../03-techniques/analysis/file-recovery.md) 로 찾아봅니다.
 - Nginx 로그의 소유자는 Ubuntu 에서 `www-data`, RHEL 에서 `nginx` 입니다[17][18]. 웹 서버 계정을 얻은 공격자가 로그를 고치거나 지웠을 가능성이 있으므로, 줄 사이 시각이 크게 비거나 파일 크기가 회전 주기에 비해 작으면 의심합니다. 흔적을 지운 사건의 조사는 [흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md) 를 봅니다.
@@ -212,7 +212,7 @@ Nginx 기본 이스케이프가 어떻게 남는지는 헥스로 보면 분명�
 ### 공개 도구로 한 번
 
 - dissect.target 은 `apache.access`, `apache.error`, `nginx.access`, `nginx.error` 로 로그를 읽고, `webserver.logs` 로 설치된 웹 서버의 접근·오류 로그를 한꺼번에 내놓습니다. 설정 파일의 `ServerRoot`, `Include`, `CustomLog`, `ErrorLog`(Nginx 는 `access_log`, `error_log`, `include`)를 따라가 기본 경로가 아닌 로그도 찾고, 압축된 회전본도 풀어서 읽습니다. `apache.hosts`, `nginx.hosts` 는 가상 호스트의 서버 이름·포트·문서 루트·로그 경로·인증서 경로를, `apache.certificates`, `nginx.certificates` 는 인증서 내용을 내놓습니다[4].
-- dissect.target 의 Apache 접근 로그 파서는 줄 모양으로 형식을 짐작합니다. 첫 칸에 `:` 와 `.` 이 함께 있으면 vhost_combined, 줄 끝이 `"` 면 combined, 숫자나 `-` 면 common 으로 봅니다. 오류 로그 시각에는 검체의 시간대를 붙입니다[4].
+- dissect.target 의 Apache 접근 로그 파서는 줄 모양으로 형식을 짐작합니다. 첫 필드에 `:` 와 `.` 이 함께 있으면 vhost_combined, 줄 끝이 `"` 면 combined, 숫자나 `-` 면 common 으로 봅니다. 오류 로그 시각에는 분석 대상 시스템의 시간대를 붙입니다[4].
 - plaso 의 `apache_access` 파서는 접근 로그 줄을 타임라인 사건으로 바꾸고, 줄에 적힌 GMT 와의 차이를 반영합니다[5]. plaso 에는 Nginx 전용 파서가 없고, Nginx 의 combined 줄은 이 파서로 읽을 수 있습니다. 타임라인 만드는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 - UAC 는 `/var/log` 아래 `access_log*`, `access.log*`, `error_log*`, `error.log*` 이름의 파일(Nginx 정의는 앞에 다른 글자가 붙은 이름까지)과 `/var/log/apache`, `/var/log/apache2`, `/var/log/httpd`, `/var/log/nginx` 폴더를 파일당 1GB 한도로 모읍니다[2][3].
 
@@ -234,7 +234,7 @@ Nginx 기본 이스케이프가 어떻게 남는지는 헥스로 보면 분명�
 
 NIST CFReDS 등에 공개된 Linux 웹 서버 이미지로 다음 질문을 풀어 봅니다.
 
-1. 검체에 설치된 웹 서버는 무엇이고, 설정 파일이 가리키는 접근 로그·오류 로그의 실제 경로와 형식 이름은 무엇인가?
+1. 분석 대상 시스템에 설치된 웹 서버는 무엇이고, 설정 파일이 가리키는 접근 로그·오류 로그의 실제 경로와 형식 이름은 무엇인가?
 2. 회전본을 포함해 가장 이른 줄과 가장 늦은 줄의 시각은 언제이고, 그 사이에 빠진 날이 있는가?
 3. 가장 많이 요청한 원격 주소 다섯 개와, 404 를 가장 많이 받은 주소는 무엇인가?
 4. 웹 루트 아래 확장자가 스크립트인 파일 가운데 설치 뒤에 생긴 것이 있다면, 그 파일을 처음 요청한 줄은 무엇인가?

@@ -103,13 +103,13 @@ nav_order: 750
    | Possible attempt to access PRT | `attemptedPrtAccess` | 오프라인 | P2 와 Defender for Cloud Apps 단독 라이선스, 또는 Microsoft 365 E5 with EMS E5 | Defender for Endpoint 가 PRT 접근 시도를 탐지. MDE 를 배포한 조직에서만 나옴[5] |
    | Token issuer anomaly | `tokenIssuerAnomaly` | 오프라인 | P2 | SAML 토큰 발급자가 침해됐을 가능성[5] |
 
-   탐지 계산 방식은 문서마다 달라서, 토큰 탈취 플레이북은 Anomalous token 을 오프라인 탐지로[6], 위험 탐지 문서는 실시간 또는 오프라인으로 적었습니다[5]. Sigma 규칙은 로그 원본 `azure`/`riskdetection` 에서 `riskEventType` 값으로 `anomalousToken`, `attemptedPrtAccess` 를 찾습니다[27][28]. 이상 토큰 탐지처럼 로그인 로그에 짝 기록이 없는 경고도 있으므로 `OfficeActivity`·`AuditLogs`·`CloudAppEvents` 를 함께 봅니다[6]. 탐지 규칙을 쓰는 법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
+   탐지 계산 방식은 문서마다 달라서, 토큰 탈취 플레이북은 Anomalous token 을 오프라인 탐지로[6], 위험 탐지 문서는 실시간 또는 오프라인으로 적었습니다[5]. Sigma 규칙은 로그 원본 `azure`/`riskdetection` 에서 `riskEventType` 값으로 `anomalousToken`, `attemptedPrtAccess` 를 찾습니다[27][28]. 이상 토큰 탐지처럼 로그인 로그에 짝 기록이 없는 경고도 있으므로 `OfficeActivity`·`AuditLogs`·`CloudAppEvents` 를 함께 봅니다[6]. 탐지 규칙을 쓰는 법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
 
 4. **세션으로 한 일을 찾습니다.** Graph 활동 로그에는 요청마다 `SessionId`·`SignInActivityId`·`TokenIssuedAt`·`UniqueTokenId`·`IPAddress`·`RequestUri` 가 남고, `IPAddress` 는 요청을 보낸 클라이언트의 IP 입니다[7]. 로그인 로그와는 `MicrosoftGraphActivityLogs` 의 `SignInActivityId` 와 로그인 표의 `UniqueTokenIdentifier` 를 맞춰 잇고, Microsoft 앱의 활동은 짝이 되는 로그인 기록이 없을 수 있습니다[7]. UAL 레코드의 `AppAccessContext` 에는 앱이 사용자 대신 한 Entra 로그인의 `AADSessionId`, 토큰이 있을 때 채워지는 `UniqueTokenId`(대소문자 구분), 토큰 인증 시각 `IssuedAtTime` 이 들어가지만, 모든 레코드에 채워지는 필드는 아닙니다[8]. 메일함의 `MailItemsAccessed` 레코드에는 `SessionId`·`ClientIPAddress`·`ClientInfoString` 이 있고, `SessionId` 는 같은 계정에서 공격자의 행동과 평소 행동을 가르는 데 씁니다[9]. 메일을 읽은 기록을 해석하는 법은 [메일 계정을 빼앗겨 송금 사기를 당했나](bec.md) 에 있습니다.
 
-5. **발판을 남겼는지 봅니다.** 세션을 쥔 쪽이 남기는 발판으로는 새로 등록한 장치, 새로 더한 MFA·비밀번호 없는 자격 증명, 받은 편지함 규칙과 전달, 권한 계정 변경이 있습니다[6]. Entra 감사 로그의 UserManagement 범주에서 `User registered security info`, `User changed default security info`, `User deleted security info`, `Admin registered security info`, `Admin updated security info`, `Admin deleted security info`, `User reviewed security info` 가 보안 정보 변경이고[6][16], Device 범주의 `Register device`, `Add device`, `Add registered owner to device` 가 장치 등록입니다[16]. Sigma `azure_change_to_authentication_method` 는 `LoggedByService` 가 `Authentication Methods`, `Category` 가 `UserManagement`, `OperationName` 이 `User registered security info` 인 레코드를 찾습니다[26]. 이 기록의 시각이 2단계에서 찾은 낯선 세션 안에 들어가는지 봅니다. 받은 편지함 규칙은 [BEC 쪽](bec.md), 앱 동의는 [악성 OAuth 앱에 동의했나](illicit-consent.md) 로 넘어갑니다.
+5. **발판을 남겼는지 봅니다.** 세션을 쥔 쪽이 남기는 발판으로는 새로 등록한 장치, 새로 더한 MFA·비밀번호 없는 자격 증명, 받은 편지함 규칙과 전달, 권한 계정 변경이 있습니다[6]. Entra 감사 로그의 UserManagement 범주에서 `User registered security info`, `User changed default security info`, `User deleted security info`, `Admin registered security info`, `Admin updated security info`, `Admin deleted security info`, `User reviewed security info` 가 보안 정보 변경이고[6][16], Device 범주의 `Register device`, `Add device`, `Add registered owner to device` 가 장치 등록입니다[16]. Sigma `azure_change_to_authentication_method` 는 `LoggedByService` 가 `Authentication Methods`, `Category` 가 `UserManagement`, `OperationName` 이 `User registered security info` 인 레코드를 찾습니다[26]. 이 기록의 시각이 2단계에서 찾은 낯선 세션 안에 들어가는지 봅니다. 받은 편지함 규칙은 [BEC 페이지](bec.md), 앱 동의는 [악성 OAuth 앱에 동의했나](illicit-consent.md) 로 넘어갑니다.
 
-6. **폐기 시각을 기준선으로 긋습니다.** 폐기 시각은 Entra 감사 로그에서 찾습니다. 감사 활동 목록에는 Core Directory 서비스, UserManagement 범주에 `Update StsRefreshTokenValidFrom Timestamp` 가 있으므로, 대응자가 세션을 폐기한 시각 전후로 이 활동이 남았는지 검체에서 확인합니다[16]. Graph 의 `revokeSignInSessions` 는 사용자의 새로 고침 토큰과 브라우저 세션 쿠키를 무효로 하면서 `signInSessionsValidFromDateTime` 을 현재 시각으로 바꾸고, 폐기까지 몇 분 늦을 수 있으며 외부 사용자에게는 적용되지 않습니다[15]. 이미 발급된 액세스 토큰은 폐기 뒤에도 수명 동안 남을 수 있으므로, 폐기 뒤의 활동을 해석할 때는 아래 수명을 함께 봅니다.
+6. **폐기 시각을 기준선으로 긋습니다.** 폐기 시각은 Entra 감사 로그에서 찾습니다. 감사 활동 목록에는 Core Directory 서비스, UserManagement 범주에 `Update StsRefreshTokenValidFrom Timestamp` 가 있으므로, 대응자가 세션을 폐기한 시각 전후로 이 활동이 남았는지 실제 로그로 확인합니다[16]. Graph 의 `revokeSignInSessions` 는 사용자의 새로 고침 토큰과 브라우저 세션 쿠키를 무효로 하면서 `signInSessionsValidFromDateTime` 을 현재 시각으로 바꾸고, 폐기까지 몇 분 늦을 수 있으며 외부 사용자에게는 적용되지 않습니다[15]. 이미 발급된 액세스 토큰은 폐기 뒤에도 수명 동안 남을 수 있으므로, 폐기 뒤의 활동을 해석할 때는 아래 수명을 함께 봅니다.
 
    | 토큰 | 수명 | 폐기와 보호 |
    |---|---|---|
@@ -142,7 +142,7 @@ nav_order: 750
 - **"비대화형 로그인이 한 시각에 몰려 있다."** 앱·사용자·IP·상태·리소스 ID 가 같은 비대화형 로그인은 포털에서 한 줄로 묶이고, 묶인 줄은 같은 시각처럼 보일 수 있습니다[2]. 줄을 펼치거나 API·Log Analytics 로 받아 개별 시각을 봅니다.
 - **"`incomingTokenType` 이 `none` 이니 토큰은 쓰이지 않았다."** Entra ID 는 이 목록에 없는 토큰 유형으로도 인증할 수 있으므로, 값이 목록에 없다고 토큰이 없었다고 볼 수 없습니다[1].
 - **"`Previously satisfied` 가 찍혔으니 토큰 재사용이다."** 이 값은 인증 요구를 토큰 안의 클레임으로 채워 사용자에게 다시 묻지 않았다는 뜻이라 정상 SSO 에서도 나올 수 있습니다[11][35]. 로그가 처음 기록될 때는 Authentication details 탭에 "satisfied by claim in the token" 이 잘못 표시될 수도 있습니다[35]. 재사용의 근거는 같은 세션의 IP·장치가 바뀐 기록입니다.
-- **"비밀번호를 바꿨으니 그 뒤 활동은 공격자가 아니다."** 사용자가 비밀번호를 바꾸거나 SSPR 을 해도 비밀번호가 아닌 방법으로 받은 쿠키·토큰과 기밀 클라이언트 토큰은 살아 있습니다[13]. 반대로 폐기 뒤의 활동을 곧바로 "공격 계속" 으로 쓰기 전에 남은 액세스 토큰 수명과 CAE 적용 여부를 봅니다[12][14].
+- **"비밀번호를 바꿨으니 그 뒤 활동은 공격자가 아니다."** 사용자가 비밀번호를 바꾸거나 SSPR 을 해도 비밀번호가 아닌 방법으로 받은 쿠키·토큰과 기밀 클라이언트 토큰은 유효합니다[13]. 반대로 폐기 뒤의 활동을 곧바로 "공격 계속" 으로 쓰기 전에 남은 액세스 토큰 수명과 CAE 적용 여부를 봅니다[12][14].
 - **"위험 탐지가 없으니 토큰 탈취는 없었다."** Free·P1 테넌트는 탐지 세부가 `generic` 으로만 보이고[5], `attemptedPrtAccess` 는 MDE 를 배포한 조직에서만 나옵니다[5]. Graph 활동 로그도 켜 두기 전의 요청은 없습니다[4].
 - **"로그인 기록이 한 곳에서만 나오니 세션도 하나다."** Graph 활동 로그는 멀티테넌트 앱이 다른 테넌트에서 한 활동을 보여 주지 않고[7], 로그인 로그에 짝이 없는 이상 토큰 경고도 있습니다[6].
 
@@ -151,11 +151,11 @@ nav_order: 750
 - "Entra 비대화형 로그인 로그에 세션 ID 00000000-0000-0000-0000-000000000001 로 기록된 로그인이 2026년 9월 2일 01:10:04(UTC)에는 IP 198.51.100.20 에서, 같은 날 03:47:31(UTC)에는 IP 203.0.113.77 에서 성공한 기록이 있다. 두 줄의 사용자 에이전트와 ASN 이 다르다." (만든 예시)
 - "03:47(UTC) 이후 Graph 활동 로그에 같은 세션 ID 로 IP 203.0.113.77 에서 보낸 메일 폴더 조회 요청이 있다." (만든 예시)
 - "ID 보호 위험 탐지 `anomalousToken` 이 이 사용자에 대해 기록되어 있다. 이 탐지는 서비스가 토큰의 이상한 수명이나 낯선 위치를 판단한 결과이며, 토큰이 새어 나간 경로는 알려 주지 않는다."
-- 쓰지 않을 문장: "공격자가 사용자의 쿠키를 훔쳐 메일을 읽었다." 로그는 한 세션이 두 곳에서 쓰였고 그 세션으로 요청이 있었다는 것까지 보여 주고, 누가 어떤 방법으로 토큰을 얻었는지는 장치 쪽 증거 없이 말하지 못합니다. 문장을 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에 있습니다.
+- 쓰지 않을 문장: "공격자가 사용자의 쿠키를 훔쳐 메일을 읽었다." 로그는 한 세션이 두 곳에서 쓰였고 그 세션으로 요청이 있었다는 것까지 보여 주고, 누가 어떤 방법으로 토큰을 얻었는지는 장치 쪽 증거 없이는 알 수 없습니다. 문장을 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에 있습니다.
 
 ## 함께 볼 페이지
 
-- 같은 갈래: [메일 계정을 빼앗겨 송금 사기를 당했나](bec.md), [악성 OAuth 앱에 동의했나](illicit-consent.md), [MFA 피로 공격을 당했나](mfa-fatigue.md)
+- 같은 분류: [메일 계정을 빼앗겨 송금 사기를 당했나](bec.md), [악성 OAuth 앱에 동의했나](illicit-consent.md), [MFA 피로 공격을 당했나](mfa-fatigue.md)
 - 개념: [토큰과 세션](../../01-foundations/identity/tokens-sessions.md), [다단계 인증과 조건부 접근](../../01-foundations/identity/mfa-conditional-access.md)
 - 기록: [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md), [OAuth 토큰 기록](../../02-artifacts/google-workspace/token-audit.md), [Okta 시스템 로그](../../02-artifacts/saas/okta.md)
 - 수집: [Microsoft 365 수집 도구](../../03-techniques/acquisition/m365-collection.md)

@@ -12,7 +12,7 @@ nav_order: 780
 
 ## 무엇을 기록하나 · 왜 생기나
 
-통합 로그는 프로세스 실행만 따로 적는 감사 로그가 아닙니다. 통합 로그 형식에는 exec·fork·launch 같은 "프로세스 실행 전용" 기록 형식이 없고, 모든 기록은 어떤 프로세스가 남긴 로그 메시지입니다. [2] 그래서 실행 사실은 두 갈래로 드러납니다. 하나는 그 프로그램이 스스로 로그를 남긴 경우이고, 다른 하나는 실행을 맡거나 검사한 시스템 프로세스가 그 일을 로그에 적은 경우입니다. 윈도우 보안 로그의 4688 처럼 "프로세스 생성" 을 뜻하는 전용 이벤트는 통합 로그 형식에 없습니다.
+통합 로그는 프로세스 실행만 따로 적는 감사 로그가 아닙니다. 통합 로그 형식에는 exec·fork·launch 같은 "프로세스 실행 전용" 기록 형식이 없고, 모든 기록은 어떤 프로세스가 남긴 로그 메시지입니다. [2] 그래서 실행 사실은 두 가지로 드러납니다. 하나는 그 프로그램이 스스로 로그를 남긴 경우이고, 다른 하나는 실행을 맡거나 검사한 시스템 프로세스가 그 일을 로그에 적은 경우입니다. 윈도우 보안 로그의 4688 처럼 "프로세스 생성" 을 뜻하는 전용 이벤트는 통합 로그 형식에 없습니다.
 
 기록마다 붙는 프로세스 정보는 Apple 이 정한 속성으로 볼 수 있습니다. `OSLogEntryFromProcess` 프로토콜은 기록을 남긴 프로세스 이름(`process`), 프로세스 번호(`processIdentifier`), 기록을 실제로 찍은 바이너리 이름(`sender`), 스레드 번호(`threadIdentifier`), 활동 번호(`activityIdentifier`) 를 내어 줍니다. [1] 파일 안에서는 여기에 유효 사용자 번호(euid) 와 실행 파일 UUID 까지 들어 있고, 실행 파일 경로는 UUID 텍스트 파일에서 찾습니다. [2]
 
@@ -22,8 +22,8 @@ nav_order: 780
 
 | macOS | 이 페이지와 관련된 차이 | 출처 |
 |---|---|---|
-| 10.12 Sierra | 통합 로그가 처음 나왔고, `log show` 출력 칸은 16개였습니다 | [3][7] |
-| 10.15 Catalina | `OSLogEntryFromProcess`·`OSLogStore` 로 프로그램에서 프로세스 속성을 읽을 수 있게 됐고, `log show` 출력 칸이 27개로 늘었습니다 | [1][3][8] |
+| 10.12 Sierra | 통합 로그가 처음 나왔고, `log show` 출력 필드는 16개였습니다 | [3][7] |
+| 10.15 Catalina | `OSLogEntryFromProcess`·`OSLogStore` 로 프로그램에서 프로세스 속성을 읽을 수 있게 됐고, `log show` 출력 필드가 27개로 늘었습니다 | [1][3][8] |
 | 12 Monterey | 공유 캐시 문자열 파일(dsc) 형식이 v2 로 바뀌었고, tracev3 에 SimpleDump 청크가 더해졌습니다 | [2][7] |
 | 13 Ventura 이후 | 공개된 형식 명세는 13 까지 다루고, 그 뒤 버전의 변화는 공개 자료가 없습니다 | [2] |
 
@@ -81,7 +81,7 @@ UUID 정보 항목은 16바이트이고, 오프셋 8 에 UUID 순번, 오프셋 
 | `process == "screensharingd" \|\| process == "ScreensharingAgent"` | 화면 공유 인증 | [3] |
 | 프로세스 `syspolicyd`, 서브시스템 `com.apple.syspolicy.exec` | Gatekeeper 실행 정책 평가 | [9] |
 
-sudo 기록에 명령줄이 남는다는 설명이 있지만 [3], 실제 메시지 문구는 공개 자료가 없어 검체에서 확인합니다. 영역별 조건과 메시지는 [통합 로그에서 찾을 것](../logs/unified-log-events/index.md) 에 모아 두었습니다.
+sudo 기록에 명령줄이 남는다는 설명이 있지만 [3], 메시지 문구가 어떤지는 실제 데이터로 확인해야 합니다. 영역별 조건과 메시지는 [통합 로그에서 찾을 것](../logs/unified-log-events/index.md) 에 모아 두었습니다.
 
 **증명하지 못하는 것**
 
@@ -89,11 +89,11 @@ sudo 기록에 명령줄이 남는다는 설명이 있지만 [3], 실제 메시�
 
 기록이 없다고 실행되지 않았다고 볼 수도 없습니다. Debug 수준은 디스크에 남지 않고 Info 수준은 설정한 경우에만 남으며, 나머지 수준도 저장소가 정해진 크기를 넘으면 오래된 것부터 지워집니다. [6] 로그를 거의 남기지 않는 프로그램은 돌았어도 흔적이 적습니다. 첫 기록의 시각 역시 실행 시각이 아니라 "처음 로그를 남긴 시각" 이라서, 실행 시각은 그보다 앞일 수 있습니다.
 
-보고서에는 "이 앱을 실행했다" 가 아니라 "이 시각(UTC)에 PID 몇 번, 실행 파일 경로 무엇인 프로세스가 로그를 남긴 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 앱을 실행했다" 가 아니라 "이 시각(UTC)에 PID 몇 번, 실행 파일 경로 무엇인 프로세스가 로그를 남긴 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-tracev3 의 시각은 연속 시각 (continuous time) 이고, 헤더나 timesync 부팅 기록의 Mach timebase 분자·분모로 환산한 다음 부팅 UUID 가 맞는 timesync 기록으로 벽시계 시각을 구합니다. [2] timesync 기록의 벽시계 값은 1970년 기준 유닉스 나노초라서 결과는 UTC 이고, 인텔 맥은 Mach 시각을 나노초로, Apple Silicon 은 틱으로 적어서 나노초로 바꿔야 정확한 시각이 나옵니다. [2][7] 재부팅을 넘어 시각을 맞추려면 `timesync` 폴더가 같이 있어야 합니다. `log show` 는 `--timezone` 옵션으로 출력 시간대를 정하니, 보고서에는 어느 시간대로 뽑았는지 함께 적습니다. [5] 변환식과 칸 오프셋은 [통합 로그 형식](../../01-foundations/data-formats/unified-log/index.md) 에서 다룹니다.
+tracev3 의 시각은 연속 시각 (continuous time) 이고, 헤더나 timesync 부팅 기록의 Mach timebase 분자·분모로 환산한 다음 부팅 UUID 가 맞는 timesync 기록으로 실제 시각(wall clock)을 구합니다. [2] timesync 기록의 실제 시각 값은 1970년 기준 유닉스 나노초라서 결과는 UTC 이고, 인텔 맥은 Mach 시각을 나노초로, Apple Silicon 은 틱으로 적어서 나노초로 바꿔야 정확한 시각이 나옵니다. [2][7] 재부팅을 넘어 시각을 맞추려면 `timesync` 폴더가 같이 있어야 합니다. `log show` 는 `--timezone` 옵션으로 출력 시간대를 정하니, 보고서에는 어느 시간대로 뽑았는지 함께 적습니다. [5] 변환식과 필드 오프셋은 [통합 로그 형식](../../01-foundations/data-formats/unified-log/index.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -103,13 +103,13 @@ tracev3 만 떼어 오고 uuidtext 폴더를 빠뜨리면 실행 파일 경로�
 
 로그는 지울 수 있습니다. `log` 명령에는 로그 데이터를 지우는 `erase` 하위 명령이 있어서, 활동이 이어져야 할 구간에 기록이 통째로 비어 있으면 삭제를 의심해 볼 만합니다. [5] 다만 용량에 따라 오래된 기록이 밀려나는 것과 구별해야 하니, 비어 있는 구간 앞뒤의 파일 시각과 다른 아티팩트를 같이 봅니다.
 
-공개 필터를 그대로 믿어서도 안 됩니다. Jamf Protect 저장소는 `sudo_access_failed_incorrect_password`, `gatekeeper_file_access_rejections_and_user_bypasses`, `gatekeeper_file_access_scan_activity`, `xprotect_remediator_scan_activity`, `login_through_login_window_with_password_success` 같은 실행·보안 관련 필터를 제품의 Telemetry 기능으로 옮기며 목록에서 뺐습니다. [4] 기록 규모도 3천만~5천만 건에 이를 만큼 커서 [3], 조건 없이 훑어보기보다 프로세스·경로 조건으로 먼저 좁힙니다.
+공개 필터를 그대로 믿어서도 안 됩니다. Jamf Protect 저장소는 `sudo_access_failed_incorrect_password`, `gatekeeper_file_access_rejections_and_user_bypasses`, `gatekeeper_file_access_scan_activity`, `xprotect_remediator_scan_activity`, `login_through_login_window_with_password_success` 같은 실행·보안 관련 필터를 제품의 Telemetry 기능으로 옮기며 목록에서 뺐습니다. [4] 기록 규모도 3천만~5천만 건에 이를 만큼 커서 [3], 조건 없이 살펴보기보다 프로세스·경로 조건으로 먼저 좁힙니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 명세의 칸 배치로 만든 카탈로그 프로세스 정보 항목 예시이고, 특정 검체에서 나온 값이 아닙니다. 위 표에서 뺀 칸(오프셋 0 항목 번호, 2·28 은 뜻이 알려지지 않은 칸) 은 `..` 로 두었고, 바이트 순서는 리틀엔디언으로 적었으니 원문 명세와 함께 확인합니다.
+아래는 명세의 필드 배치로 만든 카탈로그 프로세스 정보 항목 예시이고, 특정 기기에서 나온 값이 아닙니다. 위 표에서 뺀 필드(오프셋 0 항목 번호, 2·28 은 뜻이 알려지지 않은 필드) 은 `..` 로 두었고, 바이트 순서는 리틀엔디언으로 적었으니 원문 명세와 함께 확인합니다.
 
 ```text
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -142,7 +142,7 @@ log show --archive system_logs.logarchive \
   --predicate 'processImagePath BEGINSWITH "/Users/"' --style ndjson --timezone UTC
 ```
 
-두 번째 조건은 사용자 폴더 안에서 돈 실행 파일이 남긴 기록을 모읍니다. 맥이 아닌 곳에서는 Mandiant `macos-unifiedlogs` 의 `unifiedlog_parser` 로 아카이브를 CSV·JSON 으로 풀고 프로세스 이름·경로 칸으로 거릅니다. [7] 프로그램에서 읽을 때는 macOS 10.15 이후 `OSLogStore` 로 아카이브를 열고 기록마다 `process`·`processIdentifier`·`sender` 를 꺼냅니다. [1][8]
+두 번째 조건은 사용자 폴더 안에서 돈 실행 파일이 남긴 기록을 모읍니다. 맥이 아닌 곳에서는 Mandiant `macos-unifiedlogs` 의 `unifiedlog_parser` 로 아카이브를 CSV·JSON 으로 풀고 프로세스 이름·경로 필드로 거릅니다. [7] 프로그램에서 읽을 때는 macOS 10.15 이후 `OSLogStore` 로 아카이브를 열고 기록마다 `process`·`processIdentifier`·`sender` 를 꺼냅니다. [1][8]
 
 ## 교차 검증
 
@@ -161,13 +161,13 @@ log show --archive system_logs.logarchive \
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 `/private/var/db/diagnostics/` 와 `/private/var/db/uuidtext/` 가 들어 있거나 `.logarchive` 가 딸린 것을 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 자료 가운데 `/private/var/db/diagnostics/` 와 `/private/var/db/uuidtext/` 가 들어 있거나 `.logarchive` 가 딸린 것을 골라 아래 질문을 풀어 봅니다.
 
 1. 사용자 폴더 아래 경로에서 실행된 프로세스가 남긴 기록이 있나요? 있다면 가장 이른 기록과 가장 늦은 기록의 UTC 시각은 언제인가요?
 2. 그 프로세스의 euid 는 무엇이고, 어느 계정에 해당하나요?
 3. 같은 기록에서 `process` 와 `sender` 가 다른 경우를 찾고, 어느 쪽이 앱이고 어느 쪽이 라이브러리인지 설명해 보세요.
 4. `process == "sudo"` 기록과 터미널 명령 기록을 나란히 놓으면 시각이 맞나요?
-5. uuidtext 폴더를 빼고 tracev3 만 파서에 넣으면 출력의 어느 칸이 비나요?
+5. uuidtext 폴더를 빼고 tracev3 만 파서에 넣으면 출력의 어느 필드가 비나요?
 
 ## 참고 문헌
 

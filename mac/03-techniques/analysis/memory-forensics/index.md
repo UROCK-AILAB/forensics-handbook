@@ -20,9 +20,9 @@ has_toc: false
 |---|---|---|---|---|
 | 실행 중인 메모리 | 켜져 있는 맥의 RAM | Apple 실리콘은 커널 확장 제한과 IOMMU 때문에 확보가 어려움 | 프로세스·네트워크·커널 확장 같은 실행 상태 | [메모리 확보](memory-acquisition.md), [분석 도구와 한계](tools-limits.md) |
 | 스왑 파일 | `/System/Volumes/VM/swapfile` 뒤에 번호 (현재 xnu 소스 기준)[8] | 10.15부터 VM 볼륨에 둠[1] | 암호화되어 있어 파일의 존재·개수·크기·시각 수준 | [스왑과 잠자기 이미지](swap-sleepimage.md) |
-| 잠자기 이미지 | `pmset` 의 `hibernatefile` 이 가리키는 파일[2] | `hibernatemode` 3·25이고 `standby`·`autopoweroff` 조건이 맞을 때 씀[2], Apple 실리콘에서 쓰는지는 검체에서 확인 | 마지막 hibernate 시점의 단서 | [스왑과 잠자기 이미지](swap-sleepimage.md) |
+| 잠자기 이미지 | `pmset` 의 `hibernatefile` 이 가리키는 파일[2] | `hibernatemode` 3·25이고 `standby`·`autopoweroff` 조건이 맞을 때 씀[2], Apple 실리콘에서 쓰는지는 실제 기기에서 확인 | 마지막 hibernate 시점의 단서 | [스왑과 잠자기 이미지](swap-sleepimage.md) |
 
-인텔 맥과 Apple 실리콘 맥의 차이는 두 갈래로 나뉩니다. 확보 쪽에서는 커널 확장을 켜는 조건과 DMA 보호 방식이 다르고, 이 내용은 [메모리 확보 (Acquisition)](memory-acquisition.md)에 표로 정리했습니다. 분석 쪽에서는 Apple 실리콘의 하드웨어 커널 보호와 Secure Enclave 때문에 결과를 읽는 방법이 달라지고, 이 내용은 [분석 도구와 한계 (Tools·Limits)](tools-limits.md)에 있습니다.
+인텔 맥과 Apple 실리콘 맥의 차이는 두 부분으로 나뉩니다. 확보 쪽에서는 커널 확장을 켜는 조건과 DMA 보호 방식이 다르고, 이 내용은 [메모리 확보 (Acquisition)](memory-acquisition.md)에 표로 정리했습니다. 분석 쪽에서는 Apple 실리콘의 하드웨어 커널 보호와 Secure Enclave 때문에 결과를 읽는 방법이 달라지고, 이 내용은 [분석 도구와 한계 (Tools·Limits)](tools-limits.md)에 있습니다.
 
 ## 읽는 순서
 

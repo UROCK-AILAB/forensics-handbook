@@ -39,7 +39,7 @@ RecentDocs 를 해석할 때 알아 둘 점은 다음과 같습니다.
 
 - HKCU 는 로그온한 사용자의 NTUSER.DAT 입니다. 그래서 어느 계정의 기록인지 가를 수 있습니다. 하이브 파일의 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - 하위 키 이름에는 `.exe` 같은 확장자와 함께 `Folder` 도 있습니다[1]. `Folder` 하위 키에 폴더만 모이는지는 공개 자료로 확정되지 않았습니다.
-- 뿌리 키와 하위 키가 항목을 몇 개까지 보관하는지는 공개 자료에 없어 검체에서 확인합니다.
+- 뿌리 키와 하위 키가 항목을 몇 개까지 보관하는지는 실제 데이터로 확인해야 합니다.
 
 ### Windows 버전에 따라 달라지는 점
 
@@ -118,14 +118,14 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
    - 같은 PC 의 [열기·저장 대화상자 기록](comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) 은 계속 갱신됩니다.
    - `%APPDATA%\Microsoft\Windows\Recent` 폴더에는 .lnk 파일이 0개입니다.
 
-   `Start_TrackDocs` 가 언제 0 이 됐는지는 이 값만으로 알 수 없으므로, "0 이라서 비었다" 고 단정하지 않습니다. 설정 앱의 "최근에 연 항목 표시" 토글이 이 값과 같은 것인지는 공개 자료가 없어 검체로 확인해야 합니다. 빈 키를 만나면 이 값을 함께 적어 둡니다.
+   `Start_TrackDocs` 가 언제 0 이 됐는지는 이 값만으로 알 수 없으므로, "0 이라서 비었다" 고 단정하지 않습니다. 설정 앱의 "최근에 연 항목 표시" 토글이 이 값과 같은 것인지는 실제 기기로 확인해야 합니다. 빈 키를 만나면 이 값을 함께 적어 둡니다.
 4. **이 목록을 실행 기록으로 씁니다.** 실행 파일은 걸러집니다. 실행 여부는 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 의 흔적으로 봅니다.
 5. **끝 표시 뒤를 무시하거나 그대로 읽습니다.** plaso 는 MRUListEx 에서 -1 을 만나면 읽기를 멈춥니다[2]. 끝 표시 뒤에 남은 번호는 보여 주지 않습니다. 도구마다 처리가 다를 수 있으므로 MRUListEx 길이와 값 개수가 맞지 않으면 원시 바이트를 직접 봅니다.
 6. **XP 하이브를 Vista 이후 틀로 읽습니다.** 2000·XP 의 항목 값은 문자열뿐입니다. 먼저 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 버전을 확인합니다.
 
 ### 지우기와 조작
 
-- **정책으로 로그오프 때 지웁니다.** 정책 "Clear history of recently opened documents on exit" 의 값은 `Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` 키 (사용자 구성) 의 `ClearRecentDocsOnExit` 입니다. 이 정책은 로그오프 때 최근 문서 바로가기를 지웁니다[4]. 점프리스트의 최근·자주 항목도 지웁니다 ([점프리스트](jump-lists.md)). 프로그램 파일 메뉴 아래의 최근 파일 목록은 지우지 않습니다. 이 정책이 RecentDocs 레지스트리 키도 지우는지는 공개 자료에 없어 검체로 확인해야 합니다.
+- **정책으로 로그오프 때 지웁니다.** 정책 "Clear history of recently opened documents on exit" 의 값은 `Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` 키 (사용자 구성) 의 `ClearRecentDocsOnExit` 입니다. 이 정책은 로그오프 때 최근 문서 바로가기를 지웁니다[4]. 점프리스트의 최근·자주 항목도 지웁니다 ([점프리스트](jump-lists.md)). 프로그램 파일 메뉴 아래의 최근 파일 목록은 지우지 않습니다. 이 정책이 RecentDocs 레지스트리 키도 지우는지는 실제 기기로 확인해야 합니다.
 - **메뉴만 숨깁니다.** 정책 "Remove Recent Items menu from Start Menu" (값 `NoRecentDocsMenu`) 를 켜도 바로가기는 계속 저장되고 메뉴만 보이지 않습니다. 이 값이 켜져 있어도 기록이 없다고 보지 않습니다.
 - **기록을 남기지 않는 정책.** "Do not keep history of recently opened documents" 정책도 있지만, 공식 문서에는 이름만 있고 값 이름과 동작은 나와 있지 않습니다[4].
 - **값이나 키를 지웁니다.** 지운 키와 값은 하이브 안 빈 공간이나 트랜잭션 로그에 남을 수 있습니다. 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 옛 하이브는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
@@ -134,7 +134,7 @@ MRUList·MRUListEx 를 읽는 방법은 [레지스트리 하이브 구조](../..
 
 ### 헥스로 한 번
 
-아래는 winreg-kb 의 설명을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 winreg-kb 의 설명을 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 먼저 확장자 하위 키의 `MRUListEx` 값입니다.
 
@@ -187,9 +187,9 @@ plaso 의 레지스트리 파서는 RecentDocs 키와 그 하위 키를 "문자�
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 사용자 하이브가 든 Windows 이미지를 골라 다음을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 이미지 가운데 사용자 하이브가 든 Windows 이미지를 골라 다음을 풀어 봅니다.
 
-1. 검체의 Windows 버전은 무엇입니까? 항목 값이 문자열뿐입니까, 셸 항목이 붙어 있습니까?
+1. 그 이미지의 Windows 버전은 무엇입니까? 항목 값이 문자열뿐입니까, 셸 항목이 붙어 있습니까?
 2. RecentDocs 뿌리 키의 MRUListEx 를 직접 풀어 항목을 순서대로 적어 봅니다. 값 이름의 번호 순서와 어디서 달라집니까?
 3. 확장자 하위 키는 몇 개입니까? 각 하위 키의 첫 항목과 마지막 기록 시각 (UTC) 을 표로 적어 봅니다.
 4. 뿌리 키의 첫 항목과 확장자 하위 키의 첫 항목이 같은 파일입니까? 두 키의 시각을 비교해 봅니다.

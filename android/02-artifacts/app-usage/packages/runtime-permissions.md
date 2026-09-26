@@ -24,9 +24,9 @@ nav_order: 440
 | `/data/system/users/<사용자ID>/runtime-permissions.xml` | Android 10 이하 [7] | 옛 위치(Settings.getUserRuntimePermissionsFile) [1] |
 | `/data/misc_de/<사용자ID>/apexdata/com.android.permission/runtime-permissions.xml` | Android 11 부터 [7] | 권한 모듈이 쓰는 새 위치. 같은 폴더에 예비 사본 `runtime-permissions.xml.reservecopy` 도 씁니다 [6] |
 
-ALEAPP 는 두 위치를 함께 찾습니다 [2]. 현행 AOSP 는 먼저 권한 모듈의 저장소에서 읽고, 없으면 옛 파일을 읽은 뒤 새 저장소에 다시 씁니다 [1]. Android 10 에서 11 로 올린 기기에는 두 위치에 파일이 모두 남고, 올린 뒤의 변경은 새 위치에만 적힙니다 [7]. 그래서 두 파일을 비교하면 업그레이드 전의 권한 상태를 볼 수 있습니다. 옛 파일이 남아 있는지는 검체에서 확인합니다.
+ALEAPP 는 두 위치를 함께 찾습니다 [2]. 현행 AOSP 는 먼저 권한 모듈의 저장소에서 읽고, 없으면 옛 파일을 읽은 뒤 새 저장소에 다시 씁니다 [1]. Android 10 에서 11 로 올린 기기에는 두 위치에 파일이 모두 남고, 올린 뒤의 변경은 새 위치에만 적힙니다 [7]. 그래서 두 파일을 비교하면 업그레이드 전의 권한 상태를 볼 수 있습니다. 옛 파일이 남아 있는지는 실제 기기에서 확인합니다.
 
-옛 파일을 읽는 코드는 `Xml.resolvePullParser` 를 쓰기 때문에 옛 위치 파일은 안드로이드 바이너리 XML(ABX)로 저장되어 있을 수 있습니다 [1][4]. 새 위치 파일은 권한 모듈이 `Xml.newSerializer()` 로 쓰는데, 이 함수는 ABX 가 아닌 일반 텍스트 XML 쓰기 도구를 돌려줍니다 [4][6]. 권한 모듈은 파일을 쓴 뒤 본 파일과 예비 사본에 fs-verity 보호를 겁니다 [6]. 삼성 One UI 에서 이 파일의 위치나 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+옛 파일을 읽는 코드는 `Xml.resolvePullParser` 를 쓰기 때문에 옛 위치 파일은 안드로이드 바이너리 XML(ABX)로 저장되어 있을 수 있습니다 [1][4]. 새 위치 파일은 권한 모듈이 `Xml.newSerializer()` 로 쓰는데, 이 함수는 ABX 가 아닌 일반 텍스트 XML 쓰기 도구를 돌려줍니다 [4][6]. 권한 모듈은 파일을 쓴 뒤 본 파일과 예비 사본에 fs-verity 보호를 겁니다 [6]. 삼성 One UI 에서 이 파일의 위치나 형식은 실제 기기로 확인해야 합니다.
 
 ALEAPP 의 runtimePerms 모듈은 Android 16 Pixel 8 Pro 와 Android 15 Poco X7 이미지에서 결과가 "0 rows" 였습니다 [2]. 파일이 없었는지 형식이 달랐는지는 밝혀져 있지 않아서, 최신 기기에서 이 모듈 결과가 비면 파일이 있는지부터 직접 확인합니다.
 
@@ -41,7 +41,7 @@ ALEAPP 의 runtimePerms 모듈은 Android 16 Pixel 8 Pro 와 Android 15 Poco X7 
 | `<shared-user>` | `<shared-user>` | name | 공유 사용자 하나 |
 | `<item>` | `<permission>` | name, granted, flags | 앱이나 공유 사용자 아래의 권한 하나 |
 
-새 위치 파일은 flags 를 `Integer.toHexString()` 으로 쓰고 16진수로 읽기 때문에, 파일에는 `0x` 없는 16진수 문자열로 보입니다 [6]. ALEAPP 의 runtimePerms 모듈은 요소 이름을 가리지 않고 하위 요소의 name·granted·flags 를 읽어서, 경로에서 뽑은 사용자와 요소 종류, 이름, 권한, granted, flags 를 표로 냅니다. flags 는 풀지 않고 그대로 냅니다 [2].
+새 위치 파일은 flags 를 `Integer.toHexString()` 으로 쓰고 16진수로 읽기 때문에, 파일에는 `0x` 없는 16진수 문자열로 보입니다 [6]. ALEAPP 의 runtimePerms 모듈은 요소 이름을 구분하지 않고 하위 요소의 name·granted·flags 를 읽어서, 경로에서 뽑은 사용자와 요소 종류, 이름, 권한, granted, flags 를 표로 냅니다. flags 는 풀지 않고 그대로 냅니다 [2].
 
 ### flags 비트
 
@@ -72,13 +72,13 @@ flags 의 각 비트는 PackageManager 의 FLAG_PERMISSION_* 상수로 정의되
 
 ## 라이브 기기에서 보이는 모양 (dumpsys package)
 
-`dumpsys package` 는 권한을 아래 꼴로 찍습니다 [1][3].
+`dumpsys package` 는 권한을 아래 형식으로 찍습니다 [1][3].
 
 ```
 <권한>: granted=<true|false>, flags=[ USER_SET|USER_FIXED ]
 ```
 
-비트 이름은 permissionFlagToString() 으로 바꾸고, 이 변환 목록에 없는 비트는 숫자로 찍습니다. SELECTED_LOCATION_ACCURACY 도 변환 목록에 없어서 숫자로 나옵니다 [1][3]. 설치 권한(install permissions)도 같은 꼴이고, 사용자 0 과 다를 때만 `, userId=` 와 사용자 번호가 붙습니다 [1].
+비트 이름은 permissionFlagToString() 으로 바꾸고, 이 변환 목록에 없는 비트는 숫자로 찍습니다. SELECTED_LOCATION_ACCURACY 도 변환 목록에 없어서 숫자로 나옵니다 [1][3]. 설치 권한(install permissions)도 같은 형식이고, 사용자 0 과 다를 때만 `, userId=` 와 사용자 번호가 붙습니다 [1].
 
 같은 출력의 "Known Packages:" 절에는 권한 컨트롤러 패키지가 "Permission Controller:" 로 찍힙니다(예: `com.google.android.permissioncontroller`).
 
@@ -86,21 +86,21 @@ flags 의 각 비트는 PackageManager 의 FLAG_PERMISSION_* 상수로 정의되
 
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
-| 파일을 쓴 시점에 앱에 권한이 부여되어 있었는지 | 권한을 언제 줬거나 거뒀는지(파일에 시각 칸이 없습니다) |
+| 파일을 쓴 시점에 앱에 권한이 부여되어 있었는지 | 권한을 언제 줬거나 거뒀는지(파일에 시각 필드가 없습니다) |
 | 사용자가 정했는지, 정책·시스템·기본값·역할로 부여됐는지 | 앱이 그 권한으로 실제로 데이터에 접근했는지 |
 | 사용자가 고정(USER_FIXED)해서 다시 묻지 않게 했는지 | 권한을 준 사람이 기기 주인인지 |
 
-권한 모듈이 새 위치 파일에 쓰는 값은 version, fingerprint 와 권한마다 name, granted, flags 뿐이고, 권한을 준 시각이나 거둔 시각은 쓰지 않습니다 [6]. 옛 파일 읽기 코드에도 시각 칸은 없습니다 [1]. 그래서 보고서에는 "이 파일로는 부여 시각을 알 수 없다" 고 쓰고, 파일 자체의 수정 시각은 마지막으로 파일을 다시 쓴 때일 뿐이라서 특정 권한의 부여 시각으로 쓰지 않습니다. 권한을 실제로 쓴 기록은 앱 작업(appops) 쪽 흔적이고, ALEAPP 에는 appops·appOpsAccesses·appOpsModes·permissionAccessState 모듈이 있습니다 [5].
+권한 모듈이 새 위치 파일에 쓰는 값은 version, fingerprint 와 권한마다 name, granted, flags 뿐이고, 권한을 준 시각이나 거둔 시각은 쓰지 않습니다 [6]. 옛 파일 읽기 코드에도 시각 필드는 없습니다 [1]. 그래서 보고서에는 "이 파일로는 부여 시각을 알 수 없다" 고 쓰고, 파일 자체의 수정 시각은 마지막으로 파일을 다시 쓴 때일 뿐이라서 특정 권한의 부여 시각으로 쓰지 않습니다. 권한을 실제로 쓴 기록은 앱 작업(appops) 쪽 흔적이고, ALEAPP 에는 appops·appOpsAccesses·appOpsModes·permissionAccessState 모듈이 있습니다 [5].
 
-보고서 문장은 "앱이 위치를 추적했다" 가 아니라 "이 파일을 쓴 시점에 이 앱에는 정밀 위치 권한이 부여되어 있었고, flags 에 USER_SET 이 켜져 있었다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서 문장은 "앱이 위치를 추적했다" 가 아니라 "이 파일을 쓴 시점에 이 앱에는 정밀 위치 권한이 부여되어 있었고, flags 에 USER_SET 이 켜져 있었다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 함정과 한계
 
-granted 가 true 여도 REVOKE_ON_UPGRADE(0x8)가 켜져 있으면 실제 접근은 막혀 있고, APPLY_RESTRICTION(0x4000)이 켜져 있으면 보호 데이터 대신 빈 결과를 받습니다 [3]. 그래서 granted 한 칸만 보고 권한이 살아 있었다고 쓰지 않고 flags 를 함께 풉니다.
+granted 가 true 여도 REVOKE_ON_UPGRADE(0x8)가 켜져 있으면 실제 접근은 막혀 있고, APPLY_RESTRICTION(0x4000)이 켜져 있으면 보호 데이터 대신 빈 결과를 받습니다 [3]. 그래서 granted 필드 하나만 보고 권한이 유효했다고 쓰지 않고 flags 를 함께 풉니다.
 
 GRANTED_BY_DEFAULT, SYSTEM_FIXED, POLICY_FIXED, GRANTED_BY_ROLE 이 켜진 권한은 사용자가 고른 것이 아니라 기본값·시스템·정책·역할로 부여된 것입니다 [3]. 사용자가 권한을 허용했다고 쓰려면 USER_SET 이나 USER_FIXED 같은 사용자 쪽 비트를 근거로 삼습니다.
 
-ONE_TIME 권한은 앱이 쉬면 자동으로 거두고, AUTO_REVOKED 는 시스템이 거둔 표시라서 [3], 확보 시점에 권한이 없다고 해서 예전에도 없었다고 볼 수는 없습니다. 이 파일은 현재 상태만 적고 이력 칸이 없으니, 한 번 줬다가 거둔 이력은 업그레이드 전 옛 파일이나 다른 기록과 맞춰 봅니다.
+ONE_TIME 권한은 앱이 쉬면 자동으로 거두고, AUTO_REVOKED 는 시스템이 거둔 표시라서 [3], 확보 시점에 권한이 없다고 해서 예전에도 없었다고 볼 수는 없습니다. 이 파일은 현재 상태만 적고 이력 필드가 없으니, 한 번 줬다가 거둔 이력은 업그레이드 전 옛 파일이나 다른 기록과 맞춰 봅니다.
 
 ## 직접 분석해 보기
 
@@ -110,7 +110,7 @@ ONE_TIME 권한은 앱이 쉬면 자동으로 거두고, AUTO_REVOKED 는 시스
 2. 찾는 앱의 `<package name="...">`(옛 파일은 `<pkg name="...">`)를 열고, 앱이 공유 사용자에 속해 있으면 `<shared-user>` 쪽도 봅니다. 공유 사용자 여부는 [패키지 목록 구조](packages-xml.md) 페이지의 sharedUserId 로 확인합니다.
 3. `<permission>`(옛 파일은 `<item>`)마다 name, granted, flags 를 적고 flags 를 위 표로 비트마다 풉니다.
 
-아래는 소스의 쓰기 형식으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+아래는 소스의 쓰기 형식으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```
 <permission name="android.permission.ACCESS_FINE_LOCATION" granted="true" flags="80301" />
@@ -133,7 +133,7 @@ ALEAPP 의 runtimePerms 모듈은 두 위치의 파일을 찾아 사용자·앱�
 
 ## 실습
 
-사용자 데이터가 들어 있는 공개 검체(NIST CFReDS 등)나 직접 만든 시험 기기의 추출본으로 풀어 봅니다.
+사용자 데이터가 들어 있는 공개 시험 데이터(NIST CFReDS 등)나 직접 만든 시험 기기의 추출본으로 풀어 봅니다.
 
 1. 옛 위치와 새 위치 가운데 어느 쪽에 파일이 있고, 옛 위치 파일은 ABX 로 저장되어 있습니까?
 2. 사용자가 설치한 앱 하나를 골라 권한마다 granted 와 flags 를 적고, 사용자가 직접 정한 권한과 기본으로 받은 권한을 나눠 보십시오.

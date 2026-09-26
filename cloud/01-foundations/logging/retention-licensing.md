@@ -10,7 +10,7 @@ nav_order: 90
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 모든 클라우드 로그에 붙는 세 가지 조건을 다룹니다. 첫째는 레코드가 얼마 동안 남는지(보관 기간, retention)이고, 둘째는 라이선스나 요금제에 따라 레코드가 생기는지이며, 셋째는 조회 경로마다 한 번에 꺼낼 수 있는 기간과 양의 한도입니다. 어느 로그가 기본으로 켜지는지는 [로그의 종류](log-types.md)에서, 로그가 어디에 저장되는지는 [기록은 어디에 남나](../model/where-records-live.md)에서 다룹니다.
+이 페이지는 파일 형식이 아니라 모든 클라우드 로그에 붙는 세 가지 조건을 다룹니다. 첫째는 레코드가 얼마 동안 남는지(보관 기간, retention)이고, 둘째는 라이선스나 요금제에 따라 레코드가 생기는지이며, 셋째는 조회 경로마다 한 번에 꺼낼 수 있는 기간과 양의 한도입니다. 어느 로그가 기본으로 켜지는지는 [로그의 종류](log-types.md)에서, 로그가 어디에 저장되는지는 [기록은 어디에 남나](../model/where-records-live.md)에서 다룹니다.
 
 이 조건의 영향을 받는 로그는 [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md), [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [CloudWatch Logs](../../02-artifacts/aws/cloudwatch-logs.md), [활동 로그](../../02-artifacts/azure/activity-log.md), [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md), [관리 콘솔 감사 로그](../../02-artifacts/google-workspace/admin-audit.md), [Okta 시스템 로그](../../02-artifacts/saas/okta.md), [GitHub 감사 로그](../../02-artifacts/saas/github.md), [Dropbox·Box 기록](../../02-artifacts/saas/dropbox-box.md), [Slack 감사 로그](../../02-artifacts/saas/slack.md)입니다.
 

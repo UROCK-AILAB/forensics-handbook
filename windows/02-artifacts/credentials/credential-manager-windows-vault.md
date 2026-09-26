@@ -31,9 +31,9 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 
 - `Vault` 폴더에는 `.vcrd` 파일과 `.vpol` 파일이 있습니다. `.vcrd` 는 암호화된 자격 증명, `.vpol` 은 암호화 키를 담습니다.
 - 파일은 사용자 프로필 아래 암호화된 특수 폴더에 들어 있습니다.
-- Roaming 프로필의 자격 증명 폴더 경로, 시스템 계정 (systemprofile) 쪽 경로, `%ProgramData%\Microsoft\Vault` 경로는 공개된 자료가 없어 검체에서 확인합니다.
+- Roaming 프로필의 자격 증명 폴더 경로, 시스템 계정 (systemprofile) 쪽 경로, `%ProgramData%\Microsoft\Vault` 경로는 실제 기기에서 확인해야 합니다.
 - 암호화 키는 `Policy.vpol` 이라는 파일에 있고, 보통 자격 증명 파일과 같은 폴더에 있습니다.
-- 볼트 폴더 아래 `{GUID}` 하위 폴더 구조와 웹·Windows 보관함을 가리키는 GUID 값은 검체에서 확인합니다.
+- 볼트 폴더 아래 `{GUID}` 하위 폴더 구조와 웹·Windows 보관함을 가리키는 GUID 값은 실제 기기에서 확인합니다.
 
 ### 버전별 차이
 
@@ -47,11 +47,11 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 
 ## 구조
 
-### 한 건의 자격 증명이 담는 칸
+### 한 건의 자격 증명이 담는 필드
 
-아래 칸 이름과 값은 Win32 API 가 돌려주는 `CREDENTIALW` 구조체 기준입니다. 디스크 파일의 바이트 배치가 이 순서와 같다고 볼 근거는 없습니다.
+아래 필드 이름과 값은 Win32 API 가 돌려주는 `CREDENTIALW` 구조체 기준입니다. 디스크 파일의 바이트 배치가 이 순서와 같다고 볼 근거는 없습니다.
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `Flags` | 자격 증명 속성 플래그 |
 | `Type` | 자격 증명 종류 (아래 표) |
@@ -65,9 +65,9 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 | `TargetAlias` | 대상의 별칭 |
 | `UserName` | 사용자 이름 |
 
-칸 순서는 `Flags`, `Type`, `TargetName`, `Comment`, `LastWritten`, `CredentialBlobSize`, `CredentialBlob`, `Persist`, `AttributeCount`, `Attributes`, `TargetAlias`, `UserName` 입니다. 최소 지원은 클라이언트 Windows XP, 서버 Windows Server 2003 입니다.
+필드 순서는 `Flags`, `Type`, `TargetName`, `Comment`, `LastWritten`, `CredentialBlobSize`, `CredentialBlob`, `Persist`, `AttributeCount`, `Attributes`, `TargetAlias`, `UserName` 입니다. 최소 지원은 클라이언트 Windows XP, 서버 Windows Server 2003 입니다.
 
-`TargetName` 과 `Type` 이 한 자격 증명을 유일하게 가립니다. 만든 뒤에는 이 둘을 바꿀 수 없습니다.
+`TargetName` 과 `Type` 이 한 자격 증명을 유일하게 구분합니다. 만든 뒤에는 이 둘을 바꿀 수 없습니다.
 
 ### Type 값
 
@@ -80,9 +80,9 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 | 5 | `CRED_TYPE_GENERIC_CERTIFICATE` | Vista·2008 이하에선 지원하지 않습니다 |
 | 6 | `CRED_TYPE_DOMAIN_EXTENDED` | Vista·2008 이하에선 지원하지 않습니다 |
 
-- `TargetName` 은 대소문자를 가리지 않습니다.
+- `TargetName` 은 대소문자를 구분하지 않습니다.
 - 도메인 비밀번호형의 `TargetName` 에는 서버 이름 (NetBIOS·DNS), 와일드카드 (`*.example.com`, `도메인\*`), `*` 가 올 수 있습니다.
-- 일반형은 회사 이름을 앞에 붙이도록 권합니다. Microsoft 서비스는 `Microsoft_서비스이름_대상` 꼴을 씁니다.
+- 일반형은 회사 이름을 앞에 붙이도록 권합니다. Microsoft 서비스는 `Microsoft_서비스이름_대상` 형식을 씁니다.
 - `UserName` 은 도메인 비밀번호형이면 `도메인\사용자` 또는 UPN 이고, 인증서형이면 마샬링된 인증서 참조입니다. 일반형은 값이 있어도 관리자가 무시합니다.
 
 ### Persist 값
@@ -95,7 +95,7 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 
 ### 길이 한도
 
-| 칸 | 한도 |
+| 필드 | 한도 |
 |---|---|
 | `TargetName` | 도메인형 337자 / 일반형 32767자 |
 | `Comment`, `TargetAlias` | 256자 |
@@ -127,22 +127,22 @@ DPAPI 구조 자체는 [DPAPI 구조](../../01-foundations/protection/data-prote
 
 | 시각 | 어디에 남나 | 무엇을 가리키나 | 형식 |
 |---|---|---|---|
-| `LastWritten` | 자격 증명 칸 | 그 자격 증명을 마지막으로 고친 때 | FILETIME, UTC |
+| `LastWritten` | 자격 증명 필드 | 그 자격 증명을 마지막으로 고친 때 | FILETIME, UTC |
 
 `LastWritten` 은 쓰기 때 넣은 값을 무시하고 시스템이 정하므로 앱이 이 값을 마음대로 넣지는 못합니다. 다만 값은 그 컴퓨터의 시계를 따르므로, 시계가 틀렸으면 이 값도 틀립니다.
 
-Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값이 디스크 파일 어느 칸에 있는지는 공개된 자료가 없습니다. 그래서 "마지막 사용"과 "마지막 고침"을 섞지 않습니다.
+Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값이 디스크 파일 어느 필드에 있는지 밝힌 공개 문서는 없습니다. 그래서 "마지막 사용"과 "마지막 고침"을 섞지 않습니다.
 
 
-- `.vcrd` 파일의 파일시스템 시각 (생성·수정) 이 저장·갱신 시점과 맞는지는 공개된 자료가 없어 검체에서 맞춰 봅니다.
+- `.vcrd` 파일의 파일시스템 시각 (생성·수정) 이 저장·갱신 시점과 맞는지는 실제 데이터로 맞춰 봐야 합니다.
 - FILETIME 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 1. **파일만 있고 열쇠가 없으면 못 읽습니다.** 볼트 파일은 DPAPI 로 감싸여 있다고 알려져 있습니다. 사용자 마스터키와 그 마스터키를 풀 재료 (로그온 비밀번호나 도메인 백업키) 가 함께 있어야 풉니다. 구조는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
 2. **덮어쓴 자격 증명은 사라집니다.** 저장된 자격 증명이 거부되고 새 자격 증명으로 접근이 되면, 자격 증명 관리자가 옛 값을 새 값으로 덮어씁니다. 이전 값은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 파일에서 찾아 봅니다.
-3. **로밍 프로필을 놓칩니다.** 로밍이 켜진 계정은 자격 증명이 다른 컴퓨터에도 있을 수 있습니다. Roaming 폴더 쪽 경로는 공개된 자료가 없으므로 사용자 프로필 전체를 훑습니다.
-4. **API 구조체 순서를 디스크 배치로 오해합니다.** 위 칸 순서는 API 가 돌려주는 순서입니다. 파일 바이트 배치가 같다고 단정하지 않습니다.
+3. **로밍 프로필을 놓칩니다.** 로밍이 켜진 계정은 자격 증명이 다른 컴퓨터에도 있을 수 있습니다. Roaming 폴더 쪽 경로를 밝힌 공개 문서가 없으므로 사용자 프로필 전체를 살펴봅니다.
+4. **API 구조체 순서를 디스크 배치로 오해합니다.** 위 필드 순서는 API 가 돌려주는 순서입니다. 파일 바이트 배치가 같다고 단정하지 않습니다.
 5. **세션형은 디스크에 안 남을 수 있습니다.** `Persist` 가 1 (세션) 인 자격 증명은 로그오프하면 사라집니다. 디스크 이미지에 없다고 저장한 적이 없다고 보지 않습니다.
 
 ### 지우기와 조작
@@ -155,9 +155,9 @@ Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값�
 
 ### 헥스로 한 번
 
-아래는 FILETIME 명세를 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 FILETIME 명세를 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
-`LastWritten` 칸의 값 (FILETIME, 8바이트) 입니다.
+`LastWritten` 필드의 값 (FILETIME, 8바이트) 입니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07
@@ -183,7 +183,7 @@ Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값�
 | [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) | 볼트 파일을 풀 마스터키와 그 재료 |
 | [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](sam-security/index.md) | 시스템·계정이 저장한 다른 비밀 |
 | [사용자 프로필 목록](../system-account/profilelist.md) | 볼트가 어느 사용자 SID 아래에 있는지 |
-| [원격 데스크톱 접속 기록](../network/rdp-client-mru.md) | 원격 호스트를 대상으로 하는 자격 증명과 접속 이력 (원격 데스크톱 자격 증명의 `TargetName` 형식은 검체에서 확인합니다) |
+| [원격 데스크톱 접속 기록](../network/rdp-client-mru.md) | 원격 호스트를 대상으로 하는 자격 증명과 접속 이력 (원격 데스크톱 자격 증명의 `TargetName` 형식은 실제 기기에서 확인합니다) |
 | [로그온·로그오프](../event-logs/logon-events/index.md) | 저장된 자격 증명으로 실제 로그온했는지 |
 | [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md) | 볼트를 노린 공격을 조사하는 흐름 |
 
@@ -201,15 +201,15 @@ Windows 8.1 부터 화면에 "마지막 사용 날짜"가 보이는데, 이 값�
 - 이벤트 5376 (S) "Credential Manager credentials were backed up."
 - 채널 Security, 공급자 Microsoft-Windows-Security-Auditing, 하위 범주 Audit User Account Management, 성공만 (S), Task 13824.
 - 최소 OS 는 Windows Vista·Windows Server 2008. DC·멤버 서버·워크스테이션 모두에서 생깁니다.
-- 칸은 `SubjectUserSid`, `SubjectUserName`, `SubjectDomainName`, `SubjectLogonId` 입니다. `SubjectLogonId` 로 [로그온·로그오프](../event-logs/logon-events/index.md) 의 4624 와 이어 봅니다.
+- 필드는 `SubjectUserSid`, `SubjectUserName`, `SubjectDomainName`, `SubjectLogonId` 입니다. `SubjectLogonId` 로 [로그온·로그오프](../event-logs/logon-events/index.md) 의 4624 와 이어 봅니다.
 - 사용자가 거의 쓰지 않는 동작이므로 5376 은 모두 기록해 둡니다.
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 Windows 8 이후의 이미지를 골라 다음을 풀어 봅니다.
+NIST CFReDS 같은 공개 데이터셋 가운데 Windows 8 이후의 이미지를 골라 다음을 풀어 봅니다.
 
 1. 사용자 프로필 아래 `Microsoft\Vault` 와 `Microsoft\Credentials` 폴더에 파일이 있습니까? `.vcrd` 와 `.vpol` 이 각각 몇 개입니까?
-2. 마스터키를 풀 재료 (로그온 비밀번호나 도메인 백업키) 가 검체에 함께 있습니까?
+2. 마스터키를 풀 재료 (로그온 비밀번호나 도메인 백업키) 가 이미지에 함께 있습니까?
 3. 자격 증명을 하나 풀어 `Type`, `TargetName`, `LastWritten` 을 적어 봅니다. `TargetName` 이 어떤 서비스를 가리킵니까?
 4. `LastWritten` 을 직접 풀어 UTC 로 적고, 같은 시간대에 로그온·접속 기록이 있는지 봅니다.
 5. Security 이벤트 로그에 5376 이 있습니까? 있으면 `SubjectLogonId` 로 4624 와 이어 봅니다.

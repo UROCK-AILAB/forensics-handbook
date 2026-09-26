@@ -59,15 +59,15 @@ SRUM 전체의 보관 기간과 버전별 차이는 [SRUM 허브](index.md)를 �
 | ConnectStartTime | 64비트 정수 (FILETIME) | 연결을 시작한 시각 |
 | L2ProfileFlags | 32비트 정수 | 프로필 플래그 |
 
-AppId·UserId 를 푸는 방법은 [구조와 ID 매핑](srudbidmaptable.md)을 봅니다. 이 표에서는 두 열이 쓸모없는 경우가 많습니다. 위 PC 에서는 1,472행 모두 AppId 가 1, UserId 가 2 였고, 매핑 표의 1번과 2번은 이름 칸(`IdBlob`)이 비어 있었습니다.
+AppId·UserId 를 푸는 방법은 [구조와 ID 매핑](srudbidmaptable.md)을 봅니다. 이 표에서는 두 열이 쓸모없는 경우가 많습니다. 위 PC 에서는 1,472행 모두 AppId 가 1, UserId 가 2 였고, 매핑 표의 1번과 2번은 이름 열(`IdBlob`)이 비어 있었습니다.
 
 L2ProfileFlags 의 뜻은 공개 자료에 없습니다. 위 PC 에서는 모든 행이 0 이었습니다.
 
 ### InterfaceLuid 풀기
 
-InterfaceLuid 는 `NET_LUID` 구조입니다. 64비트 값을 세 칸으로 나눕니다.
+InterfaceLuid 는 `NET_LUID` 구조입니다. 64비트 값을 세 필드로 나눕니다.
 
-| 비트 | 칸 | 뜻 |
+| 비트 | 필드 | 뜻 |
 |---|---|---|
 | 0~23 | Reserved | 예약 |
 | 24~47 | NetLuidIndex | 인터페이스 LUID 번호 |
@@ -119,7 +119,7 @@ SSID 는 문자열이 아니라 바이트열입니다. 한글 이름이면 인�
 - 사람이 직접 연결했는지, 저장된 프로필로 자동 연결되었는지
 - 같은 이름(SSID)의 다른 장소 네트워크인지. 이름이 같으면 한 프로필로 묶일 수 있습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "SRUM 기록상 이 PC 의 무선(802.11) 인터페이스가 `<시각 UTC>` 에 프로필 번호 `<번호>` 로 연결을 시작했다. 이 번호는 SOFTWARE 하이브에서 SSID `<이름>` 의 프로필과 맞는다. 기록 시각 `<시각 UTC>` 에 이 연결은 `<초>` 초째 이어지고 있었다." 처럼 씁니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "SRUM 기록상 이 PC 의 무선(802.11) 인터페이스가 `<시각 UTC>` 에 프로필 번호 `<번호>` 로 연결을 시작했다. 이 번호는 SOFTWARE 하이브에서 SSID `<이름>` 의 프로필과 맞는다. 기록 시각 `<시각 UTC>` 에 이 연결은 `<초>` 초째 이어지고 있었다." 처럼 씁니다.
 
 ## 시각 해석
 
@@ -155,7 +155,7 @@ SSID 는 문자열이 아니라 바이트열입니다. 한글 이름이면 인�
 
 ### 헥스로 한 번
 
-아래 값은 형식 명세와 Microsoft 문서로 만든 예시입니다. 검체에서 나온 값이 아닙니다. ESE 레코드 안에서 열을 찾는 방법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)를 봅니다. 여기서는 열 값만 풉니다. 모든 값은 리틀 엔디언 (Little-endian)입니다.
+아래 값은 형식 명세와 Microsoft 문서로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다. ESE 레코드 안에서 열을 찾는 방법은 [파일 구조](../../../01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md)를 봅니다. 여기서는 열 값만 풉니다. 모든 값은 리틀 엔디언 (Little-endian)입니다.
 
 | 열 | 바이트 | 푼 값 |
 |---|---|---|
@@ -205,7 +205,7 @@ L2ProfileId 0x10000001 은 SOFTWARE 하이브에서 `ProfileIndex` 가 268435457
 
 ## 실습
 
-Windows 10 이상 공개 검체(NIST CFReDS 등)에서 `SRUDB.dat` 와 SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
+Windows 10 이상 공개 데이터 세트(NIST CFReDS 등)에서 `SRUDB.dat` 와 SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 네트워크 연결 표의 행은 몇 개이고, 인터페이스·L2ProfileId·ConnectStartTime 으로 묶으면 연결은 몇 개입니까?
 2. 인터페이스 유형(IfType)은 몇 가지가 나옵니까? 무선과 유선의 비율은 어떻습니까?

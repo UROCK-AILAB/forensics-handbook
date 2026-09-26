@@ -56,7 +56,7 @@ XML 작업 정의는 Windows Vista · Server 2008 부터 쓰입니다. 그 전�
 
 한 PC 의 XML 271개는 모두 첫 2바이트가 `FF FE` 였습니다. 이 두 바이트는 UTF-16 LE 의 바이트 순서 표시 (BOM) 입니다. XML 선언은 `<?xml version="1.0" encoding="UTF-16"?>` 였습니다. 인코딩은 [문자 인코딩 (UTF-16LE·UTF-8·CP949)](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md)에서 다룹니다.
 
-뿌리 요소는 다음 꼴입니다.
+뿌리 요소는 다음 형식입니다.
 
 ```xml
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
@@ -119,7 +119,7 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 
 ### 예시
 
-아래는 구조를 보여 주려고 스키마 요소로 만든 예시입니다. 실제 검체에서 나온 파일이 아닙니다.
+아래는 구조를 보여 주려고 스키마 요소로 만든 예시입니다. 실제 기기에서 나온 파일이 아닙니다.
 
 ```xml
 <?xml version="1.0" encoding="UTF-16"?>
@@ -170,16 +170,16 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 - Command 와 Arguments 는 작업이 실행하도록 설정된 프로그램과 인자를 보여 줍니다.
 - Principals 는 실행하도록 설정된 계정과 권한 수준을 보여 줍니다.
 - LogonType 이 Password 이면 실행 계정의 비밀번호가 자격 증명 관리자 (Credential Manager) 에 저장됩니다. 관리자 권한이 있으면 이 비밀번호를 꺼낼 수 있습니다.
-- 작업 경로가 루트(`\이름` 꼴)이면 눈여겨봅니다. 사람이 손으로 만들었거나 악성코드가 만든 작업은 루트에 있는 경우가 많습니다.
+- 작업 경로가 루트(`\이름` 형식)이면 눈여겨봅니다. 사람이 손으로 만들었거나 악성코드가 만든 작업은 루트에 있는 경우가 많습니다.
 
 **증명하지 못하는 것**
 
 - 작업이 실제로 실행됐는지는 XML 에 없습니다. 마지막 실행 시각은 레지스트리 DynamicInfo 값에서 봅니다. [작업 캐시 레지스트리](taskcache-tree-tasks.md)를 봅니다.
 - 파일이 있다고 해서 등록된 작업이라는 뜻은 아닙니다. 한 PC 에서는 XML 파일 두 개(`\Microsoft\Windows\PI\SecureBootEncodeUEFI`, `\Microsoft\Windows\Security\Pwdless\IntelligentPwdlessTask`)가 TaskCache 에 항목이 없었습니다. 두 작업은 Get-ScheduledTask 결과에도 나오지 않았습니다.
-- 누가 만들었는지 확정하지 못합니다. Author 는 문자열 칸입니다. Date 는 작업을 만든 쪽이 적어 넣은 값일 수 있습니다(아래 "시각 해석").
+- 누가 만들었는지 확정하지 못합니다. Author 는 문자열 필드입니다. Date 는 작업을 만든 쪽이 적어 넣은 값일 수 있습니다(아래 "시각 해석").
 - Hidden 이 false 여도 숨긴 작업일 수 있습니다. 레지스트리 SD 값을 지워 숨기는 방법이 따로 있습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "`\ExampleUpdater` 작업 정의 파일에 `C:\Users\Public\example.exe` 를 1시간마다 실행하도록 적혀 있다. 이 파일만으로는 실제로 실행되었는지 알 수 없다." 처럼 씁니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "`\ExampleUpdater` 작업 정의 파일에 `C:\Users\Public\example.exe` 를 1시간마다 실행하도록 적혀 있다. 이 파일만으로는 실제로 실행되었는지 알 수 없다." 처럼 씁니다.
 
 ## 시각 해석
 
@@ -213,7 +213,7 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 
 ### 헥스로 한 번
 
-아래는 명세로 만든 예시입니다. 실제 검체에서 뽑은 바이트가 아닙니다. 앞에서 본 XML 선언의 첫 48바이트입니다.
+아래는 명세로 만든 예시입니다. 실제 데이터에서 뽑은 바이트가 아닙니다. 앞에서 본 XML 선언의 첫 48바이트입니다.
 
 ```
 00000000  ff fe 3c 00 3f 00 78 00 6d 00 6c 00 20 00 76 00  |..<.?.x.m.l. .v.|
@@ -230,7 +230,7 @@ Settings 에는 Enabled, Hidden, ExecutionTimeLimit, MultipleInstancesPolicy, St
 
 XML 파일은 텍스트 편집기나 XML 뷰어로 열 수 있습니다. 편집기가 인코딩을 UTF-16 으로 읽는지 확인합니다.
 
-폴더를 통째로 훑을 때는 Python 표준 라이브러리로 충분합니다. 아래 코드는 마운트한 이미지의 `Tasks` 폴더 아래 파일마다 주요 요소를 뽑습니다. 파서가 BOM 과 `encoding="UTF-16"` 선언을 보고 인코딩을 알아서 고릅니다.
+폴더를 통째로 살펴볼 때는 Python 표준 라이브러리로 충분합니다. 아래 코드는 마운트한 이미지의 `Tasks` 폴더 아래 파일마다 주요 요소를 뽑습니다. 파서가 BOM 과 `encoding="UTF-16"` 선언을 보고 인코딩을 알아서 고릅니다.
 
 ```python
 import os
@@ -252,7 +252,7 @@ for dirpath, _, names in os.walk(top):
             print("   ", f.split("/")[-1][2:], "=", e.text if e is not None else "(없음)")
 ```
 
-살아 있는 시스템에서는 PowerShell 의 `Get-ScheduledTask` 로 등록된 작업 목록을 볼 수 있습니다. 이 목록과 폴더의 파일 목록을 맞춰 보면 등록되지 않은 XML 이 드러납니다.
+실행 중인 시스템에서는 PowerShell 의 `Get-ScheduledTask` 로 등록된 작업 목록을 볼 수 있습니다. 이 목록과 폴더의 파일 목록을 맞춰 보면 등록되지 않은 XML 이 드러납니다.
 
 ## 교차 검증
 
@@ -267,9 +267,9 @@ for dirpath, _, names in os.walk(top):
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 `C:\Windows\System32\Tasks` 폴더와 SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)에서 `C:\Windows\System32\Tasks` 폴더와 SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
 
-1. 작업 경로가 루트(`\이름` 꼴)인 작업을 모두 찾습니다. 각 작업의 Command 는 무엇입니까?
+1. 작업 경로가 루트(`\이름` 형식)인 작업을 모두 찾습니다. 각 작업의 Command 는 무엇입니까?
 2. Command 가 `Users` 폴더나 임시 폴더를 가리키는 작업이 있습니까?
 3. RegistrationInfo\Date 가 있는 작업은 몇 개입니까? 시간대 표시가 붙은 값이 있습니까?
 4. LogonType 이 Password 인 작업이 있습니까? 있다면 실행 계정은 무엇입니까?

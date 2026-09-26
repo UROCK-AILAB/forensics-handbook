@@ -47,7 +47,7 @@ Chrome·Edge 같은 브라우저, Electron 앱, WebView2 를 쓰는 앱은 모�
 |---|---|---|
 | `Local State` | 프로필 목록, 계정 정보로 보이는 칸, 암호화 키 | [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) |
 | 프로필 폴더 (`Default`, `Profile 1` …) | 프로필마다 따로 쌓인 기록 | [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) |
-| `Last Version`·`Last Browser` | 마지막으로 실행한 버전과 실행 파일. 어느 브라우저·앱의 폴더인지 가리는 단서 | [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) |
+| `Last Version`·`Last Browser` | 마지막으로 실행한 버전과 실행 파일. 어느 브라우저·앱의 폴더인지 구분하는 단서 | [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) |
 | `EBWebView` 폴더 | WebView2 앱이 쓰는 Chromium 데이터 | [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) |
 | `Cache\Cache_Data` | HTTP 캐시. 블록 파일 방식 | [캐시 형식](blockfile-simple-cache.md) |
 | `Code Cache\js`·`Code Cache\wasm` | 스크립트 캐시. Simple Cache | [캐시 형식](blockfile-simple-cache.md) |
@@ -57,10 +57,10 @@ Chrome·Edge 같은 브라우저, Electron 앱, WebView2 를 쓰는 앱은 모�
 
 ## 읽는 순서
 
-1. [프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)](user-data-profile-local-state.md) — 브라우저별 User Data 위치와 프로필 폴더 구성을 다룹니다. `Local State` 로 폴더 이름과 표시 이름을 짝짓고, Chrome 과 Edge 를 가리는 단서를 정리합니다.
+1. [프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)](user-data-profile-local-state.md) — 브라우저별 User Data 위치와 프로필 폴더 구성을 다룹니다. `Local State` 로 폴더 이름과 표시 이름을 짝짓고, Chrome 과 Edge 를 구분하는 단서를 정리합니다.
 2. [Electron·WebView2 앱 데이터 위치 (Teams·Discord·Slack 등)](teams-discord-slack.md) — Electron 과 WebView2 가 데이터 폴더를 어디에 만드는지 다룹니다. 앱별 위치와, 앱을 지운 뒤에도 폴더가 남는 경우를 정리합니다.
 3. [캐시 형식 (Blockfile·Simple Cache)](blockfile-simple-cache.md) — 두 캐시 형식의 파일 구성과 오프셋을 헥스로 따라갑니다. 비정상 종료와 지운 항목이 어떻게 남는지도 다룹니다.
-4. [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](dpapi-app-bound-encryption.md) — `Local State` 의 두 키와 `v10`·`v20` 암호문을 가리는 법을 다룹니다. 디스크 이미지만으로 무엇을 풀 수 있는지도 나눕니다.
+4. [쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)](dpapi-app-bound-encryption.md) — `Local State` 의 두 키와 `v10`·`v20` 암호문을 구분하는 법을 다룹니다. 디스크 이미지만으로 무엇을 풀 수 있는지도 나눕니다.
 
 ## 함께 볼 페이지
 

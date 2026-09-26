@@ -8,20 +8,20 @@ nav_order: 110
 
 디스크 앞쪽의 파티션 표를 읽으면 디스크를 어떤 범위로 나눴는지, 각 조각에 어떤 용도 표시를 달았는지, 다른 흔적과 맞춰 볼 식별자가 무엇인지 알 수 있습니다.
 
-MBR (Master Boot Record) 와 GPT (GUID Partition Table) 의 공통 구조는 Windows 판 [파티션 구조 (MBR·GPT)](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/disk-volume/mbr-gpt.html) 와 맥 판 [파티션 구조 (GPT·APFS 파티션)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/disk-volume/gpt-partitions.html) 에도 있습니다. 이 쪽은 리눅스에서 쓰는 형식 번호·형식 GUID, 리눅스 도구가 표를 읽는 방식, 파티션과 마운트 설정을 잇는 방법을 다룹니다.
+MBR (Master Boot Record) 와 GPT (GUID Partition Table) 의 공통 구조는 Windows 판 [파티션 구조 (MBR·GPT)](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/disk-volume/mbr-gpt.html) 와 맥 판 [파티션 구조 (GPT·APFS 파티션)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/disk-volume/gpt-partitions.html) 에도 있습니다. 이 페이지는 리눅스에서 쓰는 형식 번호·형식 GUID, 리눅스 도구가 표를 읽는 방식, 파티션과 마운트 설정을 잇는 방법을 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-파티션 표는 그 자체로 기록이라기보다 다른 흔적을 찾아 들어가는 입구입니다. 파티션 안에는 ext4·XFS·Btrfs 같은 파일 시스템, LVM 물리 볼륨, LUKS 머리글, 스왑 영역이 놓이고, 각각은 아래 쪽에서 이어서 다룹니다.
+파티션 표는 그 자체로 기록이라기보다 다른 흔적을 찾아 들어가는 입구입니다. 파티션 안에는 ext4·XFS·Btrfs 같은 파일 시스템, LVM 물리 볼륨, LUKS 머리글, 스왑 영역이 놓이고, 각각은 아래 페이지에서 이어서 다룹니다.
 
-| 파티션 안에 놓이는 것 | 이어서 볼 쪽 |
+| 파티션 안에 놓이는 것 | 이어서 볼 페이지 |
 |---|---|
 | ext4·XFS·Btrfs 파일 시스템 | [ext4](../filesystem/ext4/index.md), [XFS](../filesystem/xfs.md), [Btrfs](../filesystem/btrfs.md) |
 | LVM 물리 볼륨 | [LVM 논리 볼륨](lvm.md) |
 | LUKS 로 암호화한 볼륨 | [LUKS 디스크 암호화](luks.md) |
 | 스왑 영역·최대 절전 이미지 | [스왑과 최대 절전](swap-hibernation.md) |
 
-라이브 시스템에서는 `/etc/fstab`, `/proc/partitions`, `/proc/mounts`, `/dev/disk/by-*` 링크가 파티션을 이름·UUID 로 가리킵니다[11][17][10]. 이 연결을 해석하는 방법은 [마운트 기록](../../02-artifacts/devices/mounts.md) 쪽에 모았습니다.
+라이브 시스템에서는 `/etc/fstab`, `/proc/partitions`, `/proc/mounts`, `/dev/disk/by-*` 링크가 파티션을 이름·UUID 로 가리킵니다[11][17][10]. 이 연결을 해석하는 방법은 [마운트 기록](../../02-artifacts/devices/mounts.md) 페이지에 모았습니다.
 
 ## 구조
 
@@ -51,7 +51,7 @@ MBR 은 디스크 첫 섹터(512바이트)입니다. 0x1B8(440) 에 4바이트 �
 | 0xfd | Linux RAID |
 | 0xee | GPT Safety Partition |
 
-형식 번호가 0x05·0x0F·0x85 인 항목은 확장 파티션이고, 그 안의 연결 표(EBR)를 따라가면 논리 파티션이 나옵니다[2]. 리눅스는 논리 파티션에 5번부터 번호를 붙이고, 비어 있는 주 파티션 칸의 번호는 다시 쓰지 않습니다[5]. 따라서 `/dev/sda5` 가 있다고 `/dev/sda1`~`sda4` 가 모두 있는 것은 아닙니다.
+형식 번호가 0x05·0x0F·0x85 인 항목은 확장 파티션이고, 그 안의 연결 표(EBR)를 따라가면 논리 파티션이 나옵니다[2]. 리눅스는 논리 파티션에 5번부터 번호를 붙이고, 비어 있는 주 파티션 자리의 번호는 다시 쓰지 않습니다[5]. 따라서 `/dev/sda5` 가 있다고 `/dev/sda1`~`sda4` 가 모두 있는 것은 아닙니다.
 
 ### GPT
 
@@ -62,7 +62,7 @@ GPT 디스크의 LBA 0 에는 보호용 MBR (Protective MBR) 이 있고, 형식 
 | 0x00 | 8 | signature | `EFI PART` |
 | 0x08 | 4 | revision | 판 번호 |
 | 0x0C | 4 | header_size | 머리글 크기, 보통 92 |
-| 0x10 | 4 | header_crc32 | 머리글 CRC32 (이 칸을 0 으로 두고 계산) |
+| 0x10 | 4 | header_crc32 | 머리글 CRC32 (이 필드를 0 으로 두고 계산) |
 | 0x14 | 4 | reserved | 예약 |
 | 0x18 | 8 | my_lba | 이 머리글이 놓인 LBA |
 | 0x20 | 8 | alternate_lba | 다른 쪽 머리글의 LBA |
@@ -116,7 +116,7 @@ GUID 16바이트는 앞 세 필드(4·2·2바이트)만 리틀엔디언이고 �
 
 ### 헥스로 한 번
 
-아래는 명세로 만든 예시이고, 값은 모두 지어낸 것입니다. 512바이트 섹터 디스크에서 LBA 1 은 바이트 오프셋 0x200 입니다. CRC 와 판 번호 칸은 `..` 로 가렸습니다.
+아래는 명세로 만든 예시이고, 값은 모두 지어낸 것입니다. 512바이트 섹터 디스크에서 LBA 1 은 바이트 오프셋 0x200 입니다. CRC 와 판 번호 필드는 `..` 로 가렸습니다.
 
 ```
 오프셋     00 01 02 03 04 05 06 07  08 09 0A 0B 0C 0D 0E 0F
@@ -144,7 +144,7 @@ MBR 디스크라면 0x1BE 부터 16바이트씩 네 번 끊어 읽고, 각 항�
 
 오프라인 이미지에서는 TSK 의 `mmls` 로 파티션 배치를 봅니다. TSK 는 GPT 에서 보호용 MBR 을 "Safety Table", 머리글을 "GPT Header", 항목 배열을 "Partition Table" 이라는 메타 항목으로 목록에 함께 넣습니다[4]. dissect.volume 은 GPT·MBR·LVM2 를 파이썬에서 읽습니다[14].
 
-라이브 시스템에서는 `blkid`, `lsblk`, `fdisk -l` 결과와 `/dev/disk/by-*` 링크 목록을 함께 남깁니다[16]. udev 는 `by-partuuid` 링크를 파티션 고유 ID 로 만들고, `by-partlabel` 링크는 GPT 이면서 파티션 이름이 있을 때만 만듭니다[10]. `by-uuid`·`by-label` 은 파티션이 아니라 그 안의 파일 시스템(또는 LUKS 같은 암호 볼륨)의 UUID·이름입니다[10]. MBR 디스크에서는 libblkid 가 디스크 식별자 4바이트를 8자리 16진수 문자열로 표의 ID 로 씁니다[5]. MBR 파티션의 PARTUUID 문자열 모양은 검체의 `blkid` 출력과 `/dev/disk/by-partuuid` 링크 이름으로 확인합니다.
+라이브 시스템에서는 `blkid`, `lsblk`, `fdisk -l` 결과와 `/dev/disk/by-*` 링크 목록을 함께 남깁니다[16]. udev 는 `by-partuuid` 링크를 파티션 고유 ID 로 만들고, `by-partlabel` 링크는 GPT 이면서 파티션 이름이 있을 때만 만듭니다[10]. `by-uuid`·`by-label` 은 파티션이 아니라 그 안의 파일 시스템(또는 LUKS 같은 암호 볼륨)의 UUID·이름입니다[10]. MBR 디스크에서는 libblkid 가 디스크 식별자 4바이트를 8자리 16진수 문자열로 표의 ID 로 씁니다[5]. MBR 파티션의 PARTUUID 문자열 모양은 실제 시스템의 `blkid` 출력과 `/dev/disk/by-partuuid` 링크 이름으로 확인합니다.
 
 ## 포렌식에서 중요한 점
 
@@ -156,9 +156,9 @@ MBR 디스크라면 0x1BE 부터 16바이트씩 네 번 끊어 읽고, 각 항�
 
 ### 증명하지 못하는 것
 
-- 파티션을 언제 만들었는지, 누가 만들었는지. MBR 항목과 GPT 머리글·항목 어디에도 시각 칸이 없습니다[1][3][6].
+- 파티션을 언제 만들었는지, 누가 만들었는지. MBR 항목과 GPT 머리글·항목 어디에도 시각 필드가 없습니다[1][3][6].
 - 형식 표시가 실제 내용과 맞는지. 형식 GUID 는 쓰는 사람이 정한 표시일 뿐이라, 안의 내용은 시작 LBA 위치의 파일 시스템·LVM·LUKS 서명으로 따로 확인합니다.
-- 표에 없는 영역에 무엇이 있었는지. 항목 사이 빈 공간이나 last_usable_lba 뒤는 표가 말해 주지 않으므로 직접 서명을 찾아봅니다.
+- 표에 없는 영역에 무엇이 있었는지. 항목 사이 빈 공간이나 last_usable_lba 뒤는 표에 나와 있지 않으므로 직접 서명을 찾아봅니다.
 
 ### 시각
 
@@ -176,27 +176,27 @@ LUKS 로 감싼 자동 발견 파티션은 `/dev/mapper/root`, `/dev/mapper/home
 
 ### 배포판 차이
 
-설치기 코드(현재 개발 중인 가지) 기준으로 기본 배치는 다음과 같습니다. 실린 판과 세부가 다를 수 있으므로 검체에서는 `/etc/fstab` 과 `lsblk` 결과로 확인합니다.
+설치기 코드(현재 개발 중인 가지) 기준으로 기본 배치는 다음과 같습니다. 실린 판과 세부가 다를 수 있으므로 실제 시스템에서는 `/etc/fstab` 과 `lsblk` 결과로 확인합니다.
 
 | 항목 | Ubuntu 24.04 (subiquity) | RHEL 9 (anaconda) |
 |---|---|---|
 | 기본 파일 시스템 | ext4 (안내 설치 LVM 에서 `/` 와 `/boot`) [20] | xfs [18] |
 | 기본 배치 | `/boot` 파티션(ext4) 뒤에 나머지를 LVM 물리 볼륨으로, VG `ubuntu-vg` 안에 LV `ubuntu-lv`(`/`) [20] | `/`(최소 1GiB, 최대 70GiB), `/home`, `swap` [18] |
-| EFI 시스템 파티션 | 검체의 fstab 으로 확인 | `/boot/efi` 에 마운트 [19], EFI 디렉터리 이름 `redhat` [18] |
-| BIOS 부팅 | 검체로 확인 | `biosboot` 파티션 [19] |
+| EFI 시스템 파티션 | 실제 시스템의 fstab 으로 확인 | `/boot/efi` 에 마운트 [19], EFI 디렉터리 이름 `redhat` [18] |
+| BIOS 부팅 | 실제 시스템으로 확인 | `biosboot` 파티션 [19] |
 | 암호화 선택 시 | 안내 설치에 LVM_LUKS 선택지 [20] | 파티션을 LUKS 로 만들고 그 위에 LVM 물리 볼륨 [19] |
 
-LVM 이름 규칙과 VG 이름 확인 방법은 [LVM 논리 볼륨](lvm.md) 쪽에 있습니다.
+LVM 이름 규칙과 VG 이름 확인 방법은 [LVM 논리 볼륨](lvm.md) 페이지에 있습니다.
 
 ### 지우기·조작에 남는 것
 
-파티션 표를 지우거나 고쳐도 파티션 안의 데이터는 그대로인 경우가 많아서, 표 밖에서 파일 시스템·LVM·LUKS 서명을 찾으면 옛 파티션 범위를 되짚을 수 있습니다. GPT 는 주 머리글·항목 배열과 보조 머리글·항목 배열이 따로 있으므로, 한쪽만 고쳤다면 두 표가 서로 다릅니다[6][4]. 두 표를 모두 읽어 비교하고, CRC 가 맞는지도 계산해 봅니다.
+파티션 표를 지우거나 고쳐도 파티션 안의 데이터는 그대로인 경우가 많아서, 표 밖에서 파일 시스템·LVM·LUKS 서명을 찾으면 옛 파티션 범위를 다시 찾아낼 수 있습니다. GPT 는 주 머리글·항목 배열과 보조 머리글·항목 배열이 따로 있으므로, 한쪽만 고쳤다면 두 표가 서로 다릅니다[6][4]. 두 표를 모두 읽어 비교하고, CRC 가 맞는지도 계산해 봅니다.
 
 ## 함정
 
 **도구마다 손상된 GPT 를 받아들이는 기준이 다릅니다.** libblkid 는 머리글 CRC, 항목 배열 CRC, my_lba 가 실제 위치와 같은지, 사용 가능 범위가 말이 되는지를 모두 검사하고, 하나라도 틀리면 마지막 LBA 의 보조 머리글을 봅니다[6]. TSK 의 GPT 코드는 CRC 를 검사하지 않고, 주 머리글을 읽지 못하면 섹터 크기를 512·1024·2048·4096·8192 로 바꿔 가며 다시 읽은 뒤, 그래도 안 되면 디스크 끝의 보조 머리글을 읽습니다[4]. 그래서 같은 이미지를 두고 `mmls` 와 `blkid` 의 결과가 다를 수 있습니다.
 
-**빈 항목을 가리는 기준도 다릅니다.** libblkid 는 형식 GUID 가 모두 0 인 항목을 건너뛰고, 사용 가능 범위를 벗어난 항목도 버립니다[6]. TSK 는 시작 LBA 가 0 인 항목만 건너뜁니다[4]. 형식 GUID 만 0 으로 지우고 LBA 는 남긴 항목은 TSK 목록에는 나오고 `blkid` 에는 나오지 않습니다.
+**빈 항목을 구분하는 기준도 다릅니다.** libblkid 는 형식 GUID 가 모두 0 인 항목을 건너뛰고, 사용 가능 범위를 벗어난 항목도 버립니다[6]. TSK 는 시작 LBA 가 0 인 항목만 건너뜁니다[4]. 형식 GUID 만 0 으로 지우고 LBA 는 남긴 항목은 TSK 목록에는 나오고 `blkid` 에는 나오지 않습니다.
 
 **보호용 MBR 이 없으면 GPT 로 보지 않을 수 있습니다.** libblkid 는 기본 설정에서 LBA 0 에 0xEE 항목이 있어야 GPT 로 인식하고[6], TSK 도 주 GPT 를 읽을 때 LBA 0 의 매직과 첫 항목 0xEE 를 요구합니다[4]. 반대로 MBR 쪽 코드는 0xEE 항목을 보면 MBR 로 읽지 않습니다[5]. Apple 은 MBR 과 GPT 를 함께 맞춰 둔 하이브리드 디스크를 씁니다[6].
 
@@ -204,9 +204,9 @@ LVM 이름 규칙과 VG 이름 확인 방법은 [LVM 논리 볼륨](lvm.md) 쪽�
 
 **섹터 크기가 4096 인 디스크(4Kn)** 에서는 LBA 1 이 바이트 4096 이라 GPT 머리글이 0x1000 에 있습니다. libblkid 는 논리 섹터 크기에 LBA 를 곱해 위치를 구합니다[6]. 이미지 파일만 받았다면 0x200 과 0x1000 두 곳에서 `EFI PART` 를 찾아봅니다.
 
-**파티션 표 없이 디스크 전체를 LVM 물리 볼륨으로 쓴 경우**가 있습니다. `pvcreate` 는 장치 앞부분을 지우고, libblkid 는 이 범위를 앞 8KiB 로 잡습니다[12]. 또 LVM 물리 볼륨이 있고 MBR 표가 비어 있으면 libblkid 는 MBR 을 무시합니다[5]. 파티션 표가 없다고 빈 디스크로 판단하지 말고 [LVM 논리 볼륨](lvm.md) 쪽의 서명을 찾아봅니다.
+**파티션 표 없이 디스크 전체를 LVM 물리 볼륨으로 쓴 경우**가 있습니다. `pvcreate` 는 장치 앞부분을 지우고, libblkid 는 이 범위를 앞 8KiB 로 잡습니다[12]. 또 LVM 물리 볼륨이 있고 MBR 표가 비어 있으면 libblkid 는 MBR 을 무시합니다[5]. 파티션 표가 없다고 빈 디스크로 판단하지 말고 [LVM 논리 볼륨](lvm.md) 페이지를 보고 LVM 서명을 찾아봅니다.
 
-**fstab 파서마다 읽는 줄이 다릅니다.** fstab(5) 는 5·6번 필드를 생략하면 0 으로 보고, `LABEL=`·`UUID=`·`PARTUUID=`·`PARTLABEL=` 을 장치 칸에 쓸 수 있게 합니다[11]. dissect.target 의 fstab 파서는 필드가 정확히 6개인 줄만 읽고, `PARTUUID=`·`PARTLABEL=` 로 적은 장치는 지원하지 않는 장치로 건너뛰며, swap·tmpfs 같은 형식도 건너뜁니다[13]. 도구가 만든 마운트 목록에 빠진 항목이 있으면 fstab 원본을 직접 읽습니다. 자동 발견으로 붙은 파티션은 fstab 에 아예 없을 수 있습니다[8].
+**fstab 파서마다 읽는 줄이 다릅니다.** fstab(5) 는 5·6번 필드를 생략하면 0 으로 보고, `LABEL=`·`UUID=`·`PARTUUID=`·`PARTLABEL=` 을 장치 필드에 쓸 수 있게 합니다[11]. dissect.target 의 fstab 파서는 필드가 정확히 6개인 줄만 읽고, `PARTUUID=`·`PARTLABEL=` 로 적은 장치는 지원하지 않는 장치로 건너뛰며, swap·tmpfs 같은 형식도 건너뜁니다[13]. 도구가 만든 마운트 목록에 빠진 항목이 있으면 fstab 원본을 직접 읽습니다. 자동 발견으로 붙은 파티션은 fstab 에 아예 없을 수 있습니다[8].
 
 ## 도구
 

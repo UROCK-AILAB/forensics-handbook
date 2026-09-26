@@ -16,13 +16,13 @@ nav_order: 1670
 ## 먼저 확인할 것
 
 - **Android 버전**: 미디어 휴지통은 Android 11(API 30)부터라서 [1] 그 이전 버전에서는 아래 파일 이름 규칙을 기대하지 않습니다.
-- **제조사와 갤러리 앱**: 삼성 갤러리의 휴지통이 MediaStore 휴지통을 쓰는지, 자체 폴더를 쓰는지, 보관 기간이 며칠인지, 구글 포토 휴지통 기간이 며칠인지는 공개 자료가 없어 검체에서 확인합니다. [삼성 갤러리](../../../02-artifacts/media/samsung-gallery.md) 와 [구글 포토](../../../02-artifacts/media/google-photos.md) 페이지를 함께 봅니다.
+- **제조사와 갤러리 앱**: 삼성 갤러리의 휴지통이 MediaStore 휴지통을 쓰는지, 자체 폴더를 쓰는지, 보관 기간이 며칠인지, 구글 포토 휴지통 기간이 며칠인지는 실제 기기로 확인해야 합니다. [삼성 갤러리](../../../02-artifacts/media/samsung-gallery.md) 와 [구글 포토](../../../02-artifacts/media/google-photos.md) 페이지를 함께 봅니다.
 - **수집 시점**: 휴지통 항목은 정해진 기간이 지나면 영구 삭제되니 [1], 지운 뒤 얼마 만에 수집했는지를 적어 둡니다.
 - **수집 범위**: 점(.)으로 시작하는 숨김 파일까지 수집했는지 확인합니다.
 
 ## 사진·동영상: MediaStore 휴지통
 
-Android 11 이상에서 앱은 여러 미디어 파일을 골라 한꺼번에 휴지통으로 보내거나(`createTrashRequest()`) 휴지통을 거치지 않고 바로 영구 삭제하도록(`createDeleteRequest()`) 사용자에게 요청할 수 있습니다 [1]. 휴지통 항목은 시스템이 정한 기간이 지나면 영구 삭제되고 [1], 제조사 기본 갤러리 앱은 확인 창 없이 `IS_TRASHED` 칸을 1로 바꿔 휴지통으로 보낼 수 있습니다 [1]. 또 Android 10 이상에서 파일을 쓰는 동안 `IS_PENDING` 을 1로 두면 그 앱만 파일을 볼 수 있습니다 [1].
+Android 11 이상에서 앱은 여러 미디어 파일을 골라 한꺼번에 휴지통으로 보내거나(`createTrashRequest()`) 휴지통을 거치지 않고 바로 영구 삭제하도록(`createDeleteRequest()`) 사용자에게 요청할 수 있습니다 [1]. 휴지통 항목은 시스템이 정한 기간이 지나면 영구 삭제되고 [1], 제조사 기본 갤러리 앱은 확인 창 없이 `IS_TRASHED` 열을 1로 바꿔 휴지통으로 보낼 수 있습니다 [1]. 또 Android 10 이상에서 파일을 쓰는 동안 `IS_PENDING` 을 1로 두면 그 앱만 파일을 볼 수 있습니다 [1].
 
 AOSP MediaProvider 의 기본 보관 기간은 아래와 같습니다 [2].
 
@@ -39,16 +39,16 @@ AOSP MediaProvider 의 기본 보관 기간은 아래와 같습니다 [2].
 .pending-<만료시각>-<원래 이름>
 ```
 
-이름 속 만료 시각은 밀리초가 아닌 유닉스 초이고, 코드는 `(System.currentTimeMillis() + DEFAULT_DURATION_TRASHED) / 1000` 입니다 [2]. 그래서 기본값을 쓰는 기기라면 휴지통으로 보낸 시각은 만료 시각에서 30일을 뺀 값에 가깝습니다(해석). 제조사가 기간을 바꿨다면 이 셈은 맞지 않고, 만료 시각도 기기 벽시계로 만든 값이라서 기기 시각을 바꿔 둔 상태였다면 그만큼 어긋납니다. 이름이 점으로 시작하니 일반 파일 목록에서는 숨김 파일로 보입니다(해석).
+이름 속 만료 시각은 밀리초가 아닌 유닉스 초이고, 코드는 `(System.currentTimeMillis() + DEFAULT_DURATION_TRASHED) / 1000` 입니다 [2]. 그래서 기본값을 쓰는 기기라면 휴지통으로 보낸 시각은 만료 시각에서 30일을 뺀 값에 가깝습니다(해석). 제조사가 기간을 바꿨다면 이 셈은 맞지 않고, 만료 시각도 기기 시스템 시계로 만든 값이라서 기기 시각을 바꿔 둔 상태였다면 그만큼 어긋납니다. 이름이 점으로 시작하니 일반 파일 목록에서는 숨김 파일로 보입니다(해석).
 
-소스에 나온 이름 예 `.trashed-1621147340-test.jpg` 로 셈하면 아래와 같습니다. 특정 검체의 값이 아니라 소스 속 예시입니다.
+소스에 나온 이름 예 `.trashed-1621147340-test.jpg` 로 셈하면 아래와 같습니다. 특정 기기의 값이 아니라 소스 속 예시입니다.
 
 ```
 만료 시각   1621147340 (유닉스 초) = 2021-05-16 06:42:20 UTC
 30일 빼기   1621147340 - 2592000   = 2021-04-16 06:42:20 UTC  ← 휴지통으로 보낸 무렵(기본값 기준 해석)
 ```
 
-MediaStore 의 `DATE_EXPIRES` 칸과 파일 이름을 서로 맞춰 보는 방법은 공개된 설명이 없어 이 페이지에서 다루지 않습니다. MediaStore DB 의 구조는 [미디어 저장소 (MediaStore)](../../../02-artifacts/media/mediastore/index.md) 에 있습니다.
+MediaStore 의 `DATE_EXPIRES` 열과 파일 이름을 서로 맞춰 보는 방법은 공개된 설명이 없어 이 페이지에서 다루지 않습니다. MediaStore DB 의 구조는 [미디어 저장소 (MediaStore)](../../../02-artifacts/media/mediastore/index.md) 에 있습니다.
 
 ## 메시지·연락처
 
@@ -63,7 +63,7 @@ MediaStore 의 `DATE_EXPIRES` 칸과 파일 이름을 서로 맞춰 보는 방�
 
 ## 지운 흔적을 보여 주는 다른 기록
 
-메시지를 지워도 그 메시지가 도착했을 때의 알림 기록은 따로 남을 수 있습니다(해석). `dumpsys usagestats` 이벤트에는 `NOTIFICATION_INTERRUPTION`(`channelId=CHANNEL_ID_SMS_MMS` 처럼 채널 ID 포함)과 `NOTIFICATION_SEEN` 이 있고, `dumpsys notification` 출력에는 `deleteIntent=` 칸이 있습니다. 알림이 사라진 뒤에도 알림 기록에 남는지는 검체에서 확인해야 하니, 알림이 없다는 사실을 "메시지가 없었다" 로 읽지 않습니다. 알림 기록의 구조는 [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md) 에 있습니다.
+메시지를 지워도 그 메시지가 도착했을 때의 알림 기록은 따로 남을 수 있습니다(해석). `dumpsys usagestats` 이벤트에는 `NOTIFICATION_INTERRUPTION`(`channelId=CHANNEL_ID_SMS_MMS` 처럼 채널 ID 포함)과 `NOTIFICATION_SEEN` 이 있고, `dumpsys notification` 출력에는 `deleteIntent=` 필드가 있습니다. 알림이 사라진 뒤에도 알림 기록에 남는지는 실제 기기로 확인해야 하니, 알림이 없다는 사실을 "메시지가 없었다" 로 읽지 않습니다. 알림 기록의 구조는 [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md) 에 있습니다.
 
 `.trashed-` 파일은 `/sdcard` 아래의 표준 폴더(Alarms, Android, Audiobooks, DCIM, Documents, Download, Movies, Music, Notifications, Pictures, Podcasts, Recordings, Ringtones)와 앱이 만든 폴더를 모두 살펴 찾습니다.
 
@@ -95,7 +95,7 @@ MediaStore 의 `DATE_EXPIRES` 칸과 파일 이름을 서로 맞춰 보는 방�
 
 **`.pending-` 파일을 지운 파일로 보는 경우.** 이 이름은 작성 중인 파일에 붙는 것이고 [2], 휴지통과는 다릅니다.
 
-**휴지통으로 보낸 것을 증거 인멸 의도로 적는 경우.** 기록은 파일이 휴지통으로 갔다는 것까지만 말하고, 누가 왜 그랬는지는 말하지 않습니다. 앱이 사용자에게 요청하는 방식 [1] 과 제조사 갤러리가 확인 창 없이 옮기는 방식 [1] 이 모두 있습니다.
+**휴지통으로 보낸 것을 증거 인멸 의도로 적는 경우.** 기록으로 알 수 있는 것은 파일이 휴지통으로 갔다는 것까지이고, 누가 왜 그랬는지는 기록에 나와 있지 않습니다. 앱이 사용자에게 요청하는 방식 [1] 과 제조사 갤러리가 확인 창 없이 옮기는 방식 [1] 이 모두 있습니다.
 
 ## 보고서 문장 예
 

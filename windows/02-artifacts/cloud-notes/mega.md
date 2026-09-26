@@ -39,11 +39,11 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 
 - 돌린 로그는 기본 50개까지 둡니다. 환경 변수 `MEGA_MAX_ROTATE_LOGS` 로 개수를 바꿀 수 있습니다 (코드).
 - 디버그 모드를 켜면 바탕 화면에도 `MEGAsync.log` 를 만듭니다 (코드).
-- 동기화 설정 파일은 이름이 `megaclient_syncconfig_` 로 시작하고, 내용이 암호화돼 있습니다 (코드). 이 파일의 저장 폴더는 검체에서 확인합니다.
+- 동기화 설정 파일은 이름이 `megaclient_syncconfig_` 로 시작하고, 내용이 암호화돼 있습니다 (코드). 이 파일의 저장 폴더는 실제 기기에서 확인합니다.
 
 ### 상태 DB 이름과 판 번호
 
-- 상태 DB 이름은 `megaclient_statecache<판 번호>_<이름>.db` 꼴입니다 (코드).
+- 상태 DB 이름은 `megaclient_statecache<판 번호>_<이름>.db` 형식입니다 (코드).
 - 지금 판 번호는 15 입니다. 14 판 파일이 있으면 앱이 새 이름으로 옮겨 씁니다 (코드).
 - `<이름>` 자리에는 세션 ID 일부를 Base64 로 바꾼 값이 들어갑니다. 폴더 링크로 로그인했다면 그 링크의 공개 핸들이 들어갑니다 (코드).
 - `<이름>` 앞에 `status_`(상태)나 `transfers_`(전송 대기열)가 붙은 DB 도 있습니다 (코드). 예: `megaclient_statecache15_transfers_<이름>.db`
@@ -58,7 +58,7 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 
 ### nodes 표 (코드)
 
-| 칸 | 내용 |
+| 열 | 내용 |
 |---|---|
 | `nodehandle` | 노드(파일·폴더) 핸들 |
 | `parenthandle` | 부모 노드 핸들 |
@@ -69,13 +69,13 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 | `node` | BLOB. 내용 형식은 알려지지 않았습니다 |
 | `description`, `tags` | 노드 설명과 태그를 텍스트로 넣습니다 |
 
-- 이 밖에 계산용 가상 칸 `mimetypeVirtual`·`fingerprintVirtual`·`sizeVirtual`·`s3keyVirtual` 이 있습니다.
-- `name` 칸이 텍스트이므로 계정의 클라우드 파일·폴더 이름 목록을 이 표에서 바로 볼 수 있을 것으로 보입니다. 평문으로 남는지는 검체에서 확인합니다.
-- `parenthandle` 을 따라 `nodehandle` 로 올라가면 폴더 경로를 되살릴 수 있습니다(칸 이름에서 추론).
+- 이 밖에 계산용 가상 열 `mimetypeVirtual`·`fingerprintVirtual`·`sizeVirtual`·`s3keyVirtual` 이 있습니다.
+- `name` 열이 텍스트이므로 계정의 클라우드 파일·폴더 이름 목록을 이 표에서 바로 볼 수 있을 것으로 보입니다. 평문으로 남는지는 실제 데이터로 확인합니다.
+- `parenthandle` 을 따라 `nodehandle` 로 올라가면 폴더 경로를 되살릴 수 있습니다(열 이름에서 추론).
 
 ### statecache 표 (코드)
 
-칸은 `id`(INTEGER)와 `content`(BLOB) 두 개입니다. 앱이 레코드 내용을 저장하기 전에 PaddedCBC 로 암호화하므로, 세션 키 없이 `content` 를 읽을 수 없습니다(코드에서 추론).
+열은 `id`(INTEGER)와 `content`(BLOB) 두 개입니다. 앱이 레코드 내용을 저장하기 전에 PaddedCBC 로 암호화하므로, 세션 키 없이 `content` 를 읽을 수 없습니다(코드에서 추론).
 
 ### 로컬 휴지통 폴더 Rubbish (코드)
 
@@ -103,10 +103,10 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{uuid}` | 기본값 `MEGA`. 탐색 창에 동기화 폴더를 등록합니다 |
 | `HKCU\Software\Classes\CLSID\{uuid}` | 기본값은 동기화 이름입니다 |
 | `HKCU\Software\Classes\CLSID\{uuid}\Instance\InitPropertyBag` | `TargetFolderPath` 값이 동기화 폴더 경로입니다 |
-| `Software\Microsoft\Windows\CurrentVersion\Uninstall\MEGAsync` | 제거 정보 키입니다. 어느 하이브에 만드는지는 검체에서 확인합니다 |
-| `Explorer\StartupApproved` 아래 | 자동 시작 승인 여부를 읽고 씁니다. 정확한 하위 키 이름은 검체에서 확인합니다 |
+| `Software\Microsoft\Windows\CurrentVersion\Uninstall\MEGAsync` | 제거 정보 키입니다. 어느 하이브에 만드는지는 실제 기기에서 확인합니다 |
+| `Explorer\StartupApproved` 아래 | 자동 시작 승인 여부를 읽고 씁니다. 정확한 하위 키 이름은 실제 기기에서 확인합니다 |
 
-- 동기화 폴더에 폴더 아이콘 설정(`SHGetSetFolderCustomSettings`)을 씁니다. 이 설정이 `desktop.ini` 로 남는지는 검체에서 확인합니다.
+- 동기화 폴더에 폴더 아이콘 설정(`SHGetSetFolderCustomSettings`)을 씁니다. 이 설정이 `desktop.ini` 로 남는지는 실제 기기에서 확인합니다.
 - MEGAsync 와 SDK 코드에서 Cloud Files API 호출(`CfRegisterSyncRoot`, `StorageProviderSyncRootManager`)이 보이지 않습니다. 그래서 동기화 폴더의 파일은 자리표시자가 아닌 실제 파일이고, SyncRootManager 에 등록되지 않는 것으로 보입니다. 공통 구조는 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
 
 ## 증거로서 의미
@@ -123,7 +123,7 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 ### 증명하지 못하는 것
 
 - nodes 표에 이름이 있다고 그 파일이 이 PC 로 내려왔다는 뜻은 아닙니다. 이 표는 계정 클라우드의 목록입니다(코드에서 추론).
-- `Rubbish` 날짜는 로컬에서 파일이 옮겨진 날입니다. 지우기를 이 PC 의 사용자가 했는지, 다른 기기나 웹에서 한 일이 동기화로 내려왔는지는 폴더 이름만으로 가리지 못합니다.
+- `Rubbish` 날짜는 로컬에서 파일이 옮겨진 날입니다. 지우기를 이 PC 의 사용자가 했는지, 다른 기기나 웹에서 한 일이 동기화로 내려왔는지는 폴더 이름만으로 구분하지 못합니다.
 - `statecache` 표의 내용은 세션 키 없이 읽지 못합니다.
 - 설정 파일의 값은 DPAPI 마스터 키 없이 읽지 못합니다.
 - nodes 표의 `ctime`·`mtime` 이 서버에서 받은 값인지, 로컬에서 정한 값인지는 알려지지 않았습니다.
@@ -139,20 +139,20 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 | `YYYY-MM-DD HH.MM.SS.<번호>` 하위 폴더 이름 | 날짜·시각 | 같은 코드 부분에서 만듭니다. 폴더의 NTFS 만든 시각과 맞춰 시간대를 확인합니다 |
 | `Rubbish` 안 폴더·파일의 NTFS 시각 | FILETIME | UTC. [마스터 파일 테이블](../filesystem/mft.md) 참고 |
 
-- 로그 줄의 시각 형식은 검체에서 확인합니다.
+- 로그 줄의 시각 형식은 실제 로그로 확인합니다.
 - 폴더 이름의 로컬 날짜를 UTC 시각과 한 줄에 놓을 때는 PC 의 [시간대 설정](../system-account/time-zone.md) 을 먼저 봅니다.
 - 변환 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 
 ## 함정과 한계
 
 - **돌린 로그는 gzip 입니다.** `MEGAsync.0.log` 같은 파일은 이름이 `.log` 라도 텍스트 편집기로 열면 깨져 보입니다. 먼저 gzip 으로 풉니다.
-- **`Rubbish` 는 숨은 폴더입니다.** 숨김 파일을 보이지 않게 둔 채 훑으면 놓칩니다. 이미지의 파일 목록에서 `\Rubbish\` 경로로 찾습니다.
+- **`Rubbish` 는 숨은 폴더입니다.** 숨김 파일을 보이지 않게 둔 채 살펴보면 놓칩니다. 이미지의 파일 목록에서 `\Rubbish\` 경로로 찾습니다.
 - **`Rubbish` 는 비울 수 있습니다.** 설정 화면에 비우기 기능이 있습니다. 폴더가 비었다고 옮긴 일이 없었던 것은 아닙니다. [USN 변경 저널](../filesystem/usnjrnl.md) 과 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) 로 확인합니다.
 - **동기화를 해제하면 숨김이 풀립니다.** 숨김이 풀린 `Rubbish` 는 동기화 해제 뒤일 수 있습니다(코드에서 추론).
 - **`.cfg.bak` 은 저장할 때마다 새로 만듭니다.** 옛 설정을 오래 담아 두는 파일로 보지 않습니다.
 - **SyncRootManager 로만 찾으면 놓칩니다.** MEGAsync 는 Cloud Files API 를 쓰지 않는 것으로 보입니다(코드에서 추론). 데이터 폴더, 탐색 창 등록, `Links` 바로가기로 찾습니다.
 - **디버그 로그는 바탕 화면에 있을 수 있습니다.** 데이터 폴더만 모으면 놓칩니다.
-- **코드와 검체는 다를 수 있습니다.** 이 글의 많은 내용은 특정 커밋의 코드 기준입니다. 설치된 앱 버전을 먼저 확인합니다.
+- **코드와 실제 앱은 다를 수 있습니다.** 이 글의 많은 내용은 특정 커밋의 코드 기준입니다. 설치된 앱 버전을 먼저 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -161,7 +161,7 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 1. 데이터 폴더를 하위 폴더째 사본으로 뜹니다. 동기화 폴더의 `Rubbish` 도 따로 떠 둡니다.
 2. `megaclient_statecache15_<이름>.db` 를 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다. 머리가 보이면 파일 전체 암호화는 없다는 코드 추론과 맞습니다. 머리 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 3. 조사 대상 파일 이름 하나를 UTF-8 로 검색합니다. 찾으면 nodes 표의 `name` 이 평문으로 남는다는 뜻입니다. 같은 이름을 `.db-wal` 에서도 찾아봅니다.
-4. `ctime` 값을 Unix 초로 바꿉니다. 아래는 계산 예시이며 검체 값이 아닙니다.
+4. `ctime` 값을 Unix 초로 바꿉니다. 아래는 계산 예시이며 실제 데이터 값이 아닙니다.
 
 ```
 ctime = 1704067200
@@ -174,8 +174,8 @@ ctime = 1704067200
 ### 공개 도구로 한 번
 
 - KAPE 대상 `Megasync` 는 데이터 폴더 전체를 모읍니다.
-- SQLite 명령줄 도구(sqlite3) 같은 공개 도구로 상태 DB 를 엽니다. 먼저 `.schema nodes` 로 칸 이름이 위 표와 같은지 확인합니다.
-- 칸이 같으면 아래처럼 뽑습니다.
+- SQLite 명령줄 도구(sqlite3) 같은 공개 도구로 상태 DB 를 엽니다. 먼저 `.schema nodes` 로 열 이름이 위 표와 같은지 확인합니다.
+- 열이 같으면 아래처럼 뽑습니다.
 
 ```sql
 SELECT nodehandle, parenthandle, name, type,
@@ -202,7 +202,7 @@ FROM nodes;
 
 ## 실습
 
-MEGAsync 가 깔린 공개 검체(NIST CFReDS 등)를 구하거나, 시험용 PC 에 앱을 깔고 시험용 계정으로 동기화해 본 뒤 아래 질문을 풀어 봅니다.
+MEGAsync 가 깔린 공개 시험 데이터(NIST CFReDS 등)를 구하거나, 시험용 PC 에 앱을 깔고 시험용 계정으로 동기화해 본 뒤 아래 질문을 풀어 봅니다.
 
 1. 데이터 폴더의 `megaclient_statecache` DB 는 몇 개입니까? 판 번호는 몇입니까? `status_`·`transfers_` 가 붙은 DB 가 있습니까?
 2. nodes 표에서 파일 이름이 평문으로 보입니까? `parenthandle` 을 따라 파일 하나의 전체 경로를 만들어 봅니다.

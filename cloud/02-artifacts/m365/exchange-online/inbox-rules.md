@@ -112,7 +112,7 @@ Identity Protection 의 두 탐지는 Microsoft Defender for Cloud Apps 가 준 
 - 규칙이나 전달이 설정됐다는 사실은 메일이 실제로 나갔다는 뜻이 아닙니다. 조직이 외부 자동 전달을 막았다면 전달 시도는 반송됩니다[4]. 실제 전달 여부는 [메시지 추적](message-trace.md)과 `EmailEvents` 로 확인합니다[9].
 - 감사 레코드의 `UserId` 는 작업을 한 계정이지 그 자리에 앉은 사람이 아닙니다. 같은 시각의 로그인 기록은 [Entra ID 로그](../entra-logs/index.md)에서 봅니다.
 
-보고서에는 "이 시각에 이 계정으로 외부 주소로 전달하는 받은편지함 규칙을 만든 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 시각에 이 계정으로 외부 주소로 전달하는 받은편지함 규칙을 만든 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -155,7 +155,7 @@ Get-SweepRule -Mailbox kim@contoso.com
 | 메일함 감사 | 규칙 생성 전후의 메일 열람(`MailItemsAccessed`)·삭제 | [메일함 감사와 MailItemsAccessed](mailbox-auditing.md) |
 | 메시지 추적 | 전달 대상 주소로 메일이 실제로 나갔는지, 반송됐는지 | [메시지 추적](message-trace.md) |
 | Defender `EmailEvents` | `ForwardingInformation` 열의 전달한 사용자·전달 유형(JSON)[9] | [Defender 경고와 기록](../defender-xdr.md) |
-| 경고 정책 | `eventSource` 가 `SecurityComplianceCenter`, `eventName` 이 `Suspicious inbox forwarding` 인 경고[13] | [탐지 규칙으로 로그 훑기](../../../03-techniques/analysis/detection-rules.md) |
+| 경고 정책 | `eventSource` 가 `SecurityComplianceCenter`, `eventName` 이 `Suspicious inbox forwarding` 인 경고[13] | [탐지 규칙으로 로그 검색하기](../../../03-techniques/analysis/detection-rules.md) |
 
 조직이 온프레미스 메일을 Microsoft 365 로 거쳐 보낸다면, 온프레미스에서 자동 전달된 메일은 `X-MS-Exchange-Inbox-Rules-Loop` 헤더가 있는지를 조건으로 한 메일 흐름 규칙으로 추적합니다[4]. 클라우드 계정의 자동 전달 사용자는 Auto forwarded messages 보고서에서 볼 수 있습니다[4]. 규칙 생성·로그인·메일 흐름을 한 줄로 엮는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 

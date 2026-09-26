@@ -19,7 +19,7 @@ Microsoft Entra ID 는 여러 신호와 기계 학습으로 로그인 위험과 
 
 ## 위치와 라이선스별 차이
 
-위험 탐지는 Entra 관리 센터의 ID 보호 보고서 세 가지(위험 탐지·위험 로그인·위험 사용자)와 Microsoft Graph `identityProtection` 경로로 봅니다[3][6]. 통합 감사 로그 (Unified Audit Log) 에도 레코드 유형 294 `AadRiskDetection` 으로 들어오고, 필드는 "Microsoft Entra Risk Detection schema" 를 따릅니다[5]. 통합 감사 로그 검색과 보관은 [통합 감사 로그](../unified-audit-log/index.md) 쪽을 봅니다.
+위험 탐지는 Entra 관리 센터의 ID 보호 보고서 세 가지(위험 탐지·위험 로그인·위험 사용자)와 Microsoft Graph `identityProtection` 경로로 봅니다[3][6]. 통합 감사 로그 (Unified Audit Log) 에도 레코드 유형 294 `AadRiskDetection` 으로 들어오고, 필드는 "Microsoft Entra Risk Detection schema" 를 따릅니다[5]. 통합 감사 로그 검색과 보관은 [통합 감사 로그](../unified-audit-log/index.md) 페이지를 봅니다.
 
 라이선스에 따라 보이는 범위가 크게 다릅니다(2026년 4월·2025년 10월 문서 기준)[1][3].
 
@@ -165,7 +165,7 @@ jq -r '.[] | [.userPrincipalName, .riskEventType, .riskLevel, .riskState,
              .correlationId] | @tsv' Risk_Detections.json
 ```
 
-Sigma 의 `identity_protection` 규칙은 로그 출처를 `product: azure`, `service: riskdetection` 으로 두고 `riskEventType` 값 하나로 거릅니다[9]. 수집한 탐지에 규칙을 돌리는 방법은 [탐지 규칙으로 로그 훑기](../../../03-techniques/analysis/detection-rules.md)를 봅니다.
+Sigma 의 `identity_protection` 규칙은 로그 출처를 `product: azure`, `service: riskdetection` 으로 두고 `riskEventType` 값 하나로 거릅니다[9]. 수집한 탐지에 규칙을 돌리는 방법은 [탐지 규칙으로 로그 검색하기](../../../03-techniques/analysis/detection-rules.md)를 봅니다.
 
 ## 교차 검증
 

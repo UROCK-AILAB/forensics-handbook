@@ -6,19 +6,19 @@ nav_order: 1080
 
 # 무엇이 계속 살아남게 했나 (Persistence Hunt)
 
-재부팅·로그인·정해진 시각·장치 연결 같은 계기가 올 때마다 공격자의 코드를 다시 실행하게 만든 장치를 찾고, 그 장치를 언제 누가 만들었으며 실제로 돌았는지까지 가리는 조사입니다.
+재부팅·로그인·정해진 시각·장치 연결 같은 계기가 올 때마다 공격자의 코드를 다시 실행하게 만든 장치를 찾고, 그 장치를 언제 누가 만들었으며 실제로 돌았는지까지 판별하는 조사입니다.
 
 ## 조사 질문
 
-침입이 확인된 서버에서 "공격자가 다시 돌아오거나 코드를 계속 돌릴 수 있게 남겨 둔 것이 있는가" 를 묻습니다. 지속성 (persistence) 장치 하나를 찾았다고 끝나지 않고, 계기별로 빠짐없이 훑은 뒤 장치마다 세 가지를 답합니다. 누가 만든 것인지(패키지가 깐 것인지 사람이 만든 것인지), 언제 만들었는지, 실제로 실행된 기록이 있는지입니다.
+침입이 확인된 서버에서 "공격자가 다시 돌아오거나 코드를 계속 돌릴 수 있게 남겨 둔 것이 있는가" 를 묻습니다. 지속성 (persistence) 장치 하나를 찾았다고 끝나지 않고, 계기별로 빠짐없이 살펴본 뒤 장치마다 세 가지를 답합니다. 누가 만든 것인지(패키지가 깐 것인지 사람이 만든 것인지), 언제 만들었는지, 실제로 실행된 기록이 있는지입니다.
 
-이 쪽은 찾는 순서와 해석만 다룹니다. 장치마다 파일 형식·로그 문구·함정은 아티팩트 사전의 지속성 갈래 아홉 쪽에 있고, 여기서는 그 쪽으로 링크합니다. 침입 경로와 침입 시각은 [SSH 로 들어왔나](ssh-intrusion.md), [웹 서버가 뚫렸나](web-compromise.md), [권한을 올렸나](privilege-escalation.md) 에서 먼저 잡아 두면 이 쪽의 기준 시각으로 씁니다.
+이 페이지는 찾는 순서와 해석만 다룹니다. 장치마다 파일 형식·로그 문구·함정은 아티팩트 사전의 지속성 분류 아홉 페이지에 있고, 여기서는 그 페이지로 링크합니다. 침입 경로와 침입 시각은 [SSH 로 들어왔나](ssh-intrusion.md), [웹 서버가 뚫렸나](web-compromise.md), [권한을 올렸나](privilege-escalation.md) 에서 먼저 잡아 두면 이 페이지의 기준 시각으로 씁니다.
 
 ## 먼저 확인할 것
 
 **배포판과 판.** 같은 장치라도 경로가 배포판마다 다릅니다. 사용자 crontab 은 Ubuntu 에서 `/var/spool/cron/crontabs/사용자이름`, RHEL 에서 `/var/spool/cron/사용자이름` 입니다[1][2]. rc.local 실제 파일은 Ubuntu 가 `/etc/rc.local`, RHEL 9 가 `/etc/rc.d/rc.local` 이고, RHEL 9 의 `/etc/rc.local` 은 그 파일을 가리키는 링크입니다[8][9]. 이런 차이는 아래 표에 모아 두었습니다.
 
-**시간대.** 파일 시스템 시각(mtime·ctime·btime)은 UTC 기준 epoch 값이고[17], cron 로그와 Debian crontab 머리의 설치 시각은 현지 시각입니다([cron·anacron·at](../../02-artifacts/persistence/cron-at.md)). 검체의 시간대를 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md) 에서 먼저 정합니다.
+**시간대.** 파일 시스템 시각(mtime·ctime·btime)은 UTC 기준 epoch 값이고[17], cron 로그와 Debian crontab 머리의 설치 시각은 현지 시각입니다([cron·anacron·at](../../02-artifacts/persistence/cron-at.md)). 분석 대상의 시간대를 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md) 에서 먼저 정합니다.
 
 **사용자.** `/root` 를 포함해 모든 홈 폴더를 목록으로 뽑아 둡니다. 사용자 crontab, 사용자 systemd 유닛, `~/.ssh/`, 셸 시작 파일, 데스크톱 자동 실행이 모두 홈 폴더 아래에 있습니다. 로그인하지 않아도 사용자 유닛을 돌리게 하는 linger 표시는 `/var/lib/systemd/linger/사용자이름` 파일이라[7], 이 폴더도 함께 봅니다.
 
@@ -51,13 +51,13 @@ nav_order: 1080
 | 항목 | Ubuntu 24.04 LTS | RHEL 9 |
 |---|---|---|
 | 사용자 crontab | `/var/spool/cron/crontabs/사용자이름`[2] | `/var/spool/cron/사용자이름`[1] |
-| at 잡 | 빌드할 때 configure 가 정하고, `/var/spool/atjobs` 가 없고 `/var/spool/cron` 이 있으면 `/var/spool/cron/atjobs` 입니다. 검체에서 실제 폴더를 확인합니다[5] | `/var/spool/at`[4] |
+| at 잡 | 빌드할 때 configure 가 정하고, `/var/spool/atjobs` 가 없고 `/var/spool/cron` 이 있으면 `/var/spool/cron/atjobs` 입니다. 분석 대상에서 실제 폴더를 확인합니다[5] | `/var/spool/at`[4] |
 | rc.local | `/etc/rc.local`[8] | `/etc/rc.d/rc.local`, 패키지가 권한 `0644` 로 설치[9] |
 | 로그인 때 도는 motd 스크립트 | `/etc/update-motd.d/`[13][14] | sshd PAM 설정에 `pam_motd.so` 줄은 있지만[25], 스크립트 폴더를 돌리는 update-motd 패치가 pam 패키지에 없음[26] |
 
 ### 로그인 때 도는 것
 
-SSH 로 로그인할 때 sshd 가 실행하는 것은 [SSH 로 들어왔나](ssh-intrusion.md) 에서 넘겨받은 부분이라 여기서 모아 둡니다. 설정 키와 키 옵션의 뜻은 [SSH](../../02-artifacts/logins/ssh/index.md) 아래 쪽에 있습니다.
+SSH 로 로그인할 때 sshd 가 실행하는 것은 [SSH 로 들어왔나](ssh-intrusion.md) 에서 넘겨받은 부분이라 여기서 모아 둡니다. 설정 키와 키 옵션의 뜻은 [SSH](../../02-artifacts/logins/ssh/index.md) 아래 페이지에 있습니다.
 
 - **키 옵션 `command="…"`.** 이 키로 인증하면 사용자가 보낸 명령 대신 이 명령을 실행합니다[12]. 백업 전용 키 같은 정상 용도도 있어서, 옵션이 있다는 사실보다 명령의 내용과 키가 들어간 시각을 봅니다.
 - **`~/.ssh/rc`.** 이 파일이 있고 `PermitUserRC` 가 켜져 있으면(기본 `yes`) 사용자의 셸이나 명령보다 먼저 실행되고, 없으면 `/etc/ssh/sshrc` 가 실행됩니다[12]. 키 옵션 `restrict`·`no-user-rc` 가 붙은 키로 들어오면 `~/.ssh/rc` 를 돌리지 않습니다[12].
@@ -78,9 +78,9 @@ SSH 로 로그인할 때 sshd 가 실행하는 것은 [SSH 로 들어왔나](ssh
 
 ## 분석 흐름
 
-1. **기준 시각을 정합니다.** 침입 경로를 다룬 쪽에서 잡은 첫 침입 시각을 UTC 로 적어 둡니다. 이 시각이 없으면 가장 이른 이상 로그인이나 가장 이른 이상 파일을 임시 기준으로 삼습니다.
+1. **기준 시각을 정합니다.** 침입 경로를 다룬 페이지에서 잡은 첫 침입 시각을 UTC 로 적어 둡니다. 이 시각이 없으면 가장 이른 이상 로그인이나 가장 이른 이상 파일을 임시 기준으로 삼습니다.
 
-2. **계기별 목록을 만듭니다.** 위 표의 위치를 하나도 빼지 않고 파일 목록(경로·소유자·권한·크기·mtime·ctime·btime)으로 뽑습니다. 수집 도구 하나에 기대면 빈틈이 생깁니다. ForensicArtifacts 의 `LinuxScheduleFiles`, `LinuxServices`, `LinuxLoaderSystemPreloadFile`, `KernelModules`, `LinuxUdevRules`, `LinuxPamConfigs`, `XDGAutostartEntries`, `SSHAuthorizedKeysFiles` 같은 정의가 계기마다 있지만[21], 서비스 정의는 디렉터리 바로 아래 `*.service` 만 가리켜 드롭인, `/usr/local/lib/systemd/system`, 생성기 실행 파일이 빠지고, `system.attached` 를 `systemd.attached` 로 적어 두었습니다[6][21]. 도구별 빈틈은 각 아티팩트 쪽의 함정 절에 있습니다.
+2. **계기별 목록을 만듭니다.** 위 표의 위치를 하나도 빼지 않고 파일 목록(경로·소유자·권한·크기·mtime·ctime·btime)으로 뽑습니다. 수집 도구 하나에 기대면 빈틈이 생깁니다. ForensicArtifacts 의 `LinuxScheduleFiles`, `LinuxServices`, `LinuxLoaderSystemPreloadFile`, `KernelModules`, `LinuxUdevRules`, `LinuxPamConfigs`, `XDGAutostartEntries`, `SSHAuthorizedKeysFiles` 같은 정의가 계기마다 있지만[21], 서비스 정의는 디렉터리 바로 아래 `*.service` 만 가리켜 드롭인, `/usr/local/lib/systemd/system`, 생성기 실행 파일이 빠지고, `system.attached` 를 `systemd.attached` 로 적어 두었습니다[6][21]. 도구별 빈틈은 각 아티팩트 페이지의 함정 절에 있습니다.
 
 3. **패키지가 깐 것과 사람이 만든 것을 가릅니다.** 목록의 파일마다 소속 패키지를 찾습니다. Debian·Ubuntu 는 `dpkg-query -S`(`dpkg -S`)가 그 파일이 든 패키지를 찾고[16], RHEL 은 `rpm -q -f` 가 같은 일을 합니다[15]. 소속 패키지가 없는 파일이 이 조사의 중심 후보입니다. 소속 패키지가 있으면 `rpm -V`·`dpkg -V` 로 설치 뒤에 바뀌었는지 봅니다. `rpm -V` 는 파일마다 아홉 글자를 찍고, 자리마다 `S` 크기, `M` 모드(권한·파일 종류), `5` 다이제스트, `D` 장치 번호, `L` 링크 대상, `U` 사용자, `G` 그룹, `T` 수정 시각, `P` capabilities 가 다르다는 뜻이며 `.` 은 통과, `?` 는 검사할 수 없었다는 뜻입니다[15]. `dpkg -V` 는 dpkg 1.17.2 부터 있고, 지금은 데이터베이스에 md5sum 이 있는 파일의 md5sum 하나만 실제로 비교합니다[16]. 출력 읽는 법과 기준값을 믿을 수 있는지는 [패키지 파일 변조 확인](../../02-artifacts/packages/package-verify.md) 에 있습니다.
 
@@ -90,13 +90,13 @@ SSH 로 로그인할 때 sshd 가 실행하는 것은 [SSH 로 들어왔나](ssh
 
 6. **보호 장치를 봅니다.** 지우거나 고치지 못하게 불변 (immutable) 속성 `i` 를 걸어 둔 파일이 있는지 봅니다. 이 속성이 걸린 파일은 지우거나 이름을 바꾸거나 쓰기로 열 수 없고, root 나 `CAP_LINUX_IMMUTABLE` 이 있는 프로세스만 이 속성을 걸거나 풀 수 있습니다[18]. 라이브에서는 `lsattr` 로 보고[18], Velociraptor `Linux.Forensics.ImmutableFiles` 는 ext4 를 직접 읽어 이 플래그가 선 파일을 찾습니다[19]. 이 아티팩트의 기본 검색 범위는 `/home/*` 뿐이라, `SearchFilesGlob` 을 위 표의 지속성 경로로 넓혀 돌립니다[19]. 속성을 읽는 법은 [권한·확장 속성·ACL·Capabilities](../../01-foundations/filesystem/permissions-xattr.md) 에 있습니다.
 
-7. **목록을 닫습니다.** 장치마다 "위치 · 소속 패키지 · 만든 시각 · 실행 기록 · 실행 계정" 을 한 줄로 적습니다. 실행 파일이나 스크립트가 가리키는 대상 파일도 같은 방법으로 가르고, 해시를 떠서 [해시·YARA 검사](../../03-techniques/analysis/hash-yara.md) 로 넘깁니다.
+7. **목록을 닫습니다.** 장치마다 "위치 · 소속 패키지 · 만든 시각 · 실행 기록 · 실행 계정" 을 한 줄로 적습니다. 실행 파일이나 스크립트가 가리키는 대상 파일도 같은 방법으로 분류하고, 해시를 떠서 [해시·YARA 검사](../../03-techniques/analysis/hash-yara.md) 로 넘깁니다.
 
 ## 흔한 오판
 
 - **도구 결과가 깨끗하면 없다고 봅니다.** dissect.target `services` 는 `/etc/systemd/system`, `/lib/systemd/system`, `/usr/lib/systemd/system` 바로 아래 파일만 읽고 `.d` 로 끝나는 드롭인 폴더는 건너뜁니다[20]. `/usr/local/lib/systemd/system`, 사용자 유닛, 생성기는 이 결과에 나오지 않습니다. cron 쪽도 dissect.target `cronjobs` 는 at 잡과 anacron 시각 파일을 읽지 않고[20], Velociraptor `Linux.Sys.Crontab` 의 기본 검색 범위는 `/etc/crontab`, `/etc/cron.d/**`, `/var/at/tabs/**`, `/var/spool/cron/**` 와 `/etc/cron.{daily,hourly,monthly,weekly}/*` 입니다[19]. 결과가 비었을 때는 도구가 어디를 봤는지부터 확인합니다.
 - **파일이 있으면 실행됐다고 봅니다.** Debian 계열 cron 은 `/etc/cron.d/` 안 파일 이름에 점이 들어 있으면 실행하지 않습니다[3]. rc.local 은 실행 권한이 있을 때만 `rc-local.service` 로 이어지고[8], RHEL 9 는 이 파일을 `0644` 로 깝니다[9]. XDG 자동 실행 항목은 `Hidden=true` 이거나 `TryExec` 가 가리키는 프로그램이 없으면 실행하지 않습니다[24]. 짝 기록이 없으면 "설정이 있었다" 까지만 씁니다.
-- **SSH 지속성을 authorized_keys 에서만 찾습니다.** `command=` 옵션, `~/.ssh/rc`, `/etc/ssh/sshrc`, Ubuntu 의 `/etc/update-motd.d/` 도 SSH 로그인 때 돕니다[12][14]. 키 파일 말고도 `AuthorizedKeysCommand` 로 키를 받을 수 있으므로 [SSH](../../02-artifacts/logins/ssh/index.md) 쪽의 설명대로 sshd 설정도 봅니다.
+- **SSH 지속성을 authorized_keys 에서만 찾습니다.** `command=` 옵션, `~/.ssh/rc`, `/etc/ssh/sshrc`, Ubuntu 의 `/etc/update-motd.d/` 도 SSH 로그인 때 돕니다[12][14]. 키 파일 말고도 `AuthorizedKeysCommand` 로 키를 받을 수 있으므로 [SSH](../../02-artifacts/logins/ssh/index.md) 페이지의 설명대로 sshd 설정도 봅니다.
 - **`rpm -V`·`dpkg -V` 가 조용하면 손대지 않았다고 봅니다.** 두 명령은 패키지에 든 파일만 검사하므로 새로 더한 파일은 결과에 나오지 않습니다[15][16]. `dpkg -V` 는 무결성 검사일 뿐 보안 검증이 아닙니다[16]. RHEL 9 의 systemd 패키지는 rc.local 을 `%verify(owner group) %config(noreplace)` 로 표시했고[9], `%verify` 는 `rpm -V` 가 보는 항목을 정하는 지시어라[15] 이 파일은 내용이나 권한을 바꿔도 `rpm -V` 에 나오지 않을 가능성이 있습니다.
 - **mtime 을 심은 시각으로 단정합니다.** mtime 은 `utime` 같은 호출로 바꿀 수 있습니다[17]. ctime·btime, 링크 자체의 시각, cron·저널의 짝 기록과 맞춰 봅니다. 시각 조작은 [시각을 조작했나](../insider/time-manipulation.md) 에서 다룹니다.
 - **`crontab` 로그가 없으면 crontab 을 바꾸지 않았다고 봅니다.** `REPLACE`·`END EDIT` 는 `crontab` 명령만 남기므로[1], spool 파일이나 `/etc/cron.d/` 를 직접 고치면 이 줄이 없습니다.
@@ -120,7 +120,7 @@ SSH 로 로그인할 때 sshd 가 실행하는 것은 [SSH 로 들어왔나](ssh
 - [루트킷 찾기](../../03-techniques/analysis/rootkit-detection.md) — 커널 모듈과 숨긴 프로세스
 - [타임라인 만들기](../../03-techniques/analysis/timeline.md) — 장치를 만든 시각과 실행 기록을 한 시간축에
 - [흔적을 지웠나](../insider/anti-forensics.md) — 장치를 지운 뒤 남는 흔적
-- [SSH 로 들어왔나](ssh-intrusion.md), [웹 서버가 뚫렸나](web-compromise.md), [채굴기가 돌았나](cryptominer.md) — 기준 시각을 잡는 쪽
+- [SSH 로 들어왔나](ssh-intrusion.md), [웹 서버가 뚫렸나](web-compromise.md), [채굴기가 돌았나](cryptominer.md) — 기준 시각을 잡는 페이지
 
 ## 참고 문헌
 

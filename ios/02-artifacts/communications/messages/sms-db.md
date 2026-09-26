@@ -23,11 +23,11 @@ sms.db 는 메시지 앱이 iMessage·SMS 대화를 저장하는 SQLite 데이�
 
 | iOS 버전 | 달라진 점 | 출처 |
 |---|---|---|
-| iOS 11 전후 | 날짜 칸이 초 단위에서 나노초 단위로 바뀝니다(대략 iOS 11 부터) | [5] |
-| iOS 15 까지 | `associated_message_guid` 로 반응(탭백)을 원래 메시지에 잇고 `attributedBody` 칸도 이미 있지만, 본문은 대개 `text` 에 들어 있습니다 | [5] |
+| iOS 11 전후 | 날짜 열이 초 단위에서 나노초 단위로 바뀝니다(대략 iOS 11 부터) | [5] |
+| iOS 15 까지 | `associated_message_guid` 로 반응(탭백)을 원래 메시지에 잇고 `attributedBody` 열도 이미 있지만, 본문은 대개 `text` 에 들어 있습니다 | [5] |
 | iOS 16 이후 | 보낸 메시지 취소·편집과 최근 삭제된 항목 복구가 생겼고, `text` 가 NULL 인 행이 잦아져 `attributedBody` 를 꼭 읽어야 합니다 | [2][3][4][5] |
 
-`date_edited`, `date_retracted`, `thread_originator_guid`, `destination_caller_id`, `associated_message_emoji` 는 iOS 16 이후의 `message` 칸으로 알려져 있고[4][5], iLEAPP 도 `destination_caller_id` 를 읽습니다[1]. 그런데 이 다섯 칸이 없는 `message` 표도 있어서, 이 칸 이름을 박아 둔 질의문은 새 버전에서 오류를 낼 수 있습니다. 먼저 `PRAGMA table_info(message);` 로 칸 목록을 확인합니다.
+`date_edited`, `date_retracted`, `thread_originator_guid`, `destination_caller_id`, `associated_message_emoji` 는 iOS 16 이후의 `message` 열로 알려져 있고[4][5], iLEAPP 도 `destination_caller_id` 를 읽습니다[1]. 그런데 이 다섯 열이 없는 `message` 표도 있어서, 이 열 이름을 박아 둔 질의문은 새 버전에서 오류를 낼 수 있습니다. 먼저 `PRAGMA table_info(message);` 로 열 목록을 확인합니다.
 
 ## 구조
 
@@ -46,9 +46,9 @@ sync_deleted_chats         sync_deleted_messages
 unsynced_removed_recoverable_messages
 ```
 
-대화를 읽는 데 쓰는 표와 칸은 아래와 같습니다.
+대화를 읽는 데 쓰는 표와 열은 아래와 같습니다.
 
-| 표 | 칸 | 뜻 |
+| 표 | 열 | 뜻 |
 |---|---|---|
 | `message` | `ROWID`, `guid` | 행 번호와 메시지마다 고유한 값입니다. `guid` 는 기기 사이 동기화에 씁니다[4] |
 | `message` | `text`, `attributedBody` | 본문입니다. `text` 가 비어 있으면 `attributedBody`(typedstream 형식으로 저장한 NSAttributedString)에서 본문을 꺼냅니다[1] |
@@ -63,7 +63,7 @@ unsynced_removed_recoverable_messages
 | `chat_handle_join` | `chat_id`, `handle_id` | 대화방과 참가자를 잇고, 그룹 참가자를 모을 때 씁니다[1] |
 | `chat_message_join` | `chat_id`, `message_id`, `message_date` 등 | 대화방과 메시지를 잇습니다[1] |
 
-`message` 표는 칸이 61개이고 `item_type`, `balloon_bundle_id`, `payload_data`, `expressive_send_style_id`, `share_status` 같은 칸도 있지만, 이런 칸의 값 목록은 공개된 설명이 없습니다. `message_processing_task`, `persistent_tasks`, `kvtable`, `sync_chat_slice` 표도 뜻이 알려져 있지 않아 검체에서 확인합니다.
+`message` 표는 열이 61개이고 `item_type`, `balloon_bundle_id`, `payload_data`, `expressive_send_style_id`, `share_status` 같은 열도 있지만, 이런 열의 값 목록은 공개된 설명이 없습니다. `message_processing_task`, `persistent_tasks`, `kvtable`, `sync_chat_slice` 표도 뜻이 알려져 있지 않아 실제 데이터로 확인합니다.
 
 > 그림 자리: message 를 가운데 두고 handle·chat·chat_message_join·chat_handle_join·message_attachment_join 이 이어지는 관계도
 
@@ -73,15 +73,15 @@ unsynced_removed_recoverable_messages
 
 **증명하는 것.** `message` 행 하나는 이 기기의 메시지 DB 에 그 `guid` 의 메시지가 기록되어 있고, `is_from_me` 값에 따라 보낸 것으로 또는 받은 것으로 적혀 있다는 사실을 보여 줍니다. `handle` 을 이어 붙이면 기록된 상대 주소와 서비스를 알 수 있고, `date_read`·`date_delivered` 가 채워져 있으면 읽음·전달 상태를 기록한 시각도 알 수 있습니다.
 
-**증명하지 못하는 것.** `handle.id` 는 전화번호나 이메일 주소일 뿐이라서 그 주소를 실제로 쓴 사람이 누구인지는 따로 밝혀야 합니다. 보낸 메시지로 적혀 있어도 누가 기기를 손에 들고 보냈는지는 이 DB 만으로 알 수 없고, `message_summary_info` 로 Siri 를 거쳐 보낸 메시지인지도 함께 봅니다. 한 행이 어느 기기에서 만들어졌는지 가르는 칸은 알려져 있지 않습니다.
+**증명하지 못하는 것.** `handle.id` 는 전화번호나 이메일 주소일 뿐이라서 그 주소를 실제로 쓴 사람이 누구인지는 따로 밝혀야 합니다. 보낸 메시지로 적혀 있어도 누가 기기를 손에 들고 보냈는지는 이 DB 만으로 알 수 없고, `message_summary_info` 로 Siri 를 거쳐 보낸 메시지인지도 함께 봅니다. 한 행이 어느 기기에서 만들어졌는지 구분하는 열은 알려져 있지 않습니다.
 
-보고서에는 "이 시각에 이 주소와 주고받은 것으로 기록된 메시지가 이만큼 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 시각에 이 주소와 주고받은 것으로 기록된 메시지가 이만큼 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-날짜 칸은 예전 iOS 에서 UNIX 시각이었고 지금은 대부분 Mac 절대 시각(Cocoa, 2001-01-01 00:00:00 UTC 기준)이며[4], 기준이 UTC 라서 현지 시각으로 바꾸려면 기기의 시간대를 따로 확인합니다. 단위는 대략 iOS 11 부터 나노초이고 예전 백업은 초입니다[5]. 값이 1e12 보다 크면 나노초로 보고 1e9 로 나눈 다음, UNIX 시각으로 바꾸려면 978307200 을 더합니다[5].
+날짜 열은 예전 iOS 에서 UNIX 시각이었고 지금은 대부분 Mac 절대 시각(Cocoa, 2001-01-01 00:00:00 UTC 기준)이며[4], 기준이 UTC 라서 현지 시각으로 바꾸려면 기기의 시간대를 따로 확인합니다. 단위는 대략 iOS 11 부터 나노초이고 예전 백업은 초입니다[5]. 값이 1e12 보다 크면 나노초로 보고 1e9 로 나눈 다음, UNIX 시각으로 바꾸려면 978307200 을 더합니다[5].
 
-| 칸 | 칸이 가리키는 시각 |
+| 열 | 열이 가리키는 시각 |
 |---|---|
 | `date` | 메시지를 보내거나 받은 시각 |
 | `date_read` | 읽음으로 기록한 시각 |
@@ -93,7 +93,7 @@ unsynced_removed_recoverable_messages
 
 WAL 파일 없이 sms.db 만 열면 최근 메시지가 빠지고 아무 경고도 나오지 않습니다[5]. WAL 파일을 함께 수집하고, sms.db 와 같은 폴더에 둔 사본에서 엽니다.
 
-iOS 16 이후에는 `text` 가 NULL 인 행이 흔해서[5], `text` 만 뽑는 질의문은 본문이 빈 대화를 내놓습니다. `handle_id` 가 0 인 행을 "상대 없음" 으로 읽으면 그룹 메시지를 놓칩니다. iLEAPP 는 보낸 사람 칸을 받은 메시지(`is_from_me` = 0)일 때만 `handle` 에서 채웁니다[1].
+iOS 16 이후에는 `text` 가 NULL 인 행이 흔해서[5], `text` 만 뽑는 질의문은 본문이 빈 대화를 내놓습니다. `handle_id` 가 0 인 행을 "상대 없음" 으로 읽으면 그룹 메시지를 놓칩니다. iLEAPP 는 보낸 사람 열을 받은 메시지(`is_from_me` = 0)일 때만 `handle` 에서 채웁니다[1].
 
 `com.apple.imdsmsrecordstore.plist` 의 `IMDSavedDeviceState` 아래에는 `IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidRestoreFromCloudBackupKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey`, `IMDSavedDeviceStateDidUpgradeKey` 같은 키가 있습니다. 이름으로는 DB 가 백업 복원이나 기기 이전을 거쳐 들어왔는지와 이어져 보이지만 뜻은 공개된 설명이 없어서, 판단 근거로 쓰려면 [초기화와 복원 흔적 (Erase·Restore)](../../system-account/erase-restore.md)과 함께 봅니다.
 
@@ -101,7 +101,7 @@ iOS 16 이후에는 `text` 가 NULL 인 행이 흔해서[5], `text` 만 뽑는 �
 
 ### 시각 값을 손으로 한 번 바꾸기
 
-아래 값은 명세로 만든 예시이고 실제 검체에서 나온 값이 아닙니다.
+아래 값은 명세로 만든 예시이고 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 date = 700000000000000000        (1e12 보다 크다 → 나노초)
@@ -110,11 +110,11 @@ date = 700000000000000000        (1e12 보다 크다 → 나노초)
 1678307200                = 2023-03-08 20:26:40 UTC
 ```
 
-예전 백업처럼 같은 칸에 `700000000` 이 들어 있다면 1e12 보다 작아서 초로 보고 나누지 않은 채 978307200 만 더합니다.
+예전 백업처럼 같은 열에 `700000000` 이 들어 있다면 1e12 보다 작아서 초로 보고 나누지 않은 채 978307200 만 더합니다.
 
 ### 대화 한 줄로 이어 붙이기
 
-sqlite3 로 사본을 열어 아래처럼 이어 붙입니다. 칸 이름은 위 표에 적은 것만 썼습니다.
+sqlite3 로 사본을 열어 아래처럼 이어 붙입니다. 열 이름은 위 표에 적은 것만 썼습니다.
 
 ```sql
 SELECT
@@ -147,9 +147,9 @@ iLEAPP 의 `sms.py` 는 `message`, `handle`, `message_attachment_join`, `attachm
 
 ## 실습
 
-NIST CFReDS 같은 곳에 공개된 iOS 검체의 sms.db 로 아래를 풀어 봅니다.
+NIST CFReDS 같은 곳에 공개된 iOS 시험 데이터의 sms.db 로 아래를 풀어 봅니다.
 
-1. `PRAGMA table_info(message);` 로 칸 목록을 뽑고, 이 페이지의 표에 없는 칸과 표에 있는데 검체에 없는 칸을 가려 봅니다.
+1. `PRAGMA table_info(message);` 로 열 목록을 뽑고, 이 페이지의 표에 없는 열과 표에 있는데 실제 데이터에 없는 열을 구분해 봅니다.
 2. `text` 가 NULL 인 행이 몇 개인지 세고, 그중 `attributedBody` 가 채워진 행에서 본문을 꺼내 봅니다.
 3. WAL 을 함께 둔 사본과 빼고 연 사본에서 `message` 행 수를 비교해 봅니다.
 4. `handle_id` 가 0 인 행을 골라 `chat_handle_join` 으로 그룹 참가자를 모아 봅니다.

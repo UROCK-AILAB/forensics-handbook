@@ -8,7 +8,7 @@ nav_order: 720
 
 클라우드 조사 보고서는 찾은 사실 앞에 어느 로그를 어느 기간·어느 라이선스 조건에서 받았는지, 받은 사본이 원본과 같다는 근거, 받지 못한 구간, 시각 기준을 먼저 적습니다.
 
-보고서의 뼈대(사건 개요·수집·분석·결론·부록)와 문장을 쓰는 일반 원칙은 디스크 조사와 같아서 [Windows 판 분석 보고서 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/reporting/forensic-report.html)과 [Linux 판 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/reporting/forensic-report.html)에서 다룹니다. SaaS 내보내기와 감사 로그를 근거로 쓰는 보고서는 [AI 판 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/reporting/forensic-report.html)와 가깝습니다. 이 쪽은 클라우드 로그가 디스크 이미지와 다른 점 때문에 보고서에 더 적어야 하는 것만 다룹니다.
+보고서의 뼈대(사건 개요·수집·분석·결론·부록)와 문장을 쓰는 일반 원칙은 디스크 조사와 같아서 [Windows 판 분석 보고서 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/reporting/forensic-report.html)과 [Linux 판 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/reporting/forensic-report.html)에서 다룹니다. SaaS 내보내기와 감사 로그를 근거로 쓰는 보고서는 [AI 판 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/reporting/forensic-report.html)와 가깝습니다. 이 페이지는 클라우드 로그가 디스크 이미지와 다른 점 때문에 보고서에 더 적어야 하는 것만 다룹니다.
 
 ## 언제 쓰나
 
@@ -52,7 +52,7 @@ Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 의 �
 
    Microsoft-Extractor-Suite 의 `Get-UAL` 은 한 번에 5,000건씩 받다가 결과가 5,000건에 닿으면 구간을 반으로 줄여 다시 받습니다[25]. 가장 짧은 구간에서도 5,000건이 넘으면 실행 로그에 `SOME EVENTS IN THIS RANGE ARE NOT CAPTURED.` 로 끝나는 `[ERROR]` 줄을 남기고 받은 만큼만 쓴 채 넘어가고, 서버 오류로 재시도 횟수를 다 쓰면 `[ERROR] Max retries reached for window` 가 들어간 줄을 남기고 그 구간을 건너뜁니다[25]. 이 두 줄이 있는 구간은 보고서에 "받지 못한 구간" 으로 적습니다. 실행이 끝나면 날짜 범위·총 건수·만든 파일 수·구간 조정 횟수·출력 폴더·처리 시간을 요약해 출력하므로 이 요약도 부록에 넣습니다[25].
 
-5. **받은 사본의 해시를 곧바로 계산합니다.** 이 쪽에서 다루는 서비스 가운데 공급자가 서명한 무결성 증빙을 만들어 주는 것은 AWS CloudTrail 의 로그 파일 무결성 검증 (Log file integrity validation) 입니다. 검증을 켜 두면 한 시간마다 로그 파일의 SHA-256 해시를 담고 SHA-256 with RSA 로 서명한 다이제스트 파일이 생기고, 이것으로 로그 파일이 바뀌지 않았다는 것과 어느 기간에 계정으로 전달된 로그 파일이 없었다는 것까지 주장할 수 있습니다[17]. 다이제스트의 경로·필드·검증 방법은 [트레일과 이벤트 기록](../../02-artifacts/aws/cloudtrail/trails.md)에서 다룹니다. 그 밖의 서비스는 수집한 쪽이 사본의 해시를 계산해 무결성을 보입니다. SaaS 데이터를 보존할 때는 메타데이터까지 포함한 사본을 받고, 사본의 암호 해시를 계산하고, 알려진 정상 사본과 비교하는 방법을 씁니다[33]. 서비스가 파일 메타데이터에 해시를 주면 내려받은 파일의 해시와 맞춰 볼 수 있고, 2016년 기준 Google Drive API 는 파일마다 MD5 를 메타데이터로 돌려줬습니다[34].
+5. **받은 사본의 해시를 곧바로 계산합니다.** 이 페이지에서 다루는 서비스 가운데 공급자가 서명한 무결성 증빙을 만들어 주는 것은 AWS CloudTrail 의 로그 파일 무결성 검증 (Log file integrity validation) 입니다. 검증을 켜 두면 한 시간마다 로그 파일의 SHA-256 해시를 담고 SHA-256 with RSA 로 서명한 다이제스트 파일이 생기고, 이것으로 로그 파일이 바뀌지 않았다는 것과 어느 기간에 계정으로 전달된 로그 파일이 없었다는 것까지 주장할 수 있습니다[17]. 다이제스트의 경로·필드·검증 방법은 [트레일과 이벤트 기록](../../02-artifacts/aws/cloudtrail/trails.md)에서 다룹니다. 그 밖의 서비스는 수집한 쪽이 사본의 해시를 계산해 무결성을 보입니다. SaaS 데이터를 보존할 때는 메타데이터까지 포함한 사본을 받고, 사본의 암호 해시를 계산하고, 알려진 정상 사본과 비교하는 방법을 씁니다[33]. 서비스가 파일 메타데이터에 해시를 주면 내려받은 파일의 해시와 맞춰 볼 수 있고, 2016년 기준 Google Drive API 는 파일마다 MD5 를 메타데이터로 돌려줬습니다[34].
 
    ```bash
    # 받은 파일 전체의 해시 목록을 만들고 목록 파일도 따로 해시해 둔다 (파일 이름은 만든 예시)
@@ -88,7 +88,7 @@ Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 의 �
 | ALFA | Google Workspace | `--start-time`·`--end-time`(RFC 3339)으로 준 수집 범위. kill chain 점수는 도구의 해석[32] |
 | AWS CLI 로그 검증 | CloudTrail | 검증한 기간과 결과[17] |
 
-ALFA 는 이벤트를 `config/event_to_mitre.yml` 의 대응표로 MITRE ATT&CK 클라우드 기법에 붙이고, 시간 순서로 이어지는 공격 단계를 찾아 0~1 사이 점수(1 이 완전한 사슬)를 매기며, 계산에 쓰는 상수는 `config/config.yml` 에 고정돼 있습니다[32]. Hawk 는 결론을 대신 내리지 않고 결론에 필요한 데이터를 빨리 모으는 것을 목표로 합니다[28]. 어느 쪽이든 보고서에서는 점수나 표시가 아니라 그 밑의 레코드를 근거로 씁니다. 탐지 규칙으로 걸러 낸 결과도 같은 방식으로 다루고, 규칙 쪽 설명은 [탐지 규칙으로 로그 훑기](../analysis/detection-rules.md)에 있습니다.
+ALFA 는 이벤트를 `config/event_to_mitre.yml` 의 대응표로 MITRE ATT&CK 클라우드 기법에 붙이고, 시간 순서로 이어지는 공격 단계를 찾아 0~1 사이 점수(1 이 완전한 사슬)를 매기며, 계산에 쓰는 상수는 `config/config.yml` 에 고정돼 있습니다[32]. Hawk 는 결론을 대신 내리지 않고 결론에 필요한 데이터를 빨리 모으는 것을 목표로 합니다[28]. 어느 쪽이든 보고서에서는 점수나 표시가 아니라 그 밑의 레코드를 근거로 씁니다. 탐지 규칙으로 걸러 낸 결과도 같은 방식으로 다루고, 규칙 쪽 설명은 [탐지 규칙으로 로그 검색하기](../analysis/detection-rules.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -108,11 +108,11 @@ ALFA 는 이벤트를 `config/event_to_mitre.yml` 의 대응표로 MITRE ATT&CK 
 
 **증명하는 것.** 감사 로그 레코드는 "이 시각(UTC)에 이 계정·주체로 이 작업이 기록되었다" 까지를 보여 줍니다. 다이제스트로 검증한 CloudTrail 로그 파일은 전달된 뒤 바뀌지 않았다는 것, 특정 자격 증명이 특정 API 활동을 했다는 것, 어느 기간에 계정으로 전달된 로그 파일이 없었다는 것을 보여 줍니다[17].
 
-**증명하지 못하는 것.** 계정이나 자격 증명을 실제로 쓴 사람이 누구인지는 로그만으로 알 수 없고, CloudTrail 검증도 "특정 자격 증명이" 한 일까지만 말합니다[17]. 로그가 없다는 사실만으로 활동이 없었다고 할 수도 없습니다. 보존 기간이 지났거나, 로그가 기본으로 꺼져 있었거나, 감사 우회가 걸렸거나, 도구가 건너뛴 구간이거나, 아직 반영되지 않았을 수 있고, Google Workspace 는 드물게 이벤트가 아예 보고되지 않기도 합니다[11]. Slack Audit Logs API 는 메시지 내용을 보여 주지 않고 가능한 감사 이벤트의 일부만 지원하므로, 여기에 없다고 그 행동이 없었다고 하지 않습니다[24]. 로그를 끄거나 지운 흔적을 찾는 방법은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)에서 다룹니다.
+**증명하지 못하는 것.** 계정이나 자격 증명을 실제로 쓴 사람이 누구인지는 로그만으로 알 수 없고, CloudTrail 검증도 "특정 자격 증명이" 한 일까지만 보여 줍니다[17]. 로그가 없다는 사실만으로 활동이 없었다고 할 수도 없습니다. 보존 기간이 지났거나, 로그가 기본으로 꺼져 있었거나, 감사 우회가 걸렸거나, 도구가 건너뛴 구간이거나, 아직 반영되지 않았을 수 있고, Google Workspace 는 드물게 이벤트가 아예 보고되지 않기도 합니다[11]. Slack Audit Logs API 는 메시지 내용을 보여 주지 않고 가능한 감사 이벤트의 일부만 지원하므로, 여기에 없다고 그 행동이 없었다고 하지 않습니다[24]. 로그를 끄거나 지운 흔적을 찾는 방법은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)에서 다룹니다.
 
-보고서의 수집 부분에는 아래 칸을 채웁니다.
+보고서의 수집 부분에는 아래 항목을 채웁니다.
 
-| 칸 | 적을 내용 |
+| 항목 | 적을 내용 |
 |---|---|
 | 수집 권한 | 조회한 계정, 역할, 관리 단위 제한 여부 |
 | 조사 가능 기간 | 로그별 보관 기간(문서 기준 날짜), 테넌트 보존 정책 |
@@ -121,7 +121,7 @@ ALFA 는 이벤트를 `config/event_to_mitre.yml` 의 대응표로 MITRE ATT&CK 
 | 무결성 | 해시 목록과 그 해시, CloudTrail 다이제스트 검증 결과 |
 | 시각 기준 | 필드별 기준(UTC 여부), 조회 범위 끝 시각, 수집 시각 |
 
-결론 문장은 기록이 말하는 만큼만 씁니다. 아래 값은 모두 만든 예시입니다.
+결론 문장은 기록으로 확인되는 만큼만 씁니다. 아래 값은 모두 만든 예시입니다.
 
 - 쓰지 않음: "kim@contoso.com 사용자가 2026년 9월 1일 고객 명부를 빼돌렸다."
 - 씀: "통합 감사 로그에 2026-09-01 02:14:07 UTC 부터 02:31:52 UTC 사이에 kim@contoso.com 계정으로 203.0.113.25 에서 `FileDownloaded` 작업 42건이 기록되어 있다. 이 계정을 실제로 사용한 사람은 이 기록만으로 특정할 수 없다."

@@ -21,7 +21,7 @@ nav_order: 520
 | 홈 폴더를 바꾸지 않음 | 사용자 문서와 정보를 보존해 나중에 복원할 수 있음 | [2] |
 | 홈 폴더 삭제 | 홈 폴더를 지움 | [2] |
 
-디스크 이미지의 파일 이름 규칙과, "바꾸지 않음" 을 골랐을 때 폴더 이름에 표시가 붙는지는 공개된 자료가 없어 검체에서 확인합니다. 디스크 이미지를 여는 법은 [디스크 이미지 형식 (DMG·Sparsebundle)](../../../01-foundations/disk-volume/dmg-sparsebundle.md)에 있고, 지운 홈 폴더를 되살리는 일은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+디스크 이미지의 파일 이름 규칙과, "바꾸지 않음" 을 골랐을 때 폴더 이름에 표시가 붙는지는 실제 데이터로 확인해야 합니다. 디스크 이미지를 여는 법은 [디스크 이미지 형식 (DMG·Sparsebundle)](../../../01-foundations/disk-volume/dmg-sparsebundle.md)에 있고, 지운 홈 폴더를 되살리는 일은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -30,7 +30,7 @@ nav_order: 520
 /Users/Deleted Users/                                       (디스크 이미지로 남긴 홈 폴더)
 ```
 
-`deletedUsers` 가 어느 macOS 버전부터 기록되는지, 시스템 설정으로 지울 때만 남는지 `sysadminctl`·`dscl` 같은 명령으로 지울 때도 남는지는 공개된 자료가 없어 검체에서 확인합니다. 홈 폴더 처리의 세 선택지는 최신 macOS 기준이고 [2], 옛 버전에서는 다를 수 있습니다.
+`deletedUsers` 가 어느 macOS 버전부터 기록되는지, 시스템 설정으로 지울 때만 남는지 `sysadminctl`·`dscl` 같은 명령으로 지울 때도 남는지는 실제 데이터로 확인해야 합니다. 홈 폴더 처리의 세 선택지는 최신 macOS 기준이고 [2], 옛 버전에서는 다를 수 있습니다.
 
 ## 구조
 
@@ -41,9 +41,9 @@ nav_order: 520
 | `name` | 사용자 이름 |
 | `dsAttrTypeStandard:RealName` | 전체 이름 |
 | `dsAttrTypeStandard:UniqueID` | UID |
-| `date` | 지운 시각 (mac_apt 출력 칸 DeletedDate) |
+| `date` | 지운 시각 (mac_apt 출력 열 DeletedDate) |
 
-mac_apt 는 `date` 값을 따로 바꾸지 않고 그대로 DeletedDate 에 넣습니다 [1]. 날짜 칸에 그대로 넣으므로 plist 날짜형일 가능성이 있지만, 저장 형태는 검체에서 확인합니다.
+mac_apt 는 `date` 값을 따로 바꾸지 않고 그대로 DeletedDate 에 넣습니다 [1]. 날짜 열에 그대로 넣으므로 plist 날짜형일 가능성이 있지만, 저장 형태는 실제 데이터로 확인합니다.
 
 ## 증거로서 의미
 
@@ -51,7 +51,7 @@ mac_apt 는 `date` 값을 따로 바꾸지 않고 그대로 DeletedDate 에 넣�
 
 **증명하지 못하는 것.** 이 기록에는 누가 지웠는지와 어떤 방법으로 지웠는지가 들어 있지 않습니다. 어떤 삭제 방법에서 기록이 남는지 알려지지 않았으니, `deletedUsers` 에 항목이 없다고 해서 지운 계정이 없었다고 볼 수 없습니다. 디스크 이미지가 `/Users/Deleted Users/` 에 있다는 사실만으로는 그 이미지를 계정 삭제 과정이 만들었는지, 누가 다른 방법으로 그 자리에 두었는지 가릴 수 없습니다.
 
-보고서에는 "`deletedUsers` 에 이 이름과 UID 의 항목이 있고, `date` 값은 이 시각이다" 처럼 기록이 말하는 만큼만 쓰고, `date` 를 어떤 기준으로 풀었는지도 함께 적습니다.
+보고서에는 "`deletedUsers` 에 이 이름과 UID 의 항목이 있고, `date` 값은 이 시각이다" 처럼 기록으로 확인되는 만큼만 쓰고, `date` 를 어떤 기준으로 풀었는지도 함께 적습니다.
 
 ## 시각 해석
 
@@ -62,13 +62,13 @@ mac_apt 는 `date` 값을 따로 바꾸지 않고 그대로 DeletedDate 에 넣�
 ## 함정과 한계
 
 - **기록 조건이 알려지지 않음.** 버전과 삭제 방법에 따라 `deletedUsers` 가 남지 않을 수 있습니다. 항목이 없으면 아래 다른 자리를 함께 찾아봅니다.
-- **다른 흔적 후보.** 계정 plist 가 지워진 뒤에도 흔적이 있을 법한 자리로는 `/private/var/folders` 의 Darwin 폴더(mac_apt 가 UID 로 계정과 잇는 폴더 [3]), 같은 노드 폴더의 `sqlindex` [4], 지우지 않은 홈 폴더, 통합 로그가 있습니다. 이 자리들에 지운 계정의 흔적이 실제로 남는지는 검체에서 하나씩 확인합니다.
+- **다른 흔적 후보.** 계정 plist 가 지워진 뒤에도 흔적이 있을 법한 자리로는 `/private/var/folders` 의 Darwin 폴더(mac_apt 가 UID 로 계정과 잇는 폴더 [3]), 같은 노드 폴더의 `sqlindex` [4], 지우지 않은 홈 폴더, 통합 로그가 있습니다. 이 자리들에 지운 계정의 흔적이 실제로 남는지는 실제 데이터로 하나씩 확인합니다.
 - **같은 UID.** Darwin 폴더는 UID·GID 로 계정과 이어집니다 [3]. 지운 계정과 UID 가 같은 계정이 지금 있는지 먼저 확인해야 폴더 주인을 잘못 짚지 않습니다.
 - **설정 파일을 고친 경우.** `com.apple.preferences.accounts.plist` 를 누가 직접 고치거나 지우면 어떤 흔적이 남는지는 공개된 자료가 없습니다. [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../../03-techniques/analysis/snapshot-diff.md)로 이전 사본의 `deletedUsers` 와 계정 plist 를 비교합니다.
 
 ## 직접 분석해 보기
 
-`date` 의 저장 형태는 검체마다 확인해야 하므로, 아래 순서로 봅니다.
+`date` 의 저장 형태는 이미지마다 확인해야 하므로, 아래 순서로 봅니다.
 
 1. `/Library/Preferences/com.apple.preferences.accounts.plist` 를 plist 도구로 열고 `deletedUsers` 항목을 모두 적습니다 [1].
 2. 각 항목의 `date` 가 날짜형인지 숫자인지 적고, 숫자라면 기준을 따져 UTC 로 바꿉니다.
@@ -76,7 +76,7 @@ mac_apt 는 `date` 값을 따로 바꾸지 않고 그대로 DeletedDate 에 넣�
 4. `/Users/Deleted Users/` 에 디스크 이미지가 있는지 보고, 있으면 쓰기 막힌 상태로 열어 안의 홈 폴더를 확인합니다 [2].
 5. `/private/var/folders` 아래에서 그 UID 의 폴더를 찾습니다 [3].
 
-mac_apt USERS 플러그인은 1번의 항목을 DeletedDate 칸이 채워진 행으로 내고, 이때 `date` 를 따로 바꾸지 않고 그대로 옮깁니다 [1]. 손으로 읽은 `date` 와 DeletedDate 가 다르게 보이면 도구가 값을 바꾼 것이 아니라 표시하는 시간대가 다른 것인지 먼저 봅니다.
+mac_apt USERS 플러그인은 1번의 항목을 DeletedDate 열이 채워진 행으로 내고, 이때 `date` 를 따로 바꾸지 않고 그대로 옮깁니다 [1]. 손으로 읽은 `date` 와 DeletedDate 가 다르게 보이면 도구가 값을 바꾼 것이 아니라 표시하는 시간대가 다른 것인지 먼저 봅니다.
 
 ## 교차 검증
 
@@ -90,7 +90,7 @@ mac_apt USERS 플러그인은 1번의 항목을 DeletedDate 칸이 채워진 행
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 자료(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. `deletedUsers` 에 항목이 있는지 보고, 있다면 이름·UID·`date` 를 적은 뒤 `date` 의 저장 형태를 확인해 보세요.
 2. `/Users/Deleted Users/` 에 디스크 이미지가 있는지, 있다면 안의 홈 폴더가 어느 계정 것인지 확인해 보세요.

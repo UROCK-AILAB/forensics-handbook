@@ -33,8 +33,8 @@ has_toc: false
 
 ## 읽는 순서
 
-1. [패키지 목록 구조 (packages.xml·packages.list)](packages-xml.md) — `/data/system/` 의 파일 구성과 사본, ABX 저장, `packages.xml` 의 요소와 속성, `packages.list` 의 칸, 라이브 기기의 dumpsys 출력 모양을 다룹니다.
-2. [설치 출처와 설치 시각 (Installer·Install Time)](install-source-time.md) — 설치자·설치 요청 앱·원 출처 칸의 뜻, 사용자별 첫 설치 시각과 설치 이유, 기기에서 본 설치 관련 앱을 정리합니다.
+1. [패키지 목록 구조 (packages.xml·packages.list)](packages-xml.md) — `/data/system/` 의 파일 구성과 사본, ABX 저장, `packages.xml` 의 요소와 속성, `packages.list` 의 필드, 라이브 기기의 dumpsys 출력 모양을 다룹니다.
+2. [설치 출처와 설치 시각 (Installer·Install Time)](install-source-time.md) — 설치자·설치 요청 앱·원 출처 필드의 뜻, 사용자별 첫 설치 시각과 설치 이유, 기기에서 본 설치 관련 앱을 정리합니다.
 3. [앱 권한 부여 기록 (Runtime Permissions)](runtime-permissions.md) — `runtime-permissions.xml` 의 두 위치와 구조, flags 비트의 뜻, 부여 상태를 읽을 때의 함정을 다룹니다.
 
 ## 함께 볼 페이지

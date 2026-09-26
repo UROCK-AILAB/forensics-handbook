@@ -38,9 +38,9 @@ OS 버전부터 확인합니다. 게이트키퍼는 확인된 개발자의 소�
 | 7 | XProtect 기록, 휴지통 | XProtect 가 탐지해 옮긴 파일 | [보안 도구 기록](../../02-artifacts/logs/xprotect.md), [휴지통](../../02-artifacts/file-folder-usage/trash.md) |
 | 8 | 통합 로그, 실행 흔적 | 첫 실행 시각과 그 뒤 동작 | [통합 로그에서 찾을 것](../../02-artifacts/logs/unified-log-events/index.md), [KnowledgeC](../../02-artifacts/execution/knowledgec/index.md) |
 
-### 격리 이벤트 데이터베이스에서 쓰는 칸
+### 격리 이벤트 데이터베이스에서 쓰는 열
 
-격리 이벤트 데이터베이스는 SQLite 파일이고 표 이름은 `LSQuarantineEvent` 입니다 [1]. 이 표에서 읽을 칸은 `LSQuarantineEventIdentifier`, `LSQuarantineTimeStamp`, `LSQuarantineAgentBundleIdentifier`, `LSQuarantineAgentName`, `LSQuarantineDataURLString`, `LSQuarantineSenderName`, `LSQuarantineSenderAddress`, `LSQuarantineTypeNumber`, `LSQuarantineOriginTitle`, `LSQuarantineOriginURLString`, `LSQuarantineOriginAlias` 이고 [1], 칸마다의 뜻과 값은 [격리 속성과 다운로드 기록](../../02-artifacts/filesystem/quarantine/index.md) 페이지에 있습니다. 침해 조사에서는 시각, 받은 앱, 받은 주소 칸을 먼저 봅니다. `LSQuarantineTimeStamp` 는 2001-01-01 00:00:00 UTC 부터 센 초라서 [1], 유닉스 시각으로 바꿀 때 978307200 초를 더합니다.
+격리 이벤트 데이터베이스는 SQLite 파일이고 표 이름은 `LSQuarantineEvent` 입니다 [1]. 이 표에서 읽을 열은 `LSQuarantineEventIdentifier`, `LSQuarantineTimeStamp`, `LSQuarantineAgentBundleIdentifier`, `LSQuarantineAgentName`, `LSQuarantineDataURLString`, `LSQuarantineSenderName`, `LSQuarantineSenderAddress`, `LSQuarantineTypeNumber`, `LSQuarantineOriginTitle`, `LSQuarantineOriginURLString`, `LSQuarantineOriginAlias` 이고 [1], 열마다의 뜻과 값은 [격리 속성과 다운로드 기록](../../02-artifacts/filesystem/quarantine/index.md) 페이지에 있습니다. 침해 조사에서는 시각, 받은 앱, 받은 주소 열을 먼저 봅니다. `LSQuarantineTimeStamp` 는 2001-01-01 00:00:00 UTC 부터 센 초라서 [1], 유닉스 시각으로 바꿀 때 978307200 초를 더합니다.
 
 ```sql
 SELECT LSQuarantineEventIdentifier,
@@ -66,7 +66,7 @@ ORDER BY LSQuarantineTimeStamp;
 | `TimeStamp` | 거부한 시각 |
 | `XProtectMalwareType` | 거부 분류. mac_apt 는 이 값을 unsigned, modified bundle, signed app, modified app 네 부류로 나눕니다 |
 
-`XProtectMalwareType` 숫자마다의 뜻은 공개된 자료가 없어 검체에서 확인해야 합니다.
+`XProtectMalwareType` 숫자마다의 뜻은 실제 데이터로 확인해야 합니다.
 
 ## 분석 흐름
 
@@ -83,7 +83,7 @@ ORDER BY LSQuarantineTimeStamp;
 
 - **게이트키퍼가 있으니 서명 없는 앱은 실행되지 않았다고 보는 경우.** 첫 실행에는 사용자 승인이 끼어들어서 [2], 사용자가 승인하면 실행됩니다. AMOS 사례에서도 서명 없는 표본을 사용자가 오른쪽 클릭 "열기" 로 실행하도록 유도했습니다 [4]. macOS 15 부터는 이 방법이 막히고 설정에서 예외로 넣어야 해서 [5], 사용자가 설정 화면에서 예외를 허용했는지도 함께 봅니다. 이 사례의 나머지 행동은 [정보 탈취 악성 코드](infostealer.md) 에 있습니다.
 - **로그의 실행 경로를 파일이 놓인 경로로 읽는 경우.** 게이트키퍼는 앱을 무작위로 정한 읽기 전용 위치에서 여는데, 앱과 함께 배포된 플러그인이 자동으로 로드되지 않게 하려는 장치입니다 [2]. 그래서 실행 기록에 남은 경로가 사용자가 연 파일의 경로와 다를 수 있습니다.
-- **`.LastGKReject` 를 거부 이력 전체로 읽는 경우.** 이 파일은 마지막으로 거부한 항목만 담습니다 [1]. 앞선 거부는 통합 로그 같은 다른 기록에서 따로 찾아야 하고, 어느 로그 항목에 남는지는 검체에서 확인합니다.
+- **`.LastGKReject` 를 거부 이력 전체로 읽는 경우.** 이 파일은 마지막으로 거부한 항목만 담습니다 [1]. 앞선 거부는 통합 로그 같은 다른 기록에서 따로 찾아야 하고, 어느 로그 항목에 남는지는 실제 기기에서 확인합니다.
 - **`XProtectMalwareType` 을 악성 코드 이름으로 읽는 경우.** mac_apt 가 나누는 네 부류는 서명과 변조 상태의 분류입니다 [1].
 - **XProtect 가 탐지하지 않았으니 정상 파일이라고 보는 경우.** XProtect 는 YARA 서명으로 검사하고 갱신 여부를 기본값으로 매일 확인합니다 [3]. 서명이 나오기 전의 새 표본은 탐지되지 않을 수 있습니다. 공증 폐기 티켓은 XProtect 서명보다 훨씬 자주 확인한다는 점도 함께 적어 둡니다 [3].
 - **격리 이벤트 데이터베이스에 행이 없으니 인터넷에서 오지 않았다고 보는 경우.** 데이터베이스는 사용자마다 따로 있어서 [1] 다른 계정이 받은 파일은 그 계정 쪽에 있습니다. 행이 지워졌을 수도 있어서, 행이 없다는 사실만으로 들어온 길을 단정하지 않습니다.

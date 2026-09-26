@@ -16,20 +16,20 @@ nav_order: 390
 
 LockSettingsStorage 는 잠금과 관련된 값을 `locksettings` 표에 이름·사용자·값의 쌍으로 적고, 잠금 자격 증명을 보호하는 자료는 사용자별 폴더의 별도 파일(spblob)에 따로 저장합니다 [1].
 
-조사에서 이 기록이 중요한 까닭은 기기를 쓴 사람을 가릴 때 잠금이 걸려 있었는지가 출발점이 되기 때문입니다. 잠금이 없었다면 기기를 손에 쥔 누구나 쓸 수 있었고, 잠금이 있었다면 잠금을 푼 시각이 사람이 기기를 쓴 시각의 단서가 됩니다. 이 판단의 순서는 [그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md) 시나리오에 있습니다.
+조사에서 이 기록이 중요한 이유는 기기를 쓴 사람을 가려낼 때 잠금이 걸려 있었는지가 출발점이 되기 때문입니다. 잠금이 없었다면 기기를 손에 쥔 누구나 쓸 수 있었고, 잠금이 있었다면 잠금을 푼 시각이 사람이 기기를 쓴 시각의 단서가 됩니다. 이 판단의 순서는 [그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md) 시나리오에 있습니다.
 
 ## 위치와 버전별 차이
 
 | 파일·폴더 | 내용 | 출처 |
 |---|---|---|
-| `locksettings.db` | 표 `locksettings`, 칸 `_id`·`name`·`user`·`value`. 모든 사용자의 값을 한 표에 사용자 번호와 함께 적음 | [1] |
+| `locksettings.db` | 표 `locksettings`, 열 `_id`·`name`·`user`·`value`. 모든 사용자의 값을 한 표에 사용자 번호와 함께 적음 | [1] |
 | 사용자별 키 파일 폴더 | 사용자 0 은 `/data/system/`, 다른 사용자는 `/data/system/users/<사용자ID>/` | [1] |
 | `gatekeeper.profile.key` | 자식 프로필 잠금(위 사용자별 폴더) | [1] |
-| `reboot.escrow.key`, `reboot.escrow.server.blob.key` | 이름으로 보아 재부팅과 관련된 키(앞은 사용자별 폴더, 뒤는 사용자 0 폴더에 하나) | [1] |
+| `reboot.escrow.key`, `reboot.escrow.server.blob.key` | 이름으로 보면 재부팅과 관련된 키(앞은 사용자별 폴더, 뒤는 사용자 0 폴더에 하나) | [1] |
 | `/data/system_de/<사용자ID>/spblob/` | 잠금 자격 증명을 보호하는 자료(synthetic password) 파일. 사용자 0 도 여기에 있음. 이름은 보호자 ID 를 16진수 16자리로 적고 점 뒤에 상태 이름을 붙인 모양 | [1] |
 | `repair-mode/pst` | 수리 모드(metadata 폴더) | [1] |
 
-`locksettings.db` 는 시스템 서비스의 데이터베이스 폴더에 만들어지고, 그 폴더가 `/data/system/` 인지는 검체에서 확인합니다. 현행 소스에는 `gesture.key`, `password.key`, `gatekeeper.pattern.key` 같은 옛 파일 이름이 나오지 않아서 [1], 옛 버전 검체에서는 이 파일들이 있는지 따로 봅니다. CE·DE 영역의 차이는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에 있습니다.
+`locksettings.db` 는 시스템 서비스의 데이터베이스 폴더에 만들어지고, 그 폴더가 `/data/system/` 인지는 실제 기기에서 확인합니다. 현행 소스에는 `gesture.key`, `password.key`, `gatekeeper.pattern.key` 같은 옛 파일 이름이 나오지 않아서 [1], 옛 버전 기기에서는 이 파일들이 있는지 따로 봅니다. CE·DE 영역의 차이는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에 있습니다.
 
 삼성 기기는 AOSP 에 없는 잠금 관련 settings 키를 더 씁니다. secure 표에는 다음과 같은 키가 있습니다.
 
@@ -110,7 +110,7 @@ LockSettingsStorage 의 백업 대상에는 잠금 화면 소유자 정보 표�
 
 `dumpsys user` 에는 사용자마다 `State: RUNNING_UNLOCKED` 와 `Unlock time: <값>` 줄이 있습니다. 이름으로 보면 사용자 저장 공간(CE 영역)이 잠금 해제된 상태와 그 시각의 단서입니다. `Unlock time` 은 부팅 뒤 흐른 시간(SystemClock.elapsedRealtime)으로 적고 출력할 때는 지금과의 차이를 "얼마 전" 모양으로 찍으며 [3], 사용자를 멈추거나 재부팅하면 0 으로 돌아갑니다. 이 값은 사용자 공간을 여는 단계(onUserUnlocking)에서만 적어서 [3], 화면 잠금을 풀 때마다 바뀌는 값으로 읽지 않습니다. 출력 전체 모양은 [사용자와 프로필 (Multi-user·users)](users-profiles.md) 페이지에 있습니다.
 
-`dumpsys usagestats` 의 최근 이벤트에는 `KEYGUARD_HIDDEN` 이벤트가 있습니다. 이름으로 보아 잠금 화면이 사라진 때를 보여 주는 이벤트이고, 이벤트 형식과 보존 기간은 [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) 페이지에 있습니다.
+`dumpsys usagestats` 의 최근 이벤트에는 `KEYGUARD_HIDDEN` 이벤트가 있습니다. 이름으로 보면 잠금 화면이 사라진 때를 보여 주는 이벤트이고, 이벤트 형식과 보존 기간은 [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) 페이지에 있습니다.
 
 ## 증거로서 의미
 
@@ -126,7 +126,7 @@ LockSettingsStorage 의 백업 대상에는 잠금 화면 소유자 정보 표�
 
 ## 시각 해석
 
-`locksettings` 표의 칸에는 시각이 없어서 잠금을 언제 설정했는지는 이 표로 알 수 없습니다 [1]. settings 의 `biometrics_strong_enroll_timestamp` 는 이름에 시각이 들어 있지만 단위와 기준을 밝힌 공개 자료가 없습니다. usagestats 이벤트의 시각 해석은 usagestats 페이지를, 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
+`locksettings` 표의 열에는 시각이 없어서 잠금을 언제 설정했는지는 이 표로 알 수 없습니다 [1]. settings 의 `biometrics_strong_enroll_timestamp` 는 이름에 시각이 들어 있지만 단위와 기준을 밝힌 공개 자료가 없습니다. usagestats 이벤트의 시각 해석은 usagestats 페이지를, 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
 
 ## 함정과 한계
 
@@ -177,11 +177,11 @@ adb shell dumpsys usagestats | grep -E 'KEYGUARD_'
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
+공개된 안드로이드 시험 자료(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
 
-1. `locksettings.db` 를 찾아 표 정의를 적고, 칸이 `name`·`user`·`value` 말고 더 있는지 확인합니다.
+1. `locksettings.db` 를 찾아 표 정의를 적고, 열이 `name`·`user`·`value` 말고 더 있는지 확인합니다.
 2. 사용자 번호별로 어떤 키가 있는지 표로 만들고, 비밀 값과 관련된 키는 값 대신 "있음" 으로 적습니다.
-3. `lockscreen.password_type` 값이 무엇인지 적고, 검체 설명서에 적힌 잠금 방식과 비교해 어느 상수 체계와 맞는지 확인해 봅니다.
+3. `lockscreen.password_type` 값이 무엇인지 적고, 이미지 설명서에 적힌 잠금 방식과 비교해 어느 상수 체계와 맞는지 확인해 봅니다.
 4. 사용자별 폴더에 `spblob` 폴더가 있는지, 파일 이름이 어떤 모양인지 봅니다.
 
 ## 참고 문헌

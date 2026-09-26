@@ -8,13 +8,13 @@ nav_order: 1580
 
 ## 조사 질문
 
-"이 사진은 이 폰으로 찍었나, 아니면 어디서 받았나", "찍은 시각과 장소는 언제 어디인가", "사진에 적힌 날짜를 믿어도 되나" 같은 질문에 답하는 흐름입니다. 사진 한 장의 출처를 가리려면 파일 안의 EXIF, 미디어 저장소(MediaStore)의 색인 행, 파일이 놓인 폴더, 촬영 순간 기기에 남은 상태 변화를 나란히 놓고 서로 맞는지 봐야 합니다.
+"이 사진은 이 폰으로 찍었나, 아니면 어디서 받았나", "찍은 시각과 장소는 언제 어디인가", "사진에 적힌 날짜를 믿어도 되나" 같은 질문에 답하는 흐름입니다. 사진 한 장의 출처를 가려내려면 파일 안의 EXIF, 미디어 저장소(MediaStore)의 색인 행, 파일이 놓인 폴더, 촬영 순간 기기에 남은 상태 변화를 나란히 놓고 서로 맞는지 봐야 합니다.
 
 기록은 "이 파일의 EXIF 에 이 시각과 이 좌표가 적혀 있다", "이 앱이 이 파일을 넣었다" 까지 알려 주지만, EXIF 는 파일 안에 적힌 글자라 고칠 수 있고, 좌표는 기기가 잡은 위치일 뿐 사람이 거기 서 있었다는 뜻은 아닙니다. 사진을 지운 흔적은 [지운 대화와 사진 찾기](deleted-content.md), 그 시각 기기 위치를 다른 기록으로 확인하는 일은 [그 시각에 어디 있었나](location.md) 에서 다룹니다.
 
 ## 먼저 확인할 것
 
-- **OS 버전과 제조사** — 현행 MediaStore 는 위치를 색인하지 않고 [4] Android 10 이상에서는 앱이 받는 사본에서 위치가 가려질 수 있어서 [6], 검체 버전과 사진을 확보한 경로를 먼저 적어 둡니다. 삼성 기기에는 AOSP 미디어 저장소와 따로 삼성 미디어 제공자의 DB 가 있습니다 [7].
+- **OS 버전과 제조사** — 현행 MediaStore 는 위치를 색인하지 않고 [4] Android 10 이상에서는 앱이 받는 사본에서 위치가 가려질 수 있어서 [6], 기기 버전과 사진을 확보한 경로를 먼저 적어 둡니다. 삼성 기기에는 AOSP 미디어 저장소와 따로 삼성 미디어 제공자의 DB 가 있습니다 [7].
 - **시간대** — EXIF 의 촬영 시각은 시간대 없는 현지 시각 문자열이고, 시간대는 따로 된 태그에 적힙니다 [1]. 촬영 당시 기기의 시간대를 모르면 UTC 로 바꾼 값이 틀릴 수 있어서, [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 을 먼저 봅니다.
 - **사용자와 프로필** — 보안 폴더 안에서 찍은 사진은 다른 사용자 공간에 저장될 수 있습니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
 - **수집 범위** — 사진은 원본 파일 그대로 확보해야 합니다. 메신저나 앱을 거쳐 받은 사본은 EXIF 위치가 가려져 있을 수 있고 [6], 파일 시스템 시각은 복사 과정에서 바뀔 수 있습니다. 해시를 매긴 원본과 MediaStore DB 를 함께 확보했는지 확인합니다([모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)).
@@ -50,25 +50,25 @@ nav_order: 1580
 
 4. **두 시각을 맞춰 봅니다.** `DateTimeOriginal` 은 현지 시각이고 GPS 날짜·시각은 UTC 라서 기준이 다릅니다 [1][2]. 두 값의 차이가 `OffsetTimeOriginal` 과 맞으면 촬영 당시 기기 시간대 설정이 일관된 것이고, 맞지 않으면 기기 시각이 잘못 맞춰져 있었거나 GPS 가 위치를 잡은 때가 촬영보다 앞섰거나 EXIF 가 고쳐졌을 가능성을 차례로 봅니다. 이 단계는 두 출처에서 끌어낸 해석이라서, 보고서에는 두 값을 그대로 적고 차이를 따로 적습니다.
 
-5. **어느 기기가 찍었는지 봅니다.** `Make`(0x010f), `Model`(0x0110), `Software`(0x0131), `ImageUniqueID`(0xa420) 같은 태그로 찍은 기기와 소프트웨어를 봅니다 [1]. `Make`·`Model` 이 조사 기기와 다르면 받은 파일일 가능성을 먼저 봅니다. AOSP 스크린샷은 EXIF 에 `ImageUniqueID`, `Software`("Android " 와 빌드 표시 이름), `DateTimeOriginal`, `SubSecTimeOriginal`, `OffsetTimeOriginal` 을 쓰고 카메라·GPS 태그는 쓰지 않아서 [8] 카메라 사진과 가를 수 있습니다. 삼성 스크린샷도 같은지는 공개 자료가 없어 검체에서 확인합니다.
+5. **어느 기기가 찍었는지 봅니다.** `Make`(0x010f), `Model`(0x0110), `Software`(0x0131), `ImageUniqueID`(0xa420) 같은 태그로 찍은 기기와 소프트웨어를 봅니다 [1]. `Make`·`Model` 이 조사 기기와 다르면 받은 파일일 가능성을 먼저 봅니다. AOSP 스크린샷은 EXIF 에 `ImageUniqueID`, `Software`("Android " 와 빌드 표시 이름), `DateTimeOriginal`, `SubSecTimeOriginal`, `OffsetTimeOriginal` 을 쓰고 카메라·GPS 태그는 쓰지 않아서 [8] 카메라 사진과 구분할 수 있습니다. 삼성 스크린샷도 같은지는 실제 기기에서 확인해야 합니다.
 
-6. **MediaStore 행과 맞춥니다.** `datetaken` 은 EXIF `DateTimeOriginal`(동영상은 메타데이터의 날짜)에서 뽑은 유닉스 밀리초입니다. 이미지는 `DateTimeOriginal` 과 `OffsetTimeOriginal` 이 둘 다 있어야 이 값을 믿을 수 있습니다 [4]. `date_added` 는 처음 색인한 시각, `date_modified` 는 파일 수정 시각이고 둘 다 유닉스 초입니다 [4]. 현행 AOSP 에서는 앱이 어떤 값을 넣든 MediaProvider 가 `date_added` 를 그때의 현재 시각으로 다시 쓰므로 [5], `datetaken` 보다 `date_added` 가 한참 늦다면 나중에 기기로 들어온 파일일 수 있습니다. `owner_package_name` 은 이 미디어를 넣은 패키지이고 확실하지 않으면 NULL 일 수 있습니다 [4]. 삼성 `media.db` 의 `files` 표에는 `captured_url`, `captured_app` 칸도 있습니다 [7]. 칸 뜻을 설명한 삼성 공개 문서가 없으므로 값은 원래 칸 이름과 함께 옮깁니다.
+6. **MediaStore 행과 맞춥니다.** `datetaken` 은 EXIF `DateTimeOriginal`(동영상은 메타데이터의 날짜)에서 뽑은 유닉스 밀리초입니다. 이미지는 `DateTimeOriginal` 과 `OffsetTimeOriginal` 이 둘 다 있어야 이 값을 믿을 수 있습니다 [4]. `date_added` 는 처음 색인한 시각, `date_modified` 는 파일 수정 시각이고 둘 다 유닉스 초입니다 [4]. 현행 AOSP 에서는 앱이 어떤 값을 넣든 MediaProvider 가 `date_added` 를 그때의 현재 시각으로 다시 쓰므로 [5], `datetaken` 보다 `date_added` 가 한참 늦다면 나중에 기기로 들어온 파일일 수 있습니다. `owner_package_name` 은 이 미디어를 넣은 패키지이고 확실하지 않으면 NULL 일 수 있습니다 [4]. 삼성 `media.db` 의 `files` 표에는 `captured_url`, `captured_app` 열도 있습니다 [7]. 열의 뜻을 설명한 삼성 공개 문서가 없으므로 값은 원래 열 이름과 함께 옮깁니다.
 
-7. **위치는 원본 파일에서 읽습니다.** MediaStore 의 `latitude`·`longitude` 칸은 폐기돼 항상 NULL 이고 [4], MediaProvider 는 자신이 아닌 앱이 이 칸에 값을 넣으려 하면 NULL 로 바꿉니다 [5]. Android 10 이상에서 앱이 EXIF 위치를 가리지 않은 채 읽으려면 `ACCESS_MEDIA_LOCATION` 권한과 사용자 동의가 필요하므로 [6], 앱을 거쳐 뽑은 사본에 좌표가 없다고 해서 원본에도 없다고 단정하지 않습니다.
+7. **위치는 원본 파일에서 읽습니다.** MediaStore 의 `latitude`·`longitude` 열은 폐기돼 항상 NULL 이고 [4], MediaProvider 는 자신이 아닌 앱이 이 열에 값을 넣으려 하면 NULL 로 바꿉니다 [5]. Android 10 이상에서 앱이 EXIF 위치를 가리지 않은 채 읽으려면 `ACCESS_MEDIA_LOCATION` 권한과 사용자 동의가 필요하므로 [6], 앱을 거쳐 뽑은 사본에 좌표가 없다고 해서 원본에도 없다고 단정하지 않습니다.
 
 8. **촬영 순간의 보조 흔적을 겹칩니다.** `dumpsys batterystats` 이력에는 `+camera`·`-camera` 가 붙은 줄과 `+gps`·`-gps` 줄이 있을 수 있고, 줄 앞 시각은 연도 없는 `MM-DD HH:MM:SS.mmm` 모양입니다. camera 줄이 카메라 하드웨어 사용 구간을 뜻한다는 공개 설명이 없고 gps 줄에는 좌표가 없으므로, EXIF 시각 근처에 이런 줄이 있는지를 보조 근거로만 씁니다.
 
 ## 흔한 오판
 
-**"기기에 있다" 를 "기기가 찍었다" 로 읽는 오판**이 가장 흔합니다. `Make`·`Model` 이 다르거나, EXIF 가 비어 있거나, `owner_package_name` 이 카메라 앱이 아니면 받은 파일일 가능성을 먼저 봅니다. 메신저가 전송 과정에서 EXIF 를 지우는지는 앱마다 달라 검체에서 확인합니다.
+**"기기에 있다" 를 "기기가 찍었다" 로 읽는 오판**이 가장 흔합니다. `Make`·`Model` 이 다르거나, EXIF 가 비어 있거나, `owner_package_name` 이 카메라 앱이 아니면 받은 파일일 가능성을 먼저 봅니다. 메신저가 전송 과정에서 EXIF 를 지우는지는 앱마다 달라 실제 기기에서 확인해야 합니다.
 
 **`DateTimeOriginal` 을 UTC 로 읽는 실수**도 자주 나옵니다. 이 값은 시간대 없는 현지 시각이고 시간대는 `OffsetTimeOriginal` 에 따로 있습니다 [1].
 
 **Ref 태그를 빼고 좌표를 옮기는 실수**가 있습니다. Ref 가 빠지면 서경·남위 좌표의 부호가 뒤집혀 전혀 다른 곳이 나옵니다 [2].
 
-**EXIF 를 바꿀 수 없는 기록으로 믿는 것**도 조심합니다. EXIF 는 파일 안의 글자라 고칠 수 있으므로, EXIF 시각·MediaStore 의 `date_added`·파일 시스템 시각·배터리 기록을 함께 맞춰 봅니다. 서로 어긋나면 어긋났다는 사실 자체를 적고, 어긋난 까닭은 근거가 있을 때만 적습니다.
+**EXIF 를 바꿀 수 없는 기록으로 믿는 것**도 조심합니다. EXIF 는 파일 안의 글자라 고칠 수 있으므로, EXIF 시각·MediaStore 의 `date_added`·파일 시스템 시각·배터리 기록을 함께 맞춰 봅니다. 서로 어긋나면 어긋났다는 사실 자체를 적고, 어긋난 이유는 근거가 있을 때만 적습니다.
 
-**MediaStore 에서 좌표가 NULL 이라 위치 정보가 없다고 보는 경우**가 있습니다. 이 칸은 폐기돼 항상 NULL 이고 위치는 원본 파일에 있습니다 [4].
+**MediaStore 에서 좌표가 NULL 이라 위치 정보가 없다고 보는 경우**가 있습니다. 이 열은 폐기돼 항상 NULL 이고 위치는 원본 파일에 있습니다 [4].
 
 ## 보고서 문장 예
 

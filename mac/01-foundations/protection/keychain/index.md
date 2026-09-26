@@ -24,7 +24,7 @@ has_toc: false
 |---|---|---|---|
 | 로그인 키체인 | 파일 기반 | `/Users/<사용자>/Library/Keychains/login.keychain-db` [3] | 사용자가 저장한 계정·서비스·서버, 인증서와 키, 항목의 날짜 속성 |
 | System 키체인 | 파일 기반 | `/Library/Keychains/System.keychain` [3] | 네트워크 자격 증명과 PKI 인증서 [5] |
-| Local Items 또는 iCloud Keychain | 데이터 보호 | 검체에서 확인 | 로그인한 사용자의 암호·인증서·키, iCloud 키체인으로 동기화한 항목 |
+| Local Items 또는 iCloud Keychain | 데이터 보호 | 실제 기기에서 확인 | 로그인한 사용자의 암호·인증서·키, iCloud 키체인으로 동기화한 항목 |
 
 | macOS 버전 | 달라진 점 |
 |---|---|

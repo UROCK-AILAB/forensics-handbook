@@ -11,7 +11,7 @@ nav_order: 1680
 
 크롬 계열 브라우저는 확장 프로그램 (Extension) 의 파일을 프로필 폴더의 `Extensions` 폴더에 풀어 둡니다. 확장마다의 설정은 `Secure Preferences` 파일의 `extensions.settings` 에 JSON 으로 남으며, 여기에는 설치 경로의 종류, 처음 설치한 시각, 마지막 업데이트 시각, 꺼진 이유, manifest 전체가 들어 있습니다.
 
-> 이 페이지의 폴더·키 구성은 Windows 11(빌드 26200)의 Chrome 153·Edge 151 기준입니다. 다른 판에서는 다를 수 있어 검체에서 확인합니다. 값의 뜻은 2026년 9월 크로미엄 (Chromium) 기준입니다[1][2].
+> 이 페이지의 폴더·키 구성은 Windows 11(빌드 26200)의 Chrome 153·Edge 151 기준입니다. 다른 판에서는 다를 수 있어 실제 기기에서 확인합니다. 값의 뜻은 2026년 9월 크로미엄 (Chromium) 기준입니다[1][2].
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -43,7 +43,7 @@ nav_order: 1680
 - `Secure Preferences` 에는 확장 설정마다 검증값 (MAC) 이 붙어 있습니다. `protection.macs.extensions.settings` 같은 키입니다.
 - `ExtensionActivityEdge` 에는 `string_ids`, `url_ids`, `activitylog_edge_compressed`, `activitylog_edge_submissions`, `activitylog_edge_excluded_ids` 표가 있습니다.
 - `activitylog_edge_compressed` 의 열은 `extension_id_x`, `time`, `action_type`, `api_name_x`, `args_x`, `page_url_x`, `page_title_x`, `arg_url_x`, `other_x` 입니다.
-- 이 표는 모두 비어 있을 수 있습니다. 어떤 조건에서 기록하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+- 이 표는 모두 비어 있을 수 있습니다. 어떤 조건에서 기록하는지는 실제 데이터로 확인해야 합니다.
 - LevelDB 를 읽는 법은 [LevelDB 저장소](../../../01-foundations/database-log-formats/leveldb.md) 에서, SQLite 를 읽는 법은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 판에 따른 차이
@@ -53,7 +53,7 @@ nav_order: 1680
 | 설정 목록 위치 | Chrome 153·Edge 151 은 모두 `Secure Preferences` 의 `extensions.settings` 에 둡니다. `Preferences` 의 `extensions` 에는 `settings` 가 없습니다. 옛 판은 `Preferences` 에 목록을 두었을 수 있으므로 두 파일을 모두 봅니다. |
 | `install_time`·`state` | Chrome 153·Edge 151 에는 이 키가 없습니다. 이 키를 읽는 옛 도구는 요즘 판에서 빈 값을 냅니다. |
 | Edge 전용 | `ExtensionActivityEdge`·`ExtensionActivityComp` 는 Edge 에만 있습니다. |
-| Whale | 확장 폴더와 설정 구조, Whale 스토어에서 받은 확장의 표시는 공개된 분석 자료가 없어 검체로 확인해야 합니다. |
+| Whale | 확장 폴더와 설정 구조, Whale 스토어에서 받은 확장의 표시는 실제 데이터로 확인해야 합니다. |
 
 ### 밖에서 설치하는 경로 (외부 설치)
 
@@ -105,7 +105,7 @@ nav_order: 1680
 
 - 거의 모든 항목에 있는 나머지 키는 `was_installed_by_default`, `was_installed_by_oem`, `creation_flags`, `account_extension_type`, `commands`, `content_settings`, `preferences` 입니다.
 - 일부 항목에만 있는 키는 `cws-info`, `allowlist`, `active_bit`, `service_worker_registration_info`, `uninstall_url`, `incognito`, `last_loaded_browser_version`, `lastpingday` 등입니다.
-- 폴더를 지운 뒤에도 이 항목이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+- 폴더를 지운 뒤에도 이 항목이 남는지는 실제 데이터로 확인해야 합니다.
 
 ### location 값
 
@@ -181,8 +181,8 @@ Chrome 153·Edge 151 에서는 1·5·6·10 이 나옵니다.
 - 확장이 실제로 무엇을 했는지는 이 기록으로 알 수 없습니다. Edge 의 활동 DB 도 비어 있을 수 있습니다.
 - `manifest` 에 권한이 있다고 그 권한을 실제로 썼다는 뜻은 아닙니다.
 - 이 기록만으로 확장이 악성인지 알 수 없습니다. 확장 폴더의 코드를 따로 검사합니다.
-- 목록에 없다고 설치한 적이 없는 것은 아닙니다. 지운 확장이 설정 목록에서 어떻게 되는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
-- 같은 확장은 Chrome 과 Edge 에서 ID 가 같습니다. ID 만으로 어느 브라우저의 기록인지 알 수 없으므로 파일 위치로 가립니다.
+- 목록에 없다고 설치한 적이 없는 것은 아닙니다. 지운 확장이 설정 목록에서 어떻게 되는지는 실제 데이터로 확인해야 합니다.
+- 같은 확장은 Chrome 과 Edge 에서 ID 가 같습니다. ID 만으로 어느 브라우저의 기록인지 알 수 없으므로 파일 위치로 구분합니다.
 
 보고서에는 "이 확장을 설치했다" 대신 이렇게 씁니다. "이 프로필의 `Secure Preferences` 에 ID X 확장이 `location` 4(압축 풀린 확장 불러오기)로 있고, `first_install_time` 은 Y(UTC) 이다."
 
@@ -201,11 +201,11 @@ Chrome 153·Edge 151 에서는 1·5·6·10 이 나옵니다.
 - **`Preferences` 만 보면 목록이 비어 보입니다.** Chrome 153·Edge 151 은 확장 목록을 `Secure Preferences` 에 둡니다.
 - **ID 만 있는 항목이 있습니다.** `manifest`·`location`·설치 시각이 없는 항목으로, Edge 151 프로필 하나에 22개, Chrome 153 프로필 하나에 1개가 나온 예가 있습니다. 이런 항목은 설치된 확장으로 세지 않습니다.
 - **ID 만 있는 항목의 `[8192]` 를 단정하지 않습니다.** 위 Edge 예에서는 22개 가운데 21개의 `disable_reasons` 가 `[8192]` 하나뿐이었습니다. 8192 는 `EXTERNAL_EXTENSION` 이고, 밖에서 설치한 확장은 사용자가 켜야 합니다[3]. 두 사실을 이으면 "밖에서 설치해 사용자 확인을 기다리는 상태" 로 읽을 수 있지만, 이를 밝힌 공개 자료가 없으므로 추정으로만 씁니다.
-- **브라우저에 딸린 확장을 따로 셉니다.** `location` 5 는 브라우저 구성 요소입니다. `path` 가 `Program Files` 아래를 가리킵니다. 사용자가 넣은 확장과 섞어 세지 않습니다.
+- **브라우저에 딸린 확장을 따로 분류합니다.** `location` 5 는 브라우저 구성 요소입니다. `path` 가 `Program Files` 아래를 가리킵니다. 사용자가 넣은 확장과 섞어 세지 않습니다.
 - **Edge 의 `from_webstore` 가 false 라고 바로 의심하지 않습니다.** Edge 에는 `location` 1 인데 `from_webstore` 가 false 인 확장이 있습니다. Edge 애드온 스토어에서 받은 것으로 보이지만, 이를 밝힌 공개 자료가 없어 추정으로 둡니다.
 - **웹 스토어가 아닌 경로를 먼저 봅니다.** `location` 2·3·4·8 은 웹 스토어가 아닌 경로입니다. Chrome 에서 `location` 1 인데 `from_webstore` 가 false 인 확장도 따로 확인합니다. Chrome 153 에서는 `location` 1 이 모두 `from_webstore` true 입니다.
 - **`disable_reasons` 는 값을 더하지 않고 목록으로 읽습니다.** 목록의 원소 하나가 이유 하나입니다.
-- **검증값으로 조작 여부를 가리지 못합니다.** 이 페이지는 `Secure Preferences` 의 검증값(MAC) 계산법과, 검증값으로 설정 조작을 가리는 법을 다루지 않습니다.
+- **검증값으로 조작 여부를 판별하지 못합니다.** 이 페이지는 `Secure Preferences` 의 검증값(MAC) 계산법과, 검증값으로 설정 조작을 판별하는 법을 다루지 않습니다.
 - **외부 설치 키는 지우면 사라집니다.** 키를 지우면 확장도 없어지므로, 조사 시점에 키가 없어도 외부 설치가 없었다고 단정하지 않습니다. [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 옛 레지스트리를 봅니다.
 - **원본 프로필로 브라우저를 띄우지 않습니다.** 해시를 기록한 사본의 JSON 파일을 읽습니다.
 - **Whale 은 따로 확인합니다.** 이 페이지의 구조는 Chrome·Edge 기준입니다.
@@ -214,7 +214,7 @@ Chrome 153·Edge 151 에서는 1·5·6·10 이 나옵니다.
 
 ### 값으로 한 번
 
-아래 값은 모두 이 페이지의 규칙으로 만든 예시입니다. 실제 확장이나 검체에서 나온 값이 아닙니다.
+아래 값은 모두 이 페이지의 규칙으로 만든 예시입니다. 실제 확장이나 기기에서 나온 값이 아닙니다.
 
 **확장 ID 만들기.** 공개키의 SHA-256 앞 16바이트가 아래와 같다고 합니다.
 
@@ -303,7 +303,7 @@ for ext_id, s in prefs.get('extensions', {}).get('settings', {}).items():
 
 ## 실습
 
-크롬이나 엣지를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+크롬이나 엣지를 쓴 공개 실습 데이터(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 확장 목록이 `Secure Preferences` 와 `Preferences` 가운데 어디에 있습니까?
 2. `manifest` 가 든 항목은 몇 개이고, ID 만 있는 항목은 몇 개입니까?
@@ -312,7 +312,7 @@ for ext_id, s in prefs.get('extensions', {}).get('settings', {}).items():
 5. 확장 하나를 골라 `manifest.json` 의 `key` 로 ID 를 계산해 봅니다. 폴더 이름과 같습니까?
 6. `first_install_time` 과 확장 폴더의 $MFT 생성 시각은 얼마나 차이 납니까?
 7. `disable_reasons` 가 빈 목록이 아닌 확장은 어떤 이유로 꺼져 있습니까?
-8. 검체의 레지스트리에 외부 설치 키가 있습니까? 있다면 그 확장 ID 가 설정 목록에도 있습니까?
+8. 분석 대상의 레지스트리에 외부 설치 키가 있습니까? 있다면 그 확장 ID 가 설정 목록에도 있습니까?
 
 ## 참고 문헌
 

@@ -10,7 +10,7 @@ nav_order: 1870
 
 ## 무엇을 기록하나 · 왜 생기나
 
-EXIF (Exchangeable Image File Format)는 사진 파일 안에 태그 번호와 값을 짝지어 적어 두는 메타데이터이고, 태그마다 번호와 이름이 정해져 있습니다 [1]. 조사에서 주로 보는 태그는 시각, 기기·소프트웨어, GPS, 제조사 메모 네 갈래입니다. Make·Model·Software·HostComputer 같은 태그 이름이 보여 주듯 사진을 만든 기기와 소프트웨어를 적는 칸이 따로 있고, 렌즈 제조사와 모델, 기기 일련번호와 소유자 이름을 적는 칸도 있습니다 [1].
+EXIF (Exchangeable Image File Format)는 사진 파일 안에 태그 번호와 값을 짝지어 적어 두는 메타데이터이고, 태그마다 번호와 이름이 정해져 있습니다 [1]. 조사에서 주로 보는 태그는 시각, 기기·소프트웨어, GPS, 제조사 메모 네 종류입니다. Make·Model·Software·HostComputer 같은 태그 이름이 보여 주듯 사진을 만든 기기와 소프트웨어를 적는 태그가 따로 있고, 렌즈 제조사와 모델, 기기 일련번호와 소유자 이름을 적는 태그도 있습니다 [1].
 
 제조사 메모 (MakerNote)는 제조사마다 내용이 다른 태그라서 [1], 해석할 때는 제조사별 태그 표를 봅니다. iPhone 사진의 Apple 제조사 메모 태그 표는 ExifTool 이 공개해 두었습니다 [2]. 여기에는 부팅 뒤 켜져 있던 시간, 가속도 방향, 연속 촬영 (burst) 묶음 ID, 라이브 포토 (Live Photo) 구성 파일을 묶는 ID, 촬영 모드와 카메라 종류가 들어갑니다 [2].
 
@@ -23,7 +23,7 @@ EXIF 는 사진 파일 안에 들어 있는 값이라서 정해진 시스템 경
 | EXIF 태그 번호·이름·뜻 | ExifTool 태그 표 | [1] |
 | Apple 제조사 메모 태그 | ExifTool 태그 표 | [2] |
 | HEIC 컨테이너 구조와 그 안에서 EXIF 를 담는 위치 | 이 페이지에서 다루지 않음 | — |
-| AirDrop·메일·사진 앱 내보내기에서 위치 정보가 빠지거나 형식이 바뀌는 조건 | 검체에서 확인 | — |
+| AirDrop·메일·사진 앱 내보내기에서 위치 정보가 빠지거나 형식이 바뀌는 조건 | 실제 데이터로 확인 | — |
 
 사진 보관함에 들어간 사진은 보관함 데이터베이스에도 따로 정보가 남지만, 그 값과 EXIF 값이 어떤 관계인지는 이 페이지 범위 밖입니다. 보관함 쪽은 [사진 보관함 (Photos Library)](../cloud-apps/photos-library.md)에서 다룹니다.
 
@@ -83,7 +83,7 @@ EXIF 는 사진 파일 안에 들어 있는 값이라서 정해진 시스템 경
 | 0x002e | CameraType | 0=Back Wide Angle, 1=Back Normal, 6=Front |
 | 0x0038 | AFMeasuredDepth | 비행시간 (ToF) 보조 자동 초점이 잰 거리 |
 
-ExifTool 은 ContentIdentifier 와 같은 값이 확장 속성 (extended attribute, xattr)으로 나올 때 MediaGroupUUID 라는 이름으로 보여 줍니다 [2]. 짝이 되는 동영상 파일 쪽에서 이 값을 담는 키 이름은 검체에서 확인합니다.
+ExifTool 은 ContentIdentifier 와 같은 값이 확장 속성 (extended attribute, xattr)으로 나올 때 MediaGroupUUID 라는 이름으로 보여 줍니다 [2]. 짝이 되는 동영상 파일 쪽에서 이 값을 담는 키 이름은 실제 파일로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -95,13 +95,13 @@ ExifTool 은 ContentIdentifier 와 같은 값이 확장 속성 (extended attribu
 
 ## 시각 해석
 
-시각 태그는 수정 시각(ModifyDate), 찍은 시각(DateTimeOriginal), 디지털화한 시각(CreateDate) 세 가지이고, 각각 시간대 태그가 따로 짝지어져 있습니다 [1]. 시각을 UTC 로 옮길 때는 짝이 되는 Offset 태그를 함께 읽고, Offset 태그가 없는 파일이면 시간대는 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md) 같은 다른 기록에서 따로 찾습니다. 세 시각 태그 문자열에는 시간대가 붙지 않습니다. 그래서 세 시각을 UTC 나 현지 시각으로 단정하지 말고, 같은 파일의 Offset 태그나 다른 시각 기록과 대 본 뒤에 판단합니다. GPS 쪽은 사정이 달라서, GPSTimeStamp 는 GPS 로 위치를 잡은 UTC 시각입니다 [3]. GPSDateStamp 와 GPSTimeStamp 를 합친 값을 DateTimeOriginal 과 견주면 그 차이로 촬영 당시 기기의 시간대를 가늠해 볼 수 있지만, 위치를 잡은 시각과 셔터를 누른 시각이 다를 수 있어서 어림값으로만 씁니다.
+시각 태그는 수정 시각(ModifyDate), 찍은 시각(DateTimeOriginal), 디지털화한 시각(CreateDate) 세 가지이고, 각각 시간대 태그가 따로 짝지어져 있습니다 [1]. 시각을 UTC 로 옮길 때는 짝이 되는 Offset 태그를 함께 읽고, Offset 태그가 없는 파일이면 시간대는 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md) 같은 다른 기록에서 따로 찾습니다. 세 시각 태그 문자열에는 시간대가 붙지 않습니다. 그래서 세 시각을 UTC 나 현지 시각으로 단정하지 말고, 같은 파일의 Offset 태그나 다른 시각 기록과 대 본 뒤에 판단합니다. GPS 쪽은 사정이 달라서, GPSTimeStamp 는 GPS 로 위치를 잡은 UTC 시각입니다 [3]. GPSDateStamp 와 GPSTimeStamp 를 합친 값을 DateTimeOriginal 과 비교하면 그 차이로 촬영 당시 기기의 시간대를 추정해 볼 수 있지만, 위치를 잡은 시각과 셔터를 누른 시각이 다를 수 있어서 어림값으로만 씁니다.
 
 SubSecTimeOriginal 은 DateTimeOriginal 에만 붙는 초 아래 단위라서 [1], 같은 초에 찍힌 연속 촬영 사진의 순서를 가릴 때 함께 봅니다.
 
 EXIF 시각은 파일 안에 적힌 값이고, 파일 시스템이 적는 만든 시각·수정 시각과는 따로 움직입니다. 파일 시스템 시각은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다.
 
-Apple 제조사 메모의 RunTime 은 벽시계 시각이 아니라 마지막 부팅 뒤 켜져 있던 시간이고 대기 시간은 빠집니다 [2]. RunTime 은 하위 태그 네 개로 나뉘는 CMTime 구조이고 [2], 이름으로 보아 RunTimeValue 를 RunTimeScale 로 나누면 초가 됩니다. 같은 기기에서 나온 사진끼리 RunTime 과 DateTimeOriginal 의 간격을 견주면 그 사이에 재부팅이 있었는지 가늠해 볼 수 있습니다.
+Apple 제조사 메모의 RunTime 은 실제 시각(wall clock)이 아니라 마지막 부팅 뒤 켜져 있던 시간이고 대기 시간은 빠집니다 [2]. RunTime 은 하위 태그 네 개로 나뉘는 CMTime 구조이고 [2], 이름으로 짐작하면 RunTimeValue 를 RunTimeScale 로 나누면 초가 됩니다. 같은 기기에서 나온 사진끼리 RunTime 과 DateTimeOriginal 의 간격을 비교하면 그 사이에 재부팅이 있었는지 추정해 볼 수 있습니다.
 
 ## 함정과 한계
 
@@ -109,7 +109,7 @@ Apple 제조사 메모의 RunTime 은 벽시계 시각이 아니라 마지막 �
 
 **제조사 메모는 제조사마다 다릅니다.** 0x927c MakerNote 의 내용은 제조사마다 다르고 [1], 이 페이지의 표는 Apple 표입니다 [2]. 다른 제조사의 사진에 Apple 표를 대입하지 않습니다.
 
-**EXIF 값만으로 조작 여부를 가리지 못합니다.** 태그 값은 파일 안에 적힌 데이터라서, 값이 그럴듯해도 그대로 믿지 말고 파일 시스템 시각, 사진 보관함, 전송 기록과 맞는지 봅니다. 세 시각 태그와 Offset 태그, UTC 로 적힌 GPS 날짜·시각이 서로 맞지 않으면 편집이나 변환을 거쳤을 가능성을 살펴볼 계기로 삼습니다.
+**EXIF 값만으로 조작 여부를 판별하지 못합니다.** 태그 값은 파일 안에 적힌 데이터라서, 값이 그럴듯해도 그대로 믿지 말고 파일 시스템 시각, 사진 보관함, 전송 기록과 맞는지 봅니다. 세 시각 태그와 Offset 태그, UTC 로 적힌 GPS 날짜·시각이 서로 맞지 않으면 편집이나 변환을 거쳤을 가능성을 살펴볼 계기로 삼습니다.
 
 **전송 경로에 따라 값이 빠질 수 있습니다.** AirDrop·메일·사진 앱 내보내기를 거치면서 위치 정보가 빠지거나 다른 형식으로 바뀔 수 있으므로, 태그가 없는 파일을 보고 원래부터 없었다고 쓰지 않습니다.
 
@@ -121,7 +121,7 @@ Apple 제조사 메모의 RunTime 은 벽시계 시각이 아니라 마지막 �
 
 태그 항목을 오프셋 단위로 헥스로 따라가려면 EXIF 명세를 옆에 두고 봅니다.
 
-명세 없이도 헥스 편집기로 할 수 있는 일은 있습니다. 시각 태그 값은 문자열이라서 [1] 헥스 화면의 글자 칸에서 날짜처럼 보이는 문자열을 눈으로 찾을 수 있고, Make·Model 칸에 기기 이름이 문자열로 들어 있으면 같은 방법으로 보입니다. 도구가 보여 준 값과 헥스에서 찾은 문자열이 같은지 한 번 대 보면, 도구가 값을 바꾸거나 빠뜨리지 않았는지 확인할 수 있습니다.
+명세 없이도 헥스 편집기로 할 수 있는 일은 있습니다. 시각 태그 값은 문자열이라서 [1] 헥스 화면의 글자 영역에서 날짜처럼 보이는 문자열을 눈으로 찾을 수 있고, Make·Model 태그에 기기 이름이 문자열로 들어 있으면 같은 방법으로 보입니다. 도구가 보여 준 값과 헥스에서 찾은 문자열이 같은지 한 번 대 보면, 도구가 값을 바꾸거나 빠뜨리지 않았는지 확인할 수 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -151,7 +151,7 @@ Apple 제조사 메모의 RunTime 은 벽시계 시각이 아니라 마지막 �
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 사진 파일이 들어 있는 macOS 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 데이터셋 가운데 사진 파일이 들어 있는 macOS 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 사진 한 장에서 DateTimeOriginal·CreateDate·ModifyDate 와 짝이 되는 Offset 태그를 모두 찾아 적고, 세 시각이 서로 같은지 다른지 설명할 수 있나요?
 2. Offset 태그가 없는 사진이 있다면, 그 시각을 UTC 로 옮기려고 어떤 기록을 더 찾아봐야 하나요?

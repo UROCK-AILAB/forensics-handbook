@@ -12,7 +12,7 @@ nav_order: 290
 
 관리자가 사용자를 추가하거나 Workspace 서비스를 켜면 관리 콘솔 감사 로그에 한 건이 생깁니다[12][16]. 관리 콘솔 화면에서는 "Admin log events", 보고서 API (Reports API) 에서는 applicationName `admin`, Cloud Logging 으로 공유한 사본에서는 서비스 이름 `admin.googleapis.com` 으로 부릅니다[2][12][16]. 관리자는 이 기록을 지우거나 보관 기간을 바꿀 수 없습니다[11].
 
-이벤트는 유형(`events[].type`)으로 묶입니다. 이벤트 이름 목록에 있는 유형은 `APPLICATION_SETTINGS`, `CALENDAR_SETTINGS`, `CHAT_SETTINGS`, `CHROME OS_SETTINGS`, `CONTACTS_SETTINGS`, `DELEGATED_ADMIN`, `DOCS_SETTINGS`, `DOMAIN_SETTINGS`, `EMAIL_SETTINGS`, `GROUP_SETTINGS`, `LICENSES_SETTINGS`, `MOBILE_SETTINGS`, `ORG_SETTINGS`, `SECURITY_SETTINGS`, `SITES_SETTINGS`, `USER_SETTINGS` 입니다[3]. 위임 관리 이벤트는 부록 페이지와 Cloud Logging 에서 `DELEGATED_ADMIN_SETTINGS` 로 나오고, Chrome OS 설정도 Cloud Logging 에서는 밑줄을 쓴 `CHROME_OS_SETTINGS` 입니다[3][7][16]. 검체에서는 두 철자를 모두 검색합니다.
+이벤트는 유형(`events[].type`)으로 묶입니다. 이벤트 이름 목록에 있는 유형은 `APPLICATION_SETTINGS`, `CALENDAR_SETTINGS`, `CHAT_SETTINGS`, `CHROME OS_SETTINGS`, `CONTACTS_SETTINGS`, `DELEGATED_ADMIN`, `DOCS_SETTINGS`, `DOMAIN_SETTINGS`, `EMAIL_SETTINGS`, `GROUP_SETTINGS`, `LICENSES_SETTINGS`, `MOBILE_SETTINGS`, `ORG_SETTINGS`, `SECURITY_SETTINGS`, `SITES_SETTINGS`, `USER_SETTINGS` 입니다[3]. 위임 관리 이벤트는 부록 페이지와 Cloud Logging 에서 `DELEGATED_ADMIN_SETTINGS` 로 나오고, Chrome OS 설정도 Cloud Logging 에서는 밑줄을 쓴 `CHROME_OS_SETTINGS` 입니다[3][7][16]. 실제 로그에서는 두 철자를 모두 검색합니다.
 
 조사에서 자주 보는 이벤트는 아래와 같고, 이름과 매개변수는 보고서 API 가 돌려주는 값입니다.
 
@@ -54,7 +54,7 @@ Cloud Logging 사본에는 위 유형 말고도 `ALERT_CENTER`, `SECURITY_INVEST
 
 ### 보관 기간과 지연 시간
 
-Workspace 감사 로그 전체의 보관 기간을 이 쪽에 모아 둡니다. 다른 서비스와의 비교는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에 있습니다. 2026년 9월 문서 기준입니다.
+Workspace 감사 로그 전체의 보관 기간을 이 페이지에 모아 둡니다. 다른 서비스와의 비교는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에 있습니다. 2026년 9월 문서 기준입니다.
 
 | 로그 | 보관 | 기록에서 조회까지 걸리는 시간 |
 |---|---|---|
@@ -126,7 +126,7 @@ Workspace 감사 로그 전체의 보관 기간을 이 쪽에 모아 둡니다. 
 | `events[].type`, `events[].name` | 이벤트 유형과 이름[1] |
 | `events[].parameters[]` | `name` 과 값 필드 `value`·`multiValue`·`intValue`·`multiIntValue`·`boolValue`·`messageValue`·`multiMessageValue`[1] |
 
-`userDeviceInfo` 필드는 Drive·Chrome·SAML 같은 일부 applicationName 에만 있고 `admin` 에는 없습니다[1]. 관리 콘솔 화면의 Actor 칸에는 메일 주소 대신 License manager(관리자 동작으로 사용자 라이선스가 바뀐 경우), Service account 나 Anonymous(서비스 계정 관리자가 한 동작)가 보일 수 있습니다[12].
+`userDeviceInfo` 필드는 Drive·Chrome·SAML 같은 일부 applicationName 에만 있고 `admin` 에는 없습니다[1]. 관리 콘솔 화면의 Actor 열에는 메일 주소 대신 License manager(관리자 동작으로 사용자 라이선스가 바뀐 경우), Service account 나 Anonymous(서비스 계정 관리자가 한 동작)가 보일 수 있습니다[12].
 
 ### BigQuery 와 Cloud Logging 의 이름
 
@@ -151,7 +151,7 @@ Workspace 감사 로그 전체의 보관 기간을 이 쪽에 모아 둡니다. 
 
 ## 시각 해석
 
-보고서 API 문서의 응답 예시는 `id.time` 을 `2011-06-17T15:39:18.460Z` 처럼 `Z` 로 끝나는 RFC 3339 UTC 문자열로 보여 주지만, 같은 문서 묶음의 필드 설명은 "UNIX epoch time in seconds" 라고 적습니다[1][2]. 두 설명이 다르므로 검체의 값 모양을 보고 판단합니다. 문자열 끝이 `Z` 이면 UTC 입니다.
+보고서 API 문서의 응답 예시는 `id.time` 을 `2011-06-17T15:39:18.460Z` 처럼 `Z` 로 끝나는 RFC 3339 UTC 문자열로 보여 주지만, 같은 문서 묶음의 필드 설명은 "UNIX epoch time in seconds" 라고 적습니다[1][2]. 두 설명이 다르므로 실제 로그의 값 모양을 보고 판단합니다. 문자열 끝이 `Z` 이면 UTC 입니다.
 
 `id.time` 은 관리자가 동작한 시각이고, 조회할 수 있게 되는 시각은 몇 분 늦습니다[11]. Cloud Logging 사본에는 작업 시각 `timestamp` 와 Cloud Logging 이 받은 시각 `receiveTimestamp` 가 따로 있고, 문서 예시에서는 두 값이 1시간 35분쯤 벌어져 있습니다[16]. 타임라인에는 `timestamp`(또는 `activityId.timeUsec`, 마이크로초 단위 UNIX 시각)를 씁니다[16].
 
@@ -171,7 +171,7 @@ BigQuery 표는 `time_usec` 열로 하루 단위 파티션(`_PARTITIONTIME`)을 
 
 **받는 경로마다 자료가 다릅니다.** BigQuery 에는 필터 없는 전체 자료만 있고, 보고서 API 의 `orgUnitID` 필터에 해당하는 열이 없습니다[14]. 같은 BigQuery 설정 문서에 "표는 자동으로 지워지지 않는다" 는 문장과 "내보낸 자료의 기본 만료는 60일" 이라는 문장이 함께 있으므로, 데이터 세트의 표 만료 설정을 직접 확인합니다[14].
 
-**탐지 규칙의 필드 이름은 검체 형식에 맞춰야 합니다.** SigmaHQ 의 Workspace 관리 규칙은 `eventService: admin.googleapis.com`, `eventName`, `new_value`, `setting_name` 처럼 평평한 필드를 쓰고, 같은 갈래의 로그인 규칙은 Cloud Logging 의 `protoPayload.*` 필드를 씁니다[18]. 보고서 API JSON 이나 BigQuery 표에 규칙을 돌리려면 필드 이름을 바꿔 맞춥니다. 규칙을 옮기는 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
+**탐지 규칙의 필드 이름은 수집한 로그 형식에 맞춰야 합니다.** SigmaHQ 의 Workspace 관리 규칙은 `eventService: admin.googleapis.com`, `eventName`, `new_value`, `setting_name` 처럼 평평한 필드를 쓰고, 같은 분류의 로그인 규칙은 Cloud Logging 의 `protoPayload.*` 필드를 씁니다[18]. 보고서 API JSON 이나 BigQuery 표에 규칙을 돌리려면 필드 이름을 바꿔 맞춥니다. 규칙을 옮기는 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
 
 ### 지우기·조작
 
@@ -203,7 +203,7 @@ jq -c 'select(any(.events[]; .name=="GRANT_ADMIN_PRIVILEGE" or .name=="GRANT_DEL
 
 ### 공개 도구
 
-ALFA 는 보고서 API 로 Workspace 감사 로그를 받아 분석하는 공개 도구입니다[17]. `alfa acquire --logtype=admin` 은 `data/` 아래 UTC 기준 `yymmdd.HHMMSS` 이름의 폴더에 `admin.json` 을 만들고, 한 줄에 활동 하나를 JSON 으로 씁니다[17]. `--user` 로 관리자 한 명만, `--start-time`·`--end-time` 으로 기간을 정하는데, 시간대를 적지 않은 값은 UTC 로 봅니다[17]. 한 쪽당 결과 수(`--max-results`)는 기본값이자 최댓값이 1000이고, 429·5xx 응답은 간격을 늘려 가며 다시 요청합니다[17]. `alfa analyze` 는 기본으로 해롭지 않다고 보는 활동을 걸러 내므로(`--no-filter` 로 끔), 증거 보존용 원자료는 `acquire` 결과를 씁니다[17].
+ALFA 는 보고서 API 로 Workspace 감사 로그를 받아 분석하는 공개 도구입니다[17]. `alfa acquire --logtype=admin` 은 `data/` 아래 UTC 기준 `yymmdd.HHMMSS` 이름의 폴더에 `admin.json` 을 만들고, 한 줄에 활동 하나를 JSON 으로 씁니다[17]. `--user` 로 관리자 한 명만, `--start-time`·`--end-time` 으로 기간을 정하는데, 시간대를 적지 않은 값은 UTC 로 봅니다[17]. 한 페이지당 결과 수(`--max-results`)는 기본값이자 최댓값이 1000이고, 429·5xx 응답은 간격을 늘려 가며 다시 요청합니다[17]. `alfa analyze` 는 기본으로 해롭지 않다고 보는 활동을 걸러 내므로(`--no-filter` 로 끔), 증거 보존용 원자료는 `acquire` 결과를 씁니다[17].
 
 탐지 규칙으로는 SigmaHQ 의 Workspace 관리 규칙 7개가 있습니다[18]. 관리자 권한 부여(`GRANT_ADMIN_PRIVILEGE`·`GRANT_DELEGATED_ADMIN_PRIVILEGES`), 도메인 API 접근 허용(`AUTHORIZE_API_CLIENT_ACCESS`), 2단계 인증 강제 해제(`ENFORCE_STRONG_AUTHENTICATION`·`ALLOW_STRONG_AUTHENTICATION` 에 `new_value` 가 `false`), 역할 변경·삭제(`DELETE_ROLE`·`RENAME_ROLE`·`UPDATE_ROLE`), 역할 권한 삭제(`REMOVE_PRIVILEGE`), 앱 제거(`REMOVE_APPLICATION`·`REMOVE_APPLICATION_FROM_WHITELIST`), 접근 수준 변경(`CHANGE_APPLICATION_SETTING` 에 `setting_name` 이 `ContextAwareAccess` 로 시작)을 찾습니다[18].
 
@@ -218,11 +218,11 @@ ALFA 는 보고서 API 로 Workspace 감사 로그를 받아 분석하는 공개
 | [Vault와 Takeout](./vault-takeout.md) | 관리자가 Vault 로 자료를 내보내거나 사용자 자료를 옮긴 일 |
 | [Cloud Audit Logs](../gcp/cloud-audit-logs.md) | 같은 조직의 Google Cloud 쪽에서 같은 관리자 계정이 한 IAM 변경 |
 
-권한 변화를 시간 순서로 엮는 절차는 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), 권한 상승 조사 흐름은 [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md), 다른 기록과 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 보고서에는 "관리자가 권한을 넘겼다" 가 아니라 "이 시각에 이 관리자 계정으로 이 사용자에게 이 역할을 준 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+권한 변화를 시간 순서로 엮는 절차는 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), 권한 상승 조사 흐름은 [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md), 다른 기록과 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 보고서에는 "관리자가 권한을 넘겼다" 가 아니라 "이 시각에 이 관리자 계정으로 이 사용자에게 이 역할을 준 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 실습
 
-Workspace 감사 로그가 들어 있는 공개 검체는 드뭅니다. 시험용 Workspace 테넌트나 위의 만든 예시 레코드로 풀어 봅니다.
+Workspace 감사 로그가 들어 있는 공개 데이터는 드뭅니다. 시험용 Workspace 테넌트나 위의 만든 예시 레코드로 풀어 봅니다.
 
 1. 위 예시 레코드에서 권한을 준 계정, 권한을 받은 계정, 준 역할 이름을 찾아 보세요. 이 레코드만으로 권한을 받은 사람이 그 권한을 썼다고 말할 수 있나요?
 2. 시험용 테넌트에서 사용자 하나에 위임 관리자 역할을 주고, 관리 콘솔 Admin log events 와 보고서 API 결과에 같은 일이 어떤 이름으로 나오는지 비교해 보세요. 화면의 Date 와 API 의 `id.time` 은 몇 시간 차이가 나나요?

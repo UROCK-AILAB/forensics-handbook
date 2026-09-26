@@ -12,7 +12,7 @@ has_toc: false
 
 ## 왜 중요한가
 
-사파리는 맥에 기본으로 들어 있는 브라우저라서, 다른 브라우저를 따로 설치하지 않은 계정이라면 웹 사용의 흔적은 대부분 사파리 파일에 있습니다. 파일마다 알려 주는 것이 달라서 방문 기록은 어느 주소를 언제 열었는지, 다운로드 목록은 무엇을 어디에 받았는지, 탭과 세션 파일은 무엇이 열려 있었고 언제 닫혔는지를 말해 주고, 한 파일이 비어 있으면 다른 파일로 빈자리를 메웁니다.
+사파리는 맥에 기본으로 들어 있는 브라우저라서, 다른 브라우저를 따로 설치하지 않은 계정이라면 웹 사용의 흔적은 대부분 사파리 파일에 있습니다. 파일마다 담긴 내용이 달라서 방문 기록으로는 어느 주소를 언제 열었는지, 다운로드 목록으로는 무엇을 어디에 받았는지, 탭과 세션 파일로는 무엇이 열려 있었고 언제 닫혔는지를 알 수 있고, 한 파일이 비어 있으면 다른 파일로 빈자리를 메웁니다.
 
 사용자 데이터 폴더는 두 곳입니다. 옛 위치 `~/Library/Safari/` 와 샌드박스 컨테이너 (Sandbox Container) 위치 `~/Library/Containers/com.apple.Safari/Data/Library/Safari` 가 있고, 뒤쪽은 Safari 15 이상에서 쓰는 경로입니다 [1]. 다만 Safari 15 부터 모든 파일이 컨테이너로 옮겨 갔다고 볼 공개 자료는 없고, ForensicArtifacts 정의는 `History.db` 와 `Downloads.plist` 를 `~/Library/Safari/` 에만 적습니다 [2]. 파일이 실제로 어느 쪽에 있는지는 파일마다 달라서, 수집할 때는 두 위치를 모두 가져옵니다.
 
@@ -29,7 +29,7 @@ has_toc: false
 | 캐시와 웹 데이터 | `~/Library/Caches/com.apple.Safari/Cache.db`, `~/Library/Cookies/Cookies.binarycookies` 와 각 컨테이너 쪽 경로 [2] | 버전별 차이 자료 없음 | 받아 둔 웹 자원, 쿠키 |
 | 확장 | `Extensions`·`AppExtensions`·`WebExtensions` 폴더의 `Extensions.plist` [1][2] | Safari 14 에서 형식 바뀜 [1] | 설치한 확장과 켜짐 여부 |
 | 설정 | `~/Library/Preferences/com.apple.safari.plist`, `~/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist` [1] | 키마다 쓰인 버전이 다름 [1] | 최근 검색, 다운로드 폴더, 홈페이지 |
-| 그 밖의 DB | `~/Library/Safari/` 의 `AutoFillCorrections.db`, `CloudAutoFillCorrections.db`, `PerSitePreferences.db`, `Favicon Cache/favicons.db`, `Touch Icons Cache/TouchIconCacheSettings.db`, 각각 `-wal` 동반 [2] | 버전별 차이 자료 없음 | 수집 대상 파일. 표·칸 구성은 공개 자료 없음 |
+| 그 밖의 DB | `~/Library/Safari/` 의 `AutoFillCorrections.db`, `CloudAutoFillCorrections.db`, `PerSitePreferences.db`, `Favicon Cache/favicons.db`, `Touch Icons Cache/TouchIconCacheSettings.db`, 각각 `-wal` 동반 [2] | 버전별 차이 자료 없음 | 수집 대상 파일. 표·열 구성은 공개 자료 없음 |
 
 버전 흐름은 아래와 같습니다 [1]. Apple 이 밝힌 연표가 아니라 분석 도구 mac_apt 가 버전마다 다르게 읽는 지점을 모은 것입니다.
 
@@ -43,7 +43,7 @@ has_toc: false
 
 ### 설정 파일에서 읽는 키
 
-설정 파일은 하위 페이지 어디에도 따로 속하지 않아서 이 페이지에 모아 둡니다. 설정 파일에는 아래 키가 있고 [1], 뜻 칸의 설명 가운데 출처에 없는 것은 키 이름으로 짐작한 것입니다.
+설정 파일은 하위 페이지 어디에도 따로 속하지 않아서 이 페이지에 모아 둡니다. 설정 파일에는 아래 키가 있고 [1], 뜻 열의 설명 가운데 출처에 없는 것은 키 이름으로 짐작한 것입니다.
 
 | 키 | 쓰인 버전 | 뜻 |
 |---|---|---|

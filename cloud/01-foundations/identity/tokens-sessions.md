@@ -10,7 +10,7 @@ nav_order: 50
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 로그인 뒤의 접근을 이어 주는 증표를 다룹니다. 액세스 토큰 (access token) 은 API 를 부를 때 내는 짧은 수명의 증표이고, 새로 고침 토큰 (refresh token) 은 사용자가 다시 인증하지 않아도 새 액세스 토큰을 받게 해 주는 긴 수명의 증표입니다. 브라우저에서는 세션 쿠키 (session cookie) 가 같은 일을 합니다. AWS 처럼 토큰 대신 임시 자격 증명 (temporary security credentials) 을 내주는 서비스도 있습니다. 증표를 새로 받거나 쓸 때 서비스가 남기는 식별자가 로그를 잇는 고리가 됩니다.
+이 페이지는 파일 형식이 아니라 로그인 뒤의 접근을 이어 주는 증표를 다룹니다. 액세스 토큰 (access token) 은 API 를 부를 때 내는 짧은 수명의 증표이고, 새로 고침 토큰 (refresh token) 은 사용자가 다시 인증하지 않아도 새 액세스 토큰을 받게 해 주는 긴 수명의 증표입니다. 브라우저에서는 세션 쿠키 (session cookie) 가 같은 일을 합니다. AWS 처럼 토큰 대신 임시 자격 증명 (temporary security credentials) 을 내주는 서비스도 있습니다. 증표를 새로 받거나 쓸 때 서비스가 남기는 식별자가 로그를 잇는 고리가 됩니다.
 
 | 서비스 | 세션을 잇는 증표 | 레코드 속 세션·토큰 식별자 | 대표 기록 |
 |---|---|---|---|
@@ -77,8 +77,8 @@ CAE 를 지원하는 서비스(Exchange Online·SharePoint Online·Teams)는 아
 | `correlationId` | 로그인을 시작할 때 클라이언트가 보내는 식별자[9]. 클라이언트가 넘긴 값이라 Entra 가 정확성을 보장하지 않음[8] | 한 로그인 흐름의 여러 요청 묶기 |
 | 요청 ID (Request ID) | 발급된 토큰에 대응하는 식별자. 특정 토큰의 로그인을 찾으려면 토큰에서 요청 ID 를 먼저 꺼내야 함[8] | 가진 토큰에서 로그인 찾기 |
 | `originalRequestId` | 인증 흐름 첫 요청의 ID[9] | 흐름의 시작점 찾기 |
-| `originalTransferMethod` | 세션을 시작한 전달 방법. `none`, `deviceCodeFlow`, `authenticationTransfer`[9] | 기기 코드 흐름·인증 전달로 시작된 세션 가리기 |
-| `incomingTokenType` | 로그인 때 제시된 토큰 종류. `none`, `primaryRefreshToken`, `saml11`, `saml20`, `remoteDesktopToken`, `refreshToken`[9] | PRT·새로 고침 토큰으로 이어진 로그인 가리기 |
+| `originalTransferMethod` | 세션을 시작한 전달 방법. `none`, `deviceCodeFlow`, `authenticationTransfer`[9] | 기기 코드 흐름·인증 전달로 시작된 세션 구분 |
+| `incomingTokenType` | 로그인 때 제시된 토큰 종류. `none`, `primaryRefreshToken`, `saml11`, `saml20`, `remoteDesktopToken`, `refreshToken`[9] | PRT·새로 고침 토큰으로 이어진 로그인 구분 |
 | `clientCredentialType` | 클라이언트나 서비스 주체가 낸 자격 증명 종류. `clientSecret`, `clientAssertion`, `federatedIdentityCredential`, `managedIdentity`, `certificate` 등[9] | 서비스 주체 로그인의 인증 수단 보기 |
 | `tokenProtectionStatusDetails` | 토큰이 기기에 묶였는지. 예전 필드 `signInTokenProtectionStatus`·`appTokenProtectionStatus` 는 폐기됨[9] | 기기에 묶인 토큰인지 보기 |
 
@@ -236,11 +236,11 @@ Windows 환경에서 브라우저 28종으로 한 시험에서는 데이터를 �
 - 비밀번호를 어디서 재설정했는지에 따라 취소 범위가 다릅니다. Azure 포털 재설정과 사용자의 비밀번호 변경은 비밀번호 아닌 방식으로 받은 토큰과 기밀 클라이언트 토큰을 남깁니다[2]. 보고서에 "비밀번호를 바꿔 세션을 끊었다" 고 쓰기 전에 재설정 경로와 토큰 전체 취소 기록을 확인합니다.
 - B2B 게스트의 토큰과 세션은 리소스 테넌트에서 끊기지 않고 홈 테넌트에서 끊어야 합니다[2][13].
 - PRT 는 발급·갱신 때 조건부 접근을 평가하지 않습니다[3]. 정책을 바꾼 뒤에도 PRT 갱신 기록은 계속 남을 수 있습니다.
-- `revokeSignInSessions` 는 호출 뒤 몇 분 늦게 반영될 수 있습니다[13]. `signInSessionsValidFromDateTime` 속성과 감사 작업 "Update StsRefreshTokenValidFrom Timestamp" 가 같은 값을 가리키는지는 검체에서 시각을 대조해 확인합니다.
+- `revokeSignInSessions` 는 호출 뒤 몇 분 늦게 반영될 수 있습니다[13]. `signInSessionsValidFromDateTime` 속성과 감사 작업 "Update StsRefreshTokenValidFrom Timestamp" 가 같은 값을 가리키는지는 실제 로그에서 시각을 대조해 확인합니다.
 - `incomingTokenType` 이 목록의 값이 아니라고 토큰을 쓰지 않았다고 추론하지 않습니다. 목록에 없는 토큰 형식을 썼을 수도 있습니다[9].
 - CAE 적용 여부는 한 인증의 여러 요청 가운데 하나에만 `true` 로 표시되고, 대화형·비대화형 어느 쪽에나 나올 수 있습니다[8].
 - 통합 감사 로그의 SharePoint 기본 스키마에도 `UniqueTokenIdentifier` 라는 필드가 있지만 설명은 "리소스의 고유 식별자" 입니다[11]. 공통 스키마 `AppAccessContext.UniqueTokenId` 와 이름이 비슷하므로 섞지 않습니다.
-- Azure 활동 로그 `claims.uti` 와 로그인 로그 `UniqueTokenIdentifier` 는 둘 다 토큰 식별자를 가리키지만[6][12], 두 값을 이어 붙이기 전에 검체에서 값이 실제로 같은지 확인합니다.
+- Azure 활동 로그 `claims.uti` 와 로그인 로그 `UniqueTokenIdentifier` 는 둘 다 토큰 식별자를 가리키지만[6][12], 두 값을 이어 붙이기 전에 실제 로그에서 값이 실제로 같은지 확인합니다.
 - `ASIA` 액세스 키 ID 는 비밀 키·세션 토큰과 함께일 때만 고유합니다[24]. 긴 기간을 다룰 때는 `accessKeyId` 하나만 보지 말고 `creationDate`·`sessionIssuer` 도 함께 맞춥니다.
 - AWS `ConsoleLogin` 은 사용자 종류와 로그인 끝점에 따라 기록되는 리전이 다릅니다. 루트 사용자는 us-east-1·us-east-2·us-west-2 가운데 하나, 전역 끝점을 쓴 IAM 사용자는 계정 별칭 쿠키가 있으면 us-east-2·eu-north-1·ap-southeast-2 가운데 하나, 없으면 us-east-1 입니다[25]. 여러 리전의 기록을 함께 모읍니다.
 - Entra ID Protection 의 이상 토큰 (`anomalousToken`) 탐지는 세션 토큰과 새로 고침 토큰을 대상으로 하고, 낮음·중간 위험에서는 오탐 가능성이 여전히 높습니다[16]. PRT 접근 시도 (`attemptedPrtAccess`) 같은 프리미엄 탐지는 P2 라이선스가 없으면 "Additional risk detected" 로만 보입니다[16].

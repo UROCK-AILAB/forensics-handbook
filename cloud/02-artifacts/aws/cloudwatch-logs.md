@@ -27,10 +27,10 @@ CloudWatch Logs 는 스스로 사건을 만들어 내는 로그가 아니라, �
 | CloudTrail 트레일 | 새로 만들면 CloudTrail 이 정한 이름이나 직접 넣은 이름(예 `CloudTrail/logs`), 기존 그룹도 고를 수 있음. 트레일과 같은 계정·같은 리전에 있어야 함[8][9] | `account_ID_CloudTrail_trail_region`, 양이 많으면 끝에 `_number`[9] | 평균 약 5분, 보장 없음[8] |
 | VPC 흐름 로그 | 흐름 로그를 만들 때 지정[10] | 네트워크 인터페이스마다 하나[10] | [VPC 흐름 로그](vpc-flow-logs.md) 참고 |
 | Lambda | 기본 `/aws/lambda/함수이름`, 다른 그룹으로 바꿀 수 있음[11] | 실행 환경마다 하나, `YYYY/MM/DD[Function version][Execution environment GUID]`[12] | 호출 뒤 5~10분[11] |
-| ECS (`awslogs` 드라이버) | [Lambda·컨테이너 서비스 기록](lambda-containers.md) 참고 | 같은 쪽 참고 | 검체에서 확인 |
+| ECS (`awslogs` 드라이버) | [Lambda·컨테이너 서비스 기록](lambda-containers.md) 참고 | 같은 페이지 참고 | 실제 데이터에서 확인 |
 | EKS 제어 평면 | `/aws/eks/클러스터이름/cluster`[13] | `kube-apiserver-…`, `kube-apiserver-audit-…`, `authenticator-…`, `kube-controller-manager-…`, `kube-scheduler-…`[13] | 몇 분 안, 최선 노력[13] |
-| S3 서버 접근 로그 | 전달 대상으로 고른 그룹, 구조화 형식[14] | 검체에서 확인 | 몇 시간 안[14] |
-| EC2 인스턴스 (CloudWatch 에이전트) | 에이전트를 설치하는 과정에서 만들어짐[2] | 원천마다 하나(예 호스트별 Apache 접근 로그)[1] | 검체에서 확인 |
+| S3 서버 접근 로그 | 전달 대상으로 고른 그룹, 구조화 형식[14] | 실제 데이터에서 확인 | 몇 시간 안[14] |
+| EC2 인스턴스 (CloudWatch 에이전트) | 에이전트를 설치하는 과정에서 만들어짐[2] | 원천마다 하나(예 호스트별 Apache 접근 로그)[1] | 실제 데이터에서 확인 |
 
 다중 리전 트레일은 켜진 모든 리전의 이벤트를 로그 그룹 하나로 보내고, 그 그룹은 트레일을 만든 리전에 있습니다[8]. CloudTrail 이 로그를 넣을 때 쓰는 기본 IAM 역할 이름은 `CloudTrail_CloudWatchLogs_Role` 입니다[8]. 트레일 설정과 사본의 범위는 [트레일과 로그 파일](cloudtrail/trails.md) 에서 다룹니다.
 
@@ -86,17 +86,17 @@ CloudWatch Logs 는 스스로 사건을 만들어 내는 로그가 아니라, �
 
 ## 증거로서 의미
 
-**증명하는 것.** 어떤 원천이 이 메시지를 이 로그 그룹의 이 스트림에 보냈고, CloudWatch Logs 가 그것을 `ingestionTime` 에 받았다는 사실입니다[5]. CloudTrail 사본·흐름 로그·Lambda 로그처럼 AWS 서비스가 직접 넣는 그룹이면 메시지 내용은 그 서비스의 기록으로 읽고, 해석은 원래 기록의 쪽에서 합니다. 보관 설정이 무기한인 그룹이면 원천 시스템에서 이미 지워진 로그도 남아 있을 수 있습니다[2].
+**증명하는 것.** 어떤 원천이 이 메시지를 이 로그 그룹의 이 스트림에 보냈고, CloudWatch Logs 가 그것을 `ingestionTime` 에 받았다는 사실입니다[5]. CloudTrail 사본·흐름 로그·Lambda 로그처럼 AWS 서비스가 직접 넣는 그룹이면 메시지 내용은 그 서비스의 기록으로 읽고, 해석은 원래 기록의 페이지에서 합니다. 보관 설정이 무기한인 그룹이면 원천 시스템에서 이미 지워진 로그도 남아 있을 수 있습니다[2].
 
 **증명하지 못하는 것.** 에이전트나 애플리케이션이 보낸 메시지는 보낸 쪽이 만든 문자열이고, `timestamp` 도 보낸 쪽이 정한 값이라 내용과 발생 시각이 맞는지는 CloudWatch Logs 가 보증하지 않습니다[4]. 쓰기 권한(`logs:PutLogEvents`)이 있는 주체는 14일 안의 과거 시각으로 이벤트를 넣을 수 있으므로[4], 순서가 어긋나 보이는 줄은 `ingestionTime` 으로 확인합니다. 보관 기간이 지나 지워진 이벤트, 14일보다 오래된 시각이라 거부된 이벤트, CloudTrail 사본에서 빠진 256KB 넘는 이벤트는 그룹에 없습니다[3][4][8]. 로그 그룹이 없다고 해서 그 기간에 활동이 없었다는 뜻도 아니고, 보내도록 설정하지 않았을 수 있습니다.
 
-보고서에는 "로그 그룹 A 의 스트림 B 에 2026-09-01 03:10:14 UTC 에 받은 이벤트가 있고, 그 메시지에는 03:10:12 에 203.0.113.25 에서 `ec2-user` 로 공개 키 로그인을 허용했다고 적혀 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시). 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
+보고서에는 "로그 그룹 A 의 스트림 B 에 2026-09-01 03:10:14 UTC 에 받은 이벤트가 있고, 그 메시지에는 03:10:12 에 203.0.113.25 에서 `ec2-user` 로 공개 키 로그인을 허용했다고 적혀 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시). 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
 
 ## 시각 해석
 
-`timestamp` 와 `ingestionTime` 은 모두 1970-01-01 00:00:00 UTC 부터 흐른 밀리초라서 시간대가 없는 UTC 값입니다[5]. `timestamp` 는 보내는 쪽 시계, `ingestionTime` 은 CloudWatch Logs 쪽 시계로 찍히므로, 두 값의 차이로 전달 지연과 원천 시계의 어긋남을 가늠합니다[4][5]. 원천 메시지 안에 따로 적힌 시각(syslog 의 현지 시각 등)은 세 번째 시각이고, 원천 시스템의 시간대 설정을 따르므로 따로 확인합니다.
+`timestamp` 와 `ingestionTime` 은 모두 1970-01-01 00:00:00 UTC 부터 흐른 밀리초라서 시간대가 없는 UTC 값입니다[5]. `timestamp` 는 보내는 쪽 시계, `ingestionTime` 은 CloudWatch Logs 쪽 시계로 찍히므로, 두 값의 차이로 전달 지연과 원천 시계의 어긋남을 추정합니다[4][5]. 원천 메시지 안에 따로 적힌 시각(syslog 의 현지 시각 등)은 세 번째 시각이고, 원천 시스템의 시간대 설정을 따르므로 따로 확인합니다.
 
-원천마다 `timestamp` 가 가리키는 시점이 다릅니다. VPC 흐름 로그에서는 레코드의 `start` 와 같고 `ingestionTime` 은 레코드의 `end` 보다 늦습니다[10]. CloudTrail 사본을 콘솔에서 보면 Time (UTC) 칸은 이벤트가 로그 그룹에 들어온 시각이고, CloudTrail 이 기록한 실제 시각은 메시지 안의 `eventTime` 입니다[8]. Lambda 로그는 함수 코드가 남긴 줄까지 모든 메시지에 시각이 붙고, `START` 줄과 `END` 줄 사이의 줄이 한 호출에 속합니다[12].
+원천마다 `timestamp` 가 가리키는 시점이 다릅니다. VPC 흐름 로그에서는 레코드의 `start` 와 같고 `ingestionTime` 은 레코드의 `end` 보다 늦습니다[10]. CloudTrail 사본을 콘솔에서 보면 Time (UTC) 열은 이벤트가 로그 그룹에 들어온 시각이고, CloudTrail 이 기록한 실제 시각은 메시지 안의 `eventTime` 입니다[8]. Lambda 로그는 함수 코드가 남긴 줄까지 모든 메시지에 시각이 붙고, `START` 줄과 `END` 줄 사이의 줄이 한 호출에 속합니다[12].
 
 시각을 기준으로 거르는 기능도 두 시각 가운데 어느 쪽을 쓰는지 다릅니다. S3 내보내기 작업의 시작·끝 범위는 받은 시각 기준이라 늦게 들어온 이벤트는 발생 시각과 다른 범위에 들어갈 수 있습니다[6]. Logs Insights 는 로그 그룹을 만든 시각보다 앞선 `timestamp` 의 이벤트에 접근하지 못하고, 2018년 11월 5일 이후에 들어온 로그만 검색합니다[7]. 여러 로그의 시각을 한 줄로 맞추는 법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 과 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 
@@ -143,9 +143,9 @@ find . -exec zcat {} + | sed -r 's/^[0-9]+/\x0&/' | sort -z
 ## 교차 검증
 
 - [CloudTrail](cloudtrail/index.md) — CloudWatch Logs 의 CloudTrail 사본과 S3 의 원본 로그 파일을 맞춰 빠진 이벤트가 있는지 보고, 로그 그룹의 보관 설정을 바꾸거나 그룹을 지운 호출을 찾습니다.
-- [VPC 흐름 로그](vpc-flow-logs.md) — 흐름 로그를 CloudWatch Logs 로 보냈다면 인터페이스별 스트림을 받아 흐름 로그 쪽의 해석대로 읽습니다.
+- [VPC 흐름 로그](vpc-flow-logs.md) — 흐름 로그를 CloudWatch Logs 로 보냈다면 인터페이스별 스트림을 받아 흐름 로그 페이지의 해석대로 읽습니다.
 - [Lambda·컨테이너 서비스 기록](lambda-containers.md) — 함수 호출 로그와 컨테이너 출력, EKS 감사 로그를 CloudTrail 의 함수·태스크·클러스터 변경 기록과 맞춰 봅니다.
-- [S3 접근 기록](s3-access-logs.md) — 서버 접근 로그를 CloudWatch Logs 로 받았다면 필드 해석은 그 쪽을 따릅니다.
+- [S3 접근 기록](s3-access-logs.md) — 서버 접근 로그를 CloudWatch Logs 로 받았다면 필드 해석은 그 페이지를 따릅니다.
 - [IAM 사용자·역할·액세스 키](iam.md) — 로그를 넣은 역할(`CloudTrail_CloudWatchLogs_Role`, Lambda 실행 역할)과 `logs:PutLogEvents` 권한을 가진 주체를 확인합니다.
 - [GuardDuty](guardduty.md) — GuardDuty 결과의 시각 앞뒤로 같은 인스턴스·함수의 로그 그룹을 찾아봅니다.
 - 인스턴스 안의 원본 파일 — 에이전트가 올린 운영체제 로그는 인스턴스 디스크에도 원본이 남아 있을 수 있으므로 [클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html) 으로 확보해 [인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html) 와 줄 단위로 맞춰 봅니다.

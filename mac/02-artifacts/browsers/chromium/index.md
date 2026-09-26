@@ -33,7 +33,7 @@ has_toc: false
 
 1. [맥에서의 위치와 프로필 (Profiles)](profiles.md) — 브라우저별 사용자 데이터 폴더, 프로필 폴더 구성, `~/Library/Caches` 쪽 캐시 위치, 기본 경로 밖의 프로필을 찾는 법을 다룹니다.
 2. [방문·다운로드 기록 (History)](history-downloads.md) — `urls`·`visits`·`downloads` 표와 transition 값 풀이, 1601 기준 시각을 바꾸는 SQL을 다룹니다.
-3. [쿠키와 저장된 암호 (Cookies·Login Data)](cookies-login-data.md) — 쿠키 DB의 칸과 두 저장 위치, 맥에서 값에 붙는 `v10` 암호화 형식과 키체인과의 관계를 다룹니다.
+3. [쿠키와 저장된 암호 (Cookies·Login Data)](cookies-login-data.md) — 쿠키 DB의 열과 두 저장 위치, 맥에서 값에 붙는 `v10` 암호화 형식과 키체인과의 관계를 다룹니다.
 4. [확장 (Extensions)](extensions.md) — 확장 폴더와 설치 위치 값, 외부 확장 설정 파일, 사고 대응 때 먼저 볼 값을 다룹니다.
 
 ## 함께 볼 페이지

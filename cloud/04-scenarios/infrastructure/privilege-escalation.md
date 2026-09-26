@@ -16,7 +16,7 @@ nav_order: 780
 - 붙은 권한으로 그 뒤에 무엇을 불렀나?
 - 붙였던 권한을 나중에 떼어 내 흔적을 줄이려 했나?
 
-권한이 바뀐 기록은 대부분 관리 작업용 감사 로그에 남습니다. 권한 변화 기록을 한 줄씩 읽는 방법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md) 에 있고, 이 쪽은 "무엇을 어떤 순서로 보는가" 를 다룹니다.
+권한이 바뀐 기록은 대부분 관리 작업용 감사 로그에 남습니다. 권한 변화 기록을 한 줄씩 읽는 방법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md) 에 있고, 이 페이지는 "무엇을 어떤 순서로 보는가" 를 다룹니다.
 
 ## 먼저 확인할 것
 
@@ -39,7 +39,7 @@ nav_order: 780
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
-| 1 | 공급자·탐지 규칙의 표시: GuardDuty `PrivilegeEscalation:IAMUser/AnomalousBehavior`, Entra PIM 경고, Sigma 규칙 결과 | 권한 상승과 관련된 API 호출이 이상하다고 표시된 시각과 주체 | [GuardDuty](../../02-artifacts/aws/guardduty.md), [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) |
+| 1 | 공급자·탐지 규칙의 표시: GuardDuty `PrivilegeEscalation:IAMUser/AnomalousBehavior`, Entra PIM 경고, Sigma 규칙 결과 | 권한 상승과 관련된 API 호출이 이상하다고 표시된 시각과 주체 | [GuardDuty](../../02-artifacts/aws/guardduty.md), [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) |
 | 2 | AWS CloudTrail 의 `iam.amazonaws.com` 이벤트 | 정책 부착·인라인 정책·정책 버전·신뢰 정책 변경 | [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [IAM](../../02-artifacts/aws/iam.md) |
 | 3 | Azure 활동 로그의 `Microsoft.Authorization/*` 작업, 디렉터리 수준 활동 로그의 `elevateAccess` | 구독·관리 그룹 역할 할당, 루트 범위 권한 올리기 | [활동 로그](../../02-artifacts/azure/activity-log.md) |
 | 4 | Entra 감사 로그 RoleManagement 범주, PIM 활동 | 디렉터리 역할 부여·적격 역할 활성화 | [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md) |
@@ -52,7 +52,7 @@ nav_order: 780
 
 1. **공급자의 표시와 탐지 규칙 결과를 모읍니다.** AWS GuardDuty 의 `PrivilegeEscalation:IAMUser/AnomalousBehavior` 는 높은 권한을 얻는 데 흔히 쓰는 API 가 이상한 방식으로 불렸다는 결과이고, 기본 심각도는 Medium, 데이터 원천은 CloudTrail 관리 이벤트입니다[1]. 이 결과는 API 하나일 수도 있고, 한 사용자 ID 가 가까운 시간에 부른 여러 API 일 수도 있습니다[1]. 이 부류에는 IAM 정책·역할·사용자를 바꾸는 `AssociateIamInstanceProfile`, `AddUserToGroup`, `PutUserPolicy` 같은 API 가 들어가고, 요청의 어느 요소(요청한 사용자, 요청 위치, API)가 이상한지는 결과 상세에 있습니다[1]. 결과가 없다고 끝내지 않고, 아래 단계의 작업 이름으로 로그를 직접 찾습니다.
 
-2. **AWS 에서는 CloudTrail 의 IAM 이벤트를 훑습니다.** `eventSource` 가 `iam.amazonaws.com` 인 레코드에서 `eventName` 이 권한을 바꾸는 작업인 것을 고릅니다. AWS 가 유출된 키를 격리하려고 만든 관리형 정책 `AWSCompromisedKeyQuarantineV3` 이 거부하는 목록에는 `AddUserToGroup`, `AttachGroupPolicy`, `AttachRolePolicy`, `AttachUserPolicy`, `CreateAccessKey`, `CreateInstanceProfile`, `CreateLoginProfile`, `CreatePolicyVersion`, `CreateRole`, `CreateUser`, `PassRole`, `PutGroupPolicy`, `PutRolePolicy`, `PutUserPermissionsBoundary`, `PutUserPolicy`, `SetDefaultPolicyVersion`, `UpdateAssumeRolePolicy`, `UpdateLoginProfile`, `UpdateAccessKey` 가 들어 있어서, 권한 상승에 쓰일 수 있는 IAM 작업을 고를 때 출발점으로 쓸 수 있습니다[2]. 각 작업의 `requestParameters` 에 들어가는 값(정책 문서, 대상 사용자·역할 이름)은 검체의 레코드를 열어 확인합니다. 다른 사용자의 콘솔 비밀번호를 바꾼 기록은 `UpdateLoginProfile` 가운데 `userIdentity.arn` 과 `requestParameters.userName` 이 다른 레코드로 찾을 수 있고, Sigma `aws_update_login_profile` 이 이 조건을 씁니다[6]. IAM 밖에서 권한을 넘겨받는 길도 봅니다. Sigma 규칙은 Glue 개발 엔드포인트 작업(`glue.amazonaws.com` 의 `CreateDevEndpoint`·`DeleteDevEndpoint`·`UpdateDevEndpoint`)과 Lambda 레이어 부착(`lambda.amazonaws.com` 에서 `UpdateFunctionConfiguration` 으로 시작하고 `requestParameters.layers` 가 있는 레코드)을 권한 상승으로 분류합니다[7][8]. EC2 사용자 데이터 변경(`ec2.amazonaws.com` 의 `ModifyInstanceAttribute`, `requestParameters.attribute` 가 `userData`)은 Sigma 가 실행 (execution) 으로 분류하지만, 인스턴스가 부팅할 때 root 나 SYSTEM 권한으로 실행되는 스크립트를 바꾸는 작업이라 함께 봅니다[9]. 사용자 데이터 변경은 [채굴용 자원을 만들었나](cryptomining.md) 에서도 다룹니다.
+2. **AWS 에서는 CloudTrail 의 IAM 이벤트를 살펴봅니다.** `eventSource` 가 `iam.amazonaws.com` 인 레코드에서 `eventName` 이 권한을 바꾸는 작업인 것을 고릅니다. AWS 가 유출된 키를 격리하려고 만든 관리형 정책 `AWSCompromisedKeyQuarantineV3` 이 거부하는 목록에는 `AddUserToGroup`, `AttachGroupPolicy`, `AttachRolePolicy`, `AttachUserPolicy`, `CreateAccessKey`, `CreateInstanceProfile`, `CreateLoginProfile`, `CreatePolicyVersion`, `CreateRole`, `CreateUser`, `PassRole`, `PutGroupPolicy`, `PutRolePolicy`, `PutUserPermissionsBoundary`, `PutUserPolicy`, `SetDefaultPolicyVersion`, `UpdateAssumeRolePolicy`, `UpdateLoginProfile`, `UpdateAccessKey` 가 들어 있어서, 권한 상승에 쓰일 수 있는 IAM 작업을 고를 때 출발점으로 쓸 수 있습니다[2]. 각 작업의 `requestParameters` 에 들어가는 값(정책 문서, 대상 사용자·역할 이름)은 실제 레코드를 열어 확인합니다. 다른 사용자의 콘솔 비밀번호를 바꾼 기록은 `UpdateLoginProfile` 가운데 `userIdentity.arn` 과 `requestParameters.userName` 이 다른 레코드로 찾을 수 있고, Sigma `aws_update_login_profile` 이 이 조건을 씁니다[6]. IAM 밖에서 권한을 넘겨받는 길도 봅니다. Sigma 규칙은 Glue 개발 엔드포인트 작업(`glue.amazonaws.com` 의 `CreateDevEndpoint`·`DeleteDevEndpoint`·`UpdateDevEndpoint`)과 Lambda 레이어 부착(`lambda.amazonaws.com` 에서 `UpdateFunctionConfiguration` 으로 시작하고 `requestParameters.layers` 가 있는 레코드)을 권한 상승으로 분류합니다[7][8]. EC2 사용자 데이터 변경(`ec2.amazonaws.com` 의 `ModifyInstanceAttribute`, `requestParameters.attribute` 가 `userData`)은 Sigma 가 실행 (execution) 으로 분류하지만, 인스턴스가 부팅할 때 root 나 SYSTEM 권한으로 실행되는 스크립트를 바꾸는 작업이라 함께 봅니다[9]. 사용자 데이터 변경은 [채굴용 자원을 만들었나](cryptomining.md) 에서도 다룹니다.
 
 3. **AWS 의 역할 넘겨받기를 이어 붙입니다.** 역할을 넘겨받은 자격 증명으로 부른 호출은 `userIdentity.type` 이 `AssumedRole` 이고 `userIdentity.sessionContext.sessionIssuer.type` 이 `Role` 인 레코드로 찾고, Sigma `aws_sts_assumerole_misuse` 가 이 조건을 씁니다[10]. 역할을 넘겨받은 자격 증명으로 다시 다른 역할을 넘겨받는 역할 체이닝 (role chaining) 에서는 처음 정한 `sourceIdentity` 가 다음 요청까지 이어지고, 다른 값으로 바꾸려 하면 요청이 거부됩니다[4]. 다른 계정의 역할을 넘겨받으면 호출한 계정과 역할이 있는 계정 양쪽에 레코드가 생기고, 두 레코드의 `sharedEventID` 가 같습니다[4]. `iam:PassRole` 은 IAM 의 마지막 접근 정보 (last accessed information) 에 나오지 않으므로, 이 정보만 보고 "역할을 넘긴 적이 없다" 고 판단하지 않습니다[3]. 임시 자격 증명을 따라가는 방법은 [액세스 키가 새어 나갔나](leaked-keys.md) 와 [토큰과 세션](../../01-foundations/identity/tokens-sessions.md) 에 있습니다.
 
@@ -94,10 +94,10 @@ Azure 활동 로그의 `eventTimestamp` 는 요청을 처리한 서비스가 이
 
 - **"Azure 역할 할당이 두 번 있었다."** 역할 할당 하나가 1초 차이로 레코드 두 건을 남길 수 있고, 한 건에는 `requestbody` 가, 다른 한 건에는 `statusCode` Created 가 들어 있습니다[12]. `status` 가 Started·Succeeded 로 나뉘기도 하므로 건수를 세지 말고 `correlationId` 로 묶어 한 작업으로 셉니다[12][14].
 - **"구독별 활동 로그를 다 받았는데 권한 올리기 기록이 없다."** 루트 범위 권한 올리기는 `subscriptionId` 가 빈 디렉터리 수준 활동 로그에 남으므로, 구독별로만 받으면 빠집니다[11][24].
-- **"Entra 에 `Add member to role` 이 잔뜩 있으니 관리자가 계속 늘었다."** PIM 에서 적격 역할을 켤 때마다 이 활동이 생깁니다[20]. PIM 활동의 요청·완료·갱신 기록과 함께 읽어 새 부여인지 활성화인지 가립니다[18].
-- **"`SetIamPolicy` 로 찾았는데 서비스 계정 정책 변경이 안 나온다."** 서비스 계정 쪽은 `google.iam.admin.v1.SetIAMPolicy` 처럼 대소문자가 다르게 찍힙니다[27]. 로깅 쿼리 언어는 정규식과 논리 연산자 말고는 대소문자를 가리지 않으므로 `protoPayload.methodName:"SetIamPolicy"` 부분 일치로 찾되[29], 내보낸 JSON 을 다른 도구로 검색할 때는 대소문자를 무시하는 조건을 씁니다.
+- **"Entra 에 `Add member to role` 이 잔뜩 있으니 관리자가 계속 늘었다."** PIM 에서 적격 역할을 켤 때마다 이 활동이 생깁니다[20]. PIM 활동의 요청·완료·갱신 기록과 함께 읽어 새 부여인지 활성화인지 구분합니다[18].
+- **"`SetIamPolicy` 로 찾았는데 서비스 계정 정책 변경이 안 나온다."** 서비스 계정 쪽은 `google.iam.admin.v1.SetIAMPolicy` 처럼 대소문자가 다르게 찍힙니다[27]. 로깅 쿼리 언어는 정규식과 논리 연산자 말고는 대소문자를 구분하지 않으므로 `protoPayload.methodName:"SetIamPolicy"` 부분 일치로 찾되[29], 내보낸 JSON 을 다른 도구로 검색할 때는 대소문자를 무시하는 조건을 씁니다.
 - **"교차 계정 역할 요청이 대상 계정 로그에 없으니 시도도 없었다."** CloudTrail 은 교차 계정 역할 넘겨받기에서 거부된 STS 요청을 대상 계정에 기록하지 않습니다[4]. 호출한 쪽 계정의 로그도 함께 받습니다.
-- **"Sigma 규칙 표기와 문서 표기가 다르니 다른 이벤트다."** Sigma 의 감사 로그 규칙은 권한 올리기를 `Assigns the caller to user access admin` 로 적고[17], 문서는 활동 로그 작업을 `Assigns the caller to User Access Administrator role` 로 적습니다[11]. 규칙을 그대로 돌리기 전에 검체의 실제 값과 맞춰 봅니다([탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)).
+- **"Sigma 규칙 표기와 문서 표기가 다르니 다른 이벤트다."** Sigma 의 감사 로그 규칙은 권한 올리기를 `Assigns the caller to user access admin` 로 적고[17], 문서는 활동 로그 작업을 `Assigns the caller to User Access Administrator role` 로 적습니다[11]. 규칙을 그대로 돌리기 전에 로그의 실제 값과 맞춰 봅니다([탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)).
 
 ## 보고서 문장 예
 
@@ -108,9 +108,9 @@ Azure 활동 로그의 `eventTimestamp` 는 요청을 처리한 서비스가 이
 
 ## 함께 볼 페이지
 
-- 같은 갈래: [액세스 키가 새어 나갔나](leaked-keys.md), [채굴용 자원을 만들었나](cryptomining.md), [로그를 끄거나 지웠나](log-tampering.md)
+- 같은 분류: [액세스 키가 새어 나갔나](leaked-keys.md), [채굴용 자원을 만들었나](cryptomining.md), [로그를 끄거나 지웠나](log-tampering.md)
 - 계정 쪽 권한: [악성 OAuth 앱에 동의했나](../account-compromise/illicit-consent.md), [토큰을 훔쳐 로그인했나](../account-compromise/token-theft.md)
-- 기법: [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md), [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md)
+- 기법: [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md), [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md)
 - 다른 판: [[linux] 인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html), [[linux] 타임라인 만들기](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/analysis/timeline.html)
 
 ## 참고 문헌

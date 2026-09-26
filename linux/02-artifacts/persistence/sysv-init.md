@@ -26,14 +26,14 @@ systemd 는 이 파일들을 직접 읽지 않고 생성기(generator) 두 개�
 | `rcN.d` 가 놓이는 곳 | `/etc` 아래 (`/etc/rc2.d` 등)[12] | `/etc/rc.d` 아래 (`/etc/rc.d/rc3.d` 등)[15] |
 | `rc.local` 실제 파일 | `/etc/rc.local`[8] | `/etc/rc.d/rc.local`[13] |
 | `/etc/rc.local` | 실제 파일 자리 | `rc.d/rc.local` 을 가리키는 심볼릭 링크[13] |
-| 기본 `rc.local` | 설치돼 있는지 검체에서 확인 | systemd 패키지가 권한 `0644`(실행 권한 없음)로 설치[13][14] |
+| 기본 `rc.local` | 설치돼 있는지 실제 시스템에서 확인 | systemd 패키지가 권한 `0644`(실행 권한 없음)로 설치[13][14] |
 | `rc-local.service` 순서 | `After=network.target`[7] | `network-online.target` 뒤로 옮기는 배포판 패치가 들어가 있음[13] |
 
-RHEL 9 가 설치하는 `rc.local` 에는 `#!/bin/bash` 와 주석(호환용 파일이라는 설명, 부팅 때 실행하려면 `chmod +x /etc/rc.d/rc.local` 을 하라는 안내) 말고는 명령 `touch /var/lock/subsys/local` 한 줄만 들어 있습니다[14]. 그래서 RHEL 9 검체에서 이 파일에 실행 권한이 있거나 명령이 더 있다면 설치 뒤에 바뀐 것입니다.
+RHEL 9 가 설치하는 `rc.local` 에는 `#!/bin/bash` 와 주석(호환용 파일이라는 설명, 부팅 때 실행하려면 `chmod +x /etc/rc.d/rc.local` 을 하라는 안내) 말고는 명령 `touch /var/lock/subsys/local` 한 줄만 들어 있습니다[14]. 그래서 RHEL 9 시스템에서 이 파일에 실행 권한이 있거나 명령이 더 있다면 설치 뒤에 바뀐 것입니다.
 
 systemd 판에 따라 이 호환 기능이 없을 수도 있습니다. systemd 259 에서 폐지를 예고했고, systemd 260 에서 `systemd-rc-local-generator`, `rc-local.service`, `systemd-sysv-generator`, `systemd-sysv-install` 을 지웠습니다[10]. 기준 판인 255·252 에는 모두 들어 있지만, systemd 260 이상을 쓰는 배포판에서는 `rc.local` 과 init 스크립트가 있어도 systemd 가 실행하지 않습니다.
 
-같은 갈래로 수집 도구가 함께 모으는 곳도 있습니다. xinetd 설정 `/etc/xinetd.conf`, `/etc/xinetd.d/**` 와 LSB 순서 설정 `/etc/insserv.conf`, `/etc/insserv.conf.d/**` 가 그렇고[1], 옛 Upstart 설정은 `/etc/init`, `/etc/xdg/upstart`, `/usr/share/upstart/sessions`, 사용자별 `~/.config/upstart` 에 있습니다[19].
+같은 종류로 수집 도구가 함께 모으는 곳도 있습니다. xinetd 설정 `/etc/xinetd.conf`, `/etc/xinetd.d/**` 와 LSB 순서 설정 `/etc/insserv.conf`, `/etc/insserv.conf.d/**` 가 그렇고[1], 옛 Upstart 설정은 `/etc/init`, `/etc/xdg/upstart`, `/usr/share/upstart/sessions`, 사용자별 `~/.config/upstart` 에 있습니다[19].
 
 ## 구조
 
@@ -131,7 +131,7 @@ mtime 은 오래됐는데 ctime 만 최근이면 내용은 그대로 두고 권�
 
 라이브 시스템이면 UAC 가 `service --status-all`, `chkconfig --list`, `runlevel` 출력과 `/etc`(shadow 파일 제외)를 모읍니다[19][20]. 이때 `/run/systemd/generator.late` 에서 생성된 유닛 파일도 함께 떠 둡니다.
 
-저널에서는 systemd 255 생성기가 네이티브 유닛이 없는 SysV 스크립트를 만날 때 경고 수준으로 `MESSAGE_ID=a8fa8dacdb1d443e9503b8be367a6adb`, `SYSVSCRIPT=스크립트경로`, `UNIT=유닛이름` 을 남깁니다[3][11]. systemd 252 는 같은 경고를 `SysV service '경로' lacks a native systemd unit file.` 로 시작하는 문장으로만 남깁니다[4]. 이 경고가 저널에 남았는지는 검체에서 이 값으로 찾아봅니다.
+저널에서는 systemd 255 생성기가 네이티브 유닛이 없는 SysV 스크립트를 만날 때 경고 수준으로 `MESSAGE_ID=a8fa8dacdb1d443e9503b8be367a6adb`, `SYSVSCRIPT=스크립트경로`, `UNIT=유닛이름` 을 남깁니다[3][11]. systemd 252 는 같은 경고를 `SysV service '경로' lacks a native systemd unit file.` 로 시작하는 문장으로만 남깁니다[4]. 이 경고가 저널에 남았는지는 이 값으로 찾아봅니다.
 
 ## 교차 검증
 
@@ -144,13 +144,13 @@ mtime 은 오래됐는데 ctime 만 최근이면 내용은 그대로 두고 권�
 | [셸 명령 기록](../execution/shell-history/index.md) | `chmod +x`, 편집기 실행 같은 명령 |
 | [cron·anacron·at](cron-at.md) | `@reboot` 같은 다른 부팅 때 실행 지점 |
 
-여러 지속성 지점을 한꺼번에 훑는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
+여러 지속성 지점을 한꺼번에 살펴보는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
 
 ## 실습
 
-NIST CFReDS 같은 공개 Linux 검체 이미지로 다음을 풀어 봅니다.
+NIST CFReDS 같은 공개 Linux 디스크 이미지로 다음을 풀어 봅니다.
 
-1. 검체의 배포판과 systemd 판은 무엇이고, 이 판에서 `rc.local` 과 init 스크립트 호환 기능이 살아 있나요?
+1. 이미지의 배포판과 systemd 판은 무엇이고, 이 판에서 `rc.local` 과 init 스크립트 호환 기능이 남아 있나요?
 2. `rc.local` 의 실제 파일 경로는 어디이고, 실행 권한이 있나요? mtime 과 ctime 은 각각 언제인가요?
 3. init 스크립트 디렉터리에서 실행 권한이 있는 스크립트 가운데 `rcN.d` 에 `S` 링크가 있는 것은 무엇이고, 그중 같은 이름의 네이티브 유닛이 없는 것은 무엇인가요?
 4. 그 스크립트들이 패키지 파일 목록에 있나요?

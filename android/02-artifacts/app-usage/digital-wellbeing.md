@@ -14,7 +14,7 @@ nav_order: 490
 
 디지털 웰빙은 앱별 사용 시간을 보여 주는 Google 앱입니다. 이 앱의 DB 에는 이벤트마다 시각, 패키지, 이벤트 종류가 한 줄씩 들어 있고, 액티비티 이름까지 적는 별도 표도 있습니다 [1].
 
-이 DB 의 숫자가 뜻하는 이벤트 이름 [1] 은 `dumpsys usagestats` 에 찍히는 `type=` 이름과 같은 체계이고, `dumpsys usagestats` 에도 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED, NOTIFICATION_INTERRUPTION, KEYGUARD_HIDDEN, FOREGROUND_SERVICE_START·FOREGROUND_SERVICE_STOP 이 나옵니다. 다만 디지털 웰빙이 usagestats 에서 이벤트를 받아 옮겨 적는다는 공식 설명은 없습니다. 두 기록이 같은 출처에서 나왔는지는 검체마다 두 쪽 시각을 맞춰 보고 판단해야 합니다.
+이 DB 의 숫자가 뜻하는 이벤트 이름 [1] 은 `dumpsys usagestats` 에 찍히는 `type=` 이름과 같은 체계이고, `dumpsys usagestats` 에도 ACTIVITY_RESUMED·ACTIVITY_PAUSED·ACTIVITY_STOPPED, NOTIFICATION_INTERRUPTION, KEYGUARD_HIDDEN, FOREGROUND_SERVICE_START·FOREGROUND_SERVICE_STOP 이 나옵니다. 다만 디지털 웰빙이 usagestats 에서 이벤트를 받아 옮겨 적는다는 공식 설명은 없습니다. 두 기록이 같은 출처에서 나왔는지는 기기마다 두 쪽 시각을 맞춰 보고 판단해야 합니다.
 
 ## 위치와 버전별 차이
 
@@ -31,15 +31,15 @@ Google 디지털 웰빙 앱의 DB 는 앱 데이터 영역의 아래 경로 패�
 | Google 디지털 웰빙 앱이 깔린 기기 | `com.google.android.apps.wellbeing` | DB 경로 패턴과 표 구조 [1] |
 | 삼성 One UI | 공개 자료 없음 | 아래 설명 참고 |
 
-삼성 기기에서는 `dumpsys package` 출력의 "Known Packages" 에서 `Wellbeing:` 항목 값이 `none` 으로 나올 수 있습니다. 시스템이 디지털 웰빙 역할로 지정한 패키지가 없다는 뜻입니다. settings system 키 가운데 `add_info_com_samsung_android_forest#screenTime` 이라는 키도 있는데, 값과 뜻은 공개 자료가 없습니다. 삼성 기기에서 화면 사용 시간 기능이 어떤 앱의 어떤 DB 에 기록하는지도 공개 자료가 없으니, 삼성 검체에서는 Google 경로가 없다고 해서 사용 이벤트 기록이 없다고 결론 내리면 안 됩니다. 설정 키를 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
+삼성 기기에서는 `dumpsys package` 출력의 "Known Packages" 에서 `Wellbeing:` 항목 값이 `none` 으로 나올 수 있습니다. 시스템이 디지털 웰빙 역할로 지정한 패키지가 없다는 뜻입니다. settings system 키 가운데 `add_info_com_samsung_android_forest#screenTime` 이라는 키도 있는데, 값과 뜻은 공개 문서에 나와 있지 않습니다. 삼성 기기에서 화면 사용 시간 기능이 어떤 앱의 어떤 DB 에 기록하는지도 공개 문서에 나와 있지 않으니, 삼성 기기에서는 Google 경로가 없다고 해서 사용 이벤트 기록이 없다고 결론 내리면 안 됩니다. 설정 키를 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
 
-DB 를 몇 날치 남기는지, 어느 Android 버전부터 이 앱이 있었는지는 공개 자료가 없어 검체에서 확인합니다.
+DB 를 몇 날치 남기는지, 어느 Android 버전부터 이 앱이 있었는지는 실제 기기에서 확인해야 합니다.
 
 ## 구조
 
 `app_usage` DB 에서 이벤트를 담은 표는 네 개입니다 [1]. SQLite 파일 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다.
 
-| 표 | 칸 | 담긴 것 |
+| 표 | 열 | 담긴 것 |
 |---|---|---|
 | `events` | `timestamp`, `package_id`, `type` | 앱 단위 이벤트 한 건 |
 | `packages` | `_id`, `package_name` | 패키지 번호와 이름 |
@@ -48,7 +48,7 @@ DB 를 몇 날치 남기는지, 어느 Android 버전부터 이 앱이 있었는
 
 `events.package_id` 를 `packages._id` 와 이어야 패키지 이름이 나오고, `component_events.component_id` 는 `components._id` 로, 다시 `components.package_id` 는 `packages._id` 로 이어집니다 [1].
 
-`type` 칸의 숫자는 아래 뜻입니다 [1]. 각 이벤트가 무슨 순간에 생기는지는 [앱 사용 기록 (usagestats)](usagestats/index.md) 페이지에서 설명합니다.
+`type` 열의 숫자는 아래 뜻입니다 [1]. 각 이벤트가 무슨 순간에 생기는지는 [앱 사용 기록 (usagestats)](usagestats/index.md) 페이지에서 설명합니다.
 
 | type | 이름 |
 |---|---|
@@ -72,13 +72,13 @@ ALEAPP 가 풀어 주는 숫자는 이 아홉 개이고, 표에 없는 숫자가
 
 **증명하지 못하는 것**
 
-화면이 앞에 올라왔다는 기록만으로 사람이 그 화면을 보거나 조작했다고 말할 수 없고, 누가 폰을 들고 있었는지도 알려 주지 않습니다. 알림 이벤트에는 알림 내용이 없어서 무슨 메시지가 왔는지는 [알림 기록 (Notification History)](notification-history.md) 같은 다른 기록에서 찾아야 합니다. 앱 안에서 무엇을 했는지(메시지를 보냈는지, 파일을 열었는지)는 이 DB 가 말하지 않습니다.
+화면이 앞에 올라왔다는 기록만으로 사람이 그 화면을 보거나 조작했다고 말할 수 없고, 누가 폰을 들고 있었는지도 알려 주지 않습니다. 알림 이벤트에는 알림 내용이 없어서 무슨 메시지가 왔는지는 [알림 기록 (Notification History)](notification-history.md) 같은 다른 기록에서 찾아야 합니다. 앱 안에서 무엇을 했는지(메시지를 보냈는지, 파일을 열었는지)는 이 DB 에 나와 있지 않습니다.
 
 ## 시각 해석
 
 `timestamp` 는 유닉스 에포크 밀리초라서 1000 으로 나누면 UTC 시각이 됩니다 [1]. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 기기 시간대를 먼저 확인합니다. 값을 읽는 일반 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
-기기 시계를 사람이 바꾸면 그 뒤 이벤트의 벽시계 시각도 따라 바뀔 수 있습니다. `dumpsys usagestats` 에는 `Time changed. actualSystemTime:... expectedSystemTime:...` 모양의 줄이 있어서 시스템 쪽에서는 시계 변경을 따로 적습니다. 디지털 웰빙 DB 가 시계 변경을 어떻게 처리하는지는 공개 자료가 없으니, 시각 순서가 뒤집힌 구간이 보이면 usagestats 쪽 기록과 맞춰 봅니다.
+기기 시계를 사람이 바꾸면 그 뒤 이벤트의 시스템 시계 시각도 따라 바뀔 수 있습니다. `dumpsys usagestats` 에는 `Time changed. actualSystemTime:... expectedSystemTime:...` 모양의 줄이 있어서 시스템 쪽에서는 시계 변경을 따로 적습니다. 디지털 웰빙 DB 가 시계 변경을 어떻게 처리하는지는 알려져 있지 않으니, 시각 순서가 뒤집힌 구간이 보이면 usagestats 쪽 기록과 맞춰 봅니다.
 
 ## 함정과 한계
 
@@ -125,12 +125,12 @@ ALEAPP 의 wellbeing 모듈이 위 경로를 찾아 이벤트 표를 만들어 �
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에 `com.google.android.apps.wellbeing` 폴더가 있으면 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 시험 데이터에 `com.google.android.apps.wellbeing` 폴더가 있으면 아래 질문을 풀어 봅니다.
 
 1. `events` 표에서 가장 이른 시각과 가장 늦은 시각은 언제이고, 그 사이 며칠치가 남아 있습니까?
 2. DEVICE_STARTUP 과 DEVICE_SHUTDOWN 줄로 기기가 켜져 있던 구간을 나누면 몇 구간이 나옵니까?
 3. 한 앱을 골라 ACTIVITY_RESUMED 와 다음 ACTIVITY_PAUSED 를 짝지으면 그 앱이 앞에 있던 시간은 모두 얼마입니까?
-4. 같은 검체에 usagestats 파일이 있으면, 같은 앱의 ACTIVITY_RESUMED 시각이 두 기록에서 일치합니까?
+4. 같은 데이터에 usagestats 파일이 있으면, 같은 앱의 ACTIVITY_RESUMED 시각이 두 기록에서 일치합니까?
 
 ## 참고 문헌
 

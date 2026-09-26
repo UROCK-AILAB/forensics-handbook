@@ -34,7 +34,7 @@ nav_order: 140
 | fstab 에 들어가는 줄 | `/swap.img none swap sw 0 0` (탭으로 구분)[21] | LVM 자동 배치면 스왑 LV 이름이 `swap` 이므로 `/dev/mapper/` 아래 `-swap` 으로 끝나는 장치[23] |
 | 파일 권한과 속성 | `umask 0066` 으로 만들고 `chattr +C` 를 시도[21] | 해당 없음(블록 장치) |
 
-설치기 표는 설치기 코드 기준이고, 실제 배포판에 실린 판과 세부가 다를 수 있습니다. 검체에서는 `/etc/fstab` 의 `swap` 줄과 [LVM 백업 파일](lvm.md)로 실제 배치를 확인합니다. Ubuntu 설치기는 권장 크기가 0 이면 스왑 파일을 만들지 않으므로 `/swap.img` 가 없는 설치도 있습니다[21].
+설치기 표는 설치기 코드 기준이고, 실제 배포판에 실린 판과 세부가 다를 수 있습니다. 실제 시스템에서는 `/etc/fstab` 의 `swap` 줄과 [LVM 백업 파일](lvm.md)로 실제 배치를 확인합니다. Ubuntu 설치기는 권장 크기가 0 이면 스왑 파일을 만들지 않으므로 `/swap.img` 가 없는 설치도 있습니다[21].
 
 메모리 안에서만 도는 스왑도 있습니다. zram 은 RAM 에 압축 블록 장치 `/dev/zramN` 을 만들고 이것을 스왑으로 쓸 수 있습니다[10]. zswap 은 스왑으로 나갈 페이지를 RAM 풀에 압축해 두었다가 풀이 차면 LRU 순서로 실제 스왑 장치에 내보냅니다[9]. zram 도 `CONFIG_ZRAM_WRITEBACK` 과 `backing_dev` 를 설정하면 한동안 쓰지 않은 페이지나 압축되지 않는 페이지를 뒤쪽 저장 장치(파티션)에 씁니다[10].
 
@@ -42,7 +42,7 @@ nav_order: 140
 
 ### 스왑 머리글
 
-머리글은 스왑 영역의 첫 페이지 한 장입니다. 페이지 끝 10바이트에 서명이 있고, 1024바이트 뒤부터 정보 칸이 이어집니다[1]. 커널은 첫 페이지를 늘 불량 페이지로 표시해 스왑 데이터 자리로 쓰지 않습니다[1].
+머리글은 스왑 영역의 첫 페이지 한 장입니다. 페이지 끝 10바이트에 서명이 있고, 1024바이트 뒤부터 정보 필드가 이어집니다[1]. 커널은 첫 페이지를 늘 불량 페이지로 표시해 스왑 데이터 자리로 쓰지 않습니다[1].
 
 | 오프셋 | 크기 | 필드 | 뜻 |
 |---|---|---|---|
@@ -52,13 +52,13 @@ nav_order: 140
 | 0x408 | 4 | `nr_badpages` | 불량 페이지 수 |
 | 0x40C | 16 | `sws_uuid` | UUID |
 | 0x41C | 16 | `sws_volume` | 라벨 |
-| 0x42C | 468 | `padding[117]` | 빈 칸 |
+| 0x42C | 468 | `padding[117]` | 채움 |
 | 0x600 | 4×n | `badpages[]` | 불량 페이지 목록 |
 | 페이지 끝 − 10 | 10 | `magic` | `SWAPSPACE2` (옛 형식은 `SWAP-SPACE`) |
 
 서명 자리는 페이지 크기를 따라 움직입니다. 4KiB 페이지면 0xFF6 이고, libblkid 는 0xFF6, 0x1FF6, 0x3FF6, 0x7FF6, 0xFFF6 다섯 곳(페이지 4KiB~64KiB)을 차례로 봅니다[2]. libblkid 는 `version` 이 1 도 아니고 바이트 순서를 바꿔도 1 이 아니면, 또는 `last_page` 가 0 이면 스왑으로 인정하지 않습니다[2]. 옛 `SWAP-SPACE` 형식에는 LABEL 과 UUID 가 없습니다[2].
 
-머리글에는 시각 칸이 없습니다. mkswap 은 기본으로 UUID 를 새로 만들고, `-U random`·`-U time` 으로 무작위 UUID 나 시각 기반 UUID 를 고를 수 있습니다[3].
+머리글에는 시각 필드가 없습니다. mkswap 은 기본으로 UUID 를 새로 만들고, `-U random`·`-U time` 으로 무작위 UUID 나 시각 기반 UUID 를 고를 수 있습니다[3].
 
 ### 최대 절전 머리글 (swsusp_header)
 
@@ -93,7 +93,7 @@ nav_order: 140
 00000ff0  00 00 00 00 00 00 53 57  41 50 53 50 41 43 45 32  ......SWAPSPACE2
 ```
 
-`version` 은 1, `last_page` 는 0x3FFFF(262143)입니다. 라벨 칸(0x41C)이 비어 있으므로 라벨 없이 만든 스왑입니다.
+`version` 은 1, `last_page` 는 0x3FFFF(262143)입니다. 라벨 필드(0x41C)가 비어 있으므로 라벨 없이 만든 스왑입니다.
 
 ```
 최대 절전 뒤 되살리지 않은 스왑 (만든 예시)
@@ -102,7 +102,7 @@ nav_order: 140
 00000ff0  53 50 41 43 45 32 53 31  53 55 53 50 45 4e 44 00  SPACE2S1SUSPEND.
 ```
 
-0xFE0 의 `image` 는 0x1A40 섹터, 0xFEC 의 `orig_sig` 는 `SWAPSPACE2`, 0xFF6 의 `sig` 는 `S1SUSPEND` 입니다. 이 예시에서 `hw_sig`·`crc32`·`flags` 는 0 으로 두었고, 실제 검체에서는 플래그 값에 따라 채워져 있을 수 있습니다.
+0xFE0 의 `image` 는 0x1A40 섹터, 0xFEC 의 `orig_sig` 는 `SWAPSPACE2`, 0xFF6 의 `sig` 는 `S1SUSPEND` 입니다. 이 예시에서 `hw_sig`·`crc32`·`flags` 는 0 으로 두었고, 실제 기기에서는 플래그 값에 따라 채워져 있을 수 있습니다.
 
 ```
 xxd -s 0x400 -l 64 swap.img
@@ -112,7 +112,7 @@ xxd -s 0xfd0 -l 48 swap.img
 ### 설정과 기록으로 한 번
 
 1. `/etc/fstab` 에서 형식이 `swap` 인 줄을 찾습니다. `noauto` 가 붙은 줄은 `swapon -a` 가 건너뛰고, `pri=` 는 0~32767 우선순위, `discard` 계열은 SSD 에 버림 명령을 보내는 설정입니다[4]. fstab 해석은 [마운트 기록](../../02-artifacts/devices/mounts.md)에서 다룹니다.
-2. `/etc/crypttab` 에 `swap` 옵션이 붙은 줄은 부팅마다 그 장치를 plain 모드로 암호화한 뒤 mkswap 으로 새로 포맷하는 설정입니다. 키 파일 칸에 `/dev/urandom` 을 쓰면 키가 매번 무작위로 바뀝니다[19][20]. LUKS 머리글과 crypttab 은 [LUKS 디스크 암호화](luks.md)에서 다룹니다.
+2. `/etc/crypttab` 에 `swap` 옵션이 붙은 줄은 부팅마다 그 장치를 plain 모드로 암호화한 뒤 mkswap 으로 새로 포맷하는 설정입니다. 키 파일 필드에 `/dev/urandom` 을 쓰면 키가 매번 무작위로 바뀝니다[19][20]. LUKS 머리글과 crypttab 은 [LUKS 디스크 암호화](luks.md)에서 다룹니다.
 3. 커널 명령줄에서 `resume=`, `resume_offset=`, `noresume`, `hibernate=`, `nohibernate` 를 찾습니다[6]. 스왑 파일로 최대 절전하려면 `resume=` 과 함께 `resume_offset=` 이나 `/sys/power/resume_offset` 으로 장치 안에서 스왑이 시작하는 페이지 위치를 알려 줘야 합니다[7][15].
 4. `sleep.conf` 의 `[Sleep]` 절에서 `AllowHibernation=`, `AllowHybridSleep=`, `AllowSuspendThenHibernate=`, `HibernateMode=`, `HibernateDelaySec=` 를 봅니다[12]. `HibernateMode=` 값은 `/sys/power/disk` 에 쓰는 문자열이고, 커널이 받는 값은 `platform`, `shutdown`, `reboot`, `suspend`, `test_resume` 입니다[8][12]. suspend-then-hibernate 에서 배터리가 없으면 `HibernateDelaySec=` 기본값 2h 가 지난 뒤 최대 절전으로 넘어갑니다[12].
 5. EFI 변수 `HibernateLocation` 을 봅니다. EFI 로 부팅한 기기에서 최대 절전할 때 systemd-sleep 이 고른 스왑을 JSON 으로 적은 값이고(`resume=` 이 없으면 이 변수가 꼭 있어야 합니다), 필드는 `uuid`, `offset` 과 경우에 따라 `autoSwap`, `kernelVersion`, `osReleaseId`, `osReleaseImageId`, `osReleaseVersionId`, `osReleaseImageVersion` 입니다[13]. 되살린 뒤에는 보통 systemd-hibernate-resume.service 가 이 변수를 지우고, 남은 변수는 systemd-hibernate-clear.service 가 지웁니다[14].
@@ -152,7 +152,7 @@ MESSAGE_ID 와 필드를 읽는 법은 [systemd 저널](../logging/systemd-journ
 
 ### 서명이 알려 주는 상태
 
-최대 절전 이미지를 읽는 커널은 `S1SUSPEND` 를 보는 즉시 `orig_sig` 를 `sig` 자리로 되돌려 디스크에 다시 씁니다[5]. 하이브리드 절전에서 RAM 상태로 깨어난 경우에도 커널은 서명을 되돌립니다[5][6]. swapon 도 스왑을 켤 때 `S1SUSPEND`·`S2SUSPEND` 같은 옛 절전 서명을 보면 스왑 서명으로 다시 씁니다[4]. 그래서 전원이 꺼진 검체의 스왑에 `S1SUSPEND` 가 남아 있으면, 최대 절전 이미지를 쓴 뒤 되살리지도 그 스왑을 다시 켜지도 않은 상태입니다. 이 경우 스왑 안에 최대 절전 시점의 메모리 상태가 들어 있을 가능성이 크고, 기본 설정이면 압축돼 있습니다[6][7].
+최대 절전 이미지를 읽는 커널은 `S1SUSPEND` 를 보는 즉시 `orig_sig` 를 `sig` 자리로 되돌려 디스크에 다시 씁니다[5]. 하이브리드 절전에서 RAM 상태로 깨어난 경우에도 커널은 서명을 되돌립니다[5][6]. swapon 도 스왑을 켤 때 `S1SUSPEND`·`S2SUSPEND` 같은 옛 절전 서명을 보면 스왑 서명으로 다시 씁니다[4]. 그래서 전원이 꺼진 기기의 스왑에 `S1SUSPEND` 가 남아 있으면, 최대 절전 이미지를 쓴 뒤 되살리지도 그 스왑을 다시 켜지도 않은 상태입니다. 이 경우 스왑 안에 최대 절전 시점의 메모리 상태가 들어 있을 가능성이 크고, 기본 설정이면 압축돼 있습니다[6][7].
 
 서명을 되돌리는 시점은 하드웨어 서명 비교보다 앞섭니다. 그래서 다른 기기에서 이미지를 되살리려다 `hw_sig` 가 달라 중단된 경우에도 서명은 이미 원래 서명(`orig_sig`)으로 돌아가 있고, 커널 로그의 mismatch 줄이 남습니다[5].
 
@@ -170,19 +170,19 @@ MESSAGE_ID 와 필드를 읽는 법은 [systemd 저널](../logging/systemd-journ
 
 ### 증명하지 못하는 것
 
-- 스왑 안의 페이지가 어느 프로세스, 어느 시각의 것인지. 머리글에 그런 칸이 없습니다[1].
+- 스왑 안의 페이지가 어느 프로세스, 어느 시각의 것인지. 머리글에 그런 필드가 없습니다[1].
 - 어떤 데이터가 스왑에 없었다는 것. zram·zswap 을 쓰면 페이지가 디스크에 닿지 않을 수 있고, 부팅마다 무작위 키로 새로 만드는 암호화 스왑은 전원이 꺼진 뒤 내용을 풀 수 없을 가능성이 큽니다[9][10][19][20].
 - 최대 절전 기록이 없다는 것만으로 최대 절전을 한 적이 없다는 것. 되살리거나 swapon 으로 다시 켜면 서명은 평소와 같아집니다[4][5].
 
 ## 시각 해석
 
-스왑 머리글과 `swsusp_header` 에는 시각 칸이 없습니다[1][5]. 스왑 파일의 파일 시스템 시각은 파일 시스템 규칙을 따르지만, 커널은 스왑 파일을 파일 시스템을 거치지 않고 직접 쓰므로[4] 파일 시각이 스왑을 마지막으로 쓴 시각을 반영하지 않을 가능성이 있습니다.
+스왑 머리글과 `swsusp_header` 에는 시각 필드가 없습니다[1][5]. 스왑 파일의 파일 시스템 시각은 파일 시스템 규칙을 따르지만, 커널은 스왑 파일을 파일 시스템을 거치지 않고 직접 쓰므로[4] 파일 시각이 스왑을 마지막으로 쓴 시각을 반영하지 않을 가능성이 있습니다.
 
-잠들기·깨어나기 시각은 저널 기록에서 얻습니다. 저널 시각은 UTC 기준으로 저장되며 읽는 법은 [systemd 저널](../logging/systemd-journal/index.md)에서 다룹니다. 잠들기 시작 기록은 잠들기 직전에, 깨어남 기록은 돌아온 뒤에 남으므로 두 기록 사이가 잠들어 있던 구간입니다[13]. 커널 링 버퍼 줄의 시각은 부팅 뒤 흐른 시간이므로 벽시계 시각으로 바꾸려면 저널이나 syslog 쪽 시각과 맞춰야 합니다([커널 로그](../../02-artifacts/system-info/kernel-log.md)).
+잠들기·깨어나기 시각은 저널 기록에서 얻습니다. 저널 시각은 UTC 기준으로 저장되며 읽는 법은 [systemd 저널](../logging/systemd-journal/index.md)에서 다룹니다. 잠들기 시작 기록은 잠들기 직전에, 깨어남 기록은 돌아온 뒤에 남으므로 두 기록 사이가 잠들어 있던 구간입니다[13]. 커널 링 버퍼 줄의 시각은 부팅 뒤 흐른 시간이므로 실제 시각으로 바꾸려면 저널이나 syslog 쪽 시각과 맞춰야 합니다([커널 로그](../../02-artifacts/system-info/kernel-log.md)).
 
 ## 함정
 
-- 최대 절전은 늘 쓸 수 있는 기능이 아닙니다. `nohibernate` 가 있거나, 커널 잠금(lockdown)이 최대 절전을 막거나, secretmem·CXL 메모리를 쓰는 중이면 커널이 최대 절전을 거부합니다[6]. 검체의 커널 명령줄과 커널 로그로 먼저 확인합니다.
+- 최대 절전은 늘 쓸 수 있는 기능이 아닙니다. `nohibernate` 가 있거나, 커널 잠금(lockdown)이 최대 절전을 막거나, secretmem·CXL 메모리를 쓰는 중이면 커널이 최대 절전을 거부합니다[6]. 실제 시스템의 커널 명령줄과 커널 로그로 먼저 확인합니다.
 - `resume=` 이 없고 EFI 변수 `HibernateLocation` 으로도 위치를 넘길 수 없으면(EFI 부팅이 아닐 때 등) systemd-sleep 은 `No valid 'resume=' option found, refusing to hibernate.` 를 남기고 최대 절전을 하지 않습니다[13].
 - 되살릴 이미지가 없으면 systemd-hibernate-resume 은 오류 없이 평소처럼 부팅을 이어 갑니다[14]. 되살리기 서비스가 돌았다는 것만으로 최대 절전을 했다고 볼 수 없습니다.
 - 스왑 파일은 구멍이 없어야 합니다. cp·truncate 로 만든 파일은 swapon 이 거부하고, Btrfs 에서는 Linux 5.0 부터 nocow 속성이 붙은 파일만 스왑으로 씁니다[4]. 스왑 파일로 적혀 있는데 켜진 기록이 없다면 이 조건을 봅니다.
@@ -194,10 +194,10 @@ MESSAGE_ID 와 필드를 읽는 법은 [systemd 저널](../logging/systemd-journ
 
 ## 도구
 
-- **blkid**: 형식을 `swap` 이나 `swsuspend` 로 알리고, 판(VERSION)에 `1`, `0`, `s1suspend` 같은 값을 넣습니다. `SWAPSPACE2` 면 `padding` 칸 일부가 0 일 때 UUID 와 라벨도 읽습니다[2].
+- **blkid**: 형식을 `swap` 이나 `swsuspend` 로 알리고, 판(VERSION)에 `1`, `0`, `s1suspend` 같은 값을 넣습니다. `SWAPSPACE2` 면 `padding` 필드 일부가 0 일 때 UUID 와 라벨도 읽습니다[2].
 - **swapon --show**, `/proc/swaps`: 라이브 시스템에서 켜진 스왑을 봅니다[4][11].
 - **UAC**: Linux 에서 `free` 출력을 `free.txt` 로 모읍니다[25].
-- **헥스 편집기**: 0x400 정보 칸과 0xFD8~0xFFF 를 직접 읽습니다.
+- **헥스 편집기**: 0x400 정보 필드와 0xFD8~0xFFF 를 직접 읽습니다.
 
 메모리 수집과 분석 전반은 [메모리 수집](../../03-techniques/acquisition/memory-acquisition.md), [메모리 분석](../../03-techniques/analysis/memory-analysis.md)에서 다룹니다. 스왑을 담은 볼륨은 [LVM 논리 볼륨](lvm.md), [LUKS 디스크 암호화](luks.md), [파티션](partitions.md)을 함께 봅니다.
 

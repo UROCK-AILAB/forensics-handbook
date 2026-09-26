@@ -35,7 +35,7 @@ SSH 클라이언트는 처음 접속한 서버의 호스트 키 (host key) 를 �
 
 설정은 대부분 `HKEY_CURRENT_USER\Software\SimonTatham\PuTTY` 에 저장되고, 저장한 세션은 그 아래 `Sessions`, SSH 호스트 키는 `SshHostKeys` 에 있습니다. [1] 난수 시드 파일 `PUTTY.RND` 는 기본으로 Application Data 폴더에 있으며 위치는 `...\PuTTY\RandSeedFile` 값으로 바꿀 수 있습니다. [1] Windows 7 이후에는 최근 실행한 세션이 점프 목록에 남습니다. [1]
 
-PuTTY 는 보안 때문에 일부러 비밀번호를 저장하지 않습니다. [1] `Sessions` 아래 값 이름과 `SshHostKeys` 값 이름의 형식은 레지스트리 뷰어로 검체에서 확인합니다.
+PuTTY 는 보안 때문에 일부러 비밀번호를 저장하지 않습니다. [1] `Sessions` 아래 값 이름과 `SshHostKeys` 값 이름의 형식은 레지스트리 뷰어로 실제 데이터에서 확인합니다.
 
 ### WinSCP
 
@@ -54,7 +54,7 @@ INI 파일에 저장할 수도 있으며 파일 이름은 실행 파일과 같�
 | `Configuration\Interface\Commander\RemotePanel` 의 `LastPath` | 원격 창에서 마지막으로 연 경로 |
 | `SshHostKeys` | 서버 호스트 키 |
 
-`Sessions\<세션 이름>` 아래 값은 레지스트리 뷰어로 검체에서 확인합니다.
+`Sessions\<세션 이름>` 아래 값은 레지스트리 뷰어로 실제 데이터에서 확인합니다.
 
 ### FileZilla
 
@@ -113,13 +113,13 @@ Host db
 
 ### 호스트 키 목록 (known_hosts)
 
-`known_hosts` 한 줄은 "호스트 키종류 공개키" 세 칸입니다. 호스트 칸이 해시가 아니라 평문 IP 로 남는 경우가 있습니다. 아래는 칸 모양만 보여 주려고 만든 예시입니다.
+`known_hosts` 한 줄은 "호스트 키종류 공개키" 세 필드입니다. 호스트 필드가 해시가 아니라 평문 IP 로 남는 경우가 있습니다. 아래는 필드 모양만 보여 주려고 만든 예시입니다.
 
 ```
 192.0.2.20 ssh-ed25519 AAAA…(공개 키, 생략)
 ```
 
-호스트 칸을 해시로 저장하는 설정이 있다는 설명도 있습니다.
+호스트 필드를 해시로 저장하는 설정이 있다는 설명도 있습니다.
 
 ### OpenSSH 이벤트 채널
 
@@ -139,7 +139,7 @@ Host db
 
 ### WinSCP 경로 기록의 인코딩
 
-`RemoteTarget`·`LocalTarget` 값은 `%XX` 꼴로 URL 인코딩돼 있습니다. [5] 풀어 읽는 법은 아래 "헥스로 한 번" 에서 따라갑니다.
+`RemoteTarget`·`LocalTarget` 값은 `%XX` 형식으로 URL 인코딩돼 있습니다. [5] 풀어 읽는 법은 아래 "헥스로 한 번" 에서 따라갑니다.
 
 ## 증거로서 의미
 
@@ -160,13 +160,13 @@ Host db
 - WinSCP 는 비밀번호를 기본으로 저장하지 않습니다. 사용자가 세션 저장 대화상자에서 따로 요청해야 저장합니다. [3]
 - ssh 클라이언트를 써도 `OpenSSH/Operational`·`OpenSSH/Admin` 에는 기록이 남지 않습니다(Windows 11 25H2 기준). 이때도 `known_hosts` 변경과 프리페치는 남습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "사용자 A 의 `known_hosts` 에 192.0.2.20 의 호스트 키가 있다. 이 사용자 계정의 SSH 클라이언트가 이 서버와 접속을 시작한 적이 있다. 이 기록만으로는 로그인 성공 여부와 접속 시각을 알 수 없다." 처럼 씁니다. 예의 값은 만든 예시입니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "사용자 A 의 `known_hosts` 에 192.0.2.20 의 호스트 키가 있다. 이 사용자 계정의 SSH 클라이언트가 이 서버와 접속을 시작한 적이 있다. 이 기록만으로는 로그인 성공 여부와 접속 시각을 알 수 없다." 처럼 씁니다. 예의 값은 만든 예시입니다.
 
 ## 시각 해석
 
 - 레지스트리 값에는 시각이 없습니다. 시각은 키의 LastWrite 하나뿐입니다. RegRipper putty 플러그인은 `SshHostKeys` 키의 LastWrite 를 함께 보여 줍니다. [5] 이 시각은 그 키 안의 무언가가 마지막으로 바뀐 때입니다. 서버마다의 접속 시각이 아닙니다. LastWrite 를 읽는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - `config`·`known_hosts`·개인 키 파일은 파일 시스템 시각으로 봅니다. [마스터 파일 테이블](../filesystem/mft.md)에서 읽습니다.
-- 서버 호스트 키와 `sshd_config` 는 없으면 서비스가 시작할 때 만듭니다. [4] 그러니 이 파일들을 만든 시각은 sshd 서비스를 처음 시작한 때를 가늠하는 단서가 될 수 있습니다.
+- 서버 호스트 키와 `sshd_config` 는 없으면 서비스가 시작할 때 만듭니다. [4] 그러니 이 파일들을 만든 시각은 sshd 서비스를 처음 시작한 때를 추정하는 단서가 될 수 있습니다.
 - 이벤트 시각은 레코드 시각입니다. 읽는 법은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 함정과 한계
@@ -178,7 +178,7 @@ Host db
 - **`sshd_config` 가 있다고 누가 설정을 고쳤다는 뜻은 아닙니다.** 파일이 없으면 서비스가 기본값으로 만듭니다. [4] 기본값과 다른 줄이 있는지 따로 봅니다.
 - **서버 로그는 기본값에서 파일이 아니라 ETW 로 갑니다.** `%programdata%\ssh\logs` 가 비어 있다고 서버를 쓰지 않았다고 단정하지 않습니다. [4]
 - **OpenSSH 클라이언트 사용은 이벤트 채널에 남지 않습니다.** 클라이언트 흔적은 `.ssh` 폴더, 프리페치, PowerShell 명령 기록으로 찾습니다.
-- **ssh-agent 서비스 상태를 함께 봅니다.** ssh-agent 서비스는 중지·사용 안 함 상태로 있을 수 있습니다. 등록한 키를 어디에 두는지는 공개된 분석 자료가 없어 검체에서 확인합니다.
+- **ssh-agent 서비스 상태를 함께 봅니다.** ssh-agent 서비스는 중지·사용 안 함 상태로 있을 수 있습니다. 등록한 키를 어디에 두는지는 실제 데이터로 확인해야 합니다.
 - **FileZilla 는 공식 문서로 위치부터 확인합니다.** 설정 파일 위치를 확인한 뒤 수집·분석합니다.
 
 ## 직접 분석해 보기
@@ -245,7 +245,7 @@ Get-WinEvent -Path 'E:\case\OpenSSH%4Operational.evtx' |
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 SSH·SFTP 도구를 쓴 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등) 가운데 SSH·SFTP 도구를 쓴 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 사용자마다 NTUSER.DAT 에 `SimonTatham\PuTTY` 와 `Martin Prikryl\WinSCP 2` 키가 있습니까?
 2. PuTTY `SshHostKeys` 에 몇 개의 서버가 있습니까? 키의 LastWrite 는 언제입니까?

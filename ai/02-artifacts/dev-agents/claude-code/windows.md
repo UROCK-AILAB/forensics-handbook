@@ -41,11 +41,11 @@ Claude Code 는 터미널에서 도는 코딩 에이전트입니다. 모델 호�
 | 설치 방법 | 흔적이 남는 곳 | 업데이트 |
 |---|---|---|
 | 네이티브 설치기(`install.ps1`, `install.cmd`) | `%USERPROFILE%\.local\bin\claude.exe`, `%USERPROFILE%\.local\share\claude` | 백그라운드에서 스스로 업데이트 |
-| WinGet(`Anthropic.ClaudeCode`) | 문서에 실행 파일 위치가 없어 검체로 확인 | 스스로 업데이트하지 않음(`CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` 이면 대신 실행) |
-| npm(`@anthropic-ai/claude-code`) | 문서에 실행 파일 위치가 없어 검체로 확인 | 문서에 설명이 없어 검체로 확인 |
+| WinGet(`Anthropic.ClaudeCode`) | 문서에 실행 파일 위치가 없어 실제 기기에서 확인 | 스스로 업데이트하지 않음(`CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` 이면 대신 실행) |
+| npm(`@anthropic-ai/claude-code`) | 문서에 실행 파일 위치가 없어 실제 기기에서 확인 | 문서에 설명이 없어 실제 기기에서 확인 |
 | WSL 안에 설치 | WSL 배포판 리눅스 홈의 `~/.claude` | 리눅스 설치와 같음 |
 
-WinGet·npm 설치는 문서에 실행 파일 위치가 없어서, 검체에서는 패키지 관리자의 설치 목록과 디스크 전체에서 이름이 `claude` 로 시작하는 실행 파일을 찾습니다. 네이티브 설치에는 관리자 권한이 필요 없어서, 관리자 권한이 없는 계정에서도 설치 흔적이 나올 수 있습니다[7]. 업데이트 채널은 설정 키 `autoUpdatesChannel` 로 고르고 값은 `"latest"`(기본)와 `"stable"` 입니다[7]. WSL 에 깐 경우에는 Windows 사용자 폴더가 아니라 배포판 안의 리눅스 홈에 기록이 쌓여서, 배포판을 따로 수집합니다.
+WinGet·npm 설치는 문서에 실행 파일 위치가 없어서, 실제 기기에서는 패키지 관리자의 설치 목록과 디스크 전체에서 이름이 `claude` 로 시작하는 실행 파일을 찾습니다. 네이티브 설치에는 관리자 권한이 필요 없어서, 관리자 권한이 없는 계정에서도 설치 흔적이 나올 수 있습니다[7]. 업데이트 채널은 설정 키 `autoUpdatesChannel` 로 고르고 값은 `"latest"`(기본)와 `"stable"` 입니다[7]. WSL 에 깐 경우에는 Windows 사용자 폴더가 아니라 배포판 안의 리눅스 홈에 기록이 쌓여서, 배포판을 따로 수집합니다.
 
 명령을 실행하는 도구도 환경에 따라 다릅니다. Git for Windows 가 깔려 있으면 Git Bash 를 Bash 도구로 쓰고, 없으면 PowerShell 도구를 씁니다[7]. Git 이 있어도 claude.ai·Console 계정에서는 PowerShell 도구가 기본으로 함께 켜져 있어서, 한 세션 기록에 두 도구의 호출이 섞일 수 있습니다. Git Bash 경로는 `CLAUDE_CODE_GIT_BASH_PATH` 로 지정합니다. 네이티브 Windows 에서는 샌드박스를 지원하지 않고 WSL 2 에서는 지원합니다. 기록에서 어떤 도구로 명령을 실행했는지 읽을 때 이 차이를 함께 봅니다.
 
@@ -73,13 +73,13 @@ plugins\
 projects\
 ```
 
-Windows 판이 이 가운데 무엇을 쓰는지는 자료마다 다릅니다. claude-forensics v0.1.1(2026-06-16) 문서는 2026년 중반의 Windows 판 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 했고, `projects/` 의 세션 기록, Cowork 세션 정보, `audit.jsonl` 을 포함한 Cowork 에이전트 기록은 그대로 뽑힌다고 했습니다[8]. 2026년 9월 Windows 기기에서는 이 네 가지 가운데 `history.jsonl`, `paste-cache\`, `file-history\` 가 있었고 `shell-snapshots\` 는 없었습니다. 시점이 달라서 어느 한쪽을 기준으로 삼지 않고, 검체마다 이 네 항목이 있는지부터 봅니다.
+Windows 판이 이 가운데 무엇을 쓰는지는 자료마다 다릅니다. claude-forensics v0.1.1(2026-06-16) 문서는 2026년 중반의 Windows 판 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 했고, `projects/` 의 세션 기록, Cowork 세션 정보, `audit.jsonl` 을 포함한 Cowork 에이전트 기록은 그대로 뽑힌다고 했습니다[8]. 2026년 9월 Windows 기기에서는 이 네 가지 가운데 `history.jsonl`, `paste-cache\`, `file-history\` 가 있었고 `shell-snapshots\` 는 없었습니다. 시점이 달라서 어느 한쪽을 기준으로 삼지 않고, 기기마다 이 네 항목이 있는지부터 봅니다.
 
-`plans\`, `session-env\`, `sessions\`, `tasks\`, `todos\` 폴더[3]는 없을 수도 있습니다. 그 기능을 쓰지 않았을 수도 있고 자동 정리가 지웠을 수도 있어서, 폴더가 없다는 사실만으로 판이나 사용 여부를 가르지 않습니다. `daemon\` 의 두 파일은 쓰임을 설명한 공개 자료가 없어서 검체로 확인해야 합니다.
+`plans\`, `session-env\`, `sessions\`, `tasks\`, `todos\` 폴더[3]는 없을 수도 있습니다. 그 기능을 쓰지 않았을 수도 있고 자동 정리가 지웠을 수도 있어서, 폴더가 없다는 사실만으로 판이나 사용 여부를 판단하지 않습니다. `daemon\` 의 두 파일은 쓰임을 설명한 공개 문서가 없어서 실제 기기에서 확인해야 합니다.
 
 ### 데스크톱 앱 폴더와 수집 범위
 
-Claude 데스크톱 앱에서 Claude Code 나 Cowork(로컬 에이전트 모드)를 쓰면 앱 데이터 폴더에도 세션 정보가 남습니다. Windows 검체에서는 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 폴더를 모두 떠야 전체를 볼 수 있습니다[8]. 스토어(MSIX) 설치의 앱 폴더는 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 이고, 스토어가 아닌 설치나 예전 설치의 앱 폴더는 `%APPDATA%\Claude` 입니다[9]. claude-forensics 는 `AppData\Roaming\Claude` 한 곳만 다루므로, 검체에서는 두 곳을 모두 봅니다[8].
+Claude 데스크톱 앱에서 Claude Code 나 Cowork(로컬 에이전트 모드)를 쓰면 앱 데이터 폴더에도 세션 정보가 남습니다. Windows 기기에서는 `\Users\이름\.claude` 와 `\Users\이름\AppData\Roaming\Claude\` 두 폴더를 모두 떠야 전체를 볼 수 있습니다[8]. 스토어(MSIX) 설치의 앱 폴더는 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 이고, 스토어가 아닌 설치나 예전 설치의 앱 폴더는 `%APPDATA%\Claude` 입니다[9]. claude-forensics 는 `AppData\Roaming\Claude` 한 곳만 다루므로, 실제 기기에서는 두 곳을 모두 봅니다[8].
 
 앱 폴더 아래에서 Claude Code 와 이어지는 항목은 다음과 같습니다.
 
@@ -110,7 +110,7 @@ claude-forensics 는 앱 폴더 전체가 아니라 `claude-code-sessions`, `loc
 기록 폴더   %USERPROFILE%\.claude\projects\C--Work-my-app\
 ```
 
-이름을 되돌리면 원래 있던 `-` 와 바뀐 `-` 를 가를 수 없으므로, 폴더 이름보다 기록 줄의 `cwd` 값을 먼저 씁니다[8]. 기록 줄의 짜임은 [세션 기록 구조](transcripts.md)에서 다룹니다.
+이름을 되돌리면 원래 있던 `-` 와 바뀐 `-` 를 구분할 수 없으므로, 폴더 이름보다 기록 줄의 `cwd` 값을 먼저 씁니다[8]. 기록 줄의 짜임은 [세션 기록 구조](transcripts.md)에서 다룹니다.
 
 ### 로그인 정보 파일
 
@@ -145,7 +145,7 @@ claudeAiOauth
 
 네이티브 설치는 백그라운드에서 스스로 업데이트하기 때문에, 실행 파일이나 버전 파일의 파일 시스템 시각을 처음 설치한 때로 단정하지 않습니다. `.credentials.json` 의 `expiresAt`, `refreshTokenExpiresAt` 는 정수 시각이고 단위를 적은 공개 자료가 없어서, 13자리면 1970-01-01 UTC 기준 밀리초, 10자리면 초로 보고 파일 시각과 맞는지 확인합니다. 대화 시각은 기록 파일 안의 값이 더 정확하며 [세션 기록 구조](transcripts.md)의 시각 절을 따릅니다. 앱 폴더 쪽 세션 정보의 `createdAt`, `lastActivityAt` 해석은 [Claude — Windows 앱](../../chat-services/claude/windows.md)의 시각 절을 따릅니다.
 
-`.claude` 폴더 바로 아래에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 든 JSON 파일이 있을 수 있습니다. 이 파일을 설명한 공개 자료가 없어서, 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 가늠해 볼 수 있습니다.
+`.claude` 폴더 바로 아래에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 든 JSON 파일이 있을 수 있습니다. 이 파일을 설명한 공개 자료가 없어서, 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 추정해 볼 수 있습니다.
 
 ## 함정과 한계
 
@@ -162,7 +162,7 @@ claudeAiOauth
 00000000  7B 22 63 6C 61 75 64 65 41 69 4F 61 75 74 68 22  {"claudeAiOauth"
 ```
 
-**공개 도구로 한 번.** 살아 있는 PC 에서는 PowerShell 로 서명과 폴더, 정책 값, 앱 폴더 위치를 읽기만 합니다. 서명자가 "Anthropic, PBC" 로 나오는지 봅니다. 이미지 사본이라면 NTUSER.DAT 와 SOFTWARE 하이브를 Registry Explorer 같은 공개 도구로 열어 같은 키를 봅니다. 아래 사용자 이름은 만든 예시입니다.
+**공개 도구로 한 번.** 실행 중인 PC 에서는 PowerShell 로 서명과 폴더, 정책 값, 앱 폴더 위치를 읽기만 합니다. 서명자가 "Anthropic, PBC" 로 나오는지 봅니다. 이미지 사본이라면 NTUSER.DAT 와 SOFTWARE 하이브를 Registry Explorer 같은 공개 도구로 열어 같은 키를 봅니다. 아래 사용자 이름은 만든 예시입니다.
 
 ```powershell
 # 만든 예시: 사용자 examiner01
@@ -184,7 +184,7 @@ Test-Path "C:\Users\examiner01\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\Local
     ./out
 ```
 
-결과에는 `.claude` 쪽 세션과 프롬프트, `claude-code-sessions` 를 정리한 `cowork-sessions.jsonl`, `audit.jsonl` 을 정리한 `cowork-agent-sessions.jsonl` 이 따로 나오고, 모든 결과 파일의 SHA-256 목록도 함께 만들어집니다[8]. claude-forensics 문서는 시험한 Claude Code 판을 적지 않았고 도구 판은 v0.1.1(2026-06-16)이라서, 지금 판의 검체에서는 경고 줄(`WARNING no X under …`)로 빠진 항목을 먼저 봅니다.
+결과에는 `.claude` 쪽 세션과 프롬프트, `claude-code-sessions` 를 정리한 `cowork-sessions.jsonl`, `audit.jsonl` 을 정리한 `cowork-agent-sessions.jsonl` 이 따로 나오고, 모든 결과 파일의 SHA-256 목록도 함께 만들어집니다[8]. claude-forensics 문서는 시험한 Claude Code 판을 적지 않았고 도구 판은 v0.1.1(2026-06-16)이라서, 지금 판의 실제 데이터에서는 경고 줄(`WARNING no X under …`)로 빠진 항목을 먼저 봅니다.
 
 ## 교차 검증
 

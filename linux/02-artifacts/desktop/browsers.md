@@ -6,7 +6,7 @@ nav_order: 870
 
 # Linux 의 브라우저 프로필 (Firefox·Chrome)
 
-Linux 의 Chrome·Chromium·Firefox 는 Windows 와 같은 SQLite 데이터베이스를 쓰지만, 프로필 폴더가 설치 방식(배포판 패키지·Snap·Flatpak)과 환경 변수에 따라 여러 곳으로 갈라지고, Chrome 계열의 저장 비밀번호는 데스크톱 비밀번호 보관함에 기댑니다. 이 쪽은 Linux 에서 달라지는 경로·암호화·시각만 다룹니다. 테이블과 필드의 뜻은 다른 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)·[파이어폭스](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/firefox/index.html) 쪽을 봅니다.
+Linux 의 Chrome·Chromium·Firefox 는 Windows 와 같은 SQLite 데이터베이스를 쓰지만, 프로필 폴더가 설치 방식(배포판 패키지·Snap·Flatpak)과 환경 변수에 따라 여러 곳으로 갈라지고, Chrome 계열의 저장 비밀번호는 데스크톱 비밀번호 보관함에 기댑니다. 이 페이지는 Linux 에서 달라지는 경로·암호화·시각만 다룹니다. 테이블과 필드의 뜻은 다른 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)·[파이어폭스](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/firefox/index.html) 페이지를 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -60,7 +60,7 @@ Ubuntu 24.04 와 RHEL 9 의 차이는 경로 규칙이 아니라 어떤 방식�
 
 ## 구조
 
-데이터베이스 파일 형식은 다른 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 쪽, `Local Storage`·`IndexedDB` 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 쪽과 같습니다. Linux 에서 달라지는 부분은 암호화된 값의 앞머리입니다.
+데이터베이스 파일 형식은 다른 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지, `Local Storage`·`IndexedDB` 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지에서 다룬 것과 같습니다. Linux 에서 달라지는 부분은 암호화된 값의 앞머리입니다.
 
 ### Chrome 계열의 암호화 값 앞머리
 
@@ -101,7 +101,7 @@ Firefox 는 프로필 안의 `logins.json` 과 `key4.db`(옛 판은 `key3.db`)�
 | Firefox `moz_historyvisits.visit_date`, 쿠키 `creationTime`·`lastAccessed`, `moz_annos.dateAdded`·`lastModified` | Unix 마이크로초: 1970-01-01 UTC 부터의 마이크로초[8][10] | UTC |
 | Firefox `logins.json` 의 `timeCreated`·`timeLastUsed`·`timePasswordChanged`, `extensions.json` 의 `installDate`·`updateDate` | Unix 밀리초[8] | UTC |
 
-데이터베이스 안의 시각은 모두 UTC 라서 검체의 시간대 설정과 상관없습니다. 보고서에 현지 시각으로 옮길 때는 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 에서 확인한 시간대를 씁니다. 값을 바꾸는 법과 흔한 착오는 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 과 다른 판의 [시각 값 형식](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html) 쪽을 봅니다.
+데이터베이스 안의 시각은 모두 UTC 라서 분석 대상의 시간대 설정과 상관없습니다. 보고서에 현지 시각으로 옮길 때는 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 에서 확인한 시간대를 씁니다. 값을 바꾸는 법과 흔한 착오는 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 과 다른 판의 [시각 값 형식](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html) 페이지를 봅니다.
 
 데이터베이스 파일의 수정 시각은 파일이 마지막으로 바뀐 때를 보여 줄 뿐이라, 개별 방문의 시각으로 쓰지 않습니다. `-wal` 파일에는 본 파일에 아직 합쳐지지 않은 최근 기록이 있을 가능성이 있으므로 둘을 함께 봅니다.
 
@@ -112,7 +112,7 @@ Firefox 는 프로필 안의 `logins.json` 과 `key4.db`(옛 판은 `key3.db`)�
 - **Chrome 캐시는 `~/.config` 가 아니라 `~/.cache` 에 있습니다[1].** 설정 폴더만 떠 오면 캐시가 빠집니다.
 - **`-wal`·`-journal` 파일을 함께 모읍니다.** 마지막 기록이 아직 본 데이터베이스에 합쳐지지 않았을 수 있습니다. 수집 정의 가운데 UAC 는 `History*`·`places.sqlite*` 처럼 이름 뒤에 별표를 붙여, ForensicArtifacts 는 `History-journal`·`places.sqlite-wal` 처럼 이름을 하나씩 적어 함께 모읍니다[12][13][15].
 - **수집 도구마다 빠지는 경로가 다릅니다.** UAC 의 Chromium 정의는 Snap·Flatpak 폴더만 모으고 `~/.config/chromium` 은 모으지 않습니다[14]. UAC 의 Firefox 정의는 `~/.mozilla/firefox` 와 Snap·Flatpak 폴더를 모으지만 네이티브 설치의 `~/.config/mozilla/firefox` 는 빠집니다[15]. ForensicArtifacts 의 Firefox 캐시 정의는 이름이 `*.default`·`*.default-*` 인 프로필만 봅니다[12]. Velociraptor 의 `Linux.Applications.Chrome.Extensions` 는 기본값이 `~/.config/google-chrome` 만 뒤집니다[17]. 도구 결과가 비었으면 표의 경로를 손으로 확인합니다.
-- **UAC 의 Linux Chrome 캐시 항목에는 macOS 경로(`Library/Caches/Google/Chrome`)가 섞여 있습니다[16].** Linux 검체에 이 경로가 없어도 수집이 잘못된 것은 아닙니다.
+- **UAC 의 Linux Chrome 캐시 항목에는 macOS 경로(`Library/Caches/Google/Chrome`)가 섞여 있습니다[16].** Linux 시스템에 이 경로가 없어도 수집이 잘못된 것은 아닙니다.
 - **문서와 코드가 `basic` 방식을 다르게 적습니다.** Chromium 문서는 `basic` 을 평문 저장이라고 적고[4], 코드는 고정 키로 `v10` 암호화를 합니다[3]. 키가 브라우저 안에 있으니 보호가 없다는 점은 같습니다.
 
 ## 직접 분석해 보기
@@ -148,7 +148,7 @@ https://intranet.example.org/|763131
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 모음에서 Linux 데스크톱 이미지를 골라 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터 모음에서 Linux 데스크톱 이미지를 골라 풀어 봅니다.
 
 1. 홈 폴더마다 표의 경로를 모두 뒤졌을 때, 브라우저 프로필은 몇 개이고 각각 어떤 설치 방식의 경로인가?
 2. Firefox 프로필이 `~/.mozilla/firefox` 와 `~/.config/mozilla/firefox` 에 함께 있다면, 두 `places.sqlite` 의 마지막 방문 시각은 어떻게 다른가?

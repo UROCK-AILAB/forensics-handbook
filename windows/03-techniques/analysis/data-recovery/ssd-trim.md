@@ -11,12 +11,12 @@ nav_order: 3380
 
 TRIM 은 OS 가 저장 장치에 어느 블록을 더는 쓰지 않는지 알려 주는 명령이고, 이를 받은 SSD 는 그 영역을 무효로 표시합니다. 그 뒤 드라이브 내부 정리 (Garbage Collection) 가 끝나면 지운 데이터는 되살리기 어렵거나 불가능할 수 있습니다. Windows 의 NTFS 는 기본 설정에서 이 알림을 보냅니다.
 
-이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 다른 하위 페이지의 복구 방법이 SSD 에서 어디까지 통하는지 가늠할 때 봅니다.
+이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 다른 하위 페이지의 복구 방법이 SSD 에서 어디까지 통하는지 판단할 때 봅니다.
 
 ## 언제 쓰나
 
 - 증거 매체가 SSD 일 때 복구에 기대할 수 있는 범위를 먼저 정합니다.
-- 비할당 영역이 0 이나 같은 값으로 채워져 있을 때 까닭을 따집니다.
+- 비할당 영역이 0 이나 같은 값으로 채워져 있을 때 이유를 따집니다.
 - 복구 결과가 적을 때 그 사정을 보고서에 적습니다.
 
 ## TRIM 과 드라이브 내부 정리
@@ -72,7 +72,7 @@ NTFS DisableDeleteNotify = 0  (Allows TRIM operations to be sent to the storage 
 ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 ```
 
-같은 조건에서 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem` 의 `DisableDeleteNotification` 값은 0 이고, 같은 키에 `RefsDisableDeleteNotification` 값은 없습니다. fsutil 공식 문서에는 "레지스트리를 바꾼다" 는 말만 있고 값 이름은 없습니다[2]. 그래서 이 레지스트리 값이 fsutil 설정과 같은 것인지는 공개 자료로 알 수 없습니다. 디스크 이미지에서 이 값을 근거로 쓰려면 이 관계부터 검체에서 확인합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+같은 조건에서 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem` 의 `DisableDeleteNotification` 값은 0 이고, 같은 키에 `RefsDisableDeleteNotification` 값은 없습니다. fsutil 공식 문서에는 "레지스트리를 바꾼다" 는 말만 있고 값 이름은 없습니다[2]. 그래서 이 레지스트리 값이 fsutil 설정과 같은 것인지는 공개 자료로 알 수 없습니다. 디스크 이미지에서 이 값을 근거로 쓰려면 이 관계부터 실제 시스템에서 확인해야 합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ### 빈 섹터 전체에 다시 TRIM — Optimize-Volume·defrag
 
@@ -96,7 +96,7 @@ ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 
 예약 작업 `\Microsoft\Windows\Defrag\ScheduledDefrag` 는 Ready 상태이고, `%windir%\system32\defrag.exe` 를 인수 `-c -h -o -$` 로 실행합니다. defrag 도움말에서 `/C` 는 모든 볼륨, `/H` 는 보통 우선순위, `/O` 는 매체 종류에 알맞은 최적화입니다. `-$` 는 도움말에 나오지 않습니다.
 
-Application 로그에는 공급자 `Microsoft-Windows-Defrag` 의 이벤트 ID 258 이 남습니다. 메시지 예는 "The storage optimizer successfully completed 다시 잘라내기 on OS (C:)" 와 "... 조각 모음 on OS (C:)" 이며, 한국어 표시에서 retrim 은 "다시 잘라내기" 로 나옵니다. 258 이벤트는 2026-09-12, 2026-09-19 처럼 1주 간격으로 C: 와 RESTORE 볼륨에 나란히 남고, NVMe SSD 에서도 "다시 잘라내기" 와 "조각 모음" 이벤트가 둘 다 남습니다. 다른 Windows 버전에서도 이 이벤트로 retrim 시각을 읽을 수 있는지, 로그를 얼마나 오래 두는지는 공개 자료가 없어 검체에서 확인합니다.
+Application 로그에는 공급자 `Microsoft-Windows-Defrag` 의 이벤트 ID 258 이 남습니다. 메시지 예는 "The storage optimizer successfully completed 다시 잘라내기 on OS (C:)" 와 "... 조각 모음 on OS (C:)" 이며, 한국어 표시에서 retrim 은 "다시 잘라내기" 로 나옵니다. 258 이벤트는 2026-09-12, 2026-09-19 처럼 1주 간격으로 C: 와 RESTORE 볼륨에 나란히 남고, NVMe SSD 에서도 "다시 잘라내기" 와 "조각 모음" 이벤트가 둘 다 남습니다. 다른 Windows 버전에서도 이 이벤트로 retrim 시각을 읽을 수 있는지, 로그를 얼마나 오래 두는지는 실제 시스템에서 확인해야 합니다.
 
 작업 정의를 이미지에서 읽는 법은 [예약 작업](../../../02-artifacts/persistence/scheduled-tasks/index.md) 에 있습니다. 이벤트 로그 파일을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에 있습니다.
 

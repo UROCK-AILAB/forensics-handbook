@@ -12,9 +12,9 @@ Microsoft 365·Google Workspace·AWS·Azure·Google Cloud 와 업무용 SaaS 에
 
 ## 구성
 
-핸드북은 네 갈래로 나뉩니다.
+핸드북은 네 부분으로 나뉩니다.
 
-| 갈래 | 다루는 것 |
+| 분류 | 다루는 것 |
 |---|---|
 | **기반 구조** | 책임 공유와 조사 범위, 테넌트·구독·계정 구조, 계정·역할·OAuth 동의·토큰·MFA, 로그 종류·보관 기간·JSON 형식·시각 |
 | **아티팩트 사전** | Microsoft 365(통합 감사 로그·Entra·Exchange·SharePoint·Teams), Google Workspace, AWS(CloudTrail·IAM·S3·VPC Flow Logs), Azure, Google Cloud, Slack·GitHub·Okta 같은 업무용 SaaS |
@@ -164,7 +164,7 @@ Microsoft 365·Google Workspace·AWS·Azure·Google Cloud 와 업무용 SaaS 에
 - [클라우드 타임라인 (Timeline)](03-techniques/analysis/timeline.md)
 - [이상한 로그인 가려내기 (Suspicious Sign-ins)](03-techniques/analysis/suspicious-sign-ins.md)
 - [권한 변화 따라가기 (Permission Changes)](03-techniques/analysis/permission-changes.md)
-- [탐지 규칙으로 로그 훑기 (Sigma·KQL)](03-techniques/analysis/detection-rules.md)
+- [탐지 규칙으로 로그 검색하기 (Sigma·KQL)](03-techniques/analysis/detection-rules.md)
 
 ### 보고
 

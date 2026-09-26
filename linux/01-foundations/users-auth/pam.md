@@ -18,7 +18,7 @@ PAM 이 흔적을 남기는 곳은 다음과 같습니다.
 |---|---|---|
 | 인증 로그의 `모듈이름(서비스:동작):` 줄 | 각 모듈이 `pam_syslog` 로 보냄[3] | [인증 로그](../../02-artifacts/logins/auth-log.md) |
 | 감사 로그의 `PAM:` 메시지 | libpam[4] | [감사 로그 형식](../logging/auditd-format.md) |
-| `/var/run/faillock/사용자이름` | pam_faillock[7] | 이 쪽의 "pam_faillock 실패 기록 파일" 절 |
+| `/var/run/faillock/사용자이름` | pam_faillock[7] | 이 페이지의 "pam_faillock 실패 기록 파일" 절 |
 | `/etc/security/opasswd` | pam_unix 의 `remember=n`[5] | [계정 파일](passwd-shadow-group.md) |
 | 감사 로그의 `auid` | pam_loginuid 가 정한 값[8] | [감사 로그 형식](../logging/auditd-format.md) |
 | sudo·su 세션 줄 | sudo·su 가 부른 pam_unix | [sudo·su 사용 기록](../../02-artifacts/logins/sudo-su.md) |
@@ -39,7 +39,7 @@ PAM 이 흔적을 남기는 곳은 다음과 같습니다.
 | 모듈 옵션 파일 | `/etc/security/`[12] | `/etc/security/`(`faillock.conf`, `access.conf`, `limits.conf`, `pwhistory.conf` 등)[11] |
 | 비밀번호 확인 보조 프로그램 | `/usr/sbin/unix_chkpwd`, 그룹 `shadow`, 권한 02755[12] | `/usr/sbin/unix_chkpwd`, 권한 4755 root[11] |
 
-Ubuntu 패키지는 빌드할 때 `common-*` 틀 파일의 MD5 값이 `pam-auth-update` 안에 등록돼 있는지 검사합니다[12]. 검체의 `/etc/pam.d/common-*` 가 `/usr/share/pam/` 의 틀과 다르면 `/usr/share/pam-configs/` 의 조각 파일과 [dpkg·apt 기록](../../02-artifacts/packages/dpkg-apt.md)을 함께 보고, 어느 조각이 더해졌는지와 직접 고친 줄이 있는지를 가립니다.
+Ubuntu 패키지는 빌드할 때 `common-*` 틀 파일의 MD5 값이 `pam-auth-update` 안에 등록돼 있는지 검사합니다[12]. 분석 대상의 `/etc/pam.d/common-*` 가 `/usr/share/pam/` 의 틀과 다르면 `/usr/share/pam-configs/` 의 조각 파일과 [dpkg·apt 기록](../../02-artifacts/packages/dpkg-apt.md)을 함께 보고, 어느 조각이 더해졌는지와 직접 고친 줄이 있는지를 가려냅니다.
 
 RHEL 계열에서 authselect 로 설정하면 authselect 가 공통 파일을 만듭니다. 실제 내용은 `/etc/authselect/` 에 있고, `/etc/pam.d/system-auth` 같은 파일은 그쪽을 가리키는 심볼릭 링크입니다[10].
 
@@ -54,7 +54,7 @@ RHEL 계열에서 authselect 로 설정하면 authselect 가 공통 파일을 �
 
 ### 한 줄의 모양
 
-`/etc/pam.d/` 파일의 한 줄은 `type control module-path module-arguments` 이고, `/etc/pam.conf` 는 맨 앞에 서비스 이름이 하나 더 붙습니다. 앞 세 칸은 대소문자를 가리지 않고, `#` 뒤는 주석이며, 줄 끝의 `\` 는 다음 줄로 잇습니다[1].
+`/etc/pam.d/` 파일의 한 줄은 `type control module-path module-arguments` 이고, `/etc/pam.conf` 는 맨 앞에 서비스 이름이 하나 더 붙습니다. 앞 세 필드는 대소문자를 구분하지 않고, `#` 뒤는 주석이며, 줄 끝의 `\` 는 다음 줄로 잇습니다[1].
 
 - **type**: `auth`(사용자 확인), `account`(계정 사용 허가), `password`(비밀번호 변경), `session`(세션 열기·닫기)입니다. 앞에 `-` 를 붙이면 모듈 파일이 없어 불러오지 못해도 syslog 에 남기지 않습니다[1].
 - **control**: 단순형은 `required`, `requisite`, `sufficient`, `optional`, `include`, `substack` 이고, 대괄호형은 `[반환값=동작 ...]` 입니다. 동작은 `ignore`, `bad`, `die`, `ok`, `done`, `reset` 과 숫자 N(다음 N 개 모듈 건너뛰기)입니다[1].
@@ -87,7 +87,7 @@ user [%s] has blank password; authenticated without it
 password changed for %s
 ```
 
-세션 열기 줄의 `by` 뒤 이름은 로그인 이름이고 없으면 빈 문자열이며, 뒤의 uid 는 모듈을 부른 프로세스의 실제 UID 입니다. 앞쪽 `(uid=%s)` 는 계정 조회에 실패하면 `getpwnam error` 가 됩니다[5]. 인증 실패 줄의 마지막 `%s%s` 는 사용자 이름이 있을 때만 ` user=이름` 이 되므로, `rhost=` 값 뒤에 빈칸이 두 개 생깁니다[5]. `check pass; user (%s) unknown` 은 `audit` 옵션일 때만 입력된 이름을 적는데, 사용자가 이름 칸에 비밀번호를 잘못 넣었으면 그 비밀번호가 로그에 남을 수 있습니다[5].
+세션 열기 줄의 `by` 뒤 이름은 로그인 이름이고 없으면 빈 문자열이며, 뒤의 uid 는 모듈을 부른 프로세스의 실제 UID 입니다. 앞쪽 `(uid=%s)` 는 계정 조회에 실패하면 `getpwnam error` 가 됩니다[5]. 인증 실패 줄의 마지막 `%s%s` 는 사용자 이름이 있을 때만 ` user=이름` 이 되므로, `rhost=` 값 뒤에 빈칸이 두 개 생깁니다[5]. `check pass; user (%s) unknown` 은 `audit` 옵션일 때만 입력된 이름을 적는데, 사용자가 이름 입력란에 비밀번호를 잘못 넣었으면 그 비밀번호가 로그에 남을 수 있습니다[5].
 
 아래는 만든 예시입니다.
 
@@ -115,7 +115,7 @@ libpam 은 감사를 켜고 빌드했으면 PAM 단계마다 감사 레코드를
 
 ### pam_faillock 실패 기록 파일
 
-pam_faillock 은 사용자마다 실패 기록 파일을 하나 두고, 연속 실패가 기준을 넘으면 계정을 잠급니다[7]. 파일은 기본 폴더 `/var/run/faillock` 아래에 사용자 이름으로 만들고, 사용자 소유로 둡니다[7]. 설정은 `/etc/security/faillock.conf`(없으면 vendor 폴더의 같은 파일)에 두고, 기본값은 `deny=3`, `fail_interval=900`(15분), `unlock_time=600`(10분)입니다[7]. 배포판 파일에 어떤 값이 들어 있는지는 검체의 파일로 확인합니다.
+pam_faillock 은 사용자마다 실패 기록 파일을 하나 두고, 연속 실패가 기준을 넘으면 계정을 잠급니다[7]. 파일은 기본 폴더 `/var/run/faillock` 아래에 사용자 이름으로 만들고, 사용자 소유로 둡니다[7]. 설정은 `/etc/security/faillock.conf`(없으면 vendor 폴더의 같은 파일)에 두고, 기본값은 `deny=3`, `fail_interval=900`(15분), `unlock_time=600`(10분)입니다[7]. 배포판 파일에 어떤 값이 들어 있는지는 실제 시스템의 파일로 확인합니다.
 
 파일은 64바이트 레코드를 이어 붙인 것입니다[7].
 
@@ -126,7 +126,7 @@ pam_faillock 은 사용자마다 실패 기록 파일을 하나 두고, 연속 �
 | 0x36 | 2 | `status` | `0x1` 유효, `0x2` source 가 원격 호스트, `0x4` source 가 터미널. 2·4 둘 다 없으면 서비스 이름 |
 | 0x38 | 8 | `time` | 실패 시각, `time(NULL)` 로 얻은 epoch 초 |
 
-코드는 구조체를 바이트 순서 변환 없이 그대로 읽고 씁니다[7]. 그래서 정수는 검체 기계의 바이트 순서를 따르고, x86-64 검체면 리틀 엔디언으로 읽습니다. 레코드는 최대 1024 개까지 두고, 넘치면 파일 앞쪽의 레코드를 버립니다[7].
+코드는 구조체를 바이트 순서 변환 없이 그대로 읽고 씁니다[7]. 그래서 정수는 파일을 쓴 기계의 바이트 순서를 따르고, x86-64 기계면 리틀 엔디언으로 읽습니다. 레코드는 최대 1024 개까지 두고, 넘치면 파일 앞쪽의 레코드를 버립니다[7].
 
 잠금과 관련된 줄은 `Consecutive login failures for user %s account temporarily locked`, `User %s is temporarily locked out due to %u consecutive failed login attempts` 모양이고, `audit` 옵션이면 없는 사용자 이름을 `User unknown: %s` 로 남깁니다[7]. 감사 로그에는 `ANOM_LOGIN_FAILURES`(2100), `RESP_ACCT_LOCK`(2207), `RESP_ACCT_UNLOCK_TIMED`(2206) 레코드가 남습니다[7][9].
 
@@ -143,7 +143,7 @@ pam_faillock 은 사용자마다 실패 기록 파일을 하나 두고, 연속 �
 00000030: 0000 0000 0000 0300 803b b16a 0000 0000  .........;.j....
 ```
 
-`status` 에 `0x1` 이 빠진 레코드도 파일에 남아 있을 수 있습니다. 새 실패를 기록할 때 `fail_interval` 보다 오래된 레코드는 유효 비트만 지우고, 가장 오래된 칸이 무효일 때만 그 칸을 덮어쓰기 때문입니다[7]. 무효 레코드의 `source`·`time` 도 과거 실패의 흔적으로 읽을 수 있습니다.
+`status` 에 `0x1` 이 빠진 레코드도 파일에 남아 있을 수 있습니다. 새 실패를 기록할 때 `fail_interval` 보다 오래된 레코드는 유효 비트만 지우고, 가장 오래된 레코드가 무효일 때만 그 레코드를 덮어쓰기 때문입니다[7]. 무효 레코드의 `source`·`time` 도 과거 실패의 흔적으로 읽을 수 있습니다.
 
 ### 순서대로 한 번
 
@@ -195,7 +195,7 @@ faillock 은 성공한 인증 뒤 파일을 0 바이트로 자르므로(`ftrunca
 - **절대 경로 모듈을 따로 봅니다.** `/` 로 시작하는 module-path 는 표준 모듈 폴더 밖의 파일도 불러옵니다[1]. 흔적을 찾는 방법은 [PAM 모듈 변조](../../02-artifacts/persistence/pam-backdoor.md)에서 다룹니다.
 - **pam_exec 줄은 인자에 답이 있습니다.** pam_exec 은 외부 명령을 실행하면서 `PAM_RHOST`, `PAM_RUSER`, `PAM_SERVICE`, `PAM_TTY`, `PAM_USER`, `PAM_TYPE` 을 환경 변수로 넘기고, `expose_authtok` 이 있으면 인증·비밀번호 변경 때 명령이 표준 입력으로 비밀번호를 받습니다. `log=파일` 이 있으면 명령 출력이 그 파일에 덧붙고, 없으면 출력은 `/dev/null` 로 갑니다[8]. 그래서 줄의 인자에서 실행 파일 경로와 출력 파일 경로를 읽고 그 파일들을 모읍니다.
 - **pam_loginuid 가 없는 진입점은 로그인 UID 를 정하지 않습니다.** pam_loginuid 는 login, sshd, gdm, crond 같은 진입점에서 감사용 로그인 UID 를 정합니다. sudo·su 에 넣으면 로그인 UID 가 전환한 계정으로 바뀌어 버리므로 진입점에만 씁니다[8]. 감사 로그의 `auid` 를 사람과 잇기 전에 그 진입점 설정에 이 모듈이 있는지 봅니다.
-- **pam_tty_audit 은 키 입력을 감사 로그에 남깁니다.** 설정된 사용자의 터미널 입력을 커널 감사로 보내고, `log_passwd` 가 있으면 비밀번호 입력 중의 키도 남깁니다[8]. 이 모듈이 켜진 검체에서는 감사 로그에 사용자의 키 입력이 있을 수 있으니 다룰 때 주의합니다.
+- **pam_tty_audit 은 키 입력을 감사 로그에 남깁니다.** 설정된 사용자의 터미널 입력을 커널 감사로 보내고, `log_passwd` 가 있으면 비밀번호 입력 중의 키도 남깁니다[8]. 이 모듈이 켜진 시스템에서는 감사 로그에 사용자의 키 입력이 있을 수 있으니 다룰 때 주의합니다.
 - **RHEL 의 공통 파일은 링크입니다.** 링크만 복사하는 수집은 본문이 빠지므로 `/etc/authselect/` 까지 모읍니다[10].
 - **`/etc/pam.conf` 가 있다고 쓰이는 것은 아닙니다.** Ubuntu 패키지는 `/etc/pam.conf` 를 설치하지만[12], `/etc/pam.d/` 가 있으면 읽지 않습니다[1].
 

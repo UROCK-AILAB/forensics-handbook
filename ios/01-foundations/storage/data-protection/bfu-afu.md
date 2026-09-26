@@ -57,7 +57,7 @@ iOS 18 에서는 잠긴 채 72시간(3일)이 지나면 기기가 스스로 재�
 
 (출처: [2])
 
-압수한 뒤 획득하기 전에 기기가 BFU 로 돌아갔는지 판단할 때 이 흔적을 봅니다. 획득 기록에 BFU 상태로 적혀 있으면, 압수 시점에 이미 BFU 였는지 보관 중에 비활성 재부팅이 일어났는지를 이 로그와 NVRAM 변수로 가려 볼 수 있습니다. 어떤 획득 방식에서 이 로그를 볼 수 있는지는 공개 자료가 없어 검체로 확인해야 합니다. 통합 로그에서 찾는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events.md) 에, 획득 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
+압수한 뒤 획득하기 전에 기기가 BFU 로 돌아갔는지 판단할 때 이 흔적을 봅니다. 획득 기록에 BFU 상태로 적혀 있으면, 압수 시점에 이미 BFU 였는지 보관 중에 비활성 재부팅이 일어났는지를 이 로그와 NVRAM 변수로 구분해 볼 수 있습니다. 어떤 획득 방식에서 이 로그를 볼 수 있는지는 실제 기기로 확인해야 합니다. 통합 로그에서 찾는 방법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events.md) 에, 획득 방식은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
 
 ## 백업과 설정에서 보이는 이름
 

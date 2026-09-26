@@ -12,7 +12,7 @@ nav_order: 140
 
 ## 이 구조를 쓰는 아티팩트
 
-카메라 사진과 스크린샷, 다운로드한 파일, 녹음 파일이 모두 이 공간에 놓이고, 시스템은 이 공간을 훑어 미디어 파일을 [미디어 저장소 (MediaStore)](../../02-artifacts/media/mediastore/index.md) 에 모읍니다. 사진 파일 자체의 메타데이터는 [카메라 사진과 메타데이터](../../02-artifacts/media/dcim-exif.md), 스크린샷은 [스크린샷과 화면 녹화](../../02-artifacts/media/screenshots.md), 갤러리 앱이 따로 남기는 기록은 [삼성 갤러리](../../02-artifacts/media/samsung-gallery.md) 페이지에서 다룹니다. 자료를 밖으로 옮겼는지 볼 때도 이 공간이 출발점이 되고, 그 흐름은 [자료를 밖으로 보냈나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 시나리오에서 다룹니다.
+카메라 사진과 스크린샷, 다운로드한 파일, 녹음 파일이 모두 이 공간에 놓이고, 시스템은 이 공간을 살펴 미디어 파일을 [미디어 저장소 (MediaStore)](../../02-artifacts/media/mediastore/index.md) 에 모읍니다. 사진 파일 자체의 메타데이터는 [카메라 사진과 메타데이터](../../02-artifacts/media/dcim-exif.md), 스크린샷은 [스크린샷과 화면 녹화](../../02-artifacts/media/screenshots.md), 갤러리 앱이 따로 남기는 기록은 [삼성 갤러리](../../02-artifacts/media/samsung-gallery.md) 페이지에서 다룹니다. 자료를 밖으로 옮겼는지 볼 때도 이 공간이 출발점이 되고, 그 흐름은 [자료를 밖으로 보냈나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 시나리오에서 다룹니다.
 
 ## 구조
 
@@ -30,11 +30,11 @@ nav_order: 140
 | 채택 저장소 (Adoptable Storage) | Android 6.0 이상, 외장 매체를 암호화·포맷해 내부 저장소처럼 씀. 데이터 뿌리는 `/mnt/expand/<volume_uuid>` |
 | 휴대용 저장소 (Portable Storage) | 외장 매체를 따로 떼어 쓰는 볼륨 |
 
-`/data/media/<userid>` 가 CE 영역에 속하는지 같은 암호화 구분은 [저장 공간 암호화](encryption/index.md) 갈래에서, 파일 시스템 자체는 [파일 시스템](filesystems/index.md) 갈래에서 다룹니다.
+`/data/media/<userid>` 가 CE 영역에 속하는지 같은 암호화 구분은 [저장 공간 암호화](encryption/index.md) 페이지에서, 파일 시스템 자체는 [파일 시스템](filesystems/index.md) 페이지에서 다룹니다.
 
 ### 표준 폴더와 MediaStore 모음
 
-시스템은 공용 저장 공간을 자동으로 훑어 미디어 파일을 모음 (Collection) 별로 나눠 넣고, 폴더와 모음의 짝은 아래와 같습니다[4].
+시스템은 공용 저장 공간을 자동으로 살펴 미디어 파일을 모음 (Collection) 별로 나눠 넣고, 폴더와 모음의 짝은 아래와 같습니다[4].
 
 | 모음 | 들어가는 폴더 | 버전 차이 |
 |---|---|---|
@@ -46,7 +46,7 @@ nav_order: 140
 
 볼륨 이름도 두 가지를 구분합니다. `VOLUME_EXTERNAL` 은 모든 공용 저장 볼륨을 합쳐 보여 주는 읽기 전용 합성 볼륨이고, `VOLUME_EXTERNAL_PRIMARY` 는 읽고 쓸 수 있는 주 공용 저장 볼륨입니다.
 
-Android 16 기기의 `/sdcard` 최상위에는 `Alarms`, `Android`, `Audiobooks`, `DCIM`, `Documents`, `Download`, `Movies`, `Music`, `Notifications`, `Pictures`, `Podcasts`, `Recordings`, `Ringtones` 같은 표준 폴더와, 앱이 만든 표준 밖 폴더(이 예에서는 8개)가 함께 있습니다. 스크린샷은 `DCIM/Screenshots` 에 저장되고, `DCIM` 아래에는 `Camera`, `Screenshots`, `media` 와 표준 밖 폴더(이 예에서는 19개를 합쳐 항목 25개)가 놓입니다. `DCIM/media` 의 용도와 다른 제조사 기기의 스크린샷 폴더는 검체에서 확인합니다.
+Android 16 기기의 `/sdcard` 최상위에는 `Alarms`, `Android`, `Audiobooks`, `DCIM`, `Documents`, `Download`, `Movies`, `Music`, `Notifications`, `Pictures`, `Podcasts`, `Recordings`, `Ringtones` 같은 표준 폴더와, 앱이 만든 표준 밖 폴더(이 예에서는 8개)가 함께 있습니다. 스크린샷은 `DCIM/Screenshots` 에 저장되고, `DCIM` 아래에는 `Camera`, `Screenshots`, `media` 와 표준 밖 폴더(이 예에서는 19개를 합쳐 항목 25개)가 놓입니다. `DCIM/media` 의 용도와 다른 제조사 기기의 스크린샷 폴더는 실제 기기에서 확인합니다.
 
 > 그림 자리: `/sdcard` 최상위 표준 폴더와 각 폴더가 들어가는 MediaStore 모음을 선으로 이은 그림
 
@@ -75,11 +75,11 @@ Android 16 기기의 `/sdcard` 최상위에는 `Alarms`, `Android`, `Audiobooks`
 | Android 10~12 | 미디어를 읽는 권한은 `READ_EXTERNAL_STORAGE` 입니다 |
 | Android 13 이상 | `READ_MEDIA_IMAGES`, `READ_MEDIA_VIDEO`, `READ_MEDIA_AUDIO` 로 나뉩니다 |
 
-모든 파일 접근 권한 (`MANAGE_EXTERNAL_STORAGE`) 은 설정 화면에서 "Allow access to manage all files" 로 보이고, 이 권한을 받은 앱은 공용 저장 공간 전체와 MediaStore.Files 표 내용, OTG·SD 카드의 뿌리 폴더까지 읽고 쓸 수 있습니다. 그래도 `/sdcard/Android` 아래 대부분과 다른 앱의 `Android/data` 는 이 권한으로도 볼 수 없습니다. Google Play 는 2021년 5월부터 이 권한에 정책을 적용했습니다. 탐지 관점에서 이 권한을 받은 앱 목록은 곧 공용 저장 공간 전체를 읽을 수 있는 앱 목록이지만, 권한 부여 상태가 기기의 어디에 남는지는 검체에서 확인합니다. 권한 전반은 [앱 샌드박스와 권한](../security-model/sandbox-permissions.md) 페이지를 봅니다.
+모든 파일 접근 권한 (`MANAGE_EXTERNAL_STORAGE`) 은 설정 화면에서 "Allow access to manage all files" 로 보이고, 이 권한을 받은 앱은 공용 저장 공간 전체와 MediaStore.Files 표 내용, OTG·SD 카드의 뿌리 폴더까지 읽고 쓸 수 있습니다. 그래도 `/sdcard/Android` 아래 대부분과 다른 앱의 `Android/data` 는 이 권한으로도 볼 수 없습니다. Google Play 는 2021년 5월부터 이 권한에 정책을 적용했습니다. 탐지 관점에서 이 권한을 받은 앱 목록은 곧 공용 저장 공간 전체를 읽을 수 있는 앱 목록이지만, 권한 부여 상태가 기기의 어디에 남는지는 실제 기기에서 확인해야 합니다. 권한 전반은 [앱 샌드박스와 권한](../security-model/sandbox-permissions.md) 페이지를 봅니다.
 
 ### 사용자가 여럿인 기기
 
-공용 저장 공간도 사용자마다 따로 있습니다(`/storage/emulated/<userId>`, `/data/media/<userid>`). 사용자가 둘인 기기의 `dumpsys user` 출력에서는 `UserProperties` 아래 `mMediaSharedWithParent=false` 가 보일 수 있습니다. 칸 이름으로 보아 부모 사용자와 공용 저장 공간을 나눠 쓰지 않는다는 뜻으로 보이지만, 이 칸의 뜻을 설명한 공개 문서는 없습니다. 사용자 목록은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
+공용 저장 공간도 사용자마다 따로 있습니다(`/storage/emulated/<userId>`, `/data/media/<userid>`). 사용자가 둘인 기기의 `dumpsys user` 출력에서는 `UserProperties` 아래 `mMediaSharedWithParent=false` 가 보일 수 있습니다. 필드 이름으로 보면 부모 사용자와 공용 저장 공간을 나눠 쓰지 않는다는 뜻으로 보이지만, 이 필드의 뜻을 설명한 공개 문서는 없습니다. 사용자 목록은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
 
 ## 읽는 법
 
@@ -95,20 +95,20 @@ adb 일반 셸 권한으로도 `/sdcard` 최상위와 `DCIM`, `Pictures`, `Downl
 
 **앱을 지워도 남는 파일과 함께 지워지는 파일이 나뉩니다.** 앱이 MediaStore 로 공용 폴더에 저장한 파일은 앱을 지워도 기기에 남고, `Android/data/<패키지>` 의 파일은 앱과 함께 지워집니다. 앱을 지웠다 다시 설치한 뒤 예전에 만든 파일에 접근하려면 `READ_EXTERNAL_STORAGE` 가 필요한데, 시스템이 그 파일을 이전 설치본의 것으로 보기 때문입니다. 이 동작으로 보아 MediaStore 가 파일마다 만든 앱을 기록하는 것으로 보입니다.
 
-**파일 소유자와 권한 비트는 만든 앱을 뜻하지 않습니다.** Android 4.4 부터 외부 저장소 파일의 소유자·그룹·권한 비트는 디렉터리 구조를 바탕으로 만들어 낸 값입니다. 그래서 `/sdcard` 에서 보이는 소유자로 파일을 만든 앱을 가리면 안 됩니다.
+**파일 소유자와 권한 비트는 만든 앱을 뜻하지 않습니다.** Android 4.4 부터 외부 저장소 파일의 소유자·그룹·권한 비트는 디렉터리 구조를 바탕으로 만들어 낸 값입니다. 그래서 `/sdcard` 에서 보이는 소유자로 파일을 만든 앱을 가려내면 안 됩니다.
 
-**MediaStore 의 칸은 뜻을 알고 읽어야 합니다.** MediaStore 칸 가운데 해석에 영향을 주는 것은 아래와 같고[4], MediaStore 데이터베이스 자체의 위치와 표 구조는 [미디어 저장소](../../02-artifacts/media/mediastore/index.md) 페이지에서 다룹니다.
+**MediaStore 의 열은 뜻을 알고 읽어야 합니다.** MediaStore 열 가운데 해석에 영향을 주는 것은 아래와 같고[4], MediaStore 데이터베이스 자체의 위치와 표 구조는 [미디어 저장소](../../02-artifacts/media/mediastore/index.md) 페이지에서 다룹니다.
 
-| 칸 | 설명 | 해석할 때 |
+| 열 | 설명 | 해석할 때 |
 |---|---|---|
 | `DATA` | 파일 경로입니다. 파일이 늘 있다고 가정하면 안 됩니다 | 경로가 있어도 파일은 없을 수 있습니다 |
-| `RELATIVE_PATH`, `DISPLAY_NAME` | 파일을 만들거나 고칠 때 쓰는 칸입니다 | 폴더와 파일 이름을 따로 읽습니다 |
+| `RELATIVE_PATH`, `DISPLAY_NAME` | 파일을 만들거나 고칠 때 쓰는 열입니다 | 폴더와 파일 이름을 따로 읽습니다 |
 | `IS_PENDING` | 쓰는 동안 1, 끝나면 0 입니다 | 1 로 남은 행은 쓰다 만 파일일 수 있습니다 |
-| `IS_TRASHED` | 휴지통 상태입니다. 제조사가 미리 넣은 갤러리 앱은 확인 창 없이 이 칸을 1 로 바꿀 수 있고, 다른 앱은 `createTrashRequest()` 를 씁니다 | 지운 것이 아니라 휴지통에 옮긴 상태일 수 있습니다 |
+| `IS_TRASHED` | 휴지통 상태입니다. 제조사가 미리 넣은 갤러리 앱은 확인 창 없이 이 열의 값을 1 로 바꿀 수 있고, 다른 앱은 `createTrashRequest()` 를 씁니다 | 지운 것이 아니라 휴지통에 옮긴 상태일 수 있습니다 |
 | `DATE_ADDED` | 앱이 `setLastModified()` 를 부르거나 사용자가 시스템 시계를 바꾸면 값이 바뀔 수 있습니다 | 파일이 처음 생긴 확정 시각으로 쓰지 않습니다 |
 | `DATE_MODIFIED` | `DATE_ADDED` 와 같은 이유로 바뀔 수 있습니다 | 마지막으로 고친 확정 시각으로 쓰지 않습니다 |
 
-변경을 알아낼 때는 날짜 칸보다 `MediaStore.getGeneration()` 이 돌려주는 세대 값이 믿을 만하고[4], 이 값은 계속 커지기만 합니다. 시스템 시계를 바꾼 흔적이 있는 기기라면 날짜 칸을 더 조심해서 읽어야 합니다. 날짜 칸을 읽을 때는 [시각 값](../value-decoding/time-values.md) 페이지의 방법으로 단위(초인지 밀리초인지)를 먼저 가립니다.
+변경을 알아낼 때는 날짜 열보다 `MediaStore.getGeneration()` 이 돌려주는 세대 값이 믿을 만하고[4], 이 값은 계속 커지기만 합니다. 시스템 시계를 바꾼 흔적이 있는 기기라면 날짜 열을 더 조심해서 읽어야 합니다. 날짜 열을 읽을 때는 [시각 값](../value-decoding/time-values.md) 페이지의 방법으로 단위(초인지 밀리초인지)를 먼저 가려냅니다.
 
 **앱이 받은 사진과 원본 파일의 위치 정보가 다를 수 있습니다.** 앱이 `ACCESS_MEDIA_LOCATION` 권한 없이 사진을 열면 EXIF 위치 정보가 가려진 사본을 받을 수 있고, 원본은 `MediaStore.setRequireOriginal()` 로 엽니다. 그래서 어떤 앱이 내보낸 사진에 위치가 없더라도 공용 저장 공간의 원본 파일에는 위치가 남아 있을 수 있습니다. 동영상 위치는 `MediaMetadataRetriever` 의 `METADATA_KEY_LOCATION` 으로 읽습니다.
 

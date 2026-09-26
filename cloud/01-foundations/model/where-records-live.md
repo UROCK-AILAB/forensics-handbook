@@ -6,20 +6,20 @@ nav_order: 20
 
 # 기록은 어디에 남나 (Where Records Live)
 
-클라우드의 기록은 관리 작업, 데이터 읽기·쓰기, 로그인, 서비스 안 데이터의 네 갈래로 나뉘어 서로 다른 곳에 남고, 갈래마다 기본으로 남는지·얼마나 오래 남는지가 다릅니다.
+클라우드의 기록은 관리 작업, 데이터 읽기·쓰기, 로그인, 서비스 안 데이터의 네 종류로 나뉘어 서로 다른 곳에 남고, 종류마다 기본으로 남는지·얼마나 오래 남는지가 다릅니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 "어떤 일이 어느 로그에 남는가" 를 다룹니다. 클라우드 서비스는 기록을 하나의 로그에 모으지 않습니다. 가상 머신을 만든 일과 그 가상 머신 안 데이터를 읽은 일은 다른 로그에 남고, 로그인은 또 다른 로그에 남습니다. 조사 질문을 받으면 먼저 그 일이 네 갈래 가운데 어디에 속하는지 정하고, 그 갈래의 로그가 켜져 있었는지와 아직 보관 기간 안인지를 확인해야 합니다.
+이 페이지는 파일 형식이 아니라 "어떤 일이 어느 로그에 남는가" 를 다룹니다. 클라우드 서비스는 기록을 하나의 로그에 모으지 않습니다. 가상 머신을 만든 일과 그 가상 머신 안 데이터를 읽은 일은 다른 로그에 남고, 로그인은 또 다른 로그에 남습니다. 조사 질문을 받으면 먼저 그 일이 네 종류 가운데 어디에 속하는지 정하고, 그 종류의 로그가 켜져 있었는지와 아직 보관 기간 안인지를 확인해야 합니다.
 
-| 갈래 | 기록하는 일 | 대표 기록 |
+| 종류 | 기록하는 일 | 대표 기록 |
 |---|---|---|
 | 제어 평면 (control plane) | 리소스를 만들고 바꾸고 지우는 관리 작업, 권한·설정 변경 | [Azure 활동 로그](../../02-artifacts/azure/activity-log.md), [CloudTrail 관리 이벤트](../../02-artifacts/aws/cloudtrail/index.md), [Cloud Audit Logs 의 Admin Activity](../../02-artifacts/gcp/cloud-audit-logs.md), [Workspace 관리 콘솔 감사 로그](../../02-artifacts/google-workspace/admin-audit.md) |
 | 데이터 평면 (data plane) | 리소스 안의 데이터를 읽고 쓰는 일 | [Azure 리소스 로그](../../02-artifacts/azure/resource-logs.md), CloudTrail 데이터 이벤트, Cloud Audit Logs 의 Data Access |
 | 신원 (identity) | 로그인, 디렉터리 변경 | [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [Workspace 로그인 기록](../../02-artifacts/google-workspace/login-audit.md) |
 | 앱 안 데이터 | 서비스가 저장한 문서·레코드 자체의 변경 이력 | [Vault와 Takeout](../../02-artifacts/google-workspace/vault-takeout.md), [Purview eDiscovery와 보존](../../02-artifacts/m365/purview-ediscovery.md) |
 
-Microsoft 365 의 [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md)는 Exchange·SharePoint·OneDrive·Entra 같은 여러 서비스의 사용자·관리자 활동을 한곳에 모으고, 레코드의 `Workload` 필드에 활동이 일어난 서비스를 적습니다[14][23]. 그래서 한 로그 안에 여러 갈래가 섞여 있습니다. 로그 종류마다 필드가 어떻게 생겼는지는 [로그의 종류](../logging/log-types.md)에서 다룹니다.
+Microsoft 365 의 [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md)는 Exchange·SharePoint·OneDrive·Entra 같은 여러 서비스의 사용자·관리자 활동을 한곳에 모으고, 레코드의 `Workload` 필드에 활동이 일어난 서비스를 적습니다[14][23]. 그래서 한 로그 안에 여러 종류가 섞여 있습니다. 로그 종류마다 필드가 어떻게 생겼는지는 [로그의 종류](../logging/log-types.md)에서 다룹니다.
 
 ## 구조
 
@@ -51,7 +51,7 @@ Google Workspace 의 로그인·관리 이벤트는 관리 콘솔의 감사 및 
 
 서비스가 저장한 데이터 자체에도 변경 흔적이 남습니다. SaaS 데이터베이스의 레코드에 남은 `LastModifiedBy`·`LastModifiedDate` 값과 변경 내용을 알려진 정상 사본과 비교하면, 이벤트 로그와 따로 변경을 추적할 수 있습니다[20]. SaaS 이벤트 로그의 예로는 `EVENT_TYPE`, `TIMESTAMP`, `REQUEST_ID`, `ORGANIZATION_ID`, `USER_ID` 로 시작하고 `CLIENT_IP` 를 담는 CSV 가 있습니다[20].
 
-문서 편집 이력이 서버에 남는 방식은 서비스마다 다릅니다. 2016년 Google Docs 에서는 편집 이력이 changelog 로 서버에 남았고, 이전 판으로 되돌리면 옛 기록을 지우지 않고 그 판의 스냅숏을 담은 "revert" 항목을 덧붙였습니다[21]. 이런 동작은 서비스가 바뀌면 달라질 수 있으므로, 사건 당시의 동작은 검체 계정의 판 기록을 직접 열어 확인합니다.
+문서 편집 이력이 서버에 남는 방식은 서비스마다 다릅니다. 2016년 Google Docs 에서는 편집 이력이 changelog 로 서버에 남았고, 이전 판으로 되돌리면 옛 기록을 지우지 않고 그 판의 스냅숏을 담은 "revert" 항목을 덧붙였습니다[21]. 이런 동작은 서비스가 바뀌면 달라질 수 있으므로, 사건 당시의 동작은 조사 대상 계정의 판 기록을 직접 열어 확인합니다.
 
 ### 기본으로 남는 것과 켜야 남는 것
 
@@ -90,9 +90,9 @@ Audit(Premium) 기본 정책은 Office 365·Microsoft 365 E5 라이선스나 Mic
 
 ## 읽는 법
 
-기록 한 줄을 받으면 그것이 어느 갈래에서 어느 경로로 들어왔는지부터 읽습니다. 서비스마다 레코드 안에 출처를 알려 주는 값이 있습니다.
+기록 한 줄을 받으면 그것이 어느 종류에서 어느 경로로 들어왔는지부터 읽습니다. 서비스마다 레코드 안에 출처를 알려 주는 값이 있습니다.
 
-1. **어느 로그인지 확인합니다.** Google Cloud 감사 로그는 `logName` 이 `projects/PROJECT_ID/logs/cloudaudit.googleapis.com%2Factivity` 처럼 끝나고, 끝부분이 `activity`·`data_access`·`system_event`·`policy` 가운데 무엇인지로 갈래가 갈립니다[9]. 앞부분이 `projects/`·`folders/`·`organizations/`·`billingAccounts/` 가운데 무엇인지는 [테넌트·구독·계정·프로젝트](tenancy.md)에서 다룹니다. 통합 감사 로그는 `Workload` 로 서비스를 가립니다[23].
+1. **어느 로그인지 확인합니다.** Google Cloud 감사 로그는 `logName` 이 `projects/PROJECT_ID/logs/cloudaudit.googleapis.com%2Factivity` 처럼 끝나고, 끝부분이 `activity`·`data_access`·`system_event`·`policy` 가운데 무엇인지로 종류가 나뉩니다[9]. 앞부분이 `projects/`·`folders/`·`organizations/`·`billingAccounts/` 가운데 무엇인지는 [테넌트·구독·계정·프로젝트](tenancy.md)에서 다룹니다. 통합 감사 로그는 `Workload` 로 서비스를 구분합니다[23].
 2. **사건 시각과 들어온 시각을 나눠 읽습니다.** Azure 활동 로그의 `eventTimestamp` 는 요청을 처리한 서비스가 이벤트를 만든 시각이고, `submissionTimestamp` 는 조회할 수 있게 된 시각입니다[3]. 활동 로그 항목은 보통 이벤트 뒤 3~20분 안에 조회할 수 있게 됩니다[2]. 통합 감사 로그의 `CreationTime` 은 UTC 입니다[23].
 3. **어디서 받은 사본인지 확인합니다.** 저장소 계정으로 내보낸 활동 로그는 아래 경로의 한 시간 단위 파일에 쌓입니다[2].
 
@@ -140,11 +140,11 @@ Audit(Premium) 기본 정책은 Office 365·Microsoft 365 E5 라이선스나 Mic
 
 ## 도구
 
-Microsoft 365 와 Azure 는 Microsoft-Extractor-Suite 의 `Get-UAL`(통합 감사 로그), `Get-GraphEntraSignInLogs`·`Get-GraphEntraAuditLogs`(Entra), `Get-ActivityLogs`(구독 활동 로그), `Get-DirectoryActivityLogs`(테넌트 수준 활동 로그)로 갈래별로 받을 수 있습니다[22]. `Get-UAL` 은 한 번 조회에 5,000건 상한이 있어 시간 구간을 줄여 가며 다시 받고, 가장 짧은 구간에서도 상한을 넘으면 일부가 빠진 채 다음 구간으로 넘어가고, 그 구간을 로그에 오류로 남깁니다[22]. DFIR-O365RC 는 통합 감사 로그를 기본으로 Exchange Online PowerShell 로, Entra 로그를 Microsoft Graph PowerShell 로, Azure 활동 로그를 Az.Monitor 로 받습니다[24]. 수집 도구 비교는 [Microsoft 365 수집 도구](../../03-techniques/acquisition/m365-collection.md)에서 다룹니다.
+Microsoft 365 와 Azure 는 Microsoft-Extractor-Suite 의 `Get-UAL`(통합 감사 로그), `Get-GraphEntraSignInLogs`·`Get-GraphEntraAuditLogs`(Entra), `Get-ActivityLogs`(구독 활동 로그), `Get-DirectoryActivityLogs`(테넌트 수준 활동 로그)로 종류별로 받을 수 있습니다[22]. `Get-UAL` 은 한 번 조회에 5,000건 상한이 있어 시간 구간을 줄여 가며 다시 받고, 가장 짧은 구간에서도 상한을 넘으면 일부가 빠진 채 다음 구간으로 넘어가고, 그 구간을 로그에 오류로 남깁니다[22]. DFIR-O365RC 는 통합 감사 로그를 기본으로 Exchange Online PowerShell 로, Entra 로그를 Microsoft Graph PowerShell 로, Azure 활동 로그를 Az.Monitor 로 받습니다[24]. 수집 도구 비교는 [Microsoft 365 수집 도구](../../03-techniques/acquisition/m365-collection.md)에서 다룹니다.
 
 Google Workspace 는 ALFA 의 `alfa acquire` 가 로그 종류마다 JSON 파일을 하나씩 만들고, `--start-time`·`--end-time` 에 RFC3339 시각을 받습니다[25]. AWS 는 Invictus-AWS 가 리전 단위로 로그를 모아 리전 폴더에 저장합니다[27]. AWS·Azure·Google Cloud 수집 절차는 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md)에서 다룹니다.
 
-로그 위치와 필드 이름을 맞출 때는 SigmaHQ 클라우드 규칙의 `logsource` 가 참고가 됩니다. 규칙은 `aws/cloudtrail`, `azure/activitylogs`, `azure/signinlogs`, `azure/auditlogs`, `gcp/gcp.audit`, `gcp/google_workspace.admin`, `m365/audit` 같은 짝으로 로그 위치를 나누고, CloudTrail 은 `eventSource`·`eventName`, Google Cloud 는 `data.protoPayload.serviceName` 같은 필드로 조건을 겁니다[26]. 규칙 활용은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에서 다룹니다.
+로그 위치와 필드 이름을 맞출 때는 SigmaHQ 클라우드 규칙의 `logsource` 가 참고가 됩니다. 규칙은 `aws/cloudtrail`, `azure/activitylogs`, `azure/signinlogs`, `azure/auditlogs`, `gcp/gcp.audit`, `gcp/google_workspace.admin`, `m365/audit` 같은 짝으로 로그 위치를 나누고, CloudTrail 은 `eventSource`·`eventName`, Google Cloud 는 `data.protoPayload.serviceName` 같은 필드로 조건을 겁니다[26]. 규칙 활용은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에서 다룹니다.
 
 함께 볼 페이지: [책임 공유와 조사 범위](shared-responsibility.md), [테넌트·구독·계정·프로젝트](tenancy.md), [로그의 종류](../logging/log-types.md), [보관 기간과 라이선스](../logging/retention-licensing.md), [클라우드 로그의 시각](../logging/timestamps.md), [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md).
 

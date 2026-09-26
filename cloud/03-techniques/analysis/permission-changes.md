@@ -10,7 +10,7 @@ nav_order: 700
 
 ## 언제 쓰나
 
-계정을 빼앗긴 뒤 관리자 역할이 붙었는지, 앱이나 서비스 계정에 넓은 권한이 새로 생겼는지, 사서함·파일·드라이브를 외부 사람이 볼 수 있게 바뀌었는지를 가릴 때 씁니다. 권한 변경은 비밀번호를 바꿔도 남아 있는 경우가 많아서, 침해 범위를 정하고 무엇을 되돌려야 하는지 목록을 만들 때 이 분석이 기준이 됩니다. 역할·서비스 주체·서비스 계정이 무엇인지는 [클라우드 계정과 역할](../../01-foundations/identity/users-roles.md)에, 앱 동의는 [OAuth 앱과 동의](../../01-foundations/identity/oauth-consent.md)에 있습니다.
+계정을 빼앗긴 뒤 관리자 역할이 붙었는지, 앱이나 서비스 계정에 넓은 권한이 새로 생겼는지, 사서함·파일·드라이브를 외부 사람이 볼 수 있게 바뀌었는지를 가려낼 때 씁니다. 권한 변경은 비밀번호를 바꿔도 남아 있는 경우가 많아서, 침해 범위를 정하고 무엇을 되돌려야 하는지 목록을 만들 때 이 분석이 기준이 됩니다. 역할·서비스 주체·서비스 계정이 무엇인지는 [클라우드 계정과 역할](../../01-foundations/identity/users-roles.md)에, 앱 동의는 [OAuth 앱과 동의](../../01-foundations/identity/oauth-consent.md)에 있습니다.
 
 이 분석은 두 가지 자료를 함께 씁니다. 감사 로그는 누가 언제 무엇을 바꿨는지를 남기지만 보관 기간 안의 일만 보여 줍니다. 현재 상태 목록은 조사하는 날의 권한만 보여 주고 언제 생겼는지는 알려 주지 않습니다. 둘을 맞대면 "지금 있는 권한 중 기록으로 출처를 댈 수 있는 것" 과 "보관 기간 밖에서 생겨 출처를 댈 수 없는 것" 이 갈립니다. 서비스별 보관 기간은 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)를 봅니다.
 
@@ -109,7 +109,7 @@ Drive 공유 권한 변경은 Drive 로그에 남습니다[21]. 사용자별 권
 
 현재 권한 목록은 Microsoft 365 에서 공개 도구로 받을 수 있습니다. Hawk 의 `Get-HawkTenantConsentGrant` 는 Graph 로 지금 남아 있는 앱 권한 부여를 모아, `ConsentType` 이 `AllPrincipals` 이거나 권한 이름에 `all` 이 든 것을 "Broad-Scope Grant", `AppRoleAssignment.ReadWrite.All`·`RoleManagement.ReadWrite.Directory` 를 "Extremely Dangerous", `Mail.ReadWrite`·`Mail.Send`·`Files.`·`Sites.` 등을 "High Risk" 로 분류합니다[9]. `Get-HawkTenantEntraIDAdmin` 은 `Get-MgDirectoryRole`·`Get-MgDirectoryRoleMember` 로 디렉터리 역할 구성원을 모읍니다[9]. Microsoft-Extractor-Suite 의 `Get-AllRoleActivity` 는 역할 구성원과 함께 각 사용자의 마지막 대화형·비대화형 로그인 시각(`SignInActivity.LastSignInDateTime`, `LastNonInteractiveSignInDateTime`)을 내보내고, `Get-PIMAssignments` 는 PIM 의 활성 할당과 자격 할당을 Graph beta 의 `roleManagement/directory/roleAssignmentSchedules`·`roleEligibilitySchedules` 로 받습니다[10]. DFIR-O365RC 의 `Get-AADApps` 는 서비스 주체·앱과 그 위임 권한 부여(`oauth2PermissionGrants`), 앱 역할 할당(`appRoleAssignments`)을 내려받습니다[11].
 
-변경 이벤트 쪽에서는 Hawk 의 `Get-HawkTenantAdminMailboxPermissionChange` 와 `Get-HawkTenantRbacChange` 가 앞의 Exchange 작업 이름으로 통합 감사 로그를 검색합니다[7][8]. 여러 서비스의 권한 변경을 한꺼번에 훑으려면 SigmaHQ 의 클라우드 규칙(`azure_granting_permission_detection`, `azure_subscription_permissions_elevation_via_activitylogs`, `azure_ad_user_added_to_admin_role`, `aws_iam_backdoor_users_keys` 등)을 씁니다[24]. 규칙을 조회문으로 바꾸는 방법은 [탐지 규칙으로 로그 훑기](detection-rules.md)에 있습니다. 로그를 받는 절차는 [Microsoft 365 수집 도구](../acquisition/m365-collection.md)와 [AWS·Azure·GCP 수집](../acquisition/iaas-collection.md)을 봅니다.
+변경 이벤트 쪽에서는 Hawk 의 `Get-HawkTenantAdminMailboxPermissionChange` 와 `Get-HawkTenantRbacChange` 가 앞의 Exchange 작업 이름으로 통합 감사 로그를 검색합니다[7][8]. 여러 서비스의 권한 변경을 한꺼번에 살펴보려면 SigmaHQ 의 클라우드 규칙(`azure_granting_permission_detection`, `azure_subscription_permissions_elevation_via_activitylogs`, `azure_ad_user_added_to_admin_role`, `aws_iam_backdoor_users_keys` 등)을 씁니다[24]. 규칙을 조회문으로 바꾸는 방법은 [탐지 규칙으로 로그 검색하기](detection-rules.md)에 있습니다. 로그를 받는 절차는 [Microsoft 365 수집 도구](../acquisition/m365-collection.md)와 [AWS·Azure·GCP 수집](../acquisition/iaas-collection.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -131,7 +131,7 @@ Drive 공유 권한 변경은 Drive 로그에 남습니다[21]. 사용자별 권
 
 시각은 Entra 의 `activityDateTime` 이 UTC 이고[2], CloudTrail 의 `eventTime` 은 요청이 끝난 시각을 UTC 로 적습니다[12]. Azure 활동 로그의 `eventTimestamp` 는 `Z` 나 `+00:00` 오프셋이 붙은 UTC 로 적힙니다[3]. 로그가 늦게 들어오는 정도와 화면 표시 시간대는 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)을 봅니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "2026-03-01 22:07:42(UTC)에 admin@contoso.com 계정으로 사용자 22222222-… 에게 rg-example 리소스 그룹 범위의 역할 할당을 만든 요청이 성공 상태로 기록되어 있다(만든 예시)" 처럼 쓰고, "공격자가 권한을 올렸다" 는 로그인 분석과 이후 활동이 함께 뒷받침할 때만 씁니다. 권한 상승 사건 전체의 흐름은 [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md), 권한 변경 뒤 로그를 끈 흔적은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)를 봅니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "2026-03-01 22:07:42(UTC)에 admin@contoso.com 계정으로 사용자 22222222-… 에게 rg-example 리소스 그룹 범위의 역할 할당을 만든 요청이 성공 상태로 기록되어 있다(만든 예시)" 처럼 쓰고, "공격자가 권한을 올렸다" 는 로그인 분석과 이후 활동이 함께 뒷받침할 때만 씁니다. 권한 상승 사건 전체의 흐름은 [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md), 권한 변경 뒤 로그를 끈 흔적은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md)를 봅니다.
 
 ## 참고 문헌
 

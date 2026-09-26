@@ -32,7 +32,7 @@ sshd 는 `/etc/ssh/sshd_config` 를 읽고, 명령줄의 `-f` 로 다른 파일�
 | `X11Forwarding` | `no` | `yes` | `yes` (50-redhat.conf) |
 | `PrintMotd` | `yes` | `no` | `no` (50-redhat.conf) |
 | `AcceptEnv` | 없음 | `LANG LC_*` | 없음 |
-| `Subsystem sftp` | upstream 설정 파일은 `/usr/libexec/sftp-server`[4] | `/usr/lib/openssh/sftp-server` | 검체에서 확인. 패키지는 sftp 서버를 `/usr/libexec/openssh/sftp-server` 에 설치 |
+| `Subsystem sftp` | upstream 설정 파일은 `/usr/libexec/sftp-server`[4] | `/usr/lib/openssh/sftp-server` | 실제 시스템에서 확인. 패키지는 sftp 서버를 `/usr/libexec/openssh/sftp-server` 에 설치 |
 | `GSSAPIAuthentication` | `no` (`GSSAPICleanupCredentials` 는 `yes`) | 기본값 | `yes`, `GSSAPICleanupCredentials no` (50-redhat.conf) |
 | 암호 알고리즘 정책 | — | — | 50-redhat.conf 첫 설정 줄 `Include /etc/crypto-policies/back-ends/opensshserver.config` |
 
@@ -44,7 +44,7 @@ Ubuntu 는 포트를 소켓 단위가 엽니다. 생성기(sshd-socket-generator
 
 ## 구조
 
-한 줄에 키 하나와 인자를 적고, `#` 로 시작하는 줄과 빈 줄은 주석입니다[1]. 키 이름은 대소문자를 가리지 않지만 인자는 가립니다[1]. 해석할 때 지켜야 할 규칙은 셋입니다.
+한 줄에 키 하나와 인자를 적고, `#` 로 시작하는 줄과 빈 줄은 주석입니다[1]. 키 이름은 대소문자를 구분하지 않지만 인자는 구분합니다[1]. 해석할 때 지켜야 할 규칙은 셋입니다.
 
 첫째, 예외로 밝힌 키가 아니면 **먼저 나온 값이 이깁니다**[1]. 같은 키가 파일에 두 번 있으면 뒤의 값은 무시됩니다.
 
@@ -83,19 +83,19 @@ Ubuntu 는 포트를 소켓 단위가 엽니다. 생성기(sshd-socket-generator
 
 설정 파일 자체에는 시각이 없고, 파일 시스템의 수정 시각(mtime)과 변경 시각(ctime)만 볼 수 있습니다. mtime 은 내용을 마지막으로 고친 때 한 번만 남기므로 그 전에 몇 번 바뀌었는지는 알 수 없습니다. 파일 시스템의 시각은 UTC 기준 epoch 값이라 표시할 때 시간대를 붙입니다([Linux 의 시각 값](../../../01-foundations/value-decoding/time-values.md)).
 
-설정이 언제 적용되었는지는 sshd 로그로 가늠합니다. sshd 는 들을 주소를 열 때 `Server listening on 주소 port 번호.` 를, SIGHUP 으로 다시 읽을 때 `Received SIGHUP; restarting.` 을 INFO 등급으로 남기고, 이 줄은 upstream 9.6p1(Ubuntu 24.04 의 바탕)과 8.7p1(RHEL 9 초기 판의 바탕) 코드에도 같습니다[3]. RHEL 의 `sshd.service` 는 `ExecReload=/bin/kill -HUP $MAINPID` 라서 `systemctl reload sshd` 도 이 줄을 남깁니다[6]. 파일 mtime 과 가장 가까운 다음 재시작·다시 읽기 줄 사이가 새 설정이 적용되기 전의 틈입니다. 서비스 시작·정지 기록은 [systemd 저널](../../../01-foundations/logging/systemd-journal/index.md)에서도 볼 수 있습니다.
+설정이 언제 적용되었는지는 sshd 로그로 추정합니다. sshd 는 들을 주소를 열 때 `Server listening on 주소 port 번호.` 를, SIGHUP 으로 다시 읽을 때 `Received SIGHUP; restarting.` 을 INFO 등급으로 남기고, 이 줄은 upstream 9.6p1(Ubuntu 24.04 의 바탕)과 8.7p1(RHEL 9 초기 판의 바탕) 코드에도 같습니다[3]. RHEL 의 `sshd.service` 는 `ExecReload=/bin/kill -HUP $MAINPID` 라서 `systemctl reload sshd` 도 이 줄을 남깁니다[6]. 파일 mtime 과 가장 가까운 다음 재시작·다시 읽기 줄 사이가 새 설정이 적용되기 전의 틈입니다. 서비스 시작·정지 기록은 [systemd 저널](../../../01-foundations/logging/systemd-journal/index.md)에서도 볼 수 있습니다.
 
 ## 함정과 한계
 
 - 첫 값이 이기는 규칙을 "마지막 값이 이긴다" 로 착각하기 쉽습니다. 특히 본 파일의 `PermitRootLogin no` 가 `sshd_config.d` 의 `PermitRootLogin yes` 에 밀리는 경우를 놓치지 않습니다.
 - dissect.target 의 `opensshd.config` 는 `/etc/ssh/sshd_config` 한 파일만 읽고 `Include` 를 따라가지 않으며, `Match` 블록은 건너뜁니다(코드 주석 "This parser does not (yet) follow Include directives", "A match statement, ignore for now")[7]. 두 기준 배포판 모두 중요한 값이 `sshd_config.d` 에 있고 RHEL 은 `SyslogFacility`·`UsePAM` 까지 그 폴더에 있으므로, 이 결과만 믿으면 기본값을 잘못 읽습니다.
 - ForensicArtifacts 의 Linux 정의에는 sshd_config 항목이 없습니다[9]. UAC 는 `/etc` 를 통째로 모으므로(shadow·gshadow 제외) `sshd_config.d` 까지 들어옵니다[8].
-- 분석 기계에서 `sshd -T -f 검체파일` 로 적용값을 뽑으면, `Include /etc/ssh/sshd_config.d/*.conf` 가 절대 경로라서 검체가 아니라 분석 기계의 폴더를 읽습니다. 이미지에서는 규칙을 손으로 따라가는 편이 안전합니다.
+- 분석 기계에서 `sshd -T -f 증거파일` 로 적용값을 뽑으면, `Include /etc/ssh/sshd_config.d/*.conf` 가 절대 경로라서 증거물이 아니라 분석 기계의 폴더를 읽습니다. 이미지에서는 규칙을 손으로 따라가는 편이 안전합니다.
 - 설정 파일이 패키지 기본본과 같은지는 따로 확인합니다([패키지 파일 변조 확인](../../packages/package-verify.md)).
 
 ## 직접 분석해 보기
 
-**손으로 한 번.** 아래는 Ubuntu 24.04 검체를 가정한 만든 예시입니다.
+**손으로 한 번.** 아래는 Ubuntu 24.04 시스템을 가정한 만든 예시입니다.
 
 ```text
 # /etc/ssh/sshd_config.d/10-ops.conf  (만든 예시)
@@ -116,7 +116,7 @@ UsePAM yes
 3. `Match Address 203.0.113.0/24` 블록은 그 대역에서 온 접속에만 `PasswordAuthentication yes` 를 적용하고, 나머지 접속은 본 파일의 `no` 를 따릅니다.
 4. 결론은 "root 로그인은 허용되어 있었고, 203.0.113.0/24 에서 온 접속에는 암호 인증이 열려 있었다" 입니다. 이어서 `10-ops.conf` 의 mtime 과 sshd 로그의 `Accepted password for root from 203.0.113.x` 줄을 맞대 봅니다.
 
-**도구로 한 번.** 살아 있는 시스템이면 `sshd -T` 를 실행해 적용값을 봅니다. `-T` 는 설정을 검사해 적용값을 출력하고, `-C user=alice,addr=203.0.113.10` 처럼 접속 조건을 주면 맞는 `Match` 를 반영한 값을 보여 줍니다[2]. 이미지라면 dissect.target 의 `opensshd.config` 로 본 파일의 값과 mtime 을 뽑되[7], 위 함정대로 `sshd_config.d` 는 따로 읽습니다.
+**도구로 한 번.** 실행 중인 시스템이면 `sshd -T` 를 실행해 적용값을 봅니다. `-T` 는 설정을 검사해 적용값을 출력하고, `-C user=alice,addr=203.0.113.10` 처럼 접속 조건을 주면 맞는 `Match` 를 반영한 값을 보여 줍니다[2]. 이미지라면 dissect.target 의 `opensshd.config` 로 본 파일의 값과 mtime 을 뽑되[7], 위 함정대로 `sshd_config.d` 는 따로 읽습니다.
 
 ## 교차 검증
 
@@ -133,7 +133,7 @@ UsePAM yes
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 Linux 이미지로 다음을 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 Linux 이미지로 다음을 풀어 봅니다.
 
 1. `/etc/ssh/sshd_config` 에서 `Include` 줄은 어디에 있고, `sshd_config.d` 에는 어떤 파일이 있습니까? 이름 순으로 읽었을 때 `PermitRootLogin`, `PasswordAuthentication`, `LogLevel`, `SyslogFacility` 의 적용값은 무엇입니까?
 2. `Match` 블록이 있다면 어떤 조건에서 어떤 값을 바꿉니까?

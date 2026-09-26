@@ -32,7 +32,7 @@ Windows 11 25H2 기준입니다.
 | 폴더 안 | `Links` 하위 폴더, `desktop.ini`, `.url` 파일 |
 | 함께 있는 키 | `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MenuOrder\Favorites` |
 
-- `User Shell Folders` 값은 사용자 하이브 (NTUSER.DAT) 에 있습니다. 검체에서는 그 사용자의 NTUSER.DAT 에서 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
+- `User Shell Folders` 값은 사용자 하이브 (NTUSER.DAT) 에 있습니다. 디스크 이미지에서는 그 사용자의 NTUSER.DAT 에서 읽습니다. 하이브 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - 기본 위치에 폴더가 없으면 이 값을 먼저 확인합니다.
 - 다른 Windows 버전에서도 이 값으로 폴더 위치를 확인합니다.
 - `desktop.ini` 는 폴더 표시 설정 파일입니다. 즐겨찾기가 아닙니다.
@@ -47,7 +47,7 @@ Windows 11 25H2 기준입니다.
 | 같은 곳의 다른 폴더 | `…\User\<프로필 이름>\Recovery`, `…\User\<프로필 이름>\Datastore` | [1] |
 | 수집 범위 예 | 공개 수집 정의 `Edge.tkape` 는 `…\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\` 아래를 모두 모읍니다 | [2] |
 
-- `spartan.edb` 의 정확한 전체 경로와 표 이름·칸 이름은 공개 자료가 없어 검체에서 확인합니다.
+- `spartan.edb` 의 정확한 전체 경로와 표 이름·열 이름은 실제 데이터로 확인해야 합니다.
 - 어느 버전부터 `spartan.edb` 를 썼는지는 공개 자료에 나와 있지 않습니다. "새 버전"·"옛 버전"으로만 나뉩니다.
 - 그래서 경로 하나만 찾지 않고 패키지 폴더를 통째로 모읍니다.
 - `spartan.edb` 의 저장 형식은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서, 패키지 폴더의 짜임은 [UWP 앱 데이터 구조](../../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
@@ -111,7 +111,7 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 - 파일 시스템 시각의 종류와 바뀌는 조건은 [마스터 파일 테이블](../../filesystem/mft.md) 에서 다룹니다.
 - 만든 시각을 즐겨찾기를 추가한 시각으로 단정하지 않습니다. 다른 곳에서 복사해 온 파일이면 만든 시각은 복사한 때를 가리킬 수 있습니다.
 - 파일 내용을 고치면 수정 시각이 바뀝니다. 즐겨찾기 주소를 바꾼 흔적일 수 있습니다.
-- 옛 엣지 `spartan.edb` 안에 어떤 시각 칸이 있는지는 공개 자료가 없어 검체에서 확인합니다.
+- 옛 엣지 `spartan.edb` 안에 어떤 시각 열이 있는지는 실제 데이터로 확인해야 합니다.
 
 ## 함정과 한계
 
@@ -127,7 +127,7 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 
 ### 헥스로 한 번
 
-`.url` 에는 공개 명세가 없어서, 아래 바이트는 위에서 본 `Bing.url` 의 글자를 ASCII 로 옮기고 줄 끝에 CR LF 를 붙여 만든 예시입니다. 검체에서 뜬 헥스가 아닙니다.
+`.url` 에는 공개 명세가 없어서, 아래 바이트는 위에서 본 `Bing.url` 의 글자를 ASCII 로 옮기고 줄 끝에 CR LF 를 붙여 만든 예시입니다. 실제 파일에서 뜬 헥스가 아닙니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -177,9 +177,9 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 
 ## 실습
 
-IE 를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 프로필 폴더와 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
+IE 를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 사용자 프로필 폴더와 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
 
-1. 검체의 Windows 버전은 무엇입니까? `User Shell Folders` 의 `Favorites` 값은 어느 폴더를 가리킵니까?
+1. 분석 대상의 Windows 버전은 무엇입니까? `User Shell Folders` 의 `Favorites` 값은 어느 폴더를 가리킵니까?
 2. 즐겨찾기 폴더와 하위 폴더에 `.url` 파일이 몇 개 있습니까?
 3. 처음부터 들어 있던 것으로 보이는 항목과 사용자가 추가한 것으로 보이는 항목을 나눠 봅니다. 무엇을 근거로 나눴습니까?
 4. `.url` 한 개를 헥스로 열어 `URL=` 줄의 주소를 직접 읽어 봅니다. 도구가 보여 주는 주소와 같습니까?

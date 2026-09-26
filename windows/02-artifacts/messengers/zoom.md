@@ -26,7 +26,7 @@ nav_order: 2140
 
 (표는 [2])
 
-회의 기록에는 호스트 ID·회의 번호·주제·참가 시각·회의 길이·녹화 경로가 들어 있고, 회의 중 메시지, 사용자 계정, 로그인 기기의 비밀번호 칸은 암호화돼 있습니다[2]. 이 자료[2]에는 DB 파일 이름, 표 이름, 암호 방식, 대상 버전이 나와 있지 않아서, 아래 7.1.5.43453 의 파일과 항목을 하나씩 맞춰 볼 수 없습니다.
+회의 기록에는 호스트 ID·회의 번호·주제·참가 시각·회의 길이·녹화 경로가 들어 있고, 회의 중 메시지, 사용자 계정, 로그인 기기의 비밀번호 열은 암호화돼 있습니다[2]. 이 자료[2]에는 DB 파일 이름, 표 이름, 암호 방식, 대상 버전이 나와 있지 않아서, 아래 7.1.5.43453 의 파일과 항목을 하나씩 맞춰 볼 수 없습니다.
 
 ## 위치와 버전별 차이
 
@@ -40,8 +40,8 @@ nav_order: 2140
 | 로컬 녹화 | `C:\Users\<사용자>\Documents\Zoom` | [1][2] |
 | Outlook 플러그인 설정 | `C:\Users\<사용자>\AppData\Roaming\Zoom Plugin\*.json` | [1] |
 
-- 최신 버전에서도 로컬 녹화 기본 위치가 `문서\Zoom` 인지는 공개 자료가 없어 검체에서 확인합니다.
-- 사용자가 녹화 위치를 바꾸면 그 위치가 어디에 적히는지도 검체에서 확인합니다.
+- 최신 버전에서도 로컬 녹화 기본 위치가 `문서\Zoom` 인지는 실제 데이터로 확인해야 합니다.
+- 사용자가 녹화 위치를 바꾸면 그 위치가 어디에 적히는지도 실제 데이터로 확인합니다.
 - 관리자용 설치본(MSI)이 `Program Files` 에 깔리는지, 그때 데이터 폴더가 달라지는지도 공개 자료가 없습니다.
 
 ### 사용자별 설치본
@@ -85,23 +85,23 @@ nav_order: 2140
 
 ### 평문 DB 세 개의 표
 
-| DB | 표 | 칸 이름으로 본 성격 |
+| DB | 표 | 열 이름으로 본 성격 |
 |---|---|---|
 | `in_progress_infos.db` | `meta`, `InProgressInfos`, `UploadInfos` | 내려받기·올리기 진행 기록으로 보이는 구조 |
 | `process_monitoring.db` | `process_metrics`, `meta`, `sqlite_sequence` | 프로세스별 메모리·CPU 사용량 기록으로 보이는 구조 |
 | `zoomus.zmdb.default.noenc.rlock.db` | `TZDesc`, `TZZoom`, `TZJAVA`, `TZSelectFiles_`, `TZSelectFiles_en`, `experiment`, `feature_toggle_kvs`, `perf_summary` | 시간대 목록과 기능 설정 위주 |
 
-- `InProgressInfos` 앞쪽 칸: `guid`, `url`, `url_chain`, `fetch_error_body`, `etag`, `last_modified`, `total_bytes`, `mime_type`, `original_mime_type`, `current_path`, `target_path`, `received_bytes`, `start_time`, `end_time`.
-- `UploadInfos` 앞쪽 칸: `guid`, `state`, `interrupt_reason`, `file_path`, `file_size_at_start`, `file_mtime_at_start`, `sent_bytes`, `uploadid`, `uploadid_enc_`, `upload_path`, `upload_path_enc_`, `upload_metadata`.
-- `process_metrics` 칸: `id`, `process_name`, `metry_time`, `process_id`, `memory_usage`, `cpu_usage`, `is_in_meeting`.
-- `is_in_meeting` 은 이름으로 보아 "그 시각에 회의 중이었나" 를 가리키는 것으로 보입니다. 뜻은 검체에서 확인합니다.
-- 이 표들에 실제로 어떤 행이 남는지, 행이 얼마나 오래 남는지는 공개 자료가 없어 검체에서 확인해야 합니다.
+- `InProgressInfos` 앞쪽 열: `guid`, `url`, `url_chain`, `fetch_error_body`, `etag`, `last_modified`, `total_bytes`, `mime_type`, `original_mime_type`, `current_path`, `target_path`, `received_bytes`, `start_time`, `end_time`.
+- `UploadInfos` 앞쪽 열: `guid`, `state`, `interrupt_reason`, `file_path`, `file_size_at_start`, `file_mtime_at_start`, `sent_bytes`, `uploadid`, `uploadid_enc_`, `upload_path`, `upload_path_enc_`, `upload_metadata`.
+- `process_metrics` 열: `id`, `process_name`, `metry_time`, `process_id`, `memory_usage`, `cpu_usage`, `is_in_meeting`.
+- `is_in_meeting` 은 이름으로 보면 "그 시각에 회의 중이었나" 를 가리키는 것으로 보입니다. 뜻은 실제 데이터로 확인합니다.
+- 이 표들에 실제로 어떤 행이 남는지, 행이 얼마나 오래 남는지는 실제 데이터로 확인해야 합니다.
 
 ### 계정 폴더
 
 `data\` 아래 계정 관련 폴더입니다. 계정 식별자는 `<JID>`·`<ID>` 로 적습니다.
 
-`data\<JID>@xmpp.zoom.us\` 폴더는 여러 개일 수 있고, 파일이 없는 빈 폴더도 있습니다. 7.1.5.43453 한 대에서는 3개 가운데 하나에만 파일이 있었습니다. 빈 폴더가 예전에 로그인한 다른 계정의 것인지는 검체에서 확인합니다. `<JID>` 는 영문·숫자·밑줄로 된 22자 문자열이고, 폴더 이름에서는 소문자로 바뀝니다. 이 값은 이름 모양으로 보아 줌 계정 식별자일 가능성이 있습니다.
+`data\<JID>@xmpp.zoom.us\` 폴더는 여러 개일 수 있고, 파일이 없는 빈 폴더도 있습니다. 7.1.5.43453 한 대에서는 3개 가운데 하나에만 파일이 있었습니다. 빈 폴더가 예전에 로그인한 다른 계정의 것인지는 실제 데이터로 확인합니다. `<JID>` 는 영문·숫자·밑줄로 된 22자 문자열이고, 폴더 이름에서는 소문자로 바뀝니다. 이 값은 이름 모양으로 보면 줌 계정 식별자일 가능성이 있습니다.
 
 파일이 든 계정 폴더의 DB 입니다.
 
@@ -137,7 +137,7 @@ nav_order: 2140
 |---|---|---|
 | `Zoom.us.ini` | `[ZoomChat]` 절의 `win_osencrypt_key`, 언어 설정 `com.zoom.client.langid=1033`, `[zSafeChecker]` 절의 `LastRunTime` | DB 키를 무엇으로 보호하는지 알 수 있습니다 |
 | `client.config` | INI 형식입니다. 절 이름에 계정 JID 가 들어간 `[emoji.recent.<jid>]` 절과, 창 위치·마지막으로 연 채팅 화면이 든 `[zoom_new_im]` 절이 있습니다 | 이 파일만으로도 로그인한 계정 JID 를 알 수 있습니다 |
-| `viper.ini` | `[APE]` 절에 16진수로 적은 ASCII 문자열(제조사·모델)과 장치 번호가 있습니다 | 카메라인지 오디오 장치인지는 검체에서 확인합니다 |
+| `viper.ini` | `[APE]` 절에 16진수로 적은 ASCII 문자열(제조사·모델)과 장치 번호가 있습니다 | 카메라인지 오디오 장치인지는 실제 기기에서 확인합니다 |
 | `transcoding.ini` | `[All]` 절에 `SaveAllTempRecordFiles=0` 이 있습니다 | — |
 
 - `LastRunTime` 의 단위는 공개 자료에 없습니다.
@@ -169,7 +169,7 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 - 회의에서 오간 말과 화면 내용: 위 흔적 가운데 이것을 담은 것은 로컬 녹화 파일뿐입니다.
 - 클라우드 녹화 내용: PC 에 남는지는 공개 자료가 없습니다.
 - 웹 브라우저로만 참가한 회의: 이 폴더에 남는지는 공개 자료가 없습니다. 브라우저 기록을 따로 봅니다([크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md)).
-- 평문 DB 행의 뜻: 칸 이름으로 성격을 짐작할 뿐이고, 행 내용과 칸의 뜻은 검체에서 확인해야 합니다.
+- 평문 DB 행의 뜻: 열 이름으로 성격을 짐작할 뿐이고, 행 내용과 열의 뜻은 실제 데이터로 확인해야 합니다.
 - 회의 시각: DB 파일 수정 시각만으로는 말할 수 없습니다(아래 "시각 해석").
 
 ### 보고서 문장
@@ -179,10 +179,10 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 
 ## 시각 해석
 
-- DB 에는 회의 참가 시각·메시지 보낸 시각 같은 칸이 있습니다[2]. 시각 형식(단위·시간대)은 공개 자료에 없습니다.
+- DB 에는 회의 참가 시각·메시지 보낸 시각 같은 열이 있습니다[2]. 시각 형식(단위·시간대)은 공개 자료에 없습니다.
 - 평문 DB 의 `start_time`·`end_time`·`metry_time`·`file_mtime_at_start` 형식도 공개 자료에 없습니다.
 - `Zoom.us.ini` `LastRunTime` 의 단위도 공개 자료에 없습니다.
-- 형식을 모르는 값은 자릿수로 초·밀리초·FILETIME 가운데 무엇인지 먼저 가려 봅니다. 형식별 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 형식을 모르는 값은 자릿수로 초·밀리초·FILETIME 가운데 무엇인지 먼저 구분해 봅니다. 형식별 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 가린 결과는 프리페치의 실행 시각 같은 다른 기록과 맞춰 검증합니다.
 
 파일 시스템 시각은 파일마다 다릅니다(7.1.5.43453 기준).
@@ -197,7 +197,7 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 ## 함정과 한계
 
 - 이름에 `enc` 가 없어도 암호화된 DB 가 있습니다. `telemetrydata.db`, `local_dns_cache.db`, `users\<ID>\data.db` 가 그렇습니다. 파일 이름이 아니라 첫 16바이트로 판단합니다.
-- 위의 표·칸 설명[2]은 2021년 무렵 자료이고 대상 버전이 나와 있지 않아서, 요즘 버전과 다를 수 있습니다.
+- 위의 표·열 설명[2]은 2021년 무렵 자료이고 대상 버전이 나와 있지 않아서, 요즘 버전과 다를 수 있습니다.
 - 계정 폴더 이름은 소문자이고, `data\<ID>\calendar`·`data\users\<ID>` 는 대소문자를 살린 이름입니다. 두 폴더를 짝지을 때는 대소문자를 무시하고 비교합니다.
 - 공개 수집 목록[1]은 Windows 7 이후 경로에서는 `%APPDATA%\Zoom\logs` 만 모으고, 줌 폴더를 통째로 모으는 항목은 Windows XP 경로뿐입니다. 그 밖에 녹화 폴더와 플러그인 json 을 모읍니다[1]. 그래서 이 목록만 쓰면 Windows 7 이후 PC 에서는 `data` 폴더와 설정 파일이 빠집니다. `%APPDATA%\Zoom` 을 따로 통째로 확보합니다.
 - 이 목록은 필요 없는 DLL·EXE 도 함께 모읍니다[1].
@@ -205,7 +205,7 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 
 ### 지우기와 제거
 
-- 줌을 제거한 뒤 `data` 폴더가 남는지는 공개 자료가 없어 검체에서 확인합니다.
+- 줌을 제거한 뒤 `data` 폴더가 남는지는 실제 데이터로 확인해야 합니다.
 - 폴더가 없어도 설치·실행 흔적은 [설치 프로그램](../system-account/uninstall.md), [프리페치](../execution/prefetch/index.md), [AmCache](../execution/amcache-hve/index.md) 에서 따로 찾습니다.
 - 사용자가 채팅을 지우면 DB 에 무엇이 남는지도 공개 자료가 없습니다.
 - 파일 전체가 암호화돼 있으면 DB 의 빈 공간도 키 없이는 읽지 못합니다.
@@ -214,9 +214,9 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 
 ### 헥스로 한 번
 
-아래 두 예시는 SQLite 명세와 DPAPI 블롭 머리 모양으로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래 두 예시는 SQLite 명세와 DPAPI 블롭 머리 모양으로 만든 예시입니다. 실제 기기에서 뽑은 값이 아닙니다.
 
-**1. DB 가 평문인지 가리기**
+**1. DB 가 평문인지 판별하기**
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -227,7 +227,7 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 2. 위와 같으면 평문 SQLite 입니다. 사본을 일반 SQLite 도구로 엽니다.
 3. 첫 바이트부터 규칙 없는 값이면 파일 전체가 암호화된 것으로 봅니다. 파일 이름에 `enc` 가 있는지와 관계없이 이 결과를 따릅니다.
 
-**2. win_osencrypt_key 가 DPAPI 블롭인지 가리기**
+**2. win_osencrypt_key 가 DPAPI 블롭인지 판별하기**
 
 ```
 ZWOSKEYAQAAANCMnd8BFdERjHoAwE/C…
@@ -244,13 +244,13 @@ ZWOSKEYAQAAANCMnd8BFdERjHoAwE/C…
 ```
 
 7. 0x00 의 4바이트 `01 00 00 00` 은 버전 1 입니다.
-8. 0x04 부터 16바이트는 제공자 GUID (provider GUID) 입니다. GUID 를 읽는 법과 그 뒤 칸은 [DPAPI 블롭 구조](../../01-foundations/protection/data-protection-api/dpapi-blob.md) 를 봅니다.
+8. 0x04 부터 16바이트는 제공자 GUID (provider GUID) 입니다. GUID 를 읽는 법과 그 뒤 필드는 [DPAPI 블롭 구조](../../01-foundations/protection/data-protection-api/dpapi-blob.md) 를 봅니다.
 9. 이 머리를 Base64 로 쓰면 앞 24글자가 늘 `AQAAANCMnd8BFdERjHoAwE/C` 입니다. 다른 앱의 설정 파일에서도 이 글자열로 DPAPI 블롭을 찾을 수 있습니다.
 
 ### 공개 도구로 한 번
 
 - 평문 DB 세 개는 사본을 sqlite3 명령줄 도구 같은 공개 SQLite 도구로 엽니다.
-- `.tables` 와 `.schema` 로 표와 칸이 위 표와 같은지 확인합니다. 버전이 다르면 표 구성이 다를 수 있습니다.
+- `.tables` 와 `.schema` 로 표와 열이 위 표와 같은지 확인합니다. 버전이 다르면 표 구성이 다를 수 있습니다.
 - 예를 들어 `process_metrics` 는 다음처럼 읽습니다.
 
 ```sql
@@ -272,17 +272,17 @@ ORDER BY metry_time;
 | [프리페치](../execution/prefetch/index.md) | `Zoom.exe` 를 실행한 시각 |
 | [AmCache](../execution/amcache-hve/index.md) | `%APPDATA%\Zoom\bin\Zoom.exe` 가 기록됐는지 |
 | [SRUM](../execution/system-resource-usage-monitor/index.md) | 줌이 쓴 네트워크 양과 그 시간대 |
-| [카메라·마이크 사용 기록](../execution/capabilityaccessmanager.md) | 회의 중 카메라·마이크를 쓴 시각. 줌 항목이 여기 남는지는 검체에서 확인합니다 |
-| [윈도 알림 기록](../execution/wpndatabase-db.md) | 채팅·회의 초대 알림. 줌 알림이 여기 남는지는 검체에서 확인합니다 |
+| [카메라·마이크 사용 기록](../execution/capabilityaccessmanager.md) | 회의 중 카메라·마이크를 쓴 시각. 줌 항목이 여기 남는지는 실제 데이터로 확인합니다 |
+| [윈도 알림 기록](../execution/wpndatabase-db.md) | 채팅·회의 초대 알림. 줌 알림이 여기 남는지는 실제 데이터로 확인합니다 |
 | [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) | `win_osencrypt_key` 를 보호하는 방식 |
 | [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) | 평문 DB 의 형식 |
-| [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) | 평문 DB 시각 칸의 형식 |
+| [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) | 평문 DB 시각 열의 형식 |
 
 여러 연락 기록을 합쳐 읽는 순서는 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다. `UploadInfos` 처럼 파일을 올린 흔적을 볼 때는 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 도 함께 봅니다.
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 줌이 설치된 Windows 이미지를 고릅니다. 없으면 실험용 가상 머신에 줌을 설치해 씁니다.
+NIST CFReDS 같은 공개 시험 이미지 가운데 줌이 설치된 Windows 이미지를 고릅니다. 없으면 실험용 가상 머신에 줌을 설치해 씁니다.
 
 1. 사용자마다 `%APPDATA%\Zoom\data` 가 있습니까? 사용자별 설치입니까, 다른 위치에 설치했습니까?
 2. `data\` 와 계정 폴더 아래 `.db` 파일의 첫 16바이트를 모두 확인합니다. 평문과 암호화 파일은 각각 몇 개입니까? 이름에 `enc` 가 없는데 암호화된 파일이 있습니까?

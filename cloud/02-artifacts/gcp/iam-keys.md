@@ -74,7 +74,7 @@ IAM API 의 ServiceAccountKey 에 들어 있는 필드는 아래와 같습니다
 | `disabled` / `disableReason` | 꺼짐 여부와 이유: `..._USER_INITIATED`, `..._EXPOSED`, `..._COMPROMISE_DETECTED` |
 | `extendedStatus[]` | `SERVICE_ACCOUNT_KEY_EXTENDED_STATUS_KEY_EXPOSED`, `..._KEY_COMPROMISE_DETECTED` 와 설명 값 |
 
-`extendedStatus` 는 키가 살아 있는 동안 계속 남고, 노출 표시는 키를 다시 켜도 지워지지 않습니다[2][6]. `gcloud iam service-accounts keys list` 는 `KEY_ID`, `CREATED_AT`, `EXPIRES_AT`, `DISABLED`, `DISABLE_REASON`, `EXTENDED_STATUS` 열을 보여 주고[3], 유출로 꺼진 키의 메타데이터에는 `extended_status_message` 에 키가 발견된 곳의 링크가 들어갈 수 있습니다[3][6].
+`extendedStatus` 는 키가 유효한 동안 계속 남고, 노출 표시는 키를 다시 켜도 지워지지 않습니다[2][6]. `gcloud iam service-accounts keys list` 는 `KEY_ID`, `CREATED_AT`, `EXPIRES_AT`, `DISABLED`, `DISABLE_REASON`, `EXTENDED_STATUS` 열을 보여 주고[3], 유출로 꺼진 키의 메타데이터에는 `extended_status_message` 에 키가 발견된 곳의 링크가 들어갈 수 있습니다[3][6].
 
 ### 감사 로그의 작업 이름
 
@@ -111,7 +111,7 @@ IAM 감사 로그의 서비스 이름은 `iam.googleapis.com` 입니다[4]. 키�
 }
 ```
 
-`request.name` 에는 서비스 계정 이메일이, `resourceName` 에는 서비스 계정의 숫자 ID 가 들어갑니다[5]. 새 키의 ID 가 어느 필드에 들어가는지는 검체에서 확인합니다. `response` 를 열어 키 이름이 있는지 보고, 없으면 키 목록에서 `validAfterTime` 이 그 시각 근처인 키를 찾아 맞춥니다.
+`request.name` 에는 서비스 계정 이메일이, `resourceName` 에는 서비스 계정의 숫자 ID 가 들어갑니다[5]. 새 키의 ID 가 어느 필드에 들어가는지는 실제 로그로 확인해야 합니다. `response` 를 열어 키 이름이 있는지 보고, 없으면 키 목록에서 `validAfterTime` 이 그 시각 근처인 키를 찾아 맞춥니다.
 
 ### 키로 인증한 호출과 가장
 
@@ -136,12 +136,12 @@ IAM 감사 로그의 서비스 이름은 `iam.googleapis.com` 입니다[4]. 키�
 **증명하지 못하는 것**
 
 - 키 파일이 어디로 복사됐는지. 파일 시스템의 접근·권한 변경은 대개 감사 로그에 남지 않습니다[6].
-- 키를 쓴 사람이 누구인지. `principalEmail` 은 서비스 계정만 가리키고, 키 하나를 여러 앱이나 기계가 나눠 쓰면 기록만으로 가르기 어렵습니다[6].
+- 키를 쓴 사람이 누구인지. `principalEmail` 은 서비스 계정만 가리키고, 키 하나를 여러 앱이나 기계가 나눠 쓰면 기록만으로 구분하기 어렵습니다[6].
 - 데이터 접근 로그가 꺼져 있던 기간의 토큰 발급과 키 조회[4][5].
 - `SignBlob`·`SignJwt` 사용. 이 작업은 감사 로그를 만들지 않습니다[4].
 - 이미 지운 키의 공개 키 내용. 지운 키는 되살릴 수 없습니다[1].
 
-보고서에는 "이 시각에 이 계정이 이 서비스 계정에 키를 만든 기록이 있다", "이 키 ID 로 인증한 요청이 이 작업을 호출한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 시각에 이 계정이 이 서비스 계정에 키를 만든 기록이 있다", "이 키 ID 로 인증한 요청이 이 작업을 호출한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -157,13 +157,13 @@ Activity Analyzer 의 `lastAuthenticatedTime` 과 `observationPeriod` 는 실제
 
 `serviceAccountKeyName` 이 없다고 키를 쓰지 않았다고 볼 수 없습니다. 서비스에 따라 키 이름을 기록하지 않습니다[5].
 
-작업 이름의 모양이 로그마다 다릅니다. 서비스 계정 정책 변경은 `google.iam.admin.v1.SetIAMPolicy`(IAM 이 대문자)이고 프로젝트 정책 변경은 `SetIamPolicy` 입니다[4][5]. Logging 쿼리 언어의 `:` 연산자는 부분 일치이고 문자열 비교는 대소문자를 가리지 않으므로, `protoPayload.methodName:"SetIamPolicy"` 로 찾으면 두 모양을 함께 잡을 수 있습니다[4][17].
+작업 이름의 모양이 로그마다 다릅니다. 서비스 계정 정책 변경은 `google.iam.admin.v1.SetIAMPolicy`(IAM 이 대문자)이고 프로젝트 정책 변경은 `SetIamPolicy` 입니다[4][5]. Logging 쿼리 언어의 `:` 연산자는 부분 일치이고 문자열 비교는 대소문자를 구분하지 않으므로, `protoPayload.methodName:"SetIamPolicy"` 로 찾으면 두 모양을 함께 잡을 수 있습니다[4][17].
 
-Sigma 의 GCP 서비스 계정 규칙은 `gcp.audit.method_name` 이 `.serviceAccounts.disable`, `.serviceAccounts.delete`, `.serviceAccounts.create` 같은 값으로 끝난다고 보고 찾습니다[14][15]. 문서가 적은 작업 이름은 `google.iam.admin.v1.DisableServiceAccount` 모양이라 이 조건과 맞지 않으므로, 규칙을 쓰기 전에 검체의 실제 `methodName` 값과 맞춰 봅니다[4][14]. 키 생성과 삭제는 아래의 IAM 문서 쿼리로 찾습니다.
+Sigma 의 GCP 서비스 계정 규칙은 `gcp.audit.method_name` 이 `.serviceAccounts.disable`, `.serviceAccounts.delete`, `.serviceAccounts.create` 같은 값으로 끝난다고 보고 찾습니다[14][15]. 문서가 적은 작업 이름은 `google.iam.admin.v1.DisableServiceAccount` 모양이라 이 조건과 맞지 않으므로, 규칙을 쓰기 전에 실제 로그의 `methodName` 값과 맞춰 봅니다[4][14]. 키 생성과 삭제는 아래의 IAM 문서 쿼리로 찾습니다.
 
 Activity Analyzer 의 키 결과에는 꺼진 키가 빠지고, 만료되거나 지운 키는 들어갈 수 있습니다[7]. 서비스 계정에 묶인 API 키로 인증한 요청은 서비스 계정 사용 지표에 기록되지 않습니다[7]. Google Workspace API 에 대한 도메인 전체 위임 (domain-wide delegation) 처럼 Google Cloud 밖의 Google API 에 인증한 기록은 Activity Analyzer 가 잡지 않으므로, Cloud Monitoring 의 서비스 계정 사용 지표와 대조합니다[7].
 
-키 파일의 `token_uri` 값으로는 `https://accounts.google.com/o/oauth2/token` 과 `https://oauth2.googleapis.com/token` 이 모두 나오므로, 이 값으로 파일의 진위나 만든 방법을 가리지 않습니다[1]. 밖에서 받은 키 파일은 `type` 이 `service_account` 인지부터 확인합니다[6].
+키 파일의 `token_uri` 값으로는 `https://accounts.google.com/o/oauth2/token` 과 `https://oauth2.googleapis.com/token` 이 모두 나오므로, 이 값으로 파일의 진위나 만든 방법을 판별하지 않습니다[1]. 밖에서 받은 키 파일은 `type` 이 `service_account` 인지부터 확인합니다[6].
 
 ## 직접 분석해 보기
 
@@ -222,7 +222,7 @@ gcloud policy-intelligence query-activity --activity-type=serviceAccountKeyLastA
 2. 위의 만든 예시 키 생성 기록에서 누가, 어느 IP 에서, 어느 서비스 계정에 키를 만들었는지 적고, 이 기록만으로 새 키 ID 를 알 수 있는지 판단해 봅니다.
 3. 어떤 서비스 계정의 키를 지운 뒤에도 30분 동안 그 서비스 계정 이름으로 Pub/Sub 호출이 이어졌습니다. 가능한 이유와 다음에 볼 필드를 적어 봅니다[1][5].
 4. Activity Analyzer 결과에서 어느 키의 `lastAuthenticatedTime` 이 비어 있습니다. 이 키가 쓰인 적이 없다고 말할 수 있는지, 무엇을 함께 확인해야 하는지 적어 봅니다[7].
-5. 실제 검체에서는 조사 대상 프로젝트의 서비스 계정마다 키 목록을 내려받고, 조사 기간의 `CreateServiceAccountKey`·`DeleteServiceAccountKey` 기록과 키 ID 를 한 표로 맞춰 봅니다.
+5. 실제 사건에서는 조사 대상 프로젝트의 서비스 계정마다 키 목록을 내려받고, 조사 기간의 `CreateServiceAccountKey`·`DeleteServiceAccountKey` 기록과 키 ID 를 한 표로 맞춰 봅니다.
 
 ## 참고 문헌
 

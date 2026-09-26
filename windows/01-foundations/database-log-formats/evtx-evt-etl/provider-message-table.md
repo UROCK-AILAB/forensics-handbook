@@ -32,7 +32,7 @@ nav_order: 350
 
 **원본 키** — `HKLM\System\CurrentControlSet\Services\EventLog\<로그 종류>\<원본 이름>`
 
-XP 이하에서 쓰던 방식이고, 로그 종류는 XML 의 `Channel` 요소에서 얻습니다. 원본 (Source) 이름은 XML `Provider` 요소의 `EventSourceName` 속성이고, 이 속성이 없으면 `Name` 속성을 씁니다. 원본 이름은 대소문자를 가리지 않습니다.
+XP 이하에서 쓰던 방식이고, 로그 종류는 XML 의 `Channel` 요소에서 얻습니다. 원본 (Source) 이름은 XML `Provider` 요소의 `EventSourceName` 속성이고, 이 속성이 없으면 `Name` 속성을 씁니다. 원본 이름은 대소문자를 구분하지 않습니다.
 
 | 값 | 뜻 |
 |---|---|
@@ -59,7 +59,7 @@ Windows 11 PC 한 대의 예입니다.
 
 원본 키 `EventLog\System\Service Control Manager` 에는 ProviderGuid `{555908d1-a6d7-4695-8e1e-26931d2012f4}` 와 EventMessageFile `%SystemRoot%\system32\services.exe` 가 있었습니다. 같은 GUID 의 Publishers 키는 기본값이 "Service Control Manager" 였고, ResourceFileName 과 MessageFileName 은 `%SystemRoot%\system32\services.exe`, ParameterFileName 은 `%SystemRoot%\system32\kernel32.dll` 이었습니다. 이 키 아래에는 하위 키 ChannelReferences 가 있었습니다.
 
-살아 있는 시스템에서는 `wevtutil gp <공급자 이름>` 으로 공급자 정보를 봅니다. 수집 절차는 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
+실행 중인 시스템에서는 `wevtutil gp <공급자 이름>` 으로 공급자 정보를 봅니다. 수집 절차는 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 을 봅니다.
 
 ### 경로 풀기
 
@@ -179,7 +179,7 @@ Vista 부터 PE 파일의 `WEVT_TEMPLATE` 리소스에 이벤트 매니페스트
 - 템플릿 정의는 `TEMP` 서명으로 시작합니다. 크기, 항목 설명자 수, 항목 이름 수, 항목 오프셋, 알 수 없는 값, GUID 16바이트, 이진 XML 조각, 항목 설명자, 항목 이름이 이어집니다.
 - 알 수 없는 값은 EventData 면 1, UserData 면 2 로 보입니다.
 - 이 이진 XML 은 EVTX 의 것과 조금 다릅니다. [이진 XML 해석](binary-xml-template.md) 의 "함정" 을 봅니다.
-- 이 템플릿 GUID 가 EVTX 레코드 안의 템플릿 GUID 와 같은 값인지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+- 이 템플릿 GUID 가 EVTX 레코드 안의 템플릿 GUID 와 같은 값인지는 실제 데이터로 확인해야 합니다.
 
 Windows 11 PC 한 대의 예입니다.
 
@@ -227,7 +227,7 @@ services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었고, 명�
 
 - EventID 만으로 메시지를 찾으면 못 찾을 수 있습니다. Qualifiers 가 붙은 이벤트는 Qualifiers 를 합친 값(예: 0x40001b7c)이 메시지 식별자입니다.
 - EventMessageFile 에 파일이 여러 개 적혀 있을 수 있습니다. 세미콜론으로 나눠 모두 봅니다.
-- 원본 이름은 대소문자를 가리지 않습니다. 대소문자만 다른 이름을 다른 원본으로 보지 않습니다.
+- 원본 이름은 대소문자를 구분하지 않습니다. 대소문자만 다른 이름을 다른 원본으로 보지 않습니다.
 - `%%n` 을 풀지 않으면 문장에 숫자만 남습니다.
 - 문장에 `%#` 이 그대로 보이면 이벤트 문자열이 모자란 것일 수 있습니다.
 - CRIM 버전이 명세 값(3.1)과 달라도 버리지 않습니다. Windows 11 PC 에서는 5.1 이었습니다.
@@ -235,9 +235,9 @@ services.exe·wevtapi.dll·tquery.dll.mun 의 CRIM 버전은 5.1 이었고, 명�
 
 ## 도구
 
-- wevtutil: 살아 있는 시스템에서 `wevtutil gp <공급자 이름>` 으로 공급자 정보를 봅니다.
+- wevtutil: 실행 중인 시스템에서 `wevtutil gp <공급자 이름>` 으로 공급자 정보를 봅니다.
 - libevtx·libfwevt: 형식 명세를 공개했습니다. libfwevt 명세는 WEVT_TEMPLATE 구조를 다룹니다.
-- 이벤트 뷰어: 살아 있는 시스템에서 만든 문장을 비교 기준으로 삼을 때 씁니다.
+- 이벤트 뷰어: 실행 중인 시스템에서 만든 문장을 비교 기준으로 삼을 때 씁니다.
 
 ## 참고 문헌
 

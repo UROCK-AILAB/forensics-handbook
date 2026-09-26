@@ -29,7 +29,7 @@ Apple 은 포렌식용 공식 명세를 내지 않았습니다. 바이너리 pli
 | WirelessDomain | 14 | KeychainDomain | 1 |
 | CameraRollDomain | 10 | | |
 
-키 값의 형식도 여러 가지가 섞여 있습니다. 같은 백업에서 키 값의 형식을 세면 int 1,024개, bool 955개, str 772개, list 459개, datetime 458개, bytes 360개, float 309개이고, 사전(dict) 형식 값도 있습니다. 이 가운데 bytes 형식 값이 분석에서 특히 중요합니다. `com.apple.ap.AppStore.plist` 의 `AppStoreSLPContentSnapshot`, `com.apple.Fitness.plist` 의 `OnboardingCoordinatorCriteria`, `com.apple.biomesyncd.plist` 의 `CC_OncePerBootBackingData`, `com.apple.siriinferenced.plist` 의 `appIntentsBiomeBookmark`·`appIntentsTranscriptBiomeBookmark` 가 bytes 형식입니다. 이 bytes 안이 NSKeyedArchiver 인지, 바이너리 plist 인지, [프로토콜 버퍼](protobuf.md)인지는 값을 꺼내 앞 바이트를 보고 가립니다.
+키 값의 형식도 여러 가지가 섞여 있습니다. 같은 백업에서 키 값의 형식을 세면 int 1,024개, bool 955개, str 772개, list 459개, datetime 458개, bytes 360개, float 309개이고, 사전(dict) 형식 값도 있습니다. 이 가운데 bytes 형식 값이 분석에서 특히 중요합니다. `com.apple.ap.AppStore.plist` 의 `AppStoreSLPContentSnapshot`, `com.apple.Fitness.plist` 의 `OnboardingCoordinatorCriteria`, `com.apple.biomesyncd.plist` 의 `CC_OncePerBootBackingData`, `com.apple.siriinferenced.plist` 의 `appIntentsBiomeBookmark`·`appIntentsTranscriptBiomeBookmark` 가 bytes 형식입니다. 이 bytes 안이 NSKeyedArchiver 인지, 바이너리 plist 인지, [프로토콜 버퍼](protobuf.md)인지는 값을 꺼내 앞 바이트를 보고 구분합니다.
 
 plist 는 파일 밖의 다른 아티팩트에도 쓰입니다. iOS 16 에서 [바이옴](../../02-artifacts/app-usage/biome/index.md) 스트림 폴더의 메타데이터 파일은 NSKeyedArchiver 형식 plist 이고, 보관 기간인 `maxAge` 값(흔히 2,419,200초, 곧 28일)을 담습니다[2].
 
@@ -43,8 +43,8 @@ plist 는 파일 밖의 다른 아티팩트에도 쓰입니다. iOS 16 에서 [�
 |---|---|
 | 헤더 | 오프셋 0 부터 8바이트, ASCII `bplist00` |
 | 객체 표 | 객체들이 차례로 놓입니다. 각 객체는 마커 바이트 하나로 시작합니다 |
-| 오프셋 표 | 객체마다 파일 안 바이트 위치를 적은 목록입니다. 칸 하나의 크기는 트레일러가 정합니다 |
-| 트레일러 | 오프셋 칸 크기, 객체 참조 크기, 객체 수, 최상위 객체 번호, 오프셋 표 위치 |
+| 오프셋 표 | 객체마다 파일 안 바이트 위치를 적은 목록입니다. 항목 하나의 크기는 트레일러가 정합니다 |
+| 트레일러 | 오프셋 항목 크기, 객체 참조 크기, 객체 수, 최상위 객체 번호, 오프셋 표 위치 |
 
 객체의 형식은 마커 바이트의 위 4비트가 정하고, 아래 4비트는 형식에 따라 크기나 개수를 나타냅니다[3].
 
@@ -64,7 +64,7 @@ plist 는 파일 밖의 다른 아티팩트에도 쓰입니다. iOS 16 에서 [�
 | `1100 nnnn` | set | 원소. 형식 버전 `1?` 에서만 씀 |
 | `1101 nnnn` | dict | 키와 값 |
 
-array·set·dict 는 값을 바로 품지 않고 다른 객체의 번호를 가리키며, 이 번호 한 칸의 크기가 트레일러의 "객체 참조 크기" 입니다[3]. null 과 set 은 형식 버전 `1?` 전용이라서, 흔히 보는 `bplist00` 파일에서는 나오지 않는다고 보면 됩니다[3]. date 객체는 8바이트 빅 엔디언 실수입니다[3]. 이를 벽시계 시각으로 바꾸는 법은 [시각 값](../value-decoding/time-values.md)에서 다룹니다.
+array·set·dict 는 값을 바로 품지 않고 다른 객체의 번호를 가리키며, 이 번호 하나의 크기가 트레일러의 "객체 참조 크기" 입니다[3]. null 과 set 은 형식 버전 `1?` 전용이라서, 흔히 보는 `bplist00` 파일에서는 나오지 않는다고 보면 됩니다[3]. date 객체는 8바이트 빅 엔디언 실수입니다[3]. 이를 실제 시각(wall clock)으로 바꾸는 법은 [시각 값](../value-decoding/time-values.md)에서 다룹니다.
 
 ### NSKeyedArchiver
 
@@ -117,11 +117,11 @@ $objects  = [ ..., (1번: 주 객체), ... ]
 
 NSKeyedArchiver 안에는 참조가 돌고 돌아 자기 자신으로 돌아오는 구조가 있을 수 있어서, ccl_bplist 는 UID 를 모두 한꺼번에 따라가지 않고 요청할 때만 따라갑니다[1]. 직접 해석기를 짤 때도 같은 이유로 방문한 번호를 기록해 두어야 끝없이 도는 일을 막을 수 있습니다.
 
-바이너리 plist 는 객체 위치를 파일 끝쪽의 오프셋 표와 트레일러에서 찾는 구조입니다[3]. 그래서 파일 끝이 잘리거나 덮이면 객체 표는 남아 있어도 어디서부터 읽어야 할지 알려 주는 정보를 잃습니다. plist 의 삭제나 손상 뒤 복구 동작은 공개된 분석 자료가 없어 검체로 확인해야 합니다. 지운 파일을 되살리는 일반 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+바이너리 plist 는 객체 위치를 파일 끝쪽의 오프셋 표와 트레일러에서 찾는 구조입니다[3]. 그래서 파일 끝이 잘리거나 덮이면 객체 표는 남아 있어도 어디서부터 읽어야 할지 알려 주는 정보를 잃습니다. plist 의 삭제나 손상 뒤 복구 동작은 실제 파일로 확인해야 합니다. 지운 파일을 되살리는 일반 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
 ## 함정
 
-같은 종류의 시각 정보가 plist 마다 다른 형식으로 저장됩니다. `com.apple.appstored.plist` 의 `AppUsageBiomeStartDate` 는 datetime 형식이고, `com.apple.siriinferenced.plist` 의 `BiomeEventLastBackFill` 과 `com.apple.lighthouse.pnr.PnROnDeviceWorker.plist` 의 `com.apple.biome.self.processedstreamLastBookmarkTrackTime` 은 float 형식입니다. float 로 저장된 시각이 어느 시점을 기준으로 센 값인지는 키마다 검체에서 따로 확인합니다. 기준 시점이 다른 값들을 가려내는 법은 [시각 값](../value-decoding/time-values.md)에서 다룹니다.
+같은 종류의 시각 정보가 plist 마다 다른 형식으로 저장됩니다. `com.apple.appstored.plist` 의 `AppUsageBiomeStartDate` 는 datetime 형식이고, `com.apple.siriinferenced.plist` 의 `BiomeEventLastBackFill` 과 `com.apple.lighthouse.pnr.PnROnDeviceWorker.plist` 의 `com.apple.biome.self.processedstreamLastBookmarkTrackTime` 은 float 형식입니다. float 로 저장된 시각이 어느 시점을 기준으로 센 값인지는 키마다 실제 데이터로 따로 확인합니다. 기준 시점이 다른 값들을 가려내는 법은 [시각 값](../value-decoding/time-values.md)에서 다룹니다.
 
 bytes 형식 값을 그냥 넘기면 안쪽에 겹쳐 든 plist·NSKeyedArchiver·protobuf 를 놓칩니다. 도구가 bytes 를 16진수나 base64 로만 보여 주면 그 값을 따로 꺼내 앞 8바이트를 다시 확인합니다.
 

@@ -25,11 +25,11 @@ nav_order: 660
 | 오디오 섬네일 | 기본 외부 볼륨의 `Music/.thumbnails/` | 현행 AOSP 기준 [1] |
 | 예전 섬네일 표 | external.db 의 thumbnails(image_id), videothumbnails(video_id) | 현행 AOSP 가 원본 없는 행을 정리 [1] |
 | 앱 이미지 캐시(Glide) | `*/cache/image_manager_disk_cache/*.*`, `*/*.cnt` | ALEAPP 의 경로 패턴 [4] |
-| 구글 포토 캐시 | [구글 포토](google-photos.md) 페이지 참고 | ALEAPP 검체 |
+| 구글 포토 캐시 | [구글 포토](google-photos.md) 페이지 참고 | ALEAPP 시험 이미지 |
 
-MediaProvider 는 섬네일을 항상 기본 외부 저장소(external_primary)에 저장하므로 [1], SD 카드 같은 다른 볼륨의 사진이라도 섬네일은 기본 볼륨 쪽에 생깁니다. 예전 방식의 `/sdcard/DCIM/.thumbnails` 폴더가 어느 버전까지 쓰였는지, 섬네일 폴더가 어느 버전부터 `Pictures/.thumbnails` 로 바뀌었는지는 검체에서 확인합니다.
+MediaProvider 는 섬네일을 항상 기본 외부 저장소(external_primary)에 저장하므로 [1], SD 카드 같은 다른 볼륨의 사진이라도 섬네일은 기본 볼륨 쪽에 생깁니다. 예전 방식의 `/sdcard/DCIM/.thumbnails` 폴더가 어느 버전까지 쓰였는지, 섬네일 폴더가 어느 버전부터 `Pictures/.thumbnails` 로 바뀌었는지는 실제 기기에서 확인합니다.
 
-삼성 기기의 dumpsys package 라이브러리 목록에는 `SemAudioThumbnail` (`/system/framework/SemAudioThumbnail.jar`)이 있는데, 이름으로 보아 삼성의 오디오 섬네일 라이브러리로 보입니다. 삼성 갤러리의 자체 섬네일 캐시 경로와 형식은 공개된 자료가 없어 검체로 확인해야 합니다.
+삼성 기기의 dumpsys package 라이브러리 목록에는 `SemAudioThumbnail` (`/system/framework/SemAudioThumbnail.jar`)이 있는데, 이름으로 보면 삼성의 오디오 섬네일 라이브러리로 짐작됩니다. 삼성 갤러리의 자체 섬네일 캐시 경로와 형식은 실제 기기로 확인해야 합니다.
 
 ## 구조
 
@@ -45,7 +45,7 @@ MediaProvider 는 섬네일을 항상 기본 외부 저장소(external_primary)�
 
 파일 이름의 숫자는 ContentUris.parseId(uri) 로 얻은 MediaStore files 표의 `_id` 라서 [1], 섬네일 파일을 external.db 의 같은 `_id` 행과 짝지을 수 있습니다. 섬네일은 JPEG 품질 90 으로 저장하고, 먼저 "thumb" 로 시작하는 임시 파일에 쓴 뒤 최종 이름으로 바꿉니다 [1]. 크기는 화면 짧은 변 픽셀 수의 절반을 한 변으로 하는 정사각 범위 안에 맞춥니다(mThumbSize) [1].
 
-예전 API 의 섬네일 종류 상수(@hide)는 MINI_KIND 512×384, FULL_SCREEN_KIND 1024×786, MICRO_KIND 96×96 이고 [2], 오래된 검체나 앱 코드에서 이 크기를 만날 수 있습니다.
+예전 API 의 섬네일 종류 상수(@hide)는 MINI_KIND 512×384, FULL_SCREEN_KIND 1024×786, MICRO_KIND 96×96 이고 [2], 오래된 기기나 앱 코드에서 이 크기를 만날 수 있습니다.
 
 ### `.database_uuid` 파일과 지우는 규칙
 
@@ -61,7 +61,7 @@ MediaProvider 는 섬네일을 항상 기본 외부 저장소(external_primary)�
 
 ### 앱 이미지 캐시
 
-ALEAPP 는 `*/cache/image_manager_disk_cache/*.*` 와 `*/*.cnt` 파일을 이미지 캐시로 모으고, 시각으로는 파일 시스템의 마지막 수정 시각(mtime)만 씁니다 [4]. ALEAPP 가 공개한 검체 10개(Android 10~16)에서 이 모듈은 458~19,294 행을 냈습니다 [4]. 앱 데이터 폴더의 위치는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
+ALEAPP 는 `*/cache/image_manager_disk_cache/*.*` 와 `*/*.cnt` 파일을 이미지 캐시로 모으고, 시각으로는 파일 시스템의 마지막 수정 시각(mtime)만 씁니다 [4]. ALEAPP 가 공개한 시험 이미지 10개(Android 10~16)에서 이 모듈은 458~19,294 행을 냈습니다 [4]. 앱 데이터 폴더의 위치는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
 
 ## 증거로서 의미
 
@@ -72,11 +72,11 @@ ALEAPP 는 `*/cache/image_manager_disk_cache/*.*` 와 `*/*.cnt` 파일을 이미
 | files 표에 없는 `_id` 섬네일이 남아 있으면 원본 행이 지워졌을 가능성 | 언제 지웠는지 |
 | 앱 캐시에 이미지가 있으면 그 앱이 그 이미지를 받아 저장한 적이 있다는 것 | 화면에 실제로 띄웠다는 것 |
 
-"사용자가 이 사진을 봤다" 보다 "`Pictures/.thumbnails` 에 이 `_id` 의 섬네일이 있고, files 표에는 같은 번호가 없다" 처럼 기록이 말하는 만큼만 씁니다.
+"사용자가 이 사진을 봤다" 보다 "`Pictures/.thumbnails` 에 이 `_id` 의 섬네일이 있고, files 표에는 같은 번호가 없다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-섬네일 파일 안에는 시각 값이 없고, 파일 시스템의 시각만 남습니다. 임시 파일에 쓴 뒤 이름을 바꾸는 방식이라 [1], 섬네일 파일의 수정 시각은 섬네일을 만든 무렵으로 볼 수 있지만 원본의 촬영 시각과는 관계가 없습니다. 원본 시각은 같은 `_id` 의 files 행과 원본 EXIF 에서 읽고, ext4·F2FS 의 시각 칸은 [파일 시스템 (ext4·F2FS)](../../01-foundations/storage/filesystems/index.md) 페이지를 봅니다. 앱 이미지 캐시도 ALEAPP 는 mtime 만 보여 주니 [4], 그 시각은 캐시 파일을 쓴 시각이지 이미지를 찍은 시각이 아닙니다.
+섬네일 파일 안에는 시각 값이 없고, 파일 시스템의 시각만 남습니다. 임시 파일에 쓴 뒤 이름을 바꾸는 방식이라 [1], 섬네일 파일의 수정 시각은 섬네일을 만든 무렵으로 볼 수 있지만 원본의 촬영 시각과는 관계가 없습니다. 원본 시각은 같은 `_id` 의 files 행과 원본 EXIF 에서 읽고, ext4·F2FS 의 시각 필드는 [파일 시스템 (ext4·F2FS)](../../01-foundations/storage/filesystems/index.md) 페이지를 봅니다. 앱 이미지 캐시도 ALEAPP 는 mtime 만 보여 주니 [4], 그 시각은 캐시 파일을 쓴 시각이지 이미지를 찍은 시각이 아닙니다.
 
 ## 함정과 한계
 
@@ -102,7 +102,7 @@ FROM thumbs t JOIN files f ON f._id = t.id;
 
 첫 쿼리에 나온 번호는 원본 행이 지워졌을 가능성이 있는 항목이고, deleted_media 표의 옛 번호와도 맞춰 봅니다. `.database_uuid` 의 내용이 현재 DB 와 같은지도 함께 적어 두면, 섬네일이 한꺼번에 지워진 적이 있는지 판단할 때 씁니다.
 
-**공개 도구.** ALEAPP 의 이미지 캐시 모듈(imagemngCache)은 앱의 Glide 캐시 파일을 모아 mtime 과 함께 보여 줍니다 [4]. 도구 결과에서 관심 이미지를 찾은 뒤, 그 파일이 어느 앱 폴더 아래에 있는지로 캐시를 남긴 앱을 가립니다.
+**공개 도구.** ALEAPP 의 이미지 캐시 모듈(imagemngCache)은 앱의 Glide 캐시 파일을 모아 mtime 과 함께 보여 줍니다 [4]. 도구 결과에서 관심 이미지를 찾은 뒤, 그 파일이 어느 앱 폴더 아래에 있는지로 캐시를 남긴 앱을 구분합니다.
 
 ## 교차 검증
 
@@ -114,9 +114,9 @@ FROM thumbs t JOIN files f ON f._id = t.id;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 Android 이미지를 구할 수 있으면 다음을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)에서 Android 이미지를 구할 수 있으면 다음을 풀어 봅니다.
 
-1. `Pictures/.thumbnails`, `Movies/.thumbnails`, `Music/.thumbnails` 가 있는지, 파일 이름이 모두 숫자.jpg 꼴인지 확인합니다.
+1. `Pictures/.thumbnails`, `Movies/.thumbnails`, `Music/.thumbnails` 가 있는지, 파일 이름이 모두 숫자.jpg 형식인지 확인합니다.
 2. 섬네일 번호 가운데 external.db files 표에 없는 번호를 찾고, 그 섬네일이 보여 주는 장면을 기록합니다.
 3. `.database_uuid` 파일의 값을 적고, 섬네일 파일의 수정 시각 분포가 원본 촬영 시각 분포와 어떻게 다른지 봅니다.
 4. 앱 cache 아래 image_manager_disk_cache 폴더를 찾아 어느 앱들이 이미지 캐시를 남겼는지 정리합니다.

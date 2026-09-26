@@ -27,7 +27,7 @@ nav_order: 2310
 
 ## 위치와 버전별 차이
 
-아래 위치는 원노트 종류별로 나눈 것입니다. Windows 버전에 따라 다를 수 있어 검체에서 확인합니다.
+아래 위치는 원노트 종류별로 나눈 것입니다. Windows 버전에 따라 다를 수 있어 실제 기기에서 확인합니다.
 
 ### 데스크톱 원노트 (Microsoft 365·2016 계열)
 
@@ -66,8 +66,8 @@ KAPE 수집 대상 `MicrosoftOneNote.tkape` 는 이 폴더 아래에서 다섯 �
 | `OneNote\16.0\NoteTags\*LiveId.db` | 사용자가 정한 태그입니다 |
 | `OneNote\16.0\RecentSearches\RecentSearches.db` | 최근 검색어입니다. 비어 있을 수 있습니다 |
 
-- 위 설명은 KAPE 대상 작성자 한 사람이 자기 PC 에서 본 것이고, 여러 항목이 "~로 보인다 (appears to)" 수준의 짐작입니다[3]. 공식 문서에 나오는 내용이 아니므로 검체에서 확인합니다.
-- 각 DB 의 표와 칸 이름은 검체에서 확인합니다. DB 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
+- 위 설명은 KAPE 대상 작성자 한 사람이 자기 PC 에서 본 것이고, 여러 항목이 "~로 보인다 (appears to)" 수준의 짐작입니다[3]. 공식 문서에 나오는 내용이 아니므로 실제 기기에서 확인합니다.
+- 각 DB 의 표와 열 이름은 실제 파일에서 확인합니다. DB 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 - 이 KAPE 대상에는 데스크톱 원노트의 `Backup`·`cache` 경로가 없습니다[3].
 - 스토어 앱 폴더 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 
@@ -90,15 +90,15 @@ KAPE 수집 대상 `MicrosoftOneNote.tkape` 는 이 폴더 아래에서 다섯 �
 
 파일 머리는 파일 맨 앞에 있어야 합니다. `.one` 과 `.onetoc2` 는 같은 파일 머리 구조를 씁니다[1].
 
-아래 칸 이름과 크기는 명세를 따릅니다. 오프셋은 명세의 칸 크기를 차례로 더해 계산한 값입니다.
+아래 필드 이름과 크기는 명세를 따릅니다. 오프셋은 명세의 필드 크기를 차례로 더해 계산한 값입니다.
 
-| 오프셋 | 칸 | 크기 | 뜻 |
+| 오프셋 | 필드 | 크기 | 뜻 |
 |---|---|---|---|
-| 0x000 | guidFileType | 16 | 파일 종류. 아래 "첫 16바이트로 가리기" 참고 |
+| 0x000 | guidFileType | 16 | 파일 종류. 아래 "첫 16바이트로 판별하기" 참고 |
 | 0x010 | guidFile | 16 | 이 파일의 고유 ID |
 | 0x020 | guidLegacyFileVersion | 16 | 반드시 0. 무시 |
 | 0x030 | guidFileFormat | 16 | 반드시 `{109ADD3F-911B-49F5-A5D0-1791EDC8AED8}` |
-| 0x040 | ffvLastCodeThatWroteToThisFile | 4 | 0x040~0x04F 의 네 칸은 `.one` 이면 모두 0x2A, `.onetoc2` 면 모두 0x1B |
+| 0x040 | ffvLastCodeThatWroteToThisFile | 4 | 0x040~0x04F 의 네 필드는 `.one` 이면 모두 0x2A, `.onetoc2` 면 모두 0x1B |
 | 0x044 | ffvOldestCodeThatHasWrittenToThisFile | 4 | 위와 같음 |
 | 0x048 | ffvNewestCodeThatHasWrittenToThisFile | 4 | 위와 같음 |
 | 0x04C | ffvOldestCodeThatMayReadThisFile | 4 | 위와 같음 |
@@ -134,13 +134,13 @@ KAPE 수집 대상 `MicrosoftOneNote.tkape` 는 이 폴더 아래에서 다섯 �
 | 0x128 | rgbReserved | 728 | 0. 무시 |
 
 - 파일 머리는 0x128 + 728(0x2D8) = 0x400, 곧 1,024바이트입니다.
-- `fcr` 로 시작하는 칸은 파일 조각 참조 (file chunk reference) 입니다. 파일 안의 다른 영역을 가리킵니다. 8바이트짜리와 12바이트짜리가 있습니다[1].
+- `fcr` 로 시작하는 필드는 파일 조각 참조 (file chunk reference) 입니다. 파일 안의 다른 영역을 가리킵니다. 8바이트짜리와 12바이트짜리가 있습니다[1].
 - fcrZero·fcrNil 은 조각 참조의 특수값입니다.
 - **guidAncestor** 는 목차 파일(`.onetoc2`)의 guidFile 값입니다. `.one` 이면 같은 폴더의 목차 파일을 가리킵니다. `.onetoc2` 면 상위 폴더의 목차 파일을 가리킵니다. 값이 전부 0 이면 가리키는 목차 파일이 없습니다[1].
 - **crcName** 은 파일 이름으로 계산합니다. 이름은 확장자를 포함하고 끝에 널 문자 하나를 붙인 유니코드 문자열입니다. 파일 형식과 관계없이 `.one` 용 CRC 알고리즘을 씁니다[1].
-- **bn 으로 시작하는 네 칸**은 읽을 때 무시해도 되는 칸입니다[1].
+- **bn 으로 시작하는 네 필드**는 읽을 때 무시해도 되는 필드입니다[1].
 
-### 첫 16바이트로 가리기
+### 첫 16바이트로 판별하기
 
 GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 순서가 뒤집힙니다(리틀 엔디언)[2]. GUID 바이트 순서는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
@@ -182,7 +182,7 @@ GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 �
 - ObjectDeclarationFileData3RefCountFND 에는 파일 데이터 참조 문자열(FileDataReference)과 확장자(Extension)가 들어 있습니다. 둘 다 UTF-16 문자열입니다[2].
 - 파일 내용은 FileDataStoreObject 에 들어 있고, 구조는 아래와 같습니다[2]. 오프셋은 크기를 더해 계산한 값입니다.
 
-| 오프셋 | 칸 | 크기 | 뜻 |
+| 오프셋 | 필드 | 크기 | 뜻 |
 |---|---|---|---|
 | 0x00 | guidHeader | 16 | 머리 GUID |
 | 0x10 | cbLength | 8 | 파일 데이터 길이 |
@@ -191,13 +191,13 @@ GUID 는 디스크에 적힐 때 앞 세 부분(4·2·2바이트)의 바이트 �
 | 0x24 | 파일 데이터 | cbLength | 넣은 파일의 내용 |
 | 영역 끝 − 16 | guidFooter | 16 | 꼬리 GUID. 조각 참조가 가리키는 영역의 마지막 16바이트 |
 
-guidHeader·guidFooter 의 실제 GUID 값은 검체의 첨부 파일에서 읽어 둡니다.
+guidHeader·guidFooter 의 실제 GUID 값은 실제 전자 필기장의 첨부 파일에서 읽어 둡니다.
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
-- **원노트 파일이라는 것.** 첫 16바이트로 구역 파일인지 목차 파일인지 가립니다. 확장자와 관계없습니다.
+- **원노트 파일이라는 것.** 첫 16바이트로 구역 파일인지 목차 파일인지 판별합니다. 확장자와 관계없습니다.
 - **구역이 속한 전자 필기장.** `.one` 의 guidAncestor 를 `.onetoc2` 의 guidFile 과 맞추면 어느 필기장의 구역인지 이을 수 있습니다[1].
 - **파일이 바뀐 횟수.** nFileVersionGeneration 은 파일이 바뀐 횟수입니다[1].
 - **페이지의 내용 속성.** 제목 문자열, 작성자 문자열, 시각 값을 꺼낼 수 있습니다[2].
@@ -211,8 +211,8 @@ guidHeader·guidFooter 의 실제 GUID 값은 검체의 첨부 파일에서 읽�
 
 - **누가 썼는지.** Author 는 원노트에 설정한 이름 문자열입니다. 계정과 사람은 다를 수 있습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **프로그램을 썼다는 것.** 원노트 실행 파일이 있어도 프로필에 흔적이 하나도 없을 수 있습니다. 설치 기록만으로 사용을 말할 수 없습니다.
-- **파일 머리로 본 시각.** 파일 머리에는 날짜·시각 칸이 없습니다. 바뀐 횟수와 바뀔 때마다 새로 생기는 GUID 만 있습니다[1].
-- **파일을 만든 프로그램의 버전.** bn 칸 네 개에 빌드 번호가 적힙니다. 하지만 명세상 무시해도 되는 칸이고[1], 버전 추정에 쓸 수 있는지는 알려져 있지 않습니다.
+- **파일 머리로 본 시각.** 파일 머리에는 날짜·시각 필드가 없습니다. 바뀐 횟수와 바뀔 때마다 새로 생기는 GUID 만 있습니다[1].
+- **파일을 만든 프로그램의 버전.** bn 필드 네 개에 빌드 번호가 적힙니다. 하지만 명세상 무시해도 되는 필드이고[1], 버전 추정에 쓸 수 있는지는 알려져 있지 않습니다.
 - **사용자가 그 페이지를 열어 봤다는 것.** 원노트는 캐시를 다시 받아 새로 만들 수 있습니다. 캐시에 페이지나 첨부 파일이 있다는 것만으로 사용자가 그 페이지를 봤다고 말하기 어렵습니다.
 - **첨부 원본이 지금도 그 경로에 있다는 것.** `pathSource` 는 넣을 때의 경로입니다.
 - **`.one` 안의 SourceFilepath 가 API 의 `pathSource` 와 같은 값이라는 것.** 두 값이 같은 값인지는 알려져 있지 않습니다.
@@ -229,15 +229,15 @@ guidHeader·guidFooter 의 실제 GUID 값은 검체의 첨부 파일에서 읽�
 | 4바이트 | Time32 | 1980-01-01 00:00:00 | 초 | 1980-01-01 부터 초를 더합니다 |
 
 - pyOneNote 는 속성 이름에 `time` 이 든 속성만 시각으로 풉니다. TopologyCreationTimeStamp, CreationTimeStamp, LastModifiedTimeStamp, LastModifiedTime 이 여기에 듭니다. NoteTagCreated, NoteTagCompleted, TaskTagDueDate 는 이름에 `time` 이 없어서 pyOneNote 가 시각으로 풀지 않습니다[2]. 이 값들이 시각인지는 알려져 있지 않으므로 값 길이를 보고 따로 풀어 봅니다.
-- 어느 속성이 몇 바이트인지는 값 길이를 보고 가립니다.
+- 어느 속성이 몇 바이트인지는 값 길이를 보고 판별합니다.
 - Time32 는 초 단위이고 FILETIME 은 100ns 단위라서 같은 사건이라도 두 값의 정밀도가 다릅니다. 두 값이 초 아래에서 어긋나도 이상한 일이 아닙니다.
-- Time32 의 기준 시간대는 검체로 확인합니다. pyOneNote 코드 주석은 기준을 "1980-01-01 UTC" 로 적었지만, 계산할 때는 시간대를 붙이지 않습니다[2]. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다.
+- Time32 의 기준 시간대는 실제 데이터로 확인합니다. pyOneNote 코드 주석은 기준을 "1980-01-01 UTC" 로 적었지만, 계산할 때는 시간대를 붙이지 않습니다[2]. 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다.
 - FILETIME·Time32 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 속성 시각이 어떤 동작에서 바뀌는지는 알려져 있지 않아, 실습처럼 시험해 확인합니다.
 
-파일 머리에는 시각이 없지만 순서를 알려 주는 칸이 있습니다[1].
+파일 머리에는 시각이 없지만 순서를 알려 주는 필드가 있습니다[1].
 
-| 칸 | 언제 바뀌나 |
+| 필드 | 언제 바뀌나 |
 |---|---|
 | guidDenyReadFileVersion | 파일 머리와 안 쓰는 블록을 뺀 파일 내용이 바뀔 때 |
 | guidFileVersion | cTransactionsInLog 나 guidDenyReadFileVersion 이 바뀔 때 |
@@ -252,18 +252,18 @@ guidFile 이 같은 두 파일을 찾았다면 nFileVersionGeneration 을 비교
 - **데스크톱 원노트 위치는 공식 문서가 아닌 다른 프로그램의 자료에 기댑니다.** `Backup`·`cache` 경로는 다른 프로그램의 도움말과 소스 코드에 나오는 경로입니다[4][5]. 증거 PC 에서 실제 폴더를 확인합니다.
 - **수집 도구의 대상 범위를 봅니다.** KAPE 대상 `MicrosoftOneNote.tkape` 는 스토어 앱 폴더만 잡습니다. 데스크톱 원노트의 `Backup`·`cache` 와 `Documents\OneNote Notebooks` 는 따로 수집합니다.
 - **증거 PC 에서 원노트를 열지 않습니다.** 원노트는 캐시를 다시 받아 새로 만들 수 있습니다. 폴더를 먼저 복사합니다. 수집 순서는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
-- **스토어 앱 DB 설명은 한 사람의 관찰입니다.** 필기장 글 전체가 검색 색인에 있다는 설명도 KAPE 대상 작성자의 관찰입니다. 표와 칸을 직접 열어 확인합니다.
+- **스토어 앱 DB 설명은 한 사람의 관찰입니다.** 필기장 글 전체가 검색 색인에 있다는 설명도 KAPE 대상 작성자의 관찰입니다. 표와 열을 직접 열어 확인합니다.
 - **설치와 사용을 섞지 않습니다.** 원노트가 깔려 있어도 프로필에 흔적이 없을 수 있습니다.
-- **시각 형식이 두 가지입니다.** 4바이트 Time32 를 FILETIME 으로 풀거나 반대로 풀면 엉뚱한 날짜가 나옵니다. Time32 의 시간대 기준도 검체로 확인합니다.
-- **bn 칸은 명세가 무시하라고 한 칸입니다.** 이 값으로 프로그램 버전을 단정하지 않습니다.
+- **시각 형식이 두 가지입니다.** 4바이트 Time32 를 FILETIME 으로 풀거나 반대로 풀면 엉뚱한 날짜가 나옵니다. Time32 의 시간대 기준도 실제 데이터로 확인합니다.
+- **bn 필드는 명세가 무시하라고 한 필드입니다.** 이 값으로 프로그램 버전을 단정하지 않습니다.
 - **crcName 과 cbExpectedFileLength 로 결론을 내지 않습니다.** 원노트 밖에서 이름을 바꾸면 crcName 이 안 맞을 것이라는 짐작과, cbExpectedFileLength 가 실제 크기와 다르면 잘린 파일일 것이라는 짐작은 검증된 것이 아닙니다. 명세에는 cbExpectedFileLength 가 파일 크기라는 정의만 있습니다[1]. 두 짐작은 아래 실습에서 시험해 봅니다.
-- **검체로 확인할 흔적이 더 있습니다.** 전자 필기장 목록을 담는 레지스트리 값, 필기장 안에서 지운 페이지를 보관하는 곳, 전자 필기장 내보내기 파일, 캐시 파일의 내부 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+- **실제 기기에서 확인할 흔적이 더 있습니다.** 전자 필기장 목록을 담는 레지스트리 값, 필기장 안에서 지운 페이지를 보관하는 곳, 전자 필기장 내보내기 파일, 캐시 파일의 내부 형식은 설명한 공개 분석 자료가 없으므로 실제 기기에서 확인합니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 명세의 값으로 만든 `.one` 파일 머리의 앞 64바이트 예시입니다. 실제 검체에서 나온 값이 아닙니다. guidFile 은 파일마다 다르므로 `??` 로 비워 두었습니다.
+아래는 명세의 값으로 만든 `.one` 파일 머리의 앞 64바이트 예시입니다. 실제 파일에서 나온 값이 아닙니다. guidFile 은 파일마다 다르므로 `??` 로 비워 두었습니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -311,7 +311,7 @@ guidFile 이 같은 두 파일을 찾았다면 nFileVersionGeneration 을 비교
 | [스토어 앱 설치 목록](../system-account/appx-staterepository.md) | 스토어 앱 원노트가 설치됐는지 봅니다 |
 | [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) | 스토어 앱 원노트 DB 를 읽는 법을 봅니다 |
 | [마스터 파일 테이블](../filesystem/mft.md) | `.one`·`.onetoc2`·캐시 `.bin` 의 파일 시스템 시각을 봅니다 |
-| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `.one` 이 남았는지 봅니다. nFileVersionGeneration 으로 순서를 가립니다 |
+| [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) | 예전 시점의 `.one` 이 남았는지 봅니다. nFileVersionGeneration 으로 순서를 판별합니다 |
 | [인쇄 흔적](../external-devices/print-spooler-spl-shd.md) | 원노트가 깔린 PC 에는 원노트 가상 프린터가 있을 수 있습니다. 원노트로 보낸 인쇄가 남았는지 봅니다 |
 
 첨부 파일의 출처를 따지는 흐름은 [이 파일은 어디서 왔나](../../04-scenarios/activity/file-origin.md) 에서 다룹니다.

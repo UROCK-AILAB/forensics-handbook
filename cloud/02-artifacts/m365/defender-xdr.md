@@ -14,7 +14,7 @@ Microsoft Defender XDR 은 메일·클라우드 앱·계정·단말의 보안 �
 
 Defender XDR 에는 성격이 다른 기록 두 가지가 있습니다. 하나는 메일 처리, 클라우드 앱 활동, 로그인처럼 일어난 일을 그대로 적은 이벤트 테이블이고, 다른 하나는 탐지 엔진이 그 이벤트를 판정해 만든 경고입니다. 경고는 개별 증거 조각이고, Defender XDR 이 서로 관련된 경고를 묶어 인시던트 (incident) 를 만듭니다[8].
 
-이벤트 테이블은 조직이 켠 Defender 서비스가 채웁니다. 이 쪽에서 다루는 Microsoft 365 쪽 테이블은 아래와 같습니다[3].
+이벤트 테이블은 조직이 켠 Defender 서비스가 채웁니다. 이 페이지에서 다루는 Microsoft 365 쪽 테이블은 아래와 같습니다[3].
 
 | 테이블 | 담는 내용 |
 |---|---|
@@ -97,13 +97,13 @@ Graph 로 받은 경고 한 건에서 조사에 쓰는 속성은 아래와 같�
 - 경고가 없다고 해서 활동이 없었던 것은 아닙니다. 서비스를 배포하지 않았거나 커넥터를 켜지 않았으면 테이블 자체가 비어 있습니다[4][5].
 - 고급 헌팅 30일 창 밖의 원시 이벤트는 조회되지 않으므로, 오래된 기간의 "결과 없음" 은 부재의 증거가 되지 못합니다[1].
 
-보고서에는 "2026-09-01 02:14 UTC 에 Defender for Office 365 가 이 메일을 피싱으로 판정해 격리했다는 경고가 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2026-09-01 02:14 UTC 에 Defender for Office 365 가 이 메일을 피싱으로 판정해 격리했다는 경고가 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
 고급 헌팅은 모든 데이터를 UTC 로 저장하고 쿼리도 UTC 로 씁니다[1]. 다만 포털은 결과를 사용자가 설정한 시간대로 바꿔 보여 주므로, 화면에서 옮겨 적은 시각과 내보낸 파일의 시각이 다를 수 있습니다[1]. 각 테이블의 `Timestamp` 는 이벤트를 기록한 시각입니다[4][5][6].
 
-경고에는 시각이 다섯 개 있습니다[7]. `createdDateTime` 은 Defender 가 경고를 만든 시각이고, `firstActivityDateTime` 은 경고와 관련된 가장 이른 활동, `lastUpdateDateTime` 은 경고를 마지막으로 고친 시각, `resolvedDateTime` 은 해결한 시각입니다. 활동은 경고를 만들기 전에 일어나므로 `firstActivityDateTime` 이 `createdDateTime` 보다 앞서는 것이 정상입니다. `lastActivityDateTime` 은 이름으로는 가장 늦은 활동이지만 설명 문구가 "The oldest activity associated with the alert" 로 되어 있어 이름과 어긋나므로, 검체에서 `firstActivityDateTime` 과 비교해 어느 쪽이 늦은지 확인한 뒤 해석합니다[7]. Graph 값의 시간대는 값 끝의 오프셋 표기로 확인합니다.
+경고에는 시각이 다섯 개 있습니다[7]. `createdDateTime` 은 Defender 가 경고를 만든 시각이고, `firstActivityDateTime` 은 경고와 관련된 가장 이른 활동, `lastUpdateDateTime` 은 경고를 마지막으로 고친 시각, `resolvedDateTime` 은 해결한 시각입니다. 활동은 경고를 만들기 전에 일어나므로 `firstActivityDateTime` 이 `createdDateTime` 보다 앞서는 것이 정상입니다. `lastActivityDateTime` 은 이름으로는 가장 늦은 활동이지만 설명 문구가 "The oldest activity associated with the alert" 로 되어 있어 이름과 어긋나므로, 실제 데이터에서 `firstActivityDateTime` 과 비교해 어느 쪽이 늦은지 확인한 뒤 해석합니다[7]. Graph 값의 시간대는 값 끝의 오프셋 표기로 확인합니다.
 
 `EmailEvents` 를 스트리밍 API 로 받은 경우 판정이나 배달 위치가 바뀔 때마다 새 레코드가 생기므로, 같은 메일·수신자에 행이 여러 개 있으면 시간 순서대로 판정이 바뀐 과정입니다[5]. 로그 시각 전반은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)에서 다룹니다.
 

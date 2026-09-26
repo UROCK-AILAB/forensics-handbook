@@ -10,7 +10,7 @@ Linux 방화벽 규칙은 커널 메모리에 올라가 동작하고, 디스크�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-패킷을 거르는 일은 커널의 넷필터 (netfilter) 가 합니다. iptables·nftables 는 넷필터에 규칙을 넣는 명령이고, ufw 와 firewalld 는 그 위에서 규칙을 대신 만들어 주는 관리 도구입니다. 조사에서 방화벽을 보는 까닭은 두 가지입니다. 하나는 어떤 포트를 열고 막았는지, 누가 규칙을 바꿨는지 같은 설정 변경의 흔적이고, 다른 하나는 LOG 규칙이 남긴 패킷 한 줄 한 줄의 통신 흔적입니다.
+패킷을 거르는 일은 커널의 넷필터 (netfilter) 가 합니다. iptables·nftables 는 넷필터에 규칙을 넣는 명령이고, ufw 와 firewalld 는 그 위에서 규칙을 대신 만들어 주는 관리 도구입니다. 조사에서 방화벽을 보는 이유는 두 가지입니다. 하나는 어떤 포트를 열고 막았는지, 누가 규칙을 바꿨는지 같은 설정 변경의 흔적이고, 다른 하나는 LOG 규칙이 남긴 패킷 한 줄 한 줄의 통신 흔적입니다.
 
 iptables 규칙은 기본으로 디스크에 저장되지 않습니다[1]. 재부팅 뒤에도 규칙을 쓰려면 `iptables-save` 결과를 어딘가에 두었다가 부팅 때 다시 넣어야 하고, 이 도구에는 정해진 저장 경로가 없습니다[1]. 그래서 디스크 이미지에서 찾은 규칙 파일은 "누군가 저장해 둔 규칙" 이지 "그 시각에 동작하던 규칙" 과 같지 않을 수 있습니다.
 
@@ -30,12 +30,12 @@ firewalld 도 설정을 두 층으로 나눕니다. 런타임 설정 (runtime co
 | firewalld | 전체 설정 | `/etc/firewalld/firewalld.conf`[5][7] |
 | firewalld | 시작 인자 | `/etc/sysconfig/firewalld` 의 `FIREWALLD_ARGS=`[7] |
 | firewalld | 자체 로그(디버그 메시지) | `/var/log/firewalld`[4] |
-| nftables | 규칙 파일 | 패키지가 정함. 검체의 nftables 유닛 파일 `ExecStart` 가 읽는 파일로 확인 |
+| nftables | 규칙 파일 | 패키지가 정함. 대상 시스템의 nftables 유닛 파일 `ExecStart` 가 읽는 파일로 확인 |
 | 모든 도구 | LOG 규칙이 남긴 커널 줄 | 저널, rsyslog 파일([커널 로그](../system-info/kernel-log.md) 참고) |
 
 `/usr/lib/firewalld` 의 파일은 패키지가 넣은 것이라 패키지를 업데이트하면 바뀐 내용이 사라집니다[4]. 관리자가 미리 정의된 영역을 고치려면 이 파일을 `/etc/firewalld` 의 같은 자리로 복사해서 고치고, `/etc/firewalld` 의 파일이 기본 파일보다 앞섭니다[4]. 그래서 `/etc/firewalld/zones/` 에 있는 파일은 누군가 그 영역을 바꿨거나 새 영역을 만들었다는 단서가 됩니다.
 
-검체가 어느 도구를 썼는지는 위 경로 가운데 어느 것이 있는지와, 어떤 방화벽 서비스가 켜져 있었는지로 가립니다. firewalld 유닛은 `WantedBy=multi-user.target` 이고 `iptables.service`, `ip6tables.service`, `ebtables.service`, `ipset.service` 와 함께 돌 수 없게(`Conflicts=`) 되어 있습니다[7]. 서비스가 켜진 흔적을 읽는 법은 [systemd 서비스와 타이머](../persistence/systemd-units.md) 에서 다룹니다.
+대상 시스템이 어느 도구를 썼는지는 위 경로 가운데 어느 것이 있는지와, 어떤 방화벽 서비스가 켜져 있었는지로 판별합니다. firewalld 유닛은 `WantedBy=multi-user.target` 이고 `iptables.service`, `ip6tables.service`, `ebtables.service`, `ipset.service` 와 함께 돌 수 없게(`Conflicts=`) 되어 있습니다[7]. 서비스가 켜진 흔적을 읽는 법은 [systemd 서비스와 타이머](../persistence/systemd-units.md) 에서 다룹니다.
 
 firewalld 는 기본으로 nftables 를 백엔드로 쓰고(`FirewallBackend=nftables`), iptables 백엔드는 앞으로 없앨 예정입니다[5][7]. NetworkManager 도 공유 연결의 마스커레이드 (masquerade) 규칙을 넣을 때 `[main]` 절의 `firewall-backend` 로 iptables, nftables, none 가운데 하나를 고르고, 값을 비워 두면 스스로 감지해 고릅니다[12].
 
@@ -127,7 +127,7 @@ IPv6 줄은 `LEN= TC= HOPLIMIT= FLOWLBL=` 로 헤더를 적고, 프로토콜은 
 **증명하는 것**
 
 - 저장 파일이나 영역 파일에 적힌 규칙이 그 파일을 쓴 시점에 저장되어 있었다는 것. 어떤 포트를 열었는지, 기본 정책이 무엇이었는지, 특정 출발지만 허용했는지를 보여 줍니다.
-- LOG 규칙의 줄이 있으면, 그 시각에 해당 인터페이스로 그 출발지·도착지·포트의 패킷이 그 규칙에 걸렸다는 것[10]. 접두어로 어느 규칙이 남긴 줄인지 가립니다.
+- LOG 규칙의 줄이 있으면, 그 시각에 해당 인터페이스로 그 출발지·도착지·포트의 패킷이 그 규칙에 걸렸다는 것[10]. 접두어로 어느 규칙이 남긴 줄인지 확인합니다.
 - `/etc/firewalld/zones/` 에 파일이 있거나 `.old` 파일이 있으면 그 영역을 누군가 바꿨거나 새로 만들었다는 것[4][8].
 - 다른 프로그램이 넣은 규칙의 표지. wg-quick 은 iptables 규칙에 `-m comment --comment "wg-quick(8) rule for 인터페이스"` 주석을 달고, nft 를 쓰면 `wg-quick-인터페이스` 표를 만듭니다[13]. 이 표지로 WireGuard 사용 흔적을 찾는 법은 [VPN](vpn.md) 에서 다룹니다.
 
@@ -142,7 +142,7 @@ IPv6 줄은 `LEN= TC= HOPLIMIT= FLOWLBL=` 로 헤더를 적고, 프로토콜은 
 
 | 시각 | 바뀌는 때 | 시간대 |
 |---|---|---|
-| iptables-save 머리의 `on` 시각 | 파일을 저장할 때 | 시간대 표기가 없음. dissect 는 검체 시간대의 현지 시각으로 해석[1] |
+| iptables-save 머리의 `on` 시각 | 파일을 저장할 때 | 시간대 표기가 없음. dissect 는 대상 시스템 시간대의 현지 시각으로 해석[1] |
 | 규칙·설정 파일의 수정 시각 | 그 파일을 마지막으로 쓸 때 | 파일 시스템 시각 값(UTC 기준 epoch) |
 | firewalld `영역.xml.old` 수정 시각 | 복사 때 원래 파일의 수정 시각을 그대로 옮김 | 같음[8] |
 | 커널 로그 줄 앞 시각 | 저널이나 rsyslog 가 줄을 받을 때 붙임 | 받은 쪽의 형식을 따름 |
@@ -170,7 +170,7 @@ IPv6 줄은 `LEN= TC= HOPLIMIT= FLOWLBL=` 로 헤더를 적고, 프로토콜은 
 
 1. 이미지를 읽기 전용으로 붙이고 위 표의 경로를 모두 찾습니다. `/etc/firewalld/zones/*.xml` 과 `*.xml.old` 는 수정 시각과 함께 목록으로 남깁니다.
 2. iptables-save 형식 파일은 머리 줄의 판과 저장 시각을 적고, `*표` 줄마다 정책 줄과 `-A` 규칙을 나눠 봅니다. `-j ACCEPT` 로 연 포트, 출발지를 좁힌 규칙(`-s`), 계수가 0 이 아닌 규칙을 먼저 봅니다.
-3. firewalld 는 `/etc/firewalld/zones/영역.xml` 과 `.xml.old` 를 `diff` 로 비교하고, 같은 이름의 `/usr/lib/firewalld/zones/영역.xml` 과도 비교해 기본값에서 바뀐 부분을 가립니다.
+3. firewalld 는 `/etc/firewalld/zones/영역.xml` 과 `.xml.old` 를 `diff` 로 비교하고, 같은 이름의 `/usr/lib/firewalld/zones/영역.xml` 과도 비교해 기본값에서 바뀐 부분을 구분합니다.
 4. `/etc/firewalld/firewalld.conf` 에서 `DefaultZone`, `LogDenied`, `FirewallBackend` 를 기본값과 비교합니다.
 5. LOG 규칙의 접두어(`--log-prefix` 값, 풍부한 규칙의 `log` 요소)를 모은 뒤, 그 문자열로 저널과 rsyslog 파일을 검색합니다. ufw 로그의 접두어도 `/etc/ufw/*.rules` 의 `--log-prefix` 값에서 확인합니다.
 
@@ -195,7 +195,7 @@ IPv6 줄은 `LEN= TC= HOPLIMIT= FLOWLBL=` 로 헤더를 적고, 프로토콜은 
 
 NIST CFReDS 등에 공개된 Linux 디스크·메모리 이미지로 다음 질문을 풀어 봅니다.
 
-1. 검체에 있는 방화벽 관리 도구는 무엇이고, 어느 서비스가 켜져 있었나?
+1. 대상 시스템에 있는 방화벽 관리 도구는 무엇이고, 어느 서비스가 켜져 있었나?
 2. iptables-save 형식 파일이 있다면 머리 줄의 저장 시각과 파일 수정 시각은 서로 맞는가?
 3. `/etc/firewalld/zones/` 에 있는 영역 파일은 `/usr/lib/firewalld/zones/` 의 같은 파일과 무엇이 다른가? `.old` 파일과 비교하면 마지막 변경은 무엇인가?
 4. 저널이나 rsyslog 파일에 LOG 규칙 줄이 있다면, 가장 많이 막힌 출발지와 도착 포트는 무엇인가?

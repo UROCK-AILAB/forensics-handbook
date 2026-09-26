@@ -16,21 +16,21 @@ has_toc: false
 
 경로 하나를 고르기 전에 앱별 데이터 사용량 DB 인 `DataUsage.sqlite` 로 어느 앱이 셀룰러로 많이 보냈는지를 먼저 보면 범위를 좁힐 수 있습니다 [1]. 로컬 백업에서는 `WirelessDomain :: Library/Databases/DataUsage.sqlite` 로 보입니다. 다만 이 DB 는 Wi-Fi 사용량을 기록하지 않습니다 [1]. 표 구조와 시각 해석은 [앱별 데이터 사용량 (DataUsage.sqlite)](../../../02-artifacts/network/data-usage.md) 에서 다룹니다.
 
-이 묶음의 페이지는 모두 기록이 말하는 만큼만 씁니다. 송신량이나 업로드 기록은 그 시간대에 그 앱이 무엇을 보냈다는 기록일 뿐이고, 어떤 파일을 누구에게 넘겼는지나 넘긴 의도는 다른 흔적과 함께 판단합니다.
+이 묶음의 페이지는 모두 기록으로 확인되는 만큼만 씁니다. 송신량이나 업로드 기록은 그 시간대에 그 앱이 무엇을 보냈다는 기록일 뿐이고, 어떤 파일을 누구에게 넘겼는지나 넘긴 의도는 다른 흔적과 함께 판단합니다.
 
 ## 한눈에 보기
 
 | 경로 | 주로 볼 곳 | 버전 조건 | 알려 주는 것 |
 |---|---|---|---|
-| 메신저 | `sms.db` 의 `attachment`·`message` 표, 다른 회사 메신저는 앱 DB 와 `DataUsage.sqlite` | `sms.db` 칸 이름은 검체에서 확인 | 보낸 첨부의 이름·형식·크기, 앱 DB 를 못 읽을 때는 앱별 셀룰러 송신량과 시각 [1] |
-| 클라우드 | iCloud Drive 의 `client.db`·`server.db`, `Photos.sqlite` 의 업로드·공유 표, iCloud 백업 설정 plist | `client.db` 해석은 iOS 13.7 에서 시험한 결과 [3], 표와 칸 이름은 검체에서 확인 | 파일 앱으로 iCloud Drive 에 올린 흔적 [3], 공유 참여자, iCloud 백업을 켰는지와 마지막 백업 시각 값 |
+| 메신저 | `sms.db` 의 `attachment`·`message` 표, 다른 회사 메신저는 앱 DB 와 `DataUsage.sqlite` | `sms.db` 열 이름은 실제 데이터로 확인 | 보낸 첨부의 이름·형식·크기, 앱 DB 를 못 읽을 때는 앱별 셀룰러 송신량과 시각 [1] |
+| 클라우드 | iCloud Drive 의 `client.db`·`server.db`, `Photos.sqlite` 의 업로드·공유 표, iCloud 백업 설정 plist | `client.db` 해석은 iOS 13.7 에서 시험한 결과 [3], 표와 열 이름은 실제 데이터로 확인 | 파일 앱으로 iCloud Drive 에 올린 흔적 [3], 공유 참여자, iCloud 백업을 켰는지와 마지막 백업 시각 값 |
 | 메일 | 기본 메일 앱의 `Envelope Index`·`Protected Index` 와 `.emlx` 파일, 계정·메일함 설정 plist | DB 해석은 iOS 12·13 기준 [4], 로컬 백업에는 이 DB 가 보이지 않을 수 있음 | 보낸편지함에 있는 메일의 겉봉 정보와 받는 사람, 본문 앞부분 [4] |
 | 에어드롭 | sysdiagnose 의 통합 로그(AirDrop 범주), `com.apple.sharingd.plist` | 로그 해석 자료는 iOS 15.3.1 에서 시험 [2] | 받는 쪽 기기에서 보낸 사람 전화번호 후보 [2], 보낸 쪽에 남는 기록은 공개 자료 없음 |
 | PC 동기화 | "이 컴퓨터를 신뢰하겠습니까" 알림과 신뢰 기록, 백업 폴더의 `Info.plist`·`Manifest.plist`, `com.apple.MobileBackup.plist` | iOS 16 이상은 백업할 때도 신뢰 알림이 뜸 [6] | 신뢰한 컴퓨터가 콘텐츠에 접근할 수 있었는지 [6], 백업을 만든 기기와 시각 |
 
 ## 읽는 순서
 
-1. [메신저로 (Messenger)](messenger.md) — 기본 메시지 앱에서 보낸 첨부를 가리는 칸과, 다른 회사 메신저의 DB 를 못 읽을 때 송신량으로 대신 보는 법을 다룹니다.
+1. [메신저로 (Messenger)](messenger.md) — 기본 메시지 앱에서 보낸 첨부를 구분하는 열과, 다른 회사 메신저의 DB 를 못 읽을 때 송신량으로 대신 보는 법을 다룹니다.
 2. [클라우드로 (Cloud)](cloud.md) — iCloud Drive 업로드 기록, iCloud 사진의 업로드·공유 표, iCloud 백업 설정을 차례로 봅니다.
 3. [메일로 (Email)](email.md) — 메일 DB 두 개가 나눠 담는 정보와, 백업만 있을 때 볼 수 있는 계정·메일함 설정을 다룹니다.
 4. [에어드롭으로 (AirDrop)](airdrop.md) — 에어드롭이 상대를 찾는 원리와, 받는 쪽 로그에서 보낸 사람을 좁히는 흔적을 다룹니다.
@@ -49,7 +49,7 @@ has_toc: false
 - [sysdiagnose 묶음 (sysdiagnose)](../../../01-foundations/backups/sysdiagnose.md)
 - [누구와 연락을 주고받았나 (Communication)](../../activity/communication.md)
 - [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)
-- [포렌식 보고서 (Forensic Report)](../../../03-techniques/reporting/forensic-report.md) — 기록이 말하는 만큼만 쓰는 법
+- [포렌식 보고서 (Forensic Report)](../../../03-techniques/reporting/forensic-report.md) — 기록으로 확인되는 만큼만 쓰는 법
 
 ## 참고 문헌
 

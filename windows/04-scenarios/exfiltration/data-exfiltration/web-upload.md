@@ -13,7 +13,7 @@ nav_order: 3640
 
 앱별 송신량을 읽는 법은 이 페이지의 "SRUM 네트워크 사용량 읽기" 에서 다룹니다. 다른 하위 페이지도 이 절을 가리킵니다.
 
-"(현장 관찰)" 을 붙인 내용은 실제 사건 검체를 다루며 적어 둔 관찰입니다.
+"(현장 관찰)" 을 붙인 내용은 실제 사건 증거물을 다루며 적어 둔 관찰입니다.
 
 ## 조사 질문
 
@@ -36,7 +36,7 @@ MITRE ATT&CK 은 이 경로를 웹 서비스로 빼내기 (T1567 Exfiltration Ov
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | 사용한 브라우저 | 브라우저마다 방문 기록을 두는 곳과 형식이 다릅니다. [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 사용자 프로필 안의 브라우저 폴더를 봅니다. |
 | 사용자 SID | SRUM 은 사용자를 SID 로 적습니다[2]. SID 와 사용자 이름의 짝은 [사용자 프로필 목록](../../../02-artifacts/system-account/profilelist.md) 에서 찾습니다. |
@@ -59,7 +59,7 @@ MITRE ATT&CK 은 이 경로를 웹 서비스로 빼내기 (T1567 Exfiltration Ov
 
 방문 기록이 없다고 브라우저를 안 썼다고 단정하지 않습니다. 시크릿 모드로 썼을 수 있습니다([시크릿 모드로 무엇을 했나](../../activity/private-browsing.md)). SRUM 은 브라우저 안의 기록이 아니라 윈도 폴더에 있는 DB 라서, 방문 기록이 없어도 SRUM 은 따로 봅니다.
 
-- 웹 사용 전체를 되짚는 순서는 [웹 사용 행위 재구성](../../activity/web-activity.md) 에서 다룹니다.
+- 웹 사용 전체를 재구성하는 순서는 [웹 사용 행위 재구성](../../activity/web-activity.md) 에서 다룹니다.
 
 ## SRUM 네트워크 사용량 읽기
 
@@ -71,11 +71,11 @@ DB 파일은 `C:\Windows\System32\sru\SRUDB.dat` 이고[2], 형식은 ESE 입니
 
 - 같은 DB 의 앱 자원 사용량 표는 `{D10CA2FE-6FCF-4F6D-848E-B2E99266FA89}` 입니다[2]. 같은 시간대의 브라우저 행을 이 표에서도 찾아 함께 봅니다.
 
-### 네트워크 데이터 사용량 표의 칸
+### 네트워크 데이터 사용량 표의 열
 
-표의 칸은 AutoIncId, TimeStamp, AppId, UserId, InterfaceLuid, L2ProfileId, L2ProfileFlags, BytesSent, BytesRecvd 입니다[2]. 송신량을 뽑을 때 쓰는 칸은 아래와 같습니다.
+표의 열은 AutoIncId, TimeStamp, AppId, UserId, InterfaceLuid, L2ProfileId, L2ProfileFlags, BytesSent, BytesRecvd 입니다[2]. 송신량을 뽑을 때 쓰는 열은 아래와 같습니다.
 
-| 칸 | 읽는 법 |
+| 열 | 읽는 법 |
 |---|---|
 | TimeStamp | OLE Automation 날짜(부동소수점) 값입니다[2]. |
 | AppId | SruDbIdMapTable 의 IdIndex 를 가리킵니다[2]. |
@@ -85,7 +85,7 @@ DB 파일은 `C:\Windows\System32\sru\SRUDB.dat` 이고[2], 형식은 ESE 입니
 
 ### 앱과 사용자 찾기 (SruDbIdMapTable)
 
-AppId·UserId 값과 IdIndex 가 같은 행을 SruDbIdMapTable 에서 찾으면 그 행의 IdBlob 칸에 실제 값이 있고[2], IdBlob 을 읽는 법은 IdType 칸에 따라 다릅니다[2].
+AppId·UserId 값과 IdIndex 가 같은 행을 SruDbIdMapTable 에서 찾으면 그 행의 IdBlob 열에 실제 값이 있고[2], IdBlob 을 읽는 법은 IdType 열에 따라 다릅니다[2].
 
 | IdType | IdBlob 에 든 값 |
 |---|---|
@@ -97,17 +97,17 @@ AppId·UserId 값과 IdIndex 가 같은 행을 SruDbIdMapTable 에서 찾으면 
 - 문자열은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 을, SID 는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 을 따라 읽습니다.
 - AppId 로 찾은 문자열에서 브라우저를 가리키는 항목을 고릅니다. 그 AppId 의 행만 네트워크 데이터 사용량 표에서 뽑습니다.
 
-### 이 표가 말해 주는 것과 못 하는 것
+### 이 표로 알 수 있는 것과 없는 것
 
-**말해 주는 것.**
+**알 수 있는 것.**
 
 - 어느 앱이 어느 사용자로 기록 시각 무렵에 몇 바이트를 보내고 받았는지 알려 줍니다.
 
-**말해 주지 못하는 것.**
+**알 수 없는 것.**
 
-- 어느 사이트로 보냈는지는 알 수 없습니다. 표에 주소 칸이 없습니다[2].
-- 어떤 파일을 보냈는지는 알 수 없습니다. 표에 파일 칸이 없습니다[2].
-- 송신량은 앱 단위 합계이며, 그 가운데 파일 하나를 보낸 양을 가려낼 칸이 없습니다.
+- 어느 사이트로 보냈는지는 알 수 없습니다. 표에 주소 열이 없습니다[2].
+- 어떤 파일을 보냈는지는 알 수 없습니다. 표에 파일 열이 없습니다[2].
+- 송신량은 앱 단위 합계이며, 그 가운데 파일 하나를 보낸 양을 가려낼 열이 없습니다.
 - SRUM 이 얼마 간격으로 모아 적는지, 언제 DB 에 쓰는지는 이 페이지를 쓰면서 확인하지 않았는데, [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) 에서 확인합니다. 그 전까지 TimeStamp 를 송신이 일어난 정확한 순간으로 읽지 않습니다.
 
 ### 손상된 SRUDB.dat 다루기
@@ -138,7 +138,7 @@ AppId·UserId 값과 IdIndex 가 같은 행을 SruDbIdMapTable 에서 찾으면 
 ## 흔한 오판
 
 1. **방문 기록을 업로드 증거로 씁니다.** 방문 기록은 페이지를 연 기록입니다. 올렸는지는 다른 기록과 맞춰서만 말합니다.
-2. **SRUM 송신량을 특정 사이트나 파일로 보낸 양으로 씁니다.** 표에 주소 칸과 파일 칸이 없습니다[2]. 송신량은 그 앱이 그 시간대에 보낸 양일 뿐입니다.
+2. **SRUM 송신량을 특정 사이트나 파일로 보낸 양으로 씁니다.** 표에 주소 열과 파일 열이 없습니다[2]. 송신량은 그 앱이 그 시간대에 보낸 양일 뿐입니다.
 3. **TimeStamp 를 송신한 순간으로 읽습니다.** 기록 간격을 확인하기 전에는 "기록 시각 무렵" 으로만 씁니다.
 4. **도구 한 가지의 결과만 믿습니다.** 손상된 SRUDB.dat 는 읽는 방식에 따라 행 수가 달랐습니다(현장 관찰).
 5. **방문 기록이 없으니 올리지 않았다고 봅니다.** 시크릿 모드, 다른 브라우저, 기록 지우기를 생각합니다. 지운 흔적은 [증거를 없애려 했나](../../activity/anti-forensics/index.md) 에서 봅니다.
@@ -147,14 +147,14 @@ AppId·UserId 값과 IdIndex 가 같은 행을 SruDbIdMapTable 에서 찾으면 
 ## 보고서 문장 예
 
 - 쓰지 않을 문장: "피조사자는 웹하드에 설계 도면을 올렸습니다."
-- 쓸 문장: "사용자 ○○ 의 크롬 방문 기록에 ○○(UTC) 에 웹하드 ○○ 의 페이지를 연 기록이 있습니다. SRUDB.dat 네트워크 데이터 사용량 표에는 TimeStamp 가 ○○ 인 행에 이 사용자의 크롬이 ○○ 바이트를 보냈다고 적혀 있습니다. 이 표에는 목적지 주소 칸과 파일 이름 칸이 없습니다. 이 기록은 그 시간대 무렵 크롬이 이만큼 송신했음을 보여 줍니다. 어느 사이트로 어떤 파일을 보냈는지는 이 기록만으로 정할 수 없습니다."
+- 쓸 문장: "사용자 ○○ 의 크롬 방문 기록에 ○○(UTC) 에 웹하드 ○○ 의 페이지를 연 기록이 있습니다. SRUDB.dat 네트워크 데이터 사용량 표에는 TimeStamp 가 ○○ 인 행에 이 사용자의 크롬이 ○○ 바이트를 보냈다고 적혀 있습니다. 이 표에는 목적지 주소 열과 파일 이름 열이 없습니다. 이 기록은 그 시간대 무렵 크롬이 이만큼 송신했음을 보여 줍니다. 어느 사이트로 어떤 파일을 보냈는지는 이 기록만으로 정할 수 없습니다."
 
 ## 함께 볼 페이지
 
 - [SRUM](../../../02-artifacts/execution/system-resource-usage-monitor/index.md) — 표 구조, 기록 간격, 해석할 때의 함정입니다.
 - [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) — SRUDB.dat 를 열고 복구하는 법입니다.
 - [크롬 계열 브라우저](../../../02-artifacts/browsers/chrome-edge-whale/index.md) · [파이어폭스](../../../02-artifacts/browsers/firefox/index.md) · [인터넷 익스플로러·옛 엣지](../../../02-artifacts/browsers/ie-edgehtml/index.md) — 브라우저별 방문 기록입니다.
-- [웹 사용 행위 재구성](../../activity/web-activity.md) · [시크릿 모드로 무엇을 했나](../../activity/private-browsing.md) — 웹 사용 전체를 되짚는 순서입니다.
+- [웹 사용 행위 재구성](../../activity/web-activity.md) · [시크릿 모드로 무엇을 했나](../../activity/private-browsing.md) — 웹 사용 전체를 재구성하는 순서입니다.
 - [열기·저장 대화상자 기록](../../../02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md) · [바로가기 파일](../../../02-artifacts/file-folder-usage/lnk.md) · [점프리스트](../../../02-artifacts/file-folder-usage/jump-lists.md) · [최근 문서](../../../02-artifacts/file-folder-usage/recentdocs.md) — 올린 파일을 좁히는 기록입니다.
 - [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) · [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) · [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) — SRUM 값을 바꾸는 법입니다.
 - [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) — 손상된 DB 를 여러 방식으로 읽어 비교합니다.

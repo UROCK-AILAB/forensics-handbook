@@ -14,7 +14,7 @@ udev 규칙은 장치가 붙거나 떨어지거나 상태가 바뀔 때마다 sy
 
 규칙 파일은 원래 패키지와 관리자가 장치 이름·권한을 맞추려고 두는 설정입니다. 규칙 하나로 "이런 장치가 붙으면 이 프로그램을 돌린다" 를 적을 수 있어서 지속성에도 쓰일 수 있습니다[6]. 규칙 파일은 설정이 남아 있다는 기록이고, 규칙이 실제로 돈 기록은 저널·커널 로그 같은 다른 곳에 남습니다.
 
-udev 데이터베이스(`/run/udev/data/`)와 장치 연결 기록은 [USB 장치 연결 기록](../devices/usb.md) 에서 다룹니다. 이 쪽은 규칙 파일만 다룹니다.
+udev 데이터베이스(`/run/udev/data/`)와 장치 연결 기록은 [USB 장치 연결 기록](../devices/usb.md) 에서 다룹니다. 이 페이지는 규칙 파일만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -60,7 +60,7 @@ systemd-udevd 는 아래 네 디렉터리에서 규칙을 읽습니다[1].
 |---|---|
 | `RUN{program}` | 이벤트의 모든 규칙을 처리한 뒤 외부 프로그램을 실행합니다. 형식을 생략하면 `program` 입니다. 절대 경로가 아니면 `/usr/lib/udev` 에서 찾습니다. |
 | `RUN{builtin}` | 외부 프로그램 대신 udev 내장 프로그램을 부릅니다. `program` 과 목록을 함께 쓰므로 `=`·`:=` 로 비우면 둘 다 지워집니다. |
-| `PROGRAM` | 일치 여부를 가리려고 프로그램을 실행하고, 성공하면 참이 됩니다. 표준 출력은 `RESULT` 에 담깁니다. |
+| `PROGRAM` | 일치 여부를 판별하려고 프로그램을 실행하고, 성공하면 참이 됩니다. 표준 출력은 `RESULT` 에 담깁니다. |
 | `IMPORT{program}` | 프로그램을 실행하고 출력을 장치 속성으로 가져옵니다. `IMPORT{file}` 은 텍스트 파일을 읽어 가져옵니다. |
 
 이 밖에 `NAME`(네트워크 인터페이스 이름), `SYMLINK`, `OWNER`·`GROUP`·`MODE`(장치 노드 권한), `ENV{키}`, `TAG`, `LABEL`·`GOTO`, `OPTIONS` 가 있습니다[1]. `RUN`·`PROGRAM`·`ENV`·`SYMLINK` 등의 값에는 `%k`(커널 장치 이름), `$devpath`, `$env{키}` 같은 치환을 쓸 수 있고, `RUN` 치환은 모든 규칙을 처리한 뒤 프로그램을 실행하기 직전에 이뤄집니다[1].
@@ -127,7 +127,7 @@ find usr/lib/udev/rules.d usr/local/lib/udev/rules.d run/udev/rules.d etc/udev/r
   -printf '%f\t%h\t%y\t%l\t%TY-%Tm-%Td %TT\t%CY-%Cm-%Cd %CT\n' 2>/dev/null | sort
 ```
 
-칸은 파일 이름, 디렉터리, 종류(`f` 파일·`l` 링크), 링크 대상, mtime, ctime 순입니다. `find` 가 찍는 시각은 분석 컴퓨터의 시간대로 바뀐 값이므로, 비교하기 전에 `TZ=UTC` 를 붙여 돌리면 됩니다.
+열은 파일 이름, 디렉터리, 종류(`f` 파일·`l` 링크), 링크 대상, mtime, ctime 순입니다. `find` 가 찍는 시각은 분석 컴퓨터의 시간대로 바뀐 값이므로, 비교하기 전에 `TZ=UTC` 를 붙여 돌리면 됩니다.
 
 ### 공개 도구로 한 번
 
@@ -146,7 +146,7 @@ find usr/lib/udev/rules.d usr/local/lib/udev/rules.d run/udev/rules.d etc/udev/r
 | [셸 명령 기록](../execution/shell-history/index.md) | 규칙 파일을 만들거나 `udevadm control --reload` 를 실행한 명령 |
 | [알려진 파일 대조와 YARA](../../03-techniques/analysis/hash-yara.md) | `RUN` 이 가리키는 프로그램의 해시와 내용 |
 
-지속성 흔적을 한꺼번에 훑는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
+지속성 흔적을 한꺼번에 살펴보는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
 
 ## 실습
 

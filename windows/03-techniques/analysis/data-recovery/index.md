@@ -34,16 +34,16 @@ SSD 는 사정이 다릅니다. Windows 의 NTFS 는 기본으로 TRIM(삭제 �
 
 "—" 는 Windows 버전보다 파일시스템이나 파일의 형식을 기준으로 보는 방법이라는 뜻입니다. TRIM 의 버전별 지원 범위는 SSD 페이지에 표로 정리했습니다.
 
-> 그림 자리: 지운 파일 하나를 두고, 디렉터리 자료(파일시스템 기반 복구) → 비할당 클러스터와 슬랙 → 서명으로 찾기(파일·레코드 카빙) 순서로 남은 정보가 줄어드는 모습. 옆에 SSD 는 TRIM 뒤 클러스터 내용이 사라지는 갈래를 그린 그림
+> 그림 자리: 지운 파일 하나를 두고, 디렉터리 자료(파일시스템 기반 복구) → 비할당 클러스터와 슬랙 → 서명으로 찾기(파일·레코드 카빙) 순서로 남은 정보가 줄어드는 모습. 옆에 SSD 는 TRIM 뒤 클러스터 내용이 사라지는 경우를 그린 그림
 
 ## 읽는 순서
 
 지운 데이터는 남은 정보가 많은 방법부터 찾습니다. 먼저 [휴지통](../../../02-artifacts/file-folder-usage/recycle-bin.md) 과 [섀도 복사본 활용](../volume-shadow-copy-analysis.md) 에서 파일이 그대로 남았는지 봅니다. 그다음 아래 순서로 읽습니다.
 
-1. [파일시스템 기반 복구 (Undelete: NTFS·FAT)](undelete-ntfs-fat.md) — MFT 레코드와 FAT·exFAT 디렉터리 항목에서 지운 파일의 이름·크기·데이터 위치를 읽습니다. 되살린 내용에 다른 파일의 데이터가 섞였는지 가리는 법도 다룹니다.
+1. [파일시스템 기반 복구 (Undelete: NTFS·FAT)](undelete-ntfs-fat.md) — MFT 레코드와 FAT·exFAT 디렉터리 항목에서 지운 파일의 이름·크기·데이터 위치를 읽습니다. 되살린 내용에 다른 파일의 데이터가 섞였는지 판별하는 법도 다룹니다.
 2. [비할당 영역과 슬랙 (Unallocated·Slack Space)](unallocated-slack-space.md) — 어느 파일에도 속하지 않은 클러스터와 파일 끝 뒤에 남는 공간을 다룹니다. 파일시스템마다 찾는 자리와 뽑는 절차를 정리합니다.
 3. [파일 카빙 (File Carving)](file-carving.md) — 파일시스템 정보 없이 서명과 끝 표시로 파일을 되살립니다. 조각난 파일과 메타정보가 없는 결과를 어떻게 읽는지 다룹니다.
-4. [레코드 카빙 (Record Carving)](record-carving.md) — EVTX 레코드와 MFT 레코드·색인 블록을 레코드 단위로 찾습니다. 크기 사본·CRC32·fix-up 으로 진짜 레코드인지 가립니다.
+4. [레코드 카빙 (Record Carving)](record-carving.md) — EVTX 레코드와 MFT 레코드·색인 블록을 레코드 단위로 찾습니다. 크기 사본·CRC32·fix-up 으로 진짜 레코드인지 확인합니다.
 5. [SSD TRIM과 복구 한계 (SSD·TRIM)](ssd-trim.md) — TRIM 과 드라이브 내부 정리가 복구를 어떻게 막는지 다룹니다. Windows 버전별 지원과 설정·retrim 기록을 확인하는 법을 정리합니다.
 
 ## 함께 볼 페이지
@@ -53,7 +53,7 @@ SSD 는 사정이 다릅니다. Windows 의 NTFS 는 기본으로 TRIM(삭제 �
 - [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md), [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md) — 복구에 쓰는 값이 들어 있는 파일시스템 구조입니다.
 - [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md), [USN 변경 저널](../../../02-artifacts/filesystem/usnjrnl.md) — 지운 파일의 이름과 시각을 보강하는 기록입니다.
 - [파일 내용 검색](../content-search/index.md) — 비할당 영역과 슬랙에서 키워드를 찾는 법입니다.
-- [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) — 완전삭제 도구를 썼는지 다른 기록과 함께 가립니다.
+- [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) — 완전삭제 도구를 썼는지 다른 기록과 함께 구분합니다.
 - [도구 결과 교차 검증](../../reporting/tool-validation.md) — 복구 도구마다 결과가 다를 때 따를 절차입니다.
 
 ## 참고 문헌

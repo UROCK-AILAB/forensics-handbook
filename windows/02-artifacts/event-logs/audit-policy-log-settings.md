@@ -109,7 +109,7 @@ DisplayNameFile·DisplayNameID·PrimaryModule·Sources·RestrictGuestAccess 는 
 | Microsoft-Windows-DriverFrameworks-UserMode/Operational · DNS-Client/Operational | 꺼짐 | — |
 | Microsoft-Windows-Sysmon/Operational | 없음 (설치 안 됨) | — |
 
-채널은 466개이고 그중 387개가 켜져 있으며, 덮어쓰기 방식은 463개가 순환 (Circular), 3개가 보존 (Retain) 입니다. 채널 설정은 PC 마다 다를 수 있어 검체에서 확인합니다.
+채널은 466개이고 그중 387개가 켜져 있으며, 덮어쓰기 방식은 463개가 순환 (Circular), 3개가 보존 (Retain) 입니다. 채널 설정은 PC 마다 다를 수 있어 실제 기기에서 확인합니다.
 
 ## 구조
 
@@ -130,7 +130,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 
 ### 이벤트의 Task 값은 하위 범주 번호
 
-보안 로그 이벤트의 Task 칸에는 하위 범주 번호가 들어 있습니다. 공급자 메타데이터의 Task 표와 실제 이벤트를 맞춰 보면 다음과 같습니다.
+보안 로그 이벤트의 Task 필드에는 하위 범주 번호가 들어 있습니다. 공급자 메타데이터의 Task 표와 실제 이벤트를 맞춰 보면 다음과 같습니다.
 
 | Task | 하위 범주 | 이벤트 예 |
 |---|---|---|
@@ -146,24 +146,24 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 | 13569 | Authentication Policy Change | — |
 | 13824 | (메타데이터 표에 이름 없음) | 4798 |
 
-그래서 이미지의 보안 로그를 Task 값으로 묶어 세면, 그 PC 에서 어떤 하위 범주가 실제로 기록을 남기고 있었는지 가늠할 수 있습니다.
+그래서 이미지의 보안 로그를 Task 값으로 묶어 세면, 그 PC 에서 어떤 하위 범주가 실제로 기록을 남기고 있었는지 추정할 수 있습니다.
 
 ### 감사 설정이 바뀔 때 남는 이벤트
 
-아래 메시지와 칸은 공급자 메타데이터에 있는 값입니다.
+아래 메시지와 필드는 공급자 메타데이터에 있는 값입니다.
 
-| ID | 메시지 | 칸 |
+| ID | 메시지 | 필드 |
 |---|---|---|
 | 4719 | System audit policy was changed. | SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId, CategoryId, SubcategoryId, SubcategoryGuid, AuditPolicyChanges. 버전 1 에 ClientProcessId, ClientProcessStartKey |
-| 4912 | Per User Audit Policy was changed. | Subject 네 칸, TargetUserSid, CategoryId, SubcategoryId, SubcategoryGuid, AuditPolicyChanges |
+| 4912 | Per User Audit Policy was changed. | Subject 필드 네 개, TargetUserSid, CategoryId, SubcategoryId, SubcategoryGuid, AuditPolicyChanges |
 | 4902 | The Per-user audit policy table was created. | PuaCount, PuaPolicyId |
 | 4906 | The CrashOnAuditFail value has changed. | CrashOnAuditFailValue |
-| 4715 | The audit policy (SACL) on an object was changed. | Subject 네 칸, OldSd, NewSd |
-| 4907 | Auditing settings on object were changed. | Subject 네 칸, ObjectServer, ObjectType, ObjectName, HandleId, OldSd, NewSd, ProcessId, ProcessName |
+| 4715 | The audit policy (SACL) on an object was changed. | Subject 필드 네 개, OldSd, NewSd |
+| 4907 | Auditing settings on object were changed. | Subject 필드 네 개, ObjectServer, ObjectType, ObjectName, HandleId, OldSd, NewSd, ProcessId, ProcessName |
 
 로그 자체의 상태를 알리는 이벤트도 있습니다.
 
-| ID | 채널 | 메시지 | 칸 |
+| ID | 채널 | 메시지 | 필드 |
 |---|---|---|---|
 | 1100 | Security | The event logging service has shut down. | — |
 | 1104 | Security | The security log is now full. | — |
@@ -201,7 +201,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 1. **없는 이벤트를 없었던 일로 읽습니다.** 먼저 그 PC 에서 해당 하위 범주가 켜져 있었는지 봅니다. 다음으로 로그가 그 시각까지 남아 있는지 봅니다.
 2. **지금 설정을 사건 당시 설정으로 읽습니다.** 설정은 나중에 바뀔 수 있습니다. 4719 를 찾습니다.
 3. **하위 범주를 이름으로 찾습니다.** 화면 언어에 따라 이름이 다릅니다. 스크립트나 규칙에서는 GUID 를 씁니다.
-4. **문서의 기본값을 그대로 믿습니다.** MaxSize 가 문서 기본값 1MB 가 아니라 20MB 인 PC 가 있고, 보안 그룹 관리가 문서 표와 달리 켜져 있는 PC 도 있습니다. 기본값은 검체에서 직접 확인합니다.
+4. **문서의 기본값을 그대로 믿습니다.** MaxSize 가 문서 기본값 1MB 가 아니라 20MB 인 PC 가 있고, 보안 그룹 관리가 문서 표와 달리 켜져 있는 PC 도 있습니다. 기본값은 실제 기기에서 직접 확인합니다.
 5. **Retention 을 도구가 보여 주는 숫자로만 읽습니다.** REG_DWORD 값을 문자열로 받는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다. 그래서 0xFFFFFFFF 가 4294967295 로 보일 수 있습니다. 원시 바이트로 확인합니다.
 6. **고급 감사 정책을 설정했다고 그대로 적용됐다고 봅니다.** 고급 감사 정책 (Advanced Audit Policy Configuration) 을 쓸 때는 기본 감사 정책 (basic audit policy) 이 덮어쓰지 않는지 확인합니다[1]. 덮어쓰면 4719 가 남습니다. 이를 막는 설정은 Security Options 의 "Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings" 입니다. 이 설정을 Enabled 로 둡니다.
 7. **4688 에 명령줄이 당연히 있다고 봅니다.** 프로세스 만들기 감사를 켜도 명령줄은 따로 켜야 남습니다. 켜는 설정과 주의점은 [프로세스 생성 (4688)](4688.md)에서 다룹니다.
@@ -213,7 +213,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 - **감사 정책을 끕니다.** 4719 에 바뀐 하위 범주와 요청한 계정이 남습니다.
 - **로그를 지웁니다.** 1102·104 가 남습니다. [이벤트 로그를 지웠나](../../04-scenarios/activity/anti-forensics/log-clearing.md)에서 흐름을 봅니다.
 - **이벤트 로그 서비스를 멈춥니다.** 1100 이 남습니다.
-- **자동 백업을 켭니다.** 1105·105 의 BackupPath 칸에 백업 파일 위치가 적힙니다. 원래 로그에서 밀려난 기록이 그 파일에 있을 수 있습니다.
+- **자동 백업을 켭니다.** 1105·105 의 BackupPath 필드에 백업 파일 위치가 적힙니다. 원래 로그에서 밀려난 기록이 그 파일에 있을 수 있습니다.
 - **레코드 일부만 남습니다.** 덮어쓰거나 지운 레코드가 파일 안에 남아 있을 수 있습니다. [파일 안에 남은 지운·손상 레코드](../../01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md)를 봅니다.
 
 ## 직접 분석해 보기
@@ -222,7 +222,7 @@ GUID 뒷부분은 모두 `-69AE-11D9-BED3-505054503030` 입니다.
 
 MaxSize 와 Retention 은 REG_DWORD 입니다. 값 데이터는 4바이트 리틀 엔디언입니다. 값이 저장되는 셀 구조는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
-아래 바이트는 설명을 위해 명세대로 만든 예시입니다. 검체에서 나온 값이 아닙니다.
+아래 바이트는 설명을 위해 명세대로 만든 예시입니다. 실제 기록에서 나온 값이 아닙니다.
 
 **1) MaxSize**
 
@@ -293,12 +293,12 @@ Get-WinEvent -Path 'E:\case\Security.evtx' |
 **직접 만든 Windows 10·11 가상 머신**에서 해 봅니다.
 
 1. `auditpol /get /category:*` 결과를 저장합니다. 위 Microsoft 기본값 표와 비교해 다른 하위 범주를 찾습니다.
-2. `auditpol /set /subcategory:{0CCE922B-69AE-11D9-BED3-505054503030} /success:enable` 로 프로세스 만들기 감사를 켭니다. 4719 가 남는지 보고 AuditPolicyChanges 칸 값을 적습니다.
+2. `auditpol /set /subcategory:{0CCE922B-69AE-11D9-BED3-505054503030} /success:enable` 로 프로세스 만들기 감사를 켭니다. 4719 가 남는지 보고 AuditPolicyChanges 필드 값을 적습니다.
 3. 레지스트리의 `Services\Eventlog\Security` 값과 `wevtutil gl Security` 결과를 맞춰 봅니다.
 4. 테스트용 채널 하나의 최대 크기를 줄이고 이벤트를 쌓습니다. 가장 오래된 레코드 시각이 어떻게 바뀌는지 봅니다.
 5. `Get-WinEvent -ListLog *` 로 TaskScheduler/Operational 이 기본으로 꺼져 있는지 확인합니다.
 
-**NIST CFReDS 같은 공개 검체**에서는 다음을 풀어 봅니다.
+**NIST CFReDS 같은 공개 시험 자료**에서는 다음을 풀어 봅니다.
 
 1. SYSTEM 하이브의 `Services\Eventlog\Security` 에서 MaxSize 와 Retention 은 얼마입니까?
 2. Security.evtx 의 가장 오래된 레코드와 가장 새 레코드 시각은 언제입니까? 사건 기간을 덮습니까?

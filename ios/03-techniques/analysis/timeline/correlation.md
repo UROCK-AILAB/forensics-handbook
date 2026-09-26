@@ -11,22 +11,22 @@ nav_order: 1290
 
 ## 언제 쓰나
 
-메시지 DB 하나, 사진 DB 하나만 보면 각 기록이 말하는 사실만 알 수 있지만, 같은 시간대의 네트워크 사용량이나 위치 기록을 나란히 놓으면 그 앞뒤에 기기에서 무슨 일이 있었는지 더 촘촘하게 볼 수 있습니다. 한 기록의 시각이 의심스러울 때 다른 기록과 맞춰 보는 데에도 씁니다. 엮기 전에 모든 시각을 [시각 정규화 (Time Normalization)](time-normalization.md)로 같은 기준에 맞춰 둡니다.
+메시지 DB 하나, 사진 DB 하나만 보면 각 기록에 나온 사실만 알 수 있지만, 같은 시간대의 네트워크 사용량이나 위치 기록을 나란히 놓으면 그 앞뒤에 기기에서 무슨 일이 있었는지 더 촘촘하게 볼 수 있습니다. 한 기록의 시각이 의심스러울 때 다른 기록과 맞춰 보는 데에도 씁니다. 엮기 전에 모든 시각을 [시각 정규화 (Time Normalization)](time-normalization.md)로 같은 기준에 맞춰 둡니다.
 
 ## 엮을 때 쓰는 열쇠
 
 기록을 잇는 열쇠는 크게 세 가지입니다. 첫째는 정규화한 시각이고, 둘째는 앱을 가리키는 번들 이름이나 프로세스 이름이며, 셋째는 한 사건에 속한 로그를 묶는 식별자입니다. 시각만으로 엮으면 같은 분에 일어난 무관한 일까지 붙어 버리지만, 앱 이름이 같은 행끼리 먼저 묶고 시각을 맞추면 잘못 엮이는 경우가 줄어듭니다. 번들 ID 를 읽는 법은 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에 있습니다.
 
-아래는 iOS 27.0 백업에서 시각 칸과 앱을 가리키는 칸이 한 행에 같이 있는 곳입니다. 각 시각 칸의 기준점은 [시각 정규화](time-normalization.md)의 절차대로 값을 보고 판단합니다.
+아래는 iOS 27.0 백업에서 시각 열과 앱을 가리키는 열이 한 행에 같이 있는 곳입니다. 각 시각 열의 기준점은 [시각 정규화](time-normalization.md)의 절차대로 값을 보고 판단합니다.
 
-| 파일(도메인 :: 경로) | 표 | 시각 칸 | 앱을 가리키는 칸 | 함께 볼 페이지 |
+| 파일(도메인 :: 경로) | 표 | 시각 열 | 앱을 가리키는 열 | 함께 볼 페이지 |
 |---|---|---|---|---|
 | `WirelessDomain :: Library/Databases/DataUsage.sqlite` | `ZPROCESS` | `ZFIRSTTIMESTAMP`, `ZTIMESTAMP` | `ZBUNDLENAME`, `ZPROCNAME` | [앱별 데이터 사용량](../../../02-artifacts/network/data-usage.md) |
 | 같은 파일 | `ZLIVEUSAGE` | `ZTIMESTAMP` | `ZBUNDLENAME`, `ZPROCNAME` | 같은 페이지 |
 | 같은 파일 | `ZWIFIDATA` | `ZTIMESTAMP`, `ZTIMEAT`, `ZDHCPLEASETIME` | — | [와이파이 기록](../../../02-artifacts/network/wifi.md) |
 | `RootDomain :: Library/Caches/locationd/consolidated.db` | `GeoFence` | `Timestamp` | `BundleId` | — |
 
-같은 DataUsage.sqlite 의 `ZEVENT`, `ZPEER`, `ZCHECKUPEVENT`, `ZTSHOOTINGDATA`, `ZDEMOLIVEUSAGE` 표에도 `ZTIMESTAMP` 칸이 있습니다. 메시지와 사진처럼 앱이 정해진 기록은 [메시지 (iMessage·SMS)](../../../02-artifacts/communications/messages/index.md)와 [사진 보관함 (Photos Library)](../../../02-artifacts/media/photos/index.md)의 시각 칸을 그대로 쓰면 되고, 사진 쪽에는 사건마다 시간대 칸이 붙어 있어(칸 이름은 시각 정규화 페이지의 표) 현지 시각과 UTC 를 함께 맞출 후보가 됩니다. 다만 그 시간대 값의 쓰임새는 공개 자료가 없어 검체로 확인해야 합니다.
+같은 DataUsage.sqlite 의 `ZEVENT`, `ZPEER`, `ZCHECKUPEVENT`, `ZTSHOOTINGDATA`, `ZDEMOLIVEUSAGE` 표에도 `ZTIMESTAMP` 열이 있습니다. 메시지와 사진처럼 앱이 정해진 기록은 [메시지 (iMessage·SMS)](../../../02-artifacts/communications/messages/index.md)와 [사진 보관함 (Photos Library)](../../../02-artifacts/media/photos/index.md)의 시각 열을 그대로 쓰면 되고, 사진 쪽에는 사건마다 시간대 열이 붙어 있어(열 이름은 시각 정규화 페이지의 표) 현지 시각과 UTC 를 함께 맞출 후보가 됩니다. 다만 그 시간대 값의 쓰임새는 실제 데이터로 확인해야 합니다.
 
 통합 로그를 따로 확보했다면, 한 시각 변경 사건에 속한 로그들은 같은 ActivityID 를 공유합니다. 이 값은 터미널에서는 16진수로, Console 에서는 10진수로 보이므로 두 화면에서 뽑은 로그를 엮을 때는 진법을 맞춰야 같은 사건끼리 묶입니다 [1]. 통합 로그 형식은 [통합 로그 형식 (Unified Log·tracev3)](../../../01-foundations/data-formats/unified-log.md), 찾을 사건은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events.md)에 있습니다.
 
@@ -49,7 +49,7 @@ nav_order: 1290
 
 ## 결과를 어떻게 해석하나
 
-두 기록이 같은 시간 창에 들어 있다는 것은 그 시간대에 두 일이 함께 있었다는 것까지만 보여 주고, 한쪽이 다른 쪽을 일으켰다는 것은 보여 주지 않습니다. 보고서에는 "14:02~14:05 UTC 사이에 이 번들 이름으로 데이터 사용량 기록이 있고, 같은 창에 메시지 발신 기록이 있다" 처럼 각 기록이 말하는 만큼을 나란히 적고, 쓴 시간 창과 빠진 기록을 함께 밝힙니다. 보고서 문장은 [포렌식 보고서 (Forensic Report)](../../reporting/forensic-report.md)를 참고합니다.
+두 기록이 같은 시간 창에 들어 있다는 것은 그 시간대에 두 일이 함께 있었다는 것까지만 보여 주고, 한쪽이 다른 쪽을 일으켰다는 것은 보여 주지 않습니다. 보고서에는 "14:02~14:05 UTC 사이에 이 번들 이름으로 데이터 사용량 기록이 있고, 같은 창에 메시지 발신 기록이 있다" 처럼 각 기록으로 확인되는 만큼을 나란히 적고, 쓴 시간 창과 빠진 기록을 함께 밝힙니다. 보고서 문장은 [포렌식 보고서 (Forensic Report)](../../reporting/forensic-report.md)를 참고합니다.
 
 ## 참고 문헌
 

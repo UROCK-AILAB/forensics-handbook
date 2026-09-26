@@ -24,7 +24,7 @@ nav_order: 520
 **/system_ce/*/notification_history/history/*
 ```
 
-`system_ce` 다음 칸은 사용자 번호이고, 기준 디렉터리는 `/data/system_ce/<사용자>/notification_history` 입니다 [3]. 기준 디렉터리 아래 `history` 디렉터리에 기록 파일이 있고, 같은 기준 디렉터리에 `version` 파일이 있습니다 [1].
+`system_ce` 다음 디렉터리 이름은 사용자 번호이고, 기준 디렉터리는 `/data/system_ce/<사용자>/notification_history` 입니다 [3]. 기준 디렉터리 아래 `history` 디렉터리에 기록 파일이 있고, 같은 기준 디렉터리에 `version` 파일이 있습니다 [1].
 
 | 파일 | 뜻 |
 |---|---|
@@ -41,7 +41,7 @@ nav_order: 520
 | AOSP | 파일 위치 규칙, 보관 기간, 쓰기 주기, proto 구조(현행 소스 기준) [1][2] |
 | 삼성 One UI | 설정 키 `notification_history_enabled` 가 있음. 삼성의 알림 기록 화면이 AOSP 저장소를 그대로 쓰는지는 공개 자료 없음 |
 
-이 기능은 Android 11 에서 들어왔고 기본으로 꺼져 있습니다 [4]. 공식 문서에는 이 내용이 없으니, 검체에서는 `notification_history_enabled` 값을 직접 읽어 판단합니다.
+이 기능은 Android 11 에서 들어왔고 기본으로 꺼져 있습니다 [4]. 공식 문서에는 이 내용이 없으니, 실제 기기에서는 `notification_history_enabled` 값을 직접 읽어 판단합니다.
 
 ## 구조
 
@@ -54,7 +54,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 | `HISTORY_RETENTION_DAYS` | 1 | 하루치만 남기고 그보다 오래된 기록은 지움 |
 | `WRITE_BUFFER_INTERVAL_MS` | `1000 * 60 * 20` | 첫 알림이 들어온 뒤 20분마다 버퍼를 디스크에 씀 |
 
-디스크에 쓰기 전 20분 동안의 알림은 메모리에만 있다가 다음 쓰기 때 파일로 갑니다 [1]. 기기를 강제로 끄거나 전원을 끊었을 때 마지막 버퍼가 파일에 남는지는 공개 자료가 없어 검체에서 확인해야 합니다.
+디스크에 쓰기 전 20분 동안의 알림은 메모리에만 있다가 다음 쓰기 때 파일로 갑니다 [1]. 기기를 강제로 끄거나 전원을 끊었을 때 마지막 버퍼가 파일에 남는지는 실제 기기에서 확인해야 합니다.
 
 ### 파일 형식
 
@@ -81,7 +81,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 ## 시각 해석
 
-`posted_time_ms` 는 알림이 올라온 시각이고 밀리초 단위라서, 1000 으로 나누면 UTC 유닉스 시각이 됩니다 [2][3]. 기록 파일 이름도 밀리초 시각 숫자입니다 [1]. 파일 이름 시각이 파일을 만든 시각인지, 안에 든 알림의 시각과 어떻게 맞물리는지는 공개 자료가 없으니 알림 한 건의 시각은 반드시 `posted_time_ms` 에서 읽습니다. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 을 확인하고, 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`posted_time_ms` 는 알림이 올라온 시각이고 밀리초 단위라서, 1000 으로 나누면 UTC 유닉스 시각이 됩니다 [2][3]. 기록 파일 이름도 밀리초 시각 숫자입니다 [1]. 파일 이름 시각이 파일을 만든 시각인지, 안에 든 알림의 시각과 어떻게 맞물리는지는 알려져 있지 않으니 알림 한 건의 시각은 반드시 `posted_time_ms` 에서 읽습니다. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 을 확인하고, 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -91,13 +91,13 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 셋째, 지워진 기록 파일이나 `.new`·`.bak` 임시 파일에 더 오래된 알림이 남아 있을 수 있습니다. 파일 시스템 수준 복구는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
-넷째, 삼성 One UI 가 AOSP 와 같은 파일을 쓰는지는 공개 자료가 없으니, 삼성 검체에서 파일이 없으면 기능이 꺼져 있었는지와 경로가 다른지를 모두 따집니다.
+넷째, 삼성 One UI 가 AOSP 와 같은 파일을 쓰는지는 공개 문서에 나와 있지 않으니, 삼성 기기에서 파일이 없으면 기능이 꺼져 있었는지와 경로가 다른지를 모두 따집니다.
 
 ## 라이브 기기에서 보이는 모양 (dumpsys notification)
 
-`dumpsys notification` 은 파일에 저장된 기록이 아니라 지금 떠 있는 알림(`NotificationRecord`)을 보여 줍니다. 주요 칸은 다음과 같습니다.
+`dumpsys notification` 은 파일에 저장된 기록이 아니라 지금 떠 있는 알림(`NotificationRecord`)을 보여 줍니다. 주요 필드는 다음과 같습니다.
 
-| 묶음 | 칸 |
+| 묶음 | 필드 |
 |---|---|
 | 앱·사용자 | `pkg=`, `user=`, `uid=`, `userId=`, `opPkg=` |
 | 알림 식별 | `id=`, `tag=`, `key=`, `groupKey=` |
@@ -112,7 +112,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 ### 헥스로 한 번
 
-아래 35바이트는 위 proto 구조로 만든 예시이고 실제 검체에서 나온 값이 아닙니다. 알림 한 건에 패키지 이름, UID, 게시 시각, 제목만 넣었습니다.
+아래 35바이트는 위 proto 구조로 만든 예시이고 실제 기기에서 나온 값이 아닙니다. 알림 한 건에 패키지 이름, UID, 게시 시각, 제목만 넣었습니다.
 
 ```
 10 01 1a 1f 0a 0f 63 6f 6d 2e 65 78 61 6d 70 6c
@@ -144,11 +144,11 @@ ALEAPP 의 notificationHistory 모듈이 기록 파일을 풀어 알림 목록�
 | [문자 (SMS·MMS·RCS)](../communications/messages/index.md) | 문자 알림 본문과 문자 DB 의 메시지가 맞는지 |
 | [카카오톡 (KakaoTalk)](../messengers/kakaotalk/index.md) 등 메신저 | 알림 본문에만 있고 앱 DB 에는 없는 메시지가 있는지 |
 
-usagestats 에는 NOTIFICATION_INTERRUPTION(`channelId=` 칸 포함)과 NOTIFICATION_SEEN 이벤트가 있어서, 알림 기록 파일이 없을 때 어느 앱의 알림이 언제 울렸는지를 보조로 알려 줍니다. 대화 상대를 재구성하는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 와 [지운 대화와 사진 찾기 (Deleted Content)](../../04-scenarios/activity/deleted-content.md) 에서 다룹니다.
+usagestats 에는 NOTIFICATION_INTERRUPTION(`channelId=` 필드 포함)과 NOTIFICATION_SEEN 이벤트가 있어서, 알림 기록 파일이 없을 때 어느 앱의 알림이 언제 울렸는지를 보조로 알려 줍니다. 대화 상대를 재구성하는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 와 [지운 대화와 사진 찾기 (Deleted Content)](../../04-scenarios/activity/deleted-content.md) 에서 다룹니다.
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 등)의 `/data/system_ce/` 아래에 `notification_history` 폴더가 있으면 아래 질문을 풀어 봅니다.
+공개 안드로이드 시험 데이터(NIST CFReDS 등)의 `/data/system_ce/` 아래에 `notification_history` 폴더가 있으면 아래 질문을 풀어 봅니다.
 
 1. `history` 폴더의 파일은 몇 개이고, 파일 이름 숫자를 UTC 로 바꾸면 언제입니까?
 2. 가장 이른 `posted_time_ms` 와 가장 늦은 값의 차이가 하루 안쪽입니까?

@@ -10,13 +10,13 @@ nav_order: 1070
 
 파일이 정말 암호화됐는지부터 묻습니다. 그렇다면 암호화가 언제 시작해 언제 끝났는지, 어느 디렉터리와 어느 디스크·공유까지 번졌는지, 어느 계정과 프로세스가 실행했는지를 차례로 좁힙니다. 마지막 질문은 원본을 되살릴 수 있는지입니다.
 
-이 쪽은 조사 순서와 해석만 다룹니다. 파일 시각의 구조는 [ext4](../../01-foundations/filesystem/ext4/index.md)와 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서, 들어온 경로는 [SSH 로 들어왔나](ssh-intrusion.md)와 [웹 서버가 뚫렸나](web-compromise.md)에서 다룹니다.
+이 페이지는 조사 순서와 해석만 다룹니다. 파일 시각의 구조는 [ext4](../../01-foundations/filesystem/ext4/index.md)와 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서, 들어온 경로는 [SSH 로 들어왔나](ssh-intrusion.md)와 [웹 서버가 뚫렸나](web-compromise.md)에서 다룹니다.
 
 ## 먼저 확인할 것
 
 **전원을 끌지.** 시스템이 아직 켜져 있으면, 끄기 전에 메모리와 실행 중인 프로세스를 먼저 수집할지 정합니다. 암호화 프로그램이 아직 돌고 있거나 키가 메모리에 남아 있을 가능성이 있기 때문입니다. 절차는 [라이브 응답 수집](../../03-techniques/acquisition/live-response.md)과 [메모리 수집](../../03-techniques/acquisition/memory-acquisition.md)에서 다룹니다.
 
-**OS 와 시간대.** 파일 시각은 UTC 기준 epoch 값이라서[1] 타임라인 도구가 어느 시간대로 보여 주는지 정해야 합니다. 반면 로그는 배포판과 설정에 따라 시각 형식이 다릅니다. Ubuntu 24.04 의 rsyslog 기본 형식에는 연도와 UTC 오프셋이 있고, RHEL 의 전통 syslog 형식에는 연도와 시간대가 없으며, 저널은 UTC 로 저장합니다([인증 로그](../../02-artifacts/logins/auth-log.md), [systemd 저널](../../01-foundations/logging/systemd-journal/index.md)). 검체의 시간대는 [호스트 이름과 시간대](../../02-artifacts/system-info/hostname-timezone.md)에서 확인합니다.
+**OS 와 시간대.** 파일 시각은 UTC 기준 epoch 값이라서[1] 타임라인 도구가 어느 시간대로 보여 주는지 정해야 합니다. 반면 로그는 배포판과 설정에 따라 시각 형식이 다릅니다. Ubuntu 24.04 의 rsyslog 기본 형식에는 연도와 UTC 오프셋이 있고, RHEL 의 전통 syslog 형식에는 연도와 시간대가 없으며, 저널은 UTC 로 저장합니다([인증 로그](../../02-artifacts/logins/auth-log.md), [systemd 저널](../../01-foundations/logging/systemd-journal/index.md)). 분석 대상의 시간대는 [호스트 이름과 시간대](../../02-artifacts/system-info/hostname-timezone.md)에서 확인합니다.
 
 | 항목 | Ubuntu 24.04 | RHEL 9 |
 |---|---|---|
@@ -57,11 +57,11 @@ nav_order: 1070
 
 8. **원본을 되살릴 수 있는지 봅니다.** 스냅숏, 백업, 가상 머신 디스크의 옛 사본을 먼저 찾습니다. ext4 에서 지운 원본은 메타데이터로 되살리기 어렵습니다. debugfs 의 `lsdel` 은 ext3·ext4 에서 지운 파일에는 쓸모가 없는데, 아이노드를 풀 때 데이터 블록 정보가 사라지기 때문입니다[2]. 이때는 debugfs 로 ext4 저널(아이노드 8)을 따로 덤프한 뒤 ext4magic 에 그 저널을 넘겨 지운 파일을 되살리는 방법이 있습니다[9]. 카빙까지 포함한 절차는 [지운 파일 되살리기](../../03-techniques/analysis/file-recovery.md)에서 다룹니다.
 
-9. **메모리가 있으면 프로세스를 봅니다.** 켜진 상태로 메모리를 확보했다면 암호화 프로세스와 그 부모, 네트워크 연결을 [메모리 분석](../../03-techniques/analysis/memory-analysis.md)의 방법으로 봅니다. 한 연구에서는 오픈소스 Linux 랜섬웨어 3종(RAASNet, Ransom0, Ransomware-POC)을 무작위 내용 32 KB 파일 100개가 든 디렉터리에 돌려 시스템 콜을 추적했습니다[8]. 이 시험 조건에서 상위 10개 시스템 콜에는 파일 시스템 관련 시스템 콜이 나왔고, 디렉터리를 재귀로 훑어 파일을 읽은 뒤 암호화한 내용으로 덮어쓰는 동작과 맞았습니다[8]. RAASNet 과 Ransom0 은 실행 끝 무렵 네트워크·시간·동기화 시스템 콜을 썼는데, 피해자 정보와 키를 서버로 보내는 단계였습니다[8]. 실험 환경은 Ubuntu 20.04.3 LTS 게스트였고, 이 도구는 시스템 콜의 인수를 추적하지 않아 어떤 파일을 건드렸는지는 이 방법만으로 나오지 않습니다[8].
+9. **메모리가 있으면 프로세스를 봅니다.** 켜진 상태로 메모리를 확보했다면 암호화 프로세스와 그 부모, 네트워크 연결을 [메모리 분석](../../03-techniques/analysis/memory-analysis.md)의 방법으로 봅니다. 한 연구에서는 오픈소스 Linux 랜섬웨어 3종(RAASNet, Ransom0, Ransomware-POC)을 무작위 내용 32 KB 파일 100개가 든 디렉터리에 돌려 시스템 콜을 추적했습니다[8]. 이 시험 조건에서 상위 10개 시스템 콜에는 파일 시스템 관련 시스템 콜이 나왔고, 디렉터리를 재귀로 돌며 파일을 읽은 뒤 암호화한 내용으로 덮어쓰는 동작과 맞았습니다[8]. RAASNet 과 Ransom0 은 실행 끝 무렵 네트워크·시간·동기화 시스템 콜을 썼는데, 피해자 정보와 키를 서버로 보내는 단계였습니다[8]. 실험 환경은 Ubuntu 20.04.3 LTS 게스트였고, 이 도구는 시스템 콜의 인수를 추적하지 않아 어떤 파일을 건드렸는지는 이 방법만으로 나오지 않습니다[8].
 
 ## 흔한 오판
 
-- **"파일 mtime 이 한 시각대로 몰렸으니 그때 암호화했다."** mtime 은 `utime(2)` 같은 호출로 바꿀 수 있습니다[1]. ctime, 폴더 mtime, 로그의 시각과 함께 맞춰 봅니다. 시각 조작을 가리는 방법은 [시각을 조작했나](../insider/time-manipulation.md)에서 다룹니다.
+- **"파일 mtime 이 한 시각대로 몰렸으니 그때 암호화했다."** mtime 은 `utime(2)` 같은 호출로 바꿀 수 있습니다[1]. ctime, 폴더 mtime, 로그의 시각과 함께 맞춰 봅니다. 시각 조작을 가려내는 방법은 [시각을 조작했나](../insider/time-manipulation.md)에서 다룹니다.
 - **"mtime 이 그대로니 암호화되지 않았다."** 소유자·권한 변경은 ctime 만 바꿉니다[1]. 암호화 여부는 시각이 아니라 파일 내용으로 판단합니다.
 - **"지운 원본은 debugfs `lsdel` 로 찾으면 된다."** ext4 에서는 지운 아이노드의 데이터 블록 정보가 남지 않아 쓸모가 없습니다[2]. 저널 잔재, 스냅숏, 백업을 봅니다.
 - **"확장자와 안내문 이름을 보면 어느 계열인지 안다."** 파일 이름은 누구나 붙일 수 있습니다. 계열은 실행 파일의 해시와 내용으로 판단합니다.

@@ -7,11 +7,11 @@ nav_order: 1590
 
 # 에어드롭으로 (AirDrop)
 
-AirDrop 으로 자료를 주변 기기에 넘겼는지 가리는 페이지입니다. AirDrop 은 인터넷이나 공유기 없이 기기끼리 주고받기 때문에[1], 기기 안의 로그와 받은 쪽 기기의 흔적을 중심으로 봅니다. 기능과 설정 파일의 자세한 설명은 [에어드롭 (AirDrop)](../../../02-artifacts/network/airdrop.md) 에 있고, 이 페이지는 유출을 가리는 순서와 해석을 다룹니다. 다른 유출 경로와 전체 흐름은 허브 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 에 있습니다.
+AirDrop 으로 자료를 주변 기기에 넘겼는지 판별하는 페이지입니다. AirDrop 은 인터넷이나 공유기 없이 기기끼리 주고받기 때문에[1], 기기 안의 로그와 받은 쪽 기기의 흔적을 중심으로 봅니다. 기능과 설정 파일의 자세한 설명은 [에어드롭 (AirDrop)](../../../02-artifacts/network/airdrop.md) 에 있고, 이 페이지는 유출을 판별하는 순서와 해석을 다룹니다. 다른 유출 경로와 전체 흐름은 허브 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 에 있습니다.
 
 ## 조사 질문
 
-"이 아이폰에서 AirDrop 으로 자료를 보냈는가, 받은 기기가 있다면 그 기기에서 보낸 사람을 가릴 수 있는가" 를 묻습니다. 보낸 쪽 기기에 무엇을 누구에게 보냈는지가 남는지는 공개된 분석 자료가 없습니다. 그래서 받은 쪽 기기를 확보할 수 있는지가 조사 범위를 크게 가릅니다.
+"이 아이폰에서 AirDrop 으로 자료를 보냈는가, 받은 기기가 있다면 그 기기에서 보낸 사람을 가려낼 수 있는가" 를 묻습니다. 보낸 쪽 기기에 무엇을 누구에게 보냈는지가 남는지는 공개된 분석 자료가 없습니다. 그래서 받은 쪽 기기를 확보할 수 있는지가 조사 범위를 크게 좌우합니다.
 
 ## 먼저 확인할 것
 
@@ -49,7 +49,7 @@ log show --predicate 'category = "AirDrop"' system_logs.logarchive
 
 받는 쪽 로그의 부분 해시를 국가·지역 번호 조합으로 만든 후보 번호의 해시와 대조하면, 보낸 전화번호를 찾을 수 있습니다[3]. 이 방법은 보낸 사람이 Apple 계정의 전화번호로 보냈을 때만 통하고, 이메일로 보낸 경우는 추가 연구가 필요합니다[3]. 방법은 Epstein·Klein·Feuerstein 의 논문 "Analysis of Sysdiagnose in iOS 15 to Identify the Sending Phone Number of AirDrop Data"(Journal of Forensic Sciences, 2022년 1월)에서 나왔고, RLEAPP 모듈로 자동화되어 있습니다(iPhone 13 Pro, iOS 15.3.1 기준)[3]. 다른 버전에서는 로그 문구와 해시 길이가 다를 수 있으니, 적용하기 전에 같은 버전의 시험 기기로 먼저 확인합니다. 방법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
-보낸 쪽 기기의 같은 범주 로그에 무엇이 남는지는 공개된 분석 자료가 없습니다. 보낸 쪽 로그에서 AirDrop 이벤트를 찾더라도 받는 사람과 파일을 곧바로 적지 않고, 로그 문구가 말하는 만큼만 씁니다.
+보낸 쪽 기기의 같은 범주 로그에 무엇이 남는지는 공개된 분석 자료가 없습니다. 보낸 쪽 로그에서 AirDrop 이벤트를 찾더라도 받는 사람과 파일을 곧바로 적지 않고, 로그 문구로 확인되는 만큼만 씁니다.
 
 ### 설정 파일
 
@@ -77,7 +77,7 @@ StreamID
 
 ### 받은 쪽 기기
 
-받은 쪽 기기를 확보했으면 들어온 자료의 경로를 봅니다. `Photos.sqlite` 에서는 ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY 와 ZCLOUDMASTER 의 ZIMPORTEDBY·ZIMPORTEDBYBUNDLEIDENTIFIER·ZIMPORTEDBYDISPLAYNAME·ZORIGINALFILENAME 칸으로 사진이 어떻게 들어왔는지 가립니다. AirDrop 으로 들어온 사진에 어떤 값이 들어가는지는 공개된 분석 자료가 없어서, 같은 버전의 시험 기기로 AirDrop 을 한 번 받아 값을 확인한 뒤 씁니다. 파일 앱에서 AirDrop 으로 받은 파일은 Inbox 로 갑니다(iOS 13 기준)[4].
+받은 쪽 기기를 확보했으면 들어온 자료의 경로를 봅니다. `Photos.sqlite` 에서는 ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY 와 ZCLOUDMASTER 의 ZIMPORTEDBY·ZIMPORTEDBYBUNDLEIDENTIFIER·ZIMPORTEDBYDISPLAYNAME·ZORIGINALFILENAME 열로 사진이 어떻게 들어왔는지 판별합니다. AirDrop 으로 들어온 사진에 어떤 값이 들어가는지는 공개된 분석 자료가 없어서, 같은 버전의 시험 기기로 AirDrop 을 한 번 받아 값을 확인한 뒤 씁니다. 파일 앱에서 AirDrop 으로 받은 파일은 Inbox 로 갑니다(iOS 13 기준)[4].
 
 ## 분석 흐름
 

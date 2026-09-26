@@ -45,7 +45,7 @@ Skype 는 세대마다 저장 방식이 달랐습니다. 세대별로 알려진 
 
 | 세대 | 저장 방식 | 알려진 것 | 공개 자료 없음 |
 |---|---|---|---|
-| `main.db` 를 쓰는 판 | SQLite | 표와 칸 이름 (plaso) | 폴더 경로, `main.db` 를 쓴 마지막 버전 |
+| `main.db` 를 쓰는 판 | SQLite | 표와 열 이름 (plaso) | 폴더 경로, `main.db` 를 쓴 마지막 버전 |
 | 크롬 계열 구조의 판 | Local Storage·IndexedDB 를 LevelDB 로 저장 | Skype 는 LevelDB 를 쓰는 앱입니다 (CCL) | 폴더 경로, 대화가 남는 곳 |
 | 스토어 판 | — | — | 패키지 폴더 이름, 안의 DB 이름 |
 
@@ -61,11 +61,11 @@ plaso 파서는 아래 일곱 표가 있어야 이 파일을 Skype DB 로 읽습
 
 `Accounts`, `Calls`, `CallMembers`, `Chats`, `Messages`, `SMSes`, `Transfers`
 
-표마다 주요 칸은 아래와 같습니다(plaso skype.py). 계정 시각 칸과 통화 시각 칸 말고 나머지 칸의 뜻은 칸 이름에서 나온 것이므로, 검체에서 값을 보고 확인합니다.
+표마다 주요 열은 아래와 같습니다(plaso skype.py). 계정 시각 열과 통화 시각 열 말고 나머지 열의 뜻은 열 이름에서 나온 것이므로, 실제 데이터의 값을 보고 확인합니다.
 
 ### 계정 (Accounts)
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `id`, `fullname`, `given_displayname`, `emails`, `country` | 계정 식별 정보 |
 | `profile_timestamp` | 프로필을 바꾼 시각 |
@@ -77,9 +77,9 @@ plaso 파서는 아래 일곱 표가 있어야 이 파일을 Skype DB 로 읽습
 
 ### 대화 (Chats + Messages)
 
-`Chats` 와 `Messages` 는 `chatname` 칸으로 이어서 읽습니다. 두 표에서 읽는 칸은 아래와 같습니다. `id`·`participants`·`friendlyname`·`dialog_partner` 는 `Chats` 의 칸이고, 나머지는 `Messages` 의 칸입니다.
+`Chats` 와 `Messages` 는 `chatname` 열으로 이어서 읽습니다. 두 표에서 읽는 열은 아래와 같습니다. `id`·`participants`·`friendlyname`·`dialog_partner` 는 `Chats` 의 열이고, 나머지는 `Messages` 의 열입니다.
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `id` | 대화방 번호 |
 | `participants` | 대화 참여자 |
@@ -89,13 +89,13 @@ plaso 파서는 아래 일곱 표가 있어야 이 파일을 Skype DB 로 읽습
 | `body_xml` | 메시지 본문 |
 | `timestamp` | 메시지 시각 |
 
-본문 칸 이름은 `body_xml` 입니다. 본문 형식은 공개 자료가 없어 검체에서 확인합니다.
+본문 열 이름은 `body_xml` 입니다. 본문 형식은 실제 데이터로 확인해야 합니다.
 
 ### 통화 (Calls + CallMembers)
 
-`Calls` 에서 `id`·`is_incoming`·`begin_timestamp` 를, `CallMembers` 에서 나머지 칸을 읽습니다. (plaso skype.py)
+`Calls` 에서 `id`·`is_incoming`·`begin_timestamp` 를, `CallMembers` 에서 나머지 열을 읽습니다. (plaso skype.py)
 
-| 칸 | 표 | 뜻 |
+| 열 | 표 | 뜻 |
 |---|---|---|
 | `id` | Calls | 통화 번호 |
 | `is_incoming` | Calls | 받은 통화인지 건 통화인지 |
@@ -107,7 +107,7 @@ plaso 파서는 아래 일곱 표가 있어야 이 파일을 Skype DB 로 읽습
 
 ### SMS (SMSes)
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `id` | 번호 |
 | `target_numbers` | 받는 전화번호 |
@@ -116,11 +116,11 @@ plaso 파서는 아래 일곱 표가 있어야 이 파일을 Skype DB 로 읽습
 
 ### 파일 전송 (Transfers)
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `partner_handle`, `partner_dispname` | 상대 계정과 표시 이름 |
 | `offer_send_list` | 보내기 대상 목록으로 보입니다 |
-| `starttime`, `accepttime`, `finishtime` | 칸 이름으로 보아 전송을 시작한·수락한·끝낸 시각입니다 |
+| `starttime`, `accepttime`, `finishtime` | 열 이름으로 보면 전송을 시작한·수락한·끝낸 시각입니다 |
 | `filepath`, `filename`, `filesize` | 파일 경로·이름·크기 |
 | `status` | 전송 상태. 값의 뜻은 공개 자료 없음 |
 | `id`, `parent_id`, `pk_id` | 식별 정보 |
@@ -141,7 +141,7 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 ### 증명하지 못하는 것
 
 - **전송이 끝났는지.** `status` 값의 뜻은 알려져 있지 않습니다. `finishtime` 이 채워져 있는지와 대상 경로에 파일이 있는지를 함께 봅니다.
-- **메시지를 읽었는지.** 읽음 여부를 가리는 칸은 알려져 있지 않습니다.
+- **메시지를 읽었는지.** 읽음 여부를 구분하는 열은 알려져 있지 않습니다.
 - **누가 자판 앞에 있었는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **Skype 를 쓰지 않았다는 것.** `main.db` 가 없어도 크롬 계열 구조의 판이나 스토어 판을 썼을 수 있습니다.
 - **계정의 전체 대화.** 이 PC 의 `main.db` 가 계정의 모든 대화를 담았다고 볼 수 없습니다. Teams 로 옮겨진 대화와 비교해 빠진 부분을 적습니다.
@@ -150,11 +150,11 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 
 ## 시각 해석
 
-이 파일의 시각 칸은 모두 POSIX 초, 곧 1970-01-01 00:00:00 UTC 부터 센 초입니다(plaso skype.py). 값은 UTC 기준이라서 현지 시각으로 옮길 때는 [시간대 설정](../system-account/time-zone.md) 을 확인합니다.
+이 파일의 시각 열은 모두 POSIX 초, 곧 1970-01-01 00:00:00 UTC 부터 센 초입니다(plaso skype.py). 값은 UTC 기준이라서 현지 시각으로 옮길 때는 [시간대 설정](../system-account/time-zone.md) 을 확인합니다.
 
 - 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
-| 칸 | 알려 주는 때 |
+| 열 | 알려 주는 때 |
 |---|---|
 | `Messages.timestamp` | 메시지 시각 |
 | `Calls.begin_timestamp` | 통화를 시도한 시각 (plaso) |
@@ -177,7 +177,7 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 
 ### 헥스로 한 번
 
-아래는 SQLite 명세와 POSIX 시각 정의로 만든 예시입니다. 실제 검체에서 나온 값이 아닙니다.
+아래는 SQLite 명세와 POSIX 시각 정의로 만든 예시입니다. 실제 기기에서 나온 값이 아닙니다.
 
 1. 후보 `main.db` 의 첫 16바이트가 SQLite 머리인지 봅니다.
 
@@ -187,7 +187,7 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
    ```
 
 2. 사본을 SQLite 도구로 열어 표 일곱 개가 모두 있는지 봅니다.
-3. 시각 칸 값 하나를 손으로 풉니다. 예를 들어 값이 `1600000000` 이면 16진수로 `5F 5E 10 00` 입니다.
+3. 시각 열 값 하나를 손으로 풉니다. 예를 들어 값이 `1600000000` 이면 16진수로 `5F 5E 10 00` 입니다.
 4. 이 값은 1970-01-01 00:00:00 UTC 에서 1,600,000,000초 뒤입니다. 곧 2020-09-13 12:26:40 UTC 입니다.
 5. 시간대가 KST(UTC+9)이면 2020-09-13 21:26:40 입니다.
 6. 도구가 보여 준 시각과 손으로 푼 시각이 같은지 확인합니다.
@@ -196,7 +196,7 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 
 공개 도구의 예로 plaso 가 있습니다. plaso 의 Skype 파서는 위 일곱 표를 읽어 타임라인 사건으로 바꿉니다. (plaso skype.py)
 
-파서가 읽는 칸은 위 표에 적은 칸뿐이고, 다른 칸은 SQLite 도구로 따로 봅니다. 도구가 낸 메시지 수와 `Messages` 표의 행 수를 맞춰 보고, 차이가 나면 SQL 로 직접 셉니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+파서가 읽는 열은 위 표에 적은 열뿐이고, 다른 열은 SQLite 도구로 따로 봅니다. 도구가 낸 메시지 수와 `Messages` 표의 행 수를 맞춰 보고, 차이가 나면 SQL 로 직접 셉니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증 — 함께 볼 아티팩트
 
@@ -213,7 +213,7 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 
 ## 실습
 
-서비스가 끝나서 새로 검체를 만들 수 없고, Skype 가 들어간 공개 검체도 알려진 것이 없습니다. 예전에 만든 검체나 가상 머신 스냅숏이 있으면 아래 질문으로 풀어 봅니다.
+서비스가 끝나서 새로 시험 데이터를 만들 수 없고, Skype 가 들어간 공개 시험 이미지도 알려진 것이 없습니다. 예전에 만든 시험 이미지나 가상 머신 스냅숏이 있으면 아래 질문으로 풀어 봅니다.
 
 1. 이미지에서 `main.db` 라는 이름의 파일은 몇 개입니까? 그 가운데 표 일곱 개가 모두 있는 파일은 몇 개입니까?
 2. `Accounts` 의 `lastused_timestamp` 를 손으로 풀면 언제입니까? 도구의 결과와 같습니까?

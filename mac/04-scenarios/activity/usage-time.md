@@ -33,9 +33,9 @@ utmpx 와 로그인 기록은 "켜졌다·로그인했다" 를, pmset 기록은 
 
 ### utmpx
 
-`/private/var/run/utmpx` 는 628바이트 레코드가 이어진 파일이고, 첫 레코드는 user 칸에 `utmpx-1.00` 문자열이 들어간 머리 레코드입니다 [2]. 레코드 안 칸은 아래 순서이고, 오프셋은 칸 크기를 순서대로 더한 값입니다.
+`/private/var/run/utmpx` 는 628바이트 레코드가 이어진 파일이고, 첫 레코드는 user 필드에 `utmpx-1.00` 문자열이 들어간 머리 레코드입니다 [2]. 레코드 안 필드는 아래 순서이고, 오프셋은 필드 크기를 순서대로 더한 값입니다.
 
-| 오프셋 | 크기 | 칸 [2] | 내용 |
+| 오프셋 | 크기 | 필드 [2] | 내용 |
 |---|---|---|---|
 | 0 | 256 | user | 사용자 이름(UTF-8) |
 | 256 | 4 | terminal_id | 단말 식별자(uint32 LE) |
@@ -49,7 +49,7 @@ utmpx 와 로그인 기록은 "켜졌다·로그인했다" 를, pmset 기록은 
 
 type 값은 0(EMPTY)부터 11(SHUTDOWN_TIME)까지 있고, 사용 시간 재구성에 쓰는 값은 2 BOOT_TIME, 6 LOGIN_PROCESS, 7 USER_PROCESS, 8 DEAD_PROCESS, 11 SHUTDOWN_TIME 입니다 [2]. 시각은 1970-01-01 을 기준으로 한 유닉스 시각이고, `date` 에 `date_microseconds` 를 10^-6 곱해 더하면 됩니다 [2][3]. 헥스 편집기로 볼 때는 628바이트 단위로 끊어 오프셋 296 의 type 과 오프셋 300 의 date 를 먼저 읽으면 부팅·로그인 순서가 빠르게 잡힙니다.
 
-`/private/var/run` 이 재부팅 때 비워지는지는 알려져 있지 않습니다. 그래서 utmpx 가 사건 당시의 부팅까지 담고 있는지는 파일 안 가장 이른 BOOT_TIME 레코드로 먼저 가늠하고, 담고 있지 않으면 통합 로그 쪽 기록으로 넘어갑니다.
+`/private/var/run` 이 재부팅 때 비워지는지는 알려져 있지 않습니다. 그래서 utmpx 가 사건 당시의 부팅까지 담고 있는지는 파일 안 가장 이른 BOOT_TIME 레코드로 먼저 추정하고, 담고 있지 않으면 통합 로그 쪽 기록으로 넘어갑니다.
 
 ### 전원 관리 기록과 설정
 
@@ -64,13 +64,13 @@ type 값은 0(EMPTY)부터 11(SHUTDOWN_TIME)까지 있고, 사용 시간 재구�
 | `pmset -g pslog` | 배터리·UPS 전원 상태 |
 | `pmset -g everything` | GETTING 절의 항목 출력을 한 번에 모은 것 |
 
-pmset 으로 바꾼 설정은 `/Library/Preferences/SystemConfiguration/com.apple.PowerManagement.plist` 에 저장됩니다. 설정 이름 `sleep` 은 시스템 잠자기 타이머, `displaysleep` 은 화면 잠자기 타이머이며, 둘 다 분 단위이고 0 이면 꺼져 있다는 뜻입니다 [1]. 이 두 이름은 pmset 명령의 설정 이름이고 plist 안의 키 이름은 공개 문서에 나와 있지 않아서, 검체의 plist 에서 어느 키가 어느 설정인지 먼저 확인하고, 최근 버전에서도 파일이 같은 경로에 있는지도 함께 봅니다. 이 값은 사용 흔적이 끊긴 뒤 잠자기 기록이 나타날 때까지의 간격을 해석하는 데 씁니다. 예를 들어 `displaysleep` 이 10 이라면 마지막 조작 뒤 화면이 꺼질 때까지 약 10분 공백이 생기는 것이 설정과 맞는 모습이지만, 설정은 확보 시점의 값이라서 사건 당시에도 같았는지는 따로 확인합니다. 통합 로그에서 잠자기·깨우기를 남기는 프로세스와 문구는 [전원·잠자기 기록 (pmset)](../../02-artifacts/logs/power-events.md)에서 봅니다.
+pmset 으로 바꾼 설정은 `/Library/Preferences/SystemConfiguration/com.apple.PowerManagement.plist` 에 저장됩니다. 설정 이름 `sleep` 은 시스템 잠자기 타이머, `displaysleep` 은 화면 잠자기 타이머이며, 둘 다 분 단위이고 0 이면 꺼져 있다는 뜻입니다 [1]. 이 두 이름은 pmset 명령의 설정 이름이고 plist 안의 키 이름은 공개 문서에 나와 있지 않아서, 실제 plist 에서 어느 키가 어느 설정인지 먼저 확인하고, 최근 버전에서도 파일이 같은 경로에 있는지도 함께 봅니다. 이 값은 사용 흔적이 끊긴 뒤 잠자기 기록이 나타날 때까지의 간격을 해석하는 데 씁니다. 예를 들어 `displaysleep` 이 10 이라면 마지막 조작 뒤 화면이 꺼질 때까지 약 10분 공백이 생기는 것이 설정과 맞는 모습이지만, 설정은 확보 시점의 값이라서 사건 당시에도 같았는지는 따로 확인합니다. 통합 로그에서 잠자기·깨우기를 남기는 프로세스와 문구는 [전원·잠자기 기록 (pmset)](../../02-artifacts/logs/power-events.md)에서 봅니다.
 
 ## 분석 흐름
 
 1. macOS 버전과 시간대, 계정 목록을 적고, 라이브 확보 때 받은 `pmset -g` 출력이 있는지 확인합니다.
 2. utmpx 를 읽어 BOOT_TIME·SHUTDOWN_TIME 으로 켜져 있던 구간을 나누고, 그 안에 USER_PROCESS·DEAD_PROCESS 레코드로 로그인 세션을 표시합니다.
-3. 통합 로그에서 `loginwindow`·`com.apple.login` 기록과 잠금 해제 실패 기록을 읽어 2단계의 세션을 보강하고, `shutdown.log` 로 종료 시점을 맞춰 봅니다. 통합 로그 시각은 마크 연속 시각을 timesync 로 벽시계 시각으로 바꾼 값이라서, 변환에 쓴 timesync 파일이 해당 부팅을 담고 있는지 확인합니다.
+3. 통합 로그에서 `loginwindow`·`com.apple.login` 기록과 잠금 해제 실패 기록을 읽어 2단계의 세션을 보강하고, `shutdown.log` 로 종료 시점을 맞춰 봅니다. 통합 로그 시각은 마크 연속 시각을 timesync 로 실제 시각 시계(wall clock) 기준 시각으로 바꾼 값이라서, 변환에 쓴 timesync 파일이 해당 부팅을 담고 있는지 확인합니다.
 4. `pmset -g log` 출력이 있으면 켜져 있던 구간 안에서 잠자기·깨우기 구간을 나눕니다. `pmset -g uuid` 는 확보 시점에 진행 중인 잠자기 주기의 UUID 하나만 보여 주므로 [1], 이 값은 확보 직전 주기의 기록을 찾는 데만 씁니다. 출력이 없으면 [전원·잠자기 기록 (pmset)](../../02-artifacts/logs/power-events.md)의 방법으로 디스크 기록을 찾습니다.
 5. KnowledgeC 의 `/display/isBacklit` 과 `/device/isLocked` 로 깨어 있던 구간 안에서 화면이 켜져 있고 잠기지 않은 구간을 찾습니다.
 6. `/app/inFocus` 와 `/app/usage` 로 5단계 구간 안에서 실제로 앞에 떠 있던 앱을 확인합니다.

@@ -6,7 +6,7 @@ nav_order: 670
 
 # 스토어 앱 설치 목록 (AppX·StateRepository)
 
-> 이 페이지의 "기준 PC" 는 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) PC 한 대입니다. 수치와 표·칸 이름은 이 PC 기준이고, 다른 버전에서는 검체에서 다시 확인합니다.
+> 이 페이지의 "기준 PC" 는 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) PC 한 대입니다. 수치와 표·열 이름은 이 PC 기준이고, 다른 버전에서는 실제 데이터로 다시 확인합니다.
 
 ## 한 줄 요약
 
@@ -55,7 +55,7 @@ StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지�
 버전 차이는 이렇게 정리합니다.
 
 - StateRepository 가 처음 생긴 Windows 버전은 공개 자료에 없습니다.
-- 이 페이지의 표·칸 이름은 기준 PC 의 것입니다. 다른 버전의 검체에서는 표 목록부터 확인합니다.
+- 이 페이지의 표·열 이름은 기준 PC 의 것입니다. 다른 버전의 기기에서는 표 목록부터 확인합니다.
 
 SQLite 파일과 WAL 의 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서, 하이브 파일은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -84,22 +84,22 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 - 계열 이름에는 버전과 아키텍처가 없어서 앱을 업데이트해도 계열 이름은 그대로입니다. 앱 데이터와 보안 범위는 보통 계열 단위로 잡히므로 버전이 올라가도 설정이 이어집니다.
 - PublisherId 는 서명 인증서의 주체 이름(Publisher)으로 만든 13자 고정 길이 문자열이고, Crockford Base32 로 적기 때문에 I·L·O·U 가 들어가지 않습니다.
 - `8wekyb3d8bbwe` 는 Microsoft 의 PublisherId 입니다.
-- 대소문자는 Publisher 에서만 구분합니다. 이름·ResourceId·PublisherId·전체 이름·계열 이름은 대소문자를 가리지 않습니다.
+- 대소문자는 Publisher 에서만 구분합니다. 이름·ResourceId·PublisherId·전체 이름·계열 이름은 대소문자를 구분하지 않습니다.
 - 앱 식별자는 AUMID (ApplicationUserModelID) 입니다. 패키지 계열 이름과 매니페스트 Application 요소의 ID 로 만듭니다.
 
 ### StateRepository-Machine.srd 의 표
 
 기준 PC 의 이 DB 에는 표 (table) 가 90개쯤 있었습니다. 분석에 먼저 쓰는 표는 아래와 같습니다.
 
-| 표 | 주요 칸 (column) | 알려 주는 것 |
+| 표 | 주요 열 (column) | 알려 주는 것 |
 |---|---|---|
-| Package | `_PackageID`, `PackageFamily`, `PackageFullName`, `ResourceId`, `Architecture`, `Version`(정수), `IsInbox`, `PackageType`, `DisplayName`, `PublisherDisplayName`, `Description`, `SignatureOrigin`, `PackageOrigin`, `OSMinVersion`, `OSMaxVersionTested` | 지금 설치된 패키지입니다. 설치 시각 칸은 없습니다 |
-| PackageFamily | `Name`, `Publisher`, `PublisherId`, `PackageFamilyName`, `PackageSID`(BLOB), `RawPublisher` | 계열 이름과 게시자입니다. Package 표의 `PackageFamily` 칸이 이 표의 번호를 가리킵니다 |
+| Package | `_PackageID`, `PackageFamily`, `PackageFullName`, `ResourceId`, `Architecture`, `Version`(정수), `IsInbox`, `PackageType`, `DisplayName`, `PublisherDisplayName`, `Description`, `SignatureOrigin`, `PackageOrigin`, `OSMinVersion`, `OSMaxVersionTested` | 지금 설치된 패키지입니다. 설치 시각 열은 없습니다 |
+| PackageFamily | `Name`, `Publisher`, `PublisherId`, `PackageFamilyName`, `PackageSID`(BLOB), `RawPublisher` | 계열 이름과 게시자입니다. Package 표의 `PackageFamily` 열이 이 표의 번호를 가리킵니다 |
 | PackageUser | `Package`, `User`, `InstallTime`, `OSVersionWhenInstalled`, `WhenRestored`, `IsExplicitlyInstalled`, `DeploymentState` | 패키지를 등록한 사용자와 사용자별 설치 시각입니다 |
 | User | `UserSid`(BLOB) | 사용자입니다. SID 는 이진 형식입니다 |
 | PackageLocation | `Package`, `InstalledLocation`, `MutableLocation` | 설치 폴더입니다 |
 | Application | `Package`, `ApplicationUserModelId`, `DisplayName`, `Executable`, `Entrypoint`, `PackageRelativeApplicationId` | 패키지 안의 앱과 실행 파일입니다 |
-| PackageIdentity | `PackageFamily`, `PackageFullName` | 지금은 설치돼 있지 않은 옛 버전 이름까지 남습니다. 시각 칸은 없습니다 |
+| PackageIdentity | `PackageFamily`, `PackageFullName` | 지금은 설치돼 있지 않은 옛 버전 이름까지 남습니다. 시각 열은 없습니다 |
 | DeploymentHistory | `PackageIdentity`, `User`, `HResult`, `WhenOccurred` | 배포 작업의 결과 코드와 시각입니다 |
 
 그 밖에 PackageUserStatus, PackageMachineStatus, ProvisionedPackage, ProvisionedPackageDeleted, EndOfLifePackage, Bundle, BundlePackage, Dependency, ApplicationUser, AppExecutionAlias, Protocol, FileTypeAssociation, PrimaryTile, SecondaryTile 같은 표가 있었습니다.
@@ -115,12 +115,12 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 - 한 앱은 현재 버전 1개 말고도 옛 버전 전체 이름 20개가 PackageIdentity 에 남아 있었습니다.
 - DeploymentHistory 30행은 모두 HResult 가 -2147009278(0x80073D02)이었습니다. 이 PC 에서는 실패 기록만 있었습니다.
 - 0x80073D02 는 ERROR_PACKAGES_IN_USE 입니다. 패키지가 바꿀 리소스를 지금 쓰고 있어서 설치하지 못했다는 뜻입니다.
-- 성공한 작업이 이 표에 남는지는 공개 자료가 없어 검체로 확인해야 합니다.
+- 성공한 작업이 이 표에 남는지는 실제 데이터로 확인해야 합니다.
 - DeploymentHistory 행의 시각은 2026-08-28 부터 09-10 사이였습니다. 같은 PC 의 AppXDeploymentServer 이벤트 로그는 09-15 부터 남아 있었습니다. 이벤트 로그에서 밀려난 기록이 이 표에는 남아 있었습니다.
 
 ### StateRepository-Deployment.srd 의 표
 
-기준 PC 의 이 DB 에는 AppInstaller, AppInstallerUri, AppxManifest, AutoUpdatePackage, ContentGroup, ContentGroupFile, File, PackageAppInstaller, PackageSourceUri 표가 있었습니다. 칸 구성과 뜻은 이 페이지에서 다루지 않습니다.
+기준 PC 의 이 DB 에는 AppInstaller, AppInstallerUri, AppxManifest, AutoUpdatePackage, ContentGroup, ContentGroupFile, File, PackageAppInstaller, PackageSourceUri 표가 있었습니다. 열 구성과 뜻은 이 페이지에서 다루지 않습니다.
 
 ### 레지스트리
 
@@ -212,8 +212,8 @@ AppXDeploymentServer/Operational 의 주요 이벤트는 아래와 같습니다.
 - 사용자가 스스로 설치했는지 단정하지 못합니다. IsExplicitlyInstalled·DeploymentState 숫자의 뜻은 공개 자료에 없습니다.
 - 앱을 어디서 받았는지 단정하지 못합니다. PackageOrigin·SignatureOrigin 숫자의 뜻은 공개 자료에 없습니다.
 - InstallTime 은 내려받은 시각이 아닙니다. 기준 PC 에서는 Add 완료 시각과 31분 차이가 났습니다.
-- 위 표에는 제거 시각 칸이 없습니다. PackageIdentity 에도 시각 칸이 없습니다. 이벤트 로그가 남아 있을 때만 이벤트 607 로 제거 작업의 시각을 봅니다.
-- 앱을 완전히 제거하면 Package·PackageUser 행이 곧바로 지워지는지는 공개 자료가 없어 검체로 확인합니다.
+- 위 표에는 제거 시각 열이 없습니다. PackageIdentity 에도 시각 열이 없습니다. 이벤트 로그가 남아 있을 때만 이벤트 607 로 제거 작업의 시각을 봅니다.
+- 앱을 완전히 제거하면 Package·PackageUser 행이 곧바로 지워지는지는 실제 데이터로 확인해야 합니다.
 - 그 시각에 누가 PC 앞에 있었는지는 알 수 없습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 보고서에는 "StateRepository-Machine.srd 의 PackageUser 표에 따르면 이 패키지는 SID `<SID>` 계정에 등록돼 있고, 등록 시각 값(InstallTime)은 <UTC 시각> 이다" 처럼 씁니다. "이 시각에 앱을 내려받았다" 로 쓰지 않습니다.
@@ -254,23 +254,23 @@ InstallTime 은 Register 완료와 1초 차이였고 Add 완료와는 31분 차�
 1. **-wal·-shm 파일을 같이 떠야 합니다.** 기준 PC 에서 `-wal` 파일은 비어 있지 않았으므로 .srd 파일만 뜨면 최근 변경이 빠집니다.
 2. **서비스가 돌아가도 복사할 수 있습니다.** 기준 PC 에서는 서비스가 켜진 상태에서도 .srd 파일이 복사됐습니다.
 3. **설치 시각은 Package 표가 아니라 PackageUser 표에 있습니다.** 같은 패키지에 SYSTEM 행과 사용자 행이 따로 있습니다. 어느 SID 의 행인지 늘 같이 적습니다.
-4. **숫자 칸의 뜻은 공개 자료에 없습니다.** DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 는 값만 적고 뜻을 단정하지 않습니다.
+4. **숫자 열의 뜻은 공개 자료에 없습니다.** DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 는 값만 적고 뜻을 단정하지 않습니다.
 5. **기본 탑재 앱의 InstallTime 은 OS 설치 시각이 아닙니다.** 기준 PC 에서는 16시간 어긋났습니다.
 6. **이벤트 로그는 금방 밀려납니다.** 기준 PC 에서는 8일치만 남아 있었습니다. DeploymentHistory 에는 그보다 오래된 기록이 남아 있었습니다.
 7. **DeploymentHistory 에 성공 기록이 없을 수 있습니다.** 기준 PC 에서는 실패 기록만 있었습니다. 행이 없다고 설치 작업이 없었던 것은 아닙니다.
 8. **HResult 는 음수로 보입니다.** 32비트 오류 코드를 부호 있는 정수로 담기 때문입니다. 16진수로 바꿔 오류 이름을 찾습니다.
-9. **이름을 찾을 때 대소문자를 가리지 않습니다.** 패키지 이름은 대소문자를 구분하지 않습니다. 도구 검색에서 대소문자 구분을 끕니다.
+9. **이름을 찾을 때 대소문자를 구분하지 않습니다.** 패키지 이름은 대소문자를 구분하지 않습니다. 도구 검색에서 대소문자 구분을 끕니다.
 10. **옛 버전 이름에는 시각이 없습니다.** PackageIdentity 에 남은 이름만으로 그 버전을 언제 썼는지 말할 수 없습니다.
 11. **Deprovisioned 키의 뜻은 확정되지 않았습니다.** 키 이름만 보고 "사용자가 앱을 뺐다" 고 쓰지 않습니다.
 12. **흐리게 보이는 앱은 PackageStatus 값을 봅니다.** 이 값이 바뀌면 앱이 실행되지 않습니다. TWinUI/Operational 이벤트 5960 과 함께 봅니다.
 13. **스토어 앱 업데이트 실패는 Windows Update 이벤트에도 섞여 남습니다.** 기준 PC 에서는 System 로그의 Windows Update 클라이언트 이벤트 20 에 남았습니다. 제목은 스토어 상품 ID 로 시작했습니다. 예: `9NMPJ99VJBWV-Microsoft.YourPhone`, 오류 0x80073D02. 이 이벤트는 [윈도 업데이트 기록](windows-update-cbs-log.md) 에서 다룹니다.
-14. **다른 Windows 버전은 따로 확인합니다.** 이 페이지의 표·칸은 기준 PC 의 것입니다.
+14. **다른 Windows 버전은 따로 확인합니다.** 이 페이지의 표·열은 기준 PC 의 것입니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 값은 명세로 만든 예시입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+아래 값은 명세로 만든 예시입니다. 특정 기기에서 꺼낸 값이 아닙니다.
 
 **파일 첫 16바이트.** SQLite 파일은 아래 16바이트로 시작합니다. 기준 PC 의 두 .srd 파일도 이렇게 시작했습니다.
 
@@ -352,9 +352,9 @@ ORDER BY WhenOccurred;
 
 ## 실습
 
-Windows 공개 검체(NIST CFReDS 등)에서 `AppRepository` 폴더와 AppX 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
+Windows 공개 시험 이미지(NIST CFReDS 등)에서 `AppRepository` 폴더와 AppX 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
 
-1. 검체에 `StateRepository-Machine.srd` 가 있습니까? `-wal` 파일도 함께 있습니까?
+1. 이미지에 `StateRepository-Machine.srd` 가 있습니까? `-wal` 파일도 함께 있습니까?
 2. Package 표의 행 수와 `AppRepository` 폴더의 `.xml` 파일 수가 같습니까?
 3. IsInbox=0 패키지 가운데 로컬 사용자 SID 에 등록된 패키지는 무엇입니까?
 4. 그 패키지의 InstallTime 을 직접 날짜로 바꿔 봅니다. 도구가 보여 주는 값과 같습니까?

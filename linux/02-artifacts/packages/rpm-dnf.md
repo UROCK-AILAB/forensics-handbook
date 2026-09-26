@@ -20,17 +20,17 @@ rpm 자체도 syslog 플러그인이나 audit 플러그인이 설치되어 있�
 
 | 항목 | RHEL 9 (rpm 4.16, dnf 4) | RHEL 7 (yum) | dnf5 를 쓰는 시스템 |
 |---|---|---|---|
-| rpm 데이터베이스 | `/var/lib/rpm/rpmdb.sqlite` 와 `-wal`, `-shm`[4] | `/var/lib/rpm/Packages` 와 색인 파일들(Berkeley DB)[2][4] | rpm 판에 따라 위 둘 가운데 하나. 검체에서 확인 |
+| rpm 데이터베이스 | `/var/lib/rpm/rpmdb.sqlite` 와 `-wal`, `-shm`[4] | `/var/lib/rpm/Packages` 와 색인 파일들(Berkeley DB)[2][4] | rpm 판에 따라 위 둘 가운데 하나. 실제 시스템에서 확인 |
 | 텍스트 로그 | `/var/log/dnf.log`, `dnf.rpm.log`, `dnf.librepo.log`, `hawkey.log`[11][14] | `/var/log/yum.log`[17] | `/var/log/dnf5.log`(root 로 실행할 때)[16] |
 | 트랜잭션 기록 DB | `/var/lib/dnf/history.sqlite`[11][15] | `/var/lib/yum/history/history-YYYY-MM-DD.sqlite`[18] | `/usr/lib/sysimage/libdnf5/transaction_history.sqlite`[16] |
 | 패키지별 부가 정보 | 트랜잭션 기록 DB 안 | `/var/lib/yum/yumdb/`[18] | 트랜잭션 기록 DB 안 |
 | 저장소 설정 | `/etc/yum.repos.d/*.repo`[14] | `/etc/yum.conf`, `/etc/yum.repos.d/*.repo`[22] | `/etc/yum.repos.d/*.repo`[16] |
 | 플러그인 | `/etc/dnf/pluginconf.d/`, `/usr/lib` 아래 `dnf-plugins` 폴더[20] | `/etc/yum/pluginconf.d/`, `/usr/lib/yum-plugins/`[20] | `/etc/dnf/libdnf5-plugins/`(플러그인 설정)[16] |
-| 받은 패키지 캐시 | `/var/cache/dnf`, 기본값 `keepcache=false`[11][14] | 검체에서 확인 | 검체에서 확인 |
+| 받은 패키지 캐시 | `/var/cache/dnf`, 기본값 `keepcache=false`[11][14] | 실제 시스템에서 확인 | 실제 시스템에서 확인 |
 
-rpm 데이터베이스 폴더의 기본값은 `%_dbpath` 매크로의 `/var/lib/rpm` 입니다[2][3]. rpm 4.16 은 설정한 백엔드 파일이 없으면 sqlite, ndb, Berkeley DB 순서로 폴더 안에 있는 파일을 찾아 씁니다[4]. 그래서 백엔드는 설정을 보지 않고 폴더 안에 `rpmdb.sqlite` 가 있는지, `Packages` 가 있는지로 가리면 됩니다. ndb 백엔드라면 파일 이름이 `Packages.db` 입니다[4].
+rpm 데이터베이스 폴더의 기본값은 `%_dbpath` 매크로의 `/var/lib/rpm` 입니다[2][3]. rpm 4.16 은 설정한 백엔드 파일이 없으면 sqlite, ndb, Berkeley DB 순서로 폴더 안에 있는 파일을 찾아 씁니다[4]. 그래서 백엔드는 설정을 보지 않고 폴더 안에 `rpmdb.sqlite` 가 있는지, `Packages` 가 있는지로 판별하면 됩니다. ndb 백엔드라면 파일 이름이 `Packages.db` 입니다[4].
 
-dnf5 는 root 가 아닌 사용자로 실행하면 로그를 사용자별 XDG 상태 폴더에 씁니다[16]. 플러그인 폴더와 저장소 설정은 영구 실행 수단으로 쓰일 수 있어서 UAC 도 따로 모읍니다[20]. 이 쪽은 기록만 다루고, 설정 파일로 남는 지속성은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
+dnf5 는 root 가 아닌 사용자로 실행하면 로그를 사용자별 XDG 상태 폴더에 씁니다[16]. 플러그인 폴더와 저장소 설정은 영구 실행 수단으로 쓰일 수 있어서 UAC 도 따로 모읍니다[20]. 이 페이지는 기록만 다루고, 설정 파일로 남는 지속성은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
 
 ## 구조
 
@@ -56,9 +56,9 @@ rpm 4.16 의 sqlite 백엔드는 주 표 하나와 색인 표 여럿을 씁니�
 | `Filedigests`, `Filedigestalgo` | 1035, 5011 | string array, int32 | 파일별 해시와 해시 알고리즘. 알고리즘 값이 없으면 md5 |
 | `Filemtimes` | 1034 | int32 array | 파일별 수정 시각 |
 
-파일별 해시·크기·권한으로 설치한 뒤 바뀐 파일을 가리는 방법은 [패키지 파일 변조 확인](package-verify.md) 에서 다룹니다.
+파일별 해시·크기·권한으로 설치한 뒤 바뀐 파일을 가려내는 방법은 [패키지 파일 변조 확인](package-verify.md) 에서 다룹니다.
 
-rpm 은 쓰기로 열 때 `PRAGMA journal_mode = WAL` 을 걸고 `-wal` 파일이 닫힌 뒤에도 남도록 설정하며, `%_flush_io` 가 꺼져 있으면 자동 체크포인트를 끕니다(`wal_autocheckpoint = 0`)[4]. 정상으로 닫을 때는 `wal_checkpoint = TRUNCATE` 로 WAL 내용을 본 파일에 옮기고 WAL 을 비웁니다[4]. 그래서 rpm 이 도는 중에 수집했거나 비정상으로 끝났다면 최근 변경이 `rpmdb.sqlite-wal` 에만 있을 수 있습니다. 또 `PRAGMA secure_delete = OFF` 로 열기 때문에[4], 지운 패키지의 헤더가 빈 페이지에 남아 있을 가능성이 있습니다. WAL 과 빈 페이지를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 쪽에 있습니다.
+rpm 은 쓰기로 열 때 `PRAGMA journal_mode = WAL` 을 걸고 `-wal` 파일이 닫힌 뒤에도 남도록 설정하며, `%_flush_io` 가 꺼져 있으면 자동 체크포인트를 끕니다(`wal_autocheckpoint = 0`)[4]. 정상으로 닫을 때는 `wal_checkpoint = TRUNCATE` 로 WAL 내용을 본 파일에 옮기고 WAL 을 비웁니다[4]. 그래서 rpm 이 도는 중에 수집했거나 비정상으로 끝났다면 최근 변경이 `rpmdb.sqlite-wal` 에만 있을 수 있습니다. 또 `PRAGMA secure_delete = OFF` 로 열기 때문에[4], 지운 패키지의 헤더가 빈 페이지에 남아 있을 가능성이 있습니다. WAL 과 빈 페이지를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에 있습니다.
 
 ### dnf 텍스트 로그 (RHEL 9)
 
@@ -151,26 +151,26 @@ audit 플러그인은 패키지마다 `SOFTWARE_UPDATE`(1138) 감사 이벤트�
 | yum `trans_beg.timestamp`, `trans_end.timestamp` | Unix 초[18] | UTC | 트랜잭션 시작·끝 |
 | rpm syslog 플러그인 | 시스템 로그 시각 | [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md), [systemd 저널](../../01-foundations/logging/systemd-journal/index.md) 참고 | 줄을 쓸 때 |
 
-`rpm -q --queryformat` 의 `:date` 는 strftime `%c`, `:day` 는 `%a %b %d %Y` 로 바꿔 찍으므로[5] 분석하는 PC 의 시간대가 들어갑니다. 여러 기록을 시간순으로 합칠 때는 `%{INSTALLTIME}` 숫자 그대로 뽑아 UTC 로 바꾸는 편이 안전합니다. `yum.log` 처럼 현지 시각만 있는 기록은 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 쪽에서 구한 시간대로 옮기고, 에포크 값을 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`rpm -q --queryformat` 의 `:date` 는 strftime `%c`, `:day` 는 `%a %b %d %Y` 로 바꿔 찍으므로[5] 분석하는 PC 의 시간대가 들어갑니다. 여러 기록을 시간순으로 합칠 때는 `%{INSTALLTIME}` 숫자 그대로 뽑아 UTC 로 바꾸는 편이 안전합니다. `yum.log` 처럼 현지 시각만 있는 기록은 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md)에서 구한 시간대로 옮기고, 에포크 값을 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 
 - `rpmdb.sqlite` 만 복사하고 `-wal` 을 빼면 최근 변경이 빠질 수 있습니다[4]. 세 파일을 함께 떠서 읽습니다.
-- 검체 사본에 `rpm --dbpath` 를 쓸 때는 쓰기 가능한 경로라면 rpm 이 WAL 설정을 걸고 닫을 때 체크포인트를 해 파일을 바꿉니다[4]. 원본이 아니라 작업용 사본에서 돌립니다.
+- 증거 사본에 `rpm --dbpath` 를 쓸 때는 쓰기 가능한 경로라면 rpm 이 WAL 설정을 걸고 닫을 때 체크포인트를 해 파일을 바꿉니다[4]. 원본이 아니라 작업용 사본에서 돌립니다.
 - `dnf.log` 계열은 1 MiB 로 5세대까지만 남아서[11][14], 패키지 작업이 잦은 시스템은 몇 주 전 기록도 없을 수 있습니다. 오래된 기간은 `history.sqlite` 와 rpm DB 를 봅니다.
 - 소스 주석에는 `dnf.rpm.log` 가 `/var/log/dnf/` 아래에 있다고 적혀 있지만, 실제 경로는 `logdir`(기본 `/var/log`)에 파일 이름을 붙인 `/var/log/dnf.rpm.log` 입니다[11][12][14].
 - `user_id` 0 이 곧 root 로 로그인했다는 뜻은 아닙니다. loginuid 를 읽지 못해 실행 UID 로 대신한 경우일 수 있습니다[13].
 - 일반 사용자가 `history.sqlite` 를 열지 못하면 dnf 는 메모리 DB 로 대신하고 오류만 남깁니다[15]. 이런 실행은 파일에 기록되지 않습니다.
 - dissect.target 에는 RHEL 계열용으로 `yum.log` 파서만 있습니다[19]. 이 파서는 `Installed`·`Updated`·`Erased`·`Obsoleted` 가 없는 줄을 만나면 그 뒤 줄과 아직 읽지 않은 `yum.*` 파일을 모두 건너뛰고, 연도는 추정해서 채웁니다[19]. `Cleanup:` 줄 같은 다른 줄이 나오면 그 뒤 기록이 도구 결과에서 빠질 수 있으니 원본 파일을 함께 봅니다.
 - plaso 에는 rpm·dnf·yum 전용 파서가 없습니다[23]. `history.sqlite` 는 sqlite3 로 직접 조회합니다.
-- Velociraptor 의 `Linux.RHEL.Packages` 와 UAC 의 rpm·dnf 수집은 살아 있는 시스템에서 명령을 실행합니다[20][21]. 디스크 이미지에는 쓸 수 없어서 파일을 직접 읽어야 합니다. ForensicArtifacts 정의에도 rpm DB 와 dnf 로그는 없고 저장소 설정(`YumSources`)만 있습니다[22].
+- Velociraptor 의 `Linux.RHEL.Packages` 와 UAC 의 rpm·dnf 수집은 실행 중인 시스템에서 명령을 실행합니다[20][21]. 디스크 이미지에는 쓸 수 없어서 파일을 직접 읽어야 합니다. ForensicArtifacts 정의에도 rpm DB 와 dnf 로그는 없고 저장소 설정(`YumSources`)만 있습니다[22].
 - `Installtime` 과 `Buildtime` 을 헷갈리지 않습니다. `Buildtime` 은 배포처에서 패키지를 만든 시각입니다[1].
 
 ## 직접 분석해 보기
 
 ### 파일로 한 번
 
-먼저 rpm DB 백엔드를 가립니다. 이미지를 마운트한 경로가 `/mnt/img` 라고 두면(만든 예시) 다음처럼 봅니다.
+먼저 rpm DB 백엔드를 구분합니다. 이미지를 마운트한 경로가 `/mnt/img` 라고 두면(만든 예시) 다음처럼 봅니다.
 
 ```
 ls -l /mnt/img/var/lib/rpm/
@@ -178,7 +178,7 @@ xxd -l 16 /mnt/img/var/lib/rpm/rpmdb.sqlite
 ls -l /mnt/img/var/lib/rpm/rpmdb.sqlite-wal
 ```
 
-`rpmdb.sqlite` 가 있고 첫 16바이트가 SQLite 파일 머리이면 sqlite 백엔드이고, `Packages` 만 있으면 Berkeley DB 백엔드입니다[4]. `-wal` 파일 크기가 0 보다 크면 본 파일에 옮기지 않은 페이지가 있을 수 있어 WAL 까지 읽어야 합니다[4]. 파일 머리와 WAL 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 쪽을 봅니다.
+`rpmdb.sqlite` 가 있고 첫 16바이트가 SQLite 파일 머리이면 sqlite 백엔드이고, `Packages` 만 있으면 Berkeley DB 백엔드입니다[4]. `-wal` 파일 크기가 0 보다 크면 본 파일에 옮기지 않은 페이지가 있을 수 있어 WAL 까지 읽어야 합니다[4]. 파일 머리와 WAL 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)를 봅니다.
 
 `history.sqlite` 는 사본에서 sqlite3 로 조회합니다.
 
@@ -206,7 +206,7 @@ ORDER BY t.id;"
 ### 공개 도구로 한 번
 
 - rpm: 작업용 사본에 `rpm --dbpath 사본경로 -qa --last` 를 쓰면 설치 시각 순서로 목록이 나옵니다[2]. `rpm --dbpath 사본경로 -qa --queryformat '%{INSTALLTIME}~%{NAME}~%{VERSION}-%{RELEASE}\n'` 는 UAC 가 쓰는 질의와 같은 모양으로 에포크 숫자를 뽑습니다[20]. `rpmdb --exportdb` 는 DB 를 헤더 목록으로 내보내고, `rpmdb --verifydb` 는 DB 자체의 무결성을 점검합니다[6].
-- dnf: 살아 있는 시스템에서 `dnf history list`, `dnf history info 번호`, `dnf history userinstalled` 로 같은 DB 를 봅니다[20][24].
+- dnf: 실행 중인 시스템에서 `dnf history list`, `dnf history info 번호`, `dnf history userinstalled` 로 같은 DB 를 봅니다[20][24].
 - 감사 로그: `ausearch -m SOFTWARE_UPDATE` 로 audit 플러그인이 남긴 이벤트를 모읍니다[8].
 - 저널: syslog 플러그인 줄은 rpm 4.16 이면 식별자 `[RPM]` 으로, 최신 rpm 이면 `journalctl -t rpm` 으로 찾습니다[7].
 

@@ -10,7 +10,7 @@ nav_order: 940
 
 ## 언제 쓰나
 
-AWS EC2, Google Compute Engine, Azure 가상 머신처럼 조사 대상 Linux 가 클라우드에서 돌 때 씁니다. 수집은 게스트 안과 게스트 밖 두 갈래로 나뉩니다. 게스트 안에서는 [라이브 응답 수집](live-response.md)과 [메모리 수집](memory-acquisition.md)을 그대로 하되 결과를 클라우드 저장소로 곧바로 보내고, cloud-init 과 제공자 에이전트가 남긴 흔적을 함께 뜹니다. 게스트 밖에서는 제공자 API 로 디스크 스냅숏과 콘솔 출력을 받습니다.
+AWS EC2, Google Compute Engine, Azure 가상 머신처럼 조사 대상 Linux 가 클라우드에서 돌 때 씁니다. 수집은 게스트 안과 게스트 밖 두 가지로 나뉩니다. 게스트 안에서는 [라이브 응답 수집](live-response.md)과 [메모리 수집](memory-acquisition.md)을 그대로 하되 결과를 클라우드 저장소로 곧바로 보내고, cloud-init 과 제공자 에이전트가 남긴 흔적을 함께 뜹니다. 게스트 밖에서는 제공자 API 로 디스크 스냅숏과 콘솔 출력을 받습니다.
 
 게스트 안 도구로 뜬 메모리는 도는 시스템을 읽으므로 원자적 (atomic) 사본이 아닙니다. QEMU/KVM 에서 가상 머신을 멈추고 `dump_guest_memory` 로 뜬 메모리를 기준값으로 삼은 시험에서, 게스트 안 수집 도구로 뜬 메모리는 이 기준과 바이트가 달랐습니다[17]. 자체 하이퍼바이저에서 도는 가상 머신은 [KVM·libvirt](../../02-artifacts/containers/kvm-libvirt.md)에서 다룹니다.
 
@@ -42,7 +42,7 @@ AWS 에서 암호화한 볼륨의 스냅숏은 자동으로 암호화되고, 그
 | `/run/cloud-init/ds-identify.log` | 부팅 초기에 어느 플랫폼으로 판단했는지, 돌지 않은 이유[9] | tmpfs, 부팅 때 비워짐[16] |
 | `/var/log/cloud-init.log` | cloud-init 주 로그[9] | 여러 부팅 기록이 이어 쓰임[9] |
 | `/var/log/cloud-init-output.log` | 단계별 출력과 사용자 스크립트 출력[9] | 여러 부팅 기록이 이어 쓰임[9] |
-| `/var/lib/cloud/instance/user-data.txt` | 파일 이름으로 보아 user-data 를 담은 파일일 가능성이 있음 | `cloud-init collect-logs` 수집 대상[10] |
+| `/var/lib/cloud/instance/user-data.txt` | 파일 이름으로 보면 user-data 를 담은 파일일 가능성이 있음 | `cloud-init collect-logs` 수집 대상[10] |
 | `/var/lib/cloud/seed/` | 데이터 소스를 초기화할 때 쓰는 인스턴스 메타데이터[10] | `cloud-init clean --seed` 가 지움[10] |
 | `/var/lib/waagent` | Azure 데이터 소스가 메타데이터 파일을 읽고 받은 데이터를 쓰는 곳(기본값)[14] | Azure |
 | `/var/log/waagent.log`, `/var/log/azure` | Azure Linux VM 에이전트 로그[8] | Azure |
@@ -52,7 +52,7 @@ AWS 에서 암호화한 볼륨의 스냅숏은 자동으로 암호화되고, 그
 
 제공자 에이전트 경로는 에이전트가 깔려 있을 때만 있습니다. `cloud-init collect-logs` 를 쓰면 `/var/log/cloud-init.log`, `/var/log/cloud-init-output.log`, `/run/cloud-init`, `/var/lib/cloud/instance/user-data.txt`, cloud-init 패키지 판, `dmesg` 와 `journalctl` 출력을 tar 하나로 묶습니다[10]. 저널을 따로 뜨는 방법은 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md)에서 다룹니다.
 
-인스턴스 정보는 `cloud-init query --all` 을 root 로 실행하면 instance-data 라는 JSON 으로 볼 수 있습니다[11]. `v1.cloud_name`(예: `aws`, `azure`), `v1.instance_id`, `v1.distro` 같은 표준 키가 있고, 비밀번호처럼 민감한 값은 root 만 읽을 수 있게 따로 두어 일반 사용자에게는 가린 값을 보여 줍니다[11]. 인스턴스에 넘긴 user-data 와 vendor-data 는 root 로 `cloud-init query` 의 `userdata`·`vendordata` 키를 읽으면 디코딩한 값으로 나옵니다[10][11]. instance-data 파일이 디스크 어디에 있는지는 검체에서 `/run/cloud-init/` 아래를 보고 확인합니다.
+인스턴스 정보는 `cloud-init query --all` 을 root 로 실행하면 instance-data 라는 JSON 으로 볼 수 있습니다[11]. `v1.cloud_name`(예: `aws`, `azure`), `v1.instance_id`, `v1.distro` 같은 표준 키가 있고, 비밀번호처럼 민감한 값은 root 만 읽을 수 있게 따로 두어 일반 사용자에게는 가린 값을 보여 줍니다[11]. 인스턴스에 넘긴 user-data 와 vendor-data 는 root 로 `cloud-init query` 의 `userdata`·`vendordata` 키를 읽으면 디코딩한 값으로 나옵니다[10][11]. instance-data 파일이 디스크 어디에 있는지는 실제 시스템에서 `/run/cloud-init/` 아래를 보고 확인합니다.
 
 Azure 는 UDF 형식 CD 로 `ovf-env.xml` 을 붙여 초기 데이터를 넘기고, 이 파일에는 `HostName` 과 base64 로 인코딩한 user-data(`UserData` 또는 `CustomData` 요소)가 들어 있습니다[14].
 

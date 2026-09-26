@@ -43,11 +43,11 @@ nav_order: 2190
 | v2 | `encrcdsa` | 파일 시작(오프셋 0) | 264바이트, 빅엔디언 구조 |
 | v1 | `cdsaencr` | 파일 끝 8바이트 | 1276바이트, 파일 끝에서 그 크기만큼 앞으로 가서 읽음 |
 
-v2 머리는 `sig`(8바이트), `version`, `enc_iv_size`, 뜻이 밝혀지지 않은 4바이트 칸 다섯, `uuid`(16바이트), `blocksize`(4바이트), `datasize`(8바이트), `dataoffset`(8바이트), 채움 24바이트 순서로 시작합니다. 그 뒤로 키 유도 칸(`kdf_algorithm`, `kdf_prng_algorithm`, `kdf_iteration_count`, `kdf_salt_len`, `kdf_salt`)과 키 블롭을 감싼 방식 칸(`blob_enc_iv_size`, `blob_enc_iv`, `blob_enc_key_bits`, `blob_enc_algorithm`, `blob_enc_padding`, `blob_enc_mode`)이 오고, 끝에 `encrypted_keyblob_size` 와 `encrypted_keyblob`(64바이트)이 있습니다. v1 머리에는 `kdf_iteration_count`, `kdf_salt_len`, `kdf_salt`, `len_wrapped_aes_key`, `wrapped_aes_key`(296바이트), `len_hmac_sha1_key`, `wrapped_hmac_sha1_key`(300바이트) 칸이 있습니다.
+v2 머리는 `sig`(8바이트), `version`, `enc_iv_size`, 뜻이 밝혀지지 않은 4바이트 필드 다섯, `uuid`(16바이트), `blocksize`(4바이트), `datasize`(8바이트), `dataoffset`(8바이트), 채움 24바이트 순서로 시작합니다. 그 뒤로 키 유도 필드(`kdf_algorithm`, `kdf_prng_algorithm`, `kdf_iteration_count`, `kdf_salt_len`, `kdf_salt`)과 키 블롭을 감싼 방식 필드(`blob_enc_iv_size`, `blob_enc_iv`, `blob_enc_key_bits`, `blob_enc_algorithm`, `blob_enc_padding`, `blob_enc_mode`)이 오고, 끝에 `encrypted_keyblob_size` 와 `encrypted_keyblob`(64바이트)이 있습니다. v1 머리에는 `kdf_iteration_count`, `kdf_salt_len`, `kdf_salt`, `len_wrapped_aes_key`, `wrapped_aes_key`(296바이트), `len_hmac_sha1_key`, `wrapped_hmac_sha1_key`(300바이트) 필드가 있습니다.
 
 v2에서 인증서처럼 암호 말고 다른 수단을 함께 걸었을 때 키 블롭이 여러 개 들어가는지는 공개 자료가 없어서, 그런 이미지는 `hdiutil isencrypted` 출력과 함께 봅니다.
 
-아래 헥스는 위 구조로 만든 예시이고 실제 검체에서 뽑은 값이 아닙니다. v2 이미지의 첫 8바이트이고, 뒤쪽은 생략했습니다.
+아래 헥스는 위 구조로 만든 예시이고 실제 이미지에서 뽑은 값이 아닙니다. v2 이미지의 첫 8바이트이고, 뒤쪽은 생략했습니다.
 
 ```
 00000000  65 6E 63 72 63 64 73 61  .. .. .. .. .. .. .. ..  |encrcdsa........|
@@ -69,7 +69,7 @@ v2에서 인증서처럼 암호 말고 다른 수단을 함께 걸었을 때 키
 
 ## 함정과 한계
 
-- 확장자는 믿지 않습니다. 확장자가 `.dmg` 인데 암호화하지 않은 이미지도 있고, 확장자를 바꾼 암호 걸린 이미지도 있어서 시그니처를 기준으로 가립니다.
+- 확장자는 믿지 않습니다. 확장자가 `.dmg` 인데 암호화하지 않은 이미지도 있고, 확장자를 바꾼 암호 걸린 이미지도 있어서 시그니처를 기준으로 구분합니다.
 - v1 머리는 파일 끝에 있어서 파일 앞부분만 보는 시그니처 검색으로는 놓칩니다. 끝 8바이트도 함께 봅니다.
 - 스파스 번들은 디렉터리라서 파일 단위 시그니처 검색에 걸리지 않고, 밴드 파일이 일부만 남으면 이미지가 온전히 붙지 않을 수 있습니다.
 - 여기 적은 머리 구조는 공개 도구 코드에서 읽은 것이라서 Apple이 바꾸면 달라질 수 있습니다. 새 macOS에서 만든 이미지는 `hdiutil isencrypted` 결과와 함께 봅니다.

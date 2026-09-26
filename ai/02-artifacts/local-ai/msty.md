@@ -8,7 +8,7 @@ nav_order: 710
 
 Msty 는 모델을 받아 자기 컴퓨터에서 돌리는 기능과 대화 화면을 한 프로그램에 담은 통합형 로컬 AI 앱이고, `%AppData%\Msty` 폴더의 `msty.db` 하나에 대화·설정·API 키가, `logs\app.log` 에 모델 받기와 대화 시작, 첨부 전송이 줄마다 시각과 함께 남습니다.
 
-이 쪽의 경로와 칸은 Msty 1.8.5 판 기준이고[1], 새 판은 저장 형식이 다릅니다[4]. 로그·DB 예시 값은 모두 만든 예시입니다.
+이 페이지의 경로와 필드는 Msty 1.8.5 판 기준이고[1], 새 판은 저장 형식이 다릅니다[4]. 로그·DB 예시 값은 모두 만든 예시입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -48,7 +48,7 @@ Msty 아티팩트는 다섯 가지입니다[1, 부록 B].
 
 ### macOS·Linux
 
-다른 운영체제에서도 아티팩트 종류와 쓰임은 대체로 같고, 형식과 위치는 다를 수 있습니다[1, §6.2]. macOS·Linux 는 공개된 분석 자료가 없어서, 검체의 사용자 폴더에서 `msty.db` 와 `attachments` 폴더 이름으로 찾아 위치를 확인해야 합니다.
+다른 운영체제에서도 아티팩트 종류와 쓰임은 대체로 같고, 형식과 위치는 다를 수 있습니다[1, §6.2]. macOS·Linux 는 실제 기기의 사용자 폴더에서 `msty.db` 와 `attachments` 폴더 이름으로 찾아 위치를 확인해야 합니다.
 
 ## 구조
 
@@ -56,7 +56,7 @@ Msty 아티팩트는 다섯 가지입니다[1, 부록 B].
 
 `msty.db` 는 SQLite 3 파일이고, 머리글의 오프셋 0x12·0x13 두 바이트가 둘 다 `01` 인 롤백 저널 방식으로 쓰입니다[2]. 스키마에는 표가 스무 개 남짓 있고, 대화 조사에 쓰는 표는 아래와 같습니다. 이 가운데 핵심은 `api_keys`, `chat_sessions`, `chat_messages` 이고[1, 표 6], LangurTrace 는 `api_keys`, `chats`, `chat_messages`, `chat_sessions`, `custom_prompts` 다섯 표를 엑셀로 옮깁니다[2, `conversations_reporter.py`].
 
-| 표 | 주요 칸 | 담긴 것 |
+| 표 | 주요 열 | 담긴 것 |
 |---|---|---|
 | `chat_session_folders` | `id`, `title`, `sort_order`, `created_at` | 대화 폴더. 기본으로 `id` 가 `__ORPHANAGE__`, `title` 이 `Misc` 인 폴더 하나가 있음 |
 | `chat_sessions` | `id`, `title`, `created_at`, `archived_at`, `folder_id`, `splits_order`, `is_vapor` | 왼쪽 목록에 보이는 대화 하나 |
@@ -69,19 +69,19 @@ Msty 아티팩트는 다섯 가지입니다[1, 부록 B].
 
 이 밖에 `knowledge_stacks`, `workspaces`, `bookmarked_chat_messages`, `recent_messages`, `model_details`, `local_ai_stt_models` 표가 있고 샘플에서는 모두 비어 있습니다[2].
 
-표끼리는 `chat_session_folders.id` ← `chat_sessions.folder_id`, `chat_sessions.id` ← `chats.chat_session_id`, `chats.id` ← `chat_messages.chat_id` 로 이어집니다. 논문 표 6 은 `chat_messages.chat_id` 를 "대화 세션 ID" 라고 적었지만[1, 표 6], 샘플 스키마의 외래 키와 LangurTrace 코드는 이 칸을 `chats.id` 에 잇습니다[2]. 샘플에서는 세션 하나에 `chats` 행이 하나씩이라 두 값이 달라도 결과가 같지만, 세션 ID 로 메시지를 찾으면 한 행도 나오지 않습니다. `chats` 를 거쳐 잇는 것이 스키마 그대로입니다.
+표끼리는 `chat_session_folders.id` ← `chat_sessions.folder_id`, `chat_sessions.id` ← `chats.chat_session_id`, `chats.id` ← `chat_messages.chat_id` 로 이어집니다. 논문 표 6 은 `chat_messages.chat_id` 를 "대화 세션 ID" 라고 적었지만[1, 표 6], 샘플 스키마의 외래 키와 LangurTrace 코드는 이 열을 `chats.id` 에 잇습니다[2]. 샘플에서는 세션 하나에 `chats` 행이 하나씩이라 두 값이 달라도 결과가 같지만, 세션 ID 로 메시지를 찾으면 한 행도 나오지 않습니다. `chats` 를 거쳐 잇는 것이 스키마 그대로입니다.
 
-주요 칸의 값은 아래와 같습니다[2].
+주요 열의 값은 아래와 같습니다[2].
 
 - **`role`**: 사용자 메시지는 `user`, 모델 답은 `ai` 입니다.
-- **`model_name`**: 로컬 모델은 `gemma3:1b` 처럼 Ollama 식 이름이고, 클라우드 모델은 `{api_keys.id}::gpt-4o` 처럼 키 행의 ID 앞에 붙습니다. 그래서 이 칸으로 어느 등록 키를 거쳐 보냈는지가 이어집니다.
-- **`branch_parent_id`**: 바로 앞 메시지의 `id` 가 들어가서, 이 칸을 따라가면 대화 순서가 나옵니다. 샘플에서 `parent_id` 는 모두 비어 있습니다.
+- **`model_name`**: 로컬 모델은 `gemma3:1b` 처럼 Ollama 식 이름이고, 클라우드 모델은 `{api_keys.id}::gpt-4o` 처럼 키 행의 ID 앞에 붙습니다. 그래서 이 열로 어느 등록 키를 거쳐 보냈는지가 이어집니다.
+- **`branch_parent_id`**: 바로 앞 메시지의 `id` 가 들어가서, 이 열을 따라가면 대화 순서가 나옵니다. 샘플에서 `parent_id` 는 모두 비어 있습니다.
 - **`attachments`**: JSON 이고 `images`, `documents`, `youtube_links` 목록이 있습니다. 파일 하나에는 `size`, `type`(MIME), `path`(`attachments` 폴더 안의 사본 경로), `name`, `org_path`(올리기 전 원래 파일 경로), `org_name`, `folder` 가 들어갑니다. `org_path` 에는 사용자가 파일을 어디서 골랐는지가 드러납니다.
 - **`config`**: 사용자 메시지에 그때의 모델 옵션(`maxTokens`, `temperature`, `topP` 등)이 JSON 으로 들어갑니다. `chats.config` 의 `modelOptions.systemPrompt` 에는 그 대화에 건 시스템 프롬프트가 들어갑니다.
 - **`prompt_response_metrics`**: 모델 답 행에 JSON 으로 들어갑니다. `current` 에 이 답의 값이, `previous` 에 바로 앞 답의 값이 들어가고, 각각 옵션과 `model`, `time_to_first_token`, `prompt_eval_count`(입력 토큰), `eval_count`(출력 토큰)가 있습니다. 로컬 모델은 `created_at`(ISO 8601, `Z`)과 `total_duration`(나노초)도, 클라우드 모델은 `estimated_cost` 도 들어갑니다.
 - **`extras`**: 메시지 행에는 `branch_active_at`(Unix 밀리초)이, `chats` 행에는 `is_temp_title` 과 첨부 목록이 들어갑니다.
 
-아래는 이 칸들을 모은 메시지 두 행입니다(만든 예시).
+아래는 이 열들을 모은 메시지 두 행입니다(만든 예시).
 
 ```text
 id               01KKMTPSVCQ4R8T2W6Y0A3C5E7
@@ -102,7 +102,7 @@ extras           {"branch_active_at":1773446856020}
 
 ### api_keys 표
 
-`api_keys` 의 `provider`, `key`, `created_at` 은 클라우드 서비스, API 키, 등록 시각입니다[1, 표 6]. 다만 `key` 칸은 평문 키가 아니고, `v10` 세 글자 뒤에 알아볼 수 없는 바이트가 이어지는 값입니다(칸 형식은 text)[2]. `v10` 은 Chromium 이 운영체제 보호 키(Windows 에서는 DPAPI 로 감싼 키)로 암호화한 값 앞에 붙이는 표지와 같습니다[3]. 같은 행의 `save_in_keychain` 은 `1` 이고, `key_hint` 에는 `sk-...Q7xZ`(만든 예시)처럼 키의 앞 세 글자와 끝 네 글자만 평문으로 남습니다[2]. `models` 칸에는 그 키로 쓸 수 있게 등록한 모델 목록이 JSON 으로 들어갑니다.
+`api_keys` 의 `provider`, `key`, `created_at` 은 클라우드 서비스, API 키, 등록 시각입니다[1, 표 6]. 다만 `key` 열은 평문 키가 아니고, `v10` 세 글자 뒤에 알아볼 수 없는 바이트가 이어지는 값입니다(열 형식은 text)[2]. `v10` 은 Chromium 이 운영체제 보호 키(Windows 에서는 DPAPI 로 감싼 키)로 암호화한 값 앞에 붙이는 표지와 같습니다[3]. 같은 행의 `save_in_keychain` 은 `1` 이고, `key_hint` 에는 `sk-...Q7xZ`(만든 예시)처럼 키의 앞 세 글자와 끝 네 글자만 평문으로 남습니다[2]. `models` 열에는 그 키로 쓸 수 있게 등록한 모델 목록이 JSON 으로 들어갑니다.
 
 키 값은 보고서에 싣지 않고, "어느 서비스의 키가 언제 등록됐고 끝 네 글자가 무엇인지" 까지만 적습니다. 서버 쪽 대화 기록이나 사용 기록이 필요하면 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다. API 키는 서비스 회사에 서버 쪽 자료를 요청할 때 넘기는 단서가 됩니다[1, §4.3]. 키가 남는 곳의 일반 원리는 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에서 다룹니다.
 
@@ -114,11 +114,11 @@ LangurTrace 출력의 `custom_prompts` 시트에서 사용자가 정한 기본 �
 
 ### search 표와 지움 트리거
 
-스키마에는 `chat_messages` 에 트리거가 세 개 걸려 있습니다[2]. 메시지를 넣으면 `search` 에 `entity='chat_messages'`, `entityId`(메시지 ID), `content`(본문), `extras`(`{"chatId":...}`)가 한 행 들어가고, 메시지 본문을 고치면 `search.content` 도 고쳐지고, 메시지를 지우면 같은 `entityId` 의 `search` 행도 지워집니다. 외래 키도 `chat_sessions` → `chats` → `chat_messages` 로 `ON DELETE cascade` 가 걸려 있어서, 세션을 지우면 딸린 대화와 메시지, 검색 행까지 함께 지워지게 짜여 있습니다. 그래서 `search` 표에는 지운 메시지의 사본이 따로 남지 않습니다. FTS5 내부 조각(`search_data`)에 지운 메시지의 낱말이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+스키마에는 `chat_messages` 에 트리거가 세 개 걸려 있습니다[2]. 메시지를 넣으면 `search` 에 `entity='chat_messages'`, `entityId`(메시지 ID), `content`(본문), `extras`(`{"chatId":...}`)가 한 행 들어가고, 메시지 본문을 고치면 `search.content` 도 고쳐지고, 메시지를 지우면 같은 `entityId` 의 `search` 행도 지워집니다. 외래 키도 `chat_sessions` → `chats` → `chat_messages` 로 `ON DELETE cascade` 가 걸려 있어서, 세션을 지우면 딸린 대화와 메시지, 검색 행까지 함께 지워지게 짜여 있습니다. 그래서 `search` 표에는 지운 메시지의 사본이 따로 남지 않습니다. FTS5 내부 조각(`search_data`)에 지운 메시지의 낱말이 남는지는 실제 데이터로 확인해야 합니다.
 
 ### app.log
 
-`app.log` 는 한 줄이 JSON 객체 하나입니다. 칸은 `level`, `time`(Unix 밀리초), `pid`, `hostname`(컴퓨터 이름), `msg` 이고, `level` 은 30·40·50 이 쓰입니다[2]. 40 은 `ollama_llama_server.exe is not running` 같은 경고, 50 은 `Failed fetching model ...` 같은 실패 줄입니다. 조사에 쓰이는 `msg` 는 아래와 같습니다[2].
+`app.log` 는 한 줄이 JSON 객체 하나입니다. 필드는 `level`, `time`(Unix 밀리초), `pid`, `hostname`(컴퓨터 이름), `msg` 이고, `level` 은 30·40·50 이 쓰입니다[2]. 40 은 `ollama_llama_server.exe is not running` 같은 경고, 50 은 `Failed fetching model ...` 같은 실패 줄입니다. 조사에 쓰이는 `msg` 는 아래와 같습니다[2].
 
 | `msg` 모양 | 뜻 |
 |---|---|
@@ -145,11 +145,11 @@ LangurTrace 출력의 `custom_prompts` 시트에서 사용자가 정한 기본 �
 {"level":30,"time":1773446856010,"pid":4120,"hostname":"LAB-PC01","msg":"Estimating cost for model gpt-4o with 812 input tokens and 64 output tokens"}
 ```
 
-이 로그에는 첨부를 올리고 지운 기록이 남습니다[1, 부록 B]. 공개 샘플에는 첨부를 보낼 때의 `Encoding file to base64:` 줄만 있고 지움 줄은 없어서, 지움 줄의 모양은 검체에서 확인합니다[2].
+이 로그에는 첨부를 올리고 지운 기록이 남습니다[1, 부록 B]. 공개 샘플에는 첨부를 보낼 때의 `Encoding file to base64:` 줄만 있고 지움 줄은 없어서, 지움 줄의 모양은 실제 로그에서 확인합니다[2].
 
 ### attachments 폴더
 
-올린 파일은 `{Unix 밀리초}-{원래 이름}` 이름의 사본으로 `attachments` 폴더에 들어갑니다[1, §4.6.2][2]. 샘플에서는 이름 앞의 시각이 그 파일을 단 메시지의 `created_at` 보다 3~4초 앞서고, 메시지의 `attachments.name` 과 `app.log` 의 `Encoding file to base64:` 줄에 같은 이름이 나옵니다[2]. 파일 이름·메시지 칸·로그 줄 세 곳이 같은 이름으로 이어지는 셈입니다. 첨부와 생성물을 나눠 보는 원리는 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)에서 다룹니다.
+올린 파일은 `{Unix 밀리초}-{원래 이름}` 이름의 사본으로 `attachments` 폴더에 들어갑니다[1, §4.6.2][2]. 샘플에서는 이름 앞의 시각이 그 파일을 단 메시지의 `created_at` 보다 3~4초 앞서고, 메시지의 `attachments.name` 과 `app.log` 의 `Encoding file to base64:` 줄에 같은 이름이 나옵니다[2]. 파일 이름·메시지 열·로그 줄 세 곳이 같은 이름으로 이어지는 셈입니다. 첨부와 생성물을 나눠 보는 원리는 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -176,7 +176,7 @@ LangurTrace 출력의 `custom_prompts` 시트에서 사용자가 정한 기본 �
 | `chat_sessions.created_at`, `chats.created_at` | `YYYY-MM-DD HH:MM:SS` 글자 | UTC | 새 대화 창을 연 뒤, 첫 메시지보다 0~95초 앞 |
 | `chat_messages.created_at` | `YYYY-MM-DD HH:MM:SS` 글자 | UTC | 사용자 행은 보낸 때, `ai` 행은 답을 다 받은 때 |
 | `api_keys.created_at` | 같은 글자 | UTC | 키를 등록한 때 |
-| `id` 칸 앞 10자 | Crockford Base32 로 적은 Unix 밀리초(ULID 모양) | UTC | 행 ID 를 만든 때 |
+| `id` 열 앞 10자 | Crockford Base32 로 적은 Unix 밀리초(ULID 모양) | UTC | 행 ID 를 만든 때 |
 | `extras.branch_active_at` | Unix 밀리초 | UTC | 행을 저장한 무렵. 샘플에서는 ID 시각과 0.1초 안쪽으로 붙음 |
 | `prompt_response_metrics.created_at` | ISO 8601, `Z` | UTC | 로컬 모델의 답 생성이 끝난 때 |
 | `app.log` 의 `time` | Unix 밀리초 | UTC | 줄을 쓴 때 |
@@ -197,7 +197,7 @@ LangurTrace 출력의 `custom_prompts` 시트에서 사용자가 정한 기본 �
   |---|---|---|---|---|---|---|
   | ★ | ✩ | ★ | ✩ | ★ | – | ✩ |
 
-- **API 키 칸.** `key` 칸은 `v10` 으로 시작하는 암호화 값이라, 이 칸을 평문 API 키로 읽으면 틀립니다[1, 표 6][2][3]. 보고서에는 `provider`, `created_at`, `key_hint` 만 씁니다.
+- **API 키 열.** `key` 열은 `v10` 으로 시작하는 암호화 값이라, 이 열을 평문 API 키로 읽으면 틀립니다[1, 표 6][2][3]. 보고서에는 `provider`, `created_at`, `key_hint` 만 씁니다.
 - **수집 범위.** LangurTrace KAPE 타깃은 `C:\Users\%user%\Appdata\Roaming\Msty\` 아래 기본 경로만 모으고, DB 는 파일 마스크가 `msty.db` 하나라 같은 폴더의 `msty.db-journal` 이나 `msty.db-wal` 은 모으지 않습니다[2, `Msty.tkape`]. 로그는 타깃이 `app*.log`, 파서는 `*.log` 를 받습니다. 켜진 앱의 DB 는 저널 파일까지 함께 복사하고, 옮긴 모델 폴더는 `app_settings` 와 로그에서 경로를 읽어 따로 모읍니다. 수집 절차 일반은 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에서 다룹니다.
 - **LangurTrace 의 로그 분류.** `main_history.csv` 는 `msg` 에 소문자 `model` 이 들어 있으면 `Model setup`, `file` 이나 `attachment` 가 들어 있으면 `Attachment` 로 적고(`settings` 가 함께 있으면 버림) 나머지 줄은 버립니다[2, `log_reporter.py`]. 그래서 `No knowledge stacks attached to this model` 이 `Model setup` 으로, `Models info file not found ...` 가 `Attachment` 로 들어가고, `Local Chat conversation started ...` 와 `Using OpenAI-compatible API ...` 줄, 앱 시작·종료 줄은 빠집니다. 샘플 `app.log` 214줄 가운데 97줄만 CSV 에 들어갔습니다[2]. 대화 요청 시각은 원본 `app.log` 에서 읽습니다.
 - **LangurTrace 출력의 시각.** `main_history.csv` 의 `time` 은 `time` 값을 분석 PC 의 현지 시각으로 바꾼 것이라, 한국 시간대 PC 에서 만든 샘플 출력은 원본보다 9시간 뒤로 보입니다[2]. 대화 HTML 과 `msty_db.xlsx` 는 DB 의 `created_at` 을 그대로 옮겨서 UTC 입니다. 한 보고서에 두 기준이 섞이지 않게 맞춥니다.
@@ -205,7 +205,7 @@ LangurTrace 출력의 `custom_prompts` 시트에서 사용자가 정한 기본 �
 - **대화 제목.** 세션 제목은 사용자가 친 글이 아니라 모델 답이나 제목 생성 결과의 앞부분일 수 있고, `extras.is_temp_title` 이 `true` 인 `chats` 행도 있습니다[2]. 제목을 사용자 입력으로 인용하지 않습니다.
 - **로그 줄 수와 메시지 수.** `Local Chat conversation started` 줄은 로컬 모델에 보낸 사용자 메시지마다 한 번씩 찍히고, 답이 끝난 직후에 옵션이 다른 줄(`temperature` 0.5, `num_predict` 1200)이 한 번 더 찍히기도 합니다[2]. 줄 수를 메시지 수로 세지 않고 메시지 행과 시각으로 짝지어 봅니다.
 - **멈춘 답.** `Local Chat conversation was aborted` 줄과 `branch_active_at` 이 같은 밀리초인 `ai` 행이 DB 에 남고, 이 행의 `prompt_response_metrics` 에는 `current` 없이 `previous` 만 들어갑니다[2]. 답을 중간에 멈춰도 그때까지 받은 답이 저장될 수 있습니다.
-- **판 차이.** 이 쪽의 경로·표·로그 문장은 1.8.5 기준입니다. 2026-05 에 Msty 가 저장 형식을 새로 짰다는 기록이 있습니다[4]. 다른 판은 폴더 구성과 `sqlite_master` 의 스키마부터 확인합니다.
+- **판 차이.** 이 페이지의 경로·표·로그 문장은 1.8.5 기준입니다. 2026-05 에 Msty 가 저장 형식을 새로 짰다는 기록이 있습니다[4]. 다른 판은 폴더 구성과 `sqlite_master` 의 스키마부터 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -233,13 +233,13 @@ ORDER BY m.created_at, m.id;
 
 | 출력 | 내용 |
 |---|---|
-| `main_history.csv` | 칸 `file`, `log type`(`Model setup`·`Attachment`), `time`, `msg` |
-| `model_manifest.csv` | 칸 `model_name`, `parameter`, `layer_name`, `digest`, `size`, `path`. Ollama 와 같은 코드로 만듦 |
+| `main_history.csv` | 열 `file`, `log type`(`Model setup`·`Attachment`), `time`, `msg` |
+| `model_manifest.csv` | 열 `model_name`, `parameter`, `layer_name`, `digest`, `size`, `path`. Ollama 와 같은 코드로 만듦 |
 | `msty_db.xlsx` | 시트 `api_keys`, `chats`, `chat_messages`, `chat_sessions`, `custom_prompts` |
-| `conversations\{created_at}_{제목 앞 40자}.html` | `chats` 행마다 대화 한 쪽 |
+| `conversations\{created_at}_{제목 앞 40자}.html` | `chats` 행마다 대화 한 페이지 |
 | `uploaded_files\` | `attachments` 폴더의 사본 |
 
-`msty_db.xlsx` 의 `api_keys` 시트에는 `key` 칸이 그대로 들어가므로 보고서에 붙이기 전에 가립니다. 함정 절의 로그 분류와 시각 기준을 알고 CSV 를 원본 줄과 맞춰 씁니다.
+`msty_db.xlsx` 의 `api_keys` 시트에는 `key` 열이 그대로 들어가므로 보고서에 붙이기 전에 가립니다. 함정 절의 로그 분류와 시각 기준을 알고 CSV 를 원본 줄과 맞춰 씁니다.
 
 ## 교차 검증
 
@@ -258,7 +258,7 @@ ORDER BY m.created_at, m.id;
 
 ## 실습
 
-공개 검체는 LangurTrace 저장소의 `sample_dataset` 입니다[2]. `collect/C/Users/USER/AppData/Roaming/Msty/` 에 `msty.db`, `logs/app.log`, 첨부 두 개, 매니페스트 세 개와 작은 층 파일들이, `parse/LLM application artifacts/msty/` 에 LangurTrace 출력이 있습니다. 모델 본체 GGUF 는 크기 때문에 빠져 있습니다.
+공개 시험 데이터는 LangurTrace 저장소의 `sample_dataset` 입니다[2]. `collect/C/Users/USER/AppData/Roaming/Msty/` 에 `msty.db`, `logs/app.log`, 첨부 두 개, 매니페스트 세 개와 작은 층 파일들이, `parse/LLM application artifacts/msty/` 에 LangurTrace 출력이 있습니다. 모델 본체 GGUF 는 크기 때문에 빠져 있습니다.
 
 1. `chat_sessions` 세 행의 `created_at` 과 `id` 앞 10자를 푼 시각을 나란히 적으면, 어느 세션의 차이가 가장 큽니까? 그 사이 `app.log` 에는 어떤 줄이 있습니까?
 2. 클라우드 모델로 보낸 메시지는 몇 개이고, 그 메시지의 `model_name` 앞부분은 `api_keys` 의 어느 행과 이어집니까? 키 힌트는 로그의 어느 줄에도 나옵니까?

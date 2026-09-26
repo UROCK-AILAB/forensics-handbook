@@ -8,7 +8,7 @@ nav_order: 290
 
 ## 한 줄 요약
 
-iOS 의 시스템과 앱은 설정과 내부 상태를 `Library/Preferences/` 아래 plist 파일에 키와 값으로 적어 두고, 로컬 백업에서는 이 파일들이 사용자·시스템·통신·네트워크·관리 설정 도메인과 앱 도메인으로 나뉘어 들어오기 때문에, 어느 도메인의 어느 파일인지부터 가려야 값을 바르게 읽을 수 있습니다.
+iOS 의 시스템과 앱은 설정과 내부 상태를 `Library/Preferences/` 아래 plist 파일에 키와 값으로 적어 두고, 로컬 백업에서는 이 파일들이 사용자·시스템·통신·네트워크·관리 설정 도메인과 앱 도메인으로 나뉘어 들어오기 때문에, 어느 도메인의 어느 파일인지부터 구분해야 값을 바르게 읽을 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -31,9 +31,9 @@ iOS 의 시스템과 앱은 설정과 내부 상태를 `Library/Preferences/` �
 | `ManagedPreferencesDomain :: mobile/` | 관리(제한) 설정 |
 | `AppDomain-<번들 ID> :: Library/Preferences/<번들 ID>.plist` | 앱이 자기 컨테이너에 두는 설정 |
 
-앱 설정의 예로 `AppDomain-com.apple.mobilesafari :: Library/Preferences/com.apple.mobilesafari.plist` 가 있습니다. 백업의 `HomeDomain :: Library/Preferences/` 는 이름으로 보아 기기 안 경로 `/mobile/Library/Preferences/`[8] 와 같은 자리이지만, 도메인과 기기 안 경로를 짝짓는 규칙은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 확인합니다. 번들 ID 로 앱을 가리는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
+앱 설정의 예로 `AppDomain-com.apple.mobilesafari :: Library/Preferences/com.apple.mobilesafari.plist` 가 있습니다. 백업의 `HomeDomain :: Library/Preferences/` 는 이름으로 보면 기기 안 경로 `/mobile/Library/Preferences/`[8] 와 같은 자리이지만, 도메인과 기기 안 경로를 짝짓는 규칙은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 확인합니다. 번들 ID 로 앱을 구분하는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
 
-iOS 버전마다 어떤 설정 파일이 새로 생기거나 없어지는지는 공개된 자료가 없습니다. 이 페이지의 파일 이름과 키 이름은 iOS 27.0 백업 기준이니, 다른 버전 검체에서는 같은 이름이 있는지부터 확인합니다.
+iOS 버전마다 어떤 설정 파일이 새로 생기거나 없어지는지 설명한 공개 문서는 없습니다. 이 페이지의 파일 이름과 키 이름은 iOS 27.0 백업 기준이니, 다른 버전 기기에서는 같은 이름이 있는지부터 확인합니다.
 
 ### 자주 보는 설정 파일
 
@@ -71,7 +71,7 @@ SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles :: Library/
     MCSettingsEvents.plist  ProfileTruth.plist  PayloadManifest.plist  UserSettings.plist
 ```
 
-`UserConfigurationProfiles` 쪽 파일에는 최상위 키 `restrictedBool`, `restrictedValue`, `intersection`, `union` 이 있고, 두 `Truth.plist` 에는 빈 사전인 `assignedObject` 도 있으며, `UserSettings.plist` 는 키가 없는 빈 파일일 수 있습니다. 이름으로 보면 켜고 끄는 제한, 값으로 거는 제한, 여러 프로파일의 목록을 합치는 방식이 나뉘어 있는 것 같지만, 이를 설명한 공개 자료는 없습니다. `MCProfileEvents.plist` 와 `MCSettingsEvents.plist` 도 이름으로는 프로파일·설정 변경 기록처럼 보이지만, 공개된 분석 자료가 없어 검체로 확인해야 합니다. 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서, 이 파일 안의 암호 정책 키는 [암호와 Face ID 설정 흔적](passcode-biometrics.md) 에서 다룹니다.
+`UserConfigurationProfiles` 쪽 파일에는 최상위 키 `restrictedBool`, `restrictedValue`, `intersection`, `union` 이 있고, 두 `Truth.plist` 에는 빈 사전인 `assignedObject` 도 있으며, `UserSettings.plist` 는 키가 없는 빈 파일일 수 있습니다. 이름으로 보면 켜고 끄는 제한, 값으로 거는 제한, 여러 프로파일의 목록을 합치는 방식이 나뉘어 있는 것 같지만, 이를 설명한 공개 자료는 없습니다. `MCProfileEvents.plist` 와 `MCSettingsEvents.plist` 도 이름으로는 프로파일·설정 변경 기록처럼 보이지만, 실제 데이터로 확인해야 합니다. 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서, 이 파일 안의 암호 정책 키는 [암호와 Face ID 설정 흔적](passcode-biometrics.md) 에서 다룹니다.
 
 ## 구조
 
@@ -83,17 +83,17 @@ SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles :: Library/
 
 **증명하는 것.** 설정 파일은 수집 시점, 더 정확히는 그 파일이 마지막으로 저장된 때의 설정 상태를 보여 줍니다. 예를 들어 관리 설정 도메인에 콘텐츠 등급 키가 있고 값이 제한 쪽이면 그 기기에 제한이 걸려 있었다는 기록이 되고, 언어·지역 키 값은 사용자가 쓴 언어 환경을 보여 줍니다. 보고서에는 "수집한 설정 파일의 이 키 값이 이렇다" 처럼 파일과 키를 밝혀 씁니다.
 
-**증명하지 못하는 것.** plist 는 키 값 옆에 그 값이 바뀐 시각을 붙이지 않아서, 설정을 언제 바꿨는지는 파일의 수정 시각이나 다른 기록으로 좁혀야 합니다. 값을 누가 바꿨는지도 말해 주지 않고, 제한 설정은 사용자가 직접 걸었을 수도, 프로파일이나 보호자 설정으로 걸렸을 수도 있습니다. 키가 없다고 그 기능을 끈 것이라고 단정하지 않고, 키가 있다고 그 기능을 쓴 것이라고도 단정하지 않습니다.
+**증명하지 못하는 것.** plist 는 키 값 옆에 그 값이 바뀐 시각을 붙이지 않아서, 설정을 언제 바꿨는지는 파일의 수정 시각이나 다른 기록으로 좁혀야 합니다. 값을 누가 바꿨는지도 알 수 없고, 제한 설정은 사용자가 직접 걸었을 수도, 프로파일이나 보호자 설정으로 걸렸을 수도 있습니다. 키가 없다고 그 기능을 끈 것이라고 단정하지 않고, 키가 있다고 그 기능을 쓴 것이라고도 단정하지 않습니다.
 
 ## 시각 해석
 
-설정 파일 안의 시각은 형이 제각각입니다. 같은 성격의 값도 어떤 키는 날짜(datetime), 어떤 키는 실수(float), 어떤 키는 정수(int)로 적혀 있습니다. 실수·정수로 적힌 시각이 2001-01-01 기준 Mac 절대 시각인지 1970-01-01 기준 유닉스 시각인지는 키마다 다르고 공개된 자료가 없으니, 자릿수를 보고 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 가립니다.
+설정 파일 안의 시각은 형이 제각각입니다. 같은 성격의 값도 어떤 키는 날짜(datetime), 어떤 키는 실수(float), 어떤 키는 정수(int)로 적혀 있습니다. 실수·정수로 적힌 시각이 2001-01-01 기준 Mac 절대 시각인지 1970-01-01 기준 유닉스 시각인지는 키마다 다르니, 자릿수를 보고 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 판별합니다.
 
 파일 전체의 수정 시각은 설정 파일 안이 아니라 파일 시스템이나 백업 목록(`Manifest.db`)의 메타데이터에서 봅니다. 파일 수정 시각은 그 파일의 어떤 키든 하나가 바뀌면 함께 바뀔 수 있어서, 특정 설정을 바꾼 시각으로 바로 쓰지 않습니다.
 
 ## 함정과 한계
 
-**대소문자만 다른 파일이 따로 있습니다.** 백업에는 `com.apple.SpringBoard.plist`(대문자 B)와 `com.apple.springboard.plist`(소문자)가 둘 다 있고, 대문자 쪽은 키가 비어 있습니다. `com.apple.Preferences.plist` 와 `com.apple.preferences.plist` 도 둘 다 있고, 소문자 쪽이 비어 있습니다. 대소문자를 가리지 않는 Windows 폴더로 꺼내면 한쪽이 다른 쪽을 덮어쓸 수 있으니, 꺼낼 때 fileID 이름을 그대로 두거나 도메인별 폴더를 따로 만듭니다.
+**대소문자만 다른 파일이 따로 있습니다.** 백업에는 `com.apple.SpringBoard.plist`(대문자 B)와 `com.apple.springboard.plist`(소문자)가 둘 다 있고, 대문자 쪽은 키가 비어 있습니다. `com.apple.Preferences.plist` 와 `com.apple.preferences.plist` 도 둘 다 있고, 소문자 쪽이 비어 있습니다. 대소문자를 구분하지 않는 Windows 폴더로 꺼내면 한쪽이 다른 쪽을 덮어쓸 수 있으니, 꺼낼 때 fileID 이름을 그대로 두거나 도메인별 폴더를 따로 만듭니다.
 
 **같은 이름의 파일이 여러 도메인에 있습니다.** `com.apple.mobilesafari.plist` 는 `AppDomain-com.apple.mobilesafari` 와 그 확장 도메인에 같은 이름으로 있고, `com.apple.AuthKit.plist` 도 여러 앱 도메인에 있습니다. 파일 이름과 함께 도메인을 꼭 적습니다.
 
@@ -105,7 +105,7 @@ SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles :: Library/
 
 ### 헥스로 한 번
 
-아래는 이진 plist 명세로 만든 예시이고 특정 검체에서 나온 바이트가 아닙니다. 이진 plist 는 `bplist00` 으로 시작하고, 파일 맨 끝 32바이트가 꼬리말(trailer)입니다. 꼬리말은 앞 6바이트를 비워 두고, 이어서 오프셋 표 칸 크기 1바이트, 객체 참조 크기 1바이트, 객체 개수 8바이트, 최상위 객체 번호 8바이트, 오프셋 표 시작 위치 8바이트가 옵니다.
+아래는 이진 plist 명세로 만든 예시이고 특정 기기에서 나온 바이트가 아닙니다. 이진 plist 는 `bplist00` 으로 시작하고, 파일 맨 끝 32바이트가 꼬리말(trailer)입니다. 꼬리말은 앞 6바이트를 비워 두고, 이어서 오프셋 표 항목 크기 1바이트, 객체 참조 크기 1바이트, 객체 개수 8바이트, 최상위 객체 번호 8바이트, 오프셋 표 시작 위치 8바이트가 옵니다.
 
 ```
 파일 시작
@@ -147,13 +147,13 @@ macOS 에서는 `plutil -p 파일이름` 으로 한 파일의 내용을 사람�
 
 ## 실습
 
-공개 검체(NIST CFReDS 등의 iOS 이미지나 백업)로 다음 질문을 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등의 iOS 이미지나 백업)로 다음 질문을 풀어 봅니다.
 
 1. `HomeDomain :: Library/Preferences/` 아래 plist 는 몇 개이고, 그 가운데 키가 없는 빈 파일은 몇 개입니까?
 2. `.GlobalPreferences.plist` 의 `AppleLanguages` 와 `AppleLocale` 값은 무엇이고, `.GlobalPreferences_m.plist` 의 같은 키와 값이 같습니까?
 3. 대소문자만 다른 설정 파일 쌍이 있습니까? 있다면 어느 쪽에 키가 들어 있습니까?
 4. 관리 설정 도메인에 콘텐츠 등급 제한 키가 있습니까? 있다면 값은 무엇입니까?
-5. 설정 파일 안의 실수(float)·정수(int) 시각 키 하나를 골라, Mac 절대 시각과 유닉스 시각 가운데 어느 쪽으로 풀어야 검체 사용 기간에 들어오는지 확인합니다.
+5. 설정 파일 안의 실수(float)·정수(int) 시각 키 하나를 골라, Mac 절대 시각과 유닉스 시각 가운데 어느 쪽으로 풀어야 그 기기의 사용 기간에 들어오는지 확인합니다.
 
 ## 참고 문헌
 

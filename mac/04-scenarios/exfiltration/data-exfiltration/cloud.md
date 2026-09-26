@@ -35,11 +35,11 @@ OS 버전은 제3자 클라우드 폴더 위치와 이어집니다. 드롭박스
 
 구글 드라이브와 원드라이브의 데이터베이스·로그 위치는 [구글 드라이브](../../../02-artifacts/cloud-apps/google-drive.md)와 [원드라이브](../../../02-artifacts/cloud-apps/onedrive.md) 페이지에서 다룹니다.
 
-### 아이클라우드 드라이브 데이터베이스에서 쓰는 칸
+### 아이클라우드 드라이브 데이터베이스에서 쓰는 열
 
-두 파일은 SQLite 데이터베이스이고, 분석에 쓰는 표는 `server_items`, `client_items`, `app_libraries`(rowid, app_library_name), `devices`(key, name)입니다. `devices` 표는 `server.db`에 있고, 이 기기 목록은 두 파일의 항목에 함께 쓰입니다 [2]. 표 전체 구조는 [아이클라우드 드라이브](../../../02-artifacts/cloud-apps/icloud-drive.md) 페이지에 있고, 유출 조사에 쓰는 칸만 추리면 아래와 같습니다.
+두 파일은 SQLite 데이터베이스이고, 분석에 쓰는 표는 `server_items`, `client_items`, `app_libraries`(rowid, app_library_name), `devices`(key, name)입니다. `devices` 표는 `server.db`에 있고, 이 기기 목록은 두 파일의 항목에 함께 쓰입니다 [2]. 표 전체 구조는 [아이클라우드 드라이브](../../../02-artifacts/cloud-apps/icloud-drive.md) 페이지에 있고, 유출 조사에 쓰는 열만 추리면 아래와 같습니다.
 
-| 칸 | 쓰임 |
+| 열 | 쓰임 |
 |---|---|
 | `item_filename` | 파일 이름 |
 | `item_id`, `item_parent_id` | 부모 항목의 `item_id`를 따라 올라가 폴더 경로를 다시 만듭니다 |

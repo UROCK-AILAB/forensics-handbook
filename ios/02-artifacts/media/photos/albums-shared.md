@@ -28,15 +28,15 @@ Photos.sqlite 의 기본 구조와 `ZASSET` 은 [사진 DB 구조 (Photos.sqlite
 | iOS 16 이후 | iCloud 공유 사진 보관함(Shared Photo Library)이 생겼고, iLEAPP 는 Ph31~33 파서로 읽습니다 | [4] |
 | iOS 27·iPadOS 27 이후 | 공유 앨범이 원본 해상도 공유, 새 필터·정렬, 이모지 반응, 다른 사람을 앨범에 초대하는 새 방법을 지원하고, Apple 계정이나 Apple 기기가 없어도 웹으로 참여해 사진을 올릴 수 있습니다 | [1] |
 
-iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공유 앨범" 을 켜서 씁니다[1]. iOS 27.0 의 Photos.sqlite 에는 `ZSHAREPOST` 와 `ZCOLLECTIONSHAREMIGRATIONATTRIBUTES` 표도 있습니다. 두 표의 뜻과 iOS 27 의 공유 앨범 변경과 이어지는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공유 앨범" 을 켜서 씁니다[1]. iOS 27.0 의 Photos.sqlite 에는 `ZSHAREPOST` 와 `ZCOLLECTIONSHAREMIGRATIONATTRIBUTES` 표도 있습니다. 두 표의 뜻과 iOS 27 의 공유 앨범 변경과 이어지는지는 실제 데이터로 확인해야 합니다.
 
 ## 구조
 
 ### 앨범 표 (ZGENERICALBUM)
 
-`ZGENERICALBUM` 에는 아래 칸이 있습니다(iOS 27.0 기준). 아래는 일부이고 다른 칸이 더 있을 수 있습니다.
+`ZGENERICALBUM` 에는 아래 열이 있습니다(iOS 27.0 기준). 아래는 일부이고 다른 열이 더 있을 수 있습니다.
 
-| 묶음 | 칸 |
+| 묶음 | 열 |
 |---|---|
 | 앨범 정보 | `ZKIND`, `ZTITLE`, `ZUUID`, `ZPARENTFOLDER`, `ZISPINNED`, `ZPRIVACYSTATE`, `ZCACHEDCOUNT`, `ZCACHEDPHOTOSCOUNT`, `ZCACHEDVIDEOSCOUNT` |
 | 시각 | `ZCREATIONDATE`, `ZSTARTDATE`, `ZENDDATE`, `ZLASTMODIFIEDDATE`, `ZTRASHEDDATE` |
@@ -44,7 +44,7 @@ iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공�
 | 가져오기 | `ZIMPORTEDBYBUNDLEIDENTIFIER`, `ZIMPORTSESSIONID` |
 | 공유 앨범 | `ZCLOUDGUID`, `ZCLOUDCREATIONDATE`, `ZCLOUDLASTCONTRIBUTIONDATE`, `ZCLOUDSUBSCRIPTIONDATE`, `ZCLOUDOWNERFIRSTNAME`, `ZCLOUDOWNERLASTNAME`, `ZCLOUDOWNERFULLNAME`, `ZCLOUDOWNERHASHEDPERSONID`, `ZCLOUDOWNEREMAILKEY`, `ZCLOUDPUBLICURLENABLED`, `ZCLOUDMULTIPLECONTRIBUTORSENABLED`, `ZISOWNED`, `ZUNSEENASSETSCOUNT` |
 
-`ZKIND` 는 앨범의 종류를 가르는 칸입니다. macOS 사진 보관함 기준 값은 아래와 같고[5], iOS 에서도 같은 값인지는 검체에서 확인합니다.
+`ZKIND` 는 앨범의 종류를 구분하는 열입니다. macOS 사진 보관함 기준 값은 아래와 같고[5], iOS 에서도 같은 값인지는 실제 데이터로 확인합니다.
 
 | `ZKIND` | 뜻 |
 |---|---|
@@ -55,11 +55,11 @@ iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공�
 | 3999 | 최상위 폴더 |
 | 4000 | 사용자 폴더 |
 
-일반 앨범은 부모가 최상위 폴더(Root Folder)라서[2] `ZPARENTFOLDER` 를 따라가면 폴더 구조를 되살릴 수 있습니다. iCloud 사진을 켠 기기에서는 일반 앨범의 `ZCLOUDLOCALSTATE` 가 1, 공유 앨범이 0 으로 나뉘지만[3], iCloud 사진을 끈 기기에서는 일반 앨범도 0 이라서[2] 이 칸만으로 공유 앨범을 가르지 않습니다.
+일반 앨범은 부모가 최상위 폴더(Root Folder)라서[2] `ZPARENTFOLDER` 를 따라가면 폴더 구조를 되살릴 수 있습니다. iCloud 사진을 켠 기기에서는 일반 앨범의 `ZCLOUDLOCALSTATE` 가 1, 공유 앨범이 0 으로 나뉘지만[3], iCloud 사진을 끈 기기에서는 일반 앨범도 0 이라서[2] 이 열만으로 공유 앨범을 구분하지 않습니다.
 
 ### 자산과 앨범의 연결 표
 
-자산과 앨범은 `Z_##ASSETS` 꼴의 연결 표로 잇고, macOS 11 이후 기준으로 칸은 `Z_##ALBUMS`, `Z_3ASSETS`, 앨범 안 순서를 담는 `Z_FOK_3ASSETS` 입니다[5]. macOS 10.15 에서는 자산 칸이 `Z_34ASSETS`, 순서 칸이 `Z_FOK_34ASSETS` 였습니다[5]. 표 번호도 버전마다 바뀌고, macOS 사진 보관함 기준 번호는 아래와 같습니다[5].
+자산과 앨범은 `Z_##ASSETS` 형식의 연결 표로 잇고, macOS 11 이후 기준으로 열은 `Z_##ALBUMS`, `Z_3ASSETS`, 앨범 안 순서를 담는 `Z_FOK_3ASSETS` 입니다[5]. macOS 10.15 에서는 자산 열이 `Z_34ASSETS`, 순서 열이 `Z_FOK_34ASSETS` 였습니다[5]. 표 번호도 버전마다 바뀌고, macOS 사진 보관함 기준 번호는 아래와 같습니다[5].
 
 | macOS | 연결 표 |
 |---|---|
@@ -73,49 +73,49 @@ iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공�
 | 26.1 | `Z_33ASSETS` |
 | 27.0(개발자 베타 기준) | `Z_34ASSETS` |
 
-iOS 버전별 번호는 공개된 자료가 없어서, 검체마다 `sqlite_master` 에서 표 이름을 먼저 찾습니다.
+iOS 버전별 번호는 공개된 자료가 없어서, 분석하는 DB 마다 `sqlite_master` 에서 표 이름을 먼저 찾습니다.
 
 ### 공유 앨범의 활동 표
 
 공유 앨범의 댓글·피드·초대는 아래 표에 있습니다.
 
-| 표 | 칸(일부) |
+| 표 | 열(일부) |
 |---|---|
 | `ZCLOUDSHAREDCOMMENT` | `ZCOMMENTTEXT`, `ZCOMMENTDATE`, `ZCOMMENTCLIENTDATE`, `ZISLIKE`, `ZISMYCOMMENT`, `ZCOMMENTERHASHEDPERSONID`, `ZREACTTEXT`, `ZCOMMENTEDASSET` |
 | `ZCLOUDFEEDENTRY` | `ZENTRYDATE`, `ZENTRYTYPE`, `ZENTRYISMINE`, `ZENTRYALBUMGUID`, `ZENTRYCLOUDASSETGUID` |
 | `ZCLOUDSHAREDALBUMINVITATIONRECORD` | `ZINVITEEFULLNAME`, `ZINVITEEFIRSTNAME`, `ZINVITEELASTNAME`, `ZINVITEEEMAILKEY`, `ZINVITEEHASHEDPERSONID`, `ZINVITEESUBSCRIPTIONDATE`, `ZINVITATIONSTATE`, `ZISMINE`, `ZALBUMGUID` |
 
-`ZREACTTEXT` 는 이름으로 보아 iOS 27 의 이모지 반응과 이어질 가능성이 있습니다. `ZCOMMENTDATE` 와 `ZCOMMENTCLIENTDATE` 가 서로 어떻게 다른지는 공개된 자료가 없어서, 보고서에는 두 칸을 모두 적고 차이가 크면 따로 밝힙니다.
+`ZREACTTEXT` 는 이름으로 보면 iOS 27 의 이모지 반응과 이어질 가능성이 있습니다. `ZCOMMENTDATE` 와 `ZCOMMENTCLIENTDATE` 가 서로 어떻게 다른지는 공개된 자료가 없어서, 보고서에는 두 열을 모두 적고 차이가 크면 따로 밝힙니다.
 
 ### 링크 공유와 참여자 (ZSHARE·ZSHAREPARTICIPANT)
 
-`ZSHARE` 는 iCloud 링크 공유 등에 쓰이고, `ZSTATUS`, `ZCREATIONDATE`, `ZSTARTDATE`, `ZENDDATE`, `ZEXPIRYDATE`, `ZTITLE`, `ZSHAREURL`, `ZASSETCOUNT`, `ZUUID`, `ZPUBLICPERMISSION` 칸이 있습니다[2]. iOS 27.0 의 `ZSHARE` 에는 `ZCOLLECTIONSHAREKIND`, `ZSCOPETYPE`, `ZSCOPEIDENTIFIER`, `ZTITLE`, `ZCREATIONDATE`, `ZACCEPTANCEDATE`, `ZEXPIRYDATE`, `ZTRASHEDSTATE`, `ZTRASHEDDATE`, `ZPUBLICURLSTATE`, `ZALLOWSANONYMOUSPUBLICACCESS` 칸도 있습니다.
+`ZSHARE` 는 iCloud 링크 공유 등에 쓰이고, `ZSTATUS`, `ZCREATIONDATE`, `ZSTARTDATE`, `ZENDDATE`, `ZEXPIRYDATE`, `ZTITLE`, `ZSHAREURL`, `ZASSETCOUNT`, `ZUUID`, `ZPUBLICPERMISSION` 열이 있습니다[2]. iOS 27.0 의 `ZSHARE` 에는 `ZCOLLECTIONSHAREKIND`, `ZSCOPETYPE`, `ZSCOPEIDENTIFIER`, `ZTITLE`, `ZCREATIONDATE`, `ZACCEPTANCEDATE`, `ZEXPIRYDATE`, `ZTRASHEDSTATE`, `ZTRASHEDDATE`, `ZPUBLICURLSTATE`, `ZALLOWSANONYMOUSPUBLICACCESS` 열도 있습니다.
 
-참여자는 `ZSHAREPARTICIPANT` 에 있고, `ZEMAILADDRESS`, `ZPHONENUMBER`, `ZPARTICIPANTROLE`, `ZACCEPTANCESTATUS`, `ZISCURRENTUSER`, `ZCONTRIBUTEDASSETSCOUNT`, `ZSUBSCRIPTIONDATE` 칸이 있습니다.
+참여자는 `ZSHAREPARTICIPANT` 에 있고, `ZEMAILADDRESS`, `ZPHONENUMBER`, `ZPARTICIPANTROLE`, `ZACCEPTANCESTATUS`, `ZISCURRENTUSER`, `ZCONTRIBUTEDASSETSCOUNT`, `ZSUBSCRIPTIONDATE` 열이 있습니다.
 
 ### 공유 사진 보관함
 
-iCloud 공유 사진 보관함은 iOS 16 이후 기능이고[4], `ZASSET` 에는 `ZACTIVELIBRARYSCOPEPARTICIPATIONSTATE` 와 `ZLIBRARYSCOPESHARESTATE` 칸이 있습니다. 두 칸의 값 뜻은 공개된 자료가 없어 검체에서 확인합니다.
+iCloud 공유 사진 보관함은 iOS 16 이후 기능이고[4], `ZASSET` 에는 `ZACTIVELIBRARYSCOPEPARTICIPATIONSTATE` 와 `ZLIBRARYSCOPESHARESTATE` 열이 있습니다. 두 열의 값 뜻은 실제 데이터로 확인해야 합니다.
 
 ### 사진 앱 설정
 
-CameraRollDomain 의 `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist` 에는 `HasSignificantRegularAlbumCount`, `HasSignificantSharedAlbumActivities` 같은 키가 있습니다. 이름으로 보아 앨범 수와 공유 앨범 활동이 많은지를 적은 값으로 보이고, 기준은 공개된 자료가 없습니다.
+CameraRollDomain 의 `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist` 에는 `HasSignificantRegularAlbumCount`, `HasSignificantSharedAlbumActivities` 같은 키가 있습니다. 이름으로 보면 앨범 수와 공유 앨범 활동이 많은지를 적은 값으로 보이고, 기준은 공개된 자료가 없습니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** `ZGENERICALBUM` 에 공유 앨범 행이 있으면 수집 시점에 이 기기가 그 공유 앨범을 알고 있었다는 사실을 보여 주고, 소유자 이름 칸과 `ZISOWNED` 로 누가 만든 앨범인지를 가늠할 수 있습니다. `ZCLOUDSHAREDCOMMENT` 의 `ZISMYCOMMENT`, `ZCLOUDFEEDENTRY` 의 `ZENTRYISMINE` 은 이름으로 보아 이 기기 사용자의 활동인지를 가르는 칸이라서, 검체에서 값 분포를 확인한 뒤 누가 댓글을 달고 사진을 올렸는지를 나누는 데 씁니다.
+**증명하는 것.** `ZGENERICALBUM` 에 공유 앨범 행이 있으면 수집 시점에 이 기기가 그 공유 앨범을 알고 있었다는 사실을 보여 주고, 소유자 이름 열과 `ZISOWNED` 로 누가 만든 앨범인지를 추정할 수 있습니다. `ZCLOUDSHAREDCOMMENT` 의 `ZISMYCOMMENT`, `ZCLOUDFEEDENTRY` 의 `ZENTRYISMINE` 은 이름으로 보면 이 기기 사용자의 활동인지를 구분하는 열이라서, 실제 데이터에서 값 분포를 확인한 뒤 누가 댓글을 달고 사진을 올렸는지를 나누는 데 씁니다.
 
 **증명하지 못하는 것.** 공유 앨범은 여러 사람이 사진을 올리는 곳이고 소유자는 남의 사진·댓글을 지울 수 있어서[1], 앨범에 사진이 있다고 이 기기 사용자가 올렸다는 뜻은 아니고, 없다고 올린 적이 없다는 뜻도 아닙니다. iOS 27 부터는 Apple 계정이 없는 사람도 웹으로 사진을 올릴 수 있어서[1], 올린 사람을 Apple 계정으로만 찾지 않습니다. 앨범을 지우면 모든 참여자 기기에서 사라지므로[1] 행이 없다는 사실만으로 참여한 적이 없다고 쓰지 않습니다.
 
-보고서에는 "이 기기의 사진 DB 에 이런 이름의 공유 앨범과 이 참여자가 기록되어 있고, 이 기기 사용자 것으로 표시된 댓글이 몇 건 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 기기의 사진 DB 에 이런 이름의 공유 앨범과 이 참여자가 기록되어 있고, 이 기기 사용자 것으로 표시된 댓글이 몇 건 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-앨범과 공유 표의 날짜 칸도 Mac 절대 시각이고, 바꾸는 법은 [사진 DB 구조 (Photos.sqlite)](photos-sqlite.md)의 시각 해석 절에 있습니다. `ZCLOUDCREATIONDATE`, `ZCLOUDLASTCONTRIBUTIONDATE`, `ZCLOUDSUBSCRIPTIONDATE` 는 이름으로 보아 공유 앨범을 만든 시각, 마지막으로 사진이 올라온 시각, 구독한 시각으로 보입니다. 이름이 비슷한 `ZCREATIONDATE` 와 `ZCLOUDCREATIONDATE` 가 다를 수 있으니 둘을 섞어 쓰지 않습니다.
+앨범과 공유 표의 날짜 열도 Mac 절대 시각이고, 바꾸는 법은 [사진 DB 구조 (Photos.sqlite)](photos-sqlite.md)의 시각 해석 절에 있습니다. `ZCLOUDCREATIONDATE`, `ZCLOUDLASTCONTRIBUTIONDATE`, `ZCLOUDSUBSCRIPTIONDATE` 는 이름으로 보면 공유 앨범을 만든 시각, 마지막으로 사진이 올라온 시각, 구독한 시각으로 보입니다. 이름이 비슷한 `ZCREATIONDATE` 와 `ZCLOUDCREATIONDATE` 가 다를 수 있으니 둘을 섞어 쓰지 않습니다.
 
 ## 함정과 한계
 
-`ZKIND` 값과 연결 표 번호는 macOS 사진 보관함 기준 값이라서[5], iOS 검체에서는 값 분포와 표 이름을 먼저 확인합니다. `ZSHARE` 는 iCloud 링크 공유 등에 쓰이는 표이지만[2] `ZCOLLECTIONSHAREKIND`·`ZSCOPETYPE` 의 값 뜻은 공개된 자료가 없어서, 행마다 어떤 방식의 공유인지 단정하지 않습니다.
+`ZKIND` 값과 연결 표 번호는 macOS 사진 보관함 기준 값이라서[5], iOS 데이터에서는 값 분포와 표 이름을 먼저 확인합니다. `ZSHARE` 는 iCloud 링크 공유 등에 쓰이는 표이지만[2] `ZCOLLECTIONSHAREKIND`·`ZSCOPETYPE` 의 값 뜻은 공개된 자료가 없어서, 행마다 어떤 방식의 공유인지 단정하지 않습니다.
 
 ## 직접 분석해 보기
 
@@ -126,7 +126,7 @@ SELECT name FROM sqlite_master
 WHERE type = 'table' AND name LIKE 'Z\_%ASSETS' ESCAPE '\';
 ```
 
-찾은 번호를 `nn` 자리에 넣어 앨범별 자산을 뽑습니다. 칸 이름도 `PRAGMA table_info(Z_nnASSETS);` 로 확인합니다.
+찾은 번호를 `nn` 자리에 넣어 앨범별 자산을 뽑습니다. 열 이름도 `PRAGMA table_info(Z_nnASSETS);` 로 확인합니다.
 
 ```sql
 SELECT g.Z_PK, g.ZKIND, g.ZTITLE, g.ZCLOUDOWNERFULLNAME, g.ZISOWNED,
@@ -155,10 +155,10 @@ ORDER BY c.ZCOMMENTDATE;
 
 ## 실습
 
-NIST CFReDS 같은 곳에 공개된 iOS 검체로 아래를 풀어 봅니다.
+NIST CFReDS 같은 곳에 공개된 iOS 시험 이미지로 아래를 풀어 봅니다.
 
 1. `ZGENERICALBUM.ZKIND` 값마다 행이 몇 개인지 세고, macOS 기준 값 표와 맞는지 봅니다.
-2. 검체에서 연결 표 번호를 찾고, 검체의 iOS 버전과 함께 적어 둡니다.
+2. 시험 이미지에서 연결 표 번호를 찾고, 그 이미지의 iOS 버전과 함께 적어 둡니다.
 3. 공유 앨범 하나를 골라 `ZISMYCOMMENT` 가 참인 댓글과 거짓인 댓글이 몇 건인지 셉니다.
 4. `ZCLOUDSHAREDALBUMINVITATIONRECORD` 의 초대받은 사람을 연락처와 맞춰 봅니다.
 

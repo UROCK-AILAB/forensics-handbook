@@ -10,9 +10,9 @@ nav_order: 420
 
 ## 무엇을 기록하나 · 왜 생기나
 
-브라우저 에이전트는 브라우저가 어디서 도는지에 따라 흔적이 남는 곳이 달라집니다. 서비스 회사 쪽에서 도는 브라우저라면 방문 흔적은 사용자 PC 에 남지 않고, 사용자 PC 의 브라우저를 움직이면 그 브라우저 프로필에 남습니다. 서비스마다 구조가 다르므로, 검체의 브라우저 프로필에 에이전트가 연 사이트가 남았는지를 먼저 확인합니다. ChatGPT 에이전트는 [ChatGPT 에이전트 모드](chatgpt-agent.md)에서 다룹니다.
+브라우저 에이전트는 브라우저가 어디서 도는지에 따라 흔적이 남는 곳이 달라집니다. 서비스 회사 쪽에서 도는 브라우저라면 방문 흔적은 사용자 PC 에 남지 않고, 사용자 PC 의 브라우저를 움직이면 그 브라우저 프로필에 남습니다. 서비스마다 구조가 다르므로, 분석 대상 PC 의 브라우저 프로필에 에이전트가 연 사이트가 남았는지를 먼저 확인합니다. ChatGPT 에이전트는 [ChatGPT 에이전트 모드](chatgpt-agent.md)에서 다룹니다.
 
-이 쪽은 사용자 PC 에 설치된 실제 브라우저를 움직이는 방식을 다룹니다. Claude in Chrome 확장, Claude Code 의 Chrome 연결, ChatGPT Atlas 의 에이전트 모드가 여기에 들어갑니다. 에이전트는 사용자의 로그인 상태를 그대로 쓰므로[2], 에이전트가 연 탭과 사람이 연 탭이 같은 프로필 안에서 움직입니다. Comet·Fellou·Genspark 처럼 에이전트를 브라우저 자체에 넣은 제품과 Edge Copilot 은 [AI 에이전트 브라우저](ai-browsers.md)에서 다룹니다.
+이 페이지는 사용자 PC 에 설치된 실제 브라우저를 움직이는 방식을 다룹니다. Claude in Chrome 확장, Claude Code 의 Chrome 연결, ChatGPT Atlas 의 에이전트 모드가 여기에 들어갑니다. 에이전트는 사용자의 로그인 상태를 그대로 쓰므로[2], 에이전트가 연 탭과 사람이 연 탭이 같은 프로필 안에서 움직입니다. Comet·Fellou·Genspark 처럼 에이전트를 브라우저 자체에 넣은 제품과 Edge Copilot 은 [AI 에이전트 브라우저](ai-browsers.md)에서 다룹니다.
 
 조사할 흔적은 네 묶음입니다. 브라우저 프로필 안의 방문 기록·탭, 브라우저 확장과 PC 프로그램을 잇는 연결 설정(네이티브 메시징 (Native Messaging) 호스트), 에이전트가 저장한 스크린샷·GIF 같은 파일, 서비스 계정 서버의 대화 기록입니다.
 
@@ -26,13 +26,13 @@ Chrome 웹 스토어의 확장 ID 는 `fcoeoabgfenejglbffodgkkbkcdhcgfn` 이고,
 
 대화 원본은 서버 쪽에 있습니다. Max·Team 요금제와 관리자가 켠 Enterprise 요금제(Pro 는 차례로 적용)에서는 옆 패널이 Cowork 세션으로 돌고, 옆 패널 세션이 모두 기록(history)에 나타나며, 옆 패널에서 시작한 세션을 웹·데스크톱 앱·모바일 앱에서 이어 쓸 수 있습니다[1]. 계정 쪽 기록은 [Claude](../chat-services/claude/index.md)와 [Claude 기업용 감사 로그](../network-enterprise/claude-enterprise.md)에서 다룹니다.
 
-크롬 계열 브라우저에서 확장의 저장소는 프로필 안 `Local Extension Settings\<확장 ID>` 와 `IndexedDB\chrome-extension_<확장 ID>_0.indexeddb.leveldb` 에 있고, 공개 도구 AABF 도 BrowserOS 의 에이전트 확장은 두 경로 모두에서, Sigma 의 에이전트 확장은 `Local Extension Settings` 경로에서 찾습니다[5]. Claude in Chrome 확장이 여기에 무엇을 남기는지는 공개된 분석 자료가 없어, 위 경로에 확장 ID `fcoeoabgfenejglbffodgkkbkcdhcgfn` 폴더가 있는지부터 검체로 확인해야 합니다.
+크롬 계열 브라우저에서 확장의 저장소는 프로필 안 `Local Extension Settings\<확장 ID>` 와 `IndexedDB\chrome-extension_<확장 ID>_0.indexeddb.leveldb` 에 있고, 공개 도구 AABF 도 BrowserOS 의 에이전트 확장은 두 경로 모두에서, Sigma 의 에이전트 확장은 `Local Extension Settings` 경로에서 찾습니다[5]. Claude in Chrome 확장이 여기에 무엇을 남기는지는 위 경로에 확장 ID `fcoeoabgfenejglbffodgkkbkcdhcgfn` 폴더가 있는지부터 실제 기기로 확인해야 합니다.
 
 동작 방식과 관리 설정도 조사에 쓸모가 있습니다. "Automatically approve" 모드는 계속 작업하면서 동작마다 안전 검사를 하고 승인이 필요할 때 멈춥니다[1]. Enterprise 관리자는 허용 목록과 차단 목록으로 접근할 수 있는 사이트를 제한할 수 있습니다[1]. Claude Code 연동에서 사이트별 권한은 Chrome 확장 설정에서 관리합니다[2].
 
 ### Claude Code 의 Chrome 연결
 
-Claude Code 는 작업용 탭을 새로 열고 사용자의 로그인 상태를 함께 씁니다[2]. 브라우저 동작은 사용자 눈에 보이는 Chrome 창에서 실시간으로 일어나고, 로그인 화면이나 CAPTCHA 를 만나면 멈추고 사람에게 넘깁니다. 확장은 Claude 가 연 탭을 세션에 묶인 Chrome 탭 그룹으로 모으고, `/clear` 를 하면 그 그룹을 닫습니다(`/clear` 뒤에도 이어지는 작업이 돌고 있으면 닫지 않습니다). `/resume` 이나 종료 때는 그룹에 빈 새 탭만 있을 때만 닫아서, 세션이 끝난 뒤에도 에이전트가 연 탭이 남아 있을 수 있습니다. 이 탭들의 방문이 사용자 프로필의 방문 기록에 어떻게 남는지는 공개된 자료가 없으므로, 세션 시간대의 방문 기록을 검체에서 확인합니다.
+Claude Code 는 작업용 탭을 새로 열고 사용자의 로그인 상태를 함께 씁니다[2]. 브라우저 동작은 사용자 눈에 보이는 Chrome 창에서 실시간으로 일어나고, 로그인 화면이나 CAPTCHA 를 만나면 멈추고 사람에게 넘깁니다. 확장은 Claude 가 연 탭을 세션에 묶인 Chrome 탭 그룹으로 모으고, `/clear` 를 하면 그 그룹을 닫습니다(`/clear` 뒤에도 이어지는 작업이 돌고 있으면 닫지 않습니다). `/resume` 이나 종료 때는 그룹에 빈 새 탭만 있을 때만 닫아서, 세션이 끝난 뒤에도 에이전트가 연 탭이 남아 있을 수 있습니다. 이 탭들의 방문이 사용자 프로필의 방문 기록에 어떻게 남는지는 세션 시간대의 방문 기록을 실제 기기에서 보고 확인합니다.
 
 처음 켤 때 Claude Code 는 네이티브 메시징 호스트 설정 파일을 설치하고, 호스트 이름은 `com.anthropic.claude_code_browser_extension` 입니다[2]. 설치 위치는 브라우저와 OS 마다 다릅니다.
 
@@ -76,7 +76,7 @@ Claude 데스크톱 스토어 앱 폴더에는 브라우저 연결과 이어지�
 }
 ```
 
-같은 캐시 폴더 아래 다른 MCP 로그 `.jsonl` 에는 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. `mcp-logs-computer-use` 폴더는 이름에 화면 조작(computer use)이 들어 있고, 여기에 브라우저 동작이 적히는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 스토어 앱 폴더의 나머지 구조는 [Claude](../chat-services/claude/index.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)(Windows 판)에 있습니다.
+같은 캐시 폴더 아래 다른 MCP 로그 `.jsonl` 에는 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. `mcp-logs-computer-use` 폴더는 이름에 화면 조작(computer use)이 들어 있고, 여기에 브라우저 동작이 적히는지는 실제 기기로 확인해야 합니다. 스토어 앱 폴더의 나머지 구조는 [Claude](../chat-services/claude/index.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)(Windows 판)에 있습니다.
 
 ### ChatGPT Atlas
 
@@ -84,7 +84,7 @@ ChatGPT Atlas 는 2025-10-21 에 macOS 용으로 먼저 나온 Chromium 기반 �
 
 "browser memories" 도 선택 기능이고, 메모리는 서버에 30일 보관한 뒤 지우며, 웹 내용은 서버에서 요약한 뒤 원문을 바로 지우고 걸러 낸 요약도 7일 안에 지웁니다[3]. OpenAI 는 2026-03 에 Atlas·ChatGPT 데스크톱 앱·Codex 를 한 앱으로 합치겠다고 밝혔고, Atlas 브라우저는 2026-08-09 에 종료됐습니다[3]. 이 날짜들은 위키백과가 출처라서 보고서에 쓸 때는 출처와 열람 날짜를 붙이고 OpenAI 공지로 다시 확인합니다.
 
-Atlas 의 로컬 프로필 경로와 파일 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다. 검체에서 Atlas 프로필 폴더를 찾으면 `History`, `Local Storage`, `IndexedDB` 같은 크롬 계열 프로필 파일이 있는지부터 보고, 있으면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)의 방법으로 읽습니다.
+Atlas 의 로컬 프로필 경로와 파일 형식은 실제 기기로 확인해야 합니다. Atlas 프로필 폴더를 찾으면 `History`, `Local Storage`, `IndexedDB` 같은 크롬 계열 프로필 파일이 있는지부터 보고, 있으면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)의 방법으로 읽습니다.
 
 ### 그 밖의 브라우저 에이전트
 
@@ -133,23 +133,23 @@ Windows 에서는 설치 프로그램이 `HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chr
 
 ### 확장과 호스트 프로세스
 
-네이티브 메시징을 쓰는 확장은 자기 manifest 에 `"nativeMessaging"` 권한을 선언해야 합니다[4]. 그래서 프로필에 설치된 확장의 manifest 를 훑어 이 권한이 있는 확장을 모으면 브라우저 에이전트 후보를 가려낼 수 있습니다.
+네이티브 메시징을 쓰는 확장은 자기 manifest 에 `"nativeMessaging"` 권한을 선언해야 합니다[4]. 그래서 프로필에 설치된 확장의 manifest 를 살펴 이 권한이 있는 확장을 모으면 브라우저 에이전트 후보를 가려낼 수 있습니다.
 
-브라우저가 호스트 프로세스를 띄울 때는 부른 쪽 origin(`chrome-extension://` 뒤에 확장 ID)을 인자로 넘기고, Windows 에서는 부모 창 핸들도 넘깁니다[4]. 그래서 명령줄까지 남기는 프로세스 생성 기록이 있으면 그 안에서 확장 ID 를 찾아봅니다. 확장과 호스트는 32비트 길이를 앞에 붙인 JSON 메시지를 표준 입출력으로 주고받고, 호스트가 브라우저로 보내는 메시지 하나는 최대 1MB, 브라우저가 호스트로 보내는 메시지는 최대 64MiB 입니다. 메시지는 표준 입출력으로만 오가므로, 디스크에 남는지는 호스트 프로그램이 따로 로그를 쓰는지에 달려 있고 검체로 확인합니다.
+브라우저가 호스트 프로세스를 띄울 때는 부른 쪽 origin(`chrome-extension://` 뒤에 확장 ID)을 인자로 넘기고, Windows 에서는 부모 창 핸들도 넘깁니다[4]. 그래서 명령줄까지 남기는 프로세스 생성 기록이 있으면 그 안에서 확장 ID 를 찾아봅니다. 확장과 호스트는 32비트 길이를 앞에 붙인 JSON 메시지를 표준 입출력으로 주고받고, 호스트가 브라우저로 보내는 메시지 하나는 최대 1MB, 브라우저가 호스트로 보내는 메시지는 최대 64MiB 입니다. 메시지는 표준 입출력으로만 오가므로, 디스크에 남는지는 호스트 프로그램이 따로 로그를 쓰는지에 달려 있고 실제 기기로 확인합니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 네이티브 메시징 설정 파일이나 레지스트리 키가 있으면 그 사용자 환경에서 브라우저 연결 기능을 한 번 이상 켰다는 뜻입니다. Claude Code 는 처음 켤 때 설정 파일을 설치하기 때문입니다[2]. 확장 ID 가 프로필에 있으면 그 확장을 설치한 적이 있다는 뜻이고, 데스크톱 앱의 `coworkBrowserToolsEnabled`·`coworkPreferredBrowser` 키는 Cowork 브라우저 도구 설정이 있었음을 보여 줍니다. `bridge.claudeusercontent.com` 접속 기록은 그 시간대에 확장 중계 연결이 오간 흔적입니다. GIF·스크린샷 파일은 에이전트가 그 화면을 보았다는 기록이고, 로그인한 계정 정보가 찍혀 있을 수 있습니다.
 
-**증명하지 못하는 것.** 설정 파일이 있다고 해서 특정 날짜에 에이전트가 브라우저를 조작했다고 말할 수는 없습니다. Claude 쪽에는 방문 기록에 에이전트 표시를 따로 남긴다는 공개 자료가 없어서[1][2], 방문 기록의 한 줄이 사람의 클릭인지 에이전트의 동작인지는 기록만으로 가리기 어렵습니다. 반대로 Fellou 는 로컬 데이터베이스 방문 기록에 AI 방문인지 사람 방문인지가 적힌다는 설명이 있으므로[5], 브라우저마다 다르다는 점을 [AI 에이전트 브라우저](ai-browsers.md)에서 확인합니다. 어떤 지시로 무엇을 했는지는 계정 서버의 대화 기록이나 Claude Code 세션 기록에서 확인해야 합니다.
+**증명하지 못하는 것.** 설정 파일이 있다고 해서 특정 날짜에 에이전트가 브라우저를 조작했다고 말할 수는 없습니다. Claude 쪽에는 방문 기록에 에이전트 표시를 따로 남긴다는 공개 자료가 없어서[1][2], 방문 기록의 한 줄이 사람의 클릭인지 에이전트의 동작인지는 기록만으로 구분하기 어렵습니다. 반대로 Fellou 는 로컬 데이터베이스 방문 기록에 AI 방문인지 사람 방문인지가 적힌다는 설명이 있으므로[5], 브라우저마다 다르다는 점을 [AI 에이전트 브라우저](ai-browsers.md)에서 확인합니다. 어떤 지시로 무엇을 했는지는 계정 서버의 대화 기록이나 Claude Code 세션 기록에서 확인해야 합니다.
 
-보고서에는 "이 시간대에 이 브라우저 프로필에 이 사이트 방문 기록이 있고, 같은 시간대에 브라우저 연결 기능의 흔적이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 시간대에 이 브라우저 프로필에 이 사이트 방문 기록이 있고, 같은 시간대에 브라우저 연결 기능의 흔적이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
 네이티브 메시징 설정 파일은 기능을 처음 켤 때 만들어지므로[2], 파일 생성 시각은 처음 켠 시각의 후보입니다. 다시 쓰는 조건은 공개된 자료가 없어서 수정 시각을 처음 켠 시각으로 읽지 않습니다. Windows 에서는 호스트 이름 하위 키의 마지막 기록 시각을 함께 봅니다.
 
-브라우저 방문 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다. GIF·스크린샷 파일은 파일 시스템 시각으로 저장 시점을 잡습니다. MCP 로그에는 `timestamp` 키가 있고, 형식과 기준 시각은 검체의 값을 파일 시스템 시각과 맞춰 확인합니다. 여러 기록을 한 줄로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+브라우저 방문 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다. GIF·스크린샷 파일은 파일 시스템 시각으로 저장 시점을 잡습니다. MCP 로그에는 `timestamp` 키가 있고, 형식과 기준 시각은 실제 데이터의 값을 파일 시스템 시각과 맞춰 확인합니다. 여러 기록을 한 줄로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -173,9 +173,9 @@ GIF·스크린샷 파일과 브라우저 쿠키에는 로그인한 계정 정보
 
 `7B` 는 `{`, `22 6E 61 6D 65 22` 는 `"name"` 이고, 이어지는 값이 호스트 이름입니다. 파일 이름과 `name` 값, 레지스트리 하위 키 이름이 서로 맞는지 확인합니다.
 
-**공개 도구로.** 살아 있는 Windows 에서는 `reg query "HKCU\Software\Google\Chrome\NativeMessagingHosts" /s` 로 등록된 호스트를 모두 보고, Edge·Brave 키도 같은 방법으로 봅니다. 떠 온 이미지에서는 사용자 `NTUSER.DAT` 를 공개 레지스트리 도구(예: Registry Explorer, RegRipper)로 열어 같은 경로를 봅니다. macOS·Linux 에서는 위 표의 `NativeMessagingHosts` 폴더 목록을 뽑습니다. 그다음 매니페스트의 `allowed_origins` 확장 ID 를 브라우저 프로필의 확장 목록과 맞추고, 확장 manifest 에 `"nativeMessaging"` 권한이 있는지 봅니다. 프로필 구조는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다.
+**공개 도구로.** 실행 중인 Windows 에서는 `reg query "HKCU\Software\Google\Chrome\NativeMessagingHosts" /s` 로 등록된 호스트를 모두 보고, Edge·Brave 키도 같은 방법으로 봅니다. 떠 온 이미지에서는 사용자 `NTUSER.DAT` 를 공개 레지스트리 도구(예: Registry Explorer, RegRipper)로 열어 같은 경로를 봅니다. macOS·Linux 에서는 위 표의 `NativeMessagingHosts` 폴더 목록을 뽑습니다. 그다음 매니페스트의 `allowed_origins` 확장 ID 를 브라우저 프로필의 확장 목록과 맞추고, 확장 manifest 에 `"nativeMessaging"` 권한이 있는지 봅니다. 프로필 구조는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다.
 
-AI 에이전트 브라우저가 함께 깔린 검체라면 AABF[5]로 어떤 에이전트 브라우저가 있는지 먼저 가려냅니다. AABF 는 1.1.260618 판(2026-06 빌드) 기준으로 Comet·Fellou·Edge·BrowserOS·Sigma·Genspark 여섯 개를 찾는 도구이고 Windows 10/11 에서 돌리며, Claude in Chrome 과 Atlas 는 대상에 없습니다. 지금 판의 브라우저와 경로가 다를 수 있으니 도구 결과는 검체의 폴더와 맞춰 봅니다. AABF 에는 남은 토큰으로 서버 API 를 부르는 기능도 있는데, 서버 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 같은 법적 절차로 받습니다.
+AI 에이전트 브라우저가 함께 깔린 기기라면 AABF[5]로 어떤 에이전트 브라우저가 있는지 먼저 가려냅니다. AABF 는 1.1.260618 판(2026-06 빌드) 기준으로 Comet·Fellou·Edge·BrowserOS·Sigma·Genspark 여섯 개를 찾는 도구이고 Windows 10/11 에서 돌리며, Claude in Chrome 과 Atlas 는 대상에 없습니다. 지금 판의 브라우저와 경로가 다를 수 있으니 도구 결과는 실제 폴더와 맞춰 봅니다. AABF 에는 남은 토큰으로 서버 API 를 부르는 기능도 있는데, 서버 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 같은 법적 절차로 받습니다.
 
 ## 교차 검증
 
@@ -193,7 +193,7 @@ AI 에이전트 브라우저가 함께 깔린 검체라면 AABF[5]로 어떤 에
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 모음에서 브라우저 에이전트 흔적을 담은 검체를 먼저 찾아보고, 없으면 조사용 계정과 가상 머신으로 시험 환경을 만들어 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 자료 모음에서 브라우저 에이전트 흔적을 담은 자료를 먼저 찾아보고, 없으면 조사용 계정과 가상 머신으로 시험 환경을 만들어 아래 질문을 풀어 봅니다.
 
 1. 브라우저 연결 기능을 처음 켜기 전과 뒤에 레지스트리(또는 `NativeMessagingHosts` 폴더)를 비교해, 새로 생긴 키·파일과 그 시각을 적습니다.
 2. 에이전트에게 공개 사이트 두 곳을 열게 하고 사람이 한 곳을 직접 연 뒤, 방문 기록만으로 셋을 구분할 수 있는지, 어떤 다른 기록이 있어야 구분되는지 정리합니다.

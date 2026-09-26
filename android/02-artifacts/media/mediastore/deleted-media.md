@@ -7,7 +7,7 @@ nav_order: 640
 
 # 지운 사진의 흔적 (Deleted Media)
 
-사진이나 동영상을 지울 때 미디어 저장소(MediaStore)와 삼성 기기의 휴지통 기록에 무엇이 남는지 정리합니다. AOSP 쪽 내용은 MediaProvider 저장소의 main 가지 소스 기준("현행 AOSP 기준")이고, 삼성 쪽 내용은 ALEAPP 파서의 해석을 따릅니다. files 표의 칸과 시각 단위 전반은 [미디어 DB 구조](external-db.md) 페이지에 있습니다.
+사진이나 동영상을 지울 때 미디어 저장소(MediaStore)와 삼성 기기의 휴지통 기록에 무엇이 남는지 정리합니다. AOSP 쪽 내용은 MediaProvider 저장소의 main 가지 소스 기준("현행 AOSP 기준")이고, 삼성 쪽 내용은 ALEAPP 파서의 해석을 따릅니다. files 표의 열과 시각 단위 전반은 [미디어 DB 구조](external-db.md) 페이지에 있습니다.
 
 ## 한 줄 요약
 
@@ -25,17 +25,17 @@ nav_order: 640
 
 | 흔적 | 위치 | 근거 |
 |---|---|---|
-| is_trashed·date_expires 칸 | external.db 의 files 표 | 현행 AOSP 기준, 스키마 1010 단계에서 생김 [1] |
+| is_trashed·date_expires 열 | external.db 의 files 표 | 현행 AOSP 기준, 스키마 1010 단계에서 생김 [1] |
 | 이름이 바뀐 휴지통 파일 | 원래 파일과 같은 폴더의 `.trashed-...` 파일 | 현행 AOSP 기준 [3] |
 | deleted_media 표 | external.db | 현행 AOSP 기준, 스키마 1301 단계에서 생김 [1] |
-| 삼성 휴지통 제공자 DB | `*/com.samsung.android.providers.trash/databases/trash.db*` | ALEAPP 검체 Android 14·15 [6] |
+| 삼성 휴지통 제공자 DB | `*/com.samsung.android.providers.trash/databases/trash.db*` | ALEAPP 시험 자료 Android 14·15 [6] |
 | 삼성 휴지통 제공자 파일 | `*/data/media/*/Android/.Trash/*`, `*/storage/*/Android/.Trash/*` | ALEAPP 파서의 경로 패턴 [6] |
-| 삼성 갤러리 휴지통 DB | `*/data/com.sec.android.gallery3d/databases/local.db` 의 trash 표 | ALEAPP 검체 5개에서 모두 0행 [6] |
+| 삼성 갤러리 휴지통 DB | `*/data/com.sec.android.gallery3d/databases/local.db` 의 trash 표 | ALEAPP 시험 자료 5개에서 모두 0행 [6] |
 | 삼성 갤러리 휴지통 파일 | `*/data/com.sec.android.gallery3d/files/.Trash/**` | ALEAPP 파서의 경로 패턴 [6] |
 
-스키마 단계 번호를 Android 버전으로 옮기는 문제는 [미디어 DB 구조](external-db.md) 페이지의 "스키마 버전" 절에 있습니다. 삼성 휴지통 제공자가 One UI 몇 버전부터 있는지, 요즘 삼성 갤러리가 local.db 의 trash 표 대신 이 제공자를 쓰는지는 공개된 자료가 없어 검체에서 확인합니다.
+스키마 단계 번호를 Android 버전으로 옮기는 문제는 [미디어 DB 구조](external-db.md) 페이지의 "스키마 버전" 절에 있습니다. 삼성 휴지통 제공자가 One UI 몇 버전부터 있는지, 요즘 삼성 갤러리가 local.db 의 trash 표 대신 이 제공자를 쓰는지는 실제 기기에서 확인해야 합니다.
 
-.Trash 는 점으로 시작하는 숨김 폴더라서, 숨김 항목을 빼고 나열한 `/sdcard/Android` 목록에는 보이지 않습니다. 목록에 없다고 .Trash 가 없다고 결론 내지 말고 숨김 항목까지 나열해 봅니다. 삼성 기기의 global 설정에 있는 contact_setting_trash_bin_on 키는 이름으로 보아 연락처 휴지통 설정이고, 사진 휴지통과의 관계는 공개된 자료가 없습니다.
+.Trash 는 점으로 시작하는 숨김 폴더라서, 숨김 항목을 빼고 나열한 `/sdcard/Android` 목록에는 보이지 않습니다. 목록에 없다고 .Trash 가 없다고 결론 내지 말고 숨김 항목까지 나열해 봅니다. 삼성 기기의 global 설정에 있는 contact_setting_trash_bin_on 키는 이름으로 보면 연락처 휴지통 설정이고, 사진 휴지통과의 관계는 공개된 자료가 없습니다.
 
 ## 구조
 
@@ -53,7 +53,7 @@ MediaProvider 는 유휴 유지보수 때 외부 볼륨에서 date_expires 가 �
 
 ### deleted_media 표
 
-칸은 `_id`(AUTOINCREMENT), old_id(INTEGER UNIQUE), generation_modified(INTEGER NOT NULL) 셋뿐입니다 [1]. 외부 볼륨 DB 에서만 쓰고 이미지·동영상 행만 대상입니다 [4].
+열은 `_id`(AUTOINCREMENT), old_id(INTEGER UNIQUE), generation_modified(INTEGER NOT NULL) 셋뿐입니다 [1]. 외부 볼륨 DB 에서만 쓰고 이미지·동영상 행만 대상입니다 [4].
 
 files 행이 지워지면 그 행의 `_id` 가 old_id 로, 그때의 generation 번호가 generation_modified 로 들어갑니다 [4][2]. 행이 지워지지 않아도 "보이는 미디어" 가 "안 보이는 미디어" 로 바뀌면 들어가는데, 보이는 미디어는 휴지통 아님·대기 아님·이미지나 동영상인 행이라서 휴지통에 넣을 때도 기록됩니다 [4]. 다시 보이게 되면(휴지통에서 꺼냄 등) 그 old_id 행은 표에서 지워지고, 같은 old_id 가 다시 들어오면 새 행을 만들지 않고 generation_modified 만 새 값으로 바꿉니다 [4].
 
@@ -67,9 +67,9 @@ MediaProvider 는 다음 행 번호(next row id)와 DB 세션 ID 를 `/data/medi
 
 ### 삼성 휴지통 제공자 (trash.db)
 
-trashes 표의 칸은 다음과 같습니다 [6].
+trashes 표의 열은 다음과 같습니다 [6].
 
-| 칸 | 뜻(ALEAPP 기준) |
+| 열 | 뜻(ALEAPP 기준) |
 |---|---|
 | `_id` | 행 번호 |
 | `_data` | 지금 휴지통 안 경로 |
@@ -81,13 +81,13 @@ trashes 표의 칸은 다음과 같습니다 [6].
 | date_deleted, date_expires | 지운 시각과 만료 시각 |
 | extra | JSON |
 
-`_data` 에서 "/Android/.Trash/" 뒤의 부분으로 실제 휴지통 파일을 찾아 짝지을 수 있습니다 [6]. ALEAPP 검체에서는 Android 15 검체에 3행, Android 14 검체 둘에 0행과 29행이 있었습니다 [6].
+`_data` 에서 "/Android/.Trash/" 뒤의 부분으로 실제 휴지통 파일을 찾아 짝지을 수 있습니다 [6]. ALEAPP 시험 자료에서는 Android 15 기기에 3행, Android 14 기기 둘에 0행과 29행이 있었습니다 [6].
 
 ### 삼성 갤러리 휴지통 (local.db)
 
-trash 표의 칸은 `__deleteTime`, `__Title`, `__absPath`, `__originTitle`, `__originPath`, `__expiredPeriod`, `__restoreExtra` 이고, `__restoreExtra` 는 JSON 이고 그 안에 `__dateTaken`, latitude, longitude 가 들어 있습니다 [6]. `__expiredPeriod` 의 단위는 공개된 자료가 없어 검체에서 확인합니다.
+trash 표의 열은 `__deleteTime`, `__Title`, `__absPath`, `__originTitle`, `__originPath`, `__expiredPeriod`, `__restoreExtra` 이고, `__restoreExtra` 는 JSON 이고 그 안에 `__dateTaken`, latitude, longitude 가 들어 있습니다 [6]. `__expiredPeriod` 의 단위는 실제 데이터로 확인해야 합니다.
 
-삼성 media.db 의 files 표에도 is_trashed, is_hide, deleted 칸이 있지만 ALEAPP 검체에서 값이 비어 있거나 0 이었고, 그 내용은 [미디어 DB 구조](external-db.md) 페이지의 "삼성 media.db" 절에 있습니다.
+삼성 media.db 의 files 표에도 is_trashed, is_hide, deleted 열이 있지만 ALEAPP 시험 자료에서 값이 비어 있거나 0 이었고, 그 내용은 [미디어 DB 구조](external-db.md) 페이지의 "삼성 media.db" 절에 있습니다.
 
 ## 시각 해석
 
@@ -100,7 +100,7 @@ trash 표의 칸은 `__deleteTime`, `__Title`, `__absPath`, `__originTitle`, `__
 | local.db 의 `__deleteTime` | 유닉스 밀리초(ALEAPP 가 1000 으로 나눔) | 지운 시각 [6] |
 | `__restoreExtra` 의 `__dateTaken` | 유닉스 밀리초 | 촬영 시각 [6] |
 
-MediaStore 휴지통에는 "넣은 시각" 칸이 따로 없어서, 넣은 시각은 기본값 기준 "만료 시각 − 30일" 로 짐작할 뿐입니다. 만료 항목 정리가 만료 시각을 7일씩 늦추고 파일 이름도 바꾸기 때문에, 이름 속 숫자가 넣은 시각 + 30일과 맞지 않으면 이 연장이 한 번 이상 일어났을 수 있습니다 [2][3]. 보고서에는 "휴지통에 넣은 시각" 이 아니라 "만료 시각이 이 값으로 적혀 있다" 고 쓰고, 넣은 시각은 계산한 추정값이라고 밝힙니다. 삼성 쪽 두 DB 의 단위는 ALEAPP 의 변환 방식을 따른 것이고, 삼성이 공개한 문서는 없습니다.
+MediaStore 휴지통에는 "넣은 시각" 열이 따로 없어서, 넣은 시각은 기본값 기준 "만료 시각 − 30일" 로 짐작할 뿐입니다. 만료 항목 정리가 만료 시각을 7일씩 늦추고 파일 이름도 바꾸기 때문에, 이름 속 숫자가 넣은 시각 + 30일과 맞지 않으면 이 연장이 한 번 이상 일어났을 수 있습니다 [2][3]. 보고서에는 "휴지통에 넣은 시각" 이 아니라 "만료 시각이 이 값으로 적혀 있다" 고 쓰고, 넣은 시각은 계산한 추정값이라고 밝힙니다. 삼성 쪽 두 DB 의 단위는 ALEAPP 의 변환 방식을 따른 것이고, 삼성이 공개한 문서는 없습니다.
 
 ## 증거로서 의미
 
@@ -112,19 +112,19 @@ MediaStore 휴지통에는 "넣은 시각" 칸이 따로 없어서, 넣은 시�
 | trash.db 의 delete_package_name 이 적은 지운 앱 이름 | 그 앱을 사람이 조작했는지 |
 | `_id` 사이의 빈 번호가 있으면 행이 지워졌을 가능성 | 빈 번호마다 지운 행이 미디어였다는 것 |
 
-"사진을 지웠다" 보다 "files 표에 이 경로의 이미지가 is_trashed=1, 만료 시각 이 값으로 남아 있다" 나 "deleted_media 에 old_id 이 번호가 generation 이 값으로 남아 있다" 처럼 기록이 말하는 만큼만 씁니다.
+"사진을 지웠다" 보다 "files 표에 이 경로의 이미지가 is_trashed=1, 만료 시각 이 값으로 남아 있다" 나 "deleted_media 에 old_id 이 번호가 generation 이 값으로 남아 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 함정과 한계
 
 - 앱을 거친 조회는 휴지통 항목을 기본으로 빼서 [5][2], 라이브 기기에서 앱 화면에 안 보인다고 files 표에도 없다고 판단하면 안 됩니다.
 - deleted_media 에는 휴지통으로 옮긴 경우와 바로 지운 경우가 함께 들어가고, 휴지통에서 꺼내면 그 행이 사라집니다 [4]. 이 표만으로 삭제 여부를 가르지 말고 files 표에 같은 `_id` 가 남아 있는지 함께 봅니다.
 - 휴지통 파일 이름은 잘릴 수 있어서 [3] 원래 이름과 한 글자씩 맞지 않을 수 있습니다.
-- 지운 files 행이 SQLite 빈 페이지나 WAL 에 남는지는 검체에서 확인합니다. 레코드 복구는 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지의 일반 방법을 따릅니다.
-- 삼성 휴지통 제공자와 갤러리 휴지통의 칸 뜻과 단위는 ALEAPP 해석에 기대고 있고, ALEAPP 검체에서도 행이 없는 경우가 많았습니다 [6].
+- 지운 files 행이 SQLite 빈 페이지나 WAL 에 남는지는 실제 데이터로 확인합니다. 레코드 복구는 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지의 일반 방법을 따릅니다.
+- 삼성 휴지통 제공자와 갤러리 휴지통 열의 뜻과 단위는 ALEAPP 해석에 기대고 있고, ALEAPP 시험 자료에서도 행이 없는 경우가 많았습니다 [6].
 
 ## 직접 분석해 보기
 
-**파일 이름 읽기.** 소스 주석에 나오는 예 `/storage/emulated/0/DCIM/.trashed-1621147340-test.jpg` 를 따라가 봅니다 [3]. 이 값은 소스 주석의 예시이고 실제 검체에서 나온 값이 아닙니다.
+**파일 이름 읽기.** 소스 주석에 나오는 예 `/storage/emulated/0/DCIM/.trashed-1621147340-test.jpg` 를 따라가 봅니다 [3]. 이 값은 소스 주석의 예시이고 실제 기기에서 나온 값이 아닙니다.
 
 ```text
 .trashed-1621147340-test.jpg
@@ -133,7 +133,7 @@ MediaStore 휴지통에는 "넣은 시각" 칸이 따로 없어서, 넣은 시�
 기본값(30일)으로 거꾸로 계산한 넣은 시각 추정 = 2021-04-16 06:42:20 UTC
 ```
 
-**external.db 쿼리.** 확보한 사본을 SQLite 를 읽는 공개 도구(예: sqlite3 명령줄)로 열어 휴지통 행, deleted_media 행, 빈 `_id` 번호를 차례로 봅니다. 아래 쿼리는 이 페이지의 칸 이름으로 만든 예시입니다.
+**external.db 쿼리.** 확보한 사본을 SQLite 를 읽는 공개 도구(예: sqlite3 명령줄)로 열어 휴지통 행, deleted_media 행, 빈 `_id` 번호를 차례로 봅니다. 아래 쿼리는 이 페이지의 열 이름으로 만든 예시입니다.
 
 ```sql
 -- 휴지통 행과 만료 시각
@@ -164,12 +164,12 @@ deleted_media 의 old_id 가운데 files 표에 같은 `_id` 가 is_trashed=1 �
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 Android 이미지를 구할 수 있으면 다음을 풀어 봅니다.
+공개된 시험 자료(NIST CFReDS 등)에서 Android 이미지를 구할 수 있으면 다음을 풀어 봅니다.
 
 1. external.db 에서 is_trashed=1 인 행을 모두 찾고, 같은 폴더에 `.trashed-` 파일이 실제로 있는지, 이름 속 숫자와 date_expires 가 같은지 확인합니다.
 2. 만료 시각 − 30일로 넣은 시각을 추정하고, 그 무렵의 앱 사용 기록과 맞는지 봅니다.
 3. deleted_media 의 old_id 를 files 표와 맞춰 휴지통 항목과 바로 지운 항목으로 나눕니다.
-4. 삼성 기기 검체라면 trash.db 의 original_path 와 delete_package_name 을 external.db 의 같은 파일 기록과 비교합니다.
+4. 삼성 기기 이미지라면 trash.db 의 original_path 와 delete_package_name 을 external.db 의 같은 파일 기록과 비교합니다.
 
 ## 참고 문헌
 

@@ -24,7 +24,7 @@ nav_order: 720
 .../Biome/streams/restricted/App.InFocus/remote/*
 ```
 
-macOS 사용자 기준으로는 `~/Library/Biome/streams/restricted/App.InFocus/local/` 이 됩니다 [3]. 시스템 쪽(`/private/var/db/biome`)에도 이 스트림이 있는지는 검체에서 확인합니다.
+macOS 사용자 기준으로는 `~/Library/Biome/streams/restricted/App.InFocus/local/` 이 됩니다 [3]. 시스템 쪽(`/private/var/db/biome`)에도 이 스트림이 있는지는 실제 데이터로 확인합니다.
 
 버전별 차이는 iLEAPP 표본 이미지(iOS)에서 아래처럼 나타납니다 [1].
 
@@ -49,7 +49,7 @@ iOS에서 기록은 28일 동안 남고 [2], 다른 스트림과의 비교는 [�
 | 9 | str | 이름 없이 형식만 지정 | CFBundleShortVersionString (앱 버전 문자열) |
 | 10 | str | 이름 없이 형식만 지정 | CFBundleVersion (앱 버전 문자열) |
 
-— 는 그 도구의 해석이 공개되지 않은 칸입니다. 필드 3의 이름 붙임은 두 도구가 비슷하지만, Foreground·Background라는 이름은 스트림 이름에서 나온 iLEAPP의 해석입니다 [1]. 이 값의 뜻을 밝힌 Apple 공식 자료는 없습니다. 필드 6은 iLEAPP이 번들 ID로, mac_apt가 `product_name` 으로 부르는 같은 칸이라서, 두 도구의 결과를 합칠 때 칸 이름이 달라도 같은 값인지 확인합니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
+— 는 그 도구의 해석이 공개되지 않은 칸입니다. 필드 3의 이름 붙임은 두 도구가 비슷하지만, Foreground·Background라는 이름은 스트림 이름에서 나온 iLEAPP의 해석입니다 [1]. 이 값의 뜻을 밝힌 Apple 공식 자료는 없습니다. 필드 6은 iLEAPP이 번들 ID로, mac_apt가 `product_name` 으로 부르는 같은 필드라서, 두 도구의 결과를 합칠 때 필드 이름이 달라도 같은 값인지 확인합니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -57,13 +57,13 @@ iOS에서 기록은 28일 동안 남고 [2], 다른 스트림과의 비교는 [�
 
 **증명하지 못하는 것.** 상태 값 1이 "사용자가 앱을 앞에 띄웠다" 는 뜻인지는 도구 저자의 해석이고 [1][3], macOS에서 App.InFocus로 앱 실행을 증명한 공개 검증 자료는 없습니다. 기록이 사용자 폴더에 있어도 그 시각에 앱을 조작한 사람이 누구인지는 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md)처럼 다른 자료로 따집니다. `remote` 폴더의 기록은 같은 계정의 다른 기기에서 일어난 사건이라서 이 맥에서 앱을 썼다는 근거가 되지 않습니다 [1].
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "사용자 폴더의 Biome App.InFocus 스트림 `local` 파일에, 번들 ID `com.example.app` 에 대해 상태 값 1(iLEAPP 해석 Foreground)인 기록이 있고, 기록 안의 시작 시각은 2024-09-02 19:59:50(UTC로 해석)이다" 처럼 씁니다. 날짜와 번들 ID는 아래 헥스 예시의 값입니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "사용자 폴더의 Biome App.InFocus 스트림 `local` 파일에, 번들 ID `com.example.app` 에 대해 상태 값 1(iLEAPP 해석 Foreground)인 기록이 있고, 기록 안의 시작 시각은 2024-09-02 19:59:50(UTC로 해석)이다" 처럼 씁니다. 날짜와 번들 ID는 아래 헥스 예시의 값입니다.
 
 ## 시각 해석
 
 기록 하나에서 시각을 두 가지 읽을 수 있습니다 [1].
 
-| 시각 | 자리 | iLEAPP 칸 |
+| 시각 | 자리 | iLEAPP 열 |
 |---|---|---|
 | SEGB 기록 시각 (쓰기 시각) | SEGB 파일의 기록 헤더(v1) 또는 트레일러(v2) | Timestamp |
 | 시작 시각 | protobuf 필드 4 | Start Time |
@@ -72,7 +72,7 @@ iOS에서 기록은 28일 동안 남고 [2], 다른 스트림과의 비교는 [�
 
 ## 함정과 한계
 
-`remote` 기록이 결과의 대부분을 차지할 수 있습니다. iLEAPP 표본 가운데 iOS 17.6.1 이미지에서는 20368행 중 19852행이 `remote` 에서 왔습니다 [1]. iLEAPP은 이런 기록의 Sync Origin 칸에 `Remote (<기기 id>)` 처럼 출처를 표시해서 [1], 이 칸을 걸러 이 기기의 기록만 남긴 뒤 해석합니다. 출처 칸이 없는 도구로 폴더를 통째로 읽었다면 결과를 다시 나눠야 합니다.
+`remote` 기록이 결과의 대부분을 차지할 수 있습니다. iLEAPP 표본 가운데 iOS 17.6.1 이미지에서는 20368행 중 19852행이 `remote` 에서 왔습니다 [1]. iLEAPP은 이런 기록의 Sync Origin 열에 `Remote (<기기 id>)` 처럼 출처를 표시해서 [1], 이 열을 걸러 이 기기의 기록만 남긴 뒤 해석합니다. 출처 열이 없는 도구로 폴더를 통째로 읽었다면 결과를 다시 나눠야 합니다.
 
 삭제 표시된 기록은 iLEAPP 결과에는 시각만 있는 행으로 나오고 mac_apt 결과에는 나오지 않아서, 같은 파일이라도 두 도구의 행 수가 다를 수 있습니다. 자세한 내용은 [저장 위치와 스트림 (Streams)](streams.md)의 "함정과 한계" 절에 있습니다.
 
@@ -82,7 +82,7 @@ iOS에서 기록은 28일 동안 남고 [2], 다른 스트림과의 비교는 [�
 
 ### 헥스로 한 번
 
-아래 바이트는 실제 검체가 아니라 iLEAPP의 필드 해석 [1]과 protobuf 부호화 규칙으로 만든 예시이고, SEGB 기록 헤더를 뺀 데이터 부분만 보여 줍니다. 실제 기록에 있는 필드 2·9·10은 뺐습니다.
+아래 바이트는 실제 데이터가 아니라 iLEAPP의 필드 해석 [1]과 protobuf 부호화 규칙으로 만든 예시이고, SEGB 기록 헤더를 뺀 데이터 부분만 보여 줍니다. 실제 기록에 있는 필드 2·9·10은 뺐습니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -100,7 +100,7 @@ SEGB 쪽 기록 시각은 이 데이터 바깥, v2 파일이라면 파일 끝 �
 
 ### 공개 도구로 한 번
 
-iLEAPP의 App.InFocus 모듈은 결과를 Timestamp, Start Time, SEGB State, Bundle ID, Action, Sync Origin, Filename, Offset 칸으로 냅니다 [1]. Filename과 Offset 칸이 있어서, 보고서에 올릴 행은 원본 파일의 그 자리를 헥스로 다시 열어 값을 확인할 수 있습니다. mac_apt BIOME 플러그인은 같은 스트림을 status, `product_name`, 앱 버전 문자열 칸으로 해석합니다 [3]. 두 도구를 함께 돌려 행 수와 값이 맞는지 보면 해석 차이를 먼저 잡을 수 있습니다.
+iLEAPP의 App.InFocus 모듈은 결과를 Timestamp, Start Time, SEGB State, Bundle ID, Action, Sync Origin, Filename, Offset 열로 냅니다 [1]. Filename과 Offset 열이 있어서, 보고서에 올릴 행은 원본 파일의 그 자리를 헥스로 다시 열어 값을 확인할 수 있습니다. mac_apt BIOME 플러그인은 같은 스트림을 status, `product_name`, 앱 버전 문자열 필드로 해석합니다 [3]. 두 도구를 함께 돌려 행 수와 값이 맞는지 보면 해석 차이를 먼저 잡을 수 있습니다.
 
 ## 교차 검증
 
@@ -131,7 +131,7 @@ iLEAPP의 App.InFocus 모듈은 결과를 Timestamp, Start Time, SEGB State, Bun
 
 ## 실습
 
-Biome 폴더가 들어 있는 macOS 검체(NIST CFReDS 같은 공개 검체 목록에서 고른 이미지 등)로 아래 질문을 풀어 봅니다.
+Biome 폴더가 들어 있는 macOS 이미지(NIST CFReDS 같은 공개 시험 자료 목록에서 고른 이미지 등)로 아래 질문을 풀어 봅니다.
 
 1. `~/Library/Biome/streams/restricted/App.InFocus/` 아래에 `local` 과 `remote` 폴더가 모두 있는가? `remote` 아래 기기 식별자 폴더는 몇 개인가?
 2. `local` 파일 하나를 헥스로 열어 SEGB v1인지 v2인지 가르고, 첫 기록의 필드 3·4·6을 손으로 풀어 본다.

@@ -39,7 +39,7 @@ npm 은 프로젝트마다 `node_modules` 폴더에 패키지를 풀고, 무엇�
 | 배포판 패키지 | `/usr/lib/python3/dist-packages` | `/usr/lib/python3.x/site-packages` |
 | 관리자가 따로 설치한 패키지 | `/usr/local/lib/python3/dist-packages` | `/usr/local/lib/python3.x/site-packages` |
 
-RHEL 은 Fedora 에서 갈라져 나온 배포판이라 같은 나눔을 따를 가능성이 있습니다. Debian 은 직접 빌드해 `/usr/local` 에 깐 CPython 이 쓰는 `site-packages` 와 섞이지 않게 이름을 `dist-packages` 로 바꿔 한 번 더 나눕니다[3]. Debian 이라면 이 파일은 `/usr/lib/python3.9/EXTERNALLY-MANAGED` 같은 자리에 놓이고[3], Ubuntu 24.04 와 RHEL 9 가 이 파일을 싣는지는 검체의 `/usr/lib/python3.*/EXTERNALLY-MANAGED` 로 확인합니다. 실제 폴더 이름은 파이썬 판과 빌드에 따라 달라지므로, 이미지 전체에서 `*.dist-info` 폴더와 `pyvenv.cfg` 파일을 찾는 편이 빠뜨리는 곳이 적습니다.
+RHEL 은 Fedora 에서 갈라져 나온 배포판이라 같은 나눔을 따를 가능성이 있습니다. Debian 은 직접 빌드해 `/usr/local` 에 깐 CPython 이 쓰는 `site-packages` 와 섞이지 않게 이름을 `dist-packages` 로 바꿔 한 번 더 나눕니다[3]. Debian 이라면 이 파일은 `/usr/lib/python3.9/EXTERNALLY-MANAGED` 같은 자리에 놓이고[3], Ubuntu 24.04 와 RHEL 9 가 이 파일을 싣는지는 실제 시스템의 `/usr/lib/python3.*/EXTERNALLY-MANAGED` 로 확인합니다. 실제 폴더 이름은 파이썬 판과 빌드에 따라 달라지므로, 이미지 전체에서 `*.dist-info` 폴더와 `pyvenv.cfg` 파일을 찾는 편이 빠뜨리는 곳이 적습니다.
 
 pip 캐시는 23.3 부터 HTTP 응답을 `http-v2` 폴더에 두고, 그 전에는 `http` 폴더에 두었습니다[4]. 캐시 안쪽 구조는 구현 세부라서 pip 판마다 바뀔 수 있습니다[4].
 
@@ -56,7 +56,7 @@ pip 캐시는 23.3 부터 HTTP 응답을 `http-v2` 폴더에 두고, 그 전에�
 
 prefix 는 node 실행 파일(`{prefix}/bin/node`)보다 한 단계 위 폴더입니다[7]. 그래서 node 를 배포판 패키지로 깔아 `/usr/bin/node` 에 있으면 전역 패키지는 `/usr/lib/node_modules` 에 들어가고, `/usr/local` 에 따로 깔았으면 `/usr/local/lib/node_modules` 에 들어갑니다. 두 곳을 다 봅니다.
 
-Rust 의 cargo 같은 다른 언어 도구도 비슷한 흔적을 남기지만, 이 쪽은 pip 와 npm 을 중심으로 씁니다. UAC 는 라이브 응답에서 `cargo install --list` 도 실행합니다[14].
+Rust 의 cargo 같은 다른 언어 도구도 비슷한 흔적을 남기지만, 이 페이지는 pip 와 npm 을 중심으로 씁니다. UAC 는 라이브 응답에서 `cargo install --list` 도 실행합니다[14].
 
 ## 구조
 
@@ -112,7 +112,7 @@ Rust 의 cargo 같은 다른 언어 도구도 비슷한 흔적을 남기지만, 
 
 로그 파일 수가 `logs-max`(기본 10)를 넘으면 오래된 파일부터 지우고, `logs-max` 가 0 이면 로그 파일을 만들지 않습니다[8][10]. 이 수는 실행 횟수가 아니라 파일 개수입니다[9].
 
-한 줄은 `순번 수준 제목 내용` 모양이고, 줄 안에 시각 칸은 없습니다[9]. 시작 부분에 `verbose title` 과 `verbose argv` 줄이 남아 어떤 명령과 인자로 실행했는지 보여 줍니다[9]. 기본 인증 URL 의 비밀번호와 npm 토큰은 가리려고 하지만, 모든 비밀 값이 가려진다고 기대할 수는 없습니다[8]. 만든 예시입니다.
+한 줄은 `순번 수준 제목 내용` 모양이고, 줄 안에 시각 필드는 없습니다[9]. 시작 부분에 `verbose title` 과 `verbose argv` 줄이 남아 어떤 명령과 인자로 실행했는지 보여 줍니다[9]. 기본 인증 URL 의 비밀번호와 npm 토큰은 가리려고 하지만, 모든 비밀 값이 가려진다고 기대할 수는 없습니다[8]. 만든 예시입니다.
 
 ```
 15 verbose title npm install example-pkg
@@ -143,11 +143,11 @@ Rust 의 cargo 같은 다른 언어 도구도 비슷한 흔적을 남기지만, 
 
 **증명하는 것.** 어떤 Python 환경에 어떤 프로젝트가 어떤 판으로 들어 있는지는 `dist-info` 폴더가 보여 줍니다[1]. INSTALLER 로 pip 설치와 배포판 패키지를 가를 수 있고, REQUESTED 로 사용자가 직접 요청한 설치와 의존성으로 딸려 온 설치를 가를 수 있습니다[1][5]. `direct_url.json` 은 이름으로 받지 않고 특정 URL·저장소·로컬 폴더에서 설치했다는 것과 그 출처를 보여 줍니다[2]. RECORD 해시를 지금 파일과 대조하면 설치 뒤 파일이 바뀌었는지 알 수 있습니다[1]. npm 쪽에서는 `package-lock.json` 의 `resolved` 가 실제로 받은 곳을, `hasInstallScript` 가 설치 때 스크립트가 돌 수 있었던 패키지를 보여 줍니다[11]. 남아 있는 디버그 로그는 그 npm 실행의 시작 시각(UTC)과 명령 인자를 보여 줍니다[9].
 
-**증명하지 못하는 것.** `dist-info` 에는 설치 시각을 적는 필드가 없어서 설치 시각은 파일 시스템 시각으로만 가늠합니다[1]. 누가 설치했는지도 적지 않으므로 파일 소유자와 셸 명령 기록으로 간접 추정합니다. `direct_url.json` 이 없다고 해서 공식 색인에서 받았다는 뜻은 아닙니다. `pip.conf` 의 `index-url` 로 다른 색인을 가리키거나 `--find-links` 로 받은 설치도 이 파일을 만들지 않습니다[2][4]. `.pth` 파일에 `import` 줄이 있다는 사실만으로 악성이라고 할 수 없고, 정상 패키지도 이 방식을 써 왔습니다[6]. npm 디버그 로그가 없다고 npm 을 실행하지 않았다고 할 수도 없습니다. `logs-max` 설정이나 순환 삭제로 없을 수 있기 때문입니다[8][10].
+**증명하지 못하는 것.** `dist-info` 에는 설치 시각을 적는 필드가 없어서 설치 시각은 파일 시스템 시각으로만 추정합니다[1]. 누가 설치했는지도 적지 않으므로 파일 소유자와 셸 명령 기록으로 간접 추정합니다. `direct_url.json` 이 없다고 해서 공식 색인에서 받았다는 뜻은 아닙니다. `pip.conf` 의 `index-url` 로 다른 색인을 가리키거나 `--find-links` 로 받은 설치도 이 파일을 만들지 않습니다[2][4]. `.pth` 파일에 `import` 줄이 있다는 사실만으로 악성이라고 할 수 없고, 정상 패키지도 이 방식을 써 왔습니다[6]. npm 디버그 로그가 없다고 npm 을 실행하지 않았다고 할 수도 없습니다. `logs-max` 설정이나 순환 삭제로 없을 수 있기 때문입니다[8][10].
 
 ## 시각 해석
 
-npm 디버그 로그 이름의 시각은 `toISOString()` 으로 만든 UTC 이고, 끝의 `Z` 가 그 표시입니다[9]. 밀리초까지 들어 있고, 파일 안의 줄에는 시각이 없습니다[9]. 실행이 길면 파일 이름 시각은 시작 시각만 뜻하고, 끝난 시각은 파일의 수정 시각으로 가늠합니다.
+npm 디버그 로그 이름의 시각은 `toISOString()` 으로 만든 UTC 이고, 끝의 `Z` 가 그 표시입니다[9]. 밀리초까지 들어 있고, 파일 안의 줄에는 시각이 없습니다[9]. 실행이 길면 파일 이름 시각은 시작 시각만 뜻하고, 끝난 시각은 파일의 수정 시각으로 추정합니다.
 
 `dist-info` 폴더와 그 안 파일, `node_modules/이름` 폴더의 생성·수정 시각은 설치나 갱신 때 생깁니다. 이 값은 파일 시스템 시각이라 UTC 로 저장되고, 해석은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)과 [ext4](../../01-foundations/filesystem/ext4/index.md)에서 다룹니다. 폴더 이름에 판이 들어 있어서 판을 올리면 새 이름의 폴더가 생기므로, 폴더 생성 시각은 처음 설치한 시각이 아니라 지금 판을 설치한 시각일 가능성이 있습니다.
 
@@ -208,7 +208,7 @@ sha256sum example_pkg-1.0.dist-info/INSTALLER | cut -d' ' -f1 | xxd -r -p | base
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 Linux 디스크 이미지(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
 1. 이미지 전체에 `*.dist-info` 폴더가 몇 개 있고, INSTALLER 값별로 몇 개인가? `pip` 인 것은 어느 사이트 폴더에 있는가?
 2. REQUESTED 가 있는 pip 설치 가운데 `direct_url.json` 도 있는 것은 무엇이고, `url` 은 어디를 가리키는가?

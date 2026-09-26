@@ -1,24 +1,24 @@
 ---
-title: "탐지 규칙으로 로그 훑기"
+title: "탐지 규칙으로 로그 검색하기"
 parent: "기법 · 분석"
 nav_order: 710
 ---
 
-# 탐지 규칙으로 로그 훑기 (Sigma·KQL)
+# 탐지 규칙으로 로그 검색하기 (Sigma·KQL)
 
 수집한 클라우드 로그에 공개 탐지 규칙을 돌려 먼저 읽을 레코드를 추리고, 걸린 레코드는 원본 로그로 돌아가 다시 해석하는 방법입니다.
 
 ## 언제 쓰나
 
-감사 로그가 수십만 줄이라 처음부터 읽기 어렵거나, 사건 범위를 몰라 알려진 흔적(로깅 중지, 새 액세스 키, 메일 전달 규칙, 역할 할당 등)이 있는지부터 한 번에 확인하고 싶을 때 씁니다. 규칙 훑기는 타임라인을 대신하지 않고, [클라우드 타임라인](timeline.md)에 넣을 시작점을 찾는 단계입니다.
+감사 로그가 수십만 줄이라 처음부터 읽기 어렵거나, 사건 범위를 몰라 알려진 흔적(로깅 중지, 새 액세스 키, 메일 전달 규칙, 역할 할당 등)이 있는지부터 한 번에 확인하고 싶을 때 씁니다. 규칙 검색은 타임라인을 대신하지 않고, [클라우드 타임라인](timeline.md)에 넣을 시작점을 찾는 단계입니다.
 
-이 쪽에서 다루는 도구는 두 가지입니다. 시그마 규칙 (Sigma rule) 은 로그 원천과 검색 조건을 YAML 로 적는 벤더 중립 형식이고, 변환기 (backend) 가 이를 각 플랫폼의 조회 언어로 바꿉니다[1][5]. KQL (Kusto Query Language) 은 Log Analytics·Microsoft Sentinel·Defender XDR 고급 헌팅 (advanced hunting) 에서 쓰는 조회 언어이고, 읽기 전용 요청이며 표 형태의 입력을 파이프(`|`)로 다음 연산자에 넘깁니다[9][10].
+이 페이지에서 다루는 도구는 두 가지입니다. 시그마 규칙 (Sigma rule) 은 로그 원천과 검색 조건을 YAML 로 적는 벤더 중립 형식이고, 변환기 (backend) 가 이를 각 플랫폼의 조회 언어로 바꿉니다[1][5]. KQL (Kusto Query Language) 은 Log Analytics·Microsoft Sentinel·Defender XDR 고급 헌팅 (advanced hunting) 에서 쓰는 조회 언어이고, 읽기 전용 요청이며 표 형태의 입력을 파이프(`|`)로 다음 연산자에 넘깁니다[9][10].
 
-서비스가 스스로 내린 판정(Defender 경고, GuardDuty 결과, Entra ID 위험 탐지)은 규칙 훑기와 성격이 다르므로 [Defender 경고와 기록](../../02-artifacts/m365/defender-xdr.md)과 [GuardDuty](../../02-artifacts/aws/guardduty.md)에서 따로 다룹니다.
+서비스가 스스로 내린 판정(Defender 경고, GuardDuty 결과, Entra ID 위험 탐지)은 규칙 검색과 성격이 다르므로 [Defender 경고와 기록](../../02-artifacts/m365/defender-xdr.md)과 [GuardDuty](../../02-artifacts/aws/guardduty.md)에서 따로 다룹니다.
 
 ## Sigma 규칙의 짜임
 
-규칙에서 반드시 있어야 하는 부분은 `title`·`logsource`·`detection` 셋이고, `detection` 안에는 `condition` 이 꼭 있어야 합니다[1]. `logsource` 는 `category`·`product`·`service` 세 값으로 로그 원천을 가리키고, 변환기 설정이 이 값을 실제 인덱스나 테이블로 연결합니다[1]. `logsource` 안의 `definition` 은 변환기가 읽지 않는 설명 칸이라서, 그 규칙이 동작하려면 어떤 로그 설정이 켜져 있어야 하는지를 사람에게 알려 줍니다[1].
+규칙에서 반드시 있어야 하는 부분은 `title`·`logsource`·`detection` 셋이고, `detection` 안에는 `condition` 이 꼭 있어야 합니다[1]. `logsource` 는 `category`·`product`·`service` 세 값으로 로그 원천을 가리키고, 변환기 설정이 이 값을 실제 인덱스나 테이블로 연결합니다[1]. `logsource` 안의 `definition` 은 변환기가 읽지 않는 설명 필드라서, 그 규칙이 동작하려면 어떤 로그 설정이 켜져 있어야 하는지를 사람에게 알려 줍니다[1].
 
 아래는 SigmaHQ 저장소의 AWS 규칙 `aws_update_login_profile.yml` 에서 `logsource` 부터 끝까지 옮긴 것입니다[7].
 
@@ -40,7 +40,7 @@ level: high
 
 `selection` 은 CloudTrail 레코드의 `eventSource` 와 `eventName` 이 모두 맞는 레코드를 고르고, `filter_main_user_identity` 는 두 필드 값을 비교하는 `fieldref` 수식어로 호출한 주체의 `userIdentity.arn` 과 대상 `requestParameters.userName` 이 같은 레코드를 골라냅니다[3][7]. `condition` 은 앞의 것에서 뒤의 것을 뺍니다. 같은 모양으로 `1 of selection*`, `all of ...`, and·or·not, 괄호를 조합할 수 있고, 이름이 `_` 로 시작하는 검색 식별자는 `them` 에 들어가지 않습니다[1].
 
-값 비교에는 기본 규칙이 몇 가지 있습니다. 문자열은 대소문자를 가리지 않고 `*`·`?` 와일드카드를 쓸 수 있지만, 정규식은 기본으로 대소문자를 가립니다[1]. 대소문자를 가리려면 `cased` 수식어를 붙입니다[3]. 그 밖에 `contains`·`startswith`·`endswith`·`exists`·`neq`·`cidr`·`re`·크기 비교(`lt`·`gt` 등)와 날짜에서 분·시·일·주·월·연을 뽑는 시간 수식어가 있습니다[3].
+값 비교에는 기본 규칙이 몇 가지 있습니다. 문자열은 대소문자를 구분하지 않고 `*`·`?` 와일드카드를 쓸 수 있지만, 정규식은 기본으로 대소문자를 구분합니다[1]. 대소문자를 구분하려면 `cased` 수식어를 붙입니다[3]. 그 밖에 `contains`·`startswith`·`endswith`·`exists`·`neq`·`cidr`·`re`·크기 비교(`lt`·`gt` 등)와 날짜에서 분·시·일·주·월·연을 뽑는 시간 수식어가 있습니다[3].
 
 조사에 쓸 때 눈여겨볼 선택 항목은 셋입니다.
 
@@ -70,7 +70,7 @@ Sigma 명세의 분류표(taxonomy)가 정한 클라우드 로그 원천과, Sig
 
 ## 절차
 
-1. **로그 원천부터 맞춘다.** 돌릴 규칙의 `logsource` 와 `definition` 을 읽고, 검체에 그 원천이 있는지와 요구하는 설정이 켜져 있었는지를 확인합니다. 원천이 없으면 그 규칙은 돌려도 아무것도 말해 주지 않습니다. 보관 기간과 기본으로 꺼진 로그는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에서 확인합니다.
+1. **로그 원천부터 맞춘다.** 돌릴 규칙의 `logsource` 와 `definition` 을 읽고, 실제 데이터에 그 원천이 있는지와 요구하는 설정이 켜져 있었는지를 확인합니다. 원천이 없으면 그 규칙은 돌려도 알 수 있는 것이 없습니다. 보관 기간과 기본으로 꺼진 로그는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md)에서 확인합니다.
 2. **필드 이름을 수집 형식에 맞춘다.** 같은 로그라도 수집 경로에 따라 필드 이름이 다릅니다(아래 "함정과 한계" 참고). Graph API JSON, Log Analytics 테이블, Cloud Logging 형식, Reports API, 도구가 만든 CSV 가운데 무엇으로 받았는지 보고 규칙의 필드 이름을 바꿉니다[6][7]. JSON 레코드의 중첩 필드를 점으로 이어 부르는 방식은 [JSON 로그 읽기](../../01-foundations/logging/json-logs.md)를 봅니다.
 3. **규칙을 조회 언어로 바꿔 돌린다.** sigma-cli 로 변환하고, 클라우드 규칙은 테이블을 직접 지정합니다(아래 "도구" 참고)[5][6].
 4. **적중을 걸러 읽는다.** 걸린 레코드마다 규칙의 `falsepositives` 와 `status` 를 함께 보고, 원본 레코드를 열어 주체·대상·IP·사용자 에이전트를 다시 읽습니다[1][7]. 로그인 기록은 [이상한 로그인 가려내기](suspicious-sign-ins.md), 역할·정책 변경은 [권한 변화 따라가기](permission-changes.md)의 방법으로 이어서 봅니다.
@@ -137,8 +137,8 @@ Sigma 규칙을 옮기거나 같은 조건을 손으로 쓸 때, 플랫폼마다
 
 | 플랫폼 | 조회 수단 | 대소문자 | 범위·보관 (문서 기준) |
 |---|---|---|---|
-| Log Analytics·Sentinel·Defender XDR | KQL | 테이블·열 이름·연산자·함수 모두 가림[9] | 고급 헌팅은 Defender XDR 원시 데이터 30일, Sentinel 작업 영역을 연결하면 그 테이블의 분석 계층 보관 기간만큼(2026년 8월 7일 문서)[10] |
-| Google Cloud | Logging query language | 가리지 않음. 정규식과 `AND`·`OR` 같은 논리 연산자는 예외이고 논리 연산자는 대문자로 씀[15] | 시각은 RFC 3339(`"2024-08-02T15:01:23.045Z"`) 나 ISO 8601 날짜, 나노초 단위(2026년 9월 25일 문서)[15] |
+| Log Analytics·Sentinel·Defender XDR | KQL | 테이블·열 이름·연산자·함수 모두 구분함[9] | 고급 헌팅은 Defender XDR 원시 데이터 30일, Sentinel 작업 영역을 연결하면 그 테이블의 분석 계층 보관 기간만큼(2026년 8월 7일 문서)[10] |
+| Google Cloud | Logging query language | 구분하지 않음. 정규식과 `AND`·`OR` 같은 논리 연산자는 예외이고 논리 연산자는 대문자로 씀[15] | 시각은 RFC 3339(`"2024-08-02T15:01:23.045Z"`) 나 ISO 8601 날짜, 나노초 단위(2026년 9월 25일 문서)[15] |
 | AWS CloudTrail 이벤트 기록 | 콘솔·API 검색 | — | 최근 90일 관리 이벤트, 한 계정·한 리전, 속성 필터 하나와 시간 범위만[17] |
 | AWS CloudTrail Lake | SQL | — | 여러 리전·계정, `JOIN` 지원, 보관 최대 3,653일(1년 연장형 요금) 또는 2,557일(7년 요금)[16] |
 | Okta System Log API | SCIM 필터·`q` 키워드 | — | `filter=eventType eq "user.session.start" and outcome.result eq "FAILURE"` 식으로 쓰고, SCIM 필터에 `published` 는 쓸 수 없음[18]. 콘솔 필터의 contains 는 `debugContext.debugData.url` 에 안 됨[19] |
@@ -151,7 +151,7 @@ ALFA 는 Google Workspace 감사 로그의 이벤트를 하나씩 MITRE ATT&CK �
 
 ## 함정과 한계
 
-**대소문자 기준이 반대입니다.** Sigma 값 비교는 기본으로 대소문자를 가리지 않고 KQL 은 모든 것을 가립니다[1][9]. 변환된 쿼리가 대소문자를 가리지 않는 연산자로 옮겨졌는지 한 번 확인합니다.
+**대소문자 기준이 반대입니다.** Sigma 값 비교는 기본으로 대소문자를 구분하지 않고 KQL 은 모든 것을 구분합니다[1][9]. 변환된 쿼리가 대소문자를 구분하지 않는 연산자로 옮겨졌는지 한 번 확인합니다.
 
 **필드 이름이 수집 형식마다 다릅니다.** 같은 저장소 안에서도 Entra ID 로그인 규칙은 Log Analytics 의 `ResultType` 과 다른 형식의 `Status`·`properties.message`·`ActivityDetails` 를 섞어 씁니다[7][21]. Google Cloud 규칙은 `gcp.audit.method_name` 을 쓰지만 LogEntry 원본 필드는 `protoPayload.methodName` 입니다[7][22]. Google Workspace 관리 규칙은 `eventService`·`eventName`·`setting_name` 을 쓰지만 Reports API 응답은 `events[].name`·`events[].parameters[].name`·`events[].parameters[].value` 구조이고, 로그인 규칙은 Cloud Logging 으로 공유된 형식의 `protoPayload.metadata.event.eventName` 을 씁니다[7][23]. 필드를 바꾸지 않고 돌리면 오류 없이 0건이 나올 수 있습니다.
 
@@ -163,7 +163,7 @@ ALFA 는 Google Workspace 감사 로그의 이벤트를 하나씩 MITRE ATT&CK �
 
 **대부분 stable 이 아닙니다.** 위 표처럼 클라우드 규칙 275개 가운데 stable 은 2개이고 나머지는 test 나 experimental 입니다[1][7][8].
 
-**출처끼리 이름이 다른 곳이 있습니다.** Entra ID 문서는 불가능 이동 위험 탐지의 `riskEventType` 을 `mcasImpossibleTravel` 로 적었지만, SigmaHQ 규칙은 `impossibleTravel` 을 찾습니다[7][20]. Sigma 분류표에는 `google_workspace.login` 이 없지만 저장소의 Google Workspace 로그인 규칙은 이 `service` 를 씁니다[2][7]. 규칙 값을 검체의 실제 값과 한 번 대조한 뒤 돌립니다.
+**출처끼리 이름이 다른 곳이 있습니다.** Entra ID 문서는 불가능 이동 위험 탐지의 `riskEventType` 을 `mcasImpossibleTravel` 로 적었지만, SigmaHQ 규칙은 `impossibleTravel` 을 찾습니다[7][20]. Sigma 분류표에는 `google_workspace.login` 이 없지만 저장소의 Google Workspace 로그인 규칙은 이 `service` 를 씁니다[2][7]. 규칙 값을 실제 로그의 값과 한 번 대조한 뒤 돌립니다.
 
 **규칙은 알려진 것만 찾습니다.** DFRWS USA 2023 발표에서 Casey 는 SaaS 데이터 분석의 과제로 처음 보는 활동을 찾는 이상 탐지, 데이터 품질·라벨과 복합 사건 문제가 있는 분류, 규칙을 만들고 유지하는 부담과 복합 규칙의 어려움을 들었습니다[25]. 규칙에서 0건이 나와도 타임라인과 계정별 검토는 따로 해야 합니다.
 

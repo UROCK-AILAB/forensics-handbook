@@ -11,7 +11,7 @@ nav_order: 1210
 
 ## 무엇을 남기지 않나
 
-개인 정보 보호 창은 아래처럼 동작합니다(macOS 27, Safari 27.0 기준) [1]. 앞선 버전에서도 동작이 같은지는 공개 자료가 없어 검체에서 확인합니다.
+개인 정보 보호 창은 아래처럼 동작합니다(macOS 27, Safari 27.0 기준) [1]. 앞선 버전에서도 동작이 같은지는 해당 버전의 기기로 확인해야 합니다.
 
 | Apple 이 밝힌 동작 | 비어 있게 되는 곳 |
 |---|---|
@@ -23,11 +23,11 @@ nav_order: 1210
 | 개인 정보 보호 창을 Handoff 로 넘기지 않음 | [연속성과 유니버설 클립보드 (Continuity·Handoff)](../../cloud-apps/continuity.md) |
 | 고급 추적 방지를 자동으로 켬(지문 수집 업체 연결 차단, URL 의 추적 인자 제거) | 해당 없음 |
 
-오른쪽 칸은 각 항목이 닿는 이 핸드북의 아티팩트입니다. "저장하지 않는다" 는 해당 기록 파일에 쓰지 않는다는 뜻으로 읽을 수 있지만, 메모리나 임시 파일에 잠시라도 올라가지 않는다는 뜻인지는 공개 자료가 없습니다.
+오른쪽 열은 각 항목이 닿는 이 핸드북의 아티팩트입니다. "저장하지 않는다" 는 해당 기록 파일에 쓰지 않는다는 뜻으로 읽을 수 있지만, 메모리나 임시 파일에 잠시라도 올라가지 않는다는 뜻인지는 공개 자료가 없습니다.
 
 ## 위치와 버전별 차이
 
-개인 정보 보호 브라우징만 쓰는 파일은 알려져 있지 않고, 남는 흔적은 다른 사파리 파일 안에 섞여 있습니다. 알려진 곳은 `~/Library/Safari/RecentlyClosedTabs.plist` 입니다 [2]. 이 파일의 `ClosedTabOrWindowPersistentStates` 배열에는 닫힌 탭이나 창마다 항목이 있고, 항목 안 `PersistentState` 사전의 `IsPrivateWindow` 키가 개인 정보 보호 창이었는지를 나타냅니다 [2]. `PersistentStateType` 이 0 이면 탭 하나라서 `PersistentState` 에 `TabURL`·`TabTitle` 이 있고, 그 밖의 값이면 창이라서 `TabStates` 배열의 탭마다 `TabURL`·`TabTitle` 이 있습니다. 창의 `IsPrivateWindow` 값은 그 안의 탭 모두에 해당합니다 [2]. 이 파일의 구조와 다른 키는 [탭과 세션 (Tabs·Sessions)](tabs-sessions.md)에서 다룹니다. 이 키가 어느 버전부터 있는지, 개인 정보 보호 창에서 연 탭의 URL 이 실제로 이 파일에 남는지는 공개 자료가 없어 검체에서 확인합니다.
+개인 정보 보호 브라우징만 쓰는 파일은 알려져 있지 않고, 남는 흔적은 다른 사파리 파일 안에 섞여 있습니다. 알려진 곳은 `~/Library/Safari/RecentlyClosedTabs.plist` 입니다 [2]. 이 파일의 `ClosedTabOrWindowPersistentStates` 배열에는 닫힌 탭이나 창마다 항목이 있고, 항목 안 `PersistentState` 사전의 `IsPrivateWindow` 키가 개인 정보 보호 창이었는지를 나타냅니다 [2]. `PersistentStateType` 이 0 이면 탭 하나라서 `PersistentState` 에 `TabURL`·`TabTitle` 이 있고, 그 밖의 값이면 창이라서 `TabStates` 배열의 탭마다 `TabURL`·`TabTitle` 이 있습니다. 창의 `IsPrivateWindow` 값은 그 안의 탭 모두에 해당합니다 [2]. 이 파일의 구조와 다른 키는 [탭과 세션 (Tabs·Sessions)](tabs-sessions.md)에서 다룹니다. 이 키가 어느 버전부터 있는지, 개인 정보 보호 창에서 연 탭의 URL 이 실제로 이 파일에 남는지는 실제 기기로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -45,7 +45,7 @@ nav_order: 1210
 
 **`IsPrivateWindow` 는 도구가 읽는 키입니다.** 이 키의 뜻은 분석 도구 mac_apt 의 해석이고 Apple 이 밝힌 것이 아닙니다 [2]. 닫은 창 기록은 최근 것만 남는 목록으로 보여서, 오래전에 쓴 개인 정보 보호 창은 이미 밀려났을 수 있습니다. 목록 길이는 공개 자료가 없습니다.
 
-**여기서 다루지 않는 것.** 개인 정보 보호 창 잠금, 메모리·스왑·SQLite WAL 에 남는 흔적, 통합 로그에 남는 기록은 공개된 분석 자료가 없어 검체로 확인해야 합니다. 살아 있는 맥을 다룬다면 [메모리 분석 (Memory Forensics)](../../../03-techniques/analysis/memory-forensics/index.md)을 검토할 수 있습니다.
+**여기서 다루지 않는 것.** 개인 정보 보호 창 잠금, 메모리·스왑·SQLite WAL 에 남는 흔적, 통합 로그에 남는 기록은 실제 기기로 확인해야 합니다. 실행 중인 맥을 다룬다면 [메모리 분석 (Memory Forensics)](../../../03-techniques/analysis/memory-forensics/index.md)을 검토할 수 있습니다.
 
 ## 직접 분석해 보기
 
@@ -69,7 +69,7 @@ for item in plist.get("ClosedTabOrWindowPersistentStates", []):
               t.get("TabURL"), t.get("TabTitle"), sep=" | ")
 ```
 
-`DateClosed` 가 plist 날짜로 읽히면 `plistlib` 은 시간대 정보가 없는 `datetime` 으로 돌려주는데, 값은 UTC 입니다. 공개 도구로는 mac_apt 의 사파리 플러그인이 이 파일을 읽어 `IsPrivateWindow` 를 표시합니다 [2]. 개인 정보 보호 창 항목에 `TabURL` 이 남는지는 알려져 있지 않으니, 비어 있는지 채워져 있는지 검체마다 확인합니다.
+`DateClosed` 가 plist 날짜로 읽히면 `plistlib` 은 시간대 정보가 없는 `datetime` 으로 돌려주는데, 값은 UTC 입니다. 공개 도구로는 mac_apt 의 사파리 플러그인이 이 파일을 읽어 `IsPrivateWindow` 를 표시합니다 [2]. 개인 정보 보호 창 항목에 `TabURL` 이 남는지는 알려져 있지 않으니, 비어 있는지 채워져 있는지 분석 대상마다 확인합니다.
 
 ## 교차 검증
 
@@ -84,7 +84,7 @@ for item in plist.get("ClosedTabOrWindowPersistentStates", []):
 
 ## 실습
 
-공개 맥 검체에서 사파리 파일을 모아 아래 질문을 풀어 봅니다.
+공개 맥 시험 이미지에서 사파리 파일을 모아 아래 질문을 풀어 봅니다.
 
 1. `RecentlyClosedTabs.plist` 에 `IsPrivateWindow` 가 참인 항목이 있는가. 있다면 닫은 시각은 UTC 로 언제인가
 2. 그 항목에 `TabURL`·`TabTitle` 이 남아 있는가

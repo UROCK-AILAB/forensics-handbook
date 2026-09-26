@@ -7,11 +7,11 @@ nav_order: 1710
 
 # 클라우드로 (Cloud)
 
-클라우드 저장소 앱이나 자동 백업으로 자료가 기기 밖으로 나갔는지 확인하는 순서를 정리합니다. 클라우드 앱은 올린 파일 목록을 앱 DB 에 캐시로 두는 경우가 있지만, 공개된 분석 자료가 있는 Google Drive 도 최근 앱에서 이 목록이 채워지는지는 검체로 확인해야 합니다. 그래서 이 페이지는 앱 DB 와 함께 계정·동기화·백업 설정 값을 묶어 보는 흐름으로 씁니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
+클라우드 저장소 앱이나 자동 백업으로 자료가 기기 밖으로 나갔는지 확인하는 순서를 정리합니다. 클라우드 앱은 올린 파일 목록을 앱 DB 에 캐시로 두는 경우가 있지만, 공개된 분석 자료가 있는 Google Drive 도 최근 앱에서 이 목록이 채워지는지는 실제 기기로 확인해야 합니다. 그래서 이 페이지는 앱 DB 와 함께 계정·동기화·백업 설정 값을 묶어 보는 흐름으로 씁니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
 
 ## 조사 질문
 
-문제의 파일이 이 기기에서 클라우드 저장소로 올라갔는지, 올라갔다면 어느 계정의 어느 서비스로 언제 올라갔는지 묻습니다. 사용자가 직접 올린 경우와 사진 자동 백업처럼 설정에 따라 저절로 올라간 경우를 나눠야 하는데, 기기 쪽 기록만으로는 이 둘을 가르기 어려운 경우가 많습니다.
+문제의 파일이 이 기기에서 클라우드 저장소로 올라갔는지, 올라갔다면 어느 계정의 어느 서비스로 언제 올라갔는지 묻습니다. 사용자가 직접 올린 경우와 사진 자동 백업처럼 설정에 따라 저절로 올라간 경우를 나눠야 하는데, 기기 쪽 기록만으로는 이 둘을 구분하기 어려운 경우가 많습니다.
 
 ## 먼저 확인할 것
 
@@ -31,9 +31,9 @@ nav_order: 1710
 
 ## Google Drive 의 항목 목록
 
-Google Drive 앱의 DB 는 `*/com.google.android.apps.docs/databases/DocList.db*` 이고, 항목 목록은 그 안의 `EntryView` 에 있습니다 [2]. 앱 전체 구조는 [구글 드라이브 (Google Drive)](../../../02-artifacts/mail-cloud/google-drive.md) 페이지에 있고, 유출 조사에 쓰는 칸은 다음과 같습니다.
+Google Drive 앱의 DB 는 `*/com.google.android.apps.docs/databases/DocList.db*` 이고, 항목 목록은 그 안의 `EntryView` 에 있습니다 [2]. 앱 전체 구조는 [구글 드라이브 (Google Drive)](../../../02-artifacts/mail-cloud/google-drive.md) 페이지에 있고, 유출 조사에 쓰는 열은 다음과 같습니다.
 
-| 칸 | 담긴 것 |
+| 열 | 담긴 것 |
 |---|---|
 | `title` | 항목 이름 |
 | `kind` | 항목 종류 |
@@ -44,7 +44,7 @@ Google Drive 앱의 DB 는 `*/com.google.android.apps.docs/databases/DocList.db*
 | `lastModifierAccountAlias`, `lastModifierAccountName` | 마지막으로 고친 계정 |
 | `shareableUri`, `htmlUri` | 항목 주소 |
 
-`md5Checksum` 은 기기 안에 남은 파일의 MD5 와 맞춰 볼 수 있는 칸입니다 [2]. 문제의 파일과 MD5 가 같은 항목이 드라이브 목록에 있다면 같은 내용의 파일이 그 계정의 드라이브에 있었다고 말할 수 있고, 제목이 바뀌었어도 이 대조는 성립합니다. 다만 이 칸들은 드라이브 항목의 속성이라서, 그 항목을 이 기기에서 올렸는지 다른 기기에서 올렸는지는 드러나지 않습니다.
+`md5Checksum` 은 기기 안에 남은 파일의 MD5 와 맞춰 볼 수 있는 열입니다 [2]. 문제의 파일과 MD5 가 같은 항목이 드라이브 목록에 있다면 같은 내용의 파일이 그 계정의 드라이브에 있었다고 말할 수 있고, 제목이 바뀌었어도 이 대조는 성립합니다. 다만 이 열들은 드라이브 항목의 속성이라서, 그 항목을 이 기기에서 올렸는지 다른 기기에서 올렸는지는 드러나지 않습니다.
 
 이 모듈에는 주의할 점이 있습니다. ALEAPP 시험 이미지 10개(Android 10~16, 삼성 기기 포함)에서 모두 0행이 나왔고, 모듈은 2020-12-21 뒤로 갱신되지 않았습니다 [2]. 요즘 Drive 앱에서 이 표가 채워지는지는 공개된 자료가 없으니, 0행이 나와도 드라이브를 쓰지 않았다는 결론으로 가지 않습니다.
 
@@ -52,7 +52,7 @@ Google Drive 앱의 DB 는 `*/com.google.android.apps.docs/databases/DocList.db*
 
 ALEAPP 에는 googlePhotos.py, androidDropbox.py, dropbox.py, microsoft_onedrive.py, mega.py, megaCloud.py, mega_transfers.py, ProtonDrive.py, pikpakCloudlist.py, syncthing.py 모듈이 있습니다 [1]. 앱별 구조는 [구글 포토 (Google Photos)](../../../02-artifacts/media/google-photos.md), [삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)](../../../02-artifacts/mail-cloud/samsung-cloud-onedrive.md), [네이버 MYBOX (MYBOX)](../../../02-artifacts/mail-cloud/mybox.md) 페이지에서 다룹니다. 모듈 이름에 transfers 가 들어간 것처럼 전송 기록을 따로 두는 앱이 있을 수 있어서, 앱마다 올리기 대기열이나 전송 기록 표가 있는지 찾아봅니다.
 
-사진 자동 백업(Google 포토, 삼성 갤러리 동기화)의 업로드 기록이 어디에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 사진이 올라갔는지는 [구글 포토 (Google Photos)](../../../02-artifacts/media/google-photos.md)와 [삼성 갤러리 (Samsung Gallery)](../../../02-artifacts/media/samsung-gallery.md) 페이지에서 따로 봅니다.
+사진 자동 백업(Google 포토, 삼성 갤러리 동기화)의 업로드 기록이 어디에 남는지는 실제 기기로 확인해야 합니다. 사진이 올라갔는지는 [구글 포토 (Google Photos)](../../../02-artifacts/media/google-photos.md)와 [삼성 갤러리 (Samsung Gallery)](../../../02-artifacts/media/samsung-gallery.md) 페이지에서 따로 봅니다.
 
 ## 동기화·백업 설정 키
 
@@ -67,7 +67,7 @@ ALEAPP 에는 googlePhotos.py, androidDropbox.py, dropbox.py, microsoft_onedrive
 | secure | `ltw_clipboard_sync_state`, `samsungflow_clipboard_sync_state` |
 | global | `master_sync_status`, `synced_account_name` |
 
-이름에 scloud 가 들어간 키는 삼성 클라우드와 관련이 있어 보이고, `ltw_clipboard_sync_state` 와 `samsungflow_clipboard_sync_state` 는 이름으로 보아 클립보드 동기화 상태 키입니다. 두 키 모두 어떤 기능인지 공개된 설명은 없습니다. 설정 값을 읽는 방법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
+이름에 scloud 가 들어간 키는 삼성 클라우드와 관련이 있어 보이고, `ltw_clipboard_sync_state` 와 `samsungflow_clipboard_sync_state` 는 이름으로 보면 클립보드 동기화 상태 키입니다. 두 키 모두 어떤 기능인지 공개된 설명은 없습니다. 설정 값을 읽는 방법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
 
 ## 분석 흐름
 

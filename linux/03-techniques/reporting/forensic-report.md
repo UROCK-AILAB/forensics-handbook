@@ -10,9 +10,9 @@ nav_order: 1020
 
 ## 언제 쓰나
 
-포렌식 보고서 (forensic report) 는 조사 결과를 다른 사람에게 넘길 때 씁니다. 내부 사고 보고, 법적 절차, 다른 분석가가 같은 결론을 다시 따라가 보는 재현이 모두 여기에 들어갑니다. 읽는 사람은 원본 검체를 직접 열어 보지 않는 경우가 많아서, 보고서의 문장 하나하나가 어느 파일의 어느 줄에서 나왔는지, 그 시각이 어떤 기준인지 보고서만 보고도 알 수 있어야 합니다.
+포렌식 보고서 (forensic report) 는 조사 결과를 다른 사람에게 넘길 때 씁니다. 내부 사고 보고, 법적 절차, 다른 분석가가 같은 결론을 다시 따라가 보는 재현이 모두 여기에 들어갑니다. 읽는 사람은 원본 증거물을 직접 열어 보지 않는 경우가 많아서, 보고서의 문장 하나하나가 어느 파일의 어느 줄에서 나왔는지, 그 시각이 어떤 기준인지 보고서만 보고도 알 수 있어야 합니다.
 
-이 쪽은 Linux 수집 도구와 분석 도구가 남기는 기록 가운데 보고서에 옮길 것과, 옮길 때 틀리기 쉬운 점을 다룹니다. 수집 순서와 수집 전에 정할 일은 [조사 절차](../acquisition/investigation-process.md)에, 수집 방법 자체는 [라이브 응답 수집](../acquisition/live-response.md)·[디스크 이미징](../acquisition/disk-imaging.md)·[메모리 수집](../acquisition/memory-acquisition.md)에 있습니다. 보고서의 뼈대(요약·범위·결론 순서)처럼 운영체제와 상관없는 부분은 [Windows 분석 보고서 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/reporting/forensic-report.html)과 [macOS 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/reporting/forensic-report.html)를 함께 봅니다.
+이 페이지는 Linux 수집 도구와 분석 도구가 남기는 기록 가운데 보고서에 옮길 것과, 옮길 때 틀리기 쉬운 점을 다룹니다. 수집 순서와 수집 전에 정할 일은 [조사 절차](../acquisition/investigation-process.md)에, 수집 방법 자체는 [라이브 응답 수집](../acquisition/live-response.md)·[디스크 이미징](../acquisition/disk-imaging.md)·[메모리 수집](../acquisition/memory-acquisition.md)에 있습니다. 보고서의 뼈대(요약·범위·결론 순서)처럼 운영체제와 상관없는 부분은 [Windows 분석 보고서 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/reporting/forensic-report.html)과 [macOS 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/reporting/forensic-report.html)를 함께 봅니다.
 
 ## 절차
 
@@ -20,9 +20,9 @@ nav_order: 1020
 
 2. **수집 도구의 실행 로그에서 설정을 옮깁니다.** UAC 는 수집하는 동안 `uac.log` 를 쓰고, 끝나면 이 파일을 결과물 안 맨 앞에 넣습니다[1]. 줄마다 `date "+%Y-%m-%d %H:%M:%S %z"` 시각, 수준(`DBG`, `INF`, `ERR`, `CMD`), 메시지가 붙습니다[1]. `INF` 줄에는 `Command line:`, `Operating system:`, `Hostname:`, `Time zone:`, `Mount point:`, `Running as:`, `Hash algorithm:`, `Exclude file systems:`, `Enable modifiers:` 가 남고, 끝에 `Artifacts collection completed in N seconds` 가 남습니다[1]. 실행한 명령은 모두 `CMD` 줄로 남고, 오류 출력이 있으면 줄 끝에 ` 2> 오류 내용` 이 붙습니다[1]. 만든 예시 한 줄은 `2026-09-24 10:15:03 +0900 INF Running as: root` 모양입니다. 보고서의 "사용 도구·설정" 절은 이 줄들을 근거로 씁니다.
 
-3. **해시를 다시 맞춥니다.** 분석 사본을 옮긴 뒤에는 수집 때 계산한 해시와 지금 사본의 해시를 다시 맞춰 보고, 그 결과를 보고서에 적습니다. coreutils 의 `sha256sum --check` 같은 `--check` 모드는 앞서 만든 체크섬 목록을 읽어 파일마다 맞는지 한 줄씩 알려 줍니다[4]. Velociraptor 컨테이너는 `Container hash` 값과 `sha256sum` 결과를 견주면 됩니다[2]. E01 은 `ewfverify` 가 이미지에 저장된 해시 종류를 다시 계산해 대조하고, 저장된 해시가 없으면 MD5 를 씁니다[3]. 수집 때 MD5·SHA-1 만 계산했다면 이 단계에서 SHA-256 을 더 계산해 함께 적으면 됩니다(아래 "함정과 한계" 참고).
+3. **해시를 다시 맞춥니다.** 분석 사본을 옮긴 뒤에는 수집 때 계산한 해시와 지금 사본의 해시를 다시 맞춰 보고, 그 결과를 보고서에 적습니다. coreutils 의 `sha256sum --check` 같은 `--check` 모드는 앞서 만든 체크섬 목록을 읽어 파일마다 맞는지 한 줄씩 알려 줍니다[4]. Velociraptor 컨테이너는 `Container hash` 값과 `sha256sum` 결과를 비교하면 됩니다[2]. E01 은 `ewfverify` 가 이미지에 저장된 해시 종류를 다시 계산해 대조하고, 저장된 해시가 없으면 MD5 를 씁니다[3]. 수집 때 MD5·SHA-1 만 계산했다면 이 단계에서 SHA-256 을 더 계산해 함께 적으면 됩니다(아래 "함정과 한계" 참고).
 
-4. **대상 호스트의 기본 정보를 적습니다.** 배포판과 버전, 호스트 이름, 시간대를 보고서 앞쪽에 둡니다. 각 값을 어느 파일에서 읽었는지는 [배포판과 버전 (os-release)](../../02-artifacts/system-info/os-release.md)과 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)에 있습니다. UAC 로 수집했다면 `uac.log` 의 `Operating system:`, `Hostname:`, `Time zone:` 줄과 견줘 봅니다[1].
+4. **대상 호스트의 기본 정보를 적습니다.** 배포판과 버전, 호스트 이름, 시간대를 보고서 앞쪽에 둡니다. 각 값을 어느 파일에서 읽었는지는 [배포판과 버전 (os-release)](../../02-artifacts/system-info/os-release.md)과 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)에 있습니다. UAC 로 수집했다면 `uac.log` 의 `Operating system:`, `Hostname:`, `Time zone:` 줄과 비교해 봅니다[1].
 
 5. **시각 기준을 하나로 정합니다.** 보고서 안 모든 시각을 한 기준(보통 UTC)으로 쓰고, 표 머리나 본문 첫머리에 그 기준을 밝힙니다. 원본 기록마다 저장된 기준이 달라서, 현지 시각으로 남은 기록은 대상 시간대를 근거로 바꿨다는 사실과 그 시간대를 어디서 얻었는지를 함께 적습니다. 기록별 기준은 아래 "결과를 어떻게 해석하나" 의 표에 모았습니다.
 
@@ -34,7 +34,7 @@ nav_order: 1020
 
 9. **한계를 따로 절로 씁니다.** 수집 범위 밖에 있던 것(날짜 필터, 제외한 파일 시스템, 권한 부족), 로그 순환으로 이미 사라진 구간, 수집 중에 시스템을 바꾼 동작을 모읍니다. 항목별 근거는 "함정과 한계" 에 있습니다.
 
-10. **문장은 기록이 말하는 만큼만 씁니다.** 예시는 "결과를 어떻게 해석하나" 의 보고서 문장에 있습니다.
+10. **문장은 기록으로 확인되는 만큼만 씁니다.** 예시는 "결과를 어떻게 해석하나" 의 보고서 문장에 있습니다.
 
 ## 도구
 
@@ -48,7 +48,7 @@ nav_order: 1020
 | dissect `target-query`·`rdump` | 레코드 출력(CSV·JSON) | 시간대를 못 정하면 UTC 로 가정[8] |
 | audit `ausearch` | `--format` 의 raw·default·interpret·csv·text 출력 | `-i` 의 이름 풀이 조건에 주의[11] |
 
-타임라인을 만드는 방법은 [타임라인 만들기](../analysis/timeline.md)에, 해시로 알려진 파일을 가리는 방법은 [알려진 파일 대조와 YARA](../analysis/hash-yara.md)에 있습니다.
+타임라인을 만드는 방법은 [타임라인 만들기](../analysis/timeline.md)에, 해시로 알려진 파일을 가려내는 방법은 [알려진 파일 대조와 YARA](../analysis/hash-yara.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -68,13 +68,13 @@ nav_order: 1020
 
 **ZIP 안 파일 시각을 원본 시각으로 옮기지 않습니다.** ZIP 형식은 파일마다 시각을 하나만, 1초 단위로 담습니다[2]. Velociraptor 는 원래 파일 시각을 `results/` 의 JSON 메타데이터(`Created`, `Changed`, `Modified`, `LastAccessed`)에 적고, ZIP 안 시각은 일부 파일에만 되는 대로 남깁니다[2]. 보고서의 파일 시각은 메타데이터에서 옮깁니다.
 
-**도구마다 시간대를 정하는 규칙이 다릅니다.** plaso 는 `/etc/localtime` 이 링크면 `zoneinfo/` 뒤의 이름을 쓰고, 복사본이면 tzfile 에서 2017-01-01 기준 약어(예: `CET`)를 얻은 뒤, `/etc/timezone` 에 IANA 이름이 있으면 그 이름으로 덮습니다[6]. dissect 는 `/etc/timezone` 을 먼저 보고, 없으면 `/etc/localtime` 의 링크 대상, 하드 링크 짝, 크기와 SHA-1 이 같은 `zoneinfo` 파일 순으로 찾으며, RHEL 의 `posix` 로 시작하는 파일은 건너뜁니다[8]. 그래도 못 정하면 "Could not determine timezone of target, falling back to UTC for datetime helpers" 경고를 내고 UTC 로 가정합니다[8]. 같은 검체에서 두 도구가 다른 시간대를 쓸 수 있으므로, 보고서에는 어느 도구의 판정을 썼는지 적습니다. 시간대 파일의 해석은 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)에 있습니다.
+**도구마다 시간대를 정하는 규칙이 다릅니다.** plaso 는 `/etc/localtime` 이 링크면 `zoneinfo/` 뒤의 이름을 쓰고, 복사본이면 tzfile 에서 2017-01-01 기준 약어(예: `CET`)를 얻은 뒤, `/etc/timezone` 에 IANA 이름이 있으면 그 이름으로 덮습니다[6]. dissect 는 `/etc/timezone` 을 먼저 보고, 없으면 `/etc/localtime` 의 링크 대상, 하드 링크 짝, 크기와 SHA-1 이 같은 `zoneinfo` 파일 순으로 찾으며, RHEL 의 `posix` 로 시작하는 파일은 건너뜁니다[8]. 그래도 못 정하면 "Could not determine timezone of target, falling back to UTC for datetime helpers" 경고를 내고 UTC 로 가정합니다[8]. 같은 분석 대상에서 두 도구가 다른 시간대를 쓸 수 있으므로, 보고서에는 어느 도구의 판정을 썼는지 적습니다. 시간대 파일의 해석은 [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)에 있습니다.
 
-**`psort` 출력에는 시간대 칸을 남깁니다.** `psort` 는 기본으로 UTC 로 내보내고, dynamic·l2tcsv 같은 일부 출력 형식은 `--output-time-zone` 으로 시간대를 바꿀 수 있습니다[5]. 표에서 `timezone`(`zone`) 칸을 빼면 읽는 사람이 현지 시각으로 오해할 수 있습니다. dynamic 출력의 `datetime` 칸이 `0000-00-00T00:00:00.000000+00:00`, `date` 칸이 `0000-00-00`, `time` 칸이 `--:--:--` 이면 시각을 풀지 못한 행입니다[5]. `timestamp_desc`(`type`) 칸은 그 시각이 무엇의 시각인지 알려 주므로 함께 옮깁니다[5].
+**`psort` 출력에는 시간대 열을 남깁니다.** `psort` 는 기본으로 UTC 로 내보내고, dynamic·l2tcsv 같은 일부 출력 형식은 `--output-time-zone` 으로 시간대를 바꿀 수 있습니다[5]. 표에서 `timezone`(`zone`) 열을 빼면 읽는 사람이 현지 시각으로 오해할 수 있습니다. dynamic 출력의 `datetime` 열이 `0000-00-00T00:00:00.000000+00:00`, `date` 열이 `0000-00-00`, `time` 열이 `--:--:--` 이면 시각을 풀지 못한 행입니다[5]. `timestamp_desc`(`type`) 열은 그 시각이 무엇의 시각인지 알려 주므로 함께 옮깁니다[5].
 
 **dissect 레코드의 `_generated` 는 분석한 시각입니다.** flow.record 레코드에는 `_source`, `_classification`, `_generated`, `_version` 필드가 붙고, `_generated` 는 레코드를 만든 순간의 UTC 시각입니다[9]. 사건 시각으로 옮기지 않습니다.
 
-**`ausearch -i` 의 계정 이름은 분석 PC 기준일 수 있습니다.** 감사 로그가 enriched 형식이 아니면 `-i` 는 분석하는 PC 의 계정 정보로 UID 를 이름으로 바꾸고, 계정 이름이 바뀌었거나 같은 계정이 없으면 틀린 결과가 나올 수 있습니다[11]. enriched 로그면 함께 기록된 보충 값으로 바꿉니다[11]. `log_format` 이 `ENRICHED` 이면 uid·gid·시스템 호출·아키텍처·소켓 주소를 풀어서 함께 적고, upstream 기본 설정 파일의 값은 `ENRICHED` 입니다[11]. 검체의 실제 값은 `/etc/audit/auditd.conf` 에서 확인합니다. `--format text` 는 영어 문장으로 바꿔 주지만 세부를 잃습니다[11].
+**`ausearch -i` 의 계정 이름은 분석 PC 기준일 수 있습니다.** 감사 로그가 enriched 형식이 아니면 `-i` 는 분석하는 PC 의 계정 정보로 UID 를 이름으로 바꾸고, 계정 이름이 바뀌었거나 같은 계정이 없으면 틀린 결과가 나올 수 있습니다[11]. enriched 로그면 함께 기록된 보충 값으로 바꿉니다[11]. `log_format` 이 `ENRICHED` 이면 uid·gid·시스템 호출·아키텍처·소켓 주소를 풀어서 함께 적고, upstream 기본 설정 파일의 값은 `ENRICHED` 입니다[11]. 분석 대상의 실제 값은 `/etc/audit/auditd.conf` 에서 확인합니다. `--format text` 는 영어 문장으로 바꿔 주지만 세부를 잃습니다[11].
 
 **저널의 밑줄 없는 필드는 남긴 쪽이 적은 값입니다.** 밑줄로 시작하는 필드(`_PID`, `_UID`, `_COMM` 등)는 저널이 스스로 붙이고 클라이언트가 바꿀 수 없습니다[10]. `SYSLOG_IDENTIFIER`, `SYSLOG_PID`, `SYSLOG_TIMESTAMP` 같은 밑줄 없는 필드는 저널이 값을 검증하지 않습니다[10]. "프로그램 X 가 남겼다" 고 쓸 때는 근거가 `_COMM`·`_EXE` 인지 `SYSLOG_IDENTIFIER` 인지 밝힙니다.
 
@@ -116,7 +116,7 @@ nav_order: 1020
 
 - 해시는 계산한 순간부터만 보증합니다. 수집 이전에 원본이 온전했다는 것은 해시로 보여 줄 수 없습니다.
 - MD5·SHA-1 만 있으면 의도적인 변조에 대한 보증이 약합니다[4].
-- 수집 기록의 사건 정보 칸(검사자 이름, 사건 번호 등)은 수집하는 사람이 입력한 값이라 도구가 검증하지 않습니다[1][3].
+- 수집 기록의 사건 정보 필드(검사자 이름, 사건 번호 등)은 수집하는 사람이 입력한 값이라 도구가 검증하지 않습니다[1][3].
 - 분석 도구가 정한 시간대가 맞았다는 것은 도구 출력만으로 보여 줄 수 없습니다. 약어로 정한 경우와 UTC 로 가정한 경우가 있기 때문입니다[6][8].
 - 로그 두 줄 사이의 인과는 기록에 없습니다. 보통 로그에는 어떤 사건이 어떤 사건을 일으켰는지가 빠져 있고, 여러 로그를 잇는 일은 대개 시각에 기대는 느슨한 연결(fuzzy correlation)이라 NTP 같은 시계 동기화에 크게 기댑니다[12].
 

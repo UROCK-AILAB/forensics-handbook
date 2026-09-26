@@ -23,7 +23,7 @@ nav_order: 2700
 
 ### Partition/Diagnostic 1006
 
-공급자 GUID 는 `412bdff2-a8c4-470d-8f33-63fe0d8c20e2` 입니다. 공급자 메타데이터에 적힌 1006 의 설명은 "For internal use only." 한 줄이라서, 칸의 뜻은 칸 이름을 보고 다른 기록과 맞춰 확인합니다. 1006 은 USB·VHD 디스크를 꽂거나 뺀 기록입니다[1].
+공급자 GUID 는 `412bdff2-a8c4-470d-8f33-63fe0d8c20e2` 입니다. 공급자 메타데이터에 적힌 1006 의 설명은 "For internal use only." 한 줄이라서, 필드의 뜻은 필드 이름을 보고 다른 기록과 맞춰 확인합니다. 1006 은 USB·VHD 디스크를 꽂거나 뺀 기록입니다[1].
 
 같은 공급자에는 1001 "Operation started.", 1002 "Operation completed.", 1007 "Disk %1 has %2 hidden partitions." 도 있습니다. 1008·1009 는 파티션 오류이고, 5000~5006 은 작업 항목 이름입니다. 실제 로그에는 1006 만 남아 있기도 합니다(Windows 11 25H2 PC 한 대에서 247건).
 
@@ -44,34 +44,34 @@ Windows 11 25H2 PC 한 대의 설정입니다.
 | 로그 | 파일 | 켜짐 | 최대 크기 | 방식 | 남아 있던 기간 |
 |---|---|---|---|---|---|
 | Partition/Diagnostic | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Partition%4Diagnostic.evtx` | 켜짐 | 16MB | 순환 | OS 설치(2026-06-26 무렵) 뒤 전부, 247건 |
-| Kernel-PnP/Configuration | 검체에서 확인 | 켜짐 | 약 1MB | 순환 | OS 설치 뒤 전부, 1,367건 |
-| Kernel-PnP/Device Management | 검체에서 확인 | 켜짐 | 5MB | 순환 | 2026-08-18 부터 약 5주, 10,816건 |
+| Kernel-PnP/Configuration | 실제 데이터로 확인 | 켜짐 | 약 1MB | 순환 | OS 설치 뒤 전부, 1,367건 |
+| Kernel-PnP/Device Management | 실제 데이터로 확인 | 켜짐 | 5MB | 순환 | 2026-08-18 부터 약 5주, 10,816건 |
 | DriverFrameworks-UserMode/Operational | `Microsoft-Windows-DriverFrameworks-UserMode%4Operational.evtx` | 꺼짐 | 1MB | 순환 | 기록 없음 |
 
 - 순환 (Circular) 방식 로그는 가득 차면 오래된 이벤트부터 덮어씁니다.
-- Device Management 로그는 크기가 가장 컸지만 남은 기간이 가장 짧았습니다. 까닭은 "함정과 한계" 에서 다룹니다.
-- Windows 7 에서는 DriverFrameworks-UserMode/Operational 로그가 기본으로 켜져 있었다는 설명이 있습니다. 검체마다 켜져 있는지부터 봅니다.
+- Device Management 로그는 크기가 가장 컸지만 남은 기간이 가장 짧았습니다. 이유는 "함정과 한계" 에서 다룹니다.
+- Windows 7 에서는 DriverFrameworks-UserMode/Operational 로그가 기본으로 켜져 있었다는 설명이 있습니다. 분석 대상마다 켜져 있는지부터 봅니다.
 - 로그 설정 읽는 법은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
 ### 1006 의 이벤트 버전
 
-| 이벤트 버전 | 출처 | Vbr 칸 |
+| 이벤트 버전 | 출처 | Vbr 필드 |
 |---|---|---|
 | 4 | EvtxECmd 맵의 첫 번째 예시 (2020년) | 있음 |
-| 0 | EvtxECmd 맵의 두 번째 예시 (2022년). EventData 에 "Version" 칸이 따로 있고 값이 3 입니다 | 있음 |
+| 0 | EvtxECmd 맵의 두 번째 예시 (2022년). EventData 에 "Version" 필드가 따로 있고 값이 3 입니다 | 있음 |
 | 7 | Win11 25H2 레코드 | 없음 |
 
-- 맵 예시에는 Vbr0Bytes·Vbr0·Vbr1Bytes·Vbr1·Vbr2Bytes·Vbr2·Vbr3Size·Vbr3 칸이 있었습니다.
-- Win11 25H2 의 버전 7 에는 이름에 Vbr 이 든 칸이 없습니다. 어느 빌드에서 빠졌는지는 검체의 이벤트 버전으로 확인합니다.
-- 두 번째 예시는 System 부분의 Version 이 0 인데 EventData 에 Version 칸이 따로 있습니다. 버전을 적는 방식이 바뀐 적이 있는 것으로 보입니다.
-- 이 로그에서 볼륨 시리얼 번호 (VSN) 를 꺼내는 방법을 다룬 글이 있습니다[1]. 검체의 1006 에 Vbr 칸이 있는지부터 봅니다.
+- 맵 예시에는 Vbr0Bytes·Vbr0·Vbr1Bytes·Vbr1·Vbr2Bytes·Vbr2·Vbr3Size·Vbr3 필드가 있었습니다.
+- Win11 25H2 의 버전 7 에는 이름에 Vbr 이 든 필드가 없습니다. 어느 빌드에서 빠졌는지는 실제 데이터의 이벤트 버전으로 확인합니다.
+- 두 번째 예시는 System 부분의 Version 이 0 인데 EventData 에 Version 필드가 따로 있습니다. 버전을 적는 방식이 바뀐 적이 있는 것으로 보입니다.
+- 이 로그에서 볼륨 시리얼 번호 (VSN) 를 꺼내는 방법을 다룬 글이 있습니다[1]. 실제 데이터의 1006 에 Vbr 필드가 있는지부터 봅니다.
 - 맵 첫 번째 예시의 공급자 GUID 는 끝자리가 `63fabc8c20e2` 로, 위 GUID(`63fe0d8c20e2`)와 다릅니다. 두 번째 예시는 위 GUID 와 같습니다. 예시를 가리면서 바뀐 것으로 보입니다. GUID 로 거를 때는 공급자 이름도 함께 봅니다.
 
 ## 구조
 
-### 1006 에서 보는 칸
+### 1006 에서 보는 필드
 
-| 칸 | 내용 |
+| 필드 | 내용 |
 |---|---|
 | BusType | 버스 종류입니다. 7 은 USB, 15 는 VHD 같은 파일 기반 가상 디스크, 17 은 NVMe 입니다 |
 | Capacity | 디스크 용량입니다. 꽂을 때 0 보다 크고 뺄 때 0 입니다 |
@@ -84,7 +84,7 @@ Windows 11 25H2 PC 한 대의 설정입니다.
 
 - 표의 "꽂을 때·뺄 때" 값은 Windows 11 25H2 기준입니다.
 - BusType 값 표는 [USB 로 무엇을 가져갔나](../../04-scenarios/exfiltration/data-exfiltration/usb.md)에서 다룹니다.
-- 디스크 구조 칸은 [파티션 구조](../../01-foundations/disk-volume/mbr-gpt.md)를 알고 읽습니다.
+- 디스크 구조 필드는 [파티션 구조](../../01-foundations/disk-volume/mbr-gpt.md)를 알고 읽습니다.
 
 ### 시리얼 번호 맞추기
 
@@ -105,7 +105,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 
 | 모양 | Capacity | PartitionCount | UserRemovalPolicy | MbrBytes | 맞는 시각 |
 |---|---|---|---|---|---|
-| 꽂을 때 | 0 보다 큼 | 검체에서 확인 | true | 512 | 장치 속성의 마지막 연결 시각 |
+| 꽂을 때 | 0 보다 큼 | 실제 데이터로 확인 | true | 512 | 장치 속성의 마지막 연결 시각 |
 | 뺄 때 | 0 | 0 | false | 0 | 장치 속성의 마지막 해제 시각 |
 
 한 가지 예외가 있었습니다. 리눅스 USB 가젯은 꽂을 때도 Capacity 가 0 이고 PartitionCount 가 1 이었습니다. 매체가 없는 장치처럼 보였습니다.
@@ -114,9 +114,9 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 
 ### Kernel-PnP 이벤트 틀
 
-메시지 틀과 칸 이름은 공급자 템플릿의 값입니다.
+메시지 틀과 필드 이름은 공급자 템플릿의 값입니다.
 
-| 로그 | ID | 메시지 틀 | 칸 |
+| 로그 | ID | 메시지 틀 | 필드 |
 |---|---|---|---|
 | Configuration | 400 | "Device %1 was configured." | DeviceInstanceId, DriverName, ClassGuid, DriverDate, DriverVersion, DriverProvider, DriverInbox, DriverSection, DriverRank, MatchingDeviceId, OutrankedDrivers, DeviceUpdated, Status, ParentDeviceInstanceId. 버전 1 에 DriverPackageId 가 더해집니다 |
 | Configuration | 410 | "Device %1 was started." | DeviceInstanceId, DriverName, ClassGuid, ServiceName, LowerFilters, UpperFilters, Problem, Status |
@@ -151,9 +151,9 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 
 ### DriverFrameworks-UserMode 이벤트 틀
 
-메시지 틀과 칸 이름은 공급자 템플릿의 값입니다.
+메시지 틀과 필드 이름은 공급자 템플릿의 값입니다.
 
-| 채널 | ID | 메시지 틀 (줄임) | 칸 |
+| 채널 | ID | 메시지 틀 (줄임) | 필드 |
 |---|---|---|---|
 | Operational | 2003 | "The UMDF Host Process (%1) has been asked to load drivers for device %2." | LifetimeId, InstanceId |
 | Operational | 2004 | "The UMDF Host is loading driver %4 at level %3 for device %2." | LifetimeId, InstanceId, Level, Service, ClsId |
@@ -167,7 +167,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 | System | 10110·10111 | 사용자 모드 드라이버 충돌 | |
 
 - Operational 채널 템플릿은 버전 1 입니다.
-- 장치를 뽑은 요청을 2100·2102 의 MinorCode 값으로 가를 수 있다는 설명이 있습니다. 값마다의 뜻은 검체에서 확인합니다.
+- 장치를 뽑은 요청을 2100·2102 의 MinorCode 값으로 가를 수 있다는 설명이 있습니다. 값마다의 뜻은 실제 데이터로 확인합니다.
 
 ## 증거로서 의미
 
@@ -233,7 +233,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 ### 지우기와 조작
 
 - **로그를 지웁니다.** 지운 기록은 [이벤트 로그 삭제](1102-104.md)에서 찾습니다.
-- **로그를 끄거나 크기를 줄입니다.** 로그 설정이 검체에서 어떤 상태였는지는 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 봅니다.
+- **로그를 끄거나 크기를 줄입니다.** 로그 설정이 분석 대상에서 어떤 상태였는지는 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 봅니다.
 - 조작이 없어도 순환 로그는 스스로 밀려납니다. 기록이 없는 기간은 "연결 없음" 이 아니라 "기록 없음" 으로 적습니다.
 
 ## 직접 분석해 보기
@@ -242,7 +242,7 @@ BusType 이 7 인 1006 은 두 모양이 번갈아 나왔습니다.
 
 로그 파일 안의 문자열은 UTF-16LE 로 들어 있습니다. 그래서 장치 인스턴스 ID 조각을 UTF-16LE 바이트로 바꿔 파일 전체를 찾을 수 있습니다. 도구가 레코드로 읽어 주지 않는 자리에 남은 조각도 이렇게 찾습니다.
 
-아래는 문자열을 형식대로 옮긴 예시입니다. 검체에서 뽑은 바이트가 아닙니다.
+아래는 문자열을 형식대로 옮긴 예시입니다. 실제 데이터에서 뽑은 바이트가 아닙니다.
 
 ```
 "USBSTOR"  →  55 00 53 00 42 00 53 00 54 00 4F 00 52 00
@@ -280,7 +280,7 @@ Get-WinEvent -Path '.\Microsoft-Windows-Partition%4Diagnostic.evtx' -FilterXPath
 
 - 결과를 SerialNumber 로 묶으면 장치마다 꽂고 뺀 이력이 나옵니다.
 - 같은 방법으로 Kernel-PnP 로그에서 400·410·1010 을 뽑아 DeviceInstanceId 를 봅니다.
-- EvtxECmd 맵 저장소에는 Partition/Diagnostic 1006, Kernel-PnP/Configuration 400·410·430, DriverFrameworks-UserMode/Operational 2100, System 의 DriverFrameworks-UserMode 10000 맵이 있습니다. 도구가 뽑은 칸은 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
+- EvtxECmd 맵 저장소에는 Partition/Diagnostic 1006, Kernel-PnP/Configuration 400·410·430, DriverFrameworks-UserMode/Operational 2100, System 의 DriverFrameworks-UserMode 10000 맵이 있습니다. 도구가 뽑은 필드는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
 
@@ -305,9 +305,9 @@ Get-WinEvent -Path '.\Microsoft-Windows-Partition%4Diagnostic.evtx' -FilterXPath
 3. 한 번은 "안전하게 제거" 로 빼고, 한 번은 그냥 뽑습니다. Device Management 1010 이 두 경우 모두 남는지 비교하십시오. 함정 9번의 답이 여기서 나옵니다.
 4. 뺄 때의 1006 에서 Capacity 와 PartitionCount 를 확인하십시오. 장치 속성의 마지막 해제 시각과 몇 초 차이인지 재어 보십시오.
 5. VHD 파일을 연결해 봅니다. 1006 의 BusType 이 무엇으로 남는지 보십시오.
-6. 1006 의 이벤트 버전과 Vbr 칸이 있는지 확인하십시오. 다른 빌드의 가상 머신과 비교하면 버전 표를 채울 수 있습니다.
+6. 1006 의 이벤트 버전과 Vbr 필드가 있는지 확인하십시오. 다른 빌드의 가상 머신과 비교하면 버전 표를 채울 수 있습니다.
 
-NIST CFReDS 같은 공개 검체에서 이벤트 로그를 꺼냈다면, 먼저 Partition/Diagnostic 로그가 있는지와 1006 의 이벤트 버전을 보십시오. 그다음 USBSTOR 의 시리얼 번호가 1006 SerialNumber 에 그대로 들어 있는지 확인하십시오.
+NIST CFReDS 같은 공개 시험 데이터에서 이벤트 로그를 꺼냈다면, 먼저 Partition/Diagnostic 로그가 있는지와 1006 의 이벤트 버전을 보십시오. 그다음 USBSTOR 의 시리얼 번호가 1006 SerialNumber 에 그대로 들어 있는지 확인하십시오.
 
 ## 참고 문헌
 

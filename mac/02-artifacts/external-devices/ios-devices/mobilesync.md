@@ -29,7 +29,7 @@ macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave 이전에는 iTunes로
 
 ## 구조
 
-아래는 폴더 구성을 명세로 만든 예시이고, 특정 검체에서 나온 이름이 아닙니다.
+아래는 폴더 구성을 명세로 만든 예시이고, 특정 기기에서 나온 이름이 아닙니다.
 
 ```
 ~/Library/Application Support/MobileSync/Backup/
@@ -63,9 +63,9 @@ macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave 이전에는 iTunes로
 
 ### Manifest.db
 
-`Manifest.db` 는 SQLite 데이터베이스이고(암호화 백업은 복호화한 뒤), 백업한 파일을 기기의 원래 경로와 이어 줍니다 [3][4]. `Files` 표의 칸은 다음과 같습니다 [4].
+`Manifest.db` 는 SQLite 데이터베이스이고(암호화 백업은 복호화한 뒤), 백업한 파일을 기기의 원래 경로와 이어 줍니다 [3][4]. `Files` 표의 열은 다음과 같습니다 [4].
 
-| 칸 | 내용 |
+| 열 | 내용 |
 |---|---|
 | `fileID` | 백업 폴더 안에 저장된 실제 파일의 이름. 16진수 소문자 40글자 [4] |
 | `domain`, `relativePath` | 기기 안 원래 위치를 나타내는 두 값 [3] |
@@ -84,11 +84,11 @@ macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave 이전에는 iTunes로
 | 백업 시점에 기기에 설치돼 있던 앱 목록 [2][3] | 기기를 쓴 사람이 맥 계정 주인과 같은 사람이라는 것 |
 | 백업한 파일과 기기 안 원래 경로의 대응 [3] | |
 
-보고서에는 "이 계정 홈에 이 기기의 백업이 있고, 마지막 백업 시점이 ○○로 기록돼 있다" 처럼 기록이 말하는 만큼만 씁니다. 계정과 사람을 잇는 방법은 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md)에서 다룹니다.
+보고서에는 "이 계정 홈에 이 기기의 백업이 있고, 마지막 백업 시점이 ○○로 기록돼 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 계정과 사람을 잇는 방법은 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../../04-scenarios/activity/user-attribution.md)에서 다룹니다.
 
 ## 시각 해석
 
-마지막 백업 시점은 `Info.plist` 의 `Last Backup Date` 로 확인합니다 [2][1]. libimobiledevice는 백업할 때 호스트 시계의 현재 시각을 plist 날짜형으로 이 키에 적고 [2], plist 날짜형은 시간대 없이 UTC 기준으로 저장되므로 값은 기기가 아니라 백업한 컴퓨터의 시계를 따릅니다. Finder로 만든 백업도 같은 방식인지는 검체에서 확인합니다. `Manifest.db` 의 `file` 칸 안에 든 `LastModified` 는 유닉스 초 값이고 [4], 기기 안 파일의 수정 시각이지 백업 시각이 아닙니다. 도구가 보여 주는 날짜를 그대로 옮기지 말고 원본 값의 형식과 기준 시간대를 확인한 뒤 보고서에 적고, 값을 푸는 방법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에, 맥의 시간대 설정은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)에 있습니다.
+마지막 백업 시점은 `Info.plist` 의 `Last Backup Date` 로 확인합니다 [2][1]. libimobiledevice는 백업할 때 호스트 시계의 현재 시각을 plist 날짜형으로 이 키에 적고 [2], plist 날짜형은 시간대 없이 UTC 기준으로 저장되므로 값은 기기가 아니라 백업한 컴퓨터의 시계를 따릅니다. Finder로 만든 백업도 같은 방식인지는 실제 백업으로 확인합니다. `Manifest.db` 의 `file` 열 안에 든 `LastModified` 는 유닉스 초 값이고 [4], 기기 안 파일의 수정 시각이지 백업 시각이 아닙니다. 도구가 보여 주는 날짜를 그대로 옮기지 말고 원본 값의 형식과 기준 시간대를 확인한 뒤 보고서에 적고, 값을 푸는 방법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에, 맥의 시간대 설정은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -121,7 +121,7 @@ WHERE flags = 1;
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 iOS 기기를 백업한 흔적이 있는 맥 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 자료 가운데 iOS 기기를 백업한 흔적이 있는 맥 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 각 사용자 홈의 `MobileSync/Backup/` 아래에 백업 폴더가 몇 개 있나요? 폴더 이름과 `Info.plist` 의 UDID가 모두 같나요?
 2. `Status.plist` 의 `SnapshotState` 가 `finished` 가 아닌 백업이 있나요? 있다면 보고서에서 그 백업을 어떻게 설명하겠습니까?

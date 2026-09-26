@@ -25,7 +25,7 @@ nav_order: 640
 | `/Library/Managed Preferences` | 관리 설정이 놓이는 곳 | [2] |
 | 시스템 환경설정(현재 시스템 설정)의 프로파일 화면 | 설치된 프로파일 목록 | [1][2] |
 
-설치된 프로파일 자체가 디스크의 어느 폴더에 저장되는지, MDM 등록 여부를 표시하는 파일이 어디 있는지, `/Library/Managed Preferences` 아래가 사용자별로 어떻게 나뉘는지는 공개된 분석 자료가 없어 검체에서 확인합니다. 공개 아티팩트 정의 모음인 ForensicArtifacts에도 구성 프로파일·MDM 항목이 없어서 [3], 그 정의만 따라 수집하면 이 자료가 빠집니다.
+설치된 프로파일 자체가 디스크의 어느 폴더에 저장되는지, MDM 등록 여부를 표시하는 파일이 어디 있는지, `/Library/Managed Preferences` 아래가 사용자별로 어떻게 나뉘는지는 실제 데이터로 확인해야 합니다. 공개 아티팩트 정의 모음인 ForensicArtifacts에도 구성 프로파일·MDM 항목이 없어서 [3], 그 정의만 따라 수집하면 이 자료가 빠집니다.
 
 ### 버전별 차이
 
@@ -66,11 +66,11 @@ macOS 11 이후 명령줄 설치가 막혔다는 내용은 man 페이지 정리�
 
 ### 헥스로 한 번
 
-`/Library/Managed Preferences` 아래 파일을 헥스 편집기로 열어 앞머리로 XML plist인지 바이너리 plist인지, 아니면 다른 형식인지부터 가립니다. 이 폴더의 파일 형식은 공개된 자료가 없으므로, 형식을 가린 뒤에 plist라면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 순서대로 읽고, 페이로드 식별자 문자열(예: `com.apple.system-extension-policy`)을 검색해 위치를 잡습니다.
+`/Library/Managed Preferences` 아래 파일을 헥스 편집기로 열어 앞머리로 XML plist인지 바이너리 plist인지, 아니면 다른 형식인지부터 구분합니다. 이 폴더의 파일 형식은 공개된 자료가 없으므로, 형식을 구분한 뒤에 plist라면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 순서대로 읽고, 페이로드 식별자 문자열(예: `com.apple.system-extension-policy`)을 검색해 위치를 잡습니다.
 
 ### 공개 도구로 한 번
 
-살아 있는 시스템에서는 macOS 기본 명령 `profiles` 로 확인합니다. 동사는 `help`, `list`, `show`, `remove`, `status`, `sync`, `renew`, `validate`, `version` 이고, 옵션은 `-type`, `-user`, `-all`, `-password`, `-forced`, `-cached`, `-verbose`, `-path`, `-identifier`, `-uuid`, `-output` 이며, `-type` 값은 `configuration`, `provisioning`, `enrollment`(DEP/MDM), `bootstraptoken` 입니다 [1]. 조사에는 아래처럼 읽기만 하는 조합을 씁니다.
+실행 중인 시스템에서는 macOS 기본 명령 `profiles` 로 확인합니다. 동사는 `help`, `list`, `show`, `remove`, `status`, `sync`, `renew`, `validate`, `version` 이고, 옵션은 `-type`, `-user`, `-all`, `-password`, `-forced`, `-cached`, `-verbose`, `-path`, `-identifier`, `-uuid`, `-output` 이며, `-type` 값은 `configuration`, `provisioning`, `enrollment`(DEP/MDM), `bootstraptoken` 입니다 [1]. 조사에는 아래처럼 읽기만 하는 조합을 씁니다.
 
 ```
 profiles list
@@ -78,7 +78,7 @@ profiles show
 profiles status -type enrollment
 ```
 
-각 조합의 출력 모양은 버전마다 다를 수 있으므로, 출력은 가공하지 말고 그대로 저장해 두고 이미지에서 꺼낸 파일과 맞춰 봅니다. 살아 있는 시스템에서 명령을 칠 때의 원칙은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
+각 조합의 출력 모양은 버전마다 다를 수 있으므로, 출력은 가공하지 말고 그대로 저장해 두고 이미지에서 꺼낸 파일과 맞춰 봅니다. 실행 중인 시스템에서 명령을 칠 때의 원칙은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
 
 ## 교차 검증
 
@@ -89,7 +89,7 @@ profiles status -type enrollment
 | [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md) | MDM 관련 기록 |
 | [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md) | 관리 설정 파일이 바뀐 순서 |
 
-지속성 위치를 한꺼번에 훑는 순서는 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에 있습니다.
+지속성 위치를 한꺼번에 살펴보는 순서는 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에 있습니다.
 
 ## 실습
 

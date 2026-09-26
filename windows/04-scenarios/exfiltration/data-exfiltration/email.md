@@ -21,7 +21,7 @@ nav_order: 3610
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | 메일 프로그램 | 프로그램마다 메일을 두는 곳이 다릅니다. [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md) 에서 클래식 Outlook, 새 Outlook, 썬더버드, Windows 메일 앱이 있는지 봅니다. |
 | 계정 종류 | POP·IMAP 계정은 모든 Outlook 정보를 .pst 에 둡니다[1]. 다른 계정 종류와 .ost 는 [아웃룩](../../../02-artifacts/mail/outlook/index.md) 에서 다룹니다. |
@@ -75,7 +75,7 @@ nav_order: 3610
 - `%LOCALAPPDATA%\Microsoft\Olk\` 아래에 `EBWebView`, `logs`, `UserSettings.json` 등이 있습니다.
 - `Olk\EBWebView\Default` 는 WebView2 프로필 모양입니다. `History`, `Network\Cookies`, `Local Storage`, `Session Storage`, `Cache` 등이 있고, `IndexedDB` 는 없을 수 있습니다.
 - WebView2 프로필 파일을 읽는 법은 [크롬 계열 앱 공통 구조](../../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다.
-- 새 Outlook 이 메일 본문과 첨부를 PC 어디에 얼마나 남기는지는 공개된 분석 자료가 없어 검체에서 확인합니다. 메일은 서버에 있고 PC 에는 캐시만 남을 수 있습니다. 자세한 내용은 [새 Outlook](../../../02-artifacts/mail/new-outlook.md) 을 봅니다.
+- 새 Outlook 이 메일 본문과 첨부를 PC 어디에 얼마나 남기는지는 실제 기기에서 확인해야 합니다. 메일은 서버에 있고 PC 에는 캐시만 남을 수 있습니다. 자세한 내용은 [새 Outlook](../../../02-artifacts/mail/new-outlook.md) 을 봅니다.
 
 ## 분석 흐름
 
@@ -85,7 +85,7 @@ nav_order: 3610
 4. 첨부를 꺼내 PC 안의 원본 파일과 해시로 맞춥니다([해시셋 대조와 유사 해시](../../../03-techniques/analysis/hash-set-fuzzy-hash.md)).
 5. 받는 쪽 사본이나 서버 사본을 확보했다면 헤더로 실제 보낸 시각과 거친 서버를 확인합니다([메일 헤더 분석](../../../03-techniques/analysis/email-header-analysis.md)).
 6. 새 Outlook 만 쓴 PC 라면 PC 에 남은 캐시의 범위를 먼저 보고, 서버 쪽 자료가 필요한지 판단합니다.
-7. 보내기 전후에 원본 파일을 연 흔적(바로가기 파일·최근 문서)과 SRUM 의 송신량을 보낸 시각 앞뒤로 맞춰 봅니다. SRUM 이 말해 주는 범위는 [웹메일·웹하드로 올렸나](web-upload.md) 에서 다룹니다.
+7. 보내기 전후에 원본 파일을 연 흔적(바로가기 파일·최근 문서)과 SRUM 의 송신량을 보낸 시각 앞뒤로 맞춰 봅니다. SRUM 으로 알 수 있는 범위는 [웹메일·웹하드로 올렸나](web-upload.md) 에서 다룹니다.
 
 ## 흔한 오판
 

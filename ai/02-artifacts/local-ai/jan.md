@@ -8,7 +8,7 @@ nav_order: 720
 
 Jan 은 모델 내려받기와 대화 화면을 한 앱에 담은 통합형 로컬 LLM 앱이고, 0.5.16 판은 `%AppData%\Jan\data` 아래 스레드마다 `thread.json`·`messages.jsonl` 을 두고 모델 설정을 `cortex.db` 에 두며, 엔진 로그 `cortex.log` 에 대화 요청 본문과 모델 받기, API 키까지 평문으로 남깁니다.
 
-이 쪽의 경로와 칸은 Jan 0.5.x 판 기준이고, 새 판은 저장 형식이 다릅니다[3].
+이 페이지의 경로와 필드는 Jan 0.5.x 판 기준이고, 새 판은 저장 형식이 다릅니다[3].
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -34,23 +34,23 @@ Jan 은 로컬 모델뿐 아니라 OpenAI·Anthropic 같은 클라우드 모델�
 | `%AppData%\Jan\data\logs\cortex.log` | 텍스트 | 모델 설치 기록, 대화, API 키(지운 것 포함) |
 | `%AppData%\Jan\Local Storage\leveldb\` | LevelDB | 대화 목록, 받은 모델(지운 것 일부 포함) |
 
-모델 폴더의 짜임은 허브마다 다릅니다. Jan 자체 허브 모델은 `models\{허브}\{모델}\{크기}\model.gguf` 모양(`models\cortex.so\cogito-v1\3b\model.yml`)이고[1, 부록 A][2], Hugging Face 에서 받은 모델은 `models\huggingface.co\{작성자}\{저장소}\{파일 이름}.yml` 모양입니다[2]. 클라우드 모델 정의는 `models\remote\*.yml` 에 있습니다. 모델 폴더와 YAML 칸은 [로컬 모델 파일](model-files.md)에서 자세히 다룹니다.
+모델 폴더의 짜임은 허브마다 다릅니다. Jan 자체 허브 모델은 `models\{허브}\{모델}\{크기}\model.gguf` 모양(`models\cortex.so\cogito-v1\3b\model.yml`)이고[1, 부록 A][2], Hugging Face 에서 받은 모델은 `models\huggingface.co\{작성자}\{저장소}\{파일 이름}.yml` 모양입니다[2]. 클라우드 모델 정의는 `models\remote\*.yml` 에 있습니다. 모델 폴더와 YAML 필드는 [로컬 모델 파일](model-files.md)에서 자세히 다룹니다.
 
 KAPE 타깃은 `C:\Users\%user%\AppData\Roaming\Jan\` 아래만 모으고 로그는 `cortex*.log` 로 모두 모으지만, LangurTrace 파서(`src/apps/jan.py`)는 `cortex.log` 한 파일만 읽습니다[2].
 
 ### 다른 판과 다른 OS
 
-- **새 판.** Jan 새 판은 저장 형식을 바꿨다는 보고가 있습니다[3]. 새 판의 경로·파일 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다. 먼저 `%AppData%\Jan` 과 그 아래 `data` 폴더가 있는지, `cortex.log`·`cortex.db` 가 있는지를 보고 판을 가립니다.
-- **macOS·Linux.** LangurTrace 시험은 Windows 에서만 했고, 다른 OS 에서도 아티팩트 종류는 같을 것이라는 추정만 있습니다[1, §6.2]. 경로는 검체로 확인합니다.
+- **새 판.** Jan 새 판은 저장 형식을 바꿨다는 보고가 있습니다[3]. 새 판의 경로·파일 형식은 실제 기기에서 확인해야 합니다. 먼저 `%AppData%\Jan` 과 그 아래 `data` 폴더가 있는지, `cortex.log`·`cortex.db` 가 있는지를 보고 판을 구분합니다.
+- **macOS·Linux.** LangurTrace 시험은 Windows 에서만 했고, 다른 OS 에서도 아티팩트 종류는 같을 것이라는 추정만 있습니다[1, §6.2]. 경로는 실제 기기에서 확인합니다.
 - **판 확인.** `cortex.log` 는 엔진이 뜰 때마다 `cortex.cpp version: v1.0.12` 같은 줄을 남기므로, 이 줄로 기간별 엔진 판을 알 수 있습니다[2].
 
 ## 구조
 
 ### thread.json
 
-스레드 폴더 이름과 `id` 가 같습니다. 샘플의 칸은 다음과 같습니다[2].
+스레드 폴더 이름과 `id` 가 같습니다. 샘플의 필드는 다음과 같습니다[2].
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `id` | 스레드 ID(26자, 아래 "시각 해석" 참고) |
 | `title`, `metadata.title` | 대화 이름 |
@@ -70,7 +70,7 @@ KAPE 타깃은 `C:\Users\%user%\AppData\Roaming\Jan\` 아래만 모으고 로그
 {"completed_at":1767225606,"content":[{"text":{"annotations":[],"value":"예시 답변입니다."},"type":"text"}],"created_at":1767225606,"id":"01KDVDNFZ8Q4W2E7R9T1Y3V5X6","metadata":{"model":"Example-1B-Instruct","token_speed":120.5},"object":"thread.message","role":"assistant","status":"completed","thread_id":"01KDVDNA3VABCDEFGHJKMNPQRS"}
 ```
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `id`, `thread_id` | 메시지 ID, 속한 스레드 ID |
 | `role` | `user` 또는 `assistant` |
@@ -86,7 +86,7 @@ KAPE 타깃은 `C:\Users\%user%\AppData\Roaming\Jan\` 아래만 모으고 로그
 
 SQLite 3 파일이고 샘플의 `schema_version` 은 3입니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)를 따릅니다. 샘플 스키마는 다음과 같습니다[2].
 
-| 표 | 칸 | 쓸모 |
+| 표 | 열 | 쓸모 |
 |---|---|---|
 | `engines` | `id`, `engine_name`, `type`, `api_key`, `url`, `version`, `variant`, `status`, `metadata`, `date_created`, `date_updated` | 클라우드 서비스별 API 키. 샘플에는 `anthropic`, `openai`, `groq` 등 10행이 있고 키는 `openai` 행에만 들어 있음 |
 | `models` | `model_id`, `author_repo_id`, `branch_name`, `path_to_model_yaml`, `model_alias`, `model_format`, `model_source`, `status`, `engine`, `metadata` | 모델 목록. `status` 가 `downloaded` 인 행만 받은 모델이고, `downloadable` 은 허브 목록, `remote` 는 클라우드 모델 |
@@ -137,7 +137,7 @@ SQLite 3 파일이고 샘플의 `schema_version` 은 3입니다. 읽는 법은 [
 - 올린 파일이나 생성 파일. Jan 에는 파일을 올리거나 생성하는 기능이 없습니다[1, 표 5·8]. 샘플의 `cortex.db` `files` 표도 비어 있습니다[2].
 - 클라우드 서버 쪽 기록. 서버에 남은 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 절차로 확인합니다. API 키는 서비스 회사에 서버 쪽 자료를 요청할 때 단서로 쓸 수 있습니다[1, §4.3].
 
-보고서에는 "2025-04-16 16:25(UTC)에 Jan 엔진이 `llama3.2-1b-instruct` 모델로 이 문장을 담은 대화 요청을 처리한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "2025-04-16 16:25(UTC)에 Jan 엔진이 `llama3.2-1b-instruct` 모델로 이 문장을 담은 대화 요청을 처리한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -158,12 +158,12 @@ SQLite 3 파일이고 샘플의 `schema_version` 은 3입니다. 읽는 법은 [
 
 ## 함정과 한계
 
-- **판이 바뀌면 이 페이지가 맞지 않을 수 있음.** Jan 새 판은 저장 형식을 바꿨다는 보고가 있습니다[3]. 검체의 판부터 확인합니다.
+- **판이 바뀌면 이 페이지가 맞지 않을 수 있음.** Jan 새 판은 저장 형식을 바꿨다는 보고가 있습니다[3]. 분석 대상의 판부터 확인합니다.
 - **`thread.json` 의 모델은 메시지마다 쓴 모델이 아님.** 샘플 스레드 `hello, gpt` 는 `assistants[].model.id` 가 `llama3.2-1b-instruct` 이지만 그 안의 답은 모두 `metadata.model` 이 `gpt-3.5-turbo` 입니다[2]. 메시지마다 `metadata.model` 을 봅니다.
 - **`models` 표는 받은 모델 목록이 아님.** `status` 로 걸러야 합니다. 지운 모델은 표에서 빠지므로 `cortex.log` 받기 줄과 Local Storage 의 `downloadedModels` 를 함께 봅니다. 샘플에서 지운 `gemma2:2b`, `llama3.2:1b` 는 표에 없지만 Local Storage 파일에 이름이 남아 있습니다[2].
 - **로그의 모델 이름.** `general.name` 이 `Hf` 처럼 뜻 없는 값으로 찍힌 모델이 있습니다. 이럴 때는 `general.base_model.0.repo_url` 줄을 봅니다[2]. 자세한 방법은 [로컬 모델 파일](model-files.md)에 있습니다.
-- **API 키와 대화가 로그에 평문으로 남음.** 보고서와 도구 출력에서 키 값을 가립니다. 키가 남는 곳과 다루는 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다. LangurTrace 의 `model_configuration.xlsx` 는 `engines` 표를 `api_key` 칸까지 그대로 옮기고, `verbose_log_parsed.xlsx` 의 `Configurations` 시트에도 `Authorization` 줄이 들어갑니다[2].
-- **LangurTrace 로그 출력의 모양.** `log_reporter.py` 는 `[태그]` 와 ` - 소스` 가 한 줄에 모두 있어야 새 항목으로 읽고, 나머지 줄은 앞 항목에 이어 붙입니다[2]. 그래서 샘플의 `ChatLogs` 시트에서는 대화 요청이 `GetEngineByModelId` 태그 항목의 메시지 칸에 붙어 나오고, 태그가 없는 받기 줄·`DeleteThread` 줄·`Removed` 줄은 따로 한 행이 되지 않습니다. 지운 흔적은 원본 `cortex.log` 를 직접 검색해 확인합니다.
+- **API 키와 대화가 로그에 평문으로 남음.** 보고서와 도구 출력에서 키 값을 가립니다. 키가 남는 곳과 다루는 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다. LangurTrace 의 `model_configuration.xlsx` 는 `engines` 표를 `api_key` 열까지 그대로 옮기고, `verbose_log_parsed.xlsx` 의 `Configurations` 시트에도 `Authorization` 줄이 들어갑니다[2].
+- **LangurTrace 로그 출력의 모양.** `log_reporter.py` 는 `[태그]` 와 ` - 소스` 가 한 줄에 모두 있어야 새 항목으로 읽고, 나머지 줄은 앞 항목에 이어 붙입니다[2]. 그래서 샘플의 `ChatLogs` 시트에서는 대화 요청이 `GetEngineByModelId` 태그 항목의 메시지 열에 붙어 나오고, 태그가 없는 받기 줄·`DeleteThread` 줄·`Removed` 줄은 따로 한 행이 되지 않습니다. 지운 흔적은 원본 `cortex.log` 를 직접 검색해 확인합니다.
 - **LangurTrace 의 다른 출력.** `conversation_reporter.py` 는 `messages.jsonl` 만 읽고 `thread.json` 은 건너뛰며, 시각을 분석 PC 의 현지 시각으로 바꿔 첫 메시지의 분 단위 시각을 HTML 파일 이름으로 씁니다[2]. 샘플 출력 `2025-04-17_01-23.html` 은 1744820618 을 UTC+9 로 바꾼 이름입니다. 같은 분에 시작한 스레드가 둘이면 파일 이름이 겹칩니다. `model_reporter.py` 는 YAML 줄을 `:` 로 나눈 둘째 조각만 씁니다. 그래서 샘플 `model_metadata.csv` 에는 `cogito-v1:3b` 가 ` cogito-v1` 로 잘려 있고, Hugging Face 모델 행에는 값 뒤의 YAML 주석(`# metadata.general.name` 등)이 붙은 채로 들어 있습니다[2].
 - **디스크 복구만 잰 수치.** 표 8 은 앱 화면으로 지운 뒤 디스크에 남은 것만 쟀고, 볼륨 섀도 복사본, 메모리, SQLite 여유 공간 복구는 시험하지 않았습니다[1, §6.2].
 
@@ -203,7 +203,7 @@ Crockford base32 는 `0123456789ABCDEFGHJKMNPQRSTVWXYZ` 순서로 값을 매기�
 
 ## 실습
 
-공개 검체는 LangurTrace 저장소의 `sample_dataset` 입니다. `sample_dataset/collect/C/Users/USER/AppData/Roaming/Jan/` 에 모은 원본이, `sample_dataset/parse/LLM application artifacts/jan/` 에 LangurTrace 출력이 있습니다[2]. GGUF 모델 파일은 크기 때문에 빠져 있습니다.
+공개 시험 데이터는 LangurTrace 저장소의 `sample_dataset` 입니다. `sample_dataset/collect/C/Users/USER/AppData/Roaming/Jan/` 에 모은 원본이, `sample_dataset/parse/LLM application artifacts/jan/` 에 LangurTrace 출력이 있습니다[2]. GGUF 모델 파일은 크기 때문에 빠져 있습니다.
 
 1. `threads` 폴더의 스레드는 넷입니다. `cortex.log` 의 `DeleteThread` 줄에 나오는 스레드 ID 는 무엇이고, 그 스레드를 만든 시각은 ID 로 풀면 언제입니까?
 2. 지운 스레드에서 사용자가 보낸 문장은 `cortex.log` 의 어느 요청 본문에 남아 있습니까? 그 가운데 앱이 보낸 이름 짓기 요청은 무엇입니까?

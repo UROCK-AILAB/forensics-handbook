@@ -13,7 +13,7 @@ nav_order: 480
 
 ## 무엇을 기록하나 · 왜 생기나
 
-MMS 와 iMessage 로 오간 파일은 기기의 `/private/var/mobile/Library/SMS/Attachments` 폴더에 모입니다[3]. 파일 하나마다 `attachment` 표에 한 행이 생기고, `message_attachment_join` 의 `message_id`·`attachment_id` 가 그 행을 메시지에 잇습니다[1]. `message` 표에도 첨부가 있는 메시지를 표시하는 캐시 칸 `cache_has_attachments` 가 있습니다.
+MMS 와 iMessage 로 오간 파일은 기기의 `/private/var/mobile/Library/SMS/Attachments` 폴더에 모입니다[3]. 파일 하나마다 `attachment` 표에 한 행이 생기고, `message_attachment_join` 의 `message_id`·`attachment_id` 가 그 행을 메시지에 잇습니다[1]. `message` 표에도 첨부가 있는 메시지를 표시하는 캐시 열 `cache_has_attachments` 가 있습니다.
 
 메시지 본문에서는 첨부 자리에 U+FFFC(OBJECT REPLACEMENT CHARACTER) 한 글자가 들어가서, 사진만 보낸 메시지는 본문이 이 글자 하나뿐일 수 있습니다[2]. 사진은 사용자가 설정을 바꾸지 않았다면 HEIC 로 저장됩니다[2].
 
@@ -21,7 +21,7 @@ MMS 와 iMessage 로 오간 파일은 기기의 `/private/var/mobile/Library/SMS
 
 ## 위치와 버전별 차이
 
-`attachment.filename` 칸에는 아래처럼 `~/` 로 시작하는 경로가 들어가고, 16진 두 글자 폴더가 두 단계 이어진 다음 첨부마다 GUID 폴더가 하나씩 있습니다[2].
+`attachment.filename` 열에는 아래처럼 `~/` 로 시작하는 경로가 들어가고, 16진 두 글자 폴더가 두 단계 이어진 다음 첨부마다 GUID 폴더가 하나씩 있습니다[2].
 
 ```
 ~/Library/SMS/Attachments/ab/11/<첨부 GUID>/IMG_4471.HEIC
@@ -33,7 +33,7 @@ iOS 버전에 따라 첨부 폴더 구조가 달라진다는 공개 자료는 �
 
 ## 구조
 
-`attachment` 표에는 칸이 26개 있습니다.
+`attachment` 표에는 열이 26개 있습니다.
 
 ```
 ROWID, guid, created_date, start_date, filename, uti, mime_type,
@@ -45,11 +45,11 @@ emoji_image_short_description, preview_generation_state, preflight_info,
 sensitivity_analysis
 ```
 
-| 칸 | 읽는 법 |
+| 열 | 읽는 법 |
 |---|---|
 | `filename` | 첨부 파일 경로입니다. `~/` 로 시작하는 형식은 위와 같습니다[2] |
 | `transfer_name` | 전송할 때의 파일 이름입니다. `filename` 과 `transfer_name` 둘 중 하나가 빌 수 있습니다[2] |
-| `created_date` | iLEAPP 가 첨부 시각으로 쓰는 칸입니다[1] |
+| `created_date` | iLEAPP 가 첨부 시각으로 쓰는 열입니다[1] |
 | `uti`, `mime_type`, `total_bytes`, `is_outgoing` | 값 설명을 담은 공개 자료가 없습니다 |
 | `is_sticker`, `sticker_user_info`, `is_commsafety_sensitive`, `sensitivity_analysis` | 값의 뜻을 밝힌 공개 자료가 없습니다 |
 
@@ -62,17 +62,17 @@ sensitivity_analysis
 | `com.apple.imagent.plist` | `AttachmentDownloadEarliestDate`, `attachmentZoneChangeToken-syncStoreVersion`, `com.apple.messages-cache-delete.purge_markers` |
 | `com.apple.madrid.plist` | `AttachmentDownloadHistoryFinished`, `AttachmentFileSizeUpdateWatermark` |
 
-`MobileSMSPreview` 키 이름으로 보아 미리보기를 만드는 설정으로 보입니다. 미리보기 파일이 어디에 저장되는지는 검체에서 확인합니다.
+`MobileSMSPreview` 키 이름으로 짐작하면 미리보기를 만드는 설정으로 보입니다. 미리보기 파일이 어디에 저장되는지는 실제 데이터로 확인합니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** `attachment` 행과 `message_attachment_join` 은 이 기기의 메시지 DB 에 그 메시지와 이어진 첨부가 이 이름·경로로 기록되어 있다는 사실을 보여 줍니다. 첨부 폴더에 파일이 남아 있으면 그 파일의 내용을 직접 확인할 수 있고, 이어진 메시지의 `is_from_me` 로 보낸 쪽인지 받은 쪽인지도 가릴 수 있습니다.
+**증명하는 것.** `attachment` 행과 `message_attachment_join` 은 이 기기의 메시지 DB 에 그 메시지와 이어진 첨부가 이 이름·경로로 기록되어 있다는 사실을 보여 줍니다. 첨부 폴더에 파일이 남아 있으면 그 파일의 내용을 직접 확인할 수 있고, 이어진 메시지의 `is_from_me` 로 보낸 쪽인지 받은 쪽인지도 구분할 수 있습니다.
 
 **증명하지 못하는 것.** iCloud 저장 공간 최적화 같은 이유로 파일이 지워져도 `attachment` 행은 남아서[2], 행이 있다고 파일이 기기에 있었다고 단정할 수 없습니다. 반대로 파일이 없다고 사용자가 지웠다고 볼 수도 없습니다.
 
 ## 시각 해석
 
-iLEAPP 는 `attachment.created_date` 를 첨부 시각으로 씁니다[1]. 이 칸의 기준과 단위를 밝힌 공개 자료는 없으니, sms.db 의 다른 날짜 칸과 같은 방식인지 `message.date` 와 나란히 놓고 비교해 봅니다. 날짜 칸을 바꾸는 방법은 [대화 DB 구조 (sms.db)](sms-db.md)의 시각 해석 절에 있습니다.
+iLEAPP 는 `attachment.created_date` 를 첨부 시각으로 씁니다[1]. 이 열의 기준과 단위를 밝힌 공개 자료는 없으니, sms.db 의 다른 날짜 열과 같은 방식인지 `message.date` 와 나란히 놓고 비교해 봅니다. 날짜 열을 바꾸는 방법은 [대화 DB 구조 (sms.db)](sms-db.md)의 시각 해석 절에 있습니다.
 
 ## 함정과 한계
 
@@ -86,7 +86,7 @@ Apple 은 iMessage 의 메시지 내용과 첨부를 저장하지 않고, 종단
 
 ### 본문의 첨부 자리를 헥스로 보기
 
-아래는 명세로 만든 예시이고 실제 검체에서 나온 값이 아닙니다. U+FFFC 를 UTF-8 로 적으면 세 바이트 `EF BF BC` 이고, 사진만 보낸 메시지의 `text` 칸을 헥스로 보면 이 세 바이트만 보일 수 있습니다.
+아래는 명세로 만든 예시이고 실제 기기에서 나온 값이 아닙니다. U+FFFC 를 UTF-8 로 적으면 세 바이트 `EF BF BC` 이고, 사진만 보낸 메시지의 `text` 열을 헥스로 보면 이 세 바이트만 보일 수 있습니다.
 
 ```
 text (hex) : EF BF BC
@@ -124,7 +124,7 @@ iLEAPP 의 `sms.py` 는 `*/Library/SMS/sms.db*` 와 `*/Library/SMS/Attachments/*
 
 ## 실습
 
-NIST CFReDS 같은 곳에 공개된 iOS 검체로 아래를 풀어 봅니다.
+NIST CFReDS 같은 곳에 공개된 iOS 시험 데이터로 아래를 풀어 봅니다.
 
 1. `attachment` 행 가운데 `filename` 이 빈 행과 `transfer_name` 이 빈 행을 각각 세어 봅니다.
 2. `filename` 으로 백업 파일 ID 를 구해 실제로 파일이 있는 행과 없는 행을 나눠 봅니다.

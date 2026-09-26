@@ -40,9 +40,9 @@ nav_order: 700
 | Galaxy A53 | 14 | 0행 | 0행 |
 | Galaxy S20 | 13 | 0행 | 0행 |
 
-삼성 표본 두 대는 두 저장소 모두 0행이었고, Pixel 6a·7a 도 odlh-storage.db 에는 행이 있지만 LevelDB 는 0행이었습니다 [2][3]. 그래서 빈 결과는 삼성 기기에만 나타나는 일이 아니고, 삼성 One UI 에서 저장 위치가 다른지 설정 차이 때문인지는 알려져 있지 않습니다. 검체에서 이 두 곳이 비어 있어도 사용자가 이동하지 않았다고 결론 내리면 안 되고, 그 기기에 타임라인이 켜져 있었는지부터 따져야 합니다.
+삼성 표본 두 대는 두 저장소 모두 0행이었고, Pixel 6a·7a 도 odlh-storage.db 에는 행이 있지만 LevelDB 는 0행이었습니다 [2][3]. 그래서 빈 결과는 삼성 기기에만 나타나는 일이 아니고, 삼성 One UI 에서 저장 위치가 다른지 설정 차이 때문인지는 알려져 있지 않습니다. 실제 기기에서 이 두 곳이 비어 있어도 사용자가 이동하지 않았다고 결론 내리면 안 되고, 그 기기에 타임라인이 켜져 있었는지부터 따져야 합니다.
 
-공용 저장 공간에도 `/sdcard/Android/media/com.google.android.gms` 폴더가 있을 수 있습니다. 그 안에 타임라인과 관련된 파일이 있는지는 검체에서 확인합니다.
+공용 저장 공간에도 `/sdcard/Android/media/com.google.android.gms` 폴더가 있을 수 있습니다. 그 안에 타임라인과 관련된 파일이 있는지는 실제 기기에서 확인합니다.
 
 ## 구조
 
@@ -50,12 +50,12 @@ nav_order: 700
 
 SQLite 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다. 타임라인 구간이 든 표는 두 개입니다 [2].
 
-| 표 | 칸 | 담긴 것 |
+| 표 | 열 | 담긴 것 |
 |---|---|---|
 | `semantic_segment_table` | `start_timestamp_seconds`, `end_timestamp_seconds`, `segment_type`, `semantic_segment`, `shown_in_timeline`, `is_finalized`, `hierarchy_level`, `segment_id`, `obfuscated_gaia_id` | 타임라인 구간 한 개 |
 | `edited_segment_table` | `start_timestamp_seconds`, `end_timestamp_seconds`, `block_start_timestamp_seconds`, `block_end_timestamp_seconds`, `segment_type`, `is_edit_uploaded`, `segment_id`, `obfuscated_gaia_id` | 사용자가 고친 구간과, 그 수정을 올렸는지 여부 |
 
-`semantic_segment` 칸은 프로토콜 버퍼 덩어리이고, 좌표가 들어 있는 구간에서만 위도·경도를 꺼낼 수 있습니다 [2]. 필드 경로 3→1→4→5 아래의 1번 필드가 위도, 2번 필드가 경도입니다 [2]. 값은 E7 고정소수라서 정수를 10,000,000 으로 나누면 도 단위가 되고, 부호 없는 값으로 읽힌 숫자가 2^31 을 넘으면 2^32 를 빼서 음수로 되돌립니다 [2]. 덩어리를 읽는 일반 방법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다.
+`semantic_segment` 열은 프로토콜 버퍼 덩어리이고, 좌표가 들어 있는 구간에서만 위도·경도를 꺼낼 수 있습니다 [2]. 필드 경로 3→1→4→5 아래의 1번 필드가 위도, 2번 필드가 경도입니다 [2]. 값은 E7 고정소수라서 정수를 10,000,000 으로 나누면 도 단위가 되고, 부호 없는 값으로 읽힌 숫자가 2^31 을 넘으면 2^32 를 빼서 음수로 되돌립니다 [2]. 덩어리를 읽는 일반 방법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다.
 
 `segment_type` 은 정수인데 ALEAPP 도 숫자의 뜻을 풀지 않고 그대로 보고합니다 [2]. 어느 숫자가 방문이고 어느 숫자가 이동인지는 알려져 있지 않으니 보고서에 이름을 붙이지 않습니다.
 
@@ -70,7 +70,7 @@ LevelDB 의 기록 값마다 프로토콜 버퍼가 들어 있고, 필드 1→1 
 | 3 | 수평 정확도 | ALEAPP 는 1000 으로 나눠 보고 |
 | 6 | 시각 | 유닉스 밀리초 |
 
-ALEAPP 결과에는 Timestamp, Rec. Sequence(LevelDB 기록 순번), Latitude, Longitude, Horizontal Acc., Origin(값이 들어 있던 LevelDB 파일) 칸이 나옵니다 [3].
+ALEAPP 결과에는 Timestamp, Rec. Sequence(LevelDB 기록 순번), Latitude, Longitude, Horizontal Acc., Origin(값이 들어 있던 LevelDB 파일) 열이 나옵니다 [3].
 
 ## 증거로서 의미
 
@@ -80,11 +80,11 @@ ALEAPP 결과에는 Timestamp, Rec. Sequence(LevelDB 기록 순번), Latitude, L
 
 **증명하지 못하는 것**
 
-좌표는 폰의 위치이지 사람의 위치가 아니고, 누가 폰을 들고 있었는지는 알려 주지 않습니다. 정확도 값이 있을 때는 그 반경 안 어딘가라는 뜻이라서 특정 건물 안에 있었다고까지 말하기는 어렵습니다. `segment_type` 의 뜻을 모르니 "머물렀다" 와 "지나갔다" 를 이 칸만으로 가를 수 없고, 기록이 없는 시간대가 "움직이지 않았다" 나 "그곳에 없었다" 를 뜻하지도 않습니다.
+좌표는 폰의 위치이지 사람의 위치가 아니고, 누가 폰을 들고 있었는지는 좌표로 알 수 없습니다. 정확도 값이 있을 때는 그 반경 안 어딘가라는 뜻이라서 특정 건물 안에 있었다고까지 말하기는 어렵습니다. `segment_type` 의 뜻을 모르니 "머물렀다" 와 "지나갔다" 를 이 열만으로 구분할 수 없고, 기록이 없는 시간대가 "움직이지 않았다" 나 "그곳에 없었다" 를 뜻하지도 않습니다.
 
 ## 시각 해석
 
-odlh-storage.db 의 시각은 칸 이름대로 유닉스 초(UTC 기준)입니다 [2]. 한 구간에는 시작과 끝 두 시각이 있고, `edited_segment_table` 에는 `block_start_timestamp_seconds`·`block_end_timestamp_seconds` 가 더 있습니다 [2]. rawsignal LevelDB 의 시각은 유닉스 밀리초입니다 [3]. 두 저장소는 시각 단위가 달라서, 한 타임라인에 올릴 때 단위를 맞추지 않으면 1000 배 어긋난 날짜가 나옵니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+odlh-storage.db 의 시각은 열 이름대로 유닉스 초(UTC 기준)입니다 [2]. 한 구간에는 시작과 끝 두 시각이 있고, `edited_segment_table` 에는 `block_start_timestamp_seconds`·`block_end_timestamp_seconds` 가 더 있습니다 [2]. rawsignal LevelDB 의 시각은 유닉스 밀리초입니다 [3]. 두 저장소는 시각 단위가 달라서, 한 타임라인에 올릴 때 단위를 맞추지 않으면 1000 배 어긋난 날짜가 나옵니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
@@ -92,7 +92,7 @@ odlh-storage.db 의 시각은 칸 이름대로 유닉스 초(UTC 기준)입니�
 
 둘째, 삼성 표본에서는 두 저장소가 모두 비어 있었고, 픽셀 표본 가운데에도 LevelDB 가 빈 기기가 있었습니다 [2][3]. 빈 결과가 나오면 원인을 확인하지 못한 상태라는 점을 보고서에 적습니다.
 
-셋째, 사용자는 지도 앱과 "내 Google 활동" 에서 타임라인을 지울 수 있고 자동 삭제도 설정할 수 있습니다 [1]. 지운 뒤 기기 DB 에 무엇이 남는지는 공개 자료가 없어 검체에서 확인합니다. SQLite 에서 지운 행이 어디에 남을 수 있는지는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 구간을 고친 흔적은 `edited_segment_table` 에 남으니 [2], 조작을 의심할 때는 이 표부터 봅니다. 지우기·고치기를 조사하는 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+셋째, 사용자는 지도 앱과 "내 Google 활동" 에서 타임라인을 지울 수 있고 자동 삭제도 설정할 수 있습니다 [1]. 지운 뒤 기기 DB 에 무엇이 남는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 행이 어디에 남을 수 있는지는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 구간을 고친 흔적은 `edited_segment_table` 에 남으니 [2], 조작을 의심할 때는 이 표부터 봅니다. 지우기·고치기를 조사하는 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 
 넷째, 서버 백업은 암호화한 사본입니다 [1]. 기기 없이 서버 쪽만으로 무엇을 얻을 수 있는지와 Google Takeout 으로 받는 타임라인 형식은 공개 자료가 없어 따로 확인해야 합니다. 클라우드 쪽 확보 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
 
@@ -100,7 +100,7 @@ odlh-storage.db 의 시각은 칸 이름대로 유닉스 초(UTC 기준)입니�
 
 ### 값으로 한 번
 
-아래는 ALEAPP 의 변환 규칙 [2] 으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. 위도 필드에서 정수 375665000(16진수 `16 64 31 68`) 이 나오면 10,000,000 으로 나눠 37.5665000 도가 됩니다. 경도 필드에서 부호 없는 값 3074126721(16진수 `B7 3B 73 81`) 이 나오면 2^31 보다 크니 2^32 를 빼서 -1220840575 가 되고, 나누면 -122.0840575 도입니다.
+아래는 ALEAPP 의 변환 규칙 [2] 으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. 위도 필드에서 정수 375665000(16진수 `16 64 31 68`) 이 나오면 10,000,000 으로 나눠 37.5665000 도가 됩니다. 경도 필드에서 부호 없는 값 3074126721(16진수 `B7 3B 73 81`) 이 나오면 2^31 보다 크니 2^32 를 빼서 -1220840575 가 되고, 나누면 -122.0840575 도입니다.
 
 ```
 위도  0x16643168 = 375665000   → 375665000 / 10^7 = 37.5665000
@@ -108,7 +108,7 @@ odlh-storage.db 의 시각은 칸 이름대로 유닉스 초(UTC 기준)입니�
                                 → -1220840575 / 10^7 = -122.0840575
 ```
 
-DB 사본을 SQLite 도구로 열어 구간 시각부터 훑어볼 수 있습니다. 아래 질의는 위 구조 표로 만든 예시입니다.
+DB 사본을 SQLite 도구로 열어 구간 시각부터 살펴볼 수 있습니다. 아래 질의는 위 구조 표로 만든 예시입니다.
 
 ```sql
 SELECT segment_id,
@@ -119,7 +119,7 @@ FROM semantic_segment_table
 ORDER BY start_timestamp_seconds;
 ```
 
-좌표는 `semantic_segment` 칸의 바이트를 꺼내 프로토콜 버퍼 도구로 풀고, 위 경로의 필드를 찾아 위 규칙대로 바꿉니다. 같은 폴더의 `-wal` 파일도 함께 복사해야 하는 이유는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
+좌표는 `semantic_segment` 열의 바이트를 꺼내 프로토콜 버퍼 도구로 풀고, 위 경로의 필드를 찾아 위 규칙대로 바꿉니다. 같은 폴더의 `-wal` 파일도 함께 복사해야 하는 이유는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -139,7 +139,7 @@ ALEAPP 의 googleOdlh 모듈이 odlh-storage.db 를 [2], appSemloc 모듈이 raw
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에 `com.google.android.gms` 앱 데이터가 들어 있으면 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 이미지에 `com.google.android.gms` 앱 데이터가 들어 있으면 아래 질문을 풀어 봅니다.
 
 1. odlh-storage.db 가 있습니까? 있다면 `semantic_segment_table` 에서 가장 이른 구간과 가장 늦은 구간은 언제입니까?
 2. `segment_type` 값별로 행이 몇 개씩 있고, 좌표를 꺼낼 수 있는 구간은 그중 몇 개입니까?

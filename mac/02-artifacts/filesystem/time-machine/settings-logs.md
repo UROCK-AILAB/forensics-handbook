@@ -21,7 +21,7 @@ plaso의 타임 머신 plist 플러그인은 파일 이름 `com.apple.TimeMachin
 
 | 기록 | 내용 | 기준 |
 |---|---|---|
-| 설정 plist | 아래 "설정 파일" 표의 키 [2] | plaso 플러그인 코드. 최근 macOS에서 `SnapshotDates`가 여전히 채워지는지는 검체에서 확인 |
+| 설정 plist | 아래 "설정 파일" 표의 키 [2] | plaso 플러그인 코드. 최근 macOS에서 `SnapshotDates`가 여전히 채워지는지는 실제 데이터로 확인 |
 | 통합 로그의 백업 단계 | 아래 "백업 한 번의 단계" 순서 [4] | Big Sur·Monterey |
 | 통합 로그 문구 | 아래 "로그 문구 예" 중 [3] 표시가 붙은 것 | Sonoma·Sequoia |
 | `backupd` 감시 | Monterey에서 RunningBoard가 `backupd`를 감시함 [4] | Monterey |
@@ -40,11 +40,11 @@ plaso의 타임 머신 plist 플러그인은 파일 이름 `com.apple.TimeMachin
 | `SnapshotDates` | `Destinations` 항목 | 그 대상에 백업한 시각 목록 [2] |
 | `BackupAlias` | `Destinations` 항목 | 바이너리 alias 데이터. 안에 백업 대상 이름 문자열이 들어 있음 [2] |
 
-`BackupAlias`는 alias 구조라서 plaso가 dtFabric 정의 파일(`time_machine.yaml`)로 오프셋 0부터 구조를 읽어 대상 이름을 꺼냅니다 [2]. 그 문자열이 몇 번째 바이트에 있는지는 공개 자료에 없어 검체에서 찾고, alias 구조 일반은 [파일 참조 데이터 (Alias·Bookmark)](../../../01-foundations/value-decoding/alias-bookmark.md)에서 다룹니다.
+`BackupAlias`는 alias 구조라서 plaso가 dtFabric 정의 파일(`time_machine.yaml`)로 오프셋 0부터 구조를 읽어 대상 이름을 꺼냅니다 [2]. 그 문자열이 몇 번째 바이트에 있는지는 공개 자료에 없어 실제 파일에서 찾고, alias 구조 일반은 [파일 참조 데이터 (Alias·Bookmark)](../../../01-foundations/value-decoding/alias-bookmark.md)에서 다룹니다.
 
 ### 제외 항목
 
-`tmutil`이 다루는 제외 항목은 세 종류입니다 [1]. 어느 항목이 제외돼 있는지는 `tmutil isexcluded`로 확인하고 [1], 제외 설정이 디스크의 어느 파일이나 속성에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+`tmutil`이 다루는 제외 항목은 세 종류입니다 [1]. 어느 항목이 제외돼 있는지는 `tmutil isexcluded`로 확인하고 [1], 제외 설정이 디스크의 어느 파일이나 속성에 남는지는 실제 데이터로 확인해야 합니다.
 
 | 종류 | 따라가는 기준 |
 |---|---|
@@ -90,11 +90,11 @@ Created 4 new snapshots, and deleted 4 old snapshots.                        [3]
 
 **증명하지 못하는 것.** 로그 문구에는 파일 수와 크기가 나오지만 어떤 파일을 복사했는지는 나오지 않아서, 파일 단위 내용은 백업 저장소에서 확인합니다. 수동 백업과 자동 백업을 가르는 문구는 공개 자료에 없어서, `Starting automatic backup`이 보이지 않는다는 사실만으로 사람이 직접 백업했다고 쓰지 않습니다. 제외 항목은 지금 설정만 보여 주고, 제외를 언제 넣었는지 알려 주는 기록은 공개 자료에 없습니다.
 
-보고서에는 "백업했다" 가 아니라 "통합 로그에 이 시각 `Completed backup:` 기록이 있고, 설정 파일의 `SnapshotDates`에도 같은 무렵의 시각이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "백업했다" 가 아니라 "통합 로그에 이 시각 `Completed backup:` 기록이 있고, 설정 파일의 `SnapshotDates`에도 같은 무렵의 시각이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-`SnapshotDates`의 값은 plist 날짜값이고, plaso는 이 값에 시간대 정보가 없어서 UTC로 붙여 해석합니다 [2]. 로그 기록의 시각은 통합 로그 쪽 규칙을 따르고, 완료 기록의 백업 이름(`2021-09-28-191949.backup` 꼴)에 든 시각은 백업 저장소의 이름과 같은 `YYYY-MM-DD-HHMMSS` 표기라서 [4] 세 값을 나란히 놓으면 백업 이름의 시간대를 가늠하는 데 쓸 수 있습니다. 백업 이름의 시간대 문제는 [백업 저장소 구조 (Backup Store)](backup-store.md)의 시각 해석을 봅니다. plist 날짜값과 여러 시각 형식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다.
+`SnapshotDates`의 값은 plist 날짜값이고, plaso는 이 값에 시간대 정보가 없어서 UTC로 붙여 해석합니다 [2]. 로그 기록의 시각은 통합 로그 쪽 규칙을 따르고, 완료 기록의 백업 이름(`2021-09-28-191949.backup` 형식)에 든 시각은 백업 저장소의 이름과 같은 `YYYY-MM-DD-HHMMSS` 표기라서 [4] 세 값을 나란히 놓으면 백업 이름의 시간대를 추정하는 데 쓸 수 있습니다. 백업 이름의 시간대 문제는 [백업 저장소 구조 (Backup Store)](backup-store.md)의 시각 해석을 봅니다. plist 날짜값과 여러 시각 형식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -106,9 +106,9 @@ Created 4 new snapshots, and deleted 4 old snapshots.                        [3]
 
 ## 직접 분석해 보기
 
-**헥스로.** 설정 파일은 plist라서 헥스로는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)의 방법대로 객체 표를 따라가 `Destinations` 배열과 그 안의 `SnapshotDates`, `BackupAlias` 값을 찾습니다. `BackupAlias` 안 문자열의 오프셋은 공개 자료에 없어서 검체에서 찾고, alias 구조는 [파일 참조 데이터 (Alias·Bookmark)](../../../01-foundations/value-decoding/alias-bookmark.md)의 설명을 따라 읽습니다.
+**헥스로.** 설정 파일은 plist라서 헥스로는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)의 방법대로 객체 표를 따라가 `Destinations` 배열과 그 안의 `SnapshotDates`, `BackupAlias` 값을 찾습니다. `BackupAlias` 안 문자열의 오프셋은 공개 자료에 없어서 실제 파일에서 찾고, alias 구조는 [파일 참조 데이터 (Alias·Bookmark)](../../../01-foundations/value-decoding/alias-bookmark.md)의 설명을 따라 읽습니다.
 
-**공개 도구로.** 수집한 설정 파일은 plaso의 타임 머신 plist 플러그인으로 읽어 `destination_identifier`, `snapshot_times`, `backup_alias` 값을 타임라인에 넣을 수 있습니다 [2]. 살아 있는 Mac에서는 `tmutil destinationinfo`로 대상 정보를, `tmutil isexcluded`로 특정 경로의 제외 여부를 확인하고 [1], 이때 필요한 권한은 [백업 저장소 구조 (Backup Store)](backup-store.md)에 정리돼 있습니다. 통합 로그는 서브시스템 `com.apple.TimeMachine`으로 걸러 읽고 [4], 조회 명령을 쓰는 법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)과 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)을 봅니다.
+**공개 도구로.** 수집한 설정 파일은 plaso의 타임 머신 plist 플러그인으로 읽어 `destination_identifier`, `snapshot_times`, `backup_alias` 값을 타임라인에 넣을 수 있습니다 [2]. 실행 중인 Mac에서는 `tmutil destinationinfo`로 대상 정보를, `tmutil isexcluded`로 특정 경로의 제외 여부를 확인하고 [1], 이때 필요한 권한은 [백업 저장소 구조 (Backup Store)](backup-store.md)에 정리돼 있습니다. 통합 로그는 서브시스템 `com.apple.TimeMachine`으로 걸러 읽고 [4], 조회 명령을 쓰는 법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)과 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)을 봅니다.
 
 ## 교차 검증
 
@@ -122,7 +122,7 @@ Created 4 new snapshots, and deleted 4 old snapshots.                        [3]
 
 ## 실습
 
-공개 검체나 직접 백업을 만든 실습용 Mac에서 다음을 풀어 봅니다.
+공개 시험 이미지나 직접 백업을 만든 실습용 Mac에서 다음을 풀어 봅니다.
 
 1. 설정 파일에서 백업 대상이 몇 개인지 세고, 대상마다 `BackupAlias`에서 대상 이름을 꺼냅니다.
 2. `SnapshotDates`의 시각 목록과 통합 로그의 `Completed backup:` 기록, 백업 저장소의 백업 이름을 한 표에 놓고 어긋나는 자리를 찾습니다.

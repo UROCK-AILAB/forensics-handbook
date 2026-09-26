@@ -6,7 +6,7 @@ nav_order: 2450
 
 # 윈도 방화벽 (Windows Firewall: 규칙·pfirewall.log)
 
-> 이 페이지의 예시 값과 개수는 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다. 다른 버전에서는 검체에서 확인합니다.
+> 이 페이지의 예시 값과 개수는 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다. 다른 버전에서는 실제 데이터로 확인합니다.
 
 ## 한 줄 요약
 
@@ -36,13 +36,13 @@ nav_order: 2450
 | 기록 | 위치 | 메모 |
 |---|---|---|
 | 방화벽 설정 기본 키 | SYSTEM `CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy` | 기본 위치입니다[2] |
-| 프로필 설정 | `...\FirewallPolicy\DomainProfile`·`StandardProfile`·`PublicProfile` | `StandardProfile` 과 "개인 (Private)" 프로필의 대응은 검체에서 확인합니다 |
+| 프로필 설정 | `...\FirewallPolicy\DomainProfile`·`StandardProfile`·`PublicProfile` | `StandardProfile` 과 "개인 (Private)" 프로필의 대응은 실제 데이터로 확인합니다 |
 | 규칙 | `...\FirewallPolicy\FirewallRules` | 예: 581개 |
 | 스토어 앱 규칙 | `...\FirewallPolicy\RestrictedServices\AppIso\FirewallRules` | 예: 540개 |
 | 로그 설정 | 각 프로필 키 아래 `Logging` | |
 | 통신 로그 | `%windir%\system32\logfiles\firewall\pfirewall.log` | 기본 경로입니다[1][2] |
 | 이벤트 채널 | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx` 입니다. 기본으로 켜져 있고 최대 1MB 입니다 |
-| 같은 공급자의 다른 채널 | ConnectionSecurity·FirewallDiagnostics(켜짐), FirewallVerbose·ConnectionSecurityVerbose(꺼짐) | 내용은 검체에서 확인합니다 |
+| 같은 공급자의 다른 채널 | ConnectionSecurity·FirewallDiagnostics(켜짐), FirewallVerbose·ConnectionSecurityVerbose(꺼짐) | 내용은 실제 데이터로 확인합니다 |
 | Security 로그 | 4946~4948·4950, 5024·5025, 5031, 5152·5156·5157 | 감사 정책을 켜야 남습니다 |
 | 그룹 정책 | `HKLM\SOFTWARE\Policies\Microsoft\WindowsFirewall` | 그룹 정책을 적용하지 않은 PC 에는 이 키가 없을 수 있습니다 |
 
@@ -56,7 +56,7 @@ nav_order: 2450
 | XP·2003 | `HKLM\Software\Policies\Microsoft\WindowsFirewall\<프로필>\...` |
 | Vista 이후 | `...\FirewallPolicy\<프로필>\AuthorizedApplications\List`, `...\FirewallPolicy\<프로필>\GloballyOpenPorts\List` |
 
-규칙 이벤트 번호도 두 벌입니다. 공급자에는 옛 번호와 새 번호가 모두 정의돼 있지만, 25H2 에 실제로 남는 것은 새 번호뿐입니다. 어느 윈도 버전부터 새 번호로 바뀌었는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+규칙 이벤트 번호도 두 벌입니다. 공급자에는 옛 번호와 새 번호가 모두 정의돼 있지만, 25H2 에 실제로 남는 것은 새 번호뿐입니다. 어느 윈도 버전부터 새 번호로 바뀌었는지는 실제 데이터로 확인해야 합니다.
 
 | 뜻 | 옛 번호 | 새 번호 |
 |---|---|---|
@@ -74,15 +74,15 @@ nav_order: 2450
 
 ### 프로필 설정
 
-프로필 키에서 볼 값은 아래와 같습니다[2]. 오른쪽 칸은 `StandardProfile` 의 예입니다.
+프로필 키에서 볼 값은 아래와 같습니다[2]. 오른쪽 열은 `StandardProfile` 의 예입니다.
 
 | 값 | `StandardProfile` 예 |
 |---|---|
 | `EnableFirewall` | 1 |
 | `DisableNotifications` | 0 |
-| `DoNotAllowExceptions` | 검체에서 확인 |
-| `DefaultInboundAction` | 검체에서 확인 |
-| `DefaultOutboundAction` | 검체에서 확인 |
+| `DoNotAllowExceptions` | 실제 데이터로 확인 |
+| `DefaultInboundAction` | 실제 데이터로 확인 |
+| `DefaultOutboundAction` | 실제 데이터로 확인 |
 
 악성코드가 이 값들을 바꿔 통신을 쉽게 만들기도 합니다. Emotet 이 그 예입니다[2].
 
@@ -94,9 +94,9 @@ nav_order: 2450
 v2.33|Action=Allow|Active=FALSE|Dir=Out|Protocol=6|Profile=Public|RPort=2869|RA4=LocalSubnet|RA6=LocalSubnet|App=%SystemRoot%\system32\svchost.exe|Svc=fdphost|Name=@FirewallAPI.dll,-32765|Desc=@FirewallAPI.dll,-32768|EmbedCtxt=@FirewallAPI.dll,-32752|
 ```
 
-칸의 공식 정의는 공개돼 있지 않습니다. 아래 표의 뜻은 칸 이름과 2097 이벤트의 데이터 칸 이름(LocalPorts·RemotePorts·RemoteAddresses·ApplicationPath·ServiceName 등)에 맞춰 읽은 것입니다.
+필드의 공식 정의는 공개돼 있지 않습니다. 아래 표의 뜻은 필드 이름과 2097 이벤트의 데이터 필드 이름(LocalPorts·RemotePorts·RemoteAddresses·ApplicationPath·ServiceName 등)에 맞춰 읽은 것입니다.
 
-| 칸 | 예의 값 | 읽는 법 |
+| 필드 | 예의 값 | 읽는 법 |
 |---|---|---|
 | 맨 앞 | `v2.33` | 규칙 문자열의 버전입니다 |
 | `Action` | `Allow` | 허용인지 차단인지 |
@@ -109,20 +109,20 @@ v2.33|Action=Allow|Active=FALSE|Dir=Out|Protocol=6|Profile=Public|RPort=2869|RA4
 | `App` | `%SystemRoot%\system32\svchost.exe` | 규칙이 가리키는 프로그램 경로 |
 | `Svc` | `fdphost` | 규칙이 가리키는 서비스 이름 |
 | `Name`·`Desc`·`EmbedCtxt` | `@FirewallAPI.dll,-32765` | dll 의 문자열 리소스를 가리키는 참조입니다 |
-| `Defer` | `User` | 다른 규칙에 있는 칸입니다. 뜻을 밝힌 공개 자료가 없습니다 |
-| `TTK2_22` | `WFDPrint` | 다른 규칙에 있는 칸입니다. 뜻을 밝힌 공개 자료가 없습니다 |
+| `Defer` | `User` | 다른 규칙에 있는 필드입니다. 뜻을 밝힌 공개 자료가 없습니다 |
+| `TTK2_22` | `WFDPrint` | 다른 규칙에 있는 필드입니다. 뜻을 밝힌 공개 자료가 없습니다 |
 
-값 이름과 `Name` 칸의 모양으로 규칙이 어디서 왔는지 가립니다.
+값 이름과 `Name` 필드의 모양으로 규칙이 어디서 왔는지 구분합니다.
 
-| 규칙 | 값 이름 | `Name` 칸 |
+| 규칙 | 값 이름 | `Name` 필드 |
 |---|---|---|
 | 윈도 기본 규칙 | 규칙 ID. 예: `NETDIS-UPnPHost-Out-TCP` | `@FirewallAPI.dll,-번호` 같은 리소스 참조 |
 | 프로그램이 추가한 규칙 | `{GUID}` | 평문 이름. 예: 72개 |
 
 - 규칙 581개 가운데 569개는 버전이 `v2.33`, 12개는 `v2.10` 이었습니다.
-- `v2.10` 12개는 이름이 모두 `TCP Query User{GUID}<실행 파일 경로>` 나 `UDP Query User{GUID}<경로>` 꼴이었습니다. 모두 받는 방향(`Dir=In`) 허용 규칙이었고 `Defer=User` 가 붙어 있었습니다.
+- `v2.10` 12개는 이름이 모두 `TCP Query User{GUID}<실행 파일 경로>` 나 `UDP Query User{GUID}<경로>` 형식이었습니다. 모두 받는 방향(`Dir=In`) 허용 규칙이었고 `Defer=User` 가 붙어 있었습니다.
 - 이 Query User 규칙에는 사용자 폴더 아래 실행 파일 경로가 그대로 들어 있었습니다.
-- Query User 규칙이 "방화벽이 일부 기능을 차단했습니다" 알림에 사용자가 답할 때 생기는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+- Query User 규칙이 "방화벽이 일부 기능을 차단했습니다" 알림에 사용자가 답할 때 생기는지는 실제 데이터로 확인해야 합니다.
 
 ### 로그 설정
 
@@ -150,13 +150,13 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 #Fields: date time action protocol src-ip dst-ip src-port dst-port size tcpflags tcpsyn tcpack tcpwin icmptype icmpcode info path pid
 ```
 
-기록 한 줄은 칸 18개를 공백으로 나눈 것입니다. 아래는 한 예입니다.
+기록 한 줄은 필드 18개를 공백으로 나눈 것입니다. 아래는 한 예입니다.
 
 ```
 2026-09-24 00:07:09 ALLOW TCP 192.168.1.239 172.66.147.243 57261 80 0 - 0 0 0 - - - SEND 41752
 ```
 
-| 칸 | 예의 값 | 읽는 법 |
+| 필드 | 예의 값 | 읽는 법 |
 |---|---|---|
 | `date`·`time` | `2026-09-24`·`00:07:09` | 현지 시각입니다. 시간대 표시가 없습니다 |
 | `action` | `ALLOW` | `ALLOW` 나 `DROP` 입니다 |
@@ -170,7 +170,7 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 | `path` | `SEND` | `SEND` 나 `RECEIVE` 입니다 |
 | `pid` | `41752` | 프로세스 ID 입니다. 프로그램 이름은 없습니다 |
 
-- 빈 칸은 `-` 로 채웁니다.
+- 빈 필드는 `-` 로 채웁니다.
 - 파일 인코딩은 ASCII, 줄바꿈은 CRLF 입니다.
 - 머리글 바로 뒤에 NUL(0x00) 212바이트가 있고, 그 뒤에 첫 기록이 이어집니다.
 - Public 프로필에서 두 옵션을 모두 켜면 몇 분 만에 수십 줄이 쌓입니다. 예: 약 6분에 54줄(`ALLOW` 37줄, `DROP` 13줄).
@@ -190,22 +190,22 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 | 2059 | 모든 규칙 삭제 | 7 |
 | 2004·2005·2006 | 옛 번호 규칙 추가·수정·삭제 | 0 |
 
-2097 메시지에는 아래 칸이 있습니다.
+2097 메시지에는 아래 필드가 있습니다.
 
 - Rule ID, Rule Name, Origin, Active, Direction, Profiles, Action, Application Path, Service Name, Protocol, Security Options, Edge Traversal, Modifying User, Modifying Application, PolicyAppId, Error Code
 
-2097 이벤트 데이터의 칸 이름은 RuleId, RuleName, Origin, ApplicationPath, ServiceName, Direction, Protocol, LocalPorts, RemotePorts, Action, Profiles, LocalAddresses, RemoteAddresses, EmbeddedContext, Flags, Active, EdgeTraversal, SecurityOptions, ModifyingUser, ModifyingApplication, SchemaVersion, RuleStatus, PolicyAppId, ErrorCode 등입니다.
+2097 이벤트 데이터의 필드 이름은 RuleId, RuleName, Origin, ApplicationPath, ServiceName, Direction, Protocol, LocalPorts, RemotePorts, Action, Profiles, LocalAddresses, RemoteAddresses, EmbeddedContext, Flags, Active, EdgeTraversal, SecurityOptions, ModifyingUser, ModifyingApplication, SchemaVersion, RuleStatus, PolicyAppId, ErrorCode 등입니다.
 
 - 스토어 앱 규칙을 더하고 지운 기록은 `ModifyingUser` 가 서비스 SID(`S-1-5-80-…`), `ModifyingApplication` 이 `C:\WINDOWS\System32\svchost.exe` 로 남습니다.
 - `netsh` 로 로그 설정을 바꾸면 2082 가 두 건 남습니다. 하나는 "Type: Log Dropped Packets Value: 예", 다른 하나는 "Type: Log Successful Connections Value: 예" 였습니다. Modifying User 에는 사용자 SID, Modifying Application 에는 `C:\Windows\System32\netsh.exe` 가 들어 있습니다.
-- 2010 에는 Adapter GUID, Adapter Name, Old Profile, New Profile 칸이 있습니다.
-- 2011 은 받는 연결을 막았지만 사용자에게 알리지 못한 기록입니다. Application Path, Protocol, Port, Process Id, User 칸이 있습니다.
+- 2010 에는 Adapter GUID, Adapter Name, Old Profile, New Profile 필드가 있습니다.
+- 2011 은 받는 연결을 막았지만 사용자에게 알리지 못한 기록입니다. Application Path, Protocol, Port, Process Id, User 필드가 있습니다.
 
 ### Security 로그의 방화벽 이벤트
 
 감사 정책을 켜 둔 PC 에서만 남습니다. 감사 설정은 [감사 정책과 로그 설정](../event-logs/audit-policy-log-settings.md)에서 다룹니다.
 
-| ID | 뜻 | 칸 |
+| ID | 뜻 | 필드 |
 |---|---|---|
 | 4946 | 규칙 추가 | Profile Changed, Rule ID, Rule Name |
 | 4947 | 규칙 수정 | 같음 |
@@ -226,7 +226,7 @@ WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156�
 
 **증명하는 것**
 
-- 규칙 값 하나는 수집 시점에 그 규칙이 있었다는 기록입니다. `App` 칸은 규칙이 가리키는 프로그램 경로입니다.
+- 규칙 값 하나는 수집 시점에 그 규칙이 있었다는 기록입니다. `App` 필드는 규칙이 가리키는 프로그램 경로입니다.
 - 값 이름이 `{GUID}` 이고 `Name` 이 평문인 규칙은 윈도 기본 규칙이 아닐 가능성이 큽니다.
 - Query User 규칙의 경로는 그 실행 파일에 받는 연결을 허용하는 규칙이 있었다는 기록입니다.
 - 2097·2099·2052 는 규칙을 더하고 고치고 지운 시각과 규칙 이름을 보여 줍니다. 바꾼 사용자 SID 와 프로그램도 남습니다.
@@ -242,7 +242,7 @@ WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156�
 - 레지스트리의 규칙 값에는 만든 시각이 없습니다.
 - `ModifyingUser` 가 서비스 SID 라면 사람이 직접 바꾼 기록이 아닐 수 있습니다. 스토어 앱 규칙이 이렇게 남습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다. 예를 들면 "방화벽 이벤트 채널에 사용자 SID `S-1-5-21-…` 가 `netsh.exe` 로 방화벽 로그 설정을 바꾼 기록(2082 두 건)이 있다." 처럼 씁니다. 또 "`pfirewall.log` 에 현지 시각 2026-09-24 00:07:09 에 192.168.1.239 에서 172.66.147.243 의 80번 포트로 나가는(SEND) TCP 통신을 허용한 기록이 있고, 프로세스 ID 는 41752 로 적혀 있다." 처럼 씁니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "방화벽 이벤트 채널에 사용자 SID `S-1-5-21-…` 가 `netsh.exe` 로 방화벽 로그 설정을 바꾼 기록(2082 두 건)이 있다." 처럼 씁니다. 또 "`pfirewall.log` 에 현지 시각 2026-09-24 00:07:09 에 192.168.1.239 에서 172.66.147.243 의 80번 포트로 나가는(SEND) TCP 통신을 허용한 기록이 있고, 프로세스 ID 는 41752 로 적혀 있다." 처럼 씁니다.
 
 ## 시각 해석
 
@@ -265,8 +265,8 @@ WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156�
 9. **방화벽 채널은 빨리 밀려납니다.** 최대 1MB 인데 스토어 앱 규칙이 자주 추가·삭제됩니다. 약 18일치만 남은 예가 있습니다.
 10. **옛 번호로만 찾으면 놓칩니다.** 25H2 에서는 2004·2005·2006 이 남지 않을 수 있습니다. 2097·2099·2052 도 함께 찾습니다.
 11. **값이 표시 언어로 번역돼 남습니다.** 한국어 윈도에서는 2082 의 Value 가 "예" 로 남습니다. 영어 "Yes" 만 검색하면 놓칩니다.
-12. **숫자 칸의 뜻을 밝힌 공개 자료가 없습니다.** 규칙 ID 가 `...-Out-Block` 인 규칙의 2097 에는 `Direction=2`, `Action=2`, `Protocol=256`, `Profiles=2147483647` 이 들어 있습니다. 숫자는 메시지 문장과 함께 읽습니다.
-13. **레지스트리를 직접 고치면 이벤트가 남는지 알 수 없습니다.** 악성코드가 프로필 값을 바꾸기도 합니다[2]. 레지스트리 값을 직접 고쳐도 2082 가 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 이벤트가 없다고 설정이 그대로였다고 보지 않습니다.
+12. **숫자 필드의 뜻을 밝힌 공개 자료가 없습니다.** 규칙 ID 가 `...-Out-Block` 인 규칙의 2097 에는 `Direction=2`, `Action=2`, `Protocol=256`, `Profiles=2147483647` 이 들어 있습니다. 숫자는 메시지 문장과 함께 읽습니다.
+13. **레지스트리를 직접 고치면 이벤트가 남는지 알 수 없습니다.** 악성코드가 프로필 값을 바꾸기도 합니다[2]. 레지스트리 값을 직접 고쳐도 2082 가 남는지는 실제 데이터로 확인해야 합니다. 이벤트가 없다고 설정이 그대로였다고 보지 않습니다.
 
 ## 직접 분석해 보기
 
@@ -282,14 +282,14 @@ WFP 는 윈도 필터링 플랫폼 (Windows Filtering Platform) 입니다. 5156�
     00 00 32 30 32 36 2D 30 39 2D 32 34 20 …           ..2026-09-24 …
 ```
 
-1. `70 61 74 68 20 70 69 64` 는 `#Fields:` 줄의 마지막 두 칸 이름 `path pid` 입니다.
+1. `70 61 74 68 20 70 69 64` 는 `#Fields:` 줄의 마지막 두 필드 이름 `path pid` 입니다.
 2. `0D 0A` 는 CRLF 줄바꿈입니다.
 3. 그 뒤에 `00` 이 212바이트 이어집니다.
-4. NUL 이 끝나면 첫 기록이 날짜 칸(`32 30 32 36 2D …` = `2026-…`)으로 시작합니다.
+4. NUL 이 끝나면 첫 기록이 날짜 필드(`32 30 32 36 2D …` = `2026-…`)으로 시작합니다.
 
 ### 공개 도구로 한 번
 
-`pfirewall.log` 를 파이썬으로 읽습니다. 칸 이름은 `#Fields:` 줄에서 가져옵니다.
+`pfirewall.log` 를 파이썬으로 읽습니다. 필드 이름은 `#Fields:` 줄에서 가져옵니다.
 
 ```python
 path = r"E:\case\pfirewall.log"   # 수집한 파일 경로로 바꿉니다
@@ -305,7 +305,7 @@ with open(path, "rb") as f:
                   r["src-ip"], r["src-port"], "->", r["dst-ip"], r["dst-port"], r["path"], "pid", r["pid"])
 ```
 
-레지스트리에서 뽑은 규칙 문자열은 `|` 로 나눕니다. 칸 이름이 겹칠 경우를 생각해 사전 대신 목록으로 둡니다.
+레지스트리에서 뽑은 규칙 문자열은 `|` 로 나눕니다. 필드 이름이 겹칠 경우를 생각해 사전 대신 목록으로 둡니다.
 
 ```python
 rule = r"v2.33|Action=Allow|Active=FALSE|Dir=Out|Protocol=6|Profile=Public|RPort=2869|App=%SystemRoot%\system32\svchost.exe|Svc=fdphost|"
@@ -329,9 +329,9 @@ Get-WinEvent -FilterHashtable @{ Path = $log; Id = 2097 } | ForEach-Object {
 } | Sort-Object UTC
 ```
 
-2052·2099·2082 는 `Id` 를 바꿔 같은 방법으로 봅니다. 이 이벤트들의 데이터 칸 이름은 2097 과 다를 수 있습니다. 칸이 비어 나오면 `Message` 를 함께 출력합니다.
+2052·2099·2082 는 `Id` 를 바꿔 같은 방법으로 봅니다. 이 이벤트들의 데이터 필드 이름은 2097 과 다를 수 있습니다. 필드가 비어 나오면 `Message` 를 함께 출력합니다.
 
-살아 있는 PC 에서는 아래 명령 두 개로 규칙 목록을 남깁니다[2].
+실행 중인 PC 에서는 아래 명령 두 개로 규칙 목록을 남깁니다[2].
 
 ```
 netsh advfirewall firewall show rule name=all
@@ -358,7 +358,7 @@ netsh advfirewall monitor show firewall rule name=all
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 윈도 10·11 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등) 가운데 윈도 10·11 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 세 프로필의 `EnableFirewall` 값은 각각 무엇입니까? 꺼진 프로필이 있습니까?
 2. `FirewallRules` 의 값 가운데 이름이 `{GUID}` 이고 `Name` 이 평문인 규칙은 몇 개입니까? `App` 경로가 사용자 폴더 아래인 규칙이 있습니까?

@@ -28,9 +28,9 @@ Debian·Ubuntu 계열과 RHEL 9 에서 회계 파일은 따로 까는 회계 패
 | 파일 권한 | 0640, root:adm | 0600, root:root |
 | 순환 | `/etc/cron.daily/acct` 가 `savelog -g adm -m 0640 -u root -c ${ACCT_LOGGING}` 로 돌리고 서비스를 다시 시작 | `/etc/logrotate.d/psacct`: daily, rotate 31, compress, delaycompress, notifempty, `create 0600 root root`, 순환 뒤 서비스 reload |
 | 보관 설정 | `/etc/default/acct` 의 `ACCT_LOGGING="30"`, 켜기 설정 `ACCT_ENABLE="1"` | logrotate 의 `rotate 31` |
-| `sa` 요약 파일 | 검체의 `/var/log/account/` 목록으로 확인 | `/var/account/savacct`, `/var/account/usracct` |
+| `sa` 요약 파일 | 분석 대상의 `/var/log/account/` 목록으로 확인 | `/var/account/savacct`, `/var/account/usracct` |
 
-RHEL 9 의 `psacct` 에는 `accton`, `sa`, `lastcomm`, `dump-acct`, `dump-utmp`, `ac` 가 들어 있습니다[8]. Debian 계열에서 `savelog` 가 순환한 파일의 이름은 검체의 `/var/log/account/` 목록으로 확인합니다. RHEL 9 의 순환 파일 이름과 `delaycompress` 가 압축을 한 번 미루는 방식은 [로그 순환](../../01-foundations/logging/logrotate.md) 에서 다룹니다.
+RHEL 9 의 `psacct` 에는 `accton`, `sa`, `lastcomm`, `dump-acct`, `dump-utmp`, `ac` 가 들어 있습니다[8]. Debian 계열에서 `savelog` 가 순환한 파일의 이름은 분석 대상의 `/var/log/account/` 목록으로 확인합니다. RHEL 9 의 순환 파일 이름과 `delaycompress` 가 압축을 한 번 미루는 방식은 [로그 순환](../../01-foundations/logging/logrotate.md) 에서 다룹니다.
 
 Debian 계열은 `/etc/cron.daily/acct` 가 순환을 마친 뒤 매일 `invoke-rc.d acct restart` 로 서비스를 다시 시작하므로, 부팅 뒤 서비스를 한 번 멈춘 것만으로는 회계가 계속 꺼져 있지 않습니다[9]. 그래서 서비스를 멈춘 흔적이 있어도 다음 cron.daily 실행 뒤에는 회계가 다시 켜졌을 수 있습니다.
 
@@ -42,7 +42,7 @@ Debian 계열은 `/etc/cron.daily/acct` 가 순환을 마친 뒤 매일 `invoke-
 
 레코드 모양은 커널 빌드 옵션에 따라 둘로 나뉩니다. `CONFIG_BSD_PROCESS_ACCT_V3` 로 빌드하면 3판 (`struct acct_v3`) 을 쓰고, 아니면 2판 (`struct acct`, m68k 는 1판) 을 씁니다[4]. 두 판 모두 레코드 하나가 64바이트이고 파일 머리는 따로 없어서, 파일 크기는 64의 배수입니다(아래 오프셋은 커널 헤더의 구조체로 계산한 값입니다)[3].
 
-판은 레코드 둘째 바이트 `ac_version` 으로 가립니다. 커널은 여기에 판 번호와 바이트 순서 표시(빅엔디언이면 0x80, 리틀엔디언이면 0x00)를 OR 해서 넣습니다[3][5]. x86_64 검체라면 둘째 바이트가 `03` 이면 3판, `02` 이면 2판입니다. 어느 판으로 빌드했는지는 검체의 `/boot/config-*` 에서 `CONFIG_BSD_PROCESS_ACCT_V3` 로도 확인할 수 있습니다.
+판은 레코드 둘째 바이트 `ac_version` 으로 판별합니다. 커널은 여기에 판 번호와 바이트 순서 표시(빅엔디언이면 0x80, 리틀엔디언이면 0x00)를 OR 해서 넣습니다[3][5]. x86_64 시스템이라면 둘째 바이트가 `03` 이면 3판, `02` 이면 2판입니다. 어느 판으로 빌드했는지는 분석 대상의 `/boot/config-*` 에서 `CONFIG_BSD_PROCESS_ACCT_V3` 로도 확인할 수 있습니다.
 
 ### 3판 레코드 (acct_v3)
 
@@ -72,7 +72,7 @@ Debian 계열은 `/etc/cron.daily/acct` 가 순환을 마친 뒤 매일 `invoke-
 
 ### 2판 레코드 (acct)
 
-2판은 앞쪽에 16비트 UID·GID 를 두고, 뒤쪽에 32비트 UID·GID 를 한 번 더 둡니다[3]. PID 와 부모 PID 칸이 없다는 점이 3판과 가장 크게 다릅니다.
+2판은 앞쪽에 16비트 UID·GID 를 두고, 뒤쪽에 32비트 UID·GID 를 한 번 더 둡니다[3]. PID 와 부모 PID 필드가 없다는 점이 3판과 가장 크게 다릅니다.
 
 | 오프셋 | 필드 | 오프셋 | 필드 |
 |---|---|---|---|
@@ -118,12 +118,12 @@ Debian 계열은 `/etc/cron.daily/acct` 가 순환을 마친 뒤 매일 `invoke-
 - 아직 끝나지 않은 프로세스: 수집 시점에 돌고 있던 프로세스와 시스템이 갑자기 멈출(crash) 때 돌던 프로세스는 기록되지 않습니다[2].
 - 셸 내장 명령: `history -c` 나 `cd` 처럼 새 프로세스를 띄우지 않는 명령은 남지 않습니다. 이 점은 [셸 명령 기록](shell-history/index.md) 에서 다룹니다.
 - 명령 이름의 진위: 프로세스는 자기 `comm` 값을 바꿀 수 있습니다[7].
-- 효과 UID: `ac_uid` 는 실제 UID 라서[3][5], setuid 프로그램처럼 효과 UID 만 바뀐 권한은 이 칸에 드러나지 않습니다. 권한을 올린 경위는 `ASU` 비트와 [sudo·su 사용 기록](../logins/sudo-su.md) 으로 따로 봅니다.
+- 효과 UID: `ac_uid` 는 실제 UID 라서[3][5], setuid 프로그램처럼 효과 UID 만 바뀐 권한은 이 필드에 드러나지 않습니다. 권한을 올린 경위는 `ASU` 비트와 [sudo·su 사용 기록](../logins/sudo-su.md) 으로 따로 봅니다.
 - 회계를 켜기 전, 끈 동안, 멈춘 동안(아래 "함정과 한계")의 실행
 
 ## 시각 해석
 
-`ac_btime` 은 프로세스가 끝날 때 커널이 "지금 시각(초) − 경과 시간" 으로 거꾸로 계산해 넣는 값입니다[5]. 시작할 때 적어 둔 값이 아니라서, 프로세스가 도는 사이에 시스템 시계를 옮기면 기록된 시작 시각이 실제와 어긋날 가능성이 있습니다. 값은 1970년부터 초로 센 32비트 부호 없는 정수이고 UTC 기준이라, 현지 시각은 검체의 시간대 설정으로 따로 바꿉니다[3][5]. 시각 값 일반은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 을 봅니다.
+`ac_btime` 은 프로세스가 끝날 때 커널이 "지금 시각(초) − 경과 시간" 으로 거꾸로 계산해 넣는 값입니다[5]. 시작할 때 적어 둔 값이 아니라서, 프로세스가 도는 사이에 시스템 시계를 옮기면 기록된 시작 시각이 실제와 어긋날 가능성이 있습니다. 값은 1970년부터 초로 센 32비트 부호 없는 정수이고 UTC 기준이라, 현지 시각은 분석 대상의 시간대 설정으로 따로 바꿉니다[3][5]. 시각 값 일반은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 을 봅니다.
 
 종료 시각은 파일에 없고, `ac_btime + 경과 시간(초)` 으로 계산합니다. 3판의 경과 시간은 초당 100틱 단위의 실수라서 100으로 나누면 초가 됩니다[4][5]. 2판은 `ac_etime` 이 16비트 `comp_t` 라서, 커널이 같은 경과 시간을 24비트 `comp2_t`(5비트 2진 지수, 20비트 가수)로 한 번 더 인코딩해 `ac_etime_hi`·`ac_etime_lo` 에 나눠 둡니다[3][5]. 2판의 틱 단위는 `ac_ahz` 값으로 나눕니다[3][5].
 
@@ -172,7 +172,7 @@ UID 를 사용자 이름으로 바꿀 때는 수집 시점의 `/etc/passwd` 를 
 | 0x2A | `2c 01` | 가벼운 페이지 폴트 300 |
 | 0x30 | `63 75 72 6c 00` | `curl` |
 
-이 레코드는 "UID 1000 의 `curl` 이라는 이름의 프로세스가 2026-01-01 00:00:00 UTC 에 시작해 1.5초 뒤 정상 종료했고, 슈퍼유저 권한을 쓴 적이 있다" 까지만 말합니다. 종료 시각은 00:00:01.5 UTC 로 계산합니다.
+이 레코드로 알 수 있는 것은 "UID 1000 의 `curl` 이라는 이름의 프로세스가 2026-01-01 00:00:00 UTC 에 시작해 1.5초 뒤 정상 종료했고, 슈퍼유저 권한을 쓴 적이 있다" 까지입니다. 종료 시각은 00:00:01.5 UTC 로 계산합니다.
 
 ### 도구로 한 번
 
@@ -217,7 +217,7 @@ for off in range(0, len(data) - 63, 64):
 
 실습용 가상 머신에 `acct` 또는 `psacct` 를 깔고 서비스를 켠 뒤 몇 가지 명령을 실행하고, 이미지로 떠서 아래 질문을 풀어 봅니다.
 
-1. 회계 파일 둘째 바이트로 판을 가리고, `/boot/config-*` 의 `CONFIG_BSD_PROCESS_ACCT_V3` 와 맞는지 확인합니다.
+1. 회계 파일 둘째 바이트로 판을 판별하고, `/boot/config-*` 의 `CONFIG_BSD_PROCESS_ACCT_V3` 와 맞는지 확인합니다.
 2. `sudo` 로 실행한 명령의 레코드에서 `ac_uid` 와 `ASU` 비트가 어떻게 남는지 봅니다.
 3. 오래 돈 셸의 레코드가 그 셸에서 실행한 명령들보다 파일 뒤쪽에 나오는지 보고, 3판이면 PID·부모 PID 로 이어 봅니다.
 4. `ls` 를 다른 폴더로 복사해 실행한 뒤 원래 `ls` 와 레코드로 구별할 수 있는지 봅니다.

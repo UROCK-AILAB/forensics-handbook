@@ -37,7 +37,7 @@ has_toc: false
 
 ## 함께 볼 페이지
 
-앱 번들 ID 와 앱 그룹 ID 를 읽는 법은 [번들 ID와 앱 그룹](../../../01-foundations/value-decoding/bundle-id-app-group.md) 에, 백업 안에서 파일을 찾는 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 에 있습니다. 앱 안의 DB 와 설정 파일은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 와 [속성 목록 파일](../../../01-foundations/data-formats/plist.md) 의 방법으로 엽니다. 설치 앱 목록과 사용 기록은 [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [바이옴](../../../02-artifacts/app-usage/biome/index.md) 에서 다루고, 앱을 언제 썼는지 묻는 조사는 [어떤 앱을 언제 썼나](../../../04-scenarios/activity/app-usage.md), 낯선 앱이 악성인지 가리는 조사는 [악성 코드·스파이웨어 흔적](../spyware-triage/index.md) 에서 이어 갑니다.
+앱 번들 ID 와 앱 그룹 ID 를 읽는 법은 [번들 ID와 앱 그룹](../../../01-foundations/value-decoding/bundle-id-app-group.md) 에, 백업 안에서 파일을 찾는 구조는 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 에 있습니다. 앱 안의 DB 와 설정 파일은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 와 [속성 목록 파일](../../../01-foundations/data-formats/plist.md) 의 방법으로 엽니다. 설치 앱 목록과 사용 기록은 [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md), [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [바이옴](../../../02-artifacts/app-usage/biome/index.md) 에서 다루고, 앱을 언제 썼는지 묻는 조사는 [어떤 앱을 언제 썼나](../../../04-scenarios/activity/app-usage.md), 낯선 앱이 악성인지 판별하는 조사는 [악성 코드·스파이웨어 흔적](../spyware-triage/index.md) 에서 이어 갑니다.
 
 ## 참고 문헌
 

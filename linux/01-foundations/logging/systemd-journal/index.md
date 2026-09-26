@@ -14,9 +14,9 @@ systemd-journald 가 커널·서비스·syslog 메시지를 모아 이진 파일
 
 systemd 를 쓰는 배포판에서는 journald 가 로그를 가장 먼저 받습니다. 커널 메시지 (kmsg), `syslog(3)` 호출, 저널 고유 API, 서비스의 표준 출력·표준 오류, 커널 감사 (audit) 레코드가 모두 journald 로 들어옵니다[1]. 그래서 `/var/log/syslog`·`/var/log/messages` 같은 텍스트 로그가 없거나 지워진 시스템에서도 같은 사건이 저널에 남아 있을 수 있습니다. 반대로 `Storage=none` 이면 저널에는 아무것도 저장하지 않고 syslog 소켓 같은 다른 곳으로 넘기기만 하므로, 기록이 텍스트 로그에만 남습니다[2]. journald 가 syslog 데몬으로 넘기는 방식은 [syslog 형식과 rsyslog](../syslog-rsyslog.md) 에서 다룹니다.
 
-텍스트 로그와 달리 저널에는 신뢰 필드 (trusted field) 가 있습니다. 이름이 밑줄로 시작하는 필드(`_PID`, `_UID`, `_EXE`, `_SYSTEMD_UNIT` 등)는 journald 가 스스로 붙이고 메시지를 보낸 프로그램이 바꿀 수 없습니다[3]. 반면 밑줄이 없는 필드(`MESSAGE`, `SYSLOG_IDENTIFIER`, `PRIORITY` 등)는 journald 가 값을 검사하지 않으므로, 보낸 쪽이 적은 그대로입니다[3]. 서비스의 표준 출력으로 들어온 기록은 `_PID`·`_UID`·`_GID` 가 그 줄을 쓴 자식 프로세스가 아니라 journald 에 처음 연결한 부모 프로세스의 값입니다[3]. 필드가 어느 경로로 들어왔는지는 `_TRANSPORT` 값(audit, driver, syslog, journal, stdout, kernel)으로 가립니다[3].
+텍스트 로그와 달리 저널에는 신뢰 필드 (trusted field) 가 있습니다. 이름이 밑줄로 시작하는 필드(`_PID`, `_UID`, `_EXE`, `_SYSTEMD_UNIT` 등)는 journald 가 스스로 붙이고 메시지를 보낸 프로그램이 바꿀 수 없습니다[3]. 반면 밑줄이 없는 필드(`MESSAGE`, `SYSLOG_IDENTIFIER`, `PRIORITY` 등)는 journald 가 값을 검사하지 않으므로, 보낸 쪽이 적은 그대로입니다[3]. 서비스의 표준 출력으로 들어온 기록은 `_PID`·`_UID`·`_GID` 가 그 줄을 쓴 자식 프로세스가 아니라 journald 에 처음 연결한 부모 프로세스의 값입니다[3]. 필드가 어느 경로로 들어왔는지는 `_TRANSPORT` 값(audit, driver, syslog, journal, stdout, kernel)으로 구분합니다[3].
 
-저장 위치는 설정에 따라 디스크와 메모리 중 하나가 됩니다. `Storage=` 가 `volatile` 이면 `/run/log/journal` 아래에만 쓰고 재부팅하면 사라지며, `auto` 는 `/var/log/journal` 폴더가 있으면 디스크에, 없으면 메모리에 씁니다[2]. 기본값은 빌드할 때 정해지므로[2] 검체마다 폴더와 설정 파일을 직접 봐야 합니다. 디스크에 쓰는 시스템도 부팅 초기에는 `/run` 에 쓰다가, systemd-journal-flush.service 가 `journalctl --flush` 로 `/var` 로 옮깁니다[1][2].
+저장 위치는 설정에 따라 디스크와 메모리 중 하나가 됩니다. `Storage=` 가 `volatile` 이면 `/run/log/journal` 아래에만 쓰고 재부팅하면 사라지며, `auto` 는 `/var/log/journal` 폴더가 있으면 디스크에, 없으면 메모리에 씁니다[2]. 기본값은 빌드할 때 정해지므로[2] 시스템마다 폴더와 설정 파일을 직접 봐야 합니다. 디스크에 쓰는 시스템도 부팅 초기에는 `/run` 에 쓰다가, systemd-journal-flush.service 가 `journalctl --flush` 로 `/var` 로 옮깁니다[1][2].
 
 ## 한눈에 보기
 
@@ -37,8 +37,8 @@ systemd 를 쓰는 배포판에서는 journald 가 로그를 가장 먼저 받�
 | 항목 | Ubuntu 24.04 LTS | RHEL 9 |
 |---|---|---|
 | systemd 판 | 255.4(패키지 `255.4-1ubuntu8.17`)[6] | 252[5] |
-| 기본 `Storage=` | 빌드 값이라 검체의 `/var/log/journal` 유무와 설정 파일로 확인 | 설정 파일 주석 `#Storage=auto`[5] → `/var/log/journal` 이 있으면 디스크 저장 |
-| 배포판이 바꾼 설정 | 검체의 `/etc/systemd/journald.conf`·드롭인으로 확인 | `journald.conf` 에 주석이 아닌 `Audit=` 줄이 들어 있음[5] |
+| 기본 `Storage=` | 빌드 값이라 분석 대상의 `/var/log/journal` 유무와 설정 파일로 확인 | 설정 파일 주석 `#Storage=auto`[5] → `/var/log/journal` 이 있으면 디스크 저장 |
+| 배포판이 바꾼 설정 | 분석 대상의 `/etc/systemd/journald.conf`·드롭인으로 확인 | `journald.conf` 에 주석이 아닌 `Audit=` 줄이 들어 있음[5] |
 
 ### 보존 한도 기본값
 

@@ -46,15 +46,15 @@ macOS 27 판 Mac 사용 설명서에는 AFP 가 나오지 않습니다 [2][3]. �
 |---|---|
 | 10.10 Yosemite 이하 | `com.apple.recentitems.plist` 의 `RecentServers`. 10.10 전에는 항목을 `Alias` 로, 그 뒤로는 `Bookmark` 로 적음 |
 | 10.12 이하 | `com.apple.sidebarlists.plist` 의 `favoriteservers`(즐겨찾는 서버)와 `systemitems`(볼륨) |
-| 10.15 Catalina 이후 | `com.apple.sharedfilelist/` 아래 `RecentServers`·`FavoriteServers`·`RecentHosts` 목록 파일. 이 목록 파일로 넘어온 정확한 버전은 검체에서 확인 |
+| 10.15 Catalina 이후 | `com.apple.sharedfilelist/` 아래 `RecentServers`·`FavoriteServers`·`RecentHosts` 목록 파일. 이 목록 파일로 넘어온 정확한 버전은 실제 기기에서 확인 |
 
-`volinfo.database` 는 이전에 연결된 볼륨의 파일 소유권 정보를 담는 파일입니다 [5]. 네트워크 공유도 여기 기록되는지는 공개 자료가 없어 검체에서 확인합니다. 서버 암호가 키체인에 저장되는지도 공개 자료가 없어서, 키체인은 교차 검증 대상으로 둡니다.
+`volinfo.database` 는 이전에 연결된 볼륨의 파일 소유권 정보를 담는 파일입니다 [5]. 네트워크 공유도 여기 기록되는지는 실제 기기에서 확인해야 합니다. 서버 암호가 키체인에 저장되는지도 알려져 있지 않아서, 키체인은 교차 검증 대상으로 둡니다.
 
 ## 구조
 
 ### 최근·즐겨찾는 서버 목록
 
-목록 파일 자체의 형식과 항목 순서는 [최근 항목 (Shared File Lists)](../file-folder-usage/recent-items/index.md)에서 다루고, 여기서는 서버 항목을 알아보는 법만 적습니다. 목록의 항목마다 북마크가 붙어 있고, 북마크의 URL 칸(0x1003)이 `file:///` 로 시작하지 않고 `smb://`, `afp://`, `ftp://` 같은 값이면 그 값이 서버 주소입니다. mac_apt 도 이 방식으로 서버 항목을 골라냅니다. 북마크 안에서 칸을 찾아가는 법은 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)를 따릅니다. `RecentHosts` 목록에는 북마크가 없습니다.
+목록 파일 자체의 형식과 항목 순서는 [최근 항목 (Shared File Lists)](../file-folder-usage/recent-items/index.md)에서 다루고, 여기서는 서버 항목을 알아보는 법만 적습니다. 목록의 항목마다 북마크가 붙어 있고, 북마크의 URL 필드(0x1003)이 `file:///` 로 시작하지 않고 `smb://`, `afp://`, `ftp://` 같은 값이면 그 값이 서버 주소입니다. mac_apt 도 이 방식으로 서버 항목을 골라냅니다. 북마크 안에서 필드를 찾아가는 법은 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)를 따릅니다. `RecentHosts` 목록에는 북마크가 없습니다.
 
 10.12 이하의 `com.apple.sidebarlists.plist` 에서는 `favoriteservers` 아래 `CustomListItems` 배열에 항목마다 `Name` 과 `URL` 이 있고, `systemitems` 아래 `VolumesList` 배열에 `Name`, `EntryType`, `Alias`, `Visibility` 가 있습니다. 이 파일에는 데스크톱에 마운트되어 사이드바 목록에 나타난 볼륨 이름이 담깁니다 [5].
 
@@ -83,7 +83,7 @@ macOS 27 판 Mac 사용 설명서에는 AFP 가 나오지 않습니다 [2][3]. �
 
 ### 이 맥이 SMB 서버일 때 (preferences.plist)
 
-`/Library/Preferences/SystemConfiguration/preferences.plist` 안의 `SMB` 사전에 `NetBIOSName` 과 `Workgroup` 키가 있고, mac_apt NETWORKING 플러그인은 이 둘을 `Network_Details` 표의 `SMB.NetBIOSName`, `SMB.Workgroup` 칸으로 냅니다 [4]. 이 파일의 나머지 네트워크 서비스 설정은 [네트워크 인터페이스와 설정 (SystemConfiguration)](network-interfaces.md)에서 다룹니다. 어떤 폴더를 공유했는지 적는 공유 목록의 저장 위치와 AFP 서버 설정 파일은 공개 자료가 없어 검체에서 확인합니다.
+`/Library/Preferences/SystemConfiguration/preferences.plist` 안의 `SMB` 사전에 `NetBIOSName` 과 `Workgroup` 키가 있고, mac_apt NETWORKING 플러그인은 이 둘을 `Network_Details` 표의 `SMB.NetBIOSName`, `SMB.Workgroup` 열로 냅니다 [4]. 이 파일의 나머지 네트워크 서비스 설정은 [네트워크 인터페이스와 설정 (SystemConfiguration)](network-interfaces.md)에서 다룹니다. 어떤 폴더를 공유했는지 적는 공유 목록의 저장 위치와 AFP 서버 설정 파일은 실제 기기에서 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -91,11 +91,11 @@ macOS 27 판 Mac 사용 설명서에는 AFP 가 나오지 않습니다 [2][3]. �
 
 `nsmb.conf` 의 `[SERVER]` 절 이름이나 `addr` 값은 누군가 그 서버에 붙으려고 설정을 적어 둔 흔적으로 볼 수 있고, 서명·암호화를 끄거나 `minauth` 를 낮춘 설정은 연결 보안을 약하게 만든 흔적으로 볼 여지가 있습니다. 이 해석은 키의 뜻에서 끌어낸 판단이라서, 보고서에는 "이런 설정이 있다" 까지만 쓰고 의도는 다른 기록으로 뒷받침합니다. `preferences.plist` 의 `SMB` 값은 이 맥에 SMB 서버 이름과 작업 그룹이 설정되어 있다는 기록입니다.
 
-**증명하지 못하는 것.** 이 목록들은 연결 시도가 인증까지 성공했는지, 공유 안에서 어떤 파일을 열거나 복사했는지 알려 주지 않습니다. 즐겨찾기 항목은 주소를 등록했다는 뜻일 뿐 그 서버에 실제로 붙었다는 뜻은 아니고, `nsmb.conf` 도 설정일 뿐 연결 기록이 아닙니다. `preferences.plist` 의 SMB 이름만으로는 파일 공유가 켜져 있었는지, 누가 이 맥에 붙었는지 알 수 없습니다. 자료 유출을 다룰 때는 "이 계정의 최근 서버 목록에 이 주소가 있다" 처럼 기록이 말하는 만큼만 쓰고, 파일 이동은 [자료를 밖으로 빼돌렸나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md)의 흐름대로 다른 기록으로 따로 보입니다.
+**증명하지 못하는 것.** 이 목록들은 연결 시도가 인증까지 성공했는지, 공유 안에서 어떤 파일을 열거나 복사했는지 알려 주지 않습니다. 즐겨찾기 항목은 주소를 등록했다는 뜻일 뿐 그 서버에 실제로 붙었다는 뜻은 아니고, `nsmb.conf` 도 설정일 뿐 연결 기록이 아닙니다. `preferences.plist` 의 SMB 이름만으로는 파일 공유가 켜져 있었는지, 누가 이 맥에 붙었는지 알 수 없습니다. 자료 유출을 다룰 때는 "이 계정의 최근 서버 목록에 이 주소가 있다" 처럼 기록으로 확인되는 만큼만 쓰고, 파일 이동은 [자료를 밖으로 빼돌렸나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md)의 흐름대로 다른 기록으로 따로 보입니다.
 
 ## 시각 해석
 
-서버 목록 항목, `nsmb.conf`, `preferences.plist` 의 `SMB` 사전에는 알려진 시각 칸이 없습니다. 그래서 언제 연결했는지는 목록 파일과 설정 파일의 파일 시스템 시각, [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md), 통합 로그 같은 다른 기록으로 좁힙니다. 파일 수정 시각은 목록이나 설정이 마지막으로 바뀐 때를 가리킬 수는 있지만 어느 항목이 그때 바뀌었는지는 알려 주지 않고, 가장 최근 항목과 수정 시각을 바로 짝지으면 틀릴 수 있습니다. 파일 시스템 시각의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 여러 기록을 한 시간축에 놓는 법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)을 따릅니다. 공유를 마운트할 때 FSEvents 나 통합 로그에 어떤 모양으로 남는지는 공개 자료가 없어 검체에서 확인합니다.
+서버 목록 항목, `nsmb.conf`, `preferences.plist` 의 `SMB` 사전에는 알려진 시각 필드가 없습니다. 그래서 언제 연결했는지는 목록 파일과 설정 파일의 파일 시스템 시각, [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md), 통합 로그 같은 다른 기록으로 좁힙니다. 파일 수정 시각은 목록이나 설정이 마지막으로 바뀐 때를 가리킬 수는 있지만 어느 항목이 그때 바뀌었는지는 알려 주지 않고, 가장 최근 항목과 수정 시각을 바로 짝지으면 틀릴 수 있습니다. 파일 시스템 시각의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따르고, 여러 기록을 한 시간축에 놓는 법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)을 따릅니다. 공유를 마운트할 때 FSEvents 나 통합 로그에 어떤 모양으로 남는지는 실제 기기에서 확인해야 합니다.
 
 ## 함정과 한계
 
@@ -112,7 +112,7 @@ macOS 27 판 Mac 사용 설명서에는 AFP 가 나오지 않습니다 [2][3]. �
 
 ### 헥스로 한 번
 
-목록 파일을 구조대로 풀기 전에 원시 바이트에서 서버 주소 문자열부터 찾아 두면 빠릅니다. 아래 바이트는 ASCII 표로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+목록 파일을 구조대로 풀기 전에 원시 바이트에서 서버 주소 문자열부터 찾아 두면 빠릅니다. 아래 바이트는 ASCII 표로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```
 "smb://nas.example.com/" 을 ASCII 바이트로 적은 모양 (예시)
@@ -126,11 +126,11 @@ nfs://  → 6e 66 73 3a 2f 2f
 ftp://  → 66 74 70 3a 2f 2f
 ```
 
-바이트 열이 나오면 그 둘레를 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 순서대로 다시 읽어 URL 칸(0x1003)에 든 값인지 확인합니다. 북마크 안의 URL 문자열 인코딩은 공개 자료가 없으니, 바이트 열을 못 찾았다고 서버 항목이 없다고 단정하지 않고 구조대로 푼 결과와 맞춰 봅니다.
+바이트 열이 나오면 그 둘레를 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 순서대로 다시 읽어 URL 필드(0x1003)에 든 값인지 확인합니다. 북마크 안의 URL 문자열 인코딩은 공개 자료가 없으니, 바이트 열을 못 찾았다고 서버 항목이 없다고 단정하지 않고 구조대로 푼 결과와 맞춰 봅니다.
 
 ### 공개 도구로 한 번
 
-`nsmb.conf` 는 텍스트 파일이라 아무 편집기로 열어 절 이름과 `addr`, 서명·암호화 관련 키를 봅니다. `preferences.plist` 는 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에 나오는 plist 도구로 열어 `SMB` 사전을 보거나, mac_apt NETWORKING 플러그인을 돌려 `Network_Details` 표의 `SMB.NetBIOSName`, `SMB.Workgroup` 칸을 봅니다 [4]. 서버 목록 파일은 최근 항목 페이지에 나오는 공개 도구로 풀어서, URL 이 `file:///` 가 아닌 항목만 추립니다.
+`nsmb.conf` 는 텍스트 파일이라 아무 편집기로 열어 절 이름과 `addr`, 서명·암호화 관련 키를 봅니다. `preferences.plist` 는 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에 나오는 plist 도구로 열어 `SMB` 사전을 보거나, mac_apt NETWORKING 플러그인을 돌려 `Network_Details` 표의 `SMB.NetBIOSName`, `SMB.Workgroup` 열을 봅니다 [4]. 서버 목록 파일은 최근 항목 페이지에 나오는 공개 도구로 풀어서, URL 이 `file:///` 가 아닌 항목만 추립니다.
 
 ## 교차 검증
 
@@ -144,9 +144,9 @@ ftp://  → 66 74 70 3a 2f 2f
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 파일 서버나 NAS 에 붙은 맥 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터 가운데 파일 서버나 NAS 에 붙은 맥 이미지를 골라 아래 질문을 풀어 봅니다.
 
-1. 사용자마다 `~/Library/Application Support/com.apple.sharedfilelist/` 아래 서버 목록 파일은 어떤 확장자로 남아 있고, 그 확장자는 검체의 macOS 버전과 맞나요?
+1. 사용자마다 `~/Library/Application Support/com.apple.sharedfilelist/` 아래 서버 목록 파일은 어떤 확장자로 남아 있고, 그 확장자는 그 이미지의 macOS 버전과 맞나요?
 2. 최근 서버 목록과 즐겨찾는 서버 목록에서 URL 이 `file:///` 가 아닌 항목을 모두 뽑고 프로토콜별로 나눠 보세요. `afp://` 항목이 있나요?
 3. 원시 바이트에서 `73 6d 62 3a 2f 2f` 를 찾은 결과와 구조대로 푼 결과가 같은가요?
 4. `/etc/nsmb.conf` 와 사용자 `nsmb.conf` 가 둘 다 있다면, 같은 키를 다르게 적은 곳은 어디이고 실제로는 어느 값이 적용되나요?

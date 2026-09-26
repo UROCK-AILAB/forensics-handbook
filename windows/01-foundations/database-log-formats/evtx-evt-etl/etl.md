@@ -118,7 +118,7 @@ Windows 11 25H2 의 Autologger 키 아래에는 Circular Kernel Context Logger·
 | LogFileMode | 로그 모드 |
 | PointerSize | 포인터 크기. 이 값에 따라 구조 크기가 달라집니다 |
 | EventsLost | 세션 동안 잃은 이벤트 수 |
-| LoggerName·LogFileName | 포인터 칸이라 값으로 쓰지 않습니다. 구조 바로 뒤의 첫째 널 종료 문자열이 세션 이름, 둘째가 로그 파일 이름입니다 |
+| LoggerName·LogFileName | 포인터 필드라 값으로 쓰지 않습니다. 구조 바로 뒤의 첫째 널 종료 문자열이 세션 이름, 둘째가 로그 파일 이름입니다 |
 | TimeZone | TIME_ZONE_INFORMATION 구조. BootTime·EndTime·StartTime 의 시간대입니다 |
 | BootTime | 시스템 부팅 시각. 문서는 Global Logger 세션 추적에서만 지원한다고 적습니다[4] |
 | StartTime | 세션 시작 시각 |
@@ -159,7 +159,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 
 - 0x00 `00 00 01 00` 은 리틀 엔디언으로 0x10000, 곧 65,536 입니다. 이 파일의 버퍼 크기입니다.
 - 레지스트리의 BufferSize 0x40 은 KB 단위라 64 × 1,024 = 65,536 입니다. 두 값이 같습니다.
-- 첫 버퍼에서는 0x68 부터 TRACE_LOGFILE_HEADER 가 이어집니다. 0x04 ~ 0x67 은 버퍼 머리 자리이고, 필드 표는 공개 자료가 없습니다.
+- 첫 버퍼에서는 0x68 부터 TRACE_LOGFILE_HEADER 가 이어집니다. 0x04 ~ 0x67 은 버퍼 머리 자리이고, 이 구간의 필드 구성을 설명한 공개 자료는 없습니다.
 - 0x10000 과 0x20000 에서도 같은 4바이트가 나옵니다. 버퍼가 65,536바이트마다 이어집니다.
 - n 번째 버퍼는 (n − 1) × 0x10000 에서 시작합니다.
 
@@ -211,7 +211,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 - 레지스트리에 MaxFileSize 가 없다고 제한이 없는 것은 아닙니다. Windows 11 25H2 의 ReFSLog 는 머리에 기본값 100 이 들어 있었습니다.
 - 번호 파일 이름은 문서와 다를 수 있습니다. Windows 11 25H2 에서는 세 자리(`.002`)였습니다. 파일을 찾을 때 자릿수를 정해 두지 않습니다.
 - `RtBackup` 파일이 DisableRealtimePersistence 가 저장한 실시간 이벤트인지는 공식 문서에 나오지 않습니다.
-- Analytic·Debug 채널이 `.etl` 로 저장되는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+- Analytic·Debug 채널이 `.etl` 로 저장되는지는 실제 시스템에서 확인해야 합니다.
 
 ## 도구
 

@@ -48,7 +48,7 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 | 이벤트 | 버전 | 차이 |
 |---|---|---|
-| Kernel-Power 41 | 0 ~ 10 | 버전 0·1 의 메시지는 "The last sleep transition was unsuccessful…" 입니다. 뒤 버전의 메시지는 "The system has rebooted without cleanly shutting down first…" 입니다. 버전이 올라갈수록 칸이 늘어납니다 |
+| Kernel-Power 41 | 0 ~ 10 | 버전 0·1 의 메시지는 "The last sleep transition was unsuccessful…" 입니다. 뒤 버전의 메시지는 "The system has rebooted without cleanly shutting down first…" 입니다. 버전이 올라갈수록 필드가 늘어납니다 |
 | Kernel-Boot 20 · 27 | 1 | — |
 | Kernel-Power 42 | 3 | — |
 | Power-Troubleshooter 1 | 3 | — |
@@ -65,11 +65,11 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 
 ## 구조
 
-아래 메시지와 칸은 한 PC 의 공급자 메타데이터에서 읽었습니다. 공급자 이름은 `Microsoft-Windows-` 를 뺀 짧은 이름으로 적었습니다.
+아래 메시지와 필드는 한 PC 의 공급자 메타데이터에서 읽었습니다. 공급자 이름은 `Microsoft-Windows-` 를 뺀 짧은 이름으로 적었습니다.
 
 ### 켜짐·꺼짐
 
-| 공급자 · ID | 메시지 | 칸 |
+| 공급자 · ID | 메시지 | 필드 |
 |---|---|---|
 | Kernel-General 12 | The operating system started at system time %7. | MajorVersion, MinorVersion, BuildVersion, QfeVersion, ServiceVersion, BootMode, StartTime (FILETIME) |
 | Kernel-General 13 | The operating system is shutting down at system time %1. | StopTime (FILETIME) |
@@ -80,9 +80,9 @@ Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로
 | Security 4608 | Windows is starting up. This event is logged when LSASS.EXE starts and the auditing subsystem is initialized. | 없음 |
 | Security 4609 | Windows is shutting down. All logon sessions will be terminated by this shutdown. | 없음 |
 
-### 칸 이름이 없는 옛 방식 이벤트
+### 필드 이름이 없는 옛 방식 이벤트
 
-EventLog 공급자와 User32 공급자는 매니페스트가 없는 옛 방식입니다. 메시지 파일은 각각 `%SystemRoot%\System32\netevent.dll`, `%SystemRoot%\system32\user32.dll` 이었습니다. 그래서 칸 이름이 없고, 순서로 읽습니다. 공급자와 메시지 파일의 관계는 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
+EventLog 공급자와 User32 공급자는 매니페스트가 없는 옛 방식입니다. 메시지 파일은 각각 `%SystemRoot%\System32\netevent.dll`, `%SystemRoot%\system32\user32.dll` 이었습니다. 그래서 필드 이름이 없고, 순서로 읽습니다. 공급자와 메시지 파일의 관계는 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
 | ID | 메시지 |
 |---|---|
@@ -92,9 +92,9 @@ EventLog 공급자와 User32 공급자는 매니페스트가 없는 옛 방식�
 | 6009 | OS 버전 문자열 (예: `10.00. 26200 Multiprocessor Free`) |
 | 6013 | The system uptime is N seconds. |
 
-User32 1074 의 메시지는 "The process … has initiated the [종류] of computer … on behalf of user … for the following reason: …" 입니다. 뒤에 Reason Code·Shutdown Type·Comment 가 붙습니다. 칸은 param1 ~ param7 입니다.
+User32 1074 의 메시지는 "The process … has initiated the [종류] of computer … on behalf of user … for the following reason: …" 입니다. 뒤에 Reason Code·Shutdown Type·Comment 가 붙습니다. 필드는 param1 ~ param7 입니다.
 
-| 칸 | 뜻 | 한 PC 에서 본 값 |
+| 필드 | 뜻 | 한 PC 에서 본 값 |
 |---|---|---|
 | param1 | 종료를 일으킨 프로세스와 컴퓨터 | 시작 메뉴 재시작: `C:\Windows\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\StartMenuExperienceHost.exe ([컴퓨터 이름])`. 업데이트 재시작: `C:\WINDOWS\servicing\TrustedInstaller.exe` |
 | param2 | 컴퓨터 | — |
@@ -108,9 +108,9 @@ User32 1074 의 메시지는 "The process … has initiated the [종류] of comp
 
 ### 비정상 종료 (Kernel-Power 41)
 
-버전 10 의 칸은 다음과 같습니다: BugcheckCode, BugcheckParameter1~4, SleepInProgress, PowerButtonTimestamp, BootAppStatus, Checkpoint, ConnectedStandbyInProgress, SystemSleepTransitionsToOn, CsEntryScenarioInstanceId, BugcheckInfoFromEFI, CheckpointStatus, CsEntryScenarioInstanceIdV2, LongPowerButtonPressDetected, LidReliability, InputSuppressionState, PowerButtonSuppressionState, LidState, WHEABootErrorCount.
+버전 10 의 필드는 다음과 같습니다: BugcheckCode, BugcheckParameter1~4, SleepInProgress, PowerButtonTimestamp, BootAppStatus, Checkpoint, ConnectedStandbyInProgress, SystemSleepTransitionsToOn, CsEntryScenarioInstanceId, BugcheckInfoFromEFI, CheckpointStatus, CsEntryScenarioInstanceIdV2, LongPowerButtonPressDetected, LidReliability, InputSuppressionState, PowerButtonSuppressionState, LidState, WHEABootErrorCount.
 
-몇 칸의 뜻은 다음과 같습니다[1].
+몇몇 필드의 뜻은 다음과 같습니다[1].
 
 - BugcheckCode 는 10진수로 들어 있습니다. 예를 들어 159 는 0x9F 입니다.
 - 전원 버튼을 길게 눌러 재시작하면 PowerButtonTimestamp 가 0 이 아닙니다. 예시 값은 131728546170882432 입니다.
@@ -119,7 +119,7 @@ User32 1074 의 메시지는 "The process … has initiated the [종류] of comp
 
 ### 절전·최대 절전·모던 스탠바이
 
-| 공급자 · ID | 메시지 | 칸 |
+| 공급자 · ID | 메시지 | 필드 |
 |---|---|---|
 | Kernel-Power 42 | The system is entering sleep. Sleep Reason: %3 | TargetState, EffectiveState, Reason, Flags, TransitionsToOn |
 | Kernel-Power 107 | The system has resumed from sleep. | TargetState, EffectiveState, WakeFromState, ProgrammedWakeTimeAc, ProgrammedWakeTimeDc, WakeRequesterTypeAc, WakeRequesterTypeDc |
@@ -180,11 +180,11 @@ User32 1074 의 메시지는 "The process … has initiated the [종류] of comp
 - **12 의 StartTime 은 0.5초 단위로 끊겨 있었습니다.** 이벤트 기록 시각보다 약 0.6초 빨랐습니다. 13 의 StopTime 은 이벤트 기록 시각과 같았습니다.
 - **6005 는 늦습니다.** 네 번의 부팅에서 6005 는 12 의 StartTime 보다 19~29초 늦었습니다. 6005 를 켜진 시각으로 쓰면 그만큼 늦게 잡힙니다.
 - **6013 은 하루 한 번도 남습니다.** 부팅 직후 한 번, 그 뒤 매일 03:00 UTC 쯤 한 번씩 남았습니다. 이 PC 시간대로는 정오입니다.
-- **6008 의 시각은 현지 시각 글자입니다.** 메시지는 "The previous system shutdown at 오전 5:57:17 on ‎2026-‎09-‎21 was unexpected." 꼴이었습니다. 날짜 글자 안에 보이지 않는 U+200E (왼쪽에서 오른쪽 표시) 문자가 들어 있었습니다. 글자를 그대로 파싱하면 깨지기 쉽습니다.
+- **6008 의 시각은 현지 시각 글자입니다.** 메시지는 "The previous system shutdown at 오전 5:57:17 on ‎2026-‎09-‎21 was unexpected." 형식이었습니다. 날짜 글자 안에 보이지 않는 U+200E (왼쪽에서 오른쪽 표시) 문자가 들어 있었습니다. 글자를 그대로 파싱하면 깨지기 쉽습니다.
 - **6008 의 이진 데이터에 두 시각이 있습니다.** 앞 32바이트는 SYSTEMTIME 두 개였습니다. 첫째는 현지 시각, 둘째는 UTC 였습니다.
 - **6005 의 이진 데이터 앞 16바이트도 SYSTEMTIME (UTC) 였습니다.**
 - **6008 의 시각은 꺼진 시각이 아닐 수 있습니다.** 한 번의 비정상 종료에서 6008 의 시각 (20:57:17 UTC) 은 다음 부팅 (21:44) 보다 47분 앞이었습니다. 그때 이 PC 는 모던 스탠바이 중이었습니다 (41 의 ConnectedStandbyInProgress true). 6008 시각은 "마지막으로 살아 있음을 기록한 시각" 일 수 있습니다. 이 설명은 해석입니다.
-- **PowerButtonTimestamp 는 FILETIME 으로 풀립니다.** 같은 41 의 값 134344115099009259 를 FILETIME 으로 풀면 2026-09-20T20:58:29.9Z 입니다. 6008 시각보다 약 1분 뒤입니다. 문서 예시 값도 FILETIME 으로 풀면 2018-06-07T14:16:57Z 입니다. 다만 이 칸이 FILETIME 이라는 설명은 Microsoft 문서에 없습니다. 이 해석은 값을 풀어 본 결과입니다.
+- **PowerButtonTimestamp 는 FILETIME 으로 풀립니다.** 같은 41 의 값 134344115099009259 를 FILETIME 으로 풀면 2026-09-20T20:58:29.9Z 입니다. 6008 시각보다 약 1분 뒤입니다. 문서 예시 값도 FILETIME 으로 풀면 2018-06-07T14:16:57Z 입니다. 다만 이 필드가 FILETIME 이라는 설명은 Microsoft 문서에 없습니다. 이 해석은 값을 풀어 본 결과입니다.
 - **6013 에는 시간대가 들어 있습니다.** 삽입 문자열 [6] 은 "-540 대한민국 표준시" 였습니다. 시간대 바이어스 (분) 와 현지화된 시간대 이름입니다. -540 은 UTC+9 입니다. 레지스트리의 REG_DWORD Bias 를 부호 없이 읽으면 4294966756 이 됩니다.
 - **깨어난 시각은 107 이 아니라 Power-Troubleshooter 1 에서 봅니다.** 한 번의 최대 절전에서 107 의 기록 시각은 05:54:36 이었습니다. Power-Troubleshooter 1 의 WakeTime 은 05:56:39 로 2분 뒤였습니다.
 
@@ -197,7 +197,7 @@ User32 1074 의 메시지는 "The process … has initiated the [종류] of comp
 5. **BugcheckCode 를 16진으로 읽습니다.** 10진수입니다. 159 는 0x9F 입니다.
 6. **6008 의 시각을 꺼진 시각으로 씁니다.** 모던 스탠바이 중이었다면 한참 앞설 수 있습니다.
 7. **모던 스탠바이 PC 에서 42·107 만 찾습니다.** 한 노트북에서 약 3개월 동안 506 은 319건, 507 은 314건, 566 은 687건이었습니다. 42·107 은 7건뿐이었습니다. 이런 PC 에서는 뚜껑을 닫고 여는 일이 506·507 로 남는 것으로 보입니다. 이 판단은 해석입니다.
-8. **절전 코드 값을 추측합니다.** 최대 절전 한 번에서 42 의 TargetState 는 5, 27 의 BootType 은 2 였습니다. Power-Troubleshooter 1 에 HiberWriteDuration 11073, HiberReadDuration 14298, HiberPagesWritten 2532886 이 있어 최대 절전과 맞습니다. 그러나 TargetState 5 와 BootType 2 만으로 최대 절전이라고 단정하지 않고, 다른 칸과 함께 판단합니다.
+8. **절전 코드 값을 추측합니다.** 최대 절전 한 번에서 42 의 TargetState 는 5, 27 의 BootType 은 2 였습니다. Power-Troubleshooter 1 에 HiberWriteDuration 11073, HiberReadDuration 14298, HiberPagesWritten 2532886 이 있어 최대 절전과 맞습니다. 그러나 TargetState 5 와 BootType 2 만으로 최대 절전이라고 단정하지 않고, 다른 필드와 함께 판단합니다.
 9. **6013 의 OS 이름을 믿습니다.** Windows 11 인데 6013 의 이진 데이터에는 "Windows 10 Home" 으로 적혀 있었습니다.
 10. **Security 로그에서 4608·4609 를 기대합니다.** 보안 로그는 빨리 밀려납니다. 한 PC 에서는 이틀 치만 남아 있었습니다. 로그 크기와 보존 기간은 [감사 정책과 로그 설정](audit-policy-log-settings.md)에서 다룹니다.
 
@@ -213,7 +213,7 @@ User32 1074 의 메시지는 "The process … has initiated the [종류] of comp
 
 `HKLM\SYSTEM\CurrentControlSet\Control\Windows\ShutdownTime` 은 REG_BINARY 8바이트 FILETIME (UTC) 이었습니다. 41 의 PowerButtonTimestamp 도 FILETIME 으로 풀렸습니다.
 
-아래 바이트는 설명을 위해 만든 예시입니다. Microsoft 문서 41 예시의 PowerButtonTimestamp 값 131728546170882432 를 8바이트 리틀 엔디언으로 적었습니다. 검체에서 나온 값이 아닙니다.
+아래 바이트는 설명을 위해 만든 예시입니다. Microsoft 문서 41 예시의 PowerButtonTimestamp 값 131728546170882432 를 8바이트 리틀 엔디언으로 적었습니다. 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 80 49 4B 31 6A FE D3 01
@@ -272,12 +272,12 @@ Reliability 키와 `Bootstat.dat` 에 대해 한 PC 에서 본 것은 다음과 
 **직접 만든 Windows 10·11 가상 머신**에서 해 봅니다. 각 단계의 시각을 적어 둡니다.
 
 1. 시작 메뉴로 재시작합니다. 1074·7002·6006·109·13·12·20·27·6009·6005·6013 이 어떤 순서로 남는지 봅니다. 레코드 번호 순서와 시각 순서를 비교합니다.
-2. `shutdown` 명령으로 이유와 설명을 넣어 재시작합니다. 1074 의 param 칸에 무엇이 들어가는지 봅니다.
+2. `shutdown` 명령으로 이유와 설명을 넣어 재시작합니다. 1074 의 param 필드에 무엇이 들어가는지 봅니다.
 3. 가상 머신의 전원을 강제로 끊습니다. 다음 부팅의 20·41·6008 을 확인합니다. 6008 의 시각과 실제로 끊은 시각을 비교합니다.
 4. 최대 절전에 들어갔다 나옵니다. 42·107·Power-Troubleshooter 1·27 의 값과 시각을 비교합니다. TargetState 와 BootType 값을 적습니다.
 5. `ShutdownTime` 과 Reliability 키 값을 정상 종료 뒤와 강제 종료 뒤에 각각 읽어 비교합니다.
 
-**NIST CFReDS 같은 공개 검체**에서는 다음을 풀어 봅니다.
+**NIST CFReDS 같은 공개 시험 데이터**에서는 다음을 풀어 봅니다.
 
 1. System 로그에서 Kernel-General 12·13 을 모두 뽑아 켜짐·꺼짐 구간 표를 만듭니다. 13 없이 12 가 이어지는 곳이 있습니까?
 2. 그 자리에 41 과 6008 이 있습니까? BugcheckCode 와 PowerButtonTimestamp 는 얼마입니까?

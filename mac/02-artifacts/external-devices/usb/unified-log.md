@@ -19,7 +19,7 @@ USB 저장 장치를 꽂으면 macOS가 새 디스크를 인식하고, 이때 �
 
 통합 로그는 macOS 10.12 Sierra에서 처음 들어왔습니다 [4]. 로그 본문은 `/private/var/db/diagnostics/` 아래 `Persist`, `Special`, `Signpost`, `HighVolume`, `timesync` 폴더의 tracev3 파일에 있고, 메시지 문자열을 풀 때 쓰는 파일은 `/private/var/db/uuidtext/` 아래 16진수 두 글자 폴더(`00`~`FF`)와 `dsc` 폴더에 있습니다 [4]. 이 파일들을 다른 곳으로 옮겨 분석할 때는 `.logarchive` 디렉터리로 묶습니다 [4][5].
 
-아래 메시지 문구는 apple-oss-distributions에 공개된 DiskArbitration 소스의 main 브랜치 기준이라, 어느 macOS 버전의 문구인지는 정해져 있지 않습니다. 버전에 따라 문구가 다를 수 있어서, 검체에서는 문구 전체보다 앞부분의 짧은 단어로 먼저 찾아보고 실제 문구를 확인한 뒤 거르는 조건을 좁힙니다.
+아래 메시지 문구는 apple-oss-distributions에 공개된 DiskArbitration 소스의 main 브랜치 기준이라, 어느 macOS 버전의 문구인지는 정해져 있지 않습니다. 버전에 따라 문구가 다를 수 있어서, 실제 로그에서는 문구 전체보다 앞부분의 짧은 단어로 먼저 찾아보고 실제 문구를 확인한 뒤 거르는 조건을 좁힙니다.
 
 ## 구조
 
@@ -35,7 +35,7 @@ USB 저장 장치를 꽂으면 macOS가 새 디스크를 인식하고, 이때 �
 | `DALogError` | `os_log_info` 와 `os_log_error` | info 한 번, error 한 번 |
 | `DALogFault` | `os_log_fault` | fault |
 
-데몬을 `-d` 옵션으로 디버그 모드로 켜면 `/var/log/<데몬 이름>.log` 파일을 직접 열어 `DALogInfo`·`DALogDebug` 메시지를 이 파일에도 씁니다 [1][3]. 평상시 검체에 이 파일이 있는지는 공개 자료가 없으니, 파일이 있으면 디버그 모드로 돌린 적이 있는지부터 따져 봅니다.
+데몬을 `-d` 옵션으로 디버그 모드로 켜면 `/var/log/<데몬 이름>.log` 파일을 직접 열어 `DALogInfo`·`DALogDebug` 메시지를 이 파일에도 씁니다 [1][3]. 평상시 맥에 이 파일이 있는지는 공개 자료가 없으니, 파일이 있으면 디버그 모드로 돌린 적이 있는지부터 따져 봅니다.
 
 ### 연결과 관련된 메시지
 
@@ -54,41 +54,41 @@ USB 저장 장치를 꽂으면 macOS가 새 디스크를 인식하고, 이때 �
 | 데몬 시작 | `server has been started.` | 기본 | DAMain.c [3] |
 | 데몬 시작 때 콘솔 사용자 | `console user = %@ [%d].` | 기본 | DAMain.c [3] |
 
-`queued solicitation` 메시지에는 요청 종류(`kind`)와 대상 디스크가 함께 적혀서, 어느 프로세스 쪽에서 마운트·언마운트·꺼내기를 요청했는지 짚는 단서가 될 수 있습니다. 다만 형식 문자열만 보고 한 해석이라, 앞의 `%@` 자리에 무엇이 찍히는지는 검체에서 확인한 뒤 씁니다.
+`queued solicitation` 메시지에는 요청 종류(`kind`)와 대상 디스크가 함께 적혀서, 어느 프로세스 쪽에서 마운트·언마운트·꺼내기를 요청했는지 짚는 단서가 될 수 있습니다. 다만 형식 문자열만 보고 한 해석이라, 앞의 `%@` 자리에 무엇이 찍히는지는 실제 로그로 확인한 뒤 씁니다.
 
 마운트가 끝났다는 메시지는 이 표에 없습니다. 마운트 쪽 흔적은 [마운트 기록 (DiskArbitration)](mount-records.md)에서 이어 봅니다.
 
 ### 서브시스템 이름
 
-로그 객체의 서브시스템(subsystem) 자리에는 `_kDADaemonName` 이라는 상수가 들어갑니다 [1]. 이 상수의 실제 문자열은 검체에서 확인해야 해서, 아래 예시는 서브시스템 대신 프로세스(process) 칸으로 거릅니다.
+로그 객체의 서브시스템(subsystem) 자리에는 `_kDADaemonName` 이라는 상수가 들어갑니다 [1]. 이 상수에 들어가는 문자열은 실제 로그에서 확인해야 해서, 아래 예시는 서브시스템 대신 프로세스(process) 필드로 거릅니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `created disk` 메시지가 있으면 그 시각에 macOS가 새 디스크를 인식했다는 뜻이고, 짝이 되는 `removed disk` 메시지와 함께 보면 디스크가 이 맥에 붙어 있던 구간을 어림할 수 있습니다. 볼륨 이름이 바뀐 메시지에는 새 볼륨 이름이 적혀서, 로그만으로도 장치를 볼륨 이름으로 가리킬 수 있습니다. 콘솔 사용자 관련 메시지는 디스크가 로그인·로그아웃과 맞물려 마운트되거나 언마운트된 경우를 보여 줍니다.
 
-**증명하지 못하는 것.** 형식 문자열에는 USB라는 말이 없어서, 메시지만으로는 이 디스크가 USB 저장 장치인지 디스크 이미지나 다른 외장 장치인지 가릴 수 없습니다. 장치의 제조사·제품 번호·시리얼 번호도 이 메시지들에는 없습니다. 어떤 파일을 읽거나 복사했는지, 누가 장치를 꽂았는지도 이 기록이 말해 주지 않고, 파일 쪽 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 같은 다른 기록에서 찾습니다.
+**증명하지 못하는 것.** 형식 문자열에는 USB라는 말이 없어서, 메시지만으로는 이 디스크가 USB 저장 장치인지 디스크 이미지나 다른 외장 장치인지 구분할 수 없습니다. 장치의 제조사·제품 번호·시리얼 번호도 이 메시지들에는 없습니다. 어떤 파일을 읽거나 복사했는지, 누가 장치를 꽂았는지도 이 기록으로는 알 수 없고, 파일 쪽 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 같은 다른 기록에서 찾습니다.
 
 ## 시각 해석
 
-통합 로그 레코드의 시각은 부팅 뒤 흐른 틱(mach continuous time)으로 적혀 있고, timebase(분자/분모)를 곱해 나노초로 바꿉니다 [4]. 벽시계 시각은 timesync 레코드에 적힌 벽시계 시각에 기준 틱과의 차이를 더해 구하고, timesync 파일이 없으면 tracev3 헤더의 벽시계 시각을 기준으로 씁니다 [4]. timesync의 벽시계 시각은 1970-01-01 00:00:00 UTC부터 흐른 나노초라서 결과는 UTC이고, 부팅 UUID가 tracev3 파일과 timesync 기록을 이어 줍니다 [4]. 계산 방법은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)과 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
+통합 로그 레코드의 시각은 부팅 뒤 흐른 틱(mach continuous time)으로 적혀 있고, timebase(분자/분모)를 곱해 나노초로 바꿉니다 [4]. 실제 시각(wall clock)은 timesync 레코드에 적힌 실제 시각에 기준 틱과의 차이를 더해 구하고, timesync 파일이 없으면 tracev3 헤더의 실제 시각을 기준으로 씁니다 [4]. timesync의 실제 시각 값은 1970-01-01 00:00:00 UTC부터 흐른 나노초라서 결과는 UTC이고, 부팅 UUID가 tracev3 파일과 timesync 기록을 이어 줍니다 [4]. 계산 방법은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)과 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
 
 `log show` 는 시간대를 따로 정하지 않으면 레코드가 쓰였을 때의 시간대로 시각을 보여 주므로, `--timezone` 으로 시간대를 정해 두고 뽑습니다 [5]. 보고서에 옮길 때는 UTC로 적었는지 현지 시각으로 적었는지 함께 밝힙니다.
 
 ## 함정과 한계
 
-`DALogInfo` 라는 함수 이름만 보고 연결 메시지를 info 수준으로 여기기 쉽지만, 소스를 따라가면 기본 수준으로 쓰여서 `log show` 에 `--info` 를 붙이지 않아도 보입니다 [1][5]. 반대로 `DALogDebug` 로 쓰는 자세한 메시지는 info 수준이라 `--info` 를 붙여야 나옵니다 [1][5]. 이 수준 대응은 main 브랜치 소스 기준이라 옛 버전 검체에서는 다를 수 있습니다. 메시지가 디스크에 얼마나 오래 남는지도 공개 자료가 없으니, 메시지가 없다는 사실만으로 장치를 꽂지 않았다고 쓰지 않습니다.
+`DALogInfo` 라는 함수 이름만 보고 연결 메시지를 info 수준으로 여기기 쉽지만, 소스를 따라가면 기본 수준으로 쓰여서 `log show` 에 `--info` 를 붙이지 않아도 보입니다 [1][5]. 반대로 `DALogDebug` 로 쓰는 자세한 메시지는 info 수준이라 `--info` 를 붙여야 나옵니다 [1][5]. 이 수준 대응은 main 브랜치 소스 기준이라 옛 버전 맥에서는 다를 수 있습니다. 메시지가 디스크에 얼마나 오래 남는지도 공개 자료가 없으니, 메시지가 없다는 사실만으로 장치를 꽂지 않았다고 쓰지 않습니다.
 
 로그아웃 메시지의 `unmounting  disk` 에는 소스 문구 그대로 공백이 두 칸 들어 있어서 [2], 한 칸 띄운 문구로 찾으면 걸리지 않습니다. 버전마다 문구가 달라질 수도 있어서 `eventMessage CONTAINS "disk"` 처럼 넓게 찾은 뒤 좁혀 가는 편이 안전합니다.
 
-장치의 제조사·시리얼 번호를 적는 커널 쪽 USB 메시지는 문구가 공개 소스로 정해져 있지 않아, 검체에서 직접 찾아 확인합니다.
+장치의 제조사·시리얼 번호를 적는 커널 쪽 USB 메시지는 문구가 공개 소스로 정해져 있지 않아, 실제 로그에서 직접 찾아 확인합니다.
 
-`log` 명령에는 로그를 지우는 `log erase` 하위 명령이 있습니다 [5]. 지운 흔적이 로그에 남는지는 공개 자료가 없으니, 기록이 비어 있는 구간이 나오면 저장 한도 때문에 밀려난 것인지 지워진 것인지 다른 기록과 맞춰 가립니다. 이 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+`log` 명령에는 로그를 지우는 `log erase` 하위 명령이 있습니다 [5]. 지운 흔적이 로그에 남는지는 공개 자료가 없으니, 기록이 비어 있는 구간이 나오면 저장 한도 때문에 밀려난 것인지 지워진 것인지 다른 기록과 맞춰 판별합니다. 이 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 
 tracev3 파일을 헥스로 따라가는 방법은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에 있고, 여기서는 macOS에 들어 있는 `log` 명령으로 연결 메시지를 뽑는 방법만 봅니다.
 
-살아 있는 맥에서는 `log collect` 로 로그를 `.logarchive` 로 모으고, 분석하는 맥에서 `log show --archive` 로 그 아카이브를 엽니다 [5]. 수집 절차는 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
+실행 중인 맥에서는 `log collect` 로 로그를 `.logarchive` 로 모으고, 분석하는 맥에서 `log show --archive` 로 그 아카이브를 엽니다 [5]. 수집 절차는 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
 
 ```sh
 # 수집한 아카이브에서 디스크 등장·사라짐 메시지만 UTC로 뽑는 예
@@ -96,7 +96,7 @@ log show --archive evidence.logarchive --info --timezone UTC --style ndjson \
   --predicate 'process == "diskarbitrationd" AND (eventMessage CONTAINS "created disk" OR eventMessage CONTAINS "removed disk")'
 ```
 
-시간 범위는 `--start`, `--end` 에 "YYYY-MM-DD" 나 "YYYY-MM-DD HH:MM:SS" 형식으로 주거나 `--last` 로 최근 구간만 볼 수 있습니다 [5]. 거르는 조건(predicate)에는 `subsystem`, `category`, `process`, `eventMessage`, `sender`, `processImagePath`, `senderImagePath`, `eventType`, `messageType` 칸을 쓸 수 있고 [5], 결과 형식은 `--style` 로 default, compact, json, ndjson, syslog 중에서 고릅니다 [5]. 타임라인 도구에 넣을 때는 한 줄에 레코드 하나가 들어가는 ndjson이 다루기 편합니다.
+시간 범위는 `--start`, `--end` 에 "YYYY-MM-DD" 나 "YYYY-MM-DD HH:MM:SS" 형식으로 주거나 `--last` 로 최근 구간만 볼 수 있습니다 [5]. 거르는 조건(predicate)에는 `subsystem`, `category`, `process`, `eventMessage`, `sender`, `processImagePath`, `senderImagePath`, `eventType`, `messageType` 필드를 쓸 수 있고 [5], 결과 형식은 `--style` 로 default, compact, json, ndjson, syslog 중에서 고릅니다 [5]. 타임라인 도구에 넣을 때는 한 줄에 레코드 하나가 들어가는 ndjson이 다루기 편합니다.
 
 뽑은 결과에서는 `created disk` 와 `removed disk` 를 같은 디스크끼리 짝지은 뒤, 그 사이에 나온 볼륨 이름 변경·`queued solicitation` 메시지를 시간순으로 붙여 봅니다.
 
@@ -106,7 +106,7 @@ log show --archive evidence.logarchive --info --timezone UTC --style ndjson \
 
 ## 실습
 
-USB 저장 장치를 꽂았다 뺀 테스트 맥이나 통합 로그가 들어 있는 공개 검체(NIST CFReDS 등)에서 아래 질문을 풀어 봅니다.
+USB 저장 장치를 꽂았다 뺀 테스트 맥이나 통합 로그가 들어 있는 공개 시험 자료(NIST CFReDS 등)에서 아래 질문을 풀어 봅니다.
 
 1. `--info` 없이 찾을 때와 붙여서 찾을 때 diskarbitrationd 메시지 수가 어떻게 다르고, `created disk` 메시지는 어느 쪽에서든 보이는가?
 2. 같은 디스크의 `created disk` 와 `removed disk` 를 짝지으면 장치가 붙어 있던 구간은 얼마인가?

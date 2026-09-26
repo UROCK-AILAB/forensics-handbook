@@ -73,13 +73,13 @@ SharePoint·OneDrive, Google Drive, Box, Dropbox, Slack, GitHub 에서 파일이
    | Slack | `file_public_link_created`, `file_shared`, `external_shared_channel_invite_created`, `external_shared_channel_connected`[15] | — | — | `file_public_link_revoked`[15] |
    | GitHub | `repo.access`(저장소 공개 범위 바뀜), `repo.pages_public`(Pages 사이트가 공개로 바뀜)[16] | `project.update_user_permission`[16] | — | `org.remove_outside_collaborator`[16] |
 
-   Dropbox 의 `shared_link_access_level`·`previous_value` 와 `shared_link_view` 의 `shared_link_owner` 는 과거 자료의 빈틈 때문에 빠져 있을 수 있습니다[14]. Slack 의 `file_public_link_created`·`file_shared` 에는 행위자가 속한 팀의 식별자가 들어 있어서, 외부 조직과 함께 쓰는 공유 채널에서 누가 했는지 가리는 데 씁니다[15]. GitHub 의 외부 협력자 변경은 Sigma 규칙 "Github Outside Collaborator Detected" 가 `org.remove_outside_collaborator`·`project.update_user_permission` 으로 잡습니다[19].
+   Dropbox 의 `shared_link_access_level`·`previous_value` 와 `shared_link_view` 의 `shared_link_owner` 는 과거 자료의 빈틈 때문에 빠져 있을 수 있습니다[14]. Slack 의 `file_public_link_created`·`file_shared` 에는 행위자가 속한 팀의 식별자가 들어 있어서, 외부 조직과 함께 쓰는 공유 채널에서 누가 했는지 가려내는 데 씁니다[15]. GitHub 의 외부 협력자 변경은 Sigma 규칙 "Github Outside Collaborator Detected" 가 `org.remove_outside_collaborator`·`project.update_user_permission` 으로 잡습니다[19].
 
 5. **링크로 실제 들어온 기록을 찾습니다.** Microsoft 365 는 `AnonymousLinkUsed`·`CompanyLinkUsed`·`SecureLinkUsed` 를 찾고, 외부인이 지정한 사람 링크를 쓴 경우는 `FileAccessed` 도 함께 찾습니다[1][2]. Google Drive 에서는 개인이나 특정 그룹으로 명시해 공유받은 경우가 아니면 도메인 밖 사용자가 anonymous 로 보이고, 로그인하지 않은 사용자의 편집·내려받기·보기도 기록됩니다[10]. 외부 사용자가 조직 소유 항목을 보거나 편집·내려받기·인쇄·삭제하면 기록은 우리 조직에만 남습니다[10]. Box 는 사용자 ID `2` 의 `DOWNLOAD` 를 찾고 같은 항목의 `SHARE` 시각과 맞춰 봅니다[13]. 접근 기록의 IP 해석은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md) 를 봅니다.
 
 6. **노출 기간을 계산합니다.** 노출 기간은 링크를 만든(또는 범위를 넓힌) 시각부터 없앤 시각이나 만료 시각까지입니다. Microsoft 365 에서 누구나 링크의 최대 만료 기간을 줄이면 기존 링크도 새 기간으로 짧아지고, 늘리면 기존 링크는 원래 만료 시각을 유지합니다[4]. 조직 구성원 링크에 만료 정책을 켜면 기존 링크는 바로 바뀌지 않고, 접근할 때 원래 만든 날짜를 기준으로 만료 여부를 판정합니다[3]. 외부 공유를 줄이거나 끄면 게스트는 보통 1시간 안에 접근을 잃고, 껐던 외부 공유를 다시 켜면 게스트가 접근을 되찾습니다[4]. 설정 변경 시각과 실제 접근 차단 시각 사이에 틈이 있다는 뜻이므로, 차단 직후의 접근 기록도 버리지 않고 봅니다.
 
-7. **공유가 사용자의 동작인지, 설정이 물려준 결과인지 가립니다.** Drive 에서 부모 폴더의 설정이 바뀌어 딸려서 바뀐 권한은 `change_document_visibility_hierarchy_reconciled`, `change_user_access_hierarchy_reconciled` 처럼 이름 끝에 `_hierarchy_reconciled` 가 붙은 이벤트로 남습니다[9]. Microsoft 365 에서 항목이 부모의 공유 권한을 더 이상 물려받지 않게 되면 `SharingInheritanceBroken` 이 남습니다[1]. 권한이 언제 누구에게서 이어졌는지 따라가는 방법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md) 에 있습니다.
+7. **공유가 사용자의 동작인지, 설정이 물려준 결과인지 구분합니다.** Drive 에서 부모 폴더의 설정이 바뀌어 딸려서 바뀐 권한은 `change_document_visibility_hierarchy_reconciled`, `change_user_access_hierarchy_reconciled` 처럼 이름 끝에 `_hierarchy_reconciled` 가 붙은 이벤트로 남습니다[9]. Microsoft 365 에서 항목이 부모의 공유 권한을 더 이상 물려받지 않게 되면 `SharingInheritanceBroken` 이 남습니다[1]. 권한이 언제 누구에게서 이어졌는지 따라가는 방법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md) 에 있습니다.
 
 8. **공유 뒤에 자료를 가져갔는지 이어 봅니다.** 공유 링크로 연 사람이 내려받거나 동기화한 기록, 조직 밖으로 복사한 기록은 [클라우드 저장소에서 자료를 빼 갔나](storage-exfiltration.md) 에서 다룹니다. 조사 대상이 퇴사 예정자이고 개인 계정으로 공유한 경우라면 [퇴사자가 자료를 가져갔나](departing-employee.md) 의 기준선 비교를 함께 씁니다. 모든 기록은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 한 줄로 합칩니다.
 
@@ -87,9 +87,9 @@ SharePoint·OneDrive, Google Drive, Box, Dropbox, Slack, GitHub 에서 파일이
 
 공유 기록으로는 어느 계정이 언제 어느 항목을 어떤 범위로 열었거나 넓혔는지(작업 이름과 바뀌기 전후 값), 그리고 그 링크나 권한으로 접근한 기록이 남았는지를 증명할 수 있습니다. 지정한 사람 링크와 초대는 `TargetUserOrGroupName` 으로 대상 계정을 보여 줍니다[2][6].
 
-증명하지 못하는 것은 링크를 받은 사람이 누구였는지입니다. 누구나 링크는 인증 없이 열리고 전달할 수 있으며, 조직 구성원 링크도 전달할 수 있습니다[3]. 링크가 어느 경로로 누구에게 넘어갔는지는 공유 기록에 없습니다. Google Drive 는 도메인 밖 사용자가 시작한 이벤트에 IP 를 기록하지 않아서[10] 외부 접근자를 IP 로도 좁히기 어렵습니다. 링크를 만든 기록만 있고 쓰기 기록이 없으면 "열어 두었다" 까지만 말할 수 있습니다. 링크를 없애면 그 링크로는 더 이상 열 수 없지만[3], 링크가 살아 있던 동안 받은 사본이 받은 쪽에 남았을 가능성은 로그로 판단할 수 없습니다.
+증명하지 못하는 것은 링크를 받은 사람이 누구였는지입니다. 누구나 링크는 인증 없이 열리고 전달할 수 있으며, 조직 구성원 링크도 전달할 수 있습니다[3]. 링크가 어느 경로로 누구에게 넘어갔는지는 공유 기록에 없습니다. Google Drive 는 도메인 밖 사용자가 시작한 이벤트에 IP 를 기록하지 않아서[10] 외부 접근자를 IP 로도 좁히기 어렵습니다. 링크를 만든 기록만 있고 쓰기 기록이 없으면 "열어 두었다" 까지만 말할 수 있습니다. 링크를 없애면 그 링크로는 더 이상 열 수 없지만[3], 링크가 유효하던 동안 받은 사본이 받은 쪽에 남았을 가능성은 로그로 판단할 수 없습니다.
 
-출처끼리 설명이 다른 곳이 두 군데 있습니다. SharePoint 링크 종류 문서는 누구나 링크로 한 접근은 감사할 수 없다고 적었고[3], 감사 활동 목록은 `AnonymousLinkUsed` 에 신원은 몰라도 IP 같은 정보가 남는다고 적었습니다[1]. 검체에 `AnonymousLinkUsed` 가 있으면 그 IP 를 쓰되 사람을 특정한 근거로 쓰지 않습니다. 또 `TargetUserOrGroupType` 값을 공유 감사 문서는 Member, Guest, SharePointGroup, SecurityGroup, Partner 로[2], 관리 활동 API 스키마는 Member, Guest, Group, Partner 로[6] 적었으므로, 걸러 내기 전에 검체에 실제로 나오는 값을 먼저 세어 봅니다.
+출처끼리 설명이 다른 곳이 두 군데 있습니다. SharePoint 링크 종류 문서는 누구나 링크로 한 접근은 감사할 수 없다고 적었고[3], 감사 활동 목록은 `AnonymousLinkUsed` 에 신원은 몰라도 IP 같은 정보가 남는다고 적었습니다[1]. 실제 로그에 `AnonymousLinkUsed` 가 있으면 그 IP 를 쓰되 사람을 특정한 근거로 쓰지 않습니다. 또 `TargetUserOrGroupType` 값을 공유 감사 문서는 Member, Guest, SharePointGroup, SecurityGroup, Partner 로[2], 관리 활동 API 스키마는 Member, Guest, Group, Partner 로[6] 적었으므로, 걸러 내기 전에 로그에 실제로 나오는 값을 먼저 세어 봅니다.
 
 ## 흔한 오판
 
@@ -97,7 +97,7 @@ SharePoint·OneDrive, Google Drive, Box, Dropbox, Slack, GitHub 에서 파일이
 - **수집 도구의 기본 목록만 봅니다.** DFIR-O365RC 의 `Get-O365Light` 이 SharePoint·OneDrive·Teams 에서 고르는 작업 목록(`OneDrive_Sharepoint_Teams_YammerOnly_operations`)에는 `AnonymousLinkCreated`·`AnonymousLinkUsed`·`SharingInvitationAccepted`·`SharingInvitationBlocked`·`SharingPolicyChanged` 는 있지만 `SecureLinkCreated`·`AddedToSecureLink`·`CompanyLinkCreated`·`SharingSet` 은 없습니다[20]. 지정한 사람 링크까지 보려면 `Get-O365Full` 로 레코드 유형 단위로 받습니다[20].
 - **`GroupAdded`·`AddedToGroup` 을 권한 상승으로 읽습니다.** 사용자가 처음 파일 공유 링크를 만들면 그 사용자의 OneDrive 사이트에 시스템 그룹이 생기면서 `GroupAdded` 가 남고, 편집 권한 링크를 만들 때도 생길 수 있습니다[1]. `AddedToGroup` 도 공유에 딸려 생길 수 있습니다[1].
 - **"Shared externally" 표시를 외부인이 봤다는 뜻으로 읽습니다.** 외부 공유를 꺼 둔 상태에서 외부 사용자를 허용하는 그룹과 공유하면, 그룹에 외부 구성원이 없어도 로그에 Shared externally 로 표시되고 외부 사용자는 실제로 열 수 없습니다[10].
-- **부모 폴더 공유로 바뀐 권한을 파일마다 따로 공유한 것으로 셉니다.** `_hierarchy_reconciled` 이벤트는 사용자가 파일마다 공유한 동작이 아닙니다[9].
+- **부모 폴더 공유로 바뀐 권한을 파일마다 따로 공유한 것으로 봅니다.** `_hierarchy_reconciled` 이벤트는 사용자가 파일마다 공유한 동작이 아닙니다[9].
 - **초대받은 주소와 수락한 주소를 같은 사람으로 봅니다.** `SharingInvitationAccepted` 에는 초대받은 사용자와 수락에 쓴 이메일 주소가 함께 들어 있고, 둘은 다를 수 있습니다[1].
 - **Drive 의 `target_user` 를 공유에 쓴 주소로 봅니다.** 한 Google 계정에 이메일 주소가 여럿이면 `target_user` 에는 공유에 쓴 주소가 아니라 표시 이메일이 들어갑니다[9]. 행위자도 별칭이 아니라 기본 주소로 남습니다[10].
 - **`ClientIP` 를 공유한 사람의 기기 IP 로 단정합니다.** 일부 서비스에서는 사용자 대신 서비스를 부른 웹용 Office 같은 앱의 IP 가 들어갑니다[5].
@@ -112,7 +112,7 @@ SharePoint·OneDrive, Google Drive, Box, Dropbox, Slack, GitHub 에서 파일이
 
 ## 함께 볼 페이지
 
-- 같은 갈래: [클라우드 저장소에서 자료를 빼 갔나](storage-exfiltration.md), [퇴사자가 자료를 가져갔나](departing-employee.md)
+- 같은 분류: [클라우드 저장소에서 자료를 빼 갔나](storage-exfiltration.md), [퇴사자가 자료를 가져갔나](departing-employee.md)
 - 아티팩트: [통합 감사 로그](../../02-artifacts/m365/unified-audit-log/index.md), [SharePoint·OneDrive](../../02-artifacts/m365/sharepoint-onedrive.md), [Drive 기록](../../02-artifacts/google-workspace/drive-audit.md), [관리 콘솔 감사 로그](../../02-artifacts/google-workspace/admin-audit.md), [Dropbox·Box 기록](../../02-artifacts/saas/dropbox-box.md), [Slack 감사 로그](../../02-artifacts/saas/slack.md), [GitHub 감사 로그](../../02-artifacts/saas/github.md)
 - 기법: [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), [클라우드 타임라인](../../03-techniques/analysis/timeline.md), [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)
 - 다른 판: [보안 제품이 남기는 AI 사용 기록 (DLP·CASB)](https://urock-ailab.github.io/forensics-handbook/ai/02-artifacts/network-enterprise/dlp-casb.html), [Windows 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)

@@ -13,7 +13,7 @@ nav_order: 290
 
 웹 판은 설치 프로그램 없이 브라우저 탭에서 돌아가고, 활동 저장 (Keep Activity) 설정이 켜져 있으면 프롬프트와 대화 내용이 계정 쪽에 저장됩니다. Gemini Live 를 쓴 경우에는 녹취·음성·파일·이미지·YouTube 영상에 화면 공유와 영상 입력까지 남습니다 [1]. 보관 기간, 설정을 껐을 때의 72시간 보관, 사람 검토를 거친 사본 같은 서버 쪽 규칙은 [Gemini](index.md) 허브에 정리했고 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에서 다룹니다.
 
-웹 판을 쓴 흔적을 찾을 때는 아래 주소가 기준이 됩니다 [1][2]. 방문 기록에서 이 주소가 보이면 사용자가 어느 화면을 열었는지 가늠할 수 있습니다.
+웹 판을 쓴 흔적을 찾을 때는 아래 주소가 기준이 됩니다 [1][2]. 방문 기록에서 이 주소가 보이면 사용자가 어느 화면을 열었는지 짐작할 수 있습니다.
 
 | 주소 | 화면 | 조사에서 쓰는 곳 |
 |---|---|---|
@@ -34,7 +34,7 @@ nav_order: 290
 | 캐시 | 받아 온 응답·그림 조각 |
 | 다운로드 기록과 다운로드 폴더 | 생성한 이미지 등 내려받은 파일 |
 
-이 가운데 대화 하나하나의 주소 모양, 쿠키 이름, 저장소 키 이름, 저장소와 캐시에 대화 사본이 남는지는 시험 계정으로 만든 검체에서 확인해야 합니다.
+이 가운데 대화 하나하나의 주소 모양, 쿠키 이름, 저장소 키 이름, 저장소와 캐시에 대화 사본이 남는지는 시험 계정으로 만든 데이터에서 확인해야 합니다.
 
 ## 위치와 OS별 차이
 
@@ -63,11 +63,11 @@ nav_order: 290
 
 활동을 지우면 화면에서는 바로 사라지고, 저장 시스템에서 영구 삭제 절차가 시작됩니다 [2]. 그래서 활동 목록에 없는 대화라도 한때 있었다가 지웠을 수 있고, 활동 저장을 꺼 둔 상태의 대화나 임시 채팅은 처음부터 목록에 나오지 않습니다. 목록이 비어 있다는 사실만으로 Gemini 를 쓰지 않았다고 쓰지 않습니다.
 
-`gemini.google.com` 방문은 Gemini 를 쓴 흔적이지만, Google 의 다른 서비스나 Workspace 안에서 Gemini 를 쓴 경우는 다른 흔적을 남깁니다([Google Workspace의 Gemini](../../office-integrations/workspace-gemini.md)). 브라우저 캐시나 저장소에서 대화 조각을 찾는 일반 방법은 [대화 내용 되살리기](../../../03-techniques/analysis/content-recovery.md)에 있지만, Gemini 웹 판에서 조각이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+`gemini.google.com` 방문은 Gemini 를 쓴 흔적이지만, Google 의 다른 서비스나 Workspace 안에서 Gemini 를 쓴 경우는 다른 흔적을 남깁니다([Google Workspace의 Gemini](../../office-integrations/workspace-gemini.md)). 브라우저 캐시나 저장소에서 대화 조각을 찾는 일반 방법은 [대화 내용 되살리기](../../../03-techniques/analysis/content-recovery.md)에 있지만, Gemini 웹 판에서 조각이 남는지는 실제 브라우저 프로필로 확인해야 합니다.
 
 ## 직접 분석해 보기
 
-크롬 계열이라면 프로필 폴더의 `History` SQLite 파일을 사본으로 떠서 공개 도구인 DB Browser for SQLite 로 열고, 주소에 `gemini.google.com` 또는 `myactivity.google.com/product/gemini` 가 들어간 행을 찾습니다. 표와 칸 이름, 시각 값을 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 따릅니다. 파일을 헥스 편집기로 열어 주소 문자열 `gemini.google.com` 을 찾아보면 지운 행의 흔적이 빈 페이지에 남아 있는지도 가늠할 수 있습니다.
+크롬 계열이라면 프로필 폴더의 `History` SQLite 파일을 사본으로 떠서 공개 도구인 DB Browser for SQLite 로 열고, 주소에 `gemini.google.com` 또는 `myactivity.google.com/product/gemini` 가 들어간 행을 찾습니다. 표와 열 이름, 시각 값을 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 따릅니다. 파일을 헥스 편집기로 열어 주소 문자열 `gemini.google.com` 을 찾아보면 지운 행의 흔적이 빈 페이지에 남아 있는지도 짐작할 수 있습니다.
 
 ## 교차 검증
 
@@ -80,7 +80,7 @@ nav_order: 290
 
 ## 실습
 
-시험용 Google 계정으로 검체를 만들어 아래 질문을 직접 풀어 봅니다.
+시험용 Google 계정으로 시험 데이터를 만들어 아래 질문을 직접 풀어 봅니다.
 
 1. 웹 판에서 대화를 두 번 나눈 뒤 크롬 `History` 파일을 열면, 대화마다 다른 주소가 남습니까, 아니면 `gemini.google.com` 한 줄만 남습니까?
 2. 활동 화면에서 대화 하나를 지운 뒤, 방문 기록과 활동 목록에는 각각 무엇이 남습니까?

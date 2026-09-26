@@ -6,11 +6,11 @@ nav_order: 1430
 
 # 어떤 앱을 언제 썼나 (App Usage)
 
-특정 앱을 언제부터 언제까지 앞 화면에 띄워 썼는지, 그 앱이 기기에 언제 설치됐고 언제 통신했는지를 기록으로 되짚는 시나리오입니다. 화면이 켜져 있었는지와 하루 사용 시간은 [폰 사용 시간 재구성 (Usage Time)](usage-time.md) 에서 다루고, 이 페이지는 "어느 앱을, 언제" 에 집중합니다.
+특정 앱을 언제부터 언제까지 앞 화면에 띄워 썼는지, 그 앱이 기기에 언제 설치됐고 언제 통신했는지를 기록으로 거슬러 올라가 찾는 시나리오입니다. 화면이 켜져 있었는지와 하루 사용 시간은 [폰 사용 시간 재구성 (Usage Time)](usage-time.md) 에서 다루고, 이 페이지는 "어느 앱을, 언제" 에 집중합니다.
 
 ## 조사 질문
 
-"사고 시각에 운전자가 메신저 앱을 띄워 두었나", "이 앱을 처음 쓴 때는 언제인가", "지운 앱을 예전에 쓴 적이 있나" 같은 질문입니다. 답은 네 갈래 기록에서 나오는데, 앱이 앞 화면에 있던 구간, 앱을 설치하거나 띄운 사건, 일정 구간마다 모은 사용 시간 합계, 앱이 통신한 흔적이 그것입니다. 앞의 두 갈래가 "언제" 에 가장 가깝고, 합계와 통신 흔적은 그 구간을 받쳐 주는 보조 근거로 씁니다.
+"사고 시각에 운전자가 메신저 앱을 띄워 두었나", "이 앱을 처음 쓴 때는 언제인가", "지운 앱을 예전에 쓴 적이 있나" 같은 질문입니다. 답은 네 가지 기록에서 나오는데, 앱이 앞 화면에 있던 구간, 앱을 설치하거나 띄운 사건, 일정 구간마다 모은 사용 시간 합계, 앱이 통신한 흔적이 그것입니다. 앞의 두 가지가 "언제" 에 가장 가깝고, 합계와 통신 흔적은 그 구간을 받쳐 주는 보조 근거로 씁니다.
 
 ## 먼저 확인할 것
 
@@ -23,7 +23,7 @@ nav_order: 1430
 | iOS 11~15 | knowledgeC.db 의 `/app/inFocus` 스트림 [1][2] | 보관 기간은 약 4주입니다 [1] |
 | iOS 16 | `/app/inFocus` 와 설치 기록 등이 knowledgeC.db 에서 빠지고 바이옴으로 옮겨 갔습니다 [3] | 바이옴 파일은 SEGB v1 형식입니다 [16] |
 | iOS 17~26 | 바이옴, 같은 위치 [17] | SEGB v2 형식이고 [17], `ScreenTime.AppUsage` 스트림이 보입니다 [4] |
-| iOS 27 | 스트림 이름과 위치는 공개 자료 없음 | 검체의 실제 폴더와 공개 도구의 해석을 대조합니다 |
+| iOS 27 | 스트림 이름과 위치는 공개 자료 없음 | 실제 기기의 폴더와 공개 도구의 해석을 대조합니다 |
 
 **시각 기준**은 knowledgeC.db 와 바이옴이 Mac 절대 시각이고, 전원 로그는 Unix 시각이지만 내부 시계 보정 값(`PLStorageOperator_EventForward_TimeOffset.system`)을 더해야 합니다 [8]. 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따르고, 번들 ID 를 앱 이름으로 옮기는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
 
@@ -41,7 +41,7 @@ nav_order: 1430
 | 8 | 앱별 데이터 사용량 — 백업 WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZPROCESS` 의 `ZFIRSTTIMESTAMP` 는 그 프로세스를 처음 기록한 때, `ZTIMESTAMP` 는 가장 최근 활동으로 보입니다 [13] | [앱별 데이터 사용량](../../02-artifacts/network/data-usage.md) |
 | 9 | 백업에서 보이는 앱 상태 — HomeDomain `Library/FrontBoard/applicationState.db`, `Library/SpringBoard/IconState.plist`, 백업 `Info.plist` 의 `Installed Applications` 키 | 수집 시점에 어떤 앱이 있었고 홈 화면 어디에 놓였는지 | [설치된 앱](../../02-artifacts/app-usage/installed-apps.md) |
 
-iOS 16 에서 앱을 띄운 경로는 `com.apple.SpringBoard.transitionReason.homescreen`, `…externalrequest`, `…appswitcher`, `…spotlight` 같은 값으로 남습니다 [3]. 사용자가 홈 화면에서 직접 눌렀는지, 다른 앱의 요청으로 열렸는지를 가르는 데 쓸 수 있지만, 값 전체 목록은 공개된 자료가 없어 검체에서 확인합니다.
+iOS 16 에서 앱을 띄운 경로는 `com.apple.SpringBoard.transitionReason.homescreen`, `…externalrequest`, `…appswitcher`, `…spotlight` 같은 값으로 남습니다 [3]. 사용자가 홈 화면에서 직접 눌렀는지, 다른 앱의 요청으로 열렸는지를 가르는 데 쓸 수 있지만, 값 전체 목록은 실제 데이터로 확인해야 합니다.
 
 암호 없는 로컬 백업에는 이 밖에도 앱 사용과 이름이 닿아 있는 설정 파일이 보입니다. HomeDomain `Library/Preferences/com.apple.ScreenTimeAgent.plist` 에 `ScreenTimeEnabled`, `UsageGenesisDate`, `LastTimeZoneName` 키가, `com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageLaunchesIntervalStartDate` 같은 날짜 키가, `com.apple.mt.lastLaunch.plist` 의 `launches` 아래에 번들 ID 이름의 키가 있습니다. 각 값의 뜻을 설명한 공개 자료가 없어서, 앱을 쓴 시각의 근거로 쓰기 전에 시험 기기에서 앱을 띄우고 값이 어떻게 바뀌는지 먼저 대조합니다.
 
@@ -63,7 +63,7 @@ iOS 16 에서 앱을 띄운 경로는 `com.apple.SpringBoard.transitionReason.ho
    ```
 
    `com.example.app` 은 자리 표시용 번들 ID 입니다.
-4. iOS 16 이후라면 바이옴 `App.InFocus` 에서 Foreground·Background 전환을 시각 순으로 늘어놓아 구간을 만듭니다. SEGB 파일을 직접 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 과 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 를 봅니다. `remote` 폴더의 기록은 같은 Apple 계정의 다른 기기에서 온 것이라 [5][12] 빼고 셉니다.
+4. iOS 16 이후라면 바이옴 `App.InFocus` 에서 Foreground·Background 전환을 시각 순으로 늘어놓아 구간을 만듭니다. SEGB 파일을 직접 읽는 법은 [SEGB 형식](../../01-foundations/data-formats/segb.md) 과 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 를 봅니다. `remote` 폴더의 기록은 같은 Apple 계정의 다른 기기에서 온 것이라 [5][12] 빼고 봅니다.
 5. `AppLaunch` 의 전환 이유와 `App.Install` 의 시각을 붙여 "언제 설치했고, 어떤 경로로 띄웠는지" 를 구간 옆에 적습니다 [4][6].
 6. 화면 사용 시간 DB 와 전원 로그의 합계를 4번 구간의 합과 비교합니다. 합계가 구간보다 크게 많다면 가족 공유 기기의 기록이 섞였는지 [11], 스트림 기록 수 제한으로 빠른 전환이 빠졌는지 [7] 를 따집니다.
 7. 앱별 데이터 사용량 DB 의 `ZPROCESS` 에서 번들 이름으로 행을 찾아 처음·마지막 기록 시각을 붙입니다. `ZLIVEUSAGE.ZHASPROCESS` 는 `ZPROCESS.Z_PK` 와 이어지고, iLEAPP 는 `ZKIND` 가 257 인 행을 뺍니다 [9]. `ZKIND` 값의 뜻은 문서화되지 않았습니다 [9]. 시각은 Mac 절대 시각입니다 [9].
@@ -75,15 +75,15 @@ iOS 16 에서 앱을 띄운 경로는 `com.apple.SpringBoard.transitionReason.ho
 
 도구가 보여 주는 Foreground·Background 표시를 원본 값처럼 적는 일도 조심합니다. 필드 3 의 1·0 을 Foreground·Background 로 보는 것은 해석이라서 [5], 보고서에는 원래 값과 해석을 나눠 적습니다.
 
-전원 로그의 앱 실행 시간을 실행 시각으로 쓰는 실수도 있습니다. `PLAppTimeService_Aggregate_AppRunTime` 은 표본 구간마다 모은 값이라서 [8], 그 구간 안 어느 때에 앱을 썼는지는 말하지 않습니다.
+전원 로그의 앱 실행 시간을 실행 시각으로 쓰는 실수도 있습니다. `PLAppTimeService_Aggregate_AppRunTime` 은 표본 구간마다 모은 값이라서 [8], 그 구간 안 어느 때에 앱을 썼는지는 나와 있지 않습니다.
 
-데이터 사용량 DB 에 행이 없다고 앱을 쓰지 않았다고 읽는 일도 있습니다. `ZLIVEUSAGE` 에는 셀룰러 칸 `ZWWANIN`·`ZWWANOUT` 만 있고 Wi-Fi 칸 `ZWIFIIN`·`ZWIFIOUT` 이 없을 수 있어서, iLEAPP 도 Wi-Fi 칸이 없을 때는 셀룰러 칸만 읽는 쿼리를 씁니다 [9]. 거꾸로 이 DB 는 백업에 들어가 오래된 기록이 남기도 해서, 2013년 기록이 남은 기기도 있습니다 [13].
+데이터 사용량 DB 에 행이 없다고 앱을 쓰지 않았다고 읽는 일도 있습니다. `ZLIVEUSAGE` 에는 셀룰러 열 `ZWWANIN`·`ZWWANOUT` 만 있고 Wi-Fi 열 `ZWIFIIN`·`ZWIFIOUT` 이 없을 수 있어서, iLEAPP 도 Wi-Fi 열이 없을 때는 셀룰러 열만 읽는 쿼리를 씁니다 [9]. 거꾸로 이 DB 는 백업에 들어가 오래된 기록이 남기도 해서, 2013년 기록이 남은 기기도 있습니다 [13].
 
 ## 보고서 문장 예
 
 > 바이옴 `App.InFocus` 스트림의 `local` 폴더에 (번들 ID) 가 (시각, UTC) 에 앞 화면으로 전환되고 (시각, UTC) 에 뒤로 전환된 기록이 있습니다. 이 기록은 해당 구간에 이 앱이 이 기기의 앞 화면에 있었다는 것까지 보여 주며, 누가 조작했는지와 앱 안에서 무엇을 했는지는 보여 주지 않습니다.
 
-> `DataUsage.sqlite` 의 `ZPROCESS` 표에 (번들 이름) 행이 있고, `ZFIRSTTIMESTAMP` 는 (시각, UTC), `ZTIMESTAMP` 는 (시각, UTC) 입니다. 두 칸의 뜻은 공개 자료의 해석을 따른 것이며, 이 앱의 통신 기록이 이 DB 에 이 기간에 걸쳐 남아 있다는 뜻으로만 씁니다.
+> `DataUsage.sqlite` 의 `ZPROCESS` 표에 (번들 이름) 행이 있고, `ZFIRSTTIMESTAMP` 는 (시각, UTC), `ZTIMESTAMP` 는 (시각, UTC) 입니다. 두 열의 뜻은 공개 자료의 해석을 따른 것이며, 이 앱의 통신 기록이 이 DB 에 이 기간에 걸쳐 남아 있다는 뜻으로만 씁니다.
 
 ## 함께 볼 페이지
 

@@ -9,11 +9,11 @@ nav_order: 1390
 
 ## 한 줄 요약
 
-앱의 캐시 폴더와 WebView 데이터 폴더에서 앱이 받아 온 콘텐츠와 앱 안에서 연 웹 페이지의 흔적을 찾고, 그 흔적이 무엇을 말하고 무엇을 말하지 못하는지 가리는 방법입니다.
+앱의 캐시 폴더와 WebView 데이터 폴더에서 앱이 받아 온 콘텐츠와 앱 안에서 연 웹 페이지의 흔적을 찾고, 그 흔적으로 무엇을 알 수 있고 무엇을 알 수 없는지 구분하는 방법입니다.
 
 ## 언제 쓰나
 
-앱 자체의 DB 에는 남지 않은 이미지·웹 페이지·응답을 찾을 때 씁니다. 앱 안에 WebView 를 품은 앱은 브라우저가 아니어도 자기 폴더에 웹 방문 기록과 HTTP 캐시를 남길 수 있고, 아래에서 보듯 공개 도구도 그런 기록을 찾아 앱 이름으로 보여 줍니다. 앱 폴더 전체를 훑는 순서는 [처음 보는 앱 분석 순서](unknown-apps.md), 브라우저 앱 자체는 [크롬 (Chrome for Android)](../../../02-artifacts/browsers/chrome/index.md) 과 [삼성 인터넷 (Samsung Internet)](../../../02-artifacts/browsers/samsung-internet.md) 페이지에서 다룹니다.
+앱 자체의 DB 에는 남지 않은 이미지·웹 페이지·응답을 찾을 때 씁니다. 앱 안에 WebView 를 품은 앱은 브라우저가 아니어도 자기 폴더에 웹 방문 기록과 HTTP 캐시를 남길 수 있고, 아래에서 보듯 공개 도구도 그런 기록을 찾아 앱 이름으로 보여 줍니다. 앱 폴더 전체를 살펴보는 순서는 [처음 보는 앱 분석 순서](unknown-apps.md), 브라우저 앱 자체는 [크롬 (Chrome for Android)](../../../02-artifacts/browsers/chrome/index.md) 과 [삼성 인터넷 (Samsung Internet)](../../../02-artifacts/browsers/samsung-internet.md) 페이지에서 다룹니다.
 
 ## 캐시의 성격
 
@@ -32,7 +32,7 @@ ALEAPP 의 chrome.py 는 Chromium 계열 방문 기록 DB 를 아래 경로 패�
 
 `app_webview` 경로에서 찾은 기록은 경로 속 `<패키지>/app_webview/Default` 의 패키지 폴더 이름을 브라우저 이름 자리에 넣어 보여 주고 [3], 그래서 WebView 기록은 그 WebView 를 품은 앱 이름으로 나옵니다. `app_sbrowser` 경로의 기록은 ALEAPP 가 'Browser' 라는 이름을 붙입니다 [3]. `getDir()` 로 만든 하위 폴더의 조상은 늘 `ApplicationInfo.dataDir` 이고 [1], `app_webview` 같은 `app_` 로 시작하는 폴더도 이 방식으로 생긴 것으로 보입니다.
 
-History DB 는 브라우저와 같은 Chromium 형식이라서, 방문 URL 은 `urls`, 방문 한 번 한 번은 `visits`, 내려받기는 `downloads` 와 `downloads_url_chains`, 검색어는 `keyword_search_terms` 표에 있습니다 [3]. 옛 DB 에는 `downloads` 표의 `tab_url`, `last_access_time` 칸이 없을 수 있습니다 [3]. 표와 칸의 자세한 해석은 [크롬 (Chrome for Android)](../../../02-artifacts/browsers/chrome/index.md) 페이지에 있고, 시각 값은 1601-01-01 UTC 부터 흐른 마이크로초(WebKit 시각)이며 [2][3] 옮기는 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다. WebView 의 쿠키·Local Storage·IndexedDB 파일 경로는 검체에서 확인하고, IndexedDB 형식은 [LevelDB와 IndexedDB](../../../01-foundations/data-formats/leveldb-indexeddb.md) 페이지를 봅니다.
+History DB 는 브라우저와 같은 Chromium 형식이라서, 방문 URL 은 `urls`, 방문 한 번 한 번은 `visits`, 내려받기는 `downloads` 와 `downloads_url_chains`, 검색어는 `keyword_search_terms` 표에 있습니다 [3]. 옛 DB 에는 `downloads` 표의 `tab_url`, `last_access_time` 열이 없을 수 있습니다 [3]. 표와 열의 자세한 해석은 [크롬 (Chrome for Android)](../../../02-artifacts/browsers/chrome/index.md) 페이지에 있고, 시각 값은 1601-01-01 UTC 부터 흐른 마이크로초(WebKit 시각)이며 [2][3] 옮기는 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다. WebView 의 쿠키·Local Storage·IndexedDB 파일 경로는 실제 기기에서 확인하고, IndexedDB 형식은 [LevelDB와 IndexedDB](../../../01-foundations/data-formats/leveldb-indexeddb.md) 페이지를 봅니다.
 
 ## HTTP 캐시 구조 (Chromium Simple Cache)
 
@@ -62,7 +62,7 @@ ALEAPP 시험 이미지에서는 `cache/Cache/Cache_Data` 모양을 브라우저
 | 6 | key 의 SHA-256 | 있을 때만 |
 | 7 | 두 번째 EOF 기록 | magic `0xf4fa6f45970d41d8`, flags, CRC, stream 크기 |
 
-`_1` 파일은 같은 머리 뒤에 stream 2 를 담습니다 [2]. SimpleFileHeader 와 EOF 기록은 모두 리틀 엔디언 24바이트(8바이트 magic 뒤에 4바이트 칸 네 개, 마지막 칸은 채움)이고, 두 번째 EOF 기록의 flags 에 key SHA-256 표시 비트가 켜져 있을 때만 32바이트 해시가 붙습니다 [2]. 헥스로 따라갈 때는 파일 끝의 EOF 기록부터 거꾸로 읽어 stream 0 의 위치를 잡습니다.
+`_1` 파일은 같은 머리 뒤에 stream 2 를 담습니다 [2]. SimpleFileHeader 와 EOF 기록은 모두 리틀 엔디언 24바이트(8바이트 magic 뒤에 4바이트 필드 네 개, 마지막 필드는 채움)이고, 두 번째 EOF 기록의 flags 에 key SHA-256 표시 비트가 켜져 있을 때만 32바이트 해시가 붙습니다 [2]. 헥스로 따라갈 때는 파일 끝의 EOF 기록부터 거꾸로 읽어 stream 0 의 위치를 잡습니다.
 
 stream 0 은 flags 로 시작하고, flags 의 31번 비트가 켜져 있으면 추가 flags 가 이어집니다. 그 뒤에 요청 시각과 응답 시각이 1601-01-01 UTC 부터 흐른 마이크로초로 적히고, 추가 flags 의 2번 비트가 켜져 있으면 원래 응답 시각이 하나 더 붙은 다음, NUL 로 나뉜 응답 헤더가 옵니다 [2]. 본문(stream 1, stream 2)은 서버가 보낸 그대로라서 `Content-Encoding` 이 적용된 상태, 곧 압축된 상태일 수 있습니다 [2]. 본문을 열어 볼 때는 stream 0 의 응답 헤더에서 인코딩을 먼저 확인합니다.
 
@@ -75,15 +75,15 @@ key 는 `credential_key/post_key/[isolation_key]url` 모양입니다. 세 번째
 ## 절차
 
 1. **캐시 폴더와 WebView 폴더를 통째로 확보합니다.** 캐시는 저장 공간이 부족하면 지워질 수 있어서 [1], 켜져 있는 기기라면 되도록 일찍 확보합니다. 확보 방식은 [모바일 증거 확보 (Acquisition)](../../acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
-2. **앱마다 캐시 모양을 가립니다.** 위 표처럼 브라우저형(`cache/Cache/Cache_Data`)인지 WebView 형(`cache/WebView` 아래)인지 보고, `index-dir/the-real-index` 와 `_0`·`_1` 파일이 있으면 `_0` 파일 앞머리의 magic 을 확인해 Simple Cache 인지 가립니다.
-3. **색인과 항목 파일을 따로 셉니다.** 색인에 있는 해시 수와 `_0` 파일 수를 견줘 차이를 적어 둡니다.
+2. **앱마다 캐시 모양을 구분합니다.** 위 표처럼 브라우저형(`cache/Cache/Cache_Data`)인지 WebView 형(`cache/WebView` 아래)인지 보고, `index-dir/the-real-index` 와 `_0`·`_1` 파일이 있으면 `_0` 파일 앞머리의 magic 을 확인해 Simple Cache 인지 확인합니다.
+3. **색인과 항목 파일을 따로 셉니다.** 색인에 있는 해시 수와 `_0` 파일 수를 비교해 차이를 적어 둡니다.
 4. **항목마다 key·응답 시각·응답 헤더를 뽑습니다.** key 에서 URL 을, stream 0 에서 응답 시각과 헤더를 얻고, 색인이 있으면 마지막 사용 시각을 붙입니다.
 5. **본문은 필요한 항목만 풉니다.** 응답 헤더의 인코딩대로 풀고, 이미지나 문서가 나오면 파일 형식을 따로 확인합니다.
 6. **History DB 와 맞춰 봅니다.** 같은 앱 폴더에 WebView 의 History DB 가 있으면 방문 기록과 캐시 응답 시각을 한 시간 축에 올리고, 방법은 [타임라인 작성 (Timeline)](../timeline/index.md) 에 있습니다.
 
 ## 도구
 
-ALEAPP 는 chrome.py 로 History DB 를, chromiumHttpCache.py 로 Simple Cache 를 읽습니다 [2][3]. 폴더 목록에는 exoplayerCaches.py(동영상 재생 캐시), imagemngCache.py, cachelocation.py, browserCachechrome.py, browserCachefirefox.py 같은 캐시 관련 모듈도 있습니다 [4]. 이미지 로딩·통신 라이브러리가 만드는 캐시 폴더는 [처음 보는 앱 분석 순서](unknown-apps.md) 대로 형식부터 가립니다.
+ALEAPP 는 chrome.py 로 History DB 를, chromiumHttpCache.py 로 Simple Cache 를 읽습니다 [2][3]. 폴더 목록에는 exoplayerCaches.py(동영상 재생 캐시), imagemngCache.py, cachelocation.py, browserCachechrome.py, browserCachefirefox.py 같은 캐시 관련 모듈도 있습니다 [4]. 이미지 로딩·통신 라이브러리가 만드는 캐시 폴더는 [처음 보는 앱 분석 순서](unknown-apps.md) 대로 형식부터 구분합니다.
 
 ## 함정과 한계
 

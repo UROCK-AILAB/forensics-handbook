@@ -16,9 +16,9 @@ Google Play 보호 기능(Play Protect)의 악성 앱 분류에서 감시 앱(St
 
 ## 먼저 확인할 것
 
-- **OS 버전과 제조사** — 이 페이지의 설정 키와 알림 칸은 버전이나 제조사에 따라 없거나 이름이 다를 수 있으니 검체의 버전을 먼저 적어 둡니다. 사이드로드한 앱의 권한 제한처럼 버전마다 달라지는 보호 장치는 [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md) 에서 이어 봅니다.
+- **OS 버전과 제조사** — 이 페이지의 설정 키와 알림 필드는 버전이나 제조사에 따라 없거나 이름이 다를 수 있으니 분석 대상 기기의 버전을 먼저 적어 둡니다. 사이드로드한 앱의 권한 제한처럼 버전마다 달라지는 보호 장치는 [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md) 에서 이어 봅니다.
 - **시간대** — `dumpsys notification` 은 `mCreationTimeMs`, `mUpdateTimeMs`, `mVisibleSinceMs` 를 숫자가 아니라 한글이 섞일 수 있는 날짜 문자열 뒤에 `+####` 모양의 시차를 붙여 찍습니다. 이 시차가 기기 시간대와 같은지는 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 에서 확인합니다.
-- **사용자와 프로필** — 알림 기록에는 줄마다 `uid=`, `userId=` 칸이 있습니다. 감시 앱이 업무 프로필이나 다른 사용자 공간에 숨어 있을 수 있어서 사용자 ID 별로 나눠 봅니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
+- **사용자와 프로필** — 알림 기록에는 줄마다 `uid=`, `userId=` 필드가 있습니다. 감시 앱이 업무 프로필이나 다른 사용자 공간에 숨어 있을 수 있어서 사용자 ID 별로 나눠 봅니다([보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md)).
 - **수집 범위** — `dumpsys` 와 `settings` 출력은 adb 일반 셸 권한으로 받을 수 있습니다. `dumpsys notification` 은 받는 순간 떠 있는 알림 목록이라서 받기 전에 알림을 지우거나 앱을 끄지 않습니다. 앱 데이터까지 필요하면 확보 방식을 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 정합니다.
 
 ## 볼 아티팩트와 순서
@@ -35,7 +35,7 @@ Google Play 보호 기능(Play Protect)의 악성 앱 분류에서 감시 앱(St
 
 ## 분석 흐름
 
-1. **감시에 쓰이는 권한을 쥔 앱부터 모읍니다.** 감시 앱은 접근성 서비스, 알림 리스너, 기기 관리자 같은 기능을 많이 씁니다. settings secure 키 가운데 이와 이어지는 것은 `enabled_accessibility_services`, `accessibility_enabled`, `enabled_notification_listeners`, `autofill_service`, `credential_service`, `default_input_method` 입니다. 검체에서 값을 읽어 들어 있는 앱을 적고, 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 따릅니다. 기본 제공 앱이 아닌 이름이 나오면 그 앱을 다음 단계의 대상으로 삼습니다.
+1. **감시에 쓰이는 권한을 쥔 앱부터 모읍니다.** 감시 앱은 접근성 서비스, 알림 리스너, 기기 관리자 같은 기능을 많이 씁니다. settings secure 키 가운데 이와 이어지는 것은 `enabled_accessibility_services`, `accessibility_enabled`, `enabled_notification_listeners`, `autofill_service`, `credential_service`, `default_input_method` 입니다. 실제 기기에서 값을 읽어 들어 있는 앱을 적고, 값을 읽는 법은 [설정 값](../../02-artifacts/system-account/settings.md) 페이지를 따릅니다. 기본 제공 앱이 아닌 이름이 나오면 그 앱을 다음 단계의 대상으로 삼습니다.
 
 2. **기기 관리자 목록을 따로 확인합니다.** settings 키 목록에는 `device_admin` 류 키가 없을 수 있습니다. 설정 키가 없다고 기기 관리자 앱이 없다고 보지 않고, 저장 위치와 읽는 법은 [기기 관리자와 접근성 권한](../../02-artifacts/credentials-security/device-admin-accessibility.md) 에서 봅니다. 삼성 자동 차단(Auto Blocker)의 최대 제한은 기기 관리자 앱과 업무 프로필을 막습니다. 이 기능들로 폰에 접근하거나 폰을 원격으로 조종하는 공격을 막기 위해서입니다 [2]. 자동 차단 전체 설명은 [악성 앱은 어디서 들어왔나](initial-access.md) 에 있습니다.
 
@@ -51,7 +51,7 @@ Google Play 보호 기능(Play Protect)의 악성 앱 분류에서 감시 앱(St
 
 ## 흔한 오판
 
-**접근성이나 알림 접근 권한만 보고 감시 앱으로 단정하는 오판**이 흔합니다. 감시 앱인지는 데이터를 모아 감시 목적으로 제3자에게 보내는지로 가리므로 [1], 권한은 대상을 좁히는 단서로 쓰고 송신 흔적과 함께 판단합니다.
+**접근성이나 알림 접근 권한만 보고 감시 앱으로 단정하는 오판**이 흔합니다. 감시 앱인지는 데이터를 모아 감시 목적으로 제3자에게 보내는지로 판별하므로 [1], 권한은 대상을 좁히는 단서로 쓰고 송신 흔적과 함께 판단합니다.
 
 **부모 보호 앱이나 회사 관리 앱을 바로 불법 감시 앱으로 적는 것**도 조심합니다. 조건을 지킨 자녀 감시와 직원 감시는 허용됩니다 [1]. 다만 조건을 지켰는지는 알림과 스토어 설명 같은 다른 근거로 따로 봅니다.
 

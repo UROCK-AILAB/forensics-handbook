@@ -189,7 +189,7 @@ JSON 내보내기 ZIP 에는 `channels.json`(공개 채널), `groups.json`(비�
 - 조직 관리자 토큰으로는 감사 로그를 부를 수 없고 조직 소유자 토큰이어야 합니다[2]. 수집 권한을 미리 정해 둡니다.
 - `user_channel_join` 에서 초대받아 들어간 경우 초대한 사람이 `details` 에 들어가고 `context` 도 초대한 사람의 것입니다[2]. 이 이벤트의 IP·사용자 에이전트를 들어간 사람의 것으로 읽으면 틀립니다.
 - eDiscovery 앱이 일으킨 파일 내려받기는 행위자가 앱을 설치한 사용자로 남습니다[1]. 앱 설치자가 직접 내려받았다고 쓰기 전에 `context.app` 을 봅니다.
-- 개요 문서에는 `file_downloaded_blocked`, 작업 목록에는 `file_download_blocked` 로 이름이 달리 적혀 있습니다[1][2]. 검체에서 실제로 나오는 값을 세어 보고 필터를 짭니다.
+- 개요 문서에는 `file_downloaded_blocked`, 작업 목록에는 `file_download_blocked` 로 이름이 달리 적혀 있습니다[1][2]. 실제 데이터에 나오는 값을 세어 보고 필터를 짭니다.
 - 통합 로그 API 인자 `change_type` 의 허용값에는 `expanded` 가 없지만 응답 값 목록에는 있습니다[6]. `expanded` 로 거르지 말고 전부 받은 뒤 나눕니다.
 - 신뢰 ASN·CIDR 허용 목록에 든 곳에서 온 접속은 이상으로 표시되지 않습니다[3]. `anomaly` 가 없다는 결론을 내기 전에 `admin.audit.anomaly.allow.getItem` 으로 허용 목록을 확인합니다.
 - `limit` 보다 많은 건수가 올 수 있고(같은 시각 기록), 기본 정렬이 최신순입니다[2]. 건수로 수집 완료를 판단하지 말고 커서가 끝날 때까지 받습니다.
@@ -236,7 +236,7 @@ jq -r '.entries[] | select(.actor.user.id=="W0EXAMPLE1") | select(.action|starts
 4. 사건 기간에 `anomaly` 가 하나도 없다. 이상 접속이 없었다고 결론 내리기 전에 확인할 것은?
 5. 접근 로그에 한 조합의 `date_first` 가 사건 한 달 전, `date_last` 가 사건 당일, `count` 가 340 이다. 사건 당일 몇 번 접속했는지 말할 수 있는가?
 
-보고서 문장은 "2026-09-01 02:13:07 UTC 에 계정 user@example.com 으로 파일 F0EXAMPLE1 에 대해 `file_downloaded` 가 기록되어 있다(IP 203.0.113.10). 이 작업 이름은 내려받기와 보기를 구분하지 않는다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시). 요금제·보존 설정 때문에 비어 있는 구간은 "기록이 없다" 가 아니라 "이 요금제·설정에서는 기록되지 않는다" 로 씁니다. 보고서 전체 틀은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)를 봅니다.
+보고서 문장은 "2026-09-01 02:13:07 UTC 에 계정 user@example.com 으로 파일 F0EXAMPLE1 에 대해 `file_downloaded` 가 기록되어 있다(IP 203.0.113.10). 이 작업 이름은 내려받기와 보기를 구분하지 않는다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시). 요금제·보존 설정 때문에 비어 있는 구간은 "기록이 없다" 가 아니라 "이 요금제·설정에서는 기록되지 않는다" 로 씁니다. 보고서 전체 틀은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)를 봅니다.
 
 ## 참고 문헌
 

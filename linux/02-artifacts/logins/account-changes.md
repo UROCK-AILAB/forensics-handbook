@@ -6,7 +6,7 @@ nav_order: 410
 
 # 계정 생성·변경 흔적 (useradd·usermod)
 
-`useradd`·`usermod`·`userdel` 같은 shadow 도구는 계정을 만들고 고칠 때마다 인증 로그에 한 줄씩 남기고, 계정 파일의 백업·마지막 비밀번호 변경일·lastlog 칸 같은 곳에도 흔적을 남깁니다.
+`useradd`·`usermod`·`userdel` 같은 shadow 도구는 계정을 만들고 고칠 때마다 인증 로그에 한 줄씩 남기고, 계정 파일의 백업·마지막 비밀번호 변경일·lastlog 레코드 같은 곳에도 흔적을 남깁니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -14,7 +14,7 @@ shadow 도구 모음(shadow-utils)은 syslog 를 `LOG_AUTHPRIV` 분야(facility)
 
 useradd 는 도중에 문제가 생겨도 무엇을 하려 했는지 남도록, 계정 파일을 고치기 전에 먼저 `new user:` 줄을 남깁니다[2]. 그래서 이 줄은 "계정을 만들었다" 가 아니라 "만들려고 했다" 를 뜻하고, 실패하면 뒤에 `failed adding user` 줄이 붙습니다[2][4].
 
-계정 파일(`/etc/passwd`·`/etc/shadow`·`/etc/group`·`/etc/gshadow`) 자체의 구조와 백업 파일이 생기는 순서는 [계정 파일 (passwd·shadow·group)](../../01-foundations/users-auth/passwd-shadow-group.md)에서 다룹니다. 이 쪽은 도구가 남기는 로그 줄과, 계정을 만들고 고칠 때 덩달아 바뀌는 곳을 다룹니다.
+계정 파일(`/etc/passwd`·`/etc/shadow`·`/etc/group`·`/etc/gshadow`) 자체의 구조와 백업 파일이 생기는 순서는 [계정 파일 (passwd·shadow·group)](../../01-foundations/users-auth/passwd-shadow-group.md)에서 다룹니다. 이 페이지는 도구가 남기는 로그 줄과, 계정을 만들고 고칠 때 덩달아 바뀌는 곳을 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -28,7 +28,7 @@ useradd 는 도중에 문제가 생겨도 무엇을 하려 했는지 남도록, 
 
 Ubuntu 에서 `adduser` 로 계정을 하나 만들면, adduser 자신의 줄은 `/var/log/syslog` 에, adduser 가 부른 useradd 의 `new user:` 줄은 `/var/log/auth.log` 에 나뉘어 남습니다[5][7]. 두 파일을 시각으로 맞춰 읽으면 됩니다. 두 배포판의 rsyslog 규칙과 줄 서식 차이는 [인증 로그 (auth.log·secure)](auth-log.md)에서 다룹니다.
 
-RHEL 9 의 `passwd` 명령은 shadow-utils 가 아닌 다른 패키지에서 오므로[8], 비밀번호 변경 줄의 모양은 검체에서 `rpm -qf /usr/bin/passwd` 로 패키지를 확인한 뒤 실제 줄로 봅니다.
+RHEL 9 의 `passwd` 명령은 shadow-utils 가 아닌 다른 패키지에서 오므로[8], 비밀번호 변경 줄의 모양은 분석 대상에서 `rpm -qf /usr/bin/passwd` 로 패키지를 확인한 뒤 실제 줄로 봅니다.
 
 계정 생성 기본값도 배포판마다 다릅니다.
 
@@ -68,7 +68,7 @@ RHEL 9 의 `passwd` 명령은 shadow-utils 가 아닌 다른 패키지에서 오
 | chage | `changed password expiry for %s` | 비밀번호 나이 정보 바꿈[3] |
 | passwd (shadow) | `password for '%s' changed by '%s'` | 비밀번호 바꿈[3] |
 
-shadow 의 `passwd` 를 PAM 으로 빌드했다면 `-l`·`-e` 같은 선택 사항이 없는 일반 비밀번호 변경은 PAM 에 맡기고 곧바로 끝나므로, 위 줄 대신 `pam_unix(passwd:chauthtok): password changed for 이름` 이 남습니다[3][11]. `passwd` 가 남기는 `password locked for '%s'` 는 root 가 아닌 사용자가 잠겼거나(비밀번호 칸이 `!` 로 시작) 만료된 계정의 비밀번호를 바꾸려다 거절당했다는 뜻이고, 잠금을 건 기록이 아닙니다[3].
+shadow 의 `passwd` 를 PAM 으로 빌드했다면 `-l`·`-e` 같은 선택 사항이 없는 일반 비밀번호 변경은 PAM 에 맡기고 곧바로 끝나므로, 위 줄 대신 `pam_unix(passwd:chauthtok): password changed for 이름` 이 남습니다[3][11]. `passwd` 가 남기는 `password locked for '%s'` 는 root 가 아닌 사용자가 잠겼거나(비밀번호 필드가 `!` 로 시작) 만료된 계정의 비밀번호를 바꾸려다 거절당했다는 뜻이고, 잠금을 건 기록이 아닙니다[3].
 
 Ubuntu 24.04 의 auth.log 에서 useradd 줄은 이런 모양입니다(만든 예시).
 
@@ -90,15 +90,15 @@ shadow 도구를 감사(audit) 지원으로 빌드하면 syslog 줄과 따로 �
 | `ADD_GROUP` / `DEL_GROUP` | 1116 / 1117 | 그룹 추가 / 삭제 |
 | `GRP_MGMT` | 1132 | 그룹 속성 바뀜 |
 
-RHEL 9 의 shadow-utils 는 `--with-audit` 로 빌드하고 감사 문구를 바꾸는 패치(`shadow-4.9-audit-update.patch`)를 덧댑니다[8]. 그래서 레코드 안의 `op` 문구는 최신 shadow 코드와 다를 수 있으니 검체의 `audit.log` 로 확인합니다. 레코드 필드를 읽는 법은 [감사 로그 형식 (auditd)](../../01-foundations/logging/auditd-format.md)에서 다룹니다.
+RHEL 9 의 shadow-utils 는 `--with-audit` 로 빌드하고 감사 문구를 바꾸는 패치(`shadow-4.9-audit-update.patch`)를 덧댑니다[8]. 그래서 레코드 안의 `op` 문구는 최신 shadow 코드와 다를 수 있으니 분석 대상의 `audit.log` 로 확인합니다. 레코드 필드를 읽는 법은 [감사 로그 형식 (auditd)](../../01-foundations/logging/auditd-format.md)에서 다룹니다.
 
 ### 계정을 만들 때 함께 바뀌는 곳
 
 | 곳 | 바뀌는 내용 |
 |---|---|
 | `/etc/passwd`·`/etc/shadow`·`/etc/group`·`/etc/gshadow` | 새 내용을 임시 파일에 쓴 뒤 이름을 바꿔 덮고, 직전 판을 `파일이름-` 로 남김. 자세한 순서는 [계정 파일](../../01-foundations/users-auth/passwd-shadow-group.md) |
-| shadow 3번째 칸(마지막 비밀번호 변경일) | useradd 가 그 순간의 epoch 초를 하루(86400초)로 나눈 값으로 채움. 결과가 0 이면 -1[2] |
-| `/var/log/lastlog`·`/var/log/faillog` | 새 UID 의 칸을 0으로 지움(아래 설명)[2] |
+| shadow 3번째 필드(마지막 비밀번호 변경일) | useradd 가 그 순간의 epoch 초를 하루(86400초)로 나눈 값으로 채움. 결과가 0 이면 -1[2] |
+| `/var/log/lastlog`·`/var/log/faillog` | 새 UID 의 레코드를 0으로 지움(아래 설명)[2] |
 | 홈 폴더 | `-m` 이거나 `CREATE_HOME` 이 켜져 있으면 만들고 skel 폴더의 파일을 복사. `-r`(시스템 계정)은 `-m` 없이는 만들지 않음[10] |
 | `/etc/subuid`·`/etc/subgid` | 하위 번호 범위를 추가. `-r` 이면 `-F` 없이는 추가하지 않음[10] |
 | `/etc/shadow-maint/useradd-pre.d/*`, `useradd-post.d/*` | 최신 shadow 에서 계정 추가 전후에 실행하는 스크립트[10] |
@@ -112,9 +112,9 @@ lastlog 를 지우는 조건은 셋입니다. `-l`(`--no-log-init`)을 주지 �
 - `new user:` 줄은 그 시각에 useradd 가 그 이름·UID·GID·홈·셸로 계정을 만들려 했다는 기록입니다[2]. `from=` 은 명령을 실행한 터미널입니다.
 - usermod·userdel·gpasswd 줄은 그 시각에 그 도구가 그 항목을 바꾸려 했다는 기록입니다. gpasswd 줄에는 명령을 친 사용자 이름도 들어 있습니다[3].
 - 감사 레코드가 있으면 `auid`(로그인할 때 정해진 사용자 번호)로 어느 로그인 세션에서 실행했는지 이을 수 있습니다[12].
-- shadow 3번째 칸은 useradd 로 만든 뒤 비밀번호를 바꾸거나 `chage -d` 로 고치지 않은 계정이라면 계정을 만든 날(UTC)과 같습니다[2].
+- shadow 3번째 필드은 useradd 로 만든 뒤 비밀번호를 바꾸거나 `chage -d` 로 고치지 않은 계정이라면 계정을 만든 날(UTC)과 같습니다[2].
 
-보고서에는 "2025-03-04 10:20:33(UTC+9)에 useradd 가 /dev/pts/1 에서 svcbackup(UID 1002) 계정 생성을 기록했다" 처럼 기록이 말하는 만큼 씁니다(값은 만든 예시).
+보고서에는 "2025-03-04 10:20:33(UTC+9)에 useradd 가 /dev/pts/1 에서 svcbackup(UID 1002) 계정 생성을 기록했다" 처럼 기록으로 확인되는 만큼 씁니다(값은 만든 예시).
 
 ### 증명하지 못하는 것
 
@@ -130,13 +130,13 @@ lastlog 를 지우는 조건은 셋입니다. `-l`(`--no-log-init`)을 주지 �
 | auth.log 줄 시각(Ubuntu 24.04) | 줄을 쓸 때 | RFC 3339, UTC 오프셋 포함([syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md)) |
 | secure 줄 시각(RHEL 9) | 줄을 쓸 때 | 전통 서식, 연도·시간대 없는 현지 시각[6] |
 | 감사 레코드 `msg=audit(초.밀리초:번호)` | 레코드를 만들 때 | epoch, UTC([감사 로그 형식](../../01-foundations/logging/auditd-format.md)) |
-| shadow 3번째 칸 | useradd, 비밀번호 변경, `chage -d` | 1970-01-01 UTC 부터 센 일수[10][19] |
+| shadow 3번째 필드 | useradd, 비밀번호 변경, `chage -d` | 1970-01-01 UTC 부터 센 일수[10][19] |
 | `/etc/passwd-` 의 mtime | 백업을 만들 때 원본의 mtime 을 옮겨 붙임[1] | 직전 변경 시각 |
 | 홈 폴더·skel 복사본의 아이노드 시각 | 홈을 만들 때 | 파일 시스템 시각 |
 
-전통 서식 줄의 연도를 가늠하는 방법은 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md)에서, shadow 일수를 날짜로 바꾸는 계산은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다. shadow 칸은 날짜 경계가 UTC 자정이라, UTC+9 에서 오전 9시 전에 만든 계정은 현지 날짜보다 하루 이른 날로 기록됩니다.
+전통 서식 줄의 연도를 추정하는 방법은 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md)에서, shadow 일수를 날짜로 바꾸는 계산은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다. shadow 필드은 날짜 경계가 UTC 자정이라, UTC+9 에서 오전 9시 전에 만든 계정은 현지 날짜보다 하루 이른 날로 기록됩니다.
 
-useradd 는 이 날짜를 시계 대신 환경 변수 `SOURCE_DATE_EPOCH` 에서 가져오기도 합니다. 이 변수는 현재 시각 이하의 값만 받으므로, 변수를 준 채 실행하면 shadow 칸의 날짜가 실제보다 이르게 기록될 수 있습니다[1][4]. shadow 칸 날짜가 로그 줄 시각보다 이르면 이 가능성을 봅니다.
+useradd 는 이 날짜를 시계 대신 환경 변수 `SOURCE_DATE_EPOCH` 에서 가져오기도 합니다. 이 변수는 현재 시각 이하의 값만 받으므로, 변수를 준 채 실행하면 shadow 필드의 날짜가 실제보다 이르게 기록될 수 있습니다[1][4]. shadow 필드 날짜가 로그 줄 시각보다 이르면 이 가능성을 봅니다.
 
 ## 함정과 한계
 
@@ -144,14 +144,14 @@ useradd 는 이 날짜를 시계 대신 환경 변수 `SOURCE_DATE_EPOCH` 에서
 - **Ubuntu 는 두 파일에 나뉜다**: adduser 줄은 syslog, useradd 줄은 auth.log 에 있습니다[5][7].
 - **`password locked for` 는 잠금이 아니다**: 잠겼거나 만료된 계정의 비밀번호 변경을 거절했다는 뜻입니다[3]. 잠금을 건 기록은 `lock user '%s' password`(usermod)입니다.
 - **수집 도구의 빈틈**: UAC 는 `/etc` 를 모을 때 `shadow`·`shadow-`·`gshadow`·`gshadow-` 를 뺍니다[17]. ForensicArtifacts 의 백업 정의는 `/etc/shadow-` 하나뿐입니다[18]. Velociraptor `Linux.Sys.Users` 는 `/etc/passwd` 만 읽습니다[16]. 계정 파일과 백업은 따로 모읍니다.
-- **dissect.target `passwords` 가 건너뛰는 계정**: `$` 로 나뉜 해시가 없는 줄(`!`·`*`·빈칸 등)은 레코드를 내지 않아[15], 비밀번호 없이 만든 계정의 마지막 변경일이 결과에서 빠집니다. adduser 가 비밀번호 없이 만든 계정은 비밀번호 칸이 `!` 입니다[7].
+- **dissect.target `passwords` 가 건너뛰는 계정**: `$` 로 나뉜 해시가 없는 줄(`!`·`*`·빈칸 등)은 레코드를 내지 않아[15], 비밀번호 없이 만든 계정의 마지막 변경일이 결과에서 빠집니다. adduser 가 비밀번호 없이 만든 계정은 비밀번호 필드가 `!` 입니다[7].
 - **로그 순환**: 오래된 계정 생성 줄은 `auth.log.2.gz`, `secure-YYYYMMDD` 같은 순환본에 있습니다([로그 순환 (logrotate)](../../01-foundations/logging/logrotate.md)).
 
 ## 직접 분석해 보기
 
-### 헥스로 한 번 — lastlog 칸이 지워졌는지
+### 헥스로 한 번 — lastlog 레코드가 지워졌는지
 
-lastlog 레코드는 UID 번째 칸에 292바이트씩 놓입니다([로그인 기록 파일 형식](../../01-foundations/logging/utmp-wtmp-format.md)). UID 1002 의 칸은 292 × 1002 = 292584(0x476E8) 바이트에서 시작합니다.
+lastlog 레코드는 UID 번째 위치에 292바이트씩 놓입니다([로그인 기록 파일 형식](../../01-foundations/logging/utmp-wtmp-format.md)). UID 1002 의 레코드는 292 × 1002 = 292584(0x476E8) 바이트에서 시작합니다.
 
 ```
 $ xxd -s 292584 -l 292 var/log/lastlog | head -3
@@ -160,9 +160,9 @@ $ xxd -s 292584 -l 292 var/log/lastlog | head -3
 00047708: 0000 0000 0000 0000 0000 0000 0000 0000  ................
 ```
 
-위 출력은 명세로 만든 예시입니다. 그 UID 로 로그인한 적이 없거나 useradd 가 칸을 지웠으면 이렇게 전부 0 입니다. 파일 크기가 292584 바이트 이하이면 그 칸은 아직 없는 것이고, 4.13 이후 판의 useradd 는 이때 손대지 않습니다[2]. RHEL 9 의 4.9 판은 크기를 보지 않고 그 오프셋에 쓰므로 파일이 그만큼 늘어납니다[4].
+위 출력은 명세로 만든 예시입니다. 그 UID 로 로그인한 적이 없거나 useradd 가 레코드를 지웠으면 이렇게 전부 0 입니다. 파일 크기가 292584 바이트 이하이면 그 레코드는 아직 없는 것이고, 4.13 이후 판의 useradd 는 이때 손대지 않습니다[2]. RHEL 9 의 4.9 판은 크기를 보지 않고 그 오프셋에 쓰므로 파일이 그만큼 늘어납니다[4].
 
-shadow 3번째 칸은 텍스트이므로 날짜로 바로 바꿉니다. 예를 들어 `20151` 일은 `date -u -d @$((20151*86400))` 로 2025-03-04 가 됩니다(만든 예시).
+shadow 3번째 필드은 텍스트이므로 날짜로 바로 바꿉니다. 예를 들어 `20151` 일은 `date -u -d @$((20151*86400))` 로 2025-03-04 가 됩니다(만든 예시).
 
 ### 공개 도구로 한 번
 
@@ -190,7 +190,7 @@ dissect.target 의 `passwords` 는 `/etc/shadow` 와 `/etc/shadow-` 를 함께 �
 |---|---|
 | [sudo·su 사용 기록](sudo-su.md) | 같은 시각 `COMMAND=/usr/sbin/useradd …` 줄로 누가 실행했는지 |
 | [셸 명령 기록](../execution/shell-history/index.md) | 같은 사용자의 기록에 `useradd`·`usermod` 명령이 있는지 |
-| [계정 파일](../../01-foundations/users-auth/passwd-shadow-group.md) | 줄의 이름·UID 가 현재 파일과 `-` 백업에 있는지, shadow 3번째 칸 날짜가 줄 날짜와 맞는지 |
+| [계정 파일](../../01-foundations/users-auth/passwd-shadow-group.md) | 줄의 이름·UID 가 현재 파일과 `-` 백업에 있는지, shadow 3번째 필드 날짜가 줄 날짜와 맞는지 |
 | [로그인 기록 (wtmp·btmp·lastlog)](wtmp-btmp-lastlog.md) | 새 계정이 언제 처음 로그인했는지 |
 | [SSH](ssh/index.md) | 새 계정에 `authorized_keys` 가 생겼는지 |
 | 홈 폴더 | 홈과 skel 복사본의 생성 시각이 `new user:` 줄 시각과 맞는지 |
@@ -199,10 +199,10 @@ dissect.target 의 `passwords` 는 `/etc/shadow` 와 `/etc/shadow-` 를 함께 �
 
 ## 실습
 
-NIST CFReDS 같은 공개 Linux 검체로 다음 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 Linux 시험 데이터로 다음 질문을 풀어 봅니다.
 
 1. 인증 로그와 저널에서 `new user:` 줄을 모두 찾고, 각 계정이 지금 `/etc/passwd` 에 있는지 확인합니다.
-2. UID 가 `UID_MIN` 이상인 계정마다 shadow 3번째 칸을 날짜로 바꾸고, `new user:` 줄 날짜(UTC)와 맞는지 봅니다.
+2. UID 가 `UID_MIN` 이상인 계정마다 shadow 3번째 필드을 날짜로 바꾸고, `new user:` 줄 날짜(UTC)와 맞는지 봅니다.
 3. `/etc/passwd` 와 `/etc/passwd-` 를 비교해 마지막 변경에서 무엇이 달라졌는지 찾고, 그 변경에 해당하는 로그 줄이 있는지 봅니다.
 4. 계정 생성 줄 바로 앞뒤에 같은 터미널(`from=`)의 sudo 줄이 있는지 찾아 실행한 사용자를 잇습니다.
 5. `sudo`·`wheel`·`adm` 그룹에 들어간 기록(`add '…' to group '…'`, `user … added by … to group …`)이 있는지 찾습니다.

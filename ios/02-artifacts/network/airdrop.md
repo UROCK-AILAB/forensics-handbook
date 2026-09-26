@@ -16,7 +16,7 @@ nav_order: 700
 
 받는 쪽 설정에 따라 응답이 달라집니다. "연락처만" 모드에서는 신원 해시가 연락처와 맞을 때만 받는 기기가 응답하고, "모든 사람" 모드에서는 맞지 않아도 응답합니다 [1]. 받는 기기는 신원이 확인된 경우에만 보낸 사람의 이름과 사진을 보여 주고, 확인되지 않으면 실루엣 아이콘을 보여 줍니다 [1]. 받기 설정은 "수신 끔", "연락처만", "10분 동안 모든 사람" 세 가지입니다 [2].
 
-Apple 공식 문서는 기기에 어떤 기록이 남는지 [1], 받은 항목이 어디에 저장되는지 [2] 설명하지 않습니다. 그래서 여기서는 로컬 백업에서 에어드롭과 이름이 이어지는 설정 파일·도메인·사진 DB 칸을 정리합니다.
+Apple 공식 문서는 기기에 어떤 기록이 남는지 [1], 받은 항목이 어디에 저장되는지 [2] 설명하지 않습니다. 그래서 여기서는 로컬 백업에서 에어드롭과 이름이 이어지는 설정 파일·도메인·사진 DB 열을 정리합니다.
 
 ## 위치와 버전별 차이
 
@@ -28,7 +28,7 @@ Apple 공식 문서는 기기에 어떤 기록이 남는지 [1], 받은 항목�
 | `HomeDomain :: Library/Preferences/com.apple.Sharing.plist` | `hasDoneGenuineDeviceCheck` 키 |
 | `AppDomain-com.apple.SharingViewService :: Library/Preferences/com.apple.SharingViewService.plist` | `PASAnalyticsUUIDValueKey`, `PASAnalyticsUUIDDateKey`, `PASAnalyticsDefaultsKey` 키 |
 | `SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles :: Library/ConfigurationProfiles/UserSettings.plist` | `restrictedBool` 아래 `allowAirDrop` 키 |
-| `CameraRollDomain :: Media/PhotoData/Photos.sqlite` | 가져오기 정보 칸(아래 구조) |
+| `CameraRollDomain :: Media/PhotoData/Photos.sqlite` | 가져오기 정보 열(아래 구조) |
 
 위 표는 iOS 27.0 기준입니다. 이 밖에 `AppDomain-com.apple.Sharing.AirDropUI`, `AppDomainGroup-group.com.apple.sharingd`, `AppDomainPlugin-com.apple.Sharing.AirDrop`, `AppDomainPlugin-com.apple.Sharing.AirDropAlertUI`, `AppDomainPlugin-com.apple.AirDropSettingsIntents` 도메인도 에어드롭과 이름이 이어집니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
@@ -38,9 +38,9 @@ Apple 공식 문서는 기기에 어떤 기록이 남는지 [1], 받은 항목�
 |---|---|---|
 | 16.2 이상 | "10분 동안 모든 사람" 설정이 10분 뒤 바뀜 | [2] |
 | 17 이상(두 기기 모두) | 기기를 가까이 대어 에어드롭으로 공유 가능 | [2] |
-| 27.0 | 위 표의 파일·키·칸 이름 | |
+| 27.0 | 위 표의 파일·키·열 이름 | |
 
-iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 칸 이름이 어떻게 바뀌었는지는 공개 자료가 없어서 검체에서 확인합니다.
+iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 열 이름이 어떻게 바뀌었는지는 실제 데이터로 확인해야 합니다.
 
 ## 구조
 
@@ -60,17 +60,17 @@ iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 칸 이름이 
 
 ### 기기 관리 제한
 
-구성 프로파일 영역의 `UserSettings.plist` 에는 `restrictedBool` 아래 `allowAirDrop` 키가 있습니다. 이름으로 보아 기기 관리 쪽에서 에어드롭을 허용하는지 담는 값입니다. 이 파일 전체의 읽는 법은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다룹니다.
+구성 프로파일 영역의 `UserSettings.plist` 에는 `restrictedBool` 아래 `allowAirDrop` 키가 있습니다. 이름으로 보면 기기 관리 쪽에서 에어드롭을 허용하는지 담는 값입니다. 이 파일 전체의 읽는 법은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다룹니다.
 
-### 사진 DB 의 가져오기 칸
+### 사진 DB 의 가져오기 열
 
-`Photos.sqlite` 의 `ZADDITIONALASSETATTRIBUTES` 표에 `ZIMPORTEDBY` 칸이 있고, `ZCLOUDMASTER` 표에 `ZIMPORTEDBY`, `ZIMPORTEDBYBUNDLEIDENTIFIER`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTDATE` 칸이 있습니다. 이름으로 보아 사진을 어떤 경로·앱으로 가져왔는지 담는 칸이지만, 에어드롭으로 받은 사진이 `ZIMPORTEDBY` 에 어떤 숫자로 남는지는 공개된 분석 자료가 없어 시험으로 확인해야 합니다. 에어드롭으로 받은 사진을 `ZCREATORBUNDLEID` 칸으로 가린다는 자료도 있지만, iOS 27.0 에는 그 이름의 칸이 없습니다. 사진 DB 전체 구조는 [사진 보관함](../media/photos/index.md) 에서 다룹니다.
+`Photos.sqlite` 의 `ZADDITIONALASSETATTRIBUTES` 표에 `ZIMPORTEDBY` 열이 있고, `ZCLOUDMASTER` 표에 `ZIMPORTEDBY`, `ZIMPORTEDBYBUNDLEIDENTIFIER`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTDATE` 열이 있습니다. 이름으로 보면 사진을 어떤 경로·앱으로 가져왔는지 담는 열이지만, 에어드롭으로 받은 사진이 `ZIMPORTEDBY` 에 어떤 숫자로 남는지는 알려져 있지 않아 시험으로 확인해야 합니다. 에어드롭으로 받은 사진을 `ZCREATORBUNDLEID` 열로 구분한다는 자료도 있지만, iOS 27.0 에는 그 이름의 열이 없습니다. 사진 DB 전체 구조는 [사진 보관함](../media/photos/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-- 사진 DB 의 가져오기 칸 값이 에어드롭을 가리킨다고 시험으로 확인했다면, 그 사진이 에어드롭 경로로 기기에 들어왔다는 기록이 있다는 사실까지 말할 수 있습니다.
+- 사진 DB 의 가져오기 열 값이 에어드롭을 가리킨다고 시험으로 확인했다면, 그 사진이 에어드롭 경로로 기기에 들어왔다는 기록이 있다는 사실까지 말할 수 있습니다.
 - `allowAirDrop` 값이 있으면, 수집 시점의 기기 관리 설정에 에어드롭 제한 항목이 들어 있었다는 사실을 보여 줍니다.
 - `com.apple.sharingd.plist` 에 에어드롭 식별자 키가 있으면, 이 기기에 에어드롭 관련 계정 설정이 저장되어 있었다는 사실을 보여 줍니다.
 
@@ -81,21 +81,21 @@ iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 칸 이름이 
 - 파일을 받은 기록은 그 파일을 열어 보았다는 증거가 아닙니다.
 - 에어드롭 설정이 켜져 있었다는 사실은 특정 시각에 무엇을 주고받았다는 증거가 아닙니다.
 
-보고서에는 "이 사진은 가져오기 칸 값이 이것이고, 같은 조건의 시험에서 이 값은 에어드롭으로 받은 사진에 나타났다" 처럼 기록과 시험이 말하는 만큼만 씁니다.
+보고서에는 "이 사진은 가져오기 열 값이 이것이고, 같은 조건의 시험에서 이 값은 에어드롭으로 받은 사진에 나타났다" 처럼 기록과 시험으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-`com.apple.sharingd.plist` 의 `HashManager-LastUpdatedDateKey`·`HashManager-LastRebuiltDateKey` 는 plist 날짜형이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽지만, 무엇이 바뀔 때 이 값이 바뀌는지는 알려져 있지 않습니다. 이름으로 보아 해시 목록을 고친 때로 보이고, 전송 시각으로 읽지 않습니다.
+`com.apple.sharingd.plist` 의 `HashManager-LastUpdatedDateKey`·`HashManager-LastRebuiltDateKey` 는 plist 날짜형이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽지만, 무엇이 바뀔 때 이 값이 바뀌는지는 알려져 있지 않습니다. 이름으로 보면 해시 목록을 고친 때로 보이고, 전송 시각으로 읽지 않습니다.
 
-받은 사진의 시각은 사진 DB 의 가져오기 시각(`ZIMPORTDATE`)과 사진 자체의 촬영 시각이 다를 수 있습니다. 사진 DB 시각 칸의 기준은 [사진 보관함](../media/photos/index.md) 과 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서, 촬영 시각은 [카메라 사진과 메타데이터](../media/dcim-exif.md) 에서 확인합니다. 보낸 기기의 촬영 시각과 받은 기기의 가져오기 시각을 섞어 쓰면 사건 순서가 틀어질 수 있어서, 두 값을 칸 이름과 함께 따로 적습니다.
+받은 사진의 시각은 사진 DB 의 가져오기 시각(`ZIMPORTDATE`)과 사진 자체의 촬영 시각이 다를 수 있습니다. 사진 DB 시각 열의 기준은 [사진 보관함](../media/photos/index.md) 과 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서, 촬영 시각은 [카메라 사진과 메타데이터](../media/dcim-exif.md) 에서 확인합니다. 보낸 기기의 촬영 시각과 받은 기기의 가져오기 시각을 섞어 쓰면 사건 순서가 틀어질 수 있어서, 두 값을 열 이름과 함께 따로 적습니다.
 
 ## 함정과 한계
 
-Apple 공식 문서는 에어드롭이 기기에 남기는 기록이나 받은 항목의 저장 위치를 설명하지 않습니다 [1][2]. 그래서 공개 자료나 도구가 말하는 에어드롭 흔적은 버전마다 시험으로 다시 확인해야 하고, 한 버전에서 확인한 칸 이름이나 값을 다른 버전에 그대로 적용하지 않습니다.
+Apple 공식 문서는 에어드롭이 기기에 남기는 기록이나 받은 항목의 저장 위치를 설명하지 않습니다 [1][2]. 그래서 공개 자료나 도구에 나오는 에어드롭 흔적은 버전마다 시험으로 다시 확인해야 하고, 한 버전에서 확인한 열 이름이나 값을 다른 버전에 그대로 적용하지 않습니다.
 
 "10분 동안 모든 사람" 설정은 iOS 16.2 이상에서 10분 뒤 바뀌어서 [2], 수집 시점의 받기 모드가 사건 당시의 받기 모드와 다를 수 있습니다. 받기 모드를 담는 키도 이름으로는 드러나 있지 않습니다.
 
-사진이 아닌 파일이 어디에 저장되는지는 공식 문서에 없어서 [2], 사진 DB 만 보고 에어드롭으로 받은 것이 없다고 결론 내리지 않습니다. 통합 로그에 전송 흔적이 남는지와 로컬 백업에 통합 로그가 들어가는지는 검체에서 확인합니다. 로그를 얻는 방법은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md), 찾을 사건은 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 에서 다룹니다.
+사진이 아닌 파일이 어디에 저장되는지는 공식 문서에 없어서 [2], 사진 DB 만 보고 에어드롭으로 받은 것이 없다고 결론 내리지 않습니다. 통합 로그에 전송 흔적이 남는지와 로컬 백업에 통합 로그가 들어가는지는 실제 데이터로 확인해야 합니다. 로그를 얻는 방법은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md), 찾을 사건은 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 에서 다룹니다.
 
 받은 사진을 지운 경우는 사진 DB 의 지운 항목과 [지운 대화와 사진 찾기](../../04-scenarios/activity/deleted-content.md) 의 흐름으로 확인합니다.
 
@@ -112,7 +112,7 @@ WHERE domain LIKE '%AirDrop%'
 ORDER BY domain, relativePath;
 ```
 
-찾은 plist 는 복사본으로 옮겨 헥스 편집기로 첫 8바이트를 봅니다. 아래는 이진 plist 명세로 만든 예시이고 특정 검체의 값이 아닙니다.
+찾은 plist 는 복사본으로 옮겨 헥스 편집기로 첫 8바이트를 봅니다. 아래는 이진 plist 명세로 만든 예시이고 특정 기기의 값이 아닙니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07   문자
@@ -131,7 +131,7 @@ for key, value in data.items():
     print(key, type(value).__name__)
 ```
 
-사진 쪽은 `Photos.sqlite` 복사본을 SQLite 명령행 도구(`sqlite3` 등)로 열어, 가져오기 칸 값이 어떻게 나뉘는지부터 봅니다.
+사진 쪽은 `Photos.sqlite` 복사본을 SQLite 명령행 도구(`sqlite3` 등)로 열어, 가져오기 열 값이 어떻게 나뉘는지부터 봅니다.
 
 ```sql
 SELECT ZIMPORTEDBY, ZIMPORTEDBYBUNDLEIDENTIFIER, ZIMPORTEDBYDISPLAYNAME,
@@ -141,7 +141,7 @@ GROUP BY ZIMPORTEDBY, ZIMPORTEDBYBUNDLEIDENTIFIER, ZIMPORTEDBYDISPLAYNAME
 ORDER BY n DESC;
 ```
 
-값의 뜻은 연습용 기기에서 에어드롭으로 사진을 한 장 받은 뒤 같은 질의를 돌려, 새로 생긴 값과 비교해 정합니다. 이렇게 정한 뜻은 검체의 iOS 버전과 함께 적어 둡니다.
+값의 뜻은 연습용 기기에서 에어드롭으로 사진을 한 장 받은 뒤 같은 질의를 돌려, 새로 생긴 값과 비교해 정합니다. 이렇게 정한 뜻은 시험 기기의 iOS 버전과 함께 적어 둡니다.
 
 ## 교차 검증
 
@@ -159,7 +159,7 @@ ORDER BY n DESC;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에 에어드롭으로 받은 사진이 든 아이폰 추출이 있으면 아래 질문으로 풀어 봅니다. 없으면 연습용 기기 두 대로 사진을 한 장 주고받은 전후로 받은 쪽 백업을 떠서 비교합니다.
+공개 시험 데이터(NIST CFReDS 등)에 에어드롭으로 받은 사진이 든 아이폰 추출이 있으면 아래 질문으로 풀어 봅니다. 없으면 연습용 기기 두 대로 사진을 한 장 주고받은 전후로 받은 쪽 백업을 떠서 비교합니다.
 
 1. 받은 뒤 `ZCLOUDMASTER` 의 `ZIMPORTEDBY`·`ZIMPORTEDBYBUNDLEIDENTIFIER` 에 어떤 값이 새로 생겼습니까?
 2. 받은 사진의 `ZIMPORTDATE` 와 EXIF 촬영 시각은 어떻게 다릅니까?

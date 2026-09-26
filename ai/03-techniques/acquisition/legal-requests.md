@@ -18,7 +18,7 @@ nav_order: 830
 
 ### 1. 요청할 계정을 특정합니다
 
-회사에 요청하려면 계정을 가리킬 식별자가 필요하고, 기기에 남은 기록에서 그 단서를 찾을 수 있습니다. Claude Code 세션 기록에는 `ownerAccountUuid`·`ownerOrganizationUuid` 키가, Claude 데스크톱 설정 파일 `config.json` 에는 `lastKnownAccountUuid` 키가 있습니다. 키 이름으로 보아 계정·조직 식별자로 짐작되지만, 회사가 이 값으로 계정을 찾아 주는지는 요청할 때 회사에 확인합니다. 기기에서 이런 파일을 모으는 방법은 [기기에서 AI 흔적 모으기](endpoint-triage.md)에 있습니다.
+회사에 요청하려면 계정을 가리킬 식별자가 필요하고, 기기에 남은 기록에서 그 단서를 찾을 수 있습니다. Claude Code 세션 기록에는 `ownerAccountUuid`·`ownerOrganizationUuid` 키가, Claude 데스크톱 설정 파일 `config.json` 에는 `lastKnownAccountUuid` 키가 있습니다. 키 이름으로 보면 계정·조직 식별자로 짐작되지만, 회사가 이 값으로 계정을 찾아 주는지는 요청할 때 회사에 확인합니다. 기기에서 이런 파일을 모으는 방법은 [기기에서 AI 흔적 모으기](endpoint-triage.md)에 있습니다.
 
 ### 2. 보관 기간을 확인하고 서두릅니다
 

@@ -21,7 +21,7 @@ Microsoft 365 구독이 있으면 Exchange Online 이 디렉터리를 맞추려�
 
 관리 센터에서는 **Entra ID > Monitoring & health > Audit logs** 에서 봅니다[2]. 화면 기본 탭은 **Directory** 이고, 사용자 지정 보안 특성 변경은 **Custom Security** 탭에 따로 나오며 이 탭은 Attribute Log Administrator 나 Attribute Log Reader 역할이 있어야 보입니다[1].
 
-같은 기록을 받는 경로와 보관 기간은 [Entra ID 로그](index.md) 에 표로 정리했습니다. 이 쪽에 필요한 것만 추리면 아래와 같습니다(2026년 1월 문서 기준).
+같은 기록을 받는 경로와 보관 기간은 [Entra ID 로그](index.md) 에 표로 정리했습니다. 이 페이지에 필요한 것만 추리면 아래와 같습니다(2026년 1월 문서 기준).
 
 | 항목 | 값 |
 |---|---|
@@ -40,7 +40,7 @@ Graph `directoryAudit` 자원 하나가 감사 항목 하나입니다[3].
 | 필드 | 뜻 |
 |---|---|
 | `id` | 항목 고유 ID(GUID) |
-| `activityDateTime` | 활동을 한 시각. 항상 UTC 이고 `2014-01-01T00:00:00Z` 꼴 |
+| `activityDateTime` | 활동을 한 시각. 항상 UTC 이고 `2014-01-01T00:00:00Z` 형식 |
 | `activityDisplayName` | 활동 이름(예: `Add member to group`) |
 | `category` | 대상 자원의 범주(예: `UserManagement`, `GroupManagement`, `ApplicationManagement`, `RoleManagement`) |
 | `loggedByService` | 기록한 서비스(예: `Core Directory`, `Self-service Password Management`, `Invited Users`, `Privileged Identity Management`) |
@@ -51,7 +51,7 @@ Graph `directoryAudit` 자원 하나가 감사 항목 하나입니다[3].
 | `correlationId` | 여러 서비스에 걸친 활동을 묶는 ID |
 | `additionalDetails` | 키·값 목록으로 된 추가 정보 |
 
-화면에서 항목을 고르면 Correlation ID, 작업자와 대상, 그리고 해당하는 경우 바뀐 속성의 옛 값과 새 값이 나옵니다[1]. 바뀐 속성은 `targetResources` 안의 `modifiedProperties` 에 들어 있고, 옛 값과 새 값은 JSON 입니다[6]. 속성 이름은 `displayName`, 값은 `oldValue`·`newValue` 에 들어가며, 값은 `"[\"Guest\"]"` 처럼 JSON 배열을 한 번 더 문자열로 감싼 꼴입니다[8]. 조건부 접근 정책을 고친 항목이라면 정책 전체 JSON 이 옛 값과 새 값으로 통째로 들어가서, 두 값을 견줘야 무엇이 바뀌었는지 보입니다[6].
+화면에서 항목을 고르면 Correlation ID, 작업자와 대상, 그리고 해당하는 경우 바뀐 속성의 옛 값과 새 값이 나옵니다[1]. 바뀐 속성은 `targetResources` 안의 `modifiedProperties` 에 들어 있고, 옛 값과 새 값은 JSON 입니다[6]. 속성 이름은 `displayName`, 값은 `oldValue`·`newValue` 에 들어가며, 값은 `"[\"Guest\"]"` 처럼 JSON 배열을 한 번 더 문자열로 감싼 형식입니다[8]. 조건부 접근 정책을 고친 항목이라면 정책 전체 JSON 이 옛 값과 새 값으로 통째로 들어가서, 두 값을 비교해야 무엇이 바뀌었는지 보입니다[6].
 
 감사 로그 상세의 IP 주소는 OAuth 클라이언트의 IP, 곧 서비스 끝점 (endpoint) 에 TCP 로 붙은 상대 주소입니다[1].
 
@@ -59,7 +59,7 @@ Graph `directoryAudit` 자원 하나가 감사 항목 하나입니다[3].
 
 활동 이름은 서비스와 범주별로 수백 개가 있고 수시로 바뀝니다[2]. 아래는 2025년 3월 문서 기준으로 침해 조사에서 자주 찾는 것만 추렸습니다[2].
 
-| 범주 | 활동 이름 | 찾는 까닭 |
+| 범주 | 활동 이름 | 찾는 이유 |
 |---|---|---|
 | ApplicationManagement | `Add application`, `Add service principal` | 새 앱 등록 |
 | ApplicationManagement | `Add service principal credentials`, `Update application - Certificates and secrets management` | 앱 비밀·인증서 추가 |
@@ -77,7 +77,7 @@ Graph `directoryAudit` 자원 하나가 감사 항목 하나입니다[3].
 
 ## 증거로서 의미
 
-**증명하는 것.** 어느 주체(`initiatedBy`)가 어느 대상(`targetResources`)에 어떤 활동(`activityDisplayName`)을 했고, 그 시각(UTC)과 결과(`result`)가 무엇이었는지, 그리고 바뀐 속성의 옛 값과 새 값입니다. 보고서에는 "2026-03-02 01:14 UTC 에 계정 A 가 앱 B 에 비밀을 추가한 기록이 있다"(만든 예시) 처럼 기록이 말하는 만큼 씁니다.
+**증명하는 것.** 어느 주체(`initiatedBy`)가 어느 대상(`targetResources`)에 어떤 활동(`activityDisplayName`)을 했고, 그 시각(UTC)과 결과(`result`)가 무엇이었는지, 그리고 바뀐 속성의 옛 값과 새 값입니다. 보고서에는 "2026-03-02 01:14 UTC 에 계정 A 가 앱 B 에 비밀을 추가한 기록이 있다"(만든 예시) 처럼 기록으로 확인되는 만큼 씁니다.
 
 **증명하지 못하는 것.** 변경의 의도, 그리고 그 계정을 실제로 누가 쓰고 있었는지는 알려 주지 않습니다. `initiatedBy` 가 앱이면 사람이 아니라 앱 자격 증명으로 한 작업이라서, 그 앱의 비밀이 언제 누구에게 추가됐는지를 거꾸로 따라가야 합니다. 바뀐 설정이 그 뒤 실제로 쓰였는지(예: 추가된 앱 비밀로 로그인했는지)는 로그인 로그의 서비스 주체 로그인에서 따로 확인합니다.
 
@@ -89,10 +89,10 @@ Graph `directoryAudit` 자원 하나가 감사 항목 하나입니다[3].
 
 ## 함정과 한계
 
-- **필드 이름이 수집 경로마다 다릅니다.** Graph 는 `activityDisplayName` 처럼 소문자로 시작하고[3], Log Analytics 의 `AuditLogs` 표는 `OperationName`, `TargetResources` 처럼 대문자로 시작합니다[6][7]. 공개 탐지 규칙도 같은 활동을 규칙마다 `OperationName`, `operationName`, `properties.message` 처럼 다른 키로 찾으므로[8], 검체의 실제 키 이름을 먼저 확인합니다.
-- **활동 이름 표기가 출처마다 다를 수 있습니다.** 활동 목록 문서는 `Add eligible member to role` 로 적었지만[2], 공개 탐지 규칙은 `Add eligible member (permanent)`, `Add eligible member (eligible)` 로 찾습니다[8]. 목록 문서는 실제 서비스와 어긋날 수 있다고 스스로 밝히므로[2], 검체에서 실제 이름을 뽑아 본 뒤 검색합니다.
+- **필드 이름이 수집 경로마다 다릅니다.** Graph 는 `activityDisplayName` 처럼 소문자로 시작하고[3], Log Analytics 의 `AuditLogs` 표는 `OperationName`, `TargetResources` 처럼 대문자로 시작합니다[6][7]. 공개 탐지 규칙도 같은 활동을 규칙마다 `OperationName`, `operationName`, `properties.message` 처럼 다른 키로 찾으므로[8], 받은 데이터의 실제 키 이름을 먼저 확인합니다.
+- **활동 이름 표기가 출처마다 다를 수 있습니다.** 활동 목록 문서는 `Add eligible member to role` 로 적었지만[2], 공개 탐지 규칙은 `Add eligible member (permanent)`, `Add eligible member (eligible)` 로 찾습니다[8]. 목록 문서는 실제 서비스와 어긋날 수 있다고 스스로 밝히므로[2], 받은 데이터에서 실제 이름을 뽑아 본 뒤 검색합니다.
 - **통합 감사 로그 사본은 이름 끝에 마침표가 붙습니다.** 통합 감사 로그의 `AzureActiveDirectory` 레코드는 `Consent to application.`, `Add OAuth2PermissionGrant.`, `Disable Strong Authentication.` 처럼 끝에 마침표가 붙은 작업 이름으로 검색합니다[9][10]. Entra ID 쪽 이름 그대로 검색하면 빠집니다.
-- **옛 값·새 값은 문자열 안의 JSON 입니다.** 한 번 더 풀어야 값을 비교할 수 있고, 조건부 접근 정책처럼 큰 객체는 두 JSON 을 통째로 견줘야 합니다[6].
+- **옛 값·새 값은 문자열 안의 JSON 입니다.** 한 번 더 풀어야 값을 비교할 수 있고, 조건부 접근 정책처럼 큰 객체는 두 JSON 을 통째로 비교해야 합니다[6].
 - **다단계 인증 끄기가 한 이름으로만 남지 않습니다.** `Disable Strong Authentication` 활동 말고도, `Update user` 활동의 바뀐 속성 `StrongAuthenticationRequirement` 새 값에 `State":0` 이 들어간 형태로 찾는 규칙이 있습니다[8]. 활동 이름 하나로만 찾지 말고 바뀐 속성까지 봅니다.
 - **정보용 항목이 많습니다.** "Microsoft Substrate Management" 가 작업자인 항목은 Exchange Online 의 동기화 기록이라[1], 사람의 작업으로 읽지 않습니다.
 - **보관 기간이 짧습니다.** Free 는 7일입니다[4]. 사고를 알게 되면 [로그부터 지키기](../../../03-techniques/acquisition/log-preservation.md) 에 따라 먼저 내보냅니다.
@@ -138,7 +138,7 @@ Graph `directoryAudit` 자원 하나가 감사 항목 하나입니다[3].
 }
 ```
 
-읽는 순서는 이렇습니다. `activityDisplayName` 과 `category` 로 어떤 종류의 변경인지 보고, `initiatedBy` 로 사람(`user`)인지 앱(`app`)인지 가립니다. `targetResources` 로 대상을 확인한 뒤 `modifiedProperties` 의 `oldValue`·`newValue` 를 풀어 무엇이 바뀌었는지 봅니다. 이 예시라면 외부 게스트였던 계정이 테넌트 멤버가 됐다는 뜻입니다. 마지막으로 `correlationId` 가 같은 항목을 모아 한 작업이 여러 줄로 나뉘어 남았는지 확인합니다.
+읽는 순서는 이렇습니다. `activityDisplayName` 과 `category` 로 어떤 종류의 변경인지 보고, `initiatedBy` 로 사람(`user`)인지 앱(`app`)인지 확인합니다. `targetResources` 로 대상을 확인한 뒤 `modifiedProperties` 의 `oldValue`·`newValue` 를 풀어 무엇이 바뀌었는지 봅니다. 이 예시라면 외부 게스트였던 계정이 테넌트 멤버가 됐다는 뜻입니다. 마지막으로 `correlationId` 가 같은 항목을 모아 한 작업이 여러 줄로 나뉘어 남았는지 확인합니다.
 
 ### 공개 도구로 받기
 

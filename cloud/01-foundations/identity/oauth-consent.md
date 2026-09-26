@@ -10,7 +10,7 @@ OAuth 동의 (consent) 는 사용자나 관리자가 앱에 "나(또는 조직) 
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 앱이 사람 대신, 또는 스스로 데이터에 접근할 권리를 얻는 구조를 다룹니다. 동의 한 건은 두 곳에 흔적을 남깁니다. 하나는 동의가 일어난 순간을 적은 감사 로그이고, 다른 하나는 디렉터리에 지금 남아 있는 부여 객체입니다. 감사 로그는 보관 기간이 지나면 사라지고 부여 객체는 취소하면 사라지므로, 둘 중 하나만 보면 과거에 줬다가 거둔 권한이나 보관 기간 전에 준 권한을 놓칩니다.
+이 페이지는 파일 형식이 아니라 앱이 사람 대신, 또는 스스로 데이터에 접근할 권리를 얻는 구조를 다룹니다. 동의 한 건은 두 곳에 흔적을 남깁니다. 하나는 동의가 일어난 순간을 적은 감사 로그이고, 다른 하나는 디렉터리에 지금 남아 있는 부여 객체입니다. 감사 로그는 보관 기간이 지나면 사라지고 부여 객체는 취소하면 사라지므로, 둘 중 하나만 보면 과거에 줬다가 거둔 권한이나 보관 기간 전에 준 권한을 놓칩니다.
 
 | 서비스 | 동의·부여를 남기는 기록 | 지금 부여 상태를 보는 곳 | 자세히 |
 |---|---|---|---|
@@ -20,13 +20,13 @@ OAuth 동의 (consent) 는 사용자나 관리자가 앱에 "나(또는 조직) 
 | Slack | 감사 로그 `app_*` 동작 | 워크스페이스 앱 관리 화면 | [Slack 감사 로그](../../02-artifacts/saas/slack.md) |
 | GitHub | 감사 로그 `oauth_application`·`oauth_app_access_*` 이벤트 | 조직·엔터프라이즈 설정 | [GitHub 감사 로그](../../02-artifacts/saas/github.md) |
 
-AWS 와 Google Cloud 에서 다른 주체에 권한을 넘기는 기록은 역할 넘겨받기·서비스 계정 가장으로 남고, 이 쪽이 아니라 [토큰과 세션](tokens-sessions.md)·[페더레이션과 SSO](federation-sso.md)에서 다룹니다. 앱과 서비스 주체가 신원으로서 어떤 식별자를 쓰는지는 [클라우드 계정과 역할](users-roles.md)에 있습니다.
+AWS 와 Google Cloud 에서 다른 주체에 권한을 넘기는 기록은 역할 넘겨받기·서비스 계정 가장으로 남고, 이 페이지가 아니라 [토큰과 세션](tokens-sessions.md)·[페더레이션과 SSO](federation-sso.md)에서 다룹니다. 앱과 서비스 주체가 신원으로서 어떤 식별자를 쓰는지는 [클라우드 계정과 역할](users-roles.md)에 있습니다.
 
 ## 구조
 
 ### 위임 권한과 애플리케이션 권한
 
-Microsoft ID 플랫폼의 권한은 두 갈래입니다. 위임 권한 (delegated permission) 은 로그인한 사용자가 있는 앱이 그 사용자를 대신해 쓰는 권한이고, 사용자나 관리자가 동의할 수 있습니다[4]. 애플리케이션 권한 (application permission, 앱 역할) 은 백그라운드 서비스처럼 로그인한 사용자 없이 도는 앱이 쓰는 권한이고, 관리자만 동의할 수 있습니다[4]. 동의 화면에서 애플리케이션 권한의 설명은 대개 "without a signed-in user" 로, 위임 권한의 설명은 "on behalf of the signed-in user" 로 끝납니다[3].
+Microsoft ID 플랫폼의 권한은 두 종류입니다. 위임 권한 (delegated permission) 은 로그인한 사용자가 있는 앱이 그 사용자를 대신해 쓰는 권한이고, 사용자나 관리자가 동의할 수 있습니다[4]. 애플리케이션 권한 (application permission, 앱 역할) 은 백그라운드 서비스처럼 로그인한 사용자 없이 도는 앱이 쓰는 권한이고, 관리자만 동의할 수 있습니다[4]. 동의 화면에서 애플리케이션 권한의 설명은 대개 "without a signed-in user" 로, 위임 권한의 설명은 "on behalf of the signed-in user" 로 끝납니다[3].
 
 위임 권한 부여에는 동의 종류 (consent type) 가 붙습니다. `Principal` 은 사용자 한 명이 자기 데이터에 대해 준 동의이고, `AllPrincipals` 는 관리자가 테넌트 전체를 대신해 준 동의입니다[4][2]. 사용자가 앱에 처음 로그인할 때 그 권한에 대한 이전 동의 기록이 없으면 동의 화면이 뜨고, 동의하면 기록이 남아 같은 앱에 다시 로그인할 때는 대개 묻지 않습니다[1].
 
@@ -80,7 +80,7 @@ Entra 감사 로그의 `ApplicationManagement` 범주에 동의·앱 관련 작�
 
 토큰 감사(`applicationName=token`)에는 다섯 가지 이벤트가 있습니다[14]. `authorize` 는 사용자가 앱에 자기 데이터 접근을 허락한 기록이고 설명 문구는 `{actor} authorized access to {app_name} for {scope} scopes` 입니다. `revoke` 는 허락을 거둔 기록, `deny` 는 거부된 요청(`rejection_type` 에 사유), `request` 는 접근 요청(`requester_email`·`app_request_info`), `activity` 는 앱이 사용자 대신 API 를 부른 기록(`{app_name} called {method_name} on behalf of {actor}`)입니다[14]. 매개변수에는 `app_name`·`client_id`·`client_type`(`WEB`·`NATIVE_DESKTOP`·`NATIVE_ANDROID` 등)·`scope`·`api_name`·`method_name`·`num_response_bytes`·`product_bucket`(`GMAIL`·`DRIVE`·`GSUITE_ADMIN` 등)이 있습니다[14].
 
-사용자별로 지금 살아 있는 토큰은 Directory API 의 `tokens` 자원(`kind` 값 `admin#directory#token`)이 돌려주고, `clientId`·`scopes`·`displayText`·`userKey` 와 함께 Google 에 등록되지 않은 익명 클라이언트 ID 면 참인 `anonymous`, 설치형 앱이면 참인 `nativeApp` 이 들어 있습니다[15].
+사용자별로 지금 유효한 토큰은 Directory API 의 `tokens` 자원(`kind` 값 `admin#directory#token`)이 돌려주고, `clientId`·`scopes`·`displayText`·`userKey` 와 함께 Google 에 등록되지 않은 익명 클라이언트 ID 면 참인 `anonymous`, 설치형 앱이면 참인 `nativeApp` 이 들어 있습니다[15].
 
 관리자가 앱 접근을 다룬 기록은 관리 감사에 남습니다. 앱을 신뢰·제한·차단 목록에 넣고 빼면 `ADD_TO_TRUSTED_OAUTH2_APPS`·`ADD_TO_LIMITED_OAUTH2_APPS`·`ADD_TO_BLOCKED_OAUTH2_APPS`·`REMOVE_FROM_TRUSTED_OAUTH2_APPS`·`REMOVE_FROM_BLOCKED_OAUTH2_APPS` 가, 자기 도메인 소유 앱을 한꺼번에 신뢰하거나 거두면 `TRUST_DOMAIN_OWNED_OAUTH2_APPS`·`UNTRUST_DOMAIN_OWNED_OAUTH2_APPS` 가, 서비스 단위로 막거나 풀면 `ALLOW_SERVICE_FOR_OAUTH2_ACCESS`·`DISALLOW_SERVICE_FOR_OAUTH2_ACCESS`·`BLOCK_ALL_THIRD_PARTY_API_ACCESS`·`UNBLOCK_ALL_THIRD_PARTY_API_ACCESS` 가 남습니다[17]. API 클라이언트에 조직 데이터 접근 범위를 허용하면 `AUTHORIZE_API_CLIENT_ACCESS`(매개변수 `API_CLIENT_NAME`·`API_SCOPES`), 거두면 `REMOVE_API_CLIENT_ACCESS` 가 남습니다[18]. 관리자가 사용자의 3자 OAuth 토큰을 앱 단위로 취소하면 `REVOKE_3LO_TOKEN`, 기기 단위로 취소하면 `REVOKE_3LO_DEVICE_TOKENS` 가 남습니다[19].
 
@@ -129,7 +129,7 @@ Google Workspace 토큰 로그는 두어 시간, OAuth 로그는 몇 시간까�
 
 - **비밀번호 재설정으로 끝나지 않습니다.** 동의받은 앱은 조직 밖에 있으므로 비밀번호를 바꾸거나 다단계 인증을 요구해도 그 앱의 접근은 막히지 않습니다[6]. 계정 복구 시각 뒤에도 앱의 사용 기록이 이어질 수 있습니다.
 - **앱이 사라진 것과 접근이 끝난 것은 다릅니다.** 앱을 지우면 다른 사용자가 다시 동의해 돌아올 수 있어 대응 지침은 비활성화를 권하고, 비활성화된 앱은 새 토큰을 받지 못합니다[4]. 동의 취소는 감사 로그에 `Remove delegated permission grant`·`Remove app role assignment from service principal` 로 남습니다[6][8].
-- **이름은 흉내 낼 수 있습니다.** 유명 제품 이름을 쓰는 앱이 있으므로[4] 표시 이름 대신 `appId`, 앱 소유 조직(`AppOwnerOrganizationId`)[26], 확인된 게시자 여부[4]로 가립니다.
+- **이름은 흉내 낼 수 있습니다.** 유명 제품 이름을 쓰는 앱이 있으므로[4] 표시 이름 대신 `appId`, 앱 소유 조직(`AppOwnerOrganizationId`)[26], 확인된 게시자 여부[4]로 구분합니다.
 - **Entra 와 통합 감사 로그의 작업 이름이 다릅니다.** 통합 감사 로그 쪽에는 끝에 마침표가 붙어 `Consent to application.` 처럼 적힙니다[8][27]. 문자열이 정확히 같아야 걸리는 검색은 둘을 따로 씁니다.
 - **문서 속 오타.** Microsoft 의 동의 조사 문서 두 곳에 `AllPrinciples` 로 적힌 문장이 있지만 실제 값은 `AllPrincipals` 입니다[6][4].
 - **위험 권한 목록은 기준마다 다릅니다.** Microsoft 플레이북은 Mail.*(Mail.ReadBasic* 제외)·Contacts.*·MailboxSettings.*·People.*·Files.*·Notes.*·Directory.AccessAsUser.All·User_Impersonation 을 먼저 보라고 하고, Microsoft 사고 대응팀이 관찰한 동의 피싱의 99% 는 앞의 여섯 가지 조합을 썼습니다[4]. Hawk 는 AppRoleAssignment.ReadWrite.All·RoleManagement.ReadWrite.Directory 를 가장 위험한 권한으로, Mail.ReadWrite·Mail.Send·Files.*·Sites.*·User.* 등을 높은 위험으로, `AllPrincipals` 이거나 권한 이름에 "all" 이 든 부여를 넓은 범위로 분류합니다[27]. 도구가 붙인 위험 등급은 도구의 기준이라는 점을 보고서에 밝힙니다.

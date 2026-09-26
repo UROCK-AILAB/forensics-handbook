@@ -23,7 +23,7 @@ nav_order: 870
 |---|---|---|
 | 호환성 조치가 필요한 창(GUI) 프로그램 EXE 를 실행함 | 실행할 때 DiagTrack | 예 |
 | 프로그램을 설치하면서 생긴 EXE·SYS | 설치 처리, 점검 작업 | 아니오 |
-| 점검 작업이 훑는 폴더의 EXE (`Program Files`, `Program Files (x86)`, 바탕 화면) | 점검 작업 | 아니오 |
+| 점검 작업이 살펴보는 폴더의 EXE (`Program Files`, `Program Files (x86)`, 바탕 화면) | 점검 작업 | 아니오 |
 
 설치 폴더의 DLL 은 이 키에 들어오지 않습니다(10.0.17134 기준)[1]. 항목 하나만 보고는 세 종류 가운데 어디에 속하는지 가릴 수 없으며, 실행 증거로 쓸 수 있는 조건은 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 
@@ -49,11 +49,11 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 
 `Usn`·`OriginalFileName`·`Description`·`AppxPackageFullName`·`AppxPackageRelativeId` 값도 쓰입니다. Windows 10 21H2 하이브에는 `Usn` 이 있고[6] 공개 파서 AmcacheParser 도 이 값들을 읽습니다[5]. 어느 버전에서 처음 생겼는지는 공개 자료가 없습니다.
 
-Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서에 같은 이름의 인벤토리 이벤트가 있습니다[2]. 다만 Windows 11 하이브의 버전별 차이를 정리한 공개 자료는 없어 검체에서 확인합니다.
+Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서에 같은 이름의 인벤토리 이벤트가 있습니다[2]. 다만 Windows 11 하이브의 버전별 차이는 실제 하이브에서 확인해야 합니다.
 
 ## 구조
 
-하위 키 안에 있는 값입니다. "근거" 칸의 "문서" 는 Microsoft 진단 데이터 문서의 같은 이름 필드 설명입니다. "연구" 는 ANSSI 자료입니다. "추정" 은 공식 정의가 없어서 이름과 관찰로 해석한 값입니다.
+하위 키 안에 있는 값입니다. "근거" 열의 "문서" 는 Microsoft 진단 데이터 문서의 같은 이름 필드 설명입니다. "연구" 는 ANSSI 자료입니다. "추정" 은 공식 정의가 없어서 이름과 관찰로 해석한 값입니다.
 
 | 값 | 형식 | 뜻 | 근거 |
 |---|---|---|---|
@@ -64,9 +64,9 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 | `Size` | REG_QWORD | 파일 크기(바이트). 10.0.14913 라이브러리에서는 16진 문자열입니다. | 연구 |
 | `ProgramId` | REG_SZ | 파일이 속한 프로그램의 식별자. 이름·버전·게시자·언어로 만든 해시입니다. | 문서 |
 | `Publisher` | REG_SZ | 게시자 | 연구 |
-| `Version`·`BinFileVersion` | REG_SZ | 파일 버전. `Bin` 쪽은 버전을 숫자 네 칸으로 정리한 값입니다. | 문서 |
+| `Version`·`BinFileVersion` | REG_SZ | 파일 버전. `Bin` 쪽은 버전을 숫자 네 부분으로 정리한 값입니다. | 문서 |
 | `ProductName`·`ProductVersion`·`BinProductVersion` | REG_SZ | 제품 이름과 제품 버전 | 문서 |
-| `LinkDate` | REG_SZ | 파일이 링크된 시각. `MM/DD/YYYY HH:MM:SS` 꼴 문자열입니다. | 문서 |
+| `LinkDate` | REG_SZ | 파일이 링크된 시각. `MM/DD/YYYY HH:MM:SS` 형식 문자열입니다. | 문서 |
 | `BinaryType` | REG_SZ | 실행 파일 종류. `PE32_I386`, `PE64_AMD64`, `PE32_CLR_32` 같은 이름입니다. | 문서 |
 | `Language` | REG_DWORD | 언어 코드 (LCID). 파일 버전 정보의 언어로 봅니다. | 추정 |
 | `IsPeFile` | REG_DWORD | PE 파일이면 1 | 추정 |
@@ -75,14 +75,14 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 | `OriginalFileName`·`Description` | REG_SZ | 버전 정보의 원래 파일 이름과 설명 | 추정 |
 | `AppxPackageFullName`·`AppxPackageRelativeId` | REG_SZ | 스토어 앱 패키지에 속한 파일일 때의 패키지 이름 | 추정 |
 
-- `Publisher`·`ProductName`·`BinaryType` 도 소문자로 남을 수 있습니다[6]. 문자열을 찾을 때는 대소문자를 가리지 않습니다.
+- `Publisher`·`ProductName`·`BinaryType` 도 소문자로 남을 수 있습니다[6]. 문자열을 찾을 때는 대소문자를 구분하지 않습니다.
 - 값이 어떻게 셀에 저장되는지는 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md) 에서 다룹니다.
 
 ### 설치 프로그램과 잇기 (ProgramId)
 
 > 그림 자리: InventoryApplicationFile 하위 키의 `ProgramId` 값이 InventoryApplication 하위 키 이름과 이어지는 모습. 짝이 있는 항목과 짝이 없는 항목을 나란히 보여 주는 그림
 
-[설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 이고[1], 이 키의 `ProgramId` 와 같은 이름의 하위 키가 있으면 그 설치 프로그램에 딸린 파일입니다. 짝이 없는 항목은 설치 기록과 이어지지 않는 파일이며, 공개 파서 AmcacheParser 는 이런 항목을 "Unassociated" 로 따로 모읍니다[5]. 설치 없이 들어온 파일이 이 무리에 섞이므로 먼저 훑어볼 후보가 됩니다. 다만 프로그램을 지우면 InventoryApplication 쪽 하위 키가 지워지므로[1], 짝이 없다는 것만으로 설치 없이 들어온 파일이라고 단정하지 않습니다.
+[설치 프로그램 항목 (InventoryApplication)](inventoryapplication.md) 의 하위 키 이름은 `ProgramId` 이고[1], 이 키의 `ProgramId` 와 같은 이름의 하위 키가 있으면 그 설치 프로그램에 딸린 파일입니다. 짝이 없는 항목은 설치 기록과 이어지지 않는 파일이며, 공개 파서 AmcacheParser 는 이런 항목을 "Unassociated" 로 따로 모읍니다[5]. 설치 없이 들어온 파일이 이 무리에 섞이므로 먼저 살펴볼 후보가 됩니다. 다만 프로그램을 지우면 InventoryApplication 쪽 하위 키가 지워지므로[1], 짝이 없다는 것만으로 설치 없이 들어온 파일이라고 단정하지 않습니다.
 
 ## 증거로서 의미
 
@@ -95,14 +95,14 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 
 ### 증명하지 못하는 것
 
-- 대부분의 항목은 실행 기록이 아닙니다. 폴더를 훑거나 프로그램을 설치할 때도 항목이 생깁니다.
+- 대부분의 항목은 실행 기록이 아닙니다. 폴더를 살펴보거나 프로그램을 설치할 때도 항목이 생깁니다.
 - 누가 파일을 두었는지, 누가 실행했는지는 남지 않습니다. 사용자를 가리키는 값이 없습니다.
 - 실행 횟수와 마지막 실행 시각은 없습니다.
 - 큰 파일의 `FileId` 는 파일 전체의 해시가 아닐 수 있습니다. 계산 범위는 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 - 항목이 없다고 파일이 없었던 것은 아닙니다. 점검 작업이 돌기 전에 지운 파일은 목록에 들어오지 않을 수 있습니다.
 - 항목이 언제 지워지는지는 공개 자료가 없습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다.
 
 > `Amcache.hve` 의 InventoryApplicationFile 에 `<경로>` 항목이 있습니다. 이 항목의 SHA-1 은 `<값>` 이고, 하위 키의 마지막 기록 시각은 `<시각> UTC` 입니다. 이 시각에 이 경로에 이 파일이 있었다는 기록입니다. 이 항목만으로는 실행 여부를 판단할 수 없습니다.
 
@@ -130,10 +130,10 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 ### LinkDate
 
 - 이 값은 파일이 링크된 날짜와 시각입니다[2].
-- PE 헤더의 링크 시각 칸 (TimeDateStamp) 은 1970년 1월 1일 0시부터 센 초입니다[3].
+- PE 헤더의 링크 시각 필드 (TimeDateStamp) 은 1970년 1월 1일 0시부터 센 초입니다[3].
 - 공개 파서 AmcacheParser 는 이 문자열을 UTC 로 읽습니다[5].
-- 이 칸은 파일을 만든 쪽이 정합니다. 마음대로 바꿀 수 있습니다.
-- Windows 10 의 자체 모듈은 재현 가능한 빌드 (reproducible build) 때문에 이 칸에 시각 대신 해시를 넣습니다[4]. 그래서 엉뚱한 날짜가 나옵니다.
+- 이 필드는 파일을 만든 쪽이 정합니다. 마음대로 바꿀 수 있습니다.
+- Windows 10 의 자체 모듈은 재현 가능한 빌드 (reproducible build) 때문에 이 필드에 시각 대신 해시를 넣습니다[4]. 그래서 엉뚱한 날짜가 나옵니다.
 - 원본 파일이 남아 있으면 헤더 값과 맞춰 봅니다. PE 헤더는 [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md) 에서 다룹니다.
 
 ## 함정과 한계
@@ -156,7 +156,7 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 4. 하위 키의 값 셀 (vk) 에서 이름·형식·데이터를 읽습니다. 형식 번호는 REG_SZ 가 1, REG_DWORD 가 4, REG_QWORD 가 11 입니다.
 5. 하위 키 셀 (nk) 의 마지막 기록 시각을 FILETIME 으로 풉니다. 변환은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
-아래는 명세로 만든 예시입니다. 실제 검체에서 나온 값이 아닙니다. `FileId` 에는 설명하려고 빈 데이터의 SHA-1 (`da39a3ee…`) 을 넣었습니다.
+아래는 명세로 만든 예시입니다. 실제 하이브에서 나온 값이 아닙니다. `FileId` 에는 설명하려고 빈 데이터의 SHA-1 (`da39a3ee…`) 을 넣었습니다.
 
 ```
 FileId (REG_SZ, UTF-16LE) 데이터 앞부분
@@ -203,7 +203,7 @@ LinkDate (REG_SZ, UTF-16LE)
 
 ## 실습
 
-Windows 10 이상 공개 검체(NIST CFReDS 등)의 `Amcache.hve` 로 풀어 봅니다.
+Windows 10 이상 공개 데이터 세트(NIST CFReDS 등)의 `Amcache.hve` 로 풀어 봅니다.
 
 1. `ProgramId` 의 짝이 없는 항목을 모두 뽑습니다. 그 가운데 `\users\` 아래 경로는 몇 개입니까?
 2. 한 항목의 `FileId` 와 디스크에 남은 같은 경로 파일의 SHA-1 이 같습니까? 다르면 먼저 `Size` 를 봅니다.

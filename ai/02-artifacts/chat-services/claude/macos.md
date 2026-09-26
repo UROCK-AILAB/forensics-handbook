@@ -33,7 +33,7 @@ Anthropic 은 Cowork 의 디스크 형식을 공개하지 않았습니다. 아�
 
 claude-forensics 는 `-W` 옵션을 주면 macOS 에서 `~/Library/Application Support/Claude` 를 자동으로 찾아 읽고, 다른 OS 에서는 이 옵션을 거부하고 `-w` 로 경로를 직접 받습니다[5]. Windows 에서 같은 폴더는 설치 방식에 따라 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude` 나 `%APPDATA%\Claude` 이고, Linux 에서는 `~/.config/Claude` 입니다[6]. Windows 쪽 폴더 모양과 앱 JSON 파일의 키는 [Windows 앱](windows.md)에서 다룹니다.
 
-대화 기록이 어디에 있는지는 두 도구의 설명이 다릅니다. 2026-06 의 claude-forensics 는 Cowork 대화 기록을 세션 폴더 안의 `audit.jsonl` 에서 읽고, `cliSessionId` 가 가리키는 기록은 `~/.claude/projects/` 에서 찾습니다[5]. 2026-09 의 agentsview 는 세션 폴더 안의 `.claude/projects/` 에서 `cliSessionId` 이름의 기록 파일을 찾고, `audit.jsonl` 은 읽지 않습니다[6]. 앱 판에 따라 한쪽만 있거나 둘 다 있을 수 있으므로 검체에서 두 위치를 모두 봅니다.
+대화 기록이 어디에 있는지는 두 도구의 설명이 다릅니다. 2026-06 의 claude-forensics 는 Cowork 대화 기록을 세션 폴더 안의 `audit.jsonl` 에서 읽고, `cliSessionId` 가 가리키는 기록은 `~/.claude/projects/` 에서 찾습니다[5]. 2026-09 의 agentsview 는 세션 폴더 안의 `.claude/projects/` 에서 `cliSessionId` 이름의 기록 파일을 찾고, `audit.jsonl` 은 읽지 않습니다[6]. 앱 판에 따라 한쪽만 있거나 둘 다 있을 수 있으므로 실제 기기에서 두 위치를 모두 봅니다.
 
 ## 구조
 
@@ -54,7 +54,7 @@ local-agent-mode-sessions/
             └── cliSessionId/subagents/**/agent-id.jsonl   하위 에이전트 기록 [6]
 ```
 
-세션 작업 폴더(`local_sid/`) 아래에는 `.claude/outputs` 같은 큰 하위 폴더가 있고, 메타데이터 파일 옆에는 `cowork-clientdata-cache.json`·`cowork_settings.json` 같은 캐시 파일이 함께 있습니다[6]. 그래서 agentsview 는 `local_` 로 시작하고 `.json` 으로 끝나며 이름이 세션 ID 형식에 맞는 파일만 메타데이터로 봅니다. 인코딩된 폴더 이름은 판마다 달라서, 호스트에서 돈 세션은 `-outputs` 로 끝나는 이름이고 가상 머신에서 돈 세션은 `/sessions/이름` 을 바꾼 이름입니다[6]. 이름을 되짚어 만들지 말고 `cliSessionId.jsonl` 파일을 찾아 들어갑니다.
+세션 작업 폴더(`local_sid/`) 아래에는 `.claude/outputs` 같은 큰 하위 폴더가 있고, 메타데이터 파일 옆에는 `cowork-clientdata-cache.json`·`cowork_settings.json` 같은 캐시 파일이 함께 있습니다[6]. 그래서 agentsview 는 `local_` 로 시작하고 `.json` 으로 끝나며 이름이 세션 ID 형식에 맞는 파일만 메타데이터로 봅니다. 인코딩된 폴더 이름은 판마다 달라서, 호스트에서 돈 세션은 `-outputs` 로 끝나는 이름이고 가상 머신에서 돈 세션은 `/sessions/이름` 을 바꾼 이름입니다[6]. 폴더 이름을 직접 맞춰 만들지 말고 `cliSessionId.jsonl` 파일을 찾아 들어갑니다.
 
 세션 메타데이터 `local_sid.json` 에서 두 도구가 읽는 키는 다음과 같습니다.
 
@@ -83,9 +83,9 @@ local-agent-mode-sessions/
 
 ### 관리 설정과 로그인 정보
 
-조직은 Jamf Pro·Kandji·Intune 같은 MDM 의 구성 프로필로 환경설정 도메인 `com.anthropic.claudefordesktop` 에 관리 설정을 내려보내고, 쓸 수 있는 키는 Windows 정책과 같은 목록입니다[3]. 키 목록은 [Windows 앱](windows.md)의 관리 정책 절에 있습니다. 구성 프로필이 기기에 남기는 plist 파일의 경로는 공개 문서에 나오지 않아 검체로 확인해야 하고, 찾은 plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html)의 방법으로 읽습니다.
+조직은 Jamf Pro·Kandji·Intune 같은 MDM 의 구성 프로필로 환경설정 도메인 `com.anthropic.claudefordesktop` 에 관리 설정을 내려보내고, 쓸 수 있는 키는 Windows 정책과 같은 목록입니다[3]. 키 목록은 [Windows 앱](windows.md)의 관리 정책 절에 있습니다. 구성 프로필이 기기에 남기는 plist 파일의 경로는 실제 기기에서 확인해야 하고, 찾은 plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html)의 방법으로 읽습니다.
 
-앱이 로그인 정보를 키체인에 두는지와 항목 이름은 공개된 분석 자료가 없어 검체의 키체인에서 확인해야 합니다. 키체인의 구조와 보호 방식은 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에서 다룹니다. `buddy-tokens.json` 처럼 이름에 토큰이 들어간 파일에서 인증 값이 보이면 보고서에서 가립니다.
+앱이 로그인 정보를 키체인에 두는지와 항목 이름은 실제 기기의 키체인에서 확인해야 합니다. 키체인의 구조와 보호 방식은 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에서 다룹니다. `buddy-tokens.json` 처럼 이름에 토큰이 들어간 파일에서 인증 값이 보이면 보고서에서 가립니다.
 
 ## 증거로서 의미
 
@@ -95,7 +95,7 @@ local-agent-mode-sessions/
 
 ## 시각 해석
 
-세션 메타데이터의 `createdAt`·`lastActivityAt` 은 유닉스 epoch 밀리초 정수입니다[6]. 이 칸과 `_audit_timestamp` 는 밀리초 정수나 ISO 8601 문자열로 올 수 있고, `audit.jsonl` 의 시각은 끝에 `Z` 가 붙은 UTC 문자열입니다[5]. agentsview 는 대화 기록에 시각이 하나도 없는 세션(만들고 돌리지 않은 세션)만 `createdAt`·`lastActivityAt` 으로 시작·끝 시각을 채웁니다[6].
+세션 메타데이터의 `createdAt`·`lastActivityAt` 은 유닉스 epoch 밀리초 정수입니다[6]. 이 필드와 `_audit_timestamp` 는 밀리초 정수나 ISO 8601 문자열로 올 수 있고, `audit.jsonl` 의 시각은 끝에 `Z` 가 붙은 UTC 문자열입니다[5]. agentsview 는 대화 기록에 시각이 하나도 없는 세션(만들고 돌리지 않은 세션)만 `createdAt`·`lastActivityAt` 으로 시작·끝 시각을 채웁니다[6].
 
 세션 제목을 바꾸면 메타데이터 파일만 바뀌어서, agentsview 는 메타데이터 파일과 대화 기록 파일의 수정 시각 가운데 늦은 쪽을 세션의 수정 시각으로 씁니다[6]. 메타데이터 파일의 수정 시각이 늦다고 그때 대화가 있었다고 보지 않습니다.
 
@@ -107,7 +107,7 @@ local-agent-mode-sessions/
 - **큰 폴더는 따로 판단합니다.** claude-forensics 는 `vm_bundles/`·`Cache/`·`Code Cache/` 를 수사 가치가 없다고 보고 복사하지 않습니다[5]. 도구의 수집 목록을 그대로 쓰면 이 폴더들이 빠지므로, 사건에 필요하면 따로 뜹니다.
 - **`skills-plugin/` 은 세션이 아닙니다.** `local-agent-mode-sessions/` 바로 아래에 있지만 플러그인 지원 데이터입니다[5][6].
 - **도구마다 읽는 기록이 다릅니다.** 위치 절에서 본 것처럼 `audit.jsonl` 과 세션 폴더 안 `.claude/projects/` 가운데 도구가 한쪽만 읽을 수 있어서, 도구 결과에 세션이 비어 있으면 원본 폴더를 직접 봅니다.
-- **App Store 판과 헷갈리지 않습니다.** App Store 의 Claude 앱은 iPhone·iPad 호환만 표기돼 있고 Mac 호환 표기는 없습니다(2026-09 기준)[4]. Mac 의 Claude 흔적은 이 페이지의 데스크톱 앱에서 나온 것인지 [웹 브라우저](web.md)에서 나온 것인지부터 가립니다.
+- **App Store 판과 헷갈리지 않습니다.** App Store 의 Claude 앱은 iPhone·iPad 호환만 표기돼 있고 Mac 호환 표기는 없습니다(2026-09 기준)[4]. Mac 의 Claude 흔적은 이 페이지의 데스크톱 앱에서 나온 것인지 [웹 브라우저](web.md)에서 나온 것인지부터 확인합니다.
 - **앱을 지워도 라이브러리가 남을 수 있습니다.** 응용 프로그램 폴더에 앱이 없어도 사용자 라이브러리의 폴더와 로그를 따로 봅니다.
 
 ## 직접 분석해 보기
@@ -146,12 +146,12 @@ local-agent-mode-sessions/
 | [통합 로그 형식](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/unified-log/index.html) | 앱 실행과 관련된 시스템 기록 |
 | [MCP 서버와 도구 호출 기록](../../dev-agents/mcp.md) | 연결한 로컬 도구 |
 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱과 에이전트가 실제로 접속한 시각 |
-| [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md) | 에이전트 기록으로 행위를 되짚는 순서 |
+| [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md) | 에이전트 기록으로 행위를 추적하는 순서 |
 | [계정 데이터 내보내기](export.md) | 일반 채팅 대화 본문과 시각 |
 
 ## 실습
 
-직접 만든 시험용 macOS 가상 머신이나 공개 검체(NIST CFReDS 등)의 Mac 이미지로 다음을 풀어 봅니다.
+직접 만든 시험용 macOS 가상 머신이나 공개 시험 자료(NIST CFReDS 등)의 Mac 이미지로 다음을 풀어 봅니다.
 
 1. `local-agent-mode-sessions/` 아래 세션 폴더에 `audit.jsonl` 과 `.claude/projects/` 가운데 무엇이 있는가? 둘 다 있다면 같은 대화를 담고 있는가?
 2. `local_sid.json` 의 `createdAt`·`lastActivityAt` 과 대화 기록 첫 줄·마지막 줄의 시각은 얼마나 떨어져 있는가?

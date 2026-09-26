@@ -49,16 +49,16 @@ nav_order: 550
 |---|---|---|
 | systemd 판 | 255 | 252 |
 | 부팅 적재 목록 | 위 네 디렉터리[1][3] | 같음[3][4] |
-| `/etc/modules` | `/etc/modules-load.d/modules.conf` 가 이 파일을 가리키는 링크[5]. kmod 설치 때 파일이 없으면 "obsolete" 주석 네 줄만 든 파일을 만든다[6] | 검체에서 확인 |
-| `kmod.service` | `systemd-modules-load.service` 의 별칭 링크[5] | 검체에서 확인 |
-| modprobe 설정 | kmod 패키지가 `/etc/modprobe.d/` 와 `/usr/lib/modprobe.d/` 를 만든다[6] | 검체에서 배포판 디렉터리 확인 |
-| 명령 파일 | `lsmod`·`modprobe`·`insmod`·`rmmod`·`modinfo`·`depmod` 가 모두 `/usr/bin/kmod` 로 가는 링크[6] | 검체에서 확인 |
+| `/etc/modules` | `/etc/modules-load.d/modules.conf` 가 이 파일을 가리키는 링크[5]. kmod 설치 때 파일이 없으면 "obsolete" 주석 네 줄만 든 파일을 만든다[6] | 실제 시스템에서 확인 |
+| `kmod.service` | `systemd-modules-load.service` 의 별칭 링크[5] | 실제 시스템에서 확인 |
+| modprobe 설정 | kmod 패키지가 `/etc/modprobe.d/` 와 `/usr/lib/modprobe.d/` 를 만든다[6] | 실제 시스템에서 배포판 디렉터리 확인 |
+| 명령 파일 | `lsmod`·`modprobe`·`insmod`·`rmmod`·`modinfo`·`depmod` 가 모두 `/usr/bin/kmod` 로 가는 링크[6] | 실제 시스템에서 확인 |
 
 Ubuntu 의 `/etc/modules` 에 주석 말고 모듈 이름이 적혀 있으면 패키지가 만든 기본 상태에서 바뀐 것이고, 이 파일도 `modules.conf` 링크를 거쳐 부팅 때 읽힙니다[5][6].
 
 ### 모듈 파일
 
-`modprobe` 와 `modinfo` 는 모듈 디렉터리 아래 `uname -r` 이름의 폴더에서 모듈과 `modules.dep.bin` 을 찾습니다[8][9]. 모듈 디렉터리는 kmod 를 빌드할 때 정하는 값이라, 검체에서 `modules.dep.bin` 이 있는 폴더를 찾아 확인합니다. `modprobe` 는 모듈 이름 대신 파일 경로(상대 경로면 `./` 로 시작)를 받아 그 파일을 바로 실을 수도 있어서[8], 모듈 파일이 이 폴더 밖에 있을 수 있습니다.
+`modprobe` 와 `modinfo` 는 모듈 디렉터리 아래 `uname -r` 이름의 폴더에서 모듈과 `modules.dep.bin` 을 찾습니다[8][9]. 모듈 디렉터리는 kmod 를 빌드할 때 정하는 값이라, 실제 시스템에서 `modules.dep.bin` 이 있는 폴더를 찾아 확인합니다. `modprobe` 는 모듈 이름 대신 파일 경로(상대 경로면 `./` 로 시작)를 받아 그 파일을 바로 실을 수도 있어서[8], 모듈 파일이 이 폴더 밖에 있을 수 있습니다.
 
 ## 구조
 
@@ -72,7 +72,7 @@ Ubuntu 의 `/etc/modules` 에 주석 말고 모듈 이름이 적혀 있으면 �
 | `/proc/sys/kernel/modprobe` | 자동 적재 도우미 경로[10] |
 | `/proc/sys/kernel/modules_disabled` | 1 이면 적재·제거 잠김[10] |
 
-Velociraptor 는 `/proc/modules` 한 줄을 공백으로 나눠 `Name`, `Size`, `UseCount`, `UsedBy`, `Status`, `Address` 칸으로 읽습니다[17]. 모듈 때문에 taint 가 걸렸으면 그 줄에 괄호 표시가 붙고, UAC 는 `grep "(.*)" /proc/modules` 로 이런 줄만 따로 뽑습니다[16].
+Velociraptor 는 `/proc/modules` 한 줄을 공백으로 나눠 `Name`, `Size`, `UseCount`, `UsedBy`, `Status`, `Address` 필드로 읽습니다[17]. 모듈 때문에 taint 가 걸렸으면 그 줄에 괄호 표시가 붙고, UAC 는 `grep "(.*)" /proc/modules` 로 이런 줄만 따로 뽑습니다[16].
 
 ### taint 비트와 모듈
 
@@ -109,7 +109,7 @@ Loading of %s is rejected
 
 ### 감사 로그
 
-감사 레코드 종류에 `KERN_MODULE`(1330, 커널 모듈 이벤트)이 있습니다[20]. 이 레코드가 남는지는 검체의 감사 설정에 달려 있으므로 [감사 로그 형식](../../01-foundations/logging/auditd-format.md) 과 [감사 로그의 실행 기록](../execution/auditd-execve.md) 에서 규칙을 먼저 확인합니다.
+감사 레코드 종류에 `KERN_MODULE`(1330, 커널 모듈 이벤트)이 있습니다[20]. 이 레코드가 남는지는 분석 대상 시스템의 감사 설정에 달려 있으므로 [감사 로그 형식](../../01-foundations/logging/auditd-format.md) 과 [감사 로그의 실행 기록](../execution/auditd-execve.md) 에서 규칙을 먼저 확인합니다.
 
 ## 증거로서 의미
 
@@ -117,11 +117,11 @@ Loading of %s is rejected
 
 `modules-load.d`·`/etc/modules` 에 모듈 이름이 있으면 부팅할 때마다 그 모듈을 싣도록 설정돼 있었다는 뜻이고, `modprobe.d` 의 `install`·`remove` 줄은 그 모듈을 싣거나 뺄 때마다 적힌 명령이 돌도록 설정돼 있었다는 뜻입니다[1][7]. 저널에 `systemd-modules-load` 의 "Inserted module" 줄이 있으면 그 부팅에서 이 서비스가 해당 모듈을 실었습니다[4]. taint 값에 `O` 나 `E` 가 켜져 있으면 이번 부팅 동안 트리 밖 모듈이나 서명 없는 모듈이 한 번 이상 실렸습니다[11]. 메모리 이미지에서 모듈 목록과 다른 자료 구조가 서로 어긋나면 모듈을 숨기려고 커널 자료를 고친 흔적입니다[21].
 
-보고서에는 "이 부팅에서 이 이름의 트리 밖 모듈이 적재됐다는 커널 메시지가 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 부팅에서 이 이름의 트리 밖 모듈이 적재됐다는 커널 메시지가 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ### 증명하지 못하는 것
 
-설정 파일은 싣도록 적어 둔 것일 뿐 실제로 실렸다는 증거가 아니고, 적재에 실패하거나 차단 목록에 걸렸을 수 있습니다[4]. 반대로 `insmod` 나 `modprobe` 로 손수 실은 모듈은 설정 파일을 남기지 않으므로, 설정 파일이 없다고 모듈이 없었다고 할 수 없습니다. taint 비트는 어느 모듈 때문인지 말하지 않고, `O`·`P` 메시지는 그 비트가 처음 켜질 때만, 서명 메시지는 부팅당 한 번만 찍히므로 두 번째 모듈부터는 메시지가 없습니다[12]. 전원을 끈 뒤 만든 디스크 이미지에는 `/proc` 과 `/sys` 가 없어서 적재 상태를 볼 수 없습니다. 누가 모듈을 실었는지는 이 기록들만으로 알 수 없고 명령 기록과 감사 로그로 좁혀야 합니다.
+설정 파일은 싣도록 적어 둔 것일 뿐 실제로 실렸다는 증거가 아니고, 적재에 실패하거나 차단 목록에 걸렸을 수 있습니다[4]. 반대로 `insmod` 나 `modprobe` 로 손수 실은 모듈은 설정 파일을 남기지 않으므로, 설정 파일이 없다고 모듈이 없었다고 할 수 없습니다. taint 비트로는 어느 모듈 때문인지 알 수 없고, `O`·`P` 메시지는 그 비트가 처음 켜질 때만, 서명 메시지는 부팅당 한 번만 찍히므로 두 번째 모듈부터는 메시지가 없습니다[12]. 전원을 끈 뒤 만든 디스크 이미지에는 `/proc` 과 `/sys` 가 없어서 적재 상태를 볼 수 없습니다. 누가 모듈을 실었는지는 이 기록들만으로 알 수 없고 명령 기록과 감사 로그로 좁혀야 합니다.
 
 ## 시각 해석
 
@@ -134,15 +134,15 @@ Loading of %s is rejected
 
 `O` 메시지와 서명 메시지가 부팅당 처음 한 번만 찍힌다는 점은 시각 해석에도 걸립니다[12]. 이 메시지의 시각은 "이 부팅에서 처음으로 그런 모듈이 실린 때" 이지, 문제의 모듈이 실린 때라는 보장이 없습니다. 같은 부팅에서 정상 드라이버가 먼저 `O` 를 켰다면 뒤에 실린 모듈은 로그에 흔적이 없습니다.
 
-파일 시각의 뜻은 [ext4 시각](../../01-foundations/filesystem/ext4/timestamps.md), 커널 메시지의 경과 시간을 벽시계로 바꾸는 법은 [커널 로그](../system-info/kernel-log.md) 와 [부팅과 종료 기록](../system-info/boot-shutdown.md), 값 변환은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+파일 시각의 뜻은 [ext4 시각](../../01-foundations/filesystem/ext4/timestamps.md), 커널 메시지의 경과 시간을 실제 시각으로 바꾸는 법은 [커널 로그](../system-info/kernel-log.md) 와 [부팅과 종료 기록](../system-info/boot-shutdown.md), 값 변환은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
 - **수집 정의가 경로를 다 덮지 않습니다.** ForensicArtifacts 의 `KernelModules` 는 `/etc/modules.conf` 와 `/etc/modprobe.d/*` 만 정의하고 `modules-load.d` 는 정의하지 않습니다[15]. 이 정의에만 기대면 부팅 적재 목록과 `/usr/lib/`·`/usr/local/lib/`·`/run/` 쪽 파일을 놓치므로, 위의 디렉터리를 모두 따로 모읍니다.
 - **`install` 줄은 모듈이 아니라 명령입니다.** 적재된 모듈 목록만 보면 `install` 로 걸어 둔 명령은 보이지 않습니다[7]. `modprobe.d` 파일을 모두 열어 `install`·`remove` 줄을 따로 봅니다.
-- **같은 이름의 파일과 `/dev/null` 링크.** `/etc/` 에 벤더 파일과 같은 이름의 파일이 있으면 벤더 파일은 읽히지 않습니다[3][7]. 디렉터리를 하나씩 보지 말고 이름 기준으로 합쳐서 실제로 읽히는 파일을 가립니다.
+- **같은 이름의 파일과 `/dev/null` 링크.** `/etc/` 에 벤더 파일과 같은 이름의 파일이 있으면 벤더 파일은 읽히지 않습니다[3][7]. 디렉터리를 하나씩 보지 말고 이름 기준으로 합쳐서 실제로 읽히는 파일을 구분합니다.
 - **라이브의 두 목록 비교는 사용자 공간까지만 잡습니다.** `/proc/modules` 와 `/sys/module` 은 둘 다 커널 안에서 만드는 값이라, 커널 안의 루트킷은 둘 다 속일 수 있습니다[21]. `lsmod` 출력과 `/proc/modules` 를 비교하는 방식은 사용자 공간 조작만 잡습니다[21]. 숨은 모듈은 메모리 이미지에서 찾습니다.
-- **dissect `sysmodules` 는 `initstate` 파일이 있는 폴더만 모듈로 셉니다**[18]. 이 파일이 없는 `/sys/module` 폴더는 결과에서 빠질 가능성이 있으므로 원래 목록과 폴더 수를 맞춰 봅니다.
+- **dissect `sysmodules` 는 `initstate` 파일이 있는 폴더만 모듈로 봅니다**[18]. 이 파일이 없는 `/sys/module` 폴더는 결과에서 빠질 가능성이 있으므로 원래 목록과 폴더 수를 맞춰 봅니다.
 - **수집 도구가 taint 를 켤 수 있습니다.** 메모리 수집 도구를 커널 모듈로 실으면 `O`·`E` 가 켜질 수 있으니, 수집 기록과 대조합니다([메모리 수집](../../03-techniques/acquisition/memory-acquisition.md)).
 - **eBPF 는 모듈이 아닙니다.** eBPF 로 만든 루트킷은 커널 모듈을 쓰지 않아 모듈 교차 비교로 찾을 수 없습니다[21]. eBPF 흔적 수집은 [라이브 응답 수집](../../03-techniques/acquisition/live-response.md) 에서 다룹니다.
 - 논문은 폴더 이름을 `/sys/modules` 로 적었지만[21] 도구 코드는 `/sys/module` 을 읽습니다[16][18].
@@ -179,7 +179,7 @@ journalctl -D /mnt/evidence/var/log/journal -k -b -1 -g 'taint|verification fail
 
 `modinfo` 는 모듈의 속성을 `필드: 값` 으로 찍고, `-b` 로 모듈을 찾을 뿌리 디렉터리를, `-k` 로 커널 판을 정합니다[9]. `-F intree` 결과가 비어 있으면 그 모듈은 트리 밖 모듈로 적재돼 `O` taint 를 켭니다[12]. 저널 읽기 옵션은 [journalctl 로 읽기](../../01-foundations/logging/systemd-journal/journalctl.md) 에 있습니다.
 
-라이브 시스템에서는 UAC 가 `lsmod`, `ls -la /sys/module`, 모듈별 `parameters` 목록, 모듈별 `modinfo`, `/proc/sys/kernel/tainted`, `dmesg | grep -i taint`, `grep "(.*)" /proc/modules` 를 받습니다[16]. ForensicArtifacts 의 `LoadedKernelModules` 는 `/sbin/lsmod` 를 실행하고[15], Velociraptor 는 `Linux.Proc.Modules` 로 `/proc/modules` 를 칸별로 나눕니다[17]. 효력이 있는 modprobe 설정 전체는 `modprobe -c` 로 찍습니다[8].
+라이브 시스템에서는 UAC 가 `lsmod`, `ls -la /sys/module`, 모듈별 `parameters` 목록, 모듈별 `modinfo`, `/proc/sys/kernel/tainted`, `dmesg | grep -i taint`, `grep "(.*)" /proc/modules` 를 받습니다[16]. ForensicArtifacts 의 `LoadedKernelModules` 는 `/sbin/lsmod` 를 실행하고[15], Velociraptor 는 `Linux.Proc.Modules` 로 `/proc/modules` 를 필드별로 나눕니다[17]. 효력이 있는 modprobe 설정 전체는 `modprobe -c` 로 찍습니다[8].
 
 메모리 이미지에서는 Volatility 3 을 씁니다[19].
 
@@ -189,7 +189,7 @@ vol -f memory.lime linux.malware.modxview
 vol -f memory.lime linux.module_extract --base 0x주소
 ```
 
-`linux.lsmod` 는 모듈 목록을 읽고, `linux.malware.check_modules` 는 모듈 목록과 sysfs 정보를 비교하고, `linux.malware.hidden_modules` 는 메모리를 긁어 숨은 모듈을 찾습니다[19]. `linux.malware.modxview` 는 세 결과를 모아 모듈마다 `In procfs`, `In sysfs`, `In scan`, `Taints` 칸으로 보여 주고, `linux.module_extract` 는 주어진 주소에서 ELF 파일을 다시 만듭니다[19]. `malware` 가 빠진 옛 이름(`linux.check_modules`·`linux.hidden_modules`·`linux.modxview`)은 폐기 예정으로 표시돼 있고 제거 날짜는 2026-06-07 로 적혀 있습니다[19]. 메모리 분석의 일반 절차는 [메모리 분석](../../03-techniques/analysis/memory-analysis.md), 루트킷 판단 흐름은 [루트킷 찾기](../../03-techniques/analysis/rootkit-detection.md) 에서 다룹니다.
+`linux.lsmod` 는 모듈 목록을 읽고, `linux.malware.check_modules` 는 모듈 목록과 sysfs 정보를 비교하고, `linux.malware.hidden_modules` 는 메모리를 긁어 숨은 모듈을 찾습니다[19]. `linux.malware.modxview` 는 세 결과를 모아 모듈마다 `In procfs`, `In sysfs`, `In scan`, `Taints` 열로 보여 주고, `linux.module_extract` 는 주어진 주소에서 ELF 파일을 다시 만듭니다[19]. `malware` 가 빠진 옛 이름(`linux.check_modules`·`linux.hidden_modules`·`linux.modxview`)은 폐기 예정으로 표시돼 있고 제거 날짜는 2026-06-07 로 적혀 있습니다[19]. 메모리 분석의 일반 절차는 [메모리 분석](../../03-techniques/analysis/memory-analysis.md), 루트킷 판단 흐름은 [루트킷 찾기](../../03-techniques/analysis/rootkit-detection.md) 에서 다룹니다.
 
 교차 비교 도구의 탐지율은 시험 조건에 따라 다릅니다. Nagy(2025)는 커널 27개 판, 루트킷 55개(오픈소스 35개, VirusTotal 수집 20개)로 시험했습니다[21]. 오픈소스 35개 가운데 31개는 커널 객체 직접 조작 (Direct Kernel Object Manipulation, DKOM) 으로 모두 모듈 목록에서 자기를 뺐고, 4개는 함수 후킹으로 숨었습니다[21]. 이 조건에서 `linux.check_modules` 는 오픈소스 35개 중 13개, 수집한 20개 중 모듈 목록만 고친 10개를 찾았고, 모듈 목록·kset·모듈 트리·vmap 목록과 트리·버그 목록·ftrace 모듈 맵까지 7개 출처를 비교한 논문의 플러그인은 55개를 모두 찾았습니다[21]. 함수 후킹으로 숨는 모듈은 출처 사이에 어긋남을 만들지 않고 목록에 그대로 보입니다[21].
 
@@ -204,7 +204,7 @@ vol -f memory.lime linux.module_extract --base 0x주소
 | 메모리의 모듈 목록 ↔ 라이브 `lsmod`·`/proc/modules` | 메모리에만 있는 모듈, 라이브 목록에서 빠진 모듈 |
 | 모듈 자동 적재 ↔ [udev 규칙](udev-rules.md) | 장치 이벤트로 모듈이나 명령이 불렸는지 |
 
-지속성 흔적 전체를 차례로 훑는 흐름은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
+지속성 흔적 전체를 차례로 살펴보는 흐름은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에서 다룹니다.
 
 ## 실습
 

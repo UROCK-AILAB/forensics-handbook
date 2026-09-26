@@ -24,20 +24,20 @@ iMessage·RCS·SMS·MMS 메시지가 한 DB에 함께 들어 있어서 [1] 맥 �
 | 첨부 파일 | `~/Library/Messages/Attachments/` 아래 하위 폴더 [3] | 공개 자료 없음 | 주고받은 파일 원본과 DB의 첨부 행 |
 | 스티커 | `~/Library/Messages/StickerCache/` 아래 하위 폴더 [3] | 공개 자료 없음 | 스티커 이미지 |
 | 최근 삭제 표 | `chat.db` 안 `chat_recoverable_message_join` [2] | 맥 도입 버전은 공개 자료 없음 | 지운 뒤 30일 안에 되살릴 수 있는 메시지 [4] |
-| 편집·보내기 취소 | `chat.db` 안 plist 칸 `message_summary_info` [2] | macOS 13 이후, iMessage만 [5] | 편집 전 내용과 보내기 취소 정보 |
+| 편집·보내기 취소 | `chat.db` 안 plist 열 `message_summary_info` [2] | macOS 13 이후, iMessage만 [5] | 편집 전 내용과 보내기 취소 정보 |
 
 iOS 백업에도 같은 형식의 메시지 DB가 들어 있고 [2], 백업 안 파일 이름은 [대화 DB (chat.db)](chat-db.md)에 있습니다.
 
 ## 읽는 순서
 
-1. [대화 DB (chat.db)](chat-db.md) — 표 구성과 `message` 표의 칸, 인코딩된 본문, 시각 값의 기준점과 단위 판단, 편집·보내기 취소 기록을 다룹니다.
-2. [첨부 파일 (Attachments)](attachments.md) — `attachment` 표의 칸과 디스크 파일을 짝짓는 법, 파일이 없는 첨부 행을 해석할 때의 주의점을 다룹니다.
+1. [대화 DB (chat.db)](chat-db.md) — 표 구성과 `message` 표의 열, 인코딩된 본문, 시각 값의 기준점과 단위 판단, 편집·보내기 취소 기록을 다룹니다.
+2. [첨부 파일 (Attachments)](attachments.md) — `attachment` 표의 열과 디스크 파일을 짝짓는 법, 파일이 없는 첨부 행을 해석할 때의 주의점을 다룹니다.
 3. [지운 메시지의 흔적 (Deleted Messages)](deleted-messages.md) — 최근 삭제 폴더와 자동 삭제 설정, SQLite 빈 페이지와 WAL에 남는 옛 내용, 상대 기기와 백업 같은 다른 증거원을 다룹니다.
 
 ## 함께 볼 페이지
 
 - [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) — `chat.db` 의 저장 형식
-- [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md) — plist로 인코딩된 칸을 풀 때
+- [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md) — plist로 인코딩된 열을 풀 때
 - [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md) — 메시지 시각을 풀 때
 - [연락처 (Contacts)](../../cloud-apps/contacts.md) — 상대 주소를 사람 이름과 맞춰 볼 때
 - [페이스타임과 통화 기록 (FaceTime·CallHistory)](../facetime-callhistory.md) — 같은 상대와의 통화

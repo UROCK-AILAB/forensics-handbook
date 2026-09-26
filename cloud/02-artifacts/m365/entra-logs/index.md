@@ -60,7 +60,7 @@ Entra ID 안에 남는 기간은 로그 종류와 라이선스에 따라 다릅�
 
 공개 수집 도구 가운데 Microsoft-Extractor-Suite 는 `signInEventTypes` 필터로 대화형·비대화형·서비스 주체·관리 ID 로그인을 골라 받고[10], Untitled Goose Tool 은 로그인·감사·프로비저닝 로그를 beta 엔드포인트로 받습니다[11]. DFIR-O365RC 는 Graph 로 Entra ID 로그를 받으려면 P1 라이선스 사용자가 테넌트에 한 명 이상 있어야 하고, 앱에 `AuditLog.Read.All` 권한이 필요합니다[12]. 도구별 사용법은 [Microsoft 365 수집 도구](../../../03-techniques/acquisition/m365-collection.md) 에서 다룹니다.
 
-경로마다 필드 이름 표기가 다릅니다. Graph 는 `createdDateTime` 처럼 소문자로 시작하고, Log Analytics 표는 `CreatedDateTime` 처럼 대문자로 시작합니다[13][15]. 검체를 받으면 실제 키 이름부터 확인하고 검색식을 맞춥니다.
+경로마다 필드 이름 표기가 다릅니다. Graph 는 `createdDateTime` 처럼 소문자로 시작하고, Log Analytics 표는 `CreatedDateTime` 처럼 대문자로 시작합니다[13][15]. 데이터를 받으면 실제 키 이름부터 확인하고 검색식을 맞춥니다.
 
 ### 시각
 

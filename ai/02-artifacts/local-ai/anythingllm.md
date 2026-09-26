@@ -8,15 +8,15 @@ nav_order: 740
 
 AnythingLLM 데스크톱 앱은 대화·워크스페이스·이벤트 기록을 `%APPDATA%\anythingllm-desktop\storage\anythingllm.db` 한 SQLite 파일에 두고, 올린 문서에서 뽑은 본문은 같은 `storage` 폴더 아래 JSON 파일로 따로 둡니다.
 
-이 쪽의 경로·표·칸은 Windows 10 에서 쓴 AnythingLLM 데스크톱 앱 자료 기준이고, 다른 판은 저장 구조가 다를 수 있습니다[1].
+이 페이지의 경로·표·열은 Windows 10 에서 쓴 AnythingLLM 데스크톱 앱 자료 기준이고, 다른 판은 저장 구조가 다를 수 있습니다[1].
 
 ## 무엇을 기록하나 · 왜 생기나
 
 AnythingLLM 은 대화를 워크스페이스(workspace) 단위로 묶고, 워크스페이스 안에서 다시 스레드(thread)로 나눕니다. 사용자가 질문을 보내면 앱은 질문과 답을 한 행으로 DB 에 적고, 답에는 쓴 모델·공급자·토큰 수와 참고한 문서 조각을 JSON 으로 함께 넣습니다[4]. 그래서 대화 본문뿐만 아니라 그 답이 어느 문서를 근거로 나왔는지까지 한 행에서 읽을 수 있습니다.
 
-문서를 올리면 앱은 파일을 처리해 본문 글을 뽑고, 그 결과를 JSON 파일로 저장합니다. 이 JSON 의 `pageContent` 칸에는 올린 문서의 본문이 글 그대로 통째로 들어 있습니다[1][4]. 원래 파일을 지웠더라도 앱 저장소에 본문이 남는다는 뜻이라서, 기밀 자료를 넣었는지 묻는 조사([기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md))에서 먼저 볼 곳입니다. 프롬프트·첨부·생성물을 나눠 보는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)를 따릅니다.
+문서를 올리면 앱은 파일을 처리해 본문 글을 뽑고, 그 결과를 JSON 파일로 저장합니다. 이 JSON 의 `pageContent` 필드에는 올린 문서의 본문이 글 그대로 통째로 들어 있습니다[1][4]. 원래 파일을 지웠더라도 앱 저장소에 본문이 남는다는 뜻이라서, 기밀 자료를 넣었는지 묻는 조사([기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md))에서 먼저 볼 곳입니다. 프롬프트·첨부·생성물을 나눠 보는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)를 따릅니다.
 
-답을 낸 공급자와 모델은 답 JSON 의 `metrics` 에 남고, 샘플의 `metrics.provider` 칸은 `GenericOpenAiLLM` 이었습니다[4]. 공급자가 원격 서버라면 질문이 그 서버로도 나갔으므로, 어느 주소였는지는 설정에서 확인합니다. 로컬 런타임을 붙여 쓴 경우의 흔적은 [Ollama](ollama.md) 쪽에서 다룹니다. 서버 쪽에 남는 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
+답을 낸 공급자와 모델은 답 JSON 의 `metrics` 에 남고, 샘플의 `metrics.provider` 필드는 `GenericOpenAiLLM` 이었습니다[4]. 공급자가 원격 서버라면 질문이 그 서버로도 나갔으므로, 어느 주소였는지는 설정에서 확인합니다. 로컬 런타임을 붙여 쓴 경우의 흔적은 [Ollama](ollama.md) 쪽에서 다룹니다. 서버 쪽에 남는 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 ## 위치와 버전별 차이
 
@@ -29,11 +29,11 @@ AnythingLLM 은 대화를 워크스페이스(workspace) 단위로 묶고, 워크
 | `%APPDATA%\anythingllm-desktop\storage\.env` | 환경 설정 | 보고서[1] |
 | `%APPDATA%\anythingllm-desktop\GPUCache\`, `DawnWebGPUCache\`, `DawnGraphiteCache\` | `AnythingLLM.exe` 가 쓴 그래픽 캐시 | Procmon 화면[5] |
 
-문서 JSON 과 첨부 JSON 의 파일 이름은 `원래 이름-UUID.json` 모양입니다(예: `notes.txt-` 뒤에 UUID)[4]. 파서는 `documents` 아래를 하위 폴더까지 뒤져 JSON 을 찾으므로[2], 그 아래 폴더 구조는 검체에서 직접 봅니다. `hotdir` 에 원래 파일이 그대로 남는지는 공개 자료에 없어서 검체로 확인해야 합니다.
+문서 JSON 과 첨부 JSON 의 파일 이름은 `원래 이름-UUID.json` 모양입니다(예: `notes.txt-` 뒤에 UUID)[4]. 파서는 `documents` 아래를 하위 폴더까지 뒤져 JSON 을 찾으므로[2], 그 아래 폴더 구조는 분석 대상 기기에서 직접 봅니다. `hotdir` 에 원래 파일이 그대로 남는지는 실제 기기로 확인해야 합니다.
 
-`storage` 폴더 밖의 `GPUCache` 같은 폴더는 크롬 계열 앱 프로필에서 보이는 이름입니다. 크롬 계열 앱 프로필의 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에서 다루고, `%APPDATA%\anythingllm-desktop\` 에 그 밖에 무엇이 생기는지는 검체에서 폴더 목록을 떠서 봅니다.
+`storage` 폴더 밖의 `GPUCache` 같은 폴더는 크롬 계열 앱 프로필에서 보이는 이름입니다. 크롬 계열 앱 프로필의 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에서 다루고, `%APPDATA%\anythingllm-desktop\` 에 그 밖에 무엇이 생기는지는 실제 기기에서 폴더 목록을 떠서 봅니다.
 
-**판 번호.** 자료에 앱 판 번호가 없습니다. 샘플 DB 의 `_prisma_migrations` 표에는 적용한 스키마 변경이 40건 있고, 가장 늦은 `migration_name` 은 `20260406120000_init` 입니다[4]. 검체에서도 이 표의 목록과 설치 파일의 판 정보를 함께 적어 두면, 아래 표와 칸이 어느 무렵 스키마 기준인지 나중에 맞춰 볼 수 있습니다. Jan·Msty 처럼 저장 형식을 새로 바꾼 로컬 AI 앱도 있으니[6], 표 이름을 먼저 `sqlite_master` 로 읽고 시작합니다.
+**판 번호.** 자료에 앱 판 번호가 없습니다. 샘플 DB 의 `_prisma_migrations` 표에는 적용한 스키마 변경이 40건 있고, 가장 늦은 `migration_name` 은 `20260406120000_init` 입니다[4]. 분석 대상 DB 에서도 이 표의 목록과 설치 파일의 판 정보를 함께 적어 두면, 아래 표와 열이 어느 무렵 스키마 기준인지 나중에 맞춰 볼 수 있습니다. Jan·Msty 처럼 저장 형식을 새로 바꾼 로컬 AI 앱도 있으니[6], 표 이름을 먼저 `sqlite_master` 로 읽고 시작합니다.
 
 ## 구조
 
@@ -41,7 +41,7 @@ AnythingLLM 은 대화를 워크스페이스(workspace) 단위로 묶고, 워크
 
 샘플 DB 는 페이지 크기 4096 바이트, 롤백 저널 방식이고 표가 32개(`sqlite_sequence` 포함)입니다[4]. 조사에 바로 쓰는 표는 아래와 같습니다.
 
-| 표 | 주요 칸 | 알려 주는 것 |
+| 표 | 주요 열 | 알려 주는 것 |
 |---|---|---|
 | `workspace_chats` | `id`, `workspaceId`, `prompt`, `response`, `include`, `user_id`, `createdAt`, `lastUpdatedAt`, `thread_id`, `feedbackScore`, `api_session_id` | 질문 한 번과 답 한 번 |
 | `workspaces` | `id`, `name`, `slug`, `chatProvider`, `chatModel`, `chatMode`, `openAiPrompt`, `openAiTemp`, `openAiHistory`, `agentProvider`, `agentModel`, `createdAt` | 워크스페이스 이름과 설정. `openAiPrompt` 가 시스템 프롬프트 |
@@ -49,15 +49,15 @@ AnythingLLM 은 대화를 워크스페이스(workspace) 단위로 묶고, 워크
 | `workspace_parsed_files` | `id`, `filename`, `workspaceId`, `userId`, `threadId`, `metadata`, `tokenCountEstimate`, `createdAt` | 대화 창에 붙인 파일 |
 | `event_logs` | `id`, `event`, `metadata`, `userId`, `occurredAt` | 앱 안에서 일어난 일의 기록 |
 | `workspace_documents`, `document_vectors` | `docId`, `filename`, `docpath`, `workspaceId` / `docId`, `vectorId` | 문서와 워크스페이스, 문서와 벡터 ID 의 연결. 샘플에서는 문서 JSON 이 있는데도 비어 있었음 |
-| `prompt_history` | `workspaceId`, `prompt`, `modifiedBy`, `modifiedAt` | 워크스페이스별 프롬프트와 바꾼 시각. 샘플에서는 비어 있어 쓰임은 검체로 확인 |
+| `prompt_history` | `workspaceId`, `prompt`, `modifiedBy`, `modifiedAt` | 워크스페이스별 프롬프트와 바꾼 시각. 샘플에서는 비어 있어 쓰임은 실제 데이터로 확인 |
 | `system_settings` | `label`, `value` | 앱 설정. 샘플에는 `telemetry_id`, `onboarding_complete` 두 행 |
 | `embed_chats` | `prompt`, `response`, `session_id`, `connection_information`, `embed_id` | `embed_configs` 에 딸린 또 하나의 대화 표. 샘플에서는 비어 있음 |
 
-샘플에서 행이 있던 표는 `workspace_chats`(6), `workspaces`(2), `workspace_threads`(4), `workspace_parsed_files`(7), `event_logs`(47), `system_settings`(2), `_prisma_migrations`(40) 뿐이었고(`sqlite_sequence` 제외), `users` 를 비롯한 나머지는 비어 있었습니다[4]. `user_id` 칸도 모두 비어 있었습니다.
+샘플에서 행이 있던 표는 `workspace_chats`(6), `workspaces`(2), `workspace_threads`(4), `workspace_parsed_files`(7), `event_logs`(47), `system_settings`(2), `_prisma_migrations`(40) 뿐이었고(`sqlite_sequence` 제외), `users` 를 비롯한 나머지는 비어 있었습니다[4]. `user_id` 열도 모두 비어 있었습니다.
 
 ### `workspace_chats.response` 의 JSON
 
-`response` 칸은 글이 아니라 JSON 이고, 아래 키가 들어 있습니다[4].
+`response` 열은 글이 아니라 JSON 이고, 아래 키가 들어 있습니다[4].
 
 - `text`: 모델이 낸 답 본문
 - `sources[]`: 답에 쓴 문서 조각. 조각마다 `id`, `title`, `url`, `chunkSource`, `published`, `location`, `isDirectUpload`, `text` 등이 들어 있습니다.
@@ -74,7 +74,7 @@ Impl 파서는 이 JSON 에서 `text` 만 꺼내 CSV 에 옮기므로[2], 어떤
 
 ### `event_logs`
 
-`event` 칸은 사건 이름이고, `metadata` 칸은 JSON 입니다. 샘플에 나온 사건 이름은 아래 열 가지입니다[4].
+`event` 열은 사건 이름이고, `metadata` 열은 JSON 입니다. 샘플에 나온 사건 이름은 아래 열 가지입니다[4].
 
 | `event` | `metadata` 에 든 것 |
 |---|---|
@@ -110,7 +110,7 @@ Impl 파서는 이 JSON 에서 `text` 만 꺼내 CSV 에 옮기므로[2], 어떤
 
 ### 비밀 값이 들 수 있는 곳
 
-`api_keys.secret`, `browser_extension_api_keys.key`, `desktop_mobile_devices.token`, `temporary_auth_tokens.token`, `password_reset_tokens.token`, `users.password`, `recovery_codes.code_hash` 칸은 이름 그대로 키·토큰·비밀번호를 담는 칸이고, 샘플에서는 모두 비어 있었습니다[4]. `.env` 도 설정 파일이라 원격 공급자 키 같은 값이 들어 있는지 검체에서 확인합니다. 값이 있으면 있다는 사실과 위치만 적고 보고서에서는 가립니다. 공통 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
+`api_keys.secret`, `browser_extension_api_keys.key`, `desktop_mobile_devices.token`, `temporary_auth_tokens.token`, `password_reset_tokens.token`, `users.password`, `recovery_codes.code_hash` 열은 이름 그대로 키·토큰·비밀번호를 담는 열이고, 샘플에서는 모두 비어 있었습니다[4]. `.env` 도 설정 파일이라 원격 공급자 키 같은 값이 들어 있는지 실제 파일에서 확인합니다. 값이 있으면 있다는 사실과 위치만 적고 보고서에서는 가립니다. 공통 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -122,11 +122,11 @@ Impl 파서는 이 JSON 에서 `text` 만 꺼내 CSV 에 옮기므로[2], 어떤
 
 | 값 | 형식 | 기준 |
 |---|---|---|
-| `createdAt`, `lastUpdatedAt`, `occurredAt` 등 DB 의 날짜 칸 | 정수 Unix 밀리초 | UTC |
+| `createdAt`, `lastUpdatedAt`, `occurredAt` 등 DB 의 날짜 열 | 정수 Unix 밀리초 | UTC |
 | `response` 의 `metrics.timestamp` | ISO 8601 문자열, 끝에 `Z` | UTC |
 | 문서·첨부 JSON 의 `published` | `DD/MM/YYYY, HH:MM:SS` 모양 문자열, 오프셋 없음 | 기기 현지 시각 |
 
-DB 의 날짜 칸은 `DATETIME` 으로 선언됐지만 샘플에서는 SQLite 저장 형식이 정수였고, 값은 Unix 밀리초였습니다[4]. 샘플에서 대화 한 행의 `createdAt` 과 그 답의 `metrics.timestamp` 는 앞뒤로 10초 안쪽에 붙어 있어서, `createdAt` 이 UTC 라는 점을 이 둘로 맞춰 볼 수 있습니다[4]. 같은 대화의 `sent_chat` 이벤트 시각도 몇 초 안쪽에 있지만 앞서기도 하고 뒤서기도 해서, 질문 순서는 `createdAt` 으로 정합니다.
+DB 의 날짜 열은 `DATETIME` 으로 선언됐지만 샘플에서는 SQLite 저장 형식이 정수였고, 값은 Unix 밀리초였습니다[4]. 샘플에서 대화 한 행의 `createdAt` 과 그 답의 `metrics.timestamp` 는 앞뒤로 10초 안쪽에 붙어 있어서, `createdAt` 이 UTC 라는 점을 이 둘로 맞춰 볼 수 있습니다[4]. 같은 대화의 `sent_chat` 이벤트 시각도 몇 초 안쪽에 있지만 앞서기도 하고 뒤서기도 해서, 질문 순서는 `createdAt` 으로 정합니다.
 
 샘플의 `published` 에서 1시간을 빼면 같은 첨부의 `workspace_parsed_files.createdAt` 과 같은 초이거나 몇 초 앞선 시각이 됩니다[4]. 그래서 샘플 기기의 시간대는 UTC+1 로 읽힙니다. 샘플에서는 날짜가 일/월/년 순서였지만 `05/05` 처럼 일과 월이 같은 날은 순서를 가릴 수 없으니, 같은 문서의 DB 밀리초 값과 맞춰 순서와 시간대를 정합니다.
 
@@ -135,10 +135,10 @@ DB 의 밀리초 값을 사람이 읽는 시각으로 바꾸는 법은 1000 으�
 ## 함정과 한계
 
 - **기록이 지워진 흔적.** 샘플에서 `event_logs` 의 `workspace_file_uploaded` 는 10건인데 `workspace_parsed_files` 에 남은 행은 7건이고, `sqlite_sequence` 의 그 표 값은 10이었습니다[4]. 행이 빠진 자리의 파일 이름은 이벤트 `metadata` 의 `filename` 에 남아 있습니다. 한 표만 보면 사라진 첨부를 놓칩니다.
-- **삭제 뒤 복구.** 대화나 문서를 UI 에서 지운 뒤 무엇이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)와 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)를 봅니다.
+- **삭제 뒤 복구.** 대화나 문서를 UI 에서 지운 뒤 무엇이 남는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)와 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)를 봅니다.
 - **켜진 앱의 DB.** 앱이 켜져 있으면 잠금을 피하려고 DB 를 `-wal`, `-shm` 과 함께 복사한 뒤 엽니다[1][2]. 샘플 DB 는 롤백 저널 방식이라 `-wal` 이 없을 수 있지만, 있으면 반드시 함께 떠야 마지막 대화가 빠지지 않습니다.
 - **파서가 읽지 않는 것.** Impl 파서는 `workspace_chats`, `workspaces`, `event_logs` 세 표와 `documents` 아래 JSON 만 읽습니다[2]. `workspace_threads`(스레드 이름), `workspace_parsed_files`, `direct-uploads` 아래 JSON, 답 JSON 의 `metrics`·`sources` 는 결과 CSV 에 들어가지 않습니다. `documents` 폴더가 없으면 `storage` 전체에서 `pageContent` 나 `chunkSource` 가 든 JSON 을 모읍니다.
-- **시간대 가정.** 같은 저장소의 `correlation.py` 는 시각 칸 전체가 밀리초로 읽히지 않고 시간대 표시도 없으면 `Asia/Kolkata` 시각으로 보고 UTC 로 바꿉니다[4]. 샘플의 `published` 는 UTC+1 이었으므로 이 가정을 그대로 쓰면 시각이 어긋납니다.
+- **시간대 가정.** 같은 저장소의 `correlation.py` 는 시각 열 전체가 밀리초로 읽히지 않고 시간대 표시도 없으면 `Asia/Kolkata` 시각으로 보고 UTC 로 바꿉니다[4]. 샘플의 `published` 는 UTC+1 이었으므로 이 가정을 그대로 쓰면 시각이 어긋납니다.
 - **수집 범위.** KAPE 타깃은 `C:\Users\%user%\AppData\Roaming\anythingllm-desktop\storage\` 만 재귀로 모읍니다[3]. 같은 프로필 폴더의 캐시 폴더나 다른 드라이브에 둔 저장소는 모으지 않습니다.
 - **KAPE 모듈.** 모듈은 `main.py --app anythingllm` 을 부르는데[3], 저장소 트리에는 이 `main.py` 도, 보고서가 적은 `src/reporter/anythingllm/` 도 없습니다[1]. 실제로 돌릴 수 있는 것은 독립 파서 `final_anythingllm_parser.py` 입니다.
 
@@ -205,7 +205,7 @@ k0w4lzk1/LangurTrace-Implementation 저장소의 `Ourimplementation/correlation/
 2. 각 대화의 `createdAt` 과 `response` 의 `metrics.timestamp` 는 몇 밀리초 차이 나고, 어느 쪽이 앞섭니까?
 3. `event_logs` 의 `workspace_file_uploaded` 기록과 `workspace_parsed_files` 행을 맞춰 보면, 표에서 빠진 첨부 JSON 이름은 무엇입니까?
 4. 문서 JSON 의 `published` 와 `event_logs` 의 `document_uploaded` 시각을 맞추면 기기 시간대는 UTC 에서 몇 시간 떨어져 있습니까?
-5. 같은 폴더의 `anythingllm_chats.csv` 에는 어떤 칸이 빠져 있고, 그 값은 DB 어디에서 찾습니까?
+5. 같은 폴더의 `anythingllm_chats.csv` 에는 어떤 열이 빠져 있고, 그 값은 DB 어디에서 찾습니까?
 
 ## 참고 문헌
 

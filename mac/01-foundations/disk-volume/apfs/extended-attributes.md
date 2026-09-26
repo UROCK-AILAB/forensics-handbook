@@ -31,7 +31,7 @@ APFS에서 확장 속성 (extended attribute, xattr)은 파일 시스템 트리 
 
 ### 값
 
-값 `j_xattr_val_t` 는 `flags`(uint16), 데이터 길이 `xdata_len`(uint16), 데이터 `xdata` 가 이어진 구조이고, `flags` 로 데이터가 어디 있는지 가립니다 [1].
+값 `j_xattr_val_t` 는 `flags`(uint16), 데이터 길이 `xdata_len`(uint16), 데이터 `xdata` 가 이어진 구조이고, `flags` 로 데이터가 어디 있는지 확인합니다 [1].
 
 | 플래그 | 값 | 뜻 |
 |---|---|---|
@@ -40,7 +40,7 @@ APFS에서 확장 속성 (extended attribute, xattr)은 파일 시스템 트리 
 | `XATTR_FILE_SYSTEM_OWNED` | 0x4 | 파일 시스템이 소유한 속성(예: 심볼릭 링크 대상) |
 | `XATTR_RESERVED_8` | 0x8 | 예약 |
 
-레코드 안에 바로 넣을 수 있는 데이터는 3804바이트(`XATTR_MAX_EMBEDDED_SIZE`)까지이고, 더 크면 데이터 스트림으로 갑니다 [1]. 이때 `xdata` 에 든 `j_xattr_dstream_t` 는 `xattr_obj_id`(8바이트)와 `j_dstream_t`(40바이트)를 합친 48바이트입니다 [1]. `j_dstream_t` 의 칸(`size`, `alloced_size` 등)은 파일 데이터 스트림과 같은 구조라서 [파일 시스템 트리와 아이노드 (FS Tree·Inode)](fs-tree-inode.md)의 설명을 그대로 따릅니다. 데이터 스트림에 담긴 속성의 물리 익스텐트에서는 `owning_obj_id` 가 그 xattr 레코드의 ID입니다 [1].
+레코드 안에 바로 넣을 수 있는 데이터는 3804바이트(`XATTR_MAX_EMBEDDED_SIZE`)까지이고, 더 크면 데이터 스트림으로 갑니다 [1]. 이때 `xdata` 에 든 `j_xattr_dstream_t` 는 `xattr_obj_id`(8바이트)와 `j_dstream_t`(40바이트)를 합친 48바이트입니다 [1]. `j_dstream_t` 의 필드(`size`, `alloced_size` 등)은 파일 데이터 스트림과 같은 구조라서 [파일 시스템 트리와 아이노드 (FS Tree·Inode)](fs-tree-inode.md)의 설명을 그대로 따릅니다. 데이터 스트림에 담긴 속성의 물리 익스텐트에서는 `owning_obj_id` 가 그 xattr 레코드의 ID입니다 [1].
 
 ### 파일 시스템이 쓰는 이름
 
@@ -52,11 +52,11 @@ APFS에서 확장 속성 (extended attribute, xattr)은 파일 시스템 트리 
 | `com.apple.fs.firmlink` | 펌링크의 대상 |
 | `com.apple.fs.cow-exempt-file-count` | copy-on-write 예외 파일(`INODE_SNAPSHOT_COW_EXEMPTION`)의 수 |
 
-ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로 표시하고 [1], 실제 이미지에는 `com.apple.system.Security` 속성이 나타납니다 [2]. Finder 정보는 아이노드 확장 필드 `INO_EXT_TYPE_FINDER_INFO` (32바이트)에 들어가는데 [1], 실제 이미지에는 `com.apple.FinderInfo` 속성도 나타납니다 [2]. 두 곳의 관계를 설명한 공개 자료가 없어 검체에서 확인합니다.
+ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로 표시하고 [1], 실제 이미지에는 `com.apple.system.Security` 속성이 나타납니다 [2]. Finder 정보는 아이노드 확장 필드 `INO_EXT_TYPE_FINDER_INFO` (32바이트)에 들어가는데 [1], 실제 이미지에는 `com.apple.FinderInfo` 속성도 나타납니다 [2]. 두 곳의 관계는 실제 데이터로 확인해야 합니다.
 
 ### 실제 이미지에 나오는 이름
 
-실제 이미지에는 아래 속성 이름이 나옵니다 [2]. 오른쪽 칸은 이 핸드북에서 이어 볼 곳이고, 빈칸은 값의 형식을 설명한 공개 자료가 없는 이름입니다.
+실제 이미지에는 아래 속성 이름이 나옵니다 [2]. 오른쪽 열은 이 핸드북에서 이어 볼 곳이고, 빈칸은 값의 형식을 설명한 공개 자료가 없는 이름입니다.
 
 | 이름 [2] | 이어 볼 곳 |
 |---|---|
@@ -78,7 +78,7 @@ ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로
 
 ### 헥스로 한 번
 
-아래 바이트는 실제 검체가 아니라 명세 [1][2]의 정의에 맞춰 만든 예시입니다. 객체 ID 0x22 파일에 `com.apple.quarantine` 속성이 붙어 있고 데이터가 레코드 안에 32바이트 들어 있다고 합시다.
+아래 바이트는 실제 데이터가 아니라 명세 [1][2]의 정의에 맞춰 만든 예시입니다. 객체 ID 0x22 파일에 `com.apple.quarantine` 속성이 붙어 있고 데이터가 레코드 안에 32바이트 들어 있다고 합시다.
 
 ```
 키
@@ -94,7 +94,7 @@ ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로
 ### 절차
 
 1. 대상 파일의 객체 ID를 정하고, 파일 시스템 트리에서 같은 객체 ID에 형식 4인 레코드를 모두 모읍니다. 트리는 객체 ID, 레코드 형식, 이름 순서로 정렬하므로 한 파일의 속성 레코드는 서로 붙어 있습니다 [1].
-2. 레코드마다 이름을 바이트 그대로 읽고, 값의 `flags` 로 데이터 위치를 가립니다.
+2. 레코드마다 이름을 바이트 그대로 읽고, 값의 `flags` 로 데이터 위치를 확인합니다.
 3. `XATTR_DATA_EMBEDDED` 이면 `xdata_len` 만큼 읽습니다.
 4. `XATTR_DATA_STREAM` 이면 `j_xattr_dstream_t` 의 `xattr_obj_id` 와 `j_dstream_t` 의 `size` 를 적어 두고, 본문은 그 데이터 스트림의 익스텐트를 따라가 `size` 만큼 읽습니다.
 5. 읽은 값은 이름에 맞는 아티팩트 페이지의 방법으로 풉니다. 형식이 알려지지 않은 이름은 원본 바이트를 그대로 보존해 둡니다.

@@ -10,11 +10,11 @@ nav_order: 1100
 
 로그나 셸 명령 기록이 비어 있거나 기간이 끊겨 있을 때, 누군가 일부러 지우거나 끄거나 고쳤는지를 묻습니다. 사람이 손댔다면 언제 어느 계정으로 무엇을 했는지, 손대기 전 기록이 다른 곳에 남아 있는지까지 따라갑니다.
 
-이 쪽은 지우는 방법이 아니라 "지우거나 멈추면 어디에 무엇이 남는가" 를 다룹니다. 로그 형식과 필드 설명은 각 기반 구조·아티팩트 쪽에 있고, 여기서는 조사 순서와 판단 기준만 씁니다. 파일 시각이나 시스템 시계를 되돌린 경우는 [시각을 조작했나](time-manipulation.md) 에서, 자료를 밖으로 옮긴 뒤의 정리 흔적은 [자료를 밖으로 옮겼나](data-exfiltration.md) 와 함께 봅니다.
+이 페이지는 지우는 방법이 아니라 "지우거나 멈추면 어디에 무엇이 남는가" 를 다룹니다. 로그 형식과 필드 설명은 각 기반 구조·아티팩트 페이지에 있고, 여기서는 조사 순서와 판단 기준만 씁니다. 파일 시각이나 시스템 시계를 되돌린 경우는 [시각을 조작했나](time-manipulation.md) 에서, 자료를 밖으로 옮긴 뒤의 정리 흔적은 [자료를 밖으로 옮겼나](data-exfiltration.md) 와 함께 봅니다.
 
 ## 먼저 확인할 것
 
-**로그가 몇 겹으로 쌓이는가.** 한 사건이 저널, rsyslog 텍스트 로그, 감사 로그 (auditd) 에 함께 남는 구조라면 한 곳을 지워도 다른 곳에 사본이 있습니다. journald 는 커널 감사 레코드도 받으므로, 감사 로그 파일이 없어도 저널에 같은 레코드가 있을 수 있습니다([systemd 저널](../../01-foundations/logging/systemd-journal/index.md)). 반대로 `Storage=volatile` 이면 저널은 `/run/log/journal` 에만 있어 재부팅하면 사라집니다. 검체에 auditd 가 깔려 있는지, rsyslog 가 도는지는 패키지 기록과 설정 파일로 확인합니다.
+**로그가 몇 겹으로 쌓이는가.** 한 사건이 저널, rsyslog 텍스트 로그, 감사 로그 (auditd) 에 함께 남는 구조라면 한 곳을 지워도 다른 곳에 사본이 있습니다. journald 는 커널 감사 레코드도 받으므로, 감사 로그 파일이 없어도 저널에 같은 레코드가 있을 수 있습니다([systemd 저널](../../01-foundations/logging/systemd-journal/index.md)). 반대로 `Storage=volatile` 이면 저널은 `/run/log/journal` 에만 있어 재부팅하면 사라집니다. 분석 대상에 auditd 가 깔려 있는지, rsyslog 가 도는지는 패키지 기록과 설정 파일로 확인합니다.
 
 **정상 삭제의 기준.** 로그는 사람이 지우지 않아도 사라집니다. logrotate 의 `rotate`·`maxage` 설정과 상태 파일([로그 순환](../../01-foundations/logging/logrotate.md)), journald 의 `SystemMaxUse=`·`MaxFileSec=` 같은 보존 한도([systemd 저널](../../01-foundations/logging/systemd-journal/index.md))를 먼저 읽고, "이 설정이면 무엇이 남아 있어야 정상인가" 를 정합니다. 이 기준 없이 빈 곳을 보면 자동 삭제를 사람의 삭제로 잘못 읽습니다.
 
@@ -27,7 +27,7 @@ nav_order: 1100
 | `HISTFILESIZE` | 2000[25] | 설정 없음(bash 가 `HISTSIZE` 값을 씀)[24] |
 | 덧붙여 쓰기 | `shopt -s histappend`[25] | 대화형 셸에서 `shopt -s histappend` 와 `history -a`[26] |
 
-**시각 기준.** 저널과 감사 로그의 시각은 UTC 기준 값이고, 전통 syslog 줄에는 연도와 시간대가 없습니다. 여러 로그를 한 줄로 세우기 전에 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 과 [호스트 이름·시간대](../../02-artifacts/system-info/hostname-timezone.md) 로 검체의 시간대를 정해 둡니다.
+**시각 기준.** 저널과 감사 로그의 시각은 UTC 기준 값이고, 전통 syslog 줄에는 연도와 시간대가 없습니다. 여러 로그를 한 줄로 세우기 전에 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 과 [호스트 이름·시간대](../../02-artifacts/system-info/hostname-timezone.md) 로 분석 대상의 시간대를 정해 둡니다.
 
 ## 볼 아티팩트와 순서
 
@@ -56,15 +56,15 @@ nav_order: 1100
 
 5. **감사 로그에서 감사를 끄거나 멈춘 기록을 찾습니다.** 규칙을 넣거나 빼면 커널이 CONFIG_CHANGE(1305) 레코드에 `op=add_rule` 또는 `op=remove_rule`, 규칙 키, `list=`, `res=` 를 남깁니다[10][16]. `auditctl -e` 처럼 설정 값을 바꾸면 `op=set audit_enabled=새값 old=옛값` 과 요청한 세션의 `auid`·`ses`, `res=` 가 남습니다[9]. 이 레코드는 바꾸기 전에 감사가 켜져 있었을 때만 쓰므로, 감사를 끄는 순간의 레코드는 남고 그 뒤 활동은 남지 않습니다[9]. `-e 2` 로 잠근 상태에서는 설정을 바꿀 수 없고 시도는 `res=0` 으로 기록되며, 잠금을 풀려면 재부팅해야 합니다[9][14]. upstream 예시 규칙 `99-finalize.rules` 에는 `-e 2` 가 주석으로 들어 있어 잠금은 기본이 아닙니다[15].
 
-    auditd 데몬이 멈춘 흔적은 DAEMON_END(1201) 레코드입니다[16]. auditd 는 끝나기 전에 커널에 마지막 신호를 보낸 쪽을 물어, 답을 받으면 `op=terminate auid=… uid=… ses=… pid=… res=success` 에 그 신호를 보낸 쪽의 `auid` 와 `pid` 를 적고, 못 받으면 `auid=-1 … pid=-1` 로 적습니다[11][12]. 시작은 DAEMON_START(1200) `op=start`, 오류로 멈추면 DAEMON_ABORT(1202) `op=error-halt`, 로그 회전 요청은 DAEMON_ROTATE(1205) 입니다[11][16]. upstream `auditd.service` 에는 `RefuseManualStop=yes` 가 있어 `systemctl stop` 으로는 멈추지 않으므로[13], 멈췄다면 신호를 직접 보냈거나 다른 경로였을 가능성이 있습니다. 배포판의 유닛 파일은 검체에서 확인합니다. 감사 규칙에 upstream `30-stig.rules` 처럼 `auid>=1000` 사용자의 `unlink`·`unlinkat`·`rename`·`renameat` 를 `key=delete` 로 거는 규칙이 있으면[15], 로그 파일을 지운 계정과 경로가 SYSCALL·PATH 레코드로 남습니다.
+    auditd 데몬이 멈춘 흔적은 DAEMON_END(1201) 레코드입니다[16]. auditd 는 끝나기 전에 커널에 마지막 신호를 보낸 쪽을 물어, 답을 받으면 `op=terminate auid=… uid=… ses=… pid=… res=success` 에 그 신호를 보낸 쪽의 `auid` 와 `pid` 를 적고, 못 받으면 `auid=-1 … pid=-1` 로 적습니다[11][12]. 시작은 DAEMON_START(1200) `op=start`, 오류로 멈추면 DAEMON_ABORT(1202) `op=error-halt`, 로그 회전 요청은 DAEMON_ROTATE(1205) 입니다[11][16]. upstream `auditd.service` 에는 `RefuseManualStop=yes` 가 있어 `systemctl stop` 으로는 멈추지 않으므로[13], 멈췄다면 신호를 직접 보냈거나 다른 경로였을 가능성이 있습니다. 배포판의 유닛 파일은 분석 대상에서 확인합니다. 감사 규칙에 upstream `30-stig.rules` 처럼 `auid>=1000` 사용자의 `unlink`·`unlinkat`·`rename`·`renameat` 를 `key=delete` 로 거는 규칙이 있으면[15], 로그 파일을 지운 계정과 경로가 SYSCALL·PATH 레코드로 남습니다.
 
 6. **텍스트 로그와 로그인 기록의 빈 곳을 봅니다.** rsyslog 로그의 회전본이 모자라도 logrotate 가 지웠을 수 있으니 1단계의 표와 상태 파일의 마지막 회전 시각을 먼저 맞춰 봅니다([로그 순환](../../01-foundations/logging/logrotate.md)). wtmp 는 login·init·일부 getty 가 쓰지만 이 프로그램들은 파일을 새로 만들지 않아서, 파일이 지워지면 그 뒤로 기록이 멈춥니다[17]. 다만 systemd 의 tmpfiles 설정에는 `f /var/log/wtmp 0664 root utmp -` 줄이 있고, `f` 는 파일이 없을 때만 만드는 지시라서 부팅 때 systemd-tmpfiles 가 빈 wtmp 를 다시 만듭니다[29][30]. 그래서 wtmp 의 아이노드가 부팅 시각 무렵에 새로 생겼다면 그 전에 파일이 지워졌을 가능성이 있습니다. `utmpdump` 는 wtmp 를 텍스트로 풀고 `-r` 로 다시 이진 파일로 되돌릴 수 있는데, 이 기능은 손상된 항목을 고치는 디버깅 용도입니다[18]. 이렇게 되돌리면 파일 내용을 다시 쓰므로 mtime·ctime 이 그 시각으로 바뀌고, 레코드 시각 순서가 어긋날 가능성이 있습니다. ctime 형식으로 텍스트를 찍은 마지막 판은 util-linux 2.28 이고, 그 뒤 판의 텍스트 시각은 밀리초까지의 ISO-8601 UTC 입니다. 옛 ctime 형식 덤프를 되돌리면 시간대만큼 시각이 밀릴 수 있습니다[18]. 그래서 로그인 기록 전체가 시간대 차이만큼 어긋나 있다면 이런 변환을 거쳤는지 의심해 봅니다. UAC 는 로그 변조를 찾는 데 쓸 수 있다는 주석과 함께 `utmpdump` 결과를 모읍니다[20]. lastlog 는 `lastlog -C -u 사용자` 로 지우거나 `-S -u 사용자` 로 현재 시각을 넣을 수 있으므로[19], lastlog 값 하나로 마지막 로그인을 확정하지 않습니다.
 
-7. **셸 기록의 상태를 봅니다.** `HISTFILE` 이 풀려 있으면 셸이 끝날 때 기록을 저장하지 않고, `HISTFILESIZE=0` 이면 기록 파일을 0 바이트로 자릅니다[24]. 기록 파일이 `/dev/null` 링크인지, 시작 파일에 이런 설정 줄이 있는지, 파일 크기와 시각이 어떤지는 [기록 지우기와 끄기](../../02-artifacts/execution/shell-history/evasion.md) 의 기준으로 봅니다. `history -c` 같은 셸 내장 명령은 새 프로세스를 띄우지 않아 실행 기록에 남지 않는다는 점도 그 쪽에서 다룹니다.
+7. **셸 기록의 상태를 봅니다.** `HISTFILE` 이 풀려 있으면 셸이 끝날 때 기록을 저장하지 않고, `HISTFILESIZE=0` 이면 기록 파일을 0 바이트로 자릅니다[24]. 기록 파일이 `/dev/null` 링크인지, 시작 파일에 이런 설정 줄이 있는지, 파일 크기와 시각이 어떤지는 [기록 지우기와 끄기](../../02-artifacts/execution/shell-history/evasion.md) 의 기준으로 봅니다. `history -c` 같은 셸 내장 명령은 새 프로세스를 띄우지 않아 실행 기록에 남지 않는다는 점도 그 페이지에서 다룹니다.
 
 8. **지우는 명령이 실행된 흔적을 찾습니다.** 감사 로그의 execve 레코드와 프로세스 회계에서 `rm`, `shred`, `truncate`, `journalctl`, `auditctl`, `utmpdump`, `lastlog` 가 실행된 시각과 계정을 찾고, 2~6단계에서 찾은 시각과 맞춰 봅니다. `shred` 가 보여도 곧바로 복구를 포기하지 않습니다. `shred` 는 파일 시스템과 하드웨어가 제자리에 덮어쓴다는 가정에 기대고, ext3·ext4 의 `data=journal` 모드처럼 데이터까지 저널에 쓰도록 설정한 파일 시스템(Btrfs·XFS·ZFS 등), 스냅숏을 만드는 파일 시스템, 압축 파일 시스템, 웨어 레벨링을 하는 SSD 에서는 이 가정이 깨집니다[23]. ext3·ext4 기본인 `data=ordered` 와 `data=writeback` 에서는 `shred` 가 평소대로 동작합니다[23]. 저장 장치와 마운트 옵션을 확인한 뒤 [지운 파일 되살리기](../../03-techniques/analysis/file-recovery.md) 로 조각을 찾습니다.
 
-9. **살아 있는 시스템이면 열린 채 지운 파일을 봅니다.** 프로세스가 연 파일은 `/proc/PID/fd/` 아래에 그 파일을 가리키는 링크로 보이고[21], 파일이 지워져도 링크 끝에 `(deleted)` 가 붙은 채 남아 그 링크로 내용을 읽을 수 있습니다[22]. UAC 의 `deleted.yaml` 은 실행 파일이 지워진 프로세스의 fd 만 훑기 때문에[22], 실행 파일은 멀쩡한 데몬이 열어 둔 지운 로그는 이 항목에 잡히지 않습니다. 모든 프로세스의 fd 를 따로 봅니다([라이브 응답 수집](../../03-techniques/acquisition/live-response.md)).
+9. **실행 중인 시스템이면 열린 채 지운 파일을 봅니다.** 프로세스가 연 파일은 `/proc/PID/fd/` 아래에 그 파일을 가리키는 링크로 보이고[21], 파일이 지워져도 링크 끝에 `(deleted)` 가 붙은 채 남아 그 링크로 내용을 읽을 수 있습니다[22]. UAC 의 `deleted.yaml` 은 실행 파일이 지워진 프로세스의 fd 만 살펴보기 때문에[22], 실행 파일은 멀쩡한 데몬이 열어 둔 지운 로그는 이 항목에 잡히지 않습니다. 모든 프로세스의 fd 를 따로 봅니다([라이브 응답 수집](../../03-techniques/acquisition/live-response.md)).
 
 10. **로그 파일의 시각을 봅니다.** 로그 파일의 mtime 을 되돌려도 커널이 시각을 바꾸는 순간 ctime 을 그 시각으로 고치므로[27][28], mtime 보다 ctime 이 뒤인 로그 파일은 시각을 되돌린 흔적일 수 있습니다. 자세한 판단은 [시각을 조작했나](time-manipulation.md) 에서 합니다.
 
@@ -76,7 +76,7 @@ journald 의 `Journal file has been deleted`, `Received SIGUSR2 signal from PID 
 
 ## 흔한 오판
 
-- **"저널은 변조를 막는다."** 봉인은 키를 만든 검체에서만 있고, 기본 설치에는 없습니다[7].
+- **"저널은 변조를 막는다."** 봉인은 키를 만든 시스템에만 있고, 기본 설치에는 없습니다[7].
 - **"`.journal~` 파일이 있으니 누가 망가뜨렸다."** 전원이 끊기거나 비정상 종료해도 생깁니다([손상·삭제된 저널](../../01-foundations/logging/systemd-journal/corruption.md)).
 - **"wtmp 가 작거나 없으니 지웠다."** wtmp 는 보통 logrotate 가 돌리므로 회전본(`wtmp.1`)과 logrotate 설정의 `create` 줄까지 봅니다([로그 순환](../../01-foundations/logging/logrotate.md)).
 - **"감사 로그에 끈 기록이 없으니 안 껐다."** 이미 꺼진 상태에서 설정을 바꾸면 CONFIG_CHANGE 레코드가 남지 않습니다[9].
@@ -98,7 +98,7 @@ journald 의 `Journal file has been deleted`, `Received SIGUSR2 signal from PID 
 - [누가 그 명령을 실행했나](../attribution/user-attribution.md) — 지운 계정과 사람을 잇는 법
 - [SSH 로 들어왔나](../intrusion/ssh-intrusion.md) — 침입 뒤 로그를 지운 경우
 - [로그 분석](../../03-techniques/analysis/log-analysis.md), [타임라인 만들기](../../03-techniques/analysis/timeline.md) — 여러 로그를 시간순으로 합치는 법
-- [Linux 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) — 기록이 말하는 만큼만 쓰는 법
+- [Linux 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) — 기록으로 확인되는 만큼만 쓰는 법
 - [타임라인 작성 (Windows 판)](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) — 타임라인 공통 원리
 
 ## 참고 문헌

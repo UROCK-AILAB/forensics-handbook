@@ -34,7 +34,7 @@ USB 저장장치는 처음 꽂을 때 설치 과정을 거치므로 `0065` 는 �
 |---|---|
 | 장치 속성 시각 | `ControlSet00X\Enum\USBSTOR\Disk&Ven_<제조사>&Prod_<제품>&Rev_<판>\<인스턴스 ID>\Properties\{83da6326-97a6-4088-9453-a1923f573b29}\0064`~`0067` |
 | 디스크 인터페이스 | `ControlSet00X\Control\DeviceClasses\{53f56307-b6bf-11d0-94f2-00a0c91efb8b}\##?#USBSTOR#Disk&Ven_...&Prod_...&Rev_...#<인스턴스 ID>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b}` |
-| 볼륨 인터페이스 | `ControlSet00X\Control\DeviceClasses\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\##?#STORAGE#RemovableMedia#<...>&RM#{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}` 꼴 |
+| 볼륨 인터페이스 | `ControlSet00X\Control\DeviceClasses\{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}\##?#STORAGE#RemovableMedia#<...>&RM#{53f5630d-b6bf-11d0-94f2-00a0c91efb8b}` 형식 |
 
 `{53f56307-...}` 는 디스크 인터페이스 클래스 (`GUID_DEVINTERFACE_DISK`) 이고, `{53f5630d-...}` 는 볼륨 인터페이스 클래스 (`GUID_DEVINTERFACE_VOLUME`) 입니다. 디스크 쪽 하위 키 이름에는 USBSTOR 장치 이름과 인스턴스 ID 가 그대로 들어가고, 볼륨 쪽 하위 키 이름에는 부모 ID 접두사 (ParentIdPrefix) 가 들어갈 수 있습니다. 이 값으로 드라이브 문자 기록과 잇는 방법은 [드라이브 문자 매핑](mounteddevices.md)에서 다루고, 장치 이름과 인스턴스 ID 읽는 법은 [USB 저장장치 목록](usbstor.md)을 봅니다.
 
@@ -65,7 +65,7 @@ Enum\USBSTOR\Disk&Ven_<제조사>&Prod_<제품>&Rev_<판>\<인스턴스 ID>
 - 값 데이터는 8바이트 FILETIME 입니다. 리틀 엔디언으로 읽습니다.
 - Windows 7 에서는 한 단계가 더 있습니다. `0064\00000000` 키 아래 `Data` 값에 FILETIME 이 들어 있습니다.
 - `Properties` 아래에는 다른 GUID 의 속성도 있습니다. 모두 시각은 아닙니다.
-- 값 형식 칸에는 `REG_*` 목록에 없는 수가 들어 있을 수 있습니다. 하이브 형식 명세는 미리 정하지 않은 형식 값도 허용합니다. 그래서 보기 도구에 따라 이 값이 알 수 없는 형식이나 이진 값으로 보입니다.
+- 값 형식 필드에는 `REG_*` 목록에 없는 수가 들어 있을 수 있습니다. 하이브 형식 명세는 미리 정하지 않은 형식 값도 허용합니다. 그래서 보기 도구에 따라 이 값이 알 수 없는 형식이나 이진 값으로 보입니다.
 
 키와 값이 하이브 안에서 어떻게 저장되는지는 [하이브 내부 구조](../../../01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md)에서 다룹니다.
 
@@ -81,7 +81,7 @@ Enum\USBSTOR\Disk&Ven_<제조사>&Prod_<제품>&Rev_<판>\<인스턴스 ID>
 
 사용자와 드라이브 문자는 이 값으로 알 수 없습니다. 사용자는 [사용자별 장치 연결](mountpoints2.md)에서 찾습니다.
 
-보고서에는 기록이 말하는 만큼만 씁니다.
+보고서에는 기록으로 확인되는 만큼만 씁니다.
 
 - 쓸 수 있는 문장: "일련번호 ○○ 인 저장장치의 마지막 연결 기록 시각은 2025-05-12 01:23:45 UTC 이고, 마지막 제거 기록 시각은 같은 날 02:10:07 UTC 입니다."
 - 쓰면 안 되는 문장: "피의자가 2025-05-12 10:23 에 USB 를 꽂아 46분 동안 자료를 복사했습니다."
@@ -126,7 +126,7 @@ Yogesh Khatri 의 Windows 8 시험(2013)에서 `0066`·`0067` 은 다음처럼 �
 
 ### 헥스로 한 번
 
-아래는 형식 명세로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 형식 명세로 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 1. `Select` 키로 현재 컨트롤셋을 고릅니다.
 2. `Enum\USBSTOR` 아래에서 장치 키와 인스턴스 ID 키를 찾습니다.
@@ -171,7 +171,7 @@ RegRipper 의 `usbstor`·`devclass` 플러그인, Registry Explorer, python-regi
 
 ## 실습
 
-NIST CFReDS 의 공개 검체(예: Data Leakage Case)에서 SYSTEM 하이브를 꺼내 풀어 봅니다.
+NIST CFReDS 의 공개 실습 이미지(예: Data Leakage Case)에서 SYSTEM 하이브를 꺼내 풀어 봅니다.
 
 1. OS 버전을 먼저 확인합니다. `0066`·`0067` 키가 있습니까? 없다면 왜 없는지 설명합니다.
 2. USBSTOR 장치마다 `0064` 와 `0065` 를 비교합니다. 다른 장치가 있다면 무엇이 원인일 수 있습니까?

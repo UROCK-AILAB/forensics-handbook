@@ -24,7 +24,7 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList
 
 - 오프라인 이미지에서는 SOFTWARE 하이브에서 읽습니다. 하이브 파일 위치와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 - 네트워크 범주를 나타내는 NLM_NETWORK_CATEGORY 열거는 Windows Vista·Server 2008 이후에 있습니다.
-- 윈도 버전마다 하위 키나 값이 다를 수 있어 검체에서 확인합니다.
+- 윈도 버전마다 하위 키나 값이 다를 수 있어 실제 데이터로 확인합니다.
 
 Windows 11 PC 한 대에서 본 하위 키는 아래와 같습니다.
 
@@ -135,13 +135,13 @@ Windows 11 PC 한 대에서 본 모습은 아래와 같습니다.
 ### 증명하는 것
 
 - 이 PC 에 이 이름의 네트워크 프로필이 있습니다.
-- 그 프로필을 처음 만든 시각과 마지막으로 연결한 시각을 기록이 말하는 만큼 쓸 수 있습니다.
+- 그 프로필을 처음 만든 시각과 마지막으로 연결한 시각을 기록으로 확인되는 만큼 쓸 수 있습니다.
 - NameType 으로 무선·유선·광대역을 나눌 수 있습니다.
 - Unmanaged 서명에 `DefaultGatewayMac` 이 있으면 그 네트워크의 기본 게이트웨이 MAC 을 알 수 있습니다.
 
 ### 증명하지 못하는 것
 
-- **누가 연결했는지.** HKLM 기록이라 사용자를 적는 칸이 없습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
+- **누가 연결했는지.** HKLM 기록이라 사용자를 적는 값이 없습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 - **몇 번, 얼마 동안 연결했는지.** 처음과 마지막 두 시각만 있습니다. 그 사이의 연결은 [네트워크 연결 이벤트](../event-logs/wlan-autoconfig-networkprofile.md) 와 [SRUM](../execution/system-resource-usage-monitor/index.md) 에서 봅니다.
 - **당시 방화벽 상태.** `Category` 값만으로 포트가 열렸는지 판단하지 않습니다.
 - **장소.** 게이트웨이 MAC 만으로 장소를 정하지 않습니다. 이 값은 다른 자료와 맞춰 볼 수 있는 값으로만 씁니다.
@@ -159,7 +159,7 @@ RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그
 
 - 보고서에서 UTC 로 바꿀 때는 그 시점의 시간대 설정을 밝힙니다. 시간대 설정은 [시간대 설정](../system-account/time-zone.md) 에서 확인합니다.
 - 같은 순간이 TCP/IP 인터페이스 키에는 UTC 로 적혀 있었습니다. [네트워크 인터페이스 설정](tcp-ip-interfaces.md) 에서 다룹니다.
-- `DateLastConnected` 는 한 PC 에서 연결 이벤트(10000) 시각과 같았습니다. 끊을 때 바뀌는지는 검체의 연결·끊김 이벤트와 맞춰 확인합니다.
+- `DateLastConnected` 는 한 PC 에서 연결 이벤트(10000) 시각과 같았습니다. 끊을 때 바뀌는지는 실제 데이터의 연결·끊김 이벤트와 맞춰 확인합니다.
 - `DateCreated` 는 OS 설치 시각보다 앞설 수 있습니다. Windows 11 PC 한 대는 InstallDate 가 2026-06-27 03:07 인데 `DateCreated` 가 2025-04-21 인 프로필이 3개 남아 있었습니다. 업그레이드 뒤에도 이전 프로필이 이어진 것으로 보입니다.
 - 같은 PC 에는 InstallDate 1분 뒤(2026-06-27 03:08:24)가 `DateCreated` 인 무선 프로필도 있었습니다.
 - Wi-Fi 프로필 파일의 생성 시각과 `DateCreated` 를 맞춰 본 결과는 [Wi-Fi 프로필](wlan-profiles.md) 에서 다룹니다.
@@ -173,13 +173,13 @@ RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그
 - **Wi-Fi 프로필 파일과 GUID 가 다릅니다.** 두 자료는 이름으로 맞춰야 합니다. 자세한 것은 [Wi-Fi 프로필](wlan-profiles.md) 에 있습니다.
 - **도구가 읽는 키가 없을 수 있습니다.** RegRipper 는 `Nla\Cache\Intranet` 을 읽지만, Windows 11 PC 한 대에는 `Nla\Cache` 가 없었습니다. 결과가 비어도 도구 오류로 단정하지 않습니다.
 - **`DefaultGatewayMac` 이 비어 있을 수 있습니다.** 0바이트인 서명이 있었습니다.
-- **지운 네트워크.** 설정 앱의 "알려진 네트워크 삭제" 등으로 프로필을 지울 때 이 키도 지워지는지는 공개 자료가 없어 검체에서 확인합니다. 지운 키와 값을 찾는 방법, 하이브 로그 반영은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 이전 시점은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 봅니다.
+- **지운 네트워크.** 설정 앱의 "알려진 네트워크 삭제" 등으로 프로필을 지울 때 이 키도 지워지는지는 실제 데이터로 확인해야 합니다. 지운 키와 값을 찾는 방법, 하이브 로그 반영은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다. 이전 시점은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 바이트는 SYSTEMTIME 구조로 만든 예시입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+아래 바이트는 SYSTEMTIME 구조로 만든 예시입니다. 특정 기기에서 꺼낸 값이 아닙니다.
 
 **DateLastConnected 16바이트 (2024-03-15 09:30:05.250 으로 만든 예시).**
 
@@ -191,7 +191,7 @@ RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그
 1. 2바이트씩 끊어 리틀 엔디언으로 읽습니다.
 2. `E8 07` 은 `0x07E8`, 곧 2024 입니다. 연입니다.
 3. `03 00` 은 3월입니다.
-4. `05 00` 은 요일 칸의 값 5 입니다. 날짜는 연·월·일 칸으로 읽습니다.
+4. `05 00` 은 요일 필드의 값 5 입니다. 날짜는 연·월·일 필드로 읽습니다.
 5. `0F 00` 은 15일, `09 00` 은 9시, `1E 00` 은 30분, `05 00` 은 5초입니다.
 6. `FA 00` 은 250밀리초입니다.
 7. 이 값에는 시간대 정보가 없습니다. 현지 시각인지 UTC 인지는 "시각 해석" 절처럼 다른 기록과 맞춰 정합니다.
@@ -233,7 +233,7 @@ RegRipper networklist 플러그인은 SYSTEMTIME 을 시간대 변환 없이 그
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)에서 SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `Profiles` 아래 프로필은 몇 개입니까? NameType 별로 몇 개씩입니까?
 2. 도구가 NameType 을 10진으로 보여 줍니까, 16진으로 보여 줍니까?

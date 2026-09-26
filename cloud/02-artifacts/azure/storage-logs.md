@@ -10,7 +10,7 @@ Azure Storage 계정에서 블롭을 읽고 쓰고 지운 요청은 데이터 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Storage 계정에 대한 작업은 두 갈래로 나뉩니다[3]. 계정을 만들거나 계정 속성을 바꾸는 Azure Resource Manager 요청은 제어 평면 (control plane) 작업이고 [활동 로그](./activity-log.md)에 남습니다. 블롭을 올리거나 내려받는 것처럼 Storage 서비스 끝점으로 들어온 요청은 데이터 평면 (data plane) 작업이고 Storage 리소스 로그에 남습니다[3]. 관리·데이터 평면의 일반 원리는 [로그의 종류](../../01-foundations/logging/log-types.md)에 있습니다.
+Storage 계정에 대한 작업은 두 종류로 나뉩니다[3]. 계정을 만들거나 계정 속성을 바꾸는 Azure Resource Manager 요청은 제어 평면 (control plane) 작업이고 [활동 로그](./activity-log.md)에 남습니다. 블롭을 올리거나 내려받는 것처럼 Storage 서비스 끝점으로 들어온 요청은 데이터 평면 (data plane) 작업이고 Storage 리소스 로그에 남습니다[3]. 관리·데이터 평면의 일반 원리는 [로그의 종류](../../01-foundations/logging/log-types.md)에 있습니다.
 
 | 조사 질문 | 기록 | 예 |
 |---|---|---|
@@ -21,7 +21,7 @@ Storage 계정에 대한 작업은 두 갈래로 나뉩니다[3]. 계정을 만�
 | 진단 설정을 바꿨나 | 활동 로그 | `Microsoft.Storage/storageAccounts/blobServices/providers/Microsoft.Insights/diagnosticSettings/write` |
 | 어떤 블롭을 읽고 쓰고 지웠나 | 리소스 로그·`$logs` | `GetBlob`, `PutBlob`, `DeleteBlob` |
 
-작업 이름은 2026년 9월 문서 기준입니다[7]. `listkeys/action` 은 계정 액세스 키를 돌려주는 작업이고, `listAccountSas/action` 과 `listServiceSas/action` 은 계정 SAS·서비스 SAS 토큰을 돌려주는 작업입니다[7]. Sigma 의 드문 작업 규칙은 `Microsoft.Storage/storageAccounts/listKeys/action` 을 탐지 대상에 넣었습니다[11]. 권한 문서는 `listkeys`, Sigma 규칙은 `listKeys` 로 대소문자가 달라서 검색은 대소문자를 가리지 않게 합니다.
+작업 이름은 2026년 9월 문서 기준입니다[7]. `listkeys/action` 은 계정 액세스 키를 돌려주는 작업이고, `listAccountSas/action` 과 `listServiceSas/action` 은 계정 SAS·서비스 SAS 토큰을 돌려주는 작업입니다[7]. Sigma 의 드문 작업 규칙은 `Microsoft.Storage/storageAccounts/listKeys/action` 을 탐지 대상에 넣었습니다[11]. 권한 문서는 `listkeys`, Sigma 규칙은 `listKeys` 로 대소문자가 달라서 검색은 대소문자를 구분하지 않게 합니다.
 
 데이터 평면 요청은 요청이 들어온 서비스 끝점에만 기록이 생깁니다[1]. 블롭 끝점에만 요청이 있었다면 블롭 기록만 생기고 큐·테이블 기록은 없습니다[1][5]. Azure 포털에서 계정을 열어 보기만 해도 포털이 부른 작업이 기록되므로, 아무도 데이터를 쓰지 않은 계정에도 기록이 있을 수 있습니다[1].
 
@@ -158,17 +158,17 @@ Storage·Event Hubs 로 보낸 레코드와 Log Analytics 표는 필드 이름�
 | `identity.requester.objectId` | `RequesterObjectId` | OAuth 요청자의 개체 ID(Kerberos 면 그 사용자의 개체 ID) |
 | `identity.requester.upn` | `RequesterUpn` | 요청자 UPN |
 | `identity.requester.appId` | `RequesterAppId` | OAuth 애플리케이션 ID |
-| `identity.delegatedResource` | 검체에서 확인 | 소유자를 대신해 접근한 Azure 리소스(예 가상 머신)의 ID |
+| `identity.delegatedResource` | 실제 데이터로 확인 | 소유자를 대신해 접근한 Azure 리소스(예 가상 머신)의 ID |
 | `properties.userAgentHeader` | `UserAgentHeader` | User-Agent 값 |
 | `properties.requestBodySize`·`responseBodySize` | `RequestBodySize`·`ResponseBodySize` | 스토리지가 읽은·쓴 본문 바이트. 실패한 요청은 비어 있을 수 있음 |
-| `properties.downloadRange` | 검체에서 확인 | 블롭 일부만 받은 경우의 바이트 범위(예 `bytes=0-1023`) |
+| `properties.downloadRange` | 실제 데이터로 확인 | 블롭 일부만 받은 경우의 바이트 범위(예 `bytes=0-1023`) |
 | `properties.lastModifiedTime` | `LastModifiedTime` | 돌려준 객체의 마지막 수정 시각 |
 
 `identity.tokenHash` 의 모양은 인증 방식마다 다릅니다[2]. 계정 키면 `key1(키의 SHA-256)` 이나 `key2(...)` 처럼 어느 키였는지가 드러나고, SAS 면 `key1(...),SasSignature(SAS 토큰의 SHA-256)` 처럼 서명에 쓴 키와 SAS 서명 해시가 함께 적히며, OAuth 면 토큰의 SHA-256 하나만 적힙니다. 그 밖의 방식에는 이 필드가 없습니다[2]. `StorageBlobLogs` 에는 이 밖에도 `SourceUri`, `DestinationUri`, `CopyDestinationArmId`(복사 대상), `RequestRegion`, `SasExpiryStatus`(SAS 정책 위반), `TlsVersion`, `TrafficClassification` 열이 있습니다[4].
 
 ### 클래식 로그 줄
 
-클래식 로그는 한 줄이 레코드 하나이고 칸은 세미콜론으로 나뉩니다[6]. 첫 칸이 로그 형식 버전이고, 1.0 은 30칸, 2.0 은 OAuth 정보 8칸을 뒤에 붙인 38칸입니다[6]. Blob·Queue 는 1.0·2.0 을 모두 쓰고 Table 은 1.0 만 씁니다[6].
+클래식 로그는 한 줄이 레코드 하나이고 필드는 세미콜론으로 나뉩니다[6]. 첫 필드가 로그 형식 버전이고, 1.0 은 필드 30개, 2.0 은 OAuth 정보 필드 8개를 뒤에 붙인 38개입니다[6]. Blob·Queue 는 1.0·2.0 을 모두 쓰고 Table 은 1.0 만 씁니다[6].
 
 ```text
 1.0 (30칸)
@@ -178,7 +178,7 @@ Storage·Event Hubs 로 보낸 레코드와 Log Analytics 표는 필드 이름�
 <user-object-id>;<tenant-id>;<application-id>;<audience>;<issuer>;<user-principal-name>;<reserved-field>;<authorization-detail>
 ```
 
-`authentication-type` 은 `authenticated`, `anonymous`, `sas` 가운데 하나이고, OAuth 토큰으로 인증한 2.0 레코드에는 `bearer` 가 들어갑니다[5][6]. `requester-account-name` 은 인증된 요청이면 계정 이름이 들어가고 익명·SAS 요청이면 비어 있습니다[6]. 따옴표·세미콜론·줄바꿈이 들어갈 수 있는 칸은 HTML 인코딩한 뒤 따옴표로 감싸므로, 요청 URL 의 `&` 는 `&amp;` 로 적힙니다[5][6]. `request-status` 에는 `Success`, `AnonymousSuccess`, `SASSuccess`, `OAuthSuccess` 같은 값이 옵니다[5][6].
+`authentication-type` 은 `authenticated`, `anonymous`, `sas` 가운데 하나이고, OAuth 토큰으로 인증한 2.0 레코드에는 `bearer` 가 들어갑니다[5][6]. `requester-account-name` 은 인증된 요청이면 계정 이름이 들어가고 익명·SAS 요청이면 비어 있습니다[6]. 따옴표·세미콜론·줄바꿈이 들어갈 수 있는 필드는 HTML 인코딩한 뒤 따옴표로 감싸므로, 요청 URL 의 `&` 는 `&amp;` 로 적힙니다[5][6]. `request-status` 에는 `Success`, `AnonymousSuccess`, `SASSuccess`, `OAuthSuccess` 같은 값이 옵니다[5][6].
 
 블롭 복사 요청 하나는 `CopyBlob`, `CopyBlobSource`, `CopyBlobDestination` 세 줄로 남고, 세 줄의 `request-id-header` 는 같으며 `operation-count` 만 0·1·2 로 올라갑니다[6]. 리소스 로그의 `operationCount` 도 같은 뜻입니다[2]. Storage 리소스 공급자가 부른 요청도 기록되며 요청 URL 에 `sk=system-1` 이 붙어 있어 가려낼 수 있습니다[5].
 
@@ -188,7 +188,7 @@ Storage·Event Hubs 로 보낸 레코드와 Log Analytics 표는 필드 이름�
 
 **증명하지 못하는 것.** 공유 키 (Shared Key) 와 SAS 로 인증한 요청은 개인 신원을 알려 주지 않습니다[3]. 이때는 `CallerIpAddress` 와 `UserAgentHeader` 로 출처를 좁히고, SAS 는 서명 해시를 배포 기록과 맞춰 봐야 합니다[3]. 실패한 익명 요청과 검증에 실패한 SAS 요청은 기록되지 않으므로 "무단 접근 시도 기록이 없다" 가 "시도가 없었다" 를 뜻하지 않습니다[1][5]. 최선 노력 방식이라 요청 하나하나가 모두 남는다는 보장도 없습니다[1][5]. 진단 설정이나 클래식 로깅을 켜지 않은 기간에는 데이터 평면 기록이 아예 없습니다.
 
-활동 로그의 `listkeys/action`·`listAccountSas/action` 은 "키나 SAS 를 받아 갔다" 는 제어 평면 사실만 보여 줍니다[7]. 받아 간 키로 무엇을 했는지는 데이터 평면 기록에서 같은 키(`key1`·`key2`)의 해시가 찍힌 요청을 찾아야 보입니다[2]. 보고서에는 "이 시각에 이 IP 에서 계정 키로 이 블롭을 내려받는 요청이 성공한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+활동 로그의 `listkeys/action`·`listAccountSas/action` 은 "키나 SAS 를 받아 갔다" 는 제어 평면 사실만 보여 줍니다[7]. 받아 간 키로 무엇을 했는지는 데이터 평면 기록에서 같은 키(`key1`·`key2`)의 해시가 찍힌 요청을 찾아야 보입니다[2]. 보고서에는 "이 시각에 이 IP 에서 계정 키로 이 블롭을 내려받는 요청이 성공한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -202,7 +202,7 @@ Storage·Event Hubs 로 보낸 레코드와 Log Analytics 표는 필드 이름�
 
 - **로그 컨테이너 활동은 보이지 않습니다.** Azure Monitor 는 `insights-logs-` 컨테이너 안의 활동을 걸러 냅니다[1]. 기록을 모아 둔 계정에서 누가 로그 블롭을 읽거나 지웠는지는 이 기록으로 알 수 없어서, 그 계정의 수명 주기 정책 변경과 활동 로그를 따로 봅니다. 기록 보존 방법은 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다.
 - **`$logs` 의 내용은 지울 수 있습니다.** 컨테이너는 남아도 안의 블롭은 지울 수 있고, 같은 시간대에 중복 레코드가 생길 수 있습니다[5]. 중복은 `request-id-header` 와 `operation-count` 가 같은지로 가려냅니다.
-- **인증 방식 값의 철자가 문서마다 다릅니다.** 필드 설명은 `SAS Key`·`Account Key` 로 적고, 모니터링 문서의 KQL 예는 `AuthenticationType == "SAS"` 로 적었습니다[2][3]. 검체에서 `summarize count() by AuthenticationType` 로 실제 값을 먼저 봅니다. 같은 문서 본문의 `RequestObjectId` 는 `RequesterObjectId` 열을 가리킵니다[3][4].
+- **인증 방식 값의 철자가 문서마다 다릅니다.** 필드 설명은 `SAS Key`·`Account Key` 로 적고, 모니터링 문서의 KQL 예는 `AuthenticationType == "SAS"` 로 적었습니다[2][3]. 실제 데이터에서 `summarize count() by AuthenticationType` 로 실제 값을 먼저 봅니다. 같은 문서 본문의 `RequestObjectId` 는 `RequesterObjectId` 열을 가리킵니다[3][4].
 - **UPN 이 없을 수 있습니다.** Microsoft Entra 사용자는 UPN 이 보이지만 사용자 할당 관리 ID 나 테넌트 간 인증이면 보이지 않습니다[3].
 - **SAS 토큰 원문은 없습니다.** 로그에는 서명의 SHA-256 해시만 있어서, 토큰 자체를 로그에서 되살릴 수 없습니다[3].
 - **포털 조회도 기록을 만듭니다.** 조사자가 포털에서 계정을 열면 그 작업이 섞이고, `$logs` 를 읽는 요청도 분석 데이터 요청으로 기록됩니다[1]. 조사자의 IP·시각·계정을 적어 두고 결과에서 뺍니다.
@@ -218,9 +218,9 @@ Storage·Event Hubs 로 보낸 레코드와 Log Analytics 표는 필드 이름�
 2.0;2026-03-14T02:18:03.5550123Z;GetBlob;OAuthSuccess;200;41;12;bearer;examplestore01;examplestore01;blob;"https://examplestore01.blob.core.windows.net/reports/q1.xlsx";"/examplestore01/reports/q1.xlsx";0b1c2d3e-0000-4a5b-8c9d-0e1f2a3b4c5d;0;198.51.100.23:50433;2023-11-03;512;0;330;18432;0;;;"0x8DC0000000000AA";Friday, 13-Mar-26 09:12:40 GMT;;"azsdk-python-storage-blob/12.19.0";;"7d8e9f0a-0000-4b1c-9d2e-3f4a5b6c7d8e";11112222-aaaa-3333-bbbb-4444cccc5555;aaaabbbb-1111-cccc-2222-dddd3333eeee;99998888-7777-6666-5555-444433332222;https://storage.azure.com;https://sts.windows.net/aaaabbbb-1111-cccc-2222-dddd3333eeee/;someone@contoso.com;;
 ```
 
-| 칸 | 값 | 읽는 법 |
+| 필드 | 값 | 읽는 법 |
 |---|---|---|
-| 1 | `2.0` | 형식 버전. 뒤에 OAuth 칸 8개가 더 있음 |
+| 1 | `2.0` | 형식 버전. 뒤에 OAuth 필드 8개가 더 있음 |
 | 2 | `2026-03-14T02:18:03.5550123Z` | 요청을 받은 UTC 시각 |
 | 3·4·5 | `GetBlob`·`OAuthSuccess`·`200` | 블롭 내려받기, OAuth 인증 성공, HTTP 200 |
 | 8 | `bearer` | OAuth 토큰으로 인증 |
@@ -232,7 +232,7 @@ Storage·Event Hubs 로 보낸 레코드와 Log Analytics 표는 필드 이름�
 | 28 | `"azsdk-python-storage-blob/12.19.0"` | User-Agent |
 | 31·36 | 개체 ID·`someone@contoso.com` | 요청자 개체 ID 와 UPN |
 
-칸을 셀 때는 따옴표 안의 세미콜론에서 나누지 않고, 줄마다 첫 칸의 버전부터 보고 칸 수를 정합니다[6].
+필드를 셀 때는 따옴표 안의 세미콜론에서 나누지 않고, 줄마다 첫 필드의 버전부터 보고 필드 수를 정합니다[6].
 
 ### SAS 서명 해시 맞춰 보기
 
@@ -287,11 +287,11 @@ IP·User-Agent 로 출처를 좁히는 방법은 [IP·사용자 에이전트·�
 
 Microsoft 문서 "Storage Analytics log format" 과 "Azure Storage analytics logging" 에 실린 예시 줄로 풀어 봅니다[5][6].
 
-1. 1.0 형식의 익명 `GetBlob` 예시에서 `authentication-type` 과 `requester-account-name` 칸을 찾고, 두 칸이 그렇게 적힌 까닭을 설명해 봅니다.
+1. 1.0 형식의 익명 `GetBlob` 예시에서 `authentication-type` 과 `requester-account-name` 필드를 찾고, 두 필드가 그렇게 적힌 이유를 설명해 봅니다.
 2. `CopyBlob` 예시 세 줄에서 요청 ID 와 `operation-count` 를 비교하고, 원본 블롭과 대상 블롭이 각각 어느 줄에 있는지 적어 봅니다.
-3. 2.0 형식의 `ListBlobs`·`PutBlock` 예시에서 OAuth 칸 8개를 나눠 요청자 개체 ID·테넌트 ID·애플리케이션 ID 를 찾고, UPN 칸이 비어 있는지 확인해 봅니다.
+3. 2.0 형식의 `ListBlobs`·`PutBlock` 예시에서 OAuth 필드 8개를 나눠 요청자 개체 ID·테넌트 ID·애플리케이션 ID 를 찾고, UPN 필드가 비어 있는지 확인해 봅니다.
 4. 블롭 예시 줄의 요청 URL 에 있는 `&amp;` 를 되돌려 읽고, 그 요청이 SAS 로 인증된 요청인지 URL 의 매개변수로 판단해 봅니다.
-5. 실제 검체에서는 조사 기간을 시간 단위로 나눠 `insights-logs-storageread` 의 `PT1H.json` 이나 `$logs` 블롭이 빠진 시간이 있는지 표로 만들고, 같은 시간대의 활동 로그에서 진단 설정 변경이 있었는지 확인해 봅니다.
+5. 실제 사건에서는 조사 기간을 시간 단위로 나눠 `insights-logs-storageread` 의 `PT1H.json` 이나 `$logs` 블롭이 빠진 시간이 있는지 표로 만들고, 같은 시간대의 활동 로그에서 진단 설정 변경이 있었는지 확인해 봅니다.
 
 ## 참고 문헌
 

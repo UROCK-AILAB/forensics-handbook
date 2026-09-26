@@ -19,14 +19,14 @@ Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대�
 |---|---|---|---|
 | VS Code | Electron |  | 이 핸드북에 따로 페이지 없음 |
 | 새 Teams | WebView2 (`EBWebView` 폴더) |  | [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) |
-| 클래식 Teams | 검체에서 확인 | 위치만 공개 문서[3] | [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) |
+| 클래식 Teams | 실제 기기에서 확인 | 위치만 공개 문서[3] | [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) |
 | 새 Outlook | WebView2 (`EBWebView` 폴더) |  | [새 Outlook](../../../02-artifacts/mail/new-outlook.md) |
 | OneDrive | WebView2 (`EBWebView` 폴더) |  | [원드라이브](../../../02-artifacts/cloud-notes/onedrive/index.md) |
 | 카카오톡 PC | 사용자별 폴더 안에 `EBWebView` 폴더 |  | [카카오톡 PC](../../../02-artifacts/messengers/kakaotalk-pc/index.md) |
 | Discord | 폴더 두 개 |  | [디스코드](../../../02-artifacts/messengers/discord.md) |
-| Slack | 검체에서 확인 | — | [슬랙](../../../02-artifacts/messengers/slack.md) |
+| Slack | 실제 기기에서 확인 | — | [슬랙](../../../02-artifacts/messengers/slack.md) |
 
-아래 폴더·파일 이름, JSON 키 이름, 파일 앞 몇 바이트는 Windows 11(빌드 26200) 기준입니다. 앱 버전마다 다를 수 있어 검체에서 확인합니다.
+아래 폴더·파일 이름, JSON 키 이름, 파일 앞 몇 바이트는 Windows 11(빌드 26200) 기준입니다. 앱 버전마다 다를 수 있어 실제 기기에서 확인합니다.
 
 안에 든 파일을 읽는 법은 브라우저와 같아서 프로필 폴더와 `Local State` 는 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 에서, 캐시는 [캐시 형식](blockfile-simple-cache.md) 에서, 암호화는 [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) 에서 다룹니다.
 
@@ -48,7 +48,7 @@ Electron 은 폴더 자리에 이름을 붙여 부릅니다. Windows 기본값�
 
 앱은 `ready` 이벤트 전에 `sessionData` 경로를 바꿀 수 있고[1], 그러면 쿠키·캐시가 `userData` 가 아닌 곳에 생깁니다.
 
-Chromium 이 만드는 폴더와 이름이 겹칠 수 있으므로, 앱 전용 파일은 `userData` 바로 아래가 아니라 하위 폴더에 두는 것이 Electron 의 권장 방식입니다[1]. 이 권고를 따르지 않은 앱은 `userData` 바로 아래에 Chromium 폴더와 앱 폴더가 섞이므로, 폴더마다 누가 만들었는지 가려서 읽습니다.
+Chromium 이 만드는 폴더와 이름이 겹칠 수 있으므로, 앱 전용 파일은 `userData` 바로 아래가 아니라 하위 폴더에 두는 것이 Electron 의 권장 방식입니다[1]. 이 권고를 따르지 않은 앱은 `userData` 바로 아래에 Chromium 폴더와 앱 폴더가 섞이므로, 폴더마다 누가 만들었는지 구분해서 읽습니다.
 
 #### 예: VS Code
 
@@ -113,14 +113,14 @@ UDF 하나에는 프로필을 여러 개 둘 수 있고 프로필마다 전용 �
 ### Discord·Slack
 
 - Discord 는 `%APPDATA%\discord` 와 `%LOCALAPPDATA%\Discord` 두 폴더가 있습니다. 두 폴더를 모두 봅니다.
-- Slack 은 설치형과 스토어 판의 경로가 다를 수 있어 검체에서 확인합니다.
+- Slack 은 설치형과 스토어 판의 경로가 다를 수 있어 실제 기기에서 확인합니다.
 - 두 앱의 해석은 [디스코드](../../../02-artifacts/messengers/discord.md) 와 [슬랙](../../../02-artifacts/messengers/slack.md) 에서 다룹니다.
 - 경로를 모를 때는 아래 "읽는 법" 처럼 `Local State` 와 `EBWebView` 이름으로 찾습니다.
 
 ## 읽는 법
 
 1. **이름으로 후보를 모읍니다.** 사용자 프로필마다 `Local State` 파일과 `EBWebView` 폴더를 모두 찾습니다. `%APPDATA%`, `%LOCALAPPDATA%`, `%LOCALAPPDATA%\Packages` 아래를 먼저 보고 디스크 전체로 넓힙니다. 이미지에서는 [마스터 파일 테이블](../../../02-artifacts/filesystem/mft.md) 목록에서 이름으로 찾습니다.
-2. **경로로 앱을 가립니다.** `%APPDATA%\<앱 이름>`, 패키지 폴더 이름, 실행 파일 경로 + `.WebView2` 같은 모양을 봅니다. 폴더 이름이 제품 이름과 다를 수 있으니 [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md) 에서 설치 경로를 맞춰 봅니다.
+2. **경로로 앱을 구분합니다.** `%APPDATA%\<앱 이름>`, 패키지 폴더 이름, 실행 파일 경로 + `.WebView2` 같은 모양을 봅니다. 폴더 이름이 제품 이름과 다를 수 있으니 [설치 프로그램](../../../02-artifacts/system-account/uninstall.md) 과 [스토어 앱 설치 목록](../../../02-artifacts/system-account/appx-staterepository.md) 에서 설치 경로를 맞춰 봅니다.
 3. **층을 확인합니다.** `Default` 같은 프로필 폴더가 있는지 봅니다. VS Code 같은 Electron 앱처럼 없을 수도 있습니다. 그때는 `Local State` 가 있는 폴더를 프로필 폴더처럼 읽습니다.
 4. **버전을 적습니다.** `Last Version` 파일이 있으면 그 값을 적습니다. 파일 구조는 이 버전에 맞춰 판단합니다.
 5. **추가 세션 폴더를 찾습니다.** `Partitions` 아래 폴더와 WebView2 의 추가 프로필 폴더(예: 새 Teams 의 `WV2Profile_tfw`)도 같은 방법으로 읽습니다.

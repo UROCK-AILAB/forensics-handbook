@@ -42,7 +42,7 @@ nav_order: 1300
 | `HomeDomain :: Library/Preferences/com.apple.chronod.plist` | `lastEffectiveSignificantTimeChange` | datetime |
 | 같은 파일 | `lastKnownTimes` 안의 `timeZoneSecondsFromGMT` | — |
 
-시간대 키(`com.apple.ScreenTimeAgent.plist` 의 `LastTimeZoneName`, `com.apple.AppStore.plist`·`com.apple.games.plist` 의 `lastBootstrapTimeZone`)는 [시각 정규화](time-normalization.md)의 표에 모아 두었습니다. 앱 스토어 plist 의 부트스트랩 시간대는 수집 시점의 설정을 찍어 둔 값이라서 [3], 과거 사건 시각의 시간대와 다르다는 것만으로 조작이라고 볼 수는 없습니다. 이런 키를 조작 탐지에 쓸 수 있는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 시간대 설정 기록 자체는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md)에 있습니다.
+시간대 키(`com.apple.ScreenTimeAgent.plist` 의 `LastTimeZoneName`, `com.apple.AppStore.plist`·`com.apple.games.plist` 의 `lastBootstrapTimeZone`)는 [시각 정규화](time-normalization.md)의 표에 모아 두었습니다. 앱 스토어 plist 의 부트스트랩 시간대는 수집 시점의 설정을 찍어 둔 값이라서 [3], 과거 사건 시각의 시간대와 다르다는 것만으로 조작이라고 볼 수는 없습니다. 이런 키를 조작 탐지에 쓸 수 있는지는 실제 데이터로 확인해야 합니다. 시간대 설정 기록 자체는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md)에 있습니다.
 
 ## 절차
 
@@ -58,7 +58,7 @@ logarchive 쪽이 실제 시각을 담는다는 판단과 이상 징후 목록�
 
 ## 결과를 어떻게 해석하나
 
-`TMSetManualTime` 로그는 누군가 기기에서 시각을 손으로 맞췄다는 것까지 보여 주고, 누가 왜 그랬는지는 보여 주지 않습니다. 보고서에는 "logarchive 기준 이 시각에 `timed` 가 수동 시각 설정 로그를 남겼고, 로그에 담긴 설정 시각은 이 값이다" 처럼 기록이 말하는 만큼만 적고, 그 뒤 구간의 다른 기록은 기기 시계 기준이라 실제 시각과 다를 수 있다고 밝힙니다. 통합 로그를 보지 못한 사건이라면 앞뒤 모순만 근거로 들고, 로그를 확인하지 못했다는 사실을 함께 적습니다.
+`TMSetManualTime` 로그는 누군가 기기에서 시각을 손으로 맞췄다는 것까지 보여 주고, 누가 왜 그랬는지는 보여 주지 않습니다. 보고서에는 "logarchive 기준 이 시각에 `timed` 가 수동 시각 설정 로그를 남겼고, 로그에 담긴 설정 시각은 이 값이다" 처럼 기록으로 확인되는 만큼만 적고, 그 뒤 구간의 다른 기록은 기기 시계 기준이라 실제 시각과 다를 수 있다고 밝힙니다. 통합 로그를 보지 못한 사건이라면 앞뒤 모순만 근거로 들고, 로그를 확인하지 못했다는 사실을 함께 적습니다.
 
 ## 참고 문헌
 

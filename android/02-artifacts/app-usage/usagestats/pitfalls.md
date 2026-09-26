@@ -7,7 +7,7 @@ nav_order: 480
 
 # 해석 함정 (Pitfalls)
 
-앱 사용 기록(usagestats)을 보고서에 옮길 때 자주 어긋나는 곳을 모았습니다. 소스에 근거한 동작은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다. 파일과 칸의 생김새는 [파일 구조](structure.md), 이벤트 번호의 뜻은 [이벤트 종류](event-types.md) 페이지에 있습니다.
+앱 사용 기록(usagestats)을 보고서에 옮길 때 자주 어긋나는 곳을 모았습니다. 소스에 근거한 동작은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다. 파일과 필드의 구조는 [파일 구조](structure.md), 이벤트 번호의 뜻은 [이벤트 종류](event-types.md) 페이지에 있습니다.
 
 ## 한 줄 요약
 
@@ -27,11 +27,11 @@ usagestats 이벤트는 사용자의 조작과 시스템의 동작이 섞인 기
 
 ## 시각 해석
 
-파일 안의 시각 칸은 구간 시작(파일 이름)으로부터의 밀리초 차이라서, 파일 이름을 더하지 않고 그대로 유닉스 밀리초로 읽으면 1970년 근처 시각이 나옵니다 [4]. 차이값은 구간 시작보다 최대 1시간 앞선 음수일 수도 있고 [4], 도구마다 음수를 다루는 방식이 다를 수 있어서 음수가 나온 이벤트는 두 도구 이상으로 맞춰 봅니다. ALEAPP 의 음수 처리와 계산 예시는 [파일 구조](structure.md) 페이지에 있습니다.
+파일 안의 시각 필드는 구간 시작(파일 이름)으로부터의 밀리초 차이라서, 파일 이름을 더하지 않고 그대로 유닉스 밀리초로 읽으면 1970년 근처 시각이 나옵니다 [4]. 차이값은 구간 시작보다 최대 1시간 앞선 음수일 수도 있고 [4], 도구마다 음수를 다루는 방식이 다를 수 있어서 음수가 나온 이벤트는 두 도구 이상으로 맞춰 봅니다. ALEAPP 의 음수 처리와 계산 예시는 [파일 구조](structure.md) 페이지에 있습니다.
 
-파일 이름과 이벤트 시각은 모두 기기의 벽시계(System.currentTimeMillis)를 따르고 [1], 사용자가 기기 시각을 바꾸면 기록에도 그대로 반영됩니다. 서비스는 실제 시각과 기대한 시각이 2초(TIME_CHANGE_THRESHOLD_MILLIS)보다 벌어지면 시각이 바뀐 것으로 보고 `Time changed in by ... seconds` 로그를 남긴 다음 기준 시각을 다시 잡습니다 [2]. 이때 이미 저장된 파일과 이벤트를 어떻게 다루는지는 검체에서 확인합니다. 삼성 기기(Android 16, One UI 8.5)의 `dumpsys usagestats` 출력에는 "UsageStats RollOver history" 절에 `Time changed. actualSystemTime:... expectedSystemTime:...` 줄이 남아서, 시각 변경의 흔적을 이 절에서 찾을 수 있습니다. 시각 조작을 의심하는 사건이라면 [시간대와 시각 설정](../../system-account/time-zone.md)과 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 페이지를 함께 봅니다.
+파일 이름과 이벤트 시각은 모두 기기의 실제 시각 시계(wall clock, System.currentTimeMillis)를 따르고 [1], 사용자가 기기 시각을 바꾸면 기록에도 그대로 반영됩니다. 서비스는 실제 시각과 기대한 시각이 2초(TIME_CHANGE_THRESHOLD_MILLIS)보다 벌어지면 시각이 바뀐 것으로 보고 `Time changed in by ... seconds` 로그를 남긴 다음 기준 시각을 다시 잡습니다 [2]. 이때 이미 저장된 파일과 이벤트를 어떻게 다루는지는 실제 기기로 확인해야 합니다. 삼성 기기(Android 16, One UI 8.5)의 `dumpsys usagestats` 출력에는 "UsageStats RollOver history" 절에 `Time changed. actualSystemTime:... expectedSystemTime:...` 줄이 남아서, 시각 변경의 흔적을 이 절에서 찾을 수 있습니다. 시각 조작을 의심하는 사건이라면 [시간대와 시각 설정](../../system-account/time-zone.md)과 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 페이지를 함께 봅니다.
 
-ALEAPP 는 절대 유닉스 밀리초로 바꾼 뒤 UTC 로 보여 주지만 [6], `dumpsys usagestats` 는 한국어로 설정한 기기에서 시각을 한글이 섞인 날짜 문자열로 찍습니다. dumpsys 시각의 시간대는 검체에서 확인하고, 두 출력을 나란히 놓을 때는 시간대를 먼저 맞춥니다. 밀리초 값을 바꾸는 법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+ALEAPP 는 절대 유닉스 밀리초로 바꾼 뒤 UTC 로 보여 주지만 [6], `dumpsys usagestats` 는 한국어로 설정한 기기에서 시각을 한글이 섞인 날짜 문자열로 찍습니다. dumpsys 시각의 시간대는 실제 기기로 확인하고, 두 출력을 나란히 놓을 때는 시간대를 먼저 맞춥니다. 밀리초 값을 바꾸는 법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 이벤트 뜻을 넘겨짚는 함정
 
@@ -45,13 +45,13 @@ FOREGROUND_SERVICE_START·STOP 은 앱의 서비스가 돈 기록이지 사용�
 
 ## 빠지거나 겹치는 기록
 
-이벤트는 시스템이 며칠만 보관하고 [5], 구간 파일도 구간마다 정해진 기간이 지나면 지웁니다(기준은 [파일 구조](structure.md) 페이지) [3]. 개별 이벤트가 담긴 구간 파일이 지워지면 그 이벤트도 함께 사라집니다. 주·월·연 파일에도 개별 이벤트가 담기는지는 검체에서 확인하고, 그 전에는 오래된 기간에 누적 통계만 남는다고 보고서에 단정하지 않습니다.
+이벤트는 시스템이 며칠만 보관하고 [5], 구간 파일도 구간마다 정해진 기간이 지나면 지웁니다(기준은 [파일 구조](structure.md) 페이지) [3]. 개별 이벤트가 담긴 구간 파일이 지워지면 그 이벤트도 함께 사라집니다. 주·월·연 파일에도 개별 이벤트가 담기는지는 실제 데이터로 확인하고, 그 전에는 오래된 기간에 누적 통계만 남는다고 보고서에 단정하지 않습니다.
 
-같은 사용 기록이 daily·weekly·monthly·yearly 여러 구간에 겹쳐 나오고 [6], 구간을 가리지 않고 더하면 사용 시간을 여러 번 세게 됩니다. 사용 시간을 합칠 때는 한 구간만 고릅니다.
+같은 사용 기록이 daily·weekly·monthly·yearly 여러 구간에 겹쳐 나오고 [6], 구간을 구분하지 않고 더하면 사용 시간을 여러 번 세게 됩니다. 사용 시간을 합칠 때는 한 구간만 고릅니다.
 
 서비스는 정해진 주기마다 파일에 쓰고 정상 종료(DEVICE_SHUTDOWN)나 사용자 중지(USER_STOPPED) 때도 쓰지만 [2], 기기가 갑자기 꺼질 때는 쓸 기회가 없습니다. 그래서 배터리가 빠지는 식으로 기기가 갑자기 꺼지면 마지막 저장 뒤의 이벤트가 파일에 없을 수 있습니다. 첫 잠금 해제 전에 생긴 이벤트는 메모리나 `/data/system_de/<사용자ID>/usagestats/` 의 `pendingevents_` 파일에만 있을 수 있고, 잠금 해제 때 합친 뒤 이 폴더를 지웁니다 [2]. Android 11(R)부터는 사용자가 잠금 해제되지 않은 상태에서 API 로 조회하면 결과가 null 입니다 [5].
 
-버전 5 파일은 `mappings` 파일이 있어야 패키지·클래스 이름을 되살릴 수 있고, 구간 파일만 뽑으면 이름 대신 번호만 남습니다 [3][6]. 형식 버전을 올릴 때 이전 파일이 `backups/` 아래에 남을 수 있어 업그레이드 이전 기간 기록의 출처가 될 수 있지만 [3], 업그레이드 뒤에도 계속 남는지는 검체에서 확인합니다. 예전 경로(`/data/system/usagestats/<사용자ID>/`)의 기록은 새 경로로 옮긴 뒤 지우니 [2], 두 경로에 같은 기록이 함께 있다고 기대하지 않습니다. `/data/system/usagestats/` 폴더 자체는 공용 파일(`globalcomponentusage`)을 두는 곳으로 계속 쓰입니다 [2].
+버전 5 파일은 `mappings` 파일이 있어야 패키지·클래스 이름을 되살릴 수 있고, 구간 파일만 뽑으면 이름 대신 번호만 남습니다 [3][6]. 형식 버전을 올릴 때 이전 파일이 `backups/` 아래에 남을 수 있어 업그레이드 이전 기간 기록의 출처가 될 수 있지만 [3], 업그레이드 뒤에도 계속 남는지는 실제 데이터로 확인해야 합니다. 예전 경로(`/data/system/usagestats/<사용자ID>/`)의 기록은 새 경로로 옮긴 뒤 지우니 [2], 두 경로에 같은 기록이 함께 있다고 기대하지 않습니다. `/data/system/usagestats/` 폴더 자체는 공용 파일(`globalcomponentusage`)을 두는 곳으로 계속 쓰입니다 [2].
 
 제3자 앱이나 API 로 받은 결과는 호출한 앱에 따라 SHORTCUT_INVOCATION·LOCUS_ID_SET 이벤트가 빠지거나 알림 채널 ID·인스턴트 앱 이름이 가려질 수 있습니다 [1][2]. 가림 옵션은 [이벤트 종류](event-types.md) 페이지에 정리했습니다. `dumpsys usagestats` 는 서비스의 메모리 상태를 보여 주고 이벤트 목록도 "Last ## hour events" 처럼 최근 몇 시간만 담아서, 파일에 저장된 내용과 범위가 다릅니다.
 
@@ -67,7 +67,7 @@ AOSP 소스에 없는 절이 삼성 기기의 dumpsys 에 보이므로 제조사
 
 ## 보고서 문장 예
 
-기록이 말하는 만큼만 씁니다. "피의자가 이 시각에 앱을 열었다" 는 기록보다 많이 말하는 문장입니다. 아래처럼 씁니다.
+기록으로 확인되는 만큼만 씁니다. "피의자가 이 시각에 앱을 열었다" 는 기록에 나온 것보다 더 나아간 문장입니다. 아래처럼 씁니다.
 
 > usagestats 일간 파일에 기기 시계 기준 (시각) UTC 에 (패키지) 의 ACTIVITY_RESUMED 이벤트가 있고, 같은 액티비티의 ACTIVITY_STOPPED 이벤트가 (시각) UTC 에 있습니다. 이 두 기록 사이에 그 앱의 액티비티가 화면에 나와 있었다고 볼 수 있지만, 누가 조작했는지는 이 기록만으로 알 수 없습니다.
 
@@ -76,7 +76,7 @@ AOSP 소스에 없는 절이 삼성 기기의 dumpsys 에 보이므로 제조사
 - 알림 이벤트는 [알림 기록 (Notification History)](../notification-history.md) 과 맞춰 봅니다.
 - 화면 상태와 포그라운드 서비스는 [배터리 사용 기록 (batterystats)](../batterystats.md) 과 맞춰 봅니다.
 - 마지막으로 연 앱 화면은 [최근 앱 화면 (Recents·Snapshots)](../recents-snapshots.md) 과 맞춰 봅니다.
-- 사용 시간 수치는 [디지털 웰빙 (Digital Wellbeing)](../digital-wellbeing.md) 과 나란히 보되, 두 수치가 어떻게 다른지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. `dumpsys package` 의 "Wellbeing:" 역할 항목 값이 none 인 기기도 있습니다.
+- 사용 시간 수치는 [디지털 웰빙 (Digital Wellbeing)](../digital-wellbeing.md) 과 나란히 보되, 두 수치가 어떻게 다른지는 실제 데이터로 확인해야 합니다. `dumpsys package` 의 "Wellbeing:" 역할 항목 값이 none 인 기기도 있습니다.
 - 여러 아티팩트를 한 시간 축에 놓는 방법은 [타임라인 작성](../../../03-techniques/analysis/timeline/index.md), 사용 행위를 재구성하는 흐름은 [어떤 앱을 언제 썼나](../../../04-scenarios/activity/app-usage.md) 와 [폰 사용 시간 재구성](../../../04-scenarios/activity/usage-time.md) 시나리오에 있습니다.
 
 ## 참고 문헌

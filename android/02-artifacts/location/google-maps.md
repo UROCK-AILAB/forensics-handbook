@@ -44,7 +44,7 @@ ALEAPP 모듈에 적힌 시험 표본을 보면 기록마다 남는 정도가 �
 | Pixel 7a | 14 | 4행 | 0행 | 6행 |
 | Pixel 8 Pro | 16 | 0행 | 1행 | |
 
-`da_destination_history` 를 읽는 ALEAPP 모듈은 2021년에 만들어졌고 표본 정보가 없습니다 [1]. 현행 지도 앱에 이 DB 가 아직 있는지는 검체에서 확인합니다. 오래된 `gmm_myplaces.db` 에는 `sync_item` 표가 없어서 ALEAPP 가 읽지 못합니다 [2].
+`da_destination_history` 를 읽는 ALEAPP 모듈은 2021년에 만들어졌고 표본 정보가 없습니다 [1]. 현행 지도 앱에 이 DB 가 아직 있는지는 실제 기기에서 확인합니다. 오래된 `gmm_myplaces.db` 에는 `sync_item` 표가 없어서 ALEAPP 가 읽지 못합니다 [2].
 
 ## 구조
 
@@ -52,15 +52,15 @@ SQLite 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-fo
 
 ### da_destination_history
 
-표 `destination_history` 에 칸 `time`, `dest_lat`, `dest_lng`, `dest_title`, `dest_address`, `source_lat`, `source_lng` 이 있습니다 [1]. 목적지와 출발지 좌표가 따로 들어 있고, 좌표는 E6 정수라서 끝 여섯 자리 앞에 소수점을 넣어 읽습니다 [1].
+표 `destination_history` 에 열 `time`, `dest_lat`, `dest_lng`, `dest_title`, `dest_address`, `source_lat`, `source_lng` 이 있습니다 [1]. 목적지와 출발지 좌표가 따로 들어 있고, 좌표는 E6 정수라서 끝 여섯 자리 앞에 소수점을 넣어 읽습니다 [1].
 
 ### gmm_storage.db
 
-표 `gmm_storage_table` 에 칸 `rowid`, `_data`(바이너리), `_key_pri` 가 있습니다 [2]. `_data` 바이트에서 `/dir/` 로 시작하는 길찾기 URL 조각에 출발 위도·경도가 있고, `!1d` 뒤의 숫자가 도착 경도, `!2d` 뒤의 숫자가 도착 위도입니다 [2]. 순서가 경도 먼저라는 점을 놓치면 위도와 경도가 뒤바뀝니다.
+표 `gmm_storage_table` 에 열 `rowid`, `_data`(바이너리), `_key_pri` 가 있습니다 [2]. `_data` 바이트에서 `/dir/` 로 시작하는 길찾기 URL 조각에 출발 위도·경도가 있고, `!1d` 뒤의 숫자가 도착 경도, `!2d` 뒤의 숫자가 도착 위도입니다 [2]. 순서가 경도 먼저라는 점을 놓치면 위도와 경도가 뒤바뀝니다.
 
 ### gmm_myplaces.db
 
-표 `sync_item` 에 칸 `key_string`, `latitude`, `longitude`, `sync_item`(프로토콜 버퍼), `timestamp` 가 있습니다 [2]. `latitude`·`longitude` 는 E6 정수라서 0.000001 을 곱하고, 그 밖의 라벨·주소·URL 은 `sync_item` 덩어리의 필드 6 아래에서 읽습니다 [2].
+표 `sync_item` 에 열 `key_string`, `latitude`, `longitude`, `sync_item`(프로토콜 버퍼), `timestamp` 가 있습니다 [2]. `latitude`·`longitude` 는 E6 정수라서 0.000001 을 곱하고, 그 밖의 라벨·주소·URL 은 `sync_item` 덩어리의 필드 6 아래에서 읽습니다 [2].
 
 | 필드 | 뜻 |
 |---|---|
@@ -101,17 +101,17 @@ ALEAPP 는 `key_string` 이 `0:0` 이면 Home, `1:0` 이면 Work 로 표시하�
 
 첫째, 이 페이지의 경로·표·필드 번호는 ALEAPP 가 이렇게 읽는다는 사실이고, 모든 지도 앱 판에서 그렇게 저장한다는 보증은 아닙니다. 표본에서도 같은 파일이 기기에 따라 0행이었습니다 [2].
 
-둘째, 좌표 방식이 셋으로 나뉩니다. DB 칸은 E6 정수이고 [1][2], URL 은 문자열 안에 숫자가 적혀 있으며 [2], 검색 기록은 프로토콜 버퍼 안에 도 단위 실수(double)로 들어 있습니다 [3]. 타임라인 쪽 기록은 E7 정수라서, 두 앱의 좌표를 비교할 때 자릿수를 맞추지 않으면 열 배 어긋납니다.
+둘째, 좌표 방식이 셋으로 나뉩니다. DB 열은 E6 정수이고 [1][2], URL 은 문자열 안에 숫자가 적혀 있으며 [2], 검색 기록은 프로토콜 버퍼 안에 도 단위 실수(double)로 들어 있습니다 [3]. 타임라인 쪽 기록은 E7 정수라서, 두 앱의 좌표를 비교할 때 자릿수를 맞추지 않으면 열 배 어긋납니다.
 
 셋째, Home·Work 라벨을 그대로 보고서에 옮기지 않습니다 [2].
 
-넷째, 사용자가 앱에서 기록을 지웠을 때 이 파일들에 무엇이 남는지는 공개 자료가 없어 검체에서 확인합니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에 있고, 원본이 아니라 사본을 열고 `-wal` 파일도 함께 복사합니다.
+넷째, 사용자가 앱에서 기록을 지웠을 때 이 파일들에 무엇이 남는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에 있고, 원본이 아니라 사본을 열고 `-wal` 파일도 함께 복사합니다.
 
 ## 직접 분석해 보기
 
 ### 값과 SQL 로 한 번
 
-아래는 위 구조로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. `dest_lat` 이 37566500 이면 끝 여섯 자리 앞에 소수점을 넣어 37.566500 도가 되고, `time` 이 1700000000000 이면 1000 으로 나눈 1700000000 초가 2023-11-14 22:13:20 UTC 입니다.
+아래는 위 구조로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. `dest_lat` 이 37566500 이면 끝 여섯 자리 앞에 소수점을 넣어 37.566500 도가 되고, `time` 이 1700000000000 이면 1000 으로 나눈 1700000000 초가 2023-11-14 22:13:20 UTC 입니다.
 
 ```sql
 SELECT datetime(time / 1000, 'unixepoch') AS utc_time,
@@ -124,7 +124,7 @@ FROM destination_history
 ORDER BY time;
 ```
 
-`gmm_storage.db` 는 `_data` 칸을 헥스로 열어 `/dir/` 문자열을 찾고, 그 뒤에서 `!1d`·`!2d` 를 찾아 숫자를 읽습니다. 검색 기록 파일은 헥스 편집기로 열어 앞 8바이트를 떼어 낸 나머지를 프로토콜 버퍼 도구에 넘기고, 필드 2 의 정수를 1,000,000 으로 나눠 초로 바꿉니다.
+`gmm_storage.db` 는 `_data` 열을 헥스로 열어 `/dir/` 문자열을 찾고, 그 뒤에서 `!1d`·`!2d` 를 찾아 숫자를 읽습니다. 검색 기록 파일은 헥스 편집기로 열어 앞 8바이트를 떼어 낸 나머지를 프로토콜 버퍼 도구에 넘기고, 필드 2 의 정수를 1,000,000 으로 나눠 초로 바꿉니다.
 
 ### 공개 도구로 한 번
 
@@ -144,7 +144,7 @@ ALEAPP 의 googlemaplocation 모듈이 `da_destination_history` 를 [1], googleM
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에 `com.google.android.apps.maps` 폴더가 있으면 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 이미지에 `com.google.android.apps.maps` 폴더가 있으면 아래 질문을 풀어 봅니다.
 
 1. 위 네 파일 가운데 어느 파일이 있고, 각각 기록이 몇 건입니까?
 2. `destination_history` 에서 가장 최근 목적지는 어디이고, 출발지 좌표는 목적지에서 대략 얼마나 떨어져 있습니까?

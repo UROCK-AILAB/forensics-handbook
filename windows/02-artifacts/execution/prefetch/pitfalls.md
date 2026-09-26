@@ -171,7 +171,7 @@ Windows 8 이후 .pf 파일 안에는 최근 실행 시각이 8개까지 있고,
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체에서 Windows 10 이미지를 하나 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 이미지에서 Windows 10 이미지를 하나 골라 아래 질문을 풀어 봅니다.
 
 1. `EnablePrefetcher` 값과 `SysMain\Start` 값은 무엇입니까? 이 두 값으로 보아 수집 시점에 .pf 가 생기는 상태였습니까?
 2. .pf 파일은 몇 개입니까? 한도에 가깝습니까?

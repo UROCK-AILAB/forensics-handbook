@@ -12,11 +12,11 @@ nav_order: 1180
 
 ## 무엇을 기록하나 · 왜 생기나
 
-지보드의 패키지 이름은 `com.google.android.inputmethod.latin` 이고, 흔적은 이 앱의 데이터 폴더 아래 `databases/` 와 `files/` 에 남습니다. 흔적은 클립보드(Clipboard), 키 입력 캐시(Keystroke Cache), 세션(Sessions) 세 갈래로 나뉘고, 공개 도구 ALEAPP 도 이 셋을 모듈 하나씩으로 따로 읽습니다 [1].
+지보드의 패키지 이름은 `com.google.android.inputmethod.latin` 이고, 흔적은 이 앱의 데이터 폴더 아래 `databases/` 와 `files/` 에 남습니다. 흔적은 클립보드(Clipboard), 키 입력 캐시(Keystroke Cache), 세션(Sessions) 세 가지로 나뉘고, 공개 도구 ALEAPP 도 이 셋을 모듈 하나씩으로 따로 읽습니다 [1].
 
 클립보드 데이터베이스에는 지보드 클립보드에 들어간 글과 HTML 글, 이미지를 가리키는 URI, 고정(Pinned) 여부가 시각과 함께 남습니다. 키 입력 캐시에는 입력한 글자와 맞춤법 실수, 고친 내용, 키보드가 띄운 추천 단어가 남고, 이미 지운 앱이나 사라진 메시지, 웹 입력칸에 쳤던 내용이 남아 있기도 합니다 [2]. 다만 비밀번호 입력칸은 기록하지 않고, 백스페이스(지우기)도 기록하지 않습니다 [2].
 
-파일 이름에 training(학습)이 들어 있지만, 어떤 설정(개인 맞춤 학습 등)일 때 이 캐시가 생기는지, 시크릿 모드에서는 어떻게 동작하는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 삼성 기기에서 어떤 키보드가 기본으로 설정됐는지는 기기마다 설정 값으로 확인해야 하고, 삼성 자체 키보드의 흔적은 [삼성 키보드 입력 기록](../samsung/samsung-keyboard.md) 에서 다룹니다.
+파일 이름에 training(학습)이 들어 있지만, 어떤 설정(개인 맞춤 학습 등)일 때 이 캐시가 생기는지, 시크릿 모드에서는 어떻게 동작하는지는 실제 기기로 확인해야 합니다. 삼성 기기에서 어떤 키보드가 기본으로 설정됐는지는 기기마다 설정 값으로 확인해야 하고, 삼성 자체 키보드의 흔적은 [삼성 키보드 입력 기록](../samsung/samsung-keyboard.md) 에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -54,15 +54,15 @@ settings global : touch_keyboard, keyboard_dex
 settings system : keyboard_vibration_enabled, sip_speak_keyboard_input_aloud
 ```
 
-키 이름으로 보아 secure 쪽 키들은 기본 입력기와 켜 둔 입력기를 가리키는 것으로 보입니다. 값의 형식과 global·system 쪽 키의 뜻은 검체에서 확인합니다. 설정 값 전체는 [설정 값](../system-account/settings.md) 에서 다룹니다.
+키 이름으로 보면 secure 쪽 키들은 기본 입력기와 켜 둔 입력기를 가리키는 것으로 보입니다. 값의 형식과 global·system 쪽 키의 뜻은 실제 기기에서 확인합니다. 설정 값 전체는 [설정 값](../system-account/settings.md) 에서 다룹니다.
 
 ## 구조
 
-저장 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 페이지를 봅니다. 아래는 ALEAPP 가 읽는 칸만 정리한 것입니다 [1].
+저장 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 페이지를 봅니다. 아래는 ALEAPP 가 읽는 열만 정리한 것입니다 [1].
 
 ### 클립보드 — gboard_clipboard.db 의 clips 표
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `timestamp` | 유닉스 밀리초 시각 |
 | `text` | 클립보드 글 |
@@ -72,7 +72,7 @@ settings system : keyboard_vibration_enabled, sip_speak_keyboard_input_aloud
 | `entity_type` | 0 이면 빈칸, 1 이면 'Link', 그 밖의 값은 숫자 그대로 |
 | `_id` | 행 번호 |
 
-ALEAPP 는 `uri` 칸에서 마지막 '/' 뒤의 이름만 떼어 내 `files/clipboard_image/` 아래 이미지 파일과 잇습니다 [1]. 이 이미지 파일의 형식과 이름 규칙은 공개 자료가 없어 검체에서 확인합니다.
+ALEAPP 는 `uri` 열에서 마지막 '/' 뒤의 이름만 떼어 내 `files/clipboard_image/` 아래 이미지 파일과 잇습니다 [1]. 이 이미지 파일의 형식과 이름 규칙은 실제 기기에서 확인합니다.
 
 ```sql
 replace(uri, rtrim(uri, replace(uri, '/', '')), '')
@@ -80,9 +80,9 @@ replace(uri, rtrim(uri, replace(uri, '/', '')), '')
 
 ### 키 입력 캐시 — trainingcache2.db, trainingcache3.db
 
-`training_input_events_table` 한 행에는 입력 당시 앞에 떠 있던 앱과 입력이 들어간 칸의 이름, 시각, 키 입력이 든 `_payload` 가 함께 들어 있습니다. 앱 칸에는 Gmail 같은 앱이 들어갑니다 [2].
+`training_input_events_table` 한 행에는 입력 당시 앞에 떠 있던 앱과 입력칸 이름, 시각, 키 입력이 든 `_payload` 가 함께 들어 있습니다. 앱 열에는 Gmail 같은 앱이 들어갑니다 [2].
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `_id` | 행 번호 |
 | `_payload` | 키 입력이 든 프로토콜 버퍼 BLOB |
@@ -97,7 +97,7 @@ ALEAPP 는 `_payload` 를 프로토콜 버퍼로 풀어 필드 '7' 안의 필드
 
 ### 키 입력 캐시 — trainingcachev2.db
 
-이 파일에는 `input_action_table` 과 `session_table` 이 있고, ALEAPP 는 `_payload`, `_timestamp`(유닉스 밀리초), `_session_id`, `_id` 칸을 읽습니다. 두 표는 세션 ID 로 묶습니다 [1].
+이 파일에는 `input_action_table` 과 `session_table` 이 있고, ALEAPP 는 `_payload`, `_timestamp`(유닉스 밀리초), `_session_id`, `_id` 열을 읽습니다. 두 표는 세션 ID 로 묶습니다 [1].
 
 ```sql
 input_action_table i LEFT JOIN session_table s ON s._session_id = i._session_id
@@ -105,7 +105,7 @@ input_action_table i LEFT JOIN session_table s ON s._session_id = i._session_id
 
 ### 세션 — trainingcachev3.db 의 session 표
 
-칸은 `_session_id`, `_timestamp_`, `package_name` 입니다. `_session_id` 값 자체가 유닉스 밀리초 시각이라서 ALEAPP 는 이 칸도 시각으로 바꿔 보여 주고, `_timestamp_` 도 유닉스 밀리초입니다. `package_name` 은 입력이 이뤄진 앱입니다.
+열은 `_session_id`, `_timestamp_`, `package_name` 입니다. `_session_id` 값 자체가 유닉스 밀리초 시각이라서 ALEAPP 는 이 열도 시각으로 바꿔 보여 주고, `_timestamp_` 도 유닉스 밀리초입니다. `package_name` 은 입력이 이뤄진 앱입니다.
 
 ## 증거로서 의미
 
@@ -115,13 +115,13 @@ input_action_table i LEFT JOIN session_table s ON s._session_id = i._session_id
 
 ### 증명하지 못하는 것
 
-입력한 글이 실제로 보내지거나 저장됐는지는 이 기록만으로 알 수 없어서, 메신저나 메일 앱 쪽 기록과 맞춰 봐야 합니다. 누가 폰을 들고 입력했는지도 알 수 없습니다([그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)). 비밀번호 입력칸은 기록하지 않고 캐시는 주기적으로 지워지며 크기 제한도 있는 것으로 보여서, 캐시에 없다고 해서 입력이 없었다고 말할 수는 없습니다. ALEAPP 가 읽는 클립보드 칸에는 복사한 앱이 없어서, 어느 앱에서 복사했는지도 이 표만으로는 알 수 없습니다.
+입력한 글이 실제로 보내지거나 저장됐는지는 이 기록만으로 알 수 없어서, 메신저나 메일 앱 쪽 기록과 맞춰 봐야 합니다. 누가 폰을 들고 입력했는지도 알 수 없습니다([그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)). 비밀번호 입력칸은 기록하지 않고 캐시는 주기적으로 지워지며 크기 제한도 있는 것으로 보여서, 캐시에 없다고 해서 입력이 없었다고 말할 수는 없습니다. ALEAPP 가 읽는 클립보드 열에는 복사한 앱이 없어서, 어느 앱에서 복사했는지도 이 표만으로는 알 수 없습니다.
 
 보고서에는 "이 메시지를 보냈다" 가 아니라 "이 시각에 이 앱의 이 입력칸에서 지보드 캐시에 이런 글자가 기록되어 있다" 처럼 씁니다.
 
 ## 시각 해석
 
-| 파일·표 | 칸 | 값 | ALEAPP 변환 |
+| 파일·표 | 열 | 값 | ALEAPP 변환 |
 |---|---|---|---|
 | gboard_clipboard.db `clips` | `timestamp` | 유닉스 밀리초 | `datetime(timestamp/1000,'unixepoch')` |
 | trainingcache2·3.db `training_input_events_table` | `f9` | 유닉스 밀리초 | `datetime(f9/1000, "unixepoch")` |
@@ -134,7 +134,7 @@ ALEAPP 의 `unixepoch` 변환 결과는 UTC 라서, 현지 시각으로 옮길 �
 
 ## 함정과 한계
 
-키 입력 캐시의 파일 이름과 표 구조가 판마다 달라서, 한 판에서 확인한 쿼리를 다른 판에 그대로 쓰면 빈 결과가 나올 수 있습니다. Android 12 이후 판과 삼성 기기에서의 모양은 공개 자료가 없어 검체로 확인해야 합니다.
+키 입력 캐시의 파일 이름과 표 구조가 판마다 달라서, 한 판에서 확인한 쿼리를 다른 판에 그대로 쓰면 빈 결과가 나올 수 있습니다. Android 12 이후 판과 삼성 기기에서의 모양은 실제 기기로 확인해야 합니다.
 
 ALEAPP 는 `_payload` 에서 필드 '7'·'2'·'1' 만 풀고 나머지 필드는 보여 주지 않습니다. 백스페이스가 기록되지 않아 지운 글자가 끝에 붙어 나와서, 복원한 글은 사용자가 최종으로 남긴 글과 다를 수 있습니다.
 
@@ -144,7 +144,7 @@ ALEAPP 는 `_payload` 에서 필드 '7'·'2'·'1' 만 풀고 나머지 필드는
 
 ### 헥스로 한 번
 
-아래는 프로토콜 버퍼 인코딩 규칙으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. `_payload` 안에서 필드 '7' 아래 필드 '2' 항목 두 개가 "안" 과 "녕" 을 담는 모양을 보여 줍니다. 필드 태그 바이트는 필드 번호를 왼쪽으로 3비트 밀고 형식 번호 2(길이가 붙는 형식)를 더한 값입니다.
+아래는 프로토콜 버퍼 인코딩 규칙으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. `_payload` 안에서 필드 '7' 아래 필드 '2' 항목 두 개가 "안" 과 "녕" 을 담는 모양을 보여 줍니다. 필드 태그 바이트는 필드 번호를 왼쪽으로 3비트 밀고 형식 번호 2(길이가 붙는 형식)를 더한 값입니다.
 
 ```
 3A 0E                     필드 7, 길이 14
@@ -168,7 +168,7 @@ SELECT datetime(timestamp/1000,'unixepoch') AS ts_utc, text, html_text, uri,
 FROM clips ORDER BY timestamp;
 ```
 
-4. ALEAPP 로 같은 폴더를 처리하면 클립보드 결과는 Timestamp, Text, HTML Text, URI, Image, Item Type, Entity Type, ID 칸으로, 키 입력 캐시 결과는 Source, Event Timestamp, ID, Text, App, Input Name, Input ID 칸으로, 세션 결과는 시각으로 바꾼 `_session_id`, `_timestamp_`, Session ID, Application 칸으로 나옵니다.
+4. ALEAPP 로 같은 폴더를 처리하면 클립보드 결과는 Timestamp, Text, HTML Text, URI, Image, Item Type, Entity Type, ID 열로, 키 입력 캐시 결과는 Source, Event Timestamp, ID, Text, App, Input Name, Input ID 열로, 세션 결과는 시각으로 바꾼 `_session_id`, `_timestamp_`, Session ID, Application 열로 나옵니다.
 5. 2단계에서 직접 읽은 값과 ALEAPP 결과를 몇 행 골라 맞춰 봅니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
 
 ## 교차 검증
@@ -176,7 +176,7 @@ FROM clips ORDER BY timestamp;
 | 함께 볼 아티팩트 | 맞춰 볼 것 |
 |---|---|
 | [설정 값](../system-account/settings.md) | 그 기기에서 지보드가 기본 입력기로 켜져 있었는지 |
-| [앱 사용 기록](../app-usage/usagestats/index.md) | 키 입력 캐시의 시각에 그 앱이 앞에 떠 있었는지(ACTIVITY_RESUMED 등). 키보드 앱 자체가 여기에 찍히는 모양은 검체에서 확인 |
+| [앱 사용 기록](../app-usage/usagestats/index.md) | 키 입력 캐시의 시각에 그 앱이 앞에 떠 있었는지(ACTIVITY_RESUMED 등). 키보드 앱 자체가 여기에 찍히는 모양은 실제 기기에서 확인 |
 | [카카오톡](../messengers/kakaotalk/index.md) 등 메신저 | 입력한 글이 실제 보낸 메시지로 남았는지 |
 | [크롬](../browsers/chrome/index.md) | 웹 입력칸에 친 글과 같은 시각의 방문·검색 기록 |
 | [삼성 키보드 입력 기록](../samsung/samsung-keyboard.md) | 삼성 기기에서 다른 키보드를 쓴 기간 |
@@ -185,11 +185,11 @@ FROM clips ORDER BY timestamp;
 
 ## 실습
 
-공개 검체 가운데 지보드가 깔린 Android 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 이미지 가운데 지보드가 깔린 Android 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. `databases/` 아래 `trainingcache` 로 시작하는 파일은 무엇무엇이고, 각 파일에는 어떤 표가 있습니까?
-2. `training_input_events_table` 의 `f2` 칸에 나오는 앱은 몇 개이고, 가장 이른 `f9` 시각과 가장 늦은 시각은 UTC 로 언제입니까?
-3. `_payload` 하나를 골라 헥스로 필드 '7'·'2'·'1' 을 따라가 풀고, ALEAPP 의 Text 칸과 같은지 확인합니다.
+2. `training_input_events_table` 의 `f2` 열에 나오는 앱은 몇 개이고, 가장 이른 `f9` 시각과 가장 늦은 시각은 UTC 로 언제입니까?
+3. `_payload` 하나를 골라 헥스로 필드 '7'·'2'·'1' 을 따라가 풀고, ALEAPP 의 Text 열과 같은지 확인합니다.
 4. `clips` 표에서 `item_type` 이 1 인 항목은 몇 개이고, `uri` 가 있는 항목은 `files/clipboard_image/` 의 어느 파일과 이어집니까?
 5. 세션 표의 `package_name` 과 키 입력 캐시의 앱 목록이 서로 맞습니까?
 

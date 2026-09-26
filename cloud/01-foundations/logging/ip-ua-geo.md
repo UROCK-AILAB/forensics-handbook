@@ -10,9 +10,9 @@ nav_order: 120
 
 ## 이 형식을 쓰는 아티팩트
 
-로그인 로그와 관리·데이터 로그의 레코드에는 대부분 요청이 들어온 IP 주소가 있고, 많은 로그에 사용자 에이전트 문자열도 함께 남습니다. 일부 서비스는 기록할 때 IP 로 국가·도시·자율 시스템 번호(Autonomous System Number, ASN)·프록시 여부를 찾아 레코드에 넣어 줍니다. 흐름 로그는 연결의 양 끝 주소를 남깁니다. 로그 갈래는 [로그의 종류](log-types.md)에서, 레코드 겉모양과 중첩 JSON 을 푸는 법은 [JSON 로그 읽기](json-logs.md)에서 다룹니다.
+로그인 로그와 관리·데이터 로그의 레코드에는 대부분 요청이 들어온 IP 주소가 있고, 많은 로그에 사용자 에이전트 문자열도 함께 남습니다. 일부 서비스는 기록할 때 IP 로 국가·도시·자율 시스템 번호(Autonomous System Number, ASN)·프록시 여부를 찾아 레코드에 넣어 줍니다. 흐름 로그는 연결의 양 끝 주소를 남깁니다. 로그 종류는 [로그의 종류](log-types.md)에서, 레코드 겉모양과 중첩 JSON 을 푸는 법은 [JSON 로그 읽기](json-logs.md)에서 다룹니다.
 
-이 값을 주로 쓰는 곳은 [이상한 로그인 가려내기](../../03-techniques/analysis/suspicious-sign-ins.md)와 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)입니다.
+이 값을 주로 쓰는 곳은 [이상한 로그인 가려내기](../../03-techniques/analysis/suspicious-sign-ins.md)와 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)입니다.
 
 ## 구조
 
@@ -52,7 +52,7 @@ nav_order: 120
 | GitHub `actor_location.country_code` | 예시 값이 2글자(`US`)[18] |
 | Dropbox `country` | 국가 코드[20] |
 
-Google Workspace `networkInfo.ipAsn[]` 는 정수(integer) 배열이고[13], 이름으로 보아 ASN 목록일 가능성이 있습니다. Okta 의 `geolocation` 은 위도(`lat`)·경도(`lon`)를 ISO 6709 형식으로 담고, `postalCode` 로 우편 번호 단위까지 적습니다[14].
+Google Workspace `networkInfo.ipAsn[]` 는 정수(integer) 배열이고[13], 이름으로 보면 ASN 목록일 가능성이 있습니다. Okta 의 `geolocation` 은 위도(`lat`)·경도(`lon`)를 ISO 6709 형식으로 담고, `postalCode` 로 우편 번호 단위까지 적습니다[14].
 
 ## 읽는 법
 
@@ -146,7 +146,7 @@ UA 에 도구 이름이 남으면 공개 탐지 규칙으로 찾을 수 있습�
 
 ### 지우기·조작
 
-UA 는 호출하는 쪽이 마음대로 정할 수 있어 조작에 약합니다. 서비스가 판정한 IP·ASN·위치는 호출자가 직접 쓰는 값이 아니지만, VPN·프록시·클라우드 서버를 거치면 그 출구 주소가 남습니다. 그래서 IP 하나보다 ASN·`isProxy`·로그인 방식·기기 정보를 함께 봅니다. 보고서 문장은 "이 계정으로 이 IP 에서 로그인한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다([클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)).
+UA 는 호출하는 쪽이 마음대로 정할 수 있어 조작에 약합니다. 서비스가 판정한 IP·ASN·위치는 호출자가 직접 쓰는 값이 아니지만, VPN·프록시·클라우드 서버를 거치면 그 출구 주소가 남습니다. 그래서 IP 하나보다 ASN·`isProxy`·로그인 방식·기기 정보를 함께 봅니다. 보고서 문장은 "이 계정으로 이 IP 에서 로그인한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다([클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)).
 
 ## 함정
 
@@ -162,8 +162,8 @@ UA 는 호출하는 쪽이 마음대로 정할 수 있어 조작에 약합니다
 
 - Hawk 의 `Get-HawkUserUALSignInLog -ResolveIPLocations` 는 통합 감사 로그의 로그인 레코드 IP 를 외부 위치 조회 서비스로 찾아 `CountryName`·`RegionCode`·`RegionName`·`City` 열을 붙이고, Microsoft 소유 IP 인지를 `KnownMicrosoftIP` 로 표시합니다[21]. 이 열은 조회 시점의 결과이므로 원본 값과 구분해 둡니다.
 - Microsoft-Extractor-Suite 의 `Get-UALGraph` 는 Graph 감사 로그 검색 결과에서 `clientIp` 를 CSV 열로 뽑습니다[22].
-- 위 표의 UA·프록시 조건은 SigmaHQ 규칙[23]~[29]에서 옮긴 것이라, 규칙을 그대로 로그를 훑는 출발점으로 쓸 수 있습니다. 규칙을 로그에 적용하는 법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
-- 서비스마다 필드가 다른 레코드를 한 표로 모을 때는 IP·UA·국가 열을 이 쪽의 필드 표대로 이름을 맞춘 뒤 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 넣습니다.
+- 위 표의 UA·프록시 조건은 SigmaHQ 규칙[23]~[29]에서 옮긴 것이라, 규칙을 그대로 로그를 검색하는 출발점으로 쓸 수 있습니다. 규칙을 로그에 적용하는 법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
+- 서비스마다 필드가 다른 레코드를 한 표로 모을 때는 IP·UA·국가 열을 이 페이지의 필드 표대로 이름을 맞춘 뒤 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 넣습니다.
 
 ## 참고 문헌
 

@@ -11,7 +11,7 @@ nav_order: 1640
 
 크롬 계열 브라우저는 창과 탭의 상태를 프로필 폴더의 `Sessions` 폴더에 SNSS 형식으로 적습니다. `Session_<숫자>` 파일에는 열려 있던 탭과 탭마다의 뒤로 가기 목록이 남습니다. `Tabs_<숫자>` 파일에는 최근에 닫은 탭과 창이 남습니다. 파일 이름의 숫자는 그 파일을 만든 시각입니다.
 
-> 명령 ID 와 구조는 2026년 9월 크로미엄 (Chromium) 소스 기준입니다. 폴더 구성과 레코드 수 같은 예는 Windows 11(빌드 26200)의 Chrome 153·Edge 151 기준이며, 판이 다르면 달라질 수 있으므로 검체에서 확인합니다.
+> 명령 ID 와 구조는 2026년 9월 크로미엄 (Chromium) 소스 기준입니다. 폴더 구성과 레코드 수 같은 예는 Windows 11(빌드 26200)의 Chrome 153·Edge 151 기준이며, 판이 다르면 달라질 수 있으므로 실제 기기에서 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -42,10 +42,10 @@ nav_order: 1640
 
 | 항목 | 내용 |
 |---|---|
-| 옛 파일 이름 | 옛 판은 프로필 폴더 바로 아래에 `Current Session`·`Last Session`·`Current Tabs`·`Last Tabs` 를 두었습니다. 현재 판은 이 이름을 쓰지 않습니다. `Sessions` 폴더로 바뀐 판 번호는 공개 자료가 없으므로, 검체에서 어느 쪽 이름이 있는지 봅니다. |
+| 옛 파일 이름 | 옛 판은 프로필 폴더 바로 아래에 `Current Session`·`Last Session`·`Current Tabs`·`Last Tabs` 를 두었습니다. 현재 판은 이 이름을 쓰지 않습니다. `Sessions` 폴더로 바뀐 판은 실제 데이터에서 어느 쪽 이름이 있는지로 확인합니다. |
 | SNSS 버전 | 현재 판은 버전 1·2·4 를 더 이상 지원하지 않습니다. 평문 파일은 버전 3, 암호화 파일은 버전 5 입니다[1]. |
-| 암호화 폴더 | `Sessions_Encrypted` 가 생긴 판과, 앞으로 평문 `Sessions` 를 없앨지는 공개 자료가 없습니다. 검체에서 두 폴더가 모두 있는지 봅니다. |
-| Whale | Whale 이 같은 폴더와 형식을 쓰는지는 공개 자료가 없으므로 검체에서 확인합니다. |
+| 암호화 폴더 | `Sessions_Encrypted` 가 생긴 판과, 앞으로 평문 `Sessions` 를 없앨지는 공개된 설명이 없습니다. 실제 데이터에서 두 폴더가 모두 있는지 봅니다. |
+| Whale | Whale 이 같은 폴더와 형식을 쓰는지는 실제 데이터로 확인합니다. |
 
 ### 폴더에 남는 파일 수
 
@@ -180,7 +180,7 @@ nav_order: 1640
 - string16 은 int32 글자 수 뒤에 UTF-16LE 글자가 옵니다. 그 뒤를 4바이트 경계까지 채웁니다.
 - 이 규칙으로 읽으면 주소·제목·timestamp·http_status_code(200) 까지 제자리에서 읽힙니다.
 - 제목은 UTF-16LE 로 풀어야 합니다. 콘솔 기본 코드 페이지로 찍으면 한글이 깨집니다. 인코딩은 [문자 인코딩](../../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에서 다룹니다.
-- 탭마다 저장하는 탐색 항목 수의 상한은 공개 자료가 없습니다.
+- 탭마다 저장하는 탐색 항목 수의 상한을 밝힌 공개 자료는 없습니다.
 
 ### Edge 의 SessionRestoreLog
 
@@ -191,7 +191,7 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 | 시작·끝 표시 | `logTime`, `session`(`"START"` 또는 `"END"`) |
 | 내용 줄 | `logTime`, `level`, `location`, `message` |
 
-- `logTime` 은 `"MMDD/HHMMSS"` 꼴입니다. 연도가 없습니다.
+- `logTime` 은 `"MMDD/HHMMSS"` 형식입니다. 연도가 없습니다.
 - `message` 에는 아래 같은 글이 적힙니다.
 
 | message 예 | 알려 주는 것 |
@@ -236,7 +236,7 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 | 파일 이름의 숫자 | `Session_`·`Tabs_` 이름 | 파일을 만든 시각 | 앞 파일과 겹치면 1마이크로초를 더합니다 |
 | close_time | `Session_` ID 16·17 | 탭·창을 닫은 시각 | |
 | last_active_time | `Session_` ID 21 | 탭이 마지막으로 활성 상태였던 시각 | |
-| timestamp | 탐색 항목 11번째 값 | 탐색 항목에 붙은 시각 | 어떤 동작의 시각인지는 공개 자료가 없습니다. [방문 기록](history.md) 의 방문 시각과 맞춰 본 뒤 씁니다 |
+| timestamp | 탐색 항목 11번째 값 | 탐색 항목에 붙은 시각 | 어떤 동작의 시각인지 밝힌 공개 자료는 없습니다. [방문 기록](history.md) 의 방문 시각과 맞춰 본 뒤 씁니다 |
 | timestamp | `Tabs_` ID 4 | 항목을 닫은 시각 | 0 인 레코드도 있습니다 |
 | `logTime` | Edge `SessionRestoreLog` | 로그를 적은 시각 | 연도가 없습니다. UTC 로 보입니다 |
 
@@ -256,13 +256,13 @@ Edge 프로필 폴더의 `EdgeSessions\SessionRestoreLog` 는 한 줄에 JSON �
 - **옛 이름만 찾는 도구가 있습니다.** `Current Session` 같은 옛 이름만 찾는 도구는 요즘 판 프로필에서 아무것도 찾지 못합니다.
 - **암호화 파일은 그대로 읽을 수 없습니다.** 버전 5 파일은 키를 풀기 전에는 레코드 길이와 개수만 알 수 있습니다. Chrome 153 에는 평문 짝 파일이 함께 있습니다. 평문 폴더부터 봅니다. 브라우저 암호화의 바탕은 [DPAPI 구조](../../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 - **지운 파일도 찾아봅니다.** 옛 `Session_`·`Tabs_` 파일은 지워도 디스크에 남을 수 있습니다. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 함께 씁니다.
-- **Whale 은 따로 확인합니다.** Whale 이 같은 구조를 쓰는지는 공개 자료가 없으므로 검체에서 봅니다.
+- **Whale 은 따로 확인합니다.** Whale 이 같은 구조를 쓰는지는 실제 데이터에서 봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 바이트는 모두 이 페이지의 규칙으로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다. `pp` 는 4바이트 경계를 맞추는 채움 바이트이고, 값은 읽지 않습니다.
+아래 바이트는 모두 이 페이지의 규칙으로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다. `pp` 는 4바이트 경계를 맞추는 채움 바이트이고, 값은 읽지 않습니다.
 
 **파일 머리.** 평문 파일(버전 3)과 암호화 파일(버전 5)의 첫 8바이트입니다.
 
@@ -307,7 +307,7 @@ LL LL LL LL                레코드 길이 (uint32) = 짝 평문 레코드 크�
 
 ### 공개 도구로 한 번
 
-Python 만으로 평문 파일(버전 3)의 레코드를 훑을 수 있습니다. 아래 스크립트는 탐색 항목의 탭 ID·index·주소·제목을 뽑습니다. `Session_` 에서는 ID 16·21 의 시각을, `Tabs_` 에서는 ID 4 의 닫은 시각을 함께 뽑습니다. 끝에 명령 ID 별 개수를 찍습니다.
+Python 만으로 평문 파일(버전 3)의 레코드를 차례로 읽을 수 있습니다. 아래 스크립트는 탐색 항목의 탭 ID·index·주소·제목을 뽑습니다. `Session_` 에서는 ID 16·21 의 시각을, `Tabs_` 에서는 ID 4 의 닫은 시각을 함께 뽑습니다. 끝에 명령 ID 별 개수를 찍습니다.
 
 ```python
 import os, struct, sys, datetime as dt
@@ -373,7 +373,7 @@ print('명령 ID별 개수', sorted(count.items()))
 
 ## 실습
 
-크롬이나 엣지를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+크롬이나 엣지를 쓴 공개 실습 데이터(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 프로필 폴더에 옛 이름(`Current Session` 등)과 `Sessions` 폴더 가운데 어느 것이 있습니까? `Sessions_Encrypted` 도 있습니까?
 2. `Session_`·`Tabs_` 파일 이름의 숫자를 UTC 로 바꾸면 언제입니까? $MFT 의 파일 생성 시각과 같습니까?
@@ -381,7 +381,7 @@ print('명령 ID별 개수', sorted(count.items()))
 4. `Session_` 에서 명령 ID 별 개수를 세어 봅니다. 마커(255)는 몇 번째 레코드에 있습니까?
 5. 탭 하나를 골라 index 0 부터 차례로 주소를 적어 봅니다. 방문 기록에 같은 주소가 같은 순서로 있습니까?
 6. `Tabs_` 의 닫은 시각(ID 4)을 모아 시간 축에 놓습니다. 0 인 값은 몇 개입니까?
-7. Edge 검체라면 `SessionRestoreLog` 에서 지운 `Session_` 이름을 모두 찾습니다. 그 가운데 디스크에 남아 있는 파일이 있습니까?
+7. Edge 데이터라면 `SessionRestoreLog` 에서 지운 `Session_` 이름을 모두 찾습니다. 그 가운데 디스크에 남아 있는 파일이 있습니까?
 
 ## 참고 문헌
 

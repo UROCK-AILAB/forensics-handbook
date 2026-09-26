@@ -11,7 +11,7 @@ nav_order: 1630
 
 ## 한 줄 요약
 
-크롬 계열 브라우저는 저장한 비밀번호를 프로필 폴더의 `Login Data` 파일에 둡니다. 이 파일은 SQLite 데이터베이스이고, 암호화하는 칸은 비밀번호 값 하나뿐이며 사이트 주소·아이디·저장 시각·사용 횟수는 평문입니다. 그래서 비밀번호를 풀지 못해도 "이 프로필에 어느 사이트의 어느 아이디가 언제 저장됐나" 는 읽을 수 있습니다.
+크롬 계열 브라우저는 저장한 비밀번호를 프로필 폴더의 `Login Data` 파일에 둡니다. 이 파일은 SQLite 데이터베이스이고, 암호화하는 열은 비밀번호 값 하나뿐이며 사이트 주소·아이디·저장 시각·사용 횟수는 평문입니다. 그래서 비밀번호를 풀지 못해도 "이 프로필에 어느 사이트의 어느 아이디가 언제 저장됐나" 는 읽을 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -46,7 +46,7 @@ nav_order: 1630
 
 ### Windows 버전보다 브라우저 버전이 중요합니다
 
-이 파일의 모양은 Windows 버전이 아니라 브라우저 버전에 따라 바뀌며, 가장 큰 차이는 `password_value` 칸의 암호화 방식입니다. 칸의 앞 몇 바이트를 보면 구분됩니다.
+이 파일의 모양은 Windows 버전이 아니라 브라우저 버전에 따라 바뀌며, 가장 큰 차이는 `password_value` 열의 암호화 방식입니다. 값의 앞 몇 바이트를 보면 구분됩니다.
 
 | 앞부분 | 방식 | 키가 있는 곳 | 근거 |
 |---|---|---|---|
@@ -56,7 +56,7 @@ nav_order: 1630
 
 - 첫 줄의 바이트는 DPAPI 블롭 머리입니다. 블롭 구조는 [DPAPI 블롭 구조](../../../01-foundations/protection/data-protection-api/dpapi-blob.md)에서 봅니다.
 - Chrome 80 은 `v10` 으로 시작하지 않는 값을 옛 DPAPI 방식으로 풉니다. 그래서 오래 쓴 프로필에는 옛 방식 값이 남아 있을 수 있습니다.
-- Chrome 127 은 App-Bound 암호화를 쿠키부터 적용했고, 비밀번호와 결제 정보에는 뒤에 넓힐 계획이었습니다[5]. 비밀번호에 `v20` 이 붙기 시작한 버전은 공개 자료가 없으므로 검체의 접두사로 확인합니다.
+- Chrome 127 은 App-Bound 암호화를 쿠키부터 적용했고, 비밀번호와 결제 정보에는 뒤에 넓힐 계획이었습니다[5]. 비밀번호에 `v20` 이 붙기 시작한 버전은 실제 데이터의 접두사로 확인합니다.
 - Windows 11 25H2 의 Chrome 153·Edge 151 에서는 저장 비밀번호가 전부 `v20` 이었습니다. `Local State` 에는 `encrypted_key`(`DPAPI` 로 시작)와 `app_bound_encrypted_key`(`APPB` 로 시작)가 함께 있었습니다.
 
 새 브라우저라도 `v20` 을 쓰지 않는 경우가 있습니다. 아래 조건이면 브라우저는 App-Bound 암호화를 켜지 않고 `v10` 으로 저장합니다[3].
@@ -82,7 +82,7 @@ nav_order: 1630
 | 37 | 공유받은 비밀번호용 `sender_email`·`sender_name`·`date_received` 가 생겼습니다 |
 | 42 | `date_last_filled` 가 생겼습니다 |
 
-옛 검체를 열 때는 먼저 `version` 을 보고 어떤 열이 있어야 하는지 확인합니다.
+옛 파일을 열 때는 먼저 `version` 을 보고 어떤 열이 있어야 하는지 확인합니다.
 
 ## 구조
 
@@ -97,7 +97,7 @@ nav_order: 1630
 | `id` | 정수 | 행 번호. AUTOINCREMENT 라서 지운 번호를 다시 쓰지 않습니다 |
 | `origin_url` | 문자열 | 로그인 폼이 있던 페이지 주소 (경로까지, 쿼리는 뺌) |
 | `action_url` | 문자열 | 폼을 보낸 주소 |
-| `signon_realm` | 문자열 | 찾을 때 쓰는 기준 값. 웹은 `https://example.com/` 꼴입니다. 안드로이드 앱 항목은 `android://<인증서 해시>@<패키지 이름>` 꼴입니다 |
+| `signon_realm` | 문자열 | 찾을 때 쓰는 기준 값. 웹은 `https://example.com/` 형식입니다. 안드로이드 앱 항목은 `android://<인증서 해시>@<패키지 이름>` 형식입니다 |
 | `username_element`, `password_element` | 문자열 | 폼 안 입력칸의 이름 |
 | `username_value` | 문자열 | 아이디. **평문입니다** |
 | `password_value` | BLOB | 암호화한 비밀번호 |
@@ -108,7 +108,7 @@ nav_order: 1630
 | `date_created` 외 시각 열 | 정수 | 아래 "시각 해석" 참고 |
 | `sender_email`, `sender_name` | 문자열 | 공유로 받은 경우 보낸 사람 |
 
-`origin_url`·`username_element`·`username_value`·`password_element`·`signon_realm` 다섯 칸을 묶은 값은 겹칠 수 없습니다 (UNIQUE 제약).
+`origin_url`·`username_element`·`username_value`·`password_element`·`signon_realm` 다섯 열을 묶은 값은 겹칠 수 없습니다 (UNIQUE 제약).
 
 `password_type` 값은 Chromium 의 `PasswordForm::Type` 입니다. 새 값은 뒤에 붙습니다. 그래서 옛 버전에는 뒤쪽 값이 없습니다.
 
@@ -127,7 +127,7 @@ nav_order: 1630
 
 `v10`·`v20` 값의 모양은 "접두사 3바이트 + 논스 12바이트 + 암호문 + 인증 태그 16바이트" 입니다[3]. GCM 방식은 암호문 길이가 평문 길이와 같고 브라우저는 비밀번호를 UTF-8 로 바꿔서 암호화하므로, `password_value` 길이에서 31 을 빼면 복호화 없이 비밀번호의 UTF-8 바이트 수를 알 수 있습니다. Chrome 153·Edge 151 의 `v20` 값 2,000여 개에서 이 계산이 0 이하로 나온 행은 없었습니다.
 
-옛 DPAPI 방식 값은 블롭 안에 여러 칸이 더 있어서 이 계산을 쓰지 않습니다.
+옛 DPAPI 방식 값은 블롭 안에 여러 필드가 더 있어서 이 계산을 쓰지 않습니다.
 
 ### 다른 표
 
@@ -145,7 +145,7 @@ Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다
 - `logins_edge_extended`: `id`, `source`, `strength_alert_status`, `password_nickname`
 - `breached`: `url`, `username`, `status`, `last_checked_time`, `hashed_password` 등
 
-`meta` 에도 `edge_breached_table_version`, `logins_edge_extended_table_version` 키가 더 있었습니다. 이 칸들의 뜻을 설명한 공개 자료는 없습니다.
+`meta` 에도 `edge_breached_table_version`, `logins_edge_extended_table_version` 키가 더 있었습니다. 이 키들의 뜻을 설명한 공개 자료는 없습니다.
 
 ## 증거로서 의미
 
@@ -206,14 +206,14 @@ Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다
 
 - 사용자가 항목을 지우면 `logins` 행이 삭제됩니다.
 - 기간을 정해 지우는 기능은 `date_created` 가 그 기간에 드는 행을 지웁니다 (소스의 `RemoveLoginsCreatedBetween`). 그래서 남은 행의 `date_created` 에 빈 구간이 생깁니다.
-- Chromium 은 SQLite 를 `secure_delete` 가 켜진 상태로 빌드하며 지운 내용을 0 으로 덮으므로, 파일 안 빈 공간에서 옛 행을 되살리기 어렵습니다. Chromium 코드를 그대로 쓰는 계열 브라우저라면 같다고 보지만, 브라우저마다 검체에서 확인합니다. 빈 공간 복구 방법은 [파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md)에 있습니다.
+- Chromium 은 SQLite 를 `secure_delete` 가 켜진 상태로 빌드하며 지운 내용을 0 으로 덮으므로, 파일 안 빈 공간에서 옛 행을 되살리기 어렵습니다. Chromium 코드를 그대로 쓰는 계열 브라우저라면 같다고 보지만, 브라우저마다 실제 파일로 확인합니다. 빈 공간 복구 방법은 [파일 안에 남은 지운 레코드](../../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md)에 있습니다.
 - Chromium 은 롤백 저널을 TRUNCATE 방식으로 씁니다. 거래가 끝나면 저널 크기를 0 으로 줄이므로 저널에 있던 옛 페이지는 파일시스템의 빈 공간에만 남을 수 있습니다 ([비할당 영역과 슬랙](../../../03-techniques/analysis/data-recovery/unallocated-slack-space.md)).
-- `id` 는 다시 쓰지 않습니다. 중간에 빈 번호가 있으면 지운 행이 있었다는 단서입니다. `sqlite_sequence` 의 `seq` 가 `logins` 의 가장 큰 `id` 보다 크면 마지막 쪽 행이 지워진 것입니다.
+- `id` 는 다시 쓰지 않습니다. 중간에 빈 번호가 있으면 지운 행이 있었다는 단서입니다. `sqlite_sequence` 의 `seq` 가 `logins` 의 가장 큰 `id` 보다 크면 끝부분 행이 지워진 것입니다.
 - 옛 판 파일은 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다. 동기화를 켠 계정이면 다른 기기에도 남아 있을 수 있습니다.
 
 ### 이 파일을 노린 흔적
 
-정보 탈취 악성코드는 흔히 이 파일과 `Local State` 를 노리고, Google 이 App-Bound 암호화를 만든 까닭도 여기에 있습니다. 이 경우 `Login Data` 자체보다 둘레의 흔적을 봅니다.
+정보 탈취 악성코드는 흔히 이 파일과 `Local State` 를 노리고, Google 이 App-Bound 암호화를 만든 이유도 여기에 있습니다. 이 경우 `Login Data` 자체보다 둘레의 흔적을 봅니다.
 
 - 다른 폴더에 `Login Data` 라는 이름의 파일이 생겼다가 지워진 기록을 [$UsnJrnl](../../filesystem/usnjrnl.md)에서 찾습니다.
 - 브라우저가 아닌 프로그램이 실행된 흔적과 탐지 기록을 봅니다. 흐름은 [자격 증명을 빼냈나](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md)를 따릅니다.
@@ -222,9 +222,9 @@ Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다
 
 ### 헥스로 한 번
 
-아래는 Chromium 소스와 SQLite 명세로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래는 Chromium 소스와 SQLite 명세로 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
-**`password_value` 칸 (v10, 비밀번호 8바이트일 때, 모두 39바이트)**
+**`password_value` 열 (v10, 비밀번호 8바이트일 때, 모두 39바이트)**
 
 ```
 76 31 30                                          "v10"  (v20 이면 76 32 30)
@@ -237,7 +237,7 @@ Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다
 - 앞 네 바이트가 `01 00 00 00` 이고 그 뒤가 `D0 8C 9D DF 01 15 D1 11 …` 이면 옛 DPAPI 블롭입니다.
 - 39 − 31 = 8 이므로 비밀번호는 UTF-8 로 8바이트입니다.
 
-**`date_created` 칸**
+**`date_created` 열**
 
 SQLite 는 이 크기의 정수를 레코드 안에 8바이트 빅엔디언으로 적습니다 (직렬 유형 6). 2025-03-14 01:23:45 UTC 를 저장하면 이렇게 됩니다.
 
@@ -292,12 +292,12 @@ SELECT key, value FROM meta;
 
 ## 실습
 
-크롬 계열 브라우저가 들어 있는 공개 검체(NIST CFReDS 등)로 아래 질문을 풀어 봅니다.
+크롬 계열 브라우저가 들어 있는 공개 실습 데이터(NIST CFReDS 등)로 아래 질문을 풀어 봅니다.
 
 1. 사용자 폴더마다 프로필이 몇 개이고, 각 프로필에 `Login Data` 와 `Login Data For Account` 가 있습니까?
 2. `meta` 의 `version` 은 몇이고, 그 버전에 있어야 할 열이 모두 있습니까?
 3. `password_value` 앞부분은 옛 DPAPI·`v10`·`v20` 가운데 무엇입니까? 섞여 있다면 가장 늦게 저장된 옛 방식 행은 언제입니까?
-4. 가장 먼저 저장된 행의 `date_created` 를 UTC 와 검체의 현지 시각으로 각각 적어 봅니다.
+4. 가장 먼저 저장된 행의 `date_created` 를 UTC 와 분석 대상 기기의 현지 시각으로 각각 적어 봅니다.
 5. `blacklisted_by_user` 가 1 인 사이트를 History 의 방문 기록과 맞춰 봅니다.
 6. `sqlite_sequence` 의 값과 `logins` 의 가장 큰 `id` 를 비교합니다. 지운 행이 있었다고 말할 수 있습니까?
 7. `date_created` 가 몇 초 안에 몰린 행 묶음이 있습니까? 그 묶음의 `password_type` 은 무엇입니까?

@@ -10,7 +10,7 @@ nav_order: 540
 
 Edge 의 Copilot 과 Chrome 의 Gemini·내장 AI 는 브라우저 안에서 도는 AI 기능이고, 기기에 남는 흔적은 대화 본문이 아니라 Edge 의 페이지 접근 정책 값, Edge 프로필의 Copilot 로그인 캐시, Chrome 온디바이스 모델의 설치 흔적입니다.
 
-확인 날짜는 2026-09입니다. 아래 경로와 이름은 검체에서 한 번 더 맞춰 봅니다.
+확인 날짜는 2026-09입니다. 아래 경로와 이름은 실제 기기에서 한 번 더 맞춰 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -37,7 +37,7 @@ Windows 관리 템플릿은 `MSEdge.admx` 입니다. 정책을 설정하지 않�
 
 ### Edge 프로필의 Copilot 로그인 캐시
 
-Edge 의 Copilot 은 계정·토큰만 기기에 남기고 대화 본문은 서버에 둡니다[6]. 로그인 정보는 `%LOCALAPPDATA%\Microsoft\Edge\User Data\{profile}\Local Storage\leveldb` 에서 출처 `https://copilot.microsoft.com` 아래의 MSAL 캐시(`msal.2.*` 키, `token.keys`)에 있고, 여기에 테넌트·클라이언트 ID, 범위, `lastUpdatedAt` 이 들어 있습니다[6]. 토큰 본문은 DPAPI 로 암호화돼 있습니다. 공개 도구 AABF(v1.1.260618)로 이 캐시를 읽을 수 있고, 도구 보고서에서는 토큰 본문을 가립니다. 키 구성과 도구의 읽는 방법은 [AI 에이전트 브라우저](../agentic-services/ai-browsers.md)의 Edge 절에서 다루고, 이 쪽에서는 되풀이하지 않습니다. 대화 본문은 기기에 없으므로 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
+Edge 의 Copilot 은 계정·토큰만 기기에 남기고 대화 본문은 서버에 둡니다[6]. 로그인 정보는 `%LOCALAPPDATA%\Microsoft\Edge\User Data\{profile}\Local Storage\leveldb` 에서 출처 `https://copilot.microsoft.com` 아래의 MSAL 캐시(`msal.2.*` 키, `token.keys`)에 있고, 여기에 테넌트·클라이언트 ID, 범위, `lastUpdatedAt` 이 들어 있습니다[6]. 토큰 본문은 DPAPI 로 암호화돼 있습니다. 공개 도구 AABF(v1.1.260618)로 이 캐시를 읽을 수 있고, 도구 보고서에서는 토큰 본문을 가립니다. 키 구성과 도구의 읽는 방법은 [AI 에이전트 브라우저](../agentic-services/ai-browsers.md)의 Edge 절에서 다루고, 이 페이지에서는 되풀이하지 않습니다. 대화 본문은 기기에 없으므로 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 ### Chrome 의 내장 AI (Gemini Nano)
 
@@ -51,15 +51,15 @@ Edge 의 Copilot 은 계정·토큰만 기기에 남기고 대화 본문은 서�
 | 상태 확인 화면 | `chrome://on-device-internals` (모델 크기, Broker State 탭의 오류) |
 | 언어 | Chrome 149 부터 영어·스페인어·일본어·독일어·프랑스어 입출력 |
 
-모델 구성요소가 설치되는 폴더 이름은 옛 방식의 `OptGuideOnDeviceModel`, 뒤에 공개키 16진수가 붙는 `OptGuideManifestModel`, 매니페스트 설정용 `OptimizationGuideModelsManifest` 이고, 구성요소 이름 문자열은 `"Optimization Guide Manifest Component: "` 뒤에 이름이 붙는 형태와 `"Optimization Guide On DeviceModels Manifest"` 입니다[3]. 이 폴더들은 구성요소 사용자 폴더(`DIR_COMPONENT_USER`) 아래에 생깁니다[3]. 이 기준 폴더의 OS 별 경로는 검체의 파일 목록에서 위 폴더 이름을 검색해 찾습니다.
+모델 구성요소가 설치되는 폴더 이름은 옛 방식의 `OptGuideOnDeviceModel`, 뒤에 공개키 16진수가 붙는 `OptGuideManifestModel`, 매니페스트 설정용 `OptimizationGuideModelsManifest` 이고, 구성요소 이름 문자열은 `"Optimization Guide Manifest Component: "` 뒤에 이름이 붙는 형태와 `"Optimization Guide On DeviceModels Manifest"` 입니다[3]. 이 폴더들은 구성요소 사용자 폴더(`DIR_COMPONENT_USER`) 아래에 생깁니다[3]. 이 기준 폴더의 OS 별 경로는 분석 대상의 파일 목록에서 위 폴더 이름을 검색해 찾습니다.
 
-Chrome 의 Gemini 관련 기업 정책 이름과 레지스트리 값, Gemini in Chrome 대화가 기기에 남는지는 Chrome 기업 정책 문서와 검체의 프로필 폴더로 따로 확인합니다. Workspace 계정으로 쓴 경우의 서버 쪽 보관 규칙은 [Google Workspace의 Gemini](workspace-gemini.md)에서 다룹니다.
+Chrome 의 Gemini 관련 기업 정책 이름과 레지스트리 값, Gemini in Chrome 대화가 기기에 남는지는 Chrome 기업 정책 문서와 실제 기기의 프로필 폴더로 따로 확인합니다. Workspace 계정으로 쓴 경우의 서버 쪽 보관 규칙은 [Google Workspace의 Gemini](workspace-gemini.md)에서 다룹니다.
 
 ## 구조
 
-Windows 쪽 정책 값은 레지스트리 값 하나라서 구조가 단순합니다. `REG_DWORD` 는 32비트 정수를 리틀 엔디언 4바이트로 저장하고, 예를 들어 `0x00000001` 은 값 데이터 칸에 `01 00 00 00` 으로 들어갑니다. 레지스트리 하이브 구조와 키의 마지막 쓰기 시각은 Windows 판의 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지에서 이어 봅니다. macOS 쪽 설정은 속성 목록 파일로 읽고, 형식은 Mac 판의 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html) 페이지에서 다룹니다.
+Windows 쪽 정책 값은 레지스트리 값 하나라서 구조가 단순합니다. `REG_DWORD` 는 32비트 정수를 리틀 엔디언 4바이트로 저장하고, 예를 들어 `0x00000001` 은 값 데이터에 `01 00 00 00` 으로 들어갑니다. 레지스트리 하이브 구조와 키의 마지막 쓰기 시각은 Windows 판의 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지에서 이어 봅니다. macOS 쪽 설정은 속성 목록 파일로 읽고, 형식은 Mac 판의 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html) 페이지에서 다룹니다.
 
-Chrome 온디바이스 모델은 위 구성요소 폴더가 있는지부터 확인합니다. 폴더 안의 파일 구성은 검체에서 폴더 목록을 떠서 기록합니다.
+Chrome 온디바이스 모델은 위 구성요소 폴더가 있는지부터 확인합니다. 폴더 안의 파일 구성은 실제 기기에서 폴더 목록을 떠서 기록합니다.
 
 ## 증거로서 의미
 
@@ -76,14 +76,14 @@ Windows 의 정책 값에는 값마다 시각이 붙지 않고, 키 단위의 �
 ## 함정과 한계
 
 - **정책 두 개.** Entra ID 프로필의 사이드 패널 Copilot 페이지 접근은 `CopilotPageContext`, 기업 데이터 보호를 쓰는 Copilot 은 `EdgeEntraCopilotPageContext` 가 정합니다. 하나만 보고 판단하지 않습니다.
-- **프로필 단위.** 정책이 프로필 단위라서, 같은 기기라도 프로필마다 적용 여부가 다를 수 있습니다. 어느 프로필에서 쓴 기록인지 먼저 가립니다.
+- **프로필 단위.** 정책이 프로필 단위라서, 같은 기기라도 프로필마다 적용 여부가 다를 수 있습니다. 어느 프로필에서 쓴 기록인지 먼저 확인합니다.
 - **모바일.** Android·iOS 의 Edge 는 이 정책을 지원하지 않아서, 모바일 기기에서는 같은 흔적을 찾지 않습니다.
 - **문서 날짜 불일치.** Chrome 내장 AI 문서는 갱신 표시가 2025-05-20 인데 본문에 Chrome 149 언급이 있어, 표시 날짜와 내용 시점이 맞지 않을 수 있습니다. 인용할 때는 확인한 날짜(2026-09)를 함께 적습니다.
 - **모델 자동 삭제.** 빈 공간이 10GB 아래로 떨어지면 모델을 지우므로, 모델 폴더가 없다는 사실만으로 과거 사용을 부정하지 않습니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 아래는 `REG_DWORD` 명세로 **만든 예시**입니다. 정책 값 `CopilotPageContext` 에 `0x00000001` 이 들어 있을 때, 레지스트리 값 데이터 칸은 이렇게 보입니다.
+**헥스로 한 번.** 아래는 `REG_DWORD` 명세로 **만든 예시**입니다. 정책 값 `CopilotPageContext` 에 `0x00000001` 이 들어 있을 때, 레지스트리 값 데이터는 이렇게 보입니다.
 
 ```
 값 이름 : CopilotPageContext
@@ -106,7 +106,7 @@ Windows 의 정책 값에는 값마다 시각이 붙지 않고, 키 단위의 �
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)를 쓸 때는 이 정책 값이나 모델 폴더가 들어 있는지 검체 설명과 파일 목록으로 먼저 확인하고, 없으면 시험용 기기에서 아래 질문을 직접 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)를 쓸 때는 이 정책 값이나 모델 폴더가 들어 있는지 이미지 설명과 파일 목록으로 먼저 확인하고, 없으면 시험용 기기에서 아래 질문을 직접 풀어 봅니다.
 
 1. Edge 에 `CopilotPageContext` 정책을 걸고 레지스트리에서 값과 키의 마지막 쓰기 시각을 확인하고, 정책을 바꾼 뒤 시각이 어떻게 달라지는지 비교합니다.
 2. 같은 기기에서 Entra ID 프로필과 개인 계정 프로필을 나란히 두고, 정책이 어느 프로필에 적용되는지 확인합니다.

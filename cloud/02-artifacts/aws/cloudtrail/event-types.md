@@ -46,7 +46,7 @@ Insights 이벤트 (Insights events) 는 쓰기 관리 API 의 호출량이나 �
 
 **S3 데이터 이벤트의 범위.** S3 데이터 이벤트는 버킷과 접두사 단위로 켭니다[3]. 버킷 `amzn-s3-demo-bucket3` 의 접두사 `my-images` 에 쓰기만 켰다면 기록 여부는 다음과 같습니다[3].
 
-| 호출 | 대상 객체 | 기록 여부 | 까닭 |
+| 호출 | 대상 객체 | 기록 여부 | 이유 |
 |---|---|---|---|
 | `DeleteObject` | `my-images/example.jpg` | 기록함 | 버킷·접두사·쓰기 조건에 모두 맞음 |
 | `DeleteObject` | `my-videos/example.avi` | 기록 안 함 | 접두사가 다름 |
@@ -102,7 +102,7 @@ CloudTrail 의 `eventName` 은 API 작업 이름과 다를 수 있습니다. S3 
 
 전달 지연은 출처마다 적힌 값이 다릅니다. CloudTrail 문서는 API 호출 뒤 평균 약 5분 안에 로그를 전달하며 이 시간은 보장되지 않는다고 적고[8], S3 로그 비교표는 데이터 이벤트는 5분마다, 관리 이벤트는 15분마다 전달된다고 적습니다[11]. Insights 이벤트는 보통 비정상 활동이 있고 30분 안에 버킷에 도착하고, 처음 켠 뒤에는 첫 이벤트가 나오기까지 최대 36시간이 걸릴 수 있습니다[8]. Insights 의 끝 레코드에는 `insightDetails.state` 가 `End` 이고 `insightContext.statistics` 에 `insightDuration` 이 붙습니다[9].
 
-선택기를 바꾼 `PutEventSelectors` 레코드의 `eventTime` 은 기록 범위가 바뀐 시점입니다. 이 시각을 타임라인에 함께 올려 두면 어느 구간에서 "기록 없음" 을 근거로 쓸 수 있는지 가려집니다. 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+선택기를 바꾼 `PutEventSelectors` 레코드의 `eventTime` 은 기록 범위가 바뀐 시점입니다. 이 시각을 타임라인에 함께 올려 두면 어느 구간에서 "기록 없음" 을 근거로 쓸 수 있는지 구분됩니다. 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -110,7 +110,7 @@ CloudTrail 의 `eventName` 은 API 작업 이름과 다를 수 있습니다. S3 
 - **로그 버킷의 재귀 기록.** 로그를 받는 버킷에 데이터 이벤트를 켜면 CloudTrail 이 로그 파일을 넣을 때마다 `PutObject` 가 다시 데이터 이벤트가 되고, 그 이벤트는 다음 로그 파일에 들어갑니다[3]. 로그 버킷에 `PutObject` 가 대량으로 보이면 CloudTrail 자신의 전달일 가능성이 있습니다. 트레일에 `RecursiveLogging` 을 `false` 로 두면 이런 이벤트를 억제합니다[3].
 - **`DeleteObjects` 의 펼침.** S3 `DeleteObjects` 데이터 이벤트를 기록하면 `DeleteObjects` 레코드와 함께 지운 객체마다 `DeleteObject` 레코드가 남고, 이 추가 레코드를 빼도록 설정할 수 있습니다[10]. 지운 객체 수를 셀 때 두 가지를 겹쳐 세지 않도록 하고, 제외 설정이 걸려 있으면 개별 객체 이름이 남지 않았을 수 있습니다.
 - **집계 이벤트.** 데이터 이벤트를 모은 집계 이벤트가 있고, 예시 이름은 `API_ACTIVITY`·`RESOURCE_ACCESS` 입니다[3]. 트레일 버킷에서는 `CloudTrail-Aggregated` 폴더에 따로 쌓입니다[8]. 개별 호출을 찾을 때는 `CloudTrail` 폴더의 원래 데이터 이벤트를 봅니다.
-- **탐지 규칙과 이벤트 종류.** Sigma 규칙 `aws_s3_data_management_tampering` 이 찾는 이름 가운데 `RestoreObject` 는 S3 데이터 이벤트라서[10][16], 데이터 이벤트를 켠 트레일에서만 걸립니다. 같은 규칙은 수명 주기 설정을 `PutLifecycleConfiguration` 으로 찾지만, 이 호출은 CloudTrail 에 `PutBucketLifecycle` 로 기록됩니다[10][16]. 규칙을 돌리기 전에 검체에 실제로 남은 `eventName` 을 확인합니다. 규칙으로 로그를 훑는 방법은 [탐지 규칙으로 로그 훑기](../../../03-techniques/analysis/detection-rules.md)에 있습니다.
+- **탐지 규칙과 이벤트 종류.** Sigma 규칙 `aws_s3_data_management_tampering` 이 찾는 이름 가운데 `RestoreObject` 는 S3 데이터 이벤트라서[10][16], 데이터 이벤트를 켠 트레일에서만 걸립니다. 같은 규칙은 수명 주기 설정을 `PutLifecycleConfiguration` 으로 찾지만, 이 호출은 CloudTrail 에 `PutBucketLifecycle` 로 기록됩니다[10][16]. 규칙을 돌리기 전에 실제 로그에 남은 `eventName` 을 확인합니다. 규칙으로 로그를 검색하는 방법은 [탐지 규칙으로 로그 검색하기](../../../03-techniques/analysis/detection-rules.md)에 있습니다.
 
 ## 직접 분석해 보기
 

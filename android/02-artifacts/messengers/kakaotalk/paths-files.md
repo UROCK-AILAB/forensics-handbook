@@ -28,7 +28,7 @@ nav_order: 910
 | OBB | `/storage/emulated/0/Android/obb/com.kakao.talk` |
 | 설치 파일 | `/data/app/com.kakao.talk-(무작위 문자열)==/base.apk` |
 
-위 경로는 한 앱 버전, 에뮬레이터 기준입니다. 다른 앱 버전, 다른 Android 버전, 삼성 One UI 기기에서는 경로가 다를 수 있어 검체에서 확인합니다. `/sdcard` 쪽에서 `Android/data/com.kakao.talk/cache` 말고 어떤 폴더를 쓰는지는 공개 자료가 없습니다. Android 11 이후 다른 앱이나 adb 가 `Android/data` 아래를 어디까지 읽을 수 있는지는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md)에서 다룹니다.
+위 경로는 한 앱 버전, 에뮬레이터 기준입니다. 다른 앱 버전, 다른 Android 버전, 삼성 One UI 기기에서는 경로가 다를 수 있어 실제 기기에서 확인합니다. `/sdcard` 쪽에서 `Android/data/com.kakao.talk/cache` 말고 어떤 폴더를 쓰는지는 공개 자료가 없습니다. Android 11 이후 다른 앱이나 adb 가 `Android/data` 아래를 어디까지 읽을 수 있는지는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md)에서 다룹니다.
 
 ## 구조
 
@@ -84,7 +84,7 @@ talk_pass_preferences.xml
 | `cache/media/` | 16진수 이름의 `.uid` 파일 | 설치 직후와 로그인 뒤 각각 생김 |
 | 외부 캐시 | `MiniProfile`, `default`, `journal` | 로그인 뒤 생김 |
 
-`.preferences_pb` 파일은 이름으로 보아 프로토콜 버퍼 형식으로 보이고, 형식은 [프로토콜 버퍼 (Protocol Buffers)](../../../01-foundations/data-formats/protobuf.md)에서 다룹니다. 외부 캐시 폴더는 비교 기록에서 `external_cache/com.kakao.talk/cache` 로 적혀 있고, 경로로 옮기면 `/storage/emulated/0/Android/data/com.kakao.talk/cache` 입니다.
+`.preferences_pb` 파일은 이름으로 보면 프로토콜 버퍼 형식으로 보이고, 형식은 [프로토콜 버퍼 (Protocol Buffers)](../../../01-foundations/data-formats/protobuf.md)에서 다룹니다. 외부 캐시 폴더는 비교 기록에서 `external_cache/com.kakao.talk/cache` 로 적혀 있고, 경로로 옮기면 `/storage/emulated/0/Android/data/com.kakao.talk/cache` 입니다.
 
 ## 증거로서 의미
 
@@ -110,7 +110,7 @@ talk_pass_preferences.xml
 
 ## 실습
 
-카카오톡이 설치된 공개 검체나 직접 만든 시험 기기 이미지로 다음 질문을 풀어 봅니다.
+카카오톡이 설치된 공개 시험 자료나 직접 만든 시험 기기 이미지로 다음 질문을 풀어 봅니다.
 
 1. `databases` 폴더에 어떤 DB 가 있고, 각 DB 옆에 `-wal`·`-shm` 파일이 있습니까?
 2. 위 표에서 로그인 뒤에 생기는 파일 가운데 무엇이 있습니까? 없다면 그 기기에서 로그인하지 않았다고 볼 수 있습니까, 아니면 앱 버전이 달라서입니까?

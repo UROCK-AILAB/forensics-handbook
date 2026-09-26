@@ -16,7 +16,7 @@ nav_order: 2360
 
 접속을 건 쪽(출발 PC)에 남는 흔적이며, 접속을 받은 쪽의 흔적은 [원격 데스크톱 이벤트](../event-logs/rdp-event-logs/index.md) 에서 다룹니다. 타일에는 원격 화면의 픽셀이 그대로 들어 있어서 화면에 떠 있던 글자나 창 모양이 조각으로 남습니다.
 
-클라이언트의 "지속 비트맵 캐싱" 옵션과 캐시 파일이 생기는지의 관계, mstsc 가 아닌 다른 원격 데스크톱 클라이언트도 같은 파일을 만드는지는 공개 자료가 없어 검체에서 확인합니다.
+클라이언트의 "지속 비트맵 캐싱" 옵션과 캐시 파일이 생기는지의 관계, mstsc 가 아닌 다른 원격 데스크톱 클라이언트도 같은 파일을 만드는지는 실제 데이터로 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
@@ -26,7 +26,7 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 
 - 위 경로는 mstsc 가 쓰는 캐시 위치입니다[3].
 - 공개 도구 bmc-tools 는 사용자 프로필 안의 `bcache*.bmc` 파일과 `cache????.bin` 파일을 처리합니다[1].
-- `.bin` 파일이 `.bmc` 와 같은 `Cache` 폴더에 있는지는 검체에서 확인합니다.
+- `.bin` 파일이 `.bmc` 와 같은 `Cache` 폴더에 있는지는 실제 데이터로 확인합니다.
 
 캐시 파일은 두 형식이 있습니다.
 
@@ -36,7 +36,7 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 | `.bin` | `cache????.bin` | `RDP8bmp` + 0x00 + 버전 4바이트 | 12바이트 (0x0C) |
 
 - `.bin` 의 머리 문자열 `RDP8bmp` 로 보아 RDP 8 이후 형식으로 보입니다.
-- `.bmc` 에서 `.bin` 으로 바뀐 윈도 버전은 공개 자료가 없어 검체에서 확인합니다.
+- `.bmc` 에서 `.bin` 으로 바뀐 윈도 버전은 실제 데이터로 확인해야 합니다.
 - `bcache2`, `bcache22`, `bcache24` 처럼 파일 이름에 붙는 번호와 색 깊이의 관계도 공개 자료가 없습니다.
 
 원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 에는 `Terminal Server Client\Cache` 폴더가 없습니다.
@@ -98,7 +98,7 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 ### 타일
 
 - 타일은 보통 64×64 픽셀입니다.
-- 타일 머리에는 시각 칸이 없습니다.
+- 타일 머리에는 시각 필드가 없습니다.
 - key1·key2 가 화면 위치를 뜻하는지는 공개 자료가 없습니다.
 
 ## 증거로서 의미
@@ -121,7 +121,7 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 
 ## 시각 해석
 
-타일 머리에는 시각 칸이 없어서 시각은 캐시 파일의 파일 시스템 시각으로 잡습니다. 파일 시스템 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 읽습니다.
+타일 머리에는 시각 필드가 없어서 시각은 캐시 파일의 파일 시스템 시각으로 잡습니다. 파일 시스템 시각은 [마스터 파일 테이블](../filesystem/mft.md) 에서 읽습니다.
 
 - 캐시 파일의 만든 시각·수정 시각이 원격 데스크톱의 어떤 동작 때 바뀌는지는 알려져 있지 않습니다.
 - 그래서 파일 시각은 "이 무렵에 캐시 파일이 만들어졌거나 바뀌었다" 로만 씁니다.
@@ -144,7 +144,7 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 
 ### 헥스로 한 번
 
-아래 바이트는 bmc-tools 소스 코드가 읽는 구조로 만든 예시입니다. 특정 검체에서 꺼낸 값이 아닙니다. key1·key2 는 읽는 순서를 보이려고 넣은 값입니다.
+아래 바이트는 bmc-tools 소스 코드가 읽는 구조로 만든 예시입니다. 실제 기기에서 꺼낸 값이 아닙니다. key1·key2 는 읽는 순서를 보이려고 넣은 값입니다.
 
 **.bin 파일 앞부분 (예시).**
 
@@ -205,10 +205,10 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 사용자 프로필의 `Terminal Server Client\Cache` 폴더를 꺼내 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등)에서 사용자 프로필의 `Terminal Server Client\Cache` 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 캐시 폴더가 있습니까? 파일은 `.bmc` 입니까, `.bin` 입니까?
-2. `.bin` 파일이면 첫 8바이트가 `RDP8bmp` 와 0x00 입니까? 버전 칸의 값은 무엇입니까?
+2. `.bin` 파일이면 첫 8바이트가 `RDP8bmp` 와 0x00 입니까? 버전 필드의 값은 무엇입니까?
 3. 첫 타일의 폭과 높이는 얼마입니까? 64×64 입니까?
 4. `.bmc` 파일이면 첫 타일의 데이터 길이와 매개변수는 무엇입니까? 압축된 타일입니까? 색 형식은 무엇입니까?
 5. bmc-tools 로 뽑은 타일 중 글자가 읽히는 타일이 있습니까? 그 글자가 MRU 의 대상 호스트와 이어집니까?

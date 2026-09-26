@@ -44,7 +44,7 @@ nav_order: 3210
 | T1055.014 | VDSO Hijacking |
 | T1055.015 | ListPlanting |
 
-.009 (Proc Memory) 의 플랫폼은 Linux 뿐입니다 [3]. .008·.014 도 이름으로 보아 Linux 쪽 기법으로 보입니다.
+.009 (Proc Memory) 의 플랫폼은 Linux 뿐입니다 [3]. .008·.014 도 이름으로 짐작하면 Linux 쪽 기법입니다.
 
 탐지할 때는 아래를 봅니다 [1].
 
@@ -58,7 +58,7 @@ nav_order: 3210
 ## 플러그인
 
 Volatility 3 의 Windows 플러그인 가운데 아래를 씁니다 [2].
-왼쪽 칸의 묶음은 플러그인 이름으로 나눈 것입니다.
+왼쪽 열의 묶음은 플러그인 이름으로 나눈 것입니다.
 같은 플러그인이 windows.malfind 와 windows.malware.malfind 처럼 두 이름으로 나오기도 합니다. 이 점은 [프로세스와 DLL 분석](process-analysis.md) 의 "플러그인 이름 읽는 법" 에 있습니다.
 
 | 찾는 것 | 플러그인 [2] |
@@ -84,20 +84,20 @@ Volatility 3 의 Windows 플러그인 가운데 아래를 씁니다 [2].
 ## 절차
 
 1. 프로세스 목록을 맞대 봅니다. windows.pslist 와 windows.psscan 결과를 비교하고, windows.psxview 로 여러 목록을 한 번에 봅니다.
-2. 한쪽 목록에만 있는 프로세스는 이미 끝난 프로세스일 수 있습니다. 끝난 프로세스가 아니라고 가린 뒤에 숨긴 프로세스 후보로 둡니다.
+2. 한쪽 목록에만 있는 프로세스는 이미 끝난 프로세스일 수 있습니다. 끝난 프로세스가 아니라고 판별한 뒤에 숨긴 프로세스 후보로 둡니다.
 3. windows.malfind 로 주입 후보 영역을 찾습니다. 결과가 많으면 다음 단계에서 걸러 냅니다.
 4. 후보 영역을 파일로 꺼냅니다. 해시를 계산하고 YARA 규칙으로 검사합니다. [의심 실행 파일 선별](../code-signing-yara.md) 과 [해시셋 대조와 유사 해시](../hash-set-fuzzy-hash.md) 를 봅니다.
 5. 비우기·위장을 찾는 플러그인을 돌립니다(windows.hollowprocesses, windows.processghosting, windows.malware.pebmasquerade).
 6. 모듈 목록을 맞대 봅니다. 사용자 모드 DLL 은 windows.ldrmodules 로, 커널 모듈은 windows.modules 와 windows.modscan 을 나란히 놓고 봅니다.
 7. 스레드와 시스템 호출 쪽을 봅니다(windows.malware.suspicious_threads, windows.orphan_kernel_threads, 시스템 호출 우회 플러그인).
-8. 커널 후킹과 드라이버를 봅니다(windows.ssdt, windows.callbacks, windows.driverirp, windows.driverscan 등). 메모리에 있는 드라이버를 디스크의 서비스·드라이버 등록과 견줍니다. [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) 를 봅니다.
+8. 커널 후킹과 드라이버를 봅니다(windows.ssdt, windows.callbacks, windows.driverirp, windows.driverscan 등). 메모리에 있는 드라이버를 디스크의 서비스·드라이버 등록과 비교합니다. [서비스·드라이버](../../../02-artifacts/persistence/services-drivers.md) 를 봅니다.
 9. 찾은 후보를 디스크 기록과 잇습니다. 어디서 들어왔는지는 [악성코드는 어디서 들어왔나](../../../04-scenarios/incident/initial-access.md) 에서, 어떻게 다시 뜨는지는 [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) 에서 봅니다.
 10. 보안 제품의 탐지 기록과 맞대 봅니다. [Windows Defender 탐지](../../../02-artifacts/event-logs/1116-1117.md) 와 [디펜더 검사 로그·격리 파일](../../../02-artifacts/execution/mplog-detectionhistory-quarantine.md) 을 봅니다.
 
 ## 함정과 한계
 
 - **malfind 결과에는 정상 영역이 섞일 수 있습니다.** .NET 이나 브라우저처럼 실행 중에 코드를 만드는 JIT 컴파일러가 이런 영역을 만든다고 알려져 있습니다. 결과 하나하나를 내용으로 확인합니다.
-- **정상 프로그램도 비슷한 흔적을 남길 수 있다고 알려져 있습니다.** 보안 제품처럼 다른 프로세스나 커널에 손대는 프로그램이 그렇습니다. 같은 제품을 설치한 깨끗한 PC 의 이미지와 견주어 봅니다.
+- **정상 프로그램도 비슷한 흔적을 남길 수 있다고 알려져 있습니다.** 보안 제품처럼 다른 프로세스나 커널에 손대는 프로그램이 그렇습니다. 같은 제품을 설치한 깨끗한 PC 의 이미지와 비교해 봅니다.
 - **psscan 에만 있다고 숨긴 프로세스는 아닙니다.** 이미 끝난 프로세스일 수 있습니다.
 - **페이지 파일로 나간 영역은 보이지 않습니다.** 주입 영역의 일부가 페이지 파일에 있으면 물리 메모리 이미지에서 읽을 수 없습니다. [페이지 파일](pagefile-sys-swapfile-sys.md) 을 봅니다.
 - **플러그인 이름과 결과 형식은 버전마다 다릅니다.** 보고서에는 쓴 도구의 버전과 플러그인 이름을 적습니다.

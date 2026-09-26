@@ -25,19 +25,19 @@ SQLite 데이터베이스는 표와 인덱스를 B-트리 페이지에 담은 �
 | `-wal` | DB와 같은 디렉터리 [1] | Core Data 저장소는 OS X 10.9 Mavericks부터 WAL이 기본 [3] | 아직 DB 파일로 옮기지 않은 페이지와 그 과거 버전 |
 | `-shm` | DB와 같은 디렉터리 [1] | — | WAL 인덱스. 복구에는 필요 없음 |
 
-macOS 10.15 Catalina 이후 버전마다 SQLite 저장 방식이나 기본 저널 방식이 바뀌었다는 공개 자료는 없습니다. macOS에 들어 있는 SQLite의 버전과 컴파일 옵션은 검체에서 확인합니다.
+macOS 10.15 Catalina 이후 버전마다 SQLite 저장 방식이나 기본 저널 방식이 바뀌었다는 공개 자료는 없습니다. macOS에 들어 있는 SQLite의 버전과 컴파일 옵션은 실제 기기에서 확인합니다.
 
 ## 읽는 순서
 
 1. [페이지와 레코드 (B-tree·Record)](b-tree-record.md) — 100바이트 DB 헤더와 B-트리 페이지 헤더, 셀과 레코드의 직렬 타입을 오프셋 표와 헥스 예시로 따라갑니다.
 2. [WAL과 저널 (WAL·Journal)](wal-journal.md) — 롤백 저널과 WAL, WAL 인덱스의 구조와 체크포인트, 증거를 열 때 바뀔 수 있는 부분을 다룹니다.
 3. [지운 레코드 되살리기 (Freelist·Freeblock)](freelist-freeblock.md) — 프리리스트와 프리블록에 지운 레코드가 남는 방식, 남는 양을 정하는 설정, 공개 복구 도구와 결과 해석을 정리합니다.
-4. [Core Data 저장소 (Core Data)](core-data.md) — Core Data가 만든 SQLite 저장소의 저널 방식과 저장소 밖 파일, 표 이름과 날짜 칸을 읽을 때 챙길 점을 다룹니다.
+4. [Core Data 저장소 (Core Data)](core-data.md) — Core Data가 만든 SQLite 저장소의 저널 방식과 저장소 밖 파일, 표 이름과 날짜 열을 읽을 때 챙길 점을 다룹니다.
 
 ## 함께 볼 페이지
 
 - [속성 목록 파일 (Property List)](../plist/index.md) — SQLite와 함께 macOS 기록을 담는 다른 저장 형식
-- [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md) — DB 칸의 시각 기준을 가려낼 때
+- [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md) — DB 열의 시각 기준을 가려낼 때
 - [KnowledgeC (knowledgeC.db)](../../../02-artifacts/execution/knowledgec/index.md) — Core Data 기반 SQLite DB의 예
 - [맥 증거 확보 (Acquisition)](../../../03-techniques/process-acquisition/evidence-acquisition/index.md) — DB와 딸린 파일을 함께 확보할 때
 - [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md) — 지워진 DB 파일이나 저널 파일을 파일 시스템에서 찾을 때

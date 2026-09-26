@@ -11,7 +11,7 @@ nav_order: 940
 
 ## 무엇이 들어 있나
 
-fseventsd 데몬은 볼륨에서 일어난 파일 시스템 변경 알림을 모아 이 폴더에 파일로 씁니다. 레코드 하나에는 바뀐 경로와 이벤트 ID, 무엇이 바뀌었는지 나타내는 플래그가 들어 있지만 시각 칸은 없습니다 [1]. 날짜를 어림하는 방법은 [해석 함정 (Pitfalls)](pitfalls.md)에서, 플래그 값을 읽는 법은 [이벤트 플래그 읽기 (Flags)](flags.md)에서 다룹니다.
+fseventsd 데몬은 볼륨에서 일어난 파일 시스템 변경 알림을 모아 이 폴더에 파일로 씁니다. 레코드 하나에는 바뀐 경로와 이벤트 ID, 무엇이 바뀌었는지 나타내는 플래그가 들어 있지만 시각 필드는 없습니다 [1]. 날짜를 어림하는 방법은 [해석 함정 (Pitfalls)](pitfalls.md)에서, 플래그 값을 읽는 법은 [이벤트 플래그 읽기 (Flags)](flags.md)에서 다룹니다.
 
 ## 위치
 
@@ -30,7 +30,7 @@ fseventsd 데몬은 볼륨에서 일어난 파일 시스템 변경 알림을 모
 
 이벤트 파일 하나는 여러 멤버로 된 GZIP 파일이고, 압축을 풀면 디스크 로그 스트림(페이지)이 하나 이상 나옵니다 [1]. 숫자는 모두 little-endian으로 저장하고, 경로 문자열은 확장 ASCII(단일·다중 바이트)이며 NULL 바이트로 끝납니다 [1]. 기록된 경로는 앞에 `/` 가 붙지 않아서 `private/var/log/asl` 처럼 보입니다 [2].
 
-GZIP 헤더에는 수정 시각 칸이 있지만, fseventsd가 파일을 쓸 때 이 칸을 채우지 않는 것으로 보인다는 해석이 있습니다 [4].
+GZIP 헤더에는 수정 시각 필드가 있지만, fseventsd가 파일을 쓸 때 이 필드를 채우지 않는 것으로 보인다는 해석이 있습니다 [4].
 
 ### 페이지 헤더 (12바이트)
 
@@ -61,9 +61,9 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 | 12 | 8 | 노드 ID (버전 2 이상) | `<q` |
 | 20 | 4 | UID (버전 3) | `<i` |
 
-플래그 칸은 디스크에 little-endian으로 들어 있지만 FSEventsParser는 빅엔디언으로 읽어서, 같은 값이 도구마다 다른 16진수로 보입니다. 그 대조표는 [이벤트 플래그 읽기 (Flags)](flags.md)에 있습니다.
+플래그 필드는 디스크에 little-endian으로 들어 있지만 FSEventsParser는 빅엔디언으로 읽어서, 같은 값이 도구마다 다른 16진수로 보입니다. 그 대조표는 [이벤트 플래그 읽기 (Flags)](flags.md)에 있습니다.
 
-노드 ID는 High Sierra에서 추가된 파일 시스템 노드 ID이고, 버전 1 레코드에는 이 칸이 없어서 도구 결과에서 비어 보입니다 [5]. UID 칸은 Sonoma에서 생겼고 [2], 어떤 UID인지 밝힌 공개 자료가 없어서 사용자 계정으로 단정하지 않습니다.
+노드 ID는 High Sierra에서 추가된 파일 시스템 노드 ID이고, 버전 1 레코드에는 이 필드가 없어서 도구 결과에서 비어 보입니다 [5]. UID 필드는 Sonoma에서 생겼고 [2], 어떤 UID인지 밝힌 공개 자료가 없어서 사용자 계정으로 단정하지 않습니다.
 
 ### 이벤트 ID
 
@@ -73,7 +73,7 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 
 ### 헥스로 한 번
 
-아래 바이트는 실제 검체가 아니라 명세 [1]에 맞춰 만든 예시입니다. GZIP을 푼 뒤의 내용이고, 버전 2 페이지에 레코드 하나가 들어 있는 모양입니다. `??` 는 뜻이 알려지지 않은 칸이고 `SS` 는 페이지 크기 자리입니다.
+아래 바이트는 실제 데이터가 아니라 명세 [1]에 맞춰 만든 예시입니다. GZIP을 푼 뒤의 내용이고, 버전 2 페이지에 레코드 하나가 들어 있는 모양입니다. `??` 는 뜻이 알려지지 않은 필드이고 `SS` 는 페이지 크기 자리입니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -94,7 +94,7 @@ libyal 문서에는 `1SLD` 와 `2SLD` 만 있고 `3SLD` 는 FSEventsParser 코�
 
 ### 공개 도구로 한 번
 
-FSEventsParser(Nicole Ibrahim, 버전 4.1, Apache 2.0)는 `1SLD`·`2SLD`·`3SLD` 를 모두 읽고, `.fseventsd` 폴더를 통째로 넣을 수도 있고 dfVFS로 디스크 이미지를 바로 넣을 수도 있습니다 [2]. 결과 칸은 `id`, `node_id`, `fs_uid`, `fullpath`, `type`, `flags`, `approx_dates_plus_minus_one_day`, `source`, `source_modified_time` 이고, 상세 출력에는 `id_hex`, `filename`, `mask`, `dls_version`, `record_end_offset` 이 더 붙습니다 [2]. 폴더를 복사해서 넣을 때는 파일 수정 시각을 보존해야 날짜 추정이 동작하고, 그 이유는 [해석 함정 (Pitfalls)](pitfalls.md)에 있습니다.
+FSEventsParser(Nicole Ibrahim, 버전 4.1, Apache 2.0)는 `1SLD`·`2SLD`·`3SLD` 를 모두 읽고, `.fseventsd` 폴더를 통째로 넣을 수도 있고 dfVFS로 디스크 이미지를 바로 넣을 수도 있습니다 [2]. 결과 열은 `id`, `node_id`, `fs_uid`, `fullpath`, `type`, `flags`, `approx_dates_plus_minus_one_day`, `source`, `source_modified_time` 이고, 상세 출력에는 `id_hex`, `filename`, `mask`, `dls_version`, `record_end_offset` 이 더 붙습니다 [2]. 폴더를 복사해서 넣을 때는 파일 수정 시각을 보존해야 날짜 추정이 동작하고, 그 이유는 [해석 함정 (Pitfalls)](pitfalls.md)에 있습니다.
 
 plaso의 `fseventsd` 파서는 `1SLD` 와 `2SLD` 만 다룹니다 [4].
 

@@ -38,8 +38,8 @@ has_toc: false
 | 물리 메모리 이미지 | 확보 도구가 만든 파일 | 확보 도구의 지원 범위를 따릅니다 | 확보한 순간의 프로세스·연결·메모리 내용 |
 | 최대 절전 파일 | 파일 이름 hiberfil.sys [2] | 빠른 시작은 Windows 8 부터 있습니다 [2] | 최대 절전이나 빠른 시작으로 끌 때의 메모리 |
 | 페이지 파일 | 설정 값: `Memory Management\PagingFiles` [4] | Windows 10 [3] | 물리 메모리에서 내보낸 페이지 조각 [3] |
-| swapfile.sys | 검체에서 확인 | 공개 자료 없음 | 페이지 파일과 같은 부류로 흔히 묶습니다 |
-| 커널 크래시 덤프 | `%SystemRoot%\Memory.dmp`, `%SystemRoot%\Minidump` [4] | 버전별 기본값은 검체에서 확인 | 버그 체크 순간의 메모리. 담는 범위는 덤프 종류에 따라 다릅니다 [4] |
+| swapfile.sys | 실제 시스템에서 확인 | 공개 자료 없음 | 페이지 파일과 같은 부류로 흔히 묶습니다 |
+| 커널 크래시 덤프 | `%SystemRoot%\Memory.dmp`, `%SystemRoot%\Minidump` [4] | 버전별 기본값은 실제 시스템에서 확인 | 버그 체크 순간의 메모리. 담는 범위는 덤프 종류에 따라 다릅니다 [4] |
 | 사용자 모드 크래시 덤프 | 기본 `%LOCALAPPDATA%\CrashDumps` [5] | Windows Vista SP1·Server 2008 부터 [5] | 죽은 프로그램의 메모리 |
 
 공개 도구는 아래를 예로 듭니다.

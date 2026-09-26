@@ -30,11 +30,11 @@ nav_order: 1360
    | `ClientTruth.plist` | 클라이언트 항목마다 `clientRestrictions`, `clientType`, `compliant`, `localizedClientDescription` |
    | `UserSettings.plist` | `assignedObject`, `intersection`, `restrictedBool`, `restrictedValue`, `union` |
    | `PublicInfo/MCMeta.plist` | `LastMDMMigratedBuild`, `LastMigratedBuild` |
-   | `AppAccessibilityParameters.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist` | 검체에서 확인 |
+   | `AppAccessibilityParameters.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist` | 실제 데이터로 확인 |
 
-   `PayloadManifest.plist` 의 `HiddenProfiles` 와 `OrderedProfiles` 목록을 설정 화면에서 찍은 목록과 맞춰 보고, 화면에 없는 항목이 목록에 있는지 봅니다. 사용자 쪽 복사본은 `HomeDomain` 의 `Library/UserConfigurationProfiles/` 아래에 `ClientTruth.plist`, `EffectiveUserSettings.plist`, `PayloadDependency.plist`, `PayloadManifest.plist`, `ProfileTruth.plist`, `PublicInfo/MCMeta.plist`, `PublicInfo/NamespacedUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist`, `PublicInfo/Truth.plist`, `Truth.plist`, `UserSettings.plist` 로 따로 있습니다. 프로파일 원본 파일이 백업의 어디에 어떤 이름으로 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+   `PayloadManifest.plist` 의 `HiddenProfiles` 와 `OrderedProfiles` 목록을 설정 화면에서 찍은 목록과 맞춰 보고, 화면에 없는 항목이 목록에 있는지 봅니다. 사용자 쪽 복사본은 `HomeDomain` 의 `Library/UserConfigurationProfiles/` 아래에 `ClientTruth.plist`, `EffectiveUserSettings.plist`, `PayloadDependency.plist`, `PayloadManifest.plist`, `ProfileTruth.plist`, `PublicInfo/MCMeta.plist`, `PublicInfo/NamespacedUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist`, `PublicInfo/Truth.plist`, `Truth.plist`, `UserSettings.plist` 로 따로 있습니다. 프로파일 원본 파일이 백업의 어디에 어떤 이름으로 남는지는 실제 데이터로 확인해야 합니다.
 
-4. **제한 설정을 봅니다.** `UserSettings.plist` 의 하위 키 가운데 앱 설치·삭제, 계정 변경, 서명 신뢰, 웹 필터, 암호 조건을 이름으로 가리키는 키를 먼저 봅니다. 각 키가 정확히 무엇을 제한하는지는 검체의 값으로 확인합니다.
+4. **제한 설정을 봅니다.** `UserSettings.plist` 의 하위 키 가운데 앱 설치·삭제, 계정 변경, 서명 신뢰, 웹 필터, 암호 조건을 이름으로 가리키는 키를 먼저 봅니다. 각 키가 정확히 무엇을 제한하는지는 실제 값으로 확인합니다.
 
    | 상위 키 | 먼저 볼 하위 키 |
    |---|---|
@@ -42,22 +42,22 @@ nav_order: 1360
    | `restrictedBool` | `allowAppInstallation`, `allowAppRemoval`, `allowAccountModification`, `allowAirDrop` |
    | `restrictedValue` | `minLength`, `maxInactivity`, `passcodeKeyboardComplexity` |
 
-5. **관리(MDM) 흔적을 봅니다.** `CloudConfigurationDetails.plist` 의 `IsSupervised`, `ConfigurationSource`, `PostSetupProfileWasInstalled` 는 이름으로 보면 감독 여부와 설정 출처를 가리키는 것으로 보이지만, 값의 뜻은 공개 자료가 없어 검체에서 확인합니다. 관리와 관련된 도메인으로는 `ManagedPreferencesDomain`(항목 4개), `SysContainerDomain-com.apple.remotemanagementd`(항목 6개), `SysContainerDomain-com.apple.managedappdistributiond`(항목 2개)가 있습니다. `ManagedPreferencesDomain` 안에는 `mobile/.GlobalPreferences.plist` 와 `mobile/com.apple.webcontentfilter.plist` 가 있고, 뒤의 파일에는 `filterBlacklist`, `filterWhitelist`, `restrictWeb`, `useContentFilter`, `limitWebProxies` 같은 키가 있습니다.
+5. **관리(MDM) 흔적을 봅니다.** `CloudConfigurationDetails.plist` 의 `IsSupervised`, `ConfigurationSource`, `PostSetupProfileWasInstalled` 는 이름으로 보면 감독 여부와 설정 출처를 가리키는 것으로 보이지만, 값의 뜻은 실제 데이터로 확인합니다. 관리와 관련된 도메인으로는 `ManagedPreferencesDomain`(항목 4개), `SysContainerDomain-com.apple.remotemanagementd`(항목 6개), `SysContainerDomain-com.apple.managedappdistributiond`(항목 2개)가 있습니다. `ManagedPreferencesDomain` 안에는 `mobile/.GlobalPreferences.plist` 와 `mobile/com.apple.webcontentfilter.plist` 가 있고, 뒤의 파일에는 `filterBlacklist`, `filterWhitelist`, `restrictWeb`, `useContentFilter`, `limitWebProxies` 같은 키가 있습니다.
 
 6. **App Store 밖 서명을 봅니다.** `MobileDeviceDomain :: ProvisioningProfiles/mis.db` 에 아래 표가 있습니다.
 
-   | 표 | 칸 |
+   | 표 | 열 |
    |---|---|
    | `profiles` | `uuid`, `team_id`, `install_time`, `name`, `expires`, `is_for_all_devices`, `is_apple_internal`, `is_local`, `is_beta`, `cms_blob`, `is_der` |
    | `trusted_team_ids` | `team_id`, `signature` |
    | `team_id_info` | `team_id`, `team_name` |
    | `banned_profile_uuids`, `banned_cdhashes`, `online_auth` | 차단·온라인 인증 관련 이름의 표 |
 
-   `profiles` 표의 `team_id` 를 `team_id_info` 의 `team_name` 과 이어 보면 어느 개발자 팀의 서명 프로파일인지 이름을 붙일 수 있습니다. 다만 이 DB 가 기업 배포·개발용으로 App Store 밖에서 설치한 앱의 프로비저닝 프로파일을 기록한다는 해석과 `install_time` 의 시각 기준은 공개 문서가 없어 검체로 확인해야 합니다. MVT Applications 모듈은 백업의 `Info.plist` 에서 설치 앱 목록과 앱의 출처·설치 정보를 뽑습니다 [2]. `Info.plist` 에는 `Installed Applications` 와 `Applications` 키가 있습니다. 설치 앱 전반은 [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md) 에서 다룹니다.
+   `profiles` 표의 `team_id` 를 `team_id_info` 의 `team_name` 과 이어 보면 어느 개발자 팀의 서명 프로파일인지 이름을 붙일 수 있습니다. 다만 이 DB 가 기업 배포·개발용으로 App Store 밖에서 설치한 앱의 프로비저닝 프로파일을 기록한다는 해석과 `install_time` 의 시각 기준은 실제 데이터로 확인해야 합니다. MVT Applications 모듈은 백업의 `Info.plist` 에서 설치 앱 목록과 앱의 출처·설치 정보를 뽑습니다 [2]. `Info.plist` 에는 `Installed Applications` 와 `Applications` 키가 있습니다. 설치 앱 전반은 [설치된 앱](../../../02-artifacts/app-usage/installed-apps.md) 에서 다룹니다.
 
-7. **권한과 위치 요청을 봅니다.** MVT TCC 모듈은 `/private/var/mobile/Library/TCC/TCC.db` 에서 마이크·카메라·위치 같은 권한의 허용·거부 상태를 뽑습니다 [2]. 이 DB 는 백업에 `HomeDomain :: Library/TCC/TCC.db` 로 있고, `access` 표에 `service`, `client`, `client_type`, `auth_value`, `auth_reason`, `last_modified` 같은 칸이, 그 밖에 `access_overrides`, `managed_overrides`(`admin_auth_value` 칸 포함), `expired`, `policies` 표가 있습니다. MVT LocationdClients 모듈은 `/private/var/mobile/Library/Caches/locationd/clients.plist` 에서 위치 서비스를 요청한 앱을 뽑습니다 [2]. 이 파일은 백업의 `RootDomain :: Library/Caches/locationd/clients.plist` 에 있고, 항목 하위 키로 `Authorization`, `BundleId`, `BundlePath`, `Executable`, `BackgroundLocationCapability`, `VisitMonitoring`, `isSystemService`, `LocationTimeStopped` 등이 있습니다. 두 파일에서 사용자가 모르는 번들 ID 가 마이크·카메라·위치 권한이나 백그라운드 위치를 받았는지 봅니다.
+7. **권한과 위치 요청을 봅니다.** MVT TCC 모듈은 `/private/var/mobile/Library/TCC/TCC.db` 에서 마이크·카메라·위치 같은 권한의 허용·거부 상태를 뽑습니다 [2]. 이 DB 는 백업에 `HomeDomain :: Library/TCC/TCC.db` 로 있고, `access` 표에 `service`, `client`, `client_type`, `auth_value`, `auth_reason`, `last_modified` 같은 열이, 그 밖에 `access_overrides`, `managed_overrides`(`admin_auth_value` 열 포함), `expired`, `policies` 표가 있습니다. MVT LocationdClients 모듈은 `/private/var/mobile/Library/Caches/locationd/clients.plist` 에서 위치 서비스를 요청한 앱을 뽑습니다 [2]. 이 파일은 백업의 `RootDomain :: Library/Caches/locationd/clients.plist` 에 있고, 항목 하위 키로 `Authorization`, `BundleId`, `BundlePath`, `Executable`, `BackgroundLocationCapability`, `VisitMonitoring`, `isSystemService`, `LocationTimeStopped` 등이 있습니다. 두 파일에서 사용자가 모르는 번들 ID 가 마이크·카메라·위치 권한이나 백그라운드 위치를 받았는지 봅니다.
 
-8. **차단 모드 상태를 봅니다.** MVT GlobalPreferences 모듈은 `/private/var/mobile/Library/Preferences/.GlobalPreferences.plist` 에서 차단 모드(Lockdown Mode) 상태 등을 뽑습니다 [2]. 상태를 담는 키 이름은 공개 자료가 없어 검체에서 확인합니다.
+8. **차단 모드 상태를 봅니다.** MVT GlobalPreferences 모듈은 `/private/var/mobile/Library/Preferences/.GlobalPreferences.plist` 에서 차단 모드(Lockdown Mode) 상태 등을 뽑습니다 [2]. 상태를 담는 키 이름은 실제 데이터로 확인합니다.
 
 9. **시간순으로 모읍니다.** MVT ProfileEvents 모듈은 설정 앱에서 프로파일을 새로 설치하거나 지운 때를 시간순으로 뽑고, ConfigurationProfiles 모듈은 설치된 구성 프로파일의 자세한 정보를 뽑습니다 [2]. ProfileEvents 모듈이 읽는 파일이 `MCProfileEvents.plist` 인지는 MVT 문서에 나와 있지 않습니다. 뽑은 사건은 [타임라인 작성](../timeline/index.md) 방식으로 기기를 넘겨받은 시기, 진술한 시기와 나란히 놓습니다.
 
@@ -69,11 +69,11 @@ MVT(Mobile Verification Toolkit)의 ConfigurationProfiles, ProfileEvents, Applic
 
 항목이 있다는 사실만으로 수상하다고 보면 안 됩니다. 사용자가 직접 프로파일을 설치하지 않은 개인 기기에도 `MCSettingsEvents.plist` 의 `SystemProfileRestrictions` 아래에 통신사 이름이 들어간 `com.apple.` 형식 프로파일 식별자가, `SystemClientRestrictions` 아래에 `com.apple.lsd.appremoval` 같은 Apple 시스템 항목이 들어 있을 수 있습니다. `ClientTruth.plist` 에도 `com.apple.lsd.appremoval`, `com.apple.profiled.appenforced.com.apple.news` 같은 시스템 클라이언트 항목이 들어 있습니다. 식별자가 `com.apple.` 로 시작하는지, 통신사나 Apple 기본 항목인지를 먼저 가르고 나머지를 봅니다.
 
-`ConfigurationSource` 숫자의 뜻이나 `IsSupervised` 가 감독 여부를 그대로 나타내는지는 공개 자료가 없어 검체로 확인해야 합니다. `TCC.db` 의 `last_modified`, `mis.db` 의 `install_time` 도 어떤 기준의 시각인지 알려져 있지 않으므로, 보고서에 시각을 쓰기 전에 [시각 값](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 알려진 사건과 맞춰 봐야 합니다. 위의 파일과 키는 암호화하지 않은 백업 기준입니다. 감독 기기에 사용자가 지울 수 없는 프로파일이 있는지도 검체에서 확인합니다. 조사 전에 누군가 프로파일을 지웠다면 그 설정과 정보가 지워지고 [1], `MCProfileEvents.plist` 같은 사건 기록이나 사용자 쪽 복사본에 무엇이 남는지는 검체로 따로 확인해야 합니다.
+`ConfigurationSource` 숫자의 뜻이나 `IsSupervised` 가 감독 여부를 그대로 나타내는지는 실제 데이터로 확인해야 합니다. `TCC.db` 의 `last_modified`, `mis.db` 의 `install_time` 도 어떤 기준의 시각인지 알려져 있지 않으므로, 보고서에 시각을 쓰기 전에 [시각 값](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 알려진 사건과 맞춰 봐야 합니다. 위의 파일과 키는 암호화하지 않은 백업 기준입니다. 감독 기기에 사용자가 지울 수 없는 프로파일이 있는지도 실제 기기에서 확인합니다. 조사 전에 누군가 프로파일을 지웠다면 그 설정과 정보가 지워지고 [1], `MCProfileEvents.plist` 같은 사건 기록이나 사용자 쪽 복사본에 무엇이 남는지는 실제 데이터로 따로 확인해야 합니다.
 
 ## 결과를 어떻게 해석하나
 
-이 점검으로 증명할 수 있는 범위는 "이 백업 시점에 이 식별자의 구성 프로파일이 설치 목록에 있었다", "이 번들 ID 가 위치 권한을 받은 기록이 있다" 까지입니다. 누가 프로파일을 설치했는지, 설치한 사람이 그 설정으로 무엇을 봤는지는 이 기록만으로 증명하지 못합니다. 보고서에는 "`PayloadManifest.plist` 의 프로파일 목록에 설정 화면에 표시되지 않은 식별자 1개가 있다" 처럼 파일과 키 이름을 밝혀 기록이 말하는 만큼만 씁니다. 모르는 프로파일이 VPN 이라면 [VPN 설정](../../../02-artifacts/network/vpn.md), 계정 쪽 흔적은 [애플 계정](../../../02-artifacts/system-account/apple-account.md) 과 함께 봅니다.
+이 점검으로 증명할 수 있는 범위는 "이 백업 시점에 이 식별자의 구성 프로파일이 설치 목록에 있었다", "이 번들 ID 가 위치 권한을 받은 기록이 있다" 까지입니다. 누가 프로파일을 설치했는지, 설치한 사람이 그 설정으로 무엇을 봤는지는 이 기록만으로 증명하지 못합니다. 보고서에는 "`PayloadManifest.plist` 의 프로파일 목록에 설정 화면에 표시되지 않은 식별자 1개가 있다" 처럼 파일과 키 이름을 밝혀 기록으로 확인되는 만큼만 씁니다. 모르는 프로파일이 VPN 이라면 [VPN 설정](../../../02-artifacts/network/vpn.md), 계정 쪽 흔적은 [애플 계정](../../../02-artifacts/system-account/apple-account.md) 과 함께 봅니다.
 
 ## 참고 문헌
 

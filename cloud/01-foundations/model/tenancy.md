@@ -10,7 +10,7 @@ nav_order: 10
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 조사 대상의 경계를 다룹니다. 경계는 기록이 어느 로그에 남는지, 누가 그 로그를 받을 수 있는지, 레코드의 어느 필드에 경계 식별자가 적히는지를 함께 정합니다. 그래서 사건 하나를 조사할 때도 관련된 테넌트나 계정이 둘 이상이면 로그를 경계마다 따로 받아야 하고, 받은 로그를 합칠 때는 경계 식별자로 다시 나눠 읽어야 합니다.
+이 페이지는 파일 형식이 아니라 조사 대상의 경계를 다룹니다. 경계는 기록이 어느 로그에 남는지, 누가 그 로그를 받을 수 있는지, 레코드의 어느 필드에 경계 식별자가 적히는지를 함께 정합니다. 그래서 사건 하나를 조사할 때도 관련된 테넌트나 계정이 둘 이상이면 로그를 경계마다 따로 받아야 하고, 받은 로그를 합칠 때는 경계 식별자로 다시 나눠 읽어야 합니다.
 
 | 서비스 | 경계의 계층 | 레코드 속 경계 식별자 | 대표 기록 |
 |---|---|---|---|
@@ -21,7 +21,7 @@ nav_order: 10
 | Google Cloud | 조직 → 폴더 → 프로젝트 → 리소스 | `logName` 의 앞부분(`projects/`·`folders/`·`organizations/`·`billingAccounts/`) | [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md) |
 | Google Workspace | 고객 ID 로 가리키는 계정 | `id.customerId`, `ownerDomain` | [관리 콘솔 감사 로그](../../02-artifacts/google-workspace/admin-audit.md) |
 | Slack Enterprise | 엔터프라이즈 조직 → 워크스페이스 | `context.location.type`·`context.location.id` | [Slack 감사 로그](../../02-artifacts/saas/slack.md) |
-| GitHub Enterprise Cloud | 엔터프라이즈 계정 → 조직 | 필드는 해당 쪽에서 다룸 | [GitHub 감사 로그](../../02-artifacts/saas/github.md) |
+| GitHub Enterprise Cloud | 엔터프라이즈 계정 → 조직 | 필드는 해당 페이지에서 다룸 | [GitHub 감사 로그](../../02-artifacts/saas/github.md) |
 
 사용자·역할·서비스 계정처럼 경계 안에서 행동하는 주체는 [클라우드 계정과 역할](../identity/users-roles.md)에서, 경계마다 어떤 로그가 기본으로 남는지는 [기록은 어디에 남나](where-records-live.md)에서 다룹니다.
 
@@ -57,7 +57,7 @@ Azure 의 관리 범위는 관리 그룹·구독·리소스 그룹·리소스의
 
 AWS 조직 (organization) 은 관리 계정 (management account) 하나와 0개 이상의 멤버 계정·조직 단위 (OU)·정책으로 이루어지고 루트는 하나입니다[10]. 조직 단위는 루트와 맨 아래 조직 단위에 만든 계정을 빼고 5단계까지 깊어질 수 있습니다[10]. AWS 계정은 AWS 리소스를 담는 그릇이고, 그 안에서 행동하는 IAM 사용자·역할과는 다른 개념입니다[10]. 멤버 계정은 한 번에 한 조직에만 속하고, 어느 계정이 관리 계정인지는 바꿀 수 없습니다[10]. 서비스 제어 정책 (SCP) 을 루트에 붙여도 관리 계정에는 적용되지 않습니다[10].
 
-AWS 리소스 이름 (ARN) 은 `arn:partition:service:region:account:resource` 모양이고, `account` 칸에 하이픈 없는 계정 ID 가 들어갑니다[11]. partition 은 표준 리전이 `aws`, 중국(베이징) 리전이 `aws-cn` 이며, partition 이 다른 계정 사이에는 접근을 위임할 수 없습니다[11]. 다른 계정의 사용자가 역할을 쓰게 하려면 역할 신뢰 정책의 `Principal` 에 그 계정을 적고, 사용자가 역할을 쓰는 동안에는 원래 사용자 권한이 멈춥니다[12].
+AWS 리소스 이름 (ARN) 은 `arn:partition:service:region:account:resource` 모양이고, `account` 부분에 하이픈 없는 계정 ID 가 들어갑니다[11]. partition 은 표준 리전이 `aws`, 중국(베이징) 리전이 `aws-cn` 이며, partition 이 다른 계정 사이에는 접근을 위임할 수 없습니다[11]. 다른 계정의 사용자가 역할을 쓰게 하려면 역할 신뢰 정책의 `Principal` 에 그 계정을 적고, 사용자가 역할을 쓰는 동안에는 원래 사용자 권한이 멈춥니다[12].
 
 ### Google Cloud
 
@@ -102,9 +102,9 @@ Google Cloud 는 조직이나 폴더에 집계 싱크 (aggregated sink) 를 만�
 
 ## 읽는 법
 
-레코드 한 줄에는 "어느 경계의 로그로 모였는가" 를 말하는 값과 "행위자가 어느 경계에 속하는가" 를 말하는 값이 따로 있습니다. 두 값이 다르면 경계를 넘은 접근이므로, 두 값을 나란히 놓고 읽습니다.
+레코드 한 줄에는 "어느 경계의 로그로 모였는가" 를 나타내는 값과 "행위자가 어느 경계에 속하는가" 를 나타내는 값이 따로 있습니다. 두 값이 다르면 경계를 넘은 접근이므로, 두 값을 나란히 놓고 읽습니다.
 
-1. **레코드가 모인 경계를 읽습니다.** 통합 감사 로그는 `OrganizationId`[2], Azure 활동 로그는 `subscriptionId` 와 `resourceId`[7], CloudTrail 은 `recipientAccountId`[20], Google Workspace 보고서 API 는 `id.customerId`[21], Slack 은 `context.location`[15] 을 봅니다. Google Cloud 감사 로그는 `logName` 의 앞부분이 `projects/PROJECT_ID`, `folders/FOLDER_ID`, `billingAccounts/BILLING_ACCOUNT_ID`, `organizations/ORGANIZATION_ID` 가운데 무엇인지로 로그를 가진 경계를 알 수 있습니다[22]. 뒷부분(`activity`·`data_access` 같은 갈래)은 [기록은 어디에 남나](where-records-live.md)에서 다룹니다.
+1. **레코드가 모인 경계를 읽습니다.** 통합 감사 로그는 `OrganizationId`[2], Azure 활동 로그는 `subscriptionId` 와 `resourceId`[7], CloudTrail 은 `recipientAccountId`[20], Google Workspace 보고서 API 는 `id.customerId`[21], Slack 은 `context.location`[15] 을 봅니다. Google Cloud 감사 로그는 `logName` 의 앞부분이 `projects/PROJECT_ID`, `folders/FOLDER_ID`, `billingAccounts/BILLING_ACCOUNT_ID`, `organizations/ORGANIZATION_ID` 가운데 무엇인지로 로그를 가진 경계를 알 수 있습니다[22]. 뒷부분(`activity`·`data_access` 같은 종류)은 [기록은 어디에 남나](where-records-live.md)에서 다룹니다.
 2. **행위자가 속한 경계를 읽습니다.** Entra 로그인 로그는 홈 테넌트 (home tenant), CloudTrail 은 `userIdentity.accountId`, Google Workspace 는 `actor.email` 의 도메인을 봅니다.
 3. **두 값을 비교합니다.** 아래에서 서비스별로 비교하는 방법을 봅니다.
 
@@ -157,7 +157,7 @@ Google Cloud 는 조직이나 폴더에 집계 싱크 (aggregated sink) 를 만�
 
 ### 증명하지 못하는 것
 
-경계 식별자는 로그가 모인 곳을 말할 뿐, 행위자가 누구인지는 말하지 않습니다. 같은 테넌트의 로그라도 게스트나 다른 테넌트의 지원 담당자가 한 일이 섞여 있을 수 있으므로 행위자 쪽 값을 따로 읽어야 합니다. 조직 트레일에 어떤 계정 폴더가 없거나 비어 있다는 사실만으로는 그 계정에 활동이 없었다고 할 수 없습니다. 계정이 조직을 떠난 뒤의 활동은 조직 트레일에 기록되지 않고[17], opt-in 홈 리전 트레일은 그 리전을 켜지 않은 멤버 계정의 활동을 받지 않기 때문입니다[17].
+경계 식별자로는 로그가 모인 곳만 알 수 있고, 행위자가 누구인지는 알 수 없습니다. 같은 테넌트의 로그라도 게스트나 다른 테넌트의 지원 담당자가 한 일이 섞여 있을 수 있으므로 행위자 쪽 값을 따로 읽어야 합니다. 조직 트레일에 어떤 계정 폴더가 없거나 비어 있다는 사실만으로는 그 계정에 활동이 없었다고 할 수 없습니다. 계정이 조직을 떠난 뒤의 활동은 조직 트레일에 기록되지 않고[17], opt-in 홈 리전 트레일은 그 리전을 켜지 않은 멤버 계정의 활동을 받지 않기 때문입니다[17].
 
 ### 시각
 
@@ -168,10 +168,10 @@ Google Cloud 는 조직이나 폴더에 집계 싱크 (aggregated sink) 를 만�
 - AWS 콘솔의 이벤트 기록 (Event history) 은 로그인한 계정의 이벤트만 보여 줍니다[17]. 관리 계정으로 로그인하면 관리 계정의 최근 90일 관리 이벤트만 보이고 멤버 계정 이벤트는 보이지 않습니다[17]. 관리 계정 화면에 멤버 계정 활동이 없다고 "활동 없음" 으로 쓰지 않습니다.
 - Azure 구독을 다른 디렉터리로 옮기면 이전 디렉터리에서 받은 역할 할당으로는 더 이상 접근할 수 없습니다[3]. 현재 역할 할당 목록만 보고 과거에 누가 접근할 수 있었는지 판단하지 말고, 활동 로그의 역할 할당 기록으로 확인합니다. 권한 변화를 따라가는 방법은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md)에서 다룹니다.
 - 루트 관리 그룹에는 기본으로 접근할 수 있는 사람이 없고, Entra 전역 관리자 (Global Administrator) 만 스스로 권한을 올려 접근할 수 있습니다[6]. 권한을 올려 루트 관리 그룹에 접근하면 다른 사용자에게 어떤 Azure 역할이든 줄 수 있고[6], 모든 구독과 관리 그룹은 루트 관리 그룹 아래에 모입니다[6]. 그래서 Entra 쪽 역할이 Azure 구독 전체의 권한으로 이어질 수 있습니다. Sigma 규칙은 이 권한 올리기를 활동 로그의 `operationName` 이 `MICROSOFT.AUTHORIZATION/ELEVATEACCESS/ACTION` 인 레코드로 찾습니다[27]. 구독 수준 활동 로그만 보지 말고 테넌트 수준 활동 로그도 함께 받습니다.
-- Azure 활동 로그의 `resourceId` 는 이벤트에 따라 `/subscriptions/…/resourcegroups/`, `/subscriptions/…/resourceGroups/`, `/SUBSCRIPTIONS/…/RESOURCEGROUPS/` 처럼 대소문자가 다르게 나옵니다[7]. 구독 ID 나 리소스 그룹 이름으로 레코드를 모을 때는 대소문자를 가리지 않고 비교합니다.
+- Azure 활동 로그의 `resourceId` 는 이벤트에 따라 `/subscriptions/…/resourcegroups/`, `/subscriptions/…/resourceGroups/`, `/SUBSCRIPTIONS/…/RESOURCEGROUPS/` 처럼 대소문자가 다르게 나옵니다[7]. 구독 ID 나 리소스 그룹 이름으로 레코드를 모을 때는 대소문자를 구분하지 않고 비교합니다.
 - 정부용·국가별 클라우드는 관리 주소가 다릅니다. ARM 주소는 전역 Azure 가 `https://management.azure.com`, Azure Government 가 `https://management.usgovcloudapi.net/`, 21Vianet 이 운영하는 Azure 가 `https://management.chinacloudapi.cn` 입니다[28]. 수집 도구가 전역 주소만 부르면 이런 테넌트의 로그는 받지 못합니다. AWS 도 partition 이 다르면 조직 트레일을 partition 마다 따로 둡니다[17].
 - Google Cloud 프로젝트 ID, 프로젝트 번호, 표시 이름은 서로 다른 값입니다[13]. 로그와 설정 자료에서 어느 값이 쓰였는지 확인하고 맞춥니다.
-- Entra B2B 게스트가 이 테넌트의 리소스에 로그인한 기록은 리소스 테넌트의 로그인 로그에서 홈 테넌트가 리소스 테넌트와 다른 항목으로 찾습니다[23]. 이런 항목에는 홈 테넌트 이름이 비어 있으므로 홈 테넌트 ID 로 소속을 가립니다[23].
+- Entra B2B 게스트가 이 테넌트의 리소스에 로그인한 기록은 리소스 테넌트의 로그인 로그에서 홈 테넌트가 리소스 테넌트와 다른 항목으로 찾습니다[23]. 이런 항목에는 홈 테넌트 이름이 비어 있으므로 홈 테넌트 ID 로 소속을 판별합니다[23].
 
 ## 도구
 

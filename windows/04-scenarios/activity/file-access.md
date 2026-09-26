@@ -17,7 +17,7 @@ nav_order: 3790
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | Windows 버전 | 기록이 생기는 조건과 이벤트 버전이 Windows 버전마다 다릅니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적어 둡니다. |
 | 시간대 | 기록마다 UTC 와 현지 시각이 섞여 있습니다. 아래 "시간대 값의 부호" 를 먼저 봅니다. |
@@ -52,7 +52,7 @@ nav_order: 3790
 
 최근 항목 바로가기 파일 (LNK) 은 앱이 `SHAddToRecentDocs` 함수를 부를 때 생깁니다. 탐색기에서 항목을 열 때와 공용 파일 대화상자로 열기·저장·새로 만들기를 할 때는 셸이 이 함수를 대신 부릅니다. 자기 화면으로 파일을 고르는 앱이 이 함수를 부르지 않으면 최근 항목에 오르지 않습니다. 실행 파일(.exe)은 XP 이후 최근 항목에서 걸러지며, 프로그램 실행은 [어떤 프로그램을 언제 실행했나](program-execution.md) 에서 다룹니다.
 
-점프리스트 (Jump List) 는 앱(AppID)마다 파일 하나로 남고, 그 파일 안에 항목마다 바로가기 데이터와 마지막 갱신 시각이 있습니다. 공용 대화상자로 열기·저장·새로 만들기를 하면 같은 함수가 불리므로 바로가기 파일과 점프리스트로는 연 것과 저장한 것을 가릴 수 없습니다.
+점프리스트 (Jump List) 는 앱(AppID)마다 파일 하나로 남고, 그 파일 안에 항목마다 바로가기 데이터와 마지막 갱신 시각이 있습니다. 공용 대화상자로 열기·저장·새로 만들기를 하면 같은 함수가 불리므로 바로가기 파일과 점프리스트로는 연 것과 저장한 것을 구분할 수 없습니다.
 
 "문서를 열면 그 파일의 바로가기와 부모 폴더의 바로가기가 함께 생긴다" 는 설명이 널리 퍼져 있지만, 이 동작은 Microsoft 문서에 적혀 있지 않으므로 이 설명에 기대어 판단하지 않습니다.
 
@@ -74,7 +74,7 @@ NTFS 는 디스크의 마지막 접근 시각 갱신을 최대 1시간까지 미
 
 **0x80000001 값.** `NtfsDisableLastAccessUpdate` 값이 0x80000001 이면 `fsutil behavior query disablelastaccess` 는 "DisableLastAccess = 1 (User Managed, Last Access Time Updates DISABLED)" 로 보여 줍니다(Windows 11 25H2 기준). 이때 그 볼륨에서는 마지막 접근 시각이 갱신되지 않습니다.
 
-fsutil 문서가 설명하는 값은 0 과 1 두 가지뿐이고[1], 0x80000000 대의 값은 공개 문서에 설명이 없습니다. 검체에서는 값을 그대로 적고, 뜻은 fsutil 출력이나 다른 자료로 따로 확인합니다.
+fsutil 문서가 설명하는 값은 0 과 1 두 가지뿐이고[1], 0x80000000 대의 값은 공개 문서에 설명이 없습니다. 분석할 때는 값을 그대로 적고, 뜻은 fsutil 출력이나 다른 자료로 따로 확인합니다.
 
 시각 속성마다 무엇이 바뀔 때 바뀌는지는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
@@ -84,11 +84,11 @@ fsutil 문서가 설명하는 값은 0 과 1 두 가지뿐이고[1], 0x80000000 
 
 4663 은 Audit File System·Audit Kernel Object·Audit Registry·Audit Removable Storage 하위 범주의 이벤트이고, 개체의 SACL 에 해당 접근을 기록하라는 ACE 가 있을 때만 생깁니다[2]. 핸들 요청을 적는 4656 과 달리 4663 은 권한을 실제로 썼다는 기록이며, 실패 이벤트는 없습니다[2].
 
-공급자는 Microsoft-Windows-Security-Auditing 이고 채널은 Security 입니다[2]. 최소 OS 는 Vista·Server 2008 이며[2], 버전 1 은 Windows 8·Server 2012 에서 Resource Attributes 칸이 붙은 판입니다[2].
+공급자는 Microsoft-Windows-Security-Auditing 이고 채널은 Security 입니다[2]. 최소 OS 는 Vista·Server 2008 이며[2], 버전 1 은 Windows 8·Server 2012 에서 Resource Attributes 필드가 붙은 판입니다[2].
 
-**조사에 쓰는 칸.**
+**조사에 쓰는 필드.**
 
-| 묻는 것 | 칸 |
+| 묻는 것 | 필드 |
 |---|---|
 | 누가 | SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId |
 | 무엇을 | ObjectType, ObjectName |
@@ -125,9 +125,9 @@ Sysmon 이벤트 목록에는 파일 읽기를 기록하는 이벤트가 없습�
 
 **윈도 타임라인.** Windows 11 에도 `%LOCALAPPDATA%\ConnectedDevicesPlatform\<폴더>\ActivitiesCache.db` 가 여러 개 있을 수 있고, 그 가운데 하나는 계속 쓰입니다.
 
-표는 Activity, ActivityOperation, AppSettings, Metadata, ManualSequence, Activity_PackageId, DataEncryptionKeys, Asset 입니다(Windows 11 25H2 기준). Activity 표에 행이 수백 개 있어도 ActivityOperation 표는 0행일 수 있고, ActivityType 값이 11·12·15 세 가지뿐일 수 있습니다. 각 값의 뜻은 공개 자료가 없어 검체에서 확인합니다.
+표는 Activity, ActivityOperation, AppSettings, Metadata, ManualSequence, Activity_PackageId, DataEncryptionKeys, Asset 입니다(Windows 11 25H2 기준). Activity 표에 행이 수백 개 있어도 ActivityOperation 표는 0행일 수 있고, ActivityType 값이 11·12·15 세 가지뿐일 수 있습니다. 각 값의 뜻은 실제 데이터로 확인해야 합니다.
 
-그래서 Windows 11 에서는 이 DB 를 파일 열람 기록으로 기대하기 어렵습니다. 단정하지 말고 검체마다 표 내용을 확인합니다.
+그래서 Windows 11 에서는 이 DB 를 파일 열람 기록으로 기대하기 어렵습니다. 단정하지 말고 기기마다 표 내용을 확인합니다.
 
 **그 밖의 보조 기록.**
 
@@ -152,7 +152,7 @@ Sysmon 이벤트 목록에는 파일 읽기를 기록하는 이벤트가 없습�
 
 ## 흔한 오판
 
-1. **점프리스트나 최근 항목 바로가기를 "열었다" 는 증거로 씁니다.** 두 기록은 연 것과 저장한 것을 가리지 못합니다. "열었거나 저장했다" 까지만 씁니다.
+1. **점프리스트나 최근 항목 바로가기를 "열었다" 는 증거로 씁니다.** 두 기록은 연 것과 저장한 것을 구분하지 못합니다. "열었거나 저장했다" 까지만 씁니다.
 2. **바로가기 헤더의 시각을 연 시각으로 씁니다.** 헤더 시각은 대상 파일의 시각입니다. 바로가기 파일 자신의 시각과 다릅니다. 자세한 내용은 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) 에 있습니다.
 3. **마지막 접근 시각을 연 시각으로 씁니다.** 갱신이 꺼져 있을 수 있습니다. 켜져 있어도 디스크에는 최대 1시간 늦게 쓰일 수 있습니다[1].
 4. **4663 이 없으니 열지 않았다고 봅니다.** 감사가 꺼져 있었을 수 있습니다. 감사가 켜져 있어도 SACL 이 없는 파일은 남지 않습니다[2].
@@ -169,7 +169,7 @@ Sysmon 이벤트 목록에는 파일 읽기를 기록하는 이벤트가 없습�
 
 - [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) · [점프리스트](../../02-artifacts/file-folder-usage/jump-lists.md) — 파일을 다룬 기록의 구조와 시각입니다.
 - [셸백](../../02-artifacts/file-folder-usage/shellbags/index.md) — 탐색기로 들어간 폴더입니다.
-- [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) · [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) — 4663 이 남는 조건과 전체 칸입니다.
+- [파일 접근 감사](../../02-artifacts/event-logs/4656-4663-4660.md) · [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) — 4663 이 남는 조건과 전체 필드입니다.
 - [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) — 파일 시스템의 시각입니다.
 - [어떤 프로그램을 언제 실행했나](program-execution.md) — 실행 파일을 연 기록은 여기서 다룹니다.
 - [이 파일은 어디서 왔나](file-origin.md) — 파일이 이 PC 에 들어온 경로입니다.

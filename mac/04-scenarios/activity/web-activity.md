@@ -8,7 +8,7 @@ nav_order: 2330
 
 ## 조사 질문
 
-이 맥에서 어떤 웹 사이트에 언제 들어갔고, 무엇을 검색했고, 무엇을 받았는지 묻습니다. 사용자가 주소를 직접 쳤는지, 링크나 리디렉션으로 넘어갔는지, 다른 기기에서 동기화돼 들어온 기록인지까지 가려야 "이 사람이 이 사이트를 봤다"에 가까운 문장을 쓸 수 있습니다.
+이 맥에서 어떤 웹 사이트에 언제 들어갔고, 무엇을 검색했고, 무엇을 받았는지 묻습니다. 사용자가 주소를 직접 쳤는지, 링크나 리디렉션으로 넘어갔는지, 다른 기기에서 동기화돼 들어온 기록인지까지 구분해야 "이 사람이 이 사이트를 봤다"에 가까운 문장을 쓸 수 있습니다.
 
 브라우저마다 기록 파일과 시각 기준이 달라서, 브라우저를 하나씩 따로 읽은 뒤 한 타임라인에 합칩니다. 브라우저 밖에도 knowledgeC·격리 이벤트 DB·통합 로그의 DNS 기록처럼 웹 사용을 비추는 흔적이 있어서 브라우저 기록이 지워졌을 때 보강 자료로 씁니다. 브라우저 파일의 구조는 [사파리](../../02-artifacts/browsers/safari/index.md), [크롬·엣지·웨일](../../02-artifacts/browsers/chromium/index.md), [파이어폭스](../../02-artifacts/browsers/firefox.md) 페이지에서 다루고, 이 페이지는 조사 순서와 판단만 다룹니다.
 
@@ -29,29 +29,29 @@ OS 버전과 함께 설치된 브라우저와 버전을 확인합니다([설치�
 | 3 | 파이어폭스 `places.sqlite`(+`-wal`) | 방문 URL과 방문 종류 | [파이어폭스](../../02-artifacts/browsers/firefox.md) |
 | 4 | 사파리 `Downloads.plist`, 크롬 `downloads` 표, 파이어폭스 `visit_type` 7 | 받은 파일 | [이 파일은 어디서 왔나](file-origin.md) |
 | 5 | 사파리 탭·세션 파일 `LastSession.plist`·`RecentlyClosedTabs.plist`·`BrowserState.db`·`SafariTabs.db`·`CloudTabs.db` | 열어 둔 탭, 닫은 탭, 다른 기기의 아이클라우드 탭 | [사파리](../../02-artifacts/browsers/safari/index.md) |
-| 6 | knowledgeC `/safari/history` 스트림 | `ZVALUESTRING` 칸의 URL | [KnowledgeC](../../02-artifacts/execution/knowledgec/index.md) |
+| 6 | knowledgeC `/safari/history` 스트림 | `ZVALUESTRING` 열의 URL | [KnowledgeC](../../02-artifacts/execution/knowledgec/index.md) |
 | 7 | 격리 이벤트 DB와 파일의 격리 속성 | 받은 파일의 URL·referrer·받은 앱 | [격리 속성과 다운로드 기록](../../02-artifacts/filesystem/quarantine/index.md) |
 | 8 | 통합 로그 `mDNSResponder` 기록 | DNS 조회 | [통합 로그에서 찾을 것](../../02-artifacts/logs/unified-log-events/index.md) |
 
-크롬 사용자 데이터 폴더는 크롬이 `~/Library/Application Support/Google/Chrome`, 엣지가 `~/Library/Application Support/Microsoft Edge`, 브레이브가 `~/Library/Application Support/BraveSoftware/Brave-Browser` 이고 [5][13], 파이어폭스 기록은 `~/Library/Application Support/Firefox/Profiles/` 아래 프로필 폴더의 `places.sqlite` 입니다 [10]. 웨일의 맥 경로는 공개 자료가 없어 검체에서 확인합니다.
+크롬 사용자 데이터 폴더는 크롬이 `~/Library/Application Support/Google/Chrome`, 엣지가 `~/Library/Application Support/Microsoft Edge`, 브레이브가 `~/Library/Application Support/BraveSoftware/Brave-Browser` 이고 [5][13], 파이어폭스 기록은 `~/Library/Application Support/Firefox/Profiles/` 아래 프로필 폴더의 `places.sqlite` 입니다 [10]. 웨일의 맥 경로는 실제 기기에서 확인합니다.
 
-1~3번으로 방문 기록의 뼈대를 잡고, 4~5번으로 받은 파일과 탭 상태를 붙입니다. 6~8번은 브라우저 기록이 비었거나 지워졌을 때 보강하는 자료입니다. knowledgeC `/safari/history` 는 macOS 10.13 에 있는 스트림입니다 [9]. mac_apt 가 해석하는 바이옴 스트림 `App.WebUsage`·`Safari.*` 는 macOS 에 실제로 있는지 검체에서 확인합니다 [12]. 통합 로그의 DNS 기록은 서브시스템 `com.apple.mDNSResponder` 로 찾고, 비공개 데이터 설정이 꺼져 있으면 호스트 이름이 가려져 나옵니다 [14].
+1~3번으로 방문 기록의 뼈대를 잡고, 4~5번으로 받은 파일과 탭 상태를 붙입니다. 6~8번은 브라우저 기록이 비었거나 지워졌을 때 보강하는 자료입니다. knowledgeC `/safari/history` 는 macOS 10.13 에 있는 스트림입니다 [9]. mac_apt 가 해석하는 바이옴 스트림 `App.WebUsage`·`Safari.*` 는 macOS 에 실제로 있는지는 분석 대상 기기에서 확인합니다 [12]. 통합 로그의 DNS 기록은 서브시스템 `com.apple.mDNSResponder` 로 찾고, 비공개 데이터 설정이 꺼져 있으면 호스트 이름이 가려져 나옵니다 [14].
 
 ### 크롬 기록에서 검색어와 입력을 읽기
 
-크롬 `urls` 표에는 `url`·`title`·`visit_count`·`typed_count`·`last_visit_time`·`hidden` 칸이 있습니다. `visit_count` 는 방문 횟수, `typed_count` 는 사용자가 URL 을 직접 친 횟수, `last_visit_time` 은 마지막 방문 시각, `hidden` 은 일부 조회에서 뺄 URL 을 표시합니다 [2]. `keyword_search_terms` 표는 검색 엔진 ID(`keyword_id`), `urls.id` 를 가리키는 `url_id`, 실제 검색어 `term`, 소문자로 바꾸고 공백을 정리한 `normalized_term` 을 담아서 [2], `keyword_search_terms.url_id = urls.id` 로 이으면 검색어와 검색 결과 페이지 방문이 한 줄로 묶입니다.
+크롬 `urls` 표에는 `url`·`title`·`visit_count`·`typed_count`·`last_visit_time`·`hidden` 열이 있습니다. `visit_count` 는 방문 횟수, `typed_count` 는 사용자가 URL 을 직접 친 횟수, `last_visit_time` 은 마지막 방문 시각, `hidden` 은 일부 조회에서 뺄 URL 을 표시합니다 [2]. `keyword_search_terms` 표는 검색 엔진 ID(`keyword_id`), `urls.id` 를 가리키는 `url_id`, 실제 검색어 `term`, 소문자로 바꾸고 공백을 정리한 `normalized_term` 을 담아서 [2], `keyword_search_terms.url_id = urls.id` 로 이으면 검색어와 검색 결과 페이지 방문이 한 줄로 묶입니다.
 
 `visits` 표에는 방문마다 `visit_time`, 이전 방문 `from_visit`, 새 탭을 연 방문 `opener_visit`, 방문 경로 `transition`, 머문 시간 `visit_duration` 이 있습니다 [7]. `transition` 의 하위 8비트는 LINK 0, TYPED 1, AUTO_BOOKMARK 2, FORM_SUBMIT 7, RELOAD 8, KEYWORD 9 같은 핵심 종류이고, 그 위 비트에 FROM_ADDRESS_BAR(0x02000000), CLIENT_REDIRECT(0x40000000), SERVER_REDIRECT(0x80000000) 같은 한정자가 붙습니다 [8]. 방문 출처 값 SOURCE_SYNCED 로 다른 기기에서 동기화된 방문을 가릴 수 있고, 이 값의 숫자는 소스 코드에서 확인합니다 [7].
 
 ### 사파리 기록을 읽기
 
-사파리 `History.db` 는 URL 하나에 한 행인 `history_items` 와 방문마다 한 행인 `history_visits` 로 나뉘고, `history_visits.history_item = history_items.id` 로 잇습니다. 리디렉션은 `redirect_source`·`redirect_destination` 칸으로 따라갑니다 [3]. `history_tombstones` 표(`start_time`, `end_time`, `url`, `generation`)도 있지만 기록 지우기의 흔적인지와 시각 기준은 공개된 분석 자료가 없어 검체로 확인해야 합니다 [3]. 설정 plist 의 `RecentWebSearches` 에는 최근 검색어(`SearchString`)와 시각(`Date`)이 남습니다(요세미티 이후) [1].
+사파리 `History.db` 는 URL 하나에 한 행인 `history_items` 와 방문마다 한 행인 `history_visits` 로 나뉘고, `history_visits.history_item = history_items.id` 로 잇습니다. 리디렉션은 `redirect_source`·`redirect_destination` 열로 따라갑니다 [3]. `history_tombstones` 표(`start_time`, `end_time`, `url`, `generation`)도 있지만 기록 지우기의 흔적인지와 시각 기준은 실제 데이터로 확인해야 합니다 [3]. 설정 plist 의 `RecentWebSearches` 에는 최근 검색어(`SearchString`)와 시각(`Date`)이 남습니다(요세미티 이후) [1].
 
 ## 분석 흐름
 
 1. 사용자와 브라우저 프로필 목록을 정리하고, 프로필마다 기록 DB와 `-wal` 파일을 확보합니다.
 2. 브라우저마다 방문 기록을 뽑아 시각을 한 기준으로 바꿉니다.
-3. 방문마다 사용자가 직접 한 행위인지 가립니다. 크롬은 `typed_count` 와 `transition` 의 TYPED(1)·KEYWORD(9), 파이어폭스는 TRANSITION_TYPED(2)가 직접 입력에 가깝고, 크롬 리디렉션 한정자와 파이어폭스 5·6 은 리디렉션이라 사용자 행위로 세지 않습니다 [2][8][11].
+3. 방문마다 사용자가 직접 한 행위인지 구분합니다. 크롬은 `typed_count` 와 `transition` 의 TYPED(1)·KEYWORD(9), 파이어폭스는 TRANSITION_TYPED(2)가 직접 입력에 가깝고, 크롬 리디렉션 한정자와 파이어폭스 5·6 은 리디렉션이라 사용자 행위로 세지 않습니다 [2][8][11].
 4. 검색어를 뽑습니다. 크롬은 `keyword_search_terms`, 사파리는 `RecentWebSearches` 를 보고, 검색 결과 페이지 방문과 이어 봅니다.
 5. 동기화된 기록을 걸러 냅니다. 크롬 SOURCE_SYNCED, 사파리 아이클라우드 탭(`CloudTabs.db`), 바이옴 `remote/` 폴더 기록은 이 맥에서 직접 한 일이 아닐 수 있습니다 [1][7][12].
 6. 다운로드 기록과 격리 이벤트 DB를 붙여 방문 뒤 무엇을 받았는지 봅니다(자세한 방법은 [이 파일은 어디서 왔나](file-origin.md)).

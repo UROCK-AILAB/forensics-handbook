@@ -11,7 +11,7 @@ nav_order: 2010
 
 ## 언제 쓰나
 
-통합 로그 (Unified Log)는 디스크에 남는 기록이지만, 이 핸드북은 디스크 이미지를 뜨기 전에 따로 떠 두는 쪽을 권하고 그 까닭은 [휘발성 순서 (Order of Volatility)](order-of-volatility.md)에 있습니다. 디스크 이미지를 뜰 수 없거나 시간이 부족할 때도 로그만큼은 이 방법으로 먼저 확보합니다. 저장 형식은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에서, 무엇을 찾을지는 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events/index.md)에서 다룹니다.
+통합 로그 (Unified Log)는 디스크에 남는 기록이지만, 이 핸드북은 디스크 이미지를 뜨기 전에 따로 떠 두는 쪽을 권하고 그 이유는 [휘발성 순서 (Order of Volatility)](order-of-volatility.md)에 있습니다. 디스크 이미지를 뜰 수 없거나 시간이 부족할 때도 로그만큼은 이 방법으로 먼저 확보합니다. 저장 형식은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에서, 무엇을 찾을지는 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events/index.md)에서 다룹니다.
 
 로그 저장소는 주 저장소인 `/var/db/diagnostics` 와 UUID로 참조하는 `/var/db/uuidtext` 두 곳이고 [1], `log collect` 는 이 저장소를 `.logarchive` 로 묶습니다.
 

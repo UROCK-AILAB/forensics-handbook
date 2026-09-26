@@ -31,9 +31,9 @@ nav_order: 340
 | `/sdcard/Android/media/com.google.android.gms/` | 폴더가 있을 수 있음 | |
 | `settings` 의 구글·동기화 관련 키 | 키 이름(뜻은 공개 자료 없음) | |
 
-동기화 파일은 SyncStorageEngine 이 `<dataDir>/system/sync` 폴더(SYNC_DIR_NAME = "sync")에 두고, 흔히 `/data/system/sync/` 입니다 [4]. 예전 파일 이름 `status.bin`·`stats.bin` 도 상수로 남아 있어서 예전 버전 검체에서는 이 이름도 함께 찾습니다 [4]. 이름이 바뀐 Android 버전은 공개 자료가 없습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 이 폴더를 읽을 수 있는지는 기기마다 확인합니다.
+동기화 파일은 SyncStorageEngine 이 `<dataDir>/system/sync` 폴더(SYNC_DIR_NAME = "sync")에 두고, 흔히 `/data/system/sync/` 입니다 [4]. 예전 파일 이름 `status.bin`·`stats.bin` 도 상수로 남아 있어서 예전 버전 기기에서는 이 이름도 함께 찾습니다 [4]. 이름이 바뀐 Android 버전을 밝힌 공개 자료는 없습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 이 폴더를 읽을 수 있는지는 기기마다 확인합니다.
 
-구글 서비스 앱(com.google.android.gms)과 Play 스토어(com.android.vending) 안의 계정 관련 DB 경로와 표 이름은 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+구글 서비스 앱(com.google.android.gms)과 Play 스토어(com.android.vending) 안의 계정 관련 DB 경로와 표 이름은 공개된 분석 자료가 없어 실제 기기로 확인해야 합니다.
 
 ## 구조 — 동기화 파일
 
@@ -59,7 +59,7 @@ nav_order: 340
 
 ### status 와 stats
 
-`status` 파일에는 동기화 대상마다 SyncStatusInfo 가 들어가고, 칸은 `lastSuccessTime`, `lastSuccessSource`, `lastFailureTime`, `lastFailureSource`, `lastFailureMesg`, `initialFailureTime`, `pending`, `initialize`, `periodicSyncTimes` 와 통계(`totalStats`, `todayStats`, `yesterdayStats`)입니다 [4]. 현행 AOSP 는 `status` 를 프로토콜 버퍼(ProtoOutputStream)로 쓰고 [4], `stats` 파일은 동기화 통계를 담습니다. `stats` 의 바이트 단위 형식과 프로토콜 버퍼 칸 번호는 공개 자료가 없어 검체에서 확인합니다.
+`status` 파일에는 동기화 대상마다 SyncStatusInfo 가 들어가고, 필드는 `lastSuccessTime`, `lastSuccessSource`, `lastFailureTime`, `lastFailureSource`, `lastFailureMesg`, `initialFailureTime`, `pending`, `initialize`, `periodicSyncTimes` 와 통계(`totalStats`, `todayStats`, `yesterdayStats`)입니다 [4]. 현행 AOSP 는 `status` 를 프로토콜 버퍼(ProtoOutputStream)로 쓰고 [4], `stats` 파일은 동기화 통계를 담습니다. `stats` 의 바이트 단위 형식과 프로토콜 버퍼 필드 번호는 공개 자료가 없어 실제 파일로 확인해야 합니다.
 
 ## 설정 키와 패키지
 
@@ -68,7 +68,7 @@ nav_order: 340
 | 영역 | 키 | 알려진 것 |
 |---|---|---|
 | secure | `com.google.android.gms.tapandpay.oobe.OOBE_PHENOTYPE_STATUS`, `com.google.android.gms.tapandpay.tokenization.CACHED_BACKUP_STATUS` | 키 이름만 |
-| global | `gms_checkin_timeout_min`, `master_sync_status`, `synced_account_name` | 키 이름만. `synced_account_name` 이 구글 계정을 가리키는지 삼성 계정을 가리키는지는 검체에서 확인 |
+| global | `gms_checkin_timeout_min`, `master_sync_status`, `synced_account_name` | 키 이름만. `synced_account_name` 이 구글 계정을 가리키는지 삼성 계정을 가리키는지는 실제 기기에서 확인 |
 | system | `contact_default_account`, `sync_disabled_accounts_with_hash` | 키 이름만. 뜻은 공개 자료 없음 |
 
 `dumpsys package` 의 Known Packages 에는 Setup Wizard 로 `com.google.android.setupwizard`, Configurator 로 `com.google.android.gms`, Verifier 로 `com.android.vending` 이 나올 수 있고, `/sdcard/Android/media/` 아래에는 `com.google.android.gms` 폴더가 있을 수 있습니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../settings.md) 페이지에 있습니다.
@@ -86,13 +86,13 @@ nav_order: 340
 
 ## 시각 해석
 
-동기화 관리자가 적는 이벤트 시각은 `System.currentTimeMillis()` 기준이라 유닉스 에포크 밀리초(UTC)입니다 [4]. 계정 DB 의 시각 칸과 변경 기록의 시간대 문제는 [계정 DB 구조](accounts-db.md) 페이지의 "시각 해석" 절에 있고, 계정 DB 의 `accounts` 표에는 계정을 추가한 시각 칸이 없습니다 [1].
+동기화 관리자가 적는 이벤트 시각은 `System.currentTimeMillis()` 기준이라 유닉스 에포크 밀리초(UTC)입니다 [4]. 계정 DB 의 시각 열과 변경 기록의 시간대 문제는 [계정 DB 구조](accounts-db.md) 페이지의 "시각 해석" 절에 있고, 계정 DB 의 `accounts` 표에는 계정을 추가한 시각 열이 없습니다 [1].
 
 ## 함정과 한계
 
-GMS 내부 DB 는 공식 자료가 없으니, 다른 도구 결과를 옮길 때도 실물 파일에서 한 번 더 확인합니다. `synced_account_name` 처럼 이름만 보고 구글 계정 설정이라고 단정하기 쉬운 키도 어느 계정을 가리키는지 검체에서 확인합니다.
+GMS 내부 DB 는 공식 자료가 없으니, 다른 도구 결과를 옮길 때도 실물 파일에서 한 번 더 확인합니다. `synced_account_name` 처럼 이름만 보고 구글 계정 설정이라고 단정하기 쉬운 키도 어느 계정을 가리키는지 실제 기기에서 확인합니다.
 
-`status` 의 칸은 마지막 성공·실패 시각과 통계라서 지난 동기화를 한 건씩 되짚으려면 다른 기록이 필요하고, 기기를 초기화하거나 계정을 지운 뒤의 모습은 [초기화 흔적 (Factory Reset)](../factory-reset.md) 과 계정 DB 의 변경 기록을 함께 봅니다. 서버 쪽에 남은 기록은 [클라우드 데이터 (Google Takeout 등)](../../../03-techniques/acquisition/cloud-data.md) 절차로 따로 확보합니다.
+`status` 의 필드는 마지막 성공·실패 시각과 통계라서 지난 동기화를 한 건씩 다시 따라가려면 다른 기록이 필요하고, 기기를 초기화하거나 계정을 지운 뒤의 모습은 [초기화 흔적 (Factory Reset)](../factory-reset.md) 과 계정 DB 의 변경 기록을 함께 봅니다. 서버 쪽에 남은 기록은 [클라우드 데이터 (Google Takeout 등)](../../../03-techniques/acquisition/cloud-data.md) 절차로 따로 확보합니다.
 
 ## 직접 분석해 보기
 
@@ -110,7 +110,7 @@ SELECT _id, name, type FROM accounts ORDER BY type, name;
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
+공개된 안드로이드 시험 자료(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
 
 1. 계정 DB 의 모든 type 을 뽑고, 그중 구글 계정으로 판단한 행과 판단한 근거를 적어 봅니다.
 2. `accounts.xml` 에서 그 계정의 `authority` 요소를 모두 찾아 동기화 대상별로 켜짐·꺼짐을 표로 만들어 봅니다.

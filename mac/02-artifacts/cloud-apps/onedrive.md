@@ -8,7 +8,7 @@ nav_order: 1540
 
 맥의 원드라이브 동기화 앱은 설정을 plist에 남기고, 조직이 건 정책 키가 그 plist에 있으면 어느 조직(테넌트)으로 동기화를 허용했는지, 데스크탑·문서 폴더를 원드라이브로 옮기게 했는지, 무엇을 올리지 않게 했는지를 읽을 수 있습니다.
 
-이 페이지는 설정 파일과 관리 키를 다룹니다 [1]. 동기화 폴더 위치와 로그, 동기화 상태 DB는 공개된 분석 자료가 없어 검체에서 확인하고, macOS가 클라우드 저장소 앱에 내주는 동기화 틀은 [파일 공급자 (File Provider)](file-provider.md)에서 다룹니다.
+이 페이지는 설정 파일과 관리 키를 다룹니다 [1]. 동기화 폴더 위치와 로그, 동기화 상태 DB는 공개 분석 자료에 나와 있지 않아 실제 데이터로 확인하고, macOS가 클라우드 저장소 앱에 내주는 동기화 틀은 [파일 공급자 (File Provider)](file-provider.md)에서 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -25,7 +25,7 @@ nav_order: 1540
 | 단독 설치판 | `/Library/Preferences/com.microsoft.OneDrive.plist` | `com.microsoft.OneDrive` |
 | Mac App Store 판 | `/Library/Containers/com.microsoft.OneDrive-mac/Data/Library/Preferences/com.microsoft.OneDrive-mac.plist` | `com.microsoft.OneDrive-mac` |
 
-Mac App Store 판 경로는 `/Library/Containers/...` 로 알려져 있지만 사용자 홈 아래 `~/Library/Containers/...` 일 수도 있어서 [1], 검체에서는 두 위치를 모두 찾아봅니다.
+Mac App Store 판 경로는 `/Library/Containers/...` 로 알려져 있지만 사용자 홈 아래 `~/Library/Containers/...` 일 수도 있어서 [1], 실제 데이터에서는 두 위치를 모두 찾아봅니다.
 
 ### 사용자 설정과 업데이터
 
@@ -48,7 +48,7 @@ Mac App Store 판 경로는 `/Library/Containers/...` 로 알려져 있지만 �
 
 Ventura 이후의 백그라운드 실행 승인과 로그인 항목 기록은 [로그인 항목 (Login Items)](../persistence/login-items.md)에서 다룹니다.
 
-### 검체에서 확인할 것
+### 실제 데이터로 확인할 것
 
 | 항목 | 상태 |
 |---|---|
@@ -79,7 +79,7 @@ Ventura 이후의 백그라운드 실행 승인과 로그인 항목 기록은 [�
 | `UploadBandwidthLimited` / `DownloadBandwidthLimited` | KB/s | 올리기·내려받기 속도 상한입니다. `AutomaticUploadBandwidthPercentage` 도 올리기 속도를 정합니다. |
 | `OpenAtLogin` | | 로그인 때 자동 실행입니다. |
 
-관리 키가 plist로 직접 들어갔는지 구성 프로파일로 배포됐는지는 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 설치된 프로파일과 맞춰 가립니다.
+관리 키가 plist로 직접 들어갔는지 구성 프로파일로 배포됐는지는 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 설치된 프로파일과 맞춰 확인합니다.
 
 ## 증거로서 의미
 
@@ -101,13 +101,13 @@ Ventura 이후의 백그라운드 실행 승인과 로그인 항목 기록은 [�
 - **로컬에 남은 제외 파일.** `EnableODIgnore` 에 걸린 파일은 원드라이브 폴더 안에 있어도 올라가지 않아서 [1], 폴더 안에 있다는 사실만으로 업로드를 단정하지 않습니다. 거꾸로 이 규칙은 새 파일과 새 폴더에만 걸리고 이미 올라간 것은 클라우드에 그대로 두어서 [1], 규칙이 있다고 그 전에 올라간 파일이 없었다고 말하지도 못합니다.
 - **되돌린 폴더.** `KFMBlockOptIn` 값 2는 옮겼던 폴더를 기기로 되돌려서 [1], 폴더가 원래 자리에 있어도 한 번 옮겨진 적이 있을 수 있습니다.
 - **폐지 예정 키.** `OpenAtLogin` 은 24.113에서 폐지 예정이라서 [1], 새 버전에서는 자동 실행 여부를 로그인 항목 쪽에서 확인합니다.
-- **공개 자료가 없는 동기화 흔적.** 동기화 폴더, 로그, 상태 DB는 공개된 분석 자료가 없습니다. 도구가 이런 파일에 뜻을 붙여 보여 주면 그 근거를 확인한 뒤에 씁니다.
+- **공개 자료가 없는 동기화 흔적.** 동기화 폴더, 로그, 상태 DB를 다룬 공개 분석 자료는 없습니다. 도구가 이런 파일에 뜻을 붙여 보여 주면 그 근거를 확인한 뒤에 씁니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-설정 plist를 헥스 편집기로 열어 바이너리 plist인지 XML인지 첫 바이트로 가리고, 바이너리라면 오프셋 표를 따라 `AllowTenantList` 같은 키 문자열이 들어 있는 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에 고유한 바이트 구조는 공개된 자료가 없습니다.
+설정 plist를 헥스 편집기로 열어 바이너리 plist인지 XML인지 첫 바이트로 구분하고, 바이너리라면 오프셋 표를 따라 `AllowTenantList` 같은 키 문자열이 들어 있는 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에 고유한 바이트 구조를 다룬 공개 자료는 없습니다.
 
 ### 공개 도구로 한 번
 
@@ -135,7 +135,7 @@ plutil -p "UBF8T346G9.OneDriveStandaloneSuite.plist"
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. `/Library/Preferences/`, `/Library/Containers/`, 사용자 홈의 `Library/Containers/` 에서 원드라이브 설정 plist를 찾고, 어느 판이 설치돼 있었는지 적어 보세요.
 2. 설정 plist에 테넌트 ID가 든 키가 있으면 모두 뽑고, 같은 값이 여러 키에 나오는지 확인해 보세요.

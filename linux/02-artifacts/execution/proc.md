@@ -44,12 +44,12 @@ proc 파일 시스템 (procfs) 은 커널 자료 구조를 파일 모양으로 �
 | `/proc/PID/fd/` | 열린 파일 디스크립터 | 번호마다 링크가 있고, 파이프·소켓은 `type:[inode]`(예: `socket:[2248868]`), 아이노드 없는 것은 `anon_inode:` 모양입니다[1] |
 | `/proc/PID/maps` | 메모리 배치 | `address perms offset dev inode pathname` 순서입니다. 아이노드 0 은 파일과 이어지지 않은 영역이고, `[heap]`·`[stack]`·`[vdso]` 같은 가짜 경로가 있으며, 지워진 파일이면 ` (deleted)` 가 붙습니다[1] |
 | `/proc/PID/map_files/` | 매핑된 파일 링크 | 이름이 "시작주소-끝주소" 인 링크입니다[1] |
-| `/proc/PID/stat` | 상태 한 줄 | 공백으로 구분한 칸이고, 2번째 칸 `comm` 은 괄호로 싸여 있으며, 22번째 칸이 `starttime` 입니다[1] |
+| `/proc/PID/stat` | 상태 한 줄 | 공백으로 구분한 필드이고, 2번째 필드 `comm` 은 괄호로 싸여 있으며, 22번째 필드가 `starttime` 입니다[1] |
 | `/proc/PID/status` | 사람이 읽기 쉬운 상태 | `Name`, `State`, `PPid`, `Uid`, `Gid` 등. `Uid`·`Gid` 는 real·effective·saved·filesystem 네 값입니다[1] |
 | `/proc/stat` 의 `btime` | 부팅 시각 | 1970 epoch 초, UTC[1] |
 | `/proc/uptime` | 가동 시간 | 첫 값은 잠자기를 포함한 가동 시간(초)입니다[1] |
 
-`cwd`·`exe`·`environ`·`maps`·`map_files` 는 ptrace 접근 검사(`PTRACE_MODE_READ_FSCREDS`)를 통과해야 읽힙니다[1]. `stat` 의 일부 칸도 같은 검사에 걸리면 0 으로 나옵니다[1]. 그래서 수집은 root 로 해야 빠지는 값이 없습니다. 스레드가 여럿인 프로세스에서 주 스레드가 먼저 끝났으면 `cwd`·`exe`·`fd/`·`root` 내용을 볼 수 없습니다[1].
+`cwd`·`exe`·`environ`·`maps`·`map_files` 는 ptrace 접근 검사(`PTRACE_MODE_READ_FSCREDS`)를 통과해야 읽힙니다[1]. `stat` 의 일부 필드도 같은 검사에 걸리면 0 으로 나옵니다[1]. 그래서 수집은 root 로 해야 빠지는 값이 없습니다. 스레드가 여럿인 프로세스에서 주 스레드가 먼저 끝났으면 `cwd`·`exe`·`fd/`·`root` 내용을 볼 수 없습니다[1].
 
 `/proc/PID` 아래 파일의 소유자는 보통 그 프로세스의 실효(effective) UID·GID 이고, 프로세스의 dumpable 속성이 1 이 아니면 `root:root` 입니다[1]. `/proc/PID` 폴더에 `stat` 을 하면 프로세스의 UID·GID 를 알 수 있어서, `hidepid=2` 는 남의 폴더를 아예 숨깁니다[1]. UID 를 사용자 이름으로 바꾸는 법은 [UID·GID 와 사용자 이름 잇기](../../01-foundations/value-decoding/uid-gid.md)에서 다룹니다.
 
@@ -75,11 +75,11 @@ proc 파일 시스템 (procfs) 은 커널 자료 구조를 파일 모양으로 �
 
 ## 시각 해석
 
-`/proc` 에서 날짜로 바꿀 수 있는 값은 프로세스 시작 시각 하나입니다. `stat` 의 22번째 칸 `starttime` 은 부팅 뒤 프로세스가 시작할 때까지의 클록 틱 수이고, `sysconf(_SC_CLK_TCK)` 로 나눠야 초가 됩니다[1]. 여기에 `/proc/stat` 의 `btime`(부팅 시각, UTC epoch 초)을 더하면 시작 시각이 UTC 로 나옵니다[1]. 이 계산과 단위 이야기는 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+`/proc` 에서 날짜로 바꿀 수 있는 값은 프로세스 시작 시각 하나입니다. `stat` 의 22번째 필드 `starttime` 은 부팅 뒤 프로세스가 시작할 때까지의 클록 틱 수이고, `sysconf(_SC_CLK_TCK)` 로 나눠야 초가 됩니다[1]. 여기에 `/proc/stat` 의 `btime`(부팅 시각, UTC epoch 초)을 더하면 시작 시각이 UTC 로 나옵니다[1]. 이 계산과 단위 이야기는 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 클록 틱 값(USER_HZ)은 대부분의 아키텍처에서 100 이지만 모든 시스템에서 같지는 않습니다[1]. dissect.target 은 100 으로 나눠 시작 시각을 계산하고, 실제 값은 `getconf CLK_TCK` 로 얻습니다[4]. 그래서 수집할 때 `getconf CLK_TCK` 출력도 함께 남깁니다.
 
-`btime` 은 초 단위라서 시작 시각은 초보다 정밀하지 않습니다. 부팅 뒤에 벽시계를 크게 바꾸면 `btime` 과 실제 부팅 순간이 어긋날 가능성이 있으므로, [부팅과 종료 기록](../system-info/boot-shutdown.md)의 부팅 시각과 맞춰 봅니다.
+`btime` 은 초 단위라서 시작 시각은 초보다 정밀하지 않습니다. 부팅 뒤에 시스템 시계를 크게 바꾸면 `btime` 과 실제 부팅 순간이 어긋날 가능성이 있으므로, [부팅과 종료 기록](../system-info/boot-shutdown.md)의 부팅 시각과 맞춰 봅니다.
 
 수집 시각은 `btime` 에 `/proc/uptime` 첫 값을 더해 구할 수 있고, dissect.target 도 이 방법으로 수집 시점을 정합니다[4].
 
@@ -104,11 +104,11 @@ proc 파일 시스템 (procfs) 은 커널 자료 구조를 파일 모양으로 �
 
 **수집 도구 자신이 프로세스를 만든다.** `ps`, `ls`, `cat`, `strings` 같은 수집 명령도 수집 목록에 나오므로 수집 도구의 PID 를 따로 적어 둡니다.
 
-**도구 칸 이름을 확인한다.**
+**도구 필드 이름을 확인한다.**
 
-- dissect.target 의 `processes` 는 `runtime` 칸에 경과 시간(`timedelta`)의 `.seconds` 값을 넣습니다[4]. 파이썬의 이 값은 하루 미만의 나머지 초라서, 하루 넘게 돈 프로세스는 날짜 수가 빠집니다. 시작 시각 `ts` 로 경과 시간을 다시 계산합니다.
-- Velociraptor 의 `Linux.Sys.Maps` 는 `maps` 줄을 정규식으로 나누면서 `offset` 칸을 `Size` 로, `inode` 칸을 `PermInt` 로 이름 붙입니다[5]. 크기는 `EndHex − StartHex` 로 따로 구합니다.
-- `stat` 의 `comm` 칸에는 공백과 괄호가 들어갈 수 있습니다. dissect.target 은 첫 `(` 와 마지막 `)` 사이를 이름으로 잘라 이 문제를 피합니다[4]. 직접 나눌 때도 같은 방법을 씁니다.
+- dissect.target 의 `processes` 는 `runtime` 필드에 경과 시간(`timedelta`)의 `.seconds` 값을 넣습니다[4]. 파이썬의 이 값은 하루 미만의 나머지 초라서, 하루 넘게 돈 프로세스는 날짜 수가 빠집니다. 시작 시각 `ts` 로 경과 시간을 다시 계산합니다.
+- Velociraptor 의 `Linux.Sys.Maps` 는 `maps` 줄을 정규식으로 나누면서 `offset` 필드를 `Size` 로, `inode` 필드를 `PermInt` 로 이름 붙입니다[5]. 크기는 `EndHex − StartHex` 로 따로 구합니다.
+- `stat` 의 `comm` 필드에는 공백과 괄호가 들어갈 수 있습니다. dissect.target 은 첫 `(` 와 마지막 `)` 사이를 이름으로 잘라 이 문제를 피합니다[4]. 직접 나눌 때도 같은 방법을 씁니다.
 
 ## 직접 분석해 보기
 
@@ -136,7 +136,7 @@ $ grep ' (deleted)' /proc/4242/maps
 5610a2c00000-5610a2c21000 r-xp 00001000 fd:01 1311820   /tmp/.cache/kworker (deleted)
 ```
 
-`stat` 의 22번째 칸은 361200 이고, 클록 틱이 100 이면 3612초입니다. `btime` 1735689600 은 2025-01-01 00:00:00 UTC 이므로 시작 시각은 2025-01-01 01:00:12 UTC 입니다. 4번째 칸 1 이 부모 PID 입니다[1]. `maps` 줄은 앞에서부터 주소 범위, 권한 `r-xp`, 파일 안 오프셋, 장치 `fd:01`, 아이노드 1311820, 경로이고, 경로 뒤의 ` (deleted)` 는 매핑한 파일이 지워졌다는 표시입니다[1].
+`stat` 의 22번째 필드는 361200 이고, 클록 틱이 100 이면 3612초입니다. `btime` 1735689600 은 2025-01-01 00:00:00 UTC 이므로 시작 시각은 2025-01-01 01:00:12 UTC 입니다. 4번째 필드 1 이 부모 PID 입니다[1]. `maps` 줄은 앞에서부터 주소 범위, 권한 `r-xp`, 파일 안 오프셋, 장치 `fd:01`, 아이노드 1311820, 경로이고, 경로 뒤의 ` (deleted)` 는 매핑한 파일이 지워졌다는 표시입니다[1].
 
 `environ` 도 NUL 구분이라 `tr '\000' '\n' < /proc/PID/environ` 처럼 줄을 바꿔 봅니다[1].
 
@@ -145,7 +145,7 @@ $ grep ' (deleted)' /proc/4242/maps
 - **UAC** — `live_response/process/procfs_information` 은 `ls -l /proc/[0-9]*`, 모든 프로세스의 `exe`·`cwd` 링크 목록을 모으고, PID 마다 `fd`·`map_files` 목록과 `task/PID/children`, `comm`, `maps`, `mounts`, `stack`, `stat`, `status`, `net/unix` 를 받으며, `cmdline`·`environ` 은 `strings` 로 받습니다[3]. `/proc` 에는 있는데 `ps ax` 출력에 없는 PID 는 `hidden_pids_for_ps_command.txt` 에 적습니다[3]. `live_response/process/deleted` 는 `exe` 가 ` (deleted)` 인 프로세스의 실행 파일을 `dd ... bs=1024 count=20000` 으로 앞부분(약 20MB)만 `recovered_exe` 로 떠 오고, 그 프로세스의 메모리 영역과 지워진 파일을 가리키는 fd 도 모읍니다[3]. memfd 와 `/dev/shm` 쪽은 [임시 폴더와 메모리 파일 시스템](../file-activity/tmp-shm.md)에서 다룹니다.
 - **Velociraptor** — `Linux.Sys.Pslist` 는 `Pid`, `Ppid`, `Name`, `CommandLine`, `Exe`, 실행 파일 해시, `Username`, `CreateTime`, `RSS` 를 보여 주고, `Exe` 가 `(deleted)` 로 끝나면 `Deleted` 를 참으로 둡니다[5]. `Linux.Sys.Maps` 는 `/proc/PID/maps` 를 줄마다 나눠 보여 줍니다[5].
 - **dissect.target** — 수집본에 `/proc` 이 들어 있으면 `processes` 가 시작 시각(`ts`), 이름, 상태, PID, 경과 시간, 부모 PID, 부모 이름을 레코드로 냅니다[4].
-- **Volatility 3** — 메모리 이미지에서 `linux.pslist`(PID, TID, PPID, COMM, UID, GID, EUID, EGID, CREATION TIME), `linux.psaux`(ARGS), `linux.envars`(KEY, VALUE), `linux.pstree`, `linux.psscan`(메모리를 훑어 찾은 프로세스와 EXIT_STATE)을 봅니다[6]. `linux.psaux` 는 사용자 영역의 인수 영역(`arg_start`~`arg_end`)을 읽고, `/proc/PID/cmdline` 도 이 영역을 보여 주므로, 프로세스가 고친 명령줄은 메모리에서도 고친 값으로 나옵니다[1][6]. 이 영역이 4096바이트를 넘으면 읽지 않습니다[6].
+- **Volatility 3** — 메모리 이미지에서 `linux.pslist`(PID, TID, PPID, COMM, UID, GID, EUID, EGID, CREATION TIME), `linux.psaux`(ARGS), `linux.envars`(KEY, VALUE), `linux.pstree`, `linux.psscan`(메모리를 검색해 찾은 프로세스와 EXIT_STATE)을 봅니다[6]. `linux.psaux` 는 사용자 영역의 인수 영역(`arg_start`~`arg_end`)을 읽고, `/proc/PID/cmdline` 도 이 영역을 보여 주므로, 프로세스가 고친 명령줄은 메모리에서도 고친 값으로 나옵니다[1][6]. 이 영역이 4096바이트를 넘으면 읽지 않습니다[6].
 
 ## 교차 검증
 
@@ -161,7 +161,7 @@ $ grep ' (deleted)' /proc/4242/maps
 
 ## 실습
 
-공개 검체는 대부분 디스크 이미지라서 `/proc` 내용이 없습니다. 연습용 가상 머신에서 UAC 로 라이브 수집을 한 번 만든 뒤 아래 질문을 풀어 봅니다.
+공개 시험 데이터는 대부분 디스크 이미지라서 `/proc` 내용이 없습니다. 연습용 가상 머신에서 UAC 로 라이브 수집을 한 번 만든 뒤 아래 질문을 풀어 봅니다.
 
 1. `hidden_pids_for_ps_command.txt` 에 PID 가 있다면, 수집 도중에 끝난 프로세스인지 `ps` 에서 숨은 프로세스인지 무엇으로 가릴까요?
 2. `running_processes_full_paths.txt` 에서 ` (deleted)` 로 끝나는 줄을 찾고, 그 경로가 패키지 업데이트로 바뀐 파일인지 패키지 기록으로 확인해 봅니다.

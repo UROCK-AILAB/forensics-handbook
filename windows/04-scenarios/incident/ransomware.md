@@ -20,12 +20,12 @@ nav_order: 3770
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | Windows 버전 | PC 마다 버전과 빌드를 [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 적습니다. |
 | 시간대와 시계 | PC 여러 대의 기록을 합칩니다. PC 마다 [시간대 설정](../../02-artifacts/system-account/time-zone.md) 과 시계 오차를 적습니다. 맞추는 법은 [시간대·시계 오차 보정](../../03-techniques/analysis/timeline/time-normalization.md) 에 있습니다. |
 | 수집 범위 | 암호화된 PC 여러 대, 파일 서버, 도메인 컨트롤러를 봅니다. 각 PC 에서 $MFT, $UsnJrnl:$J, $LogFile, 이벤트 로그, 레지스트리 하이브를 확보합니다. 섀도 복사본이 남아 있는지도 적습니다. |
-| $UsnJrnl 추출 방법 | $UsnJrnl:$J 를 어떻게 뽑았는지 적습니다. 뽑는 방법에 따라 크기와 해시가 달라집니다. 까닭은 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에 있습니다. |
+| $UsnJrnl 추출 방법 | $UsnJrnl:$J 를 어떻게 뽑았는지 적습니다. 뽑는 방법에 따라 크기와 해시가 달라집니다. 이유는 [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) 에 있습니다. |
 | 감사 정책·Sysmon | 프로세스 생성 기록과 명령줄은 감사 정책과 Sysmon 설정에 따라 남기도 하고 안 남기도 합니다. 기록이 없다고 해서 명령이 없었다고 읽지 않습니다. [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) 에서 확인합니다. |
 
 ## 암호화와 복구 방해 기법
@@ -56,7 +56,7 @@ nav_order: 3770
 
 **관련 이벤트 정의.**
 
-공급자 Microsoft-Windows-Backup 의 524 는 Application 채널의 정보 이벤트이고, 메시지는 "The system catalog has been deleted." 입니다. `wbadmin delete catalog` 를 실행했을 때 524 가 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+공급자 Microsoft-Windows-Backup 의 524 는 Application 채널의 정보 이벤트이고, 메시지는 "The system catalog has been deleted." 입니다. `wbadmin delete catalog` 를 실행했을 때 524 가 남는지는 실제 기기에서 확인해야 합니다.
 
 Microsoft-Windows-Windows Defender 운영 로그에는 실시간 보호 끄기(5001), 설정 변경(5007), 스파이웨어 검사 끄기(5010), 바이러스 검사 끄기(5012) 메시지가 정의돼 있습니다. 디펜더 끄기·설정 변경 이벤트를 읽는 법은 [보안 프로그램을 끄거나 지웠나](../activity/anti-forensics/defense-evasion.md) 에 있습니다.
 
@@ -83,7 +83,7 @@ The DFIR Report 의 Hive 랜섬웨어 사례입니다[3]. 첫 접근에서 랜�
 |---|---|---|
 | 초기 접근 | 메일 링크로 받은 실행 파일 | [악성코드는 어디서 들어왔나](initial-access.md) |
 | 원격 관리 도구 설치 | 정상 원격 관리 도구 설치 | [원격 제어 프로그램으로 누가 조작했나](remote-access-tool-abuse.md) |
-| 발견 | systeminfo·nltest·AD 조회·3389 포트 훑기 | — |
+| 발견 | systeminfo·nltest·AD 조회·3389 포트 스캔 | — |
 | 자격 증명 탈취 | LSASS 덤프(사용자 정의 Mimikatz, m2.exe) | [계정 탈취와 측면 이동](credential-theft-lateral-movement/index.md) |
 | 측면 이동 | RDP·WMIEXEC·원격 서비스 | [원격 데스크톱 침입 확인](rdp-intrusion.md) · [다른 PC 에서 원격 실행했나](credential-theft-lateral-movement/psexec-wmi-winrm.md) |
 | 유출 | Rclone 으로 SFTP 유출(약 1.5시간) | [자료를 밖으로 빼돌렸나](../exfiltration/data-exfiltration/index.md) |
@@ -122,9 +122,9 @@ WMIEXEC 는 wmiprvse.exe 가 부모인 `cmd.exe /Q /c … 1> \\127.0.0.1\{공유
 1. **암호화 시각을 침입 시각으로 씁니다.** 공개 사례에서는 첫 접근과 랜섬웨어 실행 사이가 61시간이었습니다[3].
 2. **암호화된 PC 를 시작점으로 봅니다.** 공격자는 관리 공유와 유효 계정으로 다른 PC 에서 퍼뜨립니다[1][3].
 3. **섀도 복사본이 없으니 원래 꺼져 있었다고 봅니다.** 복구 방해 명령으로 지웠을 수 있습니다[2]. 명령 실행 흔적을 찾습니다.
-4. **파일 수정 시각을 암호화 시각으로 씁니다.** 랜섬웨어가 파일 시각을 어떻게 남기는지는 검체에서 확인해야 합니다. $MFT 시각 하나로 정하지 않고 $UsnJrnl 과 $LogFile 로 교차 확인합니다.
+4. **파일 수정 시각을 암호화 시각으로 씁니다.** 랜섬웨어가 파일 시각을 어떻게 남기는지는 실제 데이터로 확인해야 합니다. $MFT 시각 하나로 정하지 않고 $UsnJrnl 과 $LogFile 로 교차 확인합니다.
 5. **유출은 없었다고 봅니다.** 암호화 전에 유출한 사례가 있습니다[3].
-6. **$UsnJrnl 의 가장 오래된 기록 앞에는 아무 일도 없었다고 봅니다.** 대량 암호화가 저널의 오래된 기록을 밀어내는지는 검체에서 확인해야 합니다. 저널에 남은 가장 오래된 기록의 시각을 먼저 적고, 그보다 앞선 일은 다른 기록으로 봅니다.
+6. **$UsnJrnl 의 가장 오래된 기록 앞에는 아무 일도 없었다고 봅니다.** 대량 암호화가 저널의 오래된 기록을 밀어내는지는 실제 데이터로 확인해야 합니다. 저널에 남은 가장 오래된 기록의 시각을 먼저 적고, 그보다 앞선 일은 다른 기록으로 봅니다.
 
 ## 보고서 문장 예
 

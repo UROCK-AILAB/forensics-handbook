@@ -43,7 +43,7 @@ PowerShell 로는 테넌트마다 5분에 100번까지 조회를 요청할 수 �
 | 값 | 어디서 오나 | 성질 |
 |---|---|---|
 | Message ID | 메일 머리글의 `Message-ID` 필드(Client ID 라고도 함) | 메일이 사는 동안 바뀌지 않습니다. Microsoft 365·Exchange 에서 만든 메일은 `<GUID@ServerFQDN>` 형식이고 다른 메일 시스템은 형식이 다릅니다. 조회할 때 꺾쇠까지 넣어야 합니다. |
-| Network Message ID | 서비스가 붙이는 값(`MessageTraceId` 매개변수가 이 값을 씁니다) | 메일 한 통의 특정 인스턴스를 가리킵니다. 메일이 여러 사본으로 갈라질 때(bifurcation) 값이 어떻게 되는지는 공식 문서끼리도 엇갈립니다. EAC 문서의 한 문단은 사본마다 값이 다르다고 하고, 같은 문서의 비교표·Enhanced summary 열 설명과 `Start-HistoricalSearch` 의 `NetworkMessageId` 설명은 갈라진 사본과 배포 그룹 펼침에 걸쳐 값이 유지된다고 합니다[3][4]. 검체에서 같은 메일의 사본끼리 값을 비교해 확인합니다. 머리글 `X-MS-Exchange-Organization-Network-Message-Id`, `X-MS-Office365-Filtering-Correlation-Id`, `X-MS-Exchange-CrossTenant-Network-Message-Id` 에서 찾을 수 있습니다. |
+| Network Message ID | 서비스가 붙이는 값(`MessageTraceId` 매개변수가 이 값을 씁니다) | 메일 한 통의 특정 인스턴스를 가리킵니다. 메일이 여러 사본으로 갈라질 때(bifurcation) 값이 어떻게 되는지는 공식 문서끼리도 엇갈립니다. EAC 문서의 한 문단은 사본마다 값이 다르다고 하고, 같은 문서의 비교표·Enhanced summary 열 설명과 `Start-HistoricalSearch` 의 `NetworkMessageId` 설명은 갈라진 사본과 배포 그룹 펼침에 걸쳐 값이 유지된다고 합니다[3][4]. 실제 데이터에서 같은 메일의 사본끼리 값을 비교해 확인합니다. 머리글 `X-MS-Exchange-Organization-Network-Message-Id`, `X-MS-Office365-Filtering-Correlation-Id`, `X-MS-Exchange-CrossTenant-Network-Message-Id` 에서 찾을 수 있습니다. |
 
 `MessageTraceId` 는 서비스가 처리한 메일마다 만드는 GUID 값입니다[1]. 받는 사람이 1,000명을 넘는 메일은 `MessageTraceId` 를 지정해야 결과를 모두 받을 수 있습니다[1][4].
 
@@ -119,7 +119,7 @@ Extended report 에는 이벤트 단위의 열이 더 붙습니다. `client_ip`�
 - 받는 사람이 메일을 열었거나 읽었는지. 메일함 안의 접근은 [메일함 감사와 MailItemsAccessed](mailbox-auditing.md)에서 봅니다.
 - 보낸 사람 계정을 실제로 누가 조작했는지. 보낸 사람 주소는 계정을 가리킬 뿐이므로 로그인 기록과 함께 봐야 합니다.
 
-보고서에는 "2026-09-01 02:14 UTC 에 계정 a@contoso.com 을 보낸 사람으로 하는 메일이 외부 주소로 배달된 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "2026-09-01 02:14 UTC 에 계정 a@contoso.com 을 보낸 사람으로 하는 메일이 외부 주소로 배달된 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 

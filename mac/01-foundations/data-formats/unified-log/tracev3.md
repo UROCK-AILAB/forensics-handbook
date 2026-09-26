@@ -23,7 +23,7 @@ tracev3 파일은 아래 네 폴더에 나뉘어 들어 있고, timesync 파일�
 /private/var/db/diagnostics/timesync/
 ```
 
-`/var` 는 `/private/var` 를 가리키는 심볼릭 링크라서 `/var/db/diagnostics/` 로 적어도 같은 곳입니다 [3]. timesync 폴더 이름은 libyal 문서에는 소문자 `timesync` 로, Mandiant 글에는 `Timesync` 로 적혀 있어서 [1][3], 대소문자는 검체에서 확인합니다. 폴더별 파일 크기와 개수 관측값은 [보관 기간과 로그 수준 (Persist·Info·Debug)](retention-levels.md)에 있습니다.
+`/var` 는 `/private/var` 를 가리키는 심볼릭 링크라서 `/var/db/diagnostics/` 로 적어도 같은 곳입니다 [3]. timesync 폴더 이름은 libyal 문서에는 소문자 `timesync` 로, Mandiant 글에는 `Timesync` 로 적혀 있어서 [1][3], 대소문자는 실제 기기에서 확인합니다. 폴더별 파일 크기와 개수 관측값은 [보관 기간과 로그 수준 (Persist·Info·Debug)](retention-levels.md)에 있습니다.
 
 ## 버전과 하드웨어에 따른 차이
 
@@ -33,7 +33,7 @@ tracev3 파일은 아래 네 폴더에 나뉘어 들어 있고, timesync 파일�
 | SimpleDump 청크(0x6004) | macOS 12 Monterey에서 추가 | [3] |
 | Mach 시각 단위 | 인텔 맥은 나노초, Apple Silicon 맥은 틱(tick)이라서 나노초로 바꿔야 함 | [3] |
 
-macOS 14 이후 형식은 이 표의 자료가 다루지 않아서, 새 버전 검체는 도구가 그 버전을 지원하는지부터 확인합니다.
+macOS 14 이후 형식은 이 표의 자료가 다루지 않아서, 새 버전의 로그는 도구가 그 버전을 지원하는지부터 확인합니다.
 
 ## 구조
 
@@ -92,7 +92,7 @@ Catalog 청크에는 UUID 배열과 서브시스템 문자열, 프로세스 정�
 
 ### ChunkSet 청크 (0x600d)
 
-ChunkSet 청크의 데이터는 LZ4 블록으로 들어 있고, 블록마다 앞에 붙은 표지 문자열로 종류를 가립니다 [1]. LZ4 자체는 [압축 형식 (LZFSE·LZ4·zlib)](../../value-decoding/compression.md)에서 설명합니다.
+ChunkSet 청크의 데이터는 LZ4 블록으로 들어 있고, 블록마다 앞에 붙은 표지 문자열로 종류를 구분합니다 [1]. LZ4 자체는 [압축 형식 (LZFSE·LZ4·zlib)](../../value-decoding/compression.md)에서 설명합니다.
 
 | 표지 | 뜻 | 뒤따르는 머리 |
 |---|---|---|
@@ -116,7 +116,7 @@ Firehose 청크는 로그 항목이 실제로 들어 있는 곳입니다. 아래
 | 40 | 8 | 기준 연속 시각(Mach) |
 | 48 | - | 트레이스포인트 |
 
-비공개 데이터가 없으면 가상 오프셋 칸에 4096(0x1000)이 들어가고, 있으면 비공개 데이터는 청크 끝쪽에 붙습니다 [2].
+비공개 데이터가 없으면 가상 오프셋 필드에 4096(0x1000)이 들어가고, 있으면 비공개 데이터는 청크 끝쪽에 붙습니다 [2].
 
 트레이스포인트 하나의 앞부분은 아래와 같습니다 [1].
 
@@ -144,7 +144,7 @@ Firehose 청크는 로그 항목이 실제로 들어 있는 곳입니다. 아래
 | 0x80~0x82 | signpost, 프로세스 범위 |
 | 0xc0~0xc2 | signpost, 시스템 범위 |
 
-플래그 칸의 문자열 위치 값(strings file type)은 형식 문자열을 어느 파일에서 찾을지 알려 줍니다 [2]. 찾아간 파일의 구조는 [UUID 텍스트와 공유 캐시 (uuidtext·dsc)](uuidtext-dsc.md)에 있습니다.
+플래그 필드의 문자열 위치 값(strings file type)은 형식 문자열을 어느 파일에서 찾을지 알려 줍니다 [2]. 찾아간 파일의 구조는 [UUID 텍스트와 공유 캐시 (uuidtext·dsc)](uuidtext-dsc.md)에 있습니다.
 
 | 값 | 이름 | 찾아갈 파일 |
 |---|---|---|
@@ -172,7 +172,7 @@ Firehose 청크는 로그 항목이 실제로 들어 있는 곳입니다. 아래
 
 ### timesync 파일
 
-timesync 파일에는 부팅 레코드와 동기 레코드가 들어 있고, 두 레코드는 앞 2바이트 서명으로 가립니다 [2].
+timesync 파일에는 부팅 레코드와 동기 레코드가 들어 있고, 두 레코드는 앞 2바이트 서명으로 구분합니다 [2].
 
 부팅 레코드 (서명 `\xb0\xbb`, 48바이트)
 
@@ -206,7 +206,7 @@ timesync 파일에는 부팅 레코드와 동기 레코드가 들어 있고, 두
 2. 태그가 0x600d(ChunkSet)이면 데이터 영역의 블록을 `bv41`·`bv4-`·`bv4$` 표지에 따라 풉니다.
 3. 데이터 끝을 8바이트 경계로 올린 자리에서 다음 청크 머리를 읽고, 파일 끝까지 되풀이합니다.
 4. Firehose 트레이스포인트에서 문자열 위치 플래그와 형식 문자열 참조를 읽어 uuidtext 또는 dsc 파일에서 형식 문자열을 찾습니다.
-5. 연속 시각을 timebase 분자·분모와 timesync 레코드로 벽시계 시각으로 바꿉니다.
+5. 연속 시각을 timebase 분자·분모와 timesync 레코드로 실제 시각(wall clock)으로 바꿉니다.
 
 5번의 변환식은 timesync 파일이 있는지에 따라 두 가지입니다 [2].
 
@@ -216,23 +216,23 @@ timesync 있음:  실제 시각 = 동기 레코드 시각
                          + (연속 시각 − 동기 레코드 연속 시각) × (분자 ÷ 분모)
 ```
 
-timesync 파일은 tracev3 파일과 부팅 UUID가 같은 것을 쓰고, 그 안에서 연속 시각에 맞는 동기 레코드를 고르며, 맞는 동기 레코드가 없으면 부팅 레코드를 기준(연속 시각 0)으로 씁니다 [2]. Apple은 변환 방법을 문서로 밝히지 않았고, 이 식은 libyal 문서가 동작을 관찰해 얻은 것이라서 소수점을 버리는지 올리는지는 알려져 있지 않습니다 [2]. 벽시계 시각은 유닉스 시각, 곧 1970년 1월 1일 기준 나노초로 들어 있습니다 [2]. 트레이스포인트의 6바이트 연속 시각 차이는 Firehose 청크의 기준 연속 시각에서 떨어진 값이라서 [2], 둘을 더한 값을 위 식의 연속 시각으로 씁니다. 직접 계산한 값은 도구 결과와 맞춰 봅니다. 맥에서 쓰는 여러 시각 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)에서 비교합니다.
+timesync 파일은 tracev3 파일과 부팅 UUID가 같은 것을 쓰고, 그 안에서 연속 시각에 맞는 동기 레코드를 고르며, 맞는 동기 레코드가 없으면 부팅 레코드를 기준(연속 시각 0)으로 씁니다 [2]. Apple은 변환 방법을 문서로 밝히지 않았고, 이 식은 libyal 문서가 동작을 관찰해 얻은 것이라서 소수점을 버리는지 올리는지는 알려져 있지 않습니다 [2]. 실제 시각은 유닉스 시각, 곧 1970년 1월 1일 기준 나노초로 들어 있습니다 [2]. 트레이스포인트의 6바이트 연속 시각 차이는 Firehose 청크의 기준 연속 시각에서 떨어진 값이라서 [2], 둘을 더한 값을 위 식의 연속 시각으로 씁니다. 직접 계산한 값은 도구 결과와 맞춰 봅니다. 맥에서 쓰는 여러 시각 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)에서 비교합니다.
 
 ## 포렌식에서 중요한 점
 
-tracev3 파일에는 문장 본문이 없고 형식 문자열 참조만 있어서, tracev3만 떼어 오면 로그를 끝까지 풀 수 없습니다. 수집할 때 uuidtext 폴더를 같이 가져와야 하는 까닭은 [UUID 텍스트와 공유 캐시 (uuidtext·dsc)](uuidtext-dsc.md)에서 설명합니다. timesync 파일이 있고 없음에 따라 시각 변환식이 달라져서 [2], 수집할 때 `timesync` 폴더도 빠뜨리지 않습니다.
+tracev3 파일에는 문장 본문이 없고 형식 문자열 참조만 있어서, tracev3만 떼어 오면 로그를 끝까지 풀 수 없습니다. 수집할 때 uuidtext 폴더를 같이 가져와야 하는 이유는 [UUID 텍스트와 공유 캐시 (uuidtext·dsc)](uuidtext-dsc.md)에서 설명합니다. timesync 파일이 있고 없음에 따라 시각 변환식이 달라져서 [2], 수집할 때 `timesync` 폴더도 빠뜨리지 않습니다.
 
 Header 청크의 하위 청크에는 빌드 버전과 하드웨어 모델 문자열, 부팅 UUID, logd PID, 종료 상태가 들어 있어서 [2] 로그 파일이 어떤 모델의 어느 빌드에서 어느 부팅 구간에 쓰였는지 맞춰 볼 수 있습니다. timesync 레코드에도 부팅 UUID가 있어서 [2] 부팅마다 레코드를 나눠 볼 수 있습니다. 빌드 버전은 조사 대상 맥의 OS 버전 기록과 맞춰 보고, 그 기록은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../../02-artifacts/system-account/os-version-install-history.md)에 있습니다.
 
-Catalog 청크의 가장 이른 Firehose 시각 칸은 [2] 파일마다 로그가 언제부터 시작하는지 빠르게 가늠할 때 씁니다. 오래된 메시지는 저장소 용량 한도에 따라 지워지고, 그 규칙은 [보관 기간과 로그 수준 (Persist·Info·Debug)](retention-levels.md)에서 다룹니다. 로그를 일부러 지운 흔적을 어떻게 가늠하는지는 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
+Catalog 청크의 가장 이른 Firehose 시각 필드는 [2] 파일마다 로그가 언제부터 시작하는지 빠르게 파악할 때 씁니다. 오래된 메시지는 저장소 용량 한도에 따라 지워지고, 그 규칙은 [보관 기간과 로그 수준 (Persist·Info·Debug)](retention-levels.md)에서 다룹니다. 로그를 일부러 지운 흔적을 어떻게 판단하는지는 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
 ## 함정
 
-Apple Silicon 맥은 Mach 시각을 틱으로 기록해서 나노초로 바꿔야 하고 [3], 이 변환을 하지 않는 도구로 읽으면 시각이 틀어집니다. 도구가 인텔과 ARM 시각을 모두 지원하는지 확인합니다. Apple Silicon의 timebase 분자·분모 값은 검체의 Header 청크나 timesync 부팅 레코드에 적힌 값을 그대로 씁니다.
+Apple Silicon 맥은 Mach 시각을 틱으로 기록해서 나노초로 바꿔야 하고 [3], 이 변환을 하지 않는 도구로 읽으면 시각이 틀어집니다. 도구가 인텔과 ARM 시각을 모두 지원하는지 확인합니다. Apple Silicon의 timebase 분자·분모 값은 그 기기의 Header 청크나 timesync 부팅 레코드에 적힌 값을 그대로 씁니다.
 
 시간대 오프셋과 서머타임 플래그는 Header 청크와 timesync 레코드에 따로 들어 있습니다 [1][2]. 저장된 시각은 UTC로 보이고 `log` 도구는 현지 시간대로 바꿔 보여 주므로 [2], 보고서에 적을 때 UTC로 적었는지 현지 시각으로 적었는지 밝힙니다. 조사 대상 맥의 시간대 설정은 [시간대와 시계 설정 (Time Zone·NTP)](../../../02-artifacts/system-account/time-zone.md)에서 확인합니다.
 
-libyal 문서가 확인한 범위는 macOS 10.12~13이라서 [1] 그 뒤 버전에서는 칸 배치가 달라졌을 수 있습니다. StateDump·SimpleDump 청크에는 뜻이 밝혀지지 않은 칸이 남아 있어서 [2], 이 청크에서 나온 값을 해석할 때는 도구 결과를 그대로 믿지 말고 같은 시각의 다른 로그 항목과 맞춰 봅니다.
+libyal 문서가 확인한 범위는 macOS 10.12~13이라서 [1] 그 뒤 버전에서는 필드 배치가 달라졌을 수 있습니다. StateDump·SimpleDump 청크에는 뜻이 밝혀지지 않은 필드가 남아 있어서 [2], 이 청크에서 나온 값을 해석할 때는 도구 결과를 그대로 믿지 말고 같은 시각의 다른 로그 항목과 맞춰 봅니다.
 
 ## 도구
 

@@ -55,7 +55,7 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 - HelpLink, URLInfoAbout, Comments, Contact, Readme, Language
 - VersionMajor, VersionMinor, Version
 
-설치 위치(InstallLocation)나 설치 원본(InstallSource)이 있으면 파일 흔적과 맞춰 볼 수 있습니다. `InstallDate` 의 저장 형식은 공개 문서에 정해져 있지 않습니다. 도구가 보여 주는 값을 그대로 옮기고, 형식은 검체에서 확인합니다.
+설치 위치(InstallLocation)나 설치 원본(InstallSource)이 있으면 파일 흔적과 맞춰 볼 수 있습니다. `InstallDate` 의 저장 형식은 공개 문서에 정해져 있지 않습니다. 도구가 보여 주는 값을 그대로 옮기고, 형식은 실제 데이터로 확인합니다.
 
 ## 증거로서 의미
 
@@ -109,7 +109,7 @@ Windows Installer (MSI) 로 설치한 앱은 설치 패키지의 속성에서 �
 
 ### 헥스로 한 번
 
-아래는 FILETIME 형식을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 앱 하위 키의 LastWrite 칸이 다음 8바이트라고 합니다. 키 레코드 안에서 이 칸을 찾는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+아래는 FILETIME 형식을 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다. 앱 하위 키의 LastWrite 필드가 다음 8바이트라고 합니다. 키 레코드 안에서 이 필드를 찾는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ```
 LastWrite (8바이트)  00 1D C6 13 4E 83 DB 01
@@ -147,7 +147,7 @@ RegRipper 의 `uninstall` 플러그인은 앱 키를 LastWrite 최신순으로 �
 
 ## 실습
 
-**NIST CFReDS 같은 공개 검체 이미지**에서 SOFTWARE 하이브와 사용자별 NTUSER.DAT 를 꺼내 풀어 봅니다.
+**NIST CFReDS 같은 공개 시험 이미지**에서 SOFTWARE 하이브와 사용자별 NTUSER.DAT 를 꺼내 풀어 봅니다.
 
 1. 네 자리의 `Uninstall` 키에서 앱 항목은 각각 몇 개입니까?
 2. LastWrite 최신순으로 앱을 늘어놓아 보십시오. 가장 최근에 손댄 앱은 무엇입니까?

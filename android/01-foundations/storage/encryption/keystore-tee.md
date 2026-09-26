@@ -38,7 +38,7 @@ TEE 는 SoC 안의 신뢰 실행 환경이고, KeyMint TA 는 이 보안 영역�
 
 ## keystore2 데몬과 저장 위치
 
-`keystore2` 는 Binder API 로 키 저장소 기능을 모두 제공하는 시스템 데몬입니다. 이 데몬이 키를 두는 폴더는 `/data/misc/keystore` 이고(`DB_PATH` 값), 예전 형식의 키 블롭을 읽는 `LegacyBlobLoader` 도 같은 폴더를 씁니다[5]. `/data/misc` 는 시스템 DE 경로에 들어갑니다[1]. 이 폴더 안의 파일 이름과 구조는 공개된 설명이 없어 검체에서 확인합니다.
+`keystore2` 는 Binder API 로 키 저장소 기능을 모두 제공하는 시스템 데몬입니다. 이 데몬이 키를 두는 폴더는 `/data/misc/keystore` 이고(`DB_PATH` 값), 예전 형식의 키 블롭을 읽는 `LegacyBlobLoader` 도 같은 폴더를 씁니다[5]. `/data/misc` 는 시스템 DE 경로에 들어갑니다[1]. 이 폴더 안의 파일 이름과 구조는 실제 기기에서 확인해야 합니다.
 
 ## StrongBox
 

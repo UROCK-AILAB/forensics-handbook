@@ -24,7 +24,7 @@ nav_order: 860
 
 `PrivateStore` 아래에는 계정마다 `P_` 로 시작하는 폴더가 따로 있습니다 [1]. `Line.sqlite` 는 한 기기에 여러 개 있을 수 있어서, 처음 찾은 파일 하나만 읽지 말고 모두 찾아 읽습니다 [1].
 
-앱 그룹 이름은 `group.com.linecorp.line` 입니다(iOS 13.3.1·14.3·15.3.1·17.3 기준) [1]. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉩니다. 라인의 번들 ID 와 백업 도메인 이름, 라인 파일이 백업에 들어가는지는 공개 자료가 없어 검체에서 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 라인 자체의 iCloud 대화 백업 형식도 공개 자료가 없습니다.
+앱 그룹 이름은 `group.com.linecorp.line` 입니다(iOS 13.3.1·14.3·15.3.1·17.3 기준) [1]. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉩니다. 라인의 번들 ID 와 백업 도메인 이름, 라인 파일이 백업에 들어가는지는 실제 백업에서 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 라인 자체의 iCloud 대화 백업 형식도 공개 자료가 없습니다.
 
 | 항목 | 알려진 범위 |
 |---|---|
@@ -33,18 +33,18 @@ nav_order: 860
 
 ## 구조
 
-`Line.sqlite` 의 주요 표와 칸은 다음과 같습니다 [1].
+`Line.sqlite` 의 주요 표와 열은 다음과 같습니다 [1].
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `ZMESSAGE` | `ZTIMESTAMP`, `ZSENDER`, `ZTEXT`, `ZID` |
 | `ZUSER` | `Z_PK`, `ZNAME` |
 
 `ZSENDER` 로 `ZUSER` 의 이름을 찾아 보낸 사람을 붙입니다. `ZSENDER` 가 비어 있으면 보낸 메시지로 보는데, 이 규칙은 iLEAPP 가 시험으로 정한 것입니다 [1]. 로그인한 계정 자신의 `ZUSER` 행은 시험 표본 어디에도 없었습니다 [1].
 
-`MessageAttachmentInfo.sqlite` 의 `ZMESSAGEATTACHMENTINFO` 표에는 `ZMESSAGEID` 와 `ZFILENAME` 칸이 있습니다 [1]. `Message Attachments/` 아래 파일 이름이 "메시지 ID + 확장자" 이므로, 첨부 정보 DB 가 없어도 파일 이름에서 확장자를 떼면 `ZMESSAGE.ZID` 와 맞춰 볼 수 있습니다 [1].
+`MessageAttachmentInfo.sqlite` 의 `ZMESSAGEATTACHMENTINFO` 표에는 `ZMESSAGEID` 와 `ZFILENAME` 열이 있습니다 [1]. `Message Attachments/` 아래 파일 이름이 "메시지 ID + 확장자" 이므로, 첨부 정보 DB 가 없어도 파일 이름에서 확장자를 떼면 `ZMESSAGE.ZID` 와 맞춰 볼 수 있습니다 [1].
 
-사진을 보낸 메시지에는 본문 칸에 앱이 쓴 "사진을 보냈다" 는 뜻의 문구가 남아 있었습니다(시험 표본 10건 모두) [1]. 본문만 보면 사람이 쓴 문장처럼 보이니, 첨부 파일과 함께 확인합니다.
+사진을 보낸 메시지에는 본문 열에 앱이 쓴 "사진을 보냈다" 는 뜻의 문구가 남아 있었습니다(시험 표본 10건 모두) [1]. 본문만 보면 사람이 쓴 문장처럼 보이니, 첨부 파일과 함께 확인합니다.
 
 저장 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에 있습니다.
 
@@ -68,7 +68,7 @@ iLEAPP 에는 `linePrivateStore.py` 라는 분석기도 따로 있습니다. 지
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 아래는 명세로 만든 예시이고 실제 검체에서 나온 값이 아닙니다. `ZTIMESTAMP` 에 정수 1,700,000,000,000 이 들어 있다면, SQLite 는 이 크기의 정수를 6바이트 빅엔디언(직렬 형식 5)으로 저장하므로 레코드 안에서 다음 바이트로 보입니다.
+**헥스로 한 번.** 아래는 명세로 만든 예시이고 실제 기기에서 나온 값이 아닙니다. `ZTIMESTAMP` 에 정수 1,700,000,000,000 이 들어 있다면, SQLite 는 이 크기의 정수를 6바이트 빅엔디언(직렬 형식 5)으로 저장하므로 레코드 안에서 다음 바이트로 보입니다.
 
 ```
 01 8B CF E5 68 00
@@ -85,7 +85,7 @@ FROM ZMESSAGE m LEFT JOIN ZUSER u ON m.ZSENDER = u.Z_PK
 ORDER BY m.ZTIMESTAMP;
 ```
 
-도구가 "보낸 메시지" 로 분류하는 행은 `m.ZSENDER` 가 비어 있는 행입니다. `u.ZNAME` 은 `ZSENDER` 가 가리키는 `ZUSER` 행이 없을 때도 비므로, 이름 칸만 보고 나누지 않습니다.
+도구가 "보낸 메시지" 로 분류하는 행은 `m.ZSENDER` 가 비어 있는 행입니다. `u.ZNAME` 은 `ZSENDER` 가 가리키는 `ZUSER` 행이 없을 때도 비므로, 이름 열만 보고 나누지 않습니다.
 
 ## 교차 검증
 
@@ -97,7 +97,7 @@ ORDER BY m.ZTIMESTAMP;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 라인이 설치된 iOS 전체 파일 시스템 이미지를 골라 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등) 가운데 라인이 설치된 iOS 전체 파일 시스템 이미지를 골라 풀어 봅니다.
 
 1. 이미지 안에 `Line.sqlite` 는 몇 개이고, 각각 어느 경로에 있습니까?
 2. `PrivateStore` 아래 `P_` 폴더는 몇 개입니까?

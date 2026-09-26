@@ -9,7 +9,7 @@ nav_order: 630
 
 GitHub Copilot 은 IDE 마다 로그를 남기는 자리가 다르고, Visual Studio 의 Copilot 은 추적 파일 `*_VSGitHubCopilot_traces.jsonl` 에 프롬프트·응답·도구 호출까지 남기며, VS Code 자체의 원격 측정은 `telemetry.telemetryLevel` 설정에 따라 보내는 범위가 달라집니다.
 
-> 로그 줄의 실제 모양은 Copilot 확장·플러그인 버전에 따라 다를 수 있으므로, 검체를 보고 버전과 함께 적어 둡니다.
+> 로그 줄의 실제 모양은 Copilot 확장·플러그인 버전에 따라 다를 수 있으므로, 실제 데이터를 보고 버전과 함께 적어 둡니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -42,9 +42,9 @@ VS Code 안에서는 "GitHub Copilot" 과 "GitHub Copilot Chat" 이 로그 설�
 | 같은 추적 파일 | Linux `~/.cache/VSGitHubCopilotLogs/traces/` | agentsview README[4] |
 | 대화 파일(확장자 없음, 이름은 36자 UUID) | 솔루션 폴더의 `.vs\*\copilot-chat\*\sessions\` | agentsview `visualstudio_copilot_provider.go`, `visualstudio_copilot.go`[4] |
 
-추적 파일은 추적 폴더에서 이름이 `.jsonl` 로 끝나고 `_VSGitHubCopilot_traces` 를 담은 파일입니다[4]. 파일 이름은 `20260615T234102_b45c44b2_VSGitHubCopilot_traces.jsonl` 처럼 날짜·시각 모양 글자로 시작합니다[4]. 이 앞부분이 파일을 만든 시각인지, UTC 인지는 공개 자료가 없으니 같은 파일 안의 span 시각과 견주어 검체에서 확인합니다.
+추적 파일은 추적 폴더에서 이름이 `.jsonl` 로 끝나고 `_VSGitHubCopilot_traces` 를 담은 파일입니다[4]. 파일 이름은 `20260615T234102_b45c44b2_VSGitHubCopilot_traces.jsonl` 처럼 날짜·시각 모양 글자로 시작합니다[4]. 이 앞부분이 파일을 만든 시각인지, UTC 인지는 공개 문서에 없으니, 같은 파일 안의 span 시각과 비교해 실제 데이터로 확인합니다.
 
-Visual Studio 2026 은 솔루션 폴더의 `.vs/*/copilot-chat/*/sessions` 에도 대화 파일을 씁니다[4]. 대화 파일은 이름이 36자 UUID 모양(8-4-4-4-12 자리의 16진수)이고, 내용은 추적 파일과 같은 span 구조입니다[4]. 이 폴더는 사용자 프로필이 아닌 솔루션 폴더 안에 있어서, 사용자 폴더만 수집하면 빠집니다. 수집 범위는 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)를 봅니다. 이 배치가 어느 Visual Studio 판부터인지는 공개 자료가 없으므로, 보고서에는 검체의 Visual Studio 판을 함께 적습니다.
+Visual Studio 2026 은 솔루션 폴더의 `.vs/*/copilot-chat/*/sessions` 에도 대화 파일을 씁니다[4]. 대화 파일은 이름이 36자 UUID 모양(8-4-4-4-12 자리의 16진수)이고, 내용은 추적 파일과 같은 span 구조입니다[4]. 이 폴더는 사용자 프로필이 아닌 솔루션 폴더 안에 있어서, 사용자 폴더만 수집하면 빠집니다. 수집 범위는 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)를 봅니다. 이 배치가 어느 Visual Studio 판부터인지는 공개 문서에 없으므로, 보고서에는 분석 대상의 Visual Studio 판을 함께 적습니다.
 
 ### 사용자가 켜야 생기는 기록
 
@@ -119,20 +119,20 @@ GitHub 가 서버에 보관하는 프롬프트·사용 기록과 조직 요금�
 
 **증명하지 못하는 것.** VS Code·JetBrains 로그에 프롬프트나 응답 본문이 들어간다는 공개 문서는 없으므로, 그 로그만으로 어떤 프롬프트를 보냈는지나 제안을 받아들였는지를 말하지 않습니다. Visual Studio 의 도구 실행 span 도 도구가 돌았다는 기록일 뿐이라서, 그 변경이 지금 파일에 남아 있는지는 파일 자체와 버전 관리 기록으로 따로 확인합니다. 원격 측정 설정이 확장의 자체 원격 측정까지 막았다고 볼 수는 없습니다[3]. 추적 파일에는 자판 앞에 앉은 사람이 누구였는지가 없으므로, 계정·로그인 흔적과 함께 봅니다.
 
-보고서 문장은 "피의자가 Copilot 에게 코드를 고치게 했다" 가 아니라 "2026-06-12 19:46:40(UTC) 에 대화 ID 3f2a9c1e-… 의 채팅 span 에 이런 프롬프트가 기록돼 있다" 처럼 기록이 말하는 만큼만 씁니다(시각과 ID 는 아래 만든 예시의 값).
+보고서 문장은 "피의자가 Copilot 에게 코드를 고치게 했다" 가 아니라 "2026-06-12 19:46:40(UTC) 에 대화 ID 3f2a9c1e-… 의 채팅 span 에 이런 프롬프트가 기록돼 있다" 처럼 기록으로 확인되는 만큼만 씁니다(시각과 ID 는 아래 만든 예시의 값).
 
 ## 시각 해석
 
-Visual Studio span 의 `startTimeUnixNano`·`endTimeUnixNano` 는 1970-01-01 UTC 부터 센 나노초를 10진 문자열로 적은 값입니다[4]. 시작과 끝이 따로 있으므로 요청 하나에 걸린 시간도 알 수 있습니다. 추적 파일 이름 앞부분의 날짜·시각 모양 글자가 무엇을 뜻하는지는 공개 자료가 없으니, 같은 파일 안의 span 시각과 비교해 검체에서 확인합니다. 대화 하나가 여러 파일에 나뉠 수 있으므로, 대화 시각은 파일 수정 시각이 아닌 span 시각으로 잡습니다[4].
+Visual Studio span 의 `startTimeUnixNano`·`endTimeUnixNano` 는 1970-01-01 UTC 부터 센 나노초를 10진 문자열로 적은 값입니다[4]. 시작과 끝이 따로 있으므로 요청 하나에 걸린 시간도 알 수 있습니다. 추적 파일 이름 앞부분의 날짜·시각 모양 글자가 무엇을 뜻하는지는 공개 문서에 없으니, 같은 파일 안의 span 시각과 비교해 실제 데이터로 확인합니다. 대화 하나가 여러 파일에 나뉠 수 있으므로, 대화 시각은 파일 수정 시각이 아닌 span 시각으로 잡습니다[4].
 
-VS Code 로그 줄의 시각 형식과 시간대는 공개 문서에 없으니, 같은 검체의 다른 시각(세션 파일의 `creationDate`·`lastMessageDate` 밀리초 값, [Windows](windows.md) 참고)과 맞춰 봅니다.
+VS Code 로그 줄의 시각 형식과 시간대는 공개 문서에 없으니, 같은 기기의 다른 시각(세션 파일의 `creationDate`·`lastMessageDate` 밀리초 값, [Windows](windows.md) 참고)과 맞춰 봅니다.
 
 ## 함정과 한계
 
 - Visual Studio 추적 파일은 사용자 임시 폴더(`%LOCALAPPDATA%\Temp`) 아래에 있어서 임시 파일 정리에 쓸려 나갈 수 있으니, 다른 것보다 먼저 떠 옵니다.
 - 같은 프롬프트가 여러 채팅 span 에 거듭 나오고, 같은 도구 호출 ID 가 채팅 span 과 도구 실행 span 에 겹쳐 나옵니다[4]. span 수를 질문 수나 명령 수로 세지 않습니다.
 - `gen_ai.tool.call.arguments` 와 `gen_ai.tool.call.result` 에는 파일 경로, 명령, 패치, 파일 내용이 그대로 들어갈 수 있습니다[4]. 소스 코드나 비밀 값이 섞일 수 있으니 보고서에 옮길 때 가립니다. 토큰·키가 남는 자리는 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)을 봅니다.
-- 추적 폴더에서 파일 하나만 떼어 보면 대화가 중간에 끊겨 보입니다. 폴더를 통째로 수집하고, 대화 ID 로 모든 파일을 훑습니다[4].
+- 추적 폴더에서 파일 하나만 떼어 보면 대화가 중간에 끊겨 보입니다. 폴더를 통째로 수집하고, 대화 ID 로 모든 파일을 검색합니다[4].
 - JSON 문자열 안의 한글은 UTF-8 글자 그대로일 수도 있고 `\uXXXX` 로 적혔을 수도 있으니, 키워드 검색은 두 모양 다 해 봅니다.
 - VS Code 의 출력 창과 명령 팔레트는 VS Code 를 실행해야 쓸 수 있어서, 디스크 이미지에서는 확장 로그 폴더를 파일로 찾아야 합니다. 그 경로는 공개 문서에 없으니 VS Code 사용자 데이터 폴더를 통째로 떠 옵니다.
 - trace 수준은 문제를 푼 뒤 Info 로 되돌리게 되어 있어서[1], 수집 시점의 설정이 Info 여도 과거에 trace 로 남긴 로그가 있을 수 있습니다.
@@ -178,11 +178,11 @@ jq -c '.resourceSpans[].scopeSpans[].spans[]
 
 ## 실습
 
-Copilot 로그가 든 공개 검체가 없으므로, 직접 만든 시험 환경(가짜 사용자 `analyst01`)에서 풀어 봅니다.
+Copilot 로그가 든 공개 시험 이미지가 없으므로, 직접 만든 시험 환경(가짜 사용자 `analyst01`)에서 풀어 봅니다.
 
 1. Visual Studio 에서 Copilot 에게 질문 두 개를 하고 에이전트 모드로 파일 하나를 고치게 한 뒤, 추적 폴더의 파일 수와 대화 ID 개수는 각각 몇 개인가? 채팅·도구 실행·에이전트 호출 span 은 각각 몇 개인가?
 2. 같은 솔루션 폴더의 `.vs` 아래에 `copilot-chat` 폴더가 생겼는가? 생겼다면 대화 파일 이름이 추적 파일의 `gen_ai.conversation.id` 와 같은가?
-3. 추적 파일 이름 앞부분의 날짜·시각과 첫 span 의 `startTimeUnixNano` 는 몇 시간 차이 나는가? 시험 PC 의 시간대와 견주면 파일 이름은 UTC 인가, 현지 시각인가?
+3. 추적 파일 이름 앞부분의 날짜·시각과 첫 span 의 `startTimeUnixNano` 는 몇 시간 차이 나는가? 시험 PC 의 시간대와 비교하면 파일 이름은 UTC 인가, 현지 시각인가?
 4. VS Code 에서 로그 수준을 Trace 로 바꾸기 전과 뒤에 확장 로그 폴더의 파일은 어떻게 달라지는가?
 5. JetBrains 에서 Log CA Certificates 를 한 번 돌린 뒤 `idea.log` 에서 PEM 덩어리를 찾을 수 있는가?
 

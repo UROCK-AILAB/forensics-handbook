@@ -31,7 +31,7 @@ Ubuntu 24.04 는 Debian 의 cron(vixie cron 3.0pl1 계열, 패키지 `3.0pl1-184
 | at 허용·거부 목록 | `/etc/at.allow`, `/etc/at.deny`[9] | 같음. `/etc/at.deny` 가 기본 설치됨[5] |
 | cron 로그 | `/var/log/syslog`. 기본 설정의 `#cron.* /var/log/cron.log` 가 주석 처리돼 있음[6] | `/var/log/cron`. `/var/log/messages` 에는 `cron.none` 으로 빠짐[7] |
 
-Ubuntu 의 at spool 위치는 at 을 빌드할 때 configure 가 정하므로[4], 검체에서 `/var/spool/cron/atjobs` 와 `/var/spool/at` 을 둘 다 봅니다.
+Ubuntu 의 at spool 위치는 at 을 빌드할 때 configure 가 정하므로[4], 실제 시스템에서 `/var/spool/cron/atjobs` 와 `/var/spool/at` 을 둘 다 봅니다.
 
 Ubuntu `/etc/crontab` 의 daily·weekly·monthly 줄은 `test -x /usr/sbin/anacron ||` 로 시작하므로, anacron 이 설치돼 있으면 cron 은 이 세 줄을 건너뛰고 anacron 이 대신 돌립니다[2]. RHEL 9 에서는 매시 도는 `/etc/cron.hourly/0anacron` 이 `/var/spool/anacron/cron.daily` 의 날짜가 오늘이 아닐 때 anacron 을 부르고[3], 이 파일이 없을 때만 cronie 의 `dailyjobs` 가 run-parts 로 돌립니다[3].
 
@@ -41,9 +41,9 @@ Ubuntu `/etc/crontab` 의 daily·weekly·monthly 줄은 `test -x /usr/sbin/anacr
 
 ### crontab 한 줄
 
-한 줄은 분·시·일·월·요일의 다섯 칸과 명령으로 이뤄집니다[1][3]. `/etc/crontab` 과 `/etc/cron.d/` 의 파일에는 요일과 명령 사이에 실행할 사용자 이름 칸이 하나 더 있고, 사용자 crontab 에는 이 칸이 없습니다[1][2]. 다섯 칸 대신 `@reboot`, `@yearly`, `@annually`, `@monthly`, `@weekly`, `@daily`, `@hourly` 를 쓸 수 있고, Debian cron 은 `@midnight` 도 받습니다[1][3]. `@reboot` 는 컴퓨터가 켜진 때가 아니라 cron 데몬이 시작한 때 한 번 돕니다[1].
+한 줄은 분·시·일·월·요일의 다섯 필드와 명령으로 이뤄집니다[1][3]. `/etc/crontab` 과 `/etc/cron.d/` 의 파일에는 요일과 명령 사이에 실행할 사용자 이름 필드가 하나 더 있고, 사용자 crontab 에는 이 필드가 없습니다[1][2]. 다섯 필드 대신 `@reboot`, `@yearly`, `@annually`, `@monthly`, `@weekly`, `@daily`, `@hourly` 를 쓸 수 있고, Debian cron 은 `@midnight` 도 받습니다[1][3]. `@reboot` 는 컴퓨터가 켜진 때가 아니라 cron 데몬이 시작한 때 한 번 돕니다[1].
 
-명령 칸의 `%` 는 줄바꿈으로 바뀌고, 첫 `%` 뒤의 내용은 명령의 표준 입력으로 들어갑니다[1][3]. `SHELL=`, `PATH=`, `MAILTO=` 같은 환경 변수 줄도 둘 수 있고, cronie 는 표 하나의 시간대를 정하는 `CRON_TZ`, 무작위 지연 `RANDOM_DELAY`, 보내는 사람 `MAILFROM` 도 받습니다[1][3].
+명령 필드의 `%` 는 줄바꿈으로 바뀌고, 첫 `%` 뒤의 내용은 명령의 표준 입력으로 들어갑니다[1][3]. `SHELL=`, `PATH=`, `MAILTO=` 같은 환경 변수 줄도 둘 수 있고, cronie 는 표 하나의 시간대를 정하는 `CRON_TZ`, 무작위 지연 `RANDOM_DELAY`, 보내는 사람 `MAILFROM` 도 받습니다[1][3].
 
 ```
 # /etc/cron.d/example (만든 예시)
@@ -109,7 +109,7 @@ cron 잡은 PAM 세션을 열기도 하므로, 같은 시각에 인증 로그에
 
 **증명하는 것**
 
-- 설정 파일에 명령·주기·실행 계정이 적혀 있었다는 것. 사용자 crontab 은 파일 이름이, 시스템 crontab 은 사용자 칸이 실행 계정입니다[1][3].
+- 설정 파일에 명령·주기·실행 계정이 적혀 있었다는 것. 사용자 crontab 은 파일 이름이, 시스템 crontab 은 사용자 필드가 실행 계정입니다[1][3].
 - `CMD` 줄이 있으면 그 시각에 cron 이 그 계정으로 그 명령 문자열을 시작했다는 것[1][3].
 - `REPLACE`·`END EDIT` 줄이 있으면 그 시각에 어느 사용자가 `crontab` 명령으로 누구의 crontab 을 바꿨다는 것[1][3].
 - Debian 머리 세 줄이 있으면 `crontab` 명령으로 설치했고, 설치 원본 경로와 설치 시각(현지)이 무엇이었는지[1].
@@ -124,13 +124,13 @@ cron 잡은 PAM 세션을 열기도 하므로, 같은 시각에 인증 로그에
 - 이미 실행된 at 잡의 내용. 실행이 확정되면 잡 파일이 지워집니다[4].
 - 파일에 있다고 실행됐는지. 아래 함정처럼 이름·권한 규칙에 걸려 읽히지 않은 파일일 수 있습니다[1][3].
 
-보고서에는 "`/var/spool/cron/crontabs/user1` 에 10분마다 `/home/user1/bin/job-example.sh` 를 실행하는 줄이 있고, syslog 에 2026-01-02 03:10 부터 user1 계정의 CMD 기록이 있다"처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "`/var/spool/cron/crontabs/user1` 에 10분마다 `/home/user1/bin/job-example.sh` 를 실행하는 줄이 있고, syslog 에 2026-01-02 03:10 부터 user1 계정의 CMD 기록이 있다"처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
 | 값 | 무엇이 바뀔 때 바뀌나 | 시간대 |
 |---|---|---|
-| crontab 의 시각 칸 | 설정 값 | 데몬의 현지 시간대. Debian cron 은 `/etc/timezone` 을 쓰고 한 시간대만 다룸[1]. cronie 는 `CRON_TZ` 로 표마다 바꿀 수 있음[3] |
+| crontab 의 시각 필드 | 설정 값 | 데몬의 현지 시간대. Debian cron 은 `/etc/timezone` 을 쓰고 한 시간대만 다룸[1]. cronie 는 `CRON_TZ` 로 표마다 바꿀 수 있음[3] |
 | cron 로그 줄 | 이벤트가 생길 때 | cronie 는 로그 시각을 데몬의 현지 시간대로 적음[3]. syslog 전통 형식이면 연도·시간대가 없음 |
 | Debian 머리 `installed on` | `crontab` 으로 설치할 때 | 현지 시각, 연도 있음, 시간대 표기 없음[1] |
 | at 파일 이름 끝 8자리 | 제출할 때 정함 | UTC epoch 분[4] |
@@ -149,7 +149,7 @@ cron 잡은 PAM 세션을 열기도 하므로, 같은 시각에 인증 로그에
 - **anacron 쪽으로 옮겨 간 daily 잡.** anacron 이 있으면 cron.daily 스크립트의 실행 흔적은 `CMD` 줄이 아니라 anacron 로그와 시각 파일에 남습니다[2][3].
 - **심볼릭 링크 crontab.** cronie 가 inotify 로 변경을 감시할 때는 심볼릭 링크로 된 crontab 의 변경을 알아채지 못해 SIGHUP 을 받아야 다시 읽습니다[3]. 파일 내용과 실제로 돈 명령이 다를 수 있습니다.
 - **수집 정의의 빈틈.** ForensicArtifacts `LinuxCronLogs` 는 `/var/log/cron.log*` 만 정의하므로 RHEL 의 `/var/log/cron` 과 Ubuntu 의 `/var/log/syslog` 는 다른 정의로 모아야 합니다[9]. `LinuxAtJobs` 는 `/var/spool/at/*` 만 정의하고, Ubuntu 의 `/var/spool/cron/atjobs` 는 `LinuxCronTabs` 의 `/var/spool/cron/**` 로만 잡힙니다[9]. UAC 의 `job_scheduler.yaml` 은 `/var/spool/cron`, `/var/spool/anacron`, `/var/spool/at` 을 통째로 모으고, `/etc/crontab`·`/etc/cron.d` 는 이 정의에 없습니다[10].
-- **파서가 칸을 잘못 나누는 경우.** Velociraptor `Linux.Sys.Crontab` 의 정규식은 모든 줄에 사용자 칸이 있다고 보므로, 사용자 crontab 줄은 명령의 첫 단어가 `User` 칸으로 갑니다[11]. dissect.target `cronjobs` 는 `/etc/anacrontab` 도 다섯 칸 정규식으로 읽어 칸이 밀리고, 명령의 첫 단어가 실제 계정 이름이면 그 계정으로 추정하므로 계정이 잘못 붙을 수 있습니다[12]. 같은 정규식이라 `@reboot` 줄은 맞지 않아 경고로 빠지거나 칸이 밀린 레코드로 나올 수 있습니다[12]. dissect 는 at 잡과 anacron 시각 파일을 읽지 않습니다[12].
+- **파서가 필드를 잘못 나누는 경우.** Velociraptor `Linux.Sys.Crontab` 의 정규식은 모든 줄에 사용자 필드가 있다고 보므로, 사용자 crontab 줄은 명령의 첫 단어가 `User` 필드로 갑니다[11]. dissect.target `cronjobs` 는 `/etc/anacrontab` 도 다섯 필드 정규식으로 읽어 필드가 밀리고, 명령의 첫 단어가 실제 계정 이름이면 그 계정으로 추정하므로 계정이 잘못 붙을 수 있습니다[12]. 같은 정규식이라 `@reboot` 줄은 맞지 않아 경고로 빠지거나 필드가 밀린 레코드로 나올 수 있습니다[12]. dissect 는 at 잡과 anacron 시각 파일을 읽지 않습니다[12].
 
 ## 직접 분석해 보기
 
@@ -172,7 +172,7 @@ anacron 시각 파일 `/var/spool/anacron/cron.daily` 의 내용입니다(명세
 
 ### 공개 도구로 한 번
 
-- **dissect.target `cronjobs`**: `/var/spool/cron`, `/var/spool/cron/crontabs`, `/etc/cron.d` 의 파일과 `/etc/crontab`, `/etc/anacrontab` 을 읽어 `minute`·`hour`·`day`·`month`·`weekday`·`command`·`source` 레코드와 환경 변수 레코드를 냅니다[12]. 위 함정의 칸 밀림을 알고 봅니다.
+- **dissect.target `cronjobs`**: `/var/spool/cron`, `/var/spool/cron/crontabs`, `/etc/cron.d` 의 파일과 `/etc/crontab`, `/etc/anacrontab` 을 읽어 `minute`·`hour`·`day`·`month`·`weekday`·`command`·`source` 레코드와 환경 변수 레코드를 냅니다[12]. 위 함정의 필드 밀림을 알고 봅니다.
 - **Velociraptor `Linux.Sys.Crontab`**: `CronTabs`(줄 파싱), `CronScripts`(`/etc/cron.{hourly,…}/*` 의 수정 시각과 내용), `Uploaded`(원본 수집) 세 소스를 냅니다[11].
 - **라이브 시스템**: `atq` 는 at spool 의 파일 이름을 풀어 잡 번호, 탭, 실행 예정 시각(현지 시각), 큐 문자, 파일 소유자 순으로 찍습니다[4]. Debian 의 `crontab -l` 은 머리 세 줄을 숨기므로 파일 자체를 복사해 읽습니다[1].
 
@@ -187,11 +187,11 @@ anacron 시각 파일 `/var/spool/anacron/cron.daily` 의 내용입니다(명세
 | [dpkg·apt 기록](../packages/dpkg-apt.md), [rpm·dnf·yum 기록](../packages/rpm-dnf.md) | `/etc/cron.d` 파일이 패키지 것인지 |
 | [패키지 파일 변조 확인](../packages/package-verify.md) | 패키지가 설치한 cron 파일이 바뀌었는지 |
 
-여러 흔적을 한 줄로 늘어놓는 방법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md)를, 지속성 흔적 전체를 훑는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md)를 봅니다.
+여러 흔적을 한 줄로 늘어놓는 방법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md)를, 지속성 흔적 전체를 살펴보는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md)를 봅니다.
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 Linux 디스크 이미지(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
 1. 배포판이 무엇이고, 사용자 crontab 은 `/var/spool/cron/crontabs/` 와 `/var/spool/cron/` 중 어디에 있는가?
 2. `/etc/cron.d/` 와 `/etc/cron.{hourly,daily,weekly,monthly}/` 의 파일 가운데 패키지가 설치하지 않은 것은 무엇인가? 그 파일은 이름·권한 규칙상 실제로 실행될 수 있는가?

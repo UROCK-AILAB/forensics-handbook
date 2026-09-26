@@ -14,7 +14,7 @@ XProtect 는 YARA 시그니처로 악성 코드를 찾고, 알려진 악성 코�
 
 서명 검사와 별도로 치료 엔진이 있어, Apple 이 자동으로 보내는 갱신을 바탕으로 이미 들어온 악성 코드를 지우고 그 뒤에도 주기적으로 감염을 검사합니다 [1]. 알려지지 않은 악성 코드를 행위로 찾는 엔진도 있고 [1], 사용자가 동의했다면 실행 파일을, 앱 번들 안의 파일이면 번들 전체를 Apple 에 표본으로 올립니다 [1].
 
-행위 탐지를 맡는 XProtect Behaviour Service(XBS)는 macOS 13 Ventura 에서 들어왔고, 서명 기반 검사를 보완합니다 [3]. XBS 는 Bastion 이라는 규칙에 걸린 행위를 SQLite 데이터베이스 `/var/protected/xprotect/XPdb` 에 기록합니다 [3]. 2024년 6월 기준으로 XBS 는 기록만 하고 막지는 않았고, Apple 에는 보고하지만 사용자에게는 알리지 않았습니다 [3]. 그래서 사용자가 전혀 모르는 탐지가 XPdb 에만 남아 있을 수 있습니다. 그 뒤 판에서 막는 동작이 더해졌을 수 있으니 검체의 판을 함께 봅니다.
+행위 탐지를 맡는 XProtect Behaviour Service(XBS)는 macOS 13 Ventura 에서 들어왔고, 서명 기반 검사를 보완합니다 [3]. XBS 는 Bastion 이라는 규칙에 걸린 행위를 SQLite 데이터베이스 `/var/protected/xprotect/XPdb` 에 기록합니다 [3]. 2024년 6월 기준으로 XBS 는 기록만 하고 막지는 않았고, Apple 에는 보고하지만 사용자에게는 알리지 않았습니다 [3]. 그래서 사용자가 전혀 모르는 탐지가 XPdb 에만 남아 있을 수 있습니다. 그 뒤 판에서 막는 동작이 더해졌을 수 있으니 분석 대상의 판을 함께 봅니다.
 
 ## 위치와 버전별 차이
 
@@ -44,7 +44,7 @@ XProtect 는 YARA 시그니처로 악성 코드를 찾고, 알려진 악성 코�
 | 15 Sequoia 이후 | XProtect 번들이 두 곳에 있음. 자세한 내용은 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md) | — |
 | 26 Tahoe | 주 XProtect 번들을 iCloud 의 CloudKit 연결로도 갱신하도록 바뀜 | [2] |
 
-XProtect Remediator 가 처음 들어온 버전은 공개 자료가 없어, 10.15~12 검체에 Remediator 가 있을지는 검체에서 직접 확인합니다.
+XProtect Remediator 가 처음 들어온 버전은 공개 자료가 없어, 10.15~12 기기에 Remediator 가 있는지는 실제 기기에서 확인합니다.
 
 ### 갱신 주기
 
@@ -60,7 +60,7 @@ XProtect Remediator 가 처음 들어온 버전은 공개 자료가 없어, 10.1
 
 ### XPdb
 
-XPdb 는 SQLite 데이터베이스이고 [3], 읽는 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)와 같습니다. 표 이름과 칸 이름, 시각 값의 형식은 공개 자료가 없으니, 검체의 스키마를 먼저 뽑아 보고 칸의 뜻은 값을 보며 확인합니다.
+XPdb 는 SQLite 데이터베이스이고 [3], 읽는 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)와 같습니다. 표 이름과 열 이름, 시각 값의 형식은 공개 자료가 없으니, 실제 데이터의 스키마를 먼저 뽑아 보고 열의 뜻은 값을 보며 확인합니다.
 
 ### Bastion 규칙이 보는 행위
 
@@ -73,15 +73,15 @@ XPdb 는 SQLite 데이터베이스이고 [3], 읽는 방법은 [SQLite 데이터
 | 권한·설정 변경 | 숨은 권한 도우미(privileged helper), Safari 확장 수정 |
 | 숨은 파일과 지속성 | Adload 행위(2개), Application Support 안의 숨은 지속성, Shared 폴더의 숨은 파일과 숨은 실행(2개) |
 
-`BastionMeta.plist` 안의 키는 공개 자료가 없습니다. 규칙 목록은 판마다 늘어났으니 검체의 `bastion.sb` 와 `BastionMeta.plist` 를 함께 수집해 그때 어떤 규칙이 있었는지 확인합니다.
+`BastionMeta.plist` 안의 키는 공개 자료가 없습니다. 규칙 목록은 판마다 늘어났으니 분석 대상의 `bastion.sb` 와 `BastionMeta.plist` 를 함께 수집해 그때 어떤 규칙이 있었는지 확인합니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** XPdb 에 기록이 있으면 그 무렵 XBS 규칙에 걸린 행위가 있었다는 뜻이고, 2024년 6월 기준으로는 탐지해도 막지 않았으니 [3] 기록된 행위가 끝까지 실행됐을 수 있습니다. 휴지통에 들어간 파일과 Finder 알림은 XProtect 가 알려진 악성 코드를 막은 흔적일 수 있지만, 이 알림과 휴지통 이동이 어느 로그에 남는지는 공개 자료가 없어 검체에서 확인합니다. 수집한 번들과 규칙 파일은 수집 시점의 XProtect 판을 보여 줍니다.
+**증명하는 것.** XPdb 에 기록이 있으면 그 무렵 XBS 규칙에 걸린 행위가 있었다는 뜻이고, 2024년 6월 기준으로는 탐지해도 막지 않았으니 [3] 기록된 행위가 끝까지 실행됐을 수 있습니다. 휴지통에 들어간 파일과 Finder 알림은 XProtect 가 알려진 악성 코드를 막은 흔적일 수 있지만, 이 알림과 휴지통 이동이 어느 로그에 남는지는 공개 자료가 없어 실제 데이터로 확인해야 합니다. 수집한 번들과 규칙 파일은 수집 시점의 XProtect 판을 보여 줍니다.
 
 **증명하지 못하는 것.** XPdb 에 기록이 없다고 악성 행위가 없었다고 말할 수는 없습니다. 규칙이 보는 행위는 정해져 있고 규칙 수도 판마다 다르니, 탐지가 없었다는 것은 그 판의 시그니처와 규칙에 걸린 것이 없었다는 뜻일 뿐입니다. 2024년 6월 기준으로 XBS 는 사용자에게 알리지 않았으니 [3], XPdb 기록만으로 사용자가 탐지를 알았다고 할 수도 없습니다.
 
-보고서에는 "이 시각 무렵 이 프로세스가 브라우저 개인 데이터에 접근하는 행위가 XBS 규칙에 걸려 XPdb 에 기록됐다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 시각 무렵 이 프로세스가 브라우저 개인 데이터에 접근하는 행위가 XBS 규칙에 걸려 XPdb 에 기록됐다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -93,9 +93,9 @@ XProtect 판과 갱신 시각은 사고 당시 어떤 규칙이 돌았는지 가
 
 Tahoe 에서는 Gatekeeper Compatibility Data 를 여전히 내려받아 설치하지만 파일은 어디에도 보이지 않고, 예전 방식의 흔적만 남은 것이라는 해석이 있습니다 [2]. 그래서 설치 기록에는 있는데 파일이 없다고 곧바로 삭제 조작을 의심하지 말고, 원래 그런 동작인지 먼저 따져 봅니다.
 
-Tahoe 는 주 XProtect 번들을 Software Update 말고 iCloud 의 CloudKit 연결로도 갱신하니 [2], 예전처럼 설치 기록에서만 XProtect 갱신을 찾으면 일부를 놓칠 수 있습니다. 설치 로그에 XProtect 갱신이 남는지는 공개 자료가 없어 검체의 [설치 로그 (install.log)](install-log.md)에서 확인합니다.
+Tahoe 는 주 XProtect 번들을 Software Update 말고 iCloud 의 CloudKit 연결로도 갱신하니 [2], 예전처럼 설치 기록에서만 XProtect 갱신을 찾으면 일부를 놓칠 수 있습니다. 설치 로그에 XProtect 갱신이 남는지는 공개 자료가 없어 분석 대상의 [설치 로그 (install.log)](install-log.md)에서 확인합니다.
 
-XProtect Remediator 의 실행 주기와 실행을 맡는 LaunchDaemon 이름, 검사 결과가 남는 통합 로그 카테고리는 공개 자료가 없어 검체에서 확인합니다. 통합 로그에서 XProtect 쪽 메시지를 찾는 조건은 [통합 로그에서 찾을 것 (Unified Log Events)](unified-log-events/index.md)에 있습니다.
+XProtect Remediator 의 실행 주기와 실행을 맡는 LaunchDaemon 이름, 검사 결과가 남는 통합 로그 카테고리는 공개 자료가 없어 실제 데이터로 확인해야 합니다. 통합 로그에서 XProtect 쪽 메시지를 찾는 조건은 [통합 로그에서 찾을 것 (Unified Log Events)](unified-log-events/index.md)에 있습니다.
 
 XPdb 설명은 2024년 6월 기준이라 [3], 그 뒤 판에서 기록 방식이 바뀌었을 수 있습니다.
 
@@ -108,8 +108,8 @@ XPdb 사본을 헥스 편집기로 열어 파일 앞부분이 SQLite 머리글�
 ### 공개 도구로 한 번
 
 1. 이미지에서 `/var/protected/xprotect/` 폴더 전체와 `XProtect.app` 안의 `bastion.sb`, `BastionMeta.plist` 를 복사합니다. XPdb 옆에 같은 이름으로 시작하는 파일이 있으면 함께 복사합니다.
-2. 복사본을 SQLite 명령행 도구(예: `sqlite3`)로 열어 `.tables` 와 `.schema` 로 표와 칸을 확인합니다.
-3. 시각으로 보이는 칸을 두 방식으로 바꿔 보고, 같은 무렵의 다른 기록과 맞춰 봅니다.
+2. 복사본을 SQLite 명령행 도구(예: `sqlite3`)로 열어 `.tables` 와 `.schema` 로 표와 열을 확인합니다.
+3. 시각으로 보이는 열을 두 방식으로 바꿔 보고, 같은 무렵의 다른 기록과 맞춰 봅니다.
 4. 탐지된 경로가 있으면 그 파일의 격리 속성, 휴지통 기록, 실행 흔적을 이어서 찾습니다.
 
 ## 교차 검증
@@ -123,15 +123,15 @@ XPdb 사본을 헥스 편집기로 열어 파일 앞부분이 SQLite 머리글�
 | [설치 로그 (install.log)](install-log.md) | 보안 데이터 갱신 시기 |
 | [실행 에이전트·데몬 (LaunchAgents·LaunchDaemons)](../persistence/launchd/index.md) | 지속성 규칙에 걸린 항목의 실제 설정 |
 
-정보 탈취형 악성 코드를 조사하는 흐름은 [정보 탈취 악성 코드 (Infostealer)](../../04-scenarios/incident/infostealer.md)에, 지속성을 훑는 흐름은 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에 있습니다.
+정보 탈취형 악성 코드를 조사하는 흐름은 [정보 탈취 악성 코드 (Infostealer)](../../04-scenarios/incident/infostealer.md)에, 지속성을 살펴보는 흐름은 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에 있습니다.
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체에서 macOS 13 이후 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터에서 macOS 13 이후 이미지를 골라 아래 질문을 풀어 봅니다.
 
-1. `/var/protected/xprotect/XPdb` 가 있나요? 있다면 표는 몇 개이고, 시각으로 보이는 칸은 어느 방식으로 해석하면 다른 기록과 맞나요?
-2. 검체의 `bastion.sb` 와 `BastionMeta.plist` 를 열어 보면 이 페이지의 12개 규칙 목록 가운데 어떤 행위에 해당하는 내용이 보이나요?
-3. XProtect 번들이 두 경로 중 어디에 있나요? 검체의 macOS 버전과 맞나요?
+1. `/var/protected/xprotect/XPdb` 가 있나요? 있다면 표는 몇 개이고, 시각으로 보이는 열은 어느 방식으로 해석하면 다른 기록과 맞나요?
+2. 이미지의 `bastion.sb` 와 `BastionMeta.plist` 를 열어 보면 이 페이지의 12개 규칙 목록 가운데 어떤 행위에 해당하는 내용이 보이나요?
+3. XProtect 번들이 두 경로 중 어디에 있나요? 이미지의 macOS 버전과 맞나요?
 
 ## 참고 문헌
 

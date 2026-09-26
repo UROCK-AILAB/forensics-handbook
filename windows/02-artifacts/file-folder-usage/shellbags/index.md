@@ -18,7 +18,7 @@ has_toc: false
 
 셸백은 사용자마다 따로 있는 하이브(NTUSER.DAT·UsrClass.dat)에 남으므로 어느 사용자 프로필에서 탐색한 기록인지 나뉩니다. 폴더를 지워도 셸백 항목은 함께 지워지지 않아서 지금 디스크에 없는 폴더도 찾을 수 있고, 떼어 낸 USB 저장장치, 휴대용 장치(MTP), 네트워크 공유, ZIP 파일 안의 폴더도 셸 아이템으로 남습니다.
 
-셸 아이템에는 폴더의 만든 시각·수정 시각·접근 시각이 들어 있는데, 이 값은 셸백 항목을 처음 만들 때 파일시스템에서 옮겨 적은 값입니다. Vista 이후의 셸 아이템에는 폴더의 NTFS 파일 참조(MFT 번호·순번) 칸도 있어서 [$MFT](../../filesystem/mft.md) 의 레코드와 맞춰 볼 수 있습니다.
+셸 아이템에는 폴더의 만든 시각·수정 시각·접근 시각이 들어 있는데, 이 값은 셸백 항목을 처음 만들 때 파일시스템에서 옮겨 적은 값입니다. Vista 이후의 셸 아이템에는 폴더의 NTFS 파일 참조(MFT 번호·순번) 필드도 있어서 [$MFT](../../filesystem/mft.md) 의 레코드와 맞춰 볼 수 있습니다.
 
 셸백으로 증명하지 못하는 것은 아래와 같습니다.
 
@@ -50,22 +50,22 @@ has_toc: false
 | UsrClass.dat (Vista 이후) | `%UserProfile%\AppData\Local\Microsoft\Windows\UsrClass.dat` |
 
 - 실행 중인 시스템에서는 UsrClass.dat 가 `HKEY_CURRENT_USER\Software\Classes` 아래에 붙습니다. 그래서 같은 키가 `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU` 로 보입니다.
-- Vista 이후 검체는 UsrClass.dat 쪽을 먼저 봅니다. NTUSER.DAT 쪽 `Shell` 키도 빼놓지 않고 함께 봅니다.
+- Vista 이후 시스템은 UsrClass.dat 쪽을 먼저 봅니다. NTUSER.DAT 쪽 `Shell` 키도 빼놓지 않고 함께 봅니다.
 - 하이브 파일의 쓰임새는 [하이브 파일 종류와 위치](../../../01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md) 에서 다룹니다.
 
 ### Windows 버전에 따라 달라지는 점
 
 폴더를 가리키는 셸 아이템에는 확장 블록 (Extension Block) 이 붙습니다. 만든 시각과 접근 시각은 서명이 `0xbeef0004` 인 확장 블록에 들어 있습니다. 이 블록의 버전은 Windows 버전에 따라 다릅니다.
 
-| Windows 버전 | 셸백이 있는 하이브 | `0xbeef0004` 블록 버전 | NTFS 파일 참조 칸 |
+| Windows 버전 | 셸백이 있는 하이브 | `0xbeef0004` 블록 버전 | NTFS 파일 참조 필드 |
 |---|---|---|---|
 | XP · 2003 | NTUSER.DAT | 3 | 없음 |
 | Vista (SP0) | UsrClass.dat · NTUSER.DAT | 7 | 있음 |
 | 2008 · 7 · 8.0 | UsrClass.dat · NTUSER.DAT | 8 | 있음 |
 | 8.1 · 10 | UsrClass.dat · NTUSER.DAT | 9 | 있음 |
 
-- 파일 참조 칸에 늘 파일 참조가 들어가는지는 아직 확실하지 않습니다.
-- Windows 11 의 블록 버전 값은 공개 자료가 없어 검체에서 확인합니다.
+- 파일 참조 필드에 늘 파일 참조가 들어가는지는 아직 확실하지 않습니다.
+- Windows 11 의 블록 버전 값은 실제 데이터로 확인해야 합니다.
 - 셸 아이템의 형식은 문서로 공개되지 않았습니다. 형식 설명은 [셸 아이템 (Shell Item·PIDL)](../../../01-foundations/shell-document-formats/shell-item-pidl.md) 에서 다룹니다.
 
 ### 시각 값

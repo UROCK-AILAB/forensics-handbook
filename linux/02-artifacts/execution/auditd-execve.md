@@ -21,7 +21,7 @@ nav_order: 460
 | `-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F key=10.2.5.b-elevated-privs-setuid` (b32 줄도 있음) | audit-userspace 예시 묶음 `30-pci-dss-v31.rules`[2] | 실제 uid 와 유효 uid 가 다르고 유효 uid 가 0 인 실행, 곧 root 로 권한이 바뀌는 실행 |
 | `auditctl -a exit,always -F arch=b64 -S execve -k procmon` | Velociraptor `Linux.Events.ProcessExecutions` 가 라이브 수집 때 넣는 규칙[11] | 64비트 실행 전부 |
 
-audit-userspace 가 싣는 예시 규칙 묶음은 필요한 조각을 골라 `/etc/audit/rules.d/` 로 복사해 쓰는 것이라[2], 검체마다 들어 있는 규칙이 다릅니다. 그래서 실행 기록을 해석하기 전에 그 시점의 규칙부터 확인합니다. 감사 로그의 줄 모양, 이벤트와 레코드의 관계, 회전, 필드 사전은 [감사 로그 형식](../../01-foundations/logging/auditd-format.md) 에서 다루고, 이 쪽은 실행 규칙과 실행 레코드를 읽는 법만 다룹니다.
+audit-userspace 가 싣는 예시 규칙 묶음은 필요한 조각을 골라 `/etc/audit/rules.d/` 로 복사해 쓰는 것이라[2], 시스템마다 들어 있는 규칙이 다릅니다. 그래서 실행 기록을 해석하기 전에 그 시점의 규칙부터 확인합니다. 감사 로그의 줄 모양, 이벤트와 레코드의 관계, 회전, 필드 사전은 [감사 로그 형식](../../01-foundations/logging/auditd-format.md) 에서 다루고, 이 페이지는 실행 규칙과 실행 레코드를 읽는 법만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -94,11 +94,11 @@ PROCTITLE 은 `/proc/[pid]/cmdline` 과 같은 곳에서 명령줄을 최대 128
 
 규칙이 없던 시기, 규칙이 잡지 않는 아키텍처, `execveat` 처럼 규칙에 없는 시스템 콜로 한 실행은 기록되지 않습니다. `cd`·`echo`·`history` 같은 셸 내장 명령 (builtin) 은 새 프로그램을 실행하지 않으므로 `execve` 가 없고, 셸 안에서 한 입력은 이 기록에 나오지 않습니다. 실행 기록은 프로그램이 시작됐다는 사실만 보여 주고, 프로그램이 무엇을 했는지, 언제 끝났는지, 결과가 무엇이었는지는 보여 주지 않습니다. auditd 가 디스크 부족으로 기록을 멈춘 구간도 비어 있습니다([감사 로그 형식](../../01-foundations/logging/auditd-format.md)). `auid` 는 로그인 프로그램의 PAM 설정에 `pam_loginuid` 가 있어야 정확하고[9], 로그인 ID 가 없는 프로세스는 `auid=4294967295` 로 적힙니다[1]([인증 모듈 (PAM)](../../01-foundations/users-auth/pam.md)).
 
-보고서에는 "이 시각에 auid 1000 의 세션 3 에서 `/usr/bin/zip` 을 이 인수로 실행한 기록이 있다" 처럼 레코드가 말하는 만큼만 씁니다.
+보고서에는 "이 시각에 auid 1000 의 세션 3 에서 `/usr/bin/zip` 을 이 인수로 실행한 기록이 있다" 처럼 레코드로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-`msg=audit(초.밀리초:일련번호)` 의 시각은 커널이 `execve` 시스템 콜에 들어갈 때 읽은 벽시계 값입니다[3]. UTC 기준 Unix epoch 초에 밀리초를 붙인 값이라 시간대 정보가 없고, 현지 시각으로 바꿀 때는 검체의 시간대를 따로 확인합니다([Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)). 레코드는 시스템 콜이 끝날 때 적지만 시각은 들어갈 때의 값이므로, 같은 이벤트의 모든 줄이 한 시각을 씁니다. 시스템 시계를 바꾸면 그 뒤 기록도 바뀐 시계를 따릅니다.
+`msg=audit(초.밀리초:일련번호)` 의 시각은 커널이 `execve` 시스템 콜에 들어갈 때 읽은 실제 시각 시계(wall clock) 값입니다[3]. UTC 기준 Unix epoch 초에 밀리초를 붙인 값이라 시간대 정보가 없고, 현지 시각으로 바꿀 때는 분석 대상의 시간대를 따로 확인합니다([Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)). 레코드는 시스템 콜이 끝날 때 적지만 시각은 들어갈 때의 값이므로, 같은 이벤트의 모든 줄이 한 시각을 씁니다. 시스템 시계를 바꾸면 그 뒤 기록도 바뀐 시계를 따릅니다.
 
 이 시각은 프로그램이 시작된 때이지 끝난 때가 아닙니다. 끝난 때와 쓴 CPU 시간은 [프로세스 회계](process-accounting.md) 가 켜져 있을 때 거기서 찾습니다.
 
@@ -107,8 +107,8 @@ PROCTITLE 은 `/proc/[pid]/cmdline` 과 같은 곳에서 명령줄을 최대 128
 - **문자열 검색이 16진 인수를 놓칩니다.** 인수에 공백 하나만 있어도 16진으로 적히므로[3][4], `grep` 으로 경로나 명령을 찾을 때는 16진으로 바꾼 문자열도 함께 찾거나, 먼저 풀어 놓고 찾습니다. EXECVE 레코드에서 파일 이름 문자열만 찾는 탐지 규칙도 있어서[17], 이런 규칙의 결과가 없다는 것이 곧 실행이 없었다는 뜻은 아닙니다.
 - **`comm` 을 프로그램 이름으로 믿지 않습니다.** `comm` 은 NUL 을 포함해 16바이트에서 잘리고 프로세스가 스스로 바꿀 수 있습니다[13]. `exe`·PATH·EXECVE 의 `a0` 과 견줘 봅니다.
 - **`a0` 도 실행 파일 이름이 아닐 수 있습니다.** `a0` 은 실행한 쪽이 넘긴 첫 인수라서 실제 경로는 `exe` 와 PATH 레코드로 확인합니다. 스크립트를 실행하면 `exe` 가 인터프리터 경로로 적힐 가능성이 있으니, 스크립트 파일은 PATH 레코드에서 찾습니다.
-- **`ausearch -sc execve` 는 분석하는 기계의 시스템 콜 표로 번호를 찾습니다**[9]. 다른 아키텍처(예: aarch64) 검체의 로그라면 번호로 찾습니다.
-- **`ausearch -i` 의 사용자 이름은 분석 기계 기준일 수 있습니다.** 풀이 값이 없는 로그는 분석하는 기계의 계정 정보로 uid 를 바꿉니다[9]. 이름은 검체의 계정 파일로 다시 확인합니다([UID·GID 와 사용자 이름 잇기](../../01-foundations/value-decoding/uid-gid.md)).
+- **`ausearch -sc execve` 는 분석하는 기계의 시스템 콜 표로 번호를 찾습니다**[9]. 다른 아키텍처(예: aarch64) 시스템의 로그라면 번호로 찾습니다.
+- **`ausearch -i` 의 사용자 이름은 분석 기계 기준일 수 있습니다.** 풀이 값이 없는 로그는 분석하는 기계의 계정 정보로 uid 를 바꿉니다[9]. 이름은 분석 대상의 계정 파일로 다시 확인합니다([UID·GID 와 사용자 이름 잇기](../../01-foundations/value-decoding/uid-gid.md)).
 - **도구가 덧붙인 부모 명령줄은 수집 시점 값입니다.** Velociraptor `Linux.Events.ProcessExecutions` 는 부모 프로세스의 명령줄을 이벤트를 받을 때 `/proc/PPID/cmdline` 에서 읽어 붙입니다[11]. 부모가 이미 끝났거나 PID 가 재사용됐으면 비거나 다른 값이 됩니다. 감사 레코드 자체에는 `ppid` 번호만 있습니다.
 - **저널의 `_COMM`·`_EXE`·`_CMDLINE` 은 실행 인수가 아닙니다.** 저널 필드 정의상 이 값들은 그 항목을 보낸 프로세스의 것입니다[14]. 감사 레코드 본문의 `exe`·EXECVE 와 섞어 읽지 않습니다.
 - **sudo 로 실행한 명령은 두 번 보일 수 있습니다.** sudo 는 사용자 공간에서 `USER_CMD`(1123) 레코드로 명령을 따로 남기고, 명령 문자열은 같은 16진 규칙으로 적습니다[8][15]. 여기에 execve 규칙이 있으면 sudo 가 띄운 프로그램의 EXECVE 이벤트가 이어집니다. 자세한 읽는 법은 [sudo·su 사용 기록](../logins/sudo-su.md) 에 있습니다.
@@ -158,7 +158,7 @@ dissect.target 의 `audit` 플러그인은 `/var/log/audit/audit.log*` 와 `audi
 
 ## 교차 검증
 
-| 함께 볼 기록 | 맞춰 볼 점 | 쪽 |
+| 함께 볼 기록 | 맞춰 볼 점 | 페이지 |
 |---|---|---|
 | 셸 명령 기록 | 같은 시각대의 명령과 셸 내장 명령, 기록 파일이 지워진 흔적 | [셸 명령 기록](shell-history/index.md) |
 | 프로세스 회계 | 같은 명령 이름의 시작 시각, 끝난 때, uid | [프로세스 회계](process-accounting.md) |
@@ -173,7 +173,7 @@ dissect.target 의 `audit` 플러그인은 `/var/log/audit/audit.log*` 와 `audi
 
 ## 실습
 
-auditd 가 깔리고 execve 규칙이 있는 공개 Linux 검체(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
+auditd 가 깔리고 execve 규칙이 있는 공개 Linux 시험 이미지(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
 
 1. `/etc/audit/rules.d/` 와 `audit.rules` 에 `execve` 규칙이 있는가? `arch=b32` 와 `arch=b64` 가 둘 다 있는가? 키는 무엇인가?
 2. `syscall=59` 인 이벤트 가운데 `success=no` 인 것은 몇 개이고, 그 이벤트에 EXECVE 레코드가 있는가?

@@ -10,7 +10,7 @@ Microsoft 365 에서 지운 메일·파일이 어디에 얼마나 남는지는 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-이 쪽에서 다루는 흔적은 두 갈래입니다.
+이 페이지에서 다루는 흔적은 두 종류입니다.
 
 첫째는 **보존된 내용**입니다. 전자 증거 개시 (eDiscovery) 는 조사·소송에 쓸 전자 정보를 찾아 넘기는 절차이고, Microsoft Purview eDiscovery 는 Exchange Online, Microsoft Teams, Microsoft 365 그룹, OneDrive, SharePoint, Viva Engage 를 검색 대상으로 삼습니다[1]. 사용자가 메일이나 파일을 지워도 보존 정책 (retention policy)·보존 레이블 (retention label)·보류 (hold) 가 걸려 있으면 영구 삭제가 멈추고, 내용은 사용자에게 보이지 않는 숨은 위치로 옮겨지거나 복사됩니다[5]. 조사자는 이 숨은 위치까지 eDiscovery 검색으로 찾을 수 있습니다[4].
 
@@ -46,7 +46,7 @@ Microsoft 는 2025년 8월 31일에 클래식 eDiscovery 를 모두 폐지했습
 
 | 서비스 | 지우거나 고친 내용이 가는 곳 | 자세한 설명 |
 |---|---|---|
-| Exchange Online | 복구 가능한 항목 폴더 (Recoverable Items) 의 하위 폴더[4] | 이 쪽 아래 "구조" |
+| Exchange Online | 복구 가능한 항목 폴더 (Recoverable Items) 의 하위 폴더[4] | 이 페이지 아래 "구조" |
 | SharePoint·OneDrive | 숨은 시스템 위치인 보존 보류 라이브러리 (Preservation Hold library)[7] | [SharePoint·OneDrive](sharepoint-onedrive.md) |
 | Teams | 고치거나 지운 메시지의 원본은 복구 가능한 항목의 `SubstrateHolds`[4] | [Teams](teams.md) |
 
@@ -203,7 +203,7 @@ Microsoft 365 개발자·평가판 테넌트에서 만든 계정으로 풀어 �
 1. 한 메일함에 보류를 건 뒤 메일 하나의 제목을 고치고 다른 메일을 Shift+Delete 로 지웁니다. eDiscovery 검색에서 두 메일이 각각 어느 하위 폴더에 나타나는지 확인합니다.
 2. 사례를 만들고 검색·통계·내보내기를 차례로 한 뒤, 감사 로그에서 `CaseId` 가 같은 기록을 모아 작업 이름과 `CreationTime`·`StartTime` 차이를 표로 정리합니다.
 3. 보류를 풀고 사례를 지운 뒤 `HoldRemoved`·`CaseRemoved` 의 순서와 간격을 확인합니다.
-4. 보고서 문장으로 "이 계정이 이 시각에 이 사례에서 이 쿼리로 내보내기를 시작한 기록이 있다" 처럼 기록이 말하는 만큼만 적어 봅니다([클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)).
+4. 보고서 문장으로 "이 계정이 이 시각에 이 사례에서 이 쿼리로 내보내기를 시작한 기록이 있다" 처럼 기록으로 확인되는 만큼만 적어 봅니다([클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)).
 
 ## 참고 문헌
 

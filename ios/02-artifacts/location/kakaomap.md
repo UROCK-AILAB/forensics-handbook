@@ -16,7 +16,7 @@ nav_order: 650
 
 앱이 요구하는 권한은 위치, 음성 검색용 마이크, 리뷰용 카메라·사진, 알림, 건강 데이터 연동이고 [2], App Store 개인정보 항목에 정밀 위치가 들어 있습니다 [2]. 다만 이 표시는 개발사가 스스로 밝힌 내용이라, 기기에 무엇이 어떤 형식으로 남는지는 따로 확인해야 합니다.
 
-기기 안에서 검색 기록·최근 길찾기·즐겨찾기·내비 주행 기록을 어느 파일에 어떤 형식(SQLite·plist 등)으로 두는지, 즐겨찾기를 카카오 계정과 동기화하고 기기에도 사본을 두는지는 공개된 분석 자료가 없어 검체에서 확인해야 합니다. 이 페이지는 검체에서 이런 파일을 찾아 기록하는 절차를 다룹니다.
+기기 안에서 검색 기록·최근 길찾기·즐겨찾기·내비 주행 기록을 어느 파일에 어떤 형식(SQLite·plist 등)으로 두는지, 즐겨찾기를 카카오 계정과 동기화하고 기기에도 사본을 두는지는 실제 데이터로 확인해야 합니다. 이 페이지는 실제 기기에서 이런 파일을 찾아 기록하는 절차를 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -38,11 +38,11 @@ nav_order: 650
 | 6.29.2 (2026-09-16 기준 최신판) | iOS 17.0 이상 | [1] |
 | 그보다 예전 판 | iOS 15·16 기기에 남아 있을 수 있음 | [1] 의 최소 버전에서 추론 |
 
-최신판을 iOS 15·16 에 설치할 수 없어서, iOS 15·16 기기를 조사할 때는 예전 판의 데이터 구조를 보게 됩니다. 앱 판마다 저장 구조가 어떻게 다른지는 공개된 자료가 없어서, 검체의 앱 판 번호를 먼저 기록해 두고 판이 다른 검체와 결과를 섞지 않습니다.
+최신판을 iOS 15·16 에 설치할 수 없어서, iOS 15·16 기기를 조사할 때는 예전 판의 데이터 구조를 보게 됩니다. 앱 판마다 저장 구조가 어떻게 다른지는 알려져 있지 않아서, 분석 대상의 앱 판 번호를 먼저 기록해 두고 판이 다른 기기의 결과와 섞지 않습니다.
 
 ### 로컬 백업에서 찾기
 
-로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다. 앱 영역의 도메인은 `AppDomain-` 뒤에 번들 ID 를 붙이고, 앱 그룹은 `AppDomainGroup-`, 확장은 `AppDomainPlugin-` 으로 시작합니다. 이 형식에 따르면 카카오맵 앱 영역은 `AppDomain-net.daum.maps` 로 찾습니다. 번들 ID 로 짐작한 이름이므로 검체에 실제로 이 도메인이 있는지 확인합니다.
+로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고 열은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다. 앱 영역의 도메인은 `AppDomain-` 뒤에 번들 ID 를 붙이고, 앱 그룹은 `AppDomainGroup-`, 확장은 `AppDomainPlugin-` 으로 시작합니다. 이 형식에 따르면 카카오맵 앱 영역은 `AppDomain-net.daum.maps` 로 찾습니다. 번들 ID 로 짐작한 이름이므로 실제 백업에 이 도메인이 있는지 확인합니다.
 
 백업의 `Info.plist` 에는 `Installed Applications` 키가 있어서 앱 영역을 찾기 전에 카카오맵이 설치 목록에 있는지 먼저 볼 수 있습니다. 백업 폴더 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
 
@@ -55,15 +55,15 @@ nav_order: 650
 | `Library/Caches` | 들어가지 않음(iOS 2.2 이후), 기기 전체 복원 때 시스템이 지움 | [3] |
 | `tmp/` | 들어가지 않음 | [3] |
 
-지도 타일이나 검색 캐시를 카카오맵이 `Library/Caches` 에 둔다면 로컬 백업에는 없고 파일 시스템 전체 추출에서만 보이지만, 카카오맵이 실제로 `Caches` 에 무엇을 두는지는 공개된 자료가 없어 검체에서 확인합니다.
+지도 타일이나 검색 캐시를 카카오맵이 `Library/Caches` 에 둔다면 로컬 백업에는 없고 파일 시스템 전체 추출에서만 보이지만, 카카오맵이 `Caches` 에 실제로 무엇을 두는지는 추출한 데이터로 확인해야 합니다.
 
 ### 파일 시스템 추출에서 찾기
 
-파일 시스템 전체 추출에서는 앱 데이터가 `/private/var/mobile/Containers/Data/Application/` 아래 GUID 이름 폴더에 있어서, 폴더 이름만으로는 어느 앱인지 알 수 없습니다. 폴더 안의 `.com.apple.mobile_container_manager.metadata.plist` 에 소유 번들 ID 가 적혀 있으므로 이 파일에서 `net.daum.maps` 를 찾아 카카오맵 폴더를 가립니다 [4]. 같은 plist 가 `Shared/AppGroup/` 와 `Data/PluginKitPlugin/` 아래 GUID 폴더에도 있어서 앱 그룹·확장 폴더도 같은 방법으로 찾습니다 [4]. FrontBoard 의 `ApplicationState.db` 도 GUID 와 앱을 잇지만 `Shared/AppGroup` 경로는 이 DB 에 없습니다 [4]. 이 DB 는 [설치된 앱](../app-usage/installed-apps.md) 에서 자세히 다룹니다. 파일 시스템 추출 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 를 봅니다.
+파일 시스템 전체 추출에서는 앱 데이터가 `/private/var/mobile/Containers/Data/Application/` 아래 GUID 이름 폴더에 있어서, 폴더 이름만으로는 어느 앱인지 알 수 없습니다. 폴더 안의 `.com.apple.mobile_container_manager.metadata.plist` 에 소유 번들 ID 가 적혀 있으므로 이 파일에서 `net.daum.maps` 를 찾아 카카오맵 폴더를 찾아냅니다 [4]. 같은 plist 가 `Shared/AppGroup/` 와 `Data/PluginKitPlugin/` 아래 GUID 폴더에도 있어서 앱 그룹·확장 폴더도 같은 방법으로 찾습니다 [4]. FrontBoard 의 `ApplicationState.db` 도 GUID 와 앱을 잇지만 `Shared/AppGroup` 경로는 이 DB 에 없습니다 [4]. 이 DB 는 [설치된 앱](../app-usage/installed-apps.md) 에서 자세히 다룹니다. 파일 시스템 추출 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 를 봅니다.
 
 ## 구조
 
-카카오맵 앱 영역 안의 파일 이름, 저장 형식, 표·칸 이름, 앱 데이터 암호화 여부는 공개된 분석 자료가 없습니다. 검체에서 찾은 파일은 머리 부분으로 형식을 먼저 가리고, SQLite 면 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), plist 면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 읽는 법을 따릅니다. 앱 안 파일이 암호화되어 있는지 모를 때 기기 쪽 보호 등급부터 짚어 보려면 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 를 봅니다.
+카카오맵 앱 영역 안의 파일 이름, 저장 형식, 표·열 이름, 앱 데이터 암호화 여부는 공개된 분석 자료가 없습니다. 기기에서 찾은 파일은 머리 부분으로 형식을 먼저 판별하고, SQLite 면 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), plist 면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 읽는 법을 따릅니다. 앱 안 파일이 암호화되어 있는지 모를 때 기기 쪽 보호 등급부터 짚어 보려면 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 를 봅니다.
 
 안드로이드판에서는 TMAP 과 카카오맵이 데이터를 모두 평문으로 저장합니다 [5]. 이 결과는 안드로이드에서 얻은 것이라 iOS 판도 평문이라고 보면 안 됩니다.
 
@@ -80,17 +80,17 @@ nav_order: 650
 - 즐겨찾기가 카카오 계정과 동기화되는지 알려진 자료가 없어서, 기기에 있는 즐겨찾기를 그 기기에서 직접 추가했다고 단정할 수 없습니다.
 - 앱을 누가 조작했는지는 앱 데이터만으로 알 수 없습니다. 사용자 판단은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
-보고서에는 "카카오맵 앱 영역에 이 장소를 검색한 기록이 있고, 기록의 시각 값은 이것이다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "카카오맵 앱 영역에 이 장소를 검색한 기록이 있고, 기록의 시각 값은 이것이다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-카카오맵이 시각을 유닉스 시각으로 두는지 Mac 절대 시각으로 두는지는 공개된 자료가 없습니다. 시각으로 보이는 숫자를 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 가려 읽고, 같은 행동을 시스템 기록과 맞춰 기준을 확인한 뒤에 보고서에 씁니다. UTC 로 저장했는지 현지 시각으로 저장했는지도 같은 방법으로 확인하고, 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 봅니다.
+카카오맵이 시각을 유닉스 시각으로 두는지 Mac 절대 시각으로 두는지는 알려져 있지 않습니다. 시각으로 보이는 숫자를 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 구분해 읽고, 같은 행동을 시스템 기록과 맞춰 기준을 확인한 뒤에 보고서에 씁니다. UTC 로 저장했는지 현지 시각으로 저장했는지도 같은 방법으로 확인하고, 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 봅니다.
 
 ## 함정과 한계
 
 로컬 백업만 받았다면 `Library/Caches` 와 `tmp/` 는 처음부터 없어서 [3], 백업에서 캐시 흔적이 없다고 해서 앱을 쓰지 않았다고 볼 수 없습니다. 기기 전체 복원 때 시스템이 `Caches` 를 지우고, iOS 5.0 이후에는 저장 공간이 아주 모자랄 때도 시스템이 이 폴더를 지울 수 있어서 [3] 파일 시스템 추출에서 캐시가 비어 있어도 사용하지 않았다는 뜻은 아닙니다.
 
-앱 판 번호가 다르면 저장 구조가 다를 수 있고 iOS 15·16 기기에는 예전 판이 있을 수 있어서, 다른 검체나 다른 자료에서 얻은 파일 이름·표 이름을 그대로 적용하지 않습니다. 안드로이드 연구 결과를 iOS 에 옮겨 쓰는 일도 같은 이유로 피합니다.
+앱 판 번호가 다르면 저장 구조가 다를 수 있고 iOS 15·16 기기에는 예전 판이 있을 수 있어서, 다른 기기나 다른 자료에서 얻은 파일 이름·표 이름을 그대로 적용하지 않습니다. 안드로이드 연구 결과를 iOS 에 옮겨 쓰는 일도 같은 이유로 피합니다.
 
 앱 영역이 비어 있거나 앱이 설치 목록에 없을 때 지우기를 의심한다면 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 확인합니다. 서버에만 있는 기록은 기기에서 볼 수 없고, 계정 데이터 요청은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에서 다룹니다.
 
@@ -107,9 +107,9 @@ WHERE domain = 'AppDomain-net.daum.maps'
 ORDER BY domain, relativePath;
 ```
 
-앱 그룹과 확장 도메인의 그룹 ID 는 카카오맵의 알려진 값이 없어서 위 질의는 전체 그룹·확장 도메인을 뽑고, 결과에서 카카오 쪽으로 보이는 이름을 눈으로 고릅니다. 뽑은 파일은 해당 `fileID` 로 백업 폴더에서 찾아 복사본으로 옮긴 뒤 헥스 편집기로 첫 부분을 보고 형식을 가립니다. 형식별 머리 부분 값과 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에 있습니다.
+앱 그룹과 확장 도메인의 그룹 ID 는 카카오맵의 알려진 값이 없어서 위 질의는 전체 그룹·확장 도메인을 뽑고, 결과에서 카카오 쪽으로 보이는 이름을 눈으로 고릅니다. 뽑은 파일은 해당 `fileID` 로 백업 폴더에서 찾아 복사본으로 옮긴 뒤 헥스 편집기로 첫 부분을 보고 형식을 판별합니다. 형식별 머리 부분 값과 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에 있습니다.
 
-파일 시스템 추출이면 `/private/var/mobile/Containers/Data/Application/` 아래 폴더마다 `.com.apple.mobile_container_manager.metadata.plist` 를 열어 `net.daum.maps` 가 적힌 폴더를 찾습니다 [4]. 찾은 뒤에는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md) 의 절차대로 파일마다 형식·시각 값·내용을 기록합니다. 이렇게 찾은 파일 이름과 표 이름은 검체의 iOS 버전과 카카오맵 판 번호를 함께 적어 두어야 다음 조사에서 비교할 수 있습니다.
+파일 시스템 추출이면 `/private/var/mobile/Containers/Data/Application/` 아래 폴더마다 `.com.apple.mobile_container_manager.metadata.plist` 를 열어 `net.daum.maps` 가 적힌 폴더를 찾습니다 [4]. 찾은 뒤에는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md) 의 절차대로 파일마다 형식·시각 값·내용을 기록합니다. 이렇게 찾은 파일 이름과 표 이름은 기기의 iOS 버전과 카카오맵 판 번호를 함께 적어 두어야 다음 조사에서 비교할 수 있습니다.
 
 ## 교차 검증
 
@@ -126,7 +126,7 @@ ORDER BY domain, relativePath;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)를 쓸 때는 카카오맵이 들어 있는지부터 확인하고, 없으면 연습용 기기에 앱을 깔고 몇 가지 장소를 검색한 뒤 백업을 떠서 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)를 쓸 때는 카카오맵이 들어 있는지부터 확인하고, 없으면 연습용 기기에 앱을 깔고 몇 가지 장소를 검색한 뒤 백업을 떠서 풀어 봅니다.
 
 1. 백업 `Info.plist` 의 `Installed Applications` 에 `net.daum.maps` 가 있습니까?
 2. `Manifest.db` 에서 `AppDomain-net.daum.maps` 도메인에 파일이 몇 개 있고, 어떤 폴더(`Documents/`, `Library/`)에 몰려 있습니까?

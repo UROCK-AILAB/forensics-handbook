@@ -7,7 +7,7 @@ nav_order: 110
 
 # CE 영역과 DE 영역 (Credential·Device Encrypted Storage)
 
-파일 단위 암호화를 쓰는 Android 기기는 사용자마다 저장 공간을 두 갈래로 나누는데, 잠금 화면 자격 증명과 묶인 키로 암호화하는 CE 영역과 잠금을 풀기 전에도 쓸 수 있는 DE 영역입니다.
+파일 단위 암호화를 쓰는 Android 기기는 사용자마다 저장 공간을 두 가지로 나누는데, 잠금 화면 자격 증명과 묶인 키로 암호화하는 CE 영역과 잠금을 풀기 전에도 쓸 수 있는 DE 영역입니다.
 
 ## 두 영역의 차이
 
@@ -36,7 +36,7 @@ CE 목록에는 `/data/media/${user_id}` 도 들어 있습니다. 이 폴더와 
 
 시스템 아티팩트도 이 구분을 따릅니다. 예를 들어 앱 사용 기록은 `/data/system_ce/${user_id}/usagestats/` 아래에 있어서 CE 경로 목록과 들어맞고, 자세한 내용은 [앱 사용 기록](../../../02-artifacts/app-usage/usagestats/index.md) 페이지에서 다룹니다.
 
-이 경로는 AOSP 기준이라, 삼성 One UI 같은 제조사 기기에서도 경로가 그대로인지는 검체에서 확인합니다. 일반 셸 권한으로는 `/data` 아래를 읽을 수 없습니다.
+이 경로는 AOSP 기준이라, 삼성 One UI 같은 제조사 기기에서도 경로가 그대로인지는 실제 기기에서 확인합니다. 일반 셸 권한으로는 `/data` 아래를 읽을 수 없습니다.
 
 ## 앱이 DE 영역을 쓰는 방법
 
@@ -62,7 +62,7 @@ CE 키는 합성 비밀번호 (Synthetic Password) 로 보호하고, 그 과정�
 
 ## 사용자마다 따로 있는 CE·DE
 
-경로에 `${user_id}` 가 들어가는 것처럼 CE·DE 영역은 사용자마다 따로 있습니다. `dumpsys user` 출력에는 기본 사용자(`isPrimary=true`) 말고도 사용자 ID 가 세 자리 이상이고 `isPrimary=false`, `parentId=#` 인 사용자가 더 나올 수 있습니다. 이 사용자가 보안 폴더인지 다른 기능인지는 검체에서 확인하고, 이런 사용자에게도 따로 CE·DE 영역이 있다고 보면 경로 표의 `${user_id}` 자리에 그 ID 가 들어갑니다. 여러 사용자와 프로필은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를, 보안 폴더는 [보안 폴더와 작업 프로필](../../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
+경로에 `${user_id}` 가 들어가는 것처럼 CE·DE 영역은 사용자마다 따로 있습니다. `dumpsys user` 출력에는 기본 사용자(`isPrimary=true`) 말고도 사용자 ID 가 세 자리 이상이고 `isPrimary=false`, `parentId=#` 인 사용자가 더 나올 수 있습니다. 이 사용자가 보안 폴더인지 다른 기능인지는 실제 기기에서 확인하고, 이런 사용자에게도 따로 CE·DE 영역이 있다고 보면 경로 표의 `${user_id}` 자리에 그 ID 가 들어갑니다. 여러 사용자와 프로필은 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를, 보안 폴더는 [보안 폴더와 작업 프로필](../../security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 
 ## 함정
 

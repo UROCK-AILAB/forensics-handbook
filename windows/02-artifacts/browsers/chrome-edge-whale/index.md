@@ -52,7 +52,7 @@ has_toc: false
 | 위치를 바꾼 경우 | 실행 인자 `--user-data-dir` 로 다른 폴더를 쓸 수 있습니다. Chrome·Edge 는 `UserDataDir` 정책으로도 바꿀 수 있습니다. 기본 위치가 비어 있으면 바로가기의 실행 인자와 정책 값을 확인합니다. |
 | 사용자 정보 | 폴더 경로에 Windows 사용자 이름이 드러납니다. 브라우저에 로그인한 계정은 `Local State` 의 프로필 정보에 남을 수 있습니다. |
 
-Brave·Opera·Vivaldi 같은 다른 계열 브라우저는 폴더 위치와 구성이 조금씩 다릅니다. 어느 브라우저의 폴더인지 가리는 법은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 에서 다룹니다.
+Brave·Opera·Vivaldi 같은 다른 계열 브라우저는 폴더 위치와 구성이 조금씩 다릅니다. 어느 브라우저의 폴더인지 구분하는 법은 [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) 에서 다룹니다.
 
 ### Windows 버전에 따라 달라지는 점
 
@@ -90,7 +90,7 @@ Windows 버전보다 브라우저 판에 따른 차이가 더 큽니다. 아래 
 | 설치한 확장 프로그램 | `Extensions\`, `Preferences`·`Secure Preferences` | 폴더·JSON | [확장 프로그램](extensions.md) |
 | 프로필 목록·암호화 키 | `User Data\Local State` | JSON | [프로필 폴더와 계열 브라우저 구분](../../../01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md) |
 
-시각 형식도 먼저 알아 둡니다. SQLite 파일 안의 시각 칸은 대부분 1601년 1월 1일 0시 (UTC) 부터 센 마이크로초입니다. 이 형식을 WebKit 시각 (WebKit Time) 이라고 부릅니다. Windows FILETIME 과 기준일은 같지만 단위가 다릅니다. FILETIME 은 100나노초 단위입니다. 다른 형식을 쓰는 칸도 있으므로 하위 페이지에서 칸마다 밝힙니다. 바꾸는 법은 [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+시각 형식도 먼저 알아 둡니다. SQLite 파일 안의 시각 열은 대부분 1601년 1월 1일 0시 (UTC) 부터 센 마이크로초입니다. 이 형식을 WebKit 시각 (WebKit Time) 이라고 부릅니다. Windows FILETIME 과 기준일은 같지만 단위가 다릅니다. FILETIME 은 100나노초 단위입니다. 다른 형식을 쓰는 열도 있으므로 하위 페이지에서 열마다 밝힙니다. 바꾸는 법은 [시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 읽는 순서
 

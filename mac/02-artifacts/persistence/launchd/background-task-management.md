@@ -15,7 +15,7 @@ macOS 13부터 BTM이 로그인 항목과 실행 에이전트·데몬을 관리�
 
 앱이 스스로 도우미를 등록하는 길도 BTM과 이어집니다. SMAppService(macOS 13.0 이상)는 앱 번들 안의 로그인 항목·에이전트·데몬 도우미를 등록하고, 등록한 뒤 실제로 실행되는지는 사용자 승인에 달려 있습니다 [2]. 이 API에는 `mainApp`, `agent(plistName:)`, `daemon(plistName:)`, `loginItem(identifier:)`, `register()`, `unregister()`, `statusForLegacyPlist(at:)`, `openSystemSettingsLoginItems()` 가 있습니다 [2].
 
-그래서 macOS 13 이후 검체에서는 폴더에 놓인 plist와 별도로, 시스템이 "이런 항목이 등록돼 있고 사용자가 이렇게 처리했다" 고 적어 둔 목록을 하나 더 얻을 수 있습니다. 폴더 쪽 위치는 [위치와 적용 범위 (Locations)](locations.md)에 있습니다.
+그래서 macOS 13 이후 기기에서는 폴더에 놓인 plist와 별도로, 시스템이 "이런 항목이 등록돼 있고 사용자가 이렇게 처리했다" 고 적어 둔 목록을 하나 더 얻을 수 있습니다. 폴더 쪽 위치는 [위치와 적용 범위 (Locations)](locations.md)에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -27,10 +27,10 @@ macOS 13부터 BTM이 로그인 항목과 실행 에이전트·데몬을 관리�
 
 | macOS | 파일 이름 [3] |
 |---|---|
-| 13.0 | `BackgroundItems-v*.btm` (번호는 검체에서 확인) |
+| 13.0 | `BackgroundItems-v*.btm` (번호는 실제 기기에서 확인) |
 | 13.1 | `BackgroundItems-v7.btm` |
 
-`BackgroundItems-v4.btm` 이라는 이름도 쓰였고 [3], macOS 13.2 이후의 번호는 검체에서 확인합니다. DumpBTM은 그 폴더에서 `.btm` 으로 끝나는 파일 목록의 마지막 것을 골라 읽으므로 [4], 수집할 때는 폴더 안의 `.btm` 파일을 모두 가져오고 어느 파일을 분석했는지 기록합니다.
+`BackgroundItems-v4.btm` 이라는 이름도 쓰였고 [3], macOS 13.2 이후의 번호는 실제 기기에서 확인합니다. DumpBTM은 그 폴더에서 `.btm` 으로 끝나는 파일 목록의 마지막 것을 골라 읽으므로 [4], 수집할 때는 폴더 안의 `.btm` 파일을 모두 가져오고 어느 파일을 분석했는지 기록합니다.
 
 ## 구조
 
@@ -88,7 +88,7 @@ macOS 13부터 BTM이 로그인 항목과 실행 에이전트·데몬을 관리�
 | 0x4 | hidden | visible |
 | 0x8 | notified | not notified |
 
-아래 값은 위 두 표로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+아래 값은 위 두 표로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```
 type        0x10008 = 0x10000 (legacy) + 0x8 (agent)
@@ -139,7 +139,7 @@ sfltool dumpbtm
 
 **공개 도구.** DumpBTM은 `sfltool dumpbtm` 의 오픈소스판이고 [3], 파일을 읽으려면 전체 디스크 접근 권한이 필요합니다 [3]. 수집한 `.btm` 파일을 분석용 macOS에서 풀어 항목마다 `type`·`disposition` 을 위 표로 해석하고, agent·daemon 항목의 `url` 을 이미지 속 plist와 맞춰 봅니다.
 
-**로그.** Console에서는 `subsystem:backgroundtaskmanagement` 와 `category:mcx` 로 거르고, 터미널에서는 서브시스템을 `com.apple.backgroundtaskmanagement`, 범주를 `mcx` 로 거르는 `log stream` 을 씁니다 [1]. 이 필터는 MDM 규칙이 적용되는지 확인하는 용도이고, 등록·승인 때 남는 로그 문구는 검체에서 확인합니다. 로그 형식은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에 있습니다. 도우미가 어느 앱에 딸렸는지 적은 귀속 (attribution) 정보는 `/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/Resources/attributions.plist` 에 있습니다 [1].
+**로그.** Console에서는 `subsystem:backgroundtaskmanagement` 와 `category:mcx` 로 거르고, 터미널에서는 서브시스템을 `com.apple.backgroundtaskmanagement`, 범주를 `mcx` 로 거르는 `log stream` 을 씁니다 [1]. 이 필터는 MDM 규칙이 적용되는지 확인하는 용도이고, 등록·승인 때 남는 로그 문구는 실제 기기에서 확인합니다. 로그 형식은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md)에 있습니다. 도우미가 어느 앱에 딸렸는지 적은 귀속 (attribution) 정보는 `/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/Resources/attributions.plist` 에 있습니다 [1].
 
 ## 교차 검증
 

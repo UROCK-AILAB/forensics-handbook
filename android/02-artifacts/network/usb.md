@@ -22,7 +22,7 @@ USB 연결은 방향이 둘입니다. 휴대폰을 PC 에 꽂으면 휴대폰이
 
 ## 위치와 버전별 차이
 
-아래 경로와 이름은 AOSP main 브랜치 기준입니다. 판마다 다를 수 있어 검체에서 확인합니다.
+아래 경로와 이름은 AOSP main 브랜치 기준입니다. 판마다 다를 수 있어 실제 기기에서 확인합니다.
 
 | 흔적 | 위치 | 남는 기간 | 근거 |
 |---|---|---|---|
@@ -37,12 +37,12 @@ USB 연결은 방향이 둘입니다. 휴대폰을 PC 에 꽂으면 휴대폰이
 
 `usb_permissions.xml` 경로의 사용자 ID 폴더는 기기 사용자마다 따로 있으므로, 보안 폴더나 작업 프로필이 있는 기기라면 사용자 폴더를 모두 봅니다. 사용자 번호를 읽는 법은 [사용자와 프로필](../system-account/users-profiles.md) 에 있습니다.
 
-삼성 기기의 Settings 에는 AOSP 에 없는 아래 키도 있습니다. 뜻을 밝힌 공개 자료가 없는 키가 많아 값은 검체에서 확인합니다.
+삼성 기기의 Settings 에는 AOSP 에 없는 아래 키도 있습니다. 뜻을 밝힌 공개 자료가 없는 키가 많아 값은 실제 데이터로 확인해야 합니다.
 
 | 설정 영역 | 키 이름 | 뜻 |
 |---|---|---|
-| Global | `adb_enabled`, `adb_wifi_enabled` | 이름은 USB 디버깅·무선 디버깅과 맞습니다. 값 형식은 검체에서 확인 |
-| Global | `adb_allowed_connection_time` | AOSP 의 `Settings.Global.ADB_ALLOWED_CONNECTION_TIME`, 곧 ADB 연결 허용 기간 설정입니다[4]. 기본값은 검체에서 확인 |
+| Global | `adb_enabled`, `adb_wifi_enabled` | 이름은 USB 디버깅·무선 디버깅과 맞습니다. 값 형식은 실제 데이터로 확인 |
+| Global | `adb_allowed_connection_time` | AOSP 의 `Settings.Global.ADB_ALLOWED_CONNECTION_TIME`, 곧 ADB 연결 허용 기간 설정입니다[4]. 기본값은 실제 기기에서 확인 |
 | Global | `usb_mass_storage_enabled` | 공개 자료 없음 |
 | Global | `tethered_config_state`, `tether_offload_disabled` | 테더링 쪽 키이고 [테더링과 핫스폿](tethering-hotspot.md) 에서 다룹니다 |
 | Secure | `block_usb_lock`, `usb_audio_automatic_routing_disabled` | 삼성 키로 보입니다. 뜻은 공개 자료 없음 |
@@ -55,7 +55,7 @@ USB 연결은 방향이 둘입니다. 휴대폰을 PC 에 꽂으면 휴대폰이
 
 ### adb_keys
 
-`adb_keys` 는 "항상 허용" 을 누른 PC 의 공개키를 한 줄에 하나씩 적는 텍스트 파일입니다[4]. 키 한 줄이 곧 신뢰한 호스트 하나이므로 줄 수를 세면 허용한 PC 의 수를 가늠할 수 있습니다.
+`adb_keys` 는 "항상 허용" 을 누른 PC 의 공개키를 한 줄에 하나씩 적는 텍스트 파일입니다[4]. 키 한 줄이 곧 신뢰한 호스트 하나이므로 줄 수를 세면 허용한 PC 의 수를 어림할 수 있습니다.
 
 ### adb_temp_keys.xml
 
@@ -97,9 +97,9 @@ PC 쪽 연결에서는 `UsbDeviceManager` 가 `persist.sys.usb.config`, `sys.usb
 
 **증명하지 못하는 것**
 
-ADB 키 파일은 공개키만 알려 줄 뿐 그 PC 가 어느 컴퓨터인지까지 알려 주지는 않으므로, 상대 PC 를 가리키려면 PC 쪽 증거와 맞춰 봐야 합니다. USB 디버깅 없이 충전만 하거나 파일 전송(MTP)만 한 연결은 AOSP 에서는 파일로 남는 기록이 없습니다[1]. 어떤 파일을 옮겼는지는 USB 흔적만으로 알 수 없고, `usb_permissions.xml` 에는 시각이 없어서 권한을 언제 줬는지도 알 수 없습니다[3].
+ADB 키 파일에는 공개키만 있고 그 PC 가 어느 컴퓨터인지는 나오지 않으므로, 상대 PC 를 가리키려면 PC 쪽 증거와 맞춰 봐야 합니다. USB 디버깅 없이 충전만 하거나 파일 전송(MTP)만 한 연결은 AOSP 에서는 파일로 남는 기록이 없습니다[1]. 어떤 파일을 옮겼는지는 USB 흔적만으로 알 수 없고, `usb_permissions.xml` 에는 시각이 없어서 권한을 언제 줬는지도 알 수 없습니다[3].
 
-보고서에는 "PC 로 자료를 옮겼다" 가 아니라 "이 공개키를 쓰는 호스트에 USB 디버깅을 허용한 기록이 있고, 그 키의 마지막 연결 시각은 이러하다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "PC 로 자료를 옮겼다" 가 아니라 "이 공개키를 쓰는 호스트에 USB 디버깅을 허용한 기록이 있고, 그 키의 마지막 연결 시각은 이러하다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -160,18 +160,18 @@ date -u -d @$((MS / 1000))
 
 | 함께 볼 아티팩트 | 맞춰 볼 점 |
 |---|---|
-| [배터리 사용 기록](../app-usage/batterystats.md) | 기록 첫 상태 줄에 `status=`, `health=`, `plug=` 칸과 `-otg` 표시가 보입니다. `plug=` 에 USB 가 어떻게 찍히는지는 검체에서 확인합니다 |
+| [배터리 사용 기록](../app-usage/batterystats.md) | 기록 첫 상태 줄에 `status=`, `health=`, `plug=` 필드와 `-otg` 표시가 보입니다. `plug=` 에 USB 가 어떻게 찍히는지는 실제 데이터로 확인합니다 |
 | [logcat](../logs/logcat.md) | "USB device attached: " 줄의 vendor·product ID 를 `usb_permissions.xml` 의 `vendor-id`·`product-id` 와 맞춰 봅니다 |
 | [와이파이 설정과 접속 기록](wifi.md) | `wifiAP` 의 BSSID 가 저장된 와이파이 네트워크 가운데 어느 것인지 찾습니다 |
 | [앱 사용 기록](../app-usage/usagestats/index.md) | USB 권한을 받은 앱을 언제 썼는지 봅니다 |
 | [테더링과 핫스폿](tethering-hotspot.md) | USB 기능 가운데 RNDIS·NCM 은 USB 테더링 쪽입니다 |
-| [미디어 저장소](../media/mediastore/index.md) | PC 에서 옮긴 파일이 새 항목으로 생겼는지 봅니다. MTP 전송이 여기에 어떤 흔적을 남기는지는 검체에서 확인합니다 |
+| [미디어 저장소](../media/mediastore/index.md) | PC 에서 옮긴 파일이 새 항목으로 생겼는지 봅니다. MTP 전송이 여기에 어떤 흔적을 남기는지는 실제 데이터로 확인합니다 |
 
 여러 흔적을 한 시간선에 올리는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에, 자료 반출 여부를 묻는 조사 흐름은 [자료를 밖으로 보냈나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다. 무선으로 파일을 주고받는 경우는 [파일 공유](quick-share.md) 를 봅니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 안드로이드 전체 파일 시스템 이미지를 하나 골라 아래 질문을 풀어 봅니다. 검체에 따라 이 파일들이 없을 수 있으니 먼저 파일이 있는지부터 봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 안드로이드 전체 파일 시스템 이미지를 하나 골라 아래 질문을 풀어 봅니다. 이미지에 따라 이 파일들이 없을 수 있으니 먼저 파일이 있는지부터 봅니다.
 
 1. `/data/misc/adb/adb_keys` 에 키가 몇 줄 있고, `/adb_keys` 와 겹치는 키가 있는가?
 2. `adb_temp_keys.xml` 의 `lastConnection` 을 UTC 와 기기 시간대로 각각 바꾸면 언제인가? 그 시각에 다른 아티팩트에도 활동이 있는가?

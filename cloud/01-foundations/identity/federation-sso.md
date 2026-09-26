@@ -10,7 +10,7 @@ nav_order: 70
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 두 조직 사이의 신뢰 관계를 다룹니다. 싱글 사인온 (single sign-on, SSO) 으로 들어온 로그인 한 건은 두 곳에 흔적을 남깁니다. 하나는 사용자를 실제로 확인한 IdP 의 로그이고, 다른 하나는 어설션을 받아들인 서비스 공급자 (service provider, SP) 의 로그입니다. 여기에 신뢰 설정 자체를 만들고 바꾼 관리 기록이 더해집니다. 신뢰 설정이 바뀌면 클라우드는 그 IdP 가 서명한 어설션을 누구의 것이든 받아들이므로, 조사에서는 로그인 기록보다 설정 변경 기록을 먼저 확인합니다.
+이 페이지는 파일 형식이 아니라 두 조직 사이의 신뢰 관계를 다룹니다. 싱글 사인온 (single sign-on, SSO) 으로 들어온 로그인 한 건은 두 곳에 흔적을 남깁니다. 하나는 사용자를 실제로 확인한 IdP 의 로그이고, 다른 하나는 어설션을 받아들인 서비스 공급자 (service provider, SP) 의 로그입니다. 여기에 신뢰 설정 자체를 만들고 바꾼 관리 기록이 더해집니다. 신뢰 설정이 바뀌면 클라우드는 그 IdP 가 서명한 어설션을 누구의 것이든 받아들이므로, 조사에서는 로그인 기록보다 설정 변경 기록을 먼저 확인합니다.
 
 | 서비스 | 신뢰 설정을 바꾼 기록 | 페더레이션 로그인을 받아들인 기록 | 자세히 |
 |---|---|---|---|
@@ -75,11 +75,11 @@ IAM Identity Center 는 CloudTrail 이벤트를 여러 이벤트 소스로 나�
 
 외부 IdP 의 신원(서드파티 신원)이 호출하면 감사 로그의 `authenticationInfo.principalEmail` 대신 `principalSubject` 가 채워집니다[14]. 서비스 계정 위임 이력(`serviceAccountDelegationInfo[]`)의 `principalSubject` 는 대부분 `principal://iam.googleapis.com/{identity pool name}/subject/{subject}` 형식이고, 일부 GKE 신원(GKE_WORKLOAD, FREEFORM, GKE_HUB_WORKLOAD)은 옛 형식 `serviceAccount:{identity pool name}[{subject}]` 로 남습니다[14]. 외부 신원이 서비스 계정을 가장했다면 `serviceAccountDelegationInfo[]` 에 `thirdPartyPrincipal` 이, Google 신원이 가장했다면 `firstPartyPrincipal.principalEmail` 이 남습니다[14]. Workload Identity Federation 을 쓰는 외부 앱은 자격 증명 구성 파일로 자기 환경의 자격 증명을 짧은 수명의 서비스 계정 자격 증명으로 바꿔 씁니다[16].
 
-풀과 공급자를 만들고 바꾸는 호출은 ADMIN_WRITE 권한이 필요해 관리 활동 (Admin Activity) 감사 로그에 남습니다[15]. 메서드 이름은 `google.iam.admin.v1.WorkforcePools.CreateWorkforcePool`, `CreateWorkforcePoolProvider`, `CreateWorkforcePoolProviderKey`, `UpdateWorkforcePoolProvider`, `DeleteWorkforcePool`, `DeleteWorkforcePoolProvider`, `SetIamPolicy` 와 `google.iam.v1.WorkloadIdentityPools.CreateWorkloadIdentityPool`, `CreateWorkloadIdentityPoolProvider`, `UpdateWorkloadIdentityPoolProvider`, `DeleteWorkloadIdentityPoolProvider` 같은 꼴입니다[15]. (LRO) 표시가 붙은 메서드는 대개 시작과 끝에 한 건씩, 모두 두 건 남습니다[15].
+풀과 공급자를 만들고 바꾸는 호출은 ADMIN_WRITE 권한이 필요해 관리 활동 (Admin Activity) 감사 로그에 남습니다[15]. 메서드 이름은 `google.iam.admin.v1.WorkforcePools.CreateWorkforcePool`, `CreateWorkforcePoolProvider`, `CreateWorkforcePoolProviderKey`, `UpdateWorkforcePoolProvider`, `DeleteWorkforcePool`, `DeleteWorkforcePoolProvider`, `SetIamPolicy` 와 `google.iam.v1.WorkloadIdentityPools.CreateWorkloadIdentityPool`, `CreateWorkloadIdentityPoolProvider`, `UpdateWorkloadIdentityPoolProvider`, `DeleteWorkloadIdentityPoolProvider` 같은 형식입니다[15]. (LRO) 표시가 붙은 메서드는 대개 시작과 끝에 한 건씩, 모두 두 건 남습니다[15].
 
 ### Google Workspace — SP 일 때와 IdP 일 때
 
-Workspace 는 외부 IdP 를 믿는 SP 가 될 수도 있고, 다른 SaaS 앱에 어설션을 주는 IdP 가 될 수도 있어서 기록이 두 갈래입니다.
+Workspace 는 외부 IdP 를 믿는 SP 가 될 수도 있고, 다른 SaaS 앱에 어설션을 주는 IdP 가 될 수도 있어서 기록이 두 종류입니다.
 
 | 방향 | 기록 | 이벤트·매개변수 |
 |---|---|---|
@@ -174,7 +174,7 @@ Okta 시스템 로그를 폴링으로 받으면 결과는 로그에 실제로 �
 - **작업 이름이 두 계열입니다.** Entra 감사 로그의 도메인 작업 이름은 `Set domain authentication`·`Set federation settings on domain` 이지만[1], Hawk 는 통합 감사 로그의 `AzureActiveDirectory` 레코드에서 `Set-AcceptedDomain`·`Add-FederatedDomain` 같은 Exchange cmdlet 모양 이름도 함께 찾고[27], Sigma 는 `Add-FederatedDomain` 을 Exchange 이벤트로 봅니다[25]. 두 계열을 모두 검색합니다.
 - **Purview 설명문을 이름대로 읽지 않습니다.** Purview 감사 활동 표는 `Set federation settings on domain.` 을 "Changed the federation (external sharing) settings" 로 설명하지만[2], Entra 에서 이 작업은 도메인 페더레이션을 다루는 `DirectoryManagement` 범주 작업입니다[1]. 외부 공유 설정 변경으로만 읽으면 IdP 신뢰 변경을 놓칩니다.
 - **같은 흐름이 단계마다 다른 type 으로 남습니다.** AWS STS 호출 레코드는 `SAMLUser`·`WebIdentityUser` 로 남고[10], 페더레이션 사용자의 콘솔 로그인 레코드는 `AssumedRole` 로 남습니다[12]. `SAMLUser` 만 검색하면 콘솔 로그인을 놓칩니다.
-- **이벤트 소스 표기가 문서마다 다릅니다.** IAM Identity Center 문서 표는 Sign-in 이벤트 소스를 `signin.amazon.com` 으로 적고[13], CloudTrail 콘솔 로그인 예시는 `signin.amazonaws.com` 으로 적습니다[12]. 검체에서 실제 값을 확인하고 검색합니다.
+- **이벤트 소스 표기가 문서마다 다릅니다.** IAM Identity Center 문서 표는 Sign-in 이벤트 소스를 `signin.amazon.com` 으로 적고[13], CloudTrail 콘솔 로그인 예시는 `signin.amazonaws.com` 으로 적습니다[12]. 실제 로그에서 값을 확인하고 검색합니다.
 - **방향이 반대인 두 Workspace 로그.** 로그인 감사의 `login_type` `saml` 은 외부 IdP 로 Workspace 에 들어온 기록이고[17], SAML 감사(`applicationName=saml`)는 Workspace 가 IdP 가 되어 다른 앱으로 보낸 기록입니다[19].
 - **도메인 전환 기록.** 페더레이션 도메인을 관리형으로 돌리는 작업(`Set domain authentication`)과 사용자 단위 전환(`Convert federated user to managed`)은 따로 남습니다[1]. 사고 대응 중에 관리자가 한 전환과 공격자가 한 변경을 시각·수행 계정으로 구분합니다.
 

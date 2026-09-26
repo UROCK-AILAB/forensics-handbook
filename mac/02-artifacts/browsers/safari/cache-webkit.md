@@ -27,7 +27,7 @@ nav_order: 1190
 | 터치 아이콘 | `~/Library/Safari/Touch Icons Cache/TouchIconCacheSettings.db` (+ `-wal`) |
 | 사이트별 설정 | `~/Library/Safari/PerSitePreferences.db` (+ `-wal`) |
 
-`Cache.db`, `favicons.db`, `TouchIconCacheSettings.db`, `PerSitePreferences.db` 는 SQLite 이지만 안의 표와 칸 이름, 캐시 본문이 따로 저장되는 폴더는 공개된 분석 자료가 없어 검체에서 확인합니다. SQLite 파일을 여는 법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. LocalStorage·IndexedDB 같은 WebKit 웹사이트 데이터의 위치도 검체에서 확인하고, 형식 일반은 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../../01-foundations/data-formats/leveldb-indexeddb.md)에 있습니다.
+`Cache.db`, `favicons.db`, `TouchIconCacheSettings.db`, `PerSitePreferences.db` 는 SQLite 이지만 안의 표와 열 이름, 캐시 본문이 따로 저장되는 폴더는 실제 데이터로 확인해야 합니다. SQLite 파일을 여는 법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. LocalStorage·IndexedDB 같은 WebKit 웹사이트 데이터의 위치도 실제 데이터로 확인하고, 형식 일반은 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../../01-foundations/data-formats/leveldb-indexeddb.md)에 있습니다.
 
 ## 구조 — Cookies.binarycookies
 
@@ -71,7 +71,7 @@ nav_order: 1190
 
 ## 증거로서 의미
 
-**증명하는 것.** 쿠키 레코드가 있으면 그 도메인·경로의 이름이 붙은 쿠키가 이 파일에 저장돼 있고, 생성 시각에 만들어져 만료 시각까지 유효하도록 설정됐다는 뜻입니다 [2]. 플래그로 Secure·HttpOnly 여부를 알 수 있습니다 [2]. 방문 기록을 지운 검체에서도 쿠키의 도메인과 생성 시각은 어느 사이트와 언제 주고받았는지를 짐작하는 단서가 될 수 있습니다. 다만 기록 지우기가 쿠키도 지우는지는 공개 자료가 없어 검체에서 확인합니다.
+**증명하는 것.** 쿠키 레코드가 있으면 그 도메인·경로의 이름이 붙은 쿠키가 이 파일에 저장돼 있고, 생성 시각에 만들어져 만료 시각까지 유효하도록 설정됐다는 뜻입니다 [2]. 플래그로 Secure·HttpOnly 여부를 알 수 있습니다 [2]. 방문 기록을 지운 기기에서도 쿠키의 도메인과 생성 시각은 어느 사이트와 언제 주고받았는지를 짐작하는 단서가 될 수 있습니다. 다만 기록 지우기가 쿠키도 지우는지는 실제 기기로 확인해야 합니다.
 
 **증명하지 못하는 것.** 쿠키의 도메인은 사용자가 주소창에 연 사이트가 아닐 수 있습니다. 한 페이지가 다른 도메인의 자원을 불러오면 그 도메인의 쿠키가 생길 수 있어서, 쿠키 도메인 목록을 방문한 사이트 목록으로 쓰지 않습니다. 쿠키의 값은 사이트가 정한 것이라 그 뜻을 이 파일만으로 풀 수 없고, 값에 인증 정보가 들어 있을 수 있으니 보고서와 작업 기록에 값을 그대로 옮기지 않습니다.
 
@@ -79,7 +79,7 @@ nav_order: 1190
 
 ## 시각 해석
 
-쿠키의 생성 시각과 만료 시각은 모두 맥 절대 시각 double 이고 UTC 기준입니다 [2]. 생성 시각은 그 쿠키가 만들어진 때이고, 사이트가 같은 이름의 쿠키를 새로 써 준 뒤에 이 값이 어떻게 바뀌는지는 공개 자료가 없어 검체에서 확인합니다. 유닉스 시각으로 바꾸려면 978307200 을 더하고, 시각 값 전반은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
+쿠키의 생성 시각과 만료 시각은 모두 맥 절대 시각 double 이고 UTC 기준입니다 [2]. 생성 시각은 그 쿠키가 만들어진 때이고, 사이트가 같은 이름의 쿠키를 새로 써 준 뒤에 이 값이 어떻게 바뀌는지는 실제 데이터로 확인해야 합니다. 유닉스 시각으로 바꾸려면 978307200 을 더하고, 시각 값 전반은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
 
 ## 함정과 한계
 
@@ -93,7 +93,7 @@ nav_order: 1190
 
 ### 헥스로 따라가기
 
-아래는 형식 문서 [2]의 구조에 맞춰 만든 예시이고, 특정 검체에서 나온 값이 아닙니다. 쿠키 한 개가 든 페이지 한 개짜리 파일입니다. 문자열 오프셋은 형식 문서대로 레코드 시작 기준으로 세었고, 문서에 적혀 있지 않은 두 가지(레코드 오프셋은 페이지 시작 기준, 4바이트 `00 00 00 00` 은 레코드 오프셋 배열 바로 뒤)는 예시를 만들려고 정한 것이라 실제 파일에서 확인합니다. 아래 코드는 레코드 오프셋 배열로 레코드를 찾아서 이 4바이트의 자리에 기대지 않습니다.
+아래는 형식 문서 [2]의 구조에 맞춰 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. 쿠키 한 개가 든 페이지 한 개짜리 파일입니다. 문자열 오프셋은 형식 문서대로 레코드 시작 기준으로 세었고, 문서에 적혀 있지 않은 두 가지(레코드 오프셋은 페이지 시작 기준, 4바이트 `00 00 00 00` 은 레코드 오프셋 배열 바로 뒤)는 예시를 만들려고 정한 것이라 실제 파일에서 확인합니다. 아래 코드는 레코드 오프셋 배열로 레코드를 찾아서 이 4바이트의 자리에 기대지 않습니다.
 
 ```text
 파일 머리 (big-endian)
@@ -182,7 +182,7 @@ for row in read_cookies("Cookies.binarycookies"):
 
 ## 실습
 
-공개 맥 검체에서 이 페이지의 파일을 모아 아래 질문을 풀어 봅니다.
+공개 맥 시험 이미지에서 이 페이지의 파일을 모아 아래 질문을 풀어 봅니다.
 
 1. `Cookies.binarycookies` 가 옛 위치와 컨테이너 가운데 어디에 있고, 페이지 수와 쿠키 수는 몇 개인가
 2. 생성 시각이 가장 이른 쿠키와 가장 늦은 쿠키의 도메인은 무엇이고, 방문 기록에 같은 도메인이 있는가

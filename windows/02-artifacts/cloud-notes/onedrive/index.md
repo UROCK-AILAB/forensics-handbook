@@ -81,7 +81,7 @@ OneDrive 는 Microsoft 의 클라우드 저장소입니다. PC 에서는 동기�
 - 자리표시자는 파일 시스템 머리 1KB 만 차지합니다.
 - 이 기능의 중심은 미니필터 드라이버 `cldflt.sys` 이고, NTFS 볼륨만 지원합니다.
 - 자리표시자는 재분석 지점 (reparse point) 으로 만듭니다. 동기화 엔진과 `%systemroot%` 아래 프로그램이 아닌 앱에는 이 재분석 지점을 숨깁니다.
-- 살아 있는 PC 에서 자리표시자를 읽으면 내려받기가 일어납니다. 수집할 때 조심할 점은 [동기화 DB](syncenginedatabase-db.md) 의 함정 절에 있습니다.
+- 실행 중인 PC 에서 자리표시자를 읽으면 내려받기가 일어납니다. 수집할 때 조심할 점은 [동기화 DB](syncenginedatabase-db.md) 의 함정 절에 있습니다.
 - 파일 주문형을 켜는 정책과 드라이버 설정 값은 [계정·설정 레지스트리](accounts-settings.md) 에 있습니다.
 - 자리표시자와 동기화 루트 등록의 공통 구조는 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
 
@@ -103,7 +103,7 @@ KFM 을 켠 PC 에서는 `HKCU\Software\Microsoft\Windows\CurrentVersion\Explore
 1. [계정·설정 레지스트리 (Accounts·Settings)](accounts-settings.md) — 어느 계정을 연결했고 동기화 폴더가 어디인지 레지스트리에서 찾습니다. 계정 키의 시각 값, `SyncRootManager` 의 사용자 SID, settings 폴더의 ini 파일, 일반 정책 키도 다룹니다.
 2. [동기화 DB (SyncEngineDatabase.db)](syncenginedatabase-db.md) — 파일·폴더 목록으로 경로를 다시 만들고, QuickXorHash 해시와 로컬 수정 시각을 읽습니다. 내려받기 기록, 서비스 작업 기록, `SafeDelete.db` 의 삭제 기록도 봅니다.
 3. [로그 (ODL·ODLGZ)](odl-odlgz.md) — ODL 파일 머리와 레코드 머리를 헥스로 따라가고, 압축을 풉니다. 가려진 이름을 `general.keystore` 로 푸는 법도 다룹니다.
-4. [회사용 OneDrive와 SharePoint 동기화 (Business Tenant)](business-tenant.md) — 테넌트 ID 와 SharePoint 주소로 조직 계정을 가립니다. 라이브러리 동기화 폴더와 조직에 관한 정책을 다룹니다.
+4. [회사용 OneDrive와 SharePoint 동기화 (Business Tenant)](business-tenant.md) — 테넌트 ID 와 SharePoint 주소로 조직 계정을 구분합니다. 라이브러리 동기화 폴더와 조직에 관한 정책을 다룹니다.
 
 ## 함께 볼 페이지
 

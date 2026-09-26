@@ -14,7 +14,7 @@ containerd 는 이미지를 받고 풀어서 컨테이너를 실행하는 데몬
 
 kubelet 은 파드(pod)를 노드에서 실제로 돌리는 에이전트입니다. kubelet 이 로그 파일 경로를 정해 런타임에 넘기면 런타임이 컨테이너의 stdout·stderr 를 그 파일에 쓰고, 파일 회전은 kubelet 이 맡습니다[18]. 그래서 노드 디스크에는 "어느 네임스페이스의 어느 파드가, 어떤 이미지로, 몇 번째 재시작에서 무엇을 출력했나" 가 파일 경로와 로그 줄로 남습니다.
 
-Docker Engine 29.0 부터 새로 설치한 호스트도 이미지와 컨테이너 스냅숏을 `/var/lib/containerd` 에 두므로[29][30], 이 쪽의 containerd 구조 설명은 그런 Docker 호스트에도 그대로 쓰입니다. Docker 쪽 설명은 [Docker](docker/index.md) 에 있습니다.
+Docker Engine 29.0 부터 새로 설치한 호스트도 이미지와 컨테이너 스냅숏을 `/var/lib/containerd` 에 두므로[29][30], 이 페이지의 containerd 구조 설명은 그런 Docker 호스트에도 그대로 쓰입니다. Docker 쪽 설명은 [Docker](docker/index.md) 에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -26,7 +26,7 @@ Docker Engine 29.0 부터 새로 설치한 호스트도 이미지와 컨테이�
 | `/var/lib/containerd` (`root`) | 이미지 blob, 메타데이터 DB, 스냅숏[1][2] |
 | `/run/containerd` (`state`) | 소켓 `containerd.sock`, 실행 중인 태스크의 상태[1][2] |
 
-`root` 와 `state` 의 위치는 설정 파일의 `root`·`state` 키나 `--root`·`--state` 옵션으로 옮길 수 있습니다[1][2]. 그래서 검체에서는 설정 파일과 서비스 단위 파일의 실행 줄을 먼저 읽어 실제 경로를 정합니다. 단위 파일 읽는 법은 [systemd 서비스와 타이머](../persistence/systemd-units.md) 에 있습니다.
+`root` 와 `state` 의 위치는 설정 파일의 `root`·`state` 키나 `--root`·`--state` 옵션으로 옮길 수 있습니다[1][2]. 그래서 분석 대상에서는 설정 파일과 서비스 단위 파일의 실행 줄을 먼저 읽어 실제 경로를 정합니다. 단위 파일 읽는 법은 [systemd 서비스와 타이머](../persistence/systemd-units.md) 에 있습니다.
 
 ### Kubernetes 런타임별 저장 위치
 
@@ -121,7 +121,7 @@ kubelet 이 컨테이너 로그를 회전하고, 설정 `containerLogMaxSize`(�
 
 ### 정적 파드 매니페스트
 
-kubelet 설정의 `staticPodPath`(옛 방식은 `--pod-manifest-path`) 폴더를 kubelet 이 주기적으로 훑어, 파일이 생기면 파드를 만들고 없어지면 지웁니다[21]. 점(.)으로 시작하지 않는 파일은 확장자와 관계없이 모두 읽으므로 `kube-apiserver.yaml.backup` 같은 백업 파일도 파드로 뜹니다[21]. 폴더는 예를 들어 `/etc/kubernetes/manifests` 로 정합니다[21].
+kubelet 설정의 `staticPodPath`(옛 방식은 `--pod-manifest-path`) 폴더를 kubelet 이 주기적으로 살펴, 파일이 생기면 파드를 만들고 없어지면 지웁니다[21]. 점(.)으로 시작하지 않는 파일은 확장자와 관계없이 모두 읽으므로 `kube-apiserver.yaml.backup` 같은 백업 파일도 파드로 뜹니다[21]. 폴더는 예를 들어 `/etc/kubernetes/manifests` 로 정합니다[21].
 
 ### 컨테이너 체크포인트
 
@@ -134,7 +134,7 @@ kubelet API `POST /checkpoint/{namespace}/{pod}/{container}` 를 부르면 kubel
 - 이 노드에서 특정 네임스페이스·파드·컨테이너가 돌았다는 것. 파드 로그 폴더 이름에 네임스페이스·파드 이름·파드 UID·컨테이너 이름이, 파일 이름에 재시작 횟수가 들어 있습니다[12].
 - 컨테이너가 stdout·stderr 로 무엇을 내보냈고 런타임이 그 줄을 언제 받았는지.
 - 어떤 이미지 내용이 노드의 containerd 저장소에 있었는지(`blobs/sha256`, `meta.db`).
-- 정적 파드 폴더에 어떤 매니페스트가 있었는지. 여기 놓인 파일은 kubelet 이 폴더를 훑다가 곧바로 파드로 만듭니다[21].
+- 정적 파드 폴더에 어떤 매니페스트가 있었는지. 여기 놓인 파일은 kubelet 이 폴더를 살펴보다가 곧바로 파드로 만듭니다[21].
 - 노드에 체크포인트 tar 가 있으면, 그 시각 무렵에 누군가 kubelet 체크포인트 API 를 불렀다는 것[24].
 
 ### 증명하지 못하는 것
@@ -149,9 +149,9 @@ kubelet API `POST /checkpoint/{namespace}/{pod}/{container}` 를 부르면 kubel
 | 값 | 형식 | 시간대 | 바뀌는 때 |
 |---|---|---|---|
 | containerd 가 쓴 로그 줄 시각 | RFC3339Nano | 프로세스 시간대. UTC 로 도는 노드면 `Z` 로 끝납니다[9] | 런타임이 줄을 받은 순간(`time.Now()`)[9] |
-| CRI-O(conmon)가 쓴 로그 줄 시각 | `2026-03-14T11:15:07.123456789+09:00` 꼴, 나노초 9자리 | 현지 시각에 `±HH:MM` 오프셋. UTC 라도 `Z` 가 아니라 `+00:00` 입니다[11] | conmon 이 줄을 받은 순간[11] |
+| CRI-O(conmon)가 쓴 로그 줄 시각 | `2026-03-14T11:15:07.123456789+09:00` 형식, 나노초 9자리 | 현지 시각에 `±HH:MM` 오프셋. UTC 라도 `Z` 가 아니라 `+00:00` 입니다[11] | conmon 이 줄을 받은 순간[11] |
 | 회전 파일 이름의 `날짜-시각` | Go 형식 `20060102-150405` | 시간대 표시 없음. kubelet 프로세스의 현지 시각입니다[16] | 회전한 순간 |
-| 체크포인트 tar 이름의 시각 | 검체의 파일 이름으로 확인 | 검체에서 확인 | 체크포인트를 만든 순간[24] |
+| 체크포인트 tar 이름의 시각 | 실제 파일 이름으로 확인 | 실제 데이터로 확인 | 체크포인트를 만든 순간[24] |
 
 두 런타임 모두 로그 줄 시각은 애플리케이션이 찍은 시각이 아니라 런타임이 파이프에서 줄을 읽은 시각입니다. 애플리케이션이 내용 안에 자기 시각을 찍었다면 두 시각을 나란히 적습니다. 회전 파일 이름의 시각은 회전한 순간이라, 파일 안 마지막 줄 시각과 같거나 그보다 뒤입니다[16]. 시간대가 적히지 않은 값은 노드의 시간대 설정([호스트 이름·시간대·로캘](../system-info/hostname-timezone.md))으로 풀고, 시각 값 일반은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
@@ -210,7 +210,7 @@ ce --image-root /mnt/disk1 inspect 컨테이너ID
 
 ## 실습
 
-kubeadm 으로 만든 Kubernetes 노드의 디스크 이미지(공개 검체나 직접 만든 시험 노드)로 다음 질문을 풀어 봅니다.
+kubeadm 으로 만든 Kubernetes 노드의 디스크 이미지(공개 증거물 이미지나 직접 만든 시험 노드)로 다음 질문을 풀어 봅니다.
 
 1. `/etc/containerd/config.toml` 과 서비스 단위 파일에서 실제 `root`·`state` 경로를 찾고, 기본값과 다른지 확인합니다.
 2. `/var/log/pods` 의 폴더 이름만으로 노드에서 돈 네임스페이스·파드·컨테이너 목록을 만들고, 재시작 횟수가 1 이상인 컨테이너를 고릅니다.

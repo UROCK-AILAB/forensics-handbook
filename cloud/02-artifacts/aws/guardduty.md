@@ -18,7 +18,7 @@ GuardDuty 가 남기는 것은 로그가 아니라 판단입니다. 위협 정�
 ThreatPurpose:ResourceTypeAffected/ThreatFamilyName.DetectionMechanism!Artifact
 ```
 
-`Recon:EC2/PortProbeUnprotectedPort` 는 EC2 인스턴스의 열린 포트를 누군가 훑고 있다는 뜻이고, `CryptoCurrency:EC2/BitcoinTool.B!DNS` 는 EC2 인스턴스가 알려진 비트코인 관련 도메인과 통신한다는 뜻이고, 끝의 `!DNS` 가 악성 활동에 쓰인 도구의 자원을 가리키는 산출물 (artifact) 자리입니다[3]. 이 자리는 결과 유형에 따라 없을 수도 있습니다[3]. 탐지 방식 자리에 `.Custom` 이 붙으면 계정이 등록한 위협 목록으로, `.Reputation` 이 붙으면 도메인 평판 모델로 찾은 것입니다[3]. 맨 앞의 위협 목적 (threat purpose) 에는 `Backdoor`, `Behavior`, `CredentialAccess`, `Cryptocurrency`, `DefenseEvasion`, `Discovery`, `Execution`, `Exfiltration`, `Impact`, `InitialAccess`, `Pentest`, `Persistence`, `Policy`, `PrivilegeEscalation`, `Recon`, `Stealth`, `Trojan`, `UnauthorizedAccess` 가 오고, 이 가운데 여럿은 MITRE ATT&CK 전술과 짝이 맞습니다[3].
+`Recon:EC2/PortProbeUnprotectedPort` 는 EC2 인스턴스의 열린 포트를 누군가 스캔하고 있다는 뜻이고, `CryptoCurrency:EC2/BitcoinTool.B!DNS` 는 EC2 인스턴스가 알려진 비트코인 관련 도메인과 통신한다는 뜻이고, 끝의 `!DNS` 가 악성 활동에 쓰인 도구의 자원을 가리키는 산출물 (artifact) 자리입니다[3]. 이 자리는 결과 유형에 따라 없을 수도 있습니다[3]. 탐지 방식 자리에 `.Custom` 이 붙으면 계정이 등록한 위협 목록으로, `.Reputation` 이 붙으면 도메인 평판 모델로 찾은 것입니다[3]. 맨 앞의 위협 목적 (threat purpose) 에는 `Backdoor`, `Behavior`, `CredentialAccess`, `Cryptocurrency`, `DefenseEvasion`, `Discovery`, `Execution`, `Exfiltration`, `Impact`, `InitialAccess`, `Pentest`, `Persistence`, `Policy`, `PrivilegeEscalation`, `Recon`, `Stealth`, `Trojan`, `UnauthorizedAccess` 가 오고, 이 가운데 여럿은 MITRE ATT&CK 전술과 짝이 맞습니다[3].
 
 ## 위치와 버전별 차이
 
@@ -90,7 +90,7 @@ amzn-s3-demo-bucket/prefix-name/UUID.jsonl.gz
 | 행위 종류 | 뜻 | 더 붙는 정보 |
 |---|---|---|
 | `NETWORK_CONNECTION` | 인스턴스와 원격 호스트 사이에 트래픽이 오감 | 연결 방향 `INBOUND`·`OUTBOUND`·`UNKNOWN`, 프로토콜, Local IP, Blocked[6] |
-| `PORT_PROBE` | 원격 호스트가 인스턴스의 열린 포트 여럿을 훑음 | Local IP, Blocked[6] |
+| `PORT_PROBE` | 원격 호스트가 인스턴스의 열린 포트 여럿을 스캔함 | Local IP, Blocked[6] |
 | `DNS_REQUEST` | 인스턴스가 도메인 이름을 질의함 | 프로토콜, Blocked[6] |
 | `AWS_API_CALL` | AWS API 를 호출함(CloudTrail 의 API 아닌 이벤트 포함) | API 이름, 사용자 에이전트, 실패했으면 오류 코드, 서비스 이름[6] |
 | `RDS_LOGIN_ATTEMPT` | 원격 IP 에서 데이터베이스 로그인을 시도함 | 원격 IP[6] |
@@ -142,9 +142,9 @@ IAM 쪽 결과가 가리키는 자격 증명은 [IAM 사용자·역할·액세�
 
 **증명하는 것.** GuardDuty 가 이 리전에서 이 자원이나 자격 증명에 대해 이 유형의 활동을 탐지했고, 그 활동이 `Created at` 부터 `Updated at` 사이에 `Count` 번 합쳐졌다는 점을 보여 줍니다[6][7]. `AccessKey` 자원과 `AWS_API_CALL` 행위가 있으면 어느 액세스 키가 어느 API 를 어떤 사용자 에이전트로 불렀는지까지 알 수 있고[6], Malware Protection 결과는 볼륨 안 어느 경로에 어떤 SHA-256 의 파일이 있었는지를 알려 줍니다[6].
 
-**증명하지 못하는 것.** 결과는 판단이지 원본 기록이 아닙니다. GuardDuty 는 분석한 원천 로그를 계정에 주지 않으므로[2], 활동 하나하나는 [CloudTrail](cloudtrail/index.md)·[VPC 흐름 로그](vpc-flow-logs.md)·DNS 로그에서 다시 찾아야 하고, 그 로그를 계정이 따로 남기지 않았다면 결과만 남습니다. 결과가 합쳐질 때 원격 IP 같은 세부 값은 가장 최근 것으로 덮어쓰므로, 결과에 보이는 IP 가 첫 시도의 IP 라고 볼 수 없습니다[7]. GuardDuty 를 켜기 전, 켜지 않은 리전, 켜지 않은 보호 계획, 90일이 지난 결과(내보내기를 설정하지 않았다면)는 알 수 없습니다[2][8]. 결과가 없다는 것도 활동이 없었다는 뜻이 아니고, GuardDuty 의 탐지 조건에 걸린 활동이 없었다는 뜻일 뿐입니다. `Pentest` 유형은 알려진 침투 시험 도구가 만드는 활동과 비슷하다는 뜻이고, GuardDuty 는 그 활동의 진짜 목적을 가리지 못합니다[3].
+**증명하지 못하는 것.** 결과는 판단이지 원본 기록이 아닙니다. GuardDuty 는 분석한 원천 로그를 계정에 주지 않으므로[2], 활동 하나하나는 [CloudTrail](cloudtrail/index.md)·[VPC 흐름 로그](vpc-flow-logs.md)·DNS 로그에서 다시 찾아야 하고, 그 로그를 계정이 따로 남기지 않았다면 결과만 남습니다. 결과가 합쳐질 때 원격 IP 같은 세부 값은 가장 최근 것으로 덮어쓰므로, 결과에 보이는 IP 가 첫 시도의 IP 라고 볼 수 없습니다[7]. GuardDuty 를 켜기 전, 켜지 않은 리전, 켜지 않은 보호 계획, 90일이 지난 결과(내보내기를 설정하지 않았다면)는 알 수 없습니다[2][8]. 결과가 없다는 것도 활동이 없었다는 뜻이 아니고, GuardDuty 의 탐지 조건에 걸린 활동이 없었다는 뜻일 뿐입니다. `Pentest` 유형은 알려진 침투 시험 도구가 만드는 활동과 비슷하다는 뜻이고, GuardDuty 는 그 활동의 진짜 목적을 구분하지 못합니다[3].
 
-보고서에는 "2026-09-01 02:14~03:52 UTC 사이 GuardDuty 가 인스턴스 i-0a1b2c3d4e5f60718 에 대한 SSH 무차별 대입 결과를 412회 합쳐 기록했고, 마지막으로 기록된 원격 주소는 203.0.113.25 이다" 처럼 결과가 말하는 만큼만 씁니다(만든 예시). 로그인이 성공했는지는 인스턴스 안의 [인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html) 로 따로 확인합니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
+보고서에는 "2026-09-01 02:14~03:52 UTC 사이 GuardDuty 가 인스턴스 i-0a1b2c3d4e5f60718 에 대한 SSH 무차별 대입 결과를 412회 합쳐 기록했고, 마지막으로 기록된 원격 주소는 203.0.113.25 이다" 처럼 결과로 확인되는 만큼만 씁니다(만든 예시). 로그인이 성공했는지는 인스턴스 안의 [인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html) 로 따로 확인합니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
 
 ## 시각 해석
 
@@ -156,7 +156,7 @@ IAM 쪽 결과가 가리키는 자격 증명은 [IAM 사용자·역할·액세�
 
 ## 함정과 한계
 
-- **리전 값.** IAM·STS·S3·CloudFront·Route 53 같은 글로벌 서비스 이벤트는 GuardDuty 를 켠 리전마다 복제해 처리하므로, 결과의 Region 이 탐지를 만든 리전과 다를 수 있고 `us-east-1` 로 보이기도 합니다[2]. 결과를 모을 때는 켜 둔 모든 리전을 훑습니다.
+- **리전 값.** IAM·STS·S3·CloudFront·Route 53 같은 글로벌 서비스 이벤트는 GuardDuty 를 켠 리전마다 복제해 처리하므로, 결과의 Region 이 탐지를 만든 리전과 다를 수 있고 `us-east-1` 로 보이기도 합니다[2]. 결과를 모을 때는 켜 둔 모든 리전을 살펴봅니다.
 - **합쳐진 결과.** 같은 문제는 결과 ID 하나로 합쳐지고 세부 값은 최신 것으로 바뀝니다[7]. 대상 자원이 새로 바뀌면 새 결과를 만들고[7], 공격 흐름 (attack sequence) 결과는 같은 흐름에서 비슷한 신호를 볼 때만 합쳐집니다[7]. 결과 개수를 사건 개수로 세지 않습니다.
 - **샘플 결과.** 콘솔·API·CLI 로 만든 샘플 결과는 지어낸 값을 담고 제목에 `[SAMPLE]` 이 붙습니다[9]. 추가 정보의 Sample 값도 함께 보고 실제 결과와 가릅니다[6].
 - **보관 처리와 억제.** 보관 처리한 결과와 억제 규칙에 걸린 새 결과는 기본으로 S3 로 내보내지 않습니다[8]. 콘솔의 활성 목록이나 S3 내보내기에만 기대면 이런 결과를 놓치므로, API 로 받을 때 보관 처리한 결과까지 받고 Archived 값을 봅니다[6].
@@ -167,7 +167,7 @@ IAM 쪽 결과가 가리키는 자격 증명은 [IAM 사용자·역할·액세�
 
 ## 직접 분석해 보기
 
-**내보낸 원본 파일 읽기.** S3 로 내보낸 객체는 이름 끝이 `.jsonl.gz` 라서[8] gzip 으로 묶은 JSON Lines 일 가능성이 있으므로, 받은 파일을 풀어 한 줄이 결과 하나인지부터 확인합니다. 버킷의 경로를 먼저 훑고, 받은 파일의 첫 줄에서 최상위 키 이름을 확인한 뒤 필요한 값을 뽑습니다. 키 이름은 파일에서 나온 그대로 씁니다.
+**내보낸 원본 파일 읽기.** S3 로 내보낸 객체는 이름 끝이 `.jsonl.gz` 라서[8] gzip 으로 묶은 JSON Lines 일 가능성이 있으므로, 받은 파일을 풀어 한 줄이 결과 하나인지부터 확인합니다. 버킷의 경로를 먼저 살펴보고, 받은 파일의 첫 줄에서 최상위 키 이름을 확인한 뒤 필요한 값을 뽑습니다. 키 이름은 파일에서 나온 그대로 씁니다.
 
 ```bash
 aws s3 ls s3://amzn-s3-demo-bucket/AWSLogs/123456789012/GuardDuty/ --recursive
@@ -191,7 +191,7 @@ for region in ["us-east-1", "ap-northeast-2"]:          # 켜 둔 리전 전부
             json.dump(res, open(f"gd_{region}_{det}.json", "w"), default=str)
 ```
 
-결과가 많으면 목록이 여러 쪽으로 나뉘므로 다음 쪽 토큰으로 끝까지 받습니다(Invictus-AWS 는 이 부분을 페이지 넘김 함수로 처리합니다[16]). 90일 보관 때문에 사고를 알게 된 즉시 받아 두고, 수집 순서는 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 와 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) 에서 다룹니다.
+결과가 많으면 목록이 여러 페이지로 나뉘므로 다음 페이지 토큰으로 끝까지 받습니다(Invictus-AWS 는 이 부분을 페이지 넘김 함수로 처리합니다[16]). 90일 보관 때문에 사고를 알게 된 즉시 받아 두고, 수집 순서는 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 와 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) 에서 다룹니다.
 
 ## 교차 검증
 
@@ -201,11 +201,11 @@ for region in ["us-east-1", "ap-northeast-2"]:          # 켜 둔 리전 전부
 - [EC2 인스턴스와 스냅숏](ec2-ebs.md) — Malware Protection 이 보관한 스냅숏이나 새 스냅숏으로 볼륨을 확보하고, 결과의 파일 경로와 SHA-256 을 디스크에서 확인합니다. 인스턴스 안 수집은 [클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html) 에서 다룹니다.
 - [Lambda·컨테이너 서비스 기록](lambda-containers.md), [CloudWatch Logs](cloudwatch-logs.md) — EKS·Runtime Monitoring 결과의 파드·컨테이너를 제어 평면 로그와 컨테이너 로그로 맞춰 봅니다. GuardDuty 가 EKS 감사 로그를 봤더라도 제어 평면 로깅을 켜지 않았다면 계정에는 감사 로그가 없습니다[11].
 - [Defender 경고와 기록](../m365/defender-xdr.md) — Microsoft 365 쪽에서 같은 역할을 하는 탐지 결과입니다.
-- [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md), [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md) — 이 쪽의 결과를 조사 흐름으로 묶습니다.
+- [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md), [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md) — 이 페이지의 결과를 조사 흐름으로 묶습니다.
 
 ## 실습
 
-GuardDuty 결과는 공개 검체가 드물어서, 조사용이 아닌 시험 계정에서 샘플 결과를 만들어 풀어 봅니다[9].
+GuardDuty 결과는 공개된 실제 결과가 드물어서, 조사용이 아닌 시험 계정에서 샘플 결과를 만들어 풀어 봅니다[9].
 
 1. 시험 계정의 한 리전에서 샘플 결과를 만들고, 제목의 `[SAMPLE]` 과 추가 정보의 Sample 값이 JSON 에서 어느 키로 나오는지 적어 봅니다.
 2. 같은 결과를 콘솔과 CLI 로 각각 보고, `Created at`·`Updated at` 이 어떻게 다르게 보이는지 시간대로 설명해 봅니다.

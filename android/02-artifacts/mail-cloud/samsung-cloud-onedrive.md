@@ -8,7 +8,7 @@ nav_order: 1110
 
 ## 한 줄 요약
 
-원드라이브 (OneDrive) 앱은 `QTMetadata.db` 의 `items` 표에 클라우드 파일과 폴더의 이름·크기·시각·SHA-1 을 담고 `stream_cache` 표에 기기에 캐시한 사본의 경로를 적어 두어서 [2] 파일 목록과 폴더 경로를 되살릴 수 있습니다. 삼성 클라우드 (Samsung Cloud) 는 앱 쪽 저장 위치를 적은 공개 자료가 없어 검체에서 확인해야 합니다.
+원드라이브 (OneDrive) 앱은 `QTMetadata.db` 의 `items` 표에 클라우드 파일과 폴더의 이름·크기·시각·SHA-1 을 담고 `stream_cache` 표에 기기에 캐시한 사본의 경로를 적어 두어서 [2] 파일 목록과 폴더 경로를 되살릴 수 있습니다. 삼성 클라우드 (Samsung Cloud) 는 앱 쪽 저장 위치를 적은 공개 자료가 없어 실제 기기에서 확인해야 합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -28,11 +28,11 @@ nav_order: 1110
 
 앱 데이터 폴더의 짜임은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), 다른 앱이나 셸이 이 폴더를 읽을 수 있는지는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다.
 
-`items` 표에 `sha1Hash` 칸이 없는 DB 도 있어서 [2], 질의 전에 칸이 있는지 먼저 봅니다.
+`items` 표에 `sha1Hash` 열이 없는 DB 도 있어서 [2], 질의 전에 열이 있는지 먼저 봅니다.
 
 ### 삼성 클라우드
 
-앱 쪽 저장 위치는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 갤럭시 기기의 설정 값에는 이름에 `scloud` 나 클라우드 백업이 들어간 키가 아래처럼 있을 수 있습니다.
+앱 쪽 저장 위치는 실제 기기로 확인해야 합니다. 갤럭시 기기의 설정 값에는 이름에 `scloud` 나 클라우드 백업이 들어간 키가 아래처럼 있을 수 있습니다.
 
 | 설정 표 | 키 |
 |---|---|
@@ -47,9 +47,9 @@ nav_order: 1110
 
 ### items 표
 
-`QTMetadata.db` 는 SQLite 파일이고, 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다. `items` 표의 주요 칸은 아래와 같습니다 [2].
+`QTMetadata.db` 는 SQLite 파일이고, 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다. `items` 표의 주요 열은 아래와 같습니다 [2].
 
-| 칸 | 담긴 것 |
+| 열 | 담긴 것 |
 |---|---|
 | `_id` | 행 번호. `stream_cache.parentId` 가 이 값을 가리킴 |
 | `resourceId`, `parentRid` | 항목 id 와 상위 폴더 id |
@@ -83,21 +83,21 @@ nav_order: 1110
 
 **증명하지 못하는 것**
 
-목록에 있다는 것만으로 이 기기에서 그 파일을 올렸다고 할 수 없고, 다른 기기나 웹에서 올린 파일이 동기화로 보였을 수도 있습니다. `ownerName` 이 기기 사용자와 다르면 공유받은 항목일 수 있지만, 공유를 누가 언제 했는지는 이 표만으로 알 수 없습니다. 삼성 클라우드 쪽은 설정 키 이름밖에 없어서 무엇을 동기화했는지 말할 수 있는 기록이 없습니다.
+목록에 있다는 것만으로 이 기기에서 그 파일을 올렸다고 할 수 없고, 다른 기기나 웹에서 올린 파일이 동기화로 보였을 수도 있습니다. `ownerName` 이 기기 사용자와 다르면 공유받은 항목일 수 있지만, 공유를 누가 언제 했는지는 이 표만으로 알 수 없습니다. 삼성 클라우드 쪽은 설정 키 이름밖에 없어서 무엇을 동기화했는지 알 수 있는 기록이 없습니다.
 
 ## 시각 해석
 
-`itemDate`, `creationDate`, `modifiedDateOnClient` 세 칸은 유닉스 밀리초이고, 0 이하인 값은 빈 값으로 봅니다 [2]. 유닉스 시각은 UTC 기준이라 보고서에 현지 시각을 쓸 때는 기기 시간대를 따로 확인합니다. `modifiedDateOnClient` 는 이름으로 보아 클라이언트 쪽에서 고친 시각으로 보입니다. `itemDate` 가 서버에 올라간 시각인지 목록에 들어온 시각인지는 공개 자료가 없어 검체에서 확인합니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+`itemDate`, `creationDate`, `modifiedDateOnClient` 세 열은 유닉스 밀리초이고, 0 이하인 값은 빈 값으로 봅니다 [2]. 유닉스 시각은 UTC 기준이라 보고서에 현지 시각을 쓸 때는 기기 시간대를 따로 확인합니다. `modifiedDateOnClient` 는 이름으로 보면 클라이언트 쪽에서 고친 시각으로 짐작됩니다. `itemDate` 가 서버에 올라간 시각인지 목록에 들어온 시각인지는 실제 데이터로 확인합니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-첫째, ALEAPP 모듈에 시험 이미지 목록이 없어서 [2] 이 구조가 어느 판까지 맞는지 알려져 있지 않습니다. 칸이 없다는 오류가 나거나 결과가 비면 표 정의부터 다시 읽습니다.
+첫째, ALEAPP 모듈에 시험 이미지 목록이 없어서 [2] 이 구조가 어느 판까지 맞는지 알려져 있지 않습니다. 열이 없다는 오류가 나거나 결과가 비면 표 정의부터 다시 읽습니다.
 
 둘째, 폴더 경로를 이어 붙일 때 중간 폴더 행이 빠져 있으면 경로가 끊깁니다. 끊긴 경로를 보고서에 적을 때는 확인한 부분까지만 씁니다.
 
 셋째, 특수 행(`search`, `Mru`, `SharedBy`, `SharedWithMe`)을 빼지 않고 세면 항목 수가 부풀려집니다 [2].
 
-넷째, 파일을 지우면 `items` 에서 어떻게 빠지는지, 휴지통 항목이 따로 표시되는지는 공개 자료가 없어 검체에서 확인해야 합니다. SQLite 에서 지운 행이 남을 수 있는 자리는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 계정 쪽 전체 목록과 변경 기록을 받는 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
+넷째, 파일을 지우면 `items` 에서 어떻게 빠지는지, 휴지통 항목이 따로 표시되는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 행이 남을 수 있는 자리는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 계정 쪽 전체 목록과 변경 기록을 받는 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
 
 다섯째, 삼성 클라우드는 공개 자료가 없어서 시험 기기에 계정을 넣고 동기화를 켠 뒤 무엇이 생기는지 직접 보는 방법밖에 없습니다. 그 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다.
 
@@ -105,7 +105,7 @@ nav_order: 1110
 
 ### 값으로 한 번
 
-아래는 위 구조로 만든 예시 행이고, id 모양까지 지어낸 값이라 실제 검체의 값과 다릅니다. 파일 행의 `parentRid` 가 `R2` 이면 `resourceId` 가 `R2` 인 행을 찾고, 그 행의 `parentRid` 로 다시 올라갑니다.
+아래는 위 구조로 만든 예시 행이고, id 모양까지 지어낸 값이라 실제 데이터의 값과 다릅니다. 파일 행의 `parentRid` 가 `R2` 이면 `resourceId` 가 `R2` 인 행을 찾고, 그 행의 `parentRid` 로 다시 올라갑니다.
 
 ```
 _id  resourceId  parentRid  name        itemType  itemDate
@@ -154,12 +154,12 @@ ALEAPP 의 Microsoft OneDrive 모듈이 `QTMetadata.db` 를 읽어 경로가 붙
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에 `com.microsoft.skydrive` 앱 데이터가 들어 있으면 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 시험 이미지에 `com.microsoft.skydrive` 앱 데이터가 들어 있으면 아래 질문을 풀어 봅니다.
 
 1. `items` 에서 `itemType` 값별 행 수는 어떻게 되고, 표에 없는 값이 있습니까?
 2. 특수 행을 뺀 파일 하나를 골라 폴더 경로를 끝까지 이어 붙일 수 있습니까?
 3. `stream_cache` 의 경로 가운데 추출본에 실제 파일이 있는 것은 몇 개입니까?
-4. `sha1Hash` 칸이 있습니까? 있다면 캐시 파일의 SHA-1 을 직접 계산해 맞춰 봅니다.
+4. `sha1Hash` 열이 있습니까? 있다면 캐시 파일의 SHA-1 을 직접 계산해 맞춰 봅니다.
 
 ## 참고 문헌
 

@@ -46,14 +46,14 @@ Apple 문서 [1] 는 Windows 에서 앞쪽은 `%USERPROFILE%`, 뒤쪽은 `%AppDa
 
 ## 읽는 순서
 
-1. [백업 폴더 구조 (Manifest.db·Info.plist·Status.plist)](structure.md) — 백업 폴더 맨 위의 plist 세 개와 Manifest.db 의 표·칸, 기기 안에 남는 백업 설정 파일을 봅니다.
+1. [백업 폴더 구조 (Manifest.db·Info.plist·Status.plist)](structure.md) — 백업 폴더 맨 위의 plist 세 개와 Manifest.db 의 표·열, 기기 안에 남는 백업 설정 파일을 봅니다.
 2. [도메인과 파일 이름 (Domain·fileID)](domains-fileid.md) — 도메인 이름의 짜임과 fileID 를 만드는 규칙으로 백업 폴더 안 실제 파일을 찾습니다.
 3. [암호 건 백업 (Encrypted Backup)](encrypted-backup.md) — 암호를 걸면 무엇이 더 들어가고 무엇이 암호화되는지, 암호 여부를 어떻게 판단하는지를 봅니다.
 
 ## 함께 볼 페이지
 
 - [아이클라우드 백업](../icloud-backup.md) — 기기가 아이클라우드에 올리는 백업
-- [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) — 로컬 백업을 다른 확보 방법과 견주어 보기
+- [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) — 로컬 백업을 다른 확보 방법과 비교해 보기
 - [데이터 보호](../../storage/data-protection/index.md) — 키백과 보호 등급
 - [키체인](../../storage/keychain.md) — 백업에 들어가는 키체인 항목
 - [SQLite 데이터베이스](../../data-formats/sqlite/index.md), [속성 목록 파일](../../data-formats/plist.md) — Manifest.db 와 plist 를 읽는 법

@@ -62,7 +62,7 @@ Log Analytics 로 보낸 리소스 로그가 어느 표에 들어가는지는 �
 | 사용자 정의 표(`_CL`, Analytics·Basic) 삭제 | 데이터는 지워지지 않고 이름이 15일 동안 예약됨[4] |
 | 검색 결과 표(`_SRCH`) 삭제 | 표와 데이터가 바로 영구 삭제[4] |
 
-보관 기간과 라이선스를 서비스끼리 견주는 표는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md) 에 있습니다.
+보관 기간과 라이선스를 서비스끼리 비교하는 표는 [보관 기간과 라이선스](../../01-foundations/logging/retention-licensing.md) 에 있습니다.
 
 ## 구조
 
@@ -73,9 +73,9 @@ Log Analytics 로 보낸 리소스 로그가 어느 표에 들어가는지는 �
 | 필드 | 필수 | 뜻 |
 |---|---|---|
 | `time` | 필수 | 이벤트 시각, UTC[3] |
-| `resourceId` | 필수 | 이벤트를 낸 리소스. 테넌트 서비스는 `/tenants/테넌트ID/providers/공급자이름` 꼴[3] |
+| `resourceId` | 필수 | 이벤트를 낸 리소스. 테넌트 서비스는 `/tenants/테넌트ID/providers/공급자이름` 형식[3] |
 | `tenantId` | 테넌트 로그에서 필수 | 테넌트 수준 로그에만 나옴[3] |
-| `operationName` | 필수 | 작업 이름. 대개 `Microsoft.공급자/리소스형식/하위형식/Write·Read·Delete·Action` 꼴이고, 예로 `Microsoft.Storage/storageAccounts/blobServices/blobs/Read`[3] |
+| `operationName` | 필수 | 작업 이름. 대개 `Microsoft.공급자/리소스형식/하위형식/Write·Read·Delete·Action` 형식이고, 예로 `Microsoft.Storage/storageAccounts/blobServices/blobs/Read`[3] |
 | `operationVersion` | 선택 | API 로 한 작업이면 그 API 버전[3] |
 | `category` 또는 `type` | 필수 | 로그 범주. 리소스에서 켜고 끄는 단위. 흔한 값 `Audit`·`Operational`·`Execution`·`Request`[3] |
 | `resultType` | 선택 | `Started`·`In Progress`·`Succeeded`·`Failed`·`Active`·`Resolved` 등[3] |
@@ -115,7 +115,7 @@ Event Hubs 로 보낸 로그는 한 번에 받는 묶음마다 `records` 배열 
 
 **증명하지 못하는 것.** 진단 설정이 없던 기간과 켜지 않은 범주에는 기록 자체가 없습니다[1][2]. 로그가 없다는 사실은 그 작업이 없었다는 뜻이 아니고, 먼저 설정이 있었는지를 따져야 합니다. 설정이 있었더라도 손실이 없다는 보장이 없어서 한두 건이 빠진 것만으로 결론을 내리지 않습니다[1]. `identity` 가 비어 있는 범주에서는 누가 했는지를 이 로그만으로 말할 수 없고, [활동 로그](activity-log.md) 나 [Entra ID 로그](../m365/entra-logs/index.md) 와 맞춰 봐야 합니다.
 
-보고서에는 "Key Vault A 의 `AuditEvent` 로그에 2026-09-01 03:10:14 UTC, 203.0.113.25 에서 비밀을 읽은 요청이 성공으로 기록되어 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시). 로그가 없는 구간은 "이 기간에는 이 리소스에 진단 설정이 없어 리소스 로그가 남지 않았다" 처럼 공백의 이유와 함께 씁니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
+보고서에는 "Key Vault A 의 `AuditEvent` 로그에 2026-09-01 03:10:14 UTC, 203.0.113.25 에서 비밀을 읽은 요청이 성공으로 기록되어 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시). 로그가 없는 구간은 "이 기간에는 이 리소스에 진단 설정이 없어 리소스 로그가 남지 않았다" 처럼 공백의 이유와 함께 씁니다. 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
 
 ## 시각 해석
 
@@ -133,10 +133,10 @@ Storage 목적지의 블롭 경로에 있는 날짜·시각은 로그를 받은 
 
 ## 함정과 한계
 
-- **진단 설정을 지우거나 바꾸기.** 진단 설정을 지우거나 목적지를 바꾸면 그 순간부터 기록에 공백이 생깁니다. 설정을 바꾸는 권한의 작업 이름은 `Microsoft.Insights/DiagnosticSettings/Write`·`/Delete` 이고[7], 이 변경은 대상 리소스 경로 뒤에 붙은 꼴로 [활동 로그](activity-log.md) 의 `operationName` 에 나타날 수 있습니다. 예를 들어 Sigma 규칙은 NSG 의 진단 설정 쓰기를 `MICROSOFT.NETWORK/NETWORKSECURITYGROUPS/PROVIDERS/MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/WRITE` 로 찾습니다[9]. 활동 로그에서 `diagnosticSettings` 가 들어간 작업 이름을 대소문자 구분 없이 먼저 검색합니다. 흐름은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md) 에서 다룹니다.
+- **진단 설정을 지우거나 바꾸기.** 진단 설정을 지우거나 목적지를 바꾸면 그 순간부터 기록에 공백이 생깁니다. 설정을 바꾸는 권한의 작업 이름은 `Microsoft.Insights/DiagnosticSettings/Write`·`/Delete` 이고[7], 이 변경은 대상 리소스 경로 뒤에 붙은 형식으로 [활동 로그](activity-log.md) 의 `operationName` 에 나타날 수 있습니다. 예를 들어 Sigma 규칙은 NSG 의 진단 설정 쓰기를 `MICROSOFT.NETWORK/NETWORKSECURITYGROUPS/PROVIDERS/MICROSOFT.INSIGHTS/DIAGNOSTICSETTINGS/WRITE` 로 찾습니다[9]. 활동 로그에서 `diagnosticSettings` 가 들어간 작업 이름을 대소문자 구분 없이 먼저 검색합니다. 흐름은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md) 에서 다룹니다.
 - **보관 기간 줄이기.** Log Analytics 의 보관 기간을 줄여도 30일 동안은 지우지 않으므로[4], 그 안이면 되돌려 데이터를 살릴 수 있습니다. 수집을 마치기 전에는 보관 설정을 건드리지 않습니다. 절차는 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 에서 다룹니다.
 - **남은 설정이 새 리소스에 붙음.** 리소스를 지우거나 이름을 바꾸거나 다른 리소스 그룹·구독으로 옮길 때 진단 설정을 지우지 않으면, 같은 이름으로 다시 만든 리소스에 옛 설정이 적용되어 수집이 다시 시작될 수 있습니다[2]. 같은 `resourceId` 의 로그라도 리소스를 다시 만든 시각 앞뒤로 다른 리소스일 수 있으므로 활동 로그의 생성·삭제 기록과 맞춰 봅니다.
-- **자기 자신을 목적지로.** 포털에서는 Storage 계정이나 Event Hubs 네임스페이스가 자기 자신을 목적지로 고를 수 없지만, PowerShell·CLI·REST API·Resource Manager 템플릿으로는 만들 수 있습니다[2]. Blob Storage 문서는 같은 계정으로 보낼 수 없다고만 적어서[8] 두 문서가 다르므로, 검체의 진단 설정에서 목적지를 직접 확인합니다.
+- **자기 자신을 목적지로.** 포털에서는 Storage 계정이나 Event Hubs 네임스페이스가 자기 자신을 목적지로 고를 수 없지만, PowerShell·CLI·REST API·Resource Manager 템플릿으로는 만들 수 있습니다[2]. Blob Storage 문서는 같은 계정으로 보낼 수 없다고만 적어서[8] 두 문서가 다르므로, 분석 대상의 진단 설정에서 목적지를 직접 확인합니다.
 - **리소스 ID 의 비 ASCII 문자.** 리소스 ID 에 비 ASCII 문자가 있으면 진단 설정을 지원하지 않아 설정이 사라집니다[2]. 이런 리소스는 설정을 만든 기록이 있어도 로그가 없을 수 있습니다.
 - **필드 이름이 목적지마다 다름.** Storage·Event Hubs 의 필드 이름과 Log Analytics 의 열 이름이 다를 수 있고[3], `AzureDiagnostics` 는 열 접미사와 `AdditionalFields` 때문에 작업 영역마다 쿼리가 달라집니다[6]. 목적지가 둘 이상이면 한쪽 사본만 보고 판단하지 않습니다.
 - **모드 전환 뒤 두 표.** 리소스별 모드로 바꾼 뒤에는 옛 데이터와 새 데이터가 두 표에 나뉘어 있습니다[1].
@@ -144,7 +144,7 @@ Storage 목적지의 블롭 경로에 있는 날짜·시각은 로그를 받은 
 
 ## 직접 분석해 보기
 
-**진단 설정 목록부터.** 구독의 리소스마다 진단 설정을 받아 어떤 범주가 어느 목적지로 갔는지 표로 만듭니다. Azure CLI 의 `az monitor diagnostic-settings` 명령 묶음이나 PowerShell 의 진단 설정 cmdlet 으로 받고[2], 결과 JSON 을 리소스 ID 와 함께 저장합니다. Untitled Goose Tool 의 `_dump_diagnostic_settings` 는 구독의 모든 리소스를 돌며 진단 설정을 받아 리소스 ID 를 붙여 `구독ID/azure_configs/diagnostic_settings.json` 에 한 줄씩 씁니다[10]. 이 목록이 지금 설정만 보여 준다는 점을 기억하고, 과거 설정은 활동 로그의 `diagnosticSettings` 변경 기록으로 되짚습니다.
+**진단 설정 목록부터.** 구독의 리소스마다 진단 설정을 받아 어떤 범주가 어느 목적지로 갔는지 표로 만듭니다. Azure CLI 의 `az monitor diagnostic-settings` 명령 묶음이나 PowerShell 의 진단 설정 cmdlet 으로 받고[2], 결과 JSON 을 리소스 ID 와 함께 저장합니다. Untitled Goose Tool 의 `_dump_diagnostic_settings` 는 구독의 모든 리소스를 돌며 진단 설정을 받아 리소스 ID 를 붙여 `구독ID/azure_configs/diagnostic_settings.json` 에 한 줄씩 씁니다[10]. 이 목록이 지금 설정만 보여 준다는 점을 기억하고, 과거 설정은 활동 로그의 `diagnosticSettings` 변경 기록으로 거슬러 올라가 찾습니다.
 
 **PT1H.json 직접 읽기.** 아래는 NSG 규칙 카운터 범주의 블롭 한 개를 흉내 낸 두 줄입니다. 문서 예시의 필드 가운데 일부만 남겼고 값은 모두 만든 예시입니다.
 
@@ -161,7 +161,7 @@ find insights-logs-networksecuritygrouprulecounter -name PT1H.json -exec cat {} 
   | jq -s -r 'sort_by(.time)[] | [.time, .operationName, .properties.ruleName, .properties.matchedConnections] | @tsv'
 ```
 
-`operationName` 이 `Microsoft.` 로 시작하는 꼴이 아닌 것도 볼 수 있는데, 공통 스키마의 작업 이름 규칙은 "대개" 그렇다는 것이지 강제가 아닙니다[3].
+`operationName` 이 `Microsoft.` 로 시작하는 형식이 아닌 것도 볼 수 있는데, 공통 스키마의 작업 이름 규칙은 "대개" 그렇다는 것이지 강제가 아닙니다[3].
 
 **Log Analytics 에서 읽기.** 작업 영역으로 보낸 경우 문서의 지연 측정 쿼리를 그대로 돌려 공급자마다 늦게 들어오는 정도를 봅니다[5].
 

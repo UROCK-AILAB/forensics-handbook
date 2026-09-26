@@ -50,11 +50,11 @@ zsh는 시작 파일을 아래 순서로 읽습니다 [2]. `$ZDOTDIR` 이 정해
 
 ### bash
 
-`.bash_profile` 과 `.bashrc` 는 각각 zsh의 `.zprofile`·`.zshrc` 에 해당합니다 [1]. 수집할 때는 `/etc/profile`, `~/.bash_profile`, `~/.bash_login`, `~/.profile`, `~/.bashrc` 다섯 파일을 모두 가져오고, 이 파일들을 읽는 순서는 bash 문서로, macOS에 기본으로 들어 있는 bash 버전은 검체에서 따로 확인합니다.
+`.bash_profile` 과 `.bashrc` 는 각각 zsh의 `.zprofile`·`.zshrc` 에 해당합니다 [1]. 수집할 때는 `/etc/profile`, `~/.bash_profile`, `~/.bash_login`, `~/.profile`, `~/.bashrc` 다섯 파일을 모두 가져오고, 이 파일들을 읽는 순서는 bash 문서로, macOS에 기본으로 들어 있는 bash 버전은 실제 기기에서 따로 확인합니다.
 
 ## 구조
 
-시작 파일은 셸 문법으로 쓴 텍스트 파일이고, 그 셸이 한 줄씩 실행합니다. 조사에서는 아래 두 갈래의 줄을 봅니다.
+시작 파일은 셸 문법으로 쓴 텍스트 파일이고, 그 셸이 한 줄씩 실행합니다. 조사에서는 아래 두 종류의 줄을 봅니다.
 
 첫째는 무언가를 실행하는 줄입니다. 다른 스크립트를 불러 읽는 줄, 백그라운드로 프로그램을 띄우는 줄, 네트워크에서 무언가를 받아 오는 줄이 여기에 들고, 불려 오는 파일도 같은 방식으로 따라가 읽어야 전체 그림이 나옵니다.
 
@@ -82,7 +82,7 @@ zsh는 시작 파일을 아래 순서로 읽습니다 [2]. `$ZDOTDIR` 이 정해
 
 명령 기록이 비어 있을 때 곧바로 "기록을 지웠다" 고 보지 않습니다. 시작 파일에서 `RCS` 를 끄는 설정이 있으면 셸이 끝날 때 기록 파일을 저장하지 않으므로 [2], 기록이 없는 원인이 삭제인지 설정인지를 시작 파일에서 먼저 확인하고 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 다른 흔적과 함께 판단합니다.
 
-터미널 앱이 새 창을 로그인 셸로 여는지, 터미널 세션 복원 파일이 따로 남는지는 검체에서 확인합니다. 그래서 "터미널을 열면 이 파일이 읽힌다" 를 보고서에 쓸 때는 `.zprofile` 은 로그인 때, `.zshrc` 는 새 터미널 세션마다 읽힌다는 범위 [1] 안에서만 씁니다.
+터미널 앱이 새 창을 로그인 셸로 여는지, 터미널 세션 복원 파일이 따로 남는지는 실제 기기로 확인합니다. 그래서 "터미널을 열면 이 파일이 읽힌다" 를 보고서에 쓸 때는 `.zprofile` 은 로그인 때, `.zshrc` 는 새 터미널 세션마다 읽힌다는 범위 [1] 안에서만 씁니다.
 
 ## 직접 분석해 보기
 
@@ -99,7 +99,7 @@ zsh는 시작 파일을 아래 순서로 읽습니다 [2]. `$ZDOTDIR` 이 정해
 3. `grep` 같은 텍스트 검색 도구로 다른 파일을 불러 읽는 줄, 프로그램을 띄우는 줄, 네트워크 주소가 들어간 줄, `RCS` 를 끄는 줄을 찾습니다.
 4. 불려 오는 파일을 따라가 같은 방식으로 읽고, 시스템 쪽 파일은 같은 버전의 설치본과 비교합니다.
 
-살아 있는 시스템에서 확인할 때의 원칙은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
+실행 중인 시스템에서 확인할 때의 원칙은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
 
 ## 교차 검증
 
@@ -112,7 +112,7 @@ zsh는 시작 파일을 아래 순서로 읽습니다 [2]. `$ZDOTDIR` 이 정해
 | [실행 에이전트·데몬 (LaunchAgents·LaunchDaemons)](launchd/index.md) | 같은 시기에 심어진 다른 자동 실행 |
 | [SSH 키와 접속 목록 (SSH Keys·known_hosts)](../credentials/ssh-keys.md) | 원격 접속으로 셸이 떴을 가능성을 볼 때 |
 
-지속성 위치를 한꺼번에 훑는 순서는 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에 있습니다.
+지속성 위치를 한꺼번에 살펴보는 순서는 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에 있습니다.
 
 ## 실습
 

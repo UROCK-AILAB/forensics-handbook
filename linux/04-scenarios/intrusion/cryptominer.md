@@ -6,13 +6,13 @@ nav_order: 1060
 
 # 채굴기가 돌았나 (Cryptominer)
 
-어떤 프로세스가 CPU 를 오래 썼는지 찾고, 그 프로세스를 띄운 장치와 들어온 경로까지 되짚는 조사입니다. 지금 도는 프로세스는 `/proc` 에서 바로 보이지만, 이미 멈춘 채굴기의 CPU 사용량은 그것을 따로 남기는 기록이 있을 때만 남습니다.
+어떤 프로세스가 CPU 를 오래 썼는지 찾고, 그 프로세스를 띄운 장치와 들어온 경로까지 거슬러 올라가는 조사입니다. 지금 도는 프로세스는 `/proc` 에서 바로 보이지만, 이미 멈춘 채굴기의 CPU 사용량은 그것을 따로 남기는 기록이 있을 때만 남습니다.
 
 ## 조사 질문
 
 이 조사는 다섯 가지 질문으로 나뉩니다. 어떤 프로세스가 CPU 를 오래 썼는지, 언제부터 돌았는지, 무엇이 그 프로세스를 띄웠는지, 어디로 연결했는지, 재부팅이나 종료 뒤에도 다시 떴는지입니다.
 
-앞의 두 질문은 CPU 시간 기록으로, 세 번째는 부모 프로세스와 서비스 단위(unit)로, 네 번째는 소켓 정보로, 다섯 번째는 지속성 장치로 답합니다. 채굴 풀의 주소나 포트로 채굴기임을 가리는 방법은 이 쪽에서 다루지 않고, 실행 파일은 해시와 YARA 로 가립니다([알려진 파일 대조와 YARA](../../03-techniques/analysis/hash-yara.md)).
+앞의 두 질문은 CPU 시간 기록으로, 세 번째는 부모 프로세스와 서비스 단위(unit)로, 네 번째는 소켓 정보로, 다섯 번째는 지속성 장치로 답합니다. 채굴 풀의 주소나 포트로 채굴기임을 가려내는 방법은 이 페이지에서 다루지 않고, 실행 파일은 해시와 YARA 로 판별합니다([알려진 파일 대조와 YARA](../../03-techniques/analysis/hash-yara.md)).
 
 ## 먼저 확인할 것
 
@@ -20,9 +20,9 @@ nav_order: 1060
 
 **배포판과 systemd 판.** 서비스 단위가 멈출 때 남는 CPU 사용량 줄은 systemd 판에 따라 문장이 다릅니다. Ubuntu 24.04 LTS 는 systemd 255, RHEL 9 는 systemd 252 를 씁니다[6].
 
-**과거 CPU 사용량을 남기는 장치가 있었는지.** 이미 멈춘 프로세스의 CPU 시간은 아래 세 곳에 남습니다. atop 과 프로세스 회계는 설치하고 켜 두었는지를 검체에서 확인합니다.
+**과거 CPU 사용량을 남기는 장치가 있었는지.** 이미 멈춘 프로세스의 CPU 시간은 아래 세 곳에 남습니다. atop 과 프로세스 회계는 설치하고 켜 두었는지를 분석 대상에서 확인합니다.
 
-| 장치 | 검체에서 확인할 것 | 남는 것 |
+| 장치 | 분석 대상에서 확인할 것 | 남는 것 |
 |---|---|---|
 | systemd 단위 자원 기록 | 저널을 디스크에 영구 저장했는지([systemd 저널](../../01-foundations/logging/systemd-journal/index.md)) | 멈춘 단위가 쓴 CPU 시간 |
 | atop | `/var/log/atop/atop_*` 파일이 있는지 | 수집 간격마다의 프로세스 목록 |
@@ -50,14 +50,14 @@ CPU 시간을 남기는 기록은 여러 곳에 있지만, 기록마다 다루�
 
 | 기록 | 범위 | 남는 때 | 단위 |
 |---|---|---|---|
-| `/proc/PID/stat` 14·15번째 칸 `utime`·`stime` | 프로세스 하나 | 프로세스가 도는 동안 | 클록 틱(`sysconf(_SC_CLK_TCK)` 로 나눔)[2] |
-| `/proc/PID/stat` 16·17번째 칸 `cutime`·`cstime` | 그 프로세스가 기다려 준 자식들 | 프로세스가 도는 동안 | 클록 틱[2] |
+| `/proc/PID/stat` 14·15번째 필드 `utime`·`stime` | 프로세스 하나 | 프로세스가 도는 동안 | 클록 틱(`sysconf(_SC_CLK_TCK)` 로 나눔)[2] |
+| `/proc/PID/stat` 16·17번째 필드 `cutime`·`cstime` | 그 프로세스가 기다려 준 자식들 | 프로세스가 도는 동안 | 클록 틱[2] |
 | `/proc/stat` 의 `cpu`·`cpuN` 줄 | 시스템 전체·CPU 하나 | 시스템이 도는 동안 | USER_HZ, 대부분 1/100초[2] |
 | systemd 단위 자원 기록 | 서비스 단위 하나 | 단위가 멈추거나 실패할 때 | 나노초(`CPU_USAGE_NSEC=`)[1] |
 | atop 기록 | 프로세스 하나 | atop 이 기록할 때마다 | 틱(`utime`·`stime`)[5] |
 | 프로세스 회계 | 프로세스 하나 | 프로세스가 끝날 때 | 클록 틱(`ac_utime`·`ac_stime`)[2] |
 
-`/proc/stat` 은 CPU 가 얼마나 바빴는지만 알려 주고 어느 프로세스가 썼는지는 알려 주지 않습니다. Velociraptor `Linux.Sys.CPUTime` 은 이 파일을 `user`·`nice`·`system`·`idle`·`iowait` 등의 칸으로 나눠 보여 줍니다[4]. 지금 도는 프로세스의 CPU 비율은 UAC 가 `ps -eo user,pid,ppid,pcpu,pmem,tty,stat,lstart,args` 와 `etime` 판, `top -b -n1` 으로 남깁니다[3].
+`/proc/stat` 은 CPU 가 얼마나 바빴는지만 알려 주고 어느 프로세스가 썼는지는 알려 주지 않습니다. Velociraptor `Linux.Sys.CPUTime` 은 이 파일을 `user`·`nice`·`system`·`idle`·`iowait` 등의 필드로 나눠 보여 줍니다[4]. 지금 도는 프로세스의 CPU 비율은 UAC 가 `ps -eo user,pid,ppid,pcpu,pmem,tty,stat,lstart,args` 와 `etime` 판, `top -b -n1` 으로 남깁니다[3].
 
 **systemd 단위 자원 기록.** 서비스 단위가 `dead` 나 `failed` 상태로 들어가면 systemd 는 그 단위가 쓴 자원을 저널에 한 줄로 남깁니다[1]. 이 줄의 `MESSAGE_ID` 는 `ae8f7b866b0347b9af31fe1c80b127c0` 이고, 카탈로그 제목은 "Resources consumed by unit runtime" 입니다[1]. RHEL 9 의 systemd 소스 카탈로그에도 같은 항목이 있습니다[1]. 구조 필드로 `CPU_USAGE_NSEC=`, 단위 이름(시스템 단위는 `UNIT=`, 사용자 단위는 `USER_UNIT=`), 실행 ID(`INVOCATION_ID=` 또는 `USER_INVOCATION_ID=`)가 들어갑니다[1].
 
@@ -88,11 +88,11 @@ CPU_USAGE_NSEC=18723418000000
 
 3. **연결 상대를 잇습니다.** 프로세스의 소켓 fd 를 `/proc/net/tcp` 등의 아이노드와 맞춥니다. Velociraptor `Linux.Network.Netstat` 은 `/proc/*/fd/*` 에서 소켓 아이노드를 모아 `/proc/net/tcp`·`/proc/net/tcp6` 의 연결과 잇고, 기본으로 상태 이름이 `LISTEN|ESTAB` 에 맞는 연결(Listening·Established)만 보여 줍니다[4].
 
-4. **무엇이 띄웠는지 부모 사슬을 따라갑니다.** 부모가 cron, systemd, 웹 서버 계정의 프로세스, SSH 세션 가운데 무엇인지 봅니다. UAC 의 `ps -eo user,pid,ppid,cgroup` 출력은 프로세스가 속한 cgroup 을 보여 주므로[3] 서비스 단위나 컨테이너 소속을 가리는 데 씁니다. 단위 이름이 나오면 저널에서 그 단위의 시작·중지 줄과 `Consumed … CPU time` 줄을 찾습니다. 단위 파일의 위치와 만든 사람을 가리는 법은 [systemd 서비스와 타이머](../../02-artifacts/persistence/systemd-units.md)에 있습니다.
+4. **무엇이 띄웠는지 부모 사슬을 따라갑니다.** 부모가 cron, systemd, 웹 서버 계정의 프로세스, SSH 세션 가운데 무엇인지 봅니다. UAC 의 `ps -eo user,pid,ppid,cgroup` 출력은 프로세스가 속한 cgroup 을 보여 주므로[3] 서비스 단위나 컨테이너 소속을 판별하는 데 씁니다. 단위 이름이 나오면 저널에서 그 단위의 시작·중지 줄과 `Consumed … CPU time` 줄을 찾습니다. 단위 파일의 위치와 만든 사람을 가려내는 법은 [systemd 서비스와 타이머](../../02-artifacts/persistence/systemd-units.md)에 있습니다.
 
 5. **이미 멈춘 채굴기를 찾습니다.** 라이브 증거가 없거나 지금 CPU 사용이 낮으면 저널의 단위 자원 기록, atop 기록, 프로세스 회계에서 과거에 CPU 를 많이 쓴 프로세스와 단위를 찾습니다. 파일 쪽에서는 `/tmp`·`/dev/shm`·`/var/tmp` 와 홈의 숨김 폴더를 봅니다([임시 폴더와 메모리 파일 시스템](../../02-artifacts/file-activity/tmp-shm.md)).
 
-6. **실행 파일을 가립니다.** 건진 실행 파일과 실행 비트가 있는 파일의 해시를 대조하고, 프로세스 메모리에 YARA 를 돌립니다([알려진 파일 대조와 YARA](../../03-techniques/analysis/hash-yara.md)). Velociraptor `Linux.Detection.Yara.Process` 의 기본 규칙은 `velociraptor` 문자열을 찾는 예시일 뿐이라[4], 채굴기용 규칙을 따로 넣어야 합니다.
+6. **실행 파일을 골라냅니다.** 건진 실행 파일과 실행 비트가 있는 파일의 해시를 대조하고, 프로세스 메모리에 YARA 를 돌립니다([알려진 파일 대조와 YARA](../../03-techniques/analysis/hash-yara.md)). Velociraptor `Linux.Detection.Yara.Process` 의 기본 규칙은 `velociraptor` 문자열을 찾는 예시일 뿐이라[4], 채굴기용 규칙을 따로 넣어야 합니다.
 
 7. **다시 뜨는 장치를 찾습니다.** cron, systemd 타이머와 단위, 셸 시작 파일, `/etc/ld.so.preload` 를 봅니다([무엇이 계속 살아남게 했나](persistence-hunt.md)).
 

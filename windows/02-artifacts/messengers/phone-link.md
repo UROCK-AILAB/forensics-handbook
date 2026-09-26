@@ -57,9 +57,9 @@ C:\Users\<사용자>\AppData\Local\Packages\Microsoft.YourPhone_8wekyb3d8bbwe\Lo
 | 패키지 이름 | `Microsoft.YourPhone_8wekyb3d8bbwe` [1] | 같음 |
 | DB 위치 | `LocalCache\Indexed\<GUID>\System\Database\` [1] | `Indexed` 가 없을 수 있음 |
 | 함께 있는 패키지 | 공개 자료 없음 | `MicrosoftWindows.CrossDevice_cw5n1h2txyewy` (1.26072.116.0) |
-| 시험한 휴대폰 | 안드로이드만 [1] | 검체에서 확인 |
+| 시험한 휴대폰 | 안드로이드만 [1] | 실제 데이터로 확인 |
 
-요즘 판에서도 휴대폰 자료가 `Indexed\<GUID>\System\Database` 에 쌓이는지, 일부 자료가 CrossDevice 패키지로 옮겨 갔는지는 공개 자료가 없습니다. 그래서 검체에서는 두 패키지 폴더를 통째로 확보한 다음 `Database` 폴더가 어디 있는지 찾습니다.
+요즘 판에서도 휴대폰 자료가 `Indexed\<GUID>\System\Database` 에 쌓이는지, 일부 자료가 CrossDevice 패키지로 옮겨 갔는지는 공개 자료가 없습니다. 그래서 분석할 때는 두 패키지 폴더를 통째로 확보한 다음 `Database` 폴더가 어디 있는지 찾습니다.
 
 ## 구조
 
@@ -85,11 +85,11 @@ settings.db       settings.db-shm       settings.db-wal
 
 ### message 표 — 문자
 
-문자가 든 칸은 다음과 같습니다[2].
+문자가 든 열은 다음과 같습니다[2].
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
-| `message_id` | 메시지 번호 (칸 이름으로 본 뜻) |
+| `message_id` | 메시지 번호 (열 이름으로 본 뜻) |
 | `thread_id` | 대화방 |
 | `timestamp` | 시각 (아래 "시각 해석") |
 | `from_address` | 보낸 번호 |
@@ -100,9 +100,9 @@ settings.db       settings.db-shm       settings.db-wal
 
 ### subscription 표 — 유심과 통신사
 
-유심·통신사 정보가 든 표입니다[2]. 주요 칸은 다음과 같습니다[2]. `name`·`number` 말고 나머지 칸의 뜻은 칸 이름에서 나온 것이므로, 검체에서 값을 보고 확인합니다.
+유심·통신사 정보가 든 표입니다[2]. 주요 열은 다음과 같습니다[2]. `name`·`number` 말고 나머지 열의 뜻은 열 이름에서 나온 것이므로, 실제 값을 보고 확인합니다.
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `subscription_id` | 가입 정보 번호 |
 | `sim_slot_index` | 유심 슬롯 |
@@ -120,9 +120,9 @@ settings.db       settings.db-shm       settings.db-wal
 
 ### 그 밖의 표
 
-`mms`, `rcs_chat`, `sync` 표의 칸과 `calling.db`, `contacts.db`, `photos.db`, `notifications.db`, `settings.db` 의 표와 칸은 공개 자료가 없습니다. 검체에서는 `.schema` 로 표와 칸을 직접 확인합니다.
+`mms`, `rcs_chat`, `sync` 표의 열과 `calling.db`, `contacts.db`, `photos.db`, `notifications.db`, `settings.db` 의 표와 열은 공개 자료가 없습니다. 실제 DB 에서는 `.schema` 로 표와 열을 직접 확인합니다.
 
-> 그림 자리: `phone.db` 의 `message` 표와 `subscription` 표 — 두 표의 칸을 나란히 놓고, `number`·`from_address`·`type` 이 무엇을 알려 주는지 표시
+> 그림 자리: `phone.db` 의 `message` 표와 `subscription` 표 — 두 표의 열을 나란히 놓고, `number`·`from_address`·`type` 이 무엇을 알려 주는지 표시
 
 ## 증거로서 의미
 
@@ -135,9 +135,9 @@ settings.db       settings.db-shm       settings.db-wal
 ### 증명하지 못하는 것
 
 - PC 앞의 사람이 문자를 읽었는지: DB 에 문자가 있다는 것은 동기화된 기록입니다. 누가 PC 화면에서 그 문자를 봤다는 뜻은 아닙니다.
-- 보낸 곳: `type=2`(보낸 문자)만으로는 PC 에서 입력해 보냈는지 휴대폰에서 보냈는지 가리지 못합니다.
-- 휴대폰에서 지운 문자: PC DB 에 남는지는 공개 자료가 없어 검체에서 확인합니다.
-- 사진 전체: `photos.db` 에는 사진 파일 이름과 blob 이 들어 있습니다[1]. 휴대폰 사진 전체가 들어 있는지는 검체에서 확인합니다.
+- 보낸 곳: `type=2`(보낸 문자)만으로는 PC 에서 입력해 보냈는지 휴대폰에서 보냈는지 구분하지 못합니다.
+- 휴대폰에서 지운 문자: PC DB 에 남는지는 실제 데이터로 확인합니다.
+- 사진 전체: `photos.db` 에는 사진 파일 이름과 blob 이 들어 있습니다[1]. 휴대폰 사진 전체가 들어 있는지는 실제 데이터로 확인합니다.
 - 알림 이력 전체: `notifications.db` 에는 현재(활성) 알림이 들어 있습니다[1]. 지난 알림 이력 전체가 아닐 수 있습니다.
 - PC 에서 휴대폰으로 파일을 보냈는지: 이 페이지의 DB 는 휴대폰에서 PC 로 온 자료입니다.
 
@@ -150,7 +150,7 @@ settings.db       settings.db-shm       settings.db-wal
 
 `message.timestamp` 는 FILETIME 과 같은 방식으로 1601-01-01 부터 센 100나노초 단위 값입니다[2]. `(timestamp / 10000000) - 11644473600` 으로 Unix 초로 바꾼 다음 `datetime(..., 'unixepoch')` 으로 읽으면[2] 결과는 UTC 입니다. SQLite 에서 정수끼리 나누면 소수점 아래를 버리므로 이 식은 1초 미만을 버립니다.
 
-이 칸은 문자 시각으로 쓰이지만[2], 휴대폰에서 문자가 오간 시각인지 PC 로 동기화된 시각인지는 공개 자료가 없어 검체에서 확인합니다. 다른 DB 의 시각 칸은 자릿수로 형식부터 가립니다. 형식별 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+이 열은 문자 시각으로 쓰이지만[2], 휴대폰에서 문자가 오간 시각인지 PC 로 동기화된 시각인지는 실제 데이터로 확인해야 합니다. 다른 DB 의 시각 열은 자릿수로 형식부터 판별합니다. 형식별 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -159,20 +159,20 @@ settings.db       settings.db-shm       settings.db-wal
 - `*.db` 만 모으고 `-wal` 을 빼면 최근 문자가 빠질 수 있습니다.
 - 위 DB 구성은 안드로이드 휴대폰 기준이고, 아이폰 연결은 시험되지 않았습니다[1].
 - 요즘 판의 `LocalCache` 에는 `PlatformEncryptedKeyStorage.json` 처럼 암호와 관련된 이름의 파일이 있습니다. 이 파일이 DB 를 암호화하는 데 쓰이는지는 공개 자료가 없습니다.
-- DB 는 일반 SQLite 뷰어로 바로 열립니다[1]. 판에 따라 다를 수 있으므로 검체에서도 첫 16바이트로 평문인지 먼저 확인합니다.
+- DB 는 일반 SQLite 뷰어로 바로 열립니다[1]. 판에 따라 다를 수 있으므로 실제 파일도 첫 16바이트로 평문인지 먼저 확인합니다.
 - 원본 말고 사본에서 작업합니다. `.db`·`-wal`·`-shm` 세 파일을 함께 복사한 사본을 엽니다. WAL 이 붙은 DB 를 열고 닫을 때 파일이 어떻게 바뀌는지는 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 
 ### 지운 기록
 
-앱이 DB 에서 행을 지우면 빈 공간에 흔적이 남을 수 있습니다. 찾는 법은 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 다룹니다. Phone Link DB 에서 지운 문자가 실제로 남는지, 사용자가 앱과 휴대폰의 연결을 끊으면 PC 쪽 DB 가 어떻게 되는지는 공개 자료가 없어 검체에서 확인합니다. 섀도 복사본에 옛 DB 가 남아 있는지 찾아봅니다([섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
+앱이 DB 에서 행을 지우면 빈 공간에 흔적이 남을 수 있습니다. 찾는 법은 [파일 안에 남은 지운 레코드](../../01-foundations/database-log-formats/sqlite/freelist-freeblock.md) 에서 다룹니다. Phone Link DB 에서 지운 문자가 실제로 남는지, 사용자가 앱과 휴대폰의 연결을 끊으면 PC 쪽 DB 가 어떻게 되는지는 실제 데이터로 확인해야 합니다. 섀도 복사본에 옛 DB 가 남아 있는지 찾아봅니다([섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)).
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 예시는 SQLite 명세와 FILETIME 정의로 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래 예시는 SQLite 명세와 FILETIME 정의로 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
-**1. 평문 SQLite 인지 가리기**
+**1. 평문 SQLite 인지 판별하기**
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -217,7 +217,7 @@ SELECT sim_slot_index, name, number, country_iso, is_roaming
 FROM subscription;
 ```
 
-- `time_utc` 는 UTC 입니다. 보고서에 현지 시각을 함께 적을 때는 검체의 시간대 설정을 확인합니다([시간대 설정](../system-account/time-zone.md)).
+- `time_utc` 는 UTC 입니다. 보고서에 현지 시각을 함께 적을 때는 분석 대상 PC 의 시간대 설정을 확인합니다([시간대 설정](../system-account/time-zone.md)).
 - 결과 가운데 한두 건은 위 헥스 절처럼 손으로 다시 계산해 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 교차 검증
@@ -237,7 +237,7 @@ FROM subscription;
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 Phone Link 를 쓴 Windows 이미지를 고릅니다. 없으면 실험용 가상 머신에 안드로이드 휴대폰을 연결해 씁니다.
+NIST CFReDS 같은 공개 시험 이미지 가운데 Phone Link 를 쓴 Windows 이미지를 고릅니다. 없으면 실험용 가상 머신에 안드로이드 휴대폰을 연결해 씁니다.
 
 1. 사용자마다 `Microsoft.YourPhone_8wekyb3d8bbwe` 폴더가 있습니까? 그 안에 `LocalCache\Indexed` 가 있습니까?
 2. `Database\` 폴더의 파일 목록을 적습니다. DB 마다 `-wal` 이 있고 크기가 0 보다 큽니까?

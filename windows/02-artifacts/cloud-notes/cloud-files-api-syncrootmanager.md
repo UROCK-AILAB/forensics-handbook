@@ -16,7 +16,7 @@ Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있�
 
 클라우드 파일 API 의 중심은 미니필터 드라이버 `cldflt.sys` 이고, 이 드라이버는 NTFS 볼륨만 지원합니다. 동기화 앱은 동기화 루트마다 ID 를 하나 정하며, 이 등록은 `SyncRootManager` 키 아래에 루트마다 하위 키 하나로 남습니다.
 
-자리표시자는 재분석 지점 (reparse point) 으로 만들며, 동기화 엔진과 `%systemroot%` 아래 프로그램이 아닌 앱에는 이 재분석 지점을 숨깁니다. 자리표시자는 파일 시스템 머리 1KB 만 차지합니다. 살아 있는 PC 에서 자리표시자를 읽으면 내용을 내려받는데, 이 동작을 내려받기 (hydration) 라고 부릅니다.
+자리표시자는 재분석 지점 (reparse point) 으로 만들며, 동기화 엔진과 `%systemroot%` 아래 프로그램이 아닌 앱에는 이 재분석 지점을 숨깁니다. 자리표시자는 파일 시스템 머리 1KB 만 차지합니다. 실행 중인 PC 에서 자리표시자를 읽으면 내용을 내려받는데, 이 동작을 내려받기 (hydration) 라고 부릅니다.
 
 파일은 세 상태 가운데 하나입니다.
 
@@ -29,7 +29,7 @@ Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있�
 포렌식에서 이 구조를 보는 이유는 두 가지입니다.
 
 - 동기화 루트 등록으로 어느 사용자가 어느 폴더를 클라우드와 맞췄는지 봅니다.
-- 파일 특성으로 파일 내용이 PC 에 있었는지 가립니다. 파일 목록에 이름이 있어도 내용은 클라우드에만 있었을 수 있습니다.
+- 파일 특성으로 파일 내용이 PC 에 있었는지 확인합니다. 파일 목록에 이름이 있어도 내용은 클라우드에만 있었을 수 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -56,11 +56,11 @@ Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있�
 |---|---|---|
 | OneDrive | 씁니다 | [원드라이브](onedrive/index.md) |
 | 아이클라우드 | 공개 자료 없음. 저장 위치를 다른 드라이브로 옮기려면 그 드라이브가 NTFS 여야 합니다. `cldflt.sys` 가 NTFS 만 지원한다는 점과 들어맞지만 직접 근거는 아닙니다 | [아이클라우드](icloud-for-windows.md) |
-| 구글 드라이브 | 공개 자료 없음. 설정 `DefaultMountPoint` 가 드라이브 문자나 경로를 정합니다. 가상 드라이브 방식인지 이 API 방식인지는 검체에서 확인합니다 | [구글 드라이브](drivefs-backup-and-sync.md) |
+| 구글 드라이브 | 공개 자료 없음. 설정 `DefaultMountPoint` 가 드라이브 문자나 경로를 정합니다. 가상 드라이브 방식인지 이 API 방식인지는 실제 기기에서 확인합니다 | [구글 드라이브](drivefs-backup-and-sync.md) |
 | 드롭박스 | 공개 자료 없음 | [드롭박스](dropbox.md) |
 | 네이버 MYBOX | 공개 자료 없음 | [네이버 MYBOX](naver-mybox.md) |
 
-검체에서는 `SyncRootManager` 하위 키 이름의 앞부분을 보면 어느 공급자가 등록했는지 알 수 있습니다. 아래 "동기화 루트 ID" 절의 형식을 따릅니다.
+실제 기기에서는 `SyncRootManager` 하위 키 이름의 앞부분을 보면 어느 공급자가 등록했는지 알 수 있습니다. 아래 "동기화 루트 ID" 절의 형식을 따릅니다.
 
 ## 구조
 
@@ -89,7 +89,7 @@ Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있�
 | `Flags` | DWORD | 1314(10진) 인 예가 있습니다. 비트의 뜻은 공개 자료에 없습니다 |
 | `Handler`, `BannerNotificationHandler`, `CustomStateHandler`, `ThumbnailProvider`, `UriHandler`, `ShareHandler`, `CopyHook`, `SuggestionHandlerFactory`, `SearchHandlerFactory`, `StorageProviderStatusUISourceFactory` | REG_SZ | CLSID 입니다 |
 | `AUMID` | REG_SZ | 앱 ID 입니다. 예: `Microsoft.OneDriveSync_8wekyb3d8bbwe!OneDrive` |
-| `Cid`, `TenantName` | REG_SZ | OneDrive 회사 계정 키에 있는 값입니다. 다른 업체도 쓰는지는 검체에서 확인합니다 |
+| `Cid`, `TenantName` | REG_SZ | OneDrive 회사 계정 키에 있는 값입니다. 다른 업체도 쓰는지는 실제 데이터로 확인합니다 |
 
 - `CopyHook`, `ShareHandler`, `SearchHandlerFactory` 는 동기화 루트 레지스트리 키에 두는 값이고, 데이터는 COM 서버의 CLSID 입니다[3]. 나머지 값의 뜻을 설명한 공개 문서는 없습니다.
 - CLSID 를 읽는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에 있습니다.
@@ -107,7 +107,7 @@ Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있�
 ### 탐색 창 등록
 
 - `HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{CLSID}` 의 기본값은 동기화 루트 표시 이름입니다. 예: `OneDrive - Personal`.
-- 다른 업체도 같은 방식으로 등록하는지는 검체에서 확인합니다.
+- 다른 업체도 같은 방식으로 등록하는지는 실제 데이터로 확인합니다.
 - OneDrive 는 `HKCU\Software\SyncEngines\Providers\OneDrive\<ID>` 에도 `MountPoint`, `LastModifiedTime`, `UrlNamespace`, `LibraryType`, `CID` 같은 값을 적습니다. 이 키는 OneDrive 전용으로 보입니다. 다른 업체가 쓰는 키 이름은 공개 자료에 없습니다.
 
 ### 필터 드라이버 `CldFlt`
@@ -129,7 +129,7 @@ Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있�
 - 내려받은 뒤에도 재분석 지점은 그대로 남습니다.
 - `0x9000601A` 의 이름은 `IO_REPARSE_TAG_CLOUD_6` 입니다[4].
 - `0x9000001A`(`IO_REPARSE_TAG_CLOUD`)부터 `0x9000F01A`(`IO_REPARSE_TAG_CLOUD_F`)까지 16개는 모두 클라우드 파일 필터 (Cloud Files filter) 의 태그입니다[4]. 가운데 자리(`1`~`F`)의 뜻은 명세에 없고, 업체마다 태그 값이 다른지도 공개 자료에 없습니다.
-- 그래서 이 16개 값 가운데 하나가 보이면 클라우드 파일 필터가 관리하는 파일로 봅니다. 어느 앱이 관리하는지는 태그만으로 가리지 않습니다.
+- 그래서 이 16개 값 가운데 하나가 보이면 클라우드 파일 필터가 관리하는 파일로 봅니다. 어느 앱이 관리하는지는 태그만으로 판별하지 않습니다.
 - 재분석 지점이 MFT 에 어떻게 저장되는지는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 에 있습니다.
 
 ### 파일 특성 값
@@ -189,12 +189,12 @@ OneDrive 폴더 파일의 특성 값 조합 예는 아래와 같습니다.
 
 ## 함정과 한계
 
-- **살아 있는 PC 에서 자리표시자를 읽지 않습니다.** 해시를 구하거나 복사하려고 읽으면 내용을 내려받습니다. 그러면 파일이 자리표시자에서 전체 파일로 바뀝니다.
+- **실행 중인 PC 에서 자리표시자를 읽지 않습니다.** 해시를 구하거나 복사하려고 읽으면 내용을 내려받습니다. 그러면 파일이 자리표시자에서 전체 파일로 바뀝니다.
 - **희소 파일을 어떻게 뽑았는지 기록합니다.** 자리표시자에는 희소 특성이 붙습니다. 희소 파일을 구멍을 건너뛰고 뽑으면 내용이 앞으로 밀립니다. 구멍을 0 으로 채워 뽑으면 크기와 해시가 달라집니다. 같은 문제는 [USN 변경 저널](../filesystem/usnjrnl.md) 을 뽑을 때도 생깁니다.
 - **`0x40000` 을 단정하지 않습니다.** 이 값은 `FILE_ATTRIBUTE_EA` 와 같고, `EA` 는 내부 전용 값입니다[1]. `RECALL_ON_OPEN` 은 디렉터리 열거 구조에만 나타나므로, 다른 곳에서 본 `0x40000` 은 `RECALL_ON_OPEN` 이라고 단정할 수 없습니다.
-- **도구에 따라 재분석 지점이 안 보일 수 있습니다.** 동기화 엔진과 `%systemroot%` 아래 프로그램이 아닌 앱에는 재분석 지점을 숨깁니다[3]. 그래서 살아 있는 PC 에서 별도 설치한 도구로 보면 재분석 지점이 없는 것처럼 나올 수 있습니다.
+- **도구에 따라 재분석 지점이 안 보일 수 있습니다.** 동기화 엔진과 `%systemroot%` 아래 프로그램이 아닌 앱에는 재분석 지점을 숨깁니다[3]. 그래서 실행 중인 PC 에서 별도 설치한 도구로 보면 재분석 지점이 없는 것처럼 나올 수 있습니다.
 - **내용은 다른 곳에서 찾습니다.** 디스크 이미지에서 자리표시자 내용은 없습니다. 내용은 동기화 앱의 캐시나 클라우드 쪽에서 찾아야 합니다.
-- **지워진 키를 찾는 곳.** 지운 레지스트리 키는 하이브 여유 공간, 트랜잭션 로그, 볼륨 섀도 복사본에서 찾아볼 수 있다는 것이 일반론입니다. 이 키가 실제로 되살아나는지는 검체에서 확인합니다. 섀도 복사본을 다루는 법은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에 있습니다.
+- **지워진 키를 찾는 곳.** 지운 레지스트리 키는 하이브 여유 공간, 트랜잭션 로그, 볼륨 섀도 복사본에서 찾아볼 수 있다는 것이 일반론입니다. 이 키가 실제로 되살아나는지는 실제 데이터로 확인합니다. 섀도 복사본을 다루는 법은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에 있습니다.
 - **뜻이 알려지지 않은 값이 많습니다.** `Flags` 비트, 키 이름 뒤 32자리 16진, 재분석 태그 가운데 자리(`CLOUD_1`~`CLOUD_F`)의 뜻을 설명한 공개 자료는 없습니다. 보고서에는 값만 적고 뜻을 짐작해 쓰지 않습니다.
 
 ## 직접 분석해 보기
@@ -225,7 +225,7 @@ OneDrive!S-1-1234!Personal
 └ 공급자 ┘└ SID ┘└ 계정 ┘
 ```
 
-- 첫 번째 `!` 앞이 공급자 ID 입니다. 검체에서 이 부분을 모으면 동기화 루트를 등록한 앱 목록이 나옵니다.
+- 첫 번째 `!` 앞이 공급자 ID 입니다. 실제 기기에서 이 부분을 모으면 동기화 루트를 등록한 앱 목록이 나옵니다.
 - SID 는 [사용자 프로필 목록](../system-account/profilelist.md) 에서 사용자 이름으로 바꿉니다.
 - `UserSyncRoots` 의 값 데이터는 REG_SZ 문자열입니다. 바이트로 읽을 때의 인코딩은 [문자 인코딩](../../01-foundations/value-decoding/utf-16le-utf-8-cp949.md) 에 있습니다.
 
@@ -238,7 +238,7 @@ OneDrive!S-1-1234!Personal
 5. `SYSTEM` 하이브에서 `CldFlt` 서비스 키를 봅니다.
 6. MFT 파서로 동기화 폴더 아래 파일의 특성 값을 뽑습니다. `0x1000`·`0x400000` 이 켜진 파일과 꺼진 파일을 나눠 셉니다.
 
-살아 있는 PC 에서는 Windows 에 들어 있는 명령으로도 볼 수 있습니다.
+실행 중인 PC 에서는 Windows 에 들어 있는 명령으로도 볼 수 있습니다.
 
 ```
 reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\SyncRootManager" /s
@@ -255,14 +255,14 @@ fsutil reparsepoint query "<내려받은 파일 경로>"
 | 사용자 프로필 목록 | `UserSyncRoots` 의 SID 가 어느 사용자인지 봅니다 | [사용자 프로필 목록](../system-account/profilelist.md) |
 | 설치 프로그램 | `IconResource` 의 실행 파일이 어느 프로그램인지, 언제 깔았는지 봅니다 | [설치 프로그램](../system-account/uninstall.md) |
 | 마스터 파일 테이블 | 동기화 폴더 안 파일의 특성과 시각을 봅니다 | [마스터 파일 테이블](../filesystem/mft.md) |
-| USN 변경 저널 | 동기화 폴더 안 파일이 바뀐 기록을 찾습니다. 내려받기 때 어떤 변경 이유가 남는지는 검체에서 확인합니다 | [USN 변경 저널](../filesystem/usnjrnl.md) |
+| USN 변경 저널 | 동기화 폴더 안 파일이 바뀐 기록을 찾습니다. 내려받기 때 어떤 변경 이유가 남는지는 실제 데이터로 확인합니다 | [USN 변경 저널](../filesystem/usnjrnl.md) |
 | 셸백·바로가기 파일 | 동기화 폴더를 둘러보거나 그 안 파일을 연 기록을 봅니다 | [셸백](../file-folder-usage/shellbags/index.md), [바로가기 파일](../file-folder-usage/lnk.md) |
 
 반출 여부를 따지는 흐름은 [자료를 밖으로 빼돌렸나](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 
-클라우드 동기화 앱을 쓴 공개 검체(NIST CFReDS 등)에서 아래 질문을 풀어 봅니다.
+클라우드 동기화 앱을 쓴 공개 시험 데이터(NIST CFReDS 등)에서 아래 질문을 풀어 봅니다.
 
 1. `SyncRootManager` 아래 하위 키는 몇 개입니까? 공급자 ID 는 몇 종류입니까?
 2. 키 이름에 문서 형식 뒤로 `|` 와 16진 값이 붙어 있습니까? 모든 공급자가 그렇습니까?

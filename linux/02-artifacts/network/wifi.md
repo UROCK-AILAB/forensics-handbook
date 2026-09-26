@@ -14,7 +14,7 @@ Ubuntu·RHEL 데스크톱에서 Wi-Fi 는 보통 NetworkManager 가 관리합니
 
 연결 시각과 접속한 AP 는 프로필 파일에 적지 않습니다. 프로필을 연결할 때마다 고쳐 쓰면 `/etc` 를 계속 다시 쓰게 되므로, NetworkManager 는 실제 시각과 BSSID 목록을 `/var/lib/NetworkManager` 아래의 따로 된 파일 두 개에 둡니다[5]. 두 파일 모두 연결 프로필의 UUID 를 키로 씁니다[4][5]. 그래서 분석은 프로필에서 UUID 와 SSID 를 얻고, 그 UUID 로 두 파일과 로그를 잇는 순서로 합니다.
 
-프로필 파일의 위치와 일반 구조, NetworkManager 로그 줄 형식, 감사 기록은 [네트워크 설정](network-config.md)에서 다룹니다. 이 쪽은 Wi-Fi 에만 해당하는 내용을 다룹니다.
+프로필 파일의 위치와 일반 구조, NetworkManager 로그 줄 형식, 감사 기록은 [네트워크 설정](network-config.md)에서 다룹니다. 이 페이지는 Wi-Fi 에만 해당하는 내용을 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -150,7 +150,7 @@ Wi-Fi 연결에 성공하면 NetworkManager 는 info 수준으로 아래 줄을 
 - BSSID 와 SSID 만으로 물리적 위치는 나오지 않습니다. 위치는 외부 자료와 맞춰야 하는 추정입니다.
 - 프로필을 지우면 NetworkManager 가 timestamps 와 seen-bssids 에서 그 UUID 줄을 함께 지웁니다[4]. 지운 프로필의 연결 기록은 이 두 파일에 없습니다.
 
-보고서에는 "UUID 3f0c9a52-… 인 'ExampleNet' 프로필이 2026-01-01 00:00:00 UTC 에 마지막으로 연결 상태가 바뀐 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "UUID 3f0c9a52-… 인 'ExampleNet' 프로필이 2026-01-01 00:00:00 UTC 에 마지막으로 연결 상태가 바뀐 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
@@ -211,7 +211,7 @@ timestamps 파일을 헥스로 보면 아래와 같습니다. 형식에 맞춰 �
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 노트북 가상 머신 이미지로 아래 질문을 풀어 봅니다.
+공개 Linux 디스크 이미지(NIST CFReDS 등)나 직접 만든 노트북 가상 머신 이미지로 아래 질문을 풀어 봅니다.
 
 1. 프로필은 `/etc/NetworkManager/system-connections/` 와 `/etc/netplan/90-NM-*.yaml` 중 어디에 있는가? SSID 는 모두 몇 개인가?
 2. timestamps 에서 값이 0 인 UUID 가 있는가? 그 프로필의 연결 실패 줄이 저널에 남아 있는가?

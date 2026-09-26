@@ -99,7 +99,7 @@ Dropbox 는 요금제에 따라 기록되는 범주가 다릅니다. `file_opera
 | `source` | 이벤트를 일으킨 자원. 파일이면 `item_type`, `item_id`, `item_name`, `parent`, `owned_by`, 분류가 붙은 파일이면 `classification` |
 | `additional_details` | 사용자가 어떻게 동작했는지 등 추가 정보. 기업 이벤트에만 있고 모든 이벤트에 있지는 않음 |
 
-Box 이벤트에는 IP 주소 전용 필드가 없습니다[6]. IP 나 접속 방법이 필요하면 검체의 `additional_details` 와 `source` 에 무엇이 들어 있는지 이벤트 유형별로 먼저 확인합니다.
+Box 이벤트에는 IP 주소 전용 필드가 없습니다[6]. IP 나 접속 방법이 필요하면 실제 데이터의 `additional_details` 와 `source` 에 무엇이 들어 있는지 이벤트 유형별로 먼저 확인합니다.
 
 아래는 Event 자원 문서의 모양을 따라 만든 예시입니다. 값은 모두 지어낸 것입니다.
 
@@ -193,7 +193,7 @@ jq -s -r '[.[].events[]] | sort_by(.timestamp) | .[] | [.timestamp, (.origin.geo
 4. Dropbox `file_download` 이벤트의 `access_method` 가 `sign_in_as` 이고, 몇 분 앞에 `sign_in_as_session_start` 가 있습니다. 이 내려받기를 누구의 동작으로 적을지 정해 봅니다.
 5. rclone 으로 복사한 Dropbox 사본의 폴더 시각이 모두 같은 날입니다. 이 시각을 사건 타임라인에 넣어도 되는지 판단해 봅니다.
 
-보고서 문장은 "2026-09-01 18:13:07 UTC 에 계정 user@example.com 으로 파일 budget-2027.xlsx 에 대한 `DOWNLOAD` 이벤트가 기록되어 있다(만든 예시)" 처럼 기록이 말하는 만큼만 씁니다. 쓰는 방법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에 있습니다.
+보고서 문장은 "2026-09-01 18:13:07 UTC 에 계정 user@example.com 으로 파일 budget-2027.xlsx 에 대한 `DOWNLOAD` 이벤트가 기록되어 있다(만든 예시)" 처럼 기록으로 확인되는 만큼만 씁니다. 쓰는 방법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에 있습니다.
 
 ## 참고 문헌
 

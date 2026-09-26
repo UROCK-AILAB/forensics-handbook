@@ -44,7 +44,7 @@ Network Inspection System, Payloads, Platform, Quarantine, Scans, Snapshots, Sup
 | 항목 | 내용 | 근거 |
 |---|---|---|
 | MPLog 를 만드는 제품 | Windows Defender 또는 Microsoft Security Essentials | [1] |
-| MPLog 줄 형식 | 시기마다 바뀝니다. 언제 쓰였느냐에 따라 칸이 더 많거나 적습니다 | [1] |
+| MPLog 줄 형식 | 시기마다 바뀝니다. 언제 쓰였느냐에 따라 필드가 더 많거나 적습니다 | [1] |
 | DetectionHistory | 적어도 Windows 10 에서 생깁니다 | [2] |
 | 그룹 정책 경로 | Windows 10 2004 (2020년 5월) 전에는 경로에 Microsoft 대신 Windows Defender Antivirus 라는 이름이 쓰였을 수 있습니다 | [4] |
 | Windows 11 25H2 | 빌드 26200, Defender Product 4.18.26080.3 / Engine 1.1.26080.3 에서 세 폴더가 모두 위 위치에 있습니다 | |
@@ -69,16 +69,16 @@ Network Inspection System, Payloads, Platform, Quarantine, Scans, Snapshots, Sup
 
 포렌식에 쓸 만한 줄은 네 가지입니다[1].
 
-| 줄 종류 | 들어 있는 칸 | 알려 주는 것 |
+| 줄 종류 | 들어 있는 필드 | 알려 주는 것 |
 |---|---|---|
 | 성능 영향 (EstimatedImpact) | ProcessImageName, TotalTime, Count, MaxTime, MaxTimeFile, EstimatedImpact | 그 프로세스가 실행됐고 파일에 접근했습니다 |
 | SDN | 파일 전체 경로, Sha1, Sha2 (SHA-256) | 그 파일이 디스크에 있었습니다. 해시도 알려 줍니다 |
 | 탐지 | 시각 (UTC), 탐지명, PID, ProcessStart, File (전체 경로) | 어느 프로세스와 파일에서 무엇을 탐지했는지 |
 | EMS 탐지 | 프로세스 이름, PID, 탐지명 | 메모리 검사로 잡은 프로세스 주입 |
 
-성능 영향 줄의 칸은 다음 뜻입니다.
+성능 영향 줄의 필드는 다음 뜻입니다.
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | ProcessImageName | 실행 파일 이름 |
 | TotalTime | 그 프로세스가 접근한 파일을 검사하는 데 쓴 누적 시간 (ms) |
@@ -93,7 +93,7 @@ Windows 11 25H2 에서 성능 영향 줄은 다음 모양입니다. 실행 파�
 ProcessImageName: <이름>.exe, Pid: 11536, TotalTime: 24424254, Count: 4341109, MaxTime: 93, MaxTimeFile: \Device\HarddiskVolume3\..., EstimatedImpact: 37%
 ```
 
-- 위 칸 목록에 없는 `Pid` 칸이 있습니다.
+- 위 필드 목록에 없는 `Pid` 필드가 있습니다.
 - 경로는 드라이브 문자가 아니라 `\Device\HarddiskVolumeN` 장치 경로로 적힙니다.
 - 줄 수가 많습니다. 약 16일 분량의 MPLog 한 개에 성능 영향 줄이 16,462개 들어 있기도 합니다.
 - `SDN:` 으로 시작하는 줄은 하나도 없을 수 있습니다.
@@ -114,7 +114,7 @@ Detection State: Finished(0) Failed(0) CriticalFailed(0) Additional Actions(0)
 - 서비스가 시작될 때 격리 복구 블록이 남습니다. `Beginning quarantine recovery` 로 시작해 `Quarantine ID:{...}`, `Target:`, `Flags:131074`, `Start time:09-07-2026 06:05:24` 가 이어지고 `Finished quarantine recovery` 로 끝납니다.
 - `MPDetection-*.log` 에는 서비스 시작 줄과 버전 줄이 있습니다. 서비스 시작 줄은 `Service started - Microsoft Defender 바이러스 백신 (GUID)` 처럼 OS 표시 언어로 적힙니다. 버전 줄은 `Version: Product 4.18.26080.3 Service ... Engine 1.1.26080.3 AS 1.457.348.0 AV 1.457.348.0` 모양입니다.
 
-MPLog 가 몇 개까지 남는지, 언제 새 파일로 넘어가는지는 공개 자료가 없어 검체에서 확인합니다.
+MPLog 가 몇 개까지 남는지, 언제 새 파일로 넘어가는지는 실제 데이터로 확인해야 합니다.
 
 ### DetectionHistory
 
@@ -123,15 +123,15 @@ MPLog 가 몇 개까지 남는지, 언제 새 파일로 넘어가는지는 공�
 | 파일 이름 | GUID (예: `8CC4BE3D-8D3F-4952-9953-F24EB6638A37`) |
 | 파일 머리 | 앞 5바이트가 `08 00 00 00 08` 입니다. 공개 파서는 머리가 다르면 파일을 거부합니다 |
 | GUID 저장 | 앞 세 덩어리는 바이트 순서를 뒤집어 저장합니다 |
-| 칸 구분 | ASCII 콜론 (`0x3A`) |
+| 필드 구분 | ASCII 콜론 (`0x3A`) |
 | 구역 | 세 구역이 서로 다른 방식으로 적혀 있습니다. 3구역 구분자는 `0A 00` 입니다 |
 
 GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
-| 구역 | 칸 |
+| 구역 | 필드 |
 |---|---|
 | 1구역 | DetectionHistory GUID, Magic Version, ThreatStatusID (오프셋 `0xF0`), "Threat Type / Threat Name", 파일 이름 |
-| 2구역 | ThreatTrackingId, ThreatTrackingSha256, ThreatTrackingMD5, ThreatTrackingSha1, ThreatTrackingStartTime (FILETIME, UTC), ThreatTrackingSize, ThreatTrackingThreatId, ThreatTrackingScanSource, ThreatTrackingScanType. PUA 는 regkey·uninstall 칸이 더 붙을 수 있습니다 |
+| 2구역 | ThreatTrackingId, ThreatTrackingSha256, ThreatTrackingMD5, ThreatTrackingSha1, ThreatTrackingStartTime (FILETIME, UTC), ThreatTrackingSize, ThreatTrackingThreatId, ThreatTrackingScanSource, ThreatTrackingScanType. PUA 는 regkey·uninstall 필드가 더 붙을 수 있습니다 |
 | 3구역 | User (도메인\사용자), SpawningProcess (예: explorer.exe), SecurityGroup (있을 때만) |
 
 `Scans` 폴더에는 다음 파일과 폴더도 있습니다 (Windows 11 25H2 기준). 모두 공개된 설명이 없어 뜻을 풀지 않습니다.
@@ -151,7 +151,7 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 | `ResourceData` | 격리한 원본 내용. 해시 이름의 파일이 이름 앞 두 글자 하위 폴더에 들어갑니다 (예: `ResourceData\5D\5D92927E35A6D8FECE000ABB9739F5AEFF914A3E`) |
 | `Resources` | 항목과 원본 내용 파일을 이어 주는 메타데이터 |
 
-폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다[3]. 오프셋과 칸 단위의 구조는 공개 자료에 없습니다.
+폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다[3]. 오프셋과 필드 단위의 구조는 공개 자료에 없습니다.
 
 Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 
@@ -162,7 +162,7 @@ Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 
 ### 보관 기간과 조치 정책
 
-아래 설정의 기본값은 Microsoft 문서마다 다릅니다. 그룹 정책 설명 문서는 검사 기록 30일, 격리 90일이라고 하고[4], `Set-MpPreference` 명령 설명서는 검사 기록 15일, 격리는 값을 주지 않으면 지우지 않는다고 합니다. 검체에서는 실제 설정 값을 확인합니다.
+아래 설정의 기본값은 Microsoft 문서마다 다릅니다. 그룹 정책 설명 문서는 검사 기록 30일, 격리 90일이라고 하고[4], `Set-MpPreference` 명령 설명서는 검사 기록 15일, 격리는 값을 주지 않으면 지우지 않는다고 합니다. 분석 대상에서는 실제 설정 값을 확인합니다.
 
 | 설정 | 그룹 정책 이름 | 그룹 정책 문서의 기본값 | PowerShell |
 |---|---|---|---|
@@ -179,7 +179,7 @@ Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
-| MPLog 성능 영향 줄: 그 이름의 프로세스가 실행됐고 파일에 접근했습니다 | 누가 실행했는지. 성능 영향 줄에는 사용자 칸이 없습니다 |
+| MPLog 성능 영향 줄: 그 이름의 프로세스가 실행됐고 파일에 접근했습니다 | 누가 실행했는지. 성능 영향 줄에는 사용자 필드가 없습니다 |
 | MPLog SDN 줄: 그 경로에 파일이 있었고, 해시가 그 값이었습니다 | 그 파일을 실행했는지 |
 | MPLog 탐지 줄·EMS 탐지 줄: Defender 가 그 탐지명으로 잡았습니다 | 파일이 실제로 악성인지. 오탐일 수 있습니다 |
 | DetectionHistory: 실시간 보호가 그 파일을 잡았습니다. 해시, 사용자, 부모 프로세스도 알려 줍니다 | 사용자가 그 파일을 실행했는지. 실행하지 않아도 생깁니다 |
@@ -208,7 +208,7 @@ Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 
 - 줄 앞머리에 `Z` 가 없어도 UTC 입니다. 한국 시각 20:36 에 쓰인 마지막 줄의 앞머리가 11:36 으로, 9시간 차이가 납니다.
 - 한 파일 안에서도 날짜를 적는 순서가 다릅니다. 줄 앞머리는 년-월-일, 격리 복구 블록은 월-일-년입니다.
-- MPLog 파일 이름 속 날짜가 무엇을 기준으로 붙는지는 공개 자료가 없어 검체에서 확인합니다.
+- MPLog 파일 이름 속 날짜가 무엇을 기준으로 붙는지는 실제 데이터로 확인해야 합니다.
 - FILETIME 과 웹킷 시각을 푸는 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md) 을 봅니다.
 
 ## 함정과 한계
@@ -216,10 +216,10 @@ Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 1. **탐지를 실행으로 읽습니다.** DetectionHistory 는 파일을 실행하지 않아도 생깁니다. 실행 여부는 성능 영향 줄이나 다른 실행 흔적으로 따로 확인합니다.
 2. **Count 를 "사용자가 연 파일 수" 로 읽습니다.** Count 는 그 프로세스가 접근해서 Defender 가 검사한 파일 수입니다. 사용자가 파일을 하나하나 열었다는 뜻이 아닙니다.
 3. **장치 경로를 그대로 적습니다.** MPLog 경로는 `\Device\HarddiskVolumeN` 형식입니다. 드라이브 문자로 바꿔 읽어야 합니다. 볼륨 번호와 드라이브 문자의 짝은 따로 확인합니다.
-4. **칸 위치에 기대 파싱합니다.** MPLog 줄 형식은 시기마다 바뀝니다. 공개된 칸 목록에 없는 `Pid` 칸이 붙기도 합니다. 칸 이름으로 값을 찾습니다.
+4. **필드 위치에 기대 파싱합니다.** MPLog 줄 형식은 시기마다 바뀝니다. 공개된 필드 목록에 없는 `Pid` 필드가 붙기도 합니다. 필드 이름으로 값을 찾습니다.
 5. **보통 방식으로 복사합니다.** 서비스가 켜져 있으면 MPLog 가 잠겨 있어 보통 방식으로는 열리지 않습니다. 공유 읽기 (`FileShare.ReadWrite`) 로는 읽힙니다. 수집 방법은 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
 6. **MPLog 가 오래된 기록까지 담는다고 봅니다.** MPLog 가 하나뿐이고, 약 24MB 에 약 16일 분량만 담기도 합니다. 옛 기록은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 으로 찾습니다.
-7. **빈 DetectionHistory 를 "탐지 없음" 으로 읽습니다.** 격리 항목은 남아 있는데 DetectionHistory 파일은 하나도 없을 수 있습니다. 검사 기록 보관 기간 (그룹 정책 문서 기준 30일) 이 격리 보관 기간 (90일) 보다 짧아서 먼저 지워질 수 있기 때문입니다. 검체의 실제 설정 값을 함께 확인합니다.
+7. **빈 DetectionHistory 를 "탐지 없음" 으로 읽습니다.** 격리 항목은 남아 있는데 DetectionHistory 파일은 하나도 없을 수 있습니다. 검사 기록 보관 기간 (그룹 정책 문서 기준 30일) 이 격리 보관 기간 (90일) 보다 짧아서 먼저 지워질 수 있기 때문입니다. 분석 대상의 실제 설정 값을 함께 확인합니다.
 8. **영어 문구로만 검색합니다.** `MPDetection-*.log` 의 서비스 이름은 OS 표시 언어로 적힙니다. 한국어 Windows 에서는 한국어 문구로도 검색합니다.
 
 ### 지우기와 조작
@@ -227,14 +227,14 @@ Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 - **보호 기록 파일을 지웁니다.** DetectionHistory 파일을 지우면 보호 기록 화면의 알림도 사라집니다. 화면에 없어도 MPLog, [Windows Defender 탐지](../event-logs/1116-1117.md) 이벤트, 격리 폴더를 따로 봅니다.
 - **보관 기간을 줄입니다.** 위 "보관 기간과 조치 정책" 의 두 설정을 짧게 바꾸면 기록이 빨리 지워집니다. 정책 값과 `Set-MpPreference` 설정을 함께 확인합니다.
 - **조치를 바꿉니다.** Allow 와 조치 값 Ignore (6) 는 치료하지 않고 뒤이은 탐지 이벤트를 막습니다. 조치 값 None (11) 도 치료하지 않지만 경고와 보호 기록 항목은 남깁니다.
-- **격리에서 복원합니다.** 오탐으로 격리된 파일은 장치를 재부팅한 뒤 격리에서 복원할 수 있습니다[4]. 복원한 뒤 격리 폴더에 무엇이 남는지는 공개 자료가 없어 검체에서 확인합니다.
+- **격리에서 복원합니다.** 오탐으로 격리된 파일은 장치를 재부팅한 뒤 격리에서 복원할 수 있습니다[4]. 복원한 뒤 격리 폴더에 무엇이 남는지는 실제 데이터로 확인해야 합니다.
 - **파일을 직접 지웁니다.** 지운 로그와 격리 파일의 흔적은 [마스터 파일 테이블](../filesystem/mft.md) 과 [USN 변경 저널](../filesystem/usnjrnl.md) 에서 찾습니다. 지운 내용을 되살리는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 세 예시는 알려진 형식에 맞춰 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다.
+아래 세 예시는 알려진 형식에 맞춰 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다.
 
 **MPLog 앞부분**
 
@@ -265,7 +265,7 @@ GUID `8CC4BE3D-8D3F-4952-9953-F24EB6638A37` 은 파일 안에 다음 바이트�
 
 5. 앞 세 덩어리 `3D BE C4 8C`, `3F 8D`, `52 49` 는 뒤집어 읽습니다. `8CC4BE3D`, `8D3F`, `4952` 입니다.
 6. 뒤 두 덩어리 `99 53`, `F2 4E B6 63 8A 37` 은 그대로 읽습니다.
-7. 칸 사이의 `3A` (콜론) 를 찾아 칸을 나눕니다. 3구역은 `0A 00` 뒤에서 시작합니다.
+7. 필드 사이의 `3A` (콜론) 를 찾아 필드를 나눕니다. 3구역은 `0A 00` 뒤에서 시작합니다.
 8. ThreatStatusID 는 오프셋 `0xF0` 에서 읽습니다.
 
 **Quarantine**
@@ -302,14 +302,14 @@ GUID `8CC4BE3D-8D3F-4952-9953-F24EB6638A37` 은 파일 안에 다음 바이트�
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 Windows 10 이후의 이미지를 골라 다음을 풀어 봅니다.
+NIST CFReDS 같은 공개 자료 가운데 Windows 10 이후의 이미지를 골라 다음을 풀어 봅니다.
 
 1. `Windows Defender\Support` 폴더에 MPLog 가 몇 개 있습니까? 가장 이른 줄과 가장 늦은 줄의 시각 (UTC) 은 언제입니까?
 2. 성능 영향 줄에서 EstimatedImpact 가 가장 큰 프로세스 다섯 개를 적어 봅니다. 그 가운데 프리페치나 AmCache 에 없는 프로세스가 있습니까?
 3. SDN 줄이나 탐지 줄이 있습니까? 있다면 해시를 DetectionHistory 의 해시와 비교해 봅니다.
 4. DetectionHistory 파일을 하나 골라 앞 5바이트와 GUID 를 직접 읽어 봅니다. 3구역의 사용자와 SpawningProcess 는 무엇입니까?
 5. 격리 폴더의 세 하위 폴더 파일 수가 같습니까? 격리 항목의 원래 경로가 MFT 에 남아 있습니까?
-6. 검체에서 검사 기록·격리 보관 기간 정책이 기본값에서 바뀌어 있는지 찾아봅니다. 정책 값이 레지스트리 어디에 남는지도 함께 확인해 봅니다.
+6. 이미지에서 검사 기록·격리 보관 기간 정책이 기본값에서 바뀌어 있는지 찾아봅니다. 정책 값이 레지스트리 어디에 남는지도 함께 확인해 봅니다.
 
 실험용 가상 머신이 있으면 무해한 테스트 파일로 탐지를 일으켜 봅니다. 앞뒤로 세 폴더를 떠서 어떤 파일이 새로 생기는지 비교합니다. 결과에는 Windows 버전과 Defender 버전을 함께 적습니다.
 

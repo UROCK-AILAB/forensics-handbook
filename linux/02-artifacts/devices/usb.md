@@ -10,7 +10,7 @@ USB 장치를 꽂고 뽑을 때 커널이 남기는 로그 줄과 udev 가 만�
 
 ## 무엇을 기록하나 · 왜 생기나
 
-장치를 꽂으면 USB 코어가 장치에 주소를 매기면서 커널 로그에 `new high-speed USB device number 5 using xhci_hcd` 같은 줄을 남깁니다[1]. 줄 머리는 드라이버 이름(드라이버가 없으면 버스 이름)과 장치 이름 뒤에 콜론을 붙인 꼴이라 `usb 1-2:` 처럼 나옵니다[7]. 여기서 `1-2` 는 버스와 포트를 따라간 경로입니다.
+장치를 꽂으면 USB 코어가 장치에 주소를 매기면서 커널 로그에 `new high-speed USB device number 5 using xhci_hcd` 같은 줄을 남깁니다[1]. 줄 머리는 드라이버 이름(드라이버가 없으면 버스 이름)과 장치 이름 뒤에 콜론을 붙인 형식이라 `usb 1-2:` 처럼 나옵니다[7]. 여기서 `1-2` 는 버스와 포트를 따라간 경로입니다.
 
 커널을 `CONFIG_USB_ANNOUNCE_NEW_DEVICES` 로 빌드했으면 이어서 장치가 보고한 제조사 번호 (idVendor)·제품 번호 (idProduct)·제조사·제품 이름·시리얼 번호 줄이 나옵니다[1]. 이 설정은 보통 배포판이 디버깅을 돕고 어떤 장치가 어디에 붙었는지 알리려고 켜는 옵션입니다[2]. 저장 장치이면 usb-storage 드라이버가 `USB Mass Storage device detected` 를 찍고, SCSI 디스크 드라이버가 `sdb` 같은 디스크 이름을 붙이면서 용량·쓰기 보호·이동식 여부를 찍습니다[4][5]. 장치를 뽑으면 `USB disconnect, device number 5` 가 남고 장치 번호는 반환됩니다[1].
 
@@ -64,7 +64,7 @@ sd 6:0:0:0: [sdb] Attached SCSI removable disk
 usb 1-2: USB disconnect, device number 5
 ```
 
-`bcdDevice=%2x` 는 두 칸 폭이라 앞자리가 한 자리면 공백이 들어갑니다[1]. 드라이버 이름과 SCSI 주소는 검체마다 다릅니다.
+`bcdDevice=%2x` 는 두 칸 폭이라 앞자리가 한 자리면 공백이 들어갑니다[1]. 드라이버 이름과 SCSI 주소는 시스템마다 다릅니다.
 
 ### 저널 필드
 
@@ -78,11 +78,11 @@ journald 가 커널 메시지를 받으면 아래 필드가 붙고, 다섯 필�
 | `_UDEV_DEVNODE=` | `/dev/` 아래 장치 노드 경로[8] |
 | `_UDEV_DEVLINK=` | 장치 노드를 가리키는 링크, 여러 번 나올 수 있음[8] |
 
-`_KERNEL_DEVICE` 는 커널이 장치에 문자·블록 장치 번호가 있는지를 보고 고릅니다[7]. USB 코어는 `New USB device found` 줄을 찍은 뒤, `New USB device strings` 줄을 찍기 직전에 장치에 문자 장치 번호를 붙이고, 부 번호는 `(버스 번호 − 1) × 128 + (장치 번호 − 1)` 입니다[1]. 그래서 같은 장치라도 `new ... USB device number` 줄과 `New USB device found` 줄은 `+usb:1-2` 꼴, 그 뒤 줄들은 `c주:부` 꼴로 나뉠 가능성이 있습니다. 장치 하나의 줄을 모을 때는 한 값으로만 거르지 말고 시각이 이어지는 줄을 함께 봅니다. dissect.target 저널 플러그인은 `_UDEV_*` 필드를 `udev_sysname`, `udev_devnode`, `udev_devlink` 로 옮겨 싣습니다[18].
+`_KERNEL_DEVICE` 는 커널이 장치에 문자·블록 장치 번호가 있는지를 보고 고릅니다[7]. USB 코어는 `New USB device found` 줄을 찍은 뒤, `New USB device strings` 줄을 찍기 직전에 장치에 문자 장치 번호를 붙이고, 부 번호는 `(버스 번호 − 1) × 128 + (장치 번호 − 1)` 입니다[1]. 그래서 같은 장치라도 `new ... USB device number` 줄과 `New USB device found` 줄은 `+usb:1-2` 형식, 그 뒤 줄들은 `c주:부` 형식으로 나뉠 가능성이 있습니다. 장치 하나의 줄을 모을 때는 한 값으로만 거르지 말고 시각이 이어지는 줄을 함께 봅니다. dissect.target 저널 플러그인은 `_UDEV_*` 필드를 `udev_sysname`, `udev_devnode`, `udev_devlink` 로 옮겨 싣습니다[18].
 
 ### udev 데이터베이스
 
-udev 는 장치마다 `/run/udev/data/` 아래에 장치 ID 이름의 파일을 씁니다[11]. 장치 번호가 있으면 `b`·`c` 뒤에 주:부 번호, 네트워크 장치는 `n` 뒤에 인터페이스 번호, 그 밖은 `+서브시스템:장치이름` 이 파일 이름입니다[11]. 파일은 한 줄에 한 항목이고 앞 글자로 종류를 가립니다[11].
+udev 는 장치마다 `/run/udev/data/` 아래에 장치 ID 이름의 파일을 씁니다[11]. 장치 번호가 있으면 `b`·`c` 뒤에 주:부 번호, 네트워크 장치는 `n` 뒤에 인터페이스 번호, 그 밖은 `+서브시스템:장치이름` 이 파일 이름입니다[11]. 파일은 한 줄에 한 항목이고 앞 글자로 종류를 구분합니다[11].
 
 | 머리 | 내용 |
 |---|---|
@@ -94,7 +94,7 @@ udev 는 장치마다 `/run/udev/data/` 아래에 장치 ID 이름의 파일을 
 | `Q:` | 현재 태그 |
 | `V:` | 데이터베이스 판 |
 
-`I:` 값은 벽시계가 아니라 `CLOCK_MONOTONIC`, 곧 부팅 뒤 흐른 마이크로초이고, 같은 장치의 이전 기록이 있으면 그 값을 그대로 물려받습니다[11]. 규칙에서 `db_persist` 를 준 장치는 파일에 스티키 비트를 켜고, 이 항목은 `udevadm info --cleanup-db` 로 데이터베이스를 비워도 남습니다[11][13]. initrd 에서 실제 루트로 넘어갈 때 장치 상태를 이어 가려고 쓰는 옵션입니다[13]. 라이브에서는 `udevadm info --export-db` 로 데이터베이스 전체를 뽑습니다[13].
+`I:` 값은 실제 시각 시계(wall clock)가 아니라 `CLOCK_MONOTONIC`, 곧 부팅 뒤 흐른 마이크로초이고, 같은 장치의 이전 기록이 있으면 그 값을 그대로 물려받습니다[11]. 규칙에서 `db_persist` 를 준 장치는 파일에 스티키 비트를 켜고, 이 항목은 `udevadm info --cleanup-db` 로 데이터베이스를 비워도 남습니다[11][13]. initrd 에서 실제 루트로 넘어갈 때 장치 상태를 이어 가려고 쓰는 옵션입니다[13]. 라이브에서는 `udevadm info --export-db` 로 데이터베이스 전체를 뽑습니다[13].
 
 ### /dev/disk/by-id 링크 이름
 
@@ -114,11 +114,11 @@ GNOME 의 gvfs 는 파일 관리자가 쓰는 메타데이터를 사용자 데�
 
 커널 로그는 그 부팅에서 어느 포트 경로에 어떤 속도의 장치가 붙었고 몇 번 장치 번호를 받았는지, 언제 떨어졌는지를 보여 줍니다[1]. 커널 설정이 켜져 있으면 장치가 보고한 제조사 번호·제품 번호·제조사·제품·시리얼 문자열도 남습니다[1]. 저장 장치로 붙었으면 `sdb` 같은 디스크 이름과 용량, 이동식 여부, 쓰기 보호 여부가 함께 남습니다[5]. 디스크 이름은 [마운트 기록](mounts.md) 의 장치 이름으로, 시리얼은 by-id 링크 이름으로, 볼륨 UUID 는 gvfs 트리 이름으로 이어 한 장치를 여러 기록에서 따라갈 수 있습니다.
 
-보고서에는 "이 부팅의 이 시각에 시리얼 번호가 이것인 USB 저장 장치를 커널이 인식한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 부팅의 이 시각에 시리얼 번호가 이것인 USB 저장 장치를 커널이 인식한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ### 증명하지 못하는 것
 
-커널 로그에는 사용자가 없어서 누가 꽂았는지 알 수 없습니다. 사용자와 잇는 일은 마운트 기록의 uid 와 [로그인 기록](../logins/wtmp-btmp-lastlog.md) 으로 좁힙니다. 연결 기록은 장치가 붙었다는 사실까지만 말하고, 파일을 읽거나 복사했는지는 말하지 않습니다.
+커널 로그에는 사용자가 없어서 누가 꽂았는지 알 수 없습니다. 사용자와 잇는 일은 마운트 기록의 uid 와 [로그인 기록](../logins/wtmp-btmp-lastlog.md) 으로 좁힙니다. 연결 기록으로는 장치가 붙었다는 사실까지만 알 수 있고, 파일을 읽거나 복사했는지는 알 수 없습니다.
 
 제조사 번호와 시리얼은 장치가 설명자로 보고한 값을 커널이 그대로 옮긴 것이라[1] 장치가 진짜 그 제품인지, 같은 시리얼의 다른 장치가 아닌지는 보장하지 않습니다. 시리얼 문자열을 주지 않는 장치는 `SerialNumber` 줄 자체가 없습니다[1]. `usb 1-2` 는 포트 경로라 장치 식별자가 아니고, 장치 번호는 뽑을 때 반환되어 같은 부팅 안에서도 다시 쓰입니다[1].
 
@@ -132,20 +132,20 @@ GNOME 의 gvfs 는 파일 관리자가 쓰는 메타데이터를 사용자 데�
 | `kern.log`·`syslog`·`messages` 줄 앞 시각 | rsyslog 템플릿에 따름. RHEL 9 설정은 전통 형식이라 현지 시각이고 연도가 없음[21] | rsyslog 가 줄을 쓸 때 |
 | udev 데이터베이스 `I:` | 부팅 뒤 마이크로초(monotonic)[11] | 그 부팅에서 장치를 처음 초기화할 때 |
 
-저널의 `__REALTIME_TIMESTAMP` 는 journald 가 받은 시각이라 커널이 줄을 낸 순간보다 조금 늦을 수 있습니다[8]. `dmesg -T` 로 바꾼 벽시계 시각은 절전·복귀를 거치면 틀릴 수 있으므로[10] 보고서의 시각은 저널 값을 씁니다. 이 문제와 부팅 뒤 경과 시간을 벽시계로 바꾸는 방법은 [커널 로그](../system-info/kernel-log.md) 와 [부팅과 종료 기록](../system-info/boot-shutdown.md) 에서 다룹니다. udev `I:` 값도 같은 부팅의 저널 항목에서 monotonic 값과 realtime 값의 짝을 구해 벽시계로 바꿉니다.
+저널의 `__REALTIME_TIMESTAMP` 는 journald 가 받은 시각이라 커널이 줄을 낸 순간보다 조금 늦을 수 있습니다[8]. `dmesg -T` 로 바꾼 실제 시각은 절전·복귀를 거치면 틀릴 수 있으므로[10] 보고서의 시각은 저널 값을 씁니다. 이 문제와 부팅 뒤 경과 시간을 실제 시각으로 바꾸는 방법은 [커널 로그](../system-info/kernel-log.md) 와 [부팅과 종료 기록](../system-info/boot-shutdown.md) 에서 다룹니다. udev `I:` 값도 같은 부팅의 저널 항목에서 monotonic 값과 realtime 값의 짝을 구해 실제 시각으로 바꿉니다.
 
 rsyslog 파일의 시각 형식은 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md), 시간대 확인은 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md), 시각 값 변환은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
-- 커널을 `CONFIG_USB_ANNOUNCE_NEW_DEVICES` 없이 빌드했으면 제조사 번호·시리얼 줄이 없습니다[1][2]. `new ... USB device number` 줄과 `USB disconnect` 줄은 이 설정과 상관없이 나옵니다[1]. 검체 커널이 이 설정을 켰는지는 그 커널의 빌드 설정으로 확인합니다.
+- 커널을 `CONFIG_USB_ANNOUNCE_NEW_DEVICES` 없이 빌드했으면 제조사 번호·시리얼 줄이 없습니다[1][2]. `new ... USB device number` 줄과 `USB disconnect` 줄은 이 설정과 상관없이 나옵니다[1]. 분석 대상의 커널이 이 설정을 켰는지는 그 커널의 빌드 설정으로 확인합니다.
 - `reset high-speed USB device number` 처럼 첫 낱말이 `reset` 인 줄은 새 연결이 아니라 붙어 있던 장치를 다시 설정한 것입니다[1].
 - USB 3 저장 장치가 UAS 드라이버로 붙으면 `USB Mass Storage device detected` 줄이 없을 수 있습니다. 이 문구는 usb-storage 드라이버에만 있습니다[4].
 - `journalctl -k` 는 `--boot=0` 을 함께 뜻해서 부팅을 지정하지 않으면 마지막 부팅만 보여 줍니다[9]. 과거 연결은 부팅마다 봅니다.
 - 링 버퍼는 한 바퀴 돌면 앞쪽을 다시 쓰므로 오래 켜 둔 시스템의 `dmesg` 에는 앞선 연결이 없을 수 있습니다[19].
 - udev 데이터베이스·`/dev/disk/by-*`·sysfs 에 기록이 없다는 것은 연결이 없었다는 뜻이 아닙니다. 이 셋은 디스크에 저장되지 않는 파일 시스템이라 재부팅하면 남지 않습니다[14].
 - USB 연결 때 명령을 돌리는 udev 규칙은 지속성에 쓰일 수 있습니다[16]. 규칙 파일의 위치와 수집 범위는 [udev 규칙](../persistence/udev-rules.md) 에서 다룹니다.
-- 로그 파일을 지우거나 순환본만 남긴 흔적을 가리는 법은 [흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md) 에서 다룹니다. 저널과 rsyslog 파일 양쪽에 같은 연결 줄이 있는지 맞춰 보면 한쪽만 손댄 경우가 드러납니다.
+- 로그 파일을 지우거나 순환본만 남긴 흔적을 가려내는 법은 [흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md) 에서 다룹니다. 저널과 rsyslog 파일 양쪽에 같은 연결 줄이 있는지 맞춰 보면 한쪽만 손댄 경우가 드러납니다.
 
 ## 직접 분석해 보기
 
@@ -187,7 +187,7 @@ vol -f memory.lime linux.kmsg
 | 커널 로그 연결 시각 ↔ [로그인 기록](../logins/wtmp-btmp-lastlog.md) | 그 시간대에 로그인해 있던 계정 |
 | 연결 기간 ↔ [최근 연 파일](../execution/recently-used.md) | 마운트 경로 아래 파일을 연 기록 |
 | 연결 기간 ↔ [셸 명령 기록](../execution/shell-history/index.md) | `mount`·`cp`·`rsync` 같은 명령 |
-| 매체 볼륨 ↔ [휴지통](../file-activity/trash.md) | 매체 안 `.Trash-*` 폴더. dissect.target 은 마운트 지점과 `/mnt`·`/media` 아래 `.Trash-*` 까지 훑음[18] |
+| 매체 볼륨 ↔ [휴지통](../file-activity/trash.md) | 매체 안 `.Trash-*` 폴더. dissect.target 은 마운트 지점과 `/mnt`·`/media` 아래 `.Trash-*` 까지 검색함[18] |
 | gvfs 트리 이름 `uuid-`·`label-` ↔ 마운트 기록의 UUID·레이블 | 그 볼륨 위 파일을 GNOME 파일 관리자가 다룬 적이 있는지 |
 | 저널 커널 항목 ↔ `kern.log`·`messages` | 같은 연결 줄이 양쪽에 있는지 |
 

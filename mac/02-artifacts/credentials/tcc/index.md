@@ -8,7 +8,7 @@ has_toc: false
 
 # 개인 정보 보호 권한 (TCC)
 
-개인 정보 보호 권한 (TCC)은 앱이 카메라·마이크·화면·보호 폴더 같은 자료에 접근해도 되는지를 가리는 macOS의 권한 체계이고, 어떤 앱이 어떤 자료 종류에 접근을 요청해 허용됐는지 거부됐는지가 사용자별·시스템 전체 `TCC.db` 두 SQLite 파일에 남습니다 [1][2].
+개인 정보 보호 권한 (TCC)은 앱이 카메라·마이크·화면·보호 폴더 같은 자료에 접근해도 되는지를 판단하는 macOS의 권한 체계이고, 어떤 앱이 어떤 자료 종류에 접근을 요청해 허용됐는지 거부됐는지가 사용자별·시스템 전체 `TCC.db` 두 SQLite 파일에 남습니다 [1][2].
 
 ## 왜 중요한가
 
@@ -16,7 +16,7 @@ TCC.db를 보면 화면 기록·입력 모니터링·손쉬운 사용·전체 �
 
 macOS 11부터는 권한 상태뿐 아니라 그 상태를 사용자·시스템·MDM 가운데 누가 정했는지도 남습니다 [2][5]. 기업 맥에서는 MDM이 사용자에게 묻지 않고 PPPC 프로파일로 권한을 미리 주기 때문에 [1][3], 사용자가 직접 허용한 권한과 조직이 내려준 권한을 나눠 읽어야 합니다.
 
-Apple은 TCC.db 형식을 공개하지 않았고, 이 절의 페이지들은 공개 포렌식 도구 mac_apt·APOLLO·Aftermath의 소스와 Apple의 PPPC 프로파일 스키마를 근거로 씁니다. 도구가 읽지 않는 칸과 값은 확인한 범위를 밝히고 다룹니다.
+Apple은 TCC.db 형식을 공개하지 않았고, 이 절의 페이지들은 공개 포렌식 도구 mac_apt·APOLLO·Aftermath의 소스와 Apple의 PPPC 프로파일 스키마를 근거로 씁니다. 도구가 읽지 않는 열과 값은 확인한 범위를 밝히고 다룹니다.
 
 ## 한눈에 보기
 
@@ -25,7 +25,7 @@ Apple은 TCC.db 형식을 공개하지 않았고, 이 절의 페이지들은 공
 | 위치 (사용자별) | `~/Library/Application Support/com.apple.TCC/TCC.db` [2] |
 | 위치 (시스템 전체) | `/Library/Application Support/com.apple.TCC/TCC.db`, 전체 디스크 접근처럼 모든 사용자에게 걸리는 권한이 남음 [1][2]. Huntress 글에 적힌 시스템 쪽 경로는 파일 이름이 빠진 형태라서 경로는 mac_apt 소스를 따름 |
 | 형식 | 일반 SQLite, 핵심 표는 `access` [2][4][5] |
-| macOS 버전 | 10.15 이하는 `allowed` 칸, 11 이상은 `auth_value`·`auth_reason` 칸 [2][4] |
+| macOS 버전 | 10.15 이하는 `allowed` 열, 11 이상은 `auth_value`·`auth_reason` 열 [2][4] |
 | MDM 권한 | PPPC 프로파일 `com.apple.TCC.configuration-profile-policy`, macOS 10.14부터 [3] |
 | 알려 주는 것 | 앱(client)과 자료 종류(service)별 권한 상태, 그 행이 마지막으로 바뀐 시각(유닉스 시각), 11 이상은 상태를 정한 사유 [2][4][5] |
 | 알려 주지 않는 것 | 앱이 실제로 자료에 접근했는지, 권한의 지난 이력, 누가 알림창에 답했는지 |
@@ -35,7 +35,7 @@ TCC.db가 암호화돼 있다는 설명도 있지만 공개 도구들은 모두 
 
 ## 읽는 순서
 
-1. [권한 DB 구조 (TCC.db)](tcc-db.md) — 두 파일의 위치, `access` 표의 칸 구성과 macOS 11 전후 구조를 칸 이름으로 가르는 법, 공개 도구와 SQL로 읽는 법을 다룹니다.
+1. [권한 DB 구조 (TCC.db)](tcc-db.md) — 두 파일의 위치, `access` 표의 열 구성과 macOS 11 전후 구조를 열 이름으로 구분하는 법, 공개 도구와 SQL로 읽는 법을 다룹니다.
 2. [권한 기록 해석 (Services·auth_value)](interpretation.md) — `auth_value`·`auth_reason` 숫자 값의 이름, `kTCCService` 서비스 이름과 PPPC 도입 버전, 도구 출력에서 값이 빠지는 함정을 다룹니다.
 3. [권한 변경 흔적 (Changes)](changes.md) — `last_modified`로 권한이 바뀐 때를 읽는 법, MDM이 준 권한을 PPPC 프로파일과 대조하는 법, 사고 대응에서 먼저 볼 행을 다룹니다.
 

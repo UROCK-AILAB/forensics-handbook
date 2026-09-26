@@ -8,7 +8,7 @@ nav_order: 60
 
 ## 한 줄 요약
 
-AI 생성물의 출처 정보는 파일에 붙어 서명으로 보호되는 출처 정보 묶음(C2PA Manifest, Content Credential)과 콘텐츠 안에 보이지 않게 섞여 들어가는 워터마크 두 갈래로 남고, 둘은 무엇을 증명하는지와 어떻게 사라지는지가 다릅니다.
+AI 생성물의 출처 정보는 파일에 붙어 서명으로 보호되는 출처 정보 묶음(C2PA Manifest, Content Credential)과 콘텐츠 안에 보이지 않게 섞여 들어가는 워터마크 두 종류로 남고, 둘은 무엇을 증명하는지와 어떻게 사라지는지가 다릅니다.
 
 C2PA 내용은 명세 설명서 2.2 판 기준입니다 [1].
 
@@ -16,13 +16,13 @@ C2PA 내용은 명세 설명서 2.2 판 기준입니다 [1].
 
 출처 정보는 AI 로 만든 이미지·영상·오디오·텍스트 같은 생성물 자체에 붙거나 섞여 들어갑니다. 앱 폴더나 설정에 남는 흔적이 아니라서 OS 별 저장 위치로 나누지 않고, Windows·macOS·Android·iOS 어디에서 발견한 파일이든 같은 방법으로 읽습니다. 생성물이 대화 기록 안에서 어떻게 구분되는지는 [프롬프트·첨부·생성물 구분하기](prompt-attachment-output.md) 에서 다룹니다.
 
-Google 은 생성물에 워터마크를 넣습니다. Google DeepMind 의 SynthID 는 AI 생성 콘텐츠에 보이지 않는 워터마크를 넣고 찾아내는 도구로 이미지·영상·오디오·텍스트를 대상으로 하고, Gemini 앱, Lyria(음악), NotebookLM 의 팟캐스트 기능을 비롯한 Google 의 소비자용 생성형 AI 제품에 들어가 있습니다 [2]. 텍스트에는 생성하는 동안 단어별 확률 점수를 조정하는 방식으로 워터마크를 넣습니다 [2]. SynthID 를 언제부터 적용했는지는 공개 자료가 없으므로, 어떤 생성물에 워터마크가 들어갔는지는 파일마다 탐지 도구로 확인합니다.
+Google 은 생성물에 워터마크를 넣습니다. Google DeepMind 의 SynthID 는 AI 생성 콘텐츠에 보이지 않는 워터마크를 넣고 찾아내는 도구로 이미지·영상·오디오·텍스트를 대상으로 하고, Gemini 앱, Lyria(음악), NotebookLM 의 팟캐스트 기능을 비롯한 Google 의 소비자용 생성형 AI 제품에 들어가 있습니다 [2]. 텍스트에는 생성하는 동안 단어별 확률 점수를 조정하는 방식으로 워터마크를 넣습니다 [2]. SynthID 를 언제부터 적용했는지는 공개되지 않았으므로, 어떤 생성물에 워터마크가 들어갔는지는 파일마다 탐지 도구로 확인합니다.
 
-다른 서비스가 C2PA 출처 정보나 워터마크를 넣는지는 그 서비스의 공식 자료와 검체 파일의 Manifest 로 확인합니다. 서비스별 내용은 [Midjourney와 이미지 생성 서비스](../../02-artifacts/generative-media/image-generation.md), [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Microsoft Copilot](../../02-artifacts/chat-services/copilot/index.md), [Gemini](../../02-artifacts/chat-services/gemini/index.md), [Claude](../../02-artifacts/chat-services/claude/index.md) 쪽에서 다룹니다.
+다른 서비스가 C2PA 출처 정보나 워터마크를 넣는지는 그 서비스의 공식 자료와 실제 파일의 Manifest 로 확인합니다. 서비스별 내용은 [Midjourney와 이미지 생성 서비스](../../02-artifacts/generative-media/image-generation.md), [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Microsoft Copilot](../../02-artifacts/chat-services/copilot/index.md), [Gemini](../../02-artifacts/chat-services/gemini/index.md), [Claude](../../02-artifacts/chat-services/claude/index.md) 페이지에서 다룹니다.
 
 ## 구조
 
-### 두 갈래 비교
+### 두 방식 비교
 
 | | C2PA 출처 정보 | 워터마크 |
 |---|---|---|
@@ -31,7 +31,7 @@ Google 은 생성물에 워터마크를 넣습니다. Google DeepMind 의 SynthI
 | 바뀌었을 때 | 자산이나 출처 정보를 조금만 바꿔도 해시가 맞지 않음 | SynthID 는 자르기·필터·손실 압축 등을 견딤 |
 | 근거 | [1] | [1][2] |
 
-소프트 바인딩은 보이지 않는 워터마크나 지문 (fingerprint) 조회로 출처 정보 묶음을 다시 찾는 방식이고, 메타데이터가 떨어져 나가도 찾을 수 있게 하려고 둡니다 [1]. SynthID 가 C2PA 의 소프트 바인딩으로 쓰이는지는 공개 자료가 없으므로 두 가지를 별개로 봅니다. SynthID 가 견디는 변형은 이미지·영상에서는 자르기, 필터, 프레임 속도 변경, 손실 압축이고, 오디오에서는 잡음 추가, MP3 압축, 속도 변경입니다 [2].
+소프트 바인딩은 보이지 않는 워터마크나 지문 (fingerprint) 조회로 출처 정보 묶음을 다시 찾는 방식이고, 메타데이터가 떨어져 나가도 찾을 수 있게 하려고 둡니다 [1]. SynthID 가 C2PA 의 소프트 바인딩으로 쓰이는지는 공개되지 않았으므로 두 가지를 별개로 봅니다. SynthID 가 견디는 변형은 이미지·영상에서는 자르기, 필터, 프레임 속도 변경, 손실 압축이고, 오디오에서는 잡음 추가, MP3 압축, 속도 변경입니다 [2].
 
 ### C2PA 용어
 
@@ -48,7 +48,7 @@ Google 은 생성물에 워터마크를 넣습니다. Google DeepMind 의 SynthI
 
 ### AI 생성을 나타내는 값
 
-C2PA 는 AI 가 한 동작을 `digitalSourceType` 칸으로 표시합니다 [1]. 이 칸에 들어가는 값은 IPTC 의 디지털 출처 유형 어휘(`http://cv.iptc.org/newscodes/digitalsourcetype/`)에서 가져오고, AI 와 관련된 값은 아래 둘입니다 [3].
+C2PA 는 AI 가 한 동작을 `digitalSourceType` 필드로 표시합니다 [1]. 이 필드에 들어가는 값은 IPTC 의 디지털 출처 유형 어휘(`http://cv.iptc.org/newscodes/digitalsourcetype/`)에서 가져오고, AI 와 관련된 값은 아래 둘입니다 [3].
 
 | 값 | 뜻 |
 |---|---|
@@ -57,7 +57,7 @@ C2PA 는 AI 가 한 동작을 `digitalSourceType` 칸으로 표시합니다 [1].
 
 ### 파일 안의 위치
 
-Manifest 가 파일 형식별로 어느 부분에 어떤 컨테이너로 들어가는지, 원격 Manifest 를 어떻게 가리키는지는 설명서가 아니라 C2PA 기술 명세 본문에서 다룹니다. 오프셋이나 개별 assertion 이름이 필요하면 검체 파일이 따른 판의 기술 명세 본문을 보고 확인합니다.
+Manifest 가 파일 형식별로 어느 부분에 어떤 컨테이너로 들어가는지, 원격 Manifest 를 어떻게 가리키는지는 설명서가 아니라 C2PA 기술 명세 본문에서 다룹니다. 오프셋이나 개별 assertion 이름이 필요하면 분석 대상 파일이 따른 판의 기술 명세 본문을 보고 확인합니다.
 
 ## 읽는 법
 
@@ -65,7 +65,7 @@ Manifest 가 파일 형식별로 어느 부분에 어떤 컨테이너로 들어�
 2. C2PA 를 읽는 도구로 Manifest 가 있는지 봅니다.
 3. Manifest 가 있으면 서명이 유효한지와 서명자가 신뢰 목록에 있는지를 확인합니다.
 4. 하드 바인딩의 해시가 지금 파일 내용과 맞는지 봅니다. 맞지 않으면 서명한 뒤에 자산이나 출처 정보가 바뀐 것입니다.
-5. `digitalSourceType` 과 동작 기록을 읽어 AI 가 처음부터 만든 것인지, 다른 콘텐츠를 AI 로 고친 것인지 가립니다. 서명자가 책임지는 `created_assertions` 와 그렇지 않은 `gathered_assertions` 가운데 어디에 적힌 내용인지도 함께 적습니다.
+5. `digitalSourceType` 과 동작 기록을 읽어 AI 가 처음부터 만든 것인지, 다른 콘텐츠를 AI 로 고친 것인지 구분합니다. 서명자가 책임지는 `created_assertions` 와 그렇지 않은 `gathered_assertions` 가운데 어디에 적힌 내용인지도 함께 적습니다.
 6. Manifest 가 없으면 워터마크를 확인합니다. SynthID 는 기자·미디어 전문가를 대상으로 초기 시험 중인 SynthID Detector 포털에서 확인하거나, 이미지·영상·오디오는 Gemini 앱에 올려 Google AI 로 만들거나 바꿨는지 물어볼 수 있습니다 [2]. 두 방법 모두 증거 파일을 외부 서비스에 올리는 일이라서 조사 규칙상 허용되는지를 먼저 확인합니다.
 
 ## 포렌식에서 중요한 점
@@ -74,7 +74,7 @@ Manifest 가 파일 형식별로 어느 부분에 어떤 컨테이너로 들어�
 
 출처 정보가 없다는 사실은 사람이 만들었다는 증거가 되지 못합니다. C2PA 는 메타데이터가 떨어져 나가도 출처 정보를 다시 찾으려고 소프트 바인딩을 두고, C2PA 를 모르는 도구로 편집하면 출처 정보가 갱신되지 않을 수 있습니다 [1]. 워터마크도 보이지 않는 신호라서 탐지 결과는 탐지 도구와 그 도구를 만든 회사의 설명에 기대게 되며, AI 생성 여부를 판별하는 방법 전반의 한계는 [AI가 만든 글·이미지 판별의 한계](../../03-techniques/analysis/detection-limits.md) 에서 다룹니다.
 
-보고서에는 "이 이미지는 AI 가 만들었다" 가 아니라 "이 파일에는 서명자 누구의 C2PA 출처 정보가 있고, 서명은 유효하며, `digitalSourceType` 이 `trainedAlgorithmicMedia` 로 적혀 있다" 처럼 기록이 말하는 만큼만 씁니다. 누가 그 생성물을 만들었는지는 출처 정보만으로 정해지지 않고 기기와 계정의 사용 흔적을 함께 봐야 하며, 이 흐름은 [이 글·이미지는 AI가 만들었나](../../04-scenarios/attribution/ai-generated.md) 와 [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md) 에서 다룹니다.
+보고서에는 "이 이미지는 AI 가 만들었다" 가 아니라 "이 파일에는 서명자 누구의 C2PA 출처 정보가 있고, 서명은 유효하며, `digitalSourceType` 이 `trainedAlgorithmicMedia` 로 적혀 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 누가 그 생성물을 만들었는지는 출처 정보만으로 정해지지 않고 기기와 계정의 사용 흔적을 함께 봐야 하며, 이 흐름은 [이 글·이미지는 AI가 만들었나](../../04-scenarios/attribution/ai-generated.md) 와 [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md) 에서 다룹니다.
 
 ## 함정
 

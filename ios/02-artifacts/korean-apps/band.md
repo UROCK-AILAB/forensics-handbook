@@ -30,7 +30,7 @@ iOS 는 앱을 설치할 때 앱마다 번들 컨테이너(앱 본체)와 데이
 
 번들 ID 에 band 라는 글자가 들어 있지 않습니다[1]. 이름으로 찾으면 놓치기 쉬운 부분이라 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을 함께 봅니다.
 
-로컬 백업에서는 앱 데이터가 `AppDomain-` 뒤에 번들 ID 를 붙인 도메인으로 들어갑니다. Apple 앱 도메인(예: `AppDomain-com.apple.AAUIViewService`)도 이 규칙을 따르고, 로컬 백업에는 `AppDomainGroup-`, `AppDomainPlugin-` 으로 시작하는 도메인도 따로 있습니다. 위 표의 밴드 도메인 이름은 이 규칙에 따라 적은 것이고, 밴드가 앱 그룹이나 확장 도메인을 쓰는지는 검체에서 확인합니다.
+로컬 백업에서는 앱 데이터가 `AppDomain-` 뒤에 번들 ID 를 붙인 도메인으로 들어갑니다. Apple 앱 도메인(예: `AppDomain-com.apple.AAUIViewService`)도 이 규칙을 따르고, 로컬 백업에는 `AppDomainGroup-`, `AppDomainPlugin-` 으로 시작하는 도메인도 따로 있습니다. 위 표의 밴드 도메인 이름은 이 규칙에 따라 적은 것이고, 밴드가 앱 그룹이나 확장 도메인을 쓰는지는 실제 기기에서 확인합니다.
 
 전체 파일시스템 추출에서는 데이터 컨테이너 폴더 이름이 번들 ID 가 아니라서, 번들 ID 와 컨테이너 경로를 먼저 이어야 합니다. 이 작업은 `applicationState.db` 로 하고, 방법은 [설치된 앱](../app-usage/installed-apps.md)에 있습니다.
 
@@ -38,9 +38,9 @@ iOS 는 앱을 설치할 때 앱마다 번들 컨테이너(앱 본체)와 데이
 
 ## 구조
 
-iOS 밴드 앱의 DB 이름, 표와 칸 이름, 첨부 파일 캐시 위치를 다룬 공개 자료는 없습니다. 공개 분석 도구 iLEAPP 의 분석기 452개 가운데에도 밴드 전용 분석기는 없고, 국내 앱 가운데 전용 분석기가 있는 앱은 카카오톡뿐입니다(2026-09 저장소 목록 기준)[2].
+iOS 밴드 앱의 DB 이름, 표와 열 이름, 첨부 파일 캐시 위치를 다룬 공개 자료는 없습니다. 공개 분석 도구 iLEAPP 의 분석기 452개 가운데에도 밴드 전용 분석기는 없고, 국내 앱 가운데 전용 분석기가 있는 앱은 카카오톡뿐입니다(2026-09 저장소 목록 기준)[2].
 
-앱 데이터 컨테이너 안에서 무엇이 백업에 들어가는지는 앱과 상관없이 정해진 규칙이 있습니다. `Documents/` 와 `Library/` 는 백업되지만 `Library/Caches/` 와 `tmp/` 는 백업되지 않고, `Library/Application Support` 도 앱이 백업 제외 표시를 붙이면 빠집니다[6]. 그래서 이미지 캐시나 임시 파일은 로컬 백업에는 없고 전체 파일시스템 추출에서만 볼 수 있습니다. 이 규칙은 Apple 의 보관 문서에 나온 것이라[6], 최신 iOS 에서 바뀌었는지는 검체에서 확인합니다.
+앱 데이터 컨테이너 안에서 무엇이 백업에 들어가는지는 앱과 상관없이 정해진 규칙이 있습니다. `Documents/` 와 `Library/` 는 백업되지만 `Library/Caches/` 와 `tmp/` 는 백업되지 않고, `Library/Application Support` 도 앱이 백업 제외 표시를 붙이면 빠집니다[6]. 그래서 이미지 캐시나 임시 파일은 로컬 백업에는 없고 전체 파일시스템 추출에서만 볼 수 있습니다. 이 규칙은 Apple 의 보관 문서에 나온 것이라[6], 최신 iOS 에서 바뀌었는지는 실제 기기에서 확인해야 합니다.
 
 비교를 위해 안드로이드 쪽만 한 줄로 적으면, 사용자별 DB `[user_no].db` 에 `channel_user`·`chat_channel`·`chat_message` 표가 있습니다[5].
 
@@ -56,7 +56,7 @@ iOS 밴드 앱의 DB 이름, 표와 칸 이름, 첨부 파일 캐시 위치를 �
 
 ## 시각 해석
 
-밴드 앱 데이터 안의 시각이 어떤 기준으로 저장되는지는 iOS 쪽 자료가 없습니다. 안드로이드 앱은 캐시 파일 이름과 메시지 메타데이터 시각에 Unix 시각을 쓰지만[5], iOS 앱도 같은지는 검체에서 확인합니다. 숫자 칸을 만나면 값의 자릿수와 범위로 Unix 초·밀리초인지, Mac 절대 시각인지를 가려야 하고, 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
+밴드 앱 데이터 안의 시각이 어떤 기준으로 저장되는지는 iOS 쪽 자료가 없습니다. 안드로이드 앱은 캐시 파일 이름과 메시지 메타데이터 시각에 Unix 시각을 쓰지만[5], iOS 앱도 같은지는 실제 기기에서 확인합니다. 숫자 필드를 만나면 값의 자릿수와 범위로 Unix 초·밀리초인지, Mac 절대 시각인지를 구분해야 하고, 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
 앱을 지운 흔적인 `UninstalledApplications.plist` 의 날짜는 plist 날짜형이고 UTC 입니다[4].
 
@@ -68,13 +68,13 @@ iOS 밴드 앱의 DB 이름, 표와 칸 이름, 첨부 파일 캐시 위치를 �
 
 앱을 지웠다면 `UninstalledApplications.plist` 에 번들 ID 와 날짜가 남을 수 있습니다. 다만 번들 ID 하나에 날짜 하나만 남아서 여러 번 지우고 다시 깔아도 날짜는 하나이고, iLEAPP 시험 이미지 24개 가운데 2개에만 이 파일이 있었습니다[4]. 파일이 없다고 앱을 지우지 않았다는 뜻은 아닙니다. 로컬 백업의 `InstallDomain` 에는 이 파일 없이 `BackedUpState/BackupSystemAppInstallState.plist` 와 `SystemAppInstallState.plist` 만 있을 수 있습니다.
 
-따로 지정하지 않은 서드파티 앱 데이터의 기본 보호 등급은 Class C(첫 잠금 해제 후 보호)이고[7], 밴드가 실제로 어떤 등급을 쓰는지는 검체에서 확인합니다. 등급 설명은 [데이터 보호](../../01-foundations/storage/data-protection/index.md)에 있습니다.
+따로 지정하지 않은 서드파티 앱 데이터의 기본 보호 등급은 Class C(첫 잠금 해제 후 보호)이고[7], 밴드가 실제로 어떤 등급을 쓰는지는 실제 기기에서 확인합니다. 등급 설명은 [데이터 보호](../../01-foundations/storage/data-protection/index.md)에 있습니다.
 
 ## 직접 분석해 보기
 
 **헥스로 한 번**
 
-앱 데이터 컨테이너에서 확장자가 없거나 낯선 파일을 만나면 앞부분 몇 바이트로 형식을 가립니다. 아래는 SQLite 파일 형식 명세로 만든 예시이고 검체에서 뽑은 값이 아닙니다.
+앱 데이터 컨테이너에서 확장자가 없거나 낯선 파일을 만나면 앞부분 몇 바이트로 형식을 판별합니다. 아래는 SQLite 파일 형식 명세로 만든 예시이고 실제 기기에서 뽑은 값이 아닙니다.
 
 ```
 00000000  53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00  SQLite format 3.
@@ -84,7 +84,7 @@ iOS 밴드 앱의 DB 이름, 표와 칸 이름, 첨부 파일 캐시 위치를 �
 
 **공개 도구로 한 번**
 
-iLEAPP 에는 밴드 전용 분석기가 없어서[2], 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표에서 도메인을 바로 찾을 수 있습니다. `Files` 표의 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다.
+iLEAPP 에는 밴드 전용 분석기가 없어서[2], 설치·삭제 흔적은 applicationState 분석기와 uninstalledApplications 분석기 결과에서 번들 ID 로 찾습니다[3][4]. 로컬 백업이라면 sqlite3 로 `Manifest.db` 의 `Files` 표에서 도메인을 바로 찾을 수 있습니다. `Files` 표의 열은 `fileID`, `domain`, `relativePath`, `flags`, `file` 입니다.
 
 ```sql
 SELECT fileID, relativePath, flags
@@ -106,11 +106,11 @@ ORDER BY relativePath;
 | [앱별 데이터 사용량](../network/data-usage.md) | 앱이 주고받은 데이터 양 |
 | [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) | 서버 쪽 자료 요청 |
 
-다른 메신저와 견주어 보려면 [카카오톡](../messengers/kakaotalk/index.md)을, 앱 데이터를 처음 여는 순서는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md)을 봅니다.
+다른 메신저와 비교해 보려면 [카카오톡](../messengers/kakaotalk/index.md)을, 앱 데이터를 처음 여는 순서는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md)을 봅니다.
 
 ## 실습
 
-공개 iOS 검체(NIST CFReDS 등)에는 밴드 앱이 없을 수 있으니, 확보한 검체나 직접 만든 시험 기기로 아래 질문을 풀어 봅니다.
+공개 iOS 시험 자료(NIST CFReDS 등)에는 밴드 앱이 없을 수 있으니, 확보한 증거물이나 직접 만든 시험 기기로 아래 질문을 풀어 봅니다.
 
 1. `Manifest.db` 에서 `AppDomain-com.nhncorp.m2app` 도메인의 파일을 모두 뽑고, `Library/Caches` 아래 파일이 하나도 없는지 확인합니다.
 2. `applicationState.db` 에서 `com.nhncorp.m2app` 을 찾아 데이터 컨테이너 경로를 확인합니다.

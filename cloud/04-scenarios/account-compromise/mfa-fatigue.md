@@ -69,7 +69,7 @@ MFA 요청이 갔다는 것은 1차 인증(대개 비밀번호)을 이미 통과
 
     한 번의 로그인 시도 안에서도 MFA 이벤트가 여러 개 생깁니다. Entra 관리 센터에는 한 줄로 보이지만 Azure Monitor(Log Analytics)에는 `correlationId` 가 같은 여러 줄로 들어갑니다[4]. 푸시 횟수를 셀 때는 어느 화면·표에서 셌는지 함께 적습니다.
 
-3. **오류 코드로 실패의 종류를 나눕니다.** `ResultType` 0 은 성공이고 나머지는 실패입니다[21]. MFA 와 관련된 코드는 50074(강한 인증이 필요한데 MFA 를 통과하지 못함), 50076(MFA 가 필요해 다시 요청), 50079(MFA 등록이 필요함)이고, 50126 은 비밀번호가 틀린 경우입니다[7]. 50158 은 추가 확인 페이지로 넘어갔다는 뜻일 뿐 그것만으로 실패가 아닙니다[7]. Sigma 규칙 `azure_mfa_interrupted` 는 50074 와 함께 `ResultType: 500121`, `ResultDescription` 에 "Authentication failed during strong authentication request" 가 든 기록을 찾지만[11], Microsoft 오류 코드 목록 페이지에는 500121 이 없어서[7] 검체의 `ResultDescription` 문구로 뜻을 확인합니다. `azure_mfa_denies` 규칙은 `AuthenticationRequirement` 가 `multiFactorAuthentication` 이고 `Status` 에 "MFA Denied" 가 든 기록을 찾습니다[10]. 규칙을 로그에 돌리는 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
+3. **오류 코드로 실패의 종류를 나눕니다.** `ResultType` 0 은 성공이고 나머지는 실패입니다[21]. MFA 와 관련된 코드는 50074(강한 인증이 필요한데 MFA 를 통과하지 못함), 50076(MFA 가 필요해 다시 요청), 50079(MFA 등록이 필요함)이고, 50126 은 비밀번호가 틀린 경우입니다[7]. 50158 은 추가 확인 페이지로 넘어갔다는 뜻일 뿐 그것만으로 실패가 아닙니다[7]. Sigma 규칙 `azure_mfa_interrupted` 는 50074 와 함께 `ResultType: 500121`, `ResultDescription` 에 "Authentication failed during strong authentication request" 가 든 기록을 찾지만[11], Microsoft 오류 코드 목록 페이지에는 500121 이 없어서[7] 실제 로그의 `ResultDescription` 문구로 뜻을 확인합니다. `azure_mfa_denies` 규칙은 `AuthenticationRequirement` 가 `multiFactorAuthentication` 이고 `Status` 에 "MFA Denied" 가 든 기록을 찾습니다[10]. 규칙을 로그에 돌리는 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md) 에 있습니다.
 
 4. **1차 인증이 통과됐는지 확인합니다.** MFA 가 필요한 로그인이라도 1차 인증이 실패하면 조건부 접근이 MFA 요구를 평가하지 않아서 `authenticationRequirement` 가 `singleFactorAuthentication` 으로 남습니다[4]. 이런 시도에는 푸시가 가지 않았으므로 요청 횟수에서 뺍니다. 조건부 접근과 MFA 요구의 관계는 [다단계 인증과 조건부 접근](../../01-foundations/identity/mfa-conditional-access.md) 에 있습니다.
 
@@ -84,7 +84,7 @@ MFA 요청이 갔다는 것은 1차 인증(대개 비밀번호)을 이미 통과
 
 6. **Okta 와 Google Workspace 를 씁니다.** Okta 는 푸시를 보낼 때마다 `system.push.send_factor_verify_push` 를 남깁니다[13]. 거부는 조직의 엔진에 따라 이름이 다릅니다. Classic(V1 API)에서는 `user.mfa.okta_verify.deny_push` 이고, Identity Engine(OIE)에서는 `user.authentication.auth_via_mfa` 에 이유 `INVALID_CREDENTIALS` 로 남습니다[13]. `user.authentication.auth_via_mfa` 는 Classic 에서는 2차 인증에만, OIE 에서는 1차·2차 인증 모두에 생깁니다[13]. 사용자가 신고하면 `user.account.report_suspicious_activity_by_enduser` 가 남고[13][15], ThreatInsight 가 악성 IP 로 판단한 요청은 `security.threat.detected` 로 남습니다[13]. 시각 순으로 정렬할 때는 경계 있는 요청(since·until)을 씁니다. 폴링 요청은 내부 저장 시각 순이라 `published` 순서와 다를 수 있습니다[14].
 
-    Google Workspace 에서는 `login_challenge` 이벤트의 `login_challenge_method` 가 확인 방법(`google_prompt`, `google_authenticator`, `security_key`, `passkey`, `backup_code` 등)을, `login_challenge_status` 가 결과("Challenge Passed." 또는 "Challenge Failed.", 빈 문자열은 알 수 없음)를 남깁니다[16]. `login_verification` 의 `is_second_factor` 는 2단계 인증 여부를 알려 줍니다[16]. 사용자가 Google 메시지(`google_prompt`)를 거부한 흔적은 `google_prompt` 이면서 "Challenge Failed." 인 기록이 짧은 간격으로 이어지는지로 검체에서 확인합니다. 로그인 이벤트는 몇 분 안에 조회됩니다[17].
+    Google Workspace 에서는 `login_challenge` 이벤트의 `login_challenge_method` 가 확인 방법(`google_prompt`, `google_authenticator`, `security_key`, `passkey`, `backup_code` 등)을, `login_challenge_status` 가 결과("Challenge Passed." 또는 "Challenge Failed.", 빈 문자열은 알 수 없음)를 남깁니다[16]. `login_verification` 의 `is_second_factor` 는 2단계 인증 여부를 알려 줍니다[16]. 사용자가 Google 메시지(`google_prompt`)를 거부한 흔적은 `google_prompt` 이면서 "Challenge Failed." 인 기록이 짧은 간격으로 이어지는지로 실제 로그에서 확인합니다. 로그인 이벤트는 몇 분 안에 조회됩니다[17].
 
 7. **승인된 로그인 하나를 골라 뒤를 따라갑니다.** 성공한 로그인의 IP·장치·앱이 실패가 이어지던 시도와 같은지 봅니다. 같은 IP 에서 실패가 이어지다 성공으로 끝났다면 같은 시도자가 승인을 받아 낸 것일 가능성이 있습니다. 그 로그인의 `sessionId` 로 뒤이은 비대화형 로그인과 메일·파일 활동을 잇는 방법은 [토큰을 훔쳐 로그인했나](token-theft.md) 에, 메일함 규칙·전달 설정을 보는 순서는 [메일 계정을 빼앗겨 송금 사기를 당했나](bec.md) 에 있습니다. Azure 포털은 Entra 로그인을, Google Cloud 콘솔은 Google 계정 로그인을 거치므로 같은 기록에서 시작합니다. AWS 콘솔 로그인은 CloudTrail `ConsoleLogin` 의 `additionalEventData.MFAUsed`(Yes/No)와 `MFAIdentifier` 로 MFA 를 썼는지 남깁니다[18]. 이 값은 IAM 사용자나 루트 사용자가 MFA 를 썼을 때만 Yes 가 되고 페더레이션 사용자는 No 로 남으므로[18], 페더레이션으로 들어왔다면 MFA 요청은 연결된 ID 공급자의 로그에서 찾습니다.
 
@@ -108,7 +108,7 @@ MFA 요청이 갔다는 것은 1차 인증(대개 비밀번호)을 이미 통과
 
 ## 보고서 문장 예
 
-기록이 말하는 만큼만 씁니다. 아래 값은 모두 만든 예시입니다.
+기록으로 확인되는 만큼만 씁니다. 아래 값은 모두 만든 예시입니다.
 
 - "2026-09-10 01:12부터 01:31(UTC)까지 IP 203.0.113.24 에서 계정 kim@contoso.com 으로 로그인을 시도한 기록이 4건 있습니다. 앞의 3건은 Authenticator App 단계에서 실패했고(결과 상세 no phone input - timed out 2건, MFA denied 1건), 01:31 의 시도는 같은 단계가 성공으로 기록되어 있습니다."
 - "01:17 의 거부는 위험 탐지 보고서에 User Reported Suspicious Activity 로 남아 있습니다."

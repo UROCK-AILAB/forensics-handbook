@@ -33,7 +33,7 @@ PRK도 사용자 암호와 같은 방식으로 KEK를 풀고, 그 KEK로 VEK를 
 
 ### 사용자 쪽 보관
 
-PRK는 키체인에 저장되고, 암호(Passwords) 앱에서 볼 수 있습니다 [1]. iCloud 키체인을 켜 두면 복구 키가 iCloud 키체인으로 동기화되고, iCloud를 쓰지 않으면 사용자가 직접 보관해야 합니다 [1]. 암호 앱에서 복구 키를 보여 주는 동작이 어느 macOS 버전부터인지는 공개 자료가 없어 검체에서 확인합니다. 키체인 파일 자체는 [키체인 (Keychain)](../keychain/index.md), 동기화한 암호 항목은 [저장된 암호 (Passwords·iCloud Keychain)](../../../02-artifacts/credentials/saved-passwords.md)에서 다룹니다.
+PRK는 키체인에 저장되고, 암호(Passwords) 앱에서 볼 수 있습니다 [1]. iCloud 키체인을 켜 두면 복구 키가 iCloud 키체인으로 동기화되고, iCloud를 쓰지 않으면 사용자가 직접 보관해야 합니다 [1]. 암호 앱에서 복구 키를 보여 주는 동작이 어느 macOS 버전부터인지는 실제 기기에서 확인해야 합니다. 키체인 파일 자체는 [키체인 (Keychain)](../keychain/index.md), 동기화한 암호 항목은 [저장된 암호 (Passwords·iCloud Keychain)](../../../02-artifacts/credentials/saved-passwords.md)에서 다룹니다.
 
 IRK 쪽 키체인 파일은 `/Library/Keychains/FileVaultMaster.keychain` 이고, 아래 `com.apple.MCX.FileVault2` 페이로드에서 `UseKeychain` 이 true이고 인증서 정보를 넣지 않았을 때 시스템이 이 키체인을 씁니다 [5].
 
@@ -91,7 +91,7 @@ IRK 쪽 키체인 파일은 `/Library/Keychains/FileVaultMaster.keychain` 이고
 
 ## 함정
 
-복구 키를 바꾸거나 다시 만든 흔적과 복구 키로 잠금을 푼 기록이 어디에 남는지는 공개된 자료가 없습니다. 그래서 PRK 항목이 있다는 사실만으로 "복구 키로 풀었다" 고 쓰지 않습니다. `OutputPath` plist의 기본 경로와 키 이름은 `fdesetup` 명령의 설명서와 검체에서 확인합니다.
+복구 키를 바꾸거나 다시 만든 흔적과 복구 키로 잠금을 푼 기록이 어디에 남는지는 공개된 자료가 없습니다. 그래서 PRK 항목이 있다는 사실만으로 "복구 키로 풀었다" 고 쓰지 않습니다. `OutputPath` plist의 기본 경로와 키 이름은 `fdesetup` 명령의 설명서와 실제 데이터로 확인합니다.
 
 `Certificate` 키로 IRK를 지정한 프로파일이 있어도 Apple silicon 맥에서는 이 키를 지원하지 않으니 [5], 기기 종류를 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../../../02-artifacts/system-account/computer-name-hardware.md)에서 먼저 확인합니다.
 

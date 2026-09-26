@@ -30,7 +30,7 @@ nav_order: 1220
 
 1. **기기에서 계정과 동기화 흔적을 먼저 봅니다.** 기기나 로컬 백업이 있으면 어떤 계정이 등록돼 있는지, iCloud 백업과 iCloud Drive 를 썼는지를 먼저 확인합니다(아래 "기기에 남는 계정·클라우드 흔적" 절). 이 결과로 요청할 서비스와 기간을 좁힙니다.
 2. **계정을 특정합니다.** Apple 에 iCloud 자료를 요청하려면 Apple ID(계정 이메일)가 필요하고, 모르면 이름과 전화번호, 또는 이름과 주소로 계정을 식별합니다 [1].
-3. **데이터 보호 설정을 따집니다.** 계정이 고급 데이터 보호를 켰는지에 따라 Apple 이 내줄 수 있는 콘텐츠가 달라집니다(아래 "데이터 보호 설정에 따라 달라지는 것" 절). 기기의 어느 기록에서 이 설정을 읽을 수 있는지는 공개된 자료가 없습니다.
+3. **데이터 보호 설정을 따집니다.** 계정이 고급 데이터 보호를 켰는지에 따라 Apple 이 내줄 수 있는 콘텐츠가 달라집니다(아래 "데이터 보호 설정에 따라 달라지는 것" 절). 기기의 어느 기록에서 이 설정을 읽을 수 있는지 설명한 공개 문서는 없습니다.
 4. **보존 요청을 서두릅니다.** 미국 지침의 보존 요청(18 U.S.C. §2703(f))은 요청한 시점에 있던 데이터를 한 번 떠서 90일 동안 보존하고, 다시 요청하면 90일을 한 번 더 늘릴 수 있습니다 [1]. 같은 계정에 두 번째 보존 요청을 보내면 Apple 은 새 보존이 아니라 연장으로 처리합니다 [1]. 연결 기록처럼 최대 25일만 보관하는 자료가 있어서 [1], 늦게 요청할수록 받을 수 있는 기간이 줄어듭니다.
 5. **요건에 맞춰 요청합니다.** 자료 종류마다 필요한 법적 절차가 다르고(아래 표), 콘텐츠는 긴급 상황을 빼면 상당한 이유가 있는 수색 영장이나 고객 동의가 있어야 Apple 이 제공합니다 [1].
 6. **동의로 받는 경우 본인이 사본을 요청합니다.** 계정 주인이 privacy.apple.com 에 로그인해 "데이터 사본 요청" 을 고르고 본인 확인을 거치면 Apple 이 데이터를 정리해 줍니다 [2]. 준비가 끝나면 14일 안에 내려받아야 하고, 그 뒤에는 삭제됩니다 [2].
@@ -70,7 +70,7 @@ iOS 기기 백업에는 카메라 롤 사진과 비디오, 기기 설정, 앱 �
 
 privacy.apple.com 의 데이터 사본 요청으로 받을 수 있는 범주는 계정 정보와 로그인 기록, iCloud 콘텐츠(연락처, 캘린더, 메모, 책갈피, 사진, 비디오, 문서), 앱 사용 정보, App Store·iTunes Store·Apple Books 의 구입과 다운로드 기록, Apple Store 와 지원 거래 기록, 마케팅 수신과 설정입니다 [2]. EU, 영국, 일본 거주자는 App Store 정보와 앱 설치·푸시 알림 활동을 따로 요청할 수 있습니다 [2].
 
-파일은 원래 형식이나 업계 표준 형식으로 옵니다. 사진과 비디오는 원래 형식이고, 연락처와 캘린더는 .vcf, .ics, .html, .eml 같은 형식이며, 앱 사용 정보는 표나 .json, .csv, .pdf 로 옵니다 [2]. 나라와 지역에 따라 이 기능을 쓰지 못할 수 있습니다 [2]. 준비에 걸리는 기간과 로그인 기록에 들어 있는 칸(IP 주소, 기기 등)은 받은 파일에서 확인합니다.
+파일은 원래 형식이나 업계 표준 형식으로 옵니다. 사진과 비디오는 원래 형식이고, 연락처와 캘린더는 .vcf, .ics, .html, .eml 같은 형식이며, 앱 사용 정보는 표나 .json, .csv, .pdf 로 옵니다 [2]. 나라와 지역에 따라 이 기능을 쓰지 못할 수 있습니다 [2]. 준비에 걸리는 기간과 로그인 기록에 들어 있는 필드(IP 주소, 기기 등)은 받은 파일에서 확인합니다.
 
 ## 기기에 남는 계정·클라우드 흔적
 
@@ -85,11 +85,11 @@ privacy.apple.com 의 데이터 사본 요청으로 받을 수 있는 범주는 
 | `HomeDomain :: Library/Application Support/CloudDocs/session/db/client.db`, `server.db` | `client_items`, `server_items`, `devices`, `users`, `boot_history` 등 | iCloud Drive 에 동기화한 파일과 기기 | [아이클라우드 드라이브](../../02-artifacts/mail-cloud/icloud-drive.md) |
 | `HomeDomain :: Library/Preferences/com.apple.AuthKit.plist` | `_AKBAACertMarkerKey`, `timeCfg` | 인증 설정. 같은 이름의 파일이 여러 앱 도메인에도 있음 | [애플 계정](../../02-artifacts/system-account/apple-account.md) |
 
-동기화를 쓰는 Apple 앱의 데이터베이스에는 CloudKit 관련 칸도 남습니다. 메시지의 `HomeDomain :: Library/SMS/sms.db` `chat` 표에는 `cloudkit_record_id` 와 `ck_sync_state` 가, 단축어의 `HomeDomain :: Library/Shortcuts/Shortcuts.sqlite` 에는 `ZCLOUDKITRECORDMETADATA` 가, Freeform 의 `AppDomainGroup-group.com.apple.freeform :: Boards/boards.db` 에는 `last_cloudkit_fetch_version` 이 있습니다. 이 칸들은 항목이 클라우드와 동기화됐는지 가늠하는 단서가 될 수 있지만, 값의 뜻은 공개된 자료가 없어 검체로 확인해야 합니다. 메시지 쪽 해석은 [메시지](../../02-artifacts/communications/messages/index.md)에서 다룹니다.
+동기화를 쓰는 Apple 앱의 데이터베이스에는 CloudKit 관련 열도 남습니다. 메시지의 `HomeDomain :: Library/SMS/sms.db` `chat` 표에는 `cloudkit_record_id` 와 `ck_sync_state` 가, 단축어의 `HomeDomain :: Library/Shortcuts/Shortcuts.sqlite` 에는 `ZCLOUDKITRECORDMETADATA` 가, Freeform 의 `AppDomainGroup-group.com.apple.freeform :: Boards/boards.db` 에는 `last_cloudkit_fetch_version` 이 있습니다. 이 열들은 항목이 클라우드와 동기화됐는지 추정하는 단서가 될 수 있지만, 값의 뜻은 실제 데이터로 확인해야 합니다. 메시지 쪽 해석은 [메시지](../../02-artifacts/communications/messages/index.md)에서 다룹니다.
 
 ## 도구
 
-계정 자료를 받는 데는 따로 도구가 필요하지 않고, 본인 사본은 privacy.apple.com 에서 요청합니다 [2]. 받은 .json, .csv 파일과 기기 쪽 SQLite·plist 파일은 범용 뷰어로 열어 볼 수 있으며, 여는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다. `Accounts#.sqlite` 는 `Z_PK`, `Z_ENT`, `Z_OPT` 칸이 있는 Core Data 형식의 표이고, 칸 이름이 `Z` 로 시작합니다.
+계정 자료를 받는 데는 따로 도구가 필요하지 않고, 본인 사본은 privacy.apple.com 에서 요청합니다 [2]. 받은 .json, .csv 파일과 기기 쪽 SQLite·plist 파일은 범용 뷰어로 열어 볼 수 있으며, 여는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다. `Accounts#.sqlite` 는 `Z_PK`, `Z_ENT`, `Z_OPT` 열이 있는 Core Data 형식의 표이고, 열 이름이 `Z` 로 시작합니다.
 
 ## 함정과 한계
 
@@ -99,7 +99,7 @@ Apple 은 법이 막거나 긴급한 위험이 있는 경우 등을 빼고 요�
 
 기기 등록 정보는 iOS 8 이후 기기를 iCloud Apple ID 에 연결할 때 Apple 이 받는 정보이고, 정확하지 않거나 실제 주인과 다를 수 있습니다 [1]. 이 정보만으로 기기 소유자를 단정하지 않습니다.
 
-기기 쪽 흔적에도 한계가 있습니다. `com.apple.accountsd.plist` 의 `AuthenticationPluginCache` 목록에는 Google, Yahoo 같은 여러 계정 종류가 올라 있을 수 있는데, 이 목록이 기기가 지원하는 인증 플러그인 목록인지 실제로 로그인한 계정 목록인지는 공개된 자료가 없습니다. 실제 등록 계정은 `Accounts#.sqlite` 의 `ZACCOUNT` 표와 맞춰 봅니다. `ZDATE`, `LastCloudBackupDate`, CloudDocs 칸들의 시각 기준도 공개된 자료가 없으니, 시각 형식을 가려내는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+기기 쪽 흔적에도 한계가 있습니다. `com.apple.accountsd.plist` 의 `AuthenticationPluginCache` 목록에는 Google, Yahoo 같은 여러 계정 종류가 올라 있을 수 있는데, 이 목록이 기기가 지원하는 인증 플러그인 목록인지 실제로 로그인한 계정 목록인지 설명한 공개 문서는 없습니다. 실제 등록 계정은 `Accounts#.sqlite` 의 `ZACCOUNT` 표와 맞춰 봅니다. `ZDATE`, `LastCloudBackupDate`, CloudDocs 값들의 시각 기준도 공개 문서에 나와 있지 않으니, 시각 형식을 가려내는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 이 페이지의 요건과 보관 기간은 2025년 10월판 미국 지침 기준입니다 [1]. Apple 은 정책을 바꿀 수 있어서, 실제 요청 때는 그때의 판을 확인하고 보고서에 그 판을 적습니다.
 
@@ -107,9 +107,9 @@ Apple 은 법이 막거나 긴급한 위험이 있는 경우 등을 빼고 요�
 
 서버에서 받은 자료는 요청한 시점에 서버에 남아 있던 것입니다. 보존 요청도 요청 시점의 데이터를 한 번 떠 두는 방식이라서 [1], 그 뒤에 생긴 자료는 들어 있지 않습니다. 받은 자료에 어떤 기록이 없다고 해서 그런 일이 없었다고 쓰지 않고, 보관 기간이 지났거나 사용자가 지웠을 가능성을 함께 적습니다.
 
-iMessage 쪽에는 통신 기록이 없고 "iMessage 가능 여부 조회" 기록만 있는데, 이 기록은 실제로 메시지를 주고받았다는 뜻이 아닙니다 [1]. FaceTime 도 통화 초대 기록만 있고 실제로 통화했다는 뜻이 아닙니다 [1]. 보고서에는 "이 시각에 이 계정에서 저 연락처의 iMessage 가능 여부를 조회한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+iMessage 쪽에는 통신 기록이 없고 "iMessage 가능 여부 조회" 기록만 있는데, 이 기록은 실제로 메시지를 주고받았다는 뜻이 아닙니다 [1]. FaceTime 도 통화 초대 기록만 있고 실제로 통화했다는 뜻이 아닙니다 [1]. 보고서에는 "이 시각에 이 계정에서 저 연락처의 iMessage 가능 여부를 조회한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
-연결 기록의 IP 주소는 어느 네트워크에서 iCloud 에 접속했는지를 보여 주지만, 비공개 릴레이를 거친 접속이면 그 IP 로 계정을 되짚을 수 없습니다 [1]. 서버 쪽 기록은 기기 쪽 흔적과 시각을 맞춰 [타임라인 작성](../analysis/timeline/index.md)에 넣고, 서로 어긋나는 곳이 있으면 시간대와 시각 기준부터 다시 확인합니다.
+연결 기록의 IP 주소는 어느 네트워크에서 iCloud 에 접속했는지를 보여 주지만, 비공개 릴레이를 거친 접속이면 그 IP 로 계정을 거슬러 올라가 찾을 수 없습니다 [1]. 서버 쪽 기록은 기기 쪽 흔적과 시각을 맞춰 [타임라인 작성](../analysis/timeline/index.md)에 넣고, 서로 어긋나는 곳이 있으면 시간대와 시각 기준부터 다시 확인합니다.
 
 ## 참고 문헌
 

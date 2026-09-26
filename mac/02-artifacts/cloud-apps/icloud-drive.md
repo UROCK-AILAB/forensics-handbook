@@ -6,7 +6,7 @@ nav_order: 1500
 
 # 아이클라우드 드라이브 (iCloud Drive·CloudDocs)
 
-iCloud Drive는 사용자 홈의 `CloudDocs` 폴더 아래 SQLite DB 두 개에 동기화하는 파일마다 이름·부모 항목·생성과 마지막 사용 시각·어느 기기에서 만든 판인지를 남겨서, 파일이 로컬에 없어도 어떤 파일이 iCloud Drive에 있었는지 되짚어 볼 수 있습니다.
+iCloud Drive는 사용자 홈의 `CloudDocs` 폴더 아래 SQLite DB 두 개에 동기화하는 파일마다 이름·부모 항목·생성과 마지막 사용 시각·어느 기기에서 만든 판인지를 남겨서, 파일이 로컬에 없어도 어떤 파일이 iCloud Drive에 있었는지 알아낼 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -21,30 +21,30 @@ iCloud Drive는 여러 기기가 같은 파일을 나눠 쓰도록 동기화하�
 ~/Library/Application Support/CloudDocs/session/db/client.db
 ```
 
-두 파일 모두 SQLite DB이고 사용자 홈 안에 있어서 사용자마다 따로 봅니다 [1]. 파일 이름으로 보아 `server.db` 는 서버 쪽 상태를, `client.db` 는 이 맥의 로컬 상태를 담는 것으로 보입니다.
+두 파일 모두 SQLite DB이고 사용자 홈 안에 있어서 사용자마다 따로 봅니다 [1]. 파일 이름으로 보면 `server.db` 는 서버 쪽 상태를, `client.db` 는 이 맥의 로컬 상태를 담는 것으로 보입니다.
 
 ForensicArtifacts 정의(macos.yaml)에는 CloudDocs 항목이 없어서 [2], 이 정의만 쓰는 수집 도구로 자동 수집하면 두 DB가 빠질 수 있습니다. 수집 목록에 이 경로를 직접 넣었는지 확인합니다.
 
-macOS 10.15 Catalina 이후 버전마다 이 DB의 표 구성이 달라지는지는 공개된 자료가 없습니다. 아래 표와 칸은 mac_apt 플러그인이 읽는 이름이라서, 검체에서는 `.schema` 로 실제 칸과 먼저 맞춰 봅니다. 10.15부터는 앱이 iCloud Drive 안 파일에 접근하려면 사용자 동의가 필요하고 [3], 그 동의 기록은 [개인 정보 보호 권한 (TCC)](../credentials/tcc/index.md)에서 봅니다.
+macOS 10.15 Catalina 이후 버전마다 이 DB의 표 구성이 달라지는지를 다룬 공개 자료는 없습니다. 아래 표와 열은 mac_apt 플러그인이 읽는 이름이라서, 분석할 때는 `.schema` 로 실제 열과 먼저 맞춰 봅니다. 10.15부터는 앱이 iCloud Drive 안 파일에 접근하려면 사용자 동의가 필요하고 [3], 그 동의 기록은 [개인 정보 보호 권한 (TCC)](../credentials/tcc/index.md)에서 봅니다.
 
 ## 구조
 
-| 표 | mac_apt가 읽는 칸 |
+| 표 | mac_apt가 읽는 열 |
 |---|---|
 | `devices` | `key`, `name` |
 | `server_items` | `item_id`, `item_filename`, `item_parent_id`, `item_birthtime`, `item_lastusedtime`, `version_device`, `version_name`, `version_size`, `version_mtime`, `item_type`, `item_sharing_options` |
 | `client_items` | `rowid`, `item_id`, `item_filename`, `item_parent_id`, `item_birthtime`, `item_lastusedtime`, `version_device`, `app_library_rowid`, `version_name`, `version_size`, `version_mtime`, `item_type`, `item_sharing_options` |
 | `app_libraries` | `rowid`, `app_library_name` |
 
-두 DB에는 이 네 표가 있습니다 [1]. 표 이름으로 보아 `server_items` 는 `server.db` 에, `client_items` 와 `app_libraries` 는 `client.db` 에 있을 것으로 보이지만, 표마다 어느 파일에 있는지는 검체에서 `.tables` 로 확인합니다.
+두 DB에는 이 네 표가 있습니다 [1]. 표 이름으로 보면 `server_items` 는 `server.db` 에, `client_items` 와 `app_libraries` 는 `client.db` 에 있을 것으로 보이지만, 표마다 어느 파일에 있는지는 실제 파일에서 `.tables` 로 확인합니다.
 
 항목 하나에는 자기 이름(`item_filename`)과 부모 항목 번호(`item_parent_id`)만 있고 전체 경로는 없습니다. 경로는 `item_parent_id` 를 따라 부모를 거슬러 오르는 재귀 쿼리로 조립하고, 가장 깊이 올라간 결과를 그 항목의 경로로 씁니다 [1]. `server_items` 와 `client_items` 모두 같은 방법으로 경로를 만듭니다 [1].
 
-`version_device` 는 그 판을 만든 기기를 가리키는 값이고, `devices.key` 와 맞추면 기기 이름이 나옵니다(mac_apt 출력에서는 `version_device_name` 칸) [1]. `client_items.app_library_rowid` 는 `app_libraries.rowid` 와 이어져서, 그 항목이 어느 앱 보관함에 속하는지 알려 줍니다 [1].
+`version_device` 는 그 판을 만든 기기를 가리키는 값이고, `devices.key` 와 맞추면 기기 이름이 나옵니다(mac_apt 출력에서는 `version_device_name` 열) [1]. `client_items.app_library_rowid` 는 `app_libraries.rowid` 와 이어져서, 그 항목이 어느 앱 보관함에 속하는지 알려 줍니다 [1].
 
 `item_type` 과 `item_sharing_options` 는 숫자로 남고, mac_apt 출력에서는 `item_type_str` 과 `item_is_shared` 로 바뀌어 나옵니다 [1]. 숫자값마다 무엇을 뜻하는지(파일·폴더 등)와 공유 옵션의 비트 뜻은 공개된 문서가 없어서, 도구가 붙인 글자를 그대로 보고서에 옮기기 전에 그 변환표의 근거를 확인합니다.
 
-mac_apt 출력 표 이름은 `iCloudDevices`, `iCloudServerItems`, `iCloudClientItems` 이고, `iCloudClientItems` 에서는 판 수정 시각 칸이 원문 철자 그대로 `verion_mtime` 으로 나옵니다 [1]. 출력 칸을 검색할 때 이 철자를 알아 둡니다.
+mac_apt 출력 표 이름은 `iCloudDevices`, `iCloudServerItems`, `iCloudClientItems` 이고, `iCloudClientItems` 에서는 판 수정 시각 열이 원문 철자 그대로 `verion_mtime` 으로 나옵니다 [1]. 출력 열을 검색할 때 이 철자를 알아 둡니다.
 
 ## 증거로서 의미
 
@@ -62,7 +62,7 @@ mac_apt 출력 표 이름은 `iCloudDevices`, `iCloudServerItems`, `iCloudClient
 
 ## 시각 해석
 
-`item_birthtime`, `item_lastusedtime`, `version_mtime` 은 모두 유닉스 시각(초)이라서 [1], 1970-01-01 UTC 기준으로 바꾸고 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)을 보고 따로 맞춥니다. 칸 이름으로 보아 `item_birthtime` 은 항목이 생긴 때, `version_mtime` 은 그 판의 수정 시각, `item_lastusedtime` 은 마지막으로 쓴 때로 읽히지만, 각 값이 정확히 어떤 동작에서 바뀌는지는 공개된 문서가 없습니다. 이 칸들을 타임라인에 넣을 때는 칸 이름을 그대로 적고 "파일을 열었다" 같은 행위로 바꿔 쓰지 않습니다.
+`item_birthtime`, `item_lastusedtime`, `version_mtime` 은 모두 유닉스 시각(초)이라서 [1], 1970-01-01 UTC 기준으로 바꾸고 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)을 보고 따로 맞춥니다. 열 이름으로 보면 `item_birthtime` 은 항목이 생긴 때, `version_mtime` 은 그 판의 수정 시각, `item_lastusedtime` 은 마지막으로 쓴 때로 읽히지만, 각 값이 정확히 어떤 동작에서 바뀌는지는 공개된 문서가 없습니다. 이 열들을 타임라인에 넣을 때는 열 이름을 그대로 적고 "파일을 열었다" 같은 행위로 바꿔 쓰지 않습니다.
 
 `version_mtime` 은 판을 만든 기기(`version_device`)에서 정한 시각일 수 있어서, 다른 기기의 시계가 틀렸다면 이 맥의 다른 기록과 어긋날 수 있다는 점도 함께 적어 둡니다.
 
@@ -79,7 +79,7 @@ mac_apt 출력 표 이름은 `iCloudDevices`, `iCloudServerItems`, `iCloudClient
 
 ### 헥스로 한 번
 
-명세로 만든 예시로, `item_birthtime` 칸이 4바이트 정수로 저장됐다고 가정하면 레코드 안에서 아래처럼 보입니다.
+명세로 만든 예시로, `item_birthtime` 열이 4바이트 정수로 저장됐다고 가정하면 레코드 안에서 아래처럼 보입니다.
 
 ```
 5E 0B E1 00
@@ -87,7 +87,7 @@ mac_apt 출력 표 이름은 `iCloudDevices`, `iCloudServerItems`, `iCloudClient
 = 2020-01-01 00:00:00 UTC (유닉스 시각, 초)
 ```
 
-이 값을 정수로 읽어 1970-01-01 UTC부터 센 초로 바꾸면 날짜가 나옵니다 [1]. 칸이 실제로 몇 바이트로 저장됐는지와 레코드 안에서 칸 값을 찾아가는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
+이 값을 정수로 읽어 1970-01-01 UTC부터 센 초로 바꾸면 날짜가 나옵니다 [1]. 열이 실제로 몇 바이트로 저장됐는지와 레코드 안에서 열 값을 찾아가는 법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
 ### SQL로 한 번
 
@@ -125,7 +125,7 @@ WHERE u.depth = (SELECT max(depth) FROM up WHERE start_id = c.item_id);
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. 사용자 홈마다 `CloudDocs/session/db/` 아래 `server.db` 와 `client.db` 가 있는지 확인해 보세요.
 2. `devices` 표에서 이 계정에 묶인 기기 이름을 모두 적고, 그중 이 맥이 어느 것인지 가려내 보세요.

@@ -18,7 +18,7 @@ nav_order: 620
 
 - **윈도 버전**을 알아야 다른 아티팩트의 위치와 형식을 고를 수 있습니다.
 - **컴퓨터 이름**은 이벤트 로그나 다른 PC 의 기록에서 이 PC 를 찾을 때 씁니다.
-- **설치 시각**은 지금 윈도에서 생긴 기록의 출발점입니다. 이보다 이른 시각이 나오면 까닭을 따로 확인합니다.
+- **설치 시각**은 지금 윈도에서 생긴 기록의 출발점입니다. 이보다 이른 시각이 나오면 이유를 따로 확인합니다.
 - **마지막 정상 종료 시각**은 PC 사용 시간을 재구성할 때 끝점 하나가 됩니다.
 
 조사 첫머리에 무엇을 확인하는지는 [포렌식 조사 절차](../../03-techniques/process-acquisition/investigation-process.md)에서 다룹니다. 시간대는 따로 [시간대 설정](time-zone.md)에서 다룹니다.
@@ -61,7 +61,7 @@ SYSTEM 하이브의 경로에 나오는 `ControlSet00x` 의 x 자리는 정해�
 
 - `Control\ComputerName\ComputerName` 키의 `ComputerName` 값이 컴퓨터 이름입니다.
 - `Services\Tcpip\Parameters` 키의 `Hostname` 값도 호스트 이름으로 읽습니다.
-- 공개 도구는 두 값을 함께 보여 줍니다. 두 값이 다르면 까닭을 확인합니다.
+- 공개 도구는 두 값을 함께 보여 줍니다. 두 값이 다르면 이유를 확인합니다.
 
 ### ShutdownTime
 
@@ -101,7 +101,7 @@ SYSTEM 하이브의 경로에 나오는 `ControlSet00x` 의 x 자리는 정해�
 
 1. **ControlSet 을 잘못 고릅니다.** `Select\Current` 를 보지 않고 `ControlSet001` 을 읽으면 다른 제어 세트의 값을 쓸 수 있습니다.
 2. **두 설치 시각의 형식을 바꿔 읽습니다.** InstallDate 를 FILETIME 으로 읽거나 InstallTime 을 Unix 초로 읽으면 터무니없는 날짜가 나옵니다.
-3. **설치 시각을 PC 를 처음 쓴 때로 씁니다.** 이 값은 지금 윈도의 설치 시각입니다. 다시 설치했거나 크게 갱신했을 때 어떤 값이 남는지는 이 값만으로 가리지 못합니다. [윈도 업데이트 기록](windows-update-cbs-log.md)과 맞춰 봅니다.
+3. **설치 시각을 PC 를 처음 쓴 때로 씁니다.** 이 값은 지금 윈도의 설치 시각입니다. 다시 설치했거나 크게 갱신했을 때 어떤 값이 남는지는 이 값만으로 판별하지 못합니다. [윈도 업데이트 기록](windows-update-cbs-log.md)과 맞춰 봅니다.
 4. **ShutdownTime 을 마지막 사용 시각으로 씁니다.** 정상 종료 뒤에 PC 를 다시 켰다가 전원이 끊겼다면 그 사용은 이 값에 없습니다.
 5. **켜진 PC 에서 수집한 하이브를 그대로 읽습니다.** 수집 당시 PC 가 켜져 있었다면 ShutdownTime 은 그 전의 정상 종료 시각입니다.
 6. **도구가 현지 시각으로 바꿔 보여 줍니다.** 도구 설정에 따라 분석 PC 의 시간대로 바뀐 시각이 나올 수 있습니다.
@@ -116,7 +116,7 @@ SYSTEM 하이브의 경로에 나오는 `ControlSet00x` 의 x 자리는 정해�
 
 ### 헥스로 한 번
 
-아래는 값 형식을 보고 만든 예시입니다. 실제 검체에서 뽑은 값이 아닙니다. 하이브 파일에서 값 데이터를 찾아가는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
+아래는 값 형식을 보고 만든 예시입니다. 실제 데이터에서 뽑은 값이 아닙니다. 하이브 파일에서 값 데이터를 찾아가는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
 ```
 InstallDate  (4바이트)  00 F1 53 65
@@ -170,7 +170,7 @@ PC 를 켜고 끈 시간을 여러 기록으로 재구성하는 흐름은 [PC �
 
 ## 실습
 
-**NIST CFReDS 같은 공개 검체 이미지**에서 SYSTEM·SOFTWARE 하이브를 꺼내 풀어 봅니다.
+**NIST CFReDS 같은 공개 시험 이미지**에서 SYSTEM·SOFTWARE 하이브를 꺼내 풀어 봅니다.
 
 1. `Select\Current` 값은 몇입니까? 어느 ControlSet 을 읽어야 합니까?
 2. ProductName 과 UBR 은 무엇입니까?

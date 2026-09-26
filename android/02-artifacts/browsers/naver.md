@@ -16,22 +16,22 @@ nav_order: 880
 
 필수 접근 권한은 위치, 카메라, 파일 및 미디어, 마이크, 연락처, 전화, 신체활동, 알림(Android 13 이상)입니다 [3]. 전화 권한은 네이버 인증서, 비밀번호 없이 로그인, 네이버페이에서 기기 전화번호를 확인하는 데 쓰고, 신체활동 권한은 만보기 걸음 수에 씁니다 [3]. Play 데이터 보안 항목에는 제3자와 공유할 수 있는 데이터로 "개인 정보, 금융 정보 외 5개", 수집할 수 있는 데이터로 "위치, 개인 정보 외 11개" 가 적혀 있습니다 [3].
 
-이 기능 목록은 어떤 종류의 흔적을 찾아볼지 정하는 데 쓰고, 기기에 그 파일이 있다는 근거로 쓰지 않습니다. 개발사 소개 글에는 저장 경로나 DB 구조가 나오지 않고 공개된 분석 자료도 없어서, 검색어와 방문 기록이 SQLite 에 남는지 설정 XML 에 남는지, 표와 칸 이름이 무엇인지는 검체로 확인해야 합니다. 방문 기록을 남기지 않는 모드 같은 기능이 있는지와 그 흔적도 검체에서 확인합니다.
+이 기능 목록은 어떤 종류의 흔적을 찾아볼지 정하는 데 쓰고, 기기에 그 파일이 있다는 근거로 쓰지 않습니다. 개발사 소개 글에는 저장 경로나 DB 구조가 나오지 않고 이를 다룬 공개 분석 자료도 없습니다. 검색어와 방문 기록이 SQLite 에 남는지 설정 XML 에 남는지, 표와 열 이름이 무엇인지는 실제 기기로 확인해야 합니다. 방문 기록을 남기지 않는 모드 같은 기능이 있는지와 그 흔적도 실제 기기로 확인합니다.
 
 ## 위치와 버전별 차이
 
-알려진 것과 검체에서 확인해야 할 것을 나누면 다음과 같습니다.
+알려진 것과 실제 기기로 확인해야 할 것을 나누면 다음과 같습니다.
 
 | 항목 | 상태 | 근거 |
 |---|---|---|
 | 패키지 이름 | com.nhn.android.search | Play 상세 페이지 주소의 id [3] |
 | 공개 도구 전용 파서 | ALEAPP 에 없음 | ALEAPP 모듈 목록 [1] |
 | 검색어·방문 기록 파일 | 공개 자료 없음 | — |
-| WebView 방문 기록(`app_webview/Default/History`) | 있다면 ALEAPP 가 읽음, 실제로 남는지는 검체에서 확인 | ALEAPP chrome.py [2] |
+| WebView 방문 기록(`app_webview/Default/History`) | 있다면 ALEAPP 가 읽음, 실제로 남는지는 실제 기기로 확인 | ALEAPP chrome.py [2] |
 | 방문 기록을 남기지 않는 모드 | 공개 자료 없음 | — |
 | 네이버 계정 서버 쪽 검색 기록 | 기기 밖 자료라 서버 쪽에서 따로 확보 | — |
 
-WebView 줄은 따로 설명이 필요합니다. ALEAPP 는 `app_webview/Default/History` 를 가진 모든 앱을 Chromium 파서로 읽고 브라우저 이름 칸에 그 앱의 패키지 이름을 적습니다 [2]. 네이버 앱 안에서 연 웹 페이지가 WebView 로 열려 이런 파일을 남긴다면 ALEAPP 결과에 com.nhn.android.search 라는 이름으로 나오고, 실제로 그런지는 검체에서 확인합니다. WebView 파일의 구조와 읽는 법은 [크롬 (Chrome for Android)](chrome/index.md) 페이지에서 다룹니다.
+WebView 줄은 따로 설명이 필요합니다. ALEAPP 는 `app_webview/Default/History` 를 가진 모든 앱을 Chromium 파서로 읽고 브라우저 이름 열에 그 앱의 패키지 이름을 적습니다 [2]. 네이버 앱 안에서 연 웹 페이지가 WebView 로 열려 이런 파일을 남긴다면 ALEAPP 결과에 com.nhn.android.search 라는 이름으로 나오고, 실제로 그런지는 실제 기기로 확인합니다. WebView 파일의 구조와 읽는 법은 [크롬 (Chrome for Android)](chrome/index.md) 페이지에서 다룹니다.
 
 Android 버전이나 앱 버전에 따라 파일 배치가 어떻게 달라지는지도 공개 자료가 없습니다. 이 앱의 데이터 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 
@@ -42,9 +42,9 @@ Android 버전이나 앱 버전에 따라 파일 배치가 어떻게 달라지�
 공개된 파일 구조가 없어서 이 절은 찾는 순서만 적습니다.
 
 1. 앱 데이터 폴더(com.nhn.android.search 패키지 폴더)를 확보하고, 폴더 배치는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../01-foundations/storage/app-data-layout.md) 페이지를 참고해 하위 폴더를 차례로 엽니다.
-2. 파일마다 형식을 먼저 가립니다. SQLite 는 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md), 설정 XML 은 [설정 XML과 SharedPreferences (XML·SharedPreferences)](../../01-foundations/data-formats/shared-preferences.md), 그 밖의 바이너리는 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 와 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md) 페이지를 봅니다.
+2. 파일마다 형식을 먼저 구분합니다. SQLite 는 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md), 설정 XML 은 [설정 XML과 SharedPreferences (XML·SharedPreferences)](../../01-foundations/data-formats/shared-preferences.md), 그 밖의 바이너리는 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 와 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md) 페이지를 봅니다.
 3. `app_webview/Default/History` 가 있으면 Chrome 과 같은 방법으로 읽습니다.
-4. 검색어나 주소가 들어 있는 표와 칸을 찾으면, 시험 기기에서 검색을 몇 번 해 보고 행이 늘어나는지 확인한 뒤에 그 칸의 뜻을 보고서에 씁니다.
+4. 검색어나 주소가 들어 있는 표와 열을 찾으면, 시험 기기에서 검색을 몇 번 해 보고 행이 늘어나는지 확인한 뒤에 그 열의 뜻을 보고서에 씁니다.
 
 앱 데이터를 처음 보는 앱에 이 순서를 적용하는 방법은 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 자세히 다룹니다.
 
@@ -68,13 +68,13 @@ WebView 파일은 ALEAPP 결과에 패키지 이름으로 섞여 나오기 때�
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 구조가 알려진 파일이 없어서 이 앱 전용 헥스 예시는 없습니다. 패키지 폴더에서 파일을 찾으면 첫 몇 바이트로 형식부터 가리고, 형식별 헥스 읽는 법은 위 "구조" 절에 걸어 둔 기반 구조 페이지를 따릅니다. WebView 방문 기록 파일의 시각 값 헥스 예시는 [삼성 인터넷 (Samsung Internet)](samsung-internet.md) 과 Chrome 페이지에 있습니다.
+**헥스로 한 번.** 구조가 알려진 파일이 없어서 이 앱 전용 헥스 예시는 없습니다. 패키지 폴더에서 파일을 찾으면 첫 몇 바이트로 형식부터 판별하고, 형식별 헥스 읽는 법은 위 "구조" 절에 걸어 둔 기반 구조 페이지를 따릅니다. WebView 방문 기록 파일의 시각 값 헥스 예시는 [삼성 인터넷 (Samsung Internet)](samsung-internet.md) 과 Chrome 페이지에 있습니다.
 
-**공개 도구로 한 번.** ALEAPP 를 돌린 뒤 Chrome 계열 보고서에서 브라우저 이름이 com.nhn.android.search 인 행이 있는지 봅니다. 행이 있으면 경로 칸에서 `app_webview/Default/History` 를 확인하고, 없으면 도구가 이 앱을 읽지 않은 것이지 기록이 없다는 뜻은 아니라서 위 "구조" 절의 순서대로 직접 봅니다.
+**공개 도구로 한 번.** ALEAPP 를 돌린 뒤 Chrome 계열 보고서에서 브라우저 이름이 com.nhn.android.search 인 행이 있는지 봅니다. 행이 있으면 경로 열에서 `app_webview/Default/History` 를 확인하고, 없으면 도구가 이 앱을 읽지 않은 것이지 기록이 없다는 뜻은 아니라서 위 "구조" 절의 순서대로 직접 봅니다.
 
 ## 교차 검증
 
-- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 칸이 있고, ACTIVITY_RESUMED·ACTIVITY_PAUSED 같은 화면 전환 이벤트와 shortcutId= 칸이 붙은 SHORTCUT_INVOCATION 이벤트가 나옵니다. package= 가 com.nhn.android.search 인 줄로 앱이 화면에 떠 있던 시간대를 잡습니다.
+- [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — `dumpsys usagestats` 이벤트 줄에는 time=, type=, package=, class= 필드가 있고, ACTIVITY_RESUMED·ACTIVITY_PAUSED 같은 화면 전환 이벤트와 shortcutId= 필드가 붙은 SHORTCUT_INVOCATION 이벤트가 나옵니다. package= 가 com.nhn.android.search 인 줄로 앱이 화면에 떠 있던 시간대를 잡습니다.
 - [설치된 앱 (packages.xml)](../app-usage/packages/index.md) — 설치·업데이트 시각과 버전을 확인합니다.
 - [알림 기록 (Notification History)](../app-usage/notification-history.md) — 앱이 보낸 알림 제목과 시각을 봅니다.
 - [네이버 지도 (NAVER Map)](../location/naver-map.md), [네이버 MYBOX (MYBOX)](../mail-cloud/mybox.md), [네이버 밴드 (BAND)](../korean-apps/band.md) — 같은 회사의 다른 앱을 쓴 기록이 있으면 시간대를 함께 맞춰 봅니다.
@@ -82,11 +82,11 @@ WebView 파일은 ALEAPP 결과에 패키지 이름으로 섞여 나오기 때�
 
 ## 실습
 
-공개 검체나 직접 만든 시험 기기 가운데 네이버 앱이 깔린 이미지를 골라 아래 질문을 풀어 봅니다.
+공개 실습 자료나 직접 만든 시험 기기 가운데 네이버 앱이 깔린 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. com.nhn.android.search 패키지 폴더 아래에 SQLite 파일은 몇 개이고, 그 가운데 주소나 검색어로 보이는 문자열이 들어 있는 표는 어느 것입니까?
 2. `app_webview/Default/History` 가 있습니까? 있다면 ALEAPP 보고서에서 그 행들은 어떤 브라우저 이름으로 나옵니까?
-3. 시험 기기에서 네이버 앱으로 알고 있는 시각에 검색을 세 번 한 뒤 다시 확보했을 때, 행이 늘어난 파일과 칸은 어느 것이고 그 칸의 값은 어떤 시각 형식입니까?
+3. 시험 기기에서 네이버 앱으로 알고 있는 시각에 검색을 세 번 한 뒤 다시 확보했을 때, 행이 늘어난 파일과 열은 어느 것이고 그 열의 값은 어떤 시각 형식입니까?
 4. usagestats 에서 네이버 앱이 화면에 떠 있던 시간대와 3번에서 찾은 시각이 겹칩니까?
 
 ## 참고 문헌

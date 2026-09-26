@@ -12,7 +12,7 @@ nav_order: 910
 
 라이브 응답 수집 (live response) 은 시스템을 끄거나 디스크를 떼기 전에 씁니다. 돌고 있는 프로세스, 열린 네트워크 연결, 지워졌지만 아직 실행 중인 실행 파일은 디스크 이미지에 남지 않고, 전원을 끄면 되살릴 수 없습니다. 서버를 멈출 수 없어 디스크 이미징을 뒤로 미뤄야 할 때도 라이브 응답 결과가 첫 판단 자료가 됩니다.
 
-전체 조사 순서와 수집 전에 정할 일(권한, 기록, 휘발성 순서)은 [조사 절차](investigation-process.md)에 있습니다. 물리 메모리 덤프는 [메모리 수집](memory-acquisition.md)에서, 컨테이너 런타임 명령은 [컨테이너 수집](container-acquisition.md)에서, 클라우드 인스턴스는 [클라우드 가상 머신 수집](cloud-vm.md)에서 다룹니다. 이 쪽은 셸 명령과 `/proc` 로 뜨는 휘발성 상태만 다룹니다.
+전체 조사 순서와 수집 전에 정할 일(권한, 기록, 휘발성 순서)은 [조사 절차](investigation-process.md)에 있습니다. 물리 메모리 덤프는 [메모리 수집](memory-acquisition.md)에서, 컨테이너 런타임 명령은 [컨테이너 수집](container-acquisition.md)에서, 클라우드 인스턴스는 [클라우드 가상 머신 수집](cloud-vm.md)에서 다룹니다. 이 페이지는 셸 명령과 `/proc` 로 뜨는 휘발성 상태만 다룹니다.
 
 ## 절차
 
@@ -20,7 +20,7 @@ nav_order: 910
 
 1. **결과를 둘 곳과 권한을 정합니다.** UAC 는 root 로 실행하는지 먼저 검사하고, `-u` (`--run-as-non-root`) 로 이 검사를 끄면 수집이 제한될 수 있습니다[2]. UAC 는 임시 디렉터리 `uac-data.tmp` 를 결과 목적지 아래에 만들고, `--temp-dir` 을 주면 그 아래에 만듭니다[2]. 목적지를 대상 시스템의 디스크로 잡으면 수집 과정이 그 디스크에 파일을 씁니다. 사건 정보는 `--case-number`, `--evidence-number`, `--description`, `--examiner`, `--notes` 로 넣습니다[2].
 
-2. **시각 기준을 떠 둡니다.** 뒤에서 상대 시각을 벽시계 시각으로 바꾸려면 수집 시점의 시계 값이 필요합니다. UAC 는 `date`, `timedatectl status`, `hwclock`, `uptime`, `uptime -s` 결과를 `/live_response/system` 에 남깁니다[1]. `uptime -s` 는 시스템이 켜져 있던 기간을 시작 시각 하나로 보여 주고, 모양은 `yyyy-mm-dd HH:MM:SS` 입니다[1].
+2. **시각 기준을 떠 둡니다.** 뒤에서 상대 시각을 실제 시각으로 바꾸려면 수집 시점의 시계 값이 필요합니다. UAC 는 `date`, `timedatectl status`, `hwclock`, `uptime`, `uptime -s` 결과를 `/live_response/system` 에 남깁니다[1]. `uptime -s` 는 시스템이 켜져 있던 기간을 시작 시각 하나로 보여 주고, 모양은 `yyyy-mm-dd HH:MM:SS` 입니다[1].
 
 3. **프로세스를 뜹니다.** 목록은 `ps` 를 여러 형식으로 뜹니다. 시작 시각이 붙는 `ps -eo user,pid,ppid,pcpu,pmem,tty,stat,lstart,args`, 경과 시간이 붙는 `...,etime,args`, `ps auxwww`, `ps -ef`, 컨트롤 그룹(cgroup)이 붙는 `ps -eo user,pid,ppid,cgroup` 가 있습니다[1]. PID 마다 `/proc/PID/` 의 `cmdline`, `environ`, `comm`, `maps`, `mounts`, `stack`, `stat`, `status`, `net/unix`, `task/PID/children` 을 읽고 `fd`, `map_files` 목록을 뜹니다[1]. 실행 파일 경로는 `ls -l /proc/[0-9]*/exe` 로 뜨고, 같은 경로의 해시도 계산합니다[1]. 결과는 `/live_response/process` 와 PID 별 `/live_response/process/proc/PID/` 에 들어갑니다[1].
 
@@ -34,7 +34,7 @@ nav_order: 910
 
 8. **로그인·서비스·저장 장치를 뜹니다.** `who -T`, `journalctl --list-boots`, `systemctl list-units`, `systemctl list-timers --all`, `systemctl list-unit-files` 로 로그인 세션과 부팅 목록, 유닛 상태를 남깁니다[1]. 저장 장치는 `lsblk`(`-f`, `-J`, `-l`), `findmnt --ascii`, `findmnt -J`, `blkid`, `lvs` 로 뜹니다[1]. 이 결과는 뒤에 [디스크 이미징](disk-imaging.md)에서 어느 장치를 뜰지 정하는 근거가 됩니다.
 
-9. **파일 메타데이터를 뜬 다음 파일을 복사합니다.** bodyfile 은 `/` 전체를 `stat` 으로 훑고 `proc` 파일 시스템은 뺍니다. 결과는 `/bodyfile/bodyfile.txt` 입니다[1]. 로그·설정 파일 사본은 그 뒤에 뜹니다[2]. 이 순서를 지키는 이유(파일을 읽는 동작이 접근 시각을 바꿀 수 있다는 점)는 [조사 절차](investigation-process.md)에 있습니다.
+9. **파일 메타데이터를 뜬 다음 파일을 복사합니다.** bodyfile 은 `/` 전체를 `stat` 으로 차례로 읽고 `proc` 파일 시스템은 뺍니다. 결과는 `/bodyfile/bodyfile.txt` 입니다[1]. 로그·설정 파일 사본은 그 뒤에 뜹니다[2]. 이 순서를 지키는 이유(파일을 읽는 동작이 접근 시각을 바꿀 수 있다는 점)는 [조사 절차](investigation-process.md)에 있습니다.
 
 10. **결과물을 닫고 기록합니다.** UAC 는 결과물 옆에 `기본이름.log` 수집 기록을 만들고 `[Case Information]`, `[System Information]`, `[Acquisition Information]`, `[Output Information]`, `[Computed Hashes]` 절을 씁니다[2]. 기본 해시는 MD5 와 SHA1 이고[2], `-H` 를 주면 수집한 파일마다 해시 목록을 만듭니다[2]. 결과물 기본 이름은 `uac-%hostname%-%os%-%timestamp%` 입니다[2].
 
@@ -58,7 +58,7 @@ UAC 의 `--start-date`·`--end-date` 는 수정·접근·변경 시각으로 파
 
 **상태를 바꾸는 항목은 기본으로 꺼져 있습니다.** UAC 에서 `modifier: true` 로 표시한 아티팩트는 `--enable-modifiers` 를 줄 때만 돕니다[2]. 하나는 `sysctl -a` 를 저장한 뒤 `sysctl kernel.ftrace_enabled=0` 으로 ftrace 를 끄고, 목적은 LKM 루트킷이 시스템 호출을 가로채지 못하게 하는 것입니다[1]. 다른 하나(`revel_hidden_processes`)는 `mount`·`ps` 결과와 숨은 PID 목록을 먼저 저장한 뒤 `/proc/PID` 에 바인드 마운트된 디렉터리를 `umount` 해서, `/proc/PID` 를 가려 숨긴 프로세스를 드러냅니다[1]. `ps` 에 안 보이는 PID 가 있으면 `/live_response/modifiers/mount.txt` 나 `findmnt` 결과에서 `/proc/숫자` 위 마운트를 먼저 찾아볼 수 있습니다. 이 옵션을 켰다면 보고서에 적습니다.
 
-**거짓 결과를 가려내는 범위가 좁습니다.** `ps`, `/proc`, `ss` 는 모두 대상 커널이 돌려준 값입니다. UAC 의 숨은 PID 비교는 `/proc` 목록을 믿고 `ps` 출력과 견주는 방식이라 사용자 공간 도구 쪽 은닉만 드러냅니다[1]. 커널 수준에서 `/proc` 자체를 가리는 경우는 이 비교로 드러나지 않을 가능성이 있고, [메모리 분석](../analysis/memory-analysis.md)이나 [루트킷 찾기](../analysis/rootkit-detection.md)로 넘겨 확인합니다.
+**거짓 결과를 가려내는 범위가 좁습니다.** `ps`, `/proc`, `ss` 는 모두 대상 커널이 돌려준 값입니다. UAC 의 숨은 PID 비교는 `/proc` 목록을 믿고 `ps` 출력과 비교하는 방식이라 사용자 공간 도구 쪽 은닉만 드러냅니다[1]. 커널 수준에서 `/proc` 자체를 가리는 경우는 이 비교로 드러나지 않을 가능성이 있고, [메모리 분석](../analysis/memory-analysis.md)이나 [루트킷 찾기](../analysis/rootkit-detection.md)로 넘겨 확인합니다.
 
 **권한과 커널 설정에 따라 결과가 비기도 합니다.** `dmesg_restrict` 가 1 이면 `CAP_SYSLOG` 가 없는 사용자는 `dmesg` 를 읽지 못합니다[4]. 이런 시스템에서 root 가 아닌 계정으로 뜨면 `dmesg | grep -i taint` 결과가 비어 있어도 오염 기록이 없다는 뜻이 아닙니다. `/proc/PID/exe` 링크를 읽는 권한은 ptrace 접근 검사(`PTRACE_MODE_READ_FSCREDS`)를 따릅니다[3].
 
@@ -83,7 +83,7 @@ UAC 의 `--start-date`·`--end-date` 는 수정·접근·변경 시각으로 파
 
 ### 시각 해석
 
-`/proc/PID/stat` 의 22번째 필드 `starttime` 은 부팅 뒤 프로세스가 시작하기까지 걸린 시간이고, Linux 2.6 부터는 클럭 틱 단위라 `sysconf(_SC_CLK_TCK)` 값으로 나눠 초로 바꿉니다[3]. `/proc/uptime` 의 첫 값은 부팅 뒤 흐른 초(서스펜드 시간 포함)입니다[3]. 둘 다 상대 시각이라, 벽시계 시각으로 바꾸려면 같은 수집에서 뜬 `date` 결과가 있어야 합니다.
+`/proc/PID/stat` 의 22번째 필드 `starttime` 은 부팅 뒤 프로세스가 시작하기까지 걸린 시간이고, Linux 2.6 부터는 클럭 틱 단위라 `sysconf(_SC_CLK_TCK)` 값으로 나눠 초로 바꿉니다[3]. `/proc/uptime` 의 첫 값은 부팅 뒤 흐른 초(서스펜드 시간 포함)입니다[3]. 둘 다 상대 시각이라, 실제 시각으로 바꾸려면 같은 수집에서 뜬 `date` 결과가 있어야 합니다.
 
 아래는 만든 예시입니다. `date` 가 2026-03-10 09:00:00 +0900 이고 `/proc/uptime` 첫 값이 86400.00 이면 부팅 시각은 2026-03-09 09:00:00 +0900 입니다. 어떤 프로세스의 `starttime` 이 360000 이고 클럭 틱이 100 이면 부팅 뒤 3600초에 시작했으므로 시작 시각은 2026-03-09 10:00:00 +0900 입니다. `date` 와 `/proc/uptime` 은 서로 다른 순간에 읽으므로 이렇게 구한 값은 두 명령 사이의 간격만큼 어긋날 수 있습니다. `uptime -s` 결과와 견줘 부팅 시각이 맞는지 확인합니다.
 
@@ -91,7 +91,7 @@ UAC 의 `--start-date`·`--end-date` 는 수정·접근·변경 시각으로 파
 
 ### 보고서 문장
 
-기록이 말하는 만큼만 씁니다. "악성 프로세스가 실행되었다" 가 아니라 "2026-03-10 09:00 +0900 에 수집한 프로세스 목록에서 PID 4242 의 실행 파일 경로가 `/tmp/.cache/x (deleted)` 로 표시되었다(만든 예시)" 처럼 씁니다. 복사한 파일은 해시와 함께 "처음 20,480,000바이트까지 복사했다" 는 한계를 붙여 적습니다.
+기록으로 확인되는 만큼만 씁니다. "악성 프로세스가 실행되었다" 가 아니라 "2026-03-10 09:00 +0900 에 수집한 프로세스 목록에서 PID 4242 의 실행 파일 경로가 `/tmp/.cache/x (deleted)` 로 표시되었다(만든 예시)" 처럼 씁니다. 복사한 파일은 해시와 함께 "처음 20,480,000바이트까지 복사했다" 는 한계를 붙여 적습니다.
 
 `/proc` 각 파일의 형식과 필드는 [실행 중인 프로세스 (/proc)](../../02-artifacts/execution/proc.md)에서 다룹니다. 다른 운영체제의 수집 절차는 [Windows 조사 절차](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html)와 [macOS 조사 절차](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/process-acquisition/investigation-process.html)에 있습니다.
 

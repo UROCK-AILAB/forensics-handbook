@@ -30,7 +30,7 @@ OpenVPN 은 사용자 공간 데몬입니다. 설정 파일에 상대 서버 (`r
 | Ubuntu 23.10 이후 NM 연결 | `/etc/netplan/90-NM-UUID.yaml`[15] | 디스크 |
 | 실행 중 터널 상태 | `wg show all dump`, `ip link show`, `nmcli connection show`[1][19] | 라이브 |
 
-OpenVPN 이 2.4 부터 함께 배포하는 유닛은 클라이언트와 서버를 나눠, 클라이언트 설정은 `/etc/openvpn/client`, 서버 설정은 `/etc/openvpn/server` 에서 찾습니다[6]. 설정 파일은 확장자가 `.conf` 여야 합니다[6]. 이 유닛 이름이 아닌 `openvpn@NAME` 으로 돌리는 설정은 `/etc/openvpn/` 바로 아래에 있을 수 있어서, dissect.target 은 `/etc/openvpn/` 아래 `*.conf`·`*.ovpn` 을 하위 폴더까지 모두 훑습니다[18]. Ubuntu 24.04 와 RHEL 9 의 패키지가 이 유닛을 고쳐 배포하는지는 검체의 `/usr/lib/systemd/system/openvpn-client@.service`·`openvpn-server@.service` 를 열어 `ExecStart=` 줄을 확인하면 됩니다.
+OpenVPN 이 2.4 부터 함께 배포하는 유닛은 클라이언트와 서버를 나눠, 클라이언트 설정은 `/etc/openvpn/client`, 서버 설정은 `/etc/openvpn/server` 에서 찾습니다[6]. 설정 파일은 확장자가 `.conf` 여야 합니다[6]. 이 유닛 이름이 아닌 `openvpn@NAME` 으로 돌리는 설정은 `/etc/openvpn/` 바로 아래에 있을 수 있어서, dissect.target 은 `/etc/openvpn/` 아래 `*.conf`·`*.ovpn` 을 하위 폴더까지 모두 검색합니다[18]. Ubuntu 24.04 와 RHEL 9 의 패키지가 이 유닛을 고쳐 배포하는지는 실제 시스템의 `/usr/lib/systemd/system/openvpn-client@.service`·`openvpn-server@.service` 를 열어 `ExecStart=` 줄을 확인하면 됩니다.
 
 서버 유닛의 상태 파일 경로 `%t/openvpn-server/` 에서 `%t` 는 런타임 폴더라 시스템 유닛에서는 `/run` 이고, tmpfiles 설정이 `/run/openvpn-client` 와 `/run/openvpn-server` 를 root 소유 0710 으로 만듭니다[6]. `/run` 은 부팅 때 비워지는 tmpfs 라서 꺼진 시스템의 디스크 이미지에는 이 상태 파일이 없습니다([디렉터리 구조와 주요 경로](../../01-foundations/filesystem/fhs-paths.md) 참고).
 
@@ -84,12 +84,12 @@ NetworkManager 로 만든 OpenVPN 연결은 `[connection]` 의 `type=vpn`, `[vpn
 
 `--status file n` 을 주면 n 초마다(기본 60초) 파일을 다시 씁니다[7]. 여러 클라이언트를 받는 서버에서는 클라이언트 목록과 경로 표가 들어가고, `--status-version` 으로 형식을 고릅니다[7]. 클라이언트나 1:1 모드에서는 송수신 통계가 들어갑니다[7].
 
-| 판 | 머리 줄 | 클라이언트 줄의 칸 |
+| 판 | 머리 줄 | 클라이언트 줄의 필드 |
 |---|---|---|
 | 1 | `OpenVPN CLIENT LIST`, `Updated,시각`[8] | Common Name, Real Address, Bytes Received, Bytes Sent, Connected Since[7][8] |
 | 2(쉼표)·3(탭) | `TITLE`, `TIME,현지 시각,epoch`[8] | Common Name, Real Address, Virtual Address, Virtual IPv6 Address, Bytes Received, Bytes Sent, Connected Since, Connected Since (time_t), Username, Client ID, Peer ID, Data Channel Cipher[7][8] |
 
-2·3판은 줄 머리가 `HEADER`, `CLIENT_LIST`, `ROUTING_TABLE`, `GLOBAL_STATS`, `END` 로 나뉩니다[8]. 경로 표 줄의 칸은 Virtual Address, Common Name, Real Address, Last Ref, Last Ref (time_t) 입니다[8]. 업스트림 서버 유닛은 `--status-version 2` 를 씁니다[6]. 아래는 2판 형식으로 만든 예시입니다.
+2·3판은 줄 머리가 `HEADER`, `CLIENT_LIST`, `ROUTING_TABLE`, `GLOBAL_STATS`, `END` 로 나뉩니다[8]. 경로 표 줄의 필드는 Virtual Address, Common Name, Real Address, Last Ref, Last Ref (time_t) 입니다[8]. 업스트림 서버 유닛은 `--status-version 2` 를 씁니다[6]. 아래는 2판 형식으로 만든 예시입니다.
 
 ```
 TITLE,OpenVPN 2.x.x ...
@@ -101,11 +101,11 @@ ROUTING_TABLE,10.8.0.6,laptop01,198.51.100.23:51234,2026-03-14 09:29:58,17734481
 END
 ```
 
-`--ifconfig-pool-persist file [seconds]` 를 쓰면 서버는 시작할 때, 끝날 때, 그리고 기본 600초마다 `Common-Name,IP-address` 꼴의 쉼표 줄을 파일에 씁니다[7]. 클라이언트 이름과 가상 IP 의 오래 가는 짝이라서, 상태 파일이 사라진 뒤에도 어느 이름이 어느 가상 IP 를 받았는지 알 수 있습니다.
+`--ifconfig-pool-persist file [seconds]` 를 쓰면 서버는 시작할 때, 끝날 때, 그리고 기본 600초마다 `Common-Name,IP-address` 형식의 쉼표 줄을 파일에 씁니다[7]. 클라이언트 이름과 가상 IP 의 오래 가는 짝이라서, 상태 파일이 사라진 뒤에도 어느 이름이 어느 가상 IP 를 받았는지 알 수 있습니다.
 
 ### 로그 줄
 
-wg-quick 은 실행하는 명령마다 앞에 `[#] ` 를 붙여 표준 오류로 찍고, PreUp·PostUp 같은 훅 명령도 같은 꼴로 찍습니다[4]. 유닛의 표준 오류는 따로 정하지 않으면 표준 출력과 같은 곳으로 가고, 표준 출력의 기본값은 저널입니다[17]. 그래서 `wg-quick@wg0.service` 로 올린 터널은 저널에 `[#] ip link add dev wg0 type wireguard`(만든 예시) 같은 줄을 남깁니다. `[#] ` 줄에는 `PostUp` 으로 실행한 명령이 그대로 찍히므로 설정 파일을 나중에 고쳤더라도 당시 실행한 명령을 볼 수 있습니다[4].
+wg-quick 은 실행하는 명령마다 앞에 `[#] ` 를 붙여 표준 오류로 찍고, PreUp·PostUp 같은 훅 명령도 같은 형식으로 찍습니다[4]. 유닛의 표준 오류는 따로 정하지 않으면 표준 출력과 같은 곳으로 가고, 표준 출력의 기본값은 저널입니다[17]. 그래서 `wg-quick@wg0.service` 로 올린 터널은 저널에 `[#] ip link add dev wg0 type wireguard`(만든 예시) 같은 줄을 남깁니다. `[#] ` 줄에는 `PostUp` 으로 실행한 명령이 그대로 찍히므로 설정 파일을 나중에 고쳤더라도 당시 실행한 명령을 볼 수 있습니다[4].
 
 OpenVPN 은 상대와 연결이 맺어지면 `Peer Connection Initiated with` 뒤에 상대 주소를 붙인 줄을 찍고, 상대 인증서의 이름(Common Name)을 알면 앞에 `[이름] ` 이 붙습니다[9]. 초기화가 끝나면 `Initialization Sequence Completed` 를 찍습니다[9]. 로그 양은 `--verb n` 으로 정하고, 기본은 1, 권장은 3 입니다[7].
 
@@ -133,13 +133,13 @@ OpenVPN 은 상대와 연결이 맺어지면 `Peer Connection Initiated with` �
 |---|---|---|
 | 저널 항목 | 줄을 받은 시각 | [systemd 저널](../../01-foundations/logging/systemd-journal/index.md) 참고 |
 | OpenVPN 로그 줄(유닛 실행) | 자체 시각 없음. 유닛이 `--suppress-timestamps` 로 실행하므로 저널 시각만 있음[6][7] | 저널과 같음 |
-| 상태 파일 `TIME`·`Updated` | 파일을 마지막으로 다시 쓴 시각[8] | 문자열은 현지 시각, 2·3판의 옆 칸은 epoch 초[8] |
+| 상태 파일 `TIME`·`Updated` | 파일을 마지막으로 다시 쓴 시각[8] | 문자열은 현지 시각, 2·3판의 옆 필드는 epoch 초[8] |
 | 상태 파일 `Connected Since` | 서버가 그 클라이언트 인스턴스를 만든 시각[8] | 위와 같음 |
 | 상태 파일 `Last Ref` | 그 가상 주소 경로를 마지막으로 쓴 시각[8] | 위와 같음 |
 | `wg show dump` 의 latest-handshake | 마지막 핸드셰이크 시각[1] | epoch 초[5] |
 | WireGuard·OpenVPN 설정 파일 | 파일 안에 시각 없음. 파일 시스템 시각만 있음 | [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 참고 |
 
-상태 파일의 시각 문자열은 `localtime()` 으로 만든 `YYYY-MM-DD HH:MM:SS` 이고 시간대 표기가 없습니다[8]. 2·3판은 같은 줄에 epoch 초를 함께 쓰므로, 문자열과 epoch 의 차이로 서버가 쓰던 시간대를 거꾸로 알 수 있습니다. OpenVPN 을 유닛 없이 `--log` 로 직접 실행했다면 줄 앞에 시각이 붙을 수 있는데, 그 형식은 검체의 로그 파일에서 확인합니다.
+상태 파일의 시각 문자열은 `localtime()` 으로 만든 `YYYY-MM-DD HH:MM:SS` 이고 시간대 표기가 없습니다[8]. 2·3판은 같은 줄에 epoch 초를 함께 쓰므로, 문자열과 epoch 의 차이로 서버가 쓰던 시간대를 거꾸로 알 수 있습니다. OpenVPN 을 유닛 없이 `--log` 로 직접 실행했다면 줄 앞에 시각이 붙을 수 있는데, 그 형식은 실제 로그 파일에서 확인합니다.
 
 `SaveConfig = true` 인 WireGuard 설정 파일은 터널을 내릴 때 wg-quick 이 `.tmp` 파일에 쓴 뒤 이름을 바꿔 덮습니다[4]. 그래서 이 파일의 수정 시각은 사용자가 편집한 때가 아니라 마지막으로 터널을 내린 때일 가능성이 있습니다.
 
@@ -149,7 +149,7 @@ OpenVPN 은 상대와 연결이 맺어지면 `Peer Connection Initiated with` �
 2. OpenVPN 의 `--log file` 은 시작할 때 파일을 비웁니다. 이어 쓰려면 `--log-append` 를 씁니다[7]. `--log` 로 설정된 서버를 다시 시작했다면 그 이전 로그는 파일에 없습니다.
 3. 서버 상태 파일은 `/run` 아래라 디스크 이미지에는 없습니다[6]. 라이브 응답에서 먼저 복사합니다.
 4. dissect.target 의 WireGuard 결과는 `PrivateKey` 를 그대로 담습니다[18]. OpenVPN 결과는 `PRIVATE KEY` 가 든 `key` 값을 기본으로 가리고 `--export-key` 인자를 줄 때만 담습니다[18]. 결과를 보고서에 옮길 때 키 값을 지웁니다.
-5. dissect.target 의 WireGuard 파서는 키 이름을 대소문자까지 그대로 찾는데, `PreSharedKey`·`PersistentKeepAlive` 로 찾습니다[18]. wg(8) 표기(`PresharedKey`·`PersistentKeepalive`)[1]로 쓴 파일에서는 이 두 칸이 비어 나올 가능성이 있으므로 빈 칸을 "설정 없음" 으로 읽기 전에 원본 파일을 엽니다.
+5. dissect.target 의 WireGuard 파서는 키 이름을 대소문자까지 그대로 찾는데, `PreSharedKey`·`PersistentKeepAlive` 로 찾습니다[18]. wg(8) 표기(`PresharedKey`·`PersistentKeepalive`)[1]로 쓴 파일에서는 이 두 필드가 비어 나올 가능성이 있으므로 빈 필드를 "설정 없음" 으로 읽기 전에 원본 파일을 엽니다.
 6. dissect.target 의 WireGuard 파서는 Linux 에서 `/etc/wireguard/*.conf` 만 읽고, NetworkManager 연결 파일, systemd-networkd 의 `.netdev`, 홈 폴더의 설정은 아직 읽지 않습니다[18]. OpenVPN 파서도 Linux 에서는 `/etc/openvpn/` 만 봅니다[18]. 홈 폴더에 둔 `.ovpn`·`.conf` 는 따로 찾습니다.
 7. `PreUp`·`PostUp` 에는 아무 명령이나 넣을 수 있고 wg-quick 이 bash 로 실행합니다[2]. VPN 설정이 지속성 수단으로 쓰였을 수 있으므로 훅 명령이 가리키는 파일까지 확인합니다. 지속성 흔적 전반은 [systemd 서비스와 타이머](../persistence/systemd-units.md) 에서 다룹니다.
 8. WireGuard 커널 모듈의 디버그 정보는 동적 디버그 (dynamic debug) 를 켜야 dmesg 에 남습니다[1]. 커널 로그에 WireGuard 줄이 없다고 터널이 없었다고 볼 수 없습니다.
@@ -167,7 +167,7 @@ OpenVPN 은 상대와 연결이 맺어지면 `Peer Connection Initiated with` �
 00000020: 3230 350a                                205.
 ```
 
-1. 0x00 의 `54 49 4d 45`(`TIME`) 뒤 0x04 의 `2c` 는 칸 구분자입니다. 3판이면 이 자리가 탭 `09` 입니다[8].
+1. 0x00 의 `54 49 4d 45`(`TIME`) 뒤 0x04 의 `2c` 는 필드 구분자입니다. 3판이면 이 자리가 탭 `09` 입니다[8].
 2. 0x05 부터 0x17 까지 19바이트가 현지 시각 문자열 `2026-03-14 09:30:05` 입니다[8].
 3. 0x18 의 `2c` 다음 0x19 부터 0x22 까지가 epoch 초 `1773448205` 이고, 0x23 의 `0a` 로 줄이 끝납니다[8].
 4. `1773448205` 는 UTC 2026-03-14 00:30:05 입니다. 문자열이 09:30:05 이므로 이 서버는 UTC+9 로 시각을 썼습니다.

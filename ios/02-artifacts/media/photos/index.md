@@ -14,7 +14,7 @@ has_toc: false
 
 ## 왜 중요한가
 
-사진은 조사에서 자주 핵심 증거가 되고, 파일만 보면 알 수 없는 내력이 Photos.sqlite 에 남습니다. 이 기기 카메라로 찍은 사진인지, 공유 앨범이나 iCloud, 다른 사람이 "나와 공유됨" 으로 보낸 경로에서 들어온 사진인지를 DB 의 값으로 가를 수 있고[1], 지운 사진도 30일 동안은 DB 에 삭제 표시만 붙은 채 남습니다. 다만 값의 뜻 대부분은 Apple 명세가 아니라 공개 쿼리와 도구 자료에서 왔고, 표와 칸 이름도 버전마다 바뀌어서 검체마다 DB 를 직접 열어 확인하는 편이 안전합니다.
+사진은 조사에서 자주 핵심 증거가 되고, 파일만 보면 알 수 없는 내력이 Photos.sqlite 에 남습니다. 이 기기 카메라로 찍은 사진인지, 공유 앨범이나 iCloud, 다른 사람이 "나와 공유됨" 으로 보낸 경로에서 들어온 사진인지를 DB 의 값으로 구분할 수 있고[1], 지운 사진도 30일 동안은 DB 에 삭제 표시만 붙은 채 남습니다. 다만 값의 뜻 대부분은 Apple 명세가 아니라 공개 쿼리와 도구 자료에서 왔고, 표와 열 이름도 버전마다 바뀌어서 분석할 때마다 DB 를 직접 열어 확인하는 편이 안전합니다.
 
 ## 한눈에 보기
 
@@ -22,15 +22,15 @@ has_toc: false
 |---|---|---|---|
 | 사진 DB | 기기 `/private/var/mobile/Media/PhotoData/Photos.sqlite`[1][2], 백업 CameraRollDomain `Media/PhotoData/Photos.sqlite` | 전 버전(자산 표 이름은 버전마다 다름) | 자산별 날짜, 들어온 경로, 촬영 정보, 앨범, 공유, 삭제·가려짐 상태 |
 | 나와 공유됨 보관함 | 기기 `/private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite`[2] | — | 메시지 등으로 "나와 공유됨" 에 들어온 사진. iLEAPP 는 Ph25~26 파서로 읽습니다[2] |
-| 앱별 사진 보관함 | 백업 HomeDomain `Library/Preferences/com.apple.assetsd.plist` 의 `PLBackgroundMigrationPaths` 에 `com.apple.GenerativePlayground` 의 `.photoslibrary` 경로가 있습니다 | — | 앱마다 사진 보관함이 따로 있을 수 있다는 단서. 그 파일이 백업의 어느 도메인에 들어가는지는 검체에서 확인합니다 |
-| iCloud 사진 상태 | 백업 CameraRollDomain `Media/PhotoData/CPL/` 의 `syncstatus.plist`, `DownloadCounts.plist`, `metrics.plist`, `mobileCPL.plist`, `cloudphotos-#.#.plist` | — | 이름으로 보아 iCloud 사진 동기화 시각과 개수. 키는 아래 표에 있습니다 |
-| DCIM 번호 | 백업 CameraRollDomain `Media/PhotoData/MISC/DCIM_APPLE.plist` 의 `DCIMLastDirectoryNumber`, `DCIMLastFileNumber` | — | 이름으로 보아 마지막 DCIM 폴더·파일 번호. 값의 뜻은 공개된 자료가 없습니다 |
+| 앱별 사진 보관함 | 백업 HomeDomain `Library/Preferences/com.apple.assetsd.plist` 의 `PLBackgroundMigrationPaths` 에 `com.apple.GenerativePlayground` 의 `.photoslibrary` 경로가 있습니다 | — | 앱마다 사진 보관함이 따로 있을 수 있다는 단서. 그 파일이 백업의 어느 도메인에 들어가는지는 실제 백업에서 확인합니다 |
+| iCloud 사진 상태 | 백업 CameraRollDomain `Media/PhotoData/CPL/` 의 `syncstatus.plist`, `DownloadCounts.plist`, `metrics.plist`, `mobileCPL.plist`, `cloudphotos-#.#.plist` | — | 이름으로 보면 iCloud 사진 동기화 시각과 개수. 키는 아래 표에 있습니다 |
+| DCIM 번호 | 백업 CameraRollDomain `Media/PhotoData/MISC/DCIM_APPLE.plist` 의 `DCIMLastDirectoryNumber`, `DCIMLastFileNumber` | — | 이름으로 보면 마지막 DCIM 폴더·파일 번호. 값의 뜻은 공개된 자료가 없습니다 |
 | 사진 앱 내부 설정 | 백업 CameraRollDomain `Media/PhotoData/private/com.apple.assetsd/appPrivateData.plist`, `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist`, `Media/PhotoData/Journals/MigrationHistory.plist` | — | 사진 앱과 사진 서비스의 내부 상태 |
 | iCloud 사진 데몬 설정 | 백업 HomeDomain `Library/Preferences/com.apple.cloudphotod.plist` 에 `CPLCloudKitCoordinator-com.apple.photos.cloud` 키 | — | iCloud 사진 연결 설정으로 보이는 값 |
 
-사진 파일 자체가 백업의 어느 경로에 들어가는지는 검체에서 확인합니다. 백업 도메인을 찾는 법은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
+사진 파일 자체가 백업의 어느 경로에 들어가는지는 실제 백업에서 확인합니다. 백업 도메인을 찾는 법은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
-사진 파일이 놓이는 기기 경로는 아래와 같고[1], 들어온 경로마다 폴더가 다릅니다. Photos.sqlite 에서 이 경로를 가르는 `ZSAVEDASSETTYPE` 값은 [사진 DB 구조 (Photos.sqlite)](photos-sqlite.md)에 있습니다.
+사진 파일이 놓이는 기기 경로는 아래와 같고[1], 들어온 경로마다 폴더가 다릅니다. Photos.sqlite 에서 이 경로를 구분하는 `ZSAVEDASSETTYPE` 값은 [사진 DB 구조 (Photos.sqlite)](photos-sqlite.md)에 있습니다.
 
 | 들어온 경로 | 기기 경로 |
 |---|---|
@@ -50,15 +50,15 @@ has_toc: false
 | `metrics.plist` | `BlockedSessionsCount`, `DASUnBlockedCount`, `PoorSystemConditionsBlockedCount`, `ThunderingHerdBlockedCount`, `TotalSessionsCount` |
 | `mobileCPL.plist` | `storeUUID` |
 
-`initialSyncDate`, `lastSyncDate` 는 이름으로 보아 iCloud 사진의 첫 동기화와 마지막 동기화 시각이라서, iCloud 사진이 켜져 있었는지 가늠할 때 Photos.sqlite 의 `ZCLOUDLOCALSTATE` 와 함께 봅니다. plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../../01-foundations/data-formats/plist.md)에 있습니다.
+`initialSyncDate`, `lastSyncDate` 는 이름으로 보면 iCloud 사진의 첫 동기화와 마지막 동기화 시각이라서, iCloud 사진이 켜져 있었는지 추정할 때 Photos.sqlite 의 `ZCLOUDLOCALSTATE` 와 함께 봅니다. plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../../01-foundations/data-formats/plist.md)에 있습니다.
 
 > 그림 자리: 기기 경로의 `Media/DCIM`·`Media/PhotoData` 폴더와 백업 CameraRollDomain·HomeDomain 에 사진 DB 와 부속 plist 가 어떻게 나뉘어 들어가는지
 
 ## 읽는 순서
 
-1. [사진 DB 구조 (Photos.sqlite)](photos-sqlite.md) — `ZASSET` 과 촬영 정보·원본 파일·편집 기록 표를 잇는 법, 들어온 경로를 가르는 값, 날짜 칸을 바꾸는 법을 다룹니다.
+1. [사진 DB 구조 (Photos.sqlite)](photos-sqlite.md) — `ZASSET` 과 촬영 정보·원본 파일·편집 기록 표를 잇는 법, 들어온 경로를 구분하는 값, 날짜 열을 바꾸는 법을 다룹니다.
 2. [앨범과 공유 앨범 (Albums·Shared Albums)](albums-shared.md) — `ZGENERICALBUM` 과 연결 표, 공유 앨범의 댓글·초대·피드, iCloud 링크 공유와 공유 사진 보관함을 다룹니다.
-3. [최근 삭제된 항목 (Recently Deleted)](recently-deleted.md) — 30일 보관과 `ZTRASHEDSTATE` 삭제 표시, 가려진 항목, iCloud 로 넘어온 삭제를 가르는 어려움을 다룹니다.
+3. [최근 삭제된 항목 (Recently Deleted)](recently-deleted.md) — 30일 보관과 `ZTRASHEDSTATE` 삭제 표시, 가려진 항목, iCloud 로 넘어온 삭제를 구분하는 어려움을 다룹니다.
 
 ## 함께 볼 페이지
 

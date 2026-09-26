@@ -26,7 +26,7 @@ nav_order: 50
 | A14~A18, M1 이후 | AES-256 XTS. 파일별 키를 NIST SP 800-108 KDF 에 통과시켜 씁니다 |
 | A9~A13, S5 이후 | AES-128 XTS. 256비트 키를 나눠 씁니다 |
 
-암호화 방식은 iOS 버전이 아니라 칩으로 갈리니, 검체의 기종부터 확인합니다. 기종을 읽는 법은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md) 에 있습니다.
+암호화 방식은 iOS 버전이 아니라 칩에 따라 달라지니, 분석 대상 기기의 기종부터 확인합니다. 기종을 읽는 법은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md) 에 있습니다.
 
 ### 파일 보호 등급 네 가지
 
@@ -60,7 +60,7 @@ Class A 는 등급 키를 버린 뒤 사용자가 암호나 생체 인증으로 
 
 ## 읽는 법 — 로컬 백업에서
 
-로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고, 칸은 `fileID`, `domain`, `relativePath`, `flags`, `file`(BLOB) 입니다. `Manifest.db` 에는 도메인·경로·flags·크기·해시 같은 파일 메타데이터와 함께 암호화·보호 속성이 들어 있습니다[3]. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에서 봅니다.
+로컬 백업의 `Manifest.db` 에는 `Files` 표가 있고, 열은 `fileID`, `domain`, `relativePath`, `flags`, `file`(BLOB) 입니다. `Manifest.db` 에는 도메인·경로·flags·크기·해시 같은 파일 메타데이터와 함께 암호화·보호 속성이 들어 있습니다[3]. 백업 폴더 전체의 구조는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../backups/local-backup/index.md) 에서 봅니다.
 
 로컬 백업의 설정 plist 가운데 이름에 파일 보호가 들어간 키가 몇 개 있습니다. 각 키의 뜻을 밝힌 공개 자료는 없으니, 이름만 보고 기기의 등급 설정을 판단하지 않습니다.
 

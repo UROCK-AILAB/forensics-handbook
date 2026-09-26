@@ -130,7 +130,7 @@ Electron·WebView2 로 만든 앱도 크로미엄의 쿠키 형식을 그대로 
 
 ### encrypted_value 안의 모양
 
-아래는 설명을 위해 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다.
+아래는 설명을 위해 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 76 31 30                                     "v10" 접두사 (v20 이면 76 32 30)
@@ -210,7 +210,7 @@ DB 버전 24 이상에서는 평문 앞 32바이트가 `host_key` 의 SHA-256 �
 
 11644473600 은 1601년 1월 1일과 1970년 1월 1일 사이의 초 수입니다.
 
-**값의 첫머리.** `encrypted_value` 칸의 첫 3바이트가 `76 31 30` 이면 `v10`, `76 32 30` 이면 `v20` 입니다. 접두사 없이 `01 00 00 00 D0 8C 9D DF` 로 시작하면 옛 DPAPI 블롭입니다.
+**값의 첫머리.** `encrypted_value` 열의 첫 3바이트가 `76 31 30` 이면 `v10`, `76 32 30` 이면 `v20` 입니다. 접두사 없이 `01 00 00 00 D0 8C 9D DF` 로 시작하면 옛 DPAPI 블롭입니다.
 
 **풀린 값의 해시.** 도메인이 `.example.com` 이면 DB 버전 24 이상에서 풀린 평문의 앞 32바이트는 아래와 같아야 합니다. 이 값은 문자열 `.example.com` 의 SHA-256 을 계산한 것입니다.
 
@@ -241,7 +241,7 @@ ORDER BY creation_utc;
 ```
 
 - `nullif` 는 0 을 빈 값으로 바꿉니다. 0 을 그대로 변환하면 1601년이 나와 오해를 부릅니다.
-- `enc_tag` 로 행마다 암호화 방식을 셉니다.
+- `enc_tag` 로 행마다 암호화 방식을 구분합니다.
 - DB Browser for SQLite 같은 범용 뷰어로 같은 표를 볼 수 있습니다. Hindsight 같은 크로미엄 전용 공개 도구는 시각 변환과 `Network` 폴더 확인을 대신 해 줍니다. 도구 결과는 위 조회 결과와 한 번 맞춰 봅니다.
 
 ## 교차 검증
@@ -256,14 +256,14 @@ ORDER BY creation_utc;
 | 확장 프로그램 | 확장 프로그램이 요청을 보내 쿠키를 만들었을 가능성을 봅니다 | [확장 프로그램](extensions.md) |
 | $MFT·$UsnJrnl | `Cookies`·`NetworkDataMigrated` 의 생성 시각과 옛 `Cookies` 삭제 기록을 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
 | SRUM 네트워크 사용량 | 그 시간대에 브라우저가 실제로 통신했는지 봅니다 | [네트워크 사용량](../../execution/system-resource-usage-monitor/network-data-usage.md) |
-| 응용 프로그램 이벤트 로그 | 앱 바인딩 검증에 실패한 기록이 Application 로그에 남는지 봅니다. 다른 프로그램이 쿠키를 풀려고 한 흔적일 수 있습니다. 이벤트 원본과 ID 는 판마다 검체에서 확인합니다 | [자격 증명을 빼냈나](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) |
+| 응용 프로그램 이벤트 로그 | 앱 바인딩 검증에 실패한 기록이 Application 로그에 남는지 봅니다. 다른 프로그램이 쿠키를 풀려고 한 흔적일 수 있습니다. 이벤트 원본과 ID 는 판마다 실제 로그에서 확인합니다 | [자격 증명을 빼냈나](../../../04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md) |
 | 다른 브라우저 쿠키 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [파이어폭스 쿠키](../firefox/cookies-sqlite.md), [IE 쿠키·캐시 폴더](../ie-edgehtml/inetcookies-inetcache.md) |
 
 웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 
-크롬이나 엣지를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+크롬이나 엣지를 쓴 공개 실습 데이터(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 프로필 폴더 바로 아래의 `Cookies` 와 `Network\Cookies` 가운데 어느 것이 있습니까? `NetworkDataMigrated` 가 있다면 생성 시각은 언제입니까?
 2. `meta` 표의 `version` 은 몇입니까? 그 버전에 있어야 할 열이 실제로 다 있습니까?

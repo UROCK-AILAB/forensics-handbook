@@ -49,7 +49,7 @@ OS 는 아래 정보를 관리할 수 있습니다[1].
 
 ### query user
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | 사용자 이름 | 세션의 사용자 |
 | 세션 이름 | 세션 이름 |
@@ -83,7 +83,7 @@ WMI 의 `Win32_LogonSession` 클래스는 로그온 세션을 하나씩 보여 �
 
 ### 프로세스와 세션 잇기
 
-`Win32_Process` 와 `Win32_LogonSession` 은 연관 클래스 `Win32_SessionProcess` 로 이어지며, 이 연결로 어떤 프로세스가 어느 로그온 세션에 속하는지 알 수 있습니다. `tasklist /v` 의 세션 칸과 사용자 칸도 함께 봅니다. 프로세스 쪽 수집 방법은 [프로세스·DLL·핸들 수집](processes-dlls-handles.md)에서 다룹니다.
+`Win32_Process` 와 `Win32_LogonSession` 은 연관 클래스 `Win32_SessionProcess` 로 이어지며, 이 연결로 어떤 프로세스가 어느 로그온 세션에 속하는지 알 수 있습니다. `tasklist /v` 의 세션 열과 사용자 열도 함께 봅니다. 프로세스 쪽 수집 방법은 [프로세스·DLL·핸들 수집](processes-dlls-handles.md)에서 다룹니다.
 
 ## 클립보드
 

@@ -9,7 +9,7 @@ nav_order: 30
 
 ## 한 줄 요약
 
-A/B 업데이트를 쓰는 기기는 파티션을 슬롯 A 와 슬롯 B 두 벌로 두고 쓰지 않는 슬롯에 업데이트를 쓰며, Virtual A/B 기기는 부트로더가 쓰는 파티션만 두 벌 두고 나머지는 스냅샷으로 업데이트하기 때문에, 이미지를 볼 때는 어느 슬롯이 현재였는지와 업데이트가 끝났는지를 먼저 가립니다.
+A/B 업데이트를 쓰는 기기는 파티션을 슬롯 A 와 슬롯 B 두 벌로 두고 쓰지 않는 슬롯에 업데이트를 쓰며, Virtual A/B 기기는 부트로더가 쓰는 파티션만 두 벌 두고 나머지는 스냅샷으로 업데이트하기 때문에, 이미지를 볼 때는 어느 슬롯이 현재였는지와 업데이트가 끝났는지를 먼저 확인합니다.
 
 ## 이 구조와 관련된 아티팩트
 
@@ -78,11 +78,11 @@ COW 연산에는 Copy, Replace, Zero, XOR (Android 13 이상)가 있고, 전체 
 3. Virtual A/B 기기라면 `/metadata/ota` 와 `/data/gsi/ota` 에 스냅샷 흔적이 있는지 보고, 병합 상태는 misc 파티션에 있다는 점을 기억해 둡니다.
 4. 두 슬롯의 빌드가 다르면 현재 슬롯의 빌드를 기준으로 삼고, 다른 슬롯은 업데이트 전후의 비교 자료로 둡니다.
 
-Android 16·One UI 8.5 기기의 설정에는 settings global 의 `ota_disable_automatic_update`, `galaxy_system_update`, `galaxy_system_update_use_wifi_only` 와 settings system 의 `IsFotaUpgrade` 같은 업데이트 관련 키가 있습니다. 이 키들은 슬롯 상태를 알려 주는 값이 아니고, 값의 뜻은 공개된 자료가 없어 검체에서 확인합니다. 설정 값 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
+Android 16·One UI 8.5 기기의 설정에는 settings global 의 `ota_disable_automatic_update`, `galaxy_system_update`, `galaxy_system_update_use_wifi_only` 와 settings system 의 `IsFotaUpgrade` 같은 업데이트 관련 키가 있습니다. 이 키들은 슬롯 상태를 나타내는 값이 아니고, 값의 뜻은 실제 기기에서 확인해야 합니다. 설정 값 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
 
 ## 포렌식에서 중요한 점
 
-`/metadata/ota` 나 `/data/gsi/ota` 에 스냅샷 흔적이 남아 있으면 최근 OTA 가 진행 중이었거나 병합이 끝나지 않았을 가능성이 있습니다. 파일 이름과 시각을 읽는 기준은 공개된 자료가 없어 검체에서 확인합니다. 병합이 끝나지 않은 상태에서 만든 이미지는 원래 파티션만 읽으면 업데이트가 반영되지 않은 내용일 수 있습니다. 두 해석 모두 추정이므로 보고서에는 추정이라고 밝혀 적습니다.
+`/metadata/ota` 나 `/data/gsi/ota` 에 스냅샷 흔적이 남아 있으면 최근 OTA 가 진행 중이었거나 병합이 끝나지 않았을 가능성이 있습니다. 파일 이름과 시각을 읽는 기준은 실제 기기에서 확인해야 합니다. 병합이 끝나지 않은 상태에서 만든 이미지는 원래 파티션만 읽으면 업데이트가 반영되지 않은 내용일 수 있습니다. 두 해석 모두 추정이므로 보고서에는 추정이라고 밝혀 적습니다.
 
 병합 상태가 MERGING 이나 SNAPSHOTTED 인 동안 부트로더가 metadata·userdata 와 병합 상태를 담은 파티션의 지우기 (erase·wipe)를 거부해야 하고, MERGING 상태에서는 현재 슬롯을 바꾸는 명령도 거부합니다[4]. 이 동작은 부트로더 단계의 지우기에 관한 것이라서 설정 메뉴의 초기화까지 막는다고 볼 근거는 없습니다. 초기화 시도와 업데이트 시점이 겹치는 사건에서는 이 동작을 함께 적어 두고, 초기화 흔적 자체는 [초기화 흔적](../../../02-artifacts/system-account/factory-reset.md)에서 확인합니다.
 
@@ -90,13 +90,13 @@ successful 상태는 사용자 공간이 슬롯을 표시한 결과이고 사용
 
 ## 함정
 
-`ro.virtual_ab.enabled` 와 `ro.build.ab_update` 속성은 참고 문헌의 AOSP 문서에 나오지 않는 값이라, A/B 나 Virtual A/B 여부를 판단하는 근거로 쓰지 않습니다. 삼성 기기가 어느 방식을 쓰는지는 공개된 자료가 없어 검체에서 확인합니다.
+`ro.virtual_ab.enabled` 와 `ro.build.ab_update` 속성은 참고 문헌의 AOSP 문서에 나오지 않는 값이라, A/B 나 Virtual A/B 여부를 판단하는 근거로 쓰지 않습니다. 삼성 기기가 어느 방식을 쓰는지는 실제 기기에서 확인해야 합니다.
 
 | 항목 | AOSP 문서 | 삼성 갤럭시 (One UI) |
 |---|---|---|
-| A/B·Virtual A/B·비 A/B 가운데 무엇을 쓰나 | 기기마다 다름 | 검체에서 확인 |
-| Android 16 기기의 슬롯 여부 | — | 검체에서 확인 |
-| 슬롯 접미사 | `_a`·`_b` | 검체에서 확인 |
+| A/B·Virtual A/B·비 A/B 가운데 무엇을 쓰나 | 기기마다 다름 | 실제 기기에서 확인 |
+| Android 16 기기의 슬롯 여부 | — | 실제 기기에서 확인 |
+| 슬롯 접미사 | `_a`·`_b` | 실제 기기에서 확인 |
 
 ## 도구
 

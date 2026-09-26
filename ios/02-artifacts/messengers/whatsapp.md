@@ -25,22 +25,22 @@ nav_order: 850
 
 `CallHistory.sqlite` 는 Apple 기본 통화 기록 DB 와 파일 이름이 같으니, 경로로 어느 쪽인지 구분합니다 [1]. Apple 쪽은 [통화 기록](../communications/call-history.md) 에서 다룹니다.
 
-번들 ID 는 `net.whatsapp.WhatsApp` 입니다 [1]. 앱 그룹 ID 와 로컬 백업의 도메인 이름은 공개된 분석 자료가 없어 검체에서 확인합니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘므로, 왓츠앱 파일이 어느 도메인에 들어갔는지는 백업의 도메인 목록에서 찾습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 왓츠앱 자체의 iCloud 채팅 백업 형식은 공개된 분석 자료가 없습니다.
+번들 ID 는 `net.whatsapp.WhatsApp` 입니다 [1]. 앱 그룹 ID 와 로컬 백업의 도메인 이름은 실제 데이터로 확인해야 합니다. 로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉘므로, 왓츠앱 파일이 어느 도메인에 들어갔는지는 백업의 도메인 목록에서 찾습니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)). 왓츠앱 자체의 iCloud 채팅 백업 형식은 공개된 분석 자료가 없습니다.
 
-iLEAPP 의 시험 표본(iOS 12.4 부터 iOS 18.7.8·왓츠앱 26.14.76 까지)에서는 통화 기록 DB 의 칸과 표가 표본마다 다릅니다 [1].
+iLEAPP 의 시험 표본(iOS 12.4 부터 iOS 18.7.8·왓츠앱 26.14.76 까지)에서는 통화 기록 DB 의 열과 표가 표본마다 다릅니다 [1].
 
 | 표본 | 차이 |
 |---|---|
-| iOS 14.3(왓츠앱 2.21.20) | `ZWACDCALLEVENT.ZGROUPCALLCREATORUSERJIDSTRING` 칸이 없고 `ZWAUPCOMINGCALLEVENT` 표도 없다 [1] |
-| iOS 14.3, iOS 17.1 | `ZCALLIDSTRING` 칸이 없다 [1] |
+| iOS 14.3(왓츠앱 2.21.20) | `ZWACDCALLEVENT.ZGROUPCALLCREATORUSERJIDSTRING` 열이 없고 `ZWAUPCOMINGCALLEVENT` 표도 없다 [1] |
+| iOS 14.3, iOS 17.1 | `ZCALLIDSTRING` 열이 없다 [1] |
 
-이 차이는 표본에서 본 것이라서, 어느 앱 버전부터 칸이 생겼는지까지 알려 주지는 않습니다. 분석할 DB 에서 칸이 있는지 먼저 확인하고 질의를 짭니다.
+이 차이는 표본에서 본 것이라서, 어느 앱 버전부터 열이 생겼는지까지는 알 수 없습니다. 분석할 DB 에서 열이 있는지 먼저 확인하고 질의를 짭니다.
 
 ## 구조
 
-**대화 DB(`ChatStorage.sqlite`).** 주요 표와 칸은 다음과 같습니다 [1].
+**대화 DB(`ChatStorage.sqlite`).** 주요 표와 열은 다음과 같습니다 [1].
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `ZWAMESSAGE` | `ZMESSAGEDATE`, `ZISFROMME`, `ZPARTNERNAME`, `ZFROMJID`, `ZTOJID`, `ZMEDIAITEM`, `ZTEXT`, `ZSTARRED`, `ZMESSAGETYPE`, `ZCHATSESSION` |
 | `ZWAMEDIAITEM` | `ZMESSAGE`, `ZLONGITUDE`, `ZLATITUDE`, `ZMEDIALOCALPATH`, `ZXMPPTHUMBPATH`, `ZMETADATA` |
@@ -50,11 +50,11 @@ iLEAPP 의 시험 표본(iOS 12.4 부터 iOS 18.7.8·왓츠앱 26.14.76 까지)�
 
 `ZMETADATA` 는 프로토콜 버퍼 (Protocol Buffers) 이진 값입니다 [1]. 필드 17 은 전달 횟수, 필드 21 은 전달한 사람 ID 라는 해석이 있지만 공식 근거는 없습니다 [1]. 읽는 법은 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
 
-**연락처 DB(`ContactsV2.sqlite`).** `ZWAADDRESSBOOKCONTACT` 표에 `ZFULLNAME`, `ZABOUTTEXT`, `ZABOUTTIMESTAMP`, `ZPHONENUMBER`, `ZPHONENUMBERLABEL`, `ZWHATSAPPID`, `ZIDENTIFIER` 칸이 있습니다 [1].
+**연락처 DB(`ContactsV2.sqlite`).** `ZWAADDRESSBOOKCONTACT` 표에 `ZFULLNAME`, `ZABOUTTEXT`, `ZABOUTTIMESTAMP`, `ZPHONENUMBER`, `ZPHONENUMBERLABEL`, `ZWHATSAPPID`, `ZIDENTIFIER` 열이 있습니다 [1].
 
 **통화 기록 DB(`CallHistory.sqlite`).** 표 세 개를 이어서 읽습니다 [1].
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `ZWACDCALLEVENT` | `ZDATE`, `ZDURATION`, `ZOUTCOME`, `ZGROUPCALLCREATORUSERJIDSTRING`, `ZBYTESSENT`, `ZBYTESRECEIVED`, `ZCALLIDSTRING`, `ZGROUPJIDSTRING`, `Z1CALLEVENTS` |
 | `ZWACDCALLEVENTPARTICIPANT` | `ZJIDSTRING`, `Z1PARTICIPANTS` |
@@ -74,17 +74,17 @@ iLEAPP 의 시험 표본(iOS 12.4 부터 iOS 18.7.8·왓츠앱 26.14.76 까지)�
 
 ## 함정과 한계
 
-`ZWAAGGREGATECALLEVENT` 는 통화 하나가 아니라 통화 묶음 단위 행입니다 [1]. 여러 통화가 같은 묶음 행을 가리키면 수신·영상·부재중 값은 묶음 전체를 말하므로, 통화 한 건마다 그 값을 그대로 붙이면 틀릴 수 있습니다 [1].
+`ZWAAGGREGATECALLEVENT` 는 통화 하나가 아니라 통화 묶음 단위 행입니다 [1]. 여러 통화가 같은 묶음 행을 가리키면 수신·영상·부재중 값은 묶음 전체에 대한 것이므로, 통화 한 건마다 그 값을 그대로 붙이면 틀릴 수 있습니다 [1].
 
 이름이 같은 `CallHistory.sqlite` 를 섞으면 Apple 통화 기록과 왓츠앱 통화 기록이 한 표에 뒤섞입니다. 경로를 반드시 함께 적습니다 [1].
 
-표본마다 칸이 다르므로 [1], 없는 칸을 부르는 질의는 오류가 납니다. 도구 결과가 비어 있으면 먼저 DB 스키마를 확인합니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
+표본마다 열이 다르므로 [1], 없는 열을 부르는 질의는 오류가 납니다. 도구 결과가 비어 있으면 먼저 DB 스키마를 확인합니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
 
 지운 메시지는 표에서 행이 빠질 수 있어서, SQLite 파일의 빈 공간을 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 방법으로 따로 봅니다. 저장 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에 있습니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 아래는 명세로 만든 예시이고 실제 검체에서 나온 값이 아닙니다. SQLite 는 실수를 8바이트 IEEE 754 빅엔디언으로 저장하므로, 시각 칸에 실수 700,000,000.0 이 들어 있다면 레코드 안에서 다음 바이트로 보입니다.
+**헥스로 한 번.** 아래는 명세로 만든 예시이고 실제 기기에서 나온 값이 아닙니다. SQLite 는 실수를 8바이트 IEEE 754 빅엔디언으로 저장하므로, 시각 열에 실수 700,000,000.0 이 들어 있다면 레코드 안에서 다음 바이트로 보입니다.
 
 ```
 41 C4 DC 93 80 00 00 00
@@ -113,12 +113,12 @@ ORDER BY ZMESSAGEDATE;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 왓츠앱이 설치된 iOS 전체 파일 시스템 이미지를 골라 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등) 가운데 왓츠앱이 설치된 iOS 전체 파일 시스템 이미지를 골라 풀어 봅니다.
 
 1. `ChatStorage.sqlite` 에서 보낸 메시지와 받은 메시지는 각각 몇 건입니까?
 2. `ZMESSAGETYPE` 이 5 인 행의 좌표와 시각을 UTC 로 적어 보십시오.
 3. `ZWAMEDIAITEM.ZMEDIALOCALPATH` 가 가리키는 파일 가운데 `Message/Media/` 아래에 실제로 없는 것이 있습니까?
-4. 통화 기록 DB 에 어떤 표와 칸이 있는지 확인하고, 위 버전 차이 표와 비교해 보십시오.
+4. 통화 기록 DB 에 어떤 표와 열이 있는지 확인하고, 위 버전 차이 표와 비교해 보십시오.
 5. 가장 긴 통화의 시작 시각과 계산한 종료 시각을 적어 보십시오.
 
 ## 참고 문헌

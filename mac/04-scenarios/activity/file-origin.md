@@ -8,7 +8,7 @@ nav_order: 2310
 
 ## 조사 질문
 
-이 맥에 있는 파일이 어디서 들어왔는지 묻습니다. 웹에서 받았는지, 메일·메시지 첨부였는지, 에어드롭으로 받았는지, 외장·네트워크 볼륨에서 가져왔는지를 가리고, 웹에서 받았다면 어느 URL 에서 어떤 앱으로 언제 받았는지까지 좁힙니다. 침해 사고에서는 악성 파일이 들어온 경로를, 유출·반입 조사에서는 문서가 외부에서 들어왔는지를 확인하는 데 씁니다.
+이 맥에 있는 파일이 어디서 들어왔는지 묻습니다. 웹에서 받았는지, 메일·메시지 첨부였는지, 에어드롭으로 받았는지, 외장·네트워크 볼륨에서 가져왔는지를 가려내고, 웹에서 받았다면 어느 URL 에서 어떤 앱으로 언제 받았는지까지 좁힙니다. 침해 사고에서는 악성 파일이 들어온 경로를, 유출·반입 조사에서는 문서가 외부에서 들어왔는지를 확인하는 데 씁니다.
 
 인터넷에서 받은 파일에는 격리 속성 (quarantine)이 붙고, 사용자별 격리 이벤트 DB에도 같은 사건이 적힙니다. 브라우저는 여기에 더해 파일에 출처 URL 속성을 붙이고 자기 다운로드 기록을 따로 남깁니다. 그래서 파일 자체의 확장 속성, 격리 이벤트 DB, 브라우저 다운로드 기록 세 곳을 서로 이어 보는 방식으로 조사합니다. 각 기록의 구조는 아티팩트 페이지에서 다루고, 이 페이지는 이어 보는 순서와 판단만 다룹니다.
 
@@ -43,11 +43,11 @@ OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-v
 | 10 | 앱 번들의 `com.apple.provenance` 와 ExecPolicy | 앱이 들어온 기록 | [실행 정책 평가 기록](../../02-artifacts/execution/execpolicy-gatekeeper.md) |
 | 11 | 스포트라이트 색인 `.Spotlight-V100/Store-V2/` | 색인에 남은 `kMDItemWhereFroms` 등 속성 | [스포트라이트](../../02-artifacts/file-folder-usage/spotlight/index.md) |
 
-1~3번은 파일과 붙어 다니는 기록이라 먼저 보고, 4~6번은 받은 앱이 정해진 뒤 그 브라우저에서 찾습니다. 파일에 속성이 없으면 7~11번으로 넘어갑니다. 메시지 첨부는 `chat.db` 의 `attachment` 표 `filename`·`transfer_name` 칸과 함께 봅니다 [17]. 스포트라이트 색인에 지운 파일의 레코드가 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+1~3번은 파일과 붙어 다니는 기록이라 먼저 보고, 4~6번은 받은 앱이 정해진 뒤 그 브라우저에서 찾습니다. 파일에 속성이 없으면 7~11번으로 넘어갑니다. 메시지 첨부는 `chat.db` 의 `attachment` 표 `filename`·`transfer_name` 열과 함께 봅니다 [17]. 스포트라이트 색인에 지운 파일의 레코드가 남는지는 실제 데이터로 확인해야 합니다.
 
 ### 격리 기록을 이어 읽기
 
-격리 속성의 마지막 칸 UUID 는 격리 이벤트 DB의 `LSQuarantineEventIdentifier` 와 같은 값이라서, 파일과 DB 행을 잇는 열쇠가 됩니다 [1][3]. 플래그 비트는 0x0001 DOWNLOAD, 0x0002 SANDBOX, 0x0004 HARD, 0x0040 USER_APPROVED 이고, 0x0080 의 뜻은 알려져 있지 않습니다 [4]. 격리 종류는 WebDownload, OtherDownload, EmailAttachment, InstantMessageAttachment, CalendarEventAttachment, OtherAttachment 상수로 나뉘지만 DB의 `LSQuarantineTypeNumber` 숫자와 어떻게 대응하는지는 공개된 자료가 없어 검체에서 확인합니다 [14].
+격리 속성의 마지막 필드 UUID 는 격리 이벤트 DB의 `LSQuarantineEventIdentifier` 와 같은 값이라서, 파일과 DB 행을 잇는 열쇠가 됩니다 [1][3]. 플래그 비트는 0x0001 DOWNLOAD, 0x0002 SANDBOX, 0x0004 HARD, 0x0040 USER_APPROVED 이고, 0x0080 의 뜻은 알려져 있지 않습니다 [4]. 격리 종류는 WebDownload, OtherDownload, EmailAttachment, InstantMessageAttachment, CalendarEventAttachment, OtherAttachment 상수로 나뉘지만 DB의 `LSQuarantineTypeNumber` 숫자와 어떻게 대응하는지는 실제 데이터로 확인합니다 [14].
 
 크롬은 격리 속성의 DataURL 에 원본 URL 을, OriginURL 에 referrer 를 넣고, `kMDItemWhereFroms` 를 먼저 쓴 뒤 격리 속성을 씁니다. URL 이 http·https 면 WebDownload, 아니면 OtherDownload 로 적습니다 [8]. 압축 파일을 풀면 안에서 나온 파일에도 격리 속성이 이어져서 [1], 압축 파일과 풀린 파일을 같은 다운로드 사건으로 묶어 봅니다.
 
@@ -71,7 +71,7 @@ OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-v
 
 - **속성이 없으면 인터넷에서 받지 않았다고 보는 경우.** 크롬에서 시크릿 모드로 받은 파일은 URL 이 비어 있을 수 있고 크롬은 빈 URL 을 넣지 않아서, `kMDItemWhereFroms` 가 비거나 없을 수 있습니다 [8]. 공유 의도로 복사하거나 NFS 를 거친 파일도 속성이 빠질 수 있고 [9][11], 로컬에서 빌드해 ad hoc 서명한 앱은 처음부터 격리되지 않습니다 [6].
 - **명령줄 도구로 받은 파일에는 격리 속성이 없다고 단정하는 경우.** curl·scp 같은 도구로 받은 파일에 격리 속성이 붙는지는 공개된 분석 자료가 없어서, 테스트 기기에서 재현하기 전에는 근거로 쓰지 않습니다([도구 검증](../../03-techniques/reporting/tool-validation.md)).
-- **브라우저 기록을 지웠으니 다운로드 흔적이 없다고 보는 경우.** 사파리 "기록 지우기"는 다운로드 목록을 지우지만 받은 파일은 남기고, 개인 정보 보호 창에서 받은 파일도 목록에는 없지만 파일은 남습니다 [15][16]. 격리 이벤트 DB 행이 파일 삭제나 브라우저 기록 삭제 때 함께 지워지는지는 공개된 자료가 없어 검체로 확인해야 합니다.
+- **브라우저 기록을 지웠으니 다운로드 흔적이 없다고 보는 경우.** 사파리 "기록 지우기"는 다운로드 목록을 지우지만 받은 파일은 남기고, 개인 정보 보호 창에서 받은 파일도 목록에는 없지만 파일은 남습니다 [15][16]. 격리 이벤트 DB 행이 파일 삭제나 브라우저 기록 삭제 때 함께 지워지는지는 실제 데이터로 확인해야 합니다.
 - **DataURL 과 OriginURL 을 바꿔 읽는 경우.** 크롬 기준으로 DataURL 이 파일을 실제로 받은 주소이고 OriginURL 은 그 링크가 있던 페이지입니다 [8].
 - **풀린 파일을 따로 받은 파일로 세는 경우.** 압축을 풀면 격리 속성이 이어져서 [1], 풀린 파일의 격리 속성은 원래 압축 파일의 다운로드 사건을 가리킬 수 있습니다.
 

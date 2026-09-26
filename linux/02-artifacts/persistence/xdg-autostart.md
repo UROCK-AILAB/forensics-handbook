@@ -29,7 +29,7 @@ nav_order: 580
 
 UAC 는 표준 두 곳 말고도 `/usr/share/autostart`, `~/.local/share/autostart`, 그리고 KDE 가 쓰는 비표준 디렉터리 `~/.config/autostart-scripts` 를 함께 모읍니다[4]. ForensicArtifacts 의 `XDGAutostartEntries` 는 `/etc/xdg/autostart/*.desktop` 과 `~/.config/autostart/*.desktop` 두 곳만 정의합니다[5]. UAC 의 `desktop.yaml` 은 사용자 홈 아래 깊이 6까지의 `*.desktop` 파일을 모두 모으므로, 자동 실행 디렉터리 밖에 놓인 `.desktop` 파일도 함께 볼 수 있습니다[4].
 
-배포판별로 볼 것은 systemd 가 자동 실행을 맡을 수 있는 판인지입니다. `systemd-xdg-autostart-generator` 는 systemd 246 에 들어갔고[9], Ubuntu 24.04 의 systemd 는 255[12], RHEL 9 의 systemd 는 252 입니다[13]. 실제로 쓰는지는 검체에서 `/usr/lib/systemd/user-generators/systemd-xdg-autostart-generator` 가 있는지[6], 데스크톱 환경이 `xdg-desktop-autostart.target` 을 시작하는지로 확인합니다.
+배포판별로 볼 것은 systemd 가 자동 실행을 맡을 수 있는 판인지입니다. `systemd-xdg-autostart-generator` 는 systemd 246 에 들어갔고[9], Ubuntu 24.04 의 systemd 는 255[12], RHEL 9 의 systemd 는 252 입니다[13]. 실제로 쓰는지는 실제 시스템에서 `/usr/lib/systemd/user-generators/systemd-xdg-autostart-generator` 가 있는지[6], 데스크톱 환경이 `xdg-desktop-autostart.target` 을 시작하는지로 확인합니다.
 
 ## 구조
 
@@ -75,7 +75,7 @@ OnlyShowIn=GNOME;
 
 `X-GNOME-Autostart-Phase=` 는 출처끼리 설명이 다릅니다. man 페이지는 값이 있으면 유닛을 만들지 않는다고 적었고[6], 소스는 `NotShowIn` 에 `GNOME` 을 더해 유닛을 만들고 `OnlyShowIn` 이 GNOME 하나뿐일 때만 건너뜁니다[7].
 
-만든 유닛 파일은 `$XDG_RUNTIME_DIR/systemd/` 아래 생성기 디렉터리에 놓입니다[8]. 이 디렉터리는 실행 중에만 있는 런타임 디렉터리라서[8] 디스크 이미지에는 남지 않을 가능성이 높고, 사후 분석에서는 `.desktop` 원본과 저널 기록으로 되짚습니다.
+만든 유닛 파일은 `$XDG_RUNTIME_DIR/systemd/` 아래 생성기 디렉터리에 놓입니다[8]. 이 디렉터리는 실행 중에만 있는 런타임 디렉터리라서[8] 디스크 이미지에는 남지 않을 가능성이 높고, 사후 분석에서는 `.desktop` 원본과 저널 기록으로 거슬러 올라가 확인합니다.
 
 ## 증거로서 의미
 
@@ -131,7 +131,7 @@ journalctl --directory=/mnt/img/var/log/journal \
   USER_UNIT=app-updater@autostart.service + _SYSTEMD_USER_UNIT=app-updater@autostart.service
 ```
 
-위 유닛 이름은 `updater.desktop` 에서 만든 예시입니다. 파일 이름의 일부 문자는 유닛 이름 규칙에 따라 다른 표기로 바뀔 수 있으므로[7], 검체의 저널에서 실제 이름을 확인합니다.
+위 유닛 이름은 `updater.desktop` 에서 만든 예시입니다. 파일 이름의 일부 문자는 유닛 이름 규칙에 따라 다른 표기로 바뀔 수 있으므로[7], 저널에서 실제 이름을 확인합니다.
 
 ## 교차 검증
 
@@ -145,11 +145,11 @@ journalctl --directory=/mnt/img/var/log/journal \
 | [셸 시작 파일](shell-startup.md) | 터미널·SSH 로그인 때 실행되는 지속성 |
 | [셸 명령 기록](../execution/shell-history/index.md) | `.desktop` 파일을 만들거나 고친 명령 |
 
-여러 지속성 자리를 한꺼번에 훑는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에 있고, 파일 시각과 저널을 한 줄로 늘어놓는 방법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 를 봅니다.
+여러 지속성 자리를 한꺼번에 살펴보는 순서는 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 에 있고, 파일 시각과 저널을 한 줄로 늘어놓는 방법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 를 봅니다.
 
 ## 실습
 
-NIST CFReDS 등에 공개된 Linux 데스크톱 검체로 아래 질문을 풀어 봅니다.
+NIST CFReDS 등에 공개된 Linux 데스크톱 디스크 이미지로 아래 질문을 풀어 봅니다.
 
 1. 사용자마다 `~/.config/autostart/` 에 어떤 파일이 있고, 각 파일의 `Exec` 는 어디를 가리키나?
 2. `/etc/xdg/autostart/` 와 같은 이름을 쓰는 사용자 파일이 있나? 있다면 `Hidden=true` 로 끈 것인가, `Exec` 를 바꾼 것인가?

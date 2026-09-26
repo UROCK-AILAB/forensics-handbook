@@ -28,7 +28,7 @@ HKCU\Software\Microsoft\Terminal Server Client\Servers\<대상 호스트>
 
 - 오프라인 이미지에서는 사용자 프로필의 NTUSER.DAT 에서 `Software\Microsoft\Terminal Server Client\Default` 와 `Software\Microsoft\Terminal Server Client\Servers` 를 읽습니다.
 - Mac 용 원격 데스크톱 연결은 레지스트리가 아니라 `Users:Username:Library:Preferences:Microsoft:RDC Client:Recent Servers` 파일에 목록을 둡니다.
-- 윈도 버전별 차이는 공개 자료가 없어 검체에서 확인합니다.
+- 윈도 버전별 차이는 실제 데이터로 확인해야 합니다.
 
 원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 에는 `HKCU\Software\Microsoft\Terminal Server Client` 키가 없지만, `HKLM\SOFTWARE\Microsoft\Terminal Server Client` 에는 `Default`, `IME Mapping Table`, `TrustedGateways` 하위 키가 있습니다. 그래서 HKLM 쪽 키가 있다는 사실만으로는 이 도구를 썼다고 볼 수 없습니다.
 
@@ -44,7 +44,7 @@ HKCU\Software\Microsoft\Terminal Server Client\Servers\<대상 호스트>
 - 값에는 FQDN 이나 IP 주소가 들어갑니다. 예: `MRU0` = `192.168.16.60`, `MRU1` = `computer.domain.com`[1].
 - 새로 접속하면 그 대상이 `MRU0` 이 되고, 기존 값은 번호가 하나씩 뒤로 밀립니다.
 - MRU 가 최대 몇 개까지 남는지는 공개 자료가 없습니다.
-- 대상을 `호스트:포트` 로 입력했을 때 그대로 저장되는지는 검체에서 확인합니다.
+- 대상을 `호스트:포트` 로 입력했을 때 그대로 저장되는지는 실제 데이터로 확인합니다.
 
 ### Servers\<대상 호스트> 키
 
@@ -95,7 +95,7 @@ MRU 값은 호스트 문자열뿐이라 시각이 없습니다. 공개 도구 Re
 
 ### 헥스로 한 번
 
-아래 바이트는 예시로 만든 값입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+아래 바이트는 예시로 만든 값입니다. 실제 기기에서 꺼낸 값이 아닙니다.
 
 **MRU0 값 데이터 (대상 `10.0.0.5` 로 만든 예시).**
 
@@ -117,7 +117,7 @@ MRU 값은 호스트 문자열뿐이라 시각이 없습니다. 공개 도구 Re
 | `MRU1` | `server1` | `server2` |
 | `MRU2` | — | `server1` |
 
-- 이미 목록에 있는 대상에 다시 접속할 때 순서가 어떻게 바뀌는지는 공개 자료가 없어 검체에서 확인합니다.
+- 이미 목록에 있는 대상에 다시 접속할 때 순서가 어떻게 바뀌는지는 실제 데이터로 확인해야 합니다.
 
 ### 공개 도구로 한 번
 
@@ -138,15 +138,15 @@ mstsc 를 쓰면 아래 흔적이 함께 남습니다[3].
 | 프리페치 | `C:\Windows\Prefetch\MSTSC.EXE-<해시>.pf` | mstsc 실행 횟수와 시각 | [프리페치](../execution/prefetch/index.md) |
 | 출발 쪽 이벤트 로그 | Security 로그 4648, RDPClient/Operational 로그 | 출발 PC 쪽 접속 기록 | [원격 데스크톱 이벤트](../event-logs/rdp-event-logs/index.md) |
 
-- `Default.rdp` 의 숨김 속성은 검체에서 확인합니다.
-- mstsc 의 [점프리스트](../file-folder-usage/jump-lists.md) 에 접속 대상이 남는지는 검체에서 확인합니다.
+- `Default.rdp` 의 숨김 속성은 실제 데이터로 확인합니다.
+- mstsc 의 [점프리스트](../file-folder-usage/jump-lists.md) 에 접속 대상이 남는지는 실제 데이터로 확인합니다.
 - 원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 에는 `Documents\Default.rdp` 와 `Cache` 폴더가 없습니다.
 
 전체 흐름은 [원격 데스크톱 침입 확인](../../04-scenarios/incident/rdp-intrusion.md) 과 [계정 탈취와 측면 이동](../../04-scenarios/incident/credential-theft-lateral-movement/index.md) 에 있습니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 사용자 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
+공개 데이터셋(NIST CFReDS 등)에서 사용자 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `Terminal Server Client\Default` 키가 있습니까? MRU 값은 몇 개입니까?
 2. `MRU0` 의 대상은 무엇입니까? FQDN 입니까, IP 주소입니까?

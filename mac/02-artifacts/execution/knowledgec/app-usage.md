@@ -15,9 +15,9 @@ knowledgeC.db의 `/app/inFocus` 와 `/app/usage` 스트림은 어느 GUI 앱이 
 
 `/app/usage` 는 시작·끝·번들 ID·사용 시간을 담고, `ZSOURCE.ZDEVICEID` 와 ZCUSTOMMETADATA 표의 이름·값을 함께 이어 읽을 수 있습니다 [3]. `/app/inFocus` 와 무엇을 기준으로 구간을 다르게 끊는지는 공개 자료가 없으므로, 두 스트림이 모두 있으면 같은 시간대를 나란히 놓고 비교해 봅니다.
 
-`/app/activity` 는 앱 안에서 무엇을 했는지를 남기고, ZSTRUCTUREDMETADATA 표의 활동 종류(`…ACTIVITYTYPE`)와 제목(`…TITLE`) 칸에 보고 있던 항목이나 편집하던 항목이 들어갑니다 [1]. `/safari/history` 는 `ZVALUESTRING` 에 URL을 남깁니다 [1].
+`/app/activity` 는 앱 안에서 무엇을 했는지를 남기고, ZSTRUCTUREDMETADATA 표의 활동 종류(`…ACTIVITYTYPE`)와 제목(`…TITLE`) 열에 보고 있던 항목이나 편집하던 항목이 들어갑니다 [1]. `/safari/history` 는 `ZVALUESTRING` 에 URL을 남깁니다 [1].
 
-표와 칸의 전체 구조, 칸 이름의 원래 모양은 [표와 스트림 구조 (ZOBJECT·Stream)](structure.md)에 있습니다.
+표와 열의 전체 구조, 열 이름의 원래 모양은 [표와 스트림 구조 (ZOBJECT·Stream)](structure.md)에 있습니다.
 
 ## 버전별 차이
 
@@ -28,7 +28,7 @@ knowledgeC.db의 `/app/inFocus` 와 `/app/usage` 스트림은 어느 GUI 앱이 
 | `/app/activity` | 10.13 블로그 목록 | [1] |
 | `/safari/history` | 10.13 블로그 목록 | [1] |
 
-APOLLO 목록은 iOS 번호와 macOS 번호를 섞어 쓰고 macOS 쪽은 10.16까지만 적혀 있습니다. 목록을 읽는 법은 [표와 스트림 구조](structure.md)에서 설명하고, 그 뒤 버전은 검체에서 `ZSTREAMNAME` 목록을 뽑아 직접 확인합니다.
+APOLLO 목록은 iOS 번호와 macOS 번호를 섞어 쓰고 macOS 쪽은 10.16까지만 적혀 있습니다. 목록을 읽는 법은 [표와 스트림 구조](structure.md)에서 설명하고, 그 뒤 버전은 실제 데이터에서 `ZSTREAMNAME` 목록을 뽑아 직접 확인합니다.
 
 ## 증거로서 의미
 
@@ -38,9 +38,9 @@ APOLLO 목록은 iOS 번호와 macOS 번호를 섞어 쓰고 macOS 쪽은 10.16�
 
 ### 증명하지 못하는 것
 
-기록은 GUI 앱만 남아서 터미널은 번들 ID로만 보이고 어떤 명령을 쳤는지는 남지 않으며, 백그라운드 프로세스가 실행됐는지도 여기서는 알 수 없습니다 [1]. 앱이 앞에 있었다는 기록이 사람이 화면 앞에 있었다는 뜻은 아니라서, 사람이 있었는지는 [화면·잠금 상태 (Display·Device Lock)](device-state.md)와 다른 기록을 함께 보고 판단합니다. 누가 그 계정으로 앱을 썼는지도 이 기록만으로는 가리지 못합니다.
+기록은 GUI 앱만 남아서 터미널은 번들 ID로만 보이고 어떤 명령을 쳤는지는 남지 않으며, 백그라운드 프로세스가 실행됐는지도 여기서는 알 수 없습니다 [1]. 앱이 앞에 있었다는 기록이 사람이 화면 앞에 있었다는 뜻은 아니라서, 사람이 있었는지는 [화면·잠금 상태 (Display·Device Lock)](device-state.md)와 다른 기록을 함께 보고 판단합니다. 누가 그 계정으로 앱을 썼는지도 이 기록만으로는 가려내지 못합니다.
 
-보고서에는 "사용자가 이 앱으로 작업했다" 대신 "2020-01-06 10:40:00부터 10:52:30(UTC)까지 이 번들 ID의 앱이 앞에 나와 있던 구간이 `/app/inFocus` 에 기록되어 있다" 처럼 기록이 말하는 만큼만 씁니다(시각은 설명용 예시).
+보고서에는 "사용자가 이 앱으로 작업했다" 대신 "2020-01-06 10:40:00부터 10:52:30(UTC)까지 이 번들 ID의 앱이 앞에 나와 있던 구간이 `/app/inFocus` 에 기록되어 있다" 처럼 기록으로 확인되는 만큼만 씁니다(시각은 설명용 예시).
 
 ## 시각 해석
 
@@ -48,13 +48,13 @@ APOLLO 목록은 iOS 번호와 macOS 번호를 섞어 쓰고 macOS 쪽은 10.16�
 
 ## 함정과 한계
 
-macOS 10.13에서는 ZOBJECT에 약 4주치 기록이 들어 있었습니다 [1]. 공개된 보관 정책이 없으므로 10.15 이후 버전은 검체에서 확인합니다. 사건이 수집 시점보다 한참 전이라면 기록이 이미 사라졌을 수 있으니, 기록이 없다는 것을 "앱을 쓰지 않았다" 로 읽지 않습니다.
+macOS 10.13에서는 ZOBJECT에 약 4주치 기록이 들어 있었습니다 [1]. 공개된 보관 정책이 없으므로 10.15 이후 버전은 실제 데이터로 확인합니다. 사건이 수집 시점보다 한참 전이라면 기록이 이미 사라졌을 수 있으니, 기록이 없다는 것을 "앱을 쓰지 않았다" 로 읽지 않습니다.
 
-`/app/inFocus` 의 LAUNCHREASON 칸에 어떤 값이 들어가고 무엇을 뜻하는지는 공개 자료가 없으므로, 값을 그대로 옮겨 적되 "이렇게 실행됐다" 는 해석은 붙이지 않습니다. ZCUSTOMMETADATA의 이름·값도 공개된 설명이 없습니다.
+`/app/inFocus` 의 LAUNCHREASON 열에 어떤 값이 들어가고 무엇을 뜻하는지는 공개 자료가 없으므로, 값을 그대로 옮겨 적되 "이렇게 실행됐다" 는 해석은 붙이지 않습니다. ZCUSTOMMETADATA의 이름·값도 공개된 설명이 없습니다.
 
 ## 직접 분석해 보기
 
-DB 사본을 `sqlite3` 같은 공개 도구로 열고, APOLLO `knowledge_app_inFocus` 모듈이 뽑는 칸을 따라 쿼리를 짭니다 [4]. 모듈의 조건은 `ZSTREAMNAME IS "/app/inFocus"` 이고, 아래는 그 모양을 줄인 예시입니다.
+DB 사본을 `sqlite3` 같은 공개 도구로 열고, APOLLO `knowledge_app_inFocus` 모듈이 뽑는 열을 따라 쿼리를 짭니다 [4]. 모듈의 조건은 `ZSTREAMNAME IS "/app/inFocus"` 이고, 아래는 그 모양을 줄인 예시입니다.
 
 ```sql
 SELECT
@@ -86,7 +86,7 @@ ORDER BY ZOBJECT.ZSTARTDATE;
 | [터미널 명령 기록 (zsh_history·bash_sessions)](../shell-history.md) | 터미널이 앞에 있던 구간에 어떤 명령을 쳤는지 |
 | [통합 로그의 프로세스 실행 기록 (Process Events)](../unified-log-process.md) | GUI가 아닌 프로세스의 실행 |
 | [화면 사용 시간 (Screen Time)](../screen-time.md) | 앱 사용 구간을 다른 기록과 맞춰 보기 |
-| [바이옴 (Biome)](../biome/index.md) | 같은 갈래(프로그램 실행 흔적)의 다른 기록 |
+| [바이옴 (Biome)](../biome/index.md) | 같은 분류(프로그램 실행 흔적)의 다른 기록 |
 | [사파리 (Safari)](../../browsers/safari/index.md) | `/safari/history` URL을 사파리 방문 기록과 맞춰 보기 |
 | [설치한 앱과 영수증 (Applications·Receipts)](../../system-account/installed-apps-receipts.md) | 번들 ID가 가리키는 앱 |
 
@@ -94,7 +94,7 @@ ORDER BY ZOBJECT.ZSTARTDATE;
 
 ## 실습
 
-macOS 공개 검체(NIST CFReDS 등)에서 knowledgeC.db를 찾았다면 아래 질문을 풀어 봅니다.
+macOS 공개 시험 자료(NIST CFReDS 등)에서 knowledgeC.db를 찾았다면 아래 질문을 풀어 봅니다.
 
 1. `ZSTREAMNAME` 목록을 뽑았을 때 `/app/inFocus` 와 `/app/usage` 가 둘 다 있는가, 그렇다면 같은 시간대의 구간이 어떻게 다른가?
 2. 사용 시간이 가장 긴 번들 ID 세 개는 무엇이고, 현지 시각으로 바꾸면 주로 어느 시간대에 쓰였는가?

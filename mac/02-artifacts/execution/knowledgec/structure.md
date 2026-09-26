@@ -7,13 +7,13 @@ nav_order: 670
 
 # 표와 스트림 구조 (ZOBJECT·Stream)
 
-knowledgeC.db는 SQLite 데이터베이스이고, 사용 기록 한 건은 ZOBJECT 표의 한 행에 시작·끝 시각과 값으로 들어 있으며 어떤 종류의 기록인지는 `ZSTREAMNAME` 칸의 스트림 이름이 정합니다.
+knowledgeC.db는 SQLite 데이터베이스이고, 사용 기록 한 건은 ZOBJECT 표의 한 행에 시작·끝 시각과 값으로 들어 있으며 어떤 종류의 기록인지는 `ZSTREAMNAME` 열의 스트림 이름이 정합니다.
 
 ## 무엇이 들어 있나
 
 기록의 본체는 ZOBJECT 표이고, 기록이 어디서 왔는지는 ZSOURCE 표에, 앱이 남긴 추가 정보는 ZSTRUCTUREDMETADATA 표에 들어 있습니다 [1]. 한 행은 "어떤 스트림에서, 언제부터 언제까지, 어떤 값이었다" 를 적은 구간이라서, 앱을 쓴 기록이든 화면이 켜져 있던 기록이든 같은 모양으로 읽습니다. 두 DB 파일이 있는 위치는 [KnowledgeC (knowledgeC.db)](index.md) 허브에 정리했고, SQLite 파일 자체를 읽는 법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
-아래 표와 칸 설명은 macOS 10.13과 iOS 11 기준입니다 [1]~[5].
+아래 표와 열 설명은 macOS 10.13과 iOS 11 기준입니다 [1]~[5].
 
 ## 표 관계
 
@@ -31,13 +31,13 @@ ZOBJECT.Z_PK = Z_4EVENT.Z_11EVENT
 Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK
 ```
 
-`Z_4EVENT`, `Z_11EVENT` 처럼 숫자가 붙은 이름이 macOS 버전마다 다를 수 있습니다. 다른 버전의 검체에서 이 쿼리가 오류를 내면 먼저 표 목록에서 비슷한 이름을 찾아 봅니다.
+`Z_4EVENT`, `Z_11EVENT` 처럼 숫자가 붙은 이름이 macOS 버전마다 다를 수 있습니다. 다른 버전의 데이터베이스에서 이 쿼리가 오류를 내면 먼저 표 목록에서 비슷한 이름을 찾아 봅니다.
 
 > 그림 자리: ZOBJECT를 가운데 두고 ZSOURCE·ZSTRUCTUREDMETADATA가 붙고, `/app/usage` 일 때만 Z_4EVENT를 거쳐 ZCUSTOMMETADATA로 이어지는 관계도
 
-## ZOBJECT 주요 칸
+## ZOBJECT 주요 열
 
-| 칸 | 뜻 | 출처 |
+| 열 | 뜻 | 출처 |
 |---|---|---|
 | `ZSTREAMNAME` | 스트림 이름(기록 종류). 예 `/app/inFocus` | [1]~[5] |
 | `ZSTARTDATE` / `ZENDDATE` | 구간의 시작과 끝(맥 절대 시각). 끝에서 시작을 빼면 사용 시간(초) | [1]~[5] |
@@ -48,7 +48,7 @@ Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK
 | `ZCREATIONDATE` | 기록을 DB에 쓴 시각 | [1][2] |
 | `ZUUID` | 기록 UUID | [2]~[5] |
 | `Z_PK` | 행 번호 | [2]~[5] |
-| `ZSTRUCTUREDMETADATA` / `ZSOURCE` | 다른 표로 가는 연결 칸 | [2]~[5] |
+| `ZSTRUCTUREDMETADATA` / `ZSOURCE` | 다른 표로 가는 연결 열 | [2]~[5] |
 
 값이 문자열인 스트림은 `ZVALUESTRING` 을, 켜짐·꺼짐처럼 상태를 적는 스트림은 `ZVALUEINTEGER` 를 읽습니다. 번들 ID (Bundle ID) 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
 
@@ -56,13 +56,13 @@ Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK
 
 ### ZSOURCE
 
-`ZDEVICEID` 는 기기를 가리키는 칸이고, APOLLO는 이 칸에 "DEVICE ID (HARDWARE UUID)" 라는 이름을 붙여 보여 줍니다 [1][2][4]. `ZBUNDLEID` 는 동기화된 데이터를 보낸 앱을 가리킵니다 [1]. ZSOURCE의 OS 빌드 칸에 iOS 버전이 있고 `ZDEVICEID` 에 GUID가 들어 있는 행은 동기화된 iPhone에서 온 기록입니다 [1]. 이처럼 다른 기기에서 동기화한 기록은 그 기기를 가리키는 값을 달고 들어올 수 있습니다(macOS 10.13·iOS 11 기준). 이 Mac 자신의 기록에서 `ZDEVICEID` 가 늘 하드웨어 UUID와 같은지는 알려져 있지 않으므로, 값을 보고서에 쓸 때는 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../../system-account/computer-name-hardware.md)의 하드웨어 UUID와 직접 맞춰 봅니다.
+`ZDEVICEID` 는 기기를 가리키는 열이고, APOLLO는 이 열에 "DEVICE ID (HARDWARE UUID)" 라는 이름을 붙여 보여 줍니다 [1][2][4]. `ZBUNDLEID` 는 동기화된 데이터를 보낸 앱을 가리킵니다 [1]. ZSOURCE의 OS 빌드 열에 iOS 버전이 있고 `ZDEVICEID` 에 GUID가 들어 있는 행은 동기화된 iPhone에서 온 기록입니다 [1]. 이처럼 다른 기기에서 동기화한 기록은 그 기기를 가리키는 값을 달고 들어올 수 있습니다(macOS 10.13·iOS 11 기준). 이 Mac 자신의 기록에서 `ZDEVICEID` 가 늘 하드웨어 UUID와 같은지는 알려져 있지 않으므로, 값을 보고서에 쓸 때는 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../../system-account/computer-name-hardware.md)의 하드웨어 UUID와 직접 맞춰 봅니다.
 
 ### ZSTRUCTUREDMETADATA
 
-스트림마다 쓰는 칸이 다르고, 알려진 칸은 아래와 같습니다.
+스트림마다 쓰는 열이 다르고, 알려진 열은 아래와 같습니다.
 
-| 칸 | 쓰는 스트림 | 출처 |
+| 열 | 쓰는 스트림 | 출처 |
 |---|---|---|
 | `Z_DKAPPLICATIONMETADATAKEY__LAUNCHREASON` | `/app/inFocus` | [3] |
 | `Z_DKAPPLICATIONMETADATAKEY__EXTENSIONCONTAININGBUNDLEIDENTIFIER` | `/app/inFocus` | [3] |
@@ -73,11 +73,11 @@ Z_4EVENT.Z_4CUSTOMMETADATA = ZCUSTOMMETADATA.Z_PK
 
 ### ZCUSTOMMETADATA
 
-`/app/usage` 기록은 이 표의 `ZNAME` 과 `ZDOUBLEVALUE` 칸에 이름과 값을 둡니다 [2]. 어떤 이름과 값이 들어가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+`/app/usage` 기록은 이 표의 `ZNAME` 과 `ZDOUBLEVALUE` 열에 이름과 값을 둡니다 [2]. 어떤 이름과 값이 들어가는지는 실제 데이터로 확인해야 합니다.
 
 ## 스트림 이름
 
-스트림 (Stream)은 기록의 종류이고, `ZSTREAMNAME` 칸에 `/app/inFocus` 같은 경로 모양으로 들어 있습니다. macOS에서 알려진 스트림은 아래와 같습니다.
+스트림 (Stream)은 기록의 종류이고, `ZSTREAMNAME` 열에 `/app/inFocus` 같은 경로 모양으로 들어 있습니다. macOS에서 알려진 스트림은 아래와 같습니다.
 
 | 스트림 | 나오는 버전 | 다루는 페이지 |
 |---|---|---|
@@ -95,21 +95,21 @@ macOS 10.13·iOS 11 기준으로 iOS에만 있던 스트림도 있고(`/app/inst
 
 ### APOLLO 버전 목록 읽는 법
 
-APOLLO 모듈의 `VERSIONS=` 줄은 iOS 번호(11·12·13·14)와 macOS 번호(10.13~10.16)를 한 줄에 섞어 씁니다 [2]~[5]. 목록 끝의 "14" 는 앞의 11·12·13에 이어지는 iOS 14로 읽히고, macOS 14를 뜻한다는 말은 모듈에 없습니다. 그래서 APOLLO로 확인되는 macOS 범위는 목록에 적힌 10.16까지이고, 그 뒤 버전은 검체에서 직접 확인해야 합니다.
+APOLLO 모듈의 `VERSIONS=` 줄은 iOS 번호(11·12·13·14)와 macOS 번호(10.13~10.16)를 한 줄에 섞어 씁니다 [2]~[5]. 목록 끝의 "14" 는 앞의 11·12·13에 이어지는 iOS 14로 읽히고, macOS 14를 뜻한다는 말은 모듈에 없습니다. 그래서 APOLLO로 확인되는 macOS 범위는 목록에 적힌 10.16까지이고, 그 뒤 버전은 실제 데이터로 직접 확인해야 합니다.
 
 ## 시각 해석
 
 `ZSTARTDATE`, `ZENDDATE`, `ZCREATIONDATE` 는 맥 절대 시각 (Mac Absolute Time), 곧 2001-01-01 00:00:00 UTC부터 센 초이고, 유닉스 시각으로 바꾸려면 978307200을 더합니다 [1][2]. 저장된 값은 UTC 기준이고, 기록 당시 현지 시각은 `ZSECONDSFROMGMT` 를 더해 구합니다 [1][2]. 시각 형식을 더 자세히 보려면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
 
-한 행에는 사건 구간의 시작·끝과 DB에 쓴 시각(`ZCREATIONDATE`)이 따로 들어 있으니, 타임라인에 올릴 때는 셋을 섞지 않고 어느 칸에서 온 시각인지 함께 적습니다.
+한 행에는 사건 구간의 시작·끝과 DB에 쓴 시각(`ZCREATIONDATE`)이 따로 들어 있으니, 타임라인에 올릴 때는 셋을 섞지 않고 어느 열에서 온 시각인지 함께 적습니다.
 
 ## 직접 분석해 보기
 
 ### 값 한 개를 손으로 풀어 보기
 
-아래 숫자는 설명하려고 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+아래 숫자는 설명하려고 만든 예시이고, 실제 데이터에서 나온 값이 아닙니다.
 
-| 칸 | 저장 값(예시) | 풀이 |
+| 열 | 저장 값(예시) | 풀이 |
 |---|---|---|
 | `ZSTARTDATE` | 600000000 | 600000000 + 978307200 = 1578307200 → 2020-01-06 10:40:00 UTC |
 | `ZENDDATE` | 600000750 | 2020-01-06 10:52:30 UTC, 사용 시간 750초(12분 30초) |
@@ -119,7 +119,7 @@ APOLLO 모듈의 `VERSIONS=` 줄은 iOS 번호(11·12·13·14)와 macOS 번호(1
 
 ### SQL로 한 번
 
-원본이 아닌 사본에서 `sqlite3` 같은 공개 도구로 열고, APOLLO 모듈과 같은 방식으로 표를 붙입니다. 아래 쿼리는 이 페이지의 칸 이름만으로 짠 예시입니다.
+원본이 아닌 사본에서 `sqlite3` 같은 공개 도구로 열고, APOLLO 모듈과 같은 방식으로 표를 붙입니다. 아래 쿼리는 이 페이지의 열 이름만으로 짠 예시입니다.
 
 ```sql
 SELECT
@@ -142,11 +142,11 @@ LEFT JOIN ZSOURCE
 ORDER BY ZOBJECT.ZSTARTDATE;
 ```
 
-먼저 `SELECT DISTINCT ZSTREAMNAME FROM ZOBJECT;` 로 그 검체에 어떤 스트림이 있는지 본 뒤 `WHERE ZOBJECT.ZSTREAMNAME = '/app/inFocus'` 처럼 좁혀 가면, 버전 차이로 스트림이 없어서 결과가 빈 경우와 기록 자체가 없는 경우를 나눠 볼 수 있습니다. 스트림별로 다듬은 쿼리는 APOLLO 저장소에 `knowledge_` 로 시작하는 모듈 파일로 공개되어 있습니다.
+먼저 `SELECT DISTINCT ZSTREAMNAME FROM ZOBJECT;` 로 그 데이터베이스에 어떤 스트림이 있는지 본 뒤 `WHERE ZOBJECT.ZSTREAMNAME = '/app/inFocus'` 처럼 좁혀 가면, 버전 차이로 스트림이 없어서 결과가 빈 경우와 기록 자체가 없는 경우를 나눠 볼 수 있습니다. 스트림별로 다듬은 쿼리는 APOLLO 저장소에 `knowledge_` 로 시작하는 모듈 파일로 공개되어 있습니다.
 
 ## 함정과 한계
 
-표 구조와 칸 이름이 공개 자료로 알려진 macOS 범위는 10.13부터 10.16까지입니다 [1]~[5]. 그 뒤 버전에서 같은 칸과 연결 표가 그대로 있는지는 검체의 표 목록으로 먼저 확인하고, 숫자 붙은 연결 표(`Z_4EVENT` 등)는 특히 이름이 다를 수 있다고 보고 씁니다.
+표 구조와 열 이름이 공개 자료로 알려진 macOS 범위는 10.13부터 10.16까지입니다 [1]~[5]. 그 뒤 버전에서 같은 열과 연결 표가 그대로 있는지는 실제 데이터베이스의 표 목록으로 먼저 확인하고, 숫자 붙은 연결 표(`Z_4EVENT` 등)는 특히 이름이 다를 수 있다고 보고 씁니다.
 
 `ZDEVICEID` 에 APOLLO가 붙인 "HARDWARE UUID" 라는 이름은 도구의 표시일 뿐이라서 그대로 옮겨 적지 않고, 다른 기록과 맞춰 본 결과만 씁니다. `ZDEVICEID` 가 여러 값으로 나오면 다른 기기에서 동기화한 기록이 섞였을 수 있으니, 이 Mac에서 일어난 일로 쓰기 전에 기기별로 나눠 봅니다. 두 DB 중 한쪽만 보면 어느 쪽에 들어가는지 모르는 스트림을 놓칠 수 있습니다.
 

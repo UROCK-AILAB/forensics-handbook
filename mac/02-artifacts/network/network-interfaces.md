@@ -27,7 +27,7 @@ macOS 의 시스템 구성 (SystemConfiguration) 설정은 네트워크를 인�
 
 `preferences.plist` 는 ForensicArtifacts 에 `MacOSSystemConfigurationPreferencesPlistFile` 로 올라 있습니다 [2]. 함께 네트워크 설정을 담는 `/private/var/run/resolv.conf` 와 `/private/etc/hosts` [1]는 [hosts와 DNS 설정 (hosts·DNS)](hosts-dns.md)에서 다룹니다.
 
-iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConfiguration/` 아래에 있고, iOS 14 의 DHCP 임대 파일에는 `.plist` 확장자가 붙습니다 [1]. macOS 버전에 따라 이 파일들의 키 배치가 달라질 수 있어서, 검체마다 실제 키를 열어 보고 적습니다.
+iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConfiguration/` 아래에 있고, iOS 14 의 DHCP 임대 파일에는 `.plist` 확장자가 붙습니다 [1]. macOS 버전에 따라 이 파일들의 키 배치가 달라질 수 있어서, 기기마다 실제 키를 열어 보고 적습니다.
 
 ## 구조
 
@@ -50,7 +50,7 @@ iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConf
 | `SCNetworkInterfaceType` | | |
 | `SCNetworkInterfaceInfo` | 사전 | 안에 `UserDefinedName` |
 
-비고가 빈 키는 값의 뜻과 가능한 값 목록을 밝힌 공개 자료가 없어서, 검체에서 확인합니다.
+비고가 빈 키는 값의 뜻과 가능한 값 목록이 알려져 있지 않아서, 실제 데이터로 확인합니다.
 
 ### preferences.plist 의 NetworkServices
 
@@ -66,7 +66,7 @@ iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConf
 | `SMB` | `NetBIOSName`, `Workgroup` 등 | [공유 폴더 연결 기록 (SMB·AFP)](network-shares.md) |
 | `PPP`, `Modem` | PPP·모뎀 설정 | VPN 쪽은 [VPN 구성 (VPN)](vpn.md) |
 
-`Interface/DeviceName` 이 `NetworkInterfaces.plist` 의 `BSD Name` 과 같은 값을 쓰는지 맞춰 보면 서비스와 인터페이스를 이을 수 있습니다. 같은 파일에 있는 컴퓨터 이름과 호스트 이름 키는 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../system-account/computer-name-hardware.md)에서 다룹니다. 서비스 묶음을 가리키는 `Sets`, `CurrentSet` 같은 키는 검체에서 확인합니다. mac_apt 는 `VirtualNetworkInterfaces/Bridge` 를 읽지 않아서 [1], 이 값은 도구 결과에 나오지 않습니다.
+`Interface/DeviceName` 이 `NetworkInterfaces.plist` 의 `BSD Name` 과 같은 값을 쓰는지 맞춰 보면 서비스와 인터페이스를 이을 수 있습니다. 같은 파일에 있는 컴퓨터 이름과 호스트 이름 키는 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../system-account/computer-name-hardware.md)에서 다룹니다. 서비스 묶음을 가리키는 `Sets`, `CurrentSet` 같은 키는 실제 기기에서 확인합니다. mac_apt 는 `VirtualNetworkInterfaces/Bridge` 를 읽지 않아서 [1], 이 값은 도구 결과에 나오지 않습니다.
 
 ### DHCP 임대 파일
 
@@ -89,13 +89,13 @@ iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConf
 
 **증명하지 못하는 것.** 새 임대를 받을 때 파일을 덮어쓰는지, 예전 임대가 쌓이는지는 알려지지 않아서 임대 파일을 이 맥의 접속 이력 전체로 읽지 않습니다. 이 파일들은 시스템 전체 설정이라 어느 사용자가 네트워크를 썼는지 알려 주지 않고, 무엇을 주고받았는지도 알려 주지 않습니다. `IOMACAddress` 는 운영체제가 적어 둔 값이고, 특정 시각에 이 맥이 실제로 어떤 MAC 으로 통신했는지는 이 값만으로 단정하지 않습니다. 프록시 설정이 있으면 트래픽을 한곳으로 모으는 설정이 있었다는 기록이지만, 누가 왜 넣었는지는 다른 기록으로 받칩니다.
 
-보고서에는 "`en0` 인터페이스의 DHCP 임대 파일에 이 IP 와 임대 시작 시각, SSID 가 적혀 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "`en0` 인터페이스의 DHCP 임대 파일에 이 IP 와 임대 시작 시각, SSID 가 적혀 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
 `NetworkInterfaces.plist` 와 `preferences.plist` 의 위 키에는 시각 값이 없습니다. 설정이 언제 바뀌었는지는 파일 수정 시각과 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 좁히고, 파일 수정 시각은 마지막으로 바뀐 때만 알려 줄 뿐 어느 키가 그때 바뀌었는지는 알려 주지 않습니다.
 
-DHCP 임대 파일의 `LeaseStartDate` 는 plist 날짜 형식으로 보이고, `LeaseLength` 의 단위는 공개 자료가 없어 검체에서 확인합니다. 값을 읽을 때는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 기준을 맞춰 보고, 도구가 보여 주는 시각이 UTC 인지 현지 시각으로 바꾼 값인지 함께 적습니다.
+DHCP 임대 파일의 `LeaseStartDate` 는 plist 날짜 형식으로 보이고, `LeaseLength` 의 단위는 실제 데이터로 확인해야 합니다. 값을 읽을 때는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 기준을 맞춰 보고, 도구가 보여 주는 시각이 UTC 인지 현지 시각으로 바꾼 값인지 함께 적습니다.
 
 ## 함정과 한계
 
@@ -111,7 +111,7 @@ DHCP 임대 파일의 `LeaseStartDate` 는 plist 날짜 형식으로 보이고, 
 
 ### 헥스로 한 번
 
-`IOMACAddress` 와 `RouterHardwareAddress` 는 바이너리 값이라 [1], 헥스로 보면 바이트가 그대로 나옵니다. 아래는 문서용 예시 MAC 범위의 값으로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+`IOMACAddress` 와 `RouterHardwareAddress` 는 바이너리 값이라 [1], 헥스로 보면 바이트가 그대로 나옵니다. 아래는 문서용 예시 MAC 범위의 값으로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```
 IOMACAddress 바이트:   00 00 5E 00 53 01
@@ -145,7 +145,7 @@ plutil -p "leases/<임대 파일 이름>"
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. `NetworkInterfaces.plist` 의 인터페이스마다 `BSD Name` 과 `IOMACAddress` 를 표로 정리해 보세요.
 2. `NetworkServices` 에서 서비스마다 어느 인터페이스에 붙어 있는지 `Interface/DeviceName` 으로 찾아 1번 표와 이어 보세요.

@@ -11,17 +11,17 @@ nav_order: 510
 
 ## 무엇을 기록하나 · 왜 생기나
 
-이 페이지는 두 질문을 다룹니다. 하나는 그 계정이 관리자 그룹에 속했는가이고, 다른 하나는 그 계정이 볼륨 소유자로서 보안 토큰 (Secure Token) 을 받았는가입니다. 두 번째 질문은 보안 토큰 기록으로 답할 수 있지만 [2], 첫 번째 질문에 쓸 그룹 기록의 경로와 멤버 키는 공개된 분석 자료가 없어 검체에서 확인해야 합니다. mac_apt 의 `macinfo.py` 도 계정 plist 만 읽고 그룹 plist 는 읽지 않습니다 [1].
+이 페이지는 두 질문을 다룹니다. 하나는 그 계정이 관리자 그룹에 속했는가이고, 다른 하나는 그 계정이 볼륨 소유자로서 보안 토큰 (Secure Token) 을 받았는가입니다. 두 번째 질문은 보안 토큰 기록으로 답할 수 있지만 [2], 첫 번째 질문에 쓸 그룹 기록의 경로와 멤버 키는 실제 데이터로 확인해야 합니다. mac_apt 의 `macinfo.py` 도 계정 plist 만 읽고 그룹 plist 는 읽지 않습니다 [1].
 
-그룹 plist 의 경로, 멤버 목록 키, admin·staff 그룹의 GID 같은 구체값은 검체에서 확인하고, 확인한 macOS 버전과 함께 보고서에 적습니다.
+그룹 plist 의 경로, 멤버 목록 키, admin·staff 그룹의 GID 같은 구체값은 실제 데이터로 확인하고, 확인한 macOS 버전과 함께 보고서에 적습니다.
 
 ## 위치와 확인 범위
 
 | 알고 싶은 것 | 볼 곳 | 공개 자료 범위 |
 |---|---|---|
-| 볼륨 소유자·보안 토큰 여부 | 계정의 `AuthenticationAuthority` 속성 ([계정 plist 구조 (dslocal)](dslocal-plist.md)), 켜진 시스템에서는 `diskutil apfs listUsers /` 출력 [2] | 보안 토큰을 막는 `;DisabledTags;SecureToken` 만 공개 [2], 토큰이 있을 때의 값과 plist 키 이름은 검체에서 확인 |
-| 관리자 그룹 소속 | 로컬 그룹 기록 | 경로·키는 검체에서 확인 [1] |
-| 부트스트랩 토큰 사용 여부 | MDM 등록 상태 ([구성 프로파일 (Configuration Profiles·MDM)](../../persistence/configuration-profiles.md)) | 동작은 공개 [2], 저장 위치는 검체에서 확인 |
+| 볼륨 소유자·보안 토큰 여부 | 계정의 `AuthenticationAuthority` 속성 ([계정 plist 구조 (dslocal)](dslocal-plist.md)), 켜진 시스템에서는 `diskutil apfs listUsers /` 출력 [2] | 보안 토큰을 막는 `;DisabledTags;SecureToken` 만 공개 [2], 토큰이 있을 때의 값과 plist 키 이름은 실제 데이터로 확인 |
+| 관리자 그룹 소속 | 로컬 그룹 기록 | 경로·키는 실제 데이터로 확인 [1] |
+| 부트스트랩 토큰 사용 여부 | MDM 등록 상태 ([구성 프로파일 (Configuration Profiles·MDM)](../../persistence/configuration-profiles.md)) | 동작은 공개 [2], 저장 위치는 실제 데이터로 확인 |
 
 계정 plist 에는 `gid` 가 있지만 [1], 이 값으로 관리자 여부를 알 수 있다는 근거는 없습니다. `gid` 하나로 관리자라고 판단하지 않습니다.
 
@@ -63,11 +63,11 @@ Apple silicon Mac 에서는 처음 설정한 사용자가 보안 토큰을 받�
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 자료(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. 로컬 계정마다 `AuthenticationAuthority` 값을 표로 적고, `;DisabledTags;SecureToken` 이 있는 계정을 표시해 보세요.
 2. 보안 토큰이 있는 계정 가운데 가장 먼저 만든 계정을 `creationTime` 으로 찾아 보세요.
-3. 검체의 그룹 기록을 찾아 관리자 그룹 멤버를 확인하고, 1번 표와 겹치지 않는 계정이 있는지 비교해 보세요. 찾은 경로와 macOS 버전도 함께 적습니다.
+3. 이미지의 그룹 기록을 찾아 관리자 그룹 멤버를 확인하고, 1번 표와 겹치지 않는 계정이 있는지 비교해 보세요. 찾은 경로와 macOS 버전도 함께 적습니다.
 
 ## 참고 문헌
 

@@ -124,7 +124,7 @@ Git 이벤트는 따로 날짜 범위를 골라 Export Git Events 로 받고, gz
 - `api.request` 는 API Request Events 를 켜고 스트리밍한 경우에만 있고, 켜도 보안과 관련된 끝점 요청만 들어갑니다[11][12].
 - 계정 이름은 계정을 가리킬 뿐 키보드 앞의 사람을 가리키지 않습니다. 토큰이 새었으면 다른 사람이 같은 `actor` 로 기록됩니다.
 
-보고서에는 "직원이 코드를 가져갔다" 가 아니라 "2026-09-01 02:20 UTC 에 계정 example-user 로 저장소 example-org/example-repo 에 대해 `git.clone` 이 기록되어 있고, `hashed_token` 은 자격 증명 목록의 토큰 하나와 같다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "직원이 코드를 가져갔다" 가 아니라 "2026-09-01 02:20 UTC 에 계정 example-user 로 저장소 example-org/example-repo 에 대해 `git.clone` 이 기록되어 있고, `hashed_token` 은 자격 증명 목록의 토큰 하나와 같다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
@@ -166,7 +166,7 @@ echo -n TOKEN | openssl dgst -sha256 -binary | base64
 
 1. 조직 끝점은 조직 소유자만 부를 수 있고, 클래식 개인 액세스 토큰·OAuth 토큰은 `read:audit_log` 범위가 있어야 합니다[15].
 2. `phrase` 에 `created:2026-08-01..2026-09-01` 처럼 기간을 넣고, Git 이벤트까지 받으려면 `include=all` 을 붙이고, `per_page=100` 으로 한 번에 최대 100건씩 받습니다[7][15].
-3. 응답의 `Link` 헤더에 있는 `after` 커서로 다음 쪽을 이어 받습니다[7].
+3. 응답의 `Link` 헤더에 있는 `after` 커서로 다음 페이지를 이어 받습니다[7].
 4. 끝점마다 사용자·IP 조합당 시간당 1,750회 제한이 있으므로, 403·429 응답이 오면 잠시 기다렸다가 다시 부릅니다[7].
 
 ```bash
@@ -175,7 +175,7 @@ curl -H "Accept: application/vnd.github+json" \
      "https://api.github.com/orgs/example-org/audit-log?phrase=created:2026-08-01..2026-09-01&include=all&per_page=100"
 ```
 
-**탐지 규칙으로 훑기.** SigmaHQ 에는 `product: github`, `service: audit` 로그용 규칙 15개가 있고, 모두 `action` 값 하나로 거르며, 그 가운데 13개는 감사 로그 스트리밍으로 받은 로그를 요건으로 둡니다[17]. 예를 들어 삭제 규칙은 `codespaces.destroy`, `environment.delete`, `project.delete`, `repo.destroy` 를, 이전 규칙은 `migration.create`, `org.transfer_outgoing`, `org.transfer`, `repo.transfer_outgoing` 을, 새 비밀 규칙은 `codespaces.create_an_org_secret`, `environment.create_actions_secret`, `org.create_actions_secret`, `repo.create_actions_secret` 을 찾습니다[17]. 그 밖에 고위험 설정 끄기, 새 조직 구성원, 외부 협력자, 비밀 푸시 차단 우회·끄기, 자체 호스팅 러너 변경, 비공개 저장소 포크 허용, SSH 인증서 설정 변경, Pages 공개 전환, 저장소 보관 상태 변경, 비밀 스캔 기능 끄기, 오래된 의존성·취약점 알림 끄기 규칙이 있습니다[17]. 규칙을 로그에 돌리는 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
+**탐지 규칙으로 찾기.** SigmaHQ 에는 `product: github`, `service: audit` 로그용 규칙 15개가 있고, 모두 `action` 값 하나로 거르며, 그 가운데 13개는 감사 로그 스트리밍으로 받은 로그를 요건으로 둡니다[17]. 예를 들어 삭제 규칙은 `codespaces.destroy`, `environment.delete`, `project.delete`, `repo.destroy` 를, 이전 규칙은 `migration.create`, `org.transfer_outgoing`, `org.transfer`, `repo.transfer_outgoing` 을, 새 비밀 규칙은 `codespaces.create_an_org_secret`, `environment.create_actions_secret`, `org.create_actions_secret`, `repo.create_actions_secret` 을 찾습니다[17]. 그 밖에 고위험 설정 끄기, 새 조직 구성원, 외부 협력자, 비밀 푸시 차단 우회·끄기, 자체 호스팅 러너 변경, 비공개 저장소 포크 허용, SSH 인증서 설정 변경, Pages 공개 전환, 저장소 보관 상태 변경, 비밀 스캔 기능 끄기, 오래된 의존성·취약점 알림 끄기 규칙이 있습니다[17]. 규칙을 로그에 돌리는 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
 
 ## 교차 검증
 
@@ -191,7 +191,7 @@ curl -H "Accept: application/vnd.github+json" \
 
 ## 실습
 
-아래 질문은 이 쪽의 만든 예시 레코드와 시험용 GitHub 조직으로 풀어 봅니다.
+아래 질문은 이 페이지의 만든 예시 레코드와 시험용 GitHub 조직으로 풀어 봅니다.
 
 1. 위 예시 레코드의 `created_at` 을 한국 시각으로 바꾸면 몇 시입니까?
 2. 시험 조직에서 비공개 저장소를 복제한 뒤 조직 감사 로그 화면에서 `action:git.clone` 으로 검색하면 무엇이 나옵니까? 같은 이벤트를 REST 로 받으려면 인자를 어떻게 줍니까?

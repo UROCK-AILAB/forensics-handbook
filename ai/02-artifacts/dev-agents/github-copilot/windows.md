@@ -9,7 +9,7 @@ nav_order: 610
 
 Windows 에서 GitHub Copilot 대화는 쓰는 도구마다 다른 자리에 남습니다. VS Code 는 작업 폴더마다 세션 파일(`.json`·`.jsonl`)을 쓰고 세션 목록은 저장소 키에 따로 두며, Copilot CLI 는 사용자 폴더의 `.copilot` 아래에, Visual Studio 는 임시 폴더의 추적 파일과 솔루션 폴더의 `.vs` 아래에, JetBrains IDE 는 `%APPDATA%\github-copilot` 아래의 Nitrite 데이터베이스에 대화를 둡니다.
 
-이 쪽의 경로와 칸 이름은 판이 바뀌면 달라질 수 있습니다. 도구별 판 차이는 아래 "위치와 버전별 차이" 에 있습니다.
+이 페이지의 경로와 필드 이름은 판이 바뀌면 달라질 수 있습니다. 도구별 판 차이는 아래 "위치와 버전별 차이" 에 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -55,7 +55,7 @@ VS Code 1.132 가 쓴 JSONL 파일도 같은 형식입니다 [7]. 작업 영역�
 | Visual Studio 2026 | 솔루션 폴더의 `.vs\<이름>\copilot-chat\<이름>\sessions\<대화 ID>` | 확장자 없는 대화 파일 하나에 대화 하나 | [6] |
 | JetBrains IDE | `%APPDATA%\github-copilot\` 아래의 `copilot-agent-sessions-nitrite.db` | 에이전트 세션과 턴을 담은 Nitrite 데이터베이스 | [9] |
 
-Copilot CLI 경로는 `~/.copilot/` 모양으로 알려져 있어서 [7], Windows 검체에서는 사용자 폴더(`%USERPROFILE%`) 아래에서 `.copilot` 폴더를 찾습니다. 같은 세션 ID 로 두 모양이 다 있으면 폴더형(`events.jsonl`)을 기준으로 읽습니다 [5]. `tool.execution_*` 이벤트 해석은 Copilot CLI 1.0.76-0, `session-store.db` 해석은 1.0.83 기준입니다 [7]. 1.0.60 이 만드는 저장소(스키마 4판)에는 토큰 사용 표 `assistant_usage_events` 가 없습니다 [7].
+Copilot CLI 경로는 `~/.copilot/` 모양으로 알려져 있어서 [7], Windows 기기에서는 사용자 폴더(`%USERPROFILE%`) 아래에서 `.copilot` 폴더를 찾습니다. 같은 세션 ID 로 두 모양이 다 있으면 폴더형(`events.jsonl`)을 기준으로 읽습니다 [5]. `tool.execution_*` 이벤트 해석은 Copilot CLI 1.0.76-0, `session-store.db` 해석은 1.0.83 기준입니다 [7]. 1.0.60 이 만드는 저장소(스키마 4판)에는 토큰 사용 표 `assistant_usage_events` 가 없습니다 [7].
 
 Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소스도 없습니다 [7]. JetBrains 파일은 플러그인이 쓰는 Nitrite 4.2.x 와 판이 맞아야 열 수 있습니다 [9].
 
@@ -65,7 +65,7 @@ Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소�
 
 `.json` 파일, 그리고 `.jsonl` 을 처음부터 다시 적용해 얻은 최종 모양은 같은 짜임의 JSON 객체입니다 [4].
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `version` | 형식 판 번호 |
 | `sessionId` | 세션 ID. 비어 있으면 agentsview 는 파일 이름을 씀 |
@@ -74,9 +74,9 @@ Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소�
 | `customTitle` | 세션 제목 |
 | `requests[]` | 턴 목록. 한 항목이 프롬프트 하나와 그 응답 |
 
-`requests[]` 의 한 항목에는 아래 칸이 들어갑니다 [4].
+`requests[]` 의 한 항목에는 아래 필드가 들어갑니다 [4].
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `requestId` | 요청 ID |
 | `message.text`, `message.parts` | 사용자가 보낸 프롬프트 |
@@ -87,12 +87,12 @@ Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소�
 | `result.timings.firstProgress`, `result.timings.totalElapsed` | 첫 응답까지 걸린 시간, 전체 걸린 시간 |
 | `result.metadata.promptTokens`, `outputTokens` | 그 턴의 입력·출력 토큰 수 |
 | `result.metadata.resolvedModel` | 실제로 응답한 모델 |
-| `result.metadata.toolCallRounds` | 도구 호출 기록. `response[]` 의 도구 호출과 겹치고, agentsview 는 이 칸 대신 `response[]` 를 읽음 [7] |
+| `result.metadata.toolCallRounds` | 도구 호출 기록. `response[]` 의 도구 호출과 겹치고, agentsview 는 이 필드 대신 `response[]` 를 읽음 [7] |
 | `followups` | 후속 질문 제안 |
 
 `response[]` 조각은 `kind` 로 갈립니다. `kind` 가 없는 조각은 마크다운 응답 글이고 `value` 에 본문이 있습니다 [4].
 
-| `kind` | 뜻 | 주요 칸 |
+| `kind` | 뜻 | 주요 필드 |
 |---|---|---|
 | (없음) | 응답 글 | `value` |
 | `toolInvocationSerialized` | 도구 호출 한 번 | `toolId`, `toolCallId`, `invocationMessage`, `pastTenseMessage`, `toolSpecificData` |
@@ -110,7 +110,7 @@ Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소�
 
 ### VS Code 조작 기록(JSONL)
 
-`.jsonl` 파일은 스냅숏이 아니라 세션을 바꾼 조작을 한 줄씩 적은 기록입니다. 줄마다 `kind`, `k`(바꿀 자리의 경로. 객체 키는 문자열, 배열 번호는 숫자), `v`(값), `i`(배열 자리) 칸이 있습니다 [4].
+`.jsonl` 파일은 스냅숏이 아니라 세션을 바꾼 조작을 한 줄씩 적은 기록입니다. 줄마다 `kind`, `k`(바꿀 자리의 경로. 객체 키는 문자열, 배열 번호는 숫자), `v`(값), `i`(배열 자리) 필드가 있습니다 [4].
 
 | `kind` | 뜻 |
 |---|---|
@@ -134,7 +134,7 @@ Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소�
 
 색인은 `version` 과 `entries` 로 이뤄지고, `entries` 는 세션 ID 를 키로 삼아 항목을 담습니다 [2].
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `sessionId` | 세션 ID. 세션 파일 이름과 맞춰 볼 수 있음 |
 | `title` | 세션 제목. 없으면 "New Chat" 이 들어가고, 이 글자는 VS Code 표시 언어에 맞춰 번역된 문자열일 수 있음 |
@@ -149,7 +149,7 @@ Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소�
 | `permissionLevel` | 권한 수준 |
 | `inputState` | 외부 세션에서 보내지 않은 입력(텍스트, 모드, 고른 모델 등). 첨부는 비움 |
 
-1.109 전의 색인에는 `timing` 이 없어서, VS Code 는 옛 항목을 읽을 때 `lastMessageDate` 로 `timing` 을 채웁니다 [2]. 아래는 칸 이름만 소스에서 가져오고 값은 새로 지어낸 예시입니다.
+1.109 전의 색인에는 `timing` 이 없어서, VS Code 는 옛 항목을 읽을 때 `lastMessageDate` 로 `timing` 을 채웁니다 [2]. 아래는 필드 이름만 소스에서 가져오고 값은 새로 지어낸 예시입니다.
 
 ```json
 { "version": 1, "entries": { "00000000-0000-4000-8000-000000000001": { "sessionId": "00000000-0000-4000-8000-000000000001", "title": "New Chat", "lastMessageDate": 1767225660000, "isEmpty": false, "isExternal": false } } }
@@ -171,9 +171,9 @@ Copilot 과 채팅 세션 관련 설정은 위 `settings.json` 들에 남습니�
 
 ### Copilot CLI 이벤트 기록
 
-Copilot CLI 세션 파일은 한 줄에 이벤트 하나를 적는 JSONL 이고, 줄마다 `type`, `timestamp`(RFC3339 문자열), `data` 가 있습니다 [5]. 세션 파일에서 `session-store.db` 를 다시 만드는 동작은 GitHub 문서에 있지만, 이벤트와 데이터베이스의 짜임은 공개되지 않았습니다 [7]. 아래 표는 agentsview 가 읽는 칸입니다 [5].
+Copilot CLI 세션 파일은 한 줄에 이벤트 하나를 적는 JSONL 이고, 줄마다 `type`, `timestamp`(RFC3339 문자열), `data` 가 있습니다 [5]. 세션 파일에서 `session-store.db` 를 다시 만드는 동작은 GitHub 문서에 있지만, 이벤트와 데이터베이스의 짜임은 공개되지 않았습니다 [7]. 아래 표는 agentsview 가 읽는 필드입니다 [5].
 
-| `type` | 주요 칸(`data` 아래) | 뜻 |
+| `type` | 주요 필드(`data` 아래) | 뜻 |
 |---|---|---|
 | `session.start` | `sessionId`, `context.cwd`, `context.branch` | 세션 시작, 작업 폴더와 git 브랜치 |
 | `user.message` | `content`, `source` | 사용자 프롬프트. `source` 가 `skill-` 로 시작하면 스킬이 넣은 글 |
@@ -188,7 +188,7 @@ Copilot CLI 세션 파일은 한 줄에 이벤트 하나를 적는 JSONL 이고,
 
 `session-store.db` 의 `assistant_usage_events` 표에는 모델 호출마다 한 행이 들어갑니다 [5][7].
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `id` | 행 번호 |
 | `session_id` | 세션 ID. 세션 파일 이름과 맞춰 봄 |
@@ -214,18 +214,18 @@ SQLite 쓰기 잠금 때문에 한 행 쓰기가 실패하면 그 행은 다시 
 
 span 이름이 `invoke_agent` 로 시작하면 에이전트 실행 한 번입니다 [6]. 파일 하나에 여러 대화의 span 이 섞이고, 파일이 돌려쓰기로 나뉘면 한 대화가 여러 파일에 걸칩니다 [6]. 그래서 한 대화를 모두 보려면 같은 폴더의 다른 추적 파일에서도 그 대화의 span 을 모읍니다 [6]. 이 파일에는 프롬프트, 도구 인자, 명령 출력, 비밀 값까지 들어갈 수 있습니다 [6].
 
-Visual Studio 2026 의 `.vs\...\sessions\` 파일은 이름이 36자 UUID 이고 확장자가 없으며, 파일 하나가 대화 하나입니다 [6]. 이 파일도 추적 파일과 같은 span 형식입니다 [6]. 이 파일은 사용자 폴더가 아니라 솔루션 폴더에 생기므로, 사용자 폴더만 훑으면 놓치고 저장소에 커밋돼 원격으로 올라갈 수도 있습니다 [8].
+Visual Studio 2026 의 `.vs\...\sessions\` 파일은 이름이 36자 UUID 이고 확장자가 없으며, 파일 하나가 대화 하나입니다 [6]. 이 파일도 추적 파일과 같은 span 형식입니다 [6]. 이 파일은 사용자 폴더가 아니라 솔루션 폴더에 생기므로, 사용자 폴더만 살펴보면 놓치고 저장소에 커밋돼 원격으로 올라갈 수도 있습니다 [8].
 
 ### JetBrains Nitrite 데이터베이스
 
 JetBrains IDE 의 Copilot 은 에이전트 세션을 Nitrite(MVStore 기반 Java 내장 데이터베이스) 파일 `copilot-agent-sessions-nitrite.db` 에 둡니다 [7][9]. 이 파일은 `%APPDATA%\github-copilot\` 아래 하위 폴더까지 뒤져 찾고, 대화는 아래 두 컬렉션에 들어 있습니다 [9].
 
-| 컬렉션 | 칸 |
+| 컬렉션 | 필드 |
 |---|---|
 | `com.github.copilot.agent.session.persistence.nitrite.entity.NtAgentSession` | `id`, `name.value`(제목), `user`, `createdAt`, `modifiedAt`, `turns`(턴을 세션 안에 넣어 둔 경우) |
 | `com.github.copilot.agent.session.persistence.nitrite.entity.NtAgentTurn` | `sessionId`, `createdAt`, `deletedAt`, `request.stringContent`, `request.contents`, `request.chatMode`, `response.stringContent`, `response.contents`, `response.modelInformation.modelName` |
 
-exporter 는 `deletedAt` 이 있는 턴을 내보내지 않습니다 [9]. 거꾸로 말하면 지운 턴이 이 표시만 달고 데이터베이스 안에 남아 있을 수 있으므로, 원본 파일을 직접 볼 때는 `deletedAt` 이 있는 턴을 따로 셉니다. `user` 칸은 사용자를 가리키는 값이므로 보고서에서는 가려서 씁니다.
+exporter 는 `deletedAt` 이 있는 턴을 내보내지 않습니다 [9]. 거꾸로 말하면 지운 턴이 이 표시만 달고 데이터베이스 안에 남아 있을 수 있으므로, 원본 파일을 직접 볼 때는 `deletedAt` 이 있는 턴을 따로 봅니다. `user` 필드는 사용자를 가리키는 값이므로 보고서에서는 가려서 씁니다.
 
 ### 보관·삭제·내보내기(VS Code)
 
@@ -243,11 +243,11 @@ exporter 는 `deletedAt` 이 있는 턴을 내보내지 않습니다 [9]. 거꾸
 
 **증명하지 못하는 것.** 세션 파일은 어느 Windows 계정 폴더에 기록이 남았는지를 알려 줄 뿐 키보드 앞에 누가 있었는지는 알려 주지 않고, 이 판단은 [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)에서 다룹니다. 모델이 제안한 편집을 사용자가 받아들였는지, 제안한 코드가 저장소에 들어갔는지는 세션 파일만으로 확인되지 않고 git 기록과 파일 시각으로 따로 봐야 합니다. 도구 호출 기록은 에이전트가 그 도구를 불렀다는 기록이지, 명령이 시스템에 어떤 결과를 남겼는지까지 보여 주지는 않습니다. 클라우드 세션의 대화 원본은 PC 가 아니라 서버 쪽 자료라서 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인합니다.
 
-보고서에는 "이 작업 폴더에서 이 시각에 이런 프롬프트를 보낸 기록과, 에이전트가 이 명령을 실행하도록 요청한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 작업 폴더에서 이 시각에 이런 프롬프트를 보낸 기록과, 에이전트가 이 명령을 실행하도록 요청한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-| 기록 | 칸 | 형식 | 바뀌는 때 |
+| 기록 | 필드 | 형식 | 바뀌는 때 |
 |---|---|---|---|
 | VS Code 세션 | `creationDate` | Unix 밀리초(UTC) | 세션을 만들 때 |
 | VS Code 세션 | `requests[].timestamp` | Unix 밀리초(UTC) | 요청을 보낼 때 |
@@ -258,13 +258,13 @@ exporter 는 `deletedAt` 이 있는 턴을 내보내지 않습니다 [9]. 거꾸
 | Visual Studio | `startTimeUnixNano`, `endTimeUnixNano` | Unix 나노초 문자열(UTC) | span 이 시작·끝날 때 |
 | JetBrains | `createdAt`, `modifiedAt` | 숫자. exporter 는 턴 시각을 밀리초로 다룸 | 세션·턴을 만들고 바꿀 때 |
 
-VS Code 세션 파일의 세 칸은 Unix 밀리초이고 [4], 색인의 `lastMessageDate` 는 세션 모델의 같은 값을 옮겨 적은 것이라 [2] 단위가 같습니다. `.jsonl` 은 줄을 덧붙일 때마다 파일 수정 시각이 바뀌어 마지막 대화 무렵과 가깝게 움직이지만, 작업 영역을 옮길 때 VS Code 가 파일을 새 폴더로 복사하므로 [2] 새 폴더에 생긴 사본의 파일 시각은 원래 대화 시각과 어긋날 수 있습니다. 그래서 대화 시각은 파일 시스템 시각이 아니라 파일 안의 `timestamp` 로 정하고, 파일 시각은 맞춰 보는 데만 씁니다. 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다.
+VS Code 세션 파일의 세 필드는 Unix 밀리초이고 [4], 색인의 `lastMessageDate` 는 세션 모델의 같은 값을 옮겨 적은 것이라 [2] 단위가 같습니다. `.jsonl` 은 줄을 덧붙일 때마다 파일 수정 시각이 바뀌어 마지막 대화 무렵과 가깝게 움직이지만, 작업 영역을 옮길 때 VS Code 가 파일을 새 폴더로 복사하므로 [2] 새 폴더에 생긴 사본의 파일 시각은 원래 대화 시각과 어긋날 수 있습니다. 그래서 대화 시각은 파일 시스템 시각이 아니라 파일 안의 `timestamp` 로 정하고, 파일 시각은 맞춰 보는 데만 씁니다. 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다.
 
 ## 함정과 한계
 
 - 색인은 로컬 세션을 400개까지만 두고, 넘친 세션은 색인에서만 빠지고 파일은 남습니다 [2]. 색인에 없는 세션 파일이 곧 지운 세션이라는 뜻이 아니므로, 색인 항목 개수와 `chatSessions` 폴더의 파일 개수를 따로 세어 비교합니다.
 - 제목이 "New Chat"(또는 표시 언어로 번역된 같은 문구)이면 제목이 비어 있던 세션입니다 [2]. 제목으로 대화 내용을 짐작하지 않습니다.
-- 한 PC 에 `.json` 과 `.jsonl` 이 섞여 있을 수 있습니다. 1.109 전에 쓴 세션이 남아 있거나 `chat.useLogSessionStorage` 를 꺼 둔 경우이고, 어느 쪽인지는 설정 파일로 가립니다. 같은 ID 로 둘 다 있으면 `.jsonl` 을 기준으로 봅니다.
+- 한 PC 에 `.json` 과 `.jsonl` 이 섞여 있을 수 있습니다. 1.109 전에 쓴 세션이 남아 있거나 `chat.useLogSessionStorage` 를 꺼 둔 경우이고, 어느 쪽인지는 설정 파일로 구분합니다. 같은 ID 로 둘 다 있으면 `.jsonl` 을 기준으로 봅니다.
 - `.jsonl` 의 한 줄만 떼어 읽으면 최종 상태가 아닙니다. 반드시 첫 줄부터 다시 적용하고, 마지막 줄이 덜 쓰여 JSON 으로 읽히지 않으면 그 줄은 따로 적어 둡니다.
 - `result.metadata.toolCallRounds` 와 `response[]` 에 같은 도구 호출이 두 번 나오므로 [7], 호출 횟수를 셀 때는 한쪽만 셉니다.
 - Copilot CLI 의 `session-store.db` 를 복사할 때는 `-wal` 파일을 함께 떠야 합니다. SQLite WAL 을 쓰는 저장소는 본 파일만 떠서는 최근 기록이 빠질 수 있습니다 [8].
@@ -344,7 +344,7 @@ print(json.dumps(state, ensure_ascii=False, indent=1))
 
 1. 작업 폴더를 열고 채팅을 두 번, 빈 창에서 한 번 했을 때 `chatSessions` 와 `emptyWindowChatSessions` 에 파일이 몇 개 생기는가? 해시 폴더의 `workspace.json` 은 어느 폴더를 가리키는가?
 2. 세션 제목을 바꾼 뒤 `.jsonl` 에 어떤 `kind` 의 줄이 붙는가? 이전 제목은 어느 줄에 남는가?
-3. 에이전트 모드에서 터미널 명령을 한 번 실행하게 한 뒤, 명령 줄이 `response[]` 의 어느 칸에 남는가?
+3. 에이전트 모드에서 터미널 명령을 한 번 실행하게 한 뒤, 명령 줄이 `response[]` 의 어느 필드에 남는가?
 4. 세션 하나를 보관하고 다른 하나를 삭제한 뒤 폴더의 파일 개수와 `state.vscdb` 의 색인 항목은 어떻게 달라지는가?
 5. `chat.useLogSessionStorage` 를 false 로 바꾸고 새 세션을 열면 파일 확장자가 바뀌는가?
 

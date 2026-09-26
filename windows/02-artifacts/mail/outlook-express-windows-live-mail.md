@@ -17,12 +17,12 @@ nav_order: 1960
 | 내용 | 근거 |
 |---|---|
 | 판과 함께 나온 Windows, 날짜, 저장 형식, 프로토콜 | 위키백과[1][2][3] |
-| 파일·폴더 위치 | 흔한 설명. 검체에서 확인 |
+| 파일·폴더 위치 | 흔한 설명. 실제 데이터로 확인 |
 | 레지스트리 위치 | 흔한 설명. 공개 자료 없음, 이 페이지에 적지 않음 |
 | `.dbx` 의 시그니처·헤더 오프셋·내부 구조 | 공개 명세 없음. 이 페이지에 적지 않음 |
-| ESE 데이터베이스를 다룰 때의 주의 | 다른 ESE 파일에 흔한 내용. `MSMessageStore` 는 검체에서 확인 |
+| ESE 데이터베이스를 다룰 때의 주의 | 다른 ESE 파일에 흔한 내용. `MSMessageStore` 는 실제 데이터로 확인 |
 
-위키백과는 2차 자료입니다. 판과 날짜를 보고서에 쓰기 전에 검체 안 프로그램 파일의 판 정보로 한 번 더 맞춥니다([실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md)).
+위키백과는 2차 자료입니다. 판과 날짜를 보고서에 쓰기 전에 분석 대상 이미지 안 프로그램 파일의 판 정보로 한 번 더 맞춥니다([실행 파일 메타데이터](../embedded-metadata/pe-header-version-info-digital-signature.md)).
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -58,7 +58,7 @@ Windows Mail 은 Windows Vista 에 들어 있었고[3], Windows 7 에서는 빠�
 
 지원한 프로토콜은 POP3, IMAP, DeltaSync, Exchange ActiveSync, WebDAV 입니다[2]. DeltaSync 는 Hotmail·Outlook.com 전용이고, 2012 판은 DeltaSync 대신 Exchange ActiveSync 를 썼습니다[2]. Microsoft 는 2016년 6월 30일에 DeltaSync 지원을 끝냈지만, 2011·2012 판은 IMAP 이나 POP3 로 Hotmail 계정을 계속 쓸 수 있었습니다[2].
 
-### 흔히 알려진 위치 (검체에서 확인)
+### 흔히 알려진 위치 (실제 데이터로 확인)
 
 | 프로그램 | 흔히 알려진 위치 |
 |---|---|
@@ -66,13 +66,13 @@ Windows Mail 은 Windows Vista 에 들어 있었고[3], Windows 7 에서는 빠�
 | Windows Mail (Vista) | `%LOCALAPPDATA%\Microsoft\Windows Mail\`, 데이터베이스 파일 `WindowsMail.MSMessageStore` |
 | Windows Live Mail | `%LOCALAPPDATA%\Microsoft\Windows Live Mail\` 와 계정별 하위 폴더, 계정 파일 `account{GUID}.oeaccount` |
 
-- Outlook Express 의 저장 폴더와 계정 설정이 레지스트리에 있다는 설명도 흔합니다. 키 이름은 공개 자료가 없어 적지 않습니다.
+- Outlook Express 의 저장 폴더와 계정 설정이 레지스트리에 있다는 설명도 흔합니다. 키 이름은 공개 문서에 나와 있지 않아 적지 않습니다.
 - 기본 위치만 보지 않습니다. 디스크 전체에서 확장자(`.dbx`·`.mbx`·`.eml`·`.oeaccount`)와 이름(`MSMessageStore`)으로 찾습니다.
 - Windows 11 25H2(빌드 26200)에는 기본으로 `%LOCALAPPDATA%\Microsoft\Windows Live Mail` 과 `%LOCALAPPDATA%\Microsoft\Windows Mail` 폴더가 없습니다.
 
 ### ID 와 사용자 프로필
 
-Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서 이 ID 가 Windows 사용자 프로필로 바뀌었습니다[3]. ID 로 Windows 사용자 하나 안에 메일 사용자를 여럿 둘 수 있었다는 설명이 흔합니다. 검체의 `Identities` 폴더로 확인합니다.
+Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서 이 ID 가 Windows 사용자 프로필로 바뀌었습니다[3]. ID 로 Windows 사용자 하나 안에 메일 사용자를 여럿 둘 수 있었다는 설명이 흔합니다. 실제 데이터의 `Identities` 폴더로 확인합니다.
 
 ## 구조
 
@@ -81,9 +81,9 @@ Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서
 메일 폴더마다 `.dbx` 파일이 하나씩 있습니다[1]. `.dbx` 는 2GB 보다 작은 파일만 지원했고, 한계에 가까워지면 성능 문제가 있었습니다[1]. 데이터베이스가 자주 손상돼 복구 도구 시장이 생겼고, 공개 복구 도구로 UnDBX 가 있습니다[1]. 주소록은 Windows 주소록 파일(`.wab`)을 썼습니다[1].
 
 
-- 폴더 목록 파일 `Folders.dbx` 와 `Inbox.dbx`·`Sent Items.dbx`·`Deleted Items.dbx`·`Offline.dbx`·`Pop3uidl.dbx` 같은 파일이 있다는 설명이 흔합니다. 검체에서 확인합니다.
+- 폴더 목록 파일 `Folders.dbx` 와 `Inbox.dbx`·`Sent Items.dbx`·`Deleted Items.dbx`·`Offline.dbx`·`Pop3uidl.dbx` 같은 파일이 있다는 설명이 흔합니다. 실제 데이터로 확인합니다.
 - 시그니처, 헤더 안 값의 오프셋, 메시지를 담는 방식은 공개 명세가 없어 적지 않습니다. 구현 코드로 알려진 값이 있지만, 명세로 다시 맞추기 전에는 보고서에 쓰지 않습니다.
-- 지운 메시지 조각이 `.dbx` 안에 남아 되살릴 수 있다는 설명도 있습니다. 검체로 확인해야 합니다.
+- 지운 메시지 조각이 `.dbx` 안에 남아 되살릴 수 있다는 설명도 있습니다. 실제 데이터로 확인해야 합니다.
 
 ### Windows Mail (Vista)
 
@@ -91,7 +91,7 @@ Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서
 
 ### Windows Live Mail
 
-메시지를 `.eml` 파일로 하나씩 저장하고[2], 폴더 구조는 ESE 데이터베이스 `Mail.MSMessageStore` 가 관리합니다[2]. 이 데이터베이스의 백업 사본은 `Backup` 하위 폴더에 둡니다[2]. 계정 파일 `account{GUID}.oeaccount` 는 XML 이고 비밀번호는 암호화돼 있다는 설명이 흔합니다. 검체에서 확인합니다.
+메시지를 `.eml` 파일로 하나씩 저장하고[2], 폴더 구조는 ESE 데이터베이스 `Mail.MSMessageStore` 가 관리합니다[2]. 이 데이터베이스의 백업 사본은 `Backup` 하위 폴더에 둡니다[2]. 계정 파일 `account{GUID}.oeaccount` 는 XML 이고 비밀번호는 암호화돼 있다는 설명이 흔합니다. 실제 데이터로 확인합니다.
 
 `.eml` 파일의 형식은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서, ESE 데이터베이스의 구조는 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 
@@ -118,18 +118,18 @@ Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서
 - 메시지 헤더의 시각을 읽는 법은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 과 [메일 헤더 분석](../../03-techniques/analysis/email-header-analysis.md) 에서 다룹니다.
 - `.eml`·`.dbx` 파일의 NTFS 시각은 PC 에 파일이 생기고 바뀐 때입니다. 메일을 받은 때와 같다고 쓰려면 같은 판으로 재현해 확인합니다.
 - `.dbx` 는 메일 폴더 하나에 파일 하나입니다[1]. 그래서 파일 시각은 폴더 안 어느 메시지가 바뀐 때인지 알려 주지 않습니다.
-- ESE 데이터베이스 안의 시각 칸과 형식은 공개 자료가 없어 검체에서 확인합니다. 값을 읽을 때는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 보고, 같은 메시지의 헤더 시각과 맞춰 봅니다.
+- ESE 데이터베이스 안의 시각 열과 형식은 실제 데이터로 확인합니다. 값을 읽을 때는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 을 보고, 같은 메시지의 헤더 시각과 맞춰 봅니다.
 - 옛 PC 의 이미지는 시간대 설정부터 확인합니다([시간대 설정](../system-account/time-zone.md)).
 
 ## 함정과 한계
 
-1. **원본 ESE 데이터베이스를 바로 엽니다.** 압수 이미지에서 꺼낸 ESE 데이터베이스는 비정상 종료 상태인 경우가 많습니다. 사본에서만 작업합니다. 비정상 종료와 손상을 다루는 법은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. SRUDB.dat·WebCacheV01.dat·Windows.edb 같은 ESE 파일에서 흔한 일이고, `MSMessageStore` 도 같은지는 검체에서 확인합니다.
+1. **원본 ESE 데이터베이스를 바로 엽니다.** 압수 이미지에서 꺼낸 ESE 데이터베이스는 비정상 종료 상태인 경우가 많습니다. 사본에서만 작업합니다. 비정상 종료와 손상을 다루는 법은 [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다. SRUDB.dat·WebCacheV01.dat·Windows.edb 같은 ESE 파일에서 흔한 일이고, `MSMessageStore` 도 같은지는 실제 데이터로 확인합니다.
 2. **도구 하나의 행 수를 믿습니다.** 손상된 ESE 데이터베이스는 읽는 방식에 따라 행 수가 달라질 수 있습니다. 두 가지 이상으로 열어 비교합니다.
 3. **`Backup` 사본을 빠뜨립니다.** Windows Live Mail 은 데이터베이스의 백업 사본을 `Backup` 하위 폴더에 둡니다[2]. 본 데이터베이스와 사본의 목록을 비교합니다.
 4. **데이터베이스에 없으면 메일이 없다고 봅니다.** 메시지는 `.eml` 파일로 따로 있습니다[2][3]. 폴더 안 `.eml` 목록과 데이터베이스 목록을 따로 세어 비교합니다.
 5. **지운 `.eml` 을 데이터베이스에서만 찾습니다.** `.eml` 은 개별 파일이라, 지운 메일은 파일 시스템에서 찾아야 할 가능성이 큽니다. [마스터 파일 테이블](../filesystem/mft.md), [USN 변경 저널](../filesystem/usnjrnl.md), [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 를 함께 봅니다.
 6. **크기가 2GB 에 가까운 `.dbx` 를 정상 파일로 봅니다.** `.dbx` 는 2GB 보다 작은 파일만 지원했고 손상도 잦았습니다[1]. 크기가 한계에 가까우면 손상을 의심하고, 복구 도구 두 가지 이상의 결과를 비교합니다.
-7. **Windows 계정 하나를 메일 사용자 하나로 봅니다.** Outlook Express 에는 ID 가 있었습니다[3]. ID 로 메일 사용자를 여럿 둘 수 있었다는 설명이 흔합니다. `Identities` 아래 `{GUID}` 폴더가 여럿이면 메일 사용자도 여럿일 수 있습니다. 이 폴더 구조도 흔한 설명이라 검체에서 확인합니다.
+7. **Windows 계정 하나를 메일 사용자 하나로 봅니다.** Outlook Express 에는 ID 가 있었습니다[3]. ID 로 메일 사용자를 여럿 둘 수 있었다는 설명이 흔합니다. `Identities` 아래 `{GUID}` 폴더가 여럿이면 메일 사용자도 여럿일 수 있습니다. 이 폴더 구조도 흔한 설명이라 실제 데이터로 확인합니다.
 8. **구현 코드의 값을 명세처럼 씁니다.** `.dbx` 시그니처와 오프셋은 공개 명세가 없습니다. 보고서에 쓸 때는 어느 구현 코드에서 가져온 값인지 밝힙니다.
 9. **Hotmail 계정이 DeltaSync 로 계속 동기화됐다고 봅니다.** DeltaSync 지원은 2016년 6월 30일에 끝났습니다[2]. 그 뒤의 메일이 있으면 계정이 어떤 프로토콜로 설정됐는지 계정 파일에서 확인합니다.
 
@@ -137,7 +137,7 @@ Outlook Express 는 ID (Identities) 를 썼고[3], Vista 의 Windows Mail 에서
 
 ### 원시 바이트로 한 번
 
-`.dbx` 의 시그니처 값은 이 페이지에 적지 않았습니다. 대신 검체 안의 파일끼리 비교하는 방법을 씁니다.
+`.dbx` 의 시그니처 값은 이 페이지에 적지 않았습니다. 대신 분석 대상 이미지 안의 파일끼리 비교하는 방법을 씁니다.
 
 1. 디스크에서 `.dbx` 파일을 모두 찾아 사본을 뜹니다.
 2. 파일마다 앞 16바이트를 뽑아 나란히 놓습니다. 어느 바이트가 같고 어느 바이트가 다른지 적습니다.
@@ -172,7 +172,7 @@ ESE 데이터베이스는 파일 머리의 상태 값으로 비정상 종료인�
 
 ## 실습
 
-**공개 검체(NIST CFReDS 등)** 가운데 Windows XP·Vista·7 이미지로 해 봅니다.
+**공개 시험 데이터(NIST CFReDS 등)** 가운데 Windows XP·Vista·7 이미지로 해 봅니다.
 
 1. `.dbx` 파일은 몇 개이고 어느 폴더에 있습니까? 경로 안의 `{GUID}` 는 몇 가지입니까?
 2. `.dbx` 파일들의 앞 16바이트를 비교하면 몇 가지 모양이 나옵니까? 어느 파일이 다른 모양입니까?

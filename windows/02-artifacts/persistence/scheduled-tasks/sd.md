@@ -22,9 +22,9 @@ Tarrask 악성코드가 쓴 숨김 방식은 다음과 같습니다[1].
 3. 그러면 작업이 `schtasks /query` 결과와 작업 스케줄러 화면에서 사라집니다.
 4. 작업은 숨긴 뒤에도 트리거대로 실행됩니다. 시스템을 재부팅하거나, 그 작업을 실행하는 `svchost.exe` 프로세스가 끝날 때까지 그렇습니다.
 
-살아 있는 시스템에서 SD 값을 지우려면 SYSTEM 권한이 있어야 합니다. 관리자 권한 명령 프롬프트에서 지우려 해도 "Access Denied" 가 납니다[1]. 그래서 실행 중인 시스템에서 이 방식으로 숨겼다면, 숨긴 쪽은 이미 SYSTEM 권한을 얻은 상태였습니다. 하이브를 오프라인으로 고친 경우는 이와 따로 따져 봅니다.
+실행 중인 시스템에서 SD 값을 지우려면 SYSTEM 권한이 있어야 합니다. 관리자 권한 명령 프롬프트에서 지우려 해도 "Access Denied" 가 납니다[1]. 그래서 실행 중인 시스템에서 이 방식으로 숨겼다면, 숨긴 쪽은 이미 SYSTEM 권한을 얻은 상태였습니다. 하이브를 오프라인으로 고친 경우는 이와 따로 따져 봅니다.
 
-재부팅한 뒤에 숨긴 작업이 다시 실행되는지, Tarrask 가 `System32\Tasks` 의 XML 파일도 지웠는지는 공개 자료에 나와 있지 않습니다. 검체에서 확인합니다.
+재부팅한 뒤에 숨긴 작업이 다시 실행되는지, Tarrask 가 `System32\Tasks` 의 XML 파일도 지웠는지는 실제 기기에서 확인해야 합니다.
 
 예약 작업을 기록하는 이벤트 로그(보안 로그 4698, TaskScheduler/Operational)는 둘 다 기본으로 꺼져 있습니다. 그래서 이런 작업의 흔적은 레지스트리와 파일에만 남을 수 있습니다. 로그 설정은 [감사 정책과 로그 설정](../../event-logs/audit-policy-log-settings.md)에서 확인합니다.
 
@@ -54,14 +54,14 @@ XML 의 `Settings\Hidden` 도 작업을 화면에서 가립니다. 하지만 두
 ## 찾는 절차
 
 1. **SOFTWARE 하이브와 `System32\Tasks` 폴더를 수집합니다.** 숨긴 작업은 `schtasks /query` 와 작업 스케줄러 화면에 나오지 않습니다. 그래서 목록 도구보다 레지스트리를 직접 읽습니다.
-2. **Tree 아래 키를 모두 훑고, Id 값이 있는 키만 고릅니다.** 폴더에 해당하는 키에는 Id 가 없고 SD 만 있습니다.
+2. **Tree 아래 키를 모두 살펴보고, Id 값이 있는 키만 고릅니다.** 폴더에 해당하는 키에는 Id 가 없고 SD 만 있습니다.
 3. **그중 SD 값이 없는 키를 적습니다.** 정상 PC 에서는 Id 가 있는 Tree 키에 모두 SD 값이 있습니다. 예를 들어 Id 가 있는 키 306개 가운데 SD 없는 키가 0개인 식입니다.
 4. **Id 의 GUID 로 `Tasks\{GUID}` 키를 찾습니다.** Path, Actions, DynamicInfo 를 읽습니다. Actions 에는 실행 대상 문자열이, DynamicInfo 오프셋 12 에는 마지막 실행 시각(UTC)이 있습니다. 읽는 법은 [작업 캐시 레지스트리](taskcache-tree-tasks.md)를 봅니다.
 5. **Path 로 XML 파일을 찾습니다.** 파일이 있으면 Command, Arguments, Triggers 를 읽습니다. 레지스트리 Hash 와 파일 해시가 같은지도 봅니다.
 6. **목록과 대조합니다.** `TaskCache\Tasks` 의 작업 경로 목록을 `schtasks /query`·`Get-ScheduledTask` 결과와 맞춰 봅니다. 숨긴 작업이 없으면 두 목록의 개수가 같습니다(예: Tasks 하위 키 269개, Get-ScheduledTask 결과 269개). 레지스트리에만 있는 작업이 있으면 그 작업부터 봅니다.
 7. **로그를 켜 두었다면 이벤트를 찾습니다.** 작업 이름으로 [예약 작업 이벤트](../../event-logs/taskscheduler-4698.md)를 검색합니다.
 
-SD 를 지운 작업이 사라지는 곳으로 알려진 것은 `schtasks /query` 결과와 작업 스케줄러 화면입니다[1]. `Get-ScheduledTask` 가 이런 작업을 보여 주는지는 알려져 있지 않습니다. 그래서 6단계는 보조 수단으로 쓰고, 3단계의 레지스트리 검사를 기준으로 삼습니다. SD 값이 없는 작업을 레지스트리에서 훑어보는 방법은 탐지 권고로도 나와 있습니다[1].
+SD 를 지운 작업이 사라지는 곳으로 알려진 것은 `schtasks /query` 결과와 작업 스케줄러 화면입니다[1]. `Get-ScheduledTask` 가 이런 작업을 보여 주는지는 알려져 있지 않습니다. 그래서 6단계는 보조 수단으로 쓰고, 3단계의 레지스트리 검사를 기준으로 삼습니다. SD 값이 없는 작업을 레지스트리에서 찾아보는 방법은 탐지 권고로도 나와 있습니다[1].
 
 ## 증거로서 의미
 
@@ -90,7 +90,7 @@ SD 를 지운 작업이 사라지는 곳으로 알려진 것은 `schtasks /query
 
 - **Index 0 은 숨김 표시가 아닐 수 있습니다.** Index 가 0 인 Tree 키는 없어진 작업이 남긴 키일 수 있고, 이런 키에도 SD 값은 있습니다(예: 한 시스템에서 37개). "Index 0 이면 숨긴 작업" 이라는 주장이 있지만, 이것만으로 숨김을 판단하지 않습니다.
 - **Hidden = true 는 흔합니다.** 정상 작업도 이 설정을 씁니다.
-- **살아 있는 시스템의 목록 도구를 믿지 않습니다.** 숨긴 작업은 `schtasks /query` 와 작업 스케줄러 화면에 나오지 않습니다.
+- **실행 중인 시스템의 목록 도구를 믿지 않습니다.** 숨긴 작업은 `schtasks /query` 와 작업 스케줄러 화면에 나오지 않습니다.
 - **개수만 비교하지 않습니다.** Tree 키에는 폴더 키와 없어진 작업의 키가 섞여 있습니다. GUID 와 작업 경로로 하나씩 맞춰 봅니다.
 - **로그가 없는 것이 보통입니다.** 4698 과 TaskScheduler/Operational 은 기본으로 꺼져 있습니다. 로그가 없다는 사실만으로 작업이 없었다고 보지 않습니다.
 - **XML 파일이 남아 있는지는 사례마다 확인합니다.** Tarrask 가 XML 도 지웠는지는 공개 자료에 나와 있지 않습니다.
@@ -99,7 +99,7 @@ SD 를 지운 작업이 사라지는 곳으로 알려진 것은 `schtasks /query
 
 ### 레지스트리 값으로 한 번
 
-아래는 명세와 관찰을 바탕으로 만든 예시입니다. 실제 검체에서 나온 키가 아닙니다.
+아래는 명세와 관찰을 바탕으로 만든 예시입니다. 실제 기기에서 나온 키가 아닙니다.
 
 | Tree 아래 키 | Id | SD | 판단 |
 |---|---|---|---|
@@ -107,7 +107,7 @@ SD 를 지운 작업이 사라지는 곳으로 알려진 것은 `schtasks /query
 | `Microsoft\Windows\ExampleMaintenance` | `{GUID-A}` | 있음 (REG_BINARY 148바이트) | 보통 작업입니다 |
 | `ExampleUpdater` | `{GUID-B}` | 없음 | 숨긴 작업일 수 있습니다. `Tasks\{GUID-B}` 를 봅니다 |
 
-세 번째 키는 작업 경로가 루트(`\ExampleUpdater`)이기도 합니다. 루트에 있는 작업을 눈여겨보는 까닭은 [작업 정의 파일](system32-tasks-xml.md)의 "증거로서 의미" 를 봅니다.
+세 번째 키는 작업 경로가 루트(`\ExampleUpdater`)이기도 합니다. 루트에 있는 작업을 눈여겨보는 이유는 [작업 정의 파일](system32-tasks-xml.md)의 "증거로서 의미" 를 봅니다.
 
 ### 공개 도구로 한 번
 
@@ -130,7 +130,7 @@ $tree = 'HKLM:\CASE_SOFT\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\
 reg unload HKLM\CASE_SOFT
 ```
 
-살아 있는 시스템에서는 레지스트리의 작업 경로와 `Get-ScheduledTask` 결과를 맞춰 볼 수도 있습니다. `<=` 표시가 붙은 줄은 레지스트리에만 있는 작업입니다.
+실행 중인 시스템에서는 레지스트리의 작업 경로와 `Get-ScheduledTask` 결과를 맞춰 볼 수도 있습니다. `<=` 표시가 붙은 줄은 레지스트리에만 있는 작업입니다.
 
 ```powershell
 $tc  = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache'
@@ -139,7 +139,7 @@ $api = Get-ScheduledTask | ForEach-Object { $_.TaskPath + $_.TaskName }
 Compare-Object $reg $api
 ```
 
-살아 있는 시스템은 이미 공격자 손에 있을 수 있습니다. 결과가 깨끗해도 수집한 하이브로 한 번 더 확인합니다.
+실행 중인 시스템은 이미 공격자 손에 있을 수 있습니다. 결과가 깨끗해도 수집한 하이브로 한 번 더 확인합니다.
 
 ## 교차 검증
 
@@ -154,7 +154,7 @@ Compare-Object $reg $api
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 SOFTWARE 하이브로 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)의 SOFTWARE 하이브로 아래 질문을 풀어 봅니다.
 
 1. Tree 아래에서 Id 가 있는 키는 몇 개입니까? 그중 SD 값이 없는 키가 있습니까?
 2. SD 값이 없는 키가 있다면, Id 의 GUID 로 찾은 `Tasks\{GUID}` 의 Path 와 Actions 는 무엇입니까?

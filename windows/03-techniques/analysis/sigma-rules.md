@@ -11,13 +11,13 @@ nav_order: 3540
 ## 한 줄 요약
 
 Sigma 는 로그에서 찾을 조건을 YAML 파일로 적는 규칙 형식입니다. 규칙은 그대로 실행되지 않고, 변환 도구가 검색 도구의 질의 언어로 바꿔야 돌릴 수 있습니다.
-Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 먼저 볼 이벤트를 고를 때 씁니다.
+Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 검색해, 사람이 먼저 볼 이벤트를 고를 때 씁니다.
 이벤트 로그 파일의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
 ## 언제 쓰나
 
 - **이벤트가 너무 많아 하나씩 볼 수 없을 때** 씁니다. 규칙에 걸린 이벤트부터 봅니다.
-- **알려진 행위 모양을 여러 로그에서 한꺼번에 찾을 때** 씁니다. 프로세스 생성, PowerShell, 서비스 설치 같은 로그를 규칙 하나하나로 훑습니다.
+- **알려진 행위 모양을 여러 로그에서 한꺼번에 찾을 때** 씁니다. 프로세스 생성, PowerShell, 서비스 설치 같은 로그를 규칙 하나하나로 검색합니다.
 - **찾은 조건을 다른 분석가와 나눌 때** 씁니다. 같은 규칙 파일을 다른 검색 도구에 맞게 다시 변환할 수 있습니다.
 
 ## 규칙 파일의 형식
@@ -35,31 +35,31 @@ Windows 이벤트 로그를 규칙 여러 개로 한꺼번에 훑어, 사람이 
 | 키 | 소문자 |
 | 문자열 값 | 작은따옴표로 감쌉니다 |
 
-### 칸
+### 키
 
-| 구분 | 칸 |
+| 구분 | 키 |
 |---|---|
 | 반드시 있어야 함 | `title`, `logsource`, `detection`(그 안의 `condition`) |
 | 있어도 되고 없어도 됨 | `id`, `name`, `related`, `taxonomy`, `status`, `description`, `license`, `references`, `author`, `date`, `modified`, `fields`, `falsepositives`, `level`, `tags`, `scope` |
 
 `status` 와 `level` 에 쓸 수 있는 값은 정해져 있습니다.
 
-| 칸 | 값 |
+| 키 | 값 |
 |---|---|
 | `status` | `stable`, `test`, `experimental`, `deprecated`, `unsupported` |
 | `level` | `informational`, `low`, `medium`, `high`, `critical` |
 
-- 두 칸 모두 규칙을 쓴 사람이 붙인 값입니다.
-- `falsepositives` 칸에는 규칙이 잘못 걸릴 수 있는 경우를 적습니다. 결과를 볼 때 함께 읽습니다.
+- 두 키 모두 규칙을 쓴 사람이 붙인 값입니다.
+- `falsepositives` 키에는 규칙이 잘못 걸릴 수 있는 경우를 적습니다. 결과를 볼 때 함께 읽습니다.
 
 ### logsource: 어느 로그를 볼지
 
-- `logsource` 의 하위 칸은 `category`, `product`, `service`, `definition` 입니다.
+- `logsource` 의 하위 키는 `category`, `product`, `service`, `definition` 입니다.
 - 값은 소문자로 쓰고, 공백은 밑줄로 바꿉니다.
 
 Windows 쪽 예입니다.
 
-| 하위 칸 | 예 |
+| 하위 키 | 예 |
 |---|---|
 | `product` | `windows`. 이 값은 Security·System·Application 같은 로그를 모두 포함합니다 |
 | `category` | `process_creation` |
@@ -125,7 +125,7 @@ level: 'high'
 - `selection` 아래 두 줄은 맵이라 둘 다 맞아야 합니다.
 - `CommandLine|contains|all` 은 목록의 두 값이 모두 명령줄에 들어 있어야 맞습니다.
 - `Image`, `CommandLine` 은 설명하려고 넣은 필드 이름입니다. 실제로 쓸 필드 이름과 대소문자는 로그 원천과 변환 설정을 따릅니다.
-- `falsepositives` 에는 관리자가 일부러 섀도 복사본을 지운 경우를 적었습니다. 규칙에 걸린 이벤트는 이 경우인지 먼저 가립니다.
+- `falsepositives` 에는 관리자가 일부러 섀도 복사본을 지운 경우를 적었습니다. 규칙에 걸린 이벤트는 이 경우인지 먼저 확인합니다.
 
 ## 절차
 
@@ -158,7 +158,7 @@ level: 'high'
 
 ## 결과를 어떻게 해석하나
 
-| 결과 | 말해 주는 것 | 말해 주지 못하는 것 |
+| 결과 | 알 수 있는 것 | 알 수 없는 것 |
 |---|---|---|
 | 규칙에 걸림 | 이벤트 레코드가 규칙의 조건과 맞았다는 것 | 그 행위가 악의였는지, 누가 했는지 |
 | 규칙에 안 걸림 | 남아 있는 로그에서 조건과 맞는 레코드를 찾지 못했다는 것 | 그 행위가 없었다는 것 |

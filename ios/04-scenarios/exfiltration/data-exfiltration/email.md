@@ -7,7 +7,7 @@ nav_order: 1580
 
 # 메일로 (Email)
 
-아이폰의 기본 메일 앱으로 자료를 첨부해 보냈는지 가리는 페이지입니다. 메일 DB 가 있을 때 보낸편지함의 메일을 찾는 흐름과, DB 를 얻지 못했을 때 설정 파일로 계정과 보낸편지함의 존재를 확인하는 데까지를 다룹니다. 다른 유출 경로와 전체 흐름은 허브 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 에 있습니다.
+아이폰의 기본 메일 앱으로 자료를 첨부해 보냈는지 판별하는 페이지입니다. 메일 DB 가 있을 때 보낸편지함의 메일을 찾는 흐름과, DB 를 얻지 못했을 때 설정 파일로 계정과 보낸편지함의 존재를 확인하는 데까지를 다룹니다. 다른 유출 경로와 전체 흐름은 허브 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 에 있습니다.
 
 ## 조사 질문
 
@@ -15,7 +15,7 @@ nav_order: 1580
 
 ## 먼저 확인할 것
 
-iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 사이에서 달라졌고[1], iOS 15 이후의 표 구조는 공개된 분석 자료가 없어 검체에서 확인합니다. 버전은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md), 시간대는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다.
+iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 사이에서 달라졌고[1], iOS 15 이후의 표 구조는 알려져 있지 않아 실제 데이터로 확인합니다. 버전은 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md), 시간대는 [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 에서 봅니다.
 
 수집 범위도 확인합니다. 메일 앱 데이터는 `/private/var/mobile/Library/Mail` 에 있습니다[1]. 로컬 백업에는 `Envelope Index`·`Protected Index`·`.emlx` 파일이 들어 있지 않을 수 있습니다. 로컬 백업만 있다면 아래 "메일 DB 가 없을 때" 절의 설정 파일부터 봅니다. 수집 방법은 [모바일 증거 확보 (Acquisition)](../../../03-techniques/acquisition/mobile-acquisition/index.md) 에 있습니다.
 
@@ -37,9 +37,9 @@ iOS 버전을 먼저 확인합니다. 메일 DB 의 표 구조는 iOS 12 와 13 
 |---|---|---|
 | 12 | messages 표(보낸 사람·제목·to/cc/bcc) | message_data 표(본문 앞 500바이트) |
 | 13 | Addresses 표(주소와 이름), Subjects 표 | Summaries 표(본문 앞 500바이트) |
-| 15 이후 | 검체에서 확인 | 검체에서 확인 |
+| 15 이후 | 실제 데이터로 확인 | 실제 데이터로 확인 |
 
-`-wal` 파일에는 아직 본 DB 에 합쳐지지 않은 기록이 있을 수 있어서, 세 파일을 함께 복사한 뒤 사본에서 엽니다. 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) 에 있습니다. 두 DB 의 시각 칸이 UNIX 초인지 Mac 절대 시각인지는 알려져 있지 않아서, [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 후보 기준을 대 본 뒤 `.emlx` 머리글의 날짜와 맞는 기준을 고릅니다.
+`-wal` 파일에는 아직 본 DB 에 합쳐지지 않은 기록이 있을 수 있어서, 세 파일을 함께 복사한 뒤 사본에서 엽니다. 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) 에 있습니다. 두 DB 의 시각 열이 UNIX 초인지 Mac 절대 시각인지는 알려져 있지 않아서, [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 후보 기준을 대 본 뒤 `.emlx` 머리글의 날짜와 맞는 기준을 고릅니다.
 
 ### 메일함과 메일 파일
 
@@ -65,7 +65,7 @@ imap://<UUID>/...Sent
 imap://<UUID>/INBOX
 ```
 
-이 항목으로 기기에 IMAP 계정이 있고 그 계정에 보낸편지함이 있다는 데까지는 말할 수 있지만, 메일을 보냈다는 근거로는 쓰지 않습니다. 메일 계정 목록은 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 의 ZACCOUNTTYPE 표 등에서도 볼 수 있고, 계정 종류별 식별자 값은 검체에서 확인합니다.
+이 항목으로 기기에 IMAP 계정이 있고 그 계정에 보낸편지함이 있다는 데까지는 말할 수 있지만, 메일을 보냈다는 근거로는 쓰지 않습니다. 메일 계정 목록은 `HomeDomain :: Library/Accounts/Accounts#.sqlite` 의 ZACCOUNTTYPE 표 등에서도 볼 수 있고, 계정 종류별 식별자 값은 실제 데이터로 확인합니다.
 
 Gmail·Outlook 같은 다른 회사 메일 앱은 저장 구조가 앱마다 다릅니다. Gmail 앱은 [지메일 (Gmail)](../../../02-artifacts/mail-cloud/gmail.md) 을 따릅니다.
 
@@ -81,7 +81,7 @@ Gmail·Outlook 같은 다른 회사 메일 앱은 저장 구조가 앱마다 다
 
 ## 흔한 오판
 
-`Envelope Index` 만 보고 받는 사람을 적으려 하면 칸이 없어서 찾지 못합니다[1]. 주소는 `Protected Index` 에서 읽습니다.
+`Envelope Index` 만 보고 받는 사람을 적으려 하면 열이 없어서 찾지 못합니다[1]. 주소는 `Protected Index` 에서 읽습니다.
 
 iOS 12·13 의 표 이름을 그대로 iOS 15 이후 기기에 적용하면 표가 없다고 잘못 판단할 수 있습니다. 표 목록부터 뽑아 확인합니다.
 

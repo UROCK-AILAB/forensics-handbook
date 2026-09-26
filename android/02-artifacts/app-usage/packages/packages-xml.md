@@ -7,7 +7,7 @@ nav_order: 420
 
 # 패키지 목록 구조 (packages.xml·packages.list)
 
-패키지 관리자(PackageManager)가 `/data/system/` 에 남기는 설치 앱 목록 파일의 짜임새를 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 출시 버전마다 다를 수 있습니다. 설치자와 설치 시각 칸의 뜻은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서, 사용자가 준 권한은 [앱 권한 부여 기록](runtime-permissions.md) 페이지에서 다룹니다.
+패키지 관리자(PackageManager)가 `/data/system/` 에 남기는 설치 앱 목록 파일의 짜임새를 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 출시 버전마다 다를 수 있습니다. 설치자와 설치 시각 필드의 뜻은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서, 사용자가 준 권한은 [앱 권한 부여 기록](runtime-permissions.md) 페이지에서 다룹니다.
 
 ## 한 줄 요약
 
@@ -15,7 +15,7 @@ nav_order: 420
 
 ## 무엇을 기록하나 · 왜 생기나
 
-패키지 관리자는 설치된 앱의 설정을 이 파일에 적어 두고, 설치된 앱 목록과 함께 업데이트된 시스템 앱의 원래 판과 이름이 바뀐 패키지 기록도 남깁니다 [1]. 사용자마다 다른 상태(그 사용자에게 설치됐는지, 첫 설치 시각, 설치 이유 등)는 이 파일이 아니라 사용자별 `package-restrictions.xml` 에 따로 적습니다 [1]. 그 파일의 칸은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서 설명합니다.
+패키지 관리자는 설치된 앱의 설정을 이 파일에 적어 두고, 설치된 앱 목록과 함께 업데이트된 시스템 앱의 원래 판과 이름이 바뀐 패키지 기록도 남깁니다 [1]. 사용자마다 다른 상태(그 사용자에게 설치됐는지, 첫 설치 시각, 설치 이유 등)는 이 파일이 아니라 사용자별 `package-restrictions.xml` 에 따로 적습니다 [1]. 그 파일의 필드는 [설치 출처와 설치 시각](install-source-time.md) 페이지에서 설명합니다.
 
 ## 위치와 버전별 차이
 
@@ -31,7 +31,7 @@ nav_order: 420
 
 `packages-backup.xml` 과 `packages.xml.reservecopy` 는 ResilientAtomicFile 이 쓰는 사본이라서 본 파일과 시점이 다를 수 있습니다 [1].
 
-현행 AOSP 는 이 설정 파일들을 `Xml.resolveSerializer()` 로 쓰고, 시스템 속성 `persist.sys.binary_xml` 의 기본값이 true 라서 기본적으로 안드로이드 바이너리 XML(ABX) 형식으로 저장합니다 [1][2]. 읽을 때는 파일 앞 바이트를 보고 ABX 인지 일반 XML 인지 가리기 때문에, 두 형식이 섞여 있어도 시스템은 둘 다 읽습니다 [2]. ABX 형식은 [안드로이드 바이너리 XML (ABX)](../../../01-foundations/data-formats/abx.md) 페이지에서 다룹니다.
+현행 AOSP 는 이 설정 파일들을 `Xml.resolveSerializer()` 로 쓰고, 시스템 속성 `persist.sys.binary_xml` 의 기본값이 true 라서 기본적으로 안드로이드 바이너리 XML(ABX) 형식으로 저장합니다 [1][2]. 읽을 때는 파일 앞 바이트를 보고 ABX 인지 일반 XML 인지 구분하기 때문에, 두 형식이 섞여 있어도 시스템은 둘 다 읽습니다 [2]. ABX 형식은 [안드로이드 바이너리 XML (ABX)](../../../01-foundations/data-formats/abx.md) 페이지에서 다룹니다.
 
 `packages.list` 는 권한 0640, 소유자 SYSTEM_UID, 그룹 PACKAGE_INFO_GID 로 만들어집니다 [1].
 
@@ -83,9 +83,9 @@ ft 는 패키지 설정의 getLastModifiedTime() 값이고 dumpsys 에서는 `ti
 
 ## 구조 — packages.list
 
-`packages.list` 는 한 줄에 앱 하나를 적고, 칸은 공백으로 나눕니다. 현행 AOSP 의 writePackageListLPrInternal 이 쓰는 칸의 순서는 다음과 같습니다 [1].
+`packages.list` 는 한 줄에 앱 하나를 적고, 필드는 공백으로 나눕니다. 현행 AOSP 의 writePackageListLPrInternal 이 쓰는 필드의 순서는 다음과 같습니다 [1].
 
-| 순서 | 칸 | 값 |
+| 순서 | 필드 | 값 |
 |---|---|---|
 | 1 | 패키지 이름 | |
 | 2 | UID | |
@@ -98,15 +98,15 @@ ft 는 패키지 설정의 getLastModifiedTime() 값이고 dumpsys 에서는 `ti
 | 9 | 플랫폼에서 프로파일 가능 | 1 또는 0 |
 | 10 | 설치자 | 시스템 앱은 `@system`, product 파티션 앱은 `@product`, 설치자 이름이 있으면 그 이름, 없으면 `@null` |
 
-이 형식은 native 코드(system/core/libpackagelistparser)가 읽습니다 [1]. 데이터 경로 칸은 사용자 0 의 경로만 적기 때문에, 다른 사용자나 프로필의 설치 상태는 이 파일로 알 수 없습니다 [1]. APEX 와 메타데이터가 없는 패키지는 적지 않고, 데이터 경로에 공백이 있는 앱도 건너뜁니다 [1].
+이 형식은 native 코드(system/core/libpackagelistparser)가 읽습니다 [1]. 데이터 경로 필드는 사용자 0 의 경로만 적기 때문에, 다른 사용자나 프로필의 설치 상태는 이 파일로 알 수 없습니다 [1]. APEX 와 메타데이터가 없는 패키지는 적지 않고, 데이터 경로에 공백이 있는 앱도 건너뜁니다 [1].
 
 이 파일은 임시 파일(`.tmp`)과 JournaledFile 로 통째로 다시 쓰기 때문에, 지운 앱의 줄은 다음에 파일을 쓸 때 사라집니다 [1]. UID 와 패키지 이름을 이어 주는 방법은 [패키지 이름과 UID](../../../01-foundations/value-decoding/package-uid.md) 페이지를 봅니다.
 
 ## 라이브 기기에서 보이는 모양 (dumpsys package)
 
-`dumpsys package` 맨 앞 "Database versions:" 아래 "Internal:" 절은 `packages.xml` 의 `<version>` 값을 찍습니다 [1]. 실제 출력에서는 "Internal:" 아래에 `sdkVersion=`, `sdkVersionFull=`, `databaseVersion=` 이 한 줄에, `buildFingerprint=`, `fingerprint=` 가 다음 줄에 찍히고, "External:" 아래는 비어 있을 수 있습니다. `sdkVersionFull` 은 현행 AOSP main 의 Settings.java 에는 없는 칸이라, 제조사가 넣은 칸이거나 다른 버전의 코드일 수 있습니다.
+`dumpsys package` 맨 앞 "Database versions:" 아래 "Internal:" 절은 `packages.xml` 의 `<version>` 값을 찍습니다 [1]. 실제 출력에서는 "Internal:" 아래에 `sdkVersion=`, `sdkVersionFull=`, `databaseVersion=` 이 한 줄에, `buildFingerprint=`, `fingerprint=` 가 다음 줄에 찍히고, "External:" 아래는 비어 있을 수 있습니다. `sdkVersionFull` 은 현행 AOSP main 의 Settings.java 에는 없는 필드라, 제조사가 넣은 필드이거나 다른 버전의 코드일 수 있습니다.
 
-현행 AOSP 기준으로 패키지마다 찍히는 줄의 이름은 `appId=`, `pkg=`, `codePath=`, `versionCode=`, `timeStamp=`, `lastUpdateTime=`, `installerPackageName=` 등이고, 권한은 `declared permissions:`, `requested permissions:`, `install permissions:`, `runtime permissions:` 절로 나뉩니다 [1]. dumpsys 의 시각은 `yyyy-MM-dd HH:mm:ss` 꼴이라 밀리초가 잘리고 시간대 표시가 없어서 [1], 정밀한 시각은 파일의 16진수 값으로 확인합니다. 출력을 뽑는 방법은 [dumpsys 출력](../../logs/dumpsys.md) 페이지를 봅니다.
+현행 AOSP 기준으로 패키지마다 찍히는 줄의 이름은 `appId=`, `pkg=`, `codePath=`, `versionCode=`, `timeStamp=`, `lastUpdateTime=`, `installerPackageName=` 등이고, 권한은 `declared permissions:`, `requested permissions:`, `install permissions:`, `runtime permissions:` 절로 나뉩니다 [1]. dumpsys 의 시각은 `yyyy-MM-dd HH:mm:ss` 형식이라 밀리초가 잘리고 시간대 표시가 없어서 [1], 정밀한 시각은 파일의 16진수 값으로 확인합니다. 출력을 뽑는 방법은 [dumpsys 출력](../../logs/dumpsys.md) 페이지를 봅니다.
 
 ## 증거로서 의미
 
@@ -133,7 +133,7 @@ ALEAPP 의 permissions 모듈 중 "Package and Shared User" 표는 `<package>` �
 3. 찾는 앱의 `<package name="...">` 요소에서 codePath, version, installer, ft, ut 를 읽습니다.
 4. 16진수 시각을 10진수 밀리초로 바꾼 다음 UTC 로 바꿉니다.
 
-아래는 명세로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다.
+아래는 명세로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```
 ft="1990292d000"
@@ -141,7 +141,7 @@ ft="1990292d000"
              = 2025-09-01 00:00:00 UTC
 ```
 
-`packages.list` 는 공백으로 나누어 위 표의 순서대로 읽으면 되고, 마지막 칸으로 설치자를 바로 볼 수 있습니다.
+`packages.list` 는 공백으로 나누어 위 표의 순서대로 읽으면 되고, 마지막 필드로 설치자를 바로 볼 수 있습니다.
 
 ### 공개 도구로 따라가기
 
@@ -155,7 +155,7 @@ ALEAPP 의 packageInfo 모듈은 `packages.xml` 이 ABX 이면 먼저 풀고(che
 
 ## 실습
 
-`/data/system/` 폴더가 들어 있는 공개 검체(NIST CFReDS 등)나 직접 만든 시험 기기의 추출본으로 풀어 봅니다.
+`/data/system/` 폴더가 들어 있는 공개 시험 데이터(NIST CFReDS 등)나 직접 만든 시험 기기의 추출본으로 풀어 봅니다.
 
 1. `packages.xml` 은 ABX 입니까, 일반 XML 입니까?
 2. `<version>` 의 buildFingerprint 는 빌드 정보와 같습니까?

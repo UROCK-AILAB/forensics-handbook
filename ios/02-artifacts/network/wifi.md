@@ -16,13 +16,13 @@ nav_order: 660
 
 iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있고, 기기는 네트워크마다 다른 Wi-Fi 주소로 자신을 알립니다 [2]. 네트워크별 개인 MAC 주소 목록에는 쓰고 있는 주소 값과 주소를 만든 시각 등이 들어 있습니다 [1]. 공유기나 사내 무선망 기록에 남은 MAC 주소를 기기와 맞춰 볼 때 이 목록이 다리 역할을 합니다.
 
-로컬 백업에는 지운 네트워크로 보이는 목록과, 와이파이 접속 지점·신호 세기·위치 칸이 한 표에 모인 데이터 사용량 DB 의 `ZWIFIDATA` 표도 들어 있습니다. 백업에 알려진 네트워크 목록이 없을 때 이 두 가지가 그 빈자리를 일부 메웁니다.
+로컬 백업에는 지운 네트워크로 보이는 목록과, 와이파이 접속 지점·신호 세기·위치 열이 한 표에 모인 데이터 사용량 DB 의 `ZWIFIDATA` 표도 들어 있습니다. 백업에 알려진 네트워크 목록이 없을 때 이 두 가지가 그 빈자리를 일부 메웁니다.
 
 ## 위치와 버전별 차이
 
 ### 공개 자료에 나온 파일
 
-와이파이 기록은 아래 네 파일 이름으로 찾습니다 [1]. 기기 안 경로는 검체에서 파일 이름으로 찾아 확인합니다.
+와이파이 기록은 아래 네 파일 이름으로 찾습니다 [1]. 기기 안 경로는 실제 데이터에서 파일 이름으로 찾아 확인합니다.
 
 | 파일 이름 | 담는 것 | 근거 |
 |---|---|---|
@@ -45,7 +45,7 @@ iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있
 | `RootDomain :: Library/Preferences/com.apple.wifid.plist` | `joinPMAssertionResetTimestamp`, `joinPMAssertionTimeUsedKey` 키 |
 | `WirelessDomain :: Library/Databases/DataUsage.sqlite` | `ZWIFIDATA` 표 |
 
-공개 자료의 `com.apple.wifi-private-mac-networks.plist` 와 백업의 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르고, 두 파일이 같은 역할인지는 공개 자료가 없습니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있습니다. 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+공개 자료의 `com.apple.wifi-private-mac-networks.plist` 와 백업의 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르고, 두 파일이 같은 역할인지 설명한 공개 문서는 없습니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있습니다. 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전별 차이
 
@@ -78,7 +78,7 @@ plist 를 읽는 방법은 [속성 목록 파일](../../01-foundations/data-form
 
 ### 개인 MAC 주소 목록
 
-이 목록에는 `SSID_STR`, `BSSID`, `lastUpdated`, `lastJoined`, `addedAt`, `PresentInKnownNetworks`, `LinkDownTimestamp`, `MacGenerationTimeStamp`, `FirstJoinWithNewMacTimestamp` 와 `PRIVATE_MAC_ADDRESS` 아래의 `PRIVATE_MAC_ADDRESS_IN_USE`, `PRIVATE_MAC_ADDRESS_VALUE`, `PRIVATE_MAC_ADDRESS_VALID` 키가 있습니다 [1]. `PresentInKnownNetworks` 라는 키 이름으로 보아, 알려진 네트워크 목록에서 빠진 네트워크도 이 목록에는 남을 수 있습니다.
+이 목록에는 `SSID_STR`, `BSSID`, `lastUpdated`, `lastJoined`, `addedAt`, `PresentInKnownNetworks`, `LinkDownTimestamp`, `MacGenerationTimeStamp`, `FirstJoinWithNewMacTimestamp` 와 `PRIVATE_MAC_ADDRESS` 아래의 `PRIVATE_MAC_ADDRESS_IN_USE`, `PRIVATE_MAC_ADDRESS_VALUE`, `PRIVATE_MAC_ADDRESS_VALID` 키가 있습니다 [1]. `PresentInKnownNetworks` 라는 키 이름으로 보면, 알려진 네트워크 목록에서 빠진 네트워크도 이 목록에는 남을 수 있습니다.
 
 iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
@@ -90,11 +90,11 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
 ### 지운 네트워크 목록
 
-`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 꼴이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다. 파일 이름과 `RemovedAt` 키로 보아 사용자가 지운 네트워크의 목록으로 보이지만, 어떤 조작이 이 목록에 항목을 더하는지는 공개 자료가 없습니다.
+`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 형식이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다. 파일 이름과 `RemovedAt` 키로 보아 사용자가 지운 네트워크의 목록으로 보이지만, 어떤 조작이 이 목록에 항목을 더하는지 설명한 공개 문서는 없습니다.
 
 ### 데이터 사용량 DB 의 ZWIFIDATA 표
 
-`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 칸(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 그 밖에 칸 3개가 더 있습니다. 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준은 공개 자료가 없습니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
+`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 열(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 그 밖에 열 3개가 더 있습니다. 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준을 설명한 공개 문서는 없습니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -112,11 +112,11 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 - 네트워크에 붙은 기록은 그 네트워크로 무엇을 주고받았는지 알려 주지 않습니다.
 - 기기를 누가 들고 있었는지는 이 기록만으로 알 수 없고, [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 의 흐름으로 따로 판단합니다.
 
-보고서에는 "이 기기의 알려진 네트워크 목록에 이 SSID 가 있고, 사용자 접속 시각 키의 값은 이것이다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 기기의 알려진 네트워크 목록에 이 SSID 가 있고, 사용자 접속 시각 키의 값은 이것이다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-알려진 네트워크 목록의 시각 키는 이름대로 읽으면 추가(`AddedAt`), 갱신(`UpdatedAt`), 마지막 발견(`LastDiscoveredAt`), 사용자 접속(`JoinedByUserAt`), 시스템 접속(`JoinedBySystemAt`) 시각이고, 접속 지점마다 마지막 연결(`LastAssociatedAt`)과 위치를 잰 시각(`LocationTimestamp`)이 따로 있습니다 [1]. 이 키들이 UTC 인지 현지 시각인지, plist 날짜형인지 숫자형인지는 공개 자료가 없어 검체에서 확인합니다. plist 날짜형이면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽고, 숫자면 자릿수로 기준을 가려 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 바꿉니다.
+알려진 네트워크 목록의 시각 키는 이름대로 읽으면 추가(`AddedAt`), 갱신(`UpdatedAt`), 마지막 발견(`LastDiscoveredAt`), 사용자 접속(`JoinedByUserAt`), 시스템 접속(`JoinedBySystemAt`) 시각이고, 접속 지점마다 마지막 연결(`LastAssociatedAt`)과 위치를 잰 시각(`LocationTimestamp`)이 따로 있습니다 [1]. 이 키들이 UTC 인지 현지 시각인지, plist 날짜형인지 숫자형인지는 실제 데이터로 확인해야 합니다. plist 날짜형이면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽고, 숫자면 자릿수로 기준을 판별해 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 바꿉니다.
 
 `Last` 로 시작하는 키는 가장 최근 값 하나만 담는 것으로 보여서, 그 네트워크에 처음 붙은 때나 중간의 접속 이력은 이 목록에 없을 수 있습니다. 지운 네트워크 목록의 `RemovedAt` 과 `ZWIFIDATA` 의 `ZTIMESTAMP`·`ZTIMEAT` 도 시각 기준이 알려져 있지 않아서, 같은 접속을 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 봅니다.
 
@@ -141,7 +141,7 @@ WHERE relativePath LIKE '%wifi%'
 ORDER BY domain, relativePath;
 ```
 
-찾은 `fileID` 로 백업 폴더에서 파일을 찾아 복사본으로 옮기고, 헥스 편집기로 첫 8바이트를 봅니다. 아래는 이진 plist 명세로 만든 예시이고 특정 검체의 값이 아닙니다.
+찾은 `fileID` 로 백업 폴더에서 파일을 찾아 복사본으로 옮기고, 헥스 편집기로 첫 8바이트를 봅니다. 아래는 이진 plist 명세로 만든 예시이고 특정 기기의 값이 아닙니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07   문자
@@ -162,7 +162,7 @@ for key, item in data.items():
     print(key, item.get("RemovedAt"), item.get("SupportedSecurityTypes"))
 ```
 
-`ZWIFIDATA` 는 `DataUsage.sqlite` 복사본을 열어 `SELECT ZSSID, ZBSSID, ZTIMESTAMP, ZTIMEAT, ZLATITUDE, ZLONGITUDE, ZLOCACCURACY FROM ZWIFIDATA;` 로 먼저 훑고, 시각 칸은 기준을 확인한 뒤에 바꿉니다.
+`ZWIFIDATA` 는 `DataUsage.sqlite` 복사본을 열어 `SELECT ZSSID, ZBSSID, ZTIMESTAMP, ZTIMEAT, ZLATITUDE, ZLONGITUDE, ZLOCACCURACY FROM ZWIFIDATA;` 로 먼저 살펴보고, 시각 열은 기준을 확인한 뒤에 바꿉니다.
 
 ## 교차 검증
 
@@ -180,7 +180,7 @@ for key, item in data.items():
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에 아이폰 백업이나 파일 시스템 추출이 있으면 아래 질문으로 풀어 봅니다. 없으면 연습용 기기에서 네트워크 두세 개에 들어갔다가 하나를 지운 뒤 백업을 떠서 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)에 아이폰 백업이나 파일 시스템 추출이 있으면 아래 질문으로 풀어 봅니다. 없으면 연습용 기기에서 네트워크 두세 개에 들어갔다가 하나를 지운 뒤 백업을 떠서 풀어 봅니다.
 
 1. `Manifest.db` 에서 이름에 wifi 가 든 파일은 몇 개이고, 어느 도메인에 있습니까? 알려진 네트워크 목록이 있습니까?
 2. 지운 네트워크 목록에 방금 지운 SSID 가 있습니까? `RemovedAt` 값은 어떤 형식이고, 지운 시각과 맞습니까?

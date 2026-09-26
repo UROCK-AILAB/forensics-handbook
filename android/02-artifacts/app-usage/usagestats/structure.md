@@ -7,7 +7,7 @@ nav_order: 460
 
 # 파일 구조 (usagestats)
 
-앱 사용 기록(usagestats)이 디스크에 어떤 폴더와 파일로 남는지, 파일 안의 칸과 시각을 어떻게 읽는지 정리합니다. 소스에 근거한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 이전 Android 버전에서는 다를 수 있습니다.
+앱 사용 기록(usagestats)이 디스크에 어떤 폴더와 파일로 남는지, 파일 안의 필드와 시각을 어떻게 읽는지 정리합니다. 소스에 근거한 값은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 이전 Android 버전에서는 다를 수 있습니다.
 
 ## 한 줄 요약
 
@@ -48,7 +48,7 @@ usagestats 는 사용자별 CE 영역의 `usagestats` 폴더에 일·주·월·�
 | 4 | 프로토콜 버퍼 | UsageStatsProto |
 | 5 | 프로토콜 버퍼 V2(패키지 이름 등을 토큰으로 바꿔 저장) | UsageStatsProtoV2 |
 
-현행 AOSP 의 기본 버전(DEFAULT_CURRENT_VERSION)은 5이고 백업 버전(BACKUP_VERSION)은 4입니다 [1]. 버전을 올릴 때는 이전 형식으로 읽은 다음, 버전 5 이상으로 올리는 경우 토큰으로 바꿔 새 형식으로 다시 씁니다 [1]. 검체가 어느 버전을 쓰는지는 `version` 파일로 확인합니다.
+현행 AOSP 의 기본 버전(DEFAULT_CURRENT_VERSION)은 5이고 백업 버전(BACKUP_VERSION)은 4입니다 [1]. 버전을 올릴 때는 이전 형식으로 읽은 다음, 버전 5 이상으로 올리는 경우 토큰으로 바꿔 새 형식으로 다시 씁니다 [1]. 분석 대상 기기가 어느 버전을 쓰는지는 `version` 파일로 확인합니다.
 
 ALEAPP 는 프로토콜 버퍼 파일을 문자열을 파일 안에 넣는 "Version 1" 과 바깥의 mappings 파일이 필요한 "Version 2" 로 나눠 부릅니다 [2]. AOSP 의 DB 버전 번호(4·5)와 이름이 다르니 보고서에서 섞어 쓰지 않습니다.
 
@@ -75,7 +75,7 @@ ALEAPP 는 프로토콜 버퍼 파일을 문자열을 파일 안에 넣는 "Vers
 
 **IntervalStatsObfuscatedProto** — 구간 파일 한 개입니다.
 
-| 번호 | 칸 | 뜻 |
+| 번호 | 필드 | 뜻 |
 |---|---|---|
 | 1 | end_time_ms | 구간 끝 시각 |
 | 2 | major_version | 주 버전 |
@@ -92,7 +92,7 @@ ALEAPP 는 프로토콜 버퍼 파일을 문자열을 파일 안에 넣는 "Vers
 
 **UsageStatsObfuscatedProto** — 패키지 하나의 누적 통계입니다.
 
-| 번호 | 칸 | 번호 | 칸 |
+| 번호 | 필드 | 번호 | 필드 |
 |---|---|---|---|
 | 1 | package_token | 7 | chooser_actions |
 | 3 | last_time_active_ms | 8 | last_time_service_used_ms |
@@ -101,9 +101,9 @@ ALEAPP 는 프로토콜 버퍼 파일을 문자열을 파일 안에 넣는 "Vers
 | 6 | app_launch_count | 11 | total_time_visible_ms |
 |  |  | 12 | last_time_component_used_ms |
 
-**EventObfuscatedProto** — 이벤트 한 건입니다. 어느 이벤트가 어느 칸을 채우는지는 [이벤트 종류](event-types.md) 페이지에 정리했습니다.
+**EventObfuscatedProto** — 이벤트 한 건입니다. 어느 이벤트가 어느 필드를 채우는지는 [이벤트 종류](event-types.md) 페이지에 정리했습니다.
 
-| 번호 | 칸 | 번호 | 칸 |
+| 번호 | 필드 | 번호 | 필드 |
 |---|---|---|---|
 | 1 | package_token | 8 | standby_bucket |
 | 2 | class_token | 9 | notification_channel_id_token |
@@ -117,7 +117,7 @@ ALEAPP 는 프로토콜 버퍼 파일을 문자열을 파일 안에 넣는 "Vers
 
 ## 시각 해석
 
-파일 안의 시각 칸(time_ms, last_time_active_ms, last_time_visible_ms, end_time_ms 등)은 절대 시각이 아니고, 구간 시작 시각(beginTime, 곧 파일 이름)으로부터의 밀리초 차이입니다. 읽을 때는 아래처럼 파일 이름 값에 더합니다 [5].
+파일 안의 시각 필드(time_ms, last_time_active_ms, last_time_visible_ms, end_time_ms 등)은 절대 시각이 아니고, 구간 시작 시각(beginTime, 곧 파일 이름)으로부터의 밀리초 차이입니다. 읽을 때는 아래처럼 파일 이름 값에 더합니다 [5].
 
 ```java
 event.mTimeStamp = beginTime + proto.readLong(EventObfuscatedProto.TIME_MS);
@@ -125,7 +125,7 @@ event.mTimeStamp = beginTime + proto.readLong(EventObfuscatedProto.TIME_MS);
 
 쓸 때는 구간 시작 이후의 시각만 쓰는 것이 원칙이지만, 넘김(rollover) 처리 때문에 시작 1시간 전까지는 허용합니다. 그래서 차이값이 음수일 수 있습니다 [5]. ALEAPP 는 음수가 아닌 값은 파일 이름에 더하고 음수 값은 절댓값을 그대로 시각으로 쓰며, 결과는 UTC 로 보여 줍니다 [2]. AOSP 는 쓸 때 시각에서 구간 시작을 뺀 값을 적고(차이가 0이면 1을 적습니다), 읽을 때는 부호와 상관없이 구간 시작에 더합니다 [5]. 곧 AOSP 기준으로 음수는 구간 시작보다 앞선 시각이라서, 음수를 절댓값으로 읽는 ALEAPP 와 결과가 다를 수 있고 음수가 나온 이벤트는 두 방법으로 모두 계산해 봅니다.
 
-아래는 명세로 만든 계산 예시이고 검체에서 나온 값이 아닙니다.
+아래는 명세로 만든 계산 예시이고 실제 기기에서 나온 값이 아닙니다.
 
 | 단계 | 값 |
 |---|---|
@@ -157,7 +157,7 @@ user=#
     event aggregations
 ```
 
-맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 날짜 문자열이고, 한국어로 설정한 기기에서는 한글이 섞여 나옵니다. "In-memory daily stats" 절에는 timeRange 가 여러 개 나오고, 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙습니다. 이벤트 줄에 나온 이벤트 이름과 칸은 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
+맨 앞의 "Last ## hour events" 절에 이벤트가 한 줄에 하나씩 나오고, time 값은 밀리초 숫자가 아니라 날짜 문자열이고, 한국어로 설정한 기기에서는 한글이 섞여 나옵니다. "In-memory daily stats" 절에는 timeRange 가 여러 개 나오고, 각각 packages, ChooserCounts, configurations, event aggregations 하위 절이 붙습니다. 이벤트 줄에 나온 이벤트 이름과 필드는 [이벤트 종류](event-types.md) 페이지에, dumpsys 전반은 [dumpsys 출력](../../logs/dumpsys.md) 페이지에 있습니다.
 
 현행 AOSP 의 dumpsys usagestats 는 `--checkin`, `-c`, `flush`, `apptimelimit`, `file`, `database-info`, `appstandby`, `stats-directory`, `mappings`, `broadcast-response-stats`, `app-component-usage` 인자를 받습니다 [3]. adb 일반 권한으로 어느 인자까지 쓸 수 있는지는 기기에서 확인합니다.
 
@@ -168,15 +168,15 @@ user=#
 1. `usagestats` 폴더를 통째로 확보합니다. 구간 파일만 뽑고 `mappings` 와 `version` 을 빠뜨리면 이름과 형식 판단이 어려워집니다. 확보 방법은 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 2. `version` 파일로 스키마 버전을 확인합니다. 1~3이면 XML, 4 이상이면 프로토콜 버퍼입니다.
 3. 구간 파일을 헥스 편집기로 열어 [프로토콜 버퍼](../../../01-foundations/data-formats/protobuf.md) 페이지의 방법으로 필드 번호를 찾고, 위 표와 맞춰 봅니다. `.proto` 없이 필드 번호만 풀어 주는 범용 프로토콜 버퍼 해독기를 써도 됩니다.
-4. 토큰 번호는 `mappings` 파일에서 문자열로 바꾸고, 시각 칸은 파일 이름에 더해 절대 시각으로 바꿉니다.
+4. 토큰 번호는 `mappings` 파일에서 문자열로 바꾸고, 시각 필드는 파일 이름에 더해 절대 시각으로 바꿉니다.
 
 ### 공개 도구로 따라가기
 
-ALEAPP 의 usagestats 모듈은 XML 과 프로토콜 버퍼(Version 1·2) 파일을 모두 읽습니다. 먼저 XML 로 읽어 보고 실패(ParseError)하면 프로토콜 버퍼로 읽으며, 경로에 daily·weekly·monthly·yearly 중 어느 것이 들어 있는지로 구간을 정합니다 [2]. 결과는 표 하나로 나오고 'User (UID)', 'Timestamp / Last Time Active', 'Usage Type', 'Package', 'Event Type', 'Class', 'App Launch Count', 'Total Time Visible (ms)', 'Standby Bucket (high 16 bits)', 'Notification Channel', 'Interval' 같은 칸이 붙습니다 [2]. 같은 기록이 여러 구간에서 겹쳐 나올 수 있어서 합산할 때 주의합니다.
+ALEAPP 의 usagestats 모듈은 XML 과 프로토콜 버퍼(Version 1·2) 파일을 모두 읽습니다. 먼저 XML 로 읽어 보고 실패(ParseError)하면 프로토콜 버퍼로 읽으며, 경로에 daily·weekly·monthly·yearly 중 어느 것이 들어 있는지로 구간을 정합니다 [2]. 결과는 표 하나로 나오고 'User (UID)', 'Timestamp / Last Time Active', 'Usage Type', 'Package', 'Event Type', 'Class', 'App Launch Count', 'Total Time Visible (ms)', 'Standby Bucket (high 16 bits)', 'Notification Channel', 'Interval' 같은 열이 붙습니다 [2]. 같은 기록이 여러 구간에서 겹쳐 나올 수 있어서 합산할 때 주의합니다.
 
 ## 실습
 
-usagestats 폴더가 들어 있는 공개 검체나 직접 만든 시험 기기의 추출본으로 풀어 봅니다.
+usagestats 폴더가 들어 있는 공개 실습 이미지나 직접 만든 시험 기기의 추출본으로 풀어 봅니다.
 
 1. `version` 파일에 적힌 버전은 몇이고, `mappings` 파일이 있습니까?
 2. `daily/` 폴더에서 가장 오래된 파일 이름을 UTC 날짜로 바꾸면 언제이고, 추출 시각과의 차이가 정리 기준(10일)과 맞습니까?

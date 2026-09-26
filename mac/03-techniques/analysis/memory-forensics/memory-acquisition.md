@@ -42,7 +42,7 @@ osxpmem이 지원하는 macOS 버전과 Apple 실리콘 지원 여부, 커널 �
 | AuxKC를 두는 곳 | 데이터 볼륨 | AuxKC 측정값을 LocalPolicy에 서명해 넣음 |
 | 커널 확장을 켜는 조건 | AuxKC를 다시 만들 때 사용자 승인과 재시동 (macOS 11부터) | 전원 버튼을 누른 채 시동해 One True Recovery(1TR)로 들어가 보안 정책을 Reduced Security로 낮추고 "커널 확장 허용"을 체크한 뒤 관리자 암호를 넣고 재시동 |
 
-AuxKC를 만들 때는 실제로 들어간 커널 확장 목록을 담은 kext receipt가 생기고, 그 SHA-384 해시가 LocalPolicy에 들어갑니다[1]. 확보 도구의 커널 확장을 올렸다면 이 기록에도 그 확장이 남는다는 뜻이라서, 조사 뒤에 커널 확장 흔적을 볼 때 조사자가 올린 것인지 먼저 가려야 합니다. 커널 확장 흔적 자체는 [커널·시스템 확장 (KEXT·System Extension)](../../../02-artifacts/persistence/kext-system-extension.md)에서, SIP는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../../01-foundations/protection/codesign-notarization-sip.md)에서 다룹니다.
+AuxKC를 만들 때는 실제로 들어간 커널 확장 목록을 담은 kext receipt가 생기고, 그 SHA-384 해시가 LocalPolicy에 들어갑니다[1]. 확보 도구의 커널 확장을 올렸다면 이 기록에도 그 확장이 남는다는 뜻이라서, 조사 뒤에 커널 확장 흔적을 볼 때 조사자가 올린 것인지 먼저 구분해야 합니다. 커널 확장 흔적 자체는 [커널·시스템 확장 (KEXT·System Extension)](../../../02-artifacts/persistence/kext-system-extension.md)에서, SIP는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../../01-foundations/protection/codesign-notarization-sip.md)에서 다룹니다.
 
 커널 확장이 필요한 확보 도구를 Apple 실리콘 맥에서 쓰려면 보안 정책을 낮추고 재시동해야 하고, 재시동하면 확보하려던 메모리가 사라집니다.
 
@@ -62,7 +62,7 @@ Thunderbolt 같은 포트에 꽂은 장치가 메모리를 직접 읽는 직접 
 
 도구 목록에 이름이 있다고 해서 조사 대상의 macOS 버전을 지원한다고 보면 안 됩니다. 도구 목록은 버전 확인을 전제로 한 것이고[6], osxpmem도 조사 대상 버전을 지원하는지 먼저 확인해야 합니다.
 
-Apple 실리콘 맥에서 커널 확장을 허용하는 과정에는 재시동이 들어 있어서, 확보를 준비하는 동작이 확보 대상을 지워 버릴 수 있습니다. 확보를 시작하기 전에 도구가 커널 확장을 요구하는지부터 확인해야 하는 까닭입니다.
+Apple 실리콘 맥에서 커널 확장을 허용하는 과정에는 재시동이 들어 있어서, 확보를 준비하는 동작이 확보 대상을 지워 버릴 수 있습니다. 확보를 시작하기 전에 도구가 커널 확장을 요구하는지부터 확인해야 하는 이유입니다.
 
 메모리 이미지를 얻어도 모든 비밀이 보이지는 않습니다. Secure Enclave처럼 하드웨어가 따로 보호하는 영역의 한계는 [분석 도구와 한계 (Tools·Limits)](tools-limits.md)에 모아 두었습니다.
 

@@ -12,7 +12,7 @@ Replika·Character.AI 같은 AI 컴패니언 앱은 [AI 컴패니언 앱](compan
 
 ## 무엇을 기록하나 · 왜 생기나
 
-조사에서는 대화 원본이 서버에 있는지 기기에 있는지부터 가립니다. 이 기준은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다. 두 서비스는 기기에 남기는 것이 크게 다릅니다. DeepSeek Android 앱은 대화 목록과 메시지 본문을 SQLite 에 저장하고[3][4], Grok Android 앱에는 계정 정보와 영상 캐시가 남습니다[6].
+조사에서는 대화 원본이 서버에 있는지 기기에 있는지부터 확인합니다. 이 기준은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다. 두 서비스는 기기에 남기는 것이 크게 다릅니다. DeepSeek Android 앱은 대화 목록과 메시지 본문을 SQLite 에 저장하고[3][4], Grok Android 앱에는 계정 정보와 영상 캐시가 남습니다[6].
 
 ### DeepSeek
 
@@ -26,13 +26,13 @@ Android 앱(패키지 `com.deepseek.chat`)은 사용자별 데이터베이스에
 
 Grok 은 2023-11 에 X(옛 Twitter) 안의 기능으로 일부 사용자에게 먼저 공개됐습니다[2]. grok.com 웹과 iOS 앱은 2024-12 에 베타로 나와 2025-01-09 에 전 세계에 공개됐고, Android 앱은 2025-02-04 에 일부 지역부터 나왔습니다[2]. 3D 애니메이션 캐릭터와 대화하는 동반자 기능(2025-07), 이미지 생성 Aurora(2024-12-09), 영상 생성 Grok Imagine(2025-07-28) 같은 기능이 있어서[2], 흔적은 대화 글뿐만 아니라 생성한 이미지·영상으로도 이어집니다. 생성물 흔적의 일반 원리는 [Midjourney와 이미지 생성 서비스](../generative-media/image-generation.md)에서 다룹니다.
 
-Android 앱(패키지 `ai.x.grok`)에서 읽을 수 있는 흔적은 두 가지입니다[6]. 하나는 앱에 들어간 고객 지원 SDK(Intercom)가 설정 XML 에 남긴 계정 속성이고, 다른 하나는 Grok Imagine 영상을 재생하면서 쌓인 영상 캐시입니다. Android 기기에서 대화 본문이 어디에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 하고, ALEAPP 에도 Grok 대화 분석기는 없습니다.
+Android 앱(패키지 `ai.x.grok`)에서 읽을 수 있는 흔적은 두 가지입니다[6]. 하나는 앱에 들어간 고객 지원 SDK(Intercom)가 설정 XML 에 남긴 계정 속성이고, 다른 하나는 Grok Imagine 영상을 재생하면서 쌓인 영상 캐시입니다. Android 기기에서 대화 본문이 어디에 남는지는 실제 기기로 확인해야 하고, ALEAPP 에도 Grok 대화 분석기는 없습니다.
 
-같은 Grok 을 X 앱 안에서도, grok.com 에서도, 전용 앱에서도 쓸 수 있어서 한 사용자의 흔적이 세 곳에 흩어질 수 있습니다. X 계정으로 쓴 Grok 대화가 X 데이터 내보내기(아카이브)에 들어가는지는 공개 자료가 없어서, 받은 아카이브의 파일 목록으로 직접 확인합니다.
+같은 Grok 을 X 앱 안에서도, grok.com 에서도, 전용 앱에서도 쓸 수 있어서 한 사용자의 흔적이 세 곳에 흩어질 수 있습니다. X 계정으로 쓴 Grok 대화가 X 데이터 내보내기(아카이브)에 들어가는지는 받은 아카이브의 파일 목록으로 직접 확인합니다.
 
 ### 그 밖(Le Chat, Kimi, Qwen 등)
 
-이런 서비스를 만나면 아래 표와 같은 칸(제공 형태, 서버 위치, 보관 기간, 내보내기, 기기 저장 위치)을 사건 당시의 처리방침과 검체로 하나씩 채웁니다. 근거가 없는 칸은 비워 두고, 보고서에도 비어 있다고 적습니다.
+이런 서비스를 만나면 아래 표와 같은 항목(제공 형태, 서버 위치, 보관 기간, 내보내기, 기기 저장 위치)을 사건 당시의 처리방침과 실제 기기로 하나씩 채웁니다. 근거가 없는 칸은 비워 두고, 보고서에도 비어 있다고 적습니다.
 
 ## 위치와 버전별 차이
 
@@ -44,8 +44,8 @@ Android 앱(패키지 `ai.x.grok`)에서 읽을 수 있는 흔적은 두 가지�
 | 데이터 내보내기 | 현재 웹 버전에서만 가능[1] | 사건 당시 xAI 처리방침으로 확인 |
 | 계정 삭제 뒤 | 계정과 관련 콘텐츠·개인정보를 되살릴 수 없음[1] | 사건 당시 xAI 처리방침으로 확인 |
 | Android 패키지 | `com.deepseek.chat`[3] | `ai.x.grok`[6] |
-| Android 대화 본문 | SQLite 에 있음[4] | 공개 분석 자료 없음, 검체로 확인 |
-| iOS·웹·PC 저장 위치 | 공개 분석 자료 없음, 검체로 확인 | 공개 분석 자료 없음, 검체로 확인 |
+| Android 대화 본문 | SQLite 에 있음[4] | 공개 분석 자료 없음, 실제 기기로 확인 |
+| iOS·웹·PC 저장 위치 | 공개 분석 자료 없음, 실제 기기로 확인 | 공개 분석 자료 없음, 실제 기기로 확인 |
 
 DeepSeek 은 웹사이트 방문 기록을 통신 관련 법에 따라 3개월, 거래 기록을 소비자 보호 법에 따라 5년 보관합니다[1]. 근거 법이 어느 나라 법인지는 사건 당시의 원문판에서 확인합니다. 같은 주소라도 접속 지역에 따라 다른 언어판이 열릴 수 있어서, 사건에 쓸 때는 원문판을 따로 확보해 인용 문장과 대조합니다.
 
@@ -60,15 +60,15 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 | Grok | `databases/exoplayer_internal.db` | 영상 캐시 색인과 캐시 파일별 메타데이터 | [6] |
 | Grok | `cache/*/video-cache/*/*.exo` | 영상 캐시 조각 파일 | [6] |
 
-분석기마다 시험한 판이 다릅니다. ALEAPP 의 Grok 분석기는 Grok 1.0.71(2025-11-11)로 시험한 것이고, 영상 분석기의 마지막 수정은 2026-08-01 입니다[6]. DeepSeek 분석기 세 개(2026-05-24 작성)에는 시험한 앱 판이 적혀 있지 않습니다[3][4][5]. 두 앱 모두 지금 판과 구조가 다를 수 있어서, 검체에서 표 이름과 칸을 먼저 확인한 뒤 분석기 결과를 씁니다.
+분석기마다 시험한 판이 다릅니다. ALEAPP 의 Grok 분석기는 Grok 1.0.71(2025-11-11)로 시험한 것이고, 영상 분석기의 마지막 수정은 2026-08-01 입니다[6]. DeepSeek 분석기 세 개(2026-05-24 작성)에는 시험한 앱 판이 적혀 있지 않습니다[3][4][5]. 두 앱 모두 지금 판과 구조가 다를 수 있어서, 실제 기기에서 표 이름과 열을 먼저 확인한 뒤 분석기 결과를 씁니다.
 
 ## 구조
 
 ### DeepSeek — 대화 목록
 
-`deepseek_chat_사용자UUID.db` 의 `chat_session_list` 표에 대화 하나가 한 행으로 들어가고, 칸은 아래와 같습니다[3][7]. ALEAPP 은 이 가운데 `id`, `title`, `updated_at` 세 칸만 읽습니다[3].
+`deepseek_chat_사용자UUID.db` 의 `chat_session_list` 표에 대화 하나가 한 행으로 들어가고, 열은 아래와 같습니다[3][7]. ALEAPP 은 이 가운데 `id`, `title`, `updated_at` 세 열만 읽습니다[3].
 
-| 칸 | 형식 | 뜻 | 근거 |
+| 열 | 형식 | 뜻 | 근거 |
 |---|---|---|---|
 | `id` | TEXT | 대화 ID. 메시지 표 이름 끝에 붙는 값 | [3][7] |
 | `title` | TEXT | 대화 제목 | [3] |
@@ -82,7 +82,7 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 
 대화마다 `chat_session_messages_대화UUID` 라는 이름의 표가 따로 생깁니다[4][7]. 그래서 표를 모두 뽑으려면 `sqlite_master` 에서 `chat_session_messages_%` 로 찾아야 하고, ALEAPP 도 이렇게 찾습니다[4].
 
-| 칸 | 형식 | 뜻 | 근거 |
+| 열 | 형식 | 뜻 | 근거 |
 |---|---|---|---|
 | `role` | TEXT | 말한 쪽(`USER`·`ASSISTANT`) | [4][7] |
 | `inserted_at` | REAL | 메시지가 들어간 시각(Unix 초, 소수) | [4][7] |
@@ -103,7 +103,7 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 
 ### DeepSeek — 계정 정보
 
-`deepseek_chat.db` 의 `app_user_info` 표에는 `id`, `token`, `email`, `mobile_number` 칸이 있습니다[5]. 연동된 외부 로그인(OAuth) 프로필을 담은 JSON 칸 `id_profiles` 와 `chat_status`, `status`, `need_birthday` 칸도 있습니다[7]. `token` 은 인증 토큰이라 보고서에서는 가리고, 다루는 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다. `mmkv.default` 의 `key_user_info` 에도 토큰이 있으니 같은 원칙을 적용합니다[7].
+`deepseek_chat.db` 의 `app_user_info` 표에는 `id`, `token`, `email`, `mobile_number` 열이 있습니다[5]. 연동된 외부 로그인(OAuth) 프로필을 담은 JSON 열 `id_profiles` 와 `chat_status`, `status`, `need_birthday` 열도 있습니다[7]. `token` 은 인증 토큰이라 보고서에서는 가리고, 다루는 원칙은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)을 따릅니다. `mmkv.default` 의 `key_user_info` 에도 토큰이 있으니 같은 원칙을 적용합니다[7].
 
 ### Grok — 계정 속성
 
@@ -121,7 +121,7 @@ ALEAPP 은 `custom_attributes` 안에 `name`·`email` 이 있으면 바깥 값 �
 
 영상 캐시는 AndroidX Media3 의 SimpleCache 형식입니다[6][8]. `exoplayer_internal.db` 에서 이름이 `ExoPlayerCacheIndex` 로 시작하는 표에는 `id` 와 `key`(원래 URL)가 있고, `ExoPlayerCacheFileMetadata` 로 시작하는 표에는 캐시 파일 이름(`name`), 길이(`length`), `last_touch_timestamp`(ms)가 있습니다[6]. 표 이름 뒤에 다른 글자가 붙을 수 있어서 ALEAPP 도 앞부분으로 찾습니다[6].
 
-캐시 파일 이름은 `색인ID.위치.시각.v3.exo` 꼴입니다[8]. 첫 값은 `ExoPlayerCacheIndex` 의 `id` 와 이어지고, 두 번째 값은 원래 파일 안에서 이 조각이 시작하는 위치이며, 세 번째 값은 Unix ms 시각입니다[8]. ALEAPP 은 첫 값으로 원래 URL 을 찾아, URL 이 `https://assets.grok.com/users/` 로 시작하면 사용자가 만든 영상(User Generated)으로, 아니면 공개 영상(Public)으로 나눕니다[6].
+캐시 파일 이름은 `색인ID.위치.시각.v3.exo` 형식입니다[8]. 첫 값은 `ExoPlayerCacheIndex` 의 `id` 와 이어지고, 두 번째 값은 원래 파일 안에서 이 조각이 시작하는 위치이며, 세 번째 값은 Unix ms 시각입니다[8]. ALEAPP 은 첫 값으로 원래 URL 을 찾아, URL 이 `https://assets.grok.com/users/` 로 시작하면 사용자가 만든 영상(User Generated)으로, 아니면 공개 영상(Public)으로 나눕니다[6].
 
 ## 증거로서 의미
 
@@ -131,7 +131,7 @@ ALEAPP 은 `custom_attributes` 안에 `name`·`email` 이 있으면 바깥 값 �
 
 ## 시각 해석
 
-DeepSeek 의 `updated_at`·`inserted_at` 은 Unix 초를 소수로 담은 REAL 값이고, ALEAPP 은 이를 UTC 로 바꿔 보여 줍니다[3][4]. 같은 대화 안의 메시지 순서는 `inserted_at` 으로 정할 수 있고, ALEAPP 도 이 값으로 정렬합니다[4]. 대화 목록의 `updated_at` 은 그 대화의 마지막 메시지 시각과 견주어, 메시지 없이 목록만 바뀐 때가 있는지 봅니다.
+DeepSeek 의 `updated_at`·`inserted_at` 은 Unix 초를 소수로 담은 REAL 값이고, ALEAPP 은 이를 UTC 로 바꿔 보여 줍니다[3][4]. 같은 대화 안의 메시지 순서는 `inserted_at` 으로 정할 수 있고, ALEAPP 도 이 값으로 정렬합니다[4]. 대화 목록의 `updated_at` 은 그 대화의 마지막 메시지 시각과 비교해, 메시지 없이 목록만 바뀐 때가 있는지 봅니다.
 
 Grok 영상 캐시에는 시각이 두 개 있고 뜻이 다릅니다. 파일 이름의 시각은 Media3 가 캐시 파일을 쓰기 시작할 때의 기기 시계 값입니다[8]. `last_touch_timestamp` 는 캐시를 읽을 때마다 갱신되는 값이라 사용자가 본 시각이 아니고, 앱이 LRU 가 아닌 캐시 정리 방식을 쓰면 아예 갱신되지 않습니다[6][8]. Media3 는 파일 색인 DB 가 있으면 이 값을 DB 에만 쓰고 파일 이름은 바꾸지 않으며, 색인 DB 가 없을 때만 파일 이름을 새 시각으로 바꿉니다[8]. 두 값 모두 Unix ms 이고, ALEAPP 은 UTC 로 보여 줍니다[6].
 
@@ -151,7 +151,7 @@ ALEAPP Grok 영상 결과의 "Not Present" 는 `ExoPlayerCacheFileMetadata` 에 
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** SQLite 레코드 안의 REAL 값은 8바이트 빅 엔디언 IEEE 754 배정밀도입니다. DeepSeek `inserted_at` 을 헥스로 보면 아래처럼 읽습니다. 값은 명세대로 만든 예시이고, 검체에서 뜬 바이트가 아닙니다.
+**헥스로 한 번.** SQLite 레코드 안의 REAL 값은 8바이트 빅 엔디언 IEEE 754 배정밀도입니다. DeepSeek `inserted_at` 을 헥스로 보면 아래처럼 읽습니다. 값은 명세대로 만든 예시이고, 실제 기기에서 뜬 바이트가 아닙니다.
 
 ```
 만든 예시(SQLite REAL, 빅 엔디언 배정밀도)
@@ -190,7 +190,7 @@ sqlite3 "$DB" "SELECT m.role, datetime(m.inserted_at,'unixepoch'),
 
 ## 실습
 
-이 서비스들의 흔적이 든 공개 검체는 알려진 것이 없어서, 시험용 Android 기기와 시험 계정으로 풀어 봅니다.
+이 서비스들의 흔적이 든 공개 시험 이미지는 알려진 것이 없어서, 시험용 Android 기기와 시험 계정으로 풀어 봅니다.
 
 1. DeepSeek 앱에서 대화 두 개를 만들고 하나를 지운 뒤, `chat_session_list` 의 행과 `chat_session_messages_` 표 목록이 어떻게 바뀌는지 적어 봅니다. WAL 파일을 빼고 연 결과와도 비교합니다.
 2. 메시지 표의 `inserted_at` 과 대화 목록의 `updated_at` 을 UTC 로 바꾸고, 대화 제목을 바꾸거나 고정했을 때 `updated_at` 만 바뀌는지 확인합니다.

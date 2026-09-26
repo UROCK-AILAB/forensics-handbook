@@ -10,7 +10,7 @@ nav_order: 30
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 로그 레코드가 행위자를 적는 방식을 다룹니다. 계정을 만들고 지우는 일, 역할을 주고 빼는 일은 각 서비스의 관리 감사 기록에 남고, 그 계정이 한 행동은 서비스 로그의 행위자 필드에 남습니다. 두 기록을 잇는 열쇠가 아래 표의 "바뀌지 않는 ID" 입니다.
+이 페이지는 파일 형식이 아니라 로그 레코드가 행위자를 적는 방식을 다룹니다. 계정을 만들고 지우는 일, 역할을 주고 빼는 일은 각 서비스의 관리 감사 기록에 남고, 그 계정이 한 행동은 서비스 로그의 행위자 필드에 남습니다. 두 기록을 잇는 열쇠가 아래 표의 "바뀌지 않는 ID" 입니다.
 
 | 서비스 | 신원 종류 | 바뀌지 않는 ID | 계정·역할 변경이 남는 곳 |
 |---|---|---|---|
@@ -31,7 +31,7 @@ Entra 의 신원은 사용자와 워크로드 신원 (workload identity) 으로 
 
 사용자와 서비스 주체를 가리키는 값은 객체 ID 입니다. 액세스 토큰의 `oid` 클레임은 요청자의 바뀌지 않는 ID 이고, 같은 테넌트 안에서는 앱이 달라도 값이 같으며 Graph 가 돌려주는 사용자의 `id` 와 같습니다[2]. 같은 사람이라도 테넌트마다 객체 ID 가 다릅니다[2]. `sub` 는 앱마다 값이 달라지는 쌍 식별자 (pairwise identifier) 이고, `preferred_username`·`name` 은 바뀔 수 있는 표시용 값입니다[2].
 
-Entra 에는 역할 체계가 둘 있습니다. Entra 역할은 사용자·그룹·도메인 같은 디렉터리 자원의 권한이고, Azure RBAC 역할은 구독 안 리소스의 권한입니다(자세한 경계는 [테넌트 쪽](../model/tenancy.md)). 두 체계의 변경은 서로 다른 로그에 남습니다.
+Entra 에는 역할 체계가 둘 있습니다. Entra 역할은 사용자·그룹·도메인 같은 디렉터리 자원의 권한이고, Azure RBAC 역할은 구독 안 리소스의 권한입니다(자세한 경계는 [테넌트 페이지](../model/tenancy.md)). 두 체계의 변경은 서로 다른 로그에 남습니다.
 
 | 하는 일 | Entra 감사 로그 (범주 · 작업) | 통합 감사 로그 작업 |
 |---|---|---|
@@ -174,9 +174,9 @@ Google Cloud 레코드는 `serviceAccountKeyName` 이 있으면 키로 인증한
 - 이름으로 신원을 묶지 않습니다. AWS 에서 사용자 John 을 지우고 같은 이름으로 다시 만들면 고유 ID 가 다르고[10], Entra 는 같은 사람이라도 테넌트마다 객체 ID 가 다르며[2], Workspace 조사 도구는 사용자 이름을 바꾸면 옛 이름으로 검색되지 않습니다[31].
 - `lastSignInDateTime` 은 실패한 시도도 포함하므로 계정을 실제로 쓴 마지막 시각이 아닙니다[3]. Microsoft-Extractor-Suite 의 `Get-UsersInfo.ps1`·`Get-Roles.ps1` 은 `LastSignInDateTime`·`LastNonInteractiveSignInDateTime` 만 뽑고 `lastSuccessfulSignInDateTime` 은 뽑지 않아서[32], 이 결과로 "쓰지 않는 계정" 을 가르면 실패 시도가 섞입니다.
 - 통합 감사 로그의 작업 이름은 끝에 마침표가 붙습니다(`Add member to role.`)[5]. Entra 감사 로그의 이름(`Add member to role`)으로 만든 검색 조건을 그대로 옮기면 걸리지 않습니다[4].
-- 탐지 규칙마다 같은 기록의 필드 이름과 값 표기가 다릅니다. Sigma 의 Entra 규칙은 `properties.message`·`OperationName`·`Category` 같은 필드를 섞어 쓰고, PIM 할당을 `Add eligible member (permanent)` 로 찾는 반면 Entra 문서의 작업 이름은 `Add eligible member to role in PIM completed (permanent)` 입니다[25][4]. Google Cloud 서비스 계정 규칙은 `gcp.audit.method_name` 이 `.serviceAccounts.create` 로 끝나는지 보는 반면 IAM 감사 문서의 메서드 이름은 `google.iam.admin.v1.CreateServiceAccount` 모양입니다[25][16]. 규칙을 옮길 때는 수집한 형식에 맞춰 필드와 값을 바꿉니다. 방법은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에서 다룹니다.
-- AWS Identity Center 문서의 표는 로그인 이벤트 원천을 `signin.amazon.com` 으로 적지만[13], 콘솔 로그인 이벤트 예시의 `eventSource` 값은 `signin.amazonaws.com` 입니다[28]. 검체의 실제 값을 먼저 확인하고 검색합니다.
-- Okta 로그인 실패 레코드의 `actor.alternateId` 에 비밀번호가 들어 있을 수 있습니다. 사용자가 아이디 칸에 비밀번호를 친 경우이고, Sigma 규칙은 `legacyEventType` 이 `core.user_auth.login_failed` 인 레코드에서 이런 값을 찾습니다[25]. 보고서에 옮기거나 공유하기 전에 가립니다.
+- 탐지 규칙마다 같은 기록의 필드 이름과 값 표기가 다릅니다. Sigma 의 Entra 규칙은 `properties.message`·`OperationName`·`Category` 같은 필드를 섞어 쓰고, PIM 할당을 `Add eligible member (permanent)` 로 찾는 반면 Entra 문서의 작업 이름은 `Add eligible member to role in PIM completed (permanent)` 입니다[25][4]. Google Cloud 서비스 계정 규칙은 `gcp.audit.method_name` 이 `.serviceAccounts.create` 로 끝나는지 보는 반면 IAM 감사 문서의 메서드 이름은 `google.iam.admin.v1.CreateServiceAccount` 모양입니다[25][16]. 규칙을 옮길 때는 수집한 형식에 맞춰 필드와 값을 바꿉니다. 방법은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에서 다룹니다.
+- AWS Identity Center 문서의 표는 로그인 이벤트 원천을 `signin.amazon.com` 으로 적지만[13], 콘솔 로그인 이벤트 예시의 `eventSource` 값은 `signin.amazonaws.com` 입니다[28]. 실제 로그의 값을 먼저 확인하고 검색합니다.
+- Okta 로그인 실패 레코드의 `actor.alternateId` 에 비밀번호가 들어 있을 수 있습니다. 사용자가 아이디 입력란에 비밀번호를 친 경우이고, Sigma 규칙은 `legacyEventType` 이 `core.user_auth.login_failed` 인 레코드에서 이런 값을 찾습니다[25]. 보고서에 옮기거나 공유하기 전에 가립니다.
 - 관리 ID·서비스 주체의 로그인은 사용자 로그인과 다른 로그 범주에 있습니다. [토큰과 세션](tokens-sessions.md)에서 다룹니다.
 
 ## 도구

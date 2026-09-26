@@ -10,9 +10,9 @@ nav_order: 980
 
 ## 조사 질문
 
-AI 에이전트가 비밀번호·API 키·토큰 같은 자격 증명(credential)을 읽거나 출력했는지, 그리고 에이전트 도구 자신의 인증 정보가 어디에 어떤 방식으로 저장돼 있었는지를 밝히는 조사입니다. 질문은 두 갈래입니다. 하나는 에이전트가 사용자 프로젝트의 `.env` 파일이나 키 파일을 열어 본 경우이고, 다른 하나는 에이전트 도구나 로컬 LLM 앱에 넣어 둔 로그인 토큰·API 키가 새어 나갔는지 묻는 경우입니다.
+AI 에이전트가 비밀번호·API 키·토큰 같은 자격 증명(credential)을 읽거나 출력했는지, 그리고 에이전트 도구 자신의 인증 정보가 어디에 어떤 방식으로 저장돼 있었는지를 밝히는 조사입니다. 질문은 두 가지입니다. 하나는 에이전트가 사용자 프로젝트의 `.env` 파일이나 키 파일을 열어 본 경우이고, 다른 하나는 에이전트 도구나 로컬 LLM 앱에 넣어 둔 로그인 토큰·API 키가 새어 나갔는지 묻는 경우입니다.
 
-두 갈래 모두 에이전트가 무엇을 실행했는지 먼저 알아야 합니다. 실행 기록을 찾고 읽는 절차는 [AI 에이전트가 무엇을 실행했나](agent-actions.md)를 따르고, 이 페이지는 자격 증명과 관련된 부분만 다룹니다. 인증 정보가 남는 곳의 일반 원리는 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
+두 경우 모두 에이전트가 무엇을 실행했는지 먼저 알아야 합니다. 실행 기록을 찾고 읽는 절차는 [AI 에이전트가 무엇을 실행했나](agent-actions.md)를 따르고, 이 페이지는 자격 증명과 관련된 부분만 다룹니다. 인증 정보가 남는 곳의 일반 원리는 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
 ## 먼저 확인할 것
 
@@ -22,7 +22,7 @@ AI 에이전트가 비밀번호·API 키·토큰 같은 자격 증명(credential
 
 - coding-agent-forensics 는 `auth.json`, `.credentials.json`, API 키가 든 설정 파일을 모으지 말라고 권합니다. 조사에 보탬이 되지 않고 들고 있는 비밀만 늘린다는 이유입니다[8].
 - ccfx 는 `.credentials.json` 의 존재·크기·수정 시각만 기록하고 토큰 값은 읽지 않습니다. 다만 `-ac` 옵션으로 만드는 `claude-acquisition.zip` 은 폴더를 바이트 단위로 복사하므로 `.credentials.json` 의 OAuth 토큰이 평문으로 들어가고, `--redact-pii` 도 이 압축본에는 적용되지 않습니다[7].
-- claude-forensics 는 `paste-cache/` 의 붙여넣은 내용이 100,000바이트(`_PASTE_INLINE_MAX_BYTES`) 이하면 결과 파일 `paste-cache.jsonl` 의 `content` 칸에 그대로 넣습니다[6]. 도구가 만든 결과물에도 비밀 값이 옮겨 갈 수 있습니다.
+- claude-forensics 는 `paste-cache/` 의 붙여넣은 내용이 100,000바이트(`_PASTE_INLINE_MAX_BYTES`) 이하면 결과 파일 `paste-cache.jsonl` 의 `content` 필드에 그대로 넣습니다[6]. 도구가 만든 결과물에도 비밀 값이 옮겨 갈 수 있습니다.
 
 인증 파일은 값 대신 있는지·시각·권한만 적는 방식으로 충분한 경우가 많습니다. 통째로 복사해야 한다면 압축본을 암호화해 보관하고 그 사실을 기록합니다.
 
@@ -32,7 +32,7 @@ AI 에이전트가 비밀번호·API 키·토큰 같은 자격 증명(credential
 
 **도구 버전과 날짜를 적습니다.** 인증 파일 이름과 저장 방식은 판마다 바뀔 수 있습니다. 아래 표는 2026년 9월 기준입니다.
 
-**Windows 에 어떤 폴더가 생기는지는 검체로 봅니다.** 2026년 중반 Windows 판 Claude Code 는 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다는 분석이 있지만[6], 그 뒤 Windows 11 에서 `history.jsonl` 과 그 안의 `pastedContents` 항목이 남은 사례가 있습니다. 판에 따라 다르므로 검체에서 폴더가 실제로 있는지부터 적습니다.
+**Windows 에 어떤 폴더가 생기는지는 실제 기기로 봅니다.** 2026년 중반 Windows 판 Claude Code 는 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다는 분석이 있지만[6], 그 뒤 Windows 11 에서 `history.jsonl` 과 그 안의 `pastedContents` 항목이 남은 사례가 있습니다. 판에 따라 다르므로 분석 대상 기기에서 폴더가 실제로 있는지부터 적습니다.
 
 ## 볼 아티팩트와 순서
 
@@ -58,10 +58,10 @@ AI 에이전트가 비밀번호·API 키·토큰 같은 자격 증명(credential
 | Claude Code 의 Anthropic 프로필 | `%APPDATA%\Anthropic` 아래 `configs/`, 활성 프로필은 `active_config`[2] | `~/.config/anthropic`[2] | `~/.config/anthropic`[2] |
 | Codex CLI 로그인 | `cli_auth_credentials_store` 로 정함. 기본값 `"file"` 이면 `CODEX_HOME/auth.json`, `"keyring"` 이면 OS 자격 증명 저장소(못 쓰면 실패), `"auto"` 는 OS 저장소를 쓰다가 못 쓰면 `CODEX_HOME` 의 파일, `"ephemeral"` 은 실행 중 메모리에만 둠[9][5] | 같음 | 같음 |
 | Codex CLI 의 MCP OAuth 토큰 | `mcp_oauth_credentials_store` 로 정함. 기본값 `"auto"` 는 OS 저장소를 쓰다가 못 쓰면 `CODEX_HOME/.credentials.json`, `"file"` 은 이 파일, `"keyring"` 은 OS 저장소만 씀[9] | 같음 | 같음 |
-| Cursor CLI | 세션별 `~/.cursor/chats/<workspace-hash>/<agent-id>/store.db` 에 `blobs`·`meta` 표가 있음. 이 저장소의 `blobEncryptionKey` 는 agentsview 분석기가 읽지 않음[10]. 계정 로그인 정보가 저장되는 곳은 공개된 분석 자료가 없어 검체로 확인해야 함 | 같음 | 같음 |
-| Gemini CLI | 인증 정보 캐시 위치는 공개된 분석 자료가 없어 검체로 확인해야 함 | 같음 | 같음 |
+| Cursor CLI | 세션별 `~/.cursor/chats/<workspace-hash>/<agent-id>/store.db` 에 `blobs`·`meta` 표가 있음. 이 저장소의 `blobEncryptionKey` 는 agentsview 분석기가 읽지 않음[10]. 계정 로그인 정보가 저장되는 곳은 실제 기기에서 확인해야 함 | 같음 | 같음 |
+| Gemini CLI | 인증 정보 캐시 위치는 실제 기기에서 확인해야 함 | 같음 | 같음 |
 
-Codex 의 OS 자격 증명 저장소 안 항목 이름은 공개된 자료가 없어 검체의 자격 증명 관리자나 키체인에서 확인합니다. `.credentials.json` 은 같은 사용자로 실행되는 다른 프로그램도 읽을 수 있고, 키링에 둔 MCP 토큰은 사용자가 OS 수준에서 따로 허용하지 않는 한 Codex 만 읽습니다[9].
+Codex 의 OS 자격 증명 저장소 안 항목 이름은 실제 기기의 자격 증명 관리자나 키체인에서 확인합니다. `.credentials.json` 은 같은 사용자로 실행되는 다른 프로그램도 읽을 수 있고, 키링에 둔 MCP 토큰은 사용자가 OS 수준에서 따로 허용하지 않는 한 Codex 만 읽습니다[9].
 
 Claude Code `.credentials.json` 의 `claudeAiOauth` 아래에는 `accessToken`, `refreshToken`, `expiresAt`, `refreshTokenExpiresAt`, `scopes`, `subscriptionType`, `rateLimitTier` 키가 있습니다(Windows 11 기준). Codex 는 기본값이 `"file"` 이므로 `.codex` 폴더에 `auth.json` 이 없으면 로그인하지 않았거나, 설정으로 저장 방식을 바꿨거나, 파일을 지운 경우를 차례로 따집니다. `.credentials.json` 은 나이 기준 정리 대상이 아니라서 사용자가 지울 때까지 남습니다[1]. 파일과 키체인의 보호 원리는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html), [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html), [macOS 키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에서 다룹니다.
 
@@ -98,7 +98,7 @@ Chatbox 의 `settings` 에는 `userAvatarKey`, `defaultAssistantAvatarKey` 처�
 
 1. **실행 기록에서 자격 증명 파일을 건드린 호출을 찾습니다.** 세션 기록의 도구 호출 `input` 에서 `.env`, `.credentials.json`, `auth.json`, 키 파일 이름 같은 경로와, 환경 변수를 출력하는 명령을 찾습니다. 그다음 짝이 되는 결과 항목의 `content` 와 `toolUseResult.stdout`·`stderr` 에 실제로 값이 찍혔는지 봅니다(키 이름은 Windows 11 기준). 하위 에이전트 기록과 `tool-results/` 도 같이 찾아야 빠뜨리지 않습니다. 검색 결과를 보고서에 옮길 때는 값을 가립니다.
 
-2. **기록 밖에 남은 사본을 찾습니다.** 사용자가 비밀 값을 붙여넣었다면 `paste-cache/<hash>.txt` 에 남을 수 있고, 파일 이름은 Claude Code 가 붙인 내용 해시입니다[6]. `history.jsonl` 의 `pastedContents` 항목에는 붙여넣은 내용이나 그 해시(`contentHash`)가 들어가서 어느 프롬프트에서 붙여넣었는지 이을 수 있습니다. 에이전트가 `.env` 같은 파일을 고쳤다면 `file-history/<session>/<hash>@v<N>` 에 고치기 전 판이 남을 수 있습니다[6]. `shell-snapshots/` 의 `snapshot-zsh-<ms>-<rand>.sh`(bash 면 `snapshot-bash-`)는 Bash 도구가 쓴 셸 환경이고, 파일 이름의 밀리초가 Claude Code 를 실행한 시각입니다[6]. 이 파일의 `export` 줄에 토큰이 남을 수 있어서 claude-forensics 는 이 줄을 `exports` 칸으로 뽑습니다[6]. 디버그를 켰던 세션이면 `~/.claude/debug/` 의 세션별 로그도 봅니다.
+2. **기록 밖에 남은 사본을 찾습니다.** 사용자가 비밀 값을 붙여넣었다면 `paste-cache/<hash>.txt` 에 남을 수 있고, 파일 이름은 Claude Code 가 붙인 내용 해시입니다[6]. `history.jsonl` 의 `pastedContents` 항목에는 붙여넣은 내용이나 그 해시(`contentHash`)가 들어가서 어느 프롬프트에서 붙여넣었는지 이을 수 있습니다. 에이전트가 `.env` 같은 파일을 고쳤다면 `file-history/<session>/<hash>@v<N>` 에 고치기 전 판이 남을 수 있습니다[6]. `shell-snapshots/` 의 `snapshot-zsh-<ms>-<rand>.sh`(bash 면 `snapshot-bash-`)는 Bash 도구가 쓴 셸 환경이고, 파일 이름의 밀리초가 Claude Code 를 실행한 시각입니다[6]. 이 파일의 `export` 줄에 토큰이 남을 수 있어서 claude-forensics 는 이 줄을 `exports` 필드로 뽑습니다[6]. 디버그를 켰던 세션이면 `~/.claude/debug/` 의 세션별 로그도 봅니다.
 
 3. **당시 막아 둔 장치가 있었는지 봅니다.** Claude Code 는 권한 규칙으로 자격 증명 파일 읽기를 막을 수 있고, 규칙은 `.claude/settings.json`·`.claude/settings.local.json` 의 `permissions` 에 적습니다[1]. Codex 는 `[shell_environment_policy]` 로 셸 명령에 넘길 환경 변수를 정합니다. `ignore_default_excludes` 의 기본값이 `true` 라서, 따로 설정하지 않으면 이름에 `KEY`·`SECRET`·`TOKEN` 이 든 환경 변수도 그대로 넘어가고, `false` 로 두었을 때만 이런 변수를 먼저 걸러 냅니다[3]. `inherit` 는 `"all"`(부모 프로세스 환경 전부), `"core"`(플랫폼 기본 변수), `"none"`(물려받지 않음) 중 하나이고, 제외·포함 규칙은 예전 형식 `exclude`·`include_only` 나 새 형식 `filters` 로 적습니다[9]. 이 값들이 결과를 바꾸므로 설정 파일의 이 절을 그대로 옮겨 적습니다. Cursor 는 `beforeReadFile`·`beforeShellExecution` 훅이 파일 경로와 명령을 받습니다[4]. 이런 훅을 걸어 두었다면 그 스크립트가 남긴 기록이 가장 직접적인 증거가 됩니다.
 
@@ -106,9 +106,9 @@ Chatbox 의 `settings` 에는 `userAvatarKey`, `defaultAssistantAvatarKey` 처�
 
 5. **도구 자신의 인증 정보 상태를 적습니다.** 위 표의 위치에서 인증 파일이 있는지, 파일 시각이 언제인지, 접근 권한이 어떤지를 기록합니다. Claude Code 는 인증 수단의 우선순위가 클라우드 설정(`CLAUDE_CODE_USE_BEDROCK`·`_VERTEX`·`_FOUNDRY`) → `ANTHROPIC_AUTH_TOKEN` → `ANTHROPIC_API_KEY` → `apiKeyHelper` → `CLAUDE_CODE_OAUTH_TOKEN` → Anthropic 프로필·페더레이션 → `/login` 구독 OAuth 순이라서[2], 파일만 보지 말고 환경 변수와 설정의 `env` 블록도 봅니다. `claude setup-token` 은 1년짜리 토큰을 화면에 출력만 하고 저장하지 않으며, 사용자가 직접 `CLAUDE_CODE_OAUTH_TOKEN` 으로 넣어 씁니다[2]. 그래서 이 토큰은 셸 프로필이나 설정의 `env` 블록에서 찾습니다. `apiKeyHelper` 는 API 키를 돌려주는 셸 스크립트이고 기본 5분마다 다시 실행되므로(`CLAUDE_CODE_API_KEY_HELPER_TTL_MS`)[2], 스크립트 파일과 그 스크립트가 키를 가져오는 곳을 함께 봅니다. `--debug` 로 실행한 세션이면 `~/.claude/debug/<session-id>.txt` 에 `Using Anthropic profile auth` 줄이 남아 프로필 인증을 썼는지 알려 줍니다[2]. Codex 는 위 "Codex 설정 파일에 직접 남는 인증 정보" 표의 항목을 모두 봅니다.
 
-6. **계정 흔적을 모읍니다.** `~/.claude/backups/.claude.json.backup.*` 의 `oauthAccount` 에는 `accountUuid`, `emailAddress`, `organizationUuid`, `organizationName`, `organizationType`, `organizationRole` 이 들어 있습니다[7]. Claude 데스크톱 앱 폴더의 Cowork 세션 메타데이터 `local-agent-mode-sessions/<orgUuid>/<accountUuid>/local_<sid>.json` 에는 `emailAddress`·`accountName` 이 있습니다[6]. Windows 스토어판 Claude 데스크톱 앱에는 `LocalCache/Roaming/Claude/Network/Cookies` 쿠키 DB 가 있고, 따로 있는 `Partitions/cowork-file-preview/Network/Cookies` 의 `cookies` 표에는 `host_key`, `name`, `value`, `encrypted_value`, `creation_utc`, `expires_utc`, `last_access_utc` 같은 칸이 있어 Chromium 쿠키 구조와 같습니다. 계정 식별자는 `config.json` 의 `lastKnownAccountUuid`, `cowork-enabled-cli-ops.json` 의 `ownerAccountId` 에 있습니다. 쿠키 DB 읽는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 봅니다. 이 흔적은 어느 계정의 인증 정보가 그 기기에 있었는지 알려 주고, 누가 키보드 앞에 있었는지는 [그 대화를 한 사람이 누구인가](../attribution/user-attribution.md)의 방법으로 따로 좁힙니다.
+6. **계정 흔적을 모읍니다.** `~/.claude/backups/.claude.json.backup.*` 의 `oauthAccount` 에는 `accountUuid`, `emailAddress`, `organizationUuid`, `organizationName`, `organizationType`, `organizationRole` 이 들어 있습니다[7]. Claude 데스크톱 앱 폴더의 Cowork 세션 메타데이터 `local-agent-mode-sessions/<orgUuid>/<accountUuid>/local_<sid>.json` 에는 `emailAddress`·`accountName` 이 있습니다[6]. Windows 스토어판 Claude 데스크톱 앱에는 `LocalCache/Roaming/Claude/Network/Cookies` 쿠키 DB 가 있고, 따로 있는 `Partitions/cowork-file-preview/Network/Cookies` 의 `cookies` 표에는 `host_key`, `name`, `value`, `encrypted_value`, `creation_utc`, `expires_utc`, `last_access_utc` 같은 열이 있어 Chromium 쿠키 구조와 같습니다. 계정 식별자는 `config.json` 의 `lastKnownAccountUuid`, `cowork-enabled-cli-ops.json` 의 `ownerAccountId` 에 있습니다. 쿠키 DB 읽는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 봅니다. 이 흔적은 어느 계정의 인증 정보가 그 기기에 있었는지 알려 주고, 누가 키보드 앞에 있었는지는 [그 대화를 한 사람이 누구인가](../attribution/user-attribution.md)의 방법으로 따로 좁힙니다.
 
-7. **로컬 LLM 앱의 키를 확인합니다.** 에이전트 도구 말고도 검체에 로컬 LLM 앱이 있으면 위 "로컬 LLM 앱에 넣은 API 키" 표의 위치를 봅니다. 어느 서비스의 키가 언제 등록됐는지(Msty `api_keys.created_at` 등)를 적고, 키 값은 가립니다. 이 키로 서버 쪽 자료를 받으려면 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 절차를 밟습니다.
+7. **로컬 LLM 앱의 키를 확인합니다.** 에이전트 도구 말고도 분석 대상 기기에 로컬 LLM 앱이 있으면 위 "로컬 LLM 앱에 넣은 API 키" 표의 위치를 봅니다. 어느 서비스의 키가 언제 등록됐는지(Msty `api_keys.created_at` 등)를 적고, 키 값은 가립니다. 이 키로 서버 쪽 자료를 받으려면 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 절차를 밟습니다.
 
 8. **값이 밖으로 나갔는지는 따로 확인합니다.** 자격 증명을 읽은 호출 뒤에 네트워크를 쓰는 명령이나 MCP 도구 호출이 이어졌는지 세션 기록에서 보고, [AI 서비스 도메인과 네트워크 기록](../../02-artifacts/network-enterprise/network-traces.md)과 [보안 제품이 남기는 AI 사용 기록](../../02-artifacts/network-enterprise/dlp-casb.md)으로 교차 확인합니다. MCP 호출 기록은 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md)에서 다룹니다. 서비스 쪽 로그인·토큰 사용 기록은 [Claude 기업용 감사 로그](../../02-artifacts/network-enterprise/claude-enterprise.md)나 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 확인합니다.
 

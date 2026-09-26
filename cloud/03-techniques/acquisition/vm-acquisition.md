@@ -10,7 +10,7 @@ nav_order: 670
 
 ## 언제 쓰나
 
-AWS EC2, Azure VM, Google Compute Engine 인스턴스 안에서 무슨 일이 있었는지 파일 시스템 수준으로 봐야 할 때 씁니다. 제어 평면 로그는 누가 인스턴스를 만들고 바꿨는지까지만 보여 주고, 인스턴스 안에서 실행한 명령·내려받은 파일·남긴 백도어는 디스크에 있습니다. 게스트 OS 안의 분석 방법은 Linux 판의 [클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html)·[디스크 이미징](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/disk-imaging.html)·[메모리 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/memory-acquisition.html)에서 다루고, 이 쪽은 클라우드 제어 평면에서 디스크 사본을 뜨고 꺼내는 순서와 그 과정이 남기는 흔적을 다룹니다.
+AWS EC2, Azure VM, Google Compute Engine 인스턴스 안에서 무슨 일이 있었는지 파일 시스템 수준으로 봐야 할 때 씁니다. 제어 평면 로그는 누가 인스턴스를 만들고 바꿨는지까지만 보여 주고, 인스턴스 안에서 실행한 명령·내려받은 파일·남긴 백도어는 디스크에 있습니다. 게스트 OS 안의 분석 방법은 Linux 판의 [클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html)·[디스크 이미징](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/disk-imaging.html)·[메모리 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/memory-acquisition.html)에서 다루고, 이 페이지는 클라우드 제어 평면에서 디스크 사본을 뜨고 꺼내는 순서와 그 과정이 남기는 흔적을 다룹니다.
 
 디스크 사본을 뜨기 전에 제어 평면 로그부터 보존합니다. 순서와 방법은 [로그부터 지키기](log-preservation.md)에, 조사 전체의 틀은 [조사 절차](investigation-process.md)에 있습니다. 고객이 디스크 사본을 직접 뜰 수 있는 범위는 [책임 공유와 조사 범위](../../01-foundations/model/shared-responsibility.md)에서 정해집니다.
 
@@ -22,7 +22,7 @@ AWS EC2, Azure VM, Google Compute Engine 인스턴스 안에서 무슨 일이 �
 | 실행 중 뜨기 | 가능. 요청 시점에 볼륨에 쓰인 데이터만 들어가고 캐시는 빠짐. 루트 볼륨이면 인스턴스 중지 권장[2] | 가능하지만 전원을 껐다 켜거나 충돌한 순간과 같은 상태. 데이터 디스크가 있으면 VM 중지 권장[10] | 실행 중인 인스턴스에 붙은 디스크도 가능[14] |
 | 밖으로 꺼내기 | 다른 계정에 공유, EBS direct API 로 블록 읽기[3][4] | SAS URL 로 VHD 내려받기[10] | 이미지로 만든 뒤 Cloud Storage 로 내보내기(`disk.raw` 를 tar·gzip)[15] |
 | 제어 평면 기록 | CloudTrail `ModifySnapshotAttribute`, `SharedSnapshotCopyInitiated`·`SharedSnapshotVolumeCreated`, `StartSnapshot`·`CompleteSnapshot`(EBS direct API)[3][5][8] | 활동 로그 `Microsoft.Compute/snapshots/write`, `disks/beginGetAccess/action`·`snapshots/beginGetAccess/action`, `endGetAccess/action`[12] | 관리 활동 로그 `v1.compute.disks.createSnapshot`, `v1.compute.snapshots.insert`, `v1.compute.images.insert`[16] |
-| 멈추면 사라지는 저장소 | 인스턴스 스토어(중지·최대 절전·종료 때 지워짐)[6] | 임시 OS 디스크(스냅숏 지원 안 함)[11] | 검체의 인스턴스 구성에서 확인 |
+| 멈추면 사라지는 저장소 | 인스턴스 스토어(중지·최대 절전·종료 때 지워짐)[6] | 임시 OS 디스크(스냅숏 지원 안 함)[11] | 실제 인스턴스 구성에서 확인 |
 
 표의 값은 2026년 9월 문서 기준입니다.
 
@@ -95,7 +95,7 @@ AWS EC2, Azure VM, Google Compute Engine 인스턴스 안에서 무슨 일이 �
 
 7. **분석용 인스턴스에 붙여 봅니다.** 사본은 원본 VM 을 켜지 않고 분석 전용 컴퓨터에 붙일 수 있습니다[11]. AWS 에서는 공유받은 스냅숏으로 조사 계정에 볼륨을 만들어 분석 인스턴스에 붙이고, Azure 는 받은 VHD 나 스냅숏으로 만든 디스크를, Google Cloud 는 내려받은 `disk.raw` 를 씁니다. 붙인 뒤에는 읽기 전용으로 올리고 파일 시스템을 분석합니다. 그 과정은 Linux 판 [디스크 이미징](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/disk-imaging.html)을 따릅니다.
 
-8. **제어 평면 로그로 수집 과정을 되짚습니다.** 조사자의 작업이 기록한 대로 남았는지, 조사 기간 안에 다른 주체가 같은 스냅숏을 만들거나 공유하거나 내려받지 않았는지 봅니다.
+8. **제어 평면 로그로 수집 과정을 다시 따라가 봅니다.** 조사자의 작업이 기록한 대로 남았는지, 조사 기간 안에 다른 주체가 같은 스냅숏을 만들거나 공유하거나 내려받지 않았는지 봅니다.
 
    | 서비스 | 볼 기록 | 뜻 |
    |---|---|---|
@@ -105,7 +105,7 @@ AWS EC2, Azure VM, Google Compute Engine 인스턴스 안에서 무슨 일이 �
    | Azure | `Microsoft.Compute/snapshots/write`·`/delete`, `Microsoft.Compute/disks/beginGetAccess/action`·`endGetAccess/action`, `Microsoft.Compute/snapshots/beginGetAccess/action`·`endGetAccess/action`[12] | 스냅숏 만들기·삭제, 디스크·스냅숏 SAS 발급·회수 |
    | Google Cloud | `v1.compute.disks.createSnapshot`·`v1.compute.regionDisks.createSnapshot`·`v1.compute.snapshots.insert`·`v1.compute.instantSnapshots.insert`·`v1.compute.machineImages.insert`·`v1.compute.images.insert`(관리 활동, `ADMIN_WRITE`), `v1.compute.snapshots.setIamPolicy`(`ADMIN_WRITE`)[16] | 스냅숏·이미지 만들기, 스냅숏 IAM 정책 변경 |
 
-   Azure 활동 로그의 `operationName` 이 위 권한 이름과 같은 모양으로 남는지(대소문자 포함)는 검체에서 확인합니다. 레코드 구조와 예시는 [EC2 인스턴스와 스냅숏](../../02-artifacts/aws/ec2-ebs.md), [Azure 가상 머신](../../02-artifacts/azure/azure-vm.md), [활동 로그](../../02-artifacts/azure/activity-log.md), [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md)에 있습니다.
+   Azure 활동 로그의 `operationName` 이 위 권한 이름과 같은 모양으로 남는지(대소문자 포함)는 실제 로그로 확인합니다. 레코드 구조와 예시는 [EC2 인스턴스와 스냅숏](../../02-artifacts/aws/ec2-ebs.md), [Azure 가상 머신](../../02-artifacts/azure/azure-vm.md), [활동 로그](../../02-artifacts/azure/activity-log.md), [Cloud Audit Logs](../../02-artifacts/gcp/cloud-audit-logs.md)에 있습니다.
 
 ## 도구
 
@@ -122,7 +122,7 @@ AWS EC2, Azure VM, Google Compute Engine 인스턴스 안에서 무슨 일이 �
 - **스냅숏 공유는 유출 탐지 규칙에 걸리는 작업입니다.** `ModifySnapshotAttribute` 는 다른 계정이 스냅숏을 쓸 수 있게 권한을 바꾸는 작업이라 유출(T1537) 탐지 규칙의 대상입니다[8]. 조사용 공유가 보안 경보를 일으킬 수 있으므로 보안 운영 쪽에 미리 알리고 조사 계정 ID 와 시각을 기록합니다.
 - **기본 AWS 관리형 키로 암호화한 스냅숏은 공유되지 않습니다**[3]. 암호화한 볼륨의 스냅숏은 원본 볼륨과 같은 KMS 키로 암호화되므로[2], 조사 계정으로 옮기기 전에 어떤 키로 암호화됐는지 확인합니다.
 - **공유한 스냅숏을 받은 쪽이 블록을 읽어도 소유 계정에는 데이터 이벤트가 가지 않습니다**[5]. 소유 계정 로그만 보고 "읽힌 적 없다" 고 쓸 수 없습니다.
-- **Azure SAS URL 은 만료되거나 회수될 때까지 디스크를 읽을 수 있는 링크입니다.** 만료 시각과 회수 시각을 기록합니다. SAS 가 살아 있는 동안 VM 을 켜려고 하면 "There is an active shared access signature outstanding for disk" 오류가 나서 VM 이 시작되지 않습니다[10].
+- **Azure SAS URL 은 만료되거나 회수될 때까지 디스크를 읽을 수 있는 링크입니다.** 만료 시각과 회수 시각을 기록합니다. SAS 가 유효한 동안 VM 을 켜려고 하면 "There is an active shared access signature outstanding for disk" 오류가 나서 VM 이 시작되지 않습니다[10].
 - **Google Cloud 이미지 내보내기는 대상 프로젝트에 자원을 만듭니다.** `${PROJECT}-daisy-bkt-${REGION}` 버킷과 임시 디스크·VM 이 생기고, 세션이 끊기거나 작업이 실패하면 이 자원이 남을 수 있고, 그때는 직접 지웁니다[15]. 이 자원은 조사자의 활동으로 기록합니다. Google 제공 라이선스를 쓰는 Windows Server 이미지는 Google Cloud 밖에서 쓸 목적으로 내보낼 수 없습니다[15].
 - **Google Cloud 스냅숏이 실패하면 원본 디스크를 지울 수 없습니다.** 깨끗한 스냅숏을 뜰 때까지 원본 디스크 삭제를 막는 안전장치입니다[14]. 정리 작업이 막히면 실패한 스냅숏이 있는지 봅니다.
 - **OS 수준 암호화 디스크는 사본만으로는 읽지 못할 수 있습니다.** Azure 참조 구조는 플랫폼 관리 키를 쓰는 호스트 암호화를 전제로 하고, BitLocker·dm-crypt 같은 OS 수준 암호화는 환경마다 구현이 달라 다루지 않습니다[11]. 복구 키를 어디서 받을지 수집 전에 확인합니다.

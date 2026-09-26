@@ -12,7 +12,7 @@ AI 대화 기록은 서버에서는 서비스 회사의 보관 정책과 사용�
 
 ## 이 형식을 쓰는 아티팩트
 
-서버 쪽은 [Claude](../../02-artifacts/chat-services/claude/index.md), [Gemini](../../02-artifacts/chat-services/gemini/index.md), [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md) 같은 채팅 서비스의 계정 기록과 [Microsoft 365 Copilot](../../02-artifacts/office-integrations/m365-copilot.md) 의 조직 보존 사본이 대상입니다. 기기 쪽은 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 처럼 대화를 파일로 남기는 도구, [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md), [Ollama](../../02-artifacts/local-ai/ollama.md)·[LM Studio](../../02-artifacts/local-ai/lm-studio.md) 같은 로컬 AI 앱이 대상입니다. 어느 쪽에 원본이 있는지는 [AI 서비스의 데이터는 어디에 있나](where-data-lives.md) 에서 먼저 가립니다.
+서버 쪽은 [Claude](../../02-artifacts/chat-services/claude/index.md), [Gemini](../../02-artifacts/chat-services/gemini/index.md), [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md) 같은 채팅 서비스의 계정 기록과 [Microsoft 365 Copilot](../../02-artifacts/office-integrations/m365-copilot.md) 의 조직 보존 사본이 대상입니다. 기기 쪽은 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 처럼 대화를 파일로 남기는 도구, [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md), [Ollama](../../02-artifacts/local-ai/ollama.md)·[LM Studio](../../02-artifacts/local-ai/lm-studio.md) 같은 로컬 AI 앱이 대상입니다. 어느 쪽에 원본이 있는지는 [AI 서비스의 데이터는 어디에 있나](where-data-lives.md) 에서 먼저 가려냅니다.
 
 ## 구조
 
@@ -36,7 +36,7 @@ AI 대화 기록은 서버에서는 서비스 회사의 보관 정책과 사용�
 
 **Microsoft 365 Copilot 과 조직 보존 정책.** 조직이 보존 정책을 걸면 Copilot 과 AI 앱의 프롬프트·응답 사본이 앱을 쓴 사용자의 Exchange Online 메일함 안 숨은 폴더에 저장됩니다 [5]. 새로 만드는 보존 정책은 Microsoft 365 Copilot, Copilot Studio 같은 Microsoft 앱뿐 아니라 ChatGPT, Google Gemini, 소비자용 Microsoft Copilot, DeepSeek 같은 "다른 AI 앱" 도 위치로 고를 수 있습니다 [5]. Microsoft 365 Copilot 과 Copilot Studio 는 프롬프트·응답이 늘 들어가고, 그 밖의 Copilot 과 생성형 AI 앱은 수집 정책에서 내용 수집을 켜 두었을 때만 들어갑니다 [5]. 사용자가 Microsoft 365 Copilot Chat 에서 대화를 지우거나 그 사용자의 전체 기록 삭제 요청이 들어오면 항목이 같은 메일함의 또 다른 숨은 폴더 `SubstrateHolds` 로 옮겨집니다 [5]. 창이나 앱을 닫는 것만으로는 메시지가 지워지지 않고 화면에서 숨겨질 뿐입니다 [5].
 
-`SubstrateHolds` 로 간 항목은 최소 1일 머물고, 보존 기간이 끝난 뒤 Exchange 타이머 작업이 다음에 돌 때 영구 삭제됩니다 [5]. 이 타이머 작업은 보통 1~7일 간격으로 돕니다 [5]. 영구 삭제 전까지는 eDiscovery 로 검색되고, 같은 위치의 다른 보존 정책, Litigation Hold, delay hold, eDiscovery hold 가 걸려 있으면 영구 삭제가 멈춥니다 [5]. "1일 뒤 삭제" 정책도 영구 삭제까지 16일 걸릴 수 있습니다 [5]. 퇴사해 계정이 지워진 사용자의 메시지는 비활성 사서함 (inactive mailbox) 에 남아 eDiscovery 로 찾을 수 있습니다 [5]. Copilot 메모리는 item class `IPM.Contact` 로 저장되고, Purview 나 eDiscovery 에서 대화를 지워도 연결된 메모리는 지워지지 않습니다 [6]. 정책 종류별 삭제 흐름 표와 감사 기록의 칸은 [Microsoft Purview로 본 Copilot 기록](../../02-artifacts/network-enterprise/purview-copilot.md) 에 있습니다.
+`SubstrateHolds` 로 간 항목은 최소 1일 머물고, 보존 기간이 끝난 뒤 Exchange 타이머 작업이 다음에 돌 때 영구 삭제됩니다 [5]. 이 타이머 작업은 보통 1~7일 간격으로 돕니다 [5]. 영구 삭제 전까지는 eDiscovery 로 검색되고, 같은 위치의 다른 보존 정책, Litigation Hold, delay hold, eDiscovery hold 가 걸려 있으면 영구 삭제가 멈춥니다 [5]. "1일 뒤 삭제" 정책도 영구 삭제까지 16일 걸릴 수 있습니다 [5]. 퇴사해 계정이 지워진 사용자의 메시지는 비활성 사서함 (inactive mailbox) 에 남아 eDiscovery 로 찾을 수 있습니다 [5]. Copilot 메모리는 item class `IPM.Contact` 로 저장되고, Purview 나 eDiscovery 에서 대화를 지워도 연결된 메모리는 지워지지 않습니다 [6]. 정책 종류별 삭제 흐름 표와 감사 기록의 필드는 [Microsoft Purview로 본 Copilot 기록](../../02-artifacts/network-enterprise/purview-copilot.md) 에 있습니다.
 
 감사 기록은 보존 사본과 보관 체계가 따로입니다. 감사 (Standard) 의 기본 보관은 180일이고, 2023-10-17 이전에 생긴 레코드는 90일입니다 [7]. Audit (Premium) 의 기본 1년 정책은 `Workload` 가 AzureActiveDirectory·Exchange·OneDrive·SharePoint 인 레코드에만 걸려서, 그 밖의 레코드는 사용자 지정 정책이 없으면 180일 보관입니다 [7]. 180일을 넘겨 1년까지 두려면 레코드를 만든 사용자에게 E5 계열 라이선스가 있어야 하고, 10년까지 두려면 10년 보관 추가 라이선스도 있어야 합니다 [7].
 
@@ -58,9 +58,9 @@ Claude Code 는 세션 기록을 `cleanupPeriodDays` 로 정한 기간이 지나
 }
 ```
 
-`stats-cache.json` 은 자동 정리 대상이 아니고 [4], 파일에는 `dailyActivity[].date`·`messageCount`·`sessionCount`·`toolCallCount`, `firstSessionDate`, `hourCounts`, `longestSession`, `modelUsage`, `totalMessages`, `totalSessions` 같은 키가 있습니다. 세션 기록이 정리된 뒤에도 그 세션의 수치가 통계에 남는지는 정리 전후의 파일을 견주어 검체에서 확인합니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 쪽에서 다룹니다.
+`stats-cache.json` 은 자동 정리 대상이 아니고 [4], 파일에는 `dailyActivity[].date`·`messageCount`·`sessionCount`·`toolCallCount`, `firstSessionDate`, `hourCounts`, `longestSession`, `modelUsage`, `totalMessages`, `totalSessions` 같은 키가 있습니다. 세션 기록이 정리된 뒤에도 그 세션의 수치가 통계에 남는지는 정리 전후의 파일을 비교해 실제 데이터로 확인합니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에서 다룹니다.
 
-Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 `preferences.ccAutoArchiveInactiveDays` 키가 있습니다. 이 설정이 기기의 파일을 지우는지는 값과 데이터 폴더의 세션 파일을 대조해 검체에서 확인합니다.
+Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 `preferences.ccAutoArchiveInactiveDays` 키가 있습니다. 이 설정이 기기의 파일을 지우는지는 값과 데이터 폴더의 세션 파일을 대조해 확인합니다.
 
 ### 기기 쪽 — 앱 화면에서 지운 뒤 남는 것
 
@@ -89,7 +89,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 | Jan | 100%(5/5) | 100%(50/50) | – | – |
 | GPT4All | 0%(0/5) | 0%(0/50) | – | – |
 
-표는 논문 표 8 을 옮긴 것이고, 괄호는 지운 개수 가운데 되살린 개수입니다. "–" 는 그 앱에 해당 기능이 없거나 시험하지 않은 항목입니다. 모델을 지워도 Ollama 의 서버 로그, LM Studio·Msty·Jan 의 모델 설치 기록에 무엇을 받았는지 남았습니다 [9]. Chatbox 는 백업을 정해진 주기 없이 해서 지운 대화의 일부만 되살렸고, Jan 은 상세 로그 (verbose log) 에 지운 대화가 남았습니다 [9]. 이 비율은 디스크에서 되살린 것만 잰 값이고, 볼륨 섀도 복사본, 메모리, SQLite freelist·WAL 카빙은 시험하지 않았습니다 [9]. 그래서 0% 인 항목도 다른 방법으로는 일부 남아 있을 수 있습니다. 앱별 경로는 각 앱 쪽([Ollama](../../02-artifacts/local-ai/ollama.md), [Chatbox](../../02-artifacts/local-ai/chatbox.md), [LM Studio](../../02-artifacts/local-ai/lm-studio.md), [Msty](../../02-artifacts/local-ai/msty.md), [Jan](../../02-artifacts/local-ai/jan.md), [GPT4All](../../02-artifacts/local-ai/gpt4all.md))에 있습니다.
+표는 논문 표 8 을 옮긴 것이고, 괄호는 지운 개수 가운데 되살린 개수입니다. "–" 는 그 앱에 해당 기능이 없거나 시험하지 않은 항목입니다. 모델을 지워도 Ollama 의 서버 로그, LM Studio·Msty·Jan 의 모델 설치 기록에 무엇을 받았는지 남았습니다 [9]. Chatbox 는 백업을 정해진 주기 없이 해서 지운 대화의 일부만 되살렸고, Jan 은 상세 로그 (verbose log) 에 지운 대화가 남았습니다 [9]. 이 비율은 디스크에서 되살린 것만 잰 값이고, 볼륨 섀도 복사본, 메모리, SQLite freelist·WAL 카빙은 시험하지 않았습니다 [9]. 그래서 0% 인 항목도 다른 방법으로는 일부 남아 있을 수 있습니다. 앱별 경로는 각 앱 페이지([Ollama](../../02-artifacts/local-ai/ollama.md), [Chatbox](../../02-artifacts/local-ai/chatbox.md), [LM Studio](../../02-artifacts/local-ai/lm-studio.md), [Msty](../../02-artifacts/local-ai/msty.md), [Jan](../../02-artifacts/local-ai/jan.md), [GPT4All](../../02-artifacts/local-ai/gpt4all.md))에 있습니다.
 
 **앱을 지운 뒤.** WebView2 앱은 스토어 앱과 ClickOnce 앱을 빼면 앱을 지워도 사용자 데이터 폴더를 자동으로 지우지 않고, 자세한 규칙은 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 에 있습니다. 서버에서 대화를 지운 뒤 기기의 IndexedDB·Local Storage·캐시에 남은 조각을 찾는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md) 에서 다룹니다.
 
@@ -97,7 +97,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 
 1. 계정 종류를 먼저 확인합니다. Claude Code 처럼 개인 계정과 조직(Team·Enterprise·API) 계정의 보관 기간이 다른 서비스가 있고 [3], Microsoft 365 Copilot 은 조직의 보존 정책과 보류 여부가 기간을 정합니다 [5].
 2. 조사 대상 기간에 켜져 있던 설정을 확인합니다. Claude 의 모델 개선 설정, Gemini 의 Keep Activity 와 자동 삭제 기간처럼 보관 기간을 바꾸는 설정은 지금 값이 아니라 그 당시 값이 기준입니다.
-3. 대화를 지운 시각과 지금 날짜를 놓고, 위 표의 기간에 비추어 서버에 아직 남아 있을 수 있는 기록을 가립니다. 남아 있을 수 있다면 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 을 서두르고, 조직 쪽이면 보류(hold)부터 걸도록 요청합니다.
+3. 대화를 지운 시각과 지금 날짜를 놓고, 위 표의 기간에 비추어 서버에 아직 남아 있을 수 있는 기록을 가려냅니다. 남아 있을 수 있다면 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 을 서두르고, 조직 쪽이면 보류(hold)부터 걸도록 요청합니다.
 4. 기기 쪽은 `~/.claude/settings.json` 같은 설정 파일에서 정리 기간 키를 읽고, 남아 있는 가장 오래된 세션 기록 파일의 날짜와 맞춰 봅니다. 정리 기간보다 오래된 기록이 없다면 자동 정리로 사라진 것일 수 있고, `history.jsonl` 과 `stats-cache.json` 에서 그 기간의 흔적을 찾습니다.
 5. 앱 화면에서 지운 대화라면 주 DB 옆의 `-wal` 파일, 충돌 로그 폴더, 상세 로그, 첨부 폴더를 먼저 수집합니다. 위 두 논문에서 복구된 자리가 이런 곳이었습니다 [8][9].
 
@@ -109,7 +109,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 
 **앱의 "지우기" 가 파일을 지우지 않는 경우가 있습니다.** Linky.AI 는 대화를 지워도 새 대화 ID 만 만들었고, Persona.AI·Fantasy.AI 는 지운 대화가 WAL 에 남았으며, Replika 는 계정을 지운 뒤에도 충돌 로그에 대화가 남았습니다 [8]. 반대로 LM Studio 는 지운 대화와 업로드가 디스크 수준에서 되살아나지 않았습니다 [9]. 같은 "삭제" 라도 앱마다 결과가 달라서, 앱과 판을 밝히고 판단합니다. WAL 의 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html) 에서 다룹니다.
 
-**자동 정리 뒤에도 남는 파일이 있습니다.** Claude Code 의 자동 정리는 입력 이력과 사용량 통계를 지우지 않아서 [4], 세션 기록이 없는 기간의 사용 시기와 규모를 이 두 파일로 가늠할 수 있습니다.
+**자동 정리 뒤에도 남는 파일이 있습니다.** Claude Code 의 자동 정리는 입력 이력과 사용량 통계를 지우지 않아서 [4], 세션 기록이 없는 기간의 사용 시기와 규모를 이 두 파일로 추정할 수 있습니다.
 
 **모델 파일이 없어도 받은 기록은 남습니다.** 로컬 LLM 앱 다섯 개 가운데 네 개는 모델을 지워도 다운로드 기록으로 무엇을 받았는지 모두 되살렸습니다 [9]. 모델 파일 자체는 [로컬 모델 파일](../../02-artifacts/local-ai/model-files.md) 에서 다룹니다.
 
@@ -123,7 +123,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 
 **데스크톱에서 시작한 세션은 정리 규칙이 다릅니다.** Claude Code 기록 가운데 데스크톱 앱·Cowork 세션은 `cleanupPeriodDays` 가 아니라 `desktopSessionCleanupPeriodDays` 를 따라서 [4], 같은 폴더 안에서도 기록마다 남은 기간이 다를 수 있습니다.
 
-**논문의 복구율은 그 판, 그 방법의 값입니다.** 표 8 의 0% 는 디스크 수준 파싱 결과이고 [9], 컴패니언 앱 결과는 Android 에뮬레이터 한 환경의 결과입니다 [8]. 다른 판·다른 OS 에서는 검체로 다시 확인합니다.
+**논문의 복구율은 그 판, 그 방법의 값입니다.** 표 8 의 0% 는 디스크 수준 파싱 결과이고 [9], 컴패니언 앱 결과는 Android 에뮬레이터 한 환경의 결과입니다 [8]. 다른 판·다른 OS 에서는 실제 데이터로 다시 확인합니다.
 
 **문서는 바뀝니다.** 보관 기간은 서비스 회사가 고치는 정책이라서 조사 대상 기간에 적용되던 문서 판을 확인하고, 확인한 날짜를 보고서에 적습니다.
 

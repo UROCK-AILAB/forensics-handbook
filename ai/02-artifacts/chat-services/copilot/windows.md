@@ -31,10 +31,10 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 | 무엇 | 위치·이름 | 근거 |
 |---|---|---|
 | 앱 패키지 | 패키지 이름 `Microsoft.Copilot` | 공식 문서[1] |
-| 앱 데이터 폴더 | 사용자마다 `%LOCALAPPDATA%\Packages\` 아래 `Microsoft.Copilot_` 로 시작하는 폴더 | 뒷부분 `8wekyb3d8bbwe` 는 공개 스크립트[9]에만 나오고 공식 문서에는 없다. 검체에서 이름을 확인한다 |
-| 대화 저장 파일 | 공개된 분석 자료가 없다 | 검체에서 확인한다 |
+| 앱 데이터 폴더 | 사용자마다 `%LOCALAPPDATA%\Packages\` 아래 `Microsoft.Copilot_` 로 시작하는 폴더 | 뒷부분 `8wekyb3d8bbwe` 는 공개 스크립트[9]에만 나오고 공식 문서에는 없다. 실제 기기에서 이름을 확인한다 |
+| 대화 저장 파일 | 공개된 분석 자료가 없다 | 실제 기기에서 확인한다 |
 | 관리 정책 값 | 아래 "구조" 절의 표 | 공식 문서[2] |
-| 마이크 권한 값 | NTUSER.DAT `Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone\Microsoft.Copilot_8wekyb3d8bbwe`, 값 `Value`(`Allow`·`Deny`) | 공개 스크립트 코드[9]. 이 키 아래 다른 값은 검체에서 본다 |
+| 마이크 권한 값 | NTUSER.DAT `Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone\Microsoft.Copilot_8wekyb3d8bbwe`, 값 `Value`(`Allow`·`Deny`) | 공개 스크립트 코드[9]. 이 키 아래 다른 값은 실제 기기에서 본다 |
 
 앱 폴더 안에서 크롬 계열 저장소(Local Storage, IndexedDB 같은 폴더)가 보이면 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)로 읽습니다. 보호된 값이 나오면 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)를 참고하고, 이 페이지에서는 값을 여는 방법을 다루지 않습니다.
 
@@ -44,7 +44,7 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 ### 이름이 비슷한 회사용 앱
 
-회사 계정 PC 에서는 예전 "Microsoft 365 app" 이 "Microsoft Copilot app" 으로 이름을 바꿨고, 소비자용 "Microsoft Copilot" 앱과 이름이 비슷합니다[1]. 화면 이름으로 가르지 않고 패키지 이름으로 가릅니다. 회사용 앱의 AUMID 는 `Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe!Microsoft.MicrosoftOfficeHub` 이라서, 회사용은 `Microsoft.MicrosoftOfficeHub`, 소비자용은 `Microsoft.Copilot` 로 구분하면 됩니다[2].
+회사 계정 PC 에서는 예전 "Microsoft 365 app" 이 "Microsoft Copilot app" 으로 이름을 바꿨고, 소비자용 "Microsoft Copilot" 앱과 이름이 비슷합니다[1]. 화면 이름이 아니라 패키지 이름으로 구분합니다. 회사용 앱의 AUMID 는 `Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe!Microsoft.MicrosoftOfficeHub` 이라서, 회사용은 `Microsoft.MicrosoftOfficeHub`, 소비자용은 `Microsoft.Copilot` 로 구분하면 됩니다[2].
 
 회사·학교(Microsoft Entra) 계정은 소비자용 앱에 로그인할 수 없습니다. 로그인하려 하면 기본 브라우저에서 `https://m365.cloud.microsoft/chat` 이 열리므로 그 브라우저 방문 기록에 흔적이 남을 수 있습니다[1]. 회사용 Copilot Chat 은 [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)과 [Microsoft Purview로 본 Copilot 기록](../../network-enterprise/purview-copilot.md)에서 다룹니다.
 
@@ -65,7 +65,7 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 - **TurnOffWindowsCopilot.** 이 정책은 폐지 대상(deprecated)이라 이후 릴리스에서 빠질 수 있고, 새 Copilot 경험에는 적용되지 않습니다[2]. 다만 사이드바가 들어 있던 이미지에서 업그레이드할 때 Copilot 앱이 설치되지 않게 막는 데에는 적용됩니다[2]. 앱을 막으려면 이 정책 대신 AppLocker 를 씁니다[1].
 - **SetCopilotHardwareKey.** 정책을 두지 않으면 그 나라·지역에서 쓸 수 있을 때 Copilot 이 열리고, 정책이 있어도 사용자가 설정에서 키를 바꿀 수 있습니다[2]. 사용자는 설정 → 개인 설정 → 텍스트 입력의 "Customize Copilot key on keyboard"(`ms-settings:personalization-textinput-copilot-hardwarekey`)에서 Search, Custom, 지금 묶인 앱 가운데 고릅니다[1]. 앱 쪽에서는 Account → Settings → Copilot Keyboard Shortcuts 에서 키가 전체 앱을 열지 작은 빠른 보기를 열지 정합니다[3].
-- **RemoveMicrosoftCopilotApp.** 세 조건을 모두 채운 기기·사용자에게만 앱을 지웁니다. Microsoft 365 Copilot 과 Microsoft Copilot 이 둘 다 설치되어 있고, 사용자가 직접 설치한 앱이 아니고, 최근 28일 동안 앱을 실행하지 않았어야 합니다[2]. 지운 뒤에도 사용자가 다시 설치할 수 있습니다[2]. Intune 설정 카탈로그를 추적하는 저장소의 같은 정책 설명은 기간을 14일로 적고 있어서(2026-07-13 커밋)[7], CSP(2026-09-23 갱신)와 다릅니다. 에디션도 CSP 표에서는 Pro 가 빠져 있고 본문은 "Enterprise, Professional and Education" 이라고 적어 한 문서 안에서 다릅니다[2]. 레지스트리 위치가 문서에 없으므로 검체의 SOFTWARE 하이브와 NTUSER.DAT 에서 `RemoveMicrosoftCopilotApp` 이름으로 찾아봅니다.
+- **RemoveMicrosoftCopilotApp.** 세 조건을 모두 채운 기기·사용자에게만 앱을 지웁니다. Microsoft 365 Copilot 과 Microsoft Copilot 이 둘 다 설치되어 있고, 사용자가 직접 설치한 앱이 아니고, 최근 28일 동안 앱을 실행하지 않았어야 합니다[2]. 지운 뒤에도 사용자가 다시 설치할 수 있습니다[2]. Intune 설정 카탈로그를 추적하는 저장소의 같은 정책 설명은 기간을 14일로 적고 있어서(2026-07-13 커밋)[7], CSP(2026-09-23 갱신)와 다릅니다. 에디션도 CSP 표에서는 Pro 가 빠져 있고 본문은 "Enterprise, Professional and Education" 이라고 적어 한 문서 안에서 다릅니다[2]. 레지스트리 위치가 문서에 없으므로 분석 대상 PC 의 SOFTWARE 하이브와 NTUSER.DAT 에서 `RemoveMicrosoftCopilotApp` 이름으로 찾아봅니다.
 - **AppLocker 규칙.** 앱이 없으면 설치를 막고, 이미 깔려 있으면 실행을 막습니다[1].
 
 ## 증거로서 의미
@@ -82,13 +82,13 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 ## 함정과 한계
 
-사용자가 "Copilot" 이라고 말하면 예전 사이드바, 소비자용 앱, 회사용 "Microsoft Copilot app", Edge 안의 Copilot, 웹의 copilot.com 가운데 어느 것인지부터 가립니다. Edge 안의 Copilot 은 [브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md), 웹에서 쓴 경우는 [웹 브라우저](web.md)에서 봅니다.
+사용자가 "Copilot" 이라고 말하면 예전 사이드바, 소비자용 앱, 회사용 "Microsoft Copilot app", Edge 안의 Copilot, 웹의 copilot.com 가운데 어느 것인지부터 구분합니다. Edge 안의 Copilot 은 [브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md), 웹에서 쓴 경우는 [웹 브라우저](web.md)에서 봅니다.
 
 Copilot 키를 누른 흔적이 있어도 그 키가 어느 앱에 묶여 있었는지부터 봅니다. `SetCopilotHardwareKey` 가 있어도 사용자가 설정에서 바꿀 수 있으므로[2], 정책 값만으로 그 시점의 대상 앱을 단정하지 않습니다.
 
 회사 계정에서는 음성 대화의 글 기록을 일반 대화처럼 저장해 보존·eDiscovery·감사 정책을 적용하고, 사용자와 Copilot 의 음성은 저장하지 않습니다[1]. "Hey Copilot" 은 기능을 켰고 PC 잠금이 풀려 있을 때만 동작하고, 관리자가 음성 기능만 따로 끄는 설정은 없습니다[1]. 소비자용 앱의 음성 저장 방식은 공개 자료가 없으므로, 회사 계정의 설명을 그대로 옮겨 쓰지 않습니다.
 
-Purview 보존 정책의 "Other AI apps" 위치에는 "Microsoft Copilot (consumer version)" 이 들어 있고, 조직에 내용을 수집하는 수집 정책(collection policy)이 있어야 프롬프트와 응답이 남습니다[4]. eDiscovery 에서 Other AI apps 의 item class 는 기기 쪽 상호작용 `IPM.SkypeTeams.Message.ConnectedAIApp.Connector.<AppName>` 과 브라우저 쪽 상호작용 `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 나뉩니다[5]. Windows 앱에서 한 대화가 어느 쪽으로 들어가는지는 공개 자료가 없으므로, 조직 검체에서 두 item class 를 모두 검색합니다.
+Purview 보존 정책의 "Other AI apps" 위치에는 "Microsoft Copilot (consumer version)" 이 들어 있고, 조직에 내용을 수집하는 수집 정책(collection policy)이 있어야 프롬프트와 응답이 남습니다[4]. eDiscovery 에서 Other AI apps 의 item class 는 기기 쪽 상호작용 `IPM.SkypeTeams.Message.ConnectedAIApp.Connector.<AppName>` 과 브라우저 쪽 상호작용 `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 나뉩니다[5]. Windows 앱에서 한 대화가 어느 쪽으로 들어가는지는 공개 자료가 없으므로, 조직의 데이터에서 두 item class 를 모두 검색합니다.
 
 AppLocker 규칙은 실행을 막으므로[1], 규칙이 걸린 기간에 실행 흔적이 있으면 규칙이 실제로 적용된 시점과 그 사용자에게 적용됐는지를 다시 맞춰 봅니다.
 
@@ -106,7 +106,7 @@ M     i     c     r     o     s     o     f     t     .
 
 **공개 도구로 한 번.** 디스크 이미지에서는 사용자마다 NTUSER.DAT 를 레지스트리 뷰어(예: Registry Explorer)로 열어 위 정책 키와 마이크 권한 키를 보고, 각 키의 마지막 기록 시각을 적습니다. 파일 시스템에서는 `%LOCALAPPDATA%\Packages\` 아래 `Microsoft.Copilot_` 로 시작하는 폴더를 찾아 시각과 안의 폴더 구성을 기록합니다. KapeFiles 에는 이 앱 전용 수집 항목(target)이 없고, 이름이 비슷한 `Targets/Windows/WindowsCopilotRecall.tkape` 는 Recall 폴더 `C:\Users\*\AppData\Local\CoreAIPlatform.00\UKP\` 만 모읍니다(2026-09-18 커밋 기준)[8]. 그래서 앱 폴더는 수집 목록에 따로 넣습니다.
 
-살아 있는 PC 에서는 아래 명령으로 설치 여부를 읽습니다[1]. 이 명령은 제거 스크립트의 첫 줄이지만, 여기서는 읽기에만 씁니다.
+실행 중인 PC 에서는 아래 명령으로 설치 여부를 읽습니다[1]. 이 명령은 제거 스크립트의 첫 줄이지만, 여기서는 읽기에만 씁니다.
 
 ```powershell
 # 설치된 Copilot 앱 패키지를 읽기만 한다(지우지 않는다)
@@ -128,7 +128,7 @@ Get-AppxPackage -Name "Microsoft.Copilot"
 
 ## 실습
 
-시험용 Windows 11 PC 와 개인 Microsoft 계정으로 직접 만든 검체에서 다음을 풀어 봅니다.
+시험용 Windows 11 PC 와 개인 Microsoft 계정으로 직접 만든 시험 데이터에서 다음을 풀어 봅니다.
 
 1. 한 번도 열지 않은 기본 설치 상태와, 로그인해 대화한 뒤의 상태에서 `Microsoft.Copilot_` 패키지 폴더는 무엇이 달라지는가?
 2. 웹 내용 보기로 링크를 몇 개 연 뒤, 대화와 함께 저장된 탭 목록이 패키지 폴더 안에 남는가, 남는다면 어느 파일인가?

@@ -30,23 +30,23 @@ VPN 에는 몇 가지 운영 방식이 있습니다. 앱별 VPN(Per-App VPN)은 
 
 이 밖에 `AppDomainPlugin-com.apple.NetworkExtension.IKEv2Provider`, `AppDomainPlugin-com.apple.DiagnosticExtensions.VPN`, `AppDomainPlugin-com.apple.VPNAppIntentWidget` 같은 시스템 확장 도메인도 있습니다. 이 도메인들은 VPN 을 설정하지 않은 기기에도 있을 수 있어서 VPN 을 썼다는 근거로 쓰지 않습니다.
 
-기기 안 경로는 공개 자료가 없어서, 파일 시스템 추출에서는 파일 이름으로 찾아 위치를 확인합니다. 설정 앱의 어느 메뉴에서 VPN·프로필이 보이는지와 iOS 15 ~ 18 사이에 파일 구조가 바뀌었는지도 공개 자료가 없습니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+기기 안 경로는 공개 문서에 나와 있지 않아서, 파일 시스템 추출에서는 파일 이름으로 찾아 위치를 확인합니다. 설정 앱의 어느 메뉴에서 VPN·프로필이 보이는지와 iOS 15 ~ 18 사이에 파일 구조가 바뀌었는지도 공개 문서에 나와 있지 않습니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ## 구조
 
 ### com.apple.networkextension.plist
 
-최상위에는 정수·문자열·목록 키가 하나씩 있고, UUID 를 키로 한 사전이 있으며 그 사전 안에 `Generation`, `Index`, `Version` 키가 있습니다. VPN 구성 항목이 어떤 키 아래에 들어가는지는 검체에서 확인합니다. 열었을 때 `$objects`·`$top` 같은 키가 보이면 NSKeyedArchiver 로 싼 값이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 풀이 방법을 따릅니다.
+최상위에는 정수·문자열·목록 키가 하나씩 있고, UUID 를 키로 한 사전이 있으며 그 사전 안에 `Generation`, `Index`, `Version` 키가 있습니다. VPN 구성 항목이 어떤 키 아래에 들어가는지는 실제 데이터로 확인합니다. 열었을 때 `$objects`·`$top` 같은 키가 보이면 NSKeyedArchiver 로 싼 값이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 풀이 방법을 따릅니다.
 
 `com.apple.networkextension.control.plist` 에는 `CriticalDomains` 목록 하나가 있고, 무엇을 담는지는 알려져 있지 않습니다.
 
 ### 설정 앱 plist 의 VPN 키
 
-`com.apple.Preferences.plist` 의 `VPNConnectivity` 는 정수, `VPNHasRelayConnections` 는 참·거짓 값입니다. 키 이름으로 보아 설정 앱이 VPN 연결 상태를 표시하려고 두는 값으로 보이지만, 값의 뜻과 언제 바뀌는지는 공개 자료가 없습니다. 값을 보고서에 쓰려면 연습용 기기에서 VPN 을 켜고 끄며 값이 어떻게 바뀌는지 먼저 시험합니다.
+`com.apple.Preferences.plist` 의 `VPNConnectivity` 는 정수, `VPNHasRelayConnections` 는 참·거짓 값입니다. 키 이름으로 보면 설정 앱이 VPN 연결 상태를 표시하려고 두는 값으로 보이지만, 값의 뜻과 언제 바뀌는지를 설명한 공개 문서는 없습니다. 값을 보고서에 쓰려면 연습용 기기에서 VPN 을 켜고 끄며 값이 어떻게 바뀌는지 먼저 시험합니다.
 
 ### 구성 프로파일
 
-MVT 의 `ConfigurationProfiles` 모듈은 설치된 구성 프로파일 정보를 백업과 파일 시스템 추출에서 뽑고, 여기에는 VPN 같은 제3자 구성도 들어갑니다 [2]. 프로파일 영역의 파일과 읽는 법은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다루고, 이 페이지에서는 VPN 페이로드가 있는지 확인하는 데만 씁니다. VPN 페이로드의 식별자 문자열은 검체의 프로필에서 확인합니다.
+MVT 의 `ConfigurationProfiles` 모듈은 설치된 구성 프로파일 정보를 백업과 파일 시스템 추출에서 뽑고, 여기에는 VPN 같은 제3자 구성도 들어갑니다 [2]. 프로파일 영역의 파일과 읽는 법은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다루고, 이 페이지에서는 VPN 페이로드가 있는지 확인하는 데만 씁니다. VPN 페이로드의 식별자 문자열은 실제 기기의 프로필에서 확인합니다.
 
 ## 증거로서 의미
 
@@ -62,11 +62,11 @@ MVT 의 `ConfigurationProfiles` 모듈은 설치된 구성 프로파일 정보�
 - VPN 으로 무엇을 주고받았는지, 어느 서버에 접속했는지는 이 흔적만으로 알 수 없습니다.
 - VPN 을 썼다는 사실만으로 숨기려 했다고 해석하지 않습니다. 회사 업무용이나 관리 프로필이 넣은 구성일 수 있어서 경위를 먼저 확인합니다.
 
-보고서에는 "수집 시점에 이 기기에 IKEv2 방식 VPN 구성이 저장되어 있었다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "수집 시점에 이 기기에 IKEv2 방식 VPN 구성이 저장되어 있었다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-`com.apple.networkextension.plist` 의 키에는 시각으로 이름이 분명한 키가 없고, `Generation`·`Version` 은 이름으로 보아 판 번호로 보입니다. 구성을 언제 넣었는지는 구성 프로파일의 설치 기록이나 VPN 앱의 설치 시각에서 찾는 편이 낫고, 그 방법은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 과 [설치된 앱](../app-usage/installed-apps.md) 에서 다룹니다. 파일 시스템 추출에서는 파일의 수정 시각도 참고하되, 파일 시스템 시각은 무엇이 바뀔 때 바뀌는지 [iOS의 파일 시스템](../../01-foundations/storage/filesystem/index.md) 에서 확인한 뒤에 씁니다.
+`com.apple.networkextension.plist` 의 키에는 시각으로 이름이 분명한 키가 없고, `Generation`·`Version` 은 이름으로 보면 판 번호 같습니다. 구성을 언제 넣었는지는 구성 프로파일의 설치 기록이나 VPN 앱의 설치 시각에서 찾는 편이 낫고, 그 방법은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 과 [설치된 앱](../app-usage/installed-apps.md) 에서 다룹니다. 파일 시스템 추출에서는 파일의 수정 시각도 참고하되, 파일 시스템 시각은 무엇이 바뀔 때 바뀌는지 [iOS의 파일 시스템](../../01-foundations/storage/filesystem/index.md) 에서 확인한 뒤에 씁니다.
 
 ## 함정과 한계
 
@@ -88,14 +88,14 @@ WHERE relativePath LIKE '%networkextension%'
 ORDER BY domain, relativePath;
 ```
 
-찾은 파일을 복사본으로 옮긴 뒤 헥스 편집기로 첫 8바이트를 봅니다. 아래는 이진 plist 명세로 만든 예시이고 특정 검체의 값이 아닙니다.
+찾은 파일을 복사본으로 옮긴 뒤 헥스 편집기로 첫 8바이트를 봅니다. 아래는 이진 plist 명세로 만든 예시이고 특정 기기의 값이 아닙니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07   문자
 00000000  62 70 6C 69 73 74 30 30   bplist00
 ```
 
-이진 plist 로 확인되면 Python 표준 모듈 `plistlib` 로 열어 최상위 키와 UUID 사전 안의 키를 모두 적습니다. 값에 `$archiver` 키가 보이면 NSKeyedArchiver 로 싼 값이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 방법으로 풀고, 안에서 VPN 이름·서버 주소·방식으로 보이는 키를 찾습니다. 공개 도구로는 MVT 의 `ConfigurationProfiles` 모듈이 설치된 구성 프로파일을 뽑아 주니 [2], 프로필로 들어온 VPN 이 있는지 이 결과로 먼저 훑습니다.
+이진 plist 로 확인되면 Python 표준 모듈 `plistlib` 로 열어 최상위 키와 UUID 사전 안의 키를 모두 적습니다. 값에 `$archiver` 키가 보이면 NSKeyedArchiver 로 싼 값이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 방법으로 풀고, 안에서 VPN 이름·서버 주소·방식으로 보이는 키를 찾습니다. 공개 도구로는 MVT 의 `ConfigurationProfiles` 모듈이 설치된 구성 프로파일을 뽑아 주니 [2], 프로필로 들어온 VPN 이 있는지 이 결과로 먼저 살펴봅니다.
 
 ## 교차 검증
 
@@ -112,7 +112,7 @@ VPN 이 침해 사고와 관련된 경우의 흐름은 [악성 코드는 어디�
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에 VPN 구성이 든 아이폰 추출이 있으면 아래 질문으로 풀어 봅니다. 없으면 연습용 기기에 IKEv2 VPN 구성을 하나 넣은 전후로 백업을 떠서 비교합니다.
+공개 시험 데이터(NIST CFReDS 등)에 VPN 구성이 든 아이폰 추출이 있으면 아래 질문으로 풀어 봅니다. 없으면 연습용 기기에 IKEv2 VPN 구성을 하나 넣은 전후로 백업을 떠서 비교합니다.
 
 1. VPN 구성을 넣기 전후로 `com.apple.networkextension.plist` 의 최상위 키와 UUID 사전은 어떻게 달라집니까?
 2. VPN 이름과 서버 주소는 어느 키 아래에 들어갑니까? NSKeyedArchiver 로 싸여 있습니까?

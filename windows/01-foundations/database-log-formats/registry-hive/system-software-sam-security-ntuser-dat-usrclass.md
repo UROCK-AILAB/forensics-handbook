@@ -88,13 +88,13 @@ SAM 의 해시는 SYSTEM 하이브에서 구한 부트키로 풀리므로 SAM �
 | 그 밖의 옛 사본 | 시스템 복원 지점 | 볼륨 섀도 복사본 | 볼륨 섀도 복사본 |
 
 - Windows 10 1803 부터는 RegBack 백업이 기본으로 꺼져 있어서 파일 이름은 보이지만 크기가 0 입니다.
-- `HKLM\System\CurrentControlSet\Control\Session Manager\Configuration Manager\EnablePeriodicBackup` 을 1 로 두면 예전처럼 백업하므로, 검체에서 이 값이 1 이면 RegBack 사본이 있을 수 있습니다.
+- `HKLM\System\CurrentControlSet\Control\Session Manager\Configuration Manager\EnablePeriodicBackup` 을 1 로 두면 예전처럼 백업하므로, 분석 대상에서 이 값이 1 이면 RegBack 사본이 있을 수 있습니다.
 - 로그 파일의 형식과 쓰는 법은 [트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)](log1-log2.md) 에서 다룹니다.
 
 ## 읽는 법 — 이 파일은 누구의 것인가
 
 1. **실행 중인 시스템**: `HKLM\SYSTEM\CurrentControlSet\Control\hivelist` 를 봅니다. 값 이름이 붙은 자리(`\REGISTRY\USER\<SID>_Classes` 등)이고, 값 데이터가 `\Device\HarddiskVolumeN\...` 형태의 파일 경로입니다. 이 목록은 커널이 실행 중에 채웁니다. 이미지에서 꺼낸 SYSTEM 파일에는 이 키가 없습니다.
-2. **디스크 이미지**: config 폴더와 사용자 프로필 폴더를 직접 훑습니다. 프로필 폴더와 SID 는 SOFTWARE 하이브의 [ProfileList](../../../02-artifacts/system-account/profilelist.md) 로 짝을 맞춥니다. 폴더 이름만 보고 계정을 단정하지 않습니다.
+2. **디스크 이미지**: config 폴더와 사용자 프로필 폴더를 직접 살펴봅니다. 프로필 폴더와 SID 는 SOFTWARE 하이브의 [ProfileList](../../../02-artifacts/system-account/profilelist.md) 로 짝을 맞춥니다. 폴더 이름만 보고 계정을 단정하지 않습니다.
 3. **이름이 바뀌었거나 카빙한 파일**: 첫 4바이트를 봅니다. 아래는 명세로 만든 예시입니다.
 
    ```
@@ -102,7 +102,7 @@ SAM 의 해시는 SYSTEM 하이브에서 구한 부트키로 풀리므로 SAM �
    00000000  72 65 67 66    regf
    ```
 
-   `regf` 로 시작하면 하이브 파일입니다. 첫 블록에는 디버깅용으로 원래 파일 경로 일부가 적힙니다. 이 칸으로 어느 하이브였는지 짐작할 수 있습니다. 위치는 [하이브 내부 구조](regf-hbin-cell.md) 를 봅니다.
+   `regf` 로 시작하면 하이브 파일입니다. 첫 블록에는 디버깅용으로 원래 파일 경로 일부가 적힙니다. 이 필드로 어느 하이브였는지 짐작할 수 있습니다. 위치는 [하이브 내부 구조](regf-hbin-cell.md) 를 봅니다.
 
 ## 포렌식에서 중요한 점
 

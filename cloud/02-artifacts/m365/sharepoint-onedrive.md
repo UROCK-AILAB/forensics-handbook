@@ -14,7 +14,7 @@ OneDrive 는 사용자 한 사람의 개인 사이트이고, SharePoint 는 팀�
 
 조사에 자주 쓰는 작업 이름 (Operation) 은 다음과 같습니다[1][4]. 전체 목록은 [주요 작업 이름](unified-audit-log/operations.md)에 있습니다.
 
-| 갈래 | Operation | 뜻 |
+| 분류 | Operation | 뜻 |
 |---|---|---|
 | 읽기 | `FileAccessed`, `FileAccessedExtended`, `FilePreviewed` | 파일 열기, 같은 사람이 오래(최대 3시간) 계속 연 경우의 묶음 기록, 미리 보기 |
 | 내려받기·동기화 | `FileDownloaded`, `FileSyncDownloadedFull` | 사이트에서 내려받기, OneDrive 동기화 앱(OneDrive.exe)으로 PC 에 받기 |
@@ -107,7 +107,7 @@ OneDrive 는 사용자 한 사람의 개인 사이트이고, SharePoint 는 팀�
 }
 ```
 
-관리 활동 API 스키마는 `ItemType` 을 정수 열거형(1 File, 5 Folder 등)으로 정의하고[2], 감사 속성 문서는 File·Folder 같은 이름으로 설명합니다[3]. 검체에 숫자와 문자열 가운데 어느 쪽으로 들어 있는지 먼저 봅니다.
+관리 활동 API 스키마는 `ItemType` 을 정수 열거형(1 File, 5 Folder 등)으로 정의하고[2], 감사 속성 문서는 File·Folder 같은 이름으로 설명합니다[3]. 실제 데이터에 숫자와 문자열 가운데 어느 쪽으로 들어 있는지 먼저 봅니다.
 
 ## 증거로서 의미
 
@@ -127,7 +127,7 @@ OneDrive 는 사용자 한 사람의 개인 사이트이고, SharePoint 는 팀�
 - 기록된 IP 가 사용자 기기의 주소인지. 일부 서비스는 Office on the web 같은 신뢰된 앱의 IP 를 적습니다[2]. 해석은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md)를 봅니다.
 - 파일 내용과 무엇을 고쳤는지. 내용은 감사 로그가 아니라 버전 기록, 보존 사본, eDiscovery 로 확인합니다.
 
-보고서에는 "이 계정으로 이 시각에 이 경로의 파일에 `FileDownloaded` 가 기록되어 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 계정으로 이 시각에 이 경로의 파일에 `FileDownloaded` 가 기록되어 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -145,7 +145,7 @@ OneDrive 는 사용자 한 사람의 개인 사이트이고, SharePoint 는 팀�
 - **초대 기록은 사이트 공유에만 남습니다.** 디렉터리에 없는 사용자와 공유할 때 `SharingInvitationCreated` 는 공유 대상이 사이트일 때만 기록되고, 파일은 `AnonymousLinkCreated`·`SecureLinkCreated`·`AddedToSecureLink` 로 남습니다[4]. 외부 사용자가 특정 사용자 링크로 파일을 열면 `FileAccessed` 가 남습니다[4].
 - **공유 한 번이 기록 여러 건을 만듭니다.** 디렉터리에 있는 사용자와 공유하면 SharePoint 가 먼저 그 사용자를 SharePoint 그룹에 넣어 `AddedToGroup` 을 남기고, 이어 `SharingSet` 을 남깁니다[4]. 사용자가 파일 공유 링크를 처음 만들 때는 그 사용자의 OneDrive 에 시스템 그룹이 생기면서 `GroupAdded` 도 남습니다[1].
 - **폐지된 작업 이름이 있습니다.** `FileSyncDownloadedPartial`·`FileSyncUploadedPartial` 은 옛 동기화 앱(Groove.exe)과 함께 폐지되었습니다[1]. 오래된 기록과 요즘 기록을 비교할 때 이름이 달라진 것을 활동이 사라진 것으로 읽지 않습니다.
-- **검색 작업 이름은 출처마다 다릅니다.** 감사 작업 문서에는 SharePoint 검색이 `SharepointSearchQueryInitiated` 와 `SearchQueryPerformed` 로 실려 있고[1], Hawk 는 `SearchQueryInitiatedSharePoint` 로 검색합니다[11]. SharePoint 검색 기록은 Audit (Premium) 라이선스를 받은 사용자에게만 남습니다[6]. 검체에 실제로 들어 있는 `Operation` 값을 먼저 확인하고 그 값으로 검색합니다.
+- **검색 작업 이름은 출처마다 다릅니다.** 감사 작업 문서에는 SharePoint 검색이 `SharepointSearchQueryInitiated` 와 `SearchQueryPerformed` 로 실려 있고[1], Hawk 는 `SearchQueryInitiatedSharePoint` 로 검색합니다[11]. SharePoint 검색 기록은 Audit (Premium) 라이선스를 받은 사용자에게만 남습니다[6]. 받은 데이터에 실제로 들어 있는 `Operation` 값을 먼저 확인하고 그 값으로 검색합니다.
 - **휴지통은 eDiscovery 로 찾을 수 없습니다.** 휴지통은 색인되지 않아서 검색되지 않고, eDiscovery 보류도 휴지통 안 내용을 붙잡지 못합니다[7][8]. 지운 파일은 휴지통 단계와 보존 보관 라이브러리를 따로 봅니다. 보류와 검색은 [Purview eDiscovery와 보존](purview-ediscovery.md)을 봅니다.
 - **보존 사본이 모든 판을 갖고 있지는 않습니다.** 처음 편집할 때는 새 내용이 보존 보관 라이브러리에 복사되지 않으므로, 모든 판을 남기려면 사이트에 버전 관리가 켜져 있어야 합니다[8]. 버전 관리는 기본으로 주 버전을 최소 500개 남깁니다[8]. 2022년 7월 이후에는 한 파일의 판들을 보존 보관 라이브러리에 파일 하나로 저장하고, 그 전에 복사된 판은 따로 된 파일로 남아 있습니다[8].
 - **경고 이름은 감사 작업 이름이 아닙니다.** `Unusual volume of file deletion`, `Suspicious OAuth app file download activities` 는 Defender for Cloud Apps 의 이상 탐지 경고 이름이고, Sigma 규칙도 이 경고 이름으로 찾습니다[12]. 경고가 없다고 대량 삭제·대량 다운로드가 없었던 것은 아니므로 감사 기록에서 작업 이름으로 직접 셉니다.

@@ -57,9 +57,9 @@ hosts 파일은 `/private/etc/hosts` 에 있습니다 [3]. 분석은 원래 없�
 | `options` | 하위 옵션 `debug`, `usevc`, `ndots`, `timeout`, `attempts`, `no_tld_query`, `reload-period` |
 ### 네트워크 서비스별 설정 (preferences.plist)
 
-`preferences.plist` 는 ForensicArtifacts 에 `MacOSSystemConfigurationPreferencesPlistFile` 이라는 이름으로 올라 있고 [4], 이 파일에서 볼 키는 `NetworkServices`, `DNS`, `UserDefinedName`, `Proxies`, `ExceptionsList`, `IPv4`, `ConfigMethod`, `IPv6`, `Interface`, `DeviceName`, `Hardware`, `Type`, `SMB`, `NetBIOSName`, `Workgroup` 입니다 [3]. 네트워크 서비스와 인터페이스 쪽 칸 전체는 [네트워크 인터페이스와 설정 (SystemConfiguration)](network-interfaces.md)에서 다루고, 여기서는 서비스 항목 아래 `DNS` 사전만 봅니다. `DNS` 사전 안의 하위 키는 실제 파일을 열어 그대로 옮겨 적습니다.
+`preferences.plist` 는 ForensicArtifacts 에 `MacOSSystemConfigurationPreferencesPlistFile` 이라는 이름으로 올라 있고 [4], 이 파일에서 볼 키는 `NetworkServices`, `DNS`, `UserDefinedName`, `Proxies`, `ExceptionsList`, `IPv4`, `ConfigMethod`, `IPv6`, `Interface`, `DeviceName`, `Hardware`, `Type`, `SMB`, `NetBIOSName`, `Workgroup` 입니다 [3]. 네트워크 서비스와 인터페이스 쪽 키 전체는 [네트워크 인터페이스와 설정 (SystemConfiguration)](network-interfaces.md)에서 다루고, 여기서는 서비스 항목 아래 `DNS` 사전만 봅니다. `DNS` 사전 안의 하위 키는 실제 파일을 열어 그대로 옮겨 적습니다.
 
-수동으로 넣은 DNS 와 DHCP 로 받은 DNS 가 각각 어디에 남는지, DHCP 임대 파일에 DNS 서버 값이 들어 있는지는 검체에서 확인합니다. DHCP 임대 파일은 mac_apt 가 `Network_DHCP` 표로 내고, 칸은 `Interface`, `MAC_Address`, `IPAddress`, `LeaseLength`, `LeaseStartDate`, `PacketData`, `RouterHardwareAddress`, `RouterIPAddress`, `SSID`, `Source` 입니다 [3].
+수동으로 넣은 DNS 와 DHCP 로 받은 DNS 가 각각 어디에 남는지, DHCP 임대 파일에 DNS 서버 값이 들어 있는지는 실제 기기에서 확인합니다. DHCP 임대 파일은 mac_apt 가 `Network_DHCP` 표로 내고, 열은 `Interface`, `MAC_Address`, `IPAddress`, `LeaseLength`, `LeaseStartDate`, `PacketData`, `RouterHardwareAddress`, `RouterIPAddress`, `SSID`, `Source` 입니다 [3].
 
 ### 암호화 DNS 페이로드
 
@@ -103,7 +103,7 @@ hosts, `/private/var/run/resolv.conf`, `/etc/resolver/` 폴더 전체, `preferen
 
 ### 헥스로 한 번
 
-`/etc/resolver/` 파일과 hosts 는 텍스트라서, 헥스로 보면 편집기에서 안 보이는 글자까지 확인할 수 있습니다. 아래는 man 페이지 [1]의 키워드로 만든 예시이고, 실제 검체에서 나온 값이 아닙니다. 주소 `192.0.2.53` 은 문서용 예시 주소입니다.
+`/etc/resolver/` 파일과 hosts 는 텍스트라서, 헥스로 보면 편집기에서 안 보이는 글자까지 확인할 수 있습니다. 아래는 man 페이지 [1]의 키워드로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다. 주소 `192.0.2.53` 은 문서용 예시 주소입니다.
 
 ```
 파일 이름: example.com   ← 이 이름이 곧 도메인
@@ -131,13 +131,13 @@ mac_apt NETWORKING 플러그인은 hosts, `/private/var/run/resolv.conf`, `prefe
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 맥 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터 가운데 맥 이미지를 골라 아래 질문을 풀어 봅니다.
 
-1. 검체의 hosts 를 같은 macOS 버전의 기준본과 비교하면 추가된 줄이 있나요? 있다면 그 줄은 어떤 이름을 어떤 주소로 돌리나요?
+1. 그 이미지의 hosts 를 같은 macOS 버전의 기준본과 비교하면 추가된 줄이 있나요? 있다면 그 줄은 어떤 이름을 어떤 주소로 돌리나요?
 2. `/etc/resolver/` 폴더에 파일이 있나요? 있다면 파일 이름(도메인)과 `nameserver` 값을 표로 정리하고, 사내 도메인·VPN 설정으로 설명되는지 보세요.
 3. `/private/var/run/resolv.conf` 가 이미지에 남아 있나요? 남아 있다면 적힌 DNS 서버가 `preferences.plist` 의 서비스별 `DNS` 사전 값과 같은가요?
 4. DHCP 임대 파일의 `SSID`·`RouterIPAddress`·`LeaseStartDate` 를 뽑고, `LeaseStartDate` 를 어떤 시각 기준으로 읽어야 말이 되는지 확인해 보세요.
-5. 구성 프로파일 가운데 `com.apple.dnsSettings.managed` 페이로드가 있나요? 있다면 `OnDemandRules` 와 `ProhibitDisablement` 값은 무엇이고, 검체의 macOS 버전에서 이 페이로드를 쓸 수 있나요?
+5. 구성 프로파일 가운데 `com.apple.dnsSettings.managed` 페이로드가 있나요? 있다면 `OnDemandRules` 와 `ProhibitDisablement` 값은 무엇이고, 그 이미지의 macOS 버전에서 이 페이로드를 쓸 수 있나요?
 6. hosts 와 resolver 파일의 수정 시각 무렵 FSEvents 에는 어떤 프로세스나 경로 변화가 함께 남아 있나요?
 
 ## 참고 문헌

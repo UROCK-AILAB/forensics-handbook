@@ -64,7 +64,7 @@ Graph `signIn` 레코드의 주요 필드는 아래와 같습니다[6][7].
 
 beta 에만 있는 필드 가운데 조사에 자주 쓰는 것은 다음과 같습니다[7]. `authenticationProtocol` 은 `oAuth2`, `ropc`, `deviceCode`, `saml20`, `wsFederation` 같은 인증 프로토콜이고, `incomingTokenType` 은 인증에 내민 토큰 종류(`primaryRefreshToken`, `refreshToken`, `saml20` 등)입니다. `originalTransferMethod` 는 `deviceCodeFlow`·`authenticationTransfer` 로 세션이 시작됐는지를, `signInEventTypes` 는 `interactiveUser`·`nonInteractiveUser`·`servicePrincipal`·`managedIdentity` 중 어느 종류인지를 나타냅니다. `uniqueTokenIdentifier` 는 발급한 토큰을 리소스에서 쓸 때 따라가는 base64 식별자이고, `sessionId`·`userAgent`·`crossTenantAccessType`·`homeTenantId`·`resourceTenantId` 도 beta 에 있습니다. `incomingTokenType` 목록에 없는 토큰으로 인증했을 수도 있어서, 값이 `none` 이라고 토큰을 쓰지 않았다고 볼 수는 없습니다[7].
 
-Log Analytics 로 보낸 기록은 열 이름이 대문자로 시작합니다(`CreatedDateTime`, `IPAddress`, `ResultType`, `ResultDescription`, `UniqueTokenIdentifier`, `SessionId`, `LocationDetails`, `TimeGenerated` 등)[8]. `ResultType` 은 5~6자리 오류 코드이고 `0` 이면 성공입니다[8]. 탐지 규칙은 `ClientApp`, `properties.message` 처럼 Graph·Log Analytics 열 이름과 다른 키를 쓰기도 하므로[12], 검체에서 실제 키 이름을 먼저 확인하고 검색합니다. JSON 로그를 읽는 요령은 [JSON 로그 읽기](../../../01-foundations/logging/json-logs.md)에 있습니다.
+Log Analytics 로 보낸 기록은 열 이름이 대문자로 시작합니다(`CreatedDateTime`, `IPAddress`, `ResultType`, `ResultDescription`, `UniqueTokenIdentifier`, `SessionId`, `LocationDetails`, `TimeGenerated` 등)[8]. `ResultType` 은 5~6자리 오류 코드이고 `0` 이면 성공입니다[8]. 탐지 규칙은 `ClientApp`, `properties.message` 처럼 Graph·Log Analytics 열 이름과 다른 키를 쓰기도 하므로[12], 받은 데이터에서 실제 키 이름을 먼저 확인하고 검색합니다. JSON 로그를 읽는 요령은 [JSON 로그 읽기](../../../01-foundations/logging/json-logs.md)에 있습니다.
 
 조사에서 자주 보는 오류 코드는 아래와 같습니다[10]. 문서 번호는 `AADSTS` 를 앞에 붙인 형태이고, 로그의 `ResultType`·`errorCode` 에는 숫자만 남습니다.
 
@@ -85,7 +85,7 @@ Log Analytics 로 보낸 기록은 열 이름이 대문자로 시작합니다(`C
 
 **증명하는 것**: 특정 시각(UTC)에 특정 계정으로 특정 앱·리소스에 인증을 시도한 기록이 있고, 그 결과(성공·오류 코드), 요청 IP, 클라이언트 종류, 인증 프로토콜, 적용된 조건부 접근 정책이 무엇이었는지를 보여 줍니다[6][7]. 레거시 프로토콜(IMAP·POP·SMTP 등)이나 장치 코드 흐름으로 로그인했다는 사실도 `clientAppUsed`·`authenticationProtocol`·`originalTransferMethod` 로 드러납니다[6][7].
 
-**증명하지 못하는 것**: 로그인 뒤에 메일을 읽거나 파일을 받았는지는 알 수 없으니, 그건 [통합 감사 로그](../unified-audit-log/index.md)나 Graph 활동 로그에서 확인합니다[9]. 성공한 로그인이 계정 주인 본인이었는지도 알 수 없습니다. 위치는 IP 로 추정한 값이라 VPN·모바일 통신사 주소 풀 때문에 실제 위치와 크게 다를 수 있습니다[3]. 보고서에는 "이 시간대에 이 IP 에서 이 계정으로 로그인에 성공한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+**증명하지 못하는 것**: 로그인 뒤에 메일을 읽거나 파일을 받았는지는 알 수 없으니, 그건 [통합 감사 로그](../unified-audit-log/index.md)나 Graph 활동 로그에서 확인합니다[9]. 성공한 로그인이 계정 주인 본인이었는지도 알 수 없습니다. 위치는 IP 로 추정한 값이라 VPN·모바일 통신사 주소 풀 때문에 실제 위치와 크게 다를 수 있습니다[3]. 보고서에는 "이 시간대에 이 IP 에서 이 계정으로 로그인에 성공한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -126,7 +126,7 @@ Log Analytics 에서는 `CreatedDateTime` 이 Entra 가 인증을 처리한 시�
 
 이 레코드는 2026년 9월 1일 02:14:07 UTC 에 `user1@contoso.com` 계정이 IMAP 으로 로그인에 성공했고(`errorCode` 0), 조건부 접근 정책이 적용되지 않았다는 기록입니다. IMAP 은 레거시 인증이라[6] 다단계 인증 없이 통과했을 가능성이 있으므로, 같은 IP 의 다른 로그인과 그 뒤 메일함 활동을 이어서 봅니다.
 
-**공개 도구로 받기.** Microsoft-Extractor-Suite 의 `Get-AzureEntraGraphLogs.ps1` 은 Graph beta `auditLogs/signIns` 를 `signInEventTypes` 필터로 종류별로 받고[13], Untitled Goose Tool 도 같은 엔드포인트에서 받습니다[14]. 받은 JSON 은 `createdDateTime` 으로 정렬해 `ipAddress`·`userAgent`·`authenticationProtocol` 을 기준으로 묶어 봅니다. Log Analytics 에 쌓여 있다면 `SigninLogs` 와 `AADNonInteractiveUserSignInLogs` 를 함께 조회해야 대화형·비대화형을 모두 봅니다[9]. 탐지 규칙으로 훑는 방법은 [탐지 규칙으로 로그 훑기](../../../03-techniques/analysis/detection-rules.md)를 봅니다.
+**공개 도구로 받기.** Microsoft-Extractor-Suite 의 `Get-AzureEntraGraphLogs.ps1` 은 Graph beta `auditLogs/signIns` 를 `signInEventTypes` 필터로 종류별로 받고[13], Untitled Goose Tool 도 같은 엔드포인트에서 받습니다[14]. 받은 JSON 은 `createdDateTime` 으로 정렬해 `ipAddress`·`userAgent`·`authenticationProtocol` 을 기준으로 묶어 봅니다. Log Analytics 에 쌓여 있다면 `SigninLogs` 와 `AADNonInteractiveUserSignInLogs` 를 함께 조회해야 대화형·비대화형을 모두 봅니다[9]. 탐지 규칙으로 로그를 검사하는 방법은 [탐지 규칙으로 로그 검색하기](../../../03-techniques/analysis/detection-rules.md)를 봅니다.
 
 ## 교차 검증
 

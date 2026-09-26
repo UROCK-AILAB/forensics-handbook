@@ -9,7 +9,7 @@ nav_order: 570
 
 macOS 에서 Claude Code 는 기록과 설정을 다른 OS 와 같은 `~/.claude/` 와 `~/.claude.json` 에 두지만, 로그인 정보는 키체인에 넣고 키체인에 쓰지 못할 때만 파일로 남깁니다.
 
-본문의 v2.1.x 같은 번호는 공식 문서에 적힌 버전이고, 앱이 자주 바뀌므로 검체의 파일 모양은 다를 수 있습니다.
+본문의 v2.1.x 같은 번호는 공식 문서에 적힌 버전이고, 앱이 자주 바뀌므로 실제 기기의 파일 모양은 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -39,9 +39,9 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 |---|---|---|
 | 네이티브 설치기(`install.sh`) | `~/.local/share/claude/versions/` | 스스로 업데이트 |
 | Homebrew `claude-code`(stable 채널), `claude-code@latest`(latest 채널) | Homebrew 폴더, `brew cleanup` 전까지 | 기본으로 하지 않음. `CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` 이면 백그라운드에서 올림 |
-| npm(`@anthropic-ai/claude-code`) | npm 전역 폴더. 옛 버전이 남는지는 문서에 설명이 없어 검체에서 확인 | npm 전역 폴더에 쓸 수 있으면 스스로 업데이트 |
+| npm(`@anthropic-ai/claude-code`) | npm 전역 폴더. 옛 버전이 남는지는 문서에 설명이 없어 실제 기기에서 확인 | npm 전역 폴더에 쓸 수 있으면 스스로 업데이트 |
 
-네이티브 설치에서 `~/.local/bin/claude` 는 `versions/` 안의 한 버전을 가리키는 심볼릭 링크입니다[6]. 업데이트는 백그라운드에서 받고 다음 실행부터 적용되므로, 링크가 가리키는 곳은 마지막으로 쓴 버전이 아니라 다음 실행에 쓸 버전일 수 있습니다. 사용자가 링크를 자기 스크립트나 다른 링크로 바꾸면 Claude Code 는 어느 버전이 필요한지 가릴 수 없어 설치한 모든 버전을 디스크에 남기고, v2.1.207 전에는 업데이트할 때마다 바꾼 링크를 다시 덮어썼습니다[6]. 링크를 바꾸지 않은 보통 설치에서 몇 개의 버전이 남는지는 판마다 다를 수 있어 `versions/` 목록으로 확인합니다. Homebrew 로 깐 경우에는 `brew cleanup` 을 돌리기 전까지 옛 버전이 남아서, Homebrew 폴더의 버전 목록으로 어떤 버전을 거쳐 왔는지 가늠해 볼 수 있습니다. npm 패키지도 `@anthropic-ai/claude-code-darwin-arm64` 같은 플랫폼별 패키지로 같은 실행 파일을 받아 연결합니다[6]. 실행 파일은 "Anthropic PBC" 가 서명하고 Apple 공증을 받았습니다[6].
+네이티브 설치에서 `~/.local/bin/claude` 는 `versions/` 안의 한 버전을 가리키는 심볼릭 링크입니다[6]. 업데이트는 백그라운드에서 받고 다음 실행부터 적용되므로, 링크가 가리키는 곳은 마지막으로 쓴 버전이 아니라 다음 실행에 쓸 버전일 수 있습니다. 사용자가 링크를 자기 스크립트나 다른 링크로 바꾸면 Claude Code 는 어느 버전이 필요한지 가릴 수 없어 설치한 모든 버전을 디스크에 남기고, v2.1.207 전에는 업데이트할 때마다 바꾼 링크를 다시 덮어썼습니다[6]. 링크를 바꾸지 않은 보통 설치에서 몇 개의 버전이 남는지는 판마다 다를 수 있어 `versions/` 목록으로 확인합니다. Homebrew 로 깐 경우에는 `brew cleanup` 을 돌리기 전까지 옛 버전이 남아서, Homebrew 폴더의 버전 목록으로 어떤 버전을 거쳐 왔는지 짐작해 볼 수 있습니다. npm 패키지도 `@anthropic-ai/claude-code-darwin-arm64` 같은 플랫폼별 패키지로 같은 실행 파일을 받아 연결합니다[6]. 실행 파일은 "Anthropic PBC" 가 서명하고 Apple 공증을 받았습니다[6].
 
 ### 버전에 따라 달라지는 곳
 
@@ -50,7 +50,7 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 | 붙여 넣은 이미지·첨부 이미지 | v2.1.274 이하는 `~/.claude/image-cache/` 아래 세션별 폴더, 그 뒤는 `CLAUDE_CODE_TMPDIR` 이 정하는 임시 폴더 아래 세션별 `images/`[2] |
 | 권한 거부 규칙 | v2.1.268 부터 `/etc` 가 `/private/etc` 로 풀리는 것처럼 심볼릭 링크 폴더를 거쳐 적은 거부·묻기 규칙을 실제 위치에도 적용(macOS·Linux)[5] |
 
-새 판에서 이미지가 실제로 놓이는 곳은 검체의 `CLAUDE_CODE_TMPDIR` 값과 임시 폴더를 보고 확인합니다. 이미지가 `image-cache` 에 없다고 첨부가 없었다고 보지 않고, 먼저 설치 버전을 확인합니다.
+새 판에서 이미지가 실제로 놓이는 곳은 실제 기기의 `CLAUDE_CODE_TMPDIR` 값과 임시 폴더를 보고 확인합니다. 이미지가 `image-cache` 에 없다고 첨부가 없었다고 보지 않고, 먼저 설치 버전을 확인합니다.
 
 ## 구조
 
@@ -58,13 +58,13 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 
 기록 파일은 `~/.claude/projects/` 아래, 작업 경로를 바꿔 만든 이름의 폴더에 들어갑니다. 이름은 작업 경로의 ASCII 영문자·숫자·`-` 는 그대로 두고 나머지 글자는 모두 `-` 로 바꿔 만듭니다(Claude Code 2.1.233 기준)[8]. macOS 경로는 `/` 로 시작해서 폴더 이름이 `-` 로 시작합니다. 만든 예시로 작업 경로가 `/Users/examiner01/work/app` 이면 폴더 이름은 `-Users-examiner01-work-app` 이 되고, 세션 파일은 `/Users/examiner01/.claude/projects/-Users-examiner01-work-app/` 아래에 생깁니다.
 
-이 바꾸기는 되돌릴 수 없습니다. claude-forensics 는 앞의 `-` 를 `/` 로 돌리고 나머지 `-` 도 `/` 로 바꿔 경로를 되짚는데, 원래 경로에 `-` 가 있으면 틀어지므로 기록 줄의 `cwd` 값을 먼저 씁니다[7]. 보고서에는 폴더 이름이 아니라 `cwd` 값을 적습니다.
+이 바꾸기는 되돌릴 수 없습니다. claude-forensics 는 앞의 `-` 를 `/` 로 돌리고 나머지 `-` 도 `/` 로 바꿔 경로를 복원하는데, 원래 경로에 `-` 가 있으면 틀어지므로 기록 줄의 `cwd` 값을 먼저 씁니다[7]. 보고서에는 폴더 이름이 아니라 `cwd` 값을 적습니다.
 
 ### 로그인 정보
 
 로그인 정보는 암호화된 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에 들어갑니다[4]. SSH 세션처럼 키체인이 잠겨 쓰기를 거부하면 `~/.claude/.credentials.json` 에 파일 모드 0600 으로 대신 저장하고[4], 이 파일은 [Windows](windows.md)의 같은 이름 파일처럼 평문 JSON 입니다. 원격 접속으로만 쓰던 Mac 에서 이 파일이 나온다면 키체인 쓰기 실패와 관련이 있을 수 있지만, 파일 하나로 접속 방식을 단정하지는 않습니다.
 
-키체인 항목의 서비스 이름은 공개된 분석 자료에 없어서, 검체의 키체인 항목 목록에서 Claude Code 항목을 찾아 이름과 생성·수정 시각을 기록합니다. 항목 값은 보고서에서 가리고, 토큰이 남는 다른 곳은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다. 계정 쪽 기록이 필요하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
+키체인 항목의 서비스 이름은 공개된 분석 자료에 나와 있지 않으므로, 기기의 키체인 항목 목록에서 Claude Code 항목을 찾아 이름과 생성·수정 시각을 기록합니다. 항목 값은 보고서에서 가리고, 토큰이 남는 다른 곳은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다. 계정 쪽 기록이 필요하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 ### 관리 정책
 
@@ -82,7 +82,7 @@ Claude 데스크톱 앱에서 돌린 Code 세션은 본문이 `~/.claude/project
 
 ## 시각 해석
 
-기록 안의 시각은 [세션 기록 구조](transcripts.md)를 따릅니다. 폴더가 언제 생기고 바뀌었는지는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에서 `~/.claude/`, `~/.local/share/claude/versions/`, `~/Library/Application Support/Claude/` 경로를 찾아 맞춰 봅니다. `versions/` 에 새 파일이 생긴 시각은 업데이트 시각을 가늠하는 데 쓸 수 있지만, 스스로 업데이트하는 설치에서는 사용자가 그 시각에 앱을 켰다는 뜻까지는 아닙니다.
+기록 안의 시각은 [세션 기록 구조](transcripts.md)를 따릅니다. 폴더가 언제 생기고 바뀌었는지는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에서 `~/.claude/`, `~/.local/share/claude/versions/`, `~/Library/Application Support/Claude/` 경로를 찾아 맞춰 봅니다. `versions/` 에 새 파일이 생긴 시각은 업데이트 시각을 추정하는 데 쓸 수 있지만, 스스로 업데이트하는 설치에서는 사용자가 그 시각에 앱을 켰다는 뜻까지는 아닙니다.
 
 `~/.claude/.last-cleanup` 은 마지막 자동 삭제 시각이라서, 남은 기록의 날짜 범위와 함께 봅니다[7]. 이 파일이 없거나 오래됐는데 남은 기록의 날짜 범위가 넓으면, 그 Mac 에 보통보다 오래된 기록이 남아 있다는 신호입니다[7].
 
@@ -97,7 +97,7 @@ Claude 데스크톱 앱에서 돌린 Code 세션은 본문이 `~/.claude/project
 
 **헥스로 한 번.** 파일로 남은 `.credentials.json` 은 평문 JSON 이라서 [Windows](windows.md) 페이지의 헥스 예시와 같은 방법으로 읽습니다. 첫 바이트가 `7B`(`{`)이면 암호화하지 않은 파일입니다.
 
-**공개 도구로 한 번.** 살아 있는 Mac 에서는 기본 명령으로 서명과 설치 버전을 읽기만 합니다. 아래 사용자 이름과 폴더는 만든 예시입니다.
+**공개 도구로 한 번.** 실행 중인 Mac 에서는 기본 명령으로 서명과 설치 버전을 읽기만 합니다. 아래 사용자 이름과 폴더는 만든 예시입니다.
 
 ```sh
 # 만든 예시: 사용자 examiner01
@@ -121,7 +121,7 @@ ls -la /Users/examiner01/.claude/projects/
 
 ## 실습
 
-Claude Code 흔적이 든 공개 검체가 없으면 시험용 Mac 이나 가상 머신에 직접 깔아 만든 검체로 풀어 봅니다.
+Claude Code 흔적이 든 공개 시험 이미지가 없으면 시험용 Mac 이나 가상 머신에 직접 깔아 만든 시험 데이터로 풀어 봅니다.
 
 1. 네이티브 설치로 두 번 업데이트한 뒤 `versions/` 에는 무엇이 남고, 실행 링크는 어디를 가리킵니까?
 2. SSH 로 접속해 로그인했을 때와 화면 앞에서 로그인했을 때 `.credentials.json` 이 생기는지 비교해 봅니다.

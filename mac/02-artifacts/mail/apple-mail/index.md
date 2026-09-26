@@ -14,7 +14,7 @@ macOS 기본 메일 앱인 애플 메일은 사용자 홈의 `~/Library/Mail/V<n
 
 메일에는 누가 누구와 무엇을 주고받았는지와 어떤 파일이 첨부로 오갔는지가 남고, 애플 메일은 메시지 원본 사본을 디스크에 파일로 두는 경우가 많습니다 [2][4]. 그래서 서버에 접근하지 못해도 맥 한 대에서 메일함 구성, 메시지 헤더와 본문, 읽음·답장·전달 같은 상태 값을 함께 볼 수 있습니다. 색인 DB 만 먼저 읽으면 계정·메일함·발신자별 규모를 빠르게 잡을 수 있고, 필요한 메시지만 골라 본문 파일로 내려가는 순서가 편합니다.
 
-다만 이 구조는 공개 도구가 역분석한 결과이고 Apple 이 문서로 밝힌 API 가 아닙니다 [1]. 그래서 보고서에는 어느 도구로 읽었는지와 검체에서 몇 건을 직접 맞춰 봤는지를 함께 적습니다.
+다만 이 구조는 공개 도구가 역분석한 결과이고 Apple 이 문서로 밝힌 API 가 아닙니다 [1]. 그래서 보고서에는 어느 도구로 읽었는지와 실제 데이터에서 몇 건을 직접 맞춰 봤는지를 함께 적습니다.
 
 ## 한눈에 보기
 
@@ -30,14 +30,14 @@ macOS 기본 메일 앱인 애플 메일은 사용자 홈의 `~/Library/Mail/V<n
 | 알려 주지 않는 것 | 상태가 바뀐 시각과 바꾼 사람, 사용자가 첨부를 열거나 저장했는지 |
 | 공개 도구 예 | emlx (파이썬 `.emlx` 파서) [4], apple-mail-parser (분류 표 읽기) [5], `sqlite3` |
 
-메일 앱의 샌드박스 컨테이너 쪽 경로와 메일 활동이 남는 통합 로그 항목은 공개된 분석 자료가 없어 검체에서 확인해야 합니다.
+메일 앱의 샌드박스 컨테이너 쪽 경로와 메일 활동이 남는 통합 로그 항목은 공개된 분석 자료가 없어 실제 데이터로 확인해야 합니다.
 
 > 그림 자리: `V<n>` 폴더 아래에서 `MailData/Envelope Index` 의 `messages` 행과 `.mbox` 폴더 속 `.emlx` 파일이 ROWID 와 메일함 URL 로 이어지는 모습
 
 ## 읽는 순서
 
 1. [저장 구조 (emlx·V10)](storage.md) — 계정·메일함 폴더를 거쳐 `.emlx` 파일까지 내려가는 경로와 나눔 폴더 규칙, `.emlx` 한 파일의 세 부분과 `flags` 비트를 다룹니다.
-2. [메일 색인 DB (Envelope Index)](envelope-index.md) — 메시지·제목·주소·메일함 표를 잇는 법과 분류 표, 시각 칸의 기준을 정하는 법, WAL 을 챙겨 수집하는 법을 다룹니다.
+2. [메일 색인 DB (Envelope Index)](envelope-index.md) — 메시지·제목·주소·메일함 표를 잇는 법과 분류 표, 시각 열의 기준을 정하는 법, WAL 을 챙겨 수집하는 법을 다룹니다.
 3. [첨부 파일 (Attachments)](attachments.md) — 색인 DB·상태 값·MIME 파트 세 곳에서 첨부를 찾아 맞춰 보는 법과 공개 자료가 없는 저장 위치를 다룹니다.
 
 ## 함께 볼 페이지
@@ -45,7 +45,7 @@ macOS 기본 메일 앱인 애플 메일은 사용자 홈의 `~/Library/Mail/V<n
 - [아웃룩 (Outlook for Mac)](../outlook.md), [썬더버드 (Thunderbird)](../thunderbird.md) — 같은 맥에 다른 메일 앱이 있을 때
 - [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) — 색인 DB 의 저장 형식과 WAL
 - [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md) — `.emlx` 끝부분의 형식
-- [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md) — 색인 DB 의 날짜 칸을 풀 때
+- [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md) — 색인 DB 의 날짜 열을 풀 때
 - [개인 정보 보호 권한 (TCC)](../../credentials/tcc/index.md) — 전체 디스크 접근 권한 기록
 - [격리 속성과 다운로드 기록 (Quarantine)](../../filesystem/quarantine/index.md) — 메일에서 저장한 첨부의 출처를 볼 때
 - [누구와 연락을 주고받았나 (Communication)](../../../04-scenarios/activity/communication.md)

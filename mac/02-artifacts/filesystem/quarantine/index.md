@@ -12,7 +12,7 @@ has_toc: false
 
 ## 왜 중요한가
 
-파일이 어디서 들어왔는지는 악성 코드의 침입 경로를 찾을 때나 자료가 들어온 경위를 따질 때 먼저 묻는 질문이고, 격리 기록은 그 답을 두 곳에 나눠 남깁니다. 파일에 붙는 확장 속성 `com.apple.quarantine` 에는 받은 앱 이름과 격리 시각이 들어 있고, 사용자별 SQLite DB `QuarantineEventsV2` 에는 받은 파일 URL·원래 페이지 URL·격리 이유가 한 행씩 남습니다 [1][2]. 확장 속성의 마지막 칸인 UUID가 DB의 `LSQuarantineEventIdentifier` 와 같은 값이라서, 파일에서 출발해 다운로드 출처까지 따라갈 수 있습니다 [1][2].
+파일이 어디서 들어왔는지는 악성 코드의 침입 경로를 찾을 때나 자료가 들어온 경위를 따질 때 먼저 묻는 질문이고, 격리 기록은 그 답을 두 곳에 나눠 남깁니다. 파일에 붙는 확장 속성 `com.apple.quarantine` 에는 받은 앱 이름과 격리 시각이 들어 있고, 사용자별 SQLite DB `QuarantineEventsV2` 에는 받은 파일 URL·원래 페이지 URL·격리 이유가 한 행씩 남습니다 [1][2]. 확장 속성의 마지막 필드인 UUID가 DB의 `LSQuarantineEventIdentifier` 와 같은 값이라서, 파일에서 출발해 다운로드 출처까지 따라갈 수 있습니다 [1][2].
 
 격리 속성은 Gatekeeper가 앱을 처음 열 때 무엇을 확인할지 정하는 기준이기도 합니다. Gatekeeper는 격리 속성에 격리 플래그가 서 있는 앱에만 첫 실행 확인을 더 요구하고, 격리 속성이 없는 앱은 공증 확인만 거친 뒤 사용자 조치 없이 실행됩니다 [6]. Gatekeeper는 인터넷에서 받은 소프트웨어를 처음 열 때 사용자 승인을 요청하고, 처음 열 때는 어떤 경로로 들어왔든 모든 소프트웨어를 알려진 악성 코드인지 검사합니다 [4]. 격리 속성이 남아 있는지와 플래그가 어떻게 바뀌었는지는 사용자가 앱을 열면서 어떤 확인을 거쳤는지 따져 볼 단서가 됩니다.
 
@@ -36,8 +36,8 @@ has_toc: false
 
 ## 읽는 순서
 
-1. [격리 확장 속성 (com.apple.quarantine)](quarantine-xattr.md) — 네 칸 형식과 플래그 비트, 첫 실행 뒤의 플래그 변화, Ventura부터 붙는 `com.apple.provenance` 를 헥스 예시로 풉니다.
-2. [격리 이벤트 DB (QuarantineEventsV2)](quarantine-events-db.md) — `LSQuarantineEvent` 표의 칸과 격리 이유, 맥 절대 시각을 바꾸는 법, UUID로 파일과 잇는 SQL을 다룹니다.
+1. [격리 확장 속성 (com.apple.quarantine)](quarantine-xattr.md) — 네 필드 형식과 플래그 비트, 첫 실행 뒤의 플래그 변화, Ventura부터 붙는 `com.apple.provenance` 를 헥스 예시로 풉니다.
+2. [격리 이벤트 DB (QuarantineEventsV2)](quarantine-events-db.md) — `LSQuarantineEvent` 표의 열과 격리 이유, 맥 절대 시각을 바꾸는 법, UUID로 파일과 잇는 SQL을 다룹니다.
 
 ## 함께 볼 페이지
 

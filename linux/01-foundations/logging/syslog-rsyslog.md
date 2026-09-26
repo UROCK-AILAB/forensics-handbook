@@ -25,7 +25,7 @@ Ubuntu 24.04 와 RHEL 9 계열은 둘 다 rsyslog 를 쓰지만, 메시지를 �
 | `/var/log/spooler` | 없음 | `uucp,news.crit` | UUCP·뉴스 오류 |
 | `/var/log/boot.log` | 없음 | `local7.*` | local7 로 보낸 부팅 메시지 |
 
-Ubuntu 는 `/etc/rsyslog.conf` 에 모듈과 전역 설정만 두고, 규칙은 `/etc/rsyslog.d/50-default.conf` 에 둡니다[7]. 패키지는 원본을 `/usr/share/rsyslog/50-default.conf` 에 설치하고, 설치 스크립트가 ucf 로 `/etc/rsyslog.d/50-default.conf` 에 반영합니다[7]. RHEL 9 계열은 규칙을 `/etc/rsyslog.conf` 에 직접 쓰고 `/etc/rsyslog.d/*.conf` 를 함께 읽습니다[8]. 두 쪽 모두 다른 패키지나 관리자가 `/etc/rsyslog.d/` 에 규칙 파일을 더할 수 있으므로, 표는 출발점일 뿐이고 검체의 설정 파일을 먼저 읽어야 합니다.
+Ubuntu 는 `/etc/rsyslog.conf` 에 모듈과 전역 설정만 두고, 규칙은 `/etc/rsyslog.d/50-default.conf` 에 둡니다[7]. 패키지는 원본을 `/usr/share/rsyslog/50-default.conf` 에 설치하고, 설치 스크립트가 ucf 로 `/etc/rsyslog.d/50-default.conf` 에 반영합니다[7]. RHEL 9 계열은 규칙을 `/etc/rsyslog.conf` 에 직접 쓰고 `/etc/rsyslog.d/*.conf` 를 함께 읽습니다[8]. 두 쪽 모두 다른 패키지나 관리자가 `/etc/rsyslog.d/` 에 규칙 파일을 더할 수 있으므로, 표는 출발점일 뿐이고 실제 시스템의 설정 파일을 먼저 읽어야 합니다.
 
 Ubuntu 는 로그 파일을 `syslog` 사용자 권한으로 씁니다. `/etc/rsyslog.conf` 에 `$FileOwner syslog`, `$FileGroup adm`, `$FileCreateMode 0640`, `$PrivDropToUser syslog` 가 있고, tmpfiles 설정이 `/var/log` 를 0775 root:syslog 로, `auth.log`·`syslog`·`kern.log`·`mail.log`·`mail.err` 를 0640 syslog:adm 으로 맞춥니다[7].
 
@@ -60,7 +60,7 @@ PRI 는 원격 전송이나 `RSYSLOG_SyslogProtocol23Format` 처럼 서식에 `%
 
 ### 줄 서식 (template)
 
-rsyslog 는 서식(template)으로 파일에 쓸 줄의 모양을 정합니다. 미리 정의된 서식 가운데 이 쪽에서 다루는 것은 다음 셋입니다[2].
+rsyslog 는 서식(template)으로 파일에 쓸 줄의 모양을 정합니다. 미리 정의된 서식 가운데 이 페이지에서 다루는 것은 다음 셋입니다[2].
 
 | 서식 이름 | 정의 | 시각 모양 |
 |---|---|---|
@@ -81,16 +81,16 @@ RHEL 9 계열:   Mar 12 09:15:27 web01 backupd[3120]: job nightly started
 
 systemd 를 쓰는 시스템에서는 journald 가 `/dev/log`, `/run/systemd/journal/dev-log`, `/run/systemd/journal/socket`, `/run/systemd/journal/stdout` 을 엽니다[11]. 그래서 프로그램이 syslog(3) 로 보낸 메시지는 저널에 먼저 들어가고, rsyslog 는 두 방법 가운데 하나로 받습니다. 하나는 journald 가 `ForwardToSyslog=` 설정에 따라 `/run/systemd/journal/syslog` 소켓으로 바로 넘겨 주는 방법이고, 다른 하나는 rsyslog 가 저널 파일을 직접 읽는 방법입니다[10]. upstream 기본값은 wall 전달만 켜져 있고[10], RHEL 9 의 systemd 소스에 든 `journald.conf` 에도 `#ForwardToSyslog=no` 가 주석으로 있습니다[12].
 
-Ubuntu 의 `rsyslog.service` 는 `Requires=syslog.socket` 이고[7], imuxsock 은 systemd 시스템에서 `syslog.socket` 이 마련한 `/run/systemd/journal/syslog` 로 메시지를 받습니다[5]. 커널 메시지는 `module(load="imklog" permitnonkernelfacility="on")` 으로 따로 읽습니다[7]. 검체의 `/etc/systemd/journald.conf` 와 `journald.conf.d/` 에서 `ForwardToSyslog=` 값을 확인하면 어느 길이 쓰였는지 알 수 있습니다.
+Ubuntu 의 `rsyslog.service` 는 `Requires=syslog.socket` 이고[7], imuxsock 은 systemd 시스템에서 `syslog.socket` 이 마련한 `/run/systemd/journal/syslog` 로 메시지를 받습니다[5]. 커널 메시지는 `module(load="imklog" permitnonkernelfacility="on")` 으로 따로 읽습니다[7]. 분석 대상의 `/etc/systemd/journald.conf` 와 `journald.conf.d/` 에서 `ForwardToSyslog=` 값을 확인하면 어느 길이 쓰였는지 알 수 있습니다.
 
 RHEL 9 계열은 `imuxsock` 을 `SysSock.Use="off"` 로 불러 로컬 소켓을 듣지 않고, `imjournal` 을 `UsePid="system"`, `StateFile="imjournal.state"` 로 불러 저널을 읽습니다[8]. 작업 폴더가 `global(workDirectory="/var/lib/rsyslog")` 이고 상대 경로의 상태 파일은 작업 폴더 안에 만들므로[6][8], 읽은 위치는 `/var/lib/rsyslog/imjournal.state` 에 남습니다. 커널 메시지도 저널에서 오기 때문에 imklog 는 주석 처리되어 있습니다[8]. 저널 쪽 구조는 [systemd 저널](systemd-journal/index.md)에서 다룹니다.
 
 ## 읽는 법
 
 1. 설정부터 읽습니다. `/etc/rsyslog.conf` 와 `/etc/rsyslog.d/*.conf` 에서 어떤 규칙이 어느 파일로 보내는지, 어떤 서식을 쓰는지, `imudp`·`imtcp`(514번 포트 수신)나 `omfwd`(원격 전송)가 켜져 있는지 봅니다. 두 배포판 모두 `imudp`·`imtcp` 는 기본으로 주석 처리되어 있습니다[7][8]. Ubuntu 는 `/etc/rsyslog.d/50-default.conf` 를 패키지 원본 `/usr/share/rsyslog/50-default.conf` 와 비교하면 규칙을 바꿨는지 알 수 있습니다[7].
-2. 서식을 가립니다. 줄이 네 자리 연도로 시작하면 RFC 3339 서식이고, 영어 달 이름으로 시작하면 옛 서식이며, `<` 로 시작하면 PRI 가 든 전송 서식입니다[2][13].
+2. 서식을 구분합니다. 줄이 네 자리 연도로 시작하면 RFC 3339 서식이고, 영어 달 이름으로 시작하면 옛 서식이며, `<` 로 시작하면 PRI 가 든 전송 서식입니다[2][13].
 3. PRI 가 있으면 풉니다. 만든 예시 `<86>1 2026-03-12T00:15:27.104233+00:00 web01 backupd 3120 - - job nightly started` 에서 86 = 10 × 8 + 6 이므로 authpriv.info 입니다[9].
-4. 호스트 이름과 태그를 나눕니다. 원격에서 받은 줄이 섞인 파일은 호스트 이름 칸으로 출처를 가릅니다.
+4. 호스트 이름과 태그를 나눕니다. 원격에서 받은 줄이 섞인 파일은 호스트 이름 필드로 출처를 구분합니다.
 5. 시각을 UTC 로 바꿉니다. RFC 3339 서식은 줄에 적힌 오프셋을 빼면 되고, 옛 서식은 아래 "시각 해석" 대로 연도와 시간대를 붙입니다.
 
 Ubuntu 는 한 세대 늦게 압축하므로 순환된 파일이 `syslog.1`, `syslog.2.gz` 처럼 섞여 있고[7], `zcat -f` 로 압축 여부와 상관없이 한꺼번에 읽을 수 있습니다.

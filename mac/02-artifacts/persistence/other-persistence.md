@@ -38,7 +38,7 @@ MITRE ATT&CK는 로그인 훅을 T1037.002 (Boot or Logon Initialization Scripts
 | emond 큐 디렉터리 | `/private/var/db/emondClients` | [5] |
 | emond launchd 설정 | `/System/Library/LaunchDaemons/com.apple.emond.plist` | [5] |
 
-로그인 훅 plist 경로는 Apple 문서와 MITRE가 서로 다르게 적었고 [1][2], 현재 macOS에서 어느 쪽이 실제 저장 위치인지는 검체에서 확인합니다. 조사할 때는 두 파일 모두에서 `LoginHook`·`LogoutHook` 키를 찾아봅니다.
+로그인 훅 plist 경로는 Apple 문서와 MITRE가 서로 다르게 적었고 [1][2], 현재 macOS에서 어느 쪽이 실제 저장 위치인지는 기기에서 직접 확인합니다. 조사할 때는 두 파일 모두에서 `LoginHook`·`LogoutHook` 키를 찾아봅니다.
 
 ### 버전별 차이
 
@@ -46,10 +46,10 @@ MITRE ATT&CK는 로그인 훅을 T1037.002 (Boot or Logon Initialization Scripts
 |---|---|---|
 | 로그인·로그아웃 훅 | 폐기됨. MITRE는 macOS 10.11에서 폐기됐다고 적었고, Apple은 버전을 밝히지 않음 | [1][2] |
 | 권한 부여 플러그인 설치 경로 | Mac OS X 10.5 이후 `/Library/Security/SecurityAgentPlugins` | [4] |
-| 권한 정책 DB | 2008년 기준 `/etc/authorization` 이고 바뀔 수 있음. 현재 위치는 검체에서 확인 | [4] |
-| emond | 버전별로 들어 있는지 검체에서 확인 | — |
+| 권한 정책 DB | 2008년 기준 `/etc/authorization` 이고 바뀔 수 있음. 현재 위치는 실제 기기에서 확인 | [4] |
+| emond | 버전별로 들어 있는지 실제 기기에서 확인 | — |
 
-로그인 훅을 설명한 문서 [1][4]는 갱신이 멈춘 보관 문서라서, 폐기 뒤 macOS 10.15 이후에서 훅이 실제로 실행되는지는 검체로 확인해야 합니다. emond도 버전에 따라 빠져 있을 수 있어서, 먼저 `/sbin/emond` 와 launchd 설정 plist가 있는지부터 확인합니다.
+로그인 훅을 설명한 문서 [1][4]는 갱신이 멈춘 보관 문서라서, 폐기 뒤 macOS 10.15 이후에서 훅이 실제로 실행되는지는 기기에서 직접 확인해야 합니다. emond도 버전에 따라 빠져 있을 수 있어서, 먼저 `/sbin/emond` 와 launchd 설정 plist가 있는지부터 확인합니다.
 
 ## 구조
 
@@ -105,23 +105,23 @@ emond는 launchd 설정 `/System/Library/LaunchDaemons/com.apple.emond.plist` �
 
 **증명하지 못하는 것**
 
-- 설정이 있다고 해서 실제로 실행됐다는 뜻은 아닙니다. 폐기된 로그인 훅은 현재 macOS에서 실행되는지부터 검체로 확인해야 하고, 실행 여부는 로그나 프로세스 기록 같은 다른 흔적으로 따로 확인해야 합니다.
+- 설정이 있다고 해서 실제로 실행됐다는 뜻은 아닙니다. 폐기된 로그인 훅은 현재 macOS에서 실행되는지부터 실제 기기로 확인해야 하고, 실행 여부는 로그나 프로세스 기록 같은 다른 흔적으로 따로 확인해야 합니다.
 - 누가 설정을 넣었는지는 이 파일들만으로 알 수 없습니다. 로그인 훅을 만들거나 고치려면 관리자 권한이 필요하다는 점 [2]은 그 권한을 얻은 누군가가 넣었다는 범위까지만 좁혀 줍니다.
 - 스크립트나 번들이 악성인지도 경로만으로는 판단할 수 없고, 내용과 서명을 따로 봐야 합니다. 서명 확인은 [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md)를 참고합니다.
 
-보고서에는 "로그인 훅으로 악성 코드를 실행했다" 가 아니라 "`com.apple.loginwindow` plist의 `LoginHook` 값에 이 경로가 적혀 있고, 그 파일의 내용은 이렇다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "로그인 훅으로 악성 코드를 실행했다" 가 아니라 "`com.apple.loginwindow` plist의 `LoginHook` 값에 이 경로가 적혀 있고, 그 파일의 내용은 이렇다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
 `LoginHook` 값은 경로 문자열이라 그 안에 시각이 들어 있지 않습니다. 그래서 언제 설정됐는지는 plist 파일, 훅 스크립트, 플러그인 번들, emond 규칙 파일의 파일 시스템 시각으로 추정하고, 파일을 고칠 때 바뀌는 시각이라 마지막으로 고친 때만 알려 준다는 점을 감안합니다. 파일 시스템 시각을 읽는 법은 [APFS 구조](../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md)에 있고, 파일이 만들어지고 바뀐 순서는 [파일 시스템 이벤트](../filesystem/fsevents/index.md)로 따로 맞춰 봅니다.
 
-훅이나 규칙이 실행될 때 [통합 로그](../../01-foundations/data-formats/unified-log/index.md)에 어떤 서브시스템·메시지로 남는지는 검체의 통합 로그에서 확인합니다.
+훅이나 규칙이 실행될 때 [통합 로그](../../01-foundations/data-formats/unified-log/index.md)에 어떤 서브시스템·메시지로 남는지는 실제 통합 로그에서 확인합니다.
 
 ## 함정과 한계
 
 로그인 훅의 plist 경로는 출처마다 달라서 한쪽만 보면 놓칠 수 있고, 두 곳을 다 봐야 합니다. 폐기된 기능이라 "현재 macOS에서는 안 돈다" 고 단정하기 쉽지만, 설정이 남아 있으면 조사 대상에 넣습니다.
 
-권한 정책 DB의 위치는 2008년 기준 `/etc/authorization` 이고 바뀔 수 있어서 [4], 현재 macOS의 위치는 검체에서 확인합니다. 오래된 경로에 파일이 없다고 해서 규칙이 바뀌지 않았다고 결론 내리지 않습니다. 기본값 목록도 10.5 기준이라, 현재 버전의 기본 메커니즘과 1:1로 맞춰 보면 정상 항목을 이상 항목으로 잘못 볼 수 있고, 같은 버전의 깨끗한 설치본과 비교하는 편이 낫습니다.
+권한 정책 DB의 위치는 2008년 기준 `/etc/authorization` 이고 바뀔 수 있어서 [4], 현재 macOS의 위치는 실제 기기에서 확인합니다. 오래된 경로에 파일이 없다고 해서 규칙이 바뀌지 않았다고 결론 내리지 않습니다. 기본값 목록도 10.5 기준이라, 현재 버전의 기본 메커니즘과 1:1로 맞춰 보면 정상 항목을 이상 항목으로 잘못 볼 수 있고, 같은 버전의 깨끗한 설치본과 비교하는 편이 낫습니다.
 
 emond는 버전에 따라 아예 없을 수 있어서, 규칙 디렉터리가 없다는 사실만으로 "지워졌다" 고 보지 않습니다. 반대로 `/sbin/emond` 가 없는 버전에서 규칙 파일만 남아 있다면 실행될 수 없는 흔적일 수 있습니다.
 
@@ -131,11 +131,11 @@ emond는 버전에 따라 아예 없을 수 있어서, 규칙 디렉터리가 �
 
 ### 헥스로 한 번
 
-`com.apple.loginwindow.plist` 가 바이너리 plist라도 키 문자열 `LoginHook` 은 ASCII 바이트 그대로 들어가기 때문에, 헥스 편집기에서 문자열 검색으로 키 위치를 찾을 수 있습니다. 이 설명은 plist 형식 명세를 바탕으로 한 것이고 특정 검체에서 나온 값이 아닙니다. 키와 값이 어떻게 이어지는지(오브젝트 테이블·오프셋 테이블)는 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)의 순서대로 따라가면 값인 스크립트 경로 문자열까지 닿습니다. emond 규칙 plist도 같은 방법으로 읽습니다.
+`com.apple.loginwindow.plist` 가 바이너리 plist라도 키 문자열 `LoginHook` 은 ASCII 바이트 그대로 들어가기 때문에, 헥스 편집기에서 문자열 검색으로 키 위치를 찾을 수 있습니다. 이 설명은 plist 형식 명세를 바탕으로 한 것이고 특정 기기에서 나온 값이 아닙니다. 키와 값이 어떻게 이어지는지(오브젝트 테이블·오프셋 테이블)는 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)의 순서대로 따라가면 값인 스크립트 경로 문자열까지 닿습니다. emond 규칙 plist도 같은 방법으로 읽습니다.
 
 ### 공개 도구로 한 번
 
-살아 있는 시스템에서는 macOS 기본 명령 `defaults read` 로 값을 읽고, 이미지에서 꺼낸 plist는 파일을 직접 열어 봅니다. [1][2]
+실행 중인 시스템에서는 macOS 기본 명령 `defaults read` 로 값을 읽고, 이미지에서 꺼낸 plist는 파일을 직접 열어 봅니다. [1][2]
 
 ```
 sudo defaults read com.apple.loginwindow LoginHook
@@ -149,7 +149,7 @@ sudo defaults read com.apple.loginwindow LogoutHook
 3. `/etc/emond.d/rules/` 의 규칙 plist를 열어 이벤트 종류와 실행 동작을 읽습니다.
 4. 각 파일의 소유자와 시각을 적습니다. root가 아닌 사용자가 만든 규칙은 따로 표시합니다. [5]
 
-살아 있는 시스템에서 값을 읽을 때의 주의점은 [라이브 대응](../../03-techniques/process-acquisition/live-response/index.md)을 참고합니다.
+실행 중인 시스템에서 값을 읽을 때의 주의점은 [라이브 대응](../../03-techniques/process-acquisition/live-response/index.md)을 참고합니다.
 
 ## 교차 검증
 
@@ -165,7 +165,7 @@ sudo defaults read com.apple.loginwindow LogoutHook
 | [예약 작업](cron-periodic.md) | cron·periodic 쪽 자동 실행 |
 | [사용자 계정](../system-account/user-accounts/index.md) | 훅에 넘어간 짧은 이름이 어느 계정인지 |
 
-지속성 위치를 한꺼번에 훑는 순서는 [악성 코드 지속성 찾기](../../04-scenarios/incident/persistence.md)에 있고, 찾은 흔적을 시간 순으로 엮는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)을 참고합니다.
+지속성 위치를 한꺼번에 살펴보는 순서는 [악성 코드 지속성 찾기](../../04-scenarios/incident/persistence.md)에 있고, 찾은 흔적을 시간 순으로 엮는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)을 참고합니다.
 
 ## 실습
 

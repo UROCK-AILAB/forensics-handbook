@@ -32,16 +32,16 @@ LSA 시크릿은 SECURITY 하이브의 `Policy\Secrets\<이름>\CurrVal\default`
 2. `PolEKList` 값을 `LSA_SECRET` 구조로 읽고, 그 안 EncryptedData 의 앞 32바이트를 떼어 둡니다.
 3. 임시 키를 만듭니다. 부트키 뒤에 그 32바이트를 1000번 이어 붙인 것을 SHA256 에 넣습니다.
 4. 그 임시 키로 EncryptedData 의 나머지를 AES-CBC 로 풉니다.
-5. 푼 결과를 `LSA_SECRET_BLOB` 로 읽습니다. 그 Secret 칸의 52바이트째부터 32바이트가 LSA 키입니다.
+5. 푼 결과를 `LSA_SECRET_BLOB` 로 읽습니다. 그 Secret 필드의 52바이트째부터 32바이트가 LSA 키입니다.
 6. LSA 키로 각 시크릿의 `CurrVal\default` 를 풉니다.
 
 ## 구조
 
-시크릿 값은 `LSA_SECRET` 구조로 시작하고, 이 안에 EncKeyID(16바이트), EncAlgorithm, Flags, EncryptedData 가 차례로 있습니다. EncryptedData 를 풀면 `LSA_SECRET_BLOB` 구조가 나오는데, 길이 칸과 용도를 모르는 12바이트 뒤의 Secret 칸에 실제 시크릿이 있습니다. 이 구조 이름과 흐름은 공개 구현인 Impacket 에서 확인했습니다.
+시크릿 값은 `LSA_SECRET` 구조로 시작하고, 이 안에 EncKeyID(16바이트), EncAlgorithm, Flags, EncryptedData 가 차례로 있습니다. EncryptedData 를 풀면 `LSA_SECRET_BLOB` 구조가 나오는데, 길이 필드와 용도를 모르는 12바이트 뒤의 Secret 필드에 실제 시크릿이 있습니다. 이 구조 이름과 흐름은 공개 구현인 Impacket 에서 확인했습니다.
 
 ## 자동 로그온 비밀번호
 
-자동 로그온 (Automatic Logon) 을 켜면 비밀번호가 어딘가 저장되며, 저장되는 자리는 켜는 방법에 따라 두 갈래입니다.
+자동 로그온 (Automatic Logon) 을 켜면 비밀번호가 어딘가 저장되며, 저장되는 자리는 켜는 방법에 따라 두 가지입니다.
 
 | 켜는 방법 | 비밀번호가 저장되는 곳 | 형태 |
 |---|---|---|
@@ -69,7 +69,7 @@ LSA 시크릿은 SECURITY 하이브의 `Policy\Secrets\<이름>\CurrVal\default`
 ## 증거로서 의미 — 증명하는 것 / 증명하지 못하는 것
 
 - 증명하는 것: 그 이름의 시크릿이 이 컴퓨터에 저장되어 있다는 것입니다. `DefaultPassword` 가 평문으로 있으면 그 자체가 비밀번호입니다.
-- 증명하지 못하는 것: 시크릿을 언제 넣고 언제 썼는지입니다. 복호 흐름에서 쓰는 칸에는 사용 시각이 없습니다.
+- 증명하지 못하는 것: 시크릿을 언제 넣고 언제 썼는지입니다. 복호 흐름에서 쓰는 필드에는 사용 시각이 없습니다.
 - 증명하지 못하는 것: `DefaultUserName` 값만으로 자동 로그온 계정이라고 단정하지 못합니다. 이 값은 마지막으로 로그온한 사용자를 뜻하기도 합니다.
 
 ## 함정과 한계

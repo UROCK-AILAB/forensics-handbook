@@ -44,15 +44,15 @@ nav_order: 850
 
 Windows 에서 Claude Code 가 어떤 하위 폴더를 쓰는지는 출처끼리 다릅니다. claude-forensics 문서는 2026년 중반의 Windows Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 했지만[5], 2026-09 무렵 Windows 11(빌드 26200)의 Claude Code 폴더에는 `history.jsonl`·`paste-cache\`·`file-history\` 가 있습니다. 판과 설정에 따라 다를 수 있으니 폴더를 통째로 모은 뒤 무엇이 있는지 목록으로 남깁니다.
 
-사용자 폴더만 훑으면 놓치는 곳이 있습니다. Aider 는 작업 중인 저장소 안에 기록을 쓰고, Visual Studio 의 Copilot 은 솔루션 폴더의 `.vs\` 에 쓰므로[8], 조사 대상자의 작업 폴더도 함께 봅니다. Ollama 모델을 `OLLAMA_MODELS` 환경 변수로 다른 곳에 옮겼다면 그 위치도 따로 모읍니다. 스토어 앱 패키지 폴더의 `LocalCache\Local\` 아래에는 Android SDK·NuGet·npm·pip 캐시처럼 AI 와 상관없는 개발 도구 파일도 섞여 있을 수 있으니, 패키지 폴더는 통째로 모으되 분석할 때 경로로 걸러 냅니다.
+사용자 폴더만 살펴보면 놓치는 곳이 있습니다. Aider 는 작업 중인 저장소 안에 기록을 쓰고, Visual Studio 의 Copilot 은 솔루션 폴더의 `.vs\` 에 쓰므로[8], 조사 대상자의 작업 폴더도 함께 봅니다. Ollama 모델을 `OLLAMA_MODELS` 환경 변수로 다른 곳에 옮겼다면 그 위치도 따로 모읍니다. 스토어 앱 패키지 폴더의 `LocalCache\Local\` 아래에는 Android SDK·NuGet·npm·pip 캐시처럼 AI 와 상관없는 개발 도구 파일도 섞여 있을 수 있으니, 패키지 폴더는 통째로 모으되 분석할 때 경로로 걸러 냅니다.
 
-Claude 데스크톱 폴더는 Chromium 계열 앱과 같은 모양이라서, LevelDB·쿠키 DB 를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 Windows 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 봅니다. 쿠키 DB 의 `cookies` 표에는 `value` 칸과 `encrypted_value` 칸이 함께 있고, 암호화한 값을 보호하는 방식은 Windows 판의 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
+Claude 데스크톱 폴더는 Chromium 계열 앱과 같은 모양이라서, LevelDB·쿠키 DB 를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 Windows 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 봅니다. 쿠키 DB 의 `cookies` 표에는 `value` 열과 `encrypted_value` 열이 함께 있고, 암호화한 값을 보호하는 방식은 Windows 판의 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
 
 ### 3. SQLite 는 `-wal`·`-shm` 파일과 함께 모읍니다
 
 SQLite DB 가 미리 쓰기 로그(Write-Ahead Log, WAL) 방식이면 최근에 쓴 행은 체크포인트로 본 파일에 옮겨지기 전까지 옆의 `-wal` 파일에 있습니다. coding-agent-forensics 가 다루는 에이전트 11종 가운데 SQLite 를 쓰는 4종은 모두 WAL 을 씁니다. 막 기록한 Hermes Agent DB 는 본 파일이 4 KB 인데 대화 111 KB 가 WAL 에 남아 있어서, `state.db` 만 모으면 아무것도 되살리지 못합니다[8]. 2026-09-07 에 Windows 에서 뜬 Cursor CLI `store.db` 도 4096바이트 머리만 있고 스키마와 행은 `store.db-wal` 에 있었습니다[7]. GitHub Copilot CLI 의 `session-store.db` 도 `-wal` 과 함께 읽어야 합니다[7].
 
-그래서 `.db`·`.sqlite`·`.vscdb` 파일을 모을 때는 같은 이름의 `-wal`·`-shm` 파일을 한 번에 복사하고, 분석은 원본이 아닌 복사본으로 합니다. 수집 도구의 파일 거르개가 본 파일 이름만 지정하면 WAL 이 빠집니다. 예를 들어 LangurTrace 의 Msty 타깃은 `FileMask: 'msty.db'`, Jan 타깃은 `FileMask: 'cortex.db'` 로 지정해 옆의 `-wal`·`-shm` 파일을 모으지 않으므로 [9], 검체에 이 파일이 있으면 따로 모읍니다. WAL 의 구조와 지운 행을 찾는 법은 Windows 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
+그래서 `.db`·`.sqlite`·`.vscdb` 파일을 모을 때는 같은 이름의 `-wal`·`-shm` 파일을 한 번에 복사하고, 분석은 원본이 아닌 복사본으로 합니다. 수집 도구의 파일 거르개가 본 파일 이름만 지정하면 WAL 이 빠집니다. 예를 들어 LangurTrace 의 Msty 타깃은 `FileMask: 'msty.db'`, Jan 타깃은 `FileMask: 'cortex.db'` 로 지정해 옆의 `-wal`·`-shm` 파일을 모으지 않으므로 [9], 실제 기기에 이 파일이 있으면 따로 모읍니다. WAL 의 구조와 지운 행을 찾는 법은 Windows 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
 
 ### 4. 훅 설정을 챙깁니다
 
@@ -111,7 +111,7 @@ LangurTrace 타깃이 모으는 위치는 아래와 같습니다 [9]. 경로는 
 | Jan | `AppData\Roaming\Jan\data\` 의 `models`(재귀), `cortex.db`, `threads`(재귀), `logs\cortex*.log`, `AppData\Roaming\Jan\Local Storage\leveldb\` |
 | GPT4All | `AppData\Local\nomic.ai\GPT4ALL\` 의 `*.gguf`, `*.rmodel`, `*.chat` |
 
-타깃 경로와 논문 부록 A 의 경로는 두 곳에서 다릅니다. LM Studio 로그는 논문이 `%AppData%/LM Studio/logs/main.log`(공백 있음), 타깃이 `AppData\Roaming\LMStudio\logs\`(공백 없음)로 적었고, Chatbox API 캐시는 논문이 `Cache/Cache_Data`, 타깃이 `Cache\CacheData\` 로 적었습니다 [3][9]. 검체에서 두 경로를 모두 찾아봅니다. 논문을 낸 뒤 Jan 과 Msty 는 저장 형식을 바꿨다는 지적이 있으므로 [11], 지금 판에서는 타깃이 모은 폴더가 비어 있지 않은지 확인합니다.
+타깃 경로와 논문 부록 A 의 경로는 두 곳에서 다릅니다. LM Studio 로그는 논문이 `%AppData%/LM Studio/logs/main.log`(공백 있음), 타깃이 `AppData\Roaming\LMStudio\logs\`(공백 없음)로 적었고, Chatbox API 캐시는 논문이 `Cache/Cache_Data`, 타깃이 `Cache\CacheData\` 로 적었습니다 [3][9]. 실제 기기에서 두 경로를 모두 찾아봅니다. 논문을 낸 뒤 Jan 과 Msty 는 저장 형식을 바꿨다는 지적이 있으므로 [11], 지금 판에서는 타깃이 모은 폴더가 비어 있지 않은지 확인합니다.
 
 세션 기록 같은 JSON Lines 파일은 `jq` 로 키를 골라 볼 수 있고, SQLite 파일은 복사본을 `sqlite3` 이나 DB Browser for SQLite 로 엽니다. LevelDB 를 읽는 법은 Windows 판의 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)에 있습니다.
 
@@ -119,9 +119,9 @@ LangurTrace 타깃이 모으는 위치는 아래와 같습니다 [9]. 경로는 
 
 Claude 데스크톱이나 Cowork 에서 시작했거나 마지막으로 이어 간 세션은 기본적으로 30일 삭제 규칙을 받지 않아서, 같은 기기 안에서도 세션마다 남은 기간이 다를 수 있습니다 [1]. Anthropic 이 관리하는 가상 머신에서 돈 클라우드 세션은 처음부터 기기에 원본이 없습니다 [1].
 
-수집 도구의 경로 목록은 도구를 만든 때의 앱 판을 기준으로 합니다. LangurTrace 타깃은 2025년 판 앱을 기준으로 하고, claude-forensics 는 없는 하위 폴더를 경고만 남기고 건너뜁니다 [5]. 도구가 아무것도 내놓지 않으면 앱이 기록을 남기지 않은 것인지 도구가 경로를 모르는 것인지부터 가립니다. 폴더째 모아 두면 나중에 다른 도구로 다시 읽을 수 있습니다.
+수집 도구의 경로 목록은 도구를 만든 때의 앱 판을 기준으로 합니다. LangurTrace 타깃은 2025년 판 앱을 기준으로 하고, claude-forensics 는 없는 하위 폴더를 경고만 남기고 건너뜁니다 [5]. 도구가 아무것도 내놓지 않으면 앱이 기록을 남기지 않은 것인지 도구가 경로를 모르는 것인지부터 확인합니다. 폴더째 모아 두면 나중에 다른 도구로 다시 읽을 수 있습니다.
 
-설정 파일은 수집한 시점의 설정을 보여 줄 뿐이고, 사건이 일어난 때에도 같은 설정이었는지는 따로 확인해야 합니다. 파일 구성은 앱 판과 설정에 따라 다를 수 있으므로 검체에서 확인합니다.
+설정 파일은 수집한 시점의 설정을 보여 줄 뿐이고, 사건이 일어난 때에도 같은 설정이었는지는 따로 확인해야 합니다. 파일 구성은 앱 판과 설정에 따라 다를 수 있으므로 실제 기기에서 확인합니다.
 
 ## 결과를 어떻게 해석하나
 

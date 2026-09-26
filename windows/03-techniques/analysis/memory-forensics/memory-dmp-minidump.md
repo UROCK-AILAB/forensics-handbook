@@ -49,7 +49,7 @@ Windows 는 버그 체크 때 덤프 파일을 만들 수 있고, 만들지 않�
 
 작은 메모리 덤프는 크래시마다 새 파일을 만들어 폴더에 쌓고, 파일 이름에는 날짜가 들어갑니다 [1].
 예를 들어 `Mini022900-01.dmp` 는 2000년 2월 29일의 첫 덤프입니다 [1].
-요즘 Windows 가 쓰는 이름 형식은 검체에서 확인합니다.
+요즘 Windows 가 쓰는 이름 형식은 실제 파일로 확인합니다.
 
 ## 설정 레지스트리 — CrashControl
 
@@ -98,14 +98,14 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 - WER 을 꺼 두었거나 사용자가 보고를 취소해도 로컬 덤프는 남을 수 있습니다 [2].
 - 로컬 덤프는 Microsoft 로 보낸 덤프와 다를 수 있습니다 [2].
 - WER 보고서 파일은 [윈도 오류 보고](../../../02-artifacts/execution/wer.md) 에서 다룹니다.
-- 작업 관리자나 ProcDump 로 만든 덤프는 [메모리 덤프 확보](memory-acquisition.md) 에서 다룹니다. 이런 덤프의 저장 위치는 검체에서 찾습니다.
+- 작업 관리자나 ProcDump 로 만든 덤프는 [메모리 덤프 확보](memory-acquisition.md) 에서 다룹니다. 이런 덤프의 저장 위치는 실제 기기에서 확인합니다.
 
 ## 구조 — 미니덤프 헤더
 
 미니덤프 파일의 헤더 구조체는 MINIDUMP_HEADER 입니다 [3].
-이 구조체는 헤더 파일 minidumpapiset.h 에 있고, DbgHelp.h 가 이 파일을 포함하며, 칸은 아래 순서로 놓입니다 [3].
+이 구조체는 헤더 파일 minidumpapiset.h 에 있고, DbgHelp.h 가 이 파일을 포함하며, 필드는 아래 순서로 놓입니다 [3].
 
-| 순서 | 칸 | 형식 | 뜻 [3] |
+| 순서 | 필드 | 형식 | 뜻 [3] |
 |---|---|---|---|
 | 1 | Signature | ULONG32 | MINIDUMP_SIGNATURE 로 채웁니다 |
 | 2 | Version | ULONG32 | 아래 워드는 MINIDUMP_VERSION 입니다. 위 워드는 구현마다 다른 내부 값입니다 |
@@ -115,8 +115,8 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 | 6 | Reserved / TimeDateStamp | ULONG32 (공용체) | time_t 형식의 날짜·시각입니다 |
 | 7 | Flags | ULONG64 | MINIDUMP_TYPE 값의 조합입니다 |
 
-- 칸의 바이트 위치와 MINIDUMP_SIGNATURE 의 실제 값은 헤더 파일 minidumpapiset.h 로 확인합니다.
-- Flags 는 LocalDumps 의 CustomDumpFlags 와 같은 MINIDUMP_TYPE 조합입니다 [2][3]. 덤프에 무엇을 담았는지 가늠하는 단서가 됩니다.
+- 필드의 바이트 위치와 MINIDUMP_SIGNATURE 의 실제 값은 헤더 파일 minidumpapiset.h 로 확인합니다.
+- Flags 는 LocalDumps 의 CustomDumpFlags 와 같은 MINIDUMP_TYPE 조합입니다 [2][3]. 덤프에 무엇을 담았는지 추정하는 단서가 됩니다.
 
 ## 절차
 
@@ -133,7 +133,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 ## 시각 해석
 
 - 작은 덤프는 파일 이름에 날짜가 들어갑니다 [1].
-- 미니덤프 헤더의 TimeDateStamp 는 time_t 형식입니다 [3]. UTC 인지는 검체에서 확인합니다. time_t 를 읽는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
+- 미니덤프 헤더의 TimeDateStamp 는 time_t 형식입니다 [3]. UTC 인지는 실제 데이터로 확인합니다. time_t 를 읽는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 완전 덤프는 다음 크래시 때 이전 파일을 덮어씁니다 [1]. 커널 덤프도 덮어쓰기 설정이 켜져 있으면 덮어씁니다 [1]. 덮어썼다면 이 파일에는 마지막 크래시만 남습니다.
 - 파일 시스템 시각과 헤더 시각이 크게 다르면 파일을 옮기거나 복사했는지 봅니다.
 
@@ -153,7 +153,7 @@ Windows Server 2008 과 Windows Vista SP1 부터 WER (Windows Error Reporting) �
 - **설정이 켜져 있어도 덤프가 없을 수 있습니다.** 완전 덤프와 작은 덤프는 페이지 파일 조건이 맞아야 합니다 [1]. 페이지 파일은 [페이지 파일](pagefile-sys-swapfile-sys.md) 에 있습니다.
 - **이전 크래시는 사라졌을 수 있습니다.** 완전·커널 덤프는 덮어씁니다 [1]. 사용자 모드 덤프는 DumpCount 를 넘으면 가장 오래된 것부터 바꿉니다 [2].
 - **커널 덤프에는 사용자 프로그램 메모리가 없습니다** [1]. 커널 덤프에 사용자 프로그램의 흔적이 없다고 해서 그 프로그램을 쓰지 않았다고 볼 수 없습니다.
-- **파일 크기로 덤프 종류를 가리지 않습니다.** 작은 메모리 덤프의 크기는 64KB 로 정해져 있지만 [1], 실제 파일 크기는 이 값과 다를 수 있습니다. CrashDumpEnabled 값과 파일 위치로 가립니다.
+- **파일 크기로 덤프 종류를 구분하지 않습니다.** 작은 메모리 덤프의 크기는 64KB 로 정해져 있지만 [1], 실제 파일 크기는 이 값과 다를 수 있습니다. CrashDumpEnabled 값과 파일 위치로 구분합니다.
 - **사용자 모드 덤프에는 비밀 정보가 들 수 있습니다.** 덤프 파일은 사건 자료로 따로 다룹니다. 보고서에 내용을 그대로 옮기지 않습니다.
 
 ## 결과를 어떻게 해석하나

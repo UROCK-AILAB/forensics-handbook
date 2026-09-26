@@ -6,17 +6,17 @@ nav_order: 870
 
 # 대화 내용 되살리기 (캐시·스냅숏·알림)
 
-화면이나 목록에서 사라진 AI 대화를 기기에 남은 사본(도구 기록의 이전 판, 앱 로그, SQLite WAL, 앱 캐시, 스냅숏)과 서버에 남은 사본에서 다시 찾는 방법이며, 원본이 어디에 있는지부터 가려야 헛수고를 줄일 수 있습니다.
+화면이나 목록에서 사라진 AI 대화를 기기에 남은 사본(도구 기록의 이전 판, 앱 로그, SQLite WAL, 앱 캐시, 스냅숏)과 서버에 남은 사본에서 다시 찾는 방법이며, 원본이 어디에 있는지부터 확인해야 헛수고를 줄일 수 있습니다.
 
 잠금 해제나 암호화 우회, 남은 토큰으로 서버에 접근하는 방법은 다루지 않습니다.
 
 ## 언제 쓰나
 
-사용자가 대화를 지웠거나, 자동 삭제로 기록이 사라졌거나, 앱 화면에 보이는 것보다 더 많은 내용을 확인해야 할 때 씁니다. 대화 원본이 서버에 있는 서비스와 기기에 있는 도구는 찾을 곳이 전혀 달라서, 아래 표로 먼저 갈래를 정합니다.
+사용자가 대화를 지웠거나, 자동 삭제로 기록이 사라졌거나, 앱 화면에 보이는 것보다 더 많은 내용을 확인해야 할 때 씁니다. 대화 원본이 서버에 있는 서비스와 기기에 있는 도구는 찾을 곳이 전혀 달라서, 아래 표로 먼저 어느 경우인지 정합니다.
 
 | 대상 | 대화 원본 | 기기에서 찾을 곳 |
 |---|---|---|
-| 웹·모바일 채팅 서비스(ChatGPT, Claude, Gemini, Copilot) | 서버 계정 | 앱·브라우저 캐시. 대화 내용이 캐시에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다 |
+| 웹·모바일 채팅 서비스(ChatGPT, Claude, Gemini, Copilot) | 서버 계정 | 앱·브라우저 캐시. 대화 내용이 캐시에 남는지는 실제 데이터로 확인해야 합니다 |
 | ChatGPT macOS 앱 | 서버 계정 | 2024-07 초까지의 판은 `~/Library/Application Support/com.openai.chat` 에 대화를 평문으로 두었고, 그 뒤 판은 저장한 대화를 암호화함[4] |
 | Claude Code(로컬 세션) | 기기, 평문 JSONL | 기록 파일과 그 이전 판, 입력 기록, 편집 전 파일 사본, 붙여넣기 캐시(아래 2단계) |
 | Gemini CLI | 기기 `~/.gemini/tmp/` 아래 `chats/` | 세션 JSONL. 되감은 턴도 파일에 남음(아래 2단계) |
@@ -50,11 +50,11 @@ nav_order: 870
 | `feedback/drafts/`, `feedback-bundles/` | 피드백 초안, 서드파티 공급자를 쓸 때 보내지 않고 남긴 기록 압축본 | 초안은 최대 10개·30일 |
 | `debug/<세션 ID>.txt` | `--debug`·`/debug` 로 켰을 때만 남는 디버그 로그 | `cleanupPeriodDays` |
 
-세션 기록이 정리된 뒤에도 `history.jsonl` 은 남으므로, 이 파일의 `sessionId` 가운데 기록 파일이 없는 줄이 지워진 세션의 프롬프트입니다. claude-forensics 도구[7]는 이런 줄을 "orphan" 으로 모아 `orphan-prompts.jsonl` 로 냅니다. 보관 기간보다 오래된 대화에서는 이것이 유일하게 남은 기록인 경우가 많습니다[7]. 다만 같은 도구 README(2026-06 기준)는 Windows 판 Claude Code 가 `history.jsonl`·`paste-cache/`·`file-history/` 를 쓰지 않는 것으로 보인다고 했지만, 2026-09 Windows 11 관찰에서는 `history.jsonl` 이 있었습니다. 판과 설정에 따라 다를 수 있으니 검체에 이 파일들이 있는지부터 봅니다.
+세션 기록이 정리된 뒤에도 `history.jsonl` 은 남으므로, 이 파일의 `sessionId` 가운데 기록 파일이 없는 줄이 지워진 세션의 프롬프트입니다. claude-forensics 도구[7]는 이런 줄을 "orphan" 으로 모아 `orphan-prompts.jsonl` 로 냅니다. 보관 기간보다 오래된 대화에서는 이것이 유일하게 남은 기록인 경우가 많습니다[7]. 다만 같은 도구 README(2026-06 기준)는 Windows 판 Claude Code 가 `history.jsonl`·`paste-cache/`·`file-history/` 를 쓰지 않는 것으로 보인다고 했지만, 2026-09 Windows 11 관찰에서는 `history.jsonl` 이 있었습니다. 판과 설정에 따라 다를 수 있으니 실제 기기에 이 파일들이 있는지부터 봅니다.
 
-`history.jsonl` 의 `pastedContents.#` 아래에는 붙여넣기 본문(`content`)이 있는 줄과 해시(`contentHash`)만 있는 줄이 섞여 있습니다. 해시와 `paste-cache/` 파일의 연결은 공개 문서에 없으니, 두 곳을 모두 수집하고 연결은 검체의 실제 파일로 확인합니다. 대화를 요약(`/compact`)해도 원래 메시지는 기록 파일에 그대로 남아[12], 화면에서 요약만 보였다는 진술과 파일 내용이 다를 수 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
+`history.jsonl` 의 `pastedContents.#` 아래에는 붙여넣기 본문(`content`)이 있는 줄과 해시(`contentHash`)만 있는 줄이 섞여 있습니다. 해시와 `paste-cache/` 파일의 연결은 공개 문서에 없으니, 두 곳을 모두 수집하고 연결은 실제 파일로 확인합니다. 대화를 요약(`/compact`)해도 원래 메시지는 기록 파일에 그대로 남아[12], 화면에서 요약만 보였다는 진술과 파일 내용이 다를 수 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
 
-Gemini CLI 는 세션 파일에 줄을 덧붙이기만 합니다. 대화를 되감을 때 앞선 메시지 줄을 지우지 않고 `{"$rewindTo": "<메시지 id>"}` 줄을 하나 덧붙이며, 불러올 때 그 id 부터 뒤의 메시지를 빼고 보여 줍니다[8]. 그래서 화면에서 사라진 턴도 파일을 직접 읽으면 나옵니다. 세션 파일의 칸은 [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md)에 있습니다.
+Gemini CLI 는 세션 파일에 줄을 덧붙이기만 합니다. 대화를 되감을 때 앞선 메시지 줄을 지우지 않고 `{"$rewindTo": "<메시지 id>"}` 줄을 하나 덧붙이며, 불러올 때 그 id 부터 뒤의 메시지를 빼고 보여 줍니다[8]. 그래서 화면에서 사라진 턴도 파일을 직접 읽으면 나옵니다. 세션 파일의 필드는 [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md)에 있습니다.
 
 ### 3. 로컬 LLM 앱은 앱이 남긴 로그와 백업을 봅니다
 
@@ -71,15 +71,15 @@ Gemini CLI 는 세션 파일에 줄을 덧붙이기만 합니다. 대화를 되�
 
 (출처: LangurTrace 논문 표 8. 괄호는 지운 개수 가운데 되살린 개수, "–" 는 그 기능이 없거나 시험하지 않은 항목)
 
-되살린 내용이 나온 곳은 앱마다 다릅니다(논문 §4.4~§5.3, 부록 A). Ollama 는 모델을 지워도 `%LocalAppData%/Ollama/server.log` 의 다운로드 기록에 시각, 모델 이름, manifest 정보가 남습니다. Chatbox 는 `%AppData%/xyz.chatboxapp.app/config.json` 의 백업 사본을 만들고 지우는데 백업 간격이 일정하지 않아 대화는 일부만 되살아났고, 올린 파일과 만든 파일은 `chatbox-blobs/` 에 그대로 남았습니다. LM Studio 는 `%UserProfile%/.lmstudio/.internal/download-jobs-info.json` 에 모델 이름·다운로드 URL·SHA-256 이 남지만 지운 대화와 올린 파일은 흔적이 없었습니다. Msty 는 `%AppData%/Msty/logs/app.log` 에 모델 설정 기록이, `%AppData%/Msty/attachments/` 에 메시지를 지운 뒤에도 올린 파일이 남았습니다. Jan 은 엔진 로그 `cortex.log` 에 대화 요청 본문과 모델 받기 기록이 남아 지운 대화가 모두 나왔습니다. GPT4All 은 지운 뒤 되살린 것이 없었습니다. 파일 안의 칸과 시각 형식은 [Ollama](../../02-artifacts/local-ai/ollama.md), [Chatbox](../../02-artifacts/local-ai/chatbox.md), [LM Studio](../../02-artifacts/local-ai/lm-studio.md), [Msty](../../02-artifacts/local-ai/msty.md), [Jan](../../02-artifacts/local-ai/jan.md), [GPT4All](../../02-artifacts/local-ai/gpt4all.md) 페이지에 있습니다.
+되살린 내용이 나온 곳은 앱마다 다릅니다(논문 §4.4~§5.3, 부록 A). Ollama 는 모델을 지워도 `%LocalAppData%/Ollama/server.log` 의 다운로드 기록에 시각, 모델 이름, manifest 정보가 남습니다. Chatbox 는 `%AppData%/xyz.chatboxapp.app/config.json` 의 백업 사본을 만들고 지우는데 백업 간격이 일정하지 않아 대화는 일부만 되살아났고, 올린 파일과 만든 파일은 `chatbox-blobs/` 에 그대로 남았습니다. LM Studio 는 `%UserProfile%/.lmstudio/.internal/download-jobs-info.json` 에 모델 이름·다운로드 URL·SHA-256 이 남지만 지운 대화와 올린 파일은 흔적이 없었습니다. Msty 는 `%AppData%/Msty/logs/app.log` 에 모델 설정 기록이, `%AppData%/Msty/attachments/` 에 메시지를 지운 뒤에도 올린 파일이 남았습니다. Jan 은 엔진 로그 `cortex.log` 에 대화 요청 본문과 모델 받기 기록이 남아 지운 대화가 모두 나왔습니다. GPT4All 은 지운 뒤 되살린 것이 없었습니다. 파일 안의 필드와 시각 형식은 [Ollama](../../02-artifacts/local-ai/ollama.md), [Chatbox](../../02-artifacts/local-ai/chatbox.md), [LM Studio](../../02-artifacts/local-ai/lm-studio.md), [Msty](../../02-artifacts/local-ai/msty.md), [Jan](../../02-artifacts/local-ai/jan.md), [GPT4All](../../02-artifacts/local-ai/gpt4all.md) 페이지에 있습니다.
 
-이 표는 디스크에 남은 파일에서 도구로 되살린 결과만 잽니다. 이 시험은 볼륨 섀도 복사본(VSC)과 실행 중 메모리를 다루지 않았고, SQLite·LevelDB 저장소는 slack 영역이나 freelist·WAL 카빙으로 더 건질 수 있습니다[1]. 그래서 표의 0% 는 "그 방법으로는 나오지 않았다" 로 읽고, 아래 5단계의 방법을 더 써 봅니다. Jan 과 Msty 는 그 뒤 저장 형식을 바꿨으니[9], 검체의 앱 판이 표 1 과 다르면 경로부터 다시 확인합니다.
+이 표는 디스크에 남은 파일에서 도구로 되살린 결과만 잽니다. 이 시험은 볼륨 섀도 복사본(VSC)과 실행 중 메모리를 다루지 않았고, SQLite·LevelDB 저장소는 slack 영역이나 freelist·WAL 카빙으로 더 건질 수 있습니다[1]. 그래서 표의 0% 는 "그 방법으로는 나오지 않았다" 로 읽고, 아래 5단계의 방법을 더 써 봅니다. Jan 과 Msty 는 그 뒤 저장 형식을 바꿨으니[9], 분석 대상의 앱 판이 표 1 과 다르면 경로부터 다시 확인합니다.
 
 ### 4. 앱 캐시를 살핍니다
 
 데스크톱 채팅 앱은 대부분 Electron 이나 WebView2 위에서 돌아 브라우저와 같은 저장소를 씁니다. Claude 데스크톱(Windows 스토어 앱)의 패키지 폴더 아래 `LocalCache\Roaming\Claude` 에는 `Cache`, `Code Cache`, `IndexedDB`, `Local Storage\leveldb`, `File System`, `Network` 폴더가 있습니다. 폴더가 있다는 사실과 그 안에 대화 내용이 있다는 사실은 다르므로, 캐시는 "대화가 있을 수도 있는 곳" 으로 두고 LevelDB·IndexedDB·Chromium 캐시를 읽는 일반 방법으로 살핍니다. 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에 있습니다.
 
-앱이 실행 중이면 파일이 잠겨 열리지 않을 수 있습니다. 예를 들어 실행 중에는 기본 `Network\Cookies` DB 를 열면 OperationalError 가 나므로, 복사본을 만들어 엽니다. 앱을 지운 뒤에도 캐시가 남는지는 앱 형식마다 다릅니다. WebView2 사용자 데이터 폴더는 Win32·.NET·WinUI 앱을 지워도 자동으로 지워지지 않고, 스토어 앱을 지우면 Windows 가 지웁니다. Electron 기반 스토어 앱의 `LocalCache` 가 앱 삭제 때 함께 지워지는지는 공개 문서에 없어 검체로 확인해야 합니다. 저장 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+앱이 실행 중이면 파일이 잠겨 열리지 않을 수 있습니다. 예를 들어 실행 중에는 기본 `Network\Cookies` DB 를 열면 OperationalError 가 나므로, 복사본을 만들어 엽니다. 앱을 지운 뒤에도 캐시가 남는지는 앱 형식마다 다릅니다. WebView2 사용자 데이터 폴더는 Win32·.NET·WinUI 앱을 지워도 자동으로 지워지지 않고, 스토어 앱을 지우면 Windows 가 지웁니다. Electron 기반 스토어 앱의 `LocalCache` 가 앱 삭제 때 함께 지워지는지는 실제 기기로 확인해야 합니다. 저장 구조의 공통 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
 ### 5. 지운 파일과 지운 레코드를 찾습니다
 
@@ -89,11 +89,11 @@ SQLite 를 쓰는 저장소는 레코드를 지워도 빈 페이지나 WAL 파�
 
 마지막 연결이 닫힐 때 SQLite 는 마지막 체크포인트를 하고 WAL 과 공유 메모리 파일을 지웁니다[10]. 그래서 수집한 DB 를 `sqlite3` 로 바로 열었다 닫으면 WAL 안의 옛 내용이 주 DB 에 합쳐지고 WAL 사본이 사라질 수 있습니다. 손대지 않은 `-wal` 사본을 따로 두고, 프레임을 직접 읽는 방법은 OS 별 SQLite 페이지([Windows](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html), [macOS](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/sqlite/index.html), [Android](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html), [iOS](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/sqlite/index.html))를 따릅니다.
 
-캐시 DB 에만 남은 기록도 지운 파일의 흔적이 됩니다. ALEAPP 의 Grok 분석기[3](Grok Android 1.0.71, 2025-11-11 판에서 시험, 2026-08-01 갱신)는 `ai.x.grok/cache/*/video-cache/*/` 의 `.exo` 캐시 파일과 `ai.x.grok/databases/exoplayer_internal.db` 를 함께 읽습니다. DB 의 `ExoPlayerCacheFileMetadata*` 표에는 캐시 파일 `name`·`length`·`last_touch_timestamp`(ms) 가, `ExoPlayerCacheIndex*` 표에는 캐시 `id` 와 원래 URL(`key`)이 있습니다. 캐시 파일 이름은 `7.0.1760000000000.v3.exo`(만든 예시)처럼 생겼고, 첫 칸이 캐시 ID, 셋째 칸이 ms 단위 Unix 시각이며 분석기는 이를 UTC 로 바꿉니다. 분석기는 URL 이 `https://assets.grok.com/users/` 로 시작하면 사용자가 만든 영상(User Generated)으로, 나머지는 공개 영상(Public)으로 나누고, DB 에는 있는데 파일이 없는 항목을 `Cache Video` 칸에 "Not Present" 로 적습니다. 이 항목은 파일은 사라졌지만 그 URL 의 영상이 한때 캐시에 있었다는 기록입니다. 서비스별 나머지 흔적은 [그 밖의 서비스](../../02-artifacts/chat-services/other-services.md)에 있습니다.
+캐시 DB 에만 남은 기록도 지운 파일의 흔적이 됩니다. ALEAPP 의 Grok 분석기[3](Grok Android 1.0.71, 2025-11-11 판에서 시험, 2026-08-01 갱신)는 `ai.x.grok/cache/*/video-cache/*/` 의 `.exo` 캐시 파일과 `ai.x.grok/databases/exoplayer_internal.db` 를 함께 읽습니다. DB 의 `ExoPlayerCacheFileMetadata*` 표에는 캐시 파일 `name`·`length`·`last_touch_timestamp`(ms) 가, `ExoPlayerCacheIndex*` 표에는 캐시 `id` 와 원래 URL(`key`)이 있습니다. 캐시 파일 이름은 `7.0.1760000000000.v3.exo`(만든 예시)처럼 생겼고, 첫 번째 값이 캐시 ID, 세 번째 값이 ms 단위 Unix 시각이며 분석기는 이를 UTC 로 바꿉니다. 분석기는 URL 이 `https://assets.grok.com/users/` 로 시작하면 사용자가 만든 영상(User Generated)으로, 나머지는 공개 영상(Public)으로 나누고, DB 에는 있는데 파일이 없는 항목을 `Cache Video` 열에 "Not Present" 로 적습니다. 이 항목은 파일은 사라졌지만 그 URL 의 영상이 한때 캐시에 있었다는 기록입니다. 서비스별 나머지 흔적은 [그 밖의 서비스](../../02-artifacts/chat-services/other-services.md)에 있습니다.
 
 ### 6. 모바일 앱의 충돌 로그를 봅니다
 
-앱이 쓰는 충돌 보고 SDK 의 로그에 대화가 남는 경우가 있습니다. Replika 는 계정을 지우면 주 DB(`databases/REPLIKA_DB`)가 기기에서 지워지지만, Firebase Crashlytics 로그 파일의 `userlog` 하위 폴더에서 대화 전체를 되살릴 수 있습니다[2]. 이 폴더의 전체 경로는 공개 자료에 없으니, 수집한 앱 데이터 폴더 전체에서 `userlog` 폴더를 찾습니다. 이 결과는 루팅한 Android 12(API 31) 에뮬레이터에서 `/data/data` 전체를 tar 로 묶어 뜬 논리 이미지로 얻은 것이고(§3.3)[2], 앱 판은 밝혀져 있지 않아 검체의 앱 판을 따로 적어 둡니다. 앱별 DB 와 패키지 이름은 [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md)에 있습니다.
+앱이 쓰는 충돌 보고 SDK 의 로그에 대화가 남는 경우가 있습니다. Replika 는 계정을 지우면 주 DB(`databases/REPLIKA_DB`)가 기기에서 지워지지만, Firebase Crashlytics 로그 파일의 `userlog` 하위 폴더에서 대화 전체를 되살릴 수 있습니다[2]. 이 폴더의 전체 경로는 공개 자료에 없으니, 수집한 앱 데이터 폴더 전체에서 `userlog` 폴더를 찾습니다. 이 결과는 루팅한 Android 12(API 31) 에뮬레이터에서 `/data/data` 전체를 tar 로 묶어 뜬 논리 이미지로 얻은 것이고(§3.3)[2], 앱 판은 밝혀져 있지 않아 분석 대상 앱의 판을 따로 적어 둡니다. 앱별 DB 와 패키지 이름은 [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md)에 있습니다.
 
 모바일에서 앱 데이터를 얻는 범위는 기기 암호화와 데이터 보호 등급에 달려 있고, 원리는 [Android 저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html), [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html), [iOS 데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)에 있습니다. macOS 앱의 암호 키가 키체인에 있다면 원리는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html) 페이지를 봅니다.
 
@@ -109,7 +109,7 @@ SQLite 를 쓰는 저장소는 레코드를 지워도 빈 페이지나 WAL 파�
 
 ### 8. 알림은 시험 기기로 먼저 확인합니다
 
-AI 앱이 OS 알림에 대화 내용을 미리 보기로 싣는지, 그 알림이 OS 알림 저장소에 남는지는 공개된 분석 자료가 없어 검체나 시험 기기로 확인해야 합니다. 같은 OS·같은 앱 판을 시험 기기에 깔고, 알림 미리 보기 설정을 기록한 뒤 알림을 받아 어디에 무엇이 남는지 먼저 봅니다. Claude Code 는 훅 이벤트에 `Notification` 이 있으니[15], 사용자 설정에 이 이벤트 키가 있으면 알림 훅이 부르는 스크립트가 따로 기록을 남기는지도 봅니다. 훅이 받는 값과 스크립트 동작은 설정마다 달라서 스크립트를 직접 읽어 확인합니다.
+AI 앱이 OS 알림에 대화 내용을 미리 보기로 싣는지, 그 알림이 OS 알림 저장소에 남는지는 실제 기기나 시험 기기로 확인해야 합니다. 같은 OS·같은 앱 판을 시험 기기에 깔고, 알림 미리 보기 설정을 기록한 뒤 알림을 받아 어디에 무엇이 남는지 먼저 봅니다. Claude Code 는 훅 이벤트에 `Notification` 이 있으니[15], 사용자 설정에 이 이벤트 키가 있으면 알림 훅이 부르는 스크립트가 따로 기록을 남기는지도 봅니다. 훅이 받는 값과 스크립트 동작은 설정마다 달라서 스크립트를 직접 읽어 확인합니다.
 
 ### 9. 서버 사본을 요청합니다
 
@@ -147,9 +147,9 @@ AI 앱 전용 공개 도구는 아래와 같습니다. 모두 시험한 판이 �
 
 ## 결과를 어떻게 해석하나
 
-되살린 내용으로는 "이 파일(또는 이 위치)에 이 글이 있었다" 까지만 말할 수 있습니다. 그 글이 서비스로 보내졌는지는 저장 위치의 성격에 따라 다릅니다. Claude Code 는 모든 프롬프트와 모델 출력을 서버로 보내므로[14] 대화 기록의 사용자 메시지는 송신과 이어 볼 근거가 되지만, 붙여넣기 캐시나 앱 캐시의 조각은 입력 중이던 글일 수도 있어 송신을 증명하지 못합니다. 로컬 LLM 앱의 로그에 남은 대화는 기기 안의 모델과 주고받은 기록일 수 있어, 외부 서비스로 보냈다는 뜻이 아닙니다. 편집 전 파일 사본은 에이전트가 파일을 바꾸기 전 내용을 보여 주지만, 누가 그 편집을 시켰는지는 대화 기록과 입력 기록으로 따로 가려야 합니다.
+되살린 내용으로는 "이 파일(또는 이 위치)에 이 글이 있었다" 까지만 말할 수 있습니다. 그 글이 서비스로 보내졌는지는 저장 위치의 성격에 따라 다릅니다. Claude Code 는 모든 프롬프트와 모델 출력을 서버로 보내므로[14] 대화 기록의 사용자 메시지는 송신과 이어 볼 근거가 되지만, 붙여넣기 캐시나 앱 캐시의 조각은 입력 중이던 글일 수도 있어 송신을 증명하지 못합니다. 로컬 LLM 앱의 로그에 남은 대화는 기기 안의 모델과 주고받은 기록일 수 있어, 외부 서비스로 보냈다는 뜻이 아닙니다. 편집 전 파일 사본은 에이전트가 파일을 바꾸기 전 내용을 보여 주지만, 누가 그 편집을 시켰는지는 대화 기록과 입력 기록으로 따로 판별해야 합니다.
 
-WAL 이나 충돌 로그에서 되살린 대화는 "사용자가 지운 뒤에도 남아 있었다" 까지는 말하지만, 언제 지웠는지는 따로 말해 주지 않습니다. 지운 시각이 필요하면 파일 시스템 시각과 앱 로그를 함께 놓고, 되살린 시각을 다른 흔적과 한 줄로 놓는 방법은 [AI 사용 타임라인](timeline.md)에 있습니다.
+WAL 이나 충돌 로그에서 되살린 대화로는 "사용자가 지운 뒤에도 남아 있었다" 까지는 알 수 있지만, 언제 지웠는지는 알 수 없습니다. 지운 시각이 필요하면 파일 시스템 시각과 앱 로그를 함께 놓고, 되살린 시각을 다른 흔적과 한 줄로 놓는 방법은 [AI 사용 타임라인](timeline.md)에 있습니다.
 
 보고서 문장은 다음처럼 씁니다(만든 예시).
 

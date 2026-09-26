@@ -32,7 +32,7 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | PowerShell | 로그 | 공급자 | 파일 |
 |---|---|---|---|
 | Windows PowerShell (5.1 이하) | Microsoft-Windows-PowerShell/Operational | Microsoft-Windows-PowerShell `{A0C1853B-5C40-4B15-8766-3CF1C58F985A}` | `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-PowerShell%4Operational.evtx` |
-| Windows PowerShell (옛 방식 로그) | Windows PowerShell | PowerShell | `%SystemRoot%\System32\Winevt\Logs\Windows PowerShell.evtx` (이름에 빈칸) |
+| Windows PowerShell (옛 방식 로그) | Windows PowerShell | PowerShell | `%SystemRoot%\System32\Winevt\Logs\Windows PowerShell.evtx` (이름에 공백) |
 | PowerShell 7 | PowerShellCore/Operational | `{f90714a8-5509-434a-bf6d-b1624c8a19a2}` | — |
 
 - Microsoft-Windows-PowerShell 공급자의 메시지 파일은 `%windir%\system32\WindowsPowerShell\v1.0\PSEvents.dll` 이었습니다.
@@ -73,16 +73,16 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | Task | CommandStart |
 | Keyword | Runspace |
 
-한 PC 의 공급자 메타데이터에서 읽은 메시지와 칸은 다음과 같습니다.
+한 PC 의 공급자 메타데이터에서 읽은 메시지와 필드는 다음과 같습니다.
 
 - 메시지: `Creating Scriptblock text (%1 of %2): %3 ScriptBlock ID: %4 Path: %5`
-- 칸: MessageNumber (Int32), MessageTotal (Int32), ScriptBlockText, ScriptBlockId, Path
+- 필드: MessageNumber (Int32), MessageTotal (Int32), ScriptBlockText, ScriptBlockId, Path
 
-| 칸 | 뜻 | 읽을 때 주의 |
+| 필드 | 뜻 | 읽을 때 주의 |
 |---|---|---|
 | MessageNumber · MessageTotal | 나눈 조각의 번호와 전체 개수 | 긴 스크립트는 여러 이벤트로 나뉩니다 |
 | ScriptBlockText | 스크립트 블록 내용 | 조각을 이어야 전체가 됩니다 |
-| ScriptBlockId | 스크립트 블록이 살아 있는 동안 유지되는 GUID | 4105·4106 과 이을 때 씁니다 |
+| ScriptBlockId | 스크립트 블록이 유효한 동안 유지되는 GUID | 4105·4106 과 이을 때 씁니다 |
 | Path | 스크립트 파일 경로 | 명령줄로 넘긴 코드는 비어 있습니다 |
 
 한 이벤트에 담기 너무 긴 스크립트는 여러 이벤트로 나뉘는데, MessageNumber 로 정렬해 ScriptBlockText 를 이으면 원래 스크립트가 됩니다. 예: 1/2·2/2, 1/3~3/3, 5/5.
@@ -103,11 +103,11 @@ PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4
 | Security UserID | 실행한 사용자 SID |
 | Execution ProcessID | 실행한 `powershell.exe` 의 PID |
 
-정책이 없는 PC 의 4104 는 Level 3 (Warning) 으로 남습니다. 그래서 Warning 인 4104 는 자동 기록, Verbose (5) 인 4104 는 정책으로 켠 전체 기록으로 가를 수 있어 보이지만 이 구분은 해석입니다. 정책을 켠 PC 에서 의심 내용이 든 블록이 어느 Level 로 남는지는 검체에서 확인해야 합니다. 그래서 Warning 이라고 정책이 꺼져 있었다고 단정하지 않습니다.
+정책이 없는 PC 의 4104 는 Level 3 (Warning) 으로 남습니다. 그래서 Warning 인 4104 는 자동 기록, Verbose (5) 인 4104 는 정책으로 켠 전체 기록으로 가를 수 있어 보이지만 이 구분은 해석입니다. 정책을 켠 PC 에서 의심 내용이 든 블록이 어느 Level 로 남는지는 실제 데이터로 확인해야 합니다. 그래서 Warning 이라고 정책이 꺼져 있었다고 단정하지 않습니다.
 
 ### 4105 · 4106 실행 시작·끝
 
-| ID | 메시지 | 칸 |
+| ID | 메시지 | 필드 |
 |---|---|---|
 | 4105 (0x1009) | Started invocation of ScriptBlock ID: %1 Runspace ID: %2 | ScriptBlockId, RunspaceId |
 | 4106 (0x100A) | Completed invocation of ScriptBlock ID: %1 Runspace ID: %2 | ScriptBlockId, RunspaceId |
@@ -117,12 +117,12 @@ ScriptBlock ID 로 4104 와 이을 수 있고, Runspace ID 는 그 블록이 돈
 ### 4103 모듈 기록
 
 - 메시지: `%3 Context: %1 User Data: %2`
-- 칸: ContextInfo, UserData, Payload
-- 4100 (오류) 과 4102 도 같은 세 칸을 씁니다.
+- 필드: ContextInfo, UserData, Payload
+- 4100 (오류) 과 4102 도 같은 세 필드를 씁니다.
 
 
 
-4103 은 Level 4, Task 106, Opcode 20 입니다. Payload 에는 명령과 인자 값이 이런 꼴로 들어 있습니다.
+4103 은 Level 4, Task 106, Opcode 20 입니다. Payload 에는 명령과 인자 값이 이런 형식으로 들어 있습니다.
 
 ```
 CommandInvocation(Add-Type): "Add-Type"
@@ -138,7 +138,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 "호스트 응용 프로그램" 에는 `powershell.exe` 의 전체 명령줄이 들어 있습니다. 예: `-NoProfile -NonInteractive -ExecutionPolicy Bypass -Command …`.
 
 - 모듈 기록 정책이 없어도 4103 이 남을 수 있습니다. 정책이 없는 한 PC 에서는 4103 이 9건이었고 그중 7건이 `Add-Type` 이었습니다.
-- 영어 PC 의 키 이름은 검체에서 확인합니다.
+- 영어 PC 의 키 이름은 실제 데이터로 확인합니다.
 
 ### 옛 방식 "Windows PowerShell" 로그
 
@@ -151,7 +151,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 | 403 | Engine state is changed from Available to Stopped. | 84 |
 | 800 | Pipeline execution details for command line: … | 1 |
 
-- EventData 안에 이름 없는 Data 3개로 들어 있습니다. 칸 이름이 없습니다.
+- EventData 안에 이름 없는 Data 3개로 들어 있습니다. 필드 이름이 없습니다.
 - 400 의 Details 에는 NewEngineState, PreviousEngineState, SequenceNumber, HostName, HostVersion, HostId, HostApplication, EngineVersion, RunspaceId, PipelineId, CommandName, CommandType, ScriptName, CommandPath, CommandLine 이 있습니다.
 - 800 의 Context 에는 DetailSequence, DetailTotal, UserId, HostName … CommandLine 이 있고, 이어서 Details 에 CommandInvocation·ParameterBinding 이 있습니다.
 - 이 로그의 Details 키는 4103 과 달리 영어입니다 (예: `HostName=ConsoleHost`).
@@ -195,7 +195,7 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 ## 함정과 한계
 
 1. **자동 기록을 전체 기록으로 읽습니다.** 정책이 없으면 의심 내용이 든 블록만 남습니다. 남지 않은 블록이 없었다는 뜻이 아닙니다.
-2. **메시지 글자로 거릅니다.** 공급자 메타데이터의 메시지는 "Creating Scriptblock text" 이고, Microsoft 블로그의 예시 출력은 "Compiling Scriptblock text" 입니다[3]. 글자가 아니라 ID 와 칸으로 거릅니다.
+2. **메시지 글자로 거릅니다.** 공급자 메타데이터의 메시지는 "Creating Scriptblock text" 이고, Microsoft 블로그의 예시 출력은 "Compiling Scriptblock text" 입니다[3]. 글자가 아니라 ID 와 필드로 거릅니다.
 3. **조각 하나만 봅니다.** MessageTotal 이 1 보다 크면 같은 ScriptBlock ID 의 조각을 모두 모읍니다.
 4. **4103 을 영어 키로 찾습니다.** ContextInfo 의 키 이름은 화면 언어로 저장됩니다. "Host Application" 으로 찾는 도구는 한국어 PC 의 4103 에서 값을 찾지 못합니다.
 5. **스크립트 내용만 봅니다.** 스크립트 내용 (4104) 과 실행 명령줄 (400 의 HostApplication, 4103 의 호스트 응용 프로그램) 은 다른 곳에 있습니다. 둘 다 봅니다.
@@ -215,9 +215,9 @@ ContextInfo 는 "키 = 값" 줄 묶음입니다. 키 이름은 화면 언어로 
 
 ### 헥스로 한 번
 
-4104 의 칸 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류와 배열은 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다루므로 여기서는 값 데이터 세 개만 봅니다.
+4104 의 필드 값은 이진 XML 의 치환 값으로 들어 있습니다. 값 종류와 배열은 [이진 XML 해석](../../01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md)에서 다루므로 여기서는 값 데이터 세 개만 봅니다.
 
-아래 바이트는 설명을 위해 명세대로 만든 예시입니다. 검체에서 나온 값이 아닙니다. 스크립트가 세 조각으로 나뉘었고 그 가운데 첫 조각이라고 하겠습니다.
+아래 바이트는 설명을 위해 명세대로 만든 예시입니다. 실제 데이터에서 나온 값이 아닙니다. 스크립트가 세 조각으로 나뉘었고 그 가운데 첫 조각이라고 하겠습니다.
 
 ```
 01 00 00 00                                       MessageNumber (Int32)
@@ -284,12 +284,12 @@ Get-WinEvent Microsoft-Windows-PowerShell/Operational | Where-Object Id -EQ 4104
 
 1. 정책을 켜기 전에 `Get-Date` 같은 평범한 명령을 실행합니다. 4104 가 남는지 봅니다.
 2. 스크립트 블록 기록 정책을 켜고 새 PowerShell 창을 엽니다. 같은 명령의 4104 가 어느 Level 로 남는지 봅니다. Warning 과 Verbose 의 구분을 여기서 가릴 수 있습니다.
-3. 긴 스크립트 파일을 실행합니다. 몇 조각으로 나뉘는지, Path 칸에 파일 경로가 들어가는지 봅니다.
+3. 긴 스크립트 파일을 실행합니다. 몇 조각으로 나뉘는지, Path 필드에 파일 경로가 들어가는지 봅니다.
 4. 같은 스크립트를 두 번 실행합니다. 4104 가 한 번만 남는지 봅니다. 실행 시작·끝 기록을 켜고 4105·4106 도 봅니다.
 5. `-EncodedCommand` 로 무해한 명령을 넘깁니다. 400 의 HostApplication 과 4104 의 ScriptBlockText 를 비교합니다.
 6. 녹취 정책을 켜고 OutputDirectory 를 비워 둡니다. 녹취 파일이 어디에 생기는지 적습니다.
 
-**NIST CFReDS 같은 공개 검체**에서는 다음을 풀어 봅니다.
+**NIST CFReDS 같은 공개 시험 데이터**에서는 다음을 풀어 봅니다.
 
 1. PowerShell/Operational 로그에 4104 가 있습니까? Level 은 무엇입니까? 정책 레지스트리 키가 있습니까?
 2. MessageTotal 이 1 보다 큰 블록을 이어 붙이면 어떤 내용입니까?

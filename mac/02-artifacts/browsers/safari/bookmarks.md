@@ -17,7 +17,7 @@ nav_order: 1170
 
 ## 위치와 버전별 차이
 
-`Bookmarks.plist` 는 사파리 데이터 폴더에 있습니다 [1]. 사파리 데이터 폴더는 `~/Library/Safari/` 와 Safari 15 이후의 컨테이너 쪽 두 곳이고, 파일마다 어느 쪽에 있는지가 다를 수 있어서 둘 다 확인합니다(허브 참고). Safari 17 이후에는 `SafariTabs.db` 의 `bookmarks` 표에 탭과 프로필 정보가 들어가는데 [1], 이름이 같은 이 표로 북마크 자체가 옮겨 갔는지는 공개 자료가 없어 검체에서 확인합니다. 그 표는 [탭과 세션 (Tabs·Sessions)](tabs-sessions.md)에서 다룹니다.
+`Bookmarks.plist` 는 사파리 데이터 폴더에 있습니다 [1]. 사파리 데이터 폴더는 `~/Library/Safari/` 와 Safari 15 이후의 컨테이너 쪽 두 곳이고, 파일마다 어느 쪽에 있는지가 다를 수 있어서 둘 다 확인합니다(허브 참고). Safari 17 이후에는 `SafariTabs.db` 의 `bookmarks` 표에 탭과 프로필 정보가 들어가는데 [1], 이름이 같은 이 표로 북마크 자체가 옮겨 갔는지는 실제 데이터로 확인해야 합니다. 그 표는 [탭과 세션 (Tabs·Sessions)](tabs-sessions.md)에서 다룹니다.
 
 ## 구조
 
@@ -41,7 +41,7 @@ nav_order: 1170
 | `WebBookmarkTypeLeaf` | 항목(북마크 하나) |
 | `WebBookmarkTypeProxy` | 공개 자료 없음. mac_apt 는 이 종류를 건너뜀 |
 
-`ReadingList` 사전 안의 다른 키(미리보기 글, 읽은 시각 같은 것)는 공개 자료가 없어 검체에서 확인합니다. 읽기 목록의 오프라인 사본은 사파리 폴더의 `ReadingListArchives/{UUID}/Page.webarchive`(plist, 안의 `WebResourceURL` 로 주소를 얻음)에 있는 것으로 보입니다 [1]. mac_apt 는 이 파일을 읽지 않아서, 내용은 검체에서 직접 확인합니다. 아래는 위 키로 만든 예시이고, 특정 검체에서 나온 값이 아닙니다.
+`ReadingList` 사전 안의 다른 키(미리보기 글, 읽은 시각 같은 것)는 실제 데이터로 확인합니다. 읽기 목록의 오프라인 사본은 사파리 폴더의 `ReadingListArchives/{UUID}/Page.webarchive`(plist, 안의 `WebResourceURL` 로 주소를 얻음)에 있는 것으로 보입니다 [1]. mac_apt 는 이 파일을 읽지 않아서, 내용은 실제 파일을 열어 확인합니다. 아래는 위 키로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 
 ```text
 (루트)
@@ -63,7 +63,7 @@ plist 를 읽는 법 자체는 [속성 목록 파일 (Property List)](../../../0
 
 ### TopSites.plist
 
-`TopSites.plist` 에는 `DisplayedSitesLastModified`, `BannedURLStrings`, `TopSites` 배열(항목마다 `TopSiteURLString`, `TopSiteTitle`)이 있습니다 [1]. 이름으로 보아 `DisplayedSitesLastModified` 는 표시 목록을 마지막으로 바꾼 시각, `BannedURLStrings` 는 목록에서 뺀 주소로 보입니다.
+`TopSites.plist` 에는 `DisplayedSitesLastModified`, `BannedURLStrings`, `TopSites` 배열(항목마다 `TopSiteURLString`, `TopSiteTitle`)이 있습니다 [1]. 이름으로 보면 `DisplayedSitesLastModified` 는 표시 목록을 마지막으로 바꾼 시각, `BannedURLStrings` 는 목록에서 뺀 주소로 보입니다.
 
 ## 증거로서 의미
 
@@ -77,7 +77,7 @@ plist 를 읽는 법 자체는 [속성 목록 파일 (Property List)](../../../0
 
 ## 함정과 한계
 
-**기록 지우기로는 지워지지 않습니다.** 사파리의 기록 지우기 대상에는 자주 방문한 사이트 목록이 들어 있지만 북마크와 읽기 목록은 없습니다 [2]. 방문 기록이 비어 있어도 북마크와 읽기 목록은 남아 있을 수 있어서, 기록 지우기가 의심되는 검체에서 이 파일이 주소를 찾는 다른 통로가 됩니다. 지우기 대상 전체는 [방문 기록 (History.db)](history.md)에 정리했습니다.
+**기록 지우기로는 지워지지 않습니다.** 사파리의 기록 지우기 대상에는 자주 방문한 사이트 목록이 들어 있지만 북마크와 읽기 목록은 없습니다 [2]. 방문 기록이 비어 있어도 북마크와 읽기 목록은 남아 있을 수 있어서, 기록 지우기가 의심되는 기기에서 이 파일이 주소를 찾는 다른 통로가 됩니다. 지우기 대상 전체는 [방문 기록 (History.db)](history.md)에 정리했습니다.
 
 **iCloud 보호 수준이 방문 기록과 다릅니다.** 사파리 북마크는 표준 데이터 보호에서 전송 중과 서버에서 암호화하고 키는 Apple 이 보관하며, 고급 데이터 보호(Advanced Data Protection)를 켰을 때만 종단간 암호화합니다 [3]. 방문 기록·탭 그룹은 표준 보호에서도 종단간 암호화한다는 점이 다릅니다 [3].
 
@@ -107,7 +107,7 @@ with open("Bookmarks.plist", "rb") as f:
     walk(plistlib.load(f))
 ```
 
-`plistlib` 은 `DateAdded` 를 시간대 정보가 없는 `datetime` 으로 돌려주고 값은 UTC 입니다. macOS 에서는 `plutil -p Bookmarks.plist` 로 나무 전체를 눈으로 훑어볼 수 있고, 공개 도구 mac_apt 의 사파리 플러그인이 같은 파일과 `TopSites.plist` 를 읽습니다 [1]. 코드 결과와 도구 결과의 항목 수가 다르면 `WebBookmarkTypeProxy` 나 빈 폴더를 어떻게 셌는지부터 봅니다.
+`plistlib` 은 `DateAdded` 를 시간대 정보가 없는 `datetime` 으로 돌려주고 값은 UTC 입니다. macOS 에서는 `plutil -p Bookmarks.plist` 로 나무 전체를 눈으로 살펴볼 수 있고, 공개 도구 mac_apt 의 사파리 플러그인이 같은 파일과 `TopSites.plist` 를 읽습니다 [1]. 코드 결과와 도구 결과의 항목 수가 다르면 `WebBookmarkTypeProxy` 나 빈 폴더를 어떻게 셌는지부터 봅니다.
 
 ## 교차 검증
 
@@ -120,7 +120,7 @@ with open("Bookmarks.plist", "rb") as f:
 
 ## 실습
 
-공개 맥 검체에서 `Bookmarks.plist` 를 찾아 아래 질문을 풀어 봅니다.
+공개 맥 시험 이미지에서 `Bookmarks.plist` 를 찾아 아래 질문을 풀어 봅니다.
 
 1. `WebBookmarkTypeLeaf` 항목은 몇 개이고, 그 가운데 `ReadingList` 가 있는 항목은 몇 개인가
 2. 읽기 목록 항목 가운데 가장 최근에 넣은 것은 무엇이고, 그 주소가 방문 기록에도 있는가

@@ -7,7 +7,7 @@ nav_order: 1570
 
 # 클라우드로 (Cloud)
 
-아이폰에서 클라우드 저장소로 자료를 올렸는지 가리는 페이지입니다. iCloud Drive, iCloud 사진, iCloud 백업의 세 갈래로 나눠 기기에 남는 흔적을 보고, 다른 회사 클라우드 앱은 연결 여부를 가늠하는 데까지 다룹니다. 다른 유출 경로와 전체 흐름은 허브 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 에 있습니다.
+아이폰에서 클라우드 저장소로 자료를 올렸는지 판별하는 페이지입니다. iCloud Drive, iCloud 사진, iCloud 백업의 세 가지로 나눠 기기에 남는 흔적을 보고, 다른 회사 클라우드 앱은 연결 여부를 추정하는 데까지 다룹니다. 다른 유출 경로와 전체 흐름은 허브 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 에 있습니다.
 
 ## 조사 질문
 
@@ -17,7 +17,7 @@ nav_order: 1570
 
 iOS 버전과 시간대를 [기기 정보 (Device Info·Lockdown)](../../../02-artifacts/system-account/device-info.md), [시간대와 시각 설정 (Time Zone)](../../../02-artifacts/system-account/time-zone.md) 에서 확인하고, 기기에 로그인한 계정을 [애플 계정 (Apple Account)](../../../02-artifacts/system-account/apple-account.md) 에서 확인합니다. 파일 시스템 추출에서는 iCloud Drive 메타데이터 폴더가 `/private/var/mobile/Library/Application Support/CloudDocs/` 이고 그 아래 `session/db` 에 `client.db` 와 `server.db` 가 있으며, iCloud Drive 파일 자체는 `/private/var/mobile/Library/Mobile Documents/com~apple~CloudDocs/` 에 있습니다[1]. 로컬 백업에서도 두 DB 가 `HomeDomain :: Library/Application Support/CloudDocs/session/db/` 아래에 보입니다.
 
-위 경로는 iOS 13.7 기준입니다[1]. 표 이름·칸 이름은 판마다 다를 수 있으니 검체에서 확인합니다.
+위 경로는 iOS 13.7 기준입니다[1]. 표 이름·열 이름은 버전마다 다를 수 있으니 실제 데이터로 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -32,17 +32,17 @@ iOS 버전과 시간대를 [기기 정보 (Device Info·Lockdown)](../../../02-a
 
 ### iCloud Drive
 
-파일 앱으로 iCloud Drive 에 올린 흔적은 `client.db` 의 client_uploads 표에서 찾습니다[1]. `client.db` 에는 client_items, client_uploads, client_downloads, client_sync_up, client_pkg_upload_items, client_zones, app_libraries, item_errors, item_recursive_properties, tombstones, boot_history 같은 표가 있습니다. 그중 유출과 관련된 칸은 아래와 같습니다.
+파일 앱으로 iCloud Drive 에 올린 흔적은 `client.db` 의 client_uploads 표에서 찾습니다[1]. `client.db` 에는 client_items, client_uploads, client_downloads, client_sync_up, client_pkg_upload_items, client_zones, app_libraries, item_errors, item_recursive_properties, tombstones, boot_history 같은 표가 있습니다. 그중 유출과 관련된 열은 아래와 같습니다.
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | client_uploads | throttle_id, zone_rowid, app_library_rowid, throttle_state, retry_count, last_try_stamp, next_retry_stamp, expire_stamp, transfer_queue, transfer_size, transfer_record, transfer_stage, transfer_operation, upload_error, upload_priority |
 | client_items(일부) | item_id, item_filename, item_localname, item_parent_id, item_birthtime, item_sharing_options, item_state, item_type, item_lastusedtime, item_trash_put_back_path, version_mtime, version_size, version_device, version_uploaded_assets, version_upload_error, item_creator, version_edited_since_shared |
 | item_recursive_properties(일부) | uploaded_size, uploaded_count, needs_upload_size, needs_upload_count, shared_by_me_count, shared_to_me_count |
 
-`server.db` 에는 server_items, server_share_items_participants(item_id, zone_rowid, user_key, participant_flags), users(user_key, user_name, user_plist), devices(key, name), server_zones, server_boot_history 같은 표가 있고, server_items 에는 item_filename, item_origname, item_sharing_options, item_sharing_etag, version_size, version_mtime, version_device, shared_children_count, item_creator 칸이 있습니다. 공유한 항목의 참여자를 좇을 때는 server_share_items_participants 의 user_key 를 users 표에 잇고, 항목을 만든 기기를 좇을 때는 version_device 를 devices 표와 맞춰 봅니다. 두 연결은 칸 이름만 보고 잇는 것이라서, 결과를 보고서에 쓰기 전에 실제 값이 서로 맞는지 확인합니다.
+`server.db` 에는 server_items, server_share_items_participants(item_id, zone_rowid, user_key, participant_flags), users(user_key, user_name, user_plist), devices(key, name), server_zones, server_boot_history 같은 표가 있고, server_items 에는 item_filename, item_origname, item_sharing_options, item_sharing_etag, version_size, version_mtime, version_device, shared_children_count, item_creator 열이 있습니다. 공유한 항목의 참여자를 좇을 때는 server_share_items_participants 의 user_key 를 users 표에 잇고, 항목을 만든 기기를 좇을 때는 version_device 를 devices 표와 맞춰 봅니다. 두 연결은 열 이름만 보고 잇는 것이라서, 결과를 보고서에 쓰기 전에 실제 값이 서로 맞는지 확인합니다.
 
-item_sharing_options 값이 공유 여부를 어떻게 나타내는지, item_birthtime·version_mtime·last_try_stamp 같은 시각 칸이 어떤 기준인지는 공개된 분석 자료가 없습니다. 시각 칸은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 후보 기준을 대 보고, 같은 파일의 다른 시각 기록과 맞는 기준을 고릅니다.
+item_sharing_options 값이 공유 여부를 어떻게 나타내는지, item_birthtime·version_mtime·last_try_stamp 같은 시각 열이 어떤 기준인지는 공개된 분석 자료가 없습니다. 시각 열은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 후보 기준을 대 보고, 같은 파일의 다른 시각 기록과 맞는 기준을 고릅니다.
 
 `account.1` 파일에는 iCloud Drive 계정의 DSID(숫자 식별자)가 있습니다[1]. 이 파일은 로컬 백업에 들어 있지 않을 수 있습니다.
 
@@ -56,7 +56,7 @@ com.apple.FileProvider.LocalStorage
 com.apple.DocumentManager.SharedItems
 ```
 
-이 목록으로 다른 회사 클라우드 앱이 파일 앱에 연결된 적이 있는지 가늠할 수는 있지만, 항목이 언제 생기고 지워지는지는 공개된 분석 자료가 없습니다. iCloud Drive 공급자 설정은 `HomeDomain :: Library/Application Support/FileProvider/com.apple.CloudDocs.iCloudDriveFileProvider/Domains.plist` 에 있고 SupportsBackgroundUpload, Replicated, Path 같은 키가 들어 있습니다. 파일 앱의 `smartfolders.db`(filename, fp_folder_item, hotfolders 표)는 앱 그룹 컨테이너에 있고[1], 로컬 백업에는 들어 있지 않을 수 있습니다. Dropbox 같은 다른 회사 파일 공급자의 오프라인 파일 식별자는 BASE64 로 인코딩되어 있어서[1], 디코딩한 뒤 읽습니다.
+이 목록으로 다른 회사 클라우드 앱이 파일 앱에 연결된 적이 있는지 추정할 수는 있지만, 항목이 언제 생기고 지워지는지는 공개된 분석 자료가 없습니다. iCloud Drive 공급자 설정은 `HomeDomain :: Library/Application Support/FileProvider/com.apple.CloudDocs.iCloudDriveFileProvider/Domains.plist` 에 있고 SupportsBackgroundUpload, Replicated, Path 같은 키가 들어 있습니다. 파일 앱의 `smartfolders.db`(filename, fp_folder_item, hotfolders 표)는 앱 그룹 컨테이너에 있고[1], 로컬 백업에는 들어 있지 않을 수 있습니다. Dropbox 같은 다른 회사 파일 공급자의 오프라인 파일 식별자는 BASE64 로 인코딩되어 있어서[1], 디코딩한 뒤 읽습니다.
 
 ### iCloud 사진
 
@@ -64,7 +64,7 @@ com.apple.DocumentManager.SharedItems
 
 `CameraRollDomain :: Media/PhotoData/Photos.sqlite` 에는 업로드 작업 표 ZASSETRESOURCEUPLOADJOB(ZSTATE, ZTYPE, ZLASTMODIFIEDDATE, ZERRORDATA 등), ZASSETRESOURCEUPLOADJOBCONFIGURATION(ZBUNDLEIDENTIFIER, ZCOMPLETIONDATE 등), ZASSETRESOURCEUPLOADJOBREQUEST 가 있습니다. 이 표가 iCloud 업로드에 쓰이는지 다른 업로드에 쓰이는지는 공개된 자료가 없어서, ZBUNDLEIDENTIFIER 로 어느 앱이 만든 작업인지를 보는 데까지만 씁니다.
 
-공유 앨범과 공유 보관함은 ZSHARE, ZSHAREPARTICIPANT, ZSHAREPOST, ZCLOUDSHAREDALBUMINVITATIONRECORD, ZCLOUDFEEDENTRY 표에 남고, ZSHAREPARTICIPANT 에는 ZEMAILADDRESS, ZPHONENUMBER, ZACCEPTANCESTATUS, ZPARTICIPANTROLE 같은 칸이 있습니다. 사진 한 장 단위로는 ZADDITIONALASSETATTRIBUTES 표에 ZSHARECOUNT, ZPENDINGSHARECOUNT, ZSHARETYPE 칸이 있지만 값의 뜻을 설명한 공개 자료는 없습니다. 표 사이의 연결은 [사진 보관함 (Photos Library)](../../../02-artifacts/media/photos/index.md) 을 따릅니다.
+공유 앨범과 공유 보관함은 ZSHARE, ZSHAREPARTICIPANT, ZSHAREPOST, ZCLOUDSHAREDALBUMINVITATIONRECORD, ZCLOUDFEEDENTRY 표에 남고, ZSHAREPARTICIPANT 에는 ZEMAILADDRESS, ZPHONENUMBER, ZACCEPTANCESTATUS, ZPARTICIPANTROLE 같은 열이 있습니다. 사진 한 장 단위로는 ZADDITIONALASSETATTRIBUTES 표에 ZSHARECOUNT, ZPENDINGSHARECOUNT, ZSHARETYPE 열이 있지만 값의 뜻을 설명한 공개 자료는 없습니다. 표 사이의 연결은 [사진 보관함 (Photos Library)](../../../02-artifacts/media/photos/index.md) 을 따릅니다.
 
 ### iCloud 백업
 
@@ -73,8 +73,8 @@ com.apple.DocumentManager.SharedItems
 ## 분석 흐름
 
 1. iOS 버전·시간대·로그인 계정을 적고 조사 기간을 정합니다.
-2. `client.db` 의 client_uploads 에서 transfer_size·retry_count·upload_error 칸을 보고, client_items 에서 item_filename·version_size 와 version_uploaded_assets·version_upload_error 칸을 함께 봅니다. 두 표를 잇는 칸이 알려져 있지 않아서, 파일 이름과 크기는 client_items 쪽에서 읽습니다.
-3. item_recursive_properties 의 uploaded_count·shared_by_me_count 로 올린 항목과 내가 공유한 항목의 규모를 가늠합니다.
+2. `client.db` 의 client_uploads 에서 transfer_size·retry_count·upload_error 열을 보고, client_items 에서 item_filename·version_size 와 version_uploaded_assets·version_upload_error 열을 함께 봅니다. 두 표를 잇는 열이 알려져 있지 않아서, 파일 이름과 크기는 client_items 쪽에서 읽습니다.
+3. item_recursive_properties 의 uploaded_count·shared_by_me_count 로 올린 항목과 내가 공유한 항목의 규모를 추정합니다.
 4. `server.db` 에서 같은 파일 이름의 server_items 행과 공유 참여자를 찾습니다.
 5. 파일 앱 공급자 목록으로 다른 회사 클라우드 앱이 연결된 적이 있는지 보고, 있으면 그 앱의 아티팩트 페이지로 넘어갑니다.
 6. 사진이 의심 자료이면 `syncstatus.plist` 와 `Photos.sqlite` 의 공유 표를 봅니다.

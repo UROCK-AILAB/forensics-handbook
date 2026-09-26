@@ -13,15 +13,15 @@ GitHub Copilot 은 여러 IDE 와 터미널에서 도는 코딩 도우미이고,
 
 ## 왜 중요한가
 
-Copilot 은 JetBrains IDE(IntelliJ IDEA, Android Studio, GoLand, PhpStorm, PyCharm, RubyMine, WebStorm, Rider), VS Code, Visual Studio, Xcode, Vim/Neovim 에서 돌고, 터미널용 Copilot CLI 도 따로 있습니다. 제품마다 저장 위치와 형식이 달라서, 개발자 PC 를 조사할 때는 어느 IDE 와 도구를 썼는지부터 가려야 합니다.
+Copilot 은 JetBrains IDE(IntelliJ IDEA, Android Studio, GoLand, PhpStorm, PyCharm, RubyMine, WebStorm, Rider), VS Code, Visual Studio, Xcode, Vim/Neovim 에서 돌고, 터미널용 Copilot CLI 도 따로 있습니다. 제품마다 저장 위치와 형식이 달라서, 개발자 PC 를 조사할 때는 어느 IDE 와 도구를 썼는지부터 가려내야 합니다.
 
-VS Code 는 채팅 세션을 작업 폴더(워크스페이스)마다 `workspaceStorage` 아래 해시 폴더에 JSON·JSONL 파일로 남깁니다[1]. 같은 해시 폴더의 `workspace.json` 에 적힌 `folder` 또는 `workspace` 값이 어느 프로젝트인지 알려 주고, 세션 파일의 `creationDate`·`lastMessageDate` 는 Unix 밀리초라서 "어느 프로젝트에서 언제 AI 와 대화했나" 를 좁히는 데 쓸 수 있습니다[1]. 세션 색인에는 로컬 세션 말고도 백그라운드·클라우드 세션처럼 외부에서 불러온 세션이 `isExternal` 표시와 함께 들어갑니다[2]. 다른 에이전트 도구가 만든 세션이면 대화 원본은 그 도구 쪽 폴더에서 찾으면 됩니다. Claude Code 는 [Claude Code](../claude-code/index.md), Codex 는 [Codex CLI](../codex-cli.md) 쪽을 봅니다.
+VS Code 는 채팅 세션을 작업 폴더(워크스페이스)마다 `workspaceStorage` 아래 해시 폴더에 JSON·JSONL 파일로 남깁니다[1]. 같은 해시 폴더의 `workspace.json` 에 적힌 `folder` 또는 `workspace` 값으로 어느 프로젝트인지 알 수 있고, 세션 파일의 `creationDate`·`lastMessageDate` 는 Unix 밀리초라서 "어느 프로젝트에서 언제 AI 와 대화했나" 를 좁히는 데 쓸 수 있습니다[1]. 세션 색인에는 로컬 세션 말고도 백그라운드·클라우드 세션처럼 외부에서 불러온 세션이 `isExternal` 표시와 함께 들어갑니다[2]. 다른 에이전트 도구가 만든 세션이면 대화 원본은 그 도구 쪽 폴더에서 찾으면 됩니다. Claude Code 는 [Claude Code](../claude-code/index.md), Codex 는 [Codex CLI](../codex-cli.md) 쪽을 봅니다.
 
 Copilot CLI 는 세션마다 이벤트를 JSONL 로 적습니다. `tool.execution_start` 와 `tool.execution_complete` 이벤트는 같은 `data.toolCallId` 를 달고 각각 RFC3339 형식의 `timestamp` 를 남겨서, 에이전트가 도구를 언제부터 언제까지 실행했는지 알 수 있습니다(Copilot CLI 1.0.76-0 기준)[1].
 
-Visual Studio 의 Copilot 은 대화를 OpenTelemetry 형식의 추적 파일 `*_VSGitHubCopilot_traces.jsonl` 에 담습니다[1]. Visual Studio 2026 은 솔루션 폴더 아래 `.vs` 에도 대화 파일을 쓰므로[1], 솔루션 폴더도 수집 범위에 넣습니다. 공개된 생산자 쪽 형식 문서가 없어서, 칸 이름은 agentsview 가 읽는 것을 기준으로 삼고 검체에서 확인합니다[1].
+Visual Studio 의 Copilot 은 대화를 OpenTelemetry 형식의 추적 파일 `*_VSGitHubCopilot_traces.jsonl` 에 담습니다[1]. Visual Studio 2026 은 솔루션 폴더 아래 `.vs` 에도 대화 파일을 쓰므로[1], 솔루션 폴더도 수집 범위에 넣습니다. 공개된 생산자 쪽 형식 문서가 없어서, 필드 이름은 agentsview 가 읽는 것을 기준으로 삼고 실제 데이터로 확인합니다[1].
 
-JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장합니다[1]. 이 데이터베이스는 공개 도구 copilot-jetbrains-exporter 로 JSONL 로 내보낸 뒤 읽을 수 있습니다[1]. 데이터베이스 파일 경로는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장합니다[1]. 이 데이터베이스는 공개 도구 copilot-jetbrains-exporter 로 JSONL 로 내보낸 뒤 읽을 수 있습니다[1]. 데이터베이스 파일 경로를 적은 공개 분석 자료는 없어서, 실제 기기에서 확인해야 합니다.
 
 GitHub 서버에 남는 프롬프트·응답과 조직 요금제의 감사 기록은 PC 에서 얻을 수 없습니다. 서버 쪽 기록은 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 얻습니다.
 
@@ -40,7 +40,7 @@ GitHub 서버에 남는 프롬프트·응답과 조직 요금제의 감사 기�
 | Windows `%LOCALAPPDATA%\Temp\VSGitHubCopilotLogs\traces\`, macOS `~/Library/Caches/VSGitHubCopilotLogs/traces/`, Linux `~/.cache/VSGitHubCopilotLogs/traces/` 의 `*_VSGitHubCopilot_traces.jsonl` | Windows·macOS·Linux | 공개 형식 문서 없음[1] | Visual Studio Copilot 대화, `gen_ai.conversation.id`, `gen_ai.usage.input_tokens`·`output_tokens` |
 | 솔루션 폴더의 `.vs\*\copilot-chat\*\sessions\` 안 확장자 없는 파일 | Windows | Visual Studio 2026[1] | Visual Studio 대화 파일 |
 | JetBrains `idea.log` | Windows·macOS·Linux | 문서 기준 | Copilot 오류, 사용자가 켠 진단·trace·인증서 기록 |
-| JetBrains Nitrite 데이터베이스 | Windows·macOS·Linux | 경로는 검체로 확인[1] | JetBrains Copilot 채팅 |
+| JetBrains Nitrite 데이터베이스 | Windows·macOS·Linux | 경로는 실제 기기에서 확인[1] | JetBrains Copilot 채팅 |
 | `~/Library/Logs/GitHubCopilot/` | macOS | 문서 기준 | Xcode 용 Copilot 로그 |
 | 사용자가 고른 자리의 내보낸 JSON | 모두 | 문서 기준 | `Chat: Export Chat...` 로 내보낸 프롬프트·응답 |
 

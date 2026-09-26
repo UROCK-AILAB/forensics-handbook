@@ -12,7 +12,7 @@ GNOME 데스크톱은 사용자 홈 아래에 앱을 얼마나 오래 앞에 띄
 
 Ubuntu 24.04 와 Rocky 9.5(RHEL 9 재빌드판)를 기본 설치한 조건에서 두 배포판 모두 기본 데스크톱이 GNOME 이고 디스플레이 서버는 Wayland 와 XWayland, 오디오 서버는 PipeWire 였습니다[10]. 그래서 두 기준 배포판의 데스크톱 사용자 조사는 대개 GNOME 흔적에서 시작합니다.
 
-이 쪽에서 다루는 흔적은 GNOME 구성 요소가 각자 제 일을 하려고 쓰는 파일입니다.
+이 페이지에서 다루는 흔적은 GNOME 구성 요소가 각자 제 일을 하려고 쓰는 파일입니다.
 
 - **앱 사용 점수 (application_state)**: gnome-shell 이 앱 창에 포커스가 머문 시간을 세어 자주 쓰는 앱 순서를 정하려고 씁니다[1].
 - **설정 데이터베이스 (dconf)**: GNOME 앱이 GSettings 로 저장한 사용자 설정이 바이너리 파일 하나에 모입니다[4].
@@ -32,17 +32,17 @@ Ubuntu 24.04 와 Rocky 9.5(RHEL 9 재빌드판)를 기본 설치한 조건에서
 | 사용자 설정 | `$XDG_CONFIG_HOME/dconf/user`, 프로필이 `service-db` 이면 `$XDG_CONFIG_HOME/dconf/user.txt`[4] | GVDB 바이너리[5], `user.txt` 는 텍스트 키파일[4] |
 | 시스템 설정 | `/etc/dconf/profile/`(프로필), `/etc/dconf/db/`(시스템 DB), `/etc/dconf/db/local.d/`·`/etc/dconf/db/local.d/locks/`(시스템 DB 이름이 `local` 일 때의 키파일과 잠금)[4] | 프로필·키파일은 텍스트, DB 는 GVDB |
 | 파일 메타데이터 | `~/.local/share/gvfs-metadata/`[6][7] | 트리 파일과 저널 파일, 빅엔디언 바이너리[6] |
-| 검색 색인(Tracker 3) | `~/.cache/tracker3/files/` 의 `*Audio.db*`·`*Documents.db*`·`*FileSystem.db*`·`*Pictures.db*`·`*Software.db*`·`*Video.db*`·`meta.db*`[7] | 파일 이름으로 보아 SQLite 일 가능성이 있음 |
-| 검색 색인(tracker 폴더) | `~/.cache/tracker/`, `~/.local/share/tracker/data/`[2] | 검체에서 확인 |
-| GNOME Text Editor 최근 파일 | `~/.local/share` 아래 `session.gvariant`, Flatpak·Snap 판은 `~/.var/app`·`~/snap` 아래[7] | 검체에서 확인 |
-| gedit 최근 파일 | `~/.local/share` 아래 `gedit-metadata.xml`, Flatpak·Snap 판은 `~/.var/app`·`~/snap` 아래[7] | 검체에서 확인 |
+| 검색 색인(Tracker 3) | `~/.cache/tracker3/files/` 의 `*Audio.db*`·`*Documents.db*`·`*FileSystem.db*`·`*Pictures.db*`·`*Software.db*`·`*Video.db*`·`meta.db*`[7] | 파일 이름으로 보면 SQLite 일 가능성이 있음 |
+| 검색 색인(tracker 폴더) | `~/.cache/tracker/`, `~/.local/share/tracker/data/`[2] | 실제 데이터로 확인 |
+| GNOME Text Editor 최근 파일 | `~/.local/share` 아래 `session.gvariant`, Flatpak·Snap 판은 `~/.var/app`·`~/snap` 아래[7] | 실제 데이터로 확인 |
+| gedit 최근 파일 | `~/.local/share` 아래 `gedit-metadata.xml`, Flatpak·Snap 판은 `~/.var/app`·`~/snap` 아래[7] | 실제 데이터로 확인 |
 | X 세션 오류 기록 | `~/.xsession-errors`[7] | 텍스트 |
 | 사용자 D-Bus 설정 | `~/.local/share/dbus-1`, 시스템은 `/etc/dbus-1`·`/usr/share/dbus-1`[7] | 텍스트 |
 | 설치된 앱 목록 | `/usr/share/applications/`, `/usr/local/share/applications/`, `/var/lib/snapd/desktop/applications/`, `/var/lib/flatpak/exports/share/applications/`, `~/.local/share/applications/` 의 `*.desktop`[12] | 텍스트 |
 
 Tracker 경로는 수집 도구마다 다릅니다. ForensicArtifacts 정의는 `~/.cache/tracker/` 와 `~/.local/share/tracker/data/` 를 적고[2], UAC 는 `~/.cache/tracker3/files/` 를 적습니다[7]. Tracker 3 색인기(지금 이름 localsearch)는 저장소를 캐시 폴더에 두므로[8], 두 경로를 다 확인합니다.
 
-GDM 설정 키 목록은 판마다 다릅니다. GDM 46.0 에는 `daemon/WaylandEnable`·`daemon/PreferredDisplayServer`·`security/AllowRemoteAutoLogin`·`xdmcp/Enable` 이 있고 `ShowLocalGreeter` 가 `xdmcp/` 아래에 있지만, 최신 개발판에는 이 키들이 없고 `daemon/ShowLocalGreeter`·`daemon/FallbackSession` 이 있습니다[9]. 검체의 GDM 판과 설정 파일 위치는 [dpkg·apt 기록](../packages/dpkg-apt.md) 이나 [rpm·dnf·yum 기록](../packages/rpm-dnf.md) 의 패키지 파일 목록에서 확인합니다.
+GDM 설정 키 목록은 판마다 다릅니다. GDM 46.0 에는 `daemon/WaylandEnable`·`daemon/PreferredDisplayServer`·`security/AllowRemoteAutoLogin`·`xdmcp/Enable` 이 있고 `ShowLocalGreeter` 가 `xdmcp/` 아래에 있지만, 최신 개발판에는 이 키들이 없고 `daemon/ShowLocalGreeter`·`daemon/FallbackSession` 이 있습니다[9]. 분석 대상의 GDM 판과 설정 파일 위치는 [dpkg·apt 기록](../packages/dpkg-apt.md) 이나 [rpm·dnf·yum 기록](../packages/rpm-dnf.md) 의 패키지 파일 목록에서 확인합니다.
 
 ## 구조
 
@@ -90,7 +90,7 @@ dconf 는 프로필에 적힌 데이터베이스들을 차례로 봅니다[4]. �
 | 0x0C | 4 | `options` | 옵션 |
 | 0x10 | 8 | `root` | 루트 해시 표의 시작·끝 오프셋(각 4바이트 리틀엔디언)[5] |
 
-서명이 바이트 순서가 뒤집힌 꼴이면 읽는 코드는 빅엔디언 파일로 보고 값을 뒤집어 읽습니다[5]. 해시 표의 항목은 해시 값·부모 번호·키 위치(각 4바이트), 키 길이(2바이트), 종류(1바이트), 빈 칸(1바이트), 값 자리(8바이트)로 되어 있고[5], 값 자체는 GVariant 로 직렬화되어 있습니다. 파일 안에는 키마다 바뀐 시각을 적는 칸이 없습니다[5].
+서명이 바이트 순서가 뒤집힌 모양이면 읽는 코드는 빅엔디언 파일로 보고 값을 뒤집어 읽습니다[5]. 해시 표의 항목은 해시 값·부모 번호·키 위치(각 4바이트), 키 길이(2바이트), 종류(1바이트), 빈 자리(1바이트), 값 자리(8바이트)로 되어 있고[5], 값 자체는 GVariant 로 직렬화되어 있습니다. 파일 안에는 키마다 바뀐 시각을 적는 필드가 없습니다[5].
 
 스키마 경로 `org.gnome.desktop.privacy` 는 dconf 경로 `/org/gnome/desktop/privacy/` 에 대응합니다[3]. 조사에 쓸 만한 키와 기본값은 아래와 같습니다[3].
 
@@ -110,7 +110,7 @@ DB 파일에는 기본값과 다른 값만 들어 있을 가능성이 있으므�
 
 ### gvfs-metadata
 
-트리 파일은 경로별 메타데이터의 안정본이고, 저널 파일은 그 뒤에 생긴 변경을 차례로 적은 기록입니다[6]. 홈 폴더 아래 경로는 `home` 트리에, 장치별 트리가 없는 경로는 `root` 트리에 들어가며, 이동식 볼륨의 `uuid-`·`label-` 트리 이름은 [USB 장치 연결 기록](../devices/usb.md) 에서 다룹니다. 저널 파일 이름은 트리 파일 이름 뒤에 `-`, 트리 머리의 `random_tag` 를 16진수 8자리로 쓴 값, `.log` 를 붙인 꼴입니다(예: `home-0a1b2c3d.log`)[6]. 트리 파일이 NFS 위에 있으면 저널은 `XDG_RUNTIME_DIR` 아래 `gvfs-metadata` 폴더에 둡니다[6].
+트리 파일은 경로별 메타데이터의 안정본이고, 저널 파일은 그 뒤에 생긴 변경을 차례로 적은 기록입니다[6]. 홈 폴더 아래 경로는 `home` 트리에, 장치별 트리가 없는 경로는 `root` 트리에 들어가며, 이동식 볼륨의 `uuid-`·`label-` 트리 이름은 [USB 장치 연결 기록](../devices/usb.md) 에서 다룹니다. 저널 파일 이름은 트리 파일 이름 뒤에 `-`, 트리 머리의 `random_tag` 를 16진수 8자리로 쓴 값, `.log` 를 붙인 형식입니다(예: `home-0a1b2c3d.log`)[6]. 트리 파일이 NFS 위에 있으면 저널은 `XDG_RUNTIME_DIR` 아래 `gvfs-metadata` 폴더에 둡니다[6].
 
 트리 파일 머리는 32바이트이고 정수는 모두 빅엔디언입니다[6].
 
@@ -157,7 +157,7 @@ DB 파일에는 기본값과 다른 값만 들어 있을 가능성이 있으므�
 
 - application_state 는 앱이 어떤 파일을 열었는지, 몇 번 실행됐는지, 언제 처음 실행됐는지를 알려 주지 않습니다. 7초 미만의 포커스는 점수에 들어가지 않습니다[1].
 - `remember-app-usage` 가 false 이면 기록이 멈추므로, 파일에 없는 앱을 "쓰지 않았다" 고 볼 수 없습니다[1].
-- dconf 사용자 DB 는 값을 언제 바꿨는지 알려 주지 않습니다. 파일 수정 시각은 어떤 키든 마지막으로 쓴 때만 가리킵니다[4][5].
+- dconf 사용자 DB 에는 값을 언제 바꿨는지 나와 있지 않습니다. 파일 수정 시각은 어떤 키든 마지막으로 쓴 때만 가리킵니다[4][5].
 - gvfs-metadata 는 파일 내용이나 사용자가 파일을 열어 읽었는지를 보여 주지 않습니다. 메타데이터를 쓴 행위만 남습니다.
 - `.xsession-errors` 와 Tracker 색인은 사용자의 조작 하나하나를 기록하는 장치가 아닙니다. 앱 오류 줄이나 색인된 파일 목록으로 보조 근거만 됩니다.
 
@@ -179,7 +179,7 @@ DB 파일에는 기본값과 다른 값만 들어 있을 가능성이 있으므�
 - **지운 앱**: 저장할 때 시스템에서 찾을 수 없는 앱 ID 는 빠지므로, 앱을 지운 뒤 다음 저장에서 그 앱 줄이 사라집니다[1].
 - **점수 반감**: 한 앱이 `SCORE_MAX` 를 넘을 때마다 모든 점수가 반이 되므로, 점수×7 을 사용 시간 초로 바로 바꾸면 안 됩니다[1].
 - **dconf 프로필**: 프로필이 `service-db` 이면 `~/.config/dconf/user` 가 없고 `user.txt` 에 값이 있습니다[4]. `DCONF_PROFILE` 로 홈 안의 다른 프로필을 가리킬 수도 있으므로[4] 세션 환경 변수를 설정한 시작 파일도 봅니다.
-- **dconf 를 문자열로 검색**: 바이너리 DB 를 `strings` 로 훑으면 키 이름은 보이지만 값은 GVariant 직렬화라 형식을 알아야 바르게 읽습니다.
+- **dconf 를 문자열로 검색**: 바이너리 DB 를 `strings` 로 살펴보면 키 이름은 보이지만 값은 GVariant 직렬화라 형식을 알아야 바르게 읽습니다.
 - **시스템 잠금**: `/etc/dconf/db/` 의 `locks` 폴더에 잠긴 키는 사용자가 바꿀 수 없습니다[4]. 사용자 DB 의 값과 실제로 적용된 값이 다를 수 있습니다.
 - **gvfs 저널**: 최근 변경은 트리보다 저널에 먼저 들어갑니다[6]. 트리만 읽으면 최근 변경을 놓칩니다. 저널이 차면 새 트리를 쓰고 옛 저널을 지우므로[6] 연산별 기록은 사라지고 경로별 `last_changed` 만 남습니다.
 - **Tracker 경로**: 수집 도구마다 `tracker` 와 `tracker3` 폴더 중 한쪽만 적으므로, 도구 하나의 수집본만 보면 색인을 놓칠 수 있습니다[2][7].
@@ -253,11 +253,11 @@ Tracker 파일은 머리 16바이트가 `SQLite format 3` 과 NUL 인지 먼저 
 
 XWayland 는 Wayland 를 지원하지 않는 앱에 X 프로토콜을 제공하므로 그런 앱은 X11 방식의 키 입력 가로채기·화면 캡처에 노출됩니다[10]. Chromium 과 Electron 앱이 여기에 해당했고, GNOME 은 D-Bus 서비스로 앱이 화면 녹화·스크린샷을 요청하도록 허용합니다[10]. 데스크톱 감시 악성 코드를 의심하면 디스크 흔적과 함께 메모리에서 이 경로를 확인합니다.
 
-KDE 를 쓰는 검체는 [KDE 흔적](kde.md), 브라우저는 [Linux 의 브라우저 프로필](browsers.md) 을 봅니다.
+KDE 를 쓰는 시스템은 [KDE 흔적](kde.md), 브라우저는 [Linux 의 브라우저 프로필](browsers.md) 을 봅니다.
 
 ## 실습
 
-GNOME 데스크톱이 깔린 공개 검체(NIST CFReDS 등)나 직접 만든 시험 가상 머신의 디스크 이미지로 풀어 봅니다.
+GNOME 데스크톱이 깔린 공개 시험 데이터(NIST CFReDS 등)나 직접 만든 시험 가상 머신의 디스크 이미지로 풀어 봅니다.
 
 1. 사용자 홈의 `application_state` 에서 점수가 가장 높은 앱 세 개와 각 `last-seen` 의 UTC 시각은?
 2. 파일 수정 시각과 가장 늦은 `last-seen` 사이는 몇 초인가? 300초를 넘는다면 무엇 때문일 수 있는가?

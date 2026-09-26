@@ -54,7 +54,7 @@ nav_order: 410
 | `SysContainerDomain-com.apple.lsd :: com.apple.launchservices.appmarketplaces.plist` | `version` (int), `preferredMarketplaces` (list) |
 | `SysContainerDomain-com.apple.managedappdistributiond :: distributor-preferences-store.plist` | `doNotShowSheetList` (list) |
 
-`InstallDomain` 의 두 plist 값, `lastLaunch` 의 값, `sirisuggestions` 의 두 키, `appmarketplaces` 가 대체 앱 마켓과 관련된 파일인지는 모두 뜻을 밝힌 공개 자료가 없습니다. `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인(항목 5개)도 있고, 안의 파일은 검체에서 확인합니다.
+`InstallDomain` 의 두 plist 값, `lastLaunch` 의 값, `sirisuggestions` 의 두 키, `appmarketplaces` 가 대체 앱 마켓과 관련된 파일인지는 모두 뜻을 밝힌 공개 자료가 없습니다. `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인(항목 5개)도 있고, 안의 파일은 실제 백업에서 확인합니다.
 
 백업의 앱 도메인은 `AppDomain-com.apple.AppStore` 처럼 이름에 번들 ID 가 들어가서 설치 앱 후보를 모을 때 쓸 수 있습니다. 다만 이 목록을 설치 앱 목록과 같다고 보지 말고 `applicationState.db` 와 맞춰 봅니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
@@ -62,20 +62,20 @@ nav_order: 410
 
 `applicationState.db` 의 네 표는 다음과 같이 이어집니다[3].
 
-| 표 | 칸 | 하는 일 |
+| 표 | 열 | 하는 일 |
 |---|---|---|
 | `application_identifier_tab` | `id`, `application_identifier` | 번들 ID 를 번호에 연결 |
 | `key_tab` | `id`, `key` | key 번호를 key 이름에 연결 |
 | `kvs` | `id`, `application_identifier`, `key`, `value` | 앱 번호와 key 번호마다 값을 둠. 앱과 데이터 경로를 이음 |
-| `schema` | `version` | 칸 하나. 값의 뜻은 공개 자료 없음 |
+| `schema` | `version` | 열 하나. 값의 뜻은 공개 자료 없음 |
 
-iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으면 앱 폴더가 있는 설치 앱이고, 없으면 지운 앱이었습니다. 지운 앱 가운데 일부는 `_UninstallDate` key 에 삭제 시각을 담은 이진 plist 를 남겼지만, 모든 앱이 그렇지는 않았습니다[3]. `key_tab` 의 번호는 기기나 버전마다 다를 수 있습니다[3]. 그래서 번호를 외워 쓰지 말고 `key_tab` 과 조인해 key 이름으로 거릅니다. `value` 칸에는 이진 plist 가 들어가는 경우가 있어서[3], 값을 풀 때는 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 방법을 씁니다.
+iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으면 앱 폴더가 있는 설치 앱이고, 없으면 지운 앱이었습니다. 지운 앱 가운데 일부는 `_UninstallDate` key 에 삭제 시각을 담은 이진 plist 를 남겼지만, 모든 앱이 그렇지는 않았습니다[3]. `key_tab` 의 번호는 기기나 버전마다 다를 수 있습니다[3]. 그래서 번호를 외워 쓰지 말고 `key_tab` 과 조인해 key 이름으로 거릅니다. `value` 열에는 이진 plist 가 들어가는 경우가 있어서[3], 값을 풀 때는 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 방법을 씁니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `applicationState.db` 에 번들 ID 항목과 컨테이너 경로가 있으면 수집 시점에 그 앱이 기기에 설치되어 있었다는 근거가 됩니다[4]. 다만 지운 앱의 번들 ID 가 `_UninstallDate` 같은 key 와 함께 남은 사례가 있어서[3], 번들 ID 가 있다는 것만으로 설치 상태라고 쓰지 않고 그 앱에 어떤 key 가 달렸는지까지 확인합니다. `IconState.plist` 는 홈 화면에 어떤 항목이 어디 놓였는지를, 백업의 `Info.plist`·`Manifest.plist` 는 백업을 만든 시점의 앱 목록 키를 보여 줍니다.
 
-**증명하지 못하는 것.** 설치되어 있다는 사실은 앱을 쓴 적이 있다는 뜻이 아니고, 누가 언제 설치했는지도 알려 주지 않습니다. 앱을 정리 (offload) 하면 `applicationState.db` 항목이 지워져서[4], 항목이 없다는 사실만으로는 한 번도 설치한 적이 없다고도, 지웠다고도 말할 수 없습니다. 정리한 앱과 지운 앱을 가르는 절차는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md) 에서 다룹니다.
+**증명하지 못하는 것.** 설치되어 있다는 사실은 앱을 쓴 적이 있다는 뜻이 아니고, 누가 언제 설치했는지도 알려 주지 않습니다. 앱을 정리 (offload) 하면 `applicationState.db` 항목이 지워져서[4], 항목이 없다는 사실만으로는 한 번도 설치한 적이 없다고도, 지웠다고도 말할 수 없습니다. 정리한 앱과 지운 앱을 구분하는 절차는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md) 에서 다룹니다.
 
 보고서에는 "이 앱을 쓰고 있었다" 대신 "수집 시점의 `applicationState.db` 에 번들 ID `com.example.app` 항목과 데이터 컨테이너 경로가 있다" 처럼 씁니다.
 
@@ -89,7 +89,7 @@ iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으�
 
 **도구마다 목록이 다릅니다.** iOS 15 이미지 비교에서 Mobile Installation 로그를 읽을 때 어떤 도구는 설치에 성공한 항목만, 어떤 도구는 설치와 제거 항목을 모두, iLEAPP 는 재부팅과 관련된 항목까지 보았습니다[1]. 도구 둘이 다른 앱 목록을 내면 어느 파일의 어느 항목에서 나온 결과인지부터 확인합니다.
 
-**로그 경로와 형식은 따로 확인합니다.** Mobile Installation 로그의 파일 경로와 줄 형식, 보관 기간은 공개된 정리가 없어 검체에서 확인합니다. 로그를 인용할 때는 검체에서 찾은 실제 경로를 함께 적습니다.
+**로그 경로와 형식은 따로 확인합니다.** Mobile Installation 로그의 파일 경로와 줄 형식, 보관 기간을 정리한 공개 자료는 없어서 실제 기기에서 확인해야 합니다. 로그를 인용할 때는 실제 기기에서 찾은 경로를 함께 적습니다.
 
 **정리한 앱은 목록에서 빠질 수 있습니다.** 정리한 앱은 `applicationState.db` 에서 항목이 지워지고[4], `IconState.plist` 로 정리한 앱과 완전히 설치된 앱을 가릅니다[4]. `applicationState.db` 한 곳만 보고 설치 앱 수를 보고하지 않습니다.
 
@@ -101,7 +101,7 @@ iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으�
 
 ### 헥스로 한 번
 
-아래는 명세로 만든 예시이고 특정 검체에서 나온 값이 아닙니다. `kvs.value` 칸의 값을 헥스로 뽑았을 때 이진 plist 라면 첫 8바이트가 `bplist00` 입니다.
+아래는 명세로 만든 예시이고 실제 데이터에서 나온 값이 아닙니다. `kvs.value` 열의 값을 헥스로 뽑았을 때 이진 plist 라면 첫 8바이트가 `bplist00` 입니다.
 
 ```
 00000000  62 70 6C 69 73 74 30 30                          bplist00
@@ -111,7 +111,7 @@ iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으�
 
 ### SQL 로 앱과 key 이름 잇기
 
-사본에서 실행합니다. 먼저 이 검체의 key 이름을 확인합니다.
+사본에서 실행합니다. 먼저 이 데이터의 key 이름을 확인합니다.
 
 ```sql
 SELECT id, key FROM key_tab ORDER BY id;
@@ -133,15 +133,15 @@ MVT 의 Applications 모듈은 백업에서는 `Info.plist`, 파일 시스템 �
 
 ## 교차 검증
 
-설치 여부를 확인한 다음에는 쓴 기록을 찾습니다. 앱을 앞화면에 띄운 기록은 [KnowledgeC](knowledgec/index.md) 와 [바이옴](biome/index.md), 사용 시간 합계는 [화면 사용 시간](screen-time.md), 통신량은 [앱별 데이터 사용량](../network/data-usage.md) 에서 봅니다. 앱을 어디서 받았는지와 구매 기록은 [앱 스토어 기록](app-store.md), 앱 번들 안의 정보는 [앱 번들 정보](../embedded-metadata/app-bundle.md), 관리 기기라면 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 도 함께 봅니다. 처음 보는 앱이나 지운 앱을 다루는 절차는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md), 수상한 앱을 가리는 흐름은 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md) 에 있습니다.
+설치 여부를 확인한 다음에는 쓴 기록을 찾습니다. 앱을 앞화면에 띄운 기록은 [KnowledgeC](knowledgec/index.md) 와 [바이옴](biome/index.md), 사용 시간 합계는 [화면 사용 시간](screen-time.md), 통신량은 [앱별 데이터 사용량](../network/data-usage.md) 에서 봅니다. 앱을 어디서 받았는지와 구매 기록은 [앱 스토어 기록](app-store.md), 앱 번들 안의 정보는 [앱 번들 정보](../embedded-metadata/app-bundle.md), 관리 기기라면 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 도 함께 봅니다. 처음 보는 앱이나 지운 앱을 다루는 절차는 [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md), 수상한 앱을 가려내는 흐름은 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md) 에 있습니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등의 iOS 이미지)로 다음 질문을 풀어 봅니다.
+공개된 시험 데이터(NIST CFReDS 등의 iOS 이미지)로 다음 질문을 풀어 봅니다.
 
 1. `applicationState.db` 의 `key_tab` 에 key 가 몇 개 있고, 이름은 무엇입니까?
 2. `application_identifier_tab` 의 번들 ID 가운데 `com.apple.` 로 시작하지 않는 번들 ID 는 몇 개입니까?
-3. 그 번들 ID 가운데 `IconState.plist` 에 나오지 않는 것이 있습니까? 있다면 정리한 앱인지, 홈 화면에 두지 않은 앱인지 어떻게 가르겠습니까?
+3. 그 번들 ID 가운데 `IconState.plist` 에 나오지 않는 것이 있습니까? 있다면 정리한 앱인지, 홈 화면에 두지 않은 앱인지 어떻게 구분하겠습니까?
 4. 로컬 백업이 함께 있다면 `Info.plist` 의 `Installed Applications` 목록과 `applicationState.db` 목록은 같습니까?
 5. 두 가지 공개 도구로 설치 앱 목록을 뽑았을 때 결과가 어긋나는 번들 ID 는 무엇이고, 각각 어느 파일에서 나왔습니까?
 

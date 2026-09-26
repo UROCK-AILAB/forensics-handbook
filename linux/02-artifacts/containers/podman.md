@@ -12,7 +12,7 @@ Podman 은 데몬 없이 사용자 계정마다 따로 컨테이너 저장소를
 
 Podman 은 컨테이너 저장 라이브러리(containers-storage)로 이미지와 레이어를 풀어 두고, libpod 가 컨테이너 설정과 상태를 상태 데이터베이스에 적습니다[1][4]. 컨테이너 프로세스의 표준 출력은 conmon 이라는 감시 프로세스가 받아 로그 드라이버로 넘깁니다[9]. 컨테이너를 만들고, 시작하고, `exec` 로 들어가고, 지울 때마다 Podman 은 이벤트 (event) 를 하나씩 기록합니다[11][12].
 
-조사에서 Podman 이 Docker 와 가장 다른 점은 두 가지입니다. 첫째, root 가 아닌 일반 사용자도 자기 홈 폴더에 저장소를 따로 두고 컨테이너를 돌립니다(rootless)[1][3]. 그래서 저장소 경로만 보고도 어느 계정의 컨테이너인지 가릴 수 있고, 반대로 `/var/lib/containers` 만 보면 사용자 계정의 컨테이너를 통째로 놓칩니다. 둘째, 이벤트가 기본으로 저널에 남습니다[2][11]. Docker 의 이벤트는 메모리에만 있어 오프라인 분석에 쓸 수 없지만([Docker 허브](docker/index.md)), Podman 은 컨테이너를 지운 뒤에도 저널 보존 기간 안이라면 "언제 만들고, 시작하고, exec 하고, 지웠나" 를 되짚을 수 있습니다.
+조사에서 Podman 이 Docker 와 가장 다른 점은 두 가지입니다. 첫째, root 가 아닌 일반 사용자도 자기 홈 폴더에 저장소를 따로 두고 컨테이너를 돌립니다(rootless)[1][3]. 그래서 저장소 경로만 보고도 어느 계정의 컨테이너인지 구분할 수 있고, 반대로 `/var/lib/containers` 만 보면 사용자 계정의 컨테이너를 통째로 놓칩니다. 둘째, 이벤트가 기본으로 저널에 남습니다[2][11]. Docker 의 이벤트는 메모리에만 있어 오프라인 분석에 쓸 수 없지만([Docker 허브](docker/index.md)), Podman 은 컨테이너를 지운 뒤에도 저널 보존 기간 안이라면 "언제 만들고, 시작하고, exec 하고, 지웠나" 를 거슬러 올라가 확인할 수 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -28,13 +28,13 @@ Podman 은 컨테이너 저장 라이브러리(containers-storage)로 이미지�
 
 runroot 와 tmp_dir 은 tmpfs 에 두는 폴더라 전원이 꺼지면 사라집니다[1][2]. 디스크 이미지에서 볼 수 있는 것은 저장소 루트와 설정 파일입니다.
 
-상태 DB 의 경로는 다음 규칙으로 정해집니다[4]. 기본은 저장소 루트의 `db.sql` 이고, `containers.conf` 에 `static_dir` 을 직접 적었으면 그 폴더의 `db.sql`, transient store 모드면 runroot 의 `db.sql` 입니다. `static_dir` 기본값은 저장소 루트 아래 `libpod` 폴더(root 는 `/var/lib/containers/storage/libpod`)이지만[2], 설정에 값을 비워 두어 Podman 이 이 값을 채운 경우에는 DB 가 `libpod` 폴더가 아니라 저장소 루트에 놓입니다[4][5]. 검체에서는 두 위치를 모두 찾아봅니다. `db.sql` 의 `DBConfig` 표에는 이 DB 를 만들 때 쓴 `StaticDir`, `TmpDir`, `GraphRoot`, `RunRoot`, `GraphDriver`, `VolumeDir` 가 적혀 있어[4], 설정을 바꾼 호스트에서 실제 경로를 되짚을 때 씁니다.
+상태 DB 의 경로는 다음 규칙으로 정해집니다[4]. 기본은 저장소 루트의 `db.sql` 이고, `containers.conf` 에 `static_dir` 을 직접 적었으면 그 폴더의 `db.sql`, transient store 모드면 runroot 의 `db.sql` 입니다. `static_dir` 기본값은 저장소 루트 아래 `libpod` 폴더(root 는 `/var/lib/containers/storage/libpod`)이지만[2], 설정에 값을 비워 두어 Podman 이 이 값을 채운 경우에는 DB 가 `libpod` 폴더가 아니라 저장소 루트에 놓입니다[4][5]. 분석 대상에서는 두 위치를 모두 찾아봅니다. `db.sql` 의 `DBConfig` 표에는 이 DB 를 만들 때 쓴 `StaticDir`, `TmpDir`, `GraphRoot`, `RunRoot`, `GraphDriver`, `VolumeDir` 가 적혀 있어[4], 설정을 바꾼 호스트에서 실제 경로를 거슬러 올라가 찾을 때 씁니다.
 
 ### 설정 파일
 
 저장소 설정 `storage.conf` 는 `/usr/share/containers/storage.conf` → `/etc/containers/storage.conf` → `~/.config/containers/storage.conf` 순으로 찾고, 각 위치의 `storage.conf.d/` 와 `/usr/share/containers/`·`/etc/containers/` 아래 root·rootless 전용 `storage.rootful.conf.d/`·`storage.rootless.conf.d/` 도 읽습니다[1]. 엔진 설정 `containers.conf` 는 사용자의 `~/.config/containers/containers.conf`, 없으면 `/etc/containers/containers.conf`, 그것도 없으면 `/usr/share/containers/containers.conf` 를 읽고, `containers.conf.d`·`containers.rootful.conf.d`·`containers.rootless.conf.d/$UID` 같은 드롭인 폴더의 `.conf` 파일을 이름 순으로 덧씌웁니다[2].
 
-Ubuntu 24.04 와 RHEL 9 에서 기본 저장소 드라이버, 로그 드라이버, 이벤트 기록 방식은 배포판 패키지가 `/usr/share/containers/` 에 넣는 두 설정 파일이 정하므로, 검체에서는 이 파일과 `/etc/containers/`·사용자 홈의 덮어쓴 값을 차례로 읽습니다. 실행 중인 호스트에서는 `podman info` 출력의 `LogDriver`·`EventLogger` 값으로 확인합니다[2][10].
+Ubuntu 24.04 와 RHEL 9 에서 기본 저장소 드라이버, 로그 드라이버, 이벤트 기록 방식은 배포판 패키지가 `/usr/share/containers/` 에 넣는 두 설정 파일이 정하므로, 분석 대상에서는 이 파일과 `/etc/containers/`·사용자 홈의 덮어쓴 값을 차례로 읽습니다. 실행 중인 호스트에서는 `podman info` 출력의 `LogDriver`·`EventLogger` 값으로 확인합니다[2][10].
 
 ### 옛 상태 DB
 
@@ -94,7 +94,7 @@ SQLite 파일이고, 조사에 쓰는 표는 다음과 같습니다[4].
 
 로그 드라이버는 `k8s-file`, `journald`, `none`, `passthrough`, `passthrough-tty` 중 하나이고, `json-file` 은 `k8s-file` 의 다른 이름입니다[2][10]. 기본값은 systemd 저널을 읽고 쓸 수 있으면 `journald`, 아니면 `k8s-file` 입니다[2]. `json-file` 을 골라도 파일 내용은 JSON 이 아니라 k8s-file 형식입니다[13].
 
-k8s-file 로그는 `overlay-containers/컨테이너ID/userdata/ctr.log` 에 쌓입니다[13]. `containers.conf` 의 `log_path` 를 정했으면 그 아래 `컨테이너ID/ctr.log` 입니다[2]. 한 줄은 `시각 스트림 태그 내용` 꼴이고, 태그 `P`·`F` 의 뜻은 CRI 로그와 같습니다([containerd 와 Kubernetes 노드](containerd-kubernetes.md)). 시각은 conmon 이 줄을 받은 순간의 **현지 시각**에 `+09:00` 같은 오프셋을 붙이고 나노초 9자리까지 적습니다[9]. 아래는 만든 예시입니다.
+k8s-file 로그는 `overlay-containers/컨테이너ID/userdata/ctr.log` 에 쌓입니다[13]. `containers.conf` 의 `log_path` 를 정했으면 그 아래 `컨테이너ID/ctr.log` 입니다[2]. 한 줄은 `시각 스트림 태그 내용` 형식이고, 태그 `P`·`F` 의 뜻은 CRI 로그와 같습니다([containerd 와 Kubernetes 노드](containerd-kubernetes.md)). 시각은 conmon 이 줄을 받은 순간의 **현지 시각**에 `+09:00` 같은 오프셋을 붙이고 나노초 9자리까지 적습니다[9]. 아래는 만든 예시입니다.
 
 ```text
 2026-03-02T10:15:07.482913004+09:00 stdout F 192.0.2.44 - - "GET /login HTTP/1.1" 200 512
@@ -142,7 +142,7 @@ journald 로 기록하면 저널 항목마다 다음 필드가 붙습니다[12].
 - rootless 컨테이너 안의 root 가 호스트에서 어느 UID 였는지. 이 대응은 `containers.json`·`layers.json` 의 `uidmap`·`gidmap` 과 `ContainerConfig.JSON` 의 `idMappingsOptions` 로 따로 풀어야 합니다[6][7].
 - 이미지를 받은 시각을 `images.json` 의 `created` 만으로 말하는 것. 아래 "시각 해석" 을 봅니다.
 
-보고서에는 "사용자 alice 의 Podman 저장소에 컨테이너 web01 의 설정이 있고, 저널에 2026-03-02 10:14:58(+09:00) 에 이 컨테이너의 create 이벤트가 있다" 처럼 기록이 말하는 만큼만 씁니다(만든 예시).
+보고서에는 "사용자 alice 의 Podman 저장소에 컨테이너 web01 의 설정이 있고, 저널에 2026-03-02 10:14:58(+09:00) 에 이 컨테이너의 create 이벤트가 있다" 처럼 기록으로 확인되는 만큼만 씁니다(만든 예시).
 
 ## 시각 해석
 
@@ -163,13 +163,13 @@ Go 의 빈 시각 값 `0001-01-01T00:00:00Z` 가 `finishedTime` 에 있으면 �
 
 ## 함정과 한계
 
-- **rootless 저장소를 빠뜨리기 쉽습니다.** 사용자마다 `~/.local/share/containers/storage` 가 따로 있습니다[1]. dissect.target 도 시스템 경로 `/var/lib/containers` 와 모든 사용자 홈의 `.local/share/containers` 를 함께 훑습니다[13]. 라이브 수집에서 root 로 `podman` 명령을 실행하면 root 의 저장소(`/var/lib/containers/storage`)만 보므로[3], UAC 의 `podman container ls --all` 같은 명령 결과[15]에도 사용자 컨테이너가 빠질 수 있습니다. 사용자 계정마다 저장소 폴더를 따로 모읍니다.
-- **이벤트 조회도 사용자별입니다.** `podman events` 는 저널에서 `SYSLOG_IDENTIFIER=podman` 이면서 `_UID` 가 현재 사용자인 항목만 읽습니다[12]. 검체에서는 `_UID` 로 거르지 말고 `SYSLOG_IDENTIFIER=podman` 전체를 본 뒤 `_UID` 로 계정을 가립니다.
+- **rootless 저장소를 빠뜨리기 쉽습니다.** 사용자마다 `~/.local/share/containers/storage` 가 따로 있습니다[1]. dissect.target 도 시스템 경로 `/var/lib/containers` 와 모든 사용자 홈의 `.local/share/containers` 를 함께 검색합니다[13]. 라이브 수집에서 root 로 `podman` 명령을 실행하면 root 의 저장소(`/var/lib/containers/storage`)만 보므로[3], UAC 의 `podman container ls --all` 같은 명령 결과[15]에도 사용자 컨테이너가 빠질 수 있습니다. 사용자 계정마다 저장소 폴더를 따로 모읍니다.
+- **이벤트 조회도 사용자별입니다.** `podman events` 는 저널에서 `SYSLOG_IDENTIFIER=podman` 이면서 `_UID` 가 현재 사용자인 항목만 읽습니다[12]. 분석 대상에서는 `_UID` 로 거르지 말고 `SYSLOG_IDENTIFIER=podman` 전체를 본 뒤 `_UID` 로 계정을 구분합니다.
 - **지운 컨테이너는 DB 와 폴더에서 사라집니다.** 컨테이너를 지우면 `IDNamespace`·`ContainerConfig`·`ContainerState`·`ContainerDependency`·`ContainerVolume`·`ContainerExecSession` 의 행을 지웁니다[4]. `ContainerExitCode` 행은 컨테이너가 지워진 뒤에도 남아 있다가, 기록 시각에서 5분이 지난 뒤 정리 작업이 돌 때 지워지고[4], 재부팅 뒤 상태를 새로 만들 때 `ContainerExitCode`·`ContainerExecSession` 표를 통째로 비웁니다[4]. 지운 행은 SQLite 빈 페이지에 남을 수 있으므로 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 의 복구 방법을 씁니다.
 - **k8s-file 로그는 기본값이면 컨테이너와 함께 지워집니다.** `log_path` 를 비워 두면 로그가 컨테이너 저장소에 있다가 컨테이너를 지울 때 같이 지워집니다[2]. journald 드라이버라면 저널에 남습니다.
 - **transient store 모드면 재부팅 뒤 기록이 없습니다.** 컨테이너 메타데이터와 `db.sql` 이 runroot 에만 있기 때문입니다[1][4]. 볼륨 데이터는 디스크에 남지만 DB 기록이 없어 `podman volume ls` 에 보이지 않습니다[3].
-- **dissect.target 의 로그 정규식은 `+hh:mm` 오프셋만 받습니다.** conmon 은 UTC 보다 늦은 시간대에서 `-hh:mm` 을 씁니다[9]. dissect.target 의 `podman.logs` 는 `\+\d{2}\:\d{2}` 만 받으므로[13], 미주처럼 음수 오프셋을 쓰는 호스트의 줄은 경고만 내고 빠질 수 있습니다. 이런 검체는 로그 파일을 직접 읽습니다.
-- **dissect.target 의 `podman.logs` 는 기본 위치의 k8s-file 만 읽습니다.** `overlay-containers/*/userdata/ctr.log*` 만 훑고 `log_path` 로 옮긴 로그는 읽지 않습니다[13]. 기본 로그 드라이버인 journald 로그는 저널에서 따로 봅니다.
+- **dissect.target 의 로그 정규식은 `+hh:mm` 오프셋만 받습니다.** conmon 은 UTC 보다 늦은 시간대에서 `-hh:mm` 을 씁니다[9]. dissect.target 의 `podman.logs` 는 `\+\d{2}\:\d{2}` 만 받으므로[13], 미주처럼 음수 오프셋을 쓰는 호스트의 줄은 경고만 내고 빠질 수 있습니다. 이런 시스템은 로그 파일을 직접 읽습니다.
+- **dissect.target 의 `podman.logs` 는 기본 위치의 k8s-file 만 읽습니다.** `overlay-containers/*/userdata/ctr.log*` 만 읽고 `log_path` 로 옮긴 로그는 읽지 않습니다[13]. 기본 로그 드라이버인 journald 로그는 저널에서 따로 봅니다.
 
 ## 직접 분석해 보기
 
@@ -217,7 +217,7 @@ conmon 형식으로 만든 예시입니다[9]. `hello` 한 줄을 stdout 으로 
 
 ## 실습
 
-공개 검체 대신 실험용 가상 머신에 Podman 을 설치해 따라 합니다.
+공개 증거물 이미지 대신 실험용 가상 머신에 Podman 을 설치해 따라 합니다.
 
 1. 일반 사용자로 컨테이너 하나를 만들어 돌리고 멈춘 뒤, 그 사용자의 `db.sql` 에서 `createdTime`·`startedTime`·`finishedTime` 을, 저널에서 같은 컨테이너의 `create`·`start`·`died` 이벤트를 뽑아 나란히 놓으면 어떤 순서가 나오나?
 2. root 로 `podman ps --all` 을 실행하면 1번 컨테이너가 보이나? 보이지 않는다면 어디를 봐야 하나?

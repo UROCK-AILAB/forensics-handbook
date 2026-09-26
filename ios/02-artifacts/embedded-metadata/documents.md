@@ -14,7 +14,7 @@ Office 문서 안에는 만든 사람·마지막으로 고친 사람·만든 시
 
 문서 파일은 본문과 함께 그 문서를 누가 언제 만들고 고쳤는지 적은 속성을 파일 안에 담습니다. 이 속성은 파일이 다른 기기로 옮겨 가도 함께 따라가서, 아이폰에서 찾은 문서가 처음 어디서 만들어졌는지 짐작하는 단서가 됩니다. 사진 파일 안의 촬영 정보(EXIF)는 [카메라 사진과 메타데이터 (DCIM·EXIF·HEIC)](../media/dcim-exif.md)에서 다루고, 이 페이지는 Office·iWork·PDF 문서를 다룹니다.
 
-아이폰 쪽에서는 문서 파일 자체보다 문서가 오간 길목이 먼저 보입니다. 파일 앱, iCloud Drive, 파일 제공자 (File Provider) 확장, 도서 앱이 각자 설정과 DB 를 남깁니다. 문서 파일이 로컬 백업에 들어가는지와 iCloud Drive 에서 내려받은 문서가 기기 어디에 놓이는지는 검체에서 확인합니다.
+아이폰 쪽에서는 문서 파일 자체보다 문서가 오간 길목이 먼저 보입니다. 파일 앱, iCloud Drive, 파일 제공자 (File Provider) 확장, 도서 앱이 각자 설정과 DB 를 남깁니다. 문서 파일이 로컬 백업에 들어가는지와 iCloud Drive 에서 내려받은 문서가 기기 어디에 놓이는지는 실제 기기에서 확인합니다.
 
 ## 위치와 버전별 차이
 
@@ -24,9 +24,9 @@ Office 문서 안에는 만든 사람·마지막으로 고친 사람·만든 시
 |---|---|---|
 | Office(docx·xlsx·pptx) | 개방형 패키징 규약 (Open Packaging Conventions, OPC) 패키지의 핵심 속성 (core properties) | [2] |
 | iWork(Pages·Numbers·Keynote) | 번들 최상위의 `Metadata/` 폴더와 미리보기 그림 | [1] |
-| PDF | 검체에서 확인 | — |
+| PDF | 실제 데이터로 확인 | — |
 
-Office 핵심 속성이 패키지 안의 어느 부분(part)에 저장되는지와, 응용 프로그램 이름·편집 시간 같은 확장 속성은 이 페이지에서 다루지 않습니다. iWork 구조는 iWork '13 기준이고[1], 요즘 iWork 가 번들과 파일 하나 가운데 어느 쪽으로 저장하는지는 검체에서 확인합니다.
+Office 핵심 속성이 패키지 안의 어느 부분(part)에 저장되는지와, 응용 프로그램 이름·편집 시간 같은 확장 속성은 이 페이지에서 다루지 않습니다. iWork 구조는 iWork '13 기준이고[1], 요즘 iWork 가 번들과 파일 하나 가운데 어느 쪽으로 저장하는지는 실제 데이터로 확인합니다.
 
 ### 아이폰에서 문서 흔적이 보이는 곳
 
@@ -74,7 +74,7 @@ Metadata/
 
 `Index.zip` 안에는 문서 객체를 구성 요소 (Component) 단위로 나눈 IWA 파일이 들어 있고, 이 zip 은 압축과 Zip64 를 쓰지 않는 최소 구현이라 일반 도구로 다시 묶으면 호환이 깨집니다[1]. `.iwa` 파일은 Snappy 로 압축한 프로토콜 버퍼 직렬화 데이터입니다. 압축 스트림은 표준 Snappy 프레임 형식이 아니라 4바이트 머리(첫 바이트는 조각 종류, 다음 3바이트는 리틀 엔디언 24비트 길이)가 붙은 조각을 이어 붙인 것이라서, 표준 프레임을 기대하는 도구로는 바로 풀리지 않습니다[1]. 압축을 푼 데이터에서는 객체마다 varint 길이와 `ArchiveInfo` 메시지가 앞에 붙으며 `MessageInfo` 가 뒤따르는 내용을 설명합니다[1]. 프로토콜 버퍼를 읽는 법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md)에서 다룹니다.
 
-`BuildVersionHistory.plist` 는 이름으로 보아 문서를 저장한 앱의 빌드 이력을 담는 파일이지만, 값의 형식은 검체에서 확인합니다. 암호를 건 iWork 문서는 번들 안 거의 모든 파일을 AES128(PKCS7 채우기)로 암호화합니다[1].
+`BuildVersionHistory.plist` 는 이름으로 보면 문서를 저장한 앱의 빌드 이력을 담는 파일이지만, 값의 형식은 실제 데이터로 확인합니다. 암호를 건 iWork 문서는 번들 안 거의 모든 파일을 AES128(PKCS7 채우기)로 암호화합니다[1].
 
 ### iCloud Drive 컨테이너 설정
 
@@ -82,7 +82,7 @@ CloudDocs 의 컨테이너 plist 는 최상위 키가 번들 ID(`com.apple.Pages
 
 ### 파일 제공자 DB
 
-두 DB 의 표와 칸은 아래와 같고, 칸의 뜻을 밝힌 공개 자료는 없습니다.
+두 DB 의 표와 열은 아래와 같고, 열의 뜻을 설명한 공개 문서는 없습니다.
 
 ```
 manifest.db
@@ -96,7 +96,7 @@ backup_manifest.db
 
 ### 도서 앱 내려받기 DB
 
-`BLDatabaseManager.sqlite` 의 `ZBLDOWNLOADINFO` 표에는 `ZASSETPATH`, `ZFILEEXTENSION`, `ZTITLE`, `ZARTISTNAME`, `ZPURCHASEDATE`, `ZSTARTTIME`, `ZLASTSTATECHANGETIME` 같은 칸이 있습니다. 표와 칸 이름으로 보아 스토어에서 내려받은 기록이고, 사용자가 도서 앱에 직접 넣은 PDF 가 여기에 남는지는 검체에서 확인합니다.
+`BLDatabaseManager.sqlite` 의 `ZBLDOWNLOADINFO` 표에는 `ZASSETPATH`, `ZFILEEXTENSION`, `ZTITLE`, `ZARTISTNAME`, `ZPURCHASEDATE`, `ZSTARTTIME`, `ZLASTSTATECHANGETIME` 같은 열이 있습니다. 표와 열 이름으로 보면 스토어에서 내려받은 기록이고, 사용자가 도서 앱에 직접 넣은 PDF 가 여기에 남는지는 실제 데이터로 확인합니다.
 
 ### 확장 도메인
 
@@ -106,17 +106,17 @@ backup_manifest.db
 
 **증명하는 것**
 
-Office 문서의 `Creator`·`LastModifiedBy`·`Created`·`Modified`·`LastPrinted` 는 문서 안에 적힌 작성자 이름과 시각을 보여 주고, 아이폰에서 찾은 문서가 어떤 이름으로 만들어지고 고쳐졌는지 말할 수 있게 합니다. iWork 번들의 미리보기 그림으로는 본문을 풀지 않고도 문서 모습을 볼 수 있습니다. 아이폰 쪽 흔적은 iCloud Drive 컨테이너와 파일 제공자가 기기에 설정되어 있었다는 점을 보여 줍니다.
+Office 문서의 `Creator`·`LastModifiedBy`·`Created`·`Modified`·`LastPrinted` 는 문서 안에 적힌 작성자 이름과 시각을 보여 주고, 아이폰에서 찾은 문서가 어떤 이름으로 만들어지고 고쳐졌는지 알 수 있게 합니다. iWork 번들의 미리보기 그림으로는 본문을 풀지 않고도 문서 모습을 볼 수 있습니다. 아이폰 쪽 흔적은 iCloud Drive 컨테이너와 파일 제공자가 기기에 설정되어 있었다는 점을 보여 줍니다.
 
 **증명하지 못하는 것**
 
 문서 속성의 작성자 이름은 파일 안에 적힌 글자라서, 그 이름의 실제 사람이 썼다는 증거가 되지 않습니다. `Created`·`Modified` 는 파일 안에 든 값이라 아이폰 파일 시스템의 시각이나 아이폰에서 문서를 연 시각과 다를 수 있습니다. 컨테이너 설정과 확장 도메인만으로는 어떤 문서를 열었는지, 문서를 밖으로 보냈는지 말할 수 없습니다.
 
-보고서에는 "이 파일의 핵심 속성에 만든 사람 이름이 이렇게, 만든 시각이 이렇게 적혀 있다" 처럼 파일이 말하는 만큼만 씁니다.
+보고서에는 "이 파일의 핵심 속성에 만든 사람 이름이 이렇게, 만든 시각이 이렇게 적혀 있다" 처럼 파일로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-Office 핵심 속성의 `Created`·`Modified`·`LastPrinted` 는 만든·마지막으로 바뀐·마지막으로 인쇄한 날짜와 시각이지만[2], 이 값이 UTC 로 적히는지는 검체에서 확인합니다. 도서 앱 DB 의 `ZPURCHASEDATE`·`ZSTARTTIME`·`ZLASTSTATECHANGETIME` 은 Core Data 표의 날짜 칸이라 Mac 절대 시각일 가능성이 높지만, 값의 크기로 기준을 먼저 가려 봅니다. 시각 기준을 가리는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+Office 핵심 속성의 `Created`·`Modified`·`LastPrinted` 는 만든·마지막으로 바뀐·마지막으로 인쇄한 날짜와 시각이지만[2], 이 값이 UTC 로 적히는지는 실제 데이터로 확인합니다. 도서 앱 DB 의 `ZPURCHASEDATE`·`ZSTARTTIME`·`ZLASTSTATECHANGETIME` 은 Core Data 표의 날짜 열이라 Mac 절대 시각일 가능성이 높지만, 값의 크기로 기준을 먼저 판별합니다. 시각 기준을 판별하는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -147,7 +147,7 @@ FROM ZBLDOWNLOADINFO
 WHERE lower(ZFILEEXTENSION) = 'pdf';
 ```
 
-`ZFILEEXTENSION` 에 확장자가 점 없이 적히는지는 검체마다 확인해야 하므로, 결과가 비면 조건을 `LIKE '%pdf%'` 로 넓혀 봅니다. Office 파일은 OPC 패키지를 여는 공개 도구나 라이브러리로 사본의 핵심 속성을 읽고, 값을 위 표와 맞춰 봅니다.
+`ZFILEEXTENSION` 에 확장자가 점 없이 적히는지는 기기마다 확인해야 하므로, 결과가 비면 조건을 `LIKE '%pdf%'` 로 넓혀 봅니다. Office 파일은 OPC 패키지를 여는 공개 도구나 라이브러리로 사본의 핵심 속성을 읽고, 값을 위 표와 맞춰 봅니다.
 
 ## 교차 검증
 
@@ -161,12 +161,12 @@ WHERE lower(ZFILEEXTENSION) = 'pdf';
 
 ## 실습
 
-공개 검체(NIST CFReDS 등에서 받을 수 있는 아이폰 이미지나 로컬 백업)와 직접 만든 시험 문서로 아래 질문을 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등에서 받을 수 있는 아이폰 이미지나 로컬 백업)와 직접 만든 시험 문서로 아래 질문을 풀어 봅니다.
 
 1. 시험용 docx 를 만들고 핵심 속성의 `Creator`·`Created`·`Modified` 를 읽는다. 다른 프로그램에서 한 번 저장한 뒤 어떤 값이 바뀌었는가?
 2. Pages 로 만든 문서의 번들에서 `Metadata/` 폴더의 세 파일을 찾고, `Properties.plist` 에 어떤 키가 있는지 적는다.
 3. 백업의 CloudDocs 컨테이너 plist 에서 Pages·Numbers·Keynote 별 최상위 번들 ID 를 나열하고, 문서 목록이 아니라는 점을 보고서 문장으로 어떻게 적을지 써 본다.
-4. `ZBLDOWNLOADINFO` 의 날짜 칸 값이 Mac 절대 시각과 Unix 시각 가운데 어느 쪽에 맞는지 값의 크기로 가려 본다.
+4. `ZBLDOWNLOADINFO` 의 날짜 열 값이 Mac 절대 시각과 Unix 시각 가운데 어느 쪽에 맞는지 값의 크기로 판별해 본다.
 
 ## 참고 문헌
 

@@ -8,7 +8,7 @@ nav_order: 690
 
 LM Studio 는 모델을 내려받아 자기 컴퓨터에서 대화하는 데스크톱 앱이고, Windows 에서는 `%UserProfile%\.lmstudio` 아래에 모델 설치 기록(`download-jobs-info.json`), 모델 파일, 대화 JSON, 올린 파일과 그 메타데이터가 남습니다.
 
-이 쪽의 경로와 키는 Windows 11 24H2 의 LM Studio 0.3.14 기준입니다[3]. LM Studio 는 자주 바뀌어서 새 판에서는 경로와 키가 다를 수 있습니다.
+이 페이지의 경로와 키는 Windows 11 24H2 의 LM Studio 0.3.14 기준입니다[3]. LM Studio 는 자주 바뀌어서 새 판에서는 경로와 키가 다를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -31,15 +31,15 @@ Windows 경로는 아래와 같습니다.
 | `%UserProfile%\.lmstudio\user-files\{파일}.metadata.json` | 올린 파일의 종류·크기·원래 이름·SHA-256 | [3 부록 A·B], [5] |
 | `%AppData%\LM Studio\logs\main.log` | 업데이트·오류 로그 | [3 부록 A·B] |
 
-대화 파일 이름은 논문 부록 A 가 `{ID}.json` 으로 적었지만, 공개 샘플에서는 `Conversations\{13자리 숫자}.conversation.json` 입니다[5]. 폴더 이름도 공식 문서와 논문은 소문자 `conversations`, 샘플과 LangurTrace KAPE 타깃은 `Conversations` 로 적었습니다. Windows 는 대소문자를 가리지 않으므로 같은 폴더입니다.
+대화 파일 이름은 논문 부록 A 가 `{ID}.json` 으로 적었지만, 공개 샘플에서는 `Conversations\{13자리 숫자}.conversation.json` 입니다[5]. 폴더 이름도 공식 문서와 논문은 소문자 `conversations`, 샘플과 LangurTrace KAPE 타깃은 `Conversations` 로 적었습니다. Windows 는 대소문자를 구분하지 않으므로 같은 폴더입니다.
 
-메인 로그의 경로는 출처끼리 다릅니다. 논문(2025년 게재)은 `%AppData%\LM Studio\logs\main.log`(공백 있음)로 적었고, LangurTrace KAPE 타깃(저장소 2025-07-20 커밋)은 `C:\Users\%user%\Appdata\Roaming\LMStudio\logs\` 의 `*.log`(공백 없음)를 모읍니다[3 부록 A][4]. 공개 샘플에는 로그가 들어 있지 않고 LangurTrace 파서도 로그를 읽지 않으므로, 검체에서는 `%AppData%` 아래 두 이름을 모두 찾아봅니다.
+메인 로그의 경로는 출처끼리 다릅니다. 논문(2025년 게재)은 `%AppData%\LM Studio\logs\main.log`(공백 있음)로 적었고, LangurTrace KAPE 타깃(저장소 2025-07-20 커밋)은 `C:\Users\%user%\Appdata\Roaming\LMStudio\logs\` 의 `*.log`(공백 없음)를 모읍니다[3 부록 A][4]. 공개 샘플에는 로그가 들어 있지 않고 LangurTrace 파서도 로그를 읽지 않으므로, 실제 기기에서는 `%AppData%` 아래 두 이름을 모두 찾아봅니다.
 
-macOS·Linux 의 대화 폴더는 `~/.lmstudio/conversations/`, 모델 폴더는 `~/.lmstudio/models/` 입니다[1][2]. LangurTrace 시험은 Windows 에서만 했고, 다른 OS 는 경로가 달라도 아티팩트 종류는 같을 것이라는 추정만 있습니다[3 §6.2]. 그 밖의 macOS·Linux 경로는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+macOS·Linux 의 대화 폴더는 `~/.lmstudio/conversations/`, 모델 폴더는 `~/.lmstudio/models/` 입니다[1][2]. LangurTrace 시험은 Windows 에서만 했고, 다른 OS 는 경로가 달라도 아티팩트 종류는 같을 것이라는 추정만 있습니다[3 §6.2]. 그 밖의 macOS·Linux 경로는 실제 기기에서 확인해야 합니다.
 
 앱 판은 설치 기록 안에서 찾을 수 있습니다. 공개 샘플의 `download-jobs-info.json` 에는 내려받기 요청 머리글 `User-Agent` 값 `LM Studio/0.3.14+5 (win32/x64)` 가 모델 작업마다 들어 있어서, 그 모델을 받을 때 쓴 앱 판과 플랫폼이 드러납니다[5]. 조사할 때는 이 값과 설치된 앱 판을 먼저 적고, 아래 구조가 그 판에 맞는지 확인하며 읽습니다.
 
-모델이 기본 위치에 없으면 설치 기록의 `download.targetPath` 로 저장한 곳을 먼저 확인하고, 그래도 없으면 디스크 전체에서 `.gguf` 파일을 찾습니다. `lms import` 명령(실험 기능)으로 가져온 모델도 같은 모델 폴더에 들어갑니다[2]. 가져온 모델은 내려받기 작업이 아니므로 설치 기록에 남는지를 검체로 확인해야 합니다.
+모델이 기본 위치에 없으면 설치 기록의 `download.targetPath` 로 저장한 곳을 먼저 확인하고, 그래도 없으면 디스크 전체에서 `.gguf` 파일을 찾습니다. `lms import` 명령(실험 기능)으로 가져온 모델도 같은 모델 폴더에 들어갑니다[2]. 가져온 모델은 내려받기 작업이 아니므로 설치 기록에 남는지를 실제 기기에서 확인해야 합니다.
 
 ## 구조
 
@@ -109,9 +109,9 @@ macOS·Linux 의 대화 폴더는 `~/.lmstudio/conversations/`, 모델 폴더는
 | `notes`, `looseFiles` | 샘플에서는 빈 배열 |
 | `messages[]` | 메시지 목록 |
 
-메시지 하나는 `versions[]` 배열과 `currentlySelected` 번호로 이루어집니다. `currentlySelected` 는 `versions[]` 가운데 화면에 보이는 판의 번호입니다. 샘플의 메시지는 모두 판이 하나였으므로, 답을 다시 만든 검체라면 `versions[]` 에 다른 판이 남아 있는지 직접 봅니다.
+메시지 하나는 `versions[]` 배열과 `currentlySelected` 번호로 이루어집니다. `currentlySelected` 는 `versions[]` 가운데 화면에 보이는 판의 번호입니다. 샘플의 메시지는 모두 판이 하나였으므로, 답을 다시 만든 대화라면 `versions[]` 에 다른 판이 남아 있는지 직접 봅니다.
 
-사용자 메시지는 `type` 이 `singleStep` 이고 `role` 이 `user` 입니다. `content[]` 의 칸은 `type` 이 `text` 면 `text` 에 본문이 들고, `file` 이면 `fileIdentifier`, `fileType`, `sizeBytes` 가 듭니다. 같은 메시지의 `preprocessed.content[]` 에는 모델에 실제로 넘긴 글이 들어갑니다. 샘플에서 PDF 를 올린 메시지는 `preprocessed` 안에 "The following citations were found in the files provided by the user:" 로 시작하는 문서 발췌가 들어 있었습니다[5]. 샘플의 사용자 메시지에는 따로 시각 칸이 없었습니다.
+사용자 메시지는 `type` 이 `singleStep` 이고 `role` 이 `user` 입니다. `content[]` 의 필드는 `type` 이 `text` 면 `text` 에 본문이 들고, `file` 이면 `fileIdentifier`, `fileType`, `sizeBytes` 가 듭니다. 같은 메시지의 `preprocessed.content[]` 에는 모델에 실제로 넘긴 글이 들어갑니다. 샘플에서 PDF 를 올린 메시지는 `preprocessed` 안에 "The following citations were found in the files provided by the user:" 로 시작하는 문서 발췌가 들어 있었습니다[5]. 샘플의 사용자 메시지에는 따로 시각 필드가 없었습니다.
 
 모델의 답은 `type` 이 `multiStep` 이고 `role` 이 `assistant` 이며, `senderInfo.senderName` 에 모델 이름이 들고 본문은 `steps[]` 에 나뉘어 들어갑니다. 샘플에 나온 단계 종류는 아래 넷입니다[5].
 
@@ -146,15 +146,15 @@ macOS·Linux 의 대화 폴더는 `~/.lmstudio/conversations/`, 모델 폴더는
 | `jobState.completedTimestamp` | 설치 기록 | 내려받기 작업이 끝난 시각 |
 | `fileIdentifier` 앞 13자리 | 올린 파일 이름 | 샘플에서 그 파일을 쓴 답의 단계보다 11초쯤 앞선 값 |
 
-샘플의 사용자 메시지에는 시각 칸이 없으므로, 질문을 보낸 때는 바로 뒤 답의 `stepIdentifier` 로 좁힙니다. `fileIdentifier` 앞자리를 올린 시각으로 쓰려면 시험 기기에서 파일을 올린 때와 맞춰 본 뒤에 씁니다.
+샘플의 사용자 메시지에는 시각 필드가 없으므로, 질문을 보낸 때는 바로 뒤 답의 `stepIdentifier` 로 좁힙니다. `fileIdentifier` 앞자리를 올린 시각으로 쓰려면 시험 기기에서 파일을 올린 때와 맞춰 본 뒤에 씁니다.
 
 LangurTrace 는 이 값을 `datetime.fromtimestamp` 로 바꾸므로, 출력의 시각은 분석 PC 의 현지 시각이고 시간대 표시가 없습니다[4]. 공개 샘플의 출력(`model_setup_history.csv`, `conversations` 폴더의 HTML 파일 이름)은 원래 값을 UTC 로 푼 시각보다 9시간 늦게 적혀 있습니다[5]. 보고서에 옮길 때는 원래 Unix ms 값에서 다시 풀어 UTC 로 적습니다. 파일 시스템 시각이 언제 바뀌는지는 공개 자료에 설명이 없어 시험 기기로 확인해야 합니다. 다른 기록과 시각을 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 
-- **판마다 바뀌는 구조.** 대화 구조는 판마다 바뀔 수 있으므로, 0.3.14 에서 만든 파서를 다른 판 검체에 그대로 돌리지 않습니다. 값이 비어 나오면 내용이 없는 것인지 키 이름이 바뀐 것인지 원본 JSON 으로 가립니다.
+- **판마다 바뀌는 구조.** 대화 구조는 판마다 바뀔 수 있으므로, 0.3.14 에서 만든 파서를 다른 판 데이터에 그대로 돌리지 않습니다. 값이 비어 나오면 내용이 없는 것인지 키 이름이 바뀐 것인지 원본 JSON 으로 구분합니다.
 - **LangurTrace 보고서가 빼는 것.** 대화 HTML 은 `versions[currentlySelected]` 한 판만, 답은 `contentBlock` 의 글만 옮깁니다[4]. 다시 만든 답의 다른 판, `preprocessed` 의 문서 발췌, `debugInfoBlock`·`citationBlock` 은 원본 JSON 에서 직접 봅니다.
-- **설치 기록을 옮기는 범위.** LangurTrace 는 `jobIdentifier` 가 `modelDownload` 로 시작하는 작업만, 그것도 `tasks[]` 의 첫 칸만 CSV 로 옮깁니다[4]. 실행 엔진 작업과 둘째 칸부터의 파일은 원본에서 봅니다.
+- **설치 기록을 옮기는 범위.** LangurTrace 는 `jobIdentifier` 가 `modelDownload` 로 시작하는 작업만, 그것도 `tasks[]` 의 첫 항목만 CSV 로 옮깁니다[4]. 실행 엔진 작업과 둘째 항목부터의 파일은 원본에서 봅니다.
 - **로그는 따로 찾기.** LangurTrace 파서는 `main.log` 를 읽지 않고, KAPE 타깃의 로그 경로는 논문과 다릅니다(위 "위치와 버전별 차이").
 - **고정된 수집 경로.** KAPE 타깃은 `C:\Users\%user%\.lmstudio\` 아래 네 곳과 `C:\Users\%user%\Appdata\Roaming\LMStudio\logs\` 처럼 정해진 경로만 모읍니다[4]. 다른 드라이브로 옮긴 모델은 모으지 않습니다.
 - **공개 샘플의 빈 곳.** 샘플에는 GGUF, 올린 파일 원본, 로그가 빠져 있습니다[5]. 그래서 `models_index.csv` 의 해시는 샘플 원본만으로 다시 계산할 수 없습니다.
@@ -194,12 +194,12 @@ LangurTrace[4]는 KAPE 타깃·모듈로 쓰거나 `LangurTrace.exe --src 수집
 
 ## 실습
 
-LangurTrace 저장소[4]의 `sample_dataset` 이 공개 검체입니다. `collect/C/Users/USER/.lmstudio/` 에는 설치 기록, 대화 4개, 올린 파일 메타데이터 1개가 있고, `parse/LLM application artifacts/lmstudio/` 에는 LangurTrace 출력이 있습니다[5].
+LangurTrace 저장소[4]의 `sample_dataset` 이 공개 시험 데이터입니다. `collect/C/Users/USER/.lmstudio/` 에는 설치 기록, 대화 4개, 올린 파일 메타데이터 1개가 있고, `parse/LLM application artifacts/lmstudio/` 에는 LangurTrace 출력이 있습니다[5].
 
 1. 설치 기록에서 모델 작업은 몇 개이고, 각각 UTC 로 언제 끝났습니까? `User-Agent` 로 본 앱 판은 무엇입니까?
-2. `model_setup_history.csv` 와 `models_index.csv` 를 견주어, 설치 기록에는 있는데 모델 파일 목록에는 없는 모델을 찾아보십시오. 이 차이로 보고서에 어디까지 쓸 수 있습니까?
+2. `model_setup_history.csv` 와 `models_index.csv` 를 비교해, 설치 기록에는 있는데 모델 파일 목록에는 없는 모델을 찾아보십시오. 이 차이로 보고서에 어디까지 쓸 수 있습니까?
 3. PDF 를 올린 대화는 어느 파일이고, 문서 발췌는 JSON 의 어느 키에 남았습니까? LangurTrace HTML 에는 그 발췌가 보입니까?
-4. 각 대화 파일 이름의 숫자와 `createdAt` 을 UTC 로 풀어 견주고, LangurTrace 출력의 시각과는 몇 시간 차이가 나는지 확인해 보십시오.
+4. 각 대화 파일 이름의 숫자와 `createdAt` 을 UTC 로 풀어 비교하고, LangurTrace 출력의 시각과는 몇 시간 차이가 나는지 확인해 보십시오.
 5. 시험용 가상 머신에 LM Studio 를 깔고 가짜 사용자 `labuser01` 로 대화를 만든 뒤, 대화를 복제하면 새 파일의 이름과 `createdAt` 이 어떻게 되는지, 대화를 지우면 `user-files` 에 무엇이 남는지 확인해 보십시오.
 
 ## 참고 문헌

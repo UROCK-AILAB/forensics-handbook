@@ -36,7 +36,7 @@ flatpak 은 앱과 런타임을 OSTree 저장소에 받아 두고, 거기서 꺼
 
 마운트 위치는 배포판이 snapd 를 어떻게 꾸렸는지에 따라 다릅니다. snapd 는 `/snap` 이 실제 폴더면 그곳을 쓰고, `/snap` 이 없거나 `/var/lib/snapd/snap` 을 가리키는 심볼릭 링크면 `/var/lib/snapd/snap` 을 씁니다[1].
 
-| 검체의 `/snap` | 마운트 위치 |
+| 분석 대상의 `/snap` | 마운트 위치 |
 |---|---|
 | 실제 폴더 | `/snap/이름/리비전` |
 | 없거나 `/var/lib/snapd/snap` 을 가리키는 심볼릭 링크 | `/var/lib/snapd/snap/이름/리비전` |
@@ -58,7 +58,7 @@ flatpak 은 앱과 런타임을 OSTree 저장소에 받아 두고, 거기서 꺼
 | 설치 폴더`/sideload-repos` | 오프라인 설치 원본(사이드로드 저장소)을 가리키는 링크[7] |
 | `~/.var/app/앱ID/` | 앱별 사용자 데이터(설정·캐시·데이터)[9] |
 
-시스템 설치 경로는 빌드 설정과 환경 변수 `FLATPAK_SYSTEM_DIR` 로 바꿀 수 있고 기본값은 `/var/lib/flatpak` 입니다[7]. 그래서 검체에 `/var/lib/flatpak` 이 없으면 `installations.d` 설정과 다른 위치의 `repo` 폴더를 함께 찾습니다.
+시스템 설치 경로는 빌드 설정과 환경 변수 `FLATPAK_SYSTEM_DIR` 로 바꿀 수 있고 기본값은 `/var/lib/flatpak` 입니다[7]. 그래서 분석 대상에 `/var/lib/flatpak` 이 없으면 `installations.d` 설정과 다른 위치의 `repo` 폴더를 함께 찾습니다.
 
 ## 구조
 
@@ -123,14 +123,14 @@ flatpak 은 설치 변경마다 `MESSAGE_ID=c7b39b1e006b464599465e105b361485` �
 
 - 앱을 실제로 실행했는지, 얼마나 썼는지. 사용자 데이터 폴더 안 파일의 내용과 시각으로 따로 봅니다.
 - 오래전 snap 설치 시각. `state.json` 이력은 하루 안팎이면 사라집니다[4]. 저널·syslog 의 snapd 기록[12]과 셸 기록으로 보강합니다.
-- 누가 snap 을 설치했는지. `state.json` change 의 고정 필드에는 요청한 사용자 칸이 없습니다[3].
+- 누가 snap 을 설치했는지. `state.json` change 의 고정 필드에는 요청한 사용자 필드가 없습니다[3].
 - 저널을 지웠거나 저널이 휘발성 저장(메모리)만 쓰던 시스템의 flatpak 이력. 이때는 저널 항목이 없습니다([systemd 저널](../../01-foundations/logging/systemd-journal/index.md)).
 
 ## 시각 해석
 
 | 값 | 바뀌는 때 | 기준 |
 |---|---|---|
-| `state.json` 의 `spawn-time`, `ready-time` | 작업을 만들 때, 끝날 때 | Go `time.Time` 값을 JSON 문자열로 적은 것이라 검체에서 표기와 시간대 오프셋을 확인합니다[3] |
+| `state.json` 의 `spawn-time`, `ready-time` | 작업을 만들 때, 끝날 때 | Go `time.Time` 값을 JSON 문자열로 적은 것이라 실제 데이터에서 표기와 시간대 오프셋을 확인합니다[3] |
 | snapd API 의 `install-date` | 설치 때 | 라이브에서만 얻습니다[14] |
 | `.snap` 파일, `~/snap/이름`, 배포 폴더의 파일 시스템 시각 | 파일·폴더를 만들거나 바꿀 때 | 파일 시스템 시각([시각 값](../../01-foundations/value-decoding/time-values.md)) |
 | `meta/snap.yaml` 의 mtime | `.snap` 이미지 안에 들어 있는 값 | 이미지(SquashFS) 안 파일의 시각이라 설치 시각과 다를 수 있습니다[12] |
@@ -174,7 +174,7 @@ change 항목 하나는 이런 모양입니다(필드 이름은 명세대로이�
 }
 ```
 
-`status` 4 는 Done 입니다[3]. `kind`·`summary` 문구와 시각 표기도 만든 예시라서, 실제 값은 검체에서 확인합니다.
+`status` 4 는 Done 입니다[3]. `kind`·`summary` 문구와 시각 표기도 만든 예시라서, 실제 값은 분석 대상에서 확인합니다.
 
 flatpak 이력은 이미지의 저널 폴더를 지정해 전용 메시지만 뽑습니다.
 
@@ -219,7 +219,7 @@ journalctl -D /mnt/evidence/var/log/journal -o verbose \
 
 ## 실습
 
-NIST CFReDS 등에서 받은 Ubuntu 데스크톱 공개 검체로 다음 질문을 풀어 봅니다.
+NIST CFReDS 등에서 받은 Ubuntu 데스크톱 공개 이미지로 다음 질문을 풀어 봅니다.
 
 1. `/var/lib/snapd/snaps` 에 있는 snap 과 리비전을 모두 적고, 같은 이름에 리비전이 둘 이상인 snap 을 찾습니다.
 2. `state.json` 에 남은 change 중 가장 오래된 `spawn-time` 은 언제이고, 이미지를 만든 시각과 얼마나 떨어져 있습니까?

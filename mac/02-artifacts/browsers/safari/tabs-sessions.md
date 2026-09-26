@@ -26,7 +26,7 @@ nav_order: 1180
 
 탭 스냅샷 목록은 `~/Library/Caches/com.apple.Safari/TabSnapshots/Metadata.db` [3] 와 컨테이너 쪽 `~/Library/Containers/com.apple.Safari/Data/Library/Caches/com.apple.Safari/TabSnapshots/Metadata.db` [1] 두 곳에 있을 수 있습니다. 나머지 파일은 사파리 데이터 폴더에 있지만, `~/Library/Safari/` 와 컨테이너 가운데 파일마다 어느 쪽인지는 알려져 있지 않아서 두 곳을 다 봅니다. 두 폴더 이야기는 허브 [사파리 (Safari)](index.md)에 있습니다.
 
-`SafariTabs.db` 는 Safari 17 에서 프로필(여러 프로필)이 들어오면서 쓰이고 [1], 그 밖의 파일이 어느 macOS·사파리 버전부터 쓰였는지는 공개 자료가 없습니다. 검체의 버전에 따라 어떤 파일은 아예 없을 수 있으니, 없는 파일을 "지웠다" 로 읽기 전에 그 버전에서 원래 쓰는 파일인지부터 확인합니다.
+`SafariTabs.db` 는 Safari 17 에서 프로필(여러 프로필)이 들어오면서 쓰이고 [1], 그 밖의 파일이 어느 macOS·사파리 버전부터 쓰였는지는 공개 자료가 없습니다. 분석 대상의 버전에 따라 어떤 파일은 아예 없을 수 있으니, 없는 파일을 "지웠다" 로 읽기 전에 그 버전에서 원래 쓰는 파일인지부터 확인합니다.
 
 ## 구조
 
@@ -40,19 +40,19 @@ nav_order: 1180
 
 ### BrowserState.db
 
-표 `tabs`(칸 `id`, `url`, `title`, `uuid`)와 `tab_sessions`(칸 `tab_uuid`, `session_data`)를 `tab_sessions.tab_uuid = tabs.uuid` 로 잇습니다 [1]. `session_data` 는 앞 4바이트 뒤에 plist 가 들어 있는 BLOB 이고, 이 plist 의 `SessionHistory` 아래 `SessionHistoryEntries`(항목마다 `SessionHistoryEntryURL`, `SessionHistoryEntryTitle`)에 페이지가 순서대로 있습니다 [1]. 탭 하나마다 뒤로/앞으로 목록이 순서대로 남는 셈입니다. `SessionHistoryCurrentIndex` 라는 키도 있는데, 지금 보던 자리를 뜻하는 것으로 보이며 뜻을 풀어 둔 공개 자료는 없습니다 [1]. 앞 4바이트의 뜻은 알려져 있지 않아서, 직접 뽑을 때는 그 뒤에 plist 머리(바이너리 plist 라면 `bplist`)가 있는지 확인하고 읽습니다.
+표 `tabs`(열 `id`, `url`, `title`, `uuid`)와 `tab_sessions`(열 `tab_uuid`, `session_data`)를 `tab_sessions.tab_uuid = tabs.uuid` 로 잇습니다 [1]. `session_data` 는 앞 4바이트 뒤에 plist 가 들어 있는 BLOB 이고, 이 plist 의 `SessionHistory` 아래 `SessionHistoryEntries`(항목마다 `SessionHistoryEntryURL`, `SessionHistoryEntryTitle`)에 페이지가 순서대로 있습니다 [1]. 탭 하나마다 뒤로/앞으로 목록이 순서대로 남는 셈입니다. `SessionHistoryCurrentIndex` 라는 키도 있는데, 지금 보던 자리를 뜻하는 것으로 보이며 뜻을 풀어 둔 공개 자료는 없습니다 [1]. 앞 4바이트의 뜻은 알려져 있지 않아서, 직접 뽑을 때는 그 뒤에 plist 머리(바이너리 plist 라면 `bplist`)가 있는지 확인하고 읽습니다.
 
 ### SafariTabs.db
 
-표 `bookmarks` 에 칸 `id`, `special_id`, `parent`, `type`, `subtype`, `title`, `url`, `local_attributes`, `date_closed`, `external_uuid`, `server_id` 가 있고, `local_attributes` 는 plist 로 안에 `LastVisitTime`, `DateClosed` 가 있습니다 [1]. 이름은 `bookmarks` 지만 이 표에는 탭과 프로필이 들어 있습니다. 프로필 목록은 `parent == 0 AND type == 1 AND subtype == 2` 인 행입니다 [1]. `title` 은 프로필 이름, `external_uuid` 는 `Profiles` 아래 폴더 이름과 맞춰 보는 값, `server_id` 는 그 프로필의 확장 폴더 이름 앞에 붙는 값입니다 [1]. Safari 17 이후 프로필마다 방문 기록 파일이 따로 생기는 점은 [방문 기록 (History.db)](history.md)에서 다룹니다.
+표 `bookmarks` 에 열 `id`, `special_id`, `parent`, `type`, `subtype`, `title`, `url`, `local_attributes`, `date_closed`, `external_uuid`, `server_id` 가 있고, `local_attributes` 는 plist 로 안에 `LastVisitTime`, `DateClosed` 가 있습니다 [1]. 이름은 `bookmarks` 지만 이 표에는 탭과 프로필이 들어 있습니다. 프로필 목록은 `parent == 0 AND type == 1 AND subtype == 2` 인 행입니다 [1]. `title` 은 프로필 이름, `external_uuid` 는 `Profiles` 아래 폴더 이름과 맞춰 보는 값, `server_id` 는 그 프로필의 확장 폴더 이름 앞에 붙는 값입니다 [1]. Safari 17 이후 프로필마다 방문 기록 파일이 따로 생기는 점은 [방문 기록 (History.db)](history.md)에서 다룹니다.
 
 ### CloudTabs.db
 
-표 `cloud_tabs`(칸 `device_uuid`, `tab_uuid`, `system_fields`, `title`, `url`, `is_showing_reader`, `is_pinned`)와 `cloud_tab_devices`(칸 `device_uuid`, `device_name`)를 `device_uuid` 로 잇습니다 [1]. `system_fields` 는 직렬화된 plist 이고 `RecordCtime`, `RecordMtime` 을 담습니다 [1].
+표 `cloud_tabs`(열 `device_uuid`, `tab_uuid`, `system_fields`, `title`, `url`, `is_showing_reader`, `is_pinned`)와 `cloud_tab_devices`(열 `device_uuid`, `device_name`)를 `device_uuid` 로 잇습니다 [1]. `system_fields` 는 직렬화된 plist 이고 `RecordCtime`, `RecordMtime` 을 담습니다 [1].
 
 ### TabSnapshots/Metadata.db
 
-표 `snapshot_metadata` 에 칸 `date_created`, `filename`, `url` 이 있어서 [1], 스냅샷 파일 이름과 그 탭의 주소, 만든 시각을 짝지을 수 있습니다.
+표 `snapshot_metadata` 에 열 `date_created`, `filename`, `url` 이 있어서 [1], 스냅샷 파일 이름과 그 탭의 주소, 만든 시각을 짝지을 수 있습니다.
 
 ## 증거로서 의미
 
@@ -70,11 +70,11 @@ nav_order: 1180
 |---|---|---|
 | `LastVisitTime` | `LastSession.plist` 탭, `SafariTabs.db` `local_attributes` | 탭의 마지막 방문 시각 [1] |
 | `DateClosed` | `LastSession.plist`, `RecentlyClosedTabs.plist`, `SafariTabs.db` `local_attributes` | 탭·창을 닫은 시각 [1] |
-| `date_closed` | `SafariTabs.db` `bookmarks` 칸 | 닫은 시각(칸 이름 기준) [1] |
+| `date_closed` | `SafariTabs.db` `bookmarks` 표 | 닫은 시각(열 이름 기준) [1] |
 | `RecordCtime`, `RecordMtime` | `CloudTabs.db` `system_fields` | 공개 자료 없음 [1] |
-| `date_created` | `TabSnapshots/Metadata.db` | 스냅샷을 만든 시각(칸 이름 기준) [1] |
+| `date_created` | `TabSnapshots/Metadata.db` | 스냅샷을 만든 시각(열 이름 기준) [1] |
 
-칸마다 저장 형식이 실수인지 plist 날짜인지는 파일을 열어 직접 확인하고, 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다.
+열마다 저장 형식이 실수인지 plist 날짜인지는 파일을 열어 직접 확인하고, 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다.
 
 ## 함정과 한계
 
@@ -130,9 +130,9 @@ ORDER BY d.device_name;
 
 ## 실습
 
-공개 맥 검체에서 사파리 데이터 폴더와 캐시 폴더를 모아 아래 질문을 풀어 봅니다.
+공개 맥 시험 이미지에서 사파리 데이터 폴더와 캐시 폴더를 모아 아래 질문을 풀어 봅니다.
 
-1. 이 검체에는 위 표의 파일 가운데 어느 것이 있고, 각각 `~/Library/Safari/` 와 컨테이너 가운데 어디에 있는가
+1. 이 이미지에는 위 표의 파일 가운데 어느 것이 있고, 각각 `~/Library/Safari/` 와 컨테이너 가운데 어디에 있는가
 2. `LastSession.plist` 에서 창은 몇 개이고, 창마다 선택된 탭의 주소는 무엇인가
 3. `BrowserState.db` 에서 뒤로/앞으로 목록이 가장 긴 탭을 골라 이동 순서를 적고, 방문 기록의 시각과 맞춰 보라
 4. `RecentlyClosedTabs.plist` 에 `IsPrivateWindow` 가 참인 항목이 있는가

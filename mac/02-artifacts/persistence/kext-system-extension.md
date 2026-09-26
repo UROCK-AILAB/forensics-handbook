@@ -14,7 +14,7 @@ nav_order: 630
 
 kext는 장치 드라이버나 보안 제품처럼 커널 수준의 기능이 필요한 코드를 커널에 올리는 방식이고, 한 번 올라가면 시스템 전체에서 가장 높은 권한으로 돕니다. Apple은 macOS 10.15부터 시스템 확장을 들여와, 같은 종류의 기능을 커널이 아닌 사용자 공간에서 DriverKit·NetworkExtension·EndpointSecurity 같은 프레임워크로 구현하게 했습니다 [1][2].
 
-그래서 조사에서는 두 갈래를 봅니다. 하나는 kext 파일이 놓인 폴더와 그 kext를 올리기 위해 바꿔야 했던 보안 설정이고, 다른 하나는 시스템 확장을 사용자 승인 없이 허용하는 MDM 구성입니다. 이 페이지는 두 갈래의 위치·조건·해석을 다루고, 서명과 무결성 보호 자체는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../01-foundations/protection/codesign-notarization-sip.md)에서, 구성 프로파일 전반은 [구성 프로파일 (Configuration Profiles·MDM)](configuration-profiles.md)에서 다룹니다.
+그래서 조사에서는 두 가지를 봅니다. 하나는 kext 파일이 놓인 폴더와 그 kext를 올리기 위해 바꿔야 했던 보안 설정이고, 다른 하나는 시스템 확장을 사용자 승인 없이 허용하는 MDM 구성입니다. 이 페이지는 두 가지의 위치·조건·해석을 다루고, 서명과 무결성 보호 자체는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../01-foundations/protection/codesign-notarization-sip.md)에서, 구성 프로파일 전반은 [구성 프로파일 (Configuration Profiles·MDM)](configuration-profiles.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -26,7 +26,7 @@ kext는 장치 드라이버나 보안 제품처럼 커널 수준의 기능이 �
 | `/System/Library/Extensions/*` | kext 파일 | [4] |
 | `/usr/sbin/kextstat` | 적재된 kext 목록을 보는 명령 | [4] |
 
-macOS 11 이후 적재된 kext 목록을 보는 다른 명령이 `kextstat` 을 대신하는지, 시스템 확장의 상태가 어느 파일에 저장되는지, kext 승인 기록이 어느 DB에 남는지, 인텔 맥에서 보조 커널 컬렉션 파일이 데이터 볼륨의 어느 경로에 있는지는 조사 대상 버전의 검체에서 확인합니다.
+macOS 11 이후 적재된 kext 목록을 보는 다른 명령이 `kextstat` 을 대신하는지, 시스템 확장의 상태가 어느 파일에 저장되는지, kext 승인 기록이 어느 DB에 남는지, 인텔 맥에서 보조 커널 컬렉션 파일이 데이터 볼륨의 어느 경로에 있는지는 조사 대상 버전의 실제 데이터로 확인합니다.
 
 ### 버전별 차이
 
@@ -40,7 +40,7 @@ macOS 11 이후 적재된 kext 목록을 보는 다른 명령이 `kextstat` 을 
 
 ### macOS 11 이후 kext를 올리는 조건
 
-macOS 11 이후 kext는 AuxKC에 합쳐져야 올라가고, AuxKC를 다시 만들려면 사용자 승인과 재시동이 필요하며 보안 부팅을 "보안 수준 낮춤 (Reduced Security)" 으로 설정해야 합니다 [2]. 이 조건은 Apple 실리콘 맥의 조건이고 [2], 인텔 맥에도 같은 조건이 걸리는지는 검체에서 확인합니다. Apple 실리콘 맥에서는 시동할 때 전원 버튼을 눌러 복구 모드(1TR)로 들어간 뒤 Reduced Security로 낮추고 커널 확장을 허용하는 확인란을 켜야 kext를 쓸 수 있습니다 [2].
+macOS 11 이후 kext는 AuxKC에 합쳐져야 올라가고, AuxKC를 다시 만들려면 사용자 승인과 재시동이 필요하며 보안 부팅을 "보안 수준 낮춤 (Reduced Security)" 으로 설정해야 합니다 [2]. 이 조건은 Apple 실리콘 맥의 조건이고 [2], 인텔 맥에도 같은 조건이 걸리는지는 실제 기기로 확인합니다. Apple 실리콘 맥에서는 시동할 때 전원 버튼을 눌러 복구 모드(1TR)로 들어간 뒤 Reduced Security로 낮추고 커널 확장을 허용하는 확인란을 켜야 kext를 쓸 수 있습니다 [2].
 
 AuxKC가 어디에 기록되는지도 하드웨어마다 다릅니다. Apple 실리콘에서는 AuxKC의 측정값이 LocalPolicy에 서명되어 들어가고, 이전 하드웨어(인텔)에서는 AuxKC가 데이터 볼륨에 있었습니다 [2]. LocalPolicy에는 AuxKC Image4 구조의 SHA-384 해시와 kext 영수증 (receipt)이 들어갑니다 [2].
 
@@ -66,11 +66,11 @@ MDM 페이로드 `com.apple.system-extension-policy` 는 macOS 10.15 이후 쓸 
 
 ## 증거로서 의미
 
-**증명하는 것.** kext 폴더에 서드파티 kext가 있으면 그 kext가 디스크에 설치돼 있었다는 뜻이고, 파일의 서명으로 개발자 팀 ID를 말할 수 있습니다. Apple 실리콘 맥에 서드파티 kext가 적재돼 있었다면 누군가 보안 수준을 낮췄다는 뜻이고, 그 주체는 1TR에서 사람이 한 조작이거나 MDM일 가능성이 큽니다 [1][2]. 시스템 확장 페이로드의 `AllowedSystemExtensions`·`AllowedSystemExtensionTypes`·`AllowedTeamIdentifiers` 에 든 확장은 사용자 조작 없이 올라올 수 있는 상태였다고 읽을 수 있고, `AllowUserOverrides` 값으로 그 밖의 확장을 사용자가 따로 승인할 수 있었는지를 가립니다 [1][3].
+**증명하는 것.** kext 폴더에 서드파티 kext가 있으면 그 kext가 디스크에 설치돼 있었다는 뜻이고, 파일의 서명으로 개발자 팀 ID를 말할 수 있습니다. Apple 실리콘 맥에 서드파티 kext가 적재돼 있었다면 누군가 보안 수준을 낮췄다는 뜻이고, 그 주체는 1TR에서 사람이 한 조작이거나 MDM일 가능성이 큽니다 [1][2]. 시스템 확장 페이로드의 `AllowedSystemExtensions`·`AllowedSystemExtensionTypes`·`AllowedTeamIdentifiers` 에 든 확장은 사용자 조작 없이 올라올 수 있는 상태였다고 읽을 수 있고, `AllowUserOverrides` 값으로 그 밖의 확장을 사용자가 따로 승인할 수 있었는지를 판별합니다 [1][3].
 
 **증명하지 못하는 것.** kext 파일이 폴더에 있다는 사실은 적재됐다는 뜻이 아닙니다. 보안 수준이 낮아져 있다는 사실만으로 누가, 어떤 목적으로 낮췄는지는 알 수 없고, 보안 제품이나 장치 드라이버처럼 정상적인 이유로 낮춘 맥도 있습니다. 페이로드가 허용한다는 사실도 그 확장이 실제로 설치돼 돌았다는 뜻은 아닙니다.
 
-보고서에는 "이 맥의 보안 부팅 정책이 Reduced Security로 설정돼 있었고, 이 경로에 이 팀 ID로 서명된 kext가 있었다" 처럼 기록이 말하는 만큼 나눠서 씁니다.
+보고서에는 "이 맥의 보안 부팅 정책이 Reduced Security로 설정돼 있었고, 이 경로에 이 팀 ID로 서명된 kext가 있었다" 처럼 기록으로 확인되는 만큼 나눠서 씁니다.
 
 ## 시각 해석
 
@@ -78,7 +78,7 @@ kext가 언제 설치되고 언제 AuxKC에 들어갔는지, 보안 수준을 �
 
 ## 함정과 한계
 
-`/System/Library/Extensions` 에는 Apple이 넣어 둔 kext도 들어 있을 수 있어서, 파일 목록만 보고 이상 여부를 가리기 어렵습니다. 서명과 팀 ID로 Apple 것과 서드파티 것을 먼저 나누고, 같은 macOS 버전의 설치본과 비교합니다.
+`/System/Library/Extensions` 에는 Apple이 넣어 둔 kext도 들어 있을 수 있어서, 파일 목록만 보고 이상 여부를 판별하기 어렵습니다. 서명과 팀 ID로 Apple 것과 서드파티 것을 먼저 나누고, 같은 macOS 버전의 설치본과 비교합니다.
 
 인텔 맥과 Apple 실리콘 맥은 AuxKC가 기록되는 곳이 달라서 [2], Apple 실리콘에서 쓰는 해석(LocalPolicy, 1TR 조작)을 인텔 맥에 그대로 옮기지 않습니다. 조사 전에 하드웨어 종류를 먼저 확인합니다([컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../system-account/computer-name-hardware.md)).
 
@@ -90,7 +90,7 @@ SIP가 꺼져 있으면 kext 서명을 강제하지 않으므로 [1][2], SIP가 
 
 ### 헥스로 한 번
 
-구성 프로파일 안의 시스템 확장 페이로드는 plist 형식이라서, 헥스 편집기로 열면 키 문자열을 그대로 검색할 수 있습니다. 아래는 [3]의 키 표를 바탕으로 만든 XML plist 예시이고, 팀 ID 값 `EXAMPLE123` 은 설명용으로 넣은 값이며 실제 검체에서 나온 값이 아닙니다.
+구성 프로파일 안의 시스템 확장 페이로드는 plist 형식이라서, 헥스 편집기로 열면 키 문자열을 그대로 검색할 수 있습니다. 아래는 [3]의 키 표를 바탕으로 만든 XML plist 예시이고, 팀 ID 값 `EXAMPLE123` 은 설명용으로 넣은 값이며 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 <key>AllowedTeamIdentifiers</key>
@@ -109,10 +109,10 @@ ForensicArtifacts 정의 파일 [4]은 공개 아티팩트 정의 모음이라�
 
 1. 하드웨어 종류(인텔·Apple 실리콘)와 macOS 버전을 확인합니다.
 2. 두 kext 폴더의 항목마다 서명·팀 ID·파일 시스템 시각을 적고, Apple 것이 아닌 항목을 따로 표시합니다.
-3. 살아 있는 시스템이라면 `kextstat` 으로 적재 목록을 저장해 폴더 목록과 맞춥니다 [4].
+3. 실행 중인 시스템이라면 `kextstat` 으로 적재 목록을 저장해 폴더 목록과 맞춥니다 [4].
 4. 설치된 구성 프로파일에서 `com.apple.system-extension-policy` 페이로드를 찾아 허용된 팀 ID·번들 ID·종류와 `AllowUserOverrides` 값을 적습니다. 프로파일을 꺼내는 법은 [구성 프로파일](configuration-profiles.md)에 있습니다.
 
-살아 있는 시스템에서 명령을 칠 때의 원칙은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
+실행 중인 시스템에서 명령을 칠 때의 원칙은 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
 
 ## 교차 검증
 
@@ -125,7 +125,7 @@ ForensicArtifacts 정의 파일 [4]은 공개 아티팩트 정의 모음이라�
 | [설치한 앱과 영수증 (Applications·Receipts)](../system-account/installed-apps-receipts.md) | kext나 시스템 확장을 함께 설치한 앱 |
 | [보안 도구 기록 (XProtect)](../logs/xprotect.md) | 같은 시기에 보안 도구가 남긴 기록 |
 
-지속성 위치를 한꺼번에 훑는 순서는 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에, 권한을 높인 흔적을 보는 순서는 [권한 상승과 TCC 우회 흔적 (Privilege·TCC Bypass)](../../04-scenarios/incident/privilege-tcc-bypass.md)에 있습니다.
+지속성 위치를 한꺼번에 살펴보는 순서는 [악성 코드 지속성 찾기 (Persistence)](../../04-scenarios/incident/persistence.md)에, 권한을 높인 흔적을 보는 순서는 [권한 상승과 TCC 우회 흔적 (Privilege·TCC Bypass)](../../04-scenarios/incident/privilege-tcc-bypass.md)에 있습니다.
 
 ## 실습
 

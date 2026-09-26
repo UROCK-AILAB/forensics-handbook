@@ -53,16 +53,16 @@ InstallHistory.plist 의 항목마다 `contentType`, `date`, `displayName`, `dis
 
 loginwindow.plist 에서는 `autoLoginUser`, `GuestEnabled`, `lastUserName`, `lastUser`, `lastLoginPanic`, `AccountInfo/FirstLogins`, `AccountInfo/MaximumUsers`, `AccountInfo/OnConsole` 을 읽고, `lastLoginPanic` 은 맥 절대 시각에서 변환합니다 [4]. 사건 당시 쓰던 계정이 `AccountInfo/FirstLogins` 나 마지막 사용자에 보이지 않으면 계정 구성이 바뀌었을 가능성을 봅니다.
 
-Preboot 볼륨의 `BuildManifest.plist` 에서 `BuildIdentities[0]/Manifest` 안에 `x86,SystemVolume` 키가 있으면 인텔 맥이고, 없으면 `RestoreRamDisk` 의 `Info/Path` 값에 `arm64` 가 들어 있는지로 Apple silicon 인지를 가립니다 [4]. 이 결과는 지금 확보본이 어떤 기종에서 나왔는지 확인해 모든 콘텐츠 및 설정 지우기가 가능한 기종이었는지 가늠할 때 씁니다.
+Preboot 볼륨의 `BuildManifest.plist` 에서 `BuildIdentities[0]/Manifest` 안에 `x86,SystemVolume` 키가 있으면 인텔 맥이고, 없으면 `RestoreRamDisk` 의 `Info/Path` 값에 `arm64` 가 들어 있는지로 Apple silicon 인지를 판별합니다 [4]. 이 결과는 지금 확보본이 어떤 기종에서 나왔는지 확인해 모든 콘텐츠 및 설정 지우기가 가능한 기종이었는지 판단할 때 씁니다.
 
 ## 분석 흐름
 
 1. 기종과 macOS 버전을 확인해 모든 콘텐츠 및 설정 지우기가 가능했던 맥인지 정합니다.
 2. 사건 당시 쓰던 사용자 계정과 홈 폴더가 남아 있는지 확인합니다. 계정과 데이터가 그대로 있으면 재설치만 했거나 초기화하지 않았을 가능성이 크고, 계정이 모두 새로 만들어진 모습이면 초기화 가능성을 계속 따라갑니다.
 3. InstallHistory.plist 에서 macOS 설치 항목의 날짜와 버전을 차례로 읽고, 사건 시점 전후에 macOS 설치 항목이 있는지 봅니다. 초기화 뒤에 이 파일이 새로 시작되는지, 이전 기록이 남는지는 공개된 자료가 없어서, 기록이 짧다는 사실만으로 초기화를 단정하지 않습니다.
-4. 지금 macOS 버전을 설치 기록의 마지막 macOS 항목과 견주고, 복구 시동 방식별 설치 버전 표와 어긋나지 않는지 봅니다.
-5. APFS 볼륨 시각을 읽어 설치 기록의 시각과 견줍니다. 볼륨마다 생성 시각 (Created Time)과 갱신 시각 (Updated Time)이 있습니다 [4]. 볼륨 생성 시각이 지우기나 재설치 시점을 가리킨다는 해석이 있지만, 지우기나 재설치 때 이 값이 새로 정해지는지는 공개된 자료가 없어 보조 근거로만 씁니다.
-6. utmpx 의 BOOT_TIME(2)·SHUTDOWN_TIME(11) 레코드로 부팅·종료 시각을 보고 [5], 설치 기록 시각과 이어지는지 확인합니다. 초기화 뒤에도 이 레코드가 남는지는 검체에서 확인합니다.
+4. 지금 macOS 버전을 설치 기록의 마지막 macOS 항목과 비교하고, 복구 시동 방식별 설치 버전 표와 어긋나지 않는지 봅니다.
+5. APFS 볼륨 시각을 읽어 설치 기록의 시각과 비교합니다. 볼륨마다 생성 시각 (Created Time)과 갱신 시각 (Updated Time)이 있습니다 [4]. 볼륨 생성 시각이 지우기나 재설치 시점을 가리킨다는 해석이 있지만, 지우기나 재설치 때 이 값이 새로 정해지는지는 알려져 있지 않아 보조 근거로만 씁니다.
+6. utmpx 의 BOOT_TIME(2)·SHUTDOWN_TIME(11) 레코드로 부팅·종료 시각을 보고 [5], 설치 기록 시각과 이어지는지 확인합니다. 초기화 뒤에도 이 레코드가 남는지는 실제 데이터로 확인합니다.
 7. 사용자 데이터가 남아 있는 경우에는 데이터가 남은 범위를, 사라진 경우에는 [타임 머신 (Time Machine)](../../../02-artifacts/filesystem/time-machine/index.md)이나 아이클라우드처럼 맥 밖에 남은 사본을 찾아 확인합니다.
 
 ## 흔한 오판
@@ -71,7 +71,7 @@ Preboot 볼륨의 `BuildManifest.plist` 에서 `BuildIdentities[0]/Manifest` 안
 
 반대로 모든 콘텐츠 및 설정 지우기를 거친 맥이라면 macOS 가 그대로 남아 있어서 [1] 시스템 파일만 보면 초기화 흔적이 드러나지 않을 수 있습니다. 설치 기록에 새 macOS 설치 항목이 없다고 해서 지우지 않았다고 보지 말고, 사용자 계정과 데이터가 남은 모습을 함께 봅니다.
 
-초기화 흔적을 찾았을 때 그 시각을 곧바로 사건과 잇는 것도 조심합니다. 기기를 팔거나 넘기려고 초기화하는 경우도 있어서, 초기화 시각이 사건 시점과 어떤 순서에 있는지와 다른 기록이 무엇을 말하는지를 함께 적습니다.
+초기화 흔적을 찾았을 때 그 시각을 곧바로 사건과 잇는 것도 조심합니다. 기기를 팔거나 넘기려고 초기화하는 경우도 있어서, 초기화 시각이 사건 시점과 어떤 순서에 있는지와 다른 기록에 무엇이 나와 있는지를 함께 적습니다.
 
 ## 보고서 문장 예
 

@@ -20,11 +20,11 @@ nav_order: 880
 |---|---|---|
 | `group.com.facebook.Messenger` | `lightspeed-userDatabases/*.db` | 메신저 앱의 대화함 DB [1] |
 | `group.com.facebook.Facebook` | `cask/<계정 ID>/FBMessagingMailboxCaskStore/<n>/fb-msys-<계정 ID>.db` | 페이스북 앱 쪽 대화함 사본 [1] |
-| 검체에서 확인 | `lightspeed-TAMStorage/media_bank/AdvancedCrypto/*/persistent/*.jpg` | 종단간 암호화 대화의 첨부 [1] |
+| 실제 기기에서 확인 | `lightspeed-TAMStorage/media_bank/AdvancedCrypto/*/persistent/*.jpg` | 종단간 암호화 대화의 첨부 [1] |
 
 iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있었고, 그중 2개는 메신저 앱 자체가 없었습니다 [1]. 메신저 앱이 설치돼 있지 않다고 해서 메신저 대화가 기기에 없다고 판단하지 않습니다.
 
-로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉩니다. 메신저 앱의 번들 ID 와 백업 도메인 이름, 두 앱 그룹이 백업에 들어가는지는 공개 자료가 없어 검체에서 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)).
+로컬 백업에서는 앱 그룹 공유 폴더가 `AppDomainGroup-` 으로 시작하는 도메인으로 따로 나뉩니다. 메신저 앱의 번들 ID 와 백업 도메인 이름, 두 앱 그룹이 백업에 들어가는지는 실제 백업에서 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md)).
 
 | 항목 | 확인된 범위 |
 |---|---|
@@ -37,7 +37,7 @@ iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있�
 
 대화함 DB 의 주요 표와 뷰는 다음과 같습니다 [1].
 
-| 표·뷰 | 주요 칸과 쓰임 |
+| 표·뷰 | 주요 열과 쓰임 |
 |---|---|
 | `thread_messages`(뷰) | `timestamp_ms` |
 | `threads` | `last_activity_timestamp_ms` |
@@ -54,7 +54,7 @@ iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있�
 | `client_attachment_store_keys` | `persisted_path` |
 | `mi_act_mapping_table` | — |
 
-"—" 는 칸과 쓰임을 설명한 공개 자료가 없는 표입니다.
+"—" 는 열과 쓰임을 설명한 공개 자료가 없는 표입니다.
 
 `client_messages` 의 행은 `client_threads.transport_key` 가 `AdvancedCrypto` 인 종단간 암호화 대화였고, 시험 표본에서는 이 표의 본문이 평문으로 저장돼 있었습니다 [1]. 저장 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 를 봅니다.
 
@@ -72,13 +72,13 @@ iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있�
 
 ## 시각 해석
 
-`timestamp_ms` 처럼 `_ms` 로 끝나는 칸은 Unix 밀리초이고 UTC 기준입니다 [1]. `threads.last_activity_timestamp_ms` 는 칸 이름대로라면 대화의 마지막 활동 시각이라서, 메시지 하나의 시각은 메시지 쪽 칸에서 읽습니다 [1].
+`timestamp_ms` 처럼 `_ms` 로 끝나는 열은 Unix 밀리초이고 UTC 기준입니다 [1]. `threads.last_activity_timestamp_ms` 는 열 이름대로라면 대화의 마지막 활동 시각이라서, 메시지 하나의 시각은 메시지 쪽 열에서 읽습니다 [1].
 
 `client_messages.display_ts_ms` 에 시각이 없으면 64비트 정수의 최솟값(또는 그보다 1 큰 값) 같은 표시값이 들어가고, 실제 시각이 아닙니다 [1]. 이 값을 그대로 변환하면 터무니없는 날짜가 나오니 걸러 냅니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 
-두 사본에 같은 대화가 있어도 대화 키(`thread_pk`)는 DB 마다 따로 매겨져 값이 다릅니다 [1]. 두 DB 의 메시지를 합칠 때 `thread_pk` 로 중복을 가리면 같은 대화가 두 번 세어지므로, 시각과 본문, 상대로 맞춰 봅니다.
+두 사본에 같은 대화가 있어도 대화 키(`thread_pk`)는 DB 마다 따로 매겨져 값이 다릅니다 [1]. 두 DB 의 메시지를 합칠 때 `thread_pk` 로 중복을 가려내면 같은 대화가 두 번 세어지므로, 시각과 본문, 상대로 맞춰 봅니다.
 
 `secure_messages` 표가 있어도 시험 표본에서는 행이 없었고 값도 암호화돼 있어서 [1], 이 표가 비었다고 비밀 대화를 쓰지 않았다고 판단할 근거는 되지 않습니다.
 
@@ -86,14 +86,14 @@ iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있�
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 아래는 명세로 만든 예시이고 실제 검체에서 나온 값이 아닙니다. SQLite 레코드에서 8바이트 정수는 빅엔디언으로 저장되므로, `display_ts_ms` 에 64비트 최솟값이나 그보다 1 큰 값이 들어 있으면 다음 바이트로 보입니다.
+**헥스로 한 번.** 아래는 명세로 만든 예시이고 실제 기기에서 나온 값이 아닙니다. SQLite 레코드에서 8바이트 정수는 빅엔디언으로 저장되므로, `display_ts_ms` 에 64비트 최솟값이나 그보다 1 큰 값이 들어 있으면 다음 바이트로 보입니다.
 
 ```
 80 00 00 00 00 00 00 00   → -9,223,372,036,854,775,808
 80 00 00 00 00 00 00 01   → -9,223,372,036,854,775,807
 ```
 
-시각 칸에서 이 두 값이 보이면 실제 시각이 아닌 표시값으로 보고 걸러 냅니다.
+시각 열에서 이 두 값이 보이면 실제 시각이 아닌 표시값으로 보고 걸러 냅니다.
 
 **공개 도구로 한 번.** iLEAPP 의 메신저 분석기로 두 사본을 함께 읽어 보고서를 만들고 [1], SQLite 뷰어로 종단간 암호화 메시지를 직접 확인합니다.
 
@@ -119,7 +119,7 @@ ORDER BY m.display_ts_ms;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등) 가운데 메신저나 페이스북 앱이 설치된 iOS 전체 파일 시스템 이미지를 골라 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등) 가운데 메신저나 페이스북 앱이 설치된 iOS 전체 파일 시스템 이미지를 골라 풀어 봅니다.
 
 1. 두 앱 그룹 가운데 어느 쪽에 대화함 DB 가 있습니까? 둘 다 있다면 각각의 경로를 적어 보십시오.
 2. 두 사본에 같은 대화가 있다면, 각 DB 의 `thread_pk` 값을 비교해 보십시오.

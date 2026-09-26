@@ -8,13 +8,13 @@ nav_order: 1150
 
 ## 한 줄 요약
 
-빅스비는 삼성 기기의 음성 비서이고, 기기 안에 어떤 파일을 남기는지는 공개 포렌식 자료로 확인되지 않았지만, 설정 값의 키 이름과 삼성의 개인정보 처리방침으로 어떤 자료가 기기와 삼성 계정 쪽에 쌓일 수 있는지를 가늠할 수 있습니다.
+빅스비는 삼성 기기의 음성 비서이고, 기기 안에 어떤 파일을 남기는지는 공개 포렌식 자료로 확인되지 않았지만, 설정 값의 키 이름과 삼성의 개인정보 처리방침으로 어떤 자료가 기기와 삼성 계정 쪽에 쌓일 수 있는지를 추정할 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 빅스비는 음성이나 터치로 받은 명령을 처리하려고 명령 내용과 기기 정보를 모읍니다. 모으는 자료는 아래와 같습니다[1].
 
-| 갈래 | 항목 |
+| 분류 | 항목 |
 |---|---|
 | 명령 | 음성 명령(질문·요청·지시), 터치 입력과 그 밖의 입력, 음성 호출(wake-up) 데이터와 녹음 |
 | 기기 정보 | 하드웨어 모델, IMEI 같은 고유 식별자, MAC 주소, IP 주소, OS 버전 |
@@ -55,7 +55,7 @@ One UI 판에 따른 빅스비의 차이를 밝힌 공식 자료는 없습니다
 
 ## 구조
 
-기기 안 파일을 다룬 공개 자료가 없어 이 절에서 설명할 구조는 없습니다. 지금 볼 수 있는 흔적은 위 설정 키이고, 저장 형식은 [설정 값](../system-account/settings.md) 과 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 을 봅니다.
+기기 안 파일의 구조를 다룬 공개 자료는 없습니다. 지금 볼 수 있는 흔적은 위 설정 키이고, 저장 형식은 [설정 값](../system-account/settings.md) 과 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 을 봅니다.
 
 ## 증거로서 의미
 
@@ -85,7 +85,7 @@ One UI 판에 따른 빅스비의 차이를 밝힌 공식 자료는 없습니다
 
 ### 헥스로 한 번
 
-헥스로 따라갈 파일을 밝힌 공개 자료는 없습니다. 전체 추출본이 있다면 설치된 앱 목록에서 빅스비 관련 패키지를 찾고, 그 앱 데이터 폴더의 파일마다 첫 바이트를 보고 SQLite 인지, XML 인지, 프로토콜 버퍼인지부터 가립니다. 형식별로 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md), [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
+헥스로 따라갈 파일을 밝힌 공개 자료는 없습니다. 전체 추출본이 있다면 설치된 앱 목록에서 빅스비 관련 패키지를 찾고, 그 앱 데이터 폴더의 파일마다 첫 바이트를 보고 SQLite 인지, XML 인지, 프로토콜 버퍼인지부터 구분합니다. 형식별로 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md), [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -104,11 +104,11 @@ One UI 판에 따른 빅스비의 차이를 밝힌 공식 자료는 없습니다
 | [계정](../system-account/accounts/index.md) | 기기에 로그인한 삼성 계정. 처리방침상 빅스비 자료가 이 계정에 연결됨 |
 | [구글 어시스턴트 기록](../google-services/google-assistant.md) | 같은 기기에서 다른 음성 비서를 쓴 흔적 |
 
-`com.samsung.android.privacydashboard` 의 `permission_db` 안 `permissionAccessInformations` 는 약 7일 치를 보관합니다[2]. 빅스비가 마이크를 쓴 기록이 여기에 남는지는 검체에서 확인해야 하지만, 음성 명령 시각을 좁힐 후보가 됩니다.
+`com.samsung.android.privacydashboard` 의 `permission_db` 안 `permissionAccessInformations` 는 약 7일 치를 보관합니다[2]. 빅스비가 마이크를 쓴 기록이 여기에 남는지는 실제 기기에서 확인해야 하지만, 음성 명령 시각을 좁힐 후보가 됩니다.
 
 ## 실습
 
-공개 검체 가운데 삼성 기기 이미지를 골라 아래 질문을 풀어 봅니다.
+공개된 시험 이미지 가운데 삼성 기기 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 설정 값에서 `bixby` 가 들어간 키는 몇 개이고, 위 목록에 없는 키가 있습니까?
 2. `voice_interaction_service` 의 값은 무엇이고, 그 값에 나오는 패키지가 설치된 앱 목록에 있습니까?

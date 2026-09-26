@@ -6,16 +6,16 @@ nav_order: 60
 
 # 다단계 인증과 조건부 접근 (MFA·Conditional Access)
 
-다단계 인증 기록은 한 로그인이 MFA 를 요구받았는지, 어떤 방법으로 통과하거나 실패했는지, 이미 받은 클레임으로 넘어갔는지를 가려 주고, 조건부 접근 기록은 그 로그인에 어떤 정책이 평가됐고 결과가 무엇이었는지를 알려 줍니다. 인증 방법을 새로 등록하거나 정책을 바꾼 기록은 침해 뒤 접근을 이어 가려는 흔적일 수 있어서 따로 찾아봅니다.
+다단계 인증 기록은 한 로그인이 MFA 를 요구받았는지, 어떤 방법으로 통과하거나 실패했는지, 이미 받은 클레임으로 넘어갔는지를 구분해 주고, 조건부 접근 기록은 그 로그인에 어떤 정책이 평가됐고 결과가 무엇이었는지를 알려 줍니다. 인증 방법을 새로 등록하거나 정책을 바꾼 기록은 침해 뒤 접근을 이어 가려는 흔적일 수 있어서 따로 찾아봅니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-다단계 인증 (multifactor authentication, MFA) 은 아는 것(비밀번호), 가진 것(휴대폰·하드웨어 키), 몸의 특징(지문·얼굴) 가운데 둘 이상으로 신원을 확인합니다[1]. 조건부 접근 (Conditional Access) 은 사용자·앱·위치·기기·위험도 같은 조건에 따라 MFA 를 요구하거나 접근을 막는 정책입니다[1][4]. 이 쪽의 흔적은 서비스마다 세 곳에 나뉘어 남습니다.
+다단계 인증 (multifactor authentication, MFA) 은 아는 것(비밀번호), 가진 것(휴대폰·하드웨어 키), 몸의 특징(지문·얼굴) 가운데 둘 이상으로 신원을 확인합니다[1]. 조건부 접근 (Conditional Access) 은 사용자·앱·위치·기기·위험도 같은 조건에 따라 MFA 를 요구하거나 접근을 막는 정책입니다[1][4]. 이 흔적은 서비스마다 세 곳에 나뉘어 남습니다.
 
 | 서비스 | 로그인 때 MFA·정책 결과 | 인증 방법 등록·변경 | 정책 변경 |
 |---|---|---|---|
 | Microsoft Entra ID | [로그인 로그](../../02-artifacts/m365/entra-logs/index.md)의 `authenticationDetails`·`authenticationRequirement`·`conditionalAccessStatus` | Entra 감사 로그(서비스 Authentication Methods·Core Directory) | Entra 감사 로그(서비스 Conditional Access) |
-| AWS | [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md) `ConsoleLogin` 의 `additionalEventData.MFAUsed` | CloudTrail `EnableMFADevice` 등 | IAM 정책 조건(쪽 [IAM](../../02-artifacts/aws/iam.md)) |
+| AWS | [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md) `ConsoleLogin` 의 `additionalEventData.MFAUsed` | CloudTrail `EnableMFADevice` 등 | IAM 정책 조건([IAM](../../02-artifacts/aws/iam.md) 페이지) |
 | Google Workspace | [로그인 기록](../../02-artifacts/google-workspace/login-audit.md)의 `login_challenge_method` | 로그인 기록 `2sv_enroll`·`passkey_enrolled`, 관리 감사의 사용자 설정 | [관리 콘솔 감사 로그](../../02-artifacts/google-workspace/admin-audit.md)의 보안 설정 |
 | Okta | [시스템 로그](../../02-artifacts/saas/okta.md) `user.authentication.auth_via_mfa` | `user.mfa.factor.*` | `policy.lifecycle.*`·`policy.rule.*` |
 | Slack | 해당 없음 | 해당 없음 | [감사 로그](../../02-artifacts/saas/slack.md) `pref.two_factor_auth_changed` |
@@ -66,7 +66,7 @@ Entra 에서 MFA 를 켜는 방법은 보안 기본값 (security defaults), 조�
 
 보고 전용 (report-only) 정책은 평가만 하고 강제하지 않으며, 결과는 Report-only: Success, Report-only: Failure, Report-only: User action required, Report-only: Not applied 가운데 하나로 로그인 상세의 Conditional Access 탭과 Report-only 탭에 남습니다[10]. "User Actions" 범위 정책은 보고 전용으로 평가할 수 없습니다[10]. 정책 객체의 상태 값은 `enabled`, `disabled`, `enabledForReportingButNotEnforced` 입니다[25].
 
-아래는 비밀번호 뒤 Authenticator 로 MFA 를 한 로그인을 Graph 스키마로 만든 예시입니다. 계정·IP·시각은 지어낸 값이고, 문자열 값의 대소문자는 검체에서 확인합니다.
+아래는 비밀번호 뒤 Authenticator 로 MFA 를 한 로그인을 Graph 스키마로 만든 예시입니다. 계정·IP·시각은 지어낸 값이고, 문자열 값의 대소문자는 실제 로그에서 확인합니다.
 
 ```json
 {
@@ -108,7 +108,7 @@ Entra 에서 MFA 를 켜는 방법은 보안 기본값 (security defaults), 조�
 
 ### AWS
 
-콘솔 로그인 레코드(`eventName` 이 `ConsoleLogin`)의 `additionalEventData` 에 `MFAUsed`(`Yes`·`No`)와 MFA 를 썼을 때의 `MFAIdentifier`(MFA 장치 ARN)가 있고, `userIdentity.sessionContext.attributes.mfaAuthenticated` 에도 MFA 여부가 남습니다[12]. 두 값은 IAM 사용자나 루트 사용자가 MFA 를 쓴 요청에만 참이 되고, 페더레이션 사용자의 요청이면 `mfaAuthenticated` 는 `false`, `MFAUsed` 는 `No` 입니다[12]. MFA 장치를 붙이면 `EnableMFADevice` 이벤트가 남고 `requestParameters.serialNumber` 에 장치 ARN 이 들어갑니다[12]. MFA 를 요구하는 역할을 넘겨받을 때는 `AssumeRole` 에 MFA 장치를 가리키는 `SerialNumber` 와 장치가 만든 TOTP 인 `TokenCode` 를 넘깁니다[13]. IAM 사용자·역할별 MFA 기록은 [IAM](../../02-artifacts/aws/iam.md) 쪽에서 다룹니다.
+콘솔 로그인 레코드(`eventName` 이 `ConsoleLogin`)의 `additionalEventData` 에 `MFAUsed`(`Yes`·`No`)와 MFA 를 썼을 때의 `MFAIdentifier`(MFA 장치 ARN)가 있고, `userIdentity.sessionContext.attributes.mfaAuthenticated` 에도 MFA 여부가 남습니다[12]. 두 값은 IAM 사용자나 루트 사용자가 MFA 를 쓴 요청에만 참이 되고, 페더레이션 사용자의 요청이면 `mfaAuthenticated` 는 `false`, `MFAUsed` 는 `No` 입니다[12]. MFA 장치를 붙이면 `EnableMFADevice` 이벤트가 남고 `requestParameters.serialNumber` 에 장치 ARN 이 들어갑니다[12]. MFA 를 요구하는 역할을 넘겨받을 때는 `AssumeRole` 에 MFA 장치를 가리키는 `SerialNumber` 와 장치가 만든 TOTP 인 `TokenCode` 를 넘깁니다[13]. IAM 사용자·역할별 MFA 기록은 [IAM](../../02-artifacts/aws/iam.md) 페이지에서 다룹니다.
 
 ### Google Workspace
 
@@ -183,7 +183,7 @@ MFA 를 끄거나 방법을 바꾸는 조작은 그 자체가 감사 로그에 �
 
 **`AuthenticationRequirement` 의 정의가 문서마다 다릅니다.** Graph 문서는 로그인이 도달한 단계라고 설명하고[5], Log Analytics 표 문서는 로그인에 필요했던 가장 높은 단계라고 설명합니다[7]. 이전 MFA 클레임으로 요구가 이미 충족돼 리소스가 MFA 를 다시 요구하지 않은 경우처럼 실제로 한 인증과 값이 다를 수 있습니다[9]. 차이는 [토큰과 세션](tokens-sessions.md)에서 자세히 다룹니다.
 
-**탐지 규칙의 표기가 원문과 다릅니다.** SigmaHQ 규칙은 조건부 접근 작업 이름을 "Add conditional access policy" 처럼 소문자로 적고[21] Entra 문서는 "Add Conditional Access policy" 로 적습니다[3]. 조건부 접근 정책을 바꿀 수 있는 그룹에 구성원을 넣은 기록을 찾는 규칙은 작업 이름을 "Add member from group" 으로 적고[21], Entra 문서의 작업 이름은 "Add member to group" 입니다[3]. AWS 규칙은 `MFAUsed` 를 `'NO'` 로 찾지만[21] 레코드 값은 `No` 입니다[12]. 규칙을 그대로 쓰면 대소문자를 구분하는 도구에서 놓칠 수 있으니 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에서처럼 값을 원문과 맞춥니다.
+**탐지 규칙의 표기가 원문과 다릅니다.** SigmaHQ 규칙은 조건부 접근 작업 이름을 "Add conditional access policy" 처럼 소문자로 적고[21] Entra 문서는 "Add Conditional Access policy" 로 적습니다[3]. 조건부 접근 정책을 바꿀 수 있는 그룹에 구성원을 넣은 기록을 찾는 규칙은 작업 이름을 "Add member from group" 으로 적고[21], Entra 문서의 작업 이름은 "Add member to group" 입니다[3]. AWS 규칙은 `MFAUsed` 를 `'NO'` 로 찾지만[21] 레코드 값은 `No` 입니다[12]. 규칙을 그대로 쓰면 대소문자를 구분하는 도구에서 놓칠 수 있으니 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에서처럼 값을 원문과 맞춥니다.
 
 **예전 기능과 새 기능의 기록이 섞입니다.** Entra 의 옛 Fraud alert·Block/unblock·Notifications 기능은 2025년 3월 1일에 없어지고 Report suspicious activity 로 바뀌었습니다[19]. 그 전 기록은 감사 작업 "Fraud reported - user is blocked for MFA" 로, 그 뒤 기록은 위험 탐지 `userReportedSuspiciousActivity` 로 남을 수 있습니다[3][19]. Okta 의 `auth_via_mfa` 도 Classic 과 Identity Engine 에서 기록 범위가 다릅니다[17].
 

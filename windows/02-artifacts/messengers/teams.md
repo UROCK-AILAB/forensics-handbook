@@ -71,7 +71,7 @@ IndexedDB 폴더 이름은 `IndexedDB\https_teams.microsoft.com_0.indexeddb.leve
 forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb`)을 모두 읽습니다. 기록 대부분은 `.ldb` 에 있습니다[1].
 
 - LevelDB 의 파일 구성, 지운 기록이 남는 방식, 압축된 `.ldb` 를 푸는 법은 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
-- IndexedDB 안 객체 저장소 이름과 메시지 레코드의 칸 이름은 새 Teams 기준 공개 자료가 없어 검체에서 확인합니다.
+- IndexedDB 안 객체 저장소 이름과 메시지 레코드의 필드 이름은 새 Teams 기준으로 실제 데이터에서 확인해야 합니다.
 - forensicsim 설명서에는 지운 기록을 되살리는 기능이 나와 있지 않습니다[1].
 
 ### 앱 폴더의 다른 파일
@@ -84,7 +84,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | `Logs` | 앱 로그. 아래 "로그" 참고 |
 | `app_settings.json` | 앱 설정과 실행 정보 |
 | `tfw` | 원격 측정 SQLite DB |
-| `UserAvatarIcons` | 이름으로 보아 사용자 사진 캐시입니다 |
+| `UserAvatarIcons` | 이름으로 보면 사용자 사진 캐시입니다 |
 | `cmd_settings.json`, `ecs_request_param.json`, `ecs_settings.dat64`, `previous_session_data.json`, `tma_request_param.json`, `uae.json`, `tmp` | 공개 자료 없음 |
 
 `app_settings.json` 에는 아래 키가 있습니다.
@@ -99,7 +99,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | `web_client_version_used` | 웹 클라이언트 버전 |
 | `main_window_bounds` | 창 위치와 크기 |
 
-첫 실행 시각 칸이 0 으로 남는 경우가 있어, 이 칸만으로 첫 실행 시각을 잡지 않습니다. Teams 로 받은 파일은 `default_download_location` 이 가리키는 폴더에서 찾습니다.
+첫 실행 시각 필드가 0 으로 남는 경우가 있어, 이 필드만으로 첫 실행 시각을 잡지 않습니다. Teams 로 받은 파일은 `default_download_location` 이 가리키는 폴더에서 찾습니다.
 
 `tfw` 폴더에는 이름이 base64 로 인코딩된 SQLite 파일들이 있습니다. `-wal`·`-shm` 짝도 있습니다. 이름을 풀면 `telemetry_offline_storage_EMEACOMMERCIAL` 같은 원격 측정 저장소입니다. 첫 16바이트는 `SQLite format 3` 과 0 바이트입니다.
 
@@ -124,7 +124,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | `Launcher_*` | 실행기 로그 |
 | `MSTeamsUpdate_*`, `MSTeamsBackgroundUpdate_*` | 업데이트 로그 |
 | `MSTeamsBackgroundEcs_*`, `MSTeamsNM_SlimCore_*` | 공개 자료 없음 |
-| `SkypeRT`, `skylib`, `mediastack`, `CS_logs`, `sc-tfw` 등 | 이름으로 보아 통화·미디어 쪽 로그입니다 |
+| `SkypeRT`, `skylib`, `mediastack`, `CS_logs`, `sc-tfw` 등 | 이름으로 보면 통화·미디어 쪽 로그입니다 |
 
 로그 한 줄은 아래 모양입니다.
 
@@ -151,7 +151,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 - **전체 대화.** IndexedDB 는 앱이 PC 에 저장한 만큼만 담습니다. 여기 없다고 대화가 없었다고 말할 수 없습니다.
 - **메시지를 읽었는지.** 저장된 것은 앱이 받은 데이터입니다. 사용자가 화면에서 읽었다는 뜻은 아닙니다.
 - **누가 입력했는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
-- **첫 실행 시각.** `app_settings.json` 의 첫 실행 칸은 0 으로 남아 있을 수 있습니다.
+- **첫 실행 시각.** `app_settings.json` 의 첫 실행 필드는 0 으로 남아 있을 수 있습니다.
 - **원격 측정 DB 의 사용자 행위.** `tfw` 의 DB 는 원격 측정 저장소입니다. 대화 기록으로 보지 않습니다.
 
 보고서에는 "피의자가 이 메시지를 읽었다" 가 아니라 이렇게 씁니다. "A 계정의 새 Teams `WV2Profile_tfw` 프로필 IndexedDB 에서 이 메시지 레코드를 꺼냈다. 레코드는 앱이 이 PC 에 저장한 데이터이다."
@@ -162,8 +162,8 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 |---|---|---|
 | 로그 줄 시각 | 로그 줄을 쓸 때 | `+09:00` 이 붙지만 실제 값은 UTC 입니다 |
 | 로그 파일 이름의 날짜·시각 | 새 로그 파일을 만들 때 | 현지 시각(KST)입니다 |
-| `app_settings.json` 의 실행 시각 칸 | 공개 자료 없음 | 0 으로 남은 경우가 있습니다 |
-| IndexedDB 레코드 안의 시각 | 공개 자료 없음 | LevelDB 자체의 기록에는 시각 칸이 없습니다. [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 참고 |
+| `app_settings.json` 의 실행 시각 필드 | 공개 자료 없음 | 0 으로 남은 경우가 있습니다 |
+| IndexedDB 레코드 안의 시각 | 공개 자료 없음 | LevelDB 자체의 기록에는 시각 필드가 없습니다. [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 참고 |
 | 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](../filesystem/mft.md) 참고 |
 
 ### 로그 줄 시각은 UTC 입니다
@@ -189,7 +189,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 
 ### 헥스로 한 번
 
-아래는 base64 규칙과 SQLite 명세로 만든 예시입니다. 실제 검체에서 나온 파일 이름이 아닙니다.
+아래는 base64 규칙과 SQLite 명세로 만든 예시입니다. 실제 데이터에서 나온 파일 이름이 아닙니다.
 
 1. `tfw` 폴더의 파일 이름을 base64 로 풉니다. 예를 들어 이름이 아래와 같다면
 

@@ -10,7 +10,7 @@ PAM 설정 줄을 바꾸거나 모듈 파일(`.so`)을 바꿔치기하면 로그
 
 ## 무엇을 기록하나 · 왜 생기나
 
-PAM (Pluggable Authentication Modules) 은 login·sshd·sudo 같은 프로그램이 인증과 세션 처리를 설정 파일에 적힌 모듈에 맡기는 구조입니다. 설정 파일의 한 줄 모양, 공통 파일, 로그 줄은 [인증 모듈 (PAM)](../../01-foundations/users-auth/pam.md)에서 다루고, 이 쪽은 그 구조가 지속성 수단으로 바뀌었을 때 남는 흔적만 다룹니다.
+PAM (Pluggable Authentication Modules) 은 login·sshd·sudo 같은 프로그램이 인증과 세션 처리를 설정 파일에 적힌 모듈에 맡기는 구조입니다. 설정 파일의 한 줄 모양, 공통 파일, 로그 줄은 [인증 모듈 (PAM)](../../01-foundations/users-auth/pam.md)에서 다루고, 이 페이지는 그 구조가 지속성 수단으로 바뀌었을 때 남는 흔적만 다룹니다.
 
 libpam 은 PAM 처리를 시작할 때마다(핸들마다) 설정 파일을 읽고, 줄에 적힌 모듈 파일을 불러와 그 안의 `pam_sm_authenticate`, `pam_sm_open_session` 같은 함수를 부릅니다[2]. 그래서 설정 줄 하나나 모듈 파일 하나만 바꿔도 그 서비스로 로그인할 때마다 바뀐 코드가 돌고, 따로 실행 흔적을 남기는 데몬이 없습니다. 변조는 크게 세 모양으로 나뉩니다.
 
@@ -28,9 +28,9 @@ libpam 은 PAM 처리를 시작할 때마다(핸들마다) 설정 파일을 읽�
 |---|---|---|
 | 모듈 폴더 | `/usr/lib/멀티아키텍처이름/security/`(amd64 는 `x86_64-linux-gnu`)[5] | `/usr/lib64/security/`(`%{_libdir}/security`)[6] |
 | 기본 모듈의 소속 패키지 | libpam-modules(`usr/lib/*/security/*.so`)[5] | pam(파일 목록에 모듈을 하나씩 적음)[6] |
-| 모듈 폴더의 정상 심볼릭 링크 | 검체에서 확인 | `pam_unix_auth.so`·`pam_unix_acct.so`·`pam_unix_passwd.so`·`pam_unix_session.so` → `pam_unix.so`[6] |
+| 모듈 폴더의 정상 심볼릭 링크 | 실제 시스템에서 확인 | `pam_unix_auth.so`·`pam_unix_acct.so`·`pam_unix_passwd.so`·`pam_unix_session.so` → `pam_unix.so`[6] |
 | 공통 파일을 끌어오는 줄 | `@include common-auth` 모양[7] | `auth substack password-auth`, `account include password-auth` 모양[8] |
-| sshd 의 사용자 환경 파일 | `pam_env.so user_readenv=1 envfile=/etc/default/locale` 줄이 있어 `$HOME/.pam_environment` 를 읽음[4][7] | sshd 파일에 pam_env 줄이 없음. 끌어오는 공통 파일에 있는지 검체에서 확인[8] |
+| sshd 의 사용자 환경 파일 | `pam_env.so user_readenv=1 envfile=/etc/default/locale` 줄이 있어 `$HOME/.pam_environment` 를 읽음[4][7] | sshd 파일에 pam_env 줄이 없음. 끌어오는 공통 파일에 있는지 실제 시스템에서 확인[8] |
 
 pam 패키지 밖의 프로그램도 모듈을 싣습니다. 예를 들어 gnome-keyring 은 `pam_sm_authenticate`·`pam_sm_open_session` 이 들어 있는 자체 모듈을 만듭니다[13]. 그래서 모듈 폴더의 파일이 pam 패키지 소속이 아니라는 사실만으로는 이상하다고 할 수 없고, 설치된 모든 패키지의 파일 목록과 맞춰 봐야 합니다.
 
@@ -42,7 +42,7 @@ pam_env 는 `/etc/security/pam_env.conf`, `/etc/environment` 와 옵션에 따�
 
 아래 줄 모양이 보이면 그 줄이 배포판 원본에 있던 것인지부터 확인합니다. 줄은 모두 만든 예시입니다.
 
-| 줄 모양(만든 예시) | 눈여겨보는 까닭 |
+| 줄 모양(만든 예시) | 눈여겨보는 이유 |
 |---|---|
 | `auth sufficient pam_permit.so` | pam_permit 은 아무것도 확인하지 않고 늘 `PAM_SUCCESS` 를 돌려줍니다[4]. `sufficient` 는 앞의 required 모듈이 실패하지 않았고 이 모듈이 성공하면 그 자리에서 스택을 성공으로 끝냅니다[1]. auth 스택 앞쪽에 이 조합이 있으면 뒤의 비밀번호 확인까지 가지 않습니다 |
 | `pam_exec.so` 줄에 `expose_authtok` 이나 `log=` 인자가 있음 | pam_exec 은 외부 명령을 실행하고, `expose_authtok` 이 있으면 인증·비밀번호 변경 때 그 명령이 표준 입력으로 비밀번호를 읽습니다. `log=` 파일에는 명령 출력이 덧붙습니다[4] |
@@ -106,13 +106,13 @@ unable to resolve symbol: %s
 - **`-` 줄은 조용합니다.** 모듈을 지우거나 이름을 바꿔도 로그가 남지 않습니다[1][2].
 - **수집 목록에 모듈 폴더가 없습니다.** ForensicArtifacts 의 `LinuxPamConfigs` 는 `/etc/pam.conf`, `/etc/pam.d`, `/etc/pam.d/common-password`, `/etc/pam.d/*` 만 정의하고[9], UAC 는 `/etc` 와 `/usr/local/etc` 를 모으므로 모듈 폴더와 배포판 기본 설정 폴더(`/usr/lib/pam.d`, `/usr/share/pam.d`)는 들어 있지 않습니다[10]. 모듈 폴더, pam_exec 이 부르는 파일, `log=` 파일, 사용자 홈의 `.pam_environment` 는 따로 모읍니다.
 - **라이브 시스템의 검사 도구를 믿지 않습니다.** `dpkg`, `rpm`, `md5sum` 이 쓰는 라이브러리부터 바뀌었을 수 있으므로 이미지를 분석 PC 에 마운트해 검사합니다.
-- **지운 모듈은 메모리에 남을 수 있습니다.** 모듈을 불러온 프로세스가 살아 있는 동안 `/proc/PID/maps` 에 그 파일 경로가 보이고, 파일이 지워졌으면 경로 뒤에 ` (deleted)` 가 붙습니다[12]. libpam 은 `pam_end` 로 핸들을 닫을 때 불러온 모듈을 `dlclose` 로 내려놓으므로[2] 세션이 끝난 뒤에는 보이지 않을 가능성이 있습니다. 메모리 분석은 [메모리 분석](../../03-techniques/analysis/memory-analysis.md)을 봅니다.
+- **지운 모듈은 메모리에 남을 수 있습니다.** 모듈을 불러온 프로세스가 실행 중인 동안 `/proc/PID/maps` 에 그 파일 경로가 보이고, 파일이 지워졌으면 경로 뒤에 ` (deleted)` 가 붙습니다[12]. libpam 은 `pam_end` 로 핸들을 닫을 때 불러온 모듈을 `dlclose` 로 내려놓으므로[2] 세션이 끝난 뒤에는 보이지 않을 가능성이 있습니다. 메모리 분석은 [메모리 분석](../../03-techniques/analysis/memory-analysis.md)을 봅니다.
 
 ## 직접 분석해 보기
 
 ### 손으로 한 번
 
-검체를 `/mnt/evidence` 에 읽기 전용으로 마운트했다고 둡니다. 먼저 모든 설정 파일에서 모듈 경로를 뽑아, 절대 경로와 눈여겨볼 모듈을 골라냅니다.
+증거 이미지를 `/mnt/evidence` 에 읽기 전용으로 마운트했다고 둡니다. 먼저 모든 설정 파일에서 모듈 경로를 뽑아, 절대 경로와 눈여겨볼 모듈을 골라냅니다.
 
 ```
 $ grep -HnE '^[[:space:]]*-?[a-z]+[[:space:]]' /mnt/evidence/etc/pam.d/* \
@@ -130,7 +130,7 @@ pam_sm_authenticate
 pam_sm_setcred
 ```
 
-위 출력은 ELF 머리 규칙으로 만든 예시입니다. 표준 폴더의 같은 이름 파일과 해시를 견주고, `stat` 으로 mtime·ctime 을 읽어 앞의 시각 표와 맞춥니다.
+위 출력은 ELF 머리 규칙으로 만든 예시입니다. 표준 폴더의 같은 이름 파일과 해시를 비교하고, `stat` 으로 mtime·ctime 을 읽어 앞의 시각 표와 맞춥니다.
 
 ### 공개 도구로 한 번
 
@@ -154,13 +154,13 @@ pam_sm_setcred
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 모음에서 Ubuntu 나 RHEL 계열 서버 이미지를 골라 풀어 봅니다.
+NIST CFReDS 같은 공개 이미지 모음에서 Ubuntu 나 RHEL 계열 서버 이미지를 골라 풀어 봅니다.
 
 1. sshd 가 실제로 도는 auth 스택을 `include` 를 모두 펼쳐 한 목록으로 적으면 모듈이 몇 개이고, 그중 절대 경로로 불리는 모듈이 있는가?
 2. 모듈 폴더의 파일 가운데 어느 패키지에도 속하지 않는 파일이 있는가?
 3. 모듈 파일 가운데 ctime 이 mtime 보다 한참 늦은 파일이 있는가, 그 ctime 은 pam 패키지의 마지막 설치 시각보다 뒤인가?
 4. 감사 로그가 있다면 `USER_AUTH` 레코드의 `grantors` 값은 몇 가지이고, 드물게 나온 값은 언제 처음 나타나는가?
-5. 인증 로그에 `unable to dlopen` 이나 `adding faulty module` 줄이 있는가, 있다면 그 경로의 파일은 지금 검체에 있는가?
+5. 인증 로그에 `unable to dlopen` 이나 `adding faulty module` 줄이 있는가, 있다면 그 경로의 파일은 지금 이미지에 있는가?
 
 ## 참고 문헌
 

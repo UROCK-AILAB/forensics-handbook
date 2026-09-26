@@ -7,7 +7,7 @@ nav_order: 590
 
 # 설정·권한·훅 (Settings·Permissions·Hooks)
 
-Claude Code 의 설정 파일에는 에이전트가 묻지 않고 실행해도 되는 명령(권한 규칙)과 특정 순간에 자동으로 도는 명령(훅)이 적혀 있어서, 사고 조사에서 "에이전트가 무엇을 할 수 있었나" 와 "사람 모르게 무엇이 돌았나" 를 가르는 근거가 됩니다. 같은 폴더의 `backups/` 에는 전역 상태 파일의 사본이 남아서 로그인한 계정과 프로젝트별 사용량까지 알려 줍니다.
+Claude Code 의 설정 파일에는 에이전트가 묻지 않고 실행해도 되는 명령(권한 규칙)과 특정 순간에 자동으로 도는 명령(훅)이 적혀 있어서, 사고 조사에서 "에이전트가 무엇을 할 수 있었나" 와 "사람 모르게 무엇이 돌았나" 를 구분하는 근거가 됩니다. 같은 폴더의 `backups/` 에는 전역 상태 파일의 사본이 남아서 로그인한 계정과 프로젝트별 사용량까지 알려 줍니다.
 
 Claude Code 판이 바뀌면 설정 키가 달라질 수 있습니다.
 
@@ -72,7 +72,7 @@ Claude Code 판이 바뀌면 설정 키가 달라질 수 있습니다.
 
 "Yes, and don't ask again" 으로 영구 허용한 Bash 명령, WebFetch 도메인, WebSearch 는 `.claude/settings.local.json` 의 allow 규칙으로 남습니다[7]. Windows 에서 이 파일이 생기는 폴더는 [Windows](windows.md) 페이지에 있습니다. 파일 편집 허용은 세션이 끝나면 사라지고 파일에 남지 않아서[7], 편집을 허용한 흔적은 설정 파일이 아니라 [세션 기록](transcripts.md)에서 찾습니다.
 
-권한 모드는 `default`(v2.1.200 부터 화면 이름 Manual, 별칭 `manual`), `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions` 가 있고, 시작 모드는 `defaultMode` 키로 정합니다[7]. `bypassPermissions` 는 `.git`, `.claude` 같은 보호 경로에 쓸 때도 묻지 않습니다[7]. 조직은 `permissions.disableBypassPermissionsMode` 와 `permissions.disableAutoMode` 를 `"disable"` 로 두어 이 모드들을 막을 수 있습니다[7]. 세션 기록 줄에는 `permissionMode` 키가 있어서 그 시점의 모드를 볼 수 있지만, 값이 위 이름과 같은지는 검체에서 확인합니다. 데스크톱 앱에서 시작한 Cowork 세션은 메타데이터 파일에도 `permissionMode` 와 `remoteMcpServersConfig` 가 남고[10], 그 파일의 위치는 [Claude](../../chat-services/claude/index.md) 페이지에 있습니다.
+권한 모드는 `default`(v2.1.200 부터 화면 이름 Manual, 별칭 `manual`), `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions` 가 있고, 시작 모드는 `defaultMode` 키로 정합니다[7]. `bypassPermissions` 는 `.git`, `.claude` 같은 보호 경로에 쓸 때도 묻지 않습니다[7]. 조직은 `permissions.disableBypassPermissionsMode` 와 `permissions.disableAutoMode` 를 `"disable"` 로 두어 이 모드들을 막을 수 있습니다[7]. 세션 기록 줄에는 `permissionMode` 키가 있어서 그 시점의 모드를 볼 수 있지만, 값이 위 이름과 같은지는 실제 데이터로 확인합니다. 데스크톱 앱에서 시작한 Cowork 세션은 메타데이터 파일에도 `permissionMode` 와 `remoteMcpServersConfig` 가 남고[10], 그 파일의 위치는 [Claude](../../chat-services/claude/index.md) 페이지에 있습니다.
 
 ### 훅
 
@@ -111,7 +111,7 @@ ccfx 는 `backups/` 에서 이름이 `.claude.json.backup.` 으로 시작하는 
 | `oauthAccount` | `accountUuid`, `emailAddress`, `organizationUuid`, `organizationName`, `organizationType`, `organizationRole`, `organizationRateLimitTier`, `userRateLimitTier` | 보고서의 사용자 신원 절. 등급은 `userRateLimitTier` 가 비어 있으면 `organizationRateLimitTier` 를 씀 |
 | `projects` 아래 프로젝트 경로별 | `lastCost`, `lastTotalInputTokens`, `lastTotalOutputTokens`, `lastTotalCacheCreationInputTokens`, `lastTotalCacheReadInputTokens` | 프로젝트별 비용(달러)과 토큰 수 |
 
-ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModified` 키도 정의하지만 보고서에 쓰지 않습니다[9]. `lastSessionFirstPrompt` 에는 키 이름으로 보아 마지막 세션의 첫 입력이 들어갈 수 있으므로, 검체에서 값이 있는지 직접 확인합니다. `backups/` 의 OAuth 계정 묶음은 신원을 드러냅니다[10].
+ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModified` 키도 정의하지만 보고서에 쓰지 않습니다[9]. `lastSessionFirstPrompt` 에는 키 이름으로 보면 마지막 세션의 첫 입력이 들어갈 수 있으므로, 실제 데이터에서 값이 있는지 직접 확인합니다. `backups/` 의 OAuth 계정 묶음은 신원을 드러냅니다[10].
 
 아래는 키 이름만 실제와 같고 값은 모두 새로 만든 예시입니다.
 
@@ -139,7 +139,7 @@ ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModifi
 
 ### 원격 측정
 
-조직은 `CLAUDE_CODE_ENABLE_TELEMETRY=1` 과 `OTEL_*` 환경 변수로 OpenTelemetry 수집기에 이벤트를 모을 수 있습니다[8]. 이벤트는 `claude_code.user_prompt`, `assistant_response`, `tool_result`, `tool_decision`, `api_request`, `api_error` 이고, 공통 속성으로 `session.id`, `organization.id`, `user.account_uuid`, `user.email`, `terminal.type`, `app.entrypoint` 가 붙습니다[8]. `claude_code.tool_decision` 의 `source` 값은 `config`, `hook`, `user_permanent`, `user_temporary`, `user_abort`, `user_reject` 라서[8], 도구 호출을 설정이 허용했는지 사람이 눌러 허용했는지 가를 수 있습니다.
+조직은 `CLAUDE_CODE_ENABLE_TELEMETRY=1` 과 `OTEL_*` 환경 변수로 OpenTelemetry 수집기에 이벤트를 모을 수 있습니다[8]. 이벤트는 `claude_code.user_prompt`, `assistant_response`, `tool_result`, `tool_decision`, `api_request`, `api_error` 이고, 공통 속성으로 `session.id`, `organization.id`, `user.account_uuid`, `user.email`, `terminal.type`, `app.entrypoint` 가 붙습니다[8]. `claude_code.tool_decision` 의 `source` 값은 `config`, `hook`, `user_permanent`, `user_temporary`, `user_abort`, `user_reject` 라서[8], 도구 호출을 설정이 허용했는지 사람이 눌러 허용했는지 구분할 수 있습니다.
 
 프롬프트, 응답, 도구 인자, 도구 출력은 기본으로 가려지고 `OTEL_LOG_USER_PROMPTS`, `OTEL_LOG_ASSISTANT_RESPONSES`, `OTEL_LOG_TOOL_DETAILS`, `OTEL_LOG_TOOL_CONTENT` 로 켜야 남습니다[8]. 사용량 지표에는 코드·프롬프트·파일 경로가 들어가지 않습니다[8]. 반대로 `DISABLE_TELEMETRY=1`, `DISABLE_ERROR_REPORTING=1`, `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` 을 켜면 원격 측정과 오류 보고, 필수가 아닌 통신이 꺼집니다[3]. WebFetch 는 가져오기 전에 호스트 이름만 `api.anthropic.com` 에 보내 차단 목록을 확인하고, `skipWebFetchPreflight` 로 끕니다[3]. 네트워크 쪽 흔적은 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)과 함께 봅니다.
 
@@ -147,19 +147,19 @@ ccfx 코드는 `projects` 항목의 `lastSessionFirstPrompt`, `lastSessionModifi
 
 **증명하는 것.** 설정 파일은 수집한 시점에 어떤 명령이 허용·거부 목록에 있었고 어떤 훅이 걸려 있었는지 보여 줍니다. `settings.local.json` 의 allow 규칙은 누군가 그 명령을 "다시 묻지 않기" 로 허용했거나 손으로 적어 넣은 흔적이고, 저장소에 커밋된 훅은 git 이력으로 언제 누가 넣었는지까지 따라갈 수 있습니다. `backups/` 사본의 `oauthAccount` 는 사본을 남긴 때에 이 사용자 프로필의 Claude Code 가 어느 계정·조직으로 로그인해 있었는지 보여 주고, `projects` 는 그 계정으로 Claude Code 를 쓴 작업 폴더와 마지막 세션의 비용·토큰 수를 보여 줍니다.
 
-**증명하지 못하는 것.** 설정 파일은 지금 상태만 담아서 사건 당시에도 같았다고 말해 주지 않고, 규칙을 누가 눌러 허용했는지도 알려 주지 않습니다. 훅이 걸려 있었다는 사실이 훅이 돌았다는 뜻은 아니어서, 실행 여부는 세션 기록이나 원격 측정에서 따로 확인합니다. 명령줄 `--settings` 로 넘긴 값과 환경 변수는 파일에 남지 않을 수 있습니다. 로그인 계정이 남았다고 해서 그 계정 주인이 키보드 앞에 있었다는 뜻은 아니고, 누가 입력했는지는 로그인 기록·세션 시각 같은 다른 흔적과 맞춰 봅니다. `lastCost` 같은 값은 마지막 세션 기준이라 그 프로젝트에서 쓴 전체 사용량이 아닙니다.
+**증명하지 못하는 것.** 설정 파일은 지금 상태만 담아서 사건 당시에도 같았는지는 알 수 없고, 규칙을 누가 눌러 허용했는지도 나와 있지 않습니다. 훅이 걸려 있었다는 사실이 훅이 돌았다는 뜻은 아니어서, 실행 여부는 세션 기록이나 원격 측정에서 따로 확인합니다. 명령줄 `--settings` 로 넘긴 값과 환경 변수는 파일에 남지 않을 수 있습니다. 로그인 계정이 남았다고 해서 그 계정 주인이 키보드 앞에 있었다는 뜻은 아니고, 누가 입력했는지는 로그인 기록·세션 시각 같은 다른 흔적과 맞춰 봅니다. `lastCost` 같은 값은 마지막 세션 기준이라 그 프로젝트에서 쓴 전체 사용량이 아닙니다.
 
 ## 시각 해석
 
-사용자 설정 파일의 키에는 시각 값이 없습니다. 설정이 언제 바뀌었는지는 파일 시스템의 마지막 쓰기 시각, `backups/` 의 파일 이름에 붙은 시각, 저장소의 git 커밋 시각, 세션 기록의 `permissionMode` 가 바뀐 줄의 시각으로 가늠합니다. 설정 파일은 고칠 때마다 통째로 다시 쓰일 수 있어서, 마지막 쓰기 시각은 마지막 변경만 알려 줍니다.
+사용자 설정 파일의 키에는 시각 값이 없습니다. 설정이 언제 바뀌었는지는 파일 시스템의 마지막 쓰기 시각, `backups/` 의 파일 이름에 붙은 시각, 저장소의 git 커밋 시각, 세션 기록의 `permissionMode` 가 바뀐 줄의 시각으로 추정합니다. 설정 파일은 고칠 때마다 통째로 다시 쓰일 수 있어서, 마지막 쓰기 시각은 마지막 변경만 알려 줍니다.
 
-`backups/` 사본 이름에 붙은 시각과 `projects` 아래 `lastSessionModified` 값의 형식·시간대는 공개된 명세가 없어서 검체에서 확인해야 합니다. ccfx 코드는 `lastSessionModified` 를 형식을 정하지 않은 JSON 값(`json.RawMessage`)으로 받기만 합니다[9]. 사본 이름의 시각을 파일 시스템의 생성·수정 시각과 나란히 놓으면 어떤 형식인지 가늠할 수 있습니다.
+`backups/` 사본 이름에 붙은 시각과 `projects` 아래 `lastSessionModified` 값의 형식·시간대는 공개된 명세가 없어서 실제 데이터로 확인해야 합니다. ccfx 코드는 `lastSessionModified` 를 형식을 정하지 않은 JSON 값(`json.RawMessage`)으로 받기만 합니다[9]. 사본 이름의 시각을 파일 시스템의 생성·수정 시각과 나란히 놓으면 어떤 형식인지 추정할 수 있습니다.
 
 ## 함정과 한계
 
 우선순위가 높은 파일 하나가 아래 파일의 규칙을 덮기 때문에, 한 파일만 보고 "허용돼 있었다" 고 쓰지 않습니다. HKCU 정책 값은 사용자가 직접 쓸 수 있는 위치라서 조직 정책의 근거로 삼지 않습니다.
 
-훅은 플러그인과 스킬·하위 에이전트 머리말에도 있을 수 있어서, 설정 파일 네 곳만 보면 빠뜨립니다. `/hooks` 메뉴는 훅과 그 출처(User, Project, Local, Plugin, Session)를 읽기 전용으로 보여 주지만[2], 살아 있는 시스템에서 앱을 켜야 볼 수 있습니다.
+훅은 플러그인과 스킬·하위 에이전트 머리말에도 있을 수 있어서, 설정 파일 네 곳만 보면 빠뜨립니다. `/hooks` 메뉴는 훅과 그 출처(User, Project, Local, Plugin, Session)를 읽기 전용으로 보여 주지만[2], 실행 중인 시스템에서 앱을 켜야 볼 수 있습니다.
 
 ccfx 는 이름순으로 가장 마지막 사본 하나만 읽어서[9], 그보다 앞선 사본에 다른 계정이 남아 있어도 보고서에는 나오지 않습니다. 사본은 모두 따로 열어 봅니다. ccfx 의 `-ac` 옵션이 만드는 수집 압축 파일에는 `.credentials.json` 이 평문 그대로 들어가고 `--redact-pii` 도 적용되지 않으므로[9], 그 파일은 토큰이 든 증거물로 다룹니다.
 

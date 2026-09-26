@@ -21,7 +21,7 @@ SQLite 는 DB 를 고치는 동안 주 파일 옆에 롤백 저널(-journal)이�
 | `이름-wal` | 미리 쓰기 로그 (Write-Ahead Log, WAL). 커밋한 새 페이지 | WAL 모드에서 DB 를 열어 쓸 때 |
 | `이름-shm` | WAL 색인 (WAL-index). WAL 에서 페이지를 빨리 찾는 색인 | WAL 모드에서 DB 를 열 때 |
 
-롤백 저널은 "고치기 전" 을, WAL 은 "고친 뒤" 를 담는다는 점이 해석의 출발점입니다. 한 DB 가 어느 모드인지는 파일 머리 오프셋 18·19 로 알 수 있고, 두 값이 2 면 WAL 모드입니다. WAL 모드는 DB 에 저장돼서 다시 열어도 유지됩니다 [1][2]. 머리 칸 전체는 [페이지와 레코드](b-tree-record.md)에 있습니다.
+롤백 저널은 "고치기 전" 을, WAL 은 "고친 뒤" 를 담는다는 점이 해석의 출발점입니다. 한 DB 가 어느 모드인지는 파일 머리 오프셋 18·19 로 알 수 있고, 두 값이 2 면 WAL 모드입니다. WAL 모드는 DB 에 저장돼서 다시 열어도 유지됩니다 [1][2]. 머리 필드 전체는 [페이지와 레코드](b-tree-record.md)에 있습니다.
 
 ## 롤백 저널 (-journal)
 
@@ -48,7 +48,7 @@ SQLite 는 한 번에 쓰기 거래를 하나만 해서 저널도 하나뿐입�
 
 거래 도중에 멈춰서 복구에 필요한 내용이 남은 저널을 hot journal 이라고 부릅니다 [1]. 이런 저널에는 끝나지 않은 거래가 바꾸기 전의 페이지가 들어 있어서, 전원이 꺼지거나 앱이 비정상으로 끝난 직후 확보한 이미지라면 -journal 파일의 길이와 첫 8바이트를 먼저 봅니다.
 
-아래는 명세로 만든 저널 머리 첫 줄의 예시이고, 특정 검체의 값이 아닙니다.
+아래는 명세로 만든 저널 머리 첫 줄의 예시이고, 실제 파일의 값이 아닙니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f
@@ -112,14 +112,14 @@ WAL 자르기 기준은 앱이 DB 를 다시 열 때 적용돼서, 확보 전에
 
 Android 9 에서 호환 WAL (Compatibility WAL) 이 들어왔습니다. journal_mode=WAL 을 쓰되 DB 하나에 연결을 하나만 유지하는 방식입니다 [3]. AOSP 문서에는 호환 WAL 이 기본으로 켜져 있다고 되어 있습니다 [3]. 앱이 `enableWriteAheadLogging()`·`disableWriteAheadLogging()`·`OpenParams.setJournalMode()` 를 부르면 호환 WAL 을 쓰지 않습니다 [3]. 같은 문서에는 제조사가 `db_compatibility_wal_supported` 리소스를 false 로 덮어써서 끌 수 있다고 되어 있지만, 현행 AOSP config.xml 에는 이 이름이 없습니다 [3][5]. Room 은 API 16 이상이고 저메모리 기기가 아니면 호환 WAL 이 아닌 전체 WAL 을 씁니다 [3].
 
-설정 값 쪽에서는 settings global 의 `sqlite_compatibility_wal_flags` 키가 호환 WAL 을 조정합니다. 값은 쉼표로 나눈 key=value 목록이고, 읽는 키는 `legacy_compatibility_wal_enabled`(기본 false), `wal_syncmode`, `truncate_size`(기본 −1) 세 개입니다. `truncate_size` 가 0 이상이면 위 표의 WAL 자르기 기준보다 이 값이 먼저이고, 프로세스마다 처음 읽은 값을 저장해 두고 씁니다(현행 AOSP 기준) [7][4]. 문서의 "기본 켜짐" 과 AOSP 의 `legacy_compatibility_wal_enabled` 기본값 false 가 서로 달라서, 최신 Android 에서 일반 앱 DB 의 실제 기본 저널 모드는 검체에서 확인합니다. 설정 키를 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
+설정 값 쪽에서는 settings global 의 `sqlite_compatibility_wal_flags` 키가 호환 WAL 을 조정합니다. 값은 쉼표로 나눈 key=value 목록이고, 읽는 키는 `legacy_compatibility_wal_enabled`(기본 false), `wal_syncmode`, `truncate_size`(기본 −1) 세 개입니다. `truncate_size` 가 0 이상이면 위 표의 WAL 자르기 기준보다 이 값이 먼저이고, 프로세스마다 처음 읽은 값을 저장해 두고 씁니다(현행 AOSP 기준) [7][4]. 문서의 "기본 켜짐" 과 AOSP 의 `legacy_compatibility_wal_enabled` 기본값 false 가 서로 달라서, 최신 Android 에서 일반 앱 DB 의 실제 기본 저널 모드는 실제 기기에서 확인합니다. 설정 키를 읽는 법은 [설정 값](../../../02-artifacts/system-account/settings.md)에서 다룹니다.
 
 | 범위 | 내용 |
 |---|---|
 | Android 9 | 호환 WAL 도입 [3] |
 | 현행 AOSP(main) | 위 표의 기본값, `sqlite_compatibility_wal_flags` 키 해석 [4][5][7] |
 | Android 16, One UI 8.5 | settings global 에 `sqlite_compatibility_wal_flags` 키가 있음 |
-| 그 밖의 버전, One UI 의 따로 바꾼 설정 | 공개 자료 없음. 검체에서 확인 |
+| 그 밖의 버전, One UI 의 따로 바꾼 설정 | 공개 자료 없음. 실제 기기에서 확인 |
 
 ## 포렌식에서 중요한 점
 

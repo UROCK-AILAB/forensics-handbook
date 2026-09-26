@@ -16,7 +16,7 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 
 블루투스 장치 하나는 `Devices` 아래 하위 키 하나이고, 하위 키 이름은 상대 장치의 블루투스 주소입니다. 16진수 12자리를 소문자로, 구분 기호 없이 적습니다. 같은 주소가 System 로그에서는 콜론을 넣은 모양으로 나오는데, 예를 들어 키 이름이 `a1b2c3d4e5f6` 이면 로그에는 `a1:b2:c3:d4:e5:f6` 으로 적힙니다(주소는 만든 예시).
 
-사례 PC 에는 저전력 블루투스 (Bluetooth Low Energy, BLE) 장치 2개(A·B)와 일반 블루투스(BR/EDR) 장치 1개(C)가 있습니다. 장치 A·B 는 이 키의 항목, `Enum\BTHLE` 키, System 로그의 페어링 성공 이벤트가 짝을 이뤄 나옵니다. 그래서 페어링할 때 항목이 생긴다고 볼 수 있습니다. 장치 C 는 이 키에만 있고 Enum 쪽 키도, 페어링 이벤트도 없습니다. 이런 항목은 그 시점의 System 로그가 남아 있는지부터 봅니다. 장치를 검색하기만 해도 항목이 생기는지는 공개 자료가 없어 시험 PC 로 확인해야 합니다.
+사례 PC 에는 저전력 블루투스 (Bluetooth Low Energy, BLE) 장치 2개(A·B)와 일반 블루투스(BR/EDR) 장치 1개(C)가 있습니다. 장치 A·B 는 이 키의 항목, `Enum\BTHLE` 키, System 로그의 페어링 성공 이벤트가 짝을 이뤄 나옵니다. 그래서 페어링할 때 항목이 생긴다고 볼 수 있습니다. 장치 C 는 이 키에만 있고 Enum 쪽 키도, 페어링 이벤트도 없습니다. 이런 항목은 그 시점의 System 로그가 남아 있는지부터 봅니다. 장치를 검색하기만 해도 항목이 생기는지는 시험 PC 로 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
@@ -61,7 +61,7 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 | `LMPFeatures`, `HostSupportedFeaturesMap`, `LocalEvaldIoCap` | C | 장치 C 에는 `Name` 이 없습니다. |
 | `COD` | B·C | C 는 2752780(0x2A010C), B 는 0 입니다. 비트 해석은 공개 자료 없음 |
 
-RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 ASCII 가 아닌 이름이 어떤 인코딩으로 들어가는지, 사용자가 붙인 이름이 `FriendlyName` 에 들어가는지는 공개 자료가 없어 검체에서 확인합니다.
+RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 ASCII 가 아닌 이름이 어떤 인코딩으로 들어가는지, 사용자가 붙인 이름이 `FriendlyName` 에 들어가는지는 실제 데이터로 확인해야 합니다.
 
 각 장치 키 아래에는 `ServicesFor<16진수 12자리>` 하위 키가 하나씩 있고, 이 이름 뒤 12자리는 세 장치 모두 같습니다. PC 쪽 어댑터 주소로 보입니다.
 
@@ -129,7 +129,7 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 
 `DEVPKEY_Bluetooth_LastConnectedTime` 도 현지 시각이었습니다. UTC 11:43:04 에 조회했을 때 원시값은 20:41:45 였는데, UTC 로 읽으면 9시간 가까이 뒤의 미래이고 한국 시간으로 읽으면 조회 1분여 전입니다. 같은 장치의 `DEVPKEY_Device_LastArrivalDate` 는 UTC 여서 원시값 2026-09-20 21:44:33 이 마지막 부팅 21:44:15(UTC) 뒤였습니다. 한 장치 노드 안에서도 PnP 공통 시각은 UTC 였고 블루투스 전용 시각은 현지 시각이었습니다.
 
-장치 A 는 조회 1분여 전에 연결한 기록(`DEVPKEY_Bluetooth_LastConnectedTime`)이 있었는데도 BTHPORT `LastConnected` 는 페어링 때 값 그대로였습니다. 장치 B 는 `LastSeen`, `LastConnected`, `DEVPKEY_Bluetooth_LastConnectedTime` 원시값이 모두 134322957501039515 로 같았고, UTC 로 읽으면 2026-08-27 09:15:50 입니다. 장치 B 의 페어링 이벤트 8 은 2026-06-26 03:11:25.19(UTC), `InstallDate` 는 03:11:25.21 이었습니다. BTHPORT 값이 언제 바뀌는지(연결이 끊길 때, 종료할 때 등)는 공개 자료가 없어 검체마다 확인합니다.
+장치 A 는 조회 1분여 전에 연결한 기록(`DEVPKEY_Bluetooth_LastConnectedTime`)이 있었는데도 BTHPORT `LastConnected` 는 페어링 때 값 그대로였습니다. 장치 B 는 `LastSeen`, `LastConnected`, `DEVPKEY_Bluetooth_LastConnectedTime` 원시값이 모두 134322957501039515 로 같았고, UTC 로 읽으면 2026-08-27 09:15:50 입니다. 장치 B 의 페어링 이벤트 8 은 2026-06-26 03:11:25.19(UTC), `InstallDate` 는 03:11:25.21 이었습니다. BTHPORT 값이 언제 바뀌는지(연결이 끊길 때, 종료할 때 등)는 기기마다 확인해야 합니다.
 
 ### 읽는 법
 
@@ -137,7 +137,7 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 2. 같은 주소의 페어링 이벤트 8 과 `InstallDate` 를 찾아 원시값과의 차이를 잽니다.
 3. 차이가 시간대 오프셋과 같으면 현지 시각으로 적힌 값으로 봅니다.
 4. 현지 시각이면 그 PC 의 시간대 설정(`TimeZoneInformation`)으로 UTC 로 바꿉니다. `Bias` 는 부호 있는 값으로 읽습니다. 자세한 내용은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
-5. 다른 Windows 판이나 다른 PC 에서도 현지 시각인지는 알려져 있지 않으므로, 검체마다 2~3번을 다시 합니다.
+5. 다른 Windows 판이나 다른 PC 에서도 현지 시각인지는 알려져 있지 않으므로, 기기마다 2~3번을 다시 합니다.
 
 ## 함정과 한계
 
@@ -146,7 +146,7 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 3. **항목만 보고 페어링을 단정하는 실수.** 장치 C 는 Enum 키와 페어링 이벤트가 없었습니다. 다른 흔적과 짝이 맞는지 먼저 봅니다.
 4. **값 종류.** RegRipper 플러그인 설명에는 `Name` 이 문자열로 적혀 있지만[1], Windows 11 25H2 에서 실제 종류는 REG_BINARY 입니다. 도구 출력에 이름이 없거나 깨지면 바이트를 직접 봅니다.
 5. **주소 표기.** 레지스트리는 구분 기호 없는 소문자이고, 이벤트 로그는 콜론을 넣습니다. 검색할 때 두 모양을 모두 씁니다.
-6. **라이브 수집 권한.** 라이브 PC 에서 `Parameters\Keys` 와 `Enum\BTHLE\…\Properties` 는 관리자 권한으로도 열리지 않습니다. 하이브 사본을 떠서 읽는 방법을 씁니다. 사본에서 이 키들이 모두 읽히는지는 검체에서 확인합니다.
+6. **라이브 수집 권한.** 라이브 PC 에서 `Parameters\Keys` 와 `Enum\BTHLE\…\Properties` 는 관리자 권한으로도 열리지 않습니다. 하이브 사본을 떠서 읽는 방법을 씁니다. 사본에서 이 키들이 모두 읽히는지는 실제 사본으로 확인합니다.
 7. **Enum 흔적이 없는 장치.** `Enum\BTHENUM` 이 없는 PC 가 있고, 장치 C 처럼 Enum 쪽 키가 없는 장치도 있습니다. Enum 에 없다고 BTHPORT 항목을 버리지 않습니다.
 8. **이벤트 로그의 잡음.** System 로그에는 BTHUSB 이벤트 12 와 18 이 많이 쌓일 수 있습니다(사례 PC 에서 142건·53건). 12 는 "The local adapter returned an improper ACL data packet which was discarded." 입니다. 18 은 링크 키를 PC 어댑터에 저장할 수 없다는 메시지입니다. 페어링 성공은 8 입니다(사례 PC 에서 2건).
 9. **꺼져 있거나 비어 있는 채널.** Windows 11 25H2 에서 `Microsoft-Windows-Bluetooth-BthLEPrepairing/Operational` 과 `Bluetooth-MTPEnum/Operational` 은 켜져 있어도 0건일 수 있습니다. `Bluetooth-Policy/Operational` 과 `Bluetooth-Bthmini/Operational` 은 꺼져 있을 수 있습니다.
@@ -165,7 +165,7 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 6. `VID`·`PID` 를 16진으로 바꿔 `Enum\BTHLEDevice` 하위 키 이름과 맞춥니다.
 7. System 로그에서 콜론을 넣은 주소로 BTHUSB 이벤트 8 을 찾습니다.
 
-아래는 위 값 종류와 이름 규칙대로 만든 예시입니다. 검체에서 나온 값이 아닙니다.
+아래는 위 값 종류와 이름 규칙대로 만든 예시입니다. 실제 기기에서 나온 값이 아닙니다.
 
 ```
 장치 키 이름            a1b2c3d4e5f6
@@ -207,7 +207,7 @@ PID         CD AB 00 00                    43981 = 0xABCD
 
 ## 실습
 
-블루투스 장치 기록이 있는 공개 검체를 고르거나, 시험 PC 에 장치를 한 번 페어링한 뒤 풀어 봅니다. 검체 설명에서 OS 판과 시간대를 먼저 확인합니다.
+블루투스 장치 기록이 있는 공개 데이터 세트를 고르거나, 시험 PC 에 장치를 한 번 페어링한 뒤 풀어 봅니다. 데이터 세트 설명에서 OS 판과 시간대를 먼저 확인합니다.
 
 1. `Devices` 아래 주소를 모두 적습니다. 각 주소가 `Enum\BTHLE` 에도 있습니까?
 2. 주소마다 System 로그의 BTHUSB 이벤트 8 을 찾습니다. 이벤트가 없는 장치는 어떻게 해석하겠습니까?

@@ -50,7 +50,7 @@ Windows 11 25H2 한 대의 두 채널 설정은 아래와 같습니다.
 | `PrintService/Admin` | 켜짐 | 1,052,672 바이트 | 오래된 기록부터 덮어씁니다 | 0건 |
 
 - 307 은 Operational 채널의 이벤트라서 Admin 채널이 켜져 있어도 그쪽에 남지 않습니다.
-- 이 채널이 꺼져 있는 PC 가 있으므로 검체마다 설정을 확인합니다.
+- 이 채널이 꺼져 있는 PC 가 있으므로 분석 대상마다 설정을 확인합니다.
 - 약 1MB 로그에 며칠치가 남는지는 인쇄량에 따라 다릅니다. 로그의 가장 오래된 레코드 시각을 먼저 적어 둡니다.
 
 ### 채널이 켜져 있었는지 오프라인에서 보기
@@ -82,7 +82,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 
 - 스풀러 구성 요소 `C:\Windows\System32\localspl.dll` 안에는 UTF-16 문자열 `ShowJobTitleInEventLogs` 와 `Software\Policies\Microsoft\Windows NT\Printers` 가 있습니다.
 - 정책을 설정하지 않은 PC 에는 이 값이 없습니다. 앞 표의 PC 에서는 `Printers` 정책 키 아래에 `DriverRanking` 하위 키만 있습니다.
-- 이름을 뺄 때 문서 이름 칸에 무엇이 들어가는지는 검체나 시험으로 확인합니다.
+- 이름을 뺄 때 문서 이름 필드에 무엇이 들어가는지는 실제 데이터나 시험으로 확인합니다.
 
 ### 버전별 차이
 
@@ -91,15 +91,15 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 | 8 이후 | 정책 파일이 적은 지원 대상 (supportedOn) 이 `SUPPORTED_Windows8` 입니다 | [2] |
 | 11 25H2 | Operational 꺼짐, Admin 켜짐, 이름 정책 값 없음 (한 대) | [3] |
 
-지원 대상 값은 정책을 적용할 수 있는 Windows 판을 적을 뿐, 이름을 빼는 동작이 언제부터 기본값이 됐는지는 말하지 않습니다.
+지원 대상 값에는 정책을 적용할 수 있는 Windows 판만 나와 있습니다. 이름을 빼는 동작이 언제부터 기본값이 됐는지는 나와 있지 않습니다.
 
 ## 구조
 
-### 307 의 칸
+### 307 의 필드
 
-칸 이름은 param1~param8 이고, 모두 유니코드 문자열 (UnicodeString) 입니다. 칸의 뜻은 메시지 틀의 자리로 알 수 있습니다.
+필드 이름은 param1~param8 이고, 모두 유니코드 문자열 (UnicodeString) 입니다. 필드의 뜻은 메시지 틀의 자리로 알 수 있습니다.
 
-| 칸 | 메시지 자리 | 뜻 | 검체에서 확인할 것 |
+| 필드 | 메시지 자리 | 뜻 | 실제 데이터로 확인할 것 |
 |---|---|---|---|
 | param1 | `Document %1` | 작업 번호 (Job ID) | 스풀 폴더의 SPL·SHD 파일 이름 번호와 같은지 |
 | param2 | `, %2` | 문서 이름. 정책이 켜져 있을 때만 들어갑니다 | 정책이 꺼져 있을 때 들어가는 값 |
@@ -116,7 +116,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 
 모두 Operational 채널, 이벤트 버전 0 입니다.
 
-| 이벤트 | 메시지 | 칸 |
+| 이벤트 | 메시지 | 필드 |
 |---|---|---|
 | 300 | `Printer %1 was created.` | |
 | 301 | `Printer %1 was deleted, …` | |
@@ -136,7 +136,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 | 842 | `The print job %1 was sent through the print processor %2 on printer %3, driver %4, in the isolation mode %5 (…). Win32 error code returned by the print processor: %6.` | JobId, Processor, Printer, Driver, IsolationMode, Error |
 
 - 842 의 격리 모드 (isolation mode) 값은 메시지에 적혀 있습니다. 0 은 스풀러 안에서 불러옴, 1 은 공유 샌드박스, 2 는 격리 샌드박스입니다.
-- 805 에는 Copies 칸이 있습니다. 이 칸이 복사 매수를 뜻하는지는 검체에서 확인합니다.
+- 805 에는 Copies 필드가 있습니다. 이 필드가 복사 매수를 뜻하는지는 실제 데이터로 확인합니다.
 - 307 이 없는 작업 번호가 있으면 같은 번호의 308·309·310 도 찾아봅니다.
 - 도구가 메시지 문장을 푸는 방식은 [공급자와 메시지 파일](../../01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md)에서 다룹니다.
 
@@ -145,8 +145,8 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|
 | 기록된 시각에 이 사용자 이름이 주인인 작업을 이 프린터와 포트로 인쇄했다는 스풀러 기록이 있습니다 | 계정 뒤의 사람이 누구인지, 인쇄물을 누가 가져갔는지 |
-| 작업의 바이트 수와 쪽수 | 쪽수가 종이 장수와 같다는 것 (복사 매수 반영 여부는 검체에서 확인합니다) |
-| 정책이 켜져 있었다면 작업 이름 | 작업 이름이 디스크의 어느 파일인지 (이 칸에는 파일 경로가 아니라 작업 이름이 들어갑니다) |
+| 작업의 바이트 수와 쪽수 | 쪽수가 종이 장수와 같다는 것 (복사 매수 반영 여부는 실제 데이터로 확인합니다) |
+| 정책이 켜져 있었다면 작업 이름 | 작업 이름이 디스크의 어느 파일인지 (이 필드에는 파일 경로가 아니라 작업 이름이 들어갑니다) |
 | | 문서의 내용 (307 에는 내용이 없습니다) |
 | | 307 이 없으니 인쇄하지 않았다는 것 (채널이 꺼져 있었을 수 있습니다) |
 
@@ -154,7 +154,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 
 아래 이름과 숫자는 설명을 위해 만든 예입니다.
 
-- 쓸 수 있는 문장: "PrintService/Operational 로그에는 <시각> UTC 에 307 이 있습니다. 사용자 ○○ 가 주인인 작업 번호 ○ 을 프린터 ○○ 의 포트 ○○ 로 인쇄했다는 기록입니다. 크기는 ○○ 바이트, 쪽수는 ○ 쪽으로 적혀 있습니다. 문서 이름 칸에는 ○○ 이 적혀 있습니다."
+- 쓸 수 있는 문장: "PrintService/Operational 로그에는 <시각> UTC 에 307 이 있습니다. 사용자 ○○ 가 주인인 작업 번호 ○ 을 프린터 ○○ 의 포트 ○○ 로 인쇄했다는 기록입니다. 크기는 ○○ 바이트, 쪽수는 ○ 쪽으로 적혀 있습니다. 문서 이름 필드에는 ○○ 이 적혀 있습니다."
 - 쓰면 안 되는 문장: "○○ 이 기밀 문서를 인쇄해 가져갔다."
 - 307 이 없을 때 쓸 수 있는 문장: "이 PC 의 PrintService/Operational 채널은 꺼져 있었습니다(`Enabled` = 0). 그래서 인쇄 이벤트로는 인쇄 여부를 정할 수 없습니다."
 
@@ -163,7 +163,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 - 이벤트 시각은 `<TimeCreated SystemTime>` 에 있습니다. 끝에 Z 가 붙은 UTC 값입니다.
 - 현지 시각으로 바꾸는 법은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
 - 307 의 시각은 인쇄가 끝난 시각일 수도, 스풀러가 작업을 프린터로 넘긴 시각일 수도 있습니다. 그래서 보고서에는 "307 이 기록된 시각" 이라고만 씁니다.
-- 800(스풀), 801(인쇄), 805(렌더링), 842(인쇄 처리기) 에도 작업 번호 칸이 있습니다. 307 의 param1 과 같은 번호의 기록을 모아 시각 순으로 늘어놓아 봅니다. 두 번호가 같은 작업을 가리키는지는 검체에서 확인합니다.
+- 800(스풀), 801(인쇄), 805(렌더링), 842(인쇄 처리기) 에도 작업 번호 필드가 있습니다. 307 의 param1 과 같은 번호의 기록을 모아 시각 순으로 늘어놓아 봅니다. 두 번호가 같은 작업을 가리키는지는 실제 데이터로 확인합니다.
 - 스풀 폴더 파일의 시각과 맞춰 보는 법은 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 다룹니다.
 
 ## 함정과 한계
@@ -173,8 +173,8 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 3. **문서 이름이 비어 있거나 다르니 누가 숨겼다고 봅니다.** 정책을 켜지 않으면 이름이 들어가지 않습니다. 정책 값부터 확인합니다.
 4. **정책을 켰으니 예전 기록에도 이름이 있으리라 봅니다.** 정책을 켠 뒤의 새 기록에만 이름이 들어갑니다[2].
 5. **바이트 수와 쪽수를 문자열 그대로 정렬합니다.** 문자열로 정렬하면 "10" 이 "9" 보다 앞에 옵니다. 숫자로 바꿔 정렬하고 합칩니다.
-6. **쪽수를 종이 장수로 씁니다.** 복사 매수가 반영되는지, 드라이버가 센 값인지는 검체에서 확인합니다.
-7. **param4 를 인쇄를 보낸 컴퓨터로 단정합니다.** 이 칸의 뜻과 모양은 검체에서 확인합니다.
+6. **쪽수를 종이 장수로 씁니다.** 복사 매수가 반영되는지, 드라이버가 센 값인지는 실제 데이터로 확인합니다.
+7. **param4 를 인쇄를 보낸 컴퓨터로 단정합니다.** 이 필드의 뜻과 모양은 실제 데이터로 확인합니다.
 8. **공유 프린터 작업을 클라이언트 PC 에서만 찾습니다.** 인쇄 서버로 보낸 작업의 307 이 클라이언트 PC 에 남는지, 서버에만 남는지 정해 두지 말고 두 곳을 모두 봅니다.
 9. **가상 프린터도 같다고 봅니다.** "Microsoft Print to PDF" 같은 가상 프린터로 보낸 작업이 307 을 남기는지는 시험으로 확인합니다(실습 3).
 10. **지점 직접 인쇄 작업의 이름을 찾습니다.** 이름 정책은 이 작업에 적용되지 않습니다.
@@ -200,7 +200,7 @@ Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-PrintService/
 
 param1~param8 은 모두 유니코드 문자열입니다. 쪽수 "3" 이나 바이트 수 "12345" 도 숫자가 아니라 글자로 저장됩니다. 글자는 UTF-16LE 로 옮겨 적습니다.
 
-아래는 형식대로 만든 예시입니다. 검체에서 뽑은 바이트가 아닙니다.
+아래는 형식대로 만든 예시입니다. 실제 데이터에서 뽑은 바이트가 아닙니다.
 
 ```
 param8 "3"      →  33 00
@@ -212,7 +212,7 @@ param7 "12345"  →  31 00 32 00 33 00 34 00 35 00
 
 ### 공개 도구로 한 번
 
-Windows 에 들어 있는 PowerShell 로 사본 파일에서 307 을 뽑아 칸별로 늘어놓을 수 있습니다. 값의 순서가 param1~param8 의 순서입니다.
+Windows 에 들어 있는 PowerShell 로 사본 파일에서 307 을 뽑아 필드별로 늘어놓을 수 있습니다. 값의 순서가 param1~param8 의 순서입니다.
 
 ```powershell
 Get-WinEvent -Path '.\Microsoft-Windows-PrintService%4Operational.evtx' -FilterXPath '*[System[EventID=307]]' -Oldest |
@@ -233,7 +233,7 @@ Get-WinEvent -Path '.\Microsoft-Windows-PrintService%4Operational.evtx' -FilterX
 ```
 
 - 바이트 수와 쪽수를 숫자로 바꿔 두면 사용자별·프린터별 합계를 낼 수 있습니다.
-- 이벤트 뷰어의 "자세히 → XML 보기" 로 칸 원문을 볼 수 있습니다.
+- 이벤트 뷰어의 "자세히 → XML 보기" 로 필드 원문을 볼 수 있습니다.
 - EvtxECmd, python-evtx 같은 공개 도구도 이 채널을 읽습니다. 도구의 풀이는 XML 원문 한두 건과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md)에서 다룹니다.
 
 ## 교차 검증
@@ -253,20 +253,20 @@ Get-WinEvent -Path '.\Microsoft-Windows-PrintService%4Operational.evtx' -FilterX
 직접 만든 Windows 10·11 가상 머신에서 해 봅니다. 각 단계의 시각을 적어 둡니다.
 
 1. 채널을 켜기 전에 문서 하나를 인쇄합니다. 307 이 남는지 보십시오.
-2. Operational 채널을 켜고 같은 문서를 다시 인쇄합니다. 307 의 여덟 칸을 확인하십시오.
+2. Operational 채널을 켜고 같은 문서를 다시 인쇄합니다. 307 의 여덟 필드를 확인하십시오.
 3. "Microsoft Print to PDF" 로 인쇄합니다. 307 이 남는지 보십시오. 함정 9번의 답이 여기서 나옵니다.
 4. 이름 정책을 켜기 전과 뒤에 한 번씩 인쇄합니다. param2 가 어떻게 달라지는지 비교하십시오. 함정 3번과 4번이 여기서 풀립니다.
-5. 두 부를 인쇄합니다. param8 과 805 의 Copies 칸을 비교하십시오.
+5. 두 부를 인쇄합니다. param8 과 805 의 Copies 필드를 비교하십시오.
 6. 프린터를 일시 중지하고 인쇄한 뒤 스풀 폴더를 봅니다. 파일 이름의 번호와 param1 이 같은지 비교하십시오.
 7. 같은 작업의 800·801·805·842·307 을 시각 순으로 늘어놓으십시오. 307 이 어느 단계 뒤에 남는지 보십시오.
 
-NIST CFReDS 같은 공개 검체를 풀 때는 먼저 SOFTWARE 하이브에서 채널의 `Enabled` 값을 봅니다. 0 이면 이 로그로 인쇄 여부를 정할 수 없습니다. 그 경우 어떤 기록으로 인쇄를 확인할지 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 골라 보십시오.
+NIST CFReDS 같은 공개 시험 데이터를 풀 때는 먼저 SOFTWARE 하이브에서 채널의 `Enabled` 값을 봅니다. 0 이면 이 로그로 인쇄 여부를 정할 수 없습니다. 그 경우 어떤 기록으로 인쇄를 확인할지 [인쇄 흔적](../external-devices/print-spooler-spl-shd.md)에서 골라 보십시오.
 
 ## 참고 문헌
 
 이 페이지는 공개 문서를 인용하지 않았습니다. 모든 사실은 관찰 PC(Windows 11 Home 25H2, 빌드 26200) 에서 아래 자료를 직접 열어 확인했습니다.
 
-- Microsoft-Windows-PrintService 공급자 메타데이터 (이벤트 300~312, 800, 801, 805, 842 의 메시지 틀과 칸)
+- Microsoft-Windows-PrintService 공급자 메타데이터 (이벤트 300~312, 800, 801, 805, 842 의 메시지 틀과 필드)
 - `Printing.admx`·`Printing.adml`(en-US) 10.0.26100.8737 — WinSxS 폴더 안 파일
 - SOFTWARE 하이브 `Microsoft\Windows\CurrentVersion\WINEVT\Channels` 와 `Policies\Microsoft\Windows NT\Printers`
 - `C:\Windows\System32\localspl.dll` 안의 문자열

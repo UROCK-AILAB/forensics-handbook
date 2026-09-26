@@ -10,7 +10,7 @@ nav_order: 510
 
 Word·Excel·PowerPoint·Outlook·Teams 같은 업무 앱에서 쓴 Copilot 대화는 사용자 Exchange Online 사서함의 숨은 폴더에 저장되고, 조직이 감사를 켜 두었다면 Microsoft Purview 감사 로그에 `CopilotInteraction` 레코드가 따로 남아 어느 앱에서, 어떤 문서를 대상으로, 웹 검색을 썼는지를 알려 줍니다.
 
-확인 날짜는 2026-09입니다. Windows·macOS Office 앱이 기기에 Copilot 대화를 남기는지는 공개 자료가 없어서, 기기 쪽 흔적은 검체로 확인해야 합니다.
+확인 날짜는 2026-09입니다. Windows·macOS Office 앱이 기기에 Copilot 대화를 남기는지는 공개되지 않았으므로, 기기 쪽 흔적은 실제 기기에서 확인해야 합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -32,7 +32,7 @@ Word·PowerPoint·Excel·OneNote·Loop·Whiteboard 등에서 Copilot 을 쓰면 
 | 감사 레코드 | Purview 감사 | 감사 권한이 있는 관리자 | 없음(메시지 ID 만) |
 | 사용자 화면의 활동 기록 | 위 상호작용 내용과 같은 저장 데이터 | 사용자 본인이 Copilot Chat·Teams 회의에서 보고, My Account 포털에서 지움[1] | 있음 |
 
-사서함 항목은 앱마다 item class 가 다르고, eDiscovery 에서 이 값으로 앱을 가려 찾습니다[5].
+사서함 항목은 앱마다 item class 가 다르고, eDiscovery 에서 이 값으로 앱을 구분해 찾습니다[5].
 
 | 앱 | item class |
 |---|---|
@@ -74,32 +74,32 @@ Word·PowerPoint·Excel·OneNote·Loop·Whiteboard 등에서 Copilot 을 쓰면 
 
 ### 레코드의 짜임
 
-한 레코드는 공통 칸이 있는 바깥층과 `CopilotEventData` 객체로 나뉩니다[7]. 해석에 쓰는 칸 대부분은 `CopilotEventData` 안에 있어서, 내보낸 JSON 을 걸러 낼 때 경로를 이 객체부터 적어야 합니다.
+한 레코드는 공통 필드가 있는 바깥층과 `CopilotEventData` 객체로 나뉩니다[7]. 해석에 쓰는 필드 대부분은 `CopilotEventData` 안에 있어서, 내보낸 JSON 을 걸러 낼 때 경로를 이 객체부터 적어야 합니다.
 
-| 층 | 칸 |
+| 층 | 필드 |
 |---|---|
 | 바깥층 | `CreationTime`, `Id`, `Operation`, `OrganizationId`, `RecordType`, `UserKey`, `UserType`, `Version`, `Workload`, `ClientIP`, `ClientRegion`, `UserId` |
 | `CopilotEventData` 안 | `AppHost`, `Contexts`, `ThreadId`, `MessageIds`, `Messages`, `AccessedResources`, `ModelTransparencyDetails`, `AISystemPlugin` |
 
-이 밖에 `CopilotLogVersion` 도 레코드 칸입니다[7]. `AppIdentity`, `AgentId`·`AgentName`·`AgentVersion`, `DLPEvaluationDeferred`, `DLPEvaluationDeferredReason`, `CapacityId` 같은 칸도 있지만, 이 칸들이 레코드의 어느 층에 들어가는지는 공개되어 있지 않습니다[2]. 내보낸 레코드에서 위치를 먼저 확인합니다.
+이 밖에 `CopilotLogVersion` 도 레코드 필드입니다[7]. `AppIdentity`, `AgentId`·`AgentName`·`AgentVersion`, `DLPEvaluationDeferred`, `DLPEvaluationDeferredReason`, `CapacityId` 같은 필드도 있지만, 이 필드들이 레코드의 어느 층에 들어가는지는 공개되어 있지 않습니다[2]. 내보낸 레코드에서 위치를 먼저 확인합니다.
 
-### 해석에 자주 쓰는 칸
+### 해석에 자주 쓰는 필드
 
-| 칸 | 알려 주는 것 |
+| 필드 | 알려 주는 것 |
 |---|---|
 | `AppHost` | Copilot 을 부른 앱. 아래 표 참고 |
-| `AppIdentity` | `workloadName.appGroup.appName` 꼴. 예: `Copilot.MicrosoftCopilot.Microsoft365Copilot`, `Copilot.MicrosoftCopilot.BizChat`, `Copilot.Studio.` 뒤에 앱 ID[2] |
+| `AppIdentity` | `workloadName.appGroup.appName` 형식. 예: `Copilot.MicrosoftCopilot.Microsoft365Copilot`, `Copilot.MicrosoftCopilot.BizChat`, `Copilot.Studio.` 뒤에 앱 ID[2] |
 | `Contexts` | 대화할 때 열려 있던 대상의 `Id` 와 `Type`. `Id` 는 SharePoint 파일 ID·경로, Teams 채팅·회의 ID 등이고, `Type` 은 `docx`, `pptx`, `xlsx`, `TeamsMeeting`, `TeamsChannel`, `TeamsChat` 등[2][7] |
 | `ThreadId` | 대화 스레드 ID. 예시 값은 `19:` 로 시작해 `@thread.v2` 로 끝납니다[7] |
 | `Messages` | 메시지 ID 와 프롬프트인지 여부. 한 레코드에 보통 프롬프트·응답 한 쌍이 들어가고, 프롬프트 하나에 응답이 여럿 붙기도 합니다. `JailbreakDetected` 는 탈옥 시도 탐지 여부이고 `Size` 는 지금 쓰지 않습니다[2] |
-| `MessageIds` | Microsoft 내부용으로 예약된 칸입니다[7] |
-| `AccessedResources` | 응답을 만들며 접근한 파일·메일·메시지. 하위 칸 `Id`, `SiteUrl`, `listItemUniqueId`, `Type`, `Name`, `SensitivityLabelId`, `Action`(read·create·modify), `PolicyDetails`, `Status`, `XPIADetected`[2][7] |
+| `MessageIds` | Microsoft 내부용으로 예약된 필드입니다[7] |
+| `AccessedResources` | 응답을 만들며 접근한 파일·메일·메시지. 하위 필드 `Id`, `SiteUrl`, `listItemUniqueId`, `Type`, `Name`, `SensitivityLabelId`, `Action`(read·create·modify), `PolicyDetails`, `Status`, `XPIADetected`[2][7] |
 | `AISystemPlugin` | 쓴 플러그인의 `Name`·`Id`·`Version`. `Id` 가 `BingWebSearch` 이면 Bing 으로 공개 웹을 썼다는 뜻입니다. 예시 값은 `{"Id":"BingWebSearch","Name":"BuiltIn"}` 입니다[2][7] |
 | `ModelTransparencyDetails` | `ModelProviderName`·`ModelName`·`ModelVersion`[2] |
 | `DLPEvaluationDeferred` | DLP 평가를 미룬 단계를 나타내는 비트 값. 1 Prompt, 2 Response, 4 Grounding, 8 WebGrounding[2] |
 | `ClientIP`·`ClientRegion` | 요청한 쪽의 IP 와 지역[6][7] |
 
-`Messages` 의 키 이름은 문서마다 대소문자가 다릅니다. 스키마 정의와 2023 예시는 `Id`·`isPrompt` 이고, 감사 문서(2026-08-26)의 설명은 `ID`·`IsPrompt`, 같은 문서의 예시는 `ID`·`isPrompt` 입니다[2][7]. jq 는 키의 대소문자를 가리므로, 걸러 내기 전에 검체의 실제 키를 확인합니다.
+`Messages` 의 키 이름은 문서마다 대소문자가 다릅니다. 스키마 정의와 2023 예시는 `Id`·`isPrompt` 이고, 감사 문서(2026-08-26)의 설명은 `ID`·`IsPrompt`, 같은 문서의 예시는 `ID`·`isPrompt` 입니다[2][7]. jq 는 키의 대소문자를 구분하므로, 걸러 내기 전에 내보낸 파일의 실제 키를 확인합니다.
 
 `AppHost` 값 가운데 헷갈리기 쉬운 것은 아래와 같습니다[2].
 
@@ -122,13 +122,13 @@ Word·PowerPoint·Excel·OneNote·Loop·Whiteboard 등에서 Copilot 을 쓰면 
 
 **증명하지 못하는 것.** 감사 레코드에는 프롬프트 본문이 없어서 "무엇을 입력했다" 를 증명하지 못하고, 본문은 사서함 항목에서 따로 확보해야 합니다. 프롬프트·첨부·생성물을 나눠 보는 방법은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)에서 다룹니다. 레코드는 계정의 사용 기록이라서 그 시각에 자판 앞에 누가 있었는지도 따로 밝혀야 하고, 이 문제는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)에서 다룹니다. `ClientIP` 도 서비스에 따라 사용자 기기가 아니라 사용자 대신 서비스를 부른 앱(예: 웹판 Office)의 주소일 수 있습니다[6].
 
-모델 정보도 비어 있을 수 있습니다. Microsoft 365 Copilot 상황에서는 `ModelProviderName` 만 늘 들어가고 `ModelName`·`ModelVersion` 은 없습니다[2]. Microsoft Copilot·Copilot Chat 에서 사용자가 모델을 직접 고르면 제공자와 모델 이름이 남지만, Auto 를 고르면 빠질 수 있고 Cowork 는 제공자 정보를 보여 주지 않습니다[2]. 그래서 이 칸이 비었다고 특정 모델을 쓰지 않았다고 결론 내리지 않습니다. Anthropic·OpenAI 모델이 하위 처리자로 쓰일 수 있고 Anthropic 모델은 지금 EU Data Boundary 밖에 있다는 점도, 데이터가 어느 지역에서 처리되었는지를 다룰 때 함께 적습니다[1].
+모델 정보도 비어 있을 수 있습니다. Microsoft 365 Copilot 상황에서는 `ModelProviderName` 만 늘 들어가고 `ModelName`·`ModelVersion` 은 없습니다[2]. Microsoft Copilot·Copilot Chat 에서 사용자가 모델을 직접 고르면 제공자와 모델 이름이 남지만, Auto 를 고르면 빠질 수 있고 Cowork 는 제공자 정보를 보여 주지 않습니다[2]. 그래서 이 필드가 비었다고 특정 모델을 쓰지 않았다고 결론 내리지 않습니다. Anthropic·OpenAI 모델이 하위 처리자로 쓰일 수 있고 Anthropic 모델은 지금 EU Data Boundary 밖에 있다는 점도, 데이터가 어느 지역에서 처리되었는지를 다룰 때 함께 적습니다[1].
 
-보고서 문장은 "이 계정이 이 시간대에 Word 에서 문서 한 건을 대상으로 Copilot 과 메시지를 주고받은 감사 기록이 있고, 같은 시간대 사서함에 item class `IPM.SkypeTeams.Message.Copilot.Word` 항목이 두 건 있다" 처럼 자료마다 말하는 범위를 나눠 씁니다.
+보고서 문장은 "이 계정이 이 시간대에 Word 에서 문서 한 건을 대상으로 Copilot 과 메시지를 주고받은 감사 기록이 있고, 같은 시간대 사서함에 item class `IPM.SkypeTeams.Message.Copilot.Word` 항목이 두 건 있다" 처럼 자료마다 확인되는 범위를 나눠 씁니다.
 
 ## 시각 해석
 
-감사 레코드의 시각 칸은 바깥층의 `CreationTime` 이고, 레코드가 생성된 UTC 시각입니다[6]. 값은 `2023-12-13T17:12:36` 처럼 끝에 `Z` 같은 시간대 표시가 없어서, 현지 시각으로 잘못 읽지 않도록 합니다[7]. 레코드 목록의 `CreationDate` 는 `12/13/2023 17:12` 처럼 월/일/연도 순서에 분 단위까지만 보여 줍니다[7]. 초까지 맞춰야 하면 AuditData 안의 `CreationTime` 을 씁니다. 다른 기록과 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+감사 레코드의 시각 필드는 바깥층의 `CreationTime` 이고, 레코드가 생성된 UTC 시각입니다[6]. 값은 `2023-12-13T17:12:36` 처럼 끝에 `Z` 같은 시간대 표시가 없어서, 현지 시각으로 잘못 읽지 않도록 합니다[7]. 레코드 목록의 `CreationDate` 는 `12/13/2023 17:12` 처럼 월/일/연도 순서에 분 단위까지만 보여 줍니다[7]. 초까지 맞춰야 하면 AuditData 안의 `CreationTime` 을 씁니다. 다른 기록과 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 보관 기간은 사건 날짜가 오래되었을 때 가장 먼저 따질 점입니다[3].
 
@@ -148,12 +148,12 @@ E5 라이선스가 있는 조직이라도 Copilot 레코드를 1년 두려면 �
 
 - **감사가 꺼진 조직.** 감사 레코드는 조직이 감사를 켜 둔 경우에만 생기고, 레코드가 없다는 사실이 사용하지 않았다는 뜻은 아닙니다.
 - **앱 화면과 보존 상태는 다르다.** Copilot 메시지는 창이나 앱을 닫아도 숨겨질 뿐 그대로 있습니다. 실제로 지워지는 경우는 사용자가 Copilot Chat 에서 대화를 지우거나 전체 기록 삭제를 요청할 때이고, 이때도 항목은 `SubstrateHolds` 로 먼저 갑니다[4]. 앱에 보이는지 여부는 보존·삭제 상태를 정확히 나타내지 않습니다[4]. 같은 사서함에 다른 보존 정책, Litigation Hold, delay hold, eDiscovery hold 가 걸려 있으면 영구 삭제가 멈춥니다[4]. 보관과 삭제의 일반론은 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에서 다룹니다.
-- **감사 레코드와 사서함 항목은 보관 체계가 다르다.** 감사 레코드는 감사 보관 정책을 따르고[3], 사서함 항목은 보존 정책과 `SubstrateHolds` 삭제 흐름을 따릅니다[4]. 사용자가 My Account 포털에서 활동 기록을 지웠을 때[1] 감사 레코드가 어떻게 되는지는 공개 문서에 나오지 않아서 시험용 테넌트나 검체로 확인해야 합니다.
+- **감사 레코드와 사서함 항목은 보관 체계가 다르다.** 감사 레코드는 감사 보관 정책을 따르고[3], 사서함 항목은 보존 정책과 `SubstrateHolds` 삭제 흐름을 따릅니다[4]. 사용자가 My Account 포털에서 활동 기록을 지웠을 때[1] 감사 레코드가 어떻게 되는지는 공개 문서에 나오지 않아서 시험용 테넌트나 실제 사건 자료로 확인해야 합니다.
 - **메모리는 대화와 따로 남는다.** Copilot 메모리는 `IPM.Contact` 항목으로 저장되고, Purview 나 eDiscovery 에서 대화·메시지를 지워도 연결된 메모리는 지워지지 않습니다[5].
 - **퇴사자.** 계정을 지우면 보존 대상 메시지는 비활성 사서함에 남고, 떠나기 전에 걸려 있던 보존 정책을 계속 따릅니다[4].
 - **`AppHost` 가 `Bing` 인 경우.** Edge 사이드바, Windows Copilot, Office 모바일 앱, copilot.cloud.microsoft.com 에서 쓴 Copilot Chat 이 `Bing` 으로 남아서, 값만 보고 검색 엔진을 썼다고 읽지 않습니다[2]. 웹 검색 여부는 `AISystemPlugin` 으로 따로 봅니다. 브라우저 쪽 흔적은 [브라우저에 들어간 AI](browser-builtin-ai.md)에서 다룹니다.
 - **`AppIdentity` 로 거르기.** Purview 포털에서는 "Activities – operation names" 로 거르고, `AppIdentity` 로 거르려면 내보낸 뒤 오프라인에서 걸러야 합니다[2].
-- **레코드 모양이 시기마다 다르다.** 2023 예시에는 `ModelTransparencyDetails` 에 `"ModelName":"DEEP_LEO"` 가 들어 있지만, 지금 감사 문서는 Microsoft 365 Copilot 상황에 `ModelName` 이 없다고 적습니다[2][7]. 오래된 레코드와 최근 레코드를 섞어 볼 때는 칸 유무를 기간별로 따로 셉니다.
+- **레코드 모양이 시기마다 다르다.** 2023 예시에는 `ModelTransparencyDetails` 에 `"ModelName":"DEEP_LEO"` 가 들어 있지만, 지금 감사 문서는 Microsoft 365 Copilot 상황에 `ModelName` 이 없다고 적습니다[2][7]. 오래된 레코드와 최근 레코드를 섞어 볼 때는 필드가 있는지를 기간별로 따로 봅니다.
 - **이름 혼동.** 이름이 바뀌는 중이라서 관리 화면·문서·사용자 진술에서 같은 기능을 다른 이름으로 부를 수 있습니다.
 
 ## 직접 분석해 보기
@@ -190,7 +190,7 @@ E5 라이선스가 있는 조직이라도 Copilot 레코드를 1년 두려면 �
 
 이 레코드에서는 2026-03-04 05:06:07 UTC 에 Word 에서 불렀고, 열려 있던 문서는 docx 한 건이며, 응답을 만들며 레이블이 붙은 xlsx 한 건을 읽었고, 웹 검색을 썼고, 프롬프트 한 건과 응답 한 건이 오갔다는 것까지 읽을 수 있습니다. 프롬프트 본문은 어디에도 없습니다.
 
-**공개 도구로 한 번.** 내보낸 JSON 은 jq 같은 공개 도구로 거릅니다. 칸이 `CopilotEventData` 안에 있으므로 경로를 그 객체부터 적어야 하고, 바깥층에 `.AppHost` 로 적으면 아무것도 걸리지 않습니다. 웹 검색을 쓴 상호작용의 시각과 앱만 뽑으려면 아래처럼 씁니다.
+**공개 도구로 한 번.** 내보낸 JSON 은 jq 같은 공개 도구로 거릅니다. 필드가 `CopilotEventData` 안에 있으므로 경로를 그 객체부터 적어야 하고, 바깥층에 `.AppHost` 로 적으면 아무것도 걸리지 않습니다. 웹 검색을 쓴 상호작용의 시각과 앱만 뽑으려면 아래처럼 씁니다.
 
 ```sh
 jq -c 'select(any(.CopilotEventData.AISystemPlugin[]?; .Id == "BingWebSearch"))
@@ -203,7 +203,7 @@ jq -c 'select(any(.CopilotEventData.AISystemPlugin[]?; .Id == "BingWebSearch"))
 jq -s '[.[].CopilotEventData.Messages[]? | select(.isPrompt // .IsPrompt)] | length' records.jsonl
 ```
 
-같은 방식으로 `.CopilotEventData.Contexts[].Type` 을 모으면 어떤 종류의 문서를 대상으로 썼는지 셀 수 있습니다. 내보낸 목록에서 레코드가 AuditData 칸에 JSON 문자열로 들어 있다면[7], 그 칸을 먼저 JSON 으로 풀어야 합니다(jq 에서는 `fromjson`).
+같은 방식으로 `.CopilotEventData.Contexts[].Type` 을 모으면 어떤 종류의 문서를 대상으로 썼는지 셀 수 있습니다. 내보낸 목록에서 레코드가 AuditData 열에 JSON 문자열로 들어 있다면[7], 그 열을 먼저 JSON 으로 풀어야 합니다(jq 에서는 `fromjson`).
 
 ## 교차 검증
 
@@ -216,7 +216,7 @@ jq -s '[.[].CopilotEventData.Messages[]? | select(.isPrompt // .IsPrompt)] | len
 
 ## 실습
 
-이 자료는 테넌트 쪽에만 있어서 PC 이미지로 된 공개 검체로는 풀 수 없고, 시험용 테넌트가 있을 때 아래 질문을 풀어 봅니다.
+이 자료는 테넌트 쪽에만 있어서 공개된 PC 이미지로는 풀 수 없고, 시험용 테넌트가 있을 때 아래 질문을 풀어 봅니다.
 
 1. Word 에서 문서를 연 채 Copilot 에게 요약을 시키고, 생긴 `CopilotInteraction` 레코드의 `AppHost`·`Contexts`·`ThreadId` 를 확인합니다. 같은 대화에서 한 번 더 물었을 때 `ThreadId` 가 같은지 봅니다.
 2. 같은 질문을 웹 검색을 켠 채 다시 하고, `AISystemPlugin` 이 어떻게 달라지는지 비교합니다.

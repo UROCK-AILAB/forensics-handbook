@@ -18,15 +18,15 @@ logrotate 는 보통 하루에 한 번 cron 작업이나 systemd 타이머 `logr
 
 | 항목 | Ubuntu 24.04 | RHEL 9 |
 |---|---|---|
-| 전역 설정 | `/etc/logrotate.conf` (내용은 검체에서 확인) | `/etc/logrotate.conf`, upstream 예시 파일 그대로[5] |
+| 전역 설정 | `/etc/logrotate.conf` (내용은 실제 시스템에서 확인) | `/etc/logrotate.conf`, upstream 예시 파일 그대로[5] |
 | 패키지별 설정 | `/etc/logrotate.d/` | `/etc/logrotate.d/` (패키지가 `btmp`·`wtmp` 두 파일을 넣음)[5] |
-| 상태 파일 | 검체에서 확인 (upstream 기본값은 `/var/lib/logrotate.status`)[3] | `/var/lib/logrotate/logrotate.status`, 권한 0640 root root[5] |
-| 실행 방식 | 검체에서 확인 (타이머 또는 cron) | `logrotate.timer`·`logrotate.service`[5] |
+| 상태 파일 | 실제 시스템에서 확인 (upstream 기본값은 `/var/lib/logrotate.status`)[3] | `/var/lib/logrotate/logrotate.status`, 권한 0640 root root[5] |
+| 실행 방식 | 실제 시스템에서 확인 (타이머 또는 cron) | `logrotate.timer`·`logrotate.service`[5] |
 | syslog 회전 대상 | `syslog`, `mail.log`, `kern.log`, `auth.log`, `user.log`, `cron.log`[7] | `cron`, `maillog`, `messages`, `secure`, `spooler`[6] |
 | syslog 회전 설정 | `rotate 4`, `weekly`, `compress`, `delaycompress`, `notifempty`, `missingok`[7] | 주기·개수를 따로 적지 않아 전역 설정(`weekly`, `rotate 4`, `dateext`, 압축 없음)을 따름[4][5][6] |
 | 회전본 이름 모양 | `auth.log.1`, `auth.log.2.gz` … (전역에 `dateext` 가 없을 때) | `secure-20260920` 처럼 날짜 꼬리, 압축 없음 (날짜는 만든 예시) |
 
-Ubuntu 칸의 syslog 회전 설정은 Ubuntu 24.04 rsyslog 패키지 소스의 `rsyslog.logrotate` 내용입니다[7]. 전역 설정에 `dateext` 가 켜져 있는지는 검체의 `/etc/logrotate.conf` 를 열어 확인합니다. 상태 파일 위치도 빌드할 때 정해지므로(`--with-state-file-path`)[3], 검체의 `logrotate.service` 나 cron 스크립트에 `-s` 로 다른 경로를 넘기는지 먼저 봅니다[1]. rsyslog 가 어떤 로그를 어느 파일로 보내는지는 [syslog 형식과 rsyslog](syslog-rsyslog.md)에서 다룹니다.
+Ubuntu 열의 syslog 회전 설정은 Ubuntu 24.04 rsyslog 패키지 소스의 `rsyslog.logrotate` 내용입니다[7]. 전역 설정에 `dateext` 가 켜져 있는지는 실제 시스템의 `/etc/logrotate.conf` 를 열어 확인합니다. 상태 파일 위치도 빌드할 때 정해지므로(`--with-state-file-path`)[3], 분석 대상의 `logrotate.service` 나 cron 스크립트에 `-s` 로 다른 경로를 넘기는지 먼저 봅니다[1]. rsyslog 가 어떤 로그를 어느 파일로 보내는지는 [syslog 형식과 rsyslog](syslog-rsyslog.md)에서 다룹니다.
 
 ## 구조
 
@@ -46,7 +46,7 @@ Ubuntu 칸의 syslog 회전 설정은 Ubuntu 24.04 rsyslog 패키지 소스의 `
 | `copytruncate` | 복사본을 만든 뒤 원본을 0으로 자름. 복사와 자르기 사이의 줄은 잃을 수 있음 | 원본 파일이 그대로 남아 계속 쓰임 |
 | `copy` | 복사만 하고 원본은 건드리지 않음 | 같은 줄이 두 파일에 겹침 |
 | `renamecopy` | 원본을 `.tmp` 를 붙인 이름으로 바꾼 뒤 복사하고 임시 파일을 지움 | |
-| `compress`·`compresscmd`·`compressext` | 회전본 압축. 확장자는 gzip `.gz`, bzip2 `.bz2`, xz `.xz`, zstd `.zst`, compress `.Z`, zip `.zip` | 확장자로 압축 도구를 가늠 |
+| `compress`·`compresscmd`·`compressext` | 회전본 압축. 확장자는 gzip `.gz`, bzip2 `.bz2`, xz `.xz`, zstd `.zst`, compress `.Z`, zip `.zip` | 확장자로 압축 도구를 추정 |
 | `delaycompress` | 바로 앞 회전본은 다음 주기까지 압축하지 않음 (`compress` 와 함께일 때만) | `.1` 만 평문, `.2` 부터 압축 |
 | `dateext`·`dateformat`·`dateyesterday`·`datehourago` | 번호 대신 날짜 꼬리. 기본 형식은 `-%Y%m%d`, `hourly` 면 `-%Y%m%d%H` | 이름의 날짜가 뜻하는 날 |
 | `olddir` | 회전본을 다른 디렉터리로 옮김 | 회전본이 `/var/log` 밖에 있을 수 있음 |
@@ -77,7 +77,7 @@ Ubuntu 칸의 syslog 회전 설정은 Ubuntu 24.04 rsyslog 패키지 소스의 `
 | 경로 | `"/var/log/auth.log"` | 설정에서 글로브를 푼 실제 경로 |
 | 시각 | `%d-%d-%d-%d:%d:%d` → 연-월-일-시:분:초 | 앞자리 0을 채우지 않음. 시스템 현지 시각이고 시간대 표시는 없음 |
 
-시각은 `localtime_r` 로 만든 현지 시각이라서, 상태 파일만으로는 UTC 로 바꿀 수 없고 검체의 시간대 설정이 필요합니다[2]. 읽을 때는 연도가 1970~2100 밖이거나(1900 은 예외로 받음) 월·일·시·분이 범위를 벗어나면 그 줄을 잘못된 줄로 보고 읽기를 멈춥니다[2].
+시각은 `localtime_r` 로 만든 현지 시각이라서, 상태 파일만으로는 UTC 로 바꿀 수 없고 분석 대상의 시간대 설정이 필요합니다[2]. 읽을 때는 연도가 1970~2100 밖이거나(1900 은 예외로 받음) 월·일·시·분이 범위를 벗어나면 그 줄을 잘못된 줄로 보고 읽기를 멈춥니다[2].
 
 처음 보는 로그는 실행한 그 시각을 마지막 회전 시각으로 적습니다[1]. 이때 코드는 연·월·일·시만 채우고 분과 초는 0으로 둡니다[2]. 실제로 회전하면 분과 초까지 그대로 적습니다[2]. 그래서 `2026-9-20-6:0:0` 처럼 분·초가 0인 줄은 "그 시각에 처음 설정에 잡혔고 아직 회전하지 않은 로그" 일 가능성이 있습니다(만든 예시).
 
@@ -103,7 +103,7 @@ logrotate 는 실행할 때마다(`-d` 디버그 실행 제외) 상태 파일 �
 
 1. 실행 방식과 상태 파일 경로를 찾습니다. `logrotate.service`·`logrotate.timer` 와 cron 디렉터리를 보고, `-s` 인자가 있으면 그 경로를 씁니다([systemd 서비스와 타이머](../../02-artifacts/persistence/systemd-units.md), [cron·anacron·at](../../02-artifacts/persistence/cron-at.md)).
 2. `/etc/logrotate.conf` 와 `/etc/logrotate.d/` 의 파일을 읽어 로그마다 주기·개수·압축·이름 방식을 정리합니다. 블록 안 값이 전역 값을 덮어쓰고, 전역 설정은 그보다 앞서 나온 `include` 에 적용되지 않는다는 점을 함께 따집니다[1].
-3. 상태 파일에서 로그마다 마지막 회전 시각을 읽고, 검체의 시간대로 UTC 로 바꿉니다([호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)).
+3. 상태 파일에서 로그마다 마지막 회전 시각을 읽고, 분석 대상의 시간대로 UTC 로 바꿉니다([호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md)).
 4. 설정대로라면 있어야 할 회전본 목록(예: `rotate 4` + `weekly` 면 약 4주치)을 만들고 실제 파일과 맞춰 봅니다.
 5. 압축본은 풀어서 읽되, 원본 이미지 안의 파일은 건드리지 않고 사본으로 작업합니다.
 
@@ -115,7 +115,7 @@ logrotate 는 실행할 때마다(`-d` 디버그 실행 제외) 상태 파일 �
 
 - 상태 파일의 줄은 logrotate 가 그 경로를 마지막으로 돌린 현지 시각을 보여 줍니다[2].
 - 상태 파일에만 있고 디스크에는 없는 로그 경로는 1년 안에 그 로그가 설정에 잡혀 있었다는 흔적입니다[2].
-- 설정 파일과 상태 파일을 합치면 어떤 회전본이 있어야 하는지 계산할 수 있고, 모자란 회전본이 정상적인 개수·기간 초과 때문에 지워졌는지 가늠할 수 있습니다.
+- 설정 파일과 상태 파일을 합치면 어떤 회전본이 있어야 하는지 계산할 수 있고, 모자란 회전본이 정상적인 개수·기간 초과 때문에 지워졌는지 추정할 수 있습니다.
 - 상태 파일의 mtime 은 마지막으로 logrotate 를 (디버그가 아닌 모드로) 실행한 때와 가깝습니다. 실행할 때마다 새로 쓰고 바꿔 넣기 때문입니다[2].
 
 ### 증명하지 못하는 것
@@ -136,7 +136,7 @@ logrotate 는 실행할 때마다(`-d` 디버그 실행 제외) 상태 파일 �
 | `create` 로 새로 만든 지금 로그 파일의 생성 시각 | 회전 직후 새 파일을 만들 때[1] | 파일 시스템 시각 |
 | `dateext` 이름의 날짜 | 회전한 날. `dateyesterday` 면 전날[1] | 현지 날짜 |
 
-`dateext` 이름의 날짜는 파일이 덮는 기간이 아니라 회전한 날입니다. `weekly` 설정의 `secure-20260920` 은 9월 20일 회전 시각 직전까지 약 한 주 동안의 줄을 담고, 날짜는 그 기간의 마지막 날입니다(만든 예시). 상태 파일의 시각이 지금보다 25시간 넘게 미래이면 logrotate 는 `log %s last rotated in the future -- rotation forced` 오류를 내고 강제로 돌립니다[2]. 시계를 앞으로 돌렸다가 되돌린 흔적을 찾을 때 이 오류가 단서가 될 수 있고, systemd 서비스로 돌았다면 검체의 저널에서 `logrotate.service` 단위의 메시지를 찾아봅니다([시각을 조작했나](../../04-scenarios/insider/time-manipulation.md)).
+`dateext` 이름의 날짜는 파일이 덮는 기간이 아니라 회전한 날입니다. `weekly` 설정의 `secure-20260920` 은 9월 20일 회전 시각 직전까지 약 한 주 동안의 줄을 담고, 날짜는 그 기간의 마지막 날입니다(만든 예시). 상태 파일의 시각이 지금보다 25시간 넘게 미래이면 logrotate 는 `log %s last rotated in the future -- rotation forced` 오류를 내고 강제로 돌립니다[2]. 시계를 앞으로 돌렸다가 되돌린 흔적을 찾을 때 이 오류가 단서가 될 수 있고, systemd 서비스로 돌았다면 분석 대상의 저널에서 `logrotate.service` 단위의 메시지를 찾아봅니다([시각을 조작했나](../../04-scenarios/insider/time-manipulation.md)).
 
 전통 syslog 형식은 줄에 연도가 없어서 도구가 파일의 mtime 으로 연도를 추정합니다. dissect.target 은 파일 mtime 을 시간대에 맞춰 바꾼 연도를 마지막 줄의 연도로 보고 거꾸로 읽어 가며 연도를 넘기고, 압축본도 풀어서 같은 방식으로 읽습니다[8]. 압축본은 원래 파일의 mtime 을 이어받으므로 이 추정이 맞아떨어지지만, 수집할 때 mtime 을 보존하지 않은 사본이면 연도가 틀어질 수 있습니다.
 
@@ -154,11 +154,11 @@ logrotate 는 실행할 때마다(`-d` 디버그 실행 제외) 상태 파일 �
 - 로그가 심볼릭 링크이면 돌리지 않고 건너뛰고, 하드 링크가 둘 이상이면 `allowhardlink` 가 없는 한 건너뜁니다[2]. 로그 경로가 링크로 바뀌어 회전이 멈췄다면 그 자체가 조사할 거리입니다.
 - 설정의 `postrotate` 등 스크립트 블록은 `su` 지시어와 상관없이 logrotate 를 실행한 사용자(보통 root) 권한으로 도는 셸 명령입니다[1]. `/etc/logrotate.d/` 에 낯선 파일이나 낯선 스크립트 줄이 있으면 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md)의 관점으로 봅니다.
 - 회전 설정이 주석으로만 들어 있는 패키지도 있습니다. MySQL 이 RPM 용으로 싣는 회전 설정은 블록 전체가 주석이라, 주석을 풀기 전에는 오류 로그가 돌지 않고 계속 커집니다[12]. 서버 로그별 기본 설정은 [웹 서버 로그](../../02-artifacts/servers/web-server-logs.md)와 [데이터베이스 서버 로그](../../02-artifacts/servers/database-logs.md)에서 다룹니다.
-- upstream 예시 cron 스크립트는 logrotate 가 0이 아닌 값으로 끝나면 `logger -t logrotate "ALERT exited abnormally with [$EXITVALUE]"` 로 syslog 에 한 줄을 남깁니다[4]. cron 으로 도는 검체에서는 이 줄로 실패한 날을 찾을 수 있습니다.
+- upstream 예시 cron 스크립트는 logrotate 가 0이 아닌 값으로 끝나면 `logger -t logrotate "ALERT exited abnormally with [$EXITVALUE]"` 로 syslog 에 한 줄을 남깁니다[4]. cron 으로 도는 시스템에서는 이 줄로 실패한 날을 찾을 수 있습니다.
 
 ## 도구
 
-- 검체의 로그를 모을 때: ForensicArtifacts 정의는 `/var/log/auth*`, `/var/log/secure*`, `/var/log/messages*`, `/var/log/syslog*` 처럼 끝에 `*` 를 붙여 회전본까지 잡고[10], UAC 는 `/var/log` 전체를 모읍니다[11]. 상태 파일과 `/etc/logrotate.conf`, `/etc/logrotate.d/` 는 따로 모읍니다.
+- 분석 대상의 로그를 모을 때: ForensicArtifacts 정의는 `/var/log/auth*`, `/var/log/secure*`, `/var/log/messages*`, `/var/log/syslog*` 처럼 끝에 `*` 를 붙여 회전본까지 잡고[10], UAC 는 `/var/log` 전체를 모읍니다[11]. 상태 파일과 `/etc/logrotate.conf`, `/etc/logrotate.d/` 는 따로 모읍니다.
 - dissect.target 의 인증 로그·syslog 플러그인은 `auth.log*`·`secure*`, `syslog*`·`messages*` 를 찾아 압축본까지 읽습니다[8][9].
 - 상태 파일과 설정 파일은 평문이라 텍스트 편집기나 `grep` 으로 읽습니다. 압축본은 사본을 만든 뒤 `zcat` 같은 압축 해제 도구로 엽니다.
 - 여러 회전본을 한 타임라인으로 합치는 방법은 [로그 분석](../../03-techniques/analysis/log-analysis.md)과 [타임라인 만들기](../../03-techniques/analysis/timeline.md)에서 다룹니다. 인증 로그를 읽는 방법은 [인증 로그](../../02-artifacts/logins/auth-log.md), 로그를 지운 흔적을 찾는 순서는 [흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md)에 있습니다.

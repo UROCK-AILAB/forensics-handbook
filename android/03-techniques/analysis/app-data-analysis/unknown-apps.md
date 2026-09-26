@@ -17,9 +17,9 @@ nav_order: 1380
 
 ## 절차
 
-1. **설치 기록으로 정체를 확인합니다.** 먼저 패키지 이름이 기기의 설치 기록에 있는지, 언제 설치·갱신됐는지, 무엇이 설치했는지를 봅니다. 공개 도구 ALEAPP 의 packageInfo 모듈은 `*/system/packages.xml` 을 읽어 `<package>` 요소의 `name`, `ft`, `it`, `ut`, `installOriginator`, `installer`, `codePath`, `publicFlags`, `privateFlags` 속성을 뽑고, `it` 를 설치 시각(Install Time), `ut` 를 갱신 시각(Update Time)으로 보여 줍니다 [2]. 이 도구는 `ft` 를 포함한 세 시각 속성을 모두 16진수 문자열로 적힌 유닉스 밀리초로 보고 UTC 로 바꾸며 [2], 밀리초 값을 옮기는 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다. `ft` 의 뜻과 두 플래그 칸의 비트 뜻은 AOSP 소스에서 따로 확인합니다. 파일이 일반 XML 이 아니라 바이너리 XML 일 수 있어서 ALEAPP 도 먼저 형식을 검사한 뒤 읽고 [2], 형식 설명은 [안드로이드 바이너리 XML (ABX)](../../../01-foundations/data-formats/abx.md), 이 기록 자체의 해석은 [설치된 앱 (packages.xml)](../../../02-artifacts/app-usage/packages/index.md) 페이지에 있습니다.
+1. **설치 기록으로 정체를 확인합니다.** 먼저 패키지 이름이 기기의 설치 기록에 있는지, 언제 설치·갱신됐는지, 무엇이 설치했는지를 봅니다. 공개 도구 ALEAPP 의 packageInfo 모듈은 `*/system/packages.xml` 을 읽어 `<package>` 요소의 `name`, `ft`, `it`, `ut`, `installOriginator`, `installer`, `codePath`, `publicFlags`, `privateFlags` 속성을 뽑고, `it` 를 설치 시각(Install Time), `ut` 를 갱신 시각(Update Time)으로 보여 줍니다 [2]. 이 도구는 `ft` 를 포함한 세 시각 속성을 모두 16진수 문자열로 적힌 유닉스 밀리초로 보고 UTC 로 바꾸며 [2], 밀리초 값을 옮기는 공식은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다. `ft` 의 뜻과 두 플래그 속성의 비트 뜻은 AOSP 소스에서 따로 확인합니다. 파일이 일반 XML 이 아니라 바이너리 XML 일 수 있어서 ALEAPP 도 먼저 형식을 검사한 뒤 읽고 [2], 형식 설명은 [안드로이드 바이너리 XML (ABX)](../../../01-foundations/data-formats/abx.md), 이 기록 자체의 해석은 [설치된 앱 (packages.xml)](../../../02-artifacts/app-usage/packages/index.md) 페이지에 있습니다.
 
-2. **켜져 있는 기기라면 dumpsys package 로 한 번 더 봅니다.** `dumpsys package` 출력은 매우 길고(한 기기에서 약 192,000줄), 맨 앞의 "Database versions:" 절 뒤에 역할별 담당 패키지를 적은 "Known Packages:" 절과 공유 라이브러리를 `이름 -> (so|jar) 경로` 모양으로 적은 "Libraries:" 절이 이어집니다. "Known Packages:" 절의 값 가운데 설치 경로를 가리는 데 쓸 만한 것은 아래와 같습니다.
+2. **켜져 있는 기기라면 dumpsys package 로 한 번 더 봅니다.** `dumpsys package` 출력은 매우 길고(한 기기에서 약 192,000줄), 맨 앞의 "Database versions:" 절 뒤에 역할별 담당 패키지를 적은 "Known Packages:" 절과 공유 라이브러리를 `이름 -> (so|jar) 경로` 모양으로 적은 "Libraries:" 절이 이어집니다. "Known Packages:" 절의 값 가운데 설치 경로를 판별하는 데 쓸 만한 것은 아래와 같습니다.
 
    | 역할 | 패키지(한 기기의 예) |
    |---|---|
@@ -29,7 +29,7 @@ nav_order: 1380
    | Permission Controller | `com.google.android.permissioncontroller` |
    | Browser | `com.android.chrome` |
 
-   1단계에서 얻은 `installer` 값을 이 표의 역할과 견줘 보면, 그 앱이 스토어를 거쳤는지 기기의 설치 관리자를 거쳤는지 가늠할 단서가 됩니다. 패키지별 절에서 설치 시각 같은 칸의 이름은 출력에서 직접 찾아 확인하고, dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
+   1단계에서 얻은 `installer` 값을 이 표의 역할과 비교해 보면, 그 앱이 스토어를 거쳤는지 기기의 설치 관리자를 거쳤는지 추정할 단서가 됩니다. 패키지별 절에서 설치 시각 같은 필드의 이름은 출력에서 직접 찾아 확인하고, dumpsys 출력 전반은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지를 봅니다.
 
 3. **APK 의 매니페스트 속성을 읽습니다.** 매니페스트의 `<application>` 요소에는 데이터가 어디로 복사될 수 있는지, 통신을 어떻게 하는지 알려 주는 속성이 있습니다 [3].
 
@@ -47,7 +47,7 @@ nav_order: 1380
 
 4. **앱 폴더의 윤곽을 잡습니다.** 앱은 일반 파일을 `filesDir`, 캐시를 `cacheDir`, 따로 만든 하위 폴더를 `getDir()` 로 얻은 곳에 두고, 외부 저장소에는 `getExternalFilesDir()` 로 얻은 앱 전용 폴더를 씁니다 [1]. 이 폴더들의 성격과 Android 버전별 차이는 허브 [앱 데이터 분석](index.md) 의 표에 정리했고, 실제 경로 배치는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. 공용 저장소도 함께 봅니다. `/sdcard/Android` 아래에는 `data`, `media`, `obb` 세 폴더가 있고, `media` 아래에는 `com.google.android.gms`, `com.samsung.android.spay` 처럼 패키지 이름으로 된 폴더가 생깁니다. 공용 저장소 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md) 페이지를 봅니다.
 
-5. **파일 형식을 가립니다.** 앱 폴더의 파일은 SQLite, 설정 XML, 프로토콜 버퍼, LevelDB 처럼 형식이 정해진 것이 많아서 형식부터 가리면 읽을 방법이 정해집니다. SQLite 는 본 파일 옆에 `-wal`, `-journal` 같은 부속 파일이 붙고, ALEAPP 도 `library.db*`, `frosting.db*`, `History*` 처럼 별표 패턴으로 부속 파일까지 함께 찾습니다 [4][5][6]. 파일을 옮기거나 내보낼 때도 부속 파일을 같이 확보하고, 부속 파일의 역할은 SQLite 페이지를 봅니다. 형식별 읽는 법은 아래 페이지에 있습니다.
+5. **파일 형식을 판별합니다.** 앱 폴더의 파일은 SQLite, 설정 XML, 프로토콜 버퍼, LevelDB 처럼 형식이 정해진 것이 많아서 형식부터 판별하면 읽을 방법이 정해집니다. SQLite 는 본 파일 옆에 `-wal`, `-journal` 같은 부속 파일이 붙고, ALEAPP 도 `library.db*`, `frosting.db*`, `History*` 처럼 별표 패턴으로 부속 파일까지 함께 찾습니다 [4][5][6]. 파일을 옮기거나 내보낼 때도 부속 파일을 같이 확보하고, 부속 파일의 역할은 SQLite 페이지를 봅니다. 형식별 읽는 법은 아래 페이지에 있습니다.
 
    | 형식 | 읽는 법 |
    |---|---|
@@ -80,7 +80,7 @@ Android 버전에 따라 앱 전용 저장소의 암호화와 접근 범위가 �
 
 ## 결과를 어떻게 해석하나
 
-packages.xml 의 항목은 그 파일을 확보한 시점에 해당 패키지가 설치 기록에 있었다는 뜻이고, 사용자가 앱을 열어 썼다는 뜻은 아닙니다. `installer` 칸은 설치를 맡은 패키지로 기록된 이름이고, 사람이 누구였는지는 알려 주지 않습니다. 앱 폴더의 DB 내용은 앱이 적은 기록이라서 시스템 기록과 시각이 맞는지 확인한 만큼만 씁니다.
+packages.xml 의 항목은 그 파일을 확보한 시점에 해당 패키지가 설치 기록에 있었다는 뜻이고, 사용자가 앱을 열어 썼다는 뜻은 아닙니다. `installer` 속성은 설치를 맡은 패키지로 기록된 이름이고, 사람이 누구였는지는 이 값으로 알 수 없습니다. 앱 폴더의 DB 내용은 앱이 적은 기록이라서 시스템 기록과 시각이 맞는지 확인한 만큼만 씁니다.
 
 > packages.xml 에 `(패키지 이름)` 항목이 있고, 설치 시각(`it`)은 (시각) UTC, 설치 주체(`installer`)는 `(패키지 이름)` 으로 기록돼 있습니다. 같은 시간대의 앱 사용 기록에 이 패키지의 이벤트가 (건수) 건 있습니다.
 

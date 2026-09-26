@@ -12,7 +12,7 @@ nav_order: 870
 
 파인더 설정 파일 (Finder plist)은 이름 그대로 파인더의 설정 파일이지만, 포렌식에서는 설정값보다 사용자가 최근에 한 동작이 남는 키가 더 쓸모 있습니다. 이 파일에는 최근 폴더(`FXRecentFolders`), "폴더로 이동" 입력칸의 마지막 값과 입력 기록(`GoToField`, `GoToFieldHistory`), 최근 이동·복사 대상(`RecentMoveAndCopyDestinations`), "서버에 연결"에 마지막으로 쓴 주소(`FXConnectToLastURL`), 열기·저장 창의 마지막 폴더가 남습니다 [1]. 바탕화면에 나타났던 볼륨의 아이콘 위치(`FXDesktopVolumePositions`), 최근 파일 검색(`SGTRecentFileSearches`), 여러 항목 이름 바꾸기의 마지막 설정(`BulkRename` 으로 시작하는 키)도 함께 남습니다 [1].
 
-이 키들은 사용자가 파인더에서 무언가를 했을 때 파인더가 적어 두는 값이라서, 앱 실행 기록이나 파일 시스템 기록과는 다른 쪽에서 사용자 동작을 보여 줍니다. 최근 폴더·서버·열기 창 쪽 키는 [최근 항목 (Shared File Lists)](recent-items/index.md)에서 최근 항목 기록과 함께 자세히 다루고, 이 페이지는 파일 전체를 한 번에 훑는 길잡이와 다른 쪽에서 다루지 않는 이름 바꾸기 키를 중심으로 씁니다.
+이 키들은 사용자가 파인더에서 무언가를 했을 때 파인더가 적어 두는 값이라서, 앱 실행 기록이나 파일 시스템 기록과는 다른 쪽에서 사용자 동작을 보여 줍니다. 최근 폴더·서버·열기 창 쪽 키는 [최근 항목 (Shared File Lists)](recent-items/index.md)에서 최근 항목 기록과 함께 자세히 다루고, 이 페이지는 파일 전체를 한 번에 살펴보는 길잡이와 다른 페이지에서 다루지 않는 이름 바꾸기 키를 중심으로 씁니다.
 
 휴지통 30일 자동 비우기도 파인더 설정 › 고급의 "30일 후 휴지통에서 항목 제거(Remove items from the Trash after 30 days)"에서 켜고 끕니다 [3]. 이 설정이 휴지통 해석에 어떤 영향을 주는지는 [휴지통 (.Trash)](trash.md)에서 다룹니다.
 
@@ -28,7 +28,7 @@ nav_order: 870
 
 세 파일 모두 사용자 홈 아래에 있어서, 계정이 여럿이면 계정마다 따로 읽습니다. ForensicArtifacts 정의(`macos.yaml`)에는 `com.apple.finder.plist` 를 따로 가리키는 항목이 없으므로 [2], 그 정의로 수집 목록을 짤 때는 이 파일을 따로 챙깁니다.
 
-키마다 어느 macOS 버전부터 있고 어느 버전에서 없어졌는지는 공개 자료가 없어 검체에서 확인합니다. 알려진 버전 차이는 `FXRecentFolders` 항목 하나입니다. 옛 항목에는 `file-bookmark`(북마크 데이터) 대신 `file-data` 안에 `_CFURLAliasData`(별칭 데이터)가 들어 있고, macOS 10.9 미만에서 만든 항목으로 보는 해석이 있습니다 [1].
+키마다 어느 macOS 버전부터 있고 어느 버전에서 없어졌는지는 실제 데이터로 확인해야 합니다. 알려진 버전 차이는 `FXRecentFolders` 항목 하나입니다. 옛 항목에는 `file-bookmark`(북마크 데이터) 대신 `file-data` 안에 `_CFURLAliasData`(별칭 데이터)가 들어 있고, macOS 10.9 미만에서 만든 항목으로 보는 해석이 있습니다 [1].
 
 ## 구조
 
@@ -42,7 +42,7 @@ nav_order: 870
 | `RecentMoveAndCopyDestinations` | 최근 이동·복사 대상 | 문자열 배열 |
 | `FXConnectToLastURL` | "서버에 연결"에 마지막으로 쓴 주소 | 값 하나 |
 | `NSNavLastRootDirectory`, `NSNavLastCurrentDirectory` | 열기·저장 창의 마지막 폴더 | 값 하나씩 |
-| `FXDesktopVolumePositions` | 바탕화면에 나타났던 볼륨의 아이콘 위치 | 볼륨마다 키 하나. 키 이름이 `<볼륨이름>_<16진 숫자>` 꼴 |
+| `FXDesktopVolumePositions` | 바탕화면에 나타났던 볼륨의 아이콘 위치 | 볼륨마다 키 하나. 키 이름이 `<볼륨이름>_<16진 숫자>` 형식 |
 | `SGTRecentFileSearches` | 최근 파일 검색 | 배열. 항목마다 `name`, `type` |
 | `BulkRename` 으로 시작하는 키 | 여러 항목 이름 바꾸기의 마지막 설정 | 아래 표 |
 
@@ -73,9 +73,9 @@ nav_order: 870
 
 **증명하는 것.** 키에 값이 있으면 그 계정의 파인더가 어느 때인가 그 값을 적어 두었다는 뜻입니다. `GoToFieldHistory` 에 있는 경로는 "폴더로 이동" 에 그 경로를 넣은 기록이고, `RecentMoveAndCopyDestinations` 의 경로는 이동이나 복사 대상으로 쓰인 폴더이며, `FXConnectToLastURL` 은 "서버에 연결" 에 마지막으로 넣은 주소입니다 [1]. `SGTRecentFileSearches` 의 `name` 은 파인더에서 검색한 글자이고, `BulkRename` 키는 마지막으로 한 여러 항목 이름 바꾸기의 설정입니다 [1].
 
-**증명하지 못하는 것.** 이 키들에는 항목마다 시각이 없어서, 그 동작을 언제 했는지는 이 파일만으로 말할 수 없습니다. 이동·복사 대상 경로는 어떤 파일을 옮겼는지 알려 주지 않고, 이름 바꾸기 키는 어느 파일의 이름을 바꿨는지 알려 주지 않습니다. 동작이 끝까지 성공했는지, 그 경로가 지금도 있는지, 누가 키보드 앞에 있었는지도 이 파일은 말하지 않습니다. 값이 하나뿐인 키(`GoToField`, `FXConnectToLastURL`, `BulkRename` 키)는 마지막 값만 남으므로 그전 값은 다른 기록에서 찾아야 합니다.
+**증명하지 못하는 것.** 이 키들에는 항목마다 시각이 없어서, 그 동작을 언제 했는지는 이 파일만으로 말할 수 없습니다. 이동·복사 대상 경로는 어떤 파일을 옮겼는지 알려 주지 않고, 이름 바꾸기 키는 어느 파일의 이름을 바꿨는지 알려 주지 않습니다. 동작이 끝까지 성공했는지, 그 경로가 지금도 있는지, 누가 키보드 앞에 있었는지도 이 파일로는 알 수 없습니다. 값이 하나뿐인 키(`GoToField`, `FXConnectToLastURL`, `BulkRename` 키)는 마지막 값만 남으므로 그전 값은 다른 기록에서 찾아야 합니다.
 
-보고서에는 "피조사자가 이 폴더로 파일을 복사했다" 가 아니라 "이 계정의 파인더 설정 파일에 이 경로가 최근 이동·복사 대상으로 남아 있다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "피조사자가 이 폴더로 파일을 복사했다" 가 아니라 "이 계정의 파인더 설정 파일에 이 경로가 최근 이동·복사 대상으로 남아 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
@@ -89,7 +89,7 @@ nav_order: 870
 - **배열 순서를 시간순으로 읽는 경우.** 배열 키의 항목 순서가 최근 순서인지는 공개 자료가 없습니다. 순서만 보고 "먼저 갔다·나중에 갔다" 를 말하지 않습니다.
 - **옛 모양의 최근 폴더 항목.** `file-bookmark` 가 없는 항목은 별칭 데이터로 읽어야 해서 [1], 북마크만 푸는 도구는 이런 항목을 건너뛸 수 있습니다.
 - **도구의 해석을 사실처럼 옮기는 경우.** 볼륨 키의 16진 값을 "볼륨 생성 시각" 이라고 단정하지 않습니다 [1].
-- **지우기와 조작.** 설정 파일을 지우거나 값을 바꾸면 이 기록은 사라지거나 달라지고, 파일 안에는 그런 일이 있었다는 표시가 따로 남지 않습니다. 키가 비어 있다고 그 동작을 하지 않았다고 말할 수 없으며, 예전 값은 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)의 방법으로 스냅숏이나 백업 속 같은 파일과 견줘 찾습니다.
+- **지우기와 조작.** 설정 파일을 지우거나 값을 바꾸면 이 기록은 사라지거나 달라지고, 파일 안에는 그런 일이 있었다는 표시가 따로 남지 않습니다. 키가 비어 있다고 그 동작을 하지 않았다고 말할 수 없으며, 예전 값은 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)의 방법으로 스냅숏이나 백업 속 같은 파일과 비교해 찾습니다.
 
 ## 직접 분석해 보기
 
@@ -97,7 +97,7 @@ nav_order: 870
 
 ### 헥스로 한 번
 
-바이너리 plist 의 키 이름은 ASCII 글자로 들어 있어서, 헥스 편집기에서 글자를 검색하면 키가 어디쯤 있는지 먼저 짚을 수 있습니다. 아래는 키 이름을 ASCII 로 적은 모양이고, 특정 검체에서 나온 바이트가 아니라 글자를 바이트로 옮겨 적은 예시입니다.
+바이너리 plist 의 키 이름은 ASCII 글자로 들어 있어서, 헥스 편집기에서 글자를 검색하면 키가 어디쯤 있는지 먼저 짚을 수 있습니다. 아래는 키 이름을 ASCII 로 적은 모양이고, 특정 파일에서 나온 바이트가 아니라 글자를 바이트로 옮겨 적은 예시입니다.
 
 ```
 "GoToFieldHistory" 를 ASCII 바이트로 적은 모양 (예시)
@@ -109,7 +109,7 @@ G  o  T  o  F  i  e  l  d  H  i  s  t  o  r  y
 B  u  l  k  R  e  n  a  m  e
 ```
 
-바이너리 plist 는 키와 값을 따로 떨어진 객체로 두고 번호로 잇기 때문에, 키 이름을 찾은 뒤 값까지 가려면 오프셋 표를 따라가야 합니다. 이 과정은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 순서대로 밟습니다. 검색에 `BulkRename` 을 넣으면 여덟 키가 모두 걸리므로, 이름 바꾸기 기록이 있는지 한 번에 가릴 수 있습니다.
+바이너리 plist 는 키와 값을 따로 떨어진 객체로 두고 번호로 잇기 때문에, 키 이름을 찾은 뒤 값까지 가려면 오프셋 표를 따라가야 합니다. 이 과정은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 순서대로 밟습니다. 검색에 `BulkRename` 을 넣으면 여덟 키가 모두 걸리므로, 이름 바꾸기 기록이 있는지 한 번에 가려낼 수 있습니다.
 
 ### 공개 도구로 한 번
 
@@ -146,12 +146,12 @@ mac_apt 의 `RECENTITEMS` 플러그인을 돌리면 세 파일의 키를 한 표
 - [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md) — 이동·복사·이름 바꾸기가 언제 일어났는지 시각을 찾을 때
 - [USB 저장 장치 (USB Storage)](../external-devices/usb/index.md) — 바탕화면 볼륨 이름을 외장 장치 기록과 맞출 때
 - [공유 폴더 연결 기록 (SMB·AFP)](../network/network-shares.md) — `FXConnectToLastURL` 의 서버 주소를 연결 기록과 맞출 때
-- [스포트라이트 (Spotlight)](spotlight/index.md) — 최근 검색 글자를 스포트라이트 쪽 기록과 견줄 때
+- [스포트라이트 (Spotlight)](spotlight/index.md) — 최근 검색 글자를 스포트라이트 쪽 기록과 비교할 때
 - [이 파일을 누가 언제 열었나 (File Access)](../../04-scenarios/activity/file-access.md), [자료를 밖으로 빼돌렸나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) — 이 파일을 쓰는 조사 흐름
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 맥 이미지를 골라 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 데이터 가운데 맥 이미지를 골라 아래 질문을 풀어 봅니다.
 
 1. 계정마다 `com.apple.finder.plist` 가 있나요? 있다면 이 페이지 "구조" 표의 키 가운데 어느 것이 들어 있나요?
 2. `GoToFieldHistory` 와 `RecentMoveAndCopyDestinations` 에 나온 경로 가운데 사용자 홈 밖(외장 볼륨, 네트워크 경로)을 가리키는 것은 무엇인가요?

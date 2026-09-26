@@ -8,7 +8,7 @@ nav_order: 2530
 
 ## 조사 질문
 
-이 맥에 개인정보 (PII, Personally Identifiable Information)가 담긴 파일이 어디에 얼마나 있고, 그중 무엇이 맥 밖으로 나갔을 수 있는지 묻습니다. 질문은 두 갈래라서, 먼저 개인정보가 있는 곳을 찾아 노출 범위를 정하고, 다음으로 그 파일이 나갈 수 있는 경로에 흔적이 있는지 봅니다. USB·에어드롭·클라우드·메일·메신저 같은 경로별 세부는 [자료를 밖으로 빼돌렸나](data-exfiltration/index.md) 허브와 그 하위 페이지에서 다루고, 이 페이지는 개인정보 파일을 찾는 방법과 두 갈래를 잇는 판단 흐름만 다룹니다.
+이 맥에 개인정보 (PII, Personally Identifiable Information)가 담긴 파일이 어디에 얼마나 있고, 그중 무엇이 맥 밖으로 나갔을 수 있는지 묻습니다. 질문은 두 가지라서, 먼저 개인정보가 있는 곳을 찾아 노출 범위를 정하고, 다음으로 그 파일이 나갈 수 있는 경로에 흔적이 있는지 봅니다. USB·에어드롭·클라우드·메일·메신저 같은 경로별 세부는 [자료를 밖으로 빼돌렸나](data-exfiltration/index.md) 허브와 그 하위 페이지에서 다루고, 이 페이지는 개인정보 파일을 찾는 방법과 두 질문을 잇는 판단 흐름만 다룹니다.
 
 개인정보는 문서 파일에만 있지 않고 메일·메시지·메모·아이폰 백업 안에도 들어 있습니다. 그래서 노출 범위를 셀 때는 사용자 문서 폴더와 함께 이런 앱 저장소도 목록에 넣습니다.
 
@@ -84,7 +84,7 @@ mdfind -0 -onlyin ~/Desktop 'kMDItemFSContentChangeDate >= $time.today(-3)' | xa
 
 본문 속성 `kMDItemTextContent`는 쿼리에는 쓸 수 있지만 값을 직접 읽어 낼 수는 없고, 자세한 성질은 [스포트라이트](../../02-artifacts/file-folder-usage/spotlight/index.md) 페이지에서 다룹니다. 이 밖에 `kMDItemKind`, `kMDItemAuthor`, `kMDItemCreator`, `kMDItemUserTags`도 쿼리에 쓸 수 있습니다 [1]. `mdfind`가 정규식을 지원하는지는 공개 자료에 나오지 않아서, 주민등록번호처럼 형식으로 찾아야 하는 개인정보는 사본 이미지에서 별도 도구로 검사합니다([콘텐츠 검색](../../03-techniques/analysis/content-search.md)).
 
-스포트라이트는 색인된 파일만 찾을 수 있어서, 색인에서 뺀 폴더나 색인이 꺼진 볼륨, 암호를 건 문서의 본문은 결과에 나오지 않는다고 보는 편이 안전합니다. 볼륨의 색인 설정은 `/.Spotlight-V100/VolumeConfiguration.plist`와 `/.Spotlight-V100/Store-V1/VolumeConfig.plist`에 있고 [5], 그 안에서 제외 목록을 담는 키 이름은 검체에서 확인합니다.
+스포트라이트는 색인된 파일만 찾을 수 있어서, 색인에서 뺀 폴더나 색인이 꺼진 볼륨, 암호를 건 문서의 본문은 결과에 나오지 않는다고 보는 편이 안전합니다. 볼륨의 색인 설정은 `/.Spotlight-V100/VolumeConfiguration.plist`와 `/.Spotlight-V100/Store-V1/VolumeConfig.plist`에 있고 [5], 그 안에서 제외 목록을 담는 키 이름은 실제 파일에서 확인합니다.
 
 ### 파일마다 붙는 출처와 사용 흔적
 
@@ -94,7 +94,7 @@ mdfind -0 -onlyin ~/Desktop 'kMDItemFSContentChangeDate >= $time.today(-3)' | xa
 
 통합 로그는 메시지에 끼워 넣은 값을 개인정보 보호 옵션에 따라 가리거나 보여 줍니다 [3][4]. 기본값으로는 정수·실수·불리언 값은 그대로 보이고, 동적 문자열과 복잡한 동적 객체는 가립니다 [4]. 가린 값은 `log show` 출력에 `<private>`로 나오는 것으로 알려져 있습니다. 개발자가 `%{public}s`로 표시하면 문자열도 보이고, `%{private}d`처럼 숫자를 가릴 수도 있습니다 [4]. 파일 이름·경로·계정 같은 값은 문자열이라서 로그에서 `<private>`로 나오는 경우가 많고, 유출된 파일 이름으로 통합 로그를 직접 검색하기 어려울 수 있습니다.
 
-`mask.hash` 옵션을 쓰면 원래 값 대신 해시가 남아 같은 값이 나온 로그끼리 이어 볼 수 있지만, 해시는 프로세스마다 다릅니다 [4]. 그래서 해시를 비교해 같은 값이라고 말할 수 있는 범위는 한 프로세스 안입니다. 가린 값을 보이게 하는 설정이 이미 기록된 로그에도 적용되는지는 공개된 자료가 없어 검체로 확인해야 합니다. 로그 저장 형식은 [통합 로그 형식](../../01-foundations/data-formats/unified-log/index.md) 페이지에서 다룹니다.
+`mask.hash` 옵션을 쓰면 원래 값 대신 해시가 남아 같은 값이 나온 로그끼리 이어 볼 수 있지만, 해시는 프로세스마다 다릅니다 [4]. 그래서 해시를 비교해 같은 값이라고 말할 수 있는 범위는 한 프로세스 안입니다. 가린 값을 보이게 하는 설정이 이미 기록된 로그에도 적용되는지는 실제 기기로 확인해야 합니다. 로그 저장 형식은 [통합 로그 형식](../../01-foundations/data-formats/unified-log/index.md) 페이지에서 다룹니다.
 
 ## 분석 흐름
 
@@ -124,7 +124,7 @@ mdfind -0 -onlyin ~/Desktop 'kMDItemFSContentChangeDate >= $time.today(-3)' | xa
 - [자료를 밖으로 빼돌렸나 (Data Exfiltration)](data-exfiltration/index.md) — 경로별 유출 흔적과 공통 판단 원칙
 - [스포트라이트 (Spotlight)](../../02-artifacts/file-folder-usage/spotlight/index.md) — 색인 위치와 속성, 시각 기준
 - [콘텐츠 검색 (Content Search)](../../03-techniques/analysis/content-search.md) — 사본 이미지에서 개인정보 형식을 찾는 방법
-- [이 파일은 어디서 왔나 (File Origin)](../activity/file-origin.md) — 파일 원천을 가리는 흐름
+- [이 파일은 어디서 왔나 (File Origin)](../activity/file-origin.md) — 파일 원천을 가려내는 흐름
 - [개인 정보 보호 권한 (TCC)](../../02-artifacts/credentials/tcc/index.md) — 보호 폴더 접근 권한 기록
 
 ## 참고 문헌

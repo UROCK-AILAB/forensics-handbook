@@ -7,7 +7,7 @@ nav_order: 470
 
 # 이벤트 종류 (Event Types)
 
-앱 사용 기록(usagestats)의 개별 이벤트가 어떤 번호와 이름으로 남는지, 이벤트마다 어떤 칸이 붙는지 정리합니다. 번호와 이름은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 번호마다 처음 들어간 API 수준이 다를 수 있습니다.
+앱 사용 기록(usagestats)의 개별 이벤트가 어떤 번호와 이름으로 남는지, 이벤트마다 어떤 필드가 붙는지 정리합니다. 번호와 이름은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 번호마다 처음 들어간 API 수준이 다를 수 있습니다.
 
 ## 한 줄 요약
 
@@ -54,11 +54,11 @@ UsageEvents.Event 에 정의된 번호입니다 [1]. "공개" 는 일반 SDK 에
 
 가장 큰 번호를 뜻하는 MAX_EVENT_TYPE 도 31입니다. 1번과 2번은 새 이름(ACTIVITY_RESUMED·ACTIVITY_PAUSED)과 폐기된 옛 이름(MOVE_TO_FOREGROUND·MOVE_TO_BACKGROUND)이 같은 번호를 쓰니, 도구가 어느 이름으로 보여 주든 같은 이벤트로 읽습니다 [1]. ALEAPP 는 0~31번의 이름표 32개를 쓰고 표에 없는 번호는 숫자 그대로 보여 줍니다 [5].
 
-## 이벤트마다 붙는 칸
+## 이벤트마다 붙는 필드
 
-모든 이벤트에는 패키지(package_token), 클래스(class_token), 시각(time_ms), flags, 종류(type)가 들어가고, 일부 이벤트에만 쓰는 칸이 더 있습니다 [2]. 칸의 필드 번호는 [파일 구조](structure.md) 페이지의 EventObfuscatedProto 표에 있습니다.
+모든 이벤트에는 패키지(package_token), 클래스(class_token), 시각(time_ms), flags, 종류(type)가 들어가고, 일부 이벤트에만 쓰는 필드가 더 있습니다 [2]. 각 필드의 번호는 [파일 구조](structure.md) 페이지의 EventObfuscatedProto 표에 있습니다.
 
-| 이벤트 | 더 붙는 칸 |
+| 이벤트 | 더 붙는 필드 |
 |---|---|
 | CONFIGURATION_CHANGE | config |
 | SHORTCUT_INVOCATION | shortcut_id_token |
@@ -68,11 +68,11 @@ UsageEvents.Event 에 정의된 번호입니다 [1]. "공개" 는 일반 SDK 에
 | LOCUS_ID_SET | locus_id_token |
 | USER_INTERACTION | interaction_extras |
 
-interaction_extras 칸은 USER_INTERACTION 이벤트에 붙고 분류(category)와 동작(action)을 토큰으로 담으며, ALEAPP 는 이를 'Interaction Category', 'Interaction Action' 칸으로 보여 줍니다 [2][5][6]. flags 에는 인스턴트 앱 표시(`FLAG_IS_PACKAGE_INSTANT_APP = 1 << 0`, @hide)가 들어갑니다 [1].
+interaction_extras 필드는 USER_INTERACTION 이벤트에 붙고 분류(category)와 동작(action)을 토큰으로 담으며, ALEAPP 는 이를 'Interaction Category', 'Interaction Action' 열로 보여 줍니다 [2][5][6]. flags 에는 인스턴트 앱 표시(`FLAG_IS_PACKAGE_INSTANT_APP = 1 << 0`, @hide)가 들어갑니다 [1].
 
 ## 대기 버킷 값
 
-STANDBY_BUCKET_CHANGED 의 standby_bucket 칸에는 버킷과 바뀐 이유가 함께 들어 있고, 상위 16비트가 버킷, 하위 16비트가 이유(reason)입니다 [5]. 값의 뜻은 UsageStatsManager 에 정의되어 있습니다 [3].
+STANDBY_BUCKET_CHANGED 의 standby_bucket 필드에는 버킷과 바뀐 이유가 함께 들어 있고, 상위 16비트가 버킷, 하위 16비트가 이유(reason)입니다 [5]. 값의 뜻은 UsageStatsManager 에 정의되어 있습니다 [3].
 
 | 버킷 | 값 | 비고 |
 |---|---|---|
@@ -98,15 +98,15 @@ UsageEvents 에는 조회하는 앱에게 일부 정보를 가리는 옵션이 �
 | OBFUSCATE_NOTIFICATION_EVENTS | 0x4 | 알림 채널 ID |
 | HIDE_LOCUS_EVENTS | 0x8 | LOCUS_ID_SET 이벤트 전부 |
 
-서비스는 호출한 앱에 따라 어느 옵션을 쓸지 정하고, 인스턴트 앱 가림은 기록할 때가 아니라 조회하는 시점의 상태를 기준으로 합니다 [4]. 그래서 사용 시간 앱 같은 제3자 앱으로 뽑은 결과에서는 일부 이벤트나 칸이 빠질 수 있고, 파일이나 dumpsys 출력과 다를 수 있습니다.
+서비스는 호출한 앱에 따라 어느 옵션을 쓸지 정하고, 인스턴트 앱 가림은 기록할 때가 아니라 조회하는 시점의 상태를 기준으로 합니다 [4]. 그래서 사용 시간 앱 같은 제3자 앱으로 뽑은 결과에서는 일부 이벤트나 필드가 빠질 수 있고, 파일이나 dumpsys 출력과 다를 수 있습니다.
 
 ## dumpsys 에 찍히는 이벤트
 
 `dumpsys usagestats` 의 최근 이벤트 목록에는 ACTIVITY_RESUMED, ACTIVITY_PAUSED, ACTIVITY_STOPPED, FOREGROUND_SERVICE_START, FOREGROUND_SERVICE_STOP, SCREEN_INTERACTIVE, SCREEN_NON_INTERACTIVE, KEYGUARD_SHOWN, KEYGUARD_HIDDEN, USER_INTERACTION, SHORTCUT_INVOCATION, NOTIFICATION_SEEN, NOTIFICATION_INTERRUPTION, STANDBY_BUCKET_CHANGED 같은 이벤트 이름이 찍힙니다. NOTIFICATION_SEEN 과 NOTIFICATION_INTERRUPTION 은 SDK 에서는 시스템 전용이지만 dumpsys 에서는 이름 그대로 나옵니다.
 
-이벤트 종류에 따라 줄에 찍히는 칸은 다음과 같습니다.
+이벤트 종류에 따라 줄에 찍히는 필드는 다음과 같습니다.
 
-| 이벤트 | dumpsys 줄의 칸 |
+| 이벤트 | dumpsys 줄의 필드 |
 |---|---|
 | ACTIVITY_RESUMED·PAUSED·STOPPED | package, class, instanceId, taskRootPackage, taskRootClass, flags |
 | FOREGROUND_SERVICE_START·STOP | package, class, flags |
@@ -116,7 +116,7 @@ UsageEvents 에는 조회하는 앱에게 일부 정보를 가리는 옵션이 �
 | SHORTCUT_INVOCATION | package, shortcutId, flags |
 | SCREEN_INTERACTIVE·NON_INTERACTIVE, KEYGUARD_SHOWN·HIDDEN | package, flags |
 
-dumpsys 에서는 대기 버킷과 이유가 standbyBucket 과 reason 으로 나뉘어 찍힙니다. 화면과 잠금 화면 이벤트에도 package 칸에 값이 들어갑니다. NOTIFICATION_INTERRUPTION 의 channelId 에는 CHANNEL_ID_SMS_MMS, REMINDER_CHANNEL_ID_NOTIFICATION, CHR, BATTERY, SECURITY 같은 값이, SHORTCUT_INVOCATION 의 shortcutId 에는 AUTO_UPDATE 나 한글 문자열 같은 값이 들어갑니다.
+dumpsys 에서는 대기 버킷과 이유가 standbyBucket 과 reason 으로 나뉘어 찍힙니다. 화면과 잠금 화면 이벤트에도 package 필드에 값이 들어갑니다. NOTIFICATION_INTERRUPTION 의 channelId 에는 CHANNEL_ID_SMS_MMS, REMINDER_CHANNEL_ID_NOTIFICATION, CHR, BATTERY, SECURITY 같은 값이, SHORTCUT_INVOCATION 의 shortcutId 에는 AUTO_UPDATE 나 한글 문자열 같은 값이 들어갑니다.
 
 액티비티 이벤트는 RESUMED, PAUSED, STOPPED 세 줄이 묶여 나오는 경우가 많아서, 세 이벤트의 개수가 거의 같습니다. 이 세 이벤트를 사용 시작과 끝으로 어떻게 읽을지, 시스템이 만든 이벤트를 사용자 조작과 어떻게 가를지는 [해석 함정](pitfalls.md) 페이지에서 다룹니다.
 

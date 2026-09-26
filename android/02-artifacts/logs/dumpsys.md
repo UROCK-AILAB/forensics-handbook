@@ -36,7 +36,7 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
 
 버그 리포트 본문에도 dumpsys 출력이 들어 있습니다 [2]. 버그 리포트로 한꺼번에 받는 방법은 [버그 리포트 (bugreport)](bugreport.md) 에서 다룹니다.
 
-부르는 쪽 권한에 따라 출력이 달라지는지는 공식 문서에 나오지 않습니다 [1]. 버전·제조사마다 서비스 목록과 출력 칸이 다를 수 있으니, 검체마다 `-l` 목록부터 받아 둡니다.
+부르는 쪽 권한에 따라 출력이 달라지는지는 공식 문서에 나오지 않습니다 [1]. 버전·제조사마다 서비스 목록과 출력 필드가 다를 수 있으니, 기기마다 `-l` 목록부터 받아 둡니다.
 
 ## 구조
 
@@ -51,7 +51,7 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
 | `wifi` | 10850 | `Verbose logging is off`, `WifiDeviceStateChangeManager - Log Begin ----` 구간 | [와이파이 설정과 접속 기록 (WifiConfigStore)](../network/wifi.md) |
 | `bluetooth_manager` | 16690 | `Bluetooth Status`, `Enable log:` 줄 | [블루투스 장치 (Bluetooth)](../network/bluetooth.md) |
 | `account` | 415 | `Accounts: ##`, `Accounts History` 표 | [계정 (Accounts)](../system-account/accounts/index.md) |
-| `user` | 789 | `Current user:`, `UserInfo{...}` 와 로그인·잠금 해제 시각 칸 | [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md) |
+| `user` | 789 | `Current user:`, `UserInfo{...}` 와 로그인·잠금 해제 시각 필드 | [사용자와 프로필 (Multi-user·users)](../system-account/users-profiles.md) |
 
 줄 수는 한 기기의 한 시점 값이라 다른 기기와 비교하는 기준으로 쓰지 않습니다.
 
@@ -65,7 +65,7 @@ adb shell dumpsys [-t timeout] [--help | -l | --skip services | service [argumen
     time="..." type=SCREEN_INTERACTIVE package=<값> flags=<값>
 ```
 
-나올 수 있는 type 에는 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED`, `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE`, `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN`, `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN`, `SHORTCUT_INVOCATION`, `USER_INTERACTION`, `STANDBY_BUCKET_CHANGED` 가 있습니다. 앞의 세 가지 ACTIVITY 줄에는 `instanceId`, `taskRootPackage`, `taskRootClass` 칸이 더 붙고, `NOTIFICATION_INTERRUPTION` 에는 `channelId`, `SHORTCUT_INVOCATION` 에는 `shortcutId`, `STANDBY_BUCKET_CHANGED` 에는 `standbyBucket`, `reason` 칸이 붙습니다.
+나올 수 있는 type 에는 `ACTIVITY_RESUMED`, `ACTIVITY_PAUSED`, `ACTIVITY_STOPPED`, `FOREGROUND_SERVICE_START`, `FOREGROUND_SERVICE_STOP`, `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE`, `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN`, `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN`, `SHORTCUT_INVOCATION`, `USER_INTERACTION`, `STANDBY_BUCKET_CHANGED` 가 있습니다. 앞의 세 가지 ACTIVITY 줄에는 `instanceId`, `taskRootPackage`, `taskRootClass` 필드가 더 붙고, `NOTIFICATION_INTERRUPTION` 에는 `channelId`, `SHORTCUT_INVOCATION` 에는 `shortcutId`, `STANDBY_BUCKET_CHANGED` 에는 `standbyBucket`, `reason` 필드가 붙습니다.
 
 ### 변경 이력 표 (account)
 
@@ -83,17 +83,17 @@ Action_Type 에는 `action_account_add`, `action_account_remove`, `action_called
 
 ### 사용자 상태 (user)
 
-`dumpsys user` 는 사용자마다 `UserInfo{...} serialNo= isPrimary=` 줄과 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground` 칸을 적습니다. 주 사용자의 `State` 는 `RUNNING_UNLOCKED` 처럼 나오고, `Created:` 칸은 `<unknown>` 으로 나올 수 있습니다.
+`dumpsys user` 는 사용자마다 `UserInfo{...} serialNo= isPrimary=` 줄과 `Type`, `Flags`, `State`, `Created`, `Last logged in`, `Last logged in fingerprint`, `Start time`, `Unlock time`, `Last entered foreground` 필드를 적습니다. 주 사용자의 `State` 는 `RUNNING_UNLOCKED` 처럼 나오고, `Created:` 필드는 `<unknown>` 으로 나올 수 있습니다.
 
 ### 그 밖의 서비스
 
-`dumpsys package` 에는 `Database versions:` 아래 `sdkVersion=`, `databaseVersion=`, `buildFingerprint=` 칸과, 시스템·설치 관리자·검증기·브라우저 같은 역할별 기본 패키지를 적은 `Known Packages:` 목록이 있습니다. `dumpsys notification` 의 `NotificationRecord(...)` 아래에는 `uid`, `userId`, `opPkg`, `icon`, `flags`, `originalFlags`, `pri`, `key`, `seen`, `groupKey` 칸이 이어집니다.
+`dumpsys package` 에는 `Database versions:` 아래 `sdkVersion=`, `databaseVersion=`, `buildFingerprint=` 필드와, 시스템·설치 관리자·검증기·브라우저 같은 역할별 기본 패키지를 적은 `Known Packages:` 목록이 있습니다. `dumpsys notification` 의 `NotificationRecord(...)` 아래에는 `uid`, `userId`, `opPkg`, `icon`, `flags`, `originalFlags`, `pri`, `key`, `seen`, `groupKey` 필드가 이어집니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
-dumpsys 출력은 그 명령을 부른 시각에 그 서비스가 내놓은 상태입니다. `usagestats` 의 이벤트 줄은 그 시각에 그 패키지의 화면·서비스·화면 켜짐 이벤트가 있었다는 서비스 기록이고, `account` 의 이력 표는 계정 추가·삭제 동작이 그 시각에 그 UID 로 있었다는 기록이며, `user` 의 `Last logged in`·`Unlock time` 칸은 이름대로 읽으면 그 사용자가 마지막으로 로그인하고 잠금을 푼 시각입니다(추론).
+dumpsys 출력은 그 명령을 부른 시각에 그 서비스가 내놓은 상태입니다. `usagestats` 의 이벤트 줄은 그 시각에 그 패키지의 화면·서비스·화면 켜짐 이벤트가 있었다는 서비스 기록이고, `account` 의 이력 표는 계정 추가·삭제 동작이 그 시각에 그 UID 로 있었다는 기록이며, `user` 의 `Last logged in`·`Unlock time` 필드는 이름대로 읽으면 그 사용자가 마지막으로 로그인하고 잠금을 푼 시각입니다(추론).
 
 **증명하지 못하는 것**
 
@@ -142,7 +142,7 @@ dumpsys 는 텍스트 출력이라 헥스로 따라갈 바이너리가 없습니
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 등)에 버그 리포트나 dumpsys 출력이 들어 있으면 아래 질문을 풀어 봅니다.
+공개 안드로이드 시험 이미지(NIST CFReDS 등)에 버그 리포트나 dumpsys 출력이 들어 있으면 아래 질문을 풀어 봅니다.
 
 1. `usagestats` 출력의 `timeRange` 는 어느 기간을 덮고, 그 안에서 SCREEN_INTERACTIVE 와 SCREEN_NON_INTERACTIVE 는 몇 번씩 나옵니까?
 2. `account` 의 `Accounts History` 에서 계정 삭제 줄은 언제이고, 어떤 UID 가 불렀습니까?

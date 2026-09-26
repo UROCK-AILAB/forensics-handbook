@@ -10,7 +10,7 @@ Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되�
 
 ## 한 줄 요약
 
-시스템 설정은 SettingsProvider 가 system·secure·global·ssaid·config 다섯 표로 관리해 사용자별 시스템 폴더의 XML 파일에 저장하고 [1], 개발자 옵션·adb·기기 준비 상태·위치 설정처럼 사건 당시의 기기 상태를 말해 주는 값이 여기에 모입니다.
+시스템 설정은 SettingsProvider 가 system·secure·global·ssaid·config 다섯 표로 관리해 사용자별 시스템 폴더의 XML 파일에 저장하고 [1], 개발자 옵션·adb·기기 준비 상태·위치 설정처럼 사건 당시의 기기 상태를 알 수 있는 값이 여기에 모입니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -24,7 +24,7 @@ Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되�
 | ssaid | 사용자별 | 앱별 Android ID. 호출한 앱의 UID 문자열이 키 |
 | config | 공개 자료 없음 | 공개 자료 없음. 아래 구조 절의 namespace 태그가 이 표에 쓰임 |
 
-global 설정은 기기 소유자 아래에 저장하고 나머지 설정은 사용자별 시스템 폴더에 저장합니다. global 표는 사용자 0(USER_SYSTEM) 쪽으로만 읽고 쓰기 때문에 global 은 사용자 0 쪽에만 있고 나머지는 사용자 번호 폴더마다 따로 있습니다 [1]. "내용" 칸의 예시는 아래 "조사에 쓸 만한 키" 절의 키 이름입니다.
+global 설정은 기기 소유자 아래에 저장하고 나머지 설정은 사용자별 시스템 폴더에 저장합니다. global 표는 사용자 0(USER_SYSTEM) 쪽으로만 읽고 쓰기 때문에 global 은 사용자 0 쪽에만 있고 나머지는 사용자 번호 폴더마다 따로 있습니다 [1]. "내용" 열의 예시는 아래 "조사에 쓸 만한 키" 절의 키 이름입니다.
 
 앱별 Android ID(SSAID)는 ssaid 표에 호출한 앱의 UID 문자열을 키로 저장합니다 [1]. 식별자로서의 해석은 [기기 식별자 (Android ID·IMEI·광고 ID)](../../01-foundations/value-decoding/device-identifiers.md) 페이지에 있습니다.
 
@@ -98,7 +98,7 @@ config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태�
 
 ## 시각 해석
 
-`setting` 태그의 속성에는 시각 칸이 없어서 [2], 설정별로 언제 바뀌었는지는 이 파일로 알 수 없습니다. 파일 전체의 마지막 수정 시각은 파일 시스템 메타데이터에 남지만 어느 키가 그때 바뀌었는지는 말해 주지 않고, 읽는 법은 [파일 시스템 (ext4·F2FS)](../../01-foundations/storage/filesystems/index.md) 페이지에 있습니다. 설정이 바뀐 시각이 필요하면 로그나 앱 사용 기록처럼 시각이 붙은 다른 기록에서 찾습니다.
+`setting` 태그의 속성에는 시각 필드가 없어서 [2], 설정별로 언제 바뀌었는지는 이 파일로 알 수 없습니다. 파일 전체의 마지막 수정 시각은 파일 시스템 메타데이터에 남지만 어느 키가 그때 바뀌었는지는 나와 있지 않고, 읽는 법은 [파일 시스템 (ext4·F2FS)](../../01-foundations/storage/filesystems/index.md) 페이지에 있습니다. 설정이 바뀐 시각이 필요하면 로그나 앱 사용 기록처럼 시각이 붙은 다른 기록에서 찾습니다.
 
 ## 함정과 한계
 
@@ -130,7 +130,7 @@ adb shell settings list secure > settings_secure.txt
 adb shell settings list system > settings_system.txt
 ```
 
-이미지에서는 ALEAPP 의 settingsSecure 모듈이 `android_id`, `bluetooth_name`, `bluetooth_address`, `mock_location` 을 User·Name·Value 칸으로 뽑아 줍니다 [3]. 이 모듈은 네 키만 보니 나머지 키는 XML 을 직접 읽어 확인합니다.
+이미지에서는 ALEAPP 의 settingsSecure 모듈이 `android_id`, `bluetooth_name`, `bluetooth_address`, `mock_location` 을 User·Name·Value 열로 뽑아 줍니다 [3]. 이 모듈은 네 키만 보니 나머지 키는 XML 을 직접 읽어 확인합니다.
 
 ## 교차 검증
 
@@ -138,11 +138,11 @@ adb·개발자 옵션 값은 [USB 연결 기록 (USB)](../network/usb.md) 과, �
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
+공개된 안드로이드 시험 이미지(NIST CFReDS 에 올라온 모바일 이미지 등)를 구해 다음을 풀어 봅니다.
 
 1. 사용자 번호 폴더마다 settings 파일이 몇 개 있는지, 글자 XML 인지 ABX 인지 적습니다.
 2. `.fallback` 파일이 있으면 원본과 키·값을 비교해 다른 항목을 찾습니다.
-3. 위 "조사에 쓸 만한 키" 표의 키 가운데 이 검체에 있는 키와 없는 키를 나눕니다.
+3. 위 "조사에 쓸 만한 키" 표의 키 가운데 이 이미지에 있는 키와 없는 키를 나눕니다.
 4. ALEAPP settingsSecure 결과와 XML 원문의 `android_id` 값을 비교합니다.
 
 ## 참고 문헌

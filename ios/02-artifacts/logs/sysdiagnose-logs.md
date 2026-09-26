@@ -20,9 +20,9 @@ sysdiagnose 는 기기 상태를 진단하려고 여러 로그와 설정 파일�
 
 ### 묶음 안의 파일
 
-EC-DIGIT-CSIRC 의 공개 분석 도구 sysdiagnose 가 묶음에서 읽는 파일은 다음과 같습니다[2]. 묶음 안의 정확한 하위 경로는 공개 자료가 없어서 파일 이름만 적습니다.
+EC-DIGIT-CSIRC 의 공개 분석 도구 sysdiagnose 가 묶음에서 읽는 파일은 다음과 같습니다[2]. 묶음 안의 정확한 하위 경로는 알려져 있지 않아서 파일 이름만 적습니다.
 
-| 갈래 | 파일 | 알려 주는 것 |
+| 분류 | 파일 | 알 수 있는 것 |
 |---|---|---|
 | 프로세스 | `ps.txt`, `ps_thread.txt`, `taskinfo.txt` | 묶음을 만든 순간 돌던 프로세스와 스레드 |
 | 시스템 | SystemVersion plist | OS 버전 |
@@ -44,13 +44,13 @@ UUIDToBinaryLocations plist 는 UUID 만 적힌 기록을 읽을 때 실행 파�
 |---|---|
 | 13·14 | EC-DIGIT-CSIRC 도구에서 "확인 필요" 로 표시된 버전입니다[2] |
 | 15·16·17·18·26 | EC-DIGIT-CSIRC 도구가 시험한 버전입니다[2] |
-| 27.0 | 로컬 백업에 sysdiagnose 관련 도메인이 있습니다(아래 표). 묶음 구성은 검체에서 확인합니다 |
+| 27.0 | 로컬 백업에 sysdiagnose 관련 도메인이 있습니다(아래 표). 묶음 구성은 실제 데이터로 확인합니다 |
 
-버전마다 새로 생기거나 빠지는 파일은 공개 자료가 없어서 검체에서 확인합니다.
+버전마다 새로 생기거나 빠지는 파일은 실제 데이터로 확인해야 합니다.
 
 ### 로컬 백업에 보이는 진단 흔적
 
-로컬 백업(iOS 27.0)에는 sysdiagnose 와 같은 계열의 진단 확장 도메인이 여럿 있습니다. 이 도메인들에 sysdiagnose 묶음이 들어 있다는 근거는 없고, 항목이 4개씩이라 확장 컨테이너의 빈 틀로 보입니다. 백업에 `.ips` 파일이나 `shutdown.log` 가 들어 있는지는 검체에서 확인합니다.
+로컬 백업(iOS 27.0)에는 sysdiagnose 와 같은 계열의 진단 확장 도메인이 여럿 있습니다. 이 도메인들에 sysdiagnose 묶음이 들어 있다는 근거는 없고, 항목이 4개씩이라 확장 컨테이너의 빈 틀로 보입니다. 백업에 `.ips` 파일이나 `shutdown.log` 가 들어 있는지는 실제 백업으로 확인합니다.
 
 | 도메인 | 항목 수 |
 |---|---|
@@ -60,7 +60,7 @@ UUIDToBinaryLocations plist 는 UUID 만 적힌 기록을 읽을 때 실행 파�
 | `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` | 5 |
 | `SysSharedContainerDomain-systemgroup.com.apple.sharedpclogging` | 3 |
 
-진단 관련 설정 파일에는 다음 키가 있습니다. 키의 뜻은 공개 자료가 없습니다.
+진단 관련 설정 파일에는 다음 키가 있습니다. 키의 뜻을 밝힌 공개 문서는 없습니다.
 
 | 도메인 :: 경로 | 키 |
 |---|---|
@@ -68,7 +68,7 @@ UUIDToBinaryLocations plist 는 UUID 만 적힌 기록을 읽을 때 실행 파�
 | `RootDomain :: Library/Preferences/com.apple.osanalyticshelper.plist` | `stability-monitor.lastBuild` (str), `stability-monitor.lastBuild-hasSupplementalBuild` (bool), `retryCount` (int), `stability-monitor.baselineCrashCount` (dict), `lastSuccess` (float), `stability-monitor.baselineVersions` (dict), `stability-monitor.baselineUptime` (dict) |
 | `HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` | `netUsageBaseline` (프로세스·번들 이름별 사전) |
 
-`ExcResourceDiagInfo_` 키는 이름으로 보아 프로세스별 자원 초과 진단 시각일 수 있지만 공개 자료가 없어서, 키에 붙은 프로세스 이름은 통합 로그에서 거를 후보로만 씁니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+`ExcResourceDiagInfo_` 키는 이름으로 보면 프로세스별 자원 초과 진단 시각일 수 있지만 뜻이 확인되지 않아서, 키에 붙은 프로세스 이름은 통합 로그에서 거를 후보로만 씁니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ## 구조
 
@@ -89,7 +89,7 @@ Pegasus 사례의 경로 예는 다음과 같습니다[1].
 /private/var/db/com.apple.xpc.roleaccountd.staging/rolexd
 ```
 
-Kaspersky 의 공개 도구 iShutdown 은 한 번의 재부팅 전에 지연(delay)이 3번 이상 있거나, `/private/var/db/`·`/private/var/tmp/` 아래 경로의 프로세스가 남아 있으면 이상으로 봅니다[4]. 다만 감염되지 않은 기기에서도 재부팅 한 번에 지연 알림이 두세 번 나올 수 있고, 의심할 만한 것은 네 번을 넘는 경우입니다[1]. 그래서 지연 횟수만으로 판정하지 않고 경로와 함께 봅니다. 로그 한 줄의 정확한 문구는 공개 자료가 없어서 검체에서 확인합니다.
+Kaspersky 의 공개 도구 iShutdown 은 한 번의 재부팅 전에 지연(delay)이 3번 이상 있거나, `/private/var/db/`·`/private/var/tmp/` 아래 경로의 프로세스가 남아 있으면 이상으로 봅니다[4]. 다만 감염되지 않은 기기에서도 재부팅 한 번에 지연 알림이 두세 번 나올 수 있고, 의심할 만한 것은 네 번을 넘는 경우입니다[1]. 그래서 지연 횟수만으로 판정하지 않고 경로와 함께 봅니다. 로그 한 줄의 정확한 문구는 실제 로그로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -99,9 +99,9 @@ sysdiagnose 는 묶음을 만든 순간의 프로세스 목록·설정·로그�
 
 ### 증명하지 못하는 것
 
-Shutdown.log 에 이상한 경로가 있다고 감염이 확정되지는 않고, 없다고 감염이 없다고 말할 수도 없습니다. 이 방법은 가벼운 탐지 방법이고[1], 재부팅이 있어야 기록이 생기며[1] 기록을 얼마나 오래 남기는지는 공개 자료가 없습니다. 통합 로그는 저장 한도 안에서만 남아서[5] 묶음을 늦게 만들수록 앞선 기록이 빠졌을 수 있습니다. 프로세스 목록은 만든 순간의 상태라서 그 전에 끝난 프로세스는 담지 않습니다.
+Shutdown.log 에 이상한 경로가 있다고 감염이 확정되지는 않고, 없다고 감염이 없다고 말할 수도 없습니다. 이 방법은 가벼운 탐지 방법이고[1], 재부팅이 있어야 기록이 생기며[1] 기록을 얼마나 오래 남기는지는 알려져 있지 않습니다. 통합 로그는 저장 한도 안에서만 남아서[5] 묶음을 늦게 만들수록 앞선 기록이 빠졌을 수 있습니다. 프로세스 목록은 만든 순간의 상태라서 그 전에 끝난 프로세스는 담지 않습니다.
 
-보고서에는 "스파이웨어에 감염되었다" 가 아니라 "이 시각의 재부팅 기록에 `/private/var/tmp/` 아래 경로의 프로세스가 남아 있었고, 이는 알려진 사례와 같은 모양이다" 처럼 기록이 말하는 만큼만 씁니다. 판정과 후속 조사는 [스파이웨어 감염 흔적](../../04-scenarios/incident/spyware.md) 에서 다룹니다.
+보고서에는 "스파이웨어에 감염되었다" 가 아니라 "이 시각의 재부팅 기록에 `/private/var/tmp/` 아래 경로의 프로세스가 남아 있었고, 이는 알려진 사례와 같은 모양이다" 처럼 기록으로 확인되는 만큼만 씁니다. 판정과 후속 조사는 [스파이웨어 감염 흔적](../../04-scenarios/incident/spyware.md) 에서 다룹니다.
 
 ## 시각 해석
 
@@ -112,9 +112,9 @@ Shutdown.log 의 버퍼 비우기 시각은 UNIX 시각이라서[1] 1970-01-01 U
 ## 함정과 한계
 
 - **있을 것이라는 기대.** 묶음은 사용자가 만들어야 생기고, 버튼 조합·파일 이름 형식·정확한 설정 경로는 Apple 안내 PDF[3] 에서 확인합니다.
-- **만든 시점의 사진.** 묶음은 만든 순간의 상태이고, 통합 로그는 저장 한도가 있어[5] 오래된 기록이 빠질 수 있습니다. 보존 기간은 공개 자료가 없습니다.
+- **만든 시점의 사진.** 묶음은 만든 순간의 상태이고, 통합 로그는 저장 한도가 있어[5] 오래된 기록이 빠질 수 있습니다. 보존 기간은 알려져 있지 않습니다.
 - **재부팅이 있어야 하는 기록.** Shutdown.log 는 재부팅할 때만 쌓여서[1], 오래 재부팅하지 않은 기기에서는 관심 기간의 기록이 없을 수 있습니다.
-- **하위 경로.** 공개 도구가 읽는 파일 이름은 알지만 묶음 안의 하위 경로는 공개 자료가 없어서, 도구가 파일을 찾지 못하면 이름으로 직접 찾아봅니다.
+- **하위 경로.** 공개 도구가 읽는 파일 이름은 알지만 묶음 안의 하위 경로는 알려져 있지 않아서, 도구가 파일을 찾지 못하면 이름으로 직접 찾아봅니다.
 - **로컬 백업과 혼동.** 로컬 백업의 진단 확장 도메인은 이름만 sysdiagnose 와 비슷하고, 묶음이 들어 있다는 근거는 없습니다.
 
 ## 직접 분석해 보기
@@ -152,15 +152,15 @@ EC-DIGIT-CSIRC 의 sysdiagnose 도구는 묶음 전체를 읽어, 설치 앱 목
 | [설치된 앱](../app-usage/installed-apps.md) | 묶음의 앱 설치 로그와 설치 앱 목록 |
 | [전원 로그](../app-usage/powerlog.md) | 묶음 안 powerlogs DB 의 앱 실행 시간대 |
 | [와이파이 기록](../network/wifi.md) | 묶음의 Wi-Fi 파일과 기기에 저장한 네트워크 |
-| [설정 값](../system-account/preferences.md) | 로컬 백업의 `HomeDomain :: Library/Preferences/com.apple.springboard.plist` 에 `SBLastKnownShutdownDate` (datetime) 키가 있습니다. 이름으로 보아 마지막 종료 시각일 수 있어서, Shutdown.log 의 마지막 재부팅 시각과 비교해 볼 후보입니다 |
+| [설정 값](../system-account/preferences.md) | 로컬 백업의 `HomeDomain :: Library/Preferences/com.apple.springboard.plist` 에 `SBLastKnownShutdownDate` (datetime) 키가 있습니다. 이름으로 보면 마지막 종료 시각일 수 있어서, Shutdown.log 의 마지막 재부팅 시각과 비교해 볼 후보입니다 |
 
 감염 의심 기기에서 이 파일들을 보는 순서는 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md), 여러 기록을 한 시간 축에 놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 실습
 
-sysdiagnose 묶음이 들어 있는 공개 검체를 구했다면 다음 질문으로 풀어 봅니다. 공개 검체에 따라 묶음이 없을 수 있어서, 먼저 `.tar.gz` 가 있는지부터 확인합니다.
+sysdiagnose 묶음이 들어 있는 공개 시험 이미지를 구했다면 다음 질문으로 풀어 봅니다. 이미지에 따라 묶음이 없을 수 있어서, 먼저 `.tar.gz` 가 있는지부터 확인합니다.
 
-1. SystemVersion plist 가 가리키는 OS 버전은 무엇이고, EC-DIGIT-CSIRC 도구가 시험한 버전에 들어갑니까?
+1. SystemVersion plist 에 적힌 OS 버전은 무엇이고, EC-DIGIT-CSIRC 도구가 시험한 버전에 들어갑니까?
 2. Shutdown.log 에 기록된 재부팅은 몇 번이고, 처음과 마지막 재부팅은 언제입니까?
 3. 재부팅 한 번에 지연이 3번 이상 나온 경우가 있습니까? 있다면 그때 남아 있던 프로세스는 무엇입니까?
 4. `/private/var/db/` 나 `/private/var/tmp/` 아래 경로의 프로세스가 있습니까? 있다면 `ps.txt` 와 통합 로그에서도 같은 이름이 나옵니까?

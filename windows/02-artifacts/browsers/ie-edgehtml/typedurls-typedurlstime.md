@@ -25,7 +25,7 @@ IE 주소창에 입력한 주소는 사용자 하이브(NTUSER.DAT)의 `TypedURL
 | `TypedURLsTime` | NTUSER.DAT | `HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime` |
 
 - 수집 경로로 적으면 `HKEY_USERS\{사용자 SID}\Software\Microsoft\Internet Explorer\TypedURLs\*` 입니다[1]. 사용자 SID 와 계정 이름을 잇는 방법은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 다룹니다.
-- `TypedURLsTime` 은 Windows 8 에서 생긴 키입니다[3]. 그보다 앞선 Windows 검체에는 이 키가 없을 수 있습니다.
+- `TypedURLsTime` 은 Windows 8 에서 생긴 키입니다[3]. 그보다 앞선 Windows 에는 이 키가 없을 수 있습니다.
 - Windows 11 25H2 에도 `TypedURLsTime` 키가 없을 수 있습니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
@@ -59,7 +59,7 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 
 - 주소를 입력한 뒤 페이지가 실제로 열렸는지는 알 수 없습니다. 방문 기록과 맞춰 봐야 합니다.
 - 누가 키보드 앞에 있었는지는 알 수 없고, 하이브가 가리키는 것은 로그온한 계정입니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
-- 값 번호의 순서가 입력 순서인지와 키에 남는 최대 개수는 검체에서 확인합니다. 번호만 보고 "가장 최근 입력" 을 단정하지 않습니다.
+- 값 번호의 순서가 입력 순서인지와 키에 남는 최대 개수는 실제 데이터로 확인합니다. 번호만 보고 "가장 최근 입력" 을 단정하지 않습니다.
 - 이 키는 IE 키 아래에 있습니다. 옛 엣지 사용 흔적으로 읽으려면 따로 근거가 필요합니다.
 
 보고서에는 "이 계정의 NTUSER.DAT 에 있는 IE 주소창 입력 기록에 이 주소가 있고, 짝을 이루는 TypedURLsTime 값은 이 시각이다" 처럼 씁니다.
@@ -67,9 +67,9 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 ## 시각 해석
 
 - `TypedURLsTime` 값을 FILETIME 으로 바꿉니다. 변환 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
-- 이 시각이 UTC 인지 가리려면 같은 주소의 [웹캐시 DB](webcachev01-dat.md) 나 [index.dat](index-dat.md) 방문 기록 시각과 맞춰 봅니다.
+- 이 시각이 UTC 인지 판별하려면 같은 주소의 [웹캐시 DB](webcachev01-dat.md) 나 [index.dat](index-dat.md) 방문 기록 시각과 맞춰 봅니다.
 - `TypedURLsTime` 이 없는 시스템에서는 입력 시각을 따로 알 수 없습니다.
-- `TypedURLs` 키의 마지막 기록 시각 (LastWrite) 을 가장 최근 입력 시각으로 보는 해석이 있습니다. 다만 키의 마지막 기록 시각은 그 키가 바뀐 때를 말할 뿐, 어느 값이 바뀌었는지는 말하지 않습니다.
+- `TypedURLs` 키의 마지막 기록 시각 (LastWrite) 을 가장 최근 입력 시각으로 보는 해석이 있습니다. 다만 키의 마지막 기록 시각으로는 그 키가 바뀐 때만 알 수 있고, 어느 값이 바뀌었는지는 알 수 없습니다.
 
 ## 함정과 한계
 
@@ -83,7 +83,7 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 
 ### 헥스로 한 번
 
-아래 바이트는 명세로 만든 예시입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+아래 바이트는 명세로 만든 예시입니다. 특정 기기에서 꺼낸 값이 아닙니다.
 
 **`TypedURLsTime` 값 8바이트.**
 
@@ -125,9 +125,9 @@ HKCU\Software\Microsoft\Internet Explorer\TypedURLsTime
 
 ## 실습
 
-IE 를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
+IE 를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 사용자 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
 
-1. 검체의 Windows 버전은 무엇입니까? `TypedURLsTime` 키가 있어야 하는 버전입니까?
+1. 분석 대상의 Windows 버전은 무엇입니까? `TypedURLsTime` 키가 있어야 하는 버전입니까?
 2. `TypedURLs` 에 값이 몇 개 있습니까? `TypedURLsTime` 의 값 개수와 같습니까?
 3. `url1` 의 시각을 직접 FILETIME 으로 바꿔 봅니다. 도구가 보여 주는 값과 같습니까?
 4. 입력한 주소 가운데 방문 기록에 없는 주소가 있습니까?

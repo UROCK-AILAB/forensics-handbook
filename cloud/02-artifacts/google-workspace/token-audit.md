@@ -47,7 +47,7 @@ Cloud Logging 으로 공유한 토큰 기록은 서비스 이름이 `oauth2.goog
 
 Cloud Logging 레코드의 공통 구조는 [Cloud Audit Logs](../gcp/cloud-audit-logs.md)에서 다룹니다.
 
-로그와 별도로 지금 살아 있는 토큰의 상태를 보여 주는 곳이 두 군데 있습니다. Directory API 의 `tokens` 자원은 사용자별로 제3자 앱에 발급한 토큰 목록을 돌려주고[8], 관리 콘솔 Security > Access and data control > API controls 의 Accessed apps 목록은 조직 안에서 Google 데이터에 접근한 앱과 사용자 수를 보여 줍니다[9].
+로그와 별도로 지금 유효한 토큰의 상태를 보여 주는 곳이 두 군데 있습니다. Directory API 의 `tokens` 자원은 사용자별로 제3자 앱에 발급한 토큰 목록을 돌려주고[8], 관리 콘솔 Security > Access and data control > API controls 의 Accessed apps 목록은 조직 안에서 Google 데이터에 접근한 앱과 사용자 수를 보여 줍니다[9].
 
 ## 구조
 
@@ -60,7 +60,7 @@ Cloud Logging 레코드의 공통 구조는 [Cloud Audit Logs](../gcp/cloud-audi
 | `client_type` | 다섯 이벤트 모두 | 클라이언트 종류 |
 | `scope` | `authorize`, `revoke`, `deny`, `request` | 허락·회수한 범위 (scope) |
 | `scope_data` | `authorize`, `revoke`, `deny`, `request` | 범위 데이터(message 형식) |
-| `rejection_type` | `deny` | 거부 까닭 |
+| `rejection_type` | `deny` | 거부 이유 |
 | `app_request_info`, `requester_email` | `request` | 요청 종류와 요청한 사람의 메일 주소 |
 | `api_name`, `method_name` | `activity` | 앱이 부른 API 와 메서드 |
 | `num_response_bytes` | `activity` | 응답 크기(바이트) |
@@ -99,21 +99,21 @@ Cloud Logging 레코드의 공통 구조는 [Cloud Audit Logs](../gcp/cloud-audi
 }
 ```
 
-`scope` 의 형식은 문자열(string)입니다[1]. 범위가 여러 개일 때 검체에서 `value` 와 `multiValue` 가운데 어느 칸에 들어 있는지 먼저 확인합니다.
+`scope` 의 형식은 문자열(string)입니다[1]. 범위가 여러 개일 때 실제 데이터에서 `value` 와 `multiValue` 가운데 어느 필드에 들어 있는지 먼저 확인합니다.
 
 Directory API 의 토큰 자원에는 `clientId`, `scopes[]`, `userKey`, `anonymous`(익명 클라이언트 ID 를 쓰는 앱이면 `true`), `displayText`(앱 이름), `nativeApp`(데스크톱·모바일에 설치한 앱이면 `true`), `kind`(늘 `admin#directory#token`), `etag` 가 있습니다[8]. 발급 시각을 담는 필드는 없습니다[8].
 
 ## 증거로서 의미
 
-**증명하는 것.** `authorize` 레코드는 어느 계정이 어느 시각에 어느 앱(`client_id`·`app_name`)에 어떤 범위를 허락했는지 보여 줍니다[1][4]. `revoke` 는 접근이 끊긴 시각을, `deny` 는 관리자 정책 때문에 앱이 막혔다는 것과 그 까닭을 보여 줍니다[1]. `activity` 가 남는 에디션이라면 앱이 사용자 대신 어느 API 의 어느 메서드를 불렀고 응답이 몇 바이트였는지까지 보여 줍니다[1][4]. IP 주소는 접근을 허락·회수한 사용자의 주소이고, 프록시나 VPN 주소일 수도 있습니다[4].
+**증명하는 것.** `authorize` 레코드는 어느 계정이 어느 시각에 어느 앱(`client_id`·`app_name`)에 어떤 범위를 허락했는지 보여 줍니다[1][4]. `revoke` 는 접근이 끊긴 시각을, `deny` 는 관리자 정책 때문에 앱이 막혔다는 것과 그 이유를 보여 줍니다[1]. `activity` 가 남는 에디션이라면 앱이 사용자 대신 어느 API 의 어느 메서드를 불렀고 응답이 몇 바이트였는지까지 보여 줍니다[1][4]. IP 주소는 접근을 허락·회수한 사용자의 주소이고, 프록시나 VPN 주소일 수도 있습니다[4].
 
 **증명하지 못하는 것.** 앱이 받은 데이터의 내용은 남지 않고, `num_response_bytes` 는 크기만 알려 줍니다[1]. `activity` 가 없는 에디션에서는 허락 뒤에 앱이 실제로 데이터를 읽었는지 이 로그로 알 수 없습니다[4]. 앱을 누가 만들었는지도 이 로그에는 없고, `client_id` 로 API controls 에서 앱 정보(개인정보 처리방침·지원 정보·확인 상태)를 따로 확인합니다[9]. 토큰이 다른 곳으로 새어 나가 쓰였는지는 `activity` 의 IP·클라이언트 종류로 짐작할 수 있을 뿐입니다. 토큰 만료처럼 사용자가 직접 하지 않은 이벤트에는 IP 가 없을 수 있습니다[4].
 
-보고서에는 "2026-03-02 01:15 UTC 에 user@example.com 계정으로 클라이언트 ID 123456789012-abc 앱에 `https://mail.google.com/` 범위를 허락한 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다(예시 값은 만든 것입니다).
+보고서에는 "2026-03-02 01:15 UTC 에 user@example.com 계정으로 클라이언트 ID 123456789012-abc 앱에 `https://mail.google.com/` 범위를 허락한 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다(예시 값은 만든 것입니다).
 
 ## 시각 해석
 
-보고서 API 의 `id.time` 은 이벤트가 일어난 시각입니다. 필드 설명(UNIX epoch 초)과 문서 예시(RFC 3339)의 형식이 서로 달라서[3] 검체의 값 모양을 보고 판단하고, 자세한 내용은 [관리 콘솔 감사 로그](./admin-audit.md)에 있습니다. 관리 콘솔 OAuth log events 화면의 Date 는 브라우저의 기본 시간대로 보여 주므로, 화면을 내보낸 파일과 API 로 받은 UTC 값을 섞을 때 시간대를 먼저 맞춥니다[4]. 여러 로그의 시각을 맞추는 방법은 [클라우드의 시각](../../01-foundations/logging/timestamps.md)에서 다룹니다.
+보고서 API 의 `id.time` 은 이벤트가 일어난 시각입니다. 필드 설명(UNIX epoch 초)과 문서 예시(RFC 3339)의 형식이 서로 달라서[3] 실제 값의 모양을 보고 판단하고, 자세한 내용은 [관리 콘솔 감사 로그](./admin-audit.md)에 있습니다. 관리 콘솔 OAuth log events 화면의 Date 는 브라우저의 기본 시간대로 보여 주므로, 화면을 내보낸 파일과 API 로 받은 UTC 값을 섞을 때 시간대를 먼저 맞춥니다[4]. 여러 로그의 시각을 맞추는 방법은 [클라우드의 시각](../../01-foundations/logging/timestamps.md)에서 다룹니다.
 
 지연 시간은 OAuth 항목이 "Up to a few hours", Token log events 항목이 "A couple of hours" 이고 관리 콘솔과 보고서 API 에 똑같이 적용되므로, 토큰 기록은 몇 시간 늦게 들어온다고 보면 됩니다[5]. 드물게 이보다 더 늦거나 아예 보고되지 않는 이벤트가 있을 수 있습니다[5]. 사고 직후에 조회해서 `authorize` 가 없다면 몇 시간 뒤에 다시 조회합니다.
 
@@ -130,7 +130,7 @@ API controls 화면은 더 늦습니다. 제3자 앱 정보는 허락 뒤 보통
 
 ## 직접 분석해 보기
 
-보고서 API 로 받은 원본 JSON 을 먼저 보존하고, 그 사본으로 분석합니다. 보존 순서는 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다. 호출 모양은 아래와 같고, `eventName` 을 붙이면 특정 이벤트만 받습니다[2]. 특정 앱만 볼 때는 `eventName` 과 함께 `filters=client_id==클라이언트ID` 처럼 이벤트 매개변수로 거릅니다[3]. `applicationInfoFilter` 는 `actor.applicationInfo` 의 `oauthClientId` 를 거르는 매개변수라 `client_id` 매개변수와는 다른 칸입니다[3].
+보고서 API 로 받은 원본 JSON 을 먼저 보존하고, 그 사본으로 분석합니다. 보존 순서는 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다. 호출 모양은 아래와 같고, `eventName` 을 붙이면 특정 이벤트만 받습니다[2]. 특정 앱만 볼 때는 `eventName` 과 함께 `filters=client_id==클라이언트ID` 처럼 이벤트 매개변수로 거릅니다[3]. `applicationInfoFilter` 는 `actor.applicationInfo` 의 `oauthClientId` 를 거르는 매개변수라 `client_id` 매개변수와는 다른 필드입니다[3].
 
 ```text
 GET https://admin.googleapis.com/admin/reports/v1/activity/users/all/applications/token?maxResults=25
@@ -143,7 +143,7 @@ GET https://admin.googleapis.com/admin/reports/v1/activity/users/all/application
 alfa acquire --logtype=token --start-time 2026-03-01T00:00:00Z --end-time 2026-03-08T00:00:00Z
 ```
 
-한 줄 한 활동인 파일에서 이벤트별로 시각·계정·IP·앱·범위를 뽑습니다. 매개변수는 `value`·`multiValue`·`intValue` 가운데 값이 든 칸을 씁니다[3].
+한 줄 한 활동인 파일에서 이벤트별로 시각·계정·IP·앱·범위를 뽑습니다. 매개변수는 `value`·`multiValue`·`intValue` 가운데 값이 든 필드를 씁니다[3].
 
 ```sh
 jq -r '
@@ -174,7 +174,7 @@ jq -r '
 2. 허락 직후와 몇 시간 뒤에 조회한 결과가 다른가? 레코드가 처음 보인 때를 적어 둔다.
 3. 에디션에 `activity` 가 남는다면 `method_name` 과 `num_response_bytes` 로 앱이 무엇을 얼마나 불렀는지 정리할 수 있는가?
 4. 회수 전과 후에 `tokens.list` 결과는 어떻게 달라지고, 회수한 뒤 토큰 기록에는 무엇이 남는가?
-5. `scope` 값은 레코드의 어느 칸(`value`·`multiValue`)에 들어 있는가?
+5. `scope` 값은 레코드의 어느 필드(`value`·`multiValue`)에 들어 있는가?
 
 ## 참고 문헌
 

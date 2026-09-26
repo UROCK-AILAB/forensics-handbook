@@ -41,9 +41,9 @@ iCloud 메일은 표준 보호에서도, 고급 데이터 보호(Advanced Data P
 | 12 | `messages`(보낸 사람·제목·받는 사람/참조/숨은 참조), `message_data`(본문 앞 500바이트) | [1] |
 | 13 | `Addresses`, `Subjects`, `Summaries`, `protected_message_data` | [1] |
 | 15 이후 | 공개 자료 없음 | — |
-| 27.0 로컬 백업 | `Envelope Index`·`Protected Index`·`.emlx` 가 들어 있는지 검체에서 확인 | — |
+| 27.0 로컬 백업 | `Envelope Index`·`Protected Index`·`.emlx` 가 들어 있는지 실제 데이터로 확인 | — |
 
-iOS 12 와 13 사이에 `Protected Index` 구조가 바뀌었고 [1], iOS 15 이후 `Envelope Index` 의 표·칸 이름이 그대로인지는 공개 자료가 없습니다. 버전이 다른 검체에서는 표 목록부터 새로 뽑아 봅니다.
+iOS 12 와 13 사이에 `Protected Index` 구조가 바뀌었고 [1], iOS 15 이후 `Envelope Index` 의 표·열 이름이 그대로인지 밝힌 공개 문서는 없습니다. 버전이 다르면 표 목록부터 새로 뽑아 봅니다.
 
 ## 구조
 
@@ -53,11 +53,11 @@ iOS 12 와 13 사이에 `Protected Index` 구조가 바뀌었고 [1], iOS 15 이
 
 ### Envelope Index
 
-`Envelope Index` 는 메일 목록을 그리는 데 쓰는 겉봉 정보를 담고, `Mailboxes` 표의 URL 칸이 각 메일함 폴더를 가리킵니다 [1]. 이 URL 안에 폴더 식별자가 들어 있으면 이름만 보고는 어떤 메일함인지 알기 어려운데, 계정별 `.mboxCache.plist` 의 `mboxes` 아래 메일함마다 `MailboxName` 과 `DAFolderID` 가 함께 있어서 그 식별자를 메일함 이름에 이어 줍니다 [1]. 로컬 백업의 `.mboxCache.plist` 에는 `mboxes`(list), `separator`(str), `capabilities`(list) 키가 있습니다.
+`Envelope Index` 는 메일 목록을 그리는 데 쓰는 겉봉 정보를 담고, `Mailboxes` 표의 URL 열이 각 메일함 폴더를 가리킵니다 [1]. 이 URL 안에 폴더 식별자가 들어 있으면 이름만 보고는 어떤 메일함인지 알기 어려운데, 계정별 `.mboxCache.plist` 의 `mboxes` 아래 메일함마다 `MailboxName` 과 `DAFolderID` 가 함께 있어서 그 식별자를 메일함 이름에 이어 줍니다 [1]. 로컬 백업의 `.mboxCache.plist` 에는 `mboxes`(list), `separator`(str), `capabilities`(list) 키가 있습니다.
 
 ### Protected Index
 
-iOS 13 기준으로 `Addresses` 표에는 메일 주소와 이름 역할을 하는 `Comments` 칸이, `Subjects` 표에는 제목이, `Summaries` 표에는 본문 앞 500바이트가 들어 있습니다 [1]. `protected_message_data` 표는 [1] 의 시험 기기에서 비어 있었습니다. 본문 전체가 필요하면 `.emlx` 파일로 가고, `.emlx` 가 없거나 일부만 내려받은 경우에는 `Summaries` 의 앞부분이 남은 내용의 전부일 수 있습니다.
+iOS 13 기준으로 `Addresses` 표에는 메일 주소와 이름 역할을 하는 `Comments` 열이, `Subjects` 표에는 제목이, `Summaries` 표에는 본문 앞 500바이트가 들어 있습니다 [1]. `protected_message_data` 표는 [1] 의 시험 기기에서 비어 있었습니다. 본문 전체가 필요하면 `.emlx` 파일로 가고, `.emlx` 가 없거나 일부만 내려받은 경우에는 `Summaries` 의 앞부분이 남은 내용의 전부일 수 있습니다.
 
 ### 로컬 백업에서 보이는 것
 
@@ -71,7 +71,7 @@ collections (list)
 version (int)
 ```
 
-메일 앱 그룹 설정에는 앱 사용 시각과 색인 상태를 가늠할 키가 모여 있습니다.
+메일 앱 그룹 설정에는 앱 사용 시각과 색인 상태를 짐작할 수 있는 키가 모여 있습니다.
 
 ```
 AppDomainGroup-group.com.apple.mail :: Library/Preferences/group.com.apple.mail.plist (일부)
@@ -91,11 +91,11 @@ UserNotificationMailboxCutoffs: {imap://<UUID>/INBOX, ...}
 BucketBarConfiguration / BucketSelectionConfiguration: {All Inboxes}
 ```
 
-`UserNotificationMailboxCutoffs` 안의 항목 이름은 `imap://` 로 시작하는 메일함 URL 꼴이라서 기기에 어떤 IMAP 메일함이 있었는지 가늠하는 단서가 되지만, `Mailboxes` 표 URL [1] 과 같은 꼴인지는 공개 자료가 없습니다. 같은 plist 에는 `BlackPearl` 로 시작하는 키 여러 개(`BlackPearlModelVersion`, `BlackPearlRolloutID` 등)와 `DisableCategorizationOnboarding` 으로 시작하는 키도 있고, 메일 분류 기능과 관련이 있어 보입니다.
+`UserNotificationMailboxCutoffs` 안의 항목 이름은 `imap://` 로 시작하는 메일함 URL 형식이라서 기기에 어떤 IMAP 메일함이 있었는지 짐작하는 단서가 되지만, `Mailboxes` 표 URL [1] 과 같은 형식인지는 실제 데이터로 확인해야 합니다. 같은 plist 에는 `BlackPearl` 로 시작하는 키 여러 개(`BlackPearlModelVersion`, `BlackPearlRolloutID` 등)와 `DisableCategorizationOnboarding` 으로 시작하는 키도 있고, 메일 분류 기능과 관련이 있어 보입니다.
 
 그 밖에 `com.apple.mobilemail.plist` 에는 `MailAccountsOrder`(list)·`MessageAccountsVersion`(int)이, `com.apple.email.maild.plist` 에는 `com.apple.mobilemail.purge.bodies.purge_markers`·`kDefaultsKeyLastVerifiedMessageID`(int)·`kCloudStoreHistoryTokenUserDefaultsKey`(bytes)·`set-initial-vip-flags`(bool)가, `com.apple.icloudmailagent.plist` 에는 `com.apple.icloud.mail.lastRetryTimestamp`·`com.apple.icloud.mail.lastSyncAllTimestamp`(둘 다 float)가 있습니다. 애플 워치로 메일을 보는 설정은 `HomeDomain :: Library/Preferences/com.apple.NanoMail.plist` 에 `kIncludeMailBoxesKey`, `kAccountIdentitiesKey`, `NanoMailDefaultAccountUidKey`, `NanoMailLoadRemoteImages` 같은 키로 남습니다. 워치 연결 흔적 전체는 [애플 워치 연결](../health-wallet/apple-watch.md) 에서 다룹니다.
 
-메일 앱 도메인 안에는 `Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 도 있고, 그 `ObservedDomains` 표에 `registrableDomain`, `lastSeen`, `mostRecentUserInteractionTime` 같은 칸이 있습니다. 메일 안의 웹 콘텐츠(원격 이미지 등)를 불러온 기록인지는 공개 자료가 없어서, 보고서에 쓰기 전에 검체에서 값을 보고 판단합니다.
+메일 앱 도메인 안에는 `Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 도 있고, 그 `ObservedDomains` 표에 `registrableDomain`, `lastSeen`, `mostRecentUserInteractionTime` 같은 열이 있습니다. 메일 안의 웹 콘텐츠(원격 이미지 등)를 불러온 기록인지는 알려져 있지 않아서, 보고서에 쓰기 전에 실제 데이터의 값을 보고 판단합니다.
 
 ### 계정 DB
 
@@ -111,17 +111,17 @@ BucketBarConfiguration / BucketSelectionConfiguration: {All Inboxes}
 
 보낸 편지함에 메일이 있다는 기록만으로는 그 기기에서 사용자가 직접 썼다고 말할 수 없고, 같은 계정을 다른 기기에서도 썼다면 그쪽에서 보낸 메일일 수 있습니다. 받은 편지함의 메일도 사용자가 열어 읽었다는 뜻은 아닙니다. 기기에서 메일을 찾지 못했다고 서버에도 없었다고 쓰지 않습니다. 설정 plist 의 시각 키는 앱을 띄우거나 색인을 다시 만든 시점을 짐작하게 하지만, 특정 메일을 다룬 시각은 아닙니다.
 
-보고서에는 "이 메일을 보냈다" 대신 "수집 시점에 이 계정의 보낸 편지함에 이 제목의 메일이 있고, 보낸 날짜 칸 값은 이렇다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 메일을 보냈다" 대신 "수집 시점에 이 계정의 보낸 편지함에 이 제목의 메일이 있고, 보낸 날짜 열 값은 이렇다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-`Envelope Index` 에는 보낸 날짜가 들어 있지만 [1], iOS 15 이후 표의 날짜 칸 이름과 기준(Unix 초인지 Mac 절대 시각인지)은 공개 자료가 없습니다. 검체에서는 칸 값의 자릿수를 보고 여러 기준으로 바꿔 본 뒤, 메일 앱 화면에 보이는 날짜나 알림 기록 같은 다른 시각과 견주어 기준을 정합니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`Envelope Index` 에는 보낸 날짜가 들어 있지만 [1], iOS 15 이후 표의 날짜 열 이름과 기준(Unix 초인지 Mac 절대 시각인지)을 밝힌 공개 문서는 없습니다. 실제 데이터에서 열 값의 자릿수를 보고 여러 기준으로 바꿔 본 뒤, 메일 앱 화면에 보이는 날짜나 알림 기록 같은 다른 시각과 비교해 기준을 정합니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-설정 plist 가운데 `LastMailAppLaunchTime`, `LastFullReindexDate`, `com.apple.mail.searchableIndex.lastUpgradeDate` 는 plist 날짜형(datetime)으로 저장됩니다. `lastForegroundedTimestamp`(int)와 `com.apple.icloud.mail.lastSyncAllTimestamp`(float)의 단위와 기준 시점, 계정 DB 의 `ZDATE` 기준은 공개 자료가 없어서 위와 같이 다른 시각과 견주어 정합니다.
+설정 plist 가운데 `LastMailAppLaunchTime`, `LastFullReindexDate`, `com.apple.mail.searchableIndex.lastUpgradeDate` 는 plist 날짜형(datetime)으로 저장됩니다. `lastForegroundedTimestamp`(int)와 `com.apple.icloud.mail.lastSyncAllTimestamp`(float)의 단위와 기준 시점, 계정 DB 의 `ZDATE` 기준은 알려져 있지 않아서 위와 같이 다른 시각과 비교해 정합니다.
 
 ## 함정과 한계
 
-로컬 백업에 `Envelope Index`·`Protected Index`·`.emlx` 가 들어가는지는 공개 자료가 없습니다. 메일 본문이 필요한 사건에서는 백업만 보고 "메일 없음" 이라고 결론 내지 말고, 파일 시스템 전체 수집이 가능한지 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 먼저 검토합니다.
+로컬 백업에 `Envelope Index`·`Protected Index`·`.emlx` 가 들어가는지 밝힌 공개 문서는 없습니다. 메일 본문이 필요한 사건에서는 백업만 보고 "메일 없음" 이라고 결론 내지 말고, 파일 시스템 전체 수집이 가능한지 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 먼저 검토합니다.
 
 `Protected Index` 의 본문은 앞 500바이트뿐이라서 [1], 이 표만 읽고 메일 내용 전체를 다 봤다고 쓰면 안 됩니다. 인코딩된 본문을 디코딩하지 않고 키워드 검색을 하면 Quoted-Printable 로 쪼개진 낱말이나 Base64 로 바뀐 글자를 놓치고, 검색 전략은 [콘텐츠 검색](../../03-techniques/analysis/content-search.md) 에 있습니다.
 
@@ -131,7 +131,7 @@ BucketBarConfiguration / BucketSelectionConfiguration: {All Inboxes}
 
 ### 헥스로 한 번
 
-`.emlx` 본문이 Quoted-Printable 이면 `=` 뒤 두 글자가 바이트 하나를 16진수로 적은 것입니다 [1]. 아래는 규칙으로 만든 예시이고 검체에서 나온 값이 아닙니다.
+`.emlx` 본문이 Quoted-Printable 이면 `=` 뒤 두 글자가 바이트 하나를 16진수로 적은 것입니다 [1]. 아래는 규칙으로 만든 예시이고 실제 데이터에서 나온 값이 아닙니다.
 
 ```
 원문 바이트:  61 3D 33 44 62 3D 30 44        a=3Db=0D
@@ -177,13 +177,13 @@ BucketBarConfiguration / BucketSelectionConfiguration: {All Inboxes}
 
 ## 실습
 
-NIST CFReDS 같은 공개 검체 가운데 메일 계정이 설정된 iOS 검체가 있는지 먼저 확인하고, 있으면 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 시험 이미지 가운데 메일 계정이 설정된 iOS 이미지가 있는지 먼저 확인하고, 있으면 아래 질문을 풀어 봅니다.
 
-1. 검체가 로컬 백업인지 파일 시스템 전체인지 확인하고, `Library/Mail` 아래 파일이 몇 개 들어 있는지 셉니다.
+1. 분석 대상이 로컬 백업인지 파일 시스템 전체인지 확인하고, `Library/Mail` 아래 파일이 몇 개 들어 있는지 셉니다.
 2. `Protected Index` 의 표 목록을 뽑아 iOS 12 구조와 iOS 13 구조 가운데 어느 쪽에 가까운지, 둘 다 아닌지 적습니다.
 3. `Envelope Index` 의 `Mailboxes` 표 URL 하나를 골라 `.mboxCache.plist` 로 메일함 이름을 풀어 봅니다.
-4. `.emlx` 파일 하나를 디코딩해 `Summaries` 의 앞부분과 같은지 견줍니다.
-5. `group.com.apple.mail.plist` 의 `LastMailAppLaunchTime` 을 KnowledgeC 의 메일 앱 사용 기록과 견주어 어느 쪽이 더 늦은지 봅니다.
+4. `.emlx` 파일 하나를 디코딩해 `Summaries` 의 앞부분과 같은지 비교합니다.
+5. `group.com.apple.mail.plist` 의 `LastMailAppLaunchTime` 을 KnowledgeC 의 메일 앱 사용 기록과 비교해 어느 쪽이 더 늦은지 봅니다.
 
 ## 참고 문헌
 

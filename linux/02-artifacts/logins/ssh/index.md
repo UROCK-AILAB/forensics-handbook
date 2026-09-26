@@ -27,10 +27,10 @@ authorized_keys 에 공개 키 한 줄을 넣으면 암호를 몰라도 그 계�
 | known_hosts, 클라이언트 설정 | `~/.ssh/known_hosts`, `~/.ssh/known_hosts2`, `/etc/ssh/ssh_known_hosts`, `~/.ssh/config`, `/etc/ssh/ssh_config` | 이 계정의 ssh 클라이언트가 어느 서버에 접속한 적이 있나 | [known_hosts 와 클라이언트 설정](known-hosts.md) |
 | sshd_config | `/etc/ssh/sshd_config`, `/etc/ssh/sshd_config.d/*.conf` | 서버가 어떤 인증을 허용했고 무엇을 어디에 기록했어야 하나 | [sshd 설정](sshd-config.md) |
 | 로그인 때 읽거나 실행하는 파일 | `~/.ssh/environment`, `~/.ssh/rc`, `/etc/ssh/sshrc` | 로그인마다 실행되는 명령, 바뀐 환경 변수 | [sshd 설정](sshd-config.md) |
-| 호스트 키 | `/etc/ssh/ssh_host_ecdsa_key`, `ssh_host_ed25519_key`, `ssh_host_rsa_key` 와 각각의 `.pub` | 이 서버의 신원. 다른 기계의 known_hosts 에 있는 키와 맞대어 접속 대상을 밝힌다 | 이 쪽 |
+| 호스트 키 | `/etc/ssh/ssh_host_ecdsa_key`, `ssh_host_ed25519_key`, `ssh_host_rsa_key` 와 각각의 `.pub` | 이 서버의 신원. 다른 기계의 known_hosts 에 있는 키와 맞대어 접속 대상을 밝힌다 | 이 페이지 |
 | 로그인 기록 | `/var/log/wtmp`, `/var/log/btmp`, `/var/log/lastlog` | pty 를 받은 로그인, 암호·키보드 대화식 인증 실패와 없는 사용자 이름으로 한 시도 | [로그인 기록](../wtmp-btmp-lastlog.md) |
 
-위치는 OpenSSH 매뉴얼의 기본값입니다[1][2][3]. `AuthorizedKeysFile`, `UserKnownHostsFile` 같은 설정 키로 경로를 바꿀 수 있으므로, 검체에서는 설정 파일을 먼저 읽고 실제 경로를 정합니다. 수집 도구의 기본 경로 목록도 대체로 이 기본값을 따르지만, ForensicArtifacts 는 전역 known_hosts 를 매뉴얼의 `/etc/ssh/ssh_known_hosts` 가 아닌 `/etc/ssh/known_hosts` 로 적어 두었습니다[3][7][8].
+위치는 OpenSSH 매뉴얼의 기본값입니다[1][2][3]. `AuthorizedKeysFile`, `UserKnownHostsFile` 같은 설정 키로 경로를 바꿀 수 있으므로, 분석 대상에서는 설정 파일을 먼저 읽고 실제 경로를 정합니다. 수집 도구의 기본 경로 목록도 대체로 이 기본값을 따르지만, ForensicArtifacts 는 전역 known_hosts 를 매뉴얼의 `/etc/ssh/ssh_known_hosts` 가 아닌 `/etc/ssh/known_hosts` 로 적어 두었습니다[3][7][8].
 
 호스트 키 공개 파일(`/etc/ssh/ssh_host_*_key.pub`)은 다른 기계의 접속 기록을 푸는 데 씁니다. 여러 기계에서 모은 호스트 공개 키를 한 기계의 known_hosts 에 있는 키와 맞추면, 호스트 이름이 해시로 가려진 줄도 어느 서버를 가리키는지 알 수 있고, Velociraptor 는 이렇게 맞추는 질의를 함께 제공합니다[10].
 
@@ -38,7 +38,7 @@ authorized_keys 에 공개 키 한 줄을 넣으면 암호를 몰라도 그 계�
 
 | 항목 | Ubuntu 24.04 LTS | RHEL 9 |
 |---|---|---|
-| OpenSSH 판 | 9.6p1[4] | 처음 판은 8.7p1, CentOS Stream 9 는 2025년 9월에 9.9p1 로 올렸다[5]. 검체에서 `rpm -q openssh-server` 로 확인한다 |
+| OpenSSH 판 | 9.6p1[4] | 처음 판은 8.7p1, CentOS Stream 9 는 2025년 9월에 9.9p1 로 올렸다[5]. 분석 대상에서 `rpm -q openssh-server` 로 확인한다 |
 | 서비스 단위 | `ssh.service`, `ssh.socket`. 소켓 활성화가 기본이다[4] | `sshd.service`, `sshd.socket`, `sshd@.service`[5] |
 | 인증 줄을 남기는 프로세스 이름 | `sshd` | 9.9p1 이면 `sshd-session`(`/usr/libexec/openssh/sshd-session`)[5] |
 | sshd 로그 facility | 기본값 AUTH → `/var/log/auth.log` | `/etc/ssh/sshd_config.d/50-redhat.conf` 의 `SyslogFacility AUTHPRIV` → `/var/log/secure`[5] |
@@ -52,7 +52,7 @@ OpenSSH 9.8 부터 서버가 연결을 받는 `sshd` 와 세션마다 따로 뜨
 1. [sshd 로그 (sshd Logs)](sshd-logs.md) — 인증 성공·실패 줄의 모양과 기록 등급, 기본 설정에서 남지 않는 줄을 다룹니다. 들어온 기록은 여기서 시작합니다.
 2. [authorized_keys (authorized_keys)](authorized-keys.md) — 등록된 공개 키, 키 앞에 붙는 옵션, 로그에 찍힌 키 지문과 파일의 줄을 맞추는 방법을 다룹니다.
 3. [known_hosts 와 클라이언트 설정 (known_hosts·ssh_config)](known-hosts.md) — 이 계정이 접속한 서버, 해시된 호스트 이름을 되살리는 방법, `known_hosts.old` 를 다룹니다.
-4. [sshd 설정 (sshd_config)](sshd-config.md) — 먼저 나온 값이 이기는 읽기 규칙과 두 배포판의 기본 설정, 로그인 때 실행되는 파일을 다룹니다. 앞의 세 쪽을 해석할 때 기준이 됩니다.
+4. [sshd 설정 (sshd_config)](sshd-config.md) — 먼저 나온 값이 이기는 읽기 규칙과 두 배포판의 기본 설정, 로그인 때 실행되는 파일을 다룹니다. 앞의 세 페이지를 해석할 때 기준이 됩니다.
 
 해석은 설정에 달려 있어서, 실제 조사에서는 sshd_config 를 먼저 읽어 로그 등급(`LogLevel`)과 키 파일 경로(`AuthorizedKeysFile`)를 정한 뒤 로그와 키 파일을 보면 됩니다.
 
@@ -64,7 +64,7 @@ OpenSSH 9.8 부터 서버가 연결을 받는 `sshd` 와 세션마다 따로 뜨
 - [PAM 모듈 변조 (PAM Backdoor)](../../persistence/pam-backdoor.md) — sshd 가 `UsePAM yes` 로 PAM 을 거칠 때 남는 변조 흔적입니다.
 - [셸 시작 파일 (.bashrc·profile)](../../persistence/shell-startup.md) — `~/.ssh/rc` 와 함께 로그인 때 실행되는 다른 파일입니다.
 - [인증 모듈 (PAM)](../../../01-foundations/users-auth/pam.md) — `pam_unix(sshd:session)` 줄이 어디서 오는지 설명합니다.
-- [SSH 로 들어왔나 (SSH Intrusion)](../../../04-scenarios/intrusion/ssh-intrusion.md) — 이 갈래의 아티팩트를 한 사건에 엮는 순서입니다.
+- [SSH 로 들어왔나 (SSH Intrusion)](../../../04-scenarios/intrusion/ssh-intrusion.md) — 이 분류의 아티팩트를 한 사건에 엮는 순서입니다.
 
 ## 참고 문헌
 

@@ -10,7 +10,7 @@ nav_order: 110
 
 ## 이 형식을 쓰는 아티팩트
 
-이 쪽은 파일 형식이 아니라 여러 로그가 시각을 적는 방식을 다룹니다. [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [CloudWatch Logs](../../02-artifacts/aws/cloudwatch-logs.md), [S3 서버 접근 로그](../../02-artifacts/aws/s3-access-logs.md), [AWS VPC 흐름 로그](../../02-artifacts/aws/vpc-flow-logs.md), [Azure 활동 로그](../../02-artifacts/azure/activity-log.md)와 [리소스 로그](../../02-artifacts/azure/resource-logs.md), [Azure 흐름 로그](../../02-artifacts/azure/flow-logs.md), [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [통합 감사 로그 (Unified Audit Log, UAL)](../../02-artifacts/m365/unified-audit-log/index.md), [Google Cloud 감사 로그](../../02-artifacts/gcp/cloud-audit-logs.md)와 [VPC 흐름 로그](../../02-artifacts/gcp/vpc-flow-logs.md), [Google Workspace 관리 감사](../../02-artifacts/google-workspace/admin-audit.md)·[로그인 감사](../../02-artifacts/google-workspace/login-audit.md), [Okta](../../02-artifacts/saas/okta.md), [Slack](../../02-artifacts/saas/slack.md), [GitHub](../../02-artifacts/saas/github.md), [Dropbox·Box](../../02-artifacts/saas/dropbox-box.md)가 여기에 해당합니다.
+이 페이지는 파일 형식이 아니라 여러 로그가 시각을 적는 방식을 다룹니다. [CloudTrail](../../02-artifacts/aws/cloudtrail/index.md), [CloudWatch Logs](../../02-artifacts/aws/cloudwatch-logs.md), [S3 서버 접근 로그](../../02-artifacts/aws/s3-access-logs.md), [AWS VPC 흐름 로그](../../02-artifacts/aws/vpc-flow-logs.md), [Azure 활동 로그](../../02-artifacts/azure/activity-log.md)와 [리소스 로그](../../02-artifacts/azure/resource-logs.md), [Azure 흐름 로그](../../02-artifacts/azure/flow-logs.md), [Entra ID 로그](../../02-artifacts/m365/entra-logs/index.md), [통합 감사 로그 (Unified Audit Log, UAL)](../../02-artifacts/m365/unified-audit-log/index.md), [Google Cloud 감사 로그](../../02-artifacts/gcp/cloud-audit-logs.md)와 [VPC 흐름 로그](../../02-artifacts/gcp/vpc-flow-logs.md), [Google Workspace 관리 감사](../../02-artifacts/google-workspace/admin-audit.md)·[로그인 감사](../../02-artifacts/google-workspace/login-audit.md), [Okta](../../02-artifacts/saas/okta.md), [Slack](../../02-artifacts/saas/slack.md), [GitHub](../../02-artifacts/saas/github.md), [Dropbox·Box](../../02-artifacts/saas/dropbox-box.md)가 여기에 해당합니다.
 
 레코드를 감싼 겉모양과 고유 ID·중복·순서는 [JSON 로그 읽기](json-logs.md)에서, 기록이 얼마나 오래 남는지는 [보관 기간과 라이선스](retention-licensing.md)에서 다룹니다.
 
@@ -123,7 +123,7 @@ Purview 감사 검색 작업이 끝나기까지 걸리는 시간은 지연과 �
 
 ## 포렌식에서 중요한 점
 
-**증명하는 것.** 로그 시각은 서비스가 그 요청을 처리한 시각이고, CloudTrail `eventTime` 처럼 API 엔드포인트를 제공하는 서비스 쪽 호스트의 시계를 따릅니다[1]. 그래서 "이 시각에 이 서비스가 이 요청을 받아 처리했다" 는 것을 사용자 기기의 시계와 상관없이 보여 줍니다. 보고서에는 "2025-09-26 01:30:45 UTC 에 이 계정으로 로그인한 기록이 있다" 처럼 시간대를 붙여 기록이 말하는 만큼만 적습니다.
+**증명하는 것.** 로그 시각은 서비스가 그 요청을 처리한 시각이고, CloudTrail `eventTime` 처럼 API 엔드포인트를 제공하는 서비스 쪽 호스트의 시계를 따릅니다[1]. 그래서 "이 시각에 이 서비스가 이 요청을 받아 처리했다" 는 것을 사용자 기기의 시계와 상관없이 보여 줍니다. 보고서에는 "2025-09-26 01:30:45 UTC 에 이 계정으로 로그인한 기록이 있다" 처럼 시간대를 붙여 기록으로 확인되는 만큼만 적습니다.
 
 **증명하지 못하는 것.** 로그 시각은 사용자 기기의 시계나 사용자가 있던 곳의 시간대를 알려 주지 않습니다. Entra 화면에 보이는 시각이 로그인한 사람의 현지 시각인 것도 아닙니다[20]. 위치는 [IP·사용자 에이전트·위치 정보](ip-ua-geo.md)에서 따로 판단합니다.
 
@@ -146,8 +146,8 @@ Azure Monitor 에서 `TimeGenerated` 와 `_TimeReceived` 가 똑같은 레코드
 - **Entra 화면과 파일의 시간대가 다릅니다.** 화면은 보는 사람의 시간대, 내려받은 CSV·JSON 은 UTC 입니다[20][21]. 화면 캡처와 파일을 한 표에 섞으면 시간대 차이만큼 어긋납니다.
 - **UAL 조회에 현지 날짜를 그대로 넣으면 범위가 밀립니다.** `Search-UnifiedAuditLog` 는 시간대 없는 값을 UTC 로 해석하므로[26], 한국 시각(UTC+9)으로 생각한 날짜를 그대로 넣으면 9시간 어긋난 범위를 조회합니다.
 - **Management Activity API 의 `startTime`·`endTime` 은 발생 시각 범위가 아닙니다.** 이 두 값은 `contentCreated`, 곧 콘텐츠를 받아 갈 수 있게 된 시각을 기준으로 거르고, 시작은 포함·끝은 제외입니다[24]. 두 값은 24시간 넘게 벌어지면 안 되고 시작은 7일 이내여야 합니다[24].
-- **초와 밀리초가 섞입니다.** Slack·AWS VPC 흐름 로그는 초, CloudWatch Logs·GitHub 는 밀리초입니다[6][7][37][39]. Azure 흐름 로그는 NSG·VNet 문서 모두 "UNIX epoch" 라고만 적었지만, 예시 값은 NSG 가 `1487282421` 처럼 10자리(초), VNet 이 `1663146003599` 처럼 13자리(밀리초)입니다[15][16]. 검체의 자릿수를 보고 판단합니다.
-- **Google Workspace `id.time` 은 문서끼리 표기가 다릅니다.** Reports API 참조 문서는 "UNIX epoch 초" 라고 설명하는데[32], 같은 API 가이드의 예시 응답은 `"2011-06-17T15:39:18.460Z"` 같은 RFC 3339 문자열입니다[33]. 검체의 값 모양을 보고 읽습니다.
+- **초와 밀리초가 섞입니다.** Slack·AWS VPC 흐름 로그는 초, CloudWatch Logs·GitHub 는 밀리초입니다[6][7][37][39]. Azure 흐름 로그는 NSG·VNet 문서 모두 "UNIX epoch" 라고만 적었지만, 예시 값은 NSG 가 `1487282421` 처럼 10자리(초), VNet 이 `1663146003599` 처럼 13자리(밀리초)입니다[15][16]. 실제 값의 자릿수를 보고 판단합니다.
+- **Google Workspace `id.time` 은 문서끼리 표기가 다릅니다.** Reports API 참조 문서는 "UNIX epoch 초" 라고 설명하는데[32], 같은 API 가이드의 예시 응답은 `"2011-06-17T15:39:18.460Z"` 같은 RFC 3339 문자열입니다[33]. 실제 값의 모양을 보고 읽습니다.
 - **UAL `CreationTime` 에는 시간대 표시가 없을 수 있습니다.** 스키마는 UTC 라고 정의하지만 문서 예시 값은 `2015-06-29T20:03:19` 처럼 끝에 `Z` 가 없습니다[23][24]. 이런 값을 도구가 현지 시각으로 읽지 않도록 UTC 로 지정해 바꿉니다.
 - **S3 서버 접근 로그 시각은 ISO 8601 파서가 그대로 읽지 못합니다.** `[06/Feb/2019:00:00:38 +0000]` 처럼 대괄호와 strftime 형식이라[8] 형식 문자열을 지정해 바꿉니다.
 - **Entra 비대화형 로그인은 묶여서 같은 시각처럼 보일 수 있습니다.** 화면은 시각만 다르고 나머지가 같은 로그인을 한 줄로 묶어 "# sign-ins" 열에 개수를 적고, 펼치면 각각의 시각이 보입니다[22].

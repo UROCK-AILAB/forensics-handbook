@@ -92,7 +92,7 @@ Windows 11 에서 값은 모두 REG_DWORD 횟수이고, 값 이름은 아래 형
 `KeyCreationTime` 은 REG_QWORD 이며 64비트 FILETIME 숫자입니다[1]. UTC 로 읽고, 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다. 이 값을 키가 처음 만들어진 때, 곧 그 사용자가 처음 대화형 로그온한 때로 보는 해석이 있습니다[1].
 
 Windows 11 에서 `KeyCreationTime` 이 같은 날 가장 오래된 UserAssist·BAM 항목보다 20여 분 늦은 예가 있으므로 첫 로그온 시각 그 자체로 쓰지 말고 "그 무렵" 으로 씁니다. 첫 로그온 시각은 [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트와 맞춰 봅니다.
-하위 키의 마지막 기록 시각 (LastWrite) 은 사용할 때마다 바뀝니다. 이 시각은 그 종류의 동작이 마지막으로 셈에 들어간 무렵을 말하며, 어느 앱의 값이 바뀌었는지는 말하지 않습니다.
+하위 키의 마지막 기록 시각 (LastWrite) 은 사용할 때마다 바뀝니다. 이 시각으로는 그 종류의 동작이 마지막으로 셈에 들어간 무렵만 알 수 있고, 어느 앱의 값이 바뀌었는지는 알 수 없습니다.
 
 부모 키 `FeatureUsage` 의 마지막 기록 시각은 `KeyCreationTime` 과 같은 날일 수 있습니다. 하위 키가 바뀌어도 부모 키의 시각은 따라 바뀌지 않습니다.
 
@@ -109,7 +109,7 @@ Windows 11 에서 `KeyCreationTime` 이 같은 날 가장 오래된 UserAssist·
 
 ### 헥스로 한 번
 
-**`KeyCreationTime` 값 8바이트.** 아래 바이트는 예시 값 132286223503288727[1] 을 리틀 엔디언 바이트로 옮긴 것입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+**`KeyCreationTime` 값 8바이트.** 아래 바이트는 예시 값 132286223503288727[1] 을 리틀 엔디언 바이트로 옮긴 것입니다. 실제 데이터에서 꺼낸 값이 아닙니다.
 
 ```
 97 69 97 90 9E F9 D5 01
@@ -153,7 +153,7 @@ REG_DWORD 를 리틀 엔디언으로 읽으면 5 입니다. 그 하위 키가 �
 
 ## 실습
 
-Windows 10 1903 이후 공개 검체(NIST CFReDS 등)에서 사용자 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
+Windows 10 1903 이후 공개 실습 이미지(NIST CFReDS 등)에서 사용자 NTUSER.DAT 를 꺼내 아래 질문을 풀어 봅니다.
 
 1. `FeatureUsage` 키가 있습니까? 없다면 그 계정은 대화형으로 로그온한 적이 있습니까?
 2. 어떤 하위 키가 있습니까? TrayButtonClicked 가 있습니까?

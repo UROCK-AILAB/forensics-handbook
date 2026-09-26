@@ -59,7 +59,7 @@ has_toc: false
 
 ### 자료 기준
 
-하위 페이지는 아래 자료를 기준으로 합니다. 버전이 바뀌면 이벤트 칸과 기본값이 달라질 수 있습니다.
+하위 페이지는 아래 자료를 기준으로 합니다. 버전이 바뀌면 이벤트 필드와 기본값이 달라질 수 있습니다.
 
 | 자료 | 날짜 | 범위 |
 |---|---|---|
@@ -88,7 +88,7 @@ has_toc: false
 
 ## 함께 볼 페이지
 
-- [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) — 4624·4625·4648·4672·4768·4769·4776 의 칸을 읽습니다. 이 묶음의 페이지는 이 칸 설명을 되풀이하지 않습니다.
+- [로그온·로그오프](../../../02-artifacts/event-logs/logon-events/index.md) — 4624·4625·4648·4672·4768·4769·4776 의 필드를 읽습니다. 이 묶음의 페이지는 이 필드 설명을 되풀이하지 않습니다.
 - [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) — 어떤 흔적이 남을 수 있었는지 먼저 정합니다.
 - [레지스트리 속 비밀번호 정보](../../../02-artifacts/credentials/sam-security/index.md) · [액티브 디렉터리 DB](../../../02-artifacts/credentials/ntds-dit.md) — 공격자가 빼내려는 자격 증명이 어디에 어떤 구조로 들어 있는지 봅니다.
 - [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) — 메모리 이미지에서 자격 증명을 찾습니다.

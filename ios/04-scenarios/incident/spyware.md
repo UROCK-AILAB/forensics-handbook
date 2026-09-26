@@ -8,7 +8,7 @@ nav_order: 1620
 
 ## 조사 질문
 
-기기가 스파이웨어에 감염됐는지, 감염됐다면 언제부터였는지를 가립니다. 스파이웨어는 크게 두 갈래로 나눠 봅니다. 하나는 특정 인물을 노리는 용병 스파이웨어 (mercenary spyware)이고, 다른 하나는 가까운 사람이 몰래 감시하려고 쓰는 스토커웨어 (stalkerware)입니다. 두 경우 모두 이 페이지는 감염이 의심될 때 무엇을 먼저 보존하고 무엇을 어떤 순서로 볼지를 다루고, 아티팩트별 세부는 링크한 페이지에 맡깁니다. 처음 들어온 길을 찾는 일은 [악성 코드는 어디서 들어왔나](initial-access.md)에서 다룹니다.
+기기가 스파이웨어에 감염됐는지, 감염됐다면 언제부터였는지를 판별합니다. 스파이웨어는 크게 두 종류로 나눠 봅니다. 하나는 특정 인물을 노리는 용병 스파이웨어 (mercenary spyware)이고, 다른 하나는 가까운 사람이 몰래 감시하려고 쓰는 스토커웨어 (stalkerware)입니다. 두 경우 모두 이 페이지는 감염이 의심될 때 무엇을 먼저 보존하고 무엇을 어떤 순서로 볼지를 다루고, 아티팩트별 세부는 링크한 페이지에 맡깁니다. 처음 들어온 길을 찾는 일은 [악성 코드는 어디서 들어왔나](initial-access.md)에서 다룹니다.
 
 ## 의심 계기
 
@@ -20,7 +20,7 @@ nav_order: 1620
 
 스파이웨어 조사에서는 기기를 만지기 전에 보존 순서를 정합니다. 재부팅이나 업데이트 한 번으로 사라지는 기록이 있어서, 수집보다 먼저 전원을 끄거나 업데이트하면 안 됩니다.
 
-1. **재부팅하지 않은 상태에서 sysdiagnose 를 받습니다.** sysdiagnose 안의 `shutdown.log` 는 재부팅할 때 끝나지 않고 남은 프로세스를 PID 와 경로로 적습니다. Pegasus·Reign·Predator 는 `/private/var/db/` 아래 경로에서, Predator 는 `/private/var/tmp/` 에서 실행된 흔적이 남았습니다 [4]. iOS 18 이하에서는 이 파일이 누적되지만 iOS 26 부터는 재부팅마다 덮어써서, iOS 26 이후 기기를 재부팅하면 예전 기록이 사라집니다. 그래서 iOS 26 으로 올리기 전에 sysdiagnose 를 받아 둡니다 [5]. iOS 27 에서도 덮어쓰는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 파일 구성은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md)과 [sysdiagnose 안의 로그](../../02-artifacts/logs/sysdiagnose-logs.md)에 있습니다.
+1. **재부팅하지 않은 상태에서 sysdiagnose 를 받습니다.** sysdiagnose 안의 `shutdown.log` 는 재부팅할 때 끝나지 않고 남은 프로세스를 PID 와 경로로 적습니다. Pegasus·Reign·Predator 는 `/private/var/db/` 아래 경로에서, Predator 는 `/private/var/tmp/` 에서 실행된 흔적이 남았습니다 [4]. iOS 18 이하에서는 이 파일이 누적되지만 iOS 26 부터는 재부팅마다 덮어써서, iOS 26 이후 기기를 재부팅하면 예전 기록이 사라집니다. 그래서 iOS 26 으로 올리기 전에 sysdiagnose 를 받아 둡니다 [5]. iOS 27 에서도 덮어쓰는지는 실제 기기로 확인해야 합니다. 파일 구성은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md)과 [sysdiagnose 안의 로그](../../02-artifacts/logs/sysdiagnose-logs.md)에 있습니다.
 2. **암호화 백업을 받습니다.** 통화 기록, Safari 방문 기록, interactionC, Analytics 같은 기록은 암호화 백업에서만 나옵니다 [2]. 암호화하지 않은 백업만 받았다면 보고서에 그 범위를 적습니다.
 3. **가능하면 전체 파일 시스템을 받습니다.** MVT 는 로컬 백업, sysdiagnose, 전체 파일 시스템을 모두 입력으로 받습니다 [2]. 수집 방법의 선택은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)를 따릅니다.
 4. **재부팅 이력을 적습니다.** Pegasus 는 iOS 기기에서 더는 지속성을 유지하지 않는 것으로 보입니다 [3]. 알림을 받은 뒤 사용자가 재부팅했는지, 몇 번 했는지를 물어 둡니다.
@@ -41,7 +41,7 @@ nav_order: 1620
 
 1. **`shutdown.log` 에서 낯선 경로를 찾습니다.** 재부팅 때 남은 프로세스 가운데 `/private/var/db/` 나 `/private/var/tmp/` 아래에서 실행된 것이 있는지 봅니다 [4]. 덮어쓰는 버전이라면 파일에 마지막 재부팅 한 번의 기록만 있다는 점을 함께 적습니다.
 
-2. **데이터 사용량 표 둘을 견줍니다.** `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에는 다음 두 표가 있습니다.
+2. **데이터 사용량 표 둘을 비교합니다.** `WirelessDomain :: Library/Databases/DataUsage.sqlite` 에는 다음 두 표가 있습니다.
 
    ```
    ZPROCESS:   ZFIRSTTIMESTAMP, ZTIMESTAMP, ZBUNDLENAME, ZPROCNAME …

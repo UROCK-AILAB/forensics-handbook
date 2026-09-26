@@ -13,9 +13,9 @@ nav_order: 750
 
 ## 무엇을 기록하나 · 왜 생기나
 
-사용자가 북마크를 추가하거나 폴더를 만들면 Bookmarks.db 에 행이 생기고, 이 DB 에서 URL, 제목, 부모 북마크, `syncable`, `hidden`, `deleted` 값을 뽑을 수 있습니다[1]. iCloud 로 북마크를 맞추는 기기에서는 동기화 상태를 담는 표와 칸도 함께 쓰입니다(아래 구조 절).
+사용자가 북마크를 추가하거나 폴더를 만들면 Bookmarks.db 에 행이 생기고, 이 DB 에서 URL, 제목, 부모 북마크, `syncable`, `hidden`, `deleted` 값을 뽑을 수 있습니다[1]. iCloud 로 북마크를 맞추는 기기에서는 동기화 상태를 담는 표와 열도 함께 쓰입니다(아래 구조 절).
 
-맥의 예전 `Bookmarks.plist` 는 읽기 목록(Reading List)을 "com.apple.ReadingList" 폴더 아래에 둡니다. iOS 의 Bookmarks.db 에서 읽기 목록을 어떻게 구분하는지는 공개 자료가 없어 검체에서 확인합니다. 그래서 여기서는 읽기 목록을 가려내는 기준을 단정하지 않고, 검체에서 확인할 칸만 짚습니다.
+맥의 예전 `Bookmarks.plist` 는 읽기 목록(Reading List)을 "com.apple.ReadingList" 폴더 아래에 둡니다. iOS 의 Bookmarks.db 에서 읽기 목록을 어떻게 구분하는지는 실제 데이터로 확인해야 합니다. 그래서 여기서는 읽기 목록을 가려내는 기준을 단정하지 않고, 실제 데이터에서 확인할 열만 짚습니다.
 
 ## 위치와 버전별 차이
 
@@ -24,15 +24,15 @@ nav_order: 750
 | 기기 | `/private/var/mobile/Library/Safari/Bookmarks.db` | [1][2] |
 | 로컬 백업 | HomeDomain `Library/Safari/Bookmarks.db` | |
 
-Bookmarks.db 는 암호화하지 않은 백업에도 들어갑니다. 암호화하지 않은 백업에는 History.db 와 탭 DB 가 없을 수 있어서, 백업만 받은 사건에서는 사파리 흔적 가운데 이 DB 를 먼저 엽니다. 백업에서 파일을 찾는 법은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에 있습니다. iOS 버전마다 칸이 어떻게 늘었는지는 공개 자료가 없습니다.
+Bookmarks.db 는 암호화하지 않은 백업에도 들어갑니다. 암호화하지 않은 백업에는 History.db 와 탭 DB 가 없을 수 있어서, 백업만 받은 사건에서는 사파리 흔적 가운데 이 DB 를 먼저 엽니다. 백업에서 파일을 찾는 법은 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에 있습니다. iOS 버전마다 열이 어떻게 늘었는지는 공개 자료가 없습니다.
 
 ## 구조
 
 Bookmarks.db 의 표는 아래와 같습니다.
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
-| `bookmarks` | 아래 표의 37개 칸 |
+| `bookmarks` | 아래 표의 37개 열 |
 | `bookmark_title_words` | `id`, `bookmark_id`, `word`, `word_index` |
 | `folder_ancestors` | `id`, `folder_id`, `ancestor_id` |
 | `database_properties` | `key`, `value` |
@@ -42,9 +42,9 @@ Bookmarks.db 의 표는 아래와 같습니다.
 | `sync_record_zone_metadata` | `record_zone_name`, `record_zone_id_data`, `last_server_change_token`, `hash_generator`, `sync_record_zone_metadata_state` |
 | `sqlite_sequence` | SQLite 가 만드는 표 |
 
-`bookmarks` 표의 칸은 성격에 따라 묶으면 아래와 같습니다. 묶음은 칸 이름으로 나눈 것이고, 각 칸 값의 뜻은 공개 자료에 없습니다.
+`bookmarks` 표의 열은 성격에 따라 묶으면 아래와 같습니다. 묶음은 열 이름으로 나눈 것이고, 각 열 값의 뜻은 공개 자료에 없습니다.
 
-| 묶음 | 칸 |
+| 묶음 | 열 |
 |---|---|
 | 위치·종류 | `id`, `special_id`, `parent`, `type`, `subtype`, `num_children`, `order_index`, `last_selected_child`, `hidden`, `hidden_ancestor_count` |
 | 내용 | `title`, `url`, `topic_title`, `feature_text`, `fetched_feature_text`, `icon`, `fetched_icon` |
@@ -52,9 +52,9 @@ Bookmarks.db 의 표는 아래와 같습니다.
 | 동기화 | `external_uuid`, `server_id`, `sync_key`, `sync_data`, `syncable`, `dav_generation` |
 | 이진 속성 | `extra_attributes`, `local_attributes` |
 
-`type`(폴더인지 항목인지), `special_id`, `read`, `archive_status` 에 들어가는 값과, 읽기 목록 항목의 `extra_attributes` 에 추가한 날짜나 미리 보기 글이 들어가는지는 공개 자료가 없어 검체에서 확인합니다. `read` 와 `archive_status` 는 이름만 보면 읽기 목록과 이어질 것 같지만, 검체에서 읽기 목록에 넣은 항목과 값을 대조해 본 뒤 판단합니다.
+`type`(폴더인지 항목인지), `special_id`, `read`, `archive_status` 에 들어가는 값과, 읽기 목록 항목의 `extra_attributes` 에 추가한 날짜나 미리 보기 글이 들어가는지는 실제 데이터로 확인해야 합니다. `read` 와 `archive_status` 는 이름만 보면 읽기 목록과 이어질 것 같지만, 실제 기기에서 읽기 목록에 넣은 항목과 값을 대조해 본 뒤 판단합니다.
 
-SafariTabs.db 의 `bookmarks` 표와 칸 이름이 `parent`, `title`, `url`, `last_modified`, `date_closed`, `extra_attributes`, `local_attributes`, `external_uuid`, `deleted`, `order_index` 로 겹칩니다[3]. 두 DB 가 같은 구조를 쓰는지는 공개 자료가 없고, 탭 쪽은 [탭과 세션 (Tabs)](tabs.md)에서 다룹니다.
+SafariTabs.db 의 `bookmarks` 표와 열 이름이 `parent`, `title`, `url`, `last_modified`, `date_closed`, `extra_attributes`, `local_attributes`, `external_uuid`, `deleted`, `order_index` 로 겹칩니다[3]. 두 DB 가 같은 구조를 쓰는지는 공개 자료가 없고, 탭 쪽은 [탭과 세션 (Tabs)](tabs.md)에서 다룹니다.
 
 설정 파일에도 북마크와 이어진 이름의 키가 있습니다.
 
@@ -64,25 +64,25 @@ SafariTabs.db 의 `bookmarks` 표와 칸 이름이 `parent`, `title`, `url`, `la
 | HomeDomain `Library/Preferences/com.apple.SafariBookmarksSyncAgent.plist` | `MigrationStateEncodedRecordData`(bytes), `TabGroupMigrationStateEncodedRecordData`(bytes), `NewestLaunchedSafariBookmarksSyncAgentVersion`(str) 등 |
 | 제한 설정(구성 프로파일) plist | 제한 설정 목록 안의 `webContentFilterWhitelistedBookmarks` |
 
-`webContentFilterWhitelistedBookmarks` 는 이름으로 보아 관리 기기의 웹 콘텐츠 필터가 허용한 북마크와 이어져 보이지만 해석을 다룬 공개 자료는 없고, 구성 프로파일은 [구성 프로파일과 MDM (Configuration Profiles·MDM)](../../credentials-security/configuration-profiles.md)에서 다룹니다.
+`webContentFilterWhitelistedBookmarks` 는 이름으로 짐작하면 관리 기기의 웹 콘텐츠 필터가 허용한 북마크와 이어져 보이지만 해석을 다룬 공개 자료는 없고, 구성 프로파일은 [구성 프로파일과 MDM (Configuration Profiles·MDM)](../../credentials-security/configuration-profiles.md)에서 다룹니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** `bookmarks` 에 URL 이 있는 행이 있으면 수집 시점에 그 주소가 사파리 북마크 DB 에 저장되어 있었다는 사실을 보여 줍니다. `parent` 와 `folder_ancestors` 를 따라가면 어느 폴더 아래에 두었는지도 알 수 있습니다.
 
-**증명하지 못하는 것.** 북마크가 있다고 그 페이지를 방문했다고 할 수 없고, 누가 언제 추가했는지도 이 행만으로는 말할 수 없습니다. `sync_*` 표와 `server_id`·`sync_key`·`sync_data` 칸이 채워져 있으면 iCloud 동기화와 이어진 행일 수 있어서, 이 기기에서 직접 추가한 것인지 다른 기기에서 넘어온 것인지를 가를 근거는 알려져 있지 않습니다. `deleted` 값이 있는 행을 지운 북마크로 볼 수 있을지도 검체에서 확인한 뒤에 씁니다.
+**증명하지 못하는 것.** 북마크가 있다고 그 페이지를 방문했다고 할 수 없고, 누가 언제 추가했는지도 이 행만으로는 말할 수 없습니다. `sync_*` 표와 `server_id`·`sync_key`·`sync_data` 열이 채워져 있으면 iCloud 동기화와 이어진 행일 수 있어서, 이 기기에서 직접 추가한 것인지 다른 기기에서 넘어온 것인지를 가를 근거는 알려져 있지 않습니다. `deleted` 값이 있는 행을 지운 북마크로 볼 수 있을지도 실제 데이터로 확인한 뒤에 씁니다.
 
 보고서에는 "수집 시점에 이 URL 이 사파리 북마크 DB 의 이 폴더 아래에 저장되어 있었다" 처럼 씁니다.
 
 ## 시각 해석
 
-`last_modified`, `added`, `date_closed` 는 이름으로 보아 시각이나 시각과 이어진 값이지만, 기준과 단위는 공개 자료에 없습니다. 같은 사파리의 방문 기록과 탭 DB 에서 쓰는 방식처럼 값이 978307200 보다 큰지 작은지로 UNIX 시각과 Apple 절대 시각을 가려 본 뒤, 결과가 수집 시각보다 앞인지 확인하고 씁니다. 두 기준은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+`last_modified`, `added`, `date_closed` 는 이름으로 보면 시각이나 시각과 이어진 값이지만, 기준과 단위는 공개 자료에 없습니다. 같은 사파리의 방문 기록과 탭 DB 에서 쓰는 방식처럼 값이 978307200 보다 큰지 작은지로 UNIX 시각과 Apple 절대 시각을 구분해 본 뒤, 결과가 수집 시각보다 앞인지 확인하고 씁니다. 두 기준은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 ## 함정과 한계
 
 - 공개 도구 iLEAPP 의 북마크 모듈은 `SELECT title, url, hidden FROM bookmarks` 만 해서 읽기 목록과 폴더를 나누지 않고 시각도 바꾸지 않습니다[4]. 도구 결과만 보면 폴더 행과 항목 행이 섞이고, 읽기 목록 여부와 시각은 빠집니다.
 - 이 DB 에는 폴더 행도 함께 들어 있어서, 행 수를 북마크 개수로 그대로 옮기지 않습니다.
-- `hidden` 과 `hidden_ancestor_count` 가 채워진 행은 화면에 보이지 않는 항목일 수 있어서, 사용자가 본 목록과 DB 의 행이 다를 수 있습니다. 값의 뜻은 검체로 확인합니다.
+- `hidden` 과 `hidden_ancestor_count` 가 채워진 행은 화면에 보이지 않는 항목일 수 있어서, 사용자가 본 목록과 DB 의 행이 다를 수 있습니다. 값의 뜻은 실제 데이터로 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -117,7 +117,7 @@ ORDER BY b.id;
 
 ## 실습
 
-NIST CFReDS 같은 곳에 공개된 iOS 검체나 직접 만든 시험 기기의 백업으로 아래를 풀어 봅니다.
+NIST CFReDS 같은 곳에 공개된 iOS 시험 데이터나 직접 만든 시험 기기의 백업으로 아래를 풀어 봅니다.
 
 1. 시험 기기에서 북마크 하나와 읽기 목록 항목 하나를 추가한 뒤 백업하고, 두 행의 `parent`·`type`·`read`·`archive_status` 값이 어떻게 다른지 비교합니다.
 2. `url` 이 빈 행의 `title` 을 모두 뽑아 어떤 폴더가 있는지 봅니다.

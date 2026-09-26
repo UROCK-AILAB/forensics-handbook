@@ -31,7 +31,7 @@ log show --predicate '(subsystem == "com.example.my_subsystem") && (category == 
 
 ## 연산자
 
-조건에는 `==`, `!=`, `ENDSWITH`, `contains[cd]`, `IN { }`, `&&`, `||` 를 씁니다 [1]. 이 밖에 `AND`, `CONTAINS`(포함), `CONTAINS[c]`(대소문자를 가리지 않는 포함), `BEGINSWITH`(시작 문자열)도 쓸 수 있습니다 [2][3]. 예를 들어 잠금 해제 실패 조건은 세 조건을 `AND` 로 잇고, 경로는 `BEGINSWITH` 로, 메시지는 `CONTAINS[c]` 로 거릅니다 [2].
+조건에는 `==`, `!=`, `ENDSWITH`, `contains[cd]`, `IN { }`, `&&`, `||` 를 씁니다 [1]. 이 밖에 `AND`, `CONTAINS`(포함), `CONTAINS[c]`(대소문자를 구분하지 않는 포함), `BEGINSWITH`(시작 문자열)도 쓸 수 있습니다 [2][3]. 예를 들어 잠금 해제 실패 조건은 세 조건을 `AND` 로 잇고, 경로는 `BEGINSWITH` 로, 메시지는 `CONTAINS[c]` 로 거릅니다 [2].
 
 ```
 processImagePath BEGINSWITH "/System/Library/CoreServices" AND process == "loginwindow" AND eventMessage CONTAINS[c] "INCORRECT"
@@ -41,7 +41,7 @@ processImagePath BEGINSWITH "/System/Library/CoreServices" AND process == "login
 
 ## 아카이브에 조건 걸기
 
-사후 분석에서는 검체에서 수집한 `.logarchive` 를 `--archive` 로 주고 조건을 함께 겁니다. 기간은 `--start`·`--end` 로 정하거나 `--last` 로 최근 구간만 볼 수 있고, `--last` 에는 `boot` 도 줄 수 있습니다 [1].
+사후 분석에서는 분석 대상 기기에서 수집한 `.logarchive` 를 `--archive` 로 주고 조건을 함께 겁니다. 기간은 `--start`·`--end` 로 정하거나 `--last` 로 최근 구간만 볼 수 있고, `--last` 에는 `boot` 도 줄 수 있습니다 [1].
 
 ```
 log show --archive <경로> --start "<시작 시각>" --end "<끝 시각>" --predicate 'process == "sshd"'
@@ -75,26 +75,26 @@ log show --archive <경로> --start "<시작 시각>" --end "<끝 시각>" --pre
 | AirDrop | 서브시스템 `com.apple.sharing`, 카테고리 `AirDrop` | [5] | [에어드롭 (AirDrop)](../../external-devices/airdrop.md) |
 | MDM | 프로세스 `mdmclient`, 서브시스템 `com.apple.ManagedClient` | [5] | [구성 프로파일 (Configuration Profiles·MDM)](../../persistence/configuration-profiles.md) |
 
-`kextd` 는 macOS 11 Big Sur 에서 `kernelmanagerd` 로 바뀌어서, 11 이후 검체에서는 커널 확장 조건이 비어 나올 수 있습니다. 프로세스와 서브시스템만 적힌 항목은 `process == "syspolicyd"` 처럼 키 하나씩 조건으로 바꿔 쓰고, 둘을 `&&` 로 이을지는 검체에서 결과를 보며 정합니다.
+`kextd` 는 macOS 11 Big Sur 에서 `kernelmanagerd` 로 바뀌어서, 11 이후 기기에서는 커널 확장 조건이 비어 나올 수 있습니다. 프로세스와 서브시스템만 적힌 항목은 `process == "syspolicyd"` 처럼 키 하나씩 조건으로 바꿔 쓰고, 둘을 `&&` 로 이을지는 실제 데이터에서 결과를 보며 정합니다.
 
 ## 함정과 한계
 
 - **따옴표.** 조건 전체는 셸의 작은따옴표로, 조건 안의 문자열은 큰따옴표로 감쌉니다. 공개 자료의 예시 중에는 따옴표가 어긋난 것도 있어서 [3], 옮겨 쓴 조건은 실제 맥에서 한 번 돌려 확인합니다.
-- **버전.** 공개 자료의 조건은 대부분 적용 버전을 밝히지 않습니다. 검체의 macOS 버전에서 결과가 비면 조건부터 의심합니다.
+- **버전.** 공개 자료의 조건은 대부분 적용 버전을 밝히지 않습니다. 분석 대상의 macOS 버전에서 결과가 비면 조건부터 의심합니다.
 - **가려진 값.** 동적 문자열은 기본값으로 `<private>` 로 가려지고([허브](index.md)), `eventMessage CONTAINS` 로 가려진 부분의 문자열을 찾으면 걸리지 않을 수 있습니다.
 - **권한.** `sudo` 없이 `log show` 를 돌릴 때 보이는 범위가 달라지는지는 공개 자료가 없습니다. 라이브 시스템에서 돌릴 때는 권한을 기록에 남깁니다.
 - **메시지 확인.** 공개 자료의 조건은 대부분 프로세스·서브시스템 수준에서 거르는 데 그쳐서, 걸린 메시지를 읽어 뜻을 확인하는 단계를 건너뛰지 않습니다.
 
 ## 직접 분석해 보기
 
-1. 검체의 `.logarchive` 에 조건 없이 `--last` 로 짧은 구간만 뽑아, 출력에 어떤 키가 보이는지 확인합니다 [1].
+1. 분석 대상의 `.logarchive` 에 조건 없이 `--last` 로 짧은 구간만 뽑아, 출력에 어떤 키가 보이는지 확인합니다 [1].
 2. `--style ndjson` 으로 같은 구간을 뽑아 `process`, `subsystem`, `category` 값이 어떻게 들어 있는지 봅니다 [1].
 3. 주제 페이지의 조건을 하나 골라 걸고, 결과 수를 적어 둡니다.
 4. 공개 파서 Mandiant `unifiedlog_parser` 로 같은 아카이브를 CSV 로 풀고 [6], 같은 프로세스 이름으로 걸렀을 때 결과 수가 `log show` 와 같은지 비교합니다. 도구 검증 방법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)에 있습니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에 `.logarchive` 나 통합 로그 폴더가 들어 있으면 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)에 `.logarchive` 나 통합 로그 폴더가 들어 있으면 풀어 봅니다.
 
 1. `messageType == "error"` 조건으로 뽑은 메시지를 프로세스별로 세어, 가장 많은 프로세스 셋을 적어 보세요.
 2. `--info` 를 줄 때와 주지 않을 때 결과 수가 달라지는지 비교해 보세요.

@@ -32,11 +32,11 @@ APFS 는 아이노드 값 (j_inode_val_t) 안에 시각 네 개를 두고, 디�
 
 모든 값은 1970-01-01 00:00:00 UTC 부터 센 나노초이고, 1970년 이전 날짜도 담을 수 있도록 부호 있는 정수입니다 [1]. mac_apt 는 APFS 시각을 늘 10^9 로 나눠 1970-01-01 에 더합니다 [3].
 
-명세로 만든 예시로 값 하나를 읽어 보면, 생성 시각 칸의 정수가 1700000000000000000(16진수 `0x17979CFE362A0000`)이라면 10^9 로 나눈 1700000000 초가 되고, 이 값은 2023-11-14 22:13:20 UTC 입니다. 이 값은 설명을 위해 만든 것이고 특정 검체에서 나온 값이 아닙니다. 디스크에 놓이는 바이트 순서는 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)를 따릅니다.
+명세로 만든 예시로 값 하나를 읽어 보면, 생성 시각 필드의 정수가 1700000000000000000(16진수 `0x17979CFE362A0000`)이라면 10^9 로 나눈 1700000000 초가 되고, 이 값은 2023-11-14 22:13:20 UTC 입니다. 이 값은 설명을 위해 만든 것이고 실제 기기에서 나온 값이 아닙니다. 디스크에 놓이는 바이트 순서는 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)를 따릅니다.
 
 ### 확장 속성
 
-날짜와 관련된 확장 속성으로 `com.apple.metadata:kMDItemDownloadedDate`, `com.apple.metadata:kMDItemWhereFroms`, `com.apple.quarantine`, `com.apple.lastuseddate#PS` 가 알려져 있습니다 [1]. 격리 속성 값의 두 번째 칸은 유닉스 시각을 16진수로 적은 값이고, 읽는 법은 [격리 속성과 다운로드 기록 (Quarantine)](../../02-artifacts/filesystem/quarantine/index.md)에 있습니다. `com.apple.lastuseddate#PS` 의 내부 형식은 공개된 분석 자료가 없어서, 이 속성은 있는지만 보고서에 적습니다.
+날짜와 관련된 확장 속성으로 `com.apple.metadata:kMDItemDownloadedDate`, `com.apple.metadata:kMDItemWhereFroms`, `com.apple.quarantine`, `com.apple.lastuseddate#PS` 가 알려져 있습니다 [1]. 격리 속성 값의 두 번째 필드는 유닉스 시각을 16진수로 적은 값이고, 읽는 법은 [격리 속성과 다운로드 기록 (Quarantine)](../../02-artifacts/filesystem/quarantine/index.md)에 있습니다. `com.apple.lastuseddate#PS` 의 내부 형식은 공개된 분석 자료가 없어서, 이 속성은 있는지만 보고서에 적습니다.
 
 ### 스포트라이트 메타데이터
 
@@ -55,14 +55,14 @@ APFS 는 아이노드 값 (j_inode_val_t) 안에 시각 네 개를 두고, 디�
 
 ### 문서 안 메타데이터
 
-Office·PDF·iWork 문서는 파일 안에도 만든 날짜·고친 날짜를 적고, 그 칸을 읽는 법은 [문서 메타데이터 (iWork·Office)](../../02-artifacts/embedded-metadata/iwork-office.md)에 있습니다. 문서 안 날짜는 문서를 저장한 앱이 적는 값이라서 파일 시스템 날짜와 따로 움직일 수 있습니다.
+Office·PDF·iWork 문서는 파일 안에도 만든 날짜·고친 날짜를 적고, 그 필드를 읽는 법은 [문서 메타데이터 (iWork·Office)](../../02-artifacts/embedded-metadata/iwork-office.md)에 있습니다. 문서 안 날짜는 문서를 저장한 앱이 적는 값이라서 파일 시스템 날짜와 따로 움직일 수 있습니다.
 
 ### 시각 기준 맞추기
 
 | 층 | 기준 | 단위 |
 |---|---|---|
 | APFS 아이노드 시각, 추가된 날짜 | 1970-01-01 UTC [1] | 나노초 [1] |
-| 격리 속성 두 번째 칸 | 1970-01-01 UTC | 초, 16진수 표기 |
+| 격리 속성 두 번째 필드 | 1970-01-01 UTC | 초, 16진수 표기 |
 | 스포트라이트·plist·대부분의 앱 데이터베이스 | 2001-01-01 UTC (맥 절대 시각) | 초 또는 나노초. mac_apt 는 값 크기로 가림 [3] |
 
 기준점이 두 가지라서, 값을 옮겨 적기 전에 어느 기준인지부터 적어 둡니다. 두 기준의 차이와 변환은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.

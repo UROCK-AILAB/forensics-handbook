@@ -14,7 +14,7 @@ Claude 는 웹·데스크톱(Windows·macOS·Linux)·Android·iOS 에서 같은 
 
 Claude 는 웹 주소 claude.ai 와 데스크톱 앱, Android 앱, iOS/iPadOS 앱으로 제공되고[2][3][4][5], 데스크톱 앱은 macOS 11(Big Sur) 이상, Windows 10 이상, Ubuntu 22.04 LTS 이상과 Debian 12 이상(x64·arm64)에서 돌아갑니다[2]. 같은 계정으로 여러 기기에서 쓰는 서비스라서, 한 기기에 흔적이 없어도 다른 기기나 웹에서 쓴 기록이 계정에 남아 있을 수 있습니다. 서버·기기·동기화에 데이터가 나뉘는 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에서 다룹니다.
 
-휴대전화 앱은 대화·메시지·프로젝트를 앱 안의 캐시 데이터베이스에 두고, 메시지마다 본문과 보낸 쪽, 만든 시각이 들어 있습니다[12][13]. ALEAPP 분석기는 Android 검체 두 개로, iLEAPP 분석기는 iOS 18.7.8 과 iOS 26.5.2 검체로 시험했고 앱 판은 적혀 있지 않아서, 지금 판에서는 표나 칸이 다를 수 있습니다[12][13]. 이름이 캐시인 만큼 계정의 대화가 모두 들어 있다고 단정하지 말고, 내보내기의 대화 수와 맞춰 봅니다.
+휴대전화 앱은 대화·메시지·프로젝트를 앱 안의 캐시 데이터베이스에 두고, 메시지마다 본문과 보낸 쪽, 만든 시각이 들어 있습니다[12][13]. ALEAPP 분석기는 Android 시험 이미지 두 개로, iLEAPP 분석기는 iOS 18.7.8 과 iOS 26.5.2 시험 이미지로 시험했고 앱 판은 적혀 있지 않아서, 지금 판에서는 표나 열이 다를 수 있습니다[12][13]. 이름이 캐시인 만큼 계정의 대화가 모두 들어 있다고 단정하지 말고, 내보내기의 대화 수와 맞춰 봅니다.
 
 데스크톱 앱은 Electron 앱이라서 사용자 데이터 폴더가 운영체제마다 정해진 자리에 생기고[10], 그 안의 `claude-code-sessions/` 에는 Cowork 세션의 제목·소유 계정·모델·보관 여부가, `local-agent-mode-sessions/` 에는 Cowork 에이전트 세션의 제목·시스템 프롬프트·허용 목록·소유 계정이 남습니다[11]. Cowork 에이전트 세션은 세션 폴더 안의 `audit.jsonl` 에 사용자·어시스턴트·시스템 이벤트로 된 전체 대화와 실행 비용을 남깁니다[11]. Claude Code 의 `.claude` 폴더와 데스크톱 앱 데이터 폴더를 둘 다 수집해야 전체를 볼 수 있습니다[11]. 같은 폴더에 MCP 설정 파일이 있고, MCP 로그는 Windows 에서는 이 폴더 아래에, macOS 에서는 `~/Library/Logs/Claude/` 에 따로 있습니다[7]. Windows 앱의 패키지 폴더에는 크롬 계열 저장소와 앱이 직접 쓰는 JSON 설정 파일도 있습니다.
 
@@ -29,7 +29,7 @@ Claude 는 웹 주소 claude.ai 와 데스크톱 앱, Android 앱, iOS/iPadOS �
 | 자동 안전 분류에 걸림 | 입력·출력은 최대 2년, 안전 분류 점수는 최대 7년 |
 | 법적 요구·분쟁 해결·이용 정책 위반 대응 | 필요한 만큼 |
 
-시크릿(Incognito) 대화는 모델 개선 사용을 켜 두었어도 개선에 쓰지 않습니다[1]. 서버에 얼마나 두는지는 공개 문서에 없어서 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인해야 합니다. 기기 쪽에서는 시크릿 대화도 캐시 데이터베이스에 남고, 시크릿 여부 칸(`is_temporary`, iOS 는 `isTemporary`) 값이 1 입니다[12][13]. iLEAPP 시험 데이터에서는 시크릿 대화의 이름 칸이 비어 있었습니다[13]. 보관 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
+시크릿(Incognito) 대화는 모델 개선 사용을 켜 두었어도 개선에 쓰지 않습니다[1]. 서버에 얼마나 두는지는 공개 문서에 없어서 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인해야 합니다. 기기 쪽에서는 시크릿 대화도 캐시 데이터베이스에 남고, 시크릿 여부 열(`is_temporary`, iOS 는 `isTemporary`) 값이 1 입니다[12][13]. iLEAPP 시험 데이터에서는 시크릿 대화의 이름 열이 비어 있었습니다[13]. 보관 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
 ## 한눈에 보기
 
@@ -39,11 +39,11 @@ Claude 는 웹 주소 claude.ai 와 데스크톱 앱, Android 앱, iOS/iPadOS �
 | Windows 앱 | 스토어 판 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\`[10], 그 밖의 설치 `%APPDATA%\Claude\`[7][10], 관리 정책 `HKLM`·`HKCU` 의 `SOFTWARE\Policies\Claude`[8][9] | agentsview 코드(2026-09), Windows 11 패키지 폴더(2026-09) | 처음 실행한 때·마지막으로 본 버전·마지막 계정 ID 같은 설정 값, MCP 설정과 로그, Cowork·Claude Code 세션 메타데이터와 `audit.jsonl`[11], 관리 정책 |
 | macOS 앱 | `~/Library/Application Support/Claude/`[7][10][11], `~/Library/Logs/Claude/`[7], 관리 설정 도메인 `com.anthropic.claudefordesktop`[9] | 공식 문서(2026-09-25 열람), claude-forensics v0.1.1 | MCP 설정과 로그, Cowork·Claude Code 세션 기록, MDM 으로 내린 관리 설정 |
 | Linux 앱 | `~/.config/Claude/`[10] | agentsview 코드(2026-09) | Cowork 세션 폴더 `local-agent-mode-sessions/` |
-| Android 앱 | 앱 데이터 폴더 `com.anthropic.claude`[3] 안의 `databases/acc_*_claude_cache.db`, `cache/app_start/acc_*/org_*/cache.json`[12] | ALEAPP 분석기(2026-07-21~24 작성, 2026-08-09 갱신, Android 검체 두 개로 시험, 앱 판 기록 없음) | 대화 이름·모델·시크릿 여부, 메시지 본문·보낸 쪽(`human`·`assistant`)·시각, 프로젝트, 계정 이름·이메일 |
+| Android 앱 | 앱 데이터 폴더 `com.anthropic.claude`[3] 안의 `databases/acc_*_claude_cache.db`, `cache/app_start/acc_*/org_*/cache.json`[12] | ALEAPP 분석기(2026-07-21~24 작성, 2026-08-09 갱신, Android 시험 이미지 두 개로 시험, 앱 판 기록 없음) | 대화 이름·모델·시크릿 여부, 메시지 본문·보낸 쪽(`human`·`assistant`)·시각, 프로젝트, 계정 이름·이메일 |
 | iOS 앱 | 앱 컨테이너 `/private/var/mobile/Containers/Data/Application/` 아래 `Library/Application Support/ClaudeCache/cache_*.sqlite`, `Library/Caches/bootstrap/*.json`[13] | iLEAPP 분석기(2026-08-09 갱신, iOS 18.7.8·26.5.2 로 시험), App Store 판 1.260923.20(2026-09-25 기준, iOS·iPadOS 18.0 이상)[5] | 대화 이름·모델·시크릿 여부, 메시지 본문·보낸 쪽·시각, 프로젝트와 올린 문서 이름, 계정 이름·이메일 |
 | 계정 데이터 내보내기 | 웹·데스크톱 앱에서 요청해 이메일 링크로 받는 ZIP[6], 안의 `conversations.json`·`users.json`·`projects.json`·`memories.json`[14] | 공식 도움말(2026-09-25 열람), 공개 내보내기 뷰어 코드 | 대화 제목, 메시지 본문, 보낸 쪽, 시각, 계정, 프로젝트, 메모리 |
 
-Windows 데스크톱 폴더는 출처마다 적은 자리가 다릅니다. claude-forensics 문서(2026-06)는 `\Users\` 아래 사용자 폴더의 `AppData\Roaming\Claude\` 만 적고[11], agentsview 코드(2026-09)는 스토어 판(MSIX) 패키지 경로와 그 밖의 설치에 쓰는 `%APPDATA%\Claude\` 를 따로 적습니다[10]. 검체에서는 두 곳을 모두 찾아봅니다. 조직(Team·Enterprise) 관리자 내보내기도 같은 네 파일 이름을 씁니다[15].
+Windows 데스크톱 폴더는 출처마다 적은 자리가 다릅니다. claude-forensics 문서(2026-06)는 `\Users\` 아래 사용자 폴더의 `AppData\Roaming\Claude\` 만 적고[11], agentsview 코드(2026-09)는 스토어 판(MSIX) 패키지 경로와 그 밖의 설치에 쓰는 `%APPDATA%\Claude\` 를 따로 적습니다[10]. 실제 기기에서는 두 곳을 모두 찾아봅니다. 조직(Team·Enterprise) 관리자 내보내기도 같은 네 파일 이름을 씁니다[15].
 
 ## 읽는 순서
 
@@ -52,7 +52,7 @@ Windows 데스크톱 폴더는 출처마다 적은 자리가 다릅니다. claud
 3. [macOS 앱](macos.md) — 사용자 라이브러리의 MCP 설정·로그와 MDM 관리 설정을 봅니다.
 4. [Android 앱](android.md) — 캐시 데이터베이스의 대화·메시지·프로젝트 표와 계정 JSON 을 읽습니다.
 5. [iOS 앱](ios.md) — 앱 컨테이너의 캐시 SQLite 와 bootstrap JSON 을 읽습니다.
-6. [계정 데이터 내보내기](export.md) — 내보내기 ZIP 의 네 JSON 파일과 대화·메시지 칸을 읽습니다.
+6. [계정 데이터 내보내기](export.md) — 내보내기 ZIP 의 네 JSON 파일과 대화·메시지 필드를 읽습니다.
 
 데스크톱 앱의 `claude-code-sessions/`·`local-agent-mode-sessions/` 폴더와 `audit.jsonl` 은 [Claude Code 의 Windows 쪽](../../dev-agents/claude-code/windows.md)에서 다룹니다.
 

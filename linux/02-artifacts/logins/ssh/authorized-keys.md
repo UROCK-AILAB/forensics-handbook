@@ -28,7 +28,7 @@ sshd 가 읽는 파일은 `AuthorizedKeysFile` 설정이 정합니다. 설정이
 | 실제로 읽는 파일 | `~/.ssh/authorized_keys`, `~/.ssh/authorized_keys2` | `~/.ssh/authorized_keys` |
 | 덧붙는 설정 폴더 | `/etc/ssh/sshd_config.d/*.conf`[4] | `/etc/ssh/sshd_config.d/*.conf`[5] |
 
-위 표는 설치 직후의 모습입니다. `AuthorizedKeysFile` 은 `sshd_config.d` 의 파일에서도, `Match` 블록 안에서도 바꿀 수 있어서 사용자나 그룹마다 다른 경로를 쓰게 할 수 있습니다[2]. 검체에서는 먼저 설정 파일 전체에서 이 키워드를 찾습니다. 설정 파일을 읽는 순서와 `Match` 규칙은 [sshd 설정](sshd-config.md)에서 다룹니다.
+위 표는 설치 직후의 모습입니다. `AuthorizedKeysFile` 은 `sshd_config.d` 의 파일에서도, `Match` 블록 안에서도 바꿀 수 있어서 사용자나 그룹마다 다른 경로를 쓰게 할 수 있습니다[2]. 분석 대상에서는 먼저 설정 파일 전체에서 이 키워드를 찾습니다. 설정 파일을 읽는 순서와 `Match` 규칙은 [sshd 설정](sshd-config.md)에서 다룹니다.
 
 파일 말고도 키를 받는 길이 있습니다. `AuthorizedKeysCommand` 에 지정한 프로그램은 파일을 본 다음에 돌고, 파일에서 맞는 키를 찾으면 돌지 않습니다[2]. 이 프로그램은 절대 경로여야 하고 root 소유에 그룹·기타 사용자가 쓸 수 없어야 합니다[2]. `TrustedUserCAKeys` 로 믿는 인증 기관 (CA) 이 서명한 인증서로도 들어올 수 있습니다[2]. 그래서 authorized_keys 에 키가 없다고 해서 공개 키로 들어올 수 없었다고 말할 수는 없습니다.
 
@@ -38,7 +38,7 @@ authorized_keys 는 텍스트 파일입니다. 한 줄에 키 하나를 적고, 
 
 | 필드 | 필수 | 내용 |
 |---|---|---|
-| options | 아니오 | 쉼표로 나눈 옵션. 공백은 큰따옴표 안에서만 쓸 수 있고, 옵션 이름은 대소문자를 가리지 않는다[1] |
+| options | 아니오 | 쉼표로 나눈 옵션. 공백은 큰따옴표 안에서만 쓸 수 있고, 옵션 이름은 대소문자를 구분하지 않는다[1] |
 | keytype | 예 | `ssh-ed25519`, `ssh-rsa`, `ecdsa-sha2-nistp256`, `sk-ssh-ed25519@openssh.com` 등[1] |
 | base64 키 | 예 | 공개 키 blob 을 base64 로 적은 값 |
 | comment | 아니오 | 자유 문자열. sshd 는 이 값을 어디에도 쓰지 않는다[1] |
@@ -57,7 +57,7 @@ base64 키를 풀면 4바이트 빅엔디언 길이와 문자열이 이어지는
 | `expiry-time="timespec"` | 이 시각 뒤로는 키를 받지 않는다 | `YYYYMMDD[Z]` 또는 `YYYYMMDDHHMM[SS][Z]`. `Z` 가 붙으면 UTC, 없으면 시스템 시간대 |
 | `cert-authority` | 이 줄의 키를 CA 로 믿는다 | 이 CA 가 서명한 인증서는 줄에 없어도 들어올 수 있다. `principals=` 로 받을 이름을 좁힌다 |
 | `restrict` | 포워딩·pty·`~/.ssh/rc` 실행을 모두 막는다 | 뒤에 `pty`, `port-forwarding` 등을 붙이면 하나씩 다시 푼다 |
-| `no-port-forwarding`, `permitopen=`, `permitlisten=`, `tunnel=` | 포트 포워딩·터널을 막거나 좁힌다 | 옆 기계로 옮겨 가는 통로로 쓸 수 있었는지 가늠한다 |
+| `no-port-forwarding`, `permitopen=`, `permitlisten=`, `tunnel=` | 포트 포워딩·터널을 막거나 좁힌다 | 옆 기계로 옮겨 가는 통로로 쓸 수 있었는지 추정한다 |
 | `no-user-rc`, `user-rc` | `~/.ssh/rc` 실행을 막거나 푼다 | `~/.ssh/rc` 가 있으면 함께 본다 |
 
 ## 증거로서 의미
@@ -79,7 +79,7 @@ base64 키를 풀면 4바이트 빅엔디언 길이와 문자열이 이어지는
 
 ## 시각 해석
 
-파일 안에는 시각이 없습니다. 키를 넣은 때를 가늠하려면 파일과 `~/.ssh` 폴더의 파일 시스템 시각을 봅니다. 공개 도구도 이 파일을 읽을 때 수정 시각(mtime)과 변경 시각(ctime)을 함께 뽑습니다[11].
+파일 안에는 시각이 없습니다. 키를 넣은 때를 추정하려면 파일과 `~/.ssh` 폴더의 파일 시스템 시각을 봅니다. 공개 도구도 이 파일을 읽을 때 수정 시각(mtime)과 변경 시각(ctime)을 함께 뽑습니다[11].
 
 | 기록 | 바뀌는 때 | 해석 |
 |---|---|---|
@@ -141,7 +141,7 @@ from="192.0.2.0/24",no-port-forwarding ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAECA
 
 ### 공개 도구로 한 번
 
-`ssh-keygen -l -f` 는 authorized_keys 처럼 옵션이 붙은 줄도 읽고, 줄마다 `비트수 지문 comment (형식)` 을 한 줄씩 찍습니다[10]. 검체 사본에서 돌리면 되고, `-E md5` 로 MD5 표기를 고를 수 있습니다[10].
+`ssh-keygen -l -f` 는 authorized_keys 처럼 옵션이 붙은 줄도 읽고, 줄마다 `비트수 지문 comment (형식)` 을 한 줄씩 찍습니다[10]. 증거물 사본에서 돌리면 되고, `-E md5` 로 MD5 표기를 고를 수 있습니다[10].
 
 ```
 ssh-keygen -l -f ./home/alice/.ssh/authorized_keys
@@ -171,7 +171,7 @@ grep -rn -i "AuthorizedKeysFile\|AuthorizedKeysCommand\|TrustedUserCAKeys" ./etc
 
 ## 실습
 
-Linux 서버 디스크 이미지(NIST CFReDS 등 공개 검체)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
+Linux 서버 디스크 이미지(NIST CFReDS 등 공개 시험 데이터)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
 
 1. `/etc/ssh/sshd_config` 와 `sshd_config.d` 에서 `AuthorizedKeysFile` 은 어떤 값인가? 배포판 기본값과 같은가?
 2. `/root` 를 포함한 모든 홈에서 `authorized_keys` 와 `authorized_keys2` 는 몇 개이고, 각각 몇 줄인가?

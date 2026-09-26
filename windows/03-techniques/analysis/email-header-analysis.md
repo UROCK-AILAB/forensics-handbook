@@ -11,14 +11,14 @@ nav_order: 3550
 ## 한 줄 요약
 
 메일 헤더 분석은 `Received`·`Return-Path` 같은 경유 기록과 인증 결과 헤더를 읽는 방법입니다.
-메일이 어느 서버를 거쳐 왔는지, 발신 도메인 확인이 어떻게 나왔는지를 가립니다.
+메일이 어느 서버를 거쳐 왔는지, 발신 도메인 확인이 어떻게 나왔는지를 판별합니다.
 핵심은 어느 줄부터 믿을지 정하는 일입니다.
 받은 조직의 서버가 붙인 줄은 그 조직의 기록과 맞춰 볼 수 있고, 그보다 아래 줄은 보낸 쪽이 적어 넣었을 수 있습니다.
-메일 파일의 형식과 `Date`·`Message-ID` 같은 헤더 칸은 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
+메일 파일의 형식과 `Date`·`Message-ID` 같은 헤더 필드는 [인터넷 메일 형식](../../01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md) 에서 다룹니다.
 
 ## 언제 쓰나
 
-- **피싱이나 사칭 메일인지 가릴 때** 씁니다. 보이는 발신자와 실제 경로를 따로 봅니다.
+- **피싱이나 사칭 메일인지 판별할 때** 씁니다. 보이는 발신자와 실제 경로를 따로 봅니다.
 - **메일이 어느 서버·IP 주소에서 들어왔는지 찾을 때** 씁니다.
 - **조직 안의 어느 PC 가 보냈는지 찾을 때** 씁니다. 내부에서 보낸 메일의 `Received` 줄에는 내부 호스트 이름이 드러날 수 있습니다.
 - **메일 시각을 다른 기록과 한 줄로 놓을 때** 씁니다. 줄마다 시간대가 다를 수 있어 UTC 로 맞춰야 합니다.
@@ -115,7 +115,7 @@ SMTP 메일은 전송 단계에서 인증과 무결성을 보장하지 못하고
 3. 그 줄의 `FROM` 괄호 안 IP 주소를 "조직 밖에서 처음 연결해 온 주소" 로 적습니다.
 4. 그보다 아래 줄은 "보낸 쪽이 적은 기록" 으로 따로 적습니다.
 
-- `Received` 줄을 비교하면 느린 중계 같은 문제를 찾을 수 있습니다. 두 줄 사이의 UTC 시각 차이로 두 서버 사이에 걸린 시간을 가늠합니다. 두 서버의 시계가 서로 어긋나 있으면 이 차이도 틀어집니다.
+- `Received` 줄을 비교하면 느린 중계 같은 문제를 찾을 수 있습니다. 두 줄 사이의 UTC 시각 차이로 두 서버 사이에 걸린 시간을 추정합니다. 두 서버의 시계가 서로 어긋나 있으면 이 차이도 틀어집니다.
 - LAN 안에서 보낸 메일의 `Received` 줄에는 내부 호스트 이름 같은 정보가 드러날 수 있습니다. 조직 안에서 보낸 메일이라면 발신 PC 를 찾는 단서가 됩니다. 그 PC 를 누가 썼는지는 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
 ## Return-Path
@@ -132,7 +132,7 @@ SMTP 메일은 전송 단계에서 인증과 무결성을 보장하지 못하고
 
 이 헤더에는 SPF·DKIM·DMARC 검사 결과가 들어 있습니다. 헤더 형식은 RFC 7001 에 정의돼 있습니다.
 
-SPF 결과는 아래 꼴입니다.
+SPF 결과는 아래 형식입니다.
 
 ```
 spf=<pass (IP)|fail (IP)|softfail (이유)|neutral|none|temperror|permerror> smtp.mailfrom=<도메인>
@@ -150,7 +150,7 @@ spf=<pass (IP)|fail (IP)|softfail (이유)|neutral|none|temperror|permerror> smt
 
 - `smtp.mailfrom` 은 봉투 발신자 쪽 도메인입니다.
 
-DKIM 결과는 아래 꼴입니다.
+DKIM 결과는 아래 형식입니다.
 
 ```
 dkim=<pass|fail (이유)|none> header.d=<도메인>
@@ -159,7 +159,7 @@ dkim=<pass|fail (이유)|none> header.d=<도메인>
 - `header.d` 는 DKIM 서명에 적힌 도메인이며, 이 도메인에서 공개 키를 조회합니다.
 - `none` 은 서명이 없다는 뜻입니다.
 
-DMARC 결과는 아래 꼴입니다.
+DMARC 결과는 아래 형식입니다.
 
 ```
 dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.quarantine|pct.reject> header.from=<도메인>
@@ -187,8 +187,8 @@ dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.qua
 
 ### ARC
 
-- ARC (Authenticated Received Chain) 에 관한 AAR·AMS·AS 칸이 있습니다.
-- AS 칸의 `cv=` 는 체인 검증 결과입니다. 값은 `none`, `pass`, `fail` 입니다.
+- ARC (Authenticated Received Chain) 에 관한 AAR·AMS·AS 필드가 있습니다.
+- AS 필드의 `cv=` 는 체인 검증 결과입니다. 값은 `none`, `pass`, `fail` 입니다.
 
 ## X-Forefront-Antispam-Report (Microsoft 365)
 
@@ -199,7 +199,7 @@ dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.qua
 ...CTRY:;LANG:hr;SCL:1;SRV:;IPV:NLI;SFV:NSPM;PTR:;SFTY:;...
 ```
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `CIP` | 연결해 온 IP 주소 |
 | `CTRY` | 연결 IP 로 정한 발신 국가·지역. 처음 보낸 IP 의 국가와 다를 수 있습니다 |
@@ -213,7 +213,7 @@ dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.qua
 
 - 클라우드 조직에서는 `SCL` 값이 메일 처리 결과를 정하지 않습니다. 어떻게 걸렀는지는 `CAT` 와 `DIR` 로 봅니다.
 - `X-Microsoft-Antispam` 헤더의 `BCL` 은 대량 메일 불만 수준입니다. 값이 높을수록 스팸일 가능성이 큽니다.
-- 표에 없는 칸은 Microsoft 스팸 대응 팀의 진단용입니다. 뜻을 추측해 보고서에 쓰지 않습니다.
+- 표에 없는 필드는 Microsoft 스팸 대응 팀의 진단용입니다. 뜻을 추측해 보고서에 쓰지 않습니다.
 - `CIP` 와 `H` 는 Microsoft 365 가 본 연결 정보입니다. 앞 절의 "받은 조직이 붙인 가장 아래 `Received` 줄" 과 맞춰 봅니다.
 
 ## 절차
@@ -250,7 +250,7 @@ dmarc=<pass|fail|bestguesspass|none> action=<permerror|temperror|oreject|pct.qua
 
 ## 결과를 어떻게 해석하나
 
-| 기록 | 말해 주는 것 | 말해 주지 못하는 것 |
+| 기록 | 알 수 있는 것 | 알 수 없는 것 |
 |---|---|---|
 | 받은 조직이 붙인 `Received` 줄 | 그 서버가 그 시각에 그 IP 에서 메일을 받았다는 것 | 그 IP 뒤에서 누가 메일을 썼는지 |
 | 보낸 쪽이 붙인 `Received` 줄 | 보낸 쪽이 그렇게 적었다는 것 | 그 경로가 사실이라는 것 |

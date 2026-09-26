@@ -33,9 +33,9 @@ nav_order: 1700
 
 ## WhatsApp 에서 보낸 것 가려내기
 
-WhatsApp 의 구조 전체는 [왓츠앱 (WhatsApp)](../../../02-artifacts/messengers/whatsapp.md) 페이지에 있고, 여기서는 유출을 따질 때 필요한 연결만 적습니다. 메시지와 통화는 `msgstore.db`, 연락처는 `wa.db` 에 있으며, 두 파일은 `*/com.whatsapp/databases/msgstore.db*`, `*/com.whatsapp/databases/wa.db*` 패턴으로 찾습니다 [2]. 첨부 파일은 `*/WhatsApp/Media/*` 와 `*/com.whatsapp/files/Media/*` 패턴으로 찾고 [2], 공용 저장 공간 안의 전체 경로는 판마다 다를 수 있어 검체에서 확인합니다.
+WhatsApp 의 구조 전체는 [왓츠앱 (WhatsApp)](../../../02-artifacts/messengers/whatsapp.md) 페이지에 있고, 여기서는 유출을 따질 때 필요한 연결만 적습니다. 메시지와 통화는 `msgstore.db`, 연락처는 `wa.db` 에 있으며, 두 파일은 `*/com.whatsapp/databases/msgstore.db*`, `*/com.whatsapp/databases/wa.db*` 패턴으로 찾습니다 [2]. 첨부 파일은 `*/WhatsApp/Media/*` 와 `*/com.whatsapp/files/Media/*` 패턴으로 찾고 [2], 공용 저장 공간 안의 전체 경로는 판마다 다를 수 있어 실제 기기에서 확인합니다.
 
-요즘 스키마에서는 `message` 표의 `from_me` 칸이 방향을 알려 주고, 1 이면 보낸 메시지, 0 이면 받은 메시지입니다 [2]. 첨부는 `message_media` 표에 있고 `message_row_id` 로 `message._id` 와 이어지며, 이 표의 `file_path` 와 `file_size` 가 기기 안의 파일 위치와 크기를 알려 줍니다 [2]. 상대는 `message.chat_row_id` 에서 `chat._id` 로, `chat.jid_row_id` 에서 `jid._id` 로 따라가 `jid.raw_string` 을 얻고, 이 값을 `wa.db` 의 `wa_contacts.jid` 와 맞춰 연락처 이름을 붙입니다 [2]. `message.recipient_count` 가 0 이면 1:1 대화, 1 이상이면 그룹 대화입니다 [2].
+요즘 스키마에서는 `message` 표의 `from_me` 열이 방향을 알려 주고, 1 이면 보낸 메시지, 0 이면 받은 메시지입니다 [2]. 첨부는 `message_media` 표에 있고 `message_row_id` 로 `message._id` 와 이어지며, 이 표의 `file_path` 와 `file_size` 가 기기 안의 파일 위치와 크기를 알려 줍니다 [2]. 상대는 `message.chat_row_id` 에서 `chat._id` 로, `chat.jid_row_id` 에서 `jid._id` 로 따라가 `jid.raw_string` 을 얻고, 이 값을 `wa.db` 의 `wa_contacts.jid` 와 맞춰 연락처 이름을 붙입니다 [2]. `message.recipient_count` 가 0 이면 1:1 대화, 1 이상이면 그룹 대화입니다 [2].
 
 아래는 이 연결을 따라 만든 예시 질의로, 보낸 메시지 가운데 첨부가 있는 것만 뽑습니다.
 
@@ -63,19 +63,19 @@ ORDER BY m.timestamp;
 | 9 | 문서 |
 | 16 | 실시간 위치 |
 
-`timestamp` 와 `received_timestamp` 는 둘 다 유닉스 밀리초이고, 0 이면 값이 비어 있다는 뜻입니다 [2]. 예전 스키마에서는 `messages` 표 하나에 `key_from_me`(0 받음, 1 보냄), `key_remote_jid`, `remote_resource`, `data`, `media_url`, `received_timestamp` 같은 칸이 들어 있어서, 요즘 스키마의 표가 없으면 이쪽을 찾습니다 [2]. 통화는 `call_log` 표의 `from_me`, `timestamp`(밀리초), `duration` 으로 봅니다 [2]. 이 스키마는 ALEAPP 시험 이미지 가운데 Android 14 이미지(sharon_a14)에 맞춘 것이라서, 모든 버전에서 같지는 않을 수 있습니다 [2].
+`timestamp` 와 `received_timestamp` 는 둘 다 유닉스 밀리초이고, 0 이면 값이 비어 있다는 뜻입니다 [2]. 예전 스키마에서는 `messages` 표 하나에 `key_from_me`(0 받음, 1 보냄), `key_remote_jid`, `remote_resource`, `data`, `media_url`, `received_timestamp` 같은 열이 들어 있어서, 요즘 스키마의 표가 없으면 이쪽을 찾습니다 [2]. 통화는 `call_log` 표의 `from_me`, `timestamp`(밀리초), `duration` 으로 봅니다 [2]. 이 스키마는 ALEAPP 시험 이미지 가운데 Android 14 이미지(sharon_a14)에 맞춘 것이라서, 모든 버전에서 같지는 않을 수 있습니다 [2].
 
 ## 다른 메신저
 
-ALEAPP 에는 telegramAndroid.py, signalAndroid.py, line.py, weChat.py, googleChat.py, googleMessages.py, discordChats.py, FacebookMessenger.py, Viber.py, Threema.py, kikMessenger.py 모듈이 있습니다 [1]. 앱별 표·칸 이름은 [텔레그램 (Telegram)](../../../02-artifacts/messengers/telegram.md), [시그널 (Signal)](../../../02-artifacts/messengers/signal.md), [라인 (LINE)](../../../02-artifacts/messengers/line.md), [위챗 (WeChat)](../../../02-artifacts/messengers/wechat.md), [디스코드 (Discord)](../../../02-artifacts/messengers/discord.md), [페이스북 메신저 (Messenger)](../../../02-artifacts/messengers/facebook-messenger.md) 페이지에서 확인합니다. 어느 앱이든 확인할 점은 같아서, 보낸 방향을 나타내는 칸, 첨부 파일 경로 칸, 대화방과 상대를 잇는 열쇠를 찾습니다.
+ALEAPP 에는 telegramAndroid.py, signalAndroid.py, line.py, weChat.py, googleChat.py, googleMessages.py, discordChats.py, FacebookMessenger.py, Viber.py, Threema.py, kikMessenger.py 모듈이 있습니다 [1]. 앱별 표·열 이름은 [텔레그램 (Telegram)](../../../02-artifacts/messengers/telegram.md), [시그널 (Signal)](../../../02-artifacts/messengers/signal.md), [라인 (LINE)](../../../02-artifacts/messengers/line.md), [위챗 (WeChat)](../../../02-artifacts/messengers/wechat.md), [디스코드 (Discord)](../../../02-artifacts/messengers/discord.md), [페이스북 메신저 (Messenger)](../../../02-artifacts/messengers/facebook-messenger.md) 페이지에서 확인합니다. 어느 앱이든 확인할 점은 같아서, 보낸 방향을 나타내는 열, 첨부 파일 경로 열, 대화방과 상대를 잇는 열쇠를 찾습니다.
 
 카카오톡 전용 모듈은 ALEAPP 목록에 없습니다 [1]. 카카오톡의 경로와 대화 DB 는 [카카오톡 (KakaoTalk)](../../../02-artifacts/messengers/kakaotalk/index.md) 페이지에서 다룹니다.
 
 ## 알림과 앱 사용 기록으로 보강하기
 
-메신저 DB 를 얻지 못했거나 DB 의 시각을 다른 기록과 맞춰 보고 싶을 때는 시스템 쪽 기록을 씁니다. `dumpsys notification` 에는 알림마다 `NotificationRecord(pkg=..., user=..., id=..., key=...)` 줄과 `channel=`, `when=`, `seen=` 칸이 나오고, `dumpsys usagestats` 에는 channelId 가 붙은 NOTIFICATION_INTERRUPTION 과 NOTIFICATION_SEEN 이벤트가 나옵니다. 알림은 메시지를 받은 쪽의 흔적이라서 대화가 오간 시각대를 알려 줍니다. 이 기기에서 무엇을 보냈는지는 메신저 DB 로 확인합니다.
+메신저 DB 를 얻지 못했거나 DB 의 시각을 다른 기록과 맞춰 보고 싶을 때는 시스템 쪽 기록을 씁니다. `dumpsys notification` 에는 알림마다 `NotificationRecord(pkg=..., user=..., id=..., key=...)` 줄과 `channel=`, `when=`, `seen=` 필드가 나오고, `dumpsys usagestats` 에는 channelId 가 붙은 NOTIFICATION_INTERRUPTION 과 NOTIFICATION_SEEN 이벤트가 나옵니다. 알림은 메시지를 받은 쪽의 흔적이라서 대화가 오간 시각대를 알려 줍니다. 이 기기에서 무엇을 보냈는지는 메신저 DB 로 확인합니다.
 
-사용자가 공유 창에서 어느 메신저를 골랐는지 남는 기록은 공개된 분석 자료가 없어 검체에서 확인해야 합니다. system 설정 표에 `direct_share` 키가 있지만, 뜻을 밝힌 공개 자료는 없습니다.
+사용자가 공유 창에서 어느 메신저를 골랐는지가 어디에 남는지는 실제 기기에서 확인해야 합니다. system 설정 표에 `direct_share` 키가 있지만, 뜻을 밝힌 공개 자료는 없습니다.
 
 ## 분석 흐름
 
@@ -88,7 +88,7 @@ ALEAPP 에는 telegramAndroid.py, signalAndroid.py, line.py, weChat.py, googleCh
 
 ## 흔한 오판
 
-첨부 파일이 공용 저장 공간에 있다는 사실만으로 보냈다고 보지 않습니다. 받은 첨부도 같은 폴더에 쌓일 수 있어서, 방향은 DB 의 `from_me` 같은 칸으로 판단합니다. 반대로 첨부 파일이 지워졌어도 DB 의 `file_path`·`file_size` 행은 남아 있을 수 있습니다.
+첨부 파일이 공용 저장 공간에 있다는 사실만으로 보냈다고 보지 않습니다. 받은 첨부도 같은 폴더에 쌓일 수 있어서, 방향은 DB 의 `from_me` 같은 열로 판단합니다. 반대로 첨부 파일이 지워졌어도 DB 의 `file_path`·`file_size` 행은 남아 있을 수 있습니다.
 
 `message_type` 숫자의 뜻을 공식 값처럼 적지 않습니다. 위 표는 ALEAPP 의 해석이고, 앱 판이 바뀌면 달라질 수 있습니다. 그룹 대화로 보낸 메시지는 받은 사람이 여럿일 수 있어서, 보고서에는 받은 사람을 대화방 단위로 적습니다.
 

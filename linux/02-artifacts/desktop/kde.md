@@ -33,14 +33,14 @@ KWallet 비밀번호 보관함은 [비밀번호 보관함](keyring.md), GNOME �
 | 색인 설정 | `baloofilerc` | [13] |
 | 로그인 화면 상태 | `sddm` 계정 홈 아래 `state.conf` | 계정이 없으면 빌드할 때 정한 폴더[14] |
 
-배포판마다 기본 데스크톱과 기본 설정으로 설치한 시험 조건에서 Ubuntu 24.04 와 Rocky 9.5(RHEL 9 재빌드판)는 GNOME 이었고, KDE 는 Kubuntu 24.04 에서 Wayland/XWayland 로 돌았습니다[21]. 그래서 Ubuntu 계열에서는 Kubuntu 설치본이나 KDE 를 따로 깐 시스템에서 이 쪽의 흔적이 나옵니다.
+배포판마다 기본 데스크톱과 기본 설정으로 설치한 시험 조건에서 Ubuntu 24.04 와 Rocky 9.5(RHEL 9 재빌드판)는 GNOME 이었고, KDE 는 Kubuntu 24.04 에서 Wayland/XWayland 로 돌았습니다[21]. 그래서 Ubuntu 계열에서는 Kubuntu 설치본이나 KDE 를 따로 깐 시스템에서 이 페이지의 흔적이 나옵니다.
 
 | 항목 | Ubuntu 24.04 계열 | RHEL 9 계열 |
 |---|---|---|
 | 기본 데스크톱 | Ubuntu 는 GNOME, Kubuntu 24.04 는 KDE[21] | GNOME (Rocky 9.5 시험 조건)[21] |
-| Klipper 파일 | 검체의 Plasma 판에 따라 `history2.lst` 또는 `history3.sqlite`[6][8] | 같음 |
+| Klipper 파일 | 분석 대상의 Plasma 판에 따라 `history2.lst` 또는 `history3.sqlite`[6][8] | 같음 |
 
-Klipper 파일 이름은 Plasma 판에 따라 다르므로, 검체의 `klipper` 폴더에 어느 파일이 있는지부터 봅니다.
+Klipper 파일 이름은 Plasma 판에 따라 다르므로, 분석 대상의 `klipper` 폴더에 어느 파일이 있는지부터 봅니다.
 
 앱별로는 UAC 가 다음 파일을 모읍니다. Konqueror 를 뺀 나머지는 Flatpak(`~/.var/app`)·Snap(`~/snap`) 판 경로도 따로 모읍니다[18].
 
@@ -59,7 +59,7 @@ KDE 는 XDG 표준에 없는 자동 실행 폴더 `~/.config/autostart-scripts` 
 
 ### 활동 관리자 DB
 
-SQLite 파일이고, 쓰기 앞 기록 (WAL) 모드로 열며 WAL 이 100쪽을 넘으면 본 파일로 옮겨 씁니다[2]. 스키마 판은 `SchemaInfo` 테이블의 `version` 키에 `2015.02.09` 로 들어갑니다[1]. 열 이름 `targettedResource` 는 원래 철자가 이렇습니다.
+SQLite 파일이고, 쓰기 앞 기록 (WAL) 모드로 열며 WAL 이 100페이지를 넘으면 본 파일로 옮겨 씁니다[2]. 스키마 판은 `SchemaInfo` 테이블의 `version` 키에 `2015.02.09` 로 들어갑니다[1]. 열 이름 `targettedResource` 는 원래 철자가 이렇습니다.
 
 | 테이블 | 열 | 뜻 |
 |---|---|---|
@@ -127,7 +127,7 @@ Baloo 가 지원하는 파일 시스템은 ext3/4, Btrfs, XFS 입니다[9].
 
 ### 로그인 화면 상태 (SDDM)
 
-`state.conf` 는 INI 꼴이고 `[Last]` 그룹의 `User=` 에 마지막으로 로그인한 사용자, `Session=` 에 그 사용자의 세션 이름이 들어갑니다[14]. 다음 로그인 화면에서 이 둘을 미리 골라 둡니다[14]. 주 설정의 `[Users]` 그룹 `RememberLastUser`·`RememberLastSession`(기본 `true`) 이 이 기록을 켜고, `[Autologin]` 그룹의 `User=`, `Session=`, `Relogin=`(기본 `false`) 은 자동 로그인을 정합니다[14]. 주 설정 파일 경로는 빌드할 때 정해지므로 검체의 SDDM 패키지 파일 목록에서 찾습니다. 세션 로그 기본값은 X11 에서 `.local/share/sddm/xorg-session.log`, Wayland 에서 `.local/share/sddm/wayland-session.log` 입니다[14].
+`state.conf` 는 INI 형식이고 `[Last]` 그룹의 `User=` 에 마지막으로 로그인한 사용자, `Session=` 에 그 사용자의 세션 이름이 들어갑니다[14]. 다음 로그인 화면에서 이 둘을 미리 골라 둡니다[14]. 주 설정의 `[Users]` 그룹 `RememberLastUser`·`RememberLastSession`(기본 `true`) 이 이 기록을 켜고, `[Autologin]` 그룹의 `User=`, `Session=`, `Relogin=`(기본 `false`) 은 자동 로그인을 정합니다[14]. 주 설정 파일 경로는 빌드할 때 정해지므로 분석 대상의 SDDM 패키지 파일 목록에서 찾습니다. 세션 로그 기본값은 X11 에서 `.local/share/sddm/xorg-session.log`, Wayland 에서 `.local/share/sddm/wayland-session.log` 입니다[14].
 
 ## 증거로서 의미
 
@@ -141,8 +141,8 @@ Baloo 가 지원하는 파일 시스템은 ext3/4, Btrfs, XFS 입니다[9].
 
 ### 증명하지 못하는 것
 
-- `ResourceEvent` 는 파일 내용, 복사, 전송을 말하지 않습니다. 앱이 알림을 보내지 않으면 기록이 없고, 숨김 경로·`/tmp`·제외 앱·기록 안 하는 활동도 빠지며, 기본 4개월이 지나면 지워지므로 줄이 없다고 "열지 않았다" 고 할 수 없습니다[3].
-- Klipper 기록은 복사한 글자를 어디에 붙여넣었는지 말하지 않습니다.
+- `ResourceEvent` 로는 파일 내용, 복사, 전송을 알 수 없습니다. 앱이 알림을 보내지 않으면 기록이 없고, 숨김 경로·`/tmp`·제외 앱·기록 안 하는 활동도 빠지며, 기본 4개월이 지나면 지워지므로 줄이 없다고 "열지 않았다" 고 할 수 없습니다[3].
+- Klipper 기록에는 복사한 글자를 어디에 붙여넣었는지 나와 있지 않습니다.
 - Baloo 는 스스로 색인하므로 색인에 있다는 사실만으로 사용자가 파일을 열었다고 할 수 없습니다.
 - `state.conf` 에는 로그인 시각이 없습니다. 시각은 [로그인 기록](../logins/wtmp-btmp-lastlog.md) 과 [인증 로그](../logins/auth-log.md) 에서 찾습니다.
 
@@ -157,7 +157,7 @@ Baloo 가 지원하는 파일 시스템은 ext3/4, Btrfs, XFS 입니다[9].
 | Baloo `mTime`, `cTime` | 32비트 Unix 초 (UTC) | 파일 자체의 수정·메타데이터 변경 시각을 옮겨 적은 값[12] |
 | `state.conf` 파일 수정 시각 | 파일 시스템 시각 | SDDM 이 파일을 다시 쓸 때 |
 
-Klipper `added_time` 도 같은 단위일 가능성이 있지만, 검체에서 `last_used_time` 과 나란히 놓고 값의 크기를 먼저 봅니다. Baloo 의 시각은 색인한 때가 아니라 파일의 시각입니다. 활동 관리자는 설정을 읽을 때와 12시간마다 `keep-history-for` 개월보다 오래된 줄을 지우므로, 남은 가장 오래된 `start` 는 사용 시작 시점이 아니라 보존 기간의 끝일 가능성이 있습니다[3]. Unix 초를 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+Klipper `added_time` 도 같은 단위일 가능성이 있지만, 실제 데이터에서 `last_used_time` 과 나란히 놓고 값의 크기를 먼저 봅니다. Baloo 의 시각은 색인한 때가 아니라 파일의 시각입니다. 활동 관리자는 설정을 읽을 때와 12시간마다 `keep-history-for` 개월보다 오래된 줄을 지우므로, 남은 가장 오래된 `start` 는 사용 시작 시점이 아니라 보존 기간의 끝일 가능성이 있습니다[3]. Unix 초를 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 
@@ -182,7 +182,7 @@ Klipper `added_time` 도 같은 단위일 가능성이 있지만, 검체에서 `
 ```
 
 1. 0x00 의 `5b ... 5d` 가 그룹 이름 `[Last]` 이고 0x06 의 `0a` 로 줄이 끝납니다[14].
-2. 0x07 의 `Session=` 뒤 0x0F 부터 0x1D 의 `0a` 앞까지가 마지막 세션 이름입니다. 값이 세션 파일 이름인지 다른 꼴인지는 검체에서 봅니다.
+2. 0x07 의 `Session=` 뒤 0x0F 부터 0x1D 의 `0a` 앞까지가 마지막 세션 이름입니다. 값이 세션 파일 이름인지 다른 형식인지는 실제 데이터로 확인합니다.
 3. 0x1E 의 `User=` 뒤 0x23 부터가 마지막 로그인 사용자 `alice` 입니다[14].
 
 ### 공개 도구로 한 번
@@ -212,7 +212,7 @@ sqlite3 history3.sqlite "SELECT uuid, datetime(added_time,'unixepoch'), datetime
 
 ## 실습
 
-KDE 데스크톱이 깔린 공개 Linux 검체(NIST CFReDS 등)를 찾아 다음 질문을 풀어 봅니다.
+KDE 데스크톱이 깔린 공개 Linux 시험 이미지(NIST CFReDS 등)를 찾아 다음 질문을 풀어 봅니다.
 
 1. `database` 와 `database-wal` 을 함께 열 때와 `database` 만 열 때 `ResourceEvent` 줄 수가 다른가?
 2. `end` 가 빈 줄이 있다면, 그 파일을 연 앱이 수집 시점에 아직 떠 있었는지 다른 흔적으로 맞춰 볼 수 있는가?

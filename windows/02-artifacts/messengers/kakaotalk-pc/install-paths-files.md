@@ -36,7 +36,7 @@ DB 확장자는 `.edb` 이지만 형식은 SQLite 입니다.
 
 ### 프로그램 설치 폴더
 
-실행 파일이 깔리는 폴더는 공개된 분석 자료가 없어 검체에서 확인합니다.
+실행 파일이 깔리는 폴더는 실제 데이터로 확인합니다.
 설치 흔적은 [설치 프로그램](../../system-account/uninstall.md) 에서 찾아봅니다.
 
 ### 버전별 차이
@@ -88,7 +88,7 @@ KakaoTalk\users\<계정 폴더>\
 Windows 검색 색인 `Windows.edb` 와 브라우저 캐시 `WebCacheV01.dat` 는 Microsoft ESE 형식입니다. ESE 는 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서 다룹니다.
 카카오톡의 `.edb` 는 ESE 와 확장자만 같습니다.
 실제 형식은 SQLite 이거나 암호화한 SQLite 입니다(논문).
-둘을 가리는 법은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
+둘을 구분하는 법은 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
 
 ### 쓰기 전 로그 보조 파일
 
@@ -113,7 +113,7 @@ SQLite 는 쓰기 전 로그 (Write-Ahead Log, WAL) 방식에서 주 파일 옆�
 
 ## 시각 해석
 
-폴더·파일의 파일 시스템 시각과 레지스트리 `DeviceInfo\<DATE>` 하위 키 이름으로 계정을 설정하거나 로그인한 시기를 가늠합니다.
+폴더·파일의 파일 시스템 시각과 레지스트리 `DeviceInfo\<DATE>` 하위 키 이름으로 계정을 설정하거나 로그인한 시기를 추정합니다.
 어느 시각이 무엇을 뜻하는지는 [계정·로그인 흔적](account-login.md) 에서 다룹니다.
 
 ## 함정과 한계
@@ -129,7 +129,7 @@ SQLite 는 쓰기 전 로그 (Write-Ahead Log, WAL) 방식에서 주 파일 옆�
 
 `.edb` 파일마다 첫 16바이트를 봅니다.
 평문 SQLite 인지 암호문인지 여기서 갈립니다.
-명세로 만든 헥스 예시와 한꺼번에 가리는 스크립트는 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
+명세로 만든 헥스 예시와 한꺼번에 판별하는 스크립트는 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에 있습니다.
 
 ### 공개 도구로 한 번
 

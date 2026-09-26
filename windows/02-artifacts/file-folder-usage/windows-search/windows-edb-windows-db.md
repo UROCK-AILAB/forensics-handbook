@@ -43,7 +43,7 @@ nav_order: 1270
 | 11 25H2 | 위와 같은 세 파일 | 첫 16바이트가 `AesGcm1 SQLite3` 일 수 있습니다. 이런 파일은 보통 SQLite 도구로 열리지 않습니다. |  |
 
 - `Windows-usn.db` 는 포렌식 가치가 낮다는 평가가 있습니다(참고 2).
-- libyal 문서는 Windows 10·11 과 `Windows.db` 를 다루지 않습니다. 그래서 Windows 10 이후 칸 구성과 바이트 순서는 검체에서 직접 확인합니다.
+- libyal 문서는 Windows 10·11 과 `Windows.db` 를 다루지 않습니다. 그래서 Windows 10 이후 열 구성과 바이트 순서는 실제 데이터로 직접 확인합니다.
 - `AesGcm1 SQLite3` 형식이 어느 빌드부터 쓰였는지는 공개 자료가 없습니다.
 
 ## 구조
@@ -84,18 +84,18 @@ XP~8 기준 파일입니다(참고 1).
 
 | 표 | 내용 |
 |---|---|
-| `__NameTable__` | 칸: Version, MaxDocId, MaxSubId, CurrentMaster, DocCount, StatusFlags, AppCatName, BaseTableName |
-| `SystemIndex_0A` | XP·Vista·7 의 본 색인 표입니다. 칸이 300개가 넘습니다. |
-| `SystemIndex_0P` | `SystemIndex_0A` 의 칸 정보입니다. 칸: PID, ColumnID, Type, MaxSize, Fixed, Sparse, Compress, JetCompress, Name |
-| `SystemIndex_PropertyStore` | Windows 8 부터 있습니다. 칸이 600개가 넘습니다. |
+| `__NameTable__` | 열: Version, MaxDocId, MaxSubId, CurrentMaster, DocCount, StatusFlags, AppCatName, BaseTableName |
+| `SystemIndex_0A` | XP·Vista·7 의 본 색인 표입니다. 열이 300개가 넘습니다. |
+| `SystemIndex_0P` | `SystemIndex_0A` 의 열 정보입니다. 열: PID, ColumnID, Type, MaxSize, Fixed, Sparse, Compress, JetCompress, Name |
+| `SystemIndex_PropertyStore` | Windows 8 부터 있습니다. 열이 600개가 넘습니다. |
 | `SystemIndex_Gthr`, `SystemIndex_GthrPth` | 수집 기록 표입니다. |
 | `SystemIndex_DeletedDocIds` | 지운 문서 번호 |
 | `SystemIndex_MaxDoc` | 가장 큰 문서 번호 |
 | `SystemIndex_1`, `SystemIndex_1_Properties`, `SystemIndex_1_DATA_#`, `SystemIndex_1_OCC_#` | Windows 8 의 역색인 관련 표 |
 | `SystemIndex_Gthr_S`, `SystemIndex_GthrPth_S`, `SystemIndex_MaxDoc_S`, `SystemIndex_DeletedDocIds_S` | Vista 에만 있는 사본 표입니다. 이름 끝에 `_S` 가 붙습니다. |
 
-- 속성 표의 칸은 [파일 속성 되살리기](propertystore.md) 에서 다룹니다.
-- 수집 기록 표의 칸은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
+- 속성 표의 열은 [파일 속성 되살리기](propertystore.md) 에서 다룹니다.
+- 수집 기록 표의 열은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
 - 지운 문서 번호 표는 [지운 파일·옛 파일 흔적 찾기](deleted-file-traces.md) 에서 다룹니다.
 
 ### 표 목록 — SQLite 판 (Windows 11)
@@ -116,7 +116,7 @@ XP~8 기준 파일입니다(참고 1).
 | XP | 빅엔디언 | 빅엔디언 |
 | Vista | 리틀엔디언 | 리틀엔디언 |
 | 7 | 빅엔디언 | 빅엔디언 |
-| 8 | 칸마다 다릅니다 | 칸마다 다릅니다 |
+| 8 | 열마다 다릅니다 | 열마다 다릅니다 |
 
 - FILETIME 은 1601-01-01 부터 센 100나노초 단위 값입니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 빅엔디언 FILETIME 을 실제로 풀어 보는 예는 [파일 속성 되살리기](propertystore.md) 의 헥스 예시에 있습니다.
@@ -143,7 +143,7 @@ Windows 11 25H2 의 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` 가 이 
 **증명하는 것**
 
 - `DataDirectory` 값은 그 PC 가 색인 DB 를 둔 폴더를 알려 줍니다.
-- DB 형식으로 어느 세대의 윈도 검색이 만든 DB 인지 가늠할 수 있습니다. Windows 10 까지는 ESE, Windows 11 은 SQLite 입니다(참고 2). 빌드는 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 따로 확인합니다.
+- DB 형식으로 어느 세대의 윈도 검색이 만든 DB 인지 추정할 수 있습니다. Windows 10 까지는 ESE, Windows 11 은 SQLite 입니다(참고 2). 빌드는 [시스템 기본 정보](../../system-account/os-version-computer-name-install-date-shutdown-t.md) 로 따로 확인합니다.
 - 폴더 안의 파일 목록은 무엇을 함께 모아야 하는지 알려 줍니다.
 
 **증명하지 못하는 것**
@@ -157,10 +157,10 @@ Windows 11 25H2 의 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` 가 이 
 2. **로그 복구가 안 되는 경우가 있습니다.** JET API 로 열려면 같은 폴더의 트랜잭션 로그로 복구해야 하는데, 오래된 로그가 지워져 이미지 안의 로그가 끊겨 있으면 복구가 안 됩니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다.
 3. **원본을 열면 바뀔 수 있습니다.** 항상 사본에서 작업합니다.
 4. **Windows 10 이후 로그 확장자가 다릅니다.** `.jtx`·`.jcp` 를 `.log`·`.chk` 로 착각하면 로그를 못 찾습니다.
-5. **Windows 11 파일은 암호화된 것으로 보이는 형식일 수 있습니다.** 보통 SQLite 도구로 열리지 않으면 첫 16바이트부터 확인합니다. WAL 안의 페이지 내용도 암호화돼 있는지는 공개 자료가 없어 검체에서 확인합니다.
+5. **Windows 11 파일은 암호화된 것으로 보이는 형식일 수 있습니다.** 보통 SQLite 도구로 열리지 않으면 첫 16바이트부터 확인합니다. WAL 안의 페이지 내용도 암호화돼 있는지는 실제 데이터로 확인해야 합니다.
 6. **수집 기록 표는 다른 파일에 있습니다.** Windows 11 에서 `Windows.db` 만 모으면 수집 기록 표를 놓칩니다.
-7. **바이트 순서를 틀리면 값이 엉뚱하게 나옵니다.** XP·7 은 빅엔디언, Vista 는 리틀엔디언입니다. 도구가 버전을 가려 읽는지 확인합니다.
-8. **libyal 문서는 Windows 8 까지입니다.** Windows 10·11 의 칸 구성은 다른 자료와 검체로 확인합니다.
+7. **바이트 순서를 틀리면 값이 엉뚱하게 나옵니다.** XP·7 은 빅엔디언, Vista 는 리틀엔디언입니다. 도구가 버전을 구분해 읽는지 확인합니다.
+8. **libyal 문서는 Windows 8 까지입니다.** Windows 10·11 의 열 구성은 다른 자료와 실제 데이터로 확인합니다.
 
 ## 직접 분석해 보기
 
@@ -190,7 +190,7 @@ AesGcm1 SQLite3 헤더의 첫 32바이트 (관찰 값으로 만든 예시)
 
 - `Windows.edb` 는 ESEDatabaseView 같은 ESE 뷰어로 엽니다. 사본에서 엽니다.
 - 보통 SQLite 형식인 `Windows.db` 는 SQLite DB Browser 로 엽니다.
-- 공개 분석 도구 SIDR 은 `Windows.edb`(Windows 10 이하)와 `Windows.db`(Windows 11)를 모두 읽습니다(참고 3). `AesGcm1 SQLite3` 로 시작하는 파일을 읽는지는 검체로 확인합니다.
+- 공개 분석 도구 SIDR 은 `Windows.edb`(Windows 10 이하)와 `Windows.db`(Windows 11)를 모두 읽습니다(참고 3). `AesGcm1 SQLite3` 로 시작하는 파일을 읽는지는 실제 데이터로 확인합니다.
 - WinSearchDBAnalyzer 라는 도구도 있습니다(참고 2).
 
 도구로 열기 전에 아래를 적어 둡니다.
@@ -209,7 +209,7 @@ AesGcm1 SQLite3 헤더의 첫 32바이트 (관찰 값으로 만든 예시)
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 Windows 이미지를 골라 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)에서 Windows 이미지를 골라 풀어 봅니다.
 
 1. SOFTWARE 하이브에서 `Windows Search` 키의 `DataDirectory` 값은 무엇입니까? 기본 폴더와 같습니까?
 2. 색인 폴더에 어떤 파일이 있습니까? ESE 판이면 로그 확장자는 `.log` 입니까, `.jtx` 입니까?

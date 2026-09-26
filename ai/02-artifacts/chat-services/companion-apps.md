@@ -6,7 +6,7 @@ nav_order: 390
 
 # AI 컴패니언 앱 (Replika·Character.AI 등)
 
-사용자가 고른 캐릭터와 친구·연인처럼 대화하는 AI 컴패니언 앱은 앱마다 대화를 두는 곳이 달라서, 기기에 평문 SQLite 로 남는 앱과 인증 토큰만 남는 앱을 먼저 가르고 읽어야 합니다.
+사용자가 고른 캐릭터와 친구·연인처럼 대화하는 AI 컴패니언 앱은 앱마다 대화를 두는 곳이 달라서, 기기에 평문 SQLite 로 남는 앱과 인증 토큰만 남는 앱을 먼저 구분하고 읽어야 합니다.
 
 저장 구조는 루팅한 Android 12(API 31) 에뮬레이터에서 여섯 앱을 시험한 결과[1] 기준이고, 그 뒤 판에서는 경로와 표가 바뀌었을 수 있습니다.
 
@@ -23,13 +23,13 @@ AI 컴패니언 앱 (AI companion app) 은 사용자가 캐릭터(봇)를 정해
 | Persona.AI | 500K+ | 봇 여럿 | 있음 |
 | Fantasy.AI | 500K+ | 봇 여럿 | 있음 |
 
-대화를 두는 곳은 세 갈래입니다. Replika·Linky.AI·Persona.AI·Fantasy.AI 는 대화를 기기 안 데이터베이스에 평문으로 두고, Kindroid 는 대화 본문을 서버(Firebase)에 두면서 일부 데이터를 암호화해 기기에 둡니다. Character.AI 는 기기에 대화를 두지 않고 인증 토큰과 기기 정보만 남깁니다[1]. 서버와 기기 중 어디를 먼저 볼지 가르는 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
+대화를 두는 곳은 세 가지입니다. Replika·Linky.AI·Persona.AI·Fantasy.AI 는 대화를 기기 안 데이터베이스에 평문으로 두고, Kindroid 는 대화 본문을 서버(Firebase)에 두면서 일부 데이터를 암호화해 기기에 둡니다. Character.AI 는 기기에 대화를 두지 않고 인증 토큰과 기기 정보만 남깁니다[1]. 서버와 기기 중 어디를 먼저 볼지 정하는 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
 
 Replika 는 대화와 함께 앱이 사용자에 대해 알아낸 사실을 `memory_fact_v3` 표에 따로 모으고, 대화 가운데 일부에는 봇의 "속마음" 글도 함께 남깁니다[1]. Persona.AI 와 Fantasy.AI 는 이름만 다를 뿐 같은 백엔드를 씁니다. 두 앱은 AI 처리용 역할 ID, 음성용 Agora SDK ID, 광고용 Unity3D 앱 키, 데이터베이스 스키마까지 같습니다[1]. 그래서 한 앱을 읽는 방법을 다른 앱에 그대로 쓸 수 있습니다.
 
 ## 위치와 버전별 차이
 
-앱 폴더 이름은 논문 표와 도구 코드가 서로 다릅니다. 논문 부록 Table 4 는 `ai.character.rk/`, `com.linkyai/`, `com.persona.ai/`, `com.fantasy.ai/` 로 적었고[1], 도구 코드는 아래 표의 패키지 이름으로 폴더를 찾습니다[2]. 도구 코드는 이 이름으로 추출본 안의 앱 폴더를 찾으므로 폴더를 찾을 때는 코드 쪽 이름을 먼저 대 보고, 두 쪽 모두 맞지 않으면 아래 파일 이름으로 검체 전체를 찾습니다.
+앱 폴더 이름은 논문 표와 도구 코드가 서로 다릅니다. 논문 부록 Table 4 는 `ai.character.rk/`, `com.linkyai/`, `com.persona.ai/`, `com.fantasy.ai/` 로 적었고[1], 도구 코드는 아래 표의 패키지 이름으로 폴더를 찾습니다[2]. 도구 코드는 이 이름으로 추출본 안의 앱 폴더를 찾으므로 폴더를 찾을 때는 코드 쪽 이름을 먼저 대 보고, 두 쪽 모두 맞지 않으면 아래 파일 이름으로 추출본 전체를 검색합니다.
 
 | 앱 | 도구 코드의 패키지 이름[2] | 논문 표의 폴더[1] | 대화 본문 |
 |---|---|---|---|
@@ -58,69 +58,69 @@ Replika 는 대화와 함께 앱이 사용자에 대해 알아낸 사실을 `mem
 | Persona.AI·Fantasy.AI | `databases/ai_personal_db`, `ai_personal_db-wal` | 봇 대화 | [1][2] |
 | Persona.AI·Fantasy.AI | `databases/com.im_10.8.7.db` | 사람끼리 메시지 | [1] |
 
-출처끼리 다른 곳이 두 군데 더 있습니다. Kindroid 의 `PersistedInstallation` 파일을 논문 표는 `app_webview/Local Storage` 에 있다고 적었고[1], 도구 코드는 `files/` 폴더에서 `PersistedInstallation.` 뒤에 긴 이름이 붙은 JSON 을 코드에 적어 둔 파일 이름 그대로 읽습니다[2]. Linky.AI 대화 파일은 논문 본문이 `OpenIM_v2_conv<convIDNumber>.cd` 로 적으면서 같은 폴더의 파일이 `.hive` 와 `.db` 형식이라고 했고, 논문 표는 `.hive, .db` 로 적었습니다[1]. 도구 코드는 `app_flutter/` 에서 `OpenIM` 으로 시작하고 `.db` 로 끝나는 파일을 읽습니다[2]. 두 경우 모두 검체에서 파일 이름으로 찾아 실제 위치를 적습니다.
+출처끼리 다른 곳이 두 군데 더 있습니다. Kindroid 의 `PersistedInstallation` 파일을 논문 표는 `app_webview/Local Storage` 에 있다고 적었고[1], 도구 코드는 `files/` 폴더에서 `PersistedInstallation.` 뒤에 긴 이름이 붙은 JSON 을 코드에 적어 둔 파일 이름 그대로 읽습니다[2]. Linky.AI 대화 파일은 논문 본문이 `OpenIM_v2_conv<convIDNumber>.cd` 로 적으면서 같은 폴더의 파일이 `.hive` 와 `.db` 형식이라고 했고, 논문 표는 `.hive, .db` 로 적었습니다[1]. 도구 코드는 `app_flutter/` 에서 `OpenIM` 으로 시작하고 `.db` 로 끝나는 파일을 읽습니다[2]. 두 경우 모두 실제 추출본에서 파일 이름으로 찾아 실제 위치를 적습니다.
 
 Kindroid 는 앱 화면을 웹뷰로 띄우는 구조라서 `app_webview/` 아래가 크롬 계열 프로필과 같은 모양입니다. 이 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [LevelDB와 IndexedDB (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/leveldb-indexeddb.html)를 따라 읽습니다.
 
-위 결과의 앱 버전은 공개되지 않았습니다. Character.AI 는 `shared_prefs/CodePush.xml` 의 `appVersion` 값으로 검체의 앱 버전을 알 수 있고, 도구 코드는 이 값을 못 읽으면 1.11.3 을 기본값으로 씁니다[2]. 다른 앱도 분석 결과에 검체의 앱 버전을 함께 적습니다.
+위 결과의 앱 버전은 공개되지 않았습니다. Character.AI 는 `shared_prefs/CodePush.xml` 의 `appVersion` 값으로 분석 대상 기기의 앱 버전을 알 수 있고, 도구 코드는 이 값을 못 읽으면 1.11.3 을 기본값으로 씁니다[2]. 다른 앱도 분석 결과에 분석 대상 기기의 앱 버전을 함께 적습니다.
 
 ## 구조
 
 ### Replika — `REPLIKA_DB`
 
-평문 SQLite 입니다[1]. 주요 표와 칸은 아래와 같습니다[2].
+평문 SQLite 입니다[1]. 주요 표와 열은 아래와 같습니다[2].
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `user_profile` | `id`, `first_name`, `last_name`, `email`, `birthday_date`, `user_gender_pronounce` |
 | `bot_profile` | `id`, `name`, `gender`, `score`, `day_counter` |
 | `chat_message` | `id`, `text`, `nature`, `timestamp`, `timestamp_ms`, `type`, `is_local`, `reactions`, `action`, `avatar_emotion`, `voice_url`, `duration_in_second` |
 
-`chat_message.nature` 가 `Customer` 이면 사용자가 보낸 메시지이고 `Robot` 이면 봇의 답입니다[2]. `bot_profile.score` 와 `day_counter` 는 관계 점수와 함께한 날수로 보입니다[2]. `memory_fact_v3` 표는 이름만 알려져 있고[1] 칸 구성은 공개되지 않았습니다. 봇의 "속마음" 이 어느 칸에 들어가는지도 공개되지 않아서 검체에서 표를 열어 확인합니다.
+`chat_message.nature` 가 `Customer` 이면 사용자가 보낸 메시지이고 `Robot` 이면 봇의 답입니다[2]. `bot_profile.score` 와 `day_counter` 는 관계 점수와 함께한 날수로 보입니다[2]. `memory_fact_v3` 표는 이름만 알려져 있고[1] 열 구성은 공개되지 않았습니다. 봇의 "속마음" 이 어느 열에 들어가는지도 공개되지 않아서 실제 데이터베이스에서 표를 열어 확인합니다.
 
 ### Kindroid — 토큰과 암호화된 데이터
 
-`PersistedInstallation.*.json` 에는 `AuthToken`, `RefreshToken`, `Fid` 칸이 있고, 이 토큰은 사용자 로그인 토큰이 아닌 Firebase 설치 토큰입니다[2]. 봇 설정·배경 이야기, 사용자별 AI 기억, 말투 지시를 담은 데이터베이스 파일은 AES-256-CBC 로 암호화돼 있고, 암호문은 `Salted__` 로 시작하며, 키는 사용자 ID 에서 MD5 로 만듭니다[1]. `!enc:` 로 시작하는 값이 암호문이고, 그 뒤를 base64 로 풀면 머리가 `Salted__` 입니다[2]. 이 구조를 키 관리가 약한 부분 암호화로 보는 평가가 있습니다[1].
+`PersistedInstallation.*.json` 에는 `AuthToken`, `RefreshToken`, `Fid` 필드가 있고, 이 토큰은 사용자 로그인 토큰이 아닌 Firebase 설치 토큰입니다[2]. 봇 설정·배경 이야기, 사용자별 AI 기억, 말투 지시를 담은 데이터베이스 파일은 AES-256-CBC 로 암호화돼 있고, 암호문은 `Salted__` 로 시작하며, 키는 사용자 ID 에서 MD5 로 만듭니다[1]. `!enc:` 로 시작하는 값이 암호문이고, 그 뒤를 base64 로 풀면 머리가 `Salted__` 입니다[2]. 이 구조를 키 관리가 약한 부분 암호화로 보는 평가가 있습니다[1].
 
 ### Character.AI — `RKStorage`
 
-`RKStorage` 는 SQLite 이고, 인증 토큰은 `catalystLocalStorage` 표에서 `key` 가 `AUTH_TOKEN` 인 행의 `value` 에 있습니다[2]. 대화는 기기에 없습니다[1]. 앱이 받는 서버 응답 JSON 에는 도시, 우편번호, 시간대, 좌표 같은 위치 칸이 들어 있습니다[1]. 이 값은 기기 파일이 아니라 앱과 서버 사이의 통신 내용에서 나왔습니다[1].
+`RKStorage` 는 SQLite 이고, 인증 토큰은 `catalystLocalStorage` 표에서 `key` 가 `AUTH_TOKEN` 인 행의 `value` 에 있습니다[2]. 대화는 기기에 없습니다[1]. 앱이 받는 서버 응답 JSON 에는 도시, 우편번호, 시간대, 좌표 같은 위치 필드가 들어 있습니다[1]. 이 값은 기기 파일이 아니라 앱과 서버 사이의 통신 내용에서 나왔습니다[1].
 
 ### Linky.AI — OpenIM 데이터베이스
 
 봇 대화는 봇마다 파일이 따로 있습니다[1]. `OpenIM*.db` 파일에서 볼 표는 아래 두 개이고, 공개 도구는 두 표를 읽어 `send_time` 순으로 합칩니다[2].
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `local_conversations` | `conversation_id`, `conversation_type`, `user_id`, `group_id`, `show_name`, `face_url`, `unread_count`, `latest_msg`, `latest_msg_send_time` |
 | `local_chat_logs` | `client_msg_id`, `server_msg_id`, `send_id`, `recv_id`, `sender_nick_name`, `sender_face_url`, `session_type`, `msg_from`, `content_type`, `content`, `is_read`, `status`, `send_time`, `create_time` |
 
-`content_type` 값은 101 글, 102 이미지, 103 음성, 104 동영상, 105 파일, 106 멘션, 110 사용자 정의(JSON 안의 `text`)입니다[2]. 논문은 도구가 `.hive` 파일에서도 봇 대화를 뽑는다고 적었지만[1], 공개된 도구 코드는 `.hive` 파일을 읽지 않습니다[2]. 공개된 구조 분석 자료도 없어 검체로 확인해야 합니다.
+`content_type` 값은 101 글, 102 이미지, 103 음성, 104 동영상, 105 파일, 106 멘션, 110 사용자 정의(JSON 안의 `text`)입니다[2]. 논문은 도구가 `.hive` 파일에서도 봇 대화를 뽑는다고 적었지만[1], 공개된 도구 코드는 `.hive` 파일을 읽지 않습니다[2]. `.hive` 파일의 구조는 실제 파일로 확인해야 합니다.
 
 ### Persona.AI·Fantasy.AI — `ai_personal_db`
 
-평문 SQLite 입니다[1]. 주요 표와 칸은 아래와 같습니다[2].
+평문 SQLite 입니다[1]. 주요 표와 열은 아래와 같습니다[2].
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `chats` | `both_id`, `nick_name`, `ai_role_id`, `head_img`, `gender`, `level`, `percentage` |
 | `chat_messages` | `both_id`, `message_id`, `message_type`, `sender_id`, `sender_name`, `receiver_id`, `receiver_name`, `message_content`, `create_time`, `message_state` |
 
-`chat_messages.both_id` 로 `chats` 의 캐릭터와 잇습니다. `message_content` 는 JSON 이고 `text`, `avatar`, `audio_url`, `img_url`, `video_url`, `can_voice`, `origin_text` 칸이 있습니다. 도구는 JSON 으로 풀리지 않으면 값 전체를 글로 봅니다[2].
+`chat_messages.both_id` 로 `chats` 의 캐릭터와 잇습니다. `message_content` 는 JSON 이고 `text`, `avatar`, `audio_url`, `img_url`, `video_url`, `can_voice`, `origin_text` 필드가 있습니다. 도구는 JSON 으로 풀리지 않으면 값 전체를 글로 봅니다[2].
 
-사람끼리 메시지를 담는 `com.im_10.8.7.db` 는 Linky.AI·Persona.AI·Fantasy.AI 모두에 있고 논문은 여기서도 메시지를 뽑았다고 적었지만[1], 공개된 도구 코드는 이 파일을 읽지 않습니다[2]. 표 구성은 검체에서 확인합니다.
+사람끼리 메시지를 담는 `com.im_10.8.7.db` 는 Linky.AI·Persona.AI·Fantasy.AI 모두에 있고 논문은 여기서도 메시지를 뽑았다고 적었지만[1], 공개된 도구 코드는 이 파일을 읽지 않습니다[2]. 표 구성은 실제 파일에서 확인합니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** `REPLIKA_DB`·`ai_personal_db`·OpenIM 데이터베이스의 행은 그 기기의 앱에 그 내용의 메시지가 저장됐다는 기록이고, 보낸 쪽 칸(`nature`, `sender_name`, `send_id`)으로 사용자 입력과 봇 답을 나눌 수 있습니다. Replika `user_profile` 의 이름·이메일·생일은 그 앱 계정에 입력된 프로필입니다. Character.AI 처럼 대화가 서버에만 있는 앱은 `RKStorage` 의 토큰이 그 기기에서 계정에 로그인한 상태였다는 흔적이 됩니다. 앱은 여러 광고·분석 업체에 사용 정보를 보냅니다. Replika 는 Facebook·AppsFlyer·Adjust·Amplitude 로, Kindroid 는 웹 추적기로 TikTok Analytics·Facebook 등에, Linky.AI 는 `admob.xml` 을 거쳐 GPS 를 Google AdMob 으로, Persona.AI·Fantasy.AI 는 AppLovin 과 ThinkingData/Unity China 두 경로로 데이터를 보내고, AppLovin 쪽은 사용자당 최대 41개 행동 지표를 기록합니다[1]. 그래서 기기에서 지운 활동이 이런 업체 쪽에 남아 있을 수 있습니다.
+**증명하는 것.** `REPLIKA_DB`·`ai_personal_db`·OpenIM 데이터베이스의 행은 그 기기의 앱에 그 내용의 메시지가 저장됐다는 기록이고, 보낸 쪽 열(`nature`, `sender_name`, `send_id`)으로 사용자 입력과 봇 답을 나눌 수 있습니다. Replika `user_profile` 의 이름·이메일·생일은 그 앱 계정에 입력된 프로필입니다. Character.AI 처럼 대화가 서버에만 있는 앱은 `RKStorage` 의 토큰이 그 기기에서 계정에 로그인한 상태였다는 흔적이 됩니다. 앱은 여러 광고·분석 업체에 사용 정보를 보냅니다. Replika 는 Facebook·AppsFlyer·Adjust·Amplitude 로, Kindroid 는 웹 추적기로 TikTok Analytics·Facebook 등에, Linky.AI 는 `admob.xml` 을 거쳐 GPS 를 Google AdMob 으로, Persona.AI·Fantasy.AI 는 AppLovin 과 ThinkingData/Unity China 두 경로로 데이터를 보내고, AppLovin 쪽은 사용자당 최대 41개 행동 지표를 기록합니다[1]. 그래서 기기에서 지운 활동이 이런 업체 쪽에 남아 있을 수 있습니다.
 
 **증명하지 못하는 것.** 앱에 남은 계정은 그 계정으로 로그인했다는 뜻일 뿐이고, 누가 기기를 들고 입력했는지는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 좁힙니다. Replika `memory_fact_v3` 의 "사용자 사실" 은 앱이 대화에서 뽑아 정리한 내용이라서, 사용자가 그 문장을 그대로 말했다는 근거가 되지 못합니다. 원래 메시지를 찾아 함께 인용합니다. 봇의 답도 사용자의 생각이 아닙니다. 논문의 사례 실험에서 봇들은 처음에는 범행을 말렸지만, 사용자가 "성공했다" 고 하자 사용자가 무사해서 다행이라는 반응부터 노골적인 지지까지 반응이 갈렸습니다[1]. Character.AI 처럼 기기에 대화가 없는 앱에서 대화가 안 보인다고 대화가 없었다고 할 수 없습니다.
 
 ## 시각 해석
 
-Replika `chat_message` 의 순서는 `timestamp_ms` 로 정하고, Persona.AI·Fantasy.AI 의 `create_time` 과 Linky.AI 의 `send_time` 은 Unix 밀리초입니다[2]. Linky.AI 의 `create_time` 은 도구가 숫자로만 읽고 날짜로 바꾸지 않습니다[2]. Unix 시각은 UTC 기준이라, 값을 바꿨는데 1970년 무렵 날짜가 나오면 초 단위일 수 있으니 다시 봅니다. Replika 의 `timestamp` 칸은 도구가 그대로 날짜로 넘길 뿐 형식이 공개되지 않아서, 같은 행의 `timestamp_ms` 와 맞춰 형식과 시간대를 확인합니다.
+Replika `chat_message` 의 순서는 `timestamp_ms` 로 정하고, Persona.AI·Fantasy.AI 의 `create_time` 과 Linky.AI 의 `send_time` 은 Unix 밀리초입니다[2]. Linky.AI 의 `create_time` 은 도구가 숫자로만 읽고 날짜로 바꾸지 않습니다[2]. Unix 시각은 UTC 기준이라, 값을 바꿨는데 1970년 무렵 날짜가 나오면 초 단위일 수 있으니 다시 봅니다. Replika 의 `timestamp` 열은 도구가 그대로 날짜로 넘길 뿐 형식이 공개되지 않아서, 같은 행의 `timestamp_ms` 와 맞춰 형식과 시간대를 확인합니다.
 
-공개 도구는 결과를 `toLocaleString()` 으로 찍어서, 사람이 읽는 로그의 시각이 분석 PC 의 현지 시각으로 나옵니다[2]. 보고서에는 원래 값과 UTC 로 바꾼 값을 함께 적습니다. Linky.AI 의 `local_conversations.latest_msg_send_time` 은 그 대화의 마지막 메시지 시각이라서 `local_chat_logs` 의 마지막 `send_time` 과 맞춰 보면 지워진 메시지가 있는지 가늠할 수 있습니다. Character.AI 서버 응답에 든 시간대 칸은 사용자가 있던 지역을 짐작하는 근거가 됩니다[1]. 여러 출처의 시각을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+공개 도구는 결과를 `toLocaleString()` 으로 찍어서, 사람이 읽는 로그의 시각이 분석 PC 의 현지 시각으로 나옵니다[2]. 보고서에는 원래 값과 UTC 로 바꾼 값을 함께 적습니다. Linky.AI 의 `local_conversations.latest_msg_send_time` 은 그 대화의 마지막 메시지 시각이라서 `local_chat_logs` 의 마지막 `send_time` 과 맞춰 보면 지워진 메시지가 있는지 추정할 수 있습니다. Character.AI 서버 응답에 든 시간대 필드는 사용자가 있던 지역을 짐작하는 근거가 됩니다[1]. 여러 출처의 시각을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -136,7 +136,7 @@ Replika `chat_message` 의 순서는 `timestamp_ms` 로 정하고, Persona.AI·F
 
 그래서 `-wal`·`-shm` 파일을 주 데이터베이스와 함께 한 번에 복사하고, 앱 폴더 전체에서 `userlog` 라는 이름의 폴더를 찾습니다. WAL 에서 지운 행을 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)와 [SQLite 데이터베이스 (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)에 있고, 서비스별 보관·삭제 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
-**보낸 쪽을 가르는 도구 규칙은 어림입니다.** Linky.AI 도구는 보낸 이 이름에 `assistant`·`official`·`bot` 이 있거나 `send_id` 가 15자보다 길면 봇으로 보고, 나머지는 사용자로 봅니다[2]. Persona.AI·Fantasy.AI 도구는 `sender_name` 이 비어 있지 않고 `v` 가 아니면 봇으로 봅니다[2]. 둘 다 코드 주석에 적힌 관찰에서 나온 규칙이라서, 결과를 쓰기 전에 `send_id`·`recv_id`·`sender_id` 와 대화 상대 ID 를 원본에서 맞춰 봅니다.
+**보낸 쪽을 구분하는 도구 규칙은 어림입니다.** Linky.AI 도구는 보낸 이 이름에 `assistant`·`official`·`bot` 이 있거나 `send_id` 가 15자보다 길면 봇으로 보고, 나머지는 사용자로 봅니다[2]. Persona.AI·Fantasy.AI 도구는 `sender_name` 이 비어 있지 않고 `v` 가 아니면 봇으로 봅니다[2]. 둘 다 코드 주석에 적힌 관찰에서 나온 규칙이라서, 결과를 쓰기 전에 `send_id`·`recv_id`·`sender_id` 와 대화 상대 ID 를 원본에서 맞춰 봅니다.
 
 **남은 토큰은 가려야 합니다.** `RKStorage` 의 `AUTH_TOKEN`, Kindroid 의 `PersistedInstallation` 토큰과 IndexedDB 의 사용자 토큰은 보고서와 결과 파일에서 가립니다. 시험 계정의 토큰으로는 서버에서 대화를 받아 올 수 있었지만[1], 실제 사건에서 남은 토큰으로 서버 자료를 가져오는 일은 법적 권한이 있어야 하는 별도의 문제입니다. 서버 쪽 대화는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받고, 토큰이 남는 곳의 일반 설명은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
@@ -144,7 +144,7 @@ Replika `chat_message` 의 순서는 `timestamp_ms` 로 정하고, Persona.AI·F
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 폴더 이름이 달라도 파일 머리와 이름 바이트로 찾을 수 있습니다. 아래 값은 SQLite 명세와 문자 인코딩으로 만든 예시이고, 검체에서 뜬 바이트가 아닙니다.
+**헥스로 한 번.** 폴더 이름이 달라도 파일 머리와 이름 바이트로 찾을 수 있습니다. 아래 값은 SQLite 명세와 문자 인코딩으로 만든 예시이고, 실제 기기에서 뜬 바이트가 아닙니다.
 
 ```
 만든 예시(명세와 인코딩으로 만든 바이트)
@@ -198,7 +198,7 @@ SQLite 가 여는 순간 WAL 내용을 주 파일에 합칠 수 있으니 이 �
 
 ## 실습
 
-AI 컴패니언 앱 흔적이 든 공개 검체가 없어서, 시험용 Android 기기(또는 에뮬레이터)와 시험 계정으로 풀어 봅니다.
+AI 컴패니언 앱 흔적이 든 공개 시험 데이터가 없어서, 시험용 Android 기기(또는 에뮬레이터)와 시험 계정으로 풀어 봅니다.
 
 1. Persona.AI 나 Fantasy.AI 에서 대화를 만들고 지운 뒤, `ai_personal_db` 와 `ai_personal_db-wal` 에서 지운 메시지가 어디에 남는지 확인합니다. 앱 데이터를 모두 지운 뒤에도 다시 확인합니다.
 2. Linky.AI 에서 대화를 비우기 전과 뒤의 `local_conversations` 를 비교해 새 `conversation_id` 가 생기는지, 원래 `local_chat_logs` 행이 남는지 봅니다.

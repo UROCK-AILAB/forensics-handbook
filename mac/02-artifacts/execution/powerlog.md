@@ -22,23 +22,23 @@ APOLLO 에는 이름이 `powerlog_` 로 시작하는 모듈이 많고, 이름만
 | `powerlog_display`, `powerlog_window_server_timeline` |
 | `powerlog_network_usage`, `powerlog_process_data_usage`, `powerlog_wifi_properties`, `powerlog_timezone` |
 
-이 가운데 이름에 `macos` 가 붙은 모듈은 `powerlog_app_info_macos` 하나뿐이고, 나머지 모듈이 macOS 를 지원하는지와 어떤 표를 읽는지는 공개 자료에 없으니, 검체에서 이 모듈들을 돌려 결과가 나오더라도, 표 이름과 칸을 `.schema` 로 직접 확인한 뒤에 씁니다.
+이 가운데 이름에 `macos` 가 붙은 모듈은 `powerlog_app_info_macos` 하나뿐이고, 나머지 모듈이 macOS 를 지원하는지와 어떤 표를 읽는지는 공개 자료에 없으니, 실제 데이터에서 이 모듈들을 돌려 결과가 나오더라도, 표 이름과 열을 `.schema` 로 직접 확인한 뒤에 씁니다.
 
 ## 위치와 버전별 차이
 
-macOS 에서 `CurrentPowerlog.PLSQL` 의 전체 경로는 공개 자료에 없어서, 검체에서 파일 이름으로 볼륨 전체를 찾고, 이름이 비슷한 압축 보관본이 함께 있는지도 봅니다. 보관본의 형식도 검체에서 확인합니다.
+macOS 에서 `CurrentPowerlog.PLSQL` 의 전체 경로는 공개 자료에 없어서, 실제 데이터에서 파일 이름으로 볼륨 전체를 찾고, 이름이 비슷한 압축 보관본이 함께 있는지도 봅니다. 보관본의 형식도 실제 데이터로 확인합니다.
 
 | macOS 버전 | `powerlog_app_info_macos` 모듈 [1] |
 |---|---|
 | 10.15 Catalina | 모듈 버전 목록에 있음 |
 | 10.16 (= 11 Big Sur) | 모듈 버전 목록에 있음 |
-| 12 Monterey 이후 | 목록에 없음. 같은 표가 있는지 검체에서 확인 |
+| 12 Monterey 이후 | 목록에 없음. 같은 표가 있는지 실제 데이터로 확인 |
 
 ## 구조
 
-데이터베이스 형식은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. 모듈이 읽는 표와 칸은 아래와 같습니다 [1].
+데이터베이스 형식은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. 모듈이 읽는 표와 열은 아래와 같습니다 [1].
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `PLAPPLICATIONAGENT_EVENTNONE_APPINFO` | `TIMESTAMP`, `NAME`, `EXECUTABLE`, `CFDISPLAYNAME`, `LSDISPLAYNAME`, `BUNDLEID`, `NUMERICVERSION`, `SHORTVERSIONSTRING`, `VERSION`, `PACKAGETYPE`, `APPLICATIONTYPE`, `BUILDMACHINEOSBUILD`, `ARCHITECTURE`, `ID` |
 | `PLSTORAGEOPERATOR_EVENTFORWARD_TIMEOFFSET` | `TIMESTAMP`, `SYSTEM`(시각 보정 값), `ID` |
@@ -57,13 +57,13 @@ macOS 에서 `CurrentPowerlog.PLSQL` 의 전체 경로는 공개 자료에 없�
 
 `TIMESTAMP` 는 유닉스 시각(1970-01-01 기준 초)으로 읽히고, 모듈은 `DATETIME(TIMESTAMP, 'UNIXEPOCH')` 로 바꿉니다 [1]. `localtime` 옵션이 없어서 결과는 UTC 이고, 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)을 보고 바꿉니다. 유닉스 시각을 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다.
 
-모듈은 여기에 보정 표 `PLSTORAGEOPERATOR_EVENTFORWARD_TIMEOFFSET` 의 `SYSTEM` 값을 더해 `ADJUSTED_TIMESTAMP` 를 만들고, 이때 보정 표에서 `ID` 가 가장 큰 행, 곧 가장 최근 보정 값을 씁니다 [1]. 보정 값이 여러 개일 때 각 행이 기록된 때에 맞는 값을 고르지 않아서, 오래된 행에는 맞지 않는 보정 값이 더해질 수 있습니다. `SYSTEM` 보정 값이 생기는 까닭은 공개 자료에 없습니다. 그래서 타임라인에는 보정 전 시각과 보정 후 시각을 둘 다 적고, 보정 표의 행을 모두 뽑아 값이 하나인지 여러 개인지 먼저 봅니다.
+모듈은 여기에 보정 표 `PLSTORAGEOPERATOR_EVENTFORWARD_TIMEOFFSET` 의 `SYSTEM` 값을 더해 `ADJUSTED_TIMESTAMP` 를 만들고, 이때 보정 표에서 `ID` 가 가장 큰 행, 곧 가장 최근 보정 값을 씁니다 [1]. 보정 값이 여러 개일 때 각 행이 기록된 때에 맞는 값을 고르지 않아서, 오래된 행에는 맞지 않는 보정 값이 더해질 수 있습니다. `SYSTEM` 보정 값이 생기는 이유는 공개 자료에 없습니다. 그래서 타임라인에는 보정 전 시각과 보정 후 시각을 둘 다 적고, 보정 표의 행을 모두 뽑아 값이 하나인지 여러 개인지 먼저 봅니다.
 
 ## 함정과 한계
 
 - **구조가 알려진 표는 둘뿐.** 구조가 공개된 표는 앱 정보 표와 보정 표 둘이고 [1], 다른 모듈은 이름만 알려져 있습니다 [2].
 - **보정 값 고르기.** 도구가 보여 주는 "보정된 시각" 이 가장 최근 보정 값 하나로 계산한 결과인지 확인합니다 [1]. 보정 값이 여러 개면 보정된 시각을 그대로 믿지 않습니다.
-- **버전 범위.** 모듈이 확인한 macOS 버전은 10.15 와 10.16(11) 입니다 [1]. 이후 버전은 검체의 `.schema` 로 표가 있는지부터 봅니다.
+- **버전 범위.** 모듈이 확인한 macOS 버전은 10.15 와 10.16(11) 입니다 [1]. 이후 버전은 실제 데이터베이스의 `.schema` 로 표가 있는지부터 봅니다.
 - **행이 생기는 때.** 행이 생기는 조건이 알려져 있지 않아서, 행이 없는 날에 맥을 쓰지 않았다고 결론 내리지 않습니다.
 - **지운 행.** 지운 행을 찾는 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
@@ -71,7 +71,7 @@ macOS 에서 `CurrentPowerlog.PLSQL` 의 전체 경로는 공개 자료에 없�
 
 ### 값 하나를 손으로 바꿔 보기
 
-명세로 만든 예시로, 앱 정보 표의 `TIMESTAMP` 가 1700000000 이고 보정 표에서 `ID` 가 가장 큰 행의 `SYSTEM` 이 3600 이라고 합니다. 보정 전 시각은 1700000000 → 2023-11-14 22:13:20 UTC 이고, 보정 후 시각은 1700000000 + 3600 = 1700003600 → 2023-11-14 23:13:20 UTC 입니다. 두 값 가운데 어느 쪽이 맞는지는 같은 시각의 다른 기록과 맞춰 정합니다. 칸의 저장 형(정수·실수)은 알려져 있지 않으니, 헥스로 볼 때는 SQLite 레코드 헤더의 형 코드를 먼저 봅니다.
+명세로 만든 예시로, 앱 정보 표의 `TIMESTAMP` 가 1700000000 이고 보정 표에서 `ID` 가 가장 큰 행의 `SYSTEM` 이 3600 이라고 합니다. 보정 전 시각은 1700000000 → 2023-11-14 22:13:20 UTC 이고, 보정 후 시각은 1700000000 + 3600 = 1700003600 → 2023-11-14 23:13:20 UTC 입니다. 두 값 가운데 어느 쪽이 맞는지는 같은 시각의 다른 기록과 맞춰 정합니다. 열의 저장 형(정수·실수)은 알려져 있지 않으니, 헥스로 볼 때는 SQLite 레코드 헤더의 형 코드를 먼저 봅니다.
 
 ### SQL로 한 번
 
@@ -106,7 +106,7 @@ ORDER BY A.TIMESTAMP;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 자료(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. 볼륨 전체에서 `CurrentPowerlog.PLSQL` 을 찾아 경로를 적고, 이름이 비슷한 파일이 더 있는지 확인해 보세요.
 2. `.tables` 결과에서 이름이 `PLAPPLICATIONAGENT` 로 시작하는 표를 모두 적어 보세요.

@@ -12,7 +12,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ## 무엇을 기록하나 · 왜 생기나
 
-앱이 띄운 알림 (notification) 은 이 DB 에 들어가고, `ExpiryTime` 칸의 시각이 되면 지워집니다. 알림 한 건은 `Notification` 표의 한 행이며 실제 내용은 `Payload` 칸에 있습니다. 알림을 보낼 수 있는 앱의 목록은 `NotificationHandler` 표에 있고 `PrimaryId` 칸이 앱 이름을 보여 줍니다. 알림 종류에는 토스트 (toast), 타일 (tile), 배지 (badge) 가 있습니다.
+앱이 띄운 알림 (notification) 은 이 DB 에 들어가고, `ExpiryTime` 열의 시각이 되면 지워집니다. 알림 한 건은 `Notification` 표의 한 행이며 실제 내용은 `Payload` 열에 있습니다. 알림을 보낼 수 있는 앱의 목록은 `NotificationHandler` 표에 있고 `PrimaryId` 열이 앱 이름을 보여 줍니다. 알림 종류에는 토스트 (toast), 타일 (tile), 배지 (badge) 가 있습니다.
 
 알림에는 팝업 메시지나 앱의 글 일부가 들어 있을 수 있어서, 원본이 지워진 뒤에도 알림에서 내용을 되찾을 수 있습니다.
 
@@ -35,7 +35,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | Windows 10 1607 | API 에 `NotificationMirroring`·`RemoteId` 가 추가됩니다 | [2] |
 | Windows 10 1703 | API 에 `Data`·`Priority` 가 추가됩니다 | [2] |
 | Windows 10 1903 | API 에 `ExpiresOnReboot` 이 추가됩니다 | [2] |
-| Windows 11 25H2 | 아래 "구조" 의 표와 칸이 있습니다 | |
+| Windows 11 25H2 | 아래 "구조" 의 표와 열이 있습니다 | |
 
 - 1607 이전 파일의 이름과 형식은 공개 자료에 없습니다.
 
@@ -47,9 +47,9 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ### 표
 
-표와 칸 이름은 Windows 11 25H2 의 스키마입니다.
+표와 열 이름은 Windows 11 25H2 의 스키마입니다.
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `Notification` | `Order`, `Id`, `HandlerId`, `ActivityId`, `Type`, `Payload`, `Tag`, `Group`, `ExpiryTime`, `ArrivalTime`, `DataVersion`, `PayloadType`, `BootId`, `ExpiresOnReboot` |
 | `NotificationHandler` | `RecordId`, `PrimaryId`, `WNSId`, `HandlerType`, `WNFEventName`, `SystemDataPropertySet`, `CreatedTime`, `ModifiedTime`, `ParentId`, `ContainerSid` |
@@ -61,9 +61,9 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `TransientTable` | `OfflineCacheCount`, `NotificationId`, `OfflineBundleId`, `ServerCacheRollover`, `CrossDeviceMatchId`, `SuppressPopup`, `IsMirroringDisabled`, `RecurrenceId`, `MessageId`, `Priority`, `CV` |
 | `WNSPushChannel` | `ChannelId`, `HandlerId`, `Uri`, `ExpiryTime`, `CreatedTime`, `DeviceVersion` |
 
-### `Notification` 의 주요 칸
+### `Notification` 의 주요 열
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `Order` | 기본 키입니다 |
 | `Id` | 겹치지 않는 값입니다 (UNIQUE) |
@@ -77,16 +77,16 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 `ActivityId`, `DataVersion`, `BootId` 의 뜻은 공개 자료에 없습니다.
 
-### `NotificationHandler` 의 주요 칸
+### `NotificationHandler` 의 주요 열
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `RecordId` | 기본 키입니다. `Notification.HandlerId` 가 이 값을 가리킵니다 |
 | `PrimaryId` | 앱 이름을 보여 줍니다. 스토어 앱은 `패키지 패밀리 이름!App` 모양, 데스크톱 앱은 실행 파일 경로나 짧은 이름입니다 |
 | `HandlerType` | `app:desktop` 11개, `app:immersive` 222개, `app:system` 73개가 있었습니다 |
 | `CreatedTime`, `ModifiedTime` | `YYYY-MM-DD HH:MM:SS` 모양 글자입니다. FILETIME 이 아닙니다 |
 
-나머지 칸의 뜻은 공개 자료에 없습니다.
+나머지 열의 뜻은 공개 자료에 없습니다.
 
 ### 나머지 표의 값
 
@@ -110,7 +110,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ### 알림 내용 (Payload)
 
-토스트 알림의 XML 요소는 `toast`, `visual`, `binding`, `text`, `image`, `actions`, `action` 입니다. 아래는 이 요소 이름으로 만든 뼈대입니다. 특정 검체에서 나온 값이 아니고, 실제 속성은 더 많습니다.
+토스트 알림의 XML 요소는 `toast`, `visual`, `binding`, `text`, `image`, `actions`, `action` 입니다. 아래는 이 요소 이름으로 만든 뼈대입니다. 특정 기기에서 나온 값이 아니고, 실제 속성은 더 많습니다.
 
 ```xml
 <toast launch="(사이트 주소)">
@@ -130,11 +130,11 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 - `image` 의 `src` 는 `file:` 주소였습니다.
 - 브라우저가 띄운 웹 알림은 `toast` 의 `launch` 속성에 사이트 주소가 들어 있었습니다.
 
-### 알림 API 와 DB 칸
+### 알림 API 와 DB 열
 
-`ToastNotification` 속성[2]과 이름이 같거나 비슷한 DB 칸입니다. 이름만 비슷할 뿐, 속성 값이 그 칸에 그대로 들어가는지는 공개 자료에 없습니다.
+`ToastNotification` 속성[2]과 이름이 같거나 비슷한 DB 열입니다. 이름만 비슷할 뿐, 속성 값이 그 열에 그대로 들어가는지는 공개 자료에 없습니다.
 
-| API 속성 | 뜻 | 이름이 같거나 비슷한 DB 칸 |
+| API 속성 | 뜻 | 이름이 같거나 비슷한 DB 열 |
 |---|---|---|
 | `ExpirationTime` | 이 시각 뒤에는 알림을 보여 주지 않습니다 | `Notification.ExpiryTime` |
 | `ExpiresOnReboot` | 재부팅 뒤 알림 센터에 남는지 정합니다 | `Notification.ExpiresOnReboot` |
@@ -169,7 +169,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ## 시각 해석
 
-| 칸 | 형식 | 비고 |
+| 열 | 형식 | 비고 |
 |---|---|---|
 | `Notification.ArrivalTime` | FILETIME | 받은 시각입니다. UTC 로 풀면 `-wal` 파일의 수정 시각 (UTC) 과 몇 분 차이로 맞아 UTC 로 보입니다 |
 | `Notification.ExpiryTime` | FILETIME | DB 에서 지워질 시각입니다. 타일과 배지는 0 이었습니다 |
@@ -186,17 +186,17 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 - **세 파일을 함께 수집합니다.** `-wal` 파일은 DB 파일보다 늦게 바뀔 수 있고, 사본을 뜨는 몇 분 사이에 70KB 에서 1.5MB 로 커진 예도 있습니다. 최근 알림은 `-wal` 에만 있을 수 있습니다. `wpndatabase.db`, `-wal`, `-shm` 을 함께 뜹니다.
 - **원본을 열지 않습니다.** SQLite 도구로 열면 `-wal` 의 내용이 DB 파일로 옮겨질 수 있습니다. 해시를 기록한 사본으로 작업합니다. [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 를 참고합니다.
 - **행이 적은 것이 정상일 수 있습니다.** 알림은 만료되면 지워집니다. 과거 알림은 섀도 복사본 속 옛 파일에서 찾습니다. [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 참고합니다.
-- **지운 행.** 빈 페이지 (freelist) 가 있을 수 있습니다(한 예에서 202쪽 가운데 5쪽). 지운 행을 되살릴 수 있는지는 검체에서 확인합니다. 찾는 법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
-- **시각 형식이 표마다 다릅니다.** `NotificationHandler` 의 시각은 글자이고 시간대를 모릅니다. FILETIME 칸과 같은 방법으로 풀지 않습니다.
+- **지운 행.** 빈 페이지 (freelist) 가 있을 수 있습니다(한 예에서 202페이지 가운데 5페이지). 지운 행을 되살릴 수 있는지는 실제 데이터로 확인합니다. 찾는 법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
+- **시각 형식이 표마다 다릅니다.** `NotificationHandler` 의 시각은 글자이고 시간대를 모릅니다. FILETIME 열과 같은 방법으로 풀지 않습니다.
 - **`Payload` 는 BLOB 입니다.** 뷰어가 헥스로만 보여 줄 수 있습니다. 글자로 바꿔 읽습니다. 글자가 깨지면 문자 인코딩을 헥스로 확인합니다.
-- **API 이름과 DB 칸을 섞어 쓰지 않습니다.** 이름이 같아도 뜻이 같다는 근거는 없습니다. 보고서에는 DB 칸 이름을 씁니다.
+- **API 이름과 DB 열을 섞어 쓰지 않습니다.** 이름이 같아도 뜻이 같다는 근거는 없습니다. 보고서에는 DB 열 이름을 씁니다.
 - **개인정보가 평문으로 나옵니다.** 메시지 일부, 사이트 주소, 파일 경로가 들어 있을 수 있습니다. 보고서에는 필요한 만큼만 옮깁니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래는 FILETIME 규칙과 변환식[1]으로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다.
+아래는 FILETIME 규칙과 변환식[1]으로 만든 예시입니다. 특정 기기에서 나온 값이 아닙니다.
 
 ```
 ArrivalTime = 133549686000000000
@@ -262,10 +262,10 @@ SELECT "Key", Value FROM Metadata;
 
 ## 실습
 
-Windows 10 1607 이후 공개 검체(NIST CFReDS 등)에서 사용자의 `Notifications` 폴더를 통째로 꺼내 풀어 봅니다.
+Windows 10 1607 이후 공개 데이터 세트(NIST CFReDS 등)에서 사용자의 `Notifications` 폴더를 통째로 꺼내 풀어 봅니다.
 
 1. `wpndatabase.db` 옆에 `-wal`·`-shm` 파일이 있습니까? 각 파일의 크기와 수정 시각은 무엇입니까?
-2. `Notification` 표에 행이 몇 개 있습니까? `Metadata` 의 `CurrentNotificationId` 와 견주면 몇 건이 남지 않았습니까?
+2. `Notification` 표에 행이 몇 개 있습니까? `Metadata` 의 `CurrentNotificationId` 와 비교하면 몇 건이 남지 않았습니까?
 3. 토스트 알림 하나를 골라 `ArrivalTime` 을 UTC 로 풉니다. `ExpiryTime − ArrivalTime` 은 얼마입니까?
 4. 웹 알림이 있습니까? `launch` 속성의 사이트 주소가 브라우저 방문 기록에도 있습니까?
 5. `NotificationHandler` 에서 `HandlerType` 별로 앱 수를 셉니다. 데스크톱 앱 가운데 설치 프로그램 목록에 없는 것이 있습니까?

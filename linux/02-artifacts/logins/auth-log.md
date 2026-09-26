@@ -14,7 +14,7 @@ nav_order: 340
 
 이 파일로 들어오는 주요 기록은 다음과 같습니다.
 
-| 보내는 프로그램 | 분야 | 대표 내용 | 자세한 쪽 |
+| 보내는 프로그램 | 분야 | 대표 내용 | 자세한 페이지 |
 |---|---|---|---|
 | sshd | 기본 `AUTH`, RHEL 은 `AUTHPRIV` 로 바꿈[5][7] | 원격 로그인 성공·실패, 접속 끊김 | [sshd 로그](ssh/sshd-logs.md) |
 | PAM 모듈(pam_unix 등) | `authpriv` 고정[3] | 인증 실패, 세션 열림·닫힘 | [인증 모듈 (PAM)](../../01-foundations/users-auth/pam.md) |
@@ -23,7 +23,7 @@ nav_order: 340
 | su (util-linux) | `auth`[11] | 사용자 전환 성공·실패 | [sudo·su 사용 기록](sudo-su.md) |
 | systemd-logind | `auth`[12] | 로그인 세션 생성·제거 | [SSH](ssh/index.md) |
 
-이 쪽은 파일이 어디에 생기고 줄을 어떻게 읽는지를 다룹니다. 프로그램마다 남기는 문구의 뜻은 위 표의 쪽에서 다룹니다.
+이 페이지는 파일이 어디에 생기고 줄을 어떻게 읽는지를 다룹니다. 프로그램마다 남기는 문구의 뜻은 위 표의 페이지에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -43,7 +43,7 @@ nav_order: 340
 
 Ubuntu 의 adduser 는 자기 기록을 `user` 분야로 보내므로 `/var/log/syslog` 에 남고[13], adduser 가 부른 useradd 의 기록은 `authpriv` 라 auth.log 에 남습니다[10]. 한 번의 계정 생성이 두 파일에 나뉘어 남는 셈입니다.
 
-이 파일은 rsyslog 가 쓰므로 rsyslog 가 없거나 꺼진 시스템에는 생기지 않고, 메시지는 저널에만 남습니다. 검체에서 `/etc/rsyslog.conf` 와 `/etc/rsyslog.d/` 를 먼저 확인하면 규칙을 바꾼 흔적도 함께 볼 수 있습니다. 규칙 문법과 메시지가 rsyslog 로 들어오는 길은 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md) 에서, 순환본 이름과 순서는 [로그 순환 (logrotate)](../../01-foundations/logging/logrotate.md) 에서 다룹니다.
+이 파일은 rsyslog 가 쓰므로 rsyslog 가 없거나 꺼진 시스템에는 생기지 않고, 메시지는 저널에만 남습니다. 분석 대상에서 `/etc/rsyslog.conf` 와 `/etc/rsyslog.d/` 를 먼저 확인하면 규칙을 바꾼 흔적도 함께 볼 수 있습니다. 규칙 문법과 메시지가 rsyslog 로 들어오는 길은 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md) 에서, 순환본 이름과 순서는 [로그 순환 (logrotate)](../../01-foundations/logging/logrotate.md) 에서 다룹니다.
 
 ## 구조
 
@@ -54,7 +54,7 @@ Ubuntu 24.04:  2026-03-12T09:15:02.123456+09:00 web01 sshd[2211]: Accepted publi
 RHEL 9 계열:   Mar 12 09:15:02 web01 sshd[2211]: Accepted publickey for alice from 203.0.113.10 port 50122 ssh2: ED25519 SHA256:(생략)
 ```
 
-Ubuntu 24.04 의 줄은 RFC 3339 시각으로 시작하고, RHEL 은 달 이름으로 시작합니다[1][2][21]. OpenSSH 9.8 부터 인증 기록을 쓰는 세션 프로세스가 `sshd-session` 으로 갈라져서[18], RHEL 계열에서 이 프로그램이 설치된 판(CentOS Stream 9 의 9.9p1 패키지에 들어 있음[7])이면 태그가 `sshd-session` 일 수 있습니다. 검체의 `rpm -q openssh-server` 로 판을 확인합니다.
+Ubuntu 24.04 의 줄은 RFC 3339 시각으로 시작하고, RHEL 은 달 이름으로 시작합니다[1][2][21]. OpenSSH 9.8 부터 인증 기록을 쓰는 세션 프로세스가 `sshd-session` 으로 갈라져서[18], RHEL 계열에서 이 프로그램이 설치된 판(CentOS Stream 9 의 9.9p1 패키지에 들어 있음[7])이면 태그가 `sshd-session` 일 수 있습니다. 분석 대상에서 `rpm -q openssh-server` 로 판을 확인합니다.
 
 ### PAM 줄의 머리
 
@@ -86,7 +86,7 @@ PAM 모듈이 남기는 메시지 앞에는 `모듈(서비스:단계):` 모양�
 
 Ubuntu 24.04 의 줄에는 연도·마이크로초·UTC 오프셋이 있어서 적힌 오프셋을 빼면 UTC 가 됩니다. RHEL 의 옛 서식에는 연도와 시간대가 없고 초까지만 있어서, 기록한 시스템의 현지 시각으로 보고 연도를 추정해야 합니다. 도구마다 연도를 추정하는 방식과 로컬 줄의 시각이 보낸 시각인지 받은 시각인지는 [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md) 의 "시각 해석" 에서 다룹니다. 시간대는 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 에서 확인합니다.
 
-RHEL 은 로컬 메시지를 imjournal 로 저널에서 가져오므로[2], 줄의 시각이 저널 항목의 어느 시각을 따르는지는 검체의 저널 `__REALTIME_TIMESTAMP` 와 같은 메시지를 맞대어 확인합니다. 순환본의 `dateext` 날짜는 파일이 덮는 기간이 아니라 회전한 날입니다([로그 순환 (logrotate)](../../01-foundations/logging/logrotate.md)).
+RHEL 은 로컬 메시지를 imjournal 로 저널에서 가져오므로[2], 줄의 시각이 저널 항목의 어느 시각을 따르는지는 분석 대상의 저널 `__REALTIME_TIMESTAMP` 와 같은 메시지를 맞대어 확인합니다. 순환본의 `dateext` 날짜는 파일이 덮는 기간이 아니라 회전한 날입니다([로그 순환 (logrotate)](../../01-foundations/logging/logrotate.md)).
 
 ## 함정과 한계
 
@@ -148,7 +148,7 @@ dissect.target 은 `/var/log/auth.log*` 와 `/var/log/secure*` 를 모아 `authl
 
 NIST CFReDS 등에 공개된 Linux 디스크 이미지로 다음 질문을 풀어 봅니다.
 
-1. 검체의 rsyslog 설정에서 `auth` 와 `authpriv` 는 각각 어느 파일로 가는가? 기본 설정과 다른 규칙이 `/etc/rsyslog.d/` 에 있는가?
+1. 분석 대상의 rsyslog 설정에서 `auth` 와 `authpriv` 는 각각 어느 파일로 가는가? 기본 설정과 다른 규칙이 `/etc/rsyslog.d/` 에 있는가?
 2. 줄 서식이 RFC 3339 인가, 옛 서식인가? 옛 서식이면 순환본마다 연도를 무엇으로 정했는가?
 3. `session opened for user` 줄의 서비스 이름별 건수는 몇인가? sshd 세션 가운데 `session closed` 짝이 없는 것이 있는가?
 4. 암호 인증 실패가 가장 많은 원격 주소는 어디이고, 그 주소에서 성공한 로그인이 있는가?

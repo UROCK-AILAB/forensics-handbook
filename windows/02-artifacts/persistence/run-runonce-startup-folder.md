@@ -40,7 +40,7 @@ Run 키와 RunOnce 키는 사용자가 로그온할 때 프로그램을 실행�
 | 경로 | 비고 |
 |---|---|
 | `HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnceEx` | Vista 이후에는 기본으로 만들어지지 않습니다 |
-| `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\RunServices` | 실제로 동작하는 Windows 버전은 검체에서 확인합니다 |
+| `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\RunServices` | 실제로 동작하는 Windows 버전은 실제 기기에서 확인합니다 |
 | `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce` | 위와 같습니다 |
 | `HKLM·HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run` | |
 
@@ -78,7 +78,7 @@ Run 키와 RunOnce 키는 사용자가 로그온할 때 프로그램을 실행�
 
 ### 작업 관리자 "시작 앱" 사용 여부 (StartupApproved)
 
-이 키를 설명한 공식 문서가 없어 검체에서 확인해야 합니다. 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다.
+이 키를 설명한 공식 문서는 없습니다. 아래는 모두 Windows 11 PC 한 대에서 본 모습입니다.
 
 - 위치는 `HKLM·HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved` 입니다.
 - 그 아래에 `Run`, `Run32`, `StartupFolder` 하위 키가 있었습니다.
@@ -139,7 +139,7 @@ StartupApproved\Run
 - **실행됐나.** 등록되어 있다는 것만 알려 줍니다. 실행은 [프리페치](../execution/prefetch/index.md), [AmCache](../execution/amcache-hve/index.md), [프로세스 생성](../event-logs/4688.md), [Sysmon 이벤트 1](../event-logs/sysmon/1.md) 로 따로 확인합니다.
 - **언제 등록했나.** 값 하나하나의 시각은 없습니다. 키 단위 시각은 아래 "시각 해석" 을 봅니다.
 - **등록된 적이 없나.** RunOnce 는 실행되면 값이 사라집니다. 그래서 사후 분석 때 값이 없다고 해서 등록된 적이 없다는 뜻은 아닙니다.
-- **누가 등록했나.** 값에는 등록한 프로세스를 적는 칸이 없습니다. 레지스트리를 바꾼 프로세스는 [Sysmon 레지스트리 이벤트](../event-logs/sysmon/12-13-14.md) 가 켜져 있었을 때만 찾을 수 있습니다.
+- **누가 등록했나.** 값에는 등록한 프로세스가 적혀 있지 않습니다. 레지스트리를 바꾼 프로세스는 [Sysmon 레지스트리 이벤트](../event-logs/sysmon/12-13-14.md) 가 켜져 있었을 때만 찾을 수 있습니다.
 - **StartupApproved 플래그의 뜻.** 공식 문서가 없습니다. "사용자가 시작 앱을 껐다" 고 단정하지 않습니다.
 
 보고서에는 "수집 시점에 HKCU Run 키에 이 이름으로 이 명령줄이 등록되어 있다" 처럼 씁니다. 실행을 말하려면 "같은 경로의 실행 기록이 프리페치에 있다" 처럼 근거를 따로 적습니다.
@@ -147,7 +147,7 @@ StartupApproved\Run
 ## 시각 해석
 
 - Run 값에는 값마다 붙은 시각이 없습니다. 키 단위 시각이 무엇이 바뀔 때 바뀌는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 에서 다룹니다.
-- 키 시각은 키 안의 어느 값이 바뀌었는지 말하지 않습니다. 값이 여러 개인 키에서는 그 시각을 특정 값의 등록 시각으로 쓰지 않습니다.
+- 키 시각으로는 키 안의 어느 값이 바뀌었는지 알 수 없습니다. 값이 여러 개인 키에서는 그 시각을 특정 값의 등록 시각으로 쓰지 않습니다.
 - 시작프로그램 폴더의 파일은 파일 시스템 시각으로 언제 놓였는지 짐작합니다. 시각 속성은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
 - StartupApproved 뒤 8바이트의 FILETIME 이 무엇의 시각인지는 공식 문서가 없습니다. 시각 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 시스템은 Run 키 프로그램의 실행을 늦출 수 있습니다. 로그온 시각과 프로그램 실행 시각 사이에 틈이 있어도 이상하지 않습니다.
@@ -166,7 +166,7 @@ StartupApproved\Run
 
 ### 헥스로 한 번
 
-아래 바이트는 값 형식에 맞춰 만든 예시입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+아래 바이트는 값 형식에 맞춰 만든 예시입니다. 특정 기기에서 꺼낸 값이 아닙니다.
 
 **REG_EXPAND_SZ 명령줄의 앞부분 (`%ProgramData%`).**
 
@@ -211,11 +211,11 @@ StartupApproved\Run
 | 로그온 이벤트 | 그 계정이 언제 로그온했나 | [로그온·로그오프](../event-logs/logon-events/index.md) |
 | 서비스·예약 작업 | 같은 파일이 다른 자동실행 자리에도 등록되어 있나 | [서비스·드라이버](services-drivers.md), [예약 작업](scheduled-tasks/index.md) |
 
-탐지할 때는 Run·Startup 키에 새롭거나 이상한 실행 경로·스크립트가 생기는 변경을 보고, 표준이 아닌 폴더에서의 실행이나 이상한 부모-자식 프로세스와 엮어 봅니다[2]. 자동실행 위치 전체를 훑는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
+탐지할 때는 Run·Startup 키에 새롭거나 이상한 실행 경로·스크립트가 생기는 변경을 보고, 표준이 아닌 폴더에서의 실행이나 이상한 부모-자식 프로세스와 엮어 봅니다[2]. 자동실행 위치 전체를 살펴보는 흐름은 [악성코드 지속성(자동실행) 찾기](../../04-scenarios/incident/persistence.md) 에 있습니다.
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 레지스트리 하이브와 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)에서 레지스트리 하이브와 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. HKLM·HKCU 의 Run·RunOnce 키, WOW6432Node 아래 키에 값이 각각 몇 개입니까?
 2. 명령줄이 `%...%` 로 시작하는 값이 있습니까? 펼치면 어느 경로입니까?

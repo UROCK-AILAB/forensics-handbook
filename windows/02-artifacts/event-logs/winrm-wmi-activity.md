@@ -63,16 +63,16 @@ Windows 11 빌드 26200 클라이언트 PC 한 대의 `HKLM\SOFTWARE\Microsoft\W
 - `Plugin` 아래에 Event Forwarding Plugin, Microsoft.PowerShell, Microsoft.PowerShell.Workflow, Microsoft.PowerShell32, WMI Provider 가 있었습니다.
 - Microsoft.PowerShell 플러그인의 ConfigXML 에는 `Filename="%windir%\system32\pwrshplugin.dll"`, PSVersion 5.1 이 있었습니다.
 - 그런데 WinRM 서비스는 수동·중지 상태였습니다. 리스너 키가 있다고 원격 요청을 받고 있었다고 볼 수는 없습니다.
-- `WSMAN\Client` 키에는 값이 없었습니다. TrustedHosts 가 레지스트리 어디에 저장되는지는 검체에서 확인합니다.
+- `WSMAN\Client` 키에는 값이 없었습니다. TrustedHosts 가 레지스트리 어디에 저장되는지는 실제 시스템에서 확인합니다.
 - `C:\Windows\System32` 에 `wsmprovhost.exe`·`winrshost.exe` 가, `C:\Windows\System32\wbem` 에 `WmiPrvSE.exe` 가 있었습니다.
 
 ## 구조
 
 ### WinRM/Operational 이벤트
 
-아래 메시지와 칸은 Windows 11 빌드 26200 의 공급자 메타데이터에 있는 정의입니다. "보이는 쪽" 은 메시지 문구로 가른 해석이므로 실제 원격 실행 기록과 맞춰 봅니다.
+아래 메시지와 필드는 Windows 11 빌드 26200 의 공급자 메타데이터에 있는 정의입니다. "보이는 쪽" 은 메시지 문구로 판단한 해석이므로 실제 원격 실행 기록과 맞춰 봅니다.
 
-| ID | 메시지 | 칸 | 보이는 쪽 |
+| ID | 메시지 | 필드 | 보이는 쪽 |
 |---|---|---|---|
 | 6 | Creating WSMan Session. The connection string is: %1 | connection | 세션을 여는 쪽 |
 | 8 · 31 · 33 | Closing WSMan Session / WSMan Create Session operation completed successfuly / Closing WSMan Session completed successfuly | — | 세션을 여는 쪽 |
@@ -90,7 +90,7 @@ Windows 11 빌드 26200 클라이언트 PC 한 대의 `HKLM\SOFTWARE\Microsoft\W
 | 44 | The WinRM protocol handler started to create a session at the following destination: %1. | destination | WMI 를 WinRM 으로 부를 때로 보임 |
 | 47 | …operation of type %1 to the server. The operation accesses class %3 under the %2 namespace. | — | WMI 를 WinRM 으로 부를 때로 보임 |
 
-이 빌드의 공급자 메타데이터에는 Operational·Analytic·Debug 채널 모두 80·81·82·143·166·168·169 정의가 없습니다. 다른 자료에 나오는 80·143·166 은 검체의 빌드에 정의가 있는지 먼저 봅니다.
+이 빌드의 공급자 메타데이터에는 Operational·Analytic·Debug 채널 모두 80·81·82·143·166·168·169 정의가 없습니다. 다른 자료에 나오는 80·143·166 은 분석 대상 빌드에 정의가 있는지 먼저 봅니다.
 
 ### WMI-Activity/Operational 이벤트
 
@@ -106,7 +106,7 @@ Windows 11 빌드 26200 클라이언트 PC 한 대의 `HKLM\SOFTWARE\Microsoft\W
 
 이 이벤트들의 값은 EventData 가 아니라 UserData 아래에 들어 있었습니다. 5857 은 `UserData\Operation_StartedOperational`, 5858 은 `UserData\Operation_ClientFailure` 요소였고 네임스페이스는 `http://manifests.microsoft.com/win/2006/windows/WMI` 였습니다.
 
-- 5857 의 칸은 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다.
+- 5857 의 필드는 ProviderName, Code, HostProcess, ProcessID, ProviderPath 입니다.
 - 5861 은 영구 이벤트 구독과 관련된 이벤트입니다. [WMI 영구 이벤트 구독](../persistence/wmi-event-subscription.md)에서 다룹니다.
 
 Windows 11 빌드 26200 PC 에 남은 값의 예입니다. 컴퓨터 이름과 사용자는 가렸습니다.
@@ -116,7 +116,7 @@ Windows 11 빌드 26200 PC 에 남은 값의 예입니다. 컴퓨터 이름과 �
 | 5857 | ProviderName CIMWin32, Code 0x0, HostProcess `wmiprvse.exe`, ProviderPath `%systemroot%\system32\wbem\cimwin32.dll`, Security UserID S-1-5-20 (NETWORK SERVICE), Level 0 |
 | 5858 | ClientMachine [컴퓨터 이름], User [컴퓨터 이름]\[사용자], ClientProcessId, Operation `Start IWbemServices::ExecQuery - root\CIMV2 : SELECT * FROM Win32_ComputerSystem`, ResultCode 0x80041032, Security UserID S-1-5-18 |
 
-5858 의 Operation 칸에는 네임스페이스와 WQL 쿼리 원문이 들어 있어서, 실패한 호출만이라도 누가 (User), 어느 컴퓨터에서 (ClientMachine), 어떤 프로세스로 (ClientProcessId), 무엇을 물었는지 볼 수 있습니다. 5858 이 실패한 작업만 남기는지, 원격 호출일 때 ClientMachine 에 출발 PC 이름이 들어가는지는 아래 실습 5번처럼 재현해 확인합니다.
+5858 의 Operation 필드에는 네임스페이스와 WQL 쿼리 원문이 들어 있어서, 실패한 호출만이라도 누가 (User), 어느 컴퓨터에서 (ClientMachine), 어떤 프로세스로 (ClientProcessId), 무엇을 물었는지 볼 수 있습니다. 5858 이 실패한 작업만 남기는지, 원격 호출일 때 ClientMachine 에 출발 PC 이름이 들어가는지는 아래 실습 5번처럼 재현해 확인합니다.
 
 ## 증거로서 의미
 
@@ -145,8 +145,8 @@ Windows 11 빌드 26200 PC 에 남은 값의 예입니다. 컴퓨터 이름과 �
 ## 함정과 한계
 
 1. **WinRM 로그의 기록을 모두 원격 실행으로 읽습니다.** 254 (Activity Transfer)·161·142·145 가 각각 약 496건씩 쌓인 PC 가 있습니다. 모두 SYSTEM 권한 프로세스 하나가 로컬 리스너 설정 (`http://schemas.microsoft.com/wbem/wsman/1/config/listener`) 을 되풀이해 조회하다 실패한 기록으로, 원격 실행과 상관없는 잡음입니다.
-2. **보이는 쪽을 단정합니다.** 위 표의 "보이는 쪽" 은 메시지 문구로 가른 해석입니다. 실제 기록으로 확인한 뒤 보고서에 씁니다.
-3. **다른 자료의 이벤트 ID 를 그대로 찾습니다.** Windows 11 빌드 26200 에는 80·143·166 정의가 없습니다. 검체의 Windows 버전에서 공급자 메타데이터를 확인합니다.
+2. **보이는 쪽을 단정합니다.** 위 표의 "보이는 쪽" 은 메시지 문구로 판단한 해석입니다. 실제 기록으로 확인한 뒤 보고서에 씁니다.
+3. **다른 자료의 이벤트 ID 를 그대로 찾습니다.** Windows 11 빌드 26200 에는 80·143·166 정의가 없습니다. 분석 대상의 Windows 버전에서 공급자 메타데이터를 확인합니다.
 4. **오류 문장을 영어로 찾습니다.** 161 의 authFailureMessage 에는 한국어 오류 문장이 그대로 저장돼 있었습니다.
 5. **오류 코드의 진법을 섞습니다.** 142 의 errorCode 는 10진수 (2150858770) 로 들어 있었습니다. 5858 의 ResultCode 는 16진 (0x80041032) 이었습니다. 같은 진법으로 바꾼 뒤 비교합니다.
 6. **WMI 값을 EventData 에서 찾습니다.** WMI-Activity 이벤트는 UserData 아래에 있습니다. EventData 만 읽는 도구는 빈 값을 보여 줄 수 있습니다.
@@ -173,15 +173,15 @@ Windows 11 빌드 26200 PC 에 남은 값의 예입니다. 컴퓨터 이름과 �
 1. 2150858770 을 16진으로 바꾸면 0x80338012 입니다.
 2. 리틀 엔디언 4바이트로 적으면 위와 같습니다.
 3. 맨 앞자리가 8 이므로 부호 있는 32비트로 읽으면 음수가 됩니다. 도구에 따라 음수로 보일 수 있습니다.
-4. 5858 의 ResultCode 처럼 `0x8…` 꼴로 맞춘 뒤 비교합니다.
+4. 5858 의 ResultCode 처럼 `0x8…` 형식으로 맞춘 뒤 비교합니다.
 
-밀려난 레코드를 파일 안에서 찾을 때는 칸 값의 글자를 UTF-16LE 로 바꿔 검색합니다. 아래는 `ExecQuery` 를 UTF-16LE 로 적은 예시입니다.
+밀려난 레코드를 파일 안에서 찾을 때는 필드 값의 글자를 UTF-16LE 로 바꿔 검색합니다. 아래는 `ExecQuery` 를 UTF-16LE 로 적은 예시입니다.
 
 ```
 45 00 78 00 65 00 63 00 51 00 75 00 65 00 72 00 79 00
 ```
 
-> 그림 자리: 5858 레코드의 UserData\Operation_ClientFailure 아래 칸들과 Operation 칸의 UTF-16LE 바이트를 나란히 놓은 그림
+> 그림 자리: 5858 레코드의 UserData\Operation_ClientFailure 아래 필드들과 Operation 필드의 UTF-16LE 바이트를 나란히 놓은 그림
 
 ### 공개 도구로 한 번
 
@@ -232,11 +232,11 @@ reg unload HKLM\CASE_SW
 5. 원격 WMI 로 성공하는 조회와 실패하는 조회를 한 번씩 합니다. 5858 이 실패한 것만 남는지, ClientMachine 에 어느 컴퓨터 이름이 들어가는지 봅니다.
 6. WMI-Activity/Trace 채널을 켜고 5번을 되풀이합니다. Trace 의 Event 1·2·3 을 봅니다.
 
-**NIST CFReDS 같은 공개 검체**에서는 다음을 풀어 봅니다.
+**NIST CFReDS 같은 공개 데이터 세트**에서는 다음을 풀어 봅니다.
 
 1. WinRM/Operational 에 91·193 이 있습니까? 있다면 요청 사용자와 가상 계정은 무엇입니까?
 2. 142·161 은 원격 실행과 관련 있습니까, 아니면 로컬 설정 조회의 잡음입니까? resourceUri 로 가릅니다.
-3. WMI-Activity 의 5858 에서 Operation 칸의 쿼리 원문을 모두 뽑습니다. 어떤 클래스를 물었습니까?
+3. WMI-Activity 의 5858 에서 Operation 필드의 쿼리 원문을 모두 뽑습니다. 어떤 클래스를 물었습니까?
 4. 두 로그가 덮는 기간은 각각 언제부터 언제까지입니까?
 
 ## 참고 문헌

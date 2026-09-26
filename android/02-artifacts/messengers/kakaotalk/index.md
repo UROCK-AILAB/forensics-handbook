@@ -8,21 +8,21 @@ has_toc: false
 
 # 카카오톡 (KakaoTalk)
 
-카카오톡은 대화와 친구 목록을 앱 내부 저장소의 SQLite 데이터베이스 두 개에 남기고, 그 안에서 본문·첨부 정보·친구 이름 같은 일부 칸만 따로 암호화해 둡니다.
+카카오톡은 대화와 친구 목록을 앱 내부 저장소의 SQLite 데이터베이스 두 개에 남기고, 그 안에서 본문·첨부 정보·친구 이름 같은 일부 열만 따로 암호화해 둡니다.
 
 ## 왜 중요한가
 
-대화 기록, 대화방, 친구 목록이 앱 폴더 안의 DB 에 모여 있어서 누구와 언제 연락했는지 재구성할 때 중심이 되는 자료입니다. 다만 DB 파일은 보통 SQLite 로 열리지만 메시지 본문 같은 칸에는 암호문이 들어 있어 그대로는 읽을 수 없고, 이 칸을 풀어 주는 공개 도구도 앱이 새 암호화 방식을 쓰면 통하지 않을 수 있습니다. 그래서 파일을 찾는 단계부터 해석하는 단계까지 앱 버전과 도구의 한계를 함께 적어 두어야 합니다.
+대화 기록, 대화방, 친구 목록이 앱 폴더 안의 DB 에 모여 있어서 누구와 언제 연락했는지 재구성할 때 중심이 되는 자료입니다. 다만 DB 파일은 보통 SQLite 로 열리지만 메시지 본문 같은 열에는 암호문이 들어 있어 그대로는 읽을 수 없고, 이 열을 풀어 주는 공개 도구도 앱이 새 암호화 방식을 쓰면 통하지 않을 수 있습니다. 그래서 파일을 찾는 단계부터 해석하는 단계까지 앱 버전과 도구의 한계를 함께 적어 두어야 합니다.
 
 Android 앱 패키지 이름은 `com.kakao.talk` 입니다. 앱 폴더가 어디에 있고 어떤 권한으로 읽을 수 있는지는 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md)와 [앱 샌드박스와 권한](../../../01-foundations/security-model/sandbox-permissions.md)에서 다룹니다.
 
-폴더 목록은 카카오톡 10.1.7, Android 11 에뮬레이터 기준이라[6] 요즘 버전과는 다를 수 있습니다. Android 버전이나 제조사(삼성 One UI)에 따른 차이는 공개 자료가 없어 검체에서 확인합니다.
+폴더 목록은 카카오톡 10.1.7, Android 11 에뮬레이터 기준이라[6] 요즘 버전과는 다를 수 있습니다. Android 버전이나 제조사(삼성 One UI)에 따른 차이는 실제 기기에서 확인해야 합니다.
 
 ## 한눈에 보기
 
 | 위치 | Android 버전 | 알려 주는 것 |
 |---|---|---|
-| `/data/user/0/com.kakao.talk/databases/KakaoTalk.db` | 카카오톡 10.1.7, Android 11 에뮬레이터 기준. 다른 버전은 검체에서 확인 | 대화 기록(`chat_logs`)과 대화방(`chat_rooms`) |
+| `/data/user/0/com.kakao.talk/databases/KakaoTalk.db` | 카카오톡 10.1.7, Android 11 에뮬레이터 기준. 다른 버전은 실제 기기에서 확인 | 대화 기록(`chat_logs`)과 대화방(`chat_rooms`) |
 | `/data/user/0/com.kakao.talk/databases/KakaoTalk2.db` | 위와 같음 | 친구 목록(`friends`), 차단한 친구, 채널 기록 |
 | `/data/user/0/com.kakao.talk/shared_prefs/`, `files/datastore/` | 위와 같음 | 로그인한 뒤 생기거나 바뀌는 계정·프로필 설정 파일 |
 | `/storage/emulated/0/Android/data/com.kakao.talk/cache` | 위와 같음 | 외부 캐시. 받은 파일 원본이 남는지는 공개 자료 없음 |
@@ -34,9 +34,9 @@ Android 앱 패키지 이름은 `com.kakao.talk` 입니다. 앱 폴더가 어디
 ## 읽는 순서
 
 1. [저장 위치와 파일 (Paths·Files)](paths-files.md) — 앱 폴더 아래 DB·설정 파일·캐시가 어디에 있고, 로그인 전과 뒤에 무엇이 새로 생기는지 정리합니다.
-2. [대화 DB 구조와 암호화 (KakaoTalk.db)](chat-db.md) — `chat_logs`·`chat_rooms` 표의 칸과 암호화된 칸, 시각 칸을 읽을 때 주의할 점을 다룹니다.
-3. [받은 파일 (Received Files)](received-files.md) — 첨부 정보가 들어가는 칸과, 받은 파일 원본의 위치처럼 공개 자료가 없는 부분을 나눠 적습니다.
-4. [계정과 친구 목록 (Account·Friends)](account-friends.md) — `KakaoTalk2.db` 의 친구 표와, 암호화된 칸을 풀 때 필요한 기기 주인의 사용자 ID 를 어디서 찾는지 설명합니다.
+2. [대화 DB 구조와 암호화 (KakaoTalk.db)](chat-db.md) — `chat_logs`·`chat_rooms` 표의 열과 암호화된 열, 시각 열을 읽을 때 주의할 점을 다룹니다.
+3. [받은 파일 (Received Files)](received-files.md) — 첨부 정보가 들어가는 열과, 받은 파일 원본의 위치처럼 공개 자료가 없는 부분을 나눠 적습니다.
+4. [계정과 친구 목록 (Account·Friends)](account-friends.md) — `KakaoTalk2.db` 의 친구 표와, 암호화된 열을 풀 때 필요한 기기 주인의 사용자 ID 를 어디서 찾는지 설명합니다.
 
 ## 함께 볼 페이지
 

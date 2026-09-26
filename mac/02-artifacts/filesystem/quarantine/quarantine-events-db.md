@@ -13,7 +13,7 @@ nav_order: 990
 
 파일이 격리될 때 파일 쪽에는 [격리 확장 속성 (com.apple.quarantine)](quarantine-xattr.md)이 붙고, 같은 이벤트가 이 DB의 `LSQuarantineEvent` 표에 한 행으로 남습니다 [1][2]. 확장 속성에는 앱 이름과 시각까지만 들어 있고, 파일을 어느 URL에서 받았는지와 어떤 이유로 격리했는지는 이 DB에서 확인합니다.
 
-파일 이름에 Launch Services가 들어 있고, 칸 이름도 Launch Services 공개 API의 격리 속성 키와 짝이 맞습니다 [3]. 칸의 뜻은 이 공개 API 설명을 기준으로 읽습니다.
+파일 이름에 Launch Services가 들어 있고, 열 이름도 Launch Services 공개 API의 격리 속성 키와 짝이 맞습니다 [3]. 열의 뜻은 이 공개 API 설명을 기준으로 읽습니다.
 
 ## 위치와 버전별 차이
 
@@ -23,15 +23,15 @@ nav_order: 990
 
 사용자 홈 폴더마다 하나씩 있는 확장자 없는 SQLite 파일이고, 기록은 `LSQuarantineEvent` 표에 있습니다 [1][2]. 계정마다 따로 있으니 이미지에 있는 사용자 홈 폴더를 모두 확인합니다.
 
-옛 이름 `QuarantineEvents`(V1) 파일이 언제까지 쓰였는지, macOS 10.15 Catalina 이후 버전마다 칸이 달라지는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 아래 칸 목록은 mac_apt 격리 플러그인이 읽는 칸 기준입니다 [2].
+옛 이름 `QuarantineEvents`(V1) 파일이 언제까지 쓰였는지, macOS 10.15 Catalina 이후 버전마다 열이 달라지는지는 실제 데이터로 확인해야 합니다. 아래 열 목록은 mac_apt 격리 플러그인이 읽는 열 기준입니다 [2].
 
 ## 구조
 
-`LSQuarantineEvent` 표의 칸입니다. "공개 API 키" 가 빈 칸은 공개 문서에 짝이 되는 키가 없는 칸입니다 [3]. "mac_apt 출력" 은 공개 도구 결과를 읽을 때 쓰는 이름이고, mac_apt는 여기에 `User`·`Source` 칸을 더해 출력합니다 [2].
+`LSQuarantineEvent` 표의 열입니다. "공개 API 키" 가 빈 칸은 공개 문서에 짝이 되는 키가 없는 열입니다 [3]. "mac_apt 출력" 은 공개 도구 결과를 읽을 때 쓰는 이름이고, mac_apt는 여기에 `User`·`Source` 열을 더해 출력합니다 [2].
 
-| 칸 | 공개 API 키 | 뜻 | mac_apt 출력 |
+| 열 | 공개 API 키 | 뜻 | mac_apt 출력 |
 |---|---|---|---|
-| `LSQuarantineEventIdentifier` | | 이벤트 UUID, 확장 속성 4칸과 같은 값 [1] | EventID |
+| `LSQuarantineEventIdentifier` | | 이벤트 UUID, 확장 속성 4번 필드와 같은 값 [1] | EventID |
 | `LSQuarantineTimeStamp` | | 격리 시각, 맥 절대 시각 [2] | TimeStamp |
 | `LSQuarantineAgentBundleIdentifier` | `kLSQuarantineAgentBundleIdentifierKey` | 파일을 받은 앱의 번들 ID | AgentBundleID |
 | `LSQuarantineAgentName` | `kLSQuarantineAgentNameKey` | 파일을 받은 앱 이름 | AgentName |
@@ -58,9 +58,9 @@ nav_order: 990
 | `kLSQuarantineTypeCalendarEventAttachment` | 캘린더 이벤트 첨부 |
 | `kLSQuarantineTypeOtherAttachment` | 그 밖의 첨부 |
 
-DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 …)와 위 상수의 대응은 공개 문서에 없습니다. 숫자만 보고 격리 이유를 적지 않고, 같은 검체 안에서 URL·받은 앱과 함께 보며 판단합니다.
+DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 …)와 위 상수의 대응은 공개 문서에 없습니다. 숫자만 보고 격리 이유를 적지 않고, 같은 분석 대상 안에서 URL·받은 앱과 함께 보며 판단합니다.
 
-`LSQuarantineSenderName`·`LSQuarantineSenderAddress` 는 이름으로 보아 메일·메시지 첨부를 보낸 사람을 적는 칸으로 보이지만, 어떤 조건에서 채워지는지는 공개 자료가 없어 검체로 확인해야 합니다.
+`LSQuarantineSenderName`·`LSQuarantineSenderAddress` 는 이름으로 짐작하면 메일·메시지 첨부를 보낸 사람을 적는 열이지만, 어떤 조건에서 채워지는지는 실제 데이터로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -72,7 +72,7 @@ DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 
 
 ## 시각 해석
 
-`LSQuarantineTimeStamp` 는 2001-01-01 00:00:00 UTC를 기준으로 센 초, 곧 맥 절대 시각이고, mac_apt는 이 값을 ReadMacAbsoluteTime으로 바꿔 보여 줍니다 [2]. 파일의 격리 속성 시각은 1970-01-01 기준 유닉스 시각이라서 [1] 두 값을 날것 그대로 견주면 안 되고, 한쪽 기준으로 바꾼 뒤 비교합니다. 두 기준의 차이와 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
+`LSQuarantineTimeStamp` 는 2001-01-01 00:00:00 UTC를 기준으로 센 초, 곧 맥 절대 시각이고, mac_apt는 이 값을 ReadMacAbsoluteTime으로 바꿔 보여 줍니다 [2]. 파일의 격리 속성 시각은 1970-01-01 기준 유닉스 시각이라서 [1] 두 값을 날것 그대로 비교하면 안 되고, 한쪽 기준으로 바꾼 뒤 맞춰 봅니다. 두 기준의 차이와 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
 
 명세로 만든 예시로 보면, 맥 절대 시각 725760000은 2024-01-01 00:00:00 UTC이고, 격리 속성 쪽에서 같은 순간은 [격리 확장 속성](quarantine-xattr.md)의 풀이 예와 같습니다. 두 값 모두 UTC 기준이라 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)을 보고 따로 바꿉니다.
 
@@ -80,7 +80,7 @@ DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 
 
 - **격리 이유 숫자.** `LSQuarantineTypeNumber` 와 공개 상수의 대응표는 공개돼 있지 않습니다. 도구가 숫자를 글자로 바꿔 보여 주면 도구가 어떤 표를 썼는지 확인합니다.
 - **사용자마다 따로.** DB가 홈 폴더마다 있어서 한 계정만 보면 다른 계정에서 받은 기록을 놓칩니다.
-- **지운 기록.** 행 삭제와 파일 삭제가 어떻게 이어지는지는 공개 자료가 없어 검체에서 확인합니다. 지운 행을 찾으려면 SQLite 파일의 빈 공간을 살펴야 하고, 그 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+- **지운 기록.** 행 삭제와 파일 삭제가 어떻게 이어지는지는 실제 데이터로 확인해야 합니다. 지운 행을 찾으려면 SQLite 파일의 빈 공간을 살펴야 하고, 그 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 - **UUID 없이 찾기.** 파일의 격리 속성이 없어졌다면 `LSQuarantineDataURLString` 의 파일 이름과 시각으로 행을 찾을 수 있지만, 같은 이름의 파일을 여러 번 받았을 수 있어서 한 행으로 단정하지 않습니다.
 
 ## 직접 분석해 보기
@@ -105,7 +105,7 @@ FROM LSQuarantineEvent
 ORDER BY LSQuarantineTimeStamp;
 ```
 
-파일 하나의 출처를 찾을 때는 그 파일 격리 속성의 4칸 UUID를 `WHERE LSQuarantineEventIdentifier = '<UUID>'` 로 넣습니다.
+파일 하나의 출처를 찾을 때는 그 파일 격리 속성의 4번 필드 UUID를 `WHERE LSQuarantineEventIdentifier = '<UUID>'` 로 넣습니다.
 
 ### 공개 도구로 한 번
 
@@ -123,7 +123,7 @@ mac_apt의 격리 플러그인(quarantine)은 이 DB를 읽고, 시각을 바꿔
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 자료(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. 이미지에 있는 사용자마다 이 DB가 있는지 확인하고, 사용자별 행 수를 세어 보세요.
 2. 위 SQL로 가장 최근 다운로드 다섯 건을 뽑고, 받은 앱·받은 파일 URL·원래 페이지 URL을 적어 보세요.

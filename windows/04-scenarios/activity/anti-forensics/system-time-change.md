@@ -9,7 +9,7 @@ nav_order: 3920
 
 > 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
 
-시스템 시각을 바꾸면 이벤트 로그 항목과 파일의 타임스탬프가 틀어질 수 있습니다[2]. Windows 는 시스템 시각이 바뀔 때마다 보안 로그에 4616 을 남깁니다[1]. 이 페이지는 4616 으로 누가 어떤 프로세스로 시각을 바꿨는지 가리고, 틀어진 구간을 표시하는 순서를 다룹니다. 4616 이벤트 자체는 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md) 에서, 시각 값 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+시스템 시각을 바꾸면 이벤트 로그 항목과 파일의 타임스탬프가 틀어질 수 있습니다[2]. Windows 는 시스템 시각이 바뀔 때마다 보안 로그에 4616 을 남깁니다[1]. 이 페이지는 4616 으로 누가 어떤 프로세스로 시각을 바꿨는지 가려내고, 틀어진 구간을 표시하는 순서를 다룹니다. 4616 이벤트 자체는 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md) 에서, 시각 값 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 조사 질문
 
@@ -20,7 +20,7 @@ nav_order: 3920
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
 | Windows 버전 | 4616 은 Windows Vista·Windows Server 2008 부터 있습니다[1]. 이벤트 버전 0 은 Vista·Server 2008 입니다[1]. 버전 1 은 Windows 7·Server 2008 R2 이고, "Process Information" 절이 더해졌습니다[1]. |
 | 시간대 | 시각을 바꾸는 일과 시간대를 바꾸는 일은 다릅니다. 권한도 따로 있습니다[2]. 시간대 값은 [시간대 설정](../../../02-artifacts/system-account/time-zone.md) 에서 먼저 읽습니다. |
@@ -41,9 +41,9 @@ nav_order: 3920
 
 ## 4616 에서 읽을 것
 
-제목은 "4616(S) The system time was changed." 이고 시스템 시각이 바뀔 때마다 생깁니다[1]. 하위 범주는 Audit Security State Change 이지만 이 하위 범주의 설정과 상관없이 항상 기록되며[1], 공급자는 Microsoft-Windows-Security-Auditing, 채널은 Security 입니다[1]. 조사에 쓰는 칸은 아래와 같습니다[1].
+제목은 "4616(S) The system time was changed." 이고 시스템 시각이 바뀔 때마다 생깁니다[1]. 하위 범주는 Audit Security State Change 이지만 이 하위 범주의 설정과 상관없이 항상 기록되며[1], 공급자는 Microsoft-Windows-Security-Auditing, 채널은 Security 입니다[1]. 조사에 쓰는 필드는 아래와 같습니다[1].
 
-| 칸 | 뜻 | 이어 볼 곳 |
+| 필드 | 뜻 | 이어 볼 곳 |
 |---|---|---|
 | SubjectUserSid·SubjectUserName·SubjectDomainName | "시스템 시각 바꾸기" 를 요청한 계정 | |
 | SubjectLogonId | 그 계정의 로그온 ID | 같은 로그온 ID 의 4624 |
@@ -93,7 +93,7 @@ Subject 의 Security ID 가 LOCAL SERVICE 인 4616 은 보통 보이는 정상 �
 1. 시간대 설정을 먼저 읽습니다. 시간대 변경과 시각 변경을 섞지 않습니다.
 2. 보안 로그에서 4616 을 모두 뽑습니다.
 3. Subject 가 LOCAL SERVICE 이고 ProcessName 이 `C:\Windows\System32\svchost.exe` 인 이벤트를 따로 묶습니다. 보통 보이는 자동 보정입니다[1].
-4. 나머지 4616 마다 PreviousTime 과 NewTime 의 차이를 셉니다.
+4. 나머지 4616 마다 PreviousTime 과 NewTime 의 차이를 계산합니다.
 5. SubjectLogonId 로 4624 를 찾아 어느 세션에서 바꿨는지 봅니다. ProcessId 로 4688 을 찾아 그 프로세스를 만든 기록을 봅니다[1].
 6. 시각을 옮긴 4616 뒤에 시각을 되돌린 4616 이 있는지 봅니다. 두 이벤트 사이가 시각이 틀어진 구간입니다.
 7. 도메인 PC 이면 사람이 바꾼 4616 뒤에 LOCAL SERVICE 의 4616 이 이어지는지 봅니다. 도메인 PC 는 도메인 컨트롤러와 자동으로 시각을 맞춥니다[2].
@@ -113,7 +113,7 @@ Subject 의 Security ID 가 LOCAL SERVICE 인 4616 은 보통 보이는 정상 �
 ## 보고서 문장 예
 
 - 쓰지 않을 문장: "피조사자는 알리바이를 만들려고 PC 시각을 조작했습니다."
-- 쓸 문장: "보안 로그에 4616(시스템 시각 변경) 이벤트가 있습니다. 이 이벤트의 PreviousTime 은 ○○(UTC), NewTime 은 ○○(UTC) 로 약 ○시간 차이입니다. Subject 칸은 ○○\○○ 계정이고, ProcessName 은 ○○ 입니다. 이 기록은 이 계정의 세션에서 이 프로세스가 시스템 시각을 바꿨음을 보여 줍니다. ○○ 부터 ○○ 사이에 생긴 파일과 로그의 시각은 이 차이만큼 틀어졌을 수 있습니다. 시각을 바꾼 까닭은 이 기록만으로 알 수 없습니다."
+- 쓸 문장: "보안 로그에 4616(시스템 시각 변경) 이벤트가 있습니다. 이 이벤트의 PreviousTime 은 ○○(UTC), NewTime 은 ○○(UTC) 로 약 ○시간 차이입니다. Subject 필드는 ○○\○○ 계정이고, ProcessName 은 ○○ 입니다. 이 기록은 이 계정의 세션에서 이 프로세스가 시스템 시각을 바꿨음을 보여 줍니다. ○○ 부터 ○○ 사이에 생긴 파일과 로그의 시각은 이 차이만큼 틀어졌을 수 있습니다. 시각을 바꾼 이유는 이 기록만으로 알 수 없습니다."
 
 ## 함께 볼 페이지
 

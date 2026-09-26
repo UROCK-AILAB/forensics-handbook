@@ -34,11 +34,11 @@ bash 가 어떤 파일을 읽는지는 셸이 어떻게 떴는지에 따라 다�
 | 사용자 대화형 파일 (skel) | `~/.bashrc`: 대화형이 아니면 바로 끝남, `~/.bash_aliases` 와 bash-completion 을 불러옴[3] | `~/.bashrc`: `/etc/bashrc` 를 불러오고 `~/.local/bin:~/bin` 을 `PATH` 앞에 붙이며 `~/.bashrc.d/` 안의 파일을 전부 불러옴[5] |
 | 파일을 설치하는 패키지 | `/etc/profile` 은 base-files[4], `/etc/bash.bashrc` 와 skel 파일은 bash[3] | `/etc/profile`·`/etc/bashrc` 는 setup[6], skel 파일은 bash[5] |
 
-두 배포판 모두 `/etc/profile.d/*.sh` 를 불러오므로[4][6] 이 폴더에 파일 하나를 두면 로그인하는 모든 사용자에게 걸립니다. RHEL 은 로그인이 아닌 셸에서도 `/etc/bashrc` 가 이 폴더를 다시 읽습니다[6]. 명령 기록 관련 기본값(`HISTSIZE`, `HISTCONTROL`, `histappend`)은 [bash 기록](../execution/shell-history/bash.md) 쪽을 봅니다.
+두 배포판 모두 `/etc/profile.d/*.sh` 를 불러오므로[4][6] 이 폴더에 파일 하나를 두면 로그인하는 모든 사용자에게 걸립니다. RHEL 은 로그인이 아닌 셸에서도 `/etc/bashrc` 가 이 폴더를 다시 읽습니다[6]. 명령 기록 관련 기본값(`HISTSIZE`, `HISTCONTROL`, `histappend`)은 [bash 기록](../execution/shell-history/bash.md) 페이지를 봅니다.
 
-다른 셸도 저마다 시작 파일이 있습니다. zsh 는 사용자 `~/.zlogin`, `~/.zprofile`, `~/.zshenv`, `~/.zshrc` 와 시스템 `/etc/zshenv`, `/etc/zprofile`, `/etc/zshrc`, `/etc/zlogin` 을 씁니다[7]. UAC 는 ash, dash, fish, ksh, mksh, tcsh 등 셸마다 수집 정의를 따로 두고 있으므로[7], 계정의 로그인 셸(`/etc/passwd` 마지막 칸)을 먼저 보고 그 셸의 파일을 찾으면 됩니다.
+다른 셸도 저마다 시작 파일이 있습니다. zsh 는 사용자 `~/.zlogin`, `~/.zprofile`, `~/.zshenv`, `~/.zshrc` 와 시스템 `/etc/zshenv`, `/etc/zprofile`, `/etc/zshrc`, `/etc/zlogin` 을 씁니다[7]. UAC 는 ash, dash, fish, ksh, mksh, tcsh 등 셸마다 수집 정의를 따로 두고 있으므로[7], 계정의 로그인 셸(`/etc/passwd` 마지막 필드)을 먼저 보고 그 셸의 파일을 찾으면 됩니다.
 
-셸과 상관없이 로그인 환경 변수를 넣는 길도 있습니다. PAM 의 `pam_env` 모듈은 `/etc/security/pam_env.conf` 와 `/etc/security/pam_env.conf.d/*.conf`, `/etc/environment` 와 `/etc/environment.d/*` 를 읽고, `user_readenv=1` 이면 `$HOME/.pam_environment` 도 읽습니다[9]. `user_readenv` 는 기본으로 꺼져 있고, 1.5.0 부터 앞으로 없앨 기능으로 분류돼 있습니다[9]. PAM 설정 자체를 바꾼 흔적은 [PAM 모듈 변조](pam-backdoor.md) 쪽에서 다룹니다.
+셸과 상관없이 로그인 환경 변수를 넣는 길도 있습니다. PAM 의 `pam_env` 모듈은 `/etc/security/pam_env.conf` 와 `/etc/security/pam_env.conf.d/*.conf`, `/etc/environment` 와 `/etc/environment.d/*` 를 읽고, `user_readenv=1` 이면 `$HOME/.pam_environment` 도 읽습니다[9]. `user_readenv` 는 기본으로 꺼져 있고, 1.5.0 부터 앞으로 없앨 기능으로 분류돼 있습니다[9]. PAM 설정 자체를 바꾼 흔적은 [PAM 모듈 변조](pam-backdoor.md) 에서 다룹니다.
 
 ## 구조
 
@@ -62,16 +62,16 @@ bash 가 어떤 파일을 읽는지는 셸이 어떻게 떴는지에 따라 다�
 
 ## 시각 해석
 
-파일 시스템의 시각은 1970-01-01 00:00:00 UTC 를 기준으로 센 값이라 시간대가 없고[14], 도구가 현지 시각으로 바꿔 보여 줄 뿐입니다([시각 값](../../01-foundations/value-decoding/time-values.md)). mtime 은 마지막으로 내용을 바꾼 때, ctime 은 내용을 쓰거나 소유자·권한 같은 아이노드 정보를 마지막으로 바꾼 때입니다[14]. 대화형 셸이 뜰 때마다 파일을 읽으므로 atime 은 자주 바뀔 수 있고, 얼마나 자주 갱신하는지는 검체의 마운트 옵션에 따라 다르므로 `/etc/fstab` 과 [마운트 기록](../devices/mounts.md)으로 먼저 확인합니다. ext4 생성 시각 (crtime) 은 [ext4](../../01-foundations/filesystem/ext4/index.md) 쪽을 봅니다.
+파일 시스템의 시각은 1970-01-01 00:00:00 UTC 를 기준으로 센 값이라 시간대가 없고[14], 도구가 현지 시각으로 바꿔 보여 줄 뿐입니다([시각 값](../../01-foundations/value-decoding/time-values.md)). mtime 은 마지막으로 내용을 바꾼 때, ctime 은 내용을 쓰거나 소유자·권한 같은 아이노드 정보를 마지막으로 바꾼 때입니다[14]. 대화형 셸이 뜰 때마다 파일을 읽으므로 atime 은 자주 바뀔 수 있고, 얼마나 자주 갱신하는지는 분석 대상 시스템의 마운트 옵션에 따라 다르므로 `/etc/fstab` 과 [마운트 기록](../devices/mounts.md)으로 먼저 확인합니다. ext4 생성 시각 (crtime) 은 [ext4](../../01-foundations/filesystem/ext4/index.md) 페이지를 봅니다.
 
-mtime 은 사용자가 되돌릴 수 있지만 그렇게 아이노드 정보를 바꾸면 ctime 이 함께 바뀌므로[14], mtime 이 오래됐는데 ctime 만 최근이면 시각을 손봤을 가능성이 있습니다. 시각 조작을 가려내는 흐름은 [시각을 조작했나](../../04-scenarios/insider/time-manipulation.md) 쪽을 봅니다.
+mtime 은 사용자가 되돌릴 수 있지만 그렇게 아이노드 정보를 바꾸면 ctime 이 함께 바뀌므로[14], mtime 이 오래됐는데 ctime 만 최근이면 시각을 손봤을 가능성이 있습니다. 시각 조작을 가려내는 흐름은 [시각을 조작했나](../../04-scenarios/insider/time-manipulation.md) 페이지를 봅니다.
 
 ## 함정과 한계
 
 - **처음 하나만 읽는다.** `~/.bash_profile` 이 있으면 bash 로그인 셸은 `~/.profile` 을 읽지 않습니다[1]. Ubuntu 기본은 `~/.profile` 만 있으므로[3], 누군가 `~/.bash_profile` 을 새로 만들면 읽는 흐름 자체가 바뀝니다. 반대로 `~/.profile` 의 내용만 보고 "이 설정이 적용됐다" 고 쓰면 틀릴 수 있습니다.
 - **수집 목록에서 빠지는 파일.** UAC 의 bash 정의는 `~/.bashrc`, `~/.profile`, `~/.bash_login`, `~/.bash_profile`, `~/.bash_aliases`, `~/.bash_logout`, `~/.inputrc`, `/etc/bash.bashrc` 를 모으고, 공통 정의는 `/etc/.login`, `/etc/profile`, `/etc/shells`, `/etc/profile.d/*` 를 모읍니다[7]. RHEL `/etc/bashrc` 는 `/etc` 전체 수집으로만 잡히고[8], `~/.bashrc.d/` 는 어느 목록에도 없습니다. RHEL 은 이 폴더 안 파일을 전부 불러오므로[5] 따로 모아야 합니다.
 - **`PATH` 앞자리.** 두 배포판 모두 사용자 홈의 `bin` 폴더를 `PATH` 앞에 붙이므로[3][5], 그 폴더에 시스템 명령과 이름이 같은 파일이 있으면 그 파일이 먼저 실행됩니다. 시작 파일에 변화가 없어도 이 폴더는 따로 봐야 합니다.
-- **명령 기록 설정.** 시작 파일에서 `HISTFILE` 이나 `HISTSIZE` 를 바꾸면 명령 기록 자체가 달라집니다. 수집 도구가 설정 파일에서 `HISTFILE=` 줄을 찾아 경로를 따라가는 것도 그래서입니다[7]. 영향은 [셸 명령 기록](../execution/shell-history/index.md) 쪽을 봅니다.
+- **명령 기록 설정.** 시작 파일에서 `HISTFILE` 이나 `HISTSIZE` 를 바꾸면 명령 기록 자체가 달라집니다. 수집 도구가 설정 파일에서 `HISTFILE=` 줄을 찾아 경로를 따라가는 것도 그래서입니다[7]. 영향은 [셸 명령 기록](../execution/shell-history/index.md) 페이지를 봅니다.
 - **불러온 파일이 또 다른 파일을 부른다.** 시작 파일에 `. /경로/파일` 이나 `source` 한 줄만 있고 실제 명령은 다른 곳에 있을 수 있으므로, 불러오는 줄은 끝까지 따라갑니다.
 - **라이브 환경 변수.** `/proc/PID/environ` 은 프로그램이 `execve` 로 시작할 때의 초기 환경이고, 그 뒤에 바꾼 값은 반영하지 않습니다[10][13]. 그래서 셸 프로세스 자신의 `environ` 에는 시작 파일이 넣은 값이 보이지 않고, 시작 파일이 `export` 한 값은 그 셸이 뒤에 띄운 자식 프로세스의 `environ` 에서 보일 수 있습니다.
 
@@ -87,13 +87,13 @@ mtime 은 사용자가 되돌릴 수 있지만 그렇게 아이노드 정보를 
 00000020  61 73 68 72 63 3a 20 65 78 65 63 75 74 65 64 20  |ashrc: executed |
 ```
 
-`0a` (줄바꿈) 가 0x19 에 있고, 원래 첫 줄의 `#` (`23`) 은 0x1a 에서 시작합니다. 끼어든 줄이 대화형 검사(`case $- in`)보다 앞에 있으므로 비대화형 셸에서도 실행됩니다. 이 예시 줄은 명령 기록을 `/dev/null` 로 보내므로 해당 계정의 `.bash_history` 가 비어 있거나 멈춘 까닭을 함께 설명할 수 있습니다. 긴 공백 뒤로 밀린 명령이나 화면에 드러나지 않는 제어 문자도 이렇게 바이트로 보면 드러납니다.
+`0a` (줄바꿈) 가 0x19 에 있고, 원래 첫 줄의 `#` (`23`) 은 0x1a 에서 시작합니다. 끼어든 줄이 대화형 검사(`case $- in`)보다 앞에 있으므로 비대화형 셸에서도 실행됩니다. 이 예시 줄은 명령 기록을 `/dev/null` 로 보내므로 해당 계정의 `.bash_history` 가 비어 있거나 멈춘 이유를 함께 설명할 수 있습니다. 긴 공백 뒤로 밀린 명령이나 화면에 드러나지 않는 제어 문자도 이렇게 바이트로 보면 드러납니다.
 
 ### 공개 도구로 한 번
 
 1. UAC 로 라이브 수집을 하면 `files/shell/` 정의가 사용자별 시작 파일과 `/etc/profile.d/*` 를 모으고, `HISTFILE=` 값을 뽑아 그 경로의 파일까지 모으며[7], `live_response/system/env.txt` 에 `env` 출력을 남깁니다[8]. RHEL 이면 `~/.bashrc.d/` 를 손으로 더합니다.
 2. 이미지에서는 모든 홈 폴더와 `/root`, `/etc/skel`, `/etc/profile.d` 의 파일 목록을 mtime·ctime·소유자와 함께 뽑고, 사용자 파일을 `/etc/skel` 사본과 `diff` 로 비교합니다. skel 사본 자체가 바뀌었을 수 있으므로 `/etc/skel` 과 `/etc/profile`, `/etc/bash.bashrc`, `/etc/bashrc` 는 [패키지 파일 변조 확인](../packages/package-verify.md) 방법으로 패키지 기준값과 맞춰 봅니다.
-3. 불변 속성 (immutable) 을 걸어 지우지 못하게 한 경우는 Velociraptor `Linux.Forensics.ImmutableFiles` 로 찾습니다. ext4 플래그에서 `IMMUTABLE` 을 찾는 아티팩트이고 기본 범위는 `/home/*` 이므로[11], `/etc/profile.d` 와 `/root` 로 범위를 넓혀 씁니다. 속성 자체는 [권한·확장 속성](../../01-foundations/filesystem/permissions-xattr.md) 쪽을 봅니다.
+3. 불변 속성 (immutable) 을 걸어 지우지 못하게 한 경우는 Velociraptor `Linux.Forensics.ImmutableFiles` 로 찾습니다. ext4 플래그에서 `IMMUTABLE` 을 찾는 아티팩트이고 기본 범위는 `/home/*` 이므로[11], `/etc/profile.d` 와 `/root` 로 범위를 넓혀 씁니다. 속성 자체는 [권한·확장 속성](../../01-foundations/filesystem/permissions-xattr.md) 페이지를 봅니다.
 
 ## 교차 검증
 
@@ -106,13 +106,13 @@ mtime 은 사용자가 되돌릴 수 있지만 그렇게 아이노드 정보를 
 | [메모리 분석](../../03-techniques/analysis/memory-analysis.md) | 실행 중인 프로세스의 환경 변수에 시작 파일이 넣은 값이 있는지 |
 | [타임라인 만들기](../../03-techniques/analysis/timeline.md) | 위 기록과 시작 파일 시각을 한 줄로 세우기 |
 
-같은 갈래에서는 [systemd 서비스와 타이머](systemd-units.md), [cron·anacron·at](cron-at.md), [공유 라이브러리 가로채기](ld-preload.md), [데스크톱 자동 실행](xdg-autostart.md) 을 함께 보고, 전체 흐름은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 쪽을 따릅니다.
+같은 분류에서는 [systemd 서비스와 타이머](systemd-units.md), [cron·anacron·at](cron-at.md), [공유 라이브러리 가로채기](ld-preload.md), [데스크톱 자동 실행](xdg-autostart.md) 을 함께 보고, 전체 흐름은 [무엇이 계속 살아남게 했나](../../04-scenarios/intrusion/persistence-hunt.md) 페이지를 따릅니다.
 
 WSL 에서도 같은 파일이 쓰입니다. DFRWS 2020 USA 발표의 실험에서는 Windows 레지스트리 `HKEY_CURRENT_USER\Environment` 에 `BASH_ENV` 값을 `/etc/bash.bashrc` 로 넣고 `/etc/bash.bashrc` 를 고친 뒤, `/etc/bash.bashrc`, `~/.bash_history`, `~/.sh_history` 의 MAC 시각과 내용, 아이노드 타임라인, Windows 쪽 실행 흔적을 함께 따라갔습니다[12].
 
 ## 실습
 
-공개 Linux 검체(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
+공개 Linux 디스크 이미지(NIST CFReDS 등)나 직접 만든 가상 머신 이미지로 풀어 봅니다.
 
 1. 계정마다 로그인 셸은 무엇이고, 그 셸이 로그인할 때 실제로 읽는 사용자 파일은 어느 것인가? `~/.bash_profile` 과 `~/.profile` 이 둘 다 있는 계정이 있는가?
 2. 사용자 `~/.bashrc` 를 `/etc/skel/.bashrc` 와 비교했을 때 다른 줄은 무엇이고, 그 줄은 대화형 검사 앞에 있는가 뒤에 있는가?

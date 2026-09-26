@@ -36,7 +36,7 @@ IE 4~9 는 이 기록을 용도별 `index.dat` 파일에 나눠 두었고, 옛 �
 | 옛 엣지 | `WebCacheV01.dat` 안의 컨테이너(캐시·방문 기록·내려받기 기록·쿠키) |
 
 - 어느 버전이 `V01` 을 쓰고 어느 버전이 `V24` 를 쓰는지는 공개 자료에 나오지 않습니다.
-- 수집할 때는 이름을 가리지 않고 `WebCacheV*.dat` 를 모두 가져옵니다.
+- 수집할 때는 이름과 상관없이 `WebCacheV*.dat` 를 모두 가져옵니다.
 
 ### 폴더 안의 다른 파일
 
@@ -57,26 +57,26 @@ V01tmp.log
 
 ## 구조
 
-아래 표는 공개 분석 도구 plaso 의 WebCache 파서가 읽는 표와 칸입니다[3]. 파일 안의 모든 표를 담지는 않습니다.
+아래 표는 공개 분석 도구 plaso 의 WebCache 파서가 읽는 표와 열입니다[3]. 파일 안의 모든 표를 담지는 않습니다.
 
 ### 표
 
 | 표 이름 | 파서 기준 | 설명 |
 |---|---|---|
 | `Containers` | 꼭 있어야 함 | 컨테이너 목록입니다 |
-| `LeakFiles` | 꼭 있어야 함 | plaso 가 Filename·CreationTime·LeakId 칸을 읽습니다 |
-| `Partitions`, `PartitionsEx` | 있을 수도 있음 | 칸 구성은 아래에 적었습니다 |
+| `LeakFiles` | 꼭 있어야 함 | plaso 가 Filename·CreationTime·LeakId 열을 읽습니다 |
+| `Partitions`, `PartitionsEx` | 있을 수도 있음 | 열 구성은 아래에 적었습니다 |
 | `Container_#` | 컨테이너마다 하나 | `#` 은 컨테이너 번호입니다 |
 | `CookieEntryEx_#` | 컨테이너마다 하나 | 쿠키가 들어갑니다. `#` 은 컨테이너 번호입니다 |
 
-### 칸
+### 열
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `Containers` | ContainerId, Name, Directory, SetId, LastScavengeTime, LastAccessTime |
 | `Container_#` | EntryId, Url, AccessCount, SyncCount, AccessedTime, CreationTime, ExpiryTime, ModifiedTime, PostCheckTime, SyncTime, ResponseHeaders, RequestHeaders, Filename, FileExtension, FileSize, CacheId, RedirectUrl |
 | `CookieEntryEx_#` | ContainerId, EntryId, Name, Value, CookieHash, Flags, Expires, LastModified, RDomain |
-| `LeakFiles` | LeakId, Filename, CreationTime (plaso 가 읽는 칸만) |
+| `LeakFiles` | LeakId, Filename, CreationTime (plaso 가 읽는 열만) |
 | `Partitions`, `PartitionsEx` | Directory, PartitionId, PartitionType, LastScavengeTime, TableId |
 
 읽는 순서는 이렇습니다.
@@ -86,7 +86,7 @@ V01tmp.log
 3. 그 번호가 붙은 `Container_#` 표를 엽니다.
 4. 쿠키는 같은 번호가 붙은 `CookieEntryEx_#` 표에서 읽습니다.
 
-`Container_#` 의 Filename·FileSize 칸과 캐시 폴더의 실제 파일을 잇는 방법은 [쿠키·캐시 폴더 (INetCookies·INetCache)](inetcookies-inetcache.md) 에서 다룹니다.
+`Container_#` 의 Filename·FileSize 열과 캐시 폴더의 실제 파일을 잇는 방법은 [쿠키·캐시 폴더 (INetCookies·INetCache)](inetcookies-inetcache.md) 에서 다룹니다.
 
 ### 컨테이너 이름
 
@@ -109,7 +109,7 @@ Windows 11 25H2 PC 의 WebCacheV01.dat 사본에서 표 이름 문자열을 찾�
 - `CookieEntryEx_#`, `AppCacheEx_#`, `AppCacheEntryEx_#`, `HstsEntryEx_#`
 - `MSysObjects`, `MSysObjids`, `MSysLocales`
 
-`Partitions` 라는 이름만 따로 나오지는 않았습니다. `AppCacheEx_#`·`AppCacheEntryEx_#`·`HstsEntryEx_#` 의 뜻과 칸은 공개 자료가 없어 검체에서 확인해야 합니다.
+`Partitions` 라는 이름만 따로 나오지는 않았습니다. `AppCacheEx_#`·`AppCacheEntryEx_#`·`HstsEntryEx_#` 의 뜻과 열 구성은 실제 데이터로 확인해야 합니다.
 
 ## 증거로서 의미
 
@@ -118,7 +118,7 @@ Windows 11 25H2 PC 의 WebCacheV01.dat 사본에서 표 이름 문자열을 찾�
 - 그 사용자 프로필의 DB 에 이 주소의 행이 남아 있었습니다.
 - 행이 어느 컨테이너에 들어 있었는지 알 수 있습니다.
 - 쿠키 표의 행으로 어느 도메인(RDomain)이 어떤 이름의 쿠키를 남겼는지 알 수 있습니다.
-- 행의 시각 칸으로 그 기록을 만들거나 고친 때를 좁힐 수 있습니다.
+- 행의 시각 열로 그 기록을 만들거나 고친 때를 좁힐 수 있습니다.
 
 ### 증명하지 못하는 것
 
@@ -127,17 +127,17 @@ Windows 11 25H2 PC 의 WebCacheV01.dat 사본에서 표 이름 문자열을 찾�
 - 컨테이너 이름에서 용도를 짐작할 수 있지만 용도를 설명한 공개 문서는 없습니다. 컨테이너의 뜻은 행의 Url 모양과 함께 판단합니다.
 - 행이 없다고 방문하지 않았다고 단정하지 않습니다. 기록은 지우거나 정리할 수 있습니다.
 
-보고서에는 "이 사용자 프로필의 WebCacheV01.dat History 컨테이너에 이 주소의 행이 있고, 시각 칸 값은 이렇다" 처럼 기록이 말하는 만큼만 씁니다.
+보고서에는 "이 사용자 프로필의 WebCacheV01.dat History 컨테이너에 이 주소의 행이 있고, 시각 열 값은 이렇다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
 ## 시각 해석
 
-- 시각 칸은 모두 FILETIME 입니다. 변환 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- 시각 열은 모두 FILETIME 입니다. 변환 방법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 값이 `0x7FFFFFFFFFFFFFFF` 이면 "기한 없음" 입니다[3].
 - plaso 는 값이 1 인 FILETIME 같은 특수값을 아직 처리하지 않습니다[3]. 변환 결과가 1601년 1월 1일로 나오면 특수값을 먼저 의심합니다.
 
-plaso 는 각 시각 칸에 아래 설명을 붙입니다.
+plaso 는 각 시각 열에 아래 설명을 붙입니다.
 
-| 표 | 칸 | plaso 가 붙인 뜻 |
+| 표 | 열 | plaso 가 붙인 뜻 |
 |---|---|---|
 | `Container_#` | AccessedTime | 마지막 접근 |
 | `Container_#` | CreationTime | 만든 시각 |
@@ -150,7 +150,7 @@ plaso 는 각 시각 칸에 아래 설명을 붙입니다.
 | `CookieEntryEx_#` | Expires | 만료 |
 | `CookieEntryEx_#` | LastModified | 수정 |
 
-History 컨테이너에서 어느 칸이 "방문 시각" 인지, 그 칸이 UTC 인지 현지 시각인지는 공개 자료에 나오지 않습니다. 그래서 시각을 아는 방문 하나를 골라 칸 값과 맞춰 본 뒤 해석합니다. 같은 버전의 Windows 에서 시험 방문을 만들어 비교해도 됩니다.
+History 컨테이너에서 어느 열이 "방문 시각" 인지, 그 열이 UTC 인지 현지 시각인지는 공개 자료에 나오지 않습니다. 그래서 시각을 아는 방문 하나를 골라 열 값과 맞춰 본 뒤 해석합니다. 같은 버전의 Windows 에서 시험 방문을 만들어 비교해도 됩니다.
 
 ## 함정과 한계
 
@@ -159,7 +159,7 @@ History 컨테이너에서 어느 칸이 "방문 시각" 인지, 그 칸이 UTC 
 - **압수 이미지에서 꺼낸 파일도 대부분 비정상 종료 (dirty shutdown) 상태입니다.** JET API 로 열려면 같은 폴더의 트랜잭션 로그로 먼저 복구해야 합니다. 로그 사슬이 끊겨 복구가 안 되는 경우가 있습니다. 페이지를 직접 해석하는 방식은 로그 없이 읽습니다.
 - **원본을 열지 않습니다.** 원본을 열면 내용이 바뀔 수 있습니다. 항상 사본에서 작업합니다.
 - **도구마다 행 수가 다를 수 있습니다.** 손상된 ESE DB 는 읽는 방식에 따라 결과 행 수가 달라집니다. B-트리를 끝까지 따라가지 못한 쪽이 적게 냅니다. 두 가지 이상 방식으로 열어 비교합니다. 비교 방법은 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
-- **긴 값이 조용히 망가질 수 있습니다.** ESE 의 긴 값 (Long Value) 은 조각으로 나뉘어 저장됩니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가집니다. 긴 값이 들어가는 칸은 길이가 그럴듯한지 확인합니다.
+- **긴 값이 조용히 망가질 수 있습니다.** ESE 의 긴 값 (Long Value) 은 조각으로 나뉘어 저장됩니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가집니다. 긴 값이 들어가는 열은 길이가 그럴듯한지 확인합니다.
 - **값이 압축돼 있을 수 있습니다.** ESE 값 압축에는 7비트 ASCII·7비트 유니코드·XPRESS·XPRESS9·XPRESS10·LZ4 가 있습니다. 압축 형식은 [윈도 압축 형식](../../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) 에서 다룹니다.
 - **문자열 검색 결과는 표 목록이 아닙니다.** 파일 바이트에서 찾은 표 이름에는 지운 표의 잔재가 섞일 수 있습니다. 표 목록은 카탈로그 (Catalog) 를 해석해서 얻습니다.
 
@@ -197,24 +197,24 @@ History 컨테이너에서 어느 칸이 "방문 시각" 인지, 그 칸이 UTC 
 |---|---|---|
 | 옛 기록 파일 | 같은 PC 에서 IE 9 이전에 남긴 기록을 봅니다 | [옛 기록 파일 (index.dat)](index-dat.md) |
 | 주소창 입력 주소 | History 행의 주소를 사용자가 직접 입력했는지 봅니다 | [주소창 입력 주소](typedurls-typedurlstime.md) |
-| 쿠키·캐시 폴더 | Filename 칸이 가리키는 캐시 파일이 실제로 있는지 봅니다 | [쿠키·캐시 폴더](inetcookies-inetcache.md) |
+| 쿠키·캐시 폴더 | Filename 열이 가리키는 캐시 파일이 실제로 있는지 봅니다 | [쿠키·캐시 폴더](inetcookies-inetcache.md) |
 | 저장 비밀번호 | History 에 남은 주소로 저장 비밀번호 값을 풉니다 | [저장 비밀번호 (IntelliForms)](intelliforms.md) |
 | 다운로드 출처 표시 | iedownload 행의 파일에 다운로드 출처 표시가 남았는지 봅니다 | [다운로드 출처 표시](../../filesystem/zone-identifier.md) |
 | $MFT·$UsnJrnl | WebCacheV01.dat 와 로그 파일이 언제 만들어지고 바뀌었는지 봅니다 | [$MFT](../../filesystem/mft.md), [$UsnJrnl](../../filesystem/usnjrnl.md) |
 | 섀도 복사본 | 이전 시점의 DB 를 꺼내 지운 행을 찾습니다 | [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
-| 시간대 설정 | 시각 칸을 현지 시각으로 바꿀 때 기준을 봅니다 | [시간대 설정](../../system-account/time-zone.md) |
+| 시간대 설정 | 시각 열을 현지 시각으로 바꿀 때 기준을 봅니다 | [시간대 설정](../../system-account/time-zone.md) |
 | 다른 브라우저 | 같은 사이트를 다른 브라우저로 썼는지 봅니다 | [크롬 계열 브라우저](../chrome-edge-whale/index.md), [파이어폭스](../firefox/index.md) |
 
 웹 사용 전체를 재구성하는 흐름은 [웹 사용 행위 재구성](../../../04-scenarios/activity/web-activity.md) 에 있습니다.
 
 ## 실습
 
-IE 10 이후의 IE 나 옛 엣지를 쓴 공개 검체(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
+IE 10 이후의 IE 나 옛 엣지를 쓴 공개 시험 데이터(NIST CFReDS 등)에서 사용자 프로필 폴더를 꺼내 아래 질문을 풀어 봅니다.
 
 1. WebCache 폴더에 어떤 파일이 있습니까? `WebCacheV01.dat` 와 `WebCacheV24.dat` 가운데 어느 것입니까?
 2. `esentutl /mh` 로 본 State 는 무엇입니까? 로그로 복구가 됩니까?
 3. `Containers` 표에 컨테이너가 몇 개 있습니까? 이름과 번호를 짝지어 적어 봅니다.
-4. History 컨테이너에서 시각을 아는 방문 하나를 고릅니다. 어느 칸이 그 시각과 맞습니까? UTC 로 맞습니까, 현지 시각으로 맞습니까?
+4. History 컨테이너에서 시각을 아는 방문 하나를 고릅니다. 어느 열이 그 시각과 맞습니까? UTC 로 맞습니까, 현지 시각으로 맞습니까?
 5. 두 가지 도구로 같은 사본을 열었을 때 컨테이너별 행 수가 같습니까?
 6. iedownload 컨테이너의 행이 가리키는 파일이 디스크에 아직 있습니까?
 
@@ -222,5 +222,5 @@ IE 10 이후의 IE 나 옛 엣지를 쓴 공개 검체(NIST CFReDS 등)에서 �
 
 1. ForensicArtifacts, *artifacts/data/webbrowser.yaml* (WebCacheV*.dat 위치). https://raw.githubusercontent.com/ForensicArtifacts/artifacts/main/artifacts/data/webbrowser.yaml
 2. Forensics Wiki, *Internet Explorer* (IE 10 이후 형식, 파일 이름, 경로). https://forensics.wiki/internet_explorer
-3. log2timeline/plaso, *plaso/parsers/esedb_plugins/msie_webcache.py* (표·칸·컨테이너 이름, 시각 칸 처리). https://raw.githubusercontent.com/log2timeline/plaso/main/plaso/parsers/esedb_plugins/msie_webcache.py
+3. log2timeline/plaso, *plaso/parsers/esedb_plugins/msie_webcache.py* (표·열·컨테이너 이름, 시각 열 처리). https://raw.githubusercontent.com/log2timeline/plaso/main/plaso/parsers/esedb_plugins/msie_webcache.py
 4. Forensafe 블로그, 옛 엣지(EdgeHTML) 아티팩트 설명 글 (옛 엣지가 쓰는 컨테이너와 쿠키). https://www.forensafe.com/blogs/microsoftedge.html

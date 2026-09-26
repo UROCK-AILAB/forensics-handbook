@@ -8,7 +8,7 @@ nav_order: 1090
 
 ## 한 줄 요약
 
-삼성 이메일 (Samsung Email) 은 갤럭시 기기에서 쓰는 메일 앱입니다. 패키지 이름·DB 경로·표 이름을 적은 공개 분석 자료가 없어서, 이 페이지는 검체에서 확인할 순서와 비교 기준이 되는 AOSP 이메일 앱의 저장 구조를 정리합니다.
+삼성 이메일 (Samsung Email) 은 갤럭시 기기에서 쓰는 메일 앱입니다. 패키지 이름·DB 경로·표 이름을 적은 공개 분석 자료가 없어서, 이 페이지는 실제 기기에서 확인할 순서와 비교 기준이 되는 AOSP 이메일 앱의 저장 구조를 정리합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -26,7 +26,7 @@ K9Mail.py  FairEmail.py  thunderbird.py
 
 ## 위치와 버전별 차이
 
-패키지 이름이 공개되어 있지 않아서, 검체에서 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
+패키지 이름이 공개되어 있지 않아서, 실제 기기에서 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
 
 One UI 버전이나 앱 버전에 따른 차이도 공개 자료가 없습니다.
 
@@ -36,12 +36,12 @@ One UI 버전이나 앱 버전에 따른 차이도 공개 자료가 없습니다
 
 아래는 AOSP 이메일 앱(`com.android.email` 계열)의 `EmailContent.java` 에 정의된 저장 구조입니다 [2]. 이 소스는 master 브랜치 기준이고 저작권 표기 연도는 2009 입니다 [2].
 
-콘텐츠 제공자 (Content Provider) 의 authority 는 앱 패키지 이름 뒤에 `.provider` 를 붙여 만들고, 패키지 이름은 리소스 `email_package_name` 에서 읽습니다 [2]. 표와 주요 칸은 아래와 같습니다 [2].
+콘텐츠 제공자 (Content Provider) 의 authority 는 앱 패키지 이름 뒤에 `.provider` 를 붙여 만들고, 패키지 이름은 리소스 `email_package_name` 에서 읽습니다 [2]. 표와 주요 열은 아래와 같습니다 [2].
 
-| 표 | 주요 칸 | 담긴 것 |
+| 표 | 주요 열 | 담긴 것 |
 |---|---|---|
 | `Message` | `displayName`, `timeStamp`, `subject`, `flagRead`, `flagLoaded`, `flagFavorite`, `flagAttachment`, `flags`, `messageId`, `mailboxKey`, `accountKey`, `fromList`, `toList`, `ccList`, `bccList`, `replyToList`, `snippet`, `threadTopic`, `flagSeen`, `syncServerId`, `syncServerTimeStamp` 등 | 메일 한 통 |
-| `Message_Updates`, `Message_Deletes` | 검체에서 확인 | 갱신·삭제된 메시지용 |
+| `Message_Updates`, `Message_Deletes` | 실제 DB 에서 확인 | 갱신·삭제된 메시지용 |
 | `Body` | `messageKey`, `htmlContent`, `textContent`, `htmlContentUri`, `textContentUri`, `htmlReply`, `textReply`, `sourceMessageKey`, `introText`, `quotedTextStartPos` | 본문 |
 | `Attachment` | `fileName`, `mimeType`, `size`, `contentId`, `contentUri`, `cachedFile`, `messageKey`, `location`, `encoding`, `content`, `flags`, `content_bytes`, `accountKey`, `uiState`, `uiDestination`, `uiDownloadedSize` | 첨부 |
 | `Account` | `displayName`, `emailAddress`, `syncKey`, `syncLookback`, `syncInterval`, `hostAuthKeyRecv`, `hostAuthKeySend`, `flags`, `isDefault`, `senderName`, `protocolVersion`, `signature`, `maxAttachmentSize` 등 | 메일 계정 |
@@ -49,9 +49,9 @@ One UI 버전이나 앱 버전에 따른 차이도 공개 자료가 없습니다
 | `HostAuth` | `protocol`, `address`, `port`, `flags`, `login`, `password`, `domain`, `certAlias`, `accountKey`, `serverCert`, `credentialKey` | 메일 서버 접속 정보 |
 | `Policy` | `passwordMode`, `passwordMinLength`, `passwordExpirationDays`, `passwordHistory`, `passwordComplexChars`, `passwordMaxFails`, `maxScreenLockTime` 등 | Exchange 보안 정책 |
 
-`Message_Updates`·`Message_Deletes` 가 `Message` 와 같은 칸으로 되어 있는지, 서버에 반영되기 전의 원래 행이 이 표에 남는지는 검체 DB 에서 확인합니다.
+`Message_Updates`·`Message_Deletes` 가 `Message` 와 같은 열로 되어 있는지, 서버에 반영되기 전의 원래 행이 이 표에 남는지는 실제 DB 에서 확인합니다.
 
-몇몇 칸의 값 뜻은 아래와 같습니다 [2]. `flagRead` 는 0 이 안 읽음, 1 이 읽음이고, `messageId` 는 메일 머리의 Message-ID, `clientId` 는 쓰지 않던 칸을 다시 써서 임시 보관 메일(초안) 정보를 담습니다. `flagLoaded` 는 값 이름으로 보아 메일을 받아 둔 상태를 나타냅니다.
+몇몇 열의 값 뜻은 아래와 같습니다 [2]. `flagRead` 는 0 이 안 읽음, 1 이 읽음이고, `messageId` 는 메일 머리의 Message-ID, `clientId` 는 쓰지 않던 열을 다시 써서 임시 보관 메일(초안) 정보를 담습니다. `flagLoaded` 는 값 이름으로 보면 메일을 받아 둔 상태를 나타냅니다.
 
 | `flagLoaded` 값 | 이름 |
 |---|---|
@@ -61,13 +61,13 @@ One UI 버전이나 앱 버전에 따른 차이도 공개 자료가 없습니다
 | 3 | DELETED |
 | 4 | UNKNOWN |
 
-`Attachment.size` 는 바이트 단위이고, `location` 은 IMAP 에서는 파트 번호, Exchange ActiveSync (EAS) 에서는 내부 파일 이름입니다 [2]. `HostAuth.password` 는 메일 서버 비밀번호가 들어 있을 수 있는 칸이라서 보고서와 사본을 다룰 때 따로 가려서 취급합니다.
+`Attachment.size` 는 바이트 단위이고, `location` 은 IMAP 에서는 파트 번호, Exchange ActiveSync (EAS) 에서는 내부 파일 이름입니다 [2]. `HostAuth.password` 는 메일 서버 비밀번호가 들어 있을 수 있는 열이라서 보고서와 사본을 다룰 때 따로 가려서 취급합니다.
 
-지메일 앱이 IMAP 계정을 담는 `EmailProvider` DB 도 `Message`·`Account`·`Mailbox`·`Attachment`·`HostAuth` 표와 같은 칸 이름을 씁니다 [3]. 그 내용은 [지메일 (Gmail)](gmail.md) 페이지에서 다룹니다.
+지메일 앱이 IMAP 계정을 담는 `EmailProvider` DB 도 `Message`·`Account`·`Mailbox`·`Attachment`·`HostAuth` 표와 같은 열 이름을 씁니다 [3]. 그 내용은 [지메일 (Gmail)](gmail.md) 페이지에서 다룹니다.
 
 ## 증거로서 의미
 
-아래는 검체의 삼성 이메일 DB 가 위 AOSP 구조와 같다고 직접 확인한 뒤에야 쓸 수 있는 해석입니다.
+아래는 실제 기기의 삼성 이메일 DB 가 위 AOSP 구조와 같다고 직접 확인한 뒤에야 쓸 수 있는 해석입니다.
 
 **증명하는 것**
 
@@ -79,23 +79,23 @@ One UI 버전이나 앱 버전에 따른 차이도 공개 자료가 없습니다
 
 ## 시각 해석
 
-AOSP 이메일 앱에서 `Message.timeStamp` 는 목록에 보이는 시각, `Mailbox.syncTime` 은 마지막 동기화를 마친 시각, `Mailbox.lastTouchedTime` 은 마지막으로 메일을 읽은 시각이고, 모두 밀리초 단위입니다 [2]. Java 에서 흔히 쓰는 유닉스 밀리초로 보이지만, 삼성 앱에서 같은지는 검체 값으로 확인합니다. `timeStamp` 는 메일 머리의 Date 값인지 기기가 받은 시각인지 주석만으로는 가를 수 없습니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+AOSP 이메일 앱에서 `Message.timeStamp` 는 목록에 보이는 시각, `Mailbox.syncTime` 은 마지막 동기화를 마친 시각, `Mailbox.lastTouchedTime` 은 마지막으로 메일을 읽은 시각이고, 모두 밀리초 단위입니다 [2]. Java 에서 흔히 쓰는 유닉스 밀리초로 보이지만, 삼성 앱에서 같은지는 실제 값으로 확인합니다. `timeStamp` 는 메일 머리의 Date 값인지 기기가 받은 시각인지 주석만으로는 가를 수 없습니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 현지 시각으로 옮길 때 확인할 것은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
-첫째, 삼성 이메일 자체의 저장 구조를 적은 공개 자료는 없습니다. 다른 자료나 도구가 삼성 이메일의 경로를 보여 주더라도 검체에서 직접 확인하고 쓰고, 도구 출력은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 방법으로 원본 행과 맞춰 봅니다.
+첫째, 삼성 이메일 자체의 저장 구조를 적은 공개 자료는 없습니다. 다른 자료나 도구가 삼성 이메일의 경로를 보여 주더라도 실제 기기에서 직접 확인하고 쓰고, 도구 출력은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 방법으로 원본 행과 맞춰 봅니다.
 
-둘째, AOSP 소스는 오래된 master 브랜치라서 [2], 칸이 더해지거나 빠졌을 수 있습니다. 표 이름이 같아도 칸 목록은 검체 DB 에서 다시 읽습니다.
+둘째, AOSP 소스는 오래된 master 브랜치라서 [2], 열이 더해지거나 빠졌을 수 있습니다. 표 이름이 같아도 열 목록은 실제 DB 에서 다시 읽습니다.
 
-셋째, 삭제한 메일이 `Message_Deletes` 나 SQLite 여유 공간에 남는지는 검체에서 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다.
+셋째, 삭제한 메일이 `Message_Deletes` 나 SQLite 여유 공간에 남는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 
 ### 앱을 직접 조사하기
 
-공개 자료가 없으니 시험 기기에 앱을 설치해 계정을 넣고 메일을 주고받은 뒤, 앱 데이터 폴더에 무엇이 생기는지 보면 됩니다. 알려진 동작을 한 가지씩 하고 파일을 비교하는 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
+시험 기기에 앱을 설치해 계정을 넣고 메일을 주고받은 뒤, 앱 데이터 폴더에 무엇이 생기는지 보면 됩니다. 알려진 동작을 한 가지씩 하고 파일을 비교하는 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다. SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다.
 
-DB 를 찾았으면 먼저 표 이름을 뽑아 AOSP 구조와 맞는지 봅니다. 아래 질의는 위 AOSP 구조 표로 만든 예시이고, 검체 DB 에 같은 표가 있을 때만 돌아갑니다.
+DB 를 찾았으면 먼저 표 이름을 뽑아 AOSP 구조와 맞는지 봅니다. 아래 질의는 위 AOSP 구조 표로 만든 예시이고, 실제 DB 에 같은 표가 있을 때만 돌아갑니다.
 
 ```sql
 SELECT name FROM sqlite_master WHERE type = 'table';
@@ -122,16 +122,16 @@ ALEAPP 에는 삼성 이메일 전용 모듈이 없습니다 [1]. SQLite 뷰어�
 | [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) | 메일 시각 앞뒤로 앱을 앞에 띄운 기록 |
 | [알림 기록 (Notification History)](../app-usage/notification-history.md) | 새 메일 알림과 DB 의 메일이 맞는지 |
 
-`dumpsys account` 출력에는 계정 추가·삭제 동작을 적은 "Accounts History" 표가 있습니다. 칸 뜻과 읽는 법은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 에 있습니다.
+`dumpsys account` 출력에는 계정 추가·삭제 동작을 적은 "Accounts History" 표가 있습니다. 열의 뜻과 읽는 법은 [계정 (Accounts)](../system-account/accounts/index.md) 페이지에서 다룹니다. 메일로 누구와 연락했는지 묶어 보는 흐름은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md) 에 있습니다.
 
 ## 실습
 
-공개 안드로이드 검체(NIST CFReDS 등) 중 갤럭시 기기 이미지가 있으면 아래 질문을 풀어 봅니다.
+공개 안드로이드 시험 이미지(NIST CFReDS 등) 중 갤럭시 기기 이미지가 있으면 아래 질문을 풀어 봅니다.
 
 1. 설치된 앱 목록에서 삼성 이메일에 해당하는 패키지를 찾을 수 있습니까? 그 근거는 무엇입니까?
 2. 그 앱 데이터 폴더의 `databases` 아래에 어떤 파일이 있고, 표 이름이 위 AOSP 구조와 얼마나 겹칩니까?
 3. `Message` 와 같은 표가 있다면 `flagLoaded` 값별 행 수는 어떻게 됩니까?
-4. `HostAuth` 와 같은 표가 있다면, 비밀번호 칸을 보고서에서 어떻게 가릴지 정해 봅니다.
+4. `HostAuth` 와 같은 표가 있다면, 비밀번호 열을 보고서에서 어떻게 가릴지 정해 봅니다.
 
 ## 참고 문헌
 

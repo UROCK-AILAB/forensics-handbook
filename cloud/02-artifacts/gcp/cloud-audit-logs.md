@@ -269,7 +269,7 @@ BigQuery 로 보내면 테이블 이름은 로그 이름의 `.`·`/`·`-` 를 `_
 - `callerIp` 가 `private` 이나 `gce-internal-ip` 일 때 실제 출발지[1].
 - 키보드 앞에 누가 있었는지. 여러 사람이 같은 서비스 계정 키를 나눠 쓰면 `principalEmail` 은 모두 같은 서비스 계정입니다.
 
-보고서에는 "이 시각에 이 계정이 이 IP 에서 이 프로젝트의 IAM 정책을 바꾼 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다. 문장 짜는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
+보고서에는 "이 시각에 이 계정이 이 IP 에서 이 프로젝트의 IAM 정책을 바꾼 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다. 문장 짜는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)에 있습니다.
 
 ## 시각 해석
 
@@ -297,7 +297,7 @@ BigQuery 로 보내면 테이블 이름은 로그 이름의 `.`·`/`·`-` 를 `_
 - **폴더·조직의 `_Default` 버킷은 30일 고정입니다**[8]. 조직 수준 데이터 접근 로그는 사고를 늦게 알면 이미 사라졌을 가능성이 있습니다.
 - **한 요청이 권한을 여럿 검사하면 `authorizationInfo` 가 여러 개입니다**[5]. `granted` 는 짝마다 따로 봅니다.
 - **중복이 생길 수 있습니다.** 같은 프로젝트·`timestamp`·`insertId` 인 항목은 한 조회 결과 안에서 중복으로 빠지지만 내보낸 사본에서는 보장되지 않고[4], 겹치는 싱크는 같은 항목을 여러 번 씁니다[9]. 여러 사본을 합칠 때는 `insertId` 와 `timestamp` 로 중복을 걸러 냅니다.
-- **메서드 이름 모양이 서비스마다 다릅니다.** 프로젝트 정책 변경은 `SetIamPolicy`(Resource Manager)이고 IAM 서비스의 정책 변경은 `google.iam.admin.v1.SetIAMPolicy` 입니다[15]. Logging 쿼리 언어는 정규식과 논리 연산자 말고는 대소문자를 가리지 않고, `:` 는 부분 일치라서[12] `protoPayload.methodName:"SetIamPolicy"` 로 두 모양을 함께 찾을 수 있습니다.
+- **메서드 이름 모양이 서비스마다 다릅니다.** 프로젝트 정책 변경은 `SetIamPolicy`(Resource Manager)이고 IAM 서비스의 정책 변경은 `google.iam.admin.v1.SetIAMPolicy` 입니다[15]. Logging 쿼리 언어는 정규식과 논리 연산자 말고는 대소문자를 구분하지 않고, `:` 는 부분 일치라서[12] `protoPayload.methodName:"SetIamPolicy"` 로 두 모양을 함께 찾을 수 있습니다.
 - **로그 이름의 인코딩이 수집 경로마다 다를 수 있습니다.** 원래 `logName` 은 `%2F` 를 쓰지만[4], SIEM 으로 옮긴 사본을 겨냥한 Sigma 규칙 가운데는 `cloudaudit.googleapis.com/activity` 와 `cloudaudit.googleapis.com%2Factivity` 를 둘 다 찾는 것이 있습니다[18]. 검색어에 두 모양을 모두 넣습니다.
 
 ### 로그를 끄거나 지운 흔적
@@ -329,7 +329,7 @@ BigQuery 로 보내면 테이블 이름은 로그 이름의 `.`·`/`·`-` 를 `_
 3. `status` 가 비어 있어 오류 코드가 없고, `authorizationInfo[0].granted` 가 `true` 이므로 권한 검사를 통과한 호출입니다[5].
 4. `authenticationInfo.principalEmail` 이 사람 계정이고 `serviceAccountKeyName` 이 없으므로 서비스 계정 키로 인증한 호출이 아닙니다.
 5. `requestMetadata.callerIp` 가 공인 주소이므로 인터넷에서 들어온 호출입니다. 사용자 에이전트는 gcloud 를 가리키지만 호출자가 보낸 값입니다[5].
-6. `response.bindings` 에서 새 정책의 역할과 구성원을 봅니다. 이 레코드만으로는 무엇이 추가됐는지 알 수 없으므로, 같은 자원의 바로 앞 `SetIamPolicy` 기록이나 `serviceData.policyDelta` 가 있는 서비스라면 그 값과 견줍니다[2].
+6. `response.bindings` 에서 새 정책의 역할과 구성원을 봅니다. 이 레코드만으로는 무엇이 추가됐는지 알 수 없으므로, 같은 자원의 바로 앞 `SetIamPolicy` 기록이나 `serviceData.policyDelta` 가 있는 서비스라면 그 값과 비교합니다[2].
 7. `timestamp` 와 `receiveTimestamp` 가 1초 안이므로 늦게 들어온 기록이 아닙니다.
 
 ### 공개 도구
@@ -348,14 +348,14 @@ gcloud logging read \
 
 **plaso.** plaso 의 JSON-L 파서 플러그인 `gcp_log` 는 한 줄에 LogEntry 하나가 든 파일을 읽어 타임라인 이벤트로 바꿉니다. `logName` 과 ISO 8601 `timestamp` 가 있는 줄을 GCP 로그로 봅니다[16]. 뽑는 값은 `methodName`·`serviceName`·`resourceName`, `principalEmail`·`principalSubject`·`serviceAccountKeyName`, `serviceAccountDelegationInfo` 의 위임 사슬(`a->b` 모양), `authorizationInfo[].permission`, `callerIp`, 사용자 에이전트, `status`, `serviceData.policyDelta.bindingDeltas`(`ACTION member with role` 모양) 등입니다[16]. 사용자 에이전트에 `command/` 가 있으면 그 뒤 값을 gcloud 명령 일부로(점을 공백으로 바꿔), `invocation-id/` 가 있으면 그 뒤 값을 gcloud 호출 식별자로 뽑습니다[16]. `gcloud logging read --format=json` 결과는 JSON 배열이므로, 한 줄에 항목 하나가 되도록 풀어 넣습니다. 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)과 [Linux 판의 타임라인 만들기](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/analysis/timeline.html)에 있습니다.
 
-**Sigma.** SigmaHQ 의 GCP 규칙은 `logsource` 가 `product: gcp`, `service: gcp.audit` 이고, 대부분 `gcp.audit.method_name` 필드로 메서드 이름을 봅니다. 예를 들어 버킷 규칙은 `storage.buckets.delete`·`insert`·`update`·`patch` 를[19], 서비스 계정 규칙은 `.serviceAccounts.disable`·`.serviceAccounts.delete` 로 끝나는 이름을 찾습니다[20]. 일부 규칙은 `data.protoPayload.methodName`·`data.protoPayload.logName` 처럼 원래 필드 경로를 씁니다[18]. 필드 이름은 로그를 옮긴 SIEM 의 매핑에 따라 달라지므로, 규칙을 쓰기 전에 가져온 사본의 필드 이름과 맞는지 봅니다. 규칙 활용은 [탐지 규칙으로 로그 훑기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
+**Sigma.** SigmaHQ 의 GCP 규칙은 `logsource` 가 `product: gcp`, `service: gcp.audit` 이고, 대부분 `gcp.audit.method_name` 필드로 메서드 이름을 봅니다. 예를 들어 버킷 규칙은 `storage.buckets.delete`·`insert`·`update`·`patch` 를[19], 서비스 계정 규칙은 `.serviceAccounts.disable`·`.serviceAccounts.delete` 로 끝나는 이름을 찾습니다[20]. 일부 규칙은 `data.protoPayload.methodName`·`data.protoPayload.logName` 처럼 원래 필드 경로를 씁니다[18]. 필드 이름은 로그를 옮긴 SIEM 의 매핑에 따라 달라지므로, 규칙을 쓰기 전에 가져온 사본의 필드 이름과 맞는지 봅니다. 규칙 활용은 [탐지 규칙으로 로그 검색하기](../../03-techniques/analysis/detection-rules.md)에 있습니다.
 
 ## 교차 검증
 
 - **권한과 키.** `SetIamPolicy`, 서비스 계정·키 생성과 `serviceAccountKeyName` 을 따라가는 법은 [IAM과 서비스 계정 키](./iam-keys.md)와 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md)에 있습니다.
 - **데이터 쪽 기록.** 버킷·객체 접근은 [Cloud Storage 기록](./cloud-storage.md)에서 데이터 접근 로그와 사용 로그를 함께 봅니다.
 - **네트워크.** 방화벽 규칙이나 서브넷 설정을 바꾼 시각 전후의 실제 트래픽은 [VPC 흐름 로그](./vpc-flow-logs.md)에 남습니다. 감사 로그의 `callerIp` 가 VM 의 IP 라면 그 VM 의 흐름 로그와 VM 내부 기록을 함께 봅니다. VM 디스크는 [클라우드 가상 머신 수집](../../03-techniques/acquisition/vm-acquisition.md)과 [Linux 판의 클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html)을 봅니다.
-- **다른 클라우드와 견주기.** AWS 의 대응 기록은 [CloudTrail](../aws/cloudtrail/index.md), Azure 는 [활동 로그](../azure/activity-log.md)입니다.
+- **다른 클라우드와 비교하기.** AWS 의 대응 기록은 [CloudTrail](../aws/cloudtrail/index.md), Azure 는 [활동 로그](../azure/activity-log.md)입니다.
 - **시나리오.** [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md), [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md), [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md)에서 이 로그를 어느 순서로 보는지 다룹니다.
 
 ## 실습

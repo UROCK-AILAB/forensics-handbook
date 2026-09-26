@@ -28,7 +28,7 @@ has_toc: false
 | macOS 버전 | 10.12 Sierra 부터. 버전별 차이는 아래 표 |
 | 알려 주는 것 | 로그인·세션, 로그인 키체인 잠금 해제, sudo 실행, SSH·화면 공유 접속, TCC 권한 위반 등(메시지를 남긴 프로세스·서브시스템·시각과 함께) [2][5] |
 | 알려 주지 않는 것 | 디스크에 남지 않은 Debug·Info 메시지, 가려진(`<private>`) 값, 크기 한도로 밀려난 오래된 기록 [3][5] |
-| 시각 | 항목마다 mach continuous time 을 쓰고, `timesync` 파일의 부팅 정보와 벽시계 시각으로 실제 시각을 계산합니다. 헤더의 벽시계 값은 유닉스 시각(UTC)입니다 [1][5] |
+| 시각 | 항목마다 mach continuous time 을 쓰고, `timesync` 파일의 부팅 정보와 시스템 시계(wall clock) 값으로 실제 시각을 계산합니다. 헤더의 시스템 시계 값은 유닉스 시각(UTC)입니다 [1][5] |
 | 보는 법 | `log show`(아카이브는 `--archive`), 실시간은 `log stream`, 아카이브 만들기는 `log collect` [4]. 공개 파서 예로 Mandiant `macos-unifiedlogs` 가 있습니다 [5] |
 
 통합 로그 형식의 버전별 차이는 아래와 같습니다.

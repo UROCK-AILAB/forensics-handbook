@@ -30,7 +30,7 @@ CloudTrail 은 계정에 기본으로 켜져 있어서 따로 설정하지 않�
 
 이벤트 기록은 한 번에 한 계정·한 리전만 검색하고, 속성 필터 하나와 시간 범위만 걸 수 있으며, 조직 전체를 모아 보는 기능이 없습니다[1]. 콘솔에서 내려받으면 파일 하나에 최대 200,000건이 들어가고, 넘으면 파일을 더 받습니다[1]. KMS 나 RDS Data API 이벤트를 트레일에서 뺐더라도 그 설정은 이벤트 기록에 적용되지 않습니다[1]. AWS 서비스가 새 이벤트를 추가하면 그 이벤트의 90일치 기록이 다 차기까지 90일이 걸립니다[1].
 
-`LookupEvents` API 로 찾을 수 있는 속성은 AWS access key, Event ID, Event name, Event source, Read only, Resource name, Resource type, User name 이고, `LookupAttributes` 에는 한 번에 하나만 넣습니다[2]. 한 번에 최대 50건을 돌려주고 나머지는 `NextToken` 으로 이어 받으며, 계정·리전마다 초당 2회를 넘으면 스로틀링 오류가 납니다[2]. 응답의 `Events` 는 최근 이벤트가 먼저 오고, 항목마다 `EventTime`(숫자)·`EventName`·`Username`·`Resources` 같은 요약 칸과 함께 원래 레코드 JSON 을 문자열로 담은 `CloudTrailEvent` 가 들어 있습니다[2][16].
+`LookupEvents` API 로 찾을 수 있는 속성은 AWS access key, Event ID, Event name, Event source, Read only, Resource name, Resource type, User name 이고, `LookupAttributes` 에는 한 번에 하나만 넣습니다[2]. 한 번에 최대 50건을 돌려주고 나머지는 `NextToken` 으로 이어 받으며, 계정·리전마다 초당 2회를 넘으면 스로틀링 오류가 납니다[2]. 응답의 `Events` 는 최근 이벤트가 먼저 오고, 항목마다 `EventTime`(숫자)·`EventName`·`Username`·`Resources` 같은 요약 필드와 함께 원래 레코드 JSON 을 문자열로 담은 `CloudTrailEvent` 가 들어 있습니다[2][16].
 
 ### 트레일
 
@@ -47,9 +47,9 @@ CloudTrail 은 계정에 기본으로 켜져 있어서 따로 설정하지 않�
 
 `CloudTrail` 자리에는 이벤트 종류에 따라 다른 문자열이 옵니다. 관리·데이터 이벤트는 `CloudTrail`, Insights 이벤트는 `CloudTrail-Insight`, 네트워크 활동 이벤트는 `CloudTrail-NetworkActivity`, 데이터 이벤트 집계는 `CloudTrail-Aggregated` 입니다[5]. 접두사는 트레일을 만들 때 고른 경우에만 있습니다[5].
 
-파일 이름은 `AccountID_CloudTrail_RegionName_YYYYMMDDTHHmmZ_UniqueString.json.gz` 꼴입니다[6]. 시각 부분은 파일을 전달한 시각을 UTC 로 분까지 적은 것이고, 16자 `UniqueString` 은 덮어쓰기를 막으려는 값이라 뜻이 없습니다[6]. 예를 들면 `123456789012_CloudTrail_ap-northeast-2_20260901T0215Z_EXAMPLE0123456AB.json.gz` 이고, 만든 예시입니다.
+파일 이름은 `AccountID_CloudTrail_RegionName_YYYYMMDDTHHmmZ_UniqueString.json.gz` 형식입니다[6]. 시각 부분은 파일을 전달한 시각을 UTC 로 분까지 적은 것이고, 16자 `UniqueString` 은 덮어쓰기를 막으려는 값이라 뜻이 없습니다[6]. 예를 들면 `123456789012_CloudTrail_ap-northeast-2_20260901T0215Z_EXAMPLE0123456AB.json.gz` 이고, 만든 예시입니다.
 
-트레일이 CloudWatch Logs 로도 보내면 로그 스트림 이름은 `account_ID_CloudTrail_trail_region` 꼴이고, 양이 많아 스트림이 여럿이면 끝에 `_number` 가 붙습니다[9]. 다중 리전 트레일은 모든 리전의 이벤트를 로그 그룹 하나로 보냅니다[4]. CloudWatch Logs 쪽 보관과 조회는 [CloudWatch Logs](../cloudwatch-logs.md)에서 다룹니다.
+트레일이 CloudWatch Logs 로도 보내면 로그 스트림 이름은 `account_ID_CloudTrail_trail_region` 형식이고, 양이 많아 스트림이 여럿이면 끝에 `_number` 가 붙습니다[9]. 다중 리전 트레일은 모든 리전의 이벤트를 로그 그룹 하나로 보냅니다[4]. CloudWatch Logs 쪽 보관과 조회는 [CloudWatch Logs](../cloudwatch-logs.md)에서 다룹니다.
 
 ### 어느 리전에 남나
 

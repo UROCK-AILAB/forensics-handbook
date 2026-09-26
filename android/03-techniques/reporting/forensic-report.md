@@ -58,9 +58,9 @@ Android 빌드 정보는 Build 클래스의 필드 이름과 그 필드가 읽�
 | 빌드 지문 | `Build.FINGERPRINT` | `ro.build.fingerprint` | 이 빌드를 유일하게 식별하는 문자열 |
 | 빌드 시각 | `Build.TIME` | `ro.build.date.utc` 값에 1000 을 곱함 | 빌드를 만든 시각, 필드 값은 유닉스 기준 밀리초 |
 
-`Build.FINGERPRINT` 는 쪼개 해석하지 않는 값이라서, 보고서에는 문자열 전체를 그대로 옮깁니다[4]. 이 속성이 비어 있으면 AOSP 는 `ro.product.brand/ro.product.name/ro.product.device:ro.build.version.release/ro.build.id/ro.build.version.incremental:ro.build.type/ro.build.tags` 꼴로 값을 조립합니다[4]. `Build.TIME` 은 속성 값에 1000 을 곱해 만들기 때문에, 속성 `ro.build.date.utc` 는 초 단위이고 필드는 밀리초 단위입니다[4]. 속성 값과 필드 값을 나란히 적을 때는 이 차이를 함께 밝힙니다.
+`Build.FINGERPRINT` 는 쪼개 해석하지 않는 값이라서, 보고서에는 문자열 전체를 그대로 옮깁니다[4]. 이 속성이 비어 있으면 AOSP 는 `ro.product.brand/ro.product.name/ro.product.device:ro.build.version.release/ro.build.id/ro.build.version.incremental:ro.build.type/ro.build.tags` 형식으로 값을 조립합니다[4]. `Build.TIME` 은 속성 값에 1000 을 곱해 만들기 때문에, 속성 `ro.build.date.utc` 는 초 단위이고 필드는 밀리초 단위입니다[4]. 속성 값과 필드 값을 나란히 적을 때는 이 차이를 함께 밝힙니다.
 
-`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 칸과 `buildFingerprint`, `fingerprint` 칸이 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다. 두 fingerprint 칸의 뜻 차이는 공개 자료가 없으므로, 보고서에 옮길 때는 칸 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
+`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 필드와 `buildFingerprint`, `fingerprint` 필드가 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다. 두 fingerprint 필드의 뜻 차이를 설명한 공개 문서는 없으므로, 보고서에 옮길 때는 필드 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
 
 Android 16 기기를 예로 들면 대상 목록의 기기 부분은 다음처럼 적을 수 있습니다. 일련번호와 IMEI 같은 식별자는 이 예에서 뺐습니다.
 
@@ -86,9 +86,9 @@ Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대
 | `dumpsys batterystats` 의 Battery History 줄 | `##-## ##:##:##.###` | 찍혀 있지 않음 |
 | `dumpsys notification` 의 `mCreationTimeMs` 등 | `값(날짜 시:분:초.밀리초+####)` | 사람이 읽는 시각 옆에 시간대 차이(`+####`)가 붙음 |
 
-연도와 시간대가 없는 기록을 보고서에 옮길 때는 연도를 무엇으로 정했는지, 어느 시간대로 읽었는지를 함께 적습니다. logcat 의 기본 출력이 기기 현지 시각인지는 검체에서 확인합니다. 줄 형식은 [logcat](../../02-artifacts/logs/logcat.md)에, 시각 값을 푸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
+연도와 시간대가 없는 기록을 보고서에 옮길 때는 연도를 무엇으로 정했는지, 어느 시간대로 읽었는지를 함께 적습니다. logcat 의 기본 출력이 기기 현지 시각인지는 실제 기기에서 확인합니다. 줄 형식은 [logcat](../../02-artifacts/logs/logcat.md)에, 시각 값을 푸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-기기 시각이 바뀐 흔적이 있으면 그것도 보고서에 적습니다. `dumpsys usagestats` 에는 "UsageStats RollOver history" 아래 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄이 남을 수 있습니다. 이 줄에는 사용자가 시각을 바꿨는지 네트워크로 맞췄는지 가리는 칸이 없어서, 이 줄 하나로 시각 조작을 단정하지 않습니다. 수집 시점의 자동 시간 설정은 `settings global` 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키에서 봅니다. 키의 뜻은 [설정 값](../../02-artifacts/system-account/settings.md)과 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에, 이벤트 기록 자체는 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
+기기 시각이 바뀐 흔적이 있으면 그것도 보고서에 적습니다. `dumpsys usagestats` 에는 "UsageStats RollOver history" 아래 `Time changed. actualSystemTime:… expectedSystemTime:… actualRealtime:…` 줄이 남을 수 있습니다. 이 줄에는 사용자가 시각을 바꿨는지 네트워크로 맞췄는지 구분하는 필드가 없어서, 이 줄 하나로 시각 조작을 단정하지 않습니다. 수집 시점의 자동 시간 설정은 `settings global` 의 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit` 키에서 봅니다. 키의 뜻은 [설정 값](../../02-artifacts/system-account/settings.md)과 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md)에, 이벤트 기록 자체는 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md)에 있습니다.
 
 ### 무결성 값 적기
 
@@ -100,7 +100,7 @@ Android 에서 보고서로 옮기는 시각 가운데에는 연도나 시간대
 
 많은 포렌식 도구에 보고서 기능이 들어 있고, 보통 정해진 틀을 따르면서 기관 로고·머리글·양식 같은 구조를 바꿀 수 있습니다[1]. 도구가 만든 보고서에는 보통 조사자 이름, 사건 번호, 날짜와 제목, 증거 분류, 찾은 관련 증거가 들어갑니다[1]. 도구마다 보고서 기능 차이가 커서, .txt, .csv, .doc, .html, .pdf 같은 흔한 형식이나 항목별로 내보낼 수 있는 도구가 많지만 보고서·내보내기 기능이 없어 화면 캡처를 모아야 하는 도구도 있습니다[1].
 
-공개 도구의 예로 ALEAPP 는 Android 추출본을 파싱해 HTML 보고서와 TSV 를 만들고, 타임라인은 골라서 만듭니다[3]. Python 3.10 이상이 필요하고, 명령 꼴은 다음과 같습니다[3].
+공개 도구의 예로 ALEAPP 는 Android 추출본을 파싱해 HTML 보고서와 TSV 를 만들고, 타임라인은 골라서 만듭니다[3]. Python 3.10 이상이 필요하고, 명령 형식은 다음과 같습니다[3].
 
 ```
 python aleapp.py -t <zip | tar | fs | gz | raw> -i <추출본 경로> -o <보고서 출력 경로>
@@ -129,7 +129,7 @@ NIST SP 800-101 Rev.1 은 2014년 문서라서, Android 10 이상으로 출시�
 
 기기에서 얻은 데이터는 통화 기록 같은 통신사 기록과 맞춰 검증할 수 있고[1], 이렇게 맞춰 본 결과가 있으면 발견 옆에 함께 적습니다.
 
-발견을 쓰는 문장은 기록이 말하는 만큼만 씁니다. 예를 들어 "대상자가 이 시각에 이 앱을 썼다" 라고 쓰지 않고, "기기의 앱 사용 기록에 이 시각 이 앱의 `ACTIVITY_RESUMED` 이벤트가 있다. 이 기록만으로 기기를 조작한 사람을 특정할 수는 없다" 처럼 씁니다. 시각을 적을 때는 원래 기록의 모양과, 연도·시간대를 어떻게 정했는지를 같은 자리에 밝힙니다.
+발견을 쓰는 문장은 기록으로 확인되는 만큼만 씁니다. 예를 들어 "대상자가 이 시각에 이 앱을 썼다" 라고 쓰지 않고, "기기의 앱 사용 기록에 이 시각 이 앱의 `ACTIVITY_RESUMED` 이벤트가 있다. 이 기록만으로 기기를 조작한 사람을 특정할 수는 없다" 처럼 씁니다. 시각을 적을 때는 원래 기록의 모양과, 연도·시간대를 어떻게 정했는지를 같은 자리에 밝힙니다.
 
 ## 참고 문헌
 

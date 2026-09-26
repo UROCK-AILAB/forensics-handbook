@@ -39,7 +39,7 @@ nav_order: 160
 
 메시지를 만들고 보내고 받는 일은 `Create` 로 감사하지 않고, 메일함 폴더를 만드는 일도 감사하지 않습니다[1]. 메일 전송은 `Send` 계열로 남습니다[1].
 
-`MailItemsAccessed` 는 해석할 때 묶음 규칙을 알아야 합니다. bind 는 2분 안에 일어난 것을 레코드 하나로 묶어 `Folders` 에 메시지별 `InternetMessageId` 를 넣고 묶은 개수를 `OperationCount` 에 적습니다[3]. 같은 bind 는 1시간 안이면 다시 남기지 않고 sync 도 1시간 간격으로 거릅니다[3]. 자세한 해석은 [Exchange Online](../exchange-online/index.md) 쪽에서 다룹니다.
+`MailItemsAccessed` 는 해석할 때 묶음 규칙을 알아야 합니다. bind 는 2분 안에 일어난 것을 레코드 하나로 묶어 `Folders` 에 메시지별 `InternetMessageId` 를 넣고 묶은 개수를 `OperationCount` 에 적습니다[3]. 같은 bind 는 1시간 안이면 다시 남기지 않고 sync 도 1시간 간격으로 거릅니다[3]. 자세한 해석은 [Exchange Online](../exchange-online/index.md) 페이지에서 다룹니다.
 
 전달 설정은 받은편지함 규칙과 별개로 Exchange 관리 작업에 남습니다. `Set-Mailbox` 레코드의 `Parameters` 에 `ForwardingSMTPAddress`·`ForwardingAddress`·`DeliverToMailboxAndForward` 가 들어 있는지 보면 됩니다[8]. 감사 기능을 끄고 켠 기록은 `Set-AdminAuditLogConfig` 로 남고, `UnifiedAuditLogIngestionEnabled` 값으로 켬과 끔을 가릅니다[6].
 
@@ -62,7 +62,7 @@ nav_order: 160
 | `FileDeletedSecondStageRecycleBin` | 2단계 휴지통에서 지웠습니다 |
 | `SearchQueryPerformed` | SharePoint 나 OneDrive 에서 검색했습니다. 보류·보존 정책을 적용하는 서비스 계정도 남기고, 기록하려면 따로 켜야 합니다 |
 
-`FileSyncDownloadedPartial` 은 옛 동기화 앱(Groove.exe)과 함께 폐지됐습니다[1]. 파일 작업 레코드의 해석은 [SharePoint·OneDrive](../sharepoint-onedrive.md) 쪽에서 다룹니다.
+`FileSyncDownloadedPartial` 은 옛 동기화 앱(Groove.exe)과 함께 폐지됐습니다[1]. 파일 작업 레코드의 해석은 [SharePoint·OneDrive](../sharepoint-onedrive.md) 페이지에서 다룹니다.
 
 ## 공유
 
@@ -92,7 +92,7 @@ nav_order: 160
 | `MessageDeleted` | Deleted a message | Audit (Premium) 전용입니다 |
 | `MeetingDetail` · `MeetingParticipantDetail` | Added details about Teams meeting 등 | 참가자 기록은 이제 참가한 테넌트에도 공유됩니다 |
 
-에이전트·봇과 한 활동은 감사 레코드가 남지 않습니다[1]. Entra ID·Microsoft 365 관리 센터·Groups Graph API 로 팀 멤버를 바꾸면 Teams 감사 레코드에는 실제 작업자가 아니라 기존 팀 소유자가 작업자로 보입니다[9]. 메시지 본문을 찾는 방법은 [Teams](../teams.md) 쪽에서 다룹니다.
+에이전트·봇과 한 활동은 감사 레코드가 남지 않습니다[1]. Entra ID·Microsoft 365 관리 센터·Groups Graph API 로 팀 멤버를 바꾸면 Teams 감사 레코드에는 실제 작업자가 아니라 기존 팀 소유자가 작업자로 보입니다[9]. 메시지 본문을 찾는 방법은 [Teams](../teams.md) 페이지에서 다룹니다.
 
 ## Entra ID 와 그 밖의 작업
 
@@ -127,7 +127,7 @@ eDiscovery 작업은 `CaseAdded`, `CaseUpdated`, `CaseClosed`, `HoldCreated`, `H
 ## 함정과 한계
 
 - 레코드 수를 접근 횟수로 읽으면 안 됩니다. 5분·2분·1시간·24시간 묶음 규칙 때문에 실제 접근이 더 많을 수 있습니다[1][3].
-- 검색 관련 작업 이름은 출처마다 다릅니다. Microsoft 의 감사 활동 목록은 메일함 검색을 `SearchQueryInitiated`, SharePoint 검색을 메일함 표에서 `SharepointSearchQueryInitiated`, 파일 표에서 `SearchQueryPerformed` 로 적었고[1], Hawk 는 `SearchQueryInitiatedExchange`·`SearchQueryInitiatedSharePoint` 로 조회합니다[8]. 검체에서 실제 `Operation` 값을 먼저 뽑아 보고 거르면 됩니다.
+- 검색 관련 작업 이름은 출처마다 다릅니다. Microsoft 의 감사 활동 목록은 메일함 검색을 `SearchQueryInitiated`, SharePoint 검색을 메일함 표에서 `SharepointSearchQueryInitiated`, 파일 표에서 `SearchQueryPerformed` 로 적었고[1], Hawk 는 `SearchQueryInitiatedExchange`·`SearchQueryInitiatedSharePoint` 로 조회합니다[8]. 받은 데이터에서 실제 `Operation` 값을 먼저 뽑아 보고 거르면 됩니다.
 - `Add-MailboxPermission` 의 작업자가 `NT AUTHORITY\SYSTEM` 이나 `NT SERVICE\MSExchangeAdminApiNetCore(Microsoft.Exchange.AdminApi.NetCore)` 이면 Exchange 서비스의 예약 유지보수이고, `Administrator@apcprd03.prod.outlook.com` 은 Microsoft 지원 인력의 진단 도구 실행과 관련이 있습니다[1].
 - `UpdateInboxRules` 는 Outlook 클라이언트에서 만든 규칙·바꾼 규칙·지운 규칙을 한 작업 이름으로 남깁니다[1]. 현재 규칙 목록과 대조해야 무엇이 바뀌었는지 가릴 수 있습니다.
 - 메일함 감사 우회(`Set-MailboxAuditBypassAssociation`)가 걸린 사용자는 메일함 작업이 남지 않습니다[4].

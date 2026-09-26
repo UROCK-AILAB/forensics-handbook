@@ -10,11 +10,11 @@ nav_order: 1030
 
 외부에서 SSH 로 이 서버에 로그인했는지, 했다면 어느 계정으로 어느 주소에서 어떤 인증 방법(비밀번호·공개 키)으로 들어왔는지를 묻습니다. 이어서 세션이 언제 끝났는지, 들어온 뒤 무엇을 했는지, 이 서버에서 다시 다른 서버로 SSH 로 옮겨 갔는지까지 따라갑니다. 비밀번호 대입 (brute force) 이 있었다면 그 대입이 성공으로 이어졌는지가 핵심입니다.
 
-이 쪽은 조사 순서와 해석만 다룹니다. sshd 로그 줄의 문구, authorized_keys·known_hosts 의 구조, sshd 설정 키는 [SSH](../../02-artifacts/logins/ssh/index.md) 아래 쪽에서 다룹니다.
+이 페이지는 조사 순서와 해석만 다룹니다. sshd 로그 줄의 문구, authorized_keys·known_hosts 의 구조, sshd 설정 키는 [SSH](../../02-artifacts/logins/ssh/index.md) 아래 페이지에서 다룹니다.
 
 ## 먼저 확인할 것
 
-**OpenSSH 판과 로그 태그.** 판에 따라 sshd 줄을 찾는 이름이 달라집니다. OpenSSH 9.8 부터 연결을 받는 `sshd` 와 연결마다 새로 도는 `sshd-session` 이 나뉘었고, 인증 결과 줄은 `sshd-session` 이 씁니다[7][16]. 판은 검체의 패키지 기록([dpkg·apt](../../02-artifacts/packages/dpkg-apt.md), [rpm·dnf](../../02-artifacts/packages/rpm-dnf.md))으로 확인합니다.
+**OpenSSH 판과 로그 태그.** 판에 따라 sshd 줄을 찾는 이름이 달라집니다. OpenSSH 9.8 부터 연결을 받는 `sshd` 와 연결마다 새로 도는 `sshd-session` 이 나뉘었고, 인증 결과 줄은 `sshd-session` 이 씁니다[7][16]. 판은 분석 대상의 패키지 기록([dpkg·apt](../../02-artifacts/packages/dpkg-apt.md), [rpm·dnf](../../02-artifacts/packages/rpm-dnf.md))으로 확인합니다.
 
 | 항목 | Ubuntu 24.04 | RHEL 9 계열 |
 |---|---|---|
@@ -27,7 +27,7 @@ nav_order: 1030
 
 **설정.** 기본 `LogLevel` 은 `INFO` 이고[6], 이 수준에서는 sshd 의 `Connection from`, `Starting session`, `Close session` 줄이 남지 않습니다[3][7]. 비밀번호 로그인이 허용됐는지, root 로그인이 허용됐는지, 로그 수준이 바뀌었는지는 `sshd_config` 와 `sshd_config.d/` 의 조각을 모두 읽어야 알 수 있습니다. RHEL 에서는 옛 설치 프로그램이 만든 `/etc/sysconfig/sshd-permitrootlogin` 에 root 로그인 허용이 들어 있고 `sshd_config.d/01-permitrootlogin.conf` 가 없으면, 패키지 설치 스크립트가 `sshd_config.d/25-permitrootlogin.conf` 에 `PermitRootLogin yes` 를 씁니다[10].
 
-**시각과 시간대.** Ubuntu 24.04 의 인증 로그 줄에는 연도와 UTC 오프셋이 있고, RHEL 의 전통 형식 줄에는 연도와 시간대가 없습니다([인증 로그](../../02-artifacts/logins/auth-log.md)). 저널은 UTC 로 저장하므로, 파일 로그와 저널을 한 타임라인에 놓기 전에 검체의 시간대를 확인합니다([호스트 이름과 시간대](../../02-artifacts/system-info/hostname-timezone.md)).
+**시각과 시간대.** Ubuntu 24.04 의 인증 로그 줄에는 연도와 UTC 오프셋이 있고, RHEL 의 전통 형식 줄에는 연도와 시간대가 없습니다([인증 로그](../../02-artifacts/logins/auth-log.md)). 저널은 UTC 로 저장하므로, 파일 로그와 저널을 한 타임라인에 놓기 전에 분석 대상의 시간대를 확인합니다([호스트 이름과 시간대](../../02-artifacts/system-info/hostname-timezone.md)).
 
 **사용자와 수집 범위.** 로그인할 수 있는 계정과 홈 디렉터리 목록을 [계정 파일](../../01-foundations/users-auth/passwd-shadow-group.md)에서 뽑아 둡니다. 순환된 옛 로그(`auth.log.1`, `.gz`)와 저널 파일, `/root` 를 포함한 모든 홈의 `~/.ssh/` 가 수집 범위에 들어 있어야 합니다.
 
@@ -72,9 +72,9 @@ nav_order: 1030
 
     pam_unix 의 세션 줄과 systemd-logind 의 `New session N of user 이름.`, `Removed session N.` 줄이 sshd 줄을 둘러쌉니다[14][15]. RHEL 9.9p1 이면 sshd 줄의 태그 자리가 `sshd-session` 이고, 전통 형식이면 줄 머리가 `Mar 12 14:05:09 web01` 모양입니다.
 
-5. **로그인 기록 파일과 맞춥니다.** sshd 는 터미널(pty)을 받은 세션에서만 wtmp 에 로그인을 기록합니다[3][5]. 그래서 셸을 연 세션은 `last` 에도 나오고, 명령 하나만 실행한 접속이나 scp·sftp 는 인증 로그에만 나옵니다. btmp 에는 없는 계정 이름의 시도와 비밀번호·keyboard-interactive 방식의 실패가 터미널 칸 `ssh:notty` 로 남습니다[1][4]. wtmp·btmp 는 `last -f /var/log/wtmp`, `last -f /var/log/btmp` 로 읽을 수 있습니다[19].
+5. **로그인 기록 파일과 맞춥니다.** sshd 는 터미널(pty)을 받은 세션에서만 wtmp 에 로그인을 기록합니다[3][5]. 그래서 셸을 연 세션은 `last` 에도 나오고, 명령 하나만 실행한 접속이나 scp·sftp 는 인증 로그에만 나옵니다. btmp 에는 없는 계정 이름의 시도와 비밀번호·keyboard-interactive 방식의 실패가 터미널 필드 `ssh:notty` 로 남습니다[1][4]. wtmp·btmp 는 `last -f /var/log/wtmp`, `last -f /var/log/btmp` 로 읽을 수 있습니다[19].
 
-6. **감사 로그를 봅니다.** 두 배포판 모두 sshd 의 PAM 설정에 `pam_loginuid` 가 있어서[9][10], SSH 세션에서 뜬 프로세스의 감사 기록 `auid` 에는 로그인한 계정의 UID 가 들어갑니다[12]. 데몬이 띄운 프로세스는 `auid` 가 설정되지 않아 `4294967295` 로 찍힙니다[13]. 두 배포판 모두 OpenSSH 를 Linux 감사 기능과 함께 빌드하고[9][10], 이 코드는 터미널을 받은 세션을 열 때(성공)와 인증에 실패하거나 없는 계정일 때(실패) `USER_LOGIN`(1112) 레코드를 남깁니다[4][11][12]. RHEL 패키지에는 감사 패치가 더 붙으므로[10] 실제로 어떤 레코드가 있는지는 검체의 audit.log 에서 확인합니다.
+6. **감사 로그를 봅니다.** 두 배포판 모두 sshd 의 PAM 설정에 `pam_loginuid` 가 있어서[9][10], SSH 세션에서 뜬 프로세스의 감사 기록 `auid` 에는 로그인한 계정의 UID 가 들어갑니다[12]. 데몬이 띄운 프로세스는 `auid` 가 설정되지 않아 `4294967295` 로 찍힙니다[13]. 두 배포판 모두 OpenSSH 를 Linux 감사 기능과 함께 빌드하고[9][10], 이 코드는 터미널을 받은 세션을 열 때(성공)와 인증에 실패하거나 없는 계정일 때(실패) `USER_LOGIN`(1112) 레코드를 남깁니다[4][11][12]. RHEL 패키지에는 감사 패치가 더 붙으므로[10] 실제로 어떤 레코드가 있는지는 분석 대상의 audit.log 에서 확인합니다.
 
 7. **들어온 키와 로그인 때 도는 것을 봅니다.** authorized_keys 의 줄 앞 옵션 `command="…"` 는 그 키로 인증하면 정해 둔 명령을 실행하게 합니다[5]. `~/.ssh/rc` 는 `PermitUserRC` 가 켜져 있으면 로그인 때 사용자 셸보다 먼저 실행되고, 이 파일이 없거나 `PermitUserRC` 가 꺼져 있으면 `/etc/ssh/sshrc` 가 있을 때 그것이 실행됩니다[5]. 파일의 바뀐 시각과 첫 로그인 시각을 비교해, 들어온 뒤 키를 심었는지 봅니다. 자세한 확인 방법은 [무엇이 계속 살아남게 했나](persistence-hunt.md)에서 다룹니다.
 
@@ -87,8 +87,8 @@ nav_order: 1030
 - **"공개 키 실패 줄이 없으니 키 대입은 없었다."** 기본 `INFO` 에서 인증 결과 줄은 성공, 없는 계정, 비밀번호 방식, 실패 누적이 `MaxAuthTries` 의 절반 이상일 때만 남고 그 밖은 `VERBOSE` 로 남습니다[1]. 있는 계정에 공개 키로 시도한 초반 실패는 기본 설정에서 보이지 않습니다.
 - **"wtmp 에 없으니 로그인이 없었다."** 터미널 없는 접속은 wtmp 에 쓰지 않습니다[3]. 인증 로그의 `Accepted` 줄이 기준입니다.
 - **"btmp 에 없으니 실패가 없었다."** 공개 키 실패는 btmp 에 쓰지 않습니다[1]. `/var/log/btmp` 가 없으면 sshd 는 기록하지 않고, root 소유가 아니거나 그룹 실행·다른 사용자 권한이 있으면 기록하지 않고 `Excess permission or bad ownership on file /var/log/btmp` 를 남깁니다[4].
-- **"`sshd[` 로 검색하면 다 나온다."** OpenSSH 9.8 이상에서는 인증 줄의 태그가 `sshd-session` 입니다[7][16]. Velociraptor 의 SSH 로그인 아티팩트는 프로그램 이름이 `sshd` 인 줄만 고르고 시각 칸을 전통 형식(`SYSLOGTIMESTAMP`)으로 읽으므로[17], `sshd-session` 줄이나 Ubuntu 24.04 의 RFC 3339 줄이 빠질 가능성이 있습니다.
-- **"`Invalid user` 뒤 이름은 노린 계정 목록이다."** 이 이름은 클라이언트가 보낸 문자열 그대로이고[16], btmp 에도 그대로 들어갑니다[4]. 사용자가 이름 칸에 비밀번호를 잘못 넣은 경우도 그대로 남으므로[4], 보고서에 옮길 때 주의합니다.
+- **"`sshd[` 로 검색하면 다 나온다."** OpenSSH 9.8 이상에서는 인증 줄의 태그가 `sshd-session` 입니다[7][16]. Velociraptor 의 SSH 로그인 아티팩트는 프로그램 이름이 `sshd` 인 줄만 고르고 시각 필드를 전통 형식(`SYSLOGTIMESTAMP`)으로 읽으므로[17], `sshd-session` 줄이나 Ubuntu 24.04 의 RFC 3339 줄이 빠질 가능성이 있습니다.
+- **"`Invalid user` 뒤 이름은 노린 계정 목록이다."** 이 이름은 클라이언트가 보낸 문자열 그대로이고[16], btmp 에도 그대로 들어갑니다[4]. 사용자가 이름 입력란에 비밀번호를 잘못 넣은 경우도 그대로 남으므로[4], 보고서에 옮길 때 주의합니다.
 - **"`Connection closed by … [preauth]` 는 로그인이다."** `[preauth]` 는 인증 전 단계의 줄에 붙습니다[3]. 로그인 성공은 `Accepted` 줄로만 판단합니다.
 - **"설정 파일만 보면 된다."** 두 배포판 모두 `sshd_config.d/` 조각을 읽고, RHEL 은 로그 facility 와 PAM 사용 여부가 조각에 있습니다[9][10]. dissect 의 sshd 설정 플러그인은 `Include` 를 따라가지 않으므로[18], 그 결과만으로 설정을 판단하면 틀릴 수 있습니다.
 - **"원격 주소가 공격자다."** 원격 주소는 마지막으로 연결한 기계의 주소입니다. 중계 서버나 다른 침해 서버를 거쳤을 수 있습니다.

@@ -8,7 +8,7 @@ nav_order: 660
 
 Gemini CLI 는 Google 의 명령줄 AI 에이전트이고, 대화할 때마다 프롬프트·답변·도구 실행·토큰 사용량을 프로젝트별 폴더 `~/.gemini/tmp/…/chats/` 에 한 줄씩 덧붙여 저장합니다. 기본 설정으로 30일이 지난 세션을 스스로 지우므로, 오래된 기록이 없는 것이 정상일 수 있습니다.
 
-이 쪽의 파일 형식과 경로는 Gemini CLI 0.52.0-nightly.20260715 판 기준이고, 판에 따라 저장 방식이 바뀌었습니다(아래 "위치와 버전별 차이")[1][2][3][4].
+이 페이지의 파일 형식과 경로는 Gemini CLI 0.52.0-nightly.20260715 판 기준이고, 판에 따라 저장 방식이 바뀌었습니다(아래 "위치와 버전별 차이")[1][2][3][4].
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -50,17 +50,17 @@ Gemini CLI 는 대화하는 동안 세션을 자동으로 저장해서, 중간�
 | 옛 방식 | 프로젝트 절대 경로의 SHA-256 16진수 64자 | [3][7] |
 | 새 방식(`acae712` 소스) | 프로젝트 폴더 이름을 소문자로 바꾸고 영문·숫자 밖의 글자를 `-` 로 바꾼 이름. 이어진 `-` 는 하나로 줄이고 앞뒤 `-` 는 뗌. 겹치면 `-1`, `-2` 를 붙임 | [3] |
 
-새 방식은 처음 실행할 때 옛 해시 폴더(`tmp/`, `history/` 아래)를 새 이름 폴더로 복사하고, 옛 폴더는 지우지 않습니다[3]. 새 이름 폴더에 `.project_root` 말고 다른 파일이 이미 있으면 복사하지 않습니다[3]. 경로와 폴더 이름의 대응은 `projects.json` 에 `{"projects":{"경로":"이름"}}` 꼴로 적습니다[3]. Windows 에서는 이 파일의 경로를 소문자로 바꿔 적습니다[3]. 같은 날짜의 공식 문서는 여전히 `tmp/<project_hash>/chats/` 로 적고 있으므로[1], 문서와 소스가 다르다는 점을 알고 두 모양을 모두 찾습니다.
+새 방식은 처음 실행할 때 옛 해시 폴더(`tmp/`, `history/` 아래)를 새 이름 폴더로 복사하고, 옛 폴더는 지우지 않습니다[3]. 새 이름 폴더에 `.project_root` 말고 다른 파일이 이미 있으면 복사하지 않습니다[3]. 경로와 폴더 이름의 대응은 `projects.json` 에 `{"projects":{"경로":"이름"}}` 형식으로 적습니다[3]. Windows 에서는 이 파일의 경로를 소문자로 바꿔 적습니다[3]. 같은 날짜의 공식 문서는 여전히 `tmp/<project_hash>/chats/` 로 적고 있으므로[1], 문서와 소스가 다르다는 점을 알고 두 모양을 모두 찾습니다.
 
 **세션 파일 형식.** 지금 판은 세션마다 JSON Lines 파일 하나(`.jsonl`)에 기록을 덧붙이고, 옛 판은 JSON 한 덩어리(`.json`)로 저장했습니다[2][7]. 옛 `.json` 세션을 `--resume` 으로 이어 쓰면 같은 이름 끝에 `l` 을 붙인 `.jsonl` 로 전체를 옮겨 적고 이어서 씁니다[2]. 이때 옛 `.json` 은 지우지 않아서[2], 같은 세션이 `.json` 과 `.jsonl` 두 파일로 남을 수 있습니다.
 
-**신뢰 폴더 파일.** 출처끼리 형식이 다릅니다. gemini-cli 소스(`acae712`, 2026-07-17)는 `{"경로":"TRUST_FOLDER"}` 처럼 경로마다 `TRUST_FOLDER`·`TRUST_PARENT`·`DO_NOT_TRUST` 중 하나를 적습니다[6]. agentsview 분석기(2026-09 기준)는 `{"trustedFolders":[…]}` 배열 꼴을 읽습니다[7]. 검체의 파일을 열어 어느 꼴인지 보고 읽습니다.
+**신뢰 폴더 파일.** 출처끼리 형식이 다릅니다. gemini-cli 소스(`acae712`, 2026-07-17)는 `{"경로":"TRUST_FOLDER"}` 처럼 경로마다 `TRUST_FOLDER`·`TRUST_PARENT`·`DO_NOT_TRUST` 중 하나를 적습니다[6]. agentsview 분석기(2026-09 기준)는 `{"trustedFolders":[…]}` 배열 형식을 읽습니다[7]. 실제 파일을 열어 어느 형식인지 보고 읽습니다.
 
 ### 같은 폴더를 쓰는 다른 제품
 
 `~/.gemini` 는 Gemini CLI 만 쓰는 폴더가 아닙니다. Google Antigravity(IDE)의 세션 폴더는 `~/.gemini/antigravity/`, Antigravity CLI 의 폴더는 `~/.gemini/antigravity-cli/` 입니다[8]. IDE 쪽에는 `conversations/<uuid>.db`(세션별 SQLite), `annotations/<uuid>.pbtxt`, `brain/<uuid>/`(평문 계획·작업 문서), `implicit/<uuid>.pb`(암호화)가 있습니다[8]. Antigravity CLI 는 새 판이 세션별 SQLite, 옛 판이 AES 로 암호화한 `.pb` 파일을 쓰고, `history.jsonl` 과 `brain/` 이 함께 있습니다[8]. Google 이 저장 형식을 공개하지 않아서, 이 구조는 역분석으로 알아낸 것입니다(2026-07-19, 2026-09-02 기준)[8]. Antigravity 폴더는 Gemini CLI 와 다른 제품의 흔적으로 나눠 봅니다.
 
-`%USERPROFILE%\.gemini` 에 `tmp/` 없이 `antigravity/` 와 `config/` 만 있는 경우도 있습니다. `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 들어갑니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 들어가고, 이 폴더를 어느 제품이 쓰는지는 공개 자료가 없어 검체에서 파일 시각과 함께 쓴 프로그램을 확인해야 합니다. 이처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
+`%USERPROFILE%\.gemini` 에 `tmp/` 없이 `antigravity/` 와 `config/` 만 있는 경우도 있습니다. `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 들어갑니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 들어가고, 이 폴더를 어느 제품이 쓰는지 설명한 공개 문서는 없어서, 실제 기기에서 파일 시각과 함께 쓴 프로그램을 확인해야 합니다. 이처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
 
 ## 구조
 
@@ -151,12 +151,12 @@ chats/5f0c2a9e-1b2c-4d3e-8f90-a1b2c3d4e5f6/7c1d0e2f-3a4b-4c5d-9e6f-0a1b2c3d4e5f.
 - 줄 수를 그대로 세면 같은 메시지를 여러 번 세게 됩니다. `id` 로 묶어 마지막 줄만 쓰고, 되감기 앞 줄은 따로 표시합니다.
 - 토큰 수를 메시지마다 더하면 부풀 수 있습니다. 일부 기록은 누적값이거나 나눠 받은 값이라서, 입력·캐시 토큰은 앞 메시지와의 차이로 다시 셉니다[7].
 - 하위 에이전트 세션은 `chats/` 바로 아래가 아니라 부모 세션 ID 폴더 안에 있습니다[2]. agentsview 는 `chats/session-*` 만 찾으므로[7], 도구 결과만 보면 하위 에이전트 대화가 빠집니다.
-- 폴더 이름이 해시인지 이름인지는 판에 따라 다르고, 새 방식으로 바꿀 때 옛 해시 폴더를 복사만 하므로 같은 세션이 두 폴더에 함께 있을 수 있습니다[3]. `tmp/` 아래 폴더를 모두 수집하고 세션 ID 로 중복을 가립니다.
+- 폴더 이름이 해시인지 이름인지는 판에 따라 다르고, 새 방식으로 바꿀 때 옛 해시 폴더를 복사만 하므로 같은 세션이 두 폴더에 함께 있을 수 있습니다[3]. `tmp/` 아래 폴더를 모두 수집하고 세션 ID 로 중복을 가려냅니다.
 - 정리로 지운 세션 파일은 할당되지 않은 영역에 조각으로 남을 수 있습니다. JSON Lines 라서 줄 단위로 되살릴 수 있고, 일반 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에 있습니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 지금 판의 세션 파일은 `JSON.stringify` 로 쓴 메타 줄로 시작하므로 첫 바이트가 `{"sessionId"` 입니다[2]. 옛 `.json` 은 파일 전체가 JSON 객체 하나입니다[7]. 아래는 문자 인코딩대로 만든 예시이고, 검체에서 뜬 바이트가 아닙니다.
+**헥스로 한 번.** 지금 판의 세션 파일은 `JSON.stringify` 로 쓴 메타 줄로 시작하므로 첫 바이트가 `{"sessionId"` 입니다[2]. 옛 `.json` 은 파일 전체가 JSON 객체 하나입니다[7]. 아래는 문자 인코딩대로 만든 예시이고, 실제 데이터에서 뜬 바이트가 아닙니다.
 
 ```
 만든 예시(인코딩 명세로 만든 바이트)
@@ -199,7 +199,7 @@ agentsview 는 Gemini CLI 의 `.json`·`.jsonl` 세션을 모두 읽고 `project
 
 ## 실습
 
-Gemini CLI 흔적이 든 공개 검체가 알려져 있지 않으므로, 시험용 가상 머신과 시험 계정으로 풀어 봅니다.
+Gemini CLI 흔적이 든 공개 시험 이미지가 없으므로, 시험용 가상 머신과 시험 계정으로 풀어 봅니다.
 
 1. 서로 다른 프로젝트 폴더 두 곳에서 대화한 뒤 `tmp/` 아래 폴더 이름이 해시인지 이름인지, `projects.json` 과 `.project_root` 에 무엇이 적혔는지 봅니다.
 2. 파일을 읽는 요청을 한 번 넣고, 같은 `id` 의 메시지 줄이 몇 번 적히는지와 `toolCalls[].result` 모양을 확인합니다.

@@ -12,7 +12,7 @@ nav_order: 930
 
 메모리에는 실행 중인 프로세스, 열린 네트워크 연결, 디스크에 쓰지 않은 데이터처럼 전원을 끄면 사라지는 정보가 있습니다. 시스템을 끄거나 디스크를 이미징하기 전에 메모리부터 뜨는 이유가 여기에 있습니다. 명령 출력으로 휘발성 정보를 모으는 방법은 [라이브 응답 수집](live-response.md) 에서, 떠낸 이미지를 읽는 방법은 [메모리 분석](../analysis/memory-analysis.md) 에서 다룹니다.
 
-메모리 수집이 가능한지는 대상 커널이 정합니다. 물리 메모리를 읽는 통로는 `/proc/kcore`, `/dev/mem`, `/dev/crash` 같은 특수 파일과 커널 모듈 두 갈래인데[4][26], 커널 설정과 커널 잠금 (Kernel Lockdown) 에 따라 통로가 닫혀 있을 수 있습니다[11][14][15]. 그래서 수집 도구를 고르기 전에 대상 커널의 상태부터 확인합니다.
+메모리 수집이 가능한지는 대상 커널이 정합니다. 물리 메모리를 읽는 통로는 `/proc/kcore`, `/dev/mem`, `/dev/crash` 같은 특수 파일과 커널 모듈 두 가지인데[4][26], 커널 설정과 커널 잠금 (Kernel Lockdown) 에 따라 통로가 닫혀 있을 수 있습니다[11][14][15]. 그래서 수집 도구를 고르기 전에 대상 커널의 상태부터 확인합니다.
 
 ## 절차
 
@@ -30,8 +30,8 @@ nav_order: 930
 |---|---|---|
 | AVML 공식 시험 목록 | Ubuntu 는 22.04 까지 들어 있음[4] | RHEL 9.0 이 들어 있음[4] |
 | LiME 외부 빌드용 커널 소스 | LiME 안내서의 기본 절차가 Ubuntu 기준[3] | CentOS 절차를 따라 커널 소스 RPM 을 받음[3] |
-| 커널 잠금 단계 | 검체의 `/sys/kernel/security/lockdown` 으로 확인 | 같음 |
-| `/dev/mem`·`/proc/kcore` 커널 설정 | 검체의 `/boot/config-*` 에서 `CONFIG_STRICT_DEVMEM`·`CONFIG_PROC_KCORE` 줄 확인 | 같음 |
+| 커널 잠금 단계 | 대상 시스템의 `/sys/kernel/security/lockdown` 으로 확인 | 같음 |
+| `/dev/mem`·`/proc/kcore` 커널 설정 | 대상 시스템의 `/boot/config-*` 에서 `CONFIG_STRICT_DEVMEM`·`CONFIG_PROC_KCORE` 줄 확인 | 같음 |
 
 ## 도구
 
@@ -57,7 +57,7 @@ AVML 은 x86_64 용 사용자 공간 수집 도구이고 정적 바이너리로 
 
 `/proc/kcore` 는 물리 메모리를 ELF 코어 파일 형식으로 보여 주는 파일입니다[13]. AVML 은 이 파일의 크기가 0x2000 보다 크고 열릴 때만 쓸 수 있는 원천으로 봅니다[5]. 수집할 범위는 `/proc/iomem` 에서 `System RAM` 으로 끝나는 줄만 골라 정하고, `/proc/iomem` 을 읽으려면 `CAP_SYS_ADMIN` 이 필요합니다[7].
 
-하위 명령은 `acquire`, `convert`, `upload`, `stream` 입니다[4]. 압축하지 않으면 LiME 형식으로, `--compress` 를 주면 Snappy 로 쪽 단위 압축한 AVML 형식으로 저장합니다[4]. 압축본은 `avml convert` 로 LiME 형식으로 풉니다[4]. `stream tcp` 는 TLS 없이 보내고, 연결이 끊기면 이어 받지 못합니다[4].
+하위 명령은 `acquire`, `convert`, `upload`, `stream` 입니다[4]. 압축하지 않으면 LiME 형식으로, `--compress` 를 주면 Snappy 로 페이지 단위 압축한 AVML 형식으로 저장합니다[4]. 압축본은 `avml convert` 로 LiME 형식으로 풉니다[4]. `stream tcp` 는 TLS 없이 보내고, 연결이 끊기면 이어 받지 못합니다[4].
 
 ### 덤프 파일 형식
 
@@ -73,7 +73,7 @@ LiME 형식은 범위마다 32바이트 헤더를 두고 그 뒤에 범위의 �
 
 모든 값은 리틀 엔디언입니다[6][8]. 범위 길이는 `e_addr - s_addr + 1` 이고, 다음 헤더는 지금 헤더 끝에서 그 길이만큼 뒤에 있습니다[8]. AVML 은 `reserved` 가 0 이 아니면 잘못된 헤더로 봅니다[6]. AVML 은 범위를 최대 16MiB(`0x1000*0x1000`) 블록으로 나누고, 블록이 모두 0 이면 그 블록을 쓰지 않습니다[6].
 
-아래는 헤더 명세로 만든 예시이고 실제 검체 값이 아닙니다.
+아래는 헤더 명세로 만든 예시이고 실제 시스템의 값이 아닙니다.
 
 ```text
 00000000  45 4d 69 4c 01 00 00 00  00 10 00 00 00 00 00 00  |EMiL............|
@@ -97,7 +97,7 @@ eBPF 로 물리 메모리를 읽는 LEMON 은 커널 잠금 integrity 단계에�
 
 **커널 잠금이 통로를 닫습니다.** 커널 잠금에는 `none`, `integrity`, `confidentiality` 세 단계가 있습니다[16][17]. integrity 단계에서는 서명 없는 모듈 적재와 `/dev/mem,kmem,port` 가 막히고, confidentiality 단계에서는 여기에 더해 `/proc/kcore access` 와 `use of bpf to read kernel RAM` 이 막힙니다[17][18]. `/proc/kcore` 를 열 때 커널은 `CAP_SYS_RAWIO` 와 `LOCKDOWN_KCORE` 를 검사하고[14], `/dev/mem` 을 열 때는 `CAP_SYS_RAWIO` 와 `LOCKDOWN_DEV_MEM` 을 검사합니다[15]. EFI Secure Boot 로 부팅한 x86·arm64 장비에서는 커널 잠금이 자동으로 켜집니다[11]. 막힌 기능을 쓰면 커널 로그에 `Lockdown: 프로세스이름: 이유 is restricted; see man kernel_lockdown.7` 이 남습니다[16]. 이 줄은 [커널 로그](../../02-artifacts/system-info/kernel-log.md) 에서 찾습니다.
 
-**출처끼리 서술이 다릅니다.** AVML 설명서는 커널 잠금이 켜져 있으면 AVML 로 수집할 수 없다고 적었습니다[4]. 커널 코드에서는 `/proc/kcore` 가 confidentiality 단계에서만 막히고 integrity 단계에서는 `/dev/mem` 만 막힙니다[17][18]. AVML 코드는 `LOCKDOWN_KCORE` 가 걸리면 `/proc/kcore` 가 있어도 열리지 않거나 일부만 읽힐 수 있다고 봅니다[5]. LEMON 논문은 Secure Boot 와 커널 잠금을 켠 시스템에서 LiME·AVML 이 동작하지 않는다고 평가했습니다[26]. 원인을 한쪽으로 단정하지 말고, 검체에서 잠금 단계와 `/proc/kcore` 가 열리는지를 직접 확인합니다.
+**출처끼리 서술이 다릅니다.** AVML 설명서는 커널 잠금이 켜져 있으면 AVML 로 수집할 수 없다고 적었습니다[4]. 커널 코드에서는 `/proc/kcore` 가 confidentiality 단계에서만 막히고 integrity 단계에서는 `/dev/mem` 만 막힙니다[17][18]. AVML 코드는 `LOCKDOWN_KCORE` 가 걸리면 `/proc/kcore` 가 있어도 열리지 않거나 일부만 읽힐 수 있다고 봅니다[5]. LEMON 논문은 Secure Boot 와 커널 잠금을 켠 시스템에서 LiME·AVML 이 동작하지 않는다고 평가했습니다[26]. 원인을 한쪽으로 단정하지 말고, 대상 시스템에서 잠금 단계와 `/proc/kcore` 가 열리는지를 직접 확인합니다.
 
 **`/dev/mem` 은 RAM 을 다 보여 주지 않을 수 있습니다.** Linux 2.6.26 부터 `CONFIG_STRICT_DEVMEM` 이 `/dev/mem` 으로 접근할 수 있는 영역을 줄이고, 예를 들어 x86 에서는 RAM 은 막고 PCI 메모리 맵 영역은 허용합니다[12]. `/dev/kmem` 은 2.6.26 부터 `CONFIG_DEVKMEM` 을 켠 커널에만 있습니다[12].
 

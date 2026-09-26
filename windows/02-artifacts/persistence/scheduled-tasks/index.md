@@ -22,7 +22,7 @@ has_toc: false
 다만 이 흔적만으로는 알 수 없는 것도 있습니다.
 
 - 작업 정의가 있다고 해서 실제로 실행되었다는 뜻은 아닙니다. 실행 여부는 마지막 실행 시각과 다른 실행 흔적으로 확인합니다.
-- 작성자와 등록 일시 칸은 작업을 만든 쪽이 적은 값일 수 있습니다. 등록한 계정은 4698 이벤트에서 찾습니다.
+- 작성자와 등록 일시 필드는 작업을 만든 쪽이 적은 값일 수 있습니다. 등록한 계정은 4698 이벤트에서 찾습니다.
 - 로그가 꺼져 있으면 누가, 언제 등록했는지 남지 않을 수 있습니다.
 
 ## 한눈에 보기
@@ -71,7 +71,7 @@ has_toc: false
 ## 함께 볼 페이지
 
 - [예약 작업 이벤트 (TaskScheduler·4698)](../../event-logs/taskscheduler-4698.md) — 작업을 등록한 계정, 실행 기록, 작업 XML 전체가 남는 이벤트입니다.
-- [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) — 예약 작업을 다른 자동실행 위치와 함께 훑는 순서입니다.
+- [악성코드 지속성(자동실행) 찾기](../../../04-scenarios/incident/persistence.md) — 예약 작업을 다른 자동실행 위치와 함께 살펴보는 순서입니다.
 - [로그온 자동실행](../run-runonce-startup-folder.md) · [서비스·드라이버](../services-drivers.md) · [WMI 영구 이벤트 구독](../wmi-event-subscription.md) · [BITS 전송 작업](../bits-jobs-qmgr-db.md) · [기타 자동실행 위치](../winlogon-ifeo-appinit-dlls.md) — 다른 자동실행 흔적입니다.
 - [감사 정책과 로그 설정](../../event-logs/audit-policy-log-settings.md) — 4698 과 TaskScheduler 로그가 켜져 있었는지 확인합니다.
 - [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) — TaskCache 키를 오프라인 하이브에서 읽는 바탕입니다.

@@ -30,13 +30,13 @@ Windows 의 Claude 데스크톱 앱은 사용자 데이터 폴더 하나에 크�
 %APPDATA%\Claude\
 ```
 
-claude-forensics 는 v0.1.1(2026-06-16) 문서에서 Windows 의 데스크톱 데이터 폴더를 `\Users\이름\AppData\Roaming\Claude\` 하나로만 적습니다[6]. agentsview 는 2026-09-25 판에서 스토어 패키지 경로를 함께 적습니다[7]. 두 자료가 적은 경로가 달라서 검체에서는 두 곳을 모두 보고, 사용자 프로필 전체에서 `claude_desktop_config.json` 과 `local-agent-mode-sessions` 를 이름으로 찾습니다.
+claude-forensics 는 v0.1.1(2026-06-16) 문서에서 Windows 의 데스크톱 데이터 폴더를 `\Users\이름\AppData\Roaming\Claude\` 하나로만 적습니다[6]. agentsview 는 2026-09-25 판에서 스토어 패키지 경로를 함께 적습니다[7]. 두 자료가 적은 경로가 달라서 실제 기기에서는 두 곳을 모두 보고, 사용자 프로필 전체에서 `claude_desktop_config.json` 과 `local-agent-mode-sessions` 를 이름으로 찾습니다.
 
-가상화된 패키지 앱은 Windows 10 1903 이후 `AppData` 의 Local·Roaming 아래에 새로 만드는 파일을 사용자·패키지별 전용 위치로 옮겨 씁니다[5]. 파일을 열 때는 전용 위치를 먼저 찾고, 없으면 실제 `AppData` 에서 엽니다[5]. 스토어판에서 `%APPDATA%\Claude` 대신 패키지 안 `LocalCache\Roaming\Claude` 에 파일이 생기는 까닭이 이것이고, 원리는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에서 다룹니다.
+가상화된 패키지 앱은 Windows 10 1903 이후 `AppData` 의 Local·Roaming 아래에 새로 만드는 파일을 사용자·패키지별 전용 위치로 옮겨 씁니다[5]. 파일을 열 때는 전용 위치를 먼저 찾고, 없으면 실제 `AppData` 에서 엽니다[5]. 스토어판에서 `%APPDATA%\Claude` 대신 패키지 안 `LocalCache\Roaming\Claude` 에 파일이 생기는 이유가 이것이고, 원리는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에서 다룹니다.
 
 ### 경로 표
 
-아래 표의 `Claude\` 는 위 두 사용자 데이터 폴더 중 검체에 있는 쪽입니다.
+아래 표의 `Claude\` 는 위 두 사용자 데이터 폴더 중 분석 대상 기기에 있는 쪽입니다.
 
 | 경로 | 담긴 것 | 근거 |
 |---|---|---|
@@ -87,7 +87,7 @@ local-agent-mode-sessions\
         .claude\projects\폴더\cliSessionId\subagents\...\agent-ID.jsonl  하위 에이전트 기록
 ```
 
-claude-forensics(v0.1.1, 2026-06-16)는 `audit.jsonl` 을 에이전트 세션의 전체 대화 기록으로 읽습니다[6]. agentsview(2026-09-25)는 세션 폴더 안 `.claude\projects` 에서 `cliSessionId.jsonl` 을 찾아 읽고, 이 파일은 Claude Code 기록과 같은 형식입니다[7]. 두 도구가 서로 다른 파일을 대화 기록으로 삼으므로 검체에서는 둘 다 찾습니다. `.claude\projects` 아래 폴더 이름은 버전마다 달라서(`-…-outputs` 로 끝나거나 가상 머신 안 경로 `/sessions/…` 를 바꾼 모양) 폴더 이름을 되짚지 말고 파일 이름으로 찾습니다[7]. 같은 폴더에 있는 `cowork-clientdata-cache.json`, `cowork_settings.json` 은 세션 정보 파일이 아닙니다[7].
+claude-forensics(v0.1.1, 2026-06-16)는 `audit.jsonl` 을 에이전트 세션의 전체 대화 기록으로 읽습니다[6]. agentsview(2026-09-25)는 세션 폴더 안 `.claude\projects` 에서 `cliSessionId.jsonl` 을 찾아 읽고, 이 파일은 Claude Code 기록과 같은 형식입니다[7]. 두 도구가 서로 다른 파일을 대화 기록으로 삼으므로 실제 기기에서는 둘 다 찾습니다. `.claude\projects` 아래 폴더 이름은 버전마다 달라서(`-…-outputs` 로 끝나거나 가상 머신 안 경로 `/sessions/…` 를 바꾼 모양) 폴더 이름으로 거슬러 찾지 말고 파일 이름으로 찾습니다[7]. 같은 폴더에 있는 `cowork-clientdata-cache.json`, `cowork_settings.json` 은 세션 정보 파일이 아닙니다[7].
 
 Anthropic 은 Cowork 의 디스크 형식을 공개하지 않았고(2026-07 기준), 위 구조는 공개 도구의 구현에서 알아낸 것이라 앱이 바뀌면 달라질 수 있습니다[7].
 
@@ -130,7 +130,7 @@ Anthropic 은 Cowork 의 디스크 형식을 공개하지 않았고(2026-07 기�
 
 ### 앱 설정 JSON
 
-사용자 데이터 폴더에는 앱이 직접 쓰는 JSON 파일이 있고, 키 이름은 다음과 같습니다. claude-forensics 는 이 가운데 `config.json`, `claude_desktop_config.json`, `buddy-tokens.json`, `cowork-enabled-cli-ops.json` 과 `ant-did` 를 수집 대상으로 둡니다[6]. 키의 뜻을 설명한 공개 자료가 없어서 아래 셋째 칸은 키 이름이 가리키는 것이고, 실제 뜻은 검체의 값으로 확인해야 합니다.
+사용자 데이터 폴더에는 앱이 직접 쓰는 JSON 파일이 있고, 키 이름은 다음과 같습니다. claude-forensics 는 이 가운데 `config.json`, `claude_desktop_config.json`, `buddy-tokens.json`, `cowork-enabled-cli-ops.json` 과 `ant-did` 를 수집 대상으로 둡니다[6]. 키의 뜻을 설명한 공개 자료가 없어서 아래 셋째 열은 키 이름이 가리키는 것이고, 뜻은 실제 값으로 확인해야 합니다.
 
 | 파일 | 키(일부) | 키 이름이 가리키는 것 |
 |---|---|---|
@@ -168,7 +168,7 @@ Partitions\이름\...
 ChromeNativeHost\chrome-native-host.exe
 ```
 
-폴더마다의 형식은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)에 있습니다. `Partitions` 아래에는 `cowork-file-preview`, `launch-preview-static` 파티션이 있고, `Partitions\cowork-file-preview\Network\Cookies` 는 표 `cookies` 와 `meta` 가 있는 SQLite 데이터베이스입니다. `cookies` 의 칸은 크롬 계열 쿠키 DB 와 같습니다.
+폴더마다의 형식은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)에 있습니다. `Partitions` 아래에는 `cowork-file-preview`, `launch-preview-static` 파티션이 있고, `Partitions\cowork-file-preview\Network\Cookies` 는 표 `cookies` 와 `meta` 가 있는 SQLite 데이터베이스입니다. `cookies` 의 열은 크롬 계열 쿠키 DB 와 같습니다.
 
 ```
 cookies: creation_utc, host_key, top_frame_site_key, name, value,
@@ -179,7 +179,7 @@ cookies: creation_utc, host_key, top_frame_site_key, name, value,
 meta:    key, value
 ```
 
-크롬 계열 쿠키 값이 `encrypted_value` 칸에 보호돼 들어가는 원리는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)와 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)에서 다룹니다. 쿠키와 로그인 정보는 보고서에서 가립니다([API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)).
+크롬 계열 쿠키 값이 `encrypted_value` 열에 보호돼 들어가는 원리는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)와 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)에서 다룹니다. 쿠키와 로그인 정보는 보고서에서 가립니다([API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)).
 
 ### 패키지 안의 다른 폴더
 
@@ -203,7 +203,7 @@ forceLoginOrgUUID                  effortLevel
 
 ## 증거로서 의미
 
-**증명하는 것.** 사용자 데이터 폴더가 있으면 이 Windows 계정에 앱이 설치돼 한 번 이상 실행된 흔적이 있다고 쓸 수 있습니다. `local-agent-mode-sessions` 의 세션 정보 파일과 대화 기록이 있으면 그 세션에서 오간 요청·응답·도구 호출과, 에이전트에 붙인 폴더·허락한 도메인을 기록이 말하는 만큼 쓸 수 있습니다([AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)). 세션 정보의 `emailAddress`, `accountName` 과 폴더 이름의 조직·계정 UUID 는 그 세션이 어느 계정으로 돌았는지 알려 줍니다[6]. `claude-code-sessions` 의 파일은 `cliSessionId` 로 `.claude` 의 기록과 이어지고, 그 세션의 제목·보관 여부·소유 조직과 계정을 알려 줍니다[6]. `mcpServers` 설정과 MCP 로그가 있으면 로컬 MCP 서버를 연결했거나 연결하려 한 기록이 있다고 쓸 수 있습니다.
+**증명하는 것.** 사용자 데이터 폴더가 있으면 이 Windows 계정에 앱이 설치돼 한 번 이상 실행된 흔적이 있다고 쓸 수 있습니다. `local-agent-mode-sessions` 의 세션 정보 파일과 대화 기록이 있으면 그 세션에서 오간 요청·응답·도구 호출과, 에이전트에 붙인 폴더·허락한 도메인을 기록으로 확인되는 만큼 쓸 수 있습니다([AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)). 세션 정보의 `emailAddress`, `accountName` 과 폴더 이름의 조직·계정 UUID 는 그 세션이 어느 계정으로 돌았는지 알려 줍니다[6]. `claude-code-sessions` 의 파일은 `cliSessionId` 로 `.claude` 의 기록과 이어지고, 그 세션의 제목·보관 여부·소유 조직과 계정을 알려 줍니다[6]. `mcpServers` 설정과 MCP 로그가 있으면 로컬 MCP 서버를 연결했거나 연결하려 한 기록이 있다고 쓸 수 있습니다.
 
 **증명하지 못하는 것.** 계정 이메일은 로그인한 계정을 가리킬 뿐, 그때 키보드 앞에 누가 있었는지는 알려 주지 않습니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)). `config.json` 의 `lastKnownAccountUuid` 는 마지막 계정 하나만 가리켜서, 그 전에 다른 계정을 쓰지 않았다는 근거가 되지 않습니다. `result` 줄의 `total_cost_usd` 는 앱이 적은 값이고, 청구 기록의 기준은 Anthropic Console 입니다[6]. 일반 대화(Cowork·Claude Code 가 아닌 대화)의 본문은 이 폴더로 확인할 수 없어서 [계정 데이터 내보내기](export.md)를 씁니다.
 
@@ -213,7 +213,7 @@ Cowork 세션 정보의 `createdAt`, `lastActivityAt` 은 1970-01-01 UTC 기준 
 
 제목을 바꾸면 세션 정보 파일만 바뀝니다[7]. 그래서 세션 정보 파일의 수정 시각이 대화 기록 파일보다 늦으면, 마지막 대화 뒤에 제목 변경 같은 정보 수정이 있었을 수 있습니다. 대화가 오간 시각은 기록 줄의 시각으로 씁니다.
 
-`config.json` 의 `first_launch_at`, `version_first_launch.at`, `updaterBannerStagedAt.stagedAt`, `planUsageLastTrayOpenAt` 과 `plan-usage-history.json` 의 `samples[].t` 는 단위를 적은 공개 자료가 없어서 자릿수로 판단합니다. 앱은 약 4시간마다 스스로 업데이트하므로[3], 앱 파일의 파일 시스템 시각을 처음 설치한 때로 보지 않고 `version_first_launch` 를 먼저 봅니다. 쿠키 DB 의 `creation_utc`, `last_access_utc`, `expires_utc` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 시각 해석을 따르고, 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 바뀐 때를 가늠합니다. 여러 시각을 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+`config.json` 의 `first_launch_at`, `version_first_launch.at`, `updaterBannerStagedAt.stagedAt`, `planUsageLastTrayOpenAt` 과 `plan-usage-history.json` 의 `samples[].t` 는 단위를 적은 공개 자료가 없어서 자릿수로 판단합니다. 앱은 약 4시간마다 스스로 업데이트하므로[3], 앱 파일의 파일 시스템 시각을 처음 설치한 때로 보지 않고 `version_first_launch` 를 먼저 봅니다. 쿠키 DB 의 `creation_utc`, `last_access_utc`, `expires_utc` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 시각 해석을 따르고, 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 바뀐 때를 추정합니다. 여러 시각을 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -244,7 +244,7 @@ claude-forensics 는 JSON 으로 읽히지 않는 줄을 건너뛰고 로그에 
     output-dir
 ```
 
-결과에는 `cowork-sessions.jsonl`(claude-code-sessions)과 `cowork-agent-sessions.jsonl`(local-agent-mode-sessions)이 따로 나오고, 결과 파일마다 SHA-256 을 적은 `MANIFEST.sha256` 도 만들어집니다[6]. README 는 이 목록이 읽기 전용 사본까지 담는다고 적지만, `claude-forensics.sh` 코드와 `docs/claude-forensics.md` 는 묶음(tgz)에 들어가는 결과 파일만 담고 사본은 빼는 것으로 되어 있습니다[6]. 그래서 사본의 해시는 따로 계산해 둡니다. 도구 판은 v0.1.1(2026-06-16)이고, 어느 앱 버전에서 시험했는지는 공개돼 있지 않습니다. agentsview 는 사용자 홈 아래 기본 경로를 읽는 세션 뷰어라서, 증거 사본은 분석용 가상 머신에서 엽니다. 설정 JSON 은 jq 로 키 목록을 뽑고(`jq 'paths | map(tostring) | join(".")' config.json`), 쿠키 DB 사본은 SQLite 도구로 `cookies` 표의 `host_key` 와 시각 칸을 봅니다.
+결과에는 `cowork-sessions.jsonl`(claude-code-sessions)과 `cowork-agent-sessions.jsonl`(local-agent-mode-sessions)이 따로 나오고, 결과 파일마다 SHA-256 을 적은 `MANIFEST.sha256` 도 만들어집니다[6]. README 는 이 목록이 읽기 전용 사본까지 담는다고 적지만, `claude-forensics.sh` 코드와 `docs/claude-forensics.md` 는 묶음(tgz)에 들어가는 결과 파일만 담고 사본은 빼는 것으로 되어 있습니다[6]. 그래서 사본의 해시는 따로 계산해 둡니다. 도구 판은 v0.1.1(2026-06-16)이고, 어느 앱 버전에서 시험했는지는 공개돼 있지 않습니다. agentsview 는 사용자 홈 아래 기본 경로를 읽는 세션 뷰어라서, 증거 사본은 분석용 가상 머신에서 엽니다. 설정 JSON 은 jq 로 키 목록을 뽑고(`jq 'paths | map(tostring) | join(".")' config.json`), 쿠키 DB 사본은 SQLite 도구로 `cookies` 표의 `host_key` 와 시각 열을 봅니다.
 
 ## 교차 검증
 
@@ -260,7 +260,7 @@ claude-forensics 는 JSON 으로 읽히지 않는 줄을 건너뛰고 로그에 
 
 ## 실습
 
-직접 만든 시험용 Windows 가상 머신이나 공개 검체(NIST CFReDS 등)에 데스크톱 앱이 있다면 다음을 풀어 봅니다.
+직접 만든 시험용 Windows 가상 머신이나 공개 시험 자료(NIST CFReDS 등)에 데스크톱 앱이 있다면 다음을 풀어 봅니다.
 
 1. 사용자 데이터 폴더는 `%APPDATA%\Claude` 와 패키지 안 `LocalCache\Roaming\Claude` 중 어디에 있는가?
 2. `local-agent-mode-sessions` 의 세션 정보 파일에서 `cliSessionId` 를 뽑으면, 같은 이름의 기록 파일이 세션 폴더 안과 `.claude\projects` 중 어디에 있는가? `audit.jsonl` 도 있는가?

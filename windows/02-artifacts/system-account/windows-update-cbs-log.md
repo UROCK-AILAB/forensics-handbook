@@ -6,7 +6,7 @@ nav_order: 680
 
 # 윈도 업데이트 기록 (Windows Update·CBS Log)
 
-> 이 페이지의 실제 위치·개수·예시 값은 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) 기준입니다. 다른 버전에서는 검체에서 확인합니다.
+> 이 페이지의 실제 위치·개수·예시 값은 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) 기준입니다. 다른 버전에서는 실제 기기에서 확인합니다.
 
 ## 한 줄 요약
 
@@ -42,7 +42,7 @@ nav_order: 680
 | NotificationUxBroker.etl | `C:\ProgramData\USOShared\Logs` | Windows 10 부터 | 알림 표시 기록 |
 | CBS.log | `%systemroot%\Logs\CBS` | — | 서비싱 스택이 업데이트를 설치한 과정 |
 
-Windows Update 는 이제 WindowsUpdate.log 를 직접 만들지 않고 바로 읽을 수 없는 .etl 파일을 만들기 때문에, 읽을 수 있는 WindowsUpdate.log 는 PowerShell `Get-WindowsUpdateLog` 로 .etl 을 풀어서 만듭니다[2]. Windows 8.1 이전의 텍스트 로그 위치와 CBS.log 가 처음 생긴 Windows 버전은 공개 자료가 없어 검체에서 확인합니다.
+Windows Update 는 이제 WindowsUpdate.log 를 직접 만들지 않고 바로 읽을 수 없는 .etl 파일을 만들기 때문에, 읽을 수 있는 WindowsUpdate.log 는 PowerShell `Get-WindowsUpdateLog` 로 .etl 을 풀어서 만듭니다[2]. Windows 8.1 이전의 텍스트 로그 위치와 CBS.log 가 처음 생긴 Windows 버전은 실제 기기에서 확인해야 합니다.
 
 Windows 11 25H2 의 실제 위치는 아래와 같습니다.
 
@@ -58,7 +58,7 @@ Windows 11 25H2 의 실제 위치는 아래와 같습니다.
 | `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages` | 패키지 키 6,680개 |
 | 이벤트 로그 | System, Setup, `Microsoft-Windows-WindowsUpdateClient/Operational` |
 
-Windows 11 25H2 에서는 USO 로그가 `Logs\` 바로 아래가 아니라 `System\`, `User\` 하위 폴더에 있고, NotificationUxBroker.etl 이 없을 수 있습니다. 두 가지 모두 위의 로그 파일 표[1]와 다르므로 검체에서는 `USOShared\Logs` 아래를 통째로 수집합니다.
+Windows 11 25H2 에서는 USO 로그가 `Logs\` 바로 아래가 아니라 `System\`, `User\` 하위 폴더에 있고, NotificationUxBroker.etl 이 없을 수 있습니다. 두 가지 모두 위의 로그 파일 표[1]와 다르므로 `USOShared\Logs` 아래를 통째로 수집합니다.
 
 ## 구조
 
@@ -80,7 +80,7 @@ Windows 11 25H2 에서는 USO 로그가 `Logs\` 바로 아래가 아니라 `Syst
 | 식별자 | 누가 매기나 | 특징 |
 |---|---|---|
 | 업데이트 ID (update ID) | 게시할 때 붙습니다 | GUID 입니다 |
-| 개정 번호 (revision number) | 업데이트를 고쳐 다시 게시할 때마다 올라갑니다 | 업데이트 ID 와 함께 `{GUID}.revision` 처럼 씁니다. 다른 업데이트에서도 같은 번호를 쓰므로 번호만으로는 업데이트를 가리지 못합니다 |
+| 개정 번호 (revision number) | 업데이트를 고쳐 다시 게시할 때마다 올라갑니다 | 업데이트 ID 와 함께 `{GUID}.revision` 처럼 씁니다. 다른 업데이트에서도 같은 번호를 쓰므로 번호만으로는 업데이트를 구분하지 못합니다 |
 | 개정 ID (revision ID) | 업데이트를 처음 게시하거나 고칠 때 원본(Windows Update, WSUS)마다 따로 매기는 일련번호입니다 | 원본이 다르면 같은 번호가 다른 업데이트일 수 있습니다 |
 | 로컬 ID (local ID) | 그 PC 의 Windows Update 클라이언트가 매깁니다 | PC 마다 다릅니다. `%WINDIR%\SoftwareDistribution\Datastore\Datastore.edb` 에서 확인합니다 |
 
@@ -102,13 +102,13 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 - 예를 들어 `CbsPersist_20260920234451.log` 의 이름 시각(23:44:51 UTC)은 새 CBS.log 첫 줄 시각(현지 2026-09-21 08:44:51)과 정확히 9시간 차이 납니다. .cab 파일도 같은 관계입니다.
 - 옛 로그가 늘 .cab 으로 눌려 있지는 않습니다. 압축하지 않은 .log 로 남기도 합니다.
-- CBS.log 를 넘기는 크기와 옛 로그를 남기는 개수는 공개 자료가 없어 검체에서 확인합니다.
+- CBS.log 를 넘기는 크기와 옛 로그를 남기는 개수는 실제 기기에서 확인해야 합니다.
 
 ### ReportingEvents.log
 
-`C:\Windows\SoftwareDistribution\ReportingEvents.log` 는 UTF-16LE 텍스트입니다. 파일 앞에 BOM `FF FE` 가 있고, 칸은 탭으로 나눕니다.
+`C:\Windows\SoftwareDistribution\ReportingEvents.log` 는 UTF-16LE 텍스트입니다. 파일 앞에 BOM `FF FE` 가 있고, 필드는 탭으로 나눕니다.
 
-칸 순서는 아래와 같습니다. 공식 칸 이름은 공개돼 있지 않아, 표의 칸 이름은 내용을 보고 붙인 것입니다.
+필드 순서는 아래와 같습니다. 공식 필드 이름은 공개돼 있지 않아, 표의 필드 이름은 내용을 보고 붙인 것입니다.
 
 | 순서 | 내용 | 예 |
 |---|---|---|
@@ -124,9 +124,9 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | 11 | 범주 | Software Synchronization |
 | 12 | 설명 문장 | — |
 
-- 호출한 프로세스 칸에는 제3자 업데이트 도구의 실행 파일 이름도 찍힙니다. 어떤 프로그램이 Windows Update 를 불렀는지 이 칸에서 보입니다.
-- 1,264줄, 약 3주 반치(가장 오래된 줄 2026-08-30)만 남은 경우가 있습니다. 앞부분이 잘려 나가는 것으로 보이며, 잘리는 기준은 공개 자료가 없습니다.
-- 이 파일이 모든 Windows 버전에 있는지는 검체에서 확인합니다.
+- 호출한 프로세스 필드에는 제3자 업데이트 도구의 실행 파일 이름도 찍힙니다. 어떤 프로그램이 Windows Update 를 불렀는지 이 필드에서 보입니다.
+- 1,264줄, 약 3주 반치(가장 오래된 줄 2026-08-30)만 남은 경우가 있습니다. 앞부분이 잘려 나가는 것으로 보이며, 잘리는 기준을 설명한 공개 문서는 없습니다.
+- 이 파일이 모든 Windows 버전에 있는지는 실제 기기에서 확인합니다.
 
 ### DataStore.edb
 
@@ -155,7 +155,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - `Package_for_KB…` 이름의 키는 몇 개뿐입니다(예: 6,680개 가운데 2개).
 - `Package_for_ServicingStack_…`, `Package_for_DotNetRollup_…` 키도 있습니다.
 
-`CurrentState` 값은 세 가지가 나옵니다. 숫자마다 공식 뜻은 공개 자료가 없습니다.
+`CurrentState` 값은 세 가지가 나옵니다. 숫자마다의 공식 뜻을 설명한 공개 문서는 없습니다.
 
 | 값 | 개수 | 비고 |
 |---|---|---|
@@ -167,7 +167,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 ### 이벤트 로그
 
-아래 이벤트 ID 와 칸은 공식 문서에 설명이 없으므로 검체의 실제 이벤트로 확인합니다.
+아래 이벤트 ID 와 필드는 공식 문서에 설명이 없으므로 실제 이벤트로 확인합니다.
 
 **System 로그, 공급자 `Microsoft-Windows-WindowsUpdateClient`**
 
@@ -178,7 +178,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | 43 | Installation Started: Windows has started installing the following update: <제목> | 설치 시작 |
 | 44 | Windows Update started downloading an update. | 내려받기 시작 |
 
-- 이벤트 19 의 EventData 칸은 `updateTitle`, `updateGuid`, `updateRevisionNumber`, `serviceGuid` 입니다.
+- 이벤트 19 의 EventData 필드는 `updateTitle`, `updateGuid`, `updateRevisionNumber`, `serviceGuid` 입니다.
 - `updateGuid`·`updateRevisionNumber` 는 위의 업데이트 ID·개정 번호와 같은 뜻으로 보입니다.
 - 업데이트 제목은 설치 언어로 적힙니다. 한국어 PC 에서는 한국어 제목입니다.
 
@@ -202,7 +202,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | 13 | 선택 기능을 켜기 전에 재부팅 필요 |
 
 - 상태 이름으로 Superseded, Absent, Installed 가 나옵니다.
-- OS 를 새로 설치한 지 석 달쯤 된 PC 에서는 세 로그 모두 OS 설치 날부터 남아 있을 수 있습니다. 오래 쓴 PC 에서 얼마나 남는지는 검체에서 확인합니다.
+- OS 를 새로 설치한 지 석 달쯤 된 PC 에서는 세 로그 모두 OS 설치 날부터 남아 있을 수 있습니다. 오래 쓴 PC 에서 얼마나 남는지는 실제 기기에서 확인합니다.
 
 이벤트 로그와 ETL 파일의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
@@ -215,12 +215,12 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - RollupFix 항목의 버전이 `UBR` 과 같으면 그 항목이 현재 누적 업데이트 수준입니다.
 - `InstallClient` 와 Setup 로그의 Client id 는 설치를 맡은 주체를 알려 줍니다. 이 값으로 Windows Update 에이전트(UpdateAgentLCU)와 DISM(DISM Package Manager Provider)을 나눌 수 있습니다.
 - 이벤트 19·20·43 은 어떤 제목의 업데이트를 언제 설치 시작·성공·실패했는지 알려 줍니다.
-- ReportingEvents.log 의 호출한 프로세스 칸은 어떤 프로그램이 Windows Update 를 불렀는지 알려 줍니다.
+- ReportingEvents.log 의 호출한 프로세스 필드로 어떤 프로그램이 Windows Update 를 불렀는지 알 수 있습니다.
 
 ### 증명하지 못하는 것
 
 - 사람이 직접 설치를 눌렀는지는 알 수 없습니다. `InstallUser` 는 S-1-5-18(SYSTEM)로 남습니다.
-- `CurrentState` 숫자의 공식 뜻은 공개 자료가 없습니다. "112 는 설치 완료" 처럼 단정하지 않습니다.
+- `CurrentState` 숫자의 공식 뜻을 설명한 공개 문서는 없습니다. "112 는 설치 완료" 처럼 단정하지 않습니다.
 - `Get-HotFix` 의 날짜만으로는 설치 시각을 말할 수 없습니다. `InstalledOn` 은 날짜만 있고 시각은 00:00:00 입니다.
 - 설치 성공 이벤트가 있어도 재부팅까지 끝났는지는 따로 봅니다. Setup 로그 이벤트 4 는 재부팅 전에는 Installed 상태로 바꿀 수 없다고 적습니다.
 - 로그에 없다고 업데이트가 없었던 것은 아닙니다. ETL·ReportingEvents.log·CBS.log 는 앞부분이 밀려납니다.
@@ -247,7 +247,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - `InstallTimeHigh`·`InstallTimeLow` 는 64비트 값의 위 32비트와 아래 32비트이며, 합쳐서 FILETIME 으로 읽습니다.
 - 예를 들어 OS 설치 시각(`InstallDate`)이 2026-06-26 18:07:41 UTC 인 PC 에서, OS 설치 때 들어간 패키지의 설치 시각은 18:10:32 UTC 입니다. OS 설치 시각은 [시스템 기본 정보](os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 - 설치 시각이 0(1601-01-01)인 RollupFix 항목도 있습니다. 이 값은 설치 시각으로 쓰지 않습니다.
-- 현지 시각 기록을 UTC 로 바꿀 때는 검체의 시간대 설정을 먼저 확인합니다. [시간대 설정](time-zone.md) 에서 다룹니다.
+- 현지 시각 기록을 UTC 로 바꿀 때는 분석 대상 PC 의 시간대 설정을 먼저 확인합니다. [시간대 설정](time-zone.md) 에서 다룹니다.
 - FILETIME 변환은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 함정과 한계
@@ -274,7 +274,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 ### 헥스로 한 번
 
-아래 값은 명세로 만든 예시입니다. 특정 검체에서 꺼낸 값이 아닙니다.
+아래 값은 명세로 만든 예시입니다. 실제 기기에서 꺼낸 값이 아닙니다.
 
 **InstallTimeHigh·Low 합치기.** 레지스트리 뷰어에 두 값이 아래처럼 보인다고 해 봅니다.
 
@@ -295,7 +295,7 @@ InstallTimeLow  = 0x7689C000   (10진수 1,988,739,072)
 2. UTC+9 PC 에서는 현지 2024-01-01 09:00:00 입니다.
 3. 그 뒤에 시작한 새 CBS.log 첫 줄은 이 현지 시각 근처로 찍힙니다.
 
-**ReportingEvents.log 바이트.** 파일 맨 앞 2바이트는 BOM 입니다. 그 뒤 글자는 한 글자에 2바이트씩 이어집니다. 예를 들어 시각 칸의 `2024` 와 칸을 나누는 탭은 아래처럼 보입니다.
+**ReportingEvents.log 바이트.** 파일 맨 앞 2바이트는 BOM 입니다. 그 뒤 글자는 한 글자에 2바이트씩 이어집니다. 예를 들어 시각 필드의 `2024` 와 필드를 나누는 탭은 아래처럼 보입니다.
 
 ```
 FF FE                       BOM (UTF-16LE, 파일 맨 앞)
@@ -325,7 +325,7 @@ Get-WindowsUpdateLog -ETLPath D:\case\WindowsUpdate -LogPath D:\case\out\Windows
 4. 이벤트 뷰어나 공개 EVTX 파서로 System 로그를 엽니다. `Microsoft-Windows-WindowsUpdateClient` 의 19·20·43·44 를 거릅니다. Setup 로그에서는 `Microsoft-Windows-Servicing` 의 1·2·4 를 거릅니다.
 5. 레지스트리 뷰어로 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersion\Component Based Servicing\Packages` 를 엽니다. `Package_for_RollupFix` 키를 찾아 `InstallTimeHigh`·`InstallTimeLow` 를 위 헥스 풀이대로 합쳐 봅니다.
 6. 텍스트 편집기로 CBS.log 를 열고 `Initializing Trusted Installer` 줄을 찾습니다. 세션마다 무엇을 설치했는지 봅니다.
-7. ReportingEvents.log 는 UTF-16LE, 탭 구분으로 스프레드시트에 불러옵니다. 호출한 프로세스 칸을 기준으로 정렬합니다.
+7. ReportingEvents.log 는 UTF-16LE, 탭 구분으로 스프레드시트에 불러옵니다. 호출한 프로세스 열을 기준으로 정렬합니다.
 8. 한 업데이트를 골라 레지스트리 설치 시각, 이벤트 19 시각, CBS.log 줄 시각을 UTC 로 맞춰 봅니다.
 
 ## 교차 검증
@@ -344,14 +344,14 @@ Get-WindowsUpdateLog -ETLPath D:\case\WindowsUpdate -LogPath D:\case\out\Windows
 
 ## 실습
 
-Windows 공개 검체(NIST CFReDS 등)에서 SOFTWARE 하이브, `Logs\CBS\`, `SoftwareDistribution\`, System·Setup 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
+Windows 공개 시험 이미지(NIST CFReDS 등)에서 SOFTWARE 하이브, `Logs\CBS\`, `SoftwareDistribution\`, System·Setup 이벤트 로그를 꺼내 아래 질문을 풀어 봅니다.
 
-1. 검체의 `UBR` 은 얼마입니까? 같은 버전의 `Package_for_RollupFix` 키가 있습니까?
+1. 이미지의 `UBR` 은 얼마입니까? 같은 버전의 `Package_for_RollupFix` 키가 있습니까?
 2. 그 RollupFix 키의 `InstallTimeHigh`·`InstallTimeLow` 를 직접 합쳐 UTC 로 바꿔 봅니다. 도구가 보여 주는 값과 같습니까?
 3. System 로그 이벤트 19 가운데 같은 업데이트의 설치 성공 기록은 언제입니까? 레지스트리 시각과 얼마나 차이 납니까?
-4. `CbsPersist_` 파일 이름의 시각과, 그 뒤 새 CBS.log 첫 줄의 시각은 몇 시간 차이 납니까? 검체의 시간대와 맞습니까?
-5. ReportingEvents.log 의 호출한 프로세스 칸에 Windows 기본 구성 요소가 아닌 실행 파일이 있습니까?
-6. `Get-WindowsUpdateLog` 로 검체의 .etl 을 풀어 봅니다. 검체의 Windows 세대에 맞는 분석 PC 를 썼습니까?
+4. `CbsPersist_` 파일 이름의 시각과, 그 뒤 새 CBS.log 첫 줄의 시각은 몇 시간 차이 납니까? 이미지의 시간대와 맞습니까?
+5. ReportingEvents.log 의 호출한 프로세스 필드에 Windows 기본 구성 요소가 아닌 실행 파일이 있습니까?
+6. `Get-WindowsUpdateLog` 로 이미지에서 꺼낸 .etl 을 풀어 봅니다. 그 Windows 세대에 맞는 분석 PC 를 썼습니까?
 7. 이벤트 20 가운데 제목이 스토어 상품 ID 로 시작하는 기록이 있습니까?
 
 ## 참고 문헌

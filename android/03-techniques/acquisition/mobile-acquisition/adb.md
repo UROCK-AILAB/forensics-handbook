@@ -65,7 +65,7 @@ secure 쪽 `rampart_` 키는 삼성 기능과 관련 있어 보입니다. 조사
 | `/sdcard` | — | 폴더 목록 | [공용 저장 공간](../../../01-foundations/storage/shared-storage.md) |
 | logcat | — | main, system, crash, kernel 버퍼의 크기와, main, system, events, crash, radio 버퍼의 로그 | [logcat](../../../02-artifacts/logs/logcat.md) |
 
-`dumpsys account` 의 "Accounts History" 표에는 AccountId, Action_Type, timestamp, UID, TableName, Key 칸이 있고, 동작 값으로 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 나옵니다.
+`dumpsys account` 의 "Accounts History" 표에는 AccountId, Action_Type, timestamp, UID, TableName, Key 열이 있고, 동작 값으로 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 가 나옵니다.
 
 dumpsys 와 logcat 은 지금 메모리에 있는 상태를 보여 주어서 저장된 파일과 범위가 다르고, usagestats 출력이 "Last ## hour events" 처럼 최근 몇 시간만 담는 것이 그 예입니다. dumpsys 출력을 읽는 법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 페이지에 있습니다.
 
@@ -94,7 +94,7 @@ adb 로 읽은 결과는 명령을 실행한 순간의 상태라서 같은 명�
 
 ## 결과를 어떻게 해석하나
 
-dumpsys·logcat 결과는 "그 시각 메모리에 이런 상태가 있었다" 까지 말해 주고, 출력에 없는 이벤트가 기기에서 일어나지 않았다는 뜻은 아닙니다. 보고서에는 아래처럼 씁니다.
+dumpsys·logcat 결과로는 "그 시각 메모리에 이런 상태가 있었다" 까지 알 수 있고, 출력에 없는 이벤트가 기기에서 일어나지 않았다는 뜻은 아닙니다. 보고서에는 아래처럼 씁니다.
 
 > (날짜·시각) 에 adb 일반 셸 권한으로 실행한 `dumpsys user` 출력에 (사용자 번호) 사용자의 State 가 RUNNING_UNLOCKED 로 적혀 있습니다. 이 출력은 명령을 실행한 때의 상태이고, 그 전의 잠금 상태는 이 출력만으로 알 수 없습니다.
 

@@ -8,11 +8,11 @@ nav_order: 650
 
 Codex CLI 는 OpenAI 가 만든 명령줄 코딩 에이전트입니다. 기기의 `CODEX_HOME`(기본 `~/.codex`) 아래에는 세션마다 대화 전체를 적는 rollout 파일, 입력 기록 `history.jsonl`, 상태 SQLite, 설정, 인증 파일이 남습니다. 조직이 OpenTelemetry 수집을 켰다면 도구 실행 결정과 결과가 PC 밖 수집 서버에도 남습니다.
 
-> 기준: 경로·줄 구조·키 이름은 `openai/codex` 커밋 406dc92(2026-07-30)와 그 커밋의 설정 스키마 기준입니다[2][3]. rollout 구조는 Codex CLI 0.147.0 에서도 같습니다[4]. Codex 는 자주 바뀌므로 검체의 버전은 rollout 의 `session_meta.payload.cli_version` 으로 확인합니다.
+> 기준: 경로·줄 구조·키 이름은 `openai/codex` 커밋 406dc92(2026-07-30)와 그 커밋의 설정 스키마 기준입니다[2][3]. rollout 구조는 Codex CLI 0.147.0 에서도 같습니다[4]. Codex 는 자주 바뀌므로 분석 대상의 버전은 rollout 의 `session_meta.payload.cli_version` 으로 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에 두고, 변수가 없으면 `~/.codex` 를 씁니다[1]. Windows 에서는 `%USERPROFILE%\.codex` 입니다. 기록은 목적에 따라 네 갈래로 나뉩니다.
+Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에 두고, 변수가 없으면 `~/.codex` 를 씁니다[1]. Windows 에서는 `%USERPROFILE%\.codex` 입니다. 기록은 목적에 따라 네 종류로 나뉩니다.
 
 - **세션 기록(rollout).** 세션을 나중에 다시 열거나 살펴볼 수 있도록 세션 하나를 JSON Lines 파일 하나에 적습니다[2]. 사용자 입력, 모델 응답, 도구 호출과 결과, 턴마다의 모델·작업 폴더·승인 정책이 들어갑니다.
 - **입력 기록 `history.jsonl`.** 모든 세션의 입력을 한 파일에 덧붙이는 전역 기록입니다[2]. 한 줄에 세션 ID, 시각, 입력한 글이 들어갑니다.
@@ -42,7 +42,7 @@ Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에
 | `.credentials.json` | MCP 서버 OAuth 정보(키링을 쓸 수 없을 때) | [3] |
 | `.tmp/rollout-compression.lock` | 마지막 rollout 압축 작업의 프로세스 번호와 시작 시각 | [2] |
 
-SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는 폴더에 생깁니다. `sqlite_home` 의 기본값은 환경 변수 `CODEX_SQLITE_HOME` 이고, 그것도 없으면 `CODEX_HOME` 입니다[3]. 파일 이름의 숫자(`state_5`, `logs_2`)는 406dc92 기준이라 판이 바뀌면 달라질 수 있어서, 검체에서는 `*.sqlite` 로 모두 찾습니다. agentsview 문서는 지금 판이 세션 제목을 `thread_history_*.sqlite` 에 두므로, `session_index.jsonl` 이 없고 `thread_history_1.sqlite` 만 있는 것이 정상이라고 봅니다[4]. 406dc92 의 테이블 정의에서는 `title` 칸이 `state_5.sqlite` 의 `threads` 테이블에 있습니다[2].
+SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는 폴더에 생깁니다. `sqlite_home` 의 기본값은 환경 변수 `CODEX_SQLITE_HOME` 이고, 그것도 없으면 `CODEX_HOME` 입니다[3]. 파일 이름의 숫자(`state_5`, `logs_2`)는 406dc92 기준이라 판이 바뀌면 달라질 수 있어서, 실제 기기에서는 `*.sqlite` 로 모두 찾습니다. agentsview 문서는 지금 판이 세션 제목을 `thread_history_*.sqlite` 에 두므로, `session_index.jsonl` 이 없고 `thread_history_1.sqlite` 만 있는 것이 정상이라고 봅니다[4]. 406dc92 의 테이블 정의에서는 `title` 열이 `state_5.sqlite` 의 `threads` 테이블에 있습니다[2].
 
 로그인 정보는 `cli_auth_credentials_store` 로 저장 방식을 고릅니다. `file`(기본)은 `auth.json`, `keyring` 은 OS 키링, `auto` 는 키링을 먼저 쓰고 안 되면 파일, `ephemeral` 은 실행 중인 프로세스 메모리에만 둡니다[3]. MCP 서버의 OAuth 정보는 `mcp_oauth_credentials_store` 가 따로 정하고, 기본값 `auto` 는 키링을 먼저 쓰고 쓸 수 없으면 `.credentials.json` 에 둡니다[3]. 키링에 두었다면 Windows 는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에서 찾습니다. 토큰이 남는 곳 전반은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
@@ -52,7 +52,7 @@ SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는
 
 ### rollout 파일
 
-한 줄이 JSON 객체 하나이고, 모든 줄에 `timestamp` 가 있습니다. `ordinal` 은 있을 때만 적고, 나머지는 `type` 과 `payload` 두 칸입니다[2]. `timestamp` 는 줄을 쓴 순간의 UTC 시각을 `2026-09-01T03:04:05.678Z` 모양(밀리초까지, 끝에 `Z`)으로 적습니다[2].
+한 줄이 JSON 객체 하나이고, 모든 줄에 `timestamp` 가 있습니다. `ordinal` 은 있을 때만 적고, 나머지는 `type` 과 `payload` 두 필드입니다[2]. `timestamp` 는 줄을 쓴 순간의 UTC 시각을 `2026-09-01T03:04:05.678Z` 모양(밀리초까지, 끝에 `Z`)으로 적습니다[2].
 
 | `type` | 담는 것 | 근거 |
 |---|---|---|
@@ -61,7 +61,7 @@ SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는
 | `response_item` | 모델과 주고받은 항목. 아래 표 | [2][4] |
 | `event_msg` | 진행 이벤트. `task_started`, `task_complete`, `turn_aborted`, `agent_message`, `token_count` 등 | [4] |
 | `compacted` | 긴 대화를 줄인 요약 | [2] |
-| `inter_agent_communication`, `inter_agent_communication_metadata`, `world_state` | 그 밖의 항목. 내용은 검체에서 확인 | [2] |
+| `inter_agent_communication`, `inter_agent_communication_metadata`, `world_state` | 그 밖의 항목. 내용은 실제 데이터로 확인 | [2] |
 
 `response_item` 의 `payload.type` 은 다음과 같습니다[4].
 
@@ -72,7 +72,7 @@ SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는
 | `custom_tool_call` | 도구 호출. `apply_patch` 본문을 `input` 에 그대로 둠 |
 | `function_call_output`, `custom_tool_call_output` | 같은 `call_id` 의 결과 |
 
-`apply_patch` 호출에는 `file_path` 칸이 없습니다. 고친 파일은 패치 본문의 `*** Add File:`, `*** Update File:`, `*** Delete File:`, `*** Move to:` 줄에 적힌 경로로 알아냅니다[4]. `event_msg` 의 `token_count` 에는 누적 사용량과 마지막 턴 사용량(`info.last_token_usage`)이 함께 있습니다[4].
+`apply_patch` 호출에는 `file_path` 필드가 없습니다. 고친 파일은 패치 본문의 `*** Add File:`, `*** Update File:`, `*** Delete File:`, `*** Move to:` 줄에 적힌 경로로 알아냅니다[4]. `event_msg` 의 `token_count` 에는 누적 사용량과 마지막 턴 사용량(`info.last_token_usage`)이 함께 있습니다[4].
 
 `session_meta.payload.originator` 가 `codex_exec` 이면 대화형 화면이 아니라 `codex exec` 로 돌린 비대화형 세션입니다[4]. 하위 에이전트 세션은 `source.subagent` 와 `parent_thread_id` 로 부모를 가리키고, 갈라져 나온(fork) 세션은 `forked_from_id` 로 원래 세션을 가리킵니다[2][4].
 
@@ -93,9 +93,9 @@ SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는
 
 ### 상태 SQLite
 
-406dc92 의 테이블 정의[2]에서 조사에 쓰는 칸은 다음과 같습니다. 칸은 판마다 추가되므로 검체에서는 `.schema` 로 먼저 확인합니다.
+406dc92 의 테이블 정의[2]에서 조사에 쓰는 열은 다음과 같습니다. 열은 판마다 추가되므로 실제 파일에서는 `.schema` 로 먼저 확인합니다.
 
-| 파일 · 테이블 | 칸 |
+| 파일 · 테이블 | 열 |
 |---|---|
 | `state_5.sqlite` · `threads` | `id`, `rollout_path`, `created_at`, `updated_at`, `source`, `model_provider`, `cwd`, `title`, `sandbox_policy`, `approval_mode`, `tokens_used`, `archived`, `archived_at`, `git_sha`, `git_branch`, `git_origin_url`, 뒤에 더한 `first_user_message`, `cli_version`, `created_at_ms`, `updated_at_ms`, `recency_at` 등 |
 | `thread_history_1.sqlite` · `thread_turns` | `thread_id`, `turn_id`, `status`, `started_at`, `completed_at`, `duration_ms` |
@@ -119,7 +119,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 
 `[otel]` 의 `log_user_prompt` 는 기본이 `false` 라서 프롬프트 내용은 가려진 채 나가고, 켜야만 내용이 남습니다[1]. `[mcp_servers]` 의 `env` 나 `http_headers` 에 비밀 값이 그대로 적혀 있을 수 있으니 보고서에는 키 이름만 옮깁니다. MCP 전반은 [MCP 서버와 도구 호출 기록](mcp.md)에서 다룹니다.
 
-설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. `CODEX_HOME` 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양입니다. `skills/<이름>/<파일>.json` 에는 `files`, `files.SKILL.md`, `version` 키가 있고, 이 파일의 용도는 공개 자료가 없어 검체에서 만든 도구를 먼저 가립니다.
+설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. `CODEX_HOME` 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양입니다. `skills/<이름>/<파일>.json` 에는 `files`, `files.SKILL.md`, `version` 키가 있고, 이 파일의 용도를 설명한 공개 문서는 없어서, 실제 기기에서는 어느 도구가 만든 파일인지 먼저 구분합니다.
 
 ### 구조화 로그 이벤트(OpenTelemetry)
 
@@ -149,7 +149,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 | rollout 줄의 `timestamp` | UTC, 밀리초 | 줄을 쓸 때마다 |
 | `turn_context.timezone`, `current_date` | 턴을 시작할 때의 시간대와 날짜(있을 때만) | 턴마다 |
 | `history.jsonl` 의 `ts` | Unix 초(UTC) | 입력할 때마다 |
-| `threads.created_at`·`updated_at` (뒤에 `_ms` 가 붙은 칸) | Unix 초 (`_ms` 는 밀리초) | 세션을 만들 때 / 갱신할 때 |
+| `threads.created_at`·`updated_at` (뒤에 `_ms` 가 붙은 열) | Unix 초 (`_ms` 는 밀리초) | 세션을 만들 때 / 갱신할 때 |
 | `.jsonl.zst` 의 수정 시각 | 압축 전 원본의 수정 시각을 옮겨 적음 | 압축할 때 |
 
 폴더와 파일 이름은 현지 시각이고 줄 안의 `timestamp` 는 UTC 라서, 한국 시간대(UTC+9) PC 에서 오전 9시 전에 연 세션은 폴더 날짜가 첫 줄의 UTC 날짜보다 하루 뒤입니다[2]. 폴더 날짜로 사건일을 정하지 말고 줄의 `timestamp` 로 정한 뒤, `turn_context.timezone` 과 운영체제 시간대 설정으로 현지 시각을 붙입니다. Codex CLI 기록에는 세션을 시작한 곳의 시간대가 남습니다[5]. `thread_items.created_at_ms` 와 `thread_turns.started_at` 같은 DB 시각은 rollout 에서 옮긴 값이므로 rollout 과 어긋나면 rollout 을 먼저 봅니다. 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
@@ -162,12 +162,12 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 - **입력 기록 끄기와 세션 기록은 별개.** `[history] persistence = "none"` 은 `history.jsonl` 만 막습니다[3]. rollout 은 그대로 생기므로 `history.jsonl` 이 없다는 사실로 기록 전체가 꺼졌다고 보지 않습니다.
 - **잘린 입력 기록.** `max_bytes` 로 앞부분이 버려지는 것은 설정에 따른 정상 동작이라서, 첫 줄이 늦다고 조작으로 보면 안 됩니다. `persistence` 를 사건 전후로 바꿨는지는 `config.toml` 의 수정 시각과 백업으로 봅니다. 보관·삭제 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 - **읽을 수 없는 항목.** 다중 에이전트 도구의 `encrypted_content` 에는 평문 대신 `gAAAAA` 로 시작하는 암호화된 값이 들어 있을 수 있습니다[4]. agentsview 는 이 값을 풀지 않고 표시에서 뺍니다[4]. 보고서에는 "내용 암호화" 라고 적습니다.
-- **같은 모양의 다른 도구.** TRAE CLI 2.0 도 Codex 와 같은 모양의 rollout 을 쓰고 `originator` 에 `codex-tui` 를 적습니다[4]. 형식만 보고 Codex 라고 단정하지 말고 폴더 위치와 설치 흔적으로 도구를 가립니다.
+- **같은 모양의 다른 도구.** TRAE CLI 2.0 도 Codex 와 같은 모양의 rollout 을 쓰고 `originator` 에 `codex-tui` 를 적습니다[4]. 형식만 보고 Codex 라고 단정하지 말고 폴더 위치와 설치 흔적으로 도구를 구분합니다.
 - **로그인 정보.** `auth.json` 과 `.credentials.json` 은 토큰을 담으므로, 파일이 있었다는 사실과 수정 시각만 보고서에 적고 값은 가립니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** rollout 의 모든 줄은 `{"timestamp":"` 로 시작하고 `0A` 로 끝나므로, 지운 rollout 을 할당되지 않은 영역에서 찾을 때 이 바이트열을 기준으로 삼습니다. `history.jsonl` 줄은 `{"session_id":"` 로 시작합니다. 아래 바이트는 문자 인코딩대로 옮긴 만든 예시이고, 검체에서 뜬 값이 아닙니다.
+**헥스로 한 번.** rollout 의 모든 줄은 `{"timestamp":"` 로 시작하고 `0A` 로 끝나므로, 지운 rollout 을 할당되지 않은 영역에서 찾을 때 이 바이트열을 기준으로 삼습니다. `history.jsonl` 줄은 `{"session_id":"` 로 시작합니다. 아래 바이트는 문자 인코딩대로 옮긴 만든 예시이고, 실제 데이터에서 뜬 값이 아닙니다.
 
 ```
 만든 예시(인코딩으로 옮긴 바이트)
@@ -198,7 +198,7 @@ jq -r '[(.ts|todate), .session_id, .text] | @tsv' "$CX/history.jsonl"
 sqlite3 "$CX/state_5.sqlite" "SELECT id, datetime(created_at,'unixepoch'), cwd, title, archived, rollout_path FROM threads;"
 ```
 
-agentsview[4]는 Codex rollout 을 읽어 세션·도구 호출·사용량으로 정리하고, coding-agent-forensics[5]는 브라우저에서 세션 파일을 열어 타임라인과 파일 변경을 보여 줍니다. 두 도구 모두 판이 바뀌면 읽지 못하는 칸이 생길 수 있으므로 결과를 위의 jq 출력과 맞춰 봅니다.
+agentsview[4]는 Codex rollout 을 읽어 세션·도구 호출·사용량으로 정리하고, coding-agent-forensics[5]는 브라우저에서 세션 파일을 열어 타임라인과 파일 변경을 보여 줍니다. 두 도구 모두 판이 바뀌면 읽지 못하는 필드가 생길 수 있으므로 결과를 위의 jq 출력과 맞춰 봅니다.
 
 ## 교차 검증
 
@@ -210,7 +210,7 @@ agentsview[4]는 Codex rollout 을 읽어 세션·도구 호출·사용량으로
 
 ## 실습
 
-시험용 가상 머신과 시험 계정으로 검체를 만들어 풉니다.
+시험용 가상 머신과 시험 계정으로 시험 데이터를 만들어 풉니다.
 
 1. 기본 설정으로 대화형 세션을 두 번 연 뒤 `~/.codex` 에 생긴 파일을 모두 적고, rollout 의 줄 종류와 `history.jsonl` 의 줄을 세션 ID 로 이어 봅니다.
 2. 같은 요청을 `codex exec` 로 한 번 실행하고, rollout 의 `originator` 와 `history.jsonl` 에 줄이 생겼는지 비교합니다.

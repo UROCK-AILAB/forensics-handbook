@@ -35,7 +35,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 | 서비스 크래시 덤프 | 서비스 계정 프로필 폴더. System 서비스는 `%WINDIR%\System32\Config\SystemProfile`, Network·Local Service 는 `%WINDIR%\ServiceProfiles` |
 | 라이브 커널 보고서 | `%systemroot%\LiveKernelReports` |
 
-- 예전 Windows 에서 사용자별 보고서 폴더를 쓰는지는 검체에서 확인합니다.
+- 예전 Windows 에서 사용자별 보고서 폴더를 쓰는지는 실제 데이터로 확인합니다.
 
 ### 설정 위치
 
@@ -161,7 +161,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 ### 증명하지 못하는 것
 
-- 누가 실행했는지는 `Report.wer` 만으로 알 수 없습니다. `Report.wer` 에는 사용자 이름을 담은 키가 없습니다. `AppPath` 가 사용자 프로필 아래면 그 경로로 가늠합니다.
+- 누가 실행했는지는 `Report.wer` 만으로 알 수 없습니다. `Report.wer` 에는 사용자 이름을 담은 키가 없습니다. `AppPath` 가 사용자 프로필 아래면 그 경로로 추정합니다.
 - 오류의 원인과 프로그램이 악성인지는 알 수 없습니다.
 - 정상으로 실행하고 끝난 프로그램은 남지 않습니다.
 - 보고서가 없다고 오류가 없었던 것은 아닙니다. `Disabled`, `ExcludedApplications`, 보관 개수 한도, 사용자의 삭제로 빠질 수 있습니다.
@@ -184,7 +184,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 ## 함정과 한계
 
-- **이벤트 1001 만 보고 크래시로 단정하지 않습니다.** PC 한 대의 Application 로그에는 1001 이 364건, 1002 가 14건, 1000 이 8건 있었습니다. 1001 의 Event Name 을 보고 어떤 보고서인지 가립니다.
+- **이벤트 1001 만 보고 크래시로 단정하지 않습니다.** PC 한 대의 Application 로그에는 1001 이 364건, 1002 가 14건, 1000 이 8건 있었습니다. 1001 의 Event Name 을 보고 어떤 보고서인지 판별합니다.
 - **서명 이름은 OS 언어를 따릅니다.** `Sig[n].Name` 이 한국어로 적힐 수 있습니다. 영어 이름으로 검색하면 놓칩니다. `Sig[n].Value` 를 번호로 읽습니다.
 - **폴더 이름의 프로그램 이름은 잘립니다.** 전체 경로는 `AppPath` 로 봅니다.
 - **붙인 파일은 사라질 수 있습니다.** `ReportArchive` 에 `Report.wer` 만 남는 경우가 있습니다. 덤프 같은 붙인 파일이 없다고 수집을 빠뜨린 것은 아닙니다.
@@ -197,7 +197,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 ### 헥스로 한 번
 
-아래는 위 형식으로 만든 예시입니다. 특정 검체에서 나온 값이 아닙니다. BOM 바로 뒤에 `EventType=APPCRASH` 한 줄이 온다고 두었습니다. 실제 파일에서는 줄 순서가 다를 수 있습니다.
+아래는 위 형식으로 만든 예시입니다. 특정 기기에서 나온 값이 아닙니다. BOM 바로 뒤에 `EventType=APPCRASH` 한 줄이 온다고 두었습니다. 실제 파일에서는 줄 순서가 다를 수 있습니다.
 
 ```
 FF FE 45 00 76 00 65 00 6E 00 74 00 54 00 79 00   ..E.v.e.n.t.T.y.
@@ -266,7 +266,7 @@ Get-ChildItem .\ReportArchive -Recurse -Filter Report.wer |
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 `C:\ProgramData\Microsoft\Windows\WER\` 폴더와 Application 로그를 꺼내 풀어 봅니다.
+공개 데이터 세트(NIST CFReDS 등)에서 `C:\ProgramData\Microsoft\Windows\WER\` 폴더와 Application 로그를 꺼내 풀어 봅니다.
 
 1. `ReportArchive` 와 `ReportQueue` 에 보고서가 몇 개 있습니까? 폴더 이름의 앞머리별로 세어 봅니다.
 2. `AppCrash` 보고서 하나를 골라 `AppPath`, `EventTime`, 예외 코드를 적습니다. `EventTime` 은 UTC 로 언제입니까?

@@ -16,7 +16,7 @@ AI 서비스에 접속하면 기기 안의 DNS 질의 기록, 네트워크 장�
 
 웹 브라우저든 데스크톱 앱이든 AI 서비스와 통신하려면 먼저 도메인 이름을 IP 주소로 바꾸는 DNS 질의를 하고, 그 뒤 TLS 로 암호화한 연결을 엽니다. 대화 본문은 암호화된 연결 안에 들어 있어서 네트워크 쪽에서는 보이지 않지만, 어느 도메인을 찾았고 어느 서버에 연결했는지는 여러 곳에 흔적으로 남습니다.
 
-흔적이 남는 곳은 네 갈래입니다. 기기 안에서는 Sysmon 같은 감시 도구를 설치해 두었을 때 프로세스별 DNS 질의와 연결이 이벤트 로그에 남습니다. 네트워크 경계에서는 Zeek 같은 분석 도구가 TLS 연결을 열 때 클라이언트가 밝힌 도메인 이름, 곧 SNI (Server Name Indication) 를 기록합니다. 조직이 웹 프록시나 보안 접근 서비스(SASE/SSE)를 거치게 해 두었다면 그 제품의 로그에 접속 기록이 남고, 이 갈래는 [보안 제품이 남기는 AI 사용 기록](dlp-casb.md)에서 다룹니다. 마지막으로 Electron 으로 만든 데스크톱 앱은 앱 폴더 안에 쿠키와 네트워크 상태 파일을 따로 둡니다.
+흔적이 남는 곳은 네 가지입니다. 기기 안에서는 Sysmon 같은 감시 도구를 설치해 두었을 때 프로세스별 DNS 질의와 연결이 이벤트 로그에 남습니다. 네트워크 경계에서는 Zeek 같은 분석 도구가 TLS 연결을 열 때 클라이언트가 밝힌 도메인 이름, 곧 SNI (Server Name Indication) 를 기록합니다. 조직이 웹 프록시나 보안 접근 서비스(SASE/SSE)를 거치게 해 두었다면 그 제품의 로그에 접속 기록이 남고, 이 부분은 [보안 제품이 남기는 AI 사용 기록](dlp-casb.md)에서 다룹니다. 마지막으로 Electron 으로 만든 데스크톱 앱은 앱 폴더 안에 쿠키와 네트워크 상태 파일을 따로 둡니다.
 
 이 페이지는 도메인 목록, DNS, SNI, 앱 네트워크 폴더를 다루고, 조직의 관리 콘솔에 남는 감사 기록은 같은 묶음의 다른 페이지에서 다룹니다.
 
@@ -36,7 +36,7 @@ Microsoft Purview 는 데이터 보호 기능이 알아보는 "지원 생성형 
 | 개발·로컬 도구 | `*.cursor.com`, `*.github.com/features/copilot`, `*.ollama.ai` |
 | 그 밖의 도구 | `*.notebooklm.cloud.google.com` |
 
-같은 목록에는 공식 서비스와 이름만 비슷한 제3자 사이트(예: `*.chatgpt4online.org`, `*.ai-claude.net`)도 들어 있습니다. 도메인에 서비스 이름이 들어 있다고 해서 공식 서비스를 썼다고 단정하지 않고, 목록에서 그 도메인이 어느 쪽인지 먼저 확인합니다. 각 서비스가 API 호출에 쓰는 도메인은 이 목록과 따로 공급사 문서와 검체의 DNS 기록으로 확인합니다.
+같은 목록에는 공식 서비스와 이름만 비슷한 제3자 사이트(예: `*.chatgpt4online.org`, `*.ai-claude.net`)도 들어 있습니다. 도메인에 서비스 이름이 들어 있다고 해서 공식 서비스를 썼다고 단정하지 않고, 목록에서 그 도메인이 어느 쪽인지 먼저 확인합니다. 각 서비스가 API 호출에 쓰는 도메인은 이 목록과 따로 공급사 문서와 실제 기기의 DNS 기록으로 확인합니다.
 
 ### 기기 안: Sysmon
 
@@ -47,11 +47,11 @@ Microsoft Purview 는 데이터 보호 기능이 알아보는 "지원 생성형 
 
 Sysmon 은 Sysinternals 도구라서 조직이 설치해 두지 않았으면 기록이 없고, 기본 설정으로 설치하면 네트워크 감시를 하지 않습니다. 이벤트 3 은 설정 파일로 켜야 남고, 설정 항목 `DnsLookup`(역방향 DNS 조회)은 기본값이 True 입니다. 이벤트 22 는 Windows 8.1 에 추가된 원격 측정을 쓰기 때문에 Windows 7 이하에서는 생기지 않습니다. 기록은 `Applications and Services Logs/Microsoft/Windows/Sysmon/Operational` 에 쌓입니다. 실행 환경은 클라이언트 Windows 11 이상, 서버 Windows Server 2019 이상입니다[2].
 
-Sysmon 이 없는 기기에서 Windows 기본 DNS Client 이벤트 로그를 볼 때는 그 로그가 켜져 있었는지와 어떤 이벤트 번호가 남았는지 검체에서 먼저 확인합니다.
+Sysmon 이 없는 기기에서 Windows 기본 DNS Client 이벤트 로그를 볼 때는 그 로그가 켜져 있었는지와 어떤 이벤트 번호가 남았는지 실제 기기에서 먼저 확인합니다.
 
 ### 네트워크 경계: Zeek `ssl.log`
 
-Zeek 는 TLS 트래픽을 분석해 `ssl.log` 에 남기고, `server_name` 칸에 클라이언트가 요청한 도메인(SNI)을 적습니다. 운영체제와 관계없이 네트워크를 지나는 모든 기기의 연결이 대상이라서 Windows·macOS·Android·iOS 기기를 한꺼번에 볼 수 있지만, 조직이 미리 수집 장비를 두었을 때만 기록이 있습니다.
+Zeek 는 TLS 트래픽을 분석해 `ssl.log` 에 남기고, `server_name` 필드에 클라이언트가 요청한 도메인(SNI)을 적습니다. 운영체제와 관계없이 네트워크를 지나는 모든 기기의 연결이 대상이라서 Windows·macOS·Android·iOS 기기를 한꺼번에 볼 수 있지만, 조직이 미리 수집 장비를 두었을 때만 기록이 있습니다.
 
 ### 기기 안: 데스크톱 앱의 네트워크 폴더
 
@@ -67,20 +67,20 @@ Claude 데스크톱(스토어 앱) 폴더에는 아래 파일이 있습니다. �
 %USERPROFILE%\Packages\<Claude 패키지>\LocalCache\Roaming\Claude\Partitions\<이름>\Network\Cookies
 ```
 
-크롬 계열 앱이 쓰는 이 폴더 구조와 `Network Persistent State`·`TransportSecurity` 가 담는 내용은 공통 원리라서 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다루고, 이 페이지에서는 되풀이하지 않습니다. 다른 데스크톱 앱이나 macOS·Android·iOS 앱에서는 앱 폴더 안에 같은 `Network` 폴더가 있는지 검체에서 확인합니다. 앱별 저장 위치는 [ChatGPT](../chat-services/chatgpt/index.md), [Claude](../chat-services/claude/index.md), [Microsoft Copilot](../chat-services/copilot/index.md) 페이지를 봅니다.
+크롬 계열 앱이 쓰는 이 폴더 구조와 `Network Persistent State`·`TransportSecurity` 가 담는 내용은 공통 원리라서 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다루고, 이 페이지에서는 되풀이하지 않습니다. 다른 데스크톱 앱이나 macOS·Android·iOS 앱에서는 앱 폴더 안에 같은 `Network` 폴더가 있는지 실제 기기에서 확인합니다. 앱별 저장 위치는 [ChatGPT](../chat-services/chatgpt/index.md), [Claude](../chat-services/claude/index.md), [Microsoft Copilot](../chat-services/copilot/index.md) 페이지를 봅니다.
 
 ## 구조
 
-### `ssl.log` 에서 볼 칸
+### `ssl.log` 에서 볼 필드
 
-| 칸 | 뜻 |
+| 필드 | 뜻 |
 |---|---|
 | `server_name` | 클라이언트가 TLS 연결을 열며 밝힌 도메인(SNI) |
 | `version` | TLS 버전 |
 | `cipher` | 합의한 암호 방식 |
 | `curve` | 키 교환에 쓴 곡선 |
 | `established` | 연결이 성립했는지 |
-| `ja3`, `ja3s` | 클라이언트·서버 TLS 핸드셰이크의 지문. 기본 칸이 아니라 JA3·JA3S 패키지를 설치했을 때 붙는 칸 |
+| `ja3`, `ja3s` | 클라이언트·서버 TLS 핸드셰이크의 지문. 기본 필드가 아니라 JA3·JA3S 패키지를 설치했을 때 붙는 필드 |
 
 TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypted Client Hello) 를 쓰는 연결은 `server_name` 이 비어서 `ssl.log` 에 식별 정보가 남지 않습니다[3]. 조사하는 서비스의 연결에서 `server_name` 이 비어 있는지는 받은 `ssl.log` 에서 확인합니다.
 
@@ -88,12 +88,12 @@ TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypt
 
 `Partitions\<이름>\Network\Cookies` 를 SQLite 로 열면 표 두 개가 있습니다.
 
-| 표 | 칸 |
+| 표 | 열 |
 |---|---|
 | `cookies` | `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` |
 | `meta` | `key`, `value` |
 
-칸 이름으로 보면 `host_key` 에는 쿠키를 설정한 도메인이, `creation_utc`·`last_access_utc`·`last_update_utc` 에는 쿠키를 만든 시각과 마지막으로 쓰고 바꾼 시각이 들어갑니다. 값을 읽는 방법과 `encrypted_value` 의 보호 방식은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
+열 이름으로 보면 `host_key` 에는 쿠키를 설정한 도메인이, `creation_utc`·`last_access_utc`·`last_update_utc` 에는 쿠키를 만든 시각과 마지막으로 쓰고 바꾼 시각이 들어갑니다. 값을 읽는 방법과 `encrypted_value` 의 보호 방식은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -101,11 +101,11 @@ TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypt
 
 **증명하지 못하는 것.** 이 기록들에는 대화 내용이 없어서 무엇을 물었는지, 파일을 올렸는지는 알 수 없습니다. DNS 질의는 사람이 직접 접속하지 않아도 생기는데, 페이지에 들어 있는 다른 사이트의 자원이나 앱의 백그라운드 통신도 질의를 만듭니다. 도메인과 연결 기록은 기기나 계정 단위의 사실이라서 그 시각에 누가 자판 앞에 있었는지는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 밝힙니다.
 
-보고서 문장은 "이 시간대에 이 기기의 이 프로세스가 이 도메인을 질의하고 연결한 기록이 있다" 처럼 기록이 말하는 범위에서 씁니다.
+보고서 문장은 "이 시간대에 이 기기의 이 프로세스가 이 도메인을 질의하고 연결한 기록이 있다" 처럼 기록으로 확인되는 범위에서 씁니다.
 
 ## 시각 해석
 
-Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 칸은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 칸은 `ts` 이고, 값은 유닉스 시각(초)일 수도 있고 끝에 `Z` 가 붙은 UTC 문자열일 수도 있습니다[3]. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 열은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 필드는 `ts` 이고, 값은 유닉스 시각(초)일 수도 있고 끝에 `Z` 가 붙은 UTC 문자열일 수도 있습니다[3]. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -118,7 +118,7 @@ Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마�
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 앱의 `Cookies` 파일이 SQLite DB 인지 먼저 확인합니다. SQLite 파일은 첫 16바이트가 정해진 문자열이라서, 파일 앞부분이 아래와 같으면 SQLite 도구로 열 수 있습니다. 아래는 SQLite 파일 형식 명세로 **만든 예시**이고 특정 검체에서 뽑은 값이 아닙니다.
+**헥스로 한 번.** 앱의 `Cookies` 파일이 SQLite DB 인지 먼저 확인합니다. SQLite 파일은 첫 16바이트가 정해진 문자열이라서, 파일 앞부분이 아래와 같으면 SQLite 도구로 열 수 있습니다. 아래는 SQLite 파일 형식 명세로 **만든 예시**이고 특정 기기에서 뽑은 값이 아닙니다.
 
 ```
 오프셋    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F
@@ -136,7 +136,7 @@ WHERE host_key LIKE '%claude.ai' OR host_key LIKE '%anthropic.com'
 ORDER BY last_access_utc;
 ```
 
-패킷 캡처 파일이 있다면 Zeek 로 읽어 `ssl.log` 를 만들고 `server_name` 칸에서 같은 도메인을 찾습니다. 아래는 칸 이름만 맞춘 **만든 예시**입니다.
+패킷 캡처 파일이 있다면 Zeek 로 읽어 `ssl.log` 를 만들고 `server_name` 필드에서 같은 도메인을 찾습니다. 아래는 필드 이름만 맞춘 **만든 예시**입니다.
 
 | `server_name` | `version` | `established` | `ja3`(패키지 설치 시) |
 |---|---|---|---|
@@ -151,12 +151,12 @@ ORDER BY last_access_utc;
 - [Microsoft Purview로 본 Copilot 기록](purview-copilot.md) — 조직 계정으로 Copilot 을 쓴 감사 기록
 - [Claude 기업용 감사 로그](claude-enterprise.md) — 같은 시간대의 로그인 기록과 `ip_address`
 - [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) — 브라우저 방문 기록으로 어느 페이지를 열었는지
-- [Ollama](../local-ai/ollama.md) — 로컬 Ollama 서버는 `server.log` 의 API 호출 줄마다 호출한 IP 를 남기고, 이 값은 보통 `127.0.0.1` 입니다(LangurTrace 시험, Windows 11 24H2·Ollama 0.6.5)[5]. 다른 IP 가 보이면 네트워크 기록에서 그 IP 의 연결을 찾고, 지금 판은 로그 모양이 다를 수 있으므로 검체의 로그에서 확인합니다.
+- [Ollama](../local-ai/ollama.md) — 로컬 Ollama 서버는 `server.log` 의 API 호출 줄마다 호출한 IP 를 남기고, 이 값은 보통 `127.0.0.1` 입니다(LangurTrace 시험, Windows 11 24H2·Ollama 0.6.5)[5]. 다른 IP 가 보이면 네트워크 기록에서 그 IP 의 연결을 찾고, 지금 판은 로그 모양이 다를 수 있으므로 실제 로그에서 확인합니다.
 - [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md) — 도메인 기록을 조사 질문에 쓰는 흐름
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)를 쓸 때는 AI 서비스 접속 기록이 들어 있는지 먼저 확인하고, 없으면 시험용 PC 와 패킷 캡처 도구로 아래 질문을 직접 풀어 봅니다.
+공개 시험 데이터(NIST CFReDS 등)를 쓸 때는 AI 서비스 접속 기록이 들어 있는지 먼저 확인하고, 없으면 시험용 PC 와 패킷 캡처 도구로 아래 질문을 직접 풀어 봅니다.
 
 1. Sysmon 을 기본 설정으로 설치하고 AI 서비스에 접속한 뒤, 이벤트 22 와 이벤트 3 이 각각 남는지 확인합니다. 설정 파일로 이벤트 3 을 켠 뒤 다시 비교합니다.
 2. 브라우저와 데스크톱 앱으로 같은 서비스에 접속하고, 이벤트 22 의 프로세스로 두 접속을 나눌 수 있는지 봅니다.

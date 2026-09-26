@@ -12,7 +12,7 @@ nav_order: 760
 
 ## 이 형식을 쓰는 아티팩트
 
-모델 파일은 사용 기록이 아니라 모델 자체이지만, 조사에서는 그 PC 에 어떤 모델이 있었는지, 어디서 받았는지, 언제 받았는지를 알려 줍니다. GGUF 는 한 파일 안에 모델 이름·만든 사람·출처 URL·라이선스·채팅 틀 같은 메타데이터를 함께 넣는 형식이고, safetensors 는 텐서 목록을 JSON 헤더로 적고 자유 형식의 메타데이터 칸을 따로 둡니다. 파일 이름을 바꿔도 헤더의 값은 그대로 남아서, 이름을 바꿔 숨긴 모델도 헤더로 알아볼 수 있습니다. 사용자가 받아서 쓴 모델의 메타데이터는 사용 의도를 드러낼 수 있습니다[6, §6.1].
+모델 파일은 사용 기록이 아니라 모델 자체이지만, 조사에서는 그 PC 에 어떤 모델이 있었는지, 어디서 받았는지, 언제 받았는지를 알려 줍니다. GGUF 는 한 파일 안에 모델 이름·만든 사람·출처 URL·라이선스·채팅 틀 같은 메타데이터를 함께 넣는 형식이고, safetensors 는 텐서 목록을 JSON 헤더로 적고 자유 형식의 메타데이터 필드를 따로 둡니다. 파일 이름을 바꿔도 헤더의 값은 그대로 남아서, 이름을 바꿔 숨긴 모델도 헤더로 알아볼 수 있습니다. 사용자가 받아서 쓴 모델의 메타데이터는 사용 의도를 드러낼 수 있습니다[6, §6.1].
 
 로컬 AI 도구는 모델을 저마다 정한 폴더에 두고, 두는 방식은 크게 둘로 나뉩니다. Ollama 와 Msty 는 파일을 내용의 SHA-256 digest 이름으로 두고 모델 이름은 매니페스트 폴더에 적는 digest 형이고, LM Studio·Jan·GPT4All 은 모델 이름이 드러나는 폴더나 파일 이름으로 GGUF 를 두는 이름형입니다[6, 부록 A][7].
 
@@ -26,7 +26,7 @@ nav_order: 760
 
 Jan 은 허브마다 짜임이 다릅니다. Jan 자체 허브 모델은 `models\cortex.so\{모델}\{크기}\` 아래 `model.yml`·`metadata.yml` 과 `model.gguf` 로 두고, Hugging Face 에서 받은 모델은 `models\huggingface.co\{작성자}\{저장소}\` 아래 GGUF 와 같은 이름의 `.yml` 로 둡니다[7]. `models\remote\*.yml` 은 `engine: openai` 같은 클라우드 모델 정의라서 모델 파일이 따로 없습니다. LM Studio 는 `models` 아래를 `publisher/model/model-file.gguf` 짜임으로 두고[4], 설치 기록의 `download.targetPath` 값(`...\.lmstudio\models\{제공자}\{저장소}\{파일}.gguf`)에도 이 경로가 남습니다[7].
 
-Ollama 는 환경 변수 `OLLAMA_MODELS` 로, Msty 는 설정으로 모델 폴더를 옮길 수 있습니다. Ollama 는 `server.log` 첫머리의 `env="map[...]"` 에 `OLLAMA_MODELS` 값을 남기고, Msty 는 `app.log` 에 `Serving models from: ...` 와 `modelsFolder: ...` 줄을 남깁니다[7]. 기본 위치가 비어 있으면 이 줄에서 실제 모델 폴더를 먼저 찾습니다. 자세한 로그 형식은 [Ollama](ollama.md), [Msty](msty.md) 쪽에서 다룹니다.
+Ollama 는 환경 변수 `OLLAMA_MODELS` 로, Msty 는 설정으로 모델 폴더를 옮길 수 있습니다. Ollama 는 `server.log` 첫머리의 `env="map[...]"` 에 `OLLAMA_MODELS` 값을 남기고, Msty 는 `app.log` 에 `Serving models from: ...` 와 `modelsFolder: ...` 줄을 남깁니다[7]. 기본 위치가 비어 있으면 이 줄에서 실제 모델 폴더를 먼저 찾습니다. 자세한 로그 형식은 [Ollama](ollama.md), [Msty](msty.md) 페이지에서 다룹니다.
 
 그 밖에 파이썬 라이브러리로 받은 모델은 Hugging Face 캐시에 쌓이고, [로컬 이미지 생성 도구](image-gen-local.md)인 ComfyUI 는 `models/checkpoints` 에 safetensors 체크포인트를 둡니다[5].
 
@@ -47,7 +47,7 @@ Ollama 는 환경 변수 `OLLAMA_MODELS` 로, Msty 는 설정으로 모델 폴�
 
 GGUF 의 현재 판은 3 이고, 판 3 에서 빅엔디언 파일을 지원하기 시작했습니다. 기본은 리틀엔디언이고, 빅엔디언 파일은 메타데이터와 텐서 값이 모두 빅엔디언입니다.
 
-| 순서 | 칸 | 크기 | 뜻 |
+| 순서 | 필드 | 크기 | 뜻 |
 |---|---|---|---|
 | 1 | magic | 4바이트 | `GGUF`(`47 47 55 46`) |
 | 2 | version | uint32 | 형식 판(현재 3) |
@@ -80,13 +80,13 @@ GGUF 의 현재 판은 3 이고, 판 3 에서 빅엔디언 파일을 지원하�
 
 ### safetensors
 
-| 순서 | 칸 | 크기 | 뜻 |
+| 순서 | 필드 | 크기 | 뜻 |
 |---|---|---|---|
 | 1 | 헤더 크기 N | 8바이트 | 부호 없는 리틀엔디언 64비트 정수 |
 | 2 | 헤더 | N바이트 | UTF-8 JSON, 반드시 `{` 로 시작 |
 | 3 | 데이터 | 나머지 | 텐서 바이트 |
 
-JSON 헤더의 각 항목은 텐서 이름을 키로 하고 `dtype`, `shape`, `data_offsets` 를 적습니다. `data_offsets` 의 두 값은 데이터 부분이 시작하는 곳을 0으로 센 시작과 끝이고, 끝 값은 마지막 바이트 다음 위치입니다. 특수 키 `__metadata__` 에는 문자열에서 문자열로 가는 자유 형식 정보를 넣을 수 있고, 무엇을 넣는지는 파일을 만든 도구마다 다릅니다. safetensors 형식에는 판 번호를 적는 칸이 따로 없습니다[2].
+JSON 헤더의 각 항목은 텐서 이름을 키로 하고 `dtype`, `shape`, `data_offsets` 를 적습니다. `data_offsets` 의 두 값은 데이터 부분이 시작하는 곳을 0으로 센 시작과 끝이고, 끝 값은 마지막 바이트 다음 위치입니다. 특수 키 `__metadata__` 에는 문자열에서 문자열로 가는 자유 형식 정보를 넣을 수 있고, 무엇을 넣는지는 파일을 만든 도구마다 다릅니다. safetensors 형식에는 판 번호를 적는 필드가 따로 없습니다[2].
 
 `.ckpt`·`.bin` 같은 pickle 형식은 불러올 때 임의의 코드가 실행될 수 있고, safetensors 는 JSON 으로 선언만 하는 형식이라 그렇지 않습니다. 의심스러운 모델 파일이 pickle 형식이라면 악성 코드를 실어 나를 수 있는 파일로 보고, 분석할 때는 라이브러리로 불러오지 않고 바이트로만 읽습니다. [AI로 악성 코드를 만들었나](../../04-scenarios/misuse/malware-development.md) 같은 조사에서 모델 파일이 나오면 이 점을 먼저 확인합니다.
 
@@ -110,7 +110,7 @@ JSON 헤더의 각 항목은 텐서 이름을 키로 하고 `dtype`, `shape`, `d
 
 ### Jan 의 모델 YAML
 
-Jan `model.yml` 은 주석으로 칸의 뜻을 적어 둡니다[7]. `id`·`model` 은 모델 식별자, `name` 은 주석이 `# metadata.general.name` 이라고 적은 이름, `files` 는 GGUF 경로(상대 또는 절대), `size` 는 바이트 크기이고, `engine`·`prompt_template`·`ctx_len`·`ngl` 같은 실행 값이 이어집니다. `metadata.yml` 에는 `version`, `name`, `default`(기본 크기, 예 `3b`), `author` 가 있습니다. YAML 의 `name` 은 GGUF 헤더의 `general.name` 과 글자가 다를 수 있습니다. 예를 들어 YAML 에는 하이픈을 넣은 이름이, `cortex.log` 에 찍힌 헤더 값에는 띄어쓴 이름이 들어가기도 합니다[7].
+Jan `model.yml` 은 주석으로 필드의 뜻을 적어 둡니다[7]. `id`·`model` 은 모델 식별자, `name` 은 주석이 `# metadata.general.name` 이라고 적은 이름, `files` 는 GGUF 경로(상대 또는 절대), `size` 는 바이트 크기이고, `engine`·`prompt_template`·`ctx_len`·`ngl` 같은 실행 값이 이어집니다. `metadata.yml` 에는 `version`, `name`, `default`(기본 크기, 예 `3b`), `author` 가 있습니다. YAML 의 `name` 은 GGUF 헤더의 `general.name` 과 글자가 다를 수 있습니다. 예를 들어 YAML 에는 하이픈을 넣은 이름이, `cortex.log` 에 찍힌 헤더 값에는 띄어쓴 이름이 들어가기도 합니다[7].
 
 ### Hugging Face 캐시 폴더
 
@@ -163,23 +163,23 @@ LangurTrace 샘플[7]에서는 LM Studio 설치 기록 네 건 가운데 세 건
 
 ### 앱 기록에서 받은 시각과 적재 시각 읽기
 
-GGUF 와 safetensors 명세에는 시각 칸이 없지만, 모델을 받은 시각과 적재한 시각은 앱 기록에 따로 남습니다. 아래 줄 모양은 샘플[7]을 따라 값을 지어낸 만든 예시입니다.
+GGUF 와 safetensors 명세에는 시각 필드가 없지만, 모델을 받은 시각과 적재한 시각은 앱 기록에 따로 남습니다. 아래 줄 모양은 샘플[7]을 따라 값을 지어낸 만든 예시입니다.
 
 | 앱 | 받은 기록 | 시각 형식 |
 |---|---|---|
 | Ollama | `server.log` 의 `source=download.go:177 msg="downloading {digest 앞 12자} in {조각 수} {조각 크기} part(s)"` 와 `POST "/api/pull"` 줄 | `time=` 은 현지 시각에 오프셋, `[GIN]` 줄은 오프셋 없는 현지 시각 |
 | LM Studio | `download-jobs-info.json` 의 `jobs[].jobState.completedTimestamp` | Unix 밀리초 |
 | Jan | `cortex.log` 의 `Handle model input, model handle: {URL 또는 모델 이름}`, `Task added to queue: {모델}`, `Transfer completed for URL: {URL}` | `YYYYMMDD HH:MM:SS.ffffff UTC` |
-| Msty | `app.log` 한 줄 JSON 의 `"msg":"Fetching model: {모델}:{태그}"` | `time` 칸, Unix 밀리초 |
+| Msty | `app.log` 한 줄 JSON 의 `"msg":"Fetching model: {모델}:{태그}"` | `time` 필드, Unix 밀리초 |
 
 ```
 time=2025-06-01T10:15:02.123+09:00 level=INFO source=download.go:177 msg="downloading aaaaaaaaaaaa in 8 100 MB part(s)"
 20250601 01:20:44.500000 UTC 1234 INFO  Task added to queue: sample-model:1b - download_service.cc:492
 ```
 
-모델을 실제로 적재한 때는 Ollama `server.log` 와 Jan `cortex.log` 의 `llama_model_loader: loaded meta data with {키 개수} key-value pairs and {텐서 개수} tensors from {파일 경로}` 줄로 읽습니다. 이 줄 뒤에는 `general.name` 같은 GGUF 헤더 값이 로그에 그대로 찍혀서, 모델 파일이 지워져도 헤더 내용 일부를 로그로 되살릴 수 있습니다. 어느 대화에 어느 모델을 썼는지는 각 앱 쪽의 메시지별 모델 칸으로 확인합니다([Chatbox](chatbox.md), [Msty](msty.md), [Jan](jan.md), [LM Studio](lm-studio.md)).
+모델을 실제로 적재한 때는 Ollama `server.log` 와 Jan `cortex.log` 의 `llama_model_loader: loaded meta data with {키 개수} key-value pairs and {텐서 개수} tensors from {파일 경로}` 줄로 읽습니다. 이 줄 뒤에는 `general.name` 같은 GGUF 헤더 값이 로그에 그대로 찍혀서, 모델 파일이 지워져도 헤더 내용 일부를 로그로 되살릴 수 있습니다. 어느 대화에 어느 모델을 썼는지는 각 앱 쪽의 메시지별 모델 필드로 확인합니다([Chatbox](chatbox.md), [Msty](msty.md), [Jan](jan.md), [LM Studio](lm-studio.md)).
 
-파일 시스템 시각은 보조 근거입니다. 파일 생성 시각은 내려받거나 복사한 때에 가깝고, 모델을 쓴 때가 아닙니다. Hugging Face 캐시에서는 `hf cache ls` 가 저장소별 마지막 접근 시각과 수정 시각을 보여 주지만, 이 값도 파일 시스템 시각에서 나온 값으로 보고 볼륨의 마지막 접근 시각 기록 설정을 함께 확인합니다. `snapshots` 아래 커밋 폴더가 여럿이면 폴더 시각 순서로 판을 받은 순서를 가늠할 수 있습니다.
+파일 시스템 시각은 보조 근거입니다. 파일 생성 시각은 내려받거나 복사한 때에 가깝고, 모델을 쓴 때가 아닙니다. Hugging Face 캐시에서는 `hf cache ls` 가 저장소별 마지막 접근 시각과 수정 시각을 보여 주지만, 이 값도 파일 시스템 시각에서 나온 값으로 보고 볼륨의 마지막 접근 시각 기록 설정을 함께 확인합니다. `snapshots` 아래 커밋 폴더가 여럿이면 폴더 시각 순서로 판을 받은 순서를 추정할 수 있습니다.
 
 ## 포렌식에서 중요한 점
 
@@ -212,11 +212,11 @@ GGUF 파일이 `GGUF` 로 시작하지 않거나 판 값이 명세에 없는 값
 ## 함정
 
 - **이름만 믿기.** 파일 이름과 폴더 이름은 사용자가 바꿀 수 있습니다. 헤더를 읽어 이름을 확인합니다.
-- **헤더 이름도 비어 있거나 뜻이 없을 수 있음.** Ollama `server.log` 에 `msg="key not found" key=general.name` 줄이 찍히거나, Jan `cortex.log` 에 `general.name` 이 `Hf` 로 찍히는 모델이 있습니다[7]. 이럴 때는 `general.base_model.0.repo_url` 같은 다른 키와 해시로 모델을 가립니다.
+- **헤더 이름도 비어 있거나 뜻이 없을 수 있음.** Ollama `server.log` 에 `msg="key not found" key=general.name` 줄이 찍히거나, Jan `cortex.log` 에 `general.name` 이 `Hf` 로 찍히는 모델이 있습니다[7]. 이럴 때는 `general.base_model.0.repo_url` 같은 다른 키와 해시로 모델을 확인합니다.
 - **조각 파일.** 여러 조각으로 나뉜 GGUF 는 조각 하나만 남아 있어도 모델 전체가 있었다고 보지 않고, 조각 번호와 전체 개수를 확인합니다.
 - **digest 형 저장소의 파일 수.** Ollama·Msty 의 `blobs` 에는 모델 본체 말고도 채팅 틀·라이선스·매개변수·`config` 파일이 digest 이름으로 함께 있습니다. 크기와 매니페스트의 `mediaType` 으로 모델 본체를 고릅니다.
 - **옮긴 모델 폴더.** LangurTrace 의 KAPE 타깃은 `C:\Users\%user%\...` 아래 기본 경로만 모읍니다. `OLLAMA_MODELS` 나 Msty 설정으로 옮긴 폴더, 다른 드라이브는 로그에서 경로를 읽고 따로 모읍니다.
-- **캐시 명령의 부작용.** `hf cache ls` 나 `hf cache verify` 는 원본이 아니라 사본에서 돌립니다. `hf cache rm`·`hf cache prune` 은 지우는 명령이라 조사에서는 쓰지 않고, 사용자가 이 명령을 쓴 흔적이 있으면 캐시가 비어 있는 까닭으로 적습니다.
+- **캐시 명령의 부작용.** `hf cache ls` 나 `hf cache verify` 는 원본이 아니라 사본에서 돌립니다. `hf cache rm`·`hf cache prune` 은 지우는 명령이라 조사에서는 쓰지 않고, 사용자가 이 명령을 쓴 흔적이 있으면 캐시가 비어 있는 이유로 적습니다.
 - **Windows 링크.** 링크를 쓰지 않은 Hugging Face 캐시에서는 `blobs` 가 비어 있어도 이상이 아닙니다.
 - **시각의 시간대.** Ollama 로그는 현지 시각, Jan 로그는 UTC, LM Studio·Msty 는 Unix 밀리초라서 한 줄로 세우기 전에 기준을 맞춥니다. LangurTrace 는 LM Studio 의 Unix 밀리초를 분석 PC 의 현지 시각으로 바꿔 CSV 에 적고, Ollama 로그는 오프셋을 떼고 옮깁니다.
 
@@ -226,7 +226,7 @@ GGUF 파일이 `GGUF` 로 시작하지 않거나 판 값이 명세에 없는 값
 
 LangurTrace[7]는 KAPE 타깃과 모듈로 로컬 LLM 앱의 기록을 모으고 해석합니다. 모듈은 `LangurTrace.exe --src %sourceDirectory% --dst %destinationDirectory% --app ollama` 처럼 앱 이름을 넘겨 실행하고, 모델에 관해서는 아래 파일을 냅니다. LangurTrace 는 2025년 2~4월 배포판 앱으로 시험한 도구라서[6, 표 1], 지금 판의 앱에서는 경로나 키가 바뀌어 빠지는 항목이 있을 수 있습니다.
 
-| 앱 | 출력 파일 | 칸 | 만드는 코드 |
+| 앱 | 출력 파일 | 열 | 만드는 코드 |
 |---|---|---|---|
 | Ollama·Msty | `model_manifest.csv` | `model_name`, `parameter`, `layer_name`, `digest`, `size`, `path` | `src/reporter/ollama/manifest_reporter.py`, `layer_reporter.py` |
 | LM Studio | `model_setup_history.csv` | Job ID, Model Name, Status, File Size (bytes), SHA256, Completed Time, URL, Saved Path | `src/reporter/lmstudio/model_setup_reporter.py` |
@@ -234,7 +234,7 @@ LangurTrace[7]는 KAPE 타깃과 모듈로 로컬 LLM 앱의 기록을 모으고
 | GPT4All | `model_index.csv` | `file_name`, `size`, `sha256` | `src/reporter/gpt4all/model_reporter.py` |
 | Jan | `model_metadata.csv` | `file`, `version`, `name`, `parameter`, `author`, `model_id`, `model`, `path` | `src/reporter/jan/model_reporter.py` |
 
-LM Studio 는 `models` 아래 모든 파일을, GPT4All 은 `*.gguf` 파일을 통째로 메모리로 읽어 SHA-256 을 계산하고(`src/parser/common_parser.py` 의 `parse_binary`), LM Studio 의 Provider 칸은 경로를 `\` 로 나눈 끝에서 세 번째 조각, 곧 `models\{제공자}\{저장소}\{파일}` 의 제공자 폴더 이름입니다. Ollama·Msty 는 파일을 해시하지 않고 `blobs` 파일 이름의 digest 를 그대로 옮깁니다. Jan 의 `model_metadata.csv` 는 YAML 을 줄 단위로 잘라 읽어서 `name` 칸에 주석이 붙어 나오기도 합니다.
+LM Studio 는 `models` 아래 모든 파일을, GPT4All 은 `*.gguf` 파일을 통째로 메모리로 읽어 SHA-256 을 계산하고(`src/parser/common_parser.py` 의 `parse_binary`), LM Studio 의 Provider 열은 경로를 `\` 로 나눈 끝에서 세 번째 조각, 곧 `models\{제공자}\{저장소}\{파일}` 의 제공자 폴더 이름입니다. Ollama·Msty 는 파일을 해시하지 않고 `blobs` 파일 이름의 digest 를 그대로 옮깁니다. Jan 의 `model_metadata.csv` 는 YAML 을 줄 단위로 잘라 읽어서 `name` 열에 주석이 붙어 나오기도 합니다.
 
 ## 함께 볼 페이지
 

@@ -32,7 +32,7 @@ plist 한 개가 launchd 작업(job) 하나이고, 아래 키 목록과 뜻은 l
 
 Apple 보관 문서의 표는 `Label` 과 `ProgramArguments` 를 필수로, `inetdCompatibility` 를 inetd에서 띄우는 작업일 때만 필수로 적습니다 [2]. man 페이지는 `Program` 이나 `BundleProgram` 만 있어도 되는 것으로 적고 있어서, 실제 파일에서는 세 키 가운데 어느 것이 있는지 모두 확인합니다.
 
-실제로 실행되는 파일을 가릴 때는 `Program` 과 `ProgramArguments` 의 관계를 조심합니다. `ProgramArguments` 의 첫 요소는 `Program` 이 없을 때만 실행 파일로 쓰입니다 [1]. 그래서 `Program` 이 있으면 그 경로가 실행 파일이고, `ProgramArguments` 의 첫 요소는 프로세스에 넘기는 argv[0] 문자열일 뿐입니다. 두 키가 모두 있고 값이 다르면 `Program` 쪽을 실행 파일로 적고, `ProgramArguments[0]` 은 프로세스 목록에 보일 이름으로 따로 적습니다. `EnableGlobbing` 이 true면 인자의 와일드카드가 실행 전에 펼쳐지므로 [1], plist에 적힌 문자열과 실제로 넘어간 인자가 다를 수 있습니다.
+실제로 실행되는 파일을 판별할 때는 `Program` 과 `ProgramArguments` 의 관계를 조심합니다. `ProgramArguments` 의 첫 요소는 `Program` 이 없을 때만 실행 파일로 쓰입니다 [1]. 그래서 `Program` 이 있으면 그 경로가 실행 파일이고, `ProgramArguments` 의 첫 요소는 프로세스에 넘기는 argv[0] 문자열일 뿐입니다. 두 키가 모두 있고 값이 다르면 `Program` 쪽을 실행 파일로 적고, `ProgramArguments[0]` 은 프로세스 목록에 보일 이름으로 따로 적습니다. `EnableGlobbing` 이 true면 인자의 와일드카드가 실행 전에 펼쳐지므로 [1], plist에 적힌 문자열과 실제로 넘어간 인자가 다를 수 있습니다.
 
 `StandardOutPath` 에 적힌 파일은 없으면 새로 만들어지고, 소유자는 `UserName`·`GroupName` 을, 권한은 `Umask` 를 따릅니다 [1]. 이 출력 파일은 작업이 돌면서 남긴 흔적이 될 수 있어서 경로를 따라가 확인합니다.
 
@@ -81,7 +81,7 @@ Apple 보관 문서의 표는 `Label` 과 `ProgramArguments` 를 필수로, `ine
 
 ## 예시로 읽어 보기
 
-아래 plist는 man 페이지 [1]의 키 정의로 만든 예시이고, 실제 검체에서 나온 파일이 아닙니다. 최상위 dictionary 부분만 옮겼고, 레이블과 경로는 설명용으로 지은 이름입니다.
+아래 plist는 man 페이지 [1]의 키 정의로 만든 예시이고, 실제 기기에서 나온 파일이 아닙니다. 최상위 dictionary 부분만 옮겼고, 레이블과 경로는 설명용으로 지은 이름입니다.
 
 ```xml
 <dict>
@@ -112,7 +112,7 @@ Apple 보관 문서의 표는 `Label` 과 `ProgramArguments` 를 필수로, `ine
 
 **증명하는 것.** plist는 launchd가 이 작업을 적재하면 어떤 파일을 어떤 인자로, 어떤 조건에서 실행하도록 설정돼 있었는지를 보여 줍니다. 시스템 도메인 작업이면 `UserName`·`GroupName` 으로 어느 계정으로 실행하도록 설정됐는지도 알 수 있습니다.
 
-**증명하지 못하는 것.** 키는 설정일 뿐이라서 실제로 실행됐는지, 몇 번 실행됐는지는 말해 주지 않습니다. `Program` 에 적힌 파일이 지금 그 경로에 있는지, 설정 당시의 파일과 같은 파일인지도 따로 확인해야 합니다. 누가 plist를 만들었는지도 키에는 없습니다.
+**증명하지 못하는 것.** 키는 설정일 뿐이라서 실제로 실행됐는지, 몇 번 실행됐는지는 알 수 없습니다. `Program` 에 적힌 파일이 지금 그 경로에 있는지, 설정 당시의 파일과 같은 파일인지도 따로 확인해야 합니다. 누가 plist를 만들었는지도 키에는 없습니다.
 
 ## 시각 해석
 
@@ -134,7 +134,7 @@ plist를 언제 놓았는지는 키가 아니라 파일 시스템 시각이나 [
 |---|---|
 | `launchctl print` | 서비스나 도메인의 정보 |
 | `launchctl blame` | 실행 중인 서비스가 왜 떴는지 |
-| `launchctl list` | 예전 방식의 목록(세 칸) |
+| `launchctl list` | 예전 방식의 목록(세 열) |
 
 `blame` 은 디스크의 plist로는 알 수 없는 "왜 떴는가" 를 보여 주므로, 위의 실행 조건 키와 맞춰 보면 설정과 실제 동작을 함께 확인할 수 있습니다. 디스크 이미지에서는 plist를 풀어 위 세 표의 키를 채우고, 실행 파일 경로마다 [앱 번들 정보 (Info.plist·Code Signature)](../../embedded-metadata/app-bundle.md)와 서명을 확인합니다.
 

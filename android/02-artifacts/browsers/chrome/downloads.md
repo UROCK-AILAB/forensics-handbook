@@ -19,14 +19,14 @@ Chrome 은 다운로드를 시작할 때 downloads 표에 행을 만들고, 받�
 
 ## 위치와 버전별 차이
 
-downloads 표에는 Chrome 이 버전을 올리며 덧붙인 칸이 많아서, 오래된 DB 에는 일부 칸이 없을 수 있습니다. Chrome 은 새 칸을 이전(migration) 코드(EnsureColumnExists)로 나중에 덧붙입니다 [1].
+downloads 표에는 Chrome 이 버전을 올리며 덧붙인 열이 많아서, 오래된 DB 에는 일부 열이 없을 수 있습니다. Chrome 은 새 열을 이전(migration) 코드(EnsureColumnExists)로 나중에 덧붙입니다 [1].
 
 | DB 버전 또는 시기 | 차이 | 출처 |
 |---|---|---|
 | DB 버전 24 | downloads_url_chains 표가 생김 | [1] |
-| DB 버전 32 | last_access_time 칸이 없음 | [2] |
+| DB 버전 32 | last_access_time 열이 없음 | [2] |
 | DB 버전 33 | downloads_slices 표가 생김 | [1] |
-| "pre-v65"(ALEAPP 주석 표기 그대로) | tab_url 칸이 없음 | [2] |
+| "pre-v65"(ALEAPP 주석 표기 그대로) | tab_url 열이 없음 | [2] |
 
 ALEAPP 가 이 파서로 시험한 표본에서 Downloads 행 수는 0행부터 108행까지 기기마다 크게 달랐습니다 [2]. 파일을 받은 적이 있어도 기록이 남지 않았거나 지워졌을 수 있으니, 0행이라는 결과만으로 다운로드가 없었다고 말하지 않습니다.
 
@@ -34,9 +34,9 @@ ALEAPP 가 이 파서로 시험한 표본에서 Downloads 행 수는 0행부터 
 
 ### downloads 표
 
-downloads 표의 칸은 아래와 같습니다 [1].
+downloads 표의 열은 아래와 같습니다 [1].
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | id, guid | 다운로드 번호와 고유 ID |
 | current_path | 현재 디스크 위치 |
@@ -50,10 +50,10 @@ downloads 표의 칸은 아래와 같습니다 [1].
 | opened | 한 번이라도 열었으면 1 |
 | transient | 일시 다운로드면 1 |
 | referrer | HTTP Referrer |
-| site_url, embedder_download_data | 소스 정의에 있는 칸 |
+| site_url, embedder_download_data | 소스 정의에 있는 열 |
 | tab_url, tab_referrer_url | 다운로드를 시작한 탭의 URL 과 그 탭의 referrer |
 | http_method | 요청 방식 |
-| by_ext_id, by_ext_name, by_web_app_id | 소스 정의에 있는 칸 |
+| by_ext_id, by_ext_name, by_web_app_id | 소스 정의에 있는 열 |
 | etag, last_modified | 서버 응답 헤더 값 |
 | mime_type, original_mime_type | 파일 형식 |
 
@@ -79,11 +79,11 @@ state 값 1 은 완료(complete), 4 는 중단(interrupted)이고, ALEAPP 는 0 
 
 ### downloads_url_chains 표
 
-칸은 id(downloads.id 와 같은 값), chain_index, url 입니다. chain_index 0 이 처음 요청한 URL 이고, 가장 큰 번호가 리다이렉트를 거친 뒤의 최종 URL 입니다 [1]. ALEAPP 는 이 표를 읽지 않고, ALEAPP 결과의 "Tab URL" 은 파일 주소가 아니라 다운로드를 시작한 페이지입니다 [2]. 실제 파일을 어디서 받았는지는 이 표를 직접 열어 확인합니다.
+열은 id(downloads.id 와 같은 값), chain_index, url 입니다. chain_index 0 이 처음 요청한 URL 이고, 가장 큰 번호가 리다이렉트를 거친 뒤의 최종 URL 입니다 [1]. ALEAPP 는 이 표를 읽지 않고, ALEAPP 결과의 "Tab URL" 은 파일 주소가 아니라 다운로드를 시작한 페이지입니다 [2]. 실제 파일을 어디서 받았는지는 이 표를 직접 열어 확인합니다.
 
 ### downloads_slices 표
 
-칸은 download_id, offset, received_bytes, finished 이고, 파일을 여러 조각으로 나눠 동시에 받을 때 씁니다 [1].
+열은 download_id, offset, received_bytes, finished 이고, 파일을 여러 조각으로 나눠 동시에 받을 때 씁니다 [1].
 
 ## 증거로서 의미
 
@@ -101,13 +101,13 @@ state 값 1 은 완료(complete), 4 는 중단(interrupted)이고, ALEAPP 는 0 
 
 ## 시각 해석
 
-start_time, end_time, last_access_time 은 1601-01-01 UTC 부터의 마이크로초이고 [2], 바꾸는 계산과 헥스 예시는 [방문 기록 (History)](history.md) 페이지에 있습니다. 값이 0 인 칸을 그대로 바꾸면 1601년 날짜가 나오니, 빈 값으로 두고 날짜로 옮겨 적지 않습니다. 시작과 끝 사이의 간격으로 받는 데 걸린 시간을 가늠할 때는 received_bytes 와 함께 보고, 나눠 받은 다운로드라면 downloads_slices 의 조각 정보도 함께 봅니다.
+start_time, end_time, last_access_time 은 1601-01-01 UTC 부터의 마이크로초이고 [2], 바꾸는 계산과 헥스 예시는 [방문 기록 (History)](history.md) 페이지에 있습니다. 값이 0 인데 그대로 바꾸면 1601년 날짜가 나오니, 빈 값으로 두고 날짜로 옮겨 적지 않습니다. 시작과 끝 사이의 간격으로 받는 데 걸린 시간을 추정할 때는 received_bytes 와 함께 보고, 나눠 받은 다운로드라면 downloads_slices 의 조각 정보도 함께 봅니다.
 
 ## 함정과 한계
 
 진행 중(IN_PROGRESS)으로 남은 행은 Chrome 이 다운로드 기록을 조회하거나 만들고, 고치고, 지울 때 먼저 부르는 정리 함수(EnsureInProgressEntriesCleanedUp)가 한꺼번에 중단(INTERRUPTED)으로 바꾸고 interrupt_reason 을 충돌(crash) 사유로 채웁니다 [1]. 그래서 중단 행 가운데는 사용자가 멈춘 것이 아니라 앱이 비정상 종료된 흔적이 섞일 수 있고, 이런 행의 중단 사유를 사용자의 행동으로 읽지 않습니다. 앱 종료 기록은 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../../app-usage/crash-records.md)에서 맞춰 봅니다.
 
-다운로드 행을 지우면(RemoveDownload) downloads 행과 함께 downloads_url_chains, downloads_slices 의 같은 번호 행도 지워집니다 [1]. 기록만 지웠을 때 실제 파일이 남는지, 반대로 파일만 지우면 기록이 어떻게 바뀌는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 기록과 파일 둘 중 하나만 있는 경우를 찾았다면 둘을 따로 적고, 지운 행의 흔적은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)와 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md) 페이지를 봅니다.
+다운로드 행을 지우면(RemoveDownload) downloads 행과 함께 downloads_url_chains, downloads_slices 의 같은 번호 행도 지워집니다 [1]. 기록만 지웠을 때 실제 파일이 남는지, 반대로 파일만 지우면 기록이 어떻게 바뀌는지는 실제 기기로 확인해야 합니다. 기록과 파일 둘 중 하나만 있는 경우를 찾았다면 둘을 따로 적고, 지운 행의 흔적은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)와 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md) 페이지를 봅니다.
 
 받은 파일의 위치는 기본 저장 위치를 짐작하지 말고 target_path 에 적힌 값을 그대로 따라갑니다. 공용 저장 공간은 여러 앱이 함께 쓰는 곳이라, 그 폴더에 파일이 있다는 것만으로 Chrome 이 받았다고 말하지 않습니다. 폴더 구조는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md), 파일 등록 기록은 [미디어 저장소 (MediaStore)](../../media/mediastore/index.md) 페이지를 봅니다.
 
@@ -115,7 +115,7 @@ start_time, end_time, last_access_time 은 1601-01-01 UTC 부터의 마이크로
 
 ### 헥스로 한 번
 
-hash 칸은 SHA-256 원시값 32바이트라서 [1], 도구 화면에서 글자가 깨져 보이면 16진수로 바꿔 봅니다. target_path 의 파일이 아직 있으면 그 파일의 SHA-256 을 다시 계산해 아래처럼 비교합니다. 아래 값은 모양을 보여 주려고 만든 예시이고, 실제 검체에서 나온 해시가 아닙니다.
+hash 열은 SHA-256 원시값 32바이트라서 [1], 도구 화면에서 글자가 깨져 보이면 16진수로 바꿔 봅니다. target_path 의 파일이 아직 있으면 그 파일의 SHA-256 을 다시 계산해 아래처럼 비교합니다. 아래 값은 모양을 보여 주려고 만든 예시이고, 실제 기기에서 나온 해시가 아닙니다.
 
 ```
 hash 칸(32바이트)  : 3F 8A … (32바이트) … 1C
@@ -127,7 +127,7 @@ hex(hash)          : 3F8A…1C  (64자)
 
 ### 공개 도구로 한 번
 
-사본을 sqlite3 명령줄이나 DB Browser for SQLite 로 열어, ALEAPP 가 읽지 않는 URL 사슬까지 한 번에 봅니다. 오래된 DB 에서는 없는 칸이 있어 오류가 나면 그 칸을 빼고 다시 실행합니다.
+사본을 sqlite3 명령줄이나 DB Browser for SQLite 로 열어, ALEAPP 가 읽지 않는 URL 사슬까지 한 번에 봅니다. 오래된 DB 에서는 없는 열이 있어 오류가 나면 그 열을 빼고 다시 실행합니다.
 
 ```sql
 SELECT d.id,
@@ -151,11 +151,11 @@ ORDER BY d.id, c.chain_index;
 
 ## 실습
 
-Chrome 이 깔린 공개 Android 검체로 아래 질문을 풀어 봅니다.
+Chrome 이 깔린 공개 Android 실습 이미지로 아래 질문을 풀어 봅니다.
 
 1. downloads 의 각 행에 대해 downloads_url_chains 의 첫 URL 과 마지막 URL 을 뽑고, tab_url 과 다른 경우가 몇 건인지 셉니다.
 2. state 가 중단인 행의 interrupt_reason 을 모아, 사용자가 멈춘 것과 앱 종료로 보이는 것을 나눠 봅니다.
-3. target_path 의 파일이 남아 있는 행을 골라 SHA-256 을 다시 계산하고 hash 칸과 비교합니다.
+3. target_path 의 파일이 남아 있는 행을 골라 SHA-256 을 다시 계산하고 hash 열과 비교합니다.
 4. 공용 저장 공간의 `Download` 폴더에 있는 파일 가운데 downloads 표에 기록이 없는 파일을 찾아, 다른 앱이 만들었을 가능성을 적어 봅니다.
 
 ## 참고 문헌

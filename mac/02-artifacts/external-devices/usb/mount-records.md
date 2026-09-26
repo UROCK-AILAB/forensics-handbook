@@ -23,9 +23,9 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 |---|---|---|---|
 | 디스크 설명 키 | diskarbitrationd 소스(`DAInternal.c`)에 정의 | 볼륨·미디어·장치·버스를 설명하는 키 이름 | [2] |
 | 이전 볼륨 기록 | `/private/var/db/volinfo.database` (`/var/db/volinfo.database`) | 이전에 붙었던 볼륨의 파일 소유권 정보 | [1] |
-| 마운트된 디스크 이미지 | `hdiutil info` (살아 있는 맥에서 실행) | 지금 마운트된 DMG 목록 | [1] |
+| 마운트된 디스크 이미지 | `hdiutil info` (켜져 있는 맥에서 실행) | 지금 마운트된 DMG 목록 | [1] |
 
-키 이름은 DiskArbitration 소스의 main 브랜치 기준이라, 어느 macOS 버전부터 어느 키가 있었는지는 이 소스로 정해지지 않습니다. `volinfo.database` 가 어느 macOS 버전에 있고 파일 형식이 무엇인지는 공개된 분석 자료가 없어서, 검체에서는 파일이 있는지와 첫 바이트가 어떤 형식인지부터 봅니다.
+키 이름은 DiskArbitration 소스의 main 브랜치 기준이라, 어느 macOS 버전부터 어느 키가 있었는지는 이 소스로 정해지지 않습니다. `volinfo.database` 가 어느 macOS 버전에 있고 파일 형식이 무엇인지는 공개된 분석 자료가 없어서, 실제 기기에서는 파일이 있는지와 첫 바이트가 어떤 형식인지부터 봅니다.
 
 ## 구조
 
@@ -55,13 +55,13 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 
 ### volinfo.database
 
-`/private/var/db/volinfo.database` 에는 이전에 이 맥에 붙었던 볼륨의 파일 소유권 정보가 남습니다 [1]. 담기는 칸(볼륨 UUID가 들어가는지 등)과 파일 형식은 공개된 분석 자료가 없어 검체에서 확인합니다. 볼륨을 식별하는 값이 들어 있으면 [볼륨 UUID로 장치 잇기 (Volume UUID)](volume-uuid.md)의 대조에 씁니다.
+`/private/var/db/volinfo.database` 에는 이전에 이 맥에 붙었던 볼륨의 파일 소유권 정보가 남습니다 [1]. 담기는 필드(볼륨 UUID가 들어가는지 등)와 파일 형식은 실제 파일로 확인해야 합니다. 볼륨을 식별하는 값이 들어 있으면 [볼륨 UUID로 장치 잇기 (Volume UUID)](volume-uuid.md)의 대조에 씁니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** `volinfo.database` 에 어떤 볼륨의 항목이 있으면 그 볼륨이 이전에 이 맥에 붙은 적이 있다는 단서가 됩니다 [1]. 로그나 도구 출력에 디스크 설명 키 값이 찍혀 있으면 그 디스크의 파일 시스템 종류, 마운트 경로, 볼륨 이름, 연결 방식(`DADeviceProtocol`)을 그 값으로 말할 수 있습니다. 살아 있는 맥에서는 `hdiutil info` 로 지금 마운트된 DMG를 가려내서, 외장 장치와 디스크 이미지를 섞지 않을 수 있습니다 [1].
+**증명하는 것.** `volinfo.database` 에 어떤 볼륨의 항목이 있으면 그 볼륨이 이전에 이 맥에 붙은 적이 있다는 단서가 됩니다 [1]. 로그나 도구 출력에 디스크 설명 키 값이 찍혀 있으면 그 디스크의 파일 시스템 종류, 마운트 경로, 볼륨 이름, 연결 방식(`DADeviceProtocol`)을 그 값으로 말할 수 있습니다. 실행 중인 맥에서는 `hdiutil info` 로 지금 마운트된 DMG를 가려내서, 외장 장치와 디스크 이미지를 섞지 않을 수 있습니다 [1].
 
-**증명하지 못하는 것.** 설명 키에 시리얼 번호가 없어서 이 값만으로는 물리 장치 한 개를 특정하지 못합니다. 볼륨 기록은 볼륨이 붙은 적이 있다는 데서 그치고, 언제 붙었는지·몇 번 붙었는지·무엇을 복사했는지는 말해 주지 않습니다.
+**증명하지 못하는 것.** 설명 키에 시리얼 번호가 없어서 이 값만으로는 물리 장치 한 개를 특정하지 못합니다. 볼륨 기록은 볼륨이 붙은 적이 있다는 데서 그치고, 언제 붙었는지·몇 번 붙었는지·무엇을 복사했는지는 알 수 없습니다.
 
 ## 시각 해석
 
@@ -71,11 +71,11 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 
 키 이름은 main 브랜치 소스 기준이라 오래된 macOS에는 없는 키가 섞여 있을 수 있습니다. `DAVolumeUUID` 와 `DAMediaUUID` 는 서로 다른 키라서, 보고서에 UUID를 적을 때는 어느 키의 값인지 밝힙니다.
 
-`hdiutil info` 는 살아 있는 맥에서 지금 마운트된 것만 보여 주는 명령이라 [1], 이미지로 확보한 디스크에서는 쓸 수 없고 이미 떼어 낸 이미지도 나오지 않습니다. 디스크 이미지 형식 자체는 [디스크 이미지 형식 (DMG·Sparsebundle)](../../../01-foundations/disk-volume/dmg-sparsebundle.md)에서 다룹니다.
+`hdiutil info` 는 실행 중인 맥에서 지금 마운트된 것만 보여 주는 명령이라 [1], 이미지로 확보한 디스크에서는 쓸 수 없고 이미 떼어 낸 이미지도 나오지 않습니다. 디스크 이미지 형식 자체는 [디스크 이미지 형식 (DMG·Sparsebundle)](../../../01-foundations/disk-volume/dmg-sparsebundle.md)에서 다룹니다.
 
 ## 교차 검증
 
-디스크가 나타나고 사라진 시각은 [통합 로그의 연결 기록 (Unified Log)](unified-log.md)에서, 볼륨이 어떤 장치였는지는 [볼륨 UUID로 장치 잇기 (Volume UUID)](volume-uuid.md)에서 봅니다. 외장 볼륨 안의 변경 기록은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)에 남고, 살아 있는 맥에서 마운트 상태를 확보하는 방법은 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)에 있습니다.
+디스크가 나타나고 사라진 시각은 [통합 로그의 연결 기록 (Unified Log)](unified-log.md)에서, 볼륨이 어떤 장치였는지는 [볼륨 UUID로 장치 잇기 (Volume UUID)](volume-uuid.md)에서 봅니다. 외장 볼륨 안의 변경 기록은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)에 남고, 실행 중인 맥에서 마운트 상태를 확보하는 방법은 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)에 있습니다.
 
 ## 실습
 

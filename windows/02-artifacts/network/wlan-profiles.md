@@ -12,10 +12,10 @@ nav_order: 2320
 
 ## 무엇을 기록하나 · 왜 생기나
 
-무선 프로필 (wireless profile) 은 WLAN_profile 스키마를 따르는 XML 이고, 이 PC 에 저장해 둔 무선 네트워크 설정이며 연결 기록이 아닙니다. 프로필에는 모든 사용자용 (all-user) 과 사용자별 (per-user) 이 있는데, 무선 LAN API 의 WlanGetProfile 결과에 `WLAN_PROFILE_USER` 플래그가 없으면 모든 사용자용 프로필입니다. 그룹 정책으로 만든 프로필은 `WLAN_PROFILE_GROUP_POLICY` 플래그로 구분하고, 읽기 전용이라 내용도 우선순위도 바꿀 수 없습니다. 프로필 이름은 대소문자를 가리고, 최대 255자입니다.
+무선 프로필 (wireless profile) 은 WLAN_profile 스키마를 따르는 XML 이고, 이 PC 에 저장해 둔 무선 네트워크 설정이며 연결 기록이 아닙니다. 프로필에는 모든 사용자용 (all-user) 과 사용자별 (per-user) 이 있는데, 무선 LAN API 의 WlanGetProfile 결과에 `WLAN_PROFILE_USER` 플래그가 없으면 모든 사용자용 프로필입니다. 그룹 정책으로 만든 프로필은 `WLAN_PROFILE_GROUP_POLICY` 플래그로 구분하고, 읽기 전용이라 내용도 우선순위도 바꿀 수 없습니다. 프로필 이름은 대소문자를 구분하고, 최대 255자입니다.
 
 - Windows 11 에서 무선 프로필은 프로필 이름이 SSID 이름과 같은 경우가 많습니다(예: 9개 모두 같음).
-- AP 프로필 (`WLANAPProfile`) 은 프로필 이름이 SSID 이름과 다를 수 있습니다. 이 프로필이 모바일 핫스팟 설정인지는 검체에서 확인합니다.
+- AP 프로필 (`WLANAPProfile`) 은 프로필 이름이 SSID 이름과 다를 수 있습니다. 이 프로필이 모바일 핫스팟 설정인지는 실제 기기에서 확인합니다.
 
 ## 위치와 버전별 차이
 
@@ -40,8 +40,8 @@ C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프
 | 7 이후 | 평문 키를 따로 요청할 수 있습니다 (아래 "키" 절) |
 
 - WlanGetProfile 은 Windows Vista·XP SP3·Server 2008 이후에 있습니다.
-- Vista·7·8 에서도 파일이 위와 같은 경로에 있는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
-- XP (무선 제로 구성) 시절의 저장 위치와 사용자별 프로필의 디스크 위치도 검체에서 확인합니다.
+- Vista·7·8 에서도 파일이 위와 같은 경로에 있는지는 실제 기기로 확인해야 합니다.
+- XP (무선 제로 구성) 시절의 저장 위치와 사용자별 프로필의 디스크 위치도 실제 기기에서 확인합니다.
 
 ## 구조
 
@@ -55,11 +55,11 @@ C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프
 | `name` | 프로필 이름 |
 | `SSIDConfig/SSID/hex` | SSID 바이트를 16진수로 쓴 값. 풀면 `SSID/name` 과 같습니다 |
 | `SSIDConfig/SSID/name` | SSID 이름 |
-| `connectionType` | 검체에서 확인 |
+| `connectionType` | 실제 데이터로 확인 |
 | `connectionMode` | `auto`·`manual` |
 | `MSM/security/authEncryption/authentication` | `open`·`WPA2PSK`·`WPA3SAE` |
 | `MSM/security/authEncryption/encryption` | `WEP`·`AES` |
-| `MSM/security/authEncryption/useOneX` | 검체에서 확인 |
+| `MSM/security/authEncryption/useOneX` | 실제 데이터로 확인 |
 | `MSM/security/authEncryption/transitionMode` | 일부 프로필에만 있습니다 |
 | `sharedKey/keyType` | `networkKey`(WEP)·`passPhrase` |
 | `sharedKey/protected` | 키가 있는 9개 모두 `true` |
@@ -67,7 +67,7 @@ C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프
 | `MacRandomization/enableRandomization`, `randomizationSeed` | 공개 자료 없음 |
 
 - AP 프로필 (`WLANAPProfile`) 에는 `name`, `SSIDConfig`, `MSM/connectivity/maxNumberOfClients`, `security`(`authEncryption`·`transitionMode`·`sharedKey`) 가 있습니다.
-- 프로필 XML 안에는 만든 시각이나 마지막 연결 시각을 적는 칸이 없습니다.
+- 프로필 XML 안에는 만든 시각이나 마지막 연결 시각을 적는 요소가 없습니다.
 
 ### 키 (keyMaterial)
 
@@ -82,7 +82,7 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 - 이 머리는 DPAPI 블롭의 머리로 알려진 모양입니다. 블롭 구조는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 - `netsh wlan export profile` 로 `key=clear` 없이 내보낸 XML 의 `keyMaterial` 도 같은 머리로 시작합니다.
 
-오프라인 이미지에서 이 키를 푸는 절차는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 시스템 계정 DPAPI 는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+오프라인 이미지에서 이 키를 푸는 절차는 실제 이미지로 확인해야 합니다. 시스템 계정 DPAPI 는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -97,7 +97,7 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 
 - **연결했는지.** 설정을 저장만 하고 연결하지 않았는지는 프로필만으로 알 수 없습니다.
 - **언제 연결했는지.** XML 안에 시각이 없습니다. 연결 여부와 시각은 [네트워크 목록](networklist.md)·[네트워크 연결 이벤트](../event-logs/wlan-autoconfig-networkprofile.md)·[SRUM](../execution/system-resource-usage-monitor/index.md) 에서 봅니다.
-- **누가 만들었는지.** XML 요소에는 사용자를 가리키는 칸이 없습니다.
+- **누가 만들었는지.** XML 요소 가운데 사용자를 가리키는 것은 없습니다.
 - **키의 평문.** 디스크에는 암호화된 키만 있습니다. 키를 풀지 못하면 SSID·인증 방식까지만 씁니다.
 
 보고서에는 "이 PC 의 무선 프로필 폴더에 SSID 가 이 이름인 프로필 파일이 있고, 인증 방식은 WPA2PSK 로 적혀 있다" 처럼 씁니다.
@@ -115,7 +115,7 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 | 업그레이드 날 생성된 파일 가운데 나중에 수정된 파일 | 1개 (수정 시각 2026-09-16) |
 
 - 이 모습은 윈도 업그레이드 때 파일을 옮기면서 생성 시각만 새로 찍힌 것으로 보입니다.
-- InstallDate 가 기능 업데이트 때 바뀌는지는 검체에서 확인합니다. InstallDate 는 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
+- InstallDate 가 기능 업데이트 때 바뀌는지는 실제 기기에서 확인합니다. InstallDate 는 [시스템 기본 정보](../system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 다룹니다.
 - 업그레이드 뒤에 새로 만든 프로필 2개는 XML 생성 시각과 네트워크 목록의 DateCreated 가 거의 같았습니다. 한 건은 XML 이 2026-06-27 03:08:23, DateCreated 가 03:08:24 였습니다. 다른 한 건은 둘 다 2026-09-18 12:38 대였습니다. 둘 다 현지 시각입니다.
 - 업그레이드로 옮겨진 프로필 2개는 반대로 DateCreated 가 2026-09-04 로 XML 보다 늦었습니다.
 - 위 대응은 네트워크 목록의 `Description` 이름으로 맞춘 것입니다. 같은 이름의 프로필이 둘이면 틀릴 수 있습니다.
@@ -127,14 +127,14 @@ WlanGetProfile 이 돌려주는 `keyMaterial` 은 기본으로 암호화돼 있�
 - **네트워크 목록과 GUID 로 이어지지 않습니다.** 파일 이름 GUID 가 네트워크 목록 프로필 GUID 와 다릅니다. 이름으로 맞춰야 합니다.
 - **이름도 늘 같지는 않습니다.** 프로필 이름 10개 가운데 4개만 네트워크 목록의 `ProfileName` 과 같은 예가 있습니다.
 - **SSID 는 hex 값으로도 맞춥니다.** `SSIDConfig/SSID/hex` 는 SSID 바이트 그대로입니다. 네트워크 목록과 TCP/IP 인터페이스 키에도 SSID 를 16진수로 적은 값이 있습니다.
-- **프로필 이름은 대소문자를 가립니다.** 대소문자만 다른 두 프로필을 같은 것으로 합치지 않습니다.
-- **파일이 없으면 이전 시점을 봅니다.** 프로필을 지울 때 파일이 어떻게 되는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 로 이전 시점의 파일을 찾아봅니다.
+- **프로필 이름은 대소문자를 구분합니다.** 대소문자만 다른 두 프로필을 같은 것으로 합치지 않습니다.
+- **파일이 없으면 이전 시점을 봅니다.** 프로필을 지울 때 파일이 어떻게 되는지는 실제 기기로 확인해야 합니다. [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 로 이전 시점의 파일을 찾아봅니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-아래 XML 은 요소 구조를 보여 주려고 만든 예시입니다. 특정 검체에서 꺼낸 파일이 아닙니다. SSID 는 `HOME` 으로 정했고, 요소 일부를 줄였습니다.
+아래 XML 은 요소 구조를 보여 주려고 만든 예시입니다. 특정 기기에서 꺼낸 파일이 아닙니다. SSID 는 `HOME` 으로 정했고, 요소 일부를 줄였습니다.
 
 ```xml
 <WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
@@ -206,7 +206,7 @@ hex   48 4F 4D 45
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 `Wlansvc` 폴더와 SYSTEM·SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
+공개 시험 이미지(NIST CFReDS 등)에서 `Wlansvc` 폴더와 SYSTEM·SOFTWARE 하이브를 꺼내 아래 질문을 풀어 봅니다.
 
 1. 인터페이스 GUID 폴더는 몇 개입니까? 각 폴더는 어느 어댑터입니까?
 2. 무선 프로필은 몇 개입니까? 프로필 이름과 SSID 이름이 다른 것이 있습니까?

@@ -85,9 +85,9 @@ insights-logs-flowlogflowevent/flowLogResourceID=/{SUBSCRIPTIONID}_NETWORKWATCHE
 
 규칙 이름은 기본 규칙이면 `DefaultRule_DenyAllInBound`·`DefaultRule_AllowInternetOutBound` 처럼, 사용자가 만든 규칙이면 `UserRule_default-allow-rdp` 처럼 `UserRule_` 이 앞에 붙습니다[2]. NSG 이름이 80자, 규칙 이름이 65자를 넘으면 기록할 때 잘릴 수 있습니다[2].
 
-튜플은 버전 1 이 8칸, 버전 2 가 13칸입니다[2].
+튜플은 버전 1 이 필드 8개, 버전 2 가 필드 13개입니다[2].
 
-| 칸 | 뜻 | 값 |
+| 필드 | 뜻 | 값 |
 |---|---|---|
 | 1 | 흐름 시각 | UNIX epoch |
 | 2·3 | 출발지 IP·목적지 IP | |
@@ -99,7 +99,7 @@ insights-logs-flowlogflowevent/flowLogResourceID=/{SUBSCRIPTIONID}_NETWORKWATCHE
 | 10·11 (버전 2) | 보낸 패킷·보낸 바이트 | 출발지에서 목적지로, 지난 갱신 이후 합계 |
 | 12·13 (버전 2) | 받은 패킷·받은 바이트 | 목적지에서 출발지로, 지난 갱신 이후 합계 |
 
-바이트는 패킷 헤더와 페이로드를 합친 값입니다[2]. `B` 줄은 통계 칸이 비어 `,,,,` 로 끝납니다[2].
+바이트는 패킷 헤더와 페이로드를 합친 값입니다[2]. `B` 줄은 통계 필드가 비어 `,,,,` 로 끝납니다[2].
 
 ### VNet 흐름 로그 레코드
 
@@ -116,9 +116,9 @@ insights-logs-flowlogflowevent/flowLogResourceID=/{SUBSCRIPTIONID}_NETWORKWATCHE
 | `flowRecords.flows[].flowGroups[].rule` | 허용하거나 거부한 규칙 이름[1] |
 | `flowRecords.flows[].flowGroups[].flowTuples[]` | 쉼표로 가른 흐름 튜플 문자열[1] |
 
-튜플은 13칸이고 NSG 버전 2 와 순서가 다릅니다[1].
+튜플은 필드 13개이고 NSG 버전 2 와 순서가 다릅니다[1].
 
-| 칸 | 뜻 | 값 |
+| 필드 | 뜻 | 값 |
 |---|---|---|
 | 1 | 흐름 시각 | UNIX epoch |
 | 2·3 | 출발지 IP·목적지 IP | |
@@ -129,7 +129,7 @@ insights-logs-flowlogflowevent/flowLogResourceID=/{SUBSCRIPTIONID}_NETWORKWATCHE
 | 9 | 암호화 상태 | 아래 표 |
 | 10~13 | 보낸 패킷·보낸 바이트·받은 패킷·받은 바이트 | 지난 갱신 이후 합계 |
 
-VNet 흐름 로그에는 허용·거부 칸이 따로 없고, 흐름 상태 `D` 가 거부를 뜻합니다[1]. 암호화 상태는 기본값이 `NX`(암호화 안 됨)이고, `X` 는 플랫폼이 연결을 암호화한 경우입니다[1]. 나머지 `NX_HW_NOT_SUPPORTED`·`NX_SW_NOT_READY`·`NX_NOT_ACCEPTED`·`NX_NOT_SUPPORTED`·`NX_LOCAL_DST`·`NX_FALLBACK` 은 암호화를 설정했지만 하드웨어·소프트웨어·정책·같은 호스트 같은 이유로 암호화하지 않았거나 패킷을 버린 경우를 가립니다[1]. 암호화 때문에 거부한 흐름은 `aclID` 와 `rule` 이 `unspecified` 로 나옵니다[1].
+VNet 흐름 로그에는 허용·거부 필드가 따로 없고, 흐름 상태 `D` 가 거부를 뜻합니다[1]. 암호화 상태는 기본값이 `NX`(암호화 안 됨)이고, `X` 는 플랫폼이 연결을 암호화한 경우입니다[1]. 나머지 `NX_HW_NOT_SUPPORTED`·`NX_SW_NOT_READY`·`NX_NOT_ACCEPTED`·`NX_NOT_SUPPORTED`·`NX_LOCAL_DST`·`NX_FALLBACK` 은 암호화를 설정했지만 하드웨어·소프트웨어·정책·같은 호스트 같은 이유로 암호화하지 않았거나 패킷을 버린 경우를 구분합니다[1]. 암호화 때문에 거부한 흐름은 `aclID` 와 `rule` 이 `unspecified` 로 나옵니다[1].
 
 플랫폼 규칙 (platform rule) 으로 적힌 흐름은 사용자가 만든 규칙이 아니라 Azure 플랫폼이 스스로 처리한 트래픽입니다[1]. 부하 분산 연결을 다시 만들 때나 응답 경로처럼 규칙 평가가 필요 없는 경우에는 평범한 업무 트래픽도 플랫폼 규칙 아래 나올 수 있습니다[1].
 
@@ -184,13 +184,13 @@ VNet 흐름 로그에는 허용·거부 칸이 따로 없고, 흐름 상태 `D` 
 
 공인 IP 가 없는 VM 에도 인터넷 주소에서 들어온 흐름이 찍힐 수 있습니다[2]. 기본 SNAT 로 받은 포트 범위로 향한 흐름이 기록된 것이고, Azure 는 이 흐름을 VM 까지 들이지 않습니다[2]. 이런 줄을 "바깥에서 접속에 성공했다" 로 읽지 않습니다.
 
-보고서에는 "2026-09-01 03:10 UTC 무렵 MAC 0022480A1B2C 인터페이스(10.0.1.4)에서 203.0.113.40:443 으로 나간 TCP 흐름이 기본 아웃바운드 규칙으로 허용됐고, 이 흐름에서 VM 쪽이 약 2.4MB 를 보낸 기록이 있다" 처럼 레코드가 말하는 만큼만 씁니다(만든 예시). 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
+보고서에는 "2026-09-01 03:10 UTC 무렵 MAC 0022480A1B2C 인터페이스(10.0.1.4)에서 203.0.113.40:443 으로 나간 TCP 흐름이 기본 아웃바운드 규칙으로 허용됐고, 이 흐름에서 VM 쪽이 약 2.4MB 를 보낸 기록이 있다" 처럼 레코드로 확인되는 만큼만 씁니다(만든 예시). 문장 쓰는 법은 [클라우드 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) 에서 다룹니다.
 
 ## 시각 해석
 
-레코드의 `time` 은 ISO 8601 형식의 UTC 시각입니다[1][2]. 레코드는 1분 간격으로 모으므로 `time` 은 흐름이 일어난 시각이 아니라 그 1분치를 기록한 시각입니다[1][2]. 흐름 하나하나의 시각은 튜플 첫 칸의 UNIX epoch 값이고, 이 값도 UTC 기준입니다.
+레코드의 `time` 은 ISO 8601 형식의 UTC 시각입니다[1][2]. 레코드는 1분 간격으로 모으므로 `time` 은 흐름이 일어난 시각이 아니라 그 1분치를 기록한 시각입니다[1][2]. 흐름 하나하나의 시각은 튜플 첫 필드의 UNIX epoch 값이고, 이 값도 UTC 기준입니다.
 
-epoch 값의 자릿수는 문서 예시끼리 다릅니다. NSG 예시와 대역폭 계산 예시는 10자리 초(`1487282421`, `1708978215`)이고, VNet 흐름 로그의 예시 레코드는 13자리 밀리초(`1663146003599`)입니다[1][2]. 그래서 한 가지로 가정하지 말고 자릿수를 보고 초인지 밀리초인지 가려서 풉니다. 예를 들어 `1663146003599` 는 밀리초로 풀면 2022-09-14T09:00:03.599Z 이고, 같은 레코드의 `time` 인 2022-09-14T09:00:52Z 보다 조금 앞섭니다[1].
+epoch 값의 자릿수는 문서 예시끼리 다릅니다. NSG 예시와 대역폭 계산 예시는 10자리 초(`1487282421`, `1708978215`)이고, VNet 흐름 로그의 예시 레코드는 13자리 밀리초(`1663146003599`)입니다[1][2]. 그래서 한 가지로 가정하지 말고 자릿수를 보고 초인지 밀리초인지 구분해서 풉니다. 예를 들어 `1663146003599` 는 밀리초로 풀면 2022-09-14T09:00:03.599Z 이고, 같은 레코드의 `time` 인 2022-09-14T09:00:52Z 보다 조금 앞섭니다[1].
 
 `C` 상태 줄은 5분 간격으로 나오므로, 오래 이어진 연결은 `B` 한 줄, `C` 여러 줄, `E` 한 줄로 나뉩니다[1][2]. `C`·`E` 줄의 숫자는 앞 튜플 이후의 합계라서, 연결 하나의 전체 양은 `C`·`E` 줄을 더해서 구합니다[1][2]. 문서의 대역폭 예시는 패킷 1,021 + 52 + 8,005 + 47 = 9,125개, 바이트 588,096 + 29,952 + 4,610,880 + 27,072 = 5,256,000 으로 계산합니다[1][2].
 
@@ -200,7 +200,7 @@ epoch 값의 자릿수는 문서 예시끼리 다릅니다. NSG 예시와 대역
 
 - **NSG 두 겹.** NSG 가 서브넷과 인터페이스 양쪽에 붙어 있으면 규칙 처리 순서가 플랫폼 상태에 따라 달라지고, 흐름은 마지막으로 처리한 NSG 에 기록됩니다[2]. 거부 규칙은 거부한 NSG 가 기록하고 처리를 멈추며, 허용 규칙은 마지막으로 허용한 NSG 가 기록합니다[2]. 그래서 한쪽 NSG 의 흐름 로그만 보고 "기록이 없다" 고 쓰지 않고 양쪽을 다 봅니다. VM 에 인터페이스가 여러 개면 인터페이스마다 켜야 하고, AKS 클러스터 서브넷에는 AKS 가 기본 NSG 를 붙입니다[2].
 - **상태 없는 인바운드 TCP.** NSG 의 기본이 아닌 인바운드 TCP 규칙은 플랫폼 제약으로 상태 없이 동작해서, 이런 흐름은 바이트·패킷 수를 기록하지 않아 NSG 흐름 로그의 바이트·패킷 수가 실제와 다를 수 있습니다[2]. 가상 네트워크의 `FlowTimeoutInMinutes` 가 null 이 아닌 값으로 설정돼 있으면 이 차이가 생기지 않습니다[2].
-- **`B` 줄의 통계 칸.** 문서의 VNet 예시 레코드는 `B`·`D` 줄 통계를 `0,0,0,0` 으로, 대역폭 예시는 `B` 줄을 `,,,,` 로 적습니다[1]. 파서는 두 모양을 다 받아야 합니다.
+- **`B` 줄의 통계 필드.** 문서의 VNet 예시 레코드는 `B`·`D` 줄 통계를 `0,0,0,0` 으로, 대역폭 예시는 `B` 줄을 `,,,,` 로 적습니다[1]. 파서는 두 모양을 다 받아야 합니다.
 - **기록이 멈춘 구간.** Storage 계정의 액세스 키(NSG 흐름 로그)나 고객 관리 키(VNet 흐름 로그)를 바꾸거나 돌리면 흐름 로그가 멈추고, 흐름 로그를 껐다가 다시 켜야 되살아납니다[1][2]. 트래픽이 없으면 파일도 생기지 않습니다[2]. 트래픽이 많은 VM 은 NSG 흐름 로그 기록에 실패할 수 있습니다[2]. 기록 공백은 이런 원인과 [Storage 계정 기록](storage-logs.md) 의 키 작업 시각을 맞춰 보고 판단합니다.
 - **블롭을 건드리면 그 시간이 깨짐.** VNet 흐름 로그를 쓰는 동안 블롭을 고치거나 덮어쓰거나 지우면 그 시간 블롭에 대한 이후 쓰기가 모두 실패할 수 있습니다[1]. 수집할 때는 쓰는 중인 블롭을 고치지 말고 읽기만 합니다.
 - **지우기.** 흐름 로그 리소스를 만들고 지우는 작업은 `Microsoft.Network/networkWatchers/flowLogs/write`·`Microsoft.Network/networkWatchers/flowLogs/delete` 권한 작업이고, 대상 리소스에 흐름 로그를 설정하는 작업은 `Microsoft.Network/networkWatchers/configureFlowLog/action` 입니다[7]. 이런 관리 작업은 [활동 로그](activity-log.md) 에서 찾습니다. 흐름 로그 리소스를 지워도 Storage 데이터는 남으므로[6], 기록 자체를 없앴는지는 Storage 쪽 삭제 기록에서 따로 확인합니다. 조사 흐름은 [로그를 끄거나 지웠나](../../04-scenarios/infrastructure/log-tampering.md) 에서 다룹니다.
@@ -215,7 +215,7 @@ epoch 값의 자릿수는 문서 예시끼리 다릅니다. NSG 예시와 대역
 00000000: 7b22 7265 636f 7264 7322 3a5b            {"records":[
 ```
 
-받은 `PT1H.json` 의 처음과 끝이 이 모양인지 확인하면, 블롭이 잘리지 않고 온전히 받아졌는지 가릴 수 있습니다. 새 항목은 닫는 블록 앞에 들어가므로 쓰는 중인 블롭도 닫는 괄호로 끝나고, 블록 사이 이음새 모양은 검체에서 확인합니다.
+받은 `PT1H.json` 의 처음과 끝이 이 모양인지 확인하면, 블롭이 잘리지 않고 온전히 받아졌는지 판별할 수 있습니다. 새 항목은 닫는 블록 앞에 들어가므로 쓰는 중인 블롭도 닫는 괄호로 끝나고, 블록 사이 이음새 모양은 실제 데이터로 확인합니다.
 
 ```bash
 xxd -l 12 PT1H.json
@@ -237,7 +237,7 @@ jq -r '.records[] | .time as $t | .macAddress as $m | .flowRecords.flows[] | .ac
   | .flowGroups[] | .rule as $r | .flowTuples[] | [$t, $m, $a, $r, .] | @tsv' PT1H.json
 ```
 
-튜플 첫 칸을 자릿수에 따라 초나 밀리초로 풀어 UTC 로 바꾸고, VNet 튜플에서 VM 이 보낸 바이트를 목적지별로 더하는 예입니다. 마지막 칸이 튜플 문자열이라는 전제로 씁니다.
+튜플 첫 필드를 자릿수에 따라 초나 밀리초로 풀어 UTC 로 바꾸고, VNet 튜플에서 VM 이 보낸 바이트를 목적지별로 더하는 예입니다. 마지막 필드가 튜플 문자열이라는 전제로 씁니다.
 
 ```bash
 jq -r '.records[].flowRecords.flows[].flowGroups[].flowTuples[]' PT1H.json |
@@ -249,9 +249,9 @@ jq -r '.records[].flowRecords.flows[].flowGroups[].flowTuples[]' *.json |
 awk -F, '$7=="O" && ($8=="C" || $8=="E") {b[$3]+=$11} END {for (d in b) print b[d], d}' | sort -rn | head
 ```
 
-NSG 버전 2 튜플에 같은 계산을 하려면 방향이 7번째, 흐름 상태가 9번째, 보낸 바이트가 11번째 칸이므로 칸 번호를 바꿉니다.
+NSG 버전 2 튜플에 같은 계산을 하려면 방향이 7번째, 흐름 상태가 9번째, 보낸 바이트가 11번째 필드이므로 필드 번호를 바꿉니다.
 
-**공개 도구로 받기.** Untitled Goose Tool 설정 파일의 `[azure]` 절에서 `nsg_flow_logs=True` 로 두면 구독 안의 Storage 계정을 모두 훑어 NSG 흐름 로그 컨테이너를 받습니다[9][10]. VNet 흐름 로그는 `az storage blob download`·`Get-AzStorageBlobContent`·Storage Explorer 로 `insights-logs-flowlogflowevent` 컨테이너에서 받습니다[6]. 한 시간 블롭 전체를 받지 않고 새로 붙은 블록만 읽으려면 Microsoft 문서의 `Get-VNetFlowLogCloudBlockBlob`·`Get-NSGFlowLogCloudBlockBlob` 함수로 블록 목록을 받아 읽습니다[4]. 수집 순서 전반은 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) 과 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 에서 다룹니다.
+**공개 도구로 받기.** Untitled Goose Tool 설정 파일의 `[azure]` 절에서 `nsg_flow_logs=True` 로 두면 구독 안의 Storage 계정을 모두 살펴 NSG 흐름 로그 컨테이너를 받습니다[9][10]. VNet 흐름 로그는 `az storage blob download`·`Get-AzStorageBlobContent`·Storage Explorer 로 `insights-logs-flowlogflowevent` 컨테이너에서 받습니다[6]. 한 시간 블롭 전체를 받지 않고 새로 붙은 블록만 읽으려면 Microsoft 문서의 `Get-VNetFlowLogCloudBlockBlob`·`Get-NSGFlowLogCloudBlockBlob` 함수로 블록 목록을 받아 읽습니다[4]. 수집 순서 전반은 [AWS·Azure·GCP 수집](../../03-techniques/acquisition/iaas-collection.md) 과 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md) 에서 다룹니다.
 
 ## 교차 검증
 
@@ -261,14 +261,14 @@ NSG 버전 2 튜플에 같은 계산을 하려면 방향이 7번째, 흐름 상�
 - [리소스 로그와 진단 설정](resource-logs.md) — 흐름 로그와 별개로 NSG·Application Gateway 같은 리소스가 남기는 진단 로그를 함께 봅니다.
 - [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md) — 튜플의 바깥 주소를 해석할 때 봅니다.
 - [VPC 흐름 로그 (AWS)](../aws/vpc-flow-logs.md), [VPC 흐름 로그 (Google Cloud)](../gcp/vpc-flow-logs.md) — 다른 클라우드의 같은 역할을 하는 기록입니다.
-- [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md) — 이 쪽의 기록을 조사 흐름으로 묶습니다.
+- [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md), [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md) — 이 페이지의 기록을 조사 흐름으로 묶습니다.
 
 ## 실습
 
 Microsoft 문서의 예시 레코드[1][2]와 위의 만든 예시로 풀어 봅니다.
 
 1. NSG 버전 1 예시에서 `UserRule_default-allow-rdp` 로 허용된 튜플을 모두 골라 UTC 시각으로 풀고, 레코드 `time` 과 몇 초 차이 나는지 적어 봅니다[2].
-2. NSG 버전 2 예시의 `B`·`C`·`E` 줄을 가려, 통계가 있는 줄과 없는 줄이 무엇이고 연결 하나의 전체 바이트를 어떻게 구하는지 적어 봅니다[2].
+2. NSG 버전 2 예시의 `B`·`C`·`E` 줄을 구분해, 통계가 있는 줄과 없는 줄이 무엇이고 연결 하나의 전체 바이트를 어떻게 구하는지 적어 봅니다[2].
 3. VNet 예시 레코드에서 `D` 상태 튜플의 목적지 포트를 모아, 어느 규칙이 어느 포트를 막았는지 표로 만들어 봅니다[1].
 4. 위 만든 예시의 첫 튜플 시각을 밀리초로 풀고, 같은 값을 초로 잘못 풀면 어느 해가 나오는지 확인해 봅니다.
 5. 공인 IP 가 없는 VM 의 NSG 흐름 로그에 인터넷 주소에서 들어온 줄이 있을 때, 이 줄을 보고서에 어떻게 적어야 하는지 써 봅니다[2].

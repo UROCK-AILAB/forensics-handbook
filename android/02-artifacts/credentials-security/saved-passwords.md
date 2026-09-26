@@ -18,7 +18,7 @@ Android 쪽에는 이와 따로 자동 완성 서비스 (Autofill Service) 와 �
 
 ## 위치와 버전별 차이
 
-Chromium 의 비밀번호 DB 는 파일이 두 가지이고, 프로필 저장소는 `Login Data`, 계정 저장소는 `Login Data For Account` 입니다 [2]. Android Chrome 에서 이 파일이 들어 있는 폴더는 공개 자료가 없어 검체에서 확인합니다. 같은 브라우저의 방문 기록 DB 는 ALEAPP 가 `*/app_chrome/Default/History*` 패턴으로 찾으니 [1] 그 프로필 폴더부터 살펴볼 만합니다. `Login Data` 가 같은 폴더에 있는지는 검체에서 확인합니다. 앱 데이터 영역의 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다.
+Chromium 의 비밀번호 DB 는 파일이 두 가지이고, 프로필 저장소는 `Login Data`, 계정 저장소는 `Login Data For Account` 입니다 [2]. Android Chrome 에서 이 파일이 들어 있는 폴더는 실제 기기에서 확인합니다. 같은 브라우저의 방문 기록 DB 는 ALEAPP 가 `*/app_chrome/Default/History*` 패턴으로 찾으니 [1] 그 프로필 폴더부터 살펴볼 만합니다. `Login Data` 가 같은 폴더에 있는지는 실제 기기에서 확인합니다. 앱 데이터 영역의 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다.
 
 ALEAPP 의 chrome 모듈이 브라우저별로 찾는 폴더는 아래와 같고, 이 모듈은 History DB 만 읽고 `Login Data` 는 읽지 않습니다 [1].
 
@@ -33,7 +33,7 @@ app_webview/Default    WebView
 
 | 저장하는 쪽 | 알려진 것 | 공개 자료가 없는 것 |
 |---|---|---|
-| Chromium 계열 브라우저 | `Login Data`·`Login Data For Account` 파일 이름, 표와 칸 [2] | Android 에서의 전체 경로, `password_value` 가 암호화돼 있는지 |
+| Chromium 계열 브라우저 | `Login Data`·`Login Data For Account` 파일 이름, 표와 열 [2] | Android 에서의 전체 경로, `password_value` 가 암호화돼 있는지 |
 | 삼성 인터넷 | ALEAPP 가 찾는 프로필 폴더 `app_sbrowser/Default` [1] | 저장 비밀번호 파일 |
 | Google 비밀번호 관리자 | 없음 | 저장 파일 위치, Chrome 이 저장 비밀번호를 이쪽으로 옮기는지, 옮긴 뒤 `Login Data` 에 무엇이 남는지 |
 | Samsung Pass | settings secure 의 `fingerprint_webpass` 키 | 패키지 이름, 저장 경로, DB 구조, 암호화 방식 |
@@ -54,13 +54,13 @@ Android 버전이나 One UI 버전에 따른 저장 위치 차이는 공개 자�
 | global | `autofill_compat_mode_allowed_packages`, `autofill_logging_level` |
 | system | `show_password` |
 
-`autofill_service`·`credential_service` 값의 형식은 공개 문서에 설명이 없어 검체에서 값을 읽어 확인합니다. `fingerprint_webpass`·`fingerprint_used_samsungaccount` 는 이름으로 보아 지문과 웹 로그인·삼성 계정에 관련된 것으로 보이지만, 뜻을 밝힌 공개 자료는 없습니다. `show_password` 는 비밀번호를 입력할 때 글자를 보여 줄지 정하는 설정으로 보이고, 저장된 비밀번호와는 다른 것으로 봐야 합니다. 설정 키를 읽는 법과 저장 파일은 [설정 값](../system-account/settings.md) 페이지에서 다룹니다.
+`autofill_service`·`credential_service` 값의 형식은 실제 기기에서 값을 읽어 확인합니다. `fingerprint_webpass`·`fingerprint_used_samsungaccount` 는 이름으로 보면 지문과 웹 로그인·삼성 계정에 관련된 것으로 보이지만, 뜻을 밝힌 공개 자료는 없습니다. `show_password` 는 비밀번호를 입력할 때 글자를 보여 줄지 정하는 설정으로 보이고, 저장된 비밀번호와는 다른 것으로 봐야 합니다. 설정 키를 읽는 법과 저장 파일은 [설정 값](../system-account/settings.md) 페이지에서 다룹니다.
 
 ## 구조
 
-`Login Data` 의 `logins` 표에 있는 칸을 묶으면 아래와 같습니다(현행 Chromium main 기준) [2]. SQLite 파일 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다.
+`Login Data` 의 `logins` 표에 있는 열을 묶으면 아래와 같습니다(현행 Chromium main 기준) [2]. SQLite 파일 형식 자체는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지에서 다룹니다.
 
-| 묶음 | 칸 |
+| 묶음 | 열 |
 |---|---|
 | 식별 | `id` |
 | 사이트 | `origin_url`, `action_url`, `signon_realm`, `scheme`, `federation_url` |
@@ -70,7 +70,7 @@ Android 버전이나 One UI 버전에 따른 저장 위치 차이는 공개 자�
 | 사용·상태 | `times_used`, `blacklisted_by_user`, `password_type`, `skip_zero_click`, `generation_upload_status`, `moving_blocked_for`, `keychain_identifier`, `actor_login_approved` |
 | 공유 | `sender_email`, `sender_name`, `sender_profile_image_url`, `sharing_notification_displayed` |
 
-위 표는 칸 이름만 담았습니다. `blacklisted_by_user` 는 "이 사이트는 저장하지 않음" 을 고른 항목으로 알려져 있고, 공유 묶음은 이름으로 보아 다른 사람에게서 받은 비밀번호로 보입니다. 보고서에 칸의 뜻을 적을 때는 이름으로 짐작한 뜻임을 밝힙니다.
+위 표는 열 이름만 담았습니다. `blacklisted_by_user` 는 "이 사이트는 저장하지 않음" 을 고른 항목으로 알려져 있고, 공유 묶음은 이름으로 보면 다른 사람에게서 받은 비밀번호로 보입니다. 보고서에 열의 뜻을 적을 때는 이름으로 짐작한 뜻임을 밝힙니다.
 
 같은 DB 의 다른 표는 아래와 같습니다 [2].
 
@@ -94,15 +94,15 @@ Android 버전이나 One UI 버전에 따른 저장 위치 차이는 공개 자�
 
 ## 시각 해석
 
-`logins` 의 시각 칸은 Chromium 의 base::Time 값이고, 1601-01-01 부터 센 마이크로초입니다 [2]. 1601-01-01 과 1970-01-01 사이는 11644473600 초라서, 1,000,000 으로 나눈 뒤 이 값을 빼면 유닉스 초가 됩니다. 이 값이 UTC 기준인지와 Chrome 시각 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지를 따르고, 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 기기 시간대를 먼저 확인합니다.
+`logins` 의 시각 열은 Chromium 의 base::Time 값이고, 1601-01-01 부터 센 마이크로초입니다 [2]. 1601-01-01 과 1970-01-01 사이는 11644473600 초라서, 1,000,000 으로 나눈 뒤 이 값을 빼면 유닉스 초가 됩니다. 이 값이 UTC 기준인지와 Chrome 시각 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지를 따르고, 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 기기 시간대를 먼저 확인합니다.
 
-시각 칸이 다섯 개라서 무엇이 바뀔 때 어느 칸이 바뀌는지 구분해야 합니다. 이름으로 보면 `date_created` 는 저장한 때, `date_password_modified` 는 비밀번호를 바꾼 때, `date_last_used`·`date_last_filled` 는 쓰거나 채운 때로 보이니, 보고서에는 "이 칸의 값이 이 시각이다" 까지만 씁니다. 값이 0 이면 그 사건이 기록되지 않았다는 뜻으로 보고 날짜로 바꾸지 않습니다.
+시각 열이 다섯 개라서 무엇이 바뀔 때 어느 열이 바뀌는지 구분해야 합니다. 이름으로 보면 `date_created` 는 저장한 때, `date_password_modified` 는 비밀번호를 바꾼 때, `date_last_used`·`date_last_filled` 는 쓰거나 채운 때로 보이니, 보고서에는 "이 열의 값이 이 시각이다" 까지만 씁니다. 값이 0 이면 그 사건이 기록되지 않았다는 뜻으로 보고 날짜로 바꾸지 않습니다.
 
-`dumpsys account` 의 timestamp 칸 형식은 검체에서 값을 읽어 확인합니다.
+`dumpsys account` 의 timestamp 필드 형식은 실제 기기에서 값을 읽어 확인합니다.
 
 ## 함정과 한계
 
-첫째, Android 에서 `password_value` 가 평문인지 암호화돼 있는지는 공개 자료가 없어 검체에서 확인합니다. 이 핸드북은 비밀번호를 풀어내는 방법을 다루지 않고, 저장돼 있다는 사실과 시각·사이트·아이디 같은 주변 기록을 해석하는 데 그칩니다.
+첫째, Android 에서 `password_value` 가 평문인지 암호화돼 있는지는 실제 기기에서 확인합니다. 이 핸드북은 비밀번호를 풀어내는 방법을 다루지 않고, 저장돼 있다는 사실과 시각·사이트·아이디 같은 주변 기록을 해석하는 데 그칩니다.
 
 둘째, Chrome 이 저장 비밀번호를 Google Play 서비스 쪽으로 옮겼는지에 따라 `Login Data` 에 남는 내용이 달라질 수 있습니다. 최신 기기에서 `logins` 가 비어 있거나 적다면 그 차이 자체를 기록해 둡니다.
 
@@ -159,13 +159,13 @@ adb shell settings list system
 
 ## 실습
 
-NIST CFReDS 같은 공개 안드로이드 검체에 Chrome 앱 데이터가 들어 있으면 아래 질문을 풀어 봅니다.
+NIST CFReDS 같은 공개 안드로이드 이미지에 Chrome 앱 데이터가 들어 있으면 아래 질문을 풀어 봅니다.
 
 1. Chrome 프로필 폴더에 `Login Data` 와 `Login Data For Account` 가운데 어느 파일이 있고, 각각 `logins` 가 몇 줄입니까?
 2. `date_created` 가 가장 이른 줄과 가장 늦은 줄은 어느 사이트이고, UTC 로 언제입니까?
 3. `insecure_credentials` 에 이어진 줄이 있다면 어느 로그인에 붙어 있습니까?
 4. 같은 사이트를 History DB 에서 찾으면 `date_last_used` 와 가까운 시각에 방문 기록이 있습니까?
-5. 검체에 설정 파일이 있으면 `autofill_service` 값이 가리키는 앱은 무엇입니까?
+5. 이미지에 설정 파일이 있으면 `autofill_service` 값이 가리키는 앱은 무엇입니까?
 
 ## 참고 문헌
 

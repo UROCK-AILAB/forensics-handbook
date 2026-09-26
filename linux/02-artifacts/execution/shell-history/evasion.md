@@ -111,19 +111,19 @@ ext4 아이노드의 시각은 epoch 초이고 UTC 기준입니다[9]. `i_mtime`
 | [감사 로그의 실행 기록](../auditd-execve.md) | 기록 파일을 지우거나 비운 외부 명령의 실행과 인수 |
 | [프로세스 회계](../process-accounting.md) | `rm`·`shred` 같은 외부 명령이 실행된 사실 |
 | [셸 시작 파일](../../persistence/shell-startup.md) | 기록을 끄는 설정 줄과 그 파일의 변경 시각 |
-| [메모리 분석](../../../03-techniques/analysis/memory-analysis.md) | 살아 있는 셸의 기록 목록 |
+| [메모리 분석](../../../03-techniques/analysis/memory-analysis.md) | 실행 중인 셸의 기록 목록 |
 | [타임라인 만들기](../../../03-techniques/analysis/timeline.md) | 설정 파일 mtime, 기록 파일 ctime, 로그인 기록을 한 줄로 맞추기 |
 
 흔적 지우기 전체를 판단하는 흐름은 [흔적을 지웠나](../../../04-scenarios/insider/anti-forensics.md)에 있습니다.
 
 ## 실습
 
-Linux 디스크 이미지가 들어 있는 공개 검체(예: NIST CFReDS)로 풀어 봅니다.
+Linux 디스크 이미지가 들어 있는 공개 시험 데이터(예: NIST CFReDS)로 풀어 봅니다.
 
 1. 사용자마다 기록 파일의 형식(일반 파일·심볼릭 링크)과 크기를 표로 만듭니다. 0 바이트이거나 링크인 파일이 있습니까?
 2. 그 사용자의 시작 파일에 `HISTFILE`, `HISTSIZE`, `HISTFILESIZE`, `HISTCONTROL` 줄이 있습니까? 배포판 기본값과 다른 값은 무엇입니까?
 3. 기록 파일 아이노드의 `i_flags` 에 0x10 이 켜져 있습니까? 켜져 있다면 ctime 은 언제이고, 그 무렵 로그인 기록에 누가 있습니까?
-4. 감사 로그가 있다면 기록 파일 이름이 인수에 들어간 `EXECVE` 레코드가 있습니까? 없다면 그것이 "지우지 않았다" 는 뜻인지, 규칙이 없었다는 뜻인지 무엇으로 가립니까?
+4. 감사 로그가 있다면 기록 파일 이름이 인수에 들어간 `EXECVE` 레코드가 있습니까? 없다면 그것이 "지우지 않았다" 는 뜻인지, 규칙이 없었다는 뜻인지 무엇으로 구분합니까?
 
 ## 참고 문헌
 

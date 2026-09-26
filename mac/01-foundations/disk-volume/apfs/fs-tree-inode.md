@@ -9,7 +9,7 @@ nav_order: 30
 
 APFS 볼륨의 파일과 디렉터리는 파일 시스템 트리 (file-system tree)라는 B-트리의 레코드로 저장되고, 파일 하나가 아이노드 (inode)·디렉터리 항목·익스텐트·확장 속성 같은 여러 레코드로 나뉘어 객체 ID 순서로 나란히 놓입니다 [1].
 
-볼륨 슈퍼블록에서 이 트리를 찾아오는 과정은 [객체와 체크포인트 (Object·Checkpoint)](object-checkpoint.md)에 있고, 이 페이지는 트리 안의 레코드를 다룹니다. 아이노드의 시각 칸은 [APFS의 시각 네 가지 (Create·Modify·Change·Access)](timestamps.md)에서, 확장 속성 레코드는 [확장 속성 (Extended Attributes)](extended-attributes.md)에서 따로 설명합니다.
+볼륨 슈퍼블록에서 이 트리를 찾아오는 과정은 [객체와 체크포인트 (Object·Checkpoint)](object-checkpoint.md)에 있고, 이 페이지는 트리 안의 레코드를 다룹니다. 아이노드의 시각 필드는 [APFS의 시각 네 가지 (Create·Modify·Change·Access)](timestamps.md)에서, 확장 속성 레코드는 [확장 속성 (Extended Attributes)](extended-attributes.md)에서 따로 설명합니다.
 
 ## 이 구조를 쓰는 곳
 
@@ -76,7 +76,7 @@ APFS 볼륨에 있는 모든 파일의 이름, 부모 디렉터리, 소유자, �
 | 84 | 8 | `uncompressed_size` | 압축 전 크기(`INODE_HAS_UNCOMPRESSED_SIZE` 일 때만) |
 | 92 | | `xfields` | 확장 필드 |
 
-오프셋 84는 [2]에서 "pad2(Unknown)"이지만 [1]은 `uncompressed_size` 로 정의합니다. macOS 10.15 전에는 Apple 구현이 `INODE_HAS_UNCOMPRESSED_SIZE` 플래그를 무시하고 이 칸을 늘 패딩으로 다뤘습니다 [1].
+오프셋 84는 [2]에서 "pad2(Unknown)"이지만 [1]은 `uncompressed_size` 로 정의합니다. macOS 10.15 전에는 Apple 구현이 `INODE_HAS_UNCOMPRESSED_SIZE` 플래그를 무시하고 이 필드를 늘 패딩으로 다뤘습니다 [1].
 
 `mode` 의 파일 형식은 `S_IFMT` (0170000)로 걸러 내고, S_IFIFO 0010000, S_IFCHR 0020000, S_IFDIR 0040000, S_IFBLK 0060000, S_IFREG 0100000, S_IFLNK 0120000, S_IFSOCK 0140000, S_IFWHT 0160000 가운데 하나입니다 [1].
 
@@ -109,7 +109,7 @@ APFS 볼륨에 있는 모든 파일의 이름, 부모 디렉터리, 소유자, �
 | `INODE_IS_SPARSE` | 0x200 | 희소 파일 |
 | `INODE_WAS_EVER_CLONED` | 0x400 | 한 번 이상 복제된 적 있음 |
 | `INODE_HAS_RSRC_FORK` / `INODE_NO_RSRC_FORK` | 0x4000 / 0x8000 | 리소스 포크 유무 |
-| `INODE_HAS_UNCOMPRESSED_SIZE` | 0x40000 | `uncompressed_size` 칸이 유효 |
+| `INODE_HAS_UNCOMPRESSED_SIZE` | 0x40000 | `uncompressed_size` 필드가 유효 |
 | `INODE_IS_PURGEABLE` | 0x80000 | 다음 정리 때 지워질 파일 |
 | `INODE_WANTS_TO_BE_PURGEABLE` | 0x100000 | |
 | `INODE_IS_SYNC_ROOT` | 0x200000 | fileproviderd 동기화 계층의 뿌리 |
@@ -145,7 +145,7 @@ APFS 볼륨에 있는 모든 파일의 이름, 부모 디렉터리, 소유자, �
 
 ## 데이터 스트림과 익스텐트
 
-데이터 스트림 `j_dstream_t` (40바이트)는 `size`, `alloced_size`, `default_crypto_id`, `total_bytes_written`, `total_bytes_read` 로 되어 있고, 뒤의 두 칸은 쓰기·읽기 때마다 늘어나는 누적값이며 넘치면 0부터 다시 셉니다 [1].
+데이터 스트림 `j_dstream_t` (40바이트)는 `size`, `alloced_size`, `default_crypto_id`, `total_bytes_written`, `total_bytes_read` 로 되어 있고, 뒤의 두 필드는 쓰기·읽기 때마다 늘어나는 누적값이며 넘치면 0부터 다시 셉니다 [1].
 
 파일 익스텐트 레코드의 키 `j_file_extent_key_t` 는 파일 객체 ID와 파일 안의 바이트 오프셋 `logical_addr` 이고, 값은 하위 56비트가 바이트 길이(블록 크기의 배수)인 `len_and_flags`, 물리 블록 번호 `phys_block_num`, `crypto_id` 입니다 [1]. 물리 익스텐트 레코드는 시작 블록 주소를 키로 쓰고, 값은 하위 60비트가 블록 수이고 상위 4비트가 종류(kind)인 `len_and_kind`, `owning_obj_id`, `refcnt` 이며, `refcnt` 가 0이 되면 그 익스텐트를 지울 수 있습니다 [1].
 
@@ -159,7 +159,7 @@ APFS 볼륨에 있는 모든 파일의 이름, 부모 디렉터리, 소유자, �
 
 ### 헥스로 한 번
 
-아래 바이트는 실제 검체가 아니라 명세 [1]과 형식 문서 [2]에 맞춰 만든 아이노드 레코드이고, `xx` 는 값이 검체마다 다른 자리입니다.
+아래 바이트는 실제 데이터가 아니라 명세 [1]과 형식 문서 [2]에 맞춰 만든 아이노드 레코드이고, `xx` 는 값이 이미지마다 다른 자리입니다.
 
 ```
 키
@@ -174,7 +174,7 @@ APFS 볼륨에 있는 모든 파일의 이름, 부모 디렉터리, 소유자, �
 0050  A4 81 00 00 ...
 ```
 
-키를 리틀 엔디언으로 읽으면 0x3000000000000010이고, 상위 4비트 3은 INODE, 하위 60비트 0x10은 객체 ID 16, 곧 사용자 콘텐츠의 첫 번호입니다. 값의 `parent_id` 가 2라서 루트 디렉터리 바로 아래에 있고, `private_id` 가 자기 번호 16입니다. 0x30의 `internal_flags` 는 0이고, 0x38의 `nlink` 는 1입니다. 0x44의 `bsd_flags` 가 0이고, `owner` 는 0x1F5(501), `group` 은 0x14(20)이며, 0x50의 `mode` 0x81A4는 8진수 0100644, 곧 일반 파일(S_IFREG)에 권한 644입니다. 0x10~0x2F의 시각 네 칸은 시각 페이지에서 푸는 방법을 봅니다.
+키를 리틀 엔디언으로 읽으면 0x3000000000000010이고, 상위 4비트 3은 INODE, 하위 60비트 0x10은 객체 ID 16, 곧 사용자 콘텐츠의 첫 번호입니다. 값의 `parent_id` 가 2라서 루트 디렉터리 바로 아래에 있고, `private_id` 가 자기 번호 16입니다. 0x30의 `internal_flags` 는 0이고, 0x38의 `nlink` 는 1입니다. 0x44의 `bsd_flags` 가 0이고, `owner` 는 0x1F5(501), `group` 은 0x14(20)이며, 0x50의 `mode` 0x81A4는 8진수 0100644, 곧 일반 파일(S_IFREG)에 권한 644입니다. 0x10~0x2F의 시각 네 필드는 시각 페이지에서 푸는 방법을 봅니다.
 
 ### 절차
 
@@ -190,7 +190,7 @@ APFS 볼륨에 있는 모든 파일의 이름, 부모 디렉터리, 소유자, �
 
 `owner` 와 `group` 은 숫자 ID라서 사람 이름으로 바꾸려면 [사용자 계정 (Local Accounts)](../../../02-artifacts/system-account/user-accounts/index.md)의 UID와 맞춰 봅니다. 자식 아이노드의 `parent_id` 는 부모 디렉터리를, 부모 아래 디렉터리 항목의 `file_id` 는 자식 아이노드를 가리킵니다 [1]. 그래서 둘 가운데 한쪽 레코드만 옛 노드에서 되살려도 다른 쪽을 찾을 단서가 될 수 있습니다.
 
-`write_generation_counter` 는 아이노드나 데이터가 바뀔 때마다 늘어나고 [1], `total_bytes_written`·`total_bytes_read` 는 쓰기·읽기 누적량입니다 [1]. 이 값들은 시각이 아니라 횟수와 양이라서 언제 바뀌었는지는 알려 주지 않습니다. 이 카운터를 포렌식에 쓴 공개 자료가 없어, 분석에 쓰려면 검체로 확인해야 합니다.
+`write_generation_counter` 는 아이노드나 데이터가 바뀔 때마다 늘어나고 [1], `total_bytes_written`·`total_bytes_read` 는 쓰기·읽기 누적량입니다 [1]. 이 값들은 시각이 아니라 횟수와 양이라서 언제 바뀌었는지는 알려 주지 않습니다. 이 카운터를 포렌식에 쓴 공개 연구는 없으므로, 분석에 쓰려면 실제 데이터로 확인해야 합니다.
 
 `INODE_IS_APFS_PRIVATE` 가 켜진 아이노드는 파일 수 세기와 목록에서 숨겨지고 [1], afro가 뽑아낸 결과에는 볼륨마다 사용자에게 보이지 않는 `private-dir` 과 `root` 폴더가 나옵니다 [4]. 운영체제의 파일 목록과 트리를 직접 읽은 결과가 다르다면 이런 숨긴 항목부터 확인합니다.
 
@@ -200,7 +200,7 @@ APFS 볼륨에 있는 모든 파일의 이름, 부모 디렉터리, 소유자, �
 
 [1]의 PDF 텍스트에서 아이노드 플래그 목록은 이름과 값이 한 줄씩 어긋나 보입니다. 값은 항목별 설명에 적힌 쪽을 기준으로 삼고, 상수를 옮겨 적을 때도 항목별 설명과 맞춰 봅니다.
 
-디렉터리의 56번 칸은 하드 링크 수가 아니라 항목 수인데, macOS의 `stat` 은 이 값을 nlink처럼 다룹니다 [2]. 도구가 보여 주는 링크 수를 그대로 옮기기 전에 대상이 디렉터리인지 확인합니다.
+디렉터리에서 오프셋 56의 값은 하드 링크 수가 아니라 항목 수인데, macOS의 `stat` 은 이 값을 nlink처럼 다룹니다 [2]. 도구가 보여 주는 링크 수를 그대로 옮기기 전에 대상이 디렉터리인지 확인합니다.
 
 `readdir(2)` 는 APFS에서 해시 순서로 이름을 돌려주므로 [3], 도구가 보여 주는 목록 순서를 만든 순서나 사전 순서로 읽으면 안 됩니다. 이름은 입력한 정규화 형태 그대로 저장하는데 [3], 같은 글자로 보이는 두 이름이 NFC와 NFD처럼 바이트로는 다를 수 있다는 점도 기억해 둡니다.
 

@@ -10,7 +10,7 @@ nav_order: 1050
 
 ## 무엇을 기록하나 · 왜 생기나
 
-지갑 앱은 Apple Pay 에 등록한 결제 카드, 교통 카드, 탑승권·입장권·멤버십 같은 패스를 한곳에서 보여 줍니다. 결제 거래 표에는 가맹점 이름, 금액, 통화, 결제한 곳의 위치, 거래 상태를 적는 칸이 있고[1](버전·국가에 따라 행이 비어 있을 수 있음, 아래 "버전별 차이" 참고), 패스를 추가하면 패스 본문 파일이 저장됩니다[2].
+지갑 앱은 Apple Pay 에 등록한 결제 카드, 교통 카드, 탑승권·입장권·멤버십 같은 패스를 한곳에서 보여 줍니다. 결제 거래 표에는 가맹점 이름, 금액, 통화, 결제한 곳의 위치, 거래 상태를 적는 열이 있고[1](버전·국가에 따라 행이 비어 있을 수 있음, 아래 "버전별 차이" 참고), 패스를 추가하면 패스 본문 파일이 저장됩니다[2].
 
 조사에서는 이 기록으로 "그 시각 무렵 어느 가맹점에서 이 기기로 결제한 기록이 있는가", "어떤 탑승권이나 입장권을 받아 두었는가" 를 확인할 수 있습니다. 반면 카드 번호 자체는 기기 파일에 남지 않으므로(아래 "함정과 한계" 참고), 카드 발급사나 결제 사업자 자료와 맞춰 보는 단서로 씁니다.
 
@@ -26,7 +26,7 @@ nav_order: 1050
 | `*/Cards/*.pkpass/pass.json` | 패스 본문[2] |
 | `*/nanopasses.sqlite3*` | iLEAPP 가 "Apple wallet Nano passes" 로 부르는 패스 데이터베이스[2] |
 
-`nanopasses.sqlite3` 는 이름으로 보아 워치 쪽 패스 데이터베이스로 보입니다. 폰과 워치 가운데 어디에 있는 파일인지는 검체에서 확인합니다.
+`nanopasses.sqlite3` 는 이름으로 짐작하면 워치 쪽 패스 데이터베이스로 보입니다. 폰과 워치 가운데 어디에 있는 파일인지는 실제 기기에서 확인해야 합니다.
 
 ### 로컬 백업의 지갑 파일
 
@@ -49,19 +49,19 @@ nav_order: 1050
 | `AppDomainPlugin-com.apple.PassKit.*` | `PassKitSpotlightIndexExtension` 등 |
 | `AppDomainPlugin-com.apple.finhealth.FinHealthTransactionInsightsExtension` 등 | 공개 자료 없음 |
 
-`com.apple.Passbook` 은 이름으로 보아 지갑 앱의 번들 ID 로 보입니다. 도메인 이름을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을 봅니다.
+`com.apple.Passbook` 은 이름으로 짐작하면 지갑 앱의 번들 ID 로 보입니다. 도메인 이름을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을 봅니다.
 
 ### 버전별 차이
 
-iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 16.5(1행) 두 기기뿐이고 나머지는 0행이었습니다[1]. 버전·기기·국가에 따라 거래 기록이 아예 남지 않을 수 있습니다. 버전별로 표 구조가 어떻게 바뀌는지는 공개 자료가 없어 검체에서 확인합니다.
+iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 16.5(1행) 두 기기뿐이고 나머지는 0행이었습니다[1]. 버전·기기·국가에 따라 거래 기록이 아예 남지 않을 수 있습니다. 버전별로 표 구조가 어떻게 바뀌는지는 알려져 있지 않아 실제 데이터로 확인해야 합니다.
 
 ## 구조
 
 ### `passes23.sqlite` 의 거래 표
 
-`payment_transaction` 표의 주요 칸은 아래와 같습니다[1].
+`payment_transaction` 표의 주요 열은 아래와 같습니다[1].
 
-| 칸 | 담는 내용 |
+| 열 | 담는 내용 |
 |---|---|
 | `transaction_date` | 거래 시각 |
 | `merchant_name`, `locality`, `administrative_area` | 가맹점 이름과 지역 |
@@ -70,15 +70,15 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 | `peer_payment_counterpart_handle`, `peer_payment_memo` | 개인 간 송금의 상대와 메모 |
 | `transaction_status`, `transaction_type` | 거래 상태와 종류(번호) |
 
-`amount` 는 iLEAPP 가 10000 으로 나눠 보여 줍니다. 이 나눗수는 제조사 문서에 나온 값이 아니라 알려진 거래와 비교해서 얻은 값입니다[1]. `transaction_status` 와 `transaction_type` 의 번호 뜻은 공개 자료가 없어, 검체에서 알려진 거래와 맞춰 봐야 합니다.
+`amount` 는 iLEAPP 가 10000 으로 나눠 보여 줍니다. 이 나눗수는 제조사 문서에 나온 값이 아니라 알려진 거래와 비교해서 얻은 값입니다[1]. `transaction_status` 와 `transaction_type` 의 번호 뜻은 공개 문서에 없어, 실제 데이터에서 알려진 거래와 맞춰 봐야 합니다.
 
 ### 패스
 
 `pass.json` 은 패스 하나의 본문이고, iLEAPP 는 특정 키만 고르지 않고 키와 값을 모두 풀어 보여 줍니다[2].
 
-`nanopasses.sqlite3` 의 `PASS` 표에는 아래 칸이 있습니다[2].
+`nanopasses.sqlite3` 의 `PASS` 표에는 아래 열이 있습니다[2].
 
-| 칸 | 담는 내용 |
+| 열 | 담는 내용 |
 |---|---|
 | `UNIQUE_ID` | 패스 식별자 |
 | `ORGANIZATION_NAME`, `LOCALIZED_DESCRIPTION` | 발급 기관과 패스 설명 |
@@ -98,14 +98,14 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 | `com.apple.seserviced.contactlessCredential.settings.plist` | `defaultAppIdentifier`, `defaultAppLocalizedName`, `defaultAppCandidates`, `doubleClickEnabled`, `shouldShowContactlessPane`, `shouldShowContactlessTcc`, `shouldShowSecureElementTcc`, `shouldShowSECPane`, `version`, `domain` 등 |
 | `com.apple.stockholm.wallet.presentation.plist` | `walletDoubleButtonPressedConsumerAvailable` |
 
-`com.apple.seserviced.contactlessCredential.settings.plist` 는 키 이름으로 보아 기본 비접촉 결제 앱 설정으로 보입니다.
+`com.apple.seserviced.contactlessCredential.settings.plist` 는 키 이름으로 짐작하면 기본 비접촉 결제 앱 설정으로 보입니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
 - 거래 표에 적힌 시각·가맹점·금액·통화로 거래 기록이 이 기기에 저장되어 있다는 사실[1]
-- 거래 행에 위치 칸이 채워져 있으면, 그 위치 값이 거래 기록과 함께 저장되었다는 사실[1]
+- 거래 행에 위치 열이 채워져 있으면, 그 위치 값이 거래 기록과 함께 저장되었다는 사실[1]
 - 특정 패스(탑승권·입장권 등)가 기기에 들어와 있었다는 사실과, `INGESTED_DATE` 가 있으면 받아 들인 시각[2]
 
 **증명하지 못하는 것**
@@ -120,7 +120,7 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 
 `payment_transaction.transaction_date`, `location_date`, `PASS.INGESTED_DATE` 는 Mac 절대 시각(2001-01-01 00:00:00 UTC 부터 센 초)이고 iLEAPP 도 이 기준으로 바꿉니다[1][2]. 값은 UTC 기준이라서 현지 시각으로 옮길 때는 기기 시간대와 거래 위치를 함께 봅니다. `transaction_date` 는 거래 시각이고 `location_date` 는 위치를 잰 시각이라 두 값이 다를 수 있으며, 위치 기반 주장을 할 때는 `location_date` 를 씁니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되며, 어떤 기준의 시각인지는 공개 자료가 없어 검체에서 확인합니다.
+`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되며, 어떤 기준의 시각인지는 알려져 있지 않아 실제 데이터로 확인해야 합니다.
 
 ## 함정과 한계
 
@@ -130,13 +130,13 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 
 **금액 나눗수는 검증된 규칙이 아닙니다.** `amount` 를 10000 으로 나누는 규칙은 경험으로 얻은 값이라[1], 보고서에 금액을 적기 전에 영수증이나 카드사 자료로 알려진 거래 하나를 맞춰 봅니다.
 
-**지우기.** `PASS.DELETE_PENDING` 칸은 이름으로 보아 지우기를 기다리는 패스를 표시하는 것으로 보이며[2], 사용자가 패스를 지운 뒤 어떤 흔적이 얼마나 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)를 봅니다.
+**지우기.** `PASS.DELETE_PENDING` 열은 이름으로 짐작하면 지우기를 기다리는 패스를 표시하는 것으로 보이며[2], 사용자가 패스를 지운 뒤 어떤 흔적이 얼마나 남는지는 알려져 있지 않아 실제 기기로 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)를 봅니다.
 
 ## 직접 분석해 보기
 
 ### 금액과 시각 한 번 손으로 바꾸기
 
-아래는 명세로 만든 예시이고, 실제 검체의 값이 아닙니다. 거래 행에 `amount` 가 `45000000`, `currency_code` 가 `KRW`, `transaction_date` 가 `700000000` 이라고 하면, iLEAPP 방식으로 금액은 45000000 ÷ 10000 = 4,500원이고, 시각은 2001-01-01 00:00:00 UTC 에 700,000,000초를 더한 2023-03-08 20:26:40 UTC, 한국 시간으로 2023-03-09 05:26:40 입니다.
+아래는 명세로 만든 예시이고, 실제 데이터의 값이 아닙니다. 거래 행에 `amount` 가 `45000000`, `currency_code` 가 `KRW`, `transaction_date` 가 `700000000` 이라고 하면, iLEAPP 방식으로 금액은 45000000 ÷ 10000 = 4,500원이고, 시각은 2001-01-01 00:00:00 UTC 에 700,000,000초를 더한 2023-03-08 20:26:40 UTC, 한국 시간으로 2023-03-09 05:26:40 입니다.
 
 ```sql
 SELECT datetime(transaction_date + 978307200, 'unixepoch') AS tx_utc,
@@ -169,11 +169,11 @@ iLEAPP 의 지갑 거래 모듈은 `payment_transaction` 을 읽어 금액을 10
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)에서 아이폰 이미지를 구해 아래 질문을 풀어 봅니다. 거래 기록은 버전과 국가에 따라 없을 수 있으므로, 없으면 없다는 사실과 검체의 iOS 버전을 함께 적습니다.
+공개 시험 자료(NIST CFReDS 등)에서 아이폰 이미지를 구해 아래 질문을 풀어 봅니다. 거래 기록은 버전과 국가에 따라 없을 수 있으므로, 없으면 없다는 사실과 그 이미지의 iOS 버전을 함께 적습니다.
 
-1. 검체에서 `passes23.sqlite` 를 찾고, `payment_transaction` 표에 행이 몇 개 있는지 셉니다.
+1. 이미지에서 `passes23.sqlite` 를 찾고, `payment_transaction` 표에 행이 몇 개 있는지 셉니다.
 2. 거래 하나를 골라 `transaction_date` 와 `location_date` 를 각각 UTC 로 바꾸고 둘의 차이를 적습니다.
-3. 위치 칸이 채워진 거래가 있으면 중요 위치 기록과 같은 무렵 같은 지역인지 맞춰 봅니다.
+3. 위치 열이 채워진 거래가 있으면 중요 위치 기록과 같은 무렵 같은 지역인지 맞춰 봅니다.
 4. `pass.json` 을 하나 열어 발급 기관과 패스 종류를 확인하고, iLEAPP 결과와 같은지 봅니다.
 5. `com.apple.passd.plist` 의 `PDLastLogDate` 를 읽고, 다른 기록과 비교해 무엇이 바뀔 때 이 값이 바뀌는지 가설을 세워 봅니다.
 

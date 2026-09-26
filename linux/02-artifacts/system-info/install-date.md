@@ -6,19 +6,19 @@ nav_order: 310
 
 # 설치 날짜 가늠하기 (Install Date)
 
-Linux 에는 "설치 날짜" 를 담은 값이 따로 없어서, 파일 시스템을 만든 시각·설치 프로그램 로그·첫 패키지 기록·machine-id 같은 흔적을 모아 설치 무렵을 가늠합니다.
+Linux 에는 "설치 날짜" 를 담은 값이 따로 없어서, 파일 시스템을 만든 시각·설치 프로그램 로그·첫 패키지 기록·machine-id 같은 흔적을 모아 설치 무렵을 추정합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 설치 프로그램은 디스크를 나누고 파일 시스템을 만든 뒤 패키지를 풀어 넣고, 마지막으로 자기 로그를 설치한 시스템 안에 복사합니다. 이 과정에서 시각이 남는 곳이 여럿 생깁니다. ext4 슈퍼블록에는 파일 시스템을 만든 시각이 들어가고[1], 파일마다 아이노드에 생성 시각이 붙습니다[2]. Ubuntu 설치 프로그램 subiquity 는 `/var/log/installer/` 를, RHEL 설치 프로그램 anaconda 는 `/var/log/anaconda/` 를 대상 시스템에 남깁니다[5][6]. 패키지 관리자는 설치 중에 넣은 패키지부터 기록을 쌓고, `/etc/machine-id` 는 설치 과정이나 첫 부팅 때 생깁니다[9].
 
-이 흔적들은 서로 다른 순간을 가리킵니다. 파일 시스템 생성은 설치 초반이고, 로그 복사는 설치 막바지이며, machine-id 는 설치 중이거나 첫 부팅 때입니다. 그래서 한 값만 보고 "설치일" 이라고 쓰지 않고, 여러 값이 같은 날에 모이는지를 봅니다. 시스템이 언제부터 쓰였는지, 사건 무렵에 새로 설치한 시스템인지, 이미지를 복제해 만든 서버인지를 가릴 때 이 쪽을 씁니다.
+이 흔적들은 서로 다른 순간을 가리킵니다. 파일 시스템 생성은 설치 초반이고, 로그 복사는 설치 막바지이며, machine-id 는 설치 중이거나 첫 부팅 때입니다. 그래서 한 값만 보고 "설치일" 이라고 쓰지 않고, 여러 값이 같은 날에 모이는지를 봅니다. 시스템이 언제부터 쓰였는지, 사건 무렵에 새로 설치한 시스템인지, 이미지를 복제해 만든 서버인지를 판별할 때 이 페이지를 씁니다.
 
 ## 위치와 버전별 차이
 
 | 흔적 | Ubuntu 24.04 LTS | RHEL 9 |
 |---|---|---|
-| 파일 시스템 생성 시각 | 루트가 ext4 면 슈퍼블록 `s_mkfs_time`[1] | 루트 파일 시스템 종류를 검체에서 확인. ext4 면 같은 필드, XFS 면 [XFS](../../01-foundations/filesystem/xfs.md) 쪽의 구조로 본다 |
+| 파일 시스템 생성 시각 | 루트가 ext4 면 슈퍼블록 `s_mkfs_time`[1] | 루트 파일 시스템 종류를 분석 대상에서 확인. ext4 면 같은 필드, XFS 면 [XFS](../../01-foundations/filesystem/xfs.md) 페이지의 구조로 본다 |
 | 설치 프로그램 로그 | `/var/log/installer/` (subiquity)[5] | `/var/log/anaconda/` (anaconda)[6] |
 | 설치 설정 | `/var/log/installer/autoinstall-user-data`[5] | `/root/anaconda-ks.cfg`, `/root/original-ks.cfg`[6] |
 | 패키지 기록 | `/var/log/dpkg.log*`, `/var/log/apt/history.*`, `/var/lib/dpkg/info/*.list`[14] | rpm 데이터베이스 `rpmdb.sqlite`[17], dnf 기록 `/var/lib/dnf/history.sqlite`[16] |
@@ -30,7 +30,7 @@ Linux 에는 "설치 날짜" 를 담은 값이 따로 없어서, 파일 시스�
 
 ### ext4 파일 시스템 생성 시각
 
-ext4 슈퍼블록은 볼륨 시작에서 1024바이트 뒤에 있습니다[1]. 슈퍼블록 안 오프셋 0x108 의 `s_mkfs_time` 은 파일 시스템을 만든 시각이고, 에포크 기준 초를 담은 4바이트 리틀 엔디언 값입니다[1]. 오프셋 0x276 의 `s_mkfs_time_hi` 는 이 값의 위쪽 8비트입니다[1]. 슈퍼블록의 나머지 필드는 [ext4](../../01-foundations/filesystem/ext4/index.md) 쪽에서 다룹니다.
+ext4 슈퍼블록은 볼륨 시작에서 1024바이트 뒤에 있습니다[1]. 슈퍼블록 안 오프셋 0x108 의 `s_mkfs_time` 은 파일 시스템을 만든 시각이고, 에포크 기준 초를 담은 4바이트 리틀 엔디언 값입니다[1]. 오프셋 0x276 의 `s_mkfs_time_hi` 는 이 값의 위쪽 8비트입니다[1]. 슈퍼블록의 나머지 필드는 [ext4](../../01-foundations/filesystem/ext4/index.md) 페이지에서 다룹니다.
 
 파일 하나의 생성 시각은 아이노드의 `i_crtime`(오프셋 0x90, 에포크 기준 초)과 `i_crtime_extra`(0x94)에 들어갑니다[2]. `i_crtime_extra` 의 아래 2비트는 초 값을 34비트로 늘리는 데 쓰고, 위 30비트는 나노초입니다[2]. 이 필드는 아이노드 크기가 128바이트보다 클 때만 있고, ext4 의 기본 아이노드 레코드 크기는 256바이트입니다[2]. 일반 `stat()` 으로는 생성 시각이 보이지 않지만, debugfs 는 보여 주고[2] `statx()` 는 `stx_btime` 으로 돌려줍니다[3].
 
@@ -56,7 +56,7 @@ anaconda 는 파일을 `shutil.copyfile` 로 복사합니다[6]. 이 함수는 �
 
 ### os-release 의 BUILD_ID
 
-`/etc/os-release` 의 `BUILD_ID=` 는 설치 기반이 된 시스템 이미지를 가리키는 문자열입니다[12]. 값이 `BUILD_ID="2013-03-20.3"` 처럼 날짜 모양일 수 있지만 이미지를 만든 쪽의 식별자라서 이 시스템을 설치한 날이 아닙니다[12]. 필드 전체는 [배포판과 버전](os-release.md) 쪽에 있습니다.
+`/etc/os-release` 의 `BUILD_ID=` 는 설치 기반이 된 시스템 이미지를 가리키는 문자열입니다[12]. 값이 `BUILD_ID="2013-03-20.3"` 처럼 날짜 모양일 수 있지만 이미지를 만든 쪽의 식별자라서 이 시스템을 설치한 날이 아닙니다[12]. 필드 전체는 [배포판과 버전](os-release.md) 페이지에 있습니다.
 
 ## 증거로서 의미
 
@@ -85,9 +85,9 @@ anaconda 는 파일을 `shutil.copyfile` 로 복사합니다[6]. 이 함수는 �
 | yum.log 줄 시각 | 연도 없는 현지 시각. dissect 는 파일 시각으로 연도를 채움[14] | 패키지 작업 때 |
 | rpm `INSTALLTIME` | 패키지 설치 시각[15]. 수집 결과에서 값 모양을 확인하고 사람이 읽는 시각으로 바꿔 다른 기록과 맞춰 본다 | 그 패키지를 설치할 때 |
 
-현지 시각 기록을 UTC 로 옮길 때는 [호스트 이름·시간대·로캘](hostname-timezone.md) 쪽에서 구한 시간대를 씁니다. 에포크 값을 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+현지 시각 기록을 UTC 로 옮길 때는 [호스트 이름·시간대·로캘](hostname-timezone.md) 페이지에서 구한 시간대를 씁니다. 에포크 값을 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-로그 파일을 복사한 방식에 따라 파일 시각의 뜻이 달라집니다. subiquity 가 cloud-init 로그를 옮길 때 쓰는 `cp -a` 는 원본의 접근 시각과 수정 시각을 되도록 보존합니다[8]. 하지만 이 파일들도 대상 시스템으로는 `rsync -a` 로 한 번 더 옮기므로[5], 대상 시스템에 있는 파일의 수정 시각이 원래 로그의 시각인지는 검체에서 파일의 수정 시각과 로그 안 마지막 줄 시각을 맞춰 보고 판단합니다. anaconda 가 `shutil.copyfile` 로 옮긴 파일은 수정 시각과 생성 시각 모두 복사한 때입니다[6][7].
+로그 파일을 복사한 방식에 따라 파일 시각의 뜻이 달라집니다. subiquity 가 cloud-init 로그를 옮길 때 쓰는 `cp -a` 는 원본의 접근 시각과 수정 시각을 되도록 보존합니다[8]. 하지만 이 파일들도 대상 시스템으로는 `rsync -a` 로 한 번 더 옮기므로[5], 대상 시스템에 있는 파일의 수정 시각이 원래 로그의 시각인지는 분석 대상에서 파일의 수정 시각과 로그 안 마지막 줄 시각을 맞춰 보고 판단합니다. anaconda 가 `shutil.copyfile` 로 옮긴 파일은 수정 시각과 생성 시각 모두 복사한 때입니다[6][7].
 
 ## 함정과 한계
 
@@ -124,7 +124,7 @@ date -u -d @1716523572
 - `istat` 은 아이노드의 생성 시각을 `File Created:` 줄로 보여 줍니다[4]. `/etc/machine-id`, `/var/log/installer/installer-journal.txt`, `/var/log/anaconda/journal.log` 의 아이노드를 차례로 보면 첫 부팅과 설치 막바지 시각을 나란히 놓을 수 있습니다.
 - dissect.target 의 messages 플러그인은 `/var/log/installer/` 안의 `syslog*`, `messages*`, `cloud-init.log*` 도 읽습니다[18]. 패키지 플러그인은 dpkg·apt·yum 기록을 대상 시스템 시간대로 해석합니다[14].
 - plaso 의 dpkg 파서는 `2016-08-03 15:25:53 install base-passwd:amd64 <none> 3.5.33` 같은 줄을 현지 시각으로 읽습니다[13].
-- rpm·dnf 가 있는 살아 있는 시스템에서는 UAC 가 `rpm -q -a --queryformat '%{INSTALLTIME}~%{NAME}~%{VERSION}-%{RELEASE}\n'`, `dnf history list` 를 받아 둡니다[15]. INSTALLTIME 이 가장 이른 패키지 묶음이 설치 때 들어간 패키지일 가능성이 있습니다.
+- rpm·dnf 가 있는 실행 중인 시스템에서는 UAC 가 `rpm -q -a --queryformat '%{INSTALLTIME}~%{NAME}~%{VERSION}-%{RELEASE}\n'`, `dnf history list` 를 받아 둡니다[15]. INSTALLTIME 이 가장 이른 패키지 묶음이 설치 때 들어간 패키지일 가능성이 있습니다.
 
 ## 교차 검증
 

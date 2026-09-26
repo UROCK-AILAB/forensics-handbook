@@ -20,9 +20,9 @@ nav_order: 3780
 
 ## 먼저 확인할 것
 
-| 확인할 것 | 까닭 |
+| 확인할 것 | 이유 |
 |---|---|
-| Windows 버전 | 심캐시 형식, UserAssist 키, 4688 의 칸이 버전마다 다릅니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
+| Windows 버전 | 심캐시 형식, UserAssist 키, 4688 의 필드가 버전마다 다릅니다. [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) 에서 버전과 빌드를 먼저 적습니다. |
 | 시간대 | 기록마다 시각 기준이 다릅니다. [시간대 설정](../../02-artifacts/system-account/time-zone.md) 을 읽습니다. Bias 값을 부호 있는 수로 읽는 법은 [이 파일을 누가 언제 열었나](file-access.md) 의 "먼저 확인할 것" 에 있습니다. |
 | 사용자 | 프리페치와 심캐시에는 사용자 정보가 없습니다. UserAssist 는 사용자 하이브(NTUSER.DAT)에 남습니다. [사용자 프로필 목록](../../02-artifacts/system-account/profilelist.md) 으로 SID 와 프로필을 짝지어 둡니다. |
 | 프리페치 설정 | `EnablePrefetcher` 값이 0 이면 프리페치 파일이 생기지 않습니다. |
@@ -39,7 +39,7 @@ nav_order: 3780
 | 2 | 부팅만 |
 | 3 | 둘 다 |
 
-Windows 11 Home 25H2 PC 에서 `EnablePrefetcher` 가 3, `.pf` 파일이 294개이고 프로세스 만들기 감사는 꺼진 예가 있습니다. 이때 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit` 에는 `ProcessCreationIncludeCmdLine_Enabled` 값이 없을 수 있습니다. 이 값이 아래 "명령줄 포함" 정책과 짝인지는 검체에서 정책 설정과 함께 확인합니다.
+Windows 11 Home 25H2 PC 에서 `EnablePrefetcher` 가 3, `.pf` 파일이 294개이고 프로세스 만들기 감사는 꺼진 예가 있습니다. 이때 `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit` 에는 `ProcessCreationIncludeCmdLine_Enabled` 값이 없을 수 있습니다. 이 값이 아래 "명령줄 포함" 정책과 짝인지는 실제 기기에서 정책 설정과 함께 확인해야 합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -76,7 +76,7 @@ Windows 11 Home 25H2 PC 에서 `EnablePrefetcher` 가 3, `.pf` 파일이 294개�
 
 (출처 [3])
 
-**Windows 10 항목.** 서명 "10ts", 알 수 없는 칸, 항목 데이터 크기, 경로 크기, UTF-16 경로, 마지막 수정 시각(FILETIME), 데이터 크기, 데이터 순서로 이어집니다[3].
+**Windows 10 항목.** 서명 "10ts", 알 수 없는 필드, 항목 데이터 크기, 경로 크기, UTF-16 경로, 마지막 수정 시각(FILETIME), 데이터 크기, 데이터 순서로 이어집니다[3].
 
 **항목의 시각은 실행 시각이 아닙니다.**
 
@@ -92,7 +92,7 @@ NTFS 에서 항목의 시각은 캐시를 갱신한 시각이 아니라 그 파�
 
 AppCompatCache 값이 214,066바이트이고, 앞 4바이트 값이 0x34(52)이며, 오프셋 0x34 에서 "10ts" 가 나오는 예입니다. 값 안에 "10ts" 서명은 904개 있습니다.
 
-아래는 이 배치를 보여 주려고 명세와 위 예를 바탕으로 만든 예시입니다. 실제 검체에서 떼어 온 바이트가 아닙니다.
+아래는 이 배치를 보여 주려고 명세와 위 예를 바탕으로 만든 예시입니다. 실제 기기에서 떼어 온 바이트가 아닙니다.
 
 ```
 오프셋      바이트            뜻
@@ -138,7 +138,7 @@ UserAssist 는 사용자 하이브의 탐색기(Explorer) 키 아래에 남는 �
 - 1,612바이트 값의 이름은 `HRZR_PGYFRFFVBA` 입니다.
 - 값 이름 가운데 경로 앞부분이 `{…GUID…}\` 로 된 것이 있습니다. 알려진 폴더 GUID 로 보입니다. 경로로 바꾸는 법은 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 봅니다.
 - 스토어 앱 식별자(…!App) 형식의 값 이름도 있습니다.
-- 명령줄로 띄운 실행이 UserAssist 에 남는지는 공개 자료가 없어 검체에서 확인합니다.
+- 명령줄로 띄운 실행이 UserAssist 에 남는지는 실제 기기에서 확인해야 합니다.
 
 ## BAM
 
@@ -160,10 +160,10 @@ BAM (Background Activity Moderator) 키에는 SID 별로 실행 파일 경로가
 - PcaAppLaunchDic.txt 는 UTF-8(또는 ASCII) 글자 파일입니다.
 - 이 파일의 95줄 가운데 94줄이 `전체 경로|YYYY-MM-DD HH:MM:SS.fff` 형식입니다.
 - 이 가운데 두 줄(WindowsTerminal.exe, Orca.exe)의 시각은 같은 프로그램의 프리페치 파일 수정 시각(UTC)과 0~19초 차이입니다.
-- 시간대가 UTC+9 인데도 프리페치 시각(UTC)과 맞으므로 이 파일의 시각은 UTC 로 보입니다. 검체마다 프리페치 시각과 다시 맞춰 봅니다.
-- PcaGeneralDb0.txt 는 UTF-16 글자 파일입니다. 한 줄이 `|` 로 나뉜 8칸이고, 첫 칸이 시각입니다. 나머지 칸의 뜻은 공개 자료에 없습니다.
+- 시간대가 UTC+9 인데도 프리페치 시각(UTC)과 맞으므로 이 파일의 시각은 UTC 로 보입니다. 분석 대상마다 프리페치 시각과 다시 맞춰 봅니다.
+- PcaGeneralDb0.txt 는 UTF-16 글자 파일입니다. 한 줄이 `|` 로 나뉜 8개 필드이고, 첫 필드가 시각입니다. 나머지 필드의 뜻은 공개 자료에 없습니다.
 
-PCA 파일이 어느 Windows 버전부터 생기는지는 공개 자료에 없습니다. 검체에 폴더가 없으면 버전부터 확인합니다.
+PCA 파일이 어느 Windows 버전부터 생기는지는 공개 자료에 없습니다. 분석 대상 PC 에 폴더가 없으면 버전부터 확인합니다.
 
 ## 보안 로그 4688
 
@@ -172,14 +172,14 @@ PCA 파일이 어느 Windows 버전부터 생기는지는 공개 자료에 없�
 | 이벤트 버전 | Windows | 달라진 점 |
 |---|---|---|
 | 0 | Vista·Server 2008 | 처음 판 |
-| 1 | 8.1·Server 2012 R2 | Process Command Line 칸이 붙었습니다. |
+| 1 | 8.1·Server 2012 R2 | Process Command Line 필드가 붙었습니다. |
 | 2 | 10 | Subject 가 Creator Subject 로 바뀌었습니다. Target Subject·Mandatory Label·Creator Process Name 이 붙었습니다. |
 
 (출처 [1])
 
-**조사에 쓰는 칸.**
+**조사에 쓰는 필드.**
 
-| 묻는 것 | 칸 |
+| 묻는 것 | 필드 |
 |---|---|
 | 누가 띄웠나 | SubjectUserSid, SubjectUserName, SubjectDomainName, SubjectLogonId |
 | 무엇이 떴나 | NewProcessId, NewProcessName, CommandLine |
@@ -187,7 +187,7 @@ PCA 파일이 어느 Windows 버전부터 생기는지는 공개 자료에 없�
 | 어떤 권한으로 | TokenElevationType, MandatoryLabel |
 | 새 프로세스의 계정 | TargetUserSid, TargetUserName, TargetDomainName, TargetLogonId |
 
-**명령줄은 기본으로 비어 있습니다.** 그룹 정책 "Administrative Templates\System\Audit Process Creation\Include command line in process creation events" 를 켜야 명령줄이 들어갑니다[1]. 기본값에서는 Process Command Line 칸이 비어 있습니다[1].
+**명령줄은 기본으로 비어 있습니다.** 그룹 정책 "Administrative Templates\System\Audit Process Creation\Include command line in process creation events" 를 켜야 명령줄이 들어갑니다[1]. 기본값에서는 Process Command Line 필드가 비어 있습니다[1].
 
 **Token Elevation Type.**
 
@@ -248,7 +248,7 @@ Sysmon 은 서비스와 드라이버를 설치해야 기록을 남기고, Vista 
 5. **UserAssist GUID 의 뜻을 확정된 사실로 씁니다.** 두 GUID 의 뜻은 추정입니다[4].
 6. **BAM·PCA 시각을 문서로 확인된 실행 시각처럼 씁니다.** BAM·PCA 시각의 뜻은 공식 문서에 없습니다. 다른 기록과 맞춰 씁니다.
 7. **4688 이 없으니 실행하지 않았다고 봅니다.** 감사 정책이 꺼져 있었을 수 있습니다.
-8. **4688 명령줄이 비어 있으니 인자 없이 실행했다고 봅니다.** 정책을 켜지 않으면 명령줄 칸은 비어 있습니다[1].
+8. **4688 명령줄이 비어 있으니 인자 없이 실행했다고 봅니다.** 정책을 켜지 않으면 명령줄 필드는 비어 있습니다[1].
 9. **실행 기록을 사람의 조작으로 씁니다.** 서비스·예약 작업·자동실행으로 뜬 프로그램도 같은 기록을 남깁니다.
 
 ## 보고서 문장 예
@@ -262,7 +262,7 @@ Sysmon 은 서비스와 드라이버를 설치해야 기록을 남기고, Vista 
 - [프리페치](../../02-artifacts/execution/prefetch/index.md) · [AmCache](../../02-artifacts/execution/amcache-hve/index.md) · [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) — 실행 기록의 구조입니다.
 - [심캐시](../../02-artifacts/execution/shimcache-appcompatcache.md) · [UserAssist](../../02-artifacts/execution/userassist.md) · [BAM·DAM](../../02-artifacts/execution/background-activity-moderator.md) · [프로그램 호환성 도우미](../../02-artifacts/execution/pca.md) — 레지스트리와 파일에 남는 실행 흔적입니다.
 - [프로세스 생성](../../02-artifacts/event-logs/4688.md) · [Sysmon 로그](../../02-artifacts/event-logs/sysmon/index.md) — 이벤트 로그의 실행 기록입니다.
-- [악성코드 지속성(자동실행) 찾기](../incident/persistence.md) — 자동으로 뜬 프로그램을 가립니다.
+- [악성코드 지속성(자동실행) 찾기](../incident/persistence.md) — 자동으로 뜬 프로그램을 가려냅니다.
 - [악성코드는 어디서 들어왔나](../incident/initial-access.md) — 실행 파일이 들어온 경로를 봅니다.
 - [이 파일은 어디서 왔나](file-origin.md) — 실행 파일의 출처를 봅니다.
 - [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) — 계정에서 사람으로 좁힙니다.

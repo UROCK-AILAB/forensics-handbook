@@ -13,7 +13,7 @@ Chromium 계열 브라우저는 프로필 폴더의 `History` SQLite 파일에 �
 
 브라우저는 `History` 파일에 방문을 쌓고, 같은 파일에 다운로드 목록도 함께 둡니다 [1][3]. 방문 기록은 URL 하나당 한 행인 `urls` 표와 방문 한 번당 한 행인 `visits` 표로 나뉘고, `visits.url` 이 `urls.id` 를 가리킵니다 [1]. 다운로드는 `downloads` 표에 한 건씩 남고, 그 파일을 받기까지 거친 URL은 `downloads_url_chains` 표에 순서대로 남습니다 [3].
 
-프로필 폴더에는 `History` 말고도 오래된 방문을 담는 `Archived History` 와 방문한 URL의 지문만 모아 둔 `Visited Links` 가 있습니다 [1][5]. `Archived History` 는 오래된 브라우저 버전에서 쓰던 파일이라 최신 버전 검체에는 없을 수도 있습니다. 프로필 폴더를 찾는 법은 [맥에서의 위치와 프로필 (Profiles)](profiles.md)에서 다룹니다.
+프로필 폴더에는 `History` 말고도 오래된 방문을 담는 `Archived History` 와 방문한 URL의 지문만 모아 둔 `Visited Links` 가 있습니다 [1][5]. `Archived History` 는 오래된 브라우저 버전에서 쓰던 파일이라 최신 버전 브라우저의 프로필에는 없을 수도 있습니다. 프로필 폴더를 찾는 법은 [맥에서의 위치와 프로필 (Profiles)](profiles.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -28,16 +28,16 @@ Chromium 계열 브라우저는 프로필 폴더의 `History` SQLite 파일에 �
 | 브라우저 쪽 변화 | 내용 |
 |---|---|
 | 다운로드 시각 기준 | 예전 `downloads.start_time` 은 1970 기준 초(time_t)였고, 이후 1601 기준 마이크로초로 옮겨졌습니다 [1][3] |
-| 다운로드 URL 칸 | 예전 `downloads` 표에는 `url`·`full_path` 칸이 있었고, 버전 26부터 `target_path` 칸과 `downloads_url_chains` 표로 나뉘었습니다 [1] |
+| 다운로드 URL 열 | 예전 `downloads` 표에는 `url`·`full_path` 열이 있었고, 버전 26부터 `target_path` 열과 `downloads_url_chains` 표로 나뉘었습니다 [1] |
 | 다운로드 상태 값 | 옛 상태 값 3(BUG_140687)은 새 버전에서 INTERRUPTED로 옮겨집니다 [3] |
 
-아래 표 구성은 Chromium 소스의 현재 버전(2026-09 시점) 기준입니다. 오래된 브라우저가 만든 DB에는 일부 칸이 없을 수 있어서, 먼저 검체 DB의 `.schema` 로 칸을 확인합니다.
+아래 표 구성은 Chromium 소스의 현재 버전(2026-09 시점) 기준입니다. 오래된 브라우저가 만든 DB에는 일부 열이 없을 수 있어서, 먼저 분석 대상 DB의 `.schema` 로 열을 확인합니다.
 
 ## 구조
 
 ### urls 와 visits
 
-`urls` 표에는 `id`, `url`, `title` 칸이 있고 [1], 방문 횟수나 마지막 방문 시각을 담는 칸은 검체 DB의 `.schema` 로 확인합니다. `visits` 표의 칸은 아래와 같습니다 [4].
+`urls` 표에는 `id`, `url`, `title` 열이 있고 [1], 방문 횟수나 마지막 방문 시각을 담는 열은 분석 대상 DB의 `.schema` 로 확인합니다. `visits` 표의 열은 아래와 같습니다 [4].
 
 ```
 id, url, visit_time, from_visit, external_referrer_url, transition,
@@ -47,17 +47,17 @@ originator_opener_visit, is_known_to_sync, consider_for_ntp_most_visited,
 visited_link_id, app_id
 ```
 
-| 칸 | 뜻 |
+| 열 | 뜻 |
 |---|---|
 | `url` | `urls.id` 를 가리킵니다 [1] |
 | `visit_time` | 방문 시각, 1601-01-01 UTC 기준 마이크로초 [1] |
 | `from_visit` | 이 방문을 부른 이전 방문의 id이고, 리디렉션 연쇄를 따라갈 때 씁니다. DB에 없는 id를 가리키기도 합니다 [4] |
 | `opener_visit` | 새 탭이나 새 창으로 이 방문을 연 방문의 id [4] |
 | `transition` | 어떻게 이 페이지에 왔는지를 적은 값(아래 표) [2] |
-| `visit_duration` | 방문을 연 때부터 닫거나 끝낸 때까지의 길이이고, 탭이 떠 있기만 한 시간도 들어갑니다 [6]. 이 값은 시간 간격 형식(`BindTimeDelta`)으로 저장되고 [4], 저장 단위는 검체 값의 크기로 한 번 확인합니다 |
-| `originator_*`, `is_known_to_sync` | 칸 이름으로 보아 다른 기기에서 동기화된 방문과 관련된 칸으로 보입니다 [4] |
+| `visit_duration` | 방문을 연 때부터 닫거나 끝낸 때까지의 길이이고, 탭이 떠 있기만 한 시간도 들어갑니다 [6]. 이 값은 시간 간격 형식(`BindTimeDelta`)으로 저장되고 [4], 저장 단위는 실제 값의 크기로 한 번 확인합니다 |
+| `originator_*`, `is_known_to_sync` | 열 이름으로 보면 다른 기기에서 동기화된 방문과 관련된 열로 보입니다 [4] |
 
-`visit_source` 표에는 `id` 와 `source` 두 칸이 있고, `source` 는 방문이 어디서 왔는지를 나타냅니다 [4]. 값은 0 SOURCE_SYNCED(다른 곳에서 동기화), 1 SOURCE_BROWSED(사용자가 탐색), 2 SOURCE_EXTENSION(확장이 추가), 3 SOURCE_FIREFOX_IMPORTED, 4 SOURCE_IE_IMPORTED, 5 SOURCE_SAFARI_IMPORTED, 6 SOURCE_ACTOR, 7 SOURCE_OS_MIGRATION_IMPORTED 이고, 이미 정해진 번호는 바뀌지 않습니다 [6]. 방문을 넣을 때 출처가 SOURCE_BROWSED가 아닌 경우에만 이 표에 행을 만들어서 [4], `visit_source` 에 행이 없는 방문은 이 브라우저에서 탐색한 방문으로 읽습니다.
+`visit_source` 표에는 `id` 와 `source` 두 열이 있고, `source` 는 방문이 어디서 왔는지를 나타냅니다 [4]. 값은 0 SOURCE_SYNCED(다른 곳에서 동기화), 1 SOURCE_BROWSED(사용자가 탐색), 2 SOURCE_EXTENSION(확장이 추가), 3 SOURCE_FIREFOX_IMPORTED, 4 SOURCE_IE_IMPORTED, 5 SOURCE_SAFARI_IMPORTED, 6 SOURCE_ACTOR, 7 SOURCE_OS_MIGRATION_IMPORTED 이고, 이미 정해진 번호는 바뀌지 않습니다 [6]. 방문을 넣을 때 출처가 SOURCE_BROWSED가 아닌 경우에만 이 표에 행을 만들어서 [4], `visit_source` 에 행이 없는 방문은 이 브라우저에서 탐색한 방문으로 읽습니다.
 
 ### transition 값
 
@@ -81,7 +81,7 @@ visited_link_id, app_id
 
 ### downloads 와 딸린 표
 
-`downloads` 표의 칸은 아래와 같습니다 [3].
+`downloads` 표의 열은 아래와 같습니다 [3].
 
 ```
 id, guid, current_path, target_path, start_time, received_bytes, total_bytes,
@@ -91,9 +91,9 @@ http_method, by_ext_id, by_ext_name, by_web_app_id, etag, last_modified,
 mime_type, original_mime_type
 ```
 
-`start_time`, `end_time`, `last_access_time` 은 1601 기준 마이크로초입니다 [3]. `state` 는 0이 진행 중(IN_PROGRESS), 1이 완료(COMPLETE), 2가 취소(CANCELLED), 3이 옛 값 BUG_140687, 4가 중단(INTERRUPTED)이고, 이 번호는 DB에 저장되는 값이라 바뀌지 않습니다 [7]. `danger_type` 도 같은 파일에 번호가 정해져 있어서 0 NOT_DANGEROUS, 1 DANGEROUS_FILE, 2 DANGEROUS_URL, 3 DANGEROUS_CONTENT, 4 MAYBE_DANGEROUS_CONTENT, 5 UNCOMMON_CONTENT, 6 USER_VALIDATED, 7 DANGEROUS_HOST, 8 POTENTIALLY_UNWANTED 처럼 이어지고, 그 뒤 값은 브라우저 버전에 따라 늘어나서 검체 버전의 소스로 확인합니다 [7]. `interrupt_reason` 의 숫자 뜻도 검체 버전의 소스로 확인합니다. `by_ext_id`·`by_ext_name` 은 칸 이름으로 보아 확장이 시작한 다운로드일 때 그 확장을 적는 칸이고 [3], 확장 쪽 흔적은 [확장 (Extensions)](extensions.md)에서 다룹니다.
+`start_time`, `end_time`, `last_access_time` 은 1601 기준 마이크로초입니다 [3]. `state` 는 0이 진행 중(IN_PROGRESS), 1이 완료(COMPLETE), 2가 취소(CANCELLED), 3이 옛 값 BUG_140687, 4가 중단(INTERRUPTED)이고, 이 번호는 DB에 저장되는 값이라 바뀌지 않습니다 [7]. `danger_type` 도 같은 파일에 번호가 정해져 있어서 0 NOT_DANGEROUS, 1 DANGEROUS_FILE, 2 DANGEROUS_URL, 3 DANGEROUS_CONTENT, 4 MAYBE_DANGEROUS_CONTENT, 5 UNCOMMON_CONTENT, 6 USER_VALIDATED, 7 DANGEROUS_HOST, 8 POTENTIALLY_UNWANTED 처럼 이어지고, 그 뒤 값은 브라우저 버전에 따라 늘어나서 분석 대상 브라우저 버전의 소스로 확인합니다 [7]. `interrupt_reason` 의 숫자 뜻도 그 버전의 소스로 확인합니다. `by_ext_id`·`by_ext_name` 은 열 이름으로 보면 확장이 시작한 다운로드일 때 그 확장을 적는 열이고 [3], 확장 쪽 흔적은 [확장 (Extensions)](extensions.md)에서 다룹니다.
 
-`downloads_url_chains` 표는 `id`, `chain_index`, `url` 세 칸이고, `(id, chain_index)` 가 기본 키, `id` 가 `downloads.id` 입니다 [3]. 한 다운로드에 여러 행이 붙을 수 있고, `chain_index` 순서대로 읽으면 리디렉션을 포함해 파일에 닿기까지 거친 URL이 나옵니다 [3]. `downloads_slices` 표(`download_id`, `offset`, `received_bytes`, `finished`)는 파일을 여러 조각으로 나눠 받거나 이어 받을 때 조각 정보를 적습니다 [3].
+`downloads_url_chains` 표는 `id`, `chain_index`, `url` 세 열이고, `(id, chain_index)` 가 기본 키, `id` 가 `downloads.id` 입니다 [3]. 한 다운로드에 여러 행이 붙을 수 있고, `chain_index` 순서대로 읽으면 리디렉션을 포함해 파일에 닿기까지 거친 URL이 나옵니다 [3]. `downloads_slices` 표(`download_id`, `offset`, `received_bytes`, `finished`)는 파일을 여러 조각으로 나눠 받거나 이어 받을 때 조각 정보를 적습니다 [3].
 
 ### Visited Links
 
@@ -109,7 +109,7 @@ mime_type, original_mime_type
 
 ## 시각 해석
 
-`visit_time` 과 다운로드 시각 칸은 1601-01-01 00:00:00 UTC를 기준으로 센 마이크로초이고 [1][3], 흔히 WebKit 시각 또는 Chrome 시각이라고 부릅니다. 맥 절대 시각(2001 기준)이나 유닉스 시각(1970 기준)과 기준이 달라서, 1,000,000으로 나눠 초로 바꾼 뒤 1601과 1970 사이의 초 `11644473600` 을 빼면 유닉스 시각이 됩니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 모아 두었습니다.
+`visit_time` 과 다운로드 시각 열은 1601-01-01 00:00:00 UTC를 기준으로 센 마이크로초이고 [1][3], 흔히 WebKit 시각 또는 Chrome 시각이라고 부릅니다. 맥 절대 시각(2001 기준)이나 유닉스 시각(1970 기준)과 기준이 달라서, 1,000,000으로 나눠 초로 바꾼 뒤 1601과 1970 사이의 초 `11644473600` 을 빼면 유닉스 시각이 됩니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 모아 두었습니다.
 
 명세로 만든 예시로 보면, `13348540800000000` 은 1,000,000으로 나눈 `13348540800` 에서 `11644473600` 을 뺀 유닉스 시각 `1704067200` 이고, 이 값은 2024-01-01 00:00:00 UTC입니다. 값이 모두 UTC 기준이라서 현지 시각은 [시간대와 시계 설정 (Time Zone·NTP)](../../system-account/time-zone.md)을 보고 따로 바꿉니다.
 
@@ -117,11 +117,11 @@ mime_type, original_mime_type
 
 ## 함정과 한계
 
-- **동기화된 방문.** `visit_source` 와 `originator_*` 칸이 동기화와 관련되어 있어서 [4], 이 칸을 보지 않고 모든 방문을 이 맥에서 일어난 일로 적으면 틀릴 수 있습니다.
+- **동기화된 방문.** `visit_source` 와 `originator_*` 열이 동기화와 관련되어 있어서 [4], 이 열을 보지 않고 모든 방문을 이 맥에서 일어난 일로 적으면 틀릴 수 있습니다.
 - **transition 이 음수로 보일 때.** SERVER_REDIRECT가 32비트의 맨 위 비트라서 부호 있는 32비트로 읽으면 음수가 됩니다. 명세로 만든 예시로 `0xA0000000`(SERVER_REDIRECT와 CHAIN_END, 핵심 종류 LINK)은 부호 없이 `2684354560`, 부호 있게 읽으면 `-1610612736` 입니다. 현재 버전은 이 값을 64비트 정수로 저장하지만 [4], 오래된 버전이나 도구에 따라 음수로 보일 수 있어서 값이 음수여도 하위 8비트와 한정자 비트를 그대로 풀어 봅니다.
 - **끊긴 from_visit.** `from_visit` 이 DB에 없는 id를 가리키는 경우가 있어서 [4], 연쇄가 끊겼다는 점만으로 기록을 지웠다고 보지 않습니다.
 - **모르는 숫자.** `interrupt_reason` 의 숫자 뜻과 `danger_type` 의 새 값은 브라우저 버전마다 늘어납니다. 도구가 이 숫자를 글자로 바꿔 보여 주면 어떤 버전의 표를 썼는지 확인합니다.
-- **검색어 표.** 검색어는 `keyword_search_terms` 표에 담기고, 칸 구성은 검체 DB의 `.schema` 로 확인합니다.
+- **검색어 표.** 검색어는 `keyword_search_terms` 표에 담기고, 열 구성은 분석 대상 DB의 `.schema` 로 확인합니다.
 - **지운 기록.** 지운 행을 찾으려면 SQLite 파일의 빈 공간을 살펴야 하고, 그 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 - **격리 기록과의 연결.** 브라우저로 받은 파일의 격리 속성·격리 이벤트 DB와 이 표를 잇는 공개된 키가 없어서 URL과 시각으로 맞춰 봅니다.
 
@@ -160,7 +160,7 @@ FROM downloads d LEFT JOIN downloads_url_chains c ON c.id = d.id
 ORDER BY d.start_time, c.chain_index;
 ```
 
-오래된 DB에서 칸이 없다는 오류가 나면 `.schema downloads` 로 칸을 확인하고 해당 칸을 뺍니다.
+오래된 DB에서 열이 없다는 오류가 나면 `.schema downloads` 로 열을 확인하고 해당 열을 뺍니다.
 
 ## 교차 검증
 
@@ -175,7 +175,7 @@ ORDER BY d.start_time, c.chain_index;
 
 ## 실습
 
-공개 검체(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
+공개 시험 자료(NIST CFReDS 등)의 macOS 이미지로 풀어 봅니다.
 
 1. 프로필마다 `History` 의 `visits` 행 수와 가장 이른·늦은 `visit_time` 을 UTC로 적어 보세요.
 2. `transition` 의 핵심 종류가 TYPED인 방문만 골라 URL 목록을 만들어 보세요.
