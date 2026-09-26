@@ -115,15 +115,15 @@ VS Code 세션 파일과 설정 파일이 증명하는 것과 증명하지 못�
 | Copilot CLI 저장소 사용량 | 줄마다 시각 | ISO 형식 | agentsview 형식 조사 [5] |
 | Visual Studio 추적 파일 | span 의 `startTimeUnixNano`, `endTimeUnixNano` | Unix 나노초를 적은 문자열 | agentsview [11] |
 
-세션 목록 키의 `lastMessageDate` 를 읽을 때 조심할 점은 [Windows](windows.md)의 시각 해석 절과 같습니다. macOS 에서는 파일 시스템 시각에 더해 파일 시스템 이벤트 기록으로 세션 파일이 언제 생기고 바뀌었는지 맞춰 볼 수 있습니다. 구조는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html)에, 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+세션 목록 키의 `lastMessageDate` 를 읽을 때 조심할 점은 [Windows](windows.md)의 시각 해석 절과 같습니다. macOS 에서는 파일 시스템 시각에 더해 파일 시스템 이벤트 기록으로 세션 파일이 언제 생기고 바뀌었는지 맞춰 볼 수 있습니다. 구조는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에, 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
 - **제품마다 폴더가 다릅니다.** VS Code, Copilot CLI, Visual Studio, Xcode, JetBrains 기록은 서로 다른 폴더에 있어서, 한쪽이 비어 있다고 다른 쪽도 없다고 보지 않습니다.
 - **VS Code JSONL 세션은 마지막 줄만 보면 안 됩니다.** 조작 기록이라서 처음부터 다시 적용해야 최종 모양이 나오고, 나중에 바뀐 값의 이전 값은 앞 줄에 남습니다 [4]. 다시 적용하는 방법은 [Windows](windows.md)에 있습니다.
-- **`session-store.db` 는 WAL 과 함께 뜹니다.** `session-store.db-wal` 을 빼고 복사하면 최근 기록이 빠질 수 있습니다. 저장소에서 가장 늦은 사용량 줄의 시각이 세션 전체가 기록됐다는 뜻은 아닙니다 [5]. WAL 을 읽는 법은 [SQLite](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/sqlite/index.html)에 있습니다.
+- **`session-store.db` 는 WAL 과 함께 뜹니다.** `session-store.db-wal` 을 빼고 복사하면 최근 기록이 빠질 수 있습니다. 저장소에서 가장 늦은 사용량 줄의 시각이 세션 전체가 기록됐다는 뜻은 아닙니다 [5]. WAL 을 읽는 법은 [SQLite](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/sqlite/index.html)에 있습니다.
 - **Visual Studio 추적 파일은 캐시 폴더에 있습니다.** `~/Library/Caches` 아래라서 수집할 때 파일이 남아 있는지부터 확인합니다.
-- **로그인 정보는 따로 봅니다.** Copilot 로그인 토큰이 키체인에 들어가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에, 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다. VS Code 세션 파일과 Copilot CLI 세션 파일은 복호화 단계 없이 JSON 으로 읽힙니다 [4][7].
+- **로그인 정보는 따로 봅니다.** Copilot 로그인 토큰이 키체인에 들어가는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에, 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다. VS Code 세션 파일과 Copilot CLI 세션 파일은 복호화 단계 없이 JSON 으로 읽힙니다 [4][7].
 - **MCP 도구 호출.** Copilot 에 붙인 MCP 서버의 기록은 [MCP 서버와 도구 호출 기록](../mcp.md)에서 다룹니다.
 
 ## 직접 분석해 보기
@@ -151,7 +151,7 @@ sqlite3 /tmp/case/session-store.db ".tables"
 ## 교차 검증
 
 - VS Code 세션의 `workspace.json` 프로젝트 폴더와 Copilot CLI 의 `context.cwd` 가 같은 폴더를 가리키는지 봅니다.
-- `tool.execution_*` 기록에 파일을 고친 도구가 있으면 그 파일의 수정 시각과 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html)를 맞춰 봅니다.
+- `tool.execution_*` 기록에 파일을 고친 도구가 있으면 그 파일의 수정 시각과 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)를 맞춰 봅니다.
 - 조직 계정이면 서버 쪽 사용 기록을 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md) 절차로 받아 기기 기록과 비교합니다.
 - 같은 시간대에 다른 코딩 에이전트([Claude Code](../claude-code/index.md), [Codex CLI](../codex-cli.md), [Cursor](../cursor.md))를 썼는지 함께 봅니다.
 

@@ -135,7 +135,7 @@ DB 의 밀리초 값을 사람이 읽는 시각으로 바꾸는 법은 1000 으�
 ## 함정과 한계
 
 - **기록이 지워진 흔적.** 샘플에서 `event_logs` 의 `workspace_file_uploaded` 는 10건인데 `workspace_parsed_files` 에 남은 행은 7건이고, `sqlite_sequence` 의 그 표 값은 10이었습니다[4]. 행이 빠진 자리의 파일 이름은 이벤트 `metadata` 의 `filename` 에 남아 있습니다. 한 표만 보면 사라진 첨부를 놓칩니다.
-- **삭제 뒤 복구.** 대화나 문서를 UI 에서 지운 뒤 무엇이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)와 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)를 봅니다.
+- **삭제 뒤 복구.** 대화나 문서를 UI 에서 지운 뒤 무엇이 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)와 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)를 봅니다.
 - **켜진 앱의 DB.** 앱이 켜져 있으면 잠금을 피하려고 DB 를 `-wal`, `-shm` 과 함께 복사한 뒤 엽니다[1][2]. 샘플 DB 는 롤백 저널 방식이라 `-wal` 이 없을 수 있지만, 있으면 반드시 함께 떠야 마지막 대화가 빠지지 않습니다.
 - **파서가 읽지 않는 것.** Impl 파서는 `workspace_chats`, `workspaces`, `event_logs` 세 표와 `documents` 아래 JSON 만 읽습니다[2]. `workspace_threads`(스레드 이름), `workspace_parsed_files`, `direct-uploads` 아래 JSON, 답 JSON 의 `metrics`·`sources` 는 결과 CSV 에 들어가지 않습니다. `documents` 폴더가 없으면 `storage` 전체에서 `pageContent` 나 `chunkSource` 가 든 JSON 을 모읍니다.
 - **시간대 가정.** 같은 저장소의 `correlation.py` 는 시각 칸 전체가 밀리초로 읽히지 않고 시간대 표시도 없으면 `Asia/Kolkata` 시각으로 보고 UTC 로 바꿉니다[4]. 샘플의 `published` 는 UTC+1 이었으므로 이 가정을 그대로 쓰면 시각이 어긋납니다.
@@ -153,7 +153,7 @@ DB 의 밀리초 값을 사람이 읽는 시각으로 바꾸는 법은 1000 으�
 00000010: 1000 0101 0040 2020 0000 0001 0000 0010  .....@  ........
 ```
 
-오프셋 16~17 의 `10 00` 은 페이지 크기 4096 이고, 오프셋 18~19 의 `01 01` 은 롤백 저널 방식이라는 뜻입니다. WAL 방식이면 이 두 바이트가 `02 02` 이고, 그때는 `-wal` 파일을 꼭 함께 봅니다. 머리 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 쪽에서 자세히 다룹니다.
+오프셋 16~17 의 `10 00` 은 페이지 크기 4096 이고, 오프셋 18~19 의 `01 01` 은 롤백 저널 방식이라는 뜻입니다. WAL 방식이면 이 두 바이트가 `02 02` 이고, 그때는 `-wal` 파일을 꼭 함께 봅니다. 머리 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 쪽에서 자세히 다룹니다.
 
 스레드 이름은 레코드 안에 UTF-8 로 들어 있습니다. 아래는 첫 질문이 `draft a summary of the report` 였다고 가정해 만든 예시로, 앞 18자 뒤에 말줄임표 `E2 80 A6` 이 붙습니다.
 

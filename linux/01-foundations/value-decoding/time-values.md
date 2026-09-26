@@ -184,7 +184,7 @@ utmp·lastlog 의 32비트 초는 2038년에 넘칩니다. utmp(5)는 `ut_tv` �
 
 UAC bodyfile 한 줄은 `0|%N|%i|%A|%u|%g|%s|%X|%Y|%Z|%W` 형식 문자열로 만들어지므로, 뒤의 네 칸이 atime·mtime·ctime·btime 의 epoch 초입니다[24][16].
 
-여러 기록을 한 시간 축에 놓는 절차는 [타임라인 만들기](../../03-techniques/analysis/timeline.md)에서 다룹니다. 다른 운영체제의 시각 값은 [Windows 시각 값 형식](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html), [맥의 시각 값](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/value-decoding/mac-time-values.html), [Android 시각 값](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/value-decoding/time-values.html), [iOS 시각 값](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/value-decoding/time-values.html)에서 다룹니다.
+여러 기록을 한 시간 축에 놓는 절차는 [타임라인 만들기](../../03-techniques/analysis/timeline.md)에서 다룹니다. 다른 운영체제의 시각 값은 [Windows 시각 값 형식](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html), [맥의 시각 값](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/value-decoding/mac-time-values.html), [Android 시각 값](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/value-decoding/time-values.html), [iOS 시각 값](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/value-decoding/time-values.html)에서 다룹니다.
 
 ## 참고 문헌
 

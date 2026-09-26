@@ -29,10 +29,10 @@ nav_order: 150
 
 | 기기 | 페이지 |
 |---|---|
-| Windows 의 크롬 계열 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html), [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) |
-| macOS 의 사파리 | [사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/leveldb-indexeddb.html) |
-| Android 의 크롬 | [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html) |
-| iPhone·iPad 의 브라우저 | [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html) |
+| Windows 의 크롬 계열 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html), [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) |
+| macOS 의 사파리 | [사파리](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/browsers/safari/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/leveldb-indexeddb.html) |
+| Android 의 크롬 | [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) |
+| iPhone·iPad 의 브라우저 | [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) |
 
 ## 계정 쪽 자료
 
@@ -58,7 +58,7 @@ Windows 데스크톱 앱은 앱 패키지 폴더 안에 크롬 계열 저장소�
 
 ## 직접 분석해 보기
 
-claude.ai 가 브라우저에 두는 값은 공개된 분석 자료가 없습니다. 브라우저 파일을 헥스로 따라가는 방법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. 공개 도구로는 다음 순서로 봅니다.
+claude.ai 가 브라우저에 두는 값은 공개된 분석 자료가 없습니다. 브라우저 파일을 헥스로 따라가는 방법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. 공개 도구로는 다음 순서로 봅니다.
 
 1. 브라우저를 닫은 상태에서 프로필 폴더를 통째로 사본으로 뜹니다. 데이터베이스 옆의 저널·WAL 파일도 함께 가져옵니다.
 2. 방문 기록 데이터베이스를 SQLite 도구(예: DB Browser for SQLite)로 열어 주소에 claude.ai 가 들어간 줄만 거릅니다.

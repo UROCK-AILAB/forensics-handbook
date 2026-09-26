@@ -24,7 +24,7 @@ Ray-Ban Meta 안경으로 찍은 사진·동영상과 Meta AI 에 한 음성 질
 
 루팅하지 않은 채 `adb backup` 으로 받으면 머리말만 든 47바이트 파일이 나옵니다 [1]. APK 의 `AndroidManifest.xml` 에 `android:allowBackup="false"` 가 있어서 백업 방식의 추출이 막힙니다 [1]. 루트 권한으로 `adb pull /data/data/com.facebook.stella` 를 하면 SQLite 데이터베이스·설정 파일·캐시 미디어·AI 대화 기록이 나왔습니다 [1]. 권한 없이 수집하면 계정·기기 식별자, 설정, 미디어, AI 대화, 시스템 기록 가운데 거의 모든 항목을 얻지 못합니다 [1]. 권한 없는 수집 경로에서는 미디어를 SD 카드 저장 공간에서 따로 꺼냈습니다 [1].
 
-앱 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)에서 다룹니다.
+앱 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다.
 
 ### 앱 폴더 안의 파일 (Android)
 
@@ -68,7 +68,7 @@ iOS 앱은 공개된 분석 자료가 없어 검체로 확인해야 합니다. �
 
 ### StellaDatabase
 
-`StellaDatabase` 는 SQLite 파일이고, 앱에서 증거가 가장 많은 데이터베이스입니다 [1]. 형식 자체는 [Android SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html) 페이지를 따릅니다. ALEAPP 플러그인이 조회하는 칸은 아래와 같습니다 [2].
+`StellaDatabase` 는 SQLite 파일이고, 앱에서 증거가 가장 많은 데이터베이스입니다 [1]. 형식 자체는 [Android SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html) 페이지를 따릅니다. ALEAPP 플러그인이 조회하는 칸은 아래와 같습니다 [2].
 
 | 표 | 플러그인이 읽는 칸 | 쓰임 |
 |---|---|---|
@@ -104,7 +104,7 @@ iOS 앱은 공개된 분석 자료가 없어 검체로 확인해야 합니다. �
 
 플러그인은 `capture_timestamp_ms`, `import_completed_timestamp_ms`, `fetch_timestamp_ms` 를 1970-01-01 UTC 기준 밀리초로 보고 1000 으로 나눈 뒤 SQLite 의 `datetime(..., "unixepoch")` 로 UTC 문자열을 만듭니다 [2]. 값이 정수로 저장돼 있으면 SQLite 의 `/1000` 은 정수 나눗셈이 되므로, 보고서 시각에는 밀리초가 빠집니다. 논문 사례 연구에서 현지 시각(CDT) 오후 5:30~5:45 의 대화를 찍은 동영상이 UTC 22:31:18~22:43:27 로 나왔으므로 [1], 앱 데이터베이스의 시각은 UTC 로 읽고 보고서에는 현지 시각을 함께 적습니다.
 
-한 번의 촬영에는 시각이 두 개 있습니다. `capture` 의 촬영 시각은 안경에서 찍은 때이고, `media_item` 의 가져온 시각은 휴대폰으로 옮긴 때라서 둘 사이에 간격이 생길 수 있습니다 [1][2]. 클라우드 내보내기에서 플러그인은 대화 날짜를 `Conversation with Meta AI_` 뒤의 `두 자리-두 자리-네 자리` 날짜로, 미디어 시각을 `Jan 05, 2026 3:04 pm`(만든 예시) 같은 영문 문자열로 읽고, 둘 다 시간대 표시가 없어서 [2], 기기 쪽 UTC 기록 몇 개와 맞춰 본 뒤 기준을 정합니다. 여러 기록을 한 줄로 세우는 법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html)에 있습니다.
+한 번의 촬영에는 시각이 두 개 있습니다. `capture` 의 촬영 시각은 안경에서 찍은 때이고, `media_item` 의 가져온 시각은 휴대폰으로 옮긴 때라서 둘 사이에 간격이 생길 수 있습니다 [1][2]. 클라우드 내보내기에서 플러그인은 대화 날짜를 `Conversation with Meta AI_` 뒤의 `두 자리-두 자리-네 자리` 날짜로, 미디어 시각을 `Jan 05, 2026 3:04 pm`(만든 예시) 같은 영문 문자열로 읽고, 둘 다 시간대 표시가 없어서 [2], 기기 쪽 UTC 기록 몇 개와 맞춰 본 뒤 기준을 정합니다. 여러 기록을 한 줄로 세우는 법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)에 있습니다.
 
 ## 함정과 한계
 
@@ -176,7 +176,7 @@ iOS 앱은 공개된 분석 자료가 없어 검체로 확인해야 합니다. �
 | `media_item_location` ↔ 휴대폰의 다른 위치 기록 | 시각 | 동영상 위치가 휴대폰 위치와 맞는지 |
 | `update_log` ↔ `systems_health_report.txt` | 시각(칸 이름은 검체에서 확인) | 펌웨어 업데이트와 연결 이벤트 |
 
-계정 ID 와 일련번호로 사람과 기기를 잇는 순서는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)에, 캐시에서 대화를 되살리는 일반 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에 있습니다. 앱 설정 XML 을 읽는 법은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)를 봅니다.
+계정 ID 와 일련번호로 사람과 기기를 잇는 순서는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)에, 캐시에서 대화를 되살리는 일반 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에 있습니다. 앱 설정 XML 을 읽는 법은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)를 봅니다.
 
 ## 실습
 

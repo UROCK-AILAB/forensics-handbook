@@ -40,7 +40,7 @@ Replika 는 대화와 함께 앱이 사용자에 대해 알아낸 사실을 `mem
 | Persona.AI | `com.aipersona.camera` | `com.persona.ai/` | 기기 |
 | Fantasy.AI | `online.fantasyai.android` | `com.fantasy.ai/` | 기기 |
 
-앱 데이터 폴더(`/data/data/` 아래 패키지 폴더) 기준으로 볼 파일은 아래와 같습니다. 폴더 구조의 일반 설명은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에 있습니다.
+앱 데이터 폴더(`/data/data/` 아래 패키지 폴더) 기준으로 볼 파일은 아래와 같습니다. 폴더 구조의 일반 설명은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에 있습니다.
 
 | 앱 | 파일 | 담긴 것 | 출처 |
 |---|---|---|---|
@@ -60,7 +60,7 @@ Replika 는 대화와 함께 앱이 사용자에 대해 알아낸 사실을 `mem
 
 출처끼리 다른 곳이 두 군데 더 있습니다. Kindroid 의 `PersistedInstallation` 파일을 논문 표는 `app_webview/Local Storage` 에 있다고 적었고[1], 도구 코드는 `files/` 폴더에서 `PersistedInstallation.` 뒤에 긴 이름이 붙은 JSON 을 코드에 적어 둔 파일 이름 그대로 읽습니다[2]. Linky.AI 대화 파일은 논문 본문이 `OpenIM_v2_conv<convIDNumber>.cd` 로 적으면서 같은 폴더의 파일이 `.hive` 와 `.db` 형식이라고 했고, 논문 표는 `.hive, .db` 로 적었습니다[1]. 도구 코드는 `app_flutter/` 에서 `OpenIM` 으로 시작하고 `.db` 로 끝나는 파일을 읽습니다[2]. 두 경우 모두 검체에서 파일 이름으로 찾아 실제 위치를 적습니다.
 
-Kindroid 는 앱 화면을 웹뷰로 띄우는 구조라서 `app_webview/` 아래가 크롬 계열 프로필과 같은 모양입니다. 이 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [LevelDB와 IndexedDB (Android)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/leveldb-indexeddb.html)를 따라 읽습니다.
+Kindroid 는 앱 화면을 웹뷰로 띄우는 구조라서 `app_webview/` 아래가 크롬 계열 프로필과 같은 모양입니다. 이 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [LevelDB와 IndexedDB (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/leveldb-indexeddb.html)를 따라 읽습니다.
 
 위 결과의 앱 버전은 공개되지 않았습니다. Character.AI 는 `shared_prefs/CodePush.xml` 의 `appVersion` 값으로 검체의 앱 버전을 알 수 있고, 도구 코드는 이 값을 못 읽으면 1.11.3 을 기본값으로 씁니다[2]. 다른 앱도 분석 결과에 검체의 앱 버전을 함께 적습니다.
 
@@ -134,13 +134,13 @@ Replika `chat_message` 의 순서는 `timestamp_ms` 로 정하고, Persona.AI·F
 | Linky.AI | 대화를 비우면 새 대화 ID 만 만들고 원래 기록은 데이터베이스에 그대로 뒀습니다. 앱 안에 계정 삭제 기능이 없습니다. |
 | Persona.AI·Fantasy.AI | 지운 대화가 주 데이터베이스에서는 빠졌지만 `ai_personal_db-wal` 에 남았고, 앱 데이터를 모두 지운 뒤에도 남았습니다. |
 
-그래서 `-wal`·`-shm` 파일을 주 데이터베이스와 함께 한 번에 복사하고, 앱 폴더 전체에서 `userlog` 라는 이름의 폴더를 찾습니다. WAL 에서 지운 행을 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)와 [SQLite 데이터베이스 (Android)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)에 있고, 서비스별 보관·삭제 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
+그래서 `-wal`·`-shm` 파일을 주 데이터베이스와 함께 한 번에 복사하고, 앱 폴더 전체에서 `userlog` 라는 이름의 폴더를 찾습니다. WAL 에서 지운 행을 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)와 [SQLite 데이터베이스 (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)에 있고, 서비스별 보관·삭제 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
 **보낸 쪽을 가르는 도구 규칙은 어림입니다.** Linky.AI 도구는 보낸 이 이름에 `assistant`·`official`·`bot` 이 있거나 `send_id` 가 15자보다 길면 봇으로 보고, 나머지는 사용자로 봅니다[2]. Persona.AI·Fantasy.AI 도구는 `sender_name` 이 비어 있지 않고 `v` 가 아니면 봇으로 봅니다[2]. 둘 다 코드 주석에 적힌 관찰에서 나온 규칙이라서, 결과를 쓰기 전에 `send_id`·`recv_id`·`sender_id` 와 대화 상대 ID 를 원본에서 맞춰 봅니다.
 
 **남은 토큰은 가려야 합니다.** `RKStorage` 의 `AUTH_TOKEN`, Kindroid 의 `PersistedInstallation` 토큰과 IndexedDB 의 사용자 토큰은 보고서와 결과 파일에서 가립니다. 시험 계정의 토큰으로는 서버에서 대화를 받아 올 수 있었지만[1], 실제 사건에서 남은 토큰으로 서버 자료를 가져오는 일은 법적 권한이 있어야 하는 별도의 문제입니다. 서버 쪽 대화는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받고, 토큰이 남는 곳의 일반 설명은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
-**실험 조건이 좁습니다.** 위 결과는 루팅한 에뮬레이터 한 가지 환경에서 `adb root` 뒤 `/data/data` 를 tar 로 묶어 뽑은 것입니다[1]. 루팅하지 않은 실제 기기에서는 이 폴더를 그대로 얻지 못할 수 있으니, 수집 범위는 [저장 공간 암호화 (Android)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)와 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 보고 정합니다. iOS·데스크톱 판이나 다른 컴패니언 앱, 새로 나온 컴패니언 앱에서는 결과가 다를 수 있습니다[1].
+**실험 조건이 좁습니다.** 위 결과는 루팅한 에뮬레이터 한 가지 환경에서 `adb root` 뒤 `/data/data` 를 tar 로 묶어 뽑은 것입니다[1]. 루팅하지 않은 실제 기기에서는 이 폴더를 그대로 얻지 못할 수 있으니, 수집 범위는 [저장 공간 암호화 (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)와 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 보고 정합니다. iOS·데스크톱 판이나 다른 컴패니언 앱, 새로 나온 컴패니언 앱에서는 결과가 다를 수 있습니다[1].
 
 ## 직접 분석해 보기
 
@@ -194,7 +194,7 @@ SQLite 가 여는 순간 WAL 내용을 주 파일에 합칠 수 있으니 이 �
 
 ## 교차 검증
 
-`*.character.ai` 같은 서비스 도메인은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)에서 시각을 맞춰 봅니다. 앱 설정 XML 은 [설정 XML과 SharedPreferences (Android)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)의 방식으로 읽습니다. 계정과 사람을 잇는 일은 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)를 따르고, Replika `user_profile`·Kindroid 사용자 ID·Character.AI 토큰의 계정을 기기의 다른 계정 흔적과 맞춰 봅니다. 서버와 광고·분석 업체 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 확보합니다. DeepSeek·Grok 같은 일반 대화형 서비스는 [그 밖의 서비스](other-services.md)에서 다룹니다.
+`*.character.ai` 같은 서비스 도메인은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)에서 시각을 맞춰 봅니다. 앱 설정 XML 은 [설정 XML과 SharedPreferences (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)의 방식으로 읽습니다. 계정과 사람을 잇는 일은 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)를 따르고, Replika `user_profile`·Kindroid 사용자 ID·Character.AI 토큰의 계정을 기기의 다른 계정 흔적과 맞춰 봅니다. 서버와 광고·분석 업체 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 확보합니다. DeepSeek·Grok 같은 일반 대화형 서비스는 [그 밖의 서비스](other-services.md)에서 다룹니다.
 
 ## 실습
 

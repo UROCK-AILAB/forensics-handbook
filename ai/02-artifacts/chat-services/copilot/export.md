@@ -140,7 +140,7 @@ for title, lines in talks.items():
 
 | 함께 볼 기록 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 브라우저 방문·다운로드 기록 | 대시보드를 연 때, CSV 를 받은 때, 대화 시각의 기준 | [웹 브라우저](web.md), [크롬 계열 브라우저 (Windows 판)](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| 브라우저 방문·다운로드 기록 | 대시보드를 연 때, CSV 를 받은 때, 대화 시각의 기준 | [웹 브라우저](web.md), [크롬 계열 브라우저 (Windows 판)](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
 | Windows 앱 흔적 | 같은 계정을 앱에서도 썼을 가능성 | [Windows 앱](windows.md) |
 | 네트워크 기록 | 서비스와 통신한 시간대 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) |
 | 첨부와 생성물 | 본문 속 프롬프트·첨부·생성물을 가르는 법 | [프롬프트·첨부·생성물 구분하기](../../../01-foundations/concepts/prompt-attachment-output.md) |

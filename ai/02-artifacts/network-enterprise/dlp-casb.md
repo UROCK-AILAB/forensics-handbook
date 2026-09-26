@@ -85,7 +85,7 @@ Purview 에서 네트워크 DLP 나 브라우저 DLP 로 제3자 AI 앱을 감�
 
 - [AI 서비스 도메인과 네트워크 기록](network-traces.md) — 같은 시각에 PC 에서 해당 도메인을 질의·연결했는지
 - [Microsoft Purview로 본 Copilot 기록](purview-copilot.md) — 조직이 허용한 AI 사용 기록과 나눠 보기
-- [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) — 같은 시각의 방문 기록과 다운로드 기록
+- [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) — 같은 시각의 방문 기록과 다운로드 기록
 - [기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md) — 민감 정보 유형 기록을 조사 질문에 쓰는 흐름
 - [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md) — 허용 목록과 방문 기록을 맞추는 흐름
 

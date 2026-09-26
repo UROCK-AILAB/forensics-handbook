@@ -31,13 +31,13 @@ Copilot iOS 앱의 번들 ID 는 공개 자료에 나오지 않으니 검체에�
 
 iLEAPP 의 두 분석기를 시험한 범위는 iOS 12.4 부터 iOS 18.7.8 까지입니다 [4][6]. 그보다 새 iOS 판에서는 모양이 다를 수 있습니다. 2025년 논문의 초록에는 시험한 Copilot 앱 판과 iOS 판이 나오지 않으니, 판을 인용하려면 논문 본문을 봅니다 [2].
 
-로컬 백업에 이 앱의 데이터가 들어가는지, 로그인 정보가 키체인에 어떤 이름으로 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 백업을 받는 방법과 그 안의 짜임은 [로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html) 페이지를 따릅니다. 잠금 상태에서 파일이 읽히는지는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html), 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) 페이지에 있습니다. 이 페이지는 잠금 해제나 보안 우회 방법을 다루지 않습니다.
+로컬 백업에 이 앱의 데이터가 들어가는지, 로그인 정보가 키체인에 어떤 이름으로 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 백업을 받는 방법과 그 안의 짜임은 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html) 페이지를 따릅니다. 잠금 상태에서 파일이 읽히는지는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html), 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html) 페이지에 있습니다. 이 페이지는 잠금 해제나 보안 우회 방법을 다루지 않습니다.
 
 ## 구조
 
 앱 데이터 폴더 안에서 대화가 어떤 파일에 어떤 짜임으로 들어 있는지는 공개된 분석 자료가 없습니다. iLEAPP 에는 Copilot 분석기가 없고, 2026-09-25 기준 저장소의 AI 대화 앱 분석기는 `chatgpt.py` 와 `iOSclaude.py` 두 개입니다 [5].
 
-그래서 폴더 안의 파일을 하나씩 형식부터 가립니다. SQLite 파일은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/sqlite/index.html), plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html) 페이지를 따라 읽습니다. 대화가 브라우저 데이터와 함께 저장된다는 연구가 있으니 앱 안의 웹뷰 저장소도 살펴봅니다 [2]. 웹뷰 저장소의 일반 구조는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+그래서 폴더 안의 파일을 하나씩 형식부터 가립니다. SQLite 파일은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/sqlite/index.html), plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/plist.html) 페이지를 따라 읽습니다. 대화가 브라우저 데이터와 함께 저장된다는 연구가 있으니 앱 안의 웹뷰 저장소도 살펴봅니다 [2]. 웹뷰 저장소의 일반 구조는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -57,7 +57,7 @@ Copilot 앱 파일 안의 시각 칸과 형식은 공개 자료에 없습니다.
 - 앱 그룹 목록에는 기기에 더는 없는 앱의 항목이 남아 있을 수 있습니다 [6]. 이 항목 하나로 "지금 설치되어 있다" 고 쓰지 않습니다.
 - 위 논문은 2025년 시점의 결과입니다 [2]. 앱이 바뀌면 기기에 두는 데이터도 바뀔 수 있으니 검체의 앱 판을 함께 적습니다.
 - 초록의 iOS 위치 데이터 결과는 Copilot 이 아니라 Gemini·ChatGPT 의 것입니다 [2].
-- 같은 계정을 브라우저에서도 썼다면 대화가 앱이 아니라 [웹 브라우저](web.md)에서 이뤄졌을 수 있습니다. [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html)나 [크롬](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html) 방문 기록도 봅니다.
+- 같은 계정을 브라우저에서도 썼다면 대화가 앱이 아니라 [웹 브라우저](web.md)에서 이뤄졌을 수 있습니다. [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html)나 [크롬](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) 방문 기록도 봅니다.
 - 앱 데이터에 로그인 토큰이 남아 있으면 보고서에서 가립니다. 토큰이 남는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있고, 서버 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 ## 직접 분석해 보기
@@ -79,8 +79,8 @@ com.example.app  | (생략)      | .../mobile/Containers/Data/Application/2222BB
 |---|---|
 | [계정 데이터 내보내기](export.md) | 서버에 남은 프롬프트·응답 |
 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱이 서비스와 통신한 시간대. Copilot 앱 요청의 사용자 에이전트는 `CopilotSapphire/` 뒤에 판 번호가 붙은 모양입니다 [3] |
-| [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html) | 같은 서비스를 브라우저로 쓴 기록 |
-| [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html) | 앱 설치·사용과 다른 활동을 한 시간 축에 놓기 |
+| [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html) | 같은 서비스를 브라우저로 쓴 기록 |
+| [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html) | 앱 설치·사용과 다른 활동을 한 시간 축에 놓기 |
 
 ## 실습
 

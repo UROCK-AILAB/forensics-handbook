@@ -12,7 +12,7 @@ nav_order: 1020
 
 포렌식 보고서 (forensic report) 는 조사 결과를 다른 사람에게 넘길 때 씁니다. 내부 사고 보고, 법적 절차, 다른 분석가가 같은 결론을 다시 따라가 보는 재현이 모두 여기에 들어갑니다. 읽는 사람은 원본 검체를 직접 열어 보지 않는 경우가 많아서, 보고서의 문장 하나하나가 어느 파일의 어느 줄에서 나왔는지, 그 시각이 어떤 기준인지 보고서만 보고도 알 수 있어야 합니다.
 
-이 쪽은 Linux 수집 도구와 분석 도구가 남기는 기록 가운데 보고서에 옮길 것과, 옮길 때 틀리기 쉬운 점을 다룹니다. 수집 순서와 수집 전에 정할 일은 [조사 절차](../acquisition/investigation-process.md)에, 수집 방법 자체는 [라이브 응답 수집](../acquisition/live-response.md)·[디스크 이미징](../acquisition/disk-imaging.md)·[메모리 수집](../acquisition/memory-acquisition.md)에 있습니다. 보고서의 뼈대(요약·범위·결론 순서)처럼 운영체제와 상관없는 부분은 [Windows 분석 보고서 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/reporting/forensic-report.html)과 [macOS 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/reporting/forensic-report.html)를 함께 봅니다.
+이 쪽은 Linux 수집 도구와 분석 도구가 남기는 기록 가운데 보고서에 옮길 것과, 옮길 때 틀리기 쉬운 점을 다룹니다. 수집 순서와 수집 전에 정할 일은 [조사 절차](../acquisition/investigation-process.md)에, 수집 방법 자체는 [라이브 응답 수집](../acquisition/live-response.md)·[디스크 이미징](../acquisition/disk-imaging.md)·[메모리 수집](../acquisition/memory-acquisition.md)에 있습니다. 보고서의 뼈대(요약·범위·결론 순서)처럼 운영체제와 상관없는 부분은 [Windows 분석 보고서 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/reporting/forensic-report.html)과 [macOS 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/reporting/forensic-report.html)를 함께 봅니다.
 
 ## 절차
 
@@ -138,7 +138,7 @@ nav_order: 1020
 - [디스크 이미징](../acquisition/disk-imaging.md) — E01 획득과 검증
 - [타임라인 만들기](../analysis/timeline.md) — 보고서에 붙일 시간순 표
 - [호스트 이름·시간대·로캘](../../02-artifacts/system-info/hostname-timezone.md) — 시간대 판정의 근거 파일
-- [AI 관련 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook-ai/03-techniques/reporting/forensic-report.html), [Android 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/reporting/forensic-report.html), [iOS 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/reporting/forensic-report.html)
+- [AI 관련 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/reporting/forensic-report.html), [Android 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/reporting/forensic-report.html), [iOS 포렌식 보고서](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/reporting/forensic-report.html)
 
 ## 참고 문헌
 

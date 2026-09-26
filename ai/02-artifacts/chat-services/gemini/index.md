@@ -56,8 +56,8 @@ Chrome 설정 키 이름은 Chromium 소스(2026-09 main 브랜치)에 정의돼
 - [브라우저에 들어간 AI (Edge Copilot·Chrome Gemini 등)](../../office-integrations/browser-builtin-ai.md)
 - [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)
 - [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)
-- [windows] [크롬 계열 브라우저 (Chrome·Edge·Whale 등)](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)
-- [android] [앱 데이터 폴더 구조 (/data/data·/data/user)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)
+- [windows] [크롬 계열 브라우저 (Chrome·Edge·Whale 등)](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)
+- [android] [앱 데이터 폴더 구조 (/data/data·/data/user)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)
 
 ## 참고 문헌
 

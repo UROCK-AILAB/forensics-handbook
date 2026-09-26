@@ -36,7 +36,7 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 | 관리 정책 값 | 아래 "구조" 절의 표 | 공식 문서[2] |
 | 마이크 권한 값 | NTUSER.DAT `Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone\Microsoft.Copilot_8wekyb3d8bbwe`, 값 `Value`(`Allow`·`Deny`) | 공개 스크립트 코드[9]. 이 키 아래 다른 값은 검체에서 본다 |
 
-앱 폴더 안에서 크롬 계열 저장소(Local Storage, IndexedDB 같은 폴더)가 보이면 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)로 읽습니다. 보호된 값이 나오면 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)를 참고하고, 이 페이지에서는 값을 여는 방법을 다루지 않습니다.
+앱 폴더 안에서 크롬 계열 저장소(Local Storage, IndexedDB 같은 폴더)가 보이면 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)로 읽습니다. 보호된 값이 나오면 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)를 참고하고, 이 페이지에서는 값을 여는 방법을 다루지 않습니다.
 
 ### 배포 연혁
 
@@ -78,7 +78,7 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 공식 문서는 이 앱의 시각 기록을 설명하지 않습니다. 패키지 폴더의 파일 시스템 시각은 폴더가 생기고 바뀐 때를 알려 주지만, 기본으로 깔린 앱이라서 폴더가 생긴 시각을 사용자가 앱을 처음 쓴 시각으로 읽지 않습니다. 정책 키의 마지막 기록 시각(LastWrite, UTC)은 그 키가 마지막으로 바뀐 때이고, 정책이 처음 놓인 때와 다를 수 있습니다.
 
-배포 연혁의 날짜(2024년 9~11월, 2025년 5월, 2025년 11월)[1]는 그 기기에 어떤 업데이트가 설치됐는지와 맞춰 볼 때 기준점이 됩니다. 다른 기록과 한 줄로 맞추는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)을 따릅니다.
+배포 연혁의 날짜(2024년 9~11월, 2025년 5월, 2025년 11월)[1]는 그 기기에 어떤 업데이트가 설치됐는지와 맞춰 볼 때 기준점이 됩니다. 다른 기록과 한 줄로 맞추는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)을 따릅니다.
 
 ## 함정과 한계
 
@@ -120,7 +120,7 @@ Get-AppxPackage -Name "Microsoft.Copilot"
 | 함께 볼 기록 | 알려 주는 것 |
 |---|---|
 | [계정 데이터 내보내기](export.md) | 서버에 남은 프롬프트·응답 |
-| 브라우저 방문 기록([크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)) | Entra 계정 로그인 시도로 열린 `m365.cloud.microsoft/chat` |
+| 브라우저 방문 기록([크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)) | Entra 계정 로그인 시도로 열린 `m365.cloud.microsoft/chat` |
 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱이 서비스와 통신한 시간대 |
 | [Microsoft Purview로 본 Copilot 기록](../../network-enterprise/purview-copilot.md) | 수집 정책이 있는 조직에서 남은 프롬프트·응답 |
 | [Recall](../../windows-ai/recall.md) | Recall 을 켠 PC 라면 Copilot 창이 찍힌 스냅숏 |

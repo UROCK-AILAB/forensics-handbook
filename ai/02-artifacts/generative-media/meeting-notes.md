@@ -26,7 +26,7 @@ Otter 는 비식별화한 오디오 녹음과 받아쓴 기록으로 자체 AI �
 | 클로바노트 | 계정 화면에서 확인 | 계정 화면에서 확인 | 검체의 앱 데이터 폴더에서 확인 | 공개 분석 자료 없음 |
 | 로컬 받아쓰기 도구 | PC | 도구마다 다름 | 스크립트, 모델 파일, 결과 파일 | 검체에서 확인 |
 
-Otter 는 녹음과 받아쓴 기록을 클라우드에서 저장·처리하므로[1], 회의 원본은 서버에 있다고 보고 수집을 계획합니다. 내보낼 수 있는 형식은 계정의 내보내기 메뉴에서 확인하고, 계정에서 받는 방법은 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)을, 서비스 회사에 직접 요청하는 방법은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을 따릅니다. 데스크톱 앱이 웹뷰로 만든 앱이면 캐시는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 원리대로 찾고, Android·iOS 앱은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)와 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)를 따릅니다.
+Otter 는 녹음과 받아쓴 기록을 클라우드에서 저장·처리하므로[1], 회의 원본은 서버에 있다고 보고 수집을 계획합니다. 내보낼 수 있는 형식은 계정의 내보내기 메뉴에서 확인하고, 계정에서 받는 방법은 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)을, 서비스 회사에 직접 요청하는 방법은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을 따릅니다. 데스크톱 앱이 웹뷰로 만든 앱이면 캐시는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 원리대로 찾고, Android·iOS 앱은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 따릅니다.
 
 ### 로컬 받아쓰기 스크립트
 

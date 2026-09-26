@@ -28,17 +28,17 @@ OS 마다 앱 데이터를 보호하는 방식이 다르고, 아래 기기 경�
 
 | OS | 이 쪽에서 다루는 경로 | 공통 원리 |
 |---|---|---|
-| Windows | 사용자 폴더의 AI 도구 폴더, Claude 데스크톱(스토어 앱) 폴더 | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html), [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) |
-| macOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/leveldb-indexeddb.html) |
-| Android | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html), [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html) |
-| iOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html), [iOS 키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) |
+| Windows | 사용자 폴더의 AI 도구 폴더, Claude 데스크톱(스토어 앱) 폴더 | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html), [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) |
+| macOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/leveldb-indexeddb.html) |
+| Android | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html), [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html) |
+| iOS | 없음. 공통 원리를 보고 검체에서 앱 폴더를 찾습니다 | [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html), [iOS 키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html) |
 
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
 |---|---|---|---|
 | 1 | 피해 쪽이 받은 메일·첨부 | 보낸 계정, 받는 사람 구성, 첨부 형식, AI 가 만든 코드로 의심되는 표시 | [AI가 만든 글·이미지 판별의 한계](../../03-techniques/analysis/detection-limits.md) |
-| 2 | 용의자 브라우저 기록·캐시·쿠키 | AI 웹 서비스에 접속한 시각과 계정 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html), [AI 서비스 도메인과 네트워크 기록](../../02-artifacts/network-enterprise/network-traces.md) |
+| 2 | 용의자 브라우저 기록·캐시·쿠키 | AI 웹 서비스에 접속한 시각과 계정 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html), [AI 서비스 도메인과 네트워크 기록](../../02-artifacts/network-enterprise/network-traces.md) |
 | 3 | AI 데스크톱 앱 폴더 | 앱을 쓴 흔적, 쿠키 DB | [Claude](../../02-artifacts/chat-services/claude/index.md), [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md) |
 | 4 | AI 개발 도구 기록 | 입력한 프롬프트와 그 시각 | [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) |
 | 5 | 메일 클라이언트 보낸편지함, 첨부 파일의 작성 시각 | AI 대화 뒤에 실제로 보냈는지 | [AI 사용 타임라인](../../03-techniques/analysis/timeline.md) |

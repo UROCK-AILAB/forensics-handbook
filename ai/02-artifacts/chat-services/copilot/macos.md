@@ -28,9 +28,9 @@ App Store 를 거치지 않는 독립 설치 패키지에도 "Microsoft Copilot"
 
 ## 조사할 때 볼 곳
 
-검체에서 먼저 `/Applications` 아래 Copilot 앱 번들을 찾아 `Info.plist` 의 번들 ID 와 판을 기록하고, 사용자 라이브러리 폴더(`~/Library/Containers`, `~/Library/Application Support` 등)에서 번들 ID 가 들어간 폴더를 찾습니다. 찾은 파일은 형식에 따라 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/plist/index.html), [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/sqlite/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/leveldb-indexeddb.html) 페이지를 따라 읽고, 앱이 웹뷰를 쓰면 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)도 함께 봅니다. 로그인 정보는 키체인에 있을 수 있으니 검체에서 번들 ID 나 Microsoft 가 들어간 항목 이름을 찾되, 이 페이지는 값을 여는 방법을 다루지 않습니다. 키체인의 일반 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html) 페이지에 있습니다.
+검체에서 먼저 `/Applications` 아래 Copilot 앱 번들을 찾아 `Info.plist` 의 번들 ID 와 판을 기록하고, 사용자 라이브러리 폴더(`~/Library/Containers`, `~/Library/Application Support` 등)에서 번들 ID 가 들어간 폴더를 찾습니다. 찾은 파일은 형식에 따라 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html), [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/sqlite/index.html), [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/leveldb-indexeddb.html) 페이지를 따라 읽고, 앱이 웹뷰를 쓰면 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)도 함께 봅니다. 로그인 정보는 키체인에 있을 수 있으니 검체에서 번들 ID 나 Microsoft 가 들어간 항목 이름을 찾되, 이 페이지는 값을 여는 방법을 다루지 않습니다. 키체인의 일반 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html) 페이지에 있습니다.
 
-폴더가 언제 생기고 바뀌었는지는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html)에서, 앱이 남긴 로그는 [통합 로그 형식](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/unified-log/index.html)에서 번들 ID 로 걸러 찾습니다. 화면 기록·마이크 같은 권한을 앱에 준 적이 있는지는 [개인 정보 보호 권한](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/credentials/tcc/index.html)에서 번들 ID 로 확인합니다. 이 기록들에 Copilot 앱이 무엇을 남기는지는 공개된 분석 자료가 없어서, 결과는 검체에서 본 사실로만 적습니다.
+폴더가 언제 생기고 바뀌었는지는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에서, 앱이 남긴 로그는 [통합 로그 형식](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/unified-log/index.html)에서 번들 ID 로 걸러 찾습니다. 화면 기록·마이크 같은 권한을 앱에 준 적이 있는지는 [개인 정보 보호 권한](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/credentials/tcc/index.html)에서 번들 ID 로 확인합니다. 이 기록들에 Copilot 앱이 무엇을 남기는지는 공개된 분석 자료가 없어서, 결과는 검체에서 본 사실로만 적습니다.
 
 ## 증거로서 의미
 
@@ -40,7 +40,7 @@ App Store 를 거치지 않는 독립 설치 패키지에도 "Microsoft Copilot"
 
 ## 함정과 한계
 
-Mac 앱의 실제 파일 모양은 공개된 분석 자료가 없어 검체에서 확인합니다. 같은 계정을 웹이나 다른 기기에서 썼다면 대화가 그쪽에서 생겼을 수 있어서, [웹 브라우저](web.md)의 흔적과 [사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html) 방문 기록도 함께 봅니다. 회사·학교 계정 대화는 소비자용 개인정보 안내가 아니라 조직의 보존 정책을 따르고, [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)에서 다룹니다.
+Mac 앱의 실제 파일 모양은 공개된 분석 자료가 없어 검체에서 확인합니다. 같은 계정을 웹이나 다른 기기에서 썼다면 대화가 그쪽에서 생겼을 수 있어서, [웹 브라우저](web.md)의 흔적과 [사파리](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/browsers/safari/index.html) 방문 기록도 함께 봅니다. 회사·학교 계정 대화는 소비자용 개인정보 안내가 아니라 조직의 보존 정책을 따르고, [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)에서 다룹니다.
 
 ## 교차 검증
 
@@ -48,7 +48,7 @@ Mac 앱의 실제 파일 모양은 공개된 분석 자료가 없어 검체에�
 |---|---|
 | [계정 데이터 내보내기](export.md) | 서버에 남은 프롬프트·응답 |
 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱이 서비스와 통신한 시간대 |
-| [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/timeline/index.html) | 앱 폴더 변화와 다른 활동을 한 시간 축에 놓기 |
+| [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html) | 앱 폴더 변화와 다른 활동을 한 시간 축에 놓기 |
 
 ## 실습
 

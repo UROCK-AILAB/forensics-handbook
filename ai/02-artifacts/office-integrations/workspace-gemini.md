@@ -58,7 +58,7 @@ Vault 내보내기나 감사 로그의 시각 칸과 시간대는 문서에 나�
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 대화 원본이 서버에 있고 기기 쪽 저장 파일은 공개된 분석 자료가 없어서, 헥스로 따라갈 파일은 검체에서 직접 찾아야 합니다. 기기 이미지만 있는 사건이라면 브라우저 방문 기록에서 Workspace 앱과 Gemini 를 쓴 시간대를 먼저 좁히고, 방법은 Windows 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다.
+**헥스로 한 번.** 대화 원본이 서버에 있고 기기 쪽 저장 파일은 공개된 분석 자료가 없어서, 헥스로 따라갈 파일은 검체에서 직접 찾아야 합니다. 기기 이미지만 있는 사건이라면 브라우저 방문 기록에서 Workspace 앱과 Gemini 를 쓴 시간대를 먼저 좁히고, 방법은 Windows 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다.
 
 **공개 도구로 한 번.** Vault 와 감사 로그는 관리 콘솔에서 내보내 받습니다. 내보낸 결과를 스프레드시트나 jq 같은 공개 도구로 열어, 계정과 기간으로 거른 뒤 Gemini 관련 항목만 남깁니다. 거를 칸은 내보낸 파일의 머리글을 보고 정합니다.
 

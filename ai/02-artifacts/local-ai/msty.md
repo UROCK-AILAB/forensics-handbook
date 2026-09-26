@@ -216,7 +216,7 @@ LangurTrace 출력의 `custom_prompts` 시트에서 사용자가 정한 기본 �
 00000010: 1000 0101 0040 2020 0000 0003 0000 0010  .....@  ........
 ```
 
-WAL 방식이면 `msty.db-wal` 을 함께 두고 엽니다. 머리글과 페이지 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다. 표를 열 때는 사본을 읽기 전용으로 열고, 아래처럼 세션·대화·메시지를 이어 시각 순서로 봅니다.
+WAL 방식이면 `msty.db-wal` 을 함께 두고 엽니다. 머리글과 페이지 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다. 표를 열 때는 사본을 읽기 전용으로 열고, 아래처럼 세션·대화·메시지를 이어 시각 순서로 봅니다.
 
 ```sql
 SELECT s.title AS session_title, c.model_name AS chat_model,
@@ -251,7 +251,7 @@ ORDER BY m.created_at, m.id;
 | [로컬 모델 파일](model-files.md) | `models` 폴더의 매니페스트·층과 모델 본체 GGUF 헤더, 해시 대조 |
 | [Ollama](ollama.md) | 같은 매니페스트 짜임을 쓰는 백엔드의 로그와 비교 |
 | [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md) | `api_keys` 행을 보고서에 다루는 법 |
-| [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) | `v10` 표지가 붙은 값을 보호하는 Windows 구조 |
+| [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html) | `v10` 표지가 붙은 값을 보호하는 Windows 구조 |
 | [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md) | 클라우드 모델 호출(`api.openai.com`)과 모델 받기 통신 |
 | [기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md) | 첨부의 `org_path` 와 사본으로 넣은 자료를 밝히는 흐름 |
 | [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md) | 로컬 AI 앱 사용을 묻는 조사 흐름 |

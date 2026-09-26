@@ -114,7 +114,7 @@ claude-forensics 는 앱 폴더 전체가 아니라 `claude-code-sessions`, `loc
 
 ### 로그인 정보 파일
 
-`.credentials.json` 은 사용자 프로필 폴더의 접근 권한을 그대로 물려받아 기본으로 그 사용자 계정만 읽을 수 있고, 파일 자체는 따로 암호화하지 않습니다[5]. [DPAPI](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)나 [자격 증명 관리자](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html)를 거치지 않는 평문 JSON 이라서, 이미지 사본에서도 바로 읽힙니다. macOS 는 같은 정보를 키체인에 넣어서 [macOS](macos.md) 페이지와 비교해 봅니다.
+`.credentials.json` 은 사용자 프로필 폴더의 접근 권한을 그대로 물려받아 기본으로 그 사용자 계정만 읽을 수 있고, 파일 자체는 따로 암호화하지 않습니다[5]. [DPAPI](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)나 [자격 증명 관리자](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html)를 거치지 않는 평문 JSON 이라서, 이미지 사본에서도 바로 읽힙니다. macOS 는 같은 정보를 키체인에 넣어서 [macOS](macos.md) 페이지와 비교해 봅니다.
 
 파일의 최상위 키 `claudeAiOauth` 아래에는 다음 키가 있습니다.
 
@@ -188,7 +188,7 @@ Test-Path "C:\Users\examiner01\AppData\Local\Packages\Claude_pzs8sxrjxfjjc\Local
 
 ## 교차 검증
 
-`.claude` 폴더의 파일 시각과 기록 시각을 [Windows 타임라인](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)에 함께 올리고, 같은 시간대의 [네트워크 기록](../../network-enterprise/network-traces.md)에 모델 호출 흔적이 있는지 봅니다. 데스크톱 앱에서 연 세션은 [Claude — Windows 앱](../../chat-services/claude/windows.md)의 세션 정보와 `cliSessionId` 로 맞춰 봅니다. 에이전트가 실행한 명령과 바꾼 파일은 [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)의 순서로 따라가고, 수집 범위는 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
+`.claude` 폴더의 파일 시각과 기록 시각을 [Windows 타임라인](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 함께 올리고, 같은 시간대의 [네트워크 기록](../../network-enterprise/network-traces.md)에 모델 호출 흔적이 있는지 봅니다. 데스크톱 앱에서 연 세션은 [Claude — Windows 앱](../../chat-services/claude/windows.md)의 세션 정보와 `cliSessionId` 로 맞춰 봅니다. 에이전트가 실행한 명령과 바꾼 파일은 [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)의 순서로 따라가고, 수집 범위는 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다.
 
 ## 실습
 

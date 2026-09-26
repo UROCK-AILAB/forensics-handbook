@@ -66,7 +66,7 @@ nav_order: 930
 | `%USERPROFILE%\.ollama` | Ollama | `id_ed25519`, `id_ed25519.pub`, `cache\파일.json`(`recommendations[].model` 등) |
 | `%LOCALAPPDATA%\Packages\` 아래 Claude 패키지 폴더 | Claude 데스크톱(스토어 앱) | `LocalCache\Roaming\Claude\` 아래 `Local Storage\leveldb`, `IndexedDB`, `Network\Cookies`, `Cache`, `Code Cache`, `Local State` |
 
-`.cursor` 처럼 설정 파일 하나만 있는 폴더는 앱을 깔아 쓴 흔적이라기보다 훅이나 설정만 둔 흔적일 수 있으므로, 앱 데이터 폴더가 따로 있는지 함께 봅니다. 스토어 앱 폴더의 Electron 저장소 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md) 와 다른 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 를 봅니다.
+`.cursor` 처럼 설정 파일 하나만 있는 폴더는 앱을 깔아 쓴 흔적이라기보다 훅이나 설정만 둔 흔적일 수 있으므로, 앱 데이터 폴더가 따로 있는지 함께 봅니다. 스토어 앱 폴더의 Electron 저장소 원리는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md) 와 다른 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 를 봅니다.
 
 **사용 시기와 규모.** Claude Code 의 `stats-cache.json` 에는 날짜별 사용량과 모델별 토큰 수가 모여 있습니다.
 
@@ -113,7 +113,7 @@ nav_order: 930
 
 **로컬 AI.** Ollama 서버는 기본으로 `127.0.0.1:11434` 에서 듣고 `OLLAMA_HOST` 로 주소를 바꿉니다 [4]. 라이브 조사에서 이 포트가 열려 있으면 로컬 AI 를 쓰고 있다는 단서가 되지만, 주소를 바꾼 환경도 있으므로 `OLLAMA_HOST` 값도 함께 봅니다. 모델 위치는 Windows `C:\Users\%username%\.ollama\models`, macOS `~/.ollama/models`, Linux `/usr/share/ollama/.ollama/models` 입니다 [4]. 로컬 AI 는 회사 망에 AI 도메인 접속을 남기지 않을 수 있어서 네트워크 쪽 선별로는 보이지 않을 수 있고, 그럴 때는 기기 폴더와 모델 위치로 찾습니다. 모델 파일 형식은 [로컬 모델 파일](../../02-artifacts/local-ai/model-files.md) 을 봅니다.
 
-**다른 OS.** 이 페이지가 macOS·Linux 에 대해 다루는 것은 위 Ollama 모델 위치뿐입니다. macOS 의 AI 앱 저장 위치와 Android·iOS 앱의 흔적은 각 서비스 페이지를 보고, 앱 설치·실행 흔적의 일반 원리는 다른 판의 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html), [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html) 를 봅니다.
+**다른 OS.** 이 페이지가 macOS·Linux 에 대해 다루는 것은 위 Ollama 모델 위치뿐입니다. macOS 의 AI 앱 저장 위치와 Android·iOS 앱의 흔적은 각 서비스 페이지를 보고, 앱 설치·실행 흔적의 일반 원리는 다른 판의 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html), [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html) 를 봅니다.
 
 ## 분석 흐름
 

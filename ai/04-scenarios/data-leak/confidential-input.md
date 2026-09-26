@@ -33,13 +33,13 @@ nav_order: 920
 
 ## OS 별로 다른 점
 
-**Windows.** 개발 도구는 사용자 폴더 아래 점(.)으로 시작하는 폴더에 기록을 두고, Claude 데스크톱 같은 스토어 앱은 패키지 폴더 아래 Electron(Chromium) 저장소 모양으로 데이터를 둡니다. 저장소 원리와 DPAPI 로 보호되는 값은 다른 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 를 봅니다.
+**Windows.** 개발 도구는 사용자 폴더 아래 점(.)으로 시작하는 폴더에 기록을 두고, Claude 데스크톱 같은 스토어 앱은 패키지 폴더 아래 Electron(Chromium) 저장소 모양으로 데이터를 둡니다. 저장소 원리와 DPAPI 로 보호되는 값은 다른 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html) 를 봅니다.
 
-**macOS.** Endpoint DLP 는 Windows 10/11 과 함께 macOS 최신 3개 주 버전을 지원하지만, 브라우저 붙여넣기 평가는 macOS 에서 미리 보기(Preview) 단계입니다 [2]. 로컬 AI 인 Ollama 는 모델을 `~/.ollama/models` 에 둡니다 [5]. macOS 의 AI 앱 저장 위치는 각 서비스 페이지를 보고, 보호된 값은 다른 판의 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html) 페이지를 봅니다.
+**macOS.** Endpoint DLP 는 Windows 10/11 과 함께 macOS 최신 3개 주 버전을 지원하지만, 브라우저 붙여넣기 평가는 macOS 에서 미리 보기(Preview) 단계입니다 [2]. 로컬 AI 인 Ollama 는 모델을 `~/.ollama/models` 에 둡니다 [5]. macOS 의 AI 앱 저장 위치는 각 서비스 페이지를 보고, 보호된 값은 다른 판의 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html) 페이지를 봅니다.
 
 **Linux.** Ollama 모델 위치는 `/usr/share/ollama/.ollama/models` 입니다 [5].
 
-**Android·iOS.** 모바일 앱의 저장 위치는 각 서비스 페이지를 봅니다. 앱 데이터를 보호하는 방식은 다른 판의 [Android 저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html) 와 [iOS 데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html) 를 보고, 본문은 서버 쪽 내보내기로 확인하는 쪽을 먼저 검토합니다.
+**Android·iOS.** 모바일 앱의 저장 위치는 각 서비스 페이지를 봅니다. 앱 데이터를 보호하는 방식은 다른 판의 [Android 저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html) 와 [iOS 데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html) 를 보고, 본문은 서버 쪽 내보내기로 확인하는 쪽을 먼저 검토합니다.
 
 ## 분석 흐름
 

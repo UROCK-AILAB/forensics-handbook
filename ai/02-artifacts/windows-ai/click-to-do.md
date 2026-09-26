@@ -142,11 +142,11 @@ KapeFiles 와 Velociraptor 교환 저장소에는 클릭 투 두 전용 항목�
 01 00 00 00
 ```
 
-**공개 도구로 한 번.** SOFTWARE 하이브와 사용자마다의 NTUSER.DAT 를 Registry Explorer 같은 레지스트리 도구로 열고, 두 하이브 모두에서 `Policies\Microsoft\Windows\WindowsAI` 아래 `DisableClickToDo` 값과 키의 마지막 쓰기 시각을 적습니다. 임시 폴더는 MFTECmd 같은 공개 도구로 `$MFT` 와 `$UsnJrnl:$J` 를 풀어 해당 사용자의 `AppData\Local\Temp` 에서 생겼다 지워진 이미지 파일을 찾고, 그 시각을 그림판·사진 앱 실행 흔적과 나란히 놓습니다. Edge 와 크롬 계열 브라우저의 방문 기록을 읽는 방법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)에 있습니다.
+**공개 도구로 한 번.** SOFTWARE 하이브와 사용자마다의 NTUSER.DAT 를 Registry Explorer 같은 레지스트리 도구로 열고, 두 하이브 모두에서 `Policies\Microsoft\Windows\WindowsAI` 아래 `DisableClickToDo` 값과 키의 마지막 쓰기 시각을 적습니다. 임시 폴더는 MFTECmd 같은 공개 도구로 `$MFT` 와 `$UsnJrnl:$J` 를 풀어 해당 사용자의 `AppData\Local\Temp` 에서 생겼다 지워진 이미지 파일을 찾고, 그 시각을 그림판·사진 앱 실행 흔적과 나란히 놓습니다. Edge 와 크롬 계열 브라우저의 방문 기록을 읽는 방법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)에 있습니다.
 
 ## 교차 검증
 
-스냅숏 위에서 도는 경우와 같은 정책 키의 Recall 값은 [Recall](recall.md)에서, Copilot 에 묻기로 넘어간 내용은 [Microsoft Copilot](../chat-services/copilot/index.md)에서 봅니다. 회사 기기의 Ask Microsoft Copilot 과 Word 의 Copilot 초안은 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)과 [Microsoft Purview로 본 Copilot 기록](../network-enterprise/purview-copilot.md)에서 이어 봅니다. Bing 검색과 시각 검색이 네트워크에 남긴 흔적은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)에서 다루고, 흩어진 시각을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)에 있습니다. 화면에서 고른 텍스트가 프롬프트로 들어간 경우 프롬프트와 생성물을 가르는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
+스냅숏 위에서 도는 경우와 같은 정책 키의 Recall 값은 [Recall](recall.md)에서, Copilot 에 묻기로 넘어간 내용은 [Microsoft Copilot](../chat-services/copilot/index.md)에서 봅니다. 회사 기기의 Ask Microsoft Copilot 과 Word 의 Copilot 초안은 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)과 [Microsoft Purview로 본 Copilot 기록](../network-enterprise/purview-copilot.md)에서 이어 봅니다. Bing 검색과 시각 검색이 네트워크에 남긴 흔적은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)에서 다루고, 흩어진 시각을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다. 화면에서 고른 텍스트가 프롬프트로 들어간 경우 프롬프트와 생성물을 가르는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
 
 ## 실습
 

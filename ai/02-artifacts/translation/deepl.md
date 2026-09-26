@@ -39,17 +39,17 @@ Windows 앱에서는 다른 프로그램에서 글을 고르고 Ctrl+C 를 두 �
 
 MSI 로 조직에 배포한 경우에는 앱 설치가 사용자 한 사람의 선택이 아니라 관리자의 배포일 수 있습니다. 회사가 허용하지 않은 번역기를 썼는지 묻는 사건이라면 설치 방식부터 가리고, 판단 순서는 [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md)를 따릅니다.
 
-Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾고, 폴더의 일반 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서 다룹니다. 저장한 번역과 로그인하지 않고 만든 용어집은 기기 안에 남지만[3], 이 폴더나 iOS 앱 컨테이너의 어느 파일에 들어가는지는 공개 자료가 없어 아래 구조 절의 순서로 검체에서 찾습니다.
+Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾고, 폴더의 일반 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서 다룹니다. 저장한 번역과 로그인하지 않고 만든 용어집은 기기 안에 남지만[3], 이 폴더나 iOS 앱 컨테이너의 어느 파일에 들어가는지는 공개 자료가 없어 아래 구조 절의 순서로 검체에서 찾습니다.
 
 ## 구조
 
-Windows·macOS·Android·iOS 어느 판이든 로컬 파일 형식, DB 표 이름, 칸 이름은 공개 문서에 없습니다. Windows 앱을 어떤 틀로 만들었는지도 공개 문서에 없어서, [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에 맞는 폴더가 나오는지는 기기에서 직접 봐야 합니다. 폴더를 찾으면 아래 순서로 정리합니다.
+Windows·macOS·Android·iOS 어느 판이든 로컬 파일 형식, DB 표 이름, 칸 이름은 공개 문서에 없습니다. Windows 앱을 어떤 틀로 만들었는지도 공개 문서에 없어서, [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에 맞는 폴더가 나오는지는 기기에서 직접 봐야 합니다. 폴더를 찾으면 아래 순서로 정리합니다.
 
 1. 앱 데이터 폴더의 파일 목록과 크기, 시각을 먼저 기록합니다.
 2. 파일 앞머리의 서명으로 형식을 가리고, SQLite·LevelDB·설정 XML·plist 같은 형식별 페이지로 넘어갑니다.
 3. 테스트 기기에서 번역 하나를 "저장한 번역" 에 넣고 용어집 항목 하나를 만든 뒤, 어느 파일이 바뀌는지 비교해 원문·번역·용어집이 들어 있는 곳을 확인합니다.
 
-웹 판의 흔적은 브라우저 쪽에서 봅니다. 저장소 형식은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html), 브라우저별 위치는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다.
+웹 판의 흔적은 브라우저 쪽에서 봅니다. 저장소 형식은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html), 브라우저별 위치는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다.
 
 ## 증거로서 의미
 
@@ -77,7 +77,7 @@ Windows·macOS·Android·iOS 어느 판이든 로컬 파일 형식, DB 표 이�
 00000000  53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00  SQLite format 3.
 ```
 
-이 서명이 보이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 따라 헤더를 읽습니다. 서명이 없는 파일은 LevelDB 로그나 설정 파일일 수 있어서 형식별 페이지와 차례로 대조합니다.
+이 서명이 보이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 따라 헤더를 읽습니다. 서명이 없는 파일은 LevelDB 로그나 설정 파일일 수 있어서 형식별 페이지와 차례로 대조합니다.
 
 **공개 도구로 한 번.** 형식을 가린 뒤에는 DB Browser for SQLite 같은 공개 SQLite 뷰어로 표와 칸을 훑고, 모바일 이미지 전체는 ALEAPP·iLEAPP 같은 공개 분석 도구로 설치 앱 목록을 뽑을 수 있습니다. DeepL 전용 분석기가 있는지는 쓰는 도구 판의 분석기 목록에서 확인합니다.
 
@@ -85,7 +85,7 @@ Windows·macOS·Android·iOS 어느 판이든 로컬 파일 형식, DB 표 이�
 
 | 함께 볼 기록 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 브라우저 기록 | deepl.com 방문, 웹 판 사용 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| 브라우저 기록 | deepl.com 방문, 웹 판 사용 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
 | 네트워크 기록 | 번역 서버와 통신한 시간대 | [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md) |
 | 보안 제품 기록 | 번역 서비스로 보낸 내용이나 차단 이벤트 | [보안 제품이 남기는 AI 사용 기록](../network-enterprise/dlp-casb.md) |
 | 서비스 회사 자료 | 모바일 앱 사용자 ID 별 언어 설정·글자 수, 앱 IP 주소 | [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) |

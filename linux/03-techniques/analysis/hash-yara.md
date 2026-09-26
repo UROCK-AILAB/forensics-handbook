@@ -19,7 +19,7 @@ nav_order: 1010
 - [루트킷 찾기](rootkit-detection.md)나 [메모리 분석](memory-analysis.md)에서 뽑아낸 모듈·실행 파일이 무엇인지 판별할 때
 - 한 시스템에서 찾은 파일의 해시로 다른 시스템에도 같은 파일이 있는지 찾을 때
 
-이 쪽은 대조 절차 전반을 다룹니다. dpkg·rpm 이 설치할 때 남긴 해시와 비교하는 방법, 그 출력 글자의 뜻은 [패키지 파일 변조 확인](../../02-artifacts/packages/package-verify.md)에 있습니다. Windows 판의 같은 주제(서명 확인과 YARA)는 [의심 실행 파일 선별](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/code-signing-yara.html)에 있습니다.
+이 쪽은 대조 절차 전반을 다룹니다. dpkg·rpm 이 설치할 때 남긴 해시와 비교하는 방법, 그 출력 글자의 뜻은 [패키지 파일 변조 확인](../../02-artifacts/packages/package-verify.md)에 있습니다. Windows 판의 같은 주제(서명 확인과 YARA)는 [의심 실행 파일 선별](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/code-signing-yara.html)에 있습니다.
 
 ## 절차
 

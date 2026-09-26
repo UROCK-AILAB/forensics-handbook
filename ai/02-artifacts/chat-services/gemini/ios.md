@@ -33,7 +33,7 @@ App Store 의 개인정보 라벨은 앱이 무엇을 모아 사용자와 연결
 
 앱은 자주 새 버전이 나와서 위 버전은 2026-09-25 의 값이고, 분석할 기기의 설치 버전은 따로 확인합니다. App Store ID 는 앱 스토어 안의 번호이고 기기의 앱 컨테이너를 찾는 번들 ID 와 다릅니다. 공개 코드 가운데에는 Gemini 의 번들 ID 를 짐작으로 적은 목록도 있어서, 번들 ID 는 검체의 설치 앱 기록에서 읽은 값만 씁니다.
 
-앱 컨테이너 안의 파일은 기기 잠금 상태에 따라 보호 등급이 달라서 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)를 먼저 확인하고, 로그인 정보가 들어가는 곳은 [키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) 페이지에서 다룹니다. 로컬 백업으로 수집할 때는 [로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html)을 봅니다. Gemini 앱 데이터가 백업에 들어가는지는 공개된 분석 자료가 없어서, 백업 목록에서 이 앱의 도메인이 있는지 검체로 확인합니다.
+앱 컨테이너 안의 파일은 기기 잠금 상태에 따라 보호 등급이 달라서 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 먼저 확인하고, 로그인 정보가 들어가는 곳은 [키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html) 페이지에서 다룹니다. 로컬 백업으로 수집할 때는 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)을 봅니다. Gemini 앱 데이터가 백업에 들어가는지는 공개된 분석 자료가 없어서, 백업 목록에서 이 앱의 도메인이 있는지 검체로 확인합니다.
 
 ## 구조
 
@@ -45,7 +45,7 @@ Gemini 앱 컨테이너 안의 파일 구조는 공개된 분석 자료가 없�
 | 같은 DB 의 화면 스냅샷 기록 | 위와 같음 | 앱 전환 화면 스냅샷의 Creation Date, Last Used Date, Bundle ID | [6] |
 | 앱 권한 DB | `*/mobile/Library/TCC/TCC.db*` | `access` 표의 client(번들 ID), service, 허용 여부, 있을 때 last_modified | [7] |
 
-앱 상태 DB 의 Bundle ID·Bundle Path 목록에서 Gemini 앱에 해당하는 행을 고르면, 같은 행의 Sandbox Path 가 이 앱의 데이터 컨테이너입니다 [6]. 이 분석기는 compatibilityInfo 값을 읽지 못한 앱을 표에서 빼기 때문에, 표에 없다고 설치된 적이 없다고 보지 않습니다 [6]. 컨테이너에서 설정 파일이나 DB 를 찾았다면 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html)과 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/sqlite/index.html)의 읽는 법을 씁니다.
+앱 상태 DB 의 Bundle ID·Bundle Path 목록에서 Gemini 앱에 해당하는 행을 고르면, 같은 행의 Sandbox Path 가 이 앱의 데이터 컨테이너입니다 [6]. 이 분석기는 compatibilityInfo 값을 읽지 못한 앱을 표에서 빼기 때문에, 표에 없다고 설치된 적이 없다고 보지 않습니다 [6]. 컨테이너에서 설정 파일이나 DB 를 찾았다면 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/plist.html)과 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/sqlite/index.html)의 읽는 법을 씁니다.
 
 ## 증거로서 의미
 
@@ -55,11 +55,11 @@ Gemini 앱 컨테이너 안의 파일 구조는 공개된 분석 자료가 없�
 
 ## 시각 해석
 
-Gemini 대화 시각을 담은 기기 쪽 파일은 공개된 분석 자료가 없습니다. 메시지 단위 시각은 서버 활동 기록에 있어서 [계정 데이터 내보내기](export.md)로 받아 맞춰 봅니다. 기기 쪽에서는 TCC.db 의 last_modified 를 iLEAPP 가 Unix 시각으로 보고 UTC 로 바꿔 보여 주고 [7], 화면 스냅샷은 Creation Date 와 Last Used Date 를 따로 보여 줍니다 [6]. 설치·실행 시각을 다른 iOS 기록과 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html)에서 다룹니다.
+Gemini 대화 시각을 담은 기기 쪽 파일은 공개된 분석 자료가 없습니다. 메시지 단위 시각은 서버 활동 기록에 있어서 [계정 데이터 내보내기](export.md)로 받아 맞춰 봅니다. 기기 쪽에서는 TCC.db 의 last_modified 를 iLEAPP 가 Unix 시각으로 보고 UTC 로 바꿔 보여 주고 [7], 화면 스냅샷은 Creation Date 와 Last Used Date 를 따로 보여 줍니다 [6]. 설치·실행 시각을 다른 iOS 기록과 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)에서 다룹니다.
 
 ## 함정과 한계
 
-iOS 에서도 Gemini 를 앱이 아니라 사파리나 크롬으로 열 수 있어서, 앱이 없다고 쓰지 않았다고 볼 수 없습니다. 이 경우 흔적은 [웹 브라우저](web.md)에서 다룬 브라우저 기록 쪽에 남고, iOS 판의 [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html)와 [크롬](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html) 쪽에서 읽는 법을 다룹니다.
+iOS 에서도 Gemini 를 앱이 아니라 사파리나 크롬으로 열 수 있어서, 앱이 없다고 쓰지 않았다고 볼 수 없습니다. 이 경우 흔적은 [웹 브라우저](web.md)에서 다룬 브라우저 기록 쪽에 남고, iOS 판의 [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html)와 [크롬](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) 쪽에서 읽는 법을 다룹니다.
 
 iLEAPP 에는 AI 대화 앱 분석기로 ChatGPT 용 `chatgpt.py` 와 Claude 용 `iOSclaude.py` 가 있지만, Gemini 전용 분석기는 없습니다(2026-09-23 main 기준) [5]. ChatGPT 분석기는 앱 1.2024.178 까지 다루고, 두 분석기는 [ChatGPT iOS 앱](../chatgpt/ios.md)과 [Claude iOS 앱](../claude/ios.md)에서 다룹니다. 지금 판의 도구는 다를 수 있으니 쓰기 전에 저장소 목록을 다시 봅니다.
 

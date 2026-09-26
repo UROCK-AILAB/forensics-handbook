@@ -84,7 +84,7 @@ KAPE 타깃은 `C:\Users\%user%\AppData\Roaming\Jan\` 아래만 모으고 로그
 
 ### cortex.db
 
-SQLite 3 파일이고 샘플의 `schema_version` 은 3입니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)를 따릅니다. 샘플 스키마는 다음과 같습니다[2].
+SQLite 3 파일이고 샘플의 `schema_version` 은 3입니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)를 따릅니다. 샘플 스키마는 다음과 같습니다[2].
 
 | 표 | 칸 | 쓸모 |
 |---|---|---|
@@ -119,7 +119,7 @@ SQLite 3 파일이고 샘플의 `schema_version` 은 3입니다. 읽는 법은 [
 
 ### Local Storage(LevelDB)
 
-앱 화면이 쓰는 저장소이고 원본(origin)은 `file://` 입니다. 샘플 파일에서 읽히는 키는 `threadList`, `threadStates`, `chatMessages`, `currentThreadMessages`, `downloadedModels`, `availableModels`, `last-used-model-id`, `activeAssistant` 입니다[2]. `.ldb` 파일의 블록은 압축되어 있을 수 있고, 샘플의 `000040.log` 에서 `llama3.2:1b` 는 UTF-16LE 로만 들어 있습니다[2]. 한 가지 문자열 검색만으로는 빠지는 값이 있으므로, [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)와 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 방법으로 풀어 읽습니다.
+앱 화면이 쓰는 저장소이고 원본(origin)은 `file://` 입니다. 샘플 파일에서 읽히는 키는 `threadList`, `threadStates`, `chatMessages`, `currentThreadMessages`, `downloadedModels`, `availableModels`, `last-used-model-id`, `activeAssistant` 입니다[2]. `.ldb` 파일의 블록은 압축되어 있을 수 있고, 샘플의 `000040.log` 에서 `llama3.2:1b` 는 UTF-16LE 로만 들어 있습니다[2]. 한 가지 문자열 검색만으로는 빠지는 값이 있으므로, [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)와 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 방법으로 풀어 읽습니다.
 
 ## 증거로서 의미
 

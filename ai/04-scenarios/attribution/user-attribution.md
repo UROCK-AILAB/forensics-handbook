@@ -105,9 +105,9 @@ AI 앱은 자주 바뀌므로 실제 사건에서는 기록 안에 남은 버전
 - [계정 데이터 내보내기 형식](../../01-foundations/storage-model/data-export-formats.md) — 내보내기 파일의 칸
 - [Meta AI 앱과 AI 안경](../../02-artifacts/chat-services/meta-ai-glasses.md) — 안경과 앱의 아티팩트 전체
 - [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md) — 데스크톱 앱 폴더 구조
-- [크롬 계열 앱 공통 구조 (Windows 판)](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) — `Local Storage`·`IndexedDB`·`Network/Cookies` 읽는 법
-- [DPAPI 구조 (Windows 판)](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) — 쿠키 등 보호된 값의 원리
-- [키체인 (macOS 판)](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html), [데이터 보호 (iOS 판)](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html), [저장 공간 암호화 (Android 판)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html) — 다른 OS 의 보호 방식
+- [크롬 계열 앱 공통 구조 (Windows 판)](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) — `Local Storage`·`IndexedDB`·`Network/Cookies` 읽는 법
+- [DPAPI 구조 (Windows 판)](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html) — 쿠키 등 보호된 값의 원리
+- [키체인 (macOS 판)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html), [데이터 보호 (iOS 판)](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html), [저장 공간 암호화 (Android 판)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html) — 다른 OS 의 보호 방식
 - [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md), [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md), [Cursor](../../02-artifacts/dev-agents/cursor.md), [Ollama](../../02-artifacts/local-ai/ollama.md) — 다른 AI 도구의 흔적
 - [회사가 허용하지 않은 AI를 썼나](../data-leak/shadow-ai.md) — 사용 사실 자체를 묻는 조사
 - [이 글·이미지는 AI가 만들었나](ai-generated.md) — 결과물 쪽에서 출처를 묻는 조사

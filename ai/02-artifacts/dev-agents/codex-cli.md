@@ -44,7 +44,7 @@ Codex 는 로컬 상태를 환경 변수 `CODEX_HOME` 이 가리키는 폴더에
 
 SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는 폴더에 생깁니다. `sqlite_home` 의 기본값은 환경 변수 `CODEX_SQLITE_HOME` 이고, 그것도 없으면 `CODEX_HOME` 입니다[3]. 파일 이름의 숫자(`state_5`, `logs_2`)는 406dc92 기준이라 판이 바뀌면 달라질 수 있어서, 검체에서는 `*.sqlite` 로 모두 찾습니다. agentsview 문서는 지금 판이 세션 제목을 `thread_history_*.sqlite` 에 두므로, `session_index.jsonl` 이 없고 `thread_history_1.sqlite` 만 있는 것이 정상이라고 봅니다[4]. 406dc92 의 테이블 정의에서는 `title` 칸이 `state_5.sqlite` 의 `threads` 테이블에 있습니다[2].
 
-로그인 정보는 `cli_auth_credentials_store` 로 저장 방식을 고릅니다. `file`(기본)은 `auth.json`, `keyring` 은 OS 키링, `auto` 는 키링을 먼저 쓰고 안 되면 파일, `ephemeral` 은 실행 중인 프로세스 메모리에만 둡니다[3]. MCP 서버의 OAuth 정보는 `mcp_oauth_credentials_store` 가 따로 정하고, 기본값 `auto` 는 키링을 먼저 쓰고 쓸 수 없으면 `.credentials.json` 에 둡니다[3]. 키링에 두었다면 Windows 는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에서 찾습니다. 토큰이 남는 곳 전반은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
+로그인 정보는 `cli_auth_credentials_store` 로 저장 방식을 고릅니다. `file`(기본)은 `auth.json`, `keyring` 은 OS 키링, `auto` 는 키링을 먼저 쓰고 안 되면 파일, `ephemeral` 은 실행 중인 프로세스 메모리에만 둡니다[3]. MCP 서버의 OAuth 정보는 `mcp_oauth_credentials_store` 가 따로 정하고, 기본값 `auto` 는 키링을 먼저 쓰고 쓸 수 없으면 `.credentials.json` 에 둡니다[3]. 키링에 두었다면 Windows 는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에서 찾습니다. 토큰이 남는 곳 전반은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
 `%USERPROFILE%\.codex` 에 `hooks.json` 과 `skills/<이름>/SKILL.md`, `skills/<이름>/<파일>.json` 만 있고 `config.toml`·`auth.json`·`history.jsonl`·`sessions/` 는 없는 경우도 있습니다. Codex 를 실행하지 않아도 다른 도구가 이 폴더에 스킬·훅 파일을 둘 수 있으므로, 폴더가 있다는 사실만으로 Codex 를 썼다고 보지 않습니다.
 
@@ -102,7 +102,7 @@ SQLite 파일은 `CODEX_HOME` 이 아니라 `sqlite_home` 설정이 가리키는
 | `thread_history_1.sqlite` · `thread_items` | `thread_id`, `turn_id`, `item_id`, `created_at_ms`, `item_json` |
 | `logs_2.sqlite` · `logs` | `ts`, `ts_nanos`, `level`, `target`, `message`, `thread_id`, `process_uuid` |
 
-`threads.rollout_path` 는 세션 파일의 경로를 적으므로, rollout 파일을 지웠어도 DB 에 경로와 제목이 남아 있을 수 있습니다. `thread_items.item_json` 은 대화 항목을 JSON 으로 담습니다. SQLite 를 읽는 일반 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다.
+`threads.rollout_path` 는 세션 파일의 경로를 적으므로, rollout 파일을 지웠어도 DB 에 경로와 제목이 남아 있을 수 있습니다. `thread_items.item_json` 은 대화 항목을 JSON 으로 담습니다. SQLite 를 읽는 일반 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다.
 
 ### `config.toml`
 

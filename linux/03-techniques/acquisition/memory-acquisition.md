@@ -119,7 +119,7 @@ eBPF 로 물리 메모리를 읽는 LEMON 은 커널 잠금 integrity 단계에�
 
 **보고서 문장 예.** "2026-03-14 02:10:05Z 부터 02:31:40Z 까지 AVML 로 대상 호스트의 물리 메모리를 LiME 형식으로 수집했고, 수집 직후 SHA-256 은 (값) 이다. 대상의 커널 잠금 단계는 `none` 이었다." (시각·단계는 만든 예시)
 
-다른 운영체제의 메모리 분석은 [Windows 메모리 분석](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/memory-forensics/index.html), [macOS 메모리 분석](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/memory-forensics/index.html) 에서 다룹니다.
+다른 운영체제의 메모리 분석은 [Windows 메모리 분석](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/memory-forensics/index.html), [macOS 메모리 분석](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/memory-forensics/index.html) 에서 다룹니다.
 
 ## 참고 문헌
 

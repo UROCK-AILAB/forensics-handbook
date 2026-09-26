@@ -25,13 +25,13 @@ Windows 앱은 브라우저 없이 ChatGPT 를 쓰는 데스크톱 앱입니다.
 
 ## 위치 찾기
 
-스토어로 깐 앱은 사용자 프로필의 `%LOCALAPPDATA%\Packages` 아래 패키지마다 폴더를 하나씩 만들고, 그 안의 `LocalState`, `LocalCache` 같은 하위 폴더에 데이터를 둡니다. 이 구조는 스토어 앱 공통입니다. 앱 안에서 웹 화면을 띄우는 구조라면 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 설명하는 폴더가 생기므로, ChatGPT 앱 폴더에 그런 폴더가 있는지 검체에서 봅니다.
+스토어로 깐 앱은 사용자 프로필의 `%LOCALAPPDATA%\Packages` 아래 패키지마다 폴더를 하나씩 만들고, 그 안의 `LocalState`, `LocalCache` 같은 하위 폴더에 데이터를 둡니다. 이 구조는 스토어 앱 공통입니다. 앱 안에서 웹 화면을 띄우는 구조라면 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 설명하는 폴더가 생기므로, ChatGPT 앱 폴더에 그런 폴더가 있는지 검체에서 봅니다.
 
 ChatGPT 앱의 패키지 폴더 이름은 공개 자료에 없으니, `Packages` 아래 폴더 이름에 ChatGPT 나 OpenAI 가 들어간 것이 있는지 찾습니다. 이름으로 찾지 못해도 앱이 없었다고 단정하지 않고, 설치된 앱 목록 같은 다른 흔적으로 한 번 더 확인합니다.
 
 ## 보호 방식
 
-앱이 로컬 파일을 어떻게 보호하는지는 공개 자료가 없어 검체로 확인해야 합니다. Windows 앱이 로그인 정보나 저장소 키를 보호할 때 흔히 쓰는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)와 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html)는 원리만 참고하고, ChatGPT 앱이 이 방식을 쓴다고 단정하지 않습니다. 토큰이 남을 수 있는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다.
+앱이 로컬 파일을 어떻게 보호하는지는 공개 자료가 없어 검체로 확인해야 합니다. Windows 앱이 로그인 정보나 저장소 키를 보호할 때 흔히 쓰는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)와 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html)는 원리만 참고하고, ChatGPT 앱이 이 방식을 쓴다고 단정하지 않습니다. 토큰이 남을 수 있는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다.
 
 ## 증거로서 의미
 
@@ -41,7 +41,7 @@ ChatGPT 앱의 패키지 폴더 이름은 공개 자료에 없으니, `Packages`
 
 ## 시각 해석
 
-스토어 앱은 업데이트할 때 파일을 다시 쓸 수 있어서, 패키지 폴더와 그 안 파일의 파일 시스템 시각을 처음 설치한 때나 마지막으로 쓴 때로 단정하지 않습니다. 앱 폴더의 시각은 방향만 잡는 데 쓰고, 실제 사용 시각은 네트워크 기록이나 계정 쪽 기록과 맞춥니다. Windows 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
+스토어 앱은 업데이트할 때 파일을 다시 쓸 수 있어서, 패키지 폴더와 그 안 파일의 파일 시스템 시각을 처음 설치한 때나 마지막으로 쓴 때로 단정하지 않습니다. 앱 폴더의 시각은 방향만 잡는 데 쓰고, 실제 사용 시각은 네트워크 기록이나 계정 쪽 기록과 맞춥니다. Windows 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -51,7 +51,7 @@ Windows 에는 이름이 비슷한 AI 앱이 여럿 있습니다. Windows 에 �
 
 ## 직접 분석해 보기
 
-앱 내부 형식을 밝힌 자료가 없어서 헥스 예시는 싣지 않았습니다. 파일 하나를 헥스로 열었을 때 읽을 수 있는 글자가 이어지면 평문이고, 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라는 정도는 가를 수 있습니다. 공개 도구는 파일 형식을 확인한 다음에 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)나 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 페이지에서 고릅니다. 기기에서 모을 항목의 전체 목록은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
+앱 내부 형식을 밝힌 자료가 없어서 헥스 예시는 싣지 않았습니다. 파일 하나를 헥스로 열었을 때 읽을 수 있는 글자가 이어지면 평문이고, 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라는 정도는 가를 수 있습니다. 공개 도구는 파일 형식을 확인한 다음에 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)나 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지에서 고릅니다. 기기에서 모을 항목의 전체 목록은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
 
 ## 교차 검증
 

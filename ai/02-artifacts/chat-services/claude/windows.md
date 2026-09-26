@@ -168,7 +168,7 @@ Partitions\이름\...
 ChromeNativeHost\chrome-native-host.exe
 ```
 
-폴더마다의 형식은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)에 있습니다. `Partitions` 아래에는 `cowork-file-preview`, `launch-preview-static` 파티션이 있고, `Partitions\cowork-file-preview\Network\Cookies` 는 표 `cookies` 와 `meta` 가 있는 SQLite 데이터베이스입니다. `cookies` 의 칸은 크롬 계열 쿠키 DB 와 같습니다.
+폴더마다의 형식은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)에 있습니다. `Partitions` 아래에는 `cowork-file-preview`, `launch-preview-static` 파티션이 있고, `Partitions\cowork-file-preview\Network\Cookies` 는 표 `cookies` 와 `meta` 가 있는 SQLite 데이터베이스입니다. `cookies` 의 칸은 크롬 계열 쿠키 DB 와 같습니다.
 
 ```
 cookies: creation_utc, host_key, top_frame_site_key, name, value,
@@ -179,7 +179,7 @@ cookies: creation_utc, host_key, top_frame_site_key, name, value,
 meta:    key, value
 ```
 
-크롬 계열 쿠키 값이 `encrypted_value` 칸에 보호돼 들어가는 원리는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)와 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)에서 다룹니다. 쿠키와 로그인 정보는 보고서에서 가립니다([API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)).
+크롬 계열 쿠키 값이 `encrypted_value` 칸에 보호돼 들어가는 원리는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)와 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)에서 다룹니다. 쿠키와 로그인 정보는 보고서에서 가립니다([API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)).
 
 ### 패키지 안의 다른 폴더
 
@@ -213,7 +213,7 @@ Cowork 세션 정보의 `createdAt`, `lastActivityAt` 은 1970-01-01 UTC 기준 
 
 제목을 바꾸면 세션 정보 파일만 바뀝니다[7]. 그래서 세션 정보 파일의 수정 시각이 대화 기록 파일보다 늦으면, 마지막 대화 뒤에 제목 변경 같은 정보 수정이 있었을 수 있습니다. 대화가 오간 시각은 기록 줄의 시각으로 씁니다.
 
-`config.json` 의 `first_launch_at`, `version_first_launch.at`, `updaterBannerStagedAt.stagedAt`, `planUsageLastTrayOpenAt` 과 `plan-usage-history.json` 의 `samples[].t` 는 단위를 적은 공개 자료가 없어서 자릿수로 판단합니다. 앱은 약 4시간마다 스스로 업데이트하므로[3], 앱 파일의 파일 시스템 시각을 처음 설치한 때로 보지 않고 `version_first_launch` 를 먼저 봅니다. 쿠키 DB 의 `creation_utc`, `last_access_utc`, `expires_utc` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 시각 해석을 따르고, 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 바뀐 때를 가늠합니다. 여러 시각을 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+`config.json` 의 `first_launch_at`, `version_first_launch.at`, `updaterBannerStagedAt.stagedAt`, `planUsageLastTrayOpenAt` 과 `plan-usage-history.json` 의 `samples[].t` 는 단위를 적은 공개 자료가 없어서 자릿수로 판단합니다. 앱은 약 4시간마다 스스로 업데이트하므로[3], 앱 파일의 파일 시스템 시각을 처음 설치한 때로 보지 않고 `version_first_launch` 를 먼저 봅니다. 쿠키 DB 의 `creation_utc`, `last_access_utc`, `expires_utc` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 시각 해석을 따르고, 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 바뀐 때를 가늠합니다. 여러 시각을 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

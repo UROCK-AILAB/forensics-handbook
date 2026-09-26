@@ -33,7 +33,7 @@ Windows 11 의 AI 도구 폴더에는 아래 항목이 들어 있습니다. "없
 | [Cursor](../../02-artifacts/dev-agents/cursor.md) | `%USERPROFILE%\.cursor` | `hooks.json` 1개, 앱 데이터 폴더는 없음 | 없음 |
 | [Ollama](../../02-artifacts/local-ai/ollama.md) | `%USERPROFILE%\.ollama` | 모델 추천 목록 캐시, `id_ed25519` 키 쌍 | 없음 |
 
-Electron 형 폴더의 공통 구조는 [Electron·웹뷰 앱의 저장 구조](../storage-model/electron-webview.md) 와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 에서 다룹니다. macOS·Android·iOS 의 저장 위치는 서비스별 쪽을 봅니다.
+Electron 형 폴더의 공통 구조는 [Electron·웹뷰 앱의 저장 구조](../storage-model/electron-webview.md) 와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 에서 다룹니다. macOS·Android·iOS 의 저장 위치는 서비스별 쪽을 봅니다.
 
 ## 구조
 
@@ -122,7 +122,7 @@ jq -c 'select(.message.role != null) | {timestamp, role: .message.role, model: .
 
 ## 도구
 
-JSONL 은 텍스트라서 텍스트 편집기와 jq 같은 공개 명령줄 도구로 읽고, 줄 수가 많으면 스크립트로 `message.role` 별로 나눠 표로 만듭니다. 데스크톱 앱의 IndexedDB·Local Storage 는 LevelDB 형식이라서 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 쪽의 도구와 읽는 법을 따릅니다. 로컬 AI 앱은 LangurTrace [3] 가 Chatbox 블롭을 풀어 `uploaded/`·`generated/` 로 나눠 주고, 이 도구는 논문이 시험한 판(2025) 기준입니다. 기기에서 이런 폴더를 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md) 에서 다룹니다.
+JSONL 은 텍스트라서 텍스트 편집기와 jq 같은 공개 명령줄 도구로 읽고, 줄 수가 많으면 스크립트로 `message.role` 별로 나눠 표로 만듭니다. 데스크톱 앱의 IndexedDB·Local Storage 는 LevelDB 형식이라서 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 쪽의 도구와 읽는 법을 따릅니다. 로컬 AI 앱은 LangurTrace [3] 가 Chatbox 블롭을 풀어 `uploaded/`·`generated/` 로 나눠 주고, 이 도구는 논문이 시험한 판(2025) 기준입니다. 기기에서 이런 폴더를 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md) 에서 다룹니다.
 
 ## 참고 문헌
 

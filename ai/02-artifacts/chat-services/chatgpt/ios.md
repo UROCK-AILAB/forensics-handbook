@@ -34,9 +34,9 @@ ChatGPT 모바일 앱을 처음 포렌식으로 분석한 연구[1]에서는 And
 
 폴더 이름 `conversations-*`·`drafts-*` 의 별표 자리에 들어가는 값은 공개 자료가 없어 검체에서 확인합니다. 같은 모양의 폴더가 여러 개 있으면 폴더별로 따로 읽고, 계정 plist 와 맞춰 봅니다.
 
-파일은 기기의 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html) 등급에 따라 잠기고, 로그인 정보 같은 비밀 값을 두는 곳의 일반 원리는 [키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html)에서 다룹니다. ChatGPT 앱이 키체인에 무엇을 두는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
+파일은 기기의 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html) 등급에 따라 잠기고, 로그인 정보 같은 비밀 값을 두는 곳의 일반 원리는 [키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html)에서 다룹니다. ChatGPT 앱이 키체인에 무엇을 두는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다.
 
-iLEAPP 의 경로는 전체 파일 시스템 추출을 기준으로 합니다. 이 컨테이너가 [로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html)에 들어가는지도 공개된 분석 자료가 없어 검체로 확인해야 합니다. 백업에서 이 앱의 흔적이 나오지 않으면 백업에서 빠진 것인지, 앱이 남기지 않은 것인지부터 가립니다.
+iLEAPP 의 경로는 전체 파일 시스템 추출을 기준으로 합니다. 이 컨테이너가 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)에 들어가는지도 공개된 분석 자료가 없어 검체로 확인해야 합니다. 백업에서 이 앱의 흔적이 나오지 않으면 백업에서 빠진 것인지, 앱이 남기지 않은 것인지부터 가립니다.
 
 ### App Store 정보
 
@@ -71,7 +71,7 @@ App Store 에 적힌 앱 안 결제 항목의 이름은 ChatGPT Plus, ChatGPT Go
 
 ## 구조
 
-형식별 읽는 법은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html)에서 다루고, 여기서는 ChatGPT 앱에 해당하는 키만 적습니다.
+형식별 읽는 법은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/plist.html)에서 다루고, 여기서는 ChatGPT 앱에 해당하는 키만 적습니다.
 
 ### 대화 파일: `conversations-*/*.json`
 
@@ -140,7 +140,7 @@ iLEAPP 은 `tmp/` 아래 PNG 를 "Media Uploads" 로, M4A 를 "Voice Prompts" �
 
 `modification_date` 가 무엇이 바뀔 때 갱신되는지는 공개된 자료가 없어서, 대화를 연 시각으로 읽지 않고 메시지 하나하나의 `create_time` 을 함께 봅니다. 컨테이너 안 파일의 파일 시스템 시각도 동기화나 캐시 갱신 때 바뀔 수 있어서 대화한 시각으로 바로 옮기지 않습니다.
 
-App Store 페이지의 출시 표시는 "1일 전" 처럼 상대 시각이라서, 날짜로 적을 때는 페이지를 본 날짜를 함께 적고 "무렵" 으로 씁니다. 기기의 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
+App Store 페이지의 출시 표시는 "1일 전" 처럼 상대 시각이라서, 날짜로 적을 때는 페이지를 본 날짜를 함께 적고 "무렵" 으로 씁니다. 기기의 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -150,7 +150,7 @@ App Store 페이지의 출시 표시는 "1일 전" 처럼 상대 시각이라서
 - **토큰.** 모바일 앱에서는 접근 토큰이 나올 수 있습니다 [5]. 나오면 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 따라 보고서에서 가립니다. 서버에 있는 대화는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)이나 [계정 데이터 내보내기](export.md)로 확보합니다.
 - **지운 대화.** 대화가 파일 단위라서 지운 대화는 파일째 사라질 수 있습니다. 파일 시스템의 빈 공간에서 JSON 조각을 찾는 방법은 [내용 복구](../../../03-techniques/analysis/content-recovery.md)에 있습니다.
 - **수집 범위.** 컨테이너는 수집 방법에 따라 얻을 수도 있고 못 얻을 수도 있습니다. 폴더가 비어 보이면 앱 동작 때문인지 수집 범위 때문인지부터 가립니다. 수집 범위를 정하는 방법은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
-- **브라우저로 쓴 경우.** 사파리나 크롬으로 쓴 ChatGPT 는 앱이 아니라 [웹 브라우저](web.md) 흔적으로 남고, 그쪽 기록은 [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html)와 [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html)에서 읽습니다.
+- **브라우저로 쓴 경우.** 사파리나 크롬으로 쓴 ChatGPT 는 앱이 아니라 [웹 브라우저](web.md) 흔적으로 남고, 그쪽 기록은 [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html)와 [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html)에서 읽습니다.
 - **App Store 값은 바뀝니다.** 이 페이지의 버전·크기·요구 사양은 2026-09-25 의 값이라서, 보고서에 인용할 때는 페이지를 다시 열어 날짜와 함께 적습니다.
 
 ## 직접 분석해 보기

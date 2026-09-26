@@ -26,11 +26,11 @@ nav_order: 350
 | Android 앱(뤼튼·크랙) | 두 앱의 앱 데이터 폴더 | 패키지 이름과 앱 버전 |
 | iOS 앱(뤼튼·크랙) | 백업·전체 추출본의 앱 컨테이너 | 번들 이름과 앱 버전 |
 
-기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다. 브라우저로 썼다면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지처럼 브라우저별 페이지를 따르고, 데스크톱 앱이 Electron 이나 웹뷰로 만든 것으로 보이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)를 봅니다. 모바일 앱은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)와 [iOS 로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html)에서 어디까지 얻을 수 있는지 먼저 가늠합니다. 뤼튼과 크랙이 따로 설치돼 있으면 두 앱의 버전과 설치 시각을 함께 적어 둡니다.
+기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다. 브라우저로 썼다면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지처럼 브라우저별 페이지를 따르고, 데스크톱 앱이 Electron 이나 웹뷰로 만든 것으로 보이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)를 봅니다. 모바일 앱은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [iOS 로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)에서 어디까지 얻을 수 있는지 먼저 가늠합니다. 뤼튼과 크랙이 따로 설치돼 있으면 두 앱의 버전과 설치 시각을 함께 적어 둡니다.
 
 ## 구조
 
-로컬 대화 기록의 파일 이름, 데이터베이스 표, 설정 키는 공개된 자료가 없어 검체로 확인해야 합니다. 검체에서 뤼튼이나 크랙의 앱 폴더를 찾았다면 안에 든 파일의 형식을 첫 바이트로 먼저 가리고, SQLite 이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html), 설정 XML 이면 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html) 페이지의 방식으로 읽습니다. 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 앱 버전과 함께 무엇을 보았는지만 적습니다.
+로컬 대화 기록의 파일 이름, 데이터베이스 표, 설정 키는 공개된 자료가 없어 검체로 확인해야 합니다. 검체에서 뤼튼이나 크랙의 앱 폴더를 찾았다면 안에 든 파일의 형식을 첫 바이트로 먼저 가리고, SQLite 이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html), 설정 XML 이면 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html) 페이지의 방식으로 읽습니다. 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않고, 앱 버전과 함께 무엇을 보았는지만 적습니다.
 
 ## 증거로서 의미
 

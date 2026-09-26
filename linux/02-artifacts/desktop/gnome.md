@@ -237,7 +237,7 @@ for a in ET.parse("application_state").iter("application"):
     print(a.get("id"), a.get("score"), t.isoformat())
 ```
 
-Tracker 파일은 머리 16바이트가 `SQLite format 3` 과 NUL 인지 먼저 보고, 맞으면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 의 방법으로 사본을 엽니다.
+Tracker 파일은 머리 16바이트가 `SQLite format 3` 과 NUL 인지 먼저 보고, 맞으면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 의 방법으로 사본을 엽니다.
 
 ## 교차 검증
 

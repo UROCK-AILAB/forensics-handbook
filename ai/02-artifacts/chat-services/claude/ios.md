@@ -40,13 +40,13 @@ iOS 앱에서는 계정 데이터를 내보낼 수 없고, 내보내기는 웹�
 | 2026-09-25 | 1.260923.20 (App Store 최신판) | 169.2 MB | iOS 18.0 이상, iPadOS 18.0 이상 | [1] |
 | 2026-07~08 | 분석기에 적혀 있지 않음 | - | iOS 18.7.8, iOS 26.5.2 시험 이미지 | [3] |
 
-App Store 페이지의 버전·크기·지원 OS 는 열람한 날의 최신판 기준입니다. 검체 기기에 깔린 버전은 기기 쪽 자료에서 따로 확인해 이 표와 비교합니다. 기기 잠금과 파일별 보호 등급에 따라 무엇을 언제 읽을 수 있는지는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)에서, 로컬 백업에 앱 데이터가 들어가는지는 [로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html)에서 다룹니다.
+App Store 페이지의 버전·크기·지원 OS 는 열람한 날의 최신판 기준입니다. 검체 기기에 깔린 버전은 기기 쪽 자료에서 따로 확인해 이 표와 비교합니다. 기기 잠금과 파일별 보호 등급에 따라 무엇을 언제 읽을 수 있는지는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)에서, 로컬 백업에 앱 데이터가 들어가는지는 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)에서 다룹니다.
 
 ## 구조
 
 ### 캐시 데이터베이스
 
-SQLite 의 일반 구조와 WAL 은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/sqlite/index.html)에 있습니다. 분석기가 읽는 표와 칸은 다음과 같습니다[3].
+SQLite 의 일반 구조와 WAL 은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/sqlite/index.html)에 있습니다. 분석기가 읽는 표와 칸은 다음과 같습니다[3].
 
 | 표 | 칸 | 내용 |
 |---|---|---|
@@ -85,7 +85,7 @@ SQLite 의 일반 구조와 WAL 은 [SQLite 데이터베이스](https://urock-ai
 | 캐시 데이터베이스 | `createdAT`, `updatedAT`, `createdAt`, `updatedAt` | `YYYY-MM-DD HH:MM:SS` 문자열, 소수점 아래가 붙을 수 있음 | UTC 로 보고 소수점 아래를 버림 |
 | 계정 정보 캐시 | `created_at`, `updated_at` | ISO 8601 (`T`·`Z` 포함) | `T`·`Z` 를 떼고 UTC 로 읽음 |
 
-iLEAPP 의 `convert_human_ts_to_utc` 는 소수점 앞까지만 잘라 `%Y-%m-%d %H:%M:%S` 로 읽고 시간대를 UTC 로 붙입니다[5]. 데이터베이스의 시각 문자열에는 시간대 표시가 없으므로, 기기 쪽 다른 기록과 맞춰 보고 UTC 인지 확인한 뒤 보고서에 적습니다. 소수점 아래 값이 필요하면 원래 문자열을 직접 읽습니다. iOS 26 시험 데이터에서는 계정 이름을 바꾸자 `updated_at` 이 바뀌었습니다[3]. 같은 앱의 Android 판은 캐시 시각을 `T`·`Z` 가 붙은 ISO 8601 로 두므로, 두 판의 시각을 나란히 놓을 때는 형식을 맞춥니다([Android 앱](android.md)). 설치 시각 같은 기기 쪽 시각은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html)의 방법으로 읽고, 서버 자료와 합치는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+iLEAPP 의 `convert_human_ts_to_utc` 는 소수점 앞까지만 잘라 `%Y-%m-%d %H:%M:%S` 로 읽고 시간대를 UTC 로 붙입니다[5]. 데이터베이스의 시각 문자열에는 시간대 표시가 없으므로, 기기 쪽 다른 기록과 맞춰 보고 UTC 인지 확인한 뒤 보고서에 적습니다. 소수점 아래 값이 필요하면 원래 문자열을 직접 읽습니다. iOS 26 시험 데이터에서는 계정 이름을 바꾸자 `updated_at` 이 바뀌었습니다[3]. 같은 앱의 Android 판은 캐시 시각을 `T`·`Z` 가 붙은 ISO 8601 로 두므로, 두 판의 시각을 나란히 놓을 때는 형식을 맞춥니다([Android 앱](android.md)). 설치 시각 같은 기기 쪽 시각은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)의 방법으로 읽고, 서버 자료와 합치는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -126,7 +126,7 @@ App Store 페이지의 App Privacy 는 "사용자에게 연결된 데이터"를 
 
 **공개 도구로 한 번.** iLEAPP 을 추출 폴더에 돌리면 "Claude" 분류 아래에 계정 정보·대화·메시지·프로젝트 네 항목이 나옵니다[3]. 분석기 없이 직접 볼 때는 다음 순서를 따릅니다.
 
-1. 컨테이너마다 `.com.apple.mobile_container_manager.metadata.plist` 의 `MCMMetadataIdentifier` 를 읽어 Claude 앱 컨테이너를 찾고 번들 ID 를 적습니다[4]. plist 를 읽는 법은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html)에 있습니다.
+1. 컨테이너마다 `.com.apple.mobile_container_manager.metadata.plist` 의 `MCMMetadataIdentifier` 를 읽어 Claude 앱 컨테이너를 찾고 번들 ID 를 적습니다[4]. plist 를 읽는 법은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/plist.html)에 있습니다.
 2. `Library/Application Support/ClaudeCache/` 의 `cache_*.sqlite` 를 `-wal`·`-shm` 과 함께 복사한 뒤 `.schema` 로 표와 칸 이름을 적습니다.
 3. 다음 질의로 대화별 메시지를 시각 순서로 뽑습니다. 본문을 이어 붙이는 방식은 분석기 SQL 과 같습니다[3].
 
@@ -144,14 +144,14 @@ ORDER BY m.conversationId, m.createdAT;
 4. `Library/Caches/bootstrap/` 의 JSON 에서 `account` 객체를 찾아 계정과 생성·갱신 시각을 적습니다.
 5. 찾은 내용은 검체의 앱 버전·iOS 버전과 함께 기록하고, 이 페이지의 버전 표와 비교합니다.
 
-로그인 정보를 키체인에 두는지는 공개된 분석 자료가 없어 검체로 확인해야 하고, 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html)에 있습니다.
+로그인 정보를 키체인에 두는지는 공개된 분석 자료가 없어 검체로 확인해야 하고, 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html)에 있습니다.
 
 ## 교차 검증
 
 | 함께 볼 것 | 알려 주는 것 |
 |---|---|
 | [계정 데이터 내보내기](export.md) | 캐시에 없는 대화의 본문과 시각, 캐시 내용과의 대조 |
-| [웹 브라우저](web.md), [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html) | 앱 대신 휴대폰 브라우저로 claude.ai 를 쓴 흔적 |
+| [웹 브라우저](web.md), [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) | 앱 대신 휴대폰 브라우저로 claude.ai 를 쓴 흔적 |
 | [Android 앱](android.md) | 같은 계정을 다른 휴대폰에서 쓴 경우 |
 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 회사 네트워크에서 접속한 기록 |
 

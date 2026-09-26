@@ -83,11 +83,11 @@ Windows 에서는 `%USERPROFILE%\.cursor\` 입니다[7].
 
 에이전트 대화가 어디에 "주로" 남는지는 출처끼리 다릅니다. agentsview 설명서(2026-09-11)는 편집기(GUI)가 `agent-transcripts` 를 쓰지 않고 전역 `state.vscdb` 가 편집기 대화의 유일한 저장소이며, `agent-transcripts` 와 `chats/.../store.db` 는 Cursor CLI(Cursor Agent)가 쓴다고 적었습니다[5]. KapeFiles 수집 대상(2026-09-18)은 에이전트 대화가 전역 `state.vscdb` 에 있고, 전체 대화를 `agent-transcripts` 아래 JSONL 로도 쓴다고 적었습니다[7]. la-roca 설명서(2026-09-21)는 지금의 에이전트 대화가 `chats` 아래 세션마다 `store.db` 하나씩 있고 옆에 `meta.json` 이 있으며, 이 저장소로는 데스크톱과 CLI 를 가를 수 없다고 적었고, 전역 `state.vscdb` 는 예전(legacy) 저장소로 부릅니다[8]. 검체에서는 세 곳을 모두 모으고, 같은 대화 ID 가 여러 곳에 있는지 맞춰 봅니다.
 
-`%USERPROFILE%\.cursor\hooks.json` 하나만 있고 `%APPDATA%\Cursor` 폴더는 없는 PC 도 있습니다. 그래서 `~/.cursor` 의 파일 하나만 보고 Cursor 를 설치했다고 쓰지 않고, 앱 데이터 폴더와 설치 흔적을 함께 봅니다. 앱 데이터 폴더는 Electron 앱 모양이라서 위 표에 없는 폴더는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 따라 읽습니다.
+`%USERPROFILE%\.cursor\hooks.json` 하나만 있고 `%APPDATA%\Cursor` 폴더는 없는 PC 도 있습니다. 그래서 `~/.cursor` 의 파일 하나만 보고 Cursor 를 설치했다고 쓰지 않고, 앱 데이터 폴더와 설치 흔적을 함께 봅니다. 앱 데이터 폴더는 Electron 앱 모양이라서 위 표에 없는 폴더는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 따라 읽습니다.
 
 ## 구조
 
-`state.vscdb`, `store.db`, `ai-code-tracking.db` 는 모두 SQLite 라서 형식 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지대로 읽습니다.
+`state.vscdb`, `store.db`, `ai-code-tracking.db` 는 모두 SQLite 라서 형식 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지대로 읽습니다.
 
 ### 전역 `state.vscdb` 의 `cursorDiskKV`
 

@@ -32,7 +32,7 @@ ChatGPT 는 음성 오디오를 서버에 얼마나 보관하는지 밝힌 공�
 
 ChatGPT 도구의 시험 범위는 다음과 같습니다. RLEAPP 의 내보내기 파서는 2024-07-09 에 마지막으로 검증했습니다[2]. iLEAPP 의 대화 파서는 앱 1.2024.178 까지를 다루고, 시험 이미지는 iOS 17 의 ChatGPT 1.2024.219·1.2024.233 입니다[3]. ALEAPP 의 대화 파서는 1.2024.177 까지 시험했습니다[4]. 2026년 판 앱은 이 범위를 넘으므로 칸 이름과 경로가 그대로인지 검체에서 다시 봅니다.
 
-기기 쪽에서 볼 곳은 운영체제마다 다릅니다. 앱이 마이크를 쓰려면 권한을 받아야 해서, macOS 에서는 [개인 정보 보호 권한](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/credentials/tcc/index.html)에서 어떤 앱이 마이크 권한을 받았는지부터 봅니다. Android 와 iOS 에서는 앱 데이터 폴더에서 캐시나 임시 음성 파일을 찾고, 폴더 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)와 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)를 따릅니다. Windows·macOS 데스크톱 앱이 웹뷰로 만든 앱이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 캐시·저장소 원리대로 찾습니다.
+기기 쪽에서 볼 곳은 운영체제마다 다릅니다. 앱이 마이크를 쓰려면 권한을 받아야 해서, macOS 에서는 [개인 정보 보호 권한](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/credentials/tcc/index.html)에서 어떤 앱이 마이크 권한을 받았는지부터 봅니다. Android 와 iOS 에서는 앱 데이터 폴더에서 캐시나 임시 음성 파일을 찾고, 폴더 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 따릅니다. Windows·macOS 데스크톱 앱이 웹뷰로 만든 앱이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 캐시·저장소 원리대로 찾습니다.
 
 ## 구조
 

@@ -6,7 +6,7 @@ nav_order: 870
 
 # Linux 의 브라우저 프로필 (Firefox·Chrome)
 
-Linux 의 Chrome·Chromium·Firefox 는 Windows 와 같은 SQLite 데이터베이스를 쓰지만, 프로필 폴더가 설치 방식(배포판 패키지·Snap·Flatpak)과 환경 변수에 따라 여러 곳으로 갈라지고, Chrome 계열의 저장 비밀번호는 데스크톱 비밀번호 보관함에 기댑니다. 이 쪽은 Linux 에서 달라지는 경로·암호화·시각만 다룹니다. 테이블과 필드의 뜻은 다른 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)·[파이어폭스](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/firefox/index.html) 쪽을 봅니다.
+Linux 의 Chrome·Chromium·Firefox 는 Windows 와 같은 SQLite 데이터베이스를 쓰지만, 프로필 폴더가 설치 방식(배포판 패키지·Snap·Flatpak)과 환경 변수에 따라 여러 곳으로 갈라지고, Chrome 계열의 저장 비밀번호는 데스크톱 비밀번호 보관함에 기댑니다. 이 쪽은 Linux 에서 달라지는 경로·암호화·시각만 다룹니다. 테이블과 필드의 뜻은 다른 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)·[파이어폭스](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/firefox/index.html) 쪽을 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -60,7 +60,7 @@ Ubuntu 24.04 와 RHEL 9 의 차이는 경로 규칙이 아니라 어떤 방식�
 
 ## 구조
 
-데이터베이스 파일 형식은 다른 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 쪽, `Local Storage`·`IndexedDB` 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 쪽과 같습니다. Linux 에서 달라지는 부분은 암호화된 값의 앞머리입니다.
+데이터베이스 파일 형식은 다른 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 쪽, `Local Storage`·`IndexedDB` 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 쪽과 같습니다. Linux 에서 달라지는 부분은 암호화된 값의 앞머리입니다.
 
 ### Chrome 계열의 암호화 값 앞머리
 
@@ -101,7 +101,7 @@ Firefox 는 프로필 안의 `logins.json` 과 `key4.db`(옛 판은 `key3.db`)�
 | Firefox `moz_historyvisits.visit_date`, 쿠키 `creationTime`·`lastAccessed`, `moz_annos.dateAdded`·`lastModified` | Unix 마이크로초: 1970-01-01 UTC 부터의 마이크로초[8][10] | UTC |
 | Firefox `logins.json` 의 `timeCreated`·`timeLastUsed`·`timePasswordChanged`, `extensions.json` 의 `installDate`·`updateDate` | Unix 밀리초[8] | UTC |
 
-데이터베이스 안의 시각은 모두 UTC 라서 검체의 시간대 설정과 상관없습니다. 보고서에 현지 시각으로 옮길 때는 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 에서 확인한 시간대를 씁니다. 값을 바꾸는 법과 흔한 착오는 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 과 다른 판의 [시각 값 형식](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html) 쪽을 봅니다.
+데이터베이스 안의 시각은 모두 UTC 라서 검체의 시간대 설정과 상관없습니다. 보고서에 현지 시각으로 옮길 때는 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 에서 확인한 시간대를 씁니다. 값을 바꾸는 법과 흔한 착오는 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 과 다른 판의 [시각 값 형식](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html) 쪽을 봅니다.
 
 데이터베이스 파일의 수정 시각은 파일이 마지막으로 바뀐 때를 보여 줄 뿐이라, 개별 방문의 시각으로 쓰지 않습니다. `-wal` 파일에는 본 파일에 아직 합쳐지지 않은 최근 기록이 있을 가능성이 있으므로 둘을 함께 봅니다.
 

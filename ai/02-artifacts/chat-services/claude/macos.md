@@ -83,9 +83,9 @@ local-agent-mode-sessions/
 
 ### 관리 설정과 로그인 정보
 
-조직은 Jamf Pro·Kandji·Intune 같은 MDM 의 구성 프로필로 환경설정 도메인 `com.anthropic.claudefordesktop` 에 관리 설정을 내려보내고, 쓸 수 있는 키는 Windows 정책과 같은 목록입니다[3]. 키 목록은 [Windows 앱](windows.md)의 관리 정책 절에 있습니다. 구성 프로필이 기기에 남기는 plist 파일의 경로는 공개 문서에 나오지 않아 검체로 확인해야 하고, 찾은 plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/plist/index.html)의 방법으로 읽습니다.
+조직은 Jamf Pro·Kandji·Intune 같은 MDM 의 구성 프로필로 환경설정 도메인 `com.anthropic.claudefordesktop` 에 관리 설정을 내려보내고, 쓸 수 있는 키는 Windows 정책과 같은 목록입니다[3]. 키 목록은 [Windows 앱](windows.md)의 관리 정책 절에 있습니다. 구성 프로필이 기기에 남기는 plist 파일의 경로는 공개 문서에 나오지 않아 검체로 확인해야 하고, 찾은 plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html)의 방법으로 읽습니다.
 
-앱이 로그인 정보를 키체인에 두는지와 항목 이름은 공개된 분석 자료가 없어 검체의 키체인에서 확인해야 합니다. 키체인의 구조와 보호 방식은 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에서 다룹니다. `buddy-tokens.json` 처럼 이름에 토큰이 들어간 파일에서 인증 값이 보이면 보고서에서 가립니다.
+앱이 로그인 정보를 키체인에 두는지와 항목 이름은 공개된 분석 자료가 없어 검체의 키체인에서 확인해야 합니다. 키체인의 구조와 보호 방식은 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에서 다룹니다. `buddy-tokens.json` 처럼 이름에 토큰이 들어간 파일에서 인증 값이 보이면 보고서에서 가립니다.
 
 ## 증거로서 의미
 
@@ -99,7 +99,7 @@ local-agent-mode-sessions/
 
 세션 제목을 바꾸면 메타데이터 파일만 바뀌어서, agentsview 는 메타데이터 파일과 대화 기록 파일의 수정 시각 가운데 늦은 쪽을 세션의 수정 시각으로 씁니다[6]. 메타데이터 파일의 수정 시각이 늦다고 그때 대화가 있었다고 보지 않습니다.
 
-업데이트는 앱 안에서 이뤄지고[1] 그때 앱 번들의 파일 시스템 시각이 바뀔 수 있어서, 번들 시각을 처음 설치한 때로 보지 않습니다. 처음 받은 때는 [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/quarantine/index.html)에서, 폴더가 생기고 지워진 순서는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html)에서 찾습니다. 여러 시각을 한 줄로 맞추는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)을 봅니다. MCP 로그 줄의 시각 형식은 공개 문서에 없어서 값을 보고 판단합니다.
+업데이트는 앱 안에서 이뤄지고[1] 그때 앱 번들의 파일 시스템 시각이 바뀔 수 있어서, 번들 시각을 처음 설치한 때로 보지 않습니다. 처음 받은 때는 [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/quarantine/index.html)에서, 폴더가 생기고 지워진 순서는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에서 찾습니다. 여러 시각을 한 줄로 맞추는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)을 봅니다. MCP 로그 줄의 시각 형식은 공개 문서에 없어서 값을 보고 판단합니다.
 
 ## 함정과 한계
 
@@ -141,9 +141,9 @@ local-agent-mode-sessions/
 | 함께 볼 것 | 알려 주는 것 |
 |---|---|
 | [Claude Code](../../dev-agents/claude-code/index.md) | `cliSessionId` 로 이어지는 대화 기록 본문 |
-| [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/quarantine/index.html) | 설치 파일을 받은 때와 받은 곳 |
-| [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html) | 세션 폴더가 생기고 지워진 순서 |
-| [통합 로그 형식](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/unified-log/index.html) | 앱 실행과 관련된 시스템 기록 |
+| [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/quarantine/index.html) | 설치 파일을 받은 때와 받은 곳 |
+| [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html) | 세션 폴더가 생기고 지워진 순서 |
+| [통합 로그 형식](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/unified-log/index.html) | 앱 실행과 관련된 시스템 기록 |
 | [MCP 서버와 도구 호출 기록](../../dev-agents/mcp.md) | 연결한 로컬 도구 |
 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱과 에이전트가 실제로 접속한 시각 |
 | [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md) | 에이전트 기록으로 행위를 되짚는 순서 |

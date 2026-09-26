@@ -107,7 +107,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 
 **기록을 끈 것과 지운 것은 흔적이 다릅니다.** Claude Code 는 `CLAUDE_CODE_SKIP_PROMPT_HISTORY` 를 켜면 처음부터 기록을 쓰지 않고 [4], Gemini 는 Keep Activity 를 끈 대화도 72시간은 계정에 남깁니다 [2]. 기록이 비어 있다면 삭제 흔적을 찾기 전에 기록을 끄는 설정이 있었는지부터 봅니다.
 
-**앱의 "지우기" 가 파일을 지우지 않는 경우가 있습니다.** Linky.AI 는 대화를 지워도 새 대화 ID 만 만들었고, Persona.AI·Fantasy.AI 는 지운 대화가 WAL 에 남았으며, Replika 는 계정을 지운 뒤에도 충돌 로그에 대화가 남았습니다 [8]. 반대로 LM Studio 는 지운 대화와 업로드가 디스크 수준에서 되살아나지 않았습니다 [9]. 같은 "삭제" 라도 앱마다 결과가 달라서, 앱과 판을 밝히고 판단합니다. WAL 의 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html) 에서 다룹니다.
+**앱의 "지우기" 가 파일을 지우지 않는 경우가 있습니다.** Linky.AI 는 대화를 지워도 새 대화 ID 만 만들었고, Persona.AI·Fantasy.AI 는 지운 대화가 WAL 에 남았으며, Replika 는 계정을 지운 뒤에도 충돌 로그에 대화가 남았습니다 [8]. 반대로 LM Studio 는 지운 대화와 업로드가 디스크 수준에서 되살아나지 않았습니다 [9]. 같은 "삭제" 라도 앱마다 결과가 달라서, 앱과 판을 밝히고 판단합니다. WAL 의 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html) 에서 다룹니다.
 
 **자동 정리 뒤에도 남는 파일이 있습니다.** Claude Code 의 자동 정리는 입력 이력과 사용량 통계를 지우지 않아서 [4], 세션 기록이 없는 기간의 사용 시기와 규모를 이 두 파일로 가늠할 수 있습니다.
 
@@ -129,7 +129,7 @@ Claude 데스크톱의 `claude_desktop_config.json` 에는 정수 값을 담는 
 
 ## 도구
 
-설정 파일의 정리 기간 키는 `jq` 같은 공개 도구로 뽑고, 세션 기록 파일의 날짜 목록은 OS 기본 명령으로 뜬 뒤 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md) 에 올립니다. 로컬 LLM 앱은 LangurTrace(github.com/jeongramon/LangurTrace)가 KAPE 타깃과 파서로 지운 모델·대화 기록을 모읍니다 [9]. WAL 에 남은 레코드는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 의 방법으로 읽습니다. Microsoft 365 Copilot 의 보존 사본과 `SubstrateHolds` 항목은 Purview eDiscovery 로 검색합니다 [5][6]. 서버 쪽 보관 정책은 공개 문서를 저장해 둔 사본(날짜가 찍힌 PDF 나 웹 보관본)을 보고서에 붙입니다.
+설정 파일의 정리 기간 키는 `jq` 같은 공개 도구로 뽑고, 세션 기록 파일의 날짜 목록은 OS 기본 명령으로 뜬 뒤 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md) 에 올립니다. 로컬 LLM 앱은 LangurTrace(github.com/jeongramon/LangurTrace)가 KAPE 타깃과 파서로 지운 모델·대화 기록을 모읍니다 [9]. WAL 에 남은 레코드는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 의 방법으로 읽습니다. Microsoft 365 Copilot 의 보존 사본과 `SubstrateHolds` 항목은 Purview eDiscovery 로 검색합니다 [5][6]. 서버 쪽 보관 정책은 공개 문서를 저장해 둔 사본(날짜가 찍힌 PDF 나 웹 보관본)을 보고서에 붙입니다.
 
 ## 참고 문헌
 

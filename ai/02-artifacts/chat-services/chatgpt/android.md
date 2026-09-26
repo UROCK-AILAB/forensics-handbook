@@ -21,7 +21,7 @@ ChatGPT 모바일 앱을 처음 포렌식으로 분석한 연구로는 Dragonas�
 
 ## 위치와 버전별 차이
 
-앱 폴더는 `/data/data/com.openai.chatgpt/` 입니다. 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)에서 다룹니다.
+앱 폴더는 `/data/data/com.openai.chatgpt/` 입니다. 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다.
 
 | 앱 폴더 안 경로 | 형식 | 담긴 것 | 근거 |
 |---|---|---|---|
@@ -40,7 +40,7 @@ ALEAPP 은 대화 DB 파일 이름에서 `_conversations.db` 앞부분을 떼어
 
 ## 구조
 
-형식별 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)와 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)에서 다루고, 여기서는 ChatGPT 앱에 해당하는 표·칸·키만 적습니다.
+형식별 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)와 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)에서 다루고, 여기서는 ChatGPT 앱에 해당하는 표·칸·키만 적습니다.
 
 ### 대화 목록: `DBConversation`
 
@@ -136,7 +136,7 @@ Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이�
 
 대화의 `modification_date` 가 무엇이 바뀔 때 갱신되는지는 공개된 자료가 없어서, 대화를 연 시각으로 읽지 않고 메시지 하나하나의 `created_date` 를 함께 봅니다. `created` 는 ALEAPP 이 "Account Creation Time" 으로 보여 주는 값이라서 [3], 이 기기에 로그인한 시각으로 옮기지 않습니다.
 
-앱 폴더 안 파일의 파일 시스템 시각은 동기화나 캐시 갱신 때도 바뀌어서 대화한 시각으로 바로 옮기지 않습니다. 앱 설치·업데이트 시각과 기기의 다른 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
+앱 폴더 안 파일의 파일 시스템 시각은 동기화나 캐시 갱신 때도 바뀌어서 대화한 시각으로 바로 옮기지 않습니다. 앱 설치·업데이트 시각과 기기의 다른 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -199,7 +199,7 @@ ALEAPP 에 앱 데이터 폴더가 든 추출본을 넣으면 "ChatGPT" 분류 �
 
 ## 교차 검증
 
-기기의 대화 사본은 [계정 데이터 내보내기](export.md)로 받은 `conversations.json` 의 같은 대화와 제목·시각을 맞춥니다. `remote_id` 가 내보내기의 대화 ID 와 같은지도 검체로 맞춰 봅니다. 접속 시간대는 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)으로 보고, 같은 사람이 브라우저로도 썼다면 [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html) 기록도 함께 봅니다. 같은 계정을 쓴 iPhone 이 있으면 [iOS 앱](ios.md)의 대화 사본과도 맞춥니다.
+기기의 대화 사본은 [계정 데이터 내보내기](export.md)로 받은 `conversations.json` 의 같은 대화와 제목·시각을 맞춥니다. `remote_id` 가 내보내기의 대화 ID 와 같은지도 검체로 맞춰 봅니다. 접속 시간대는 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)으로 보고, 같은 사람이 브라우저로도 썼다면 [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) 기록도 함께 봅니다. 같은 계정을 쓴 iPhone 이 있으면 [iOS 앱](ios.md)의 대화 사본과도 맞춥니다.
 
 ## 실습
 

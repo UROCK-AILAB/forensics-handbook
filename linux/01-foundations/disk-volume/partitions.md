@@ -8,7 +8,7 @@ nav_order: 110
 
 디스크 앞쪽의 파티션 표를 읽으면 디스크를 어떤 범위로 나눴는지, 각 조각에 어떤 용도 표시를 달았는지, 다른 흔적과 맞춰 볼 식별자가 무엇인지 알 수 있습니다.
 
-MBR (Master Boot Record) 와 GPT (GUID Partition Table) 의 공통 구조는 Windows 판 [파티션 구조 (MBR·GPT)](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/disk-volume/mbr-gpt.html) 와 맥 판 [파티션 구조 (GPT·APFS 파티션)](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/disk-volume/gpt-partitions.html) 에도 있습니다. 이 쪽은 리눅스에서 쓰는 형식 번호·형식 GUID, 리눅스 도구가 표를 읽는 방식, 파티션과 마운트 설정을 잇는 방법을 다룹니다.
+MBR (Master Boot Record) 와 GPT (GUID Partition Table) 의 공통 구조는 Windows 판 [파티션 구조 (MBR·GPT)](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/disk-volume/mbr-gpt.html) 와 맥 판 [파티션 구조 (GPT·APFS 파티션)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/disk-volume/gpt-partitions.html) 에도 있습니다. 이 쪽은 리눅스에서 쓰는 형식 번호·형식 GUID, 리눅스 도구가 표를 읽는 방식, 파티션과 마운트 설정을 잇는 방법을 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트
 

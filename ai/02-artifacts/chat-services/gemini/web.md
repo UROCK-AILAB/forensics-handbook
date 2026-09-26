@@ -42,12 +42,12 @@ nav_order: 290
 
 | OS | 브라우저 | 구조 설명 |
 |---|---|---|
-| Windows | 크롬·엣지·웨일 등 크롬 계열 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
-| macOS | 사파리 | [사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html) |
-| Android | 크롬 | [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html) |
-| iOS | 사파리, 크롬 | [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html) |
+| Windows | 크롬·엣지·웨일 등 크롬 계열 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| macOS | 사파리 | [사파리](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/browsers/safari/index.html) |
+| Android | 크롬 | [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) |
+| iOS | 사파리, 크롬 | [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) |
 
-크롬 계열에서 Local Storage 와 IndexedDB 는 LevelDB 파일로 남아서 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 페이지의 읽는 법을 그대로 씁니다. 크롬 도구 모음에서 여는 Gemini 창은 웹 탭과 흔적이 달라서 [Chrome 통합](chrome.md)에서 따로 보고, 휴대폰 앱은 [Android 앱](android.md)과 [iOS 앱](ios.md)에서 봅니다.
+크롬 계열에서 Local Storage 와 IndexedDB 는 LevelDB 파일로 남아서 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지의 읽는 법을 그대로 씁니다. 크롬 도구 모음에서 여는 Gemini 창은 웹 탭과 흔적이 달라서 [Chrome 통합](chrome.md)에서 따로 보고, 휴대폰 앱은 [Android 앱](android.md)과 [iOS 앱](ios.md)에서 봅니다.
 
 ## 증거로서 의미
 
@@ -67,7 +67,7 @@ nav_order: 290
 
 ## 직접 분석해 보기
 
-크롬 계열이라면 프로필 폴더의 `History` SQLite 파일을 사본으로 떠서 공개 도구인 DB Browser for SQLite 로 열고, 주소에 `gemini.google.com` 또는 `myactivity.google.com/product/gemini` 가 들어간 행을 찾습니다. 표와 칸 이름, 시각 값을 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 따릅니다. 파일을 헥스 편집기로 열어 주소 문자열 `gemini.google.com` 을 찾아보면 지운 행의 흔적이 빈 페이지에 남아 있는지도 가늠할 수 있습니다.
+크롬 계열이라면 프로필 폴더의 `History` SQLite 파일을 사본으로 떠서 공개 도구인 DB Browser for SQLite 로 열고, 주소에 `gemini.google.com` 또는 `myactivity.google.com/product/gemini` 가 들어간 행을 찾습니다. 표와 칸 이름, 시각 값을 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 따릅니다. 파일을 헥스 편집기로 열어 주소 문자열 `gemini.google.com` 을 찾아보면 지운 행의 흔적이 빈 페이지에 남아 있는지도 가늠할 수 있습니다.
 
 ## 교차 검증
 

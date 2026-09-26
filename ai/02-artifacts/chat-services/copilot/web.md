@@ -28,7 +28,7 @@ nav_order: 220
 | 개인정보 대시보드(`account.microsoft.com/privacy`) | 계정의 Copilot 활동 기록 | 공식 문서[4] |
 | 조직 사용자의 Exchange Online 사서함 숨은 폴더 | 조직이 수집 정책으로 잡은 소비자용 Copilot 프롬프트·응답 | 공식 문서[6][7]. 수집 정책이 있을 때만 |
 
-브라우저 저장소의 파일 위치와 읽는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 페이지를 따르고, 서버와 기기 가운데 어디에 무엇이 있는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에 모아 두었습니다.
+브라우저 저장소의 파일 위치와 읽는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지를 따르고, 서버와 기기 가운데 어디에 무엇이 있는지의 일반 원리는 [AI 서비스의 데이터는 어디에 있나](../../../01-foundations/storage-model/where-data-lives.md)에 모아 두었습니다.
 
 ## 관련 설정
 
@@ -42,7 +42,7 @@ nav_order: 220
 
 ## 시각 해석
 
-방문 기록의 시각 형식과 기준 시간대는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다. 방문 시각은 페이지를 연 시각이지 대화를 보낸 시각이 아닙니다. 대화별 ID 가 URL 에 붙는지는 검체로 확인하고, 확인하기 전에는 방문 기록 한 줄을 대화 하나와 짝짓지 않습니다. 대화 시각은 내보낸 활동 기록에서 찾고, 그 파일의 시각 칸 이름과 기준은 [계정 데이터 내보내기](export.md)에서 검체로 확인합니다.
+방문 기록의 시각 형식과 기준 시간대는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다. 방문 시각은 페이지를 연 시각이지 대화를 보낸 시각이 아닙니다. 대화별 ID 가 URL 에 붙는지는 검체로 확인하고, 확인하기 전에는 방문 기록 한 줄을 대화 하나와 짝짓지 않습니다. 대화 시각은 내보낸 활동 기록에서 찾고, 그 파일의 시각 칸 이름과 기준은 [계정 데이터 내보내기](export.md)에서 검체로 확인합니다.
 
 ## 함정과 한계
 
@@ -50,7 +50,7 @@ nav_order: 220
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 브라우저 저장소에 Copilot 대화가 어떤 형식으로 남는지는 공개된 분석 자료가 없어 검체로 확인해야 하므로, 여기에는 헥스 예시를 싣지 않습니다. 방문 기록 데이터베이스를 헥스로 따라가는 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다.
+**헥스로 한 번.** 브라우저 저장소에 Copilot 대화가 어떤 형식으로 남는지는 공개된 분석 자료가 없어 검체로 확인해야 하므로, 여기에는 헥스 예시를 싣지 않습니다. 방문 기록 데이터베이스를 헥스로 따라가는 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다.
 
 **공개 도구로 한 번.** 브라우저 방문 기록 사본을 SQLite 도구로 열고 URL 칸에서 `copilot.microsoft.com` 과 `m365.cloud.microsoft` 를 찾아 방문 시각과 횟수를 뽑습니다. 원본 파일은 직접 열지 않고, 브라우저를 닫은 상태에서 뜬 사본으로 작업합니다.
 

@@ -46,7 +46,7 @@ Claude 개인용(Free·Pro·Max)은 대화를 지웠을 때의 처리와 보관 
 | Gemini | Android·iOS | 기기 쪽 공개 분석기 없음 | 대화는 클라우드, Takeout 으로 받음 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
 | Copilot | Android·iOS | 기기 쪽 공개 분석기 없음 | 평문 대화와 브라우저 데이터 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
 
-Android 의 경로는 앱 데이터 폴더(`/data/data/` 아래 패키지 이름 폴더) 기준이고, iOS 의 경로는 `Containers/Data/Application/` 아래 UUID 이름의 앱 폴더 기준입니다. 앱 폴더의 공통 구조와 보호 방식은 [앱 데이터 폴더 구조 (Android)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html) 와 [데이터 보호 (iOS)](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html) 를 봅니다.
+Android 의 경로는 앱 데이터 폴더(`/data/data/` 아래 패키지 이름 폴더) 기준이고, iOS 의 경로는 `Containers/Data/Application/` 아래 UUID 이름의 앱 폴더 기준입니다. 앱 폴더의 공통 구조와 보호 방식은 [앱 데이터 폴더 구조 (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html) 와 [데이터 보호 (iOS)](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html) 를 봅니다.
 
 분석기가 시험한 판은 2024~2026 년의 몇 판뿐이라서 지금 판의 파일 구성과 다를 수 있습니다. 검체에서는 앱 판을 먼저 적고, 표의 파일이 그 자리에 있는지 확인합니다. Claude 앱의 파일은 이름대로 캐시라서 계정의 대화 전체가 들어 있다고 단정하지 않고 계정 내보내기와 견줘 봅니다. Copilot 은 기기에 대화가 남는지를 두고 출처끼리 다르게 적었으므로 [Copilot](../../02-artifacts/chat-services/copilot/index.md) 쪽의 대조를 봅니다. 표·칸·시각 형식은 [ChatGPT Android](../../02-artifacts/chat-services/chatgpt/android.md), [ChatGPT iOS](../../02-artifacts/chat-services/chatgpt/ios.md), [Claude Android](../../02-artifacts/chat-services/claude/android.md), [Claude iOS](../../02-artifacts/chat-services/claude/ios.md) 쪽에서 다룹니다.
 
@@ -100,7 +100,7 @@ Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `e
 
 1. 기기에서 어떤 방식으로 AI 서비스를 썼는지 먼저 확인합니다. 설치된 앱, 브라우저 방문 기록, 사용자 폴더 아래 `.claude`·`.codex`·`.gemini`·`.cursor`·`.ollama` 같은 도구 폴더, 스토어 앱 패키지 폴더, 휴대전화의 앱 폴더를 봅니다. 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md) 를 따릅니다.
 2. 서비스마다 원본이 서버에 있는지 기기에 있는지 가립니다. 원본이 서버에 있다면 계정 내보내기 파일이나 서비스 회사 회신이 있는지 확인하고, 없다면 기기에서 찾은 대화는 사본이라고 적어 둡니다.
-3. 원본이나 사본이 기기에 있다면 폴더째 복사한 사본에서 분석합니다. 앱이 쓰고 있는 데이터베이스는 잠겨서 열리지 않을 수 있고, SQLite 는 `-wal`·`-shm` 파일을 함께 가져와야 합니다(자세한 내용은 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)).
+3. 원본이나 사본이 기기에 있다면 폴더째 복사한 사본에서 분석합니다. 앱이 쓰고 있는 데이터베이스는 잠겨서 열리지 않을 수 있고, SQLite 는 `-wal`·`-shm` 파일을 함께 가져와야 합니다(자세한 내용은 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)).
 4. 서버 쪽 기록과 기기 쪽 기록의 시각을 한 표에 놓고 맞춰 봅니다. 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md) 에 있습니다.
 
 ## 포렌식에서 중요한 점
@@ -123,7 +123,7 @@ Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `e
 
 ## 도구
 
-폴더 구성은 파일 탐색기나 `dir /s`, `ls -laR` 같은 기본 명령으로 먼저 목록을 뜨고, 목록을 사본과 함께 보관합니다. JSON·JSONL 파일은 `jq` 같은 공개 도구로 읽고, SQLite 파일은 DB Browser for SQLite 같은 공개 도구로 엽니다. 개발 도구의 세션 파일은 agentsview 가 여러 도구의 기본 위치를 찾아 읽고 [7], 휴대전화 추출본의 ChatGPT·Claude 앱 데이터는 ALEAPP·iLEAPP 의 분석기가 읽으며 [8][9], 로컬 AI 앱의 흔적은 LangurTrace 가 모아 분석합니다 [11]. 크롬 계열 저장소(LevelDB·IndexedDB·쿠키 DB)를 읽는 법은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 를 봅니다.
+폴더 구성은 파일 탐색기나 `dir /s`, `ls -laR` 같은 기본 명령으로 먼저 목록을 뜨고, 목록을 사본과 함께 보관합니다. JSON·JSONL 파일은 `jq` 같은 공개 도구로 읽고, SQLite 파일은 DB Browser for SQLite 같은 공개 도구로 엽니다. 개발 도구의 세션 파일은 agentsview 가 여러 도구의 기본 위치를 찾아 읽고 [7], 휴대전화 추출본의 ChatGPT·Claude 앱 데이터는 ALEAPP·iLEAPP 의 분석기가 읽으며 [8][9], 로컬 AI 앱의 흔적은 LangurTrace 가 모아 분석합니다 [11]. 크롬 계열 저장소(LevelDB·IndexedDB·쿠키 DB)를 읽는 법은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 를 봅니다.
 
 ## 참고 문헌
 

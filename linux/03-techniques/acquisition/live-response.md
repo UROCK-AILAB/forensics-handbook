@@ -93,7 +93,7 @@ UAC 의 `--start-date`·`--end-date` 는 수정·접근·변경 시각으로 파
 
 기록이 말하는 만큼만 씁니다. "악성 프로세스가 실행되었다" 가 아니라 "2026-03-10 09:00 +0900 에 수집한 프로세스 목록에서 PID 4242 의 실행 파일 경로가 `/tmp/.cache/x (deleted)` 로 표시되었다(만든 예시)" 처럼 씁니다. 복사한 파일은 해시와 함께 "처음 20,480,000바이트까지 복사했다" 는 한계를 붙여 적습니다.
 
-`/proc` 각 파일의 형식과 필드는 [실행 중인 프로세스 (/proc)](../../02-artifacts/execution/proc.md)에서 다룹니다. 다른 운영체제의 수집 절차는 [Windows 조사 절차](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/process-acquisition/investigation-process.html)와 [macOS 조사 절차](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/process-acquisition/investigation-process.html)에 있습니다.
+`/proc` 각 파일의 형식과 필드는 [실행 중인 프로세스 (/proc)](../../02-artifacts/execution/proc.md)에서 다룹니다. 다른 운영체제의 수집 절차는 [Windows 조사 절차](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html)와 [macOS 조사 절차](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/process-acquisition/investigation-process.html)에 있습니다.
 
 ## 참고 문헌
 

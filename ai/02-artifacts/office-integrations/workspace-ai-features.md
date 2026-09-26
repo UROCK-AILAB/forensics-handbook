@@ -67,7 +67,7 @@ AI 채팅 기록을 어디에 저장하는지, 감사 로그에 AI 사용이 남
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 기기 쪽 저장 파일은 공개된 분석 자료가 없어서, 헥스로 따라갈 파일도 검체에서 먼저 찾아야 합니다. 기기를 조사한다면 앱 폴더를 먼저 목록으로 떠서 무엇이 있는지 확인하는 순서를 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에서 따르고, 찾은 파일이 SQLite·LevelDB 라면 Windows 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)·[LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 페이지로 읽습니다.
+**헥스로 한 번.** 기기 쪽 저장 파일은 공개된 분석 자료가 없어서, 헥스로 따라갈 파일도 검체에서 먼저 찾아야 합니다. 기기를 조사한다면 앱 폴더를 먼저 목록으로 떠서 무엇이 있는지 확인하는 순서를 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에서 따르고, 찾은 파일이 SQLite·LevelDB 라면 Windows 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)·[LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지로 읽습니다.
 
 **공개 도구로 한 번.** 서비스 쪽 자료는 조직 관리자가 서비스의 관리 기능으로 내보낼 수 있는지 먼저 알아보고, 그럴 수 없으면 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 절차를 따릅니다. 내보낸 결과를 jq 나 스프레드시트 같은 공개 도구로 열어 채널·페이지·기간으로 거르고, AI 결과물(요약본, 워크플로 채널 요약)이 들어 있는지 직접 확인합니다. 들어 있지 않다면 그 사실을 보고서에 적습니다.
 

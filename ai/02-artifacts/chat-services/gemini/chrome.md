@@ -19,7 +19,7 @@ Chrome 에 들어간 Gemini 는 도구 모음의 "Ask Gemini" 버튼으로 열�
 
 ## 위치와 구조 — Chromium 소스로 본 설정 키
 
-Chromium 은 이 기능을 안에서 "glic" 라고 부르고, 설정 키 이름을 `chrome/browser/glic/glic_pref_names.h` 파일에 모아 정의합니다. 키는 설치 전체에 하나인 Local State 파일에 들어가는 것과 프로필마다 있는 Preferences 파일에 들어가는 것으로 나뉩니다. 두 파일의 위치와 JSON 구조는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다룹니다.
+Chromium 은 이 기능을 안에서 "glic" 라고 부르고, 설정 키 이름을 `chrome/browser/glic/glic_pref_names.h` 파일에 모아 정의합니다. 키는 설치 전체에 하나인 Local State 파일에 들어가는 것과 프로필마다 있는 Preferences 파일에 들어가는 것으로 나뉩니다. 두 파일의 위치와 JSON 구조는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다룹니다.
 
 | 파일 | 소스에 정의된 키(예) | 짐작할 수 있는 뜻 |
 |---|---|---|
@@ -73,7 +73,7 @@ jq 로는 프로필 폴더의 Preferences 사본에서 `jq '.glic' Preferences` 
 | 함께 볼 기록 | 알려 주는 것 | 링크 |
 |---|---|---|
 | 계정 데이터 내보내기 | 대화 내용과 메시지 시각 | [계정 데이터 내보내기](export.md) |
-| Chrome 방문 기록 | Gemini 에 공유했을 법한 탭의 주소와 시각 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| Chrome 방문 기록 | Gemini 에 공유했을 법한 탭의 주소와 시각 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
 | 보안 제품 기록 | 기업 환경에서 AI 기능 사용을 막거나 남긴 기록 | [보안 제품이 남기는 AI 사용 기록](../../network-enterprise/dlp-casb.md) |
 | 허용되지 않은 AI 사용 조사 | 정책과 실제 사용 흔적을 맞춰 보는 흐름 | [회사가 허용하지 않은 AI를 썼나](../../../04-scenarios/data-leak/shadow-ai.md) |
 

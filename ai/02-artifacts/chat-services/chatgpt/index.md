@@ -52,7 +52,7 @@ ChatGPT 는 여러 기기에서 같은 계정으로 쓰는 서비스라서, 한 
 - [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md) — 기기에 남은 토큰을 보고서에서 다루는 법
 - [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md) — 계정 주인의 협조 없이 서버 쪽 기록을 확보하는 절차
 - [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md) — 계정 기록과 실제 입력한 사람을 잇는 방법
-- 저장 형식 공통 원리 — [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html), [Android SQLite](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html), [Android 설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html), [iOS 속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html)
+- 저장 형식 공통 원리 — [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html), [Android SQLite](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html), [Android 설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html), [iOS 속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/plist.html)
 
 ## 참고 문헌
 

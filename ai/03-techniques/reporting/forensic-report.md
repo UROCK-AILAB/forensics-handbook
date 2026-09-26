@@ -39,10 +39,10 @@ AI 앱은 자주 바뀌어서 이 페이지에 나온 키 이름과 폴더 구�
 
    | OS | 보호 방식 설명 |
    |---|---|
-   | Windows | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html), [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html) |
-   | macOS | [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html) |
-   | Android | [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html) |
-   | iOS | [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html), [키체인](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) |
+   | Windows | [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html), [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html) |
+   | macOS | [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html) |
+   | Android | [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html) |
+   | iOS | [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html), [키체인](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html) |
 
 5. **시각 표기를 하나로 맞춥니다.** 같은 앱 안에서도 파일마다 시각을 적는 방식이 다를 수 있습니다. Claude Code의 입력 이력 `history.jsonl` 은 `timestamp` 를 정수로 적고, 세션 기록 `projects` 아래 `.jsonl` 은 `timestamp` 를 문자열로 적습니다. 보고서 본문에는 한 가지 시간대로 바꾼 값을 쓰고, 부록에는 원래 값과 어느 파일·어느 키에서 읽었는지, 어떤 규칙으로 바꿨는지를 적습니다. 바꾸는 규칙을 알 수 없는 값은 원래 값만 적고, 바꾸지 않았다고 밝힙니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../analysis/timeline.md)에 있습니다.
 
@@ -84,7 +84,7 @@ AI 앱은 자주 바뀌어서 이 페이지에 나온 키 이름과 폴더 구�
 
 ## 도구
 
-해시 계산에는 OS에 들어 있는 명령이나 공개 도구를 쓰고, JSON Lines 기록은 `jq` 같은 공개 도구로, SQLite 데이터베이스는 SQLite 명령줄 도구로 열 수 있습니다. 어느 도구를 쓰든 보고서에는 도구 이름과 버전, 실행한 명령이나 질의를 부록에 남겨서 다른 분석가가 같은 결과를 다시 얻을 수 있게 합니다. 여러 기록을 한 줄로 세우는 도구와 방법은 [AI 사용 타임라인](../analysis/timeline.md)과 Windows 판 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)을 봅니다.
+해시 계산에는 OS에 들어 있는 명령이나 공개 도구를 쓰고, JSON Lines 기록은 `jq` 같은 공개 도구로, SQLite 데이터베이스는 SQLite 명령줄 도구로 열 수 있습니다. 어느 도구를 쓰든 보고서에는 도구 이름과 버전, 실행한 명령이나 질의를 부록에 남겨서 다른 분석가가 같은 결과를 다시 얻을 수 있게 합니다. 여러 기록을 한 줄로 세우는 도구와 방법은 [AI 사용 타임라인](../analysis/timeline.md)과 Windows 판 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)을 봅니다.
 
 ## 함정과 한계
 

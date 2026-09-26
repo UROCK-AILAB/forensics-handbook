@@ -62,13 +62,13 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 
 ### 로그인 정보
 
-로그인 정보는 암호화된 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)에 들어갑니다[4]. SSH 세션처럼 키체인이 잠겨 쓰기를 거부하면 `~/.claude/.credentials.json` 에 파일 모드 0600 으로 대신 저장하고[4], 이 파일은 [Windows](windows.md)의 같은 이름 파일처럼 평문 JSON 입니다. 원격 접속으로만 쓰던 Mac 에서 이 파일이 나온다면 키체인 쓰기 실패와 관련이 있을 수 있지만, 파일 하나로 접속 방식을 단정하지는 않습니다.
+로그인 정보는 암호화된 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에 들어갑니다[4]. SSH 세션처럼 키체인이 잠겨 쓰기를 거부하면 `~/.claude/.credentials.json` 에 파일 모드 0600 으로 대신 저장하고[4], 이 파일은 [Windows](windows.md)의 같은 이름 파일처럼 평문 JSON 입니다. 원격 접속으로만 쓰던 Mac 에서 이 파일이 나온다면 키체인 쓰기 실패와 관련이 있을 수 있지만, 파일 하나로 접속 방식을 단정하지는 않습니다.
 
 키체인 항목의 서비스 이름은 공개된 분석 자료에 없어서, 검체의 키체인 항목 목록에서 Claude Code 항목을 찾아 이름과 생성·수정 시각을 기록합니다. 항목 값은 보고서에서 가리고, 토큰이 남는 다른 곳은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다. 계정 쪽 기록이 필요하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 ### 관리 정책
 
-관리 정책은 `/Library/Application Support/ClaudeCode/` 아래 파일이나 MDM 구성 프로파일로 내려옵니다[3]. 구성 프로파일은 관리 환경설정 도메인 `com.anthropic.claudecode` 를 쓰고, 그 안의 최상위 키는 `managed-settings.json` 과 같습니다[3]. 관리 환경설정을 읽는 법은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/plist/index.html) 페이지를 참고합니다. 여러 소스 사이의 순서는 [설정·권한·훅](settings-permissions.md)에서 다룹니다.
+관리 정책은 `/Library/Application Support/ClaudeCode/` 아래 파일이나 MDM 구성 프로파일로 내려옵니다[3]. 구성 프로파일은 관리 환경설정 도메인 `com.anthropic.claudecode` 를 쓰고, 그 안의 최상위 키는 `managed-settings.json` 과 같습니다[3]. 관리 환경설정을 읽는 법은 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html) 페이지를 참고합니다. 여러 소스 사이의 순서는 [설정·권한·훅](settings-permissions.md)에서 다룹니다.
 
 ### 데스크톱 앱에서 돌린 Code 세션
 
@@ -82,7 +82,7 @@ Claude 데스크톱 앱에서 돌린 Code 세션은 본문이 `~/.claude/project
 
 ## 시각 해석
 
-기록 안의 시각은 [세션 기록 구조](transcripts.md)를 따릅니다. 폴더가 언제 생기고 바뀌었는지는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html)에서 `~/.claude/`, `~/.local/share/claude/versions/`, `~/Library/Application Support/Claude/` 경로를 찾아 맞춰 봅니다. `versions/` 에 새 파일이 생긴 시각은 업데이트 시각을 가늠하는 데 쓸 수 있지만, 스스로 업데이트하는 설치에서는 사용자가 그 시각에 앱을 켰다는 뜻까지는 아닙니다.
+기록 안의 시각은 [세션 기록 구조](transcripts.md)를 따릅니다. 폴더가 언제 생기고 바뀌었는지는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에서 `~/.claude/`, `~/.local/share/claude/versions/`, `~/Library/Application Support/Claude/` 경로를 찾아 맞춰 봅니다. `versions/` 에 새 파일이 생긴 시각은 업데이트 시각을 가늠하는 데 쓸 수 있지만, 스스로 업데이트하는 설치에서는 사용자가 그 시각에 앱을 켰다는 뜻까지는 아닙니다.
 
 `~/.claude/.last-cleanup` 은 마지막 자동 삭제 시각이라서, 남은 기록의 날짜 범위와 함께 봅니다[7]. 이 파일이 없거나 오래됐는데 남은 기록의 날짜 범위가 넓으면, 그 Mac 에 보통보다 오래된 기록이 남아 있다는 신호입니다[7].
 
@@ -117,7 +117,7 @@ ls -la /Users/examiner01/.claude/projects/
 
 ## 교차 검증
 
-폴더 시각은 [FSEvents](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/fsevents/index.html)와, 기록 시각은 [macOS 타임라인](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/timeline/index.html)과 맞춰 봅니다. 데스크톱 앱 세션은 [Claude macOS 앱](../../chat-services/claude/macos.md)의 메타데이터와 이어 봅니다. 모델 호출이 나간 시간대는 [네트워크 기록](../../network-enterprise/network-traces.md)으로, 에이전트가 실행한 명령과 바꾼 파일은 [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)로 이어 봅니다.
+폴더 시각은 [FSEvents](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)와, 기록 시각은 [macOS 타임라인](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 맞춰 봅니다. 데스크톱 앱 세션은 [Claude macOS 앱](../../chat-services/claude/macos.md)의 메타데이터와 이어 봅니다. 모델 호출이 나간 시간대는 [네트워크 기록](../../network-enterprise/network-traces.md)으로, 에이전트가 실행한 명령과 바꾼 파일은 [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)로 이어 봅니다.
 
 ## 실습
 

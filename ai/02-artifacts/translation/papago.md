@@ -35,16 +35,16 @@ Google Play 수집 항목에 사진, 음성 녹음, 파일 및 문서가 있고 
 | Windows | 전용 데스크톱 앱에 대한 공개 자료 없음. 검체의 설치 프로그램 목록에서 확인 | 검체에서 확인 |
 | 웹 | 브라우저로 쓰는 판 | 브라우저 기록·저장소 |
 
-Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾습니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서 다룹니다. 파파고 폴더 안의 파일과 DB 는 공개 자료가 없어 검체에서 아래 구조 절의 순서로 확인합니다. iOS 에서는 앱 컨테이너 안의 파일이 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html) 등급에 따라 잠기므로, 수집 방식에 따라 읽을 수 있는 파일이 달라집니다.
+Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾습니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서 다룹니다. 파파고 폴더 안의 파일과 DB 는 공개 자료가 없어 검체에서 아래 구조 절의 순서로 확인합니다. iOS 에서는 앱 컨테이너 안의 파일이 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html) 등급에 따라 잠기므로, 수집 방식에 따라 읽을 수 있는 파일이 달라집니다.
 
-웹 판을 썼다면 방문 기록과 저장소는 브라우저 쪽에 남습니다. 읽는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html), [사파리(macOS)](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html), [크롬(Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html), [사파리(iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html) 페이지를 따릅니다. 파파고 웹 페이지가 브라우저 저장소에 쓰는 키는 검체의 저장소를 열어 확인합니다.
+웹 판을 썼다면 방문 기록과 저장소는 브라우저 쪽에 남습니다. 읽는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html), [사파리(macOS)](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/browsers/safari/index.html), [크롬(Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html), [사파리(iOS)](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html) 페이지를 따릅니다. 파파고 웹 페이지가 브라우저 저장소에 쓰는 키는 검체의 저장소를 열어 확인합니다.
 
 ## 구조
 
 파파고 앱의 로컬 파일 형식, DB 표 이름, 칸 이름은 공개 자료가 없어 검체로 확인해야 합니다. 모바일 앱은 흔히 SQLite 나 설정 XML·plist 에 데이터를 두지만, 파파고도 그런지는 기기를 열어 봐야 압니다. 기기를 열면 아래 순서로 정리합니다.
 
 1. 앱 데이터 폴더 안의 파일 목록과 크기, 시각을 먼저 기록합니다.
-2. 파일 앞머리의 서명으로 형식을 가립니다. SQLite 는 [SQLite 데이터베이스(Android)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html), 설정 XML 은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html), iOS plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/data-formats/plist.html) 페이지로 넘어갑니다.
+2. 파일 앞머리의 서명으로 형식을 가립니다. SQLite 는 [SQLite 데이터베이스(Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html), 설정 XML 은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html), iOS plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/plist.html) 페이지로 넘어갑니다.
 3. 번역 원문·결과로 보이는 칸, 즐겨찾기·단어장으로 보이는 칸, 계정 식별자로 보이는 칸을 나눠 적습니다. 테스트 기기에서 번역을 한 번 해 본 뒤 어느 칸이 바뀌는지 비교해 뜻을 확인합니다.
 
 ## 증거로서 의미
@@ -80,7 +80,7 @@ Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾습니다. �
 
 | 함께 볼 기록 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 브라우저 기록 | 웹 판 파파고 방문 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| 브라우저 기록 | 웹 판 파파고 방문 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
 | 네트워크 기록 | 번역 서버와 통신한 시간대 | [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md) |
 | 보안 제품 기록 | 번역 서비스로 보낸 내용이나 차단 이벤트 | [보안 제품이 남기는 AI 사용 기록](../network-enterprise/dlp-casb.md) |
 | 서비스 회사 자료 | 계정·기기와 연결된 서버 기록 | [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) |

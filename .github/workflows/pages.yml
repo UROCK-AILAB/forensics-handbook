@@ -33,9 +33,15 @@ jobs:
           bundler-cache: true
       - id: pages
         uses: actions/configure-pages@v5
-      - run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+      - name: 일곱 권을 각자 빌드
         env:
           JEKYLL_ENV: production
+        run: |
+          for k in windows mac linux android ios cloud ai; do
+            if [ -d "$k" ]; then bundle exec jekyll build --source "$k" --destination "_site/$k" --baseurl "${{ steps.pages.outputs.base_path }}/$k"; fi
+          done
+          cp index.html sitemap.xml landing-sitemap.xml _site/
+          touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
 
   deploy:

@@ -58,7 +58,7 @@ rpm 4.16 의 sqlite 백엔드는 주 표 하나와 색인 표 여럿을 씁니�
 
 파일별 해시·크기·권한으로 설치한 뒤 바뀐 파일을 가리는 방법은 [패키지 파일 변조 확인](package-verify.md) 에서 다룹니다.
 
-rpm 은 쓰기로 열 때 `PRAGMA journal_mode = WAL` 을 걸고 `-wal` 파일이 닫힌 뒤에도 남도록 설정하며, `%_flush_io` 가 꺼져 있으면 자동 체크포인트를 끕니다(`wal_autocheckpoint = 0`)[4]. 정상으로 닫을 때는 `wal_checkpoint = TRUNCATE` 로 WAL 내용을 본 파일에 옮기고 WAL 을 비웁니다[4]. 그래서 rpm 이 도는 중에 수집했거나 비정상으로 끝났다면 최근 변경이 `rpmdb.sqlite-wal` 에만 있을 수 있습니다. 또 `PRAGMA secure_delete = OFF` 로 열기 때문에[4], 지운 패키지의 헤더가 빈 페이지에 남아 있을 가능성이 있습니다. WAL 과 빈 페이지를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 쪽에 있습니다.
+rpm 은 쓰기로 열 때 `PRAGMA journal_mode = WAL` 을 걸고 `-wal` 파일이 닫힌 뒤에도 남도록 설정하며, `%_flush_io` 가 꺼져 있으면 자동 체크포인트를 끕니다(`wal_autocheckpoint = 0`)[4]. 정상으로 닫을 때는 `wal_checkpoint = TRUNCATE` 로 WAL 내용을 본 파일에 옮기고 WAL 을 비웁니다[4]. 그래서 rpm 이 도는 중에 수집했거나 비정상으로 끝났다면 최근 변경이 `rpmdb.sqlite-wal` 에만 있을 수 있습니다. 또 `PRAGMA secure_delete = OFF` 로 열기 때문에[4], 지운 패키지의 헤더가 빈 페이지에 남아 있을 가능성이 있습니다. WAL 과 빈 페이지를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 쪽에 있습니다.
 
 ### dnf 텍스트 로그 (RHEL 9)
 
@@ -178,7 +178,7 @@ xxd -l 16 /mnt/img/var/lib/rpm/rpmdb.sqlite
 ls -l /mnt/img/var/lib/rpm/rpmdb.sqlite-wal
 ```
 
-`rpmdb.sqlite` 가 있고 첫 16바이트가 SQLite 파일 머리이면 sqlite 백엔드이고, `Packages` 만 있으면 Berkeley DB 백엔드입니다[4]. `-wal` 파일 크기가 0 보다 크면 본 파일에 옮기지 않은 페이지가 있을 수 있어 WAL 까지 읽어야 합니다[4]. 파일 머리와 WAL 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 쪽을 봅니다.
+`rpmdb.sqlite` 가 있고 첫 16바이트가 SQLite 파일 머리이면 sqlite 백엔드이고, `Packages` 만 있으면 Berkeley DB 백엔드입니다[4]. `-wal` 파일 크기가 0 보다 크면 본 파일에 옮기지 않은 페이지가 있을 수 있어 WAL 까지 읽어야 합니다[4]. 파일 머리와 WAL 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 쪽을 봅니다.
 
 `history.sqlite` 는 사본에서 sqlite3 로 조회합니다.
 

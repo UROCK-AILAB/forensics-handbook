@@ -14,7 +14,7 @@ Electron 앱과 WebView2 를 쓰는 앱은 웹 페이지를 앱 창 안에 띄�
 
 Claude 데스크톱(스토어 앱)의 데이터 폴더는 Electron 앱의 사용자 데이터 폴더와 같은 모양입니다. 다른 AI 데스크톱 앱이 Electron·WebView2·WKWebView 가운데 무엇으로 만들어졌는지는 앱마다 다르므로 [ChatGPT](../../02-artifacts/chat-services/chatgpt/index.md), [Microsoft Copilot](../../02-artifacts/chat-services/copilot/index.md) 같은 서비스별 쪽을 봅니다. 모바일에서는 Claude Android 앱도 앱 안에 WebView 저장소를 만들고, 아래 Android WebView 절에서 다룹니다 [4][5].
 
-크롬 계열 저장소 하나하나의 파일 형식은 다른 판에서 이미 다룹니다. 폴더 공통 구조는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html), LevelDB 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html), SQLite 는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 를 봅니다. 이 쪽은 AI 앱 폴더에서 무엇을 먼저 찾고 어떻게 나눠 읽는지에 집중합니다.
+크롬 계열 저장소 하나하나의 파일 형식은 다른 판에서 이미 다룹니다. 폴더 공통 구조는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html), LevelDB 는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html), SQLite 는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 를 봅니다. 이 쪽은 AI 앱 폴더에서 무엇을 먼저 찾고 어떻게 나눠 읽는지에 집중합니다.
 
 ## 구조
 
@@ -55,7 +55,7 @@ Claude 데스크톱 데이터 폴더(스토어 앱은 패키지 폴더 아래 `L
 
 ### 쿠키 DB 의 표와 칸
 
-파티션 쪽 쿠키 DB 에는 `cookies` 표와 `meta` 표가 있습니다. `cookies` 표의 칸은 `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` 이고, `meta` 표의 칸은 `key`, `value` 입니다. 값이 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉘는 구성과 시각 칸의 해석은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 쪽을 따릅니다. 로그인 세션의 흔적으로서 쿠키가 무엇을 뜻하는지는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
+파티션 쪽 쿠키 DB 에는 `cookies` 표와 `meta` 표가 있습니다. `cookies` 표의 칸은 `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` 이고, `meta` 표의 칸은 `key`, `value` 입니다. 값이 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉘는 구성과 시각 칸의 해석은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 쪽을 따릅니다. 로그인 세션의 흔적으로서 쿠키가 무엇을 뜻하는지는 [API 키와 토큰이 남는 곳](api-keys-tokens.md) 에서 다룹니다.
 
 ### 앱 자체 JSON 파일
 
@@ -84,7 +84,7 @@ Electron 에는 앱이 문자열을 OS 의 보호 기능으로 암호화해 저�
 | macOS | 키체인에 암호 키 보관 | 다른 사용자와 같은 사용자 공간의 다른 앱으로부터 막음 |
 | Linux | kwallet(4·5·6) 또는 gnome-libsecret | 비밀 저장소가 없으면 코드에 박힌 평문 암호로 암호화 |
 
-Linux 에서 앱이 어느 저장소를 골랐는지는 `getSelectedStorageBackend()` 가 `basic_text`, `gnome_libsecret`, `kwallet`, `kwallet5`, `kwallet6`, `unknown` 가운데 하나로 알려 줍니다 [2]. AI 앱이 `safeStorage` 를 쓰는지, `Local State` 안에 어떤 키가 있는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 보호 기능 자체의 구조는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 와 [키체인 (macOS)](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html) 를 봅니다.
+Linux 에서 앱이 어느 저장소를 골랐는지는 `getSelectedStorageBackend()` 가 `basic_text`, `gnome_libsecret`, `kwallet`, `kwallet5`, `kwallet6`, `unknown` 가운데 하나로 알려 줍니다 [2]. AI 앱이 `safeStorage` 를 쓰는지, `Local State` 안에 어떤 키가 있는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 보호 기능 자체의 구조는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html) 와 [키체인 (macOS)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html) 를 봅니다.
 
 ### WebView2 사용자 데이터 폴더
 
@@ -103,7 +103,7 @@ UDF 를 언제 지우는지도 앱 종류마다 다릅니다 [3]. Win32·.NET·W
 
 ### WKWebView (macOS·iOS)
 
-macOS·iOS 앱이 쓰는 WKWebView 의 저장 위치와 데이터 저장소 구조는 이 쪽에서 다루지 않으므로 검체의 앱 폴더에서 확인합니다. macOS 의 LevelDB·IndexedDB 형식은 [LevelDB와 IndexedDB (macOS)](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/leveldb-indexeddb.html) 를 봅니다.
+macOS·iOS 앱이 쓰는 WKWebView 의 저장 위치와 데이터 저장소 구조는 이 쪽에서 다루지 않으므로 검체의 앱 폴더에서 확인합니다. macOS 의 LevelDB·IndexedDB 형식은 [LevelDB와 IndexedDB (macOS)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/leveldb-indexeddb.html) 를 봅니다.
 
 ### Android WebView (Claude Android 앱)
 
@@ -121,7 +121,7 @@ Claude Android 앱(`com.anthropic.claude`)은 주로 `claude.ai` 를 WebView 로
 | `cache/WebView/Default/HTTP Cache/Cache_Data/` | HTTP 디스크 캐시 |
 | `cache/WebView/Default/HTTP Cache/Code Cache/js/`, `Code Cache/wasm/` | 스크립트 코드 캐시 |
 
-"담기는 것" 칸은 폴더 이름과 크롬 계열 저장소 이름으로 맞춘 것입니다. 대화 캐시 DB 의 이름·표·칸은 [Claude](../../02-artifacts/chat-services/claude/index.md) 쪽에서 다루고, Android 의 LevelDB 형식은 [LevelDB와 IndexedDB (Android)](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/leveldb-indexeddb.html) 를 봅니다. 앱 버전이 바뀌면 폴더 구성이 달라질 수 있어서 검체의 앱 버전과 함께 적습니다.
+"담기는 것" 칸은 폴더 이름과 크롬 계열 저장소 이름으로 맞춘 것입니다. 대화 캐시 DB 의 이름·표·칸은 [Claude](../../02-artifacts/chat-services/claude/index.md) 쪽에서 다루고, Android 의 LevelDB 형식은 [LevelDB와 IndexedDB (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/leveldb-indexeddb.html) 를 봅니다. 앱 버전이 바뀌면 폴더 구성이 달라질 수 있어서 검체의 앱 버전과 함께 적습니다.
 
 ## 읽는 법
 
@@ -135,7 +135,7 @@ Claude Android 앱(`com.anthropic.claude`)은 주로 `claude.ai` 를 WebView 로
 
 **쓰는 중인 파일은 잠겨 있습니다.** 앱이 켜져 있으면 기본 `Network\Cookies` 와 `declarative_performance_observer.db` 를 SQLite 로 바로 열 때 `OperationalError` 가 납니다. 원본을 직접 열지 말고 복사본을 만들어 열며, `-journal`·`-wal` 파일도 함께 복사해 두어야 마지막 변경분을 잃지 않습니다.
 
-**LevelDB 는 지운 값이 한동안 남습니다.** Local Storage·IndexedDB 는 LevelDB 라서 지운 레코드가 `.log`·`.ldb` 에 남아 있을 수 있고, 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 를 따릅니다. 그 안에 AI 대화 내용이 들어 있는지는 앱마다 다르므로 검체에서 확인하고, 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md) 에서 다룹니다.
+**LevelDB 는 지운 값이 한동안 남습니다.** Local Storage·IndexedDB 는 LevelDB 라서 지운 레코드가 `.log`·`.ldb` 에 남아 있을 수 있고, 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 를 따릅니다. 그 안에 AI 대화 내용이 들어 있는지는 앱마다 다르므로 검체에서 확인하고, 되살리는 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md) 에서 다룹니다.
 
 **앱을 지워도 데이터가 남을 수 있습니다.** 위 WebView2 UDF 삭제 규칙대로 스토어 앱·ClickOnce 앱이 아니면 UDF 가 남고, `userData` 를 클라우드에 백업하는 환경도 있어서 [1] 백업 사본이 있는지도 확인합니다.
 
@@ -151,7 +151,7 @@ Claude Android 앱(`com.anthropic.claude`)은 주로 `claude.ai` 를 WebView 로
 
 ## 도구
 
-쿠키 DB 는 DB Browser for SQLite 같은 공개 도구로 복사본을 열어 읽고, LevelDB 는 다른 판 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 에 소개한 공개 도구로 읽습니다. JSON 파일은 `jq` 같은 공개 도구로 키 목록을 뽑을 수 있습니다.
+쿠키 DB 는 DB Browser for SQLite 같은 공개 도구로 복사본을 열어 읽고, LevelDB 는 다른 판 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 에 소개한 공개 도구로 읽습니다. JSON 파일은 `jq` 같은 공개 도구로 키 목록을 뽑을 수 있습니다.
 
 ## 참고 문헌
 

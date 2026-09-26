@@ -67,7 +67,7 @@ Claude 데스크톱(스토어 앱) 폴더에는 아래 파일이 있습니다. �
 %USERPROFILE%\Packages\<Claude 패키지>\LocalCache\Roaming\Claude\Partitions\<이름>\Network\Cookies
 ```
 
-크롬 계열 앱이 쓰는 이 폴더 구조와 `Network Persistent State`·`TransportSecurity` 가 담는 내용은 공통 원리라서 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다루고, 이 페이지에서는 되풀이하지 않습니다. 다른 데스크톱 앱이나 macOS·Android·iOS 앱에서는 앱 폴더 안에 같은 `Network` 폴더가 있는지 검체에서 확인합니다. 앱별 저장 위치는 [ChatGPT](../chat-services/chatgpt/index.md), [Claude](../chat-services/claude/index.md), [Microsoft Copilot](../chat-services/copilot/index.md) 페이지를 봅니다.
+크롬 계열 앱이 쓰는 이 폴더 구조와 `Network Persistent State`·`TransportSecurity` 가 담는 내용은 공통 원리라서 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 다루고, 이 페이지에서는 되풀이하지 않습니다. 다른 데스크톱 앱이나 macOS·Android·iOS 앱에서는 앱 폴더 안에 같은 `Network` 폴더가 있는지 검체에서 확인합니다. 앱별 저장 위치는 [ChatGPT](../chat-services/chatgpt/index.md), [Claude](../chat-services/claude/index.md), [Microsoft Copilot](../chat-services/copilot/index.md) 페이지를 봅니다.
 
 ## 구조
 
@@ -93,7 +93,7 @@ TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypt
 | `cookies` | `creation_utc`, `host_key`, `top_frame_site_key`, `name`, `value`, `encrypted_value`, `path`, `expires_utc`, `is_secure`, `is_httponly`, `last_access_utc`, `has_expires`, `is_persistent`, `priority`, `samesite`, `source_scheme`, `source_port`, `last_update_utc`, `source_type`, `has_cross_site_ancestor` |
 | `meta` | `key`, `value` |
 
-칸 이름으로 보면 `host_key` 에는 쿠키를 설정한 도메인이, `creation_utc`·`last_access_utc`·`last_update_utc` 에는 쿠키를 만든 시각과 마지막으로 쓰고 바꾼 시각이 들어갑니다. 값을 읽는 방법과 `encrypted_value` 의 보호 방식은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
+칸 이름으로 보면 `host_key` 에는 쿠키를 설정한 도메인이, `creation_utc`·`last_access_utc`·`last_update_utc` 에는 쿠키를 만든 시각과 마지막으로 쓰고 바꾼 시각이 들어갑니다. 값을 읽는 방법과 `encrypted_value` 의 보호 방식은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -105,7 +105,7 @@ TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypt
 
 ## 시각 해석
 
-Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 칸은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 칸은 `ts` 이고, 값은 유닉스 시각(초)일 수도 있고 끝에 `Z` 가 붙은 UTC 문자열일 수도 있습니다[3]. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 칸은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 칸은 `ts` 이고, 값은 유닉스 시각(초)일 수도 있고 끝에 `Z` 가 붙은 UTC 문자열일 수도 있습니다[3]. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -125,7 +125,7 @@ Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마�
 00000000  53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00   SQLite format 3.
 ```
 
-머리 뒤의 페이지 구조와 지운 행을 찾는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
+머리 뒤의 페이지 구조와 지운 행을 찾는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
 
 **공개 도구로 한 번.** 파일을 복사한 뒤 DB Browser for SQLite 같은 공개 도구로 열고, 아래처럼 AI 서비스 도메인이 설정한 쿠키만 뽑아 봅니다. 도메인 조건은 위 표에서 조사할 서비스에 맞게 고칩니다.
 
@@ -150,7 +150,7 @@ ORDER BY last_access_utc;
 - [보안 제품이 남기는 AI 사용 기록](dlp-casb.md) — 프록시·SASE/SSE·DLP 가 같은 접속을 기록했는지
 - [Microsoft Purview로 본 Copilot 기록](purview-copilot.md) — 조직 계정으로 Copilot 을 쓴 감사 기록
 - [Claude 기업용 감사 로그](claude-enterprise.md) — 같은 시간대의 로그인 기록과 `ip_address`
-- [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) — 브라우저 방문 기록으로 어느 페이지를 열었는지
+- [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) — 브라우저 방문 기록으로 어느 페이지를 열었는지
 - [Ollama](../local-ai/ollama.md) — 로컬 Ollama 서버는 `server.log` 의 API 호출 줄마다 호출한 IP 를 남기고, 이 값은 보통 `127.0.0.1` 입니다(LangurTrace 시험, Windows 11 24H2·Ollama 0.6.5)[5]. 다른 IP 가 보이면 네트워크 기록에서 그 IP 의 연결을 찾고, 지금 판은 로그 모양이 다를 수 있으므로 검체의 로그에서 확인합니다.
 - [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md) — 도메인 기록을 조사 질문에 쓰는 흐름
 

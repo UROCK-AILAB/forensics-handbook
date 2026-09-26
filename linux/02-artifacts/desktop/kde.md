@@ -162,7 +162,7 @@ Klipper `added_time` 도 같은 단위일 가능성이 있지만, 검체에서 `
 ## 함정과 한계
 
 - 활동 관리자 DB 와 Klipper DB 는 WAL 모드라서 `database` 나 `history3.sqlite` 만 복사하면 최근 기록을 놓칩니다. `-wal`·`-shm` 파일을 함께 모읍니다[2][6].
-- 사용자가 "최근 기록 지우기" 를 하면 `ResourceInfo`·`ResourceEvent`·`ResourceScoreCache` 에서 해당 줄을 DELETE 합니다[3]. 지운 줄은 SQLite 빈 페이지나 WAL 에 남을 수 있으므로 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 의 복구 방법을 씁니다.
+- 사용자가 "최근 기록 지우기" 를 하면 `ResourceInfo`·`ResourceEvent`·`ResourceScoreCache` 에서 해당 줄을 DELETE 합니다[3]. 지운 줄은 SQLite 빈 페이지나 WAL 에 남을 수 있으므로 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 의 복구 방법을 씁니다.
 - Klipper 기록을 비우면 `main`·`aux` 를 지우고 `data/` 아래 항목 폴더도 지웁니다. 별표 (`starred`) 가 붙은 항목만 남기는 비우기도 있습니다[6].
 - `UseRecent=false` 나 `MaxEntries=0` 이면 KDE 앱이 `recently-used.xbel` 을 통째로 지우므로 GTK 앱 기록까지 함께 사라집니다[5].
 - UAC 의 `kde_mru` 는 옛 `RecentDocuments` 폴더만 모읍니다[16]. 현재 KIO 는 `recently-used.xbel` 에 쓰므로 `linux_mru` 처럼 xbel 을 모으는 항목을 같이 돌립니다[5][17].

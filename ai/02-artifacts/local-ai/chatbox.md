@@ -47,7 +47,7 @@ Chatbox 의 주요 아티팩트는 여섯 가지입니다[1, 표 4].
 | `%AppData%\xyz.chatboxapp.app\Cache\CacheData\` | 같은 캐시(타깃이 적은 이름) | 타깃 |
 | `%LocalAppData%\xyz.chatboxapp.app-updater\pending\` | 받아 둔 업데이트 설치 파일 | 샘플 `main.log` |
 
-API 캐시 폴더 이름은 논문이 `Cache_Data`, KAPE 타깃이 `CacheData` 로 서로 다르게 적었습니다[1, 부록 A][3]. 타깃 경로가 검체의 실제 폴더와 다르면 캐시가 수집되지 않으므로, 검체에서 폴더 이름을 먼저 보고 수집 경로를 맞춥니다. 모델 목록 LevelDB 는 공개된 경로가 없고 KAPE 타깃도 모으지 않습니다[1, 부록 A][3]. 검체의 `xyz.chatboxapp.app` 폴더 아래에서 LevelDB 폴더를 찾아 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)의 방법으로 읽습니다.
+API 캐시 폴더 이름은 논문이 `Cache_Data`, KAPE 타깃이 `CacheData` 로 서로 다르게 적었습니다[1, 부록 A][3]. 타깃 경로가 검체의 실제 폴더와 다르면 캐시가 수집되지 않으므로, 검체에서 폴더 이름을 먼저 보고 수집 경로를 맞춥니다. 모델 목록 LevelDB 는 공개된 경로가 없고 KAPE 타깃도 모으지 않습니다[1, 부록 A][3]. 검체의 `xyz.chatboxapp.app` 폴더 아래에서 LevelDB 폴더를 찾아 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)의 방법으로 읽습니다.
 
 공개된 시험은 Windows 만 다룹니다. 다른 운영체제에서는 형식과 저장 위치가 다를 수 있어도 아티팩트 종류는 크게 다르지 않으리라는 추정이 있습니다[1, §6.2]. macOS·Linux 에서는 Electron 사용자 데이터 폴더를 찾으면 같은 파일이 있는지 볼 수 있습니다. 사용자 데이터 폴더의 위치와 Electron 앱 공통 구조는 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)에서 다룹니다.
 

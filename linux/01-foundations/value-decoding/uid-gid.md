@@ -148,7 +148,7 @@ lastlog 에는 지운 사용자의 레코드가 남을 수 있고, `lastlog` 명
 
 라이브 시스템에서는 `/proc/PID/status`, `/proc/PID/loginuid`, `/proc/PID/uid_map` 을 함께 읽습니다([실행 중인 프로세스](../../02-artifacts/execution/proc.md)). 로그인 기록과 잇는 방법은 [로그인 기록](../../02-artifacts/logins/wtmp-btmp-lastlog.md), 시각 값 풀이는 [Linux 의 시각 값](time-values.md)에서 다룹니다. 파일 시스템별 아이노드 구조는 [ext4](../filesystem/ext4/index.md), [XFS](../filesystem/xfs.md), [Btrfs](../filesystem/btrfs.md)에 있습니다.
 
-다른 판의 사용자 식별자는 [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.html), [맥의 식별자 읽기 (UUID·UID·GUID)](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/value-decoding/uuid-uid.html), [안드로이드 패키지 이름과 UID](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/value-decoding/package-uid.html)에서 다룹니다.
+다른 판의 사용자 식별자는 [윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/value-decoding/sid-guid-clsid-known-folder-id.html), [맥의 식별자 읽기 (UUID·UID·GUID)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/value-decoding/uuid-uid.html), [안드로이드 패키지 이름과 UID](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/value-decoding/package-uid.html)에서 다룹니다.
 
 ## 참고 문헌
 

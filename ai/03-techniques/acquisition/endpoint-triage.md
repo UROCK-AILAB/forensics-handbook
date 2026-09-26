@@ -46,13 +46,13 @@ Windows 에서 Claude Code 가 어떤 하위 폴더를 쓰는지는 출처끼리
 
 사용자 폴더만 훑으면 놓치는 곳이 있습니다. Aider 는 작업 중인 저장소 안에 기록을 쓰고, Visual Studio 의 Copilot 은 솔루션 폴더의 `.vs\` 에 쓰므로[8], 조사 대상자의 작업 폴더도 함께 봅니다. Ollama 모델을 `OLLAMA_MODELS` 환경 변수로 다른 곳에 옮겼다면 그 위치도 따로 모읍니다. 스토어 앱 패키지 폴더의 `LocalCache\Local\` 아래에는 Android SDK·NuGet·npm·pip 캐시처럼 AI 와 상관없는 개발 도구 파일도 섞여 있을 수 있으니, 패키지 폴더는 통째로 모으되 분석할 때 경로로 걸러 냅니다.
 
-Claude 데스크톱 폴더는 Chromium 계열 앱과 같은 모양이라서, LevelDB·쿠키 DB 를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 Windows 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 봅니다. 쿠키 DB 의 `cookies` 표에는 `value` 칸과 `encrypted_value` 칸이 함께 있고, 암호화한 값을 보호하는 방식은 Windows 판의 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
+Claude 데스크톱 폴더는 Chromium 계열 앱과 같은 모양이라서, LevelDB·쿠키 DB 를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)와 Windows 판의 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 봅니다. 쿠키 DB 의 `cookies` 표에는 `value` 칸과 `encrypted_value` 칸이 함께 있고, 암호화한 값을 보호하는 방식은 Windows 판의 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)에서 다룹니다.
 
 ### 3. SQLite 는 `-wal`·`-shm` 파일과 함께 모읍니다
 
 SQLite DB 가 미리 쓰기 로그(Write-Ahead Log, WAL) 방식이면 최근에 쓴 행은 체크포인트로 본 파일에 옮겨지기 전까지 옆의 `-wal` 파일에 있습니다. coding-agent-forensics 가 다루는 에이전트 11종 가운데 SQLite 를 쓰는 4종은 모두 WAL 을 씁니다. 막 기록한 Hermes Agent DB 는 본 파일이 4 KB 인데 대화 111 KB 가 WAL 에 남아 있어서, `state.db` 만 모으면 아무것도 되살리지 못합니다[8]. 2026-09-07 에 Windows 에서 뜬 Cursor CLI `store.db` 도 4096바이트 머리만 있고 스키마와 행은 `store.db-wal` 에 있었습니다[7]. GitHub Copilot CLI 의 `session-store.db` 도 `-wal` 과 함께 읽어야 합니다[7].
 
-그래서 `.db`·`.sqlite`·`.vscdb` 파일을 모을 때는 같은 이름의 `-wal`·`-shm` 파일을 한 번에 복사하고, 분석은 원본이 아닌 복사본으로 합니다. 수집 도구의 파일 거르개가 본 파일 이름만 지정하면 WAL 이 빠집니다. 예를 들어 LangurTrace 의 Msty 타깃은 `FileMask: 'msty.db'`, Jan 타깃은 `FileMask: 'cortex.db'` 로 지정해 옆의 `-wal`·`-shm` 파일을 모으지 않으므로 [9], 검체에 이 파일이 있으면 따로 모읍니다. WAL 의 구조와 지운 행을 찾는 법은 Windows 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
+그래서 `.db`·`.sqlite`·`.vscdb` 파일을 모을 때는 같은 이름의 `-wal`·`-shm` 파일을 한 번에 복사하고, 분석은 원본이 아닌 복사본으로 합니다. 수집 도구의 파일 거르개가 본 파일 이름만 지정하면 WAL 이 빠집니다. 예를 들어 LangurTrace 의 Msty 타깃은 `FileMask: 'msty.db'`, Jan 타깃은 `FileMask: 'cortex.db'` 로 지정해 옆의 `-wal`·`-shm` 파일을 모으지 않으므로 [9], 검체에 이 파일이 있으면 따로 모읍니다. WAL 의 구조와 지운 행을 찾는 법은 Windows 판의 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
 
 ### 4. 훅 설정을 챙깁니다
 
@@ -84,9 +84,9 @@ Claude 데스크톱 패키지 폴더  -> case42_claude_desktop.zip  SHA-256 (계
 
 ### 다른 OS
 
-**macOS·Linux.** Claude Code 는 `~/.claude/` 를 쓰고 자동 삭제 규칙은 Windows 와 같습니다 [1]. macOS 의 Claude 데스크톱·Cowork 폴더는 `~/Library/Application Support/Claude/` 이고[5], 다른 도구의 macOS·Linux 경로는 agentsview 문서의 표에 있습니다[7]. 설정 파일과 키 보관 방식의 공통 원리는 macOS 판의 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/plist/index.html)과 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html)을 봅니다. LangurTrace [3] 는 Windows 만 시험했습니다.
+**macOS·Linux.** Claude Code 는 `~/.claude/` 를 쓰고 자동 삭제 규칙은 Windows 와 같습니다 [1]. macOS 의 Claude 데스크톱·Cowork 폴더는 `~/Library/Application Support/Claude/` 이고[5], 다른 도구의 macOS·Linux 경로는 agentsview 문서의 표에 있습니다[7]. 설정 파일과 키 보관 방식의 공통 원리는 macOS 판의 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html)과 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)을 봅니다. LangurTrace [3] 는 Windows 만 시험했습니다.
 
-**Android·iOS.** 모바일 AI 앱의 저장 위치는 각 서비스 페이지에서 다룹니다. 앱 데이터 폴더를 얻을 수 있는지는 추출 방식에 따라 달라서, Android 판의 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)와 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html), iOS 판의 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)와 [로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html)을 보고 수집 범위를 정합니다. 모바일에서만 쓴 계정이라면 [계정 데이터 내보내기로 수집](export-collection.md)이나 [서비스 회사에 대한 데이터 요청](legal-requests.md)을 함께 검토합니다.
+**Android·iOS.** 모바일 AI 앱의 저장 위치는 각 서비스 페이지에서 다룹니다. 앱 데이터 폴더를 얻을 수 있는지는 추출 방식에 따라 달라서, Android 판의 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html), iOS 판의 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)와 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)을 보고 수집 범위를 정합니다. 모바일에서만 쓴 계정이라면 [계정 데이터 내보내기로 수집](export-collection.md)이나 [서비스 회사에 대한 데이터 요청](legal-requests.md)을 함께 검토합니다.
 
 ## 도구
 
@@ -113,7 +113,7 @@ LangurTrace 타깃이 모으는 위치는 아래와 같습니다 [9]. 경로는 
 
 타깃 경로와 논문 부록 A 의 경로는 두 곳에서 다릅니다. LM Studio 로그는 논문이 `%AppData%/LM Studio/logs/main.log`(공백 있음), 타깃이 `AppData\Roaming\LMStudio\logs\`(공백 없음)로 적었고, Chatbox API 캐시는 논문이 `Cache/Cache_Data`, 타깃이 `Cache\CacheData\` 로 적었습니다 [3][9]. 검체에서 두 경로를 모두 찾아봅니다. 논문을 낸 뒤 Jan 과 Msty 는 저장 형식을 바꿨다는 지적이 있으므로 [11], 지금 판에서는 타깃이 모은 폴더가 비어 있지 않은지 확인합니다.
 
-세션 기록 같은 JSON Lines 파일은 `jq` 로 키를 골라 볼 수 있고, SQLite 파일은 복사본을 `sqlite3` 이나 DB Browser for SQLite 로 엽니다. LevelDB 를 읽는 법은 Windows 판의 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)에 있습니다.
+세션 기록 같은 JSON Lines 파일은 `jq` 로 키를 골라 볼 수 있고, SQLite 파일은 복사본을 `sqlite3` 이나 DB Browser for SQLite 로 엽니다. LevelDB 를 읽는 법은 Windows 판의 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)에 있습니다.
 
 ## 함정과 한계
 

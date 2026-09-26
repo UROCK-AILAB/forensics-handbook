@@ -42,12 +42,12 @@ https://chatgpt.com/c/[id]                                chatgpt-forensic-expor
 
 | OS | 브라우저 | 구조 설명 |
 |---|---|---|
-| Windows | 크롬·엣지·웨일 등 크롬 계열 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
-| macOS | 사파리 | [사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html) |
-| Android | 크롬 | [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html) |
-| iOS | 사파리, 크롬 | [사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/chrome.html) |
+| Windows | 크롬·엣지·웨일 등 크롬 계열 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| macOS | 사파리 | [사파리](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/browsers/safari/index.html) |
+| Android | 크롬 | [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) |
+| iOS | 사파리, 크롬 | [사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html), [크롬 (Chrome for iOS)](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/chrome.html) |
 
-Local Storage 와 IndexedDB 는 크롬 계열에서 LevelDB 파일로 남아서 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html) 페이지의 읽는 법을 그대로 씁니다. 같은 기기에 전용 앱도 깔려 있다면 앱 쪽 흔적은 [Windows 앱](windows.md), [macOS 앱](macos.md), [Android 앱](android.md), [iOS 앱](ios.md)에서 따로 봅니다.
+Local Storage 와 IndexedDB 는 크롬 계열에서 LevelDB 파일로 남아서 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지의 읽는 법을 그대로 씁니다. 같은 기기에 전용 앱도 깔려 있다면 앱 쪽 흔적은 [Windows 앱](windows.md), [macOS 앱](macos.md), [Android 앱](android.md), [iOS 앱](ios.md)에서 따로 봅니다.
 
 브라우저가 켜져 있는 동안에는 탭 프로세스 메모리에도 대화가 있을 수 있습니다. 메모리를 떠서 찾는 방법은 [메모리에서 AI 흔적 찾기](../../../03-techniques/analysis/memory-analysis.md)에서 다룹니다.
 

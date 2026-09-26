@@ -133,7 +133,7 @@ Linux 서버는 디스크 하나가 파일 시스템 하나로 끝나지 않을 
 
 **보고서 문장 예(만든 예시).** "2026-09-26 14:05(KST)부터 15:40(KST)까지 서버의 `/dev/sdb` 전체를 전원이 켜진 상태에서 EWF(encase6)로 획득했고, 획득 때 계산한 SHA-256 과 검증 때 계산한 SHA-256 이 같았다. 획득 로그에 읽기 오류는 기록되지 않았다. 켜진 상태에서 획득했으므로 이미지 안의 파일 시스템은 저널 재생 전 상태이다."
 
-다른 운영체제의 증거 확보 절차는 [Windows 포렌식 조사 절차](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/process-acquisition/investigation-process.html) 를 봅니다.
+다른 운영체제의 증거 확보 절차는 [Windows 포렌식 조사 절차](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html) 를 봅니다.
 
 ## 참고 문헌
 

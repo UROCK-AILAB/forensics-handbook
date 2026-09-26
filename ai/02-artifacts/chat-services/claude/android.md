@@ -36,7 +36,7 @@ Android 앱에서는 계정 데이터를 내보낼 수 없고, 내보내기는 �
 
 추출본마다 파일 구성이 다릅니다. Claude 앱 폴더는 있는데 대화 캐시 없이 Firebase Analytics 데이터베이스만 나오는 추출본도 있습니다[6]. 공개된 이런 추출본 두 벌은 모두 `databases/` 에 `google_app_measurement_local.db` 와 `com.google.android.datatransport.events` 만 있고, 계정 정보 파일은 `acc_` 단계 없이 `cache/app_start/org_{조직UUID}/cache.json` 에 있습니다[7]. 이 경로는 ALEAPP 경로 패턴에 걸리지 않으므로, 분석기가 계정 정보를 내놓지 않으면 `cache/app_start/` 아래를 직접 봅니다. 같은 추출본의 `shared_prefs/` 에는 `account_prefs{계정UUID}.xml`, `organization_prefs__{계정UUID}_{조직UUID}.xml`, `user_cookies_{계정UUID}.xml`, `device_id_prefs.xml`, `app_prefs_latest_seen_completed_messages.xml` 같은 이름의 파일이 있습니다[7]. 이 파일들의 내용을 설명한 공개 자료는 없어서 검체에서 열어 확인합니다.
 
-앱 데이터 폴더의 하위 폴더 구성은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서, 기기 암호화 때문에 무엇을 언제 읽을 수 있는지는 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)에서 다룹니다.
+앱 데이터 폴더의 하위 폴더 구성은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 기기 암호화 때문에 무엇을 언제 읽을 수 있는지는 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다.
 
 ### 스토어의 데이터 보안 표기
 
@@ -93,7 +93,7 @@ Play 의 데이터 보안 페이지는 앱이 모으는 데이터와 다른 곳�
 
 **증명하는 것.** 캐시에 대화가 있으면 이 기기의 앱에 그 계정으로 로그인한 적이 있고, 그 대화의 이름·모델·시각이 캐시에 들어온 적이 있다고 쓸 수 있습니다. 메시지 행이 있으면 사용자가 입력한 글(`human`)과 Claude 의 답(`assistant`)을 시각과 함께 보고서에 옮길 수 있습니다. `is_temporary` 가 1 이면 시크릿 대화로 표시된 대화입니다. `cache.json` 과 캐시 파일 이름은 앱에 로그인한 계정의 이메일·이름·계정 UUID 를 알려 줍니다.
 
-**증명하지 못하는 것.** 캐시는 서버 기록의 일부만 담아서, 캐시에 없는 대화나 메시지를 없었다고 쓸 수 없습니다[5]. 대화 원본은 계정 서버에 있고 같은 계정을 웹·PC 에서도 쓸 수 있어서, 캐시에 있는 대화를 이 기기에서 입력했다고 단정할 수 없습니다. 휴대폰 브라우저로 claude.ai 를 쓴 흔적은 [웹 브라우저](web.md)와 [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html)에서 봅니다. 누가 기기를 쥐고 입력했는지는 [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 좁힙니다. 첨부 파일은 `files[0].file_name` 에 이름만 남을 수 있고, ALEAPP 시험 데이터에서는 메시지에 적힌 이미지 폴더가 비어 있었습니다[4]. 그래서 파일 이름만으로 그 파일이 기기에 있었다고 쓰지 않습니다.
+**증명하지 못하는 것.** 캐시는 서버 기록의 일부만 담아서, 캐시에 없는 대화나 메시지를 없었다고 쓸 수 없습니다[5]. 대화 원본은 계정 서버에 있고 같은 계정을 웹·PC 에서도 쓸 수 있어서, 캐시에 있는 대화를 이 기기에서 입력했다고 단정할 수 없습니다. 휴대폰 브라우저로 claude.ai 를 쓴 흔적은 [웹 브라우저](web.md)와 [크롬 (Chrome for Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html)에서 봅니다. 누가 기기를 쥐고 입력했는지는 [그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 좁힙니다. 첨부 파일은 `files[0].file_name` 에 이름만 남을 수 있고, ALEAPP 시험 데이터에서는 메시지에 적힌 이미지 폴더가 비어 있었습니다[4]. 그래서 파일 이름만으로 그 파일이 기기에 있었다고 쓰지 않습니다.
 
 보고서에는 "이 기기의 Claude 앱 캐시에 이 계정의 대화 N 건과 메시지 M 행이 있고, 가장 늦은 메시지의 `created_at` 은 이 시각이다" 처럼 기록이 말하는 만큼만 씁니다.
 
@@ -105,11 +105,11 @@ Play 의 데이터 보안 페이지는 앱이 모으는 데이터와 다른 곳�
 | 메시지 `content[]` 의 `start_timestamp`, `stop_timestamp` | ISO 8601 문자열(UTC) | [5] |
 | `cachedConversations` 의 `updated_at` 칸 | 유닉스 시각 밀리초(정수) | [5] |
 
-ALEAPP 은 ISO 8601 문자열에서 `T` 와 `Z` 를 떼고 UTC 로 읽습니다[4]. JSON 안 시각은 대화·메시지 객체가 만들어지고 바뀐 시각이라, 기기가 그 행을 캐시에 쓴 시각과 같다고 보지 않습니다. 앱을 언제 설치·업데이트했는지와 캐시 파일이 언제 바뀌었는지는 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html)의 방법으로 파일 시스템 시각에서 읽습니다. 기기 시각과 계정 내보내기 자료의 시각을 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+ALEAPP 은 ISO 8601 문자열에서 `T` 와 `Z` 를 떼고 UTC 로 읽습니다[4]. JSON 안 시각은 대화·메시지 객체가 만들어지고 바뀐 시각이라, 기기가 그 행을 캐시에 쓴 시각과 같다고 보지 않습니다. 앱을 언제 설치·업데이트했는지와 캐시 파일이 언제 바뀌었는지는 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)의 방법으로 파일 시스템 시각에서 읽습니다. 기기 시각과 계정 내보내기 자료의 시각을 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
-- **WAL 을 함께 수집합니다.** 캐시 데이터베이스와 `-wal`·`-shm` 을 같이 복사하지 않으면 마지막 변경이 빠질 수 있습니다. WAL 을 읽는 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)에 있습니다.
+- **WAL 을 함께 수집합니다.** 캐시 데이터베이스와 `-wal`·`-shm` 을 같이 복사하지 않으면 마지막 변경이 빠질 수 있습니다. WAL 을 읽는 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)에 있습니다.
 - **캐시가 없을 수 있습니다.** 추출본에 따라 대화 캐시 없이 분석용 데이터베이스만 나오기도 합니다[6]. `/data/data` 아래를 읽지 못하는 수집 방법도 많아서, 캐시가 없다고 앱을 쓰지 않았다고 쓰지 않습니다.
 - **경로가 분석기 패턴과 다를 수 있습니다.** 계정 정보 파일이 `acc_` 단계 없이 놓인 추출본이 있습니다[7]. 분석기 결과가 비어 있으면 폴더 목록을 직접 봅니다.
 - **LEAF 문서는 보조 자료입니다.** README 는 Claude 대화 데이터베이스를 아직 추출하지 않았다고 적었고, 스키마 문서는 대화 캐시의 표를 설명해서 두 문서가 서로 어긋납니다[5][6]. LEAF 에만 있는 칸·키는 검체에서 한 번 더 확인하고 씁니다.
@@ -136,7 +136,7 @@ LEFT JOIN cachedConversations c ON c.uuid = m.conversation_uuid
 ORDER BY created_at;
 ```
 
-**공개 도구로 한 번.** ALEAPP 에 앱 데이터 폴더나 기기 이미지를 넣으면 "Claude" 분류 아래 계정 정보, 대화, 메시지, 프로젝트 네 결과가 나옵니다[4]. 결과를 위 쿼리 결과와 대조하고, 행 수가 다르면 WAL 반영 여부부터 봅니다. 웹뷰의 `Local Storage/leveldb` 는 [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/leveldb-indexeddb.html), `shared_prefs/` 의 XML 은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)의 방법으로 읽습니다.
+**공개 도구로 한 번.** ALEAPP 에 앱 데이터 폴더나 기기 이미지를 넣으면 "Claude" 분류 아래 계정 정보, 대화, 메시지, 프로젝트 네 결과가 나옵니다[4]. 결과를 위 쿼리 결과와 대조하고, 행 수가 다르면 WAL 반영 여부부터 봅니다. 웹뷰의 `Local Storage/leveldb` 는 [LevelDB와 IndexedDB](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/leveldb-indexeddb.html), `shared_prefs/` 의 XML 은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)의 방법으로 읽습니다.
 
 ## 교차 검증
 

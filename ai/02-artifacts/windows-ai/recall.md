@@ -51,7 +51,7 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 | 〃 (24H2) | 2025-10 글 | 관리자 권한 없이 `ukg.db` 에 접근은 되지만 암호화돼 있고, 글을 쓸 때 공개된 복호 방법이 없음 | Securelist[8] |
 | 〃 (25H2 26300.8155) | 2026-04 글 | `ukg.db` 를 SQLite SEE 의 AES-256-GCM 으로 페이지마다 암호화 | TotalRecall Reloaded[5] |
 
-보호 방식은 다음과 같습니다. 암호화 키는 TPM 이 보호하면서 사용자의 Windows Hello ESS 신원에 묶이고, VBS 엔클레이브 안의 작업만 이 키를 씁니다. Recall 을 열 때와 스냅숏에 접근할 때마다 Windows Hello 로 본인을 확인하고, 그때에만 복호합니다(just in time decryption)[1][4]. 키는 Windows Hello, TPM 에 묶인 NGC 키, 엔클레이브에 봉인된 키를 거쳐 페이지 단위 AES-256-GCM 키로 이어집니다[5]. 이 사슬에는 DPAPI 가 없습니다. 따라서 사용자 암호를 알아도 [DPAPI](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 방식으로 디스크 이미지에서 풀 수 있다고 볼 근거가 없고, 공개된 복호 방법도 없습니다[8].
+보호 방식은 다음과 같습니다. 암호화 키는 TPM 이 보호하면서 사용자의 Windows Hello ESS 신원에 묶이고, VBS 엔클레이브 안의 작업만 이 키를 씁니다. Recall 을 열 때와 스냅숏에 접근할 때마다 Windows Hello 로 본인을 확인하고, 그때에만 복호합니다(just in time decryption)[1][4]. 키는 Windows Hello, TPM 에 묶인 NGC 키, 엔클레이브에 봉인된 키를 거쳐 페이지 단위 AES-256-GCM 키로 이어집니다[5]. 이 사슬에는 DPAPI 가 없습니다. 따라서 사용자 암호를 알아도 [DPAPI](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html) 방식으로 디스크 이미지에서 풀 수 있다고 볼 근거가 없고, 공개된 복호 방법도 없습니다[8].
 
 ### 설정과 정책
 
@@ -142,7 +142,7 @@ SemanticImageStore.sidb         이미지 의미 검색 색인 (DiskANN), 들어
 
 ### 의미 검색 색인과 이미지
 
-`.sidb` 파일에는 `si_items`, `si_embedding_metadata`, `si_diskann_graph`, `si_diskann_references`, `si_diskann_config`, `si_diskann_info`, `si_application_values` 표가 있습니다[5]. SQLite 파일 구조 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
+`.sidb` 파일에는 `si_items`, `si_embedding_metadata`, `si_diskann_graph`, `si_diskann_references`, `si_diskann_config`, `si_diskann_info`, `si_application_values` 표가 있습니다[5]. SQLite 파일 구조 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에서 다룹니다.
 
 2024 판의 `ImageStore` 파일은 확장자 없는 JPEG 이고, TotalRecall 첫 판은 복사본에 `.jpg` 를 붙여 엽니다[6]. 이 JPEG 의 `Exif.Photo.MakerNote`(0x927C) 태그에는 전경 창 경계, 캡처 시각, 창 제목, 창 ID, 창을 띄운 프로세스 전체 경로, 브라우저라면 URI 와 도메인이 들어 있습니다[8]. DB 가 없어도 이미지 한 장에서 이 메타데이터를 얻을 수 있다는 뜻이고, 내보낸 스냅숏도 같은 태그를 씁니다[13]. 다만 이 이미지 설명이 어느 판 기준인지는 밝혀져 있지 않고, 다시 설계한 판은 스냅숏을 늘 암호화합니다[1][8]. 그래서 다시 설계한 판의 `ImageStore` 파일 형식은 검체로 확인해야 합니다.
 
@@ -215,7 +215,7 @@ EEA 기기에서 사용자가 내보낸 폴더와 내보내기 코드를 받았�
 
 ## 교차 검증
 
-Recall 폴더의 파일 시각은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 올려 브라우저 방문 기록, AI 앱 기록과 겹쳐 보고, Windows 타임라인 일반 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)에 있습니다. 평문 DB 의 `Web.Uri` 와 `App.Path` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 방문 기록과 맞춰 봅니다. 스냅숏 위에서 도는 [클릭 투 두](click-to-do.md)의 흔적은 그 페이지에서 다룹니다. 화면 기록이 대화 내용을 되살리는 단서가 되는 경우는 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에, 기기에서 이 폴더를 빠뜨리지 않고 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다. 조직의 DLP 설정과 함께 보려면 [보안 제품이 남기는 AI 사용 기록](../network-enterprise/dlp-casb.md)을 봅니다.
+Recall 폴더의 파일 시각은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 올려 브라우저 방문 기록, AI 앱 기록과 겹쳐 보고, Windows 타임라인 일반 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다. 평문 DB 의 `Web.Uri` 와 `App.Path` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 방문 기록과 맞춰 봅니다. 스냅숏 위에서 도는 [클릭 투 두](click-to-do.md)의 흔적은 그 페이지에서 다룹니다. 화면 기록이 대화 내용을 되살리는 단서가 되는 경우는 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에, 기기에서 이 폴더를 빠뜨리지 않고 모으는 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다. 조직의 DLP 설정과 함께 보려면 [보안 제품이 남기는 AI 사용 기록](../network-enterprise/dlp-casb.md)을 봅니다.
 
 ## 실습
 

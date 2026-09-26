@@ -27,13 +27,13 @@ nav_order: 370
 | PC | 설치 프로그램 목록과 사용자 폴더의 앱 데이터 |
 | 웹 | 쓰던 브라우저의 방문 기록·캐시·사이트 저장소 |
 
-통화 녹음·요약이 쟁점이면 폰부터 수집하고, 녹음 파일과 요약문이 어느 폴더에 있는지는 추출본에서 찾아 확인합니다. Android 는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)와 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)를, iOS 는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)와 [로컬 백업](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/backups/local-backup/index.html)을 먼저 읽고, 어떤 추출 방식으로 어디까지 얻을 수 있는지 가늠합니다. PC 앱 폴더에 Electron 이나 웹뷰 앱의 파일 구성이 보이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)를 봅니다. 기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
+통화 녹음·요약이 쟁점이면 폰부터 수집하고, 녹음 파일과 요약문이 어느 폴더에 있는지는 추출본에서 찾아 확인합니다. Android 는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)를, iOS 는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)와 [로컬 백업](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/backups/local-backup/index.html)을 먼저 읽고, 어떤 추출 방식으로 어디까지 얻을 수 있는지 가늠합니다. PC 앱 폴더에 Electron 이나 웹뷰 앱의 파일 구성이 보이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)를 봅니다. 기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
 
 폰 앱은 업데이트가 잦아서, 추출할 때 앱 버전과 추출 날짜를 꼭 함께 적습니다.
 
 ## 구조
 
-로컬 저장 구조(파일 이름, 데이터베이스 표, 설정 키, 녹음 파일 형식)는 공개 자료가 없어 검체로 확인해야 합니다. 검체에서 앱 폴더를 찾았다면 파일 형식을 첫 바이트로 가린 뒤 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)나 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html) 같은 형식 페이지로 읽고, 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않습니다.
+로컬 저장 구조(파일 이름, 데이터베이스 표, 설정 키, 녹음 파일 형식)는 공개 자료가 없어 검체로 확인해야 합니다. 검체에서 앱 폴더를 찾았다면 파일 형식을 첫 바이트로 가린 뒤 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)나 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html) 같은 형식 페이지로 읽고, 표나 키의 이름만 보고 뜻을 짐작해 보고서에 쓰지 않습니다.
 
 ## 증거로서 의미
 
@@ -43,7 +43,7 @@ nav_order: 370
 
 ## 시각 해석
 
-통화 녹음 요약에는 통화 시각, 녹음 파일이 생긴 시각, 요약을 만든 시각이 따로 있을 수 있어서, 세 시각이 같다고 가정하지 않습니다. 어느 시각이 어디에 적히는지는 검체에서 통화 기록의 시각과 맞춰 보며 가려냅니다. 기기 쪽 시각의 기준(UTC 인지 현지 시각인지)은 형식마다 다르고, 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html)에 있습니다.
+통화 녹음 요약에는 통화 시각, 녹음 파일이 생긴 시각, 요약을 만든 시각이 따로 있을 수 있어서, 세 시각이 같다고 가정하지 않습니다. 어느 시각이 어디에 적히는지는 검체에서 통화 기록의 시각과 맞춰 보며 가려냅니다. 기기 쪽 시각의 기준(UTC 인지 현지 시각인지)은 형식마다 다르고, 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)에 있습니다.
 
 ## 함정과 한계
 

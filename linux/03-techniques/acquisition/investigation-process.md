@@ -109,7 +109,7 @@ atime 은 "마지막으로 읽은 시각" 이 아니라 `relatime` 규칙에 따
 - [디스크 이미징](./disk-imaging.md) — 디스크 이미지를 만들고 검증하는 법
 - [타임라인 만들기](../analysis/timeline.md) — bodyfile 과 로그를 한 줄로 세우는 법
 - [Linux 포렌식 보고서](../reporting/forensic-report.md) — 수집 과정을 보고서에 적는 법
-- 다른 판의 조사 절차: [Windows](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/process-acquisition/investigation-process.html), [macOS](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/process-acquisition/investigation-process.html), [Android](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/acquisition/investigation-process.html), [iOS](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/acquisition/investigation-process.html), [AI](https://urock-ailab.github.io/forensics-handbook-ai/03-techniques/acquisition/investigation-process.html)
+- 다른 판의 조사 절차: [Windows](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/process-acquisition/investigation-process.html), [macOS](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/process-acquisition/investigation-process.html), [Android](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/acquisition/investigation-process.html), [iOS](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/acquisition/investigation-process.html), [AI](https://urock-ailab.github.io/forensics-handbook/ai/03-techniques/acquisition/investigation-process.html)
 
 ## 참고 문헌
 

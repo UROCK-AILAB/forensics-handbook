@@ -49,7 +49,7 @@ Android 앱(패키지 `ai.x.grok`)에서 읽을 수 있는 흔적은 두 가지�
 
 DeepSeek 은 웹사이트 방문 기록을 통신 관련 법에 따라 3개월, 거래 기록을 소비자 보호 법에 따라 5년 보관합니다[1]. 근거 법이 어느 나라 법인지는 사건 당시의 원문판에서 확인합니다. 같은 주소라도 접속 지역에 따라 다른 언어판이 열릴 수 있어서, 사건에 쓸 때는 원문판을 따로 확보해 인용 문장과 대조합니다.
 
-Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`) 아래에 있습니다. 폴더 구조와 수집 방법은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)를 따릅니다.
+Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`) 아래에 있습니다. 폴더 구조와 수집 방법은 [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)를 따릅니다.
 
 | 서비스 | 경로(앱 데이터 폴더 기준) | 담긴 것 | 근거 |
 |---|---|---|---|
@@ -107,7 +107,7 @@ Android 쪽 파일은 모두 앱 데이터 폴더(`/data/data/패키지 이름/`
 
 ### Grok — 계정 속성
 
-두 Intercom 설정 XML 에 든 키는 아래와 같습니다[6]. 설정 XML 자체의 형식은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)에 있습니다.
+두 Intercom 설정 XML 에 든 키는 아래와 같습니다[6]. 설정 XML 자체의 형식은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)에 있습니다.
 
 | 키 | 담긴 것 |
 |---|---|
@@ -139,7 +139,7 @@ Grok 영상 캐시에는 시각이 두 개 있고 뜻이 다릅니다. 파일 �
 
 ## 함정과 한계
 
-DeepSeek 데이터베이스는 WAL 모드라서, `-wal`·`-shm` 파일을 함께 수집하지 않으면 `sqlite_master` 에 표 이름은 보여도 대화 목록과 메시지 표가 비어 보일 수 있습니다[7]. 파일 세 개를 한 번에 복사하고, 읽는 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)를 따릅니다. ALEAPP 의 경로 패턴(`deepseek_chat_*.db*`)은 WAL 파일까지 함께 잡습니다[3][4].
+DeepSeek 데이터베이스는 WAL 모드라서, `-wal`·`-shm` 파일을 함께 수집하지 않으면 `sqlite_master` 에 표 이름은 보여도 대화 목록과 메시지 표가 비어 보일 수 있습니다[7]. 파일 세 개를 한 번에 복사하고, 읽는 방법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)를 따릅니다. ALEAPP 의 경로 패턴(`deepseek_chat_*.db*`)은 WAL 파일까지 함께 잡습니다[3][4].
 
 메시지 표가 대화마다 따로 있어서, 표 하나만 열어 보고 대화가 이것뿐이라고 판단하면 안 됩니다. `chat_session_list` 의 ID 와 남은 메시지 표 이름을 맞춰 보고, 짝이 안 맞는 대화는 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)의 방법으로 WAL 과 여유 공간을 확인합니다.
 
@@ -186,7 +186,7 @@ sqlite3 "$DB" "SELECT m.role, datetime(m.inserted_at,'unixepoch'),
 
 ## 교차 검증
 
-기기 흔적은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)과 시각을 맞춰 보고, 회사 기기라면 [보안 제품이 남기는 AI 사용 기록](../network-enterprise/dlp-casb.md)과 [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md)로 이어 갑니다. 웹으로 썼다면 [크롬 (Android)](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html)이나 [크롬 계열 브라우저 (Windows)](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 방문 기록과 맞춰 봅니다. Grok 생성 영상이 쟁점이면 [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md)를, 파일을 올렸는지가 쟁점이면 [기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md)를 봅니다. 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
+기기 흔적은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)과 시각을 맞춰 보고, 회사 기기라면 [보안 제품이 남기는 AI 사용 기록](../network-enterprise/dlp-casb.md)과 [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md)로 이어 갑니다. 웹으로 썼다면 [크롬 (Android)](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html)이나 [크롬 계열 브라우저 (Windows)](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 방문 기록과 맞춰 봅니다. Grok 생성 영상이 쟁점이면 [딥페이크·합성 이미지를 만들었나](../../04-scenarios/misuse/deepfake.md)를, 파일을 올렸는지가 쟁점이면 [기밀 자료를 AI에 넣었나](../../04-scenarios/data-leak/confidential-input.md)를 봅니다. 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
 
 ## 실습
 

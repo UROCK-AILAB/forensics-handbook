@@ -37,7 +37,7 @@ SwitchAI 의 액티비티 이름은 2026-03-29 판 코드 기준입니다 [4]. G
 
 Gemini 앱 폴더는 `/data/data/com.google.android.apps.bard/` 입니다. LEAF 저장소의 기록에는 Android 15 기기에서 2026-04-20 에 뽑은 이 폴더에 SQLite 데이터베이스가 하나도 없었고, 파일 13개가 모두 웹뷰(WebView) 캐시와 미리 컴파일한 OAT 파일이었다고 적혀 있습니다 [5]. 같은 저장소의 README 는 Gemini 를 "SQLite 안에 Protocol Buffer 로 인코딩" 한다고 적어 두 문서가 서로 어긋납니다 [5]. 이 저장소는 학생 과제 수준이라 두 기록 모두 검체로 다시 확인하고, 어느 쪽이든 대화 전문이 앱 폴더에 있다는 근거로 쓰지 않습니다.
 
-Google 앱 폴더 `/data/data/com.google.android.googlequicksearchbox/` 안에서 Gemini 대화가 어느 파일에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)에서 다룹니다. 웹뷰 캐시를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
+Google 앱 폴더 `/data/data/com.google.android.googlequicksearchbox/` 안에서 Gemini 대화가 어느 파일에 남는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 폴더 구조의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 이 폴더가 기기 암호화의 보호를 받는 방식은 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다. 웹뷰 캐시를 읽는 법은 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
 ## 구조
 
@@ -51,7 +51,7 @@ Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google �
 
 `app_session/*.binarypb` 는 protobuf 하나이고, `googleQuickSearchbox.py` 는 필드 번호로 값을 꺼냅니다 [6]. 필드 `3` 은 세션 종류 문자열이고, 필드 `132269847` 안의 `1` 안의 `2` 가 대표 검색어입니다. 같은 필드 `132269847` 안의 `2` 에는 조각이 여럿 들어 있고, 분석기는 조각마다 UTF-16 문자열 `com.google.android.apps.gsa.shared.search.Query` 를 찾아 그 뒤의 검색어를 읽습니다. 필드 `132269388` 안의 `1` 에는 음성 응답이 mp3 로 들어 있습니다 [6].
 
-`RecentsDataStore.pb` 는 필드 `1` 이 되풀이되는 목록이고, 항목마다 `1` 번호, `4` 시각 1, `5` 검색어, `7` 페이지(`1` 주소, `2` 도메인, `3` 제목), `8` 검색(`1` 분류, `2` 검색 엔진), `9` 화면 캡처 번호, `17` 시각 2 가 있습니다 [7]. 화면 캡처는 "계정 이름-캡처 번호.jpg" 라는 이름의 파일과 짝을 짓습니다 [7]. SQLite 를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html) 페이지를 봅니다.
+`RecentsDataStore.pb` 는 필드 `1` 이 되풀이되는 목록이고, 항목마다 `1` 번호, `4` 시각 1, `5` 검색어, `7` 페이지(`1` 주소, `2` 도메인, `3` 제목), `8` 검색(`1` 분류, `2` 검색 엔진), `9` 화면 캡처 번호, `17` 시각 2 가 있습니다 [7]. 화면 캡처는 "계정 이름-캡처 번호.jpg" 라는 이름의 파일과 짝을 짓습니다 [7]. SQLite 를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html) 페이지를 봅니다.
 
 ## 증거로서 의미
 
@@ -61,7 +61,7 @@ Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google �
 
 ## 시각 해석
 
-Gemini 대화의 메시지 단위 시각은 서버 기록에 있어서 [계정 데이터 내보내기](export.md)로 받아 맞춰 봅니다 [3]. 설치 시각과 앱 실행 시각은 Android 의 일반 기록을 따르고 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
+Gemini 대화의 메시지 단위 시각은 서버 기록에 있어서 [계정 데이터 내보내기](export.md)로 받아 맞춰 봅니다 [3]. 설치 시각과 앱 실행 시각은 Android 의 일반 기록을 따르고 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 Google 앱 쪽 파일의 시각은 파일마다 뜻이 다릅니다. `app_session/*.binarypb` 에는 ALEAPP 이 읽는 시각 필드가 없고, 분석기는 파일 수정 시각을 UTC 로 바꿔 "File Timestamp" 칸에 넣습니다 [6]. 그래서 이 값은 파일을 마지막으로 쓴 시각이고, 복사하면서 수정 시각이 바뀌면 틀어집니다. `RecentsDataStore.pb` 의 필드 `4` 는 1970년부터 센 밀리초로, ALEAPP 이 UTC 로 바꿔 "Timestamp" 칸에 넣습니다 [7]. 필드 `17` 은 이름만 "timestamp2" 로 붙어 있고 분석기가 뜻을 적지 않았습니다 [7].
 
@@ -94,7 +94,7 @@ BA F1 C8 F8 03 09 0A 07 12 05 68 65 6C 6C 6F  필드 132269847 > 1 > 2, "hello" 
 |---|---|---|
 | 계정 데이터 내보내기 | 대화 내용과 메시지 시각 | [계정 데이터 내보내기](export.md) |
 | 서비스 회사 자료 | 서버에 남은 대화 원본 | [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md) |
-| 크롬 방문 기록 | 앱 대신 웹 판을 쓴 흔적 | [웹 브라우저](web.md), [크롬](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html) |
+| 크롬 방문 기록 | 앱 대신 웹 판을 쓴 흔적 | [웹 브라우저](web.md), [크롬](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) |
 | 음성 대화 기능 | "Hey Google"·Gemini Live 같은 음성 사용 | [음성 대화 기능](../../generative-media/voice-mode.md) |
 | 웹뷰 캐시 | 앱 폴더에 남은 캐시 조각 | [대화 내용 되살리기](../../../03-techniques/analysis/content-recovery.md) |
 

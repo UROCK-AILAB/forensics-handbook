@@ -84,7 +84,7 @@ AnythingLLM 의 키·토큰 칸은 [AnythingLLM](../../02-artifacts/local-ai/any
 
 ### 채팅 앱과 브라우저
 
-**Electron 데스크톱 앱.** 로그인 세션은 앱 데이터 폴더의 쿠키 DB `Network\Cookies` 와 파티션별 쿠키 DB 의 `cookies` 표에 남고, 값은 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉩니다. 쿠키 DB 위치와 칸 목록은 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 에, Windows 에서 `encrypted_value` 를 보호하는 원리는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html) 에 있습니다. 앱이 Electron `safeStorage` 로 문자열을 암호화했다면, Windows 에서는 같은 사용자 공간의 다른 앱도 풀 수 있습니다[5].
+**Electron 데스크톱 앱.** 로그인 세션은 앱 데이터 폴더의 쿠키 DB `Network\Cookies` 와 파티션별 쿠키 DB 의 `cookies` 표에 남고, 값은 평문 `value` 와 암호화된 `encrypted_value` 두 칸으로 나뉩니다. 쿠키 DB 위치와 칸 목록은 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 에, Windows 에서 `encrypted_value` 를 보호하는 원리는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) 와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html) 에 있습니다. 앱이 Electron `safeStorage` 로 문자열을 암호화했다면, Windows 에서는 같은 사용자 공간의 다른 앱도 풀 수 있습니다[5].
 
 비밀값은 아니지만 계정을 가리키는 식별자도 설정 파일에 남습니다. Claude 데스크톱에서는 `config.json` 의 `lastKnownAccountUuid`, `cowork-enabled-cli-ops.json` 의 `ownerAccountId`, `plan-usage-history.json` 의 `samples[].org` 가 계정·조직 식별자로 보이는 칸입니다. 이런 식별자로 사용자를 가리는 법은 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md) 에서 다룹니다.
 
@@ -134,7 +134,7 @@ AnythingLLM 의 키·토큰 칸은 [AnythingLLM](../../02-artifacts/local-ai/any
 
 ## 도구
 
-파일 목록과 시각은 OS 기본 명령이나 공개 타임라인 도구로 뜹니다. JSON 파일은 `jq 'keys'` 처럼 키 이름만 뽑으면 값을 화면에 띄우지 않고 짜임을 볼 수 있고, SQLite 는 스키마와 `count(*)`, 값이 비었는지만 조회하면 됩니다. Windows 자격 증명 관리자는 그 사용자로 로그온한 살아 있는 시스템에서 `cmdkey /list` 로 항목 이름을 볼 수 있습니다. 구조는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html), [키체인 (macOS)](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html), [키체인 (iOS)](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/keychain.html) 에서 다룹니다.
+파일 목록과 시각은 OS 기본 명령이나 공개 타임라인 도구로 뜹니다. JSON 파일은 `jq 'keys'` 처럼 키 이름만 뽑으면 값을 화면에 띄우지 않고 짜임을 볼 수 있고, SQLite 는 스키마와 `count(*)`, 값이 비었는지만 조회하면 됩니다. Windows 자격 증명 관리자는 그 사용자로 로그온한 살아 있는 시스템에서 `cmdkey /list` 로 항목 이름을 볼 수 있습니다. 구조는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html), [키체인 (macOS)](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html), [키체인 (iOS)](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/keychain.html) 에서 다룹니다.
 
 LangurTrace 는 Chatbox·Msty·Jan·GPT4All 의 키를 표로 뽑고[8], ccfx 는 Claude Code 로그인 파일이 있는지만 기록합니다[11]. 두 도구 모두 위 "함정" 에 적은 대로 출력의 키 값을 다뤄야 합니다.
 

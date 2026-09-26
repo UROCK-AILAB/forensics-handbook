@@ -37,7 +37,7 @@ Android 패키지 이름(`copilot`)과 실행 액티비티의 접두어(`copilot
 
 계정 내보내기 CSV 는 첫 줄이 `Conversation,Time,Author,Message` 이고, `Author` 값은 `Human` 과 `AI` 입니다. `Time` 칸에는 시간대 표시가 없고, 대화 ID 와 메시지 ID 도 없습니다. 이 형식은 2026년 7월 내보내기 파일 기준입니다 [15]. 줄 순서, BOM, 시각 해석은 [계정 데이터 내보내기](export.md)에서 다룹니다.
 
-앱 폴더를 직접 볼 때 필요한 공통 원리는 OS 별 핸드북을 따릅니다. Windows 는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/protection/keychain/index.html), Android 는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html), iOS 는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook-ios/01-foundations/storage/data-protection/index.html)를 봅니다.
+앱 폴더를 직접 볼 때 필요한 공통 원리는 OS 별 핸드북을 따릅니다. Windows 는 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)와 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html), macOS 는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html), Android 는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html), iOS 는 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 봅니다.
 
 ### 이름이 같은 회사용 앱 가리기
 

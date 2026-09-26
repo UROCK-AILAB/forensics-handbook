@@ -16,7 +16,7 @@ AABF 는 여섯 브라우저를 다룹니다. Perplexity Comet, Fellou, Microsof
 
 브라우저는 서비스 형태로도 나뉩니다. 대화 본문을 기기에 남기는 쪽(local-centric)은 Comet 과 BrowserOS, 계정·토큰만 기기에 남기고 본문은 서버에 두는 쪽(cloud-centric)은 Fellou, Edge, Genspark, 둘이 섞인 쪽(hybrid)은 Sigma 입니다[1]. 이 구분이 조사 방향을 정합니다. 기기 쪽이면 프로필 폴더를 떠서 캐시를 읽고, 서버 쪽이면 기기에서는 누가 언제 썼는지까지만 잡고 본문은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
-이 브라우저들은 대부분 Chromium 을 바탕으로 만들었고 Fellou 만 Electron 입니다[1]. 그래서 방문 기록·쿠키 같은 일반 흔적은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)와 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md) 방식대로 읽고, 이 쪽은 에이전트 기능이 더하는 흔적만 다룹니다. 일반 브라우저에 확장으로 붙는 에이전트(Claude in Chrome 등)는 [브라우저를 조작하는 AI](browser-agents.md)에 있습니다.
+이 브라우저들은 대부분 Chromium 을 바탕으로 만들었고 Fellou 만 Electron 입니다[1]. 그래서 방문 기록·쿠키 같은 일반 흔적은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)와 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md) 방식대로 읽고, 이 쪽은 에이전트 기능이 더하는 흔적만 다룹니다. 일반 브라우저에 확장으로 붙는 에이전트(Claude in Chrome 등)는 [브라우저를 조작하는 AI](browser-agents.md)에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -103,7 +103,7 @@ Sigma 도 에이전트가 고정 ID `amabiocpfnlgbceffljgkcjeacejflga` 인 내�
 
 ## 구조
 
-저장 형식 자체는 기반 구조 쪽에 있습니다. Local Storage·IndexedDB·확장 저장소는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html), `Cookies`·`Login Data`·`sqliteDatabase.db` 는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)(둘 다 Windows 판) 방식으로 읽습니다. 아래는 AABF 파서가 읽는 값의 짜임입니다.
+저장 형식 자체는 기반 구조 쪽에 있습니다. Local Storage·IndexedDB·확장 저장소는 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html), `Cookies`·`Login Data`·`sqliteDatabase.db` 는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)(둘 다 Windows 판) 방식으로 읽습니다. 아래는 AABF 파서가 읽는 값의 짜임입니다.
 
 ### Comet 의 IndexedDB 캐시
 
@@ -179,7 +179,7 @@ AABF 는 숫자의 크기로 형식을 고릅니다. 10^15 이상이면 WebKit �
 - **같은 대화가 여러 번 나옴.** Comet 은 같은 대화 본문을 캐시 판(`pplx-query-cache-버전`)마다 따로 두므로 AABF 는 중복을 걷어 냅니다[1]. 손으로 셀 때도 대화 ID 로 묶어서 셉니다.
 - **IndexedDB 의 `.blob` 폴더.** IndexedDB 는 큰 값을 `이름.indexeddb.leveldb` 옆의 `이름.indexeddb.blob` 폴더에 따로 둡니다. 이 폴더를 함께 수집하지 않으면 대화 본문처럼 큰 값을 가리키는 레코드가 조용히 빠집니다[1]. 수집할 때 두 폴더를 함께 뜹니다.
 - **Genspark 쿠키가 평문인지.** AABF 안에서도 적힌 내용이 다릅니다. `signatures.py` 의 설명은 `session_id`·`ai_user`·`ai_session` 이 평문이라고 적고, 같은 파일의 항목 표시와 `genspark.py` 주석은 보통 `encrypted_value` 칸에 DPAPI·AES-GCM 으로 암호화돼 있다고 적습니다(둘 다 2026-06 코드)[1]. 검체의 `cookies` 표에서 `value` 와 `encrypted_value` 중 어느 칸이 차 있는지 봅니다.
-- **암호화된 쿠키.** Chromium 쿠키의 `v10` 형식은 `Local State` 의 키와 같은 사용자의 DPAPI 로 풀리지만, AABF 는 App-Bound(`v20`) 쿠키 암호화를 다루지 않습니다[1]. DPAPI 구조는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/protection/data-protection-api/index.html)(Windows 판)에 있습니다.
+- **암호화된 쿠키.** Chromium 쿠키의 `v10` 형식은 `Local State` 의 키와 같은 사용자의 DPAPI 로 풀리지만, AABF 는 App-Bound(`v20`) 쿠키 암호화를 다루지 않습니다[1]. DPAPI 구조는 [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html)(Windows 판)에 있습니다.
 - **토큰은 가립니다.** `pplx-next-auth-session`, `fellou.id_token`, `search-storage` 의 `access_token`·`refresh_token`, 쿠키의 세션 값은 모두 계정 접근에 쓰이는 값입니다. `fellou.id_token` 은 JWT 라서 가운데 조각을 base64url 로 풀면 사용자 ID·이름·이메일이 보이지만 서명된 것이지 암호화된 것은 아닙니다[1]. 보고서에는 토큰이 어느 파일의 어느 키에 있었는지만 쓰고 값은 가립니다. 토큰이 남는 곳의 일반론은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md), 서버 쪽 대화는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)으로 안내합니다.
 - **도구의 범위.** AABF 는 디스크 흔적만 다루고 메모리는 다루지 않습니다[1]. 실행 중인 브라우저의 프로필을 읽거나 DPAPI 값을 풀려면 관리자 권한이 필요합니다[1]. 실행 중인 브라우저가 `Cookies` 를 잡고 있으면 그 파일만 복사에 실패하고, AABF 는 나머지 파일은 계속 복사합니다[1].
 
@@ -191,7 +191,7 @@ AABF 는 숫자의 크기로 형식을 고릅니다. 10^15 이상이면 WebKit �
 66 65 6C 6C 6F 75 2E 69 64 5F 74 6F 6B 65 6E   fellou.id_token
 ```
 
-같은 방식으로 `pplx-next-auth-session`, `search-storage`, `conversations` 를 찾습니다. 바이트로 찾아지지 않아도 없는 것으로 보지 않고, LevelDB 를 읽는 도구로 한 번 더 읽습니다. 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/leveldb.html)(Windows 판)에 있습니다.
+같은 방식으로 `pplx-next-auth-session`, `search-storage`, `conversations` 를 찾습니다. 바이트로 찾아지지 않아도 없는 것으로 보지 않고, LevelDB 를 읽는 도구로 한 번 더 읽습니다. 읽는 법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)(Windows 판)에 있습니다.
 
 **공개 도구로.** AABF[1] 는 Python 3.10 이상에서 돌고 `ccl_chromium_reader` 로 LevelDB·IndexedDB 를 읽습니다. 떠 온 이미지 파일(`.E01` 등), 마운트한 드라이브, 사용자 `AppData` 폴더를 대상으로 줄 수 있습니다.
 
@@ -206,7 +206,7 @@ aabf collect  "E:\cases\disk0.E01" -O evidence   # 기기 흔적 수집
 
 | 함께 볼 기록 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 같은 프로필의 방문 기록·다운로드 | 에이전트가 연 사이트와 받은 파일(사람 방문과 섞임) | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| 같은 프로필의 방문 기록·다운로드 | 에이전트가 연 사이트와 받은 파일(사람 방문과 섞임) | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
 | 프록시·DNS 기록 | `perplexity.ai`, `agent.fellou.ai`, `app.sigmabrowser.com`, `copilot.microsoft.com` 접속 시간대 | [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md) |
 | Perplexity 계정 | Comet 이 아닌 웹·앱에서 한 같은 계정의 대화 | [Perplexity](../chat-services/perplexity.md) |
 | BrowserOS 제어 서버 로그 | 대화별 시작·끝 시각과 모델 | 이 쪽 BrowserOS 절 |

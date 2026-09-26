@@ -205,7 +205,7 @@ ZIP 안의 파일은 출처마다 조금씩 다르게 적었습니다. 아래 �
 | `messages` | uuid, text, sender, created_at, updated_at, attachments, files, conversation_id |
 | `artifacts` | id, artifact, identifier, version, type, language, title, content, thinking, conversation_id, message_id |
 
-만든 데이터베이스를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 봅니다. 변환 결과는 검색하기 편한 사본으로만 쓰고, 보고서의 근거는 원본 JSON 에서 칸을 직접 확인해 적습니다.
+만든 데이터베이스를 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지를 봅니다. 변환 결과는 검색하기 편한 사본으로만 쓰고, 보고서의 근거는 원본 JSON 에서 칸을 직접 확인해 적습니다.
 
 ## 교차 검증
 

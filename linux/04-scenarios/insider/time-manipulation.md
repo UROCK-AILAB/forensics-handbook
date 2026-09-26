@@ -125,7 +125,7 @@ nav_order: 1110
 - [타임라인 만들기](../../03-techniques/analysis/timeline.md) — 조작 구간을 표시하는 법
 - [로그 분석](../../03-techniques/analysis/log-analysis.md)
 - [Linux 포렌식 보고서](../../03-techniques/reporting/forensic-report.md)
-- 다른 판: [Windows 시각 값 형식](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html), [Windows 타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)
+- 다른 판: [Windows 시각 값 형식](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/value-decoding/filetime-unix-webkit-dos-ole.html), [Windows 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)
 
 ## 참고 문헌
 

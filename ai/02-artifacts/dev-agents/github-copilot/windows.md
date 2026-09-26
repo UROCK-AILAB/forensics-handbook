@@ -130,7 +130,7 @@ Visual Studio 추적 파일은 형식을 설명한 공개 문서도 공개 소�
 
 ### VS Code 세션 목록(색인)
 
-세션 목록은 폴더 안 파일이 아니라 VS Code 저장소 서비스의 키 `chat.ChatSessionStore.index` 에 들어갑니다 [2]. 폴더를 연 창이면 작업 영역 범위, 빈 창이면 애플리케이션 범위에 쓰고, 다른 작업 영역으로 넘긴 세션 목록은 프로필 범위의 키 `ChatSessionStore.transferIndex` 에 둡니다 [2]. VS Code 호환 편집기(Trae 등)의 저장소 값은 작업 영역별·전역 `state.vscdb` 의 `ItemTable` 키에 들어가므로 [7], 작업 영역 범위 색인은 같은 해시 폴더의 `state.vscdb` 에서 키 이름으로 찾습니다. `state.vscdb` 읽는 법은 [Cursor](../cursor.md)에, SQLite 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)에 있습니다.
+세션 목록은 폴더 안 파일이 아니라 VS Code 저장소 서비스의 키 `chat.ChatSessionStore.index` 에 들어갑니다 [2]. 폴더를 연 창이면 작업 영역 범위, 빈 창이면 애플리케이션 범위에 쓰고, 다른 작업 영역으로 넘긴 세션 목록은 프로필 범위의 키 `ChatSessionStore.transferIndex` 에 둡니다 [2]. VS Code 호환 편집기(Trae 등)의 저장소 값은 작업 영역별·전역 `state.vscdb` 의 `ItemTable` 키에 들어가므로 [7], 작업 영역 범위 색인은 같은 해시 폴더의 `state.vscdb` 에서 키 이름으로 찾습니다. `state.vscdb` 읽는 법은 [Cursor](../cursor.md)에, SQLite 자체는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)에 있습니다.
 
 색인은 `version` 과 `entries` 로 이뤄지고, `entries` 는 세션 ID 를 키로 삼아 항목을 담습니다 [2].
 
@@ -235,7 +235,7 @@ exporter 는 `deletedAt` 이 있는 턴을 내보내지 않습니다 [9]. 거꾸
 
 `Chat: Export Chat...` 명령을 쓰면 세션의 프롬프트와 응답 전부를 JSON 파일로 내보내고, 그 파일은 사용자가 고른 자리에 생깁니다 [1]. 내보낸 파일의 일반적인 해석은 [계정 데이터 내보내기 형식](../../../01-foundations/storage-model/data-export-formats.md)을 봅니다.
 
-로그인 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에, 자격 증명 관리자의 구조는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/credentials/credential-manager-windows-vault.html)에 있습니다.
+로그인 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에, 자격 증명 관리자의 구조는 [자격 증명 관리자와 볼트](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/credentials/credential-manager-windows-vault.html)에 있습니다.
 
 ## 증거로서 의미
 
@@ -258,7 +258,7 @@ exporter 는 `deletedAt` 이 있는 턴을 내보내지 않습니다 [9]. 거꾸
 | Visual Studio | `startTimeUnixNano`, `endTimeUnixNano` | Unix 나노초 문자열(UTC) | span 이 시작·끝날 때 |
 | JetBrains | `createdAt`, `modifiedAt` | 숫자. exporter 는 턴 시각을 밀리초로 다룸 | 세션·턴을 만들고 바꿀 때 |
 
-VS Code 세션 파일의 세 칸은 Unix 밀리초이고 [4], 색인의 `lastMessageDate` 는 세션 모델의 같은 값을 옮겨 적은 것이라 [2] 단위가 같습니다. `.jsonl` 은 줄을 덧붙일 때마다 파일 수정 시각이 바뀌어 마지막 대화 무렵과 가깝게 움직이지만, 작업 영역을 옮길 때 VS Code 가 파일을 새 폴더로 복사하므로 [2] 새 폴더에 생긴 사본의 파일 시각은 원래 대화 시각과 어긋날 수 있습니다. 그래서 대화 시각은 파일 시스템 시각이 아니라 파일 안의 `timestamp` 로 세우고, 파일 시각은 맞춰 보는 데만 씁니다. 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)에 있습니다.
+VS Code 세션 파일의 세 칸은 Unix 밀리초이고 [4], 색인의 `lastMessageDate` 는 세션 모델의 같은 값을 옮겨 적은 것이라 [2] 단위가 같습니다. `.jsonl` 은 줄을 덧붙일 때마다 파일 수정 시각이 바뀌어 마지막 대화 무렵과 가깝게 움직이지만, 작업 영역을 옮길 때 VS Code 가 파일을 새 폴더로 복사하므로 [2] 새 폴더에 생긴 사본의 파일 시각은 원래 대화 시각과 어긋날 수 있습니다. 그래서 대화 시각은 파일 시스템 시각이 아니라 파일 안의 `timestamp` 로 세우고, 파일 시각은 맞춰 보는 데만 씁니다. 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다.
 
 ## 함정과 한계
 

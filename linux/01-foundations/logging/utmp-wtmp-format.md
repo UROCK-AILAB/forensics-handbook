@@ -21,7 +21,7 @@ utmp·wtmp·btmp 는 같은 고정 길이 이진 레코드를 차례로 붙인 �
 
 위 tmpfiles 줄은 upstream systemd 기준이고, systemd 를 utmp 지원(`ENABLE_UTMP`)으로 빌드했을 때만 들어갑니다[2]. RHEL 9 의 systemd 소스(252판)는 wtmp·btmp·lastlog 세 줄이 같고, utmp 줄만 예전 표기인 `F! /run/utmp 0664 root utmp -` 로 쓰는데 `F` 는 `f+` 와 같은 뜻입니다[4]. `f` 는 파일이 없을 때만 만들고, `f+` 는 만들거나 길이를 0으로 자르며, `!` 가 붙은 줄은 부팅 때만 실행합니다[3]. 그래서 utmp 는 부팅할 때마다 비워지고, btmp 는 권한이 0660 이라 root 와 utmp 그룹이 아닌 사용자는 읽을 수 없습니다[2].
 
-새 배포판에는 이진 파일 대신 SQLite 를 쓰는 형식도 있습니다. wtmpdb 는 `/var/lib/wtmpdb/` 아래 `.db` 파일의 `wtmp` 테이블에 `Login`·`Logout`(마이크로초)·`Type`·`User`·`TTY`·`RemoteHost`·`Service` 열을 두고, lastlog2 는 `/var/lib/lastlog/lastlog2.db` 의 `Lastlog2` 테이블에 `Name`·`Time`·`TTY`·`RemoteHost`·`Service` 열을 둡니다[13][14]. wtmpdb 의 `Type` 은 0 EMPTY, 1 BOOT_TIME, 2 RUNLEVEL, 3 USER_PROCESS 로, utmp 의 번호와 다릅니다[13]. Ubuntu 24.04 와 RHEL 9 검체에서는 두 파일이 있는지부터 확인하고, 있으면 SQLite 로 엽니다([SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)).
+새 배포판에는 이진 파일 대신 SQLite 를 쓰는 형식도 있습니다. wtmpdb 는 `/var/lib/wtmpdb/` 아래 `.db` 파일의 `wtmp` 테이블에 `Login`·`Logout`(마이크로초)·`Type`·`User`·`TTY`·`RemoteHost`·`Service` 열을 두고, lastlog2 는 `/var/lib/lastlog/lastlog2.db` 의 `Lastlog2` 테이블에 `Name`·`Time`·`TTY`·`RemoteHost`·`Service` 열을 둡니다[13][14]. wtmpdb 의 `Type` 은 0 EMPTY, 1 BOOT_TIME, 2 RUNLEVEL, 3 USER_PROCESS 로, utmp 의 번호와 다릅니다[13]. Ubuntu 24.04 와 RHEL 9 검체에서는 두 파일이 있는지부터 확인하고, 있으면 SQLite 로 엽니다([SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)).
 
 ## 구조
 

@@ -53,7 +53,7 @@ ChatGPT 앱과 웹의 일반 저장 구조는 [ChatGPT](../chat-services/chatgpt
 
 ## 시각 해석
 
-사용자 PC 에 남는 브라우저 방문 기록의 시각은 사용자가 ChatGPT 화면을 연 시각이고, 작업이 서버에서 돌았다면 에이전트가 외부 사이트에 접속한 시각과 다를 수 있습니다. 브라우저 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다.
+사용자 PC 에 남는 브라우저 방문 기록의 시각은 사용자가 ChatGPT 화면을 연 시각이고, 작업이 서버에서 돌았다면 에이전트가 외부 사이트에 접속한 시각과 다를 수 있습니다. 브라우저 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다.
 
 서버 기록과 내보내기 파일의 시각이 UTC 인지, 작업 단계마다 시각이 붙는지는 받은 파일에서 직접 확인합니다. 기기 쪽 시각과 서버 쪽 시각을 한 줄로 합칠 때는 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)의 방법을 따릅니다.
 
@@ -69,7 +69,7 @@ ChatGPT 앱과 웹의 일반 저장 구조는 [ChatGPT](../chat-services/chatgpt
 
 ## 직접 분석해 보기
 
-**헥스로.** 에이전트 모드만의 로컬 파일 형식은 공개된 분석 자료가 없어, 헥스로 따라갈 대상은 일반 브라우저 기록입니다. 브라우저 기록 파일은 SQLite 라서 파일 머리와 페이지 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html)(Windows 판)의 헥스 설명을 따릅니다.
+**헥스로.** 에이전트 모드만의 로컬 파일 형식은 공개된 분석 자료가 없어, 헥스로 따라갈 대상은 일반 브라우저 기록입니다. 브라우저 기록 파일은 SQLite 라서 파일 머리와 페이지 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)(Windows 판)의 헥스 설명을 따릅니다.
 
 **공개 도구로.** 사본으로 뜬 브라우저 기록 파일을 SQLite 를 여는 공개 도구(예: DB Browser for SQLite)로 열고, ChatGPT 사이트 방문 줄을 시간순으로 뽑아 사용 시간대를 잡습니다. 그다음 계정 데이터 내보내기나 서비스 회사 자료로 같은 시간대의 대화 기록을 맞춰 봅니다. 수집 절차는 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)과 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)에 있습니다.
 
@@ -77,7 +77,7 @@ ChatGPT 앱과 웹의 일반 저장 구조는 [ChatGPT](../chat-services/chatgpt
 
 | 함께 볼 기록 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 브라우저 방문 기록·캐시 | ChatGPT 화면을 연 시간대 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| 브라우저 방문 기록·캐시 | ChatGPT 화면을 연 시간대 | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
 | 네트워크 기록 | ChatGPT 서비스 도메인 접속 | [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md) |
 | 기업용 감사 기록 | 조직 계정의 대화 기록(에이전트 작업이 들어가는지는 받은 기록에서 확인) | [ChatGPT 기업용 감사 기록](../network-enterprise/chatgpt-enterprise.md) |
 | 상대 사이트의 계정·주문 기록, 확인 메일 | 에이전트가 한 작업의 실제 결과 | 해당 서비스 |

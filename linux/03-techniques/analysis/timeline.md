@@ -95,7 +95,7 @@ bodyfile 과 plaso 저장 파일의 시각은 UTC 기준 epoch 값이고, 화면
 - [systemd 저널](../../01-foundations/logging/systemd-journal/index.md) — 저널 시각 필드
 - [로그 분석](log-analysis.md) — 로그 줄 거르기와 교차 확인
 - [지운 파일 되살리기](file-recovery.md) — `fls -d`·`ils` 결과를 되살리는 절차
-- 다른 판의 타임라인: [Windows](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html) · [macOS](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/timeline/index.html) · [Android](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html) · [iOS](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html)
+- 다른 판의 타임라인: [Windows](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) · [macOS](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html) · [Android](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html) · [iOS](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)
 
 ## 참고 문헌
 

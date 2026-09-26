@@ -76,7 +76,7 @@ Claude 데스크톱 스토어 앱 폴더에는 브라우저 연결과 이어지�
 }
 ```
 
-같은 캐시 폴더 아래 다른 MCP 로그 `.jsonl` 에는 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. `mcp-logs-computer-use` 폴더는 이름에 화면 조작(computer use)이 들어 있고, 여기에 브라우저 동작이 적히는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 스토어 앱 폴더의 나머지 구조는 [Claude](../chat-services/claude/index.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)(Windows 판)에 있습니다.
+같은 캐시 폴더 아래 다른 MCP 로그 `.jsonl` 에는 `cwd`, `debug`, `sessionId`, `timestamp` 키가 있습니다. `mcp-logs-computer-use` 폴더는 이름에 화면 조작(computer use)이 들어 있고, 여기에 브라우저 동작이 적히는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. 스토어 앱 폴더의 나머지 구조는 [Claude](../chat-services/claude/index.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)(Windows 판)에 있습니다.
 
 ### ChatGPT Atlas
 
@@ -84,7 +84,7 @@ ChatGPT Atlas 는 2025-10-21 에 macOS 용으로 먼저 나온 Chromium 기반 �
 
 "browser memories" 도 선택 기능이고, 메모리는 서버에 30일 보관한 뒤 지우며, 웹 내용은 서버에서 요약한 뒤 원문을 바로 지우고 걸러 낸 요약도 7일 안에 지웁니다[3]. OpenAI 는 2026-03 에 Atlas·ChatGPT 데스크톱 앱·Codex 를 한 앱으로 합치겠다고 밝혔고, Atlas 브라우저는 2026-08-09 에 종료됐습니다[3]. 이 날짜들은 위키백과가 출처라서 보고서에 쓸 때는 출처와 열람 날짜를 붙이고 OpenAI 공지로 다시 확인합니다.
 
-Atlas 의 로컬 프로필 경로와 파일 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다. 검체에서 Atlas 프로필 폴더를 찾으면 `History`, `Local Storage`, `IndexedDB` 같은 크롬 계열 프로필 파일이 있는지부터 보고, 있으면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)의 방법으로 읽습니다.
+Atlas 의 로컬 프로필 경로와 파일 형식은 공개된 분석 자료가 없어 검체로 확인해야 합니다. 검체에서 Atlas 프로필 폴더를 찾으면 `History`, `Local Storage`, `IndexedDB` 같은 크롬 계열 프로필 파일이 있는지부터 보고, 있으면 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)의 방법으로 읽습니다.
 
 ### 그 밖의 브라우저 에이전트
 
@@ -149,7 +149,7 @@ Windows 에서는 설치 프로그램이 `HKEY_LOCAL_MACHINE\SOFTWARE\Google\Chr
 
 네이티브 메시징 설정 파일은 기능을 처음 켤 때 만들어지므로[2], 파일 생성 시각은 처음 켠 시각의 후보입니다. 다시 쓰는 조건은 공개된 자료가 없어서 수정 시각을 처음 켠 시각으로 읽지 않습니다. Windows 에서는 호스트 이름 하위 키의 마지막 기록 시각을 함께 봅니다.
 
-브라우저 방문 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다. GIF·스크린샷 파일은 파일 시스템 시각으로 저장 시점을 잡습니다. MCP 로그에는 `timestamp` 키가 있고, 형식과 기준 시각은 검체의 값을 파일 시스템 시각과 맞춰 확인합니다. 여러 기록을 한 줄로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+브라우저 방문 기록의 시각 형식과 기준 시각은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다. GIF·스크린샷 파일은 파일 시스템 시각으로 저장 시점을 잡습니다. MCP 로그에는 `timestamp` 키가 있고, 형식과 기준 시각은 검체의 값을 파일 시스템 시각과 맞춰 확인합니다. 여러 기록을 한 줄로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 
@@ -173,7 +173,7 @@ GIF·스크린샷 파일과 브라우저 쿠키에는 로그인한 계정 정보
 
 `7B` 는 `{`, `22 6E 61 6D 65 22` 는 `"name"` 이고, 이어지는 값이 호스트 이름입니다. 파일 이름과 `name` 값, 레지스트리 하위 키 이름이 서로 맞는지 확인합니다.
 
-**공개 도구로.** 살아 있는 Windows 에서는 `reg query "HKCU\Software\Google\Chrome\NativeMessagingHosts" /s` 로 등록된 호스트를 모두 보고, Edge·Brave 키도 같은 방법으로 봅니다. 떠 온 이미지에서는 사용자 `NTUSER.DAT` 를 공개 레지스트리 도구(예: Registry Explorer, RegRipper)로 열어 같은 경로를 봅니다. macOS·Linux 에서는 위 표의 `NativeMessagingHosts` 폴더 목록을 뽑습니다. 그다음 매니페스트의 `allowed_origins` 확장 ID 를 브라우저 프로필의 확장 목록과 맞추고, 확장 manifest 에 `"nativeMessaging"` 권한이 있는지 봅니다. 프로필 구조는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다.
+**공개 도구로.** 살아 있는 Windows 에서는 `reg query "HKCU\Software\Google\Chrome\NativeMessagingHosts" /s` 로 등록된 호스트를 모두 보고, Edge·Brave 키도 같은 방법으로 봅니다. 떠 온 이미지에서는 사용자 `NTUSER.DAT` 를 공개 레지스트리 도구(예: Registry Explorer, RegRipper)로 열어 같은 경로를 봅니다. macOS·Linux 에서는 위 표의 `NativeMessagingHosts` 폴더 목록을 뽑습니다. 그다음 매니페스트의 `allowed_origins` 확장 ID 를 브라우저 프로필의 확장 목록과 맞추고, 확장 manifest 에 `"nativeMessaging"` 권한이 있는지 봅니다. 프로필 구조는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)(Windows 판)에 있습니다.
 
 AI 에이전트 브라우저가 함께 깔린 검체라면 AABF[5]로 어떤 에이전트 브라우저가 있는지 먼저 가려냅니다. AABF 는 1.1.260618 판(2026-06 빌드) 기준으로 Comet·Fellou·Edge·BrowserOS·Sigma·Genspark 여섯 개를 찾는 도구이고 Windows 10/11 에서 돌리며, Claude in Chrome 과 Atlas 는 대상에 없습니다. 지금 판의 브라우저와 경로가 다를 수 있으니 도구 결과는 검체의 폴더와 맞춰 봅니다. AABF 에는 남은 토큰으로 서버 API 를 부르는 기능도 있는데, 서버 쪽 자료는 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md) 같은 법적 절차로 받습니다.
 
@@ -181,7 +181,7 @@ AI 에이전트 브라우저가 함께 깔린 검체라면 AABF[5]로 어떤 에
 
 | 함께 볼 기록 | 알려 주는 것 | 링크 |
 |---|---|---|
-| 브라우저 방문 기록·탭 | 에이전트가 연 사이트(사람 방문과 섞임) | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
+| 브라우저 방문 기록·탭 | 에이전트가 연 사이트(사람 방문과 섞임) | [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) |
 | 프록시·DNS 기록 | `bridge.claudeusercontent.com` 접속 시간대 | [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md) |
 | Claude Code 세션 기록 | 브라우저 도구를 부른 지시와 결과 | [Claude Code](../dev-agents/claude-code/index.md) |
 | MCP 설정·로그 | `claude-in-chrome` 서버 사용과 차단 설정 | [MCP 서버와 도구 호출 기록](../dev-agents/mcp.md) |

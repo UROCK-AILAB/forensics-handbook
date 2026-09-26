@@ -10,7 +10,7 @@ AI 도구가 기기와 서버, 네트워크에 남긴 시각을 모아 UTC 기�
 
 ## 언제 쓰나
 
-"그 사람이 언제 AI 를 썼고, 그 앞뒤로 무슨 일이 있었나" 를 물을 때 씁니다. 기밀 파일을 연 시각과 AI 에 내용을 붙여 넣은 시각이 가까운지 보거나, 에이전트가 명령을 실행한 시각과 디스크의 파일이 바뀐 시각을 맞춰 보는 일이 대표적입니다. OS 전체 타임라인을 만드는 일반 방법은 OS 별 판의 타임라인 페이지([Windows](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html), [macOS](https://urock-ailab.github.io/forensics-handbook-mac/03-techniques/analysis/timeline/index.html), [Android](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html), [iOS](https://urock-ailab.github.io/forensics-handbook-ios/03-techniques/analysis/timeline/index.html))에 있고, 이 페이지는 그 위에 AI 흔적을 얹는 부분만 다룹니다.
+"그 사람이 언제 AI 를 썼고, 그 앞뒤로 무슨 일이 있었나" 를 물을 때 씁니다. 기밀 파일을 연 시각과 AI 에 내용을 붙여 넣은 시각이 가까운지 보거나, 에이전트가 명령을 실행한 시각과 디스크의 파일이 바뀐 시각을 맞춰 보는 일이 대표적입니다. OS 전체 타임라인을 만드는 일반 방법은 OS 별 판의 타임라인 페이지([Windows](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html), [macOS](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html), [Android](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html), [iOS](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html))에 있고, 이 페이지는 그 위에 AI 흔적을 얹는 부분만 다룹니다.
 
 ## 절차
 
@@ -32,7 +32,7 @@ AI 도구가 기기와 서버, 네트워크에 남긴 시각을 모아 UTC 기�
 
 유닉스 시각은 시간대와 상관없는 값이지만, 바꾸는 도구가 분석 PC 의 현지 시각으로 보여 줄 수 있습니다. LangurTrace 의 LM Studio 보고 코드는 `datetime.fromtimestamp` 를 시간대 없이 불러서 분석 PC 의 현지 시각으로 바꾸므로, 그 출력을 옮길 때는 UTC 로 다시 계산합니다[11]. 오프셋 없는 현지 시각은 기기의 시간대 설정으로 바꾸고, 같은 사건이 오프셋 붙은 줄에도 있으면 둘을 맞춰 봅니다. 표의 LM Studio·Ollama 는 Windows 11 Pro 24H2 에서 시험한 판이고[10], 지금 판과 다를 수 있습니다. 도구별 경로와 칸은 [LM Studio](../../02-artifacts/local-ai/lm-studio.md), [Ollama](../../02-artifacts/local-ai/ollama.md), [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md), [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md), [Cursor](../../02-artifacts/dev-agents/cursor.md) 쪽에 있습니다.
 
-Sysmon 이벤트 로그는 시각을 UTC 로 적고, Chromium 쿠키 DB 는 `creation_utc`·`last_access_utc` 처럼 칸 이름에 `_utc` 가 붙어 있습니다. 쿠키 시각 값을 사람이 읽는 시각으로 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다.
+Sysmon 이벤트 로그는 시각을 UTC 로 적고, Chromium 쿠키 DB 는 `creation_utc`·`last_access_utc` 처럼 칸 이름에 `_utc` 가 붙어 있습니다. 쿠키 시각 값을 사람이 읽는 시각으로 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지를 따릅니다.
 
 ### 2. 대화 원본이 어디에 있는지 가릅니다
 
@@ -101,7 +101,7 @@ JSONL 기록은 `jq` 로 필요한 키만 뽑아 표로 만들면 됩니다. 아
 jq -r '[.timestamp, .sessionId, .project] | @tsv' history.jsonl > history_times.tsv
 ```
 
-쿠키 DB 같은 SQLite 파일은 앱이 쓰는 중이면 잠겨서 열리지 않을 수 있으므로, 복사본을 `sqlite3` 로 엽니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. ChatGPT 내보내기는 오픈소스 도구 convoviz[14] 로 Markdown 과 사용 그래프로 바꿔 볼 수 있지만, 시각 해석은 원본 JSON 으로 다시 확인합니다. 여러 출처를 합친 뒤에는 스프레드시트나 OS 판에서 소개한 타임라인 도구에 넣어 정렬합니다.
+쿠키 DB 같은 SQLite 파일은 앱이 쓰는 중이면 잠겨서 열리지 않을 수 있으므로, 복사본을 `sqlite3` 로 엽니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. ChatGPT 내보내기는 오픈소스 도구 convoviz[14] 로 Markdown 과 사용 그래프로 바꿔 볼 수 있지만, 시각 해석은 원본 JSON 으로 다시 확인합니다. 여러 출처를 합친 뒤에는 스프레드시트나 OS 판에서 소개한 타임라인 도구에 넣어 정렬합니다.
 
 ## 함정과 한계
 

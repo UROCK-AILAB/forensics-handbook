@@ -18,7 +18,7 @@ Edge 의 Copilot 과 Chrome 의 Gemini·내장 AI 는 브라우저 안에서 도
 
 Chrome 의 내장 AI 는 이와 달리 모델(Gemini Nano)을 기기에 내려받아 기기 안에서 돌립니다. 모델을 내려받으려면 조건이 맞아야 하고, 내려받은 모델은 Chrome 의 구성요소로 설치됩니다. 그래서 대화 내용보다는 "이 기기에 온디바이스 모델이 있었는가" 가 먼저 확인할 거리가 됩니다.
 
-브라우저 자체의 방문 기록·캐시·프로필 구조는 Windows 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지에서 다루고, 여기서는 되풀이하지 않습니다. 브라우저를 직접 조작하는 에이전트형 기능은 [브라우저를 조작하는 AI](../agentic-services/browser-agents.md)에서 다룹니다.
+브라우저 자체의 방문 기록·캐시·프로필 구조는 Windows 판의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지에서 다루고, 여기서는 되풀이하지 않습니다. 브라우저를 직접 조작하는 에이전트형 기능은 [브라우저를 조작하는 AI](../agentic-services/browser-agents.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -57,7 +57,7 @@ Chrome 의 Gemini 관련 기업 정책 이름과 레지스트리 값, Gemini in 
 
 ## 구조
 
-Windows 쪽 정책 값은 레지스트리 값 하나라서 구조가 단순합니다. `REG_DWORD` 는 32비트 정수를 리틀 엔디언 4바이트로 저장하고, 예를 들어 `0x00000001` 은 값 데이터 칸에 `01 00 00 00` 으로 들어갑니다. 레지스트리 하이브 구조와 키의 마지막 쓰기 시각은 Windows 판의 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html)과 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지에서 이어 봅니다. macOS 쪽 설정은 속성 목록 파일로 읽고, 형식은 Mac 판의 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook-mac/01-foundations/data-formats/plist/index.html) 페이지에서 다룹니다.
+Windows 쪽 정책 값은 레지스트리 값 하나라서 구조가 단순합니다. `REG_DWORD` 는 32비트 정수를 리틀 엔디언 4바이트로 저장하고, 예를 들어 `0x00000001` 은 값 데이터 칸에 `01 00 00 00` 으로 들어갑니다. 레지스트리 하이브 구조와 키의 마지막 쓰기 시각은 Windows 판의 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html) 페이지에서 이어 봅니다. macOS 쪽 설정은 속성 목록 파일로 읽고, 형식은 Mac 판의 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/plist/index.html) 페이지에서 다룹니다.
 
 Chrome 온디바이스 모델은 위 구성요소 폴더가 있는지부터 확인합니다. 폴더 안의 파일 구성은 검체에서 폴더 목록을 떠서 기록합니다.
 

@@ -24,7 +24,7 @@ nav_order: 360
 | 모바일 앱 | 앱 스토어와 검체의 설치 앱 목록에서 앱이 따로 있는지 | Android 앱 데이터 폴더, iOS 앱 컨테이너 |
 | 다른 앱 안의 기능 | 사용자가 쓰던 앱 목록 | 그 앱의 데이터 폴더 |
 
-브라우저 흔적은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html), [macOS 사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html), [Android 크롬](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html), [iOS 사파리](https://urock-ailab.github.io/forensics-handbook-ios/02-artifacts/browsers/safari/index.html) 페이지대로 읽고, 기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다. 서비스 주소를 모르는 채로 방문 기록을 뒤지면 빠뜨리기 쉬워서, 주소를 먼저 확인한 뒤 찾습니다.
+브라우저 흔적은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html), [macOS 사파리](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/browsers/safari/index.html), [Android 크롬](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html), [iOS 사파리](https://urock-ailab.github.io/forensics-handbook/ios/02-artifacts/browsers/safari/index.html) 페이지대로 읽고, 기기별 수집 순서는 [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md)를 따릅니다. 서비스 주소를 모르는 채로 방문 기록을 뒤지면 빠뜨리기 쉬워서, 주소를 먼저 확인한 뒤 찾습니다.
 
 ## 구조
 

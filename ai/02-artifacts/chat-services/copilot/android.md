@@ -21,7 +21,7 @@ LEAF 저장소에 올라온 수집 파일(2026-02, 앱 30.0.440127001)에도 대
 
 ## 위치와 버전별 차이
 
-앱 폴더는 `/data/data/com.microsoft.copilot/`(같은 곳을 `/data/user/0/com.microsoft.copilot/` 로도 가리킴)입니다 [6]. 폴더 짜임의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/app-data-layout.html)에서, 이 폴더를 수집할 수 있는 범위는 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/storage/encryption/index.html)에서 다룹니다.
+앱 폴더는 `/data/data/com.microsoft.copilot/`(같은 곳을 `/data/user/0/com.microsoft.copilot/` 로도 가리킴)입니다 [6]. 폴더 짜임의 일반 원리는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 이 폴더를 수집할 수 있는 범위는 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다.
 
 패키지 이름과 실행 화면의 접두어가 다릅니다. 패키지는 `com.microsoft.copilot` 이고 [2][3], 앱을 여는 액티비티는 `com.microsoft.copilotn.MainActivity` 입니다 [3]. 원격 측정 기록의 앱 이름도 `CopilotN-prod-android` 로 남습니다 [6]. 설치 앱 목록에서는 패키지 이름으로, 로그와 원격 측정에서는 `copilotn` 이 붙은 이름으로 찾습니다.
 
@@ -81,10 +81,10 @@ LEAF 저장소에 올라온 수집 파일(2026-02, 앱 30.0.440127001)에도 대
 
 - **출처끼리 어긋남.** Tyagi 외(2025)는 평문 대화를 되살렸고 [1], LEAF 문서(2026-04)는 대화가 없다고 했으며 [4], LEAF README 는 암호화된 JSON 이라고 적었습니다 [5]. 앱 판과 연구 시점이 다르므로 어느 한쪽을 정답으로 삼지 않고, 검체의 앱 판과 함께 결과를 적습니다.
 - **대기열은 쌓이는 기록이 아님.** `StorageRecord` 는 보낼 이벤트를 모아 두는 표라서, 수집 파일에는 행이 1개뿐이었습니다 [6]. 행이 적다고 앱을 적게 썼다고 보지 않습니다.
-- **WAL 파일.** 원격 측정 DB 는 `-wal` 이 붙은 WAL 모드라서 `-wal`·`-shm` 을 함께 수집합니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/sqlite/index.html)를 따릅니다.
+- **WAL 파일.** 원격 측정 DB 는 `-wal` 이 붙은 WAL 모드라서 `-wal`·`-shm` 을 함께 수집합니다. 읽는 법은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/sqlite/index.html)를 따릅니다.
 - **인증 정보.** `user_info`, `CookiePersistence`, `com.auth0.authentication.storage.xml` 에는 토큰과 쿠키가 있을 수 있어서 보고서와 사본 공유 때 가립니다.
 - **공개 분석기 없음.** 2026-09-25 기준 ALEAPP 저장소에는 Copilot 전용 분석기가 없습니다 [7]. 파일은 SQLite 도구와 protobuf 해석 도구로 직접 읽습니다.
-- **이름이 같은 다른 제품.** [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)이나 Edge 안의 Copilot([브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md))과 구분합니다. 같은 계정을 브라우저에서 썼다면 [웹 브라우저](web.md) 쪽 흔적과 [크롬](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html) 방문 기록도 봅니다.
+- **이름이 같은 다른 제품.** [Microsoft 365 Copilot](../../office-integrations/m365-copilot.md)이나 Edge 안의 Copilot([브라우저에 들어간 AI](../../office-integrations/browser-builtin-ai.md))과 구분합니다. 같은 계정을 브라우저에서 썼다면 [웹 브라우저](web.md) 쪽 흔적과 [크롬](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) 방문 기록도 봅니다.
 
 ## 직접 분석해 보기
 
@@ -97,7 +97,7 @@ sqlite3 -readonly be6e4c19699f4fdf9f8c0ec9f9b398ef.db \
   "SELECT id, datetime(timestamp/1000,'unixepoch') AS utc, retryCount, length(blob) FROM StorageRecord;"
 ```
 
-`.preferences_pb` 파일은 protobuf 라서 `protoc --decode_raw < user_data.preferences_pb` 로 키와 값을 펼쳐 볼 수 있습니다. 설정 XML 은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook-android/01-foundations/data-formats/shared-preferences.html)를 따라 읽습니다.
+`.preferences_pb` 파일은 protobuf 라서 `protoc --decode_raw < user_data.preferences_pb` 로 키와 값을 펼쳐 볼 수 있습니다. 설정 XML 은 [설정 XML과 SharedPreferences](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/data-formats/shared-preferences.html)를 따라 읽습니다.
 
 ## 교차 검증
 
@@ -105,8 +105,8 @@ sqlite3 -readonly be6e4c19699f4fdf9f8c0ec9f9b398ef.db \
 |---|---|
 | [계정 데이터 내보내기](export.md) | 서버에 남은 프롬프트·응답 |
 | [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md) | 앱이 서비스와 통신한 시간대. 앱의 User-Agent 에는 `CopilotSapphire/` 뒤에 판 번호가 붙습니다 [2] |
-| [크롬](https://urock-ailab.github.io/forensics-handbook-android/02-artifacts/browsers/chrome/index.html) | 같은 계정으로 웹에서 쓴 흔적 |
-| [타임라인 작성](https://urock-ailab.github.io/forensics-handbook-android/03-techniques/analysis/timeline/index.html) | 원격 측정·Sentry 시각을 다른 활동과 한 시간 축에 놓기 |
+| [크롬](https://urock-ailab.github.io/forensics-handbook/android/02-artifacts/browsers/chrome/index.html) | 같은 계정으로 웹에서 쓴 흔적 |
+| [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html) | 원격 측정·Sentry 시각을 다른 활동과 한 시간 축에 놓기 |
 | [대화 내용 되살리기](../../../03-techniques/analysis/content-recovery.md) | 캐시·알림 등 앱 폴더 밖에서 대화 조각 찾기 |
 
 ## 실습

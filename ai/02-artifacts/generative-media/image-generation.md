@@ -29,7 +29,7 @@ Gemini 앱에서는 사용자가 올린 사진 같은 공유 내용도 활동 �
 | ComfyUI | PC 의 출력 폴더 | PNG 파일과 그 안의 텍스트 청크 | 소스 코드로 확인[1] |
 | AUTOMATIC1111 | PC 의 출력 폴더 | PNG·JPEG·WebP·AVIF·GIF 파일과 그 안의 생성 정보 | 소스 코드로 확인[2] |
 
-서버에서 만든 이미지를 웹에서 내려받으면 파일은 브라우저가 정한 다운로드 폴더에 들어가고, 다운로드 기록은 브라우저 쪽에 남습니다. Windows 의 크롬 계열은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook-windows/02-artifacts/browsers/chrome-edge-whale/index.html), macOS 는 [사파리](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/browsers/safari/index.html)와 [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook-mac/02-artifacts/filesystem/quarantine/index.html)에서 찾는 방법을 다룹니다. Android·iOS 앱에서 저장한 이미지는 검체의 사진 보관함과 앱 폴더에서 파일 시각으로 찾아 확인합니다.
+서버에서 만든 이미지를 웹에서 내려받으면 파일은 브라우저가 정한 다운로드 폴더에 들어가고, 다운로드 기록은 브라우저 쪽에 남습니다. Windows 의 크롬 계열은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html), macOS 는 [사파리](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/browsers/safari/index.html)와 [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/quarantine/index.html)에서 찾는 방법을 다룹니다. Android·iOS 앱에서 저장한 이미지는 검체의 사진 보관함과 앱 폴더에서 파일 시각으로 찾아 확인합니다.
 
 Android 의 Grok 앱은 Grok Imagine 영상을 재생하면서 캐시를 남기고, ALEAPP 은 캐시 색인에 적힌 원래 URL 이 `https://assets.grok.com/users/` 로 시작하면 사용자 생성 영상(User Generated), 그 밖은 공개 영상(Public)으로 나눕니다[4]. 이 분석기는 Grok 1.0.71(2025-11-11)로 시험했고 지금 판과 구조가 다를 수 있습니다[4]. 캐시 경로·표·시각 해석은 [그 밖의 서비스 (DeepSeek·Grok 등)](../chat-services/other-services.md)에 있습니다.
 

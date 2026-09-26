@@ -99,7 +99,7 @@ journald 의 `Journal file has been deleted`, `Received SIGUSR2 signal from PID 
 - [SSH 로 들어왔나](../intrusion/ssh-intrusion.md) — 침입 뒤 로그를 지운 경우
 - [로그 분석](../../03-techniques/analysis/log-analysis.md), [타임라인 만들기](../../03-techniques/analysis/timeline.md) — 여러 로그를 한 줄로 세우는 법
 - [Linux 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) — 기록이 말하는 만큼만 쓰는 법
-- [타임라인 작성 (Windows 판)](https://urock-ailab.github.io/forensics-handbook-windows/03-techniques/analysis/timeline/index.html) — 타임라인 공통 원리
+- [타임라인 작성 (Windows 판)](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) — 타임라인 공통 원리
 
 ## 참고 문헌
 
