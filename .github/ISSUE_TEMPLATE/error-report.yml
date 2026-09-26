@@ -1,0 +1,58 @@
+name: 오류 제보
+description: 틀린 내용이나 버전이 바뀌어 달라진 동작을 알려 주세요.
+title: "[오류] "
+labels: ["오류 제보"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        알려 주셔서 고맙습니다. 아래를 채워 주시면 확인하고 고치겠습니다.
+        질문이나 제안은 [토론](https://github.com/UROCK-AILAB/forensics-handbook/discussions)에 남겨 주시면 됩니다.
+  - type: input
+    id: page
+    attributes:
+      label: 쪽 주소
+      description: 문제가 있는 쪽의 주소를 붙여 주세요.
+      placeholder: https://urock-ailab.github.io/forensics-handbook/windows/...
+    validations:
+      required: true
+  - type: dropdown
+    id: handbook
+    attributes:
+      label: 핸드북
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Android
+        - iOS
+        - Cloud
+        - AI 서비스
+        - 첫 화면·공통
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 종류
+      options:
+        - 내용이 틀림(경로·형식·값·설명)
+        - 버전이 바뀌어 동작이 달라짐
+        - 링크가 깨짐
+        - 문장·맞춤법
+        - 그 밖의 것
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 무엇이 틀렸나요
+      description: 쪽에 적힌 내용과 실제가 어떻게 다른지 적어 주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 근거와 확인한 환경
+      description: 확인한 OS·앱 버전, 참고한 문서나 도구 출력이 있으면 적어 주세요. 사건 자료나 개인정보는 올리지 마세요.
+      placeholder: "예: Windows 11 24H2, 앱 버전 1.2.3, 공식 문서 주소"

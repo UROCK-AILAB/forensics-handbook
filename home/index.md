@@ -15,7 +15,7 @@ permalink: /
 
 이 핸드북은 많은 사람의 작업 위에 서 있습니다. 공개 분석 도구를 만들어 나눈 개발자들, 실험 결과를 논문으로 남긴 연구자들, 문서를 공개한 회사들이 없었다면 쓸 수 없었습니다. 그 이름은 쪽마다 참고 문헌에 적었습니다.
 
-틀린 곳이나 달라진 동작을 발견하면 알려 주십시오. 함께 고쳐 가며 오래 쓸 수 있는 핸드북으로 만들어 가겠습니다.
+틀린 곳이나 달라진 동작을 발견하면 [GitHub 이슈](https://github.com/UROCK-AILAB/forensics-handbook/issues)로 알려 주십시오. 궁금한 점이나 제안은 [GitHub 토론](https://github.com/UROCK-AILAB/forensics-handbook/discussions)에 남겨 주시면 됩니다. 함께 고쳐 가며 오래 쓸 수 있는 핸드북으로 만들어 가겠습니다.
 
 ## 핸드북
 

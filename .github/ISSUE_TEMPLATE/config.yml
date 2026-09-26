@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 질문·제안 (토론)
+    url: https://github.com/UROCK-AILAB/forensics-handbook/discussions
+    about: 궁금한 점이나 다뤘으면 하는 주제는 토론에 남겨 주세요.
