@@ -212,7 +212,7 @@ NTFS 에서 TRIM(삭제 알림)은 관리자가 끄지 않는 한 기본으로 �
 - [휴지통](../../02-artifacts/file-folder-usage/recycle-bin.md) — `$I`·`$R` 의 구조입니다.
 - [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) · [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) — 파일 레코드와 속성의 구조입니다.
 - [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) · [NTFS 트랜잭션 로그](../../02-artifacts/filesystem/logfile.md) — 파일 시스템 변경 기록입니다.
-- [타임라인 작성](../../03-techniques/analysis/timeline/index.md) — 파일 시스템 기록을 한 줄로 세웁니다.
+- [타임라인 작성](../../03-techniques/analysis/timeline/index.md) — 파일 시스템 기록을 시간순으로 합칩니다.
 - [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) · [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) — 내용을 되살립니다.
 - [증거를 없애려 했나](anti-forensics/index.md) — 완전삭제 도구와 흔적 지우기를 봅니다.
 - [이 파일을 누가 언제 열었나](file-access.md) — 지우기 전에 파일을 다룬 기록입니다.

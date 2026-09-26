@@ -239,7 +239,7 @@ $r | Where-Object { $_.AuditData -like '*"MailAccessType","Value":"Bind"*' }
 | [받은편지함 규칙과 전달](inbox-rules.md) | `UpdateInboxRules`·`New-InboxRule` 뒤에 실제로 만들어진 규칙 |
 | [메시지 추적](message-trace.md) | `Send`·`SendAs` 기록과 실제로 나간 메일 |
 | [Purview eDiscovery와 보존](../purview-ediscovery.md) | 복구 가능한 항목에 남은 삭제 메일, 조사자 자신의 검색 기록 |
-| [클라우드 타임라인](../../../03-techniques/analysis/timeline.md) | 여러 로그를 UTC 로 맞춰 한 줄로 세우는 방법 |
+| [클라우드 타임라인](../../../03-techniques/analysis/timeline.md) | 여러 로그를 UTC 로 맞춰 시간순으로 합치는 방법 |
 
 ## 실습
 

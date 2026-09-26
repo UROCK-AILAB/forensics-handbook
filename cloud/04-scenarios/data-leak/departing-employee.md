@@ -20,7 +20,7 @@ nav_order: 820
 
 ## 먼저 확인할 것
 
-**날짜 표부터 세웁니다.** 퇴사 결정일, 통보일, 마지막 근무일, 로그인 차단일, 라이선스 회수일, 계정 삭제일을 한 표에 적고 모두 UTC 로 맞춥니다. 이 표가 있어야 "결정 전 몇 주" 와 "결정 후" 를 나눠 비교할 수 있습니다. 시간대를 맞추는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 에 있습니다.
+**먼저 주요 날짜를 표로 정리합니다.** 퇴사 결정일, 통보일, 마지막 근무일, 로그인 차단일, 라이선스 회수일, 계정 삭제일을 한 표에 적고 모두 UTC 로 맞춥니다. 이 표가 있어야 "결정 전 몇 주" 와 "결정 후" 를 나눠 비교할 수 있습니다. 시간대를 맞추는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 에 있습니다.
 
 **계정이 지금 어떤 상태인지 확인합니다.** 계정 처리도 로그에 남습니다. Microsoft Entra ID 감사 로그에는 UserManagement 범주의 `Disable account`, `Change user license`, `Delete user`, `Hard Delete user`, `Restore user` 가 있습니다[2]. Google Workspace 관리 로그에는 `SUSPEND_USER`, `ARCHIVE_USER`, `DELETE_USER`, `UNDELETE_USER` 가 있고[14], 문서 소유권을 다른 사람에게 넘기면 `TRANSFER_DOCUMENT_OWNERSHIP` 이 `Owner of documents changed from {USER_EMAIL} to {NEW_VALUE}` 모양으로 남습니다[15]. Slack 은 `user_deactivated` 로 남습니다[26].
 
@@ -75,7 +75,7 @@ OneDrive 를 지키려면 삭제 전에 보존 정책이나 eDiscovery 보류를
 
 7. **관리자의 퇴사 처리와 퇴사자의 행동을 나눕니다.** 관리자가 사용자 프로필을 고쳐 남의 OneDrive 에 접근권을 받으면 `SiteCollectionAdminAdded` 가 남습니다[6]. `app@sharepoint` 사용자는 SharePoint App-Only 권한을 받은 앱이 한 작업이고, 보존 정책을 적용할 때 검색·파일 접근 기록을 대량으로 만듭니다[6]. 접근 위임(access delegation)이 켜져 있으면 계정을 지울 때 그 사용자의 상사(manager)나, 상사가 없을 때 지정한 보조 소유자가 OneDrive 접근권을 자동으로 받으므로[1], 삭제일 뒤의 파일 작업은 누가 했는지 `UserId` 를 먼저 확인합니다.
 
-8. **타임라인으로 합칩니다.** 날짜 표, 계정 처리 기록, 내보내기·내려받기·전달 기록을 한 줄로 세우고 결정일 앞뒤로 나눕니다. 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에 있습니다. 개인 PC·휴대 기기를 함께 조사하면 [[windows] 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) 의 순서로 기기 쪽 흔적과 맞춥니다.
+8. **타임라인으로 합칩니다.** 날짜 표, 계정 처리 기록, 내보내기·내려받기·전달 기록을 시간순으로 합치고 결정일 앞뒤로 나눕니다. 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에 있습니다. 개인 PC·휴대 기기를 함께 조사하면 [[windows] 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) 의 순서로 기기 쪽 흔적과 맞춥니다.
 
 ## 흔한 오판
 

@@ -218,7 +218,7 @@ ALFA 는 보고서 API 로 Workspace 감사 로그를 받아 분석하는 공개
 | [Vault와 Takeout](./vault-takeout.md) | 관리자가 Vault 로 자료를 내보내거나 사용자 자료를 옮긴 일 |
 | [Cloud Audit Logs](../gcp/cloud-audit-logs.md) | 같은 조직의 Google Cloud 쪽에서 같은 관리자 계정이 한 IAM 변경 |
 
-권한 변화를 시간 순서로 엮는 절차는 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), 권한 상승 조사 흐름은 [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md), 다른 기록과 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 보고서에는 "관리자가 권한을 넘겼다" 가 아니라 "이 시각에 이 관리자 계정으로 이 사용자에게 이 역할을 준 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
+권한 변화를 시간 순서로 엮는 절차는 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), 권한 상승 조사 흐름은 [권한을 올렸나](../../04-scenarios/infrastructure/privilege-escalation.md), 다른 기록과 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 보고서에는 "관리자가 권한을 넘겼다" 가 아니라 "이 시각에 이 관리자 계정으로 이 사용자에게 이 역할을 준 기록이 있다" 처럼 기록이 말하는 만큼만 씁니다.
 
 ## 실습
 

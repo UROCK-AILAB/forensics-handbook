@@ -17,7 +17,7 @@ NTFS 파일에는 생성·수정·레코드 변경·접근 시각이 두 벌 있
 
 - [마스터 파일 테이블 ($MFT)](../../../02-artifacts/filesystem/mft.md): 파일 레코드마다 $SI 한 개와 $FN 한 개 이상이 들어 있습니다.
 - [폴더 인덱스와 슬랙 ($I30)](../../../02-artifacts/filesystem/i30.md): 상위 폴더의 색인 항목마다 $FN 사본이 들어 있습니다.
-- [파일시스템 타임라인](../../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md): 두 벌을 따로 줄 세워 봅니다.
+- [파일시스템 타임라인](../../../03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md): 두 벌을 따로 정렬해 봅니다.
 - [시각 조작 탐지 (Timestomping)](../../../03-techniques/analysis/timeline/timestomping.md): 두 벌의 차이를 첫 단서로 씁니다.
 
 레코드와 속성 머리의 생김새는 [MFT 레코드와 속성](file-record-attribute.md)에서 다룹니다. 이 페이지는 두 속성의 값 부분과 시각만 다룹니다.

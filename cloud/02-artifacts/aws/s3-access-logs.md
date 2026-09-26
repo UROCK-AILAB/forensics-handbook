@@ -190,7 +190,7 @@ for line in sys.stdin:
 - Remote IP 가 VPC 안의 주소이거나 끝점을 거친 요청이면 [VPC 흐름 로그](./vpc-flow-logs.md)에서 같은 시간대의 흐름을 봅니다.
 - 역할 세션 ARN 이 요청자로 나오면 그 역할을 누가 넘겨받았는지 [IAM 사용자·역할·액세스 키](./iam.md)와 CloudTrail 에서 찾습니다.
 - S3 관련 탐지 결과는 [GuardDuty](./guardduty.md)에서 함께 봅니다.
-- 저장소에서 자료를 빼 간 사건 전체의 흐름은 [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md)에, 여러 로그를 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+- 저장소에서 자료를 빼 간 사건 전체의 흐름은 [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md)에, 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 실습
 

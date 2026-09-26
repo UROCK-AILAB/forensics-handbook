@@ -138,7 +138,7 @@ ext4 에서 문자 장치 삭제 표시는 디렉터리 항목의 `file_type` �
 - [컨테이너 설정과 로그](container-logs.md): `Created`·`StartedAt` 과 쓰기 층 파일 시각을 맞춥니다. 표준 출력에 찍힌 명령과 `diff/` 에 생긴 파일을 견줍니다.
 - [셸 명령 기록](../../execution/shell-history/index.md): 호스트의 `docker cp`·`docker exec` 명령과, 컨테이너 쓰기 층 `diff/root/` 등에 남은 셸 기록 파일을 함께 봅니다.
 - [마운트 기록](../../devices/mounts.md): 수집 당시 overlay 마운트 목록이 남아 있다면 실행 중이던 컨테이너를 가려냅니다.
-- [타임라인 만들기](../../../03-techniques/analysis/timeline.md): 쓰기 층 파일 시각을 호스트 로그와 한 줄로 세웁니다.
+- [타임라인 만들기](../../../03-techniques/analysis/timeline.md): 쓰기 층 파일 시각을 호스트 로그와 시간순으로 합칩니다.
 
 ## 실습
 

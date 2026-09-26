@@ -168,7 +168,7 @@ ORDER BY 시각_칸;
 | [통합 로그에서 찾을 것](../logs/unified-log-events.md) | 위치 서비스 관련 시스템 이벤트 |
 | [나의 찾기](find-my.md) | 기기 위치 조회와 위치 공유 |
 
-여러 위치 기록을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 [그 시각에 어디 있었나](../../04-scenarios/activity/location.md) 에서 다룹니다.
+여러 위치 기록을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 [그 시각에 어디 있었나](../../04-scenarios/activity/location.md) 에서 다룹니다.
 
 ## 실습
 

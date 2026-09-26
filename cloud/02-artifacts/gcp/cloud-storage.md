@@ -231,7 +231,7 @@ protoPayload.resourceName:"example-bucket"
 - 서비스 계정 키로 인증한 요청이면 `authenticationInfo.serviceAccountKeyName` 과 키 기록을 [IAM과 서비스 계정 키](./iam-keys.md)에서 이어 봅니다.
 - 요청 IP 가 VPC 안의 VM 이면 같은 시간대 흐름을 [VPC 흐름 로그](./vpc-flow-logs.md)에서 찾습니다.
 - 같은 종류의 기록을 다른 클라우드와 견줄 때는 [S3 접근 기록](../aws/s3-access-logs.md)과 [Storage 계정 기록](../azure/storage-logs.md)을 봅니다.
-- 버킷을 공개로 바꾼 흐름은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), 자료를 빼 간 사건 전체의 흐름은 [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md), 여러 로그를 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+- 버킷을 공개로 바꾼 흐름은 [권한 변화 따라가기](../../03-techniques/analysis/permission-changes.md), 자료를 빼 간 사건 전체의 흐름은 [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md), 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 - 로그가 사라지기 전에 사용 로그 객체와 감사 로그를 확보하는 방법은 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다.
 
 ## 실습

@@ -35,7 +35,7 @@ OS 버전과 함께 설치된 브라우저와 버전을 확인합니다([설치�
 
 크롬 사용자 데이터 폴더는 크롬이 `~/Library/Application Support/Google/Chrome`, 엣지가 `~/Library/Application Support/Microsoft Edge`, 브레이브가 `~/Library/Application Support/BraveSoftware/Brave-Browser` 이고 [5][13], 파이어폭스 기록은 `~/Library/Application Support/Firefox/Profiles/` 아래 프로필 폴더의 `places.sqlite` 입니다 [10]. 웨일의 맥 경로는 공개 자료가 없어 검체에서 확인합니다.
 
-1~3번으로 방문 기록의 뼈대를 세우고, 4~5번으로 받은 파일과 탭 상태를 붙입니다. 6~8번은 브라우저 기록이 비었거나 지워졌을 때 보강하는 자료입니다. knowledgeC `/safari/history` 는 macOS 10.13 에 있는 스트림입니다 [9]. mac_apt 가 해석하는 바이옴 스트림 `App.WebUsage`·`Safari.*` 는 macOS 에 실제로 있는지 검체에서 확인합니다 [12]. 통합 로그의 DNS 기록은 서브시스템 `com.apple.mDNSResponder` 로 찾고, 비공개 데이터 설정이 꺼져 있으면 호스트 이름이 가려져 나옵니다 [14].
+1~3번으로 방문 기록의 뼈대를 잡고, 4~5번으로 받은 파일과 탭 상태를 붙입니다. 6~8번은 브라우저 기록이 비었거나 지워졌을 때 보강하는 자료입니다. knowledgeC `/safari/history` 는 macOS 10.13 에 있는 스트림입니다 [9]. mac_apt 가 해석하는 바이옴 스트림 `App.WebUsage`·`Safari.*` 는 macOS 에 실제로 있는지 검체에서 확인합니다 [12]. 통합 로그의 DNS 기록은 서브시스템 `com.apple.mDNSResponder` 로 찾고, 비공개 데이터 설정이 꺼져 있으면 호스트 이름이 가려져 나옵니다 [14].
 
 ### 크롬 기록에서 검색어와 입력을 읽기
 

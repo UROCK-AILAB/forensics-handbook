@@ -166,7 +166,7 @@ GitHub Enterprise 감사 로그의 `action` 에서 `audit_log_streaming.destroy`
 
 ### 7. 빈 기간을 메운다
 
-끄는 작업을 찾았으면 그 시각부터 다시 켠 시각까지를 빈 기간으로 정하고, 끌 수 없는 기록(이벤트 기록·활동 로그·`_Required` 버킷)과 흐름 로그, GuardDuty·Defender 결과, 가상 머신 안의 로그로 그 기간을 메웁니다. 모든 원천의 시각을 UTC 로 맞춰 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 과 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 쪽에 있습니다. 끄는 작업을 한 주체가 어떻게 그 권한을 얻었는지는 [권한을 올렸나](privilege-escalation.md), 그 자격 증명이 어디서 왔는지는 [액세스 키가 새어 나갔나](leaked-keys.md) 로 이어서 봅니다.
+끄는 작업을 찾았으면 그 시각부터 다시 켠 시각까지를 빈 기간으로 정하고, 끌 수 없는 기록(이벤트 기록·활동 로그·`_Required` 버킷)과 흐름 로그, GuardDuty·Defender 결과, 가상 머신 안의 로그로 그 기간을 메웁니다. 모든 원천의 시각을 UTC 로 맞춰 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 과 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 쪽에 있습니다. 끄는 작업을 한 주체가 어떻게 그 권한을 얻었는지는 [권한을 올렸나](privilege-escalation.md), 그 자격 증명이 어디서 왔는지는 [액세스 키가 새어 나갔나](leaked-keys.md) 로 이어서 봅니다.
 
 ## 증명하는 것 / 증명하지 못하는 것
 

@@ -105,7 +105,7 @@ iLEAPP 의 디스코드 분석기는 `fsCachedData` 와 `a` 파일에서 메시�
 
 ## 교차 검증
 
-메시지가 오간 시각에 디스코드 알림이 떴는지는 [알림 기록 (Notifications)](../app-usage/notifications.md)에서, 그 시각에 앱을 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../app-usage/biome/index.md)에서 봅니다. 통화 시간대에 앱이 데이터를 얼마나 썼는지는 [앱별 데이터 사용량 (DataUsage.sqlite)](../network/data-usage.md)과 맞춰 봅니다. 캐시 이미지가 사진 보관함에도 저장됐는지는 [사진 보관함 (Photos Library)](../media/photos/index.md)에서 찾고, 다른 연락 수단과 한 줄로 세우는 방법은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md)에 있습니다.
+메시지가 오간 시각에 디스코드 알림이 떴는지는 [알림 기록 (Notifications)](../app-usage/notifications.md)에서, 그 시각에 앱을 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../app-usage/biome/index.md)에서 봅니다. 통화 시간대에 앱이 데이터를 얼마나 썼는지는 [앱별 데이터 사용량 (DataUsage.sqlite)](../network/data-usage.md)과 맞춰 봅니다. 캐시 이미지가 사진 보관함에도 저장됐는지는 [사진 보관함 (Photos Library)](../media/photos/index.md)에서 찾고, 다른 연락 수단과 시간순으로 합치는 방법은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md)에 있습니다.
 
 ## 실습
 

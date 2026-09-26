@@ -187,7 +187,7 @@ curl -H "Accept: application/vnd.github+json" \
 | 개인 보안 로그 | Enterprise Managed Users 가 아닐 때 엔터프라이즈 로그에 없는 로그인·개인 자원 동작(계정 본인이 내보내야 함)[14] |
 | 단말의 Git 흔적 | 감사 로그의 `git.clone` 시각에 맞는 로컬 저장소 폴더가 어느 PC 에 생겼는지 |
 
-토큰이 새어 나간 경우의 흐름은 [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md), 퇴사 전 대량 복제는 [퇴사자가 자료를 가져갔나](../../04-scenarios/data-leak/departing-employee.md), 여러 서비스의 시각을 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 보관 기간이 지나 API 로 받을 수 없는 기록은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을 검토합니다. GitHub 는 계정 접근 기록을 법원 명령이나 수색 영장이 있을 때만 내주고, 미국 법집행기관이 공식 요청하면 계정 기록을 최대 90일 보존합니다[16]. 사건 초기에 할 일은 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다.
+토큰이 새어 나간 경우의 흐름은 [액세스 키가 새어 나갔나](../../04-scenarios/infrastructure/leaked-keys.md), 퇴사 전 대량 복제는 [퇴사자가 자료를 가져갔나](../../04-scenarios/data-leak/departing-employee.md), 여러 서비스의 시각을 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 보관 기간이 지나 API 로 받을 수 없는 기록은 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)을 검토합니다. GitHub 는 계정 접근 기록을 법원 명령이나 수색 영장이 있을 때만 내주고, 미국 법집행기관이 공식 요청하면 계정 기록을 최대 90일 보존합니다[16]. 사건 초기에 할 일은 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다.
 
 ## 실습
 

@@ -258,7 +258,7 @@ exporter 는 `deletedAt` 이 있는 턴을 내보내지 않습니다 [9]. 거꾸
 | Visual Studio | `startTimeUnixNano`, `endTimeUnixNano` | Unix 나노초 문자열(UTC) | span 이 시작·끝날 때 |
 | JetBrains | `createdAt`, `modifiedAt` | 숫자. exporter 는 턴 시각을 밀리초로 다룸 | 세션·턴을 만들고 바꿀 때 |
 
-VS Code 세션 파일의 세 칸은 Unix 밀리초이고 [4], 색인의 `lastMessageDate` 는 세션 모델의 같은 값을 옮겨 적은 것이라 [2] 단위가 같습니다. `.jsonl` 은 줄을 덧붙일 때마다 파일 수정 시각이 바뀌어 마지막 대화 무렵과 가깝게 움직이지만, 작업 영역을 옮길 때 VS Code 가 파일을 새 폴더로 복사하므로 [2] 새 폴더에 생긴 사본의 파일 시각은 원래 대화 시각과 어긋날 수 있습니다. 그래서 대화 시각은 파일 시스템 시각이 아니라 파일 안의 `timestamp` 로 세우고, 파일 시각은 맞춰 보는 데만 씁니다. 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다.
+VS Code 세션 파일의 세 칸은 Unix 밀리초이고 [4], 색인의 `lastMessageDate` 는 세션 모델의 같은 값을 옮겨 적은 것이라 [2] 단위가 같습니다. `.jsonl` 은 줄을 덧붙일 때마다 파일 수정 시각이 바뀌어 마지막 대화 무렵과 가깝게 움직이지만, 작업 영역을 옮길 때 VS Code 가 파일을 새 폴더로 복사하므로 [2] 새 폴더에 생긴 사본의 파일 시각은 원래 대화 시각과 어긋날 수 있습니다. 그래서 대화 시각은 파일 시스템 시각이 아니라 파일 안의 `timestamp` 로 정하고, 파일 시각은 맞춰 보는 데만 씁니다. 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다.
 
 ## 함정과 한계
 

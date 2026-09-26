@@ -143,7 +143,7 @@ _HOSTNAME=host01
 | Velociraptor `Linux.Forensics.Journal.Fields` | `journalctl -N`·`-F` 와 같은 일을 색인에서 바로 하고, 값마다 항목 수와 첫·마지막 시각을 냄[8] | 압축형 (compact) 형식(systemd 252 이후)만 읽고, 읽을 수 없거나 비었거나 손상된 파일과 옛 형식 파일은 건너뜀[8] |
 | UAC | 라이브 응답에서 `journalctl --list-boots` 결과만 명령으로 받음[9] | |
 
-도구끼리 결과를 맞출 때는 `-o export` 나 `-o json` 으로 뽑은 `journalctl` 결과를 기준으로 삼고, 항목 수가 다르면 손상 파일을 도구마다 다르게 처리했을 가능성을 [손상·삭제된 저널](corruption.md) 에서 확인합니다. 여러 로그를 한 줄로 세우는 방법은 [타임라인 만들기](../../../03-techniques/analysis/timeline.md) 에서 다룹니다.
+도구끼리 결과를 맞출 때는 `-o export` 나 `-o json` 으로 뽑은 `journalctl` 결과를 기준으로 삼고, 항목 수가 다르면 손상 파일을 도구마다 다르게 처리했을 가능성을 [손상·삭제된 저널](corruption.md) 에서 확인합니다. 여러 로그를 시간순으로 합치는 방법은 [타임라인 만들기](../../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 
 ## 참고 문헌
 

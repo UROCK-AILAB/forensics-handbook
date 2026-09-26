@@ -257,7 +257,7 @@ DFIR-O365RC 로 받으려면 대상 구독에 `Microsoft.Insights/eventtypes/*` 
 - **로그인 기록.** 클레임의 `objectidentifier`·`appid` 와 시각으로 Entra ID 로그인 로그의 해당 로그인을 찾으면, 그 토큰을 어디서 어떤 인증으로 받았는지 이어 볼 수 있습니다. [Entra ID 로그](../m365/entra-logs/index.md)를 봅니다.
 - **데이터 평면 기록.** 활동 로그의 `listKeys/action`, 디스크·스냅숏 작업 뒤에 실제 데이터 접근이 있었는지는 [Storage 계정 기록](./storage-logs.md), [Key Vault 기록](./key-vault.md), [Azure 가상 머신](./azure-vm.md)에서 확인합니다.
 - **네트워크 설정 변경.** NSG 규칙이 바뀐 시각 전후의 실제 트래픽은 [네트워크 흐름 로그](./flow-logs.md)에 남습니다.
-- **다른 클라우드와 견주기.** AWS 의 대응 기록은 [CloudTrail](../aws/cloudtrail/index.md)입니다. 여러 로그를 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)과 [Windows 판의 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)을 봅니다.
+- **다른 클라우드와 견주기.** AWS 의 대응 기록은 [CloudTrail](../aws/cloudtrail/index.md)입니다. 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)과 [Windows 판의 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)을 봅니다.
 - IP 주소 해석은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md), JSON 을 읽는 일반 원칙은 [JSON 로그 읽기](../../01-foundations/logging/json-logs.md)에 있습니다.
 
 ## 실습

@@ -8,7 +8,7 @@ nav_order: 1610
 
 ## 조사 질문
 
-"그날 밤 11시부터 새벽 1시 사이에 이 폰을 쓰고 있었나", "운전하던 그 몇 분 동안 화면이 켜져 있었고 잠금이 풀려 있었나" 같은 질문에 답하는 흐름입니다. 앱 하나를 언제 썼는지는 [어떤 앱을 언제 썼나](app-usage.md) 에서 다루고, 이 페이지는 폰 전체를 놓고 화면이 켜져 있고 잠금이 풀려 사람이 조작할 수 있던 시간대를 세우는 데 집중합니다.
+"그날 밤 11시부터 새벽 1시 사이에 이 폰을 쓰고 있었나", "운전하던 그 몇 분 동안 화면이 켜져 있었고 잠금이 풀려 있었나" 같은 질문에 답하는 흐름입니다. 앱 하나를 언제 썼는지는 [어떤 앱을 언제 썼나](app-usage.md) 에서 다루고, 이 페이지는 폰 전체를 놓고 화면이 켜져 있고 잠금이 풀려 사람이 조작할 수 있던 시간대를 찾는 데 집중합니다.
 
 기록은 화면이 켜졌는지, 잠금 화면이 걷혔는지, 어떤 앱 화면이 앞에 있었는지까지 알려 주지만, 그 시간에 누가 화면을 보고 있었는지는 알려 주지 않습니다. 사람을 가리는 문제는 [그 시각에 폰을 쓴 사람이 누구인가](user-attribution.md) 에서 이어 갑니다.
 
@@ -40,9 +40,9 @@ nav_order: 1610
 
 ## 분석 흐름
 
-1. **시각의 기준을 먼저 세웁니다.** 기기 시간대를 적고, 기기 시각이 옮겨진 흔적이 있는지 봅니다. 기기에 따라 `dumpsys usagestats` 에 "UsageStats RollOver history :" 절이 있고, 그 안에 `Time changed. actualSystemTime:... expectedSystemTime:... actualRealtime:...` 모양의 줄이 남습니다. 현행 AOSP 의 UsageStatsService 에는 `actualSystemTime`·`expectedSystemTime` 이라는 변수로 시각 변경을 보정하는 코드가 있지만 이 절을 찍는 문자열은 없어서 [5], 제조사가 더한 출력일 가능성이 있습니다. 시각 변경을 따지는 방법은 [증거를 없애려 했나](anti-forensics/index.md) 묶음에 있습니다.
+1. **시각의 기준을 먼저 정합니다.** 기기 시간대를 적고, 기기 시각이 옮겨진 흔적이 있는지 봅니다. 기기에 따라 `dumpsys usagestats` 에 "UsageStats RollOver history :" 절이 있고, 그 안에 `Time changed. actualSystemTime:... expectedSystemTime:... actualRealtime:...` 모양의 줄이 남습니다. 현행 AOSP 의 UsageStatsService 에는 `actualSystemTime`·`expectedSystemTime` 이라는 변수로 시각 변경을 보정하는 코드가 있지만 이 절을 찍는 문자열은 없어서 [5], 제조사가 더한 출력일 가능성이 있습니다. 시각 변경을 따지는 방법은 [증거를 없애려 했나](anti-forensics/index.md) 묶음에 있습니다.
 
-2. **화면이 켜진 구간을 세웁니다.** `SCREEN_INTERACTIVE`(15)는 화면이 켜져 사용자와 상호작용할 수 있게 된 때이고, `SCREEN_NON_INTERACTIVE`(16)는 화면이 완전히 꺼지거나 앰비언트 디스플레이(ambient display)처럼 상호작용 없이만 켜진 상태가 된 때입니다 [1]. 둘을 짝지으면 "화면을 조작할 수 있던 구간" 이 나옵니다. `dumpsys usagestats` 에서 이 줄은 `time="..." type=SCREEN_INTERACTIVE package=... flags=...` 모양이고, 두 이벤트는 보통 거의 짝을 이룹니다. 짝이 맞지 않는 끝 한 건은 기록 범위의 처음이나 끝에 걸린 구간일 수 있습니다.
+2. **화면이 켜진 구간을 찾습니다.** `SCREEN_INTERACTIVE`(15)는 화면이 켜져 사용자와 상호작용할 수 있게 된 때이고, `SCREEN_NON_INTERACTIVE`(16)는 화면이 완전히 꺼지거나 앰비언트 디스플레이(ambient display)처럼 상호작용 없이만 켜진 상태가 된 때입니다 [1]. 둘을 짝지으면 "화면을 조작할 수 있던 구간" 이 나옵니다. `dumpsys usagestats` 에서 이 줄은 `time="..." type=SCREEN_INTERACTIVE package=... flags=...` 모양이고, 두 이벤트는 보통 거의 짝을 이룹니다. 짝이 맞지 않는 끝 한 건은 기록 범위의 처음이나 끝에 걸린 구간일 수 있습니다.
 
 3. **잠금이 풀린 구간을 겹칩니다.** `KEYGUARD_HIDDEN`(18)은 잠금 화면이 숨겨진 때이고, 보통 사용자가 폰의 잠금을 풀 때 생깁니다. `KEYGUARD_SHOWN`(17)은 잠금 화면이 표시된 때입니다 [1]. `KEYGUARD_HIDDEN` 에서 다음 `KEYGUARD_SHOWN` 까지를 잠금이 풀린 구간으로 잡고 2단계의 화면 구간 위에 겹칩니다.
 
@@ -50,7 +50,7 @@ nav_order: 1610
 
 5. **파일로 며칠 전까지 넓힙니다.** 저장된 usagestats 는 daily·weekly·monthly·yearly 구간 폴더로 나뉘고, 파일 이름은 그 구간의 시작 시각을 유닉스 밀리초로 적은 숫자입니다 [4]. 파일 안의 시각이 0 이상이면 파일 이름의 숫자에 더하고, 음수이면 그 크기를 그대로 절대 시각으로 씁니다. ALEAPP 는 결과를 UTC 로 보여 줍니다 [3]. 같은 기록이 여러 구간 폴더에 겹쳐 나올 수 있어 구간을 모두 더하면 시간이 부풀고 [3], 현행 AOSP 기준으로 daily 파일은 10일이 지나면 지워집니다 [4]. 현행 AOSP 는 개별 이벤트를 daily 통계에만 넣으니 [6], 10일보다 오래된 날에는 누적 통계만 남고 이벤트가 없어도 "그날은 쓰지 않았다" 로 읽지 않습니다.
 
-6. **누적 통계로 합계를 맞춰 봅니다.** `dumpsys usagestats` 의 "In-memory daily stats" 절에서 앱 줄에는 `totalTimeUsed`, `lastTimeUsed`, `totalTimeVisible`, `lastTimeVisible`, `lastTimeComponentUsed`, `totalTimeFS` 칸이 있습니다. 파일에서는 ALEAPP 로 'Total Time Visible (ms)', 'Last Time Visible', 'App Launch Count' 같은 칸을 뽑을 수 있습니다 [3]. 2~4단계에서 세운 구간의 길이를 더한 값이 이 합계와 크게 어긋나면 빠진 이벤트나 겹친 구간이 있는지 다시 봅니다. `totalTimeFS` 는 포그라운드 서비스가 쓰인 시간의 합계라서 [6] 사람이 화면을 본 시간과 섞지 않습니다.
+6. **누적 통계로 합계를 맞춰 봅니다.** `dumpsys usagestats` 의 "In-memory daily stats" 절에서 앱 줄에는 `totalTimeUsed`, `lastTimeUsed`, `totalTimeVisible`, `lastTimeVisible`, `lastTimeComponentUsed`, `totalTimeFS` 칸이 있습니다. 파일에서는 ALEAPP 로 'Total Time Visible (ms)', 'Last Time Visible', 'App Launch Count' 같은 칸을 뽑을 수 있습니다 [3]. 2~4단계에서 찾은 구간의 길이를 더한 값이 이 합계와 크게 어긋나면 빠진 이벤트나 겹친 구간이 있는지 다시 봅니다. `totalTimeFS` 는 포그라운드 서비스가 쓰인 시간의 합계라서 [6] 사람이 화면을 본 시간과 섞지 않습니다.
 
 7. **다른 기록으로 교차 확인합니다.** Google 디지털 웰빙이 있는 기기라면 `app_usage` DB 의 `events` 표(`timestamp`, `package_id`, `type`)와 `packages` 표를 이어 봅니다. `type` 번호는 usagestats 와 같은 체계이고 `timestamp` 는 유닉스 밀리초입니다 [2]. 배터리 기록의 Battery History 줄은 `##-## ##:##:##.### ### (상태 변화)` 모양이고 `+screen`·`-screen`, `screenwake=`, `display_state_changed=`, `brightness=` 같은 표시가 붙습니다. 이 줄에는 연도가 없고 줄 앞 시각의 시계 기준은 공개 자료가 없으니, 같은 시각을 가리키는 usagestats 이벤트와 나란히 놓아 어긋남을 재는 데 씁니다.
 

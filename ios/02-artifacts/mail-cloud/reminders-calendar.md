@@ -196,7 +196,7 @@ SQLite 는 실수(REAL) 값을 레코드 안에 8바이트 빅엔디언 IEEE 754
 | [KnowledgeC](../app-usage/knowledgec/index.md)·[바이옴](../app-usage/biome/index.md) | 두 앱을 앞에 띄워 쓴 시각 |
 | [시리](../input-assistant/siri.md) | 음성으로 만든 일정·할 일 |
 
-사건 전후의 행동 순서를 세우는 데는 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 이 시각들을 다른 기록과 함께 한 줄로 늘어놓는 방법을 봅니다.
+사건 전후의 행동 순서를 정리하는 데는 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 이 시각들을 다른 기록과 함께 한 줄로 늘어놓는 방법을 봅니다.
 
 ## 실습
 

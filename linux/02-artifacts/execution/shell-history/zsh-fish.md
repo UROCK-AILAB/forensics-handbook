@@ -150,7 +150,7 @@ fish 기록은 평문이라 헥스로 볼 것이 적습니다. `- cmd: ` 로 시
 | [실행 중인 프로세스](../proc.md) | 라이브에서 살아 있는 zsh·fish 프로세스와 그 사용자 |
 | [로그인 기록](../../logins/wtmp-btmp-lastlog.md) | 기록 시각에 그 계정이 로그인해 있었는지 |
 
-여러 기록을 한 줄로 세우는 방법은 [타임라인 만들기](../../../03-techniques/analysis/timeline.md) 에서 다룹니다.
+여러 기록을 시간순으로 합치는 방법은 [타임라인 만들기](../../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 
 ## 실습
 

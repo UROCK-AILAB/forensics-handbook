@@ -186,7 +186,7 @@ LangurTrace 출력의 `custom_prompts` 시트에서 사용자가 정한 기본 �
 
 `id` 는 26자이고 앞 10자를 풀면 Unix 밀리초가 나옵니다. 샘플의 메시지·API 키 행은 이 값이 `created_at` 과 같은 초였지만, `chat_sessions`·`chats` 행은 ID 시각이 `created_at` 보다 5초에서 1분 39초 앞섰습니다[2]. 새 대화 창을 연 때와 처음 저장한 때가 다를 수 있으므로, 세션 시작 시각을 적을 때는 두 값을 함께 봅니다. `created_at` 은 초 단위까지만 있어서, 같은 초 안의 순서는 ID 시각이나 `branch_parent_id` 로 정합니다.
 
-여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+여러 기록을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

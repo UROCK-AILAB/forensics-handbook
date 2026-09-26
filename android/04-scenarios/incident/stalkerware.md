@@ -41,7 +41,7 @@ Google Play 보호 기능(Play Protect)의 악성 앱 분류에서 감시 앱(St
 
 3. **계속 떠 있는 알림을 찾습니다.** 계속 떠 있는 알림은 감시 앱이 허용되는 조건 가운데 하나이므로 [1], 알림 목록에서 대상 앱의 알림이 보이는지 봅니다. `dumpsys notification` 의 NotificationRecord 한 건에는 `pkg=`, `uid=`, `userId=`, `opPkg=`, `flags=`, `importance=`, `mImportance=`, `mCreationTimeMs=`, `mUpdateTimeMs=`, `mVisibleSinceMs=` 가 찍히고, `extras` 안에 `android.title` 과 `android.text` 가 있습니다. 1단계에서 모은 앱의 `pkg=` 줄을 찾아 알림 제목·내용과 처음 만들어진 시각을 적습니다. `flags=` 에서 진행 중(ongoing) 알림을 가리키는 비트 값은 [알림 기록](../../02-artifacts/app-usage/notification-history.md) 페이지에서 봅니다. `mImportance=MIN` 처럼 중요도가 찍힌 줄도 있으니 이 값도 함께 적어 둡니다.
 
-4. **들어온 경로와 시각을 세웁니다.** 대상 앱의 설치자, 설치를 요청한 패키지, 첫 설치 시각을 [악성 앱은 어디서 들어왔나](initial-access.md) 의 흐름대로 읽습니다. 설치 시각이 피해자가 폰을 다른 사람에게 맡긴 시간대와 겹치는지 보는 문제는 [그 시각에 폰을 쓴 사람이 누구인가](../activity/user-attribution.md) 에서 이어 갑니다.
+4. **들어온 경로와 시각을 확인합니다.** 대상 앱의 설치자, 설치를 요청한 패키지, 첫 설치 시각을 [악성 앱은 어디서 들어왔나](initial-access.md) 의 흐름대로 읽습니다. 설치 시각이 피해자가 폰을 다른 사람에게 맡긴 시간대와 겹치는지 보는 문제는 [그 시각에 폰을 쓴 사람이 누구인가](../activity/user-attribution.md) 에서 이어 갑니다.
 
 5. **돌았는지와 보냈는지를 봅니다.** 같은 앱이 뒤에서 실행된 흔적은 [앱 사용 기록](../../02-artifacts/app-usage/usagestats/index.md) 과 [배터리 사용 기록](../../02-artifacts/app-usage/batterystats.md) 에서, 송신량은 [데이터 사용량](../../02-artifacts/network/netstats.md) 에서 봅니다. 무엇을 밖으로 보냈는지 따지는 흐름은 [자료를 밖으로 보냈나](../exfiltration/data-exfiltration/index.md) 에 있습니다.
 

@@ -187,7 +187,7 @@ vol -f memory.lime linux.kmsg
 | 커널 로그 첫 줄 ↔ [부팅과 종료 기록](boot-shutdown.md) | 부팅 시각의 일치, 경과 시간을 벽시계로 바꿀 기준 |
 | 메모리의 `linux.kmsg` ↔ 디스크의 저널 | 디스크에 없는 최근 메시지, 비운 뒤 남은 메시지 |
 
-누가 로그를 지웠는지 판단하는 흐름은 [흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md), 여러 로그를 한 줄로 세우는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 와 [로그 분석](../../03-techniques/analysis/log-analysis.md) 에서 다룹니다.
+누가 로그를 지웠는지 판단하는 흐름은 [흔적을 지웠나](../../04-scenarios/insider/anti-forensics.md), 여러 로그를 시간순으로 합치는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 와 [로그 분석](../../03-techniques/analysis/log-analysis.md) 에서 다룹니다.
 
 ## 실습
 

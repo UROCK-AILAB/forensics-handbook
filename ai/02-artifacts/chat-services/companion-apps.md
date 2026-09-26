@@ -120,7 +120,7 @@ Kindroid 는 앱 화면을 웹뷰로 띄우는 구조라서 `app_webview/` 아�
 
 Replika `chat_message` 의 순서는 `timestamp_ms` 로 정하고, Persona.AI·Fantasy.AI 의 `create_time` 과 Linky.AI 의 `send_time` 은 Unix 밀리초입니다[2]. Linky.AI 의 `create_time` 은 도구가 숫자로만 읽고 날짜로 바꾸지 않습니다[2]. Unix 시각은 UTC 기준이라, 값을 바꿨는데 1970년 무렵 날짜가 나오면 초 단위일 수 있으니 다시 봅니다. Replika 의 `timestamp` 칸은 도구가 그대로 날짜로 넘길 뿐 형식이 공개되지 않아서, 같은 행의 `timestamp_ms` 와 맞춰 형식과 시간대를 확인합니다.
 
-공개 도구는 결과를 `toLocaleString()` 으로 찍어서, 사람이 읽는 로그의 시각이 분석 PC 의 현지 시각으로 나옵니다[2]. 보고서에는 원래 값과 UTC 로 바꾼 값을 함께 적습니다. Linky.AI 의 `local_conversations.latest_msg_send_time` 은 그 대화의 마지막 메시지 시각이라서 `local_chat_logs` 의 마지막 `send_time` 과 맞춰 보면 지워진 메시지가 있는지 가늠할 수 있습니다. Character.AI 서버 응답에 든 시간대 칸은 사용자가 있던 지역을 짐작하는 근거가 됩니다[1]. 여러 출처의 시각을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+공개 도구는 결과를 `toLocaleString()` 으로 찍어서, 사람이 읽는 로그의 시각이 분석 PC 의 현지 시각으로 나옵니다[2]. 보고서에는 원래 값과 UTC 로 바꾼 값을 함께 적습니다. Linky.AI 의 `local_conversations.latest_msg_send_time` 은 그 대화의 마지막 메시지 시각이라서 `local_chat_logs` 의 마지막 `send_time` 과 맞춰 보면 지워진 메시지가 있는지 가늠할 수 있습니다. Character.AI 서버 응답에 든 시간대 칸은 사용자가 있던 지역을 짐작하는 근거가 됩니다[1]. 여러 출처의 시각을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

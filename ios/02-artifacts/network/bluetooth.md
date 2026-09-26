@@ -160,7 +160,7 @@ for addr, item in devices.items():
 | [나의 찾기](../location/find-my.md) | 분실물 찾기 장치와 등록 기록 |
 | [시간대와 시각 설정](../system-account/time-zone.md) | 현지 시각 값을 UTC 로 바꿀 기준 |
 
-여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
+여러 기록을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 실습
 

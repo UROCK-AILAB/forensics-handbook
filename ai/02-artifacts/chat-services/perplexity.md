@@ -49,7 +49,7 @@ Comet 프로필의 Local Storage 키(`pplx-next-auth-session`, `comet-sidecar-th
 
 ## 시각 해석
 
-기기 쪽 시각은 브라우저나 앱이 남긴 기록의 시각이라서, 저장소마다 기준 시각(UTC 인지 현지 시각인지)과 단위가 다릅니다. Comet 에서는 캐시 항목의 `entry_created_datetime` 이 ISO-8601 문자열, Local Storage 대화 목록의 `updatedAt` 이 유닉스 시각 밀리초, `perplexity_last_event_timestamp` 가 유닉스 시각 초로 들어 있습니다[2]. ISO-8601 문자열은 끝에 시간대 표시가 붙었는지 검체에서 보고 읽습니다. 브라우저 기록의 시각 형식은 각 브라우저 페이지에 있고, 여러 출처의 시각을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 서버 쪽 대화 시각은 계정 데이터 내보내기나 수사기관 요청으로 받은 자료에서 확인하고, Perplexity 가 내보내기를 제공하는지와 그 형식은 사건 당시 계정 설정 화면과 도움말에서 확인합니다.
+기기 쪽 시각은 브라우저나 앱이 남긴 기록의 시각이라서, 저장소마다 기준 시각(UTC 인지 현지 시각인지)과 단위가 다릅니다. Comet 에서는 캐시 항목의 `entry_created_datetime` 이 ISO-8601 문자열, Local Storage 대화 목록의 `updatedAt` 이 유닉스 시각 밀리초, `perplexity_last_event_timestamp` 가 유닉스 시각 초로 들어 있습니다[2]. ISO-8601 문자열은 끝에 시간대 표시가 붙었는지 검체에서 보고 읽습니다. 브라우저 기록의 시각 형식은 각 브라우저 페이지에 있고, 여러 출처의 시각을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다. 서버 쪽 대화 시각은 계정 데이터 내보내기나 수사기관 요청으로 받은 자료에서 확인하고, Perplexity 가 내보내기를 제공하는지와 그 형식은 사건 당시 계정 설정 화면과 도움말에서 확인합니다.
 
 ## 함정과 한계
 

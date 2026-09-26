@@ -167,7 +167,7 @@ gzip -dc 123456789012_CloudTrail-Digest_ap-northeast-2_example-trail_ap-northeas
 - 데이터 이벤트를 켜지 않은 버킷의 객체 접근은 [S3 접근 기록](../s3-access-logs.md)에서 찾습니다.
 - 이벤트 기록에서 찾은 `StopLogging`·`DeleteTrail` 호출 주체는 [IAM 사용자·역할·액세스 키](../iam.md)에서 키·역할의 주인을 맞춰 봅니다.
 - 보관 기간이 로그마다 다른 이유와 수집 순서는 [보관 기간과 라이선스](../../../01-foundations/logging/retention-licensing.md)와 [AWS·Azure·GCP 수집](../../../03-techniques/acquisition/iaas-collection.md)을 봅니다.
-- 전달 시각과 `eventTime` 을 다른 로그와 한 줄로 세우는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+- 전달 시각과 `eventTime` 을 다른 로그와 시간순으로 합치는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 실습
 

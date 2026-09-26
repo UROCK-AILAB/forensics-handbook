@@ -62,7 +62,7 @@ nav_order: 1780
 
 7. **관련 설정 키를 적어 둡니다.** settings global 키 목록에는 `secure_frp_mode`, `device_provisioned`, `synced_account_name`, `first_launch_samsung_account_menu` 가, secure 쪽에는 `remote_lock_setting`, `biometrics_strong_enroll_timestamp`, `lock_screen_lock_after_timeout`, `credential_service_primary` 가 있을 수 있습니다. 이 키들의 뜻은 이름으로 짐작할 뿐이라서, 값을 읽더라도 "이 키가 이 값이었다" 까지만 적습니다. 자동 완성과 자격 증명 서비스 키는 [몰래 설치된 감시 앱](stalkerware.md) 에서, 잠금 설정은 [잠금 화면 설정](../../02-artifacts/system-account/lock-settings.md) 에서 봅니다.
 
-8. **서버 쪽 기록과 맞춥니다.** 기기 기록에서 세운 추가·삭제 시각을 서비스 쪽 로그인 기록과 나란히 놓으면 다른 기기에서 먼저 로그인한 뒤 이 기기의 계정이 지워졌는지 같은 순서를 따질 수 있습니다. 서버 기록을 받는 법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에, 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
+8. **서버 쪽 기록과 맞춥니다.** 기기 기록에서 찾은 추가·삭제 시각을 서비스 쪽 로그인 기록과 나란히 놓으면 다른 기기에서 먼저 로그인한 뒤 이 기기의 계정이 지워졌는지 같은 순서를 따질 수 있습니다. 서버 기록을 받는 법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에, 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 > 그림 자리: `debug_table` 한 줄을 여섯 칸으로 나눠 "계정 ID → accounts 표의 _id", "UID → 패키지 이름" 으로 화살표를 잇고, 요청 줄과 실제 변경 줄을 다른 색으로 구분한 그림
 

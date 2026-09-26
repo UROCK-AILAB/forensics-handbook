@@ -151,7 +151,7 @@ audit 플러그인은 패키지마다 `SOFTWARE_UPDATE`(1138) 감사 이벤트�
 | yum `trans_beg.timestamp`, `trans_end.timestamp` | Unix 초[18] | UTC | 트랜잭션 시작·끝 |
 | rpm syslog 플러그인 | 시스템 로그 시각 | [syslog 형식과 rsyslog](../../01-foundations/logging/syslog-rsyslog.md), [systemd 저널](../../01-foundations/logging/systemd-journal/index.md) 참고 | 줄을 쓸 때 |
 
-`rpm -q --queryformat` 의 `:date` 는 strftime `%c`, `:day` 는 `%a %b %d %Y` 로 바꿔 찍으므로[5] 분석하는 PC 의 시간대가 들어갑니다. 여러 기록을 한 줄로 세울 때는 `%{INSTALLTIME}` 숫자 그대로 뽑아 UTC 로 바꾸는 편이 안전합니다. `yum.log` 처럼 현지 시각만 있는 기록은 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 쪽에서 구한 시간대로 옮기고, 에포크 값을 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`rpm -q --queryformat` 의 `:date` 는 strftime `%c`, `:day` 는 `%a %b %d %Y` 로 바꿔 찍으므로[5] 분석하는 PC 의 시간대가 들어갑니다. 여러 기록을 시간순으로 합칠 때는 `%{INSTALLTIME}` 숫자 그대로 뽑아 UTC 로 바꾸는 편이 안전합니다. `yum.log` 처럼 현지 시각만 있는 기록은 [호스트 이름·시간대·로캘](../system-info/hostname-timezone.md) 쪽에서 구한 시간대로 옮기고, 에포크 값을 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 

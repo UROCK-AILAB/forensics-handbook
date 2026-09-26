@@ -227,7 +227,7 @@ AZKVAuditLogs
 | [Azure 가상 머신](./azure-vm.md) | 관리 ID 를 쓰는 VM 에서 비밀을 읽은 경우 그 VM 안의 작업 |
 | [CloudTrail](../aws/cloudtrail/index.md) | AWS 쪽 비밀·키 사용 기록과 견줄 때 |
 
-IP·User-Agent 로 출처를 좁히는 방법은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md), 여러 기록을 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md), 기록이 지워지기 전에 지키는 방법은 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다.
+IP·User-Agent 로 출처를 좁히는 방법은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md), 여러 기록을 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md), 기록이 지워지기 전에 지키는 방법은 [로그부터 지키기](../../03-techniques/acquisition/log-preservation.md)에 있습니다.
 
 ## 실습
 

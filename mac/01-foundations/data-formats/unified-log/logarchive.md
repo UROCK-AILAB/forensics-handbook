@@ -74,7 +74,7 @@ log show --file <tracev3 파일 경로>
 
 predicate 조건에는 `eventMessage`, `eventType`, `messageType`, `process`, `processImagePath`, `sender`, `senderImagePath`, `subsystem`, `category` 필드를 씁니다 [1]. 조사에서 자주 찾는 서브시스템과 메시지는 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events/index.md)과 [통합 로그의 프로세스 실행 기록 (Process Events)](../../../02-artifacts/execution/unified-log-process.md)에서 다룹니다.
 
-`--info`·`--debug` 를 붙이지 않으면 그 수준 메시지는 결과에 나오지 않아서 [1], 아카이브에 있는 info·debug 항목을 보려면 두 옵션을 붙입니다. 출력 시각은 `--timezone` 에 따라 달라지고 이 옵션을 빼면 항목을 기록할 때의 시간대로 나오므로 [1], 결과를 다른 로그와 합칠 때는 시간대를 밝혀 맞추고, 여러 로그를 한 줄로 세우는 법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
+`--info`·`--debug` 를 붙이지 않으면 그 수준 메시지는 결과에 나오지 않아서 [1], 아카이브에 있는 info·debug 항목을 보려면 두 옵션을 붙입니다. 출력 시각은 `--timezone` 에 따라 달라지고 이 옵션을 빼면 항목을 기록할 때의 시간대로 나오므로 [1], 결과를 다른 로그와 합칠 때는 시간대를 밝혀 맞추고, 여러 로그를 시간순으로 합치는 법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 
 ### 그 밖의 하위 명령
 

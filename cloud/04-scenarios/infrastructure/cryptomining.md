@@ -26,7 +26,7 @@ nav_order: 790
 | Azure | Defender for Cloud(서버용) | Linux 머신의 호스트 데이터 분석과 ARM 작업 분석으로 경고가 생김[11] |
 | Google Cloud | Security Command Center | Premium 또는 Enterprise 등급에서 Event Threat Detection·VM Threat Detection 을 켜야 하고, 채굴 프로그램이 알려진 나쁜 도메인을 부르는 것을 잡으려면 Cloud DNS 로깅도 켜야 함[12]. Enterprise 등급은 2027년 5월 21일에 끝나고 Premium 으로 옮겨 감[12] |
 
-**시각 기준.** CloudTrail `eventTime` 은 요청이 끝난 시각이고 UTC 입니다[2]. Azure 활동 로그 `eventTimestamp` 는 요청을 처리한 Azure 서비스가 이벤트를 만든 시각이고 `Z` 가 붙은 UTC 로 적힙니다[9]. Google Cloud 감사 로그의 `timestamp` 도 `Z` 가 붙은 UTC 입니다[14]. 여러 공급자의 기록을 한 줄로 세우는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)과 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)을 따릅니다.
+**시각 기준.** CloudTrail `eventTime` 은 요청이 끝난 시각이고 UTC 입니다[2]. Azure 활동 로그 `eventTimestamp` 는 요청을 처리한 Azure 서비스가 이벤트를 만든 시각이고 `Z` 가 붙은 UTC 로 적힙니다[9]. Google Cloud 감사 로그의 `timestamp` 도 `Z` 가 붙은 UTC 입니다[14]. 여러 공급자의 기록을 시간순으로 합치는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md)과 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)을 따릅니다.
 
 ## 볼 아티팩트와 순서
 

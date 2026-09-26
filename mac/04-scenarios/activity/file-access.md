@@ -46,7 +46,7 @@ OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-v
 | 10 | 통합 로그의 `tccd` 기록 | 개인 정보 보호 권한 확인과 접근 위반 | [개인 정보 보호 권한](../../02-artifacts/credentials/tcc/index.md) |
 | 11 | APFS 파일 시각과 `date_added` | 만들기·수정·변경·접근 시각, 폴더에 들어온 시각 | [APFS 구조](../../01-foundations/disk-volume/apfs/index.md) |
 
-1~6번은 "열었다"에 가까운 흔적이라 먼저 보고, 7~11번은 앞의 결과를 보강하거나 파일을 바꾼 시점을 세울 때 봅니다. 오피스 파일 경로는 오피스 2016 기준으로 `~/Library/Containers/com.microsoft.<앱>/Data/Library/Preferences/com.microsoft.<앱>.securebookmarks.plist` 입니다 [8].
+1~6번은 "열었다"에 가까운 흔적이라 먼저 보고, 7~11번은 앞의 결과를 보강하거나 파일을 바꾼 시점을 확인할 때 봅니다. 오피스 파일 경로는 오피스 2016 기준으로 `~/Library/Containers/com.microsoft.<앱>/Data/Library/Preferences/com.microsoft.<앱>.securebookmarks.plist` 입니다 [8].
 
 ### 파일 자체에 남는 "마지막으로 연 날짜"
 

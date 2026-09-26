@@ -184,7 +184,7 @@ JOIN ZADDITIONALASSETATTRIBUTES b ON b.ZASSET = a.Z_PK;
 | [아이폰·아이패드 연결](../external-devices/ios-devices/index.md) | 연결한 기기에서 사진을 가져온 시점 |
 | [타임 머신](../filesystem/time-machine/index.md) | 예전 시점의 보관함 사본 |
 
-사진이 보관함에서 사라진 사건은 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) 시나리오와, 여러 아티팩트의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 함께 봅니다.
+사진이 보관함에서 사라진 사건은 [지운 파일의 흔적 찾기](../../04-scenarios/activity/deleted-file-traces.md) 시나리오와, 여러 아티팩트의 시각을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 함께 봅니다.
 
 ## 실습
 

@@ -106,7 +106,7 @@ iLEAPP 의 위챗 분석기는 `Chat_` 표와 `Friend` 표를 이어 대화 상�
 
 ## 교차 검증
 
-대화 시각에 위챗 알림이 떴는지는 [알림 기록 (Notifications)](../app-usage/notifications.md)에서, 그 시각에 앱을 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../app-usage/biome/index.md)에서 봅니다. 위챗 연락처의 전화번호가 기기 연락처에도 있는지는 [연락처 (AddressBook)](../communications/contacts.md)에서 맞춰 보고, 다른 연락 수단과 한 줄로 세우는 방법은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md)에 있습니다.
+대화 시각에 위챗 알림이 떴는지는 [알림 기록 (Notifications)](../app-usage/notifications.md)에서, 그 시각에 앱을 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../app-usage/biome/index.md)에서 봅니다. 위챗 연락처의 전화번호가 기기 연락처에도 있는지는 [연락처 (AddressBook)](../communications/contacts.md)에서 맞춰 보고, 다른 연락 수단과 시간순으로 합치는 방법은 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md)에 있습니다.
 
 ## 실습
 

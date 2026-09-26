@@ -164,7 +164,7 @@ containerd 저장소에서는 압축된 레이어 blob·매니페스트·설정�
 - [overlay 파일 시스템 (overlay2)](overlay2.md): `cache-id`·`mount-id` 가 가리키는 폴더의 실제 내용과 컨테이너가 바꾼 파일.
 - [셸 명령 기록](../../execution/shell-history/index.md): `docker pull`, `docker build`, `docker load` 명령과 그 순서.
 - [systemd 저널](../../../01-foundations/logging/systemd-journal/index.md): `docker.service` 단위의 데몬 기록.
-- [타임라인 만들기](../../../03-techniques/analysis/timeline.md): `lastUpdated`, 레이어 폴더 생성 시각, 셸 기록을 한 줄로 세웁니다.
+- [타임라인 만들기](../../../03-techniques/analysis/timeline.md): `lastUpdated`, 레이어 폴더 생성 시각, 셸 기록을 시간순으로 합칩니다.
 
 ## 실습
 

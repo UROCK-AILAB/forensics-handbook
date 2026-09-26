@@ -105,7 +105,7 @@ TLS 1.3 은 서버 인증서를 수동 관찰에서 숨기고, ESNI/ECH (Encrypt
 
 ## 시각 해석
 
-Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 칸은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 칸은 `ts` 이고, 값은 유닉스 시각(초)일 수도 있고 끝에 `Z` 가 붙은 UTC 문자열일 수도 있습니다[3]. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+Sysmon 이벤트의 시각은 UTC 입니다. 이벤트 22 는 질의 한 번마다 생기는 기록이라서 연결이 이어진 시간이 아니라 이름을 찾은 순간을 가리키고, 연결이 얼마나 이어졌는지는 이벤트 3 이나 네트워크 장비 기록으로 봅니다. `Cookies` 표의 시각 칸은 이름에 `utc` 가 붙어 있고, 저장 형식과 바꾸는 법은 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)를 따릅니다. `ssl.log` 의 시각 칸은 `ts` 이고, 값은 유닉스 시각(초)일 수도 있고 끝에 `Z` 가 붙은 UTC 문자열일 수도 있습니다[3]. 어느 모양으로 남는지는 수집 장비의 출력 설정에 따라 다르므로 받은 파일에서 확인합니다. 여러 기록을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

@@ -104,7 +104,7 @@ SigninLogs
 
 ### 7. 로그인 뒤에 바뀐 것을 잇는다
 
-의심 로그인 하나를 찾으면 그 뒤에 같은 계정으로 무엇이 바뀌었는지 봅니다. Entra 에서는 감사 로그의 MFA 방법 추가, 기기 등록, 자격 증명 변경과 메일함의 받은편지함 규칙·전달 규칙을 확인합니다[8]. Google Workspace 로그인 기록에도 `2sv_disable`, `password_edit`, `recovery_email_edit`, `recovery_phone_edit`, `email_forwarding_out_of_domain` 같은 계정 변경 이벤트가 함께 있습니다[14]. 설정 변경을 읽는 방법은 [권한 변화 따라가기](permission-changes.md), 로그인과 변경을 한 줄로 세우는 방법은 [클라우드 타임라인](timeline.md)에 있습니다.
+의심 로그인 하나를 찾으면 그 뒤에 같은 계정으로 무엇이 바뀌었는지 봅니다. Entra 에서는 감사 로그의 MFA 방법 추가, 기기 등록, 자격 증명 변경과 메일함의 받은편지함 규칙·전달 규칙을 확인합니다[8]. Google Workspace 로그인 기록에도 `2sv_disable`, `password_edit`, `recovery_email_edit`, `recovery_phone_edit`, `email_forwarding_out_of_domain` 같은 계정 변경 이벤트가 함께 있습니다[14]. 설정 변경을 읽는 방법은 [권한 변화 따라가기](permission-changes.md), 로그인과 변경을 시간순으로 합치는 방법은 [클라우드 타임라인](timeline.md)에 있습니다.
 
 ## 도구
 

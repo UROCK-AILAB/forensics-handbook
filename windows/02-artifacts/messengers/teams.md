@@ -231,7 +231,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | [스카이프](skype.md) | Skype 에서 옮겨 온 대화가 있는지 봅니다 |
 | [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) | `EBWebView` 의 쿠키·캐시·방문 기록을 읽는 법을 봅니다 |
 
-여러 출처의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다. 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
+여러 출처의 시각을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다. 조사 전체 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication-reconstruction.md) 에서 다룹니다.
 
 ## 실습
 

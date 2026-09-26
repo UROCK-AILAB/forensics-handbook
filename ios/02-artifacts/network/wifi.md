@@ -176,7 +176,7 @@ for key, item in data.items():
 | [전원 로그](../app-usage/powerlog.md) | 같은 시간대의 기기 상태 |
 | [시간대와 시각 설정](../system-account/time-zone.md) | 시각을 현지 시각으로 바꿀 기준 |
 
-여러 시각 기록을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 [그 시각에 어디 있었나](../../04-scenarios/activity/location.md) 에서 다룹니다.
+여러 시각 기록을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 [그 시각에 어디 있었나](../../04-scenarios/activity/location.md) 에서 다룹니다.
 
 ## 실습
 

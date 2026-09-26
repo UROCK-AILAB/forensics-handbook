@@ -149,7 +149,7 @@ ORDER BY createTime;
 | [연락처](../communications/contacts.md) | `userinfo` 의 전화번호나 `rcontact` 항목이 기기 연락처와 겹치는지 |
 | [미디어 저장소](../media/mediastore/index.md) | 대화 이미지를 공용 저장 공간에 저장했는지 |
 
-여러 앱의 대화를 한 흐름으로 세우는 방법은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
+여러 앱의 대화를 시간순으로 합쳐 보는 방법은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 실습
 

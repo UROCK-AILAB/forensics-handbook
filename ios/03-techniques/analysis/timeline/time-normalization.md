@@ -7,7 +7,7 @@ nav_order: 1280
 
 # 시각 정규화 (Time Normalization)
 
-아이폰의 여러 기록에 흩어진 시각 값을 같은 기준점과 단위, 같은 시간대로 바꿔서 한 줄에 세울 수 있게 만드는 작업입니다.
+아이폰의 여러 기록에 흩어진 시각 값을 같은 기준점과 단위, 같은 시간대로 바꿔서 시간순으로 합칠 수 있게 만드는 작업입니다.
 
 ## 언제 쓰나
 
@@ -42,7 +42,7 @@ iOS 11 부터 메시지 DB(`sms.db`)의 시각 칸에 길이가 다른 Mac 절�
 case when LENGTH(chat_message_join.message_date)=18 then datetime(chat_message_join.message_date/1000000000+978307200,'unixepoch','localtime') when LENGTH(chat_message_join.message_date)=9 then datetime(chat_message_join.message_date +978307200,'unixepoch','localtime') else 'N/A' END
 ```
 
-이 식은 `'localtime'` 을 붙여서 분석하는 PC 의 시간대로 바꿔 보여 줍니다. 여러 기록을 한 줄에 세울 때는 `'localtime'` 을 빼고 UTC 로 받은 뒤, 기기의 시간대는 5단계처럼 따로 적는 편이 뒤섞이지 않습니다.
+이 식은 `'localtime'` 을 붙여서 분석하는 PC 의 시간대로 바꿔 보여 줍니다. 여러 기록을 시간순으로 합칠 때는 `'localtime'` 을 빼고 UTC 로 받은 뒤, 기기의 시간대는 5단계처럼 따로 적는 편이 뒤섞이지 않습니다.
 
 iOS 27.0 백업의 `HomeDomain :: Library/SMS/sms.db` 에서 시각이 들어가는 칸은 다음과 같습니다. 이 버전에서 각 칸이 초인지 나노초인지는 행마다 자릿수를 보고 판단합니다.
 

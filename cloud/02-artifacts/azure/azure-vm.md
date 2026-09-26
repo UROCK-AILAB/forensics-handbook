@@ -148,7 +148,7 @@ AzureActivity
 | [Linux 인증 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/logins/auth-log.html) | 게스트에 SSH 로 들어온 계정과 시각 |
 | [EC2 인스턴스와 스냅숏](../aws/ec2-ebs.md) | AWS 에서 같은 질문을 풀 때의 대응 기록 |
 
-여러 기록을 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+여러 기록을 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 실습
 

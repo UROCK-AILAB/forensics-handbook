@@ -183,7 +183,7 @@ Crockford base32 는 `0123456789ABCDEFGHJKMNPQRSTVWXYZ` 순서로 값을 매기�
 **로그를 직접 한 번.** `cortex.log` 를 텍스트 편집기나 `grep` 으로 열어 아래 순서로 찾습니다.
 
 1. `cortex.cpp version` 과 `Host:` 줄로 엔진을 띄운 때와 판을 나열합니다.
-2. `model handle`, `Task added to queue`, `Transfer completed for URL`, `Removed` 로 모델을 받고 지운 흐름을 세웁니다.
+2. `model handle`, `Task added to queue`, `Transfer completed for URL`, `Removed` 로 모델을 받고 지운 흐름을 정리합니다.
 3. `request body` 뒤 JSON 의 `model` 과 `messages[]` 를 읽고, 같은 시각의 `messages.jsonl` 줄과 맞춥니다. `messages.jsonl` 에 없는 요청은 지운 대화이거나 앱이 보낸 이름 짓기 요청입니다.
 4. `DeleteThread` 줄의 스레드 ID 를 `threads` 폴더와 대조해, 폴더가 없는 ID 는 앞 10자를 풀어 만든 시각을 구합니다.
 
@@ -199,7 +199,7 @@ Crockford base32 는 `0123456789ABCDEFGHJKMNPQRSTVWXYZ` 순서로 값을 매기�
 | `engines.api_key` ↔ `cortex.log` `Authorization` 줄 ↔ `api.openai.com` 같은 호출 주소 | 어느 서비스를 키로 썼는지. 네트워크 쪽은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md) |
 | 모델 YAML ↔ GGUF 헤더 ↔ 로그의 `llama_model_loader` 줄 | 모델 이름과 출처 URL. [로컬 모델 파일](model-files.md) |
 
-여러 앱의 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+여러 앱의 기록을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 실습
 

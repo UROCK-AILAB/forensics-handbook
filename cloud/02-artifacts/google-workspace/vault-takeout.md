@@ -168,7 +168,7 @@ Takeout 보관 파일은 고른 최대 크기를 넘으면 여러 파일로 나�
 - Vault 내보내기의 Gmail 메타데이터 DateSent 는 UTC 이고, DateReceived 는 시간대 설명 없이 형식만 정해져 있습니다[7]. 두 형식 모두 끝의 `ZZZZ` 자리에 시간대 표기가 붙으므로 값 끝의 시간대 표기를 보고 판단합니다. Groups 메타데이터 CSV 는 두 값 모두 UTC 입니다[7].
 - Vault API 의 `createTime` 은 `Z` 로 끝나는 RFC 3339 UTC 문자열입니다[9].
 - Drive 메타데이터의 #DateCreated 는 Google 형식이 아닌 파일이면 보통 Drive 에 올린 날짜이지 원래 파일을 만든 날짜가 아닙니다[7].
-- 여러 시각 원천을 한 줄로 세우는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 과 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
+- 여러 시각 원천을 시간순으로 합치는 방법은 [클라우드 로그의 시각](../../01-foundations/logging/timestamps.md) 과 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 
 ## 함정과 한계
 

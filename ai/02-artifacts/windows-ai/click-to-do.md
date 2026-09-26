@@ -113,7 +113,7 @@ Copilot 에 묻기를 고르면 고른 내용이 Copilot 의 프롬프트 상자
 
 ## 증거로서 의미
 
-**증명하는 것.** 정책 키에 `DisableClickToDo`=1 이 있으면 관리자가 클릭 투 두를 막았다는 사실과 그 범위(장치 하이브인지 사용자 하이브인지)를 알 수 있습니다. 다른 이름으로 저장한 이미지 파일은 사용자가 정한 위치에 남으므로, 파일의 생성 시각은 그 시각에 이미지 파일이 만들어졌다는 기록이 됩니다. 임시 폴더에 이미지 파일이 생긴 시각과 그림판·사진 앱이 파일을 연 시각이 맞으면, 클릭 투 두로 화면 일부를 넘겼을 가능성을 뒷받침합니다. 다만 임시 파일 이름 규칙이 공개되지 않아서 이 연결은 시각과 정황으로 세우는 추정이고, 보고서에는 "이 시각에 임시 폴더에 이미지 파일이 생겼고 곧이어 그림판이 이 파일을 열었다" 처럼 기록이 말하는 만큼만 씁니다.
+**증명하는 것.** 정책 키에 `DisableClickToDo`=1 이 있으면 관리자가 클릭 투 두를 막았다는 사실과 그 범위(장치 하이브인지 사용자 하이브인지)를 알 수 있습니다. 다른 이름으로 저장한 이미지 파일은 사용자가 정한 위치에 남으므로, 파일의 생성 시각은 그 시각에 이미지 파일이 만들어졌다는 기록이 됩니다. 임시 폴더에 이미지 파일이 생긴 시각과 그림판·사진 앱이 파일을 연 시각이 맞으면, 클릭 투 두로 화면 일부를 넘겼을 가능성을 뒷받침합니다. 다만 임시 파일 이름 규칙이 공개되지 않아서 이 연결은 시각과 정황으로 하는 추정이고, 보고서에는 "이 시각에 임시 폴더에 이미지 파일이 생겼고 곧이어 그림판이 이 파일을 열었다" 처럼 기록이 말하는 만큼만 씁니다.
 
 **증명하지 못하는 것.** 클릭 투 두는 작업 뒤 화면 내용을 보관하지 않아서, 사용자가 어떤 화면에서 무엇을 골랐는지 클릭 투 두 쪽 기록으로는 보여 줄 수 없습니다[1][2]. 기기 안 요약·다시 쓰기의 결과는 공개된 저장 위치가 없습니다. Edge 방문 기록의 Bing 검색, Copilot 대화, 저장한 이미지 파일이 있어도 그것만으로는 클릭 투 두를 거쳤는지 사용자가 직접 했는지 가를 수 없습니다. 정책 값이 없거나 0 이라는 사실도 사용자가 클릭 투 두를 썼다는 뜻이 아니고, 쓸 수 있었다는 뜻일 뿐입니다.
 
@@ -146,7 +146,7 @@ KapeFiles 와 Velociraptor 교환 저장소에는 클릭 투 두 전용 항목�
 
 ## 교차 검증
 
-스냅숏 위에서 도는 경우와 같은 정책 키의 Recall 값은 [Recall](recall.md)에서, Copilot 에 묻기로 넘어간 내용은 [Microsoft Copilot](../chat-services/copilot/index.md)에서 봅니다. 회사 기기의 Ask Microsoft Copilot 과 Word 의 Copilot 초안은 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)과 [Microsoft Purview로 본 Copilot 기록](../network-enterprise/purview-copilot.md)에서 이어 봅니다. Bing 검색과 시각 검색이 네트워크에 남긴 흔적은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)에서 다루고, 흩어진 시각을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다. 화면에서 고른 텍스트가 프롬프트로 들어간 경우 프롬프트와 생성물을 가르는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
+스냅숏 위에서 도는 경우와 같은 정책 키의 Recall 값은 [Recall](recall.md)에서, Copilot 에 묻기로 넘어간 내용은 [Microsoft Copilot](../chat-services/copilot/index.md)에서 봅니다. 회사 기기의 Ask Microsoft Copilot 과 Word 의 Copilot 초안은 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)과 [Microsoft Purview로 본 Copilot 기록](../network-enterprise/purview-copilot.md)에서 이어 봅니다. Bing 검색과 시각 검색이 네트워크에 남긴 흔적은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)에서 다루고, 흩어진 시각을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)에 있습니다. 화면에서 고른 텍스트가 프롬프트로 들어간 경우 프롬프트와 생성물을 가르는 기준은 [프롬프트·첨부·생성물 구분하기](../../01-foundations/concepts/prompt-attachment-output.md)에 있습니다.
 
 ## 실습
 

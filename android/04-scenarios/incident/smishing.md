@@ -54,7 +54,7 @@ Google Play 보호 기능(Play Protect)의 분류에서 피싱(Phishing)은 믿�
 
 4. **문자가 지워졌으면 알림에서 찾습니다.** `dumpsys notification` 알림 기록에는 `pkg=` 와 함께 `extras` 안에 `android.title`, `android.text` 칸이 있습니다. 문자 앱이 띄운 알림이면 이 칸에서 보낸 사람과 본문 일부를 볼 수 있을 가능성이 있으니 검체에서 확인합니다. 지난 알림을 저장하는 기록은 [알림 기록](../../02-artifacts/app-usage/notification-history.md) 에서 봅니다.
 
-5. **링크를 열었는지 봅니다.** 문자를 받은 시각 뒤에 본문 속 주소나 그 주소가 넘겨준 페이지가 브라우저 기록에 있는지 찾습니다. 브라우저마다 기록 위치가 달라 [크롬](../../02-artifacts/browsers/chrome/index.md) 과 [삼성 인터넷](../../02-artifacts/browsers/samsung-internet.md), [그 밖의 브라우저](../../02-artifacts/browsers/other-browsers.md) 페이지를 따르고, 웹 기록을 시간순으로 세우는 법은 [웹 사용 행위 재구성](../activity/web-activity.md) 에 있습니다.
+5. **링크를 열었는지 봅니다.** 문자를 받은 시각 뒤에 본문 속 주소나 그 주소가 넘겨준 페이지가 브라우저 기록에 있는지 찾습니다. 브라우저마다 기록 위치가 달라 [크롬](../../02-artifacts/browsers/chrome/index.md) 과 [삼성 인터넷](../../02-artifacts/browsers/samsung-internet.md), [그 밖의 브라우저](../../02-artifacts/browsers/other-browsers.md) 페이지를 따르고, 웹 기록을 시간순으로 정리하는 법은 [웹 사용 행위 재구성](../activity/web-activity.md) 에 있습니다.
 
 6. **파일을 받았는지 봅니다.** 링크를 거쳐 받은 파일은 미디어 저장소의 받은 주소, 리퍼러, 파일을 넣은 앱, 추가된 시각으로 찾고, 칸 이름과 단위는 [악성 앱은 어디서 들어왔나](initial-access.md) 의 4단계에 있습니다. 받은 파일이 APK 이고 설치까지 이어졌다면 같은 페이지의 흐름으로 설치자와 설치 시각을 읽습니다.
 

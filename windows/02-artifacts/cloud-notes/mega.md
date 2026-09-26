@@ -71,7 +71,7 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 
 - 이 밖에 계산용 가상 칸 `mimetypeVirtual`·`fingerprintVirtual`·`sizeVirtual`·`s3keyVirtual` 이 있습니다.
 - `name` 칸이 텍스트이므로 계정의 클라우드 파일·폴더 이름 목록을 이 표에서 바로 볼 수 있을 것으로 보입니다. 평문으로 남는지는 검체에서 확인합니다.
-- `parenthandle` 을 따라 `nodehandle` 로 올라가면 폴더 경로를 다시 세울 수 있습니다(칸 이름에서 추론).
+- `parenthandle` 을 따라 `nodehandle` 로 올라가면 폴더 경로를 되살릴 수 있습니다(칸 이름에서 추론).
 
 ### statecache 표 (코드)
 
@@ -205,7 +205,7 @@ FROM nodes;
 MEGAsync 가 깔린 공개 검체(NIST CFReDS 등)를 구하거나, 시험용 PC 에 앱을 깔고 시험용 계정으로 동기화해 본 뒤 아래 질문을 풀어 봅니다.
 
 1. 데이터 폴더의 `megaclient_statecache` DB 는 몇 개입니까? 판 번호는 몇입니까? `status_`·`transfers_` 가 붙은 DB 가 있습니까?
-2. nodes 표에서 파일 이름이 평문으로 보입니까? `parenthandle` 을 따라 파일 하나의 전체 경로를 세워 봅니다.
+2. nodes 표에서 파일 이름이 평문으로 보입니까? `parenthandle` 을 따라 파일 하나의 전체 경로를 만들어 봅니다.
 3. `logs` 폴더의 로그 파일은 몇 개입니까? 번호 붙은 로그를 풀어 첫 줄과 마지막 줄의 시각을 적습니다.
 4. 동기화 폴더에서 `Rubbish` 를 찾습니다. 숨김 속성이 켜져 있습니까? 날짜 폴더는 몇 개입니까?
 5. 날짜 폴더 하나의 이름과 그 폴더의 NTFS 만든 시각(UTC)을 비교합니다. 시간대만큼 차이가 납니까?

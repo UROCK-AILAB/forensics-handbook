@@ -160,7 +160,7 @@ fsstat -o 2048 disk.raw
 | 저널 부팅 첫 메시지 ↔ ext4 `s_mtime` ↔ [커널 로그](kernel-log.md) 첫 줄 | 부팅 시각의 일치 |
 | wtmp 런레벨 레코드의 커널 판 ↔ [배포판과 버전](os-release.md) | 그 부팅이 어느 커널이었는지 |
 
-종료 메시지가 없는 부팅이 있고, 저널 폴더에 `.journal~` 파일이 있으며, 슈퍼블록에 INCOMPAT_RECOVER 가 켜져 있으면 비정상 종료였을 가능성이 높아집니다. 사람이 시계를 바꿨는지는 [시각을 조작했나](../../04-scenarios/insider/time-manipulation.md), 여러 기록을 한 줄로 세우는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다. 로그인 세션과 부팅을 함께 보는 법은 [로그인 기록](../logins/wtmp-btmp-lastlog.md) 에서 다룹니다.
+종료 메시지가 없는 부팅이 있고, 저널 폴더에 `.journal~` 파일이 있으며, 슈퍼블록에 INCOMPAT_RECOVER 가 켜져 있으면 비정상 종료였을 가능성이 높아집니다. 사람이 시계를 바꿨는지는 [시각을 조작했나](../../04-scenarios/insider/time-manipulation.md), 여러 기록을 시간순으로 합치는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다. 로그인 세션과 부팅을 함께 보는 법은 [로그인 기록](../logins/wtmp-btmp-lastlog.md) 에서 다룹니다.
 
 ## 실습
 

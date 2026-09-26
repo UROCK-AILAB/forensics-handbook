@@ -252,7 +252,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 
 ## 함정과 한계
 
-1. **시각 기준이 섞여 있습니다.** 위 표대로 기록마다 기준을 적고 나서 한 줄로 세웁니다.
+1. **시각 기준이 섞여 있습니다.** 위 표대로 기록마다 기준을 적고 나서 시간순으로 합칩니다.
 2. **.etl 은 바로 읽을 수 없습니다.** `Get-WindowsUpdateLog` 로 풉니다. 이때 로그를 만든 Windows 세대와 푸는 PC 의 세대가 맞아야 합니다.
    - Windows 10 1709(빌드 16299) 이전 로그는 Microsoft 심볼 서버에 접속해야 풀립니다. 1709 이전 Windows 10 에서 풀어야 합니다.
    - 1709 부터의 로그는 심볼 서버가 필요 없습니다. Windows 10 1709 이상에서 풀어야 합니다.
@@ -340,7 +340,7 @@ Get-WindowsUpdateLog -ETLPath D:\case\WindowsUpdate -LogPath D:\case\out\Windows
 | 초기 침입 조사 | 침입 시점에 어떤 누적 업데이트까지 설치돼 있었는지 봅니다 | [악성코드는 어디서 들어왔나](../../04-scenarios/incident/initial-access.md) |
 | 초기화·재설치 흔적 | OS 설치 때 들어간 패키지 시각과 OS 설치 시각을 함께 봅니다 | [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) |
 
-여러 기록의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
+여러 기록의 시각을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 ## 실습
 

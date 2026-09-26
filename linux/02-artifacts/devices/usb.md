@@ -191,7 +191,7 @@ vol -f memory.lime linux.kmsg
 | gvfs 트리 이름 `uuid-`·`label-` ↔ 마운트 기록의 UUID·레이블 | 그 볼륨 위 파일을 GNOME 파일 관리자가 다룬 적이 있는지 |
 | 저널 커널 항목 ↔ `kern.log`·`messages` | 같은 연결 줄이 양쪽에 있는지 |
 
-여러 기록을 한 줄로 세우는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
+여러 기록을 시간순으로 합치는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 
 ## 실습
 

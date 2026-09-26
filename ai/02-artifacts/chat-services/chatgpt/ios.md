@@ -100,7 +100,7 @@ App Store 에 적힌 앱 안 결제 항목의 이름은 ChatGPT Plus, ChatGPT Go
 | `metadata.finish_details.type` | 답이 어떻게 끝났는지 |
 | `metadata.voice_mode_message` | 음성 대화에서 나온 메시지인지 |
 
-iLEAPP 은 `metadata` 전체도 문자열로 한 칸에 남깁니다 [3]. iLEAPP 은 `storage` 의 메시지를 한 행씩 꺼낼 뿐이고 메시지 사이의 순서를 따로 정리하지 않습니다. 대화 흐름을 다시 세울 때는 JSON 을 직접 열어 메시지 객체의 다른 키를 봅니다.
+iLEAPP 은 `metadata` 전체도 문자열로 한 칸에 남깁니다 [3]. iLEAPP 은 `storage` 의 메시지를 한 행씩 꺼낼 뿐이고 메시지 사이의 순서를 따로 정리하지 않습니다. 대화 흐름을 다시 맞출 때는 JSON 을 직접 열어 메시지 객체의 다른 키를 봅니다.
 
 `about_user_message` 와 `about_model_message` 는 사용자가 직접 쓴 글이라서 대화 본문처럼 다룹니다.
 
@@ -140,7 +140,7 @@ iLEAPP 은 `tmp/` 아래 PNG 를 "Media Uploads" 로, M4A 를 "Voice Prompts" �
 
 `modification_date` 가 무엇이 바뀔 때 갱신되는지는 공개된 자료가 없어서, 대화를 연 시각으로 읽지 않고 메시지 하나하나의 `create_time` 을 함께 봅니다. 컨테이너 안 파일의 파일 시스템 시각도 동기화나 캐시 갱신 때 바뀔 수 있어서 대화한 시각으로 바로 옮기지 않습니다.
 
-App Store 페이지의 출시 표시는 "1일 전" 처럼 상대 시각이라서, 날짜로 적을 때는 페이지를 본 날짜를 함께 적고 "무렵" 으로 씁니다. 기기의 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
+App Store 페이지의 출시 표시는 "1일 전" 처럼 상대 시각이라서, 날짜로 적을 때는 페이지를 본 날짜를 함께 적고 "무렵" 으로 씁니다. 기기의 여러 기록을 시간순으로 합치는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

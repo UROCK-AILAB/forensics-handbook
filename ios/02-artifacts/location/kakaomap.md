@@ -122,7 +122,7 @@ ORDER BY domain, relativePath;
 | [알림 기록](../app-usage/notifications.md) | 카카오맵이 보낸 알림 |
 | [Apple 지도](apple-maps.md) · [네이버 지도](naver-map.md) | 다른 지도 앱으로 같은 장소를 찾았는지 |
 
-앱 실행·사용 시각은 앱 자체 기록과 별도로 시스템 흔적에서 번들 ID 로 찾아 보강할 수 있고, 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 [그 시각에 어디 있었나](../../04-scenarios/activity/location.md) 에서 다룹니다.
+앱 실행·사용 시각은 앱 자체 기록과 별도로 시스템 흔적에서 번들 ID 로 찾아 보강할 수 있고, 여러 기록을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 [그 시각에 어디 있었나](../../04-scenarios/activity/location.md) 에서 다룹니다.
 
 ## 실습
 

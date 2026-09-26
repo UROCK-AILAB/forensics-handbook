@@ -183,7 +183,7 @@ Untitled Goose Tool 의 `dump_log_analytic_workspaces` 는 작업 영역 목록�
 - [네트워크 흐름 로그](flow-logs.md) — 흐름 로그도 같은 `insights-logs-` 컨테이너 규칙으로 Storage 에 쌓입니다.
 - [Entra ID 로그](../m365/entra-logs/index.md) — `identity` 에 적힌 주체와 IP 를 로그인 기록과 맞춰 봅니다.
 - [CloudWatch Logs](../aws/cloudwatch-logs.md) — AWS 에서 서비스 로그를 모으는 비슷한 구조입니다.
-- [클라우드 타임라인](../../03-techniques/analysis/timeline.md) — 리소스 로그의 `time` 을 다른 로그와 한 줄로 세웁니다.
+- [클라우드 타임라인](../../03-techniques/analysis/timeline.md) — 리소스 로그의 `time` 을 다른 로그와 시간순으로 합칩니다.
 
 ## 실습
 

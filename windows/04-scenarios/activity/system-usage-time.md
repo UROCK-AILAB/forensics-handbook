@@ -158,7 +158,7 @@ PC 한 대를 두고 "언제 켜져 있었고, 언제 꺼졌고, 그 사이 언�
 - [감사 정책과 로그 설정](../../02-artifacts/event-logs/audit-policy-log-settings.md) — 이벤트가 남는 조건입니다.
 - [시스템 기본 정보](../../02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md) — 마지막 종료 시각입니다.
 - [SRUM](../../02-artifacts/execution/system-resource-usage-monitor/index.md) — 로그가 빈 구간을 채우는 사용량 기록입니다.
-- [타임라인 작성](../../03-techniques/analysis/timeline/index.md) — 시각을 한 줄로 세웁니다.
+- [타임라인 작성](../../03-techniques/analysis/timeline/index.md) — 시각을 시간순으로 합칩니다.
 - [그 시각에 PC 를 쓴 사람이 누구인가](user-attribution.md) — 구간에서 사람으로 좁힙니다.
 - [증거를 없애려 했나](anti-forensics/index.md) — 로그 삭제와 시각 변경입니다.
 

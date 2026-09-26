@@ -197,7 +197,7 @@ jq -r '.[] | .jsonPayload
 | [서비스 계정 키](iam-keys.md) | 흐름에 나온 VM 에 붙은 서비스 계정이 같은 시각에 무엇을 호출했는지 |
 | VM 디스크 안의 기록 | 연결을 연 프로세스와 사용자. [Linux 클라우드 가상 머신 수집](https://urock-ailab.github.io/forensics-handbook/linux/03-techniques/acquisition/cloud-vm.html) 참고 |
 
-AWS 와 Azure 의 같은 성격 기록은 [AWS VPC 흐름 로그](../aws/vpc-flow-logs.md) 와 [Azure 네트워크 흐름 로그](../azure/flow-logs.md) 에 있고, 여러 기록을 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에서 다룹니다. 채굴 풀로 나가는 흐름을 찾는 절차는 [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md) 에 있습니다.
+AWS 와 Azure 의 같은 성격 기록은 [AWS VPC 흐름 로그](../aws/vpc-flow-logs.md) 와 [Azure 네트워크 흐름 로그](../azure/flow-logs.md) 에 있고, 여러 기록을 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에서 다룹니다. 채굴 풀로 나가는 흐름을 찾는 절차는 [채굴용 자원을 만들었나](../../04-scenarios/infrastructure/cryptomining.md) 에 있습니다.
 
 ## 실습
 

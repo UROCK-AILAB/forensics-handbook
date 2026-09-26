@@ -128,7 +128,7 @@ Word·PowerPoint·Excel·OneNote·Loop·Whiteboard 등에서 Copilot 을 쓰면 
 
 ## 시각 해석
 
-감사 레코드의 시각 칸은 바깥층의 `CreationTime` 이고, 레코드가 생성된 UTC 시각입니다[6]. 값은 `2023-12-13T17:12:36` 처럼 끝에 `Z` 같은 시간대 표시가 없어서, 현지 시각으로 잘못 읽지 않도록 합니다[7]. 레코드 목록의 `CreationDate` 는 `12/13/2023 17:12` 처럼 월/일/연도 순서에 분 단위까지만 보여 줍니다[7]. 초까지 맞춰야 하면 AuditData 안의 `CreationTime` 을 씁니다. 다른 기록과 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+감사 레코드의 시각 칸은 바깥층의 `CreationTime` 이고, 레코드가 생성된 UTC 시각입니다[6]. 값은 `2023-12-13T17:12:36` 처럼 끝에 `Z` 같은 시간대 표시가 없어서, 현지 시각으로 잘못 읽지 않도록 합니다[7]. 레코드 목록의 `CreationDate` 는 `12/13/2023 17:12` 처럼 월/일/연도 순서에 분 단위까지만 보여 줍니다[7]. 초까지 맞춰야 하면 AuditData 안의 `CreationTime` 을 씁니다. 다른 기록과 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 보관 기간은 사건 날짜가 오래되었을 때 가장 먼저 따질 점입니다[3].
 

@@ -198,7 +198,7 @@ dissect.target 의 `wireguard.config` 는 `[Interface]` 와 `[Peer]` 를 각각 
 | 설정 파일 생성 시각 ↔ [dpkg·apt 기록](../packages/dpkg-apt.md)·[rpm·dnf·yum 기록](../packages/rpm-dnf.md) | wireguard-tools·openvpn 패키지를 언제 설치했는지 |
 | 상태 파일의 `Real Address` ↔ [인증 로그](../logins/auth-log.md) | 같은 주소에서 들어온 로그인이 있는지 |
 
-여러 기록을 한 줄로 세우는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
+여러 기록을 시간순으로 합치는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 
 ## 실습
 

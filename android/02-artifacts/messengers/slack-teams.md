@@ -153,7 +153,7 @@ SELECT attributeValue FROM MessagePropertyAttribute WHERE propertyId = 'CallLog'
 | [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) | 업무용 앱이 작업 프로필 안에 설치됐는지 |
 | [통화 기록](../communications/call-log.md) | 팀즈 통화 시각과 기기 통화 기록이 겹치는지 |
 
-여러 앱의 대화를 한 흐름으로 세우는 방법은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
+여러 앱의 대화를 시간순으로 합쳐 보는 방법은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 실습
 

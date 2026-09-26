@@ -64,7 +64,7 @@ DB 가 어느 컨테이너에 있는지는 자료마다 다릅니다. iLEAPP 는
 
 **증명하는 것.** `MESSAGES` 행은 이 기기의 인스타그램 DB 에 어느 대화방에서 어떤 사용자 ID 가 보낸 것으로 기록된 메시지가 이 서버 시각과 함께 남아 있다는 사실을 보여 줍니다. `threadActivity` 가 있는 행은 그 대화방에 통화 알림이 기록되어 있다는 뜻이고, `reactions` 로 누가 어떤 메시지에 반응했는지도 볼 수 있습니다[1].
 
-**증명하지 못하는 것.** DB 에 남은 메시지만 보이기 때문에 행이 없다고 대화가 없었다고 볼 수 없고, 서버나 상대 기기에는 이 기기에 없는 메시지가 있을 수 있습니다. 미디어 메시지에 URL 이 남아 있어도[2] 그 파일을 기기에서 열어 봤는지는 이 DB 만으로 알 수 없습니다. `senderPk` 는 계정 ID 라서, 그 계정을 그 시각에 실제로 누가 쓰고 있었는지는 [그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)처럼 다른 흔적으로 따로 세워야 합니다.
+**증명하지 못하는 것.** DB 에 남은 메시지만 보이기 때문에 행이 없다고 대화가 없었다고 볼 수 없고, 서버나 상대 기기에는 이 기기에 없는 메시지가 있을 수 있습니다. 미디어 메시지에 URL 이 남아 있어도[2] 그 파일을 기기에서 열어 봤는지는 이 DB 만으로 알 수 없습니다. `senderPk` 는 계정 ID 라서, 그 계정을 그 시각에 실제로 누가 쓰고 있었는지는 [그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)처럼 다른 흔적으로 따로 밝혀야 합니다.
 
 ## 시각 해석
 
@@ -107,7 +107,7 @@ iLEAPP 의 인스타그램 분석기는 이 DB 에서 메시지 보고서와 통
 
 ## 교차 검증
 
-DM 이 온 시각에 인스타그램 알림이 떴는지는 [알림 기록 (Notifications)](../app-usage/notifications.md)에서, 그 시각에 앱을 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../app-usage/biome/index.md)에서 봅니다. 미디어를 주고받은 시간대에 앱이 데이터를 얼마나 썼는지는 [앱별 데이터 사용량 (DataUsage.sqlite)](../network/data-usage.md)과 맞춰 봅니다. 다른 연락 수단과 한 줄로 세우는 방법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)과 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md)에 있습니다.
+DM 이 온 시각에 인스타그램 알림이 떴는지는 [알림 기록 (Notifications)](../app-usage/notifications.md)에서, 그 시각에 앱을 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../app-usage/biome/index.md)에서 봅니다. 미디어를 주고받은 시간대에 앱이 데이터를 얼마나 썼는지는 [앱별 데이터 사용량 (DataUsage.sqlite)](../network/data-usage.md)과 맞춰 봅니다. 다른 연락 수단과 시간순으로 합치는 방법은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)과 [누구와 연락을 주고받았나 (Communication)](../../04-scenarios/activity/communication.md)에 있습니다.
 
 ## 실습
 

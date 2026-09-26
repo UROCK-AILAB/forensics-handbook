@@ -72,7 +72,7 @@ Insights 이벤트 (Insights events) 는 쓰기 관리 API 의 호출량이나 �
 
 기본 선택기를 쓰는 트레일이면 `EventSelectors` 아래에 `ReadWriteType`, `IncludeManagementEvents`, `DataResources`, `ExcludeManagementEventSources` 가 나옵니다[2].
 
-이 명령은 지금 설정만 보여 주고 사건 당시 설정은 보여 주지 않습니다. 선택기는 `PutEventSelectors`, Insights 설정은 `PutInsightSelectors` API 로 바꾸고[1][3], CloudTrail 자신의 설정 호출도 관리 이벤트로 남습니다(`CreateTrail` 이 관리 이벤트의 예입니다)[1]. 관리 이벤트에서 `eventSource` 가 `cloudtrail.amazonaws.com` 이고 `eventName` 이 `PutEventSelectors`·`PutInsightSelectors` 인 레코드를 찾아 `requestParameters` 를 읽으면 언제부터 어떤 범위가 기록됐는지 시간 순으로 세울 수 있습니다. 트레일을 멈추거나 지우거나 고친 `StopLogging`·`DeleteTrail`·`UpdateTrail` 도 같은 방법으로 찾습니다[15].
+이 명령은 지금 설정만 보여 주고 사건 당시 설정은 보여 주지 않습니다. 선택기는 `PutEventSelectors`, Insights 설정은 `PutInsightSelectors` API 로 바꾸고[1][3], CloudTrail 자신의 설정 호출도 관리 이벤트로 남습니다(`CreateTrail` 이 관리 이벤트의 예입니다)[1]. 관리 이벤트에서 `eventSource` 가 `cloudtrail.amazonaws.com` 이고 `eventName` 이 `PutEventSelectors`·`PutInsightSelectors` 인 레코드를 찾아 `requestParameters` 를 읽으면 언제부터 어떤 범위가 기록됐는지 시간 순으로 정리할 수 있습니다. 트레일을 멈추거나 지우거나 고친 `StopLogging`·`DeleteTrail`·`UpdateTrail` 도 같은 방법으로 찾습니다[15].
 
 ## 서비스별 경계
 
@@ -102,7 +102,7 @@ CloudTrail 의 `eventName` 은 API 작업 이름과 다를 수 있습니다. S3 
 
 전달 지연은 출처마다 적힌 값이 다릅니다. CloudTrail 문서는 API 호출 뒤 평균 약 5분 안에 로그를 전달하며 이 시간은 보장되지 않는다고 적고[8], S3 로그 비교표는 데이터 이벤트는 5분마다, 관리 이벤트는 15분마다 전달된다고 적습니다[11]. Insights 이벤트는 보통 비정상 활동이 있고 30분 안에 버킷에 도착하고, 처음 켠 뒤에는 첫 이벤트가 나오기까지 최대 36시간이 걸릴 수 있습니다[8]. Insights 의 끝 레코드에는 `insightDetails.state` 가 `End` 이고 `insightContext.statistics` 에 `insightDuration` 이 붙습니다[9].
 
-선택기를 바꾼 `PutEventSelectors` 레코드의 `eventTime` 은 기록 범위가 바뀐 시점입니다. 이 시각을 타임라인에 함께 올려 두면 어느 구간에서 "기록 없음" 을 근거로 쓸 수 있는지 가려집니다. 여러 로그를 한 줄로 세우는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+선택기를 바꾼 `PutEventSelectors` 레코드의 `eventTime` 은 기록 범위가 바뀐 시점입니다. 이 시각을 타임라인에 함께 올려 두면 어느 구간에서 "기록 없음" 을 근거로 쓸 수 있는지 가려집니다. 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

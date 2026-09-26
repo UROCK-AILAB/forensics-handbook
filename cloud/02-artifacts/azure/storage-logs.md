@@ -281,7 +281,7 @@ jq -c 'select(.operationName=="GetBlob") | [.time, .callerIpAddress, .identity.t
 | [Key Vault 기록](./key-vault.md) | 계정 키나 연결 문자열을 비밀로 둔 경우 그 비밀을 읽은 시각 |
 | [S3 접근 기록](../aws/s3-access-logs.md) | AWS 쪽 대응 기록. 필드 대응을 비교할 때 |
 
-IP·User-Agent 로 출처를 좁히는 방법은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md), 여러 기록을 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+IP·User-Agent 로 출처를 좁히는 방법은 [IP·사용자 에이전트·위치 정보](../../01-foundations/logging/ip-ua-geo.md), 여러 기록을 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 실습
 

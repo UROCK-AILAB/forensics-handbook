@@ -43,7 +43,7 @@ nav_order: 370
 
 ## 시각 해석
 
-통화 녹음 요약에는 통화 시각, 녹음 파일이 생긴 시각, 요약을 만든 시각이 따로 있을 수 있어서, 세 시각이 같다고 가정하지 않습니다. 어느 시각이 어디에 적히는지는 검체에서 통화 기록의 시각과 맞춰 보며 가려냅니다. 기기 쪽 시각의 기준(UTC 인지 현지 시각인지)은 형식마다 다르고, 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)에 있습니다.
+통화 녹음 요약에는 통화 시각, 녹음 파일이 생긴 시각, 요약을 만든 시각이 따로 있을 수 있어서, 세 시각이 같다고 가정하지 않습니다. 어느 시각이 어디에 적히는지는 검체에서 통화 기록의 시각과 맞춰 보며 가려냅니다. 기기 쪽 시각의 기준(UTC 인지 현지 시각인지)은 형식마다 다르고, 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)에 있습니다.
 
 ## 함정과 한계
 

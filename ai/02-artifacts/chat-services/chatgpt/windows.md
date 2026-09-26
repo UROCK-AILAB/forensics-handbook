@@ -41,7 +41,7 @@ ChatGPT 앱의 패키지 폴더 이름은 공개 자료에 없으니, `Packages`
 
 ## 시각 해석
 
-스토어 앱은 업데이트할 때 파일을 다시 쓸 수 있어서, 패키지 폴더와 그 안 파일의 파일 시스템 시각을 처음 설치한 때나 마지막으로 쓴 때로 단정하지 않습니다. 앱 폴더의 시각은 방향만 잡는 데 쓰고, 실제 사용 시각은 네트워크 기록이나 계정 쪽 기록과 맞춥니다. Windows 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
+스토어 앱은 업데이트할 때 파일을 다시 쓸 수 있어서, 패키지 폴더와 그 안 파일의 파일 시스템 시각을 처음 설치한 때나 마지막으로 쓴 때로 단정하지 않습니다. 앱 폴더의 시각은 방향만 잡는 데 쓰고, 실제 사용 시각은 네트워크 기록이나 계정 쪽 기록과 맞춥니다. Windows 기록을 시간순으로 합치는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

@@ -8,7 +8,7 @@ nav_order: 1750
 
 ## 조사 질문
 
-"이 앱은 스토어에서 받았나, 파일로 깔았나", "그 APK 파일은 어느 주소에서 내려받았나", "처음 설치된 때가 언제인가" 같은 질문에 답하는 흐름입니다. 수상한 앱이 기기에서 무엇을 했는지는 [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md) 에서 다루고, 이 페이지는 앱이 기기에 들어온 길을 세우는 데 집중합니다. 문자에 담긴 링크에서 시작한 사고라면 [스미싱 흔적](smishing.md) 을, 다른 사람이 몰래 깐 감시 앱이 의심되면 [몰래 설치된 감시 앱](stalkerware.md) 을 함께 봅니다.
+"이 앱은 스토어에서 받았나, 파일로 깔았나", "그 APK 파일은 어느 주소에서 내려받았나", "처음 설치된 때가 언제인가" 같은 질문에 답하는 흐름입니다. 수상한 앱이 기기에서 무엇을 했는지는 [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md) 에서 다루고, 이 페이지는 앱이 기기에 들어온 길을 밝히는 데 집중합니다. 문자에 담긴 링크에서 시작한 사고라면 [스미싱 흔적](smishing.md) 을, 다른 사람이 몰래 깐 감시 앱이 의심되면 [몰래 설치된 감시 앱](stalkerware.md) 을 함께 봅니다.
 
 기록은 어느 패키지가 설치자로 적혔는지, 설치 앱이 출처를 무엇이라고 알렸는지, 설치 파일을 어느 주소에서 받았는지까지 알려 주지만, 누가 설치 버튼을 눌렀는지나 사용자가 속았는지는 알려 주지 않습니다.
 
@@ -56,11 +56,11 @@ nav_order: 1750
 
    값을 알리지 않는 설치 앱을 거치면 0 으로 남아서, 0 은 "출처가 수상하다" 가 아니라 "설치 앱이 알리지 않았다" 로 읽습니다.
 
-3. **설치 시각을 세웁니다.** 설치 기록 파일은 `ft`(마지막 수정 시각)와 `ut`(마지막 업데이트 시각)를 16진수 long 으로 쓰고, 읽을 때는 `it`(첫 설치 시각)도 16진수로 읽습니다 [2]. `dumpsys package` 는 패키지별로 `timeStamp=`, `lastUpdateTime=`, `installerPackageName=`, `installerPackageUid=`, `initiatingPackageName=`, `originatingPackageName=`, `packageSource=` 줄을 찍고 `updateOwnerPackageName=`, `installerAttributionTag=` 는 값이 있을 때만 찍으며, 사용자별로 `installReason=`, `dataDir=`, `firstInstallTime=` 을 찍습니다 [2]. `dumpsys package` 요약 출력에서는 이 패키지별 줄이 생략될 수 있으니, 위 줄 이름은 소스 기준으로 보고 검체의 실제 출력에서 다시 확인합니다. 파일의 16진수 값과 `dumpsys` 의 날짜 문자열을 같은 앱에서 나란히 놓으면 파일 값의 단위를 검체에서 직접 맞춰 볼 수 있습니다.
+3. **설치 시각을 확인합니다.** 설치 기록 파일은 `ft`(마지막 수정 시각)와 `ut`(마지막 업데이트 시각)를 16진수 long 으로 쓰고, 읽을 때는 `it`(첫 설치 시각)도 16진수로 읽습니다 [2]. `dumpsys package` 는 패키지별로 `timeStamp=`, `lastUpdateTime=`, `installerPackageName=`, `installerPackageUid=`, `initiatingPackageName=`, `originatingPackageName=`, `packageSource=` 줄을 찍고 `updateOwnerPackageName=`, `installerAttributionTag=` 는 값이 있을 때만 찍으며, 사용자별로 `installReason=`, `dataDir=`, `firstInstallTime=` 을 찍습니다 [2]. `dumpsys package` 요약 출력에서는 이 패키지별 줄이 생략될 수 있으니, 위 줄 이름은 소스 기준으로 보고 검체의 실제 출력에서 다시 확인합니다. 파일의 16진수 값과 `dumpsys` 의 날짜 문자열을 같은 앱에서 나란히 놓으면 파일 값의 단위를 검체에서 직접 맞춰 볼 수 있습니다.
 
 4. **설치 파일이 어디서 왔는지 찾습니다.** 미디어 저장소의 내려받은 항목(`MediaStore.Downloads`)에는 받은 주소 `download_uri` 와 그 주소의 HTTP 리퍼러 `referer_uri` 칸이 있고, 둘 다 문자열입니다 [3]. 모든 미디어 항목에는 내려받은 것인지 표시하는 `is_download`, 항목을 넣은 패키지 `owner_package_name`, 처음 추가된 시각 `date_added`(유닉스 초) 칸이 있습니다 [3]. 3단계의 설치 시각 바로 앞에 추가된 APK 항목을 찾아 두 주소를 적고, `owner_package_name` 으로 어느 앱이 파일을 넣었는지 봅니다. 미디어 저장소 DB 파일의 경로와 크롬 자체의 내려받기 기록은 [미디어 저장소](../../02-artifacts/media/mediastore/index.md) 와 [크롬](../../02-artifacts/browsers/chrome/index.md) 페이지에서 봅니다.
 
-5. **내려받기 전후의 페이지를 잇습니다.** `referer_uri` 에 적힌 페이지와 같은 시간대의 브라우저 기록, 문자·메신저에서 받은 링크를 나란히 놓습니다. 링크를 받은 쪽은 [스미싱 흔적](smishing.md), 웹 기록을 시간순으로 세우는 법은 [웹 사용 행위 재구성](../activity/web-activity.md) 에 있습니다.
+5. **내려받기 전후의 페이지를 잇습니다.** `referer_uri` 에 적힌 페이지와 같은 시간대의 브라우저 기록, 문자·메신저에서 받은 링크를 나란히 놓습니다. 링크를 받은 쪽은 [스미싱 흔적](smishing.md), 웹 기록을 시간순으로 정리하는 법은 [웹 사용 행위 재구성](../activity/web-activity.md) 에 있습니다.
 
 6. **설치를 허용하거나 막는 설정을 봅니다.** 설정 키 가운데 secure 쪽에는 `install_non_market_apps`, `unknown_sources_default_reversed` 와 `appprotection_auto_scan_updated`, `appprotection_package_uid`, `appprotection_permission_function_install_auto_scan_agreed`, `appprotection_permission_function_background_auto_scan_agreed` 같은 `appprotection_` 키가 있고, global 쪽에는 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `adb_enabled`, `adb_wifi_enabled` 가 있습니다. 각 키의 뜻과 쓰임은 공개 자료가 없으니, 검체에서 값을 읽더라도 "이 키가 이 값이었다" 까지만 적고 기능이 켜져 있었다고 풀어 쓰지 않습니다. `appprotection_` 키는 이름으로 보아 삼성의 앱 보호 기능과 이어질 가능성이 있습니다.
 

@@ -8,7 +8,7 @@ nav_order: 1620
 
 ## 조사 질문
 
-"그 시각에 폰을 조작한 사람이 소유자인가, 폰을 넘겨받은 다른 사람인가" 를 묻는 흐름입니다. [폰 사용 시간 재구성](usage-time.md) 으로 화면이 켜지고 잠금이 풀린 구간을 세웠다면, 이 페이지는 그 구간을 어느 사용자 계정과 어떤 사람에게 이을 수 있는지, 어디까지가 기록이 말하는 범위인지를 따집니다.
+"그 시각에 폰을 조작한 사람이 소유자인가, 폰을 넘겨받은 다른 사람인가" 를 묻는 흐름입니다. [폰 사용 시간 재구성](usage-time.md) 으로 화면이 켜지고 잠금이 풀린 구간을 찾았다면, 이 페이지는 그 구간을 어느 사용자 계정과 어떤 사람에게 이을 수 있는지, 어디까지가 기록이 말하는 범위인지를 따집니다.
 
 먼저 짚을 점은 Android 기록의 단위입니다. 앱 사용 기록(usagestats)은 사용자별 경로(`*/system_ce/*/usagestats*`)에 쌓이고, 공개 도구 ALEAPP 도 결과를 사용자 칸으로 나눕니다 [2]. 이 단위는 기기 안의 "사용자(user ID)" 이지 사람이 아니라서, 기기 안 기록만으로는 "이 사용자 ID 에서 잠금이 풀리고 이 앱이 쓰였다" 까지 말할 수 있습니다. 그 사용자 ID 를 쓴 사람이 누구인지는 기기 안팎의 다른 기록과 시각을 맞춰 좁혀 가는 해석이고, 이 페이지는 그 해석에 쓸 흔적과 한계를 모읍니다. 잠금 해제나 보안 우회 방법은 다루지 않습니다.
 
@@ -51,7 +51,7 @@ nav_order: 1620
 
    소스에는 이 밖에 부팅 후 경과 시간으로 적는 `startRealtime`(사용자가 시작된 때)과 `unlockRealtime`(사용자 잠금이 풀린 때)이 있어, 재부팅하면 기준점이 바뀝니다 [3]. `dumpsys user` 에는 Created, Last logged in, Last logged in fingerprint, Start time, Unlock time, Last entered foreground 칸이 있지만, 이 칸들이 위 속성과 하나씩 대응한다는 공개 자료는 없어 그렇게 단정하지 않습니다. 사건 시각의 활동이 어느 사용자 ID 에 쌓였는지부터 가리고, 프로필의 활동을 주 사용자의 활동과 합치지 않습니다.
 
-2. **그 사용자 ID 의 사용 구간을 가져옵니다.** [폰 사용 시간 재구성](usage-time.md) 의 흐름대로 화면·잠금·앱 구간을 세우고, 사건 시각이 그 구간 안에 드는지 봅니다. 잠금이 풀린 기록 `KEYGUARD_HIDDEN` 에는 `package` 와 `flags` 칸만 있고, 이 이벤트는 "보통 사용자가 잠금을 풀 때" 생길 뿐이라서 [1] PIN·지문·얼굴 가운데 무엇으로 누가 풀었는지는 이 기록에 없습니다. 어떤 생체 인증으로 풀었는지 따로 남는 기록은 공개 자료가 없어 검체에서 확인합니다.
+2. **그 사용자 ID 의 사용 구간을 가져옵니다.** [폰 사용 시간 재구성](usage-time.md) 의 흐름대로 화면·잠금·앱 구간을 찾고, 사건 시각이 그 구간 안에 드는지 봅니다. 잠금이 풀린 기록 `KEYGUARD_HIDDEN` 에는 `package` 와 `flags` 칸만 있고, 이 이벤트는 "보통 사용자가 잠금을 풀 때" 생길 뿐이라서 [1] PIN·지문·얼굴 가운데 무엇으로 누가 풀었는지는 이 기록에 없습니다. 어떤 생체 인증으로 풀었는지 따로 남는 기록은 공개 자료가 없어 검체에서 확인합니다.
 
 3. **잠금 방식을 확인합니다.** `settings secure` 에는 `lockscreen.disabled`, `lockscreen.options`, `lock_screen_lock_after_timeout`, `fingerprint_screen_lock`, `face_screen_lock`, `biometrics_strong_enroll_timestamp`, 여러 `active_unlock_*`, `aware_lock_enabled` 같은 키가 있고, `settings system` 에는 `screen_off_timeout`, `db_lockscreen_is_smart_lock`, `automatic_unlock` 같은 키가 있습니다. 각 키의 뜻은 이름으로 짐작하지 말고 [잠금 화면 설정](../../02-artifacts/system-account/lock-settings.md) 의 근거로 확인합니다. 잠금 방식이 아예 없거나 신뢰 장치·얼굴로 풀리는 설정이었다면, `KEYGUARD_HIDDEN` 이 이런 경우를 구분해 주지 않아 [1] "잠금이 풀렸다" 가 곧 "비밀번호를 아는 사람이 풀었다" 가 되지 않습니다.
 
@@ -63,7 +63,7 @@ nav_order: 1620
 
    `Action_Type` 에는 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 같은 값이 나옵니다. 사건 구간 가까이에 계정이 추가·삭제된 기록이 있으면 그 계정이 누구의 것인지가 사람을 좁히는 단서가 될 수 있지만, 이 부분은 기록이 아니라 해석이라서 보고서에서도 해석으로 나눠 적습니다.
 
-5. **알림과 무선 기록으로 같은 시각을 한 번 더 찍습니다.** `dumpsys notification` 알림 항목에는 `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs`, `seen` 칸과 `posttimeToFirstClickMs`, `posttimeToDismissMs`, `airtimeMs` 가 든 `stats` 줄이 있습니다. `dumpsys wifi` 에는 `what=CMD_SCREEN_STATE_CHANGED screen=...` 줄이, `dumpsys bluetooth_manager` 의 "Enable log:" 에는 `Package [android] requested to [Enable]. Reason is SYSTEM_BOOT` 모양의 줄이 남습니다. 알림 칸 하나하나의 뜻은 공개 자료가 없으니, 이 기록들은 usagestats 가 세운 구간과 같은 시각에 다른 서비스도 화면 변화를 기록했는지 확인하는 데 씁니다. 연결된 블루투스 기기(시계·차량 등)가 사람을 가리는 단서가 되는지는 사건마다 따로 따집니다.
+5. **알림과 무선 기록으로 같은 시각을 한 번 더 찍습니다.** `dumpsys notification` 알림 항목에는 `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs`, `seen` 칸과 `posttimeToFirstClickMs`, `posttimeToDismissMs`, `airtimeMs` 가 든 `stats` 줄이 있습니다. `dumpsys wifi` 에는 `what=CMD_SCREEN_STATE_CHANGED screen=...` 줄이, `dumpsys bluetooth_manager` 의 "Enable log:" 에는 `Package [android] requested to [Enable]. Reason is SYSTEM_BOOT` 모양의 줄이 남습니다. 알림 칸 하나하나의 뜻은 공개 자료가 없으니, 이 기록들은 usagestats 가 기록한 구간과 같은 시각에 다른 서비스도 화면 변화를 기록했는지 확인하는 데 씁니다. 연결된 블루투스 기기(시계·차량 등)가 사람을 가리는 단서가 되는지는 사건마다 따로 따집니다.
 
 6. **기기 밖 자료와 시각을 맞춥니다.** 기기 안 기록은 사용자 ID 까지만 가리키니, 사람을 특정하려면 CCTV, 다른 기기의 기록, 위치 자료, 진술처럼 기기 밖 자료와 1~5단계의 시각을 맞춥니다. 위치는 [그 시각에 어디 있었나](location.md) 에서, 여러 자료를 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 봅니다.
 

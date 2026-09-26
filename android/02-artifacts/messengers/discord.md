@@ -138,7 +138,7 @@ SELECT substr(data, 1, 200) FROM messages0 LIMIT 5;
 | [설치된 앱](../app-usage/packages/index.md) | 앱 설치·업데이트 시각 |
 | [미디어 저장소](../media/mediastore/index.md) | 첨부 이미지를 공용 저장 공간에 저장했는지 |
 
-여러 앱의 대화를 한 흐름으로 세우는 방법은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
+여러 앱의 대화를 시간순으로 합쳐 보는 방법은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 
 ## 실습
 

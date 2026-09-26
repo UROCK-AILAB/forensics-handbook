@@ -288,7 +288,7 @@ LevelDB 는 DB 를 열 때 아래 순서로 복구합니다[1].
 순서 번호는 쓰기 순서만 알려 줄 뿐 언제 썼는지는 알려 주지 않습니다.
 시각이 필요하면 `.log`·`.ldb` 파일 자체의 파일 시스템 시각을 보고([마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) 을 봅니다), 값 안에 앱이 시각을 적었다면 그 값을 따로 풉니다. 형식은 [시각 값 형식](../value-decoding/filetime-unix-webkit-dos-ole.md) 을 봅니다.
 
-- 여러 출처의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
+- 여러 출처의 시각을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 ## 함정
 

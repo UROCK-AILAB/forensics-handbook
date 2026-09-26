@@ -55,7 +55,7 @@ Gemini 앱 컨테이너 안의 파일 구조는 공개된 분석 자료가 없�
 
 ## 시각 해석
 
-Gemini 대화 시각을 담은 기기 쪽 파일은 공개된 분석 자료가 없습니다. 메시지 단위 시각은 서버 활동 기록에 있어서 [계정 데이터 내보내기](export.md)로 받아 맞춰 봅니다. 기기 쪽에서는 TCC.db 의 last_modified 를 iLEAPP 가 Unix 시각으로 보고 UTC 로 바꿔 보여 주고 [7], 화면 스냅샷은 Creation Date 와 Last Used Date 를 따로 보여 줍니다 [6]. 설치·실행 시각을 다른 iOS 기록과 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)에서 다룹니다.
+Gemini 대화 시각을 담은 기기 쪽 파일은 공개된 분석 자료가 없습니다. 메시지 단위 시각은 서버 활동 기록에 있어서 [계정 데이터 내보내기](export.md)로 받아 맞춰 봅니다. 기기 쪽에서는 TCC.db 의 last_modified 를 iLEAPP 가 Unix 시각으로 보고 UTC 로 바꿔 보여 주고 [7], 화면 스냅샷은 Creation Date 와 Last Used Date 를 따로 보여 줍니다 [6]. 설치·실행 시각을 다른 iOS 기록과 시간순으로 합치는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)에서 다룹니다.
 
 ## 함정과 한계
 

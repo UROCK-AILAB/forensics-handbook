@@ -139,7 +139,7 @@ SharePoint 파일 레코드에서는 SiteUrl, SourceRelativeUrl, SourceFileName 
 
 CreationTime 은 UTC 이고, 감사 레코드가 만들어진 시각입니다[1][5]. Graph auditLogRecord 의 createdDateTime 은 활동이 일어난 시각입니다[3]. Management Activity API 의 contentCreated 는 레코드를 담은 묶음(blob)을 받을 수 있게 된 시각이라서 이벤트 시각으로 쓰면 안 됩니다[6]. 핵심 서비스(Exchange·SharePoint·OneDrive·Teams)의 레코드는 보통 이벤트 뒤 60~90분이 지나야 검색되고, Microsoft 는 특정 시간을 보장하지 않습니다[7].
 
-내보낸 파일을 도구로 읽을 때는 시각이 현지 시각으로 바뀌지 않았는지, 검체에서 한 건을 골라 포털 화면의 Date (UTC) 열과 맞춰 봅니다[7]. 여러 로그를 한 줄로 세우는 방법은 [클라우드 로그의 시각](../../../01-foundations/logging/timestamps.md) 과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) 을 봅니다.
+내보낸 파일을 도구로 읽을 때는 시각이 현지 시각으로 바뀌지 않았는지, 검체에서 한 건을 골라 포털 화면의 Date (UTC) 열과 맞춰 봅니다[7]. 여러 로그를 시간순으로 합치는 방법은 [클라우드 로그의 시각](../../../01-foundations/logging/timestamps.md) 과 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) 을 봅니다.
 
 ## 함정과 한계
 

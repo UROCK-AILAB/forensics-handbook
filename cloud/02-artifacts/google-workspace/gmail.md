@@ -198,7 +198,7 @@ BigQuery 내보내기가 켜져 있으면 `_PARTITIONTIME` 조건과 시각 조�
 4. BigQuery 에서 한국 시간 9월 26일 하루의 Gmail 기록을 뽑을 때 `_PARTITIONTIME` 조건을 어떻게 잡아야 빠지는 기록이 없는지 따져 봅니다.
 5. 시험용 테넌트에서 메일을 보내고, 열고, 링크를 누르고, 휴지통을 비운 뒤 보안 조사 도구와 보고서 API 결과를 견주어 어느 쪽에 무엇이 남는지 적어 봅니다.
 
-송금 사기 조사에서 이 기록을 어떤 순서로 쓰는지는 [메일 계정을 빼앗겨 송금 사기를 당했나](../../04-scenarios/account-compromise/bec.md), 여러 로그를 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에 있습니다.
+송금 사기 조사에서 이 기록을 어떤 순서로 쓰는지는 [메일 계정을 빼앗겨 송금 사기를 당했나](../../04-scenarios/account-compromise/bec.md), 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md) 에 있습니다.
 
 ## 참고 문헌
 

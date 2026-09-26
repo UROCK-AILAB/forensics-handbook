@@ -50,7 +50,7 @@ Purview 감사는 조직에 등록한 제3자 AI 앱을 `ConnectedAIAppInteracti
 
 ## 시각 해석
 
-Compliance API 기록의 시각 칸 이름과 시간대는 받은 자료에서 확인합니다. 시각 값에 시간대 표시가 있는지 먼저 보고, 같은 대화가 Purview 쪽에도 있다면 두 자료의 시각을 맞춰 보아 기준 시간대를 정합니다. 여러 기록을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+Compliance API 기록의 시각 칸 이름과 시간대는 받은 자료에서 확인합니다. 시각 값에 시간대 표시가 있는지 먼저 보고, 같은 대화가 Purview 쪽에도 있다면 두 자료의 시각을 맞춰 보아 기준 시간대를 정합니다. 여러 기록을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

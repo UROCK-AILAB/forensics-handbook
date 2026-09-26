@@ -104,7 +104,7 @@ iOS 앱은 공개된 분석 자료가 없어 검체로 확인해야 합니다. �
 
 플러그인은 `capture_timestamp_ms`, `import_completed_timestamp_ms`, `fetch_timestamp_ms` 를 1970-01-01 UTC 기준 밀리초로 보고 1000 으로 나눈 뒤 SQLite 의 `datetime(..., "unixepoch")` 로 UTC 문자열을 만듭니다 [2]. 값이 정수로 저장돼 있으면 SQLite 의 `/1000` 은 정수 나눗셈이 되므로, 보고서 시각에는 밀리초가 빠집니다. 논문 사례 연구에서 현지 시각(CDT) 오후 5:30~5:45 의 대화를 찍은 동영상이 UTC 22:31:18~22:43:27 로 나왔으므로 [1], 앱 데이터베이스의 시각은 UTC 로 읽고 보고서에는 현지 시각을 함께 적습니다.
 
-한 번의 촬영에는 시각이 두 개 있습니다. `capture` 의 촬영 시각은 안경에서 찍은 때이고, `media_item` 의 가져온 시각은 휴대폰으로 옮긴 때라서 둘 사이에 간격이 생길 수 있습니다 [1][2]. 클라우드 내보내기에서 플러그인은 대화 날짜를 `Conversation with Meta AI_` 뒤의 `두 자리-두 자리-네 자리` 날짜로, 미디어 시각을 `Jan 05, 2026 3:04 pm`(만든 예시) 같은 영문 문자열로 읽고, 둘 다 시간대 표시가 없어서 [2], 기기 쪽 UTC 기록 몇 개와 맞춰 본 뒤 기준을 정합니다. 여러 기록을 한 줄로 세우는 법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)에 있습니다.
+한 번의 촬영에는 시각이 두 개 있습니다. `capture` 의 촬영 시각은 안경에서 찍은 때이고, `media_item` 의 가져온 시각은 휴대폰으로 옮긴 때라서 둘 사이에 간격이 생길 수 있습니다 [1][2]. 클라우드 내보내기에서 플러그인은 대화 날짜를 `Conversation with Meta AI_` 뒤의 `두 자리-두 자리-네 자리` 날짜로, 미디어 시각을 `Jan 05, 2026 3:04 pm`(만든 예시) 같은 영문 문자열로 읽고, 둘 다 시간대 표시가 없어서 [2], 기기 쪽 UTC 기록 몇 개와 맞춰 본 뒤 기준을 정합니다. 여러 기록을 시간순으로 합치는 법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)과 [Android 타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)에 있습니다.
 
 ## 함정과 한계
 

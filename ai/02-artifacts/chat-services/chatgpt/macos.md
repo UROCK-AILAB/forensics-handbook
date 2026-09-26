@@ -40,7 +40,7 @@ macOS 용 ChatGPT 앱은 2024-07 보도 당시 대화를 `~/Library/Application 
 
 ## 시각 해석
 
-앱 폴더 안 파일의 파일 시스템 시각은 앱이 파일을 다시 쓸 때마다 바뀔 수 있어서, 대화한 시각으로 바로 옮기지 않습니다. 폴더가 처음 생긴 때와 파일이 바뀐 흐름은 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)로 보강할 수 있고, 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다. 앱 업데이트 시기를 알면 보도 전 판이 언제까지 기기에 있었는지 가늠할 수 있습니다.
+앱 폴더 안 파일의 파일 시스템 시각은 앱이 파일을 다시 쓸 때마다 바뀔 수 있어서, 대화한 시각으로 바로 옮기지 않습니다. 폴더가 처음 생긴 때와 파일이 바뀐 흐름은 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)로 보강할 수 있고, 여러 기록을 시간순으로 합치는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다. 앱 업데이트 시기를 알면 보도 전 판이 언제까지 기기에 있었는지 가늠할 수 있습니다.
 
 ## 함정과 한계
 

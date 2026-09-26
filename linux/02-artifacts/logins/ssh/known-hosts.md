@@ -143,7 +143,7 @@ print(base64.b64encode(mac).decode())   # pnf7YNGP4aWyz8jgTSTxhlbQ29M=
 | [authorized_keys](authorized-keys.md) | 이 계정의 `IdentityFile` 공개 키가 상대 서버에 등록돼 있는지 |
 | `~/.ssh/config` 와 `known_hosts.old` | 설정의 `HostName` 목록, 해시 전·삭제 전 줄 |
 
-양쪽 기계의 기록을 한 줄로 세우는 방법은 [타임라인 만들기](../../../03-techniques/analysis/timeline.md) 에서, 한 사건으로 엮는 순서는 [SSH 로 들어왔나](../../../04-scenarios/intrusion/ssh-intrusion.md) 에서 다룹니다. 파일을 지우거나 줄을 지운 흔적은 [흔적을 지웠나](../../../04-scenarios/insider/anti-forensics.md) 와 [지운 파일 되살리기](../../../03-techniques/analysis/file-recovery.md) 를 봅니다.
+양쪽 기계의 기록을 시간순으로 합치는 방법은 [타임라인 만들기](../../../03-techniques/analysis/timeline.md) 에서, 한 사건으로 엮는 순서는 [SSH 로 들어왔나](../../../04-scenarios/intrusion/ssh-intrusion.md) 에서 다룹니다. 파일을 지우거나 줄을 지운 흔적은 [흔적을 지웠나](../../../04-scenarios/insider/anti-forensics.md) 와 [지운 파일 되살리기](../../../03-techniques/analysis/file-recovery.md) 를 봅니다.
 
 ## 실습
 

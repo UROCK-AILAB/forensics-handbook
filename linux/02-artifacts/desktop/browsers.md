@@ -132,7 +132,7 @@ https://intranet.example.org/|763131
 ### 공개 도구로 한 번
 
 - dissect.target 의 `chrome`·`chromium`·`firefox` 플러그인은 Linux 경로(Snap·Flatpak 포함)를 스스로 찾아 방문 기록·쿠키·다운로드·확장·비밀번호 기록을 뽑습니다[6][7][8]. Chromium 계열의 `v11` 값은 풀지 않고 경고 로그만 남깁니다[7].
-- plaso 의 `linux` 프리셋은 `webhist` 프리셋을 포함하고, `webhist` 에는 `sqlite/chrome_27_history`, `sqlite/chrome_66_cookies`, `chrome_cache`, `chrome_preferences`, `sqlite/firefox_history`, `sqlite/firefox_downloads`, `sqlite/firefox_10_cookies`, `firefox_cache` 등이 들어 있습니다[11]. 결과를 다른 흔적과 한 줄로 세우는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
+- plaso 의 `linux` 프리셋은 `webhist` 프리셋을 포함하고, `webhist` 에는 `sqlite/chrome_27_history`, `sqlite/chrome_66_cookies`, `chrome_cache`, `chrome_preferences`, `sqlite/firefox_history`, `sqlite/firefox_downloads`, `sqlite/firefox_10_cookies`, `firefox_cache` 등이 들어 있습니다[11]. 결과를 다른 흔적과 시간순으로 합치는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md) 에서 다룹니다.
 - Velociraptor 의 `Linux.Applications.Chrome.Extensions` 는 `manifest.json` 을 읽고, `default_locale` 이 있으면 `_locales` 의 `messages.json` 에서 확장 이름을 풀어 줍니다[17].
 
 ## 교차 검증

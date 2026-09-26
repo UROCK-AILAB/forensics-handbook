@@ -67,7 +67,7 @@ version_mtime, version_name, version_size, version_device,
 version_quarantine_info, version_upload_error, app_library_rowid, zone_rowid
 ```
 
-`item_id` 와 `item_parent_id` 를 이으면 폴더 구조를 다시 세울 수 있고, `app_library_rowid`·`zone_rowid` 로 `app_libraries`·`client_zones` 표와 이어 어느 앱 영역의 파일인지 봅니다. `item_type` 값이 파일과 폴더를 어떻게 나누는지는 공개 자료가 없어 검체에서 확인합니다.
+`item_id` 와 `item_parent_id` 를 이으면 폴더 구조를 되살릴 수 있고, `app_library_rowid`·`zone_rowid` 로 `app_libraries`·`client_zones` 표와 이어 어느 앱 영역의 파일인지 봅니다. `item_type` 값이 파일과 폴더를 어떻게 나누는지는 공개 자료가 없어 검체에서 확인합니다.
 
 올리기와 내려받기 대기열은 `client_uploads`·`client_downloads` 에 있고, 두 표에는 `transfer_size`, `transfer_stage`, `last_try_stamp`, `next_retry_stamp`, `expire_stamp` 칸이, 각각 `upload_error`·`download_error` 칸이, `client_downloads` 에는 `download_request_stamp` 칸이 더 있습니다. 동기화 실패는 `item_errors` 의 `error_domain`, `error_code`, `error_message`, `error_timestamp` 칸에 남고, `boot_history` 에는 `date`, `os`, `br`, `bird_schema`, `db_schema`, `device_id` 칸이 있습니다. `boot_history` 의 `os` 칸은 이름으로 보아 OS 버전을 적은 것으로 보입니다.
 
@@ -194,7 +194,7 @@ iCloud 백업에는 iCloud Drive 파일이 들어가지 않아서 [3], iCloud �
 NIST CFReDS 같은 공개 검체 가운데 iCloud Drive 를 쓴 iOS 검체가 있는지 먼저 확인하고, 있으면 아래 질문을 풀어 봅니다.
 
 1. `client.db` 와 `server.db` 의 표 목록을 뽑아 위 표 목록과 견주고, 없는 표와 새로 생긴 표를 적습니다.
-2. `client_items` 에서 `item_parent_id` 를 따라 폴더 구조를 다시 세우고, 가장 깊은 폴더가 몇 단계인지 셉니다.
+2. `client_items` 에서 `item_parent_id` 를 따라 폴더 구조를 되살리고, 가장 깊은 폴더가 몇 단계인지 셉니다.
 3. `item_birthtime` 값 하나를 Unix 초와 Mac 절대 시각 두 가지로 바꿔 보고, 어느 쪽이 그럴듯한 날짜인지 판단합니다.
 4. `server_items` 에만 있고 `client_items` 에는 없는 파일 이름이 있는지 찾습니다.
 5. 파일 시스템 전체 검체라면 `Mobile Documents/com~apple~CloudDocs/` 에서 `.iCloud` 파일을 찾아 plist 안의 이름·크기를 `server_items` 의 값과 견줍니다.

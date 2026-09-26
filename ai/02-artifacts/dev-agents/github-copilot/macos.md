@@ -104,7 +104,7 @@ VS Code 세션 파일과 설정 파일이 증명하는 것과 증명하지 못�
 
 **증명하는 것.** `~/.copilot/session-state` 의 세션 파일은 그 계정에서 Copilot CLI 로 대화한 기록입니다. `session.start` 의 `context.cwd` 는 CLI 를 실행한 폴더이고, `tool.execution_*` 짝은 에이전트가 도구를 부른 시각과 결과입니다 [7]. `workspace.json` 은 VS Code 채팅 세션이 어느 프로젝트 폴더에서 열렸는지 알려 줍니다 [4]. Xcode 용 Copilot 로그 파일이 있으면 그 계정에서 Xcode 용 Copilot 을 실행한 적이 있다고 읽을 수 있습니다.
 
-**증명하지 못하는 것.** 도구 호출 기록은 에이전트가 명령을 요청하고 결과를 받았다는 기록이지, 사용자가 그 명령을 직접 입력했다는 기록이 아닙니다. 추적 파일과 `session-store.db` 의 토큰 수는 사용량일 뿐이라서 무엇을 보냈는지는 알려 주지 않습니다. Xcode 로그 파일만으로는 어떤 코드를 제안받았는지, 제안을 받아들였는지를 알 수 없습니다. 에이전트가 한 일을 순서대로 세우는 방법은 [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)에 있습니다.
+**증명하지 못하는 것.** 도구 호출 기록은 에이전트가 명령을 요청하고 결과를 받았다는 기록이지, 사용자가 그 명령을 직접 입력했다는 기록이 아닙니다. 추적 파일과 `session-store.db` 의 토큰 수는 사용량일 뿐이라서 무엇을 보냈는지는 알려 주지 않습니다. Xcode 로그 파일만으로는 어떤 코드를 제안받았는지, 제안을 받아들였는지를 알 수 없습니다. 에이전트가 한 일을 순서대로 정리하는 방법은 [AI 에이전트가 무엇을 실행했나](../../../04-scenarios/agents/agent-actions.md)에 있습니다.
 
 ## 시각 해석
 
@@ -115,7 +115,7 @@ VS Code 세션 파일과 설정 파일이 증명하는 것과 증명하지 못�
 | Copilot CLI 저장소 사용량 | 줄마다 시각 | ISO 형식 | agentsview 형식 조사 [5] |
 | Visual Studio 추적 파일 | span 의 `startTimeUnixNano`, `endTimeUnixNano` | Unix 나노초를 적은 문자열 | agentsview [11] |
 
-세션 목록 키의 `lastMessageDate` 를 읽을 때 조심할 점은 [Windows](windows.md)의 시각 해석 절과 같습니다. macOS 에서는 파일 시스템 시각에 더해 파일 시스템 이벤트 기록으로 세션 파일이 언제 생기고 바뀌었는지 맞춰 볼 수 있습니다. 구조는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에, 여러 기록을 한 줄로 세우는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+세션 목록 키의 `lastMessageDate` 를 읽을 때 조심할 점은 [Windows](windows.md)의 시각 해석 절과 같습니다. macOS 에서는 파일 시스템 시각에 더해 파일 시스템 이벤트 기록으로 세션 파일이 언제 생기고 바뀌었는지 맞춰 볼 수 있습니다. 구조는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에, 여러 기록을 시간순으로 합치는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

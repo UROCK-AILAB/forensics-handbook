@@ -58,7 +58,7 @@ ZLASTMESSAGEID, ZLASTMESSAGETYPE, ZUPDATEDAT
 
 ## 증거로서 의미
 
-**증명하는 것.** `Message` 행은 이 기기의 카카오톡 DB 에 어느 채팅방에서 어떤 사용자 ID 로 기록된 메시지가 이 시각 값과 함께 남아 있다는 사실을 보여 줍니다. 본문이 풀리면 그 내용도 확인할 수 있고, 보낸 사람·채팅방·종류·시각은 평문이라[1][2] 본문을 풀지 못해도 누구와 언제 오갔는지의 틀은 세울 수 있습니다.
+**증명하는 것.** `Message` 행은 이 기기의 카카오톡 DB 에 어느 채팅방에서 어떤 사용자 ID 로 기록된 메시지가 이 시각 값과 함께 남아 있다는 사실을 보여 줍니다. 본문이 풀리면 그 내용도 확인할 수 있고, 보낸 사람·채팅방·종류·시각은 평문이라[1][2] 본문을 풀지 못해도 누구와 언제 오갔는지의 틀은 잡을 수 있습니다.
 
 **증명하지 못하는 것.** 행이 있다고 사용자가 그 메시지를 읽었다고 단정할 수 없고, `readAt` 이 무엇이 바뀔 때 바뀌는지는 공개된 분석 자료가 없어 검체로 확인해야 합니다. `type` 값의 뜻은 공식 설명이 없고 한 도구의 가정[3]만 있어서, 사진·음성 같은 메시지 종류를 숫자만으로 단정하지 않습니다. 기기에 없는 메시지가 서버나 상대 기기에는 있을 수 있어서, 행이 없다고 대화가 없었다고 볼 수도 없습니다.
 
@@ -117,7 +117,7 @@ iLEAPP 의 카카오톡 분석기는 본문과 첨부 정보를 풀어 Messages�
 
 ## 교차 검증
 
-같은 시각대에 카카오톡 알림이 왔는지는 [알림 기록 (Notifications)](../../app-usage/notifications.md)에서, 앱을 그 시각에 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../../app-usage/biome/index.md)에서 확인합니다. 다른 연락 수단과 한 줄로 세우는 방법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)과 [누구와 연락을 주고받았나 (Communication)](../../../04-scenarios/activity/communication.md)에 있습니다.
+같은 시각대에 카카오톡 알림이 왔는지는 [알림 기록 (Notifications)](../../app-usage/notifications.md)에서, 앱을 그 시각에 쓰고 있었는지는 [KnowledgeC (knowledgeC.db)](../../app-usage/knowledgec/index.md)와 [바이옴 (Biome)](../../app-usage/biome/index.md)에서 확인합니다. 다른 연락 수단과 시간순으로 합치는 방법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)과 [누구와 연락을 주고받았나 (Communication)](../../../04-scenarios/activity/communication.md)에 있습니다.
 
 ## 실습
 

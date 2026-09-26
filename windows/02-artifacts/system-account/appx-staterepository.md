@@ -348,7 +348,7 @@ ORDER BY WhenOccurred;
 | 실행 흔적 | 등록한 앱을 실제로 실행했는지 봅니다 | [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) |
 | 섀도 복사본 | 이전 시점의 .srd 에 지금은 없는 패키지가 있는지 봅니다 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 
-여러 기록의 시각을 한 줄로 세우는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
+여러 기록의 시각을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
 ## 실습
 

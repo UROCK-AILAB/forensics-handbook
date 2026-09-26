@@ -160,7 +160,7 @@ gzip -dc 123456789012_CloudTrail_ap-northeast-2_20260901T0215Z_EXAMPLE0123456AB.
 
 - 같은 `sharedEventID` 를 가진 다른 계정의 레코드로 교차 계정 작업의 양쪽을 맞춥니다[1].
 - `AssumeRole` 응답의 `responseElements.credentials.accessKeyId` 로 그 뒤 임시 키 호출을 이어 붙입니다[2]. 방법은 [IAM 사용자·역할·액세스 키](../iam.md)에 있습니다.
-- `sourceIPAddress`·`userAgent` 해석은 [IP·사용자 에이전트·위치 정보](../../../01-foundations/logging/ip-ua-geo.md)를, 여러 로그를 한 줄로 세우는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)을 봅니다.
+- `sourceIPAddress`·`userAgent` 해석은 [IP·사용자 에이전트·위치 정보](../../../01-foundations/logging/ip-ua-geo.md)를, 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../../03-techniques/analysis/timeline.md)을 봅니다.
 - JSON 로그를 읽는 일반 원칙은 [JSON 로그 읽기](../../../01-foundations/logging/json-logs.md)에 있습니다.
 
 ## 참고 문헌

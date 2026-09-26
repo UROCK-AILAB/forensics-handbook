@@ -186,7 +186,7 @@ Search-UnifiedAuditLog -StartDate "2026-03-01 00:00:00z" -EndDate "2026-03-08 00
 
 Windows 에서 Microsoft 365 를 시험한 연구에서는 OneDrive 동기화 앱의 흔적이 `%UserProfile%/AppData/Local/Microsoft/OneDrive/settings/Personal` 또는 `settings/Business` 폴더에 남았습니다[9]. 이 시험에서 `[UserCid].dat` 에는 웹과 앱에서 한 OneDrive 작업(동기화·내려받기·올리기·열기)마다 파일 이름과 시각이 남았고, `SafeDelete.db`(SQLite) 에는 OneDrive 폴더의 파일 목록이 파일 이름만으로 남았습니다[9]. 같은 연구에서 Office 의 `UsageMetricStore/FileActivityStoreV3` 아래 파일에도 로컬 클라우드 저장소 파일을 열거나 만든 기록이 파일 이름·경로와 함께 남았습니다[9]. 감사 로그의 `FileSyncDownloadedFull` 과 PC 쪽 파일 목록이 맞으면 "받았다" 에서 "그 PC 에 있었다" 까지 말할 수 있습니다.
 
-Google Workspace 의 같은 성격 기록은 [Drive 기록](../google-workspace/drive-audit.md)과 비교해 볼 수 있습니다. 조사 흐름은 [외부 공유 링크로 새어 나갔나](../../04-scenarios/data-leak/external-sharing.md), [퇴사자가 자료를 가져갔나](../../04-scenarios/data-leak/departing-employee.md), [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md)를 봅니다. 여러 기록을 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)을 봅니다.
+Google Workspace 의 같은 성격 기록은 [Drive 기록](../google-workspace/drive-audit.md)과 비교해 볼 수 있습니다. 조사 흐름은 [외부 공유 링크로 새어 나갔나](../../04-scenarios/data-leak/external-sharing.md), [퇴사자가 자료를 가져갔나](../../04-scenarios/data-leak/departing-employee.md), [클라우드 저장소에서 자료를 빼 갔나](../../04-scenarios/data-leak/storage-exfiltration.md)를 봅니다. 여러 기록을 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)을 봅니다.
 
 ## 실습
 

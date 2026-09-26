@@ -152,7 +152,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 | `threads.created_at`·`updated_at` (뒤에 `_ms` 가 붙은 칸) | Unix 초 (`_ms` 는 밀리초) | 세션을 만들 때 / 갱신할 때 |
 | `.jsonl.zst` 의 수정 시각 | 압축 전 원본의 수정 시각을 옮겨 적음 | 압축할 때 |
 
-폴더와 파일 이름은 현지 시각이고 줄 안의 `timestamp` 는 UTC 라서, 한국 시간대(UTC+9) PC 에서 오전 9시 전에 연 세션은 폴더 날짜가 첫 줄의 UTC 날짜보다 하루 뒤입니다[2]. 폴더 날짜로 사건일을 정하지 말고 줄의 `timestamp` 로 정한 뒤, `turn_context.timezone` 과 운영체제 시간대 설정으로 현지 시각을 붙입니다. Codex CLI 기록에는 세션을 시작한 곳의 시간대가 남습니다[5]. `thread_items.created_at_ms` 와 `thread_turns.started_at` 같은 DB 시각은 rollout 에서 옮긴 값이므로 rollout 과 어긋나면 rollout 을 먼저 봅니다. 여러 출처를 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+폴더와 파일 이름은 현지 시각이고 줄 안의 `timestamp` 는 UTC 라서, 한국 시간대(UTC+9) PC 에서 오전 9시 전에 연 세션은 폴더 날짜가 첫 줄의 UTC 날짜보다 하루 뒤입니다[2]. 폴더 날짜로 사건일을 정하지 말고 줄의 `timestamp` 로 정한 뒤, `turn_context.timezone` 과 운영체제 시간대 설정으로 현지 시각을 붙입니다. Codex CLI 기록에는 세션을 시작한 곳의 시간대가 남습니다[5]. `thread_items.created_at_ms` 와 `thread_turns.started_at` 같은 DB 시각은 rollout 에서 옮긴 값이므로 rollout 과 어긋나면 rollout 을 먼저 봅니다. 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

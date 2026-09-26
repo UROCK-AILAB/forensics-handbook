@@ -200,7 +200,7 @@ plaso 의 `postgresql` 텍스트 플러그인은 PostgreSQL 서버 로그를 읽
 - 웹 서버 로그의 요청 시각과 데이터베이스 로그의 오류 줄을 맞춰 보면, 웹 요청이 SQL 오류를 일으켰는지 가늠할 수 있습니다. 웹 쪽 기록은 [웹 서버 로그](web-server-logs.md), 판단 흐름은 [웹 서버가 뚫렸나](../../04-scenarios/intrusion/web-compromise.md)에서 다룹니다.
 - 로컬에서 `sudo -u postgres psql` 로 들어갔다면 [sudo·su 사용 기록](../logins/sudo-su.md)과 [인증 로그](../logins/auth-log.md)의 시각이 `.psql_history` 사용 시점과 맞는지 봅니다.
 - 서버 시작·종료 시각은 [systemd 저널](../../01-foundations/logging/systemd-journal/index.md)의 서비스 시작·정지 기록과 맞춰 봅니다.
-- 여러 로그의 시각을 한 줄로 세우는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+- 여러 로그의 시각을 시간순으로 합치는 법은 [타임라인 만들기](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 실습
 

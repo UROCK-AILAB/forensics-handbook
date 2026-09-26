@@ -131,11 +131,11 @@ ALEAPP 은 `custom_attributes` 안에 `name`·`email` 이 있으면 바깥 값 �
 
 ## 시각 해석
 
-DeepSeek 의 `updated_at`·`inserted_at` 은 Unix 초를 소수로 담은 REAL 값이고, ALEAPP 은 이를 UTC 로 바꿔 보여 줍니다[3][4]. 같은 대화 안의 메시지 순서는 `inserted_at` 으로 세울 수 있고, ALEAPP 도 이 값으로 정렬합니다[4]. 대화 목록의 `updated_at` 은 그 대화의 마지막 메시지 시각과 견주어, 메시지 없이 목록만 바뀐 때가 있는지 봅니다.
+DeepSeek 의 `updated_at`·`inserted_at` 은 Unix 초를 소수로 담은 REAL 값이고, ALEAPP 은 이를 UTC 로 바꿔 보여 줍니다[3][4]. 같은 대화 안의 메시지 순서는 `inserted_at` 으로 정할 수 있고, ALEAPP 도 이 값으로 정렬합니다[4]. 대화 목록의 `updated_at` 은 그 대화의 마지막 메시지 시각과 견주어, 메시지 없이 목록만 바뀐 때가 있는지 봅니다.
 
 Grok 영상 캐시에는 시각이 두 개 있고 뜻이 다릅니다. 파일 이름의 시각은 Media3 가 캐시 파일을 쓰기 시작할 때의 기기 시계 값입니다[8]. `last_touch_timestamp` 는 캐시를 읽을 때마다 갱신되는 값이라 사용자가 본 시각이 아니고, 앱이 LRU 가 아닌 캐시 정리 방식을 쓰면 아예 갱신되지 않습니다[6][8]. Media3 는 파일 색인 DB 가 있으면 이 값을 DB 에만 쓰고 파일 이름은 바꾸지 않으며, 색인 DB 가 없을 때만 파일 이름을 새 시각으로 바꿉니다[8]. 두 값 모두 Unix ms 이고, ALEAPP 은 UTC 로 보여 줍니다[6].
 
-서버 쪽 시각은 받은 파일 안의 시간대 표기를 직접 봅니다. 여러 출처의 시각을 한 줄로 세우는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
+서버 쪽 시각은 받은 파일 안의 시간대 표기를 직접 봅니다. 여러 출처의 시각을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

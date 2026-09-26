@@ -97,7 +97,7 @@ journald 의 `Journal file has been deleted`, `Received SIGUSR2 signal from PID 
 - [시각을 조작했나](time-manipulation.md) — 로그 파일과 시스템 시계를 되돌린 흔적
 - [누가 그 명령을 실행했나](../attribution/user-attribution.md) — 지운 계정과 사람을 잇는 법
 - [SSH 로 들어왔나](../intrusion/ssh-intrusion.md) — 침입 뒤 로그를 지운 경우
-- [로그 분석](../../03-techniques/analysis/log-analysis.md), [타임라인 만들기](../../03-techniques/analysis/timeline.md) — 여러 로그를 한 줄로 세우는 법
+- [로그 분석](../../03-techniques/analysis/log-analysis.md), [타임라인 만들기](../../03-techniques/analysis/timeline.md) — 여러 로그를 시간순으로 합치는 법
 - [Linux 포렌식 보고서](../../03-techniques/reporting/forensic-report.md) — 기록이 말하는 만큼만 쓰는 법
 - [타임라인 작성 (Windows 판)](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/timeline/index.html) — 타임라인 공통 원리
 

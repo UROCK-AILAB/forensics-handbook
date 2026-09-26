@@ -154,7 +154,7 @@ v2 파일도 명세[6]로만 만든 예시를 들면 다음과 같습니다.
 
 ## 교차 검증
 
-iOS 15 까지 같은 종류의 기록은 [KnowledgeC (knowledgeC.db)](../knowledgec/index.md)에 있었고 파일은 iOS 16 에도 남아 있어서[1][7], 버전이 걸친 사건은 두 곳을 함께 봅니다. 알림 스트림은 [알림 기록 (Notifications)](../notifications.md)과, 동기화한 기기는 [애플 계정 (Apple Account)](../../system-account/apple-account.md)과 맞춰 봅니다. 여러 스트림의 시각을 한 줄로 세우는 법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에 있습니다.
+iOS 15 까지 같은 종류의 기록은 [KnowledgeC (knowledgeC.db)](../knowledgec/index.md)에 있었고 파일은 iOS 16 에도 남아 있어서[1][7], 버전이 걸친 사건은 두 곳을 함께 봅니다. 알림 스트림은 [알림 기록 (Notifications)](../notifications.md)과, 동기화한 기기는 [애플 계정 (Apple Account)](../../system-account/apple-account.md)과 맞춰 봅니다. 여러 스트림의 시각을 시간순으로 합치는 법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에 있습니다.
 
 ## 실습
 

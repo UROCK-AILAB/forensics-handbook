@@ -175,7 +175,7 @@ eDiscovery 감사 기록의 `CreationTime` 과 `StartTime` 은 UTC 입니다[2].
 }
 ```
 
-읽는 순서는 이렇습니다. `CreationTime` 이 UTC 이므로 조사 기준 시간대로 바꿉니다. `ClientIP` 가 있으니 새 환경 작업이고, `UserId` 가 조사팀 계정인지 확인합니다. `CaseName`·`ObjectName`·`QueryText`·`DataSources` 로 누구의 메일함을 어떤 조건으로 검색했는지 보고, 같은 `CaseId` 로 앞뒤 기록을 모아 사례 생성부터 내보내기까지 순서를 세웁니다.
+읽는 순서는 이렇습니다. `CreationTime` 이 UTC 이므로 조사 기준 시간대로 바꿉니다. `ClientIP` 가 있으니 새 환경 작업이고, `UserId` 가 조사팀 계정인지 확인합니다. `CaseName`·`ObjectName`·`QueryText`·`DataSources` 로 누구의 메일함을 어떤 조건으로 검색했는지 보고, 같은 `CaseId` 로 앞뒤 기록을 모아 사례 생성부터 내보내기까지 순서를 정리합니다.
 
 ### 공개 도구
 

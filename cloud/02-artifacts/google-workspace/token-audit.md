@@ -164,7 +164,7 @@ jq -r '
 - `activity` 의 `product_bucket` 이 `DRIVE` 나 `GMAIL` 이면 같은 시간대의 [Drive 기록](./drive-audit.md)과 [Gmail 기록과 메일 검색](./gmail.md)을 봅니다.
 - 앱 신뢰·차단, 도메인 전체 위임, 관리자의 토큰 회수는 [관리 콘솔 감사 로그](./admin-audit.md)에서 봅니다.
 - Microsoft 365 에서 같은 역할을 하는 기록은 [Entra ID 로그](../m365/entra-logs/index.md)에 있습니다.
-- 여러 로그를 한 줄로 세우는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에, 조사 흐름은 [악성 OAuth 앱에 동의했나](../../04-scenarios/account-compromise/illicit-consent.md)와 [토큰을 훔쳐 로그인했나](../../04-scenarios/account-compromise/token-theft.md)에 있습니다.
+- 여러 로그를 시간순으로 합치는 방법은 [클라우드 타임라인](../../03-techniques/analysis/timeline.md)에, 조사 흐름은 [악성 OAuth 앱에 동의했나](../../04-scenarios/account-compromise/illicit-consent.md)와 [토큰을 훔쳐 로그인했나](../../04-scenarios/account-compromise/token-theft.md)에 있습니다.
 
 ## 실습
 
