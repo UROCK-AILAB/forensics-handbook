@@ -9,8 +9,6 @@ nav_order: 340
 
 구글 계정이 기기에 남기는 시스템 쪽 흔적을 정리합니다. 계정 DB 의 표 구조는 [계정 DB 구조 (accounts_ce.db·accounts_de.db)](accounts-db.md) 페이지에 있고, 이 페이지는 그 위에 더해 볼 동기화 기록과 설정 키, 패키지를 다룹니다. 값은 현행 AOSP(frameworks/base 의 main 가지) 기준입니다.
 
-## 한 줄 요약
-
 구글 계정도 다른 계정처럼 계정 DB 의 `accounts` 표에 name·type 쌍으로 남고, 계정과 동기화 대상의 조합마다 설정과 상태를 적는 `/data/system/sync/` 파일, 구글 서비스 이름이 붙은 설정 키와 패키지가 그 곁에 남습니다 [1][4].
 
 ## 무엇을 기록하나 · 왜 생기나

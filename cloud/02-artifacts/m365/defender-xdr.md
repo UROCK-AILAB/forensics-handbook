@@ -6,8 +6,6 @@ nav_order: 280
 
 # Defender 경고와 기록 (Microsoft Defender XDR)
 
-## 한 줄 요약
-
 Microsoft Defender XDR 은 메일·클라우드 앱·계정·단말의 보안 이벤트를 고급 헌팅 (advanced hunting) 테이블에 쌓고 그 위에서 경고 (alert) 를 만들며, 원시 이벤트는 최대 30일, 포털 데이터는 180일 동안 볼 수 있습니다[1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -7,8 +7,6 @@ nav_order: 2210
 
 # 회사용 OneDrive와 SharePoint 동기화 (Business Tenant)
 
-## 한 줄 요약
-
 회사·학교 계정으로 OneDrive 를 연결하면 레지스트리·`settings`·`logs` 에 `Business1`, `Business2` … 라는 이름으로 기록이 따로 쌓입니다. 이 기록에는 조직을 가리키는 테넌트 ID 와 SharePoint 주소가 남습니다. 관리자 정책의 값 이름에도 테넌트 ID 가 자주 들어갑니다. 그래서 어느 조직의 계정을 썼는지, 정책이 어느 조직을 대상으로 걸렸는지 구분할 수 있습니다.
 
 > 이 페이지의 레지스트리·로그 값은 Windows 11 빌드 26200 과 OneDrive 26.168.0830.0006 기준입니다.

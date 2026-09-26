@@ -6,8 +6,6 @@ nav_order: 610
 
 # 위치 기록 데몬 (routined)
 
-## 한 줄 요약
-
 routined 는 아이폰이 지나간 위치 점과 머문 장소를 SQLite DB 세 개(`Cache.sqlite`, `Local.sqlite`, `Cloud.sqlite`)에 쌓는 시스템 데몬이고, 이 DB 들은 파일 시스템 전체 추출에서만 나오며 로컬 백업에는 설정 plist 만 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

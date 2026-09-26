@@ -6,8 +6,6 @@ nav_order: 2270
 
 # 메가 (MEGA)
 
-## 한 줄 요약
-
 MEGA 데스크톱 앱(MEGAsync)은 `AppData\Local\Mega Limited\MEGAsync\` 에 설정 파일, 로그, SQLite 상태 DB 를 두고, 동기화 폴더 안에는 숨은 `Rubbish` 폴더를 만듭니다. 동기화 때문에 지워지거나 덮어쓰인 로컬 파일은 이 폴더의 날짜 폴더로 옮겨집니다.
 
 > **(코드)** 표시는 MEGA 가 공개한 소스 코드(MEGAsync 커밋 22e72f5, MEGA SDK 커밋 b93cc67)[2][3]에 쓰인 동작입니다. 앱 버전이 다르면 다를 수 있습니다.

@@ -6,8 +6,6 @@ nav_order: 1230
 
 # 탐색기 입력 기록 (TypedPaths·WordWheelQuery)
 
-## 한 줄 요약
-
 TypedPaths 와 WordWheelQuery 는 사용자 하이브 NTUSER.DAT 의 `Explorer` 키 아래에 있는 입력 목록입니다. TypedPaths 에는 탐색기 주소 표시줄의 경로가, WordWheelQuery 에는 탐색기 검색어가 남는다고 널리 설명됩니다. 두 키 모두 시각은 키마다 하나뿐입니다. 두 키의 뜻을 직접 밝힌 공개 자료가 없으므로, 쓰기 전에 대상 버전에서 실험으로 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나

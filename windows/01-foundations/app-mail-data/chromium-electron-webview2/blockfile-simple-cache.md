@@ -9,8 +9,6 @@ nav_order: 450
 
 > 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 캐시 형식
 
-## 한 줄 요약
-
 Chromium 의 디스크 캐시 (Disk Cache) 는 저장 방식이 두 가지입니다. 블록 파일 방식 (Blockfile) 은 `index` 파일 하나와 `data_0`~`data_3` 파일 넷에 항목을 나눠 담고, 심플 캐시 (Simple Cache) 는 항목 하나를 파일 하나에 담습니다. Windows 한 PC 안에서도 폴더에 따라 두 형식이 섞여 있습니다.
 
 ## 이 형식을 쓰는 아티팩트

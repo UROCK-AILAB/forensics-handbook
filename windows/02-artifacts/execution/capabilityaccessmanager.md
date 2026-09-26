@@ -6,8 +6,6 @@ nav_order: 1120
 
 # 카메라·마이크 사용 기록 (CapabilityAccessManager)
 
-## 한 줄 요약
-
 Windows 는 앱이 카메라·마이크를 쓴 때를 레지스트리의 ConsentStore 키에 남깁니다. 앱마다 마지막으로 쓰기 시작한 시각 (LastUsedTimeStart) 과 멈춘 시각 (LastUsedTimeStop) 이 FILETIME 으로 남습니다. `C:\ProgramData\Microsoft\Windows\CapabilityAccessManager` 에는 사용 기록 표가 든 SQLite DB 도 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

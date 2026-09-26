@@ -6,8 +6,6 @@ nav_order: 1580
 
 # 스마트폰 백업 파일 (iTunes·Smart Switch Backup)
 
-## 한 줄 요약
-
 iPhone·iPad 를 iTunes 나 Apple 기기 앱으로 백업하면 PC 의 사용자 프로필 아래에 백업 폴더가 생깁니다. 폴더 안 파일은 원래 이름 대신 40자 SHA-1 값을 이름으로 씁니다. 원래 경로는 `Manifest.db` 에서 찾습니다. Samsung Smart Switch 의 PC 백업은 공개된 분석 자료가 없어 실제 데이터로 확인할 점만 적습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

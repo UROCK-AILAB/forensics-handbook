@@ -7,8 +7,6 @@ nav_order: 360
 
 # 구형 EVT 형식 (Windows XP·2003)
 
-## 한 줄 요약
-
 EVT 는 Windows Vista 전에 쓰던 이벤트 로그 형식으로, 48바이트 헤더 뒤에 레코드가 원형 버퍼처럼 이어집니다. 파일 끝 레코드 (EOF Record) 에는 헤더와 같은 위치 정보가 한 벌 더 들어 있고, 시각은 32비트 유닉스 시각(UTC)입니다. 레코드 본문은 XML 이 아니라 고정 필드와 문자열입니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. Vista 이후 형식은 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에서 다룹니다.

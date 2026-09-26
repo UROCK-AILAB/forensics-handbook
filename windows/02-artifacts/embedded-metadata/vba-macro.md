@@ -6,8 +6,6 @@ nav_order: 3010
 
 # 오피스 매크로 (VBA Macro)
 
-## 한 줄 요약
-
 오피스 문서 안에는 VBA 매크로 코드가 들어 있을 수 있습니다. 97-2003 문서는 OLE 구조 안에, 2007 이후 OpenXML 문서는 ZIP 안의 `vbaProject.bin` 에 코드가 들어갑니다(참고 1). 코드 스트림에는 소스 글자와 컴파일된 코드 (P-code) 가 함께 있어서, 둘이 다르면 소스만 읽어서는 판단할 수 없습니다. 인터넷에서 받은 파일의 매크로는 Office 가 기본으로 막습니다(참고 2). 그래서 매크로가 파일에 있다는 것과 매크로가 실행됐다는 것은 따로 확인합니다.
 
 > 아래 예시 값은 Microsoft 365 설치본에 들어 있는 Excel 추가 기능 두 개(`Office16\Library\SOLVER\SOLVER.XLAM`, `Office16\1042\EXPTOOWS.XLA`)의 값이고, olevba 결과는 oletools 0.60.2 (olefile 0.47) 기준입니다. "(oletools 소스)" 는 oletools 0.60.2 의 `olevba.py` 소스 코드와 주석입니다. 주석이 MS-OVBA 명세를 인용하므로 세부는 명세 원문과 맞춰 봅니다.

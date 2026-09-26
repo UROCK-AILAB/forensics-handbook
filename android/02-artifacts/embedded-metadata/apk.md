@@ -6,8 +6,6 @@ nav_order: 1270
 
 # APK 정보 (AndroidManifest·서명)
 
-## 한 줄 요약
-
 APK 파일은 ZIP 묶음 안에 이진 형식으로 컴파일한 매니페스트(AndroidManifest.xml)와 리소스를 담고, 서명 방식에 따라 META-INF 디렉터리나 APK 서명 블록(APK Signing Block)에 서명 인증서를 담아서, 파일 하나만 있어도 패키지 이름·요청 권한과 이 파일에 서명한 키의 인증서를 확인할 수 있습니다 [1][2][3].
 
 ## 무엇을 기록하나 · 왜 생기나

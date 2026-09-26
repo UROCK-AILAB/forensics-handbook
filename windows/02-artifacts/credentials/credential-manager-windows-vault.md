@@ -6,8 +6,6 @@ nav_order: 2850
 
 # 자격 증명 관리자와 볼트 (Credential Manager·Windows Vault)
 
-## 한 줄 요약
-
 Windows 는 사용자가 저장한 웹·앱·네트워크 자격 증명을 사용자 프로필 아래 암호화된 폴더에 담습니다. 자격 증명 관리자 (Credential Manager) 가 이 자격 증명을 관리하고, 저장 영역은 Windows 볼트 (Windows Vault) 라고 부릅니다. 파일은 암호화된 특수 폴더에 들어 있고, DPAPI 로 감싸여 있다고 널리 알려져 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

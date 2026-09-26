@@ -7,8 +7,6 @@ nav_order: 820
 
 # 받은 파일 (Received Files)
 
-## 한 줄 요약
-
 카카오톡으로 받은 사진·영상·음성은 `Library/PrivateDocuments/` 아래 `chat`·`chatVideo`·`chatAudio` 폴더의 채팅방별 하위 폴더에 확장자 없이 저장되고, 복호한 첨부 정보 속 토큰이 파일 이름에 들어 있어 메시지와 파일을 이을 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

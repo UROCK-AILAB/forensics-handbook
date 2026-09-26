@@ -6,8 +6,6 @@ nav_order: 430
 
 # 알림 기록 (Notifications)
 
-## 한 줄 요약
-
 알림 기록은 앱이 띄운 알림의 제목·본문·번들 ID·시각을 담은 파일이고, iOS 12 에서는 앱별 폴더의 `DeliveredNotifications.plist`, iOS 15 에서는 `userNotificationEvents` 스트림에서 "이 시각에 이 앱에서 이런 문구의 알림이 왔다" 를 읽을 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

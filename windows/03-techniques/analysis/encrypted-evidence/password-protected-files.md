@@ -9,8 +9,6 @@ nav_order: 3430
 
 > 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > 암호 걸린 문서·압축 파일
 
-## 한 줄 요약
-
 문서와 압축 파일의 암호는 그 파일 형식 안에 표시됩니다.
 ZIP 은 일반 비트 플래그의 bit 0 으로 표시합니다.
 암호 걸린 오피스 OOXML 문서는 OLE 파일 안의 `EncryptedPackage` 스트림에 들어갑니다.

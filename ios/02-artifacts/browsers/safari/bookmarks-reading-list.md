@@ -7,8 +7,6 @@ nav_order: 750
 
 # 북마크와 읽기 목록 (Bookmarks·Reading List)
 
-## 한 줄 요약
-
 사파리 북마크는 Bookmarks.db 의 `bookmarks` 표에 폴더와 항목이 한 표로 들어가고, 이 DB 는 암호화하지 않은 로컬 백업에도 HomeDomain 아래로 들어가서 방문 기록이 없는 백업에서도 열어 볼 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

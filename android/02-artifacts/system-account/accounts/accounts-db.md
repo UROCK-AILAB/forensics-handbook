@@ -9,8 +9,6 @@ nav_order: 330
 
 기기에 등록된 계정 목록을 담는 SQLite 파일 두 개의 위치와 표, 시각, 변경 기록을 정리합니다. 값은 현행 AOSP(frameworks/base 의 main 가지) 기준이고, 이전 Android 버전에서는 다를 수 있습니다.
 
-## 한 줄 요약
-
 시스템 서비스 AccountManagerService 가 사용자마다 계정의 이름·종류·권한 부여·가시성을 `accounts_de.db` 에, 비밀번호·인증 토큰·부가 값을 `accounts_ce.db` 에 나눠 적고, DE 쪽 `debug_table` 에는 최대 64줄의 계정 변경 기록을 남깁니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

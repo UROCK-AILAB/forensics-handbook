@@ -6,8 +6,6 @@ nav_order: 1010
 
 # 미리 알림과 캘린더 (Reminders·Calendar)
 
-## 한 줄 요약
-
 캘린더 일정은 `HomeDomain` 의 `Library/Calendar/Calendar.sqlitedb` 에, 미리 알림은 앱 그룹 `group.com.apple.reminders` 의 `Container_v#/Stores/` 아래 SQLite DB 에 따로 남고, 두 DB 모두 시각을 Mac 절대 시각(2001-01-01 기준 초)으로 읽습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -6,8 +6,6 @@ nav_order: 510
 
 # Microsoft 365 Copilot (M365 Copilot)
 
-## 한 줄 요약
-
 Word·Excel·PowerPoint·Outlook·Teams 같은 업무 앱에서 쓴 Copilot 대화는 사용자 Exchange Online 사서함의 숨은 폴더에 저장되고, 조직이 감사를 켜 두었다면 Microsoft Purview 감사 로그에 `CopilotInteraction` 레코드가 따로 남아 어느 앱에서, 어떤 문서를 대상으로, 웹 검색을 썼는지를 알려 줍니다.
 
 확인 날짜는 2026-09입니다. Windows·macOS Office 앱이 기기에 Copilot 대화를 남기는지는 공개되지 않았으므로, 기기 쪽 흔적은 실제 기기에서 확인해야 합니다.

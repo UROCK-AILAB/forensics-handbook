@@ -9,8 +9,6 @@ nav_order: 200
 
 > 위치: [레지스트리 하이브 구조](index.md) > MRU 목록 읽는 법
 
-## 한 줄 요약
-
 MRU 목록 (Most Recently Used list) 은 최근에 쓴 항목 여러 개를 레지스트리 키 하나에 모아 두는 저장 방식입니다. 항목의 순서는 항목과 따로, MRUList 또는 MRUListEx 라는 값 하나에 적습니다. MRUList 는 글자로 순서를 적고, MRUListEx 는 4바이트 숫자로 순서를 적습니다.
 
 ## 이 형식을 쓰는 아티팩트

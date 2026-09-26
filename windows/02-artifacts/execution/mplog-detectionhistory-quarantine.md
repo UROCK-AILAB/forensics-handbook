@@ -6,8 +6,6 @@ nav_order: 1110
 
 # 디펜더 검사 로그·격리 파일 (MPLog·DetectionHistory·Quarantine)
 
-## 한 줄 요약
-
 Microsoft Defender 바이러스 백신은 `C:\ProgramData\Microsoft\Windows Defender` 아래에 파일 흔적을 세 가지 남깁니다. 검사 로그 MPLog 에는 탐지가 없어도 프로세스 이름과 파일 경로가 남습니다. 보호 기록 (DetectionHistory) 에는 탐지 한 건마다 파일이 하나씩 생깁니다. 격리 폴더 (Quarantine) 에는 격리한 파일의 원본 내용이 암호화된 채 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

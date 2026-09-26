@@ -9,8 +9,6 @@ nav_order: 230
 
 > 위치: [ESE 데이터베이스 (Extensible Storage Engine)](index.md) > 트랜잭션 로그와 비정상 종료 상태
 
-## 한 줄 요약
-
 ESE 는 DB 를 바꾸는 작업을 DB 파일보다 트랜잭션 로그 (Transaction Log) 에 먼저 적고, DB 를 깨끗하게 닫지 못하면 DB 파일 머리에 비정상 종료 (Dirty Shutdown) 상태가 남습니다. 압수 이미지에서 꺼낸 ESE DB 는 대부분 이 상태이므로, 로그를 함께 모으고 로그를 적용하기 전과 후를 나눠 읽어야 합니다.
 
 ## 이 형식을 쓰는 아티팩트

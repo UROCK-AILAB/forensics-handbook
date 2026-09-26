@@ -7,8 +7,6 @@ nav_order: 3360
 
 # 파일 카빙 (File Carving)
 
-## 한 줄 요약
-
 파일 카빙 (File Carving) 은 파일시스템의 메타정보 없이 원시 데이터만 분석해 파일을 되살리는 방법입니다. 파일 형식마다 정해진 서명으로 시작점을 찾고, 끝 표시나 파일 머리에 적힌 크기로 끝을 정하며, 결과에는 파일 이름·시각·원래 경로가 없습니다.
 
 이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 이름과 시각까지 되살릴 수 있는지는 먼저 [파일시스템 기반 복구 (Undelete: NTFS·FAT)](undelete-ntfs-fat.md) 로 봅니다. 카빙할 데이터를 어디서 뽑는지는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](unallocated-slack-space.md) 에 있습니다. 파일보다 작은 레코드 단위로 찾는 방법은 [레코드 카빙 (Record Carving)](record-carving.md) 에서 다룹니다.

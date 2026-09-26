@@ -7,8 +7,6 @@ nav_order: 2180
 
 # 계정·설정 레지스트리 (Accounts·Settings)
 
-## 한 줄 요약
-
 OneDrive 는 연결한 계정마다 사용자 레지스트리의 `HKCU\Software\Microsoft\OneDrive\Accounts` 아래에 하위 키를 하나씩 만듭니다. 이 키에는 계정 메일, 계정 ID, 동기화 폴더 경로, 로그인 시각이 남습니다. 앱은 같은 동기화 폴더를 `HKCU\Software\SyncEngines` 와 SOFTWARE 하이브의 `SyncRootManager` 키에도 적습니다.
 
 > 이 페이지의 값 이름과 예시 값은 Windows 11 빌드 26200 과 OneDrive 26.168.0830.0006 기준입니다.

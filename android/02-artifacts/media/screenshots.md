@@ -6,8 +6,6 @@ nav_order: 690
 
 # 스크린샷과 화면 녹화 (Screenshots·Screen Recording)
 
-## 한 줄 요약
-
 AOSP 의 시스템 UI(SystemUI)는 스크린샷을 `Pictures/Screenshots` 에 캡처 시각이 든 이름으로 저장하면서 EXIF 에 시차까지 포함한 캡처 시각과 빌드 표시값을 적고, 화면 녹화는 `screen-날짜-시각.mp4` 이름으로 Movies 에 저장하는데, 삼성 기기는 저장 폴더와 설정이 달라서 기기에서 실제 위치를 먼저 확인합니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -7,8 +7,6 @@ nav_order: 1680
 
 # 확장 프로그램 (Extensions)
 
-## 한 줄 요약
-
 크롬 계열 브라우저는 확장 프로그램 (Extension) 의 파일을 프로필 폴더의 `Extensions` 폴더에 풀어 둡니다. 확장마다의 설정은 `Secure Preferences` 파일의 `extensions.settings` 에 JSON 으로 남으며, 여기에는 설치 경로의 종류, 처음 설치한 시각, 마지막 업데이트 시각, 꺼진 이유, manifest 전체가 들어 있습니다.
 
 > 이 페이지의 폴더·키 구성은 Windows 11(빌드 26200)의 Chrome 153·Edge 151 기준입니다. 다른 판에서는 다를 수 있어 실제 기기에서 확인합니다. 값의 뜻은 2026년 9월 크로미엄 (Chromium) 기준입니다[1][2].

@@ -8,8 +8,6 @@ has_toc: false
 
 # Gemini (Gemini)
 
-## 한 줄 요약
-
 Gemini 는 Google 의 대화형 AI 서비스이고, 웹·Android·iOS·Chrome 어디서 쓰든 대화는 Google 계정에 묶여 서버의 Gemini 앱 활동 (Gemini Apps Activity) 에 저장됩니다 [1].
 
 ## 왜 중요한가

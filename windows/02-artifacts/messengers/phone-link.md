@@ -6,8 +6,6 @@ nav_order: 2150
 
 # 휴대폰과 연결 (Phone Link)
 
-## 한 줄 요약
-
 휴대폰과 연결 (Phone Link) 은 연결한 휴대폰의 문자·연락처·통화 기록·알림·사진을 PC 로 동기화하는 Windows 앱입니다. 동기화한 자료는 사용자 프로필의 앱 패키지 폴더 안 SQLite DB 에 남습니다[1][2]. 앱의 옛 이름은 Your Phone 이고 패키지 이름은 `Microsoft.YourPhone_8wekyb3d8bbwe` 입니다[1]. 패키지 1.26072.255.0 에서도 이름이 같습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

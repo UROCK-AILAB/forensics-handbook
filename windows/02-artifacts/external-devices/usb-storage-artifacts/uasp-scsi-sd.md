@@ -7,8 +7,6 @@ nav_order: 1550
 
 # USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)
 
-## 한 줄 요약
-
 USBSTOR 키에는 Usbstor.sys 드라이버가 맡은 저장장치만 남습니다. UASP 로 붙은 USB 저장장치와 eSATA·썬더볼트 외장 디스크는 `Enum\SCSI` 에 남고, 내장 SD 슬롯에 꽂은 메모리 카드는 `Enum\SD` 에 남습니다. 그래서 USBSTOR 가 비어 있어도 외부 저장장치를 안 썼다고 단정할 수 없습니다.
 
 ## 왜 USBSTOR 에 안 남나

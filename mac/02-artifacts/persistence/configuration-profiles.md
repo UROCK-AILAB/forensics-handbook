@@ -6,8 +6,6 @@ nav_order: 640
 
 # 구성 프로파일 (Configuration Profiles·MDM)
 
-## 한 줄 요약
-
 구성 프로파일 (Configuration Profile)은 맥의 설정을 묶어서 한꺼번에 적용하는 설정 꾸러미이고, 기기 관리 (Mobile Device Management, MDM) 서버가 밀어 넣거나 사용자가 설치하며, 다른 자동 실행 위치의 허용 규칙까지 바꿀 수 있어서 지속성 조사 때 설치된 프로파일과 MDM 등록 상태를 함께 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -6,8 +6,6 @@ nav_order: 520
 
 # Google Workspace의 Gemini (Workspace Gemini)
 
-## 한 줄 요약
-
 회사·학교 계정으로 Docs·Sheets·Slides·Drive·Gmail·Meet 옆 패널이나 Gemini 앱에서 쓴 Gemini 대화는 Google 서버에 있고, 보관 기간은 관리자가 정하며, 조사는 관리자 쪽 Vault 와 감사 로그에서 시작합니다.
 
 확인 날짜는 2026-09이고, 근거는 Google 의 "Generative AI in Google Workspace Privacy Hub"(마지막 갱신 2026-08-14) 한 편입니다. 기기 쪽 흔적은 실제 기기에서 확인해야 합니다.

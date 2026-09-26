@@ -8,8 +8,6 @@ has_toc: false
 
 # SRUM (System Resource Usage Monitor)
 
-## 한 줄 요약
-
 SRUM (System Resource Usage Monitor) 은 윈도가 앱과 사용자별 자원 사용량을 모아 두는 기능입니다. 모은 값은 한 시간 단위로 `C:\Windows\System32\sru\SRUDB.dat` 에 쌓입니다. 이 파일에는 앱이 쓴 CPU·디스크 양, 앱별 네트워크 송수신 바이트, 연결한 네트워크, 배터리 상태가 남습니다.
 
 ## 왜 중요한가

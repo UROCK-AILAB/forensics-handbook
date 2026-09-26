@@ -6,8 +6,6 @@ nav_order: 2160
 
 # 클라우드 동기화 공통 구조 (Cloud Files API·SyncRootManager)
 
-## 한 줄 요약
-
 Windows 10 1709 부터 클라우드 파일 API (Cloud Files API) 가 들어 있습니다. 동기화 앱은 이 API 로 클라우드와 맞출 폴더를 동기화 루트 (sync root) 로 등록하고, 폴더 안 파일을 자리표시자 (placeholder) 로 만듭니다. 등록 정보는 SOFTWARE 하이브의 `SyncRootManager` 키에 남습니다. 파일마다 내용이 PC 에 있는지는 재분석 지점과 파일 특성 (file attribute) 에 남습니다.
 
 > 아래 키 이름과 값의 예는 Windows 11 빌드 26200 의 OneDrive 동기화 루트(개인 계정 1개, 회사 계정 1개) 기준입니다. 다른 업체의 앱은 값이 다를 수 있습니다.

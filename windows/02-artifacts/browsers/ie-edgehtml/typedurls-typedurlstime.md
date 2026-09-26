@@ -7,8 +7,6 @@ nav_order: 1820
 
 # 주소창 입력 주소 (TypedURLs·TypedURLsTime)
 
-## 한 줄 요약
-
 IE 주소창에 입력한 주소는 사용자 하이브(NTUSER.DAT)의 `TypedURLs` 키에 `url1` 같은 이름의 값으로 남습니다. Windows 8 에서 소개된 `TypedURLsTime` 키에는 같은 번호의 값으로 입력 시각이 FILETIME 으로 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

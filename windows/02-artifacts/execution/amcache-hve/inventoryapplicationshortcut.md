@@ -7,8 +7,6 @@ nav_order: 900
 
 # 바로가기 항목 (InventoryApplicationShortcut)
 
-## 한 줄 요약
-
 Amcache.hve 의 `Root\InventoryApplicationShortcut` 키에는 호환성 인벤토리가 시작 메뉴 같은 폴더에서 찾은 바로가기(LNK) 파일이 하나씩 하위 키로 남습니다. 옛 판에는 LNK 경로 하나만 있고, 새 판에는 대상 경로와 앱 식별자가 더 있습니다. 이 기록은 "그 바로가기가 있었다" 는 뜻입니다. 실행했다는 뜻이 아닙니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -6,8 +6,6 @@ nav_order: 2760
 
 # 프로그램 설치·삭제 이벤트 (MsiInstaller)
 
-## 한 줄 요약
-
 Windows Installer (MSI) 로 프로그램을 설치하거나 제거하거나 구성을 바꾸면 응용 프로그램 로그 (Application) 에 이벤트가 남습니다. 이벤트의 원본 (Source) 이름은 MsiInstaller 이고, 제품 이름, 버전, 제조사, 결과 상태가 적힙니다. Windows 11 25H2 에서는 Binary 필드에 제품 코드 (ProductCode) 가 들어 있습니다. 제품을 지운 뒤에도 이벤트는 남으므로 레지스트리 설치 목록에서 사라진 앱의 이력을 찾을 수 있습니다. 시각은 UTC 이며, 로그가 순환하면 오래된 기록부터 사라집니다.
 
 > 이 페이지의 예시 레코드는 Windows 11 25H2, 시간대 Korea Standard Time(UTC+9) PC 의 것입니다.

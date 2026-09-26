@@ -7,8 +7,6 @@ nav_order: 850
 
 # 다운로드 (Downloads)
 
-## 한 줄 요약
-
 Chrome for Android 의 다운로드 기록은 `History` 파일 안의 downloads 표에 한 건씩 들어 있고, 저장 경로와 크기, 상태, 내용의 SHA-256 값, 다운로드를 시작한 탭의 URL 이 남으며, 리다이렉트를 거친 실제 파일 주소는 downloads_url_chains 표에 따로 남습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

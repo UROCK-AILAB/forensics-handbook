@@ -6,8 +6,6 @@ nav_order: 1110
 
 # 삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)
 
-## 한 줄 요약
-
 원드라이브 (OneDrive) 앱은 `QTMetadata.db` 의 `items` 표에 클라우드 파일과 폴더의 이름·크기·시각·SHA-1 을 담고 `stream_cache` 표에 기기에 캐시한 사본의 경로를 적어 두어서 [2] 파일 목록과 폴더 경로를 되살릴 수 있습니다. 삼성 클라우드 (Samsung Cloud) 는 앱 쪽 저장 위치를 적은 공개 자료가 없어 실제 기기에서 확인해야 합니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -7,8 +7,6 @@ nav_order: 380
 
 # ETW 추적 로그 (ETL)
 
-## 한 줄 요약
-
 ETW (Event Tracing for Windows) 는 커널 수준에서 동작하는 Windows 의 추적 기능입니다. 커널이나 앱이 정한 이벤트를 실시간으로 넘기거나 로그 파일(`.etl`)에 씁니다. `.etl` 파일의 첫 이벤트에는 세션 머리 정보 (TRACE_LOGFILE_HEADER) 가 들어 있고, 여기에 세션 시작 시각과 시스템 부팅 시각이 남습니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 이벤트 뷰어가 여는 `.evtx` 파일은 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에서 다룹니다.

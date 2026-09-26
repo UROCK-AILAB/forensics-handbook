@@ -6,8 +6,6 @@ nav_order: 1050
 
 # 작업표시줄 사용 기록 (FeatureUsage)
 
-## 한 줄 요약
-
 Windows 10 1903 이후 사용자 하이브(NTUSER.DAT)의 `FeatureUsage` 키에 작업 표시줄에서 앱을 띄우고, 누르고, 오른쪽 클릭한 횟수가 앱마다 쌓이지만 값에는 시각이 없고, 키의 `KeyCreationTime` 값은 그 사용자가 처음 대화형 로그온한 무렵을 가리킵니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -9,8 +9,6 @@ nav_order: 580
 
 RCS(Rich Communication Services) 채팅과 관련해 기기에 남는 기록을 정리합니다. 공개 파서 ALEAPP 가 읽는 Google 메시지 앱의 DB 와 삼성 기기의 IMS 서비스 로그를 중심으로 다룹니다.
 
-## 한 줄 요약
-
 RCS 대화 본문이 시스템 문자 DB(mmssms.db)에 들어가는지는 공개 자료에 정리되어 있지 않고, 볼 수 있는 기록은 Google 메시지 앱의 bugle_db 와 삼성 IMS 서비스(com.sec.imsservice)의 등록 로그입니다. 공개 파서가 읽는 bugle_db 열 가운데에는 한 메시지가 SMS·MMS·RCS 가운데 무엇으로 오갔는지 구분하는 열이 없습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

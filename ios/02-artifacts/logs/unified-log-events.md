@@ -6,8 +6,6 @@ nav_order: 1090
 
 # 통합 로그에서 찾을 것 (Unified Log Events)
 
-## 한 줄 요약
-
 통합 로그 (Unified Logs)는 운영체제의 데몬과 앱이 코드에서 남기는 메시지를 한 형식으로 모은 기록이고, 레코드마다 프로세스·subsystem·category·메시지·시각이 붙어 있어서 "그 무렵 어떤 프로세스가 무엇을 적었나" 를 거르고 모아 볼 수 있습니다. 아이폰의 통합 로그는 sysdiagnose 묶음 안의 `system_logs.logarchive` 로 손에 넣습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -8,8 +8,6 @@ has_toc: false
 
 # 크롬 (Chrome for Android)
 
-## 한 줄 요약
-
 Chrome for Android(패키지 com.android.chrome)는 앱 데이터 폴더의 `app_chrome/Default/` 아래 SQLite 파일에 방문 기록과 다운로드, 쿠키, 자동 완성을 남기고, 열린 탭은 따로 탭 상태 파일에 저장합니다 [1][2][3][4].
 
 ## 왜 중요한가

@@ -6,8 +6,6 @@ nav_order: 990
 
 # 아이클라우드 드라이브 (iCloud Drive)
 
-## 한 줄 요약
-
 iCloud Drive 는 파일 자체를 `Library/Mobile Documents/com~apple~CloudDocs/` 에, 파일 목록과 올리고 내려받은 기록을 `Library/Application Support/CloudDocs/session/db/` 의 `client.db`·`server.db` 에 남기고, 로컬 백업에는 파일 없이 이 두 DB 와 설정 plist 가 들어갑니다.
 
 ## 무엇을 기록하나 · 왜 생기나

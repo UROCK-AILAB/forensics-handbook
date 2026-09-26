@@ -6,8 +6,6 @@ nav_order: 680
 
 # 삼성 갤러리 (Samsung Gallery)
 
-## 한 줄 요약
-
 삼성 기기의 기본 갤러리 앱(com.sec.android.gallery3d)은 앱 전용 폴더의 local.db 에 휴지통 기록을 두고, 숨긴 앨범(Hidden Album)을 쓰면 secured.db 와 sec_pass 폴더에 숨긴 사진의 원래 경로로 보이는 값과 기기 모델 이름으로 보이는 값 같은 기록을 남기는데, 두 곳 모두 삼성이 공개한 규격이 없어 공개 도구의 해석에 기대어 읽습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -6,8 +6,6 @@ nav_order: 780
 
 # 기타 자동실행 위치 (Winlogon·IFEO·AppInit_DLLs)
 
-## 한 줄 요약
-
 Run 키 말고도 로그온, 프로그램 시작, DLL 로드에 끼어드는 레지스트리 자리가 있습니다. 이 페이지는 Winlogon 의 Shell·Userinit·Notify, IFEO 의 Debugger, AppInit_DLLs, 그리고 BootExecute·Load 값을 다룹니다. 이 자리들은 정상 값이 정해져 있거나 대개 비어 있어서, 기준과 다른 값이 보이면 살펴볼 대상입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

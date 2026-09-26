@@ -6,8 +6,6 @@ nav_order: 410
 
 # OLE 복합 파일 (Compound File Binary)
 
-## 한 줄 요약
-
 OLE 복합 파일 (Compound File Binary) 은 파일 하나 안에 작은 파일 시스템을 넣은 컨테이너 형식입니다. OLE2, Compound Binary File, Compound Document File 이라고도 부르고, libyal 은 OLECF 라고 부릅니다. 파일 머리 뒤에 같은 크기의 섹터가 이어지고, 할당 표가 섹터를 사슬로 묶습니다. 디렉터리 항목은 저장소 (Storage) 와 스트림 (Stream) 을 나무 모양으로 묶습니다. 이 구조는 FAT 파일 시스템과 비슷합니다.
 
 ## 이 형식을 쓰는 아티팩트

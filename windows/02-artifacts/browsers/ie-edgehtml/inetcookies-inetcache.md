@@ -7,8 +7,6 @@ nav_order: 1840
 
 # 쿠키·캐시 폴더 (INetCookies·INetCache)
 
-## 한 줄 요약
-
 IE 는 받은 웹 자원을 캐시 폴더(IE 4~9 는 `Content.IE5`, IE 10 이후는 `INetCache\IE`)에 파일로 저장합니다. 어느 주소가 어느 파일인지는 폴더가 아니라 기록 파일(index.dat 나 WebCacheV01.dat)이 잇습니다. IE 10 이후 쿠키는 WebCache DB 의 쿠키 표에 들어갑니다.
 
 ## 무엇을 기록하나 · 왜 생기나

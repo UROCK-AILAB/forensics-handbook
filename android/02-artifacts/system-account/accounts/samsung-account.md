@@ -9,8 +9,6 @@ nav_order: 350
 
 삼성 기기에서 삼성 계정과 관련해 시스템 쪽에 남는 흔적을 정리합니다. 계정 DB 의 표 구조는 [계정 DB 구조 (accounts_ce.db·accounts_de.db)](accounts-db.md) 에, 계정별 동기화 파일은 [구글 계정 흔적 (Google Account)](google-account.md) 에 있고, 이 페이지는 삼성 기기에서만 볼 수 있는 설정 키를 다룹니다.
 
-## 한 줄 요약
-
 삼성 계정도 AccountManager 에 등록하는 계정이라 AOSP 구조대로라면 계정 DB 의 `accounts` 표에 name·type 쌍으로 남고, 삼성 기기의 설정에는 삼성 계정·약관 동의·기기 이전과 관련된 이름의 키가 따로 남습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

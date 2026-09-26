@@ -6,8 +6,6 @@ nav_order: 2700
 
 # 외부 장치 연결 이벤트 (Partition/Diagnostic·Kernel-PnP·DriverFrameworks)
 
-## 한 줄 요약
-
 저장장치를 꽂고 뺄 때 이벤트 로그 여러 곳에 기록이 남습니다. Partition/Diagnostic 로그의 1006 은 꽂을 때와 뺄 때마다 한 건씩 쌓입니다. Kernel-PnP/Configuration 로그의 400·410 은 장치를 처음 구성할 때 남습니다. Kernel-PnP/Device Management 로그의 1010 은 장치가 버스에서 사라졌을 때 남습니다. 메시지 문구는 "예고 없이 빠짐 (surprise removed)" 입니다. DriverFrameworks-UserMode/Operational 로그는 꺼져 있을 수 있습니다. 기록 계정은 모두 SYSTEM 이어서, 누가 꽂았는지는 이 로그로 알 수 없습니다. 시각은 UTC 입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

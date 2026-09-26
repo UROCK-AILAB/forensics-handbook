@@ -6,8 +6,6 @@ nav_order: 470
 
 # UWP 앱 데이터 구조 (Packages 폴더·settings.dat)
 
-## 한 줄 요약
-
 스토어 앱처럼 패키지로 설치하는 앱을 패키지 앱 (Packaged App) 이라고 합니다.
 패키지 앱은 사용자마다 앱 데이터 저장소를 따로 받으며, Windows 11 에서는 그 저장소가 `%LOCALAPPDATA%\Packages\<패키지 패밀리 이름>` 폴더입니다.
 폴더 이름을 나눠 읽으면 앱 이름과 게시자를 가릴 수 있습니다.

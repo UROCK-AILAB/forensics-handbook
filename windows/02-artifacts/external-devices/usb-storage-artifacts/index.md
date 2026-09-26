@@ -8,8 +8,6 @@ has_toc: false
 
 # USB 저장장치 흔적 (USB Storage Artifacts)
 
-## 한 줄 요약
-
 USB 저장장치 흔적 (USB Storage Artifacts) 은 USB 메모리나 외장 디스크를 PC 에 꽂았을 때 윈도가 레지스트리와 로그 파일에 남기는 기록입니다. 기록은 한곳에 모여 있지 않고 SYSTEM·SOFTWARE·NTUSER.DAT 하이브와 `setupapi.dev.log` 에 흩어져 있지만, 시리얼 번호와 볼륨 식별자로 이어 붙이면 어떤 장치가 언제 어느 드라이브 문자로 붙었는지 알 수 있습니다.
 
 ## 왜 중요한가

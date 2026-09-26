@@ -9,8 +9,6 @@ nav_order: 460
 
 > 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 쿠키·비밀번호 암호화
 
-## 한 줄 요약
-
 크롬 계열 앱은 쿠키·비밀번호 같은 값을 AES-256-GCM 으로 암호화하고, 암호화 키는 `Local State` 파일의 `os_crypt` 아래에 둡니다. 키는 데이터 보호 API (DPAPI) 로 보호한 키와 앱 바인딩 암호화 (App-Bound Encryption) 키 두 종류이고, 어느 키로 풀어야 하는지는 암호문 앞 3바이트(`v10`·`v20`)로 구분합니다.
 
 ## 이 구조를 쓰는 아티팩트

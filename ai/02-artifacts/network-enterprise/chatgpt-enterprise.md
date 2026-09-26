@@ -6,8 +6,6 @@ nav_order: 780
 
 # ChatGPT 기업용 감사 기록 (Compliance API)
 
-## 한 줄 요약
-
 조직이 ChatGPT Enterprise 로 쓴 대화와 사용 기록은 OpenAI 서버에 있고 조직 관리자가 관리 기능으로 가져가는 자료라서, 직원 PC 이미지가 아니라 조직에 요청해서 받습니다.
 
 이 페이지의 Purview 관련 내용은 Microsoft Learn 문서(Purview DSPM for AI 2025-12-15·갱신 2026-06-25, Copilot·AI 앱 보존 2025-09-23·갱신 2026-06-25, Copilot·AI 앱 감사 2026-08-26)를 2026-09 에 확인한 것입니다[1][2][3]. OpenAI 쪽 관리자 기능의 세부는 조사 시점의 OpenAI 기업 고객용 문서로 확인합니다.

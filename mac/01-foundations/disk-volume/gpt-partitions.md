@@ -6,8 +6,6 @@ nav_order: 110
 
 # 파티션 구조 (GPT·APFS 파티션)
 
-## 한 줄 요약
-
 인텔 맥과 Apple silicon 맥의 디스크는 GUID 파티션 표 (GUID Partition Table, GPT) 로 나뉘고, 파티션마다 붙은 유형 GUID 로 APFS 컨테이너·HFS+·EFI 시스템 파티션 같은 용도를 가려내며, APFS 컨테이너 파티션은 첫 블록의 컨테이너 슈퍼블록에서 읽기 시작합니다.
 
 ## 이 형식을 쓰는 아티팩트

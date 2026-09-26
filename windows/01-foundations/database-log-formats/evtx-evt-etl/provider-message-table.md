@@ -7,8 +7,6 @@ nav_order: 350
 
 # 공급자와 메시지 파일 (Provider·Message Table)
 
-## 한 줄 요약
-
 이벤트 뷰어에 보이는 설명 문장은 로그 파일 안에 없고, 레코드에는 문장의 빈자리(`%1`, `%2` …)에 들어갈 값만 있습니다. 문장 틀은 이벤트를 낸 공급자 (Provider) 의 메시지 파일 (Message File) 에 있으므로, 레지스트리로 메시지 파일을 찾고 이벤트 식별자로 문장을 고른 뒤 레코드 값을 채워야 설명 문장이 됩니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 레코드 안의 값을 꺼내는 법은 [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) 에 있습니다.

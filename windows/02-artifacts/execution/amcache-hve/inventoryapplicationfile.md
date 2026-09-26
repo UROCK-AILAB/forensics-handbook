@@ -7,8 +7,6 @@ nav_order: 870
 
 # 실행 파일 항목 (InventoryApplicationFile)
 
-## 한 줄 요약
-
 실행 파일 항목 (InventoryApplicationFile) 은 `Amcache.hve` 하이브 안의 `Root\InventoryApplicationFile` 키입니다. 윈도의 호환성 점검 기능이 찾아낸 실행 파일마다 하위 키가 하나씩 생기고, 하위 키에는 파일 경로, 내용의 SHA-1, 크기, 버전 정보, 링크 시각이 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

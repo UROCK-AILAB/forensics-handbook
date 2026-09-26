@@ -8,8 +8,6 @@ nav_order: 2110
 
 > 위치: 아티팩트 사전 > 메신저
 
-## 한 줄 요약
-
 시그널 데스크톱은 Electron 앱이고, 사용자 데이터를 `C:\Users\<사용자>\AppData\Roaming\Signal\` 에 둡니다.
 대화방·메시지·첨부 파일 정보는 `sql\db.sqlite` 에 있고, 이 DB 는 SQLCipher 로 암호화돼 있습니다. DB 키는 같은 폴더의 `config.json` 에 있습니다. 옛 방식은 키를 평문 `key` 필드에 적었고, 지금 소스는 키를 암호화해 `encryptedKey` 필드에 적습니다. Windows 에서 이 암호화의 키는 DPAPI 로 만들기 때문에, `encryptedKey` 만 있는 이미지에서는 그 사용자의 DPAPI 를 풀어야 DB 키를 얻습니다.
 

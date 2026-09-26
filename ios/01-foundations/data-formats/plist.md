@@ -6,8 +6,6 @@ nav_order: 140
 
 # 속성 목록 파일 (plist·NSKeyedArchiver)
 
-## 한 줄 요약
-
 속성 목록 파일 (property list, plist) 은 iOS 설정과 백업 정보를 담는 기본 형식이고, 그 안에 객체 그래프를 한 겹 더 싸 넣는 NSKeyedArchiver 형식이 자주 겹쳐 들어 있어 두 층을 차례로 풀어야 값이 보입니다.
 
 Apple 은 포렌식용 공식 명세를 내지 않았습니다. 바이너리 plist 는 Apple 공개 소스 CF 의 `CFBinaryPList.c` 주석이 사실상 명세 구실을 합니다[3].

@@ -7,8 +7,6 @@ nav_order: 290
 
 # 파일 안에 남은 지운 레코드 (Freelist·Freeblock)
 
-## 한 줄 요약
-
 SQLite 는 행을 지워도 그 바이트를 곧바로 0 으로 채우지 않고, 그 자리를 빈 공간으로 표시해 두었다가 나중에 다시 씁니다. 페이지 전체가 비면 프리리스트 (Freelist) 에 올라가고, 페이지 일부가 비면 프리블록 (Freeblock) 이나 비할당 영역 (Unallocated Region) 이 됩니다. 이 세 곳이 파일 안에서 지운 레코드를 찾는 자리입니다. 다만 앱이 보안 삭제 (secure_delete) 를 켜 두었으면 대부분 0 으로 바뀌어 있습니다.
 
 페이지·셀·레코드 형식 자체는 [파일·페이지 구조 (B-tree·Record Format)](b-tree-record-format.md) 에서 다룹니다. 이 글은 빈 공간만 봅니다.

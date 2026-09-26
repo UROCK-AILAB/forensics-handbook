@@ -9,8 +9,6 @@ nav_order: 440
 
 > 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > Electron·WebView2 앱 데이터 위치
 
-## 한 줄 요약
-
 Electron 앱과 WebView2 를 쓰는 앱은 Chromium 의 저장 방식을 그대로 써서 앱 폴더 안에 브라우저와 같은 모양의 폴더가 생깁니다. 위치는 앱이 정하므로 기본 위치를 알아 두고, 기본 위치를 벗어난 폴더는 `Local State`·`EBWebView` 이름으로 찾습니다.
 
 ## 이 구조를 쓰는 아티팩트

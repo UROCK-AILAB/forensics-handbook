@@ -6,8 +6,6 @@ nav_order: 2670
 
 # 계정 생성·변경 (Account Management Events)
 
-## 한 줄 요약
-
 사용자 계정을 만들거나 바꾸거나 지우면 보안 로그 (Security) 에 계정 관리 이벤트가 남습니다. 4720 은 계정을 만든 기록이고, 4738 은 계정을 바꾼 기록입니다. 보안 로컬 그룹에 구성원을 넣으면 4732 가 남습니다. 이벤트마다 대상 계정 (Target) 과 작업한 계정 (Subject) 이 따로 적힙니다. 감사 하위 범주 Audit User Account Management 와 Audit Security Group Management 를 켜야 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

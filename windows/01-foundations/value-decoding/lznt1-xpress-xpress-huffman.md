@@ -6,8 +6,6 @@ nav_order: 530
 
 # 윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)
 
-## 한 줄 요약
-
 Windows 는 LZ77 계열 압축 세 가지, 곧 LZNT1, Xpress, Xpress Huffman 을 씁니다.
 NTFS 파일 압축은 LZNT1 을 쓰고 WOF 압축은 Xpress Huffman 이나 LZX 를 쓰는데, 압축된 데이터 안에서는 원래 바이트가 그대로 보이지 않습니다.
 그래서 검색하거나 해시를 구하기 전에 풀어서 읽어야 합니다.

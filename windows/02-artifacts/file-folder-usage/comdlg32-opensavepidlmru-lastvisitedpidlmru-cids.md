@@ -6,8 +6,6 @@ nav_order: 1220
 
 # 열기·저장 대화상자 기록 (ComDlg32: OpenSavePidlMRU·LastVisitedPidlMRU·CIDSizeMRU)
 
-## 한 줄 요약
-
 공통 파일 대화상자 (Common File Dialog) 로 파일을 열거나 저장하면, 사용자 하이브 NTUSER.DAT 의 `ComDlg32` 키 아래에 MRU 목록이 쌓입니다. OpenSavePidlMRU 에는 고른 파일이 확장자별로 남고, LastVisitedPidlMRU 와 CIDSizeMRU 에는 프로그램 이름으로 보이는 문자열이 남습니다. 시각은 키마다 하나뿐입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

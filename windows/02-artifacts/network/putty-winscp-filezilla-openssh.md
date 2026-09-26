@@ -6,8 +6,6 @@ nav_order: 2430
 
 # SSH·FTP 도구 흔적 (PuTTY·WinSCP·FileZilla·OpenSSH)
 
-## 한 줄 요약
-
 PuTTY 와 WinSCP 는 접속한 서버의 흔적을 사용자 레지스트리(NTUSER.DAT)에 남깁니다. 윈도 내장 OpenSSH 클라이언트는 사용자 홈의 `.ssh` 폴더에 접속 설정과 서버 호스트 키를 평문으로 남깁니다. OpenSSH 서버를 켠 PC 에는 `%programdata%\ssh` 아래 설정·키 파일과 OpenSSH 이벤트 채널이 흔적으로 남습니다. FileZilla 는 설정 파일 위치를 공식 문서에서 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나

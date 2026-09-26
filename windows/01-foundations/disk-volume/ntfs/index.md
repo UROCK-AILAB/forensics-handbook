@@ -8,8 +8,6 @@ has_toc: false
 
 # NTFS 구조 (NTFS)
 
-## 한 줄 요약
-
 NTFS (New Technology File System) 는 Windows 가 기본으로 쓰는 파일 시스템입니다. 볼륨 안의 모든 파일과 폴더는 마스터 파일 테이블 (Master File Table, MFT) 에 레코드로 적힙니다.
 
 ## 왜 중요한가

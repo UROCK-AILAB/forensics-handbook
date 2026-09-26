@@ -9,8 +9,6 @@ nav_order: 560
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > DPAPI Blob
 
-## 한 줄 요약
-
 DPAPI 블롭 (Blob) 은 암호문과 그것을 풀 메타데이터를 한 덩어리에 담은 구조입니다.
 DPAPI 는 이 블롭을 스스로 저장하지 않고 블롭을 받은 앱이 저장하기 때문에, 블롭은 앱마다 다른 파일이나 레지스트리 값 안에 들어 있습니다.
 

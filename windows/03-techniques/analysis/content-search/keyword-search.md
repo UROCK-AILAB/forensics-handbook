@@ -7,8 +7,6 @@ nav_order: 3500
 
 # 키워드 검색 (Keyword Search)
 
-## 한 줄 요약
-
 찾을 낱말을 인코딩마다 바이트열로 바꿔 파일·원시 영역·색인에서 찾고, 걸린 곳마다 위치·인코딩·앞뒤 글을 적습니다.
 
 이 글은 [파일 내용 검색 (Content Search)](index.md) 묶음의 한 편입니다. 압축된 파일과 문서 파일은 [압축·복합 파일 펼치기](archive-expansion.md) 와 [본문 추출과 글자 인식](text-extraction-ocr.md) 을 거친 결과에서도 찾습니다.

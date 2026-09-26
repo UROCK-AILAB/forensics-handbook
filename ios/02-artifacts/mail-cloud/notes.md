@@ -6,8 +6,6 @@ nav_order: 1000
 
 # 메모 (Notes)
 
-## 한 줄 요약
-
 아이폰 메모 앱은 메모를 앱 그룹 `group.com.apple.notes` 의 `NoteStore.sqlite` 에 저장하고, 본문은 `ZICNOTEDATA` 표의 `ZDATA` 열에 gzip 으로 압축한 protobuf 로 들어 있어서, 압축을 풀고 protobuf 를 읽어야 글자가 보입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

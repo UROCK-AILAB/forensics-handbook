@@ -9,8 +9,6 @@ nav_order: 550
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > Protect·Unprotect 동작
 
-## 한 줄 요약
-
 DPAPI 는 CryptProtectData 함수로 데이터를 암호로 감싸고, CryptUnprotectData 함수로 다시 풉니다.
 보호의 뿌리는 사용자의 로그온 자격증명, 보통은 사용자 암호의 해시입니다.
 같은 자격증명을 쓴 같은 사용자만, 대개 같은 컴퓨터에서만 다시 풀 수 있습니다.

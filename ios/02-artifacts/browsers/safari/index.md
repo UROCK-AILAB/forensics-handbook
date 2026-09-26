@@ -8,8 +8,6 @@ has_toc: false
 
 # 사파리 (Safari)
 
-## 한 줄 요약
-
 아이폰 기본 브라우저 사파리는 방문 기록, 탭, 북마크를 `/private/var/mobile/Library/Safari/` 아래의 SQLite DB 여러 개에 나눠 담고, 개인 정보 보호 모드의 탭과 iCloud 로 넘어온 다른 기기의 기록까지 같은 곳에 남깁니다.
 
 ## 왜 중요한가

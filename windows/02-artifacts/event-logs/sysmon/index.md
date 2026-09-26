@@ -8,8 +8,6 @@ has_toc: false
 
 # Sysmon 로그 (Sysmon)
 
-## 한 줄 요약
-
 Sysmon (System Monitor) 은 설정 파일이 정한 시스템 활동을 Windows 이벤트 로그에 남기는 Sysinternals 도구입니다. 프로세스 생성, 네트워크 연결, 파일·레지스트리 변경, 다른 프로세스 접근을 이벤트 번호별로 기록합니다.
 
 ## 왜 중요한가

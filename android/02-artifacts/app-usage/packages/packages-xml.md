@@ -9,8 +9,6 @@ nav_order: 420
 
 패키지 관리자(PackageManager)가 `/data/system/` 에 남기는 설치 앱 목록 파일의 짜임새를 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 출시 버전마다 다를 수 있습니다. 설치자와 설치 시각 필드의 뜻은 [설치 출처와 설치 시각](install-source-time.md) 페이지에서, 사용자가 준 권한은 [앱 권한 부여 기록](runtime-permissions.md) 페이지에서 다룹니다.
 
-## 한 줄 요약
-
 `packages.xml` 은 기기에 설치된 앱마다 이름·코드 경로·버전·설치자·시각·서명을 한 요소에 적는 설정 파일이고, `packages.list` 는 같은 목록을 한 줄에 한 앱씩 공백으로 나눠 적은 요약본입니다 [1].
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -6,8 +6,6 @@ nav_order: 510
 
 # 윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)
 
-## 한 줄 요약
-
 Windows 는 계정과 그룹을 보안 식별자 (SID, Security Identifier) 로 가리키고, COM 클래스나 표준 폴더 같은 대상은 GUID 로 가리킵니다.
 두 식별자 모두 문자열로 적을 때와 디스크에 저장할 때 바이트 배치가 다르므로, 헥스를 보이는 순서대로 이으면 다른 값이 됩니다.
 그래서 배치 규칙대로 풀어 읽습니다.

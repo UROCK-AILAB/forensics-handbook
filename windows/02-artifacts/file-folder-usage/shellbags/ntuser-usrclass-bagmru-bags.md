@@ -7,8 +7,6 @@ nav_order: 1160
 
 # 저장 위치와 구조 (NTUSER·UsrClass·BagMRU·Bags)
 
-## 한 줄 요약
-
 셸백 (ShellBags) 은 사용자 하이브 두 개에 BagMRU 와 Bags 라는 두 키로 남습니다. BagMRU 는 폴더 경로를 키 트리로 적고, Bags 는 그 폴더를 어떤 보기 설정으로 열었는지 적으며, 두 키는 NodeSlot 이라는 번호 하나로 이어집니다.
 
 ## 무엇을 기록하나 · 왜 생기나

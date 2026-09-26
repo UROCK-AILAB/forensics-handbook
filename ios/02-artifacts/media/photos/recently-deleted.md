@@ -7,8 +7,6 @@ nav_order: 570
 
 # 최근 삭제된 항목 (Recently Deleted)
 
-## 한 줄 요약
-
 사진 앱에서 지운 사진·동영상은 바로 없어지지 않고 "최근 삭제된 항목" 에 30일 동안 머물며, 그동안 Photos.sqlite 에는 행이 그대로 남은 채 `ZASSET.ZTRASHEDSTATE` 로 삭제 표시만 붙습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

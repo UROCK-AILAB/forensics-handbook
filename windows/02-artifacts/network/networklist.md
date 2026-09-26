@@ -6,8 +6,6 @@ nav_order: 2330
 
 # 네트워크 목록 (NetworkList)
 
-## 한 줄 요약
-
 SOFTWARE 하이브의 `NetworkList` 키에는 네트워크마다 이름·종류·처음 만든 시각·마지막 연결 시각이 남습니다. 서명 (Signatures) 하위 키에는 기본 게이트웨이의 MAC 주소가 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

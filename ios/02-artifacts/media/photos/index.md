@@ -8,8 +8,6 @@ has_toc: false
 
 # 사진 보관함 (Photos Library)
 
-## 한 줄 요약
-
 아이폰 사진 앱은 사진·동영상 파일을 `Media/DCIM` 과 `Media/PhotoData` 아래 폴더에 두고, 파일마다 날짜·촬영 정보·앨범·공유·삭제 상태를 Photos.sqlite 한 DB 에 적으며, iCloud 사진 동기화 상태는 따로 plist 에 남깁니다.
 
 ## 왜 중요한가

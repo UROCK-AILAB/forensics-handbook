@@ -7,8 +7,6 @@ nav_order: 10
 
 # 파티션 배치 (boot·system·vendor·userdata)
 
-## 한 줄 요약
-
 Android 기기의 저장소는 하는 일이 정해진 여러 파티션으로 나뉘고, 사용자 흔적은 대부분 userdata 에 있지만 그 userdata 를 풀 키는 metadata 파티션에, 기기의 빌드와 운영체제 구성은 system·vendor 쪽 파티션에 있어서 셋을 함께 알아야 합니다.
 
 ## 이 배치와 관련된 아티팩트

@@ -6,8 +6,6 @@ nav_order: 10
 
 # Electron·웹뷰 앱의 저장 구조 (Electron·WebView2·WKWebView)
 
-## 한 줄 요약
-
 Electron 앱과 WebView2 를 쓰는 앱은 웹 페이지를 앱 창 안에 띄우는 방식이라서 크롬 계열 브라우저와 같은 저장소(쿠키 DB, Local Storage, IndexedDB, 캐시)를 앱 전용 폴더에 따로 만듭니다. Electron 앱은 앱 설정 파일도 같은 폴더에 둡니다 [1].
 
 ## 이 형식을 쓰는 아티팩트

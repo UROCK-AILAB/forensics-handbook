@@ -8,8 +8,6 @@ has_toc: false
 
 # 계정 (Accounts)
 
-## 한 줄 요약
-
 Android 의 계정 목록은 시스템 서비스 AccountManagerService 가 관리하고, AccountsDb 가 사용자마다 SQLite 파일 두 개(`accounts_de.db`, `accounts_ce.db`)에 나눠 저장하며, 여기에 구글·삼성 같은 서비스 계정과 여러 앱이 등록한 계정이 이름(name)과 종류(type)의 쌍으로 함께 남습니다 [1][2][3].
 
 ## 왜 중요한가

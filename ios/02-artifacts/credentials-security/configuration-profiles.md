@@ -6,8 +6,6 @@ nav_order: 1120
 
 # 구성 프로파일과 MDM (Configuration Profiles·MDM)
 
-## 한 줄 요약
-
 구성 프로파일 (Configuration Profile)은 설정과 권한 정보를 묶어 기기에 설치하는 파일이고, 기기 관리 서비스 (MDM)가 원격으로 넣거나 사용자가 메일·웹에서 받아 직접 설치합니다. 설치 결과는 로컬 백업의 `ConfigurationProfiles` 폴더에 프로파일 목록과 제한 설정 이름으로 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

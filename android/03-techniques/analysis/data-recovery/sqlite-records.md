@@ -7,8 +7,6 @@ nav_order: 1460
 
 # SQLite 레코드 되살리기 (SQLite)
 
-## 한 줄 요약
-
 파일은 남아 있고 안의 행만 지운 SQLite 데이터베이스에서, 페이지 안의 빈 공간과 빈 페이지 목록 (freelist), 롤백 저널 (rollback journal), WAL 에 남은 옛 바이트를 찾아 지운 레코드를 다시 읽어 내는 기법입니다.
 
 ## 언제 쓰나

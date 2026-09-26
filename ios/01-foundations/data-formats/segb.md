@@ -6,8 +6,6 @@ nav_order: 150
 
 # SEGB 형식 (SEGB)
 
-## 한 줄 요약
-
 SEGB 는 [바이옴](../../02-artifacts/app-usage/biome/index.md) 기록을 담는 이진 파일 형식이고, 기록 하나하나는 짧은 헤더 뒤에 [프로토콜 버퍼](protobuf.md) 페이로드가 붙은 모양이며, iOS 17 에서 파일 구조가 v2 로 바뀌었습니다.
 
 Apple 은 이 형식의 공식 문서를 내지 않았습니다.

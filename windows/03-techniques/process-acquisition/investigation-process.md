@@ -6,8 +6,6 @@ nav_order: 3030
 
 # 포렌식 조사 절차 (Investigation Process)
 
-## 한 줄 요약
-
 포렌식 조사는 수집(Collection) → 검사(Examination) → 분석(Analysis) → 보고(Reporting) 네 단계로 진행합니다. 모든 단계에서 데이터가 바뀌지 않게 지키고, 누가 언제 무엇을 했는지 기록합니다.
 
 이 페이지는 전체 흐름만 다룹니다. 증거를 복제하고 검증하는 방법은 [증거 획득](evidence-acquisition/index.md)에서, 켜진 시스템에서 모으는 방법은 [라이브 응답](live-response/index.md)에서 다룹니다.

@@ -8,8 +8,6 @@ has_toc: false
 
 # 이벤트 로그 형식 (EVTX·EVT·ETL)
 
-## 한 줄 요약
-
 Windows Vista 부터 이벤트 로그는 EVTX 형식으로 저장됩니다. XP·Server 2003 까지는 EVT 형식을 썼습니다. ETW (Event Tracing for Windows) 추적 세션은 이와 별도로 ETL 형식의 `.etl` 파일을 남깁니다. 세 형식 모두 이진 파일이라서 구조를 알면 도구가 보여 준 결과를 헥스로 직접 확인할 수 있습니다.
 
 ## 왜 중요한가

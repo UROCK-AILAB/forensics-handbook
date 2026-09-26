@@ -7,8 +7,6 @@ nav_order: 1520
 
 # APK 확인 (APK Check)
 
-## 한 줄 요약
-
 의심 앱의 APK 파일에서 서명 방식과 서명 인증서를 확인하고, 파일 해시와 인증서를 공개된 침해 지표 (Indicator of Compromise, IOC) 와 대조하는 방법입니다.
 
 ## 언제 쓰나

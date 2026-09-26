@@ -7,8 +7,6 @@ nav_order: 3130
 
 # 프로세스·DLL·핸들 수집 (Processes·DLLs·Handles)
 
-## 한 줄 요약
-
 켜진 시스템에서 실행 중인 프로세스 목록, 프로세스가 불러온 DLL, 프로세스가 연 핸들을 글자 파일로 남깁니다. Windows 기본 명령 `tasklist` 로 목록·서비스·모듈을 얻습니다. `tasklist` 에 없는 명령줄·부모 프로세스·시작 시각은 WMI 의 `Win32_Process` 클래스에서 얻습니다. 핸들 목록은 Sysinternals Handle 같은 도구로 얻습니다.
 
 ## 언제 쓰나

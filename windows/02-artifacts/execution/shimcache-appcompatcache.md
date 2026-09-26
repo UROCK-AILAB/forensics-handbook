@@ -6,8 +6,6 @@ nav_order: 940
 
 # 심캐시 (ShimCache·AppCompatCache)
 
-## 한 줄 요약
-
 SYSTEM 하이브의 `AppCompatCache` 값에 실행 파일 경로와 그 파일의 마지막 수정 시각이 목록으로 남습니다. 이 시각은 실행 시각이 아닙니다. Windows 8 이후의 항목이 실행을 뜻하는지는 밝혀져 있지 않습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

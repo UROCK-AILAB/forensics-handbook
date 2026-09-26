@@ -7,8 +7,6 @@ nav_order: 1510
 
 # 감시 앱 흔적 (Stalkerware)
 
-## 한 줄 요약
-
 몰래 설치된 감시 앱 (stalkerware) 을 공개된 침해 지표 (Indicator of Compromise, IOC) 와 대조하고, 화면에 드러나지 않은 채 움직인 앱의 활동 흔적을 찾는 방법입니다.
 
 ## 언제 쓰나

@@ -6,8 +6,6 @@ nav_order: 200
 
 # 설정 XML과 SharedPreferences (XML·SharedPreferences)
 
-## 한 줄 요약
-
 공유 환경설정 (SharedPreferences) 은 앱이 작은 설정 값을 키와 값으로 저장하는 안드로이드 기본 방식이고, 파일은 텍스트 XML 로 남으며 쓰기가 끝나지 못하면 직전 내용을 담은 `.bak` 파일이 함께 남습니다.
 
 ## 이 형식을 쓰는 아티팩트

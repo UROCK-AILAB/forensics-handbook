@@ -8,8 +8,6 @@ has_toc: false
 
 # 원격 데스크톱 이벤트 (RDP Event Logs)
 
-## 한 줄 요약
-
 원격 데스크톱 이벤트 (RDP Event Logs) 는 원격 데스크톱 프로토콜 (Remote Desktop Protocol, RDP) 로 들어오고 나간 접속을 Windows 가 여러 이벤트 로그에 나눠 남긴 기록입니다. 접속을 받은 컴퓨터에는 연결·인증·세션 기록이 남고, 접속을 건 컴퓨터에는 어느 서버로 나갔는지가 남습니다.
 
 ## 왜 중요한가

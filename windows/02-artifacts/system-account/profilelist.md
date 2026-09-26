@@ -6,8 +6,6 @@ nav_order: 650
 
 # 사용자 프로필 목록 (ProfileList)
 
-## 한 줄 요약
-
 SOFTWARE 하이브의 `ProfileList` 키 아래에는 SID 마다 하위 키가 하나씩 있고, 하위 키의 `ProfileImagePath` 값이 그 계정의 프로필 폴더를 가리킵니다. 다른 기록에 SID 만 나올 때, 이 키로 사람 이름과 프로필 폴더를 찾습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

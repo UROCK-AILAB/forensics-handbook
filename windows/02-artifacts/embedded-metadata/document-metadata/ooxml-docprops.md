@@ -9,8 +9,6 @@ nav_order: 2940
 
 > 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
 
-## 한 줄 요약
-
 docx 같은 OOXML 문서는 ZIP 파일이고, ZIP 안의 `docProps/core.xml` 과 `docProps/app.xml` 에 문서 속성이 XML 로 들어 있습니다. 작성자, 마지막으로 저장한 사람, 개정 번호, 만든 시각, 수정 시각, 총 편집 시간 같은 값입니다.
 
 > 이 페이지의 예시 값은 Word 16.0 빌드 16.0.20326 (Microsoft 365) 에서 두 번 저장한 docx 의 값입니다. 새 문서에 글을 넣고 docx 로 다른 이름 저장을 한 뒤, 문서를 닫고 약 1분 뒤 다시 열어 글을 덧붙이고 저장한 파일입니다. 시간대는 KST (UTC+9) 입니다.

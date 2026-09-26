@@ -6,8 +6,6 @@ nav_order: 800
 
 # Microsoft Purview로 본 Copilot 기록 (Purview)
 
-## 한 줄 요약
-
 Microsoft Purview 에는 Copilot 과 AI 앱 사용이 세 가지로 남습니다. 감사 기록은 누가 어느 앱에서 무엇을 근거로 AI 를 썼는지를, 보존 정책으로 사용자 메일함에 모인 사본은 프롬프트와 응답 본문을, DSPM for AI 활동 탐색기는 민감 정보가 오갔는지를 보여 주고, 셋 다 Microsoft 365 테넌트 쪽에만 있습니다.
 
 확인 날짜는 2026-09입니다. PC 에 남는 Copilot 앱 흔적은 [Microsoft Copilot](../chat-services/copilot/index.md), 업무 앱에서 쓴 Copilot 의 기록 성격과 감사 레코드 한 건을 읽는 예시는 [Microsoft 365 Copilot](../office-integrations/m365-copilot.md)에서 다룹니다. 이 페이지는 Purview 쪽 기록의 필드, 보관 기간, 삭제 흐름을 다룹니다.

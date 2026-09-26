@@ -8,8 +8,6 @@ has_toc: false
 
 # 미디어 저장소 (MediaStore)
 
-## 한 줄 요약
-
 미디어 저장소(MediaStore)는 공용 저장 공간의 사진·동영상·오디오·문서를 시스템 쪽 제공자(MediaProvider)가 볼륨마다 SQLite DB 로 색인해 두는 곳이고, 외부 볼륨 DB 인 external.db 의 files 표 하나에 파일 경로, 넣은 앱, 여러 시각, 휴지통 상태가 함께 적힙니다 [1][2].
 
 ## 왜 중요한가

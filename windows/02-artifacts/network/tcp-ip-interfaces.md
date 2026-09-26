@@ -6,8 +6,6 @@ nav_order: 2340
 
 # 네트워크 인터페이스 설정 (TCP/IP Interfaces)
 
-## 한 줄 요약
-
 SYSTEM 하이브의 `Tcpip\Parameters\Interfaces` 키에는 네트워크 인터페이스마다 IP 설정과 DHCP 임대 정보가 남습니다. 무선 인터페이스 아래에는 무선 네트워크(SSID)마다 하위 키가 따로 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -8,8 +8,6 @@ has_toc: false
 
 # 인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)
 
-## 한 줄 요약
-
 인터넷 익스플로러 (Internet Explorer, IE) 는 Windows 의 구성 요소인 브라우저입니다. 옛 엣지 (Microsoft Edge Legacy) 는 EdgeHTML 엔진을 쓰던 예전 Edge 입니다. IE 4~9 는 방문 기록·캐시·쿠키·내려받기 기록을 `index.dat` 파일에 둡니다. IE 10 이후와 옛 엣지는 같은 기록을 ESE 데이터베이스인 `WebCacheV*.dat` 에 둡니다. 주소창 입력 주소·저장 비밀번호·즐겨찾기는 레지스트리와 사용자 폴더에 따로 남습니다.
 
 ## 왜 중요한가

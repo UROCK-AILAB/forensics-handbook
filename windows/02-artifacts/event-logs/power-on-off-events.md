@@ -6,8 +6,6 @@ nav_order: 2560
 
 # 켜짐·꺼짐 (Power On·Off Events)
 
-## 한 줄 요약
-
 Windows 는 켜질 때, 꺼질 때, 절전에 들어가고 나올 때 System 로그에 여러 이벤트를 남깁니다. 켜진 시각은 Kernel-General 12 에, 꺼진 시각은 Kernel-General 13 에 들어 있습니다. 누가 어떤 프로세스로 종료·재시작했는지는 User32 1074 에 남습니다. 정상적으로 꺼지지 않았으면 다음 부팅 때 Kernel-Power 41 과 EventLog 6008 이 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -8,8 +8,6 @@ nav_order: 370
 
 Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되고, 조사에서 어떤 키를 먼저 보는지를 정리합니다. 값은 현행 AOSP 기준(frameworks/base 의 main 가지)입니다.
 
-## 한 줄 요약
-
 시스템 설정은 SettingsProvider 가 system·secure·global·ssaid·config 다섯 표로 관리해 사용자별 시스템 폴더의 XML 파일에 저장하고 [1], 개발자 옵션·adb·기기 준비 상태·위치 설정처럼 사건 당시의 기기 상태를 알 수 있는 값이 여기에 모입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

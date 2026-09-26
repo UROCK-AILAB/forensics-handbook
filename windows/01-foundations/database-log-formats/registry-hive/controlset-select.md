@@ -9,8 +9,6 @@ nav_order: 190
 
 > 위치: [레지스트리 하이브 구조](index.md) > 컨트롤셋 고르기
 
-## 한 줄 요약
-
 떼어 낸 SYSTEM 하이브에는 `CurrentControlSet` 키가 없습니다. 루트의 `Select` 키에 있는 `Current` 값을 먼저 읽고, 그 번호의 `ControlSet00N` 키를 엽니다.
 
 ## 이 구조를 쓰는 아티팩트

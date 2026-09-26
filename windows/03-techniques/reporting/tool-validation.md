@@ -6,8 +6,6 @@ nav_order: 3560
 
 # 도구 결과 교차 검증 (Tool Validation)
 
-## 한 줄 요약
-
 도구가 보여 주는 값은 원시 데이터를 그 도구 방식대로 해석한 결과라서, 보고서에 쓸 값은 해석 경로가 다른 방법으로 한 번 더 읽어 맞춰 보고 두 결과가 다르면 원시 바이트를 직접 읽어 판별합니다.
 
 이 페이지는 도구 결과를 서로 맞춰 보는 방법을 다룹니다. 조사 전체 흐름은 [포렌식 조사 절차](../process-acquisition/investigation-process.md)에, 원본과 사본의 해시를 맞추는 방법은 [증거 획득](../process-acquisition/evidence-acquisition/index.md)에 있습니다.

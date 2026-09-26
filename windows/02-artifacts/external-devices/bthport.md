@@ -6,8 +6,6 @@ nav_order: 1560
 
 # 블루투스 장치 (BTHPORT)
 
-## 한 줄 요약
-
 SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스 장치가 주소마다 하위 키 하나로 남습니다. 하위 키에는 장치 이름, VID·PID, `LastSeen`·`LastConnected` 시각 같은 값이 있습니다. Windows 11 25H2 에서 두 시각 값이 UTC 가 아니라 현지 시각으로 적힌 사례가 있습니다. 시각은 페어링 이벤트와 장치 속성 시각에 맞춰 본 뒤에 씁니다.
 
 > 아래 "사례 PC" 는 Windows 11 25H2, 시간대 Korea Standard Time(UTC+9) 입니다. 장치는 A·B·C 로 부릅니다.

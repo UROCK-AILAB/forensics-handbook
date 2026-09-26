@@ -7,8 +7,6 @@ nav_order: 910
 
 # 장치 항목 (InventoryDevicePnp)
 
-## 한 줄 요약
-
 Amcache.hve 의 `Root\InventoryDevicePnp` 키에는 플러그 앤 플레이 (Plug and Play, PnP) 장치가 하나씩 하위 키로 남습니다. USB 저장장치의 VID·PID·일련번호·볼륨 이름을 SYSTEM 하이브와 다른 파일에서 한 번 더 확인할 때 씁니다. 연결 시각은 이 키만으로 알 수 없습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

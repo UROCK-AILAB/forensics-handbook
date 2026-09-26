@@ -6,8 +6,6 @@ nav_order: 650
 
 # 그 밖의 지속성 위치 (Login Hook·Authorization Plugin·Emond)
 
-## 한 줄 요약
-
 로그인 훅 (Login Hook)·권한 부여 플러그인 (Authorization Plugin)·이벤트 감시 데몬 (Emond)은 흔히 쓰이지 않는 자동 실행 위치이고, 셋 다 root 권한으로 코드를 돌릴 수 있어서 실행 에이전트·데몬만 보고 끝내면 놓치기 쉬운 지속성 흔적입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -7,8 +7,6 @@ nav_order: 3480
 
 # 압축·복합 파일 펼치기 (Archive Expansion)
 
-## 한 줄 요약
-
 ZIP·OLE 복합 파일처럼 다른 파일을 담는 형식에서 안쪽 항목을 꺼내고, 꺼낸 항목을 다시 형식 식별과 본문 추출로 보냅니다.
 
 이 글은 [파일 내용 검색 (Content Search)](index.md) 묶음의 한 편입니다.

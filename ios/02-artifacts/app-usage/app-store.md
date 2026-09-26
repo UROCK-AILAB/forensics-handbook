@@ -6,8 +6,6 @@ nav_order: 420
 
 # 앱 스토어 기록 (App Store)
 
-## 한 줄 요약
-
 앱 스토어 (App Store) 기록은 앱 번들 폴더의 `iTunesMetadata.plist`·`BundleMetadata.plist` 와 App Store 서비스가 쓰는 SQLite DB·설정 plist 에 흩어져 있고, 앱이 App Store 에서 왔는지, 어떤 번들 ID 와 상품 식별자가 스토어 서비스 기록에 올라 있는지를 보여 줍니다.
 
 ## 무엇을 기록하나 · 왜 생기나

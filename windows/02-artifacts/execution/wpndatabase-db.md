@@ -6,8 +6,6 @@ nav_order: 1100
 
 # 윈도 알림 기록 (wpndatabase.db)
 
-## 한 줄 요약
-
 Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\Windows\Notifications\wpndatabase.db` 에 SQLite 형식으로 남습니다. 알림 내용 (XML), 알림을 보낸 앱, 받은 시각, 지울 시각이 한 행에 들어 있습니다. 알림에는 메시지나 글의 일부가 들어 있을 수 있어, 원본이 지워진 뒤에도 내용을 되찾는 데 씁니다.
 
 ## 무엇을 기록하나 · 왜 생기나

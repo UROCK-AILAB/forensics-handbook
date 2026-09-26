@@ -6,8 +6,6 @@ nav_order: 540
 
 # 브라우저에 들어간 AI (Edge Copilot·Chrome Gemini 등)
 
-## 한 줄 요약
-
 Edge 의 Copilot 과 Chrome 의 Gemini·내장 AI 는 브라우저 안에서 도는 AI 기능이고, 기기에 남는 흔적은 대화 본문이 아니라 Edge 의 페이지 접근 정책 값, Edge 프로필의 Copilot 로그인 캐시, Chrome 온디바이스 모델의 설치 흔적입니다.
 
 확인 날짜는 2026-09입니다. 아래 경로와 이름은 실제 기기에서 한 번 더 맞춰 봅니다.

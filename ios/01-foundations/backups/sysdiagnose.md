@@ -6,8 +6,6 @@ nav_order: 260
 
 # sysdiagnose 묶음 (sysdiagnose)
 
-## 한 줄 요약
-
 sysdiagnose 묶음 (sysdiagnose)은 디버깅과 문제 해결을 위해 기기가 시스템 로그와 DB 를 모아 `.tar.gz` 파일 하나로 묶은 것이고 [2], 로컬 백업이나 전체 이미지 없이도 통합 로그 일부와 Shutdown.log 를 얻을 수 있어 스파이웨어 1차 점검에 쓰입니다 [2].
 
 ## 이 형식을 쓰는 아티팩트

@@ -7,8 +7,6 @@ nav_order: 740
 
 # 탭과 세션 (Tabs)
 
-## 한 줄 요약
-
 사파리의 탭 흔적은 지금 열린 탭을 담는 SafariTabs.db, iOS 16 부터 닫은 탭을 담는 BrowserState.db, iCloud 로 연결된 다른 기기의 탭을 담는 CloudTabs.db 세 곳에 나뉘어 남고, 버전에 따라 각 DB 가 맡는 역할과 시각 기준이 달라집니다.
 
 ## 무엇을 기록하나 · 왜 생기나

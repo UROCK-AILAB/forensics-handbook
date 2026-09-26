@@ -6,8 +6,6 @@ nav_order: 770
 
 # 크롬 (Chrome for iOS)
 
-## 한 줄 요약
-
 아이폰용 크롬은 방문 기록·내려받기·검색어를 데스크톱 크롬과 같은 크로미움 형식 SQLite 파일(`History` 등)에 적고, 이 파일은 앱 컨테이너의 `Application Support` 안에 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

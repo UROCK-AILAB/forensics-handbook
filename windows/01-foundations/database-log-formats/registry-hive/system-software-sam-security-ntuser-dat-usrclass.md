@@ -7,8 +7,6 @@ nav_order: 140
 
 # 하이브 파일 종류와 위치 (SYSTEM·SOFTWARE·SAM·SECURITY·NTUSER.DAT·UsrClass.dat)
 
-## 한 줄 요약
-
 레지스트리는 파일 하나가 아니라 여러 개의 하이브 (Hive) 파일이 디스크에 따로 저장된 것이고, 부팅할 때와 사용자가 로그온할 때 이 파일들이 한 트리에 붙습니다. 이 페이지는 어떤 파일이 어디에 있는지, 레지스트리 편집기의 어느 경로로 보이는지, 어떤 아티팩트를 담는지 정리합니다.
 
 파일 안의 구조(regf 머리글·hbin·셀)는 [하이브 내부 구조 (regf·hbin·Cell)](regf-hbin-cell.md) 에서 다룹니다.

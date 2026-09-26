@@ -8,8 +8,6 @@ has_toc: false
 
 # 원격 제어 프로그램 (Remote Access Tools)
 
-## 한 줄 요약
-
 원격 제어 프로그램 (Remote Access Tools) 은 멀리 있는 사람이 이 PC 의 화면을 보고 조작하게 해 주는 원격 지원 프로그램입니다. 설치형은 서비스를 등록하고, 도구마다 전용 로그 파일이나 전용 이벤트 로그에 접속 기록을 남깁니다. 이 허브는 TeamViewer, AnyDesk, ScreenConnect, RustDesk, Splashtop, Chrome Remote Desktop 의 흔적을 어디서 찾는지 안내합니다.
 
 ## 왜 중요한가

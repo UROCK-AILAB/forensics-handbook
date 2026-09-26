@@ -7,8 +7,6 @@ nav_order: 390
 
 # 앱 사용 스트림 (App.InFocus)
 
-## 한 줄 요약
-
 iOS 15 까지 KnowledgeC.db 에 있던 앱 전경 사용 기록(`/app/inFocus`)이 iOS 16 부터 바이옴의 `App.InFocus` 스트림으로 옮겨졌고, 어느 앱이 언제 화면 앞에 나오고 들어갔는지를 번들 ID 와 함께 SEGB 기록으로 남깁니다.
 
 ## 무엇을 기록하나 · 왜 생기나

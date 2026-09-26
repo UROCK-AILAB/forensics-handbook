@@ -9,8 +9,6 @@ nav_order: 440
 
 사용자가 앱에 준 위험 권한(런타임 권한)의 현재 상태가 어느 파일에 어떻게 남는지 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 출시 버전마다 다를 수 있습니다. 권한 체계 자체는 [앱 샌드박스와 권한](../../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 다룹니다.
 
-## 한 줄 요약
-
 `runtime-permissions.xml` 은 사용자별로 앱마다 런타임 권한의 부여 여부(granted)와 부여 경위를 담은 비트 값(flags)을 적는 파일이고, 파일 위치는 `/data/system/users/` 아래 옛 위치와 권한 모듈의 새 위치 두 곳입니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

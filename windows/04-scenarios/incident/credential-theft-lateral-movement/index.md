@@ -8,8 +8,6 @@ has_toc: false
 
 # 계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)
 
-## 한 줄 요약
-
 계정 탈취 (Credential Theft) 는 남의 비밀번호나 해시 같은 자격 증명 (Credential) 을 손에 넣는 일입니다. 측면 이동 (Lateral Movement) 은 손에 넣은 자격 증명으로 다른 PC 에 들어가 명령을 실행하는 일입니다. 이 허브는 비밀번호 대입, 자격 증명 빼내기, 원격 실행, 계정 생성·권한 상승의 흔적을 어디서 찾는지 안내합니다.
 
 ## 왜 중요한가

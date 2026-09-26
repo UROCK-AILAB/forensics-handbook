@@ -7,8 +7,6 @@ nav_order: 810
 
 # 실행 횟수와 실행 시각 읽기 (Run Count·Last Run Times)
 
-## 한 줄 요약
-
 `.pf` 파일 안에는 실행 횟수 (Run Count) 필드 하나와 마지막 실행 시각 (Last Run Time) 필드가 있습니다. 실행 시각은 Windows 7 까지 1개, Windows 8 부터 최대 8개이며 모두 UTC 기준 FILETIME 입니다. 두 값에는 이 `.pf` 파일이 생긴 뒤의 실행만 담깁니다.
 
 ## 무엇을 기록하나

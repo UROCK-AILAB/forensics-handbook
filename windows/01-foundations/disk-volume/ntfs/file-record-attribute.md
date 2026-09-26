@@ -9,8 +9,6 @@ nav_order: 40
 
 상위 페이지: [NTFS 구조 (NTFS)](index.md)
 
-## 한 줄 요약
-
 NTFS 는 파일마다 MFT 안에 크기가 정해진 자리를 하나 이상 둡니다. 이 자리를 MFT 레코드 (MFT Entry·File Record Segment) 라고 하며, 레코드 하나에는 헤더 하나와 속성 (Attribute) 여러 개가 들어 있습니다. 파일 이름·시각·내용 위치는 모두 속성에 담깁니다.
 
 ## 이 형식을 쓰는 아티팩트

@@ -7,8 +7,6 @@ nav_order: 370
 
 # 파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)
 
-## 한 줄 요약
-
 EVTX 청크의 빈 공간 (Chunk Slack) 에는 정상 레코드 목록에서 빠진 옛 레코드가 남을 수 있고, 손상된 파일은 도구마다 읽어 내는 건수가 다릅니다. 레코드 서명, 크기 사본, 시각, 이진 XML 머리를 함께 봐야 진짜 레코드를 골라낼 수 있으며, 되살린 레코드를 XML 로 풀 때는 템플릿이 맞는지도 확인합니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 청크와 레코드의 기본 구조는 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에 있습니다. 템플릿은 [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) 에 있습니다. 옛 EVT 형식의 손상 사례는 [구형 EVT 형식 (Windows XP·2003)](windows-xp-2003.md) 에서 다룹니다.

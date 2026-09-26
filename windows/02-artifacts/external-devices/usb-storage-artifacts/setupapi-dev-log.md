@@ -7,8 +7,6 @@ nav_order: 1530
 
 # 장치 설치 로그 (setupapi.dev.log)
 
-## 한 줄 요약
-
 `setupapi.dev.log` 는 플러그 앤 플레이 (Plug and Play, PnP) 관리자와 SetupAPI 가 장치와 드라이버를 설치할 때 남기는 텍스트 로그이며, USB 저장장치가 이 PC 에 설치된 시각을 밀리초까지 보여 줍니다. 시각은 시간대 표시가 없는 현지 시각이라서 UTC 로 바꿔서 씁니다.
 
 ## 무엇을 기록하나 · 왜 생기나

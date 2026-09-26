@@ -7,8 +7,6 @@ nav_order: 860
 
 # 쿠키와 자동 완성 (Cookies·Autofill)
 
-## 한 줄 요약
-
 Chrome for Android 의 쿠키는 프로필 폴더의 `Cookies` SQLite 파일에, 입력란에 넣었던 값(자동 완성)과 주소 프로필은 `Web Data` SQLite 파일에 들어 있고, 두 파일은 시각 기준이 서로 달라서 쿠키는 1601년 기준 마이크로초, 자동 완성은 유닉스 초로 읽습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

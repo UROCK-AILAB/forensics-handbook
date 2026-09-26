@@ -7,8 +7,6 @@ nav_order: 3340
 
 # 파일시스템 기반 복구 (Undelete: NTFS·FAT)
 
-## 한 줄 요약
-
 파일을 지워도 매체의 데이터는 대개 그대로 남고, OS 는 파일 위치를 가리키는 디렉터리 자료에 삭제 표시만 남깁니다. 그 공간은 빈 공간으로 취급되어 언제든 덮어쓸 수 있습니다. 파일시스템 기반 복구 (Undelete) 는 남은 디렉터리 자료에서 이름·크기·데이터 위치를 읽어 파일을 되살리는 방법입니다. 되살린 내용이 원래 파일의 것인지는 따로 확인합니다.
 
 이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. NTFS 와 FAT 계열(FAT12·FAT16·FAT32·exFAT)을 다룹니다. 구조 전체는 [NTFS 구조](../../../01-foundations/disk-volume/ntfs/index.md) 와 [FAT·exFAT 구조](../../../01-foundations/disk-volume/fat-exfat.md) 에 있습니다. 클러스터가 비어 있는지 판단하는 자리는 [비할당 영역과 슬랙 (Unallocated·Slack Space)](unallocated-slack-space.md) 에 정리했습니다.

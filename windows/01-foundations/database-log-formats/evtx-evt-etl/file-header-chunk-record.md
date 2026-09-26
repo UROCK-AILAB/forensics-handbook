@@ -7,8 +7,6 @@ nav_order: 330
 
 # EVTX 파일 구조 (File Header·Chunk·Record)
 
-## 한 줄 요약
-
 EVTX 파일은 4096바이트 파일 헤더 (File Header) 뒤에 65536바이트 청크 (Chunk) 를 이어 붙인 파일입니다. 이벤트 레코드 (Event Record) 는 청크 안에 차례로 들어 있습니다. 파일 헤더와 청크 헤더에는 서명과 CRC32 체크섬이 있고, 레코드에는 서명과 크기 사본이 있어서 이 값들을 따라가면 헥스만으로 레코드 경계를 찾고 손상을 가려낼 수 있습니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 레코드 본문을 푸는 법은 [이진 XML 해석 (Binary XML·Template)](binary-xml-template.md) 에 있습니다. 설명 문장을 찾는 법은 [공급자와 메시지 파일 (Provider·Message Table)](provider-message-table.md) 에 있습니다. 빈 공간과 손상은 [파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)](chunk-slack-corrupted-evtx.md) 에서 다룹니다.

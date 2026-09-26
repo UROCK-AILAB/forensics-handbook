@@ -6,8 +6,6 @@ nav_order: 410
 
 # 설치된 앱 (Installed Apps·applicationState.db)
 
-## 한 줄 요약
-
 설치된 앱 목록은 주로 `applicationState.db` 에서 만들고, 앱 번들 폴더의 메타데이터 plist, 홈 화면 배치 파일, 백업의 `Info.plist`·`Manifest.plist` 로 보강하며, 이 기록들은 "수집 시점에 이 번들 ID 의 앱이 기기에 있었다" 는 상태를 보여 줍니다.
 
 ## 무엇을 기록하나 · 왜 생기나

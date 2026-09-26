@@ -6,8 +6,6 @@ nav_order: 230
 
 # LevelDB와 IndexedDB (LevelDB·IndexedDB)
 
-## 한 줄 요약
-
 LevelDB 는 최근 변경을 덧붙여 적는 로그와 키로 정렬된 테이블 파일로 이루어진 키-값 저장소이고, Chrome 과 Chromium 계열 브라우저는 웹 페이지가 쓰는 IndexedDB 를 이 위에 저장합니다.
 
 ## 이 형식을 쓰는 아티팩트

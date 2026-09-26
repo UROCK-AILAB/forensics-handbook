@@ -6,8 +6,6 @@ nav_order: 890
 
 # 인스타그램 (Instagram)
 
-## 한 줄 요약
-
 인스타그램 다이렉트 메시지(DM)는 `DirectSQLiteDatabase` 폴더의 SQLite DB 에 남고, 대화방은 `THREADS` 표에, 메시지는 `MESSAGES` 표에 들어 있지만 본문·보낸 사람·시각은 `ARCHIVE` 열에 NSKeyedArchiver 로 묶여 있어 풀어야 읽힙니다.
 
 ## 무엇을 기록하나 · 왜 생기나

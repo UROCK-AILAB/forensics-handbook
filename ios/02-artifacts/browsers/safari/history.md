@@ -7,8 +7,6 @@ nav_order: 730
 
 # 방문 기록 (History.db)
 
-## 한 줄 요약
-
 사파리는 방문 기록을 History.db 에 남기고 URL 한 개를 `history_items` 의 한 행으로, 방문 한 번을 `history_visits` 의 한 행으로 적으며, `origin` 열로 이 기기의 방문과 iCloud 로 넘어온 다른 기기의 방문을 가를 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

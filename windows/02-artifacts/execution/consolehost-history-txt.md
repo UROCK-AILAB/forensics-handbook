@@ -6,8 +6,6 @@ nav_order: 1070
 
 # PowerShell 명령 기록 (ConsoleHost_history.txt)
 
-## 한 줄 요약
-
 PowerShell 의 PSReadLine 모듈은 대화형 콘솔에서 친 명령을 사용자별 글자 파일에 한 줄씩 저장합니다. Windows 의 기본 파일은 `%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt` 입니다. 파일에는 시각이 없습니다. 비밀 값을 뜻하는 단어가 든 명령은 거르기 규칙에 걸리면 파일에 들어가지 않습니다. 규칙은 PSReadLine 버전마다 다릅니다.
 
 ## 무엇을 기록하나 · 왜 생기나

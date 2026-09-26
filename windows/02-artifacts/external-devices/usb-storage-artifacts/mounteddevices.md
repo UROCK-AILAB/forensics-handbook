@@ -7,8 +7,6 @@ nav_order: 1510
 
 # 드라이브 문자 매핑 (MountedDevices)
 
-## 한 줄 요약
-
 SYSTEM 하이브의 `MountedDevices` 키는 마운트 관리자 (Mount Manager) 가 볼륨 이름과 드라이브 문자를 적어 두는 곳이며, USB 저장장치를 볼륨 GUID 와 드라이브 문자에 잇는 중간 고리입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

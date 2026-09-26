@@ -6,8 +6,6 @@ nav_order: 440
 
 # 서명·공증·무결성 보호 (Code Signing·Notarization·SIP)
 
-## 한 줄 요약
-
 macOS 는 코드 서명 (Code Signing) 과 공증 (Notarization) 으로 앱이 누구에게서 왔고 그 뒤로 바뀌지 않았는지를 확인하고, 시스템 무결성 보호 (System Integrity Protection, SIP) 와 서명된 시스템 볼륨 (Signed System Volume, SSV) 으로 운영체제 영역을 읽기 전용으로 묶어 둡니다. 이 페이지는 각 장치가 무엇을 확인하는지 정리하고, 그 결과 분석가가 어떤 흔적을 믿어도 되고 어떤 흔적을 의심해야 하는지를 다룹니다.
 
 ## 이 보호 장치와 이어진 아티팩트

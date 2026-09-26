@@ -6,8 +6,6 @@ nav_order: 1060
 
 # 프로그램 호환성 도우미 (PCA)
 
-## 한 줄 요약
-
 Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 개가 생깁니다. `PcaAppLaunchDic.txt` 에는 실행 파일 경로와 시각이 한 줄씩 남고, `PcaGeneralDb0.txt` 에는 프로그램의 비정상 종료·설치 실패·호환성 판정이 필드 여덟 개로 남으며, 사용자 하이브와 SOFTWARE 하이브의 `AppCompatFlags` 키에도 관련 기록이 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

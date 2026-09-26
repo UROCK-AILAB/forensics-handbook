@@ -7,8 +7,6 @@ nav_order: 840
 
 # 탭과 세션 (Tabs·Sessions)
 
-## 한 줄 요약
-
 Chrome for Android 는 열린 탭을 다시 띄우려고 탭마다 상태 파일(TabState)을 앱 데이터의 탭 폴더에 저장하고, 이 파일에 탭의 현재 URL 과 탭을 연 앱, 마지막 탐색 시각 같은 값이 들어 있으며, 시크릿(incognito) 탭은 따로 암호화한 파일로 저장합니다 (현행 Chromium 기준) [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

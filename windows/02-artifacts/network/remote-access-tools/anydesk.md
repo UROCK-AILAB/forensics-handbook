@@ -9,8 +9,6 @@ nav_order: 2390
 
 > 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
 
-## 한 줄 요약
-
 애니데스크 (AnyDesk) 는 원격 지원 프로그램입니다. 받는 쪽 PC 의 `connection_trace.txt` 에는 들어온 접속이 한 줄씩 남고, 줄마다 날짜·시각, 승인 방식, AnyDesk ID 가 적힙니다. trace 로그(`ad.trace`, `ad_svc.trace`)에는 상대 ID 와 외부 IP 주소가 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

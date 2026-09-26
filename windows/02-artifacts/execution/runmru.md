@@ -6,8 +6,6 @@ nav_order: 1080
 
 # 실행 창 명령 기록 (RunMRU)
 
-## 한 줄 요약
-
 실행 창 (Run dialog) 에 친 명령은 사용자 하이브 NTUSER.DAT 의 `Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU` 키에 남습니다. 항목의 순서는 `MRUList` 값이 정합니다. 시각은 키의 마지막 기록 시각 하나뿐입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

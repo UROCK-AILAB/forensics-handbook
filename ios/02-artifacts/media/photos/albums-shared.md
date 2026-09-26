@@ -7,8 +7,6 @@ nav_order: 560
 
 # 앨범과 공유 앨범 (Albums·Shared Albums)
 
-## 한 줄 요약
-
 사진 앱의 앨범과 폴더, 공유 앨범은 Photos.sqlite 의 `ZGENERICALBUM` 에 함께 들어 있고, 공유 앨범의 댓글·초대·피드와 iCloud 링크 공유, 공유 사진 보관함은 별도 표에 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -7,8 +7,6 @@ nav_order: 20
 
 # 동적 파티션 (super)
 
-## 한 줄 요약
-
 Android 10 이후 기기는 system·vendor·product 같은 파티션을 super 라는 물리 파티션 하나 안에 논리 파티션으로 담고, 각 논리 파티션의 이름과 블록 범위는 super 안의 메타데이터에 적혀 있어서, 이미지에서 system 이나 vendor 를 꺼내 보려면 이 메타데이터부터 읽어야 합니다.
 
 ## 이 형식을 쓰는 아티팩트

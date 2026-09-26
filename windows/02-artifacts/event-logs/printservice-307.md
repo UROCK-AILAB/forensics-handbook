@@ -6,8 +6,6 @@ nav_order: 2770
 
 # 인쇄 이벤트 (PrintService 307)
 
-## 한 줄 요약
-
 이벤트 307 은 문서 한 건을 프린터로 인쇄했다는 기록입니다. 작업 번호, 문서 이름, 사용자, 컴퓨터, 프린터, 포트, 바이트 수, 쪽수가 들어갑니다. 이 이벤트는 `Microsoft-Windows-PrintService/Operational` 채널에 남고, 이 채널이 켜져 있을 때만 기록됩니다. 문서 이름은 "Allow job name in event logs" 정책을 켜야 들어갑니다. 시각은 UTC 입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

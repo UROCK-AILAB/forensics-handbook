@@ -8,8 +8,6 @@ has_toc: false
 
 # 윈도 검색 색인 DB (Windows Search)
 
-## 한 줄 요약
-
 윈도 검색 (Windows Search) 은 파일을 빨리 찾으려고 파일의 이름·경로·속성·본문을 미리 모아 두는 기능입니다. 모은 결과는 색인 DB 에 쌓입니다. Windows 10 까지는 ESE 형식의 `Windows.edb` 를 쓰고, Windows 11 은 SQLite 형식의 `Windows.db` 와 `Windows-gather.db` 를 씁니다. 이 DB 를 풀면 그 PC 에 어떤 파일이 어느 경로에 있었는지 목록을 얻을 수 있습니다.
 
 ## 왜 중요한가

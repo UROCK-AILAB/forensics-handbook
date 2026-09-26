@@ -9,8 +9,6 @@ nav_order: 280
 
 > 위치: [SQLite 데이터베이스 (SQLite)](index.md) > WAL과 롤백 저널
 
-## 한 줄 요약
-
 SQLite 는 주 파일을 고칠 때 같은 폴더에 보조 파일을 함께 씁니다.
 롤백 저널 (Rollback Journal) 인 `-journal` 에는 바뀌기 **전** 페이지를 적고, 쓰기 전 로그 (Write-Ahead Log, WAL) 인 `-wal` 에는 바뀐 **뒤** 페이지를 적습니다.
 그래서 주 파일만 읽으면 최근 기록을 놓치고, 이미 지운 기록을 유효한 기록으로 잘못 볼 수도 있습니다.

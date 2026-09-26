@@ -6,8 +6,6 @@ nav_order: 2650
 
 # 예약 작업 이벤트 (TaskScheduler·4698)
 
-## 한 줄 요약
-
 예약 작업 (Scheduled Task) 을 만들거나 바꾸거나 실행하면 이벤트 로그 두 곳에 기록이 남을 수 있습니다. 보안 로그 (Security) 의 4698 에는 작업을 만든 계정과 작업 XML 전체가 남습니다. `Microsoft-Windows-TaskScheduler/Operational` 로그에는 작업 등록·수정·삭제와 실행의 시작·끝이 남습니다. 두 기록 모두 기본으로 꺼져 있습니다[1]. 켜 두지 않았으면 아무것도 남지 않습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

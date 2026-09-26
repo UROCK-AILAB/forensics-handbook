@@ -7,8 +7,6 @@ nav_order: 340
 
 # 이진 XML 해석 (Binary XML·Template)
 
-## 한 줄 요약
-
 EVTX 레코드 본문은 글자로 쓴 XML 이 아니라 토큰으로 줄인 이진 XML (Binary XML) 입니다. 요소 이름과 이벤트의 틀인 템플릿 (Template) 은 청크 안에 한 번만 들어 있고, 레코드는 그 자리를 가리키며 값만 담습니다. 그래서 레코드를 XML 로 되살리려면 같은 청크의 이름과 템플릿이 함께 있어야 합니다.
 
 이 페이지는 [이벤트 로그 형식 (EVTX·EVT·ETL)](index.md) 의 하위 주제입니다. 레코드가 파일 어디에 있는지는 [EVTX 파일 구조 (File Header·Chunk·Record)](file-header-chunk-record.md) 에서 다룹니다.

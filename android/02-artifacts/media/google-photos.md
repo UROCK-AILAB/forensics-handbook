@@ -6,8 +6,6 @@ nav_order: 670
 
 # 구글 포토 (Google Photos)
 
-## 한 줄 요약
-
 구글 포토 앱(com.google.android.apps.photos)은 앱 전용 폴더의 gphotos DB 에 기기 안 미디어(local_media)와 클라우드 미디어(remote_media)를 따로 적고, 이미지 캐시와 앱 휴지통 DB 도 따로 두어서, 기기에서 지운 사진이 클라우드 쪽 목록이나 캐시에 남는지 볼 수 있습니다 [1].
 
 ## 무엇을 기록하나 · 왜 생기나

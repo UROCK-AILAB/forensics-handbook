@@ -8,8 +8,6 @@ has_toc: false
 
 # 크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)
 
-## 한 줄 요약
-
 Chrome·Edge 같은 브라우저, Electron 앱, WebView2 를 쓰는 앱은 모두 Chromium 의 저장 방식을 씁니다.
 그래서 폴더 안 모양이 거의 같고 `Local State`, 프로필 폴더, `Cache`, `Network\Cookies` 가 공통으로 보입니다. 이 구조를 한 번 익히면 브라우저와 메신저·메일·클라우드 앱의 기록을 같은 방법으로 읽습니다.
 

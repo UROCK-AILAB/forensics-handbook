@@ -6,8 +6,6 @@ nav_order: 3020
 
 # 실행 파일 메타데이터 (PE Header·Version Info·Digital Signature)
 
-## 한 줄 요약
-
 Windows 실행 파일(EXE·DLL) 안에는 PE 헤더, 버전 정보, 디지털 서명이 들어 있습니다. PE 헤더의 TimeDateStamp 는 빌드 시각처럼 보이지만, Windows 10 을 재현 가능한 빌드로 만든 뒤로 Windows 구성 파일에서는 시각이 아니라 해시입니다(참고 3). 같은 Microsoft 파일이라도 Office 의 `WINWORD.EXE` 처럼 그럴듯한 시각이 든 파일도 있습니다. 버전 정보는 개발자가 적는 값입니다(참고 2). 서명이 유효하면 서명이 덮는 바이트가 서명 뒤로 바뀌지 않았다는 것을 알 수 있습니다. 세 가지를 함께 봐야 "이 파일이 무엇이고 언제 만들었나" 를 기록으로 확인되는 만큼 적을 수 있습니다.
 
 > 아래 예시 값은 Windows 11 빌드 26200 의 `C:\Windows\System32\notepad.exe`, `C:\Windows\System32\kernel32.dll` 과 설치된 `git-bash.exe`·`python.exe`·`WINWORD.EXE` 의 값입니다. 서명 결과는 PowerShell 5.1 의 `Get-AuthenticodeSignature` 기준이고, 시간대는 KST (UTC+9) 입니다.

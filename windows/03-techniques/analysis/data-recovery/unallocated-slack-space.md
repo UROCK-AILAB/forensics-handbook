@@ -7,8 +7,6 @@ nav_order: 3350
 
 # 비할당 영역과 슬랙 (Unallocated·Slack Space)
 
-## 한 줄 요약
-
 비할당 영역 (Unallocated Space) 은 파일이나 파티션에 할당되지 않은 공간이고, 슬랙 공간 (Slack Space) 은 할당된 블록 안에서 쓰지 않는 부분입니다. 두 곳 모두 지운 파일 조각 같은 옛 데이터가 남을 수 있으며, 이 데이터는 비트 단위 이미지에만 담깁니다.
 
 이 페이지는 [삭제 데이터 복구 (Data Recovery)](index.md) 의 하위 주제입니다. 여기서 찾은 데이터를 파일로 되살리는 법은 [파일 카빙 (File Carving)](file-carving.md) 과 [레코드 카빙 (Record Carving)](record-carving.md) 에 있습니다. 파일시스템 기록으로 되살리는 법은 [파일시스템 기반 복구 (Undelete: NTFS·FAT)](undelete-ntfs-fat.md) 에 있습니다.

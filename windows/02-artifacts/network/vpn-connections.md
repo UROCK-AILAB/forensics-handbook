@@ -8,8 +8,6 @@ nav_order: 2420
 
 > 이 페이지의 내용은 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다. 예시 값은 시험용 VPN 프로필(`ZZTestVPN`)을 만들었다가 지운 기록입니다. 다른 버전에서는 실제 데이터로 확인합니다.
 
-## 한 줄 요약
-
 윈도 내장 VPN 의 흔적은 세 곳에 남습니다. 연결 프로필은 전화번호부 파일 (phonebook) `rasphone.pbk` 에, 접속 시도와 결과는 Application 로그의 RasClient 이벤트에, 프로필을 만들고 지운 기록은 `Microsoft-Windows-VPN-Client/Operational` 로그에 남습니다. 프로필을 지우면 파일에서는 사라지지만 삭제 이벤트는 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

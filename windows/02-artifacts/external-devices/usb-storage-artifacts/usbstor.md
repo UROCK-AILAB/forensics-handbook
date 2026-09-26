@@ -9,8 +9,6 @@ nav_order: 1480
 
 > 상위 허브: [USB 저장장치 흔적 (USB Storage Artifacts)](index.md)
 
-## 한 줄 요약
-
 SYSTEM 하이브의 `Enum\USBSTOR` 키에는 USB 대용량 저장장치 드라이버로 붙은 저장장치가 하나씩 남습니다. 키 이름에서 장치 종류·제조사·제품·리비전 문자열과 인스턴스 ID (Instance ID) 를 읽습니다. 이 키의 값만으로는 언제, 누가 꽂았는지 알 수 없습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

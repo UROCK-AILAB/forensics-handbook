@@ -6,8 +6,6 @@ nav_order: 2690
 
 # 네트워크 연결 이벤트 (WLAN-AutoConfig·NetworkProfile)
 
-## 한 줄 요약
-
 Wi-Fi 에 연결하거나 연결이 끊기면 `Microsoft-Windows-WLAN-AutoConfig/Operational` 로그에 기록이 남습니다. Windows 가 네트워크에 연결됐다고 판단하거나 연결이 끊겼다고 판단하면 `Microsoft-Windows-NetworkProfile/Operational` 로그에 기록이 남습니다. WLAN 쪽은 SSID·프로필 이름·인증 방식·암호화 방식을 알려 줍니다. NetworkProfile 쪽은 Windows 가 붙인 네트워크 이름과 프로필 GUID 를 알려 줍니다. 두 로그를 시각으로 맞추고, GUID 로 레지스트리의 네트워크 목록과 잇습니다.
 
 이 페이지의 필드 구성과 값은 Windows 11 25H2 (빌드 26200) 의 공급자 매니페스트와 실제 기록 기준입니다.

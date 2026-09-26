@@ -6,7 +6,7 @@ nav_order: 400
 
 # 초기화 흔적 (Factory Reset)
 
-> 한 줄 요약: 공장 초기화 (Factory Reset) 를 하면 사용자 데이터 영역이 지워지지만, 초기화 뒤 첫 부팅이 끝날 때 bootstat 이 `/data/misc/bootstat/factory_reset` 파일의 수정 시각에 그 시각을 적어 두고, 설정 값·계정 기록·공장 초기화 보호 (FRP) 영역에도 "여기서부터 다시 시작했다" 는 흔적이 남습니다.
+> 공장 초기화 (Factory Reset) 를 하면 사용자 데이터 영역이 지워지지만, 초기화 뒤 첫 부팅이 끝날 때 bootstat 이 `/data/misc/bootstat/factory_reset` 파일의 수정 시각에 그 시각을 적어 두고, 설정 값·계정 기록·공장 초기화 보호 (FRP) 영역에도 "여기서부터 다시 시작했다" 는 흔적이 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 

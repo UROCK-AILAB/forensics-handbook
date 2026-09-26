@@ -6,8 +6,6 @@ nav_order: 870
 
 # 삼성 인터넷 (Samsung Internet)
 
-## 한 줄 요약
-
 삼성 인터넷(패키지 com.sec.android.app.sbrowser)은 앱 데이터 폴더의 `app_sbrowser/Default/` 아래에 Chrome 과 이름이 같은 History, Cookies, Web Data 같은 파일을 남기고, 공개 도구 ALEAPP 는 이 파일들을 Chrome 과 같은 SQL 로 읽습니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

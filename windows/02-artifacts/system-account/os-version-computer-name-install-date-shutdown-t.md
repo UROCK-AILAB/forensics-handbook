@@ -6,8 +6,6 @@ nav_order: 620
 
 # 시스템 기본 정보 (OS Version·Computer Name·Install Date·Shutdown Time)
 
-## 한 줄 요약
-
 레지스트리의 SOFTWARE 하이브에는 윈도 제품 이름과 설치 시각이, SYSTEM 하이브에는 컴퓨터 이름과 마지막 정상 종료 시각이 있습니다. 분석을 시작할 때 가장 먼저 읽는 값들이며, 시각은 모두 UTC 로 해석합니다.
 
 ## 무엇을 기록하나 · 왜 생기나

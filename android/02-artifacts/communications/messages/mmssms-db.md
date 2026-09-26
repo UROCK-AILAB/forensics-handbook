@@ -9,8 +9,6 @@ nav_order: 570
 
 Android 시스템 문자 저장소인 mmssms.db 의 표와 열, 값의 뜻, 시각 단위를 정리합니다. 표와 열 이름은 현행 AOSP(main 가지) 소스 기준입니다.
 
-## 한 줄 요약
-
 mmssms.db 는 시스템 제공자 패키지 com.android.providers.telephony 가 관리하는 SQLite DB 로, SMS 는 sms 표에, MMS 는 pdu·part·addr 표에 나눠 담고 두 종류가 threads 표의 대화 번호(thread_id)를 함께 쓰며, MMS 첨부 파일은 DB 밖의 app_parts 폴더에 따로 둡니다 [1][2].
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -6,8 +6,6 @@ nav_order: 1240
 
 # 저장된 암호 (Google 비밀번호 관리자·Samsung Pass)
 
-## 한 줄 요약
-
 안드로이드에서 웹·앱 비밀번호는 브라우저, Google 비밀번호 관리자 (Google Password Manager), Samsung Pass 처럼 여러 곳에 저장될 수 있고, 이 가운데 구조가 소스로 공개된 곳은 Chromium 계열 브라우저의 `Login Data` DB 와 어느 앱이 자동 완성을 맡는지 적어 두는 설정 키입니다 [2].
 
 ## 무엇을 기록하나 · 왜 생기나

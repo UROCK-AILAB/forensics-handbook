@@ -6,8 +6,6 @@ nav_order: 2350
 
 # 원격 데스크톱 접속 기록 (RDP Client MRU)
 
-## 한 줄 요약
-
 원격 데스크톱 연결 (Remote Desktop Connection, mstsc) 로 다른 컴퓨터에 접속하면, 대상 컴퓨터 이름이 사용자 하이브의 `Terminal Server Client\Default` 키에 MRU 목록으로 남습니다. 대상별 하위 키에는 사용자 이름 힌트가 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -7,8 +7,6 @@ nav_order: 1500
 
 # 연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)
 
-## 한 줄 요약
-
 Windows 8 부터는 USB 저장장치를 마지막으로 꽂은 시각과 마지막으로 뺀 시각이 장치 속성 값으로 남습니다. 자리는 SYSTEM 하이브 `Enum\USBSTOR` 장치 키 아래 `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 의 `0066`·`0067` 이고, 같은 자리의 `0064`·`0065` 에는 설치 시각이 남습니다. Windows 7 까지는 연결 시각 값이 따로 없었기 때문에 `Control\DeviceClasses` 아래 키의 마지막 기록 시각으로 연결 시각을 짐작했습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

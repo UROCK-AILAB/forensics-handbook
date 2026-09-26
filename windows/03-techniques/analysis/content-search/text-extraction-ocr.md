@@ -7,8 +7,6 @@ nav_order: 3490
 
 # 본문 추출과 글자 인식 (Text Extraction·OCR)
 
-## 한 줄 요약
-
 문서 파일에서 서식을 걷어 내고 글만 뽑아 검색할 수 있게 만들고, 그림 속 글자는 글자 인식 (Optical Character Recognition, OCR) 으로 글로 바꿉니다.
 
 이 글은 [파일 내용 검색 (Content Search)](index.md) 묶음의 한 편입니다.

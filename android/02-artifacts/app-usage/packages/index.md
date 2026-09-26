@@ -8,8 +8,6 @@ has_toc: false
 
 # 설치된 앱 (packages.xml)
 
-## 한 줄 요약
-
 패키지 관리자(PackageManager)는 `/data/system/` 의 `packages.xml` 과 `packages.list` 에 설치된 앱의 목록과 설치 정보를 적고, 사용자별 설치 상태와 권한 부여 상태는 사용자별 파일에 따로 적습니다 [1].
 
 ## 왜 중요한가

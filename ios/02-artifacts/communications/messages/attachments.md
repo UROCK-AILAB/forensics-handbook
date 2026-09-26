@@ -7,8 +7,6 @@ nav_order: 480
 
 # 첨부 파일 (Attachments)
 
-## 한 줄 요약
-
 메시지로 주고받은 사진·영상·파일은 sms.db 밖의 첨부 폴더에 파일로 저장되고, sms.db 의 `attachment` 표가 그 파일의 경로·형식·크기·전송 방향을 기록하며 `message_attachment_join` 이 첨부를 메시지에 잇습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -9,8 +9,6 @@ nav_order: 2020
 
 > 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 계정·로그인 흔적
 
-## 한 줄 요약
-
 카카오톡 PC 는 레지스트리 `HKEY_CURRENT_USER\SOFTWARE\Kakao\KakaoTalk\DeviceInfo\<DATE>` 에 기기 정보를 남기고, 계정 폴더의 `login_list.dat` 와 `last_pc_login.dat` 에는 로그인했던 이메일이 남습니다(26.6.0.5208 기준). 계정 userId 는 `ActionLogDB.edb` 의 `Common` 표 `userid` 열에 있습니다[1]. 이 흔적으로 이 기기에서 어느 계정을 썼는지와 대략의 시기를 추정합니다.
 
 ## 무엇을 기록하나

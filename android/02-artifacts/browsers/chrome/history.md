@@ -7,8 +7,6 @@ nav_order: 830
 
 # 방문 기록 (History)
 
-## 한 줄 요약
-
 Chrome for Android 의 방문 기록은 프로필 폴더의 `History` SQLite 파일에 URL 별 요약(urls 표)과 방문 한 건씩의 기록(visits 표), 주소창 검색어(keyword_search_terms 표)로 나뉘어 들어 있고, 시각은 1601-01-01 UTC 부터 센 마이크로초로 적습니다 [1].
 
 ## 무엇을 기록하나 · 왜 생기나

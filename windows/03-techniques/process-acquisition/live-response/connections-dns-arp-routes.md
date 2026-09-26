@@ -7,8 +7,6 @@ nav_order: 3140
 
 # 네트워크 상태 수집 (Connections·DNS·ARP·Routes)
 
-## 한 줄 요약
-
 켜진 시스템의 네트워크 연결, DNS 캐시, ARP 캐시, 라우팅 표, 네트워크 설정을 글자 파일로 남깁니다. 연결 목록은 몇 초 만에도 바뀌므로 가장 먼저 모읍니다. `netstat` 결과에는 시각 열이 없고, 수집 중에 `ipconfig /flushdns` 를 돌리면 DNS 캐시가 지워집니다.
 
 ## 언제 쓰나

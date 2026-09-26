@@ -6,8 +6,6 @@ nav_order: 630
 
 # 커널·시스템 확장 (KEXT·System Extension)
 
-## 한 줄 요약
-
 커널 확장 (Kernel Extension, kext)은 커널 안에서 도는 코드이고 시스템 확장 (System Extension)은 macOS 10.15부터 그 역할을 사용자 공간으로 옮긴 확장이라서, 둘 다 시스템 전체에 영향을 주는 자리이고 macOS 11 이후에는 적재 조건과 보안 수준 설정 자체가 조사 단서가 됩니다.
 
 ## 무엇을 기록하나 · 왜 생기나

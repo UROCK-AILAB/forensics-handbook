@@ -6,8 +6,6 @@ nav_order: 810
 
 # 보안 제품이 남기는 AI 사용 기록 (DLP·CASB)
 
-## 한 줄 요약
-
 조직이 DLP (Data Loss Prevention, 정보 유출 방지) 나 CASB·SASE/SSE 같은 보안 접근 제품을 쓰고 있다면, 직원이 제3자 AI 사이트에 들어가거나 민감 정보를 보낸 기록이 그 제품의 관리 콘솔에 남고, 이 기록은 PC 이미지가 아니라 조직의 보안 담당자에게서 받아야 합니다.
 
 확인 날짜는 2026-09입니다. 근거는 Microsoft Learn 문서 두 편(DSPM for AI classic 판 2025-12-15·갱신 2026-06-25, Copilot·AI 앱 감사 2026-08-26)입니다. 이 페이지는 Microsoft Purview 를 예로 들어 원리를 설명하고, 다른 회사의 CASB·SSE 제품은 필드와 내보내기 형식을 각 제품 문서로 확인합니다.

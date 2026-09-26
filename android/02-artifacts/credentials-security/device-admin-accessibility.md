@@ -6,8 +6,6 @@ nav_order: 1250
 
 # 기기 관리자와 접근성 권한 (Device Admin·Accessibility)
 
-## 한 줄 요약
-
 기기 관리자 (Device Admin) 는 앱이 잠금·초기화·비밀번호 정책을 다룰 수 있게 하는 권한이고 접근성 서비스 (Accessibility Service) 는 앱이 화면 내용을 읽고 사용자 대신 조작할 수 있게 하는 권한이라서, 조사에서는 어느 앱이 이 둘을 켜 두었는지를 시스템 쪽 `device_policies.xml` 과 settings secure 의 접근성 키에서 확인합니다 [1][2][4].
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -9,8 +9,6 @@ nav_order: 2890
 
 > 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > LSA 시크릿
 
-## 한 줄 요약
-
 LSA 시크릿 (LSA Secrets) 은 Windows 가 서비스 비밀번호나 시스템 열쇠를 담아 두는 저장소로, SECURITY 하이브에 있으며 자동 로그온 비밀번호가 여기서 나오기도 합니다.
 
 ## 무엇을 담나 · 왜 생기나

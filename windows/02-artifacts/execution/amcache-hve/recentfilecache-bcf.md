@@ -9,8 +9,6 @@ nav_order: 920
 
 > 위치: [AmCache (Amcache.hve)](index.md) > 구버전 실행 기록
 
-## 한 줄 요약
-
 RecentFileCache.bcf 는 Windows 7 과 Windows Server 2008 R2 에서 Amcache.hve 보다 먼저 쓰던 파일입니다. 호환성 보정이 필요한 실행 파일의 경로를 소문자로 모아 두며, 파일 안에는 시각이 하나도 없습니다. 매일 밤 예약 작업이 이 파일을 비우므로 남아 있는 경로는 마지막으로 비운 뒤에 실행된 파일을 가리킵니다.
 
 ## 무엇을 기록하나 · 왜 생기나

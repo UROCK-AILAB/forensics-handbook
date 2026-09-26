@@ -6,8 +6,6 @@ nav_order: 1250
 
 # 썸네일 캐시 (thumbcache_*.db·Thumbs.db)
 
-## 한 줄 요약
-
 썸네일 캐시 (thumbnail cache) 는 탐색기가 쓰는 미리 보기 그림을 모아 둔 파일입니다. Windows Vista 부터는 사용자 프로필 안의 `thumbcache_*.db` 파일에 그림이 모입니다. XP 에서는 폴더마다 숨김 파일 `Thumbs.db` 가 생겼습니다. 그림은 남지만, Windows 7 이후 형식에는 원본 파일의 이름과 시각을 담는 필드가 문서화돼 있지 않습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

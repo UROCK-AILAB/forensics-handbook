@@ -6,8 +6,6 @@ nav_order: 700
 
 # 서비스·드라이버 (Services·Drivers)
 
-## 한 줄 요약
-
 `HKLM\SYSTEM\CurrentControlSet\Services` 아래에는 서비스와 커널 드라이버마다 키가 하나씩 있습니다. Start 값은 언제 올릴지, Type 값은 서비스인지 드라이버인지, ImagePath 값은 무엇을 실행할지 정합니다. 부팅할 때 사용자 로그온 없이 도는 자리라서 지속성 조사에서 꼭 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -9,8 +9,6 @@ nav_order: 2400
 
 > 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
 
-## 한 줄 요약
-
 스크린커넥트 (ScreenConnect) 는 ConnectWise 의 원격 지원 제품입니다. 조종당하는 PC 에 클라이언트 서비스가 설치되고, 서비스 명령줄에 중계 서버 주소와 세션 종류가 붙습니다. Application 이벤트 로그에는 세션 시작·끝, 파일 전송, 명령 실행이 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

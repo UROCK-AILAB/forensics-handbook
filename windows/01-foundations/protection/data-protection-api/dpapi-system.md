@@ -9,8 +9,6 @@ nav_order: 590
 
 > 위치: [DPAPI 구조 (Data Protection API)](index.md) > 시스템 DPAPI 키
 
-## 한 줄 요약
-
 SYSTEM 과 머신 계정은 사용자 암호가 없어서, 이 계정의 마스터키는 사용자 암호 대신 LSA 시크릿 DPAPI_SYSTEM 으로 풉니다.
 DPAPI_SYSTEM 을 손에 넣으면 머신 마스터키로 감싼 시스템 비밀을 오프라인에서 풀 수 있습니다.
 

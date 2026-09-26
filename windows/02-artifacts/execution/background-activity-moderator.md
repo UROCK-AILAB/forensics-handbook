@@ -6,8 +6,6 @@ nav_order: 950
 
 # BAM·DAM (Background Activity Moderator)
 
-## 한 줄 요약
-
 Windows 10 1709 무렵부터 SYSTEM 하이브의 `Services\bam` 키 아래에 사용자 SID 마다 실행 파일 경로와 시각 하나가 남습니다. 시각은 프로세스가 만들어질 때와 끝날 때 바뀝니다. 부팅 때 7일이 지난 항목은 지워집니다[2].
 
 ## 무엇을 기록하나 · 왜 생기나

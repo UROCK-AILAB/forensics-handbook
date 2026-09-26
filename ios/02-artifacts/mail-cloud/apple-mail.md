@@ -6,8 +6,6 @@ nav_order: 970
 
 # 메일 앱 (Apple Mail)
 
-## 한 줄 요약
-
 아이폰 기본 메일 앱은 메일 본문을 `.emlx` 파일로, 메일 목록과 겉봉 정보를 `Envelope Index`·`Protected Index` 두 SQLite DB 로 남기지만, 로컬 백업에서는 이 파일들 없이 설정 plist 와 계정 DB 만 나올 수 있어서 수집 방식부터 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나

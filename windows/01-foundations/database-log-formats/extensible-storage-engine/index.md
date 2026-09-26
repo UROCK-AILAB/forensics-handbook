@@ -8,8 +8,6 @@ has_toc: false
 
 # ESE 데이터베이스 (Extensible Storage Engine)
 
-## 한 줄 요약
-
 ESE (Extensible Storage Engine) 는 Windows 에 들어 있는 데이터베이스 엔진입니다. SRUM, IE 웹캐시, Windows 검색 색인, BITS, Active Directory 가 이 엔진으로 데이터를 저장합니다. 분석은 DB 파일과 같은 폴더의 트랜잭션 로그 (Transaction Log) 를 함께 확보하는 데서 시작합니다.
 
 ## 왜 중요한가

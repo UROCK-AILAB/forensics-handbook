@@ -6,8 +6,6 @@ nav_order: 1320
 
 # 윈도 타임라인 (ActivitiesCache.db)
 
-## 한 줄 요약
-
 윈도 타임라인 (Windows Timeline) 의 활동 기록은 계정마다 SQLite 데이터베이스 `ActivitiesCache.db` 에 남습니다. 앱을 열거나 쓴 활동, 파일과 웹페이지를 연 활동, 클립보드 활동이 행 하나씩 들어갑니다. 다른 기기에서 동기화된 행이 섞일 수 있고, 시각 열은 Unix 초로 풀립니다.
 
 ## 무엇을 기록하나 · 왜 생기나

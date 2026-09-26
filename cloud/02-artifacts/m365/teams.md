@@ -6,8 +6,6 @@ nav_order: 260
 
 # Teams (Teams)
 
-## 한 줄 요약
-
 Microsoft Teams 조사는 세 곳을 봅니다. 팀·채널·멤버·앱을 바꾼 기록은 통합 감사 로그 (Unified Audit Log) 에 RecordType 25 `MicrosoftTeams` 로 남고, 메시지 본문은 Exchange 메일함의 숨은 폴더와 Teams 내보내기 API (Teams Export APIs) 로 찾으며, 기기에는 Teams 앱의 로그와 데이터베이스가 남습니다[1][3][6][7][12].
 
 ## 무엇을 기록하나 · 왜 생기나

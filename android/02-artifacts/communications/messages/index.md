@@ -8,8 +8,6 @@ has_toc: false
 
 # 문자 (SMS·MMS·RCS)
 
-## 한 줄 요약
-
 Android 의 SMS·MMS 는 시스템 제공자 패키지 com.android.providers.telephony 가 mmssms.db 한 파일에 담고, Google 메시지 앱은 자기 DB(bugle_db)를 따로 두며, RCS 대화가 어느 쪽에 들어가는지는 공개 자료에 정리되어 있지 않습니다 [1][2][4].
 
 ## 왜 중요한가

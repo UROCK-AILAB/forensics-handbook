@@ -7,8 +7,6 @@ nav_order: 800
 
 # 저장 위치와 파일 (Paths·Files)
 
-## 한 줄 요약
-
 아이폰 카카오톡은 앱 데이터 컨테이너의 `Library/PrivateDocuments/` 아래에 메시지 DB `Message.sqlite` 와 채팅방·사용자 DB `Talk.sqlite` 를 두고, 받은 미디어는 같은 폴더의 `chat`·`chatVideo`·`chatAudio` 아래 채팅방별 폴더에 저장합니다.
 
 ## 무엇을 기록하나 · 왜 생기나

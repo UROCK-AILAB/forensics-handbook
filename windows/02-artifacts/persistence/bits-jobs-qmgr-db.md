@@ -6,8 +6,6 @@ nav_order: 770
 
 # BITS 전송 작업 (BITS Jobs·qmgr.db)
 
-## 한 줄 요약
-
 BITS (Background Intelligent Transfer Service) 작업은 파일을 받거나 올리는 예약 전송입니다. 작업에 알림 명령을 걸어 두면 전송이 끝나거나 오류가 날 때 BITS 가 그 명령을 실행합니다. 이 설정은 레지스트리가 아니라 BITS 데이터베이스에 남고, Windows 10 이후에는 그 파일이 ESE 형식의 `qmgr.db` 입니다.
 
 ## 무엇을 기록하나 · 왜 생기나

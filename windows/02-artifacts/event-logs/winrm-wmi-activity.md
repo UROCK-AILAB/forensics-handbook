@@ -6,8 +6,6 @@ nav_order: 2630
 
 # 원격 명령 실행 이벤트 (WinRM·WMI-Activity)
 
-## 한 줄 요약
-
 Windows 원격 관리 (WinRM, Windows Remote Management) 와 WMI (Windows Management Instrumentation) 는 다른 컴퓨터에 명령을 보내는 관리 통로입니다. 두 통로는 각자 Operational 로그를 씁니다. `Microsoft-Windows-WinRM/Operational` 에는 세션을 열고 셸과 명령을 만든 기록, 인증 실패가 남습니다. `Microsoft-Windows-WMI-Activity/Operational` 에는 WMI 공급자 시작과 실패한 WMI 호출이 남습니다. 두 로그 모두 작고 잡음이 많아서 빨리 밀려납니다.
 
 ## 무엇을 기록하나 · 왜 생기나

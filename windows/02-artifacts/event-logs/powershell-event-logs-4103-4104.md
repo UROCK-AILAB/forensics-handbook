@@ -6,8 +6,6 @@ nav_order: 2620
 
 # PowerShell 실행 기록 (PowerShell Event Logs: 4103·4104)
 
-## 한 줄 요약
-
 PowerShell 은 실행한 코드와 명령을 이벤트 로그에 남깁니다. 4104 에는 스크립트 블록 (Script Block) 의 내용이, 4103 에는 명령과 인자 값이 남고, 옛 방식 "Windows PowerShell" 로그의 400 에는 PowerShell 을 띄운 명령줄이 남습니다. 정책을 켜지 않아도 의심스러운 내용이 든 스크립트 블록은 4104 로 자동 기록됩니다.
 
 ## 무엇을 기록하나 · 왜 생기나
