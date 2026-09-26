@@ -1,0 +1,846 @@
+[
+ {
+  "title": "책임 공유와 조사 범위 (Shared Responsibility)",
+  "path": "01-foundations/model/shared-responsibility.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "클라우드 조사의 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "테넌트·구독·계정·프로젝트 (Tenant·Subscription·Account·Project)",
+  "path": "01-foundations/model/tenancy.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "클라우드 조사의 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "기록은 어디에 남나 (Where Records Live)",
+  "path": "01-foundations/model/where-records-live.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "클라우드 조사의 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클라우드 계정과 역할 (Users·Roles·Service Accounts)",
+  "path": "01-foundations/identity/users-roles.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "계정과 인증",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "OAuth 앱과 동의 (OAuth Apps·Consent)",
+  "path": "01-foundations/identity/oauth-consent.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "계정과 인증",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "토큰과 세션 (Tokens·Sessions)",
+  "path": "01-foundations/identity/tokens-sessions.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "계정과 인증",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "다단계 인증과 조건부 접근 (MFA·Conditional Access)",
+  "path": "01-foundations/identity/mfa-conditional-access.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "계정과 인증",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "페더레이션과 SSO (Federation·SSO)",
+  "path": "01-foundations/identity/federation-sso.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "계정과 인증",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그의 종류 (관리·데이터·로그인·흐름)",
+  "path": "01-foundations/logging/log-types.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "보관 기간과 라이선스 (Retention·Licensing)",
+  "path": "01-foundations/logging/retention-licensing.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "JSON 로그 읽기 (JSON Log Records)",
+  "path": "01-foundations/logging/json-logs.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클라우드 로그의 시각 (Timestamps·Time Zones)",
+  "path": "01-foundations/logging/timestamps.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "IP·사용자 에이전트·위치 정보 (IP·User Agent·Geo)",
+  "path": "01-foundations/logging/ip-ua-geo.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "로그 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "통합 감사 로그 (Unified Audit Log)",
+  "path": "02-artifacts/m365/unified-audit-log/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "레코드 구조 (AuditData)",
+    "path": "02-artifacts/m365/unified-audit-log/record-structure.md"
+   },
+   {
+    "title": "검색과 내보내기 (Search·Export)",
+    "path": "02-artifacts/m365/unified-audit-log/search-export.md"
+   },
+   {
+    "title": "주요 작업 이름 (Operations)",
+    "path": "02-artifacts/m365/unified-audit-log/operations.md"
+   }
+  ]
+ },
+ {
+  "title": "레코드 구조 (AuditData)",
+  "path": "02-artifacts/m365/unified-audit-log/record-structure.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "통합 감사 로그 (Unified Audit Log)",
+   "path": "02-artifacts/m365/unified-audit-log/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "검색과 내보내기 (Search·Export)",
+  "path": "02-artifacts/m365/unified-audit-log/search-export.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "통합 감사 로그 (Unified Audit Log)",
+   "path": "02-artifacts/m365/unified-audit-log/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "주요 작업 이름 (Operations)",
+  "path": "02-artifacts/m365/unified-audit-log/operations.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "통합 감사 로그 (Unified Audit Log)",
+   "path": "02-artifacts/m365/unified-audit-log/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Entra ID 로그 (Entra ID Logs)",
+  "path": "02-artifacts/m365/entra-logs/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "로그인 로그 (Sign-in Logs)",
+    "path": "02-artifacts/m365/entra-logs/sign-in-logs.md"
+   },
+   {
+    "title": "감사 로그 (Audit Logs)",
+    "path": "02-artifacts/m365/entra-logs/audit-logs.md"
+   },
+   {
+    "title": "위험 탐지 (Identity Protection)",
+    "path": "02-artifacts/m365/entra-logs/identity-protection.md"
+   }
+  ]
+ },
+ {
+  "title": "로그인 로그 (Sign-in Logs)",
+  "path": "02-artifacts/m365/entra-logs/sign-in-logs.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "Entra ID 로그 (Entra ID Logs)",
+   "path": "02-artifacts/m365/entra-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "감사 로그 (Audit Logs)",
+  "path": "02-artifacts/m365/entra-logs/audit-logs.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "Entra ID 로그 (Entra ID Logs)",
+   "path": "02-artifacts/m365/entra-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "위험 탐지 (Identity Protection)",
+  "path": "02-artifacts/m365/entra-logs/identity-protection.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "Entra ID 로그 (Entra ID Logs)",
+   "path": "02-artifacts/m365/entra-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Exchange Online (Exchange Online)",
+  "path": "02-artifacts/m365/exchange-online/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "메일함 감사와 MailItemsAccessed (Mailbox Auditing)",
+    "path": "02-artifacts/m365/exchange-online/mailbox-auditing.md"
+   },
+   {
+    "title": "받은편지함 규칙과 전달 (Inbox Rules·Forwarding)",
+    "path": "02-artifacts/m365/exchange-online/inbox-rules.md"
+   },
+   {
+    "title": "메시지 추적 (Message Trace)",
+    "path": "02-artifacts/m365/exchange-online/message-trace.md"
+   }
+  ]
+ },
+ {
+  "title": "메일함 감사와 MailItemsAccessed (Mailbox Auditing)",
+  "path": "02-artifacts/m365/exchange-online/mailbox-auditing.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "Exchange Online (Exchange Online)",
+   "path": "02-artifacts/m365/exchange-online/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "받은편지함 규칙과 전달 (Inbox Rules·Forwarding)",
+  "path": "02-artifacts/m365/exchange-online/inbox-rules.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "Exchange Online (Exchange Online)",
+   "path": "02-artifacts/m365/exchange-online/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "메시지 추적 (Message Trace)",
+  "path": "02-artifacts/m365/exchange-online/message-trace.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": {
+   "title": "Exchange Online (Exchange Online)",
+   "path": "02-artifacts/m365/exchange-online/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "SharePoint·OneDrive (SharePoint·OneDrive)",
+  "path": "02-artifacts/m365/sharepoint-onedrive.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Teams (Teams)",
+  "path": "02-artifacts/m365/teams.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Purview eDiscovery와 보존 (eDiscovery·Retention)",
+  "path": "02-artifacts/m365/purview-ediscovery.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Defender 경고와 기록 (Microsoft Defender XDR)",
+  "path": "02-artifacts/m365/defender-xdr.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Microsoft 365",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "관리 콘솔 감사 로그 (Admin Audit)",
+  "path": "02-artifacts/google-workspace/admin-audit.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Workspace",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그인 기록 (Login Audit)",
+  "path": "02-artifacts/google-workspace/login-audit.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Workspace",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Drive 기록 (Drive Audit)",
+  "path": "02-artifacts/google-workspace/drive-audit.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Workspace",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Gmail 기록과 메일 검색 (Gmail Log Search)",
+  "path": "02-artifacts/google-workspace/gmail.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Workspace",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "OAuth 토큰 기록 (Token Audit)",
+  "path": "02-artifacts/google-workspace/token-audit.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Workspace",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Vault와 Takeout (Vault·Takeout)",
+  "path": "02-artifacts/google-workspace/vault-takeout.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Workspace",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "CloudTrail (CloudTrail)",
+  "path": "02-artifacts/aws/cloudtrail/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "레코드 구조 (Event Record)",
+    "path": "02-artifacts/aws/cloudtrail/record-structure.md"
+   },
+   {
+    "title": "관리 이벤트와 데이터 이벤트 (Management·Data Events)",
+    "path": "02-artifacts/aws/cloudtrail/event-types.md"
+   },
+   {
+    "title": "트레일과 이벤트 기록 (Trails·Event History·Lake)",
+    "path": "02-artifacts/aws/cloudtrail/trails.md"
+   }
+  ]
+ },
+ {
+  "title": "레코드 구조 (Event Record)",
+  "path": "02-artifacts/aws/cloudtrail/record-structure.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": {
+   "title": "CloudTrail (CloudTrail)",
+   "path": "02-artifacts/aws/cloudtrail/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "관리 이벤트와 데이터 이벤트 (Management·Data Events)",
+  "path": "02-artifacts/aws/cloudtrail/event-types.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": {
+   "title": "CloudTrail (CloudTrail)",
+   "path": "02-artifacts/aws/cloudtrail/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "트레일과 이벤트 기록 (Trails·Event History·Lake)",
+  "path": "02-artifacts/aws/cloudtrail/trails.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": {
+   "title": "CloudTrail (CloudTrail)",
+   "path": "02-artifacts/aws/cloudtrail/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "IAM 사용자·역할·액세스 키 (IAM)",
+  "path": "02-artifacts/aws/iam.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "S3 접근 기록 (S3 Server Access Logs)",
+  "path": "02-artifacts/aws/s3-access-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "VPC 흐름 로그 (VPC Flow Logs)",
+  "path": "02-artifacts/aws/vpc-flow-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "GuardDuty (GuardDuty)",
+  "path": "02-artifacts/aws/guardduty.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "CloudWatch Logs (CloudWatch Logs)",
+  "path": "02-artifacts/aws/cloudwatch-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "EC2 인스턴스와 스냅숏 (EC2·EBS Snapshots)",
+  "path": "02-artifacts/aws/ec2-ebs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Lambda·컨테이너 서비스 기록 (Lambda·ECS·EKS)",
+  "path": "02-artifacts/aws/lambda-containers.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "AWS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "활동 로그 (Activity Log)",
+  "path": "02-artifacts/azure/activity-log.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Azure",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "리소스 로그와 진단 설정 (Resource Logs·Diagnostic Settings)",
+  "path": "02-artifacts/azure/resource-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Azure",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네트워크 흐름 로그 (NSG·VNet Flow Logs)",
+  "path": "02-artifacts/azure/flow-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Azure",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Storage 계정 기록 (Storage Logs)",
+  "path": "02-artifacts/azure/storage-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Azure",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Key Vault 기록 (Key Vault Logs)",
+  "path": "02-artifacts/azure/key-vault.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Azure",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Azure 가상 머신 (Azure VM)",
+  "path": "02-artifacts/azure/azure-vm.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Azure",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Cloud Audit Logs (Cloud Audit Logs)",
+  "path": "02-artifacts/gcp/cloud-audit-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Cloud",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "VPC 흐름 로그 (VPC Flow Logs)",
+  "path": "02-artifacts/gcp/vpc-flow-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Cloud",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Cloud Storage 기록 (Cloud Storage)",
+  "path": "02-artifacts/gcp/cloud-storage.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Cloud",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "IAM과 서비스 계정 키 (IAM·Service Account Keys)",
+  "path": "02-artifacts/gcp/iam-keys.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "Google Cloud",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Slack 감사 로그 (Slack)",
+  "path": "02-artifacts/saas/slack.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무용 SaaS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Dropbox·Box 기록 (Dropbox·Box)",
+  "path": "02-artifacts/saas/dropbox-box.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무용 SaaS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "GitHub 감사 로그 (GitHub)",
+  "path": "02-artifacts/saas/github.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무용 SaaS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Okta 시스템 로그 (Okta)",
+  "path": "02-artifacts/saas/okta.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무용 SaaS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Zoom 기록 (Zoom)",
+  "path": "02-artifacts/saas/zoom.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무용 SaaS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Notion·Atlassian 기록 (Notion·Jira·Confluence)",
+  "path": "02-artifacts/saas/notion-atlassian.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "업무용 SaaS",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "조사 절차 (Investigation Process)",
+  "path": "03-techniques/acquisition/investigation-process.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그부터 지키기 (Log Preservation)",
+  "path": "03-techniques/acquisition/log-preservation.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Microsoft 365 수집 도구 (Microsoft-Extractor-Suite 등)",
+  "path": "03-techniques/acquisition/m365-collection.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "AWS·Azure·GCP 수집 (Cloud Log Collection)",
+  "path": "03-techniques/acquisition/iaas-collection.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "서비스 회사에 대한 데이터 요청 (Legal Requests)",
+  "path": "03-techniques/acquisition/legal-requests.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클라우드 가상 머신 수집 (VM·Disk Acquisition)",
+  "path": "03-techniques/acquisition/vm-acquisition.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클라우드 타임라인 (Timeline)",
+  "path": "03-techniques/analysis/timeline.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이상한 로그인 가려내기 (Suspicious Sign-ins)",
+  "path": "03-techniques/analysis/suspicious-sign-ins.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "권한 변화 따라가기 (Permission Changes)",
+  "path": "03-techniques/analysis/permission-changes.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "탐지 규칙으로 로그 훑기 (Sigma·KQL)",
+  "path": "03-techniques/analysis/detection-rules.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클라우드 포렌식 보고서 (Forensic Report)",
+  "path": "03-techniques/reporting/forensic-report.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "메일 계정을 빼앗겨 송금 사기를 당했나 (BEC)",
+  "path": "04-scenarios/account-compromise/bec.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "계정 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "악성 OAuth 앱에 동의했나 (Illicit Consent)",
+  "path": "04-scenarios/account-compromise/illicit-consent.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "계정 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "토큰을 훔쳐 로그인했나 (Token Theft)",
+  "path": "04-scenarios/account-compromise/token-theft.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "계정 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "MFA 피로 공격을 당했나 (MFA Fatigue)",
+  "path": "04-scenarios/account-compromise/mfa-fatigue.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "계정 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "액세스 키가 새어 나갔나 (Leaked Access Keys)",
+  "path": "04-scenarios/infrastructure/leaked-keys.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "인프라 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "권한을 올렸나 (Privilege Escalation)",
+  "path": "04-scenarios/infrastructure/privilege-escalation.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "인프라 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "채굴용 자원을 만들었나 (Cryptomining)",
+  "path": "04-scenarios/infrastructure/cryptomining.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "인프라 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그를 끄거나 지웠나 (Log Tampering)",
+  "path": "04-scenarios/infrastructure/log-tampering.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "인프라 침해",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "클라우드 저장소에서 자료를 빼 갔나 (Storage Exfiltration)",
+  "path": "04-scenarios/data-leak/storage-exfiltration.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "자료 유출",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "퇴사자가 자료를 가져갔나 (Departing Employee)",
+  "path": "04-scenarios/data-leak/departing-employee.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "자료 유출",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "외부 공유 링크로 새어 나갔나 (External Sharing)",
+  "path": "04-scenarios/data-leak/external-sharing.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "자료 유출",
+  "parent": null,
+  "subpages": []
+ }
+]

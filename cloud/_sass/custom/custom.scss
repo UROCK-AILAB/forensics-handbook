@@ -1,0 +1,92 @@
+@font-face {
+  font-family: "RIDIBatang";
+  src: url("/forensics-handbook/font/RIDIBatang.otf") format("opentype");
+  font-display: swap;
+}
+
+// 목차 제목은 한 줄로 고정하고, 넘치면 …으로 자른다.
+.nav-list .nav-list-item .nav-list-link {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 단계마다 들여쓰기를 줄여 제목 자리를 넓힌다.
+.nav-list .nav-list-item .nav-list .nav-list-link {
+  padding-left: 1.6rem;
+}
+
+.nav-list .nav-list-item .nav-list .nav-list-item .nav-list .nav-list-link {
+  padding-left: 2.4rem;
+}
+
+// 왼쪽 위 사이트 제목도 한 줄로 두고, 목록을 가리지 않게 글자를 줄인다.
+.site-title {
+  font-size: 1.05rem !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// 갈래 제목(기반 구조·아티팩트 사전…): 링크가 아닌 작은 구분 제목
+.nav-list .nav-section-title {
+  margin: 0;
+  padding: 1.2rem 1rem 0.25rem 2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #6b7085;
+  list-style: none;
+  pointer-events: none;
+}
+
+// 메뉴 제목과 펼침 화살표 위에서는 손가락 커서(현재 쪽 링크는 주소가 없어 기본 커서가 나온다)
+.nav-list .nav-list-link,
+.nav-list .nav-list-expander {
+  cursor: pointer;
+}
+
+// 레이아웃: 목차를 화면 왼쪽 끝에 붙이고, 본문은 남은 폭을 채운다.
+// (테마 원본은 목차와 본문을 함께 가운데로 모으고 본문 폭을 50rem 으로 고정한다.)
+.side-bar {
+  @include mq(lg) {
+    width: $nav-width;
+    min-width: $nav-width;
+  }
+
+  & + .main {
+    @include mq(lg) {
+      margin-left: $nav-width;
+    }
+  }
+}
+
+.main {
+  @include mq(md) {
+    max-width: none;
+    margin-right: 0;
+  }
+}
+
+// 너무 넓은 화면에서 한 줄이 지나치게 길어지지 않게 상한만 둔다.
+.main-content-wrap {
+  max-width: 90rem;
+}
+
+// 사이드바의 상단 제목과 하단 회사 표기를 가운데에 둔다.
+.site-footer {
+  text-align: center;
+}
+
+.site-title {
+  @include mq(md) {
+    justify-content: center;
+  }
+}
+
+// 쪽 아래 마지막 수정 날짜(git 기록의 마지막 커밋 날짜)
+.last-modified {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+  color: #6b7085;
+}

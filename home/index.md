@@ -25,6 +25,7 @@ permalink: /
 - **[Linux 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/linux/)** — Linux 서버와 데스크톱에 남는 흔적을 읽고 해석합니다.
 - **[Android 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/android/)** — Android 기기에 남는 흔적을 읽고 해석합니다.
 - **[iOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/ios/)** — iPhone 에 남는 흔적을 읽고 해석합니다.
+- **[클라우드 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/cloud/)** — Microsoft 365·Google Workspace·AWS·Azure·Google Cloud 와 업무용 SaaS 에 남는 기록을 읽고 해석합니다.
 - **[AI 서비스 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/ai/)** — ChatGPT·Claude 같은 AI 서비스를 쓰면 남는 흔적을 읽고 해석합니다.
 <!-- 핸드북 목록 끝 -->
 
