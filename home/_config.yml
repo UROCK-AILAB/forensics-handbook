@@ -2,7 +2,7 @@ title: 디지털 포렌식 핸드북
 description: Windows·macOS·Linux·Android·iOS·클라우드·AI 서비스에 남는 흔적을 읽고 해석하는 한국어 디지털 포렌식 핸드북
 lang: ko
 theme: just-the-docs
-search_enabled: true
+search_enabled: false
 search:
   button: true
 heading_anchors: true
