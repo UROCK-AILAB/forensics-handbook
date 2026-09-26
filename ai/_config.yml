@@ -4,7 +4,7 @@ lang: ko
 theme: just-the-docs
 search_enabled: true
 search:
-  button: true
+  button: false
 heading_anchors: true
 back_to_top: true
 back_to_top_text: 맨 위로

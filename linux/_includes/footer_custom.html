@@ -23,19 +23,3 @@
     });
   })();
 </script>
-<script>
-  (function () {
-    /* 왼쪽 메뉴가 없는 첫 화면에서는 테마가 검색 버튼을 연결하지 않으므로 여기서 연결한다. */
-    if (document.getElementById('site-nav')) return;
-    var btn = document.getElementById('search-button');
-    var input = document.getElementById('search-input');
-    var header = document.getElementById('main-header');
-    if (!btn || !input) return;
-    btn.addEventListener('click', function (e) {
-      e.preventDefault();
-      if (header) header.classList.add('nav-open');
-      window.scrollTo(0, 0);
-      input.focus();
-    });
-  })();
-</script>
