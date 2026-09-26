@@ -31,3 +31,7 @@ social:
   name: 주식회사 유락
   links:
     - https://urock.kr/
+aux_links:
+  "전체 핸드북":
+    - "https://urock-ailab.github.io/forensics-handbook/"
+aux_links_new_tab: false

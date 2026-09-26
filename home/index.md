@@ -1,5 +1,6 @@
 ---
 title: 처음
+layout: minimal
 nav_order: -100
 permalink: /
 ---
@@ -34,3 +35,5 @@ permalink: /
 ## 이용 조건
 
 이 핸드북의 글은 [크리에이티브 커먼즈 저작자표시-비영리-동일조건변경허락 4.0 국제 라이선스(CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko){:target="_blank" rel="license noopener noreferrer"}를 따릅니다. 출처(주식회사 유락, 디지털 포렌식 핸드북, 해당 쪽 주소)를 밝히면 비영리 목적으로 자유롭게 옮기고 고쳐 쓸 수 있습니다. 고쳐 쓴 글을 공개할 때는 같은 라이선스를 따라야 하고, 상업적으로 쓸 수는 없습니다.
+
+&copy; 2026 [주식회사 유락](https://urock.kr/){:target="_blank" rel="noopener noreferrer"} · [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko){:target="_blank" rel="license noopener noreferrer"}
