@@ -1,0 +1,2065 @@
+[
+ {
+  "title": "파티션과 저장 영역 (Partitions)",
+  "path": "01-foundations/storage/partitions/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파티션 배치 (boot·system·vendor·userdata)",
+    "path": "01-foundations/storage/partitions/partition-layout.md"
+   },
+   {
+    "title": "동적 파티션 (super)",
+    "path": "01-foundations/storage/partitions/super-partition.md"
+   },
+   {
+    "title": "A/B 슬롯 (A/B Slots)",
+    "path": "01-foundations/storage/partitions/ab-slots.md"
+   }
+  ]
+ },
+ {
+  "title": "파티션 배치 (boot·system·vendor·userdata)",
+  "path": "01-foundations/storage/partitions/partition-layout.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "파티션과 저장 영역 (Partitions)",
+   "path": "01-foundations/storage/partitions/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "동적 파티션 (super)",
+  "path": "01-foundations/storage/partitions/super-partition.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "파티션과 저장 영역 (Partitions)",
+   "path": "01-foundations/storage/partitions/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "A/B 슬롯 (A/B Slots)",
+  "path": "01-foundations/storage/partitions/ab-slots.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "파티션과 저장 영역 (Partitions)",
+   "path": "01-foundations/storage/partitions/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "파일 시스템 (ext4·F2FS)",
+  "path": "01-foundations/storage/filesystems/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "ext4 구조 (ext4)",
+    "path": "01-foundations/storage/filesystems/ext4.md"
+   },
+   {
+    "title": "F2FS 구조 (F2FS)",
+    "path": "01-foundations/storage/filesystems/f2fs.md"
+   },
+   {
+    "title": "지운 파일과 저널 (Deleted Files·Journal)",
+    "path": "01-foundations/storage/filesystems/deleted-files-journal.md"
+   }
+  ]
+ },
+ {
+  "title": "ext4 구조 (ext4)",
+  "path": "01-foundations/storage/filesystems/ext4.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "파일 시스템 (ext4·F2FS)",
+   "path": "01-foundations/storage/filesystems/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "F2FS 구조 (F2FS)",
+  "path": "01-foundations/storage/filesystems/f2fs.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "파일 시스템 (ext4·F2FS)",
+   "path": "01-foundations/storage/filesystems/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "지운 파일과 저널 (Deleted Files·Journal)",
+  "path": "01-foundations/storage/filesystems/deleted-files-journal.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "파일 시스템 (ext4·F2FS)",
+   "path": "01-foundations/storage/filesystems/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "저장 공간 암호화 (Encryption)",
+  "path": "01-foundations/storage/encryption/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일 단위 암호화 (FBE)",
+    "path": "01-foundations/storage/encryption/fbe.md"
+   },
+   {
+    "title": "잠금 해제 전·후 (BFU·AFU)",
+    "path": "01-foundations/storage/encryption/bfu-afu.md"
+   },
+   {
+    "title": "CE 영역과 DE 영역 (Credential·Device Encrypted Storage)",
+    "path": "01-foundations/storage/encryption/ce-de-storage.md"
+   },
+   {
+    "title": "키 저장소와 보안 하드웨어 (Keystore·TEE·StrongBox)",
+    "path": "01-foundations/storage/encryption/keystore-tee.md"
+   }
+  ]
+ },
+ {
+  "title": "파일 단위 암호화 (FBE)",
+  "path": "01-foundations/storage/encryption/fbe.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "저장 공간 암호화 (Encryption)",
+   "path": "01-foundations/storage/encryption/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "잠금 해제 전·후 (BFU·AFU)",
+  "path": "01-foundations/storage/encryption/bfu-afu.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "저장 공간 암호화 (Encryption)",
+   "path": "01-foundations/storage/encryption/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "CE 영역과 DE 영역 (Credential·Device Encrypted Storage)",
+  "path": "01-foundations/storage/encryption/ce-de-storage.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "저장 공간 암호화 (Encryption)",
+   "path": "01-foundations/storage/encryption/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "키 저장소와 보안 하드웨어 (Keystore·TEE·StrongBox)",
+  "path": "01-foundations/storage/encryption/keystore-tee.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": {
+   "title": "저장 공간 암호화 (Encryption)",
+   "path": "01-foundations/storage/encryption/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "앱 데이터 폴더 구조 (/data/data·/data/user)",
+  "path": "01-foundations/storage/app-data-layout.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "공용 저장 공간 (Shared Storage·/sdcard)",
+  "path": "01-foundations/storage/shared-storage.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "저장 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "SQLite 데이터베이스 (SQLite)",
+  "path": "01-foundations/data-formats/sqlite/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "페이지와 레코드 (B-tree·Record)",
+    "path": "01-foundations/data-formats/sqlite/b-tree-record.md"
+   },
+   {
+    "title": "WAL과 저널 (WAL·Journal)",
+    "path": "01-foundations/data-formats/sqlite/wal-journal.md"
+   },
+   {
+    "title": "지운 레코드 되살리기 (Freelist·Freeblock)",
+    "path": "01-foundations/data-formats/sqlite/freelist-freeblock.md"
+   },
+   {
+    "title": "암호화된 SQLite (SQLCipher)",
+    "path": "01-foundations/data-formats/sqlite/sqlcipher.md"
+   }
+  ]
+ },
+ {
+  "title": "페이지와 레코드 (B-tree·Record)",
+  "path": "01-foundations/data-formats/sqlite/b-tree-record.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/data-formats/sqlite/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "WAL과 저널 (WAL·Journal)",
+  "path": "01-foundations/data-formats/sqlite/wal-journal.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/data-formats/sqlite/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "지운 레코드 되살리기 (Freelist·Freeblock)",
+  "path": "01-foundations/data-formats/sqlite/freelist-freeblock.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/data-formats/sqlite/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "암호화된 SQLite (SQLCipher)",
+  "path": "01-foundations/data-formats/sqlite/sqlcipher.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/data-formats/sqlite/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "설정 XML과 SharedPreferences (XML·SharedPreferences)",
+  "path": "01-foundations/data-formats/shared-preferences.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "안드로이드 바이너리 XML (ABX)",
+  "path": "01-foundations/data-formats/abx.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "프로토콜 버퍼 (Protocol Buffers)",
+  "path": "01-foundations/data-formats/protobuf.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "LevelDB와 IndexedDB (LevelDB·IndexedDB)",
+  "path": "01-foundations/data-formats/leveldb-indexeddb.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "데이터 저장 형식",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "시각 값 (Unix 밀리초·Chrome 시각·기타)",
+  "path": "01-foundations/value-decoding/time-values.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 읽는 법",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "패키지 이름과 UID (Package Name·UID)",
+  "path": "01-foundations/value-decoding/package-uid.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 읽는 법",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "기기 식별자 (Android ID·IMEI·광고 ID)",
+  "path": "01-foundations/value-decoding/device-identifiers.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 읽는 법",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "앱 샌드박스와 권한 (Sandbox·Permissions)",
+  "path": "01-foundations/security-model/sandbox-permissions.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "보안 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "부트로더와 검증 부팅 (Bootloader·Verified Boot)",
+  "path": "01-foundations/security-model/verified-boot.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "보안 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "삼성 녹스 (Samsung Knox)",
+  "path": "01-foundations/security-model/samsung-knox.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "보안 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "보안 폴더와 작업 프로필 (Secure Folder·Work Profile)",
+  "path": "01-foundations/security-model/secure-folder-work-profile.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "보안 구조",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "기기 정보와 빌드 (build.prop·Build)",
+  "path": "02-artifacts/system-account/device-build.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "계정 (Accounts)",
+  "path": "02-artifacts/system-account/accounts/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "계정 DB 구조 (accounts_ce.db·accounts_de.db)",
+    "path": "02-artifacts/system-account/accounts/accounts-db.md"
+   },
+   {
+    "title": "구글 계정 흔적 (Google Account)",
+    "path": "02-artifacts/system-account/accounts/google-account.md"
+   },
+   {
+    "title": "삼성 계정 흔적 (Samsung Account)",
+    "path": "02-artifacts/system-account/accounts/samsung-account.md"
+   }
+  ]
+ },
+ {
+  "title": "계정 DB 구조 (accounts_ce.db·accounts_de.db)",
+  "path": "02-artifacts/system-account/accounts/accounts-db.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": {
+   "title": "계정 (Accounts)",
+   "path": "02-artifacts/system-account/accounts/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "구글 계정 흔적 (Google Account)",
+  "path": "02-artifacts/system-account/accounts/google-account.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": {
+   "title": "계정 (Accounts)",
+   "path": "02-artifacts/system-account/accounts/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "삼성 계정 흔적 (Samsung Account)",
+  "path": "02-artifacts/system-account/accounts/samsung-account.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": {
+   "title": "계정 (Accounts)",
+   "path": "02-artifacts/system-account/accounts/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "사용자와 프로필 (Multi-user·users)",
+  "path": "02-artifacts/system-account/users-profiles.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "설정 값 (Settings Global·Secure·System)",
+  "path": "02-artifacts/system-account/settings.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "시간대와 시각 설정 (Time Zone)",
+  "path": "02-artifacts/system-account/time-zone.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "잠금 화면 설정 (Lock Settings)",
+  "path": "02-artifacts/system-account/lock-settings.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "초기화 흔적 (Factory Reset)",
+  "path": "02-artifacts/system-account/factory-reset.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "설치된 앱 (packages.xml)",
+  "path": "02-artifacts/app-usage/packages/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "패키지 목록 구조 (packages.xml·packages.list)",
+    "path": "02-artifacts/app-usage/packages/packages-xml.md"
+   },
+   {
+    "title": "설치 출처와 설치 시각 (Installer·Install Time)",
+    "path": "02-artifacts/app-usage/packages/install-source-time.md"
+   },
+   {
+    "title": "앱 권한 부여 기록 (Runtime Permissions)",
+    "path": "02-artifacts/app-usage/packages/runtime-permissions.md"
+   }
+  ]
+ },
+ {
+  "title": "패키지 목록 구조 (packages.xml·packages.list)",
+  "path": "02-artifacts/app-usage/packages/packages-xml.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": {
+   "title": "설치된 앱 (packages.xml)",
+   "path": "02-artifacts/app-usage/packages/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "설치 출처와 설치 시각 (Installer·Install Time)",
+  "path": "02-artifacts/app-usage/packages/install-source-time.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": {
+   "title": "설치된 앱 (packages.xml)",
+   "path": "02-artifacts/app-usage/packages/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "앱 권한 부여 기록 (Runtime Permissions)",
+  "path": "02-artifacts/app-usage/packages/runtime-permissions.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": {
+   "title": "설치된 앱 (packages.xml)",
+   "path": "02-artifacts/app-usage/packages/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "앱 사용 기록 (usagestats)",
+  "path": "02-artifacts/app-usage/usagestats/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일 구조 (usagestats)",
+    "path": "02-artifacts/app-usage/usagestats/structure.md"
+   },
+   {
+    "title": "이벤트 종류 (Event Types)",
+    "path": "02-artifacts/app-usage/usagestats/event-types.md"
+   },
+   {
+    "title": "해석 함정 (Pitfalls)",
+    "path": "02-artifacts/app-usage/usagestats/pitfalls.md"
+   }
+  ]
+ },
+ {
+  "title": "파일 구조 (usagestats)",
+  "path": "02-artifacts/app-usage/usagestats/structure.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": {
+   "title": "앱 사용 기록 (usagestats)",
+   "path": "02-artifacts/app-usage/usagestats/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "이벤트 종류 (Event Types)",
+  "path": "02-artifacts/app-usage/usagestats/event-types.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": {
+   "title": "앱 사용 기록 (usagestats)",
+   "path": "02-artifacts/app-usage/usagestats/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "해석 함정 (Pitfalls)",
+  "path": "02-artifacts/app-usage/usagestats/pitfalls.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": {
+   "title": "앱 사용 기록 (usagestats)",
+   "path": "02-artifacts/app-usage/usagestats/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "디지털 웰빙 (Digital Wellbeing)",
+  "path": "02-artifacts/app-usage/digital-wellbeing.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "배터리 사용 기록 (batterystats)",
+  "path": "02-artifacts/app-usage/batterystats.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "최근 앱 화면 (Recents·Snapshots)",
+  "path": "02-artifacts/app-usage/recents-snapshots.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "알림 기록 (Notification History)",
+  "path": "02-artifacts/app-usage/notification-history.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "앱 오류·종료 기록 (DropBox·tombstones·ANR)",
+  "path": "02-artifacts/app-usage/crash-records.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "구글 플레이 기록 (Play Store)",
+  "path": "02-artifacts/app-usage/play-store.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "앱 설치·사용 흔적",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "통화 기록 (calllog.db)",
+  "path": "02-artifacts/communications/call-log.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "통화·문자·연락처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "문자 (SMS·MMS·RCS)",
+  "path": "02-artifacts/communications/messages/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "통화·문자·연락처",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "문자 DB 구조 (mmssms.db)",
+    "path": "02-artifacts/communications/messages/mmssms-db.md"
+   },
+   {
+    "title": "RCS 메시지 (RCS)",
+    "path": "02-artifacts/communications/messages/rcs.md"
+   },
+   {
+    "title": "삼성 메시지 앱 (Samsung Messages)",
+    "path": "02-artifacts/communications/messages/samsung-messages.md"
+   }
+  ]
+ },
+ {
+  "title": "문자 DB 구조 (mmssms.db)",
+  "path": "02-artifacts/communications/messages/mmssms-db.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "통화·문자·연락처",
+  "parent": {
+   "title": "문자 (SMS·MMS·RCS)",
+   "path": "02-artifacts/communications/messages/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "RCS 메시지 (RCS)",
+  "path": "02-artifacts/communications/messages/rcs.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "통화·문자·연락처",
+  "parent": {
+   "title": "문자 (SMS·MMS·RCS)",
+   "path": "02-artifacts/communications/messages/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "삼성 메시지 앱 (Samsung Messages)",
+  "path": "02-artifacts/communications/messages/samsung-messages.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "통화·문자·연락처",
+  "parent": {
+   "title": "문자 (SMS·MMS·RCS)",
+   "path": "02-artifacts/communications/messages/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "연락처 (contacts2.db)",
+  "path": "02-artifacts/communications/contacts.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "통화·문자·연락처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "통화 녹음과 음성 사서함 (Call Recording·Voicemail)",
+  "path": "02-artifacts/communications/call-recording-voicemail.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "통화·문자·연락처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "미디어 저장소 (MediaStore)",
+  "path": "02-artifacts/media/mediastore/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "미디어 DB 구조 (external.db)",
+    "path": "02-artifacts/media/mediastore/external-db.md"
+   },
+   {
+    "title": "지운 사진의 흔적 (Deleted Media)",
+    "path": "02-artifacts/media/mediastore/deleted-media.md"
+   }
+  ]
+ },
+ {
+  "title": "미디어 DB 구조 (external.db)",
+  "path": "02-artifacts/media/mediastore/external-db.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": {
+   "title": "미디어 저장소 (MediaStore)",
+   "path": "02-artifacts/media/mediastore/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "지운 사진의 흔적 (Deleted Media)",
+  "path": "02-artifacts/media/mediastore/deleted-media.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": {
+   "title": "미디어 저장소 (MediaStore)",
+   "path": "02-artifacts/media/mediastore/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "카메라 사진과 메타데이터 (DCIM·EXIF)",
+  "path": "02-artifacts/media/dcim-exif.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "섬네일 캐시 (Thumbnails)",
+  "path": "02-artifacts/media/thumbnails.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "구글 포토 (Google Photos)",
+  "path": "02-artifacts/media/google-photos.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "삼성 갤러리 (Samsung Gallery)",
+  "path": "02-artifacts/media/samsung-gallery.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "스크린샷과 화면 녹화 (Screenshots·Screen Recording)",
+  "path": "02-artifacts/media/screenshots.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "사진·미디어",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "구글 위치 기록과 타임라인 (Timeline)",
+  "path": "02-artifacts/location/google-timeline.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "위치",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "위치 캐시 (Cached Locations)",
+  "path": "02-artifacts/location/cached-locations.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "위치",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "구글 지도 (Google Maps)",
+  "path": "02-artifacts/location/google-maps.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "위치",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네이버 지도 (NAVER Map)",
+  "path": "02-artifacts/location/naver-map.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "위치",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "카카오맵 (KakaoMap)",
+  "path": "02-artifacts/location/kakaomap.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "위치",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "와이파이 설정과 접속 기록 (WifiConfigStore)",
+  "path": "02-artifacts/network/wifi.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·연결",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "블루투스 장치 (Bluetooth)",
+  "path": "02-artifacts/network/bluetooth.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·연결",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "데이터 사용량 (netstats)",
+  "path": "02-artifacts/network/netstats.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·연결",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "테더링과 핫스폿 (Tethering·Hotspot)",
+  "path": "02-artifacts/network/tethering-hotspot.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·연결",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "VPN 설정 (VPN)",
+  "path": "02-artifacts/network/vpn.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·연결",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "USB 연결 기록 (USB)",
+  "path": "02-artifacts/network/usb.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·연결",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "파일 공유 (Quick Share·Nearby Share)",
+  "path": "02-artifacts/network/quick-share.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크·연결",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "크롬 (Chrome for Android)",
+  "path": "02-artifacts/browsers/chrome/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "방문 기록 (History)",
+    "path": "02-artifacts/browsers/chrome/history.md"
+   },
+   {
+    "title": "탭과 세션 (Tabs·Sessions)",
+    "path": "02-artifacts/browsers/chrome/tabs-sessions.md"
+   },
+   {
+    "title": "다운로드 (Downloads)",
+    "path": "02-artifacts/browsers/chrome/downloads.md"
+   },
+   {
+    "title": "쿠키와 자동 완성 (Cookies·Autofill)",
+    "path": "02-artifacts/browsers/chrome/cookies-autofill.md"
+   }
+  ]
+ },
+ {
+  "title": "방문 기록 (History)",
+  "path": "02-artifacts/browsers/chrome/history.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 (Chrome for Android)",
+   "path": "02-artifacts/browsers/chrome/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "탭과 세션 (Tabs·Sessions)",
+  "path": "02-artifacts/browsers/chrome/tabs-sessions.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 (Chrome for Android)",
+   "path": "02-artifacts/browsers/chrome/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "다운로드 (Downloads)",
+  "path": "02-artifacts/browsers/chrome/downloads.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 (Chrome for Android)",
+   "path": "02-artifacts/browsers/chrome/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "쿠키와 자동 완성 (Cookies·Autofill)",
+  "path": "02-artifacts/browsers/chrome/cookies-autofill.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 (Chrome for Android)",
+   "path": "02-artifacts/browsers/chrome/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "삼성 인터넷 (Samsung Internet)",
+  "path": "02-artifacts/browsers/samsung-internet.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네이버 앱 (NAVER)",
+  "path": "02-artifacts/browsers/naver.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "그 밖의 브라우저 (웨일·파이어폭스)",
+  "path": "02-artifacts/browsers/other-browsers.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "카카오톡 (KakaoTalk)",
+  "path": "02-artifacts/messengers/kakaotalk/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "저장 위치와 파일 (Paths·Files)",
+    "path": "02-artifacts/messengers/kakaotalk/paths-files.md"
+   },
+   {
+    "title": "대화 DB 구조와 암호화 (KakaoTalk.db)",
+    "path": "02-artifacts/messengers/kakaotalk/chat-db.md"
+   },
+   {
+    "title": "받은 파일 (Received Files)",
+    "path": "02-artifacts/messengers/kakaotalk/received-files.md"
+   },
+   {
+    "title": "계정과 친구 목록 (Account·Friends)",
+    "path": "02-artifacts/messengers/kakaotalk/account-friends.md"
+   }
+  ]
+ },
+ {
+  "title": "저장 위치와 파일 (Paths·Files)",
+  "path": "02-artifacts/messengers/kakaotalk/paths-files.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 (KakaoTalk)",
+   "path": "02-artifacts/messengers/kakaotalk/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "대화 DB 구조와 암호화 (KakaoTalk.db)",
+  "path": "02-artifacts/messengers/kakaotalk/chat-db.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 (KakaoTalk)",
+   "path": "02-artifacts/messengers/kakaotalk/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "받은 파일 (Received Files)",
+  "path": "02-artifacts/messengers/kakaotalk/received-files.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 (KakaoTalk)",
+   "path": "02-artifacts/messengers/kakaotalk/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "계정과 친구 목록 (Account·Friends)",
+  "path": "02-artifacts/messengers/kakaotalk/account-friends.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 (KakaoTalk)",
+   "path": "02-artifacts/messengers/kakaotalk/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "텔레그램 (Telegram)",
+  "path": "02-artifacts/messengers/telegram.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "왓츠앱 (WhatsApp)",
+  "path": "02-artifacts/messengers/whatsapp.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "라인 (LINE)",
+  "path": "02-artifacts/messengers/line.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "시그널 (Signal)",
+  "path": "02-artifacts/messengers/signal.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "페이스북 메신저 (Messenger)",
+  "path": "02-artifacts/messengers/facebook-messenger.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "인스타그램 (Instagram)",
+  "path": "02-artifacts/messengers/instagram.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "디스코드 (Discord)",
+  "path": "02-artifacts/messengers/discord.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "위챗 (WeChat)",
+  "path": "02-artifacts/messengers/wechat.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "슬랙과 팀즈 (Slack·Teams)",
+  "path": "02-artifacts/messengers/slack-teams.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네이버 밴드 (BAND)",
+  "path": "02-artifacts/korean-apps/band.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "국내 생활 앱",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "당근 (Karrot)",
+  "path": "02-artifacts/korean-apps/karrot.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "국내 생활 앱",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "쿠팡 (Coupang)",
+  "path": "02-artifacts/korean-apps/coupang.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "국내 생활 앱",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "배달 앱 (배달의민족·쿠팡이츠·요기요)",
+  "path": "02-artifacts/korean-apps/delivery-apps.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "국내 생활 앱",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "지메일 (Gmail)",
+  "path": "02-artifacts/mail-cloud/gmail.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일·클라우드",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "삼성 이메일 (Samsung Email)",
+  "path": "02-artifacts/mail-cloud/samsung-email.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일·클라우드",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "구글 드라이브 (Google Drive)",
+  "path": "02-artifacts/mail-cloud/google-drive.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일·클라우드",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)",
+  "path": "02-artifacts/mail-cloud/samsung-cloud-onedrive.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일·클라우드",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네이버 MYBOX (MYBOX)",
+  "path": "02-artifacts/mail-cloud/mybox.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일·클라우드",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "구글 백업 (Google Backup)",
+  "path": "02-artifacts/mail-cloud/google-backup.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일·클라우드",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "삼성 헬스 (Samsung Health)",
+  "path": "02-artifacts/samsung/samsung-health.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "삼성 기기 전용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "빅스비 (Bixby)",
+  "path": "02-artifacts/samsung/bixby.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "삼성 기기 전용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "엣지 패널 (Edge Panel)",
+  "path": "02-artifacts/samsung/edge-panel.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "삼성 기기 전용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "삼성 키보드 입력 기록 (Samsung Keyboard)",
+  "path": "02-artifacts/samsung/samsung-keyboard.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "삼성 기기 전용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "지보드 입력 기록 (Gboard)",
+  "path": "02-artifacts/google-services/gboard.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "구글 입력·음성 비서",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "구글 어시스턴트 기록 (Google Assistant)",
+  "path": "02-artifacts/google-services/google-assistant.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "구글 입력·음성 비서",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "logcat (logcat)",
+  "path": "02-artifacts/logs/logcat.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이벤트 로그 버퍼 (events)",
+  "path": "02-artifacts/logs/events-buffer.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "버그 리포트 (bugreport)",
+  "path": "02-artifacts/logs/bugreport.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "dumpsys 출력 (dumpsys)",
+  "path": "02-artifacts/logs/dumpsys.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "저장된 암호 (Google 비밀번호 관리자·Samsung Pass)",
+  "path": "02-artifacts/credentials-security/saved-passwords.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자격 증명·보안 설정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "기기 관리자와 접근성 권한 (Device Admin·Accessibility)",
+  "path": "02-artifacts/credentials-security/device-admin-accessibility.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자격 증명·보안 설정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "설치된 인증서 (User Certificates)",
+  "path": "02-artifacts/credentials-security/user-certificates.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자격 증명·보안 설정",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "APK 정보 (AndroidManifest·서명)",
+  "path": "02-artifacts/embedded-metadata/apk.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "문서 메타데이터 (PDF·Office)",
+  "path": "02-artifacts/embedded-metadata/documents.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "조사 절차 (Investigation Process)",
+  "path": "03-techniques/acquisition/investigation-process.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "모바일 증거 확보 (Acquisition)",
+  "path": "03-techniques/acquisition/mobile-acquisition/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "수집 방식 비교 (논리·파일 시스템·물리)",
+    "path": "03-techniques/acquisition/mobile-acquisition/methods.md"
+   },
+   {
+    "title": "압수와 보관 (전원·통신 차단)",
+    "path": "03-techniques/acquisition/mobile-acquisition/seizure-handling.md"
+   },
+   {
+    "title": "ADB로 볼 수 있는 것 (ADB)",
+    "path": "03-techniques/acquisition/mobile-acquisition/adb.md"
+   },
+   {
+    "title": "백업으로 수집 (Google 백업·Smart Switch)",
+    "path": "03-techniques/acquisition/mobile-acquisition/backups.md"
+   },
+   {
+    "title": "결과물 형식과 해시 (Extraction Formats·Hash)",
+    "path": "03-techniques/acquisition/mobile-acquisition/formats-hash.md"
+   }
+  ]
+ },
+ {
+  "title": "수집 방식 비교 (논리·파일 시스템·물리)",
+  "path": "03-techniques/acquisition/mobile-acquisition/methods.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "모바일 증거 확보 (Acquisition)",
+   "path": "03-techniques/acquisition/mobile-acquisition/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "압수와 보관 (전원·통신 차단)",
+  "path": "03-techniques/acquisition/mobile-acquisition/seizure-handling.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "모바일 증거 확보 (Acquisition)",
+   "path": "03-techniques/acquisition/mobile-acquisition/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "ADB로 볼 수 있는 것 (ADB)",
+  "path": "03-techniques/acquisition/mobile-acquisition/adb.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "모바일 증거 확보 (Acquisition)",
+   "path": "03-techniques/acquisition/mobile-acquisition/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "백업으로 수집 (Google 백업·Smart Switch)",
+  "path": "03-techniques/acquisition/mobile-acquisition/backups.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "모바일 증거 확보 (Acquisition)",
+   "path": "03-techniques/acquisition/mobile-acquisition/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "결과물 형식과 해시 (Extraction Formats·Hash)",
+  "path": "03-techniques/acquisition/mobile-acquisition/formats-hash.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "모바일 증거 확보 (Acquisition)",
+   "path": "03-techniques/acquisition/mobile-acquisition/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "클라우드 데이터 (Google Takeout 등)",
+  "path": "03-techniques/acquisition/cloud-data.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "앱 데이터 분석 (App Data Analysis)",
+  "path": "03-techniques/analysis/app-data-analysis/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "처음 보는 앱 분석 순서 (Unknown Apps)",
+    "path": "03-techniques/analysis/app-data-analysis/unknown-apps.md"
+   },
+   {
+    "title": "캐시와 웹뷰 (Cache·WebView)",
+    "path": "03-techniques/analysis/app-data-analysis/cache-webview.md"
+   },
+   {
+    "title": "지운 앱이 남긴 흔적 (Uninstalled Apps)",
+    "path": "03-techniques/analysis/app-data-analysis/uninstalled-apps.md"
+   }
+  ]
+ },
+ {
+  "title": "처음 보는 앱 분석 순서 (Unknown Apps)",
+  "path": "03-techniques/analysis/app-data-analysis/unknown-apps.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "앱 데이터 분석 (App Data Analysis)",
+   "path": "03-techniques/analysis/app-data-analysis/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "캐시와 웹뷰 (Cache·WebView)",
+  "path": "03-techniques/analysis/app-data-analysis/cache-webview.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "앱 데이터 분석 (App Data Analysis)",
+   "path": "03-techniques/analysis/app-data-analysis/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "지운 앱이 남긴 흔적 (Uninstalled Apps)",
+  "path": "03-techniques/analysis/app-data-analysis/uninstalled-apps.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "앱 데이터 분석 (App Data Analysis)",
+   "path": "03-techniques/analysis/app-data-analysis/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "타임라인 작성 (Timeline)",
+  "path": "03-techniques/analysis/timeline/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "시각 정규화 (Time Normalization)",
+    "path": "03-techniques/analysis/timeline/time-normalization.md"
+   },
+   {
+    "title": "여러 기록 엮기 (Correlation)",
+    "path": "03-techniques/analysis/timeline/correlation.md"
+   },
+   {
+    "title": "시각 조작 흔적 (Time Manipulation)",
+    "path": "03-techniques/analysis/timeline/time-manipulation.md"
+   }
+  ]
+ },
+ {
+  "title": "시각 정규화 (Time Normalization)",
+  "path": "03-techniques/analysis/timeline/time-normalization.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "여러 기록 엮기 (Correlation)",
+  "path": "03-techniques/analysis/timeline/correlation.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "시각 조작 흔적 (Time Manipulation)",
+  "path": "03-techniques/analysis/timeline/time-manipulation.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "삭제 데이터 복구 (Data Recovery)",
+  "path": "03-techniques/analysis/data-recovery/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "SQLite 레코드 되살리기 (SQLite)",
+    "path": "03-techniques/analysis/data-recovery/sqlite-records.md"
+   },
+   {
+    "title": "파일 카빙 (Carving)",
+    "path": "03-techniques/analysis/data-recovery/carving.md"
+   },
+   {
+    "title": "TRIM과 암호화가 주는 한계 (TRIM·Encryption)",
+    "path": "03-techniques/analysis/data-recovery/trim-encryption.md"
+   }
+  ]
+ },
+ {
+  "title": "SQLite 레코드 되살리기 (SQLite)",
+  "path": "03-techniques/analysis/data-recovery/sqlite-records.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "파일 카빙 (Carving)",
+  "path": "03-techniques/analysis/data-recovery/carving.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "TRIM과 암호화가 주는 한계 (TRIM·Encryption)",
+  "path": "03-techniques/analysis/data-recovery/trim-encryption.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "악성 앱 흔적 분석 (Malicious App Triage)",
+  "path": "03-techniques/analysis/malicious-app-triage/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "권한과 설정으로 찾기 (Permissions·Settings)",
+    "path": "03-techniques/analysis/malicious-app-triage/permissions-settings.md"
+   },
+   {
+    "title": "감시 앱 흔적 (Stalkerware)",
+    "path": "03-techniques/analysis/malicious-app-triage/stalkerware.md"
+   },
+   {
+    "title": "APK 확인 (APK Check)",
+    "path": "03-techniques/analysis/malicious-app-triage/apk-check.md"
+   }
+  ]
+ },
+ {
+  "title": "권한과 설정으로 찾기 (Permissions·Settings)",
+  "path": "03-techniques/analysis/malicious-app-triage/permissions-settings.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "악성 앱 흔적 분석 (Malicious App Triage)",
+   "path": "03-techniques/analysis/malicious-app-triage/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "감시 앱 흔적 (Stalkerware)",
+  "path": "03-techniques/analysis/malicious-app-triage/stalkerware.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "악성 앱 흔적 분석 (Malicious App Triage)",
+   "path": "03-techniques/analysis/malicious-app-triage/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "APK 확인 (APK Check)",
+  "path": "03-techniques/analysis/malicious-app-triage/apk-check.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "악성 앱 흔적 분석 (Malicious App Triage)",
+   "path": "03-techniques/analysis/malicious-app-triage/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "콘텐츠 검색 (Content Search)",
+  "path": "03-techniques/analysis/content-search.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "포렌식 보고서 (Forensic Report)",
+  "path": "03-techniques/reporting/forensic-report.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "도구 검증 (Tool Validation)",
+  "path": "03-techniques/reporting/tool-validation.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "누구와 연락을 주고받았나 (Communication)",
+  "path": "04-scenarios/activity/communication.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "어떤 앱을 언제 썼나 (App Usage)",
+  "path": "04-scenarios/activity/app-usage.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이 사진은 언제 어디서 찍었나 (Photo Origin)",
+  "path": "04-scenarios/activity/photo-origin.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "그 시각에 어디 있었나 (Location)",
+  "path": "04-scenarios/activity/location.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "웹 사용 행위 재구성 (Web Activity)",
+  "path": "04-scenarios/activity/web-activity.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "폰 사용 시간 재구성 (Usage Time)",
+  "path": "04-scenarios/activity/usage-time.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)",
+  "path": "04-scenarios/activity/user-attribution.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "지운 대화와 사진 찾기 (Deleted Content)",
+  "path": "04-scenarios/activity/deleted-content.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "증거를 없애려 했나 (Anti-Forensics)",
+  "path": "04-scenarios/activity/anti-forensics/index.md",
+  "kind": "hub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "초기화 (Factory Reset)",
+    "path": "04-scenarios/activity/anti-forensics/factory-reset.md"
+   },
+   {
+    "title": "앱 지우기 (App Removal)",
+    "path": "04-scenarios/activity/anti-forensics/app-removal.md"
+   },
+   {
+    "title": "메시지·사진 지우기 (Content Deletion)",
+    "path": "04-scenarios/activity/anti-forensics/content-deletion.md"
+   },
+   {
+    "title": "시각 바꾸기 (Time Change)",
+    "path": "04-scenarios/activity/anti-forensics/time-change.md"
+   }
+  ]
+ },
+ {
+  "title": "초기화 (Factory Reset)",
+  "path": "04-scenarios/activity/anti-forensics/factory-reset.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "앱 지우기 (App Removal)",
+  "path": "04-scenarios/activity/anti-forensics/app-removal.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "메시지·사진 지우기 (Content Deletion)",
+  "path": "04-scenarios/activity/anti-forensics/content-deletion.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "시각 바꾸기 (Time Change)",
+  "path": "04-scenarios/activity/anti-forensics/time-change.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "자료를 밖으로 보냈나 (Data Exfiltration)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/index.md",
+  "kind": "hub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "메신저로 (Messenger)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/messenger.md"
+   },
+   {
+    "title": "클라우드로 (Cloud)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/cloud.md"
+   },
+   {
+    "title": "메일로 (Email)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/email.md"
+   },
+   {
+    "title": "PC 연결로 (USB·PC)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/usb-pc.md"
+   },
+   {
+    "title": "근거리 공유로 (Quick Share·Bluetooth)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/nearby-share.md"
+   }
+  ]
+ },
+ {
+  "title": "메신저로 (Messenger)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/messenger.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 보냈나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "클라우드로 (Cloud)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/cloud.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 보냈나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "메일로 (Email)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/email.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 보냈나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "PC 연결로 (USB·PC)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/usb-pc.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 보냈나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "근거리 공유로 (Quick Share·Bluetooth)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/nearby-share.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 보냈나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "악성 앱은 어디서 들어왔나 (Initial Access)",
+  "path": "04-scenarios/incident/initial-access.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "몰래 설치된 감시 앱 (Stalkerware)",
+  "path": "04-scenarios/incident/stalkerware.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "스미싱 흔적 (Smishing)",
+  "path": "04-scenarios/incident/smishing.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "계정 탈취 흔적 (Account Takeover)",
+  "path": "04-scenarios/incident/account-takeover.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": []
+ }
+]
