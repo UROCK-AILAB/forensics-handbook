@@ -1,18 +1,26 @@
 디지털 포렌식 핸드북
 Copyright (c) 2026 주식회사 유락
 
-이 저장소의 글과 코드는 크리에이티브 커먼즈 저작자표시-비영리-동일조건변경허락 4.0 국제
-라이선스(CC BY-NC-SA 4.0)를 따릅니다. 라이선스 원문은 LICENSE 파일에 있습니다.
-https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko
+이 저장소는 글과 코드에 서로 다른 라이선스를 씁니다.
 
-다만 아래 파일은 Just the Docs 테마(https://github.com/just-the-docs/just-the-docs)의
-파일을 고쳐 만든 것입니다. 이 파일에서 테마에서 온 부분은 아래 MIT 라이선스를 따르고,
-고친 부분은 CC BY-NC-SA 4.0 을 따릅니다.
+1. 글 — 크리에이티브 커먼즈 저작자표시 4.0 국제 라이선스(CC BY 4.0), 원문: LICENSE
+   https://creativecommons.org/licenses/by/4.0/deed.ko
+   각 권 폴더(windows, mac, linux, android, ios, cloud, ai)와 home 폴더의 .md 파일,
+   그리고 그 안의 그림 파일.
 
-  */_includes/components/nav/links.html
-  (ai, android, home, ios, linux, mac, windows 및 이후 더하는 권의 같은 경로)
+2. 코드 — MIT 라이선스, 원문: LICENSE-CODE
+   .github/, tools/, 각 폴더의 _includes/, _sass/, _config.yml, 그리고 Gemfile 처럼
+   사이트를 만들고 빌드하는 파일.
+
+글을 옮기거나 고쳐 쓸 때는 출처를 밝혀 주십시오.
+예: "주식회사 유락, 디지털 포렌식 핸드북, 해당 쪽 주소, CC BY 4.0"
 
 ----------------------------------------------------------------------
+
+아래 파일은 Just the Docs 테마(https://github.com/just-the-docs/just-the-docs)의 파일을
+고쳐 만든 것이며, 테마에서 온 부분의 저작권 표시는 아래와 같습니다(MIT 라이선스).
+
+  */_includes/components/nav/links.html
 
 The MIT License (MIT)
 
