@@ -1,0 +1,5484 @@
+[
+ {
+  "title": "NTFS 구조 (NTFS)",
+  "path": "01-foundations/disk-volume/ntfs/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "부트 섹터와 클러스터 (Boot Sector·Cluster)",
+    "path": "01-foundations/disk-volume/ntfs/boot-sector-cluster.md"
+   },
+   {
+    "title": "MFT 레코드와 속성 (FILE Record·Attribute)",
+    "path": "01-foundations/disk-volume/ntfs/file-record-attribute.md"
+   },
+   {
+    "title": "데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)",
+    "path": "01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md"
+   },
+   {
+    "title": "두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)",
+    "path": "01-foundations/disk-volume/ntfs/standard-information-file-name.md"
+   },
+   {
+    "title": "대체 데이터 스트림 (ADS)",
+    "path": "01-foundations/disk-volume/ntfs/ads.md"
+   },
+   {
+    "title": "압축·희소 파일 (Compressed·Sparse)",
+    "path": "01-foundations/disk-volume/ntfs/compressed-sparse.md"
+   },
+   {
+    "title": "링크와 리파스 포인트 (Hard Link·Junction·Reparse Point)",
+    "path": "01-foundations/disk-volume/ntfs/hard-link-junction-reparse-point.md"
+   },
+   {
+    "title": "NTFS 메타 파일 ($Bitmap·$Secure·$Extend)",
+    "path": "01-foundations/disk-volume/ntfs/bitmap-secure-extend.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "부트 섹터와 클러스터 (Boot Sector·Cluster)",
+  "path": "01-foundations/disk-volume/ntfs/boot-sector-cluster.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "MFT 레코드와 속성 (FILE Record·Attribute)",
+  "path": "01-foundations/disk-volume/ntfs/file-record-attribute.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)",
+  "path": "01-foundations/disk-volume/ntfs/data-run-resident-non-resident.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)",
+  "path": "01-foundations/disk-volume/ntfs/standard-information-file-name.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "대체 데이터 스트림 (ADS)",
+  "path": "01-foundations/disk-volume/ntfs/ads.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "압축·희소 파일 (Compressed·Sparse)",
+  "path": "01-foundations/disk-volume/ntfs/compressed-sparse.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "링크와 리파스 포인트 (Hard Link·Junction·Reparse Point)",
+  "path": "01-foundations/disk-volume/ntfs/hard-link-junction-reparse-point.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "NTFS 메타 파일 ($Bitmap·$Secure·$Extend)",
+  "path": "01-foundations/disk-volume/ntfs/bitmap-secure-extend.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": {
+   "title": "NTFS 구조 (NTFS)",
+   "path": "01-foundations/disk-volume/ntfs/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "레지스트리 하이브 구조 (Registry Hive)",
+  "path": "01-foundations/database-log-formats/registry-hive/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "하이브 파일 종류와 위치 (SYSTEM·SOFTWARE·SAM·SECURITY·NTUSER.DAT·UsrClass.dat)",
+    "path": "01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md"
+   },
+   {
+    "title": "하이브 내부 구조 (regf·hbin·Cell)",
+    "path": "01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md"
+   },
+   {
+    "title": "키 마지막 기록 시각 (Last Write Time)",
+    "path": "01-foundations/database-log-formats/registry-hive/last-write-time.md"
+   },
+   {
+    "title": "트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)",
+    "path": "01-foundations/database-log-formats/registry-hive/log1-log2.md"
+   },
+   {
+    "title": "지워진 키·값 복구 (Deleted Keys·Values)",
+    "path": "01-foundations/database-log-formats/registry-hive/deleted-keys-values.md"
+   },
+   {
+    "title": "컨트롤셋 고르기 (ControlSet·Select)",
+    "path": "01-foundations/database-log-formats/registry-hive/controlset-select.md"
+   },
+   {
+    "title": "MRU 목록 읽는 법 (MRUList·MRUListEx)",
+    "path": "01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "하이브 파일 종류와 위치 (SYSTEM·SOFTWARE·SAM·SECURITY·NTUSER.DAT·UsrClass.dat)",
+  "path": "01-foundations/database-log-formats/registry-hive/system-software-sam-security-ntuser-dat-usrclass.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "레지스트리 하이브 구조 (Registry Hive)",
+   "path": "01-foundations/database-log-formats/registry-hive/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "하이브 내부 구조 (regf·hbin·Cell)",
+  "path": "01-foundations/database-log-formats/registry-hive/regf-hbin-cell.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "레지스트리 하이브 구조 (Registry Hive)",
+   "path": "01-foundations/database-log-formats/registry-hive/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "키 마지막 기록 시각 (Last Write Time)",
+  "path": "01-foundations/database-log-formats/registry-hive/last-write-time.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "레지스트리 하이브 구조 (Registry Hive)",
+   "path": "01-foundations/database-log-formats/registry-hive/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "트랜잭션 로그와 반영 안 된 변경 (.LOG1·.LOG2)",
+  "path": "01-foundations/database-log-formats/registry-hive/log1-log2.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "레지스트리 하이브 구조 (Registry Hive)",
+   "path": "01-foundations/database-log-formats/registry-hive/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "지워진 키·값 복구 (Deleted Keys·Values)",
+  "path": "01-foundations/database-log-formats/registry-hive/deleted-keys-values.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "레지스트리 하이브 구조 (Registry Hive)",
+   "path": "01-foundations/database-log-formats/registry-hive/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "컨트롤셋 고르기 (ControlSet·Select)",
+  "path": "01-foundations/database-log-formats/registry-hive/controlset-select.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "레지스트리 하이브 구조 (Registry Hive)",
+   "path": "01-foundations/database-log-formats/registry-hive/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "MRU 목록 읽는 법 (MRUList·MRUListEx)",
+  "path": "01-foundations/database-log-formats/registry-hive/mrulist-mrulistex.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "레지스트리 하이브 구조 (Registry Hive)",
+   "path": "01-foundations/database-log-formats/registry-hive/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "ESE 데이터베이스 (Extensible Storage Engine)",
+  "path": "01-foundations/database-log-formats/extensible-storage-engine/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일 구조 (Page·B+Tree·Catalog)",
+    "path": "01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md"
+   },
+   {
+    "title": "트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)",
+    "path": "01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md"
+   },
+   {
+    "title": "긴 값과 압축 열 (Long Value·Compressed Column)",
+    "path": "01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md"
+   },
+   {
+    "title": "파일 안에 남은 지운 레코드 (Deleted Records)",
+    "path": "01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "파일 구조 (Page·B+Tree·Catalog)",
+  "path": "01-foundations/database-log-formats/extensible-storage-engine/page-b-tree-catalog.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "ESE 데이터베이스 (Extensible Storage Engine)",
+   "path": "01-foundations/database-log-formats/extensible-storage-engine/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "트랜잭션 로그와 비정상 종료 상태 (edb.log·Dirty Shutdown)",
+  "path": "01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "ESE 데이터베이스 (Extensible Storage Engine)",
+   "path": "01-foundations/database-log-formats/extensible-storage-engine/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "긴 값과 압축 열 (Long Value·Compressed Column)",
+  "path": "01-foundations/database-log-formats/extensible-storage-engine/long-value-compressed-column.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "ESE 데이터베이스 (Extensible Storage Engine)",
+   "path": "01-foundations/database-log-formats/extensible-storage-engine/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "파일 안에 남은 지운 레코드 (Deleted Records)",
+  "path": "01-foundations/database-log-formats/extensible-storage-engine/deleted-records.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "ESE 데이터베이스 (Extensible Storage Engine)",
+   "path": "01-foundations/database-log-formats/extensible-storage-engine/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "SQLite 데이터베이스 (SQLite)",
+  "path": "01-foundations/database-log-formats/sqlite/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일·페이지 구조 (B-tree·Record Format)",
+    "path": "01-foundations/database-log-formats/sqlite/b-tree-record-format.md"
+   },
+   {
+    "title": "WAL과 롤백 저널 (-wal·-journal·-shm)",
+    "path": "01-foundations/database-log-formats/sqlite/wal-journal-shm.md"
+   },
+   {
+    "title": "파일 안에 남은 지운 레코드 (Freelist·Freeblock)",
+    "path": "01-foundations/database-log-formats/sqlite/freelist-freeblock.md"
+   },
+   {
+    "title": "암호화된 SQLite (SQLCipher)",
+    "path": "01-foundations/database-log-formats/sqlite/sqlcipher.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "파일·페이지 구조 (B-tree·Record Format)",
+  "path": "01-foundations/database-log-formats/sqlite/b-tree-record-format.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/database-log-formats/sqlite/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "WAL과 롤백 저널 (-wal·-journal·-shm)",
+  "path": "01-foundations/database-log-formats/sqlite/wal-journal-shm.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/database-log-formats/sqlite/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "파일 안에 남은 지운 레코드 (Freelist·Freeblock)",
+  "path": "01-foundations/database-log-formats/sqlite/freelist-freeblock.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/database-log-formats/sqlite/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "암호화된 SQLite (SQLCipher)",
+  "path": "01-foundations/database-log-formats/sqlite/sqlcipher.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "SQLite 데이터베이스 (SQLite)",
+   "path": "01-foundations/database-log-formats/sqlite/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "프리페치 (Prefetch)",
+  "path": "02-artifacts/execution/prefetch/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일 구조와 버전 (Format Versions·MAM)",
+    "path": "02-artifacts/execution/prefetch/format-versions-mam.md"
+   },
+   {
+    "title": "실행 횟수와 실행 시각 읽기 (Run Count·Last Run Times)",
+    "path": "02-artifacts/execution/prefetch/run-count-last-run-times.md"
+   },
+   {
+    "title": "참조 파일·폴더 목록 활용 (Referenced Files)",
+    "path": "02-artifacts/execution/prefetch/referenced-files.md"
+   },
+   {
+    "title": "경로 해시로 실행 위치 구분하기 (Path Hash)",
+    "path": "02-artifacts/execution/prefetch/path-hash.md"
+   },
+   {
+    "title": "프리페치 해석 함정 (꺼진 경우·보관 개수 한도·첫 실행 시각)",
+    "path": "02-artifacts/execution/prefetch/pitfalls.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "파일 구조와 버전 (Format Versions·MAM)",
+  "path": "02-artifacts/execution/prefetch/format-versions-mam.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "프리페치 (Prefetch)",
+   "path": "02-artifacts/execution/prefetch/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "실행 횟수와 실행 시각 읽기 (Run Count·Last Run Times)",
+  "path": "02-artifacts/execution/prefetch/run-count-last-run-times.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "프리페치 (Prefetch)",
+   "path": "02-artifacts/execution/prefetch/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "참조 파일·폴더 목록 활용 (Referenced Files)",
+  "path": "02-artifacts/execution/prefetch/referenced-files.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "프리페치 (Prefetch)",
+   "path": "02-artifacts/execution/prefetch/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "경로 해시로 실행 위치 구분하기 (Path Hash)",
+  "path": "02-artifacts/execution/prefetch/path-hash.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "프리페치 (Prefetch)",
+   "path": "02-artifacts/execution/prefetch/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "프리페치 해석 함정 (꺼진 경우·보관 개수 한도·첫 실행 시각)",
+  "path": "02-artifacts/execution/prefetch/pitfalls.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "프리페치 (Prefetch)",
+   "path": "02-artifacts/execution/prefetch/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "AmCache (Amcache.hve)",
+  "path": "02-artifacts/execution/amcache-hve/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "구조와 버전별 차이 (Structure·Versions)",
+    "path": "02-artifacts/execution/amcache-hve/structure-versions.md"
+   },
+   {
+    "title": "실행 파일 항목 (InventoryApplicationFile)",
+    "path": "02-artifacts/execution/amcache-hve/inventoryapplicationfile.md"
+   },
+   {
+    "title": "설치 프로그램 항목 (InventoryApplication)",
+    "path": "02-artifacts/execution/amcache-hve/inventoryapplication.md"
+   },
+   {
+    "title": "드라이버 항목 (InventoryDriverBinary)",
+    "path": "02-artifacts/execution/amcache-hve/inventorydriverbinary.md"
+   },
+   {
+    "title": "바로가기 항목 (InventoryApplicationShortcut)",
+    "path": "02-artifacts/execution/amcache-hve/inventoryapplicationshortcut.md"
+   },
+   {
+    "title": "장치 항목 (InventoryDevicePnp)",
+    "path": "02-artifacts/execution/amcache-hve/inventorydevicepnp.md"
+   },
+   {
+    "title": "구버전 실행 기록 (RecentFileCache.bcf)",
+    "path": "02-artifacts/execution/amcache-hve/recentfilecache-bcf.md"
+   },
+   {
+    "title": "AmCache 해석 함정 (실행 증거가 아닌 경우·SHA1 계산 범위)",
+    "path": "02-artifacts/execution/amcache-hve/sha1.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "구조와 버전별 차이 (Structure·Versions)",
+  "path": "02-artifacts/execution/amcache-hve/structure-versions.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "실행 파일 항목 (InventoryApplicationFile)",
+  "path": "02-artifacts/execution/amcache-hve/inventoryapplicationfile.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "설치 프로그램 항목 (InventoryApplication)",
+  "path": "02-artifacts/execution/amcache-hve/inventoryapplication.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "드라이버 항목 (InventoryDriverBinary)",
+  "path": "02-artifacts/execution/amcache-hve/inventorydriverbinary.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "바로가기 항목 (InventoryApplicationShortcut)",
+  "path": "02-artifacts/execution/amcache-hve/inventoryapplicationshortcut.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "장치 항목 (InventoryDevicePnp)",
+  "path": "02-artifacts/execution/amcache-hve/inventorydevicepnp.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "구버전 실행 기록 (RecentFileCache.bcf)",
+  "path": "02-artifacts/execution/amcache-hve/recentfilecache-bcf.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "AmCache 해석 함정 (실행 증거가 아닌 경우·SHA1 계산 범위)",
+  "path": "02-artifacts/execution/amcache-hve/sha1.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "AmCache (Amcache.hve)",
+   "path": "02-artifacts/execution/amcache-hve/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "SRUM (System Resource Usage Monitor)",
+  "path": "02-artifacts/execution/system-resource-usage-monitor/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "구조와 ID 매핑 (SruDbIdMapTable)",
+    "path": "02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md"
+   },
+   {
+    "title": "앱별 자원 사용 (Application Resource Usage)",
+    "path": "02-artifacts/execution/system-resource-usage-monitor/application-resource-usage.md"
+   },
+   {
+    "title": "네트워크 사용량 (Network Data Usage)",
+    "path": "02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md"
+   },
+   {
+    "title": "네트워크 연결 기록 (Network Connectivity)",
+    "path": "02-artifacts/execution/system-resource-usage-monitor/network-connectivity.md"
+   },
+   {
+    "title": "전원·배터리 사용 (Energy Usage)",
+    "path": "02-artifacts/execution/system-resource-usage-monitor/energy-usage.md"
+   },
+   {
+    "title": "SRUM 해석 함정 (1시간 단위 기록·레지스트리 임시 저장)",
+    "path": "02-artifacts/execution/system-resource-usage-monitor/1.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "구조와 ID 매핑 (SruDbIdMapTable)",
+  "path": "02-artifacts/execution/system-resource-usage-monitor/srudbidmaptable.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "SRUM (System Resource Usage Monitor)",
+   "path": "02-artifacts/execution/system-resource-usage-monitor/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "앱별 자원 사용 (Application Resource Usage)",
+  "path": "02-artifacts/execution/system-resource-usage-monitor/application-resource-usage.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "SRUM (System Resource Usage Monitor)",
+   "path": "02-artifacts/execution/system-resource-usage-monitor/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "네트워크 사용량 (Network Data Usage)",
+  "path": "02-artifacts/execution/system-resource-usage-monitor/network-data-usage.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "SRUM (System Resource Usage Monitor)",
+   "path": "02-artifacts/execution/system-resource-usage-monitor/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "네트워크 연결 기록 (Network Connectivity)",
+  "path": "02-artifacts/execution/system-resource-usage-monitor/network-connectivity.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "SRUM (System Resource Usage Monitor)",
+   "path": "02-artifacts/execution/system-resource-usage-monitor/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "전원·배터리 사용 (Energy Usage)",
+  "path": "02-artifacts/execution/system-resource-usage-monitor/energy-usage.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "SRUM (System Resource Usage Monitor)",
+   "path": "02-artifacts/execution/system-resource-usage-monitor/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "SRUM 해석 함정 (1시간 단위 기록·레지스트리 임시 저장)",
+  "path": "02-artifacts/execution/system-resource-usage-monitor/1.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": {
+   "title": "SRUM (System Resource Usage Monitor)",
+   "path": "02-artifacts/execution/system-resource-usage-monitor/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "바로가기 파일 (LNK)",
+  "path": "02-artifacts/file-folder-usage/lnk.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "점프리스트 (Jump Lists)",
+  "path": "02-artifacts/file-folder-usage/jump-lists.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "셸백 (ShellBags)",
+  "path": "02-artifacts/file-folder-usage/shellbags/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "저장 위치와 구조 (NTUSER·UsrClass·BagMRU·Bags)",
+    "path": "02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md"
+   },
+   {
+    "title": "셸백 시각 해석 (처음 연 때·마지막 바뀐 때)",
+    "path": "02-artifacts/file-folder-usage/shellbags/timestamps.md"
+   },
+   {
+    "title": "외부 장치·네트워크·압축 폴더 탐색 흔적",
+    "path": "02-artifacts/file-folder-usage/shellbags/removable-network-zip.md"
+   },
+   {
+    "title": "지운 폴더 흔적 찾기 (Deleted Folders)",
+    "path": "02-artifacts/file-folder-usage/shellbags/deleted-folders.md"
+   },
+   {
+    "title": "셸백 해석 함정 (Pitfalls)",
+    "path": "02-artifacts/file-folder-usage/shellbags/pitfalls.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "저장 위치와 구조 (NTUSER·UsrClass·BagMRU·Bags)",
+  "path": "02-artifacts/file-folder-usage/shellbags/ntuser-usrclass-bagmru-bags.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "셸백 (ShellBags)",
+   "path": "02-artifacts/file-folder-usage/shellbags/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "셸백 시각 해석 (처음 연 때·마지막 바뀐 때)",
+  "path": "02-artifacts/file-folder-usage/shellbags/timestamps.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "셸백 (ShellBags)",
+   "path": "02-artifacts/file-folder-usage/shellbags/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "외부 장치·네트워크·압축 폴더 탐색 흔적",
+  "path": "02-artifacts/file-folder-usage/shellbags/removable-network-zip.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "셸백 (ShellBags)",
+   "path": "02-artifacts/file-folder-usage/shellbags/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "지운 폴더 흔적 찾기 (Deleted Folders)",
+  "path": "02-artifacts/file-folder-usage/shellbags/deleted-folders.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "셸백 (ShellBags)",
+   "path": "02-artifacts/file-folder-usage/shellbags/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "셸백 해석 함정 (Pitfalls)",
+  "path": "02-artifacts/file-folder-usage/shellbags/pitfalls.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "셸백 (ShellBags)",
+   "path": "02-artifacts/file-folder-usage/shellbags/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "휴지통 (Recycle Bin)",
+  "path": "02-artifacts/file-folder-usage/recycle-bin.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "USB 저장장치 목록 (USBSTOR)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/usbstor.md"
+   },
+   {
+    "title": "USB 장치 식별자 (Enum\\USB VID·PID)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md"
+   },
+   {
+    "title": "연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md"
+   },
+   {
+    "title": "드라이브 문자 매핑 (MountedDevices)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md"
+   },
+   {
+    "title": "사용자별 장치 연결 (MountPoints2)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md"
+   },
+   {
+    "title": "장치 설치 로그 (setupapi.dev.log)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md"
+   },
+   {
+    "title": "휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md"
+   },
+   {
+    "title": "USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)",
+    "path": "02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "USB 저장장치 목록 (USBSTOR)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/usbstor.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "USB 장치 식별자 (Enum\\USB VID·PID)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/enum-usb-vid-pid.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "연결·해제 시각 (DeviceClasses·Device Properties 0064·0066·0067)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/deviceclasses-device-properties-0064-0066-0067.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "드라이브 문자 매핑 (MountedDevices)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/mounteddevices.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "사용자별 장치 연결 (MountPoints2)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/mountpoints2.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "장치 설치 로그 (setupapi.dev.log)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/setupapi-dev-log.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "휴대용 장치·볼륨 이름 기록 (WPD·EMDMgmt)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/wpd-emdmgmt.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "USBSTOR 에 안 남는 장치 (UASP·SCSI·SD 카드)",
+  "path": "02-artifacts/external-devices/usb-storage-artifacts/uasp-scsi-sd.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": {
+   "title": "USB 저장장치 흔적 (USB Storage Artifacts)",
+   "path": "02-artifacts/external-devices/usb-storage-artifacts/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "방문·다운로드 기록 (History)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/history.md"
+   },
+   {
+    "title": "쿠키 (Cookies)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/cookies.md"
+   },
+   {
+    "title": "캐시 (Cache)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/cache.md"
+   },
+   {
+    "title": "저장 비밀번호 (Login Data)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/login-data.md"
+   },
+   {
+    "title": "세션·탭 복원 (Sessions)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/sessions.md"
+   },
+   {
+    "title": "웹 저장소 (Local Storage·IndexedDB)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/local-storage-indexeddb.md"
+   },
+   {
+    "title": "자동완성·폼 기록 (Web Data·Autofill)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/web-data-autofill.md"
+   },
+   {
+    "title": "즐겨찾기 (Bookmarks)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/bookmarks.md"
+   },
+   {
+    "title": "확장 프로그램 (Extensions)",
+    "path": "02-artifacts/browsers/chrome-edge-whale/extensions.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "방문·다운로드 기록 (History)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/history.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "쿠키 (Cookies)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/cookies.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "캐시 (Cache)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/cache.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "저장 비밀번호 (Login Data)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/login-data.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "세션·탭 복원 (Sessions)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/sessions.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "웹 저장소 (Local Storage·IndexedDB)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/local-storage-indexeddb.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "자동완성·폼 기록 (Web Data·Autofill)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/web-data-autofill.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "즐겨찾기 (Bookmarks)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/bookmarks.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "확장 프로그램 (Extensions)",
+  "path": "02-artifacts/browsers/chrome-edge-whale/extensions.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "크롬 계열 브라우저 (Chrome·Edge·Whale 등)",
+   "path": "02-artifacts/browsers/chrome-edge-whale/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "로그온·로그오프 (Logon Events)",
+  "path": "02-artifacts/event-logs/logon-events/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "로그온 유형 해석 (Logon Type)",
+    "path": "02-artifacts/event-logs/logon-events/logon-type.md"
+   },
+   {
+    "title": "로그온 실패와 실패 코드 (4625)",
+    "path": "02-artifacts/event-logs/logon-events/4625.md"
+   },
+   {
+    "title": "로그온 세션 잇기 (Logon ID·4624~4634·4647)",
+    "path": "02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md"
+   },
+   {
+    "title": "화면 잠금·해제 (4800·4801)",
+    "path": "02-artifacts/event-logs/logon-events/4800-4801.md"
+   },
+   {
+    "title": "명시적 자격 증명·특수 권한 (4648·4672)",
+    "path": "02-artifacts/event-logs/logon-events/4648-4672.md"
+   },
+   {
+    "title": "도메인 인증 이벤트 (4768·4769·4776)",
+    "path": "02-artifacts/event-logs/logon-events/4768-4769-4776.md"
+   },
+   {
+    "title": "기록이 남는 위치 (로컬 PC와 도메인 컨트롤러)",
+    "path": "02-artifacts/event-logs/logon-events/pc.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "로그온 유형 해석 (Logon Type)",
+  "path": "02-artifacts/event-logs/logon-events/logon-type.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "로그온·로그오프 (Logon Events)",
+   "path": "02-artifacts/event-logs/logon-events/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "로그온 실패와 실패 코드 (4625)",
+  "path": "02-artifacts/event-logs/logon-events/4625.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "로그온·로그오프 (Logon Events)",
+   "path": "02-artifacts/event-logs/logon-events/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "로그온 세션 잇기 (Logon ID·4624~4634·4647)",
+  "path": "02-artifacts/event-logs/logon-events/logon-id-4624-4634-4647.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "로그온·로그오프 (Logon Events)",
+   "path": "02-artifacts/event-logs/logon-events/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "화면 잠금·해제 (4800·4801)",
+  "path": "02-artifacts/event-logs/logon-events/4800-4801.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "로그온·로그오프 (Logon Events)",
+   "path": "02-artifacts/event-logs/logon-events/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "명시적 자격 증명·특수 권한 (4648·4672)",
+  "path": "02-artifacts/event-logs/logon-events/4648-4672.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "로그온·로그오프 (Logon Events)",
+   "path": "02-artifacts/event-logs/logon-events/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "도메인 인증 이벤트 (4768·4769·4776)",
+  "path": "02-artifacts/event-logs/logon-events/4768-4769-4776.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "로그온·로그오프 (Logon Events)",
+   "path": "02-artifacts/event-logs/logon-events/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "기록이 남는 위치 (로컬 PC와 도메인 컨트롤러)",
+  "path": "02-artifacts/event-logs/logon-events/pc.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "로그온·로그오프 (Logon Events)",
+   "path": "02-artifacts/event-logs/logon-events/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/index.md",
+  "kind": "hub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "USB 로 무엇을 가져갔나 (USB)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/usb.md"
+   },
+   {
+    "title": "스마트폰으로 옮겼나 (MTP·Phone Link)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md"
+   },
+   {
+    "title": "메일로 밖에 보냈나 (Email)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/email.md"
+   },
+   {
+    "title": "메신저로 파일을 보냈나 (Messenger)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/messenger.md"
+   },
+   {
+    "title": "클라우드로 밖에 보냈나 (Cloud)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/cloud.md"
+   },
+   {
+    "title": "웹메일·웹하드로 올렸나 (Web Upload)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/web-upload.md"
+   },
+   {
+    "title": "인쇄해서 가져갔나 (Print)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/print.md"
+   },
+   {
+    "title": "퇴사 전 자료를 모으고 압축했나 (Staging)",
+    "path": "04-scenarios/exfiltration/data-exfiltration/staging.md"
+   }
+  ],
+  "priority": true
+ },
+ {
+  "title": "USB 로 무엇을 가져갔나 (USB)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/usb.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "스마트폰으로 옮겼나 (MTP·Phone Link)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/mtp-phone-link.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "메일로 밖에 보냈나 (Email)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/email.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "메신저로 파일을 보냈나 (Messenger)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/messenger.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "클라우드로 밖에 보냈나 (Cloud)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/cloud.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "웹메일·웹하드로 올렸나 (Web Upload)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/web-upload.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "인쇄해서 가져갔나 (Print)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/print.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "퇴사 전 자료를 모으고 압축했나 (Staging)",
+  "path": "04-scenarios/exfiltration/data-exfiltration/staging.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": {
+   "title": "자료를 밖으로 빼돌렸나 (Data Exfiltration)",
+   "path": "04-scenarios/exfiltration/data-exfiltration/index.md"
+  },
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "이 파일을 누가 언제 열었나 (File Access)",
+  "path": "04-scenarios/activity/file-access.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": true
+ },
+ {
+  "title": "증거 이미지·가상 디스크 형식 (E01·RAW·AFF4·VHDX·VMDK)",
+  "path": "01-foundations/disk-volume/e01-raw-aff4-vhdx-vmdk.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파티션 구조 (MBR·GPT)",
+  "path": "01-foundations/disk-volume/mbr-gpt.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "FAT·exFAT 구조 (FAT·exFAT)",
+  "path": "01-foundations/disk-volume/fat-exfat.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "볼륨 섀도 복사본 구조 (Volume Shadow Copy)",
+  "path": "01-foundations/disk-volume/volume-shadow-copy.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "디스크·볼륨",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "LevelDB 저장소 (LevelDB)",
+  "path": "01-foundations/database-log-formats/leveldb.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "이벤트 로그 형식 (EVTX·EVT·ETL)",
+  "path": "01-foundations/database-log-formats/evtx-evt-etl/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "EVTX 파일 구조 (File Header·Chunk·Record)",
+    "path": "01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md"
+   },
+   {
+    "title": "이진 XML 해석 (Binary XML·Template)",
+    "path": "01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md"
+   },
+   {
+    "title": "공급자와 메시지 파일 (Provider·Message Table)",
+    "path": "01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md"
+   },
+   {
+    "title": "구형 EVT 형식 (Windows XP·2003)",
+    "path": "01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md"
+   },
+   {
+    "title": "파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)",
+    "path": "01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md"
+   },
+   {
+    "title": "ETW 추적 로그 (ETL)",
+    "path": "01-foundations/database-log-formats/evtx-evt-etl/etl.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "EVTX 파일 구조 (File Header·Chunk·Record)",
+  "path": "01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "이벤트 로그 형식 (EVTX·EVT·ETL)",
+   "path": "01-foundations/database-log-formats/evtx-evt-etl/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "이진 XML 해석 (Binary XML·Template)",
+  "path": "01-foundations/database-log-formats/evtx-evt-etl/binary-xml-template.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "이벤트 로그 형식 (EVTX·EVT·ETL)",
+   "path": "01-foundations/database-log-formats/evtx-evt-etl/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "공급자와 메시지 파일 (Provider·Message Table)",
+  "path": "01-foundations/database-log-formats/evtx-evt-etl/provider-message-table.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "이벤트 로그 형식 (EVTX·EVT·ETL)",
+   "path": "01-foundations/database-log-formats/evtx-evt-etl/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "구형 EVT 형식 (Windows XP·2003)",
+  "path": "01-foundations/database-log-formats/evtx-evt-etl/windows-xp-2003.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "이벤트 로그 형식 (EVTX·EVT·ETL)",
+   "path": "01-foundations/database-log-formats/evtx-evt-etl/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파일 안에 남은 지운·손상 레코드 (Chunk Slack·Corrupted EVTX)",
+  "path": "01-foundations/database-log-formats/evtx-evt-etl/chunk-slack-corrupted-evtx.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "이벤트 로그 형식 (EVTX·EVT·ETL)",
+   "path": "01-foundations/database-log-formats/evtx-evt-etl/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "ETW 추적 로그 (ETL)",
+  "path": "01-foundations/database-log-formats/evtx-evt-etl/etl.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "데이터베이스·로그 형식",
+  "parent": {
+   "title": "이벤트 로그 형식 (EVTX·EVT·ETL)",
+   "path": "01-foundations/database-log-formats/evtx-evt-etl/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "셸 아이템 (Shell Item·PIDL)",
+  "path": "01-foundations/shell-document-formats/shell-item-pidl.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "셸·문서 형식",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "바로가기 형식 (Shell Link·LNK)",
+  "path": "01-foundations/shell-document-formats/shell-link-lnk.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "셸·문서 형식",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "OLE 복합 파일 (Compound File Binary)",
+  "path": "01-foundations/shell-document-formats/compound-file-binary.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "셸·문서 형식",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)",
+  "path": "01-foundations/app-mail-data/chromium-electron-webview2/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)",
+    "path": "01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md"
+   },
+   {
+    "title": "Electron·WebView2 앱 데이터 위치 (Teams·Discord·Slack 등)",
+    "path": "01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md"
+   },
+   {
+    "title": "캐시 형식 (Blockfile·Simple Cache)",
+    "path": "01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md"
+   },
+   {
+    "title": "쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)",
+    "path": "01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)",
+  "path": "01-foundations/app-mail-data/chromium-electron-webview2/user-data-profile-local-state.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": {
+   "title": "크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)",
+   "path": "01-foundations/app-mail-data/chromium-electron-webview2/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "Electron·WebView2 앱 데이터 위치 (Teams·Discord·Slack 등)",
+  "path": "01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": {
+   "title": "크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)",
+   "path": "01-foundations/app-mail-data/chromium-electron-webview2/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "캐시 형식 (Blockfile·Simple Cache)",
+  "path": "01-foundations/app-mail-data/chromium-electron-webview2/blockfile-simple-cache.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": {
+   "title": "크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)",
+   "path": "01-foundations/app-mail-data/chromium-electron-webview2/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "쿠키·비밀번호 암호화 (DPAPI·App-Bound Encryption)",
+  "path": "01-foundations/app-mail-data/chromium-electron-webview2/dpapi-app-bound-encryption.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": {
+   "title": "크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)",
+   "path": "01-foundations/app-mail-data/chromium-electron-webview2/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "UWP 앱 데이터 구조 (Packages 폴더·settings.dat)",
+  "path": "01-foundations/app-mail-data/packages-settings-dat.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "인터넷 메일 형식 (EML·MBOX·RFC 5322·MIME)",
+  "path": "01-foundations/app-mail-data/eml-mbox-rfc-5322-mime.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "MAPI 속성 (MAPI Property)",
+  "path": "01-foundations/app-mail-data/mapi-property.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "앱·메일 데이터 구조",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시각 값 형식 (FILETIME·Unix·WebKit·DOS·OLE)",
+  "path": "01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 읽는 법",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 식별자 형식 (SID·GUID·CLSID·Known Folder ID)",
+  "path": "01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 읽는 법",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "문자 인코딩 (UTF-16LE·UTF-8·CP949)",
+  "path": "01-foundations/value-decoding/utf-16le-utf-8-cp949.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 읽는 법",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 압축 형식 (LZNT1·Xpress·Xpress Huffman)",
+  "path": "01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "값 읽는 법",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "DPAPI 구조 (Data Protection API)",
+  "path": "01-foundations/protection/data-protection-api/index.md",
+  "kind": "hub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "DPAPI 동작 원리 (Protect·Unprotect)",
+    "path": "01-foundations/protection/data-protection-api/protect-unprotect.md"
+   },
+   {
+    "title": "DPAPI 블롭 구조 (DPAPI Blob)",
+    "path": "01-foundations/protection/data-protection-api/dpapi-blob.md"
+   },
+   {
+    "title": "마스터키 파일 (Master Key·Protect\\SID)",
+    "path": "01-foundations/protection/data-protection-api/master-key-protect-sid.md"
+   },
+   {
+    "title": "비밀번호 변경 기록 (CREDHIST)",
+    "path": "01-foundations/protection/data-protection-api/credhist.md"
+   },
+   {
+    "title": "시스템 DPAPI 키 (DPAPI_SYSTEM)",
+    "path": "01-foundations/protection/data-protection-api/dpapi-system.md"
+   },
+   {
+    "title": "도메인 백업 키 (Domain Backup Key)",
+    "path": "01-foundations/protection/data-protection-api/domain-backup-key.md"
+   },
+   {
+    "title": "오프라인 복호 재료와 절차 (비밀번호·NT 해시·백업 키)",
+    "path": "01-foundations/protection/data-protection-api/nt.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "DPAPI 동작 원리 (Protect·Unprotect)",
+  "path": "01-foundations/protection/data-protection-api/protect-unprotect.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": {
+   "title": "DPAPI 구조 (Data Protection API)",
+   "path": "01-foundations/protection/data-protection-api/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "DPAPI 블롭 구조 (DPAPI Blob)",
+  "path": "01-foundations/protection/data-protection-api/dpapi-blob.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": {
+   "title": "DPAPI 구조 (Data Protection API)",
+   "path": "01-foundations/protection/data-protection-api/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "마스터키 파일 (Master Key·Protect\\SID)",
+  "path": "01-foundations/protection/data-protection-api/master-key-protect-sid.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": {
+   "title": "DPAPI 구조 (Data Protection API)",
+   "path": "01-foundations/protection/data-protection-api/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "비밀번호 변경 기록 (CREDHIST)",
+  "path": "01-foundations/protection/data-protection-api/credhist.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": {
+   "title": "DPAPI 구조 (Data Protection API)",
+   "path": "01-foundations/protection/data-protection-api/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시스템 DPAPI 키 (DPAPI_SYSTEM)",
+  "path": "01-foundations/protection/data-protection-api/dpapi-system.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": {
+   "title": "DPAPI 구조 (Data Protection API)",
+   "path": "01-foundations/protection/data-protection-api/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "도메인 백업 키 (Domain Backup Key)",
+  "path": "01-foundations/protection/data-protection-api/domain-backup-key.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": {
+   "title": "DPAPI 구조 (Data Protection API)",
+   "path": "01-foundations/protection/data-protection-api/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "오프라인 복호 재료와 절차 (비밀번호·NT 해시·백업 키)",
+  "path": "01-foundations/protection/data-protection-api/nt.md",
+  "kind": "sub",
+  "section": "기반 구조",
+  "group": "암호 보호",
+  "parent": {
+   "title": "DPAPI 구조 (Data Protection API)",
+   "path": "01-foundations/protection/data-protection-api/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시스템 기본 정보 (OS Version·Computer Name·Install Date·Shutdown Time)",
+  "path": "02-artifacts/system-account/os-version-computer-name-install-date-shutdown-t.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시간대 설정 (Time Zone)",
+  "path": "02-artifacts/system-account/time-zone.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "사용자 계정 (SAM)",
+  "path": "02-artifacts/system-account/sam.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "사용자 프로필 목록 (ProfileList)",
+  "path": "02-artifacts/system-account/profilelist.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "설치 프로그램 (Uninstall)",
+  "path": "02-artifacts/system-account/uninstall.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "스토어 앱 설치 목록 (AppX·StateRepository)",
+  "path": "02-artifacts/system-account/appx-staterepository.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 업데이트 기록 (Windows Update·CBS Log)",
+  "path": "02-artifacts/system-account/windows-update-cbs-log.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "시스템·계정",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "로그온 자동실행 (Run·RunOnce·Startup Folder)",
+  "path": "02-artifacts/persistence/run-runonce-startup-folder.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "서비스·드라이버 (Services·Drivers)",
+  "path": "02-artifacts/persistence/services-drivers.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "예약 작업 (Scheduled Tasks)",
+  "path": "02-artifacts/persistence/scheduled-tasks/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "작업 정의 파일 (System32\\Tasks XML)",
+    "path": "02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md"
+   },
+   {
+    "title": "작업 캐시 레지스트리 (TaskCache Tree·Tasks)",
+    "path": "02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md"
+   },
+   {
+    "title": "옛 작업 파일 (.job·at)",
+    "path": "02-artifacts/persistence/scheduled-tasks/job-at.md"
+   },
+   {
+    "title": "숨긴 예약 작업 찾기 (SD 값 삭제)",
+    "path": "02-artifacts/persistence/scheduled-tasks/sd.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "작업 정의 파일 (System32\\Tasks XML)",
+  "path": "02-artifacts/persistence/scheduled-tasks/system32-tasks-xml.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": {
+   "title": "예약 작업 (Scheduled Tasks)",
+   "path": "02-artifacts/persistence/scheduled-tasks/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "작업 캐시 레지스트리 (TaskCache Tree·Tasks)",
+  "path": "02-artifacts/persistence/scheduled-tasks/taskcache-tree-tasks.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": {
+   "title": "예약 작업 (Scheduled Tasks)",
+   "path": "02-artifacts/persistence/scheduled-tasks/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "옛 작업 파일 (.job·at)",
+  "path": "02-artifacts/persistence/scheduled-tasks/job-at.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": {
+   "title": "예약 작업 (Scheduled Tasks)",
+   "path": "02-artifacts/persistence/scheduled-tasks/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "숨긴 예약 작업 찾기 (SD 값 삭제)",
+  "path": "02-artifacts/persistence/scheduled-tasks/sd.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": {
+   "title": "예약 작업 (Scheduled Tasks)",
+   "path": "02-artifacts/persistence/scheduled-tasks/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "WMI 영구 이벤트 구독 (WMI Event Subscription)",
+  "path": "02-artifacts/persistence/wmi-event-subscription.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "BITS 전송 작업 (BITS Jobs·qmgr.db)",
+  "path": "02-artifacts/persistence/bits-jobs-qmgr-db.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "기타 자동실행 위치 (Winlogon·IFEO·AppInit_DLLs)",
+  "path": "02-artifacts/persistence/winlogon-ifeo-appinit-dlls.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자동실행·지속성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "심캐시 (ShimCache·AppCompatCache)",
+  "path": "02-artifacts/execution/shimcache-appcompatcache.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "BAM·DAM (Background Activity Moderator)",
+  "path": "02-artifacts/execution/background-activity-moderator.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "UserAssist (UserAssist)",
+  "path": "02-artifacts/execution/userassist.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "MUICache (MUICache)",
+  "path": "02-artifacts/execution/muicache.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "작업표시줄 사용 기록 (FeatureUsage)",
+  "path": "02-artifacts/execution/featureusage.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "프로그램 호환성 도우미 (PCA)",
+  "path": "02-artifacts/execution/pca.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "PowerShell 명령 기록 (ConsoleHost_history.txt)",
+  "path": "02-artifacts/execution/consolehost-history-txt.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "실행 창 명령 기록 (RunMRU)",
+  "path": "02-artifacts/execution/runmru.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 오류 보고 (WER)",
+  "path": "02-artifacts/execution/wer.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 알림 기록 (wpndatabase.db)",
+  "path": "02-artifacts/execution/wpndatabase-db.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "디펜더 검사 로그·격리 파일 (MPLog·DetectionHistory·Quarantine)",
+  "path": "02-artifacts/execution/mplog-detectionhistory-quarantine.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "카메라·마이크 사용 기록 (CapabilityAccessManager)",
+  "path": "02-artifacts/execution/capabilityaccessmanager.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "프로그램 실행 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "최근 문서 (RecentDocs)",
+  "path": "02-artifacts/file-folder-usage/recentdocs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "열기·저장 대화상자 기록 (ComDlg32: OpenSavePidlMRU·LastVisitedPidlMRU·CIDSizeMRU)",
+  "path": "02-artifacts/file-folder-usage/comdlg32-opensavepidlmru-lastvisitedpidlmru-cids.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "탐색기 입력 기록 (TypedPaths·WordWheelQuery)",
+  "path": "02-artifacts/file-folder-usage/typedpaths-wordwheelquery.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "썸네일 캐시 (thumbcache_*.db·Thumbs.db)",
+  "path": "02-artifacts/file-folder-usage/thumbcache-db-thumbs-db.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 검색 색인 DB (Windows Search)",
+  "path": "02-artifacts/file-folder-usage/windows-search/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "위치와 형식 (Windows.edb·Windows.db)",
+    "path": "02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md"
+   },
+   {
+    "title": "파일 속성 되살리기 (PropertyStore)",
+    "path": "02-artifacts/file-folder-usage/windows-search/propertystore.md"
+   },
+   {
+    "title": "수집 기록 (SystemIndex_Gthr)",
+    "path": "02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md"
+   },
+   {
+    "title": "지운 파일·옛 파일 흔적 찾기",
+    "path": "02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md"
+   },
+   {
+    "title": "색인 해석 함정 (색인 범위·재구성)",
+    "path": "02-artifacts/file-folder-usage/windows-search/pitfalls.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "위치와 형식 (Windows.edb·Windows.db)",
+  "path": "02-artifacts/file-folder-usage/windows-search/windows-edb-windows-db.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "윈도 검색 색인 DB (Windows Search)",
+   "path": "02-artifacts/file-folder-usage/windows-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파일 속성 되살리기 (PropertyStore)",
+  "path": "02-artifacts/file-folder-usage/windows-search/propertystore.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "윈도 검색 색인 DB (Windows Search)",
+   "path": "02-artifacts/file-folder-usage/windows-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "수집 기록 (SystemIndex_Gthr)",
+  "path": "02-artifacts/file-folder-usage/windows-search/systemindex-gthr.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "윈도 검색 색인 DB (Windows Search)",
+   "path": "02-artifacts/file-folder-usage/windows-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "지운 파일·옛 파일 흔적 찾기",
+  "path": "02-artifacts/file-folder-usage/windows-search/deleted-file-traces.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "윈도 검색 색인 DB (Windows Search)",
+   "path": "02-artifacts/file-folder-usage/windows-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "색인 해석 함정 (색인 범위·재구성)",
+  "path": "02-artifacts/file-folder-usage/windows-search/pitfalls.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "윈도 검색 색인 DB (Windows Search)",
+   "path": "02-artifacts/file-folder-usage/windows-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 타임라인 (ActivitiesCache.db)",
+  "path": "02-artifacts/file-folder-usage/activitiescache-db.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "오피스 사용 흔적 (Microsoft Office)",
+  "path": "02-artifacts/file-folder-usage/microsoft-office/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "오피스 최근 파일 (File MRU·Place MRU)",
+    "path": "02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md"
+   },
+   {
+    "title": "신뢰 문서 기록 (Trust Records)",
+    "path": "02-artifacts/file-folder-usage/microsoft-office/trust-records.md"
+   },
+   {
+    "title": "읽던 위치 (Reading Locations)",
+    "path": "02-artifacts/file-folder-usage/microsoft-office/reading-locations.md"
+   },
+   {
+    "title": "백스테이지 캐시 (BackstageInAppNavCache)",
+    "path": "02-artifacts/file-folder-usage/microsoft-office/backstageinappnavcache.md"
+   },
+   {
+    "title": "자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)",
+    "path": "02-artifacts/file-folder-usage/microsoft-office/autorecover-unsavedfiles.md"
+   },
+   {
+    "title": "오피스 문서 캐시 (OfficeFileCache)",
+    "path": "02-artifacts/file-folder-usage/microsoft-office/officefilecache.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "오피스 최근 파일 (File MRU·Place MRU)",
+  "path": "02-artifacts/file-folder-usage/microsoft-office/file-mru-place-mru.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "오피스 사용 흔적 (Microsoft Office)",
+   "path": "02-artifacts/file-folder-usage/microsoft-office/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "신뢰 문서 기록 (Trust Records)",
+  "path": "02-artifacts/file-folder-usage/microsoft-office/trust-records.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "오피스 사용 흔적 (Microsoft Office)",
+   "path": "02-artifacts/file-folder-usage/microsoft-office/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "읽던 위치 (Reading Locations)",
+  "path": "02-artifacts/file-folder-usage/microsoft-office/reading-locations.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "오피스 사용 흔적 (Microsoft Office)",
+   "path": "02-artifacts/file-folder-usage/microsoft-office/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "백스테이지 캐시 (BackstageInAppNavCache)",
+  "path": "02-artifacts/file-folder-usage/microsoft-office/backstageinappnavcache.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "오피스 사용 흔적 (Microsoft Office)",
+   "path": "02-artifacts/file-folder-usage/microsoft-office/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)",
+  "path": "02-artifacts/file-folder-usage/microsoft-office/autorecover-unsavedfiles.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "오피스 사용 흔적 (Microsoft Office)",
+   "path": "02-artifacts/file-folder-usage/microsoft-office/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "오피스 문서 캐시 (OfficeFileCache)",
+  "path": "02-artifacts/file-folder-usage/microsoft-office/officefilecache.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": {
+   "title": "오피스 사용 흔적 (Microsoft Office)",
+   "path": "02-artifacts/file-folder-usage/microsoft-office/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "메모장 탭 저장 파일 (Notepad TabState)",
+  "path": "02-artifacts/file-folder-usage/notepad-tabstate.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "압축 프로그램 사용 기록 (7-Zip·WinRAR·Bandizip)",
+  "path": "02-artifacts/file-folder-usage/7-zip-winrar-bandizip.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일·폴더 사용 흔적",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "마스터 파일 테이블 ($MFT)",
+  "path": "02-artifacts/filesystem/mft.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일시스템",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "NTFS 트랜잭션 로그 ($LogFile)",
+  "path": "02-artifacts/filesystem/logfile.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일시스템",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "USN 변경 저널 ($UsnJrnl)",
+  "path": "02-artifacts/filesystem/usnjrnl.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일시스템",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "폴더 인덱스와 슬랙 ($I30)",
+  "path": "02-artifacts/filesystem/i30.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일시스템",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "다운로드 출처 표시 (Zone.Identifier)",
+  "path": "02-artifacts/filesystem/zone-identifier.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일시스템",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "블루투스 장치 (BTHPORT)",
+  "path": "02-artifacts/external-devices/bthport.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "인쇄 흔적 (Print Spooler: SPL·SHD·프린터 목록)",
+  "path": "02-artifacts/external-devices/print-spooler-spl-shd.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "스마트폰 백업 파일 (iTunes·Smart Switch Backup)",
+  "path": "02-artifacts/external-devices/itunes-smart-switch-backup.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "외부 장치",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파이어폭스 (Firefox)",
+  "path": "02-artifacts/browsers/firefox/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "프로필 구조 (profiles.ini·prefs.js)",
+    "path": "02-artifacts/browsers/firefox/profiles-ini-prefs-js.md"
+   },
+   {
+    "title": "방문·다운로드·즐겨찾기 (places.sqlite)",
+    "path": "02-artifacts/browsers/firefox/places-sqlite.md"
+   },
+   {
+    "title": "쿠키 (cookies.sqlite)",
+    "path": "02-artifacts/browsers/firefox/cookies-sqlite.md"
+   },
+   {
+    "title": "캐시 (cache2)",
+    "path": "02-artifacts/browsers/firefox/cache2.md"
+   },
+   {
+    "title": "저장 비밀번호 (logins.json·key4.db)",
+    "path": "02-artifacts/browsers/firefox/logins-json-key4-db.md"
+   },
+   {
+    "title": "세션 복원 (sessionstore.jsonlz4)",
+    "path": "02-artifacts/browsers/firefox/sessionstore-jsonlz4.md"
+   },
+   {
+    "title": "웹 저장소 (storage 폴더)",
+    "path": "02-artifacts/browsers/firefox/storage.md"
+   },
+   {
+    "title": "양식 기록 (formhistory.sqlite)",
+    "path": "02-artifacts/browsers/firefox/formhistory-sqlite.md"
+   },
+   {
+    "title": "확장 프로그램 (extensions.json)",
+    "path": "02-artifacts/browsers/firefox/extensions-json.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "프로필 구조 (profiles.ini·prefs.js)",
+  "path": "02-artifacts/browsers/firefox/profiles-ini-prefs-js.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "방문·다운로드·즐겨찾기 (places.sqlite)",
+  "path": "02-artifacts/browsers/firefox/places-sqlite.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "쿠키 (cookies.sqlite)",
+  "path": "02-artifacts/browsers/firefox/cookies-sqlite.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "캐시 (cache2)",
+  "path": "02-artifacts/browsers/firefox/cache2.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "저장 비밀번호 (logins.json·key4.db)",
+  "path": "02-artifacts/browsers/firefox/logins-json-key4-db.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "세션 복원 (sessionstore.jsonlz4)",
+  "path": "02-artifacts/browsers/firefox/sessionstore-jsonlz4.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "웹 저장소 (storage 폴더)",
+  "path": "02-artifacts/browsers/firefox/storage.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "양식 기록 (formhistory.sqlite)",
+  "path": "02-artifacts/browsers/firefox/formhistory-sqlite.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "확장 프로그램 (extensions.json)",
+  "path": "02-artifacts/browsers/firefox/extensions-json.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "파이어폭스 (Firefox)",
+   "path": "02-artifacts/browsers/firefox/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)",
+  "path": "02-artifacts/browsers/ie-edgehtml/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "웹캐시 DB (WebCacheV01.dat)",
+    "path": "02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md"
+   },
+   {
+    "title": "옛 기록 파일 (index.dat)",
+    "path": "02-artifacts/browsers/ie-edgehtml/index-dat.md"
+   },
+   {
+    "title": "주소창 입력 주소 (TypedURLs·TypedURLsTime)",
+    "path": "02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md"
+   },
+   {
+    "title": "저장 비밀번호 (IntelliForms)",
+    "path": "02-artifacts/browsers/ie-edgehtml/intelliforms.md"
+   },
+   {
+    "title": "쿠키·캐시 폴더 (INetCookies·INetCache)",
+    "path": "02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md"
+   },
+   {
+    "title": "즐겨찾기 (Favorites .url)",
+    "path": "02-artifacts/browsers/ie-edgehtml/favorites-url.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "웹캐시 DB (WebCacheV01.dat)",
+  "path": "02-artifacts/browsers/ie-edgehtml/webcachev01-dat.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)",
+   "path": "02-artifacts/browsers/ie-edgehtml/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "옛 기록 파일 (index.dat)",
+  "path": "02-artifacts/browsers/ie-edgehtml/index-dat.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)",
+   "path": "02-artifacts/browsers/ie-edgehtml/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "주소창 입력 주소 (TypedURLs·TypedURLsTime)",
+  "path": "02-artifacts/browsers/ie-edgehtml/typedurls-typedurlstime.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)",
+   "path": "02-artifacts/browsers/ie-edgehtml/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "저장 비밀번호 (IntelliForms)",
+  "path": "02-artifacts/browsers/ie-edgehtml/intelliforms.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)",
+   "path": "02-artifacts/browsers/ie-edgehtml/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "쿠키·캐시 폴더 (INetCookies·INetCache)",
+  "path": "02-artifacts/browsers/ie-edgehtml/inetcookies-inetcache.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)",
+   "path": "02-artifacts/browsers/ie-edgehtml/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "즐겨찾기 (Favorites .url)",
+  "path": "02-artifacts/browsers/ie-edgehtml/favorites-url.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "인터넷·브라우저",
+  "parent": {
+   "title": "인터넷 익스플로러·옛 엣지 (IE·EdgeHTML)",
+   "path": "02-artifacts/browsers/ie-edgehtml/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "아웃룩 (Outlook)",
+  "path": "02-artifacts/mail/outlook/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "데이터 파일 구조 (PST·OST)",
+    "path": "02-artifacts/mail/outlook/pst-ost.md"
+   },
+   {
+    "title": "PST와 OST 차이 (Cached Mode·Exchange)",
+    "path": "02-artifacts/mail/outlook/cached-mode-exchange.md"
+   },
+   {
+    "title": "지운 메시지 복구 (Recoverable Items·Free Blocks)",
+    "path": "02-artifacts/mail/outlook/recoverable-items-free-blocks.md"
+   },
+   {
+    "title": "개별 메시지 파일 (MSG)",
+    "path": "02-artifacts/mail/outlook/msg.md"
+   },
+   {
+    "title": "첨부 임시 폴더 (OLK·Content.Outlook)",
+    "path": "02-artifacts/mail/outlook/olk-content-outlook.md"
+   },
+   {
+    "title": "자동완성 목록 (NK2·Stream_Autocomplete)",
+    "path": "02-artifacts/mail/outlook/nk2-stream-autocomplete.md"
+   },
+   {
+    "title": "계정·프로필 레지스트리 (Outlook Profiles)",
+    "path": "02-artifacts/mail/outlook/outlook-profiles.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "데이터 파일 구조 (PST·OST)",
+  "path": "02-artifacts/mail/outlook/pst-ost.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": {
+   "title": "아웃룩 (Outlook)",
+   "path": "02-artifacts/mail/outlook/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "PST와 OST 차이 (Cached Mode·Exchange)",
+  "path": "02-artifacts/mail/outlook/cached-mode-exchange.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": {
+   "title": "아웃룩 (Outlook)",
+   "path": "02-artifacts/mail/outlook/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "지운 메시지 복구 (Recoverable Items·Free Blocks)",
+  "path": "02-artifacts/mail/outlook/recoverable-items-free-blocks.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": {
+   "title": "아웃룩 (Outlook)",
+   "path": "02-artifacts/mail/outlook/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "개별 메시지 파일 (MSG)",
+  "path": "02-artifacts/mail/outlook/msg.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": {
+   "title": "아웃룩 (Outlook)",
+   "path": "02-artifacts/mail/outlook/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "첨부 임시 폴더 (OLK·Content.Outlook)",
+  "path": "02-artifacts/mail/outlook/olk-content-outlook.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": {
+   "title": "아웃룩 (Outlook)",
+   "path": "02-artifacts/mail/outlook/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "자동완성 목록 (NK2·Stream_Autocomplete)",
+  "path": "02-artifacts/mail/outlook/nk2-stream-autocomplete.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": {
+   "title": "아웃룩 (Outlook)",
+   "path": "02-artifacts/mail/outlook/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "계정·프로필 레지스트리 (Outlook Profiles)",
+  "path": "02-artifacts/mail/outlook/outlook-profiles.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": {
+   "title": "아웃룩 (Outlook)",
+   "path": "02-artifacts/mail/outlook/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "새 Outlook (New Outlook)",
+  "path": "02-artifacts/mail/new-outlook.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "썬더버드 (Thunderbird)",
+  "path": "02-artifacts/mail/thunderbird.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "옛 윈도 메일 프로그램 (Outlook Express·Windows Live Mail)",
+  "path": "02-artifacts/mail/outlook-express-windows-live-mail.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "Windows 메일 앱 (HxStore)",
+  "path": "02-artifacts/mail/hxstore.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메일",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "카카오톡 PC (KakaoTalk PC)",
+  "path": "02-artifacts/messengers/kakaotalk-pc/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "설치 위치와 파일 구성 (Install Paths·Files)",
+    "path": "02-artifacts/messengers/kakaotalk-pc/install-paths-files.md"
+   },
+   {
+    "title": "대화 DB 암호화와 버전별 차이 (Chat DB Encryption)",
+    "path": "02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md"
+   },
+   {
+    "title": "받은 파일·사진 폴더 (Received Files)",
+    "path": "02-artifacts/messengers/kakaotalk-pc/received-files.md"
+   },
+   {
+    "title": "계정·로그인 흔적 (Account·Login)",
+    "path": "02-artifacts/messengers/kakaotalk-pc/account-login.md"
+   },
+   {
+    "title": "대화 DB가 안 열릴 때 남는 단서 (메모리·캐시·이미지)",
+    "path": "02-artifacts/messengers/kakaotalk-pc/when-db-wont-open.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "설치 위치와 파일 구성 (Install Paths·Files)",
+  "path": "02-artifacts/messengers/kakaotalk-pc/install-paths-files.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 PC (KakaoTalk PC)",
+   "path": "02-artifacts/messengers/kakaotalk-pc/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "대화 DB 암호화와 버전별 차이 (Chat DB Encryption)",
+  "path": "02-artifacts/messengers/kakaotalk-pc/chat-db-encryption.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 PC (KakaoTalk PC)",
+   "path": "02-artifacts/messengers/kakaotalk-pc/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "받은 파일·사진 폴더 (Received Files)",
+  "path": "02-artifacts/messengers/kakaotalk-pc/received-files.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 PC (KakaoTalk PC)",
+   "path": "02-artifacts/messengers/kakaotalk-pc/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "계정·로그인 흔적 (Account·Login)",
+  "path": "02-artifacts/messengers/kakaotalk-pc/account-login.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 PC (KakaoTalk PC)",
+   "path": "02-artifacts/messengers/kakaotalk-pc/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "대화 DB가 안 열릴 때 남는 단서 (메모리·캐시·이미지)",
+  "path": "02-artifacts/messengers/kakaotalk-pc/when-db-wont-open.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": {
+   "title": "카카오톡 PC (KakaoTalk PC)",
+   "path": "02-artifacts/messengers/kakaotalk-pc/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "왓츠앱 데스크톱 (WhatsApp Desktop)",
+  "path": "02-artifacts/messengers/whatsapp-desktop.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "스카이프 (Skype)",
+  "path": "02-artifacts/messengers/skype.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "마이크로소프트 팀즈 (Teams)",
+  "path": "02-artifacts/messengers/teams.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "텔레그램 (Telegram)",
+  "path": "02-artifacts/messengers/telegram.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "디스코드 (Discord)",
+  "path": "02-artifacts/messengers/discord.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "라인 (LINE)",
+  "path": "02-artifacts/messengers/line.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "슬랙 (Slack)",
+  "path": "02-artifacts/messengers/slack.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시그널 (Signal)",
+  "path": "02-artifacts/messengers/signal.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "위챗 (WeChat)",
+  "path": "02-artifacts/messengers/wechat.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "네이트온 (NateOn)",
+  "path": "02-artifacts/messengers/nateon.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "줌 (Zoom)",
+  "path": "02-artifacts/messengers/zoom.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "휴대폰과 연결 (Phone Link)",
+  "path": "02-artifacts/messengers/phone-link.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "메신저",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "클라우드 동기화 공통 구조 (Cloud Files API·SyncRootManager)",
+  "path": "02-artifacts/cloud-notes/cloud-files-api-syncrootmanager.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원드라이브 (OneDrive)",
+  "path": "02-artifacts/cloud-notes/onedrive/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "계정·설정 레지스트리 (Accounts·Settings)",
+    "path": "02-artifacts/cloud-notes/onedrive/accounts-settings.md"
+   },
+   {
+    "title": "동기화 DB (SyncEngineDatabase.db)",
+    "path": "02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md"
+   },
+   {
+    "title": "로그 (ODL·ODLGZ)",
+    "path": "02-artifacts/cloud-notes/onedrive/odl-odlgz.md"
+   },
+   {
+    "title": "회사용 OneDrive와 SharePoint 동기화 (Business Tenant)",
+    "path": "02-artifacts/cloud-notes/onedrive/business-tenant.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "계정·설정 레지스트리 (Accounts·Settings)",
+  "path": "02-artifacts/cloud-notes/onedrive/accounts-settings.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": {
+   "title": "원드라이브 (OneDrive)",
+   "path": "02-artifacts/cloud-notes/onedrive/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "동기화 DB (SyncEngineDatabase.db)",
+  "path": "02-artifacts/cloud-notes/onedrive/syncenginedatabase-db.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": {
+   "title": "원드라이브 (OneDrive)",
+   "path": "02-artifacts/cloud-notes/onedrive/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "로그 (ODL·ODLGZ)",
+  "path": "02-artifacts/cloud-notes/onedrive/odl-odlgz.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": {
+   "title": "원드라이브 (OneDrive)",
+   "path": "02-artifacts/cloud-notes/onedrive/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "회사용 OneDrive와 SharePoint 동기화 (Business Tenant)",
+  "path": "02-artifacts/cloud-notes/onedrive/business-tenant.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": {
+   "title": "원드라이브 (OneDrive)",
+   "path": "02-artifacts/cloud-notes/onedrive/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "구글 드라이브 (DriveFS·Backup and Sync)",
+  "path": "02-artifacts/cloud-notes/drivefs-backup-and-sync.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "드롭박스 (Dropbox)",
+  "path": "02-artifacts/cloud-notes/dropbox.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "네이버 MYBOX (Naver MYBOX)",
+  "path": "02-artifacts/cloud-notes/naver-mybox.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "아이클라우드 (iCloud for Windows)",
+  "path": "02-artifacts/cloud-notes/icloud-for-windows.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "박스 드라이브 (Box Drive)",
+  "path": "02-artifacts/cloud-notes/box-drive.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "메가 (MEGA)",
+  "path": "02-artifacts/cloud-notes/mega.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "에버노트 (Evernote)",
+  "path": "02-artifacts/cloud-notes/evernote.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "노션 (Notion)",
+  "path": "02-artifacts/cloud-notes/notion.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "스티커 메모 (Sticky Notes)",
+  "path": "02-artifacts/cloud-notes/sticky-notes.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원노트 (OneNote)",
+  "path": "02-artifacts/cloud-notes/onenote.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "클라우드·노트",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "Wi-Fi 프로필 (WLAN Profiles)",
+  "path": "02-artifacts/network/wlan-profiles.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "네트워크 목록 (NetworkList)",
+  "path": "02-artifacts/network/networklist.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "네트워크 인터페이스 설정 (TCP/IP Interfaces)",
+  "path": "02-artifacts/network/tcp-ip-interfaces.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원격 데스크톱 접속 기록 (RDP Client MRU)",
+  "path": "02-artifacts/network/rdp-client-mru.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원격 데스크톱 비트맵 캐시 (RDP Bitmap Cache)",
+  "path": "02-artifacts/network/rdp-bitmap-cache.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원격 제어 프로그램 (Remote Access Tools)",
+  "path": "02-artifacts/network/remote-access-tools/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "팀뷰어 (TeamViewer)",
+    "path": "02-artifacts/network/remote-access-tools/teamviewer.md"
+   },
+   {
+    "title": "애니데스크 (AnyDesk)",
+    "path": "02-artifacts/network/remote-access-tools/anydesk.md"
+   },
+   {
+    "title": "스크린커넥트 (ScreenConnect)",
+    "path": "02-artifacts/network/remote-access-tools/screenconnect.md"
+   },
+   {
+    "title": "기타 원격 제어 도구 (RustDesk·Splashtop·Chrome Remote Desktop)",
+    "path": "02-artifacts/network/remote-access-tools/rustdesk-splashtop-chrome-remote-desktop.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "팀뷰어 (TeamViewer)",
+  "path": "02-artifacts/network/remote-access-tools/teamviewer.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": {
+   "title": "원격 제어 프로그램 (Remote Access Tools)",
+   "path": "02-artifacts/network/remote-access-tools/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "애니데스크 (AnyDesk)",
+  "path": "02-artifacts/network/remote-access-tools/anydesk.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": {
+   "title": "원격 제어 프로그램 (Remote Access Tools)",
+   "path": "02-artifacts/network/remote-access-tools/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "스크린커넥트 (ScreenConnect)",
+  "path": "02-artifacts/network/remote-access-tools/screenconnect.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": {
+   "title": "원격 제어 프로그램 (Remote Access Tools)",
+   "path": "02-artifacts/network/remote-access-tools/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "기타 원격 제어 도구 (RustDesk·Splashtop·Chrome Remote Desktop)",
+  "path": "02-artifacts/network/remote-access-tools/rustdesk-splashtop-chrome-remote-desktop.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": {
+   "title": "원격 제어 프로그램 (Remote Access Tools)",
+   "path": "02-artifacts/network/remote-access-tools/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "VPN 연결 기록 (VPN Connections)",
+  "path": "02-artifacts/network/vpn-connections.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "SSH·FTP 도구 흔적 (PuTTY·WinSCP·FileZilla·OpenSSH)",
+  "path": "02-artifacts/network/putty-winscp-filezilla-openssh.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "공유 폴더·네트워크 드라이브 (Network Shares·Mapped Drives)",
+  "path": "02-artifacts/network/network-shares-mapped-drives.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "윈도 방화벽 (Windows Firewall: 규칙·pfirewall.log)",
+  "path": "02-artifacts/network/windows-firewall-pfirewall-log.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "hosts 파일 (hosts)",
+  "path": "02-artifacts/network/hosts.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "감사 정책과 로그 설정 (Audit Policy·Log Settings)",
+  "path": "02-artifacts/event-logs/audit-policy-log-settings.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "켜짐·꺼짐 (Power On·Off Events)",
+  "path": "02-artifacts/event-logs/power-on-off-events.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원격 데스크톱 이벤트 (RDP Event Logs)",
+  "path": "02-artifacts/event-logs/rdp-event-logs/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "들어온 접속: 인증 단계 (1149·4624 유형 10·4625)",
+    "path": "02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md"
+   },
+   {
+    "title": "들어온 접속: 세션 단계 (LocalSessionManager 21~25·4778·4779)",
+    "path": "02-artifacts/event-logs/rdp-event-logs/localsessionmanager-21-25-4778-4779.md"
+   },
+   {
+    "title": "나간 접속 (RDPClient 1024·1102)",
+    "path": "02-artifacts/event-logs/rdp-event-logs/rdpclient-1024-1102.md"
+   },
+   {
+    "title": "해석 함정 (1149의 뜻·NLA·유형 3과 10 구분)",
+    "path": "02-artifacts/event-logs/rdp-event-logs/1149-nla-3-10.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "들어온 접속: 인증 단계 (1149·4624 유형 10·4625)",
+  "path": "02-artifacts/event-logs/rdp-event-logs/1149-4624-10-4625.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "원격 데스크톱 이벤트 (RDP Event Logs)",
+   "path": "02-artifacts/event-logs/rdp-event-logs/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "들어온 접속: 세션 단계 (LocalSessionManager 21~25·4778·4779)",
+  "path": "02-artifacts/event-logs/rdp-event-logs/localsessionmanager-21-25-4778-4779.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "원격 데스크톱 이벤트 (RDP Event Logs)",
+   "path": "02-artifacts/event-logs/rdp-event-logs/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "나간 접속 (RDPClient 1024·1102)",
+  "path": "02-artifacts/event-logs/rdp-event-logs/rdpclient-1024-1102.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "원격 데스크톱 이벤트 (RDP Event Logs)",
+   "path": "02-artifacts/event-logs/rdp-event-logs/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "해석 함정 (1149의 뜻·NLA·유형 3과 10 구분)",
+  "path": "02-artifacts/event-logs/rdp-event-logs/1149-nla-3-10.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "원격 데스크톱 이벤트 (RDP Event Logs)",
+   "path": "02-artifacts/event-logs/rdp-event-logs/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "PowerShell 실행 기록 (PowerShell Event Logs: 4103·4104)",
+  "path": "02-artifacts/event-logs/powershell-event-logs-4103-4104.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원격 명령 실행 이벤트 (WinRM·WMI-Activity)",
+  "path": "02-artifacts/event-logs/winrm-wmi-activity.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "서비스 설치 (7045·4697)",
+  "path": "02-artifacts/event-logs/7045-4697.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "예약 작업 이벤트 (TaskScheduler·4698)",
+  "path": "02-artifacts/event-logs/taskscheduler-4698.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "프로세스 생성 (4688)",
+  "path": "02-artifacts/event-logs/4688.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "계정 생성·변경 (Account Management Events)",
+  "path": "02-artifacts/event-logs/account-management-events.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "이벤트 로그 삭제 (1102·104)",
+  "path": "02-artifacts/event-logs/1102-104.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "네트워크 연결 이벤트 (WLAN-AutoConfig·NetworkProfile)",
+  "path": "02-artifacts/event-logs/wlan-autoconfig-networkprofile.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "외부 장치 연결 이벤트 (Partition/Diagnostic·Kernel-PnP·DriverFrameworks)",
+  "path": "02-artifacts/event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시간 변경 (4616·Kernel-General)",
+  "path": "02-artifacts/event-logs/4616-kernel-general.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "Windows Defender 탐지 (1116·1117)",
+  "path": "02-artifacts/event-logs/1116-1117.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "오피스 경고 (OAlerts)",
+  "path": "02-artifacts/event-logs/oalerts.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "공유 폴더 접근 (5140·5145)",
+  "path": "02-artifacts/event-logs/5140-5145.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파일 접근 감사 (4656·4663·4660)",
+  "path": "02-artifacts/event-logs/4656-4663-4660.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "프로그램 설치·삭제 이벤트 (MsiInstaller)",
+  "path": "02-artifacts/event-logs/msiinstaller.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "인쇄 이벤트 (PrintService 307)",
+  "path": "02-artifacts/event-logs/printservice-307.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "Sysmon 로그 (Sysmon)",
+  "path": "02-artifacts/event-logs/sysmon/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "Sysmon 개념과 설정 확인 (Sysmon Config)",
+    "path": "02-artifacts/event-logs/sysmon/sysmon-config.md"
+   },
+   {
+    "title": "프로세스 생성 (이벤트 1)",
+    "path": "02-artifacts/event-logs/sysmon/1.md"
+   },
+   {
+    "title": "네트워크 연결·DNS 질의 (이벤트 3·22)",
+    "path": "02-artifacts/event-logs/sysmon/3-22.md"
+   },
+   {
+    "title": "파일 생성·삭제 (이벤트 11·23·26)",
+    "path": "02-artifacts/event-logs/sysmon/11-23-26.md"
+   },
+   {
+    "title": "레지스트리 변경 (이벤트 12·13·14)",
+    "path": "02-artifacts/event-logs/sysmon/12-13-14.md"
+   },
+   {
+    "title": "이미지 로드·프로세스 접근 (이벤트 7·8·10)",
+    "path": "02-artifacts/event-logs/sysmon/7-8-10.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "Sysmon 개념과 설정 확인 (Sysmon Config)",
+  "path": "02-artifacts/event-logs/sysmon/sysmon-config.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "Sysmon 로그 (Sysmon)",
+   "path": "02-artifacts/event-logs/sysmon/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "프로세스 생성 (이벤트 1)",
+  "path": "02-artifacts/event-logs/sysmon/1.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "Sysmon 로그 (Sysmon)",
+   "path": "02-artifacts/event-logs/sysmon/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "네트워크 연결·DNS 질의 (이벤트 3·22)",
+  "path": "02-artifacts/event-logs/sysmon/3-22.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "Sysmon 로그 (Sysmon)",
+   "path": "02-artifacts/event-logs/sysmon/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파일 생성·삭제 (이벤트 11·23·26)",
+  "path": "02-artifacts/event-logs/sysmon/11-23-26.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "Sysmon 로그 (Sysmon)",
+   "path": "02-artifacts/event-logs/sysmon/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "레지스트리 변경 (이벤트 12·13·14)",
+  "path": "02-artifacts/event-logs/sysmon/12-13-14.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "Sysmon 로그 (Sysmon)",
+   "path": "02-artifacts/event-logs/sysmon/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "이미지 로드·프로세스 접근 (이벤트 7·8·10)",
+  "path": "02-artifacts/event-logs/sysmon/7-8-10.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "이벤트 로그",
+  "parent": {
+   "title": "Sysmon 로그 (Sysmon)",
+   "path": "02-artifacts/event-logs/sysmon/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "자격 증명 관리자와 볼트 (Credential Manager·Windows Vault)",
+  "path": "02-artifacts/credentials/credential-manager-windows-vault.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "레지스트리 속 비밀번호 정보 (SAM·SECURITY)",
+  "path": "02-artifacts/credentials/sam-security/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "부트키 구하기 (SYSTEM Boot Key)",
+    "path": "02-artifacts/credentials/sam-security/system-boot-key.md"
+   },
+   {
+    "title": "NTLM 비밀번호 해시 (NT Hash)",
+    "path": "02-artifacts/credentials/sam-security/nt-hash.md"
+   },
+   {
+    "title": "LSA 시크릿 (LSA Secrets, 자동 로그온 비밀번호 포함)",
+    "path": "02-artifacts/credentials/sam-security/lsa-secrets.md"
+   },
+   {
+    "title": "도메인 캐시 자격증명 (MSCache v2)",
+    "path": "02-artifacts/credentials/sam-security/mscache-v2.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "부트키 구하기 (SYSTEM Boot Key)",
+  "path": "02-artifacts/credentials/sam-security/system-boot-key.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": {
+   "title": "레지스트리 속 비밀번호 정보 (SAM·SECURITY)",
+   "path": "02-artifacts/credentials/sam-security/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "NTLM 비밀번호 해시 (NT Hash)",
+  "path": "02-artifacts/credentials/sam-security/nt-hash.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": {
+   "title": "레지스트리 속 비밀번호 정보 (SAM·SECURITY)",
+   "path": "02-artifacts/credentials/sam-security/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "LSA 시크릿 (LSA Secrets, 자동 로그온 비밀번호 포함)",
+  "path": "02-artifacts/credentials/sam-security/lsa-secrets.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": {
+   "title": "레지스트리 속 비밀번호 정보 (SAM·SECURITY)",
+   "path": "02-artifacts/credentials/sam-security/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "도메인 캐시 자격증명 (MSCache v2)",
+  "path": "02-artifacts/credentials/sam-security/mscache-v2.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": {
+   "title": "레지스트리 속 비밀번호 정보 (SAM·SECURITY)",
+   "path": "02-artifacts/credentials/sam-security/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "액티브 디렉터리 DB (NTDS.dit)",
+  "path": "02-artifacts/credentials/ntds-dit.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "공동인증서 (NPKI)",
+  "path": "02-artifacts/credentials/npki.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "자격증명",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "문서 메타데이터 (Document Metadata)",
+  "path": "02-artifacts/embedded-metadata/document-metadata/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "오피스 문서 속성 (OOXML docProps)",
+    "path": "02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md"
+   },
+   {
+    "title": "옛 오피스 문서 속성 (OLE SummaryInformation)",
+    "path": "02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md"
+   },
+   {
+    "title": "편집 흔적 식별자 (RSID)",
+    "path": "02-artifacts/embedded-metadata/document-metadata/rsid.md"
+   },
+   {
+    "title": "PDF 정보 사전과 XMP (PDF Info·XMP)",
+    "path": "02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md"
+   },
+   {
+    "title": "PDF 증분 저장과 이전 판 복원 (Incremental Update)",
+    "path": "02-artifacts/embedded-metadata/document-metadata/incremental-update.md"
+   },
+   {
+    "title": "한글 문서 (HWP·HWPX)",
+    "path": "02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "오피스 문서 속성 (OOXML docProps)",
+  "path": "02-artifacts/embedded-metadata/document-metadata/ooxml-docprops.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": {
+   "title": "문서 메타데이터 (Document Metadata)",
+   "path": "02-artifacts/embedded-metadata/document-metadata/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "옛 오피스 문서 속성 (OLE SummaryInformation)",
+  "path": "02-artifacts/embedded-metadata/document-metadata/ole-summaryinformation.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": {
+   "title": "문서 메타데이터 (Document Metadata)",
+   "path": "02-artifacts/embedded-metadata/document-metadata/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "편집 흔적 식별자 (RSID)",
+  "path": "02-artifacts/embedded-metadata/document-metadata/rsid.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": {
+   "title": "문서 메타데이터 (Document Metadata)",
+   "path": "02-artifacts/embedded-metadata/document-metadata/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "PDF 정보 사전과 XMP (PDF Info·XMP)",
+  "path": "02-artifacts/embedded-metadata/document-metadata/pdf-info-xmp.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": {
+   "title": "문서 메타데이터 (Document Metadata)",
+   "path": "02-artifacts/embedded-metadata/document-metadata/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "PDF 증분 저장과 이전 판 복원 (Incremental Update)",
+  "path": "02-artifacts/embedded-metadata/document-metadata/incremental-update.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": {
+   "title": "문서 메타데이터 (Document Metadata)",
+   "path": "02-artifacts/embedded-metadata/document-metadata/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "한글 문서 (HWP·HWPX)",
+  "path": "02-artifacts/embedded-metadata/document-metadata/hwp-hwpx.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": {
+   "title": "문서 메타데이터 (Document Metadata)",
+   "path": "02-artifacts/embedded-metadata/document-metadata/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "사진 EXIF (EXIF)",
+  "path": "02-artifacts/embedded-metadata/exif.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "오피스 매크로 (VBA Macro)",
+  "path": "02-artifacts/embedded-metadata/vba-macro.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "실행 파일 메타데이터 (PE Header·Version Info·Digital Signature)",
+  "path": "02-artifacts/embedded-metadata/pe-header-version-info-digital-signature.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "파일 내장 메타데이터",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "포렌식 조사 절차 (Investigation Process)",
+  "path": "03-techniques/process-acquisition/investigation-process.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "증거 획득 (Evidence Acquisition)",
+  "path": "03-techniques/process-acquisition/evidence-acquisition/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "디스크 이미징 (Disk Imaging)",
+    "path": "03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md"
+   },
+   {
+    "title": "쓰기 방지 (Write Blocker)",
+    "path": "03-techniques/process-acquisition/evidence-acquisition/write-blocker.md"
+   },
+   {
+    "title": "해시로 무결성 검증 (Hash Verification)",
+    "path": "03-techniques/process-acquisition/evidence-acquisition/hash-verification.md"
+   },
+   {
+    "title": "선별 수집 (Triage Collection)",
+    "path": "03-techniques/process-acquisition/evidence-acquisition/triage-collection.md"
+   },
+   {
+    "title": "가상 머신·클라우드 디스크 확보 (VM·Cloud Disk)",
+    "path": "03-techniques/process-acquisition/evidence-acquisition/vm-cloud-disk.md"
+   },
+   {
+    "title": "증거 보관 연속성 (Chain of Custody)",
+    "path": "03-techniques/process-acquisition/evidence-acquisition/chain-of-custody.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "디스크 이미징 (Disk Imaging)",
+  "path": "03-techniques/process-acquisition/evidence-acquisition/disk-imaging.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "증거 획득 (Evidence Acquisition)",
+   "path": "03-techniques/process-acquisition/evidence-acquisition/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "쓰기 방지 (Write Blocker)",
+  "path": "03-techniques/process-acquisition/evidence-acquisition/write-blocker.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "증거 획득 (Evidence Acquisition)",
+   "path": "03-techniques/process-acquisition/evidence-acquisition/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "해시로 무결성 검증 (Hash Verification)",
+  "path": "03-techniques/process-acquisition/evidence-acquisition/hash-verification.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "증거 획득 (Evidence Acquisition)",
+   "path": "03-techniques/process-acquisition/evidence-acquisition/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "선별 수집 (Triage Collection)",
+  "path": "03-techniques/process-acquisition/evidence-acquisition/triage-collection.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "증거 획득 (Evidence Acquisition)",
+   "path": "03-techniques/process-acquisition/evidence-acquisition/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "가상 머신·클라우드 디스크 확보 (VM·Cloud Disk)",
+  "path": "03-techniques/process-acquisition/evidence-acquisition/vm-cloud-disk.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "증거 획득 (Evidence Acquisition)",
+   "path": "03-techniques/process-acquisition/evidence-acquisition/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "증거 보관 연속성 (Chain of Custody)",
+  "path": "03-techniques/process-acquisition/evidence-acquisition/chain-of-custody.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "증거 획득 (Evidence Acquisition)",
+   "path": "03-techniques/process-acquisition/evidence-acquisition/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "라이브 응답 (Live Response)",
+  "path": "03-techniques/process-acquisition/live-response/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "수집 순서와 원칙 (Order of Volatility)",
+    "path": "03-techniques/process-acquisition/live-response/order-of-volatility.md"
+   },
+   {
+    "title": "프로세스·DLL·핸들 수집 (Processes·DLLs·Handles)",
+    "path": "03-techniques/process-acquisition/live-response/processes-dlls-handles.md"
+   },
+   {
+    "title": "네트워크 상태 수집 (Connections·DNS·ARP·Routes)",
+    "path": "03-techniques/process-acquisition/live-response/connections-dns-arp-routes.md"
+   },
+   {
+    "title": "로그온 세션·클립보드·화면 수집 (Sessions·Clipboard·Screen)",
+    "path": "03-techniques/process-acquisition/live-response/sessions-clipboard-screen.md"
+   },
+   {
+    "title": "실행 중 시스템 이미징 (Live Imaging)",
+    "path": "03-techniques/process-acquisition/live-response/live-imaging.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "수집 순서와 원칙 (Order of Volatility)",
+  "path": "03-techniques/process-acquisition/live-response/order-of-volatility.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "라이브 응답 (Live Response)",
+   "path": "03-techniques/process-acquisition/live-response/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "프로세스·DLL·핸들 수집 (Processes·DLLs·Handles)",
+  "path": "03-techniques/process-acquisition/live-response/processes-dlls-handles.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "라이브 응답 (Live Response)",
+   "path": "03-techniques/process-acquisition/live-response/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "네트워크 상태 수집 (Connections·DNS·ARP·Routes)",
+  "path": "03-techniques/process-acquisition/live-response/connections-dns-arp-routes.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "라이브 응답 (Live Response)",
+   "path": "03-techniques/process-acquisition/live-response/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "로그온 세션·클립보드·화면 수집 (Sessions·Clipboard·Screen)",
+  "path": "03-techniques/process-acquisition/live-response/sessions-clipboard-screen.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "라이브 응답 (Live Response)",
+   "path": "03-techniques/process-acquisition/live-response/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "실행 중 시스템 이미징 (Live Imaging)",
+  "path": "03-techniques/process-acquisition/live-response/live-imaging.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "조사 절차·증거 확보",
+  "parent": {
+   "title": "라이브 응답 (Live Response)",
+   "path": "03-techniques/process-acquisition/live-response/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "메모리 분석 (Memory Forensics)",
+  "path": "03-techniques/analysis/memory-forensics/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "메모리 덤프 확보 (Memory Acquisition)",
+    "path": "03-techniques/analysis/memory-forensics/memory-acquisition.md"
+   },
+   {
+    "title": "프로세스와 DLL 분석 (Process Analysis)",
+    "path": "03-techniques/analysis/memory-forensics/process-analysis.md"
+   },
+   {
+    "title": "메모리 속 네트워크 흔적 (Network Artifacts)",
+    "path": "03-techniques/analysis/memory-forensics/network-artifacts.md"
+   },
+   {
+    "title": "코드 주입·숨긴 프로세스 탐지 (Injection·Rootkit)",
+    "path": "03-techniques/analysis/memory-forensics/injection-rootkit.md"
+   },
+   {
+    "title": "메모리 속 문자열·자격증명·암호 키 (Strings·Credentials·Keys)",
+    "path": "03-techniques/analysis/memory-forensics/strings-credentials-keys.md"
+   },
+   {
+    "title": "최대 절전 파일 (hiberfil.sys)",
+    "path": "03-techniques/analysis/memory-forensics/hiberfil-sys.md"
+   },
+   {
+    "title": "페이지 파일 (pagefile.sys·swapfile.sys)",
+    "path": "03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md"
+   },
+   {
+    "title": "크래시 덤프 (MEMORY.DMP·Minidump)",
+    "path": "03-techniques/analysis/memory-forensics/memory-dmp-minidump.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "메모리 덤프 확보 (Memory Acquisition)",
+  "path": "03-techniques/analysis/memory-forensics/memory-acquisition.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "프로세스와 DLL 분석 (Process Analysis)",
+  "path": "03-techniques/analysis/memory-forensics/process-analysis.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "메모리 속 네트워크 흔적 (Network Artifacts)",
+  "path": "03-techniques/analysis/memory-forensics/network-artifacts.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "코드 주입·숨긴 프로세스 탐지 (Injection·Rootkit)",
+  "path": "03-techniques/analysis/memory-forensics/injection-rootkit.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "메모리 속 문자열·자격증명·암호 키 (Strings·Credentials·Keys)",
+  "path": "03-techniques/analysis/memory-forensics/strings-credentials-keys.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "최대 절전 파일 (hiberfil.sys)",
+  "path": "03-techniques/analysis/memory-forensics/hiberfil-sys.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "페이지 파일 (pagefile.sys·swapfile.sys)",
+  "path": "03-techniques/analysis/memory-forensics/pagefile-sys-swapfile-sys.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "크래시 덤프 (MEMORY.DMP·Minidump)",
+  "path": "03-techniques/analysis/memory-forensics/memory-dmp-minidump.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "메모리 분석 (Memory Forensics)",
+   "path": "03-techniques/analysis/memory-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "타임라인 작성 (Timeline)",
+  "path": "03-techniques/analysis/timeline/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일 시각 네 가지와 변화 규칙 (MACB·Timestamp Rules)",
+    "path": "03-techniques/analysis/timeline/macb-timestamp-rules.md"
+   },
+   {
+    "title": "파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)",
+    "path": "03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md"
+   },
+   {
+    "title": "여러 아티팩트 합친 타임라인 (Super Timeline)",
+    "path": "03-techniques/analysis/timeline/super-timeline.md"
+   },
+   {
+    "title": "시간대·시계 오차 보정 (Time Normalization)",
+    "path": "03-techniques/analysis/timeline/time-normalization.md"
+   },
+   {
+    "title": "시각 조작 탐지 (Timestomping)",
+    "path": "03-techniques/analysis/timeline/timestomping.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "파일 시각 네 가지와 변화 규칙 (MACB·Timestamp Rules)",
+  "path": "03-techniques/analysis/timeline/macb-timestamp-rules.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파일시스템 타임라인 (Filesystem Timeline: $MFT·$UsnJrnl·$LogFile)",
+  "path": "03-techniques/analysis/timeline/filesystem-timeline-mft-usnjrnl-logfile.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "여러 아티팩트 합친 타임라인 (Super Timeline)",
+  "path": "03-techniques/analysis/timeline/super-timeline.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시간대·시계 오차 보정 (Time Normalization)",
+  "path": "03-techniques/analysis/timeline/time-normalization.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시각 조작 탐지 (Timestomping)",
+  "path": "03-techniques/analysis/timeline/timestomping.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "타임라인 작성 (Timeline)",
+   "path": "03-techniques/analysis/timeline/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "섀도 복사본 활용 (Volume Shadow Copy Analysis)",
+  "path": "03-techniques/analysis/volume-shadow-copy-analysis.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "삭제 데이터 복구 (Data Recovery)",
+  "path": "03-techniques/analysis/data-recovery/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일시스템 기반 복구 (Undelete: NTFS·FAT)",
+    "path": "03-techniques/analysis/data-recovery/undelete-ntfs-fat.md"
+   },
+   {
+    "title": "비할당 영역과 슬랙 (Unallocated·Slack Space)",
+    "path": "03-techniques/analysis/data-recovery/unallocated-slack-space.md"
+   },
+   {
+    "title": "파일 카빙 (File Carving)",
+    "path": "03-techniques/analysis/data-recovery/file-carving.md"
+   },
+   {
+    "title": "레코드 카빙 (Record Carving)",
+    "path": "03-techniques/analysis/data-recovery/record-carving.md"
+   },
+   {
+    "title": "SSD TRIM과 복구 한계 (SSD·TRIM)",
+    "path": "03-techniques/analysis/data-recovery/ssd-trim.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "파일시스템 기반 복구 (Undelete: NTFS·FAT)",
+  "path": "03-techniques/analysis/data-recovery/undelete-ntfs-fat.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "비할당 영역과 슬랙 (Unallocated·Slack Space)",
+  "path": "03-techniques/analysis/data-recovery/unallocated-slack-space.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파일 카빙 (File Carving)",
+  "path": "03-techniques/analysis/data-recovery/file-carving.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "레코드 카빙 (Record Carving)",
+  "path": "03-techniques/analysis/data-recovery/record-carving.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "SSD TRIM과 복구 한계 (SSD·TRIM)",
+  "path": "03-techniques/analysis/data-recovery/ssd-trim.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "삭제 데이터 복구 (Data Recovery)",
+   "path": "03-techniques/analysis/data-recovery/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "암호화 증거 다루기 (Encrypted Evidence)",
+  "path": "03-techniques/analysis/encrypted-evidence/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "암호화 컨테이너 찾기 (Encrypted Container Detection)",
+    "path": "03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md"
+   },
+   {
+    "title": "BitLocker 볼륨 구조와 풀기 (BitLocker)",
+    "path": "03-techniques/analysis/encrypted-evidence/bitlocker.md"
+   },
+   {
+    "title": "EFS 암호화 파일 (Encrypting File System)",
+    "path": "03-techniques/analysis/encrypted-evidence/encrypting-file-system.md"
+   },
+   {
+    "title": "암호 걸린 문서·압축 파일 (Password-Protected Files)",
+    "path": "03-techniques/analysis/encrypted-evidence/password-protected-files.md"
+   },
+   {
+    "title": "DRM 문서 판별 (Enterprise DRM)",
+    "path": "03-techniques/analysis/encrypted-evidence/enterprise-drm.md"
+   },
+   {
+    "title": "비밀번호 복구 (Password Recovery)",
+    "path": "03-techniques/analysis/encrypted-evidence/password-recovery.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "암호화 컨테이너 찾기 (Encrypted Container Detection)",
+  "path": "03-techniques/analysis/encrypted-evidence/encrypted-container-detection.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "암호화 증거 다루기 (Encrypted Evidence)",
+   "path": "03-techniques/analysis/encrypted-evidence/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "BitLocker 볼륨 구조와 풀기 (BitLocker)",
+  "path": "03-techniques/analysis/encrypted-evidence/bitlocker.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "암호화 증거 다루기 (Encrypted Evidence)",
+   "path": "03-techniques/analysis/encrypted-evidence/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "EFS 암호화 파일 (Encrypting File System)",
+  "path": "03-techniques/analysis/encrypted-evidence/encrypting-file-system.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "암호화 증거 다루기 (Encrypted Evidence)",
+   "path": "03-techniques/analysis/encrypted-evidence/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "암호 걸린 문서·압축 파일 (Password-Protected Files)",
+  "path": "03-techniques/analysis/encrypted-evidence/password-protected-files.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "암호화 증거 다루기 (Encrypted Evidence)",
+   "path": "03-techniques/analysis/encrypted-evidence/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "DRM 문서 판별 (Enterprise DRM)",
+  "path": "03-techniques/analysis/encrypted-evidence/enterprise-drm.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "암호화 증거 다루기 (Encrypted Evidence)",
+   "path": "03-techniques/analysis/encrypted-evidence/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "비밀번호 복구 (Password Recovery)",
+  "path": "03-techniques/analysis/encrypted-evidence/password-recovery.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "암호화 증거 다루기 (Encrypted Evidence)",
+   "path": "03-techniques/analysis/encrypted-evidence/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "파일 내용 검색 (Content Search)",
+  "path": "03-techniques/analysis/content-search/index.md",
+  "kind": "hub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "파일 형식 식별 (File Signature)",
+    "path": "03-techniques/analysis/content-search/file-signature.md"
+   },
+   {
+    "title": "압축·복합 파일 펼치기 (Archive Expansion)",
+    "path": "03-techniques/analysis/content-search/archive-expansion.md"
+   },
+   {
+    "title": "본문 추출과 글자 인식 (Text Extraction·OCR)",
+    "path": "03-techniques/analysis/content-search/text-extraction-ocr.md"
+   },
+   {
+    "title": "키워드 검색 (Keyword Search)",
+    "path": "03-techniques/analysis/content-search/keyword-search.md"
+   },
+   {
+    "title": "개인정보 탐지 (PII Detection)",
+    "path": "03-techniques/analysis/content-search/pii-detection.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "파일 형식 식별 (File Signature)",
+  "path": "03-techniques/analysis/content-search/file-signature.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "파일 내용 검색 (Content Search)",
+   "path": "03-techniques/analysis/content-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "압축·복합 파일 펼치기 (Archive Expansion)",
+  "path": "03-techniques/analysis/content-search/archive-expansion.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "파일 내용 검색 (Content Search)",
+   "path": "03-techniques/analysis/content-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "본문 추출과 글자 인식 (Text Extraction·OCR)",
+  "path": "03-techniques/analysis/content-search/text-extraction-ocr.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "파일 내용 검색 (Content Search)",
+   "path": "03-techniques/analysis/content-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "키워드 검색 (Keyword Search)",
+  "path": "03-techniques/analysis/content-search/keyword-search.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "파일 내용 검색 (Content Search)",
+   "path": "03-techniques/analysis/content-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "개인정보 탐지 (PII Detection)",
+  "path": "03-techniques/analysis/content-search/pii-detection.md",
+  "kind": "sub",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": {
+   "title": "파일 내용 검색 (Content Search)",
+   "path": "03-techniques/analysis/content-search/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "해시셋 대조와 유사 해시 (Hash Set·Fuzzy Hash)",
+  "path": "03-techniques/analysis/hash-set-fuzzy-hash.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "의심 실행 파일 선별 (Code Signing·YARA)",
+  "path": "03-techniques/analysis/code-signing-yara.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "이벤트 로그 규칙 검색 (Sigma Rules)",
+  "path": "03-techniques/analysis/sigma-rules.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "메일 헤더 분석 (Email Header Analysis)",
+  "path": "03-techniques/analysis/email-header-analysis.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "도구 결과 교차 검증 (Tool Validation)",
+  "path": "03-techniques/reporting/tool-validation.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "분석 보고서 작성 (Forensic Report)",
+  "path": "03-techniques/reporting/forensic-report.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "개인정보 파일이 어디 있고 밖으로 나갔나 (PII Exposure)",
+  "path": "04-scenarios/exfiltration/pii-exposure.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "정보 유출",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "악성코드는 어디서 들어왔나 (Initial Access)",
+  "path": "04-scenarios/incident/initial-access.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "악성코드 지속성(자동실행) 찾기 (Persistence)",
+  "path": "04-scenarios/incident/persistence.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원격 데스크톱 침입 확인 (RDP Intrusion)",
+  "path": "04-scenarios/incident/rdp-intrusion.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "원격 제어 프로그램으로 누가 조작했나 (Remote Access Tool Abuse)",
+  "path": "04-scenarios/incident/remote-access-tool-abuse.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)",
+  "path": "04-scenarios/incident/credential-theft-lateral-movement/index.md",
+  "kind": "hub",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "비밀번호 대입 공격이 있었나 (Brute Force)",
+    "path": "04-scenarios/incident/credential-theft-lateral-movement/brute-force.md"
+   },
+   {
+    "title": "자격 증명을 빼냈나 (Credential Dumping)",
+    "path": "04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md"
+   },
+   {
+    "title": "다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)",
+    "path": "04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md"
+   },
+   {
+    "title": "새 계정을 만들거나 권한을 올렸나 (Account·Privilege)",
+    "path": "04-scenarios/incident/credential-theft-lateral-movement/account-privilege.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "비밀번호 대입 공격이 있었나 (Brute Force)",
+  "path": "04-scenarios/incident/credential-theft-lateral-movement/brute-force.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": {
+   "title": "계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)",
+   "path": "04-scenarios/incident/credential-theft-lateral-movement/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "자격 증명을 빼냈나 (Credential Dumping)",
+  "path": "04-scenarios/incident/credential-theft-lateral-movement/credential-dumping.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": {
+   "title": "계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)",
+   "path": "04-scenarios/incident/credential-theft-lateral-movement/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "다른 PC 에서 원격 실행했나 (PsExec·WMI·WinRM)",
+  "path": "04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": {
+   "title": "계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)",
+   "path": "04-scenarios/incident/credential-theft-lateral-movement/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "새 계정을 만들거나 권한을 올렸나 (Account·Privilege)",
+  "path": "04-scenarios/incident/credential-theft-lateral-movement/account-privilege.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": {
+   "title": "계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)",
+   "path": "04-scenarios/incident/credential-theft-lateral-movement/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "랜섬웨어는 언제 어떻게 퍼졌나 (Ransomware)",
+  "path": "04-scenarios/incident/ransomware.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침해 사고",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "어떤 프로그램을 언제 실행했나 (Program Execution)",
+  "path": "04-scenarios/activity/program-execution.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "이 파일은 어디서 왔나 (File Origin)",
+  "path": "04-scenarios/activity/file-origin.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "지운 파일의 흔적 찾기 (Deleted File Traces)",
+  "path": "04-scenarios/activity/deleted-file-traces.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "웹 사용 행위 재구성 (Web Activity)",
+  "path": "04-scenarios/activity/web-activity.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시크릿 모드로 무엇을 했나 (Private Browsing)",
+  "path": "04-scenarios/activity/private-browsing.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "누구와 연락을 주고받았나 (Communication Reconstruction)",
+  "path": "04-scenarios/activity/communication-reconstruction.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "PC 사용 시간 재구성 (켜짐·꺼짐·로그온) (System Usage Time)",
+  "path": "04-scenarios/activity/system-usage-time.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "그 시각에 PC 를 쓴 사람이 누구인가 (User Attribution)",
+  "path": "04-scenarios/activity/user-attribution.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "이 문서의 날짜를 믿을 수 있나 (Document Date Verification)",
+  "path": "04-scenarios/activity/document-date-verification.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "증거를 없애려 했나 (Anti-Forensics)",
+  "path": "04-scenarios/activity/anti-forensics/index.md",
+  "kind": "hub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "이벤트 로그를 지웠나 (Log Clearing)",
+    "path": "04-scenarios/activity/anti-forensics/log-clearing.md"
+   },
+   {
+    "title": "완전삭제 도구를 썼나 (Wiping Tools)",
+    "path": "04-scenarios/activity/anti-forensics/wiping-tools.md"
+   },
+   {
+    "title": "PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)",
+    "path": "04-scenarios/activity/anti-forensics/reset-reinstall.md"
+   },
+   {
+    "title": "시스템 시각을 바꿨나 (System Time Change)",
+    "path": "04-scenarios/activity/anti-forensics/system-time-change.md"
+   },
+   {
+    "title": "보안 프로그램을 끄거나 지웠나 (Defense Evasion)",
+    "path": "04-scenarios/activity/anti-forensics/defense-evasion.md"
+   }
+  ],
+  "priority": false
+ },
+ {
+  "title": "이벤트 로그를 지웠나 (Log Clearing)",
+  "path": "04-scenarios/activity/anti-forensics/log-clearing.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "완전삭제 도구를 썼나 (Wiping Tools)",
+  "path": "04-scenarios/activity/anti-forensics/wiping-tools.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)",
+  "path": "04-scenarios/activity/anti-forensics/reset-reinstall.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "시스템 시각을 바꿨나 (System Time Change)",
+  "path": "04-scenarios/activity/anti-forensics/system-time-change.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ },
+ {
+  "title": "보안 프로그램을 끄거나 지웠나 (Defense Evasion)",
+  "path": "04-scenarios/activity/anti-forensics/defense-evasion.md",
+  "kind": "sub",
+  "section": "조사 시나리오",
+  "group": "행위 재구성",
+  "parent": {
+   "title": "증거를 없애려 했나 (Anti-Forensics)",
+   "path": "04-scenarios/activity/anti-forensics/index.md"
+  },
+  "subpages": [],
+  "priority": false
+ }
+]
