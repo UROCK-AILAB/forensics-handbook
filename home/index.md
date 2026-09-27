@@ -20,13 +20,15 @@ permalink: /
 ## 핸드북
 
 <!-- 핸드북 목록 시작 -->
-- **[Windows 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/windows/)** — Windows 시스템에 남는 흔적을 읽고 해석합니다.
-- **[macOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/mac/)** — macOS 시스템에 남는 흔적을 읽고 해석합니다.
-- **[Linux 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/linux/)** — Linux 서버와 데스크톱에 남는 흔적을 읽고 해석합니다.
-- **[Android 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/android/)** — Android 기기에 남는 흔적을 읽고 해석합니다.
-- **[iOS 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/ios/)** — iPhone 에 남는 흔적을 읽고 해석합니다.
-- **[클라우드 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/cloud/)** — Microsoft 365·Google Workspace·AWS·Azure·Google Cloud 와 업무용 SaaS 에 남는 기록을 읽고 해석합니다.
-- **[AI 서비스 디지털 포렌식 핸드북](https://urock-ailab.github.io/forensics-handbook/ai/)** — ChatGPT·Claude 같은 AI 서비스를 쓰면 남는 흔적을 읽고 해석합니다.
+| 핸드북 | 다루는 것 |
+|---|---|
+| [Windows](https://urock-ailab.github.io/forensics-handbook/windows/) | NTFS·레지스트리·이벤트 로그부터 브라우저·메신저까지 Windows PC 에 남는 흔적 |
+| [macOS](https://urock-ailab.github.io/forensics-handbook/mac/) | APFS·통합 로그·plist 와 macOS 앱에 남는 흔적 |
+| [Linux](https://urock-ailab.github.io/forensics-handbook/linux/) | 로그인·명령 실행·지속성·로그 중심의 서버와 데스크톱 흔적 |
+| [Android](https://urock-ailab.github.io/forensics-handbook/android/) | Android 기기의 앱·통신·위치·사용 기록 |
+| [iOS](https://urock-ailab.github.io/forensics-handbook/ios/) | iPhone 의 앱·통신·위치·사용 기록 |
+| [Cloud](https://urock-ailab.github.io/forensics-handbook/cloud/) | Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 의 로그 |
+| [AI 서비스](https://urock-ailab.github.io/forensics-handbook/ai/) | ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정에 남는 흔적 |
 <!-- 핸드북 목록 끝 -->
 
 ## 이용 조건
