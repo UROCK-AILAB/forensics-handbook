@@ -20,6 +20,7 @@ permalink: /
 ## 핸드북
 
 <!-- 핸드북 목록 시작 -->
+
 | 핸드북 | 다루는 것 |
 |---|---|
 | [Windows](https://urock-ailab.github.io/forensics-handbook/windows/) | NTFS·레지스트리·이벤트 로그부터 브라우저·메신저까지 Windows PC 에 남는 흔적 |
@@ -29,6 +30,7 @@ permalink: /
 | [iOS](https://urock-ailab.github.io/forensics-handbook/ios/) | iPhone 의 앱·통신·위치·사용 기록 |
 | [Cloud](https://urock-ailab.github.io/forensics-handbook/cloud/) | Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 의 로그 |
 | [AI 서비스](https://urock-ailab.github.io/forensics-handbook/ai/) | ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정에 남는 흔적 |
+
 <!-- 핸드북 목록 끝 -->
 
 ## 이용 조건
