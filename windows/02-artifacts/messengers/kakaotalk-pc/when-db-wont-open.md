@@ -40,24 +40,24 @@ nav_order: 2030
 
 ### 이미지와 섬네일 (`.cng`)
 
-`.cng` 는 계정별 키 없이 기기 지문과 userId 만으로 풀리는 경우가 있습니다(논문).
+`.cng` 는 계정별 키 없이 기기 지문과 userId 만으로 풀리는 경우가 있습니다[1].
 자세한 내용은 [받은 파일·사진 폴더](received-files.md) 에 있습니다.
 
 ### `ActionLogDB.edb`
 
-- 25.7.2 미만의 이 DB 는 고정 패스프레이즈를 씁니다(논문).
+- 25.7.2 미만의 이 DB 는 고정 패스프레이즈를 씁니다[1].
 - 그래서 이 파일에서는 계정별 키 없이도 행동 로그와 userId 를 얻을 수 있습니다.
-- 25.7.2 이상에서 쓰는 현재 `ActionLogDB.edb` 는 SQLCipher 4 로 암호화합니다(논문).
-- 업데이트 때 이름이 바뀐 `<계정 폴더>_backup_<백업 시각>` 폴더의 사본은 같은 고정 패스프레이즈로 풀립니다(논문).
+- 25.7.2 이상에서 쓰는 현재 `ActionLogDB.edb` 는 SQLCipher 4 로 암호화합니다[1].
+- 업데이트 때 이름이 바뀐 `<계정 폴더>_backup_<백업 시각>` 폴더의 사본은 같은 고정 패스프레이즈로 풀립니다[1].
 - 고정 패스프레이즈 값은 이 핸드북에 옮기지 않습니다. 논문을 봅니다.
 - userId 가 든 표와 열은 [계정·로그인 흔적](account-login.md) 에 있습니다.
 
 ### `-wal` 과 `-shm`
 
-- `-wal` 은 주 DB 에 아직 합치지 않은 최근 트랜잭션을 담는 파일입니다(SQLite WAL 문서).
+- `-wal` 은 주 DB 에 아직 합치지 않은 최근 트랜잭션을 담는 파일입니다[2].
 - SQLite 는 이 기록을 주 DB 위에 이어 붙여 적용합니다. 이런 방식을 롤포워드 (Roll-forward) 라고 합니다.
 - `-shm` 은 `-wal` 안의 기록을 빨리 찾게 하는 색인입니다. 여러 프로세스가 공유 메모리로 씁니다.
-- 최근 메시지가 주 DB 가 아니라 `-wal` 에만 있을 수 있습니다(SQLite WAL 문서). 그래서 세 파일을 함께 봅니다.
+- 최근 메시지가 주 DB 가 아니라 `-wal` 에만 있을 수 있습니다[2]. 그래서 세 파일을 함께 봅니다.
 - 암호화한 DB 의 `-wal` 이 평문인지 암호문인지는 실제 데이터로 확인해야 합니다.
 - `-wal` 형식은 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 
@@ -66,6 +66,34 @@ nav_order: 2030
 - RAM 캡처, `hiberfil.sys`, `pagefile.sys` 같은 메모리 이미지에는 복호 키나 평문 잔재가 남아 있을 수 있습니다.
 - 메모리 이미지를 다루는 법은 [메모리 분석](../../../03-techniques/analysis/memory-forensics/index.md) 에서, 암호문을 다루는 일반 절차는 [암호화 증거 다루기](../../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
 - RAM 은 PC 가 켜져 있을 때만 뜰 수 있습니다. 수집 순서는 [라이브 응답](../../../03-techniques/process-acquisition/live-response/index.md) 에서 다룹니다.
+
+## 보낸 사람 이름 찾기 (연락처 DB 가 안 열릴 때)
+
+대화 DB 의 `authorId` 열에는 보낸 사람의 이름이 아니라 사용자 식별자가 들어 있고, 이 식별자에 맞는 이름은 연락처 DB 인 `TalkUserDB.edb` 의 `userId`·`nickName` 열에 있습니다[1]. 그래서 대화 DB 가 평문이어도 `TalkUserDB.edb` 가 암호문이면 보낸 사람이 숫자로만 보입니다. 연락처 DB 의 암호화 상태는 [대화 DB 암호화와 버전별 차이](chat-db-encryption.md) 에서 다룹니다.
+
+이럴 때는 대화 DB 안의 피드 (Feed) 행에서 이름을 찾습니다. 피드 행은 누가 방에 들어오고, 초대받고, 나간 일을 남기는 시스템 기록입니다. 안드로이드 카카오톡의 대화 표 `chat_logs` 에서는 `type` 이 0 인 행이 피드이고, 이 행의 `message` 값이 JSON 입니다[3][4]. JSON 의 `feedType` 이 1 이면 초대, 2 이면 나감, 4 이면 들어옴이고, 초대한 사람은 `inviter` 필드에, 대상은 `member`·`members` 필드에 들어갑니다[3][4]. 대상마다 `userId` 와 `nickName` 이 짝으로 들어 있어서, 이 `userId` 를 메시지 행의 보낸 사람 ID 와 맞추면 이름을 붙일 수 있습니다[4]. 안드로이드 DB 에서는 `message` 값 자체가 암호화돼 있을 수 있어, 먼저 풀어야 JSON 이 보입니다[3][4].
+
+아래는 들어옴 피드의 `message` 값입니다(만든 예시). 필드 이름은 [3][4] 를 따랐고, 값은 지어낸 것입니다.
+
+```json
+{"feedType":4,"members":[{"userId":1234567890,"nickName":"홍길동"}]}
+```
+
+카카오톡 PC 의 대화 DB 에 같은 모양의 피드 행이 있는지는 공개된 분석 자료가 없습니다. 그래서 PC 에서는 아래 순서로 실제 데이터에서 확인합니다.
+
+1. 평문 대화 DB 나 `.backup` 의 사본을 열고 `.schema` 로 열 이름을 봅니다.
+2. `message` 가 `{"feedType"` 으로 시작하는 행을 뽑습니다.
+
+   ```sql
+   SELECT <시각 열>, message FROM <메시지 표> WHERE message LIKE '{"feedType"%';
+   ```
+
+3. 행마다 JSON 을 풀어 `userId`·`nickName` 짝과 그 행의 시각을 적습니다. 같은 `userId` 에 이름이 여러 개 나오면 모두 적습니다.
+4. 메시지 행의 `authorId` 를 이 짝의 `userId` 와 맞춥니다.
+
+이 방법은 피드 행이 남은 방에서만 쓸 수 있고, 피드 행에 한 번도 나오지 않은 사람은 숫자로 남습니다. `nickName` 은 그 피드 행이 생길 때 쓰던 이름이라서, 지금 쓰는 이름이나 연락처에 저장한 이름, 실명과 다를 수 있습니다. 또 이 짝은 그 계정이 그 이름을 썼다는 기록일 뿐, 그 계정을 실제로 누가 썼는지는 증명하지 못합니다.
+
+> 보고서 문장 예: "대화방 <식별자> 의 피드 행(<시각>)에 userId <값> 과 nickName <값> 이 함께 기록돼 있고, 이 방의 메시지 N건의 `authorId` 가 이 userId 와 같다."
 
 ## 증거로서 의미
 
@@ -83,7 +111,7 @@ nav_order: 2030
 
 ## 시각 해석
 
-- 업데이트 때 생기는 `_backup_<백업 시각>` 폴더 이름의 시각은 UTC+0 기준입니다(논문).
+- 업데이트 때 생기는 `_backup_<백업 시각>` 폴더 이름의 시각은 UTC+0 기준입니다[1].
 - `chat_data\` 의 `.backup` 파일 이름에도 날짜와 시각이 들어 있습니다.
 - 이 파일 이름의 값이 백업을 만든 시각인지, 어느 시간대 기준인지는 공개된 분석 자료가 없습니다. 백업 안 마지막 메시지 시각과 맞춰 봅니다.
 - `-wal` 의 기록은 주 DB 에 아직 합치지 않은 최근 변경입니다. 주 DB 보다 뒤의 시점을 담을 수 있습니다.
@@ -139,5 +167,7 @@ SELECT COUNT(*), MIN(<시각 칸>), MAX(<시각 칸>) FROM <메시지 표>;
 
 ## 참고 문헌
 
-- 논문: 카카오톡 PC 포렌식 연구 논문(최신 버전 구간의 한계, `_backup_` 폴더, `.cng` 복호, `ActionLogDB.edb` 고정 패스프레이즈), KoreaScience — https://www.koreascience.kr/article/JAKO202530836043843.page
+- 논문: 카카오톡 PC 포렌식 연구 논문(최신 버전 구간의 한계, `_backup_` 폴더, `.cng` 복호, `ActionLogDB.edb` 고정 패스프레이즈, `authorId` 와 `TalkUserDB.edb` 의 `userId`·`nickName` 열), KoreaScience — https://www.koreascience.kr/article/JAKO202530836043843.page
 - SQLite WAL 문서: SQLite, "Write-Ahead Log" 파일 형식(-wal·-shm 의 뜻과 이름 규칙), SQLite.org — https://www.sqlite.org/walformat.html
+- AnalyzeKakaoTalk: KENNYSOFT, 안드로이드 카카오톡 DB 복호 도구 소스(`chat_logs` 의 `type` 0 행을 JSON 으로 읽고 `feedType` 1·2·4 로 초대·나감·들어옴을 구분, `inviter`·`member`·`members` 의 `nickName`), GitHub — https://github.com/KENNYSOFT/AnalyzeKakaoTalk
+- KakaoDBpy: minsuho, 안드로이드 카카오톡 DB 를 읽는 봇 소스(`type` 0 행의 `message` 를 풀어 `feedType` 과 `member`·`members` 의 `userId`·`nickName` 을 읽음), GitHub — https://github.com/minsuho/KakaoDBpy

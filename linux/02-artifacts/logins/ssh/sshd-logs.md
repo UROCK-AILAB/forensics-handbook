@@ -90,7 +90,7 @@ Accepted|Failed|Partial|Postponed 방식[/하위방식] for [invalid user ]이�
 
 ## 시각 해석
 
-줄의 시각은 sshd 가 그 사건을 기록한 때이고, 파일에 적히는 모양은 배포판의 rsyslog 서식을 따릅니다. Ubuntu 24.04 줄에는 연도와 UTC 오프셋이 있지만 RHEL 9 의 전통형 줄에는 연도·시간대가 없으므로, 연도를 추정하는 방법은 [인증 로그](../auth-log.md)와 [syslog 형식과 rsyslog](../../../01-foundations/logging/syslog-rsyslog.md)를 봅니다. 한 접속의 길이는 `Accepted` 줄과 같은 PID 의 `Disconnected from`·`session closed` 줄 사이로 잽니다.
+줄의 시각은 sshd 가 그 사건을 기록한 때이고, 파일에 적히는 모양은 배포판의 rsyslog 서식을 따릅니다. Ubuntu 24.04 줄에는 연도와 UTC 오프셋이 있지만 RHEL 9 의 전통형 줄에는 연도·시간대가 없으므로, 연도를 추정하는 방법은 [인증 로그](../auth-log.md)와 [syslog 형식과 rsyslog](../../../01-foundations/logging/syslog-rsyslog.md)를 봅니다. 한 접속의 길이는 `Accepted` 줄부터, 원격 주소와 포트가 같은 `Disconnected from` 줄이나 `Accepted` 줄과 PID 가 같은 `session closed` 줄까지로 잽니다.
 
 Ubuntu 는 소켓 활성화가 기본이라서[10] 연결이 올 때 sshd 가 시작될 수 있고, `Server listening` 줄의 시각이 부팅 시각과 다를 가능성이 있습니다.
 

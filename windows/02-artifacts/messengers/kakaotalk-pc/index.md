@@ -8,7 +8,7 @@ has_toc: false
 
 # 카카오톡 PC (KakaoTalk PC)
 
-카카오톡 PC 는 Windows 사용자마다 `C:\Users\<사용자>\AppData\Local\Kakao\KakaoTalk\` 폴더에 데이터를 남깁니다(논문). 그 아래 `users\` 에는 카카오톡 계정별 폴더가 있고, 이 폴더에 대화·연락처·계정 정보·받은 사진이 모입니다. 대화 기록 파일의 확장자는 `.edb` 이지만 형식은 SQLite 이며, 대화 DB 는 카카오톡 버전과 상태에 따라 평문일 때도 있고 암호문일 때도 있습니다.
+카카오톡 PC 는 Windows 사용자마다 `C:\Users\<사용자>\AppData\Local\Kakao\KakaoTalk\` 폴더에 데이터를 남깁니다[1]. 그 아래 `users\` 에는 카카오톡 계정별 폴더가 있고, 이 폴더에 대화·연락처·계정 정보·받은 사진이 모입니다. 대화 기록 파일의 확장자는 `.edb` 이지만 형식은 SQLite 이며, 대화 DB 는 카카오톡 버전과 상태에 따라 평문일 때도 있고 암호문일 때도 있습니다.
 
 ## 왜 중요한가
 
