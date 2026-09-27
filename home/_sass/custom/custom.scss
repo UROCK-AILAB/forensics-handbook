@@ -25,6 +25,11 @@ h1, h2, h3, h4, h5, h6, strong, b, th {
   }
 }
 
+// 메뉴 맨 위 "전체 핸드북" 링크는 굵게
+.site-nav > .nav-list:first-child .nav-list-link {
+  font-weight: 700;
+}
+
 // 목차 제목은 한 줄로 고정하고, 넘치면 …으로 자른다.
 .nav-list .nav-list-item .nav-list-link {
   white-space: nowrap;
