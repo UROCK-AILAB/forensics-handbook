@@ -1,5 +1,5 @@
 ---
-title: 처음
+title: Linux 개요
 nav_order: -100
 permalink: /
 ---

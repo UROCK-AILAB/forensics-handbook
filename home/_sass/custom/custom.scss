@@ -18,6 +18,13 @@ h1, h2, h3, h4, h5, h6, strong, b, th {
   font-size: 0.9375rem;
 }
 
+// 메뉴 목록 위의 기본 여백(테마 기본 3rem 안팎)을 줄인다
+.site-nav {
+  @include mq(md) {
+    padding-top: 0.75rem;
+  }
+}
+
 // 목차 제목은 한 줄로 고정하고, 넘치면 …으로 자른다.
 .nav-list .nav-list-item .nav-list-link {
   white-space: nowrap;

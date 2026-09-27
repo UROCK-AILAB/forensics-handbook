@@ -1,11 +1,11 @@
 {%- comment -%}
-  [사이트 수정] 목록 맨 위에 전체 핸드북(Home) 링크, 맨 아래에 "다른 핸드북" 분류를 둔다. 원본: just-the-docs v0.12.0 components/site_nav.html
+  [사이트 수정] 목록 맨 위에 "전체 핸드북" 링크, 맨 아래에 "다른 핸드북" 분류를 둔다. 원본: just-the-docs v0.12.0 components/site_nav.html
   다른 핸드북 목록은 _config.yml 의 nav_external_links 에서 온다.
 {%- endcomment -%}
 
 <nav aria-label="Main" id="site-nav" class="site-nav">
   <ul class="nav-list">
-    <li class="nav-list-item"><a href="https://urock-ailab.github.io/forensics-handbook/" class="nav-list-link">Home</a></li>
+    <li class="nav-list-item"><a href="https://urock-ailab.github.io/forensics-handbook/" class="nav-list-link">전체 핸드북</a></li>
   </ul>
   {% assign pages_top_size = site.html_pages
         | where_exp:"item", "item.title != nil"
