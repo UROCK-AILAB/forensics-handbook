@@ -31,7 +31,36 @@ social:
   name: 주식회사 유락
   links:
     - https://urock.kr/
-aux_links:
-  "<svg viewBox='0 0 24 24' width='20' height='20' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' role='img' aria-label='전체 핸드북' style='vertical-align:middle'><title>전체 핸드북</title><path d='M3 10.5 12 3l9 7.5'/><path d='M5 9.5V21h14V9.5'/><path d='M10 21v-6h4v6'/></svg>":
-    - "https://urock-ailab.github.io/forensics-handbook/"
-aux_links_new_tab: false
+nav_external_links:
+  - title: Windows
+    url: https://urock-ailab.github.io/forensics-handbook/windows/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: macOS
+    url: https://urock-ailab.github.io/forensics-handbook/mac/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: Linux
+    url: https://urock-ailab.github.io/forensics-handbook/linux/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: Android
+    url: https://urock-ailab.github.io/forensics-handbook/android/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: Cloud
+    url: https://urock-ailab.github.io/forensics-handbook/cloud/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: Network
+    url: https://urock-ailab.github.io/forensics-handbook/network/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: Crypto
+    url: https://urock-ailab.github.io/forensics-handbook/crypto/
+    hide_icon: true
+    opens_in_new_tab: false
+  - title: AI
+    url: https://urock-ailab.github.io/forensics-handbook/ai/
+    hide_icon: true
+    opens_in_new_tab: false
