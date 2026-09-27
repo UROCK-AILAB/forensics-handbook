@@ -82,13 +82,13 @@ h1, h2, h3, h4, h5, h6, strong, b, th {
 
   & + .main {
     @include mq(lg) {
-      margin-left: $nav-width;
+      margin-left: calc(#{$nav-width} + clamp(1rem, 2.5vw, 3.5rem));  // 메뉴와 본문 사이 회색 여백
     }
   }
 }
 
 // 위키백과처럼: 메뉴와 오른쪽 여백은 옅은 회색, 본문만 흰 판으로 둔다.
-// 오른쪽 여백은 화면 폭에 따라 1.5rem~6rem 사이에서 늘고 준다.
+// 오른쪽 여백은 화면 폭에 따라 2rem~9rem 사이에서 늘고 준다.
 body {
   @include mq(md) {
     background-color: $sidebar-color;
@@ -98,11 +98,20 @@ body {
 .main {
   @include mq(md) {
     max-width: none;
-    margin-right: clamp(1.5rem, 4vw, 6rem);
+    margin-right: clamp(2rem, 6vw, 9rem);
     min-height: 100vh;
     background-color: $body-background-color;
     border-left: 1px solid $border-color;
     border-right: 1px solid $border-color;
+  }
+}
+
+// 첫 화면(메뉴 없는 모양): 흰 판을 가운데 두고 좌우에 같은 회색 여백을 둔다.
+body:not(:has(.side-bar)) .main {
+  @include mq(md) {
+    max-width: 64rem;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
