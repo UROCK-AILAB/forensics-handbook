@@ -76,7 +76,14 @@ h1, h2, h3, h4, h5, h6, strong, b, th {
 // 위키백과처럼 좌우 여백은 옅은 회색, 본문만 흰 판으로 보이게 색만 입힌다.
 body {
   @include mq(md) {
-    background-color: $sidebar-color;
+    background-color: $margin-color;
+  }
+}
+
+// 넓은 화면에서 메뉴 칸은 왼쪽 여백까지 늘어난다. 메뉴 폭만큼만 메뉴 색, 그 왼쪽은 여백 색.
+.side-bar {
+  @include mq(lg) {
+    background: linear-gradient(to right, $margin-color calc(100% - #{$nav-width}), $sidebar-color 0);
   }
 }
 
