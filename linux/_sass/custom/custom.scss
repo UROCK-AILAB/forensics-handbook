@@ -81,9 +81,13 @@ body {
 }
 
 // 넓은 화면에서 메뉴 칸은 왼쪽 여백까지 늘어난다. 메뉴 폭만큼만 메뉴 색, 그 왼쪽은 여백 색.
+// 경계에는 본문 판 테두리와 같은 1px 선을 둔다.
 .side-bar {
   @include mq(lg) {
-    background: linear-gradient(to right, $margin-color calc(100% - #{$nav-width}), $sidebar-color 0);
+    background: linear-gradient(to right,
+      $margin-color calc(100% - #{$nav-width}),
+      $border-color calc(100% - #{$nav-width}) calc(100% - #{$nav-width} + 1px),
+      $sidebar-color 0);
   }
 }
 
