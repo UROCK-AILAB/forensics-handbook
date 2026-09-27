@@ -26,6 +26,7 @@ permalink: /
 | [iOS](https://urock-ailab.github.io/forensics-handbook/ios/) | iPhone 의 앱·통신·위치·사용 기록 |
 | [Cloud](https://urock-ailab.github.io/forensics-handbook/cloud/) | Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 의 로그 |
 | [Network](https://urock-ailab.github.io/forensics-handbook/network/) | 패킷 캡처·흐름 기록·Zeek·Suricata 로그와 방화벽·프록시·DNS·DHCP·VPN 로그 |
+| [Crypto](https://urock-ailab.github.io/forensics-handbook/crypto/) | 암호화폐 지갑(데스크톱·브라우저 확장·모바일·하드웨어)과 거래소 앱, 블록체인 거래 추적 |
 | [AI 서비스](https://urock-ailab.github.io/forensics-handbook/ai/) | ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정에 남는 흔적 |
 
 <!-- 핸드북 목록 끝 -->

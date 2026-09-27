@@ -38,7 +38,7 @@ jobs:
           JEKYLL_ENV: production
         run: |
           bundle exec jekyll build --source home --destination _site --baseurl "${{ steps.pages.outputs.base_path }}"
-          for k in windows mac linux android ios cloud network ai; do
+          for k in windows mac linux android ios cloud network crypto ai; do
             if [ -d "$k" ]; then bundle exec jekyll build --source "$k" --destination "_site/$k" --baseurl "${{ steps.pages.outputs.base_path }}/$k"; fi
           done
           python3 tools/merge_search.py _site

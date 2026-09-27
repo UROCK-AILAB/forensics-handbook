@@ -1,0 +1,393 @@
+[
+ {
+  "title": "블록과 트랜잭션 (Blocks·Transactions)",
+  "path": "01-foundations/blockchain/blocks-transactions.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "블록체인 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "비트코인의 UTXO (UTXO Model)",
+  "path": "01-foundations/blockchain/utxo.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "블록체인 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이더리움의 계정과 로그 (Accounts·Logs)",
+  "path": "01-foundations/blockchain/ethereum-accounts.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "블록체인 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "토큰과 NFT (ERC-20·ERC-721)",
+  "path": "01-foundations/blockchain/tokens.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "블록체인 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "블록 시각과 확정 (Block Time·Confirmations)",
+  "path": "01-foundations/blockchain/block-time.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "블록체인 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "지갑의 종류 (Custodial·Non-custodial·Hardware)",
+  "path": "01-foundations/wallets/wallet-types.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "지갑과 키",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "주소 형식 (Address Formats)",
+  "path": "01-foundations/wallets/address-formats.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "지갑과 키",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "복구 문구와 파생 경로 (BIP-39·BIP-32·BIP-44)",
+  "path": "01-foundations/wallets/seed-derivation.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "지갑과 키",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "지갑 파일과 암호화 (Wallet Files)",
+  "path": "01-foundations/wallets/wallet-files.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "지갑과 키",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "거래소와 가상자산사업자 (Exchanges·VASP)",
+  "path": "01-foundations/ecosystem/exchanges.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "거래 환경",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "탈중앙 거래소와 브리지 (DEX·Bridge)",
+  "path": "01-foundations/ecosystem/dex-bridge.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "거래 환경",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "믹서와 추적을 어렵게 하는 방법 (Mixers·Privacy Coins)",
+  "path": "01-foundations/ecosystem/mixers.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "거래 환경",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Bitcoin Core (Bitcoin Core)",
+  "path": "02-artifacts/desktop/bitcoin-core.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "데스크톱 지갑",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Electrum (Electrum)",
+  "path": "02-artifacts/desktop/electrum.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "데스크톱 지갑",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Exodus (Exodus)",
+  "path": "02-artifacts/desktop/exodus.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "데스크톱 지갑",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "MetaMask (MetaMask)",
+  "path": "02-artifacts/browser/metamask/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "브라우저 확장 지갑",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "저장 위치와 구조 (Storage)",
+    "path": "02-artifacts/browser/metamask/storage.md"
+   },
+   {
+    "title": "볼트와 암호화 (Vault)",
+    "path": "02-artifacts/browser/metamask/vault.md"
+   },
+   {
+    "title": "거래 기록과 연결한 사이트 (Activity·Connected Sites)",
+    "path": "02-artifacts/browser/metamask/activity.md"
+   }
+  ]
+ },
+ {
+  "title": "저장 위치와 구조 (Storage)",
+  "path": "02-artifacts/browser/metamask/storage.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "브라우저 확장 지갑",
+  "parent": {
+   "title": "MetaMask (MetaMask)",
+   "path": "02-artifacts/browser/metamask/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "볼트와 암호화 (Vault)",
+  "path": "02-artifacts/browser/metamask/vault.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "브라우저 확장 지갑",
+  "parent": {
+   "title": "MetaMask (MetaMask)",
+   "path": "02-artifacts/browser/metamask/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "거래 기록과 연결한 사이트 (Activity·Connected Sites)",
+  "path": "02-artifacts/browser/metamask/activity.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "브라우저 확장 지갑",
+  "parent": {
+   "title": "MetaMask (MetaMask)",
+   "path": "02-artifacts/browser/metamask/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "다른 확장 지갑 (Phantom·Coinbase Wallet 등)",
+  "path": "02-artifacts/browser/other-extensions.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "브라우저 확장 지갑",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Android 지갑 앱 (Android Wallets)",
+  "path": "02-artifacts/mobile/android-wallets.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "모바일 지갑과 거래소 앱",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "iOS 지갑 앱 (iOS Wallets)",
+  "path": "02-artifacts/mobile/ios-wallets.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "모바일 지갑과 거래소 앱",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "거래소 앱 (Exchange Apps)",
+  "path": "02-artifacts/mobile/exchange-apps.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "모바일 지갑과 거래소 앱",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "하드웨어 지갑과 연결 흔적 (Ledger·Trezor)",
+  "path": "02-artifacts/hardware/hardware-wallets.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "하드웨어 지갑",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "거래소가 제공하는 자료 (Exchange Records)",
+  "path": "02-artifacts/records/exchange-records.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "거래소와 체인 기록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "블록 탐색기 기록 읽기 (Block Explorers)",
+  "path": "02-artifacts/records/block-explorers.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "거래소와 체인 기록",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "조사 절차 (Investigation Process)",
+  "path": "03-techniques/acquisition/investigation-process.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·수집",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "기기에서 지갑 흔적 찾기 (Artifact Search)",
+  "path": "03-techniques/acquisition/artifact-search.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·수집",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "주소와 트랜잭션 ID 찾기 (Address·TXID Carving)",
+  "path": "03-techniques/acquisition/address-carving.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·수집",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "비트코인 거래 따라가기 (Bitcoin Tracing)",
+  "path": "03-techniques/analysis/bitcoin-tracing.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이더리움 거래 따라가기 (Ethereum Tracing)",
+  "path": "03-techniques/analysis/ethereum-tracing.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "주소 묶기와 그 한계 (Address Clustering)",
+  "path": "03-techniques/analysis/clustering.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "거래소 자료 분석 (Exchange Data Analysis)",
+  "path": "03-techniques/analysis/exchange-analysis.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "암호화폐 타임라인 (Timeline)",
+  "path": "03-techniques/analysis/timeline.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "암호화폐 포렌식 보고서 (Forensic Report)",
+  "path": "03-techniques/reporting/forensic-report.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "빼앗긴 자산은 어디로 갔나 (Stolen Funds)",
+  "path": "04-scenarios/asset-flow/stolen-funds.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "자산 흐름",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "거래소로 들어갔나 (Exchange Deposit)",
+  "path": "04-scenarios/asset-flow/exchange-deposit.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "자산 흐름",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이 기기로 지갑을 썼나 (Wallet Use)",
+  "path": "04-scenarios/device-use/wallet-use.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "기기 사용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "악성 코드가 지갑을 노렸나 (Wallet Stealer)",
+  "path": "04-scenarios/device-use/wallet-stealer.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "기기 사용",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "투자 사기의 흔적 (Investment Scam)",
+  "path": "04-scenarios/fraud/investment-scam.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "사기",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "피싱 사이트에 서명했나 (Wallet Drainer)",
+  "path": "04-scenarios/fraud/wallet-drainer.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "사기",
+  "parent": null,
+  "subpages": []
+ }
+]
