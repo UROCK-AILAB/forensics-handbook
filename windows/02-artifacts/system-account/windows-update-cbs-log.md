@@ -6,8 +6,6 @@ nav_order: 680
 
 # 윈도 업데이트 기록 (Windows Update·CBS Log)
 
-> 이 페이지의 실제 위치·개수·예시 값은 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) 기준입니다. 다른 버전에서는 실제 기기에서 확인합니다.
-
 윈도 업데이트 기록은 한 파일이 아니라 여러 곳에 나뉘어 남습니다. 설치된 업데이트 목록과 설치 시각은 SOFTWARE 하이브의 Component Based Servicing 키에 남고, 설치 과정은 이벤트 로그·CBS.log·ETL 로그·ReportingEvents.log 에 남습니다. 기록마다 시각 기준(UTC·현지 시각)이 달라서 섞어 쓰면 시간대만큼 어긋납니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -6,8 +6,6 @@ nav_order: 2100
 
 # 슬랙 (Slack)
 
-> 위치: 아티팩트 사전 > 메신저
-
 슬랙 데스크톱 앱은 Electron 앱이고, 사용자 데이터는 `C:\Users\<사용자>\AppData\Roaming\Slack\` 에 있습니다. 대화 기록은 이 폴더의 `IndexedDB\` 안 LevelDB 파일에 남으며, 캐시·앱 로그·내려받은 파일 기록도 같은 폴더에 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

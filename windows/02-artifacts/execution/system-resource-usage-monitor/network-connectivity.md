@@ -7,8 +7,6 @@ nav_order: 1010
 
 # 네트워크 연결 기록 (Network Connectivity)
 
-> 상위 허브: [SRUM (System Resource Usage Monitor)](index.md)
-
 SRUM 의 네트워크 연결 표는 이 PC 의 네트워크 인터페이스가 어떤 네트워크에 언제 연결되어 얼마나 붙어 있었는지를 적습니다. 행마다 연결 시작 시각과 연결된 시간(초)이 있습니다. 무선이면 프로필 번호를 SOFTWARE 하이브와 맞춰 네트워크 이름(SSID)까지 알아낼 수 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나

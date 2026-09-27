@@ -7,8 +7,6 @@ nav_order: 800
 
 # 파일 구조와 버전 (Format Versions·MAM)
 
-> 위치: [프리페치 (Prefetch)](index.md) > 파일 구조와 버전
-
 프리페치 파일(.pf)의 본체는 `SCCA` 서명이 들어간 구조이고, 이 구조는 Windows 세대마다 조금씩 다릅니다. 세대는 파일 맨 앞 4바이트의 형식 버전 (Format Version) 으로 구분합니다. Windows 10 부터는 본체를 Xpress Huffman 으로 압축하고 앞에 `MAM` 머리를 붙여 저장하므로, Windows 10 이후 파일은 압축부터 풀어야 읽을 수 있습니다.
 
 ## 무엇이 들어 있나

@@ -7,8 +7,6 @@ nav_order: 2410
 
 # 기타 원격 제어 도구 (RustDesk·Splashtop·Chrome Remote Desktop)
 
-> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
-
 이 페이지는 원격 제어 도구 세 가지의 흔적을 정리합니다. RustDesk 는 사용자 폴더와 서비스 폴더의 로그 파일을 봅니다. Splashtop 은 전용 이벤트 로그 두 개와 텍스트 로그 두 개를 봅니다. Chrome Remote Desktop 은 "chromoting" 이름으로 남는 이벤트 ID 1~6 을 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나

@@ -4,7 +4,7 @@ parent: "아티팩트 · 대화형 AI 서비스"
 nav_order: 340
 ---
 
-# Perplexity (Perplexity)
+# Perplexity
 
 Perplexity 는 질문에 검색 결과를 붙여 답하는 AI 검색 서비스이고, 웹·모바일 앱·Chrome 확장·자체 브라우저 Comet 으로 쓸 수 있어서 어느 형태로 썼는지에 따라 흔적을 찾을 곳이 달라집니다.
 

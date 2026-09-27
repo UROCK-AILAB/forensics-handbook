@@ -6,8 +6,6 @@ nav_order: 1940
 
 # 새 Outlook (New Outlook)
 
-> 위치: 아티팩트 사전 > 메일
-
 새 Outlook (Outlook for Windows) 은 Windows 메일·일정·사람 앱을 대신하는 Microsoft 의 메일 앱입니다. 스토어 앱 패키지로 깔리고, 본체 실행 파일 이름은 `olk.exe` 입니다. PC 에 남는 주된 흔적은 `%LOCALAPPDATA%\Microsoft\Olk` 폴더의 WebView2 프로필과 로그 파일입니다. 로그에는 앱을 켜고 끈 시각, 연결된 계정, 실행 인자가 UTC 시각과 함께 남습니다. 메일 본문을 PC 어디에 어떤 형식으로 두는지는 공개 문서에 나와 있지 않아 실제 데이터로 확인해야 합니다.
 
 ## 내용별 근거

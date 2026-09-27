@@ -4,7 +4,7 @@ parent: "아티팩트 · Google Cloud"
 nav_order: 520
 ---
 
-# Cloud Audit Logs (Cloud Audit Logs)
+# Cloud Audit Logs
 
 Cloud Audit Logs 는 Google Cloud 의 프로젝트·폴더·조직·결제 계정에서 누가 어느 API 를 어느 자원에 불렀는지 남기는 기록이고, 관리 작업 기록은 끌 수 없이 400일 동안 남습니다[1][8].
 

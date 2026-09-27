@@ -7,8 +7,6 @@ nav_order: 600
 
 # 도메인 백업 키 (Domain Backup Key)
 
-> 위치: [DPAPI 구조 (Data Protection API)](index.md) > 도메인 백업 키
-
 도메인 계정의 마스터키는 만들 때 도메인 컨트롤러 (Domain Controller, DC) 의 공개키로 한 벌 더 암호화해 둡니다.
 사용자 암호로 마스터키를 못 풀 때, 이 백업본을 DC 가 대신 풀어 줍니다.
 그래서 DC 의 백업 개인키가 있으면 사용자 암호 없이도 마스터키가 풀립니다.

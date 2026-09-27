@@ -4,7 +4,7 @@ parent: "아티팩트 · Windows의 AI 기능"
 nav_order: 490
 ---
 
-# Recall (Recall)
+# Recall
 
 Recall 은 Copilot+ PC 에서 화면 스냅숏을 주기적으로 저장하고 기기 안에서 분석해 자연어로 다시 찾게 해 주는 Windows 기능이고, 사용자 폴더 아래 `CoreAIPlatform.00\UKP` 에 스냅숏 이미지와 주 DB(`ukg.db`), 의미 검색 색인을 남깁니다.
 

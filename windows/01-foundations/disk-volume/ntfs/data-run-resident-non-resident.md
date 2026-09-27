@@ -7,8 +7,6 @@ nav_order: 50
 
 # 데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)
 
-> 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](index.md)
-
 NTFS 속성의 내용은 MFT 레코드 안에 바로 들어가거나 (상주, Resident) 레코드 밖의 클러스터에 놓입니다 (비상주, Non-resident). 비상주일 때 레코드에는 내용 대신 클러스터 위치를 적은 데이터 런 (Data Run) 이 들어갑니다.
 
 ## 이 형식을 쓰는 아티팩트

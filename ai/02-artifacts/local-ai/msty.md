@@ -4,7 +4,7 @@ parent: "아티팩트 · 로컬 AI"
 nav_order: 710
 ---
 
-# Msty (Msty)
+# Msty
 
 Msty 는 모델을 받아 자기 컴퓨터에서 돌리는 기능과 대화 화면을 한 프로그램에 담은 통합형 로컬 AI 앱이고, `%AppData%\Msty` 폴더의 `msty.db` 하나에 대화·설정·API 키가, `logs\app.log` 에 모델 받기와 대화 시작, 첨부 전송이 줄마다 시각과 함께 남습니다.
 

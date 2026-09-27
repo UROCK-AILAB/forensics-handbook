@@ -5,7 +5,7 @@ grand_parent: "아티팩트 · 개발 도구·에이전트"
 nav_order: 610
 ---
 
-# Windows (Windows)
+# Windows
 
 Windows 에서 GitHub Copilot 대화는 쓰는 도구마다 다른 자리에 남습니다. VS Code 는 작업 폴더마다 세션 파일(`.json`·`.jsonl`)을 쓰고 세션 목록은 저장소 키에 따로 두며, Copilot CLI 는 사용자 폴더의 `.copilot` 아래에, Visual Studio 는 임시 폴더의 추적 파일과 솔루션 폴더의 `.vs` 아래에, JetBrains IDE 는 `%APPDATA%\github-copilot` 아래의 Nitrite 데이터베이스에 대화를 둡니다.
 

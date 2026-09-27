@@ -7,8 +7,6 @@ nav_order: 3220
 
 # 메모리 속 문자열·자격증명·암호 키 (Strings·Credentials·Keys)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
-
 메모리 이미지에서 문자열, 계정 해시·비밀, 암호 키를 찾습니다. 이런 값은 디스크에 남지 않고 메모리에만 잠시 있다가 사라지기도 하지만, Credential Guard 가 켜진 PC 에서는 lsass 메모리에서 꺼낼 수 있는 값이 줄어듭니다.
 
 ## 언제 쓰나

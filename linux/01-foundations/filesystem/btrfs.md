@@ -4,7 +4,7 @@ parent: "기반 · 파일 시스템"
 nav_order: 80
 ---
 
-# Btrfs (Btrfs)
+# Btrfs
 
 Btrfs 는 슈퍼블록을 뺀 모든 구조를 쓸 때 복사하는 트리 (copy-on-write B-tree) 로 저장하는 파일 시스템이라서, 고친 메타데이터의 옛 판이 새 자리에 쓰인 판과 함께 디스크에 남습니다[1][13].
 

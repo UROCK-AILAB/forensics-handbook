@@ -7,8 +7,6 @@ nav_order: 720
 
 # 작업 정의 파일 (System32\Tasks XML)
 
-> 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)
-
 예약 작업을 등록하면 `C:\Windows\System32\Tasks` 아래에 작업 이름과 같은 파일이 하나 생깁니다. 이 파일에는 확장자가 없고 안에 작업 정의가 XML 로 들어 있으며, 무엇을, 언제, 어느 계정으로 실행할지가 여기에 적힙니다.
 
 ## 무엇을 기록하나 · 왜 생기나

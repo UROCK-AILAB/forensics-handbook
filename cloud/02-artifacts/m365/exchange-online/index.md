@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# Exchange Online (Exchange Online)
+# Exchange Online
 
 Exchange Online 에서는 메일함 안에서 일어난 작업, 받은편지함 규칙과 전달 설정, 메일이 오간 경로가 각각 다른 곳에 따로 남습니다. 이 페이지는 그 기록들이 어디에 있고 무엇을 알려 주는지 정리한 입구입니다.
 

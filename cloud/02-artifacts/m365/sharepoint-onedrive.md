@@ -4,7 +4,7 @@ parent: "아티팩트 · Microsoft 365"
 nav_order: 250
 ---
 
-# SharePoint·OneDrive (SharePoint·OneDrive)
+# SharePoint·OneDrive
 
 SharePoint 사이트와 OneDrive 에서 파일을 열고, 내려받고, 동기화하고, 공유하고, 지운 일은 통합 감사 로그에 파일 경로와 함께 남고, 지우거나 고친 파일의 원본은 보존 설정에 따라 서비스 안에 한동안 남습니다.
 

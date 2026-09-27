@@ -4,7 +4,7 @@ parent: "아티팩트 · 개발 도구·에이전트"
 nav_order: 660
 ---
 
-# Gemini CLI (Gemini CLI)
+# Gemini CLI
 
 Gemini CLI 는 Google 의 명령줄 AI 에이전트이고, 대화할 때마다 프롬프트·답변·도구 실행·토큰 사용량을 프로젝트별 폴더 `~/.gemini/tmp/…/chats/` 에 한 줄씩 덧붙여 저장합니다. 기본 설정으로 30일이 지난 세션을 스스로 지우므로, 오래된 기록이 없는 것이 정상일 수 있습니다.
 

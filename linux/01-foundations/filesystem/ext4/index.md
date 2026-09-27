@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# ext4 (ext4)
+# ext4
 
 ext4 는 장치를 블록 그룹 (block group) 으로 나눠 쓰는 Linux 파일 시스템이고, 파일 하나의 흔적이 슈퍼블록 (superblock)·아이노드 (inode)·디렉터리 블록·저널 (journal) 에 나뉘어 남습니다.
 

@@ -7,8 +7,6 @@ nav_order: 2980
 
 # PDF 증분 저장과 이전 판 복원 (Incremental Update)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
-
 PDF 는 고친 내용을 원래 파일 끝에 덧붙여 저장할 수 있습니다. 이 방식을 증분 저장 (incremental update) 이라고 합니다. 앞부분의 옛 객체는 지워지지 않고 남습니다. 그래서 알맞은 위치에서 파일을 자르면 고치기 전 판을 되살릴 수 있습니다.
 
 > Word(Microsoft 365, 16.0.20326)로 내보낸 PDF 를 pypdf 6.19.0 의 증분 쓰기 (`incremental=True`) 로 고쳐 정보 사전의 `Author`·`ModDate` 를 바꾸면, 원래 내용은 그대로 두고 파일 끝에 새 정보 사전과 xref 가 붙습니다. 아래 값은 이 경우의 값입니다.

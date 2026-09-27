@@ -58,7 +58,7 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 
 **UTC = 현지 시각 + Bias**
 
-- UTC+9 인 곳의 Bias 는 -540 이며(현장 관찰), 공식에 넣으면 현지 18:00 은 18:00 + (-540분) = 09:00 UTC 가 됩니다.
+- UTC+9 인 곳의 Bias 는 -540 이며, 공식에 넣으면 현지 18:00 은 18:00 + (-540분) = 09:00 UTC 가 됩니다.
 - DaylightBias 는 일광 절약 시간 동안 Bias 에 더하는 값이라(참고 2), 위 공식과 합치면 일광 절약 시간 동안에는 UTC = 현지 시각 + Bias + DaylightBias 가 됩니다.
 - 가상의 예를 듭니다. Bias 가 300, DaylightBias 가 -60 인 시간대에서 일광 절약 시간 중 현지 12:00 은 12:00 + 240분 = 16:00 UTC 입니다. 같은 시간대의 표준시 중 현지 12:00 은 StandardBias 가 0 이면 17:00 UTC 입니다.
 
@@ -75,11 +75,11 @@ Windows 는 시간대를 TIME_ZONE_INFORMATION 구조체로 나타냅니다(참�
 | 무엇 | 위치 | 값 |
 |---|---|---|
 | 시간대별 정의 | `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones\<시간대 이름>` | Display, Dlt, Std, MUI_Display, MUI_Dlt, MUI_Std (REG_SZ), TZI (REG_BINARY) (참고 2) |
-| 이 컴퓨터의 현재 설정 | `SYSTEM\ControlSet00X\Control\TimeZoneInformation\Bias` | REG_DWORD. 부호 있는 32비트로 읽음 (현장 관찰) |
+| 이 컴퓨터의 현재 설정 | `SYSTEM\ControlSet00X\Control\TimeZoneInformation\Bias` | REG_DWORD. 부호 있는 32비트로 읽음 |
 
 - TZI 값은 REG_TZI_FORMAT 구조입니다(참고 2). Bias, StandardBias, DaylightBias 를 LONG 으로 차례로 적고, 그 뒤에 StandardDate, DaylightDate 를 SYSTEMTIME 으로 적습니다(참고 2).
-- Bias 는 REG_DWORD 로 저장하지만 부호 있는 32비트로 읽어야 합니다(현장 관찰). UTC+9 의 -540 을 부호 없이 읽으면 4,294,966,756 이 됩니다(현장 관찰).
-- 하이브의 REG_DWORD 를 글자로 보여 주는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다(현장 관찰). 부호에 뜻이 있는 값은 원시 바이트로 확인합니다.
+- Bias 는 REG_DWORD 로 저장하지만 부호 있는 32비트로 읽어야 합니다. UTC+9 의 -540 을 부호 없이 읽으면 4,294,966,756 이 됩니다.
+- 하이브의 REG_DWORD 를 글자로 보여 주는 도구는 부호 없는 10진으로 보여 주는 경우가 많습니다. 부호에 뜻이 있는 값은 원시 바이트로 확인합니다.
 - TimeZoneInformation 키의 다른 값과 그 뜻은 [시간대 설정](../../../02-artifacts/system-account/time-zone.md)을 봅니다.
 - 오프라인 SYSTEM 하이브에서 어느 컨트롤셋을 읽을지는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)를 봅니다.
 
@@ -164,14 +164,14 @@ NewTime 에서 PreviousTime 을 빼면 시계가 뛴 크기가 나오고, 시계
 
 ## 도구
 
-- 레지스트리 뷰어로 Bias 를 볼 때는 부호 없는 10진으로 나오지 않는지 확인합니다(현장 관찰). 의심스러우면 원시 바이트를 읽습니다.
+- 레지스트리 뷰어로 Bias 를 볼 때는 부호 없는 10진으로 나오지 않는지 확인합니다. 의심스러우면 원시 바이트를 읽습니다.
 - 타임라인 도구의 출력 시간대는 결과의 시간대 필드로 확인합니다. 출력 필드는 [여러 아티팩트 합친 타임라인](super-timeline.md)에서 다룹니다.
 - 변환을 도구에 맡기더라도 한두 값은 위 공식으로 직접 계산해 맞춰 봅니다.
 - 4616 은 이벤트 로그 파일에서 읽습니다. 파일을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)을 봅니다.
 
 ## 함정과 한계
 
-1. **Bias 를 부호 없이 읽습니다.** -540 이 4,294,966,756 으로 보입니다(현장 관찰).
+1. **Bias 를 부호 없이 읽습니다.** -540 이 4,294,966,756 으로 보입니다.
 2. **Bias 를 거꾸로 적용합니다.** 공식은 UTC = 현지 시각 + Bias 입니다(참고 2). Bias 가 -540 이면 현지 시각에서 9시간을 뺍니다.
 3. **지금 설정으로 과거 시각을 바꿉니다.** 일광 절약 시간을 적용할지는 그 시각의 날짜로 정합니다(참고 1).
 4. **분석 PC 의 시간대가 섞입니다.** 도구가 현지 시각으로 보여 주면 그 현지는 분석 PC 의 설정일 수 있습니다.

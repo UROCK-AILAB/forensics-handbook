@@ -5,7 +5,7 @@ grand_parent: "아티팩트 · 개발 도구·에이전트"
 nav_order: 620
 ---
 
-# macOS (macOS)
+# macOS
 
 macOS 에서 GitHub Copilot 기록은 제품마다 다른 폴더에 남습니다. VS Code 채팅은 `~/Library/Application Support/Code/User` 아래, Copilot CLI 는 `~/.copilot` 아래, Visual Studio 추적 파일은 `~/Library/Caches/VSGitHubCopilotLogs/traces` 아래, Xcode 용 Copilot 로그는 `~/Library/Logs/GitHubCopilot` 아래에 있습니다.
 

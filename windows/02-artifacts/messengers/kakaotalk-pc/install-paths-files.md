@@ -7,8 +7,6 @@ nav_order: 1990
 
 # 설치 위치와 파일 구성 (Install Paths·Files)
 
-> 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 설치 위치와 파일 구성
-
 카카오톡 PC 는 Windows 사용자마다 `AppData\Local\Kakao\KakaoTalk\` 폴더에 데이터를 남기고, 그 아래 `users\` 에는 카카오톡 계정별 폴더가 있습니다.
 계정 폴더에는 대화·대화방 목록·연락처·행동 로그 DB 와 계정 상태 파일이 있습니다.
 DB 확장자는 `.edb` 이지만 형식은 SQLite 입니다.

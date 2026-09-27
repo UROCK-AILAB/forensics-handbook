@@ -7,8 +7,6 @@ nav_order: 2960
 
 # 편집 흔적 식별자 (RSID)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
-
 docx 에는 편집 세션을 가리키는 식별자인 RSID (revision save ID) 가 들어 있습니다. `word/settings.xml` 에 문서 전체의 RSID 목록이 있고 본문의 문단과 글자 묶음에도 RSID 가 속성으로 붙으며, 같은 RSID 가 붙은 부분끼리는 같은 편집 세션에 저장된 것으로 읽을 수 있습니다. 다만 RSID 에는 시각이 없습니다.
 
 > 이 페이지의 예시 값은 Word 16.0 빌드 16.0.20326 (Microsoft 365) 에서 세 번 저장한 docx 의 값입니다. 새 문서에 글을 넣고 docx 로 다른 이름 저장을 하고, 같은 세션에서 .doc 로 다른 이름 저장을 한 번 더 한 뒤, 문서를 닫고 약 1분 뒤 docx 를 다시 열어 글을 덧붙이고 저장한 파일입니다.

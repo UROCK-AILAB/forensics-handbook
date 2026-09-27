@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# CloudTrail (CloudTrail)
+# CloudTrail
 
 CloudTrail 은 AWS 계정에서 누가 어떤 API 를 언제 어디서 불렀고 결과가 어땠는지를 이벤트 하나당 JSON 레코드 하나로 남기는 기록입니다[1][4].
 

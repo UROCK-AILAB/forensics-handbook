@@ -7,8 +7,6 @@ nav_order: 3240
 
 # 페이지 파일 (pagefile.sys·swapfile.sys)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
-
 페이지 파일 (Page File) 은 Windows 가 물리 메모리에서 내보낸 페이지를 담아 두는 디스크 파일입니다.
 파일 이름은 보통 pagefile.sys 이며, 물리 메모리 이미지에 없는 메모리 조각이 이 파일에 남을 수 있습니다.
 

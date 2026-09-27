@@ -7,8 +7,6 @@ nav_order: 2870
 
 # 부트키 구하기 (SYSTEM Boot Key)
 
-> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > 부트키 구하기
-
 부트키 (Boot Key) 는 SAM 과 SECURITY 하이브의 비밀을 풀 때 맨 처음 필요한 16바이트 열쇠로, SYSTEM 하이브 안에 조각나 숨어 있습니다. 부트키를 먼저 만들어야 [NTLM 비밀번호 해시](nt-hash.md) 와 [LSA 시크릿](lsa-secrets.md) 으로 넘어갑니다.
 
 ## 어디서 나오나 · 왜 이렇게 숨겨 두나

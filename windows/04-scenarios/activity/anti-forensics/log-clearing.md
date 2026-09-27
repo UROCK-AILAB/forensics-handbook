@@ -7,8 +7,6 @@ nav_order: 3890
 
 # 이벤트 로그를 지웠나 (Log Clearing)
 
-> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
-
 이벤트 로그를 지우면 지운 일이 또 하나의 기록으로 남습니다. 이 페이지는 로그를 지운 흔적을 찾고, 누가 어디서 지웠는지 좁히는 순서를 다룹니다. 1102·104 이벤트 자체는 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 에서, .evtx 파일 형식은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다. 여기서는 조사에 쓰는 필드만 봅니다.
 
 ## 조사 질문

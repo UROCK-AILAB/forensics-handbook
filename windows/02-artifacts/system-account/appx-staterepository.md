@@ -6,9 +6,7 @@ nav_order: 670
 
 # 스토어 앱 설치 목록 (AppX·StateRepository)
 
-> 이 페이지의 "기준 PC" 는 Windows 11 25H2(빌드 26200.9457), 한국 표준시(UTC+9) PC 한 대입니다. 수치와 표·열 이름은 이 PC 기준이고, 다른 버전에서는 실제 데이터로 다시 확인합니다.
-
-스토어 앱은 패키지 (package) 단위로 설치합니다. 패키지를 어느 사용자에게 언제 등록했는지는 `StateRepository-Machine.srd` 라는 SQLite DB 에 남습니다. 설치·업데이트·제거 과정은 AppXDeploymentServer 이벤트 로그에 남습니다. 이 로그는 금방 밀려날 수 있어서(기준 PC 에서는 8일치) DB 와 함께 봅니다.
+스토어 앱은 패키지 (package) 단위로 설치합니다. 패키지를 어느 사용자에게 언제 등록했는지는 `StateRepository-Machine.srd` 라는 SQLite DB 에 남습니다. 설치·업데이트·제거 과정은 AppXDeploymentServer 이벤트 로그에 남습니다. 이 로그는 금방 밀려날 수 있어서(Windows 11 25H2 기준 8일치) DB 와 함께 봅니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -43,17 +41,17 @@ StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지�
 | `%SystemRoot%\System32\Winevt\Logs\` 의 AppX 관련 .evtx | 설치·등록·제거 작업 |
 
 - 두 .srd 파일은 첫 16바이트가 `SQLite format 3\0` 이라서, 확장자는 .srd 이지만 SQLite DB 입니다.
-- 기준 PC 에서 `StateRepository-Machine.srd-wal` 은 103,032바이트로 비어 있지 않았습니다.
-- 기준 PC 의 `AppRepository` 폴더에는 `<패키지 전체 이름>.xml` 파일이 393개 있었고, Package 표의 행 수도 393개였습니다.
+- `StateRepository-Machine.srd-wal` 은 비어 있지 않을 수 있습니다(Windows 11 25H2 기준 103,032바이트).
+- `AppRepository` 폴더의 `<패키지 전체 이름>.xml` 파일 수와 Package 표의 행 수가 같게 나옵니다(Windows 11 25H2 기준 둘 다 393개).
 - 이전 버전을 지울 때는 `WindowsApps\Deleted\` 로 옮긴 뒤 지웁니다. 이 내용은 이벤트 471(삭제 실패 오류)에도 남습니다.
 - 사용자별 앱 데이터 폴더 아래에는 AC, AppData, LocalCache, LocalState, RoamingState, Settings, SystemAppData, TempState 가 있었습니다. 앱 데이터의 구조는 [UWP 앱 데이터 구조](../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
-- 일부 앱 폴더에는 `SystemAppData\Helium\UserClasses.dat` 라는 앱 전용 레지스트리 하이브가 따로 있습니다. 기준 PC 의 hivelist 에는 이 하이브가 `\REGISTRY\WC\Silo<GUID>user_classes` 로 올라와 있었습니다.
-- HKCU 쪽 키는 파일로는 `C:\Users\<사용자>\AppData\Local\Microsoft\Windows\UsrClass.dat` 에 있습니다. 기준 PC 의 `HKLM\SYSTEM\CurrentControlSet\Control\hivelist` 에서 `\REGISTRY\USER\<SID>_Classes` 가 이 파일을 가리켰습니다.
+- 일부 앱 폴더에는 `SystemAppData\Helium\UserClasses.dat` 라는 앱 전용 레지스트리 하이브가 따로 있습니다. 이 하이브는 hivelist 에 `\REGISTRY\WC\Silo<GUID>user_classes` 로 올라옵니다(Windows 11 25H2 기준).
+- HKCU 쪽 키는 파일로는 `C:\Users\<사용자>\AppData\Local\Microsoft\Windows\UsrClass.dat` 에 있습니다. `HKLM\SYSTEM\CurrentControlSet\Control\hivelist` 에서 `\REGISTRY\USER\<SID>_Classes` 가 이 파일을 가리킵니다(Windows 11 25H2 기준).
 
 버전 차이는 이렇게 정리합니다.
 
 - StateRepository 가 처음 생긴 Windows 버전은 공개 자료에 없습니다.
-- 이 페이지의 표·열 이름은 기준 PC 의 것입니다. 다른 버전의 기기에서는 표 목록부터 확인합니다.
+- 이 페이지의 표·열 이름은 Windows 11 25H2 기준입니다. 다른 버전의 기기에서는 표 목록부터 확인합니다.
 
 SQLite 파일과 WAL 의 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서, 하이브 파일은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -87,7 +85,7 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 
 ### StateRepository-Machine.srd 의 표
 
-기준 PC 의 이 DB 에는 표 (table) 가 90개쯤 있었습니다. 분석에 먼저 쓰는 표는 아래와 같습니다.
+Windows 11 25H2 의 이 DB 에는 표 (table) 가 90개쯤 있습니다. 분석에 먼저 쓰는 표는 아래와 같습니다.
 
 | 표 | 주요 열 (column) | 알려 주는 것 |
 |---|---|---|
@@ -102,7 +100,7 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 
 그 밖에 PackageUserStatus, PackageMachineStatus, ProvisionedPackage, ProvisionedPackageDeleted, EndOfLifePackage, Bundle, BundlePackage, Dependency, ApplicationUser, AppExecutionAlias, Protocol, FileTypeAssociation, PrimaryTile, SecondaryTile 같은 표가 있었습니다.
 
-기준 PC 의 값은 이렇습니다.
+Windows 11 25H2 에서 나온 값의 예는 이렇습니다.
 
 - User 표는 5행이었습니다. S-1-0-0, S-1-5-18, S-1-5-19, 로컬 계정 2개(RID 1000·1001)입니다.
 - PackageUser 에는 IsInbox=1(기본 탑재) 패키지가 129건, IsInbox=0 패키지가 362건 있었습니다.
@@ -111,14 +109,14 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 - DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 숫자의 뜻은 공개 자료에 없습니다.
 - PackageIdentity 527행 가운데 134행은 Package 표에 없는 이름이었습니다.
 - 한 앱은 현재 버전 1개 말고도 옛 버전 전체 이름 20개가 PackageIdentity 에 남아 있었습니다.
-- DeploymentHistory 30행은 모두 HResult 가 -2147009278(0x80073D02)이었습니다. 이 PC 에서는 실패 기록만 있었습니다.
+- DeploymentHistory 30행은 모두 HResult 가 -2147009278(0x80073D02)이었습니다. 성공 기록 없이 실패 기록만 있었습니다.
 - 0x80073D02 는 ERROR_PACKAGES_IN_USE 입니다. 패키지가 바꿀 리소스를 지금 쓰고 있어서 설치하지 못했다는 뜻입니다.
 - 성공한 작업이 이 표에 남는지는 실제 데이터로 확인해야 합니다.
 - DeploymentHistory 행의 시각은 2026-08-28 부터 09-10 사이였습니다. 같은 PC 의 AppXDeploymentServer 이벤트 로그는 09-15 부터 남아 있었습니다. 이벤트 로그에서 밀려난 기록이 이 표에는 남아 있었습니다.
 
 ### StateRepository-Deployment.srd 의 표
 
-기준 PC 의 이 DB 에는 AppInstaller, AppInstallerUri, AppxManifest, AutoUpdatePackage, ContentGroup, ContentGroupFile, File, PackageAppInstaller, PackageSourceUri 표가 있었습니다. 열 구성과 뜻은 이 페이지에서 다루지 않습니다.
+Windows 11 25H2 의 이 DB 에는 AppInstaller, AppInstallerUri, AppxManifest, AutoUpdatePackage, ContentGroup, ContentGroupFile, File, PackageAppInstaller, PackageSourceUri 표가 있습니다. 열 구성과 뜻은 이 페이지에서 다루지 않습니다.
 
 ### 레지스트리
 
@@ -129,10 +127,10 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 
 하위 키의 내용은 이렇습니다.
 
-- `Applications\<패키지 전체 이름>` 키에는 `Path` 값이 있습니다. 값은 `C:\Program Files\WindowsApps\<전체 이름>\...\AppxManifest.xml` 이나 `AppxBundleManifest.xml` 경로입니다. 기준 PC 에서 126개였습니다.
+- `Applications\<패키지 전체 이름>` 키에는 `Path` 값이 있습니다. 값은 `C:\Program Files\WindowsApps\<전체 이름>\...\AppxManifest.xml` 이나 `AppxBundleManifest.xml` 경로입니다. 이 키는 126개였습니다(Windows 11 25H2 기준).
 - `Deprovisioned` 아래에는 패키지 계열 이름 키가 있었습니다. 예: `Microsoft.Copilot_8wekyb3d8bbwe`
 - `Deprovisioned` 가 "새 사용자에게 자동으로 설치하지 않도록 뺀 앱" 을 뜻하는지는 공개 자료로 확인되지 않습니다.
-- 사용자별 키 `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages\<패키지 전체 이름>` 에는 `PackageRootFolder`, `DisplayName`, `PackageID`, `PackageSid`, `OSMinVersion`, `OSMaxVersionTested`, `CapabilityCount`, `SupportedUsers` 값이 있습니다. 기준 PC 에서 221개였습니다.
+- 사용자별 키 `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages\<패키지 전체 이름>` 에는 `PackageRootFolder`, `DisplayName`, `PackageID`, `PackageSid`, `OSMinVersion`, `OSMaxVersionTested`, `CapabilityCount`, `SupportedUsers` 값이 있습니다. 이 키는 221개였습니다(Windows 11 25H2 기준).
 
 아래 두 키도 함께 봅니다[1].
 
@@ -144,7 +142,7 @@ Microsoft.Windows.Photos_2020.20090.1002.0_x64__8wekyb3d8bbwe
 
 배포 문제는 `Microsoft-Windows-AppxPackaging/Operational` 과 `Microsoft-Windows-AppXDeploymentServer/Operational` 로그에서 보고, 이 가운데 AppXDeployment-Server 쪽을 먼저 봅니다[1]. PowerShell 의 `Get-AppxLog` 는 가장 최근 배포 작업의 로그를 보여 줍니다.
 
-기준 PC 에는 아래 로그가 있었습니다. 모두 `%SystemRoot%\System32\Winevt\Logs\` 아래 .evtx 파일입니다.
+Windows 11 25H2 에는 아래 로그가 있습니다. 모두 `%SystemRoot%\System32\Winevt\Logs\` 아래 .evtx 파일입니다.
 
 - AppxPackaging/Operational
 - AppXDeploymentServer/Operational, AppXDeploymentServer/Restricted
@@ -170,8 +168,8 @@ AppXDeploymentServer/Operational 의 주요 이벤트는 아래와 같습니다.
 
 - 작업 이름으로는 Add, Register, RegisterByPackageFamilyName, RegisterByPackageFullName, Stage, DeStage, Remove, ProvisionPackageOperation, DeprovisionPackageOperation, OnDemandRegisterOperation, PreRegisterPackage 등이 있습니다.
 - 이벤트 로그는 사용자 SID 를 문자열로 적습니다. 예: `S-1-5-21-…-1001`, `S-1-5-18`
-- 기준 PC 에서 AppXDeploymentServer/Operational 의 최대 크기는 5,242,880바이트였습니다.
-- 가장 오래된 이벤트는 8일 전(2026-09-15)이었습니다.
+- AppXDeploymentServer/Operational 의 최대 크기는 5,242,880바이트입니다(Windows 11 25H2 기준).
+- 이 크기에서 이벤트가 8일치(2026-09-15 부터)만 남은 예가 있습니다.
 
 이벤트 로그 파일의 구조는 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md) 에서 다룹니다.
 
@@ -209,7 +207,7 @@ AppXDeploymentServer/Operational 의 주요 이벤트는 아래와 같습니다.
 - 앱을 실행했는지는 알 수 없습니다. 등록은 실행이 아닙니다. 실행 흔적은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에서 다룹니다.
 - 사용자가 스스로 설치했는지 단정하지 못합니다. IsExplicitlyInstalled·DeploymentState 숫자의 뜻은 공개 자료에 없습니다.
 - 앱을 어디서 받았는지 단정하지 못합니다. PackageOrigin·SignatureOrigin 숫자의 뜻은 공개 자료에 없습니다.
-- InstallTime 은 내려받은 시각이 아닙니다. 기준 PC 에서는 Add 완료 시각과 31분 차이가 났습니다.
+- InstallTime 은 내려받은 시각이 아닙니다. Add 완료 시각과 차이가 납니다(Windows 11 25H2 기준 31분).
 - 위 표에는 제거 시각 열이 없습니다. PackageIdentity 에도 시각 열이 없습니다. 이벤트 로그가 남아 있을 때만 이벤트 607 로 제거 작업의 시각을 봅니다.
 - 앱을 완전히 제거하면 Package·PackageUser 행이 곧바로 지워지는지는 실제 데이터로 확인해야 합니다.
 - 그 시각에 누가 PC 앞에 있었는지는 알 수 없습니다. 사람을 좁히는 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
@@ -229,7 +227,7 @@ AppXDeploymentServer/Operational 의 주요 이벤트는 아래와 같습니다.
 - SQLite 에서는 `datetime(값/10000000-11644473600,'unixepoch')` 로 UTC 날짜를 얻습니다.
 - 변환 원리는 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
-기준 PC 에서 한 앱의 시각을 맞춰 보면 이렇습니다.
+Windows 11 25H2 에서 한 앱의 시각을 맞춰 보면 이렇습니다.
 
 | 기록 | 시각 (UTC) |
 |---|---|
@@ -249,20 +247,20 @@ InstallTime 은 Register 완료와 1초 차이였고 Add 완료와는 31분 차�
 
 ## 함정과 한계
 
-1. **-wal·-shm 파일을 같이 떠야 합니다.** 기준 PC 에서 `-wal` 파일은 비어 있지 않았으므로 .srd 파일만 뜨면 최근 변경이 빠집니다.
-2. **서비스가 돌아가도 복사할 수 있습니다.** 기준 PC 에서는 서비스가 켜진 상태에서도 .srd 파일이 복사됐습니다.
+1. **-wal·-shm 파일을 같이 떠야 합니다.** `-wal` 파일이 비어 있지 않으면 .srd 파일만 떠서는 최근 변경이 빠집니다.
+2. **서비스가 돌아가도 복사할 수 있습니다.** Windows 11 25H2 에서는 서비스가 켜진 상태에서도 .srd 파일이 복사됩니다.
 3. **설치 시각은 Package 표가 아니라 PackageUser 표에 있습니다.** 같은 패키지에 SYSTEM 행과 사용자 행이 따로 있습니다. 어느 SID 의 행인지 늘 같이 적습니다.
 4. **숫자 열의 뜻은 공개 자료에 없습니다.** DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 는 값만 적고 뜻을 단정하지 않습니다.
-5. **기본 탑재 앱의 InstallTime 은 OS 설치 시각이 아닙니다.** 기준 PC 에서는 16시간 어긋났습니다.
-6. **이벤트 로그는 금방 밀려납니다.** 기준 PC 에서는 8일치만 남아 있었습니다. DeploymentHistory 에는 그보다 오래된 기록이 남아 있었습니다.
-7. **DeploymentHistory 에 성공 기록이 없을 수 있습니다.** 기준 PC 에서는 실패 기록만 있었습니다. 행이 없다고 설치 작업이 없었던 것은 아닙니다.
+5. **기본 탑재 앱의 InstallTime 은 OS 설치 시각이 아닙니다.** 두 시각이 16시간 어긋나기도 합니다(Windows 11 25H2 기준).
+6. **이벤트 로그는 금방 밀려납니다.** Windows 11 25H2 기준 8일치만 남기도 합니다. 이때도 DeploymentHistory 에는 그보다 오래된 기록이 남아 있을 수 있습니다.
+7. **DeploymentHistory 에 성공 기록이 없을 수 있습니다.** 실패 기록만 남은 경우가 있습니다(Windows 11 25H2 기준). 행이 없다고 설치 작업이 없었던 것은 아닙니다.
 8. **HResult 는 음수로 보입니다.** 32비트 오류 코드를 부호 있는 정수로 담기 때문입니다. 16진수로 바꿔 오류 이름을 찾습니다.
 9. **이름을 찾을 때 대소문자를 구분하지 않습니다.** 패키지 이름은 대소문자를 구분하지 않습니다. 도구 검색에서 대소문자 구분을 끕니다.
 10. **옛 버전 이름에는 시각이 없습니다.** PackageIdentity 에 남은 이름만으로 그 버전을 언제 썼는지 말할 수 없습니다.
 11. **Deprovisioned 키의 뜻은 확정되지 않았습니다.** 키 이름만 보고 "사용자가 앱을 뺐다" 고 쓰지 않습니다.
 12. **흐리게 보이는 앱은 PackageStatus 값을 봅니다.** 이 값이 바뀌면 앱이 실행되지 않습니다. TWinUI/Operational 이벤트 5960 과 함께 봅니다.
-13. **스토어 앱 업데이트 실패는 Windows Update 이벤트에도 섞여 남습니다.** 기준 PC 에서는 System 로그의 Windows Update 클라이언트 이벤트 20 에 남았습니다. 제목은 스토어 상품 ID 로 시작했습니다. 예: `9NMPJ99VJBWV-Microsoft.YourPhone`, 오류 0x80073D02. 이 이벤트는 [윈도 업데이트 기록](windows-update-cbs-log.md) 에서 다룹니다.
-14. **다른 Windows 버전은 따로 확인합니다.** 이 페이지의 표·열은 기준 PC 의 것입니다.
+13. **스토어 앱 업데이트 실패는 Windows Update 이벤트에도 섞여 남습니다.** Windows 11 25H2 에서는 System 로그의 Windows Update 클라이언트 이벤트 20 에 남고, 제목이 스토어 상품 ID 로 시작합니다. 예: `9NMPJ99VJBWV-Microsoft.YourPhone`, 오류 0x80073D02. 이 이벤트는 [윈도 업데이트 기록](windows-update-cbs-log.md) 에서 다룹니다.
+14. **다른 Windows 버전은 따로 확인합니다.** 이 페이지의 표·열은 Windows 11 25H2 기준입니다.
 
 ## 직접 분석해 보기
 
@@ -270,7 +268,7 @@ InstallTime 은 Register 완료와 1초 차이였고 Add 완료와는 31분 차�
 
 아래 값은 명세로 만든 예시입니다. 특정 기기에서 꺼낸 값이 아닙니다.
 
-**파일 첫 16바이트.** SQLite 파일은 아래 16바이트로 시작합니다. 기준 PC 의 두 .srd 파일도 이렇게 시작했습니다.
+**파일 첫 16바이트.** SQLite 파일은 아래 16바이트로 시작합니다. 두 .srd 파일도 이렇게 시작합니다.
 
 ```
 53 51 4C 69 74 65 20 66 6F 72 6D 61 74 20 33 00   SQLite format 3.

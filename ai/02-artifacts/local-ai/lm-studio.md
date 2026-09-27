@@ -4,7 +4,7 @@ parent: "아티팩트 · 로컬 AI"
 nav_order: 690
 ---
 
-# LM Studio (LM Studio)
+# LM Studio
 
 LM Studio 는 모델을 내려받아 자기 컴퓨터에서 대화하는 데스크톱 앱이고, Windows 에서는 `%UserProfile%\.lmstudio` 아래에 모델 설치 기록(`download-jobs-info.json`), 모델 파일, 대화 JSON, 올린 파일과 그 메타데이터가 남습니다.
 

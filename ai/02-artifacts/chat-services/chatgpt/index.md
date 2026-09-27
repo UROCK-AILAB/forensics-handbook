@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# ChatGPT (ChatGPT)
+# ChatGPT
 
 ChatGPT 는 웹·Windows·macOS·Android·iOS 에서 쓰는 대화형 AI 서비스이고, 대화 원본은 계정에 묶여 서버에 있지만 모바일 앱은 그 사본을 기기에 평문으로 남기므로, 기기 흔적과 계정 데이터 내보내기를 함께 봐야 대화 내용과 사용 기기를 모두 설명할 수 있습니다.
 

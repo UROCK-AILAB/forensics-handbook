@@ -7,8 +7,6 @@ nav_order: 3910
 
 # PC 를 초기화하거나 윈도를 다시 깔았나 (Reset·Reinstall)
 
-> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
-
 Windows 10·11 의 PC 초기화 (Push-button reset) 는 OS 를 다시 만들면서 여러 폴더를 비웁니다. 무엇을 남기고 무엇을 지우는지는 고른 옵션에 따라 정해져 있습니다[1]. 이 페이지는 초기화한 PC 에서 무엇을 어디서 찾는지 다룹니다.
 
 ## 조사 질문

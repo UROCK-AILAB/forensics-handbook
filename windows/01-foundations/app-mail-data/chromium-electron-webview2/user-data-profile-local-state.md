@@ -7,8 +7,6 @@ nav_order: 430
 
 # 프로필 폴더와 계열 브라우저 구분 (User Data·Profile·Local State)
 
-> 위치: [크롬 계열 앱 공통 구조 (Chromium·Electron·WebView2)](index.md) > 프로필 폴더와 계열 브라우저 구분
-
 크롬 계열 브라우저는 사용자 데이터 폴더 (User Data Directory) 하나에 기록을 모으고, 그 아래 프로필 (Profile) 폴더마다 방문 기록·쿠키 같은 파일이 따로 쌓입니다.
 `Local State` 파일에는 프로필 폴더 이름과 사용자가 붙인 이름을 잇는 정보가 들어 있습니다.
 어느 브라우저의 폴더인지는 폴더 모양이 아니라 `Last Version`·`Last Browser` 파일과 `Local State` 의 키로 구분합니다.

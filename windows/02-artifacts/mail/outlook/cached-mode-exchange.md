@@ -7,8 +7,6 @@ nav_order: 1880
 
 # PST와 OST 차이 (Cached Mode·Exchange)
 
-> 상위 허브: [아웃룩 (Outlook)](index.md)
-
 PST 는 Outlook 항목을 PC 에 담아 두는 파일입니다. OST 는 캐시된 Exchange 모드 (Cached Exchange Mode) 에서 서버 사서함의 사본을 두는 파일입니다. OST 의 원본은 서버에 있습니다. 그래서 OST 에 무엇이 들어 있는지는 오프라인 기간과 공유 폴더 설정에 따라 달라집니다.
 
 ## 무엇을 기록하나 · 왜 생기나

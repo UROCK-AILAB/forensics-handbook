@@ -4,7 +4,7 @@ parent: "아티팩트 · 로컬 AI"
 nav_order: 720
 ---
 
-# Jan (Jan)
+# Jan
 
 Jan 은 모델 내려받기와 대화 화면을 한 앱에 담은 통합형 로컬 LLM 앱이고, 0.5.16 판은 `%AppData%\Jan\data` 아래 스레드마다 `thread.json`·`messages.jsonl` 을 두고 모델 설정을 `cortex.db` 에 두며, 엔진 로그 `cortex.log` 에 대화 요청 본문과 모델 받기, API 키까지 평문으로 남깁니다.
 

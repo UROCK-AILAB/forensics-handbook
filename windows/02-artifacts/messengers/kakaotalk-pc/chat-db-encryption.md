@@ -7,8 +7,6 @@ nav_order: 2000
 
 # 대화 DB 암호화와 버전별 차이 (Chat DB Encryption)
 
-> 위치: [카카오톡 PC (KakaoTalk PC)](index.md) > 대화 DB 암호화와 버전별 차이
-
 카카오톡 PC 는 대화방마다 대화 기록을 `chatLogs_<대화방 식별자>.edb` 파일에 저장하는데, 확장자는 `.edb` 이지만 형식은 SQLite 입니다. 25.7.2 미만은 카카오톡 자체 모듈인 EvaSQLite 로, 25.7.2 이상은 SQLCipher 4 로 암호화합니다[1]. 실제 파일이 평문인지 암호문인지는 첫 16바이트를 보면 바로 갈립니다.
 
 ## 무엇을 기록하나 · 왜 생기나

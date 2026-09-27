@@ -7,8 +7,6 @@ nav_order: 3590
 
 # USB 로 무엇을 가져갔나 (USB)
 
-> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
-
 USB 메모리나 외장 디스크가 언제 어느 드라이브 문자로 붙었는지는 [USB 저장장치 흔적](../../../02-artifacts/external-devices/usb-storage-artifacts/index.md) 허브에서 다룹니다. 이 페이지는 그 연결 기록에 이벤트 로그와 파일을 연 흔적을 이어 붙이는 순서를 다룹니다.
 
 아래 이벤트 로그 설정과 필드 구성은 Windows 11 Home 25H2(빌드 26200.9457) 기준이며, 다른 빌드에서는 다를 수 있습니다.

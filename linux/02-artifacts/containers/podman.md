@@ -4,7 +4,7 @@ parent: "아티팩트 · 컨테이너와 가상화"
 nav_order: 820
 ---
 
-# Podman (Podman)
+# Podman
 
 Podman 은 데몬 없이 사용자 계정마다 따로 컨테이너 저장소를 두고, 컨테이너 설정·상태를 SQLite 파일 `db.sql` 에, 이미지·레이어·컨테이너 목록을 JSON 파일에, 컨테이너 동작 이벤트를 기본으로 systemd 저널에 남깁니다.
 

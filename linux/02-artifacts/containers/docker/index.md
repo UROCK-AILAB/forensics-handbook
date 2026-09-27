@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# Docker (Docker)
+# Docker
 
 Docker 데몬(dockerd)은 이미지·컨테이너 설정·표준 출력 로그·볼륨을 데이터 루트 폴더 하나에 모아 두고, Docker Engine 29.0 부터 새로 설치한 호스트에서는 이미지와 컨테이너 파일 시스템을 containerd 쪽 폴더에 따로 둡니다.
 

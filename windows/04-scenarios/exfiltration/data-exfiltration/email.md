@@ -7,8 +7,6 @@ nav_order: 3610
 
 # 메일로 밖에 보냈나 (Email)
 
-> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
-
 이 페이지는 PC 에 설치한 메일 프로그램으로 자료를 첨부해 보냈는지 확인하는 순서를 다룹니다. 브라우저로 웹메일에 들어가 보낸 경우는 [웹메일·웹하드로 올렸나 (Web Upload)](web-upload.md) 에서 다룹니다.
 
 아래 폴더 구성은 새 Outlook 만 쓰고 클래식 Outlook 은 쓰지 않은 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다.

@@ -7,8 +7,6 @@ nav_order: 980
 
 # 구조와 ID 매핑 (SruDbIdMapTable)
 
-> 위치: [SRUM (System Resource Usage Monitor)](index.md) > 구조와 ID 매핑
-
 SRUM 데이터베이스(SRUDB.dat)의 기록 표에는 프로그램 경로와 사용자 SID 가 글자로 들어 있지 않고 번호만 있습니다.
 그 번호가 가리키는 이름은 ID 매핑 표 (SruDbIdMapTable) 에 따로 있어서 이 표를 먼저 풀어야 "어느 프로그램이, 어느 계정으로" 를 읽을 수 있습니다.
 

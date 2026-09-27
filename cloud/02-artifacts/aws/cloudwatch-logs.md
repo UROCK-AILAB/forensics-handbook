@@ -4,7 +4,7 @@ parent: "아티팩트 · AWS"
 nav_order: 430
 ---
 
-# CloudWatch Logs (CloudWatch Logs)
+# CloudWatch Logs
 
 애플리케이션·인스턴스·AWS 서비스가 보낸 로그 줄을 로그 그룹과 로그 스트림에 나눠 담는 AWS 의 로그 저장소이고, 한 줄마다 보낸 쪽이 적은 발생 시각과 CloudWatch Logs 가 받은 시각이 함께 남습니다.
 

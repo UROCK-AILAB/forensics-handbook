@@ -7,8 +7,6 @@ nav_order: 3920
 
 # 시스템 시각을 바꿨나 (System Time Change)
 
-> 상위 허브: [증거를 없애려 했나 (Anti-Forensics)](index.md)
-
 시스템 시각을 바꾸면 이벤트 로그 항목과 파일의 타임스탬프가 틀어질 수 있습니다[2]. Windows 는 시스템 시각이 바뀔 때마다 보안 로그에 4616 을 남깁니다[1]. 이 페이지는 4616 으로 누가 어떤 프로세스로 시각을 바꿨는지 가려내고, 틀어진 구간을 표시하는 순서를 다룹니다. 4616 이벤트 자체는 [시간 변경](../../../02-artifacts/event-logs/4616-kernel-general.md) 에서, 시각 값 형식은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ## 조사 질문

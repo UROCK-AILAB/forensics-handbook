@@ -7,8 +7,6 @@ nav_order: 2380
 
 # 팀뷰어 (TeamViewer)
 
-> 상위 허브: [원격 제어 프로그램 (Remote Access Tools)](index.md)
-
 팀뷰어 (TeamViewer) 는 원격 지원 프로그램입니다. 설치 폴더의 동작 로그와 받은 접속 목록에 누가 언제 들어왔는지가 남습니다. 받는 쪽 PC 의 `Connections_incoming.txt` 에는 줄마다 상대 TeamViewer ID, 시작·끝 시각, 로컬 사용자가 적힙니다.
 
 ## 무엇을 기록하나 · 왜 생기나

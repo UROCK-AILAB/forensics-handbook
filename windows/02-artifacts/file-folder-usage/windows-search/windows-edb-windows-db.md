@@ -7,8 +7,6 @@ nav_order: 1270
 
 # 위치와 형식 (Windows.edb·Windows.db)
 
-> 위치: [윈도 검색 색인 DB (Windows Search)](index.md) > 위치와 형식
-
 윈도 검색 색인 DB 는 한 폴더에 모여 있습니다. Windows 10 까지는 ESE 형식의 `Windows.edb` 가 본 DB 이고, Windows 11 은 SQLite 형식의 `Windows.db` 와 `Windows-gather.db` 로 나뉩니다. 이 페이지는 폴더 위치, 함께 모을 파일, 표 목록, 바이트 순서, 그리고 Windows 11 의 `AesGcm1 SQLite3` 헤더를 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나

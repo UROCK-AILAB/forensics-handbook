@@ -7,8 +7,6 @@ nav_order: 3760
 
 # 새 계정을 만들거나 권한을 올렸나 (Account·Privilege)
 
-> 상위 허브: [계정 탈취와 측면 이동 (Credential Theft·Lateral Movement)](index.md)
-
 이 페이지는 공격자가 계속 들어올 발판으로 계정을 새로 만들거나, 이미 있는 계정의 권한을 관리자급으로 올렸는지 확인하는 순서를 다룹니다. 계정·그룹 이벤트의 필드는 [계정 생성·변경](../../../02-artifacts/event-logs/account-management-events.md) 에서도 다루지만, 이 페이지는 그 이벤트를 침해 판단에 쓰는 방법을 다룹니다.
 
 ## 조사 질문

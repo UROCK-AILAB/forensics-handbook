@@ -7,8 +7,6 @@ nav_order: 1930
 
 # 계정·프로필 레지스트리 (Outlook Profiles)
 
-> 상위 허브: [아웃룩 (Outlook)](index.md)
-
 클래식 Outlook 의 사용자 설정은 사용자 레지스트리의 `HKCU\Software\Microsoft\Office\<버전>\Outlook` 아래에 있습니다. `<버전>` 자리의 번호로 Outlook 판을 추정할 수 있습니다. 계정과 데이터 파일을 묶는 프로필 (Profile) 키가 어디에 있는지는 공식 문서에 없습니다. 그래서 이 페이지는 공식 문서의 내용과 흔한 설명을 나눠 적고, 하이브에서 계정 정보를 직접 찾는 법을 중심으로 씁니다.
 
 ## 이 페이지 내용의 근거

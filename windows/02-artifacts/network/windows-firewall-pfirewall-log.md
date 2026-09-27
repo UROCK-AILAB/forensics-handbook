@@ -6,8 +6,6 @@ nav_order: 2450
 
 # 윈도 방화벽 (Windows Firewall: 규칙·pfirewall.log)
 
-> 이 페이지의 예시 값과 개수는 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다. 다른 버전에서는 실제 데이터로 확인합니다.
-
 윈도 방화벽의 흔적은 세 곳에 남습니다. 설정과 규칙은 SYSTEM 하이브의 `FirewallPolicy` 키에, 규칙을 더하거나 지운 기록은 방화벽 이벤트 채널에 남습니다. 허용·차단한 통신은 `pfirewall.log` 에 남지만, 이 로그는 기본으로 꺼져 있습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
@@ -35,8 +33,8 @@ nav_order: 2450
 |---|---|---|
 | 방화벽 설정 기본 키 | SYSTEM `CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy` | 기본 위치입니다[2] |
 | 프로필 설정 | `...\FirewallPolicy\DomainProfile`·`StandardProfile`·`PublicProfile` | `StandardProfile` 과 "개인 (Private)" 프로필의 대응은 실제 데이터로 확인합니다 |
-| 규칙 | `...\FirewallPolicy\FirewallRules` | 예: 581개 |
-| 스토어 앱 규칙 | `...\FirewallPolicy\RestrictedServices\AppIso\FirewallRules` | 예: 540개 |
+| 규칙 | `...\FirewallPolicy\FirewallRules` | 예: 581개(Windows 11 25H2) |
+| 스토어 앱 규칙 | `...\FirewallPolicy\RestrictedServices\AppIso\FirewallRules` | 예: 540개(Windows 11 25H2) |
 | 로그 설정 | 각 프로필 키 아래 `Logging` | |
 | 통신 로그 | `%windir%\system32\logfiles\firewall\pfirewall.log` | 기본 경로입니다[1][2] |
 | 이벤트 채널 | `Microsoft-Windows-Windows Firewall With Advanced Security/Firewall` | 파일은 `%SystemRoot%\System32\Winevt\Logs\Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx` 입니다. 기본으로 켜져 있고 최대 1MB 입니다 |
@@ -175,7 +173,7 @@ MDM 으로 Firewall CSP 를 써서 관리하는 PC 는 프로필마다 `./Vendor
 
 ### 방화벽 이벤트 채널
 
-25H2 PC 한 대에 남은 이벤트 수의 예입니다.
+Windows 11 25H2 에 남은 이벤트 수의 예입니다.
 
 | ID | 뜻 | 건수 |
 |---|---|---|

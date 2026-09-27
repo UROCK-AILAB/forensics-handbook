@@ -4,7 +4,7 @@ parent: "아티팩트 · 개발 도구·에이전트"
 nav_order: 640
 ---
 
-# Cursor (Cursor)
+# Cursor
 
 Cursor 는 AI 채팅과 에이전트가 들어간 VS Code 계열 편집기입니다. 편집기 대화는 앱 데이터 폴더의 전역 `state.vscdb` 에 있는 `cursorDiskKV` 표에 남고, 예전 채팅 패널 대화는 작업 공간별 `state.vscdb` 에 남으며, 사용자 폴더 `~/.cursor` 에는 에이전트 대화 사본과 세션 저장소, 훅·MCP 설정이 남습니다.
 

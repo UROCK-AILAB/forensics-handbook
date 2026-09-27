@@ -7,8 +7,6 @@ nav_order: 2950
 
 # 옛 오피스 문서 속성 (OLE SummaryInformation)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
-
 .doc 같은 옛 오피스 문서는 OLE 복합 파일이고, 그 안의 `\005SummaryInformation` 과 `\005DocumentSummaryInformation` 스트림에 문서 속성이 들어 있습니다. 값마다 속성 ID 와 값 형식이 붙고, 시각은 FILETIME (UTC) 입니다.
 
 > 이 페이지의 예시 값은 Word 16.0 빌드 16.0.20326 (Microsoft 365) 에서 새 문서를 docx 로 저장한 뒤, 같은 세션에서 .doc 로 다른 이름 저장한 파일의 값입니다. 시간대는 KST (UTC+9) 입니다.

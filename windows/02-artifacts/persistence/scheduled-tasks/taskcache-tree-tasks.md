@@ -7,8 +7,6 @@ nav_order: 730
 
 # 작업 캐시 레지스트리 (TaskCache Tree·Tasks)
 
-> 상위 허브: [예약 작업 (Scheduled Tasks)](index.md)
-
 작업 스케줄러는 작업을 등록할 때 SOFTWARE 하이브의 `TaskCache` 아래에 키를 두 개 만듭니다. `Tree` 아래 키는 작업 경로를 이름으로 쓰고, `Tasks` 아래 키는 GUID 를 이름으로 쓰며 작업의 해시·명령·시각을 담습니다. XML 파일과 따로 남기 때문에, 파일이 없거나 바뀌었을 때 비교할 기준이 됩니다.
 
 ## 무엇을 기록하나 · 왜 생기나

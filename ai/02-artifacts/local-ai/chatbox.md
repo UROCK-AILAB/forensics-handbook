@@ -4,7 +4,7 @@ parent: "아티팩트 · 로컬 AI"
 nav_order: 700
 ---
 
-# Chatbox (Chatbox)
+# Chatbox
 
 Chatbox 는 Ollama·LM Studio 같은 로컬 백엔드나 클라우드 API 에 붙여 쓰는 대화 화면 앱이고, 대화 본문·시스템 프롬프트·메시지별 모델·API 키가 `%AppData%\xyz.chatboxapp.app\config.json` 과 그 백업 파일에, 올린 이미지와 만든 이미지가 `chatbox-blobs` 폴더에 남습니다.
 

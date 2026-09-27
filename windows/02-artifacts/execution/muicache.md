@@ -4,7 +4,7 @@ parent: "아티팩트 · 프로그램 실행 흔적"
 nav_order: 1040
 ---
 
-# MUICache (MUICache)
+# MUICache
 
 사용자가 새 프로그램을 쓰기 시작할 때 Windows 가 실행 파일의 버전 정보에서 앱 이름을 꺼내 `MuiCache` 키에 경로와 함께 남깁니다[2]. Vista 이후 이 키는 `Software\Classes` 아래에 있습니다[1]. 그래서 하이브 파일은 NTUSER.DAT 가 아니라 UsrClass.dat 입니다.
 

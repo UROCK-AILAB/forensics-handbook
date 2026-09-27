@@ -66,11 +66,11 @@ MFT 9번은 NTFS 1.2 에서 $Quota 였다가 NTFS 3.0 부터 $Secure 로 바뀌�
 아래 순서대로 읽으면 볼륨 첫 섹터에서 출발해 파일 내용까지 따라갈 수 있습니다.
 
 1. [부트 섹터와 클러스터 (Boot Sector·Cluster)](boot-sector-cluster.md) — 볼륨 첫 섹터에서 섹터 크기, 클러스터 크기, $MFT 위치, 레코드 크기를 읽습니다. 뒤의 모든 계산이 여기서 시작합니다.
-2. [MFT 레코드와 속성 (FILE Record·Attribute)](file-record-attribute.md) — 레코드 머리글, 섹터 끝 바이트를 되돌리는 고정값 (Fixup), 속성 (Attribute) 목록을 읽습니다. 레코드 하나에 다 담기지 않는 파일은 $ATTRIBUTE_LIST 로 확장 레코드를 씁니다. 이때 긴 이름이 확장 레코드에만 있을 수 있습니다 (현장 관찰).
+2. [MFT 레코드와 속성 (FILE Record·Attribute)](file-record-attribute.md) — 레코드 머리글, 섹터 끝 바이트를 되돌리는 고정값 (Fixup), 속성 (Attribute) 목록을 읽습니다. 레코드 하나에 다 담기지 않는 파일은 $ATTRIBUTE_LIST 로 확장 레코드를 씁니다. 이때 긴 이름이 확장 레코드에만 있을 수 있습니다.
 3. [데이터 런과 상주·비상주 데이터 (Data Run·Resident·Non-resident)](data-run-resident-non-resident.md) — 작은 파일은 내용이 레코드 안에 있습니다. 큰 파일은 데이터 런으로 클러스터 위치를 적으며, 조각난 파일과 조각난 $MFT 를 이 방법으로 따라갑니다.
 4. [두 벌의 시각 ($STANDARD_INFORMATION·$FILE_NAME)](standard-information-file-name.md) — 두 속성의 시각이 각각 언제 바뀌는지 봅니다. 시각 조작을 찾는 방법의 바탕입니다.
 5. [대체 데이터 스트림 (ADS)](ads.md) — 파일 하나에 이름 있는 $DATA 스트림이 여럿 붙을 수 있고 탐색기에는 보이지 않습니다. 다운로드 출처를 적는 Zone.Identifier 가 대표 예입니다.
-6. [압축·희소 파일 (Compressed·Sparse)](compressed-sparse.md) — 압축된 파일과 구멍이 있는 희소 파일은 데이터 런이 다르게 생겼고, $UsnJrnl:$J 도 희소 스트림입니다. 구멍을 0 으로 채워 뽑는지, 건너뛰고 뽑는지에 따라 크기와 해시가 달라집니다 (현장 관찰).
+6. [압축·희소 파일 (Compressed·Sparse)](compressed-sparse.md) — 압축된 파일과 구멍이 있는 희소 파일은 데이터 런이 다르게 생겼고, $UsnJrnl:$J 도 희소 스트림입니다. 구멍을 0 으로 채워 뽑는지, 건너뛰고 뽑는지에 따라 크기와 해시가 달라집니다.
 7. [링크와 리파스 포인트 (Hard Link·Junction·Reparse Point)](hard-link-junction-reparse-point.md) — 하드 링크 이름과 8.3 짧은 이름도 $FILE_NAME 속성에 들어갑니다. 정션과 심볼릭 링크는 리파스 포인트로 다른 경로를 가리킵니다.
 8. [NTFS 메타 파일 ($Bitmap·$Secure·$Extend)](bitmap-secure-extend.md) — $Bitmap 으로 클러스터가 쓰이는지 확인하고, $Secure 로 권한을 찾고, $Extend 안의 파일들을 봅니다.
 

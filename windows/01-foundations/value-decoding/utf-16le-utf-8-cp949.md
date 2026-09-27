@@ -16,7 +16,7 @@ Windows 가 저장하는 문자열은 대부분 BOM 없는 UTF-16LE 이고, 8비
 |---|---|---|
 | Windows 형식 전반의 유니코드 문자열 | 따로 정하지 않았으면 BOM 없는 UTF-16LE | 아래 "Windows 쪽 기본 규칙" |
 | NTFS 의 유니코드 문자열·파일 이름 | BOM 없는 UTF-16LE | [NTFS 구조](../disk-volume/ntfs/index.md) |
-| SECURITY 하이브의 작업그룹·도메인 이름 | 길이 필드 뒤의 UTF-16 (현장 관찰) | 아래 "길이 필드가 붙은 문자열", [레지스트리 속 비밀번호 정보](../../02-artifacts/credentials/sam-security/index.md) |
+| SECURITY 하이브의 작업그룹·도메인 이름 | 길이 필드 뒤의 UTF-16 | 아래 "길이 필드가 붙은 문자열", [레지스트리 속 비밀번호 정보](../../02-artifacts/credentials/sam-security/index.md) |
 | 8비트 문자열 (LPSTR) | 코드 페이지 또는 UTF-8. 쓰는 쪽이 정함 | 코드 페이지 문자열이 남는 예는 [바로가기 파일](../../02-artifacts/file-folder-usage/lnk.md) |
 
 ## 구조

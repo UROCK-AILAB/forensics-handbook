@@ -7,8 +7,6 @@ nav_order: 3250
 
 # 크래시 덤프 (MEMORY.DMP·Minidump)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
-
 크래시 덤프 (Crash Dump) 는 시스템이나 프로그램이 멈춘 순간의 메모리를 담은 파일입니다.
 커널 크래시 덤프는 Windows 가 파란 화면, 곧 버그 체크 (Bug Check) 때 만들고 [1], 사용자 모드 덤프는 프로그램이 죽을 때 WER 로컬 덤프 설정에 따라 남습니다 [2].
 

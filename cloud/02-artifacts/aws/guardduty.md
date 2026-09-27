@@ -4,7 +4,7 @@ parent: "아티팩트 · AWS"
 nav_order: 420
 ---
 
-# GuardDuty (GuardDuty)
+# GuardDuty
 
 AWS 가 계정의 로그를 따로 받아 분석하고 수상한 활동을 "결과 (finding)" 로 남기는 위협 탐지 서비스이고, 결과 하나는 어느 자원·자격 증명에 어떤 유형의 활동이 언제부터 언제까지 몇 번 있었는지를 알려 줍니다.
 

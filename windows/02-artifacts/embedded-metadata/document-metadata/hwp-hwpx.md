@@ -7,8 +7,6 @@ nav_order: 2990
 
 # 한글 문서 (HWP·HWPX)
 
-> 상위 페이지: [문서 메타데이터 (Document Metadata)](index.md)
-
 한글은 문서를 HWP 5.0 과 HWPX 두 형식으로 저장합니다. HWP 5.0 은 OLE 복합 파일이고, 문서 속성은 `\005HwpSummaryInformation` 스트림에 들어 있습니다. HWPX 는 ZIP 파일이고, 문서 속성은 `Contents/content.hpf` 의 metadata 에 들어 있습니다. 두 형식 모두 작성자, 마지막으로 저장한 사람, 만든 시각, 마지막으로 저장한 시각을 적습니다.
 
 > 아래 값은 한글 13.0.0.3621 (한컴오피스 2024), 시간대 KST (UTC+9) 기준입니다. 새 문서에 글을 한 줄 넣고 문서 정보는 비워 둔 채 hwp 로 저장한 뒤, 약 3초 뒤 같은 문서를 hwpx 로 저장한 경우의 값입니다.

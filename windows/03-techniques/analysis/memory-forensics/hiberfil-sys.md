@@ -7,8 +7,6 @@ nav_order: 3230
 
 # 최대 절전 파일 (hiberfil.sys)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
-
 최대 절전 파일 (Hibernation File) 은 Windows 가 최대 절전이나 빠른 시작으로 꺼질 때 메모리 내용을 써 두는 파일이며, 파일 이름은 hiberfil.sys 입니다.
 전원이 꺼진 PC 에서도 이 파일로 꺼지기 전 메모리의 일부를 볼 수 있습니다.
 

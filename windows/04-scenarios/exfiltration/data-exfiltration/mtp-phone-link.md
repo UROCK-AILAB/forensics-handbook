@@ -7,8 +7,6 @@ nav_order: 3600
 
 # 스마트폰으로 옮겼나 (MTP·Phone Link)
 
-> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
-
 스마트폰이 PC 와 자료를 주고받는 길은 크게 두 가지입니다. 하나는 USB 선으로 연결해 MTP (Media Transfer Protocol) 로 붙는 길입니다. 다른 하나는 휴대폰과 연결 (Phone Link) 앱으로 휴대폰과 PC 를 연동하는 길입니다. 이 페이지는 두 길이 PC 에 남기는 흔적과, 그 흔적으로 말할 수 있는 범위를 다룹니다.
 
 ## 조사 질문

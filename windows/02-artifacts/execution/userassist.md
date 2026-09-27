@@ -4,7 +4,7 @@ parent: "아티팩트 · 프로그램 실행 흔적"
 nav_order: 960
 ---
 
-# UserAssist (UserAssist)
+# UserAssist
 
 사용자 하이브(NTUSER.DAT)의 `UserAssist` 키에 탐색기로 띄운 프로그램과 바로 가기가 남는데, 값 이름은 ROT-13 으로 가려져 있고 값 데이터에는 실행 횟수와 마지막 실행 시각이 들어 있습니다.
 

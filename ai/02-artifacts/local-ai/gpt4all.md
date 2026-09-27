@@ -4,7 +4,7 @@ parent: "아티팩트 · 로컬 AI"
 nav_order: 730
 ---
 
-# GPT4All (GPT4All)
+# GPT4All
 
 GPT4All 은 모델 내려받기와 대화 화면을 한 프로그램에 담은 통합형 로컬 AI 앱이고, Windows 에서는 모델 파일(`.gguf`)·원격 모델 설정(`.rmodel`)·대화 기록(`.chat`)이 모두 `%LocalAppData%\nomic.ai\GPT4ALL\` 한 폴더에 남습니다.
 

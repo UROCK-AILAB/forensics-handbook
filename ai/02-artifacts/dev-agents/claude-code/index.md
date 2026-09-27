@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# Claude Code (Claude Code)
+# Claude Code
 
 Claude Code 는 터미널에서 도는 코딩 에이전트이고, 대화 전문과 도구 호출·결과, 입력 이력, 편집 전 파일 사본, 권한·훅 설정을 사용자 PC 의 `~/.claude/` 폴더에 평문으로 남깁니다.
 

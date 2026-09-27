@@ -4,7 +4,7 @@ parent: "아티팩트 · 로컬 AI"
 nav_order: 740
 ---
 
-# AnythingLLM (AnythingLLM)
+# AnythingLLM
 
 AnythingLLM 데스크톱 앱은 대화·워크스페이스·이벤트 기록을 `%APPDATA%\anythingllm-desktop\storage\anythingllm.db` 한 SQLite 파일에 두고, 올린 문서에서 뽑은 본문은 같은 `storage` 폴더 아래 JSON 파일로 따로 둡니다.
 

@@ -6,7 +6,7 @@ has_children: true
 has_toc: false
 ---
 
-# Claude (Claude)
+# Claude
 
 Claude 는 웹·데스크톱(Windows·macOS·Linux)·Android·iOS 에서 같은 계정으로 쓰는 대화형 AI 서비스이고, 대화 원본은 계정 서버에 있지만 휴대전화 앱의 캐시 데이터베이스와 데스크톱 앱의 세션 폴더에도 대화가 남아서 기기 흔적과 계정 데이터 내보내기를 함께 봅니다.
 

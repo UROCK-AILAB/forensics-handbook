@@ -7,8 +7,6 @@ nav_order: 3650
 
 # 인쇄해서 가져갔나 (Print)
 
-> 상위 허브: [자료를 밖으로 빼돌렸나 (Data Exfiltration)](index.md)
-
 이 페이지는 자료를 종이로 인쇄했는지, 또는 PDF 프린터 같은 가상 프린터로 파일을 만들었는지 확인하는 순서를 다룹니다. 인쇄 이벤트와 스풀 파일의 구조는 [인쇄 이벤트](../../../02-artifacts/event-logs/printservice-307.md) 와 [인쇄 흔적](../../../02-artifacts/external-devices/print-spooler-spl-shd.md) 에서 다룹니다.
 
 이벤트의 메시지 틀과 필드 이름, 레지스트리 값은 Windows 11 Home 25H2(빌드 26200.9457) 기준입니다.

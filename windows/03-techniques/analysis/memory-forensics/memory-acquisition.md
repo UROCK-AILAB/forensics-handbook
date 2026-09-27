@@ -7,8 +7,6 @@ nav_order: 3180
 
 # 메모리 덤프 확보 (Memory Acquisition)
 
-> 상위 허브: [메모리 분석 (Memory Forensics)](index.md)
-
 켜져 있는 PC 의 물리 메모리 (Physical Memory) 를 파일로 떠 두는 단계이고, 이렇게 뜬 파일을 메모리 이미지 (Memory Image) 라고 부릅니다.
 전원이 꺼지면 메모리 내용은 사라지므로 메모리는 디스크보다 먼저 확보합니다.
 

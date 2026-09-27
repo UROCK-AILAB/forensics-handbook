@@ -7,8 +7,6 @@ nav_order: 100
 
 # NTFS 메타 파일 ($Bitmap·$Secure·$Extend)
 
-> 위치: 기반 구조 > 디스크·볼륨 > [NTFS 구조](index.md)
-
 NTFS 는 볼륨을 관리하는 정보도 메타 파일 (metadata file) 에 담습니다. 이 페이지는 그중 클러스터 사용 표($Bitmap), 보안 설명자 모음($Secure), 확장 메타 파일 폴더($Extend)를 다룹니다.
 
 ## 이 형식을 쓰는 아티팩트

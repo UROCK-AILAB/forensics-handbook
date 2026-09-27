@@ -7,8 +7,6 @@ nav_order: 2880
 
 # NTLM 비밀번호 해시 (NT Hash)
 
-> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > NTLM 비밀번호 해시
-
 NT 해시 (NT Hash) 는 로컬 계정의 비밀번호를 MD4 로 줄인 값으로, SAM 하이브 안에 계정마다 하나씩 들어 있습니다. 꺼내려면 [부트키](system-boot-key.md) 로 여러 겹을 벗겨야 합니다.
 
 ## 무엇을 담나 · 왜 생기나

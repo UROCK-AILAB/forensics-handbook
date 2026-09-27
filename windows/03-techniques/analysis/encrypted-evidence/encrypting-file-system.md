@@ -7,8 +7,6 @@ nav_order: 3420
 
 # EFS 암호화 파일 (Encrypting File System)
 
-> 위치: [암호화 증거 다루기 (Encrypted Evidence)](index.md) > EFS 암호화 파일
-
 EFS (Encrypting File System) 는 NTFS 볼륨의 파일을 하나씩 공개 키 방식으로 암호화하는 Windows 기능입니다.
 암호화한 파일은 MFT 의 파일 속성 플래그 0x00004000 으로 찾으며, 이런 파일에는 이름이 `$EFS` 인 로그 유틸리티 스트림이 붙습니다.
 켜진 시스템에서는 `cipher` 명령으로 암호화 파일 목록을 뽑고 인증서와 키를 백업할 수 있습니다.

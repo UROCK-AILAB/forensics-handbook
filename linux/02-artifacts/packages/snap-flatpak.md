@@ -4,7 +4,7 @@ parent: "아티팩트 · 패키지와 소프트웨어"
 nav_order: 610
 ---
 
-# snap·flatpak (snap·flatpak)
+# snap·flatpak
 
 snap 과 flatpak 은 배포판 패키지 관리자와 따로 움직이는 앱 설치 체계라서, dpkg·rpm 기록만 보면 이쪽으로 설치한 앱이 통째로 빠집니다.
 

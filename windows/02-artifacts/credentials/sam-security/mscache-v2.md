@@ -7,8 +7,6 @@ nav_order: 2900
 
 # 도메인 캐시 자격증명 (MSCache v2)
 
-> 위치: [레지스트리 속 비밀번호 정보 (SAM·SECURITY)](index.md) > 도메인 캐시 자격증명
-
 도메인 캐시 자격증명 (Domain Cached Credentials) 은 도메인 계정으로 로그온한 기록을 PC 안에 남긴 것으로, 도메인 컨트롤러에 닿지 못해도 로그온할 수 있게 남겨 둡니다. 요즘 방식을 MSCache v2 라고 부릅니다.
 
 ## 무엇을 담나 · 왜 생기나

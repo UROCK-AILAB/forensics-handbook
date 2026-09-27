@@ -5,7 +5,7 @@ grand_parent: "아티팩트 · 로그인과 계정"
 nav_order: 370
 ---
 
-# authorized_keys (authorized_keys)
+# authorized_keys
 
 `~/.ssh/authorized_keys` 는 그 계정에 공개 키 인증으로 들어올 수 있는 키를 한 줄에 하나씩 적은 파일이라서, 수집 시점에 "누가 이 계정의 문을 열 수 있게 돼 있었나" 를 보여 줍니다.
 

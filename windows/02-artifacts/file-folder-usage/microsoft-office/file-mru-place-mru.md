@@ -7,8 +7,6 @@ nav_order: 1340
 
 # 오피스 최근 파일 (File MRU·Place MRU)
 
-> 상위 페이지: [오피스 사용 흔적 (Microsoft Office)](index.md)
-
 Word·Excel·PowerPoint 같은 오피스 앱은 최근에 쓴 파일과 폴더를 사용자 레지스트리에 목록으로 적어 둡니다. 목록의 값 하나에는 경로 하나와 FILETIME 시각 하나가 들어 있습니다. 이 시각이 연 시각인지 닫은 시각인지는 공식 설명이 없습니다.
 
 > 16.0 의 값 모양은 Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 기준입니다.

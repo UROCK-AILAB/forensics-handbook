@@ -6,8 +6,6 @@ nav_order: 1960
 
 # 옛 윈도 메일 프로그램 (Outlook Express·Windows Live Mail)
 
-> 위치: 아티팩트 사전 > 메일
-
 이 페이지는 옛 메일 프로그램 세 가지를 다룹니다. Outlook Express 는 Windows 98 부터 XP 까지 함께 나왔고, 5.0 판부터 메일 폴더마다 `.dbx` 파일을 하나씩 썼습니다. Vista 의 Windows Mail 은 메시지를 `.eml` 파일로 하나씩 두고 ESE 데이터베이스로 항목을 관리했습니다. Windows Live Mail 도 `.eml` 파일과 ESE 데이터베이스 `Mail.MSMessageStore` 를 썼습니다. 마지막 판인 2012 판의 지원은 2017년 1월 10일에 끝났습니다.
 
 ## 내용별 근거

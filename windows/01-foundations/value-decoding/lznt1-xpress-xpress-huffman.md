@@ -16,7 +16,7 @@ NTFS 파일 압축은 LZNT1 을 쓰고 WOF 압축은 Xpress Huffman 이나 LZX �
 |---|---|---|
 | NTFS 파일 압축 | LZNT1 | [NTFS 구조](../disk-volume/ntfs/index.md) |
 | WOF 압축 (Windows Overlay Filter, Windows 10 부터) | Xpress Huffman 4K·8K·16K, 또는 LZX | [NTFS 구조](../disk-volume/ntfs/index.md) |
-| ESE 데이터베이스의 긴 값 압축 | XPRESS 등 여러 방식 (현장 관찰) | [ESE 데이터베이스](../database-log-formats/extensible-storage-engine/index.md) |
+| ESE 데이터베이스의 긴 값 압축 | XPRESS 등 여러 방식 | [ESE 데이터베이스](../database-log-formats/extensible-storage-engine/index.md) |
 
 NTFS 속성 데이터 플래그의 압축 방식 값 1 은 LZNT1 이고, WOF 압축 파일의 실제 데이터는 `WofCompressedData` 라는 대체 데이터 스트림에 있습니다[2].
 LZX 는 이 페이지의 세 형식과 다른 알고리즘이라 여기서 다루지 않습니다.
