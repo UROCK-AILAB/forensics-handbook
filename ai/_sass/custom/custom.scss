@@ -7,6 +7,17 @@ h1, h2, h3, h4, h5, h6, strong, b, th {
   font-weight: 700;
 }
 
+// 본문 글자 17px, 줄 간격 1.75배(명조는 줄 사이가 좁으면 받침이 윗줄과 붙어 보인다)
+.main-content {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+
+// 왼쪽 메뉴 15px
+.side-bar .nav-list .nav-list-item {
+  font-size: 0.9375rem;
+}
+
 // 목차 제목은 한 줄로 고정하고, 넘치면 …으로 자른다.
 .nav-list .nav-list-item .nav-list-link {
   white-space: nowrap;
