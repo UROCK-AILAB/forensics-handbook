@@ -4,7 +4,7 @@ nav_order: -100
 permalink: /
 ---
 
-# 클라우드 디지털 포렌식 핸드북
+# Cloud 개요
 
 Microsoft 365·Google Workspace·AWS·Azure·Google Cloud 와 업무용 SaaS 에 어떤 기록이 남는지, 그 기록을 어떻게 모으고 읽고 해석하는지 정리한 한국어 핸드북입니다.
 

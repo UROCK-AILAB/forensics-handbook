@@ -4,7 +4,7 @@ nav_order: -100
 permalink: /
 ---
 
-# AI 서비스 디지털 포렌식 핸드북
+# AI 개요
 
 ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정에 어떤 흔적이 남는지, 그 흔적을 어떻게 읽고 해석하는지 정리한 한국어 핸드북입니다.
 

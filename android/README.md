@@ -4,7 +4,7 @@ nav_order: -100
 permalink: /
 ---
 
-# Android 디지털 포렌식 핸드북
+# Android 개요
 
 Android 기기에 남는 흔적을 어떻게 읽고 해석하는지 정리한 한국어 핸드북입니다.
 

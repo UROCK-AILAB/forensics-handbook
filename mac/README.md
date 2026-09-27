@@ -4,7 +4,7 @@ nav_order: -100
 permalink: /
 ---
 
-# macOS 디지털 포렌식 핸드북
+# macOS 개요
 
 macOS 시스템에 남는 흔적을 어떻게 읽고 해석하는지 정리한 한국어 핸드북입니다.
 
