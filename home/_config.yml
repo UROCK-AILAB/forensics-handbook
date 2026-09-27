@@ -56,6 +56,10 @@ nav_external_links:
     url: https://urock-ailab.github.io/forensics-handbook/cloud/
     hide_icon: true
     opens_in_new_tab: false
+  - title: Network 핸드북
+    url: https://urock-ailab.github.io/forensics-handbook/network/
+    hide_icon: true
+    opens_in_new_tab: false
   - title: AI 서비스 핸드북
     url: https://urock-ailab.github.io/forensics-handbook/ai/
     hide_icon: true

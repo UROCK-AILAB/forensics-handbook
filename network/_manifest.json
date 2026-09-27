@@ -1,0 +1,544 @@
+[
+ {
+  "title": "pcap 형식 (pcap)",
+  "path": "01-foundations/capture/pcap.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "패킷 캡처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "pcapng 형식 (pcapng)",
+  "path": "01-foundations/capture/pcapng.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "패킷 캡처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "어디서 캡처하나 (SPAN·TAP·호스트)",
+  "path": "01-foundations/capture/capture-points.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "패킷 캡처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "캡처 필터와 잘린 패킷 (Capture Filter·Snaplen)",
+  "path": "01-foundations/capture/capture-filters.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "패킷 캡처",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "TCP 연결과 흐름 (TCP Sessions)",
+  "path": "01-foundations/protocols/tcp-sessions.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "프로토콜 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "DNS (DNS)",
+  "path": "01-foundations/protocols/dns.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "프로토콜 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "HTTP (HTTP)",
+  "path": "01-foundations/protocols/http.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "프로토콜 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "TLS와 인증서 (TLS·X.509)",
+  "path": "01-foundations/protocols/tls.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "프로토콜 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "메일 프로토콜 (SMTP·IMAP·POP3)",
+  "path": "01-foundations/protocols/mail-protocols.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "프로토콜 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "SMB와 원격 관리 프로토콜 (SMB·RDP·SSH)",
+  "path": "01-foundations/protocols/remote-protocols.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "프로토콜 기초",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "흐름 기록 (NetFlow·IPFIX·sFlow)",
+  "path": "01-foundations/records/flow-records.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "기록 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네트워크 로그의 종류 (Network Log Types)",
+  "path": "01-foundations/records/log-types.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "기록 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네트워크 기록의 시각 (Timestamps)",
+  "path": "01-foundations/records/timestamps.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "기록 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "IP 주소·포트·NAT 해석 (IP·Port·NAT)",
+  "path": "01-foundations/records/ip-nat.md",
+  "kind": "page",
+  "section": "기반 구조",
+  "group": "기록 체계",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Zeek 로그 (Zeek Logs)",
+  "path": "02-artifacts/zeek/zeek-logs/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "Zeek",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "연결 기록 (conn.log)",
+    "path": "02-artifacts/zeek/zeek-logs/conn-log.md"
+   },
+   {
+    "title": "DNS 기록 (dns.log)",
+    "path": "02-artifacts/zeek/zeek-logs/dns-log.md"
+   },
+   {
+    "title": "HTTP 기록 (http.log)",
+    "path": "02-artifacts/zeek/zeek-logs/http-log.md"
+   },
+   {
+    "title": "TLS·인증서 기록 (ssl.log·x509.log)",
+    "path": "02-artifacts/zeek/zeek-logs/ssl-x509-log.md"
+   },
+   {
+    "title": "파일 기록 (files.log)",
+    "path": "02-artifacts/zeek/zeek-logs/files-log.md"
+   },
+   {
+    "title": "경고와 이상 기록 (notice.log·weird.log)",
+    "path": "02-artifacts/zeek/zeek-logs/notice-weird-log.md"
+   }
+  ]
+ },
+ {
+  "title": "연결 기록 (conn.log)",
+  "path": "02-artifacts/zeek/zeek-logs/conn-log.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Zeek",
+  "parent": {
+   "title": "Zeek 로그 (Zeek Logs)",
+   "path": "02-artifacts/zeek/zeek-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "DNS 기록 (dns.log)",
+  "path": "02-artifacts/zeek/zeek-logs/dns-log.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Zeek",
+  "parent": {
+   "title": "Zeek 로그 (Zeek Logs)",
+   "path": "02-artifacts/zeek/zeek-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "HTTP 기록 (http.log)",
+  "path": "02-artifacts/zeek/zeek-logs/http-log.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Zeek",
+  "parent": {
+   "title": "Zeek 로그 (Zeek Logs)",
+   "path": "02-artifacts/zeek/zeek-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "TLS·인증서 기록 (ssl.log·x509.log)",
+  "path": "02-artifacts/zeek/zeek-logs/ssl-x509-log.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Zeek",
+  "parent": {
+   "title": "Zeek 로그 (Zeek Logs)",
+   "path": "02-artifacts/zeek/zeek-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "파일 기록 (files.log)",
+  "path": "02-artifacts/zeek/zeek-logs/files-log.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Zeek",
+  "parent": {
+   "title": "Zeek 로그 (Zeek Logs)",
+   "path": "02-artifacts/zeek/zeek-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "경고와 이상 기록 (notice.log·weird.log)",
+  "path": "02-artifacts/zeek/zeek-logs/notice-weird-log.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Zeek",
+  "parent": {
+   "title": "Zeek 로그 (Zeek Logs)",
+   "path": "02-artifacts/zeek/zeek-logs/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "Suricata EVE 로그 (EVE JSON)",
+  "path": "02-artifacts/suricata/eve-json/index.md",
+  "kind": "hub",
+  "section": "아티팩트 사전",
+  "group": "Suricata",
+  "parent": null,
+  "subpages": [
+   {
+    "title": "경고 기록 (alert)",
+    "path": "02-artifacts/suricata/eve-json/alert.md"
+   },
+   {
+    "title": "프로토콜 기록 (dns·http·tls·flow)",
+    "path": "02-artifacts/suricata/eve-json/protocol-events.md"
+   },
+   {
+    "title": "파일 추출 (filestore)",
+    "path": "02-artifacts/suricata/eve-json/filestore.md"
+   }
+  ]
+ },
+ {
+  "title": "경고 기록 (alert)",
+  "path": "02-artifacts/suricata/eve-json/alert.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Suricata",
+  "parent": {
+   "title": "Suricata EVE 로그 (EVE JSON)",
+   "path": "02-artifacts/suricata/eve-json/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "프로토콜 기록 (dns·http·tls·flow)",
+  "path": "02-artifacts/suricata/eve-json/protocol-events.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Suricata",
+  "parent": {
+   "title": "Suricata EVE 로그 (EVE JSON)",
+   "path": "02-artifacts/suricata/eve-json/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "파일 추출 (filestore)",
+  "path": "02-artifacts/suricata/eve-json/filestore.md",
+  "kind": "sub",
+  "section": "아티팩트 사전",
+  "group": "Suricata",
+  "parent": {
+   "title": "Suricata EVE 로그 (EVE JSON)",
+   "path": "02-artifacts/suricata/eve-json/index.md"
+  },
+  "subpages": []
+ },
+ {
+  "title": "방화벽 로그 (iptables·nftables·pf)",
+  "path": "02-artifacts/devices/firewall-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크 장비와 서버 로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "웹 프록시 로그 (Squid)",
+  "path": "02-artifacts/devices/proxy-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크 장비와 서버 로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "DNS 서버 로그 (BIND·Windows DNS)",
+  "path": "02-artifacts/devices/dns-server-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크 장비와 서버 로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "DHCP 로그 (DHCP)",
+  "path": "02-artifacts/devices/dhcp-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크 장비와 서버 로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "VPN 서버 로그 (OpenVPN·WireGuard)",
+  "path": "02-artifacts/devices/vpn-logs.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "네트워크 장비와 서버 로그",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "TLS 지문 (JA3·JA4)",
+  "path": "02-artifacts/fingerprints/ja3-ja4.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "식별 정보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "인증서로 서버 알아보기 (Certificates)",
+  "path": "02-artifacts/fingerprints/certificates.md",
+  "kind": "page",
+  "section": "아티팩트 사전",
+  "group": "식별 정보",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "조사 절차 (Investigation Process)",
+  "path": "03-techniques/acquisition/investigation-process.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·수집",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "패킷 캡처하기 (tcpdump·dumpcap)",
+  "path": "03-techniques/acquisition/packet-capture.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·수집",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "큰 캡처 파일 다루기 (editcap·mergecap·capinfos)",
+  "path": "03-techniques/acquisition/large-captures.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·수집",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "로그 수집과 보존 (Log Collection)",
+  "path": "03-techniques/acquisition/log-collection.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "조사 절차·수집",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "Wireshark·tshark로 읽기 (Wireshark)",
+  "path": "03-techniques/analysis/wireshark.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "세션 복원과 파일 꺼내기 (Reassembly·File Extraction)",
+  "path": "03-techniques/analysis/file-extraction.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "암호화된 트래픽 분석 (Encrypted Traffic)",
+  "path": "03-techniques/analysis/encrypted-traffic.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "흐름 기록 분석 (nfdump)",
+  "path": "03-techniques/analysis/flow-analysis.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "비컨 찾기 (Beacon Detection)",
+  "path": "03-techniques/analysis/beaconing.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "DNS 분석 (DNS Analysis)",
+  "path": "03-techniques/analysis/dns-analysis.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "탐지 규칙 활용 (Suricata·Sigma)",
+  "path": "03-techniques/analysis/detection-rules.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네트워크 타임라인 (Timeline)",
+  "path": "03-techniques/analysis/timeline.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "분석",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "네트워크 포렌식 보고서 (Forensic Report)",
+  "path": "03-techniques/reporting/forensic-report.md",
+  "kind": "page",
+  "section": "분석 기법",
+  "group": "보고",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "악성 코드가 C2 서버와 통신했나 (C2 Communication)",
+  "path": "04-scenarios/intrusion/c2-communication.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침입",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "내부에서 다른 PC 로 옮겨 갔나 (Lateral Movement)",
+  "path": "04-scenarios/intrusion/lateral-movement.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침입",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "웹 서버의 취약점을 노렸나 (Web Exploitation)",
+  "path": "04-scenarios/intrusion/web-exploitation.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침입",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "비밀번호를 무작위로 넣어 봤나 (Brute Force)",
+  "path": "04-scenarios/intrusion/brute-force.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "침입",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "자료를 밖으로 보냈나 (Data Exfiltration)",
+  "path": "04-scenarios/exfiltration/data-exfiltration.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "자료 유출",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "DNS 로 몰래 보냈나 (DNS Tunneling)",
+  "path": "04-scenarios/exfiltration/dns-tunneling.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "자료 유출",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "피싱 링크를 눌렀나 (Phishing Click)",
+  "path": "04-scenarios/user-activity/phishing-click.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "사용자 행위",
+  "parent": null,
+  "subpages": []
+ },
+ {
+  "title": "이 시각에 이 IP 를 누가 썼나 (IP Attribution)",
+  "path": "04-scenarios/user-activity/ip-attribution.md",
+  "kind": "page",
+  "section": "조사 시나리오",
+  "group": "사용자 행위",
+  "parent": null,
+  "subpages": []
+ }
+]

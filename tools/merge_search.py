@@ -5,7 +5,7 @@ import json, os, sys
 
 SITE = sys.argv[1] if len(sys.argv) > 1 else '_site'
 NAMES = [('windows', 'Windows'), ('mac', 'macOS'), ('linux', 'Linux'), ('android', 'Android'),
-         ('ios', 'iOS'), ('cloud', 'Cloud'), ('ai', 'AI')]
+         ('ios', 'iOS'), ('cloud', 'Cloud'), ('network', 'Network'), ('ai', 'AI')]
 merged = {}
 home = os.path.join(SITE, 'assets', 'js', 'search-data.json')
 if os.path.exists(home):

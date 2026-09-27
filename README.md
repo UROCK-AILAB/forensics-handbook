@@ -12,6 +12,7 @@
 | Android | https://urock-ailab.github.io/forensics-handbook/android/ |
 | iOS | https://urock-ailab.github.io/forensics-handbook/ios/ |
 | 클라우드 | https://urock-ailab.github.io/forensics-handbook/cloud/ |
+| 네트워크 | https://urock-ailab.github.io/forensics-handbook/network/ |
 | AI 서비스 | https://urock-ailab.github.io/forensics-handbook/ai/ |
 
 ## 이용 조건
