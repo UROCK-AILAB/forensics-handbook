@@ -1,8 +1,10 @@
-// 마루부리는 굵기마다 글꼴 이름이 따로 있다. 제목과 굵은 글씨는 MaruBuriBold 로 쓰고,
-// 브라우저가 한 번 더 굵게 칠하지 않도록 font-weight 를 보통으로 둔다.
+// 명조체는 작은 크기에서 가로획이 흐려지므로 본문을 한 단계 굵게(500) 쓴다.
+body {
+  font-weight: 500;
+}
+
 h1, h2, h3, h4, h5, h6, strong, b, th {
-  font-family: "MaruBuriBold", "MaruBuri", system-ui, sans-serif;
-  font-weight: normal;
+  font-weight: 700;
 }
 
 // 목차 제목은 한 줄로 고정하고, 넘치면 …으로 자른다.

@@ -2,5 +2,5 @@
 $nav-width: 22rem;
 $nav-width-md: 19rem;
 
-// 본문 글꼴: 네이버 마루부리. 글꼴 파일은 head_custom.html 의 maru-buri.css 가 불러온다.
-$body-font-family: "MaruBuri", system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif, "Segoe UI Emoji";
+// 본문 글꼴: Noto Serif KR. 글꼴 파일은 head_custom.html 의 Google Fonts 링크가 불러온다.
+$body-font-family: "Noto Serif KR", "Apple SD Gothic Neo", "Malgun Gothic", serif;
