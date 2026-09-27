@@ -43,7 +43,6 @@ jobs:
           done
           python3 tools/merge_search.py _site
           cp sitemap.xml landing-sitemap.xml _site/
-          mkdir -p _site/font && cp font/RIDIBatang.otf _site/font/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
 

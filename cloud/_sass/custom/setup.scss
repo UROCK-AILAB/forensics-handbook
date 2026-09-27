@@ -2,5 +2,5 @@
 $nav-width: 22rem;
 $nav-width-md: 19rem;
 
-// 본문 글꼴: 리디바탕. 파일은 사이트 맨 위 font/ 에 하나만 두고 모든 권이 같은 주소로 받는다.
-$body-font-family: "RIDIBatang", system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif, "Segoe UI Emoji";
+// 본문 글꼴: 네이버 마루부리. 글꼴 파일은 head_custom.html 의 maru-buri.css 가 불러온다.
+$body-font-family: "MaruBuri", system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif, "Segoe UI Emoji";
