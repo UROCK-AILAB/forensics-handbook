@@ -6,5 +6,5 @@ $nav-width-md: 19rem;
 $content-width: 75rem;
 
 // 본문 글꼴: Noto Serif KR. 글꼴 파일은 head_custom.html 의 Google Fonts 링크가 불러온다.
-// 받는 동안은 모양이 비슷한 시스템 명조(Mac 애플명조, Windows 바탕)로 보여 바뀌는 티를 줄인다.
+// 받는 동안은 글자를 숨겼다가 한 번에 보여 준다(display=block). 3초가 지나도 못 받으면 시스템 명조(Mac 애플명조, Windows 바탕)로 보인다.
 $body-font-family: "Noto Serif KR", "AppleMyungjo", "Batang", "바탕", "Nanum Myeongjo", serif;
