@@ -27,6 +27,8 @@ jobs:
             d=$(git log -1 --format=%cs -- "$f")
             if [ -n "$d" ] && [ "$(head -1 "$f")" = "---" ]; then sed -i "1a last_modified_date: $d\nlast_modified_at: $d" "$f"; fi
           done
+      - name: 쪽마다 검색·AI 용 설명(description) 넣기(요약 문단에서 뽑음, 저장소 파일은 그대로 둠)
+        run: python3 tools/add_descriptions.py .
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.3'
@@ -43,6 +45,7 @@ jobs:
           done
           python3 tools/merge_search.py _site
           python3 tools/page_counts.py _site
+          python3 tools/llms_txt.py _site
           cp sitemap.xml landing-sitemap.xml _site/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3

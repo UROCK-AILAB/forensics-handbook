@@ -40,9 +40,9 @@ RFC 3227 2.1절의 휘발성 순서는 아래 일곱 단계이고, 위에 있을
 1. 수집 도구와 도구를 띄울 앱에 [전체 디스크 접근 권한 (Full Disk Access)](full-disk-access.md)이 있는지 확인하고, 권한을 새로 주었다면 그 시각을 적습니다.
 2. 프로세스 목록과 열린 파일을 모읍니다. [프로세스와 열린 파일 (ps·lsof)](processes-open-files.md)
 3. 네트워크 연결, 라우팅 테이블, 인터페이스 통계를 모읍니다. [네트워크 연결 (Connections)](connections.md)
-4. 물리 메모리를 뜰 수 있는 환경이면 이 단계 앞뒤에서 뜹니다. [메모리 분석 (Memory Forensics)](../../analysis/memory-forensics/index.md)
-5. 통합 로그를 모읍니다. [통합 로그 수집 (log collect)](log-collect.md)
-6. 디스크를 뜹니다. [맥 증거 확보 (Acquisition)](../evidence-acquisition/index.md)
+4. 통합 로그를 모읍니다. [통합 로그 수집 (log collect)](log-collect.md)
+5. 디스크를 뜹니다. [맥 증거 확보 (Acquisition)](../evidence-acquisition/index.md)
+6. 물리 메모리는 미리 설치해 둔 수집 에이전트가 있을 때만 뜹니다. 메모리를 뜨다 커널 패닉이 나면 남은 수집을 못 할 수 있으니, 다른 수집을 모두 마친 뒤 마지막에 뜹니다. [메모리 확보 (Acquisition)](../../analysis/memory-forensics/memory-acquisition.md)
 7. MDM·EDR 같은 원격 기록은 맥을 다 뜬 뒤 관리 서버 쪽에서 따로 요청합니다.
 
 ## 함정과 한계

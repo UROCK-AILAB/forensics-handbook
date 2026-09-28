@@ -126,6 +126,7 @@ nav_order: 920
 - [그 대화를 한 사람이 누구인가](../attribution/user-attribution.md) — 계정과 실제 사용자를 잇는 방법
 - [AI 에이전트가 무엇을 실행했나](../agents/agent-actions.md) — 에이전트가 스스로 읽고 보낸 파일
 - [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md) — 증거 파일 속 토큰을 비밀로 다루는 이유
+- [OpenAI API 플랫폼 기록](../../02-artifacts/network-enterprise/openai-api-platform.md) — API 로 보낸 요청·응답 내용과 저장된 파일·응답 객체
 - [조사 절차](../../03-techniques/acquisition/investigation-process.md)
 
 ## 참고 문헌

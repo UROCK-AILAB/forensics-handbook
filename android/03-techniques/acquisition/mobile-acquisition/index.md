@@ -28,7 +28,7 @@ Android 10 이상으로 출시되는 기기는 모두 파일 단위 암호화 (F
 | 논리 추출 (Logical Extraction, NIST 2단계) | 운영체제를 거쳐 읽음 | 파일 시스템 파티션 위의 디렉터리·파일 | [수집 방식 비교](methods.md) |
 | 물리 추출 (NIST 3~5단계: Hex Dumping/JTAG, Chip-Off, Micro Read) | 고급 교육과 장비, 기기를 더 건드림 | 메모리 칩의 복사본·이미지, 삭제된 객체와 미할당 영역의 잔재(파싱·복호·해석이 따로 필요함) | [수집 방식 비교](methods.md) |
 | ADB | USB 디버깅이 켜져 있고, 잠금을 푼 상태에서 컴퓨터의 RSA 키를 허용해야 함 | 셸 권한으로 읽히는 파일, dumpsys·logcat·버그 리포트 출력 | [ADB로 볼 수 있는 것](adb.md) |
-| Google 계정 백업 | 사용자가 백업을 켰을 때 Google 계정에 저장됨 | 앱과 앱 데이터, 통화 기록, 연락처, 기기 설정, SMS·MMS[9] | [백업으로 수집](backups.md) |
+| Google 계정 백업 | 사용자가 백업을 켰을 때 Google 계정에 저장됨 | 앱과 앱 데이터, 통화 기록, 연락처, 기기 설정, SMS·MMS[6] | [백업으로 수집](backups.md) |
 | 기기 간 전송 (D2D) | 앱이 클라우드 백업과 다른 규칙을 줄 수 있음 | 앱이 전송 대상으로 정한 파일 | [백업으로 수집](backups.md) |
 
 Android 버전과 제조사에 따라 달라지는 점은 아래와 같고, 자세한 내용은 오른쪽 페이지에 있습니다.
@@ -41,7 +41,7 @@ Android 버전과 제조사에 따라 달라지는 점은 아래와 같고, 자�
 | Android 9 이상 | 사용자가 백업을 켜고 화면 잠금을 설정했으면 Auto Backup 을 기기 PIN·패턴·비밀번호로 종단간 암호화함[3] | [백업](backups.md) |
 | Android 10 이상으로 출시된 기기 | FBE 필수, CE 영역은 잠금 해제 뒤에만 쓸 수 있음[1] | [수집 방식 비교](methods.md), [압수와 보관](seizure-handling.md) |
 | Android 11 (API 30) 이상 휴대폰 | 같은 무선 네트워크에서 무선 디버깅을 쓸 수 있음[2] | [ADB](adb.md) |
-| Android 12 (API 31) 이상 | 12 이상을 대상으로 하는 앱은 adb backup 에서 앱 데이터가 빠지고(debuggable 앱만 예외)[6], 백업 규칙을 클라우드 백업과 기기 간 전송으로 나눠 정함[3] | [ADB](adb.md), [백업](backups.md) |
+| Android 12 (API 31) 이상 | 12 이상을 대상으로 하는 앱은 adb backup 에서 앱 데이터가 빠지고(debuggable 앱만 예외)[5], 백업 규칙을 클라우드 백업과 기기 간 전송으로 나눠 정함[3] | [ADB](adb.md), [백업](backups.md) |
 | 삼성 One UI | settings global·secure 에 Smart Switch 관련 키가 있음 | [백업](backups.md) |
 
 ## 읽는 순서
@@ -73,5 +73,5 @@ Android 버전과 제조사에 따라 달라지는 점은 아래와 같고, 자�
 2. Android Debug Bridge (adb) — Android Developers, https://developer.android.com/tools/adb
 3. Back up user data with Auto Backup — Android Developers, https://developer.android.com/identity/data/autobackup
 4. NIST SP 800-101 Rev.1, Guidelines on Mobile Device Forensics (Ayers, Brothers, Jansen, 2014), https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-101r1.pdf
-6. Behavior changes: apps targeting Android 12 — Android Developers, https://developer.android.com/about/versions/12/behavior-changes-12
-9. Back up or restore data on your Android device — Google Android Help, https://support.google.com/android/answer/2819582?hl=en
+5. Behavior changes: apps targeting Android 12 — Android Developers, https://developer.android.com/about/versions/12/behavior-changes-12
+6. Back up or restore data on your Android device — Google Android Help, https://support.google.com/android/answer/2819582?hl=en

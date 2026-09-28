@@ -33,6 +33,11 @@ TCC.db는 두 곳에 있습니다 [2][4].
 | 10.15 이하 (APOLLO 쿼리는 10.14·10.15 대상) | `allowed` | `prompt_count` | `allowed` 열이 있음 |
 | 11 이상 | `auth_value` | `auth_reason` | `auth_value` 열이 있음 |
 
+### macOS 27 Golden Gate 에서 바뀐 점
+
+macOS 27 Golden Gate 부터는 앱이 로컬 TCC 데이터베이스에 직접 접근할 수 없습니다 [6]. SUMURI 지침서는 여기에 더해 TCC.db 가 `~/Library` 밖의 보호된 시스템 위치로 옮겨졌다고 보고, 그래서 어느 앱이 어떤 권한을 받았는지는 실행 중인 맥에서 파일을 복사해 읽지 말고 디스크 이미지나 `tccutil` 로 확인하라고 합니다 [5].
+macOS 27 이미지에서 앞의 두 경로에 TCC.db 가 없어도 권한 기록이 없다고 판단하지 않습니다. 이미지 안에서 `TCC.db` 이름으로 파일을 찾고, 찾은 파일도 `PRAGMA table_info("access")` 로 열 구성을 다시 확인한 뒤 읽습니다. 실행 중인 맥이 기관이 관리하는 기기라면 macOS 27 에 새로 생긴 `tccutil list` 로 지정한 서비스나 앱의 현재 권한을 볼 수 있습니다 [6]. 결정을 지우는 `tccutil reset` 은 쓰지 않습니다. `tccutil` 설명은 [전체 디스크 접근 권한](../../../03-techniques/process-acquisition/live-response/full-disk-access.md) 의 도구 절에 있습니다.
+
 ## 구조
 
 권한 기록의 핵심 표는 `access`이고 [2][3][4], 도구들이 읽는 열은 아래와 같습니다 [2][3][4]. 열의 값을 어떻게 읽는지는 [권한 기록 해석](interpretation.md)에 있습니다.
@@ -119,3 +124,5 @@ ORDER BY last_modified DESC;
 2. mac_apt TCC 플러그인 소스 tcc.py (Minoru Kobayashi, 2022) — https://github.com/ydkhatri/mac_apt/blob/master/plugins/tcc.py
 3. APOLLO 모듈 tcc_db.txt (Sarah Edwards, mac4n6) — https://github.com/mac4n6/APOLLO/blob/master/modules/tcc_db.txt
 4. Jamf Aftermath 소스 analysis/DatabaseParser.swift — https://github.com/jamf/aftermath/blob/main/analysis/DatabaseParser.swift
+5. SUMURI, Mac Forensics Best Practices Guide, 2026 Edition (2026-09) — https://sumuri.com/
+6. Apple Support, "What's new for enterprise in macOS Golden Gate 27" (2026-09-14) — https://support.apple.com/en-us/148830

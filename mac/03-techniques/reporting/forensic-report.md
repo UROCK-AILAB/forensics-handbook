@@ -6,7 +6,7 @@ nav_order: 2270
 
 # 포렌식 보고서 (Forensic Report)
 
-조사에서 한 일과 알아낸 것을 다른 사람이 확인하고 다시 따라갈 수 있게 적는 방법을 다룹니다. NIST SP 800-86 이 정한 보고 단계와 SWGDE 보고서 요건(2018년 1.0판 기준)을 바탕으로 보고서에 반드시 넣을 요소와 쓰는 순서를 정리하고, 맥 조사에서 따로 챙길 자리(기기 식별, 시각 표기, 도구 기록)를 해당 페이지로 이어 줍니다.
+조사에서 한 일과 알아낸 것을 다른 사람이 확인하고 다시 따라갈 수 있게 적는 방법을 다룹니다. NIST SP 800-86 이 정한 보고 단계와 SWGDE 보고서 요건(2018년 1.0판 기준)을 바탕으로 보고서에 반드시 넣을 요소와 쓰는 순서를 정리하고, 맥 조사에서 따로 챙길 자리(기기 식별, 시각 표기, 도구 기록, 화면 캡처, 한계 표기)를 해당 페이지로 이어 줍니다.
 
 ## 언제 쓰나
 
@@ -50,6 +50,29 @@ SWGDE 의 "Requirements for Report Writing in Digital and Multimedia Forensics" 
 
 보고서를 쓰는 데 전용 도구가 꼭 필요하지는 않고, 워드프로세서와 사건 관리 프로그램이면 충분합니다. 포렌식 도구에 딸린 보고 기능은 그 도구가 한 일과 결과만 다루고 감정 전체 범위는 대개 담지 않아서 [2], 도구 보고서는 감정 보고서를 대신하지 못하고 부록으로 붙입니다. 화면 캡처, 사진, 도면, 사건 메모도 보고서의 재료이고 [2], 필요하면 자동 도구 보고서와 함께 보조 자료로 붙입니다 [2].
 
+## 맥에서 화면 남기기
+
+아티팩트를 사용자가 봤을 모습대로 보여 주려면 분석용 맥에서 화면을 캡처하거나 PDF 로 남깁니다 [3]. 화면 캡처는 아래 단축키로 합니다 [3][4].
+
+| 캡처 대상 | 단축키 |
+|---|---|
+| 화면 전체 | Command+Shift+3 |
+| 고른 영역 | Command+Shift+4 |
+| 창 하나 | Command+Shift+4 를 누른 뒤 스페이스 바 |
+| 캡처 옵션과 화면 기록 | Command+Shift+5 (스크린샷 앱) |
+
+스크린샷 앱은 macOS Mojave 10.14 부터 쓸 수 있고 [4], 화면 기록도 이 앱에서 시작하며 기록 파일은 .mov 로 저장됩니다 [5]. 캡처 파일은 손실 없이 압축하는 PNG 로 저장되는데, 보고서용 캡처는 이 기본값을 그대로 둡니다 [3][4]. macOS Tahoe 26 이상을 지원하는 모델에서는 HDR 캡처를 고를 수 있고 이때는 HEIF 로 저장되므로 [4], 캡처 형식은 SDR(PNG) 로 둡니다.
+
+캡처 파일은 바탕화면에 날짜와 시각이 붙은 이름으로 저장돼서 [4] 나중에는 무엇을 찍었는지 알기 어렵습니다. 찍은 즉시 `QuarantineRecord_Safari_2026-09-02.png` 처럼 아티팩트와 날짜가 드러나는 이름으로 바꾸고, 이미지와 같은 사건 폴더로 옮겨 다른 파일과 함께 해시를 계산합니다 [3]. 해시를 기록하는 방법은 [해시와 증거 보관 (Hash·Chain of Custody)](../process-acquisition/evidence-acquisition/hash-chain-of-custody.md) 에서 다룹니다.
+
+긴 결과 목록, 브라우저 방문 기록 화면, Spotlight 검색 결과처럼 한 화면에 다 들어가지 않는 내용은 PDF 로 남겨 고정된 형태로 보관합니다 [3]. 대부분의 앱에서 파일 > 프린트를 고른 뒤 PDF 팝업 메뉴에서 "PDF로 저장" 을 누르면 되고 [6], 파일 이름은 사건 번호와 아티팩트 종류를 기준으로 붙입니다 [3].
+
+## 앱으로 다시 보여 주기 (copy-over)
+
+메일함, 대화 DB, 앱 상태처럼 파싱한 표만으로는 사용자가 본 화면을 알기 어려운 아티팩트는 분석용 맥의 깨끗한 계정에 복사해 두고 macOS 앱이 보여 주는 대로 기록할 수 있습니다 [3]. SUMURI 지침서는 이 방법을 copy-over 라고 부르고, 어떤 파서도 제대로 보여 주지 못하는 맥 전용 아티팩트에는 이 방법이 사실상 유일하다고 봅니다 [3]. 메일함의 파일 구조는 [저장 구조 (emlx·V10)](../../02-artifacts/mail/apple-mail/storage.md) 에서 다룹니다.
+
+이렇게 얻은 화면은 증거 자체가 아니라 앱이 증거를 보여 준 결과입니다 [3]. 같은 데이터도 macOS 버전이나 앱 버전이 다르면 다르게 보일 수 있어서 [3], 보고서에는 어떤 아티팩트를 어디에서 가져와 어떤 환경에 복사했는지와 그 환경의 macOS 버전·앱 버전을 적습니다 [3]. 이 작업은 원본 이미지에 대고 하지 않습니다 [3]. 복사한 계정의 준비 상태와 작업 순서도 결과에 영향을 줘서, 이것을 기록하지 않으면 캡처가 아무것도 증명하지 못한다고 SUMURI 지침서는 봅니다 [3].
+
 ## 함정과 한계
 
 도구가 뽑아 준 보고서를 그대로 감정 보고서로 내면 의뢰 범위, 근거 권한, 감정하지 않은 항목, 처분처럼 SWGDE 가 요구하는 요소가 빠지기 쉽습니다. 도구 보고 기능은 그 도구가 한 일과 결과만 다루기 때문입니다 [2]. 반대로 결론만 적고 과정을 줄이면 같은 지식을 지닌 검토자가 평가할 수 없어 [2] 다툼이 생겼을 때 방어하기 어렵습니다.
@@ -57,6 +80,10 @@ SWGDE 의 "Requirements for Report Writing in Digital and Multimedia Forensics" 
 분석 단계의 정의에는 "법적으로 정당화할 수 있는 방법과 기법(legally justifiable methods and techniques)" 이 들어 있어서 [1], 보고서에 적는 방법도 그 기준으로 설명할 수 있어야 합니다. 관할과 인정 기관에 따라 ASTM E2763, ASTM E620, ISO/IEC 17025 같은 표준의 요건이 더 붙을 수 있습니다 [2]. 이 페이지의 SWGDE 보고서 요건은 2018년 1.0판 기준이라, 보고서를 쓰기 전에 SWGDE 누리집에서 최신판을 확인합니다.
 
 맥 아티팩트는 같은 사실이 여러 곳에 겹쳐 남는 일이 많아서, 한 아티팩트만 보고 쓴 결론은 다른 설명을 배제하지 못할 수 있습니다. 앞의 7단계처럼 설명마다 교차 확인한 결과를 적고, 어떤 아티팩트를 함께 볼지는 각 조사 시나리오 페이지를 따릅니다.
+
+### 보고서에 한계 밝히기
+
+수집이나 분석에 제약이 있었으면 그 사실을 보고서에 적습니다 [3]. 라이브 수집 때 [전체 디스크 접근 권한 (Full Disk Access)](../process-acquisition/live-response/full-disk-access.md) 이 없었는지, 물리 이미지가 아니라 [논리 수집 (Logical Collection)](../process-acquisition/evidence-acquisition/logical-collection.md) 이었는지, 로컬 스냅숏이 수집 전에 이미 사라졌는지를 밝힙니다 [3]. 로컬 스냅숏을 얼마나 보관하는지는 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../analysis/snapshot-diff.md) 에서 봅니다. SUMURI 지침서는 스스로 밝힌 한계는 반대 신문을 견디지만 상대가 찾아낸 한계는 그렇지 못하다고 봅니다 [3].
 
 ## 결과를 어떻게 해석하나
 
@@ -74,3 +101,7 @@ SWGDE 의 "Requirements for Report Writing in Digital and Multimedia Forensics" 
 
 1. NIST SP 800-86, Guide to Integrating Forensic Techniques into Incident Response (2006-08) — https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-86.pdf
 2. SWGDE, Requirements for Report Writing in Digital and Multimedia Forensics, Version 1.0 (2018-11-20) — https://www.swgde.org/wp-content/uploads/2023/11/2018-11-20-SWGDE-Requirements-for-Report-Writin.pdf
+3. SUMURI, Mac Forensics Best Practices Guide, 2026 Edition (2026-09) — https://sumuri.com/
+4. Apple 지원, Take a screenshot on Mac — https://support.apple.com/en-us/102646
+5. Apple 지원, How to record the screen on Mac — https://support.apple.com/en-us/102618
+6. Apple, Mac 사용 설명서, Save a document as a PDF on Mac — https://support.apple.com/guide/mac-help/save-a-document-as-a-pdf-on-mac-mchlp1531/mac

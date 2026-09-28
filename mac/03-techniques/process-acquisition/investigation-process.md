@@ -70,6 +70,37 @@ nav_order: 1900
 
 11. **사본으로 검사·분석하고 보고합니다.** 비트 수준 사본을 만들고 분석은 사본으로 합니다[3]. 검사와 분석은 [타임라인 작성](../analysis/timeline/index.md) 같은 분석 페이지로, 결과 정리는 [포렌식 보고서](../reporting/forensic-report.md)로 이어지고, 쓴 도구를 믿을 근거는 [도구 검증](../reporting/tool-validation.md)에서 다룹니다.
 
+## 압수 뒤 네트워크 차단
+
+맥은 스스로 인터넷에 닿을 기회가 생각보다 많아서 절차 3단계에서 네트워크를 뗍니다. 나의 찾기 (Find My)에 등록된 맥은 인터넷에 닿으면 원격 지우기 명령을 받을 수 있습니다[6][7]. 잠자기 상태라고 안심할 수도 없습니다. 파워 냅 (Power Nap)이 켜진 맥은 잠든 동안에도 Mail의 새 메시지를 확인하고 캘린더와 iCloud 이벤트를 갱신하며, 전원 어댑터에 꽂혀 있으면 소프트웨어 업데이트를 내려받고 Time Machine 백업까지 합니다[9][10]. 꺼진 것처럼 보이는 노트북도 덮개를 열거나 트랙패드를 건드리기만 하면 켜지고, Siri에 음성으로 명령해 기기를 잠그거나 증거를 지우는 스크립트를 실행할 수도 있습니다[7][10].
+
+그래서 패러데이 가방이나 상자를 압수한 순간부터 운반하는 동안까지 씁니다. 운반 중에 전에 접속한 적 있는 Wi-Fi 근처를 지나면 맥이 그 네트워크에 다시 붙어 옮기는 도중에 지워질 수 있습니다[7][10].
+
+예외가 하나 있습니다. 켜져 있고 잠금이 풀린 맥은 네트워크 상태 자체가 증거입니다. 지금 맺어진 연결, 원격 세션, 마운트된 네트워크 공유, 클라우드와 동기화된 내용은 네트워크를 끊는 순간 사라집니다[7]. 사건에 이 상태가 필요하고 앞으로 몇 분 동안 원격 지우기를 당할 위험을 감수할 만하다고 판단하면, 절차 7단계의 휘발성 수집([라이브 대응](live-response/index.md), [네트워크 연결](live-response/connections.md))을 먼저 하고 곧바로 네트워크를 끊습니다[7]. 수집은 몇 분 안에 끝냅니다. 어느 쪽으로 정했든 그렇게 판단한 이유를 현장 기록에 남깁니다[7].
+
+활성화 잠금 (Activation Lock)도 차단과 함께 챙깁니다. 감독 (supervised) 상태가 아닌 맥에서는 사용자가 Apple 계정으로 로그인하고 나의 찾기를 켜면 활성화 잠금이 자동으로 켜집니다[8]. Apple silicon 맥은 저수준 부트로더 (LLB)가 유효한 LocalPolicy가 있는지 확인하고, T2 맥은 T2 펌웨어가 유효한 활성화 인증서를 확인한 뒤에야 macOS로 부팅합니다[8]. 잠긴 맥을 recoveryOS에서 풀려면 활성화 잠금을 켠 Apple 계정의 인증 정보, 그 로컬 사용자가 전에 쓰던 기기 암호, 기기 관리 서비스(MDM)에 맡겨 둔 우회 코드 가운데 하나가 있어야 합니다[8]. 그래서 활성화 잠금이 없다고 확인하지 않은 맥은 지우거나 macOS를 다시 설치하지 않습니다. 이런 맥을 지우면 활성화 화면에서 멈추고, 위 세 가지 없이는 다시 쓸 수 없습니다[7][8]. 켜져 있고 잠금이 풀린 맥에서 수집하는 일은 활성화 잠금이 막지 않습니다[7].
+
+## 현장 점검 목록
+
+SUMURI 지침서는 현장에서 할 일을 아래 14단계로 정리합니다[7]. 앞의 절차와 겹치는 단계는 해당 페이지로 이었습니다.
+
+1. 칩 종류(인텔, T2, Apple silicon)를 확인합니다. 출시 연도로 짐작하지 말고 기기에서 직접 확인합니다(절차 4단계).
+2. 모든 네트워크에서 떼어 냅니다. 압수한 순간부터 운반하는 동안까지 패러데이 가방에 넣어 둡니다.
+3. 쓰고 있는 암호와 암호 문구를 모두 요청하고, 각각 누가 알려 줬는지 적습니다.
+4. 암호는 `dscl . -authonly <사용자이름>`으로 한 번씩만 확인하고, 짐작으로 입력해 보지 않습니다. 이 명령은 시동 때 쓰는 암호 입력 횟수를 쓰지 않고 로컬 계정 암호를 확인합니다. 암호 입력 횟수를 다 쓰면 Secure Enclave가 더는 복호화하지 않고, 이 상태는 되돌릴 수 없습니다.
+5. 데스크톱이 열려 있으면 곧바로 잠자기와 화면 잠금을 끕니다.
+6. 강제 종료 창(Command + Option + Esc)에서 증거를 지우는 프로세스가 도는지 보고, Mission Control에서 숨은 데스크톱이 있는지 봅니다.
+7. 로컬 스냅숏 목록을 `tmutil listlocalsnapshots /`로 뽑습니다. 로컬 스냅숏은 24시간만 보관되므로 미루지 않습니다([스냅숏과 백업 비교](../analysis/snapshot-diff.md)).
+8. 휘발성 데이터와 통합 로그 (Unified Logs)를 APFS나 HFS+로 포맷한 외장 매체에 모읍니다([라이브 대응](live-response/index.md), [통합 로그 수집](live-response/log-collect.md)).
+9. 라이브 수집 전에 전체 디스크 접근 권한 (Full Disk Access)이 있는지 확인합니다([전체 디스크 접근 권한](live-response/full-disk-access.md)).
+10. 확보할 때는 볼륨 하나보다 APFS 컨테이너 전체를 우선합니다([맥 증거 확보](evidence-acquisition/index.md)).
+11. 메모리 수집은 하더라도 맨 마지막에 합니다([메모리 확보](../analysis/memory-forensics/memory-acquisition.md)).
+12. 알려진 기준 시각과 비교해 시스템 날짜와 시각을 기록합니다(절차 2단계).
+13. 해시를 기록하고, 이미지를 잠그고, 섀도 파일을 붙여 읽기 전용으로 마운트합니다(`hdiutil attach -noverify -noautofsck IMAGE.dmg -shadow`)([해시와 증거 보관](evidence-acquisition/hash-chain-of-custody.md)).
+14. 쓴 도구와 버전, 실행한 명령, 목록에서 벗어난 조치를 모두 기록합니다.
+
+원격 지우기를 당하면 되돌릴 수 없어서 2단계(네트워크 차단)를 8단계(휘발성 수집)보다 앞에 둡니다. 켜져 있고 잠금이 풀린 맥에서 사건에 필요한 것이 네트워크 상태라면 앞의 "압수 뒤 네트워크 차단" 절처럼 순서를 바꾸고, 어느 쪽이든 판단을 기록합니다[7].
+
 ## 증거 보관 연속성 기록
 
 보관 연속성 기록에는 증거를 어디서, 언제, 누가 발견하고 수집했는지와 어디서, 언제, 누가 검사하고 취급했는지를 적습니다. 여기에 기간마다 누가 보관을 책임졌고 어떻게 보관했는지, 증거를 넘길 때의 시각과 방법, 추적 번호까지 담습니다[3].
@@ -111,3 +142,7 @@ sudo fdesetup hasinstitutionalrecoverykey  # 기관 복구 키가 있으면 "tru
 4. Apple Support, Mac computers with the Apple T2 Security Chip — https://support.apple.com/en-us/103265
 5. fdesetup(8) man page (Xcode man pages 미러) — https://keith.github.io/xcode-man-pages/fdesetup.8.html
 6. iCloud User Guide, Erase a device in Find Devices on iCloud.com — https://support.apple.com/guide/icloud/erase-a-device-mmfc0ef36f/icloud
+7. SUMURI, Mac Forensics Best Practices Guide, 2026 Edition (2026-09) — https://sumuri.com/
+8. Apple Platform Security, Activation Lock security (2024-12-19) — https://support.apple.com/guide/security/activation-lock-security-sec0f8dfd030/web
+9. Mac User Guide, What is Power Nap on Mac? (macOS 14) — https://support.apple.com/en-gb/guide/mac-help/mh40773/14.0/mac/14.0
+10. SWGDE 23-F-005-1.0, Best Practices Apple MacOS Forensic Acquisition (2024-03-15) — https://www.swgde.org/wp-content/uploads/2024/04/2024-03-15-SWGDE-Best-Practices-Apple-MacOS-Forensic-Acquisition-23-F-005-1.0.pdf (6.1절, 12.4절)

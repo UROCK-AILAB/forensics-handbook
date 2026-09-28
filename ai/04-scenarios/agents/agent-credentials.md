@@ -149,6 +149,7 @@ Chatbox 의 `settings` 에는 `userAvatarKey`, `defaultAssistantAvatarKey` 처�
 - [기기에서 AI 흔적 모으기](../../03-techniques/acquisition/endpoint-triage.md) — 수집 범위를 정하는 법
 - [프롬프트 인젝션 사고 분석](../../03-techniques/analysis/prompt-injection.md) — 외부 내용에 이끌려 에이전트가 비밀 파일을 연 경우
 - [기밀 자료를 AI에 넣었나](../data-leak/confidential-input.md) — 사람이 직접 비밀 값을 붙여넣은 경우
+- [OpenAI API 플랫폼 기록](../../02-artifacts/network-enterprise/openai-api-platform.md) — 새 API 키·서비스 계정이 만들어졌는지 보는 조직 감사 로그
 - [DPAPI 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/protection/data-protection-api/index.html), [macOS 키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html) — OS 보호 원리
 
 ## 참고 문헌

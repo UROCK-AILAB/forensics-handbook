@@ -129,6 +129,7 @@ Cursor 편집기 DB 의 키는 공개 문서가 없고, 표의 키는 macOS 판 
 - [에이전트가 자격 증명을 건드렸나](agent-credentials.md) — 세션 기록과 셸 환경에 섞인 비밀 값, 도구 자체의 인증 정보
 - [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md), [Codex CLI](../../02-artifacts/dev-agents/codex-cli.md), [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md), [Cursor](../../02-artifacts/dev-agents/cursor.md), [GitHub Copilot](../../02-artifacts/dev-agents/github-copilot/index.md) — 도구별 저장 구조
 - [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md) — 외부 도구 서버 쪽 기록과 메모리 흔적
+- [OpenAI API 플랫폼 기록](../../02-artifacts/network-enterprise/openai-api-platform.md) — Agents SDK 트레이스와 API 호출 로깅으로 보는 서버 쪽 실행 흐름
 - [프롬프트 인젝션 사고 분석](../../03-techniques/analysis/prompt-injection.md) — 에이전트가 사용자 뜻과 다른 일을 한 경우
 - [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md) — 기록이 없을 때의 해석
 - [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html) — 데스크톱 앱 폴더 구조(Windows 판)

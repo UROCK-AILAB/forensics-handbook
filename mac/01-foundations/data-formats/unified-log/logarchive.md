@@ -94,6 +94,12 @@ Mandiant의 공개 파서 macos-unifiedlogs에 든 `unifiedlog_iterator` 는 로
 
 `log erase` 는 로그 데이터를 지우는 명령이고, 옵션 없이 쓰면 주 저장소와 아직 기록 중인 로그를, `--all` 을 붙이면 TTL 로그와 fault·error 내용까지 지웁니다 [1]. 그래서 로그가 있어야 할 기간에 공백이 보이면 이 명령을 쓴 흔적일 가능성도 따져 봅니다. 공백만으로는 삭제를 단정하지 않고, 용량 한도에 따른 정상 삭제와 구분하려면 다른 기록과 맞춰 봐야 합니다. 그 방법은 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 
+## macOS 27 에서 바뀐 아카이브 형식
+
+macOS 27 Golden Gate에서 통합 로그 아카이브 형식이 바뀌었습니다. 그래서 macOS 27 맥이 만든 아카이브는 macOS 26.1 이하에서는 읽지 못하고, macOS 26.2 이상이 있어야 읽습니다 [5][6]. 조사 대상 맥이 macOS 27이면 분석용 맥을 macOS 26.2 이상으로 맞춘 뒤에 `log show --archive` 나 Console 앱으로 엽니다. 분석용 맥이 더 오래되었을 때 `log show` 가 어떻게 끝나는지는 아래 함정 절에서 다룹니다.
+
+Mandiant 파서는 macOS 10.12~12에서 시험한 도구라서 [2], macOS 27 아카이브를 이 파서로 읽었다면 결과를 macOS 26.2 이상의 맥에서 돌린 `log show` 결과와 맞춰 봅니다. 맞춰 보는 법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)에 있습니다.
+
 ## 함정
 
 `log show` 와 공개 파서는 같은 항목을 다른 모양으로 보여 줄 수 있습니다. 공개 파서는 오류 코드를 숫자로, 사용자 정의 객체를 base64로 내서 [3] `log show` 결과와 글자 그대로 맞지 않을 수 있고, 가려진 비공개 값도 도구에 따라 다르게 보입니다. 비공개 값이 가려지는 규칙은 [보관 기간과 로그 수준 (Persist·Info·Debug)](retention-levels.md)에 있습니다.
@@ -108,3 +114,5 @@ Mandiant의 공개 파서 macos-unifiedlogs에 든 `unifiedlog_iterator` 는 로
 2. Alexander Holcomb (Mandiant), Reviewing macOS Unified Logs (Google Cloud 블로그, 2022-08-31) — https://cloud.google.com/blog/topics/threat-intelligence/reviewing-macos-unified-logs
 3. Mandiant macos-UnifiedLogs README — https://raw.githubusercontent.com/mandiant/macos-UnifiedLogs/main/README.md
 4. Apple Developer, OSLogStore — https://developer.apple.com/tutorials/data/documentation/oslog/oslogstore.json
+5. Apple Developer, macOS 27 Golden Gate Release Notes (Apple Unified Logging System) — https://developer.apple.com/documentation/macos-release-notes/macos-27-release-notes
+6. SUMURI, Mac Forensics Best Practices Guide, 2026 Edition (2026-09) — https://sumuri.com/

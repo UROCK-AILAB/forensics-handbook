@@ -15,15 +15,15 @@ nav_order: 2110
 
 ## 절차 (Volatility 3)
 
-1. **커널 배너를 확인합니다.** 먼저 `banners.Banners` 플러그인으로 이미지 속 커널 버전을 확인합니다[9]. 기본 사용법은 아래와 같습니다.
+1. **커널 배너를 확인합니다.** 먼저 `banners.Banners` 플러그인으로 이미지 속 커널 버전을 확인합니다[5]. 기본 사용법은 아래와 같습니다.
 
    ```
    python3 vol.py -f <메모리 이미지> banners.Banners
    ```
 
-2. **맞는 심볼 테이블을 준비합니다.** Volatility Foundation이 미리 만들어 둔 맥 심볼 묶음(`https://downloads.volatilityfoundation.org/volatility3/symbols/mac.zip`)을 받아 `volatility3/symbols/` 아래에 둡니다[9]. 심볼 파일의 배너는 버전 번호만이 아니라 컴파일 시각 같은 요소까지 이미지의 배너와 정확히 맞아야 합니다[4].
-3. **묶음에 없으면 심볼을 직접 만듭니다.** 배너와 정확히 맞는 디버그 커널을 구해 dwarf2json으로 JSON 심볼 파일을 만들고, 심볼 디렉터리의 `mac` 폴더에 둡니다. 실행은 리눅스 예시의 `linux` 를 `mac` 으로 바꾼 `dwarf2json mac ...` 형태입니다[4]. 맥은 리눅스보다 커널 종류가 훨씬 적고 배포판이 하나라서 맞는 심볼을 찾기 쉽습니다[4].
-4. **플러그인을 실행합니다.** 예를 들어 `mac.pslist`, `mac.pstree`, `mac.ifconfig` 를 실행합니다[9].
+2. **맞는 심볼 테이블을 준비합니다.** Volatility Foundation이 미리 만들어 둔 맥 심볼 묶음(`https://downloads.volatilityfoundation.org/volatility3/symbols/mac.zip`)을 받아 `volatility3/symbols/` 아래에 둡니다[5]. 심볼 파일의 배너는 버전 번호만이 아니라 컴파일 시각 같은 요소까지 이미지의 배너와 정확히 맞아야 합니다[2].
+3. **묶음에 없으면 심볼을 직접 만듭니다.** 배너와 정확히 맞는 디버그 커널을 구해 dwarf2json으로 JSON 심볼 파일을 만들고, 심볼 디렉터리의 `mac` 폴더에 둡니다. 실행은 리눅스 예시의 `linux` 를 `mac` 으로 바꾼 `dwarf2json mac ...` 형태입니다[2]. 맥은 리눅스보다 커널 종류가 훨씬 적고 배포판이 하나라서 맞는 심볼을 찾기 쉽습니다[2].
+4. **플러그인을 실행합니다.** 예를 들어 `mac.pslist`, `mac.pstree`, `mac.ifconfig` 를 실행합니다[5].
 
    ```
    python3 vol.py -f <메모리 이미지> mac.pslist
@@ -37,7 +37,7 @@ nav_order: 2110
 
 ### Volatility 3
 
-Volatility 3에는 `mac.*` 플러그인이 23개 있습니다[5].
+Volatility 3에는 `mac.*` 플러그인이 23개 있습니다[3].
 
 ```
 mac.bash.Bash
@@ -65,11 +65,11 @@ mac.trustedbsd.Trustedbsd
 mac.vfsevents.VFSevents
 ```
 
-Volatility 3의 macOS 분석 지원은 parity release 이후 더는 활발히 관리되지 않아, 기존 플러그인은 남지만 앞으로 갱신·버그 수정이 없을 수 있습니다[9]. 지원하는 macOS 버전 범위와 Apple 실리콘(arm64) 메모리 이미지를 읽을 수 있는지는 조사 대상과 같은 조건의 이미지로 먼저 시험해 확인합니다.
+Volatility 3의 macOS 분석 지원은 parity release 이후 더는 활발히 관리되지 않아, 기존 플러그인은 남지만 앞으로 갱신·버그 수정이 없을 수 있습니다[5]. 지원하는 macOS 버전 범위와 Apple 실리콘(arm64) 메모리 이미지를 읽을 수 있는지는 조사 대상과 같은 조건의 이미지로 먼저 시험해 확인합니다.
 
 ### Volatility 2 (역사적 참고)
 
-Volatility 2에는 10.5 Leopard(32비트)부터 10.9 Mavericks(10.9.1–10.9.4, 64비트)까지 미리 만든 프로필이 있고, 그 뒤 버전의 프로필은 프로필 저장소 목록에 있습니다[6]. 프로필은 Apple 개발자 사이트에서 Kernel Debug Kit를 받아 만듭니다. 커널 `.dSYM` 에서 `dwarfdump` 로 디버그 정보를 뽑고 `dsymutil` 로 심볼을 만든 뒤, `.vtypes` 와 `.symbol.dsymutil` 파일을 ZIP으로 묶습니다[6]. 이 책이 주로 다루는 10.15 이후 버전에서는 옛 자료를 읽을 때 참고하는 정도로 봅니다.
+Volatility 2에는 10.5 Leopard(32비트)부터 10.9 Mavericks(10.9.1–10.9.4, 64비트)까지 미리 만든 프로필이 있고, 그 뒤 버전의 프로필은 프로필 저장소 목록에 있습니다[4]. 프로필은 Apple 개발자 사이트에서 Kernel Debug Kit를 받아 만듭니다. 커널 `.dSYM` 에서 `dwarfdump` 로 디버그 정보를 뽑고 `dsymutil` 로 심볼을 만든 뒤, `.vtypes` 와 `.symbol.dsymutil` 파일을 ZIP으로 묶습니다[4]. 이 책이 주로 다루는 10.15 이후 버전에서는 옛 자료를 읽을 때 참고하는 정도로 봅니다.
 
 ## 함정과 한계
 
@@ -87,9 +87,9 @@ Secure Enclave는 DRAM의 전용 영역에서 돌고, 메모리 보호 엔진 (M
 
 ## 결과를 어떻게 해석하나
 
-배너와 맞지 않는 심볼로 얻은 결과는 쓰지 않습니다. 배너는 컴파일 시각 같은 요소까지 정확히 맞아야 하므로[4], 보고서에는 이미지의 배너와 쓴 심볼 파일을 함께 적습니다.
+배너와 맞지 않는 심볼로 얻은 결과는 쓰지 않습니다. 배너는 컴파일 시각 같은 요소까지 정확히 맞아야 하므로[2], 보고서에는 이미지의 배너와 쓴 심볼 파일을 함께 적습니다.
 
-플러그인이 오류를 내거나 빈 결과를 내면 먼저 도구 쪽 문제를 의심합니다. macOS 지원이 더는 활발히 관리되지 않는다는 점[9]을 함께 적고, 같은 이미지를 다른 버전의 도구로도 돌려 봅니다. 검증 방식은 [도구 검증 (Tool Validation)](../../reporting/tool-validation.md)을 따릅니다.
+플러그인이 오류를 내거나 빈 결과를 내면 먼저 도구 쪽 문제를 의심합니다. macOS 지원이 더는 활발히 관리되지 않는다는 점[5]을 함께 적고, 같은 이미지를 다른 버전의 도구로도 돌려 봅니다. 검증 방식은 [도구 검증 (Tool Validation)](../../reporting/tool-validation.md)을 따릅니다.
 
 메모리에서 얻은 결과는 디스크 흔적과 맞춰 본 뒤에 보고서에 씁니다. 프로세스 목록은 [통합 로그의 프로세스 실행 기록 (Process Events)](../../../02-artifacts/execution/unified-log-process.md)과, 커널 확장 목록은 [커널·시스템 확장 (KEXT·System Extension)](../../../02-artifacts/persistence/kext-system-extension.md)과, 네트워크 결과는 [네트워크 인터페이스와 설정 (SystemConfiguration)](../../../02-artifacts/network/network-interfaces.md)과 대조합니다. 메모리에만 있고 디스크에 흔적이 없는 프로세스를 찾았다면 [악성 코드 흔적 분석 (Malware Triage)](../malware-triage/index.md)으로 넘깁니다.
 
@@ -98,7 +98,7 @@ Secure Enclave는 DRAM의 전용 영역에서 돌고, 메모리 보호 엔진 (M
 ## 참고 문헌
 
 1. Apple, Apple Platform Security (2026년 8월 판, PDF) — https://help.apple.com/pdf/security/en_US/apple-platform-security-guide.pdf ("Memory Protection Engine", "Kernel Integrity Protection", "System Integrity Protection" 절)
-4. Volatility 3 문서, Creating New Symbol Tables — https://volatility3.readthedocs.io/en/latest/symbol-tables.html
-5. Volatility 3 문서, volatility3.plugins.mac 패키지 — https://volatility3.readthedocs.io/en/latest/volatility3.plugins.mac.html
-6. Volatility 2 위키, Mac — https://github.com/volatilityfoundation/volatility/wiki/Mac
-9. Volatility 3 문서, macOS Tutorial — https://volatility3.readthedocs.io/en/latest/getting-started-mac-tutorial.html
+2. Volatility 3 문서, Creating New Symbol Tables — https://volatility3.readthedocs.io/en/latest/symbol-tables.html
+3. Volatility 3 문서, volatility3.plugins.mac 패키지 — https://volatility3.readthedocs.io/en/latest/volatility3.plugins.mac.html
+4. Volatility 2 위키, Mac — https://github.com/volatilityfoundation/volatility/wiki/Mac
+5. Volatility 3 문서, macOS Tutorial — https://volatility3.readthedocs.io/en/latest/getting-started-mac-tutorial.html
