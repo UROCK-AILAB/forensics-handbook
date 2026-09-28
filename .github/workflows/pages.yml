@@ -42,6 +42,7 @@ jobs:
             if [ -d "$k" ]; then bundle exec jekyll build --source "$k" --destination "_site/$k" --baseurl "${{ steps.pages.outputs.base_path }}/$k"; fi
           done
           python3 tools/merge_search.py _site
+          python3 tools/page_counts.py _site
           cp sitemap.xml landing-sitemap.xml _site/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@v3

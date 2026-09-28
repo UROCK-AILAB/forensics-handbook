@@ -17,17 +17,18 @@ permalink: /
 
 <!-- 핸드북 목록 시작 -->
 
-| 핸드북 | 다루는 것 |
-|---|---|
-| [Windows](https://urock-ailab.github.io/forensics-handbook/windows/) | NTFS·레지스트리·이벤트 로그부터 브라우저·메신저까지 Windows PC 에 남는 흔적 |
-| [macOS](https://urock-ailab.github.io/forensics-handbook/mac/) | APFS·통합 로그·plist 와 macOS 앱에 남는 흔적 |
-| [Linux](https://urock-ailab.github.io/forensics-handbook/linux/) | 로그인·명령 실행·지속성·로그 중심의 서버와 데스크톱 흔적 |
-| [Android](https://urock-ailab.github.io/forensics-handbook/android/) | Android 기기의 앱·통신·위치·사용 기록 |
-| [iOS](https://urock-ailab.github.io/forensics-handbook/ios/) | iPhone 의 앱·통신·위치·사용 기록 |
-| [Cloud](https://urock-ailab.github.io/forensics-handbook/cloud/) | Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 의 로그 |
-| [Network](https://urock-ailab.github.io/forensics-handbook/network/) | 패킷 캡처·흐름 기록·Zeek·Suricata 로그와 방화벽·프록시·DNS·DHCP·VPN 로그 |
-| [Crypto](https://urock-ailab.github.io/forensics-handbook/crypto/) | 암호화폐 지갑(데스크톱·브라우저 확장·모바일·하드웨어)과 거래소 앱, 블록체인 거래 추적 |
-| [AI](https://urock-ailab.github.io/forensics-handbook/ai/) | ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정에 남는 흔적 |
+| 핸드북 | 다루는 것 | 페이지 |
+|---|---|--:|
+| [Windows](https://urock-ailab.github.io/forensics-handbook/windows/) | NTFS·레지스트리·이벤트 로그부터 브라우저·메신저까지 Windows PC 에 남는 흔적 | <span class="pages" data-hb="windows">-</span> |
+| [macOS](https://urock-ailab.github.io/forensics-handbook/mac/) | APFS·통합 로그·plist 와 macOS 앱에 남는 흔적 | <span class="pages" data-hb="mac">-</span> |
+| [Linux](https://urock-ailab.github.io/forensics-handbook/linux/) | 로그인·명령 실행·지속성·로그 중심의 서버와 데스크톱 흔적 | <span class="pages" data-hb="linux">-</span> |
+| [Android](https://urock-ailab.github.io/forensics-handbook/android/) | Android 기기의 앱·통신·위치·사용 기록 | <span class="pages" data-hb="android">-</span> |
+| [iOS](https://urock-ailab.github.io/forensics-handbook/ios/) | iPhone 의 앱·통신·위치·사용 기록 | <span class="pages" data-hb="ios">-</span> |
+| [Cloud](https://urock-ailab.github.io/forensics-handbook/cloud/) | Microsoft 365·Google Workspace·AWS·Azure·Google Cloud·업무용 SaaS 의 로그 | <span class="pages" data-hb="cloud">-</span> |
+| [Network](https://urock-ailab.github.io/forensics-handbook/network/) | 패킷 캡처·흐름 기록·Zeek·Suricata 로그와 방화벽·프록시·DNS·DHCP·VPN 로그 | <span class="pages" data-hb="network">-</span> |
+| [Crypto](https://urock-ailab.github.io/forensics-handbook/crypto/) | 암호화폐 지갑(데스크톱·브라우저 확장·모바일·하드웨어)과 거래소 앱, 블록체인 거래 추적 | <span class="pages" data-hb="crypto">-</span> |
+| [AI](https://urock-ailab.github.io/forensics-handbook/ai/) | ChatGPT·Claude·Copilot·Gemini 같은 AI 서비스를 쓰면 기기와 계정에 남는 흔적 | <span class="pages" data-hb="ai">-</span> |
+| **합계** | | **<span class="pages" data-hb="all">-</span>** |
 
 <!-- 핸드북 목록 끝 -->
 
