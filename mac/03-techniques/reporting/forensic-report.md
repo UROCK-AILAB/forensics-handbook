@@ -69,9 +69,9 @@ SWGDE 의 "Requirements for Report Writing in Digital and Multimedia Forensics" 
 
 ## 앱으로 다시 보여 주기 (copy-over)
 
-메일함, 대화 DB, 앱 상태처럼 파싱한 표만으로는 사용자가 본 화면을 알기 어려운 아티팩트는 분석용 맥의 깨끗한 계정에 복사해 두고 macOS 앱이 보여 주는 대로 기록할 수 있습니다 [3]. SUMURI 지침서는 이 방법을 copy-over 라고 부르고, 어떤 파서도 제대로 보여 주지 못하는 맥 전용 아티팩트에는 이 방법이 사실상 유일하다고 봅니다 [3]. 메일함의 파일 구조는 [저장 구조 (emlx·V10)](../../02-artifacts/mail/apple-mail/storage.md) 에서 다룹니다.
+메일함, 대화 DB, 앱 상태처럼 파싱한 표만으로는 사용자가 본 화면을 알기 어려운 아티팩트는 분석용 맥의 깨끗한 계정에 복사해 두고 macOS 앱이 보여 주는 대로 기록할 수 있습니다 [3]. 이 방법을 copy-over 라고 하고, 어떤 파서도 제대로 보여 주지 못하는 맥 전용 아티팩트에는 사실상 유일한 방법입니다 [3]. 메일함의 파일 구조는 [저장 구조 (emlx·V10)](../../02-artifacts/mail/apple-mail/storage.md) 에서 다룹니다.
 
-이렇게 얻은 화면은 증거 자체가 아니라 앱이 증거를 보여 준 결과입니다 [3]. 같은 데이터도 macOS 버전이나 앱 버전이 다르면 다르게 보일 수 있어서 [3], 보고서에는 어떤 아티팩트를 어디에서 가져와 어떤 환경에 복사했는지와 그 환경의 macOS 버전·앱 버전을 적습니다 [3]. 이 작업은 원본 이미지에 대고 하지 않습니다 [3]. 복사한 계정의 준비 상태와 작업 순서도 결과에 영향을 줘서, 이것을 기록하지 않으면 캡처가 아무것도 증명하지 못한다고 SUMURI 지침서는 봅니다 [3].
+이렇게 얻은 화면은 증거 자체가 아니라 앱이 증거를 보여 준 결과입니다 [3]. 같은 데이터도 macOS 버전이나 앱 버전이 다르면 다르게 보일 수 있어서 [3], 보고서에는 어떤 아티팩트를 어디에서 가져와 어떤 환경에 복사했는지와 그 환경의 macOS 버전·앱 버전을 적습니다 [3]. 이 작업은 원본 이미지에 대고 하지 않습니다 [3]. 복사한 계정의 준비 상태와 작업 순서도 결과에 영향을 줘서, 이것을 기록하지 않으면 캡처로 아무것도 증명하지 못합니다 [3].
 
 ## 함정과 한계
 
@@ -83,7 +83,7 @@ SWGDE 의 "Requirements for Report Writing in Digital and Multimedia Forensics" 
 
 ### 보고서에 한계 밝히기
 
-수집이나 분석에 제약이 있었으면 그 사실을 보고서에 적습니다 [3]. 라이브 수집 때 [전체 디스크 접근 권한 (Full Disk Access)](../process-acquisition/live-response/full-disk-access.md) 이 없었는지, 물리 이미지가 아니라 [논리 수집 (Logical Collection)](../process-acquisition/evidence-acquisition/logical-collection.md) 이었는지, 로컬 스냅숏이 수집 전에 이미 사라졌는지를 밝힙니다 [3]. 로컬 스냅숏을 얼마나 보관하는지는 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../analysis/snapshot-diff.md) 에서 봅니다. SUMURI 지침서는 스스로 밝힌 한계는 반대 신문을 견디지만 상대가 찾아낸 한계는 그렇지 못하다고 봅니다 [3].
+수집이나 분석에 제약이 있었으면 그 사실을 보고서에 적습니다 [3]. 라이브 수집 때 [전체 디스크 접근 권한 (Full Disk Access)](../process-acquisition/live-response/full-disk-access.md) 이 없었는지, 물리 이미지가 아니라 [논리 수집 (Logical Collection)](../process-acquisition/evidence-acquisition/logical-collection.md) 이었는지, 로컬 스냅숏이 수집 전에 이미 사라졌는지를 밝힙니다 [3]. 로컬 스냅숏을 얼마나 보관하는지는 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../analysis/snapshot-diff.md) 에서 봅니다. 스스로 밝힌 한계는 반대 신문을 견디지만, 상대가 찾아낸 한계는 그렇지 못합니다 [3].
 
 ## 결과를 어떻게 해석하나
 

@@ -60,9 +60,9 @@ Thunderbolt 같은 포트에 꽂은 장치가 메모리를 직접 읽는 직접 
 
 ## 휘발성 데이터 수집과 메모리 이미징 구분
 
-현장에서 "램 확보"라고 부르는 일에는 서로 다른 두 가지가 섞여 있습니다. 하나는 로그인된 세션에서 명령과 도구로 프로세스·연결 같은 휘발성 데이터를 모으는 일이고, 다른 하나는 물리 메모리 전체를 파일로 떠내는 메모리 이미징입니다. 앞의 것은 요즘 맥에서도 할 수 있지만, SUMURI 지침서는 뒤의 것을 T2 칩 맥과 Apple 실리콘 맥에서 현장에서 할 방법이 없다고 봅니다[5]. 물리 메모리를 읽으려면 커널 안에서 코드가 돌아야 하는데, 커널 확장을 올리는 길은 위 "커널 확장 제약" 절처럼 재시동을 거쳐야 하고 주변장치로 읽는 길은 "DMA 경로" 절처럼 막혀 있습니다[1].
+현장에서 "램 확보"라고 부르는 일에는 서로 다른 두 가지가 섞여 있습니다. 하나는 로그인된 세션에서 명령과 도구로 프로세스·연결 같은 휘발성 데이터를 모으는 일이고, 다른 하나는 물리 메모리 전체를 파일로 떠내는 메모리 이미징입니다. 앞의 것은 요즘 맥에서도 할 수 있지만, 뒤의 것은 T2 칩 맥과 Apple 실리콘 맥에서 현장에서 할 방법이 없습니다[5]. 물리 메모리를 읽으려면 커널 안에서 코드가 돌아야 하는데, 커널 확장을 올리는 길은 위 "커널 확장 제약" 절처럼 재시동을 거쳐야 하고 주변장치로 읽는 길은 "DMA 경로" 절처럼 막혀 있습니다[1].
 
-SUMURI 지침서는 방법별 가능 여부를 아래처럼 봅니다[5].
+방법별 가능 여부는 아래와 같습니다[5].
 
 | 방법 | 요즘 맥에서 |
 |---|---|
@@ -74,7 +74,7 @@ SUMURI 지침서는 방법별 가능 여부를 아래처럼 봅니다[5].
 | 칩오프로 메모리 복구 | 칩 패키지 안의 통합 DRAM 이라 현실적이지 않음 |
 | 로그인된 세션에서 휘발성 데이터 수집 | 가능 |
 
-이 지침서는 `/dev/mem`·`/dev/kmem` 이 오래전에 없어졌고, Apple 실리콘에서는 페이지 보호 계층 (Page Protection Layer, PPL)과 커널 텍스트 읽기 전용 영역이 서드파티 확장의 물리 메모리 매핑을 막는다고 봅니다[5]. PPL 에 대해서는 Apple 설명이 다릅니다. Apple 은 PPL 이 실행하는 모든 코드에 서명이 필요한 시스템에만 해당해서 macOS 에는 없다고 설명합니다[6]. Apple 실리콘 맥의 커널 코드를 하드웨어로 보호하는 커널 무결성 보호 (KIP)는 [분석 도구와 한계 (Tools·Limits)](tools-limits.md)에서 다룹니다.
+`/dev/mem`·`/dev/kmem` 은 오래전에 없어졌고, 서드파티 확장은 물리 메모리를 매핑할 수 없습니다[5]. 이를 막는 장치로 페이지 보호 계층 (Page Protection Layer, PPL)을 드는 자료도 있지만[5], Apple 은 PPL 이 실행하는 모든 코드에 서명이 필요한 시스템에만 해당해서 macOS 에는 없다고 설명합니다[6]. Apple 실리콘 맥의 커널 코드를 하드웨어로 보호하는 커널 무결성 보호 (KIP)는 [분석 도구와 한계 (Tools·Limits)](tools-limits.md)에서 다룹니다.
 
 잠금이 풀린 채 로그인된 세션에서는 평범한 명령과 도구로 아래 휘발성 데이터를 모을 수 있습니다[5].
 
@@ -98,9 +98,9 @@ Windows 에서는 메모리부터 뜨는 경우가 많지만, 맥에서는 메�
 
 > "conducting a memory acquisition on a Mac may result in a kernel panic, rendering the examination useless if the panic occurs prior to obtaining a full-disk acquisition or the administrator's password. … Because of this propensity to panic, Mac memory acquisitions should be held until all other forensic acquisition actions have been taken by the examiner or when memory acquisition software has been preinstalled on the computer." — SWGDE 23-F-005-1.0, 6.1절[4]
 
-인용문 끝의 "or when … preinstalled" 는 메모리 확보 소프트웨어가 미리 설치되어 있으면 예외라고도 읽힙니다. SUMURI 지침서는 기업 사고 대응에서 에이전트를 미리 배포해 둔 경우에도 다른 수집을 모두 마친 뒤에 메모리를 뜨라고 봅니다[5]. [휘발성 순서 (Order of Volatility)](../../process-acquisition/live-response/order-of-volatility.md)의 RFC 3227 순서에서는 메모리가 2단계에 들어 있지만, 맥에서는 이 권고에 따라 메모리 확보를 맨 끝으로 미룹니다.
+인용문 끝의 "or when … preinstalled" 는 메모리 확보 소프트웨어가 미리 설치되어 있으면 예외라고도 읽힙니다. 기업 사고 대응에서 에이전트를 미리 배포해 둔 경우에도, 메모리는 다른 수집을 모두 마친 뒤에 뜹니다[5]. [휘발성 순서 (Order of Volatility)](../../process-acquisition/live-response/order-of-volatility.md)의 RFC 3227 순서에서는 메모리가 2단계에 들어 있지만, 맥에서는 이 권고에 따라 메모리 확보를 맨 끝으로 미룹니다.
 
-SUMURI 지침서는 실행 중인 맥에서 아래 순서를 권합니다[5].
+실행 중인 맥에서는 아래 순서로 수집합니다[5].
 
 1. 작업하는 동안 세션이 끝나지 않게 잠자기와 화면 잠금을 끕니다.
 2. 관리자 암호가 맞는지 확인합니다.

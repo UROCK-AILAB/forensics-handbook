@@ -35,7 +35,7 @@ TCC.db는 두 곳에 있습니다 [2][4].
 
 ### macOS 27 Golden Gate 에서 바뀐 점
 
-macOS 27 Golden Gate 부터는 앱이 로컬 TCC 데이터베이스에 직접 접근할 수 없습니다 [6]. SUMURI 지침서는 여기에 더해 TCC.db 가 `~/Library` 밖의 보호된 시스템 위치로 옮겨졌다고 보고, 그래서 어느 앱이 어떤 권한을 받았는지는 실행 중인 맥에서 파일을 복사해 읽지 말고 디스크 이미지나 `tccutil` 로 확인하라고 합니다 [5].
+macOS 27 Golden Gate 부터는 앱이 로컬 TCC 데이터베이스에 직접 접근할 수 없습니다 [6]. TCC.db 는 `~/Library` 밖의 보호된 시스템 위치로 옮겨졌습니다 [5]. 그래서 어느 앱이 어떤 권한을 받았는지는 실행 중인 맥에서 파일을 복사해 읽지 않고, 디스크 이미지나 `tccutil` 로 확인합니다 [5].
 macOS 27 이미지에서 앞의 두 경로에 TCC.db 가 없어도 권한 기록이 없다고 판단하지 않습니다. 이미지 안에서 `TCC.db` 이름으로 파일을 찾고, 찾은 파일도 `PRAGMA table_info("access")` 로 열 구성을 다시 확인한 뒤 읽습니다. 실행 중인 맥이 기관이 관리하는 기기라면 macOS 27 에 새로 생긴 `tccutil list` 로 지정한 서비스나 앱의 현재 권한을 볼 수 있습니다 [6]. 결정을 지우는 `tccutil reset` 은 쓰지 않습니다. `tccutil` 설명은 [전체 디스크 접근 권한](../../../03-techniques/process-acquisition/live-response/full-disk-access.md) 의 도구 절에 있습니다.
 
 ## 구조

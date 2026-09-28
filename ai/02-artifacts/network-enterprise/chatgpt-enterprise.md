@@ -16,7 +16,7 @@ nav_order: 780
 
 작업 공간 기록은 컴플라이언스 로그 플랫폼 (Compliance Logs Platform) 에 쌓이고, 조직 관리자는 Compliance API 로 이 기록을 받습니다. 대상은 Enterprise·Edu 작업 공간이고, 플랫폼은 데이터를 30일 동안 보관합니다[4]. 대화 기록에는 사용자 프롬프트와 에이전트 응답이 들어가고, 연결한 앱 (connected app) 의 호출은 따로 기록됩니다[4]. 지금 라이브러리 (Library) 에 있는 파일은 라이브러리 전용 Compliance API 엔드포인트로 받습니다[4]. 어떤 이벤트를 받을 수 있는지, 필드와 보관 기간, 필요한 권한은 Admin API 참조 문서가 기준이라서[5], 조사할 때 그 문서를 직접 열어 보고 확인한 날짜를 보고서에 함께 적습니다.
 
-Invictus 백서는 작업 공간 기록을 네 종류로 나눠 봅니다[7]. 종류마다 답하는 질문이 다릅니다.
+작업 공간 기록은 네 종류이고[7], 종류마다 답하는 질문이 다릅니다.
 
 | 로그 | 담는 것 | 답하는 질문 |
 |---|---|---|
@@ -25,9 +25,9 @@ Invictus 백서는 작업 공간 기록을 네 종류로 나눠 봅니다[7]. �
 | 인증 로그 (Authentication Logs) | ChatGPT 쪽 로그인 기록 | OpenAI 가 인증 활동을 기록했나, 그 뒤 활동을 좁힐 주체·세션 정보는 무엇인가 |
 | Codex 사용 로그 (Codex Usage Logs) | 지원하는 Codex 클라이언트·실행 경로의 사용 기록 | 어느 Codex 사용자·세션·활동이 기록됐나 |
 
-같은 백서는 감사 로그를 내부자의 악의적 행동, 권한 변경, 작업 공간 통제를 약하게 하려는 시도가 있을 때 쓰는 로그로 봅니다. 인증 로그는 계정 탈취와 수상한 로그인을 조사할 때 먼저 보는 로그로 봅니다[7].
+감사 로그는 내부자의 악의적 행동, 권한 변경, 작업 공간 통제를 약하게 하려는 시도를 조사할 때 보고, 인증 로그는 계정 탈취와 수상한 로그인을 조사할 때 먼저 봅니다[7].
 
-Microsoft 문서에는 ChatGPT Enterprise 를 Purview 에 연결하는 경로가 나옵니다[1]. Purview DSPM for AI 의 권장 사항에 "Discover and govern interactions with ChatGPT Enterprise AI" 가 있고, 조직이 ChatGPT Enterprise 작업 공간을 등록하면 ChatGPT Enterprise 에 공유된 민감 정보를 탐지할 수 있습니다. "Secure interactions from enterprise apps" 권장 사항은 ChatGPT Enterprise 커넥터 (Connector) 로 들어온 프롬프트와 응답을 규정 준수 목적으로 수집합니다. 조직이 이 연결을 해 두었다면 OpenAI 쪽 자료와 별도로 Microsoft 365 테넌트에도 ChatGPT Enterprise 사용 기록이 생깁니다.
+ChatGPT Enterprise 는 Microsoft Purview 에 연결할 수 있습니다[1]. Purview DSPM for AI 의 권장 사항에 "Discover and govern interactions with ChatGPT Enterprise AI" 가 있고, 조직이 ChatGPT Enterprise 작업 공간을 등록하면 ChatGPT Enterprise 에 공유된 민감 정보를 탐지할 수 있습니다. "Secure interactions from enterprise apps" 권장 사항은 ChatGPT Enterprise 커넥터 (Connector) 로 들어온 프롬프트와 응답을 규정 준수 목적으로 수집합니다. 조직이 이 연결을 해 두었다면 OpenAI 쪽 자료와 별도로 Microsoft 365 테넌트에도 ChatGPT Enterprise 사용 기록이 생깁니다.
 
 ## 위치와 버전별 차이
 
@@ -41,7 +41,7 @@ Microsoft 문서에는 ChatGPT Enterprise 를 Purview 에 연결하는 경로가
 
 Purview 는 ChatGPT Enterprise 를 따로 분류합니다. DSPM for AI 활동 탐색기에서는 "Enterprise AI apps" 분류에 들어가고[1], 보존 정책에서도 "Enterprise AI apps" 위치에 들어갑니다[2]. 개인 계정으로 쓰는 ChatGPT 는 보존 정책의 "Other AI apps" 위치에 따로 있어서[2], 같은 ChatGPT 라도 조직 계정으로 썼는지 개인 계정으로 썼는지에 따라 보존 정책이 걸리는 위치가 다릅니다. 보존 위치 전체와 숨은 폴더·영구 삭제 흐름은 [Microsoft Purview로 본 Copilot 기록](purview-copilot.md)에서 다룹니다.
 
-요금제에 따라 받을 수 있는 로그가 다르고, 대상은 Enterprise·Edu 작업 공간입니다[4]. 나머지 요금제까지 넣은 아래 구분은 Invictus 백서의 판단이고, 백서는 네 종류 로그를 요금제마다 똑같이 받을 수 있거나 없다고 봅니다[7].
+요금제에 따라 받을 수 있는 로그가 다르고, 대상은 Enterprise·Edu 작업 공간입니다[4]. 네 종류 로그는 요금제마다 한꺼번에 받을 수 있거나 없습니다[7].
 
 | 요금제 | 네 종류 로그 | 보관 |
 |---|---|---|
@@ -50,7 +50,7 @@ Purview 는 ChatGPT Enterprise 를 따로 분류합니다. DSPM for AI 활동 �
 | Healthcare | 감사 기능은 문서에 있으나, 컴플라이언스 플랫폼 권한과 받을 수 있는 종류는 테넌트에서 따로 확인 | — |
 | FedRAMP | 2026-08-04 기준 로그 엔드포인트를 쓸 수 없음. 예전 사용자·대화 자료는 받을 수 있고, Codex 는 API 키 경로를 따름 | — |
 
-같은 백서는 API 플랫폼 (API Platform) 기록이 ChatGPT 요금제와 상관없이 따로 있다고 봅니다[7]. 조직이 API 플랫폼도 쓴다면 그쪽 감사 로그·API 호출 기록·에이전트 추적은 [OpenAI API 플랫폼 기록](openai-api-platform.md)에서 다룹니다.
+API 플랫폼 (API Platform) 기록은 ChatGPT 요금제와 상관없이 따로 있습니다[7]. 조직이 API 플랫폼도 쓴다면 그쪽 감사 로그·API 호출 기록·에이전트 추적은 [OpenAI API 플랫폼 기록](openai-api-platform.md)에서 다룹니다.
 
 직원 PC 에 남는 흔적은 앱·브라우저 페이지에서 다룹니다. 웹·Windows·macOS 앱의 흔적은 [ChatGPT](../chat-services/chatgpt/index.md), 접속 도메인과 네트워크 기록은 [AI 서비스 도메인과 네트워크 기록](network-traces.md)에 있습니다. 서버·기기·동기화 사이에서 데이터가 어디에 놓이는지의 일반론은 [AI 서비스의 데이터는 어디에 있나](../../01-foundations/storage-model/where-data-lives.md)에 있습니다.
 
@@ -64,15 +64,15 @@ Purview 감사는 조직에 등록한 제3자 AI 앱을 `ConnectedAIAppInteracti
 
 ## 증거로서 의미
 
-**증명하는 것.** 조직이 Purview 에 ChatGPT Enterprise 를 연결해 두었다면, 수집된 프롬프트·응답과 DSPM 활동 기록으로 그 조직 계정이 ChatGPT Enterprise 에서 무엇을 주고받았는지와 민감 정보 유형이 걸렸는지를 알 수 있습니다. OpenAI 쪽 로그로 알 수 있는 것을 Invictus 백서는 로그별로 이렇게 봅니다. 대화·컴플라이언스 로그로 한 계정과 시각을 작업 공간 이벤트에 묶고, 그 이벤트가 가리키는 대화·파일을 찾을 수 있습니다. 감사 로그로는 관리 설정이 언제 바뀌었고 누가 어떤 대상을 바꿨는지 알 수 있고, 인증 로그로는 ChatGPT 쪽에 로그인이 기록됐는지와 그 주체·세션을 알 수 있습니다. Codex 사용 로그로는 어느 Codex 사용자·세션·활동이 기록됐는지 알 수 있습니다[7].
+**증명하는 것.** 조직이 Purview 에 ChatGPT Enterprise 를 연결해 두었다면, 수집된 프롬프트·응답과 DSPM 활동 기록으로 그 조직 계정이 ChatGPT Enterprise 에서 무엇을 주고받았는지와 민감 정보 유형이 걸렸는지를 알 수 있습니다. OpenAI 쪽 로그로 알 수 있는 것은 로그마다 다릅니다. 대화·컴플라이언스 로그로 한 계정과 시각을 작업 공간 이벤트에 묶고, 그 이벤트가 가리키는 대화·파일을 찾을 수 있습니다. 감사 로그로는 관리 설정이 언제 바뀌었고 누가 어떤 대상을 바꿨는지 알 수 있고, 인증 로그로는 ChatGPT 쪽에 로그인이 기록됐는지와 그 주체·세션을 알 수 있습니다. Codex 사용 로그로는 어느 Codex 사용자·세션·활동이 기록됐는지 알 수 있습니다[7].
 
-**증명하지 못하는 것.** 파일 다운로드 이벤트로는 파일이 기기까지 내려갔다는 것만 알 수 있고, 그 파일을 열었거나 실행했는지는 기기 쪽 기록으로 확인합니다[7]. Invictus 백서는 감사 로그에 모델 요청과 생성된 답, 기기 활동이 없고, 인증 로그에 SSO·MFA 같은 ID 공급자 (IdP) 의 판단이 들어 있지 않다고 봅니다[7]. 그래서 로그인 과정 전체는 조직의 IdP 로그로 되살립니다. 이 기록만으로는 호스팅된 환경의 파일 작업, 셸 명령, 브라우저 조작, 도구 호출, 승인을 하나하나 다 추적할 수 없습니다[4]. 조직 계정의 기록이라서 그 시각에 누가 자판 앞에 있었는지는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 밝힙니다. 개인 계정 ChatGPT 는 조직 작업 공간 밖에서 쓰는 것이라서, 관리자 자료에 기록이 없다는 것만으로 그 직원이 ChatGPT 를 쓰지 않았다고 결론 내리지 않습니다. 개인 계정 사용 여부는 [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md)의 흐름으로 봅니다.
+**증명하지 못하는 것.** 파일 다운로드 이벤트로는 파일이 기기까지 내려갔다는 것만 알 수 있고, 그 파일을 열었거나 실행했는지는 기기 쪽 기록으로 확인합니다[7]. 감사 로그에는 모델 요청과 생성된 답, 기기 활동이 없고, 인증 로그에는 SSO·MFA 같은 ID 공급자 (IdP) 의 판단이 들어 있지 않습니다[7]. 그래서 로그인 과정 전체는 조직의 IdP 로그로 되살립니다. 이 기록만으로는 호스팅된 환경의 파일 작업, 셸 명령, 브라우저 조작, 도구 호출, 승인을 하나하나 다 추적할 수 없습니다[4]. 조직 계정의 기록이라서 그 시각에 누가 자판 앞에 있었는지는 [그 대화를 한 사람이 누구인가](../../04-scenarios/attribution/user-attribution.md)의 방법으로 따로 밝힙니다. 개인 계정 ChatGPT 는 조직 작업 공간 밖에서 쓰는 것이라서, 관리자 자료에 기록이 없다는 것만으로 그 직원이 ChatGPT 를 쓰지 않았다고 결론 내리지 않습니다. 개인 계정 사용 여부는 [회사가 허용하지 않은 AI를 썼나](../../04-scenarios/data-leak/shadow-ai.md)의 흐름으로 봅니다.
 
 보고서 문장은 "조직이 제공한 ChatGPT Enterprise 관리자 자료에 이 계정이 이 시간대에 대화를 만든 기록이 있다" 처럼 받은 자료로 확인되는 범위에서 쓰고, 어느 경로(Compliance API, Purview 수집)로 받은 자료인지 밝힙니다.
 
 ### 조사 시작점별로 볼 로그
 
-Invictus 백서는 조사를 시작한 신호에 따라 먼저 볼 ChatGPT 쪽 로그를 아래처럼 나눕니다[7]. API 플랫폼 쪽은 [OpenAI API 플랫폼 기록](openai-api-platform.md)에서 다룹니다.
+조사를 시작한 신호에 따라 먼저 볼 ChatGPT 쪽 로그는 아래와 같습니다[7]. API 플랫폼 쪽은 [OpenAI API 플랫폼 기록](openai-api-platform.md)에서 다룹니다.
 
 | 조사 시작점 | 답할 질문 | 볼 로그 |
 |---|---|---|
@@ -92,8 +92,8 @@ Compliance API 는 로그 목록을 받을 때 시간대가 붙은 ISO 8601 시�
 - **연결하지 않았으면 Purview 에 없다.** Purview 쪽 기록은 조직이 작업 공간을 등록하고 커넥터를 연결했을 때 생깁니다[1]. 연결하기 전의 사용이 나중에 Purview 로 들어오는지는 문서에 나오지 않으므로, 조직에 연결 날짜를 묻고 받은 자료의 가장 이른 시각과 비교해 봅니다.
 - **30일이 지나면 플랫폼에 없다.** 컴플라이언스 로그 플랫폼은 데이터를 30일 동안 보관하고, 더 오래 둬야 하는 조직은 전자증거개시 (eDiscovery)·DLP·SIEM·데이터 레이크로 계속 내보내야 합니다[4]. 플랫폼의 보관 기간이 조직의 보관 정책을 대신하지 않으므로[5], 30일보다 오래된 기간은 조직이 내보내 둔 사본이 있는지부터 묻습니다.
 - **로그와 객체는 보관 규칙이 다르다.** 프로젝트 파일, 잠깐 올린 파일, 저장된 메모리, 컴플라이언스 이벤트, 동기화한 앱 데이터는 보관·삭제 규칙이 각각 따로 있습니다[4]. 그래서 파일은 이미 지워졌는데 그 파일을 가리키는 이벤트는 남아 있을 수 있습니다[7]. 이벤트가 가리키는 대화·파일은 찾는 대로 먼저 보존합니다.
-- **인증 로그는 API 플랫폼 감사 로그와 필드가 다르다.** Invictus 백서는 API 플랫폼 감사 로그 문서에 나오는 필드가 ChatGPT 인증 로그에도 있다고 가정하지 말라고 봅니다[7]. API 플랫폼 감사 로그는 [OpenAI API 플랫폼 기록](openai-api-platform.md)에서 다룹니다.
-- **API 키로 쓴 Codex.** Invictus 백서는 API 키로 인증한 Codex 활동의 범위를 ChatGPT 작업 공간 기록이 아니라 연결된 API 조직과 그 데이터 설정을 기준으로 정해야 한다고 봅니다[7].
+- **인증 로그는 API 플랫폼 감사 로그와 필드가 다르다.** API 플랫폼 감사 로그 문서에 나오는 필드가 ChatGPT 인증 로그에도 있다고 가정하지 않습니다[7]. API 플랫폼 감사 로그는 [OpenAI API 플랫폼 기록](openai-api-platform.md)에서 다룹니다.
+- **API 키로 쓴 Codex.** API 키로 인증한 Codex 활동은 ChatGPT 작업 공간 기록이 아니라, 연결된 API 조직과 그 데이터 설정을 기준으로 범위를 정합니다[7].
 - **개인 계정과 조직 계정.** 같은 ChatGPT 라도 계정 종류에 따라 자료가 있는 곳과 보존 정책이 걸리는 위치가 다릅니다. 요청서에 계정 종류를 적습니다.
 - **문서가 바뀐다.** 공급사의 관리자 기능은 자주 바뀌므로 조사 시점의 OpenAI·Microsoft 문서로 다시 확인하고 확인 날짜를 적습니다.
 - **지운 대화.** 대화와 파일의 보관 정책은 작업 공간 요금제, 관리자 설정, 쓰는 기능에 따라 정해지므로[4], 지운 대화가 얼마나 남는지는 조직의 보관 설정부터 확인합니다. Purview 로 수집된 사본의 보존·삭제 흐름은 [Microsoft Purview로 본 Copilot 기록](purview-copilot.md)에서 다룹니다. 보관·삭제의 일반론은 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
