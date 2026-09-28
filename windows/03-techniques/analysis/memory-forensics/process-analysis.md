@@ -106,9 +106,60 @@ nav_order: 3190
 | 도구 | 쓰임 |
 |---|---|
 | Volatility 3 (공개) | 위 표의 플러그인으로 프로세스·DLL·핸들·스레드를 봅니다 [1] |
+| MemProcFS (공개) | 메모리 이미지를 파일 시스템처럼 열어 폴더와 파일로 보여 줍니다. 포렌식 모드를 켜면 아래 결과를 한꺼번에 만듭니다 [2] |
 
 도구 하나의 결과만 믿지 않습니다. 중요한 결과는 다른 도구나 다른 플러그인으로 한 번 더 봅니다. [도구 결과 교차 검증](../../reporting/tool-validation.md) 을 봅니다.
+
+### MemProcFS 포렌식 모드
+
+MemProcFS 의 포렌식 모드 (forensic mode) 는 메모리 이미지를 처음부터 끝까지 한 번 읽으면서 여러 분석을 함께 돌리고, 결과를 SQLite DB 에 저장한 뒤 `forensic` 폴더 아래에 시간순 기록 (timeline)·CSV·NTFS 복원 결과를 만듭니다 [2].
+기본값은 꺼져 있고 1~4 중 한 값으로 켜는데, 1 은 DB 를 메모리에만 두고 2 는 종료할 때 지우며 3·4 는 종료 뒤에도 남깁니다 [2].
+나중에 같은 결과를 다시 보여 줘야 하는 사건이면 DB 를 남기는 값을 고르고, 남은 DB 파일도 해시를 계산해 확보 기록에 적습니다.
+
+| 결과 폴더 | 담는 것 | 해석할 때 주의 |
+|---|---|---|
+| `timeline` | 이벤트 로그·네트워크 연결·NTFS MFT·프로세스·레지스트리·스레드 기록을 시각순으로 합친 텍스트 파일입니다. 모두 합친 파일은 timeline_all.txt 입니다. 필드는 DATE, TYPE, ACTION, PID, NUM, HEX, DESC 이고, ACTION 은 CRE(생성·시작), MOD(수정), RD(읽기), DEL(삭제·종료) 중 하나입니다 [3] | NUM·HEX 필드의 뜻이 TYPE 마다 다릅니다. PROC 줄의 NUM 은 부모 PID 이고, NTFS 줄의 NUM 은 파일 크기, HEX 는 MFT 레코드의 물리 주소입니다 [3] |
+| `csv` | 프로세스·핸들·모듈·드라이버·서비스·예약 작업·네트워크·DNS 캐시·이벤트 로그 표와, timeline_all.csv 를 비롯한 시간순 기록 CSV 입니다 [5] | 시각은 UTC 입니다 [5]. 현지 시각으로 바꿔 둔 다른 도구 결과와 합칠 때는 한쪽 기준으로 맞춥니다 |
+| `ntfs` | 메모리에 남은 MFT 레코드로 되살린 파일 시스템과, 레코드마다 생성·수정 시각, 크기, 플래그, 경로를 적은 ntfs_files.txt 입니다 [4] | 가능한 만큼만 복원하므로 경로가 틀리거나 파일·폴더가 빠질 수 있습니다. 내용은 MFT 레코드 안에 들어 있는 상주 (resident) 데이터만 꺼낼 수 있고, 플래그 R 로 표시합니다 [4] |
+| `findevil` | 코드 주입 같은 이상 징후를 프로세스·주소와 함께 적은 findevil.txt 입니다 [6] | 사용자 모드 악성코드만 찾고, 놓치는 종류와 오탐이 있습니다. 주로 64비트 Windows 10·11 에서 동작합니다 [6] |
+
+NTFS 결과의 폴더 번호도 확인합니다.
+0 번 폴더는 물리 메모리에서만 찾은 레코드이고, 1 번 이후는 레코드 수가 많은 파일 시스템 순서라서 1 번이 보통 시스템 드라이브이지만 늘 그렇지는 않습니다 [4].
+부모 폴더를 알 수 없는 파일은 파일 시스템마다 `$_ORPHAN` 폴더에 모이고, 물리 주소가 0 으로 나온 항목은 MFT 레코드가 아니라 $I30 인덱스 항목에서 되살린 것일 수 있습니다 [4].
+이 결과는 메모리에 있던 MFT 레코드만 담기 때문에, 파일이 디스크에 있었는지와 전체 시각 값은 디스크의 [MFT](../../../02-artifacts/filesystem/mft.md) 로 확인합니다.
+
+레지스트리는 포렌식 모드와 따로 루트의 `registry` 폴더에 보이는데, 이것도 메모리 조각으로 되살린 것입니다 [7].
+하이브 파일은 가능한 만큼만 복원하고 페이지 파일로 나가 읽지 못한 페이지는 0 으로 채우므로 일부가 깨져 있을 수 있습니다 [7].
+키의 마지막 쓰기 시각은 그 키를 나타내는 폴더의 수정 시각으로 보이고, 부모를 모르는 키는 하이브마다 ORPHAN 키 아래에 모입니다 [7].
+값이 비었거나 깨져 있으면 먼저 페이지 파일로 나간 부분인지 의심하고, 디스크 하이브와 비교합니다.
+
+FindEvil 결과는 조사할 곳을 좁히는 목록으로만 씁니다.
+일부 탐지 종류는 페이지 파일로 나갔거나 확보하는 동안 바뀐 메모리에서도 뜨고, SYSTEM 이 아닌 프로세스의 SeDebugPrivilege 를 찾는 탐지(PROC_DEBUG)는 이 권한이 있는 정상 프로그램에서도 뜹니다 [6].
+뜬 항목은 [코드 주입·숨긴 프로세스 탐지](injection-rootkit.md) 의 방법으로 다시 확인합니다.
+
+포렌식 모드는 확보한 이미지 파일에 씁니다.
+실행 중인 PC 의 메모리를 직접 읽으면서 켜면 읽는 동안 메모리가 바뀌어 결과 품질이 떨어집니다 [2].
+시간순 기록은 [슈퍼 타임라인](../timeline/super-timeline.md) 에 합쳐 디스크 기록과 함께 봅니다.
+
+기능은 버전마다 늘어나므로 쓰는 버전의 릴리스 노트와 위키로 확인하고, 보고서에 도구 버전을 적습니다 [8].
+
+| 버전 | 공개일(UTC) | 바뀐 내용 [8] |
+|---|---|---|
+| 5.10 | 2024-07-11 | Windows 11 24H2 지원, 최대 절전 파일 지원, 프리페치 해석, 이벤트 로그 파일을 보여 주는 모듈 |
+| 5.15 | 2025-06-22 | FindEvil 에 높은 엔트로피 (High Entropy) 영역 탐지 추가, DNS 캐시 해석 |
+| 5.16 | 2025-10-05 | Windows 11 25H2 지원 |
+| 5.17 | 2026-02-22 | Windows 11 26H1 지원, 레지스트리 해석 개선 |
+| 5.18 | 2026-07-25 | Amcache 포렌식 모듈(Windows 10 이상), Windows Terminal 해석 모듈(Windows 11 이상) |
+
+Amcache 항목의 뜻은 [AmCache](../../../02-artifacts/execution/amcache-hve/index.md) 를 봅니다.
 
 ## 참고 문헌
 
 1. Volatility 3 documentation, "volatility3.plugins.windows package" (latest) — https://volatility3.readthedocs.io/en/latest/volatility3.plugins.windows.html
+2. Ulf Frisk, MemProcFS Wiki "FS_Forensic" (GitHub) — https://github.com/ufrisk/MemProcFS/wiki/FS_Forensic
+3. Ulf Frisk, MemProcFS Wiki "FS_Forensic_Timeline" (GitHub) — https://github.com/ufrisk/MemProcFS/wiki/FS_Forensic_Timeline
+4. Ulf Frisk, MemProcFS Wiki "FS_Forensic_Ntfs" (GitHub) — https://github.com/ufrisk/MemProcFS/wiki/FS_Forensic_Ntfs
+5. Ulf Frisk, MemProcFS Wiki "FS_Forensic_CSV" (GitHub) — https://github.com/ufrisk/MemProcFS/wiki/FS_Forensic_CSV
+6. Ulf Frisk, MemProcFS Wiki "FS_FindEvil" (GitHub) — https://github.com/ufrisk/MemProcFS/wiki/FS_FindEvil
+7. Ulf Frisk, MemProcFS Wiki "FS_Registry" (GitHub) — https://github.com/ufrisk/MemProcFS/wiki/FS_Registry
+8. Ulf Frisk, MemProcFS Releases (GitHub, v5.10~v5.18) — https://github.com/ufrisk/MemProcFS/releases

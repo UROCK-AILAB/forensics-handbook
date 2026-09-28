@@ -77,6 +77,7 @@ has_toc: false
 2. [애니데스크 (AnyDesk)](anydesk.md) — `connection_trace.txt` 의 승인 방식과 trace 로그의 상대 ID·외부 IP 를 읽습니다. 설치 때 남는 28115 이벤트와 설정 파일도 다룹니다.
 3. [스크린커넥트 (ScreenConnect)](screenconnect.md) — 클라이언트 서비스 명령줄의 접속 정보와 Application 로그의 세션·파일 전송·명령 실행 이벤트를 읽습니다. 자료마다 다른 이벤트 ID 도 다룹니다.
 4. [기타 원격 제어 도구 (RustDesk·Splashtop·Chrome Remote Desktop)](rustdesk-splashtop-chrome-remote-desktop.md) — RustDesk 로그 위치, Splashtop 전용 이벤트 로그와 파일 전송 로그, Chrome Remote Desktop 이벤트 ID 1~6 을 정리합니다.
+5. [빠른 지원 (Quick Assist)](quick-assist.md) — Windows 에 들어 있는 원격 지원 앱의 WebView2 프로필 `History`·파일 시각과, SRUM·보안 이벤트 5058·비트맵 캐시로 화면을 내준 쪽과 본 쪽을 판단하는 법을 다룹니다.
 
 ## 함께 볼 페이지
 

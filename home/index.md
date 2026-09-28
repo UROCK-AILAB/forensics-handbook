@@ -32,6 +32,8 @@ permalink: /
 
 <!-- 핸드북 목록 끝 -->
 
+새로 추가되거나 변경된 페이지는 [변경 기록](changelog.md)에서 볼 수 있습니다.
+
 ## 이용 조건
 
 이 핸드북의 글은 [크리에이티브 커먼즈 저작자표시 4.0 국제 라이선스(CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.ko){:target="_blank" rel="license noopener noreferrer"}를 따릅니다. 출처(주식회사 유락, 디지털 포렌식 핸드북, 해당 페이지 주소)를 밝히면 상업적 목적을 포함해 자유롭게 옮기고 고쳐 쓸 수 있습니다. 사이트를 만드는 코드는 [MIT 라이선스](https://github.com/UROCK-AILAB/forensics-handbook/blob/main/LICENSE-CODE){:target="_blank" rel="noopener noreferrer"}를 따릅니다.

@@ -97,6 +97,37 @@ eBPF 로 커널 모듈 없이 후킹과 비슷한 기능을 만드는 흐름도 
 - **이미지 품질이 결과를 좌우합니다.** 불완전하거나 일관되지 않은 덤프에서는 숨은 모듈을 찾지 못할 수 있습니다[1]. 라이브로 뜬 메모리는 한순간의 스냅숏이 아니므로, 출처 사이 어긋남이 수집 중 변화에서 왔을 가능성도 따져 봅니다([메모리 수집](../acquisition/memory-acquisition.md)).
 - **UAC 의 숨은 PID 목록에는 수집 중 끝난 프로세스가 섞일 수 있습니다.** `/proc` 목록을 읽은 뒤 `ps ax` 를 돌리는 사이에 끝난 프로세스는 `ps` 에 없으므로[5], 같은 PID 가 `ps_auxwww.txt` 같은 다른 결과나 메모리에 있는지 맞춰 봅니다.
 
+## io_uring 과 시스템 호출 감시의 사각지대
+
+io_uring 은 사용자 공간과 커널이 함께 쓰는 링 버퍼 (ring buffer) 로 비동기 입출력 요청을 주고받는 리눅스 API 이고, 5.1 부터 들어 있습니다[8]. 프로그램이 요청을 제출 큐 (submission queue) 에 넣으면 커널이 처리해 결과를 완료 큐 (completion queue) 에 돌려주므로, 파일 읽기·쓰기나 소켓 연결·송수신을 작업마다 그 작업의 시스템 호출을 부르지 않고 처리할 수 있습니다[8][10]. 2025년 4월 기준으로 io_uring 으로 할 수 있는 작업은 파일 시스템과 네트워크 작업을 합쳐 61가지입니다[8].
+
+그래서 `openat`, `connect`, `read` 같은 시스템 호출 진입점에 거는 감시에는 io_uring 으로 처리한 작업이 그 이름으로 나타나지 않습니다[8]. ARMO 가 2025년 4월 공개한 개념 증명 루트킷 Curing 은 C2 서버에서 명령을 받아 실행하는 과정을 io_uring 으로 처리했고, ARMO 의 시험에서 시스템 호출 후킹에 기대는 Falco 는 이 동작을 보지 못했으며 Tetragon 도 예시 정책으로는 보지 못했습니다[8]. 이런 도구의 기록에 파일 열기나 네트워크 연결이 없다는 사실만으로 그 동작이 없었다고 쓰지 않습니다.
+
+커널 감사 (audit) 는 5.16 부터 io_uring 작업을 따로 다룹니다[11]. 커널은 작업을 처리할 때마다 작업 번호를 감사 정보에 넣고, 기록할 때는 `SYSCALL` 이 아닌 `URINGOP`(유형 1336) 레코드에 `uring_op`(작업 번호), `success`, `exit`, `items`, `ppid`, `pid`, `uid` 같은 필드를 남깁니다[11]. 작업 번호는 시스템 호출 규칙이 아니라 io_uring 필터 목록의 규칙과 맞춰 보므로[11], `-a always,exit -S openat` 처럼 시스템 호출 번호로 건 규칙은 io_uring 으로 연 파일과 맞지 않습니다. auditctl 은 이 목록에 규칙을 넣는 `io_uring` 필터를 따로 두고, 작업은 `-S` 에 시스템 호출 이름처럼 적습니다[12]. 다만 `read`, `write`, `send`, `recv`, `socket` 같은 작업은 커널이 성능 때문에 감사를 아예 건너뛰므로 규칙과 상관없이 기록이 남지 않고, 감사하는 작업은 `openat`, `connect`, `accept`, `unlinkat`, `renameat` 등입니다[10][12]. 감사 로그를 읽는 방법은 [감사 로그의 실행 기록](../../02-artifacts/execution/auditd-execve.md) 에서 다룹니다.
+
+라이브 응답에서는 io_uring 을 쓰는 프로세스를 아래 흔적으로 골라내고, 그 프로세스를 이 페이지의 다른 절차로 더 살펴봅니다. fdinfo 필드는 메인라인 커널 소스 기준입니다.
+
+| 흔적 | 보는 곳 | 뜻 |
+|---|---|---|
+| `anon_inode:[io_uring]` 링크 | `ls -l /proc/PID/fd` | 커널은 io_uring 인스턴스를 `[io_uring]` 이라는 익명 inode 파일로 만들어 프로세스에 넘깁니다[10] |
+| `SqMask`, `SqHead`, `SqTail`, `CqMask`, `CqHead`, `CqTail`, `SQEs`, `CQEs`, `SqThread`, `UserFiles`, `UserBufs`, `PollList`, `CqOverflowList` | 위 링크의 번호로 `/proc/PID/fdinfo/FD` | 링의 상태입니다. `SQEs`·`CQEs` 아래에는 수집 순간 처리를 기다리는 요청(`opcode`, `fd` 등)과 결과만 나오고, `UserFiles` 아래에는 링에 등록한 파일이 경로로 나옵니다[10] |
+| 이름이 `iou-sqp-PID`, `iou-wrk-PID` 인 스레드 | `/proc/PID/task/*/comm` | 커널 스레드가 제출 큐를 계속 읽는 방식(SQPOLL)의 스레드와 비동기 작업 스레드입니다. 이름의 숫자는 링을 만들거나 요청을 낸 원래 스레드의 ID(TID)라서, 스레드가 하나뿐인 프로세스면 PID 와 같습니다[10] |
+| `kernel.io_uring_disabled`, `kernel.io_uring_group` | `/proc/sys/kernel/`, `sysctl -a` | 새 인스턴스를 만들 수 있는지 정하는 설정입니다(아래 표)[9] |
+
+`openat` 요청에 등록 파일 슬롯을 지정해 연 파일은 커널이 프로세스의 파일 디스크립터 표에 올리지 않고 링의 등록 파일 표에만 넣으므로[10], `/proc/PID/fd` 에는 나오지 않고 fdinfo 의 `UserFiles` 목록에만 나옵니다. 커널은 링의 잠금을 곧바로 얻지 못하면 링 상태를 출력하지 않으므로[10], fdinfo 에 `pos`·`flags` 같은 공통 줄만 나오면 몇 번 다시 읽어 봅니다.
+
+`kernel.io_uring_disabled` 는 6.6 부터 있는 설정입니다[9].
+
+| 값 | 뜻 |
+|---|---|
+| 0 | 모든 프로세스가 io_uring 인스턴스를 만들 수 있습니다. 기본값입니다[9] |
+| 1 | `CAP_SYS_ADMIN` 이 없고 `io_uring_group` 에 속하지 않은 프로세스는 `io_uring_setup()` 이 `-EPERM` 으로 실패합니다. `io_uring_group` 이 기본값 -1 이면 `CAP_SYS_ADMIN` 이 있는 프로세스만 만들 수 있습니다[9] |
+| 2 | 모든 프로세스에서 `io_uring_setup()` 이 `-EPERM` 으로 실패합니다[9] |
+
+1 과 2 모두 이미 만든 인스턴스는 계속 쓸 수 있습니다[9]. 그래서 수집 시점 값이 2 라도 설정을 바꾸기 전에 만든 링이 돌고 있을 수 있으므로 fd 확인을 건너뛰지 않습니다. 계속 감시하는 쪽에서는 시스템 호출 대신 io_uring 자체의 tracepoint(`io_uring:io_uring_create`, `io_uring:io_uring_submit_req` 등)나 LSM 훅을 봅니다[10]. `io_uring_setup()` 은 인스턴스를 만들기 전에 LSM 검사(`security_uring_allowed`)를 거치고[10], LSM 훅은 파일 작업·프로세스 실행·네트워크 접근을 io_uring 경로까지 포함해 더 일관되게 잡습니다[8].
+
+`anon_inode:[io_uring]` 링크가 있으면 수집 순간 그 프로세스가 io_uring 인스턴스를 열어 두고 있었다는 뜻이고, `UserFiles` 목록은 그 순간 링에 등록된 파일입니다. io_uring 은 정상 프로그램도 쓰는 입출력 방식이라 사용 사실만으로 악성이라고 쓰지 않습니다. fdinfo 의 요청 목록은 수집 순간 대기 중인 것뿐이라 지난 작업 이력이 되지 못하고, 어떤 파일을 언제 읽고 어디로 보냈는지는 감사 로그의 `URINGOP` 레코드, 네트워크 기록, 메모리 분석으로 좁힙니다.
+
 ## 결과를 어떻게 해석하나
 
 ### 모듈 비교 표 읽기
@@ -141,3 +172,8 @@ eBPF 로 커널 모듈 없이 후킹과 비슷한 기능을 만드는 흐름도 
 5. UAC, artifacts (live_response/modifiers/revel_hidden_processes·disable_ftrace, live_response/system/kernel_modules·lsmod·kernel_tainted_state·ebpf·bpftool, chkrootkit/chkrootkit·hidden_etc_ld_so_preload). https://github.com/tclahr/uac/tree/main/artifacts
 6. Linux kernel, Documentation/admin-guide/tainted-kernels.rst. https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/tainted-kernels.rst
 7. Velociraptor, Linux.Proc.Modules. https://github.com/Velocidex/velociraptor/blob/master/artifacts/definitions/Linux/Proc/Modules.yaml
+8. Amit Schendel (ARMO), "io_uring Is Back, This Time as a Rootkit" (2025-04-24). https://www.armosec.io/blog/io_uring-rootkit-bypasses-linux-security/
+9. Linux kernel, Documentation/admin-guide/sysctl/kernel.rst (io_uring_disabled, io_uring_group). https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/sysctl/kernel.rst , https://github.com/torvalds/linux/blob/v6.6/Documentation/admin-guide/sysctl/kernel.rst
+10. Linux kernel, io_uring (io_uring.c, fdinfo.c, opdef.c, openclose.c, sqpoll.c, io-wq.c), include/trace/events/io_uring.h. https://github.com/torvalds/linux/tree/master/io_uring , https://github.com/torvalds/linux/blob/master/include/trace/events/io_uring.h
+11. Linux kernel, kernel/auditsc.c (`__audit_uring_entry`, `__audit_uring_exit`, `audit_log_uring`), include/uapi/linux/audit.h. https://github.com/torvalds/linux/blob/master/kernel/auditsc.c , https://github.com/torvalds/linux/blob/v5.16/kernel/auditsc.c , https://github.com/torvalds/linux/blob/master/include/uapi/linux/audit.h
+12. Linux Audit userspace, docs/auditctl.8, lib/uringop_table.h. https://github.com/linux-audit/audit-userspace/blob/master/docs/auditctl.8 , https://github.com/linux-audit/audit-userspace/blob/master/lib/uringop_table.h

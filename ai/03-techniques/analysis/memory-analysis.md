@@ -12,7 +12,7 @@ AI 앱이 실행 중일 때 뜬 메모리 이미지에서 대화·도구 호출 
 
 ## 언제 쓰나
 
-디스크 기록이 없거나 믿기 어려울 때 씁니다. 에이전트의 도구 호출은 잠깐 떴다 사라지는 실행 환경에서 일어나서, 로그와 패킷 기록이 불완전하거나, 꺼져 있거나, 일부러 지워질 수 있습니다[1]. 설정을 고치고 흔적을 지우는 로컬 공격자(악성 코드, 악성 확장)가 있을 때도 메모리는 디스크와 따로 남는 증거원이 됩니다[1]. 원격 MCP 서버를 쓴 경우에도 HTTP 방식 호출의 인자와 결과를 메모리 이미지에서 되살릴 수 있습니다(Table 3)[1]. 설정에 따라 처음부터 디스크에 남지 않는 값도 있습니다. Codex CLI 는 로그인 정보 저장 방식을 `ephemeral` 로 두면 실행 중인 프로세스 메모리에만 둡니다([Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) 참고).
+디스크 기록이 없거나 믿기 어려울 때 씁니다. 에이전트의 도구 호출은 잠깐 떴다 사라지는 실행 환경에서 일어나서, 로그와 패킷 기록이 불완전하거나, 꺼져 있거나, 일부러 지워질 수 있습니다[1]. 설정을 고치고 흔적을 지우는 로컬 공격자(악성 코드, 악성 확장)가 있을 때도 메모리는 디스크와 따로 남는 증거원이 됩니다[1]. HTTP 방식으로 붙인 서버의 호출 인자와 결과도 메모리 이미지에서 되살아났는데, 이 시험의 HTTP 서버는 같은 가상 머신 안에서 돌았습니다(Table 3)[1]. 조건은 아래 "논문이 시험한 조건과 결과" 절에 있습니다. 설정에 따라 처음부터 디스크에 남지 않는 값도 있습니다. Codex CLI 는 로그인 정보 저장 방식을 `ephemeral` 로 두면 실행 중인 프로세스 메모리에만 둡니다([Codex CLI](../../02-artifacts/dev-agents/codex-cli.md) 참고).
 
 디스크 분석에서 "되살릴 수 없음" 으로 나온 흔적을 다시 찾을 때도 씁니다. LangurTrace 연구는 로컬 LLM 앱의 흔적을 Windows 11 Pro 디스크에서 되살릴 수 있는지만 따졌고, 볼륨 섀도 사본과 라이브 메모리 분석은 평가하지 않았습니다(§6.2)[3]. 그래서 이 연구가 "되살릴 수 없음" 으로 적은 흔적도 일부는 되찾을 수 있습니다[3].
 
@@ -76,9 +76,26 @@ xxd -s 27440064 -l 256 case-0001.vmem
 
 **rg 와 xxd.** 도구가 보고한 조각을 손으로 확인할 때 씁니다[1]. UTF-16LE 문자열은 GNU `strings -el` 로 뽑아 같은 키 이름을 찾을 수 있습니다.
 
+## 논문이 시험한 조건과 결과
+
+위 절차와 MCPRecon 은 DFRWS USA 2026 에 발표된 논문에서 나왔고, 논문은 아래 조건에서만 시험했습니다[1]. 시험은 VMware 로 띄운 Ubuntu 24.04(커널 6.14.0-36-generic, 메모리 8GB) 가상 머신 하나에서 했습니다. 클라이언트 두 개(Codex CLI, VS Code + GitHub Copilot)와 서버 세 개(stdio 방식 날씨 서버, HTTP 방식 날씨 서버, stdio 방식 Context7)를 모두 그 가상 머신 안에서 돌렸습니다(§6.4)[1]. 구성마다 도구 목록을 묻는 프롬프트 하나(P1, `tools/list`)와 인자를 바꿔 도구를 부르는 프롬프트 두 개(P2·P3, `tools/call`)를 차례로 넣었습니다. 세 프롬프트가 끝난 뒤 메모리 전체를 한 번 뜨고 Volatility3 로 오프라인 분석했습니다(§6.3~6.5, Table 2)[1]. 어떤 프롬프트를 넣었고 어떤 도구가 불려 무엇을 돌려줬는지는 실행하면서 따로 적어 두고, 메모리에서 나온 결과와 맞췄습니다(§6.3)[1].
+
+| 클라이언트 | 서버와 전송 방식 | 하나씩 돌리고 뜬 경우 (Table 3) | 함께 돌리고 한 번 뜬 경우 (Table 4) |
+|---|---|---|---|
+| Codex CLI | 날씨 서버, stdio | P1·P2·P3 | P1·P2·P3 |
+| Codex CLI | 날씨 서버, HTTP | P1·P2·P3 | P1·P3 (P2 없음) |
+| Codex CLI | Context7, stdio | P1·P2·P3 | P1·P3 (P2 없음) |
+| VS Code + Copilot | 날씨 서버, HTTP | P1·P2·P3 | P2·P3 (P1 없음) |
+| VS Code + Copilot | 날씨 서버, stdio | P1·P2·P3 | P2 (P1·P3 없음) |
+| VS Code + Copilot | Context7, stdio | P1·P2·P3 | P2·P3 (P1 없음) |
+
+표에 적힌 프롬프트는 그 단계의 JSON-RPC 메시지를 메모리에서 떼어 내 구조 검사와 MCP 메서드 검사를 통과했고, 응답이 있는 단계는 같은 `id` 의 요청과 짝지어졌다는 뜻입니다(§6.7)[1]. 오른쪽 열은 Codex 와 Copilot 을 같은 가상 머신에서 돌려 모든 서버에 프롬프트를 넣은 뒤 메모리를 한 번만 뜬 경우입니다(§6.8)[1]. 두 클라이언트와 stdio·HTTP 두 전송 방식 모두에서 같은 종류의 흔적(도구 목록과 스키마, 호출 인자, 결과)이 나왔습니다(§7.1)[1].
+
+이 표는 Linux 가상 머신 안에서 클라이언트와 서버를 함께 돌린 조건의 결과라서, Windows·macOS 기기나 다른 클라이언트, 기기 밖의 원격 서버에 접속한 사건에 그대로 옮겨 쓰지 않습니다. 시험에 쓴 날씨 서버 코드는 MCPRecon 저장소의 `testbed/weather` 폴더에 있습니다. stdio 방식은 `server.py`, HTTP 방식은 `http-weather-server.py` 이고, HTTP 서버는 `http://127.0.0.1:8000` 에서 요청을 받습니다[2]. 클라이언트별 설정 파일과 서버 로그 위치는 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md)에 있습니다.
+
 ## 함정과 한계
 
-메모리에 없다고 해서 그 호출이 없었던 것은 아닙니다. Codex 와 Copilot 을 한 가상 머신에서 함께 돌리고 메모리를 한 번만 뜬 시험에서는 일부 단계의 흔적이 되살아나지 않았습니다(Table 4)[1]. Codex 는 HTTP 날씨 서버와 Context7 에서 첫 번째 호출이 빠졌고, Copilot 은 세 구성 모두에서 도구 목록 조회가, stdio 날씨 서버에서는 두 번째 호출까지 빠졌습니다[1]. 클라이언트가 계속 메모리를 할당하면 버퍼가 덮어써지고, 여러 앱이 함께 돌면 메모리가 더 자주 바뀌고 조각나며, 짧게 쓰고 버리는 버퍼는 일부만 남아 검사를 통과하지 못하기 때문입니다[1]. 클라이언트를 하나씩 돌린 여섯 구성에서는 세 단계가 모두 되살아났습니다(Table 3)[1].
+메모리에 없다고 해서 그 호출이 없었던 것은 아닙니다. 위 표의 오른쪽 열처럼 두 클라이언트를 함께 돌리고 메모리를 한 번만 뜬 시험에서는 일부 단계의 흔적이 되살아나지 않았습니다(Table 4)[1]. 클라이언트가 계속 메모리를 할당하면 버퍼가 덮어써지고, 여러 앱이 함께 돌면 메모리가 더 자주 바뀌고 조각나며, 짧게 쓰고 버리는 버퍼는 일부만 남아 검사를 통과하지 못하기 때문입니다[1].
 
 증거가 한쪽만 남을 수 있습니다. 논문의 공격 시연에서 악성 서버가 응답에 지시문을 끼워 넣었는데, 지시문이 든 응답은 손으로 찾아봐도 메모리 어디에도 없었고(덮어써진 것으로 보입니다), 작업 폴더의 파일 내용을 `country` 인자에 실어 내보낸 요청만 되살아났습니다(§8.3)[1]. 지시가 어디서 왔는지는 메모리만으로 밝히지 못할 수 있으니 서버 설정과 대화 기록을 함께 봅니다. 시연 내용과 인젝션 분석 방법은 [MCP 서버와 도구 호출 기록](../../02-artifacts/dev-agents/mcp.md)과 [프롬프트 인젝션 사고 분석](prompt-injection.md)에 있습니다.
 
@@ -104,8 +121,8 @@ xxd -s 27440064 -l 256 case-0001.vmem
 
 ## 참고 문헌
 
-1. A. Satter, M. Salmon, L. Muhanna, T. T. Spinosa, T. Gharaibeh, I. Baggili, "With or Without Logs: Memory Forensic Reconstruction of Model Context Protocol (MCP) Activity in Agentic LLM Systems". 코드와 실험 자료: https://github.com/BiTLab-BaggiliTruthLab/MCPRecon (§4, Algorithm 1, §5.2, §6.4~6.8, §7.2~7.3, §8, Table 3·4·5·A.6)
-2. BiTLab-BaggiliTruthLab/MCPRecon — https://github.com/BiTLab-BaggiliTruthLab/MCPRecon — `README.md`, `tool/mcprecon.py` (마지막 커밋 2026-04-12)
+1. A. Satter, M. Salmon, L. Muhanna, T. T. Spinosa, T. Gharaibeh, I. Baggili, "With or Without Logs: Memory Forensic Reconstruction of Model Context Protocol (MCP) Activity in Agentic LLM Systems", DFRWS USA 2026. 발표 페이지: https://dfrws.org/presentation/with-or-without-logs-reconstructing-model-context-protocol-activity-from-volatile-memory/ 논문: https://dfrws.org/wp-content/uploads/2026/04/DFRWS_USA_2026_Camera_Ready_Paper_82.pdf 코드와 실험 자료: https://github.com/BiTLab-BaggiliTruthLab/MCPRecon (§4, Algorithm 1, §5.2, §6.3~6.8, §7.1~7.3, §8, Table 2·3·4·5·A.6)
+2. BiTLab-BaggiliTruthLab/MCPRecon — https://github.com/BiTLab-BaggiliTruthLab/MCPRecon — `README.md`, `tool/mcprecon.py`, `testbed/weather/README.md`·`http-weather-server.py` (마지막 커밋 2026-04-12)
 3. S. Jeong, S. Lee, J. Park, "LangurTrace: Forensic analysis of local LLM applications", Forensic Science International: Digital Investigation, 54 (2025), 301987. https://doi.org/10.1016/j.fsidi.2025.301987 (§6.2)
 4. "Forensic Investigations in the Age of AI: Identifying and Analyzing Artifacts from AI-Assisted Crimes", 2025 13th International Symposium on Digital Forensics and Security (ISDFS), IEEE, 2025. https://doi.org/10.1109/isdfs65363.2025.11012109 (초록)
 5. "Forensic analysis from generative AI web application memory: A ChatGPT case study", Forensic Science International: Digital Investigation, 2026. https://doi.org/10.1016/j.fsidi.2026.302175

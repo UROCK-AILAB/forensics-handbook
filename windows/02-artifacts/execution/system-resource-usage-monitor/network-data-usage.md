@@ -199,6 +199,7 @@ srum-dump, SrumECmd, dissect.target 의 SRUM 플러그인, libesedb 의 `esedbex
 | [VPN 연결 기록](../../network/vpn-connections.md) | 송신량이 VPN 프로세스로 몰린 시간대 |
 | [프리페치](../prefetch/index.md) · [AmCache](../amcache-hve/index.md) | 앱의 실행 시각과 실행 파일 정보 |
 | [켜짐·꺼짐](../../event-logs/power-on-off-events.md) | 한 행이 덮는 구간에 PC 가 켜져 있던 시간 |
+| [빠른 지원](../../network/remote-access-tools/quick-assist.md) | `QuickAssist.exe` 행의 보낸 양과 받은 양으로 화면을 내준 쪽인지 본 쪽인지 |
 
 무엇을 어디로 보냈는지는 이 표 밖에서 찾습니다. 흐름은 [자료를 밖으로 빼돌렸나](../../../04-scenarios/exfiltration/data-exfiltration/index.md), [클라우드로 밖에 보냈나](../../../04-scenarios/exfiltration/data-exfiltration/cloud.md), [웹메일·웹하드로 올렸나](../../../04-scenarios/exfiltration/data-exfiltration/web-upload.md)를 봅니다.
 

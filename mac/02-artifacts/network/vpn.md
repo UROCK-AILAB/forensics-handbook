@@ -118,6 +118,50 @@ plutil -p preferences.plist
 
 mac_apt NETWORKING 플러그인 [2]을 돌려 같은 서비스의 `PPP` 값이 나오는지 맞춰 보면, 직접 읽은 값과 도구 결과를 서로 검증할 수 있습니다. 설치된 프로필에서 `com.apple.vpn.managed` 페이로드를 찾는 법은 구성 프로파일 페이지를 따릅니다.
 
+## Tailscale 흔적 (통합 로그)
+
+Tailscale 은 여러 기기를 한 사설망으로 묶는 VPN 서비스이고, 맥의 Tailscale 앱 로그는 시스템 통합 로그에서 찾습니다 [4]. 그래서 앞의 설정 기록과 달리, 통합 로그에서는 앱이 언제 돌았는지와 Taildrop 파일 보내기, 상대 기기와 통신한 주소까지 찾을 수 있습니다 [3].
+
+### 설치 방식과 로그가 남는 곳
+
+맥용 Tailscale 은 세 가지 방식으로 설치되고, 셋 다 macOS 12.0 Monterey 이상에서 돌아갑니다 [5].
+
+| 설치 방식 | 연결 방식 | GUI | Taildrop | 자동 업데이트 |
+|---|---|---|---|---|
+| Mac App Store 앱 | 네트워크 확장 (Network Extension) | 있음 | 지원 | App Store 가 관리 |
+| Standalone 앱 (Tailscale 패키지 서버에서 받음) | 시스템 확장 (System Extension) | 있음 | 지원 | 앱 안에서 관리(Sparkle) |
+| 오픈 소스 `tailscaled` (GitHub 배포, CLI 전용) | `utun` 인터페이스 | 없음 | 일부만 지원 | 없음 |
+
+켜져 있는 맥에서는 Console 앱에서 `IPN` 으로 검색해 로그를 실시간으로 볼 수 있습니다 [4]. 지난 기록은 `sudo sysdiagnose` 로 만든 결과물 안의 `system_logs.logarchive` 에서 `IPN` 이 든 항목을 찾습니다 [4]. 로그 항목의 프로세스 이름은 `IPNExtension` 입니다 [3]. 아카이브를 만들고 읽는 절차는 [통합 로그 수집 (log collect)](../../03-techniques/process-acquisition/live-response/log-collect.md)을, 검색 조건을 짜는 법은 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)을 따릅니다. 오픈 소스 `tailscaled` 는 GUI 앱과 동작 방식이 달라서, 그 기기에서 `tailscaled` 가 어떤 인자로 실행됐고 로그를 어디로 내보내는지 따로 확인합니다. 시스템 확장이나 네트워크 확장이 설치되어 있었는지는 [커널·시스템 확장 (KEXT·System Extension)](../persistence/kext-system-extension.md)에서 함께 봅니다.
+
+### 찾을 메시지
+
+| 메시지 | 알 수 있는 것 |
+|---|---|
+| `localapi: [PUT] /localapi/v0/file-put/` | 이 맥에서 Taildrop 으로 다른 노드에 파일을 보내는 요청이 있었다는 기록 [3] |
+| `magicsock: disco: node [노드 표시값] d:… now using 주소:포트 mtu=… tx=…` | 상대 노드와 통신에 쓴 주소와 포트. 상대 기기가 다른 네트워크에 있으면 그 기기의 공인 IP 가 찍힙니다 [3] |
+
+통합 로그에서 뽑은 한 줄에는 로그 종류, 시각(시간대 오프셋 포함), 프로세스 이름, 메시지가 차례로 나옵니다 [3]. 아래는 그 형식을 따라 만든 예시이고, 시각·노드 표시값·주소는 모두 지어낸 값입니다(만든 예시).
+
+```
+default	2026-06-01 10:15:30.123456 +0900	IPNExtension	localapi: [PUT] /localapi/v0/file-put/
+default	2026-06-01 10:15:30.345678 +0900	IPNExtension	magicsock: disco: node [AbCdE] d:0123456789abcdef now using 203.0.113.10:41641 mtu=1360 tx=0123456789ab
+```
+
+아카이브에서 이 프로세스의 메시지만 보려면 프로세스 이름을 조건으로 겁니다.
+
+```
+log show --archive system_logs.logarchive --predicate 'process == "IPNExtension"'
+```
+
+### 증거로서 의미
+
+**증명하는 것.** `IPNExtension` 메시지가 있으면 그 시각에 이 맥에서 Tailscale 앱이 돌고 있었다는 기록입니다 [3]. `file-put` 요청은 그 시각에 이 맥에서 Taildrop 파일 보내기를 요청했다는 기록이고, 그 뒤에 나오는 `magicsock: disco` 줄에 찍힌 주소로 보낸 상대 기기의 네트워크 위치를 좁힐 수 있습니다 [3]. Taildrop 은 USB 나 클라우드 업로드를 거치지 않고 기기끼리 파일을 옮기므로, 자료 유출을 따질 때 다른 반출 경로와 함께 확인합니다.
+
+**증명하지 못하는 것.** `file-put` 줄에는 파일 이름과 크기가 없어서 무엇을 보냈는지, 전송이 끝났는지는 이 줄만으로 알 수 없습니다. `node [...]` 의 표시값만으로는 상대가 어느 기기인지 알 수 없고, `magicsock` 줄의 주소는 상대 기기가 같은 내부망에 있으면 공인 IP 가 아닐 수 있어서 사설 대역인지 공인 주소인지부터 확인합니다. 통합 로그는 보관 기간이 지나면 지워지므로, 메시지가 없다고 Tailscale 을 쓰지 않았다고 단정하지 않습니다. 보관 방식은 [통합 로그 형식 (Unified Log)](../../01-foundations/data-formats/unified-log/index.md)에서 다룹니다.
+
+로그 줄의 시각은 `log show` 를 실행한 장비의 시간대로 표시되고 오프셋이 함께 붙어서, 보고서에는 오프셋을 그대로 옮기거나 `--timezone` 으로 UTC 에 맞춘 값을 씁니다. Tailscale 클라이언트는 연결이 열리고 닫힌 이벤트를 포함한 로그를 Tailscale 의 로그 서버(`log.tailscale.com`)로도 보내므로 [4], 맥에서 지워진 구간은 서비스 쪽 기록으로 보완할 수 있는지 따져 봅니다.
+
 ## 교차 검증
 
 | 함께 볼 아티팩트 | 맞춰 볼 것 |
@@ -142,3 +186,6 @@ mac_apt NETWORKING 플러그인 [2]을 돌려 같은 서비스의 `PPP` 값이 �
 
 1. Apple Developer, Device Management — VPN — https://developer.apple.com/documentation/devicemanagement/vpn
 2. mac_apt `networking.py` NETWORKING 플러그인 소스 (Yogesh Khatri) — https://raw.githubusercontent.com/ydkhatri/mac_apt/master/plugins/networking.py
+3. ogmini, Examining Tailscale Artifacts - Part 5 (2026-06-22) — https://ogmini.github.io/2026/06/22/Examining-Tailscale-Artifacts-Part-5.html
+4. Tailscale Docs, Logging (macOS) — https://tailscale.com/docs/features/logging?tab=macos
+5. Tailscale Docs, macOS variants — https://tailscale.com/docs/concepts/macos-variants

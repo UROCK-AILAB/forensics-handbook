@@ -50,7 +50,7 @@ Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사�
 4. **필요하면 메모리 상태를 체크포인트로 남깁니다.** 컨테이너 프로세스의 메모리만 따로 떠야 할 때 쓰는 방법이고, 호스트 전체 메모리 수집은 [메모리 수집](memory-acquisition.md)을 봅니다. 방법마다 컨테이너에 주는 영향이 달라서 옵션을 기록해 둡니다.
    - Podman: `podman container checkpoint` 는 CRIU 로 컨테이너의 모든 프로세스를 체크포인트하고, 기본으로는 끝난 뒤 컨테이너를 **멈춥니다**[4]. `--leave-running`(`-R`)을 주면 계속 돌지만, 메모리와 파일 시스템이 같은 시점을 담도록 체크포인트 동안 cgroup 을 얼렸다가 풉니다[4]. `--export`(`-e`)는 결과를 아카이브로 내보내고 루트 파일 시스템 변경분도 함께 담으며, `--ignore-rootfs`·`--ignore-volumes` 로 빼는 옵션이 따로 있습니다[4]. `--keep`(`-k`)은 CRIU 가 만든 로그·통계 파일을 남깁니다[4]. systemd 를 엔트리포인트로 쓰는 컨테이너는 체크포인트가 안 될 수 있습니다[4].
    - Docker: `docker checkpoint create` 에는 저장 위치를 바꾸는 `--checkpoint-dir` 와 체크포인트 뒤에도 계속 돌게 하는 `--leave-running` 이 있습니다[3].
-   - Kubernetes: 기능 게이트 `ContainerCheckpoint` 가 켜진 노드에서 kubelet 에 `POST /checkpoint/NAMESPACE/POD/CONTAINER` 를 보내면, kubelet 루트 디렉터리 아래 `checkpoints`(기본 `/var/lib/kubelet/checkpoints`)에 `checkpoint-<podFullName>-<containerName>-<timestamp>.tar` 이름으로 tar 파일이 생깁니다[5]. 게이트가 꺼져 있으면 404 가 돌아옵니다[5]. tar 안의 구성은 노드의 CRI 구현(containerd, CRI-O 등)마다 다릅니다[5].
+   - Kubernetes: 기능 게이트 `ContainerCheckpoint` 가 켜진 노드에서 kubelet 에 `POST /checkpoint/NAMESPACE/POD/CONTAINER` 를 보내면, kubelet 루트 디렉터리 아래 `checkpoints`(기본 `/var/lib/kubelet/checkpoints`)에 `checkpoint-<podFullName>-<containerName>-<timestamp>.tar` 이름으로 tar 파일이 생깁니다[5]. 게이트가 꺼져 있으면 404 가 돌아옵니다[5]. `ContainerCheckpoint` 게이트는 1.25~1.29 에서 알파(기본 꺼짐)였고 1.30 부터 베타(기본 켜짐)입니다[11]. 쿼리 매개변수 `timeout` 으로 체크포인트 제한 시간(초)을 줄 수 있고, 0 이거나 주지 않으면 CRI 기본 제한 시간을 씁니다[5]. tar 안의 구성은 노드의 CRI 구현(containerd, CRI-O 등)마다 다릅니다[5].
 
 5. **디스크에서 데이터 루트를 확보합니다.** 호스트를 [디스크 이미징](disk-imaging.md)으로 뜨면 데이터 루트가 함께 들어오고, 이미징이 어려우면 적어도 1단계에서 찾은 데이터 루트 전체와 볼륨 경로를 복사합니다. overlay2 저장 드라이버에서는 레이어마다 `/var/lib/docker/overlay2/ID/` 아래 `diff` 디렉터리가 있고, 컨테이너의 쓰기층도 이 `diff` 이며 overlay 마운트의 `upperdir` 로 걸립니다[9]. 컨테이너 설정은 `containers/ID/config.v2.json`, overlay2 컨테이너의 마운트 정보는 `image/overlay2/layerdb/mounts/ID` 에 있습니다[6]. Podman 은 `storage/overlay-containers/ID/userdata/config.json`, `storage/overlay/레이어ID`, 그리고 v4 이상이면 컨테이너 목록 SQLite 파일 `storage/db.sql` 을 함께 가져옵니다[7]. 각 파일의 필드 뜻은 [Docker](../../02-artifacts/containers/docker/index.md), [Podman](../../02-artifacts/containers/podman.md) 페이지에 있습니다.
 
@@ -66,6 +66,7 @@ Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사�
 | Velociraptor `Linux.Applications.Docker.Info` | Docker 데몬 요약 정보[2] | 컨테이너별 상세는 없다 |
 | 런타임 CLI (`docker`, `podman`, `lxc`) | inspect·logs·diff·export·checkpoint[3][4] | 라이브 호스트에서만 쓸 수 있다 |
 | kubelet 체크포인트 API | 파드 안 컨테이너의 체크포인트 tar[5] | 기능 게이트가 필요하다[5] |
+| checkpointctl | 체크포인트 아카이브의 프로세스 트리·열린 파일·소켓·메모리 검색, 두 아카이브 비교[12] | `diff` 는 v1.6.0 부터 있다[12] |
 | dissect.target `docker.*`, `podman.*` | 디스크 이미지에서 컨테이너·이미지·로그 파싱[6][7] | overlay2 가 아닌 저장 드라이버는 마운트 경로를 풀지 않는다[6] |
 
 ## 함정과 한계
@@ -101,6 +102,36 @@ Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사�
 
 보고서에는 "컨테이너 ID ○○의 쓰기층에 `/usr/bin/wget` 에 대한 whiteout 이 있다" 처럼 기록으로 확인되는 만큼 씁니다. "침입자가 wget 을 지웠다" 는 누가 지웠는지를 다른 기록([실행 중인 프로세스](../../02-artifacts/execution/proc.md), 저널, 셸 기록)으로 뒷받침할 때만 씁니다.
 
+## 체크포인트 아카이브 분석과 연속 스냅숏
+
+kubelet 이 만든 체크포인트 아카이브는 tar 파일이라 `tar -tvf` 로 목록을 볼 수 있습니다[5]. Podman 의 `--export` 아카이브는 기본으로 zstd 로 압축되고, `--compress` 로 gzip 이나 압축 없음(none)을 고를 수 있습니다[4]. 먼저 원본의 해시를 계산하고, 분석은 사본에서 합니다. Podman·CRI-O·containerd 아카이브에서 볼 파일은 아래와 같고, 실제로 어떤 파일이 들어가는지는 런타임과 옵션마다 다릅니다[4][5][12].
+
+| 파일 | 담긴 내용 |
+|---|---|
+| `config.dump` | 컨테이너 ID·이름·이미지·OCI 런타임, 만든 시각 `createdTime`, 체크포인트 시각 `checkpointedTime` (JSON)[12] |
+| `spec.dump` | 컨테이너의 OCI 런타임 스펙과 주석(`annotations`) (JSON)[12] |
+| `checkpoint/` | CRIU 이미지 파일[12] |
+| `rootfs-diff.tar` | 루트 파일 시스템 변경분[4][12] |
+| `deleted.files` | 지운 파일의 경로 목록 (JSON 문자열 배열)[12] |
+| `devshm-checkpoint.tar` | 컨테이너의 `/dev/shm` 디렉터리 내용 (Podman)[19] |
+| `network.status` | Podman 네트워크 인터페이스별 IP·MAC·게이트웨이 (JSON)[12] |
+| `dump.log` | CRIU 덤프 로그[12] |
+| `status` | containerd 가 만든 아카이브에만 있는 상태 파일 (`CreatedAt`, `StartedAt`, `FinishedAt`, `Pid` 등)[12] |
+
+`checkpoint/` 안의 CRIU 이미지는 파일마다 맨 앞에 32비트 매직 값(파일 종류)이 오고 필요하면 두 번째 매직 값(하위 종류)이 더 붙으며, 그 뒤로 32비트 크기와 protobuf 항목이 이어지는 형식입니다[13]. CRIU 이미지를 사람이 읽는 형식으로 푸는 도구 CRIT 로 내용을 볼 수 있습니다[13]. 프로세스 트리는 `pstree.img`, 레지스터와 시그널 마스크는 `core-PID.img`, 주소 공간(VMA)은 `mm-PID.img` 에 있습니다[13]. 열린 파일 디스크립터는 `fdinfo-*.img`, IPv4·IPv6 소켓은 `inetsk-*.img` 에 있고, `tcp-stream-*.img` 에는 큐에 남아 있던 데이터까지 포함한 TCP 연결 상태가 들어 있습니다[13].
+
+메모리는 두 파일로 나뉩니다. `pagemap-*.img` 의 항목은 가상 주소 `vaddr` 와 페이지 수 `nr_pages` 로 어느 주소에 몇 페이지가 들어가는지 적고, `pages-*.img` 는 4KB 페이지를 pagemap 항목 순서대로 이어 붙인 원시 데이터입니다[14]. 그래서 특정 가상 주소의 내용은 pagemap 항목의 페이지 수를 앞에서부터 더해 pages 파일 안의 위치를 계산해서 찾습니다[14]. CRIU 는 메모리에 올라와 있지 않은 페이지와, 파일을 매핑했지만 고치지 않아 파일과 내용이 같은 페이지는 덤프하지 않습니다[15]. 실행 파일이나 라이브러리 코드처럼 고치지 않은 파일 매핑 내용은 pages 파일에 없으므로 원본 파일에서 봅니다.
+
+이미지를 직접 풀지 않고 내용을 보려면 checkpointctl 을 씁니다. `show` 는 이미지·엔진·만든 시각·체크포인트 크기·루트 파일 시스템 변경 크기를 한 줄로 보여 줍니다[12]. `inspect` 는 `--ps-tree-cmd`(명령줄을 포함한 프로세스 트리), `--ps-tree-env`(환경 변수), `--files`(열린 파일 디스크립터), `--sockets`, `--mounts`, `--metadata`, `--stats` 를 골라 출력하고, `--format json` 으로 JSON 을 냅니다[12]. `memparse` 는 프로세스별 메모리 크기를 보여 주고, `--pid` 로 프로세스를 정해 `--search`·`--search-regex` 로 메모리 페이지에서 문자열을 찾으며 `--context` 로 앞뒤 바이트를 함께 출력합니다(검색은 v1.3.0 부터)[12]. v1.6.0(2026-08) 부터는 `diff` 로 두 체크포인트의 프로세스 트리·파일 디스크립터·소켓·메모리 크기 변화를 비교할 수 있습니다[12]. `list` 는 기본으로 `/var/lib/kubelet/checkpoints/` 의 체크포인트를 나열합니다[12]. 환경 변수와 메모리 검색 결과에는 비밀번호·토큰·세션 키가 그대로 나올 수 있어서[18], 출력 파일도 아카이브와 같은 수준으로 접근을 막습니다.
+
+**시각.** kubelet 은 런타임에 체크포인트를 요청하기 직전의 노드 시계 값을 `time.Now().Format(time.RFC3339)` 로 파일 이름에 붙입니다[16]. 그래서 이름의 시각은 초 단위이고 노드 현지 시간대의 오프셋이 붙으며, 노드가 UTC 이면 `Z` 로 끝납니다[16]. 예를 들어 `checkpoint-web_default-app-2026-09-01T11:15:30+09:00.tar`(만든 예시)는 한국 시간대 노드에서 만든 이름입니다. 컨테이너를 만든 시각은 파일 이름이 아니라 `config.dump` 의 `createdTime` 에서 따로 봅니다[12]. 시각 값 읽는 법은 [Linux 의 시각 값](../../01-foundations/value-decoding/time-values.md)을 봅니다.
+
+**증분 덤프.** CRIU 는 `/proc/PID/clear_refs` 에 4 를 써서 추적을 켜고, 그 뒤 `/proc/PID/pagemap` 의 soft-dirty 비트로 바뀐 페이지를 찾습니다[17]. 이 기능은 Linux 3.11 에 들어가 3.18 까지 다듬어졌고, `criu check --feature mem_dirty_track` 로 지원 여부를 확인합니다[17]. `--track-mem` 은 추적 상태를 초기화하고, `--prev-images-dir` 에 이전 `dump`·`pre-dump` 이미지 경로를 주면 그 뒤 바뀐 페이지만 덤프합니다[17]. 이렇게 만든 이미지에서 pagemap 항목의 `in_parent` 가 켜져 있으면 그 페이지 내용은 부모 이미지에 있고, 부모 이미지도 다시 자기 부모를 가리킬 수 있습니다[14]. 증분 이미지 하나만으로는 프로세스 메모리 전체를 되살릴 수 없어서, 처음 전체 덤프까지 이어지는 이미지를 모두 확보합니다.
+
+**연속 스냅숏(FSC).** 증분 체크포인트를 짧은 간격으로 이어 떠서 시간 순서가 있는 스냅숏 묶음을 만드는 방법으로 포렌식 스냅숏 체인 (Forensic Snapshot Chains, FSC) 이 있습니다[18]. 보안 경보가 울리면 컨테이너를 정해진 간격으로 체크포인트하되 soft-dirty 비트로 앞 스냅숏 뒤 바뀐 페이지만 저장하고, 스냅숏마다 SHA-256 해시를 계산해 앞 스냅숏의 해시와 함께 담아 사슬로 잇습니다[18]. 중간 스냅숏 하나를 고치면 그 뒤 해시가 모두 맞지 않게 됩니다[18]. 분석할 때는 이웃한 두 스냅숏을 비교해서, 뒤 스냅숏에만 있는 프로세스·소켓·메모리 내용은 앞 스냅숏 뒤에 생겼고 앞 스냅숏에만 있던 것은 뒤 스냅숏 전에 사라졌다고 순서를 정합니다[18]. Stoyanov 등(2026)은 노드 2대(각 52코어, 메모리 62GB, 디스크 3TB, Ubuntu 22.04)에 CRI-O v1.32.12 와 CRIU v4.2 로 구성한 Kubernetes 클러스터에서 2~3초 간격으로 스냅숏을 뜨고 각 실험을 10번 되풀이했습니다[18]. 이 조건에서 `at` 로 예약해 디스크에 쓰지 않고 메모리에서만 도는 파이썬 코드가 NGINX 워커 메모리를 읽는 경우, 43초 동안 뜬 스냅숏 19개(약 2.4초 간격)에서 `at` 작업, 잠깐 돌고 끝난 `python3` 프로세스, 디코딩된 코드, 밖으로 나간 HTTP 연결이 모두 확인됐고 이 흔적은 컨테이너 로그와 파일 시스템에는 없었습니다[18]. 한 번 떠서 전체를 담는 체크포인트와 비교하면 스냅숏 크기는 DSVW(취약점 실습용 웹 앱)가 8.6MB 에서 553KB 로, NGINX 가 217MB 에서 15MB 로 줄었습니다[18]. 프로세스가 멈춘 시간은 255.7ms 에서 240.3ms, 1271.6ms 에서 1194.9ms 로 약 6% 줄었고, 3초 간격으로 뜨면 시간당 DSVW 약 663MB, NGINX 약 18GB 가 쌓였습니다[18].
+
+스냅숏 사이에 시작해서 끝난 행위는 프로세스나 소켓으로 남지 않을 수 있고, 간격을 좁히거나 무작위로 바꿔도 빈틈은 남습니다[18]. 그래서 두 스냅숏 사이에 나타난 흔적은 그 구간 안에서 생겼다는 것까지만 알 수 있고, 구간 안의 정확한 시각은 다른 기록으로 좁혀야 합니다. 이 방법은 호스트 커널·CRIU·컨테이너 런타임을 믿는다는 전제라서 커널 루트킷이 있거나 CRIU·체크포인트 메타데이터가 조작된 호스트에서 뜬 스냅숏은 믿기 어렵고, 스냅숏을 뜨기 전에 지워진 컨테이너는 분석할 수 없습니다[18]. 커널이 지원하지 않는 기능이나 GPU 같은 장치 때문에 체크포인트가 실패하면 일부만 담긴 스냅숏이 생기고[18], checkpointctl 의 메모리 분석은 문자열·바이트를 뽑는 수준이라 언어 런타임의 자료 구조는 따로 해석해야 합니다[18].
+
 ## 참고 문헌
 
 1. tclahr, UAC — `artifacts/live_response/containers/docker.yaml`, `podman.yaml`, `containerd.yaml`, `lxc.yaml`. https://github.com/tclahr/uac/tree/main/artifacts/live_response/containers
@@ -113,3 +144,12 @@ Docker·Podman·LXC 같은 컨테이너 런타임이 돌던 호스트를 조사�
 8. Linux kernel — Overlay Filesystem (`Documentation/filesystems/overlayfs.rst`). https://github.com/torvalds/linux/blob/master/Documentation/filesystems/overlayfs.rst
 9. Docker Docs — OverlayFS storage driver. https://github.com/docker/docs/blob/main/content/manuals/engine/storage/drivers/overlayfs-driver.md
 10. Docker Docs — containerd image store with Docker Engine. https://github.com/docker/docs/blob/main/content/manuals/engine/storage/containerd.md
+11. Kubernetes — Feature Gates (`ContainerCheckpoint`). https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
+12. checkpoint-restore, checkpointctl — `README.md`, `lib/metadata.go`, `docs/checkpointctl-*.adoc`, 릴리스 노트(v1.3.0, v1.6.0). https://github.com/checkpoint-restore/checkpointctl
+13. CRIU — Images. https://criu.org/Images
+14. CRIU — Memory dumps. https://criu.org/Memory_dumps
+15. CRIU — Memory dumping and restoring. https://criu.org/Memory_dumping_and_restoring
+16. Kubernetes — `pkg/kubelet/kubelet.go` (`CheckpointContainer`). https://github.com/kubernetes/kubernetes/blob/master/pkg/kubelet/kubelet.go
+17. CRIU — Memory changes tracking. https://criu.org/Memory_changes_tracking
+18. Stoyanov, R., Goldoni, L., Reber, A., Hargreaves, C., Bruno, R. "Forensic analysis of container snapshot chains for post-event reconstruction." Forensic Science International: Digital Investigation 57 (Supplement), 302114, 2026 (DFRWS USA 2026). doi:10.1016/j.fsidi.2026.302114. https://www.dpss.inesc-id.pt/~rbruno/papers/rstoyanov-dfrws-usa26.pdf
+19. Podman — `libpod/container_internal_common.go` (`/dev/shm` 체크포인트 처리). https://github.com/containers/podman/blob/main/libpod/container_internal_common.go

@@ -232,6 +232,7 @@ Get-WinEvent -FilterHashtable @{ Path = 'E:\case\Application.evtx'; ProviderName
 | 섀도 복사본 | 지운 `rasphone.pbk` 의 예전 내용 | [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) |
 | 로그온·로그오프 | 접속 시각에 로그온해 있던 사용자 | [로그온·로그오프](../event-logs/logon-events/index.md) |
 | 시간대 설정 | 다른 현지 시각 기록과 맞출 때 | [시간대 설정](../system-account/time-zone.md) |
+| 테일스케일 | 내장 VPN 대신 테일스케일을 쓴 기록 | [테일스케일](tailscale.md) |
 
 ## 실습
 
