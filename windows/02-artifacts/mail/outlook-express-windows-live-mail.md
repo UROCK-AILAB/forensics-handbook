@@ -14,7 +14,7 @@ nav_order: 1960
 |---|---|
 | 판과 함께 나온 Windows, 날짜, 저장 형식, 프로토콜 | 위키백과[1][2][3] |
 | 파일·폴더 위치 | 흔한 설명. 실제 데이터로 확인 |
-| 레지스트리 위치 | 흔한 설명. 공개 자료 없음, 이 페이지에 적지 않음 |
+| 레지스트리 위치 | 흔한 설명. 사용자 레지스트리 하이브에서 저장 폴더 경로를 문자열로 검색해 확인 |
 | `.dbx` 의 시그니처·헤더 오프셋·내부 구조 | 공개 명세 없음. 이 페이지에 적지 않음 |
 | ESE 데이터베이스를 다룰 때의 주의 | 다른 ESE 파일에 흔한 내용. `MSMessageStore` 는 실제 데이터로 확인 |
 
@@ -62,7 +62,7 @@ Windows Mail 은 Windows Vista 에 들어 있었고[3], Windows 7 에서는 빠�
 | Windows Mail (Vista) | `%LOCALAPPDATA%\Microsoft\Windows Mail\`, 데이터베이스 파일 `WindowsMail.MSMessageStore` |
 | Windows Live Mail | `%LOCALAPPDATA%\Microsoft\Windows Live Mail\` 와 계정별 하위 폴더, 계정 파일 `account{GUID}.oeaccount` |
 
-- Outlook Express 의 저장 폴더와 계정 설정이 레지스트리에 있다는 설명도 흔합니다. 키 이름은 공개 문서에 나와 있지 않아 적지 않습니다.
+- Outlook Express 의 저장 폴더와 계정 설정이 레지스트리에 있다는 설명도 흔합니다. 키 이름은 사용자 레지스트리 하이브에서 저장 폴더 경로를 문자열로 검색해 찾습니다.
 - 기본 위치만 보지 않습니다. 디스크 전체에서 확장자(`.dbx`·`.mbx`·`.eml`·`.oeaccount`)와 이름(`MSMessageStore`)으로 찾습니다.
 - Windows 11 25H2(빌드 26200)에는 기본으로 `%LOCALAPPDATA%\Microsoft\Windows Live Mail` 과 `%LOCALAPPDATA%\Microsoft\Windows Mail` 폴더가 없습니다.
 

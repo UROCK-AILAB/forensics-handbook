@@ -53,9 +53,9 @@ iOS 는 파일 시스템 키를 감싸는 키를 지울 수 있는 저장소 (Ef
 | `SetupLastExit` | datetime | [4] 는 설정 지원을 끝낸 시각으로 보고, [2] 는 사용자가 설정 화면에서 마지막으로 무언가 바꾼 시각을 반영해 믿기 어렵다고 봅니다[2][4] |
 | `SetupState` | str | 설정 방법. "SetupUsingAssistant"(기기 간 이전 또는 로컬 백업), "RestoredFromCloudBackup"(iCloud 복원)[4], "RestoredFromDevice"(기기 간 이전)[3]. iCloud 복원 값을 "RestoredFromiCloudBackup" 으로 적은 자료도 있어서[2] 자료마다 표기가 다릅니다 |
 | `lastPrepareLaunchSentinel` | list | 설정 완료 표시로 쓸 수 있습니다[3] |
-| `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion` | bool·int | 공개 자료 없음 |
+| `SetupDone`, `SetupFinishedAllSteps`, `SetupVersion`, `RestoreChoice`, `RestoredMobileSyncSettings`, `setupMigratorVersion` | bool·int | 뜻이 정해져 있지 않음. 시험 기기에서 설정 과정을 다시 거쳐 값이 바뀌는지로 확인 |
 
-`Language`, `Locale`, `UserChoseLanguage`, `PrivacyPresented`, `ScreenTimePresented`, `AutoUpdatePresented` 처럼 설정 화면을 보여 줬는지 적는 키도 함께 있습니다. 같은 계열로 `com.apple.SetupAssistant.plist`(`CKPerBootTasks`, `CKStartupTime`), `com.apple.setupassistant.privacypane.plist`(`HasSeenPrivacy`, `LastSeenPrivacyVersion`), `com.apple.keyboard.plist` 의 `BuddySetupDone` 도 있지만, 이 키로 초기화·복원을 판단하는 공개 자료는 없습니다.
+`Language`, `Locale`, `UserChoseLanguage`, `PrivacyPresented`, `ScreenTimePresented`, `AutoUpdatePresented` 처럼 설정 화면을 보여 줬는지 적는 키도 함께 있습니다. 같은 계열로 `com.apple.SetupAssistant.plist`(`CKPerBootTasks`, `CKStartupTime`), `com.apple.setupassistant.privacypane.plist`(`HasSeenPrivacy`, `LastSeenPrivacyVersion`), `com.apple.keyboard.plist` 의 `BuddySetupDone` 도 있지만, 이 키만으로 초기화·복원을 판단하지 않습니다.
 
 ### 첫 설정 완료와 복원 방법 — `data_ark.plist`
 
@@ -81,9 +81,9 @@ AccountEnabledDate (datetime)
 
 ### 다른 기기에서 옮긴 기록 — `com.apple.migration.plist` 와 `ZMIGRATIONHISTORY`
 
-`com.apple.migration.plist` 에는 `RestoredBackupProductType`(원래 기기 모델 ID), `BackupDeviceUUID`(어디서 온 값인지 밝혀지지 않은 식별자), `Reason`(대상 기기 UDID 와 복원 일시)이 남습니다[4]. 로컬 백업에는 이 파일 대신 `AppDomain-com.apple.Migration` 도메인이 있을 수 있고, 그 내용을 밝힌 공개 자료는 없습니다.
+`com.apple.migration.plist` 에는 `RestoredBackupProductType`(원래 기기 모델 ID), `BackupDeviceUUID`(어디서 온 값인지 분명하지 않은 식별자), `Reason`(대상 기기 UDID 와 복원 일시)이 남습니다[4]. 로컬 백업에는 이 파일 대신 `AppDomain-com.apple.Migration` 도메인이 있을 수 있으니, 그 안의 파일을 열어 같은 키가 있는지 확인합니다.
 
-사진 보관함 DB 인 `Photos.sqlite` 의 `ZMIGRATIONHISTORY` 표도 이전 과정을 적습니다[3]. `ZMIGRATIONDATE` 는 이전 시각, `ZOSVERSION` 은 iOS 빌드입니다. `ZORIGIN` 은 제한된 시험에서 3 이면 다른 기기에서 온 데이터, 2 면 출처를 알 수 없는 이전이었습니다[3]. `ZSOURCEMODELVERSION` 은 비어 있는 행이 있고, 그 뜻을 밝힌 공개 자료는 없습니다. 표의 열은 다음과 같습니다.
+사진 보관함 DB 인 `Photos.sqlite` 의 `ZMIGRATIONHISTORY` 표도 이전 과정을 적습니다[3]. `ZMIGRATIONDATE` 는 이전 시각, `ZOSVERSION` 은 iOS 빌드입니다. `ZORIGIN` 은 제한된 시험에서 3 이면 다른 기기에서 온 데이터, 2 면 출처를 알 수 없는 이전이었습니다[3]. `ZSOURCEMODELVERSION` 은 비어 있는 행이 있고, 뜻이 정해져 있지 않으므로 보고서에는 값만 옮깁니다. 표의 열은 다음과 같습니다.
 
 ```
 Z_PK, Z_ENT, Z_OPT, ZCPLENABLED, ZFORCEREBUILDREASON, ZINDEX, ZMIGRATIONTYPE, ZMODELVERSION, ZORIGIN,
@@ -95,11 +95,11 @@ ZOSVERSION, ZSTOREUUID, ZGLOBALKEYVALUES
 
 ### OS 업데이트 기록 — `restore.log`
 
-`restore.log` 에는 "data = " 뒤에 JSON 조각이 들어 있고, 필드는 `eventTime`(Unix 시각), `originalOSVersion`(이전 빌드), `currentOSVersion`(이후 빌드), `event`(대부분 "updateFinished"), `deviceClass`, `deviceModel`, `batteryIsCharging` 입니다[5]. 파일 이름에 restore 가 들어 있지만 업데이트 기록이고, 초기화도 기록하는지는 알려져 있지 않습니다[5]. 로컬 백업에는 이 파일이 들어 있지 않을 수 있고, RootDomain `Library/Preferences/com.apple.MobileSoftwareUpdate.plist` 는 키가 비어 있을 수 있습니다.
+`restore.log` 에는 "data = " 뒤에 JSON 조각이 들어 있고, 필드는 `eventTime`(Unix 시각), `originalOSVersion`(이전 빌드), `currentOSVersion`(이후 빌드), `event`(대부분 "updateFinished"), `deviceClass`, `deviceModel`, `batteryIsCharging` 입니다[5]. 파일 이름에 restore 가 들어 있지만 업데이트 기록입니다[5]. 초기화도 기록하는지는 시험 기기를 초기화한 뒤 이 파일에 새 줄이 생기는지로 확인합니다. 로컬 백업에는 이 파일이 들어 있지 않을 수 있고, RootDomain `Library/Preferences/com.apple.MobileSoftwareUpdate.plist` 는 키가 비어 있을 수 있습니다.
 
-### 뜻이 밝혀지지 않은 복원·이전 표시
+### 실제 데이터로 뜻을 확인할 복원·이전 표시
 
-아래 키는 이름으로 보면 복원·이전과 관계있어 보이지만, 뜻을 설명한 공개 문서는 없어서 키 이름만 적습니다.
+아래 키는 이름으로 보면 복원·이전과 관계있어 보이지만 뜻이 정해져 있지 않아서 키 이름만 적습니다. 값의 뜻은 시험 기기에서 복원·이전을 재현해 확인합니다.
 
 | 파일(HomeDomain) | 키 |
 |---|---|
@@ -110,7 +110,7 @@ ZOSVERSION, ZSTOREUUID, ZGLOBALKEYVALUES
 | `Library/DeviceRegistry.state/GlobalState.plist` | `restoreTracker.identifier`, `restoreTracker.state` |
 | `Library/Preferences/com.apple.icloud.findmydeviced.postwipe.plist` | 파일은 있고 키는 비어 있을 수 있음 |
 
-`com.apple.icloud.findmydeviced.postwipe.plist` 는 이름으로 보면 원격 지우기와 관계있어 보입니다. Safari 쪽에도 설정 지원 전용 웹 데이터 `AppDomain-com.apple.mobilesafari` `Library/WebKit/com.apple.purplebuddy/WebsiteData/ResourceLoadStatistics/observations.db` 가 있고, 이를 해석한 공개 자료는 없습니다.
+`com.apple.icloud.findmydeviced.postwipe.plist` 는 이름으로 보면 원격 지우기와 관계있어 보입니다. Safari 쪽에도 설정 지원 전용 웹 데이터 `AppDomain-com.apple.mobilesafari` `Library/WebKit/com.apple.purplebuddy/WebsiteData/ResourceLoadStatistics/observations.db` 가 있습니다.
 
 ## 증거로서 의미
 
@@ -124,7 +124,7 @@ ZOSVERSION, ZSTOREUUID, ZGLOBALKEYVALUES
 **증명하지 못하는 것**
 
 - 지우기를 누른 시각 자체는 알려 주지 않습니다. 남는 시각은 초기화 뒤 첫 부팅이나 설정 단계 시각입니다[2].
-- 누가, 어떤 방법(직접·iCloud·MDM·Exchange)으로 지웠는지 구별하지 못합니다. 네 방법 모두 같은 키 삭제를 쓰고[1], 기기 안에서 방법을 구별하는 흔적은 알려져 있지 않습니다. 원격 지우기 쪽은 [나의 찾기](../location/find-my.md), [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md), [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에서 기기 밖 기록과 맞춰 봅니다.
+- 누가, 어떤 방법(직접·iCloud·MDM·Exchange)으로 지웠는지 구별하지 못합니다. 네 방법 모두 같은 키 삭제를 씁니다[1]. 원격 지우기 쪽은 [나의 찾기](../location/find-my.md), [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md), [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에서 기기 밖 기록과 맞춰 봅니다.
 - 초기화 전에 어떤 데이터가 있었는지는 알려 주지 않고, 그 데이터를 되살릴 수도 없습니다[1].
 - 초기화를 증거 인멸 목적으로 했다는 뜻은 담기지 않습니다. 보고서에는 "이 시각 무렵 초기화 뒤 첫 부팅 기록이 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
@@ -153,7 +153,7 @@ iCloud 백업으로 복원한 기기는 이전 기기의 설정값이 되살아�
 
 로컬 백업만 확보한 경우에는 `.obliterated`, containermanagerd 로그, `data_ark.plist`, `restore.log` 를 보지 못할 수 있습니다. 백업 안의 `AddressBook.sqlitedb` 는 HomeDomain `Library/AddressBook/AddressBook.sqlitedb` 로 들어 있지만, 백업 파일의 생성 시각은 원본 기기의 생성 시각과 다를 수 있습니다. 생성 시각 방법[2]을 백업에 그대로 쓸 수 있는지는 실제 데이터로 확인해야 합니다.
 
-자료가 시험한 버전은 iOS 13.7·14.2[2], 15.1·16.7.5[3] 이라, iOS 17 이후에도 키의 뜻이 같은지는 실제 데이터로 확인합니다. iOS 27.0 백업에도 같은 이름의 키가 있습니다. 컴퓨터로 펌웨어를 다시 설치해 복원한 경우 위 흔적이 어떻게 달라지는지 설명한 공개 문서는 없습니다.
+자료가 시험한 버전은 iOS 13.7·14.2[2], 15.1·16.7.5[3] 이라, iOS 17 이후에도 키의 뜻이 같은지는 실제 데이터로 확인합니다. iOS 27.0 백업에도 같은 이름의 키가 있습니다. 컴퓨터로 펌웨어를 다시 설치해 복원한 경우 위 흔적이 어떻게 달라지는지는 시험 기기에서 재현해 확인합니다.
 
 ## 직접 분석해 보기
 

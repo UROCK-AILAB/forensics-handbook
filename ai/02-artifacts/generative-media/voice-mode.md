@@ -18,18 +18,16 @@ Gemini 앱은 활동 기록 저장(Keep Activity)이 켜져 있으면 오디오 
 
 회사 계정으로 쓰는 Microsoft Copilot 은 2025년 11월부터 음성 대화를 새로 시작할 수 있고, 음성 대화의 글 기록(text transcripts)을 일반 Copilot 대화처럼 저장해 보존·eDiscovery·감사 정책을 적용하며, 사용자와 Copilot 의 음성은 저장하지 않습니다[5]. 이 설명은 회사 계정에 대한 것이라, 개인 계정으로 쓰는 Copilot 에 그대로 적용하지 않습니다.
 
-ChatGPT 는 음성 오디오를 서버에 얼마나 보관하는지 밝힌 공식 문서가 없어서, 기록 쪽 흔적으로 봅니다. 계정 내보내기의 메시지에는 `metadata.voice_mode_message` 필드가 있고[2], iOS 앱은 대화 파일의 같은 필드와 함께 앱 폴더의 `tmp/` 아래에 `m4a` 녹음 파일을 둘 수 있습니다[3]. Claude 앱 음성 모드의 흔적은 실제 기기와 계정 내보내기로 확인해야 합니다.
+ChatGPT 음성 모드를 썼는지는 기록 쪽 흔적으로 봅니다. 계정 내보내기의 메시지에는 `metadata.voice_mode_message` 필드가 있고[2], iOS 앱은 대화 파일의 같은 필드와 함께 앱 폴더의 `tmp/` 아래에 `m4a` 녹음 파일을 둘 수 있습니다[3]. Claude 앱 음성 모드의 흔적은 실제 기기와 계정 내보내기로 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
 | 서비스 | 원본이 있는 곳 | 보관 | 기기·내보내기에 남는 것 | 근거 |
 |---|---|---|---|---|
 | Gemini 앱 | 서버의 활동 기록 | 활동 기록 저장이 켜져 있으면 기본 18개월 뒤 자동 삭제, 3개월·36개월·자동 삭제 안 함으로 바꿀 수 있음. 꺼져 있거나 임시 채팅이면 계정에 72시간 보관 | 기기에 녹음 파일이 남는지는 실제 기기로 확인 | Privacy Hub[1] |
-| ChatGPT | 서버의 대화 기록 | 공식 문서 없음. 계정 내보내기로 확인 | 내보내기 `conversations.json` 의 `metadata.voice_mode_message`[2], iOS 대화 파일의 `metadata.voice_mode_message`와 `tmp/recordings/*.m4a`·`tmp/*/*.m4a`[3], Android 예전 DB 형식의 `is_voice_message`[4] | RLEAPP·iLEAPP·ALEAPP 코드 |
+| ChatGPT | 서버의 대화 기록 | 계정 내보내기로 확인 | 내보내기 `conversations.json` 의 `metadata.voice_mode_message`[2], iOS 대화 파일의 `metadata.voice_mode_message`와 `tmp/recordings/*.m4a`·`tmp/*/*.m4a`[3], Android 예전 DB 형식의 `is_voice_message`[4] | RLEAPP·iLEAPP·ALEAPP 코드 |
 | Microsoft Copilot(회사 계정) | Microsoft 365 쪽 대화 기록 | 글 기록은 조직의 보존 정책을 따르고, 음성은 저장하지 않음 | 글 기록은 보존·eDiscovery·감사 대상 | Microsoft Learn[5] |
 | Meta AI(Ray-Ban Meta 안경) | Meta 계정 클라우드 | "Delete Voice Activity" 로 클라우드의 대화 기록이 지워짐 | Android 앱 `interaction_log.db` 에서 음성 질문이 `<redacted>` 로 바뀌어 있음 | 논문[6] |
-| Claude 앱 | 공개된 분석 자료가 없음 | 실제 기기로 확인 | 실제 기기로 확인 | 없음 |
-
 ChatGPT 도구의 시험 범위는 다음과 같습니다. RLEAPP 의 내보내기 파서는 2024-07-09 에 마지막으로 검증했습니다[2]. iLEAPP 의 대화 파서는 앱 1.2024.178 까지를 다루고, 시험 이미지는 iOS 17 의 ChatGPT 1.2024.219·1.2024.233 입니다[3]. ALEAPP 의 대화 파서는 1.2024.177 까지 시험했습니다[4]. 2026년 판 앱은 이 범위를 넘으므로 필드 이름과 경로가 그대로인지 실제 데이터로 다시 확인합니다.
 
 기기 쪽에서 볼 곳은 운영체제마다 다릅니다. 앱이 마이크를 쓰려면 권한을 받아야 해서, macOS 에서는 [개인 정보 보호 권한](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/credentials/tcc/index.html)에서 어떤 앱이 마이크 권한을 받았는지부터 봅니다. Android 와 iOS 에서는 앱 데이터 폴더에서 캐시나 임시 음성 파일을 찾고, 폴더 구조는 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)와 [데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)를 따릅니다. Windows·macOS 데스크톱 앱이 웹뷰로 만든 앱이면 [Electron·웹뷰 앱의 저장 구조](../../01-foundations/storage-model/electron-webview.md)의 캐시·저장소 원리대로 찾습니다.
@@ -38,7 +36,7 @@ ChatGPT 도구의 시험 범위는 다음과 같습니다. RLEAPP 의 내보내�
 
 ### 서버의 활동 기록과 계정 내보내기
 
-Gemini 의 활동 기록에는 대화와 함께 오디오 녹음, Gemini Live 대화 기록, 영상·화면 공유가 한 계정 아래 쌓이고, Google Takeout 으로 내보낼 수 있습니다[1]. 내보낸 묶음에서 음성 파일이 어느 폴더에 어떤 형식으로 들어 있는지는 공개된 분석 자료가 없어서, 아래 "직접 분석해 보기" 의 시작 바이트 표로 구분합니다. 계정 내보내기 형식의 일반 원리는 [계정 데이터 내보내기 형식](../../01-foundations/storage-model/data-export-formats.md)에, 수집 절차는 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)에 있습니다.
+Gemini 의 활동 기록에는 대화와 함께 오디오 녹음, Gemini Live 대화 기록, 영상·화면 공유가 한 계정 아래 쌓이고, Google Takeout 으로 내보낼 수 있습니다[1]. 내보낸 묶음에서 음성 파일이 어느 폴더에 어떤 형식으로 들어 있는지는 아래 "직접 분석해 보기" 의 시작 바이트 표로 구분합니다. 계정 내보내기 형식의 일반 원리는 [계정 데이터 내보내기 형식](../../01-foundations/storage-model/data-export-formats.md)에, 수집 절차는 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)에 있습니다.
 
 ChatGPT 계정 내보내기의 `conversations.json` 에서는 메시지마다 `metadata` 아래 `voice_mode_message` 필드를 봅니다. RLEAPP 는 이 필드를 "Voice Chat" 열로 따로 보여 줍니다[2]. 내보내기의 다른 필드는 [ChatGPT 계정 내보내기](../chat-services/chatgpt/export.md)에 있습니다. 내보내기 묶음에 음성 파일이 따로 들어 있는지는 받은 묶음에서 아래 시작 바이트 표로 직접 찾아 확인합니다.
 
@@ -70,7 +68,7 @@ Ray-Ban Meta 안경으로 Meta AI 에 한 음성 질문은 짝지은 Android 휴
 
 ## 시각 해석
 
-Gemini 활동 기록의 시각을 화면과 내보내기 파일에서 어느 시간대로 보여 주는지는 공식 문서에 없어서, 실제 데이터에서 표기를 먼저 봅니다. 보관 규칙도 시각 해석에 영향을 줍니다. 기본 설정이면 18개월보다 오래된 활동은 이미 지워졌을 수 있고, 활동 기록 저장이 꺼져 있었다면 72시간이 지나면 계정에서 찾을 수 없습니다[1]. 이런 기록이 필요한 사건은 보존 요청을 서둘러야 합니다([서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)).
+Gemini 활동 기록의 시각을 화면과 내보내기 파일에서 어느 시간대로 보여 주는지는 실제 데이터에서 표기를 먼저 보고 확인합니다. 보관 규칙도 시각 해석에 영향을 줍니다. 기본 설정이면 18개월보다 오래된 활동은 이미 지워졌을 수 있고, 활동 기록 저장이 꺼져 있었다면 72시간이 지나면 계정에서 찾을 수 없습니다[1]. 이런 기록이 필요한 사건은 보존 요청을 서둘러야 합니다([서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)).
 
 ChatGPT 내보내기의 메시지 `create_time` 은 유닉스 초이고, RLEAPP 는 UTC 로 바꿔 보여 줍니다[2]. iOS 대화 파일의 메시지 `create_time` 도 유닉스 초입니다[3]. `tmp` 의 `m4a` 는 iLEAPP 가 시각 열 없이 파일 이름과 경로만 보여 주므로[3], 파일 시스템 시각을 대화 파일의 메시지 시각과 맞춰 봅니다.
 
@@ -84,7 +82,7 @@ ChatGPT 내보내기의 메시지 `create_time` 은 유닉스 초이고, RLEAPP 
 
 Meta AI 앱은 음성 질문을 기기 DB 에서 가리므로, 기기 DB 만 보고 "질문 내용이 없다" 고 쓰면 안 됩니다[6]. "Delete Voice Activity" 를 쓰면 클라우드의 대화 기록은 지워지지만 AI 로 만든 알림은 남습니다[6].
 
-ChatGPT 의 음성 필드와 경로는 2024년 판 앱으로 시험한 도구 코드에서 왔습니다[2][3][4]. Claude 앱 음성 모드는 공개된 분석 자료가 없으므로, 음성 원본이 남는지는 실제 기기로 확인합니다.
+ChatGPT 의 음성 필드와 경로는 2024년 판 앱으로 시험한 도구 코드에서 왔습니다[2][3][4]. Claude 앱 음성 모드에서 음성 원본이 남는지는 실제 기기로 확인합니다.
 
 ## 직접 분석해 보기
 

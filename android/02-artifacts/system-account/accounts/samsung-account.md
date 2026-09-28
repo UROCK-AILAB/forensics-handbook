@@ -13,7 +13,7 @@ nav_order: 350
 
 ## 무엇을 기록하나 · 왜 생기나
 
-AccountManager 는 계정을 이름과 종류(type)의 쌍으로 구분하고 type 은 그 계정을 관리하는 인증기를 가리킵니다 [2]. 삼성 계정 앱의 패키지 이름과 type 이 `com.osp.app.signin` 이라는 이야기는 널리 알려져 있지만, 이 값을 밝힌 제조사 문서나 도구 문서는 공개되어 있지 않습니다. 그래서 삼성 계정 행을 가려낼 때는 실물 DB 의 type 값과 설치된 앱 목록을 함께 보고 판단한 근거를 보고서에 적습니다.
+AccountManager 는 계정을 이름과 종류(type)의 쌍으로 구분하고 type 은 그 계정을 관리하는 인증기를 가리킵니다 [2]. 삼성 계정 앱의 패키지 이름과 type 이 `com.osp.app.signin` 이라는 이야기는 널리 알려져 있지만, 제조사가 이 값을 문서로 밝히지는 않았습니다. 그래서 삼성 계정 행을 가려낼 때는 실물 DB 의 type 값과 설치된 앱 목록을 함께 보고 판단한 근거를 보고서에 적습니다.
 
 라이브 기기의 `dumpsys account` 출력에는 type 이 패키지 이름 모양인 계정 줄과 그렇지 않은 줄이 섞여 나옵니다. 어느 줄이 삼성 계정인지는 type 값을 설치된 앱 목록과 맞춰 구분합니다. 출력 모양은 [계정 DB 구조](accounts-db.md) 페이지의 dumpsys 절에 있습니다.
 
@@ -25,12 +25,12 @@ AccountManager 는 계정을 이름과 종류(type)의 쌍으로 구분하고 ty
 | `/data/system/sync/` | 계정·동기화 대상별 설정 | 구조는 [구글 계정 흔적](google-account.md) 참고 |
 | `settings` global·system·secure | 삼성 계정·동의·기기 이전 관련 키 | 키 이름만 알려짐, 값의 뜻은 실제 기기에서 확인 |
 | `/sdcard/Android/media/com.samsung.android.spay/` | 삼성 월렛·페이 앱 폴더 | 공용 저장 공간에 폴더가 생김 |
-| 삼성 계정 앱 내부 폴더 | DB·설정 파일 | 공개 자료 없음 |
-| 삼성 클라우드, 내 디바이스 찾기(SmartThings Find) 연동 | 연동 흔적 | 공개 자료 없음 |
+| 삼성 계정 앱 내부 폴더 | DB·설정 파일 | 전체 추출본의 앱 데이터 폴더에서 SQLite·XML 파일을 찾아 구조를 확인 |
+| 삼성 클라우드, 내 디바이스 찾기(SmartThings Find) 연동 | 연동 흔적 | 관련 앱의 데이터 폴더와 설정 키를 실제 기기에서 확인 |
 
 ## 구조 — 설정 키
 
-Android 16 삼성 기기의 `settings` 세 영역에는 아래 이름의 키가 있습니다. 각 키가 무엇을 뜻하는지, 삼성 계정 가입과 어떤 관계인지는 공개된 자료가 없어 실제 기기의 값으로 판단합니다.
+Android 16 삼성 기기의 `settings` 세 영역에는 아래 이름의 키가 있습니다. 각 키가 무엇을 뜻하는지, 삼성 계정 가입과 어떤 관계인지는 실제 기기의 값으로 판단합니다.
 
 | 영역 | 키 | 이름에 드러난 주제 |
 |---|---|---|
@@ -40,7 +40,7 @@ Android 16 삼성 기기의 `settings` 세 영역에는 아래 이름의 키가 
 | global | `dbsc_consent_tnc_agree_date`, `dbsc_consent_personal_ad_agree_date`, `dbsc_consent_customized_service_agree_date` (같은 머리의 `*_value` 키와 `dbsc_consent_tnc_country` 도 있음) | 동의 날짜 |
 | global | `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `quick_start_source_manufacturer` (같은 머리의 키가 몇 개 더 있음) | 기기 이전(Smart Switch)·빠른 시작 |
 
-`fingerprint_*` 두 키는 지문으로 삼성 계정을 확인하는 기능과 관련된 설정으로 보입니다. 기기 이전 쪽 키는 계정이 처음 등록된 무렵을 해석할 때 참고할 수 있지만, 두 쪽 모두 뜻을 밝힌 공개 자료는 없습니다. 설정 값을 읽는 법과 세 영역의 차이는 [설정 값 (Settings Global·Secure·System)](../settings.md) 페이지에 있습니다.
+`fingerprint_*` 두 키는 지문으로 삼성 계정을 확인하는 기능과 관련된 설정으로 보입니다. 기기 이전 쪽 키는 계정이 처음 등록된 무렵을 해석할 때 참고할 수 있지만, 두 쪽 모두 키 이름만으로 뜻을 단정할 수는 없습니다. 설정 값을 읽는 법과 세 영역의 차이는 [설정 값 (Settings Global·Secure·System)](../settings.md) 페이지에 있습니다.
 
 ## 증거로서 의미
 

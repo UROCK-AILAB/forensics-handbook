@@ -28,7 +28,7 @@ nav_order: 910
 | OBB | `/storage/emulated/0/Android/obb/com.kakao.talk` |
 | 설치 파일 | `/data/app/com.kakao.talk-(무작위 문자열)==/base.apk` |
 
-위 경로는 한 앱 버전, 에뮬레이터 기준입니다. 다른 앱 버전, 다른 Android 버전, 삼성 One UI 기기에서는 경로가 다를 수 있어 실제 기기에서 확인합니다. `/sdcard` 쪽에서 `Android/data/com.kakao.talk/cache` 말고 어떤 폴더를 쓰는지는 공개 자료가 없습니다. Android 11 이후 다른 앱이나 adb 가 `Android/data` 아래를 어디까지 읽을 수 있는지는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md)에서 다룹니다.
+위 경로는 한 앱 버전, 에뮬레이터 기준입니다. 다른 앱 버전, 다른 Android 버전, 삼성 One UI 기기에서는 경로가 다를 수 있어 실제 기기에서 확인합니다. `/sdcard` 쪽에서 `Android/data/com.kakao.talk/cache` 말고 어떤 폴더를 쓰는지는 공용 저장 공간에서 이름에 `com.kakao.talk` 이 들어간 폴더를 찾아 확인합니다. Android 11 이후 다른 앱이나 adb 가 `Android/data` 아래를 어디까지 읽을 수 있는지는 [공용 저장 공간 (Shared Storage·/sdcard)](../../../01-foundations/storage/shared-storage.md)에서 다룹니다.
 
 ## 구조
 
@@ -70,7 +70,7 @@ kakaotalk.cache.xml
 talk_pass_preferences.xml
 ```
 
-`KakaoTalk.vox.perferences.xml` 처럼 일부 파일 이름은 원래부터 "perferences" 로 철자가 틀려 있어서, 이름으로 검색할 때는 틀린 철자도 함께 넣어야 합니다. OAuth 토큰 같은 일부 값은 앱에 들어 있는 고정 키로 암호화돼 있어 XML 을 열어도 그대로 읽히지 않습니다[3]. 각 파일 안의 키 이름과 뜻은 공개 자료가 없습니다.
+`KakaoTalk.vox.perferences.xml` 처럼 일부 파일 이름은 원래부터 "perferences" 로 철자가 틀려 있어서, 이름으로 검색할 때는 틀린 철자도 함께 넣어야 합니다. OAuth 토큰 같은 일부 값은 앱에 들어 있는 고정 키로 암호화돼 있어 XML 을 열어도 그대로 읽히지 않습니다[3]. 각 파일 안의 키 이름은 XML 을 직접 열어 확인하고, 키의 뜻은 이름만 보고 단정하지 않습니다.
 
 ### 그 밖의 폴더
 

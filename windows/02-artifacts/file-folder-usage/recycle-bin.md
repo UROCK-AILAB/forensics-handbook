@@ -27,7 +27,7 @@ Vista 이후에는 이 정보를 항목마다 `$I` 파일에 적고, 원래 파�
 | Windows | 파일 시스템 | 폴더 | 정보 파일 | 근거 |
 |---|---|---|---|---|
 | 95·98·Me | FAT | `\RECYCLED\` | INFO 또는 INFO2 한 파일. Me 의 레코드는 280바이트 | Jones, libyal |
-| NT·2000·XP·2003 | NTFS | `\RECYCLER\<SID>\` | INFO2 한 파일. 레코드는 800바이트 (libyal 은 2000 이후로 적습니다. NT 는 공개 자료가 없습니다) | Jones, libyal |
+| NT·2000·XP·2003 | NTFS | `\RECYCLER\<SID>\` | INFO2 한 파일. 레코드는 800바이트 (libyal 은 2000 이후로 적습니다. NT 에서는 실제 INFO2 파일로 레코드 크기를 확인합니다) | Jones, libyal |
 | NT·2000·XP·2003 | FAT | `\RECYCLED\` | 사용자를 나누지 않고 한 폴더에 모읍니다 | Chen |
 | Vista·7·8·8.1 | NTFS | `\$Recycle.Bin\<SID>\` | 항목마다 `$I` 하나. 형식 버전 1 | libyal, RBCmd 시험 파일 |
 | 10·11 | NTFS | `\$Recycle.Bin\<SID>\` | 항목마다 `$I` 하나. 형식 버전 2 | libyal, Windows 11 25H2 |
@@ -53,7 +53,7 @@ Windows 11 25H2 의 `C:\$Recycle.Bin` 아래에는 사용자 SID 폴더와 함�
 
 - `NukeOnDelete` 는 1 이면 그 볼륨에서 지운 파일이 휴지통을 거치지 않는 설정으로 알려져 있습니다.
 - 지금 없는 볼륨의 키는 예전에 붙었던 볼륨의 실마리가 됩니다. 볼륨 GUID 는 [드라이브 문자 매핑 (MountedDevices)](../external-devices/usb-storage-artifacts/mounteddevices.md) 과 맞춰 봅니다.
-- 키가 언제 바뀌었는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 으로 봅니다. 이 키에서 이 시각이 무엇을 뜻하는지는 공개 자료가 없습니다.
+- 키가 언제 바뀌었는지는 [키 마지막 기록 시각](../../01-foundations/database-log-formats/registry-hive/last-write-time.md) 으로 봅니다. 이 키에서 이 시각이 무엇을 뜻하는지는 정해져 있지 않으므로, 설정을 바꾼 시각으로 단정하지 않습니다.
 
 ## 구조
 

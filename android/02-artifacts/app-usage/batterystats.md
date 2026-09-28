@@ -22,7 +22,7 @@ nav_order: 500
 /data/system/battery-history/
 ```
 
-버퍼가 차면 새 파일을 열고, 파일 수가 최대치를 넘거나 저장 공간이 100MB 아래로 떨어지면 번호가 작은(오래된) 파일부터 지웁니다 [2]. 최대 파일 수와 버퍼 크기는 `BatteryStatsImpl.Constants` 의 `MAX_HISTORY_FILES`, `MAX_HISTORY_BUFFER` 로 정하고, 구체 값은 판마다 다를 수 있어 소스나 실제 기기에서 확인합니다 [2]. settings global 에는 `battery_stats_constants` 라는 키가 있을 수 있는데, 이 키가 위 값을 바꾸는지 밝힌 공개 자료는 없습니다.
+버퍼가 차면 새 파일을 열고, 파일 수가 최대치를 넘거나 저장 공간이 100MB 아래로 떨어지면 번호가 작은(오래된) 파일부터 지웁니다 [2]. 최대 파일 수와 버퍼 크기는 `BatteryStatsImpl.Constants` 의 `MAX_HISTORY_FILES`, `MAX_HISTORY_BUFFER` 로 정하고, 구체 값은 판마다 다를 수 있어 소스나 실제 기기에서 확인합니다 [2]. settings global 에는 `battery_stats_constants` 라는 키가 있을 수 있는데, 이 키만 보고 위 값이 바뀌었다고 단정하지 않습니다.
 
 `/data/system/` 은 시스템 영역이라 루팅되지 않은 기기에서 파일을 직접 복사하기 어렵습니다. 대신 아래 방법으로 텍스트를 받을 수 있습니다 [1].
 
@@ -43,7 +43,7 @@ nav_order: 500
 
 ## 구조
 
-`.bh` 파일의 바이너리 형식은 공개 문서에 설명이 없어서, 여기서는 `dumpsys batterystats` 텍스트 출력의 모양을 정리합니다.
+여기서는 `.bh` 파일의 바이너리 형식 대신 `dumpsys batterystats` 텍스트 출력의 모양을 정리합니다.
 
 출력은 아래 모양의 머리줄로 시작합니다.
 
@@ -70,7 +70,7 @@ Battery History [Format: #] (##% used, ####KB used of ####KB, #### strings using
 | CPU 깨어남 | `+running`/`-running`, `wake_reason=`, `+wake_lock=`/`-wake_lock=` |
 | 화면 | `+screen`/`-screen`, `brightness=`, `screenwake=`, `display_state_changed=` |
 | 앱 작업 | `+job=`/`-job=` |
-| 뜻이 공개되지 않은 항목 | `-fg=`, `+state=`/`-state=`, `+tmpwhitelist=`/`-tmpwhitelist=` |
+| 뜻을 단정하기 어려운 항목 | `-fg=`, `+state=`/`-state=`, `+tmpwhitelist=`/`-tmpwhitelist=` |
 | 장치 | `+gps`/`-gps`, `gps_signal_quality=`, `+camera`/`-camera`, `+audio`/`-audio`, `+sensor`/`-sensor` |
 | 통신 | `+wifi_scan`/`-wifi_scan`, `conn=`, `cellular_high_tx_power` |
 | 삼성 기기 추가 항목 | `ap_temp=`, `pa_temp=`, `skin_temp=`, `txshare_event=`, `current_event=`, `misc_event=` |
@@ -107,7 +107,7 @@ Battery History [Format: #] (##% used, ####KB used of ####KB, #### strings using
 
 ### 텍스트로 한 번
 
-`.bh` 파일 형식은 공개 문서에 설명이 없어서 헥스 따라가기 대신 텍스트 출력을 직접 읽습니다.
+`.bh` 파일을 헥스로 따라가는 대신 텍스트 출력을 직접 읽습니다.
 
 1. `adb shell dumpsys batterystats > batterystats.txt` 로 출력을 파일에 담습니다. `--reset` 은 붙이지 않습니다.
 2. 머리줄 `Battery History [...]` 로 버퍼 사용률을 확인하고 `RESET:TIME:` 줄을 찾아 기록 시작 시각을 적어 둡니다.

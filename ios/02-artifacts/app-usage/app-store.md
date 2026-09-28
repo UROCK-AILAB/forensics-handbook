@@ -40,7 +40,7 @@ MVT 는 백업에서는 `Info.plist`, 파일 시스템 덤프에서는 `iTunesMe
 | `kvs.sqlitedb` | `kvs_value`(`pid`, `domain`, `key`, `value`) |
 | `purchase_intents.sqlitedb` | `purchase_intents_table`(`product_identifier`, `app_bundle_id`, `timestamp`, `pid`, `product_name`, `app_name`), `install_attribution_params_table`(`app_adam_id`, `ad_network_id`, `campaign_id`, `impression_id`, `timestamp`, `attribution_signature`, `local_timestamp`), `install_attribution_pingback_table`(`app_adam_id`, `ad_network_id`, `campaign_id`, `transaction_id`, `attribution_signature`, `pingback_url`, `pending`, `retry_count`, `local_timestamp`) |
 
-`ZMICROPAYMENT…` 표는 앱 내 구입 (in-app purchase) 기록, `ZINAPPREVIEWREQUEST` 는 앱 평가 요청 기록으로 보이지만, 이름에서 짐작한 것이고 뜻을 밝힌 공개 자료는 없습니다. `Z` 로 시작하는 표·열과 `Z_METADATA`·`Z_PRIMARYKEY` 는 Core Data 가 만드는 저장소와 이름 모양이 같아서, Core Data 저장소일 가능성이 있습니다.
+`ZMICROPAYMENT…` 표는 앱 내 구입 (in-app purchase) 기록, `ZINAPPREVIEWREQUEST` 는 앱 평가 요청 기록으로 보이지만, 이름에서 짐작한 것이라 뜻을 단정할 수는 없습니다. `Z` 로 시작하는 표·열과 `Z_METADATA`·`Z_PRIMARYKEY` 는 Core Data 가 만드는 저장소와 이름 모양이 같아서, Core Data 저장소일 가능성이 있습니다.
 
 ### 로컬 백업에 보이는 설정 plist
 
@@ -57,21 +57,21 @@ MVT 는 백업에서는 `Info.plist`, 파일 시스템 덤프에서는 `iTunesMe
 
 ## 구조
 
-`.sqlitedb` 확장자를 쓰지만 네 DB 모두 표와 열이 있는 SQLite DB 이고, 여는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 같습니다. 번들 ID 가 들어가는 열은 `ZINAPPREVIEWREQUEST.ZBUNDLEIDENTIFIER`, `ZMICROPAYMENTCLIENT.ZIDENTIFIER`, `purchase_intents_table.app_bundle_id` 처럼 이름으로 드러나는 곳이 있어서, 번들 ID 하나를 두고 네 DB 를 가로질러 찾을 수 있습니다. 열 이름의 뜻을 밝힌 공개 자료는 없으니, 번들 ID 가 나온 표와 열을 그대로 기록해 둡니다.
+`.sqlitedb` 확장자를 쓰지만 네 DB 모두 표와 열이 있는 SQLite DB 이고, 여는 법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 같습니다. 번들 ID 가 들어가는 열은 `ZINAPPREVIEWREQUEST.ZBUNDLEIDENTIFIER`, `ZMICROPAYMENTCLIENT.ZIDENTIFIER`, `purchase_intents_table.app_bundle_id` 처럼 이름으로 드러나는 곳이 있어서, 번들 ID 하나를 두고 네 DB 를 가로질러 찾을 수 있습니다. 열 이름만으로 뜻을 단정할 수 없으니, 번들 ID 가 나온 표와 열을 그대로 기록해 둡니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 파일 시스템 추출에서는 `iTunesMetadata.plist` 로 앱의 설치 출처를 볼 수 있고, MVT 는 App Store 가 아닌 곳에서 온 앱을 따로 표시합니다[2]. 충돌 보고서의 `itemID` 는 그 앱이 스토어의 어느 항목인지를 가리킵니다[3]. 백업의 App Store 서비스 DB 에 어떤 번들 ID 나 상품 식별자가 있다는 사실은, 그 번들 ID 가 이 기기의 App Store 서비스 기록에 올라 있다는 뜻입니다.
 
-**증명하지 못하는 것.** 각 열의 뜻이 밝혀지지 않아서, `itunesstored` DB 의 행 하나를 "이 사람이 이 시각에 결제했다" 로 옮길 수 없습니다. 구매 기록은 계정 단위로 여러 기기에 걸칠 수 있어서[5] 이 기기에 설치했다는 증명도 아닙니다. 설치 여부는 [설치된 앱](installed-apps.md) 에서 따로 확인합니다.
+**증명하지 못하는 것.** 각 열의 뜻을 단정할 수 없어서, `itunesstored` DB 의 행 하나를 "이 사람이 이 시각에 결제했다" 로 옮길 수 없습니다. 구매 기록은 계정 단위로 여러 기기에 걸칠 수 있어서[5] 이 기기에 설치했다는 증명도 아닙니다. 설치 여부는 [설치된 앱](installed-apps.md) 에서 따로 확인합니다.
 
 보고서에는 "이 앱을 샀다" 대신 "`purchase_intents.sqlitedb` 의 `purchase_intents_table` 에 `app_bundle_id` 가 `com.example.app` 인 행이 있고, `timestamp` 열 원래 값은 이것이다" 처럼 표·열·원래 값을 함께 씁니다.
 
 ## 시각 해석
 
-DB 에는 `ZDATE`, `ZPURCHASEDATE`, `ZORIGINALPURCHASEDATE`, `ZINSERTDATE`, `ZLASTQUEUECHECKDATE`, `timestamp`, `local_timestamp` 같은 시각 열이 있지만 기준점과 단위를 밝힌 공개 자료는 없습니다. `install_attribution_*` 표에는 `timestamp` 와 `local_timestamp` 가 나란히 있는데, 두 열의 차이도 알려져 있지 않습니다. 값을 풀 때는 유닉스 시각과 Mac 절대 시각(2001-01-01 기준)으로 각각 바꿔 보고, 수집일이나 다른 기록과 맞는 쪽을 근거와 함께 적습니다.
+DB 에는 `ZDATE`, `ZPURCHASEDATE`, `ZORIGINALPURCHASEDATE`, `ZINSERTDATE`, `ZLASTQUEUECHECKDATE`, `timestamp`, `local_timestamp` 같은 시각 열이 있고, 기준점과 단위는 값을 보고 확인해야 합니다. `install_attribution_*` 표에는 `timestamp` 와 `local_timestamp` 가 나란히 있어서, 같은 행의 두 값을 비교해 차이를 확인합니다. 값을 풀 때는 유닉스 시각과 Mac 절대 시각(2001-01-01 기준)으로 각각 바꿔 보고, 수집일이나 다른 기록과 맞는 쪽을 근거와 함께 적습니다.
 
-설정 plist 의 `datetime` 형은 plist 날짜 형식이라 도구가 날짜로 풀어 주지만, `AppStore.plist` 의 `lastBootstrapDate` 는 `float` 형이라 기준점을 따로 확인해야 합니다. 같은 파일의 `lastBootstrapTimeZone` (str) 은 시간대와 관련된 값으로 보이지만 뜻은 알려져 있지 않습니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md), 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 다룹니다.
+설정 plist 의 `datetime` 형은 plist 날짜 형식이라 도구가 날짜로 풀어 주지만, `AppStore.plist` 의 `lastBootstrapDate` 는 `float` 형이라 기준점을 따로 확인해야 합니다. 같은 파일의 `lastBootstrapTimeZone` (str) 은 시간대와 관련된 값으로 보이지만 이름만으로 뜻을 단정할 수는 없습니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md), 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 다룹니다.
 
 ## 함정과 한계
 

@@ -25,7 +25,7 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 | 이전 볼륨 기록 | `/private/var/db/volinfo.database` (`/var/db/volinfo.database`) | 이전에 붙었던 볼륨의 파일 소유권 정보 | [1] |
 | 마운트된 디스크 이미지 | `hdiutil info` (켜져 있는 맥에서 실행) | 지금 마운트된 DMG 목록 | [1] |
 
-키 이름은 DiskArbitration 소스의 main 브랜치 기준이라, 어느 macOS 버전부터 어느 키가 있었는지는 이 소스로 정해지지 않습니다. `volinfo.database` 가 어느 macOS 버전에 있고 파일 형식이 무엇인지는 공개된 분석 자료가 없어서, 실제 기기에서는 파일이 있는지와 첫 바이트가 어떤 형식인지부터 봅니다.
+키 이름은 DiskArbitration 소스의 main 브랜치 기준이라, 어느 macOS 버전부터 어느 키가 있었는지는 이 소스로 정해지지 않습니다. `volinfo.database` 는 실제 기기에서 파일이 있는지와 첫 바이트가 어떤 형식인지부터 봅니다.
 
 ## 구조
 
@@ -51,7 +51,7 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 
 이 목록에 USB 시리얼 번호를 담는 키는 없습니다 [2]. 장치를 시리얼 번호로 특정하려면 이 키가 아닌 다른 기록을 찾아야 합니다.
 
-이 키 묶음을 통째로 디스크에 저장하는 파일은 공개 자료에 나오지 않습니다. 그래서 키 목록은 "어느 파일을 열면 나온다" 가 아니라, 로그·도구 출력·보고서에 나온 값을 읽을 때 쓰는 이름표로 봅니다.
+이 키 목록은 DiskArbitration 소스에 정의된 이름이라서 [2], "어느 파일을 열면 나온다" 가 아니라, 로그·도구 출력·보고서에 나온 값을 읽을 때 쓰는 이름표로 봅니다.
 
 ### volinfo.database
 
@@ -65,7 +65,7 @@ DiskArbitration은 macOS에서 디스크가 나타나고 사라지는 것을 받
 
 ## 시각 해석
 
-`DAAppearanceTime` 은 디스크가 나타난 시각을 담는 키지만, 이 값이 2001-01-01 기준(맥 절대 시각)인지는 알려진 자료가 없습니다. 이 값을 날짜로 바꿀 때는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)의 방식 몇 가지로 풀어 보고, 같은 순간의 통합 로그 시각과 맞는 쪽을 고릅니다. 연결 시각의 기준은 [통합 로그의 연결 기록](unified-log.md)에서 잡는 편이 확실합니다.
+`DAAppearanceTime` 은 디스크가 나타난 시각을 담는 키입니다. 이 값을 날짜로 바꿀 때는 2001-01-01 기준(맥 절대 시각)으로 정해 두지 말고 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)의 방식 몇 가지로 풀어 보고, 같은 순간의 통합 로그 시각과 맞는 쪽을 고릅니다. 연결 시각의 기준은 [통합 로그의 연결 기록](unified-log.md)에서 잡는 편이 확실합니다.
 
 ## 함정과 한계
 

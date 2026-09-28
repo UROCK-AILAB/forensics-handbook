@@ -32,7 +32,7 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 |---|---|---|
 | 앱 패키지 | 패키지 이름 `Microsoft.Copilot` | 공식 문서[1] |
 | 앱 데이터 폴더 | 사용자마다 `%LOCALAPPDATA%\Packages\` 아래 `Microsoft.Copilot_` 로 시작하는 폴더 | 뒷부분 `8wekyb3d8bbwe` 는 공개 스크립트[9]에만 나오고 공식 문서에는 없다. 실제 기기에서 이름을 확인한다 |
-| 대화 저장 파일 | 공개된 분석 자료가 없다 | 실제 기기에서 확인한다 |
+| 대화 저장 파일 | 실제 기기의 앱 데이터 폴더에서 찾는다 | — |
 | 관리 정책 값 | 아래 "구조" 절의 표 | 공식 문서[2] |
 | 마이크 권한 값 | NTUSER.DAT `Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone\Microsoft.Copilot_8wekyb3d8bbwe`, 값 `Value`(`Allow`·`Deny`) | 공개 스크립트 코드[9]. 이 키 아래 다른 값은 실제 기기에서 본다 |
 
@@ -50,7 +50,7 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 ## 구조
 
-대화 파일의 짜임은 공개된 분석 자료가 없어서, 이 절은 관리 정책 값만 다룹니다. `TurnOffWindowsCopilot` 과 `SetCopilotHardwareKey` 의 ADMX 는 `WindowsCopilot.admx` 이고, `RemoveMicrosoftCopilotApp` 은 CSP 에 ADMX 이름이 없습니다[2].
+대화 파일의 짜임은 실제 기기에서 확인하고, 이 절은 관리 정책 값만 다룹니다. `TurnOffWindowsCopilot` 과 `SetCopilotHardwareKey` 의 ADMX 는 `WindowsCopilot.admx` 이고, `RemoveMicrosoftCopilotApp` 은 CSP 에 ADMX 이름이 없습니다[2].
 
 | 정책 | 범위 | 레지스트리 | 값 | 적용 OS·에디션 |
 |---|---|---|---|---|
@@ -86,15 +86,15 @@ Microsoft Store 제품 ID 는 `9NHT9RB2F4HD` 이고 스토어 페이지 제목�
 
 Copilot 키를 누른 흔적이 있어도 그 키가 어느 앱에 묶여 있었는지부터 봅니다. `SetCopilotHardwareKey` 가 있어도 사용자가 설정에서 바꿀 수 있으므로[2], 정책 값만으로 그 시점의 대상 앱을 단정하지 않습니다.
 
-회사 계정에서는 음성 대화의 글 기록을 일반 대화처럼 저장해 보존·eDiscovery·감사 정책을 적용하고, 사용자와 Copilot 의 음성은 저장하지 않습니다[1]. "Hey Copilot" 은 기능을 켰고 PC 잠금이 풀려 있을 때만 동작하고, 관리자가 음성 기능만 따로 끄는 설정은 없습니다[1]. 소비자용 앱의 음성 저장 방식은 공개 자료가 없으므로, 회사 계정의 설명을 그대로 옮겨 쓰지 않습니다.
+회사 계정에서는 음성 대화의 글 기록을 일반 대화처럼 저장해 보존·eDiscovery·감사 정책을 적용하고, 사용자와 Copilot 의 음성은 저장하지 않습니다[1]. "Hey Copilot" 은 기능을 켰고 PC 잠금이 풀려 있을 때만 동작하고, 관리자가 음성 기능만 따로 끄는 설정은 없습니다[1]. 이 설명은 회사 계정에 대한 것이므로, 소비자용 앱의 음성 저장 방식에 그대로 옮겨 쓰지 않습니다.
 
-Purview 보존 정책의 "Other AI apps" 위치에는 "Microsoft Copilot (consumer version)" 이 들어 있고, 조직에 내용을 수집하는 수집 정책(collection policy)이 있어야 프롬프트와 응답이 남습니다[4]. eDiscovery 에서 Other AI apps 의 item class 는 기기 쪽 상호작용 `IPM.SkypeTeams.Message.ConnectedAIApp.Connector.<AppName>` 과 브라우저 쪽 상호작용 `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 나뉩니다[5]. Windows 앱에서 한 대화가 어느 쪽으로 들어가는지는 공개 자료가 없으므로, 조직의 데이터에서 두 item class 를 모두 검색합니다.
+Purview 보존 정책의 "Other AI apps" 위치에는 "Microsoft Copilot (consumer version)" 이 들어 있고, 조직에 내용을 수집하는 수집 정책(collection policy)이 있어야 프롬프트와 응답이 남습니다[4]. eDiscovery 에서 Other AI apps 의 item class 는 기기 쪽 상호작용 `IPM.SkypeTeams.Message.ConnectedAIApp.Connector.<AppName>` 과 브라우저 쪽 상호작용 `IPM.SkypeTeams.Message.CloudAIApp.SaaS.<AppID>` 로 나뉩니다[5]. Windows 앱에서 한 대화가 어느 쪽으로 들어가는지는 조직의 데이터에서 두 item class 를 모두 검색해 확인합니다.
 
 AppLocker 규칙은 실행을 막으므로[1], 규칙이 걸린 기간에 실행 흔적이 있으면 규칙이 실제로 적용된 시점과 그 사용자에게 적용됐는지를 다시 맞춰 봅니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 앱의 대화 파일 형식은 공개된 자료가 없어서, 여기서는 정책 값을 헥스로 읽는 법만 봅니다. 아래는 만든 예시입니다. 레지스트리 편집 도구나 하이브 헥스 보기에서 `TurnOffWindowsCopilot` 의 데이터가 `01 00 00 00` 이면 리틀 엔디언 정수 1, 곧 "끔" 입니다. `CopilotKey` 키 아래 문자열 값은 UTF-16LE 로 적혀 있어서, CSP 예시 AUMID 라면 데이터가 아래처럼 시작합니다.
+**헥스로 한 번.** 여기서는 정책 값을 헥스로 읽는 법을 봅니다. 아래는 만든 예시입니다. 레지스트리 편집 도구나 하이브 헥스 보기에서 `TurnOffWindowsCopilot` 의 데이터가 `01 00 00 00` 이면 리틀 엔디언 정수 1, 곧 "끔" 입니다. `CopilotKey` 키 아래 문자열 값은 UTF-16LE 로 적혀 있어서, CSP 예시 AUMID 라면 데이터가 아래처럼 시작합니다.
 
 ```text
 만든 예시 — "Microsoft." 를 UTF-16LE 로 적은 바이트

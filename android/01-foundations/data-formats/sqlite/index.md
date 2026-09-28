@@ -22,7 +22,7 @@ SQLite 데이터베이스는 표와 색인을 파일 하나에 담는 데이터�
 
 | 위치 | Android 버전 | 알려 주는 것 |
 |---|---|---|
-| 주 DB 파일 | 현행 AOSP 의 플랫폼 SQLite 는 secure_delete 와 auto_vacuum=FULL 을 기본으로 빌드 [3]. 버전별 차이는 공개 자료 없음 | 마지막 체크포인트까지의 표·색인, 빈 페이지와 빈 조각에 남은 옛 레코드 |
+| 주 DB 파일 | 현행 AOSP 의 플랫폼 SQLite 는 secure_delete 와 auto_vacuum=FULL 을 기본으로 빌드 [3]. 다른 버전은 `PRAGMA secure_delete`·`PRAGMA auto_vacuum` 으로 확인 | 마지막 체크포인트까지의 표·색인, 빈 페이지와 빈 조각에 남은 옛 레코드 |
 | 같은 폴더의 `이름-journal` | 현행 AOSP 의 WAL 이 아닐 때 기본 저널 모드는 TRUNCATE [4] | 거래가 바꾸기 전의 원래 페이지 |
 | 같은 폴더의 `이름-wal` | Android 9 에서 호환 WAL 도입 [5] | 커밋했지만 주 파일로 옮기지 않은 새 페이지, 같은 페이지의 옛 버전 프레임 |
 | 같은 폴더의 `이름-shm` | WAL 과 함께 생김 | WAL 에서 페이지를 찾는 일시 색인. 영구 상태는 아님 [1] |

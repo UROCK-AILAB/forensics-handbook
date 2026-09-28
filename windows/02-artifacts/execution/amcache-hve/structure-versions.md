@@ -43,7 +43,7 @@ Windows 에는 응용 프로그램 호환성 인프라 (Application Compatibilit
 | 10.0.16299 | 10 1709 | 옛 키 4개는 남아 있지만 비어 있습니다. 새 키 5개가 생깁니다 |
 | 10.0.17134·10.0.17763 | 10 1803·1809 | 옛 키 4개와 `Device`·`HwItem`·`Metadata` 가 사라집니다. 새 키 11개가 생깁니다 |
 
-ANSSI 의 실험은 10.0.17763 까지입니다. 그 뒤 버전(Windows 10 뒤 버전과 Windows 11)을 라이브러리 버전별로 정리한 공개 연구는 없으므로 실제 데이터로 확인해야 합니다. 요즘 시스템의 Amcache 에서는 `InventoryApplicationFile`·`InventoryApplication`·`InventoryDriverBinary`·`InventoryApplicationShortcut` 이 중심입니다.
+ANSSI 의 실험은 10.0.17763 까지입니다. 그 뒤 버전(Windows 10 뒤 버전과 Windows 11)은 분석 대상 하이브의 키 구성을 직접 열어 확인합니다. 요즘 시스템의 Amcache 에서는 `InventoryApplicationFile`·`InventoryApplication`·`InventoryDriverBinary`·`InventoryApplicationShortcut` 이 중심입니다.
 
 ### 하이브를 누가 언제 쓰나
 
@@ -96,7 +96,7 @@ Root                              값 Sync: ProgramDataUpdater 마지막 실행 
 | 100 | ProgramId | 문자열 |
 | 101 | SHA-1 (앞에 `0000`) | 문자열 |
 | d | 이미지 버전(PE 헤더의 MajorImageVersion·MinorImageVersion)이라는 해석이 있습니다. 뜻은 확정되지 않았습니다 | DWORD |
-| a·b·10·16 | 뜻이 확인되지 않았습니다 | — |
+| a·b·10·16 | 뜻을 알 수 없습니다 | — |
 
 값 11 과 17 은 둘 다 수정 시각으로 보입니다. 17 은 11 과 거의 늘 1초 차이가 납니다. 11 은 수정 시각이거나 그보다 몇 초 뒤라는 해석이 있습니다. 값 101 은 비어 있는 키가 많습니다. 이유는 [AmCache 해석 함정](sha1.md)에서 다룹니다.
 
@@ -112,8 +112,8 @@ Root                              값 Sync: ProgramDataUpdater 마지막 실행 
 | d | 설치 폴더와, 실행 파일이 든 하위 폴더 |
 | Files | 설치로 생긴 실행 파일 목록. 항목마다 `{볼륨 GUID}@{파일 ID}` 형식입니다 |
 | 11·12 | MSI 제품 코드·패키지 코드 (MSI 로 설치한 경우). f·10 에도 같은 값이 들어갑니다 |
-| 3·5·13 | 뜻이 확인되지 않았습니다 |
-| 14~18 | 10.0.10240 에서 생긴 값입니다. 뜻이 확인되지 않았습니다 |
+| 3·5·13 | 뜻을 알 수 없습니다 |
+| 14~18 | 10.0.10240 에서 생긴 값입니다. 뜻을 알 수 없습니다 |
 
 `Programs` 에는 제거된 프로그램도 남습니다. 제거된 프로그램은 값 b 에 제거 시각이 들어갑니다. 설치 프로그램 목록 자체는 [설치 프로그램 (Uninstall)](../../system-account/uninstall.md)과 대조합니다.
 
@@ -149,7 +149,7 @@ Root
 
 | 키 | 10.0.14913 | 10.0.16299 부터 |
 |---|---|---|
-| InventoryApplicationFile 아래 | 소문자 전체 경로(UTF-16LE)의 SHA-1 앞에 `0000` 을 붙인 이름 | `파일 이름\|해시` 형식. 해시 계산법은 밝혀지지 않았습니다 |
+| InventoryApplicationFile 아래 | 소문자 전체 경로(UTF-16LE)의 SHA-1 앞에 `0000` 을 붙인 이름 | `파일 이름\|해시` 형식. 해시 계산법은 공개되지 않았습니다 |
 | InventoryDriverBinary 아래 | 드라이버 SHA-1 앞에 `0000` 을 붙인 이름 | 드라이버 전체 경로. SHA-1 은 값 `DriverId` 로 옮겨 갑니다 |
 | InventoryApplication 아래 | ProgramId | ProgramId |
 
@@ -188,10 +188,10 @@ Root
 
 1. **OS 버전으로 형식을 단정합니다.** 형식은 라이브러리 버전을 따릅니다. KB2952664 를 받은 Windows 7 에도 새 형식 키가 있을 수 있습니다.
 2. **업그레이드한 시스템의 옛 파일을 놓칩니다.** 라이브러리가 바뀌어도 이전 형식의 파일이 남아 계속 쓰일 수 있습니다. Windows 7 에서 RecentFileCache.bcf 와 Amcache.hve 가 함께 있는 경우가 그 예입니다.
-3. **빈 키를 "기록 없음" 으로 읽습니다.** 10.0.16299 에서는 옛 키 4개가 빈 채로 남습니다. 빈 키는 지운 흔적이 아닐 수 있습니다. 항목이 없다는 사실만으로 내릴 수 있는 결론은 공개 연구에 정리되어 있지 않습니다.
+3. **빈 키를 "기록 없음" 으로 읽습니다.** 10.0.16299 에서는 옛 키 4개가 빈 채로 남습니다. 빈 키는 지운 흔적이 아닐 수 있습니다. 항목이 없다는 사실만으로 그런 활동이 없었다고 결론 내리지 않습니다.
 4. **도구가 한쪽 형식만 읽습니다.** 도구마다 읽는 키가 다릅니다. 도구 결과에 없는 키가 하이브에 있는지 트리를 직접 열어 확인합니다([도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)).
 5. **트랜잭션 로그를 빼고 읽습니다.** 최근 항목이 LOG1·LOG2 에만 있을 수 있습니다. 로그를 반영하는 방법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)에서 다룹니다.
-6. **뜻이 밝혀지지 않은 값을 해석합니다.** 옛 형식 값 이름의 뜻은 대부분 코드 분석이 아니라 실험으로 얻은 것입니다. "뜻이 확인되지 않았습니다" 인 값은 보고서 근거로 쓰지 않습니다.
+6. **뜻을 알 수 없는 값을 해석합니다.** 옛 형식 값 이름의 뜻은 대부분 코드 분석이 아니라 실험으로 얻은 것입니다. "뜻을 알 수 없습니다" 인 값은 보고서 근거로 쓰지 않습니다.
 7. **1809 이후 동작을 옛 연구로 설명합니다.** 이 페이지의 버전별 동작은 10.0.17763 까지의 실험입니다. 뒤 버전에서는 실제 데이터로 다시 확인하고, 어느 버전에서 확인했는지 보고서에 적습니다.
 
 Amcache.hve 도 레지스트리 하이브이므로 지운 키가 빈 셀이나 트랜잭션 로그에 남을 수 있습니다([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 섀도 복사본 안의 옛 Amcache.hve 와 비교하면 사라진 항목을 찾을 수 있습니다([섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)).

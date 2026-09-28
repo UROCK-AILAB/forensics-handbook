@@ -60,7 +60,7 @@ Gemini CLI 는 대화하는 동안 세션을 자동으로 저장해서, 중간�
 
 `~/.gemini` 는 Gemini CLI 만 쓰는 폴더가 아닙니다. Google Antigravity(IDE)의 세션 폴더는 `~/.gemini/antigravity/`, Antigravity CLI 의 폴더는 `~/.gemini/antigravity-cli/` 입니다[8]. IDE 쪽에는 `conversations/<uuid>.db`(세션별 SQLite), `annotations/<uuid>.pbtxt`, `brain/<uuid>/`(평문 계획·작업 문서), `implicit/<uuid>.pb`(암호화)가 있습니다[8]. Antigravity CLI 는 새 판이 세션별 SQLite, 옛 판이 AES 로 암호화한 `.pb` 파일을 쓰고, `history.jsonl` 과 `brain/` 이 함께 있습니다[8]. Google 이 저장 형식을 공개하지 않아서, 이 구조는 역분석으로 알아낸 것입니다(2026-07-19, 2026-09-02 기준)[8]. Antigravity 폴더는 Gemini CLI 와 다른 제품의 흔적으로 나눠 봅니다.
 
-`%USERPROFILE%\.gemini` 에 `tmp/` 없이 `antigravity/` 와 `config/` 만 있는 경우도 있습니다. `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 들어갑니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 들어가고, 이 폴더를 어느 제품이 쓰는지 설명한 공개 문서는 없어서, 실제 기기에서 파일 시각과 함께 쓴 프로그램을 확인해야 합니다. 이처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
+`%USERPROFILE%\.gemini` 에 `tmp/` 없이 `antigravity/` 와 `config/` 만 있는 경우도 있습니다. `antigravity/` 안에는 `antigravity_state.pbtxt`, `installation_id`, `crashes/`, `knowledge/`, `bin/`, `builtin/skills/` 가 들어갑니다. `config/` 안에는 `config.json`, `hooks.json`, `mcp_config.json`, `projects/` 가 들어갑니다. 이 폴더를 어느 제품이 쓰는지는 실제 기기에서 파일 시각과 함께 쓴 프로그램을 보고 확인합니다. 이처럼 `.gemini` 가 있어도 Gemini CLI 세션은 없을 수 있어서, 폴더가 있다는 사실만으로 Gemini CLI 를 썼다고 쓰지 않습니다.
 
 ## 구조
 

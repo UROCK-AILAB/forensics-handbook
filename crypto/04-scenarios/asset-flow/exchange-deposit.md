@@ -39,7 +39,7 @@ nav_order: 360
 
 ## 분석 흐름
 
-1. **기기에서 보낸 거래와 상대 주소를 모읍니다.** iOS MetaMask 에서 iLEAPP 는 `TransactionController.transactions` 의 항목마다 `time`, `transaction.from`, `transaction.to`, `transaction.value`, `transactionHash` 를 읽고, 주소록은 `AddressBookController.addressBook` 아래 체인 ID 별 항목의 `name`·`address` 를 읽습니다[1]. iOS Coinbase Wallet 의 `Documents/default/wallet-rn-v2.sqlite` 에서는 `tx_history_v2` 의 `toAddress`, `toDomain`, `txHash` 를 봅니다. `toDomain` 은 앱이 받는 주소를 이름으로 풀어 낸 값이 들어가는 열이고[2], 보낸 거래 행에 어떤 값이 들어가는지는 공개된 자료가 없어서 실제 데이터로 확인합니다. 저장 위치와 구조는 위 표 1번 행의 아티팩트 페이지에 있습니다.
+1. **기기에서 보낸 거래와 상대 주소를 모읍니다.** iOS MetaMask 에서 iLEAPP 는 `TransactionController.transactions` 의 항목마다 `time`, `transaction.from`, `transaction.to`, `transaction.value`, `transactionHash` 를 읽고, 주소록은 `AddressBookController.addressBook` 아래 체인 ID 별 항목의 `name`·`address` 를 읽습니다[1]. iOS Coinbase Wallet 의 `Documents/default/wallet-rn-v2.sqlite` 에서는 `tx_history_v2` 의 `toAddress`, `toDomain`, `txHash` 를 봅니다. `toDomain` 은 앱이 받는 주소를 이름으로 풀어 낸 값이 들어가는 열이고[2], 보낸 거래 행에 어떤 값이 들어가는지는 실제 데이터로 확인합니다. 저장 위치와 구조는 위 표 1번 행의 아티팩트 페이지에 있습니다.
 
    이더리움 토큰을 거래소로 보냈다면 트랜잭션의 `to` 는 받는 사람이 아니라 토큰 컨트랙트입니다. 받는 사람은 입력 데이터와 `Transfer` 로그에 있으므로, `to`·`value` 만 보여 주는 결과표에서는 받는 주소가 컨트랙트로, 금액이 0 으로 보일 수 있습니다([토큰과 NFT](../../01-foundations/blockchain/tokens.md), [이더리움 거래 따라가기](../../03-techniques/analysis/ethereum-tracing.md)).
 

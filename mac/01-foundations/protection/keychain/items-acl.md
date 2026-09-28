@@ -36,7 +36,7 @@ chainbreaker는 같은 레코드를 아래 필드 이름으로 풀어 보여 줍
 | 일반 암호 | CreationDate, ModDate, Description, Creator, Type, PrintName, Alias, Account, Service, SSGPArea |
 | 인터넷 암호 | CreationDate, ModDate, Description, Comment, Creator, Type, PrintName, Alias, Protected, Account, SecurityDomain, Server, Protocol, AuthType, Port, Path, SSGPArea |
 
-`svce` 와 Service, `acct` 와 Account, `srvr` 와 Server, `ptcl` 와 Protocol 처럼 이름이 비슷한 짝이 보이지만, 4글자 속성과 필드 이름을 하나씩 맞춘 공개 대응표는 없습니다. 그래서 보고서에는 도구가 보여 준 필드 이름과 원래 속성 이름을 함께 적고, 이름만 보고 짝을 단정하지 않습니다.
+`svce` 와 Service, `acct` 와 Account, `srvr` 와 Server, `ptcl` 와 Protocol 처럼 이름이 비슷한 짝이 보입니다. 보고서에는 도구가 보여 준 필드 이름과 원래 속성 이름을 함께 적고, 이름만 보고 짝을 단정하지 않습니다.
 
 파일 기반 키체인에서는 계정, 서비스, 서버 같은 메타데이터가 키체인을 풀 수단 없이도 보입니다 [3]. 데이터 보호 키체인은 메타데이터도 암호화하므로 [5] 이렇게 전제하지 않습니다. 푸는 수단과 암호화한 부분의 구조는 [로그인 키체인 파일 (login.keychain-db)](login-keychain.md)에서 다룹니다.
 
@@ -61,7 +61,7 @@ chainbreaker는 같은 레코드를 아래 필드 이름으로 풀어 보여 줍
 
 ## 증거로서 의미
 
-항목의 메타데이터는 이 사용자의 키체인에 어떤 서비스나 서버에 쓸 계정이 저장돼 있다는 사실을 보여 주지만, 그 계정으로 실제 로그인했는지나 언제 암호를 꺼내 썼는지는 알 수 없습니다. `mdat` 가 암호를 바꾼 시각을 뜻하는지, ACL을 바꿀 때도 `mdat` 가 바뀌는지는 공개 자료가 없어서 "암호를 이때 바꿨다" 고 쓰지 않습니다. 보고서에는 "로그인 키체인에 이 서버를 가리키는 인터넷 암호 항목이 있고, 이 항목의 `mdat` 속성 값은 이 시각(UTC)이다" 처럼 기록된 만큼만 씁니다.
+항목의 메타데이터는 이 사용자의 키체인에 어떤 서비스나 서버에 쓸 계정이 저장돼 있다는 사실을 보여 주지만, 그 계정으로 실제 로그인했는지나 언제 암호를 꺼내 썼는지는 알 수 없습니다. `mdat` 값만으로는 암호를 바꾼 시각인지, ACL을 바꿀 때 바뀐 값인지 단정할 수 없어서 "암호를 이때 바꿨다" 고 쓰지 않습니다. 보고서에는 "로그인 키체인에 이 서버를 가리키는 인터넷 암호 항목이 있고, 이 항목의 `mdat` 속성 값은 이 시각(UTC)이다" 처럼 기록된 만큼만 씁니다.
 
 키체인에 누가 접근했는지를 남기는 통합 로그 기록의 서브시스템과 카테고리는 실제 데이터로 확인해야 합니다. 키체인 파일에 접근한 흔적을 찾을 때는 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events/index.md)과 [정보 탈취 악성 코드 (Infostealer)](../../../04-scenarios/incident/infostealer.md)를 함께 봅니다.
 

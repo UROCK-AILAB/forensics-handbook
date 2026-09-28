@@ -25,7 +25,7 @@ Chromium 계열 브라우저는 프로필 폴더의 `Cookies` 와 `Login Data` S
 <프로필>/Web Data
 ```
 
-새 버전 브라우저는 쿠키 DB를 프로필 안의 `Network` 폴더 아래에 두므로, 두 위치를 모두 수집합니다 [3]. 쿠키 DB가 `Network` 로 옮겨진 크롬 버전은 공개 문서에 나와 있지 않아서, 두 위치를 다 확인합니다. 크롬은 `Network/Login Data` 도 수집 대상이고 `Web Data` 도 같습니다 [3]. 프로필 폴더를 찾는 법은 [맥에서의 위치와 프로필 (Profiles)](profiles.md)에서 다룹니다.
+새 버전 브라우저는 쿠키 DB를 프로필 안의 `Network` 폴더 아래에 두므로, 두 위치를 모두 수집합니다 [3]. 크롬은 `Network/Login Data` 도 수집 대상이고 `Web Data` 도 같습니다 [3]. 프로필 폴더를 찾는 법은 [맥에서의 위치와 프로필 (Profiles)](profiles.md)에서 다룹니다.
 
 아래 암호화 형식 설명은 크롬 v120 소스 기준입니다 [2].
 

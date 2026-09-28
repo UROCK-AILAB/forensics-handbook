@@ -14,7 +14,7 @@ has_toc: false
 
 자료 유출이나 악성 코드 유입을 조사할 때는 "언제 어떤 외장 장치가 이 맥에 붙었나" 를 먼저 묻게 되고, 맥에서는 그 답이 한 파일에 모여 있지 않습니다. 이 허브가 다루는 흔적은 통합 로그, DiskArbitration 쪽 기록, 호스트 맥과 외장 볼륨에 남은 볼륨 파일로 흩어져 있어서, 로그로 시각을 잡고 볼륨 기록으로 어떤 볼륨이었는지를 좁히는 식으로 여러 기록을 이어 봐야 합니다. 이 흔적들로 장치의 시리얼 번호까지 얻지는 못하고, 그 한계는 하위 페이지마다 따로 적었습니다.
 
-Apple silicon 맥 노트북은 새 USB·Thunderbolt 액세서리나 SD 카드를 연결할 때 사용자에게 허용 여부를 묻습니다 [3]. 이 설정은 시스템 설정의 개인정보 보호 및 보안 항목 중 "Allow accessories to connect" 에 있고, "Always ask", "Ask for new accessories"(기본값), "Automatically allow when unlocked", "Always allow" 중에서 고릅니다 [3]. 맥이 잠겨 있으면 잠금을 먼저 풀어야 허용할 수 있고, 3일 넘게 잠겨 있었으면 전에 허용한 액세서리도 다시 잠금 해제를 요구할 수 있으며, "Don't Allow" 를 골라도 충전은 됩니다 [3]. 감독(supervised) 상태의 맥 노트북에서는 관리자가 이 설정을 통제할 수 있어서 [3], 조사 대상 맥이 기관 관리 기기라면 [구성 프로파일 (Configuration Profiles·MDM)](../../persistence/configuration-profiles.md)도 함께 봅니다. Apple 문서에는 이 기능이 들어온 macOS 버전이 적혀 있지 않고, 허용·거부 결정이 어느 파일이나 로그에 남는지도 확인한 자료가 없습니다.
+Apple silicon 맥 노트북은 새 USB·Thunderbolt 액세서리나 SD 카드를 연결할 때 사용자에게 허용 여부를 묻습니다 [3]. 이 설정은 시스템 설정의 개인정보 보호 및 보안 항목 중 "Allow accessories to connect" 에 있고, "Always ask", "Ask for new accessories"(기본값), "Automatically allow when unlocked", "Always allow" 중에서 고릅니다 [3]. 맥이 잠겨 있으면 잠금을 먼저 풀어야 허용할 수 있고, 3일 넘게 잠겨 있었으면 전에 허용한 액세서리도 다시 잠금 해제를 요구할 수 있으며, "Don't Allow" 를 골라도 충전은 됩니다 [3]. 감독(supervised) 상태의 맥 노트북에서는 관리자가 이 설정을 통제할 수 있어서 [3], 조사 대상 맥이 기관 관리 기기라면 [구성 프로파일 (Configuration Profiles·MDM)](../../persistence/configuration-profiles.md)도 함께 봅니다. Apple 문서에는 이 기능이 들어온 macOS 버전이 적혀 있지 않습니다. 허용·거부 결정이 어느 파일이나 로그에 남는지는 같은 macOS 버전의 시험 기기에서 액세서리를 허용·거부해 본 뒤 통합 로그와 파일 변경 기록을 보고 확인합니다.
 
 ## 한눈에 보기
 

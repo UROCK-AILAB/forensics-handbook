@@ -14,7 +14,7 @@ has_toc: false
 
 iOS 13의 knowledgeC에는 스트림이 50개 넘게 있었지만 iOS 16부터 활성 스트림이 약 20개로 줄었고, 이를 두고 iOS 16부터 Biome이 knowledgeC 역할을 넘겨받고 있다는 해석이 있습니다 [4]. iOS에서 포렌식 가치가 있는 Biome 스트림 84개는 기기 상태, 연결 기기·네트워크, 위치, 앱 사용, 앱 데이터의 다섯 분류로 나눌 수 있습니다 [3]. 그래서 iOS 16 이후 기기에서 앱 사용을 재구성할 때는 knowledgeC와 Biome을 함께 봅니다.
 
-macOS 쪽 공개 자료는 아직 적습니다. SEGB 파일은 iOS와 macOS 등에서 나오고 [1], 공개 도구 가운데 mac_apt가 macOS의 Biome 위치를 읽습니다 [6]. macOS가 어느 버전부터 Biome을 쓰는지와 기록을 얼마나 오래 두는지는 실제 데이터로 확인해야 합니다. 형식과 필드의 뜻도 Apple 문서가 아니라 공개 도구 코드와 연구자 글에서 나온 해석이라서, 보고서에는 어느 도구로 읽었는지 함께 적습니다.
+SEGB 파일은 iOS와 macOS 등에서 나오고 [1], 공개 도구 가운데 mac_apt가 macOS의 Biome 위치를 읽습니다 [6]. macOS가 어느 버전부터 Biome을 쓰는지와 기록을 얼마나 오래 두는지는 실제 데이터로 확인해야 합니다. 형식과 필드의 뜻도 Apple 문서가 아니라 공개 도구 코드와 연구자 글에서 나온 해석이라서, 보고서에는 어느 도구로 읽었는지 함께 적습니다.
 
 ## 한눈에 보기
 
@@ -23,8 +23,8 @@ macOS 쪽 공개 자료는 아직 적습니다. SEGB 파일은 iOS와 macOS 등�
 | 위치 (macOS) | 시스템 `/private/var/db/biome/streams/`, 사용자별 `~/Library/Biome/streams/` (mac_apt가 보는 경로) [6] |
 | 위치 (iOS, 비교용) | 시스템 `/private/var/db/biome/streams/`, 사용자 `/private/var/mobile/Library/Biome/streams/` [3][4][6] |
 | 형식 | 스트림 폴더 안 `local` 폴더에 SEGB 파일(v1·v2), 기록 안 데이터는 대개 protobuf [1][5] |
-| macOS 버전 | 도입 버전과 SEGB v1→v2 전환 버전 모두 공개 자료 없음 |
-| 보존 기간 | iOS에서 대부분 스트림 28일, macOS는 공개 자료 없음 [3] |
+| macOS 버전 | 도입 버전과 SEGB v1→v2 전환 버전은 실제 데이터의 SEGB 파일로 확인 |
+| 보존 기간 | iOS에서 대부분 스트림 28일 [3], macOS는 가장 오래된 기록의 시각으로 확인 |
 | 알려 주는 것 | 스트림에 따라 앱 사용, 기기 상태, 연결 기기·네트워크, 위치 같은 사건과 그 기록 시각 [3] |
 | 알려 주지 않는 것 | 값의 공식 의미(필드 이름과 값의 뜻은 도구 저자의 해석) [2][6] |
 | 공개 도구 | ccl_segb(SEGB 읽기) [1], iLEAPP(iOS) [2], mac_apt BIOME 플러그인(macOS·iOS) [6] |

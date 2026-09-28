@@ -25,7 +25,7 @@ nav_order: 700
 */com.google.android.gms/app_semanticlocation_rawsignal_db/*
 ```
 
-첫째 파일은 기기 내 위치 기록 (On Device Location History, ODLH) 을 담은 SQLite DB 이고 [2], 둘째 폴더는 LevelDB 입니다 [3]. 두 저장소가 원재료와 정리된 구간의 관계인지는 알려져 있지 않습니다. 앱 데이터 영역은 루팅되지 않은 기기에서 adb 일반 권한으로 읽을 수 없는 곳이고, 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다.
+첫째 파일은 기기 내 위치 기록 (On Device Location History, ODLH) 을 담은 SQLite DB 이고 [2], 둘째 폴더는 LevelDB 입니다 [3]. 두 저장소가 원재료와 정리된 구간의 관계라고 단정하지 말고, 같은 시각대의 기록끼리 맞춰 봅니다. 앱 데이터 영역은 루팅되지 않은 기기에서 adb 일반 권한으로 읽을 수 없는 곳이고, 짜임새는 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 다룹니다.
 
 타임라인을 쓰는 데 필요한 Android 버전과 지도 앱 버전은 공개되어 있지 않습니다. ALEAPP 모듈의 시험 표본을 보면 기기에 따라 두 저장소가 비어 있을 수 있습니다 [2][3]. 아래 표는 그 일부입니다.
 
@@ -38,7 +38,7 @@ nav_order: 700
 | Galaxy A53 | 14 | 0행 | 0행 |
 | Galaxy S20 | 13 | 0행 | 0행 |
 
-삼성 표본 두 대는 두 저장소 모두 0행이었고, Pixel 6a·7a 도 odlh-storage.db 에는 행이 있지만 LevelDB 는 0행이었습니다 [2][3]. 그래서 빈 결과는 삼성 기기에만 나타나는 일이 아니고, 삼성 One UI 에서 저장 위치가 다른지 설정 차이 때문인지는 알려져 있지 않습니다. 실제 기기에서 이 두 곳이 비어 있어도 사용자가 이동하지 않았다고 결론 내리면 안 되고, 그 기기에 타임라인이 켜져 있었는지부터 따져야 합니다.
+삼성 표본 두 대는 두 저장소 모두 0행이었고, Pixel 6a·7a 도 odlh-storage.db 에는 행이 있지만 LevelDB 는 0행이었습니다 [2][3]. 그래서 빈 결과는 삼성 기기에만 나타나는 일이 아니고, 삼성 One UI 에서 저장 위치가 다른지 설정 차이 때문인지는 표본만으로 알 수 없습니다. 실제 기기에서 이 두 곳이 비어 있어도 사용자가 이동하지 않았다고 결론 내리면 안 되고, 그 기기에 타임라인이 켜져 있었는지부터 따져야 합니다.
 
 공용 저장 공간에도 `/sdcard/Android/media/com.google.android.gms` 폴더가 있을 수 있습니다. 그 안에 타임라인과 관련된 파일이 있는지는 실제 기기에서 확인합니다.
 
@@ -55,7 +55,7 @@ SQLite 파일 형식은 [SQLite 데이터베이스](../../01-foundations/data-fo
 
 `semantic_segment` 열은 프로토콜 버퍼 덩어리이고, 좌표가 들어 있는 구간에서만 위도·경도를 꺼낼 수 있습니다 [2]. 필드 경로 3→1→4→5 아래의 1번 필드가 위도, 2번 필드가 경도입니다 [2]. 값은 E7 고정소수라서 정수를 10,000,000 으로 나누면 도 단위가 되고, 부호 없는 값으로 읽힌 숫자가 2^31 을 넘으면 2^32 를 빼서 음수로 되돌립니다 [2]. 덩어리를 읽는 일반 방법은 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다.
 
-`segment_type` 은 정수인데 ALEAPP 도 숫자의 뜻을 풀지 않고 그대로 보고합니다 [2]. 어느 숫자가 방문이고 어느 숫자가 이동인지는 알려져 있지 않으니 보고서에 이름을 붙이지 않습니다.
+`segment_type` 은 정수인데 ALEAPP 도 숫자의 뜻을 풀지 않고 그대로 보고합니다 [2]. 어느 숫자가 방문이고 어느 숫자가 이동인지는 값만으로 알 수 없으니 보고서에 이름을 붙이지 않습니다.
 
 ### app_semanticlocation_rawsignal_db
 
@@ -92,7 +92,7 @@ odlh-storage.db 의 시각은 열 이름대로 유닉스 초(UTC 기준)입니�
 
 셋째, 사용자는 지도 앱과 "내 Google 활동" 에서 타임라인을 지울 수 있고 자동 삭제도 설정할 수 있습니다 [1]. 지운 뒤 기기 DB 에 무엇이 남는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 행이 어디에 남을 수 있는지는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 구간을 고친 흔적은 `edited_segment_table` 에 남으니 [2], 조작을 의심할 때는 이 표부터 봅니다. 지우기·고치기를 조사하는 흐름은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 
-넷째, 서버 백업은 암호화한 사본입니다 [1]. 기기 없이 서버 쪽만으로 무엇을 얻을 수 있는지와 Google Takeout 으로 받는 타임라인 형식은 공개 자료가 없어 따로 확인해야 합니다. 클라우드 쪽 확보 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
+넷째, 서버 백업은 암호화한 사본입니다 [1]. 기기 없이 서버 쪽만으로 무엇을 얻을 수 있는지와 Google Takeout 으로 받는 타임라인 형식은 실제로 받은 자료로 따로 확인합니다. 클라우드 쪽 확보 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 

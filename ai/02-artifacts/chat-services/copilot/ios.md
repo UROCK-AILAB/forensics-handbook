@@ -35,7 +35,7 @@ iLEAPP 의 두 분석기를 시험한 범위는 iOS 12.4 부터 iOS 18.7.8 까�
 
 ## 구조
 
-앱 데이터 폴더 안에서 대화가 어떤 파일에 어떤 짜임으로 들어 있는지는 공개된 분석 자료가 없습니다. iLEAPP 에는 Copilot 분석기가 없고, 2026-09-25 기준 저장소의 AI 대화 앱 분석기는 `chatgpt.py` 와 `iOSclaude.py` 두 개입니다 [5].
+앱 데이터 폴더 안에서 대화가 어떤 파일에 어떤 짜임으로 들어 있는지는 실제 기기에서 확인합니다. iLEAPP 에는 Copilot 분석기가 없고, 2026-09-25 기준 저장소의 AI 대화 앱 분석기는 `chatgpt.py` 와 `iOSclaude.py` 두 개입니다 [5].
 
 그래서 폴더 안의 파일을 하나씩 형식부터 판별합니다. SQLite 파일은 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/sqlite/index.html), plist 는 [속성 목록 파일](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/data-formats/plist.html) 페이지를 따라 읽습니다. 대화가 브라우저 데이터와 함께 저장된다는 연구가 있으니 앱 안의 웹뷰 저장소도 살펴봅니다 [2]. 웹뷰 저장소의 일반 구조는 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)에 있습니다.
 
@@ -47,7 +47,7 @@ iLEAPP 의 두 분석기를 시험한 범위는 iOS 12.4 부터 iOS 18.7.8 까�
 
 ## 시각 해석
 
-Copilot 앱 파일 안의 시각 필드와 형식은 공개 자료에 없습니다. 실제 데이터에서 시각 필드를 찾으면 값의 모양(유닉스 초·밀리초, Mac 절대 시각 등)과 시간대를 따로 확인합니다.
+Copilot 앱 파일 안의 시각 필드와 형식은 실제 데이터로 확인합니다. 시각 필드를 찾으면 값의 모양(유닉스 초·밀리초, Mac 절대 시각 등)과 시간대를 따로 확인합니다.
 
 앱을 쓴 시점을 보조로 볼 때는 `applicationState.db` 의 화면 스냅숏 시각을 쓸 수 있습니다. iOS 18 과 iOS 26 추출본에서 `creationDate` 는 해당 스냅숏 파일의 UTC 수정 시각과 같습니다 [4]. `lastUsedDate` 는 드물게 채워지고, `creationDate` 보다 한참 뒤에 바뀔 수 있습니다 [4]. 두 값 모두 그 시각에 앱이 화면 앞에 있었다거나 사용자가 화면을 봤다는 증명은 아닙니다 [4].
 
@@ -84,7 +84,7 @@ com.example.app  | (생략)      | .../mobile/Containers/Data/Application/2222BB
 
 ## 실습
 
-Copilot 이 들어 있는 공개 iOS 시험 이미지는 알려진 것이 없습니다. 시험용 iPhone 과 시험용 Microsoft 계정으로 시험 데이터를 만들어 풀어 봅니다.
+시험용 iPhone 과 시험용 Microsoft 계정으로 시험 데이터를 만들어 풀어 봅니다.
 
 1. `applicationState.db` 에서 Copilot 앱의 번들 ID 와 데이터 폴더 경로는 무엇으로 나오는가?
 2. 대화에 쓴 문장이 데이터 폴더의 어느 파일에 평문으로 남는가? 그 파일은 SQLite 인가, plist 인가, 웹뷰 저장소인가?

@@ -66,7 +66,7 @@ MVT 는 CacheFiles 모듈로 디스크에 있는 이름이 `Cache.db` 인 DB 를
 
 앱의 `Library/Caches` 는 로컬 백업에 들어가지 않고 시스템이 공간이 부족할 때 지울 수도 있어서[1], 캐시가 없다는 사실만으로 사용자가 지웠다거나 앱을 쓰지 않았다고 볼 수 없습니다. 전체 파일 시스템 추출에서도 캐시는 수집 시점에 남아 있던 것만 보여 줍니다.
 
-`observations.db` 의 `lastSeen`, `mostRecentUserInteractionTime` 이 유닉스 초인지 Mac 절대 시각인지는 공개된 분석 자료가 없습니다. 값 하나를 두 방식으로 모두 바꿔 보고 다른 기록과 맞는 쪽을 고르되, 그 판단 근거를 보고서에 남깁니다. 변환 방법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`observations.db` 의 `lastSeen`, `mostRecentUserInteractionTime` 이 유닉스 초인지 Mac 절대 시각인지는 값 하나를 두 방식으로 모두 바꿔 보고 다른 기록과 맞는 쪽으로 정합니다. 그 판단 근거는 보고서에 남깁니다. 변환 방법은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 `observations.db` 는 Safari 가 아닌 앱 컨테이너에도 생겨서, 음악 앱이나 메일 앱의 `observations.db` 에 있는 도메인을 Safari 방문 기록으로 읽으면 안 됩니다. 어느 도메인 아래 파일인지를 늘 함께 적습니다.
 

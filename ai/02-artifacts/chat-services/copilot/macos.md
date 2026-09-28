@@ -7,9 +7,9 @@ nav_order: 240
 
 # macOS 앱 (macOS)
 
-Microsoft 는 소비자용 Copilot 을 Mac 앱으로도 제공하고, 이 앱은 Mac App Store 에 번들 ID `com.microsoft.copilot-mac` 으로 올라와 있습니다. 기기 안의 저장 위치와 파일 형식은 공개된 분석 자료가 없어 실제 기기로 확인해야 하므로, 이 페이지는 조사를 시작할 곳과 해석 기준을 적습니다.
+Microsoft 는 소비자용 Copilot 을 Mac 앱으로도 제공하고, 이 앱은 Mac App Store 에 번들 ID `com.microsoft.copilot-mac` 으로 올라와 있습니다. 기기 안의 저장 위치와 파일 형식은 실제 기기로 확인하고, 이 페이지는 조사를 시작할 곳과 해석 기준을 적습니다.
 
-## 공개 자료로 알 수 있는 것
+## 앱 배포 정보
 
 Microsoft 는 소비자용 Copilot 을 웹(`copilot.microsoft.com`)과 Windows, Mac, iOS, Android 앱으로 제공합니다[1]. Mac App Store 의 "Microsoft Copilot" 은 번들 ID 가 `com.microsoft.copilot-mac` 이고, 2026-09-25 기준 판은 `25.7.440902001` 입니다[2]. 판은 그때의 값이라서, 분석 대상 Mac 에 설치된 판은 앱 번들의 `Info.plist` 에서 따로 읽습니다.
 
@@ -20,9 +20,9 @@ App Store 를 거치지 않는 독립 설치 패키지에도 "Microsoft Copilot"
 | 배포 방식 | Mac App Store[2] |
 | 번들 ID | `com.microsoft.copilot-mac`[2] |
 | 목록에 적힌 판 | `25.7.440902001`(2026-09-25 목록 기준)[2] |
-| 최소 macOS 판 | 공개 자료 없음. 실제 앱 번들의 `Info.plist` 에서 확인 |
-| 사용자 데이터 폴더, 키체인 항목 이름 | 공개된 분석 자료 없음. 실제 기기로 확인 |
-| 대화가 기기에 사본으로 남는지 | 공식 문서에 언급 없음. 실제 기기로 확인 |
+| 최소 macOS 판 | 실제 앱 번들의 `Info.plist` 에서 확인 |
+| 사용자 데이터 폴더, 키체인 항목 이름 | 실제 기기로 확인 |
+| 대화가 기기에 사본으로 남는지 | 실제 기기로 확인 |
 
 대화 원본이 서버에만 있는지, 기기에도 남는지는 공식 문서에 나와 있지 않아서 어느 쪽으로도 단정하지 않습니다. 계정에 쌓인 활동 기록은 다른 기기와 마찬가지로 [계정 데이터 내보내기](export.md)로 받습니다.
 

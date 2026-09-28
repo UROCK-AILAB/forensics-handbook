@@ -32,7 +32,7 @@ iOS 버전과 기기에 설정된 시간대를 먼저 적어 둡니다. 버전�
 
 대화 DB 의 전체 구조와 첨부 파일이 저장되는 경로, 시각 기준은 [메시지 (iMessage·SMS)](../../../02-artifacts/communications/messages/index.md) 에 있습니다. 유출을 판별할 때는 그중 첨부와 방향에 관한 열만 골라 봅니다. `sms.db` 의 attachment 표에는 is_outgoing, transfer_name, filename, mime_type, uti, total_bytes, created_date, start_date, transfer_state, original_guid 열이 있고, message 표에는 is_from_me, is_sent, is_delivered, date, date_delivered, date_read, service, account_guid, share_status, share_direction 열이 있습니다. 메시지와 첨부는 message_attachment_join 표로, 대화와 메시지는 chat_message_join 표로 잇습니다.
 
-share_status·share_direction 열은 이름만 보면 공유 방향과 관련이 있어 보이지만 값의 뜻을 밝힌 공개 자료가 없습니다. 백업의 `com.apple.sharingd.plist` 에는 `SFCollaborationUserDefaults.com.apple.MobileSMS` 키가 있고, `HomeDomain :: Library/Application Support/CloudDocs/session/containers/iCloud.com.apple.MobileSMS.plist` 라는 메시지용 iCloud 컨테이너 설정 파일도 있습니다. 두 파일이 무엇을 기록하는지 밝힌 공개 자료가 없으니 보고서에 근거로 쓰지 않습니다.
+share_status·share_direction 열은 이름만 보면 공유 방향과 관련이 있어 보이지만, 이름만으로 값의 뜻을 단정할 수 없으니 보고서에는 값만 옮깁니다. 백업의 `com.apple.sharingd.plist` 에는 `SFCollaborationUserDefaults.com.apple.MobileSMS` 키가 있고, `HomeDomain :: Library/Application Support/CloudDocs/session/containers/iCloud.com.apple.MobileSMS.plist` 라는 메시지용 iCloud 컨테이너 설정 파일도 있습니다. 두 파일이 무엇을 기록하는지는 이름만으로 판단할 수 없으니 보고서에 근거로 쓰지 않습니다.
 
 ### 다른 회사 메신저
 

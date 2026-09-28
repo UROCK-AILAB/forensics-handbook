@@ -98,6 +98,7 @@ Android 에서 "지웠다" 는 한 가지 상태가 아닙니다. 사진은 휴�
 ## 함께 볼 페이지
 
 - 아티팩트 본문: [미디어 저장소](../../02-artifacts/media/mediastore/index.md), [삼성 갤러리](../../02-artifacts/media/samsung-gallery.md), [알림 기록](../../02-artifacts/app-usage/notification-history.md), [문자](../../02-artifacts/communications/messages/index.md), [카카오톡](../../02-artifacts/messengers/kakaotalk/index.md)
+- 메모 앱의 삭제 표시: [삼성 노트](../../02-artifacts/samsung/samsung-notes.md), [구글 Keep](../../02-artifacts/google-services/keep.md)
 - 기반 구조: [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md), [공용 저장 공간](../../01-foundations/storage/shared-storage.md)
 - 기법: [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md), [도구 검증](../../03-techniques/reporting/tool-validation.md)
 - 이어지는 시나리오: [증거를 없애려 했나](anti-forensics/index.md), [폰 사용 시간 재구성](usage-time.md)

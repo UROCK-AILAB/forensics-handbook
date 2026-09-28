@@ -49,7 +49,7 @@ claude-forensics 는 v0.1.1(2026-06-16) 문서에서 Windows 의 데스크톱 �
 | `Claude\vm_bundles\` | 수 GB 크기의 폴더(수집 도구가 빼는 대상) | [6] |
 | `Claude\Cache\`, `Code Cache\` 등 | 크롬 계열 캐시와 저장소 | [6] |
 | 패키지 폴더의 `LocalCache\Local\claude-cli-nodejs\Cache\` | `mcp-logs-` 로 시작하는 폴더의 JSON Lines 로그 | |
-| 패키지 폴더의 `AC\INetHistory\이름\container.dat` | 용도를 설명한 공개 자료 없음 | |
+| 패키지 폴더의 `AC\INetHistory\이름\container.dat` | 용도는 파일 헤더를 보고 확인 | |
 | `HKLM\SOFTWARE\Policies\Claude` | 기기 관리 정책 | [4] |
 | `HKCU\SOFTWARE\Policies\Claude` | 사용자 관리 정책 | [4] |
 
@@ -130,21 +130,21 @@ Anthropic 은 Cowork 의 디스크 형식을 공개하지 않았고(2026-07 기�
 
 ### 앱 설정 JSON
 
-사용자 데이터 폴더에는 앱이 직접 쓰는 JSON 파일이 있고, 키 이름은 다음과 같습니다. claude-forensics 는 이 가운데 `config.json`, `claude_desktop_config.json`, `buddy-tokens.json`, `cowork-enabled-cli-ops.json` 과 `ant-did` 를 수집 대상으로 둡니다[6]. 키의 뜻을 설명한 공개 자료가 없어서 아래 셋째 열은 키 이름이 가리키는 것이고, 뜻은 실제 값으로 확인해야 합니다.
+사용자 데이터 폴더에는 앱이 직접 쓰는 JSON 파일이 있고, 키 이름은 다음과 같습니다. claude-forensics 는 이 가운데 `config.json`, `claude_desktop_config.json`, `buddy-tokens.json`, `cowork-enabled-cli-ops.json` 과 `ant-did` 를 수집 대상으로 둡니다[6]. 아래 셋째 열은 키 이름이 가리키는 것일 뿐이라서, 뜻은 실제 값으로 확인합니다.
 
 | 파일 | 키(일부) | 키 이름이 가리키는 것 |
 |---|---|---|
 | `config.json` | `first_launch_at`, `version_first_launch.at`, `version_first_launch.version`, `updaterLastSeenVersion`, `updaterBannerStagedAt.version`, `updaterBannerStagedAt.stagedAt`, `lastKnownAccountUuid`, `locale`, `userThemeMode`, `planUsageLastTrayOpenAt`, `terminalCliPowerShellPath`, `windowSizeWasSignedIn`, `quickWindowPosition.monitor.*` | 처음 실행한 때와 그때 버전, 업데이트 버전, 마지막 계정 ID, 모니터 정보 |
 | `claude_desktop_config.json` | `mcpServers`, `coworkUserFilesPath`, `preferences.localAgentModeTrustedFolders`, `preferences.remoteToolsDeviceName`, `preferences.coworkWebSearchEnabled`, `preferences.coworkBrowserToolsEnabled`, `preferences.coworkPreferredBrowser`, `preferences.coworkScheduledTasksEnabled`, `preferences.ccdScheduledTasksEnabled`, `preferences.ccRemoteControlDefaultEnabled`, `preferences.ccAutoArchiveInactiveDays`, `preferences.bypassPermissionsGateByAccount`, `preferences.keepAwakeEnabled`, `preferences.sidebarMode`, `preferences.epitaxyPrefs.*` | MCP 서버, Cowork 작업 폴더, 신뢰한 폴더, 켜 둔 에이전트 기능 |
-| `bridge-state.json` | `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` | 공개 설명 없음 |
-| `plan-usage-history.json` | `version`, `samples[].org`, `samples[].t`, `samples[].u.fh`, `samples[].u.sd` | 공개 설명 없음 |
+| `bridge-state.json` | `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` | 실제 값으로 확인 |
+| `plan-usage-history.json` | `version`, `samples[].org`, `samples[].t`, `samples[].u.fh`, `samples[].u.sd` | 실제 값으로 확인 |
 | `buddy-tokens.json` | `tokens-today.date`, `tokens-today.tokens` | 날짜와 토큰 수 |
 | `window-state.json` | `x`, `y`, `width`, `height`, `isMaximized`, `isFullScreen`, `displayBounds.*` | 창 크기와 위치 |
 | `git-worktrees.json` | `schemaVersion`, `worktrees`, `untrackedDirGc.cwds`, `untrackedDirGc.roots`, `untrackedDirGc.sightings` | 앱이 다룬 코드 작업 폴더 |
-| `mcp-user-tool-toggles.json` | `v`, `owners.*` | 공개 설명 없음 |
+| `mcp-user-tool-toggles.json` | `v`, `owners.*` | 실제 값으로 확인 |
 | `extensions-blocklist.json` | `[].url`, `[].lastUpdated`, `[].entries[].id`, `.reason`, `.hash`, `.certificateFingerprint`, `.is_internal_dxt` | 확장 차단 목록 |
 | `cowork-enabled-cli-ops.json` | `ownerAccountId` | 계정 ID |
-| `ant-device-registry.json` | 키 이름 가림, 값은 문자열 | 공개 설명 없음 |
+| `ant-device-registry.json` | 키 이름 가림, 값은 문자열 | 실제 값으로 확인 |
 
 `claude_desktop_config.json` 에는 `mcpServers` 키가 없을 수도 있습니다. 이 파일에는 앱 환경설정이 함께 들어 있어서, 키가 없으면 이 파일로 로컬 MCP 서버를 설정하지 않았다는 뜻으로만 읽습니다. MCP 설정과 로그의 해석은 [MCP 서버와 도구 호출 기록](../../dev-agents/mcp.md)에서 다룹니다.
 
@@ -209,11 +209,11 @@ forceLoginOrgUUID                  effortLevel
 
 ## 시각 해석
 
-Cowork 세션 정보의 `createdAt`, `lastActivityAt` 은 1970-01-01 UTC 기준 밀리초입니다[7]. `audit.jsonl` 의 `_audit_timestamp` 는 밀리초 정수이거나 `Z` 로 끝나는 UTC 문자열입니다[6]. `claude-code-sessions` 의 `createdAt`, `lastActivityAt` 은 단위를 밝힌 공개 자료가 없어서, 13자리 정수면 밀리초로 보고 파일 시스템 시각과 맞는지 확인합니다.
+Cowork 세션 정보의 `createdAt`, `lastActivityAt` 은 1970-01-01 UTC 기준 밀리초입니다[7]. `audit.jsonl` 의 `_audit_timestamp` 는 밀리초 정수이거나 `Z` 로 끝나는 UTC 문자열입니다[6]. `claude-code-sessions` 의 `createdAt`, `lastActivityAt` 은 13자리 정수면 밀리초로 보고 파일 시스템 시각과 맞는지 확인합니다.
 
 제목을 바꾸면 세션 정보 파일만 바뀝니다[7]. 그래서 세션 정보 파일의 수정 시각이 대화 기록 파일보다 늦으면, 마지막 대화 뒤에 제목 변경 같은 정보 수정이 있었을 수 있습니다. 대화가 오간 시각은 기록 줄의 시각으로 씁니다.
 
-`config.json` 의 `first_launch_at`, `version_first_launch.at`, `updaterBannerStagedAt.stagedAt`, `planUsageLastTrayOpenAt` 과 `plan-usage-history.json` 의 `samples[].t` 는 단위를 적은 공개 자료가 없어서 자릿수로 판단합니다. 앱은 약 4시간마다 스스로 업데이트하므로[3], 앱 파일의 파일 시스템 시각을 처음 설치한 때로 보지 않고 `version_first_launch` 를 먼저 봅니다. 쿠키 DB 의 `creation_utc`, `last_access_utc`, `expires_utc` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 시각 해석을 따르고, 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 바뀐 때를 추정합니다. 여러 시각을 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
+`config.json` 의 `first_launch_at`, `version_first_launch.at`, `updaterBannerStagedAt.stagedAt`, `planUsageLastTrayOpenAt` 과 `plan-usage-history.json` 의 `samples[].t` 는 자릿수로 단위를 판단합니다. 앱은 약 4시간마다 스스로 업데이트하므로[3], 앱 파일의 파일 시스템 시각을 처음 설치한 때로 보지 않고 `version_first_launch` 를 먼저 봅니다. 쿠키 DB 의 `creation_utc`, `last_access_utc`, `expires_utc` 는 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/index.html)의 시각 해석을 따르고, 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 바뀐 때를 추정합니다. 여러 시각을 한 줄로 맞추는 방법은 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에 있습니다.
 
 ## 함정과 한계
 

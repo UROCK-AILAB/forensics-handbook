@@ -117,7 +117,7 @@ Android 9 에서 호환 WAL (Compatibility WAL) 이 들어왔습니다. journal_
 | Android 9 | 호환 WAL 도입 [3] |
 | 현행 AOSP(main) | 위 표의 기본값, `sqlite_compatibility_wal_flags` 키 해석 [4][5][7] |
 | Android 16, One UI 8.5 | settings global 에 `sqlite_compatibility_wal_flags` 키가 있음 |
-| 그 밖의 버전, One UI 의 따로 바꾼 설정 | 공개 자료 없음. 실제 기기에서 확인 |
+| 그 밖의 버전, One UI 의 따로 바꾼 설정 | 실제 기기에서 settings global 의 키 값과 DB 의 `PRAGMA journal_mode` 로 확인 |
 
 ## 포렌식에서 중요한 점
 

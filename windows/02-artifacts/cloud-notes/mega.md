@@ -62,9 +62,9 @@ MEGAsync 는 로컬 폴더와 MEGA 클라우드 폴더를 동기화하면서, �
 | `parenthandle` | 부모 노드 핸들 |
 | `name` | 노드의 표시 이름. 복호된 파일·폴더 이름을 텍스트로 넣습니다 |
 | `fingerprint`, `origFingerprint` | 지문 값 |
-| `type`, `share`, `fav`, `flags`, `counter`, `label` | 코드에 이름만 있고 뜻은 알려지지 않았습니다 |
+| `type`, `share`, `fav`, `flags`, `counter`, `label` | 코드에 이름만 있습니다. 뜻을 단정하지 않고 값만 옮깁니다 |
 | `ctime`, `mtime` | int64 시각 값(아래 "시각 해석") |
-| `node` | BLOB. 내용 형식은 알려지지 않았습니다 |
+| `node` | BLOB. 내용 형식은 값의 앞부분을 헥스로 보고 확인합니다 |
 | `description`, `tags` | 노드 설명과 태그를 텍스트로 넣습니다 |
 
 - 이 밖에 계산용 가상 열 `mimetypeVirtual`·`fingerprintVirtual`·`sizeVirtual`·`s3keyVirtual` 이 있습니다.
@@ -91,7 +91,7 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 - 해시·XOR 에 쓰는 키 재료는 현재 사용자 토큰의 SID 에 고정 시드를 XOR 한 뒤 SHA-1 한 값입니다.
 - Windows 에서는 이 키 재료를 설정 파일 안에 `LocalStorageKey` 라는 항목으로 저장해 둡니다.
 - 오프라인 이미지에서 값을 풀려면 그 사용자의 DPAPI 마스터 키가 필요합니다(코드에서 추론). 마스터 키를 푸는 재료와 절차는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에 정리합니다.
-- 풀었을 때 어떤 설정 값(계정 이메일, 동기화 목록 등)이 나오는지는 공개 자료가 없습니다.
+- 풀었을 때 어떤 설정 값(계정 이메일, 동기화 목록 등)이 나오는지는 시험 PC 에서 값을 풀어 보고 확인합니다.
 
 ### 레지스트리·탐색기 흔적 (코드)
 
@@ -124,7 +124,7 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 - `Rubbish` 날짜는 로컬에서 파일이 옮겨진 날입니다. 지우기를 이 PC 의 사용자가 했는지, 다른 기기나 웹에서 한 일이 동기화로 내려왔는지는 폴더 이름만으로 구분하지 못합니다.
 - `statecache` 표의 내용은 세션 키 없이 읽지 못합니다.
 - 설정 파일의 값은 DPAPI 마스터 키 없이 읽지 못합니다.
-- nodes 표의 `ctime`·`mtime` 이 서버에서 받은 값인지, 로컬에서 정한 값인지는 알려지지 않았습니다.
+- nodes 표의 `ctime`·`mtime` 만으로는 서버에서 받은 값인지, 로컬에서 정한 값인지 구분하지 못합니다.
 
 보고서에는 "X 파일을 지웠다" 대신 이렇게 씁니다. "동기화 폴더 안 숨은 `Rubbish\2024-01-01\` 폴더에 X 파일이 있다. 앱 코드상 이 폴더 이름은 동기화 중 로컬 파일을 휴지통 폴더로 옮긴 날(로컬 시각)이다."
 
@@ -132,7 +132,7 @@ Windows 에서 동기화 폴더 안 로컬 휴지통 폴더 이름은 `Rubbish` 
 
 | 값 | 형식 | 기준 |
 |---|---|---|
-| nodes 표 `ctime`, `mtime` | int64 `m_time_t`. `time(NULL)` 로 만드는 Unix 초입니다 (코드) | Unix 초는 1970-01-01 00:00 UTC 부터 센 값입니다. 서버 값인지 로컬 값인지는 알려지지 않았습니다 |
+| nodes 표 `ctime`, `mtime` | int64 `m_time_t`. `time(NULL)` 로 만드는 Unix 초입니다 (코드) | Unix 초는 1970-01-01 00:00 UTC 부터 센 값입니다. 서버 값인지 로컬 값인지는 같은 파일의 NTFS 시각과 맞춰 보고 판단합니다 |
 | `Rubbish\YYYY-MM-DD\` 폴더 이름 | 날짜 | 로컬 시각입니다 (코드) |
 | `YYYY-MM-DD HH.MM.SS.<번호>` 하위 폴더 이름 | 날짜·시각 | 같은 코드 부분에서 만듭니다. 폴더의 NTFS 만든 시각과 맞춰 시간대를 확인합니다 |
 | `Rubbish` 안 폴더·파일의 NTFS 시각 | FILETIME | UTC. [마스터 파일 테이블](../filesystem/mft.md) 참고 |

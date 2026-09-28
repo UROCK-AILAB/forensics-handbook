@@ -48,7 +48,7 @@ iCloud 백업의 암호화 층은 아래와 같습니다 [1]. 위에서 아래�
 
 백업 안의 키체인은 Secure Enclave 의 UID 루트 키에서 나온 키로 암호화합니다. 이 키는 기기마다 다르고 Apple 도 알지 못해서, 키체인은 원래 기기에만 복원할 수 있습니다 [1]. 키체인 구조는 [키체인](../storage/keychain.md) 페이지에서 다룹니다.
 
-암호화하지 않은 로컬 백업에서는 `KeychainDomain :: keychain-backup.plist` 에 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있습니다. iCloud 백업 안의 키체인이 같은 모양인지는 공개 자료가 없습니다.
+암호화하지 않은 로컬 백업에서는 `KeychainDomain :: keychain-backup.plist` 에 `keybag-uuid`, `genp`, `inet`, `cert`, `keys` 키가 있습니다. iCloud 백업에서 받은 키체인은 같은 키가 있는지 plist 를 열어 확인합니다.
 
 ### 표준 데이터 보호와 고급 데이터 보호
 
@@ -79,7 +79,7 @@ iCloud 백업 본문은 서버에 있어서 기기를 분석하는 쪽에서는 
 | 같은 파일 | `PreflightSizing`{도메인 이름들, `_TotalSize`} | 백업 도메인별 크기 |
 | 같은 파일 | `RemoteConfiguration`{`BackupPeriod`, `BackupWarningPeriod`, `BackupVerificationEnabled`, `RestoreVerificationEnabled`, `LocalSnapshotsDisabled`, `ServerRestrictedDomains` 등}, `RemoteConfigurationExpiration`(datetime), `RemoteConfigurationBuildVersion`(str) | 서버에서 내려받은 백업 설정 |
 | 같은 파일 | `AccountEnabledDate`(datetime), `FetchMissingKeysAtNextUnlock`(bool), `NotifyDaemonNextTimeKeyBagIsUnlocked`(bool), `SyncZoneFetched`(bool), `FSEventState`{`dateCreated`, `eventDatabaseUUIDForVolumeUUID`, `eventId`}, `LastOnConditionEvents`(list), `AirTrafficFinishedRestoring`(bool) | 계정에서 백업을 켠 시각 등 |
-| `RootDomain :: Library/Preferences/com.apple.backupd.plist` | `CKPerBootTasks`(list), `CC_OncePerBootBackingData`(bytes), `CKStartupTime`(int) | 공개 자료 없음 |
+| `RootDomain :: Library/Preferences/com.apple.backupd.plist` | `CKPerBootTasks`(list), `CC_OncePerBootBackingData`(bytes), `CKStartupTime`(int) | 이름만으로는 뜻을 짐작하기 어려움 |
 | `HomeDomain :: Library/Preferences/com.apple.mobileSMS.plist` | `IMDCKBackupControllerBackupDeviceStateKey`{`IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidRestoreFromCloudBackupKey`, `IMDSavedDeviceStateDidMigrateKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey`, `IMDSavedDeviceStateDidUpgradeKey`, `IMDSavedDeviceStateBuildVersionKey`, `IMDSavedDeviceStateDateKey`, `IMDSavedDeviceStateIsMigratingKey`}, `IMDCKBackupControllerTimebombStartUserDefaultsKey`(datetime) | 메시지 앱이 본 백업 복원·기기 이전 상태 |
 
 같은 로컬 백업의 도메인 목록에는 `AppDomainPlugin-com.apple.MobileBackup.framework.DiagnosticExtension`, `…FollowUpUIExtension`, `…MBPrebuddyFollowUpExtension` 처럼 백업 기능에 딸린 확장 컨테이너도 있습니다. plist 를 여는 방법은 [속성 목록 파일](../data-formats/plist.md) 페이지를, 로컬 백업의 도메인 구조는 [로컬 백업](local-backup/index.md) 페이지를 봅니다.
@@ -98,7 +98,7 @@ iCloud 백업을 끈 뒤에도 서버의 백업은 180일 동안 남아 있다�
 
 위 표의 키 뜻은 모두 키 이름으로 짐작한 것이고, Apple 이 공개한 설명은 없습니다. 보고서에는 "`WasCloudRestore` 키가 있고 값이 참이다" 처럼 기록 그대로 쓰고, "iCloud 에서 복원했다" 는 다른 흔적과 맞아떨어질 때만 씁니다.
 
-`LastCloudBackupDate` 는 정수형이고, Unix 초인지 Mac 절대 시각인지 알려져 있지 않습니다. 두 기준으로 모두 바꿔 보고 `LastCloudBackupTZ` 와 다른 시각 기록에 맞는 쪽을 고릅니다. 시각 기준은 [시각 값](../value-decoding/time-values.md) 페이지에서 설명합니다.
+`LastCloudBackupDate` 는 정수형이고, Unix 초인지 Mac 절대 시각인지 값만으로는 단정할 수 없습니다. 두 기준으로 모두 바꿔 보고 `LastCloudBackupTZ` 와 다른 시각 기록에 맞는 쪽을 고릅니다. 시각 기준은 [시각 값](../value-decoding/time-values.md) 페이지에서 설명합니다.
 
 위 키 목록은 암호화하지 않은 로컬 백업 기준이라, iCloud 백업 본문이나 다른 iOS 버전에서 같은 키가 있다고 볼 근거는 없습니다.
 
@@ -107,7 +107,7 @@ iCloud 백업을 끈 뒤에도 서버의 백업은 180일 동안 남아 있다�
 | iOS | 내용 | 출처 |
 |---|---|---|
 | 16.2 이상 | 고급 데이터 보호를 켜면 iCloud 백업을 종단 간 암호화할 수 있음 | [2] |
-| 27.0 | `com.apple.MobileBackup.plist` 에 `SnapshotFormat`, `SnapshotFormatEnum` 키가 있음. 값과 버전별 변화는 공개 자료 없음 | |
+| 27.0 | `com.apple.MobileBackup.plist` 에 `SnapshotFormat`, `SnapshotFormatEnum` 키가 있음. 값은 plist 를 열어 확인 | |
 
 iOS 15 이후 그 밖의 버전에서 iCloud 백업 구조가 바뀌었는지는 실제 기기로 확인해야 합니다.
 

@@ -43,7 +43,7 @@ UDID (Unique Device Identifier) 는 ECID 같은 하드웨어 값으로 계산한
 | 2007~2018년 | 소문자 16진수 40자리 | [2] |
 | 2018년 이후 | 대문자 16진수 25자리 | [2] |
 
-옛 형식은 `SHA1(serial + IMEI + wifiMac + bluetoothMac)` 로 계산한다는 설명이 있지만, 이 설명을 실은 위키백과 문단은 스스로 출처 부족을 표시해 두었습니다 [2]. 새 형식이 어떤 값을 어떻게 이어 붙인 것인지와 정확한 기종 경계는 공개 자료로 밝혀져 있지 않습니다. Apple 이 Apple ID·iCloud 에서 기기를 가릴 때 UDID 를 쓰고, iOS 11 부터 설정 과정에서 확인 서버가 UDID 를 검사한다는 설명도 같은 문서에 있지만, 이 문단 역시 출처 표시가 부족합니다 [2].
+옛 형식은 `SHA1(serial + IMEI + wifiMac + bluetoothMac)` 로 계산한다는 설명이 있지만, 이 설명을 실은 위키백과 문단은 스스로 출처 부족을 표시해 두었습니다 [2]. 새 형식이 어떤 값을 어떻게 이어 붙인 것인지와 정확한 기종 경계는 단정할 수 없으므로, UDID 모양만 보고 기종을 판단하지 않습니다. Apple 이 Apple ID·iCloud 에서 기기를 가릴 때 UDID 를 쓰고, iOS 11 부터 설정 과정에서 확인 서버가 UDID 를 검사한다는 설명도 같은 문서에 있지만, 이 문단 역시 출처 표시가 부족합니다 [2].
 
 ECID 는 UDID 계산에 들어가는 하드웨어 값이고 [2], 길이와 형식은 실제 기기의 값으로 확인합니다.
 
@@ -59,8 +59,7 @@ ECID 는 UDID 계산에 들어가는 하드웨어 값이고 [2], 길이와 형�
 | 원래 포장 상자의 바코드 | 일련번호, EID, IMEI/MEID |
 | 처음 켤 때 "Hello" 화면 오른쪽 아래 정보(i) 단추 | 기기 정보 |
 
-기기 본체에 IMEI/MEID 가 새겨진 자리는 기종마다 다릅니다. iPhone 13 계열·12 계열·11 계열, SE 2·3세대, XS·XS Max·XR·X, 8·8 Plus, 7·7 Plus, 6s·6s Plus, 3G·3GS·4(GSM)·4s 는 SIM 트레이에, iPhone 6·6 Plus, SE 1세대, 5s·5c·5 는 뒷면에 적혀 있습니다 [1]. iPhone 14 이후 기종에는 IMEI/MEID 가 새겨져 있지 않습니다 [1]. 듀얼 SIM 기기의 IMEI 두 개가 어디에 적히는지는 이 안내에 없습니다.
-
+기기 본체에 IMEI/MEID 가 새겨진 자리는 기종마다 다릅니다. iPhone 13 계열·12 계열·11 계열, SE 2·3세대, XS·XS Max·XR·X, 8·8 Plus, 7·7 Plus, 6s·6s Plus, 3G·3GS·4(GSM)·4s 는 SIM 트레이에, iPhone 6·6 Plus, SE 1세대, 5s·5c·5 는 뒷면에 적혀 있습니다 [1]. iPhone 14 이후 기종에는 IMEI/MEID 가 새겨져 있지 않습니다 [1].
 ## 읽는 법
 
 수집한 백업이 압수한 기기에서 나왔는지 확인할 때는 아래 순서를 따릅니다.
@@ -68,7 +67,7 @@ ECID 는 UDID 계산에 들어가는 하드웨어 값이고 [2], 길이와 형�
 1. **백업의 Info.plist 를 읽습니다.** `Serial Number`, `IMEI`, `MEID`, `Product Type`, `Product Version`, `Build Version` 을 적습니다.
 2. **기기 쪽 번호를 따로 확인합니다.** 설정 화면, 컴퓨터 연결 화면, SIM 트레이(iPhone 13 이전 기종)나 상자처럼 번호가 적힌 곳에서 같은 번호를 읽습니다 [1].
 3. **두 쪽을 대조합니다.** 일련번호와 IMEI 가 같고 기종 식별자가 기기 모델과 맞는지 봅니다.
-4. **뜻이 밝혀지지 않은 키에는 뜻을 붙이지 않습니다.** `Unique Identifier`·`Target Identifier` 가 UDID 를 담는지, `GUID` 가 기기와 백업한 컴퓨터 가운데 어느 쪽의 식별자인지는 공개 자료로 밝혀져 있지 않으니 보고서에는 키 이름과 값을 그대로 적습니다.
+4. **뜻을 단정할 수 없는 키에는 뜻을 붙이지 않습니다.** `Unique Identifier`·`Target Identifier` 가 UDID 를 담는지, `GUID` 가 기기와 백업한 컴퓨터 가운데 어느 쪽의 식별자인지는 이름만으로 단정할 수 없으니 보고서에는 키 이름과 값을 그대로 적습니다.
 
 Python 표준 라이브러리로 Info.plist 의 키를 읽는 예입니다.
 
@@ -87,17 +86,17 @@ plist 의 형식은 [속성 목록 파일](../data-formats/plist.md) 에서 다�
 
 ## 포렌식에서 중요한 점
 
-복원이나 기기 이전이 있었으면 한 기기의 데이터가 다른 기기에 들어 있을 수 있어서, 식별자와 함께 빌드 번호 흔적도 봅니다. 로컬 백업에는 com.apple.MobileBackup.plist 의 `RestoreInfo` 아래 `BackupBuildVersion`, `DeviceBuildVersion`, `RestoreDate`, `WasCloudRestore` 키와 `HomeDomain` :: `Library/Preferences/com.apple.imdsmsrecordstore.plist` 의 `IMDSavedDeviceState` 아래 `IMDSavedDeviceStateBuildVersionKey`, `IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey` 키가 있습니다. `HomeDomain` :: `Library/Preferences/com.apple.cloudphotod.plist` 에는 `_CPLUpgradeHistory-SystemLibrary` 아래 `lastSeenOSBuildVersion`, `previousOSBuildVersion` 키도 있습니다. 이 키들은 이름으로 보면 복원·이전 흔적과 엮을 수 있지만 뜻을 밝힌 공개 자료는 없습니다. 복원 흔적을 읽는 법은 [초기화와 복원 흔적](../../02-artifacts/system-account/erase-restore.md) 에서 다룹니다.
+복원이나 기기 이전이 있었으면 한 기기의 데이터가 다른 기기에 들어 있을 수 있어서, 식별자와 함께 빌드 번호 흔적도 봅니다. 로컬 백업에는 com.apple.MobileBackup.plist 의 `RestoreInfo` 아래 `BackupBuildVersion`, `DeviceBuildVersion`, `RestoreDate`, `WasCloudRestore` 키와 `HomeDomain` :: `Library/Preferences/com.apple.imdsmsrecordstore.plist` 의 `IMDSavedDeviceState` 아래 `IMDSavedDeviceStateBuildVersionKey`, `IMDSavedDeviceStateDidRestoreFromBackupKey`, `IMDSavedDeviceStateDidMigrateFromDifferentDeviceKey` 키가 있습니다. `HomeDomain` :: `Library/Preferences/com.apple.cloudphotod.plist` 에는 `_CPLUpgradeHistory-SystemLibrary` 아래 `lastSeenOSBuildVersion`, `previousOSBuildVersion` 키도 있습니다. 이 키들은 이름으로 보면 복원·이전 흔적과 엮을 수 있지만, 이름만으로 뜻을 단정할 수는 없습니다. 복원 흔적을 읽는 법은 [초기화와 복원 흔적](../../02-artifacts/system-account/erase-restore.md) 에서 다룹니다.
 
-`UDIDChangeTracker.plist` 도 이름으로 짐작하면 UDID 변화와 관련된 파일 같지만, 무엇을 적는지 밝힌 공개 자료가 없습니다. 이름만으로 "UDID 가 바뀐 기록이 있다" 고 쓰지 않습니다.
+`UDIDChangeTracker.plist` 도 이름으로 짐작하면 UDID 변화와 관련된 파일 같지만, 이름만으로 "UDID 가 바뀐 기록이 있다" 고 쓰지 않습니다.
 
 ## 함정
 
 - **위키백과 한 곳에만 기댄 설명이 많습니다.** UDID 의 모양과 계산식은 출처 표시가 부족한 위키백과 문단 [2] 에 기댄 것입니다. 보고서에 UDID 형식을 근거로 기종을 판단하는 문장을 넣을 때는 이 한계를 함께 적습니다.
-- **일련번호라는 열 이름이 기기 일련번호라는 보장이 없습니다.** consolidated.db·gyroCal.db 의 `TableInfo.SerialNumber` 는 같은 표에 `TableName`·`SoftwareVersion` 이 함께 있어서 표 버전 번호일 수도 있고, 기기 일련번호인지는 밝혀져 있지 않습니다.
+- **일련번호라는 열 이름이 기기 일련번호라는 보장이 없습니다.** consolidated.db·gyroCal.db 의 `TableInfo.SerialNumber` 는 같은 표에 `TableName`·`SoftwareVersion` 이 함께 있어서 표 버전 번호일 수도 있고, 기기 일련번호인지는 단정할 수 없습니다.
 - **상대 기기의 식별자를 이 기기의 식별자로 읽지 않습니다.** 블루투스 DB 의 `Uuid`·`Address`·`iCloudIdentifier` 는 상대 기기를 적는 열이라서, 이 아이폰을 가리키지 않습니다. 해석은 [블루투스 장치](../../02-artifacts/network/bluetooth.md) 에서 다룹니다.
-- **백업 폴더 이름과 식별자의 관계를 짐작하지 않습니다.** 로컬 백업 폴더 이름과 UDID 의 관계를 밝힌 공개 자료가 없으니, 기기를 구분할 때는 폴더 이름 대신 Info.plist 의 일련번호·IMEI 를 씁니다.
-- **consolidated.db 의 `DeviceId` 는 뜻을 모릅니다.** `FenceHandOffDeviceId` 표의 `DeviceId` 는 다른 기기의 식별자로 보이지만 뜻을 밝힌 공개 자료는 없습니다.
+- **백업 폴더 이름과 식별자의 관계를 짐작하지 않습니다.** 로컬 백업 폴더 이름과 UDID 의 관계는 단정할 수 없으니, 기기를 구분할 때는 폴더 이름 대신 Info.plist 의 일련번호·IMEI 를 씁니다.
+- **consolidated.db 의 `DeviceId` 는 뜻을 단정하지 않습니다.** `FenceHandOffDeviceId` 표의 `DeviceId` 는 다른 기기의 식별자로 보이지만, 이름만으로 단정할 수 없어서 보고서에는 값만 옮깁니다.
 
 ## 도구
 

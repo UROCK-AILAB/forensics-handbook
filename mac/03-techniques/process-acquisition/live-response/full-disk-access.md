@@ -46,7 +46,7 @@ TCC 데이터베이스는 사용자별 `~/Library/Application Support/com.apple.
 | `Allowed` | 허용 여부(참/거짓) |
 | `Comment` | 설명 |
 
-프로파일로 준 권한이 TCC 데이터베이스 말고 어느 파일에 남는지는 공개된 분석 자료가 없어서, FDA의 출처를 따질 때는 TCC 데이터베이스와 함께 설치된 프로파일도 봅니다. 프로파일은 [구성 프로파일 (Configuration Profiles·MDM)](../../../02-artifacts/persistence/configuration-profiles.md)에서 다룹니다.
+권한은 프로파일로도 줄 수 있어서, FDA의 출처를 따질 때는 TCC 데이터베이스와 함께 설치된 프로파일도 봅니다. 프로파일은 [구성 프로파일 (Configuration Profiles·MDM)](../../../02-artifacts/persistence/configuration-profiles.md)에서 다룹니다.
 
 ## 도구
 

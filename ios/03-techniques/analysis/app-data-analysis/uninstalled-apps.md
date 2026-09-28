@@ -62,7 +62,7 @@ nav_order: 1260
    | 기록 | 삭제 뒤 상태 | 자세히 |
    |---|---|---|
    | knowledgeC.db, InteractionC.db | knowledgeC.db 에서는 앱을 지우면 그 번들의 항목이 지워짐. InteractionC.db 에서는 지운 행을 되살린 사례가 있음[7] | [KnowledgeC](../../../02-artifacts/app-usage/knowledgec/index.md), [삭제 데이터 복구](../data-recovery/index.md) |
-   | Biome `_DKEvent.App.Install` | 번들 ID 와 설치 시작·끝 시각. 보존 기간(maxAge) 28일. 삭제를 기록하는지는 공개 자료 없음[4] | [바이옴](../../../02-artifacts/app-usage/biome/index.md) |
+   | Biome `_DKEvent.App.Install` | 번들 ID 와 설치 시작·끝 시각. 보존 기간(maxAge) 28일[4]. 삭제를 기록하는지는 시험 기기에서 앱을 지워 보고 확인 | [바이옴](../../../02-artifacts/app-usage/biome/index.md) |
    | Biome `AppLaunch` | 앱을 연 경로(idleTimer, homescreen, appswitcher, spotlight 등)와 앱 정보. 28일[4] | [바이옴](../../../02-artifacts/app-usage/biome/index.md) |
    | Biome(알림, 텍스트 입력 세션) | 삭제 6일 뒤에도 남음[7] | [바이옴](../../../02-artifacts/app-usage/biome/index.md) |
    | 알림, SMS | 삭제 6일 뒤에도 남음[7] | [알림 기록](../../../02-artifacts/app-usage/notifications.md), [메시지](../../../02-artifacts/communications/messages/index.md) |
@@ -83,7 +83,7 @@ nav_order: 1260
 
 `key_tab` 의 번호와 `_UninstallDate` 는 iOS 11.2.1 에서 시험한 결과이고[6] 모든 지운 앱에 삭제 시각이 남지도 않습니다. `UninstalledApplications.plist` 도 유료 구매나 결제 수단 연결 뒤에만 채워지는 것으로 보이므로[3], 이 파일에 앱이 없다고 해서 그 앱을 지운 적이 없다고 쓰지 않습니다.
 
-iOS 27.0 로컬 백업의 `HomeDomain :: Library/Preferences/com.apple.mobile.installation.plist` 에는 `ExtensionDataContainerParentIDUpdateVersion` 키 하나만 있고 앱 목록은 없습니다. `HomeDomain :: Library/Preferences/com.apple.MobileStore.appremoval.plist` 는 파일이 있어도 키가 비어 있을 수 있고, 이 파일의 용도를 밝힌 공개 자료는 없습니다. 이름만 보고 삭제 기록으로 해석하지 않습니다.
+iOS 27.0 로컬 백업의 `HomeDomain :: Library/Preferences/com.apple.mobile.installation.plist` 에는 `ExtensionDataContainerParentIDUpdateVersion` 키 하나만 있고 앱 목록은 없습니다. `HomeDomain :: Library/Preferences/com.apple.MobileStore.appremoval.plist` 는 파일이 있어도 키가 비어 있을 수 있습니다. 이름만 보고 삭제 기록으로 해석하지 않습니다.
 
 Biome 의 두 스트림은 보존 기간이 28일이라[4] 오래전에 지운 앱은 Biome 에 흔적이 없을 수 있습니다. 앱을 지우면 앱의 데이터 컨테이너도 함께 지워진다고 흔히 말하지만, Apple 공식 문서에 적힌 내용은 아닙니다. 그래서 컨테이너가 없다는 것은 수집 시점에 없었다는 사실로만 씁니다.
 

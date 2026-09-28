@@ -32,7 +32,7 @@ nav_order: 2190
 | ULMO | 읽기 전용, lzma 압축 | |
 | ASIF | Apple 스파스 이미지 | 현대적 스파스 읽기·쓰기 이미지 |
 
-디스크 유틸리티에서는 이 밖에 RAW, DVD/CD 마스터, 하이브리드(HFS+/ISO/UDF) 형식도 고를 수 있습니다(macOS 10.15 Catalina 이후 기준) [7]. ASIF가 어느 macOS 버전에서 들어왔는지는 공개 자료가 없습니다.
+디스크 유틸리티에서는 이 밖에 RAW, DVD/CD 마스터, 하이브리드(HFS+/ISO/UDF) 형식도 고를 수 있습니다(macOS 10.15 Catalina 이후 기준) [7].
 
 ## 암호화 머리 구조
 
@@ -45,7 +45,7 @@ nav_order: 2190
 
 v2 머리는 `sig`(8바이트), `version`, `enc_iv_size`, 뜻이 밝혀지지 않은 4바이트 필드 다섯, `uuid`(16바이트), `blocksize`(4바이트), `datasize`(8바이트), `dataoffset`(8바이트), 채움 24바이트 순서로 시작합니다. 그 뒤로 키 유도 필드(`kdf_algorithm`, `kdf_prng_algorithm`, `kdf_iteration_count`, `kdf_salt_len`, `kdf_salt`)과 키 블롭을 감싼 방식 필드(`blob_enc_iv_size`, `blob_enc_iv`, `blob_enc_key_bits`, `blob_enc_algorithm`, `blob_enc_padding`, `blob_enc_mode`)이 오고, 끝에 `encrypted_keyblob_size` 와 `encrypted_keyblob`(64바이트)이 있습니다. v1 머리에는 `kdf_iteration_count`, `kdf_salt_len`, `kdf_salt`, `len_wrapped_aes_key`, `wrapped_aes_key`(296바이트), `len_hmac_sha1_key`, `wrapped_hmac_sha1_key`(300바이트) 필드가 있습니다.
 
-v2에서 인증서처럼 암호 말고 다른 수단을 함께 걸었을 때 키 블롭이 여러 개 들어가는지는 공개 자료가 없어서, 그런 이미지는 `hdiutil isencrypted` 출력과 함께 봅니다.
+v2에서 인증서처럼 암호 말고 다른 수단을 함께 건 이미지는 키 블롭이 하나라고 가정하지 않고, `hdiutil isencrypted` 출력과 함께 봅니다.
 
 아래 헥스는 위 구조로 만든 예시이고 실제 이미지에서 뽑은 값이 아닙니다. v2 이미지의 첫 8바이트이고, 뒤쪽은 생략했습니다.
 
@@ -73,7 +73,7 @@ v2에서 인증서처럼 암호 말고 다른 수단을 함께 걸었을 때 키
 - v1 머리는 파일 끝에 있어서 파일 앞부분만 보는 시그니처 검색으로는 놓칩니다. 끝 8바이트도 함께 봅니다.
 - 스파스 번들은 디렉터리라서 파일 단위 시그니처 검색에 걸리지 않고, 밴드 파일이 일부만 남으면 이미지가 온전히 붙지 않을 수 있습니다.
 - 여기 적은 머리 구조는 공개 도구 코드에서 읽은 것이라서 Apple이 바꾸면 달라질 수 있습니다. 새 macOS에서 만든 이미지는 `hdiutil isencrypted` 결과와 함께 봅니다.
-- 이미지 암호를 키체인에 기억시키는 동작이나 이미지를 붙였다 뗀 기록이 어디에 남는지는 공개된 분석 자료가 없습니다. 붙인 흔적은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events/index.md)과 [최근 항목 (Shared File Lists)](../../../02-artifacts/file-folder-usage/recent-items/index.md) 쪽에서 따로 찾아봅니다.
+- 이미지 암호를 키체인에 기억시키는 동작이나 이미지를 붙였다 뗀 기록이 어디에 남는지는 시험 기기에서 재현해 확인합니다. 붙인 흔적은 [통합 로그에서 찾을 것 (Unified Log Events)](../../../02-artifacts/logs/unified-log-events/index.md)과 [최근 항목 (Shared File Lists)](../../../02-artifacts/file-folder-usage/recent-items/index.md) 쪽에서 따로 찾아봅니다.
 
 ## 결과를 어떻게 해석하나
 

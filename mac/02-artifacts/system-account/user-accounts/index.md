@@ -23,12 +23,12 @@ macOS 의 로컬 사용자 계정 정보는 사용자마다 plist 하나로 `/pr
 | 위치 | macOS 버전 | 알려 주는 것 |
 |---|---|---|
 | `/private/var/db/dslocal/nodes/Default/users/*.plist` | 암호 정책 키가 10.10 Yosemite 이후 `accountPolicyData`, 그 전 `passwordpolicyoptions` [1][3] | 이름·UID·UUID·홈 폴더·만든 시각·로그인 실패·암호 설정 시각·로그인 암호 해시 [1][3][6] |
-| `/private/var/db/dslocal/nodes/Default/sqlindex` | 공개 자료 없음 | 디렉터리 서비스 (Directory Services) 로컬 노드 데이터베이스, 계정 plist 와의 관계는 실제 데이터로 확인 [6] |
-| `/Library/Preferences/com.apple.preferences.accounts.plist` | 기록되기 시작한 버전은 공개 자료 없음 | `deletedUsers` 에 지운 계정의 이름·UID·지운 시각 [2] |
+| `/private/var/db/dslocal/nodes/Default/sqlindex` | 실제 데이터로 확인 | 디렉터리 서비스 (Directory Services) 로컬 노드 데이터베이스, 계정 plist 와의 관계는 실제 데이터로 확인 [6] |
+| `/Library/Preferences/com.apple.preferences.accounts.plist` | 기록되기 시작한 버전은 실제 데이터로 확인 | `deletedUsers` 에 지운 계정의 이름·UID·지운 시각 [2] |
 | `/Users/Deleted Users/` | 최신 macOS [5] | 계정을 지울 때 디스크 이미지로 남긴 홈 폴더 [5] |
 | `/Library/Preferences/com.apple.loginwindow.plist` | 마지막 로그인 사용자는 10.9 기준 [7] | 자동 로그인 계정 `autoLoginUser` [2], 마지막 로그인 사용자 [7] |
-| `/private/etc/kcpassword` | 공개 자료 없음 | 자동 로그인 암호를 되돌릴 수 있는 형태로 가려 저장한 파일 [2] |
-| `/private/var/folders/` | 공개 자료 없음 | UID·GID 로 계정과 이어지는 Darwin 사용자 폴더 [3] |
+| `/private/etc/kcpassword` | 실제 데이터로 확인 | 자동 로그인 암호를 되돌릴 수 있는 형태로 가려 저장한 파일 [2] |
+| `/private/var/folders/` | 실제 데이터로 확인 | UID·GID 로 계정과 이어지는 Darwin 사용자 폴더 [3] |
 
 `/private/var/...` 경로는 자료에 따라 `/var/...` 로도 적습니다 [6][7]. 로그인 창 설정과 자동 로그인 파일은 [로그인 창 설정 (loginwindow)](../loginwindow.md)에서 다룹니다.
 

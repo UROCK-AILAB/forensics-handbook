@@ -158,7 +158,7 @@ Claude Code 처럼 도구 호출과 결과를 별도 블록으로 두지 않고,
 
 ### 코드 기여 기록 `ai-code-tracking.db`
 
-코드 변경을 AI 와 사람 가운데 누가 썼는지 구분하는 SQLite 이고[7], 대화가 아니라 코드 기여를 적은 행이 들어 있습니다[8]. 표와 열 이름을 설명한 공개 분석 자료는 없어서, 실제 파일에서 `.schema` 로 확인합니다.
+코드 변경을 AI 와 사람 가운데 누가 썼는지 구분하는 SQLite 이고[7], 대화가 아니라 코드 기여를 적은 행이 들어 있습니다[8]. 표와 열 이름은 실제 파일에서 `.schema` 로 확인합니다.
 
 ### 훅 설정 `hooks.json`
 
@@ -216,7 +216,7 @@ Claude Code 처럼 도구 호출과 결과를 별도 블록으로 두지 않고,
 | 대화 사본의 `<timestamp>` 꼬리표 | 현지 시각 글자와 UTC 차이, 분 단위 | 사용자 메시지 | [5] |
 | `store.db` turn 의 시각 | epoch 밀리초 | 발화, 필드 번호는 그 판 기준 | [5] |
 
-`lastUpdatedAt` 이 bubble 의 시각보다 뒤처지는 경우가 있어서, 둘 가운데 늦은 쪽을 대화 끝으로 잡습니다[5]. 한 레코드 안에서도 `composerData` 는 밀리초 숫자이고 bubble 은 ISO-8601 문자열이라, 두 값을 시간순으로 합칠 때는 둘 다 UTC 로 바꾼 뒤 비교합니다. 옛 구조 숫자와 탭 `timestamp` 는 단위를 적은 자료가 없어서 자릿수로 초·밀리초를 구분합니다.
+`lastUpdatedAt` 이 bubble 의 시각보다 뒤처지는 경우가 있어서, 둘 가운데 늦은 쪽을 대화 끝으로 잡습니다[5]. 한 레코드 안에서도 `composerData` 는 밀리초 숫자이고 bubble 은 ISO-8601 문자열이라, 두 값을 시간순으로 합칠 때는 둘 다 UTC 로 바꾼 뒤 비교합니다. 옛 구조 숫자와 탭 `timestamp` 는 값에 단위가 적혀 있지 않으므로 자릿수로 초·밀리초를 구분합니다.
 
 대화 사본의 꼬리표는 분 단위라서 초는 알 수 없고, 어시스턴트가 답을 마친 시각은 파일에 없습니다[5]. agentsview 는 꼬리표가 없는 사본이면 파일 수정 시각을 세션의 시작과 끝으로 씁니다[5]. 파일 시스템 시각은 앱이 그 파일에 마지막으로 쓴 때이고, 전역 `state.vscdb` 는 모든 대화를 한 파일에 담으므로 그 수정 시각이 특정 대화의 시각을 뜻하지 않습니다. 문서에 나온 훅 입력 필드에는 시각이 없어서, 감사 기록의 시각은 훅 스크립트가 직접 넣은 값이고 UTC 인지 현지 시각인지는 그 스크립트를 열어 확인합니다. 여러 출처의 시각을 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에 있습니다.
 
@@ -232,7 +232,7 @@ SQLite 는 WAL 과 함께 모읍니다. KapeFiles 수집 대상은 `state.vscdb*
 
 훅 설정은 여러 범위에 흩어집니다. 사용자·프로젝트·기업 파일을 모두 모으지 않으면 걸려 있던 훅을 빠뜨리고, 팀 범위 훅은 웹 대시보드에서 옵니다[1]. MCP 서버는 확장 프로그램이 설정 파일을 거치지 않고 등록할 수도 있는데, 이 내용은 [MCP 서버와 도구 호출 기록](mcp.md)에 있습니다. `mcp.json` 의 인증 정보와 `store.db` 의 `blobEncryptionKey` 는 어디에 있는지만 적고 보고서에서 값을 가립니다. 이런 값이 남는 곳 전반은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다.
 
-agentsview 는 `composerData` 행이 없어진 대화를 Cursor 안에서 지운 대화로 처리합니다[5]. 지운 SQLite 레코드를 되살리는 일반 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에 있고, `.backup` 파일과 WAL 에 앞 상태가 남았는지도 비교합니다. 서버 쪽 보관 기간은 공개 문서에 없어서 다른 서비스의 규칙으로 메우지 않고, 사건 당시의 약관과 trust.cursor.com 자료를 따로 확보합니다. 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
+agentsview 는 `composerData` 행이 없어진 대화를 Cursor 안에서 지운 대화로 처리합니다[5]. 지운 SQLite 레코드를 되살리는 일반 방법은 [대화 내용 되살리기](../../03-techniques/analysis/content-recovery.md)에 있고, `.backup` 파일과 WAL 에 앞 상태가 남았는지도 비교합니다. 서버 쪽 보관 기간은 다른 서비스의 규칙으로 메우지 않고, 사건 당시의 약관과 trust.cursor.com 자료를 따로 확보합니다. 일반 원리는 [대화 기록 보관 설정과 삭제](../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
 ## 직접 분석해 보기
 

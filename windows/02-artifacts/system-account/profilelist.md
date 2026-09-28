@@ -23,7 +23,7 @@ SID 하위 키마다 `ProfileImagePath` 값이 있고, 이 값은 `C:\Users\<이
 - 실행 중인 PC 에서는 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList` 로 보입니다.
 - 하이브 파일 위치는 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 - 이 페이지는 SID 키 안의 값 가운데 `ProfileImagePath` 만 다룹니다.
-- Windows 버전별 차이는 공개 자료에 없습니다.
+- 다른 Windows 버전의 기기에서는 SID 키 아래 값 목록부터 확인합니다.
 
 ## 구조
 
@@ -107,7 +107,7 @@ SID 의 마지막 값(RID)으로 계정 종류를 가릴 수 있는 경우가 �
 ## 시각 해석
 
 - `ProfileImagePath` 는 시각이 아닙니다.
-- SID 키에도 레지스트리 키마다 있는 마지막 기록 시각(LastWrite)이 있습니다([레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)). 무엇이 이 시각을 바꾸는지는 공개 자료에 없으므로 참고로만 봅니다.
+- SID 키에도 레지스트리 키마다 있는 마지막 기록 시각(LastWrite)이 있습니다([레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md)). 무엇이 이 시각을 바꾸는지 단정할 수 없으므로 참고로만 봅니다.
 - 이 키로 찾은 프로필 폴더의 NTUSER.DAT 생성 시각은 계정 생성 시각을 추정하는 데 씁니다. 방법과 한계는 [사용자 계정 (SAM)](sam.md)에서 다룹니다.
 
 ## 함정과 한계

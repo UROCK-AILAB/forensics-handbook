@@ -82,15 +82,15 @@ ORDER BY ZBUNDLENAME;
 
 번들 ID 는 여러 아티팩트를 한 앱으로 묶는 열쇠라서, 권한 기록·위치 기록·데이터 사용량처럼 서로 다른 DB 에 흩어진 행을 같은 앱의 기록으로 엮을 수 있습니다. 앱 데이터가 데이터 컨테이너가 아니라 그룹 컨테이너에 있는 경우도 있어서 [2], 앱 도메인만 보고 앱 데이터가 없다고 쓰지 않습니다.
 
-백업에 앱 도메인이 있으면 그 앱의 데이터가 백업 대상이었다는 뜻일 뿐이고, 앱을 언제 설치하고 썼는지는 [설치된 앱](../../02-artifacts/app-usage/installed-apps.md) 과 [KnowledgeC](../../02-artifacts/app-usage/knowledgec/index.md) 같은 기록으로 따로 확인합니다. mis.db 는 `ProvisioningProfiles` 아래에 있고 개발자 팀 ID 열이 있지만, 이 열로 앱의 출처를 판단하는 방법을 다룬 공개 자료는 없습니다. 앱 출처를 살피는 절차는 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md) 에서 다룹니다.
+백업에 앱 도메인이 있으면 그 앱의 데이터가 백업 대상이었다는 뜻일 뿐이고, 앱을 언제 설치하고 썼는지는 [설치된 앱](../../02-artifacts/app-usage/installed-apps.md) 과 [KnowledgeC](../../02-artifacts/app-usage/knowledgec/index.md) 같은 기록으로 따로 확인합니다. mis.db 는 `ProvisioningProfiles` 아래에 있고 개발자 팀 ID 열이 있지만, 이 열 값만으로 앱의 출처를 단정하지 않습니다. 앱 출처를 살피는 절차는 [악성 코드·스파이웨어 흔적](../../03-techniques/analysis/spyware-triage/index.md) 에서 다룹니다.
 
 ## 함정
 
 - **그룹 ID 가 모두 `group.` 으로 시작하지 않습니다.** 접두어가 없거나 `systemgroup.` 으로 시작하는 그룹도 있습니다.
 - **이름이 비슷하다고 같은 앱의 그룹이라고 단정하지 않습니다.** 그룹 ID 와 앱 번들 ID 의 관계는 권한 정보로 확인해야 하고, 그룹 ID 에 개발자 팀 ID 접두어가 붙는지도 실제 기기의 권한 정보에서 확인합니다.
-- **UUID 폴더 이름은 기기마다 다릅니다.** 재설치·업데이트·복원 뒤에 UUID 가 바뀌는지를 다룬 공개 자료가 없으니, 여러 시점의 자료를 비교할 때는 UUID 대신 번들 ID 로 맞춥니다.
+- **UUID 폴더 이름은 기기마다 다릅니다.** 재설치·업데이트·복원 뒤에 UUID 가 그대로인지는 시점별 자료에서 같은 번들 ID 의 경로를 비교해 확인합니다. 여러 시점의 자료를 맞출 때는 UUID 대신 번들 ID 를 씁니다.
 - **applicationState.db 만으로는 그룹을 알 수 없습니다.** 이 DB 는 앱 UUID 와 번들 ID 를 이어 주지만 앱 그룹 경로 정보는 없습니다 [2].
-- **열 이름이 같은 뜻이라는 보장이 없습니다.** consolidated.db 의 `OnBehalfBundleId` 처럼 이름만으로 뜻을 짐작할 수 있는 열도 뜻을 밝힌 공개 자료가 없으니, 보고서에는 열 이름과 값을 그대로 적습니다.
+- **열 이름이 같은 뜻이라는 보장이 없습니다.** consolidated.db 의 `OnBehalfBundleId` 처럼 이름만으로 뜻을 짐작할 수 있는 열도 뜻을 단정할 수 없으니, 보고서에는 열 이름과 값을 그대로 적습니다.
 
 ## 도구
 

@@ -125,6 +125,7 @@ ALEAPP 의 runtimePerms 모듈은 두 위치의 파일을 찾아 사용자·앱�
 ## 교차 검증
 
 - [설치 출처와 설치 시각](install-source-time.md) — 권한을 받은 앱이 언제, 어떤 경로로 설치됐는지
+- [권한 사용 기록 (AppOps·Privacy Dashboard)](permission-usage.md) — 권한을 받은 앱이 카메라·마이크·위치를 실제로 언제 썼는지, Android 15 부터 권한 상태를 적는 `access.abx`
 - [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](../../credentials-security/device-admin-accessibility.md) — 함께 확인할 다른 권한 설정
 - [앱 사용 기록 (usagestats)](../usagestats/index.md) — 권한을 받은 앱이 실제로 움직였는지
 - [몰래 설치된 감시 앱 (Stalkerware)](../../../04-scenarios/incident/stalkerware.md), [악성 앱 흔적 분석 (Malicious App Triage)](../../../03-techniques/analysis/malicious-app-triage/index.md) — 이 기록을 쓰는 조사

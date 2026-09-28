@@ -84,7 +84,7 @@ iOS 18 이하에서는 containermanagerd 로그의 부팅 기록과 Shutdown.log
 
 로컬 백업에는 sysdiagnose 묶음 파일이 들어가지 않고, 도메인 목록에 `AppDomainPlugin-com.apple.DiagnosticExtensions.sysdiagnose`(항목 4개)가 있을 뿐입니다. 같은 백업에는 `…DiagnosticExtensions.CrashLogs`, `.Panic`, `.StackShot`, `.WiFi`, `.Cellular`, `.CoreLocation`, `.ScreenTime`, `.VPN`, `.Messages` 같은 진단 확장 컨테이너도 많습니다. 각 컨테이너에 무엇이 있는지와 sysdiagnose 의 어느 부분을 채우는지는 실제 데이터로 확인해야 합니다.
 
-진단과 관련된 설정 plist 도 백업에 들어옵니다. 키의 뜻을 풀이한 공개 자료는 없습니다.
+진단과 관련된 설정 plist 도 백업에 들어옵니다. 키의 뜻은 이름만으로 단정하지 않고, 보고서에는 값만 옮깁니다.
 
 | 파일 | 키 |
 |---|---|

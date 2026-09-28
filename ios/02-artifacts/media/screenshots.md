@@ -32,20 +32,20 @@ Photos.sqlite 의 전체 구조와 삭제·편집 기록은 [사진 보관함 (P
 
 ### 사진 보관함 안의 표시
 
-`ZASSET.ZKINDSUBTYPE` 이 10 이면 스크린샷이고, 103 이면 화면 녹화입니다[1]. 화면 녹화는 동영상이라서 `ZKIND` 가 1 입니다[1]. 이 값은 macOS 사진 보관함용 공개 도구 osxphotos 가 쓰는 값이고, 같은 Photos.sqlite 구조이긴 하지만 iOS 기기에서 따로 검증한 공개 자료는 없습니다.
+`ZASSET.ZKINDSUBTYPE` 이 10 이면 스크린샷이고, 103 이면 화면 녹화입니다[1]. 화면 녹화는 동영상이라서 `ZKIND` 가 1 입니다[1]. 이 값은 macOS 사진 보관함용 공개 도구 osxphotos 가 쓰는 값이라서, iOS 기기에서는 실제 스크린샷 몇 개의 값과 맞춰 봅니다.
 
 | `ZKIND` | `ZKINDSUBTYPE` | 뜻 |
 |---|---|---|
 | 0 (사진) | 10 | 스크린샷 |
 | 1 (동영상) | 103 | 화면 녹화 |
 
-iOS 27.0 의 `ZASSET` 에는 `ZISDETECTEDSCREENSHOT` 열도 있습니다. 이름으로 짐작하면 스크린샷으로 판정된 자산을 표시하는 열로 보이지만, 값의 뜻과 어느 iOS 부터 생겼는지는 공개 자료가 없어서 `ZKINDSUBTYPE` 과 나란히 세어 보는 데만 씁니다.
+iOS 27.0 의 `ZASSET` 에는 `ZISDETECTEDSCREENSHOT` 열도 있습니다. 이름으로 짐작하면 스크린샷으로 판정된 자산을 표시하는 열로 보입니다. 짐작한 뜻이라서 `ZKINDSUBTYPE` 과 나란히 세어 보는 데만 쓰고, 다른 버전 DB 에서는 이 열이 있는지부터 `PRAGMA table_info` 로 확인합니다.
 
 ### 스크린샷 서비스 plist
 
 AppDomain-com.apple.ScreenshotServicesService 의 `Library/Preferences/com.apple.ScreenshotServicesService.plist` 에는 `PKPaletteDefaults` 사전 하나만 있고, 그 안에 `PKPaletteAutoHideCorner`, `PKPaletteAutoHideEnabled`, `PKPaletteLastEdge`, `PKPalettePosition` 키가 있습니다. 이름으로 짐작하면 스크린샷을 편집(마크업)할 때 쓰는 도구 팔레트의 위치 설정으로 보입니다. 스크린샷을 찍은 기록은 이 plist 에 없습니다.
 
-HomeDomain 의 `Library/Preferences/.GlobalPreferences.plist` 에는 `com.apple.VisualIntelligence.FeatureAwareness.Screenshot`(int) 키가 있습니다. 이 값의 뜻을 설명한 공개 문서는 없습니다.
+HomeDomain 의 `Library/Preferences/.GlobalPreferences.plist` 에는 `com.apple.VisualIntelligence.FeatureAwareness.Screenshot`(int) 키가 있습니다. 이 값의 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 
 ### 화면 녹화 쪽 흔적
 
@@ -57,7 +57,7 @@ plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01
 
 **증명하는 것.** `ZKINDSUBTYPE` 이 10 이나 103 인 `ZASSET` 행은 수집 시점에 그 스크린샷이나 화면 녹화가 사진 보관함에 자산으로 등록되어 있었다는 사실을 보여 줍니다. 원본 파일이 있으면 그 화면에 무엇이 떠 있었는지를 이미지·동영상으로 보여 주고, `ZTRASHEDSTATE` 가 1 이면 "최근 삭제된 항목" 에 들어가 있다는 사실도 보여 줍니다[2].
 
-**증명하지 못하는 것.** 스크린샷 자산이 있다고 이 기기에서 찍었다는 뜻은 아닙니다. 다른 곳에서 받아 저장한 이미지도 보관함에 자산으로 들어오고, 받은 스크린샷이 어떤 종류 값으로 기록되는지는 공개 자료가 없어서 원래 파일 이름과 가져온 앱 열로 경로를 따로 확인합니다. 화면 녹화 동영상도 녹화한 앱이나 녹화 중 누가 기기를 조작했는지는 알 수 없습니다. 스크린샷에 카메라 EXIF(제조사·모델·GPS)가 없다는 해석은 근거 자료가 없어서, EXIF 가 비어 있다는 사실만으로 스크린샷이라고 단정하지 않습니다.
+**증명하지 못하는 것.** 스크린샷 자산이 있다고 이 기기에서 찍었다는 뜻은 아닙니다. 다른 곳에서 받아 저장한 이미지도 보관함에 자산으로 들어오고, 받은 스크린샷이 어떤 종류 값으로 기록되는지는 시험 기기에서 재현해 확인하고, 사건 데이터에서는 원래 파일 이름과 가져온 앱 열로 경로를 따로 확인합니다. 화면 녹화 동영상도 녹화한 앱이나 녹화 중 누가 기기를 조작했는지는 알 수 없습니다. 카메라 EXIF(제조사·모델·GPS)가 비어 있다는 사실만으로 스크린샷이라고 단정하지 않습니다.
 
 보고서에는 "사진 보관함에 스크린샷으로 분류된 자산이 있고, 보관함 기록에 따른 생성 시각은 이렇다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
@@ -69,7 +69,7 @@ plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01
 
 값 해석이 macOS 도구에서 왔다는 점이 가장 큰 한계입니다. 분석 대상의 iOS 버전에서 `ZKINDSUBTYPE` 값별 행 수를 먼저 세고, 10·103 으로 뽑은 자산 몇 개를 실제 이미지·동영상과 대조해 스크린샷·화면 녹화가 맞는지 확인한 다음 결론에 씁니다. `ZISDETECTEDSCREENSHOT` 처럼 뜻을 모르는 열은 모른다고 적습니다.
 
-스크린샷을 지우면 다른 자산과 마찬가지로 `ZTRASHEDSTATE`·`ZTRASHEDDATE` 로 "최근 삭제된 항목" 여부를 봅니다[2]. 스크린샷에만 따로 적용되는 삭제 규칙이 없다고 단정할 자료는 없고, 마크업으로 편집한 스크린샷에 편집 기록이 남는지도 실제 기기에서 확인합니다. 삭제와 편집 기록 전반은 [사진 보관함 (Photos Library)](photos/index.md)에서 다룹니다.
+스크린샷을 지우면 다른 자산과 마찬가지로 `ZTRASHEDSTATE`·`ZTRASHEDDATE` 로 "최근 삭제된 항목" 여부를 봅니다[2]. 스크린샷에만 따로 적용되는 삭제 규칙이 있는지, 마크업으로 편집한 스크린샷에 편집 기록이 남는지는 실제 기기에서 확인합니다. 삭제와 편집 기록 전반은 [사진 보관함 (Photos Library)](photos/index.md)에서 다룹니다.
 
 iCloud 사진을 쓰는 기기라면 DB 행만 있고 원본 파일은 기기에 없을 수 있어서, 화면 내용을 확인하려면 [클라우드 데이터 (iCloud·계정 데이터 요청)](../../03-techniques/acquisition/cloud-data.md)도 함께 봅니다.
 

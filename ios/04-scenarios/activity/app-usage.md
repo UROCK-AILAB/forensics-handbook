@@ -23,7 +23,7 @@ nav_order: 1430
 | iOS 11~15 | knowledgeC.db 의 `/app/inFocus` 스트림 [1][2] | 보관 기간은 약 4주입니다 [1] |
 | iOS 16 | `/app/inFocus` 와 설치 기록 등이 knowledgeC.db 에서 빠지고 바이옴으로 옮겨 갔습니다 [3] | 바이옴 파일은 SEGB v1 형식입니다 [16] |
 | iOS 17~26 | 바이옴, 같은 위치 [17] | SEGB v2 형식이고 [17], `ScreenTime.AppUsage` 스트림이 보입니다 [4] |
-| iOS 27 | 스트림 이름과 위치는 공개 자료 없음 | 실제 기기의 폴더와 공개 도구의 해석을 대조합니다 |
+| iOS 27 | 스트림 이름과 위치는 실제 기기에서 확인 | 실제 기기의 폴더와 공개 도구의 해석을 대조합니다 |
 
 **시각 기준**은 knowledgeC.db 와 바이옴이 Mac 절대 시각이고, 전원 로그는 Unix 시각이지만 내부 시계 보정 값(`PLStorageOperator_EventForward_TimeOffset.system`)을 더해야 합니다 [8]. 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따르고, 번들 ID 를 앱 이름으로 옮기는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 을 봅니다.
 
@@ -43,7 +43,7 @@ nav_order: 1430
 
 iOS 16 에서 앱을 띄운 경로는 `com.apple.SpringBoard.transitionReason.homescreen`, `…externalrequest`, `…appswitcher`, `…spotlight` 같은 값으로 남습니다 [3]. 사용자가 홈 화면에서 직접 눌렀는지, 다른 앱의 요청으로 열렸는지를 가르는 데 쓸 수 있지만, 값 전체 목록은 실제 데이터로 확인해야 합니다.
 
-암호 없는 로컬 백업에는 이 밖에도 앱 사용과 이름이 닿아 있는 설정 파일이 보입니다. HomeDomain `Library/Preferences/com.apple.ScreenTimeAgent.plist` 에 `ScreenTimeEnabled`, `UsageGenesisDate`, `LastTimeZoneName` 키가, `com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageLaunchesIntervalStartDate` 같은 날짜 키가, `com.apple.mt.lastLaunch.plist` 의 `launches` 아래에 번들 ID 이름의 키가 있습니다. 각 값의 뜻을 설명한 공개 자료가 없어서, 앱을 쓴 시각의 근거로 쓰기 전에 시험 기기에서 앱을 띄우고 값이 어떻게 바뀌는지 먼저 대조합니다.
+암호 없는 로컬 백업에는 이 밖에도 앱 사용과 이름이 닿아 있는 설정 파일이 보입니다. HomeDomain `Library/Preferences/com.apple.ScreenTimeAgent.plist` 에 `ScreenTimeEnabled`, `UsageGenesisDate`, `LastTimeZoneName` 키가, `com.apple.appstored.plist` 에 `AppUsageBiomeStartDate`, `AppUsageLaunchesIntervalStartDate` 같은 날짜 키가, `com.apple.mt.lastLaunch.plist` 의 `launches` 아래에 번들 ID 이름의 키가 있습니다. 각 값의 뜻이 정해져 있지 않아서, 앱을 쓴 시각의 근거로 쓰기 전에 시험 기기에서 앱을 띄우고 값이 어떻게 바뀌는지 먼저 대조합니다.
 
 ## 분석 흐름
 
@@ -93,6 +93,7 @@ iOS 16 에서 앱을 띄운 경로는 `com.apple.SpringBoard.transitionReason.ho
 - [바이옴 (Biome)](../../02-artifacts/app-usage/biome/index.md)
 - [설치된 앱 (Installed Apps·applicationState.db)](../../02-artifacts/app-usage/installed-apps.md)
 - [전원 로그 (PowerLog)](../../02-artifacts/app-usage/powerlog.md)
+- [앱 화면 스냅숏 (App Snapshots·KTX)](../../02-artifacts/app-usage/app-snapshots.md) — 앱을 뒤로 보낼 때 남은 마지막 화면
 - [앱별 데이터 사용량 (DataUsage.sqlite)](../../02-artifacts/network/data-usage.md)
 
 ## 참고 문헌

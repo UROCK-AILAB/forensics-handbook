@@ -60,7 +60,7 @@ Android 빌드 정보는 Build 클래스의 필드 이름과 그 필드가 읽�
 
 `Build.FINGERPRINT` 는 쪼개 해석하지 않는 값이라서, 보고서에는 문자열 전체를 그대로 옮깁니다[4]. 이 속성이 비어 있으면 AOSP 는 `ro.product.brand/ro.product.name/ro.product.device:ro.build.version.release/ro.build.id/ro.build.version.incremental:ro.build.type/ro.build.tags` 형식으로 값을 조립합니다[4]. `Build.TIME` 은 속성 값에 1000 을 곱해 만들기 때문에, 속성 `ro.build.date.utc` 는 초 단위이고 필드는 밀리초 단위입니다[4]. 속성 값과 필드 값을 나란히 적을 때는 이 차이를 함께 밝힙니다.
 
-`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 필드와 `buildFingerprint`, `fingerprint` 필드가 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다. 두 fingerprint 필드의 뜻 차이를 설명한 공개 문서는 없으므로, 보고서에 옮길 때는 필드 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
+`dumpsys package` 출력 머리의 "Database versions" 절에는 `sdkVersion`, `sdkVersionFull`, `databaseVersion` 필드와 `buildFingerprint`, `fingerprint` 필드가 있어서, 속성에서 읽은 빌드 값과 맞춰 보는 데 쓸 수 있습니다. 두 fingerprint 필드는 뜻이 어떻게 다른지 단정할 수 없으므로, 보고서에 옮길 때는 필드 이름을 그대로 붙여 적습니다. 이 출력을 얻는 방법은 [dumpsys 출력](../../02-artifacts/logs/dumpsys.md)에 있습니다.
 
 Android 16 기기를 예로 들면 대상 목록의 기기 부분은 다음처럼 적을 수 있습니다. 일련번호와 IMEI 같은 식별자는 이 예에서 뺐습니다.
 

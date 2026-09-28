@@ -55,7 +55,7 @@ shutdown.log 는 sysdiagnose 압축 파일 안 `system_logs.logarchive\Extra` �
 |---|---|
 | iOS 18 이하 | 재부팅마다 덧붙여 누적 [5] |
 | iOS 26 | 재부팅마다 덮어씀. iOS 26 으로 올린 뒤 재부팅하면 예전 감염 흔적이 사라짐 [5] |
-| iOS 27 | 공개 자료 없음 |
+| iOS 27 | 시험 기기에서 재부팅 전후 shutdown.log 를 비교해 확인 |
 
 iOS 26 으로 올리기 전에 sysdiagnose 를 받아 둡니다 [5]. iOS 18 이하에서는 containermanagerd 로그가 부팅 이벤트를 담고 몇 주 동안 남을 수 있습니다 [5].
 
@@ -71,7 +71,7 @@ MVT 의 mvt-ios 가 백업·전체 파일 시스템 추출·sysdiagnose 를 모�
 
 2021년 Amnesty 조사는 2016년부터 iOS 14.6(2021년 7월)까지를 다뤘고, iOS 14.6 까지 패치한 iPhone 12 에서도 무클릭 공격 흔적이 나왔습니다 [3]. Pegasus 는 더는 재부팅 뒤 지속하지 않는 것으로 보이고, 재부팅하면 실행 파일을 비휘발 저장소에서 찾을 수 없습니다 [3]. 실행 파일을 찾지 못해도 프로세스 기록과 shutdown.log 는 따로 확인합니다. shutdown.log 는 사용자가 재부팅해야 기록이 생기고 [4], iOS 26 부터는 재부팅마다 덮어써집니다 [5].
 
-`DataUsage.sqlite` 는 `Z_PK`, `Z_ENT`, `Z_OPT` 열과 `Z_METADATA` 표가 있는 Core Data 형식이지만, `ZTIMESTAMP` 가 Mac 절대 시각인지는 실제 데이터로 확인해야 합니다. 시각을 보고서에 쓰기 전에 [시각 값](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 기준을 확인합니다. `RootDomain :: Library/Preferences/com.apple.osanalyticshelper.plist` 에는 `stability-monitor.` 로 시작하는 키도 있지만, 탐지에 어떻게 쓰는지는 공개 자료가 없습니다.
+`DataUsage.sqlite` 는 `Z_PK`, `Z_ENT`, `Z_OPT` 열과 `Z_METADATA` 표가 있는 Core Data 형식이지만, `ZTIMESTAMP` 가 Mac 절대 시각인지는 실제 데이터로 확인해야 합니다. 시각을 보고서에 쓰기 전에 [시각 값](../../../01-foundations/value-decoding/time-values.md) 의 방법으로 기준을 확인합니다. `RootDomain :: Library/Preferences/com.apple.osanalyticshelper.plist` 에는 `stability-monitor.` 로 시작하는 키도 있지만, 값의 뜻을 단정할 수 없으므로 탐지 근거로 쓰지 않습니다.
 
 ## 결과를 어떻게 해석하나
 

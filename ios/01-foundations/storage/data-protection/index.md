@@ -18,7 +18,7 @@ has_toc: false
 
 데이터 보호는 Apple SoC 가 들어간 기기(iPhone, iPad, Apple silicon Mac, Apple TV, Apple Vision Pro, Apple Watch)의 플래시 저장소 데이터에 적용됩니다[1]. 맥과 비교하면, Apple silicon Mac 은 기본 등급이 Class C 이고 파일별 키 대신 볼륨 키를 써서 FileVault 방식을 재현하며[1], macOS 에서 Class A 키는 잠글 때가 아니라 로그아웃할 때 지워집니다[2].
 
-> 그림 자리: 맨 아래 Secure Enclave 와 UID, 그 위에 키 가방과 등급 키 네 개, 맨 위에 파일을 두고, 잠금 상태에 따라 등급 키가 메모리에 남거나 버려지는 흐름을 보여 주는 그림(파일 시스템 키 층은 확인한 자료가 없어 넣지 않음)
+> 그림 자리: 맨 아래 Secure Enclave 와 UID, 그 위에 키 가방과 등급 키 네 개, 맨 위에 파일을 두고, 잠금 상태에 따라 등급 키가 메모리에 남거나 버려지는 흐름을 보여 주는 그림
 
 ## 한눈에 보기
 

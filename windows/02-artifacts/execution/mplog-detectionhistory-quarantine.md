@@ -98,7 +98,7 @@ ProcessImageName: <이름>.exe, Pid: 11536, TotalTime: 24424254, Count: 4341109,
 
 #### 그 밖의 줄
 
-아래 줄은 공개된 설명이 없어 모양만 적습니다.
+아래 줄은 뜻을 단정하지 않고 모양만 적습니다.
 
 ```
 [RTP] [Mini-filter] Unsuccessful scan status(#n): <경로>. Process: <경로>, Status: 0x...
@@ -108,7 +108,7 @@ Engine:command line reported as lowfi: <명령줄>
 Detection State: Finished(0) Failed(0) CriticalFailed(0) Additional Actions(0)
 ```
 
-- `Engine:command line reported as lowfi` 줄에는 명령줄이 통째로 남습니다. 이 줄이 생기는 조건은 공개된 설명이 없습니다.
+- `Engine:command line reported as lowfi` 줄에는 명령줄이 통째로 남습니다. 이 줄이 생기는 조건은 시험 기기에서 재현해 확인합니다.
 - 서비스가 시작될 때 격리 복구 블록이 남습니다. `Beginning quarantine recovery` 로 시작해 `Quarantine ID:{...}`, `Target:`, `Flags:131074`, `Start time:09-07-2026 06:05:24` 가 이어지고 `Finished quarantine recovery` 로 끝납니다.
 - `MPDetection-*.log` 에는 서비스 시작 줄과 버전 줄이 있습니다. 서비스 시작 줄은 `Service started - Microsoft Defender 바이러스 백신 (GUID)` 처럼 OS 표시 언어로 적힙니다. 버전 줄은 `Version: Product 4.18.26080.3 Service ... Engine 1.1.26080.3 AS 1.457.348.0 AV 1.457.348.0` 모양입니다.
 
@@ -132,7 +132,7 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 | 2구역 | ThreatTrackingId, ThreatTrackingSha256, ThreatTrackingMD5, ThreatTrackingSha1, ThreatTrackingStartTime (FILETIME, UTC), ThreatTrackingSize, ThreatTrackingThreatId, ThreatTrackingScanSource, ThreatTrackingScanType. PUA 는 regkey·uninstall 필드가 더 붙을 수 있습니다 |
 | 3구역 | User (도메인\사용자), SpawningProcess (예: explorer.exe), SecurityGroup (있을 때만) |
 
-`Scans` 폴더에는 다음 파일과 폴더도 있습니다 (Windows 11 25H2 기준). 모두 공개된 설명이 없어 뜻을 풀지 않습니다.
+`Scans` 폴더에는 다음 파일과 폴더도 있습니다 (Windows 11 25H2 기준). 모두 뜻을 단정하지 않고 모양만 적습니다.
 
 - `DetectionHistory` 아래에 `00`, `03`, `04` … `18` 같은 두 자리 숫자 폴더가 있습니다. 폴더가 비어 있을 수 있습니다.
 - `History\Service` 폴더에 `Detections.log`, `Unknown.Log`, `History.Log` 가 있습니다. 셋 다 UTF-16LE 입니다.
@@ -149,14 +149,14 @@ GUID 의 바이트 순서는 [윈도 식별자 형식](../../01-foundations/valu
 | `ResourceData` | 격리한 원본 내용. 해시 이름의 파일이 이름 앞 두 글자 하위 폴더에 들어갑니다 (예: `ResourceData\5D\5D92927E35A6D8FECE000ABB9739F5AEFF914A3E`) |
 | `Resources` | 항목과 원본 내용 파일을 이어 주는 메타데이터 |
 
-폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다[3]. 오프셋과 필드 단위의 구조는 공개 자료에 없습니다.
+폴더 안 파일은 모두 고정 키 RC4 로 암호화돼 있습니다. 키는 256바이트이며 `0x1E, 0x87, 0x78, 0x1B, 0x8D` … 로 시작해 … `0x82, 0x53` 으로 끝납니다. `Entries` 파일은 따로 암호화한 세 덩어리로 되어 있고, 풀면 원래 전체 경로, 탐지 정보, 시각이 나오며 `ResourceData` 파일과 짝지을 해시도 나옵니다. `ResourceData` 파일을 풀면 원본 앞뒤에 메타데이터가 붙어 있으므로 이것을 떼어 내야 원본 파일이 됩니다[3]. 오프셋과 필드 단위의 구조는 복호화한 파일을 헥스 편집기로 열어 확인합니다.
 
 Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 
 - `Entries`, `ResourceData`, `Resources` 의 파일 수가 서로 같습니다 (예: 모두 11개).
 - `ResourceData` 파일 이름은 40자리 16진수입니다. SHA-1 과 길이가 같습니다.
 - `ResourceData` 파일 크기는 249바이트에서 215MB 까지 다양합니다. 원본 크기를 따라가는 것으로 보입니다.
-- `Entries` 파일 이름은 `{80063FCC-0000-0000-…}` 모양입니다. 앞 8자리 16진수 `0x80063FCC` 는 10진수로 2147893196 이고, `Detections.log` 의 앞머리 숫자와 같습니다. 모든 항목이 이렇게 맞는다는 근거는 없습니다.
+- `Entries` 파일 이름은 `{80063FCC-0000-0000-…}` 모양입니다. 앞 8자리 16진수 `0x80063FCC` 는 10진수로 2147893196 이고, `Detections.log` 의 앞머리 숫자와 같습니다. 다른 항목도 이렇게 맞는지는 항목마다 맞춰 봅니다.
 
 ### 보관 기간과 조치 정책
 
@@ -198,11 +198,11 @@ Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 | 시각 | 어디에 남나 | 형식 | 기준 |
 |---|---|---|---|
 | MPLog 줄 앞머리 | 각 줄 | `2020-06-14T20:11:42.880Z` 처럼 끝에 `Z` 가 붙기도 하고, `2026-09-07T06:05:24.539` 처럼 없기도 합니다 | UTC |
-| MPLog 탐지 줄의 시각 | 탐지 줄 | 공개 자료 없음 | UTC |
-| MPLog 탐지 줄의 ProcessStart | 탐지 줄 | 웹킷 시각 형식이라는 설명이 있습니다[1]. 그런데 그 예시 값 `132696072639875080` 은 18자리입니다. FILETIME 으로 풀면 2021-07-01 10:01:03 UTC 가 되고, 웹킷 (마이크로초) 으로 풀면 5805년이 됩니다. 두 방식으로 모두 풀어 보고 맞는 쪽을 고릅니다 | 공개 자료 없음 |
-| 격리 복구 블록의 Start time | 서비스 시작 때 남는 블록 | `09-07-2026 06:05:24` 처럼 월-일-년 순서 | 공개 자료 없음 |
+| MPLog 탐지 줄의 시각 | 탐지 줄 | 실제 탐지 줄을 열어 형식을 확인합니다 | UTC |
+| MPLog 탐지 줄의 ProcessStart | 탐지 줄 | 웹킷 시각 형식이라는 설명이 있습니다[1]. 그런데 그 예시 값 `132696072639875080` 은 18자리입니다. FILETIME 으로 풀면 2021-07-01 10:01:03 UTC 가 되고, 웹킷 (마이크로초) 으로 풀면 5805년이 됩니다. 두 방식으로 모두 풀어 보고 맞는 쪽을 고릅니다 | 같은 파일의 줄 앞머리 시각과 맞춰 봅니다 |
+| 격리 복구 블록의 Start time | 서비스 시작 때 남는 블록 | `09-07-2026 06:05:24` 처럼 월-일-년 순서 | 같은 파일의 줄 앞머리 시각과 맞춰 봅니다 |
 | ThreatTrackingStartTime | DetectionHistory 2구역 | FILETIME | UTC |
-| Entries 의 시각 | 풀어낸 `Entries` 파일 | 공개 자료 없음 | 공개 자료 없음 |
+| Entries 의 시각 | 풀어낸 `Entries` 파일 | 풀어낸 파일을 헥스로 열어 확인합니다 | MPLog 탐지 줄의 시각과 맞춰 봅니다 |
 
 - 줄 앞머리에 `Z` 가 없어도 UTC 입니다. 한국 시각 20:36 에 쓰인 마지막 줄의 앞머리가 11:36 으로, 9시간 차이가 납니다.
 - 한 파일 안에서도 날짜를 적는 순서가 다릅니다. 줄 앞머리는 년-월-일, 격리 복구 블록은 월-일-년입니다.
@@ -255,7 +255,7 @@ Windows 11 25H2 에서 격리 폴더는 다음과 같습니다.
 
 4. 앞 5바이트가 `08 00 00 00 08` 인지 봅니다. 다르면 DetectionHistory 파일이 아니거나 손상된 파일입니다.
 
-GUID `8CC4BE3D-8D3F-4952-9953-F24EB6638A37` 은 파일 안에 다음 바이트로 들어갑니다. 파일 안 위치는 공개 자료에 없습니다.
+GUID `8CC4BE3D-8D3F-4952-9953-F24EB6638A37` 은 파일 안에 다음 바이트로 들어갑니다. 파일 안 위치는 이 바이트 열을 검색해 찾습니다.
 
 ```
 3D BE C4 8C  3F 8D  52 49  99 53  F2 4E B6 63 8A 37

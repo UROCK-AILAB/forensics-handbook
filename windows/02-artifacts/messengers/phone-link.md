@@ -54,10 +54,10 @@ C:\Users\<사용자>\AppData\Local\Packages\Microsoft.YourPhone_8wekyb3d8bbwe\Lo
 |---|---|---|
 | 패키지 이름 | `Microsoft.YourPhone_8wekyb3d8bbwe` [1] | 같음 |
 | DB 위치 | `LocalCache\Indexed\<GUID>\System\Database\` [1] | `Indexed` 가 없을 수 있음 |
-| 함께 있는 패키지 | 공개 자료 없음 | `MicrosoftWindows.CrossDevice_cw5n1h2txyewy` (1.26072.116.0) |
+| 함께 있는 패키지 | — | `MicrosoftWindows.CrossDevice_cw5n1h2txyewy` (1.26072.116.0) |
 | 시험한 휴대폰 | 안드로이드만 [1] | 실제 데이터로 확인 |
 
-요즘 판에서도 휴대폰 자료가 `Indexed\<GUID>\System\Database` 에 쌓이는지, 일부 자료가 CrossDevice 패키지로 옮겨 갔는지는 공개 자료가 없습니다. 그래서 분석할 때는 두 패키지 폴더를 통째로 확보한 다음 `Database` 폴더가 어디 있는지 찾습니다.
+요즘 판에서도 휴대폰 자료가 `Indexed\<GUID>\System\Database` 에 쌓이는지, 일부 자료가 CrossDevice 패키지로 옮겨 갔는지는 두 패키지 폴더를 모두 열어 봐야 알 수 있습니다. 그래서 분석할 때는 두 패키지 폴더를 통째로 확보한 다음 `Database` 폴더가 어디 있는지 찾습니다.
 
 ## 구조
 
@@ -118,7 +118,7 @@ settings.db       settings.db-shm       settings.db-wal
 
 ### 그 밖의 표
 
-`mms`, `rcs_chat`, `sync` 표의 열과 `calling.db`, `contacts.db`, `photos.db`, `notifications.db`, `settings.db` 의 표와 열은 공개 자료가 없습니다. 실제 DB 에서는 `.schema` 로 표와 열을 직접 확인합니다.
+`mms`, `rcs_chat`, `sync` 표의 열과 `calling.db`, `contacts.db`, `photos.db`, `notifications.db`, `settings.db` 의 표와 열은 실제 DB 에서 `.schema` 로 직접 확인합니다.
 
 > 그림 자리: `phone.db` 의 `message` 표와 `subscription` 표 — 두 표의 열을 나란히 놓고, `number`·`from_address`·`type` 이 무엇을 알려 주는지 표시
 
@@ -156,7 +156,7 @@ settings.db       settings.db-shm       settings.db-wal
 - 앱이 설치돼 있어도 `Indexed` 가 없을 수 있습니다.
 - `*.db` 만 모으고 `-wal` 을 빼면 최근 문자가 빠질 수 있습니다.
 - 위 DB 구성은 안드로이드 휴대폰 기준이고, 아이폰 연결은 시험되지 않았습니다[1].
-- 요즘 판의 `LocalCache` 에는 `PlatformEncryptedKeyStorage.json` 처럼 암호와 관련된 이름의 파일이 있습니다. 이 파일이 DB 를 암호화하는 데 쓰이는지는 공개 자료가 없습니다.
+- 요즘 판의 `LocalCache` 에는 `PlatformEncryptedKeyStorage.json` 처럼 암호와 관련된 이름의 파일이 있습니다. 파일 이름만 보고 DB 가 암호화됐다고 단정하지 않습니다.
 - DB 는 일반 SQLite 뷰어로 바로 열립니다[1]. 판에 따라 다를 수 있으므로 실제 파일도 첫 16바이트로 평문인지 먼저 확인합니다.
 - 원본 말고 사본에서 작업합니다. `.db`·`-wal`·`-shm` 세 파일을 함께 복사한 사본을 엽니다. WAL 이 붙은 DB 를 열고 닫을 때 파일이 어떻게 바뀌는지는 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 

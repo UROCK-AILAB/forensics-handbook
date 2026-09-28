@@ -35,13 +35,13 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 
 - `.bin` 의 머리 문자열 `RDP8bmp` 로 보아 RDP 8 이후 형식으로 보입니다.
 - `.bmc` 에서 `.bin` 으로 바뀐 윈도 버전은 실제 데이터로 확인해야 합니다.
-- `bcache2`, `bcache22`, `bcache24` 처럼 파일 이름에 붙는 번호와 색 깊이의 관계도 공개 자료가 없습니다.
+- `bcache2`, `bcache22`, `bcache24` 처럼 파일 이름에 붙는 번호와 색 깊이의 관계는 타일을 이미지로 풀어 색이 제대로 나오는지 보고 확인합니다.
 
 원격 데스크톱 연결을 쓴 적이 없는 Windows 11 PC 에는 `Terminal Server Client\Cache` 폴더가 없습니다.
 
 ## 구조
 
-공개된 파일 형식 문서가 없어서, 아래 구조는 bmc-tools 소스 코드가 읽는 방식으로 정리했습니다[2]. 숫자는 모두 리틀 엔디언 (little-endian) 입니다.
+파일 형식은 공개되지 않았습니다. 아래 구조는 bmc-tools 소스 코드가 파일을 읽는 방식입니다[2]. 숫자는 모두 리틀 엔디언 (little-endian) 입니다.
 
 ### .bin 파일
 
@@ -91,13 +91,13 @@ C:\Users\<사용자>\AppData\Local\Microsoft\Terminal Server Client\Cache\bcache
 | 3 | 24비트 색 |
 | 4 | 32비트 BGRA |
 
-- bmc-tools 는 3.05 판부터 BMCache 파일 안의 "old bitmap data" 를 뽑는 `-o` 옵션이 있습니다[1]. 이 데이터가 무엇인지(덮어쓴 타일인지 등)는 공개 자료가 없습니다.
+- bmc-tools 는 3.05 판부터 BMCache 파일 안의 "old bitmap data" 를 뽑는 `-o` 옵션이 있습니다[1]. 이 데이터가 무엇인지(덮어쓴 타일인지 등)는 정해져 있지 않으므로, 보고서에는 뽑은 이미지만 옮기고 뜻을 단정하지 않습니다.
 
 ### 타일
 
 - 타일은 보통 64×64 픽셀입니다.
 - 타일 머리에는 시각 필드가 없습니다.
-- key1·key2 가 화면 위치를 뜻하는지는 공개 자료가 없습니다.
+- key1·key2 를 화면 위치로 단정하지 않습니다.
 
 ## 증거로서 의미
 

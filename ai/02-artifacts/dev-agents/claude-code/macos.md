@@ -64,7 +64,7 @@ macOS 에서도 대화 전문, 입력한 프롬프트 목록, 편집 전 파일 
 
 로그인 정보는 암호화된 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에 들어갑니다[4]. SSH 세션처럼 키체인이 잠겨 쓰기를 거부하면 `~/.claude/.credentials.json` 에 파일 모드 0600 으로 대신 저장하고[4], 이 파일은 [Windows](windows.md)의 같은 이름 파일처럼 평문 JSON 입니다. 원격 접속으로만 쓰던 Mac 에서 이 파일이 나온다면 키체인 쓰기 실패와 관련이 있을 수 있지만, 파일 하나로 접속 방식을 단정하지는 않습니다.
 
-키체인 항목의 서비스 이름은 공개된 분석 자료에 나와 있지 않으므로, 기기의 키체인 항목 목록에서 Claude Code 항목을 찾아 이름과 생성·수정 시각을 기록합니다. 항목 값은 보고서에서 가리고, 토큰이 남는 다른 곳은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다. 계정 쪽 기록이 필요하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
+키체인 항목의 서비스 이름은 기기의 키체인 항목 목록에서 Claude Code 항목을 찾아 확인하고, 이름과 생성·수정 시각을 기록합니다. 항목 값은 보고서에서 가리고, 토큰이 남는 다른 곳은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 모아 두었습니다. 계정 쪽 기록이 필요하면 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 받습니다.
 
 ### 관리 정책
 

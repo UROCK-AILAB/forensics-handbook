@@ -28,7 +28,7 @@ nav_order: 270
 | 일련번호 | `/private/var/root/Library/Caches/locationd/consolidated.db` |
 | UDID | `/private/var/root/Library/Caches/locationd/cache.plist` |
 | Wi-Fi MAC 주소 | `/private/var/preferences/SystemConfiguration/NetworkInterfaces.plist` |
-| 블루투스 MAC 주소 | `backup_keychain_v2.plist` (전체 경로는 공개 자료 없음) |
+| 블루투스 MAC 주소 | `backup_keychain_v2.plist` (전체 경로는 추출물에서 파일 이름으로 찾아 확인) |
 | iOS 버전·빌드 | `/private/var/installd/Library/MobileInstallation/LastBuildInfo.plist` |
 | 기기 이름 | `/private/var/root/Library/Lockdown/data_ark.plist` |
 | 전화번호(MSISDN)·ICCID | `/private/var/wireless/Library/Preferences/com.apple.commcenter.plist` |
@@ -51,7 +51,7 @@ nav_order: 270
 | 기기 쪽 백업 설정 | `HomeDomain :: Library/Preferences/com.apple.mobile.ldbackup.plist` | `CloudBackupEnabled`, `LastCloudBackupDate`, `LastCloudBackupTZ`, `RequiresEncryption`, `WillEncrypt`, `Version` |
 | 기종 정보 묶음 | `HomeDomain :: Library/Preferences/com.apple.itunesstored.plist`, `com.apple.Preferences.plist` | `SSDeviceType` 안의 `buildVersion`, `deviceTypeNumber`, `hardwareModel` |
 
-`Info.plist` 의 키 전체와 `Manifest.plist`·`Status.plist` 의 짜임은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다. `Unique Identifier` 는 이름으로 보면 UDID 자리입니다. `Model` 키에는 "기종 내부 이름"[1] 이 들어 있는 것으로 보입니다. 같은 도메인에는 키 구성이 똑같은 `SystemConfiguration/preferences-D##AP.plist`(`#` 은 숫자) 도 있고, 이 파일이 왜 따로 생기는지 밝힌 공개 자료는 없습니다.
+`Info.plist` 의 키 전체와 `Manifest.plist`·`Status.plist` 의 짜임은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다. `Unique Identifier` 는 이름으로 보면 UDID 자리입니다. `Model` 키에는 "기종 내부 이름"[1] 이 들어 있는 것으로 보입니다. 같은 도메인에는 키 구성이 똑같은 `SystemConfiguration/preferences-D##AP.plist`(`#` 은 숫자) 도 있습니다.
 
 `/private/var/root/Library/Lockdown/` 과 `/private/var/installd/` 에 해당하는 도메인 경로는 로컬 백업에 나오지 않을 수 있습니다. 그래서 `data_ark.plist` 와 `LastBuildInfo.plist` 는 전체 파일 시스템 추출에서만 볼 수 있을 가능성이 높습니다. 수집 방식에 따라 얻는 범위는 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다.
 
@@ -69,9 +69,9 @@ iOS 버전이나 빌드를 적는 키는 `Info.plist` 말고도 여러 설정 �
 | `com.apple.AppleMediaServices.plist` | `AMSLastMigratedBuildVersion` |
 | `MCMeta.plist` | `LastMigratedBuild` |
 
-구성 요소마다 자기가 마지막으로 돈 버전을 따로 적는 것으로 보여서, 값을 나란히 놓으면 업데이트 뒤 어느 구성 요소가 아직 옛 버전 값을 남기고 있는지 볼 수 있을 것으로 보입니다. 다만 이 키들로 업데이트 이력을 재구성하는 방법을 밝힌 공개 자료는 없으니, 보고서에는 "이 키에 이 버전이 적혀 있다" 까지만 씁니다.
+구성 요소마다 자기가 마지막으로 돈 버전을 따로 적는 것으로 보여서, 값을 나란히 놓으면 업데이트 뒤 어느 구성 요소가 아직 옛 버전 값을 남기고 있는지 볼 수 있을 것으로 보입니다. 다만 이 키들로 업데이트 이력을 재구성하는 방법은 정해져 있지 않으므로, 보고서에는 "이 키에 이 버전이 적혀 있다" 까지만 씁니다.
 
-같은 `com.apple.springboard.plist` 에는 `SBLastKnownShutdownDate` (datetime) 와 `SBLastRestoreIdentifier` (str) 키가 있고, `com.apple.centaurid.plist` 에는 `SystemBootUUID` 와 `RestoreVersion` 키가 있습니다. 이름으로는 마지막 종료 시각, 복원 식별자, 부팅 식별자로 읽히지만 뜻을 밝힌 공개 자료는 없습니다.
+같은 `com.apple.springboard.plist` 에는 `SBLastKnownShutdownDate` (datetime) 와 `SBLastRestoreIdentifier` (str) 키가 있고, `com.apple.centaurid.plist` 에는 `SystemBootUUID` 와 `RestoreVersion` 키가 있습니다. 이름으로는 마지막 종료 시각, 복원 식별자, 부팅 식별자로 읽히지만 뜻이 정해져 있지 않으므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 
 ## 구조
 

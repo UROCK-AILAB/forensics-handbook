@@ -104,7 +104,7 @@ iCloud 키체인 항목은 이미 클라우드에 있어 iCloud 백업에는 들
 
 지운 키체인 항목을 되살릴 수 있는지, 비정상 종료 뒤 데이터베이스가 어떻게 남는지는 실제 데이터로 확인해야 합니다. `keychain-2.db` 도 SQLite 파일이라 일반적인 복구 방법은 [SQLite 데이터베이스 (SQLite)](../data-formats/sqlite/index.md) 를 따르지만, 되살린 행도 메타데이터와 비밀 값이 암호문이라는 점은 같습니다.
 
-로컬 백업에는 키체인 주변 설정으로 보이는 파일과 키가 더 있습니다. 아래는 로컬 백업에 있는 파일과 키 이름이고, 각 키와 값의 뜻을 밝힌 공개 자료는 없습니다.
+로컬 백업에는 키체인 주변 설정으로 보이는 파일과 키가 더 있습니다. 아래는 로컬 백업에 있는 파일과 키 이름입니다. 각 키와 값의 뜻은 이름만으로 단정할 수 없으므로, 보고서에는 키 이름과 값만 옮깁니다.
 
 | 도메인 :: 경로 | 키·열 이름 |
 |---|---|
@@ -118,13 +118,13 @@ iCloud 키체인 항목은 이미 클라우드에 있어 iCloud 백업에는 들
 | HomeDomain :: `Library/Preferences/com.apple.NanoRegistry.NRLaunchNotificationController.volatile.plist` | `com.apple.mobile.keybagd.first_unlock.enabled`, `com.apple.security.secureobjectsync.viewschanged.enabled` |
 | AppDomainGroup-group.com.apple.notes :: `NoteStore.sqlite` | `ZICCLOUDSYNCINGOBJECT` 표의 `ZHASMISSINGKEYCHAINITEM` 열 |
 
-이 밖에 `AppDomainPlugin-com.apple.security.AKSDiagnosticExtension` 도메인도 있습니다(항목 4개). `cloudkeychainproxy` 파일은 이름으로 보면 iCloud 키체인 동기화 쪽 설정 같지만 이를 설명한 공개 자료는 없으니, 보고서에는 "이런 이름의 키가 있다" 까지만 씁니다. 파일 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../data-formats/plist.md) 에서 다룹니다.
+이 밖에 `AppDomainPlugin-com.apple.security.AKSDiagnosticExtension` 도메인도 있습니다(항목 4개). `cloudkeychainproxy` 파일은 이름으로 보면 iCloud 키체인 동기화 쪽 설정 같지만 이름만으로는 단정할 수 없으니, 보고서에는 "이런 이름의 키가 있다" 까지만 씁니다. 파일 형식은 [속성 목록 파일 (plist·NSKeyedArchiver)](../data-formats/plist.md) 에서 다룹니다.
 
 ## 함정
 
 - 백업에 `keychain-backup.plist` 가 있다고 비밀번호를 얻을 수 있다고 보지 않습니다. 파일이 들어 있는지와 풀 수 있는지는 따로이고, 풀 수 있는 범위는 백업 암호화 여부와 항목 등급으로 정해집니다[2][6].
 - 기기 안 파일을 복사해 SQLite 로 열면 표 이름은 보여도, 메타데이터와 비밀 값이 모두 암호문이라 기기 밖에서 바로 읽을 수 있는 내용은 적을 것으로 보입니다. [1] 의 구조 설명에서 나오는 해석입니다.
-- 파일 보호 등급과 키체인 보호 등급은 이름과 체계가 다르고, `pdmn` 열의 짧은 값도 공개 자료로 대응이 밝혀진 것은 `dk`·`dku` 두 개뿐입니다[5]. 나머지 값의 뜻은 실제 데이터로 확인한 뒤 씁니다.
+- 파일 보호 등급과 키체인 보호 등급은 이름과 체계가 다르고, `pdmn` 열의 짧은 값 가운데 대응을 단정할 수 있는 것은 `dk`·`dku` 두 개뿐입니다[5]. 나머지 값의 뜻은 실제 데이터로 확인한 뒤 씁니다.
 - 기기 안 경로를 `/private/var` 와 `/var` 로 섞어 적는 자료가 있으니 보고서에는 실제 수집본에서 본 경로를 씁니다.
 - iCloud 키체인 항목은 iCloud 백업에 들어가지 않으니[6], iCloud 백업에 없다는 사실만으로 계정에도 없다고 쓰지 않습니다.
 

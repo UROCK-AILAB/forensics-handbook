@@ -68,11 +68,11 @@ Android 계정 관리자(`dumpsys account`)에 카카오 계정이 어떤 계정
 
 **증명하는 것.** `friends` 에 행이 있으면 그 상대가 이 계정의 친구 목록에 올라 있었다는 기록이 됩니다. `chat_id`, `involved_chat_ids` 열은 이름으로 짐작하면 대화방과 이어 주는 값으로 보이고, `chat_logs` 의 `user_id` 를 `friends` 와 맞춰 보면 대화 상대의 이름을 붙일 수 있습니다.
 
-**증명하지 못하는 것.** 친구 목록에 있다는 사실만으로 그 상대와 대화했다고 말할 수는 없습니다. `blocked`, `favorite`, `hidden`, `purged` 같은 열은 이름으로 보면 차단·즐겨찾기·숨김·삭제 상태를 뜻하는 것 같지만, 값의 뜻을 밝힌 공개 자료가 없으므로 보고서에 "차단했다" 처럼 단정하지 않습니다. `name` 과 `contact_name` 이 어떻게 다른지도 알려져 있지 않습니다.
+**증명하지 못하는 것.** 친구 목록에 있다는 사실만으로 그 상대와 대화했다고 말할 수는 없습니다. `blocked`, `favorite`, `hidden`, `purged` 같은 열은 이름으로 보면 차단·즐겨찾기·숨김·삭제 상태를 뜻하는 것 같지만, 값의 뜻은 정해져 있지 않으므로 보고서에 "차단했다" 처럼 단정하지 않습니다. `name` 과 `contact_name` 이 어떻게 다른지는 기기의 연락처와 앱 화면에 보이는 이름을 맞춰 보고 확인합니다.
 
 ## 시각 해석
 
-`friends` 에는 `created_at`, `new_badge_updated_at`, `new_badge_seen_at` 시각 열이 있습니다. 세 열의 단위와 시간대, 값이 바뀌는 때는 알려져 있지 않습니다. 단위를 추정하는 방법은 [시각 값](../../../01-foundations/value-decoding/time-values.md)을 보고, 시험 기기에서 친구를 추가한 시각과 비교해 확인한 뒤에 씁니다.
+`friends` 에는 `created_at`, `new_badge_updated_at`, `new_badge_seen_at` 시각 열이 있습니다. 세 열의 단위와 시간대, 값이 바뀌는 때는 값만 보고 단정하지 않습니다. 단위를 추정하는 방법은 [시각 값](../../../01-foundations/value-decoding/time-values.md)을 보고, 시험 기기에서 친구를 추가한 시각과 비교해 확인한 뒤에 씁니다.
 
 ## 함정과 한계
 

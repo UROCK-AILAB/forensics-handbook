@@ -10,7 +10,7 @@ Windows 11 22H2 부터 `C:\Windows\appcompat\pca\` 폴더에 글자 파일 세 �
 
 ## 무엇을 기록하나 · 왜 생기나
 
-프로그램 호환성 도우미 (Program Compatibility Assistant, PCA) 는 프로그램 호환성 문제를 다루는 Windows 기능입니다. 서비스 이름은 `PcaSvc` 이고 표시 이름은 "Program Compatibility Assistant Service" 이며, 시작 유형은 자동이고 평소 실행 중입니다. 세 파일을 어느 프로세스가 쓰는지 설명한 공개 자료는 없습니다.
+프로그램 호환성 도우미 (Program Compatibility Assistant, PCA) 는 프로그램 호환성 문제를 다루는 Windows 기능입니다. 서비스 이름은 `PcaSvc` 이고 표시 이름은 "Program Compatibility Assistant Service" 이며, 시작 유형은 자동이고 평소 실행 중입니다.
 
 | 기록 | 담는 것 |
 |---|---|
@@ -50,7 +50,7 @@ Pro 판뿐 아니라 Home 판에도 세 파일이 생깁니다. Windows 10 과 �
 | `Layers` | 호환 모드 설정입니다. 값 데이터 예: `ELEVATECREATEPROCESS`, `RUNASADMIN`, `WINXPSP2 RUNASADMIN` |
 | `Compatibility Assistant\Store` | 값 이름이 실행 파일 경로입니다 |
 | `Compatibility Assistant\Persisted` | RegRipper 플러그인이 읽는 키입니다[2]. 없을 수도 있습니다 |
-| `Custom`, `InstalledSDB` | RegRipper 플러그인이 읽는 키입니다[2]. 담는 내용은 공개 자료 없음 |
+| `Custom`, `InstalledSDB` | RegRipper 플러그인이 읽는 키입니다[2]. 담는 내용은 실제 하이브에서 값을 열어 확인합니다 |
 
 하이브를 수집하고 여는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 를 따릅니다.
 
@@ -105,7 +105,7 @@ Windows 11 25H2 에서는 다음과 같습니다.
 
 ### PcaGeneralDb1.txt
 
-0바이트일 수 있습니다. `PcaGeneralDb0.txt` 와 번갈아 쓰이는지 설명한 공개 자료는 없습니다. 크기가 0 이 아니면 같은 방법으로 읽어 봅니다.
+0바이트일 수 있습니다. `PcaGeneralDb0.txt` 와 번갈아 쓰이는지는 두 파일의 수정 시각을 비교해 봅니다. 크기가 0 이 아니면 같은 방법으로 읽어 봅니다.
 
 ### 레지스트리 `Compatibility Assistant\Store`
 
@@ -133,7 +133,7 @@ Windows 11 25H2 에서는 다음과 같습니다.
 ### 증명하지 못하는 것
 
 - 모든 실행이 남지 않습니다. 터미널에서 자주 실행하는 `git.exe`·`python.exe`·`cmd.exe`·`powershell.exe` 가 `PcaAppLaunchDic.txt` 에 없을 수 있습니다. 반면 `dotnet.exe`·`wsl.exe`·`msiexec.exe` 는 남기도 합니다.
-- 어떤 실행이 남는지는 아직 밝혀지지 않았습니다[1]. "탐색기에서 연 것만 남는다" 는 주장도 있지만 뒷받침하는 공개 자료가 없습니다.
+- 어떤 실행이 남는지는 아직 밝혀지지 않았습니다[1]. "탐색기에서 연 것만 남는다" 는 주장도 있지만, 이 주장을 근거로 해석하지 않습니다.
 - `PcaAppLaunchDic.txt` 는 경로 하나에 한 줄입니다. 실행 횟수와 그 전의 실행 시각은 알 수 없습니다.
 - 누가 실행했는지는 알 수 없습니다. 글자 파일은 시스템에 한 벌만 있고, 사용자를 적는 필드가 없습니다. `%USERPROFILE%` 로 줄인 경로도 어느 사용자 폴더인지 알려 주지 않습니다.
 - 비정상 종료의 원인과 프로그램이 악성인지는 알 수 없습니다.
@@ -143,7 +143,7 @@ Windows 11 25H2 에서는 다음과 같습니다.
 
 ## 시각 해석
 
-두 파일의 시각은 `YYYY-MM-DD HH:MM:SS.mmm` 모양 글자입니다. 이 시각이 UTC 인지 현지 시각인지는 공개된 설명이 없습니다.
+두 파일의 시각은 `YYYY-MM-DD HH:MM:SS.mmm` 모양 글자입니다.
 
 - Windows 11 25H2 에서는 두 파일 모두 가장 늦은 줄의 시각이 파일의 마지막 수정 시각 (UTC) 과 같습니다. 시각은 UTC 로 보입니다.
 - 분석 대상마다 같은 방법으로 확인합니다. 가장 늦은 줄의 시각을 [마스터 파일 테이블](../filesystem/mft.md) 의 수정 시각과 비교합니다.

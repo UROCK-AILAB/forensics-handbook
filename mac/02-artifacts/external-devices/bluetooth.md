@@ -12,7 +12,7 @@ nav_order: 1080
 
 맥은 블루투스 설정과 페어링한 장치 정보를 시스템 전역 속성 목록 파일 (Property List) 하나에 적어 둡니다 [1][2]. 키보드·마우스·헤드폰 같은 장치를 짝지은 정보가 남는 파일이라, 분석가에게는 "이 맥에 이런 이름의 장치가 짝지어진 적이 있다" 는 단서가 됩니다.
 
-이 파일에는 블루투스 설정과 페어링한 장치 정보가 들어 있습니다(Mac OS X 10.9 기준) [1][2]. 수집 규칙 모음 ForensicArtifacts 에서는 이 파일을 `MacOSBluetoothPlistFile` 이라는 이름으로 정의합니다 [1]. 파일 안의 키 구조를 설명한 공개 자료는 없습니다.
+이 파일에는 블루투스 설정과 페어링한 장치 정보가 들어 있습니다(Mac OS X 10.9 기준) [1][2]. 수집 규칙 모음 ForensicArtifacts 에서는 이 파일을 `MacOSBluetoothPlistFile` 이라는 이름으로 정의합니다 [1].
 
 ## 위치와 버전별 차이
 
@@ -21,7 +21,7 @@ nav_order: 1080
 | 블루투스 설정·페어링 장치 plist | `/Library/Preferences/com.apple.Bluetooth.plist` | Mac OS X 10.9 기준, ForensicArtifacts 정의에 있음 | [1][2] |
 | 최근 macOS 의 페어링 정보 | `/Library/Bluetooth/` 아래(`com.apple.MobileBluetooth.devices.plist`, `com.apple.MobileBluetooth.ledevices.paired.db` 등) | 실제 데이터로 확인 | — |
 
-ForensicArtifacts 의 macOS 정의에서 블루투스 항목은 위 plist 하나뿐이고 다른 경로는 정의돼 있지 않습니다 [1]. macOS 10.15 Catalina 이후의 버전별 차이를 정리한 공개 자료는 없습니다. macOS 12 Monterey 무렵부터 페어링 정보가 `/Library/Bluetooth/` 아래로 옮겨졌다는 설명이 있지만, 경로와 버전 경계는 실제 기기에서 확인해야 합니다. 그래서 분석할 때는 `com.apple.Bluetooth.plist` 만 보고 끝내지 말고 `/Library/Bluetooth/` 폴더가 있는지, 있다면 어떤 파일이 들어 있는지도 함께 봅니다.
+ForensicArtifacts 의 macOS 정의에서 블루투스 항목은 위 plist 하나뿐이고 다른 경로는 정의돼 있지 않습니다 [1]. macOS 12 Monterey 무렵부터 페어링 정보가 `/Library/Bluetooth/` 아래로 옮겨졌다는 설명이 있지만, 경로와 버전 경계는 실제 기기에서 확인해야 합니다. 그래서 분석할 때는 `com.apple.Bluetooth.plist` 만 보고 끝내지 말고 `/Library/Bluetooth/` 폴더가 있는지, 있다면 어떤 파일이 들어 있는지도 함께 봅니다.
 
 ## 구조
 
@@ -41,7 +41,7 @@ plist 파일을 읽는 방법 자체는 [속성 목록 파일 (Property List)](.
 
 ## 시각 해석
 
-이 plist 안의 시각 값과 그 기준을 설명한 공개 자료는 없습니다. 키 이름에 `Update` 가 들어간 값이 날짜 형식이면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방식 몇 가지로 풀어 보고, 같은 무렵의 다른 기록과 맞는 쪽을 고릅니다.
+키 이름에 `Update` 가 들어간 값이 날짜 형식이면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방식 몇 가지로 풀어 보고, 같은 무렵의 다른 기록과 맞는 쪽을 고릅니다.
 
 연결 이력은 KnowledgeC 의 `/bluetooth/isConnected` 스트림에서 찾습니다. 이 스트림의 `ZOBJECT` 행에는 시작·종료 시각이, `ZSTRUCTUREDMETADATA` 의 `Z_DKBLUETOOTHMETADATAKEY__NAME`·`Z_DKBLUETOOTHMETADATAKEY__ADDRESS`·`Z_DKBLUETOOTHMETADATAKEY__DEVICETYPE` 열에는 장치 이름·주소·종류가 들어 있습니다 [3]. 시각은 맥 절대 시각(2001-01-01 UTC 기준 초)이라 `ZSTARTDATE` 에 978307200 을 더하면 유닉스 시각이 됩니다 [3]. 이 구조가 알려진 버전은 iOS 11~14 와 macOS 10.16(Big Sur)이라 [3], 그 밖의 버전에서는 스트림과 열이 그대로인지 실제 데이터로 확인합니다. KnowledgeC 자체의 구조는 [KnowledgeC (knowledgeC.db)](../execution/knowledgec/index.md)에 있습니다.
 
@@ -49,11 +49,11 @@ plist 파일을 읽는 방법 자체는 [속성 목록 파일 (Property List)](.
 
 ## 함정과 한계
 
-가장 큰 한계는 이 파일에 대한 공개 자료가 적다는 점입니다. 위치 설명은 Mac OS X 10.9 기준이고 [2], 최근 macOS 에서 같은 파일에 같은 내용이 남는지는 실제 기기에서 확인해야 합니다. 분석 대상의 macOS 버전을 먼저 확인하고([OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)), 그 버전의 테스트 맥에서 같은 조작을 해 본 결과로 해석합니다.
+위치 설명은 Mac OS X 10.9 기준이라 [2], 최근 macOS 에서 같은 파일에 같은 내용이 남는지는 실제 기기에서 확인해야 합니다. 분석 대상의 macOS 버전을 먼저 확인하고([OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)), 그 버전의 테스트 맥에서 같은 조작을 해 본 결과로 해석합니다.
 
 수집 도구가 ForensicArtifacts 정의만 따라 파일을 모으면 `/Library/Bluetooth/` 아래 파일은 빠질 수 있습니다. 이 폴더는 정의에 없기 때문입니다 [1].
 
-사용자가 장치를 목록에서 지웠을 때 plist 항목이 어떻게 되는지는 공개 자료가 없습니다. 그래서 항목이 없어도 짝지은 적이 없다고 단정하지 않고, 통합 로그나 KnowledgeC 처럼 따로 남는 기록을 함께 봅니다.
+사용자가 장치를 목록에서 지웠을 때 plist 항목이 어떻게 되는지는 테스트 맥에서 장치를 짝지었다가 목록에서 지워 보고 확인합니다. 그 전에는 항목이 없어도 짝지은 적이 없다고 단정하지 않고, 통합 로그나 KnowledgeC 처럼 따로 남는 기록을 함께 봅니다.
 
 ## 직접 분석해 보기
 

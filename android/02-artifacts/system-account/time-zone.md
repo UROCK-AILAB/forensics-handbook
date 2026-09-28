@@ -30,7 +30,7 @@ Android 는 시각과 시간대를 따로 맞춥니다. 자동 시각 설정은 
 
 자동 시각 키 `auto_time` 과 자동 시간대 키 `auto_time_zone` 은 Settings.Global 에 있습니다 [4]. AOSP 기본값은 자동 시간대 켜짐이고, 다른 기기의 백업을 복원하면 `auto_time_zone` 값도 기본으로 복원됩니다 [1]. 그래서 이 값이 사용자가 직접 고른 값이 아닐 수 있습니다.
 
-삼성 기기에는 global 표에 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit`, `clockwork_auto_time`, `clockwork_auto_time_zone` 키가 있습니다. system 표에는 `homecity_timezone`, `dualclock_menu_settings`, `TIME_DIFFERENCE`, `next_alarm_formatted` 키가 있는데, 이름으로 보면 삼성 듀얼 시계 기능과 관련된 듯하지만 뜻을 설명한 공개 자료는 없습니다. `time_12_24` 와 `location_time_zone_detection_enabled` 는 목록에 없을 수 있습니다. `auto_time_zone_explicit` 과 `clockwork_` 로 시작하는 키도 뜻을 설명한 공개 자료가 없습니다. settings 파일의 위치와 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
+삼성 기기에는 global 표에 `auto_time`, `auto_time_zone`, `auto_time_zone_explicit`, `clockwork_auto_time`, `clockwork_auto_time_zone` 키가 있습니다. system 표에는 `homecity_timezone`, `dualclock_menu_settings`, `TIME_DIFFERENCE`, `next_alarm_formatted` 키가 있는데, 이름으로 보면 삼성 듀얼 시계 기능과 관련된 듯하지만 값의 뜻은 단정할 수 없습니다. `time_12_24` 와 `location_time_zone_detection_enabled` 는 목록에 없을 수 있습니다. `auto_time_zone_explicit` 과 `clockwork_` 로 시작하는 키의 뜻은 시험 기기에서 설정을 바꿔 가며 확인합니다. settings 파일의 위치와 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
 
 시간대 ID 는 `persist.sys.timezone` 속성에, 그 값을 얼마나 믿을지는 `persist.sys.timezone_confidence` 속성에 적습니다 [5]. 부팅 때 `persist.sys.timezone` 이 비었거나 올바르지 않으면 시스템이 `GMT` 를 낮은 신뢰도로 넣어서 [5], 확보한 값이 `GMT` 라면 사용자가 고른 시간대가 아닐 수 있습니다. 이 속성이 이미지 안 어느 파일에 저장되는지와 시간대 데이터(tzdata)를 어떻게 업데이트하는지는 실제 기기에서 확인해야 합니다.
 
@@ -56,7 +56,7 @@ logcat 시각은 기기 시간대의 현지 시각으로 보이고, 연도가 �
 <날짜>:##:##.###User[#] Time changed. actualSystemTime:<값> expectedSystemTime:<값> actualRealtime:<값>
 ```
 
-필드 이름으로 보면 앱 사용 기록 서비스가 기대한 시스템 시각과 실제 시스템 시각이 어긋난 때를 적은 줄이라 시계 변경을 가려내는 단서가 될 수 있지만, 어떤 조건에서 이 줄을 쓰는지 밝힌 공개 자료는 없습니다. 앱 사용 기록 자체는 [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) 페이지에서 다룹니다.
+필드 이름으로 보면 앱 사용 기록 서비스가 기대한 시스템 시각과 실제 시스템 시각이 어긋난 때를 적은 줄이라 시계 변경을 가려내는 단서가 될 수 있고, 어떤 조건에서 이 줄을 쓰는지는 시험 기기에서 시계를 바꿔 재현해 확인합니다. 앱 사용 기록 자체는 [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) 페이지에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -79,7 +79,7 @@ Android 12 부터 time_detector 서비스는 빌드 시각보다 이른 자동 �
 
 자동 시각이 켜져 있어도 비행기 모드처럼 출처를 받을 수 없던 기간에는 시계가 틀어졌을 수 있고, 자동 시각이 꺼져 있었다고 해서 시계를 실제로 바꿨다는 뜻도 아닙니다. 시계 조작 여부는 이 설정 하나로 판단하지 않고 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md) 페이지처럼 여러 기록의 순서를 맞춰 보고 정합니다.
 
-삼성 듀얼 시계의 `homecity_timezone` 같은 값은 기기 시간대와 다를 수 있고 뜻도 알려져 있지 않아서, 기기 시간대의 근거로 쓰지 않습니다. 한 번도 값을 쓰지 않은 키가 목록에서 빠지는지는 알려져 있지 않아서, `location_time_zone_detection_enabled` 가 없다는 사실로 위치 기반 시간대를 쓰지 않았다고 말하지 않습니다.
+삼성 듀얼 시계의 `homecity_timezone` 같은 값은 기기 시간대와 다를 수 있고 뜻도 단정할 수 없어서, 기기 시간대의 근거로 쓰지 않습니다. 한 번도 값을 쓰지 않은 키가 목록에서 빠지는지 단정할 수 없어서, `location_time_zone_detection_enabled` 가 없다는 사실로 위치 기반 시간대를 쓰지 않았다고 말하지 않습니다.
 
 time_detector 와 time_zone_detector 의 dump 출력을 adb 일반 권한으로 볼 수 있는지, 실제 기기의 출력이 문서 예시와 같은지는 실제 기기에서 확인합니다.
 

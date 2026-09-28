@@ -21,11 +21,10 @@ nav_order: 2100
 | 항목 | 위치 | 근거 |
 |---|---|---|
 | 사용자 데이터 폴더 | `C:\Users\<사용자>\AppData\Roaming\Slack\` | [2] |
-| 프로그램 설치 폴더 | 알려진 바로는 사용자별 설치는 `%LOCALAPPDATA%\slack\`, MSI 로 한 전 컴퓨터 설치는 `Program Files` 아래 (버전마다 확인 필요) | 공개 자료 없음 |
-| Microsoft Store 판 데이터 | 알려진 바로는 `%LOCALAPPDATA%\Packages\` 아래 (버전마다 확인 필요) | 공개 자료 없음 |
+| 프로그램 설치 폴더 | 알려진 바로는 사용자별 설치는 `%LOCALAPPDATA%\slack\`, MSI 로 한 전 컴퓨터 설치는 `Program Files` 아래 (버전마다 확인 필요) | 실제 설치 폴더로 확인 |
+| Microsoft Store 판 데이터 | 알려진 바로는 `%LOCALAPPDATA%\Packages\` 아래 (버전마다 확인 필요) | 실제 패키지 폴더로 확인 |
 
 - `%APPDATA%` 는 사용자마다 따로 있습니다. 사용자 프로필마다 봅니다.
-- 저장 위치가 Windows 버전에 따라 다르다는 공개 자료는 없습니다.
 
 ### 폴더별 내용
 
@@ -43,7 +42,7 @@ nav_order: 2100
 
 ### 버전별 차이
 
-아래 "구조" 절의 IndexedDB 설명은 수집 정의 파일의 주석에 있는 내용이고, 2017년 대학 보고서를 근거로 합니다[2]. 요즘 버전에서 `IndexedDB\` 가 워크스페이스마다 나뉘는지, 앱을 꺼야 기록이 반영되는지는 공개 자료가 없습니다. 그래서 분석 대상의 슬랙 버전을 먼저 적고, 이 설명이 그 버전에도 맞는지 폴더를 보고 확인합니다.
+아래 "구조" 절의 IndexedDB 설명은 수집 정의 파일의 주석에 있는 내용이고, 2017년 대학 보고서를 근거로 합니다[2]. 요즘 버전에서 `IndexedDB\` 가 워크스페이스마다 나뉘는지, 앱을 꺼야 기록이 반영되는지는 분석 대상의 슬랙 버전을 먼저 적은 다음 폴더를 보고 확인합니다.
 
 ## 구조
 
@@ -83,7 +82,7 @@ LevelDB 의 파일 구성(`.log`·`.ldb`·`MANIFEST-*`·`CURRENT`), 순서 번�
 
 ### 암호화
 
-슬랙이 쿠키 같은 값을 Chromium 방식으로 암호화하는지는 공개 자료가 없습니다. Chromium 방식은 `Local State` 파일에 둔 키를 DPAPI 로 보호하므로, 슬랙 폴더의 `Local State` 에 암호화 키 필드가 있는지 직접 봅니다. 키 필드가 있으면 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 암호화 설명과 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
+슬랙이 쿠키 같은 값을 Chromium 방식으로 암호화하는지는 `Local State` 파일로 확인합니다. Chromium 방식은 `Local State` 파일에 둔 키를 DPAPI 로 보호하므로, 슬랙 폴더의 `Local State` 에 암호화 키 필드가 있는지 직접 봅니다. 키 필드가 있으면 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 암호화 설명과 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 를 봅니다.
 
 ## 증거로서 의미
 
@@ -127,7 +126,7 @@ LevelDB 레코드 자체에는 시각이 없고 순서 번호로 앞뒤만 알 �
 - **폴더 하나를 워크스페이스 하나로 봅니다.** 옛 버전에서는 워크스페이스 두 곳이 한 폴더를 같이 씁니다.
 - **기본 위치만 봅니다.** 설치형과 스토어 판의 위치가 다를 수 있습니다. 경로를 모르면 [Electron·WebView2 앱 데이터 위치](../../01-foundations/app-mail-data/chromium-electron-webview2/teams-discord-slack.md) 의 방법처럼 `Local State` 이름으로 찾습니다.
 - **같은 메시지가 여러 번 나와 여러 건으로 셉니다.** LevelDB 에는 같은 키의 레코드가 여러 개 남을 수 있습니다. 순서 번호로 나중 기록을 가려냅니다.
-- **지운 흔적을 앱 폴더에서만 찾습니다.** 사용자가 로그아웃하거나 앱 데이터를 지우면 무엇이 지워지는지는 공개 자료가 없습니다. 지운 파일의 흔적은 [USN 변경 저널](../filesystem/usnjrnl.md) 과 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서도 찾습니다.
+- **지운 흔적을 앱 폴더에서만 찾습니다.** 사용자가 로그아웃하거나 앱 데이터를 지우면 무엇이 지워지는지는 시험 기기에서 재현해 확인합니다. 지운 파일의 흔적은 [USN 변경 저널](../filesystem/usnjrnl.md) 과 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서도 찾습니다.
 
 ## 직접 분석해 보기
 

@@ -97,7 +97,7 @@ ZSTARTDATE, ZENDDATE, ZCREATIONDATE 는 모두 Mac 절대 시각 (Mac Absolute T
 
 ## 함정과 한계
 
-공개 자료에 나온 표와 열 구성은 대부분 iOS 11~13 과 macOS 기준이고 [3][4], iOS 15 이후에도 열 구성이 같은지는 공개 자료가 없습니다. 로컬 백업에는 knowledgeC.db 가 들어 있지 않을 수 있습니다. 그래서 새 버전 데이터를 열 때는 열 이름부터 `PRAGMA table_info(ZOBJECT);` 로 확인하고 나서 조회문을 돌리는 편이 안전합니다.
+공개 자료에 나온 표와 열 구성은 대부분 iOS 11~13 과 macOS 기준입니다 [3][4]. 로컬 백업에는 knowledgeC.db 가 들어 있지 않을 수 있습니다. 그래서 새 버전 데이터를 열 때는 열 이름부터 `PRAGMA table_info(ZOBJECT);` 로 확인하고 나서 조회문을 돌리는 편이 안전합니다.
 
 맥에도 같은 이름의 DB 가 있고 [1] 공개 자료에는 맥에서 확인한 내용이 섞여 있어서, 글을 인용할 때는 iOS 에 관한 내용인지 먼저 확인합니다.
 

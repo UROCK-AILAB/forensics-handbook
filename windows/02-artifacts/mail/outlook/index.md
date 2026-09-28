@@ -33,16 +33,16 @@ PST 에는 메일·연락처·일정·작업·메모·업무일지가 들어 있
 | 흔적 | 어디에 있나 | 판에 따른 차이 | 알려 주는 것 | 자세히 |
 |---|---|---|---|---|
 | PST | 새 PST 기본 위치는 Outlook 2016 이후 `Documents\Outlook Files\`, 앞선 판 `AppData\Local\Microsoft\Outlook\` (Windows 10 기준) | ANSI·유니코드·4KB 형식 | 메일·연락처·일정 같은 항목과 첨부 | [데이터 파일 구조](pst-ost.md) |
-| OST | 공식 자료 없음. 실제 데이터로 확인 | 캐시된 Exchange 모드에서만 생김. 새 Outlook 에는 이 모드가 없음 | 서버 사서함의 사본 | [PST와 OST 차이](cached-mode-exchange.md) |
+| OST | 실제 데이터로 확인 | 캐시된 Exchange 모드에서만 생김. 새 Outlook 에는 이 모드가 없음 | 서버 사서함의 사본 | [PST와 OST 차이](cached-mode-exchange.md) |
 | Recoverable Items 폴더 | 서버 사서함의 숨은 영역. PC 에는 없음 | 하위 페이지는 Exchange Online 기준 | 지운 항목, 보존 중 고친 항목 | [지운 메시지 복구](recoverable-items-free-blocks.md) |
 | 데이터 파일의 빈 공간 | PST·OST 안 | 형식마다 페이지 크기가 다름 | 지운 데이터가 남았을 수 있는 자리 | [지운 메시지 복구](recoverable-items-free-blocks.md) |
 | `.msg` | 사용자가 저장한 곳. 정해진 폴더 없음 | Windows 버전과 관계없음 | 메시지 한 통과 그 수신자·첨부 | [개별 메시지 파일](msg.md) |
-| 첨부 임시 폴더 | 공식 자료 없음. 실제 데이터로 확인 | Windows 판에 따라 다르다는 설명이 흔함 | 첨부 사본 | [첨부 임시 폴더](olk-content-outlook.md) |
+| 첨부 임시 폴더 | 실제 데이터로 확인 | Windows 판에 따라 다르다는 설명이 흔함 | 첨부 사본 | [첨부 임시 폴더](olk-content-outlook.md) |
 | 자동완성 목록 | Outlook 2007 이전 `%APPDATA%\Microsoft\Outlook` 의 `.nk2`, 2010 이후 기본 메시지 저장소 안의 숨은 메시지 | 판에 따라 저장 방식이 다름 | 메일을 보낸 상대의 주소와 표시 이름 | [자동완성 목록](nk2-stream-autocomplete.md) |
 | 레지스트리 설정 | NTUSER.DAT 의 `Software\Microsoft\Office\<버전>\Outlook` | 버전 번호 `11.0`~`16.0` | Outlook 판, 데이터 파일·목록 한도, 계정 | [계정·프로필 레지스트리](outlook-profiles.md) |
 
 - PST 기본 위치는 새 파일을 만들 때의 값입니다. 분석 대상에서는 확장자와 헤더 시그니처로 디스크 전체를 찾습니다.
-- OST 위치, 첨부 임시 폴더, 프로필 키의 자리는 공식 자료가 없고 흔한 설명만 있습니다. 각 하위 페이지는 흔한 설명과 공식 자료가 있는 사실을 나눠 적습니다.
+- OST 위치, 첨부 임시 폴더, 프로필 키의 자리는 흔한 설명을 출발점으로 삼고 실제 데이터에서 확인합니다. 각 하위 페이지는 흔한 설명과 공식 자료가 있는 사실을 나눠 적습니다.
 
 ### 먼저 확인할 것
 

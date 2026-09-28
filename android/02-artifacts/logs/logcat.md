@@ -56,7 +56,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 | 구분 | 내용 |
 |---|---|
 | AOSP 공통 | 버퍼 종류, 출력 형식, 우선순위 문자 [1]. 옵션은 OS 버전마다 달라서 `adb logcat --help` 로 확인 [1] |
-| 삼성 One UI | settings global 에 `activity_starts_logging_enabled`, `autofill_logging_level`, settings system 에 `samsung_errorlog_agree`, `show_message_logs` 키가 있음. 각 키의 뜻은 공개 자료 없음 |
+| 삼성 One UI | settings global 에 `activity_starts_logging_enabled`, `autofill_logging_level`, settings system 에 `samsung_errorlog_agree`, `show_message_logs` 키가 있음. 각 키의 뜻은 이름만으로 단정하지 않음 |
 
 삼성 전용 로그 수집 경로와 파일 위치는 실제 기기에서 확인합니다. 설정 키를 읽는 방법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 에서 다룹니다.
 
@@ -122,7 +122,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 
 첫째, 버퍼는 메모리 순환 버퍼라서 오래된 항목은 새 항목에 밀려 사라집니다 [1]. 기본 크기가 256KB 로 작고 [3], `ro.logd.filter` 기본값은 가장 말 많은 UID 의 오래된 항목과 system 에서 가장 말 많은 PID 의 항목을 먼저 지웁니다 [3]. 로그를 많이 찍는 앱 하나 때문에 다른 앱의 기록이 먼저 사라질 수 있습니다.
 
-둘째, 재부팅 뒤에도 버퍼 내용이 남는지는 공식 문서에 나와 있지 않습니다. 메모리 버퍼라는 점을 생각해 기기를 끄거나 다시 켜기 전에 먼저 받는 편이 안전하고, 받은 시각을 수집 기록에 적어 둡니다.
+둘째, 버퍼가 메모리에 있어서 재부팅 뒤에는 내용이 남아 있지 않을 수 있습니다. 기기를 끄거나 다시 켜기 전에 먼저 받는 편이 안전하고, 받은 시각을 수집 기록에 적어 둡니다.
 
 셋째, 태그별 로그 수준은 `setprop log.tag.<TAG>` 로 바꿀 수 있고, `persist.log.tag.<TAG>` 는 재부팅 뒤에도 남습니다 [2]. 분석 대상 기기에 `persist.log.tag.` 로 시작하는 속성이 있으면 누군가 로그 수준을 바꾼 흔적일 수 있다고 보고(추론), 그 태그의 로그가 적거나 없는 이유를 따로 따져 봅니다. `persist.logd.size` 계열 값이 기본보다 작게 잡혀 있을 때도 로그가 짧게 남는 이유가 될 수 있습니다(추론). 이런 흔적은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 에서 다른 기록과 함께 봅니다.
 
@@ -132,7 +132,7 @@ events 버퍼는 [이벤트 로그 버퍼 (events)](events-buffer.md) 에서 따
 
 ### 텍스트로 한 번
 
-logd 버퍼의 바이너리 형식은 공개 문서가 없어서 헥스 따라가기 대신 텍스트 출력을 직접 읽습니다.
+logd 버퍼는 헥스로 따라가지 않고 텍스트 출력을 직접 읽습니다.
 
 1. `adb logcat --help` 로 그 기기에서 쓸 수 있는 옵션을 확인합니다. 특히 버퍼를 한 번 쏟아 내고 끝내는 `-d` 가 있는지 봅니다. `-d` 없이 부르면 명령이 끝나지 않고 새 줄을 계속 받습니다.
 2. `adb logcat -d -b all -v threadtime` 출력을 파일로 받고, 같은 방식으로 `year`·`zone` 수식어를 붙인 출력도 받아 둡니다.

@@ -51,7 +51,7 @@ XML 파일에는 형식 버전이 적혀 있고, 현행 버전은 3 입니다 [3
 
 `dumpsys wifi` 출력은 1만 줄이 넘을 만큼 길고(한 기기에서 약 10,850줄), 설정 상태(`WifiState`, `AirplaneModeOn`, `ScanAlwaysAvailable`, `WifiStateApm`, `WifiStateBt`, `SatelliteModeOn` 등)와 지원 기능 목록(`SupportedFeatures`), 상태 기계 기록(`WifiController`, `WifiClientModeManager`, `WifiClientModeImpl` 의 `rec[#]: time=... what=CMD_...` 줄)이 나옵니다. `WifiClientModeManager` 기록에는 `RequestorWs: WorkSource{... com.android.settings}` 처럼 Wi-Fi 클라이언트 모드를 켜 달라고 요청한 앱이 함께 찍히고, 이 줄은 특정 네트워크에 붙은 기록이 아니라 모드 전환 명령(`CMD_START`, `CMD_SWITCH_TO_CONNECT_MODE`) 기록입니다. 저장된 네트워크 목록이 이 출력에 나오는지와 adb 일반 권한으로 `WifiConfigStore.xml` 을 직접 읽을 수 있는지는 기기에서 확인합니다. `dumpsys` 를 받는 방법은 [dumpsys 출력 (dumpsys)](../logs/dumpsys.md) 페이지에 있습니다.
 
-삼성 기기의 설정 값에는 Wi-Fi 관련 키가 여러 개 있습니다. global 쪽에는 `wifi_on`, `wifi_scan_always_enabled`, `wifi_wakeup_enabled`, `wifi_networks_available_notification_on`, `wifi_sleep_policy`, `network_avoid_bad_wifi`, `wifi_migration_completed`, `SecureWifiBackupExist`, `adb_wifi_enabled`, `auto_wifi`, `sem_auto_wifi_added_removed_list`, `sem_auto_wifi_control_enabled` 와 `sem_wifi_` 로 시작하는 키 여러 개가 있고, secure 쪽에는 `wifi_saved_state`, `wifi_apm_state`, `sem_wifi_turn_off_by_autowifi`, `sec_wifi_mlo_link_count` 가 있습니다. 키마다 값의 뜻을 밝힌 공식 문서는 없고, 특히 `sem_auto_wifi_added_removed_list` 에 어떤 형식으로 무엇이 들어가는지는 실제 데이터로 확인해야 합니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
+삼성 기기의 설정 값에는 Wi-Fi 관련 키가 여러 개 있습니다. global 쪽에는 `wifi_on`, `wifi_scan_always_enabled`, `wifi_wakeup_enabled`, `wifi_networks_available_notification_on`, `wifi_sleep_policy`, `network_avoid_bad_wifi`, `wifi_migration_completed`, `SecureWifiBackupExist`, `adb_wifi_enabled`, `auto_wifi`, `sem_auto_wifi_added_removed_list`, `sem_auto_wifi_control_enabled` 와 `sem_wifi_` 로 시작하는 키 여러 개가 있고, secure 쪽에는 `wifi_saved_state`, `wifi_apm_state`, `sem_wifi_turn_off_by_autowifi`, `sec_wifi_mlo_link_count` 가 있습니다. 키마다 값의 뜻은 실제 기기의 값으로 확인하고, 특히 `sem_auto_wifi_added_removed_list` 에 어떤 형식으로 무엇이 들어가는지는 실제 데이터로 확인해야 합니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -95,11 +95,11 @@ WifiConfigStoreData
 
 **증명하지 못하는 것**
 
-AOSP 필드에는 시각이 없어서 이 파일만으로는 특정 시각에 그 네트워크에 붙어 있었다고 말할 수 없고, 연결 횟수나 연결된 동안 주고받은 데이터 양도 나오지 않습니다. SSID 는 누구나 같은 이름으로 만들 수 있어서 이름만으로 장소를 정할 수 없고, `PreSharedKey` 가 저장돼 있다고 해서 사용자가 비밀번호를 직접 입력했거나 알고 있었다는 뜻도 아닙니다. 네트워크를 지운 뒤 파일에 무엇이 남는지 밝힌 공개 자료가 없으니, 항목이 없다는 사실만으로 연결한 적이 없다고 결론 내리지 않습니다.
+AOSP 필드에는 시각이 없어서 이 파일만으로는 특정 시각에 그 네트워크에 붙어 있었다고 말할 수 없고, 연결 횟수나 연결된 동안 주고받은 데이터 양도 나오지 않습니다. SSID 는 누구나 같은 이름으로 만들 수 있어서 이름만으로 장소를 정할 수 없고, `PreSharedKey` 가 저장돼 있다고 해서 사용자가 비밀번호를 직접 입력했거나 알고 있었다는 뜻도 아닙니다. 네트워크를 지운 뒤 파일에 무엇이 남는지는 시험 기기에서 네트워크를 지워 보고 확인하고, 항목이 없다는 사실만으로 연결한 적이 없다고 결론 내리지 않습니다.
 
 ## 시각 해석
 
-`semCreationTime`, `semUpdateTime`, `LastConnectedTime` 세 필드는 유닉스 밀리초 시각이고, 0 이하 값은 비어 있는 값입니다 [1]. `sem` 으로 시작하는 두 필드는 AOSP 필드 목록에 없어서 제조사(삼성)가 더한 필드로 보입니다. `LastConnectedTime` 을 쓰는 제조사 범위는 공개 자료가 없어 실제 데이터로 확인해야 합니다. 필드 이름으로 보면 설정을 만든 시각, 고친 시각, 마지막으로 연결한 시각으로 읽을 수 있지만, 정확히 어떤 동작 때 값이 바뀌는지는 실제 데이터에서 다른 기록과 맞춰 본 뒤 씁니다.
+`semCreationTime`, `semUpdateTime`, `LastConnectedTime` 세 필드는 유닉스 밀리초 시각이고, 0 이하 값은 비어 있는 값입니다 [1]. `sem` 으로 시작하는 두 필드는 AOSP 필드 목록에 없어서 제조사(삼성)가 더한 필드로 보입니다. `LastConnectedTime` 필드는 기기마다 실제 파일에 있는지부터 확인합니다. 필드 이름으로 보면 설정을 만든 시각, 고친 시각, 마지막으로 연결한 시각으로 읽을 수 있지만, 정확히 어떤 동작 때 값이 바뀌는지는 실제 데이터에서 다른 기록과 맞춰 본 뒤 씁니다.
 
 삼성 `configs` 표의 `CREATION_TIME` 은 유닉스 시각을 담은 TEXT 열이고 [2], 초인지 밀리초인지는 값으로 판별합니다. 값이 13자리 안팎이면 밀리초, 10자리 안팎이면 초일 가능성이 높으니 자릿수부터 보고 바꿉니다. `wifigeofence.db` 의 `time`·`time_major` 열 단위도 같은 방법으로 판별합니다. 값을 읽는 일반 방법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 

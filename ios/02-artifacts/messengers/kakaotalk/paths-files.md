@@ -39,7 +39,7 @@ nav_order: 800
 
 ### 버전별 차이
 
-시험한 iOS 버전과 카카오톡 앱 버전을 밝힌 공개 자료가 없어서, 경로가 버전에 따라 달라지는지는 실제 기기에서 확인합니다. 앱 버전에 따라 `Talk.sqlite` 의 열 구성이 다른 사례는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
+경로가 iOS 버전과 카카오톡 앱 버전에 따라 달라지는지는 실제 기기에서 확인합니다. 앱 버전에 따라 `Talk.sqlite` 의 열 구성이 다른 사례는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
 
 ## 구조
 

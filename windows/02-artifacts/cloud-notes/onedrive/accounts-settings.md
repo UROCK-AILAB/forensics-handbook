@@ -92,7 +92,7 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 
 `FirstRunSignInOriginDateTime` 은 형식이 REG_SZ 이지만 내용은 Unix 초 숫자를 적은 문자열입니다.
 
-각 값을 정확히 언제 적는지는 공개 자료가 없습니다. 예를 들어 `_Upload` 가 올리기를 시작한 때인지 끝낸 때인지 알 수 없습니다. 보고서에는 이름에서 짐작한 뜻이라고 밝힙니다.
+각 값을 정확히 언제 적는지는 시험 PC 에서 파일을 올리고 내려받으며 값이 바뀌는 때를 보고 확인합니다. 예를 들어 `_Upload` 가 올리기를 시작한 때인지 끝낸 때인지는 이름만으로 알 수 없습니다. 보고서에는 이름에서 짐작한 뜻이라고 밝힙니다.
 
 **상태 값**
 
@@ -105,7 +105,7 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 | `LastKFMOptInSource` | DWORD | (숫자) |
 | `LastPerFolderMigrationScanResult` | REG_SZ (JSON) | (JSON) |
 
-알려진 폴더 이동 값은 어느 폴더를 OneDrive 로 옮겼는지 보여 줍니다. 숫자 코드(위의 5, 3584 등)의 뜻은 공개 자료가 없습니다.
+알려진 폴더 이동 값은 어느 폴더를 OneDrive 로 옮겼는지 보여 줍니다. 숫자 코드(위의 5, 3584 등)의 뜻은 단정할 수 없으므로 보고서에는 값만 옮깁니다.
 
 **계정 종류에 따라 있는 값**
 
@@ -194,18 +194,18 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 - `SyncRootManager` 는 HKLM 에 있지만 키 이름과 `UserSyncRoots` 에 사용자 SID 가 들어갑니다. 그래서 SOFTWARE 하이브 하나로 이 PC 에서 OneDrive 를 쓴 사용자를 가려낼 수 있을 것으로 보입니다.
 - `PersonalUnlinkedTimeStamp` 와 `LastPersonalUnlinkedReason` 이 있으면 개인 계정 연결을 끊은 기록이 있습니다.
 - `SilentBusinessConfigCompleted` 가 있으면 자동 연결 정책이 회사 계정을 연결하는 데 성공한 적이 있습니다.
-- `LastKnownFolderMigrationState` 는 바탕 화면·문서·사진 같은 폴더를 OneDrive 로 옮겼는지 보여 줍니다. 숫자의 뜻은 공개 자료가 없습니다.
+- `LastKnownFolderMigrationState` 는 바탕 화면·문서·사진 같은 폴더를 OneDrive 로 옮겼는지 보여 줍니다. 숫자의 뜻은 단정하지 않습니다.
 - 정책 키에 값이 있으면 관리자가 그 정책을 건 적이 있습니다.
 
 ### 증명하지 못하는 것
 
 - 어떤 파일을 올렸거나 내려받았는지는 이 키로 알 수 없습니다. 파일 단위 기록은 [동기화 DB](syncenginedatabase-db.md) 와 [로그](odl-odlgz.md) 에 있습니다.
-- 시각 값의 이름이 뜻을 보장하지 않습니다. 정확한 기록 조건은 공개 자료가 없습니다.
+- 시각 값의 이름이 뜻을 보장하지 않습니다. 정확한 기록 조건은 시험 PC 에서 재현해 확인합니다.
 - `UserEmail` 은 OneDrive 에 로그인한 계정입니다. 그 시각에 PC 앞에 있던 사람을 알려 주지 않습니다.
 - 정책 값이 있다고 지금도 그 정책이 걸려 있다는 뜻은 아닙니다. "구성 안 됨"으로 되돌려도 키가 남기 때문입니다.
 - 값이 없다고 쓰지 않았다는 뜻은 아닙니다. 연결을 끊은 계정 키에는 값이 거의 남지 않을 수 있습니다. 이미지로 배포한 PC 라면 관리자가 SysPrep 전에 루트 키 값을 지웠을 수도 있습니다.
 
-보고서에는 "OneDrive 를 썼다" 대신 이렇게 씁니다. "사용자 A 의 NTUSER.DAT 에 OneDrive 계정 키 `Business1` 이 있다. `UserEmail` 은 X 이고, `ClientFirstSignInTimestamp` 는 Y(UTC)이다. 이 값의 정확한 기록 조건은 공개 문서로 확인되지 않았다."
+보고서에는 "OneDrive 를 썼다" 대신 이렇게 씁니다. "사용자 A 의 NTUSER.DAT 에 OneDrive 계정 키 `Business1` 이 있다. `UserEmail` 은 X 이고, `ClientFirstSignInTimestamp` 는 Y(UTC)이다. 값 이름이 기록 조건을 보장하지는 않는다."
 
 ## 시각 해석
 
@@ -213,7 +213,7 @@ OneDrive 동기화 앱은 계정을 연결하면 계정마다 하위 키를 하�
 |---|---|---|
 | `Accounts\<계정>` 의 시각 값, 루트 키의 `PersonalUnlinkedTimeStamp` 등 | QWORD, Unix 초 | 1970-01-01 00:00 UTC 부터 센 초. 변환하면 UTC 입니다 |
 | `FirstRunSignInOriginDateTime` | REG_SZ 에 적은 Unix 초 숫자 | 위와 같습니다 |
-| `SyncEngines` 의 `LastModifiedTime` | REG_SZ 날짜 문자열 | 시간대 표시가 없습니다. OneDrive 시작 시각(UTC)과 맞아서 UTC 로 보입니다. 공식 설명은 없습니다 |
+| `SyncEngines` 의 `LastModifiedTime` | REG_SZ 날짜 문자열 | 시간대 표시가 없습니다. OneDrive 시작 시각(UTC)과 맞아서 UTC 로 보입니다 |
 | 키의 마지막 기록 시각 | 하이브에 있는 키 단위 시각 | [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 를 참고합니다 |
 
 Unix 초로 읽는 근거는 이렇습니다. `Accounts\Personal` 의 `LastSignInTime` 이 1790114532 이면 2026-09-22 22:02:12 UTC 입니다. 같은 PC 에서 실행 중이던 OneDrive 프로세스의 시작 시각은 22:02:11 UTC 로, 1초 차이입니다.
@@ -223,11 +223,11 @@ Unix 초를 변환하는 법은 [시각 값 형식](../../../01-foundations/valu
 ## 함정과 한계
 
 - **값 목록은 OneDrive 26.168.0830.0006 기준입니다.** 앱 버전이 다르면 값 이름과 구성이 다를 수 있습니다.
-- **숫자 코드의 뜻을 짐작으로 채우지 않습니다.** `LastKnownFolderMigrationState` 의 5, `KfmFoldersProtectedNow` 의 3584, `USQInformation` 의 단위는 모두 공개 자료가 없습니다.
+- **숫자 코드의 뜻을 짐작으로 채우지 않습니다.** `LastKnownFolderMigrationState` 의 5, `KfmFoldersProtectedNow` 의 3584 는 값만 옮기고, `USQInformation` 의 단위는 실제 데이터로 확인합니다.
 - **QWORD 를 FILETIME 으로 읽지 않습니다.** 레지스트리 도구가 QWORD 를 FILETIME 으로 풀어 보여 주면 1601년 초의 날짜가 나옵니다. 아래 헥스 예시에서 확인합니다.
 - **회사 계정의 `UserName` 과 `UserEmail` 은 값이 다를 수 있습니다.** 보고서에는 어느 값을 썼는지 밝힙니다.
 - **ini 파일 이름은 테넌트 ID 가 아닙니다.** 회사 계정도 `cid` 로 파일 이름을 짓습니다.
-- **`Collection` 으로 끝나는 루트 키 값 네 개는 내용에 관한 공개 자료가 없습니다.** 이름만으로 무엇이 들었는지 단정하지 않습니다.
+- **`Collection` 으로 끝나는 루트 키 값 네 개는 값 데이터를 직접 열어 봅니다.** 이름만으로 무엇이 들었는지 단정하지 않습니다.
 - **알려진 폴더 이동을 켠 PC 는 바탕 화면·문서 경로가 OneDrive 폴더 안으로 바뀝니다.** 다른 아티팩트의 경로를 읽을 때 [원드라이브 허브](index.md) 의 설명을 참고합니다.
 
 ## 직접 분석해 보기

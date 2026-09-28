@@ -68,7 +68,7 @@ ChatGPT Enterprise 를 Purview 에 연결하는 경로는 [ChatGPT 기업용 감
 | `CopilotInteraction` | 261 | `Copilot` | Microsoft 가 만든 Copilot(Microsoft 365 Copilot, Cowork, Security Copilot 등) |
 | `AIAppInteraction` | 284 | `AIApp` | 조직에 배포하지 않은 제3자 AI 앱 |
 | `ConnectedAIAppInteraction` | 328 | `ConnectedAIApp` | 조직 테넌트에 배포·등록한 AI 앱 |
-| `TeamCopilotInteraction` | 334 | 공개 자료 없음 | Teams 회의 도우미. `Operation` 은 `AINotesUpdate`, `LiveNotesUpdate`, `TeamCopilotMsgInteraction` |
+| `TeamCopilotInteraction` | 334 | 내보낸 레코드에서 확인 | Teams 회의 도우미. `Operation` 은 `AINotesUpdate`, `LiveNotesUpdate`, `TeamCopilotMsgInteraction` |
 
 `ConnectedAIAppInteraction` 은 "조직에 등록한 사용자 정의 Copilot 이나 제3자 AI 앱" 의 기록이지만, Copilot Studio 로 만든 앱은 `RecordType` `CopilotInteraction`, `AppIdentity` `Copilot.Studio.<appId>` 로 남습니다[1]. 조직이 만든 앱이라고 `ConnectedAIAppInteraction` 만 찾으면 Copilot Studio 앱을 빠뜨리므로, 두 값을 함께 검색합니다. 회의 도우미 레코드의 `AppIdentity` 는 `Copilot.TeamCopilot.AINotes`, `Copilot.TeamCopilot.LiveNotes`, `Copilot.TeamCopilot.MeetingModerator`, `Copilot.TeamCopilot.Message` 입니다[1]. 관리자 작업은 `UpdateTenantSettings`, `CreatePlugin`, `DeletePlugin`, `EnablePromptBook` 같은 `Operation` 으로 따로 남습니다.
 
@@ -82,7 +82,7 @@ Copilot 감사 레코드는 두 층입니다[5]. 모든 감사 레코드에 공�
 | 바깥(Copilot 전용) | `ClientRegion`, `CopilotLogVersion` |
 | `CopilotEventData` 안 | `AppHost`, `Contexts`, `ThreadId`, `MessageIds`, `Messages`, `AccessedResources`, `ModelTransparencyDetails`, `AISystemPlugin` |
 
-이 밖에 `AppIdentity`, `AgentId`·`AgentName`·`AgentVersion`, `CapacityId`, `DLPEvaluationDeferred`·`DLPEvaluationDeferredReason` 필드도 있지만[1], 이 필드들이 어느 층에 들어가는지는 공개되어 있지 않습니다[5]. 내보낸 레코드에서 필드의 실제 위치를 먼저 확인합니다(아래 "직접 분석해 보기").
+이 밖에 `AppIdentity`, `AgentId`·`AgentName`·`AgentVersion`, `CapacityId`, `DLPEvaluationDeferred`·`DLPEvaluationDeferredReason` 필드도 있습니다[1]. 이 필드들이 어느 층에 들어가는지는 내보낸 레코드에서 실제 위치를 보고 확인합니다(아래 "직접 분석해 보기").
 
 JSON 키는 대소문자를 구분하고, 문서마다 표기가 다릅니다. 감사 문서의 설명은 `ID`·`IsPrompt` 로 쓰지만, 스키마 정의와 두 문서의 예시 레코드는 `Id`·`isPrompt` 이고 `AccessedResources` 의 예시 키는 `listItemUniqueId` 입니다[1][5]. 필터를 쓰기 전에 내보낸 파일에서 키 표기를 확인합니다.
 

@@ -47,7 +47,7 @@ MountPoints2 는 사용자 하이브(NTUSER.DAT)에 있는 키이며, 그 사용
 | `{GUID}` | 볼륨 GUID. `MountedDevices` 의 `\??\Volume{GUID}` 와 짝입니다 | `{01234567-89ab-cdef-0123-456789abcdef}` (winreg-kb 예시) |
 | `##…#…` | 네트워크 공유. UNC 경로의 `\` 가 `#` 로 바뀐 형식입니다 | `##1.2.3.4#username` (winreg-kb 예시) |
 | 영문 한 글자 | 드라이브 문자 | `C` (winreg-kb 예시) |
-| `CPC` | 아래에 `Volume`·`LocalMOF` 하위 키가 있습니다 | 뜻을 설명한 공개 문서는 없습니다 |
+| `CPC` | 아래에 `Volume`·`LocalMOF` 하위 키가 있습니다 | 뜻이 정해져 있지 않으므로 해석하지 않습니다 |
 
 `{GUID}` 하위 키 안에는 다음 하위 키와 값이 있을 수 있습니다(winreg-kb).
 
@@ -61,7 +61,7 @@ Windows 11 25H2 에서는 이런 모습입니다.
 
 - `{GUID}` 하위 키 가운데 여럿은 값도 하위 키도 없는 빈 키일 수 있습니다.
 - 나머지에는 `shell\Autoplay` (값 `MUIVerb`) 와 `shell\Autoplay\DropTarget` (값 `CLSID`) 가 있습니다.
-- `CPC\Volume` 아래에는 `{GUID}` 하위 키가 있고, 값 이름은 `Data`·`Generation` 입니다. 이 값의 뜻을 설명한 공개 문서는 없으므로 해석하지 않습니다.
+- `CPC\Volume` 아래에는 `{GUID}` 하위 키가 있고, 값 이름은 `Data`·`Generation` 입니다. 이 값의 뜻은 정해져 있지 않으므로 해석하지 않습니다.
 - 드라이브 문자 하위 키는 없을 수 있습니다.
 
 ### 볼륨 GUID 안에 든 정보

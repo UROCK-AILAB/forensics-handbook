@@ -16,7 +16,7 @@ nav_order: 2360
 
 먼저 macOS 버전과 시간대를 확인합니다. KnowledgeC 의 `/device/isLocked` 스트림은 macOS 10.15 부터 있어서, 버전에 따라 잠금 상태를 읽을 수 있는지가 달라집니다. 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../02-artifacts/system-account/os-version-install-history.md)에서, 시간대는 [시간대와 시계 설정 (Time Zone·NTP)](../../02-artifacts/system-account/time-zone.md)에서 확인합니다.
 
-다음으로 확보 방식을 확인합니다. `pmset -g log` 는 켜져 있는 맥에서 실행하는 명령이고, 이 명령이 읽는 기록이 디스크 어디에 있는지는 공개 문서에 나와 있지 않습니다 [1]. 라이브 확보 때 이 명령의 출력을 받아 두었는지에 따라 잠자기·깨우기 기록을 읽는 길이 달라지고, 라이브 확보 절차는 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)에 있습니다. 사용자 계정 목록과 시계를 바꾼 흔적이 있는지도 함께 확인하며, 시계 조작은 [시스템 시각 바꾸기 (Time Change)](anti-forensics/time-change.md)에서 다룹니다.
+다음으로 확보 방식을 확인합니다. `pmset -g log` 는 켜져 있는 맥에서 실행하는 명령입니다 [1]. 라이브 확보 때 이 명령의 출력을 받아 두었는지에 따라 잠자기·깨우기 기록을 읽는 길이 달라지고, 라이브 확보 절차는 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)에 있습니다. 사용자 계정 목록과 시계를 바꾼 흔적이 있는지도 함께 확인하며, 시계 조작은 [시스템 시각 바꾸기 (Time Change)](anti-forensics/time-change.md)에서 다룹니다.
 
 ## 볼 아티팩트와 순서
 
@@ -51,7 +51,7 @@ utmpx 와 로그인 기록은 "켜졌다·로그인했다" 를, pmset 기록은 
 
 type 값은 0(EMPTY)부터 11(SHUTDOWN_TIME)까지 있고, 사용 시간 재구성에 쓰는 값은 2 BOOT_TIME, 6 LOGIN_PROCESS, 7 USER_PROCESS, 8 DEAD_PROCESS, 11 SHUTDOWN_TIME 입니다 [2]. 시각은 1970-01-01 을 기준으로 한 유닉스 시각이고, `date` 에 `date_microseconds` 를 10^-6 곱해 더하면 됩니다 [2][3]. 헥스 편집기로 볼 때는 628바이트 단위로 끊어 오프셋 296 의 type 과 오프셋 300 의 date 를 먼저 읽으면 부팅·로그인 순서가 빠르게 잡힙니다.
 
-`/private/var/run` 이 재부팅 때 비워지는지는 알려져 있지 않습니다. 그래서 utmpx 가 사건 당시의 부팅까지 담고 있는지는 파일 안 가장 이른 BOOT_TIME 레코드로 먼저 추정하고, 담고 있지 않으면 통합 로그 쪽 기록으로 넘어갑니다.
+utmpx 가 사건 당시의 부팅까지 담고 있는지는 파일 안 가장 이른 BOOT_TIME 레코드로 먼저 추정하고, 담고 있지 않으면 통합 로그 쪽 기록으로 넘어갑니다.
 
 ### 전원 관리 기록과 설정
 
@@ -66,7 +66,7 @@ type 값은 0(EMPTY)부터 11(SHUTDOWN_TIME)까지 있고, 사용 시간 재구�
 | `pmset -g pslog` | 배터리·UPS 전원 상태 |
 | `pmset -g everything` | GETTING 절의 항목 출력을 한 번에 모은 것 |
 
-pmset 으로 바꾼 설정은 `/Library/Preferences/SystemConfiguration/com.apple.PowerManagement.plist` 에 저장됩니다. 설정 이름 `sleep` 은 시스템 잠자기 타이머, `displaysleep` 은 화면 잠자기 타이머이며, 둘 다 분 단위이고 0 이면 꺼져 있다는 뜻입니다 [1]. 이 두 이름은 pmset 명령의 설정 이름이고 plist 안의 키 이름은 공개 문서에 나와 있지 않아서, 실제 plist 에서 어느 키가 어느 설정인지 먼저 확인하고, 최근 버전에서도 파일이 같은 경로에 있는지도 함께 봅니다. 이 값은 사용 흔적이 끊긴 뒤 잠자기 기록이 나타날 때까지의 간격을 해석하는 데 씁니다. 예를 들어 `displaysleep` 이 10 이라면 마지막 조작 뒤 화면이 꺼질 때까지 약 10분 공백이 생기는 것이 설정과 맞는 모습이지만, 설정은 확보 시점의 값이라서 사건 당시에도 같았는지는 따로 확인합니다. 통합 로그에서 잠자기·깨우기를 남기는 프로세스와 문구는 [전원·잠자기 기록 (pmset)](../../02-artifacts/logs/power-events.md)에서 봅니다.
+pmset 으로 바꾼 설정은 `/Library/Preferences/SystemConfiguration/com.apple.PowerManagement.plist` 에 저장됩니다. 설정 이름 `sleep` 은 시스템 잠자기 타이머, `displaysleep` 은 화면 잠자기 타이머이며, 둘 다 분 단위이고 0 이면 꺼져 있다는 뜻입니다 [1]. 이 두 이름은 pmset 명령의 설정 이름이라서 plist 안의 키 이름과 같다고 보지 않고, 실제 plist 에서 어느 키가 어느 설정인지 먼저 확인하고, 최근 버전에서도 파일이 같은 경로에 있는지도 함께 봅니다. 이 값은 사용 흔적이 끊긴 뒤 잠자기 기록이 나타날 때까지의 간격을 해석하는 데 씁니다. 예를 들어 `displaysleep` 이 10 이라면 마지막 조작 뒤 화면이 꺼질 때까지 약 10분 공백이 생기는 것이 설정과 맞는 모습이지만, 설정은 확보 시점의 값이라서 사건 당시에도 같았는지는 따로 확인합니다. 통합 로그에서 잠자기·깨우기를 남기는 프로세스와 문구는 [전원·잠자기 기록 (pmset)](../../02-artifacts/logs/power-events.md)에서 봅니다.
 
 ## 분석 흐름
 
@@ -86,7 +86,7 @@ pmset 으로 바꾼 설정은 `/Library/Preferences/SystemConfiguration/com.appl
 
 로그인 세션이 길게 이어진 것을 그 시간 내내 사용한 것으로 보는 것도 오판입니다. USER_PROCESS 레코드부터 DEAD_PROCESS 레코드까지는 세션이 열려 있던 구간일 뿐이고, 그 안에 화면이 꺼지거나 잠긴 구간이 있을 수 있습니다.
 
-utmpx 에 사건 당시 레코드가 없다고 해서 그때 맥이 꺼져 있었다고 보지 않습니다. 파일이 부팅을 넘어 남는지 알려져 있지 않아서, 레코드가 없으면 "이 파일로는 판단할 수 없다" 까지만 말하고 다른 층의 기록으로 넘어갑니다.
+utmpx 에 사건 당시 레코드가 없다고 해서 그때 맥이 꺼져 있었다고 보지 않습니다. 레코드가 없으면 "이 파일로는 판단할 수 없다" 까지만 말하고 다른 층의 기록으로 넘어갑니다.
 
 ## 보고서 문장 예
 

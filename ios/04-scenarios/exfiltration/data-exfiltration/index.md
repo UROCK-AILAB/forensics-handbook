@@ -25,7 +25,7 @@ has_toc: false
 | 메신저 | `sms.db` 의 `attachment`·`message` 표, 다른 회사 메신저는 앱 DB 와 `DataUsage.sqlite` | `sms.db` 열 이름은 실제 데이터로 확인 | 보낸 첨부의 이름·형식·크기, 앱 DB 를 못 읽을 때는 앱별 셀룰러 송신량과 시각 [1] |
 | 클라우드 | iCloud Drive 의 `client.db`·`server.db`, `Photos.sqlite` 의 업로드·공유 표, iCloud 백업 설정 plist | `client.db` 해석은 iOS 13.7 에서 시험한 결과 [3], 표와 열 이름은 실제 데이터로 확인 | 파일 앱으로 iCloud Drive 에 올린 흔적 [3], 공유 참여자, iCloud 백업을 켰는지와 마지막 백업 시각 값 |
 | 메일 | 기본 메일 앱의 `Envelope Index`·`Protected Index` 와 `.emlx` 파일, 계정·메일함 설정 plist | DB 해석은 iOS 12·13 기준 [4], 로컬 백업에는 이 DB 가 보이지 않을 수 있음 | 보낸편지함에 있는 메일의 겉봉 정보와 받는 사람, 본문 앞부분 [4] |
-| 에어드롭 | sysdiagnose 의 통합 로그(AirDrop 범주), `com.apple.sharingd.plist` | 로그 해석 자료는 iOS 15.3.1 에서 시험 [2] | 받는 쪽 기기에서 보낸 사람 전화번호 후보 [2], 보낸 쪽에 남는 기록은 공개 자료 없음 |
+| 에어드롭 | sysdiagnose 의 통합 로그(AirDrop 범주), `com.apple.sharingd.plist` | 로그 해석 자료는 iOS 15.3.1 에서 시험 [2] | 받는 쪽 기기에서 보낸 사람 전화번호 후보 [2], 보낸 쪽 기기의 기록은 같은 통합 로그에서 보낸 시각 전후의 AirDrop 항목으로 확인 |
 | PC 동기화 | "이 컴퓨터를 신뢰하겠습니까" 알림과 신뢰 기록, 백업 폴더의 `Info.plist`·`Manifest.plist`, `com.apple.MobileBackup.plist` | iOS 16 이상은 백업할 때도 신뢰 알림이 뜸 [6] | 신뢰한 컴퓨터가 콘텐츠에 접근할 수 있었는지 [6], 백업을 만든 기기와 시각 |
 
 ## 읽는 순서

@@ -49,22 +49,22 @@ mac_apt 는 `date` 값을 따로 바꾸지 않고 그대로 DeletedDate 에 넣�
 
 **증명하는 것.** `deletedUsers` 에 항목이 있으면 그 이름과 UID 의 계정을 지운 기록이 이 Mac 에 있고, `date` 가 그 기록의 시각이라는 뜻입니다 [1]. `/Users/Deleted Users/` 에 디스크 이미지가 있으면 계정을 지우면서 홈 폴더를 이미지로 남기는 선택지를 골랐을 때 이미지가 놓이는 자리와 맞고, 이미지 안에서 그 계정의 파일을 볼 수 있습니다 [2].
 
-**증명하지 못하는 것.** 이 기록에는 누가 지웠는지와 어떤 방법으로 지웠는지가 들어 있지 않습니다. 어떤 삭제 방법에서 기록이 남는지 알려지지 않았으니, `deletedUsers` 에 항목이 없다고 해서 지운 계정이 없었다고 볼 수 없습니다. 디스크 이미지가 `/Users/Deleted Users/` 에 있다는 사실만으로는 그 이미지를 계정 삭제 과정이 만들었는지, 누가 다른 방법으로 그 자리에 두었는지 가릴 수 없습니다.
+**증명하지 못하는 것.** 이 기록에는 누가 지웠는지와 어떤 방법으로 지웠는지가 들어 있지 않습니다. 삭제 방법에 따라 `deletedUsers` 가 남지 않을 수 있으니, 항목이 없다고 해서 지운 계정이 없었다고 볼 수 없습니다. 디스크 이미지가 `/Users/Deleted Users/` 에 있다는 사실만으로는 그 이미지를 계정 삭제 과정이 만들었는지, 누가 다른 방법으로 그 자리에 두었는지 가릴 수 없습니다.
 
 보고서에는 "`deletedUsers` 에 이 이름과 UID 의 항목이 있고, `date` 값은 이 시각이다" 처럼 기록으로 확인되는 만큼만 쓰고, `date` 를 어떤 기준으로 풀었는지도 함께 적습니다.
 
 ## 시각 해석
 
-`date` 의 저장 형태와 기준 시각은 알려지지 않았으니, 도구가 보여 주는 시각을 그대로 옮기기 전에 원본 값의 형태부터 봅니다. plist 날짜형이면 plist 도구가 날짜로 보여 주고, 숫자라면 유닉스 시각인지 맥 절대 시각인지 따져서 바꿔야 합니다. 기준별 계산은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
+`date` 는 저장 형태와 기준 시각을 짐작하지 말고, 도구가 보여 주는 시각을 그대로 옮기기 전에 원본 값의 형태부터 봅니다. plist 날짜형이면 plist 도구가 날짜로 보여 주고, 숫자라면 유닉스 시각인지 맥 절대 시각인지 따져서 바꿔야 합니다. 기준별 계산은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
 
 이 시각은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)에서 계정 plist 가 지워진 기록과 `/Users/Deleted Users/` 에 이미지가 생긴 기록을 찾아 맞춰 봅니다. 두 기록의 시각이 가까우면 `date` 를 어떤 기준으로 풀었는지 판단하는 근거로도 쓸 수 있습니다.
 
 ## 함정과 한계
 
-- **기록 조건이 알려지지 않음.** 버전과 삭제 방법에 따라 `deletedUsers` 가 남지 않을 수 있습니다. 항목이 없으면 아래 다른 자리를 함께 찾아봅니다.
+- **기록이 남지 않을 수 있음.** 버전과 삭제 방법에 따라 `deletedUsers` 가 남지 않을 수 있습니다. 항목이 없으면 아래 다른 자리를 함께 찾아봅니다.
 - **다른 흔적 후보.** 계정 plist 가 지워진 뒤에도 흔적이 있을 법한 자리로는 `/private/var/folders` 의 Darwin 폴더(mac_apt 가 UID 로 계정과 잇는 폴더 [3]), 같은 노드 폴더의 `sqlindex` [4], 지우지 않은 홈 폴더, 통합 로그가 있습니다. 이 자리들에 지운 계정의 흔적이 실제로 남는지는 실제 데이터로 하나씩 확인합니다.
 - **같은 UID.** Darwin 폴더는 UID·GID 로 계정과 이어집니다 [3]. 지운 계정과 UID 가 같은 계정이 지금 있는지 먼저 확인해야 폴더 주인을 잘못 짚지 않습니다.
-- **설정 파일을 고친 경우.** `com.apple.preferences.accounts.plist` 를 누가 직접 고치거나 지우면 어떤 흔적이 남는지는 공개된 자료가 없습니다. [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../../03-techniques/analysis/snapshot-diff.md)로 이전 사본의 `deletedUsers` 와 계정 plist 를 비교합니다.
+- **설정 파일을 고친 경우.** `com.apple.preferences.accounts.plist` 를 누가 직접 고치거나 지웠는지는 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../../03-techniques/analysis/snapshot-diff.md)로 이전 사본의 `deletedUsers` 와 계정 plist 를 비교해 확인합니다.
 
 ## 직접 분석해 보기
 

@@ -23,9 +23,9 @@ iOS 15 까지 앱을 화면 앞에 띄워 쓴 기록은 KnowledgeC.db 의 `ZOBJE
 | 16 | `/private/var/db/biome/streams/restricted/_DKEvent.App.InFocus` | SEGB v1 | [1][3][6] |
 | 17–26 | iOS 16 과 같은 위치 | SEGB v2 | [2][6] |
 
-iLEAPP 파서는 `*/[Bb]iome/streams/restricted/App.InFocus/local/*` 와 `*/[Bb]iome/streams/restricted/App.InFocus/remote/*` 두 경로 규칙으로 이 스트림을 찾습니다[5]. `[Bb]` 로 대소문자를 모두 받아서 `/private/var/db/biome` 과 `/private/var/mobile/Library/Biome` 양쪽을 잡습니다. 스트림 이름이 `_DKEvent.App.InFocus` 인 경우와 `App.InFocus` 인 경우가 각각 어느 iOS 버전, 어느 영역에 해당하는지는 공개 자료로 밝혀지지 않았으므로, 실제 데이터에서는 두 이름을 모두 찾아봅니다. iOS 27 에서의 위치도 실제 기기로 확인합니다.
+iLEAPP 파서는 `*/[Bb]iome/streams/restricted/App.InFocus/local/*` 와 `*/[Bb]iome/streams/restricted/App.InFocus/remote/*` 두 경로 규칙으로 이 스트림을 찾습니다[5]. `[Bb]` 로 대소문자를 모두 받아서 `/private/var/db/biome` 과 `/private/var/mobile/Library/Biome` 양쪽을 잡습니다. 스트림 이름은 `_DKEvent.App.InFocus` 와 `App.InFocus` 두 가지로 나타나므로, 실제 데이터에서는 두 이름을 모두 찾아보고 찾은 이름을 iOS 버전·영역과 함께 적습니다. iOS 27 에서의 위치도 실제 기기로 확인합니다.
 
-로컬 백업의 HomeDomain `Library/Preferences/com.apple.appstored.plist` 에는 `AppUsageBiomeStartDate` (datetime) 라는 키가 있습니다. 이 키와 `App.InFocus` 의 관계는 밝혀지지 않았고, 로컬 백업에는 `App.InFocus` SEGB 파일이 들어 있지 않습니다. 바이옴을 얻으려면 어떤 수집이 필요한지는 [저장 위치와 스트림 (Streams)](streams.md)의 수집 범위 절에 있습니다.
+로컬 백업의 HomeDomain `Library/Preferences/com.apple.appstored.plist` 에는 `AppUsageBiomeStartDate` (datetime) 라는 키가 있습니다. 이 키와 `App.InFocus` 의 관계는 이름만으로 단정할 수 없고, 로컬 백업에는 `App.InFocus` SEGB 파일이 들어 있지 않습니다. 바이옴을 얻으려면 어떤 수집이 필요한지는 [저장 위치와 스트림 (Streams)](streams.md)의 수집 범위 절에 있습니다.
 
 ## 구조
 
@@ -54,7 +54,7 @@ iLEAPP 는 `App.InFocus` 스트림을 아래처럼 읽습니다[5].
 
 iLEAPP 결과표의 열은 `Timestamp`, `Start Time`, `SEGB State`, `Bundle ID`, `Action`, `Sync Origin`, `Filename`, `Offset` 입니다[5]. `SEGB State` 로 Written·Deleted 를, `Sync Origin` 으로 `local`·`remote` 를 가르고, `Filename` 과 `Offset` 으로 원본 파일의 기록 위치까지 거슬러 올라가 찾을 수 있습니다.
 
-iLEAPP 해석대로라면 앱이 앞에 나올 때와 뒤로 갈 때마다 기록이 하나씩 생기고, 사용 구간은 Foreground 기록과 그 뒤의 Background 기록을 짝지어 만들게 됩니다. 이 짝짓기 방식은 공개된 방법이 아니므로, 구간을 계산했다면 보고서에 분석가가 짝지은 결과라고 밝힙니다.
+iLEAPP 해석대로라면 앱이 앞에 나올 때와 뒤로 갈 때마다 기록이 하나씩 생기고, 사용 구간은 Foreground 기록과 그 뒤의 Background 기록을 짝지어 만들게 됩니다. 이 짝짓기는 기록에 적힌 값이 아니라 분석가가 하는 계산이므로, 구간을 계산했다면 보고서에 분석가가 짝지은 결과라고 밝힙니다.
 
 ## 증거로서 의미
 
@@ -74,7 +74,7 @@ iOS 16 의 전환 이유 값에는 `com.apple.SpringBoard.transitionReason.homes
 
 ## 함정과 한계
 
-도구 결과에서 `remote` 기록을 걸러내지 않으면 다른 기기의 사용이 이 기기의 사용처럼 타임라인에 섞입니다[5][7]. iLEAPP 는 `tombstone` 폴더 파일을 건너뛰고[5], `tombstone` 안 파일을 해석하는 방법은 공개 자료가 없어서, 도구가 보여 주지 않는 기록이 폴더에 남아 있을 수 있습니다.
+도구 결과에서 `remote` 기록을 걸러내지 않으면 다른 기기의 사용이 이 기기의 사용처럼 타임라인에 섞입니다[5][7]. iLEAPP 는 `tombstone` 폴더 파일을 건너뛰어서[5], 도구가 보여 주지 않는 기록이 폴더에 남아 있을 수 있습니다. `tombstone` 폴더에 파일이 있으면 파일 헤더부터 직접 확인합니다.
 
 필드 3 의 Foreground·Background 표시는 iLEAPP 스스로 해석이라고 밝혔고[5], crush 와 iLEAPP 의 필드 번호도 다릅니다[3][5]. 그래서 도구 한 가지 결과만 옮기지 말고 필드 번호와 원본 값을 함께 기록합니다. 기록에는 번들 ID 만 남아서 앱 이름은 [설치된 앱 (Installed Apps·applicationState.db)](../installed-apps.md) 같은 다른 기록과 맞춰 바꿉니다. 번들 ID 를 읽는 법은 [번들 ID와 앱 그룹 (Bundle ID·App Group)](../../../01-foundations/value-decoding/bundle-id-app-group.md)에 있습니다.
 

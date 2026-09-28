@@ -26,7 +26,7 @@ has_toc: false
 | 볼륨 슈퍼블록 `apfs_fs_flags` | 10.13 이후 | 소프트웨어 암호화 볼륨인지 처음 가려내기 |
 | `/var/db/FileVaultPRK.dat` | 10.13 이후 | MDM 복구 키 에스크로를 설정했던 기기 |
 | 구성 프로파일의 파일볼트 페이로드 | 10.9 이후 (10.13 이후 에스크로 페이로드) | 파일볼트를 켜게 한 정책, 복구 키 처리 방식 |
-| `/Library/Keychains/FileVaultMaster.keychain` | 공개 자료 없음 | 기관 복구 키를 쓰도록 한 흔적 |
+| `/Library/Keychains/FileVaultMaster.keychain` | — | 기관 복구 키를 쓰도록 한 흔적 |
 | 기기의 보안 칩 (T2·Apple silicon) | — | 디스크만 떼어 내 풀 수 있는지 판단 |
 
 관리 기능이 들어온 버전은 아래와 같습니다 [2].

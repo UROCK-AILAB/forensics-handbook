@@ -23,11 +23,11 @@ has_toc: false
 | 길 | 먼저 볼 위치 | macOS 버전 | 알려 주는 것 |
 |---|---|---|---|
 | USB | 통합 로그의 DiskArbitration 메시지, `/private/var/db/volinfo.database`, `~/Library/Preferences/com.apple.sidebarlists.plist` [1] | 실제 기기에서 확인 | 외부 볼륨이 연결된 시각과 볼륨 |
-| 에어드롭 | 받는 쪽은 받은 파일(기본은 다운로드 폴더) [2]. 보내는 쪽 전용 기록은 공개 자료 없음 | OS X 10.11 이상 맥 [3] | 받은 파일 |
+| 에어드롭 | 받는 쪽은 받은 파일(기본은 다운로드 폴더) [2]. 보내는 쪽 기록만으로는 보낸 파일을 알기 어려움 | OS X 10.11 이상 맥 [3] | 받은 파일 |
 | 클라우드 | `~/Library/Application Support/CloudDocs/session/db/client.db`·`server.db` [4], `~/Library/CloudStorage/` 아래 드롭박스 폴더 [5] | 파일 공급자판 드롭박스는 macOS 12.5 이상 [5] | 동기화 항목과 올린 기기 |
 | 메일 | `~/Library/Mail/V[0-9]/...`, `~/Library/Containers/com.apple.mail/Data/Library/Mail Downloads/*` [1] | 실제 기기에서 확인 | 보낸 메일과 첨부 |
 | 메신저 | `~/Library/Messages/chat.db`, `~/Library/Messages/Attachments/` [1][6] | 실제 기기에서 확인 | 보낸 메시지와 첨부 |
-| 웹 업로드 | 업로드 전용 기록은 공개 자료 없음. 브라우저 방문 기록과 파일 접근 흔적으로 정황을 모음 | 실제 기기에서 확인 | 업로드 사이트 방문과 같은 시간대의 파일 접근 |
+| 웹 업로드 | 브라우저 방문 기록과 파일 접근 흔적으로 정황을 모음 | 실제 기기에서 확인 | 업로드 사이트 방문과 같은 시간대의 파일 접근 |
 | 아이폰 | `~/Library/Preferences/com.apple.iPod.plist`, `~/Library/Application Support/MobileSync/Backup/*` [1][7] | 실제 기기에서 확인 | 연결된 기기와 마지막 연결 시각 |
 | 인쇄 | 스풀 폴더 `/var/spool/cups`(제어 파일 c·데이터 파일 d), 로그 폴더 `/var/log/cups/` [8][9] | 실제 기기에서 확인 | 인쇄 작업·요청 계정·인쇄한 앱·시각 |
 

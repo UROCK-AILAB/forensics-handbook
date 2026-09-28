@@ -63,7 +63,7 @@ App Store 페이지의 값은 다음과 같습니다(2026-09-25 기준) [7].
 
 App Store 의 "Data Linked to You" 라벨에는 Health & Fitness, Location, Contact Info, User Content, Search History, Identifiers, Usage Data, Diagnostics 가 적혀 있습니다 [7]. 이 라벨은 개발사가 신고한 수집 항목이라서, 서버로 모으는 데이터의 종류로 읽고 기기에 남는 파일 목록으로 읽지 않습니다.
 
-iOS 에서 ChatGPT 와 Gemini 는 위치 서비스를 꺼 둔 상태에서도 약 0.5마일 안쪽의 위치 데이터를 얻을 수 있습니다 [2]. 그 위치가 어느 파일이나 서버 기록에 남는지는 공개된 자료가 없습니다. 위치 서비스를 껐다는 설정만으로 앱이 위치를 몰랐다고 쓰지 않습니다.
+iOS 에서 ChatGPT 와 Gemini 는 위치 서비스를 꺼 둔 상태에서도 약 0.5마일 안쪽의 위치 데이터를 얻을 수 있습니다 [2]. 그 위치가 기기에 남는지는 앱 컨테이너 안 파일에서 위도·경도 값을 찾아 확인합니다. 위치 서비스를 껐다는 설정만으로 앱이 위치를 몰랐다고 쓰지 않습니다.
 
 ### 앱 안 결제 항목
 
@@ -138,7 +138,7 @@ iLEAPP 은 `tmp/` 아래 PNG 를 "Media Uploads" 로, M4A 를 "Voice Prompts" �
 
 두 형식의 기준 시점이 달라서, 한 파일 안에서도 대화 시각과 메시지 시각을 같은 방식으로 바꾸면 31년쯤 어긋납니다. iLEAPP 은 두 값을 정수로 바꾼 뒤 변환해 초 아래 자리를 버리고, 값이 0 이거나 비어 있으면 빈칸으로 둡니다 [3].
 
-`modification_date` 가 무엇이 바뀔 때 갱신되는지는 공개된 자료가 없어서, 대화를 연 시각으로 읽지 않고 메시지 하나하나의 `create_time` 을 함께 봅니다. 컨테이너 안 파일의 파일 시스템 시각도 동기화나 캐시 갱신 때 바뀔 수 있어서 대화한 시각으로 바로 옮기지 않습니다.
+`modification_date` 는 대화를 연 시각으로 읽지 않고 메시지 하나하나의 `create_time` 을 함께 봅니다. 무엇이 바뀔 때 이 값이 갱신되는지는 시험 기기에서 대화를 열거나 메시지를 보내 보고 값이 바뀌는지로 확인합니다. 컨테이너 안 파일의 파일 시스템 시각도 동기화나 캐시 갱신 때 바뀔 수 있어서 대화한 시각으로 바로 옮기지 않습니다.
 
 App Store 페이지의 출시 표시는 "1일 전" 처럼 상대 시각이라서, 날짜로 적을 때는 페이지를 본 날짜를 함께 적고 "무렵" 으로 씁니다. 기기의 여러 기록을 시간순으로 합치는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/ios/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 

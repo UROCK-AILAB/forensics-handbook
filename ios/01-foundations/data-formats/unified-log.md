@@ -12,7 +12,7 @@ Apple 은 이 형식의 공식 명세를 내지 않았습니다.
 
 ## 이 형식을 쓰는 아티팩트
 
-통합 로그는 macOS 10.12 에서 처음 나왔고, macOS 뿐만 아니라 iOS·watchOS·tvOS 에도 있습니다[2]. libyal 형식 문서는 macOS 10.12 부터 13 까지를 시험한 결과입니다[1]. iOS 가 어느 버전부터 이 형식을 썼는지 밝힌 공개 자료는 없습니다. 맥과 파일 구조는 같고, iOS 에서는 기기에서 파일을 꺼내 오는 방법이 다릅니다(아래 "읽는 법").
+통합 로그는 macOS 10.12 에서 처음 나왔고, macOS 뿐만 아니라 iOS·watchOS·tvOS 에도 있습니다[2]. libyal 형식 문서는 macOS 10.12 부터 13 까지를 시험한 결과입니다[1]. 맥과 파일 구조는 같고, iOS 에서는 기기에서 파일을 꺼내 오는 방법이 다릅니다(아래 "읽는 법").
 
 통합 로그는 아래 파일들로 이루어집니다[1].
 
@@ -96,13 +96,13 @@ log show --style json <이름>.logarchive > logarchive.json
 
 tracev3 와 uuidtext 는 짝으로 다뤄야 합니다. 둘 중 하나만 확보하면 메시지 문장이나 시각 계산의 일부를 잃을 수 있어서, 파일 시스템에서 꺼낼 때는 두 폴더를 함께 꺼내고 해시를 따로 남깁니다.
 
-지운 로그나 손상된 tracev3 를 복구하는 동작은 공개된 분석 자료가 없습니다. 청크셋이 LZ4 블록 단위로 나뉘어 있으므로 파일 일부가 망가져도 `bv41`·`bv4-` 표지를 찾아 남은 블록만 풀어 볼 여지는 있지만, 검증된 절차는 아닙니다.
+지운 로그나 손상된 tracev3 를 복구하는 방법은 정해진 것이 없습니다. 청크셋이 LZ4 블록 단위로 나뉘어 있으므로 파일 일부가 망가져도 `bv41`·`bv4-` 표지를 찾아 남은 블록만 풀어 볼 여지는 있지만, 검증된 절차는 아닙니다.
 
 ## 함정
 
 macos-UnifiedLogs 는 printf 오류 코드를 뜻으로 풀지 않고 번호 그대로 두며, 지원하지 않는 객체는 base64 로 내보냅니다[2]. 출력에 숫자나 base64 가 보이면 해석 실패가 아니라 도구가 풀지 않은 값일 수 있습니다.
 
-아이폰 로컬 백업에는 이름에 로그가 들어간 영역이 있습니다. 도메인 `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`, `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs`, 그리고 `WirelessDomain` 의 `Library/Preferences/com.apple.AppleBasebandManager.plist` 안의 `systemlogs.mode` 키가 그 예입니다. 이들이 통합 로그와 직접 관련 있다는 공개 자료는 없으므로, 이름만 보고 통합 로그를 확보했다고 적지 않습니다. tracev3 가 백업에 들어 있는지는 실제 백업으로 확인합니다. 충돌 기록은 [충돌·진단 기록](../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
+아이폰 로컬 백업에는 이름에 로그가 들어간 영역이 있습니다. 도메인 `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`, `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs`, 그리고 `WirelessDomain` 의 `Library/Preferences/com.apple.AppleBasebandManager.plist` 안의 `systemlogs.mode` 키가 그 예입니다. 이들이 통합 로그를 담고 있는지는 이름만으로 알 수 없으므로, 통합 로그를 확보했다고 적지 않습니다. tracev3 가 백업에 들어 있는지는 실제 백업으로 확인합니다. 충돌 기록은 [충돌·진단 기록](../../02-artifacts/app-usage/diagnostics.md)에서 다룹니다.
 
 개인정보를 가리는 표시(`<private>`)가 붙는 조건과 로그 수준별 보관 기간은 실제 기기로 확인합니다. 어떤 사건의 로그가 없다는 사실만으로 그 사건이 없었다고 쓰지 않습니다.
 

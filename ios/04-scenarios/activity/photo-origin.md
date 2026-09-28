@@ -73,7 +73,7 @@ nav_order: 1440
    ```
 
    EXIF 날짜 문자열·시간대·원래 파일 이름이 든 `ZADDITIONALASSETATTRIBUTES` 는 `ZASSET.ZADDITIONALATTRIBUTES` 를 `ZADDITIONALASSETATTRIBUTES.Z_PK` 와 이어 붙입니다 [3]. 버전마다 열이 달라질 수 있어서 쿼리가 멈추면 `PRAGMA table_info(ZADDITIONALASSETATTRIBUTES);` 로 열을 먼저 확인합니다.
-3. 시각을 셋으로 맞춰 봅니다. `ZDATECREATED`, EXIF 날짜 문자열, `ZADDEDDATE` 가 서로 가까운지 보고, 시간대 열로 현지 시각을 만듭니다. `ZDATECREATED` 와 `ZADDEDDATE` 의 차이만으로 "이 기기에서 찍음" 과 "나중에 저장함" 을 가르는 해석은 공개된 근거가 없어서, 2번의 경로 열과 함께 쓸 때만 근거로 삼습니다.
+3. 시각을 셋으로 맞춰 봅니다. `ZDATECREATED`, EXIF 날짜 문자열, `ZADDEDDATE` 가 서로 가까운지 보고, 시간대 열로 현지 시각을 만듭니다. `ZDATECREATED` 와 `ZADDEDDATE` 의 차이만으로는 "이 기기에서 찍음" 과 "나중에 저장함" 을 가를 수 없어서, 2번의 경로 열과 함께 쓸 때만 근거로 삼습니다.
 4. 위치를 봅니다. `ZASSET` 의 위도·경도에 더해 `ZADDITIONALASSETATTRIBUTES` 의 `ZSHIFTEDLOCATIONISVALID`, `ZREVERSELOCATIONDATAISVALID` [2] 와 `ZGPSHORIZONTALACCURACY` 를 적습니다. 위치가 있는 자산만 모아 보려면 iLEAPP 의 `Ph005HasLocations` 파서를 쓸 수 있습니다 [5].
 5. 이 기기 카메라로 찍었다고 판단했다면, 수집 범위에 바이옴과 전원 로그가 있을 때 같은 시각에 카메라를 쓴 흔적을 `CameraCapture.AutoFocusROI` 와 `PLCameraAgent_EventForward_Camera` 에서 찾습니다 [11][12]. 사진 위치는 [그 시각에 어디 있었나](location.md) 의 위치 기록과도 맞춰 봅니다.
 6. 받은 사진이라면 `sms.db` 의 `attachment` 표나 메신저 앱 DB 에서 같은 파일 이름·크기를 찾습니다. 메시지·AirDrop·메일로 보낼 때 받는 기기가 새 형식을 읽지 못하면 호환 형식으로 바꿔 보낼 수 있어서 [7], 받은 파일과 원본의 형식·해시가 다를 수 있습니다.
@@ -82,13 +82,13 @@ nav_order: 1440
 
 ## 흔한 오판
 
-사진의 위치를 "그 사람이 그곳에 있었다" 로 옮기는 실수가 가장 흔합니다. 사진 위치로는 사진이 찍힌 곳만 알 수 있고, 받은 사진이라면 다른 사람이 찍은 곳입니다. 사용자가 위치를 고쳤는지를 판별하는 열은 공개 자료에 없습니다. 사람의 위치는 [그 시각에 어디 있었나](location.md) 의 기록과 겹칠 때만 적습니다.
+사진의 위치를 "그 사람이 그곳에 있었다" 로 옮기는 실수가 가장 흔합니다. 사진 위치로는 사진이 찍힌 곳만 알 수 있고, 받은 사진이라면 다른 사람이 찍은 곳입니다. 사용자가 위치를 고쳤는지는 시험 기기에서 위치를 고쳐 보고 어느 열이 바뀌는지로 확인합니다. 사람의 위치는 [그 시각에 어디 있었나](location.md) 의 기록과 겹칠 때만 적습니다.
 
 `ZSAVEDASSETTYPE` 풀이를 확정된 값처럼 적는 일도 조심합니다. 같은 열을 도구와 버전마다 다르게 풀었고 [1][2], iOS 27 은 공개 파서가 아직 다루지 않습니다 [1].
 
 기기에서 지워진 사진을 "이 기기 사용자가 지웠다" 로 적는 실수도 있습니다. iCloud 사진이 켜져 있으면 다른 기기에서 지운 사진도 이 기기에서 지워져서 [9], 삭제 표시만으로는 어느 기기에서 지웠는지 말할 수 없습니다.
 
-기기 시각이 바뀌었을 가능성도 따집니다. 사용자가 기기 시각을 손으로 바꾸면 knowledgeC.db 의 기록 시각도 틀어집니다 [13]. 사진 DB 의 열도 같은 영향을 받는지는 공개된 근거가 없습니다. EXIF 날짜 문자열과 `ZDATECREATED`, 앞뒤 사진의 순서가 어긋나면 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 을 먼저 봅니다.
+기기 시각이 바뀌었을 가능성도 따집니다. 사용자가 기기 시각을 손으로 바꾸면 knowledgeC.db 의 기록 시각도 틀어집니다 [13]. 사진 DB 의 열도 같은 영향을 받는지는 시험 기기에서 시각을 바꾼 뒤 사진을 찍어 확인합니다. EXIF 날짜 문자열과 `ZDATECREATED`, 앞뒤 사진의 순서가 어긋나면 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 을 먼저 봅니다.
 
 받은 파일의 해시가 원본과 다르다고 "다른 사진" 으로 단정하는 일도 있습니다. 보낼 때 호환 형식으로 바뀌거나 [7], USB 로 컴퓨터에 가져올 때 "원본 유지" 설정이 아니면 JPEG·H.264 로 바뀔 수 있습니다 [7].
 

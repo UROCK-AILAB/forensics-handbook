@@ -57,7 +57,7 @@ FOREGROUND_SERVICE_START·STOP 은 앱의 서비스가 돈 기록이지 사용�
 
 | 항목 | 현행 AOSP | Android 16, One UI 8.5 |
 |---|---|---|
-| 보관 한도와 저장 주기 | [파일 구조](structure.md) 페이지의 값 | 삼성이 바꿨는지는 공개 자료 없음 |
+| 보관 한도와 저장 주기 | [파일 구조](structure.md) 페이지의 값 | 폴더 안 파일 날짜의 범위와 간격을 보고 AOSP 값과 같은지 확인 |
 | dumpsys 의 "UsageStats RollOver history" 절 | 소스에 없음 | 있음 |
 | dumpsys 의 mDumpInitLastTimeSaved·mDumpInitEndTime 줄 | 소스에 없음 | 있음 |
 

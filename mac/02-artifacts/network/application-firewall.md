@@ -19,7 +19,7 @@ macOS 방화벽의 설정 항목은 모두 들어오는 (incoming) 연결에 대
 | macOS 버전 | 설정이 있는 곳 |
 |---|---|
 | 14 Sonoma 까지 | `/Library/Preferences/com.apple.alf.plist` [2] |
-| 15 Sequoia 부터 | plist 에 들어 있지 않습니다. 저장 위치는 공개 자료 없음 [2] |
+| 15 Sequoia 부터 | plist 에 들어 있지 않습니다 [2]. 저장 위치는 실제 기기에서 확인 |
 
 macOS 15 부터 방화벽 설정은 속성 목록 파일에 들어 있지 않습니다. `/Library/Preferences/com.apple.alf.plist` 를 고쳐 설정을 바꾸던 앱이나 작업 흐름은 `socketfilterfw` 명령행 도구를 쓰도록 바뀌어야 합니다 [2]. 이 도구의 전체 경로와 옵션은 그 맥에서 확인합니다.
 
@@ -31,7 +31,7 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 
 ### com.apple.alf.plist (macOS 14 까지)
 
-속성 목록 파일이고 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)을 따릅니다. 이 파일 안의 키 이름은 공개된 분석 자료가 없어, 실제 파일을 열어 나온 키와 값을 그대로 옮겨 적습니다.
+속성 목록 파일이고 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)을 따릅니다. 이 파일 안의 키 이름은 실제 파일을 열어 확인하고, 나온 키와 값을 그대로 옮겨 적습니다.
 
 ### Firewall 페이로드 (`com.apple.security.firewall`)
 
@@ -64,7 +64,7 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 
 - **macOS 15 의 변화.** macOS 15 부터 설정이 plist 에 들어 있지 않아서 [2], `com.apple.alf.plist` 가 없거나 옛 값만 남아 있어도 방화벽이 꺼져 있었다고 단정하지 않습니다. 업그레이드한 맥이라면 남은 plist 가 업그레이드 전 설정일 수 있다는 점도 적습니다.
 - **들어오는 연결만.** 방화벽 설정 항목은 모두 들어오는 연결을 다뤄서 [1], 나가는 통신을 막는 기능으로 설명하면 틀립니다.
-- **로컬 설정과 관리 프로필.** Firewall 페이로드가 여러 프로필에 있으면 가장 엄격한 설정들의 합집합을 쓰고 [3], 로컬 설정과 관리 프로필이 서로 다를 때 어느 쪽이 적용되는지 밝힌 공개 자료는 없습니다. 그래서 로컬 plist 만 보고 방화벽 상태를 판단하지 않고 두 쪽을 함께 적습니다.
+- **로컬 설정과 관리 프로필.** Firewall 페이로드가 여러 프로필에 있으면 가장 엄격한 설정들의 합집합을 쓰고 [3], 로컬 설정과 관리 프로필이 서로 다를 때 어느 쪽이 적용되는지는 설정 기록만으로 단정할 수 없습니다. 그래서 로컬 plist 만 보고 방화벽 상태를 판단하지 않고 두 쪽을 함께 적습니다.
 - **떠도는 키 이름.** `com.apple.alf.plist` 의 키 이름은 여러 자료에 돌아다니지만 근거가 분명하지 않습니다. 도구가 키에 뜻을 붙여 보여 주면 그 근거를 확인한 뒤에 씁니다.
 - **수집 정의의 빈틈.** ForensicArtifacts 정의에 방화벽 항목이 없어서 [4], 자동 수집 결과에 설정 파일이 없을 수 있습니다.
 
@@ -72,9 +72,9 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 
 | 항목 | 상태 |
 |---|---|
-| macOS 15 이후 설정 저장 위치 | 공개 자료 없음 |
+| macOS 15 이후 설정 저장 위치 | 실제 데이터로 확인 |
 | `socketfilterfw` 의 전체 경로와 옵션 | 실제 데이터로 확인 |
-| `com.apple.alf.plist` 의 키 이름 | 공개 자료 없음 |
+| `com.apple.alf.plist` 의 키 이름 | 실제 데이터로 확인 |
 | 방화벽 로그(`/var/log/appfirewall.log`, 통합 로그 서브시스템 등) | 실제 데이터로 확인 |
 | `Firewall.ApplicationsItem` 안의 키 | 실제 데이터로 확인 |
 
@@ -84,7 +84,7 @@ ForensicArtifacts `macos.yaml` 에는 방화벽 관련 정의가 없어서 [4], 
 
 ### 헥스로 한 번
 
-`com.apple.alf.plist` 를 헥스 편집기로 열어 바이너리 plist 인지 XML 인지 첫 바이트로 판별하고, 바이너리라면 오프셋 표를 따라 키 문자열이 든 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에 고유한 바이트 구조를 밝힌 공개 자료는 없어서, 실제 파일의 바이트를 그대로 기록합니다.
+`com.apple.alf.plist` 를 헥스 편집기로 열어 바이너리 plist 인지 XML 인지 첫 바이트로 판별하고, 바이너리라면 오프셋 표를 따라 키 문자열이 든 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에서는 실제 파일의 바이트를 그대로 기록합니다.
 
 관리 프로필 쪽은 아래처럼 페이로드 키 [3]로 만든 예시와 설치된 프로필의 내용을 맞춰 봅니다. 실제 데이터에서 나온 값이 아니고, 페이로드의 나머지 공통 키는 생략했습니다.
 

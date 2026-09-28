@@ -31,7 +31,7 @@ nav_order: 3560
 | 열 이름 규칙 | Win8/10 Windows Search 의 SystemIndex_PropertyStore 표는 실제 열 이름 앞에 숫자 속성 ID 와 선택적 'F' 가 붙습니다(예: 4456-System_Kind). 속성 이름을 정확히 찾는 도구는 이 표에서 0건을 냅니다. | [윈도 검색 색인 DB](../../02-artifacts/file-folder-usage/windows-search/index.md) |
 | 손상된 데이터베이스 | 손상된 ESE 데이터베이스는 같은 표라도 도구마다 행 수가 다를 수 있습니다. B-트리를 끝까지 따라가지 못하는 도구가 행을 적게 냅니다. | [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) |
 | 조각 이어 붙이기 | ESE 의 긴 값(Long Value)은 여러 조각으로 나뉘어 따로 저장됩니다. 조각 경계를 잘못 계산하면 오류 없이 값이 망가지는데, 예를 들어 6,000바이트 값이 11,158바이트로 나올 수 있습니다. | [ESE 데이터베이스](../../01-foundations/database-log-formats/extensible-storage-engine/index.md) |
-| 손상된 압축 블록 | 16,384 오프셋에서 잘린 LZNT1 블록을 두고 두 NTFS 구현의 결과가 달랐습니다. 한 구현은 읽은 만큼 풀고 나머지를 0 으로 채웠고, 다른 구현은 버퍼에 남아 있던 이전 데이터를 내놓는 것으로 보였습니다 [2]. 이 경우가 손상인지 형식의 특수한 경우인지는 정해져 있지 않습니다 [2]. Windows 가 이 블록을 어떻게 푸는지는 공개 자료가 없습니다. | [윈도 압축 형식](../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) |
+| 손상된 압축 블록 | 16,384 오프셋에서 잘린 LZNT1 블록을 두고 두 NTFS 구현의 결과가 달랐습니다. 한 구현은 읽은 만큼 풀고 나머지를 0 으로 채웠고, 다른 구현은 버퍼에 남아 있던 이전 데이터를 내놓는 것으로 보였습니다 [2]. 이 경우가 손상인지 형식의 특수한 경우인지는 정해져 있지 않습니다 [2]. Windows 가 이 블록을 어떻게 푸는지는 시험 PC 에서 재현해 확인합니다. | [윈도 압축 형식](../../01-foundations/value-decoding/lznt1-xpress-xpress-huffman.md) |
 | 확장 레코드 | MFT 레코드가 $ATTRIBUTE_LIST 로 확장 레코드를 쓰면 Win32 긴 이름($FILE_NAME)이 확장 레코드에만 있을 수 있습니다. 기본 레코드만 읽으면 8.3 짧은 이름만 보입니다. | [마스터 파일 테이블](../../02-artifacts/filesystem/mft.md) |
 | 추출 방식 | 희소(sparse) 스트림은 빈 구간을 0 으로 채워 뽑느냐 건너뛰느냐에 따라 크기와 해시가 달라집니다. | [USN 변경 저널](../../02-artifacts/filesystem/usnjrnl.md) |
 | 시각 기준 | 공개 도구 RegRipper 의 networklist 플러그인은 네트워크 목록의 날짜 값을 시간대 변환 없이 그대로 출력합니다 [4]. 이 값이 같은 시각 이벤트의 현지 시각과 초까지 같은 경우가 있습니다. | [네트워크 목록](../../02-artifacts/network/networklist.md) |

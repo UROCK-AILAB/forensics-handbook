@@ -19,9 +19,9 @@ VS Code 는 채팅 세션을 작업 폴더(워크스페이스)마다 `workspaceS
 
 Copilot CLI 는 세션마다 이벤트를 JSONL 로 적습니다. `tool.execution_start` 와 `tool.execution_complete` 이벤트는 같은 `data.toolCallId` 를 달고 각각 RFC3339 형식의 `timestamp` 를 남겨서, 에이전트가 도구를 언제부터 언제까지 실행했는지 알 수 있습니다(Copilot CLI 1.0.76-0 기준)[1].
 
-Visual Studio 의 Copilot 은 대화를 OpenTelemetry 형식의 추적 파일 `*_VSGitHubCopilot_traces.jsonl` 에 담습니다[1]. Visual Studio 2026 은 솔루션 폴더 아래 `.vs` 에도 대화 파일을 쓰므로[1], 솔루션 폴더도 수집 범위에 넣습니다. 공개된 생산자 쪽 형식 문서가 없어서, 필드 이름은 agentsview 가 읽는 것을 기준으로 삼고 실제 데이터로 확인합니다[1].
+Visual Studio 의 Copilot 은 대화를 OpenTelemetry 형식의 추적 파일 `*_VSGitHubCopilot_traces.jsonl` 에 담습니다[1]. Visual Studio 2026 은 솔루션 폴더 아래 `.vs` 에도 대화 파일을 쓰므로[1], 솔루션 폴더도 수집 범위에 넣습니다. Microsoft 가 이 형식을 공개하지 않았으므로, 필드 이름은 agentsview 가 읽는 것을 기준으로 삼고 실제 데이터로 확인합니다[1].
 
-JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장합니다[1]. 이 데이터베이스는 공개 도구 copilot-jetbrains-exporter 로 JSONL 로 내보낸 뒤 읽을 수 있습니다[1]. 데이터베이스 파일 경로를 적은 공개 분석 자료는 없어서, 실제 기기에서 확인해야 합니다.
+JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장합니다[1]. 이 데이터베이스는 공개 도구 copilot-jetbrains-exporter 로 JSONL 로 내보낸 뒤 읽을 수 있습니다[1]. 데이터베이스 파일 경로는 실제 기기에서 확인합니다.
 
 GitHub 서버에 남는 프롬프트·응답과 조직 요금제의 감사 기록은 PC 에서 얻을 수 없습니다. 서버 쪽 기록은 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 얻습니다.
 
@@ -37,7 +37,7 @@ GitHub 서버에 남는 프롬프트·응답과 조직 요금제의 감사 기�
 | VS Code 출력 창, 확장 로그 폴더, `telemetry.log` | Windows·macOS·Linux | 문서 기준 | 오류·연결 문제, 원격 측정 |
 | `~/.copilot/session-state/<uuid>.jsonl` 또는 `<uuid>/events.jsonl`, 같은 폴더의 `workspace.yaml` | Windows·macOS·Linux | Copilot CLI 1.0.76-0 으로 2026-07-28 시험[1] | Copilot CLI 세션 이벤트(메시지, 모델, 도구 실행 시작·끝), 세션 이름 |
 | `~/.copilot/session-store.db`(`-wal` 포함) | Windows·macOS·Linux | Copilot CLI 1.0.83 으로 2026-09-10 시험[1] | 세션 파일에서 다시 만드는 SQLite 저장소, `assistant_usage_events` 표의 모델 호출별 사용량 |
-| Windows `%LOCALAPPDATA%\Temp\VSGitHubCopilotLogs\traces\`, macOS `~/Library/Caches/VSGitHubCopilotLogs/traces/`, Linux `~/.cache/VSGitHubCopilotLogs/traces/` 의 `*_VSGitHubCopilot_traces.jsonl` | Windows·macOS·Linux | 공개 형식 문서 없음[1] | Visual Studio Copilot 대화, `gen_ai.conversation.id`, `gen_ai.usage.input_tokens`·`output_tokens` |
+| Windows `%LOCALAPPDATA%\Temp\VSGitHubCopilotLogs\traces\`, macOS `~/Library/Caches/VSGitHubCopilotLogs/traces/`, Linux `~/.cache/VSGitHubCopilotLogs/traces/` 의 `*_VSGitHubCopilot_traces.jsonl` | Windows·macOS·Linux | agentsview 가 읽는 필드 기준[1] | Visual Studio Copilot 대화, `gen_ai.conversation.id`, `gen_ai.usage.input_tokens`·`output_tokens` |
 | 솔루션 폴더의 `.vs\*\copilot-chat\*\sessions\` 안 확장자 없는 파일 | Windows | Visual Studio 2026[1] | Visual Studio 대화 파일 |
 | JetBrains `idea.log` | Windows·macOS·Linux | 문서 기준 | Copilot 오류, 사용자가 켠 진단·trace·인증서 기록 |
 | JetBrains Nitrite 데이터베이스 | Windows·macOS·Linux | 경로는 실제 기기에서 확인[1] | JetBrains Copilot 채팅 |

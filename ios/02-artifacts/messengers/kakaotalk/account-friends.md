@@ -40,7 +40,7 @@ ZPHONENUMBER, ZFRIENDTYPE, ZBLOCKTYPE, ZUSERTYPE, ZHIDDEN, ZFAVORITE, ZPHOTOURL
 | `ZSTATUSMESSAGE`, `ZEMAIL` | 시험 기기 두 대에서는 비어 있었습니다[2] |
 | `ZHIDDEN`, `ZFAVORITE` | 시험 기기 두 대에서는 0 이었습니다[2] |
 | `ZPHOTOURL` | 프로필 사진의 원격 주소이고, 도구는 이 주소를 열지 않습니다[2] |
-| `ZACCOUNTID` | 값의 뜻을 설명한 공개 자료가 없습니다 |
+| `ZACCOUNTID` | 값의 뜻이 정해져 있지 않아서 보고서에는 값만 옮깁니다 |
 
 `ZPHONENUMBER` 는 시험 기기 두 대 모두 값이 있는 6행이 전부 풀렸습니다[2]. 암호화 방식은 메시지 본문과 같은 계열이고, 방식은 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에서 다룹니다.
 
@@ -50,7 +50,7 @@ ZPHONENUMBER, ZFRIENDTYPE, ZBLOCKTYPE, ZUSERTYPE, ZHIDDEN, ZFAVORITE, ZPHOTOURL
 ZNAME, ZPHONENUMBER, ZORIGINALPHONENUMBER, ZRAWPHONENUMBER, ZCONTACTID, ZUSER
 ```
 
-이름(`ZNAME`)은 평문이고 번호 열은 base64 암호문입니다[2]. iLEAPP 개발 기록에는 이 번호가 메시지 본문과 다른 키를 쓰고 그 키를 찾지 못해 저장된 값 그대로 둔다고 적혀 있지만[1], 같은 도구의 설명문에는 본문과 같은 방식으로 암호화되어 있다고 적혀 있어서[2] 키가 무엇인지는 확인되지 않았습니다. `ZUSER` 열에는 앱이 이 주소록 항목과 짝이 되는 카카오톡 사용자를 찾았을 때만 그 사용자 ID 가 들어갑니다[2]. `ZORIGINALPHONENUMBER` 는 시험 기기 두 대에서 정규화된 번호와 값이 같았습니다[2].
+이름(`ZNAME`)은 평문이고 번호 열은 base64 암호문입니다[2]. iLEAPP 개발 기록에는 이 번호가 메시지 본문과 다른 키를 쓰고 그 키를 찾지 못해 저장된 값 그대로 둔다고 적혀 있지만[1], 같은 도구의 설명문에는 본문과 같은 방식으로 암호화되어 있다고 적혀 있습니다[2]. 두 설명이 달라서 어느 키를 쓰는지는 단정할 수 없습니다. `ZUSER` 열에는 앱이 이 주소록 항목과 짝이 되는 카카오톡 사용자를 찾았을 때만 그 사용자 ID 가 들어갑니다[2]. `ZORIGINALPHONENUMBER` 는 시험 기기 두 대에서 정규화된 번호와 값이 같았습니다[2].
 
 ### 내 계정 ID
 
@@ -64,11 +64,11 @@ ZNAME, ZPHONENUMBER, ZORIGINALPHONENUMBER, ZRAWPHONENUMBER, ZCONTACTID, ZUSER
 
 ## 시각 해석
 
-`ZUSER`·`ZCONTACT` 에는 공개 자료로 알려진 시각 열이 없습니다. 사용자가 언제 친구가 되었는지는 이 두 표만으로 알 수 없고, 그 사용자와 처음 주고받은 메시지 시각을 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에서 찾아 봅니다.
+`ZUSER`·`ZCONTACT` 에는 시각이라고 정해진 열이 없습니다. 사용자가 언제 친구가 되었는지는 이 두 표만으로 알 수 없고, 그 사용자와 처음 주고받은 메시지 시각을 [대화 DB 구조와 암호화 (Chat DB)](chat-db.md)에서 찾아 봅니다.
 
 ## 함정과 한계
 
-이름 열이 셋이라서 도구가 어느 열을 보고서에 썼는지 확인해야 합니다. 같은 사람이 도구마다 다른 이름으로 나올 수 있고, 열마다 누가 정한 이름인지는 공개된 설명이 없어서 보고서에는 열 이름을 함께 적습니다.
+이름 열이 셋이라서 도구가 어느 열을 보고서에 썼는지 확인해야 합니다. 같은 사람이 도구마다 다른 이름으로 나올 수 있고, 열마다 누가 정한 이름인지는 열 이름만으로 단정할 수 없어서 보고서에는 열 이름을 함께 적습니다.
 
 시험 기기 두 대에서는 `ZSTATUSMESSAGE`·`ZEMAIL` 이 비어 있고 `ZHIDDEN`·`ZFAVORITE` 가 0 이었지만[2], 다른 기기에서 값이 있다면 그 뜻은 새로 확인합니다. `ZPHOTOURL` 은 원격 주소라서 열면 서버에 접속 기록이 남을 수 있으니, 사건 기록 없이 열지 않습니다.
 

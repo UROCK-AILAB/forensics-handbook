@@ -44,7 +44,7 @@ macOS 13 이후에는 백그라운드 작업 관리 (Background Task Management,
 
 위 파일은 모두 plist 파일입니다 [2]. plist를 읽는 일반 원리(XML과 바이너리 형식, 바이너리 plist의 오브젝트 테이블, NSKeyedArchiver로 묶은 데이터)는 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에 있습니다.
 
-각 파일 안에서 어떤 키에 항목이 들어가는지(`com.apple.loginitems.plist` 안의 키 이름, `com.apple.loginwindow` plist에서 로그인 때 다시 여는 앱 목록이 들어가는 키)는 공개된 분석 자료가 없어서, 키 이름을 짐작해 찾지 말고 파일 전체를 풀어 경로·번들 ID·앱 이름이 보이는 값을 모두 적습니다. 값 안에 파일 참조 데이터가 들어 있으면 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 방법으로 풀고, 번들 ID와 팀 ID는 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)를 참고합니다.
+각 파일 안에서 어떤 키에 항목이 들어가는지(`com.apple.loginitems.plist` 안의 키 이름, `com.apple.loginwindow` plist에서 로그인 때 다시 여는 앱 목록이 들어가는 키)는 키 이름을 짐작해 찾지 말고 파일 전체를 풀어 경로·번들 ID·앱 이름이 보이는 값을 모두 적습니다. 값 안에 파일 참조 데이터가 들어 있으면 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 방법으로 풀고, 번들 ID와 팀 ID는 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)를 참고합니다.
 
 ## 증거로서 의미
 

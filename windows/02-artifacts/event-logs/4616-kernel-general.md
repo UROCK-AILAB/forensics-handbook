@@ -25,7 +25,7 @@ nav_order: 2710
 | 3 | 새 시간대로 맞춤 |
 | 그 밖 | "Unknown code" |
 
-Reason 값을 풀이한 Microsoft 공식 자료는 없습니다.
+Microsoft 는 Reason 값의 풀이를 문서로 밝히지 않았으므로, 보고서에는 숫자 값을 함께 적습니다.
 
 Reason 마다 기록 모습이 다릅니다. 아래는 Windows 11 25H2 의 Kernel-General 1 199건 기준입니다.
 
@@ -62,7 +62,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 | 공급자 GUID | `{54849625-5478-4994-A5BA-3E3B0328C30D}` | 실제 기록으로 확인 |
 | Task | 12288 (Microsoft 예시) | SystemTimeChange. 맵 예시 값은 5 |
 | Keywords | `0x8020000000000000` (Microsoft 예시) | KERNEL_GENERAL_KEYWORD_TIME. 맵 예시 값은 `0x8000000000000010` |
-| 최소 OS | Windows Vista · Windows Server 2008 | 공개 자료 없음 |
+| 최소 OS | Windows Vista · Windows Server 2008 | 실제 기록으로 확인 |
 
 ### 4616 의 이벤트 버전
 
@@ -83,7 +83,7 @@ Kernel-General 공급자는 시각과 관련된 이벤트를 더 남깁니다. �
 | 3 | CmosTime (FILETIME), TimeZoneBias (Int32), RealTimeIsUniversal (Boolean), SystemInCmosMode (Boolean) |
 | 4 | TimeDeltaInMs (Int64, 밀리초) |
 
-버전마다 어느 Windows 빌드에서 쓰이는지는 공개 자료가 없습니다. EvtxECmd 맵의 예시(2020년)는 버전 2 이고[2], Windows 11 25H2 의 기록은 버전 4 입니다.
+버전마다 어느 Windows 빌드에서 쓰이는지는 기록의 Version 값으로 확인합니다. EvtxECmd 맵의 예시(2020년)는 버전 2 이고[2], Windows 11 25H2 의 기록은 버전 4 입니다.
 
 ### 로그 보존 기간
 
@@ -121,7 +121,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 | 9 | RealTimeIsUniversal | Boolean | 하드웨어 시계가 UTC 인지 |
 | 10 | SystemInCmosMode | Boolean | |
 
-"뜻" 열은 공식 설명이 아니라 필드 이름과 실제 값으로 본 뜻입니다. SystemInCmosMode 의 뜻을 설명한 공개 자료는 없습니다.
+"뜻" 열은 공식 설명이 아니라 필드 이름과 실제 값으로 본 뜻입니다. SystemInCmosMode 는 뜻을 단정하지 않고 값만 옮깁니다.
 
 ### Microsoft 의 4616 예시 값
 
@@ -175,7 +175,7 @@ PreviousTime·NewTime 의 표시 형식은 `YYYY-MM-DDThh:mm:ss.nnnnnnnZ` 입니
 - TimeZoneBias 는 부호 있는 32비트 값입니다. UTC+9 에서는 -540 입니다.
 - TimeDeltaInMs 는 음수가 될 수 있습니다. 예를 들어 -1995 는 약 2초 뒤로 돌린 것이고, 깨어날 때 남은 121010 은 약 2분 앞으로 옮긴 것입니다. 뒤로 간 변경을 찾을 때는 이 필드의 부호를 봅니다.
 - 현지 시각으로 바꿀 때는 [시간대 설정](../system-account/time-zone.md)을 씁니다.
-- 시각을 되돌리면, 레코드 번호는 늘어나는데 기록 시각은 거꾸로 가는 곳이 생길 수 있습니다. 이 방법으로 되돌림을 찾을 수 있는지는 공개된 검증 자료가 없으니 "실습" 에서 직접 확인해 봅니다.
+- 시각을 되돌리면, 레코드 번호는 늘어나는데 기록 시각은 거꾸로 가는 곳이 생길 수 있습니다. 이 방법으로 되돌림을 찾을 수 있는지는 "실습" 에서 직접 확인해 봅니다.
 - 여러 기록의 시각을 한 기준으로 맞추는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md)에서 다룹니다.
 
 ## 함정과 한계

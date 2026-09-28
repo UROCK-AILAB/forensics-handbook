@@ -31,7 +31,6 @@ iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있�
 | 시험 표본 iOS | 12.4 ~ 26.6 [1] |
 | 시험 표본 메신저 앱 | 405.0 ~ 570.0.0 [1] |
 | 행이 나온 표본 | iOS 15.3.1, 16.5, 17.x, 18.x, 26.5.2 일부 [1] |
-| 버전별 표 차이 | 공개 자료 없음 |
 
 ## 구조
 
@@ -54,7 +53,7 @@ iLEAPP 시험 표본 25개 가운데 4개는 페이스북 앱 쪽 사본만 있�
 | `client_attachment_store_keys` | `persisted_path` |
 | `mi_act_mapping_table` | — |
 
-"—" 는 열과 쓰임을 설명한 공개 자료가 없는 표입니다.
+"—" 로 적은 표는 열과 쓰임을 실제 DB 에서 `PRAGMA table_info` 로 확인합니다.
 
 `client_messages` 의 행은 `client_threads.transport_key` 가 `AdvancedCrypto` 인 종단간 암호화 대화였고, 시험 표본에서는 이 표의 본문이 평문으로 저장돼 있었습니다 [1]. 저장 형식은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 를 봅니다.
 

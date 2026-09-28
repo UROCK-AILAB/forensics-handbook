@@ -6,7 +6,7 @@ nav_order: 810
 
 # 파일 공유 (Quick Share·Nearby Share)
 
-Quick Share 는 가까운 기기끼리 블루투스와 Wi-Fi 로 파일을 주고받는 기능이고, 전송 기록 파일의 위치와 구조를 다룬 공개 자료가 없어서 받은 파일, 설정 값, 알림·앱 사용 기록처럼 둘레에 남는 흔적으로 전송을 짐작합니다.
+Quick Share 는 가까운 기기끼리 블루투스와 Wi-Fi 로 파일을 주고받는 기능이고, 받은 파일, 설정 값, 알림·앱 사용 기록처럼 둘레에 남는 흔적으로 전송을 짐작합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -14,24 +14,23 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 
 받는 쪽이 누구에게 보일지는 공개 범위로 정합니다. 선택지는 내 기기(Your devices), 연락처(Contacts), 10분 동안 모두(Everyone for 10 minutes) 셋이고, "10분 동안 모두" 는 10분이 지나면 이전 설정으로 저절로 돌아갑니다[1]. 받은 파일은 기본 파일 앱에서 Downloads 안의 Quick Share 폴더에서 볼 수 있고, 보내는 화면을 벗어나면 알림 창에 전송 상태 알림이 떠서 진행 상황을 보거나 취소할 수 있습니다[1].
 
-삼성 갤럭시 기기에는 삼성이 만든 Quick Share 가 따로 있습니다. Android 10·One UI 2.1 이상 갤럭시에서는 설정과 기능이 다를 수 있고, 자세한 내용은 삼성 문서에 있습니다[1]. 이름이 같아도 두 기능의 저장 위치가 같다고 보면 안 되고, 두 회사 기능을 언제 어디까지 합쳤는지는 공개 자료가 없습니다.
+삼성 갤럭시 기기에는 삼성이 만든 Quick Share 가 따로 있습니다. Android 10·One UI 2.1 이상 갤럭시에서는 설정과 기능이 다를 수 있고, 자세한 내용은 삼성 문서에 있습니다[1]. 이름이 같아도 두 기능의 저장 위치가 같다고 보면 안 됩니다.
 
 ## 위치와 버전별 차이
 
 | 항목 | Google Quick Share | 삼성 Quick Share |
 |---|---|---|
 | 대상 | Android 6 이상[1] | Android 10·One UI 2.1 이상 갤럭시[1] |
-| 필요한 무선 | 블루투스. Android 12 이하는 위치도. iPhone·iPad·Mac 과는 Wi-Fi[1] | 공개 자료 없음 |
-| 받은 파일 | 파일 앱의 Downloads 안 Quick Share 폴더[1]. 실제 저장 경로는 실제 기기에서 확인 | 공개 자료 없음 |
+| 필요한 무선 | 블루투스. Android 12 이하는 위치도. iPhone·iPad·Mac 과는 Wi-Fi[1] | 실제 기기에서 확인 |
+| 받은 파일 | 파일 앱의 Downloads 안 Quick Share 폴더[1]. 실제 저장 경로는 실제 기기에서 확인 | 실제 기기에서 확인 |
 | 패키지 이름 | 실제 기기에서 확인 | 실제 기기에서 확인 |
-| 전송 기록 DB·표·열 | 공개 자료 없음 | 공개 자료 없음 |
-| 전송 기술(BLE·Wi-Fi Direct 등) 목록 | 공개 자료 없음 | 공개 자료 없음 |
+| 전송 기록 DB·표·열 | 앱 데이터 폴더에서 DB 파일을 찾아 표 구조를 확인 | 앱 데이터 폴더에서 DB 파일을 찾아 표 구조를 확인 |
 
 받은 파일이 공용 저장 공간의 어느 폴더에 실제로 놓이는지는 실제 기기에서 직접 찾아야 합니다. 공용 저장 공간의 구조는 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 에 있습니다.
 
 ## 구조
 
-전송 기록 파일의 구조는 공개 자료가 없어서, 대신 이름이 파일 공유와 닿아 있어 보이는 설정 키와 서비스 등록 목록을 정리합니다. 키마다 뜻과 값 형식은 실제 데이터로 확인해야 합니다.
+여기서는 이름이 파일 공유와 닿아 있어 보이는 설정 키와 서비스 등록 목록을 정리합니다. 키마다 뜻과 값 형식은 실제 데이터로 확인해야 합니다.
 
 | 설정 영역 | 키 이름 |
 |---|---|
@@ -39,9 +38,9 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 | Secure | `nearby_sharing_component`, `mcf_continuity_nearby_device_state`, `autohotspot_saved_nearby_state` |
 | System | `quickshare_enabled`, `direct_share`, `mcf_continuity`, `mcf_family_device_share_enabled`, `mcf_mydevice_activated` |
 
-`quickshare_enabled` 와 `mcf_quick_share_visibility` 는 이름으로 보면 Quick Share 를 켰는지와 공개 범위에 닿아 있는 키 같습니다. `nearby_sharing_component` 가 어떤 구성 요소를 가리키는지, `mcf_` 로 시작하는 키들이 Quick Share 와 어떤 관계인지는 공개 자료가 없습니다. 설정 값을 읽는 법과 파일 위치는 [설정 값](../system-account/settings.md) 에 있습니다.
+`quickshare_enabled` 와 `mcf_quick_share_visibility` 는 이름으로 보면 Quick Share 를 켰는지와 공개 범위에 닿아 있는 키 같습니다. `nearby_sharing_component` 가 어떤 구성 요소를 가리키는지, `mcf_` 로 시작하는 키들이 Quick Share 와 어떤 관계인지는 시험 기기에서 Quick Share 설정을 바꿔 가며 값이 바뀌는지 보고 확인합니다. 설정 값을 읽는 법과 파일 위치는 [설정 값](../system-account/settings.md) 에 있습니다.
 
-삼성 기기의 `dumpsys bluetooth_manager` 출력에는 "Ble app registered:" 목록이 있고, 여기에 `com.samsung.android.mcfserver`, `com.samsung.android.mcfds`, `com.samsung.android.beaconmanager`, `com.samsung.android.mdx.kit` 가 나옵니다. BLE 를 쓰려고 등록한 삼성 구성 요소들이고, 이 가운데 어느 것이 Quick Share 를 맡는지는 공개 자료가 없습니다. 블루투스 쪽 흔적은 [블루투스 장치](bluetooth.md) 에서 다룹니다.
+삼성 기기의 `dumpsys bluetooth_manager` 출력에는 "Ble app registered:" 목록이 있고, 여기에 `com.samsung.android.mcfserver`, `com.samsung.android.mcfds`, `com.samsung.android.beaconmanager`, `com.samsung.android.mdx.kit` 가 나옵니다. BLE 를 쓰려고 등록한 삼성 구성 요소들이고, 이 가운데 어느 것이 Quick Share 를 맡는지는 이 목록만으로 알 수 없습니다. 블루투스 쪽 흔적은 [블루투스 장치](bluetooth.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -57,9 +56,9 @@ Google 의 Quick Share 는 이전 이름이 Nearby Share 이고, Android 6 이�
 
 ## 시각 해석
 
-전송 기록 자체의 시각 필드는 공개 자료가 없어서 둘레 흔적의 시각을 씁니다. 받은 파일은 파일 시스템 시각과 [미디어 저장소](../media/mediastore/index.md) 의 시각을, 앱 사용과 알림은 [앱 사용 기록](../app-usage/usagestats/index.md) 과 [알림 기록](../app-usage/notification-history.md) 의 시각을 봅니다. usagestats dump 는 시각을 `time="…"` 필드에 적고, 표시 형식과 시간대는 실제 출력에서 확인합니다. 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에, 기기 시간대 확인은 [시간대와 시각 설정](../system-account/time-zone.md) 에 있습니다.
+시각은 둘레 흔적에서 읽습니다. 받은 파일은 파일 시스템 시각과 [미디어 저장소](../media/mediastore/index.md) 의 시각을, 앱 사용과 알림은 [앱 사용 기록](../app-usage/usagestats/index.md) 과 [알림 기록](../app-usage/notification-history.md) 의 시각을 봅니다. usagestats dump 는 시각을 `time="…"` 필드에 적고, 표시 형식과 시간대는 실제 출력에서 확인합니다. 시각 값 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에, 기기 시간대 확인은 [시간대와 시각 설정](../system-account/time-zone.md) 에 있습니다.
 
-파일을 받은 시각과 파일 시스템에 찍힌 시각이 같은지, 원본 파일의 수정 시각을 넘겨받는지는 공개 자료가 없으니 한 가지 시각에 기대지 말고 여러 흔적을 맞춰 봅니다.
+파일을 받은 시각과 파일 시스템에 찍힌 시각이 같은지, 원본 파일의 수정 시각을 넘겨받는지는 시험 기기에서 파일을 주고받아 확인하고, 한 가지 시각에 기대지 말고 여러 흔적을 맞춰 봅니다.
 
 ## 함정과 한계
 
@@ -73,7 +72,7 @@ usagestats 에 Quick Share 이벤트가 어떤 패키지 이름으로 찍히는�
 
 ### 출력 모양을 한 번 따라가기
 
-Quick Share 전송 기록의 파일 형식은 공개 자료가 없어서, 헥스 대신 usagestats dump 의 이벤트 줄 모양을 따라갑니다. 아래 줄에서 값 자리는 비워 두었습니다.
+여기서는 헥스 대신 usagestats dump 의 이벤트 줄 모양을 따라갑니다. 아래 줄에서 값 자리는 비워 두었습니다.
 
 ```text
 time="…" type=NOTIFICATION_INTERRUPTION package=<패키지> channelId=<값> flags=<값>

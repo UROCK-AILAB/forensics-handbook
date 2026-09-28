@@ -35,7 +35,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | Windows 10 1903 | API 에 `ExpiresOnReboot` 이 추가됩니다 | [2] |
 | Windows 11 25H2 | 아래 "구조" 의 표와 열이 있습니다 | |
 
-- 1607 이전 파일의 이름과 형식은 공개 자료에 없습니다.
+- 1607 이전 기기에서는 `%LOCALAPPDATA%\Microsoft\Windows\Notifications\` 폴더의 파일을 찾아 파일 헤더와 표 구조를 먼저 확인합니다.
 
 ## 구조
 
@@ -73,7 +73,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `ExpiryTime` | 알림이 DB 에서 지워질 시각입니다. FILETIME 입니다 |
 | `Tag`, `Group`, `ExpiresOnReboot` | API 의 같은 이름 속성과 이름이 같습니다 (아래 표) |
 
-`ActivityId`, `DataVersion`, `BootId` 의 뜻은 공개 자료에 없습니다.
+`ActivityId`, `DataVersion`, `BootId` 는 뜻을 단정할 수 없어 보고서에는 값만 옮깁니다.
 
 ### `NotificationHandler` 의 주요 열
 
@@ -84,14 +84,14 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `HandlerType` | `app:desktop` 11개, `app:immersive` 222개, `app:system` 73개가 있었습니다 |
 | `CreatedTime`, `ModifiedTime` | `YYYY-MM-DD HH:MM:SS` 모양 글자입니다. FILETIME 이 아닙니다 |
 
-나머지 열의 뜻은 공개 자료에 없습니다.
+나머지 열은 뜻을 단정하지 않고 값만 옮깁니다.
 
 ### 나머지 표의 값
 
 아래는 Windows 11 25H2 PC 한 대의 값입니다.
 
 - `HandlerAssets` 의 키는 `DisplayName`, `IconUri`, `LaunchArgs` 였습니다.
-- `HandlerSettings` 에는 앱마다 `s:toast`, `s:banner`, `s:audio`, `s:lock:toast`, `s:badge`, `s:tile`, `c:toast` 같은 설정 키가 있었습니다. 핸들러 306개에 키가 약 20개씩이었습니다. 키마다의 뜻은 공개 자료에 없습니다.
+- `HandlerSettings` 에는 앱마다 `s:toast`, `s:banner`, `s:audio`, `s:lock:toast`, `s:badge`, `s:tile`, `c:toast` 같은 설정 키가 있었습니다. 핸들러 306개에 키가 약 20개씩이었습니다. 키마다의 뜻은 시험 기기에서 앱의 알림 설정을 바꾸고 값이 어떻게 달라지는지 봐서 확인합니다.
 - `Metadata` 값은 아래와 같았습니다.
 
 | 키 | 값 |
@@ -104,7 +104,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `CurrentNotificationId` | 3348 |
 
 - `WNSPushChannel` 의 `ExpiryTime`·`CreatedTime` 도 FILETIME 이었습니다. 채널 6개 모두 만료가 생성 30일 뒤였습니다.
-- `WNSPushChannel.Uri` 가 푸시 알림 서버 주소인지는 공개 자료에 없습니다.
+- `WNSPushChannel.Uri` 를 푸시 알림 서버 주소로 단정하지 않습니다.
 
 ### 알림 내용 (Payload)
 
@@ -130,7 +130,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 
 ### 알림 API 와 DB 열
 
-`ToastNotification` 속성[2]과 이름이 같거나 비슷한 DB 열입니다. 이름만 비슷할 뿐, 속성 값이 그 열에 그대로 들어가는지는 공개 자료에 없습니다.
+`ToastNotification` 속성[2]과 이름이 같거나 비슷한 DB 열입니다. 이름이 비슷하다고 속성 값이 그 열에 그대로 들어간다고 단정하지 않습니다.
 
 | API 속성 | 뜻 | 이름이 같거나 비슷한 DB 열 |
 |---|---|---|
@@ -141,8 +141,8 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 | `SuppressPopup` | 화면에 팝업을 띄울지 정합니다 | `TransientTable.SuppressPopup` |
 | `Priority` | 우선순위입니다 | `TransientTable.Priority` |
 | `NotificationMirroring` | 다른 기기로 복제를 허용할지 정합니다 | `TransientTable.IsMirroringDisabled` |
-| `RemoteId` | 다른 기기의 알림과 짝짓는 ID 입니다 | 공개 자료 없음 |
-| `Data` | 알림 상태에 대한 추가 정보입니다 | 공개 자료 없음 |
+| `RemoteId` | 다른 기기의 알림과 짝짓는 ID 입니다 | — |
+| `Data` | 알림 상태에 대한 추가 정보입니다 | — |
 
 - 알림이 만료되거나 사용자가 닫아 화면에서 사라지면 `Dismissed` 이벤트가 일어납니다.
 
@@ -158,7 +158,7 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 ### 증명하지 못하는 것
 
 - 사용자가 알림을 보았는지, 눌렀는지는 알 수 없습니다.
-- 알림을 닫으면 DB 에서 바로 지워지는지는 공개 자료에 없습니다. 행이 없다고 알림을 받지 않은 것은 아닙니다.
+- 알림을 닫으면 DB 에서 바로 지워지는지는 시험 기기에서 재현해 확인합니다. 행이 없다고 알림을 받지 않은 것은 아닙니다.
 - 지난 알림은 대부분 남지 않습니다. 한 예에서 `Notification` 표에는 11행만 있었는데 `CurrentNotificationId` 는 3348 이었습니다.
 - 알림은 원본 메시지의 일부일 수 있습니다. 원본 전체를 알려 주지 않습니다.
 - 핸들러로 등록된 앱을 사용자가 실행했다고 단정할 수 없습니다.
@@ -171,11 +171,11 @@ Windows 10 1607 이후 사용자에게 뜬 알림은 `%LOCALAPPDATA%\Microsoft\W
 |---|---|---|
 | `Notification.ArrivalTime` | FILETIME | 받은 시각입니다. UTC 로 풀면 `-wal` 파일의 수정 시각 (UTC) 과 몇 분 차이로 맞아 UTC 로 보입니다 |
 | `Notification.ExpiryTime` | FILETIME | DB 에서 지워질 시각입니다. 타일과 배지는 0 이었습니다 |
-| `NotificationHandler.CreatedTime`, `ModifiedTime` | `YYYY-MM-DD HH:MM:SS` 글자 | 시간대는 공개 자료에 없습니다 |
+| `NotificationHandler.CreatedTime`, `ModifiedTime` | `YYYY-MM-DD HH:MM:SS` 글자 | 시간대는 같은 기기의 다른 기록과 시각을 맞춰 확인합니다 |
 | `WNSPushChannel.ExpiryTime`, `CreatedTime` | FILETIME | 만료가 생성 30일 뒤였습니다 |
 
 - 변환식은 `(값 ÷ 10000000) − 11644473600 = 유닉스 시간` 입니다[1].
-- 한 예에서 토스트 5건은 모두 `ExpiryTime − ArrivalTime` 이 정확히 72시간 (3일) 이었습니다. 3일이 기본값인지는 공개 자료에 없습니다.
+- 한 예에서 토스트 5건은 모두 `ExpiryTime − ArrivalTime` 이 정확히 72시간 (3일) 이었습니다. 3일을 기본값으로 단정하지 않습니다.
 - FILETIME 의 뜻과 다른 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 정리합니다.
 - 알림 시각을 다른 기록과 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 을 따릅니다.
 

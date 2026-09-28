@@ -58,10 +58,8 @@ SQLite 형식은 [SQLite 데이터베이스](../../01-foundations/database-log-f
 | 데스크톱 앱 스위치 이름 | Windows 11 은 "Let desktop apps access your camera", Windows 10 은 "Allow desktop apps to access your camera" | [1] |
 | SOFTWARE 쪽 앱별 기록 | RECmd 배치 파일이 SOFTWARE 하이브의 `microphone`·`webcam` 아래에서 시각 값을 읽습니다 | [2] |
 | 앱별 기록이 있는 하이브 | SOFTWARE 쪽 `webcam`·`microphone` 키에는 `Value`·`LastSetTime` 만 있고 앱 하위 키가 없습니다. 앱별 사용 시각은 NTUSER.DAT 쪽에 있습니다 | Windows 11 25H2 (빌드 26200) |
-| 레지스트리 구조가 처음 생긴 버전 | 공개 자료 없음 | — |
-| DB 가 처음 생긴 버전 | 공개 자료 없음 | — |
 
-SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없으므로 두 하이브를 모두 봅니다.
+앱별 기록은 SOFTWARE 와 NTUSER.DAT 두 하이브를 모두 봅니다.
 
 ## 구조
 
@@ -80,7 +78,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없
 |---|---|---|---|
 | `LastUsedTimeStart` | REG_QWORD, FILETIME | 그 앱이 장치를 쓰기 시작한 시각 | [2] |
 | `LastUsedTimeStop` | REG_QWORD, FILETIME | 그 앱이 장치 쓰기를 멈춘 시각 | [2] |
-| `LastUserAnnotatedLabel` | REG_DWORD (예: 2) | 공개 자료 없음 | |
+| `LastUserAnnotatedLabel` | REG_DWORD (예: 2) | 뜻을 단정하지 않고 값만 옮깁니다 | |
 | `PersistedInDatabase` | REG_DWORD (예: 1) | 이름으로 짐작하면 DB 에 옮겨 적었다는 표시로 보입니다 | |
 
 - 스토어 앱 하위 키에는 `Value` (REG_SZ) 와 `LastSetTime` (REG_QWORD) 도 있습니다. `Value` 에는 `Allow` 나 `Prompt` 가 들어갑니다.
@@ -108,7 +106,7 @@ SOFTWARE 쪽에 앱별 기록이 남는 버전과 조건은 공개 자료에 없
 
 - 사용 기록 표의 Capability, BinaryFullPath, UserSid, FileID 같은 열에는 숫자 ID 가 들어 있고, 실제 문자열은 같은 이름의 사전 표에서 찾습니다. 예를 들어 Capability 열의 숫자는 `Capabilities` 표의 ID 입니다.
 - 사전 표 값의 예를 들면, `Capabilities` 에는 `location`, `BinaryFullPaths` 에는 `C:\Windows\System32\dllhost.exe`, `Users` 에는 `S-1-5-21-…-500` 모양의 SID 가 들어갑니다.
-- `FileIDs` 와 `ProgramIDs` 의 값은 `0000` 뒤에 16진수 40자가 붙은 44자 문자열입니다. [AmCache](amcache-hve/index.md) 의 FileId·ProgramId 와 모양이 같습니다. 파일의 SHA-1 인지는 밝혀지지 않았습니다.
+- `FileIDs` 와 `ProgramIDs` 의 값은 `0000` 뒤에 16진수 40자가 붙은 44자 문자열입니다. [AmCache](amcache-hve/index.md) 의 FileId·ProgramId 와 모양이 같습니다. 파일의 SHA-1 인지는 `BinaryFullPath` 의 파일에서 SHA-1 을 직접 구해 맞춰 봅니다.
 - 시각 열에는 FILETIME 정수가 들어 있습니다.
 
 레지스트리에는 앱마다 마지막 한 쌍만 남습니다. DB 는 사용할 때마다 행을 쌓을 수 있는 표 모양입니다. 여러 번 쓴 기록이 실제로 여러 행으로 남는지는 실제 DB 에서 확인합니다.

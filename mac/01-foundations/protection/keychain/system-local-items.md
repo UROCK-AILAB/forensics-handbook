@@ -14,7 +14,7 @@ nav_order: 420
 | 구분 | System 키체인 | Local Items (데이터 보호 키체인) |
 |---|---|---|
 | 구현 | 파일 기반 키체인 [1] | 데이터 보호 키체인 [1] |
-| 위치 | `/Library/Keychains/System.keychain` [3] | 공개 자료 없음 |
+| 위치 | `/Library/Keychains/System.keychain` [3] | 사용자 계정 아래에서 실제 파일을 찾아 확인 |
 | 쓰는 쪽 | launchd 데몬 같은 시스템 맥락, 그리고 사용자 맥락의 검색 목록 [1] | 로그인한 사용자 맥락만, 사용자마다 하나 [1] |
 | 담는 것 | 네트워크 자격 증명, PKI 인증서(identity) [2] | 인터넷 암호, 일반 암호, 인증서, 키 [1] |
 | 푸는 수단 | 잠금 해제 파일 SystemKey [3] | Secure Enclave가 보호하는 키(iOS 중심 설명) [2] |

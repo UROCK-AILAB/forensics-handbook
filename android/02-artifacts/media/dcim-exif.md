@@ -47,7 +47,7 @@ date_added 와 date_modified 는 EXIF 에서 오지 않습니다. date_added 는
 
 ### 위치 정보와 가림
 
-MediaStore 는 개인정보 보호를 위해 위치를 더 이상 색인하지 않아서 latitude·longitude 열은 항상 NULL 이고, 위치가 필요하면 ExifInterface#getLatLong() 으로 파일에서 직접 읽어야 합니다 [1]. MediaProvider 도 자기 자신이 아닌 앱이 두 열에 값을 넣으려 하면 NULL 로 바꿉니다 [2]. 현행 소스에는 사진 선택기 검색용으로 두 열을 다시 채우는 기능 플래그(indexMediaLatitudeLongitude)가 있지만, 이 플래그가 켜져 있어도 MediaProvider 가 아닌 호출자가 조회하면 NULL 을 돌려줍니다 [2]. 이 플래그가 어느 버전과 기기에서 켜져 있는지는 공개 자료가 없습니다. 삼성 기기에는 AOSP 와 별도로 삼성 미디어 제공자의 media.db 에 위도·경도 열이 있는데, 그 내용은 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에 있습니다.
+MediaStore 는 개인정보 보호를 위해 위치를 더 이상 색인하지 않아서 latitude·longitude 열은 항상 NULL 이고, 위치가 필요하면 ExifInterface#getLatLong() 으로 파일에서 직접 읽어야 합니다 [1]. MediaProvider 도 자기 자신이 아닌 앱이 두 열에 값을 넣으려 하면 NULL 로 바꿉니다 [2]. 현행 소스에는 사진 선택기 검색용으로 두 열을 다시 채우는 기능 플래그(indexMediaLatitudeLongitude)가 있지만, 이 플래그가 켜져 있어도 MediaProvider 가 아닌 호출자가 조회하면 NULL 을 돌려줍니다 [2]. 이 플래그가 켜진 기기인지는 추출한 DB 파일을 직접 열어 두 열에 값이 들어 있는지로 확인합니다. 삼성 기기에는 AOSP 와 별도로 삼성 미디어 제공자의 media.db 에 위도·경도 열이 있는데, 그 내용은 [미디어 DB 구조 (external.db)](mediastore/external-db.md) 페이지에 있습니다.
 
 파일을 열어 줄 때도 위치를 가립니다. 범위 저장소(scoped storage)를 쓰는 앱이 사진을 열면 시스템이 위치 정보를 기본으로 가리고, 원본 바이트를 받으려면 앱이 ACCESS_MEDIA_LOCATION 권한을 얻은 뒤 MediaStore.setRequireOriginal() 로 바꾼 URI 를 열어야 합니다 [3]. MediaProvider 는 가림이 필요한 호출자에게 RedactionUtils.getRedactionRanges() 로 구한 바이트 구간을 가려서 넘기고, 권한 없이 원본을 요구하면 "Caller must hold ACCESS_MEDIA_LOCATION permission to access original" 예외를 냅니다 [2]. 앱 권한의 일반 구조는 [앱 샌드박스와 권한](../../01-foundations/security-model/sandbox-permissions.md) 페이지에 있습니다.
 
@@ -118,7 +118,7 @@ taken_utc 와 EXIF 의 현지 시각·시차로 계산한 UTC 가 맞지 않으�
 - [구글 포토 (Google Photos)](google-photos.md), [삼성 갤러리 (Samsung Gallery)](samsung-gallery.md) — 앱이 따로 적어 둔 촬영 시각·시차·위치와 비교합니다.
 - [배터리 사용 기록 (batterystats)](../app-usage/batterystats.md) — Battery History 에는 `+camera`·`-camera` 표시가 붙은 줄이 있을 수 있고, 각 줄 앞에 월-일 시:분:초.밀리초 형식의 시각이 붙습니다. 이 표시가 카메라 사용의 시작과 끝을 뜻하는지는 촬영 시각과 맞춰 보고 판단합니다.
 - [앱 사용 기록 (usagestats)](../app-usage/usagestats/index.md) — 촬영 시각 무렵 카메라 앱이 앞에 떠 있었는지 봅니다.
-- [설정 값 (Settings)](../system-account/settings.md) — settings system 에 camera_feedback_vibrate, csc_pref_camera_forced_shuttersound_key 같은 카메라 관련 키가 있을 수 있고, 뜻을 적은 공개 자료는 없습니다.
+- [설정 값 (Settings)](../system-account/settings.md) — settings system 에 camera_feedback_vibrate, csc_pref_camera_forced_shuttersound_key 같은 카메라 관련 키가 있을 수 있고, 키의 뜻은 정해져 있지 않으므로 값만 옮깁니다.
 - [이 사진은 언제 어디서 찍었나 (Photo Origin)](../../04-scenarios/activity/photo-origin.md) — 이 기록을 쓰는 조사 시나리오입니다.
 
 ## 실습

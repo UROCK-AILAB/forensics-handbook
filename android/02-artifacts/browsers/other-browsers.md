@@ -6,7 +6,7 @@ nav_order: 890
 
 # 그 밖의 브라우저 (웨일·파이어폭스)
 
-네이버 웨일(com.naver.whale)은 공개 도구에 전용 파서가 없고 파일 배치를 다룬 공개 자료도 없는 브라우저이고, 파이어폭스(org.mozilla.firefox)는 Chromium 계열과 다른 배치로 `files/places.sqlite` 에 방문 기록·북마크·검색어를 남기면서 시각을 유닉스 밀리초로 적습니다 [1][3][4].
+네이버 웨일(com.naver.whale)은 공개 도구에 전용 파서가 없어 파일 배치를 실제 기기에서 확인해야 하는 브라우저이고, 파이어폭스(org.mozilla.firefox)는 Chromium 계열과 다른 배치로 `files/places.sqlite` 에 방문 기록·북마크·검색어를 남기면서 시각을 유닉스 밀리초로 적습니다 [1][3][4].
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -18,15 +18,15 @@ nav_order: 890
 
 ## 위치와 버전별 차이
 
-**웨일.** 알려진 것이 적어서 상태만 표로 정리합니다.
+**웨일.** 알려진 값과 실제 기기에서 확인할 항목을 표로 정리합니다.
 
 | 항목 | 상태 |
 |---|---|
 | 패키지 이름 | com.naver.whale (Play 상세 페이지 주소의 id) [5] |
 | 공개 도구 전용 파서 | ALEAPP 에 없음 [1] |
-| 프로필 폴더 이름(`app_chrome` 인지 다른 이름인지) | 공개 자료 없음 |
-| History·Cookies 같은 파일 이름 | 공개 자료 없음 |
-| 동기화로 들어온 PC 방문 기록이 폰 파일에 섞이는지 | 공개 자료 없음 |
+| 프로필 폴더 이름(`app_chrome` 인지 다른 이름인지) | 앱 데이터 폴더를 열어 프로필 폴더 이름을 확인 |
+| History·Cookies 같은 파일 이름 | 프로필 폴더 안의 파일 이름과 파일 헤더(SQLite 여부)를 확인 |
+| 동기화로 들어온 PC 방문 기록이 폰 파일에 섞이는지 | 방문 시각을 같은 기기의 앱 사용 기록과 맞춰 보거나 시험 기기에서 재현해 확인 |
 
 웨일이 `app_chrome/Default/History` 에 쓴다면 ALEAPP 는 그 파일을 Chromium 파서로 읽고 브라우저 이름 열에 com.naver.whale 을 적습니다. ALEAPP 는 `app_chrome` 을 쓰는 Chromium 파생 브라우저를 경로 안의 패키지 폴더 이름으로 구분하기 때문입니다 [2]. 실제로 웨일이 `app_chrome` 을 쓰는지는 실제 기기로 확인합니다.
 
@@ -55,7 +55,7 @@ nav_order: 890
 
 ## 구조
 
-웨일은 파일 구조가 알려지지 않았고, Chromium 계열 파일이 나오면 [크롬 (Chrome for Android)](chrome/index.md) 페이지의 방법으로 읽습니다. 아래는 Firefox 의 `places.sqlite` 이고, 표와 열은 Mozilla application-services 의 main 가지 스키마 파일 기준입니다(특정 Firefox 버전 태그가 아닙니다) [4].
+웨일은 앱 데이터 폴더의 파일부터 확인하고, Chromium 계열 파일이 나오면 [크롬 (Chrome for Android)](chrome/index.md) 페이지의 방법으로 읽습니다. 아래는 Firefox 의 `places.sqlite` 이고, 표와 열은 Mozilla application-services 의 main 가지 스키마 파일 기준입니다(특정 Firefox 버전 태그가 아닙니다) [4].
 
 | 표 | 주요 열 | 알려 주는 것 |
 |---|---|---|
@@ -65,7 +65,7 @@ nav_order: 890
 | moz_places_metadata | id, created_at, updated_at, place_id, total_view_time, search_query_id, referrer_place_id, document_type, typing_time, key_presses | 페이지를 본 시간과 입력 |
 | moz_places_metadata_search_queries | id, term | 검색어 |
 | moz_places_tombstones, moz_historyvisit_tombstones(place_id, visit_date), moz_bookmarks_deleted | — | 삭제 흔적 |
-| moz_inputhistory | place_id, input 등 | 열 전체와 뜻은 공개 자료 없음 |
+| moz_inputhistory | place_id, input 등 | 열 구성은 `PRAGMA table_info(moz_inputhistory)` 로 확인 |
 
 moz_places 에서는 방문 횟수와 마지막 방문 시각이 로컬(local)과 원격(remote)으로 나뉘어 있어서, 동기화로 들어온 값과 이 기기에서 생긴 값이 따로 적힙니다 [4]. moz_historyvisits 의 is_local 은 로컬에서 추가한 방문이면 항상 참, 동기화로 추가된 방문이면 항상 거짓이라서 방문 한 건 단위로 둘을 가를 수 있습니다 [4]. typed 열은 참·거짓이 아니라 횟수를 뜻하지만, ALEAPP 는 0/1 을 No/Yes 로 표시합니다 [3][4]. moz_places_metadata 의 document_type 은 0 이 일반 문서, 1 이 미디어입니다 [4].
 
@@ -85,7 +85,7 @@ ALEAPP 가 읽는 값의 뜻은 다음과 같습니다 [3].
 
 **증명하는 것.** Firefox 의 moz_historyvisits 에 is_local 이 참인 행이 있으면 이 기기의 Firefox 에서 그 주소를 그 시각에 방문했다는 기록이 남아 있다는 뜻이고, 거짓인 행은 동기화로 들어온 방문입니다 [4]. visit_type 으로 링크를 눌러 들어갔는지(LINK), 주소를 쳐서 들어갔는지(TYPED), 북마크로 들어갔는지(BOOKMARK) 같은 들어간 경로를 가를 수 있습니다 [3]. 다운로드 표의 status 가 6(Finished)이면 Firefox 가 그 파일을 끝까지 받았다고 기록한 것입니다 [3].
 
-**증명하지 못하는 것.** 기록만으로는 기기를 누가 들고 있었는지 알 수 없습니다. 같은 배치를 Tor Browser 와 Fennec F-Droid 도 쓰기 때문에, 파일 이름만 보고 Firefox 기록이라고 쓰지 말고 경로의 패키지 이름을 함께 적습니다 [3]. 삭제 흔적 표(moz_places_tombstones 등)에 남은 행은 지운 항목을 가리킬 수 있지만, 이 표들이 언제 채워지고 언제 비워지는지 알려지지 않아서 행이 없다는 사실만으로 지운 적이 없다고 말할 수 없습니다 [4]. 웨일은 파일 구조도, 동기화된 PC 방문 기록이 섞이는지도 알려지지 않았기 때문에, 웨일 파일에서 주소를 찾더라도 이 폰에서 직접 연 것이라고 단정하지 않습니다.
+**증명하지 못하는 것.** 기록만으로는 기기를 누가 들고 있었는지 알 수 없습니다. 같은 배치를 Tor Browser 와 Fennec F-Droid 도 쓰기 때문에, 파일 이름만 보고 Firefox 기록이라고 쓰지 말고 경로의 패키지 이름을 함께 적습니다 [3]. 삭제 흔적 표(moz_places_tombstones 등)에 남은 행은 지운 항목을 가리킬 수 있지만, 행이 없다는 사실만으로 지운 적이 없다고 말할 수 없습니다 [4]. 웨일은 네이버 아이디로 로그인하면 PC 와 같은 방문 기록을 쓰므로 [5], 웨일 파일에서 주소를 찾더라도 이 폰에서 직접 연 것이라고 단정하지 않습니다.
 
 ## 시각 해석
 

@@ -11,7 +11,7 @@ AirDrop 으로 자료를 주변 기기에 넘겼는지 판별하는 페이지입
 
 ## 조사 질문
 
-"이 아이폰에서 AirDrop 으로 자료를 보냈는가, 받은 기기가 있다면 그 기기에서 보낸 사람을 가려낼 수 있는가" 를 묻습니다. 보낸 쪽 기기에 무엇을 누구에게 보냈는지가 남는지는 공개된 분석 자료가 없습니다. 그래서 받은 쪽 기기를 확보할 수 있는지가 조사 범위를 크게 좌우합니다.
+"이 아이폰에서 AirDrop 으로 자료를 보냈는가, 받은 기기가 있다면 그 기기에서 보낸 사람을 가려낼 수 있는가" 를 묻습니다. 보낸 쪽 기기에 무엇을 누구에게 보냈는지가 남는지는 시험 기기로 확인해야 해서, 받은 쪽 기기를 확보할 수 있는지가 조사 범위를 크게 좌우합니다.
 
 ## 먼저 확인할 것
 
@@ -24,7 +24,7 @@ AirDrop 은 BLE 와 Apple 의 기기 간 Wi-Fi(peer-to-peer)로 주변 기기를
 | 16.2 이상 | "모든 사람(10분 동안)" 을 고르면 10분 뒤 설정이 바뀝니다. Apple 계정에 로그인되어 있으면 "연락처만", 아니면 "수신 끔" 으로 돌아갑니다[2]. |
 | 17 이상 | 두 기기가 모두 iOS 17 이상이면 기기를 맞대어 AirDrop 으로 공유할 수 있습니다[2]. |
 
-인터넷(셀룰러)으로 이어서 보내는 기능이 남기는 흔적은 공개된 분석 자료가 없습니다.
+인터넷(셀룰러)으로 이어서 보내는 기능이 남기는 흔적은 시험 기기로 셀룰러 전송을 해 보고 확인합니다.
 
 수집 범위도 확인합니다. 아래에서 쓰는 로그는 sysdiagnose 묶음 안의 `system_logs.logarchive` 에서 얻고[3], 로컬 백업에는 AirDrop 과 관련된 설정 파일과 사진 DB 가 들어 있습니다. sysdiagnose 를 받는 방법은 [sysdiagnose 묶음 (sysdiagnose)](../../../01-foundations/backups/sysdiagnose.md) 에 있습니다.
 
@@ -49,7 +49,7 @@ log show --predicate 'category = "AirDrop"' system_logs.logarchive
 
 받는 쪽 로그의 부분 해시를 국가·지역 번호 조합으로 만든 후보 번호의 해시와 대조하면, 보낸 전화번호를 찾을 수 있습니다[3]. 이 방법은 보낸 사람이 Apple 계정의 전화번호로 보냈을 때만 통하고, 이메일로 보낸 경우는 추가 연구가 필요합니다[3]. 방법은 Epstein·Klein·Feuerstein 의 논문 "Analysis of Sysdiagnose in iOS 15 to Identify the Sending Phone Number of AirDrop Data"(Journal of Forensic Sciences, 2022년 1월)에서 나왔고, RLEAPP 모듈로 자동화되어 있습니다(iPhone 13 Pro, iOS 15.3.1 기준)[3]. 다른 버전에서는 로그 문구와 해시 길이가 다를 수 있으니, 적용하기 전에 같은 버전의 시험 기기로 먼저 확인합니다. 방법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) 을 따릅니다.
 
-보낸 쪽 기기의 같은 범주 로그에 무엇이 남는지는 공개된 분석 자료가 없습니다. 보낸 쪽 로그에서 AirDrop 이벤트를 찾더라도 받는 사람과 파일을 곧바로 적지 않고, 로그 문구로 확인되는 만큼만 씁니다.
+보낸 쪽 기기의 같은 범주 로그에 무엇이 남는지는 시험 기기로 확인합니다. 보낸 쪽 로그에서 AirDrop 이벤트를 찾더라도 받는 사람과 파일을 곧바로 적지 않고, 로그 문구로 확인되는 만큼만 씁니다.
 
 ### 설정 파일
 
@@ -71,13 +71,13 @@ UIActivityCategoryAction
 StreamID
 ```
 
-키마다 뜻을 설명한 공개 자료는 없습니다. 수신 모드("연락처만"·"모든 사람")를 드러내는 이름의 키는 이 목록에 없습니다. 백업에는 AppDomain-com.apple.Sharing.AirDropUI, AppDomainGroup-group.com.apple.sharingd, AppDomainPlugin-com.apple.Sharing.AirDrop, AppDomainPlugin-com.apple.Sharing.AirDropAlertUI, AppDomainPlugin-com.apple.AirDropSettingsIntents, AppDomain-com.apple.SharingViewService 도메인도 있지만, 각각 항목이 3~4개뿐입니다.
+키 이름만으로 뜻을 단정하지 않습니다. 수신 모드("연락처만"·"모든 사람")를 드러내는 이름의 키는 이 목록에 없습니다. 백업에는 AppDomain-com.apple.Sharing.AirDropUI, AppDomainGroup-group.com.apple.sharingd, AppDomainPlugin-com.apple.Sharing.AirDrop, AppDomainPlugin-com.apple.Sharing.AirDropAlertUI, AppDomainPlugin-com.apple.AirDropSettingsIntents, AppDomain-com.apple.SharingViewService 도메인도 있지만, 각각 항목이 3~4개뿐입니다.
 
 `HomeDomain :: Library/UserConfigurationProfiles/EffectiveUserSettings.plist` 의 restrictedBool 안에는 allowAirDrop 키가 있습니다. 회사 기기라면 이 값으로 AirDrop 이 막혀 있었는지를 먼저 봅니다. 다만 이 값은 수집 시점의 설정이라서, 사건 당시에도 막혀 있었는지는 프로파일을 설치하거나 지운 기록과 함께 판단합니다.
 
 ### 받은 쪽 기기
 
-받은 쪽 기기를 확보했으면 들어온 자료의 경로를 봅니다. `Photos.sqlite` 에서는 ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY 와 ZCLOUDMASTER 의 ZIMPORTEDBY·ZIMPORTEDBYBUNDLEIDENTIFIER·ZIMPORTEDBYDISPLAYNAME·ZORIGINALFILENAME 열로 사진이 어떻게 들어왔는지 판별합니다. AirDrop 으로 들어온 사진에 어떤 값이 들어가는지는 공개된 분석 자료가 없어서, 같은 버전의 시험 기기로 AirDrop 을 한 번 받아 값을 확인한 뒤 씁니다. 파일 앱에서 AirDrop 으로 받은 파일은 Inbox 로 갑니다(iOS 13 기준)[4].
+받은 쪽 기기를 확보했으면 들어온 자료의 경로를 봅니다. `Photos.sqlite` 에서는 ZADDITIONALASSETATTRIBUTES.ZIMPORTEDBY 와 ZCLOUDMASTER 의 ZIMPORTEDBY·ZIMPORTEDBYBUNDLEIDENTIFIER·ZIMPORTEDBYDISPLAYNAME·ZORIGINALFILENAME 열로 사진이 어떻게 들어왔는지 판별합니다. AirDrop 으로 들어온 사진에 어떤 값이 들어가는지는 같은 버전의 시험 기기로 AirDrop 을 한 번 받아 값을 확인한 뒤 씁니다. 파일 앱에서 AirDrop 으로 받은 파일은 Inbox 로 갑니다(iOS 13 기준)[4].
 
 ## 분석 흐름
 
@@ -90,7 +90,7 @@ StreamID
 
 ## 흔한 오판
 
-AirDrop 은 받는 사람이 수락해야 전송되지만[1], 같은 Apple 계정에 로그인한 자기 기기끼리 보낼 때도 수락 절차가 있는지는 공개된 자료가 없습니다. 그래서 받은 쪽 기록에 파일이 있다는 사실만으로 받은 기기에서 누군가 수락했다고 쓰지 않고, 두 기기의 Apple 계정이 같은지부터 확인합니다. 반대로 보낸 쪽 로그에 전송 시도가 보여도 받은 쪽이 거절했을 수 있어서, 보낸 쪽 기록만으로 "전달되었다" 고 쓰지 않습니다.
+AirDrop 은 받는 사람이 수락해야 전송되지만[1], 같은 Apple 계정에 로그인한 자기 기기끼리 보낼 때도 수락 절차가 있다고 단정할 수는 없습니다. 그래서 받은 쪽 기록에 파일이 있다는 사실만으로 받은 기기에서 누군가 수락했다고 쓰지 않고, 두 기기의 Apple 계정이 같은지부터 확인합니다. 반대로 보낸 쪽 로그에 전송 시도가 보여도 받은 쪽이 거절했을 수 있어서, 보낸 쪽 기록만으로 "전달되었다" 고 쓰지 않습니다.
 
 부분 해시가 맞는다는 결과는 보낸 기기에 로그인된 Apple 계정의 전화번호를 가리킬 뿐, 그 순간 기기를 쥔 사람을 가리키지 않습니다. 사용자 판단은 [그 시각에 폰을 쓴 사람이 누구인가 (User Attribution)](../../activity/user-attribution.md) 를 따릅니다.
 

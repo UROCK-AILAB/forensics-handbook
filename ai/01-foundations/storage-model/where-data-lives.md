@@ -41,8 +41,8 @@ Claude 개인용(Free·Pro·Max)은 대화를 지웠을 때의 처리와 보관 
 | ChatGPT | iOS | `Library/Application Support/conversations-*/` 아래 `*.json` | 대화마다 JSON 파일 하나 | 앱 1.2024.178 까지, 시험 이미지 1.2024.219·1.2024.233(iOS 17) | [9] |
 | Claude | Android | `com.anthropic.claude/databases/` 아래 `acc_*_claude_cache.db` | SQLite, 열 안에 JSON | Android 13·17 시험 이미지, 앱 버전 기록 없음 | [8] |
 | Claude | iOS | `Library/Application Support/ClaudeCache/` 아래 `cache_*.sqlite` | SQLite | iOS 18.7.8·26.5.2 시험 이미지 | [9] |
-| Gemini | Android·iOS | 기기 쪽 공개 분석기 없음 | 대화는 클라우드, Takeout 으로 받음 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
-| Copilot | Android·iOS | 기기 쪽 공개 분석기 없음 | 평문 대화와 브라우저 데이터 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
+| Gemini | Android·iOS | 실제 기기의 앱 폴더에서 확인 | 대화는 클라우드, Takeout 으로 받음 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
+| Copilot | Android·iOS | 실제 기기의 앱 폴더에서 확인 | 평문 대화와 브라우저 데이터 | ALEAPP·iLEAPP 에 전용 분석기 없음(2026-09-25) | [10] |
 
 Android 의 경로는 앱 데이터 폴더(`/data/data/` 아래 패키지 이름 폴더) 기준이고, iOS 의 경로는 `Containers/Data/Application/` 아래 UUID 이름의 앱 폴더 기준입니다. 앱 폴더의 공통 구조와 보호 방식은 [앱 데이터 폴더 구조 (Android)](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html) 와 [데이터 보호 (iOS)](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html) 를 봅니다.
 
@@ -78,9 +78,9 @@ OS 별 위치는 아래와 같습니다.
 | Claude Code 세션 기록 | `%USERPROFILE%\.claude\projects\` | `~/.claude/projects/` | `~/.claude/projects/` | [4][5] |
 | Claude 데스크톱 데이터 폴더 | 스토어 판 `%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude`, 그 밖의 설치 `%APPDATA%\Claude` | `~/Library/Application Support/Claude` | `~/.config/Claude` | [7] |
 | Ollama 모델 | `C:\Users\%username%\.ollama\models` | `~/.ollama/models` | `/usr/share/ollama/.ollama/models` | [3] |
-| Ollama 서버 로그 | `%LocalAppData%/Ollama/server.log` | 공개 자료 없음 | 공개 자료 없음 | [11] |
+| Ollama 서버 로그 | `%LocalAppData%/Ollama/server.log` | 기기에서 확인 | 기기에서 확인 | [11] |
 
-Electron 으로 만든 데스크톱 앱의 기본 데이터 폴더는 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 에서, Claude 데스크톱 폴더의 내용은 [Claude](../../02-artifacts/chat-services/claude/index.md) 페이지에서 다룹니다. 표에서 "공개 자료 없음" 인 칸은 실제 기기에서 기본 위치와 설정을 보고 확인합니다.
+Electron 으로 만든 데스크톱 앱의 기본 데이터 폴더는 [Electron·웹뷰 앱의 저장 구조](electron-webview.md) 에서, Claude 데스크톱 폴더의 내용은 [Claude](../../02-artifacts/chat-services/claude/index.md) 페이지에서 다룹니다. 표에서 "기기에서 확인" 인 칸은 실제 기기에서 기본 위치와 설정을 보고 경로를 찾습니다.
 
 ### Windows 스토어(MSIX) 앱의 위치
 
@@ -92,7 +92,7 @@ Claude 데스크톱은 설치 방식에 따라 데이터 폴더가 다릅니다.
 
 같은 계정의 대화가 웹·데스크톱·모바일에 똑같이 보이면 대화 목록의 원본은 서버 계정에 있다고 보고, 기기마다 남은 사본은 따로 수집합니다. Claude Code 의 Remote Control 세션은 실행을 사용자 기기에서 하고, 연결된 동안에는 대화 기록 사본을 서버에도 저장합니다 [4]. 이런 세션은 기기의 세션 기록과 서버 사본이 함께 있습니다.
 
-Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` 키가 있습니다. 이 파일의 용도를 설명한 공개 자료는 없습니다. 실제 데이터에서 `localSessionId` 와 `remoteSessionId` 값을 세션 기록의 세션 ID 와 대조해 두 세션이 이어졌는지 확인합니다.
+Claude 데스크톱 데이터 폴더의 `bridge-state.json` 에는 `enabled`, `environmentId`, `localSessionId`, `remoteSessionId`, `processedMessageUuids`, `pendingProcessedAcks`, `userConsented` 키가 있습니다. 실제 데이터에서 `localSessionId` 와 `remoteSessionId` 값을 세션 기록의 세션 ID 와 대조해 두 세션이 이어졌는지 확인합니다.
 
 ## 읽는 법
 

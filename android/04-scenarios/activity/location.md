@@ -47,13 +47,13 @@ nav_order: 1590
 
 1. **질문의 시간 창을 정합니다.** "밤 10시" 처럼 한 점으로 주어진 질문도 앞뒤로 창을 넓혀 잡습니다. 위치 기록은 연속된 선이 아니라 드문드문 찍힌 점이나 구간이라서, 창 안에 기록이 몇 개 있는지부터 셉니다.
 
-2. **구글 기기 내 위치 기록을 봅니다.** 기기 내 위치 기록 파일은 `*/com.google.android.gms/databases/odlh-storage.db*` 이고, 파일 주인은 지도 앱이 아니라 Google Play 서비스입니다 [2]. `semantic_segment_table` 한 행은 시작·끝 시각이 있는 구간이고 `shown_in_timeline`, `is_finalized` 같은 열도 함께 있습니다 [2]. 개별 위치 점은 `*/com.google.android.gms/app_semanticlocation_rawsignal_db/*` 의 LevelDB 에 위도·경도·수평 정확도·시각으로 남습니다 [3]. 두 저장소가 어떤 관계인지(원재료와 정리된 구간인지)는 공개 자료가 없으므로 둘을 별개 기록으로 표에 올립니다.
+2. **구글 기기 내 위치 기록을 봅니다.** 기기 내 위치 기록 파일은 `*/com.google.android.gms/databases/odlh-storage.db*` 이고, 파일 주인은 지도 앱이 아니라 Google Play 서비스입니다 [2]. `semantic_segment_table` 한 행은 시작·끝 시각이 있는 구간이고 `shown_in_timeline`, `is_finalized` 같은 열도 함께 있습니다 [2]. 개별 위치 점은 `*/com.google.android.gms/app_semanticlocation_rawsignal_db/*` 의 LevelDB 에 위도·경도·수평 정확도·시각으로 남습니다 [3]. 두 저장소가 어떤 관계인지(원재료와 정리된 구간인지)는 단정할 수 없으므로 둘을 별개 기록으로 표에 올립니다.
 
 3. **지도 앱 기록을 더합니다.** 구글 지도의 길찾기 목적지 기록은 `da_destination_history` DB 의 `destination_history` 표에 목적지와 출발지 좌표, 시각을 남기고 [4], 저장한 장소 `gmm_myplaces.db` 에는 라벨과 좌표가 남습니다 [5]. ALEAPP 는 저장한 장소의 key_string 두 값을 Home·Work 로 표시하지만, 이 대응은 데이터에 적혀 있지 않고, 라벨이 붙었다고 실제 집·직장이라는 뜻도 아닙니다 [5]. 길찾기 목적지는 "가려고 했던 곳" 이고 도착했다는 기록이 아니므로, 도착은 다른 기록으로 확인합니다. 네이버 지도·카카오맵은 공개 분석 도구가 없어 경로와 표를 실제 기기로 확인해야 하니 각 앱 페이지를 따라갑니다.
 
 4. **사진 한 점을 올립니다.** 창 안에서 찍은 사진이 있으면 EXIF 좌표와 GPS UTC 시각을 한 점으로 올립니다. 촬영 순간 한 점이라는 성격만 기억해 두고, 태그를 읽는 방법과 함정은 [이 사진은 언제 어디서 찍었나](photo-origin.md) 에 있습니다.
 
-5. **Wi-Fi 기록으로 장소를 좁힙니다.** `WifiConfigStore.xml` 은 `*/misc**/apexdata/com.android.wifi/WifiConfigStore.xml`(예전에는 `*/misc/wifi/`)에 있고, 삼성 기기에는 유닉스 밀리초 값인 `semCreationTime`, `semUpdateTime`, `LastConnectedTime` 필드가 있습니다 [7]. 네트워크 이름(SSID)으로 집·회사·카페 같은 장소를 짐작할 수는 있지만 이름은 누구나 붙일 수 있으므로 짐작으로만 적습니다. 삼성 기기의 `wifigeofence.db` 에는 Wi-Fi 네트워크별 `bssid` 와 좌표가 있어 [8] 네트워크를 지도 위의 점으로 옮길 수 있지만, 이 좌표가 언제 어떻게 잡힌 것인지는 공개 자료가 없습니다. `dumpsys wifi` 의 상태 기록 줄은 `rec[#]: time=MM-DD HH:MM:SS.mmm processed=... what=CMD_...` 모양이고 연도가 없습니다.
+5. **Wi-Fi 기록으로 장소를 좁힙니다.** `WifiConfigStore.xml` 은 `*/misc**/apexdata/com.android.wifi/WifiConfigStore.xml`(예전에는 `*/misc/wifi/`)에 있고, 삼성 기기에는 유닉스 밀리초 값인 `semCreationTime`, `semUpdateTime`, `LastConnectedTime` 필드가 있습니다 [7]. 네트워크 이름(SSID)으로 집·회사·카페 같은 장소를 짐작할 수는 있지만 이름은 누구나 붙일 수 있으므로 짐작으로만 적습니다. 삼성 기기의 `wifigeofence.db` 에는 Wi-Fi 네트워크별 `bssid` 와 좌표가 있어 [8] 네트워크를 지도 위의 점으로 옮길 수 있습니다. 이 좌표가 언제 어떻게 잡혔는지는 단정하지 않고, 같은 기기의 다른 위치 기록과 맞춰 봅니다. `dumpsys wifi` 의 상태 기록 줄은 `rec[#]: time=MM-DD HH:MM:SS.mmm processed=... what=CMD_...` 모양이고 연도가 없습니다.
 
 6. **배터리 기록으로 빈틈을 확인합니다.** `dumpsys batterystats` 이력에는 `+gps +state=`, `-gps -state=`, `gps_signal_quality=`, `+wifi_scan`·`-wifi_scan` 같은 줄이 있고, 시각은 `MM-DD HH:MM:SS.mmm` 모양이며 이력 머리에 `RESET:TIME:` 줄이 있습니다. 이 줄로 알 수 있는 것은 "그 시각에 GPS 가 켜져 있었다" 까지이고 좌표와 GPS 를 켠 앱은 이 줄에 없습니다. 위치 기록이 비어 있는 창에서 GPS 가 켜져 있었다면 어딘가에 위치를 남겼을 앱을 찾아볼 단서가 됩니다.
 

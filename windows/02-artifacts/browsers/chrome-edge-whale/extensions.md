@@ -190,7 +190,7 @@ Chrome 153·Edge 151 에서는 1·5·6·10 이 나옵니다.
 - 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 업데이트한 적이 없는 확장은 두 값이 같습니다.
 - 업데이트한 확장은 `last_update_time` 이 더 뒤입니다. 이때 `path` 의 버전 폴더(`<버전>_0`)와 `manifest` 의 `version` 이 새 버전입니다.
-- `lastpingday` 처럼 다른 시각으로 보이는 키도 있습니다. 뜻을 밝힌 공개 자료가 없어 이 페이지에서는 해석하지 않습니다.
+- `lastpingday` 처럼 다른 시각으로 보이는 키도 있습니다. 이 키는 값만 옮기고 뜻을 단정하지 않습니다.
 - 옛 도구가 `install_time` 만 읽으면 설치 시각이 비어 보입니다. 이때는 `first_install_time` 을 직접 봅니다.
 - 확장 폴더를 만든 시각은 [마스터 파일 테이블](../../filesystem/mft.md) 에서 따로 확인하고 `first_install_time` 과 맞춰 봅니다.
 
@@ -198,9 +198,9 @@ Chrome 153·Edge 151 에서는 1·5·6·10 이 나옵니다.
 
 - **`Preferences` 만 보면 목록이 비어 보입니다.** Chrome 153·Edge 151 은 확장 목록을 `Secure Preferences` 에 둡니다.
 - **ID 만 있는 항목이 있습니다.** `manifest`·`location`·설치 시각이 없는 항목으로, Edge 151 프로필 하나에 22개, Chrome 153 프로필 하나에 1개가 나온 예가 있습니다. 이런 항목은 설치된 확장으로 세지 않습니다.
-- **ID 만 있는 항목의 `[8192]` 를 단정하지 않습니다.** 위 Edge 예에서는 22개 가운데 21개의 `disable_reasons` 가 `[8192]` 하나뿐이었습니다. 8192 는 `EXTERNAL_EXTENSION` 이고, 밖에서 설치한 확장은 사용자가 켜야 합니다[3]. 두 사실을 이으면 "밖에서 설치해 사용자 확인을 기다리는 상태" 로 읽을 수 있지만, 이를 밝힌 공개 자료가 없으므로 추정으로만 씁니다.
+- **ID 만 있는 항목의 `[8192]` 를 단정하지 않습니다.** 위 Edge 예에서는 22개 가운데 21개의 `disable_reasons` 가 `[8192]` 하나뿐이었습니다. 8192 는 `EXTERNAL_EXTENSION` 이고, 밖에서 설치한 확장은 사용자가 켜야 합니다[3]. 두 사실을 이으면 "밖에서 설치해 사용자 확인을 기다리는 상태" 로 읽을 수 있지만, 두 사실을 이은 추정이므로 보고서에도 추정으로만 씁니다.
 - **브라우저에 딸린 확장을 따로 분류합니다.** `location` 5 는 브라우저 구성 요소입니다. `path` 가 `Program Files` 아래를 가리킵니다. 사용자가 넣은 확장과 섞어 세지 않습니다.
-- **Edge 의 `from_webstore` 가 false 라고 바로 의심하지 않습니다.** Edge 에는 `location` 1 인데 `from_webstore` 가 false 인 확장이 있습니다. Edge 애드온 스토어에서 받은 것으로 보이지만, 이를 밝힌 공개 자료가 없어 추정으로 둡니다.
+- **Edge 의 `from_webstore` 가 false 라고 바로 의심하지 않습니다.** Edge 에는 `location` 1 인데 `from_webstore` 가 false 인 확장이 있습니다. Edge 애드온 스토어에서 받은 것으로 보이지만, 이 값만으로 단정하지 않고 추정으로 둡니다.
 - **웹 스토어가 아닌 경로를 먼저 봅니다.** `location` 2·3·4·8 은 웹 스토어가 아닌 경로입니다. Chrome 에서 `location` 1 인데 `from_webstore` 가 false 인 확장도 따로 확인합니다. Chrome 153 에서는 `location` 1 이 모두 `from_webstore` true 입니다.
 - **`disable_reasons` 는 값을 더하지 않고 목록으로 읽습니다.** 목록의 원소 하나가 이유 하나입니다.
 - **검증값으로 조작 여부를 판별하지 못합니다.** 이 페이지는 `Secure Preferences` 의 검증값(MAC) 계산법과, 검증값으로 설정 조작을 판별하는 법을 다루지 않습니다.

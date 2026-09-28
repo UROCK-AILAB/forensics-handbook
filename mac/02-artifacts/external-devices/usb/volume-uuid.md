@@ -13,7 +13,7 @@ nav_order: 1070
 
 통합 로그는 디스크가 나타나고 사라진 시각을 알려 주지만 연결 메시지의 형식 문자열에는 시리얼 번호 같은 장치 식별 값 자리가 없어서, 로그에서 본 디스크가 손에 든 장치와 같은지는 다른 기록으로 이어야 합니다. 이때 쓰는 값이 볼륨 이름과 볼륨 식별 값이고, 그 값은 호스트 맥 쪽과 외장 볼륨 쪽 양쪽에 흩어져 남습니다.
 
-DiskArbitration은 디스크를 설명할 때 볼륨 UUID(`DAVolumeUUID`)와 미디어 UUID(`DAMediaUUID`)를 서로 다른 키로 둡니다 [2]. 두 값이 각각 파일 시스템과 파티션 중 무엇을 가리키는지, 장치를 다시 포맷하면 어느 쪽이 바뀌는지는 공개 자료가 없으니, 대조할 때는 같은 키의 값끼리만 맞춥니다. 키 목록 전체는 [마운트 기록 (DiskArbitration)](mount-records.md)에 있습니다.
+DiskArbitration은 디스크를 설명할 때 볼륨 UUID(`DAVolumeUUID`)와 미디어 UUID(`DAMediaUUID`)를 서로 다른 키로 둡니다 [2]. 두 값이 각각 파일 시스템과 파티션 중 무엇을 가리키는지, 장치를 다시 포맷하면 어느 쪽이 바뀌는지는 시험용 장치를 다시 포맷해 보고 확인합니다. 대조할 때는 같은 키의 값끼리만 맞춥니다. 키 목록 전체는 [마운트 기록 (DiskArbitration)](mount-records.md)에 있습니다.
 
 ## 위치와 버전별 차이
 
@@ -25,7 +25,7 @@ DiskArbitration은 디스크를 설명할 때 볼륨 UUID(`DAVolumeUUID`)와 미
 | 외장 볼륨 | `/.Spotlight-V100/Store-V1/VolumeConfig.plist` | 스포트라이트가 볼륨에 남긴 설정 파일 | [1] |
 | 외장 볼륨 | `/.fseventsd/` | 파일 시스템 이벤트 기록 | [1] |
 
-외장 볼륨 쪽 경로는 그 볼륨의 루트를 기준으로 적었습니다. `com.apple.sidebarlists.plist` 가 어느 macOS 버전까지 쓰였는지는 알려진 자료가 없으니, 최근 버전의 맥에서는 파일이 있는지부터 봅니다. 스포트라이트 plist 안의 키 이름과 버전에 따라 달라지는 저장소 경로는 실제 파일로 확인합니다. 스포트라이트 저장소 자체는 [스포트라이트 (Spotlight)](../../file-folder-usage/spotlight/index.md)에서, `.fseventsd` 는 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)에서 다룹니다. `volinfo.database` 설명은 [마운트 기록 (DiskArbitration)](mount-records.md)에 있습니다.
+외장 볼륨 쪽 경로는 그 볼륨의 루트를 기준으로 적었습니다. `com.apple.sidebarlists.plist` 는 최근 버전의 맥에서는 파일이 있는지부터 봅니다. 스포트라이트 plist 안의 키 이름과 버전에 따라 달라지는 저장소 경로는 실제 파일로 확인합니다. 스포트라이트 저장소 자체는 [스포트라이트 (Spotlight)](../../file-folder-usage/spotlight/index.md)에서, `.fseventsd` 는 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)에서 다룹니다. `volinfo.database` 설명은 [마운트 기록 (DiskArbitration)](mount-records.md)에 있습니다.
 
 ## 잇는 순서
 
@@ -47,7 +47,7 @@ DiskArbitration은 디스크를 설명할 때 볼륨 UUID(`DAVolumeUUID`)와 미
 
 ## 함정과 한계
 
-`DAVolumeUUID` 와 `DAMediaUUID` 는 다른 값이라 [2], 한쪽 기록의 볼륨 UUID를 다른 쪽 기록의 미디어 UUID와 맞춰 보면 틀린 결론이 나옵니다. 어느 쪽이 재포맷에 따라 바뀌는지 알려져 있지 않으니, 값이 맞지 않는다고 해서 다른 장치라고 단정하지도 않습니다.
+`DAVolumeUUID` 와 `DAMediaUUID` 는 다른 값이라 [2], 한쪽 기록의 볼륨 UUID를 다른 쪽 기록의 미디어 UUID와 맞춰 보면 틀린 결론이 나옵니다. 장치를 다시 포맷하면 값이 바뀔 수 있으니, 값이 맞지 않는다고 해서 다른 장치라고 단정하지도 않습니다.
 
 외장 장치를 분석하는 맥에 그냥 꽂으면 그 맥이 볼륨 루트에 스포트라이트·파일 시스템 이벤트 파일을 새로 쓰거나 고칠 수 있습니다. 볼륨 쪽 파일은 반드시 쓰기 방지 장치를 거쳐 확보한 이미지에서 읽고, 방법은 [맥 증거 확보 (Acquisition)](../../../03-techniques/process-acquisition/evidence-acquisition/index.md)에서 다룹니다.
 

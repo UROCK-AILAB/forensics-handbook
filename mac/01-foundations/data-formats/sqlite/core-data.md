@@ -20,7 +20,7 @@ iOS 7과 OS X 10.9 Mavericks부터 Core Data SQLite 저장소의 기본 저널 �
 | macOS 버전 | Core Data SQLite 저장소의 기본 저널 방식 |
 |---|---|
 | OS X 10.9 Mavericks 이후 | WAL [1] |
-| macOS 10.15 Catalina 이후 버전별 차이 | 바뀌었다는 공개 자료 없음 |
+| macOS 10.15 Catalina 이후 | DB 헤더 18·19번 바이트로 확인 |
 
 앱은 `NSSQLitePragmasOption` 에 `journal_mode` 를 `DELETE` 로 넘겨 롤백 저널로 되돌릴 수 있어서 [1], 모든 Core Data 저장소가 WAL이라고 단정하지 않고 DB 헤더 18·19번 바이트로 확인합니다. 헤더 필드는 [페이지와 레코드 (B-tree·Record)](b-tree-record.md)에, WAL 파일 구조는 [WAL과 저널 (WAL·Journal)](wal-journal.md)에 있습니다.
 
@@ -32,7 +32,7 @@ iOS 7과 OS X 10.9 Mavericks부터 Core Data SQLite 저장소의 기본 저널 �
 
 ## 표와 열 이름
 
-knowledgeC.db에는 ZOBJECT, ZSOURCE, ZSTRUCTUREDMETADATA 같은 표와 ZCREATIONDATE 같은 열이 있고, 표를 서로 묶을 때 Z_PK와 Z_ENT 열을 씁니다 [4]. 표와 열 이름 앞에 Z가 붙는 모양은 knowledgeC.db의 예이고, 이 이름 규칙이나 Z_PK·Z_ENT 열의 정확한 뜻을 설명한 Apple 공개 문서는 없습니다.
+knowledgeC.db에는 ZOBJECT, ZSOURCE, ZSTRUCTUREDMETADATA 같은 표와 ZCREATIONDATE 같은 열이 있고, 표를 서로 묶을 때 Z_PK와 Z_ENT 열을 씁니다 [4]. 표와 열 이름 앞에 Z가 붙는 모양은 knowledgeC.db의 예라서, 다른 Core Data 저장소에서는 `PRAGMA table_info` 로 표 구조를 보고 Z_PK·Z_ENT 열이 있는지 확인합니다.
 
 낯선 Core Data 저장소를 처음 열 때는 이름으로 짐작하기보다 작업 사본에서 `sqlite_schema` 를 조회해 실제 표 목록과 `CREATE` 문부터 확인합니다.
 

@@ -25,7 +25,7 @@ nav_order: 1490
 ~/Library/Accounts/Accounts*.sqlite-wal
 ```
 
-세 위치 모두 사용자 홈 안에 있어서 사용자마다 따로 확인합니다 [1]. 계정 DB는 파일 이름의 숫자가 다른 `Accounts3.sqlite` 와 `Accounts4.sqlite` 두 판이 있습니다 [1]. 어느 macOS 버전에서 `Accounts3` 에서 `Accounts4` 로 바뀌었는지는 공개 자료에 나와 있지 않아서, 실제 데이터에서는 `Accounts*.sqlite` 에 맞는 파일을 모두 모읍니다.
+세 위치 모두 사용자 홈 안에 있어서 사용자마다 따로 확인합니다 [1]. 계정 DB는 파일 이름의 숫자가 다른 `Accounts3.sqlite` 와 `Accounts4.sqlite` 두 판이 있습니다 [1]. 어느 판을 쓰는지 macOS 버전만으로 정하지 말고, 실제 데이터에서 `Accounts*.sqlite` 에 맞는 파일을 모두 모읍니다.
 
 | 파일 | 알려진 것 | 실제 데이터로 확인할 것 |
 |---|---|---|
@@ -35,7 +35,7 @@ nav_order: 1490
 
 ## 구조
 
-`MobileMeAccounts.plist` 는 속성 목록 파일이라서 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)을 따르고, 계정 DB는 SQLite 파일이라서 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따릅니다. 두 파일 안의 키 이름과 표·열 이름은 공개 분석 자료에 나와 있지 않아서, 실제 파일을 직접 열어 확인한 이름만 보고서에 씁니다.
+`MobileMeAccounts.plist` 는 속성 목록 파일이라서 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)을 따르고, 계정 DB는 SQLite 파일이라서 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)를 따릅니다. 두 파일 안의 키 이름과 표·열 이름은 실제 파일을 직접 열어 확인하고, 확인한 이름만 보고서에 씁니다.
 
 계정 DB 옆에 `-wal` 파일이 있으면 아직 본 DB에 합쳐지지 않은 변경이 그 안에 있을 수 있어서, 두 파일을 함께 수집합니다 [1]. WAL을 합치는 순서와 주의점은 SQLite 페이지에서 다룹니다.
 
@@ -57,7 +57,7 @@ nav_order: 1490
 
 **증명하는 것.** 사용자 홈에 이 파일들이 있으면 그 사용자 계정에서 iCloud 계정 설정이 만들어진 기록이 있다는 뜻이고, 계정 DB에 행이 있으면 그 사용자 홈에 계정 설정이 등록된 기록이 있다는 뜻이고, 그 행이 어떤 종류의 계정인지는 실제 데이터에서 열을 확인한 뒤에 적습니다.
 
-**증명하지 못하는 것.** 파일이 있다는 사실만으로 지금도 로그인해 있다거나 특정 시각에 로그인했다고 단정하지 않습니다. 로그인·로그아웃 시각이 남는 곳과 관련 통합 로그는 공개 분석 자료에 나와 있지 않아 실제 데이터에서 따로 찾아야 합니다. 그 계정을 실제로 쓴 사람이 누구인지도 이 파일만으로는 알 수 없어서 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)의 흐름으로 다른 흔적과 맞춰 봅니다.
+**증명하지 못하는 것.** 파일이 있다는 사실만으로 지금도 로그인해 있다거나 특정 시각에 로그인했다고 단정하지 않습니다. 로그인·로그아웃 시각이 남는 곳과 관련 통합 로그는 시험 기기에서 로그인·로그아웃을 재현해 찾습니다. 그 계정을 실제로 쓴 사람이 누구인지도 이 파일만으로는 알 수 없어서 [그 시각에 맥을 쓴 사람이 누구인가 (User Attribution)](../../04-scenarios/activity/user-attribution.md)의 흐름으로 다른 흔적과 맞춰 봅니다.
 
 서버에 올라간 데이터는 이 파일들에 담기지 않습니다. 표준 데이터 보호라면 Apple이 키를 보관하는 항목이 있고 고급 데이터 보호라면 키가 신뢰하는 기기에만 있어서 [2], 어느 쪽이든 맥 안에서 확인할 수 있는 흔적이 분석의 중심이 될 가능성이 큽니다.
 
@@ -65,7 +65,7 @@ nav_order: 1490
 
 ## 시각 해석
 
-계정 DB 안 시각 열의 이름과 기준을 다룬 공개 분석 자료는 없습니다. 실제 데이터에서 시각으로 보이는 열을 찾으면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 기준을 차례로 대 보고, 알려진 다른 사건(설치 시각 등)과 맞는 기준을 고른 뒤 그 판단 근거를 보고서에 함께 적습니다.
+계정 DB 안에서 시각으로 보이는 열을 찾으면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 기준을 차례로 대 보고, 알려진 다른 사건(설치 시각 등)과 맞는 기준을 고른 뒤 그 판단 근거를 보고서에 함께 적습니다.
 
 파일 자체의 수정 시각은 이 파일이 마지막으로 바뀐 때를 알려 줄 뿐이고, 무엇이 바뀌어서 시각이 갱신됐는지는 알려 주지 않습니다. 파일 변경의 흐름은 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)와 함께 봅니다.
 
@@ -75,13 +75,13 @@ nav_order: 1490
 - **WAL 파일.** `-wal` 을 빼고 DB만 복사하면 최근 변경이 빠질 수 있습니다 [1].
 - **관리자가 끈 기능.** iCloud Drive나 iCloud 백업은 구성 프로파일로 꺼질 수 있어서 [3], 서비스 흔적이 없을 때는 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 제한이 걸려 있었는지 먼저 봅니다.
 - **항목 수가 다른 두 자료.** 고급 데이터 보호의 종단간 항목 수는 지원 문서와 보안 가이드가 다르게 적습니다 [2][3].
-- **공개 자료가 없는 키와 열.** 도구가 plist 키나 DB 열에 뜻을 붙여 보여 주면, 그 뜻이 어디서 나왔는지 확인한 뒤에 씁니다.
+- **도구가 붙인 키·열의 뜻.** 도구가 plist 키나 DB 열에 뜻을 붙여 보여 주면, 그 뜻이 어디서 나왔는지 확인한 뒤에 씁니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-`MobileMeAccounts.plist` 를 헥스 편집기로 열어 첫 바이트가 바이너리 plist 머리말인지 XML 텍스트인지 먼저 확인합니다. 머리말을 가려내는 법과 바이너리 plist의 오프셋 표를 따라가는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에 고유한 바이트 구조를 다룬 공개 자료는 없습니다.
+`MobileMeAccounts.plist` 를 헥스 편집기로 열어 첫 바이트가 바이너리 plist 머리말인지 XML 텍스트인지 먼저 확인합니다. 머리말을 가려내는 법과 바이너리 plist의 오프셋 표를 따라가는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 

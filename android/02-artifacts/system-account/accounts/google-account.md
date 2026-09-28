@@ -27,11 +27,11 @@ nav_order: 340
 | `/data/system/sync/stats` | 동기화 통계 | 현행 AOSP 기준 [4] |
 | `dumpsys package` 의 Known Packages | 구글 설치 도우미·서비스 패키지의 역할 | |
 | `/sdcard/Android/media/com.google.android.gms/` | 폴더가 있을 수 있음 | |
-| `settings` 의 구글·동기화 관련 키 | 키 이름(뜻은 공개 자료 없음) | |
+| `settings` 의 구글·동기화 관련 키 | 키 이름(뜻은 실제 기기의 값으로 확인) | |
 
-동기화 파일은 SyncStorageEngine 이 `<dataDir>/system/sync` 폴더(SYNC_DIR_NAME = "sync")에 두고, 흔히 `/data/system/sync/` 입니다 [4]. 예전 파일 이름 `status.bin`·`stats.bin` 도 상수로 남아 있어서 예전 버전 기기에서는 이 이름도 함께 찾습니다 [4]. 이름이 바뀐 Android 버전을 밝힌 공개 자료는 없습니다. 루팅하지 않은 기기에서 adb 일반 권한으로 이 폴더를 읽을 수 있는지는 기기마다 확인합니다.
+동기화 파일은 SyncStorageEngine 이 `<dataDir>/system/sync` 폴더(SYNC_DIR_NAME = "sync")에 두고, 흔히 `/data/system/sync/` 입니다 [4]. 예전 파일 이름 `status.bin`·`stats.bin` 도 상수로 남아 있어서 예전 버전 기기에서는 이 이름도 함께 찾습니다 [4]. 루팅하지 않은 기기에서 adb 일반 권한으로 이 폴더를 읽을 수 있는지는 기기마다 확인합니다.
 
-구글 서비스 앱(com.google.android.gms)과 Play 스토어(com.android.vending) 안의 계정 관련 DB 경로와 표 이름은 공개된 분석 자료가 없어 실제 기기로 확인해야 합니다.
+구글 서비스 앱(com.google.android.gms)과 Play 스토어(com.android.vending) 안의 계정 관련 DB 경로와 표 이름은 실제 기기의 앱 데이터 폴더에서 SQLite 파일을 찾아 표 구조를 보고 확인합니다.
 
 ## 구조 — 동기화 파일
 
@@ -57,17 +57,17 @@ nav_order: 340
 
 ### status 와 stats
 
-`status` 파일에는 동기화 대상마다 SyncStatusInfo 가 들어가고, 필드는 `lastSuccessTime`, `lastSuccessSource`, `lastFailureTime`, `lastFailureSource`, `lastFailureMesg`, `initialFailureTime`, `pending`, `initialize`, `periodicSyncTimes` 와 통계(`totalStats`, `todayStats`, `yesterdayStats`)입니다 [4]. 현행 AOSP 는 `status` 를 프로토콜 버퍼(ProtoOutputStream)로 쓰고 [4], `stats` 파일은 동기화 통계를 담습니다. `stats` 의 바이트 단위 형식과 프로토콜 버퍼 필드 번호는 공개 자료가 없어 실제 파일로 확인해야 합니다.
+`status` 파일에는 동기화 대상마다 SyncStatusInfo 가 들어가고, 필드는 `lastSuccessTime`, `lastSuccessSource`, `lastFailureTime`, `lastFailureSource`, `lastFailureMesg`, `initialFailureTime`, `pending`, `initialize`, `periodicSyncTimes` 와 통계(`totalStats`, `todayStats`, `yesterdayStats`)입니다 [4]. 현행 AOSP 는 `status` 를 프로토콜 버퍼(ProtoOutputStream)로 쓰고 [4], `stats` 파일은 동기화 통계를 담습니다. `stats` 의 바이트 단위 형식과 프로토콜 버퍼 필드 번호는 실제 파일을 열어 바이트를 보고 확인합니다.
 
 ## 설정 키와 패키지
 
-`settings` 세 영역에는 구글이나 계정·동기화와 관련된 이름의 키가 있을 수 있습니다. 키가 있다는 사실 말고, 값의 뜻을 밝힌 공개 자료는 없습니다.
+`settings` 세 영역에는 구글이나 계정·동기화와 관련된 이름의 키가 있을 수 있습니다. 키 이름만으로는 값의 뜻을 단정할 수 없습니다.
 
 | 영역 | 키 | 알려진 것 |
 |---|---|---|
 | secure | `com.google.android.gms.tapandpay.oobe.OOBE_PHENOTYPE_STATUS`, `com.google.android.gms.tapandpay.tokenization.CACHED_BACKUP_STATUS` | 키 이름만 |
 | global | `gms_checkin_timeout_min`, `master_sync_status`, `synced_account_name` | 키 이름만. `synced_account_name` 이 구글 계정을 가리키는지 삼성 계정을 가리키는지는 실제 기기에서 확인 |
-| system | `contact_default_account`, `sync_disabled_accounts_with_hash` | 키 이름만. 뜻은 공개 자료 없음 |
+| system | `contact_default_account`, `sync_disabled_accounts_with_hash` | 키 이름만 |
 
 `dumpsys package` 의 Known Packages 에는 Setup Wizard 로 `com.google.android.setupwizard`, Configurator 로 `com.google.android.gms`, Verifier 로 `com.android.vending` 이 나올 수 있고, `/sdcard/Android/media/` 아래에는 `com.google.android.gms` 폴더가 있을 수 있습니다. 설정 키를 읽는 법은 [설정 값 (Settings Global·Secure·System)](../settings.md) 페이지에 있습니다.
 
@@ -77,7 +77,7 @@ nav_order: 340
 |---|---|---|
 | 계정 DB 의 구글 계정 행 | 확보 시점에 그 사용자 공간에 이 계정이 등록되어 있었다는 것 | 언제 추가했는지, 누가 썼는지 |
 | `accounts.xml` 의 `authority` | 이 계정과 동기화 대상 조합에 동기화 설정이 있었고, 켜져 있었는지 | 무엇을 주고받았는지 |
-| `status` 의 성공·실패 시각 | 그 시각에 이 조합의 동기화가 성공하거나 실패했다는 기록이 있다는 것 | 사람이 직접 동기화를 시작했는지(`*Source` 값의 뜻은 공개 자료 없음) |
+| `status` 의 성공·실패 시각 | 그 시각에 이 조합의 동기화가 성공하거나 실패했다는 기록이 있다는 것 | 사람이 직접 동기화를 시작했는지(`*Source` 값만으로는 단정할 수 없음) |
 | 설정 키 이름 | 그 키가 설정에 있다는 것 | 키의 뜻, 계정 가입이나 로그인 여부 |
 
 보고서에는 "이 시각에 이 계정과 연락처 제공자 조합의 동기화가 성공한 기록이 있다" 처럼 쓰고, "이 시각에 연락처를 올렸다" 처럼 기록보다 넓게 쓰지 않습니다.
@@ -88,7 +88,7 @@ nav_order: 340
 
 ## 함정과 한계
 
-GMS 내부 DB 는 공식 자료가 없으니, 다른 도구 결과를 옮길 때도 실물 파일에서 한 번 더 확인합니다. `synced_account_name` 처럼 이름만 보고 구글 계정 설정이라고 단정하기 쉬운 키도 어느 계정을 가리키는지 실제 기기에서 확인합니다.
+GMS 내부 DB 는 다른 도구 결과를 옮길 때도 실물 파일에서 한 번 더 확인합니다. `synced_account_name` 처럼 이름만 보고 구글 계정 설정이라고 단정하기 쉬운 키도 어느 계정을 가리키는지 실제 기기에서 확인합니다.
 
 `status` 의 필드는 마지막 성공·실패 시각과 통계라서 지난 동기화를 한 건씩 다시 따라가려면 다른 기록이 필요하고, 기기를 초기화하거나 계정을 지운 뒤의 모습은 [초기화 흔적 (Factory Reset)](../factory-reset.md) 과 계정 DB 의 변경 기록을 함께 봅니다. 서버 쪽에 남은 기록은 [클라우드 데이터 (Google Takeout 등)](../../../03-techniques/acquisition/cloud-data.md) 절차로 따로 확보합니다.
 

@@ -20,7 +20,7 @@ SRUM 의 에너지 사용 표에는 노트북이 전원에 꽂혀 있었는지, 
 
 배터리 열의 이름(DesignedCapacity·FullChargedCapacity·CycleCount)은 배터리 드라이버가 돌려주는 `BATTERY_INFORMATION` 구조의 멤버 이름과 같습니다. 이 구조의 용량 단위는 mWh 입니다[3]. 배터리가 상대 단위(BATTERY_CAPACITY_RELATIVE)로 보고하면 단위가 없습니다.
 
-이름이 비슷한 에너지 추정 공급자 (Energy Estimation Provider, `eeprov.dll`)도 있습니다. 이 공급자는 앱별 에너지 추정값을 `{DA73FB89-2BEA-4DDC-86B8-6E048C6DA477}` 표의 이진 열(BinaryData)에 넣는데, 이 이진 값의 구조는 공개 명세에 없습니다. 이 페이지는 에너지 사용 공급자의 두 표만 다룹니다.
+이름이 비슷한 에너지 추정 공급자 (Energy Estimation Provider, `eeprov.dll`)도 있습니다. 이 공급자는 앱별 에너지 추정값을 `{DA73FB89-2BEA-4DDC-86B8-6E048C6DA477}` 표의 이진 열(BinaryData)에 넣습니다. 이 페이지는 에너지 사용 공급자의 두 표만 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -28,7 +28,7 @@ SRUM 의 에너지 사용 표에는 노트북이 전원에 꽂혀 있었는지, 
 
 | Windows | 두 표 | 근거 |
 |---|---|---|
-| 8·8.1 | 공개 자료 없음 | 공개 명세의 Windows 8 부분이 비어 있습니다 |
+| 8·8.1 | 실제 파일에서 두 표가 있는지 확인합니다 | — |
 | 10 | 있습니다. 열은 아래 구조 표와 같습니다 | libyal 명세 |
 | 11 25H2 (빌드 26200) | 있습니다. 두 표 모두 끝에 `BatteryCount`·`BatteryChargeLimited` 열이 더 있습니다 | 노트북 한 대의 기록 |
 | Server 2019 | 새로 설치한 한 대에서 두 표가 없었습니다 | Harrison 의 시험 |
@@ -52,7 +52,7 @@ SRUM 의 에너지 사용 표에는 노트북이 전원에 꽂혀 있었는지, 
 | FullChargedCapacity | 32비트 정수 | 지금 가득 충전했을 때의 용량 (mWh) |
 | ChargeLevel | 32비트 정수 | 그 순간 남은 용량 (mWh) |
 | CycleCount | 32비트 정수 | 충방전 횟수. 배터리가 세지 않으면 0 |
-| ConfigurationHash | 64비트 정수 | 뜻이 공개 문서에 없습니다 |
+| ConfigurationHash | 64비트 정수 | 뜻이 정해져 있지 않아 값만 옮깁니다 |
 | BatteryCount·BatteryChargeLimited | 32비트 정수 | Windows 11 25H2 에 더 있는 열. Windows 11 노트북에서는 1 과 0 이었습니다 |
 
 EventTimestamp 는 명세에 64비트 정수로만 나와 있고[1], 공개 도구들은 이 값을 FILETIME 으로 읽습니다. Windows 11 노트북에서도 FILETIME 으로 푼 값이 같은 순간의 이벤트 로그 시각과 1초 안팎으로 맞았습니다.
@@ -72,15 +72,15 @@ AutoIncId·TimeStamp·AppId·UserId 와 배터리 열(DesignedCapacity·FullChar
 | ActiveDcTime | 배터리로 켜져 있던 시간 |
 | CsDcTime | 배터리로 대기하던 시간 |
 | ActiveDischargeTime·CsDischargeTime | Windows 11 노트북의 12행에서는 모두 각각 ActiveDcTime·CsDcTime 과 같습니다 |
-| ActiveEnergy·CsEnergy | 쓴 에너지로 보입니다. 단위는 공개 자료에 없습니다 |
+| ActiveEnergy·CsEnergy | 쓴 에너지로 보입니다. 단위는 알 수 없습니다 |
 
-열 이름의 Cs 는 연결 대기 (Connected Standby)를 줄인 것으로 보입니다. 공개 문서에 풀이는 없습니다.
+열 이름의 Cs 는 연결 대기 (Connected Standby)를 줄인 것으로 보입니다.
 
 Windows 11 노트북에서 장기 표 행은 약 7일 간격입니다. 네 시간 열을 더하면 행 간격을 초로 센 값과 거의 같으므로, 시간 열의 단위는 초로 보입니다. 다만 두 주 간격으로 떨어진 행은 합이 간격보다 클 수 있습니다. ActiveEnergy 를 mWh 로 보고 ActiveDcTime 으로 나누면 평균 10~24 W 이지만, 같은 계산을 CsEnergy 에 하면 0.3~63 W 로 크게 흩어집니다. 그래서 두 에너지 열의 단위는 알 수 없습니다.
 
 ### 상태 전환 값 읽기
 
-StateTransition 의 뜻은 공개 명세에 없습니다. 아래 뜻은 Windows 11 노트북의 기록을 같은 기기의 이벤트 로그와 맞춰 읽은 해석입니다. 결론 문장에 쓰기 전에 같은 기기의 이벤트 로그로 다시 확인합니다.
+StateTransition 의 뜻은 정해져 있지 않습니다. 아래 뜻은 Windows 11 노트북의 기록을 같은 기기의 이벤트 로그와 맞춰 읽은 해석입니다. 결론 문장에 쓰기 전에 같은 기기의 이벤트 로그로 다시 확인합니다.
 
 값은 두 바이트로 읽습니다. 낮은 바이트(파일에서 첫 바이트)가 이전 상태이고, 둘째 바이트가 지금 상태입니다.
 
@@ -90,7 +90,7 @@ StateTransition 의 뜻은 공개 명세에 없습니다. 아래 뜻은 Windows 
 | 2 | 배터리, 켜짐 |
 | 3 | 전원 연결, 대기 |
 | 4 | 배터리, 대기 |
-| 0 | 뜻이 알려져 있지 않습니다 |
+| 0 | 뜻을 단정할 수 없습니다 |
 
 예를 들어 `0x0201` 은 1 에서 2 로 바뀐 것입니다. 켜진 채로 전원이 빠진 순간입니다. `0x0301` 은 전원에 꽂힌 채 대기로 들어간 순간이고, `0x0103` 은 거기서 깨어난 순간입니다.
 
@@ -148,7 +148,7 @@ Windows 11 노트북의 기본 표에는 행 3,210개에 TimeStamp 값이 1,415�
 - **두 표를 합치는 도구가 있습니다.** SrumECmd 는 장기 표와 기본 표를 한 목록으로 합칩니다[6]. 번호가 겹치면 기본 표 행의 번호를 바꿉니다. 결과의 번호를 원래 AutoIncId 로 믿지 말고 어느 표의 행인지 확인합니다.
 - **새 열을 빠뜨리는 도구가 있습니다.** BatteryCount·BatteryChargeLimited 는 libyal 명세와 SrumECmd 소스(2026년 9월 master)에 없습니다. 열 이름을 정해 두고 읽는 도구는 새 열을 내놓지 않습니다.
 - **빈 번호를 삭제로 단정하지 않습니다.** Windows 11 노트북의 기본 표는 AutoIncId 가 1,408 부터 시작했고, 그 뒤로도 빈 번호가 220군데 있었습니다. 장기 표는 홀수 번호만 있었습니다.
-- **보관 기간이 짧습니다.** 보관 기간은 공식 문서에 없습니다. 기본 설정으로 계산하면 기본 표는 60일, 장기 표는 1,820일(7일 × 260)이지만[7], Windows 11 노트북에는 기본 표 약 60일, 장기 표 약 13주 치만 남아 있었습니다. 장기 표가 계산보다 짧은 이유는 알려져 있지 않습니다. 오래된 사건은 장기 표의 주간 합계로만 남을 수 있습니다.
+- **보관 기간이 짧습니다.** 보관 기간은 공식 문서에 없습니다. 기본 설정으로 계산하면 기본 표는 60일, 장기 표는 1,820일(7일 × 260)이지만[7], Windows 11 노트북에는 기본 표 약 60일, 장기 표 약 13주 치만 남아 있었습니다. 오래된 사건은 장기 표의 주간 합계로만 남을 수 있습니다.
 - **압수 이미지의 SRUDB.dat 는 대부분 비정상 종료 상태입니다.** 이미지 안의 로그가 끊겨 복구가 안 되는 경우가 있습니다. 손상 DB 는 도구마다 행 수가 달라서, 같은 표에서 1,612행과 1,742행이 나온 사례가 있습니다. 사본에서 작업하고 두 가지 이상 방식으로 열어 비교합니다. [트랜잭션 로그와 비정상 종료 상태](../../../01-foundations/database-log-formats/extensible-storage-engine/edb-log-dirty-shutdown.md)와 [도구 결과 교차 검증](../../../03-techniques/reporting/tool-validation.md)을 봅니다.
 
 ## 직접 분석해 보기

@@ -12,11 +12,11 @@ nav_order: 1380
 
 통화 기록 DB는 걸거나 받은 통화 한 건마다 `ZCALLRECORD` 표에 행을 하나 만듭니다 [1][2]. 같은 DB가 iOS와 macOS 양쪽에 있고 [2], iOS 추출본을 읽는 공개 도구 iLEAPP도 같은 표를 읽습니다 [1].
 
-행 하나에는 통화가 시작된 시각과 길이, 상대 번호나 주소, 이쪽에서 건 통화인지 걸려 온 통화인지, 받았는지, 어떤 종류의 통화였는지, 어떻게 끊겼는지가 함께 담깁니다 [1][2]. 다만 맥에서 어떤 경로의 통화가 이 DB에 행으로 남는지를 밝힌 공개 자료는 없습니다. 맥에서 직접 건 FaceTime 통화, 아이폰으로 온 전화를 맥에서 받은 통화, 아이폰의 통화 기록이 iCloud로 넘어온 행이 각각 남는지와 그 조건은 실제 기기에서 따로 확인해야 합니다.
+행 하나에는 통화가 시작된 시각과 길이, 상대 번호나 주소, 이쪽에서 건 통화인지 걸려 온 통화인지, 받았는지, 어떤 종류의 통화였는지, 어떻게 끊겼는지가 함께 담깁니다 [1][2]. 다만 맥에서 직접 건 FaceTime 통화, 아이폰으로 온 전화를 맥에서 받은 통화, 아이폰의 통화 기록이 iCloud로 넘어온 행이 각각 이 DB에 남는지와 그 조건은 실제 기기에서 따로 확인해야 합니다.
 
 ## 위치와 버전별 차이
 
-파일 이름은 `CallHistory.storedata` 입니다 [2]. 맥의 전체 경로로 `~/Library/Application Support/CallHistoryDB/CallHistory.storedata` 가 흔히 알려져 있지만 이를 밝힌 공개 분석 자료는 없어서, 수집한 이미지 전체에서 파일 이름으로 찾은 뒤 실제 경로를 보고서에 적습니다.
+파일 이름은 `CallHistory.storedata` 입니다 [2]. 맥의 전체 경로로 `~/Library/Application Support/CallHistoryDB/CallHistory.storedata` 가 흔히 알려져 있으므로 이 경로부터 보되, 수집한 이미지 전체에서 파일 이름으로 찾은 뒤 실제 경로를 보고서에 적습니다.
 
 iOS 추출본에서는 아래 경로 패턴에 같은 DB가 있습니다 [1]. 아이폰 백업이나 추출본을 맥과 함께 볼 때는 [아이폰·아이패드 연결 (iOS Devices)](../external-devices/ios-devices/index.md)도 봅니다.
 
@@ -32,7 +32,7 @@ APOLLO 모듈이 적은 버전 목록은 `8,9,10,11,12,13,10.13,10.14,10.15,10.1
 | macOS 10.13 ~ 10.16 | APOLLO 모듈의 버전 목록에 있습니다 [2] |
 | macOS 11 이후 | 모듈 목록에 따로 없어서, 표와 열이 같은지는 실제 데이터로 확인합니다 |
 | iOS 8 ~ 14 | APOLLO 모듈의 버전 목록에 있습니다 [2] |
-| iOS 26 | 열 4개(`ZAUTOANSWEREDREASON`, `ZCOMMUNICATIONTRUSTSCORE`, `ZORIGINATINGDEVICENAME`, `ZBLOCKEDBYEXTENSIONNAME`)가 늘었습니다 [1]. macOS 26에 같은 열이 생겼는지는 알려져 있지 않습니다 |
+| iOS 26 | 열 4개(`ZAUTOANSWEREDREASON`, `ZCOMMUNICATIONTRUSTSCORE`, `ZORIGINATINGDEVICENAME`, `ZBLOCKEDBYEXTENSIONNAME`)가 늘었습니다 [1]. macOS 26에 같은 열이 생겼는지는 `.schema ZCALLRECORD` 로 확인합니다 |
 
 ## 구조
 
@@ -52,7 +52,7 @@ APOLLO 모듈이 적은 버전 목록은 `8,9,10,11,12,13,10.13,10.14,10.15,10.1
 | `ZISO_COUNTRY_CODE`, `ZLOCATION` | 나라 코드와 지역 [1][2] |
 | `ZFACE_TIME_DATA` | 데이터 양(바이트 수), KB·MB 같은 단위로 바꿔 읽습니다 [1]. 맥 DB에서도 같은 뜻인지는 실제 데이터로 확인합니다 |
 
-`ZCALLTYPE` 값의 뜻은 iOS 기준이고 [1], 맥 DB에서도 같은 값을 쓰는지는 알려져 있지 않습니다. `ZSERVICE_PROVIDER` 에 실제로 어떤 철자의 문자열이 들어가는지도 알려져 있지 않아서, 실제 데이터에서 나온 값을 그대로 옮겨 적습니다.
+`ZCALLTYPE` 값의 뜻은 iOS 기준이라 [1], 맥 DB에서는 뜻을 단정하지 않고 숫자를 그대로 함께 적습니다. `ZSERVICE_PROVIDER` 는 실제 데이터에서 나온 문자열을 철자 그대로 옮겨 적습니다.
 
 `ZDISCONNECTED_CAUSE` 는 앱에 따라 뜻이 달라집니다. 일반 앱에서는 0이 정상 종료, 6이 거절입니다. WhatsApp 행에서는 2가 거절이고, 6은 통화 길이와 방향에 따라 길이가 0이 아니면 정상 종료, 건 통화면 부재 중이거나 거절, 나머지는 부재 중입니다 [1]. 그래서 이 열은 `ZSERVICE_PROVIDER` 와 함께 읽습니다.
 
@@ -62,7 +62,7 @@ APOLLO가 macOS 쿼리에서만 `ZADDRESS` 를 16진으로 찍는 것으로 보�
 
 **증명하는 것.** 행이 있으면 이 DB에 그 시각에 시작해 그만큼 이어진 통화가 기록되어 있고, 상대 주소와 방향(`ZORIGINATED`), 응답 여부(`ZANSWERED`)가 그렇게 적혀 있다는 사실을 보여 줍니다. `ZCALLTYPE` 과 `ZSERVICE_PROVIDER` 를 함께 보면 전화였는지 FaceTime이었는지, 영상이었는지 음성이었는지를 기록 수준에서 가를 수 있습니다.
 
-**증명하지 못하는 것.** 통화에서 무슨 말이 오갔는지는 이 DB에 없습니다. 통화할 때 맥 앞에 누가 있었는지도 이 기록만으로는 알 수 없어서, 로그인 기록과 사용 시간을 따로 봅니다. 행이 이 맥에서 일어난 통화인지, 다른 기기의 기록이 넘어온 것인지를 가르는 방법은 알려져 있지 않고, iOS 26에서 생긴 `ZORIGINATINGDEVICENAME` 이 이름대로 걸었던 기기를 가리키는지도 알려지지 않았습니다.
+**증명하지 못하는 것.** 통화에서 무슨 말이 오갔는지는 이 DB에 없습니다. 통화할 때 맥 앞에 누가 있었는지도 이 기록만으로는 알 수 없어서, 로그인 기록과 사용 시간을 따로 봅니다. 이 DB만으로는 행이 이 맥에서 일어난 통화인지, 다른 기기의 기록이 넘어온 것인지 구분할 수 없습니다. iOS 26에서 생긴 `ZORIGINATINGDEVICENAME` 도 이름만 보고 걸었던 기기라고 단정하지 않습니다.
 
 `ZDURATION` 이 0인 행을 곧바로 "받지 않은 통화" 로 적지 않습니다. 응답 여부는 `ZANSWERED` 에, 끊긴 이유는 `ZDISCONNECTED_CAUSE` 에 따로 나와 있으니 세 열을 함께 읽습니다.
 
@@ -76,9 +76,9 @@ APOLLO가 macOS 쿼리에서만 `ZADDRESS` 를 16진으로 찍는 것으로 보�
 
 ## 함정과 한계
 
-맥 쪽 공개 자료는 적습니다. APOLLO 모듈에는 macOS 11 이후가 따로 없고, 열 값의 뜻은 대부분 iOS 기준인 iLEAPP에서 왔으니, 최신 macOS 데이터에서는 `.schema ZCALLRECORD` 로 열 목록부터 확인하고 모르는 값은 풀지 않고 숫자 그대로 적습니다.
+APOLLO 모듈에는 macOS 11 이후가 따로 없고, 열 값의 뜻은 대부분 iOS 기준인 iLEAPP에서 왔으니, 최신 macOS 데이터에서는 `.schema ZCALLRECORD` 로 열 목록부터 확인하고 모르는 값은 풀지 않고 숫자 그대로 적습니다.
 
-통화 기록을 지웠을 때 이 DB에 무엇이 남는지는 알려져 있지 않습니다. WAL 파일과 빈 페이지에 남는 잔재를 찾는 일반 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)에서 다루고, 그 방법이 이 DB에서 통하는지는 분석 대상마다 확인합니다. FaceTime 앱의 설정 plist와 통화 관련 통합 로그 서브시스템도 실제 데이터로 확인해야 합니다.
+통화 기록을 지웠을 때 이 DB에 무엇이 남는지는 WAL 파일과 빈 페이지를 살펴 찾아봅니다. 잔재를 찾는 일반 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md)에서 다루고, 그 방법이 이 DB에서 통하는지는 분석 대상마다 확인합니다. FaceTime 앱의 설정 plist와 통화 관련 통합 로그 서브시스템도 실제 데이터로 확인해야 합니다.
 
 ## 직접 분석해 보기
 

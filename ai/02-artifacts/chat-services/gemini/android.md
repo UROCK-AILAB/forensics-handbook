@@ -15,7 +15,7 @@ Android 의 Gemini 는 따로 받은 Gemini 앱(패키지 `com.google.android.ap
 
 Gemini 앱을 받아도 Gemini 는 Google 앱이 실행하고(hosted by the Google app), 위치·마이크·카메라·알림 권한도 Google 앱 설정에서 관리합니다 [1]. 공개 코드에서도 같은 구조가 보입니다. 기본 어시스턴트를 바꿔 주는 앱 SwitchAI 는 Gemini 를 열 때 Gemini 앱의 `com.google.android.apps.bard.shellapp.BardEntryPointActivity` 를 부르고, 루트 권한 설정을 켜면 Google 앱 패키지 안의 액티비티를 곧바로 부릅니다 [4]. Gemini 앱 쪽 액티비티 이름에 "shellapp" 이 들어간 점도 Google 앱이 Gemini 를 실행하는 구조와 들어맞습니다.
 
-ChatGPT 와 Copilot 이 대화를 기기에 평문으로 두는 것과 달리, Gemini 는 대화·브라우저 데이터·이미지를 모두 클라우드에 두고 Google Takeout 으로 받을 수 있습니다 [3]. 세 앱 모두 쓰는 플랫폼에 따라 대화를 되살릴 수 있지만, Gemini 대화를 기기와 Takeout 가운데 어디서 되살렸는지는 공개 자료에 없습니다 [3]. 그래서 대화 내용은 [계정 데이터 내보내기](export.md)나 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인하고, 기기에서는 설치·설정·실행 흔적을 봅니다. 서버 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 정리했습니다.
+ChatGPT 와 Copilot 이 대화를 기기에 평문으로 두는 것과 달리, Gemini 는 대화·브라우저 데이터·이미지를 모두 클라우드에 두고 Google Takeout 으로 받을 수 있습니다 [3]. 세 앱 모두 쓰는 플랫폼에 따라 대화를 되살릴 수 있습니다 [3]. 그래서 대화 내용은 [계정 데이터 내보내기](export.md)나 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인하고, 기기에서는 설치·설정·실행 흔적을 봅니다. 서버 보관 기간과 삭제 규칙은 [Gemini](index.md) 허브에 정리했습니다.
 
 Google 앱을 기본 어시스턴트 앱으로 둔 휴대폰에서는 Gemini 를 모바일 어시스턴트로 고를 수 있고, 고르면 Google Assistant 대신 Gemini 가 답합니다 [2]. 휴대폰이 아닌 기기에서는 "Hey Google" 에 계속 Google Assistant 가 답합니다 [2]. 여는 길도 여럿이라 전원 버튼 길게 누르기, "Hey Google", 화면 아래 모서리에서 위로 쓸기, Gemini 앱을 직접 여는 방법이 있습니다 [2].
 
@@ -41,7 +41,7 @@ Google 앱 폴더 `/data/data/com.google.android.googlequicksearchbox/` 안에�
 
 ## 구조
 
-Gemini 전용 파일 구조는 공개된 자료가 없습니다. 대신 Google 앱 쪽에는 ALEAPP 이 읽는 파일이 두 종류 있고, 검색 위젯과 어시스턴트의 검색 세션, 최근 검색어를 담습니다 [6][7]. 두 분석기 모두 Gemini 를 언급하지 않아서, 이 파일에 Gemini 대화가 들어가는지는 실제 데이터로 따로 확인합니다.
+Gemini 전용 파일 구조는 실제 기기의 앱 폴더 목록으로 확인합니다. Google 앱 쪽에는 ALEAPP 이 읽는 파일이 두 종류 있고, 검색 위젯과 어시스턴트의 검색 세션, 최근 검색어를 담습니다 [6][7]. 두 분석기 모두 Gemini 를 언급하지 않아서, 이 파일에 Gemini 대화가 들어가는지는 실제 데이터로 따로 확인합니다.
 
 | 경로(Google 앱 폴더 안) | 형식 | ALEAPP 이 꺼내는 것 | 근거 |
 |---|---|---|---|
@@ -100,7 +100,7 @@ BA F1 C8 F8 03 09 0A 07 12 05 68 65 6C 6C 6F  필드 132269847 > 1 > 2, "hello" 
 
 ## 실습
 
-Gemini 흔적을 담은 공개 Android 시험 이미지는 알려진 것이 없어서, 시험용 기기와 계정으로 아래 질문을 풀어 봅니다.
+시험용 기기와 계정으로 아래 질문을 풀어 봅니다.
 
 1. Gemini 앱을 설치하고 한 번 대화한 뒤 Gemini 앱 폴더와 Google 앱 폴더 가운데 어느 쪽 파일의 수정 시각이 바뀝니까?
 2. 어시스턴트를 Gemini 로 바꾸기 전과 후에 달라지는 설정 파일이 있습니까?

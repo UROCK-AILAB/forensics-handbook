@@ -14,7 +14,7 @@ nav_order: 1470
 
 DB를 여는 키는 사용자 설정 파일(userConfig)에 두고 [3], 이 설정 파일은 데이터 폴더 아래 `config.json` 입니다 [2][6]. 키를 두는 방식은 두 가지이고, 앱이 옛 방식에서 새 방식으로 스스로 옮깁니다 [3].
 
-일렉트론의 `safeStorage` 는 맥에서 암호화 키를 키체인 (Keychain) 에 두고, 이 키는 다른 앱이 사용자 허락 없이 불러올 수 없게 저장됩니다 [1]. 맥에서 `safeStorage` 가 제대로 동작하려면 앱이 코드 서명돼 있어야 하고 [1], 키 저장 백엔드를 고르는 `getSelectedStorageBackend()` 는 리눅스 전용이라 맥은 키체인, 윈도우는 DPAPI로 정해져 있습니다 [1]. `safeStorage` 가 만드는 키체인 항목의 이름(서비스·계정 이름)은 공식 문서에 나오지 않아서, 시그널의 항목 이름은 실제 키체인에서 확인합니다. 키체인의 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에서 다룹니다.
+일렉트론의 `safeStorage` 는 맥에서 암호화 키를 키체인 (Keychain) 에 두고, 이 키는 다른 앱이 사용자 허락 없이 불러올 수 없게 저장됩니다 [1]. 맥에서 `safeStorage` 가 제대로 동작하려면 앱이 코드 서명돼 있어야 하고 [1], 키 저장 백엔드를 고르는 `getSelectedStorageBackend()` 는 리눅스 전용이라 맥은 키체인, 윈도우는 DPAPI로 정해져 있습니다 [1]. `safeStorage` 가 만드는 키체인 항목의 이름(서비스·계정 이름)은 실제 키체인에서 확인합니다. 키체인의 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -26,7 +26,7 @@ DB를 여는 키는 사용자 설정 파일(userConfig)에 두고 [3], 이 설�
 | 사용자 설정 파일 | 데이터 폴더 아래 `config.json` [6] |
 | 첨부 파일 폴더 | 데이터 폴더 아래 `attachments.noindex` [7]. `avatars.noindex`, `stickers.noindex`, `drafts.noindex`, `downloads.noindex` 폴더도 있습니다 [7] |
 
-DB 키를 두는 방식은 시그널 데스크톱 버전에 따라 다르고, 새 방식이 들어온 버전은 공개 자료가 없습니다. macOS 10.15 Catalina 이후 맥 버전에 따라 경로가 바뀐다는 공개 자료도 없습니다.
+DB 키를 두는 방식은 시그널 데스크톱 버전에 따라 다르므로, 기기마다 설정 파일에 어느 필드가 있는지로 방식을 가립니다.
 
 | 방식 | 설정 파일의 필드 | 내용 [3] |
 |---|---|---|
@@ -90,7 +90,7 @@ encryptedKey 칸의 16진 문자열 (예시, 앞부분만)
 a1 b2 c3 d4 e5 f6 ...
 ```
 
-문자열 길이를 2로 나누면 암호문 바이트 수가 나오고, 그 바이트의 내부 구조는 공식 문서에 나오지 않습니다. 이어서 `sql/db.sqlite` 의 첫 줄을 열어 SQLite 파일 머리 모양인지 봅니다. 머리 모양은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에 있고, 그 모양이 보이지 않으면 파일 전체가 암호화된 정황으로 적어 두되 암호 방식은 확인되지 않았다고 함께 씁니다.
+문자열 길이를 2로 나누면 암호문 바이트 수가 나옵니다. 이어서 `sql/db.sqlite` 의 첫 줄을 열어 SQLite 파일 머리 모양인지 봅니다. 머리 모양은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에 있고, 그 모양이 보이지 않으면 파일 전체가 암호화된 정황으로 적어 두되 암호 방식은 확인되지 않았다고 함께 씁니다.
 
 ### 공개 도구로 한 번
 

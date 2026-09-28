@@ -40,7 +40,7 @@ nav_order: 2140
 
 - 최신 버전에서도 로컬 녹화 기본 위치가 `문서\Zoom` 인지는 실제 데이터로 확인해야 합니다.
 - 사용자가 녹화 위치를 바꾸면 그 위치가 어디에 적히는지도 실제 데이터로 확인합니다.
-- 관리자용 설치본(MSI)이 `Program Files` 에 깔리는지, 그때 데이터 폴더가 달라지는지도 공개 자료가 없습니다.
+- 관리자용 설치본(MSI)이 `Program Files` 에 깔리는지, 그때 데이터 폴더가 달라지는지도 실제 설치 폴더로 확인합니다.
 
 ### 사용자별 설치본
 
@@ -77,7 +77,7 @@ nav_order: 2140
 
 - "SQLite 머리" 는 첫 16바이트가 `SQLite format 3\0` 인 파일입니다.
 - 나머지 DB 는 첫 바이트부터 규칙 없는 값이어서 파일 전체를 암호화한 모양입니다. 이름에 `enc` 가 없는 `telemetrydata.db`, `local_dns_cache.db` 도 암호화돼 있습니다.
-- 암호 방식은 공개 자료에 없습니다. SQLite 파일을 통째로 암호화하는 대표 방식은 [암호화된 SQLite (SQLCipher)](../../01-foundations/database-log-formats/sqlite/sqlcipher.md) 에서 다룹니다.
+- SQLite 파일을 통째로 암호화하는 대표 방식은 [암호화된 SQLite (SQLCipher)](../../01-foundations/database-log-formats/sqlite/sqlcipher.md) 에서 다룹니다.
 - 모든 DB 옆에 크기가 0 인 `-journal` 파일이 있고 `-wal`·`-shm` 은 없으므로, 롤백 저널 (rollback journal) 방식으로 봅니다. 저널 파일의 뜻은 [WAL과 롤백 저널](../../01-foundations/database-log-formats/sqlite/wal-journal-shm.md) 에서 다룹니다.
 - 설정 파일 `Zoom.us.ini`, `client.config`, `viper.ini`, `transcoding.ini`, `SSBAvatarCacheIndex.ini` 도 같은 폴더에 있습니다.
 
@@ -123,7 +123,7 @@ nav_order: 2140
 | `data\users\<ID>\` | `data.db` 가 있습니다. 이름과 달리 암호화돼 있습니다. |
 | `data\ConfAvatar\` | `conf_avatar_<32자 16진수>_<숫자>` 파일이 438개 있습니다. 회의 참가자 사진 캐시일 가능성이 있습니다. |
 | `data\VirtualBkgnd_Default`, `VirtualBkgnd_Custom`, `VirtualBkgnd_Video` | 가상 배경 폴더입니다. 사용자가 올린 배경은 `VirtualBkgnd_Custom` 에 들어갈 것으로 보입니다. |
-| `data\VideoFilter`, `PSWallpaper`, `WaitingRoom` 등 | 이름 밖의 내용은 공개 자료가 없습니다. |
+| `data\VideoFilter`, `PSWallpaper`, `WaitingRoom` 등 | 폴더를 열어 내용을 확인합니다. |
 
 > 그림 자리: `%APPDATA%\Zoom\data` 폴더 트리 — 평문 DB, 암호화 DB, 계정 폴더, 설정 파일을 색으로 나눠 표시
 
@@ -138,7 +138,7 @@ nav_order: 2140
 | `viper.ini` | `[APE]` 절에 16진수로 적은 ASCII 문자열(제조사·모델)과 장치 번호가 있습니다 | 카메라인지 오디오 장치인지는 실제 기기에서 확인합니다 |
 | `transcoding.ini` | `[All]` 절에 `SaveAllTempRecordFiles=0` 이 있습니다 | — |
 
-- `LastRunTime` 의 단위는 공개 자료에 없습니다.
+- `LastRunTime` 의 단위는 아래 "시각 해석" 의 방법으로 확인합니다.
 
 ### DB 키 보호 — win_osencrypt_key
 
@@ -150,7 +150,7 @@ nav_order: 2140
 
 DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면 그 사용자의 DPAPI 마스터키를 풀 재료(사용자 암호 등)가 필요할 것으로 보입니다. DPAPI 일반 원리는 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
-이 값에서 DB 키를 만드는 방법과 암호 설정값은 공개 자료에 없습니다. 이 페이지는 키를 꺼내 DB 를 여는 절차를 다루지 않습니다.
+이 페이지는 키를 꺼내 DB 를 여는 절차를 다루지 않습니다.
 
 ## 증거로서 의미
 
@@ -165,8 +165,8 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 ### 증명하지 못하는 것
 
 - 회의에서 오간 말과 화면 내용: 위 흔적 가운데 이것을 담은 것은 로컬 녹화 파일뿐입니다.
-- 클라우드 녹화 내용: PC 에 남는지는 공개 자료가 없습니다.
-- 웹 브라우저로만 참가한 회의: 이 폴더에 남는지는 공개 자료가 없습니다. 브라우저 기록을 따로 봅니다([크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md)).
+- 클라우드 녹화 내용: PC 에 남는지는 시험 기기에서 재현해 확인합니다.
+- 웹 브라우저로만 참가한 회의: 이 폴더에 남는지는 시험 기기에서 재현해 확인합니다. 브라우저 기록을 따로 봅니다([크롬 계열 브라우저](../browsers/chrome-edge-whale/index.md)).
 - 평문 DB 행의 뜻: 열 이름으로 성격을 짐작할 뿐이고, 행 내용과 열의 뜻은 실제 데이터로 확인해야 합니다.
 - 회의 시각: DB 파일 수정 시각만으로는 말할 수 없습니다(아래 "시각 해석").
 
@@ -177,9 +177,8 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 
 ## 시각 해석
 
-- DB 에는 회의 참가 시각·메시지 보낸 시각 같은 열이 있습니다[2]. 시각 형식(단위·시간대)은 공개 자료에 없습니다.
-- 평문 DB 의 `start_time`·`end_time`·`metry_time`·`file_mtime_at_start` 형식도 공개 자료에 없습니다.
-- `Zoom.us.ini` `LastRunTime` 의 단위도 공개 자료에 없습니다.
+- DB 에는 회의 참가 시각·메시지 보낸 시각 같은 열이 있습니다[2]. 시각 형식(단위·시간대)은 DB 를 푼 뒤 확인합니다.
+- 평문 DB 의 `start_time`·`end_time`·`metry_time`·`file_mtime_at_start` 형식과 `Zoom.us.ini` `LastRunTime` 의 단위도 아래 방법으로 확인합니다.
 - 형식을 모르는 값은 자릿수로 초·밀리초·FILETIME 가운데 무엇인지 먼저 구분해 봅니다. 형식별 읽는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - 가린 결과는 프리페치의 실행 시각 같은 다른 기록과 맞춰 검증합니다.
 
@@ -205,7 +204,7 @@ DPAPI 일반 원리로 보면, 디스크 이미지만으로 이 값을 풀려면
 
 - 줌을 제거한 뒤 `data` 폴더가 남는지는 실제 데이터로 확인해야 합니다.
 - 폴더가 없어도 설치·실행 흔적은 [설치 프로그램](../system-account/uninstall.md), [프리페치](../execution/prefetch/index.md), [AmCache](../execution/amcache-hve/index.md) 에서 따로 찾습니다.
-- 사용자가 채팅을 지우면 DB 에 무엇이 남는지도 공개 자료가 없습니다.
+- 사용자가 채팅을 지우면 DB 에 무엇이 남는지도 시험 기기에서 재현해 확인합니다.
 - 파일 전체가 암호화돼 있으면 DB 의 빈 공간도 키 없이는 읽지 못합니다.
 
 ## 직접 분석해 보기
@@ -257,7 +256,7 @@ FROM process_metrics
 ORDER BY metry_time;
 ```
 
-- `metry_time` 의 단위는 공개 자료에 없습니다. 값을 그대로 적고, 해석은 따로 검증합니다.
+- `metry_time` 의 단위는 정해져 있지 않으므로 값을 그대로 적고, 해석은 따로 검증합니다.
 - `client.config`, `Zoom.us.ini` 는 텍스트 편집기로 엽니다. `[emoji.recent.` 로 시작하는 절 이름에서 JID 를 읽습니다.
 - 암호화된 DB 는 일반 SQLite 도구로 열리지 않습니다. 암호화된 증거를 다루는 일반 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에서 다룹니다.
 - 도구 결과는 몇 건이라도 헥스로 읽은 값과 맞춰 봅니다. 방법은 [도구 결과 교차 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.

@@ -14,7 +14,7 @@ nav_order: 340
 |---|---|---|---|
 | HFS+ 카탈로그의 파일·폴더 이름 | `HFSUniStr255` (UTF-16 코드 단위, 최대 255자) | 완전 분해한 정규 순서로 바꿔 저장 | [HFS+ 구조](../disk-volume/hfs-plus.md) |
 | APFS 디렉터리 항목 이름 | null 로 끝나는 UTF-8 | 받은 형태 그대로 저장, 정규화 무시 볼륨은 NFD 로 정규화한 이름의 해시를 키에 넣음 | [APFS 구조](../disk-volume/apfs/index.md) |
-| APFS 볼륨 이름 `apfs_volname` | null 로 끝나는 UTF-8 | 공개 자료 없음 | [APFS 구조](../disk-volume/apfs/index.md) |
+| APFS 볼륨 이름 `apfs_volname` | null 로 끝나는 UTF-8 | 실제 바이트로 확인 | [APFS 구조](../disk-volume/apfs/index.md) |
 
 파일 이름 말고 앱이 SQLite·plist 안에 저장한 문자열의 정규화 형태는 앱마다 다를 수 있어 실제 데이터로 확인해야 합니다.
 
@@ -105,7 +105,7 @@ APFS 디렉터리 항목 키가 해시를 담은 형태이면 `name_len_and_hash
 
 같은 이름이 도구마다 다르게 보일 수 있습니다. 어떤 도구는 이름을 NFC 로 바꿔 보여 주고 어떤 도구는 저장된 바이트 그대로 보여 주면, 두 도구의 결과를 문자열로 맞춰 볼 때 서로 없는 파일처럼 나옵니다. 도구 결과를 합치기 전에 한쪽 형태로 정규화하고, 어느 도구가 어떤 형태로 내놓는지는 [도구 검증](../../03-techniques/reporting/tool-validation.md) 방식으로 확인합니다.
 
-APFS 정규화 동작의 공식 설명은 2018년 FAQ 에 머물러 있고, 볼륨 이름 `apfs_volname` 의 정규화 여부와 앱 데이터 안 문자열의 형태는 공개 자료가 없습니다. 이런 곳에서 형태를 가정해야 하면 실제 바이트를 한 번 보고 정합니다.
+APFS 정규화 동작의 공식 설명은 2018년 FAQ 가 마지막입니다. 볼륨 이름 `apfs_volname` 의 정규화 여부와 앱 데이터 안 문자열의 형태는 실제 바이트를 한 번 보고 정합니다.
 
 ## 도구
 

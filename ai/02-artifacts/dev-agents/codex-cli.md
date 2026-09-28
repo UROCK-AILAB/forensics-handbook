@@ -119,7 +119,7 @@ TOML 형식이고, 조사에 쓰는 키는 다음과 같습니다[1][3].
 
 `[otel]` 의 `log_user_prompt` 는 기본이 `false` 라서 프롬프트 내용은 가려진 채 나가고, 켜야만 내용이 남습니다[1]. `[mcp_servers]` 의 `env` 나 `http_headers` 에 비밀 값이 그대로 적혀 있을 수 있으니 보고서에는 키 이름만 옮깁니다. MCP 전반은 [MCP 서버와 도구 호출 기록](mcp.md)에서 다룹니다.
 
-설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. `CODEX_HOME` 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양입니다. `skills/<이름>/<파일>.json` 에는 `files`, `files.SKILL.md`, `version` 키가 있고, 이 파일의 용도를 설명한 공개 문서는 없어서, 실제 기기에서는 어느 도구가 만든 파일인지 먼저 구분합니다.
+설정 스키마의 훅 이벤트는 `PermissionRequest`, `PostCompact`, `PostToolUse`, `PreCompact`, `PreToolUse`, `SessionEnd`, `SessionStart`, `Stop`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` 입니다[3]. 이벤트마다 `matcher` 와 `hooks` 목록을 두고, 목록 항목은 `type`(`command`, `prompt`, `agent`)과 `command`, `commandWindows`, `timeout`, `async` 등을 담습니다[3]. 이 스키마는 `config.toml` 안에 적는 훅을 설명합니다. `CODEX_HOME` 의 `hooks.json` 도 이벤트 아래 `matcher`(문자열)와 `hooks`(목록)를 두는 같은 모양입니다. `skills/<이름>/<파일>.json` 에는 `files`, `files.SKILL.md`, `version` 키가 있습니다. 이 파일은 용도가 정해져 있지 않으므로, 실제 기기에서는 어느 도구가 만든 파일인지 먼저 구분합니다.
 
 ### 구조화 로그 이벤트(OpenTelemetry)
 

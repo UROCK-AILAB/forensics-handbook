@@ -74,7 +74,7 @@ nav_order: 1080
 - **키가 있다고 실행 창을 썼다는 뜻이 아닙니다.** 값이 없는 키가 OS 설치 당일부터 있을 수 있습니다.
 - **값 이름순으로 읽지 않습니다.** 도구가 값을 이름순으로 보여 줄 수 있습니다. 순서는 늘 `MRUList` 로 읽습니다.
 - **로그 파일을 함께 수집합니다.** 주 하이브 파일만으로는 최신 상태가 아닐 수 있습니다. [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 를 따라 트랜잭션 로그를 함께 가져옵니다.
-- **정책과 설정 값을 함께 적어 둡니다.** `NoRun`·`ClearRecentDocsOnExit`·`NoRecentDocsHistory`·`Start_TrackProgs` 의 영향을 설명한 공개 자료는 없습니다. 분석 대상에 이 값이 있는지 보고서에 함께 적습니다.
+- **정책과 설정 값을 함께 적어 둡니다.** `NoRun`·`ClearRecentDocsOnExit`·`NoRecentDocsHistory`·`Start_TrackProgs` 가 이 키에 어떤 영향을 주는지는 시험 기기에서 값을 바꾸고 실행 창을 써 보며 확인합니다. 분석 대상에 이 값이 있는지 보고서에 함께 적습니다.
 - **지운 항목.** 사용자가 목록을 지웠을 수 있습니다. 지운 값은 하이브의 빈 셀, 트랜잭션 로그, 섀도 복사본에서 찾습니다. 찾는 법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 - **친 문자열이 곧 실행한 파일은 아닙니다.** 실행 창에는 폴더 경로나 주소도 칠 수 있습니다. 무엇을 열었는지는 다른 기록으로 확인합니다.
 

@@ -66,13 +66,13 @@ ExifTool 이 `docProps` 에서 뽑아 보여 주는 태그 가운데 조사에�
 | 문서 속성 | Application, AppVersion, Company, Template, Revision, Keywords, Subject, Category |
 | 보안 | DocSecurity |
 
-DocSecurity 는 숫자 값이고, ExifTool 은 0 = None, 1 = Password protected, 2 = Read-only recommended, 4 = Read-only enforced, 8 = Locked for annotations 로 풀어 보여 줍니다 [2]. 위 태그가 `docProps` 안 어느 XML 파일의 어떤 요소에서 오는지는 공개 자료에 나와 있지 않아서, 이 페이지에서는 ExifTool 태그 이름으로 적습니다.
+DocSecurity 는 숫자 값이고, ExifTool 은 0 = None, 1 = Password protected, 2 = Read-only recommended, 4 = Read-only enforced, 8 = Locked for annotations 로 풀어 보여 줍니다 [2]. 이 페이지에서는 위 태그를 ExifTool 태그 이름으로 적고, `docProps` 안 어느 XML 파일의 어떤 요소에서 오는지는 압축을 풀어 XML 파일을 열어 확인합니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** 문서 안에 적힌 작성자 이름, 날짜, 편집 통계, 작성 앱, 보안 설정을 보여 줍니다. OOXML 이면 처음 만든 사람으로 적힌 이름(Creator)과 마지막으로 고친 사람으로 적힌 이름(LastModifiedBy)을 나눠 볼 수 있고, Application·AppVersion 으로 어떤 앱이 저장했다고 적혀 있는지, Template·Company 로 어떤 서식과 조직 설정에서 나왔는지 단서를 얻습니다 [2]. Revision 과 TotalEditTime 은 문서를 몇 번 고쳤고 얼마나 편집했는지 적힌 값이고, 본문 길이와 함께 보면 작성 이력을 추정하는 데 씁니다 [2]. iWork 문서는 `DocumentIdentifier` 로 문서마다 고유 식별자를 적어 두고 [1], 두 파일의 식별자가 같으면 한 문서에서 갈라져 나온 사본일 가능성이 있어 살펴볼 만합니다. 미리보기 이미지가 패키지 맨 위에 따로 있어서 [1], 본문을 풀기 전에 문서 겉모습을 먼저 볼 수 있습니다.
 
-**증명하지 못하는 것.** Creator·LastModifiedBy 에 적힌 이름은 문서 안의 문자열이라서, 그 사람이 실제로 문서를 만들거나 고쳤다는 뜻은 아닙니다. 앱이 그 이름을 어디서 가져와 적는지는 공개 자료에 없습니다. 문서 안의 날짜도 파일 안에 적힌 값일 뿐이라서, 그 시각에 그 맥에서 문서를 저장했다는 것까지 보여 주지는 않습니다. `AnnotationAuthorStorage.iwa` 는 파일 이름만 보면 주석 작성자와 관련 있어 보이지만, 안에 무엇이 들어 있는지 공개된 분석 자료가 없어서 작성자 근거로 쓰지 않습니다.
+**증명하지 못하는 것.** Creator·LastModifiedBy 에 적힌 이름은 문서 안의 문자열이라서, 그 사람이 실제로 문서를 만들거나 고쳤다는 뜻은 아닙니다. 문서 안의 날짜도 파일 안에 적힌 값일 뿐이라서, 그 시각에 그 맥에서 문서를 저장했다는 것까지 보여 주지는 않습니다. `AnnotationAuthorStorage.iwa` 는 파일 이름만 보면 주석 작성자와 관련 있어 보이지만, 이름만으로는 안에 무엇이 들어 있는지 알 수 없으므로 작성자 근거로 쓰지 않습니다.
 
 보고서에는 "이 사람이 문서를 만들었다" 가 아니라 "이 문서의 속성에는 Creator 가 이 이름, CreateDate 가 이 값, Application 이 이 값으로 적혀 있다" 처럼 문서에 적힌 만큼만 씁니다.
 

@@ -121,7 +121,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | 12 | 설명 문장 | — |
 
 - 호출한 프로세스 필드에는 제3자 업데이트 도구의 실행 파일 이름도 찍힙니다. 어떤 프로그램이 Windows Update 를 불렀는지 이 필드에서 보입니다.
-- 1,264줄, 약 3주 반치(가장 오래된 줄 2026-08-30)만 남은 경우가 있습니다. 앞부분이 잘려 나가는 것으로 보이며, 잘리는 기준을 설명한 공개 문서는 없습니다.
+- 1,264줄, 약 3주 반치(가장 오래된 줄 2026-08-30)만 남은 경우가 있습니다. 앞부분이 잘려 나가는 것으로 보입니다.
 - 이 파일이 모든 Windows 버전에 있는지는 실제 기기에서 확인합니다.
 
 ### DataStore.edb
@@ -142,7 +142,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 | `CurrentState` | 상태 숫자 |
 | `InstallTimeHigh`, `InstallTimeLow` | 합치면 64비트 FILETIME(UTC) |
 | `InstallUser` | S-1-5-18 |
-| `SelfUpdate`, `Visibility` | 공개 자료 없음 |
+| `SelfUpdate`, `Visibility` | 실제 데이터로 확인 |
 
 패키지 이름으로 업데이트 종류를 나눕니다.
 
@@ -151,7 +151,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 - `Package_for_KB…` 이름의 키는 몇 개뿐입니다(예: 6,680개 가운데 2개).
 - `Package_for_ServicingStack_…`, `Package_for_DotNetRollup_…` 키도 있습니다.
 
-`CurrentState` 값은 세 가지가 나옵니다. 숫자마다의 공식 뜻을 설명한 공개 문서는 없습니다.
+`CurrentState` 값은 세 가지가 나옵니다. 숫자마다의 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮깁니다.
 
 | 값 | 개수 | 비고 |
 |---|---|---|
@@ -216,7 +216,7 @@ YYYY-MM-DD hh:mm:ss, Info                  CBS    <내용>
 ### 증명하지 못하는 것
 
 - 사람이 직접 설치를 눌렀는지는 알 수 없습니다. `InstallUser` 는 S-1-5-18(SYSTEM)로 남습니다.
-- `CurrentState` 숫자의 공식 뜻을 설명한 공개 문서는 없습니다. "112 는 설치 완료" 처럼 단정하지 않습니다.
+- `CurrentState` 숫자는 뜻이 정해져 있지 않습니다. "112 는 설치 완료" 처럼 단정하지 않습니다.
 - `Get-HotFix` 의 날짜만으로는 설치 시각을 말할 수 없습니다. `InstalledOn` 은 날짜만 있고 시각은 00:00:00 입니다.
 - 설치 성공 이벤트가 있어도 재부팅까지 끝났는지는 따로 봅니다. Setup 로그 이벤트 4 는 재부팅 전에는 Installed 상태로 바꿀 수 없다고 적습니다.
 - 로그에 없다고 업데이트가 없었던 것은 아닙니다. ETL·ReportingEvents.log·CBS.log 는 앞부분이 밀려납니다.

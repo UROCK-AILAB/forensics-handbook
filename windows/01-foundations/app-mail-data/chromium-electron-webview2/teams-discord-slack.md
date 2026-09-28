@@ -102,7 +102,7 @@ UDF 하나에는 프로필을 여러 개 둘 수 있고 프로필마다 전용 �
 | 클래식 Teams | `%appdata%\Microsoft\Teams` |
 | 새 Teams | `%userprofile%\appdata\local\Packages\MSTeams_8wekyb3d8bbwe\LocalCache\Microsoft\MSTeams` |
 
-새 Teams 의 `EBWebView\Local State` 에는 `Default` 와 `WV2Profile_tfw` 두 프로필이 있고, `EBWebView` 아래에도 `WV2Profile_tfw` 폴더가 있습니다. "tfw" 의 뜻을 설명한 공개 자료는 없습니다. 두 프로필 폴더를 모두 읽습니다. `EBWebView` 폴더가 있으므로 새 Teams 는 WebView2 기반으로 보입니다.
+새 Teams 의 `EBWebView\Local State` 에는 `Default` 와 `WV2Profile_tfw` 두 프로필이 있고, `EBWebView` 아래에도 `WV2Profile_tfw` 폴더가 있습니다. 두 프로필 폴더를 모두 읽습니다. `EBWebView` 폴더가 있으므로 새 Teams 는 WebView2 기반으로 보입니다.
 
 - 대화 기록 같은 Teams 고유 해석은 [마이크로소프트 팀즈](../../../02-artifacts/messengers/teams.md) 에서 다룹니다.
 

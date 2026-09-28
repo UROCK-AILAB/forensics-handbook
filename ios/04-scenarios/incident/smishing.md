@@ -66,11 +66,11 @@ nav_order: 1630
    simFilterIndex
    ```
 
-   각 키의 뜻은 이름에서 짐작할 수 있을 뿐 공개된 분석 자료가 없으므로, 보고서에는 키 이름과 값만 적고 뜻을 단정하지 않습니다. 필터 확장과 관련된 백업 도메인 `AppDomain-com.apple.smsFilter` 와 `AppDomainPlugin-com.apple.smsFilter.extension` 도 있습니다.
+   각 키의 뜻은 이름에서 짐작할 수 있을 뿐이므로, 보고서에는 키 이름과 값만 적고 뜻을 단정하지 않습니다. 필터 확장과 관련된 백업 도메인 `AppDomain-com.apple.smsFilter` 와 `AppDomainPlugin-com.apple.smsFilter.extension` 도 있습니다.
 
-5. **정크 자동 삭제 가능성을 염두에 둡니다.** `HomeDomain :: Library/Preferences/com.apple.IMAutomaticHistoryDeletionAgent.plist` 에 날짜 형식의 키 `startDeletingJunkMessagesFrom` 이 있습니다. 이름으로 보면 정크 메시지 자동 삭제와 관련 있어 보이지만, 동작과 보관 기간은 공개된 분석 자료가 없습니다. 사용자가 받았다고 말한 문자가 보이지 않으면, 정크로 분류된 뒤 지워졌을 가능성을 열어 두고 이 키의 값과 받은 시각을 함께 적습니다.
+5. **정크 자동 삭제 가능성을 염두에 둡니다.** `HomeDomain :: Library/Preferences/com.apple.IMAutomaticHistoryDeletionAgent.plist` 에 날짜 형식의 키 `startDeletingJunkMessagesFrom` 이 있습니다. 이름으로 보면 정크 메시지 자동 삭제와 관련 있어 보이지만, 이름만으로 동작과 보관 기간을 알 수는 없습니다. 사용자가 받았다고 말한 문자가 보이지 않으면, 정크로 분류된 뒤 지워졌을 가능성을 열어 두고 이 키의 값과 받은 시각을 함께 적습니다.
 
-6. **지운 문자를 찾습니다.** `sms.db` 에는 `chat_recoverable_message_join`(`delete_date` 포함)과 `recoverable_message_part`(`part_text` 포함) 표가 있습니다. 복구 절차는 [지운 대화와 사진 찾기](../activity/deleted-content.md)를 따릅니다. 모르는 발신자 기록으로 보이는 `HomeDomain :: Library/MessagesMetaData/NickNameCache/unknownSenderRecordInfoStore.db`(표 `kvtable`: `ROWID`, `key`, `value`, `value_type`, `date`)도 있지만, 용도는 공개된 분석 자료가 없습니다.
+6. **지운 문자를 찾습니다.** `sms.db` 에는 `chat_recoverable_message_join`(`delete_date` 포함)과 `recoverable_message_part`(`part_text` 포함) 표가 있습니다. 복구 절차는 [지운 대화와 사진 찾기](../activity/deleted-content.md)를 따릅니다. 모르는 발신자 기록으로 보이는 `HomeDomain :: Library/MessagesMetaData/NickNameCache/unknownSenderRecordInfoStore.db`(표 `kvtable`: `ROWID`, `key`, `value`, `value_type`, `date`)도 있지만, 이름만으로 용도를 단정할 수는 없습니다.
 
 7. **링크를 눌렀는지 봅니다.** 암호화 백업이라면 Safari `History.db` 의 `history_items`(`url`, `visit_count`)와 `history_visits`(`visit_time`, `redirect_source`, `redirect_destination`, `origin`)에서 문자 속 URL 과 그 뒤 리디렉션을 찾습니다 [7]. 암호화하지 않은 백업에도 `AppDomain-com.apple.mobilesafari :: Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 가 들어가고, 표 `ObservedDomains`(`registrableDomain`, `lastSeen`, `hadUserInteraction`, `mostRecentUserInteractionTime` 등)와 `TopFrameUniqueRedirectsTo`(`sourceDomainID`, `toDomainID`), `TopFrameUniqueRedirectsFrom`, `SubresourceUniqueRedirectsTo` 등이 있습니다. MVT 의 WebkitResourceLoadStatistics 모듈은 이 파일에서 접속한 도메인과 시각을 뽑습니다 [6]. `lastSeen` 이 어떤 기준 시각인지는 알려져 있지 않아서, 문자 받은 시각과 비교하기 전에 다른 기록으로 기준을 맞춥니다. 시각 해석과 표 구성은 [사파리](../../02-artifacts/browsers/safari/index.md)에, 행위 재구성은 [웹 사용 행위 재구성](../activity/web-activity.md)에 있습니다.
 

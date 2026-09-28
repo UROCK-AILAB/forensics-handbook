@@ -81,13 +81,13 @@ UserSettings.plist
 
 `AppAccessibilityParameters.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist` 는 키가 비어 있습니다.
 
-`IsSupervised` 는 이름으로 보면 감독 여부 [3]에 해당하지만, 값의 정의는 공개된 설명이 없습니다. `PayloadManifest.plist` 의 `OrderedProfiles` 는 이름으로 보면 설치된 프로파일의 순서, `HiddenProfiles` 는 화면에 드러나지 않는 프로파일의 목록이고, `MCProfileEvents.plist` 의 `ProfileEvents` 는 프로파일 설치·제거 이벤트 목록으로 보입니다. 다만 목록 안 항목에 어떤 키(설치·삭제 시각 등)가 있는지는 공개된 설명이 없으니, 이 세 목록은 값을 직접 열어 확인한 만큼만 해석합니다. `MCMeta.plist` 의 두 키는 이름으로 보면 설정을 마지막으로 옮겨 적은 iOS 빌드 번호입니다.
+`IsSupervised` 는 이름으로 보면 감독 여부 [3]에 해당하지만, 이름만으로 값의 뜻을 단정할 수는 없습니다. `PayloadManifest.plist` 의 `OrderedProfiles` 는 이름으로 보면 설치된 프로파일의 순서, `HiddenProfiles` 는 화면에 드러나지 않는 프로파일의 목록이고, `MCProfileEvents.plist` 의 `ProfileEvents` 는 프로파일 설치·제거 이벤트 목록으로 보입니다. 목록 안 항목에 어떤 키(설치·삭제 시각 등)가 있는지는 값을 직접 열어 확인하고, 이 세 목록은 확인한 만큼만 해석합니다. `MCMeta.plist` 의 두 키는 이름으로 보면 설정을 마지막으로 옮겨 적은 iOS 빌드 번호입니다.
 
 `SystemProfileRestrictions` 아래에는 통신사 이름과 UUID 가 들어간 식별자가 있을 수 있습니다. 개인 기기에도 통신사 설정처럼 처음부터 들어 있는 프로파일이 있을 수 있다는 뜻으로 보입니다. 이 목록에 항목이 있다는 사실만으로 사용자가 프로파일을 설치했다고 보지 않습니다.
 
 ### UserConfigurationProfiles 폴더
 
-`HomeDomain :: Library/UserConfigurationProfiles/` 아래에도 같은 계열의 이름이 있습니다. `PayloadManifest.plist`(`HiddenProfiles`, `OrderedProfiles`), `PublicInfo/MCMeta.plist`(`LastMigratedBuild`)와 함께 제한 설정 키가 든 `EffectiveUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist`, `PublicInfo/Truth.plist`, `Truth.plist` 가 있고, `ClientTruth.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist`, `UserSettings.plist` 는 키가 비어 있습니다. 두 폴더가 어떻게 나뉘어 쓰이는지는 공개된 설명이 없습니다.
+`HomeDomain :: Library/UserConfigurationProfiles/` 아래에도 같은 계열의 이름이 있습니다. `PayloadManifest.plist`(`HiddenProfiles`, `OrderedProfiles`), `PublicInfo/MCMeta.plist`(`LastMigratedBuild`)와 함께 제한 설정 키가 든 `EffectiveUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist`, `PublicInfo/Truth.plist`, `Truth.plist` 가 있고, `ClientTruth.plist`, `PayloadDependency.plist`, `ProfileTruth.plist`, `PublicInfo/NamespacedUserSettings.plist`, `UserSettings.plist` 는 키가 비어 있습니다. 두 폴더가 어떻게 나뉘어 쓰이는지는 시험 기기에서 프로파일을 설치·제거하며 두 폴더의 파일이 어떻게 바뀌는지로 확인합니다.
 
 ### 제한 설정 키
 
@@ -120,17 +120,17 @@ mobile/com.apple.webcontentfilter.plist
 
 웹 콘텐츠 필터 설정은 MDM 에서 왔을 수도 있고 [화면 사용 시간](../app-usage/screen-time.md)의 제한에서 왔을 수도 있으니, 두 쪽을 함께 봅니다.
 
-### 뜻이 알려지지 않은 항목
+### 실제 데이터로 확인할 항목
 
-아래 항목은 이름이 기기 관리와 관련되어 보이지만 뜻은 공개된 설명이 없습니다.
+아래 항목은 이름이 기기 관리와 관련되어 보이지만, 이름만으로 뜻을 단정할 수는 없습니다.
 
 | 위치 | 키 | 비고 |
 |---|---|---|
 | `HomeDomain :: Library/Preferences/com.apple.managedconfiguration.profiled.plist` | `MCFeatureHealthDataSubmissionAllowedVersion` (int) | 프로파일 데몬 설정으로 보임 |
 | `HomeDomain :: Library/Preferences/com.apple.remotemanagement.ManagedSettingsSubscriber.plist` | `RemovedLegacySystemSharedContainers` (bool) | 원격 관리 설정으로 보임 |
 | `HomeDomain :: Library/Preferences/com.apple.managedappdistributiond.plist` | `lastKnownBuild` (str), `LastWeeklyCAEventsPost` (datetime), `dayLockReasons` (int) | 관리 앱 배포 데몬 설정으로 보임 |
-| `SysContainerDomain-com.apple.managedappdistributiond :: distributor-preferences-store.plist` | `doNotShowSheetList` (list) | 무엇을 담는지 공개 자료 없음 |
-| `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed :: Library/Preferences/FMIPStateInfo.plist` | `fmipActive` (bool), `fmipLostModeType` (int) | MDM 분실 모드와의 관계는 공개 자료 없음. 나의 찾기는 [나의 찾기](../location/find-my.md) |
+| `SysContainerDomain-com.apple.managedappdistributiond :: distributor-preferences-store.plist` | `doNotShowSheetList` (list) | 값을 열어 목록 내용을 확인 |
+| `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed :: Library/Preferences/FMIPStateInfo.plist` | `fmipActive` (bool), `fmipLostModeType` (int) | MDM 분실 모드와의 관계는 MDM 기록과 맞춰 확인. 나의 찾기는 [나의 찾기](../location/find-my.md) |
 
 ### 이름이 비슷하지만 다른 것
 
@@ -155,7 +155,7 @@ online_auth: uuid, cdhash, grace_period, last_success_monotonic_time, last_succe
 
 ### 증명하지 못하는 것
 
-프로파일이 있다는 사실만으로 사용자가 직접 설치했다고 말할 수 없는데, MDM 과 Apple Configurator 도 프로파일을 설치하고 [1] 통신사 설정처럼 처음부터 들어 있을 수 있는 항목도 보이기 때문입니다. 백업에 MDM 서버 주소와 등록 시각이 어디 남는지 알려져 있지 않아서, 어느 조직이 기기를 관리했는지를 이 페이지의 파일만으로 밝히지 못합니다. 제한 키 이름이 있다는 사실은 제한이 걸렸다는 뜻이 아니고, 프로파일이 지금 없다는 사실도 설치된 적이 없다는 뜻이 아닙니다.
+프로파일이 있다는 사실만으로 사용자가 직접 설치했다고 말할 수 없는데, MDM 과 Apple Configurator 도 프로파일을 설치하고 [1] 통신사 설정처럼 처음부터 들어 있을 수 있는 항목도 보이기 때문입니다. 어느 조직이 기기를 관리했는지는 이 페이지의 파일만으로 밝히지 못합니다. 제한 키 이름이 있다는 사실은 제한이 걸렸다는 뜻이 아니고, 프로파일이 지금 없다는 사실도 설치된 적이 없다는 뜻이 아닙니다.
 
 보고서에는 "피의자가 악성 프로파일을 설치했다" 가 아니라 "백업 시점의 프로파일 목록에 이 식별자의 프로파일이 있고, 이 프로파일이 설정한 제한 값은 이러하다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
@@ -163,13 +163,13 @@ online_auth: uuid, cdhash, grace_period, last_success_monotonic_time, last_succe
 
 사용자가 직접 설치하는 프로파일은 받은 뒤 8분 안에 설치해야 하므로 [2], 메일이나 웹에서 받은 시각과 설치 시각은 가깝게 붙습니다. 그래서 설치 시각을 찾았다면 그 앞 몇 분 동안의 메일·메시지·Safari 기록을 먼저 봅니다. 다만 `ProfileEvents` 목록 안에 시각 값이 있는지, 있다면 어떤 기준인지는 실제 데이터로 확인합니다.
 
-`mis.db` 의 `install_time`·`expires`, `managedappdistributiond.plist` 의 `LastWeeklyCAEventsPost` 도 기준 시각이 알려져 있지 않습니다. plist 의 날짜 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md), 기준 시각을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지를 보고, 값을 바꿀 때 가정한 기준을 보고서에 함께 적습니다.
+`mis.db` 의 `install_time`·`expires`, `managedappdistributiond.plist` 의 `LastWeeklyCAEventsPost` 도 값의 크기와 다른 기록의 시각을 보고 기준 시각을 먼저 확인합니다. plist 의 날짜 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md), 기준 시각을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지를 보고, 값을 바꿀 때 가정한 기준을 보고서에 함께 적습니다.
 
 ## 함정과 한계
 
-기기 전체를 지우면 프로파일이 모두 없어지고 [1], 사용자나 MDM 이 프로파일 하나만 지울 수도 있습니다 [1]. 프로파일을 지운 뒤 `ProfileEvents` 나 다른 파일에 제거 흔적이 남는지는 알려져 있지 않으니, 프로파일이 없다는 결과를 보고할 때는 수집 시점과 [초기화와 복원 흔적](../system-account/erase-restore.md)을 함께 적습니다. 감독하지 않은 기기에서는 기기 암호를 아는 사람이 제거 제한이 걸린 수동 설치 프로파일도 지울 수 있어서 [1], 제거 제한이 있었다는 사실이 프로파일이 끝까지 남았다는 근거가 되지는 않습니다.
+기기 전체를 지우면 프로파일이 모두 없어지고 [1], 사용자나 MDM 이 프로파일 하나만 지울 수도 있습니다 [1]. 프로파일을 지운 뒤 `ProfileEvents` 나 다른 파일에 제거 흔적이 남는지는 시험 기기에서 프로파일을 지워 확인할 수 있고, 프로파일이 없다는 결과를 보고할 때는 수집 시점과 [초기화와 복원 흔적](../system-account/erase-restore.md)을 함께 적습니다. 감독하지 않은 기기에서는 기기 암호를 아는 사람이 제거 제한이 걸린 수동 설치 프로파일도 지울 수 있어서 [1], 제거 제한이 있었다는 사실이 프로파일이 끝까지 남았다는 근거가 되지는 않습니다.
 
-`HiddenProfiles`, `ProfileEvents`, `ConfigurationSource`, `PostSetupProfileWasInstalled` 같은 키는 이름이 뜻을 짐작하게 하지만 공개된 정의가 없습니다. 이 키들로 결론을 낼 때는 시험 기기에서 프로파일을 설치·제거하며 값이 어떻게 바뀌는지 직접 검증한 결과만 씁니다. 이 페이지의 파일과 키 이름은 iOS 27.0 백업 기준이니, 다른 버전에서 같은지 따로 확인합니다. 이 페이지는 프로파일이나 감독을 우회하거나 지우는 방법을 다루지 않습니다.
+`HiddenProfiles`, `ProfileEvents`, `ConfigurationSource`, `PostSetupProfileWasInstalled` 같은 키는 이름으로 뜻을 짐작할 수 있을 뿐입니다. 이 키들로 결론을 낼 때는 시험 기기에서 프로파일을 설치·제거하며 값이 어떻게 바뀌는지 직접 검증한 결과만 씁니다. 이 페이지의 파일과 키 이름은 iOS 27.0 백업 기준이니, 다른 버전에서 같은지 따로 확인합니다. 이 페이지는 프로파일이나 감독을 우회하거나 지우는 방법을 다루지 않습니다.
 
 ## 직접 분석해 보기
 

@@ -84,7 +84,7 @@ iOS 앱은 샌드박스 안의 자기 컨테이너에만 파일을 두고, 실�
 
 | 위치 | 내용 |
 |---|---|
-| `InstallDomain` :: `Library/MobileInstallation/BackedUpState/SystemAppInstallState.plist`, `BackupSystemAppInstallState.plist` | 키는 번들 ID(예: `com.apple.iBooks`, `com.apple.VoiceMemos`, `com.apple.mobilesafari`), 값은 정수. 값의 뜻은 공개 자료 없음 |
+| `InstallDomain` :: `Library/MobileInstallation/BackedUpState/SystemAppInstallState.plist`, `BackupSystemAppInstallState.plist` | 키는 번들 ID(예: `com.apple.iBooks`, `com.apple.VoiceMemos`, `com.apple.mobilesafari`), 값은 정수. 값의 뜻은 단정하지 않고 값만 기록 |
 | `HomeDomain` :: `Library/Preferences/com.apple.mobile.installation.plist` | 키 `ExtensionDataContainerParentIDUpdateVersion`(정수) |
 | 백업 폴더의 `Manifest.plist` | `Applications`, `Containers` 키. 안의 구조는 실제 파일로 확인 |
 | 백업 폴더의 `Info.plist` | `Installed Applications`, `Applications` 키 |
@@ -100,7 +100,7 @@ iOS 앱은 샌드박스 안의 자기 컨테이너에만 파일을 두고, 실�
 
 - **앱 데이터가 데이터 컨테이너에만 있지 않습니다.** Spark·WhatsApp·Signal 같은 앱은 2020년 기준으로 데이터를 `Data/Application` 이 아니라 `Shared/AppGroup` 에 두었고 [4], 백업에서도 메모와 미리 알림의 DB 가 그룹 도메인에 들어 있습니다.
 - **UUID 는 기기마다 다릅니다.** 폴더 이름만으로 앱을 판단하지 말고, 위 "읽는 법" 의 파일로 번들 ID 를 확인합니다.
-- **백업 도메인과 기기 경로의 대응을 짐작하지 않습니다.** `AppDomainGroup-` 이 `Shared/AppGroup` 에, `SysContainerDomain-` 이 `Data/System` 에 대응한다는 설명을 뒷받침하는 공개 자료가 없으니, 보고서에는 백업 도메인 이름을 그대로 적습니다.
+- **백업 도메인과 기기 경로의 대응을 짐작하지 않습니다.** `AppDomainGroup-` 이 `Shared/AppGroup` 에, `SysContainerDomain-` 이 `Data/System` 에 대응한다고 단정할 수 없으니, 보고서에는 백업 도메인 이름을 그대로 적습니다.
 - **개발자 문서는 보관 문서입니다.** 폴더별 백업 여부 표 [6] 는 옛 문서의 설명이라서, 새 iOS 에서 달라진 부분이 있을 수 있습니다.
 
 ## 참고 문헌

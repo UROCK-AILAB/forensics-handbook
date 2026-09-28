@@ -14,17 +14,17 @@ nav_order: 1480
 
 ## 먼저 확인할 것
 
-**iOS 버전과 시간대**를 먼저 적습니다. 잠금·화면 켜짐을 보여 주는 기록이 iOS 15 이하에서는 knowledgeC.db 에 있지만, iOS 16 이후 바이옴에서 대응하는 스트림 이름은 공개 자료가 없습니다. 버전별 차이는 [폰 사용 시간 재구성](usage-time.md) 의 버전 표를 따릅니다.
+**iOS 버전과 시간대**를 먼저 적습니다. 잠금·화면 켜짐을 보여 주는 기록이 iOS 15 이하에서는 knowledgeC.db 에 있지만, iOS 16 이후 바이옴에서 대응하는 스트림 이름은 시험 기기로 확인합니다. 버전별 차이는 [폰 사용 시간 재구성](usage-time.md) 의 버전 표를 따릅니다.
 
 **기기에 연결된 계정**을 확인합니다. 기기에 로그인한 Apple 계정은 [애플 계정](../../02-artifacts/system-account/apple-account.md) 에서, 기기 자체를 가리키는 식별값은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 봅니다. 계정 명의자와 실제 사용자가 다를 수 있다는 점을 처음부터 전제로 둡니다.
 
-**Face ID·Touch ID 가 사람에 대해 무엇을 남기지 않는지**도 알고 시작합니다. Touch ID 지문 자료는 Apple 로 보내지 않고 기기 백업에도 넣지 않으며, Face ID 등록 자료는 얼굴의 수학적 표현으로 Secure Enclave 에 보관합니다 [2]. 그래서 백업을 아무리 살펴도 등록된 얼굴이나 지문이 누구 것인지는 알 수 없습니다. 잠금 해제 시도나 성공을 기록하는 로그는 Apple 보안 문서에 설명이 없습니다 [2].
+**Face ID·Touch ID 가 사람에 대해 무엇을 남기지 않는지**도 알고 시작합니다. Touch ID 지문 자료는 Apple 로 보내지 않고 기기 백업에도 넣지 않으며, Face ID 등록 자료는 얼굴의 수학적 표현으로 Secure Enclave 에 보관합니다 [2]. 그래서 백업을 아무리 살펴도 등록된 얼굴이나 지문이 누구 것인지는 알 수 없습니다. 잠금 해제 시도나 성공을 남기는 로그를 근거로 쓰려면, 시험 기기에서 잠금을 풀어 보고 그 기록이 남는지 먼저 확인합니다.
 
 **암호가 필요한 상황**도 정리해 둡니다. 기기를 켠 직후와 재시동 뒤에는 Face ID·Touch ID 대신 암호를 넣어야 하고, 기기 암호를 바꾸거나 지문 등록을 지우거나 새로 만들 때도 암호가 필요합니다 [2]. 48시간 동안 쓰지 않았을 때 같은 다른 조건과 대체 외모·지문의 등록 개수는 분석 대상 기기의 iOS 버전에 맞는 Apple 문서에서 따로 확인합니다.
 
 ## 볼 아티팩트와 순서
 
-아래 3~5번의 키와 필드는 백업에 이름이 보이지만, 값의 뜻을 설명한 공개 문서는 없습니다.
+아래 3~5번의 키와 필드는 백업에 이름이 보이지만, 값의 뜻은 이름만으로 단정하지 않습니다.
 
 | 순서 | 아티팩트 | 알려 주는 것 | 자세히 |
 |---|---|---|---|
@@ -36,7 +36,7 @@ nav_order: 1480
 | 6 | 메시지 DB — HomeDomain `Library/SMS/sms.db` 의 `message` 표 `is_from_me` 열 | 이름으로 보면 이 기기 쪽에서 보낸 메시지인지와 관련된 열입니다. 뜻은 [메시지](../../02-artifacts/communications/messages/index.md) 의 설명과 대조합니다 | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 7 | 사진 DB — CameraRollDomain `Media/PhotoData/Photos.sqlite` 의 `ZEXTENDEDATTRIBUTES` 표 `ZCAMERAMAKE`, `ZCAMERAMODEL`, `ZLENSMODEL`, `ZDATECREATED` 열 | 촬영 기기 정보로 보이는 열이지만, 이 열로 "이 기기에서 찍은 사진" 을 구분할 수 있는지는 실제 데이터로 확인합니다 | [이 사진은 언제 어디서 찍었나](photo-origin.md) |
 
-백업에는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic`, `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 도메인도 있습니다. 두 도메인 안에 인증 기록이 있는지는 알려져 있지 않아서, 이름만 보고 "생체 인증 로그" 라고 부르지 않습니다.
+백업에는 `AppDomainPlugin-com.apple.BiometricKit.BioLogDiagnostic`, `AppDomainPlugin-com.apple.PasscodeAndBiometricsSettingsAppIntentsExtension` 도메인도 있습니다. 두 도메인 안에 인증 기록이 있는지는 파일을 열어 확인하고, 이름만 보고 "생체 인증 로그" 라고 부르지 않습니다.
 
 ## 분석 흐름
 
@@ -56,7 +56,7 @@ Face ID 가 켜져 있었으니 소유자만 풀 수 있었다고 보는 실수�
 
 스크린 타임에 나오는 이름이나 Apple ID 를 실제 사용자로 적는 실수도 있습니다. 이 항목은 계정 명의를 보여 주는 값이고, 가족 공유로 동기화가 켜져 있으면 다른 기기의 사용 기록까지 함께 보일 수 있습니다 [3][4].
 
-설정 키 이름을 뜻으로 옮겨 적는 일도 조심합니다. `WasPasscodeSet`, `AMSDeviceBiometricsState`, `__BOOTTIME` 은 이름만 보면 뜻을 알 수 있을 것처럼 보이지만 값의 뜻이 공개되지 않았으니, 시험 기기로 값이 바뀌는 모습을 확인하거나 공개 도구의 해석과 대조한 뒤에만 씁니다. 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
+설정 키 이름을 뜻으로 옮겨 적는 일도 조심합니다. `WasPasscodeSet`, `AMSDeviceBiometricsState`, `__BOOTTIME` 은 이름만 보면 뜻을 알 수 있을 것처럼 보이지만, 시험 기기로 값이 바뀌는 모습을 확인하거나 공개 도구의 해석과 대조한 뒤에만 씁니다. 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 을 봅니다.
 
 ## 보고서 문장 예
 

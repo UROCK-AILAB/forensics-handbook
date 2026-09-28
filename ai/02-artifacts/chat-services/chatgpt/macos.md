@@ -9,11 +9,9 @@ nav_order: 100
 
 macOS 용 ChatGPT 앱은 2024-07 보도 당시 대화를 `~/Library/Application Support/com.openai.chat` 에 평문으로 저장했고, 그 뒤 업데이트로 저장한 대화를 암호화했습니다. 그래서 조사할 때는 앱 버전부터 확인합니다.
 
-지금 판의 암호화 방식과 키를 두는 곳은 공개된 분석 자료가 없습니다.
-
 ## 무엇이 남나 · 왜 생기나
 
-2024-07-03 보도 당시 macOS 용 ChatGPT 앱은 대화를 사용자 라이브러리의 `Application Support` 아래 `com.openai.chat` 폴더에 평문으로 저장했고, macOS 샌드박스를 쓰지 않았습니다. 그 뒤 OpenAI 는 Mac 에 저장한 대화를 암호화하는 새 앱을 내놓았습니다. 고친 앱의 버전 번호는 알려져 있지 않습니다.
+2024-07-03 보도 당시 macOS 용 ChatGPT 앱은 대화를 사용자 라이브러리의 `Application Support` 아래 `com.openai.chat` 폴더에 평문으로 저장했고, macOS 샌드박스를 쓰지 않았습니다. 그 뒤 OpenAI 는 Mac 에 저장한 대화를 암호화하는 새 앱을 내놓았습니다. 고친 앱이 몇 번째 판부터인지는 앱 버전만으로 구분할 수 없어서, 폴더 안 파일을 직접 열어 평문인지 확인합니다.
 
 이 일로 macOS 앱은 적어도 한동안 대화 사본을 기기에 남겼다는 것을 알 수 있습니다. 대화 원본이 서버에 있다는 점과 서비스 전체의 정리는 [ChatGPT](index.md) 허브에 있습니다.
 
@@ -30,7 +28,7 @@ macOS 용 ChatGPT 앱은 2024-07 보도 당시 대화를 `~/Library/Application 
 
 ## 보호 방식
 
-지금 판이 무엇으로 암호화하는지, 키를 어디에 두는지는 공개된 분석 자료가 없습니다. macOS 앱이 비밀 값을 둘 때 흔히 쓰는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)의 원리는 그 페이지를 참고하되, ChatGPT 앱이 키체인을 쓴다고 단정하지 않습니다. 이 핸드북은 암호화한 대화를 푸는 방법을 다루지 않고, 파일이 평문인지 암호문인지 구분하는 데까지만 봅니다. 대화 내용이 필요하면 [계정 데이터 내보내기](export.md)나 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)처럼 적법한 절차로 계정 쪽 사본을 확보합니다.
+macOS 앱이 비밀 값을 둘 때 흔히 쓰는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)의 원리는 그 페이지를 참고하되, ChatGPT 앱이 키체인을 쓴다고 단정하지 않습니다. 이 핸드북은 암호화한 대화를 푸는 방법을 다루지 않고, 파일이 평문인지 암호문인지 구분하는 데까지만 봅니다. 대화 내용이 필요하면 [계정 데이터 내보내기](export.md)나 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)처럼 적법한 절차로 계정 쪽 사본을 확보합니다.
 
 ## 증거로서 의미
 
@@ -44,13 +42,13 @@ macOS 용 ChatGPT 앱은 2024-07 보도 당시 대화를 `~/Library/Application 
 
 ## 함정과 한계
 
-업데이트할 때 예전 평문 파일을 암호화해 바꿔 썼는지, 지웠는지, 그대로 두었는지는 공개 자료에 없습니다. 그래서 업데이트한 기기에 평문 파일이 남아 있다고도, 없다고도 미리 단정하지 않고 실제로 찾아봅니다. 백업이나 이전 사본에 보도 당시 판의 폴더가 남아 있을 수도 있습니다.
+업데이트할 때 예전 평문 파일을 암호화해 바꿔 썼는지, 지웠는지, 그대로 두었는지는 기기에서 실제로 찾아 확인합니다. 업데이트한 기기에 평문 파일이 남아 있다고도, 없다고도 미리 단정하지 않습니다. 백업이나 이전 사본에 보도 당시 판의 폴더가 남아 있을 수도 있습니다.
 
 이 보도는 2024-07 의 앱을 다룬 것이라 지금 판의 저장 구조를 알려 주지 않습니다. 기기에서 새로 확인한 내용은 macOS 버전, 앱 버전, 확인 날짜를 붙여 적습니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 폴더 안 파일의 형식은 공개된 자료가 없습니다. 파일을 헥스 편집기로 열어 앞부분에 읽을 수 있는 글자(영문, UTF-8 한글, JSON 의 중괄호 등)가 이어지면 평문이고, 처음부터 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라고 가를 수 있습니다. 파일 앞머리에 SQLite 같은 알려진 형식의 머리 글자가 보이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/sqlite/index.html) 페이지를 따라 읽습니다.
+**헥스로 한 번.** 폴더 안 파일을 헥스 편집기로 열어 앞부분에 읽을 수 있는 글자(영문, UTF-8 한글, JSON 의 중괄호 등)가 이어지면 평문이고, 처음부터 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라고 가를 수 있습니다. 파일 앞머리에 SQLite 같은 알려진 형식의 머리 글자가 보이면 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/sqlite/index.html) 페이지를 따라 읽습니다.
 
 **공개 도구로 한 번.** 앱 번들의 정보 파일은 plist 를 읽는 공개 도구로 열어 버전을 적고, 앱 폴더의 파일은 형식을 확인한 다음 그 형식에 맞는 도구로 엽니다.
 

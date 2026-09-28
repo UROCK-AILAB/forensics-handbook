@@ -38,7 +38,7 @@ Data 볼륨에 스냅숏(예를 들어 로컬 백업용)이 남는지는 실제 
 
 ## 읽는 법 — 업데이트 흔적이 남는 설정 파일
 
-로컬 백업에는 볼륨과 스냅숏이 들어오지 않아서, 백업으로 업데이트 이력을 볼 때는 설정 파일의 키를 읽습니다. 아래 표는 백업에 들어 있는 키의 이름과 형식이고, 값의 뜻을 밝힌 공개 자료는 없습니다.
+로컬 백업에는 볼륨과 스냅숏이 들어오지 않아서, 백업으로 업데이트 이력을 볼 때는 설정 파일의 키를 읽습니다. 아래 표는 백업에 들어 있는 키의 이름과 형식입니다. 값의 뜻은 이름만으로 단정하지 않습니다.
 
 | 위치(도메인 :: 상대 경로) | 키(형식) |
 |---|---|
@@ -54,9 +54,9 @@ Data 볼륨에 스냅숏(예를 들어 로컬 백업용)이 남는지는 실제 
 
 `SUSUISoftwareUpdateState` 아래에는 `SUSUISoftwareUpdateAlertFlow`, `SUSUISoftwareUpdateDownloadWasQueuedRemotely`, `SUSUISoftwareUpdateStateAlertRemindMeLaterCount`, `SUSUISoftwareUpdateStateInstallPolicyKey` 같은 하위 키가, `SUSUIState` 아래에는 `SUSUIAlertFlow`, `SUSUIStateAlertRemindMeLaterCount`, `SUSUIStateAlertRemindMeLaterCountSinceRequiringInstallation`, `SUSUIStateInstallPolicyKey` 같은 하위 키가 있습니다.
 
-`firstbootafterupdate.plist` 의 `PrevOSVersion` 과 `CurrentOSVersion` 은 이름대로라면 업데이트 전후의 버전 쌍으로 보이지만, 이 해석을 뒷받침하는 공개 자료는 없습니다. 보고서에는 "이 파일의 `PrevOSVersion` 키 값이 무엇이었다" 처럼 기록 그대로만 적습니다.
+`firstbootafterupdate.plist` 의 `PrevOSVersion` 과 `CurrentOSVersion` 은 이름대로라면 업데이트 전후의 버전 쌍으로 보이지만, 이름만으로 단정할 수는 없습니다. 보고서에는 "이 파일의 `PrevOSVersion` 키 값이 무엇이었다" 처럼 기록 그대로만 적습니다.
 
-백업에는 소프트웨어 업데이트 관련 확장 도메인 `AppDomainPlugin-com.apple.SoftwareUpdateServices.SUFollowUpRollbackDetectedExtension`, `AppDomainPlugin-com.apple.SoftwareUpdateServices.SUSFollowUpExtension`, `AppDomainPlugin-com.apple.SoftwareUpdateSettingsIntents` 도 있습니다. "RollbackDetected" 가 무엇을 알리는지는 공개된 자료가 없습니다.
+백업에는 소프트웨어 업데이트 관련 확장 도메인 `AppDomainPlugin-com.apple.SoftwareUpdateServices.SUFollowUpRollbackDetectedExtension`, `AppDomainPlugin-com.apple.SoftwareUpdateServices.SUSFollowUpExtension`, `AppDomainPlugin-com.apple.SoftwareUpdateSettingsIntents` 도 있습니다. 이름에 "RollbackDetected" 가 들어 있다는 것만으로 롤백이 있었다고 단정하지 않습니다.
 
 백업 폴더의 `Info.plist` 에는 `Build Version`, `Product Version`, `Last Backup Date` 키가 있어서 백업을 만든 시점의 버전을 설정 파일 속 버전 키와 견줘 볼 수 있습니다. 백업에서 복원한 기기인지 판단하는 키(`com.apple.MobileBackup.plist` 의 `RestoreInfo` 등)는 [초기화와 복원 흔적](../../../02-artifacts/system-account/erase-restore.md) 에서 다룹니다.
 

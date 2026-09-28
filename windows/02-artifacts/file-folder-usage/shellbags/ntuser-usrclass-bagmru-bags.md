@@ -89,7 +89,7 @@ Windows 11 25H2 에서는 다음과 같습니다.
 
 - `NodeSlot` 이 없는 BagMRU 키가 있습니다. 그런 키에는 하위 키가 있습니다. 보기 설정 없이 경로 중간 단계로만 남은 폴더로 보입니다.
 - `NodeSlot` 값은 서로 다르고, 값마다 같은 번호의 `Bags` 하위 키가 있습니다.
-- `NodeSlots` 값의 길이는 가장 큰 `Bags` 번호와 같습니다. 바이트 하나가 슬롯 하나에 대응하는 것으로 보입니다. 바이트 값의 뜻은 공개 자료가 없습니다.
+- `NodeSlots` 값의 길이는 가장 큰 `Bags` 번호와 같습니다. 바이트 하나가 슬롯 하나에 대응하는 것으로 보입니다. 바이트 값의 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 
 ### Bags — 보기 설정
 
@@ -114,10 +114,10 @@ Vista~8.1 에서 `ComDlg` 는 대화상자로 폴더를 열었다가 닫거나 �
 | 값 | 형식 | 내용 | 근거 |
 |---|---|---|---|
 | `SniffedFolderType` | REG_SZ | 탐색기가 폴더 내용을 보고 고른 폴더 유형 이름. 그림 파일이 있으면 Pictures, 문서가 있으면 Documents 가 됩니다 | Lo |
-| `KnownFolderDerivedFolderType` | REG_SZ | 공개 자료에는 이름만 있습니다. 이름으로 보면 알려진 폴더 (Known Folder) 에서 정한 폴더 유형입니다 | Lo |
+| `KnownFolderDerivedFolderType` | REG_SZ | 이름으로 보면 알려진 폴더 (Known Folder) 에서 정한 폴더 유형입니다 | Lo |
 
 - 한 폴더에 폴더 유형 GUID 하위 키가 여럿일 수 있습니다. 지금 쓰는 설정이 어느 GUID 에 있는지는 `SniffedFolderType` 이 알려 줍니다.
-- Windows 11 25H2 의 `{폴더 유형 GUID}` 키에는 `Mode`·`LogicalViewMode`·`Vid`·`IconSize`·`Sort`·`GroupView`·`GroupByKey:FMTID`·`GroupByKey:PID`·`GroupByDirection`·`FFlags`·`Rev`·`ColInfo` 값이 있습니다. 이름으로 보면 보기 방식·아이콘 크기·정렬·묶기·열 배치 값입니다. 각 값의 형식을 밝힌 공개 명세는 없습니다.
+- Windows 11 25H2 의 `{폴더 유형 GUID}` 키에는 `Mode`·`LogicalViewMode`·`Vid`·`IconSize`·`Sort`·`GroupView`·`GroupByKey:FMTID`·`GroupByKey:PID`·`GroupByDirection`·`FFlags`·`Rev`·`ColInfo` 값이 있습니다. 이름으로 보면 보기 방식·아이콘 크기·정렬·묶기·열 배치 값입니다. 각 값의 형식은 정해져 있지 않으므로, 이름만 보고 값을 풀지 않습니다.
 
 #### 폴더 유형 GUID
 
@@ -142,7 +142,7 @@ GUID 와 이름의 짝은 SOFTWARE 하이브의 `Microsoft\Windows\CurrentVersio
 #### `AllFolders\Shell` 의 창 위치 값
 
 - `Bags\<번호>\Shell` 에는 `MinPos1100x705(1).x` 처럼 화면 크기가 이름에 들어간 값이 있습니다.
-- Windows 11 25H2 에서는 이런 값이 `Bags\AllFolders\Shell` 에 있고, 값 이름은 `WinPos<가로>x<세로>x<숫자>(<번호>).left` 형식입니다. 세 번째 숫자의 뜻은 공개 자료가 없습니다.
+- Windows 11 25H2 에서는 이런 값이 `Bags\AllFolders\Shell` 에 있고, 값 이름은 `WinPos<가로>x<세로>x<숫자>(<번호>).left` 형식입니다. 세 번째 숫자의 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮깁니다.
 - 값 이름에 화면 크기가 여럿 보이면 그 크기의 화면에서 탐색기 창을 쓴 적이 있다고 추정할 수 있습니다. 어떤 모니터였는지는 다른 기록과 맞춰 봅니다.
 
 ### 경로를 되살리는 순서

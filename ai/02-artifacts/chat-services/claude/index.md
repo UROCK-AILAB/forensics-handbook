@@ -29,7 +29,7 @@ Claude 는 웹 주소 claude.ai 와 데스크톱 앱, Android 앱, iOS/iPadOS �
 | 자동 안전 분류에 걸림 | 입력·출력은 최대 2년, 안전 분류 점수는 최대 7년 |
 | 법적 요구·분쟁 해결·이용 정책 위반 대응 | 필요한 만큼 |
 
-시크릿(Incognito) 대화는 모델 개선 사용을 켜 두었어도 개선에 쓰지 않습니다[1]. 서버에 얼마나 두는지는 공개 문서에 없어서 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인해야 합니다. 기기 쪽에서는 시크릿 대화도 캐시 데이터베이스에 남고, 시크릿 여부 열(`is_temporary`, iOS 는 `isTemporary`) 값이 1 입니다[12][13]. iLEAPP 시험 데이터에서는 시크릿 대화의 이름 열이 비어 있었습니다[13]. 보관 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
+시크릿(Incognito) 대화는 모델 개선 사용을 켜 두었어도 개선에 쓰지 않습니다[1]. 서버에 얼마나 두는지는 [서비스 회사에 대한 데이터 요청](../../../03-techniques/acquisition/legal-requests.md)으로 확인합니다. 기기 쪽에서는 시크릿 대화도 캐시 데이터베이스에 남고, 시크릿 여부 열(`is_temporary`, iOS 는 `isTemporary`) 값이 1 입니다[12][13]. iLEAPP 시험 데이터에서는 시크릿 대화의 이름 열이 비어 있었습니다[13]. 보관 설정의 일반 원리는 [대화 기록 보관 설정과 삭제](../../../01-foundations/storage-model/retention-deletion.md)에 있습니다.
 
 ## 한눈에 보기
 

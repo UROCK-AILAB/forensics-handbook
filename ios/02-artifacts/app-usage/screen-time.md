@@ -30,7 +30,7 @@ nav_order: 400
 
 | 범위 | 내용 | 출처 |
 |---|---|---|
-| iOS 12 | `RMAdminStore-Local.sqlite`, 동기화 기록용 `RMAdminStore-Cloud.sqlite`. 표와 열 이름은 공개 자료 없음 | [1] |
+| iOS 12 | `RMAdminStore-Local.sqlite`, 동기화 기록용 `RMAdminStore-Cloud.sqlite`. 표와 열 이름은 실제 DB 에서 확인 | [1] |
 | 버전 밝히지 않음 | `RMAdminStore-Local.sqlite` 의 `ZUSAGETIMEDITEM`(시간 항목), `ZUSAGECOUNTEDITEM`(횟수 항목) 표 | [2] |
 | iOS 17 이후 | 바이옴 (Biome) 에도 `ScreenTime.AppUsage` 스트림이 있고, SEGB 시각·번들 ID·이벤트를 담으며 보관 기간은 28일 | [3] |
 | iOS 27.0 로컬 백업 | 아래 "로컬 백업에 보이는 것" 참고 | |
@@ -61,11 +61,11 @@ AppDomainPlugin-com.apple.FamilyControls.ActivityPickerExtension
 | `HomeDomain :: Library/Preferences/com.apple.ScreenTimeSettingsAgent.plist` | `ManagedChildMigrationRemediation` (bool), `TimeAllowanceClientIdentifierMigration` (bool) 등 |
 | `HomeDomain :: Library/Preferences/com.apple.coreduetd.plist` | `ScreenTimeSyncDisabled` (bool) 등 |
 
-키 이름만 보면 `UsageGenesisDate` 는 사용 기록이 시작된 시각, `ScreenTimeEnabled` 는 기능을 켰는지로 읽히지만, 키의 뜻을 밝힌 공개 문서는 없습니다. 보고서에는 키 이름과 값을 그대로 옮기고 해석은 다른 기록과 맞춘 뒤에 붙입니다. 백업 파일을 도메인과 경로로 찾는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 를 여는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+키 이름만 보면 `UsageGenesisDate` 는 사용 기록이 시작된 시각, `ScreenTimeEnabled` 는 기능을 켰는지로 읽히지만, 이름만으로 뜻을 단정할 수는 없습니다. 보고서에는 키 이름과 값을 그대로 옮기고 해석은 다른 기록과 맞춘 뒤에 붙입니다. 백업 파일을 도메인과 경로로 찾는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 를 여는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ## 구조
 
-`RMAdminStore-Local.sqlite` 는 SQLite DB 이고, 사용 시간은 `ZUSAGETIMEDITEM` 표에, 알림 수와 들어 올린 횟수 같은 횟수는 `ZUSAGECOUNTEDITEM` 표에 있습니다[2]. 도구 화면에 나오는 "First Pickup" 같은 이름은 도구가 붙인 이름이고 실제 열 이름은 공개되지 않아서[2], 열 이름을 쓰기 전에 실제 DB 의 스키마를 직접 확인합니다. SQLite 구조와 `-wal` 처리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+`RMAdminStore-Local.sqlite` 는 SQLite DB 이고, 사용 시간은 `ZUSAGETIMEDITEM` 표에, 알림 수와 들어 올린 횟수 같은 횟수는 `ZUSAGECOUNTEDITEM` 표에 있습니다[2]. 도구 화면에 나오는 "First Pickup" 같은 이름은 도구가 붙인 이름이라서[2], 열 이름을 쓰기 전에 실제 DB 의 스키마를 직접 확인합니다. SQLite 구조와 `-wal` 처리는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -77,21 +77,21 @@ AppDomainPlugin-com.apple.FamilyControls.ActivityPickerExtension
 
 ## 시각 해석
 
-기록에 든 시각은 집계 구간이 시작한 시각이고, 사용 시간은 초 단위입니다[1]. DB 안 시각 열이 Mac 절대 시각(2001-01-01 기준 초)인지는 공개 자료가 없어서, 값을 풀 때는 같은 날 다른 기록과 맞춰 기준을 먼저 확인합니다. 설정 plist 의 `datetime` 형은 plist 날짜 형식이라 도구가 날짜로 풀어 줍니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+기록에 든 시각은 집계 구간이 시작한 시각이고, 사용 시간은 초 단위입니다[1]. DB 안 시각 열이 Mac 절대 시각(2001-01-01 기준 초)인지는 값을 풀 때 같은 날 다른 기록과 맞춰 먼저 확인합니다. 설정 plist 의 `datetime` 형은 plist 날짜 형식이라 도구가 날짜로 풀어 줍니다. 시각 기준 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
-`ScreenTimeAgent.plist` 에는 `LastTimeZoneName` (str) 키가 있어서 시간대와 관련된 값으로 보이지만 뜻은 공개 자료로 밝혀지지 않았습니다. 일간 합계를 다른 기록과 맞출 때는 기기 시간대를 [시간대와 시각 설정](../system-account/time-zone.md) 에서 따로 확인하고, 하루를 UTC 로 끊었는지 현지 시각으로 끊었는지 단정하지 않습니다.
+`ScreenTimeAgent.plist` 에는 `LastTimeZoneName` (str) 키가 있어서 시간대와 관련된 값으로 보이지만, 이름만으로 뜻을 단정할 수는 없습니다. 일간 합계를 다른 기록과 맞출 때는 기기 시간대를 [시간대와 시각 설정](../system-account/time-zone.md) 에서 따로 확인하고, 하루를 UTC 로 끊었는지 현지 시각으로 끊었는지 단정하지 않습니다.
 
 ## 함정과 한계
 
 **여러 기기의 기록이 섞입니다.** 가족 공유와 동기화 때문에 수집한 기기에 없는 기기의 UDID 와 사용 기록이 나올 수 있습니다[1]. 행마다 기기 UDID·기기 이름을 확인하고, 수집한 기기의 식별자는 [기기 정보](../system-account/device-info.md) 에서 얻어 맞춰 봅니다.
 
-**화면에 보이는 7일과 DB 의 보관 기간은 다를 수 있습니다.** 설정 화면은 7일치만 보여 주지만[1] DB 쪽 보관 기간은 공개 자료가 없습니다. 화면으로 본 결과와 DB 로 본 결과를 섞어 쓰지 않습니다.
+**화면에 보이는 7일과 DB 의 보관 기간은 다를 수 있습니다.** 설정 화면은 7일치만 보여 주지만[1] DB 쪽 보관 기간은 DB 에 남은 가장 이른 기록의 시각으로 확인합니다. 화면으로 본 결과와 DB 로 본 결과를 섞어 쓰지 않습니다.
 
-**열 이름은 실제 DB 에서 직접 확인합니다.** 공개 자료에는 표 이름과 도구 표시 이름만 있고 실제 열 이름은 없습니다[2]. 버전마다 스키마가 달라질 수도 있어서, 도구 출력만 옮기지 말고 `PRAGMA table_info` 로 열을 확인한 결과를 함께 남깁니다.
+**열 이름은 실제 DB 에서 직접 확인합니다.** 도구 출력에 나오는 이름은 도구가 붙인 표시 이름입니다[2]. 버전마다 스키마가 달라질 수도 있어서, 도구 출력만 옮기지 말고 `PRAGMA table_info` 로 열을 확인한 결과를 함께 남깁니다.
 
 **iOS 17 이후에는 바이옴 쪽도 봅니다.** 같은 종류의 기록이 바이옴 `ScreenTime.AppUsage` 스트림에도 있고 보관 기간이 28일이라[3], DB 와 스트림의 합계가 다르면 기간과 집계 방식이 다른지부터 확인합니다.
 
-**지우기와 조작.** 사용자는 화면 사용 시간을 끄거나 켤 수 있고, `FamilyControlsAgent.plist` 에는 이름에 삭제가 들어간 `DidDeleteActivityRecords` 키도 있습니다. 이 키가 사용 기록을 지운 사건을 뜻하는지는 밝혀지지 않았으므로 삭제의 근거로 쓰지 않고, 기록이 비어 있는 구간은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 다른 기록과 함께 봅니다.
+**지우기와 조작.** 사용자는 화면 사용 시간을 끄거나 켤 수 있고, `FamilyControlsAgent.plist` 에는 이름에 삭제가 들어간 `DidDeleteActivityRecords` 키도 있습니다. 이 키가 사용 기록을 지운 사건을 뜻한다고 단정할 수 없으므로 삭제의 근거로 쓰지 않고, 기록이 비어 있는 구간은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 다른 기록과 함께 봅니다.
 
 ## 직접 분석해 보기
 
@@ -111,7 +111,7 @@ AppDomainPlugin-com.apple.FamilyControls.ActivityPickerExtension
 
 ### SQL 로 스키마부터 보기
 
-열 이름이 공개되지 않았으므로, 먼저 사본에서 표와 열을 나열합니다.
+먼저 사본에서 표와 열을 나열합니다.
 
 ```sql
 SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name;

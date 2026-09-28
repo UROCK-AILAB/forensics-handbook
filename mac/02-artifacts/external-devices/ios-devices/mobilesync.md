@@ -69,7 +69,7 @@ macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave 이전에는 iTunes로
 |---|---|
 | `fileID` | 백업 폴더 안에 저장된 실제 파일의 이름. 16진수 소문자 40글자 [4] |
 | `domain`, `relativePath` | 기기 안 원래 위치를 나타내는 두 값 [3] |
-| `flags` | `1` 이면 일반 파일(공개 도구가 파일을 꺼낼 때 쓰는 조건). 다른 값의 뜻은 공개 자료 없음 |
+| `flags` | `1` 이면 일반 파일(공개 도구가 파일을 꺼낼 때 쓰는 조건). 다른 값은 뜻을 단정하지 않고 값만 옮김 |
 | `file` | NSKeyedArchiver 형식의 바이너리 plist로 된 파일 메타데이터. `EncryptionKey`(암호화 백업), `ProtectionClass`, `Size`, `LastModified` 등이 들어감 [4] |
 
 실제 파일은 백업 폴더 아래 `fileID` 앞 두 글자 이름의 하위 폴더에 `fileID` 이름으로 저장됩니다 [4]. SQLite를 읽는 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에, plist를 읽는 방법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에 있습니다.
@@ -98,7 +98,7 @@ macOS 10.15 Catalina 이후에는 Finder로, 10.14 Mojave 이전에는 iTunes로
 
 백업은 사용자 홈마다 따로 있어서 [1], 맥에 계정이 여러 개라면 모든 홈을 봅니다. 계정 목록은 [사용자 계정 (Local Accounts)](../../system-account/user-accounts/index.md)에서 확인합니다.
 
-`fileID` 는 16진수 40글자로 SHA-1 값의 길이와 같고 [4], `domain` 과 `relativePath` 를 이은 문자열의 SHA-1이라는 설명이 있습니다. 두 글자 하위 폴더 구조와 `Manifest.db` 가 iOS 10부터 예전 `Manifest.mbdb` 를 대신했다는 설명도 있습니다. 오래된 백업을 만나면 이 페이지의 구조를 전제하지 말고 폴더 구성부터 확인합니다. `flags` 의 `1` 이외 값은 뜻을 밝힌 공개 자료가 없으니, 도구가 이 값을 어떻게 걸러 내는지는 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)의 방법으로 확인합니다.
+`fileID` 는 16진수 40글자로 SHA-1 값의 길이와 같고 [4], `domain` 과 `relativePath` 를 이은 문자열의 SHA-1이라는 설명이 있습니다. 두 글자 하위 폴더 구조와 `Manifest.db` 가 iOS 10부터 예전 `Manifest.mbdb` 를 대신했다는 설명도 있습니다. 오래된 백업을 만나면 이 페이지의 구조를 전제하지 말고 폴더 구성부터 확인합니다. `flags` 의 `1` 이외 값은 뜻을 단정하지 않고, 도구가 이 값을 어떻게 걸러 내는지는 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)의 방법으로 확인합니다.
 
 ## 직접 분석해 보기
 

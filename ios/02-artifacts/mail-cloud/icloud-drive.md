@@ -36,7 +36,7 @@ iOS 27.0 로컬 백업에는 `Library/Mobile Documents/com~apple~CloudDocs/` 아
 | iOS | 내용 | 근거 |
 |---|---|---|
 | 13.7 | 파일 위치, `client.db`·`server.db`, `.iCloud` 자리표시 파일, 최근 삭제된 항목 동작 | [1] |
-| 15~26 | 공개 자료 없음, 실제 데이터로 확인 | — |
+| 15~26 | 두 DB 의 표 목록을 `sqlite_master` 로 뽑아 13.7·27.0 과 비교 | — |
 | 27.0 | 두 DB 의 표·열 이름, 설정 plist 키 이름 | — |
 
 ## 구조
@@ -118,15 +118,15 @@ iCloud Drive 목록에 있는 파일이 이 기기에서 만들어졌다고 바�
 
 ## 시각 해석
 
-`item_birthtime`, `version_mtime`, `item_lastusedtime`, `*_stamp`, `error_timestamp` 열의 시각 기준(Unix 초, Mac 절대 시각, 나노초 등)은 공개 자료가 없습니다. 실제 데이터에서는 열마다 자릿수를 보고 여러 기준으로 바꿔 본 뒤, 파일 앱에 보이는 수정 날짜나 [KnowledgeC](../app-usage/knowledgec/index.md) 의 앱 사용 시각과 비교해 기준을 정합니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`item_birthtime`, `version_mtime`, `item_lastusedtime`, `*_stamp`, `error_timestamp` 열은 시각 기준(Unix 초, Mac 절대 시각, 나노초 등)을 열마다 따로 확인합니다. 열마다 자릿수를 보고 여러 기준으로 바꿔 본 뒤, 파일 앱에 보이는 수정 날짜나 [KnowledgeC](../app-usage/knowledgec/index.md) 의 앱 사용 시각과 비교해 기준을 정합니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-이름만 보면 `item_birthtime` 은 파일을 만든 시각, `version_mtime` 은 그 판을 고친 시각, `item_lastusedtime` 은 마지막으로 연 시각처럼 보이지만, 무엇이 바뀔 때 각 열이 바뀌는지는 공개 자료가 없습니다. 시험 기기에서 파일을 만들고, 고치고, 열어 본 뒤 열 값이 어떻게 바뀌는지 보고 나서 보고서에 씁니다.
+이름만 보면 `item_birthtime` 은 파일을 만든 시각, `version_mtime` 은 그 판을 고친 시각, `item_lastusedtime` 은 마지막으로 연 시각처럼 보입니다. 무엇이 바뀔 때 각 열이 바뀌는지는 시험 기기에서 파일을 만들고, 고치고, 열어 본 뒤 열 값이 어떻게 바뀌는지 보고 나서 보고서에 씁니다.
 
 ## 함정과 한계
 
-열의 뜻과 동작은 iOS 13.7 기준으로 알려져 있고 [1], iOS 27.0 에서 알려진 것은 표 이름뿐입니다. 그 사이 버전에서 무엇이 바뀌었는지는 공개 자료가 없어서, 버전이 다른 기기에서는 표 목록부터 새로 뽑아 봅니다.
+열의 뜻과 동작은 iOS 13.7 기준으로 알려져 있고 [1], iOS 27.0 에서 알려진 것은 표 이름뿐입니다. 그 사이 버전의 기기에서는 표 목록부터 새로 뽑아 두 버전과 비교합니다.
 
-두 DB 는 수집 시점의 상태를 적은 것이라서, 지운 파일의 행은 없어졌을 수 있습니다. `tombstones` 표나 SQLite 의 빈 페이지·`-wal` 파일에 흔적이 남는지는 공개 자료가 없고, 찾아보는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
+두 DB 는 수집 시점의 상태를 적은 것이라서, 지운 파일의 행은 없어졌을 수 있습니다. `tombstones` 표나 SQLite 의 빈 페이지·`-wal` 파일에서 흔적을 찾아보는 방법은 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 
 iCloud 백업에는 iCloud Drive 파일이 들어가지 않아서 [3], iCloud 백업만 받았다면 iCloud Drive 파일은 따로 확보해야 합니다. 고급 데이터 보호가 켜진 계정은 iCloud Drive 데이터가 종단 간 암호화되어 있고 [2], 계정 쪽 자료 요청 절차는 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 에서 확인합니다.
 
@@ -162,7 +162,7 @@ iCloud 백업에는 iCloud Drive 파일이 들어가지 않아서 [3], iCloud �
    FROM client_uploads;
    ```
 
-   `client_uploads` 의 행이 `client_items` 의 어느 열과 이어지는지는 공개 자료가 없습니다. 두 표를 따로 읽고, 값의 모양을 보고 잇는 열을 찾습니다.
+   `client_uploads` 의 행이 `client_items` 의 어느 열과 이어지는지는 두 표를 따로 읽고, 값의 모양을 비교해 찾습니다.
 
 3. `server.db` 에서 서버 쪽 목록과 기기 이름을 봅니다.
 

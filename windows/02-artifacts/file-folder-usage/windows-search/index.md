@@ -20,8 +20,8 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 
 - 색인 범위 밖의 파일은 처음부터 색인하지 않습니다. 그래서 "색인에 없다" 가 "파일이 없었다" 는 뜻은 아닙니다.
 - 색인의 수집 시각 (GatherTime) 은 색인이 파일을 처리한 시각입니다. 사용자가 파일을 연 시각이 아닙니다.
-- 색인을 초기화하면 DB 를 새로 만듭니다. 초기화 전 기록이 새 DB 에 이어지는지는 공개된 자료가 없습니다.
-- 색인 기록을 특정 사용자와 잇는 방법은 공개된 자료가 없습니다.
+- 색인을 초기화하면 DB 를 새로 만듭니다. 그래서 색인 기록이 짧다는 것만으로 PC 를 쓴 기간이 짧다고 볼 수는 없습니다.
+- 색인 기록만으로는 어느 사용자의 기록인지 단정할 수 없습니다.
 - Windows 11 25H2 에서는 DB 파일이 보통 SQLite 형식이 아닐 수 있습니다. 첫 16바이트가 `AesGcm1 SQLite3` 인 파일은 SQLite 도구로 열리지 않습니다.
 
 ## 한눈에 보기
@@ -47,7 +47,7 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 | 8·10 | `Windows.edb` | ESE | `SystemIndex_PropertyStore` | `SystemIndex_Gthr`·`SystemIndex_GthrPth` |
 | 11 | `Windows.db`·`Windows-gather.db`·`Windows-usn.db` | SQLite | `Windows.db` 의 `SystemIndex_1_PropertyStore` | `Windows-gather.db` 의 `SystemIndex_Gthr`·`SystemIndex_GthrPth` |
 
-- 암호화된 것으로 보이는 Windows 11 형식이 어느 빌드부터 쓰였는지는 공개된 자료가 없습니다.
+- Windows 11 의 DB 파일은 빌드와 상관없이 첫 16바이트를 먼저 보고, SQLite 형식인지 `AesGcm1 SQLite3` 로 시작하는 형식인지 구분합니다.
 
 ### 알려 주는 것
 

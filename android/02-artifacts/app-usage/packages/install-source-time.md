@@ -7,7 +7,7 @@ nav_order: 430
 
 # 설치 출처와 설치 시각 (Installer·Install Time)
 
-앱을 누가, 어떤 경로로, 언제 설치했는지 시스템이 남기는 필드를 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이고, 어느 Android 출시 버전에서 바뀌었는지는 대부분 공개 자료로 정리돼 있지 않습니다. 이 필드들이 들어 있는 파일의 전체 짜임새는 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
+앱을 누가, 어떤 경로로, 언제 설치했는지 시스템이 남기는 필드를 정리합니다. 내용은 현행 AOSP 기준(frameworks/base 의 main 가지)이라서, 옛 버전 기기에서는 파일에 어떤 속성이 있는지 먼저 확인합니다. 이 필드들이 들어 있는 파일의 전체 짜임새는 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
 
 설치 출처는 `packages.xml` 의 `<package>` 요소에 설치자·설치 요청 앱·원 출처 같은 여러 필드로 나뉘어 적히고, 첫 설치 시각과 설치 이유는 현행 AOSP 에서 사용자별 `package-restrictions.xml` 에 적힙니다 [1].
 
@@ -35,13 +35,13 @@ nav_order: 430
 
 packageSource 는 PackageInstaller.PackageSourceType 값을 정수로 적은 것인데 [2], 숫자와 이름(STORE·LOCAL_FILE·DOWNLOADED_FILE 등)의 대응은 PackageInstaller 에서 찾아봅니다.
 
-installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그 뒤에 지워졌다는 뜻이고, isOrphaned 는 설치자 기록이 고아가 된 상태를 나타냅니다 [1]. isOrphaned 가 켜지는 정확한 조건은 공개 자료로 정리돼 있지 않습니다. `<package>` 아래 `install-initiator-sigs` 요소에는 설치를 요청한 패키지의 서명이 저장됩니다 [1]. `packages.list` 마지막 필드에도 설치자가 적히는데, 형식은 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
+installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그 뒤에 지워졌다는 뜻이고, isOrphaned 는 설치자 기록이 고아가 된 상태를 나타냅니다 [1]. isOrphaned 값만으로 설치 경위를 단정하지는 않습니다. `<package>` 아래 `install-initiator-sigs` 요소에는 설치를 요청한 패키지의 서명이 저장됩니다 [1]. `packages.list` 마지막 필드에도 설치자가 적히는데, 형식은 [패키지 목록 구조](packages-xml.md) 페이지에 있습니다.
 
 ### 기기의 설치 관련 앱과 설정 키
 
 삼성 기기의 예를 들면 `dumpsys package` 의 "Known Packages:" 절에서 Installer 는 `com.google.android.packageinstaller`, Verifier 는 `com.android.vending` 과 `com.samsung.android.sm.devicesecurity`, "Developer verification service provider" 는 `com.google.android.verifier` 입니다. 설치자 필드의 값을 이 목록과 맞춰 보면 기기에 지정된 설치 프로그램이 설치를 맡았는지 판별할 수 있습니다.
 
-설정 값 가운데 settings secure 에 `install_non_market_apps` 키가, settings global 에 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `default_install_location`, `set_install_location`, `upload_apk_enable` 키가 있습니다. 각 키의 뜻을 설명한 공개 자료는 없습니다. 설정 값을 읽는 방법은 [설정 값](../../system-account/settings.md) 페이지를 봅니다.
+설정 값 가운데 settings secure 에 `install_non_market_apps` 키가, settings global 에 `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `default_install_location`, `set_install_location`, `upload_apk_enable` 키가 있지만, 키 이름만 보고 뜻을 단정하지 않습니다. 설정 값을 읽는 방법은 [설정 값](../../system-account/settings.md) 페이지를 봅니다.
 
 ## 설치 시각 필드
 
@@ -51,7 +51,7 @@ installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그
 | 마지막 업데이트 시각 | `packages.xml` 의 `<package>` 요소 ut(16진수) | `lastUpdateTime=` |
 | 마지막 수정 시각 | `packages.xml` 의 `<package>` 요소 ft(16진수) | `timeStamp=` |
 
-첫 설치 시각은 예전에 `packages.xml` 의 `<package>` 요소 it 속성(16진수)에 패키지별로 적었고, 현행 AOSP 는 사용자별로 옮겼습니다 [1]. 사용자별 값이 0(없음)이면 OTA 전 `packages.xml` 의 it 값을 대신 쓰는데, OTA 로 정보가 사라지는 것을 막으려는 코드입니다 [1]. 사용자별로 옮긴 Android 버전은 공개 자료로 정리돼 있지 않습니다. ft 의 뜻은 [패키지 목록 구조](packages-xml.md) 페이지에서 다룹니다.
+첫 설치 시각은 예전에 `packages.xml` 의 `<package>` 요소 it 속성(16진수)에 패키지별로 적었고, 현행 AOSP 는 사용자별로 옮겼습니다 [1]. 사용자별 값이 0(없음)이면 OTA 전 `packages.xml` 의 it 값을 대신 쓰는데, OTA 로 정보가 사라지는 것을 막으려는 코드입니다 [1]. 기기가 어느 쪽에 적는지는 `packages.xml` 에 it 속성이 있는지, `package-restrictions.xml` 에 first-install-time 이 있는지로 확인합니다. ft 의 뜻은 [패키지 목록 구조](packages-xml.md) 페이지에서 다룹니다.
 
 ## 설치 이유와 사용자별 상태
 
@@ -100,7 +100,7 @@ installInitiatorUninstalled 가 true 이면 설치를 요청한 패키지가 그
 
 ## 시각 해석
 
-`packages.xml` 과 `package-restrictions.xml` 의 시각 필드는 16진수 문자열이고, 유닉스 에포크 밀리초로 읽어 UTC 로 바꿉니다 [4]. 바꾸는 계산은 [패키지 목록 구조](packages-xml.md) 페이지의 예시를 따르고, 시각 값 일반은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다. `dumpsys package` 는 시각을 `yyyy-MM-dd HH:mm:ss` 형식으로 찍어서 밀리초가 잘리고 시간대 표시가 없습니다 [1]. 어느 시간대로 찍히는지 알려져 있지 않으니, 파일 값과 한 번 맞춰 본 뒤에 씁니다.
+`packages.xml` 과 `package-restrictions.xml` 의 시각 필드는 16진수 문자열이고, 유닉스 에포크 밀리초로 읽어 UTC 로 바꿉니다 [4]. 바꾸는 계산은 [패키지 목록 구조](packages-xml.md) 페이지의 예시를 따르고, 시각 값 일반은 [시각 값](../../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다. `dumpsys package` 는 시각을 `yyyy-MM-dd HH:mm:ss` 형식으로 찍어서 밀리초가 잘리고 시간대 표시가 없습니다 [1]. 어느 시간대로 찍히는지는 파일 값과 한 번 맞춰 보고 확인한 뒤에 씁니다.
 
 첫 설치 시각은 사용자별로 적기 때문에 같은 앱이라도 사용자마다 다를 수 있습니다 [1]. 설치 이유가 2(복원)인 앱은 이 기기에 복원하며 설치한 앱이라서, 첫 설치 시각을 원래 기기에서 처음 설치한 때로 읽지 않습니다.
 

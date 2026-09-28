@@ -24,7 +24,7 @@ nav_order: 280
 | 로컬 백업 | `HomeDomain :: Library/Accounts/Accounts#.sqlite` (`#` 은 숫자) | |
 | 로컬 백업의 사본 | `HomeDomain :: Library/Accounts/VerifiedBackup/Accounts#.sqlite` | |
 
-백업 쪽 `HomeDomain :: Library/Accounts/` 는 이름으로 보면 전체 파일 시스템 경로 `/private/var/mobile/Library/Accounts/` 와 맞습니다. `VerifiedBackup` 폴더의 사본은 표와 열 구성이 원본과 같고, 언제 왜 만들어지는지 밝힌 공개 자료는 없습니다. 두 파일의 내용이 다르면 서로 다른 시점의 상태일 수 있으니 따로 읽어 비교합니다.
+백업 쪽 `HomeDomain :: Library/Accounts/` 는 이름으로 보면 전체 파일 시스템 경로 `/private/var/mobile/Library/Accounts/` 와 맞습니다. `VerifiedBackup` 폴더의 사본은 표와 열 구성이 원본과 같습니다. 두 파일의 내용이 다르면 서로 다른 시점의 상태일 수 있으니 따로 읽어 비교합니다.
 
 ### 애플 계정 쪽 설정 파일
 
@@ -78,7 +78,7 @@ iOS 15~27 사이에 파일 이름이나 표 구성이 어떻게 바뀌었는지�
 | `ZCREDENTIALITEM` | `Z_PK`, `Z_ENT`, `Z_OPT`, `ZPERSISTENT`, `ZEXPIRATIONDATE`, `ZACCOUNTIDENTIFIER`, `ZSERVICENAME` |
 | `ZACCESSOPTIONSKEY`, `ZDATACLASS` | `Z_PK`, `Z_ENT`, `Z_OPT`, `ZNAME`, `ZENUMVALUE` |
 
-계정 DB 에서 읽는 항목[7]이 어느 열에 있는지 밝힌 공개 자료는 없습니다. 아래 대응은 열 이름으로 짐작한 것이니, 실제 데이터에서 값을 보고 확인한 뒤에 씁니다.
+계정 DB 에서 읽는 항목[7]과 열의 대응은 아래와 같습니다. 이 대응은 열 이름으로 짐작한 것이니, 실제 데이터에서 값을 보고 확인한 뒤에 씁니다.
 
 | 항목[7] | 짐작되는 열 |
 |---|---|
@@ -91,7 +91,7 @@ iOS 15~27 사이에 파일 이름이나 표 구성이 어떻게 바뀌었는지�
 | 계정 종류 | `ZACCOUNT.ZACCOUNTTYPE` 이 가리키는 `ZACCOUNTTYPE` 행의 `ZACCOUNTTYPEDESCRIPTION`·`ZIDENTIFIER` |
 | 추가 시각 | `ZACCOUNT.ZDATE` |
 
-`ZACCOUNTPROPERTY` 는 `ZOWNER`, `ZKEY`, `ZVALUE` 열 이름으로 보면 계정마다 딸린 속성을 키와 값으로 늘어놓는 표로 보입니다. `ZCREDENTIALITEM` 에는 `ZACCOUNTIDENTIFIER`, `ZSERVICENAME`, `ZEXPIRATIONDATE` 열이 있지만, 비밀번호 같은 자격 증명 값이 이 DB 에 들어 있는지 밝힌 공개 자료는 없습니다. 저장된 비밀번호와 토큰은 [키체인](../../01-foundations/storage/keychain.md) 과 [저장된 암호](../credentials-security/saved-passwords.md) 에서 다룹니다.
+`ZACCOUNTPROPERTY` 는 `ZOWNER`, `ZKEY`, `ZVALUE` 열 이름으로 보면 계정마다 딸린 속성을 키와 값으로 늘어놓는 표로 보입니다. `ZCREDENTIALITEM` 에는 `ZACCOUNTIDENTIFIER`, `ZSERVICENAME`, `ZEXPIRATIONDATE` 열이 있습니다. 비밀번호 같은 자격 증명 값이 이 DB 에 들어 있는지는 이 표의 행을 열어 값을 보고 확인합니다. 저장된 비밀번호와 토큰은 [키체인](../../01-foundations/storage/keychain.md) 과 [저장된 암호](../credentials-security/saved-passwords.md) 에서 다룹니다.
 
 `com.apple.accountsd.plist` 의 `AuthenticationPluginCache` 안에는 계정 종류를 나타내는 식별자가 들어 있습니다.
 
@@ -119,7 +119,7 @@ com.apple.account.iTunesStore.sandbox
 
 **증명하는 것.** 수집 시점에 `ZACCOUNT` 에 행이 있으면 그 사용자 이름과 계정 종류의 계정이 기기에 등록되어 있었다는 기록이 됩니다. 소유 번들 ID 로는 어느 앱이나 시스템 기능이 그 계정을 쓰는지 보고, 부모 계정 열로는 한 계정 아래 딸린 하위 계정을 묶어 볼 수 있습니다. 보고서에는 "이 기기의 계정 DB 에 이 사용자 이름의 이 종류 계정 행이 있고, 추가 시각 열 값은 이렇다" 처럼 씁니다.
 
-**증명하지 못하는 것.** 계정 행은 기기에 계정이 설정되어 있었다는 사실만 보여 줍니다. 그 계정을 누가 만들었는지, 누가 비밀번호를 넣었는지, 서버 쪽에서 계정이 지금도 유효한지는 이 행으로 알 수 없습니다. `AAIsAccountSignedIn`, `AAPrimaryAccountSignInState`, `fmipActive` 같은 키는 이름으로 보면 로그인·나의 찾기 상태를 담지만, 값의 뜻을 밝힌 공개 자료가 없으니 값 하나로 "로그인되어 있었다" 고 단정하지 않습니다. `dsid` 도 애플 계정 식별 번호로 흔히 풀이되지만, 이를 뒷받침하는 공개 자료는 없습니다.
+**증명하지 못하는 것.** 계정 행은 기기에 계정이 설정되어 있었다는 사실만 보여 줍니다. 그 계정을 누가 만들었는지, 누가 비밀번호를 넣었는지, 서버 쪽에서 계정이 지금도 유효한지는 이 행으로 알 수 없습니다. `AAIsAccountSignedIn`, `AAPrimaryAccountSignInState`, `fmipActive` 같은 키는 이름으로 보면 로그인·나의 찾기 상태를 담지만, 값의 뜻이 정해져 있지 않으므로 값 하나로 "로그인되어 있었다" 고 단정하지 않습니다. `dsid` 도 애플 계정 식별 번호로 흔히 풀이되지만, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 
 ## 시각 해석
 

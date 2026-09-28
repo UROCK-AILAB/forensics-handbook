@@ -7,7 +7,7 @@ nav_order: 1720
 
 # 메일로 (Email)
 
-메일 앱으로 자료를 밖으로 보냈는지 확인하는 순서를 정리합니다. 이 페이지는 공개된 분석 자료가 있는 Gmail 을 중심으로 씁니다. Gmail 은 메일 본문과 머리를 압축한 protobuf 로 저장해서 표를 그대로 읽어서는 받는 사람이나 제목이 보이지 않습니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
+메일 앱으로 자료를 밖으로 보냈는지 확인하는 순서를 정리합니다. 이 페이지는 Gmail 을 중심으로 씁니다. Gmail 은 메일 본문과 머리를 압축한 protobuf 로 저장해서 표를 그대로 읽어서는 받는 사람이나 제목이 보이지 않습니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
 
 ## 조사 질문
 
@@ -33,7 +33,7 @@ nav_order: 1720
 
 Gmail 의 구조 전체는 [지메일 (Gmail)](../../../02-artifacts/mail-cloud/gmail.md) 페이지에 있고, 여기서는 유출을 따질 때 필요한 부분만 적습니다. 메일 DB 는 `*/com.google.android.gm/databases/bigTopDataDB.*` 이고, 로그인한 계정마다 `bigTopDataDB.<숫자 id>` 파일이 하나씩 있습니다 [2]. 어느 파일이 어느 계정인지는 `*/com.google.android.gm/shared_prefs/Gmail.xml` 에 적힌 메일 주소로 맞추는데, ALEAPP 시험 이미지에서는 주소 문자열의 Java `String.hashCode` 값이 파일 이름 뒤의 숫자와 같았습니다 [2]. 계정이 둘 이상이면 파일마다 이 대조를 먼저 해 둡니다.
 
-메일은 `item_messages` 표에, 첨부 목록은 `item_message_attachments` 표에 있고, 첨부 표의 `item_messages_row_id` 가 `item_messages.row_id` 와 이어집니다 [2]. 받는 사람, 회신 주소, 제목 같은 머리와 본문은 `item_messages` 의 `zipped_message_proto` 열에 zlib 으로 압축한 protobuf 로 들어 있습니다 [2]. protobuf 는 필드 이름 없이 번호만 남기는 형식이고, Gmail 의 필드 번호는 공개 문서가 없어 ALEAPP 가 시험 이미지에서 맞춰 정했습니다 [2]. 형식은 [프로토콜 버퍼 (Protocol Buffers)](../../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다.
+메일은 `item_messages` 표에, 첨부 목록은 `item_message_attachments` 표에 있고, 첨부 표의 `item_messages_row_id` 가 `item_messages.row_id` 와 이어집니다 [2]. 받는 사람, 회신 주소, 제목 같은 머리와 본문은 `item_messages` 의 `zipped_message_proto` 열에 zlib 으로 압축한 protobuf 로 들어 있습니다 [2]. protobuf 는 필드 이름 없이 번호만 남기는 형식이고, Gmail 의 필드 번호는 ALEAPP 가 시험 이미지에서 맞춰 정한 것입니다 [2]. 형식은 [프로토콜 버퍼 (Protocol Buffers)](../../../01-foundations/data-formats/protobuf.md) 페이지에 있습니다.
 
 읽는 순서는 다음과 같습니다.
 
@@ -46,7 +46,7 @@ Gmail 의 구조 전체는 [지메일 (Gmail)](../../../02-artifacts/mail-cloud/
 
 같은 앱의 `downloader.db` 에는 `download_requests` 표가 있고, 열은 `request_time_ms`(밀리초), `account_name`, `type`, `caller_id`, `url`, `target_file_path`, `target_file_size`, `priority` 입니다 [2]. 이름 그대로 내려받기 요청의 기록이라서 보낸 쪽보다는 받은 첨부를 언제 기기에 내려받았는지를 볼 때 씁니다. ALEAPP 시험 이미지 대부분에서 0행이었습니다 [2].
 
-`bigTopDataDB` 의 `label_counts` 표에는 라벨마다 `label_server_perm_id`, `unread_count`, `total_count`, `unseen_count` 가 있습니다 [2]. 보낸편지함 라벨로 보낸 메일만 골라내는 방법은 공개된 자료가 없습니다. 그래서 기기 쪽에서는 메일이 이 계정 저장소에 있었다는 사실과 받는 사람·제목·시각까지만 적고, 보낸 메일인지는 계정 쪽 보낸편지함과 맞춰 확인합니다. ALEAPP 시험 이미지에는 삼성 Galaxy S10(galaxys10_a10, Android 10)과 Pixel 기기가 섞여 있고, 계정 저장소가 둘인 이미지도 있습니다 [2].
+`bigTopDataDB` 의 `label_counts` 표에는 라벨마다 `label_server_perm_id`, `unread_count`, `total_count`, `unseen_count` 가 있습니다 [2]. 이 표는 라벨별 개수만 담아서, 이것만으로 보낸 메일을 골라낼 수는 없습니다. 그래서 기기 쪽에서는 메일이 이 계정 저장소에 있었다는 사실과 받는 사람·제목·시각까지만 적고, 보낸 메일인지는 계정 쪽 보낸편지함과 맞춰 확인합니다. ALEAPP 시험 이미지에는 삼성 Galaxy S10(galaxys10_a10, Android 10)과 Pixel 기기가 섞여 있고, 계정 저장소가 둘인 이미지도 있습니다 [2].
 
 ## 다른 메일 앱
 

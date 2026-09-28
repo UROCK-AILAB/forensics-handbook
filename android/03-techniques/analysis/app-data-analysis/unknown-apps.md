@@ -72,7 +72,7 @@ packages.xml 이 일반 XML 도 바이너리 XML 도 아닌 경우가 있고(암
 
 Android 버전에 따라 앱 전용 저장소의 암호화와 접근 범위가 달라집니다(허브 [앱 데이터 분석](index.md) 의 표). 확보한 자료에 앱 폴더가 없으면 수집 방식이 그 영역에 닿지 못한 것인지부터 확인하고, 수집 방식별 범위는 [모바일 증거 확보 (Acquisition)](../../acquisition/mobile-acquisition/index.md), 암호화는 [저장 공간 암호화 (Encryption)](../../../01-foundations/storage/encryption/index.md) 페이지를 봅니다.
 
-`settings global` 에는 `default_install_location`, `set_install_location`, `package_verifier_user_consent`, `verifier_timeout_samsung` 같은 키가, `settings secure` 에는 `install_non_market_apps`, `appprotection_permission_function_install_auto_scan_agreed` 같은 키가 있을 수 있습니다. 이름만 보면 설치 경로와 검증에 관련된 키로 보이지만 값의 뜻을 설명한 공개 자료가 없어서, 뜻을 확인하기 전에는 판단 근거로 쓰지 않습니다. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
+`settings global` 에는 `default_install_location`, `set_install_location`, `package_verifier_user_consent`, `verifier_timeout_samsung` 같은 키가, `settings secure` 에는 `install_non_market_apps`, `appprotection_permission_function_install_auto_scan_agreed` 같은 키가 있을 수 있습니다. 이름만 보면 설치 경로와 검증에 관련된 키로 보이지만 값의 뜻은 단정할 수 없어서, 뜻을 확인하기 전에는 판단 근거로 쓰지 않습니다. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md) 페이지에 있습니다.
 
 앱 폴더의 하위 폴더 이름과 파일 이름은 앱이 정해서, 이름만 보고 내용을 짐작하지 않습니다. 앱 판이 바뀌면 DB 구조도 바뀔 수 있어서, 분석한 앱의 버전을 함께 적어 둡니다.
 

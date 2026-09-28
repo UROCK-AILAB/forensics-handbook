@@ -21,11 +21,11 @@ BAM (Background Activity Moderator) 은 커널 드라이버입니다. Windows 11
 | `HKLM\SYSTEM\CurrentControlSet\Services\bam\UserSettings\{SID}` | `State` 가 없는 경로[1] |
 | `HKLM\SYSTEM\CurrentControlSet\Services\bam\State\UserSettings\{SID}` | `State` 가 붙은 경로[1]. Windows 11 에는 이 경로만 있을 수 있습니다 |
 
-- BAM 키는 Windows 10 1709 이후에 생긴 것으로 보입니다[1]. 도입 버전은 정확히 밝혀지지 않았습니다.
-- 어느 빌드부터 `State` 가 붙는지는 공개 자료에 없으므로 두 경로를 모두 봅니다.
+- BAM 키는 Windows 10 1709 이후에 생긴 것으로 보입니다[1].
+- `State` 가 붙은 경로와 붙지 않은 경로를 모두 봅니다.
 - 오프라인 하이브에서는 `CurrentControlSet` 대신 `ControlSet00X` 아래에서 찾습니다. 이 점은 [심캐시](shimcache-appcompatcache.md) 의 위치 절에서 다룹니다.
 - 보존 기간을 바꾸는 설정 값이 있습니다. `\REGISTRY\MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\BAM` 키의 `UserSettingsLifetimeMs` 값입니다[2]. 이 `Session Manager\BAM` 키는 기본으로는 없을 수 있습니다.
-- DAM 의 레지스트리 경로와 값 구조는 공개 자료에 없습니다. Windows 11 에서 `Services\dam` 키에 `PowerEvents` 하위 키 하나만 있고 `dam\State\UserSettings` 는 없는 경우가 있습니다.
+- DAM 의 레지스트리 경로와 값 구조는 분석 대상 하이브에서 `Services\dam` 키를 열어 확인합니다. Windows 11 에서 `Services\dam` 키에 `PowerEvents` 하위 키 하나만 있고 `dam\State\UserSettings` 는 없는 경우가 있습니다.
 - Windows 11 에서 `bam`·`dam` 서비스는 둘 다 Type=1(커널 드라이버), Start=1(System) 이며, 켜진 PC 에서는 실행 중입니다. 서비스 키 읽는 법은 [서비스·드라이버](../persistence/services-drivers.md) 에서 다룹니다.
 
 하이브 파일의 구조와 수집 방법은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
@@ -55,7 +55,7 @@ BAM (Background Activity Moderator) 은 커널 드라이버입니다. Windows 11
 
 - 값은 24바이트(0x18) REG_BINARY 이고, 앞 8바이트가 FILETIME 입니다[1][2].
 - Windows 11 에서 실행 파일 경로 항목은 오프셋 16 이 0, 패키지 앱 항목은 1 입니다. 오프셋 20 은 2, 오프셋 8~15 는 0 입니다.
-- SID 키마다 DWORD 값 `Version` 과 `SequenceNumber` 가 있습니다. Windows 11 에서 `Version` 은 1 이고, `SequenceNumber` 는 키마다 다릅니다(예: 624~4886). 두 값의 뜻은 공개 자료에 없습니다.
+- SID 키마다 DWORD 값 `Version` 과 `SequenceNumber` 가 있습니다. Windows 11 에서 `Version` 은 1 이고, `SequenceNumber` 는 키마다 다릅니다(예: 624~4886). 두 값은 뜻을 단정하지 않고 값만 옮깁니다.
 - `UserSettings` 아래에는 로컬 계정 `S-1-5-21-…` 말고도 `S-1-5-18`, `S-1-5-90-0-…` 같은 SID 키가 있을 수 있습니다.
 
 SID 의 짜임과 잘 알려진 SID 는 [윈도 식별자 형식](../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서, SID 를 계정 이름과 잇는 방법은 [사용자 프로필 목록](../system-account/profilelist.md) 에서 다룹니다.
@@ -95,7 +95,7 @@ SID 의 짜임과 잘 알려진 SID 는 [윈도 식별자 형식](../../01-found
 - **장치 경로를 드라이브 문자로 바꿔야 합니다.** `\Device\HarddiskVolumeN` 이 어느 드라이브인지는 다른 근거로 맞춥니다. 번호를 짐작으로 드라이브 문자에 붙이지 않습니다.
 - **섀도 복사본 안의 프로그램도 기록됩니다[2].** 경로가 낯설면 섀도 복사본 안의 파일을 실행했는지 봅니다. 섀도 복사본 구조는 [볼륨 섀도 복사본 구조](../../01-foundations/disk-volume/volume-shadow-copy.md) 에서 다룹니다.
 - **띄운 방법에 따라 기록 여부가 달라집니다.** 콘솔 프로그램을 PowerShell 에서 띄웠는지 직접 띄웠는지에 따라 결과가 다릅니다[2].
-- **DAM 은 아직 밝혀지지 않은 부분이 많습니다.** 경로와 값 구조를 정리한 공개 자료가 없습니다. DAM 에서 실행 기록을 찾았다고 쓰려면 근거를 따로 찾습니다.
+- **DAM 은 경로와 값 구조를 실제 하이브에서 확인합니다.** DAM 에서 실행 기록을 찾았다고 쓰려면 근거를 따로 찾습니다.
 
 ## 직접 분석해 보기
 

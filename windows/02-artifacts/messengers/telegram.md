@@ -21,7 +21,7 @@ nav_order: 2070
 | 판 | 위치 | 근거 |
 |---|---|---|
 | Windows 설치판 | `%USERPROFILE%\AppData\Roaming\Telegram Desktop` | [1] |
-| 스토어 판, 포터블 판 | 공개 자료 없음 | — |
+| 스토어 판, 포터블 판 | 실제 기기에서 `tdata` 폴더를 찾아 확인 | — |
 
 설치판은 실행 파일과 데이터를 같은 폴더에 두며, 그 폴더에는 `Telegram.exe`, `Updater.exe`, `unins000.exe`·`unins000.dat`·`unins000.msg`, `log.txt`, `log_start0.txt`, `modules`, `tdata`, `tupdates` 가 있습니다. 경로를 모를 때는 이름 `tdata` 폴더와 `Telegram.exe` 로 찾고, 설치 기록은 [설치 프로그램](../system-account/uninstall.md) 에서 확인합니다.
 
@@ -60,7 +60,7 @@ nav_order: 2070
 - 앱은 읽을 때 `s` 파일을 먼저 찾고, 없으면 `0` 과 `1` 가운데 수정 시각이 새것을 고릅니다[2].
 - 옛 자료에는 `tdata/D877F783D5D3EF8C/map0` 으로 나오지만[1] 7.1.1 에서는 `maps` 이며, 끝 글자 규칙과 맞습니다.
 - 폴더 이름 `D877F783D5D3EF8C` 는 MD5("data") 에서 나온 값과 같습니다. 계산은 아래 "헥스로 한 번" 에 있습니다.
-- 두 번째 계정부터 폴더 이름이 어떻게 정해지는지는 공개 자료가 없습니다.
+- 두 번째 계정부터 폴더 이름이 어떻게 정해지는지는 시험 기기에서 계정을 추가해 확인합니다.
 
 ### 암호화
 
@@ -85,7 +85,6 @@ nav_order: 2070
 | 파일 수 | 예: `user_data` 안에 825개 |
 
 - `binlog` 와 캐시 파일은 `54 44 45 46`(`TDEF`)로 시작합니다. 설정 파일의 `TDF$` 와 다릅니다.
-- 캐시 형식의 세부는 공개 자료가 없습니다.
 
 ### tdata 의 다른 항목
 
@@ -93,7 +92,7 @@ nav_order: 2070
 |---|---|
 | `user_data\wvbots\EBWebView` | 봇(미니 앱)용 WebView2 데이터 폴더로 보입니다. 읽는 법은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 에서 다룹니다 |
 | `emoji` | `cache_42_*`, `cache_56_*` 파일 |
-| `dumps`, `temp`, `tdummy`, `countries` | 공개 자료 없음 |
+| `dumps`, `temp`, `tdummy`, `countries` | 폴더를 열어 내용을 확인합니다 |
 | `shortcuts-custom.json`, `shortcuts-default.json` | 단축키 설정 |
 | `prefix` | 내용이 `https://td.telegram.org/` 로 시작합니다 |
 | `usertag` | 8바이트 파일 |
@@ -109,7 +108,7 @@ nav_order: 2070
 | `Working dir: ...` | 작업 폴더 |
 | `Command line: ...` | 실행 인수 |
 
-로그를 몇 개까지 돌려 쓰는지는 공개 자료가 없습니다.
+로그를 몇 개까지 돌려 쓰는지는 설치 폴더에 남은 로그 파일의 개수와 시각을 보고 확인합니다.
 
 ## 증거로서 의미
 
@@ -136,7 +135,7 @@ nav_order: 2070
 |---|---|---|
 | `log.txt` 줄 시각 | 로그 줄을 쓸 때 | 현지 시각입니다. 마지막 줄 시각이 파일 수정 시각과 같습니다 |
 | 설정 파일 (`TDF$`) | — | 구조에 시각 필드가 없습니다 |
-| 설정 파일의 파일 시스템 시각 | 앱이 파일을 다시 쓸 때 | UTC. `settingss` 는 마지막 실행과 가깝고, `key_datas` 는 그보다 이를 수 있습니다. 각 파일 시각의 뜻은 공개 자료가 없습니다 |
+| 설정 파일의 파일 시스템 시각 | 앱이 파일을 다시 쓸 때 | UTC. `settingss` 는 마지막 실행과 가깝고, `key_datas` 는 그보다 이를 수 있습니다. 각 파일 시각의 뜻은 단정하지 않습니다 |
 | 캐시 파일의 파일 시스템 시각 | 캐시를 쓸 때 | UTC. 받은 때의 단서로 봅니다 |
 
 - 현지 시각인 로그와 UTC 인 파일 시각을 한 표에 놓을 때는 [시간대 설정](../system-account/time-zone.md) 으로 맞춥니다.

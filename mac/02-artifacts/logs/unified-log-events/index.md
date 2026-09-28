@@ -38,7 +38,7 @@ has_toc: false
 | 10.12 Sierra | 통합 로그 도입 [1][2] |
 | 12 Monterey | `/private/var/db/uuidtext/dsc` 의 UUID 파일 형식이 바뀌고, tracev3 에 Simpledump 이벤트 유형이 더해짐 [5] |
 | 13 Ventura | libyal 형식 문서가 시험한 마지막 버전 [1] |
-| 14 Sonoma 이후 | 형식 변화에 대한 공개 자료 없음 |
+| 14 Sonoma 이후 | 형식이 바뀌었는지는 실제 파일을 분석 도구로 읽어 확인 |
 
 파일 구조와 시각 계산은 [통합 로그 형식 (Unified Log)](../../../01-foundations/data-formats/unified-log/index.md) 에서 다룹니다.
 

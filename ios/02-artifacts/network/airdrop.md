@@ -54,7 +54,7 @@ iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 열 이름이 
 | 공유 시트 | `UIActivityCategoryShare`, `UIActivityCategoryAction`, `SFCollaborationUserDefaults.com.apple.MobileSMS` |
 | 그 밖 | `StreamID`, `expireEscrowTokens` 등 |
 
-`HashManager-LastUpdatedDateKey` 와 `HashManager-LastRebuiltDateKey` 는 날짜형 값입니다. 받기 모드(연락처만·모든 사람)라고 이름이 분명한 키는 없습니다. 그래서 이 파일만 보고 수집 당시 받기 모드를 말할 수 없습니다. 각 키의 뜻을 설명한 공개 자료는 없고, `AirDropID` 가 보안 문서의 신원 해시와 같은 값인지도 알려져 있지 않습니다.
+`HashManager-LastUpdatedDateKey` 와 `HashManager-LastRebuiltDateKey` 는 날짜형 값입니다. 받기 모드(연락처만·모든 사람)라고 이름이 분명한 키는 없습니다. 그래서 이 파일만 보고 수집 당시 받기 모드를 말할 수 없습니다. 각 키의 뜻은 정해져 있지 않으므로 보고서에는 값만 옮기고, `AirDropID` 를 보안 문서의 신원 해시와 같은 값으로 단정하지 않습니다.
 
 ### 기기 관리 제한
 
@@ -62,7 +62,7 @@ iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 열 이름이 
 
 ### 사진 DB 의 가져오기 열
 
-`Photos.sqlite` 의 `ZADDITIONALASSETATTRIBUTES` 표에 `ZIMPORTEDBY` 열이 있고, `ZCLOUDMASTER` 표에 `ZIMPORTEDBY`, `ZIMPORTEDBYBUNDLEIDENTIFIER`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTDATE` 열이 있습니다. 이름으로 보면 사진을 어떤 경로·앱으로 가져왔는지 담는 열이지만, 에어드롭으로 받은 사진이 `ZIMPORTEDBY` 에 어떤 숫자로 남는지는 알려져 있지 않아 시험으로 확인해야 합니다. 에어드롭으로 받은 사진을 `ZCREATORBUNDLEID` 열로 구분한다는 자료도 있지만, iOS 27.0 에는 그 이름의 열이 없습니다. 사진 DB 전체 구조는 [사진 보관함](../media/photos/index.md) 에서 다룹니다.
+`Photos.sqlite` 의 `ZADDITIONALASSETATTRIBUTES` 표에 `ZIMPORTEDBY` 열이 있고, `ZCLOUDMASTER` 표에 `ZIMPORTEDBY`, `ZIMPORTEDBYBUNDLEIDENTIFIER`, `ZIMPORTEDBYDISPLAYNAME`, `ZIMPORTDATE` 열이 있습니다. 이름으로 보면 사진을 어떤 경로·앱으로 가져왔는지 담는 열이지만, 에어드롭으로 받은 사진이 `ZIMPORTEDBY` 에 어떤 숫자로 남는지는 시험 기기로 사진을 받아 보고 확인합니다. 에어드롭으로 받은 사진을 `ZCREATORBUNDLEID` 열로 구분한다는 자료도 있지만, iOS 27.0 에는 그 이름의 열이 없습니다. 사진 DB 전체 구조는 [사진 보관함](../media/photos/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -74,7 +74,7 @@ iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 열 이름이 
 
 **증명하지 못하는 것**
 
-- 받는 기기가 보여 주는 보낸 사람 이름은 신원이 확인된 경우에만 나오고 [1], 기기에 보낸 사람 정보가 어디에 남는지는 알려져 있지 않습니다. 그래서 보낸 사람을 기기 기록만으로 특정하지 않습니다.
+- 받는 기기가 보여 주는 보낸 사람 이름은 신원이 확인된 경우에만 나오고 [1], 기기에 보낸 사람 정보가 어디에 남는지는 시험 기기로 재현해 확인해야 합니다. 그래서 보낸 사람을 기기 기록만으로 특정하지 않습니다.
 - 전송은 공유기를 거치지 않고 기기끼리 직접 해서 [1], 공유기나 통신사 기록에서 이 전송을 찾을 수 없습니다. 기록이 없다고 해서 전송이 없었다고 말하지 않습니다.
 - 파일을 받은 기록은 그 파일을 열어 보았다는 증거가 아닙니다.
 - 에어드롭 설정이 켜져 있었다는 사실은 특정 시각에 무엇을 주고받았다는 증거가 아닙니다.
@@ -83,7 +83,7 @@ iOS 15 ~ 18 사이에 `com.apple.sharingd.plist` 키나 사진 DB 열 이름이 
 
 ## 시각 해석
 
-`com.apple.sharingd.plist` 의 `HashManager-LastUpdatedDateKey`·`HashManager-LastRebuiltDateKey` 는 plist 날짜형이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽지만, 무엇이 바뀔 때 이 값이 바뀌는지는 알려져 있지 않습니다. 이름으로 보면 해시 목록을 고친 때로 보이고, 전송 시각으로 읽지 않습니다.
+`com.apple.sharingd.plist` 의 `HashManager-LastUpdatedDateKey`·`HashManager-LastRebuiltDateKey` 는 plist 날짜형이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽지만, 무엇이 바뀔 때 이 값이 바뀌는지는 값만으로 알 수 없습니다. 이름으로 보면 해시 목록을 고친 때로 보이고, 전송 시각으로 읽지 않습니다.
 
 받은 사진의 시각은 사진 DB 의 가져오기 시각(`ZIMPORTDATE`)과 사진 자체의 촬영 시각이 다를 수 있습니다. 사진 DB 시각 열의 기준은 [사진 보관함](../media/photos/index.md) 과 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서, 촬영 시각은 [카메라 사진과 메타데이터](../media/dcim-exif.md) 에서 확인합니다. 보낸 기기의 촬영 시각과 받은 기기의 가져오기 시각을 섞어 쓰면 사건 순서가 틀어질 수 있어서, 두 값을 열 이름과 함께 따로 적습니다.
 

@@ -28,15 +28,15 @@ has_toc: false
 | SSH 파일 | `~/.ssh/`, `/etc/ssh/` | 실제 기기에서 확인 | 로그인에 쓸 수 있는 키, 접속했던 호스트, 설정 |
 | 외부 원격 제어 앱 | 앱마다 다름 | 앱 버전마다 확인 | 설치·자동 실행·권한·실행·통신 흔적 |
 
-utmpx와 lastlog는 세 방식 모두에서 함께 볼 로그인 기록 파일이라 여기에 한 번만 적습니다. ForensicArtifacts 정의 이름은 `MacOSUtmpxFile`, `MacOSLastlogFile` 이고, `/var/run/utmpx`, `/var/log/lastlog` 형태의 경로도 함께 잡습니다 [2]. 레코드 구조와 시각 기준, `last` 명령이 어느 파일을 읽는지, 최근 macOS에서 lastlog가 실제로 쓰이는지, SSH·화면 공유 세션이 이 파일에 각각 어떻게 남는지는 공개 자료가 없습니다. 그래서 도구가 풀어 준 결과를 그대로 쓰기보다, 알려진 시각에 로그인해 보고 기록이 어떻게 남는지 먼저 확인한 뒤 해석하며, 그 방법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)에 있습니다.
+utmpx와 lastlog는 세 방식 모두에서 함께 볼 로그인 기록 파일이라 여기에 한 번만 적습니다. ForensicArtifacts 정의 이름은 `MacOSUtmpxFile`, `MacOSLastlogFile` 이고, `/var/run/utmpx`, `/var/log/lastlog` 형태의 경로도 함께 잡습니다 [2]. 도구가 풀어 준 결과를 그대로 쓰기 전에, 알려진 시각에 로그인해 보고 레코드 구조와 시각 기준, `last` 명령이 어느 파일을 읽는지, 최근 macOS에서 lastlog가 실제로 쓰이는지, SSH·화면 공유 세션이 이 파일에 각각 어떻게 남는지를 먼저 확인합니다. 그 방법은 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md)에 있습니다.
 
-통합 로그에서 원격 접속을 찾는 프로세스·서브시스템 이름과 로그 문구도 공개 자료가 없습니다. 검색어를 정하는 법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)을 따르고, 실제 기기에서 문구를 확인한 뒤에 씁니다.
+통합 로그에서 원격 접속을 찾는 프로세스·서브시스템 이름과 로그 문구는 실제 기기에서 확인한 뒤에 쓰고, 검색어를 정하는 법은 [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)을 따릅니다.
 
 ## 읽는 순서
 
 1. [화면 공유와 원격 관리 (Screen Sharing·ARD)](screen-sharing-ard.md) — 화면 공유 앱의 연결 기록 plist를 푸는 법, 원격 관리(ARD)의 관리하는 쪽·관리받는 쪽 파일, kickstart 실행 흔적을 찾을 때 쓸 이름을 다룹니다.
 2. [SSH 접속 기록 (SSH)](ssh.md) — 원격 로그인 설정, 받는 쪽의 authorized_keys와 sshd 파일, 거는 쪽의 known_hosts와 설정 파일을 읽고, 무엇을 증명하지 못하는지 정리합니다.
-3. [원격 제어 앱 (TeamViewer·AnyDesk)](third-party-tools.md) — 앱 고유 경로가 알려지지 않은 외부 원격 제어 앱을 설치·다운로드·자동 실행·권한·실행·통신 기록으로 찾아가는 순서를 다룹니다.
+3. [원격 제어 앱 (TeamViewer·AnyDesk)](third-party-tools.md) — 앱마다 흔적 경로가 다른 외부 원격 제어 앱을 설치·다운로드·자동 실행·권한·실행·통신 기록으로 찾아가는 순서를 다룹니다.
 
 ## 함께 볼 페이지
 

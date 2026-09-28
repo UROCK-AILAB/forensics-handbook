@@ -21,7 +21,7 @@ nav_order: 1130
 | 실행 주기 | 대략 하루 한 번, 백업하는 동안 앱을 종료함 | 여러 앱의 요청을 묶어 몇 시간마다, 앱을 종료하지 않음 |
 | 근거 | [1][2] | [1] |
 
-자동 백업은 가장 최근 백업 하나만 보관하고 새 백업을 만들면 이전 것을 지우며, 이 저장분은 사용자의 개인 Google Drive 용량에 들어가지 않습니다[2]. 테스트 문서에는 "클라우드 백업은 앱당 2MB, 기기 간 전송(D2D)은 앱당 2GB(Android 12, API 31 이상)" 라는 다른 값도 나옵니다[3]. 이 값과 위 표의 25MB·5MB 가 어떻게 맞춰지는지는 공개된 설명이 없습니다.
+자동 백업은 가장 최근 백업 하나만 보관하고 새 백업을 만들면 이전 것을 지우며, 이 저장분은 사용자의 개인 Google Drive 용량에 들어가지 않습니다[2]. 테스트 문서에는 "클라우드 백업은 앱당 2MB, 기기 간 전송(D2D)은 앱당 2GB(Android 12, API 31 이상)" 라는 다른 값도 나옵니다[3].
 
 백업 항목은 앱과 앱 데이터, 통화 기록, 연락처, 기기 설정, SMS·MMS 메시지입니다. 사진·영상은 Google 포토가, RCS 메시지는 Google 메시지가, 통화 설정과 차단 번호는 Google 전화 앱이 따로 백업합니다[4]. 그래서 사진은 [구글 포토](../media/google-photos.md) 쪽을 봅니다. Android 7.0(API 24) 이상에서는 사용자가 앱에 준 권한도 시스템이 자동으로 백업하고 복원합니다[1].
 
@@ -62,7 +62,7 @@ nav_order: 1130
 
 ### 상태 폴더 안의 파일
 
-AOSP 의 `UserBackupManagerService` 가 상태 폴더 안에 두는 파일·폴더 이름은 아래와 같습니다[5]. 파일 안의 바이트 구조는 공개된 분석 자료가 없어 적지 않습니다.
+AOSP 의 `UserBackupManagerService` 가 상태 폴더 안에 두는 파일·폴더 이름은 아래와 같습니다[5]. 파일 안의 바이트 구조는 아래 "직접 분석해 보기" 처럼 헥스 편집기로 열어 확인합니다.
 
 | 이름 | 소스에 적힌 쓰임 |
 |---|---|
@@ -70,7 +70,7 @@ AOSP 의 `UserBackupManagerService` 가 상태 폴더 안에 두는 파일·폴�
 | `ancestral` | 토큰 파일. 기록 버전 상수 `CURRENT_ANCESTRAL_RECORD_VERSION = 1` |
 | `processed` | 처리한 패키지 저널 |
 | `fb-schedule` | 전체 백업 일정. 상수 `SCHEDULE_FILE_VERSION = 1` |
-| `serial_id` | 공개 자료 없음 |
+| `serial_id` | 실제 파일을 열어 확인 |
 
 토큰은 두 가지인데, `mAncestralToken` 은 복원에 쓴 이전 데이터셋의 토큰이고 `mCurrentToken` 은 현재 백업 토큰입니다[5].
 
@@ -84,7 +84,7 @@ AOSP 의 `UserBackupManagerService` 가 상태 폴더 안에 두는 파일·폴�
 | secure | `backup_encryption_opt_in_displayed`, `backup_manager_constants`, `user_full_data_backup_aware` | 뜻은 이름으로만 짐작 |
 | secure | `backup_enabled:com.android.calllogbackup`, `backup_enabled:com.android.providers.telephony` | 패키지별 키 |
 | secure | `mms_backup_enabled`, `mms_backup_in_progress`, `mms_backup_last_completed` | 값 형식(시각 단위 등)은 실제 데이터로 확인 |
-| secure | `com.google.android.gms.tapandpay.tokenization.CACHED_BACKUP_STATUS`, `wifi_ap_settings_cloud_backup_restoring` | 공개 자료 없음 |
+| secure | `com.google.android.gms.tapandpay.tokenization.CACHED_BACKUP_STATUS`, `wifi_ap_settings_cloud_backup_restoring` | 뜻은 이름으로만 짐작 |
 | secure | `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS` | 삼성 스마트스위치 쪽 흔적 |
 | global | `backup_agent_timeout_parameters`, `SecureWifiBackupExist`, `setup_type` | 뜻은 이름으로만 짐작 |
 | global | `smartswitch_bnr_count`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe` | 삼성 스마트스위치 쪽 흔적 |
@@ -109,7 +109,7 @@ com.google.android.gms/.backup.migrate.service.D2dTransport  기기 간 전송 (
 
 ## 증거로서 의미
 
-**증명하는 것.** `backup_enabled` 와 `backup_transport` 값은 수집 시점에 기기의 백업 설정이 어떻게 되어 있었는지 보여 주고, 패키지별 `backup_enabled:` 키는 통화 기록 백업 패키지(com.android.calllogbackup)나 문자 제공자(com.android.providers.telephony)가 백업 대상으로 등록되어 있었다는 흔적입니다. 구글 백업은 Google 계정 로그인이 전제라서[1], [계정](../system-account/accounts/index.md) 의 추가 기록은 백업이 가능해진 시작점을 좁히는 데 씁니다. `mAncestralToken` 이 복원에 쓴 이전 데이터셋의 토큰이라서[5] `ancestral` 파일이 있으면 이 기기가 이전 백업에서 복원된 적이 있다는 쪽으로 읽을 수 있지만, 파일 안 구조가 공개되어 있지 않아 단정하지는 않습니다.
+**증명하는 것.** `backup_enabled` 와 `backup_transport` 값은 수집 시점에 기기의 백업 설정이 어떻게 되어 있었는지 보여 주고, 패키지별 `backup_enabled:` 키는 통화 기록 백업 패키지(com.android.calllogbackup)나 문자 제공자(com.android.providers.telephony)가 백업 대상으로 등록되어 있었다는 흔적입니다. 구글 백업은 Google 계정 로그인이 전제라서[1], [계정](../system-account/accounts/index.md) 의 추가 기록은 백업이 가능해진 시작점을 좁히는 데 씁니다. `mAncestralToken` 이 복원에 쓴 이전 데이터셋의 토큰이라서[5] `ancestral` 파일이 있으면 이 기기가 이전 백업에서 복원된 적이 있다는 쪽으로 읽을 수 있지만, 파일 안 구조를 확인하기 전에는 단정하지 않습니다.
 
 **증명하지 못하는 것.** 설정 키로 알 수 있는 것은 "켜져 있었다" 까지이고, 실제로 어느 날 백업이 끝났는지, 서버에 무엇이 올라갔는지는 알 수 없습니다. 자동 백업은 최근 것 하나만 남기므로[2] 서버에 과거 시점의 데이터가 남아 있다고 기대할 수도 없습니다. 복원된 앱 데이터는 이전 기기에서 만든 데이터일 수 있어서, 앱 폴더 안의 대화·기록이 이 기기에서 만들어졌다고 곧바로 쓰지 않습니다.
 
@@ -121,19 +121,19 @@ com.google.android.gms/.backup.migrate.service.D2dTransport  기기 간 전송 (
 
 ## 함정과 한계
 
-화면 잠금 암호화 때문에 서버 쪽 데이터를 읽을 수 있는 범위가 달라집니다. Android 9 이상은 기기의 PIN·패턴·비밀번호로 백업을 종단 간 암호화합니다[2]. 일부 데이터는 기기의 화면 잠금으로 한 번 더 암호화되고, Google 포토와 MMS 미디어는 여기서 빠집니다[4]. 이 암호화가 수사 기관의 클라우드 자료 확보 범위에 어떤 영향을 주는지는 공개된 자료가 없습니다. 클라우드 쪽 자료를 다루는 방법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 를 봅니다.
+화면 잠금 암호화 때문에 서버 쪽 데이터를 읽을 수 있는 범위가 달라집니다. Android 9 이상은 기기의 PIN·패턴·비밀번호로 백업을 종단 간 암호화합니다[2]. 일부 데이터는 기기의 화면 잠금으로 한 번 더 암호화되고, Google 포토와 MMS 미디어는 여기서 빠집니다[4]. 클라우드 쪽 자료를 다루는 방법은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md) 를 봅니다.
 
 앱이 백업에서 빠졌는지는 설정 키로 알 수 없고 앱 매니페스트를 봐야 합니다. `allowBackup`, `fullBackupContent`, `dataExtractionRules` 값으로 그 앱 데이터가 백업에 들어갈 수 있었는지 판단하는데, Android 12 이상 대상 앱은 일부 제조사 기기에서 `allowBackup="false"` 여도 기기 간 전송은 막히지 않는다는 점을 함께 따집니다[2]. 매니페스트를 읽는 법은 [APK 정보](../embedded-metadata/apk.md) 에 있습니다.
 
 이름에 backup 이 들어간 설정 키가 모두 구글 백업 흔적은 아닙니다. global 영역의 `dc_backup_animator_duration_scale`, system 영역의 `backup_dark_mode`, `backup_screen_off_timeout` 같은 키는 이름만 보고 구글 백업과 묶지 않습니다. 삼성 기기라면 스마트스위치로 옮긴 흔적(`smartswitch_*`, `IS_SMARTSWITCH_*`)과 구글 백업 복원을 구분해서 적어야 합니다.
 
-logcat 버퍼는 짧게 유지되는 것으로 알려져 있으므로, 백업 로그가 필요하면 기기를 받자마자 먼저 떠 둡니다. `/sdcard/Android/media` 아래의 `com.google.android.gms` 폴더는 백업과 관련이 있는지 공개된 자료가 없어, 이름만 보고 백업 흔적으로 묶지 않습니다. 흔히 "기기를 오래 쓰지 않으면 57일 뒤 백업이 지워진다" 고 말하지만 참고 문헌의 공식 문서에는 이 내용이 없으므로 근거로 쓰지 않습니다.
+logcat 버퍼는 짧게 유지되는 것으로 알려져 있으므로, 백업 로그가 필요하면 기기를 받자마자 먼저 떠 둡니다. `/sdcard/Android/media` 아래의 `com.google.android.gms` 폴더는 이름만 보고 백업 흔적으로 묶지 않습니다. 흔히 "기기를 오래 쓰지 않으면 57일 뒤 백업이 지워진다" 고 말하지만 참고 문헌의 공식 문서에는 이 내용이 없으므로 근거로 쓰지 않습니다.
 
 증거 기기에서 `bmgr enable`, `bmgr backupnow`, `bmgr run` 같은 명령은 쓰지 않습니다. 개발자 시험용 명령이고[3], 실행하면 기기의 백업 상태가 바뀝니다. 읽기 명령인 `bmgr list transports` 만 씁니다.
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** `ancestral`, `fb-schedule` 같은 상태 파일은 소스에 기록 버전 상수만 있고 바이트 배치를 적은 공개 자료가 없어서, 이 페이지에는 헥스 예시를 싣지 않습니다. 전체 파일 시스템 이미지에서 상태 폴더를 찾았다면 형식을 짐작하기 전에 파일 첫 바이트부터 헥스 편집기로 보고, 앞쪽에 버전 값 1 로 읽히는 필드가 있는지부터 소스 상수와 맞춰 봅니다. 저장 형식이 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 이나 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 인지도 이 단계에서 판별합니다.
+**헥스로 한 번.** `ancestral`, `fb-schedule` 같은 상태 파일은 소스에서 기록 버전 상수를 확인할 수 있습니다. 전체 파일 시스템 이미지에서 상태 폴더를 찾았다면 형식을 짐작하기 전에 파일 첫 바이트부터 헥스 편집기로 보고, 앞쪽에 버전 값 1 로 읽히는 필드가 있는지부터 소스 상수와 맞춰 봅니다. 저장 형식이 [안드로이드 바이너리 XML](../../01-foundations/data-formats/abx.md) 이나 [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 인지도 이 단계에서 판별합니다.
 
 **공개 도구로 한 번.** adb 일반 권한으로 읽을 수 있는 것부터 봅니다. settings 목록과 `dumpsys account` 는 일반 셸 권한으로 읽을 수 있습니다. 전송 경로 목록은 아래 읽기 명령으로 봅니다[3].
 

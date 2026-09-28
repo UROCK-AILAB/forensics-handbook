@@ -35,7 +35,7 @@ PowerShell(`Add-VpnConnection`)로 VPN 프로필을 만들면 전화번호부 �
 |---|---|---|
 | 사용자별 프로필 | `%APPDATA%\Microsoft\Network\Connections\Pbk\rasphone.pbk` | |
 | 모든 사용자용 프로필 | `%ProgramData%\Microsoft\Network\Connections\Pbk\rasphone.pbk` | `-AllUserConnection` 으로 만든 프로필입니다. 이때는 사용자별 파일이 생기지 않습니다 |
-| 숨은 폴더 | 사용자별 `Pbk` 폴더 안의 `_hiddenPbk` | 쓰임새는 공개 자료가 없습니다. 폴더째 수집합니다 |
+| 숨은 폴더 | 사용자별 `Pbk` 폴더 안의 `_hiddenPbk` | 폴더째 수집해 안에 든 파일을 확인합니다 |
 | 접속 이벤트 | Application 로그, 원본 RasClient | 메시지 파일은 `C:\Windows\System32\mprmsg.dll` 입니다 |
 | 프로필 이벤트 | `Microsoft-Windows-VPN-Client/Operational` | 기본으로 켜져 있고 최대 크기는 1MB 입니다 |
 | 그 밖의 채널 | `Microsoft-Windows-VPN/Operational`(켜짐), `Microsoft-Windows-RasAgileVpn/Operational`(꺼짐), `Windows Networking Vpn Plugin Platform/Operational`(꺼짐) | 내용은 이 페이지에서 다루지 않습니다 |
@@ -74,9 +74,9 @@ HighDateTime=31279980
 | `[절 이름]` | `ZZTestVPN` | 연결 이름입니다 |
 | `PhoneNumber` | `vpn.invalid` | 서버 주소가 이 필드에 들어갑니다 |
 | `Device` | `WAN Miniport (IKEv2)` | 장치 이름입니다. 터널 종류를 Automatic 으로 만든 프로필의 값입니다 |
-| `DEVICE`·`MEDIA`·`Port` | `vpn`·`rastapi`·`VPN2-0` | 장치에 딸린 필드입니다. 필드마다 뜻은 공개 자료가 없습니다 |
-| `Type` | `2` | 이 값이 VPN 을 뜻하는지는 공개 자료가 없습니다 |
-| `VpnStrategy` | `0` | 숫자마다 뜻은 공개 자료가 없습니다 |
+| `DEVICE`·`MEDIA`·`Port` | `vpn`·`rastapi`·`VPN2-0` | 장치에 딸린 필드입니다. 필드마다 뜻을 단정하지 않고 값만 옮깁니다 |
+| `Type` | `2` | 이 값만으로 VPN 프로필이라고 단정하지 않습니다 |
+| `VpnStrategy` | `0` | 숫자의 뜻을 단정하지 않습니다. 20221 이벤트의 `VpnStrategy` 문장과 함께 봅니다 |
 | `PreSharedKey` | 비어 있음 | 사전 공유 키 (pre-shared key) 필드입니다. 예시 프로필에서는 비어 있습니다 |
 | `PowershellCreatedProfile` | `1` | PowerShell 로 만든 프로필에 붙는 값입니다. 설정 앱으로 만든 프로필의 값은 실제 데이터로 확인합니다 |
 | `LowDateTime`·`HighDateTime` | `1806595920`·`31279980` | 두 필드를 합치면 FILETIME 이 됩니다. 프로필을 만든 시각과 같습니다 |
@@ -98,7 +98,7 @@ HighDateTime=31279980
 | 20227 | 접속에 실패했습니다 | `%3` 연결 이름, `%4` 오류 코드 |
 | 20220 | 장치로 맺은 연결이 끊겼습니다 | `%1` 대상, `%2` 장치 |
 
-같은 dll 에는 20267(연결 성공)과 20268(연결 끊김)도 있습니다. RasClient 가 이 둘을 쓰는지, 서버 쪽 메시지인지는 공개 자료가 없습니다.
+같은 dll 에는 20267(연결 성공)과 20268(연결 끊김)도 있습니다. RasClient 가 이 둘을 남기는지는 Application 로그에서 원본이 RasClient 인 이벤트를 찾아 확인합니다.
 
 `rasdial` 로 존재하지 않는 서버 이름에 접속하면 아래처럼 남습니다.
 
@@ -160,7 +160,7 @@ HighDateTime=31279980
 - **기록이 아예 없을 수 있습니다.** 내장 VPN 으로 접속한 적이 없는 PC 에는 RasClient 이벤트가 한 건도 없습니다.
 - **VPN-Client/Operational 은 최대 1MB 입니다.** 오래 쓴 PC 에서는 앞선 기록이 밀려났을 수 있습니다.
 - **추적 로그는 기본값이 꺼져 있습니다.** `EnableFileTracing` 이 1 이 아니면 추적 로그를 기대하지 않습니다.
-- **네트워크 목록과의 관계는 실제 데이터로 확인합니다.** 네트워크 목록의 NameType 0x17 은 "broadband (3g)" 입니다[1]. VPN 연결이 이 값으로 네트워크 목록에 남는다는 설명이 흔하지만 뒷받침하는 공개 자료는 없습니다. 실패한 접속으로는 네트워크 목록에 새 프로필이 생기지 않습니다. 목록을 읽는 법은 [네트워크 목록](networklist.md)에서 다룹니다.
+- **네트워크 목록과의 관계는 실제 데이터로 확인합니다.** 네트워크 목록의 NameType 0x17 은 "broadband (3g)" 입니다[1]. VPN 연결이 이 값으로 네트워크 목록에 남는다는 설명이 흔하지만, 이 값만으로 VPN 연결이라고 단정하지 않습니다. 실패한 접속으로는 네트워크 목록에 새 프로필이 생기지 않습니다. 목록을 읽는 법은 [네트워크 목록](networklist.md)에서 다룹니다.
 - **메시지 문장은 분석 PC 에서 만듭니다.** RasClient 레코드에는 빈자리 값만 들어 있고 문장 틀은 메시지 파일에서 읽습니다. 자세한 내용은 [이벤트 로그 형식](../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기

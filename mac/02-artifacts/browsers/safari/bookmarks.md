@@ -39,7 +39,7 @@ nav_order: 1170
 |---|---|
 | `WebBookmarkTypeList` | 폴더 |
 | `WebBookmarkTypeLeaf` | 항목(북마크 하나) |
-| `WebBookmarkTypeProxy` | 공개 자료 없음. mac_apt 는 이 종류를 건너뜀 |
+| `WebBookmarkTypeProxy` | 뜻을 단정할 수 없음. mac_apt 는 이 종류를 건너뜀 |
 
 `ReadingList` 사전 안의 다른 키(미리보기 글, 읽은 시각 같은 것)는 실제 데이터로 확인합니다. 읽기 목록의 오프라인 사본은 사파리 폴더의 `ReadingListArchives/{UUID}/Page.webarchive`(plist, 안의 `WebResourceURL` 로 주소를 얻음)에 있는 것으로 보입니다 [1]. mac_apt 는 이 파일을 읽지 않아서, 내용은 실제 파일을 열어 확인합니다. 아래는 위 키로 만든 예시이고, 실제 기기에서 나온 값이 아닙니다.
 

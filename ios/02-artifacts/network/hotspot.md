@@ -28,16 +28,16 @@ nav_order: 710
 | 백업 `HomeDomain :: Library/Preferences/com.apple.networkserviceproxy.plist` | 위 파일의 백업 속 위치 | |
 | 백업 `HomeDomain :: Library/Preferences/com.apple.wifi.removed-networks.plist` | 지운 Wi-Fi 네트워크 목록 | |
 
-암호화하지 않은 로컬 백업에는 `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi-private-mac-networks.plist` 가 없을 수 있습니다. 그 대신 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-class-d-private-mac-networks.plist`(list 하나)와 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-networks.plist`(비어 있음)가 들어 있습니다. 암호화 백업이면 달라지는지는 알려져 있지 않으니, 파일 시스템 추출본과 백업을 나눠서 봅니다.
+암호화하지 않은 로컬 백업에는 `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi-private-mac-networks.plist` 가 없을 수 있습니다. 그 대신 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-class-d-private-mac-networks.plist`(list 하나)와 `SystemPreferencesDomain :: SystemConfiguration/com.apple.wifi-networks.plist`(비어 있음)가 들어 있습니다. 암호화 백업에서는 `Manifest.db` 에서 두 파일이 있는지 먼저 확인하고, 파일 시스템 추출본과 백업을 나눠서 봅니다.
 
 ### 제공 기기(핫스폿을 켠 아이폰)
 
 | 경로 | 알려 주는 것 | 출처 |
 |---|---|---|
 | `/private/var/wireless/Library/Databases/DataUsage.sqlite` (백업 `WirelessDomain :: Library/Databases/DataUsage.sqlite`) | ZPROCESS 표의 지운 레코드로 핫스폿을 켠 흔적 | [1][2] |
-| `/private/var/networkd/netusage.sqlite` | 프로세스별 Wi-Fi·WWAN 송수신량(핫스폿과의 관계는 공개 자료 없음) | [2] |
-| 백업 `HomeDomain :: Library/Preferences/com.apple.MobileInternetSharing.plist` | 핫스폿 상태로 보이는 키(뜻은 공개 자료 없음) | |
-| 백업 `HomeDomain :: Library/Preferences/com.apple.Preferences.plist` | `PersonalHotspotDiabled` 키(뜻은 공개 자료 없음) | |
+| `/private/var/networkd/netusage.sqlite` | 프로세스별 Wi-Fi·WWAN 송수신량(핫스폿과의 관계는 실제 데이터로 확인) | [2] |
+| 백업 `HomeDomain :: Library/Preferences/com.apple.MobileInternetSharing.plist` | 핫스폿 상태로 보이는 키(뜻은 실제 데이터로 확인) | |
+| 백업 `HomeDomain :: Library/Preferences/com.apple.Preferences.plist` | `PersonalHotspotDiabled` 키(뜻은 실제 데이터로 확인) | |
 
 netusage.sqlite 는 파일 시스템 추출에서만 얻을 수 있고 [2], 로컬 백업에는 없을 수 있습니다.
 
@@ -99,9 +99,9 @@ ZTIMESTAMP 는 가장 최근 활동, ZFIRSTTIMESTAMP 는 처음 쓴 때입니다
 
 DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], iOS 27.0 의 ZLIVEUSAGE 표에도 Wi-Fi 열 없이 ZWWANIN·ZWWANOUT 만 있습니다.
 
-### 뜻이 알려지지 않은 항목
+### 실제 데이터로 뜻을 확인할 항목
 
-아래 항목은 이름이 핫스폿·네트워크 공유와 관련되어 보이지만 값의 뜻을 설명한 공개 자료가 없습니다. 모두 iOS 27.0 로컬 백업에 있는 항목입니다.
+아래 항목은 이름이 핫스폿·네트워크 공유와 관련되어 보이지만 값의 뜻은 정해져 있지 않아서, 시험 기기와 비교해 확인해야 합니다. 모두 iOS 27.0 로컬 백업에 있는 항목입니다.
 
 | 위치 | 키·항목 | 비고 |
 |---|---|---|
@@ -121,7 +121,7 @@ DataUsage 는 Wi-Fi 사용량을 기록하지 않고 [2], iOS 27.0 의 ZLIVEUSAG
 
 ### 증명하지 못하는 것
 
-인스턴트 핫스폿은 같은 Apple 계정 기기와 가족 구성원 기기에 암호를 묻지 않아서 [4], 인스턴트 핫스폿으로 붙은 기록이라면 사용자가 암호를 알고 직접 입력했다는 근거가 되지 않습니다. 네트워크 이름은 제공 기기의 기기 이름이지만 접속한 뒤에 기기 이름을 바꾸면 기록과 달라질 수 있고 [1], 이름이 맞는다는 사실만으로 특정 기기를 가리킬 수는 없으니 다른 흔적과 맞춰 봐야 합니다. 핫스폿을 통해 무엇을 주고받았는지, 제공 기기에 어떤 기기(MAC 주소·이름)가 붙었는지가 나와 있는 기록은 알려져 있지 않습니다. ZPROCESS 의 지운 레코드는 늘 생기지는 않으니 [1], 레코드가 없다는 사실을 핫스폿을 켜지 않았다는 증거로 쓰지 않습니다.
+인스턴트 핫스폿은 같은 Apple 계정 기기와 가족 구성원 기기에 암호를 묻지 않아서 [4], 인스턴트 핫스폿으로 붙은 기록이라면 사용자가 암호를 알고 직접 입력했다는 근거가 되지 않습니다. 네트워크 이름은 제공 기기의 기기 이름이지만 접속한 뒤에 기기 이름을 바꾸면 기록과 달라질 수 있고 [1], 이름이 맞는다는 사실만으로 특정 기기를 가리킬 수는 없으니 다른 흔적과 맞춰 봐야 합니다. 핫스폿을 통해 무엇을 주고받았는지, 제공 기기에 어떤 기기(MAC 주소·이름)가 붙었는지는 이 페이지의 기록으로는 알 수 없습니다. ZPROCESS 의 지운 레코드는 늘 생기지는 않으니 [1], 레코드가 없다는 사실을 핫스폿을 켜지 않았다는 증거로 쓰지 않습니다.
 
 보고서에는 "피의자 기기로 인터넷을 썼다" 가 아니라 "접속 기기의 Wi-Fi 기록에 제공 기기 이름과 같은 네트워크가 있고, 처음 연결 시각과 자동 재연결 시각이 이러하다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
@@ -133,13 +133,13 @@ known-networks, private-mac-networks, networkserviceproxy 의 시각 값은 CFAb
 
 ## 함정과 한계
 
-핫스폿 네트워크와 일반 AP 를 plist 키 하나로 가려내는 방법은 알려져 있지 않습니다. 지금은 네트워크 이름이 제공 기기 이름과 맞는지, 연결 시각이 다른 흔적과 맞는지를 함께 보고 판단해야 합니다.
+핫스폿 네트워크와 일반 AP 를 구분하는 plist 키는 정해져 있지 않습니다. 그래서 네트워크 이름이 제공 기기 이름과 맞는지, 연결 시각이 다른 흔적과 맞는지를 함께 보고 판단해야 합니다.
 
 접속 기기 쪽 흔적의 경로는 기기 안 경로이고 [1], 로컬 백업에는 known-networks 와 private-mac-networks 파일이 없을 수 있습니다. 로컬 백업만 받았다면 접속 흔적이 없다고 결론 내리기 전에 수집 범위부터 확인합니다([로컬 백업](../../01-foundations/backups/local-backup/index.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md)).
 
 제공 기기의 핵심 흔적은 지운 레코드라서 SQLite 여유 공간이나 WAL 에서 복구해야 합니다. 복구 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 페이지를 봅니다.
 
-사용자가 Wi-Fi 네트워크 목록에서 네트워크를 지우면 `com.apple.wifi.removed-networks.plist` 에 `RemovedAt` 이 붙은 항목이 생길 수 있고, 핫스폿도 이 목록에 들어가는지는 실제 데이터로 확인해야 합니다. 핫스폿 기본 주소 대역, 통합 로그에서 핫스폿 켜기·클라이언트 접속을 찾을 프로세스 이름, KnowledgeC·바이옴에 핫스폿 상태가 남는지도 알려져 있지 않으니, 이런 내용을 보고서에 쓸 때는 직접 검증한 결과만 씁니다.
+사용자가 Wi-Fi 네트워크 목록에서 네트워크를 지우면 `com.apple.wifi.removed-networks.plist` 에 `RemovedAt` 이 붙은 항목이 생길 수 있고, 핫스폿도 이 목록에 들어가는지는 실제 데이터로 확인해야 합니다. 핫스폿 기본 주소 대역, 통합 로그에서 핫스폿 켜기·클라이언트 접속을 찾을 프로세스 이름, KnowledgeC·바이옴에 핫스폿 상태가 남는지도 시험 기기로 재현해 확인해야 하고, 이런 내용을 보고서에 쓸 때는 직접 검증한 결과만 씁니다.
 
 ## 직접 분석해 보기
 

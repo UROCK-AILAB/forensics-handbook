@@ -44,7 +44,7 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 
 소프트웨어 업데이트, 기기 지우기, 암호 설정을 보거나 바꾸는 일, 구성 프로파일 설치는 생체 인증과 관계없이 늘 암호를 요구합니다[4]. Touch ID 가 있어도 기기를 켜거나 재시동한 뒤에는 암호가 필요하고, 암호를 바꾸거나 지문을 등록·삭제할 때도 암호가 필요합니다[3]. 마스크를 쓴 채 쓰는 Face ID 는 Face ID 매칭에 성공하거나 암호를 넣거나 Apple Watch 로 잠금을 푼 뒤 6.5시간 동안 쓸 수 있습니다[4].
 
-지문(Touch ID) 템플릿 데이터는 기기를 떠나지 않고, Apple 로 보내지지 않으며, 기기 백업에도 들어가지 않습니다[3]. 이 설명은 Touch ID 지문 데이터를 두고 한 것이고, Face ID 얼굴 데이터도 같은지 설명한 공개 문서는 없습니다. 그래서 추출물에서 찾을 대상은 생체 데이터가 아니라 "생체 인증을 설정했다·쓸 수 있었다" 는 설정 흔적입니다.
+지문(Touch ID) 템플릿 데이터는 기기를 떠나지 않고, Apple 로 보내지지 않으며, 기기 백업에도 들어가지 않습니다[3]. 이 설명은 Touch ID 지문 데이터를 두고 한 것이라, Face ID 얼굴 데이터에 그대로 옮겨 쓰지 않습니다. 그래서 추출물에서 찾을 대상은 생체 데이터가 아니라 "생체 인증을 설정했다·쓸 수 있었다" 는 설정 흔적입니다.
 
 ## 위치와 버전별 차이
 
@@ -74,11 +74,11 @@ Face ID 나 Touch ID 를 쓰려면 먼저 잠금 해제에 암호를 요구하�
 | `Truth.plist`, `PublicInfo/Truth.plist` | `maxFailedAttempts`, `maxGracePeriod`, `maxInactivity`, `maxPINAgeInDays`, `minComplexChars`, `minLength`, `passcodeKeyboardComplexity`, `pinHistory`, `simplePasscodeComplexity` |
 | `EffectiveUserSettings.plist`, `PublicInfo/PublicEffectiveUserSettings.plist` | `maxGracePeriod`, `maxInactivity`, `minLength`, `passcodeKeyboardComplexity`, `simplePasscodeComplexity` |
 
-같은 파일의 `restrictedBool` 안에는 `allowAccessWithoutPasscodeInAppLock` 같은 키도 있습니다. 이 이름들이 MDM 암호 정책과 같은지 밝힌 공개 자료는 없고, 키 이름이 있다고 정책이 걸려 있었다는 뜻도 아닙니다. 값이 기본값인지, 프로파일이 건 값인지는 파일을 열어 값과 프로파일 목록을 함께 봐야 가릴 수 있습니다. 파일 구성은 [설정 값](preferences.md), 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다룹니다.
+같은 파일의 `restrictedBool` 안에는 `allowAccessWithoutPasscodeInAppLock` 같은 키도 있습니다. 이 이름만으로 MDM 암호 정책과 같다고 볼 수 없고, 키 이름이 있다고 정책이 걸려 있었다는 뜻도 아닙니다. 값이 기본값인지, 프로파일이 건 값인지는 파일을 열어 값과 프로파일 목록을 함께 봐야 가릴 수 있습니다. 파일 구성은 [설정 값](preferences.md), 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서 다룹니다.
 
-### 공개 자료가 없는 것
+### 실제 데이터로 확인할 것
 
-암호 실패 횟수나 마지막 잠금 해제 시각이 어느 파일에 남는지, 시스템 키 가방 파일의 위치와 내용은 실제 데이터로 확인해야 합니다. 위 키가 iOS 몇 판부터 생겼는지도 알려져 있지 않고, 위 표는 iOS 27.0 백업 기준입니다. 도난 기기 보호(Stolen Device Protection)는 이 페이지에서 다루지 않습니다.
+암호 실패 횟수나 마지막 잠금 해제 시각이 어느 파일에 남는지, 시스템 키 가방 파일의 위치와 내용은 실제 데이터로 확인해야 합니다. 위 표는 iOS 27.0 백업 기준이니, 다른 버전 기기에서는 같은 키가 있는지부터 확인합니다. 도난 기기 보호(Stolen Device Protection)는 이 페이지에서 다루지 않습니다.
 
 ## 구조
 

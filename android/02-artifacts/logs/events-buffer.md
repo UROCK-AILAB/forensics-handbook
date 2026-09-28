@@ -20,7 +20,7 @@ events 버퍼는 다른 logcat 버퍼처럼 `logd` 의 메모리 버퍼에 있�
 
 adb 일반 셸 권한으로 events 버퍼의 줄을 읽을 수 있는 기기에서도, 버퍼 크기 목록에는 events 가 나오지 않을 수 있습니다.
 
-태그 이름은 Android 버전에 따라 다릅니다. source.android.com 의 버그 리포트 문서에는 `am_focused_activity` 가 나오지만 [3], 현재 AOSP main 의 ActivityManager 태그 파일에는 이 태그가 없고 [4], 화면 전환 태그는 WindowManager 태그 파일에 `wm_` 으로 시작하는 이름으로 있습니다 [6]. 태그가 옮겨 간 Android 버전은 공개 자료에 없으니, 실제 데이터를 읽을 때는 그 기기의 태그 사전과 실제 출력으로 이름을 확인합니다.
+태그 이름은 Android 버전에 따라 다릅니다. source.android.com 의 버그 리포트 문서에는 `am_focused_activity` 가 나오지만 [3], 현재 AOSP main 의 ActivityManager 태그 파일에는 이 태그가 없고 [4], 화면 전환 태그는 WindowManager 태그 파일에 `wm_` 으로 시작하는 이름으로 있습니다 [6]. 그래서 실제 데이터를 읽을 때는 그 기기의 태그 사전과 실제 출력으로 이름을 확인합니다.
 
 | 출처 | 기준 | 담긴 태그 |
 |---|---|---|

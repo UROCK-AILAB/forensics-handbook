@@ -33,7 +33,7 @@ nav_order: 810
 | `attachment` | 첨부 정보이고 암호문(base64)입니다[2] |
 | `sentAt`, `readAt` | Mac 절대 시각(초)입니다[1][2] |
 | `updateAt` | UNIX 시각(초)입니다[1][2] |
-| `serverLogId`, `clientMsgId`, `prevId` | 값의 뜻을 설명한 공개 자료가 없습니다 |
+| `serverLogId`, `clientMsgId`, `prevId` | 값의 뜻이 정해져 있지 않아서 보고서에는 값만 옮깁니다 |
 
 보낸 사람 이름은 `Message.userId` 를 `ZUSER.ZID` 와 이어 찾고, 짝이 없으면 ID 만 남습니다[2][3]. 공개 도구 하나는 `userId` 가 내 ID 와 같으면 보낸 메시지로 봅니다[3]. 그 도구가 내 ID 를 정하는 방법과 그 한계는 [계정과 친구 목록 (Account·Friends)](account-friends.md)에 있습니다.
 
@@ -75,7 +75,7 @@ ZLASTMESSAGEID, ZLASTMESSAGETYPE, ZUPDATEDAT
 
 ## 함정과 한계
 
-`Message.sqlite` 는 행 내용 대부분이 `-wal` 파일에 있을 수 있습니다[2]. WAL 을 빼고 열면 메시지가 거의 없어 보일 수 있어서, 수집할 때 세 파일을 함께 가져옵니다. 지운 메시지를 SQLite 빈 공간이나 WAL 에서 찾는 방법은 카카오톡만 다룬 공개 자료가 없어서 일반적인 방법을 따르고, 그 방법은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)와 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에 있습니다.
+`Message.sqlite` 는 행 내용 대부분이 `-wal` 파일에 있을 수 있습니다[2]. WAL 을 빼고 열면 메시지가 거의 없어 보일 수 있어서, 수집할 때 세 파일을 함께 가져옵니다. 지운 메시지를 SQLite 빈 공간이나 WAL 에서 찾을 때는 일반적인 방법을 따르고, 그 방법은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)와 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에 있습니다.
 
 `Talk.sqlite` 의 빈 방 이름과 모두 0 인 안 읽은 수는 시험 기기 기준의 관찰이라서[2], 다른 기기에서도 같다고 보지 않습니다. 도구마다 복호에 실패한 값을 처리하는 방식이 다를 수 있어서, 본문이 빈 행이 원래 비어 있던 행인지 풀리지 않은 행인지 원래 값과 맞춰 봅니다.
 

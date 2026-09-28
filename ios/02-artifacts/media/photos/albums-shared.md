@@ -71,7 +71,7 @@ iOS 27 이후 공유 앨범은 설정 > [이름] > iCloud > 사진 에서 "공�
 | 26.1 | `Z_33ASSETS` |
 | 27.0(개발자 베타 기준) | `Z_34ASSETS` |
 
-iOS 버전별 번호는 공개된 자료가 없어서, 분석하는 DB 마다 `sqlite_master` 에서 표 이름을 먼저 찾습니다.
+iOS 기기에서는 분석하는 DB 마다 `sqlite_master` 에서 표 이름을 먼저 찾습니다.
 
 ### 공유 앨범의 활동 표
 
@@ -83,7 +83,7 @@ iOS 버전별 번호는 공개된 자료가 없어서, 분석하는 DB 마다 `s
 | `ZCLOUDFEEDENTRY` | `ZENTRYDATE`, `ZENTRYTYPE`, `ZENTRYISMINE`, `ZENTRYALBUMGUID`, `ZENTRYCLOUDASSETGUID` |
 | `ZCLOUDSHAREDALBUMINVITATIONRECORD` | `ZINVITEEFULLNAME`, `ZINVITEEFIRSTNAME`, `ZINVITEELASTNAME`, `ZINVITEEEMAILKEY`, `ZINVITEEHASHEDPERSONID`, `ZINVITEESUBSCRIPTIONDATE`, `ZINVITATIONSTATE`, `ZISMINE`, `ZALBUMGUID` |
 
-`ZREACTTEXT` 는 이름으로 보면 iOS 27 의 이모지 반응과 이어질 가능성이 있습니다. `ZCOMMENTDATE` 와 `ZCOMMENTCLIENTDATE` 가 서로 어떻게 다른지는 공개된 자료가 없어서, 보고서에는 두 열을 모두 적고 차이가 크면 따로 밝힙니다.
+`ZREACTTEXT` 는 이름으로 보면 iOS 27 의 이모지 반응과 이어질 가능성이 있습니다. `ZCOMMENTDATE` 와 `ZCOMMENTCLIENTDATE` 의 차이는 정해져 있지 않으므로, 보고서에는 두 열을 모두 적고 차이가 크면 따로 밝힙니다.
 
 ### 링크 공유와 참여자 (ZSHARE·ZSHAREPARTICIPANT)
 
@@ -97,7 +97,7 @@ iCloud 공유 사진 보관함은 iOS 16 이후 기능이고[4], `ZASSET` 에는
 
 ### 사진 앱 설정
 
-CameraRollDomain 의 `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist` 에는 `HasSignificantRegularAlbumCount`, `HasSignificantSharedAlbumActivities` 같은 키가 있습니다. 이름으로 보면 앨범 수와 공유 앨범 활동이 많은지를 적은 값으로 보이고, 기준은 공개된 자료가 없습니다.
+CameraRollDomain 의 `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist` 에는 `HasSignificantRegularAlbumCount`, `HasSignificantSharedAlbumActivities` 같은 키가 있습니다. 이름으로 보면 앨범 수와 공유 앨범 활동이 많은지를 적은 값으로 보입니다.
 
 ## 증거로서 의미
 
@@ -113,7 +113,7 @@ CameraRollDomain 의 `Media/PhotoData/private/com.apple.mobileslideshow/appPriva
 
 ## 함정과 한계
 
-`ZKIND` 값과 연결 표 번호는 macOS 사진 보관함 기준 값이라서[5], iOS 데이터에서는 값 분포와 표 이름을 먼저 확인합니다. `ZSHARE` 는 iCloud 링크 공유 등에 쓰이는 표이지만[2] `ZCOLLECTIONSHAREKIND`·`ZSCOPETYPE` 의 값 뜻은 공개된 자료가 없어서, 행마다 어떤 방식의 공유인지 단정하지 않습니다.
+`ZKIND` 값과 연결 표 번호는 macOS 사진 보관함 기준 값이라서[5], iOS 데이터에서는 값 분포와 표 이름을 먼저 확인합니다. `ZSHARE` 는 iCloud 링크 공유 등에 쓰이는 표이지만[2] `ZCOLLECTIONSHAREKIND`·`ZSCOPETYPE` 값만으로는 행마다 어떤 방식의 공유인지 단정하지 않습니다.
 
 ## 직접 분석해 보기
 

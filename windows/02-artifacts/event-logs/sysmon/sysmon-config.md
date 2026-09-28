@@ -76,7 +76,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 
 기본으로 꺼져 있어 관리자가 직접 켜야 합니다. 켜는 순서는 두 단계로, `Enable-WindowsOptionalFeature -Online -FeatureName Sysmon` 으로 기능을 설치하고 `sysmon -i` 를 실행하며, 이때 설정 파일을 줄 수 있습니다. 따로 받은 Sysmon 과 함께 쓸 수 없으므로, 먼저 `Get-Service sysmon*` 으로 기존 설치를 찾아 지웁니다. 이벤트는 따로 받은 Sysmon 과 같은 채널에 쌓이고, 설정을 바꾸면 바로 적용되며 재부팅 뒤에도 유지됩니다. 대상은 지원되는 Windows 11 이상입니다. Windows 11 25H2 (빌드 26200.9457) 에는 선택적 기능 "Sysmon" 과 "Sysmon-Service" 가 있고, 둘 다 Disabled 상태입니다.
 
-내장 Sysmon 의 실행 파일 위치, 서비스·드라이버 이름, 설정이 남는 레지스트리 값, 처음 들어간 빌드를 밝힌 공개 분석 자료는 없습니다. 실제 시스템에서 확인해야 합니다. 이 페이지의 레지스트리 설명은 따로 받은 Sysmon 을 기준으로 합니다.
+내장 Sysmon 의 실행 파일 위치, 서비스·드라이버 이름, 설정이 남는 레지스트리 값은 실제 시스템에서 `Get-Service sysmon*` 으로 서비스를 찾고, 그 서비스 키의 값을 열어 확인합니다. 이 페이지의 레지스트리 설명은 따로 받은 Sysmon 을 기준으로 합니다.
 
 ## 구조
 
@@ -104,7 +104,7 @@ Windows 11 에는 선택적 기능으로 들어 있는 Sysmon 이 있습니다.
 | Rules | REG_BINARY | 필터 규칙 |
 | Options | REG_DWORD | 1 = 네트워크 연결 기록, 2 = 이미지 로드 기록 |
 | HashingAlgorithm | REG_DWORD | 1 = SHA1, 2 = MD5, 4 = SHA256, 8 = IMPHASH |
-| ProcessAccessMasks | REG_BINARY | 스크립트가 읽는 값입니다. 뜻은 공개 자료 없음 |
+| ProcessAccessMasks | REG_BINARY | 스크립트가 읽는 값입니다. 뜻을 단정하지 않고 값만 옮깁니다 |
 | ProcessAccessNames | REG_MULTI_SZ | 위와 같습니다 |
 | CheckRevocation | REG_BINARY | 위와 같습니다 |
 

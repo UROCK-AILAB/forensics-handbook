@@ -49,7 +49,7 @@ odl.py 와 OneDriveExplorer 는 지원 확장자를 `.odl`, `.odlgz`, `.odlsent`
 
 `.odlgz` 는 `ListSync` 아래에 있습니다. 파일 이름의 날짜·시각은 UTC 입니다. 예를 들어 PC 시간대가 UTC+9 여도 이름이 `0714` 인 파일의 첫 레코드 시각은 07:14:51 UTC 입니다. 파일 이름의 PID 자리는 그 로그를 쓴 `OneDrive.exe` 의 프로세스 ID 입니다.
 
-남는 기간은 `Personal`·`Business1` 이 4~5일 치, `Common` 이 약 4주 치 정도일 수 있습니다. 지우는 규칙은 공개 자료가 없습니다.
+남는 기간은 `Personal`·`Business1` 이 4~5일 치, `Common` 이 약 4주 치 정도일 수 있습니다. 실제 기기에서는 남은 파일 이름의 날짜로 기간을 확인합니다.
 
 ### 버전에 따른 차이
 
@@ -69,7 +69,7 @@ odl.py 와 OneDriveExplorer 는 지원 확장자를 `.odl`, `.odlgz`, `.odlsent`
 |---|---|---|---|
 | 0x00 | 8 | signature | 문자열 `EBFGONED` |
 | 0x08 | 4 | odl_version | uint32. 위 버전 표 참고 |
-| 0x0C | 4 | unknown | uint32. 예: `.odlsent`·`.odlgz` 는 0xD7, `.aodl`·`.odl` 은 0xC7. 뜻은 공개 자료가 없습니다 |
+| 0x0C | 4 | unknown | uint32. 예: `.odlsent`·`.odlgz` 는 0xD7, `.aodl`·`.odl` 은 0xC7. 뜻은 단정하지 않습니다 |
 | 0x10 | 8 | unknown | uint64. 값은 0 |
 | 0x18 | 4 | unknown | uint32. 값은 1 |
 | 0x1C | 0x40 | one_drive_version | 앱 버전 문자열. 예: `26.168.0830.0006` |

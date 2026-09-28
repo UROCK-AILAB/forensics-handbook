@@ -17,11 +17,11 @@ nav_order: 510
 
 ## 위치와 확인 범위
 
-| 알고 싶은 것 | 볼 곳 | 공개 자료 범위 |
+| 알고 싶은 것 | 볼 곳 | 알려진 것과 확인할 것 |
 |---|---|---|
-| 볼륨 소유자·보안 토큰 여부 | 계정의 `AuthenticationAuthority` 속성 ([계정 plist 구조 (dslocal)](dslocal-plist.md)), 켜진 시스템에서는 `diskutil apfs listUsers /` 출력 [2] | 보안 토큰을 막는 `;DisabledTags;SecureToken` 만 공개 [2], 토큰이 있을 때의 값과 plist 키 이름은 실제 데이터로 확인 |
+| 볼륨 소유자·보안 토큰 여부 | 계정의 `AuthenticationAuthority` 속성 ([계정 plist 구조 (dslocal)](dslocal-plist.md)), 켜진 시스템에서는 `diskutil apfs listUsers /` 출력 [2] | 보안 토큰을 막는 값은 `;DisabledTags;SecureToken` [2], 토큰이 있을 때의 값과 plist 키 이름은 실제 데이터로 확인 |
 | 관리자 그룹 소속 | 로컬 그룹 기록 | 경로·키는 실제 데이터로 확인 [1] |
-| 부트스트랩 토큰 사용 여부 | MDM 등록 상태 ([구성 프로파일 (Configuration Profiles·MDM)](../../persistence/configuration-profiles.md)) | 동작은 공개 [2], 저장 위치는 실제 데이터로 확인 |
+| 부트스트랩 토큰 사용 여부 | MDM 등록 상태 ([구성 프로파일 (Configuration Profiles·MDM)](../../persistence/configuration-profiles.md)) | 동작 설명 [2], 저장 위치는 실제 데이터로 확인 |
 
 계정 plist 에는 `gid` 가 있지만 [1], 이 값으로 관리자 여부를 알 수 있다는 근거는 없습니다. `gid` 하나로 관리자라고 판단하지 않습니다.
 
@@ -49,7 +49,7 @@ Apple silicon Mac 에서는 처음 설정한 사용자가 보안 토큰을 받�
 
 - **도구 결과에 그룹이 없음.** mac_apt 사용자 정보는 그룹 plist 를 읽지 않아서 [1], 도구 표에 관리자 여부가 없다고 일반 사용자라고 판단하지 않습니다.
 - **처음 만든 계정.** Apple silicon 에서는 처음 설정한 사용자가 첫 볼륨 소유자가 됩니다 [2]. 보안 토큰이 있는 계정이 여럿이면 어느 계정이 처음 설정한 계정인지 만든 시각(`creationTime`)으로 따져 봅니다.
-- **권한이 바뀐 시점.** 관리자 권한이나 보안 토큰을 언제 주고 뺐는지가 계정 기록에 남는지는 공개된 자료가 없습니다. [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../../03-techniques/analysis/snapshot-diff.md)로 이전 사본과 비교하고, [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에서 같은 시간대 기록을 찾아봅니다.
+- **권한이 바뀐 시점.** 관리자 권한이나 보안 토큰을 언제 주고 뺐는지는 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../../03-techniques/analysis/snapshot-diff.md)로 이전 사본과 비교하고, [통합 로그에서 찾을 것 (Unified Log Events)](../../logs/unified-log-events/index.md)에서 같은 시간대 기록을 찾아 확인합니다.
 
 ## 교차 검증
 

@@ -22,7 +22,7 @@ nav_order: 150
 | 방문 기록 | 브라우저 프로필의 방문 기록 | claude.ai 주소를 연 시각과 횟수 | 브라우저 공통 원리 |
 | 쿠키 | 브라우저 쿠키 저장소 | claude.ai 도메인 쿠키가 있었는지, 쿠키에 적힌 시각 | 브라우저 공통 원리 |
 | 캐시 | 브라우저 캐시 | 받은 페이지 자원 | 브라우저 공통 원리(대화 내용이 들어가는지는 실제 기기에서 확인) |
-| 사이트 저장소 | Local Storage·IndexedDB | 실제 기기의 claude.ai 출처 항목으로 확인 | 공개 분석 자료 없음 |
+| 사이트 저장소 | Local Storage·IndexedDB | 실제 기기의 claude.ai 출처 항목으로 확인 | 브라우저 공통 원리 |
 | 대화 원본 | 계정 서버 | 대화 제목·본문·시각 | [2] |
 
 브라우저별 파일 위치와 형식은 다음 페이지에 있습니다.
@@ -40,7 +40,7 @@ nav_order: 150
 
 ## 증거로서 의미
 
-**증명하는 것.** 방문 기록에 claude.ai 가 있으면 이 브라우저 프로필에서 그 시각에 claude.ai 주소를 연 기록이 있다고 쓸 수 있습니다. claude.ai 도메인 쿠키가 있으면 이 프로필로 사이트에 접속한 적이 있다고 쓸 수 있습니다. 로그인 세션을 담은 쿠키인지는 쿠키 이름으로 구분해야 하는데, 쿠키 이름의 뜻을 밝힌 공개 자료가 없으므로 "로그인했다"까지는 쓰지 않습니다.
+**증명하는 것.** 방문 기록에 claude.ai 가 있으면 이 브라우저 프로필에서 그 시각에 claude.ai 주소를 연 기록이 있다고 쓸 수 있습니다. claude.ai 도메인 쿠키가 있으면 이 프로필로 사이트에 접속한 적이 있다고 쓸 수 있습니다. 로그인 세션을 담은 쿠키인지는 쿠키 이름만으로 단정할 수 없으므로 "로그인했다"까지는 쓰지 않습니다.
 
 **증명하지 못하는 것.** 방문 기록과 쿠키만으로는 무엇을 입력했는지, 어느 계정으로 들어갔는지, 그때 누가 키보드 앞에 있었는지 알 수 없습니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)). 방문 기록이 없어도 쓰지 않았다고 보지 않습니다. 브라우저의 시크릿 창으로 열었을 수 있고, 기록을 지웠을 수 있고, 다른 기기나 데스크톱 앱으로 썼을 수도 있습니다.
 
@@ -58,7 +58,7 @@ Windows 데스크톱 앱은 앱 패키지 폴더 안에 크롬 계열 저장소�
 
 ## 직접 분석해 보기
 
-claude.ai 가 브라우저에 두는 값은 공개된 분석 자료가 없습니다. 브라우저 파일을 헥스로 따라가는 방법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. 공개 도구로는 다음 순서로 봅니다.
+claude.ai 가 브라우저에 두는 값은 사이트 저장소를 직접 열어 확인합니다. 브라우저 파일을 헥스로 따라가는 방법은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에 있습니다. 공개 도구로는 다음 순서로 봅니다.
 
 1. 브라우저를 닫은 상태에서 프로필 폴더를 통째로 사본으로 뜹니다. 데이터베이스 옆의 저널·WAL 파일도 함께 가져옵니다.
 2. 방문 기록 데이터베이스를 SQLite 도구(예: DB Browser for SQLite)로 열어 주소에 claude.ai 가 들어간 줄만 거릅니다.

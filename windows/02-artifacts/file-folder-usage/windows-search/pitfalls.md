@@ -41,7 +41,7 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 - `WorkingSetRules` 에는 `Default=1` 규칙과 `Default=0` 규칙이 섞여 있습니다.
 - 예를 들어 사용자 폴더의 `.android`, `.aws` 를 빼는 규칙은 `Default=0` 입니다.
 - `SearchRoots` 에는 `defaultroot://{사용자 SID}/`, `winrt://{사용자 SID}/` 처럼 사용자 SID 가 든 루트가 있습니다.
-- 각 값의 정확한 뜻과 우선순위는 공개된 자료가 없습니다. 값 이름으로 뜻을 짐작해 보고서에 쓰지 않습니다.
+- 각 값의 뜻과 우선순위는 정해져 있지 않으므로, 값 이름으로 뜻을 짐작해 보고서에 쓰지 않습니다.
 
 분석할 때는 SOFTWARE 하이브의 이 키를 먼저 읽어 둡니다. 조사하는 폴더가 규칙 목록에 들어 있는지, 빠져 있는지를 적습니다. 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서, 볼륨 GUID 는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md) 에서 다룹니다.
 
@@ -57,8 +57,8 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 
 속성 스키마를 다시 등록해 기존 속성 설정을 바꾸면 색인기가 반영하지 않을 수 있습니다. 이때는 색인을 재구성하면 됩니다.
 
-- 초기화 전 기록이 새 DB 에 이어지는지는 공개된 자료가 없으므로, 색인 기록이 짧다는 것만으로 PC 를 쓴 기간이 짧다고 쓰지 않습니다.
-- 레지스트리 `Gather\Windows\SystemIndex` 키의 `CatalogResetSignature` 같은 값으로 재구성 시점을 알 수 있는지도 공개된 자료가 없습니다. 이 값은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
+- 초기화 전 기록이 새 DB 에 이어지는지는 시험 기기에서 색인을 초기화해 보고 확인합니다. 색인 기록이 짧다는 것만으로 PC 를 쓴 기간이 짧다고 쓰지 않습니다.
+- 레지스트리 `Gather\Windows\SystemIndex` 키의 `CatalogResetSignature` 같은 값이 재구성 때 바뀌는지는 시험 기기에서 재구성 전후 값을 비교해 확인합니다. 이 값은 [수집 기록](systemindex-gthr.md) 에서 다룹니다.
 
 ### 수집 시각이 몰리는 경우
 
@@ -83,7 +83,7 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 - 검색 프로토콜 호스트는 시스템용과 사용자용으로 나뉩니다. 자세한 내용은 [수집 기록](systemindex-gthr.md) 에 있습니다.
 - 속성 저장소에는 `System_FileOwner` 열이 있습니다[6].
 - 수집 기록 표에는 `SDID`·`RequiredSIDs` 열이 있습니다[7].
-- 이 열들로 색인 기록을 특정 사용자와 잇는 구체적 방법은 공개된 자료가 없습니다.
+- 이 열들만으로 색인 기록을 특정 사용자와 이을 수는 없습니다.
 
 그래서 기록마다 "어느 사용자의 파일" 인지 적을 때는 경로(`C:\Users\<이름>\…`)나 SID 루트 같은 근거를 함께 적습니다. 근거가 경로뿐이면 "이 사용자 프로필 폴더 아래의 파일" 이라고만 씁니다. SID 를 계정과 잇는 일은 [사용자 프로필 목록](../../system-account/profilelist.md) 에서 합니다.
 
@@ -95,7 +95,7 @@ Windows 11 25H2 에서는 `HKLM\SOFTWARE\Microsoft\Windows Search\CrawlScopeMana
 | "수집 시각에 사용자가 파일을 열었다." | 수집 시각은 색인이 파일을 처리한 시각입니다. | "색인이 이 파일의 속성을 ○○ 에 처리한 기록이 있습니다." |
 | "색인 기록이 지난달부터 있으니 PC 를 지난달부터 썼다." | 초기화 전 기록이 이어지는지 알 수 없습니다. | "색인 DB 에서 가장 이른 수집 시각은 ○○ 입니다." |
 | "본문 검색에 걸리지 않으니 그 낱말은 문서에 없었다." | 속성만 색인한 파일이나 본문 색인 안 함 파일이 있습니다. | "색인에서 그 낱말로 찾은 결과는 없습니다. 파일 본문은 따로 확인했습니다." |
-| "소유자 열이 A 이니 A 가 만든 파일이다." | 소유자 열을 사용자 행동과 잇는 방법은 알려져 있지 않습니다. | "속성 저장소의 소유자 열 값은 ○○ 입니다." |
+| "소유자 열이 A 이니 A 가 만든 파일이다." | 소유자 열만으로 사용자 행동을 알 수는 없습니다. | "속성 저장소의 소유자 열 값은 ○○ 입니다." |
 
 ## 직접 확인해 보기
 

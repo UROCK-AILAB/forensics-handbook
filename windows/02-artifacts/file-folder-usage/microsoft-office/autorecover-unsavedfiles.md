@@ -28,7 +28,7 @@ nav_order: 1380
 |---|---|---|
 | 자동 복구 파일 | `*.asd` | 자동 복구가 저장할 때 |
 | 백업 복사본 | `Backup of <원래 이름>.wbk` | Word 의 [항상 백업 복사본 만들기] 옵션을 켰을 때 |
-| 임시 파일 | `~` 로 시작하는 `*.tmp` | 알려져 있지 않습니다. |
+| 임시 파일 | `~` 로 시작하는 `*.tmp` | 시험 기기에서 재현해 확인합니다. |
 
 ## 위치와 버전별 차이
 
@@ -41,12 +41,12 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 
 - 이 경로는 보관 (archived) 처리된 Microsoft 문서 (ms.date 2024-06-06) 에 나온 것이라 지금 버전과 다를 수 있습니다.
 - KAPE 의 OfficeAutosave 타깃은 사용자마다 `AppData\Roaming\Microsoft\` 아래 `Word\`, `Excel\`, `Powerpoint\`, `Publisher\` 를 하위 폴더까지 모두 모읍니다.
-- AutoRecover 폴더 위치를 정하는 레지스트리 값은 알려져 있지 않습니다. Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 의 `Software\Microsoft\Office\<버전>\Word\Options` 키에는 `AutoRecoverySaveIntervalMetadata` (REG_DWORD) 값만 있고 경로 값은 없습니다.
+- Microsoft 365 앱 16.0.20326.20158 (클릭 투 런) 의 `Software\Microsoft\Office\<버전>\Word\Options` 키에는 `AutoRecoverySaveIntervalMetadata` (REG_DWORD) 값만 있고 경로 값은 없습니다.
 - 자동 복구의 기본 간격과, 정상 종료나 저장 때 AutoRecover 파일을 지우는 조건은 실험으로 확인해야 합니다.
 
 ## 구조
 
-자동 복구 파일 안의 형식은 공개 자료가 없습니다. 아래는 Microsoft 365 앱 16.0.20326.20158 에서 폴더와 파일 이름의 모양입니다.
+자동 복구 파일 안의 형식은 파일 앞 바이트를 보고 파일마다 확인합니다. 아래는 Microsoft 365 앱 16.0.20326.20158 에서 폴더와 파일 이름의 모양입니다.
 
 - `%LOCALAPPDATA%\Microsoft\Office\UnsavedFiles` 폴더가 없을 수 있습니다.
 - `%APPDATA%\Microsoft\Word` 에는 `STARTUP` 폴더만 있고 `.asd` 파일이 없을 수 있습니다.
@@ -54,10 +54,10 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 - 그 폴더마다 파일이 두 개 있습니다.
   - `<원래 문서 이름>((Unsaved-<18자리 숫자>)).xlsb`
   - `<원래 문서 이름>.csv.lnk`: 원본 CSV 를 가리키는 바로 가기입니다.
-- 폴더 이름의 숫자와 `Unsaved-` 뒤 숫자는 서로 다릅니다. 두 숫자의 뜻은 알려져 있지 않습니다.
+- 폴더 이름의 숫자와 `Unsaved-` 뒤 숫자는 서로 다릅니다. 두 숫자의 뜻은 단정하지 않고 값만 적습니다.
 - `.xlsb` 파일의 마지막 수정 시각은 폴더의 마지막 수정 시각보다 몇 분 이를 수 있습니다.
 
-이 버전에서 Excel 의 자동 복구 파일은 `.asd` 가 아니라 `.xlsb` 입니다. Excel 자동 복구 형식을 밝힌 공식 자료가 없으므로 실제 파일마다 확인합니다.
+이 버전에서 Excel 의 자동 복구 파일은 `.asd` 가 아니라 `.xlsb` 입니다. Excel 자동 복구 파일의 형식은 실제 파일마다 앞 바이트로 확인합니다.
 
 ## 증거로서 의미
 
@@ -70,7 +70,7 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 
 **증명하지 못하는 것**
 
-- 파일이 남은 이유. 비정상 종료 때문인지, 저장하지 않고 닫았기 때문인지 파일만으로 구분하지 못합니다. 파일을 지우는 조건이 알려져 있지 않습니다.
+- 파일이 남은 이유. 비정상 종료 때문인지, 저장하지 않고 닫았기 때문인지 파일만으로 구분하지 못합니다.
 - 파일이 없다고 작업하지 않았다는 것. 클라우드 문서는 자동 저장을 씁니다. 사용자가 [문서 복구] 창에서 "아니요, 파일을 제거합니다" 를 골랐을 수도 있습니다.
 - 사용자가 문서를 끝내 저장했는지.
 - 누가 작업했는지.
@@ -82,7 +82,7 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 
 ## 시각 해석
 
-- 자동 복구 파일 안에 시각이 있는지는 알려져 있지 않으므로, 시각은 파일시스템에서 읽습니다 ([마스터 파일 테이블](../../filesystem/mft.md)).
+- 시각은 파일시스템에서 읽습니다 ([마스터 파일 테이블](../../filesystem/mft.md)).
 - 백업 파일의 생성·수정 시각은 그 백업 파일의 시각입니다. 원본 문서의 시각이 아닙니다.
 - `.xlsb` 수정 시각이 폴더 수정 시각보다 몇 분 이를 수 있으므로, 폴더 시각을 백업 파일 시각으로 옮겨 적지 않습니다.
 - **18자리 숫자.** 요즘 날짜의 FILETIME 을 10진수로 적으면 18자리입니다. 그래서 시각일 수도 있지만, 시각이라는 근거는 아직 없습니다. 풀어 본 값은 파일시스템 시각과 맞춰 본 뒤에만 씁니다. 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
@@ -91,14 +91,14 @@ C:\Users\<UserName>\AppData\Local\Microsoft\Office\UnsavedFiles
 
 - **공식 경로와 실제 모양이 다를 수 있습니다.** 공식 경로는 보관 처리된 Microsoft 문서에 나온 것입니다. Microsoft 365 앱 16.0.20326.20158 에는 `UnsavedFiles` 폴더도, Word 의 `.asd` 파일도 없을 수 있고, Excel 은 다른 모양의 파일을 남깁니다.
 - **수집 범위를 확인합니다.** KAPE OfficeAutosave 타깃의 폴더는 `Roaming` 아래 네 곳입니다. `UnsavedFiles` 는 `Local` 아래에 있으므로 수집 목록에 따로 넣습니다.
-- **폴더 위치가 바뀌었을 수 있습니다.** 위치를 정하는 레지스트리 값이 알려져 있지 않습니다. 기본 폴더에 없으면 디스크 전체에서 `*.asd`, `Backup of *.wbk`, `*((Unsaved-*` 이름을 찾습니다.
+- **폴더 위치가 바뀌었을 수 있습니다.** 기본 폴더에 없으면 디스크 전체에서 `*.asd`, `Backup of *.wbk`, `*((Unsaved-*` 이름을 찾습니다.
 - **클라우드 문서는 여기 남지 않을 수 있습니다.** OneDrive·SharePoint 문서는 자동 저장을 씁니다. [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) 를 봅니다.
 - **지운 백업 파일.** 지우는 조건을 모르므로 지금 없는 파일도 찾아봅니다. [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 와 [섀도 복사본 활용](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 을 봅니다.
 - **확장자만 믿지 않습니다.** 파일 앞 바이트로 실제 형식을 확인합니다.
 
 ## 직접 분석해 보기
 
-자동 복구 파일 안의 형식은 공개 자료가 없어 헥스 예시가 없습니다. 아래 절차는 파일을 찾아 모으고 원래 문서와 잇는 데까지입니다.
+아래 절차는 파일을 찾아 모으고 원래 문서와 잇는 데까지입니다.
 
 1. 사용자마다 `AppData\Roaming\Microsoft\` 아래 `Word`·`Excel`·`Powerpoint`·`Publisher` 폴더와 `AppData\Local\Microsoft\Office\UnsavedFiles` 를 하위 폴더까지 모읍니다. KAPE 를 쓴다면 OfficeAutosave 타깃에 `UnsavedFiles` 를 더합니다.
 2. 이름 모양으로 거릅니다. `*.asd`, `Backup of *.wbk`, `~*.tmp`, `*((Unsaved-*` 를 찾습니다.

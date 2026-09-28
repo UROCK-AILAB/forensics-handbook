@@ -27,7 +27,7 @@ Services 트리는 시스템의 서비스마다 정보를 담고, 드라이버�
 - `CurrentControlSet` 은 켜진 PC 에서 보이는 이름입니다. 이미지에서 어느 컨트롤셋을 읽어야 하는지는 [컨트롤셋 고르기](../../01-foundations/database-log-formats/registry-hive/controlset-select.md) 에서 다룹니다.
 - Windows 11 PC 한 대에서 `HKLM\SYSTEM\Select` 는 Current=1, Default=1, LastKnownGood=1, Failed=0 이었습니다. `ControlSet001` 과 `CurrentControlSet` 만 보였고 `ControlSet002` 는 없었습니다.
 - 같은 PC 의 `Svchost` 키에는 그룹 목록 값이 67개 있었습니다. 예를 들어 `netsvcs` 그룹에는 lanmanserver·IKEEXT·iphlpsvc 등이 들어 있었습니다.
-- 같은 PC 에는 사용자별 서비스가 있었습니다. 아래 "사용자별 서비스" 를 봅니다. 이 형태가 어느 버전부터 생겼는지는 공개 자료가 없습니다.
+- 같은 PC 에는 사용자별 서비스가 있었습니다. 아래 "사용자별 서비스" 를 봅니다.
 
 ## 구조
 
@@ -101,7 +101,7 @@ Services\disk
     ErrorControl   0x1
 ```
 
-ImagePath 에는 드라이브 문자도 `%SystemRoot%` 도 없는 상대 경로가 들어 있었습니다. ImagePath 가 아예 없을 때 어느 경로를 쓰는지는 공개 자료가 없습니다.
+ImagePath 에는 드라이브 문자도 `%SystemRoot%` 도 없는 상대 경로가 들어 있었습니다. ImagePath 가 아예 없는 서비스가 어느 파일을 올리는지는 같은 버전의 시험 기기에서 확인합니다.
 
 ### 사용자별 서비스
 

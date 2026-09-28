@@ -60,7 +60,7 @@ freelist 잎 페이지는 정보를 담지 않는 페이지라서, SQLite 는 �
 | secure_delete = 1 | 지운 내용을 0 으로 덮어쓴다 | 파일에 기록되지 않음 |
 | secure_delete = FAST | 입출력이 늘지 않을 때만 덮어써서, b-tree 페이지의 옛 내용은 지우지만 freelist 페이지에는 흔적을 남긴다 | 파일에 기록되지 않음 |
 
-auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 실행해야 하고, FULL 로 켜져 있으면 빈 페이지를 파일 끝으로 모아 잘라 내서 freelist 쪽 복원 여지가 줄어듭니다. 이 설정은 페이지 단위로만 정리하니, 사용 중인 페이지 안의 freeblock 까지 지우지는 않습니다. secure_delete 기본값은 컴파일 옵션 `SQLITE_SECURE_DELETE` 로 정해지며 보통 꺼져 있습니다. iOS 시스템 SQLite 의 secure_delete·auto_vacuum 기본값과 컴파일 옵션은 공개된 자료가 없습니다.
+auto_vacuum 을 NONE 에서 켜려면 표를 만들기 전이거나 VACUUM 을 실행해야 하고, FULL 로 켜져 있으면 빈 페이지를 파일 끝으로 모아 잘라 내서 freelist 쪽 복원 여지가 줄어듭니다. 이 설정은 페이지 단위로만 정리하니, 사용 중인 페이지 안의 freeblock 까지 지우지는 않습니다. secure_delete 기본값은 컴파일 옵션 `SQLITE_SECURE_DELETE` 로 정해지며 보통 꺼져 있습니다. iOS 의 DB 는 이 기본값을 가정하지 않고, auto_vacuum 설정을 파일 헤더 오프셋 52·64 로 확인합니다.
 
 ## 읽는 법
 

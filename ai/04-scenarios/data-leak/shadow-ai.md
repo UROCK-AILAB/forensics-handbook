@@ -17,7 +17,7 @@ nav_order: 930
 - **허용 기준.** 회사가 허용한 AI 서비스와 계정 종류(회사 조직 계정만인지, 특정 도구만인지)를 정책 문서로 먼저 확인합니다. 기준이 없으면 "허용되지 않은 사용" 을 판단할 수 없습니다.
 - **네트워크 로그의 종류와 필드.** 프록시, 방화벽, DNS, 보안 웹 게이트웨이 가운데 무엇이 있고 보존 기간이 얼마인지 확인합니다. 장비마다 남기는 필드가 달라서, 올린 데이터 양(Uploaded bytes)이 있는 로그인지에 따라 답할 수 있는 질문이 달라집니다.
 - **사용자와 기기.** 어느 사용자 프로필인지, 회사 망 밖에서 쓴 기기인지 확인합니다. 회사 망을 거치지 않은 사용은 회사 프록시·방화벽 로그에 남지 않아서, 기기 흔적이나 기기에서 직접 모으는 기록(Defender for Endpoint 연동 등)으로만 볼 수 있습니다 [5].
-- **시간대.** 네트워크 로그, 관리 도구 화면, 기기 설정 파일의 시각 필드마다 UTC 인지 현지 시각인지, 단위가 무엇인지 확인하고 맞춥니다. 이 페이지에서 다루는 기기 파일의 시각 값은 시간대와 단위를 설명한 공개 자료가 없어 실제 데이터로 확인해야 합니다.
+- **시간대.** 네트워크 로그, 관리 도구 화면, 기기 설정 파일의 시각 필드마다 UTC 인지 현지 시각인지, 단위가 무엇인지 확인하고 맞춥니다. 이 페이지에서 다루는 기기 파일의 시각 값은 시간대와 단위를 실제 데이터로 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -53,7 +53,7 @@ nav_order: 930
 
 **AI 사이트 방문 기록.** Purview 의 AI 용 데이터 보안 관리(DSPM for AI)에는 브라우저로 AI 사이트에 간 것을 탐지하는 기본 내부자 위험 정책 `DSPM for AI - Detect when users visit AI sites` 가 있고, 활동 탐색기에는 `AI website visit` 이벤트가 남습니다 [1]. 제3자 AI 사이트 방문을 찾으려면 Windows 사용자에게 Purview 브라우저 확장을 배포해야 하고, Chrome 에서 Endpoint DLP 를 쓸 때도 이 확장이 필요하며, Edge 는 Edge 구성 정책으로 연동을 켭니다 [1]. 확장이 배포되지 않은 브라우저의 방문은 이 기록에 없습니다. 기본 DLP 정책에는 `DSPM for AI - Block sensitive info from AI sites`(적응형 보호, 테스트 모드)와 `DSPM for AI - Block elevated risk users from submitting prompts to AI apps in Microsoft Edge` 등이 있고 [1], 차단 기록이나 재정의(override) 기록이 있으면 사용자가 경고를 보고도 진행했는지를 보여 주는 단서가 됩니다.
 
-**클라우드 사업자를 거친 사용.** Claude Code 를 Bedrock, Google Agent Platform, Microsoft Foundry, Claude Platform on AWS 로 쓰면 사용 지표, 오류 보고, `/feedback` 이 기본으로 꺼집니다 [3]. 이때 모델 요청은 Anthropic 도메인이 아니라 클라우드 사업자 도메인으로 가므로, AI 회사 도메인만 찾으면 이 사용을 놓칩니다. 다만 WebFetch 도구는 공급자와 상관없이 가져올 URL 의 호스트 이름만 `api.anthropic.com` 에 보내 Anthropic 의 차단 목록과 대조합니다 [3]. Claude Code 의 사용 지표는 Anthropic 과 제3자 로깅 인프라로, 오류 보고는 제3자 오류 추적 서비스로 가고, 지표에는 코드·프롬프트·파일 경로가 들어가지 않습니다 [3]. 오류 보고는 Pro·Max 구독으로 로그인해 Claude API 에 바로 연결한 v2.1.198 이후 판에서만 기본으로 켜지므로 [3], 오류 보고 전송이 없다는 것만으로는 사용 여부를 판별하지 못합니다. `DISABLE_TELEMETRY`, `DISABLE_ERROR_REPORTING`, `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` 값이 켜진 환경에서는 이 전송이 줄어들어 네트워크 쪽 흔적도 적습니다 [3]. 텔레메트리를 받는 호스트 이름은 공개 문서에 없어 실제 네트워크 기록에서 확인해야 합니다.
+**클라우드 사업자를 거친 사용.** Claude Code 를 Bedrock, Google Agent Platform, Microsoft Foundry, Claude Platform on AWS 로 쓰면 사용 지표, 오류 보고, `/feedback` 이 기본으로 꺼집니다 [3]. 이때 모델 요청은 Anthropic 도메인이 아니라 클라우드 사업자 도메인으로 가므로, AI 회사 도메인만 찾으면 이 사용을 놓칩니다. 다만 WebFetch 도구는 공급자와 상관없이 가져올 URL 의 호스트 이름만 `api.anthropic.com` 에 보내 Anthropic 의 차단 목록과 대조합니다 [3]. Claude Code 의 사용 지표는 Anthropic 과 제3자 로깅 인프라로, 오류 보고는 제3자 오류 추적 서비스로 가고, 지표에는 코드·프롬프트·파일 경로가 들어가지 않습니다 [3]. 오류 보고는 Pro·Max 구독으로 로그인해 Claude API 에 바로 연결한 v2.1.198 이후 판에서만 기본으로 켜지므로 [3], 오류 보고 전송이 없다는 것만으로는 사용 여부를 판별하지 못합니다. `DISABLE_TELEMETRY`, `DISABLE_ERROR_REPORTING`, `CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC` 값이 켜진 환경에서는 이 전송이 줄어들어 네트워크 쪽 흔적도 적습니다 [3]. 텔레메트리를 받는 호스트 이름은 실제 네트워크 기록에서 확인합니다.
 
 ## 기기에서 찾기
 
@@ -88,19 +88,19 @@ nav_order: 930
 {"firstSessionDate":"2026-01-05","dailyActivity":[{"date":"2026-03-02","messageCount":42,"sessionCount":3,"toolCallCount":17}],"totalMessages":1200,"totalSessions":85}
 ```
 
-이 파일은 합계만 담고 내용은 담지 않아서 "허용되지 않은 도구를 이 기간에 이만큼 썼다" 를 밝히는 데 쓰고, 무엇을 넣었는지는 세션 기록으로 넘깁니다. `hourCounts` 의 시간이 UTC 인지 현지 시각인지는 공개된 설명이 없으므로 근무 시간 밖 사용을 주장할 때는 세션 기록의 `timestamp` 로 다시 맞춥니다.
+이 파일은 합계만 담고 내용은 담지 않아서 "허용되지 않은 도구를 이 기간에 이만큼 썼다" 를 밝히는 데 쓰고, 무엇을 넣었는지는 세션 기록으로 넘깁니다. `hourCounts` 의 시간이 UTC 인지 현지 시각인지는 이 파일만으로 알 수 없으므로, 근무 시간 밖 사용을 주장할 때는 세션 기록의 `timestamp` 로 다시 맞춥니다.
 
 **계정 종류 단서.** 회사 조직 계정인지 개인 계정인지는 다음 키로 좁힙니다.
 
 | 파일 | 키 | 알려 주는 것 |
 |---|---|---|
-| `.claude\.credentials.json` | `claudeAiOauth.subscriptionType`, `claudeAiOauth.rateLimitTier`, `claudeAiOauth.scopes`, `claudeAiOauth.expiresAt` | 키 이름으로 보면 로그인한 계정의 요금제 종류와 권한 범위(값의 뜻은 공개 설명이 없어 회사 계약 요금제와 대조해 확인) |
+| `.claude\.credentials.json` | `claudeAiOauth.subscriptionType`, `claudeAiOauth.rateLimitTier`, `claudeAiOauth.scopes`, `claudeAiOauth.expiresAt` | 키 이름으로 보면 로그인한 계정의 요금제 종류와 권한 범위(값의 뜻은 회사 계약 요금제와 대조해 확인) |
 | Claude 데스크톱 `config.json` | `lastKnownAccountUuid`, `first_launch_at`, `version_first_launch.at / version`, `updaterLastSeenVersion` | 마지막 계정 ID, 처음 실행한 시각과 그때의 버전 |
 | Claude 데스크톱 `plan-usage-history.json` | `samples[].org`, `samples[].t` | 사용량을 기록한 조직과 시각 |
 | Claude 데스크톱 `buddy-tokens.json` | `tokens-today.date`, `tokens-today.tokens` | 그날 쓴 토큰 수 |
 | Claude 데스크톱 `claude_desktop_config.json` | `preferences.localAgentModeTrustedFolders`, `coworkUserFilesPath`, `preferences.coworkWebSearchEnabled` | 에이전트가 다룰 수 있게 허용한 폴더, 웹 검색 사용 설정 |
 
-`.credentials.json` 에는 `accessToken` 과 `refreshToken` 필드도 있어서 증거로 옮길 때는 비밀번호처럼 다룹니다. 토큰 취급은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md) 에 있고, 계정 ID 를 실제 사람과 잇는 방법은 [그 대화를 한 사람이 누구인가](../attribution/user-attribution.md) 에 있습니다. `first_launch_at` 같은 정수 시각은 단위가 공개돼 있지 않아, 파일 수정 시각과 맞춰 보고 초인지 밀리초인지 정합니다.
+`.credentials.json` 에는 `accessToken` 과 `refreshToken` 필드도 있어서 증거로 옮길 때는 비밀번호처럼 다룹니다. 토큰 취급은 [API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md) 에 있고, 계정 ID 를 실제 사람과 잇는 방법은 [그 대화를 한 사람이 누구인가](../attribution/user-attribution.md) 에 있습니다. `first_launch_at` 같은 정수 시각은 파일 수정 시각과 맞춰 보고 초인지 밀리초인지 정합니다.
 
 **개발 도구의 훅 설정.** 개발 도구는 프롬프트를 보내기 전이나 도구를 실행하기 전후에 정해 둔 명령을 돌리는 훅을 설정 파일에 둡니다. 관찰한 이벤트 이름은 다음과 같습니다.
 

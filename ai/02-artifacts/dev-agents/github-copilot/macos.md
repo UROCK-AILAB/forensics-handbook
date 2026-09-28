@@ -92,11 +92,11 @@ Copilot CLI 세션 파일은 한 줄에 이벤트 하나를 적는 JSONL 이고,
 
 ### Xcode 용 Copilot 로그
 
-Xcode 용 Copilot 앱에서 Advanced → Open Copilot Log Folder 를 누르면 로그 폴더가 열리고, Advanced → Logging → Verbose Logging 스위치를 켜면 더 자세한 로그를 남깁니다 [9]. 로그 줄의 형식과 프롬프트·응답 본문이 들어가는지를 설명한 공개 분석 자료는 없어서, 실제 기기에서 확인해야 합니다.
+Xcode 용 Copilot 앱에서 Advanced → Open Copilot Log Folder 를 누르면 로그 폴더가 열리고, Advanced → Logging → Verbose Logging 스위치를 켜면 더 자세한 로그를 남깁니다 [9]. 로그 줄의 형식과 프롬프트·응답 본문이 들어가는지는 실제 기기에서 로그 파일을 열어 확인합니다.
 
 ### JetBrains IDE
 
-macOS 의 JetBrains IDE 에서는 Help → Show Log in Finder 로 `idea.log` 를 엽니다 [9]. JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장하고, 이 데이터베이스는 `copilot-jetbrains-exporter` 로 JSONL 을 뽑아서 읽을 수 있습니다 [8]. 그 데이터베이스 파일의 경로를 적은 공개 분석 자료는 없어서, 실제 기기에서 확인해야 합니다. `idea.log` 에 남는 Copilot 관련 줄은 [로그와 원격 측정](logs.md)에서 다룹니다.
+macOS 의 JetBrains IDE 에서는 Help → Show Log in Finder 로 `idea.log` 를 엽니다 [9]. JetBrains IDE 는 Copilot 채팅을 Nitrite 데이터베이스에 저장하고, 이 데이터베이스는 `copilot-jetbrains-exporter` 로 JSONL 을 뽑아서 읽을 수 있습니다 [8]. 그 데이터베이스 파일의 경로는 실제 기기에서 확인합니다. `idea.log` 에 남는 Copilot 관련 줄은 [로그와 원격 측정](logs.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -123,7 +123,7 @@ VS Code 세션 파일과 설정 파일이 증명하는 것과 증명하지 못�
 - **VS Code JSONL 세션은 마지막 줄만 보면 안 됩니다.** 조작 기록이라서 처음부터 다시 적용해야 최종 모양이 나오고, 나중에 바뀐 값의 이전 값은 앞 줄에 남습니다 [4]. 다시 적용하는 방법은 [Windows](windows.md)에 있습니다.
 - **`session-store.db` 는 WAL 과 함께 뜹니다.** `session-store.db-wal` 을 빼고 복사하면 최근 기록이 빠질 수 있습니다. 저장소에서 가장 늦은 사용량 줄의 시각이 세션 전체가 기록됐다는 뜻은 아닙니다 [5]. WAL 을 읽는 법은 [SQLite](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/sqlite/index.html)에 있습니다.
 - **Visual Studio 추적 파일은 캐시 폴더에 있습니다.** `~/Library/Caches` 아래라서 수집할 때 파일이 남아 있는지부터 확인합니다.
-- **로그인 정보는 따로 봅니다.** Copilot 로그인 토큰이 키체인에 들어가는지를 설명한 공개 분석 자료는 없어서, 실제 기기에서 확인해야 합니다. 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에, 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다. VS Code 세션 파일과 Copilot CLI 세션 파일은 복호화 단계 없이 JSON 으로 읽힙니다 [4][7].
+- **로그인 정보는 따로 봅니다.** Copilot 로그인 토큰이 키체인에 들어가는지는 실제 기기의 키체인 항목을 보고 확인합니다. 키체인 구조는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html)에, 토큰이 흔히 남는 자리와 보고서에서 가리는 법은 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)에 있습니다. VS Code 세션 파일과 Copilot CLI 세션 파일은 복호화 단계 없이 JSON 으로 읽힙니다 [4][7].
 - **MCP 도구 호출.** Copilot 에 붙인 MCP 서버의 기록은 [MCP 서버와 도구 호출 기록](../mcp.md)에서 다룹니다.
 
 ## 직접 분석해 보기

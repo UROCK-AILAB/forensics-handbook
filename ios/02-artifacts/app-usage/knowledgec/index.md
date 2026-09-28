@@ -21,7 +21,7 @@ knowledgeC.db 는 앱이 앞 화면에 있던 구간, 잠금과 화면 켜짐 �
 | 위치 | `/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db` [1][2] |
 | 얻는 방법 | 전체 파일 시스템 수집이 있어야 하고, iCloud 백업과 iTunes 방식 백업에는 들어 있지 않습니다 [1][2] |
 | 형식 | SQLite. 시각은 Mac 절대 시각 (Mac Absolute Time) |
-| 보관 기간 | 약 4 주 [1], 대체로 한 달 정도 [2]. 정확한 삭제 규칙은 공개 자료 없음 |
+| 보관 기간 | 약 4 주 [1], 대체로 한 달 정도 [2]. 실제 보관 범위는 가장 오래된 기록의 시각으로 확인 |
 | 알려 주는 것 | 앞 화면에 있던 앱과 구간, 앱 사용 사건, 잠금 상태, 화면 켜짐, 충전기 연결, 기기 방향 등 |
 | 버전 | iOS 16 부터 대부분 바이옴으로 옮겨 감 [2][3] |
 
@@ -54,7 +54,7 @@ HomeDomain :: Library/Preferences/com.apple.ScreenTimeAgent.plist
   SyncEnabled (bool)
 ```
 
-이 키들의 뜻은 공개된 분석 자료가 없어서 이름만 적고, 사용 기록 자체로 해석하지 않습니다. 수집 방법별로 무엇을 얻는지는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md)와 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지를 봅니다.
+이 키들은 뜻을 단정할 수 없어서 이름만 적고, 사용 기록 자체로 해석하지 않습니다. 수집 방법별로 무엇을 얻는지는 [모바일 증거 확보](../../../03-techniques/acquisition/mobile-acquisition/index.md)와 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지를 봅니다.
 
 ## 읽는 순서
 

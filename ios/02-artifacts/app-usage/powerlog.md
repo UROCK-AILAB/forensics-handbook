@@ -28,7 +28,7 @@ nav_order: 450
 
 지난 기록은 gzip 으로 압축한 파일로 따로 남고, 이름은 `powerlog_2018-10-07_7F9FC438.PLSQL.gz` 처럼 날짜 뒤에 16진수 8자리가 붙는 형식입니다[5]. 압축본은 같은 `BatteryLife` 폴더 아래 `Archives` 하위 폴더에 있습니다[5].
 
-확장 기록인 PerfPowerTelemetry 는 배터리 자료를 담은 `.EPSQL` 과 백그라운드 작업을 담은 `.BGSQL` 로 나뉩니다[3]. 기기 안 전체 경로는 공개 자료가 없고, 공개 파서 iLEAPP 가 찾는 위치는 다음과 같습니다[3].
+확장 기록인 PerfPowerTelemetry 는 배터리 자료를 담은 `.EPSQL` 과 백그라운드 작업을 담은 `.BGSQL` 로 나뉩니다[3]. 공개 파서 iLEAPP 는 아래 경로 규칙으로 파일을 찾으므로[3], 기기 안 전체 경로는 수집본에서 이 규칙에 맞는 파일을 찾아 확인합니다.
 
 ```
 */BatteryLife/*.PLSQL*
@@ -51,7 +51,7 @@ sysdiagnose 묶음을 여는 법은 [sysdiagnose 묶음](../../01-foundations/ba
 
 ### 로컬 백업에 보이는 전원 관련 설정 파일
 
-로컬 백업에 전원 로그 DB 는 없지만, 이름에 전원 로그나 전원 관리가 들어간 설정 파일과 도메인은 있습니다. 이 plist 들이 무엇을 기록하는지는 공개 자료가 없어서, 아래에는 키 이름만 적습니다.
+로컬 백업에 전원 로그 DB 는 없지만, 이름에 전원 로그나 전원 관리가 들어간 설정 파일과 도메인은 있습니다. 이 plist 들이 무엇을 기록하는지는 이름만으로 단정할 수 없어서, 아래에는 키 이름만 적습니다.
 
 | 도메인 :: 경로 | 키 |
 |---|---|
@@ -131,7 +131,7 @@ iLEAPP 시험에서 어긋난 정도는 다음과 같았고, 보정한 뒤에는
 
 PerfPowerTelemetry 도 같은 방식이라 `.EPSQL` 은 `PPTStorageOperator_TimeOffset` 표(뒤에 붙는 보존 기간 접미사가 iOS 버전마다 다름), `.BGSQL` 은 `BackgroundProcessing_TimeOffset` 표로 보정합니다[3]. 다만 `BatteryTrustedData_Daily` 의 `TrustedDateOfFirstUse` 와 `BackgroundProcessing_TaskInstanceData` 의 `StartDate`·`EndDate` 는 보정이 필요 없는 일반 유닉스 시각입니다[3].
 
-사용자가 기기 시각을 직접 바꿀 때 보정 표에 행이 생기는지는 공개 자료로 밝혀지지 않았습니다. 그래서 시각 조작을 의심할 때는 보정 표의 값이 바뀐 지점을 표시해 두고 다른 기록과 맞춰 보는 데 그칩니다.
+사용자가 기기 시각을 직접 바꿀 때 보정 표에 행이 생긴다고 단정할 수 없습니다. 그래서 시각 조작을 의심할 때는 보정 표의 값이 바뀐 지점을 표시해 두고 다른 기록과 맞춰 보는 데 그칩니다.
 
 ## 함정과 한계
 

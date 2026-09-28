@@ -31,12 +31,12 @@ nav_order: 2260
 - 바뀐 위치는 아래 파일에서 찾습니다[1].
   - 박스 드라이브: `Box_Streem` 로그
   - Box Sync: `sync_root_folder.txt`
-- `Box_Streem` 로그의 정확한 폴더와 파일 이름 형식, 로컬 캐시 폴더 위치는 공개 자료에 나오지 않습니다. 메타데이터 폴더를 하위 폴더째 모은 뒤 그 안에서 찾습니다.
+- `Box_Streem` 로그의 폴더와 파일 이름 형식, 로컬 캐시 폴더 위치는 메타데이터 폴더를 하위 폴더째 모은 뒤 그 안에서 찾아 확인합니다.
 
 ### 클라우드 파일을 보여 주는 방식
 
 - 박스 드라이브 폴더의 파일이 모두 로컬에 있지는 않습니다. 이 폴더를 모으면 on-demand 클라우드 파일까지 내려받게 됩니다[1].
-- 박스 드라이브가 Windows Cloud Files API 로 이 동작을 하는지, 자체 파일 시스템 드라이버를 쓰는지는 공개 자료에 나오지 않습니다.
+- 박스 드라이브가 Windows Cloud Files API 로 이 동작을 하는지, 자체 파일 시스템 드라이버를 쓰는지는 실제 기기에서 구분합니다.
 - 실제 기기에서는 SyncRootManager 키에 Box 공급자 이름으로 시작하는 항목이 있는지 봅니다. 키 위치와 읽는 법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 정리합니다.
 
 ## 구조
@@ -60,7 +60,7 @@ nav_order: 2260
 | Box Logs | Logged Date, Log Level, Component, Source File, Log Message, Process, Offset |
 | Box Preferences | Display Username, Last Modified Time, Last Sync time, Box Homepage, Enterprise Name, Is Startup Completed, Currently Logged In, Sync Directory, Is First Run, Login Name |
 
-각 묶음이 어느 DB 파일의 어느 표에서 오는지, 실제 표·열 이름과 시각 저장 형식은 공개 자료에 나오지 않습니다. 그래서 실제 데이터에서는 DB 마다 표 목록을 먼저 뽑고, 위 항목 이름과 뜻이 맞는 열을 찾아 짝을 짓습니다.
+각 묶음이 어느 DB 파일의 어느 표에서 오는지, 실제 표·열 이름과 시각 저장 형식은 실제 데이터에서 확인합니다. DB 마다 표 목록을 먼저 뽑고, 위 항목 이름과 뜻이 맞는 열을 찾아 짝을 짓습니다.
 
 ## 증거로서 의미
 
@@ -74,15 +74,15 @@ nav_order: 2260
 ### 증명하지 못하는 것
 
 - 목록에 파일이 있다고 그 파일 내용이 이 PC 에 내려왔다는 뜻은 아닙니다. 박스 드라이브 폴더에는 로컬에 없는 파일도 보입니다.
-- "Item Last Access Date" 가 사용자가 파일을 연 때인지는 공개 자료에 나오지 않습니다.
-- 묶음 이름에 "Local" 이 붙어 있지만, 사건을 누가 어느 기기에서 일으켰는지 구분하는 항목은 공개 자료에 나오지 않습니다.
+- "Item Last Access Date" 만으로 사용자가 파일을 연 때라고 볼 수는 없습니다.
+- 묶음 이름에 "Local" 이 붙어 있지만, 이 이름만으로 사건을 누가 어느 기기에서 일으켰는지 구분할 수는 없습니다.
 - 로그인 이름은 계정을 가리킵니다. 그 시각에 PC 앞에 앉은 사람은 따로 밝힙니다([그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md)).
 
 보고서에는 "X 파일을 Box 에 올렸다" 대신 이렇게 씁니다. "박스 드라이브 메타데이터 DB 에 이름이 X 인 항목이 있고, 그 항목의 만든 시각 열 값은 Y 이다. 이 열이 서버 시각인지 로컬 시각인지는 확인하지 못했다."
 
 ## 시각 해석
 
-- DB 에는 Creation Date, Modification Date, Last Update Date, Logged Date 같은 시각 항목이 있습니다[2]. 시각이 어떤 단위·기준으로 저장되는지, UTC 인지 현지 시각인지는 공개 자료에 나오지 않습니다.
+- DB 에는 Creation Date, Modification Date, Last Update Date, Logged Date 같은 시각 항목이 있습니다[2]. 시각의 단위·기준과 UTC 인지 현지 시각인지는 아래 방법으로 실제 값에서 정합니다.
 - 값의 자릿수로 형식을 먼저 짐작합니다. 자릿수로 형식을 구분하는 법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 짐작한 변환이 맞는지는 시각을 아는 사건(예: 조사 중 직접 만든 파일, 로그의 앱 시작 줄)과 맞춰 봅니다.
 - 파일 목록의 만든·고친 시각이 서버 쪽 값인지, 로컬 파일 시스템 값인지도 실제 데이터로 확인합니다.
@@ -101,7 +101,7 @@ nav_order: 2260
 
 ### 헥스로 한 번
 
-DB 내부 구조를 설명한 공개 자료는 없습니다. 헥스로는 파일 형식과 문자열 위치를 확인하는 데까지만 봅니다.
+헥스로는 파일 형식과 문자열 위치를 확인하는 데까지만 봅니다.
 
 1. 메타데이터 폴더를 하위 폴더째 사본으로 뜹니다. 분석은 사본에서만 합니다.
 2. `.db` 파일을 헥스 편집기로 열어 맨 앞이 SQLite 머리 문자열인지 봅니다. 머리 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.

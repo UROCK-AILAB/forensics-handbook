@@ -33,7 +33,6 @@ ALEAPP 시험 결과로 본 버전별 차이는 아래와 같습니다 [2].
 | 시험 이미지 | 10개, Android 10~16, 삼성 기기 포함 |
 | 결과 | 10개 모두 0행 |
 | 모듈 마지막 갱신 | 2020-12-21 |
-| One UI 에 따른 차이 | 공개 자료 없음 |
 
 시험 이미지가 모두 0행이라는 것은 최근 앱에서 이 표가 비어 있거나 다른 곳으로 옮겨졌을 가능성을 뜻합니다. 어느 쪽인지는 실제 데이터로 확인합니다.
 
@@ -68,7 +67,7 @@ ALEAPP 시험 결과로 본 버전별 차이는 아래와 같습니다 [2].
 
 ## 시각 해석
 
-`creationTime`·`lastModifiedTime`·`lastOpenedTime` 은 유닉스 밀리초이고, 값이 0 이면 비어 있는 것으로 봅니다 [2]. 유닉스 시각은 UTC 기준이라 보고서에 현지 시각을 쓸 때는 기기 시간대를 따로 확인합니다. 세 시각이 기기 시계로 찍은 값인지 서버 시각을 받아 온 값인지는 알려져 있지 않습니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
+`creationTime`·`lastModifiedTime`·`lastOpenedTime` 은 유닉스 밀리초이고, 값이 0 이면 비어 있는 것으로 봅니다 [2]. 유닉스 시각은 UTC 기준이라 보고서에 현지 시각을 쓸 때는 기기 시간대를 따로 확인합니다. 세 시각이 기기 시계로 찍은 값인지 서버 시각을 받아 온 값인지는 값만으로 알 수 없으므로, 같은 기기의 다른 기록과 시각을 맞춰 봅니다. 값을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md), 시간대 확인은 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 페이지에 있습니다.
 
 ## 함정과 한계
 
@@ -122,7 +121,7 @@ ALEAPP 의 DocList 모듈이 `EntryView` 를 읽어 표로 만들어 줍니다 [
 | [데이터 사용량 (netstats)](../network/netstats.md) | 그 시간대에 앱이 주고받은 데이터 양 |
 | [미디어 저장소 (MediaStore)](../media/mediastore/index.md) | 같은 이름이나 크기의 파일이 기기에 있는지 |
 
-settings global 에는 `master_sync_status`, `synced_account_name` 키가, settings system 에는 `sync_disabled_accounts_with_hash` 키가 있을 수 있습니다. 이름으로 짐작하면 계정 동기화와 관련된 키이지만 값의 뜻을 설명한 공개 자료는 없고, 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다. 클라우드로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
+settings global 에는 `master_sync_status`, `synced_account_name` 키가, settings system 에는 `sync_disabled_accounts_with_hash` 키가 있을 수 있습니다. 이름으로 짐작하면 계정 동기화와 관련된 키이지만 값의 뜻은 이름만으로 단정하지 않습니다. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다. 클라우드로 자료를 내보냈는지 따지는 흐름은 [자료를 밖으로 보냈나 (Data Exfiltration)](../../04-scenarios/exfiltration/data-exfiltration/index.md) 에 있습니다.
 
 ## 실습
 

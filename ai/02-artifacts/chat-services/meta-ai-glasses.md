@@ -62,7 +62,7 @@ Meta 계정 센터(Accounts Center)의 데이터 내보내기는 분류별 HTML 
 
 ### iOS 와 다른 세대
 
-iOS 앱은 공개된 분석 자료가 없어 실제 기기로 확인해야 합니다. 웹의 Meta AI 는 브라우저 흔적으로 남으므로 도메인 목록은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)을 봅니다.
+iOS 앱의 저장 위치는 실제 기기로 확인합니다. 웹의 Meta AI 는 브라우저 흔적으로 남으므로 도메인 목록은 [AI 서비스 도메인과 네트워크 기록](../network-enterprise/network-traces.md)을 봅니다.
 
 ## 구조
 
@@ -92,7 +92,7 @@ iOS 앱은 공개된 분석 자료가 없어 실제 기기로 확인해야 합�
 
 ### AI 대화 기록
 
-`interaction_log.db` 의 `entries` 표에는 대화 상태·AI 응답 글·세션 UUID 가 있지만, 사용자 음성 질문은 `<redacted>` 로 바뀌어 AI 응답만 읽을 수 있습니다 [1]. 사용자 질문의 평문은 `cache/graphql_response_cache/` 아래 `P3%3a` 로 시작하는 캐시 파일과 클라우드의 `your_ai_conversations.html` 에 남습니다 [1]. `files/assistantLogs/` 의 JSON 에는 음성 명령의 메타데이터와 상호작용 ID 가 있습니다 [1]. 이 세 곳의 필드 이름은 공개된 분석 자료에 나와 있지 않고 2026-04-12 판 플러그인의 경로 목록에도 없어서 [2], 실제 파일을 직접 열어 확인합니다.
+`interaction_log.db` 의 `entries` 표에는 대화 상태·AI 응답 글·세션 UUID 가 있지만, 사용자 음성 질문은 `<redacted>` 로 바뀌어 AI 응답만 읽을 수 있습니다 [1]. 사용자 질문의 평문은 `cache/graphql_response_cache/` 아래 `P3%3a` 로 시작하는 캐시 파일과 클라우드의 `your_ai_conversations.html` 에 남습니다 [1]. `files/assistantLogs/` 의 JSON 에는 음성 명령의 메타데이터와 상호작용 ID 가 있습니다 [1]. 이 세 곳은 2026-04-12 판 플러그인의 경로 목록에 없으므로 [2], 필드 이름은 실제 파일을 직접 열어 확인합니다.
 
 ## 증거로서 의미
 

@@ -21,7 +21,7 @@ nav_order: 530
 | 기록 | 위치 | 알려 주는 것 |
 |---|---|---|
 | 시스템 로그인 창 설정 | `/Library/Preferences/com.apple.loginwindow.plist` | 마지막 로그인 사용자, 자동 로그인 계정, 손님 계정 사용 여부 [1][2][3] |
-| 사용자별 로그인 창 설정 | `<홈 폴더>/Library/Preferences/com.apple.loginwindow.plist` | 사용자 쪽 파일. 담기는 키는 공개 자료 없음 [2] |
+| 사용자별 로그인 창 설정 | `<홈 폴더>/Library/Preferences/com.apple.loginwindow.plist` | 사용자 쪽 파일. 담기는 키는 실제 파일을 열어 확인 [2] |
 | 관리 설정 페이로드 | 구성 프로파일 안의 `com.apple.loginwindow` 유형 | 관리 서버가 정한 로그인 창 동작 [4] |
 
 관리 서버가 내려보낸 값이 디스크의 어느 파일에 풀려 남는지는 실제 데이터로 확인해야 합니다. 프로파일 자체를 찾는 법은 [구성 프로파일](../persistence/configuration-profiles.md) 페이지에 있습니다. 페이로드 키는 macOS 버전마다 도입 시기가 달라서 아래 구조 절의 표에 버전을 함께 적었습니다. [4]
@@ -37,11 +37,11 @@ mac_apt 가 시스템 쪽 `com.apple.loginwindow.plist` 에서 읽는 키는 다
 | `autoLoginUser` | 자동 로그인 계정 |
 | `GuestEnabled` | 손님 계정 사용 여부 |
 | `lastUserName` | 마지막으로 로그인한 사용자 이름 |
-| `lastUser` | 뜻은 공개 자료 없음 |
-| `lastLoginPanic` | 뜻과 값 형식은 공개 자료 없음 |
-| `AccountInfo` | 사전. mac_apt 는 그 안의 `FirstLogins`, `MaximumUsers`, `OnConsole` 을 읽음. 각 값의 뜻은 공개 자료 없음 |
+| `lastUser` | 뜻이 정해져 있지 않아 값만 옮김 |
+| `lastLoginPanic` | 뜻과 값 형식이 정해져 있지 않아 값만 옮김 |
+| `AccountInfo` | 사전. mac_apt 는 그 안의 `FirstLogins`, `MaximumUsers`, `OnConsole` 을 읽음. 각 값의 뜻은 단정하지 않고 값만 옮김 |
 
-키마다 어떤 형식의 값이 들어가는지는 공개 자료가 없습니다. `lastUser`, `lastLoginPanic`, `AccountInfo` 안의 값은 키 이름만으로 뜻을 짐작하지 않고, 실제 데이터에서 나온 값을 그대로 적은 뒤 다른 기록과 맞춰 봅니다.
+`lastUser`, `lastLoginPanic`, `AccountInfo` 안의 값은 키 이름만으로 뜻을 짐작하지 않고, 실제 데이터에서 나온 값을 그대로 적은 뒤 다른 기록과 맞춰 봅니다.
 
 ### 관리 설정 페이로드의 키
 
@@ -84,7 +84,7 @@ mac_apt 가 시스템 쪽 `com.apple.loginwindow.plist` 에서 읽는 키는 다
 
 ## 시각 해석
 
-위 시스템 파일의 키 가운데 시각 값으로 알려진 것은 없고, `lastLoginPanic` 이 날짜인지도 알려져 있지 않습니다. 파일의 수정 시각은 로그인 말고도 설정이 바뀔 때 다시 쓰일 수 있어서, "마지막 로그인 시각" 으로 보고서에 적지 않습니다. 로그인과 로그아웃의 시각은 [맥 사용 시간 재구성](../../04-scenarios/activity/usage-time.md) 과 [통합 로그에서 찾을 것](../logs/unified-log-events/index.md) 에서 찾고, 이 파일의 `lastUserName` 은 그 결과의 마지막 사용자와 맞는지 확인하는 데 씁니다.
+위 시스템 파일의 키 가운데 시각 값이라고 단정할 수 있는 것은 없고, `lastLoginPanic` 도 실제 데이터에서 값의 형태를 보기 전에는 날짜로 읽지 않습니다. 파일의 수정 시각은 로그인 말고도 설정이 바뀔 때 다시 쓰일 수 있어서, "마지막 로그인 시각" 으로 보고서에 적지 않습니다. 로그인과 로그아웃의 시각은 [맥 사용 시간 재구성](../../04-scenarios/activity/usage-time.md) 과 [통합 로그에서 찾을 것](../logs/unified-log-events/index.md) 에서 찾고, 이 파일의 `lastUserName` 은 그 결과의 마지막 사용자와 맞는지 확인하는 데 씁니다.
 
 ## 함정과 한계
 
@@ -92,7 +92,7 @@ mac_apt 가 시스템 쪽 `com.apple.loginwindow.plist` 에서 읽는 키는 다
 
 페이로드 정의에는 `AutologinPassword` 키가 문자열로 들어 있습니다. [4] 구성 프로파일 사본에 이 키가 있으면 계정 암호가 들어 있을 수 있으니, 보고서와 작업 기록에 값을 옮겨 적지 않고 키가 있다는 사실만 적습니다.
 
-사용자 홈 폴더 쪽 `com.apple.loginwindow.plist` 는 위치만 알려져 있고 담기는 키는 공개 자료가 없습니다. [2] 시스템 파일과 같은 키가 있다고 가정하지 말고, 실제 파일에서 열어 본 키를 그대로 적습니다.
+사용자 홈 폴더 쪽 `com.apple.loginwindow.plist` 에 시스템 파일과 같은 키가 있다고 가정하지 말고, 실제 파일에서 열어 본 키를 그대로 적습니다. [2]
 
 파일이 없거나 `lastUserName` 이 계정 목록에 없는 이름이면, 계정을 지웠거나 파일에 손댄 흔적일 수도 있지만 이 파일 하나로 결론 내리지 않습니다. 지운 계정은 [사용자 계정](user-accounts/index.md) 페이지의 안내를 따라 찾고, 전체 판단은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 시나리오를 따릅니다.
 

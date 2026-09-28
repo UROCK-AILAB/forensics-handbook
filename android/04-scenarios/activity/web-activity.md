@@ -63,7 +63,7 @@ nav_order: 1600
 
 5. **기기에 남은 파일과 맞춥니다.** `target_path` 의 파일이 아직 있는지 확인하고, MediaStore 의 `is_download`, `download_uri`, `referer_uri` 열 [8] 과 `owner_package_name`(이 파일을 넣은 패키지) [9] 을 함께 봅니다. 브라우저 기록에는 없는데 `Download` 폴더에 파일이 있다면 다른 앱이 받은 파일일 수 있습니다.
 
-6. **Firefox 계열이 있으면 따로 읽습니다.** `places.sqlite` 의 `moz_historyvisits` 표에는 `is_local` 열이 있어, 이 기기에서 추가한 방문은 참, 동기화로 들어온 방문은 거짓입니다 [6]. `moz_places` 표도 방문 횟수와 마지막 방문 시각을 로컬과 원격으로 나눠 둡니다 [6]. Chromium 계열 `History` 에서 동기화로 들어온 방문을 구분하는 열을 밝힌 공개 분석 자료는 없으므로, Chrome·삼성 인터넷 기록은 계정 동기화가 켜져 있었는지와 함께 해석합니다.
+6. **Firefox 계열이 있으면 따로 읽습니다.** `places.sqlite` 의 `moz_historyvisits` 표에는 `is_local` 열이 있어, 이 기기에서 추가한 방문은 참, 동기화로 들어온 방문은 거짓입니다 [6]. `moz_places` 표도 방문 횟수와 마지막 방문 시각을 로컬과 원격으로 나눠 둡니다 [6]. Chromium 계열 `History` 는 동기화로 들어온 방문을 구분하는 열이 있는지 표 구조부터 확인하고, 구분할 수 없으면 Chrome·삼성 인터넷 기록을 계정 동기화가 켜져 있었는지와 함께 해석합니다.
 
 7. **앱 안에서 연 페이지를 봅니다.** 웹뷰를 쓰는 앱은 자기 패키지 아래 `app_webview/Default/` 에 `History`·`Cookies`·`Web Data` 를 남길 수 있습니다 [1]. `Web Data` 의 자동 완성 표에는 `date_created`·`date_last_used` 열이 있고 값은 유닉스 초라서 [2], `History` 의 마이크로초와 단위가 다릅니다.
 

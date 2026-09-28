@@ -52,7 +52,7 @@ nav_order: 870
 
 세션 기록이 정리된 뒤에도 `history.jsonl` 은 남으므로, 이 파일의 `sessionId` 가운데 기록 파일이 없는 줄이 지워진 세션의 프롬프트입니다. claude-forensics 도구[7]는 이런 줄을 "orphan" 으로 모아 `orphan-prompts.jsonl` 로 냅니다. 보관 기간보다 오래된 대화에서는 이것이 유일하게 남은 기록인 경우가 많습니다[7]. 다만 같은 도구 README(2026-06 기준)는 Windows 판 Claude Code 가 `history.jsonl`·`paste-cache/`·`file-history/` 를 쓰지 않는 것으로 보인다고 했지만, 2026-09 Windows 11 관찰에서는 `history.jsonl` 이 있었습니다. 판과 설정에 따라 다를 수 있으니 실제 기기에 이 파일들이 있는지부터 봅니다.
 
-`history.jsonl` 의 `pastedContents.#` 아래에는 붙여넣기 본문(`content`)이 있는 줄과 해시(`contentHash`)만 있는 줄이 섞여 있습니다. 해시와 `paste-cache/` 파일의 연결은 공개 문서에 없으니, 두 곳을 모두 수집하고 연결은 실제 파일로 확인합니다. 대화를 요약(`/compact`)해도 원래 메시지는 기록 파일에 그대로 남아[12], 화면에서 요약만 보였다는 진술과 파일 내용이 다를 수 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
+`history.jsonl` 의 `pastedContents.#` 아래에는 붙여넣기 본문(`content`)이 있는 줄과 해시(`contentHash`)만 있는 줄이 섞여 있습니다. 두 곳을 모두 수집하고, 해시와 `paste-cache/` 파일의 연결은 실제 파일로 확인합니다. 대화를 요약(`/compact`)해도 원래 메시지는 기록 파일에 그대로 남아[12], 화면에서 요약만 보였다는 진술과 파일 내용이 다를 수 있습니다. 기록 구조는 [Claude Code](../../02-artifacts/dev-agents/claude-code/index.md) 페이지에 있습니다.
 
 Gemini CLI 는 세션 파일에 줄을 덧붙이기만 합니다. 대화를 되감을 때 앞선 메시지 줄을 지우지 않고 `{"$rewindTo": "<메시지 id>"}` 줄을 하나 덧붙이며, 불러올 때 그 id 부터 뒤의 메시지를 빼고 보여 줍니다[8]. 그래서 화면에서 사라진 턴도 파일을 직접 읽으면 나옵니다. 세션 파일의 필드는 [Gemini CLI](../../02-artifacts/dev-agents/gemini-cli.md)에 있습니다.
 
@@ -93,7 +93,7 @@ SQLite 를 쓰는 저장소는 레코드를 지워도 빈 페이지나 WAL 파�
 
 ### 6. 모바일 앱의 충돌 로그를 봅니다
 
-앱이 쓰는 충돌 보고 SDK 의 로그에 대화가 남는 경우가 있습니다. Replika 는 계정을 지우면 주 DB(`databases/REPLIKA_DB`)가 기기에서 지워지지만, Firebase Crashlytics 로그 파일의 `userlog` 하위 폴더에서 대화 전체를 되살릴 수 있습니다[2]. 이 폴더의 전체 경로는 공개 자료에 없으니, 수집한 앱 데이터 폴더 전체에서 `userlog` 폴더를 찾습니다. 이 결과는 루팅한 Android 12(API 31) 에뮬레이터에서 `/data/data` 전체를 tar 로 묶어 뜬 논리 이미지로 얻은 것이고(§3.3)[2], 앱 판은 밝혀져 있지 않아 분석 대상 앱의 판을 따로 적어 둡니다. 앱별 DB 와 패키지 이름은 [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md)에 있습니다.
+앱이 쓰는 충돌 보고 SDK 의 로그에 대화가 남는 경우가 있습니다. Replika 는 계정을 지우면 주 DB(`databases/REPLIKA_DB`)가 기기에서 지워지지만, Firebase Crashlytics 로그 파일의 `userlog` 하위 폴더에서 대화 전체를 되살릴 수 있습니다[2]. 이 폴더는 수집한 앱 데이터 폴더 전체에서 `userlog` 라는 이름으로 찾습니다. 이 결과는 루팅한 Android 12(API 31) 에뮬레이터에서 `/data/data` 전체를 tar 로 묶어 뜬 논리 이미지로 얻은 것이고(§3.3)[2], 앱 판은 밝혀져 있지 않아 분석 대상 앱의 판을 따로 적어 둡니다. 앱별 DB 와 패키지 이름은 [AI 컴패니언 앱](../../02-artifacts/chat-services/companion-apps.md)에 있습니다.
 
 모바일에서 앱 데이터를 얻는 범위는 기기 암호화와 데이터 보호 등급에 달려 있고, 원리는 [Android 저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html), [Android 앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html), [iOS 데이터 보호](https://urock-ailab.github.io/forensics-handbook/ios/01-foundations/storage/data-protection/index.html)에 있습니다. macOS 앱의 암호 키가 키체인에 있다면 원리는 [키체인](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/protection/keychain/index.html) 페이지를 봅니다.
 
@@ -101,7 +101,7 @@ SQLite 를 쓰는 저장소는 레코드를 지워도 빈 페이지나 WAL 파�
 
 **Windows Recall.** Recall 스냅숏은 기기 안에만 있고 Microsoft 로 보내지 않아 서버 사본이 없습니다. 2025-04 이후 다시 설계한 판은 스냅숏을 암호화해서 디스크 이미지만으로 내용을 읽는 공식 경로가 없습니다. 암호화된 상태에서 쓸 수 있는 것은 폴더와 파일의 존재, 크기, 파일 시스템 시각이고, 유럽경제지역(EEA) 기기라면 사용자가 Windows Hello 인증을 거쳐 스냅숏을 내보내는 경로를 사용자 협조로 씁니다. 다만 관리 기기는 정책으로 내보내기가 기본으로 막혀 있습니다. 정책으로 Recall 이나 스냅숏 저장을 끄면 기존 스냅숏이 지워지니, 스냅숏이 없을 때는 정책 값도 확인합니다. 저장 위치, 보호 방식, 정책 이름은 [Recall](../../02-artifacts/windows-ai/recall.md)에 있습니다.
 
-**Click to Do.** 화면 내용을 보관하지 않지만, 내용을 다른 앱으로 넘길 때 `C:\Users\{username}\AppData\Local\Temp` 에 임시 파일을 만듭니다[21]. 파일 이름 규칙은 공개 문서에 없어서, 흔적은 작업을 받은 앱 쪽을 먼저 찾아봅니다([클릭 투 두](../../02-artifacts/windows-ai/click-to-do.md)).
+**Click to Do.** 화면 내용을 보관하지 않지만, 내용을 다른 앱으로 넘길 때 `C:\Users\{username}\AppData\Local\Temp` 에 임시 파일을 만듭니다[21]. 흔적은 임시 파일보다 작업을 받은 앱 쪽을 먼저 찾아봅니다([클릭 투 두](../../02-artifacts/windows-ai/click-to-do.md)).
 
 **파일 되돌리기 스냅숏.** Claude Code 는 사용자가 턴을 시작할 때마다 체크포인트를 만들고 편집 전 파일 사본을 `file-history/<세션>/` 에 둡니다. 오래된 체크포인트를 버려도 파일마다 첫 사본은 남기므로[13], 에이전트가 바꾸기 전의 파일 내용을 되살리는 데 씁니다. 다만 Claude 의 편집 도구로 바꾼 파일만 추적하고, Bash 명령(rm, mv, cp 등)으로 바꾼 파일, 사람이 직접 바꾼 파일, 다른 세션의 편집, 대부분의 하위 에이전트 편집은 잡지 않습니다.
 
@@ -141,7 +141,7 @@ AI 앱 전용 공개 도구는 아래와 같습니다. 모두 시험한 판이 �
 
 대화 기록에는 비밀 값이 섞여 있을 수 있습니다. Claude Code 는 도구가 `.env` 파일을 읽거나 명령이 자격 증명을 출력하면 그 값을 대화 기록에 그대로 쓰고, 기록을 저장할 때 암호화하지 않아 OS 파일 권한이 유일한 보호입니다[12]. 같은 폴더의 `.credentials.json` 에는 `accessToken`·`refreshToken` 키가 있고, Jan 의 `cortex.log` 에는 등록한 API 키가 평문으로 남습니다[1]. 수집한 사본은 원본과 같은 수준으로 보관하고 보고서에서는 값을 가립니다([API 키와 토큰이 남는 곳](../../01-foundations/storage-model/api-keys-tokens.md)).
 
-앱 판이 결과를 가릅니다. ChatGPT macOS 앱은 2024-07 에 저장 방식을 바꿨고 고친 판 번호는 알려져 있지 않으며[4], Claude Code 도 첨부 이미지 저장 위치를 v2.1.274 뒤로 바꿨습니다. 수집한 앱의 판을 먼저 적고, 판이 다르면 이 페이지의 위치를 그대로 믿지 않습니다.
+앱 판이 결과를 가릅니다. ChatGPT macOS 앱은 2024-07 에 저장 방식을 바꿨고[4], Claude Code 도 첨부 이미지 저장 위치를 v2.1.274 뒤로 바꿨습니다. 수집한 앱의 판을 먼저 적고, 판이 다르면 이 페이지의 위치를 그대로 믿지 않습니다.
 
 이 페이지의 방법은 모두 디스크에 남은 것을 다룹니다. 앱이 실행 중인 기기라면 전원을 끄기 전에 메모리를 먼저 확보할지 정해야 하고, 방법은 [메모리에서 AI 흔적 찾기](memory-analysis.md)에 있습니다. 한쪽(기기 또는 서버)에 없다는 사실만으로 다른 쪽에도 없다고 쓰지 않습니다. Recall 처럼 암호화된 저장소를 푸는 일은 이 핸드북의 범위가 아닙니다.
 

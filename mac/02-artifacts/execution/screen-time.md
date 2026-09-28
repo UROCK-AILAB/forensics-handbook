@@ -16,7 +16,7 @@ APOLLO 에는 같은 데이터베이스를 읽는 모듈이 `screentime_by_categ
 
 ## 위치와 버전별 차이
 
-데이터베이스 파일 이름은 `RMAdminStore-Local.sqlite` 와 `RMAdminStore-Cloud.sqlite` 이고, macOS 와 iOS 에서 같은 쿼리로 읽습니다 [1]. macOS 의 전체 경로는 공개 자료에 없으므로, 실제 데이터에서는 파일 이름으로 전체 볼륨을 찾고 찾은 경로를 보고서에 그대로 적습니다. Local 과 Cloud 두 파일이 각각 무엇을 담는지(이 기기의 기록인지, iCloud 로 받은 다른 기기의 기록인지)도 공개 자료가 없어서, 두 파일을 모두 수집하고 따로 읽습니다.
+데이터베이스 파일 이름은 `RMAdminStore-Local.sqlite` 와 `RMAdminStore-Cloud.sqlite` 이고, macOS 와 iOS 에서 같은 쿼리로 읽습니다 [1]. macOS 에서는 파일 이름으로 전체 볼륨을 찾고, 찾은 경로를 보고서에 그대로 적습니다. Local 과 Cloud 두 파일이 각각 이 기기의 기록인지, iCloud 로 받은 다른 기기의 기록인지는 두 파일을 모두 수집해 따로 읽은 뒤 행마다 기기 열(`ZCOREDEVICE`)을 보고 확인합니다.
 
 | APOLLO 쿼리가 적은 버전 | 쿼리에서 달라지는 점 [1] |
 |---|---|
@@ -35,7 +35,7 @@ macOS 12 이후 데이터에서는 아래 표 이름과 열이 그대로 있는�
 | 표 | 열 | 뜻 |
 |---|---|---|
 | `ZUSAGETIMEDITEM` | `ZBUNDLEIDENTIFIER` | 번들 ID |
-| `ZUSAGETIMEDITEM` | `ZDOMAIN` | 도메인(담기는 값은 공개 자료 없음) |
+| `ZUSAGETIMEDITEM` | `ZDOMAIN` | 도메인(담기는 값은 실제 데이터로 확인) |
 | `ZUSAGETIMEDITEM` | `ZTOTALTIMEINSECONDS` | 앱 사용 시간(초) |
 | `ZUSAGETIMEDITEM` | `ZCATEGORY` | `ZUSAGECATEGORY` 와 잇는 키 |
 | `ZUSAGECATEGORY` | `ZIDENTIFIER` | 분류 코드 |
@@ -91,10 +91,10 @@ ZUSAGE.ZDEVICE            = ZCOREDEVICE.Z_PK
 ## 함정과 한계
 
 - **버전 범위.** APOLLO 쿼리가 확인한 macOS 버전은 10.15 와 10.16(11) 뿐입니다 [1]. 이후 버전에서 표가 바뀌었는지는 실제 데이터베이스의 `.schema` 로 확인합니다.
-- **두 파일.** Local 과 Cloud 파일의 차이는 공개 자료가 없습니다. 한쪽만 읽으면 기록을 놓칠 수 있어서 둘 다 읽고, 행마다 기기 열을 봅니다.
+- **두 파일.** 한쪽만 읽으면 기록을 놓칠 수 있어서 둘 다 읽고, 행마다 기기 열을 봅니다.
 - **다른 기기의 기록.** `ZCOREDEVICE.ZPLATFORM` 이 2(iOS)나 4(Apple Watch)인 행은 이 맥에서 쓴 기록이 아닐 수 있습니다 [1].
 - **개인 정보.** `ZCOREUSER` 에 이름·성·Apple ID·DSID 가 들어 있어서 [1], 보고서에 옮길 때는 조사 범위에 필요한 열만 씁니다.
-- **기능을 끈 경우.** 화면 사용 시간 설정을 끄면 기록이 남지 않는지, 기록을 얼마 동안 두는지는 공개 자료가 없습니다. 데이터베이스가 비어 있거나 없다는 사실만으로 앱을 쓰지 않았다고 결론 내리지 않습니다.
+- **기능을 끈 경우.** 화면 사용 시간 설정을 끄면 기록이 남지 않는지, 기록을 얼마 동안 두는지는 같은 macOS 버전의 시험 기기에서 재현해 확인합니다. 데이터베이스가 비어 있거나 없다는 사실만으로 앱을 쓰지 않았다고 결론 내리지 않습니다.
 - **지운 행.** 지운 행을 찾는 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기

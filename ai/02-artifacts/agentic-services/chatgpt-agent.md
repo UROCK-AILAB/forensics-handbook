@@ -69,7 +69,7 @@ ChatGPT 앱과 웹의 일반 저장 구조는 [ChatGPT](../chat-services/chatgpt
 
 ## 직접 분석해 보기
 
-**헥스로.** 에이전트 모드만의 로컬 파일 형식을 설명한 공개 문서는 없어서, 헥스로 따라갈 대상은 일반 브라우저 기록입니다. 브라우저 기록 파일은 SQLite 라서 파일 머리와 페이지 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)(Windows 판)의 헥스 설명을 따릅니다.
+**헥스로.** 기기에서 헥스로 볼 대상은 일반 브라우저 기록입니다. 브라우저 기록 파일은 SQLite 라서 파일 머리와 페이지 구조는 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)(Windows 판)의 헥스 설명을 따릅니다.
 
 **공개 도구로.** 사본으로 뜬 브라우저 기록 파일을 SQLite 를 여는 공개 도구(예: DB Browser for SQLite)로 열고, ChatGPT 사이트 방문 줄을 시간순으로 뽑아 사용 시간대를 잡습니다. 그다음 계정 데이터 내보내기나 서비스 회사 자료로 같은 시간대의 대화 기록을 맞춰 봅니다. 수집 절차는 [계정 데이터 내보내기로 수집](../../03-techniques/acquisition/export-collection.md)과 [서비스 회사에 대한 데이터 요청](../../03-techniques/acquisition/legal-requests.md)에 있습니다.
 
@@ -84,7 +84,7 @@ ChatGPT 앱과 웹의 일반 저장 구조는 [ChatGPT](../chat-services/chatgpt
 
 ## 실습
 
-에이전트 모드 흔적을 담은 공개 시험 자료가 없어, 기능이 빠지기 전에 조사용 계정과 가상 머신으로 만들어 둔 시험 자료나 사건 증거물로 아래 질문을 풀어 봅니다.
+기능이 빠지기 전에 조사용 계정과 가상 머신으로 만들어 둔 시험 자료나 사건 증거물로 아래 질문을 풀어 봅니다.
 
 1. 에이전트에게 공개 웹 사이트 한 곳을 열어 요약하라고 시킨 기록이 있다면, 가상 머신의 브라우저 기록에 그 사이트 방문이 남았는지, ChatGPT 사이트 방문만 남았는지 확인합니다.
 2. 같은 작업 뒤 받은 계정 데이터 내보내기에 작업 지시와 에이전트가 보인 단계가 들어 있는지 확인합니다.

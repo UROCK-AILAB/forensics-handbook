@@ -13,7 +13,7 @@ knowledgeC.db 의 /device/isLocked 와 /display/isBacklit 스트림은 기기가
 
 두 스트림 모두 ZOBJECT 의 ZVALUEINTEGER 열에 상태를 적고, ZSTARTDATE 부터 ZENDDATE 까지가 그 상태가 이어진 구간입니다. /device/isLocked 는 0 이 잠금 해제이고 1 이 잠김이며 [2][4], /display/isBacklit 는 1 이 켜짐이고 0 이 꺼짐입니다 [2]. /device/isLocked 는 화면이 잠겼는지를, /display/isBacklit 는 백라이트 수준을 적는 스트림입니다 [6].
 
-같은 분류에 속한 스트림으로는 충전기가 꽂혔는지를 적는 /device/isPluggedIn [6], 기기 방향을 적는 /display/orientation [1], 그리고 /device/batteryPercentage [1] 가 있습니다. /device/batteryPercentage 값의 형태는 공개된 자료가 없습니다.
+같은 분류에 속한 스트림으로는 충전기가 꽂혔는지를 적는 /device/isPluggedIn [6], 기기 방향을 적는 /display/orientation [1], 그리고 /device/batteryPercentage [1] 가 있습니다. /device/batteryPercentage 값의 형태는 실제 데이터에서 ZOBJECT 의 값 열을 보고 확인합니다.
 
 APOLLO 의 knowledge_device_locked 모듈은 `ZSTREAMNAME LIKE "/device/isLocked"` 로 행을 거르고, 시작·끝 시각, 잠금 상태, 사용한 초와 분, 기기 ID, 요일, GMT 차이, 행 생성 시각, UUID 를 뽑습니다 [4]. 잠금 구간의 길이는 ZENDDATE 에서 ZSTARTDATE 를 뺀 값입니다 [4].
 
@@ -26,12 +26,12 @@ APOLLO 의 knowledge_device_locked 모듈이 대상으로 적은 버전은 iOS 1
 | `/device/isLocked` | 0 해제, 1 잠김 [2][4] | 실제 데이터로 확인 | Device.ScreenLocked (0 해제, 1 잠김) |
 | `/display/isBacklit` | 1 켜짐, 0 꺼짐 [2] | 실제 데이터로 확인 | Device.Display.Backlight (0/1) |
 | `/device/isPluggedIn` | 충전기 연결 여부 [6] | knowledgeC 에서 빠짐 [3] | Device.Power.PluggedIn (0 안 꽂힘, 1 꽂힘, 어댑터 종류 필드도 있음) |
-| `/display/orientation` | 기기 방향 [1] | knowledgeC 에서 빠짐 [3] | 공개 자료 없음 |
-| `/device/batteryPercentage` | 공개 자료 없음 | 실제 데이터로 확인 | 공개 자료 없음 |
+| `/display/orientation` | 기기 방향 [1] | knowledgeC 에서 빠짐 [3] | 실제 데이터로 확인 |
+| `/device/batteryPercentage` | 실제 데이터로 확인 | 실제 데이터로 확인 | 실제 데이터로 확인 |
 
 유선이든 무선이든 충전할 때 기록이 생기므로 "isCharging" 이 더 맞는 이름일 수 있다는 해석이 있습니다 [5]. 충전 중이었다는 뜻으로 읽을지 꽂혀 있었다는 뜻으로 읽을지는 실제 데이터에서 다른 기록과 맞춰 보고 정합니다. 바이옴 쪽 경로와 파일 읽는 법은 [바이옴](../biome/index.md) 허브에 있습니다.
 
-로컬 백업의 `Manifest.plist` 에는 `WasPasscodeSet` 키가 있습니다. 잠금과 이름이 닿지만 knowledgeC 기록과 직접 관계는 없고, 값의 해석도 공개된 자료가 없습니다. 암호 설정 흔적은 [암호와 Face ID 설정 흔적](../../system-account/passcode-biometrics.md) 페이지에서, 백업 파일 구성은 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지에서 다룹니다.
+로컬 백업의 `Manifest.plist` 에는 `WasPasscodeSet` 키가 있습니다. 잠금과 이름이 닿지만 knowledgeC 기록과 직접 관계는 없고, 값의 뜻도 이름만으로 단정할 수 없습니다. 암호 설정 흔적은 [암호와 Face ID 설정 흔적](../../system-account/passcode-biometrics.md) 페이지에서, 백업 파일 구성은 [로컬 백업](../../../01-foundations/backups/local-backup/index.md) 페이지에서 다룹니다.
 
 ## 구조
 

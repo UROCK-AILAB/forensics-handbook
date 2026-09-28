@@ -141,7 +141,7 @@ AirTrafficFinishedRestoring
 
 `RootDomain` 의 `Library/Preferences/com.apple.backupd.plist` 에는 CKPerBootTasks, CC_OncePerBootBackingData, CKStartupTime 키가 있습니다.
 
-이 키들이 아이클라우드 백업에만 쓰이는지 로컬 백업에도 쓰이는지, RestoreInfo 로 복원 시점을 알 수 있는지를 풀이한 공개 자료는 없습니다. 그래서 이름만 보고 "마지막 백업 시각" 이나 "복원한 날짜" 로 단정하지 않고, 값을 [초기화와 복원 흔적](../../../02-artifacts/system-account/erase-restore.md)·[아이클라우드 백업](../icloud-backup.md) 의 다른 기록과 맞춰 본 뒤에 씁니다.
+이 키들이 아이클라우드 백업에만 쓰이는지 로컬 백업에도 쓰이는지, RestoreInfo 로 복원 시점을 알 수 있는지는 키 이름만으로 판단할 수 없습니다. 그래서 "마지막 백업 시각" 이나 "복원한 날짜" 로 단정하지 않고, 값을 [초기화와 복원 흔적](../../../02-artifacts/system-account/erase-restore.md)·[아이클라우드 백업](../icloud-backup.md) 의 다른 기록과 맞춰 본 뒤에 씁니다.
 
 ## 읽는 법
 

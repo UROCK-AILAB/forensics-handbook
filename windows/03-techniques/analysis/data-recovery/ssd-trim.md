@@ -70,7 +70,7 @@ NTFS DisableDeleteNotify = 0  (Allows TRIM operations to be sent to the storage 
 ReFS DisableDeleteNotify = 0  (뒤 설명 줄임)
 ```
 
-같은 조건에서 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem` 의 `DisableDeleteNotification` 값은 0 이고, 같은 키에 `RefsDisableDeleteNotification` 값은 없습니다. fsutil 공식 문서에는 "레지스트리를 바꾼다" 는 말만 있고 값 이름은 없습니다[2]. 그래서 이 레지스트리 값이 fsutil 설정과 같은 것인지는 공개 자료로 알 수 없습니다. 디스크 이미지에서 이 값을 근거로 쓰려면 이 관계부터 실제 시스템에서 확인해야 합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
+같은 조건에서 `HKLM\SYSTEM\CurrentControlSet\Control\FileSystem` 의 `DisableDeleteNotification` 값은 0 이고, 같은 키에 `RefsDisableDeleteNotification` 값은 없습니다. fsutil 공식 문서에는 "레지스트리를 바꾼다" 는 말만 있고 값 이름은 없습니다[2]. 그래서 디스크 이미지에서 이 값을 근거로 쓰려면, 이 레지스트리 값이 fsutil 설정과 같은 것인지부터 실제 시스템에서 확인해야 합니다. 하이브 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ### 빈 섹터 전체에 다시 TRIM — Optimize-Volume·defrag
 

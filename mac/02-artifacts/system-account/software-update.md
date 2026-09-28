@@ -85,7 +85,7 @@ MDM 페이로드 `com.apple.SoftwareUpdate` 의 키는 다음과 같습니다. �
 
 ## 시각 해석
 
-두 날짜 키는 plist `date` 형식으로 저장되고 plaso 는 이를 날짜 값으로 바꿔 읽습니다. [2] plist 날짜가 어떤 기준 시각에서 세는 값인지와 읽는 법은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md) 과 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md) 페이지에 있습니다. 이 파일의 값이 UTC 인지 현지 시각인지는 공개된 자료가 없으니, 같은 시간대의 `InstallHistory.plist` 항목 `date` 와 맞춰 보고, 기기의 시간대는 [시간대와 시계 설정](time-zone.md) 에서 따로 확인합니다.
+두 날짜 키는 plist `date` 형식으로 저장되고 plaso 는 이를 날짜 값으로 바꿔 읽습니다. [2] plist 날짜가 어떤 기준 시각에서 세는 값인지와 읽는 법은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md) 과 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md) 페이지에 있습니다. 이 파일의 값이 UTC 인지 현지 시각인지는 같은 시간대의 `InstallHistory.plist` 항목 `date` 와 맞춰 보고 판단하고, 기기의 시간대는 [시간대와 시계 설정](time-zone.md) 에서 따로 확인합니다.
 
 값이 바뀌는 조건도 공식 설명이 없습니다. `softwareupdate --list` 나 `--background` 는 업데이트 검사를 일으키는 옵션이라 날짜 키를 바꿀 가능성이 있으므로 이미지 확보 전에는 돌리지 않습니다.
 
@@ -97,7 +97,7 @@ plaso 의 이 플러그인이 내는 데이터 형식 이름은 `macos:software_
 
 `update_time` 이 따로 나오지 않는 경우도 헷갈리기 쉽습니다. 앞에서 적었듯 두 날짜가 같으면 plaso 는 `full_update_time` 하나만 내므로, 이를 "부분 업데이트가 없었다" 로 읽으면 안 됩니다.
 
-MDM 설정 키는 관리 서버가 강제한 값이고, 사용자가 시스템 설정에서 직접 바꾼 값과 같은 자리에 같은 이름으로 남는지는 공개된 자료가 없습니다. 설정값이 꺼져 있다는 사실만으로 사용자가 일부러 업데이트를 막았다고 보지 않고, 구성 프로파일 설치 기록과 함께 판단합니다.
+MDM 설정 키는 관리 서버가 강제한 값이고, 사용자가 시스템 설정에서 직접 바꾼 값이 같은 자리에 같은 이름으로 남는지는 시험 기기에서 재현해 확인합니다. 설정값이 꺼져 있다는 사실만으로 사용자가 일부러 업데이트를 막았다고 보지 않고, 구성 프로파일 설치 기록과 함께 판단합니다.
 
 파일이 아예 없거나 날짜가 설치 이력·운영체제 버전과 맞지 않으면 지워지거나 손댄 흔적일 수도 있지만, 이 파일 하나로 결론 내리지 않습니다. 이전 값은 [스냅숏과 백업 비교](../../03-techniques/analysis/snapshot-diff.md) 로 찾아보고, 전체 판단은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 시나리오를 따릅니다.
 

@@ -14,7 +14,7 @@ nav_order: 2340
 
 ## 먼저 확인할 것
 
-먼저 macOS 버전과 사파리 버전, 설치된 브라우저 목록을 확인합니다. 아래 동작이 어느 사파리·macOS 버전부터인지는 공개 자료에 나와 있지 않아서 [1], 분석 대상의 버전을 적어 두고 결과를 그 버전 범위 안에서만 말합니다. 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../02-artifacts/system-account/os-version-install-history.md)에서, 설치된 브라우저는 [설치한 앱과 영수증 (Applications·Receipts)](../../02-artifacts/system-account/installed-apps-receipts.md)에서 확인합니다.
+먼저 macOS 버전과 사파리 버전, 설치된 브라우저 목록을 확인합니다. 아래 동작에 관한 결과는 분석 대상의 사파리·macOS 버전을 적어 두고 그 버전 범위 안에서만 말합니다 [1]. 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../02-artifacts/system-account/os-version-install-history.md)에서, 설치된 브라우저는 [설치한 앱과 영수증 (Applications·Receipts)](../../02-artifacts/system-account/installed-apps-receipts.md)에서 확인합니다.
 
 다음으로 조사 대상 계정과 시간대를 정하고, 수집 범위에 메모리가 들어 있는지와 맥 밖의 네트워크 기록(회사 프록시·DNS 기록 등)을 받을 수 있는지 확인합니다. 방문한 웹사이트나 네트워크를 관리하는 조직(회사·인터넷 서비스 사업자)은 시크릿 모드 활동을 볼 수 있어서 [2], 맥 안의 기록이 비어 있을 때 맥 밖의 기록이 중요해집니다. 시간대는 [시간대와 시계 설정 (Time Zone·NTP)](../../02-artifacts/system-account/time-zone.md)에서 확인합니다.
 
@@ -46,10 +46,10 @@ nav_order: 2340
 | 3 | 격리 이벤트 데이터베이스의 `LSQuarantineEvent` 표 | 다운로드 기록의 후보. 개인 정보 보호 창 다운로드가 기록되는지는 실제 데이터로 확인 | [격리 속성과 다운로드 기록 (Quarantine)](../../02-artifacts/filesystem/quarantine/index.md) |
 | 4 | 사파리 `RecentlyClosedTabs.plist` | 닫힌 창·탭 항목의 `IsPrivateWindow` 키 | [사파리 (Safari)](../../02-artifacts/browsers/safari/index.md) |
 | 5 | KnowledgeC 의 `/safari/history` 스트림 | 개인 정보 보호 모드에서 기록되는지는 실제 데이터로 확인 | [KnowledgeC (knowledgeC.db)](../../02-artifacts/execution/knowledgec/index.md) |
-| 6 | 메모리·스왑 | 남는지는 공개 자료 없음. 라이브 확보 때만 볼 수 있음 | [메모리 분석 (Memory Forensics)](../../03-techniques/analysis/memory-forensics/index.md) |
+| 6 | 메모리·스왑 | 남는지는 실제 데이터로 확인. 라이브 확보 때만 볼 수 있음 | [메모리 분석 (Memory Forensics)](../../03-techniques/analysis/memory-forensics/index.md) |
 | 7 | 맥 밖의 네트워크 기록 | 방문한 웹사이트와 네트워크 관리 조직이 활동을 볼 수 있을 수 있음 [2] | [웹 사용 행위 재구성 (Web Activity)](web-activity.md) |
 
-`RecentlyClosedTabs.plist` 는 닫힌 창과 탭을 항목으로 담고, mac_apt 는 항목의 `IsPrivateWindow` 키를 읽어 개인 정보 보호 창을 따로 표시합니다. 이 키가 참인 항목은 개인 정보 보호 창이 열렸다가 닫혔다는 기록으로 보입니다. 다만 사파리 버전마다 이 파일에 개인 정보 보호 창이 남는지는 알려져 있지 않아서, 분석 대상의 사파리 버전과 함께 적습니다. 파일 위치와 항목 구조는 [사파리 (Safari)](../../02-artifacts/browsers/safari/index.md)에 있습니다.
+`RecentlyClosedTabs.plist` 는 닫힌 창과 탭을 항목으로 담고, mac_apt 는 항목의 `IsPrivateWindow` 키를 읽어 개인 정보 보호 창을 따로 표시합니다. 이 키가 참인 항목은 개인 정보 보호 창이 열렸다가 닫혔다는 기록으로 보입니다. 다만 이 파일에 개인 정보 보호 창이 남는지는 분석 대상의 사파리 버전에서 실제 데이터로 확인하고, 결과는 그 버전과 함께 적습니다. 파일 위치와 항목 구조는 [사파리 (Safari)](../../02-artifacts/browsers/safari/index.md)에 있습니다.
 
 확장 속성과 격리 이벤트 데이터베이스, KnowledgeC 가 개인 정보 보호 창의 활동을 담는지는 실제 데이터로 확인해야 합니다. 그래서 이 세 곳은 "있으면 쓰고, 없어도 결론을 내리지 않는" 후보로 다루고, 찾은 값이 개인 정보 보호 창에서 나왔는지는 다른 기록과 시각을 맞춰 따로 판단합니다.
 
@@ -60,7 +60,7 @@ nav_order: 2340
 3. `RecentlyClosedTabs.plist` 에서 `IsPrivateWindow` 가 참인 항목을 찾아, 개인 정보 보호 창을 쓴 적이 있는지부터 확인합니다.
 4. 다운로드 폴더와 사용자 폴더에서 조사 구간 안에 생긴 파일을 찾고, 다운로드 목록에 없는 파일을 따로 모읍니다. 개인 정보 보호 창에서 받은 파일은 다운로드 목록에 들어가지 않기 때문에 [1], 목록에 없는 파일이 후보가 됩니다. 파일이 생긴 시각은 [파일 시스템 이벤트 (FSEvents)](../../02-artifacts/filesystem/fsevents/index.md)로도 맞춰 봅니다.
 5. 후보 파일마다 확장 속성과 격리 이벤트 데이터베이스를 읽어 출처 URL 과 받은 시각을 찾습니다. 값이 있으면 그대로 적고, 없으면 "속성이 없었다" 는 사실만 적습니다.
-6. 메모리를 확보했다면 조사 구간의 URL·검색어 문자열을 찾되, 메모리에 남는지 자체가 알려져 있지 않아서 결과를 다른 기록으로 뒷받침할 때만 씁니다.
+6. 메모리를 확보했다면 조사 구간의 URL·검색어 문자열을 찾고, 찾은 결과는 다른 기록으로 뒷받침할 때만 씁니다.
 7. 맥 밖의 네트워크 기록을 받을 수 있다면 조사 구간의 접속 기록과 3~5단계의 결과를 한 타임라인에 올립니다. 타임라인은 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)을 따릅니다.
 
 > 그림 자리: 일반 창의 방문 기록이 비어 있는 구간 위에 받은 파일의 생성 시각·격리 속성 시각·네트워크 접속 기록을 겹쳐 놓은 타임라인
@@ -71,7 +71,7 @@ nav_order: 2340
 
 `IsPrivateWindow` 가 참인 항목을 찾았다고 해서 그 창에서 무엇을 했는지까지 알 수 있다고 보지도 않습니다. 이 키는 닫힌 창이 개인 정보 보호 창이었다는 표시일 뿐이라서, 그 창의 활동은 받은 파일이나 맥 밖의 기록처럼 다른 흔적으로 따로 밝혀야 합니다.
 
-받은 파일에 출처 속성이 있다고 해서 그 파일을 개인 정보 보호 창에서 받았다고 보는 것도 오판입니다. 파일과 속성만으로는 어느 창에서 받았는지 가릴 수 없고, 개인 정보 보호 창에서 받은 파일에 이 속성이 붙는지도 알려져 있지 않습니다. "다운로드 목록에는 없고 파일과 출처 속성은 있다" 처럼 관찰한 사실을 그대로 적습니다.
+받은 파일에 출처 속성이 있다고 해서 그 파일을 개인 정보 보호 창에서 받았다고 보는 것도 오판입니다. 파일과 속성만으로는 어느 창에서 받았는지 가릴 수 없습니다. "다운로드 목록에는 없고 파일과 출처 속성은 있다" 처럼 관찰한 사실을 그대로 적습니다.
 
 ## 보고서 문장 예
 

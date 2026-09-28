@@ -66,7 +66,7 @@ nav_order: 2080
 | `logs\` | 앱 로그 |
 | `sentry\scope_v3.json`, `sentry\queue\queue-v2.json` | 오류 보고 대기열 |
 | `module_data\` | `crashlogs`, `discord_utils`, `discord_voice` |
-| `quotes.json`, `badge-*.ico` | 공개 자료 없음 |
+| `quotes.json`, `badge-*.ico` | 파일을 열어 내용 확인 |
 
 `userDataCache.json` 의 최상위 키는 `…Store` 이름들입니다. 예는 아래와 같습니다.
 
@@ -74,7 +74,7 @@ nav_order: 2080
 
 - 키 이름으로 보면 선택한 서버, 여러 계정, 친구 그룹 같은 상태가 담긴 것으로 보입니다.
 - `tokens` 키가 있으므로 인증 정보가 들어 있을 가능성이 있습니다. 값을 보고서에 옮기지 않습니다.
-- 이 파일이 Local Storage 의 사본인지, 언제 쓰이는지는 공개 자료가 없습니다.
+- 이 파일이 Local Storage 의 사본인지는 두 곳의 키와 값을 비교해 확인합니다.
 
 `logs\` 에는 아래 같은 파일이 있습니다.
 
@@ -119,7 +119,7 @@ nav_order: 2080
 - **캐시에 없는 대화.** 캐시 크기와 교체에 따라 얼마나 남는지 달라집니다. 없다고 대화가 없었다고 말할 수 없습니다.
 - **누가 자판 앞에 있었는지.** 계정까지만 알려 줍니다. 방법은 [그 시각에 PC 를 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다.
 
-채널을 연 순간의 메시지 API 응답이 캐시에 남으면, 서버에서 나중에 지운 메시지도 캐시에서 보일 수 있습니다. 얼마나 오래 남는지는 공개 자료가 없습니다.
+채널을 연 순간의 메시지 API 응답이 캐시에 남으면, 서버에서 나중에 지운 메시지도 캐시에서 보일 수 있습니다.
 
 보고서에는 "피의자가 이 메시지를 봤다" 가 아니라 이렇게 씁니다. "A 계정의 디스코드 HTTP 캐시에 채널 X 의 메시지 API 응답이 있다. 응답에는 이 메시지가 들어 있다. 캐시 항목의 시각은 Y 이다."
 
@@ -128,7 +128,7 @@ nav_order: 2080
 | 시각 | 무엇이 바뀔 때 | 주의 |
 |---|---|---|
 | 캐시 항목의 시각 | 앱이 응답을 받아 캐시에 적을 때 | 형식과 기준은 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 의 캐시 형식에서 다룹니다 |
-| 응답 JSON 안의 시각 | 서버가 적은 값 | 필드 이름과 형식은 공개 자료가 없습니다. [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 후보 형식을 봅니다 |
+| 응답 JSON 안의 시각 | 서버가 적은 값 | 필드 이름과 형식은 응답 JSON 을 열어 확인합니다. [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 후보 형식을 봅니다 |
 | 로그 줄 시각 | 로그를 쓸 때 | UTC 인지 현지 시각인지 파일 수정 시각과 맞춰 봅니다 |
 | 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](../filesystem/mft.md) 에서 봅니다 |
 

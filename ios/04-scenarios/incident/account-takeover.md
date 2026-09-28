@@ -10,7 +10,7 @@ nav_order: 1640
 
 ## 조사 질문
 
-사용자의 Apple 계정이나 기기에 등록한 다른 계정을 남이 가로챘는지, 기기에 그 흔적이 남았는지를 판별합니다. 계정 탈취 (account takeover)의 핵심 기록인 로그인 내역과 계정에 연결된 기기 목록은 사용자가 account.apple.com 에서 봅니다 [1]. 이 기록이 기기 파일에도 남는다는 공개 자료는 없습니다. 그래서 기기 포렌식은 서버 기록을 대신하지 못하고, 기기 쪽에서 계정이 추가·변경된 흔적과 사용자 진술을 맞춰 보는 데까지 다룹니다. 서버 쪽 자료를 받는 일은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md)에 있습니다.
+사용자의 Apple 계정이나 기기에 등록한 다른 계정을 남이 가로챘는지, 기기에 그 흔적이 남았는지를 판별합니다. 계정 탈취 (account takeover)의 핵심 기록인 로그인 내역과 계정에 연결된 기기 목록은 사용자가 account.apple.com 에서 봅니다 [1]. 기기 포렌식은 이 서버 기록을 대신하지 못하므로, 기기 쪽에서 계정이 추가·변경된 흔적과 사용자 진술을 맞춰 보는 데까지 다룹니다. 서버 쪽 자료를 받는 일은 [클라우드 데이터](../../03-techniques/acquisition/cloud-data.md)에 있습니다.
 
 ## 먼저 확인할 것
 
@@ -36,7 +36,7 @@ nav_order: 1640
 | 기기 암호 대신 Face ID·Touch ID 만 됨 | 키체인의 암호·패스키 사용, Safari 자동 완성의 결제 수단 사용, 분실 모드 끄기, 잠긴 앱 열기, 모든 콘텐츠 및 설정 지우기, 빠른 시작으로 새 기기 설정, eSIM 설정·이전 등 |
 | 1시간 보안 지연 | Apple 계정 암호 변경, Apple 계정 로그아웃, 계정 보안 설정 변경, Face ID·Touch ID 추가·제거, 기기 암호 변경, 모든 설정 재설정, MDM 등록, 도난 기기 보호 끄기 |
 
-이 기능이 켜졌는지, 지연이 걸렸는지는 사용자 진술과 설정 화면으로 확인합니다. 이 상태를 담는 파일과 키를 밝힌 공개 자료는 없습니다.
+이 기능이 켜졌는지, 지연이 걸렸는지는 사용자 진술과 설정 화면으로 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -61,7 +61,7 @@ nav_order: 1640
    ZCREDENTIALITEM: ZEXPIRATIONDATE, ZACCOUNTIDENTIFIER, ZSERVICENAME …
    ```
 
-   이 DB 에서 계정을 추가한 시각, 사용자 이름, 계정 종류 등을 뽑을 수 있습니다 [4]. `ZDATE` 가 그 추가 시각인지와 어떤 기준 시각인지는 공개 자료로 정해지지 않아서, 사용자가 계정을 추가했다고 기억하는 시각과 먼저 맞춰 봅니다. 사용자가 모르는 `ZUSERNAME` 의 메일·클라우드 계정이 있으면 탈취한 쪽이 추가했을 가능성을 두고 조사하되, 사용자가 잊은 계정일 수도 있어서 진술로 확인합니다.
+   이 DB 에서 계정을 추가한 시각, 사용자 이름, 계정 종류 등을 뽑을 수 있습니다 [4]. `ZDATE` 가 그 추가 시각인지와 어떤 기준 시각인지는 사용자가 계정을 추가했다고 기억하는 시각과 먼저 맞춰 보고 판단합니다. 사용자가 모르는 `ZUSERNAME` 의 메일·클라우드 계정이 있으면 탈취한 쪽이 추가했을 가능성을 두고 조사하되, 사용자가 잊은 계정일 수도 있어서 진술로 확인합니다.
 
 2. **Apple 계정 상태를 봅니다.** `HomeDomain :: Library/Preferences/com.apple.appleaccount.informationcache.plist` 에 `AAAccountFullName`, `AAIsAccountSignedIn`, `AAPrimaryAccountSignInState`, `AAProfilePictureCacheURL` 키가 있습니다. 이름과 로그인 상태가 사용자 진술과 다른지 봅니다.
 
@@ -72,7 +72,7 @@ nav_order: 1640
    | `HomeDomain :: Library/Preferences/com.apple.icloud.findmydeviced.FMIPAccounts.plist` | `addTime`, `osVersion`, `versionHistory`, `lowBatteryLocate`, `dsid`, `enableContext` |
    | `SysSharedContainerDomain-systemgroup.com.apple.icloud.findmydevice.managed :: Library/Preferences/FMIPStateInfo.plist` | `fmipActive`, `fmipLostModeType` |
 
-   `fmipLostModeType` 은 이름으로 보면 분실 모드와 관련된 값이지만 값의 뜻을 밝힌 공개 자료가 없습니다. `addTime` 의 기준 시각도 공개 자료가 없습니다. 같은 기기에서 분실 모드를 켜지 않은 상태의 값과 비교하고, 해석 근거를 보고서에 적습니다.
+   `fmipLostModeType` 은 이름으로 보면 분실 모드와 관련된 값이지만, 이름만으로 값의 뜻을 단정할 수 없습니다. `addTime` 의 기준 시각은 같은 기기의 다른 기록과 시각을 맞춰 보고 판단합니다. 같은 기기에서 분실 모드를 켜지 않은 상태의 값과 비교하고, 해석 근거를 보고서에 적습니다.
 
 4. **보내지 않았다는 메시지를 봅니다.** `sms.db` 의 `message.is_from_me` 가 1 인 행이 보낸 메시지이고 [5], 사용자가 보내지 않았다고 말한 메시지와 시각·상대를 맞춰 봅니다. 이 값으로는 사용자 쪽에서 보낸 메시지라는 것까지만 알 수 있고, 누가 보냈는지는 알 수 없습니다. 누가 기기를 쓰고 있었는지는 [그 시각에 폰을 쓴 사람이 누구인가](../activity/user-attribution.md)를 따릅니다.
 
@@ -86,7 +86,7 @@ nav_order: 1640
 
 - **기기에서 로그인 내역을 찾으려 합니다.** Apple 계정의 로그인 내역과 기기 목록은 account.apple.com 에서 봅니다 [1]. 기기 쪽 흔적이 없다는 사실은 로그인이 없었다는 뜻이 아닙니다.
 - **사용자의 조치와 탈취한 쪽의 변경을 섞습니다.** 암호 변경·기기 제거 같은 조치를 한 시각을 먼저 받아 두지 않으면 두 변경을 나눌 수 없습니다.
-- **키 이름만 보고 값을 해석합니다.** `fmipLostModeType`, `ZDATE`, `addTime` 은 뜻이나 기준 시각이 밝혀지지 않은 필드입니다. 보고서에는 값과 해석 근거를 함께 적습니다.
+- **키 이름만 보고 값을 해석합니다.** `fmipLostModeType`, `ZDATE`, `addTime` 은 이름만으로 뜻이나 기준 시각을 단정할 수 없는 필드입니다. 보고서에는 값과 해석 근거를 함께 적습니다.
 - **키체인 파일이 있으니 저장된 암호를 봤다고 씁니다.** 파일이 있다는 것과 항목을 읽을 수 있다는 것은 다릅니다.
 
 ## 보고서 문장 예

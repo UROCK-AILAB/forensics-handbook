@@ -46,7 +46,7 @@ MetaMask Mobile 은 v7.60.0 부터 저장 방식이 바뀌었습니다. v7.59.0 
 | `deleted` | 삭제 표시 |
 | `value` | 암호화된 값 |
 
-시험 이미지에서 나온 키는 `wallet-info`, `asset-index`, `plat-vuex-` 로 시작하는 앱 상태 키, `txn2-` 로 시작하는 트랜잭션 메타데이터 키였습니다. `wallet-info` 와 `asset-index` 는 이름 이상의 뜻이 밝혀져 있지 않습니다[1].
+시험 이미지에서 나온 키는 `wallet-info`, `asset-index`, `plat-vuex-` 로 시작하는 앱 상태 키, `txn2-` 로 시작하는 트랜잭션 메타데이터 키였습니다. `wallet-info` 와 `asset-index` 는 이름만 보고 뜻을 단정하지 않습니다[1].
 
 `txn2-` 뒤의 문자열은 트랜잭션 해시이고, 시험 이미지에서는 헥스 64자였습니다. 이렇게 읽는 근거는 앱 APK 안의 코드입니다. APK 에 상수 이름 `TX_META_DATA_KEY_PREFIX`, 이 키를 만드는 메서드 `getTxMetaDataKey`, 레코드를 읽는 클래스 `com.breadwallet.platform.entities.TxMetaData`, 쿼리 `...where key like 'txn2-%'`, 이벤트 문자열 `OnTransactionMetaDataUpdated(transactionHash=` 가 들어 있습니다[1].
 
@@ -62,7 +62,7 @@ MetaMask Mobile 은 v7.60.0 부터 저장 방식이 바뀌었습니다. v7.59.0 
 |---|---|---|
 | `userId` | UUID | BRD 계정 식별자 |
 | `walletRewardId` | 네 단어 값 | 지갑 리워드 식별자 |
-| `phraseWritten` | 불리언 | 이름은 복구 문구를 적었는지와 관련 있지만, 어떤 사용자 동작이 이 값을 켜는지는 밝혀져 있지 않습니다. |
+| `phraseWritten` | 불리언 | 이름은 복구 문구를 적었는지와 관련 있지만, 어떤 사용자 동작이 이 값을 켜는지는 시험 기기에서 재현해 확인합니다. |
 | `rewardsAnimationShown` | 불리언 | 앱 상태 값 |
 | `appForegroundedCount` | 정수 | 앱 상태 값 |
 | `secureTime` | Unix epoch 밀리초 | 시각 값 |
@@ -115,7 +115,7 @@ Android 앱 매니페스트에는 `android:allowBackup="false"` 가 설정되어
 
 ## 시각 해석
 
-BRD 의 `thetime` 과 `secureTime` 은 Unix epoch 밀리초입니다. ALEAPP 는 이 값을 1000 으로 나눠 초로 바꾼 뒤 UTC 로 표시합니다[1]. 예를 들어 `1623640000000`(만든 예시)은 2021-06-14 03:06:40 UTC 입니다. 이 값이 기기 시계로 쓴 것인지 서버가 준 것인지는 공개 자료에 나와 있지 않으므로, 같은 해시의 블록 시각과 비교해서 차이를 확인합니다. 블록 시각의 성질은 [블록 시각과 확정](../../01-foundations/blockchain/block-time.md)에서 다룹니다.
+BRD 의 `thetime` 과 `secureTime` 은 Unix epoch 밀리초입니다. ALEAPP 는 이 값을 1000 으로 나눠 초로 바꾼 뒤 UTC 로 표시합니다[1]. 예를 들어 `1623640000000`(만든 예시)은 2021-06-14 03:06:40 UTC 입니다. 이 값이 기기 시계로 쓴 것인지 서버가 준 것인지는 같은 해시의 블록 시각과 비교해서 판단합니다. 블록 시각의 성질은 [블록 시각과 확정](../../01-foundations/blockchain/block-time.md)에서 다룹니다.
 
 Coinomi 의 해시 이름 파일에는 시각 정보가 들어 있지 않습니다. 거래 시각은 해시로 블록 탐색기를 조회해서 블록 시각으로 확인합니다[2].
 

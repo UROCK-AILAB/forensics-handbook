@@ -41,8 +41,8 @@ Claude Code 는 터미널에서 도는 코딩 에이전트입니다. 모델 호�
 | 설치 방법 | 흔적이 남는 곳 | 업데이트 |
 |---|---|---|
 | 네이티브 설치기(`install.ps1`, `install.cmd`) | `%USERPROFILE%\.local\bin\claude.exe`, `%USERPROFILE%\.local\share\claude` | 백그라운드에서 스스로 업데이트 |
-| WinGet(`Anthropic.ClaudeCode`) | 문서에 실행 파일 위치가 없어 실제 기기에서 확인 | 스스로 업데이트하지 않음(`CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` 이면 대신 실행) |
-| npm(`@anthropic-ai/claude-code`) | 문서에 실행 파일 위치가 없어 실제 기기에서 확인 | 문서에 설명이 없어 실제 기기에서 확인 |
+| WinGet(`Anthropic.ClaudeCode`) | 실제 기기에서 `claude.exe` 위치를 찾아 확인 | 스스로 업데이트하지 않음(`CLAUDE_CODE_PACKAGE_MANAGER_AUTO_UPDATE=1` 이면 대신 실행) |
+| npm(`@anthropic-ai/claude-code`) | 실제 기기에서 실행 파일 위치를 찾아 확인 | 실제 기기에서 확인 |
 | WSL 안에 설치 | WSL 배포판 리눅스 홈의 `~/.claude` | 리눅스 설치와 같음 |
 
 WinGet·npm 설치는 문서에 실행 파일 위치가 없어서, 실제 기기에서는 패키지 관리자의 설치 목록과 디스크 전체에서 이름이 `claude` 로 시작하는 실행 파일을 찾습니다. 네이티브 설치에는 관리자 권한이 필요 없어서, 관리자 권한이 없는 계정에서도 설치 흔적이 나올 수 있습니다[7]. 업데이트 채널은 설정 키 `autoUpdatesChannel` 로 고르고 값은 `"latest"`(기본)와 `"stable"` 입니다[7]. WSL 에 깐 경우에는 Windows 사용자 폴더가 아니라 배포판 안의 리눅스 홈에 기록이 쌓여서, 배포판을 따로 수집합니다.
@@ -75,7 +75,7 @@ projects\
 
 Windows 판이 이 가운데 무엇을 쓰는지는 자료마다 다릅니다. claude-forensics v0.1.1(2026-06-16) 문서는 2026년 중반의 Windows 판 Claude Code 가 `history.jsonl`, `shell-snapshots/`, `paste-cache/`, `file-history/` 를 쓰지 않는 것으로 보인다고 했고, `projects/` 의 세션 기록, Cowork 세션 정보, `audit.jsonl` 을 포함한 Cowork 에이전트 기록은 그대로 뽑힌다고 했습니다[8]. 2026년 9월 Windows 기기에서는 이 네 가지 가운데 `history.jsonl`, `paste-cache\`, `file-history\` 가 있었고 `shell-snapshots\` 는 없었습니다. 시점이 달라서 어느 한쪽을 기준으로 삼지 않고, 기기마다 이 네 항목이 있는지부터 봅니다.
 
-`plans\`, `session-env\`, `sessions\`, `tasks\`, `todos\` 폴더[3]는 없을 수도 있습니다. 그 기능을 쓰지 않았을 수도 있고 자동 정리가 지웠을 수도 있어서, 폴더가 없다는 사실만으로 판이나 사용 여부를 판단하지 않습니다. `daemon\` 의 두 파일은 쓰임을 설명한 공개 문서가 없어서 실제 기기에서 확인해야 합니다.
+`plans\`, `session-env\`, `sessions\`, `tasks\`, `todos\` 폴더[3]는 없을 수도 있습니다. 그 기능을 쓰지 않았을 수도 있고 자동 정리가 지웠을 수도 있어서, 폴더가 없다는 사실만으로 판이나 사용 여부를 판단하지 않습니다. `daemon\` 의 두 파일은 쓰임을 실제 기기에서 확인합니다.
 
 ### 데스크톱 앱 폴더와 수집 범위
 
@@ -143,9 +143,9 @@ claudeAiOauth
 
 ## 시각 해석
 
-네이티브 설치는 백그라운드에서 스스로 업데이트하기 때문에, 실행 파일이나 버전 파일의 파일 시스템 시각을 처음 설치한 때로 단정하지 않습니다. `.credentials.json` 의 `expiresAt`, `refreshTokenExpiresAt` 는 정수 시각이고 단위를 적은 공개 자료가 없어서, 13자리면 1970-01-01 UTC 기준 밀리초, 10자리면 초로 보고 파일 시각과 맞는지 확인합니다. 대화 시각은 기록 파일 안의 값이 더 정확하며 [세션 기록 구조](transcripts.md)의 시각 절을 따릅니다. 앱 폴더 쪽 세션 정보의 `createdAt`, `lastActivityAt` 해석은 [Claude — Windows 앱](../../chat-services/claude/windows.md)의 시각 절을 따릅니다.
+네이티브 설치는 백그라운드에서 스스로 업데이트하기 때문에, 실행 파일이나 버전 파일의 파일 시스템 시각을 처음 설치한 때로 단정하지 않습니다. `.credentials.json` 의 `expiresAt`, `refreshTokenExpiresAt` 는 정수 시각이고 단위가 따로 적혀 있지 않아서, 13자리면 1970-01-01 UTC 기준 밀리초, 10자리면 초로 보고 파일 시각과 맞는지 확인합니다. 대화 시각은 기록 파일 안의 값이 더 정확하며 [세션 기록 구조](transcripts.md)의 시각 절을 따릅니다. 앱 폴더 쪽 세션 정보의 `createdAt`, `lastActivityAt` 해석은 [Claude — Windows 앱](../../chat-services/claude/windows.md)의 시각 절을 따릅니다.
 
-`.claude` 폴더 바로 아래에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 든 JSON 파일이 있을 수 있습니다. 이 파일을 설명한 공개 자료가 없어서, 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 추정해 볼 수 있습니다.
+`.claude` 폴더 바로 아래에 `version_from`, `version_to`, `outcome`, `status`, `error_code`, `path`, `timestamp` 키가 든 JSON 파일이 있을 수 있습니다. 판이 바뀐 시각의 근거로 쓰려면 시험 기기에서 업데이트 전후로 파일을 비교해 뜻을 먼저 확인합니다. 정책 레지스트리 키는 키의 마지막 쓰기 시각으로 정책이 언제 바뀌었는지 추정해 볼 수 있습니다.
 
 ## 함정과 한계
 

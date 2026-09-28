@@ -134,7 +134,7 @@ Google Play 데이터 안전 페이지는 앱 개발사가 신고한 내용이�
 | `DBMessageChunk` JSON 의 `created_date`, `modification_date` | `%Y-%m-%dT%H:%M:%S.%fZ` 또는 소수점 없는 `%Y-%m-%dT%H:%M:%SZ`, UTC | [4] |
 | `_user`·`_accountuser_state` 의 `created` | Unix 초, UTC | [3] |
 
-대화의 `modification_date` 가 무엇이 바뀔 때 갱신되는지는 공개된 자료가 없어서, 대화를 연 시각으로 읽지 않고 메시지 하나하나의 `created_date` 를 함께 봅니다. `created` 는 ALEAPP 이 "Account Creation Time" 으로 보여 주는 값이라서 [3], 이 기기에 로그인한 시각으로 옮기지 않습니다.
+대화의 `modification_date` 는 대화를 연 시각으로 읽지 않고 메시지 하나하나의 `created_date` 를 함께 봅니다. 무엇이 바뀔 때 이 값이 갱신되는지는 시험 기기에서 대화를 열거나 메시지를 보내 보고 값이 바뀌는지로 확인합니다. `created` 는 ALEAPP 이 "Account Creation Time" 으로 보여 주는 값이라서 [3], 이 기기에 로그인한 시각으로 옮기지 않습니다.
 
 앱 폴더 안 파일의 파일 시스템 시각은 동기화나 캐시 갱신 때도 바뀌어서 대화한 시각으로 바로 옮기지 않습니다. 앱 설치·업데이트 시각과 기기의 다른 기록을 시간순으로 합치는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)에서 다룹니다.
 

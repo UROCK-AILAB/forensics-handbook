@@ -78,6 +78,7 @@ iOS 16 이전에 지운 메시지를 "최근 삭제된 항목" 에서 찾으려�
 - [지운 대화와 사진 찾기 (Deleted Content)](../deleted-content.md)
 - [메시지 (iMessage·SMS)](../../../02-artifacts/communications/messages/index.md)
 - [사진 보관함 (Photos Library)](../../../02-artifacts/media/photos/index.md)
+- [파일 시스템 이벤트 (FSEvents)](../../../02-artifacts/logs/fsevents.md) — 전체 파일 시스템 추출본에서 지운 사진·파일의 경로가 남았는지 볼 때
 - [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md)
 
 ## 참고 문헌

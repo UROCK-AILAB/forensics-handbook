@@ -18,7 +18,7 @@ iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있
 
 ## 위치와 버전별 차이
 
-### 공개 자료에 나온 파일
+### iLEAPP 가 찾는 파일
 
 와이파이 기록은 아래 네 파일 이름으로 찾습니다 [1]. 기기 안 경로는 실제 데이터에서 파일 이름으로 찾아 확인합니다.
 
@@ -31,7 +31,7 @@ iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있
 
 ### 로컬 백업에 있는 파일
 
-암호화하지 않은 로컬 백업(iOS 27.0)에는 아래 파일이 있고, `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi.plist` 는 없을 수 있습니다. 알려진 네트워크 목록이 암호화한 백업에 들어가는지는 공식 자료가 없습니다.
+암호화하지 않은 로컬 백업(iOS 27.0)에는 아래 파일이 있고, `com.apple.wifi.known-networks.plist` 와 `com.apple.wifi.plist` 는 없을 수 있습니다. 암호화한 백업에서는 이 두 파일이 들어 있는지 따로 확인합니다.
 
 | 도메인 :: 상대 경로 | 내용 |
 |---|---|
@@ -43,14 +43,14 @@ iOS 14 이상에서는 개인 Wi-Fi 주소(Private Wi-Fi Address)를 쓸 수 있
 | `RootDomain :: Library/Preferences/com.apple.wifid.plist` | `joinPMAssertionResetTimestamp`, `joinPMAssertionTimeUsedKey` 키 |
 | `WirelessDomain :: Library/Databases/DataUsage.sqlite` | `ZWIFIDATA` 표 |
 
-공개 자료의 `com.apple.wifi-private-mac-networks.plist` 와 백업의 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르고, 두 파일이 같은 역할인지 설명한 공개 문서는 없습니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있습니다. 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+iLEAPP 가 찾는 `com.apple.wifi-private-mac-networks.plist` 와 백업의 `com.apple.wifi-class-d-private-mac-networks.plist` 는 이름이 다르므로, 두 파일이 같은 역할인지는 키 구성과 값을 나란히 놓고 비교해 확인합니다. 이 밖에 `SysSharedContainerDomain-systemgroup.com.apple.WiFiAssist` 도메인(항목 3개)과 `AppDomainPlugin-com.apple.wifi.settingscontrols`, `AppDomainPlugin-com.apple.DiagnosticExtensions.WiFi` 같은 확장 도메인도 있습니다. 백업 도메인이 무엇인지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ### 버전별 차이
 
 | iOS | 달라지는 점 | 근거 |
 |---|---|---|
 | 12.4 ~ 18.x | iLEAPP 스크립트가 이 범위의 표본을 기준으로 만들어졌고, 버전마다 plist 구조가 다름 | [1] |
-| 14 전후 | 예전 `com.apple.wifi.plist` 에서 `com.apple.wifi.known-networks.plist` 로 바뀐 것으로 흔히 알려져 있음(공개 자료 없음) | — |
+| 14 전후 | 예전 `com.apple.wifi.plist` 에서 `com.apple.wifi.known-networks.plist` 로 바뀐 것으로 보임. 기기에 두 파일 중 어느 쪽이 있는지로 확인 | — |
 | 14 이상 | 개인 Wi-Fi 주소 사용 가능 | [2] |
 | 18 이상 | 개인 Wi-Fi 주소 설정이 끔·고정·순환 세 가지 | [2] |
 | 27.0 | 암호화하지 않은 백업에 알려진 네트워크 목록 없음, 지운 네트워크 목록 있음 | |
@@ -88,11 +88,11 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
 ### 지운 네트워크 목록
 
-`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 형식이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다. 파일 이름과 `RemovedAt` 키로 보아 사용자가 지운 네트워크의 목록으로 보이지만, 어떤 조작이 이 목록에 항목을 더하는지 설명한 공개 문서는 없습니다.
+`com.apple.wifi.removed-networks.plist` 의 항목 키는 `wifi.network.ssid.<SSID>` 형식이고, 항목마다 `RemovedAt`, `SSID`, `SupportedSecurityTypes` 키가 있습니다. 파일 이름과 `RemovedAt` 키를 보면 사용자가 지운 네트워크의 목록으로 보이고, 어떤 조작이 이 목록에 항목을 더하는지는 시험 기기에서 네트워크를 지워 보고 확인합니다.
 
 ### 데이터 사용량 DB 의 ZWIFIDATA 표
 
-`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 열(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 그 밖에 열 3개가 더 있습니다. 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준을 설명한 공개 문서는 없습니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
+`DataUsage.sqlite` 의 `ZWIFIDATA` 표에는 `ZSSID`, `ZBSSID`, `ZRSSI`, `ZLINKQUALITY`, `ZSTATE`, `ZISADHOC`, `ZISCAPTIVE`, `ZISLINKLOCALADDR`, `ZDHCPLEASETIME`, `ZTIMEAT`, `ZTIMESTAMP`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY` 와 주고받은 바이트·TCP 통계 열(`ZSTATSINBYTESACTUAL`, `ZSTATSINBYTESBASE`, `ZSTATSOUTBYTESACTUAL`, `ZSTATSOUTBYTESBASE`, `ZSTATSTCPCNTACTUAL`, `ZSTATSTCPCNTBASE`)이 있고, 그 밖에 열 3개가 더 있습니다. 접속 지점과 위도·경도가 한 행에 모이는 표라서 위치 조사에 쓸 만하지만, `ZTIMEAT`·`ZSTATE` 값의 뜻과 시각 기준은 같은 기기의 다른 기록과 시각을 맞춰 보고 판단합니다. DB 의 다른 표는 [앱별 데이터 사용량](data-usage.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -116,7 +116,7 @@ iOS 18 이상의 개인 Wi-Fi 주소 설정은 다음과 같습니다 [2].
 
 알려진 네트워크 목록의 시각 키는 이름대로 읽으면 추가(`AddedAt`), 갱신(`UpdatedAt`), 마지막 발견(`LastDiscoveredAt`), 사용자 접속(`JoinedByUserAt`), 시스템 접속(`JoinedBySystemAt`) 시각이고, 접속 지점마다 마지막 연결(`LastAssociatedAt`)과 위치를 잰 시각(`LocationTimestamp`)이 따로 있습니다 [1]. 이 키들이 UTC 인지 현지 시각인지, plist 날짜형인지 숫자형인지는 실제 데이터로 확인해야 합니다. plist 날짜형이면 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 규칙대로 읽고, 숫자면 자릿수로 기준을 판별해 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 바꿉니다.
 
-`Last` 로 시작하는 키는 가장 최근 값 하나만 담는 것으로 보여서, 그 네트워크에 처음 붙은 때나 중간의 접속 이력은 이 목록에 없을 수 있습니다. 지운 네트워크 목록의 `RemovedAt` 과 `ZWIFIDATA` 의 `ZTIMESTAMP`·`ZTIMEAT` 도 시각 기준이 알려져 있지 않아서, 같은 접속을 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 봅니다.
+`Last` 로 시작하는 키는 가장 최근 값 하나만 담는 것으로 보여서, 그 네트워크에 처음 붙은 때나 중간의 접속 이력은 이 목록에 없을 수 있습니다. 지운 네트워크 목록의 `RemovedAt` 과 `ZWIFIDATA` 의 `ZTIMESTAMP`·`ZTIMEAT` 도 값만으로는 시각 기준을 알 수 없어서, 같은 접속을 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 기기 시간대는 [시간대와 시각 설정](../system-account/time-zone.md) 에서 봅니다.
 
 ## 함정과 한계
 

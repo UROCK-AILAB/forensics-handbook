@@ -27,10 +27,10 @@ Copilot 은 새 Windows 11 PC 에 기본으로 깔려 있고, Copilot 키나 Win
 | 어디서 | 위치·식별 정보 | 앱 판 | 알려 주는 것 |
 |---|---|---|---|
 | 웹 | `copilot.microsoft.com` | 해당 없음(웹 서비스) | 브라우저 방문 기록으로 본 접속 사실 |
-| Windows | Microsoft Store 앱, AppLocker 규칙의 패키지 이름 `MICROSOFT.COPILOT` [6] | 공식 문서에 판 번호가 없어 실제 기기의 패키지 정보로 확인 | 설치 흔적, 관리 정책, Copilot 키 설정 |
+| Windows | Microsoft Store 앱, AppLocker 규칙의 패키지 이름 `MICROSOFT.COPILOT` [6] | 실제 기기의 패키지 정보로 확인 | 설치 흔적, 관리 정책, Copilot 키 설정 |
 | macOS | 번들 ID `com.microsoft.copilot-mac` [14] | Mac App Store 판 `25.7.440902001`(2026-09-25 기준) [14] | 앱 폴더 위치는 실제 기기에서 확인 |
-| Android | 패키지 `com.microsoft.copilot` [12][13], 실행 액티비티 `com.microsoft.copilotn.MainActivity` [13] | 공개 자료에 판 번호가 없어 실제 기기에서 확인 | 연구에 따라 평문 대화·프롬프트·위치(2025) [10] 또는 원격 측정 대기열만(2026-04) [11] |
-| iOS | App Store ID `id6472538445` [12], 번들 ID 는 공개 자료가 없어 실제 기기에서 확인 | 공개 자료에 판 번호가 없어 실제 기기에서 확인 | 평문 대화와 브라우저 데이터(2025) [10] |
+| Android | 패키지 `com.microsoft.copilot` [12][13], 실행 액티비티 `com.microsoft.copilotn.MainActivity` [13] | 실제 기기에서 확인 | 연구에 따라 평문 대화·프롬프트·위치(2025) [10] 또는 원격 측정 대기열만(2026-04) [11] |
+| iOS | App Store ID `id6472538445` [12], 번들 ID 는 실제 기기에서 확인 | 실제 기기에서 확인 | 평문 대화와 브라우저 데이터(2025) [10] |
 | 계정 | 개인정보 대시보드(`account.microsoft.com/privacy`), CSV 내보내기 [4][5] | 해당 없음 | 서버에 남은 프롬프트와 응답 |
 
 Android 패키지 이름(`copilot`)과 실행 액티비티의 접두어(`copilotn`)가 다르므로, 로그나 실행 기록을 찾을 때는 두 문자열을 모두 검색합니다 [13]. LEAPP 계열 도구(ALEAPP·iLEAPP·RLEAPP)에는 Copilot 전용 분석기가 없어서(2026-09-25 저장소 목록 기준) [16], 앱 폴더는 SQLite·캐시 파일을 직접 열어 봅니다.

@@ -44,7 +44,7 @@ XProtect 는 YARA 시그니처로 악성 코드를 찾고, 알려진 악성 코�
 | 15 Sequoia 이후 | XProtect 번들이 두 곳에 있음. 자세한 내용은 [악성 코드 흔적 분석 (Malware Triage)](../../03-techniques/analysis/malware-triage/index.md) | — |
 | 26 Tahoe | 주 XProtect 번들을 iCloud 의 CloudKit 연결로도 갱신하도록 바뀜 | [2] |
 
-XProtect Remediator 가 처음 들어온 버전은 공개 자료가 없어, 10.15~12 기기에 Remediator 가 있는지는 실제 기기에서 확인합니다.
+10.15~12 기기에 XProtect Remediator 가 있는지는 실제 기기에서 확인합니다.
 
 ### 갱신 주기
 
@@ -60,7 +60,7 @@ XProtect Remediator 가 처음 들어온 버전은 공개 자료가 없어, 10.1
 
 ### XPdb
 
-XPdb 는 SQLite 데이터베이스이고 [3], 읽는 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)와 같습니다. 표 이름과 열 이름, 시각 값의 형식은 공개 자료가 없으니, 실제 데이터의 스키마를 먼저 뽑아 보고 열의 뜻은 값을 보며 확인합니다.
+XPdb 는 SQLite 데이터베이스이고 [3], 읽는 방법은 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)와 같습니다. 표 이름과 열 이름, 시각 값의 형식은 실제 데이터의 스키마를 먼저 뽑아 보고 확인하며, 열의 뜻은 값을 보며 확인합니다.
 
 ### Bastion 규칙이 보는 행위
 
@@ -73,11 +73,11 @@ XPdb 는 SQLite 데이터베이스이고 [3], 읽는 방법은 [SQLite 데이터
 | 권한·설정 변경 | 숨은 권한 도우미(privileged helper), Safari 확장 수정 |
 | 숨은 파일과 지속성 | Adload 행위(2개), Application Support 안의 숨은 지속성, Shared 폴더의 숨은 파일과 숨은 실행(2개) |
 
-`BastionMeta.plist` 안의 키는 공개 자료가 없습니다. 규칙 목록은 판마다 늘어났으니 분석 대상의 `bastion.sb` 와 `BastionMeta.plist` 를 함께 수집해 그때 어떤 규칙이 있었는지 확인합니다.
+`BastionMeta.plist` 안의 키는 파일을 열어 직접 확인합니다. 규칙 목록은 판마다 늘어났으니 분석 대상의 `bastion.sb` 와 `BastionMeta.plist` 를 함께 수집해 그때 어떤 규칙이 있었는지 확인합니다.
 
 ## 증거로서 의미
 
-**증명하는 것.** XPdb 에 기록이 있으면 그 무렵 XBS 규칙에 걸린 행위가 있었다는 뜻이고, 2024년 6월 기준으로는 탐지해도 막지 않았으니 [3] 기록된 행위가 끝까지 실행됐을 수 있습니다. 휴지통에 들어간 파일과 Finder 알림은 XProtect 가 알려진 악성 코드를 막은 흔적일 수 있지만, 이 알림과 휴지통 이동이 어느 로그에 남는지는 공개 자료가 없어 실제 데이터로 확인해야 합니다. 수집한 번들과 규칙 파일은 수집 시점의 XProtect 판을 보여 줍니다.
+**증명하는 것.** XPdb 에 기록이 있으면 그 무렵 XBS 규칙에 걸린 행위가 있었다는 뜻이고, 2024년 6월 기준으로는 탐지해도 막지 않았으니 [3] 기록된 행위가 끝까지 실행됐을 수 있습니다. 휴지통에 들어간 파일과 Finder 알림은 XProtect 가 알려진 악성 코드를 막은 흔적일 수 있지만, 이 알림과 휴지통 이동이 어느 로그에 남는지는 실제 데이터로 확인해야 합니다. 수집한 번들과 규칙 파일은 수집 시점의 XProtect 판을 보여 줍니다.
 
 **증명하지 못하는 것.** XPdb 에 기록이 없다고 악성 행위가 없었다고 말할 수는 없습니다. 규칙이 보는 행위는 정해져 있고 규칙 수도 판마다 다르니, 탐지가 없었다는 것은 그 판의 시그니처와 규칙에 걸린 것이 없었다는 뜻일 뿐입니다. 2024년 6월 기준으로 XBS 는 사용자에게 알리지 않았으니 [3], XPdb 기록만으로 사용자가 탐지를 알았다고 할 수도 없습니다.
 
@@ -85,7 +85,7 @@ XPdb 는 SQLite 데이터베이스이고 [3], 읽는 방법은 [SQLite 데이터
 
 ## 시각 해석
 
-XPdb 의 시각 값이 맥 절대 시각인지 유닉스 시각인지는 공개 자료가 없습니다. 값을 뽑은 뒤 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방법으로 두 해석을 모두 해 보고, 같은 무렵의 통합 로그나 파일 시스템 기록과 맞는 쪽을 택합니다. 어느 쪽을 택했는지와 그 근거는 보고서에 적습니다.
+XPdb 의 시각 값이 맥 절대 시각인지 유닉스 시각인지 알아내려면 값을 뽑은 뒤 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방법으로 두 해석을 모두 해 보고, 같은 무렵의 통합 로그나 파일 시스템 기록과 맞는 쪽을 택합니다. 어느 쪽을 택했는지와 그 근거는 보고서에 적습니다.
 
 XProtect 판과 갱신 시각은 사고 당시 어떤 규칙이 돌았는지 가르는 기준이 되고, 데이터는 거의 매주, Remediator 는 대개 한 달 안팎으로 바뀌니 [2] 수집 시점의 판이 사고 당시 판과 다를 수 있습니다. 갱신 이력은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)과 [소프트웨어 업데이트 기록 (Software Update)](../system-account/software-update.md)에서 찾습니다.
 
@@ -93,9 +93,9 @@ XProtect 판과 갱신 시각은 사고 당시 어떤 규칙이 돌았는지 가
 
 Tahoe 에서는 Gatekeeper Compatibility Data 를 여전히 내려받아 설치하지만 파일은 어디에도 보이지 않고, 예전 방식의 흔적만 남은 것이라는 해석이 있습니다 [2]. 그래서 설치 기록에는 있는데 파일이 없다고 곧바로 삭제 조작을 의심하지 말고, 원래 그런 동작인지 먼저 따져 봅니다.
 
-Tahoe 는 주 XProtect 번들을 Software Update 말고 iCloud 의 CloudKit 연결로도 갱신하니 [2], 예전처럼 설치 기록에서만 XProtect 갱신을 찾으면 일부를 놓칠 수 있습니다. 설치 로그에 XProtect 갱신이 남는지는 공개 자료가 없어 분석 대상의 [설치 로그 (install.log)](install-log.md)에서 확인합니다.
+Tahoe 는 주 XProtect 번들을 Software Update 말고 iCloud 의 CloudKit 연결로도 갱신하니 [2], 예전처럼 설치 기록에서만 XProtect 갱신을 찾으면 일부를 놓칠 수 있습니다. 설치 로그에 XProtect 갱신이 남는지는 분석 대상의 [설치 로그 (install.log)](install-log.md)에서 확인합니다.
 
-XProtect Remediator 의 실행 주기와 실행을 맡는 LaunchDaemon 이름, 검사 결과가 남는 통합 로그 카테고리는 공개 자료가 없어 실제 데이터로 확인해야 합니다. 통합 로그에서 XProtect 쪽 메시지를 찾는 조건은 [통합 로그에서 찾을 것 (Unified Log Events)](unified-log-events/index.md)에 있습니다.
+XProtect Remediator 의 실행 주기와 실행을 맡는 LaunchDaemon 이름, 검사 결과가 남는 통합 로그 카테고리는 실제 데이터로 확인해야 합니다. 통합 로그에서 XProtect 쪽 메시지를 찾는 조건은 [통합 로그에서 찾을 것 (Unified Log Events)](unified-log-events/index.md)에 있습니다.
 
 XPdb 설명은 2024년 6월 기준이라 [3], 그 뒤 판에서 기록 방식이 바뀌었을 수 있습니다.
 

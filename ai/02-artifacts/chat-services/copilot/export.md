@@ -32,7 +32,7 @@ CSV 열 구성은 공식 문서에 없고, 아래 내용은 2026년 7월 내보�
 개인정보 대시보드 → Privacy > Empower your productivity > Copilot > Your Copilot app activity history
 ```
 
-내보내기는 `https://account.microsoft.com/privacy/copilot` 에서 "Your Copilot activity history" 의 "Export all activity history" 를 고르면 됩니다[6][8]. 이 메뉴가 어느 분류의 파일을 주는지는 공개 자료에 없으니, 두 분류를 따로 받아 첫 줄의 열 이름을 나란히 비교합니다.
+내보내기는 `https://account.microsoft.com/privacy/copilot` 에서 "Your Copilot activity history" 의 "Export all activity history" 를 고르면 됩니다[6][8]. 이 메뉴로 받은 파일이 어느 분류인지는 두 분류를 따로 받아 첫 줄의 열 이름을 나란히 비교해 확인합니다.
 
 받은 파일 이름은 `copilot-activity-history.csv` 입니다[7][8]. 다만 이름이 다를 수 있고 화면 문구와 형식도 바뀔 수 있습니다[8]. 그래서 기기에서 찾을 때는 이름보다 첫 줄의 열 이름으로 찾습니다. 다른 서비스의 내보내기 형식과 비교한 내용은 [계정 데이터 내보내기 형식](../../../01-foundations/storage-model/data-export-formats.md)에 있습니다.
 

@@ -130,7 +130,7 @@ sqlite3 copy.db "SELECT type, name, tbl_name, rootpage FROM sqlite_schema;"
 
 SQLite 에는 날짜·시각 전용 자료형이 없어서, 시각은 정수나 실수로 저장되고 기준 시점과 단위는 앱마다 다릅니다. Core Data 저장소의 기준은 [Core Data 저장소](core-data.md)에, 여러 기준을 바꾸는 법은 [시각 값](../../value-decoding/time-values.md)에 정리했고, 어느 DB 의 어느 열이 초인지 나노초인지는 아티팩트 페이지를 따릅니다.
 
-SQL 질의는 셀 포인터 배열이 가리키는 유효한 셀만 보여 줍니다. 지운 행의 흔적은 freeblock·할당 안 된 영역·freelist 페이지에 남고, 커밋 전후의 페이지는 곁 파일에 남습니다. SQL 결과만 보고 DB 안의 내용을 다 봤다고 말할 수 없는 이유입니다. iOS 시스템에 들어 있는 SQLite 의 버전과 컴파일 옵션은 공개된 자료가 없습니다. 파일마다 헤더 오프셋 96 에서 마지막으로 파일을 고친 SQLite 의 버전 번호는 읽을 수 있습니다.
+SQL 질의는 셀 포인터 배열이 가리키는 유효한 셀만 보여 줍니다. 지운 행의 흔적은 freeblock·할당 안 된 영역·freelist 페이지에 남고, 커밋 전후의 페이지는 곁 파일에 남습니다. SQL 결과만 보고 DB 안의 내용을 다 봤다고 말할 수 없는 이유입니다. iOS 시스템 SQLite 의 버전은 파일마다 헤더 오프셋 96 에서 마지막으로 파일을 고친 SQLite 의 버전 번호로 확인합니다.
 
 ## 함정
 

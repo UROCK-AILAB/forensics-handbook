@@ -75,7 +75,7 @@ ALEAPP 에는 telegramAndroid.py, signalAndroid.py, line.py, weChat.py, googleCh
 
 메신저 DB 를 얻지 못했거나 DB 의 시각을 다른 기록과 맞춰 보고 싶을 때는 시스템 쪽 기록을 씁니다. `dumpsys notification` 에는 알림마다 `NotificationRecord(pkg=..., user=..., id=..., key=...)` 줄과 `channel=`, `when=`, `seen=` 필드가 나오고, `dumpsys usagestats` 에는 channelId 가 붙은 NOTIFICATION_INTERRUPTION 과 NOTIFICATION_SEEN 이벤트가 나옵니다. 알림은 메시지를 받은 쪽의 흔적이라서 대화가 오간 시각대를 알려 줍니다. 이 기기에서 무엇을 보냈는지는 메신저 DB 로 확인합니다.
 
-사용자가 공유 창에서 어느 메신저를 골랐는지가 어디에 남는지는 실제 기기에서 확인해야 합니다. system 설정 표에 `direct_share` 키가 있지만, 뜻을 밝힌 공개 자료는 없습니다.
+사용자가 공유 창에서 어느 메신저를 골랐는지가 어디에 남는지는 실제 기기에서 확인해야 합니다. system 설정 표에 `direct_share` 키가 있지만, 뜻을 단정할 수 없으므로 보고서에는 값만 옮깁니다.
 
 ## 분석 흐름
 

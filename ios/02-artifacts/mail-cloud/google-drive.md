@@ -6,11 +6,11 @@ nav_order: 1020
 
 # 구글 드라이브 (Google Drive)
 
-아이폰의 구글 드라이브 앱은 앱 안의 저장 구조가 공개 자료로 확인되지 않아서, 로컬 백업에서 앱이 있는지 확인한 뒤 Files 앱 쪽 흔적과 다른 사용 기록을 맞춰 보는 방식으로 분석합니다.
+아이폰의 구글 드라이브 앱은 앱 안의 저장 구조를 실제 데이터에서 찾아야 해서, 로컬 백업에서 앱이 있는지 확인한 뒤 Files 앱 쪽 흔적과 다른 사용 기록을 맞춰 보는 방식으로 분석합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-구글 드라이브는 Google LLC 가 내는 클라우드 저장 앱이고, 오프라인으로 보기, 카메라로 종이 문서를 스캔해 올리기, 파일·폴더에 권한을 정해 공유하기, 100가지가 넘는 파일 형식 저장·편집을 지원합니다 [4]. 오프라인 보기와 스캔은 기기 안에 파일을 두거나 기기에서 파일을 만드는 기능이라서 앱 컨테이너 안에 파일 목록이나 내려받은 파일이 남을 수 있지만, 그 파일 이름과 DB 구조는 공개 자료가 없어 실제 데이터로 직접 확인해야 합니다.
+구글 드라이브는 Google LLC 가 내는 클라우드 저장 앱이고, 오프라인으로 보기, 카메라로 종이 문서를 스캔해 올리기, 파일·폴더에 권한을 정해 공유하기, 100가지가 넘는 파일 형식 저장·편집을 지원합니다 [4]. 오프라인 보기와 스캔은 기기 안에 파일을 두거나 기기에서 파일을 만드는 기능이라서 앱 컨테이너 안에 파일 목록이나 내려받은 파일이 남을 수 있지만, 그 파일 이름과 DB 구조는 실제 데이터로 직접 확인합니다.
 
 App Store 개인정보 라벨에는 사용자와 연결된 데이터로 구입 항목, 위치, 연락처 정보, 연락처, 사용자 콘텐츠(사진·비디오·오디오), 검색 기록, 식별자, 사용 데이터, 진단이 적혀 있습니다 [4]. 이 라벨은 개발사가 수집해 처리하는 데이터 종류를 밝힌 것이고, 기기 안에 그 데이터가 남는다는 뜻은 아닙니다.
 
@@ -21,7 +21,7 @@ App Store 개인정보 라벨에는 사용자와 연결된 데이터로 구입 �
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
 | 앱 설치 여부와 번들 ID | 백업 최상위 `Info.plist` 의 `Installed Applications`·`Applications` 키, `Manifest.plist` 의 `Applications` 키, `Manifest.db` 의 도메인 이름 | — |
-| 앱 컨테이너 안의 메타데이터 DB·캐시·오프라인 파일 | 앱 도메인(`AppDomain-` 로 시작) 안 | 공개 자료 없음, 실제 데이터로 확인 |
+| 앱 컨테이너 안의 메타데이터 DB·캐시·오프라인 파일 | 앱 도메인(`AppDomain-` 로 시작) 안 | 실제 데이터로 확인 |
 | 파일 공급자 도메인 설정 | `HomeDomain :: Library/Application Support/FileProvider/<앱>/Domains.plist` | — |
 | Files 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.DocumentManager.defaults.plist` | — |
 | 파일 공급자 작업 자료 | `HomeDomain :: Library/Application Support/FileProvider/<UUID>/wharf/...`, `.../FileProvider/backup/backup_manifest.db` | 어느 공급자 것인지는 실제 데이터로 확인 |
@@ -35,7 +35,7 @@ App Store 개인정보 라벨에는 사용자와 연결된 데이터로 구입 �
 | NSFileProviderDomain | iOS 11.0 부터 | [2] |
 | Files 앱 쪽 흔적 | iOS 27.0 로컬 백업에 있음 | — |
 
-지금 App Store 버전은 iOS 17.0 이상을 요구하므로 iOS 15·16 기기에서 발견한 앱은 그보다 예전 버전일 수 있고, 예전 버전의 저장 구조도 공개 자료가 없습니다.
+지금 App Store 버전은 iOS 17.0 이상을 요구하므로 iOS 15·16 기기에서 발견한 앱은 그보다 예전 버전일 수 있어서, 앱 버전을 먼저 기록하고 저장 구조를 따로 확인합니다.
 
 ## 구조
 
@@ -119,7 +119,7 @@ Library/Application Support/FileProvider/<UUID>/wharf/wharf/resources/speculativ
 
 ## 시각 해석
 
-앱이 내부에 시각을 어떤 형식(Unix 시각, Mac 절대 시각 등)으로 저장하는지는 공개 자료가 없습니다. 실제 데이터에서 시각으로 보이는 숫자를 찾으면 자릿수와 기준 시점을 여러 형식으로 바꿔 보고, 앱에서 실제로 한 동작의 시각과 비교해 형식을 정합니다. 형식별 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+앱이 내부에 시각을 어떤 형식(Unix 시각, Mac 절대 시각 등)으로 저장하는지는 실제 데이터로 정합니다. 시각으로 보이는 숫자를 찾으면 자릿수와 기준 시점을 여러 형식으로 바꿔 보고, 앱에서 실제로 한 동작의 시각과 비교해 형식을 정합니다. 형식별 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 파일 공급자 쪽 `speculative-set-pacer.plist` 에서는 `lastRefreshDate`·`lastTotalDownloadResetDate` 가 정수로, `indexAllStartDate`·`indexableConfigurationStartDate` 가 날짜 형식으로 저장됩니다. 정수 쪽의 기준 시점은 실제 데이터에서 값을 보고 정하고, 이 파일이 어느 공급자 것인지 밝히기 전에는 구글 드라이브 사용 시각으로 바로 쓰지 않습니다.
 

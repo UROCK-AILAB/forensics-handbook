@@ -25,7 +25,7 @@ Android 앱 패키지 이름은 `com.kakao.talk` 입니다. 앱 폴더가 어디
 | `/data/user/0/com.kakao.talk/databases/KakaoTalk.db` | 카카오톡 10.1.7, Android 11 에뮬레이터 기준. 다른 버전은 실제 기기에서 확인 | 대화 기록(`chat_logs`)과 대화방(`chat_rooms`) |
 | `/data/user/0/com.kakao.talk/databases/KakaoTalk2.db` | 위와 같음 | 친구 목록(`friends`), 차단한 친구, 채널 기록 |
 | `/data/user/0/com.kakao.talk/shared_prefs/`, `files/datastore/` | 위와 같음 | 로그인한 뒤 생기거나 바뀌는 계정·프로필 설정 파일 |
-| `/storage/emulated/0/Android/data/com.kakao.talk/cache` | 위와 같음 | 외부 캐시. 받은 파일 원본이 남는지는 공개 자료 없음 |
+| `/storage/emulated/0/Android/data/com.kakao.talk/cache` | 위와 같음 | 외부 캐시. 받은 파일 원본이 남는지는 폴더 안 파일을 받은 파일 기록과 맞춰 확인 |
 
 `/data/user/0/com.kakao.talk/` 는 `/data/data/com.kakao.talk/` 와 같은 폴더입니다.
 
@@ -35,7 +35,7 @@ Android 앱 패키지 이름은 `com.kakao.talk` 입니다. 앱 폴더가 어디
 
 1. [저장 위치와 파일 (Paths·Files)](paths-files.md) — 앱 폴더 아래 DB·설정 파일·캐시가 어디에 있고, 로그인 전과 뒤에 무엇이 새로 생기는지 정리합니다.
 2. [대화 DB 구조와 암호화 (KakaoTalk.db)](chat-db.md) — `chat_logs`·`chat_rooms` 표의 열과 암호화된 열, 시각 열을 읽을 때 주의할 점을 다룹니다.
-3. [받은 파일 (Received Files)](received-files.md) — 첨부 정보가 들어가는 열과, 받은 파일 원본의 위치처럼 공개 자료가 없는 부분을 나눠 적습니다.
+3. [받은 파일 (Received Files)](received-files.md) — 첨부 정보가 들어가는 열과, 받은 파일 원본의 위치처럼 실제 기기에서 확인할 부분을 나눠 적습니다.
 4. [계정과 친구 목록 (Account·Friends)](account-friends.md) — `KakaoTalk2.db` 의 친구 표와, 암호화된 열을 풀 때 필요한 기기 주인의 사용자 ID 를 어디서 찾는지 설명합니다.
 
 ## 함께 볼 페이지

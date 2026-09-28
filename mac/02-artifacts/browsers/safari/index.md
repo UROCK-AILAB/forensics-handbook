@@ -14,7 +14,7 @@ has_toc: false
 
 사파리는 맥에 기본으로 들어 있는 브라우저라서, 다른 브라우저를 따로 설치하지 않은 계정이라면 웹 사용의 흔적은 대부분 사파리 파일에 있습니다. 파일마다 담긴 내용이 달라서 방문 기록으로는 어느 주소를 언제 열었는지, 다운로드 목록으로는 무엇을 어디에 받았는지, 탭과 세션 파일로는 무엇이 열려 있었고 언제 닫혔는지를 알 수 있고, 한 파일이 비어 있으면 다른 파일로 빈자리를 메웁니다.
 
-사용자 데이터 폴더는 두 곳입니다. 옛 위치 `~/Library/Safari/` 와 샌드박스 컨테이너 (Sandbox Container) 위치 `~/Library/Containers/com.apple.Safari/Data/Library/Safari` 가 있고, 뒤쪽은 Safari 15 이상에서 쓰는 경로입니다 [1]. 다만 Safari 15 부터 모든 파일이 컨테이너로 옮겨 갔다고 볼 공개 자료는 없고, ForensicArtifacts 정의는 `History.db` 와 `Downloads.plist` 를 `~/Library/Safari/` 에만 적습니다 [2]. 파일이 실제로 어느 쪽에 있는지는 파일마다 달라서, 수집할 때는 두 위치를 모두 가져옵니다.
+사용자 데이터 폴더는 두 곳입니다. 옛 위치 `~/Library/Safari/` 와 샌드박스 컨테이너 (Sandbox Container) 위치 `~/Library/Containers/com.apple.Safari/Data/Library/Safari` 가 있고, 뒤쪽은 Safari 15 이상에서 쓰는 경로입니다 [1]. 다만 ForensicArtifacts 정의는 `History.db` 와 `Downloads.plist` 를 `~/Library/Safari/` 에만 적습니다 [2]. 파일이 실제로 어느 쪽에 있는지는 파일마다 달라서, 수집할 때는 두 위치를 모두 가져옵니다.
 
 사파리의 DB 와 plist 시각은 대부분 맥 절대 시각 (Mac Absolute Time), 곧 2001-01-01 00:00:00 UTC 부터 센 초입니다 [1][3]. 유닉스 시각과 기준이 달라서 다른 아티팩트와 나란히 놓기 전에 먼저 바꿔야 하고, 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에서 다룹니다.
 
@@ -23,13 +23,13 @@ has_toc: false
 | 기록 | 위치 | 버전 | 알려 주는 것 |
 |---|---|---|---|
 | 방문 기록 | `~/Library/Safari/History.db` [2], 프로필마다 컨테이너 쪽 사파리 폴더의 `Profiles/{UUID}/History.db` [1] | Mavericks 까지는 `History.plist` [1] | 어느 주소를 언제 방문했는지, 리디렉트 연결 |
-| 다운로드 목록 | `~/Library/Safari/Downloads.plist` [2] | 버전별 차이 자료 없음 | 받은 주소, 저장 경로, 시작·끝 시각 |
-| 북마크·읽기 목록·자주 방문 사이트 | 사파리 폴더의 `Bookmarks.plist`, `TopSites.plist` [1] | 버전별 차이 자료 없음 | 저장해 둔 주소, 읽기 목록에 넣은 때 |
+| 다운로드 목록 | `~/Library/Safari/Downloads.plist` [2] | 버전별 차이는 실제 데이터로 확인 | 받은 주소, 저장 경로, 시작·끝 시각 |
+| 북마크·읽기 목록·자주 방문 사이트 | 사파리 폴더의 `Bookmarks.plist`, `TopSites.plist` [1] | 버전별 차이는 실제 데이터로 확인 | 저장해 둔 주소, 읽기 목록에 넣은 때 |
 | 탭과 세션 | `LastSession.plist`, `RecentlyClosedTabs.plist`, `BrowserState.db`, `SafariTabs.db`, `CloudTabs.db` 등 [1] | `SafariTabs.db` 는 Safari 17 프로필과 함께 쓰임 [1] | 열려 있던 탭, 닫은 탭과 창, 다른 기기의 iCloud 탭 |
-| 캐시와 웹 데이터 | `~/Library/Caches/com.apple.Safari/Cache.db`, `~/Library/Cookies/Cookies.binarycookies` 와 각 컨테이너 쪽 경로 [2] | 버전별 차이 자료 없음 | 받아 둔 웹 자원, 쿠키 |
+| 캐시와 웹 데이터 | `~/Library/Caches/com.apple.Safari/Cache.db`, `~/Library/Cookies/Cookies.binarycookies` 와 각 컨테이너 쪽 경로 [2] | 버전별 차이는 실제 데이터로 확인 | 받아 둔 웹 자원, 쿠키 |
 | 확장 | `Extensions`·`AppExtensions`·`WebExtensions` 폴더의 `Extensions.plist` [1][2] | Safari 14 에서 형식 바뀜 [1] | 설치한 확장과 켜짐 여부 |
 | 설정 | `~/Library/Preferences/com.apple.safari.plist`, `~/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist` [1] | 키마다 쓰인 버전이 다름 [1] | 최근 검색, 다운로드 폴더, 홈페이지 |
-| 그 밖의 DB | `~/Library/Safari/` 의 `AutoFillCorrections.db`, `CloudAutoFillCorrections.db`, `PerSitePreferences.db`, `Favicon Cache/favicons.db`, `Touch Icons Cache/TouchIconCacheSettings.db`, 각각 `-wal` 동반 [2] | 버전별 차이 자료 없음 | 수집 대상 파일. 표·열 구성은 공개 자료 없음 |
+| 그 밖의 DB | `~/Library/Safari/` 의 `AutoFillCorrections.db`, `CloudAutoFillCorrections.db`, `PerSitePreferences.db`, `Favicon Cache/favicons.db`, `Touch Icons Cache/TouchIconCacheSettings.db`, 각각 `-wal` 동반 [2] | 버전별 차이는 실제 데이터로 확인 | 수집 대상 파일. 표·열 구성은 SQLite 표 구조를 보고 확인 |
 
 버전 흐름은 아래와 같습니다 [1]. Apple 이 밝힌 연표가 아니라 분석 도구 mac_apt 가 버전마다 다르게 읽는 지점을 모은 것입니다.
 
@@ -56,7 +56,7 @@ has_toc: false
 | `NSNavLastRootDirectory` | 표시 없음 | 이름으로 보면 파일 열기·저장 창이 마지막으로 연 폴더 |
 | `SuccessfulLaunchTimestamp` | 표시 없음 | 이름으로 보면 사파리가 마지막으로 정상 실행된 시각 |
 
-어느 키가 두 설정 파일 가운데 어느 쪽에 남는지는 공개 자료가 없어서 두 파일을 모두 읽습니다. plist 를 읽는 법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
+키는 두 설정 파일 어느 쪽에도 남을 수 있어서 두 파일을 모두 읽습니다. plist 를 읽는 법은 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 ## 읽는 순서
 

@@ -38,7 +38,7 @@ nav_order: 1170
 | 8 | Server 2008·7·8.0 | 있음 | 있음 |
 | 9 | 8.1·10 | 있음 | 있음 |
 
-셸 아이템의 수정 시각 필드는 XP 이전 형식에도 있습니다. Windows 11 형식은 따로 정리된 자료가 없습니다. Windows 8.1 부터 하이브 변경은 트랜잭션 로그에 먼저 쓰입니다. 그래서 가장 새 키 시각이 UsrClass.dat 의 .LOG1·.LOG2 에만 있을 수 있습니다. 반영 방법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) 을 봅니다.
+셸 아이템의 수정 시각 필드는 XP 이전 형식에도 있습니다. Windows 11 에서는 실제 데이터로 필드 위치를 확인합니다. Windows 8.1 부터 하이브 변경은 트랜잭션 로그에 먼저 쓰입니다. 그래서 가장 새 키 시각이 UsrClass.dat 의 .LOG1·.LOG2 에만 있을 수 있습니다. 반영 방법은 [트랜잭션 로그와 반영 안 된 변경](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md) 을 봅니다.
 
 ## 구조 — 시각이 든 필드
 

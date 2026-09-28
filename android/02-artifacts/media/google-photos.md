@@ -26,7 +26,7 @@ nav_order: 670
 | 앱 휴지통 DB | `*/com.google.android.apps.photos/databases/local_trash.db` |
 | 앱 휴지통 파일 | `*/com.google.android.apps.photos/files/trash_files/*` |
 
-주 DB 파일 이름은 gphotos 뒤에 번호가 붙는 형식이라 계정마다 파일이 따로 생기는 것으로 보이지만, 번호의 뜻은 공개 자료가 없습니다. ALEAPP 시험 자료(Android 10·13·14·15·16, 앱 버전 코드 36652547 ~ 51832862)에서 이 구조의 DB 를 읽을 수 있었습니다 [1]. 앱 전용 폴더의 위치와 확보 조건은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에 있습니다.
+주 DB 파일 이름은 gphotos 뒤에 번호가 붙는 형식이라 계정마다 파일이 따로 생기는 것으로 보이지만, 번호의 뜻은 정해져 있지 않으므로 보고서에서 단정하지 않습니다. ALEAPP 시험 자료(Android 10·13·14·15·16, 앱 버전 코드 36652547 ~ 51832862)에서 이 구조의 DB 를 읽을 수 있었습니다 [1]. 앱 전용 폴더의 위치와 확보 조건은 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md), [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -39,7 +39,7 @@ nav_order: 670
 | shared_media | utc_timestamp, filename, remote_url, size_bytes, capture_timestamp, timezone_offset, upload_status | 표가 없는 DB 도 있음 |
 | backup_folders | bucket_id | local_media 와 bucket_id 로 이어짐 |
 
-local_media 의 media_store_id 는 이름으로 보면 MediaStore 의 `_id` 로 보이지만, 짝지어 확인한 공개 자료는 없어서 실제 데이터에서 맞춰 봅니다. remote_media 의 upload_status 는 저장된 값 그대로이고 퍼센트가 아닙니다 [1]. 값마다의 뜻은 공개 자료가 없습니다. inferred_latitude·inferred_longitude 가 무엇으로 추정한 위치인지도 알려져 있지 않습니다. backup_folders 표에 폴더가 있다고 해서 그 폴더의 파일이 올라갔다는 뜻은 아닙니다 [1].
+local_media 의 media_store_id 는 이름으로 보면 MediaStore 의 `_id` 로 보이므로, 실제 데이터에서 두 값을 맞춰 보고 씁니다. remote_media 의 upload_status 는 저장된 값 그대로이고 퍼센트가 아닙니다 [1]. 값마다의 뜻은 정해져 있지 않으므로 보고서에는 값만 옮깁니다. inferred_latitude·inferred_longitude 도 무엇으로 추정한 위치인지 정해져 있지 않아서 촬영 위치로 단정하지 않습니다. backup_folders 표에 폴더가 있다고 해서 그 폴더의 파일이 올라갔다는 뜻은 아닙니다 [1].
 
 ### 캐시
 
@@ -66,7 +66,7 @@ local_trash.db 의 local 표에는 deleted_time, local_path, content_uri, trash_
 | 열 | 단위(ALEAPP 처리) | 비고 |
 |---|---|---|
 | utc_timestamp | 유닉스 밀리초 | 뜻은 공개되지 않음 |
-| capture_timestamp | 유닉스 밀리초 | utc_timestamp 와의 차이는 공개 자료 없음 |
+| capture_timestamp | 유닉스 밀리초 | utc_timestamp 와 어떻게 다른지는 같은 파일의 EXIF 촬영 시각과 맞춰 확인 |
 | timezone_offset | 밀리초 단위 시차 | ALEAPP 는 3,600,000 으로 나눠 시간 단위로 보여 줌 |
 | trash_timestamp, purge_timestamp | 유닉스 밀리초 | 없는 DB 도 있음 |
 | duration | 밀리초 | 이름으로 보면 재생 길이 |

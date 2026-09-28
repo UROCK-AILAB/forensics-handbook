@@ -67,7 +67,7 @@ nav_order: 580
 
 ### 촬영 정보가 들어 있는 열
 
-iOS 27.0 의 `ZEXTENDEDATTRIBUTES` 에는 카메라와 촬영 조건을 적는 열이 모여 있습니다(전체 41개 열). 이 표를 파일의 EXIF 에서 채우는지는 공개 자료가 없습니다.
+iOS 27.0 의 `ZEXTENDEDATTRIBUTES` 에는 카메라와 촬영 조건을 적는 열이 모여 있습니다(전체 41개 열). 이 표의 값이 파일의 EXIF 와 같은지는 원본 파일의 EXIF 를 읽어 맞춰 봅니다.
 
 | 묶음 | 열 |
 |---|---|
@@ -89,7 +89,7 @@ iCloud 사진을 쓰면 DB 행은 있어도 원본 파일이 기기에 없을 �
 
 ### 카메라 설정
 
-`com.apple.camera.plist` 에는 `CAMUserPreferenceCaptureMode`, `CAMUserPreferenceDesiredHDRMode`, `CAMUserPreferenceDesiredFlashMode`, `CAMUserPreferenceDesiredNightMode`, `CAMUserPreferenceTimerDuration` 같은 설정 키와 `CAMUserPreferencesLastWrittenSettingsDate`, `CAMUserPreferencesLastViewedSettingsInterfaceDate` 두 날짜 키가 있습니다. iLEAPP 에는 이 plist 를 읽는 Ph081comappleCameraPlist 파서가 있습니다[7]. 값의 뜻은 공개 자료가 없으므로, 키 이름으로 짐작한 설정은 결론의 근거로 쓰지 않습니다. plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01-foundations/data-formats/plist.md)에 있습니다.
+`com.apple.camera.plist` 에는 `CAMUserPreferenceCaptureMode`, `CAMUserPreferenceDesiredHDRMode`, `CAMUserPreferenceDesiredFlashMode`, `CAMUserPreferenceDesiredNightMode`, `CAMUserPreferenceTimerDuration` 같은 설정 키와 `CAMUserPreferencesLastWrittenSettingsDate`, `CAMUserPreferencesLastViewedSettingsInterfaceDate` 두 날짜 키가 있습니다. iLEAPP 에는 이 plist 를 읽는 Ph081comappleCameraPlist 파서가 있습니다[7]. 값의 뜻은 정해져 있지 않으므로, 키 이름으로 짐작한 설정은 결론의 근거로 쓰지 않습니다. plist 를 읽는 법은 [속성 목록 파일 (plist·NSKeyedArchiver)](../../01-foundations/data-formats/plist.md)에 있습니다.
 
 ## 증거로서 의미
 

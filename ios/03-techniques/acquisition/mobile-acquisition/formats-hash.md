@@ -19,7 +19,7 @@ nav_order: 1210
 |---|---|---|
 | 로컬 백업 | 폴더 하나. 최상위에 plist 와 `Manifest.db`, 그 아래 해시 이름의 하위 폴더 | [백업으로 수집](backup-acquisition.md) |
 | sysdiagnose | `.tar.gz` 파일 하나 | [sysdiagnose로 수집](sysdiagnose-collection.md) |
-| 파일 시스템 추출 | 공개 자료 없음 | 이 페이지 "함정과 한계" |
+| 파일 시스템 추출 | tar·zip 이나 도구 고유 형식. 도구마다 다름 | 이 페이지 "함정과 한계" |
 
 로컬 백업은 최상위에 plist 와 `Manifest.db`, `Manifest.db-shm`, `Manifest.db-wal` 이 있고 파일이 많이 들어 있는 폴더라서, 폴더 전체를 zip·tar 같은 묶음 하나로 만든 뒤 해시할지, 파일마다 해시 목록을 만들지 정해야 합니다. 어느 쪽을 골랐는지와 그 방법을 수집 기록에 적어 두면 뒤에서 다른 사람이 같은 값을 다시 계산할 수 있습니다.
 

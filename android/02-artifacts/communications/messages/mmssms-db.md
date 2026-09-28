@@ -15,7 +15,7 @@ mmssms.db 는 시스템 제공자 패키지 com.android.providers.telephony 가 
 
 Android 의 SMS·MMS 는 시스템 제공자 패키지 com.android.providers.telephony 가 mmssms.db 에 저장합니다 [1][2]. SMS 한 건은 sms 표의 한 행이고, MMS 한 건은 본체(pdu 표) 한 행에 조각(part 표)과 주소(addr 표) 여러 행이 딸린 모양입니다. 보낸 메시지에는 그 메시지를 만든 앱이 creator 열에 남는데, 이 열은 제공자가 채우고 앱이 바꿀 수 없습니다 [1].
 
-Google 메시지 앱은 자기 DB(bugle_db)를 따로 두고, RCS 대화 본문이 이 DB 에 들어가는지는 공개 자료에 정리되어 있지 않습니다. 두 내용은 [RCS 메시지 (RCS)](rcs.md) 페이지에서 다룹니다.
+Google 메시지 앱은 자기 DB(bugle_db)를 따로 두고, RCS 대화 본문이 이 DB 에 들어가는지는 실제 기기에서 두 DB 를 함께 열어 확인합니다. 두 내용은 [RCS 메시지 (RCS)](rcs.md) 페이지에서 다룹니다.
 
 ## 위치와 버전별 차이
 
@@ -25,17 +25,17 @@ Google 메시지 앱은 자기 DB(bugle_db)를 따로 두고, RCS 대화 본문�
 | MMS 첨부 폴더 | `/data/user_de/0/com.android.providers.telephony/app_parts` | [2] |
 | 같은 파일의 다른 경로 | `data_mirror/data_de/null/0/...` | 같은 파일이 `data/user_de/0/...` 와 이 경로 두 곳에 보일 수 있음 [3] |
 
-경로의 `user_de` 는 기기 암호화(DE) 저장 영역이고, 저장 영역의 구분은 [저장 공간 암호화 (Encryption)](../../../01-foundations/storage/encryption/index.md) 와 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. ALEAPP 는 `*/com.android.providers.telephony/databases/mmssms*`, `*/com.android.providers.telephony/app_parts/*`, `*/com.android.providers.telephony/parts/*` 세 패턴으로 파일을 찾습니다 [3]. `parts` 폴더가 어느 버전에서 쓰였는지는 공개 자료에 없습니다.
+경로의 `user_de` 는 기기 암호화(DE) 저장 영역이고, 저장 영역의 구분은 [저장 공간 암호화 (Encryption)](../../../01-foundations/storage/encryption/index.md) 와 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다. ALEAPP 는 `*/com.android.providers.telephony/databases/mmssms*`, `*/com.android.providers.telephony/app_parts/*`, `*/com.android.providers.telephony/parts/*` 세 패턴으로 파일을 찾습니다 [3]. 분석하는 기기에 `app_parts` 와 `parts` 가운데 어느 폴더가 있는지 먼저 확인합니다.
 
 | 구분 | 차이 | 근거 |
 |---|---|---|
 | DB 스키마 버전 | 소스 main 가지의 DATABASE_VERSION 은 69이고, Android 버전별 값은 실제 기기에서 확인 | [2] |
 | Android 7(N) 으로 올린 기기 | 파일 기반 암호화(FBE)를 쓰지 않던 기기를 N 으로 올리면 첨부 파일을 `/data/data` 에서 `/data/user_de` 로 옮기고 part._data 에 적힌 경로도 새 경로로 고침(upgradeDatabaseToVersion62) | [2] |
 | 자동차 기기 | sms_changes 표(읽음 변경·삭제를 적는 트리거 포함)는 FEATURE_AUTOMOTIVE 기기에서만 만들고 휴대폰에는 없음 | [2] |
-| LG 기기 | sms.type 에 7·8·19 같은 확장 값을 씀. ALEAPP 는 lgeSiid 열이 있을 때만 이 값을 풂. 제조사 문서 근거가 없어 뜻이 검증되지 않음 | [3] |
-| 삼성 기기 | spam_sms 표가 있을 수 있고 ALEAPP 는 이 표를 sms 표와 같은 방식으로 읽음. 열 구성과 언제 쓰이는지 밝힌 공개 자료 없음 | [3] |
+| LG 기기 | sms.type 에 7·8·19 같은 확장 값을 씀. ALEAPP 는 lgeSiid 열이 있을 때만 이 값을 풂. 확장 값의 뜻은 단정하지 않고 값만 옮김 | [3] |
+| 삼성 기기 | spam_sms 표가 있을 수 있고 ALEAPP 는 이 표를 sms 표와 같은 방식으로 읽음. 열 구성은 `PRAGMA table_info(spam_sms)` 로 확인 | [3] |
 
-설정 값에는 문자 관련 이름의 키가 있고, 그 뜻은 공식 문서에 정리되어 있지 않습니다. settings secure 에는 `backup_enabled:com.android.providers.telephony`, `mms_backup_enabled`, `mms_backup_in_progress`, `mms_backup_last_completed` 가 있고, settings global 에는 `multi_sim_sms`, `multi_sim_sms_slot`, `multi_sim_psim_sms`, `multi_sim_existing_sms`, `sms_short_codes_content_url`, `sms_short_codes_metadata_url`, `cdma_cell_broadcast_sms` 가 있습니다. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../system-account/settings.md) 페이지에 있습니다.
+설정 값에는 문자 관련 이름의 키가 있고, 뜻은 이름으로만 짐작할 수 있으므로 보고서에는 읽은 값을 그대로 옮깁니다. settings secure 에는 `backup_enabled:com.android.providers.telephony`, `mms_backup_enabled`, `mms_backup_in_progress`, `mms_backup_last_completed` 가 있고, settings global 에는 `multi_sim_sms`, `multi_sim_sms_slot`, `multi_sim_psim_sms`, `multi_sim_existing_sms`, `sms_short_codes_content_url`, `sms_short_codes_metadata_url`, `cdma_cell_broadcast_sms` 가 있습니다. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../system-account/settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -170,7 +170,7 @@ words 는 `_id, index_text, source_id, table_to_use, sub_id` 로 된 FTS3 가상
 
 **증명하는 것.** sms 행 하나는 이 기기의 시스템 문자 저장소에 그 상대 주소, 메시지 상자(type), 시각, 본문으로 된 문자 기록이 있다는 뜻입니다. 보낸 메시지의 creator 는 앱이 바꿀 수 없는 열이라서 [1], 어떤 패키지가 그 메시지를 만들었는지 보여 주는 단서가 됩니다. MMS 는 addr 의 FROM·TO 로 상대를, part 의 _data 로 첨부 파일 위치를 알 수 있습니다. sub_id 로는 다중 SIM 기기에서 어느 SIM 가입으로 오간 메시지인지 구분할 수 있습니다 [1].
 
-**증명하지 못하는 것.** read 가 1 이어도 사람이 본문을 읽었다는 뜻은 아니고, 읽음 처리가 된 상태라는 뜻입니다. seen 은 알림을 띄울지 정하는 값이라서 [1] 이것만으로 사용자가 내용을 확인했다고 쓰지 않습니다. 누가 기기를 조작해 보냈는지도 이 DB 로는 알 수 없습니다. RCS 대화가 이 DB 에 들어가는지는 알려져 있지 않으니, mmssms.db 에 없다고 해서 문자 대화가 없었다고 결론 내리지 않습니다.
+**증명하지 못하는 것.** read 가 1 이어도 사람이 본문을 읽었다는 뜻은 아니고, 읽음 처리가 된 상태라는 뜻입니다. seen 은 알림을 띄울지 정하는 값이라서 [1] 이것만으로 사용자가 내용을 확인했다고 쓰지 않습니다. 누가 기기를 조작해 보냈는지도 이 DB 로는 알 수 없습니다. RCS 대화가 이 DB 에 들어가는지는 기기마다 확인해야 하므로, mmssms.db 에 없다고 해서 문자 대화가 없었다고 결론 내리지 않습니다.
 
 ## 시각 해석
 
@@ -188,18 +188,18 @@ sms.date 가 밀리초이고 pdu.date 가 초라는 근거는 제공자의 합�
 
 ## 함정과 한계
 
-ALEAPP 는 MMS 한 건을 SMIL 이 아닌 조각마다 한 줄로 보여 주기 때문에, 조각이 여러 개인 MMS 는 같은 MSG ID 가 여러 줄에 나옵니다 [3]. 줄 수를 메시지 수로 세지 않습니다. 첨부 파일도 파일 이름만으로 맞추지 않고 _data 에 적힌 전체 경로(저장 구역·사용자 번호·패키지·파일 이름)로 맞추며, 어떤 part 행도 가리키지 않는 app_parts 파일과 pdu 행 없이 남은 part 행은 따로 표시합니다 [3]. 그런 상태가 왜 생기는지는 알려져 있지 않으므로, 이런 파일과 행을 곧바로 지운 메시지의 흔적이라고 단정하지 않습니다.
+ALEAPP 는 MMS 한 건을 SMIL 이 아닌 조각마다 한 줄로 보여 주기 때문에, 조각이 여러 개인 MMS 는 같은 MSG ID 가 여러 줄에 나옵니다 [3]. 줄 수를 메시지 수로 세지 않습니다. 첨부 파일도 파일 이름만으로 맞추지 않고 _data 에 적힌 전체 경로(저장 구역·사용자 번호·패키지·파일 이름)로 맞추며, 어떤 part 행도 가리키지 않는 app_parts 파일과 pdu 행 없이 남은 part 행은 따로 표시합니다 [3]. 이런 상태가 생긴 원인은 이 DB 만으로 알 수 없으므로, 이런 파일과 행을 곧바로 지운 메시지의 흔적이라고 단정하지 않습니다.
 
 words 표는 트리거가 sms·part 와 함께 지우니 [2], 지운 문자 본문이 words 에 남아 있기를 기대하지 않습니다. threads.snippet 도 메시지를 지우면 남은 메시지 기준으로 다시 계산되니 [2], 대화 목록의 미리보기 글이 지운 메시지를 보여 주지 않습니다. 지운 행이 SQLite 빈 페이지나 WAL 파일에 남는지는 실제 기기에서 확인하고, 일반적인 복구 방법은 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지에 있습니다.
 
-canonical_addresses 의 번호가 중간에 비어 있으면 그 번호를 쓰던 행이 있었을 수 있지만, 번호만으로 어떤 주소였는지나 왜 없어졌는지는 알 수 없습니다. 읽음 변경과 삭제를 적는 sms_changes 표는 자동차 기기에만 있어서 [2] 휴대폰에서 찾지 않습니다. LG 기기의 확장 type 값은 뜻이 검증되지 않았고 [3], 삼성 spam_sms 표도 열 구성이 알려져 있지 않으니 이 두 곳에서 뽑은 값은 보고서에 그 한계를 함께 적습니다.
+canonical_addresses 의 번호가 중간에 비어 있으면 그 번호를 쓰던 행이 있었을 수 있지만, 번호만으로 어떤 주소였는지나 왜 없어졌는지는 알 수 없습니다. 읽음 변경과 삭제를 적는 sms_changes 표는 자동차 기기에만 있어서 [2] 휴대폰에서 찾지 않습니다. LG 기기의 확장 type 값은 뜻을 단정할 수 없고 [3], 삼성 spam_sms 표는 열 구성을 기기마다 확인해야 하니 이 두 곳에서 뽑은 값은 보고서에 그 한계를 함께 적습니다.
 
 ## 직접 분석해 보기
 
 원본을 건드리지 않도록 복사본을 열고, 같은 폴더에 `-wal` 이나 `-journal` 파일이 있으면 함께 복사합니다. SQLite 파일을 다루는 일반 절차는 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md) 페이지에 있습니다. 아래 쿼리는 이 페이지의 열 이름으로 만든 예시이고, 공개 도구인 sqlite3 셸에서 그대로 돌릴 수 있습니다.
 
 ```sql
--- SMS: date 는 밀리초라서 1000으로 나눈다. date_sent 는 단위를 확인하지 못해 원래 값으로 둔다.
+-- SMS: date 는 밀리초라서 1000으로 나눈다. date_sent 는 단위를 실제 기기에서 확인할 때까지 원래 값으로 둔다.
 SELECT _id, thread_id, address, type, status,
        datetime(date / 1000, 'unixepoch') AS date_utc,
        date_sent, read, seen, sub_id, creator, body

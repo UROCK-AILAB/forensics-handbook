@@ -43,7 +43,7 @@ Sysmon (System Monitor) 은 설정 파일이 정한 시스템 활동을 Windows 
 | 구분 | 내용 |
 |---|---|
 | 따로 받은 Sysmon v15.22 | Windows 11 이상, Windows Server 2019 이상에서 돕니다 |
-| 따로 받은 Sysmon 예전 버전 | 어느 OS 까지 지원했는지 공개 자료가 없습니다 |
+| 따로 받은 Sysmon 예전 버전 | 어느 OS 까지 지원하는지는 분석 대상 기기에서 쓴 버전과 OS 를 함께 확인합니다 |
 | Windows 11 내장 Sysmon | 선택적 기능입니다. 기본으로 꺼져 있습니다. 따로 받은 Sysmon 과 함께 쓸 수 없고, 같은 채널에 기록합니다 |
 
 ### 이벤트 목록

@@ -28,7 +28,7 @@ nav_order: 960
 
 DB 파일 이름 뒤의 `*` 는 `-wal`·`-shm` 같은 딸린 파일까지 함께 잡으려는 것으로 보입니다. DB 를 확보할 때는 딸린 파일을 같이 가져와야 최근 변경분을 잃지 않고, 그 이유는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다. `shared_prefs` 아래 두 XML 은 앱 설정 파일이고, 읽는 법은 [설정 XML과 SharedPreferences](../../01-foundations/data-formats/shared-preferences.md)를 봅니다.
 
-마지막 줄 `*/WhatsApp/Media/*` 는 앞쪽 경로를 가리지 않고 찾는 패턴이라서, 받은 사진·파일이 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 어디에 있든 잡습니다. Android 11 이후 이 폴더가 `/sdcard/Android/media/com.whatsapp/WhatsApp/` 로 옮겨졌다는 이야기가 있지만 공식 자료는 없으므로, 실제 기기에서 두 위치를 모두 찾아봅니다.
+마지막 줄 `*/WhatsApp/Media/*` 는 앞쪽 경로를 가리지 않고 찾는 패턴이라서, 받은 사진·파일이 [공용 저장 공간](../../01-foundations/storage/shared-storage.md) 어디에 있든 잡습니다. Android 11 이후 기기에서는 이 폴더가 `/sdcard/Android/media/com.whatsapp/WhatsApp/` 에 있을 수 있으므로, 실제 기기에서 두 위치를 모두 찾아봅니다.
 
 | 항목 | 알려진 것 | 실제 데이터로 확인할 것 |
 |---|---|---|
@@ -80,7 +80,7 @@ DB 파일 이름 뒤의 `*` 는 `-wal`·`-shm` 같은 딸린 파일까지 함께
 
 ## 시각 해석
 
-시각 열은 유닉스 밀리초이고, `datetime(칸/1000,'unixepoch')` 로 바꿉니다[1]. 이 변환 결과는 UTC 이며, 현지 시각이 필요하면 [시간대와 시각 설정](../system-account/time-zone.md)을 함께 봅니다. 메시지 표에는 `timestamp` 와 `received_timestamp` 두 시각이 있고, 이름으로 보면 앞의 것이 메시지 시각, 뒤의 것이 기기가 받은 시각입니다. 두 열이 정확히 언제 쓰이는지는 공개 자료가 없으니, 알려진 대화 몇 건으로 차이를 먼저 확인합니다.
+시각 열은 유닉스 밀리초이고, `datetime(칸/1000,'unixepoch')` 로 바꿉니다[1]. 이 변환 결과는 UTC 이며, 현지 시각이 필요하면 [시간대와 시각 설정](../system-account/time-zone.md)을 함께 봅니다. 메시지 표에는 `timestamp` 와 `received_timestamp` 두 시각이 있고, 이름으로 보면 앞의 것이 메시지 시각, 뒤의 것이 기기가 받은 시각입니다. 두 열이 정확히 언제 쓰이는지는 알려진 대화 몇 건으로 차이를 먼저 확인합니다.
 
 `chat.created_timestamp` 는 대화방 시각, `message_location.live_location_final_timestamp` 는 실시간 위치 공유의 마지막 시각, `call_log.timestamp` 는 통화 시각이고 `call_log.duration` 은 길이입니다. `duration` 은 초 단위라서 `timestamp/1000 + duration` 이 통화가 끝난 시각입니다[1]. 단위 판별과 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
@@ -89,7 +89,7 @@ DB 파일 이름 뒤의 `*` 는 `-wal`·`-shm` 같은 딸린 파일까지 함께
 - 분석 대상의 메시지 표가 `messages` 인지 `message` 인지 먼저 확인합니다. 두 구조의 열 이름이 달라서, 한쪽 구조에 맞춘 쿼리를 다른 쪽에 그대로 쓰면 빈 결과가 나옵니다.
 - 새 구조에서는 상대 번호가 메시지 행에 없어서, 이어 붙이는 단계를 빠뜨리면 대화 상대를 잘못 짝지을 수 있습니다.
 - ALEAPP 에는 로그 파일을 보는 모듈 `WhatsAppLogFiles.py` 가 따로 있습니다[2].
-- 외부 저장소의 암호화 백업은 위치와 형식을 다룬 공개 자료가 없고, 이 핸드북은 백업을 푸는 절차를 다루지 않습니다.
+- 외부 저장소의 암호화 백업은 위치와 형식을 실제 기기에서 확인하고, 이 핸드북은 백업을 푸는 절차를 다루지 않습니다.
 - 지운 메시지가 DB 안에 남는지, 남는다면 어디에 남는지는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [지운 대화와 사진 찾기](../../04-scenarios/activity/deleted-content.md)를 봅니다.
 
 ## 직접 분석해 보기

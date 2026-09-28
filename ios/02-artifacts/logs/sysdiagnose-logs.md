@@ -12,13 +12,13 @@ sysdiagnose 묶음에는 통합 로그 보관본, 프로세스 목록, 충돌 �
 
 sysdiagnose 는 기기 상태를 진단하려고 여러 로그와 설정 파일을 한 번에 모은 `.tar.gz` 묶음이고, 크기는 200~400MB, 만드는 데 보통 몇 분이 걸립니다[1]. Apple 은 개발자 페이지에서 iOS·iPadOS 용 sysdiagnose 안내 PDF(`sysdiagnose_Logging_Instructions.pdf`)와 로깅 프로파일 `loggingiOS.mobileconfig` 를 내려받게 해 둡니다[3]. 만든 묶음은 설정의 개인정보 보호·분석 메뉴에서 찾을 수 있고, 메뉴 이름은 iOS 버전마다 다릅니다[1].
 
-묶음은 사용자가 직접 만들어야 생깁니다. 기기가 스스로 주기적으로 만든다는 공개 자료는 없어서, 조사 대상 기기에 이미 만들어진 묶음이 있을 것이라고 기대하지 않습니다. 묶음을 만드는 순서와 여는 법은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에서 다루고, 이 페이지는 묶음 안의 로그가 무엇을 알려 주는지를 다룹니다.
+묶음은 사용자가 직접 만들어야 생겨서, 조사 대상 기기에 이미 만들어진 묶음이 있을 것이라고 기대하지 않습니다. 묶음을 만드는 순서와 여는 법은 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에서 다루고, 이 페이지는 묶음 안의 로그가 무엇을 알려 주는지를 다룹니다.
 
 ## 위치와 버전별 차이
 
 ### 묶음 안의 파일
 
-EC-DIGIT-CSIRC 의 공개 분석 도구 sysdiagnose 가 묶음에서 읽는 파일은 다음과 같습니다[2]. 묶음 안의 정확한 하위 경로는 알려져 있지 않아서 파일 이름만 적습니다.
+EC-DIGIT-CSIRC 의 공개 분석 도구 sysdiagnose 가 묶음에서 읽는 파일은 다음과 같습니다[2]. 표에는 파일 이름만 적었고, 묶음 안의 하위 경로는 묶음을 풀어 이름으로 찾습니다.
 
 | 분류 | 파일 | 알 수 있는 것 |
 |---|---|---|
@@ -58,7 +58,7 @@ UUIDToBinaryLocations plist 는 UUID 만 적힌 기록을 읽을 때 실행 파�
 | `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` | 5 |
 | `SysSharedContainerDomain-systemgroup.com.apple.sharedpclogging` | 3 |
 
-진단 관련 설정 파일에는 다음 키가 있습니다. 키의 뜻을 밝힌 공개 문서는 없습니다.
+진단 관련 설정 파일에는 다음 키가 있습니다. 키 이름만으로 뜻을 단정할 수는 없습니다.
 
 | 도메인 :: 경로 | 키 |
 |---|---|
@@ -66,7 +66,7 @@ UUIDToBinaryLocations plist 는 UUID 만 적힌 기록을 읽을 때 실행 파�
 | `RootDomain :: Library/Preferences/com.apple.osanalyticshelper.plist` | `stability-monitor.lastBuild` (str), `stability-monitor.lastBuild-hasSupplementalBuild` (bool), `retryCount` (int), `stability-monitor.baselineCrashCount` (dict), `lastSuccess` (float), `stability-monitor.baselineVersions` (dict), `stability-monitor.baselineUptime` (dict) |
 | `HomeDomain :: Library/Preferences/com.apple.osanalytics.addaily.plist` | `netUsageBaseline` (프로세스·번들 이름별 사전) |
 
-`ExcResourceDiagInfo_` 키는 이름으로 보면 프로세스별 자원 초과 진단 시각일 수 있지만 뜻이 확인되지 않아서, 키에 붙은 프로세스 이름은 통합 로그에서 거를 후보로만 씁니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+`ExcResourceDiagInfo_` 키는 이름으로 보면 프로세스별 자원 초과 진단 시각일 수 있지만 뜻을 단정할 수 없어서, 키에 붙은 프로세스 이름은 통합 로그에서 거를 후보로만 씁니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md), plist 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ## 구조
 
@@ -97,7 +97,7 @@ sysdiagnose 는 묶음을 만든 순간의 프로세스 목록·설정·로그�
 
 ### 증명하지 못하는 것
 
-Shutdown.log 에 이상한 경로가 있다고 감염이 확정되지는 않고, 없다고 감염이 없다고 말할 수도 없습니다. 이 방법은 가벼운 탐지 방법이고[1], 재부팅이 있어야 기록이 생기며[1] 기록을 얼마나 오래 남기는지는 알려져 있지 않습니다. 통합 로그는 저장 한도 안에서만 남아서[5] 묶음을 늦게 만들수록 앞선 기록이 빠졌을 수 있습니다. 프로세스 목록은 만든 순간의 상태라서 그 전에 끝난 프로세스는 담지 않습니다.
+Shutdown.log 에 이상한 경로가 있다고 감염이 확정되지는 않고, 없다고 감염이 없다고 말할 수도 없습니다. 이 방법은 가벼운 탐지 방법이고[1], 재부팅이 있어야 기록이 생깁니다[1]. 기록이 언제부터 남아 있는지는 파일 안 가장 오래된 기록의 시각으로 확인합니다. 통합 로그는 저장 한도 안에서만 남아서[5] 묶음을 늦게 만들수록 앞선 기록이 빠졌을 수 있습니다. 프로세스 목록은 만든 순간의 상태라서 그 전에 끝난 프로세스는 담지 않습니다.
 
 보고서에는 "스파이웨어에 감염되었다" 가 아니라 "이 시각의 재부팅 기록에 `/private/var/tmp/` 아래 경로의 프로세스가 남아 있었고, 이는 알려진 사례와 같은 모양이다" 처럼 기록으로 확인되는 만큼만 씁니다. 판정과 후속 조사는 [스파이웨어 감염 흔적](../../04-scenarios/incident/spyware.md) 에서 다룹니다.
 
@@ -110,9 +110,9 @@ Shutdown.log 의 버퍼 비우기 시각은 UNIX 시각이라서[1] 1970-01-01 U
 ## 함정과 한계
 
 - **있을 것이라는 기대.** 묶음은 사용자가 만들어야 생기고, 버튼 조합·파일 이름 형식·정확한 설정 경로는 Apple 안내 PDF[3] 에서 확인합니다.
-- **만든 시점의 사진.** 묶음은 만든 순간의 상태이고, 통합 로그는 저장 한도가 있어[5] 오래된 기록이 빠질 수 있습니다. 보존 기간은 알려져 있지 않습니다.
+- **만든 시점의 사진.** 묶음은 만든 순간의 상태이고, 통합 로그는 저장 한도가 있어[5] 오래된 기록이 빠질 수 있습니다. 기록이 어디까지 남았는지는 가장 오래된 기록의 시각으로 확인합니다.
 - **재부팅이 있어야 하는 기록.** Shutdown.log 는 재부팅할 때만 쌓여서[1], 오래 재부팅하지 않은 기기에서는 관심 기간의 기록이 없을 수 있습니다.
-- **하위 경로.** 공개 도구가 읽는 파일 이름은 알지만 묶음 안의 하위 경로는 알려져 있지 않아서, 도구가 파일을 찾지 못하면 이름으로 직접 찾아봅니다.
+- **하위 경로.** 공개 도구가 파일을 찾지 못하면 묶음을 풀어 파일 이름으로 직접 찾아봅니다.
 - **로컬 백업과 혼동.** 로컬 백업의 진단 확장 도메인은 이름만 sysdiagnose 와 비슷하고, 묶음이 들어 있다는 근거는 없습니다.
 
 ## 직접 분석해 보기

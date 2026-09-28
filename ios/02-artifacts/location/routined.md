@@ -10,7 +10,7 @@ routined 는 아이폰이 지나간 위치 점과 머문 장소를 SQLite DB 세
 
 ## 무엇을 기록하나 · 왜 생기나
 
-중요 위치 데이터는 routined 데몬이 만듭니다 [1]. 데몬은 기기가 계산한 위치 점을 짧은 기간 모아 두고, 사용자가 드나든 관심 장소와 장소 사이 이동도 기록합니다 [1]. 사용자가 무엇을 저장하지 않아도 기록이 쌓여서, 조사에서는 "그 시각에 기기가 어디 있었나" 를 따질 때 씁니다. 어떤 설정이 켜져 있어야 기록이 생기는지는 공개된 자료가 없습니다.
+중요 위치 데이터는 routined 데몬이 만듭니다 [1]. 데몬은 기기가 계산한 위치 점을 짧은 기간 모아 두고, 사용자가 드나든 관심 장소와 장소 사이 이동도 기록합니다 [1]. 사용자가 무엇을 저장하지 않아도 기록이 쌓여서, 조사에서는 "그 시각에 기기가 어디 있었나" 를 따질 때 씁니다.
 
 세 DB 는 쓰임이 다릅니다. `Cache.sqlite` 는 1주일 남짓한 위치 점을 담고, `Local.sqlite` 는 학습된 관심 장소(Location of Interest) 진입·이탈과 이동, 주차 기록을 담고, `Cloud.sqlite` 는 방문과 학습된 장소를 담습니다 [1]. 방문과 학습된 장소는 [중요 위치](significant-locations.md) 에서 자세히 다루고, 이 페이지는 나머지 두 DB 와 데몬 주변 흔적을 다룹니다.
 
@@ -40,7 +40,7 @@ DB 세 개는 `/private/var/mobile/Library/Caches/com.apple.routined/` 폴더에
 | iOS 15 | `Cache.sqlite` 의 `ZRTCLLOCATIONMO` 표에 캐시 위치 | [2] |
 | iOS 27.0 로컬 백업 | DB 없음, 설정 plist 와 진단 확장 도메인만 있음 | |
 
-iOS 16 이후 DB 이름과 표 구조가 어떻게 바뀌었는지는 공개된 자료가 없습니다.
+iOS 16 이후 기기에서는 폴더 안의 DB 이름과 각 DB 의 표 구조를 먼저 확인합니다.
 
 ## 구조
 
@@ -50,11 +50,11 @@ iOS 16 이후 DB 이름과 표 구조가 어떻게 바뀌었는지는 공개된 
 
 ### Local.sqlite
 
-학습된 관심 장소의 진입·이탈, 이동(transition) 시작·끝, 주차한 차의 위치와 주차 기록이 있고, 각 행에 시각, 좌표, 신뢰도, 불확실도, 데이터 점 개수, 프로토콜 버퍼 BLOB 이 있습니다 [1]. 주차 기록에는 CarPlay 연결이 필요할 가능성이 있지만 필수인지는 밝혀지지 않았습니다 [1]. 이 파일의 표 이름은 알려져 있지 않아서 실제 데이터에서 열 구성으로 찾습니다.
+학습된 관심 장소의 진입·이탈, 이동(transition) 시작·끝, 주차한 차의 위치와 주차 기록이 있고, 각 행에 시각, 좌표, 신뢰도, 불확실도, 데이터 점 개수, 프로토콜 버퍼 BLOB 이 있습니다 [1]. 주차 기록에는 CarPlay 연결이 필요할 수 있지만 필수 조건으로 단정하지는 않습니다 [1]. 표 이름은 실제 데이터에서 열 구성을 보고 찾습니다.
 
 ### Cloud.sqlite
 
-방문 진입·이탈과 들어오는·나가는 이동의 시작·끝, 장소 ID, 여러 시각 값, 장소 이름·지오 BLOB 이 있습니다 [1]. 해석은 [중요 위치](significant-locations.md) 에 있습니다. 이름으로 보면 기기 사이 동기화와 관련 있는 파일로 보이지만, 동기화와 파일의 관계를 밝힌 공개 문서는 없습니다.
+방문 진입·이탈과 들어오는·나가는 이동의 시작·끝, 장소 ID, 여러 시각 값, 장소 이름·지오 BLOB 이 있습니다 [1]. 해석은 [중요 위치](significant-locations.md) 에 있습니다. 이름으로 보면 기기 사이 동기화와 관련 있는 파일로 보이지만, 이름만으로 동기화 기록이라고 단정하지 않습니다.
 
 ### 설정 plist 의 키
 
@@ -80,7 +80,7 @@ iOS 16 이후 DB 이름과 표 구조가 어떻게 바뀌었는지는 공개된 
 | `RTDefaultsSafetyCacheActiveSessionZoneCKSyncEngineMetadata` | bytes |
 | `BluePOIDailyEventOpportunisticWiFiScanRequestCount` | int |
 
-두 `Cached...Enabled` 키가 위치 서비스와 중요 위치가 켜져 있었는지를 나타내는지, 방문 개수 키가 무엇을 센 값인지는 공개된 자료가 없습니다. 이름만 보고 "중요 위치가 켜져 있었다" 고 보고서에 쓰지 않고, 같은 설정을 바꿔 본 시험 기기에서 값이 어떻게 달라지는지 확인한 뒤에 씁니다. plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
+두 `Cached...Enabled` 키가 위치 서비스와 중요 위치가 켜져 있었는지를 나타내는지, 방문 개수 키가 무엇을 센 값인지는 키 이름만으로 정할 수 없습니다. 이름만 보고 "중요 위치가 켜져 있었다" 고 보고서에 쓰지 않고, 같은 설정을 바꿔 본 시험 기기에서 값이 어떻게 달라지는지 확인한 뒤에 씁니다. plist 를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 에서 다룹니다.
 
 ### 함께 남는 locationd 흔적
 
@@ -93,7 +93,7 @@ iOS 16 이후 DB 이름과 표 구조가 어떻게 바뀌었는지는 공개된 
 | `HomeDomain :: Library/Preferences/com.apple.locationaccessstored.plist` | 키 `LastRecordingTime`(str), `LocationAccessRecordsAge`(int) |
 | `HomeDomain :: Library/Preferences/com.apple.locationd.plist` | 키 `LastSystemVersion`, `CLSilo.Version`, `ObsoleteDataDeleted` |
 
-`clients.plist` 의 `VisitMonitoring`·`Visit...`·`Significant...`·`SLC` 키는 방문 감시나 중요 위치 변경 감시를 쓰는 클라이언트 표시로 보이지만 뜻을 밝힌 공개 자료는 없습니다. `consolidated.db` 는 표 이름으로 보면 지오펜스(구역) 정의를 담고 있고, 위치 이력도 담는지는 실제 데이터로 확인합니다.
+`clients.plist` 의 `VisitMonitoring`·`Visit...`·`Significant...`·`SLC` 키는 방문 감시나 중요 위치 변경 감시를 쓰는 클라이언트 표시로 보이지만 뜻이 정해져 있지 않으므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다. `consolidated.db` 는 표 이름으로 보면 지오펜스(구역) 정의를 담고 있고, 위치 이력도 담는지는 실제 데이터로 확인합니다.
 
 ## 증거로서 의미
 
@@ -113,9 +113,9 @@ iOS 16 이후 DB 이름과 표 구조가 어떻게 바뀌었는지는 공개된 
 
 ## 시각 해석
 
-시각 형식을 밝힌 공개 자료는 없습니다. 표 이름으로 보면 Core Data 형식 DB 이고 Core Data 의 날짜 열은 보통 Mac 절대 시각이라서, 978307200 을 더해 유닉스 시각으로 바꿔 보고 [3] 값이 그럴듯한 날짜인지 확인합니다. Mac 절대 시각은 UTC 기준이라 현지 시각으로 바꿀 때는 [시간대와 시각 설정](../system-account/time-zone.md) 을 확인하고, 형식 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+표 이름으로 보면 Core Data 형식 DB 이고 Core Data 의 날짜 열은 보통 Mac 절대 시각이라서, 978307200 을 더해 유닉스 시각으로 바꿔 보고 [3] 값이 그럴듯한 날짜인지 확인합니다. Mac 절대 시각은 UTC 기준이라 현지 시각으로 바꿀 때는 [시간대와 시각 설정](../system-account/time-zone.md) 을 확인하고, 형식 전반은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
-`Cache.sqlite` 의 시각은 위치 점을 얻은 때이고, `Local.sqlite` 의 진입·이탈 시각은 시스템이 판단한 경계라서 두 값을 같은 성격으로 섞지 않습니다. plist 의 `datetime` 키는 데몬이 어떤 작업을 마지막으로 시도하거나 갱신한 시각으로 보이지만, 각 키가 언제 바뀌는지는 공개된 자료가 없습니다.
+`Cache.sqlite` 의 시각은 위치 점을 얻은 때이고, `Local.sqlite` 의 진입·이탈 시각은 시스템이 판단한 경계라서 두 값을 같은 성격으로 섞지 않습니다. plist 의 `datetime` 키는 데몬이 어떤 작업을 마지막으로 시도하거나 갱신한 시각으로 보이지만, 각 키가 언제 바뀌는지는 시험 기기에서 값을 비교해 확인합니다.
 
 ## 함정과 한계
 
@@ -165,6 +165,7 @@ ORDER BY 시각_칸;
 | [카메라 사진과 메타데이터](../media/dcim-exif.md) | 사진 촬영 위치 |
 | [통합 로그에서 찾을 것](../logs/unified-log-events.md) | 위치 서비스 관련 시스템 이벤트 |
 | [나의 찾기](find-my.md) | 기기 위치 조회와 위치 공유 |
+| [locationd 위치 캐시](locationd-cache.md) | 기기가 받아 둔 주변 와이파이·기지국 위치 |
 
 여러 위치 기록을 시간순으로 합치는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 과 [그 시각에 어디 있었나](../../04-scenarios/activity/location.md) 에서 다룹니다.
 

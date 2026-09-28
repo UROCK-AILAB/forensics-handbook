@@ -37,7 +37,7 @@ Apple silicon 맥과 T2 맥은 파일볼트 키를 전부 보안 영역(Secure E
 | 외부 매체 부팅 | 기본값은 허용하지 않음. 이 유틸리티에서 바꿀 수 있음 | 그 OS 버전을 먼저 recoveryOS에서 인증된 재시작으로 개인화(personalize)해야 함 |
 | 그 밖의 장벽 | 펌웨어 암호를 켜 두면 다른 디스크로 부팅할 수 없음 | recoveryOS에 들어가려면 전원 버튼을 길게 눌러야 해서 맥 앞에 있는 사람만 할 수 있음 |
 
-T2 맥에서 외부 부팅으로 이미징하려면 관리자 인증을 거쳐 이 설정을 바꿔야 하고, 펌웨어 암호가 걸려 있으면 그 길이 막힌다고 판단합니다 [4]. Apple silicon 맥은 모든 부팅을 로컬에서 처리하고 [5], 서드파티 부팅 매체(리눅스 기반 포렌식 매체 등)를 쓸 수 있는지는 공개된 자료가 없어 같은 기종의 시험용 맥에서 확인해야 합니다. 서명과 SIP의 관계는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../../01-foundations/protection/codesign-notarization-sip.md)에서 봅니다.
+T2 맥에서 외부 부팅으로 이미징하려면 관리자 인증을 거쳐 이 설정을 바꿔야 하고, 펌웨어 암호가 걸려 있으면 그 길이 막힌다고 판단합니다 [4]. Apple silicon 맥은 모든 부팅을 로컬에서 처리하고 [5], 서드파티 부팅 매체(리눅스 기반 포렌식 매체 등)를 쓸 수 있는지는 같은 기종의 시험용 맥에서 확인해야 합니다. 서명과 SIP의 관계는 [서명·공증·무결성 보호 (Code Signing·Notarization·SIP)](../../../01-foundations/protection/codesign-notarization-sip.md)에서 봅니다.
 
 ## 절차
 
@@ -59,7 +59,7 @@ T2 맥에서 외부 부팅으로 이미징하려면 관리자 인증을 거쳐 �
 
 켜진 맥을 조사하려고 재시작하거나 끄는 순간 2단계의 기회가 사라집니다. 대상 디스크 모드는 켜진 상태에서도 시동 디스크 설정으로 재시작해 들어갈 수 있지만 [2], 재시작하면 잠금이 풀린 상태를 잃는다는 점을 먼저 따져 봅니다.
 
-T2 맥에서 Startup Security Utility 설정을 바꾸면 그 사실이 맥 어디에 흔적으로 남는지는 공개된 분석 자료가 없습니다. 조사 중에 설정을 바꿨다면 바꾼 항목과 시각을 보관 기록에 적어, 나중에 그 변화를 사용자 행위로 오해하지 않게 합니다.
+T2 맥에서 조사 중에 Startup Security Utility 설정을 바꿨다면 바꾼 항목과 시각을 보관 기록에 적어, 나중에 그 변화를 사용자 행위로 오해하지 않게 합니다.
 
 Apple silicon 맥에서 SIP를 끄려면 LocalPolicy 서명 키에 접근할 수 있는 사용자의 인증이 필요하고, kext를 쓰려면 Reduced Security로 낮춘 뒤 Auxiliary Kernel Collection으로 합쳐 재시작해야 합니다 [5]. 커널 확장이 필요한 수집 도구는 이 조건에 걸린다고 판단합니다. 커널 확장의 흔적은 [커널·시스템 확장 (KEXT·System Extension)](../../../02-artifacts/persistence/kext-system-extension.md)에서 봅니다.
 

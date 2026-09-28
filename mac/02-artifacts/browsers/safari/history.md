@@ -67,7 +67,7 @@ BLOB 열 세 개의 내부 형식은 실제 데이터로 확인해야 합니다.
 
 ### history_tombstones
 
-`history_tombstones` 에는 `id`, `start_time`(REAL), `end_time`(REAL), `url`, `generation` 열이 있습니다 [2]. 이름과 열 구성만 보면 지운 기간이나 주소를 적어 두는 표처럼 보이지만, 이 뜻을 밝힌 공개 자료는 없고 두 시각 열의 기준도 밝혀지지 않았습니다. 이 표의 행을 "사용자가 기록을 지운 증거" 로 쓰려면 같은 macOS 버전에서 직접 지워 보고 확인한 뒤에 씁니다.
+`history_tombstones` 에는 `id`, `start_time`(REAL), `end_time`(REAL), `url`, `generation` 열이 있습니다 [2]. 이름과 열 구성만 보면 지운 기간이나 주소를 적어 두는 표처럼 보이지만, 이름만으로 뜻을 단정할 수 없고 두 시각 열의 기준도 값의 크기로 따로 확인합니다. 이 표의 행을 "사용자가 기록을 지운 증거" 로 쓰려면 같은 macOS 버전에서 직접 지워 보고 확인한 뒤에 씁니다.
 
 ## 증거로서 의미
 

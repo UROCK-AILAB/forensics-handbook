@@ -36,7 +36,7 @@ nav_order: 1270
 | 파이어폭스 버전 | 바뀐 점 |
 |---|---|
 | Firefox 3부터 | 방문 기록을 `places.sqlite` 에 저장 [1] |
-| Firefox 21 이하 | 다운로드 기록이 `downloads.sqlite` 에 있고, 그 뒤로는 `places.sqlite` 로 옮겨짐 [1]. 정확한 전환 버전은 공개 자료 없음 |
+| Firefox 21 이하 | 다운로드 기록이 `downloads.sqlite` 에 있고, 그 뒤로는 `places.sqlite` 로 옮겨짐 [1] |
 | Firefox 32부터 | 캐시 폴더가 `Cache/` 에서 `cache2/` 로 바뀜 [1] |
 | 최근 버전 | `moz_places`·`moz_origins` 뒤쪽 열(`alt_frecency`, `recalc_alt_frecency` 등)은 2026-09 무렵 소스 기준이라 오래된 DB에는 없을 수 있음 [2] |
 
@@ -59,7 +59,7 @@ nav_order: 1270
 | `moz_bookmarks_deleted` | `guid`, `dateRemoved` | 열 이름으로 보면 지운 북마크의 `guid` 와 지운 시각. 시각 단위는 실제 데이터로 확인 [2] |
 | `moz_places_metadata` | `place_id`, `referrer_place_id`, `created_at`, `updated_at`, `total_view_time`, `typing_time`, `key_presses`, `scrolling_time`, `scrolling_distance`, `document_type`, `search_query_id` | 열 이름으로 보면 페이지를 본 시간과 입력·스크롤 양 [2] |
 
-`moz_places_metadata` 의 시간 열 단위와 이 표가 들어온 버전은 공개 자료가 없어서, 보고서에 옮길 때는 실물 값의 크기를 보고 단위를 따로 확인합니다. `from_visit` 는 열 이름대로 바로 앞 방문의 `id` 로 보고 방문 흐름을 이어 붙이는 데 흔히 쓰지만, 열 이름에서 나온 풀이입니다 [2]. 다운로드한 파일의 저장 경로가 `moz_annos` 에 `downloads/destinationFileURI` 같은 이름으로 남는다고 알려져 있어서, 분석 대상의 `moz_annos` 에서 확인합니다.
+`moz_places_metadata` 의 시간 열은 보고서에 옮기기 전에 실물 값의 크기를 보고 단위를 확인합니다. `from_visit` 는 열 이름대로 바로 앞 방문의 `id` 로 보고 방문 흐름을 이어 붙이는 데 흔히 쓰지만, 열 이름에서 나온 풀이입니다 [2]. 다운로드한 파일의 저장 경로가 `moz_annos` 에 `downloads/destinationFileURI` 같은 이름으로 남는다고 알려져 있어서, 분석 대상의 `moz_annos` 에서 확인합니다.
 
 방문 종류는 `moz_historyvisits.visit_type` 에 숫자로 들어갑니다 [3].
 
@@ -95,7 +95,7 @@ nav_order: 1270
 | `moz_places.last_visit_date` | PRTime(마이크로초)으로 알려짐 | 단위는 실제 데이터로 확인 [2] |
 | `moz_bookmarks.dateAdded`, `lastModified` | PRTime(마이크로초)으로 알려짐 | 단위는 실제 데이터로 확인 [2] |
 | `moz_annos.dateAdded`, `lastModified` | PRTime(마이크로초)으로 알려짐 | 단위는 실제 데이터로 확인 [2] |
-| `moz_origins.block_until_ms`, `block_pages_until_ms` | 이름상 밀리초 | 뜻은 공개 자료 없음 [2] |
+| `moz_origins.block_until_ms`, `block_pages_until_ms` | 이름상 밀리초 | 뜻을 단정하지 않고 값만 옮김 [2] |
 
 방문 한 번이 `moz_historyvisits` 한 행이라서 방문마다 `visit_date` 가 하나씩 있고 [2], `moz_places.last_visit_date` 는 URL 한 행에 하나뿐인 값이라 방문 흐름을 따질 때는 `visit_date` 를 씁니다. PRTime 은 2001 기준 맥 절대 시각과도, 크롬 계열의 1601 기준 시각과도 다르므로 [1][3], 사파리·크롬 기록과 한 타임라인에 놓을 때는 기준을 먼저 맞춥니다. 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에 정리돼 있습니다.
 

@@ -28,7 +28,7 @@ Takeout 보관 파일에서 Gemini 활동은 "My Activity" 폴더 아래 "Gemini
 
 | 쓰는 곳 | 기록이 있는 곳 | OS·환경 | 앱 버전 | 알려 주는 것 |
 |---|---|---|---|---|
-| 웹 브라우저 | 서버 활동 기록. 브라우저 쪽 흔적은 공개 분석 자료가 없어 실제 브라우저 프로필에서 확인 | 브라우저 | 웹 서비스라 앱 버전 없음 | 서버에 남은 프롬프트와 대화, 공개 링크 목록, Gems 관리 페이지 [1][3] |
+| 웹 브라우저 | 서버 활동 기록. 브라우저 쪽 흔적은 실제 브라우저 프로필에서 확인 | 브라우저 | 웹 서비스라 앱 버전 없음 | 서버에 남은 프롬프트와 대화, 공개 링크 목록, Gems 관리 페이지 [1][3] |
 | Android 앱 | 서버 활동 기록. 앱 패키지는 `com.google.android.apps.bard` 이고 [10], 앱을 받아도 Google 앱이 Gemini 를 실행 [5] | Android | 버전은 기기의 패키지 정보에서 확인 | 권한을 Google 앱 설정에서 관리하는 구조, 기본 어시스턴트로 골랐는지 [5]. Android 15(2026-04 수집본)의 앱 폴더에 SQLite DB 없음 [10] |
 | iOS 앱 | 서버 활동 기록. 별도 앱 "Google Gemini" | iOS·iPadOS 17.4 이상 | 1.2026.3770306(2026-09 App Store) | App Store 개인정보 라벨이 적은 수집 항목 [6], 위치 설정을 끈 상태에서도 반경 0.5마일 안 위치 [9] |
 | Chrome 통합 | 서버 활동 기록, Chrome 설정 파일(Preferences·Local State)의 설정 키 | Windows·Mac·Chromebook Plus | 관리 정책은 Windows·macOS Chrome 137 부터 | 내부 이름 glic 으로 시작하는 설정 키, 기업 관리 정책 [2][7][8] |

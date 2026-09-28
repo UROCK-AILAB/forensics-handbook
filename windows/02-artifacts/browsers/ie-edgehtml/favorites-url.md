@@ -34,7 +34,7 @@ Windows 11 25H2 기준입니다.
 - 기본 위치에 폴더가 없으면 이 값을 먼저 확인합니다.
 - 다른 Windows 버전에서도 이 값으로 폴더 위치를 확인합니다.
 - `desktop.ini` 는 폴더 표시 설정 파일입니다. 즐겨찾기가 아닙니다.
-- `MenuOrder\Favorites` 키 값의 형식과 뜻은 공개 자료가 없습니다. 이 키로 즐겨찾기 순서나 시각을 해석하지 않습니다.
+- `MenuOrder\Favorites` 키 값은 형식이 공개되지 않았으므로, 이 키로 즐겨찾기 순서나 시각을 해석하지 않습니다.
 
 ### 옛 엣지 즐겨찾기
 
@@ -46,7 +46,7 @@ Windows 11 25H2 기준입니다.
 | 수집 범위 예 | 공개 수집 정의 `Edge.tkape` 는 `…\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\` 아래를 모두 모읍니다 | [2] |
 
 - `spartan.edb` 의 정확한 전체 경로와 표 이름·열 이름은 실제 데이터로 확인해야 합니다.
-- 어느 버전부터 `spartan.edb` 를 썼는지는 공개 자료에 나와 있지 않습니다. "새 버전"·"옛 버전"으로만 나뉩니다.
+- `spartan.edb` 를 쓰는지는 버전 번호로 판단하지 않고 실제 패키지 폴더에서 확인합니다.
 - 그래서 경로 하나만 찾지 않고 패키지 폴더를 통째로 모읍니다.
 - `spartan.edb` 의 저장 형식은 [ESE 데이터베이스](../../../01-foundations/database-log-formats/extensible-storage-engine/index.md) 에서, 패키지 폴더의 짜임은 [UWP 앱 데이터 구조](../../../01-foundations/app-mail-data/packages-settings-dat.md) 에서 다룹니다.
 - Windows 11 에는 옛 엣지 패키지 폴더가 없을 수 있습니다.
@@ -72,8 +72,8 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 
 | 줄 | 이 파일의 값 | 읽는 법 |
 |---|---|---|
-| `[{000214A0-0000-0000-C000-000000000046}]` | 절 이름 | 공개 자료 없음 |
-| `Prop3=` | `19,2` | 공개 자료 없음 |
+| `[{000214A0-0000-0000-C000-000000000046}]` | 절 이름 | 뜻을 단정하지 않고 값만 옮깁니다 |
+| `Prop3=` | `19,2` | 뜻을 단정하지 않고 값만 옮깁니다 |
 | `[InternetShortcut]` | 절 이름 | 아래 줄들이 이 절에 듭니다 |
 | `IDList=` | 비어 있음 | 이 파일에서는 값이 비어 있습니다 |
 | `URL=` | `http://go.microsoft.com/fwlink/p/?LinkId=255142` | 즐겨찾기가 가리키는 주소입니다 |
@@ -125,7 +125,7 @@ IconFile=%ProgramFiles%\Internet Explorer\Images\bing.ico
 
 ### 헥스로 한 번
 
-`.url` 에는 공개 명세가 없어서, 아래 바이트는 위에서 본 `Bing.url` 의 글자를 ASCII 로 옮기고 줄 끝에 CR LF 를 붙여 만든 예시입니다. 실제 파일에서 뜬 헥스가 아닙니다.
+아래 바이트는 위에서 본 `Bing.url` 의 글자를 ASCII 로 옮기고 줄 끝에 CR LF 를 붙여 만든 예시입니다. 실제 파일에서 뜬 헥스가 아닙니다.
 
 ```
 오프셋  00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F

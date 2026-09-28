@@ -28,7 +28,7 @@ VPN 에는 몇 가지 운영 방식이 있습니다. 앱별 VPN(Per-App VPN)은 
 
 이 밖에 `AppDomainPlugin-com.apple.NetworkExtension.IKEv2Provider`, `AppDomainPlugin-com.apple.DiagnosticExtensions.VPN`, `AppDomainPlugin-com.apple.VPNAppIntentWidget` 같은 시스템 확장 도메인도 있습니다. 이 도메인들은 VPN 을 설정하지 않은 기기에도 있을 수 있어서 VPN 을 썼다는 근거로 쓰지 않습니다.
 
-기기 안 경로는 공개 문서에 나와 있지 않아서, 파일 시스템 추출에서는 파일 이름으로 찾아 위치를 확인합니다. 설정 앱의 어느 메뉴에서 VPN·프로필이 보이는지와 iOS 15 ~ 18 사이에 파일 구조가 바뀌었는지도 공개 문서에 나와 있지 않습니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
+파일 시스템 추출에서는 위 파일 이름으로 찾아 기기 안 위치를 확인합니다. 설정 앱의 어느 메뉴에서 VPN·프로필이 보이는지와 iOS 15 ~ 18 사이에 파일 구조가 바뀌었는지는 시험 기기에서 직접 확인합니다. 백업 도메인 이름을 읽는 법은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
 ## 구조
 
@@ -36,11 +36,11 @@ VPN 에는 몇 가지 운영 방식이 있습니다. 앱별 VPN(Per-App VPN)은 
 
 최상위에는 정수·문자열·목록 키가 하나씩 있고, UUID 를 키로 한 사전이 있으며 그 사전 안에 `Generation`, `Index`, `Version` 키가 있습니다. VPN 구성 항목이 어떤 키 아래에 들어가는지는 실제 데이터로 확인합니다. 열었을 때 `$objects`·`$top` 같은 키가 보이면 NSKeyedArchiver 로 싼 값이라서 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 풀이 방법을 따릅니다.
 
-`com.apple.networkextension.control.plist` 에는 `CriticalDomains` 목록 하나가 있고, 무엇을 담는지는 알려져 있지 않습니다.
+`com.apple.networkextension.control.plist` 에는 `CriticalDomains` 목록 하나가 있고, 이 목록의 뜻은 정해져 있지 않으므로 보고서에는 값만 옮깁니다.
 
 ### 설정 앱 plist 의 VPN 키
 
-`com.apple.Preferences.plist` 의 `VPNConnectivity` 는 정수, `VPNHasRelayConnections` 는 참·거짓 값입니다. 키 이름으로 보면 설정 앱이 VPN 연결 상태를 표시하려고 두는 값으로 보이지만, 값의 뜻과 언제 바뀌는지를 설명한 공개 문서는 없습니다. 값을 보고서에 쓰려면 연습용 기기에서 VPN 을 켜고 끄며 값이 어떻게 바뀌는지 먼저 시험합니다.
+`com.apple.Preferences.plist` 의 `VPNConnectivity` 는 정수, `VPNHasRelayConnections` 는 참·거짓 값입니다. 키 이름으로 보면 설정 앱이 VPN 연결 상태를 표시하려고 두는 값으로 보이지만, 키 이름만으로 값의 뜻과 언제 바뀌는지를 단정할 수는 없습니다. 값을 보고서에 쓰려면 연습용 기기에서 VPN 을 켜고 끄며 값이 어떻게 바뀌는지 먼저 시험합니다.
 
 ### 구성 프로파일
 

@@ -22,7 +22,7 @@ nav_order: 2110
 | 항목 | 위치 | 근거 |
 |---|---|---|
 | 사용자 데이터 폴더 | `C:\Users\<사용자>\AppData\Roaming\Signal\` | 수집 정의 파일 |
-| 프로그램 설치 폴더 | 알려진 바로는 `%LOCALAPPDATA%\Programs\signal-desktop\` (버전마다 확인 필요) | 공개 자료 없음 |
+| 프로그램 설치 폴더 | 알려진 바로는 `%LOCALAPPDATA%\Programs\signal-desktop\` (버전마다 확인 필요) | 실제 기기에서 확인 |
 
 `%APPDATA%` 는 사용자마다 따로 있으므로 사용자 프로필마다 봅니다.
 
@@ -69,7 +69,7 @@ nav_order: 2110
 
 Windows 에서 safeStorage 의 암호화 키는 DPAPI 로 만듭니다. 이렇게 암호화한 값은 대개 같은 로그온 자격 증명으로 로그온한 사용자만 풀 수 있습니다. 그래서 같은 PC 의 다른 사용자로부터는 보호되지만, 같은 사용자 공간에서 도는 다른 앱으로부터는 보호되지 않습니다. Windows 에서 `isEncryptionAvailable()` 은 앱이 `ready` 이벤트를 낸 뒤 true 를 돌려줍니다.
 
-safeStorage 가 값마다 DPAPI 를 직접 쓰는지, Chromium 처럼 `Local State` 파일에 둔 키를 DPAPI 로 감싸는지는 공개 문서에 나오지 않으므로 실제 데이터로 확인합니다(아래 "헥스로 한 번"). 사용자 DPAPI 의 마스터 키와 푸는 조건은 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
+safeStorage 가 값마다 DPAPI 를 직접 쓰는지, Chromium 처럼 `Local State` 파일에 둔 키를 DPAPI 로 감싸는지는 실제 데이터로 확인합니다(아래 "헥스로 한 번"). 사용자 DPAPI 의 마스터 키와 푸는 조건은 [DPAPI 구조](../../01-foundations/protection/data-protection-api/index.md) 에서 다룹니다.
 
 ### DB 파일
 
@@ -111,7 +111,7 @@ safeStorage 가 값마다 DPAPI 를 직접 쓰는지, Chromium 처럼 `Local Sta
 
 | 시각 | 자리 | 무엇이 바뀔 때 바뀌나 | 기준 |
 |---|---|---|---|
-| 메시지 시각 | DB 안의 시각 열 | 공개 자료 없음 | 알려진 바로는 밀리초 단위 유닉스 시각(버전마다 확인 필요) |
+| 메시지 시각 | DB 안의 시각 열 | 시험 기기에서 메시지를 주고받아 확인 | 알려진 바로는 밀리초 단위 유닉스 시각(버전마다 확인 필요) |
 | `config.json` 수정 시각 | 파일 시스템 | 앱이 파일을 다시 쓸 때 | UTC |
 | `db.sqlite`·`-wal` 수정 시각 | 파일 시스템 | 앱이 DB 에 쓸 때 | UTC |
 | 로그 파일 시각 | 파일 시스템, 로그 줄 | 앱이 로그를 쓸 때 | 로그 줄의 형식은 실제 데이터로 확인 |
@@ -125,7 +125,7 @@ safeStorage 가 값마다 DPAPI 를 직접 쓰는지, Chromium 처럼 `Local Sta
 - **옛 자료대로 평문 키를 기대합니다.** 지금 소스는 암호화를 쓸 수 있으면 평문 `key` 를 지웁니다.
 - **`db.sqlite` 만 수집합니다.** `-wal`·`-shm`·`config.json` 을 함께 수집합니다. 로그의 `.log.0`, `.log.1` 도 함께 수집합니다.
 - **다른 사용자의 DPAPI 로 풀려고 합니다.** safeStorage 는 같은 로그온 자격 증명으로 로그온한 사용자만 대개 풀 수 있습니다. `Signal` 폴더가 있는 그 사용자의 DPAPI 를 풉니다. SID 와 사용자는 [사용자 프로필 목록](../system-account/profilelist.md) 에서 맞춥니다.
-- **`Local State` 를 거친다고 단정합니다.** safeStorage 가 Windows 에서 키를 어떻게 보관하는지는 공개 문서에 나오지 않습니다. 아래 "헥스로 한 번" 처럼 값을 직접 봅니다.
+- **`Local State` 를 거친다고 단정합니다.** safeStorage 가 Windows 에서 키를 어떻게 보관하는지는 아래 "헥스로 한 번" 처럼 값을 직접 보고 확인합니다.
 - **safeStorage 를 강한 보호로 봅니다.** 같은 사용자 공간에서 도는 다른 앱으로부터는 보호되지 않습니다. 사용자 권한으로 도는 악성 프로그램도 키를 풀 수 있다는 뜻입니다(해석).
 - **암호문에서 지운 레코드를 찾습니다.** 페이지가 암호화돼 있어서 풀기 전에는 지운 레코드를 찾을 수 없습니다. DB 를 푼 뒤 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 의 방법으로 찾습니다.
 - **첨부 파일을 모두 평문으로 봅니다.** 첨부 파일을 디스크에 암호화하는지는 버전마다 확인합니다.
@@ -198,7 +198,7 @@ DB 를 연 뒤에는 도구가 보여 주는 메시지 수와 표의 행 수를 
 
 ## 실습
 
-시그널 데스크톱이 든 공개 시험 이미지는 알려진 것이 없습니다. Windows 가상 머신에 시그널 데스크톱을 설치해 직접 시험하고, 시험 전에 앱 버전과 Windows 버전을 적어 둡니다.
+Windows 가상 머신에 시그널 데스크톱을 설치해 직접 시험하고, 시험 전에 앱 버전과 Windows 버전을 적어 둡니다.
 
 1. 새로 설치하고 처음 실행한 뒤 `config.json` 에 어떤 키 필드가 있습니까?
 2. `sql\db.sqlite` 의 앞 16바이트는 평문 SQLite 헤더입니까?

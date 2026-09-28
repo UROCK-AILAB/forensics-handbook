@@ -19,7 +19,7 @@ nav_order: 2200
 |---|---|---|---|---|
 | 파일 기반 login | `/Users/<사용자>/Library/Keychains/login.keychain` 또는 `login.keychain-db` | macOS 10.12부터 파일 이름이 `.keychain` 에서 `.keychain-db` 로 바뀜 | 키체인 암호나 메모리에서 얻은 마스터 키로 풀림 | [KC-1][KC-4] |
 | 파일 기반 System | `/Library/Keychains/System.keychain` | | 잠금 해제 파일 SystemKey로 풀림 | [KC-4] |
-| 데이터 보호(Local Items·iCloud Keychain) | 공개 자료 없음 | macOS 10.9에서 iCloud 키체인과 함께 도입 | 항목을 AES-256-GCM 키 두 개(메타데이터 키, 행별 비밀 키)로 암호화하고 비밀 키는 늘 Secure Enclave를 거침 | [KC-2][KC-3] |
+| 데이터 보호(Local Items·iCloud Keychain) | 실제 이미지에서 확인 | macOS 10.9에서 iCloud 키체인과 함께 도입 | 항목을 AES-256-GCM 키 두 개(메타데이터 키, 행별 비밀 키)로 암호화하고 비밀 키는 늘 Secure Enclave를 거침 | [KC-2][KC-3] |
 
 ## 절차
 

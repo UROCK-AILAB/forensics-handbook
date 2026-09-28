@@ -24,10 +24,10 @@ nav_order: 620
 |---|---|
 | `Devices.data` | 기기 식별자, 표시 이름, 모델·종류, 소유자 ID, "위치 켜짐"·"분실 모드"·암호 길이 표시 |
 | `Items.data` | 물건(AirTag 등) 식별자, 이름, 종류, 제조사, 일련번호, 연결된 안전 위치 ID |
-| `ItemGroups.data` | 공개 자료 없음 |
+| `ItemGroups.data` | 실제 데이터로 확인 |
 | `FamilyMembers.data` | Apple ID, 이름, 전화번호, 사용자 ID |
 | `SafeLocations.data` | 위도·경도, 주소, 장소 이름, 추가된 시각 |
-| `Owner.data` | 공개 자료 없음 |
+| `Owner.data` | 실제 데이터로 확인 |
 
 이 파일들의 저장 형식과 암호화 여부, 해당 iOS 버전은 실제 데이터로 확인해야 합니다.
 
@@ -99,7 +99,7 @@ iOS 27.0 로컬 백업에는 나의 찾기 관련 도메인으로 `AppDomain-com
 
 ## 시각 해석
 
-`searchpartyd` DB 의 시각은 유닉스 시각이라는 설명이 있지만 뒷받침하는 원 자료는 없고, `fmipcore` 캐시 파일의 시각 형식은 알려져 있지 않습니다. 값을 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 판별하고, 같은 시각대의 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 현지 시각 변환은 [시간대와 시각 설정](../system-account/time-zone.md) 을 봅니다.
+`searchpartyd` DB 의 시각은 유닉스 시각일 수 있지만 단정하지 않고, `fmipcore` 캐시 파일의 시각 형식도 실제 값으로 판별합니다. 값을 찾으면 자릿수와 기준 시점을 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 판별하고, 같은 시각대의 다른 기록과 맞춰 기준을 확인한 뒤에 씁니다. 현지 시각 변환은 [시간대와 시각 설정](../system-account/time-zone.md) 을 봅니다.
 
 기기가 정지해 있을 때 관찰이 늘고, 한 비콘이 2~4초 간격으로 기록된 예가 있습니다 [3]. 관찰 간격이 촘촘한 구간은 이동보다 머문 구간일 수 있어서 [위치 기록 데몬](routined.md) 의 위치 점과 함께 봅니다.
 

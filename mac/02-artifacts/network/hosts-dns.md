@@ -83,7 +83,7 @@ MDM 으로 설치하면 관리되는 Wi-Fi 네트워크에만 적용되고 수�
 
 ## 시각 해석
 
-hosts, `/etc/resolver/` 파일, `preferences.plist` 에는 시각 값이 없습니다. 그래서 언제 바뀌었는지는 파일 시스템 시각으로 판단하고, 파일 수정 시각은 마지막으로 바뀐 때만 알려 주지 어느 줄이 그때 들어갔는지는 알려 주지 않습니다. 줄이 들어간 무렵을 좁히려면 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)의 해당 경로 기록과, 스냅숏이나 백업에 남은 예전 판을 함께 봅니다. DHCP 임대의 `LeaseStartDate` 는 시각 기준을 밝힌 공개 자료가 없어서, 값을 읽을 때는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 후보 기준을 차례로 맞춰 봅니다.
+hosts, `/etc/resolver/` 파일, `preferences.plist` 에는 시각 값이 없습니다. 그래서 언제 바뀌었는지는 파일 시스템 시각으로 판단하고, 파일 수정 시각은 마지막으로 바뀐 때만 알려 주지 어느 줄이 그때 들어갔는지는 알려 주지 않습니다. 줄이 들어간 무렵을 좁히려면 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)의 해당 경로 기록과, 스냅숏이나 백업에 남은 예전 판을 함께 봅니다. DHCP 임대의 `LeaseStartDate` 는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 후보 기준을 차례로 맞춰 보고 시각 기준을 정합니다.
 
 DNS 질의 기록은 통합 로그에서 프로세스 `mDNSResponder`, 서브시스템 `com.apple.mDNSResponder` 로 찾을 수 있지만, 비공개 데이터 표시가 꺼져 있으면 호스트 이름이 가려집니다. 로그 쪽 찾는 법은 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)과 [타임라인 작성 (Timeline)](../../03-techniques/analysis/timeline/index.md)을 따릅니다.
 

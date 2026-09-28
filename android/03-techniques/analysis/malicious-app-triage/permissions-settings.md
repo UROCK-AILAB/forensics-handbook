@@ -53,7 +53,7 @@ Protection 열 값의 표기, 이 파일의 전체 경로, 권한 기록이 이 
 
 ## 살펴볼 설정 키
 
-settings 출력에서 악성 앱 분석과 관련 있는 키를 이름으로 묶으면 아래와 같습니다. 각 키의 값 형식과 정확한 뜻을 설명한 공개 자료는 없어서 실제 기기로 확인해야 합니다.
+settings 출력에서 악성 앱 분석과 관련 있는 키를 이름으로 묶으면 아래와 같습니다. 각 키의 값 형식과 정확한 뜻은 실제 기기로 확인합니다.
 
 | 묶음 | 이름공간 | 키 |
 |---|---|---|
@@ -68,7 +68,7 @@ settings 출력에서 악성 앱 분석과 관련 있는 키를 이름으로 묶
 | 앱 검증 | global | `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung`, `art_verifier_verify_debuggable` |
 | 초기 설정 | global | `device_provisioned` |
 
-삼성 폰에는 `rampart_` 로 시작하는 키가 secure 에 `rampart_main_switch_enabled`, `rampart_blocked_unknown_apps`, `rampart_blocked_adb_cmd`, `rampart_blocked_at_cmd`, `rampart_blocked_commands`, `rampart_blocked_keystring`, `rampart_enabled_message_guard`, `rampart_is_reset_by_at_command`, `rampart_misc_settings`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled`, `rampart_strict_protection_switch_enabled` 가 있고, global 에 `rampart_boot_complete_count`, system 에 `rampart_suw_main_on` 이 있습니다. 키 이름으로 보면 삼성 자동 차단 (Auto Blocker) 기능의 설정일 가능성이 있습니다. secure 에는 `appprotection_auto_scan_updated`, `appprotection_package_uid`, `appprotection_permission_function_agree_or_disagree`, `appprotection_permission_function_background_auto_scan_agreed`, `appprotection_permission_function_install_auto_scan_agreed`, `appprotection_permission_function_usage`, `appprotection_permission_scloud_function_usage`, `appprotection_permission_scloud_usage_user_decided` 도 있는데, 어느 삼성 기능의 키인지 밝힌 공개 자료는 없습니다.
+삼성 폰에는 `rampart_` 로 시작하는 키가 secure 에 `rampart_main_switch_enabled`, `rampart_blocked_unknown_apps`, `rampart_blocked_adb_cmd`, `rampart_blocked_at_cmd`, `rampart_blocked_commands`, `rampart_blocked_keystring`, `rampart_enabled_message_guard`, `rampart_is_reset_by_at_command`, `rampart_misc_settings`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled`, `rampart_strict_protection_switch_enabled` 가 있고, global 에 `rampart_boot_complete_count`, system 에 `rampart_suw_main_on` 이 있습니다. 키 이름으로 보면 삼성 자동 차단 (Auto Blocker) 기능의 설정일 가능성이 있습니다. secure 에는 `appprotection_auto_scan_updated`, `appprotection_package_uid`, `appprotection_permission_function_agree_or_disagree`, `appprotection_permission_function_background_auto_scan_agreed`, `appprotection_permission_function_install_auto_scan_agreed`, `appprotection_permission_function_usage`, `appprotection_permission_scloud_function_usage`, `appprotection_permission_scloud_usage_user_decided` 도 있는데, 어느 삼성 기능의 키인지는 이름만으로 단정할 수 없습니다.
 
 접근성 설정은 먼저 봅니다. 접근성 설정에 접근한 앱은 화면 내용을 읽고 사용자 대신 다른 앱을 조작할 수 있습니다 [2]. 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../../../02-artifacts/system-account/settings.md), 접근성 서비스와 기기 관리자 기록 자체는 [기기 관리자와 접근성 권한](../../../02-artifacts/credentials-security/device-admin-accessibility.md) 페이지에 있습니다.
 

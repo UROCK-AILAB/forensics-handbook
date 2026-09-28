@@ -121,7 +121,7 @@ ZLASTUSERACCESSDATE, ZMARKEDFORDELETION
 
 캘린더의 시각 열은 Mac 절대 시각(2001-01-01 UTC 기준 초)이고, `datetime('2001-01-01', 칸 || ' seconds')` 로 바꾸면 됩니다 [1]. 미리 알림도 같은 기준이라서, 값에 978307200 을 더해 Unix 시각으로 만든 뒤 UTC 로 바꿔도 됩니다 [2]. 두 방식은 같은 결과를 냅니다.
 
-캘린더에는 `start_tz`·`end_tz`, 미리 알림에는 `ZTIMEZONE` 열이 따로 있습니다. 저장된 값은 UTC 기준으로 바꾸고, 사용자가 본 현지 시각은 이 시간대 열로 다시 계산해서 둘을 함께 적습니다. 종일 일정(`all_day`)이 어느 시간대 기준으로 저장되는지는 공개 자료가 없어서, UTC 로 바꾼 날짜가 화면과 하루 어긋나 보이면 `start_tz` 를 함께 보고 판단합니다. 시간대 해석은 [시간대와 시각 설정](../system-account/time-zone.md) 과 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+캘린더에는 `start_tz`·`end_tz`, 미리 알림에는 `ZTIMEZONE` 열이 따로 있습니다. 저장된 값은 UTC 기준으로 바꾸고, 사용자가 본 현지 시각은 이 시간대 열로 다시 계산해서 둘을 함께 적습니다. 종일 일정(`all_day`)은 UTC 로 바꾼 날짜가 화면과 하루 어긋나 보이면 `start_tz` 를 함께 보고 어느 시간대 기준으로 저장됐는지 판단합니다. 시간대 해석은 [시간대와 시각 설정](../system-account/time-zone.md) 과 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 `creation_date`·`last_modified`(캘린더), `ZCREATIONDATE`·`ZLASTMODIFIEDDATE`(미리 알림)는 이름으로 보면 항목을 만들고 고친 시각이지만, 동기화로 다른 기기에서 받은 항목이 이 기기에 들어온 시각인지 원래 만든 시각인지는 실제 데이터로 확인해야 합니다. `com.apple.mobilecal.plist` 의 `LastViewedDate`·`LastSuspendTime` 은 float 로, `defaultCalendarChangedTimestamp` 는 int 로 저장되고, 기준 시점도 실제 데이터로 확인합니다.
 

@@ -60,8 +60,8 @@ Windows 판보다 파이어폭스 판에 따른 차이가 더 큽니다.
 | 32 | 로그인 파일이 `signons.sqlite` 에서 `logins.json` 으로 바뀌었습니다 | [저장 비밀번호](logins-json-key4-db.md) |
 | 58.0.2 | 키 파일이 `key3.db` 에서 `key4.db` 로 바뀌었습니다 | [저장 비밀번호](logins-json-key4-db.md) |
 | 75.0·144.0 | `key4.db` 와 `logins.json` 의 암호 방식이 바뀌었습니다 | [저장 비밀번호](logins-json-key4-db.md) |
-| 공개 자료 없음 | 쿠키 스키마 15 부터 만료 시각이 초에서 밀리초로 바뀌었습니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
-| 공개 자료 없음 | 세션 파일이 압축하지 않은 `.js`·`.bak` 에서 LZ4 압축 파일로 바뀌었습니다 | [세션 복원](sessionstore-jsonlz4.md) |
+| 실제 파일로 확인 | 쿠키 스키마 15 부터 만료 시각이 초에서 밀리초로 바뀌었습니다 | [쿠키 (cookies.sqlite)](cookies-sqlite.md) |
+| 실제 파일로 확인 | 세션 파일이 압축하지 않은 `.js`·`.bak` 에서 LZ4 압축 파일로 바뀌었습니다 | [세션 복원](sessionstore-jsonlz4.md) |
 
 ### 알려 주는 것
 

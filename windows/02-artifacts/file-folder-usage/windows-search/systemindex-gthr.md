@@ -79,11 +79,11 @@ nav_order: 1290
 | 7·8·10 | `Scope`, `Parent`, `Name` | [1][2] |
 | XP·Vista | `LookupMD5`, `LookupValue` | [1] |
 
-### 두 표를 잇는 법 — 알려지지 않은 부분
+### 두 표를 잇는 법 — 실제 데이터로 확인할 부분
 
-- 열 이름만 보면 `Gthr.ScopeID` 를 `GthrPth.Scope` 에 맞추고 `Parent` 를 따라 올라가 폴더 경로를 조립할 수 있을 것처럼 보입니다. 이 방법을 설명한 공개 명세는 없습니다.
-- `Gthr.DocumentID` 가 속성 저장소의 `WorkID` 와 같은 번호인지도 공개된 자료가 없습니다.
-- `LastModified` 가 정확히 어떤 시각인지도 공개된 자료가 없습니다. 파일 수정 시각을 옮겨 적은 값인지 알 수 없습니다.
+- 열 이름만 보면 `Gthr.ScopeID` 를 `GthrPth.Scope` 에 맞추고 `Parent` 를 따라 올라가 폴더 경로를 조립할 수 있을 것처럼 보입니다.
+- `Gthr.DocumentID` 가 속성 저장소의 `WorkID` 와 같은 번호인지는 같은 파일의 두 행을 맞춰 봐야 알 수 있습니다.
+- `LastModified` 가 파일 수정 시각을 옮겨 적은 값인지는 알 수 없습니다.
 - 그래서 조립한 경로나 번호 짝은 속성 저장소의 `System_ItemPathDisplay` 와 몇 행씩 맞춰 본 뒤에 씁니다.
 
 ### 수집 로그 파일 (GatherLogs)
@@ -98,7 +98,7 @@ nav_order: 1290
 |---|---|
 | `StreamLogsDirectory` | `...\Applications\Windows\GatherLogs` |
 | `LogDirectory` | `...\Applications\Windows\Projects\SystemIndex` |
-| `CatalogResetSignature`, `CheckPointNumber`, `NewCrawlNumber` | 값의 뜻은 공개된 자료가 없습니다 |
+| `CatalogResetSignature`, `CheckPointNumber`, `NewCrawlNumber` | 뜻이 정해져 있지 않아 값만 옮겨 적습니다 |
 
 **로그 파일**
 
@@ -118,12 +118,12 @@ nav_order: 1290
 | 첫째 필드 | FILETIME 의 하위 32비트 (16진수) |
 | 둘째 필드 | FILETIME 의 상위 32비트 (16진수) |
 | 셋째 필드 | 수집 대상 주소 |
-| 나머지 필드 (`8000000c`, `80041201` 등) | 공개 자료 없음 |
+| 나머지 필드 (`8000000c`, `80041201` 등) | 뜻이 정해져 있지 않아 값만 옮겨 적습니다 |
 
 - 첫째 필드와 둘째 필드를 합치면 UTC FILETIME 이 됩니다.
 - `.Crwl` 첫 줄의 시각이 로그 폴더를 만든 시각과 맞은 예가 있습니다. 풀어 낸 값은 2026-06-26 18:10:36 UTC 이고, 폴더를 만든 시각은 2026-06-27 03:10 한국 시각입니다.
 - 위 줄의 둘째 필드 `1dd4ab1` 은 일곱 자리입니다. 앞자리 0 을 적지 않은 것으로 보입니다. 합칠 때는 앞에 0 을 채워 여덟 자리로 맞춥니다.
-- 로그가 얼마나 오래 남는지는 공개된 자료가 없습니다.
+- 로그가 얼마나 오래 남는지는 남아 있는 로그 파일마다 첫 줄의 시각을 풀어 가장 이른 시각을 확인합니다.
 
 ## 증거로서 의미
 
@@ -135,10 +135,10 @@ nav_order: 1290
 **증명하지 못하는 것**
 
 - 수집기는 파일 변경 알림을 받아 움직이므로, 수집 기록만으로는 누가 파일을 바꿨는지, 사용자의 손인지 프로그램의 동작인지도 구분하지 못합니다.
-- `LastModified` 의 정확한 뜻은 공개된 자료가 없습니다. 이 값을 파일 수정 시각이라고 단정해 적지 않습니다.
+- `LastModified` 의 뜻은 정해져 있지 않으므로, 이 값을 파일 수정 시각이라고 단정해 적지 않습니다.
 - 로그가 얼마나 남는지 모르므로, 로그에 없는 경로가 수집된 적이 없다고 말할 수 없습니다.
-- 앞 두 필드의 시각이 정확히 무엇을 뜻하는지는 공개된 자료가 없습니다. 폴더 생성 시각과 맞은 예가 하나 있을 뿐이므로, 실제 데이터에서 다른 기록과 한 번 더 맞춰 봅니다.
-- `SDID`·`RequiredSIDs` 로 기록을 사용자와 잇는 방법은 공개된 자료가 없습니다. [색인 해석 함정](pitfalls.md) 에서 다룹니다.
+- 앞 두 필드의 시각은 폴더 생성 시각과 맞은 예가 하나 있을 뿐이므로, 실제 데이터에서 다른 기록과 한 번 더 맞춰 봅니다.
+- `SDID`·`RequiredSIDs` 만으로 기록을 사용자와 이을 수는 없습니다. [색인 해석 함정](pitfalls.md) 에서 다룹니다.
 
 보고서에는 기록으로 확인되는 만큼만 적습니다.
 예: "GatherLogs 의 `SystemIndex.○○.gthr` 에 `file:C:/Users/○○/Documents/계약서.docx` 줄이 있습니다. 이 줄의 앞 두 필드를 FILETIME 으로 풀면 ○○ UTC 입니다." (경로는 설명용 예시입니다.)
@@ -147,8 +147,8 @@ nav_order: 1290
 
 | 값 | 형식 | 뜻 |
 |---|---|---|
-| `SystemIndex_Gthr.LastModified` (Windows 7·8) | 빅엔디언 FILETIME 이진값 | 공개 자료 없음 |
-| `SystemIndex_Gthr.FirstAccess`·`LastAccess` (XP·Vista) | 공개 자료 없음 | 공개 자료 없음 |
+| `SystemIndex_Gthr.LastModified` (Windows 7·8) | 빅엔디언 FILETIME 이진값 | 뜻이 정해져 있지 않아 파일 수정 시각으로 단정하지 않습니다 |
+| `SystemIndex_Gthr.FirstAccess`·`LastAccess` (XP·Vista) | 헥스로 값의 길이와 바이트 순서를 확인합니다 | 뜻이 정해져 있지 않아 값만 옮겨 적습니다 |
 | GatherLogs 한 줄의 첫째·둘째 필드 | 16진수 글자 두 조각으로 적은 FILETIME. UTC 입니다. | 폴더 생성 시각과 맞은 예가 있습니다 |
 
 - FILETIME 을 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.

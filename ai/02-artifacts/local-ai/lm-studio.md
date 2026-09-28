@@ -122,7 +122,7 @@ macOS·Linux 의 대화 폴더는 `~/.lmstudio/conversations/`, 모델 폴더는
 | `status` | `statusState` 의 진행 상태 글 |
 | `citationBlock` | 답에 인용한 문서 조각 `citedText` |
 
-단계마다 `stepIdentifier` 가 있고, 샘플에서는 Unix ms 13자리 뒤에 `-` 와 소수가 붙은 모양이었습니다[5]. 소수 부분의 뜻은 공개 자료에 설명이 없습니다.
+단계마다 `stepIdentifier` 가 있고, 샘플에서는 Unix ms 13자리 뒤에 `-` 와 소수가 붙은 모양이었습니다[5]. 소수 부분의 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 
 ### 올린 파일
 
@@ -148,7 +148,7 @@ macOS·Linux 의 대화 폴더는 `~/.lmstudio/conversations/`, 모델 폴더는
 
 샘플의 사용자 메시지에는 시각 필드가 없으므로, 질문을 보낸 때는 바로 뒤 답의 `stepIdentifier` 로 좁힙니다. `fileIdentifier` 앞자리를 올린 시각으로 쓰려면 시험 기기에서 파일을 올린 때와 맞춰 본 뒤에 씁니다.
 
-LangurTrace 는 이 값을 `datetime.fromtimestamp` 로 바꾸므로, 출력의 시각은 분석 PC 의 현지 시각이고 시간대 표시가 없습니다[4]. 공개 샘플의 출력(`model_setup_history.csv`, `conversations` 폴더의 HTML 파일 이름)은 원래 값을 UTC 로 푼 시각보다 9시간 늦게 적혀 있습니다[5]. 보고서에 옮길 때는 원래 Unix ms 값에서 다시 풀어 UTC 로 적습니다. 파일 시스템 시각이 언제 바뀌는지는 공개 자료에 설명이 없어 시험 기기로 확인해야 합니다. 다른 기록과 시각을 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+LangurTrace 는 이 값을 `datetime.fromtimestamp` 로 바꾸므로, 출력의 시각은 분석 PC 의 현지 시각이고 시간대 표시가 없습니다[4]. 공개 샘플의 출력(`model_setup_history.csv`, `conversations` 폴더의 HTML 파일 이름)은 원래 값을 UTC 로 푼 시각보다 9시간 늦게 적혀 있습니다[5]. 보고서에 옮길 때는 원래 Unix ms 값에서 다시 풀어 UTC 로 적습니다. 파일 시스템 시각이 언제 바뀌는지는 시험 기기에서 재현해 확인합니다. 다른 기록과 시각을 맞추는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

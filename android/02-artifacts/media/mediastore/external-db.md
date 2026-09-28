@@ -19,7 +19,7 @@ files 표의 행 하나는 공용 저장 공간의 파일 하나에 대응합니
 
 ## 위치와 버전별 차이
 
-external.db 가 기기 안 어느 폴더에 있는지, 그리고 MediaProvider 가 몇 번 Android 부터 메인라인 모듈 패키지로 나뉘었는지는 공개 자료로 정해지지 않아 실제 기기에서 확인합니다. 보고서에는 기기에서 실제로 찾은 경로를 씁니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
+external.db 가 기기 안 어느 폴더에 있는지, 그리고 MediaProvider 가 몇 번 Android 부터 메인라인 모듈 패키지로 나뉘었는지는 실제 기기에서 확인합니다. 보고서에는 기기에서 실제로 찾은 경로를 씁니다. 앱 데이터 폴더의 일반 구조는 [앱 데이터 폴더 구조](../../../01-foundations/storage/app-data-layout.md) 페이지에 있습니다.
 
 삼성 기기에는 AOSP external.db 와 별도로 삼성 미디어 제공자의 DB 가 있습니다. 이 DB 는 경로 패턴 `*/com.samsung.android.providers.media/databases/media.db*` 로 찾을 수 있고, ALEAPP 시험 자료 가운데 Android 10·11·13·14·15 삼성 기기에서 나왔습니다 [3]. 두 DB 는 표 구조가 달라서 아래 "삼성 media.db" 절에 따로 정리합니다.
 
@@ -126,7 +126,7 @@ adb 일반 셸 권한으로 external.db 파일 자체를 읽을 수 있는지는
 
 ALEAPP 가 삼성 media.db 의 files 표에서 읽는 열은 datetaken, date_added, date_modified, `_display_name`, `_data`, mime_type, `_size`, latitude, longitude, addr, bucket_display_name, owner_package_name, captured_url, captured_app, is_favorite, is_hide, is_trashed, deleted 이고, addr 는 여러 부분을 `|` 로 이어 붙인 문자열입니다 [3]. location 표에서는 latitude, longitude, address_text, country_name, country_code, admin_area, sub_admin_area, locality, sub_locality, street_name, street_number, postal_code 를 읽습니다 [3].
 
-ALEAPP 시험 자료 10개에서는 is_hide 와 deleted 가 모든 행에서 비어 있었고 is_favorite·is_trashed 는 0 이거나 비어 있어서, 다른 값이 무엇을 뜻하는지는 알려져 있지 않습니다 [3]. 이 DB 의 열의 뜻과 시각 단위는 삼성이 공개한 문서가 없으니, captured_app 같은 열을 해석할 때는 같은 파일의 AOSP external.db 행과 나란히 놓고 봅니다.
+ALEAPP 시험 자료 10개에서는 is_hide 와 deleted 가 모든 행에서 비어 있었고 is_favorite·is_trashed 는 0 이거나 비어 있었습니다 [3]. 다른 값이 나오면 뜻을 단정하지 말고 값만 옮깁니다. 이 DB 의 열의 뜻과 시각 단위는 삼성이 공개한 문서가 없으니, captured_app 같은 열을 해석할 때는 같은 파일의 AOSP external.db 행과 나란히 놓고 봅니다.
 
 ## 시각 해석
 
@@ -138,7 +138,7 @@ files 표에는 초 단위 열과 밀리초 단위 열이 섞여 있습니다 [2
 | date_modified | 유닉스 초 | 파일의 File#lastModified() 를 색인한 값 |
 | datetaken | 유닉스 밀리초 | MediaMetadataRetriever 의 METADATA_KEY_DATE 나 EXIF 의 TAG_DATETIME_ORIGINAL 에서 뽑은 값 |
 | date_expires | 유닉스 초 | is_pending 이나 is_trashed 가 바뀔 때 자동으로 계산 |
-| inferred_date | 공개 자료 없음 | datetaken 이 있으면 그 값, 없으면 date_modified |
+| inferred_date | datetaken·date_modified 가운데 어느 값과 같은지로 확인 | datetaken 이 있으면 그 값, 없으면 date_modified |
 
 이미지의 datetaken 은 EXIF 의 TAG_DATETIME_ORIGINAL 과 TAG_OFFSET_TIME_ORIGINAL 이 둘 다 있어야 에포크 기준 시각을 믿을 수 있습니다 [2]. 시차 값이 없는 사진이라면 datetaken 을 UTC 로 단정하지 말고 원본 파일의 EXIF 를 [카메라 사진과 메타데이터](../dcim-exif.md) 페이지 방법으로 다시 읽습니다. inferred_date 는 기능 플래그(FLAG_INFERRED_MEDIA_DATE)가 붙은 열이고, 예전 열 inferred_media_date 는 더는 쓰지 않습니다 [1][2].
 
@@ -160,10 +160,10 @@ generation_added 와 generation_modified 는 시각이 아니라 세대 번호�
 
 ## 함정과 한계
 
-- external.db 의 기기 안 경로와 메인라인 모듈로 나뉜 버전은 공개 자료로 정해지지 않았습니다. 도구가 보여 주는 경로와 버전을 그대로 옮기지 말고 실제 기기에서 확인합니다.
+- external.db 의 기기 안 경로와 메인라인 모듈로 나뉜 버전은 도구가 보여 주는 값을 그대로 옮기지 말고 실제 기기에서 확인합니다.
 - 보기(images, video 등)는 조건에 맞는 행만 보여 주고 음악 관련 보기는 휴지통·대기 항목까지 빼서, 개수를 셀 때는 files 표를 기준으로 삼습니다.
 - `_modifier` 열이 생기기 전부터 있던 행은 모두 3 으로 채워졌습니다 [1].
-- 삼성 media.db 열의 뜻은 공개 문서가 없고, ALEAPP 시험 자료에서도 is_hide·deleted 가 비어 있었습니다 [3].
+- 삼성은 media.db 열의 뜻을 공개하지 않았고, ALEAPP 시험 자료에서도 is_hide·deleted 가 비어 있었습니다 [3].
 - 지운 행이 SQLite 빈 페이지에 남는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 레코드를 찾는 일반 방법은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 페이지를 봅니다.
 
 ## 직접 분석해 보기

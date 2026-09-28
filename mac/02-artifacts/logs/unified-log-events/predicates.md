@@ -37,7 +37,7 @@ log show --predicate '(subsystem == "com.example.my_subsystem") && (category == 
 processImagePath BEGINSWITH "/System/Library/CoreServices" AND process == "loginwindow" AND eventMessage CONTAINS[c] "INCORRECT"
 ```
 
-`--predicate` 에는 `p`(process)·`s`(subsystem)·`c`(category) 같은 줄인 키와 `:`(포함), `:^`(시작), `endswith`, `~/regex/` 같은 줄임 연산자도 쓸 수 있습니다(man 페이지의 "SHORTHAND-BASED FILTERING" 절) [1]. 다만 이 줄임 문법이 macOS 몇 버전부터 되는지는 알려져 있지 않으니, 보고서나 절차서에 남길 조건은 `==`, `CONTAINS` 같은 위의 연산자로 씁니다.
+`--predicate` 에는 `p`(process)·`s`(subsystem)·`c`(category) 같은 줄인 키와 `:`(포함), `:^`(시작), `endswith`, `~/regex/` 같은 줄임 연산자도 쓸 수 있습니다(man 페이지의 "SHORTHAND-BASED FILTERING" 절) [1]. 다만 이 줄임 문법이 분석에 쓰는 macOS 버전에서 되는지는 직접 돌려 확인해야 하니, 보고서나 절차서에 남길 조건은 `==`, `CONTAINS` 같은 위의 연산자로 씁니다.
 
 ## 아카이브에 조건 걸기
 
@@ -82,7 +82,7 @@ log show --archive <경로> --start "<시작 시각>" --end "<끝 시각>" --pre
 - **따옴표.** 조건 전체는 셸의 작은따옴표로, 조건 안의 문자열은 큰따옴표로 감쌉니다. 공개 자료의 예시 중에는 따옴표가 어긋난 것도 있어서 [3], 옮겨 쓴 조건은 실제 맥에서 한 번 돌려 확인합니다.
 - **버전.** 공개 자료의 조건은 대부분 적용 버전을 밝히지 않습니다. 분석 대상의 macOS 버전에서 결과가 비면 조건부터 의심합니다.
 - **가려진 값.** 동적 문자열은 기본값으로 `<private>` 로 가려지고([허브](index.md)), `eventMessage CONTAINS` 로 가려진 부분의 문자열을 찾으면 걸리지 않을 수 있습니다.
-- **권한.** `sudo` 없이 `log show` 를 돌릴 때 보이는 범위가 달라지는지는 공개 자료가 없습니다. 라이브 시스템에서 돌릴 때는 권한을 기록에 남깁니다.
+- **권한.** `sudo` 를 붙일 때와 뺄 때 `log show` 에 보이는 범위가 다른지는 같은 기기에서 두 번 돌려 비교합니다. 라이브 시스템에서 돌릴 때는 권한을 기록에 남깁니다.
 - **메시지 확인.** 공개 자료의 조건은 대부분 프로세스·서브시스템 수준에서 거르는 데 그쳐서, 걸린 메시지를 읽어 뜻을 확인하는 단계를 건너뛰지 않습니다.
 
 ## 직접 분석해 보기

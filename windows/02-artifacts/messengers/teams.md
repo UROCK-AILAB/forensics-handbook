@@ -40,7 +40,7 @@ forensicsim 은 아래 두 환경에서 시험됐습니다[1].
 | Microsoft Teams 1.4.00.11161 | Windows 10, 무료 업무 조직 |
 | "Teams 2.0" 48/21062133356 | Windows 11, 개인 조직 |
 
-"Teams 2.0" 은 2021년 Windows 11 개인용 Teams 로 보입니다. 2023년 이후의 새 Teams(MSTeams 패키지)와 같은 것인지는 공개 자료가 없습니다. 그래서 새 Teams 에 이 파서를 쓸 때는 결과를 따로 검증합니다.
+"Teams 2.0" 은 2021년 Windows 11 개인용 Teams 로 보입니다. 2023년 이후의 새 Teams(MSTeams 패키지)와 같은 것이라고 단정할 수 없으므로, 새 Teams 에 이 파서를 쓸 때는 결과를 따로 검증합니다.
 
 ## 구조
 
@@ -81,7 +81,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | `app_settings.json` | 앱 설정과 실행 정보 |
 | `tfw` | 원격 측정 SQLite DB |
 | `UserAvatarIcons` | 이름으로 보면 사용자 사진 캐시입니다 |
-| `cmd_settings.json`, `ecs_request_param.json`, `ecs_settings.dat64`, `previous_session_data.json`, `tma_request_param.json`, `uae.json`, `tmp` | 공개 자료 없음 |
+| `cmd_settings.json`, `ecs_request_param.json`, `ecs_settings.dat64`, `previous_session_data.json`, `tma_request_param.json`, `uae.json`, `tmp` | 파일을 열어 내용을 확인합니다 |
 
 `app_settings.json` 에는 아래 키가 있습니다.
 
@@ -119,7 +119,7 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 | `MSTeams_<날짜>_<시각>.<번호>.log` | 앱 본체 로그 |
 | `Launcher_*` | 실행기 로그 |
 | `MSTeamsUpdate_*`, `MSTeamsBackgroundUpdate_*` | 업데이트 로그 |
-| `MSTeamsBackgroundEcs_*`, `MSTeamsNM_SlimCore_*` | 공개 자료 없음 |
+| `MSTeamsBackgroundEcs_*`, `MSTeamsNM_SlimCore_*` | 파일을 열어 내용을 확인합니다 |
 | `SkypeRT`, `skylib`, `mediastack`, `CS_logs`, `sc-tfw` 등 | 이름으로 보면 통화·미디어 쪽 로그입니다 |
 
 로그 한 줄은 아래 모양입니다.
@@ -158,8 +158,8 @@ forensicsim 은 텍스트 로그 파일(`.log`)과 바이너리 표 파일(`.ldb
 |---|---|---|
 | 로그 줄 시각 | 로그 줄을 쓸 때 | `+09:00` 이 붙지만 실제 값은 UTC 입니다 |
 | 로그 파일 이름의 날짜·시각 | 새 로그 파일을 만들 때 | 현지 시각(KST)입니다 |
-| `app_settings.json` 의 실행 시각 필드 | 공개 자료 없음 | 0 으로 남은 경우가 있습니다 |
-| IndexedDB 레코드 안의 시각 | 공개 자료 없음 | LevelDB 자체의 기록에는 시각 필드가 없습니다. [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 참고 |
+| `app_settings.json` 의 실행 시각 필드 | 시험 기기에서 앱을 실행하기 전후의 값을 비교해 확인합니다 | 0 으로 남은 경우가 있습니다 |
+| IndexedDB 레코드 안의 시각 | 레코드 값을 풀어 시각 필드를 확인합니다 | LevelDB 자체의 기록에는 시각 필드가 없습니다. [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 참고 |
 | 파일 시스템 시각 | 파일을 다시 쓸 때 | UTC. [마스터 파일 테이블](../filesystem/mft.md) 참고 |
 
 ### 로그 줄 시각은 UTC 입니다

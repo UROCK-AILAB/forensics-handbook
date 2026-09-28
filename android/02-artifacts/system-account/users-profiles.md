@@ -39,11 +39,10 @@ Android 는 한 기기에서 여러 사용자 공간을 나눠 씁니다. 사용
 | 사용자 종류 정의를 정리한 버전 | Android 11 | [2] |
 | 헤드리스 시스템 사용자 | `ro.fw.mu.headless_system_user=true` 일 때이고, Android 10 이후 자동차용 | [2] |
 | 다중 사용자 켜기 | 기기 설정 `config_multiuserMaximumUsers`(1보다 크게), `config_enableMultiUserUI`(true) | [2] |
-| 휴대폰에 다중 사용자가 들어온 버전 | 공개 자료 없음 | |
 | 삼성 기기의 두 번째 사용자 | 번호가 세 자리이고 parentId 가 붙은 프로필일 수 있음 | |
-| 삼성 보안 폴더·앱 이중 실행이 쓰는 번호 범위 | 공개 자료 없음(실제 기기에서 확인) | |
+| 삼성 보안 폴더·앱 이중 실행이 쓰는 번호 범위 | 실제 기기의 `dumpsys user` 출력에서 확인 | |
 
-삼성 기기의 settings 에는 global 표에 `add_users_when_locked`, `lock_add_profile`, `lock_remove_profile`, `lock_reset_profile`, `smartswitch_data_exist_securefolder` 키가, secure 표에 `hide_secure_folder_flag` 키가 있을 수 있습니다. 이름으로 보면 잠금 상태에서 사용자 추가, 프로필 추가·삭제, 보안 폴더와 관련된 값으로 보이지만, 값의 뜻을 밝힌 공개 자료는 없습니다.
+삼성 기기의 settings 에는 global 표에 `add_users_when_locked`, `lock_add_profile`, `lock_remove_profile`, `lock_reset_profile`, `smartswitch_data_exist_securefolder` 키가, secure 표에 `hide_secure_folder_flag` 키가 있을 수 있습니다. 이름으로 보면 잠금 상태에서 사용자 추가, 프로필 추가·삭제, 보안 폴더와 관련된 값으로 보이지만, 값의 뜻은 단정할 수 없습니다.
 
 ## 구조
 
@@ -126,7 +125,7 @@ Users:
 
 `dumpsys user` 는 이 값들을 날짜로 찍지 않고 출력한 때로부터 얼마 전인지("... ago")로 찍고, 값이 0 이면 `<unknown>` 으로 찍습니다 [1]. 그래서 날짜로 바꾸려면 dumpsys 를 뽑은 시각을 함께 기록해 둬야 합니다. `Start time` 과 `Unlock time` 은 부팅 뒤 흐른 시간(SystemClock.elapsedRealtime)으로 적는 값이라 [1], 파일에 남지 않고 재부팅하면 사라집니다.
 
-사용자 0 의 `Created:` 가 `<unknown>` 으로 나오는 기기도 있습니다. `created` 값이 0 이라는 뜻이고 [1], 왜 0 이 되었는지 밝힌 공개 자료는 없습니다. 그래서 사용자 0 의 생성 시각으로 기기를 처음 설정한 날을 말하지 않고 [초기화 흔적 (Factory Reset)](factory-reset.md) 페이지의 기록과 함께 봅니다. 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
+사용자 0 의 `Created:` 가 `<unknown>` 으로 나오는 기기도 있습니다. `created` 값이 0 이라는 뜻이고 [1], 왜 0 이 되었는지는 이 값만으로 알 수 없습니다. 그래서 사용자 0 의 생성 시각으로 기기를 처음 설정한 날을 말하지 않고 [초기화 흔적 (Factory Reset)](factory-reset.md) 페이지의 기록과 함께 봅니다. 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
 ## 함정과 한계
 

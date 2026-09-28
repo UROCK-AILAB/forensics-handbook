@@ -6,7 +6,7 @@ nav_order: 1230
 
 # 탐색기 입력 기록 (TypedPaths·WordWheelQuery)
 
-TypedPaths 와 WordWheelQuery 는 사용자 하이브 NTUSER.DAT 의 `Explorer` 키 아래에 있는 입력 목록입니다. TypedPaths 에는 탐색기 주소 표시줄의 경로가, WordWheelQuery 에는 탐색기 검색어가 남는다고 널리 설명됩니다. 두 키 모두 시각은 키마다 하나뿐입니다. 두 키의 뜻을 직접 밝힌 공개 자료가 없으므로, 쓰기 전에 대상 버전에서 실험으로 확인합니다.
+TypedPaths 와 WordWheelQuery 는 사용자 하이브 NTUSER.DAT 의 `Explorer` 키 아래에 있는 입력 목록입니다. TypedPaths 에는 탐색기 주소 표시줄의 경로가, WordWheelQuery 에는 탐색기 검색어가 남는다고 널리 설명됩니다. 두 키 모두 시각은 키마다 하나뿐입니다. 두 키에 무엇이 남는지는 보고서에 쓰기 전에 대상 버전에서 실험으로 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -15,7 +15,7 @@ TypedPaths 와 WordWheelQuery 는 사용자 하이브 NTUSER.DAT 의 `Explorer` 
 | TypedPaths | 탐색기 주소 표시줄에 입력한 경로 | 값 이름이 `url1`, `url2` … 인 문자열 목록입니다. plaso 는 인터넷 익스플로러의 TypedURLs 와 같은 틀로 읽습니다 |
 | WordWheelQuery | 탐색기 검색 상자에 입력한 검색어 | 문자열 값과 MRUList 순서 값의 목록입니다. Windows 11 은 아래처럼 다릅니다 |
 
-다음 설명은 널리 쓰이지만 공개 자료로 굳어지지 않았습니다. TypedPaths 에는 주소 표시줄에 직접 입력한 경로만 남고 클릭으로 옮겨 간 폴더는 남지 않는다는 설명, `url1` 이 가장 최근 입력이라는 설명과 최대 개수, WordWheelQuery 가 탐색기 검색 상자의 검색어이고 작업 표시줄 검색과 따로 남는다는 설명입니다.
+다음 설명은 널리 쓰이지만 정해진 동작으로 볼 수는 없습니다. TypedPaths 에는 주소 표시줄에 직접 입력한 경로만 남고 클릭으로 옮겨 간 폴더는 남지 않는다는 설명, `url1` 이 가장 최근 입력이라는 설명과 최대 개수, WordWheelQuery 가 탐색기 검색 상자의 검색어이고 작업 표시줄 검색과 따로 남는다는 설명입니다.
 
 이 설명에 기대 보고서를 쓸 때는 분석 대상과 같은 Windows 버전에서 실험으로 먼저 확인합니다. 실험 방법은 아래 "실습" 에 있습니다.
 
@@ -40,7 +40,7 @@ Windows 11 25H2 의 WordWheelQuery 는 winreg-kb 의 설명과 다릅니다.
 | 순서 값 | MRUList | MRUListEx (8바이트) |
 | 항목 값 | 문자열 | REG_BINARY, UTF-16LE 문자열과 `00 00` |
 
-이 GUID 하위 키의 뜻과, 어느 버전부터 하위 키로 나뉘었는지는 공개 자료가 없습니다. 같은 Windows 11 25H2 의 `HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings` 에는 `IsDeviceSearchHistoryEnabled` 값 (예: 0) 이 있을 수 있습니다. 이 값이 WordWheelQuery 기록과 관계있는지는 알려져 있지 않습니다.
+WordWheelQuery 가 이 GUID 하위 키로 나뉘어 있는지는 분석 대상 PC 마다 키 아래를 직접 열어 확인합니다. 같은 Windows 11 25H2 의 `HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings` 에는 `IsDeviceSearchHistoryEnabled` 값 (예: 0) 이 있을 수 있습니다. 이 값과 WordWheelQuery 기록의 관계는 시험 기기에서 값을 바꿔 가며 검색해 보고 확인합니다.
 
 Windows 11 25H2 의 TypedPaths 값 (예: `url1`~`url13`) 은 모두 REG_SZ 이고, MRUList 와 MRUListEx 값은 없습니다.
 
@@ -57,7 +57,7 @@ Windows 11 25H2 의 TypedPaths 값 (예: `url1`~`url13`) 은 모두 REG_SZ 이�
 
 plaso 는 이 키를 `windows_typed_urls` 플러그인으로 읽는데, 인터넷 익스플로러의 `HKCU\Software\Microsoft\Internet Explorer\TypedURLs` 를 읽는 플러그인과 같습니다 ([인터넷 익스플로러·옛 엣지](../browsers/ie-edgehtml/index.md)). 이 플러그인은 값 이름을 정규식 `^url[0-9]+$` (대소문자 무시) 로 고르고, 문자열이면서 비어 있지 않은 값만 씁니다.
 
-순서 값이 없으므로 순서는 값 이름의 번호에서 읽어야 하는데, 번호가 작을수록 최근인지는 알려져 있지 않아 실험으로 확인합니다.
+순서 값이 없으므로 순서는 값 이름의 번호에서 읽어야 하는데, 번호가 작을수록 최근인지는 실험으로 확인합니다.
 
 ### WordWheelQuery
 
@@ -78,7 +78,7 @@ Windows 11 25H2 의 구조입니다.
 |---|---|
 | 이 사용자 하이브의 목록에 이 문자열이 있습니다 | 그 계정 앞에 실제로 누가 앉아 있었는지 |
 | 키가 마지막으로 바뀐 때 (UTC) | 항목마다 언제 입력했는지 |
-| WordWheelQuery 에서는 항목끼리의 앞뒤 순서 (MRUListEx) | TypedPaths 항목의 순서 (순서 값이 없고 번호의 뜻이 알려져 있지 않습니다) |
+| WordWheelQuery 에서는 항목끼리의 앞뒤 순서 (MRUListEx) | TypedPaths 항목의 순서 (순서 값이 없고 번호의 뜻은 실험으로 확인해야 합니다) |
 | | 입력한 경로가 실제로 있었는지. 그 폴더가 열렸는지 |
 | | 검색 결과로 무엇이 나왔는지. 결과를 열었는지 |
 
@@ -106,9 +106,9 @@ TypedPaths 는 순서 값이 없어서 키 시각을 어느 값에 이어야 하
 ## 함정과 한계
 
 1. **WordWheelQuery 키 바로 아래만 봅니다.** Windows 11 25H2 에서는 항목이 GUID 하위 키 아래에 있습니다. 키 바로 아래 값만 읽는 도구는 아무것도 보여 주지 않을 수 있습니다. 하위 키까지 펼쳐 봅니다.
-2. **TypedPaths 번호를 확인 없이 순서로 씁니다.** 순서 값이 없고, 번호의 방향은 알려져 있지 않습니다.
+2. **TypedPaths 번호를 확인 없이 순서로 씁니다.** 순서 값이 없으므로 번호의 방향은 실험으로 확인합니다.
 3. **도구가 거른 값을 놓칩니다.** plaso 는 이름이 `url` + 숫자가 아니거나, 문자열이 아니거나, 비어 있는 값을 건너뜁니다. 이런 값이 있는지 원시 키에서 확인합니다.
-4. **빈 키를 "쓰지 않았다" 로 읽습니다.** 설정이나 정리 도구가 기록을 막거나 지웠을 수 있습니다. `SearchSettings` 같은 설정 값을 함께 적어 둡니다. 다만 설정과 기록의 관계는 알려져 있지 않습니다.
+4. **빈 키를 "쓰지 않았다" 로 읽습니다.** 설정이나 정리 도구가 기록을 막거나 지웠을 수 있습니다. `SearchSettings` 같은 설정 값을 함께 적어 둡니다. 다만 설정 값만으로 기록이 막혔다고 단정하지 않습니다.
 5. **검색어를 행위로 읽습니다.** 검색어가 있다는 것과 그 검색으로 파일을 찾거나 열었다는 것은 다른 일입니다.
 6. **다른 입력 기록과 섞습니다.** 실행 창에 입력한 명령은 [실행 창 명령 기록](../execution/runmru.md) 에, 인터넷 익스플로러 주소 입력은 [인터넷 익스플로러·옛 엣지](../browsers/ie-edgehtml/index.md) 에 따로 남습니다. 어느 키에서 나온 값인지 보고서에 적습니다.
 

@@ -37,11 +37,11 @@ EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스�
 |---|---|---|---|
 | XP | SANS 의 XP 용 안내서는 이 키를 쓰지 않습니다. | 없습니다. 레디부스트가 Vista 에서 처음 나왔습니다. | SANS, Russinovich |
 | Vista | 볼륨 이름과 드라이브 문자를 찾는 위치로 쓰였습니다. | 레디부스트와 함께 생깁니다. | SANS, Russinovich |
-| 7 | 공개 자료 없음. | 시스템 디스크가 SSD 이고 성능 기준을 넘으면 레디부스트를 끕니다. 이때 키가 비어 있을 수 있습니다. | Microsoft(E7 블로그), Cowen |
-| 8 이후 (10·11) | 한 공개 플러그인은 2019~2020년 갱신판에서 `Enum\SWD\WPDBUSENUM` 을 읽습니다. | 공개된 설명이 없습니다. 실제 하이브에서 키가 있는지부터 봅니다. | RegRipper 소스 |
+| 7 | 실제 하이브에서 키가 있는지부터 봅니다. | 시스템 디스크가 SSD 이고 성능 기준을 넘으면 레디부스트를 끕니다. 이때 키가 비어 있을 수 있습니다. | Microsoft(E7 블로그), Cowen |
+| 8 이후 (10·11) | 한 공개 플러그인은 2019~2020년 갱신판에서 `Enum\SWD\WPDBUSENUM` 을 읽습니다. | 실제 하이브에서 키가 있는지부터 봅니다. | RegRipper 소스 |
 
 - 같은 플러그인 소스에는 예전 경로 `Enum\WpdBusEnumRoot` 가 주석으로 남아 있습니다.
-- 어느 판에서 경로가 바뀌었는지는 공개 문서에 나와 있지 않으므로 SYSTEM 하이브에서는 두 경로를 모두 찾아봅니다.
+- SYSTEM 하이브에서는 두 경로를 모두 찾아봅니다.
 
 ## 구조
 
@@ -57,7 +57,7 @@ EMDMgmt 는 레디부스트 (ReadyBoost) 가 쓰는 키입니다. 레디부스�
 - 장치 인스턴스 ID (Device Instance ID) 하나가 하위 키 하나입니다.
 - 공개 플러그인(RegRipper `wpdbusenum`)은 `FriendlyName`·`DeviceDesc`·`Mfg` 값을 읽습니다.
 - `Properties\{83da6326-97a6-4088-9453-a1923f573b29}` 아래 속성 번호 0064~0067 에는 설치·연결·해제 시각이 있습니다. 뜻은 [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다.
-- SOFTWARE 쪽 `FriendlyName` 과 이 키의 `FriendlyName` 이 늘 같은지는 알려져 있지 않으므로 실제 데이터에서 두 값을 맞춰 봅니다.
+- SOFTWARE 쪽 `FriendlyName` 과 이 키의 `FriendlyName` 이 늘 같다고 보지 말고 실제 데이터에서 두 값을 맞춰 봅니다.
 
 > 그림 자리: USBSTOR 일련번호 하나가 WPD Devices 하위 키 이름, SWD\WPDBUSENUM 인스턴스 키 이름, EMDMgmt 하위 키 이름에 모두 들어 있고, EMDMgmt 끝의 볼륨 일련번호가 LNK 파일의 볼륨 일련번호와 이어지는 모습
 
@@ -116,7 +116,7 @@ _??_USBSTOR#<장치 이름>#<일련번호>#{53f56307-b6bf-11d0-94f2-00a0c91efb8b
 |---|---|---|
 | EMDMgmt 하위 키 마지막 기록 시각 | 여러 하위 키의 시각이 같거나 가까운 경우가 많습니다. 연결·해제가 아닌 다른 동작도 이 시각을 바꿉니다[6]. | UTC, FILETIME ([키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)) |
 | `LastTestedTime` 값 | 이름으로는 마지막 검사 때로 보이지만 명세는 없습니다. 관심 시간대와 크게 떨어진 경우가 많습니다. 값이 0 일 수 있습니다. | 공개 플러그인은 FILETIME·UTC 로 풉니다. |
-| WPD Devices 하위 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 공개된 설명이 없습니다. | UTC, FILETIME |
+| WPD Devices 하위 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 정해져 있지 않습니다. | UTC, FILETIME |
 | SWD\WPDBUSENUM 장치 속성 0064~0067 | [연결·해제 시각](deviceclasses-device-properties-0064-0066-0067.md)에서 다룹니다. | UTC, FILETIME |
 
 - 이 페이지의 두 키에서 나온 시각은 연결 시각으로 쓰지 않습니다.

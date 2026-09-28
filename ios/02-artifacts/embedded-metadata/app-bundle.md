@@ -65,7 +65,7 @@ AppDomainPlugin-<번들 ID>    앱 확장(플러그인)
 
 ### 설치 상태 파일
 
-InstallDomain 에는 항목이 6개 있고, 그 가운데 `SystemAppInstallState.plist` 와 `BackupSystemAppInstallState.plist` 는 Apple 기본 앱의 번들 ID(`com.apple.iBooks`, `com.apple.DocumentsApp`, `com.apple.mobilesafari` 등)를 키로, int 를 값으로 적습니다. int 값이 설치됨·삭제됨 같은 상태를 뜻하는지는 공개된 자료가 없습니다. HomeDomain 의 `com.apple.mobile.installation.plist` 에는 `ExtensionDataContainerParentIDUpdateVersion`(int) 키 하나만 있습니다.
+InstallDomain 에는 항목이 6개 있고, 그 가운데 `SystemAppInstallState.plist` 와 `BackupSystemAppInstallState.plist` 는 Apple 기본 앱의 번들 ID(`com.apple.iBooks`, `com.apple.DocumentsApp`, `com.apple.mobilesafari` 등)를 키로, int 를 값으로 적습니다. int 값이 설치됨·삭제됨 같은 상태를 뜻하는지는 이 파일만으로 단정할 수 없습니다. HomeDomain 의 `com.apple.mobile.installation.plist` 에는 `ExtensionDataContainerParentIDUpdateVersion`(int) 키 하나만 있습니다.
 
 `applicationState.db` 는 번들 ID 와 앱 상태 값을 잇는 DB 이고, 표 구조와 해석은 [설치된 앱 (Installed Apps·applicationState.db)](../app-usage/installed-apps.md)에서 다룹니다. 설치 도우미 로그 도메인 안의 파일 형식은 실제 데이터로 확인해야 합니다.
 
@@ -83,14 +83,14 @@ InstallDomain 에는 항목이 6개 있고, 그 가운데 `SystemAppInstallState
 
 ## 시각 해석
 
-시각으로 보이는 키는 아래와 같고, 모두 뜻이나 기준을 밝힌 공개 자료가 없습니다.
+시각으로 보이는 키는 아래와 같고, 모두 이름만으로 뜻이나 기준을 단정할 수 없습니다.
 
 | 키 | 위치 | 주의 |
 |---|---|---|
 | `Last Backup Date` | 백업 `Info.plist` | 이름으로 보면 백업 시각이지만, UTC 인지 현지 시각인지는 실제 데이터로 판별합니다. |
-| `Date` | `Manifest.plist` | 뜻을 밝힌 공개 자료가 없습니다. |
-| `LastOSInstallDate`(datetime) | HomeDomain :: `Library/Preferences/com.apple.appstored.plist` | 이름으로 보면 앱이 아니라 OS 설치 날짜이고, 뜻을 밝힌 공개 자료는 없습니다. |
-| `lastAppInstallDate`(datetime) | HomeDomain :: `Library/Preferences/com.apple.siri.sirisuggestions.plist` | 앱 설치 기록 파일이 아니라 시리 제안 설정 파일에 있고, 뜻을 밝힌 공개 자료는 없습니다. |
+| `Date` | `Manifest.plist` | 뜻이 정해져 있지 않으므로 값만 옮기고 뜻을 단정하지 않습니다. |
+| `LastOSInstallDate`(datetime) | HomeDomain :: `Library/Preferences/com.apple.appstored.plist` | 이름으로 보면 앱이 아니라 OS 설치 날짜입니다. |
+| `lastAppInstallDate`(datetime) | HomeDomain :: `Library/Preferences/com.apple.siri.sirisuggestions.plist` | 앱 설치 기록 파일이 아니라 시리 제안 설정 파일에 있습니다. |
 
 plist 의 날짜 값을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../01-foundations/value-decoding/time-values.md)에서 다룹니다. 앱별 설치 시각은 이 표의 키로 정하지 말고 설치된 앱·앱 스토어 페이지의 기록과 함께 봅니다.
 
@@ -98,7 +98,7 @@ plist 의 날짜 값을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기�
 
 가장 흔한 혼동은 이름이 같은 두 Info.plist 입니다. 백업 폴더의 `Info.plist` 는 백업 정보를 담은 파일이고 앱 번들의 Info.plist 와 다른 파일이라서, 여기서 읽은 값을 앱이 스스로 적은 번들 정보로 보고하면 안 됩니다.
 
-`LastOSInstallDate` 와 `lastAppInstallDate` 는 이름만 보면 설치 시각처럼 읽히지만, 앞의 것은 OS 쪽 키로 보이고 뒤의 것은 시리 제안 설정 파일에 들어 있습니다. 두 키 모두 뜻이 알려지지 않았으므로 앱 설치 시각의 근거로 쓰지 않습니다. `SystemAppInstallState.plist` 의 int 값도 같은 이유로 해석하지 않고 그대로 인용합니다.
+`LastOSInstallDate` 와 `lastAppInstallDate` 는 이름만 보면 설치 시각처럼 읽히지만, 앞의 것은 OS 쪽 키로 보이고 뒤의 것은 시리 제안 설정 파일에 들어 있습니다. 두 키 모두 이름만으로 뜻을 단정할 수 없으므로 앱 설치 시각의 근거로 쓰지 않습니다. `SystemAppInstallState.plist` 의 int 값도 같은 이유로 해석하지 않고 그대로 인용합니다.
 
 도메인이 없다는 사실만으로 앱이 없었다고 말하지 않습니다. 앱 도메인이 백업에서 빠지는 조건과 앱을 지운 뒤 백업에 남는 것은 실제 데이터로 확인해야 합니다. 지우기 흔적 전반은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)에서 다룹니다.
 

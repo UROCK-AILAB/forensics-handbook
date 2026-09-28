@@ -36,7 +36,7 @@ nav_order: 1320
 
 - 같은 설정 화면에서 기기에 저장된 활동 기록을 지울 수 있습니다.
 - 활동 기록을 Microsoft 로 보내는 옵션은 Windows 11 22H2·23H2 에서 2024-01-23 KB5034204 업데이트부터 없어졌습니다[2].
-- 이 설정이 레지스트리의 어느 값에 남는지는 공개 자료에 나와 있지 않습니다.
+- 이 설정이 레지스트리의 어느 값에 남는지는 시험 PC 에서 설정을 바꾸기 전과 뒤의 하이브를 비교해 확인합니다.
 
 ## 위치와 버전별 차이
 
@@ -46,7 +46,7 @@ nav_order: 1320
 %LOCALAPPDATA%\ConnectedDevicesPlatform\<계정 폴더>\ActivitiesCache.db
 ```
 
-- `ConnectedDevicesPlatform` 폴더 아래에 계정마다 폴더가 하나씩 있습니다. 로컬 계정은 `L.<사용자>` 폴더, 그 밖의 계정은 AAD·MSA 이름 규칙의 폴더를 쓴다는 설명이 널리 쓰입니다. 이 규칙을 뒷받침하는 공개 문서가 드물므로 실제 이미지의 폴더를 모두 확인합니다.
+- `ConnectedDevicesPlatform` 폴더 아래에 계정마다 폴더가 하나씩 있습니다. 로컬 계정은 `L.<사용자>` 폴더, 그 밖의 계정은 AAD·MSA 이름 규칙의 폴더를 쓴다는 설명이 널리 쓰입니다. 이 규칙만 믿지 말고 실제 이미지의 폴더를 모두 확인합니다.
 - DB 옆에 `ActivitiesCache.db-wal` 과 `ActivitiesCache.db-shm` 이 함께 있습니다. 세 파일을 함께 수집하며, 이유는 "구조" 에서 설명합니다.
 - 사용자 프로필 폴더 안이라 어느 Windows 사용자의 기록인지 가를 수 있습니다. 프로필 폴더와 계정의 짝은 [사용자 프로필 목록](../system-account/profilelist.md) 으로 확인합니다.
 
@@ -54,7 +54,7 @@ Windows 11 25H2 에서는 다음과 같은 모습이 나타날 수 있습니다.
 
 - 계정 폴더로 16자리 16진수 이름의 폴더와 `AAD.<GUID>` 이름의 폴더가 함께 있습니다.
 - `L.` 로 시작하는 폴더가 없을 수도 있습니다.
-- 16자리 16진수 이름의 폴더가 어느 계정 종류인지는 공개 자료에 나와 있지 않습니다.
+- 16자리 16진수 이름의 폴더가 어느 계정 종류인지는 이름만으로 정할 수 없습니다.
 - 계정 폴더마다 `ActivitiesCache.db`, `-wal`, `-shm` 세 파일이 있습니다.
 - `ConnectedDevicesPlatform` 바로 아래에는 `<폴더 이름>.cdp`, `<폴더 이름>.cdpresource`, `CDPGlobalSettings.cdp`, `Connected Devices Platform certificates.sst` 파일이 있습니다.
 
@@ -95,7 +95,7 @@ Windows 11 25H2 의 DB 에는 다음 표가 있습니다.
 | `Activity_PackageId` | `ActivityId`, `Platform`, `PackageName`, `ExpirationTime` |
 | `SmartLookup` | `Activity` 와 거의 같은 열에 `IsInUploadQueue` 가 더 있습니다 |
 | `Metadata` | DB 설정. 키는 `CurrentEtag`, `CurrentSettings`, `DatabaseActivityPolicies`, `DatabaseInstanceId`, `DatabaseInstanceIdUpdateTime`, `DatabaseNotificationSubscriptionInfo`, `PendingFirstDEKUpload` 입니다 |
-| `AppSettings`, `Asset`, `DataEncryptionKeys`, `ManualSequence` | 열의 뜻은 공개 자료에 나와 있지 않습니다 |
+| `AppSettings`, `Asset`, `DataEncryptionKeys`, `ManualSequence` | 열의 뜻이 정해져 있지 않으므로 값만 옮깁니다 |
 
 분석에서 주로 다루는 표는 `Activity` ("Activities" 로 적기도 합니다), `Activity_PackageID`, `ActivityOperation` 입니다[1].
 
@@ -117,7 +117,7 @@ Windows 11 25H2 에서 `Activity` 표의 열은 다음과 같습니다.
 | `PlatformDeviceId` | — | 활동이 나온 기기. 이 값을 HKCU 의 DeviceCache 항목과 맞춰 기기를 찾습니다. 같은 기기의 값도 시간이 지나면 바뀝니다[1] |
 | `StartTime`, `EndTime`, `LastModifiedTime`, `ExpirationTime`, `CreatedInCloud`, `LastModifiedOnClient` | `StartTime`·`LastModifiedTime` 은 INTEGER | Unix 초로 풀립니다. 열마다의 정확한 뜻은 아래 "시각 해석" 을 봅니다 |
 
-- DeviceCache 의 전체 키 경로는 공개 자료에 나와 있지 않습니다. 흔히 `HKCU\Software\Microsoft\Windows\CurrentVersion\TaskFlow\DeviceCache` 로 설명하는 키가 Windows 11 25H2 에는 없을 수 있습니다.
+- DeviceCache 는 흔히 `HKCU\Software\Microsoft\Windows\CurrentVersion\TaskFlow\DeviceCache` 로 설명하지만, 이 키가 Windows 11 25H2 에는 없을 수 있습니다. 사용자 하이브에서 `DeviceCache` 이름의 키를 찾아 전체 경로를 확인합니다.
 - `Metadata` 의 `CurrentSettings` 값은 `{"ActivityTypes":[0,1,3,4,7,11,12,13,15,16],"Environment":"prod"}` 와 같은 모양입니다. `AAD.<GUID>` 폴더 DB 에서는 `ActivityTypes` 가 `[0,1,3,4,7,13,16]` 인 예가 있습니다.
 
 ## 증거로서 의미
@@ -145,15 +145,15 @@ Windows 11 25H2 에서 `Activity` 표의 열은 다음과 같습니다.
 
 | 열 | 형식 | 알려진 것 |
 |---|---|---|
-| `StartTime` | Unix 초, INTEGER | 이름은 시작 시각이지만, 정확한 뜻은 공개 자료에 나와 있지 않습니다 |
+| `StartTime` | Unix 초, INTEGER | 이름은 시작 시각이지만, 정확한 뜻은 정해져 있지 않으므로 열 이름과 값만 적습니다 |
 | `EndTime` | Unix 초 | Windows 11 25H2 에서 모든 행이 0 인 예가 있습니다 |
-| `LastModifiedTime` · `LastModifiedOnClient` | Unix 초. `LastModifiedTime` 은 INTEGER | 정확한 뜻은 공개 자료에 나와 있지 않습니다 |
-| `ExpirationTime` | Unix 초 | 정확한 뜻은 공개 자료에 나와 있지 않습니다 |
-| `CreatedInCloud` | Unix 초 | 정확한 뜻은 공개 자료에 나와 있지 않습니다. 값이 있는 행은 동기화를 거친 행일 수 있습니다 |
+| `LastModifiedTime` · `LastModifiedOnClient` | Unix 초. `LastModifiedTime` 은 INTEGER | 정확한 뜻은 정해져 있지 않습니다 |
+| `ExpirationTime` | Unix 초 | 정확한 뜻은 정해져 있지 않습니다 |
+| `CreatedInCloud` | Unix 초 | 정확한 뜻은 정해져 있지 않습니다. 값이 있는 행은 동기화를 거친 행일 수 있습니다 |
 
 - Unix 초는 1970-01-01 00:00:00 UTC 부터 센 초입니다. 그래서 풀어낸 값은 UTC 입니다. 계산은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서, 현지 시각 변환은 [시간대 설정](../system-account/time-zone.md) 에서 다룹니다.
 - Windows 11 25H2 에서 `StartTime` 과 `LastModifiedTime` 은 INTEGER 로 저장되고, Unix 초로 풀면 맞는 날짜가 나옵니다.
-- 로컬 DB 의 보존 기간은 공개 자료에 나와 있지 않습니다. 흔히 말하는 30일은 클라우드에 올라간 활동 기록이 마지막 동기화 뒤 30일 안에 자동으로 지워진다는 뜻입니다[2]. 로컬 DB 의 보존 기간이 아닙니다.
+- 흔히 말하는 30일은 클라우드에 올라간 활동 기록이 마지막 동기화 뒤 30일 안에 자동으로 지워진다는 뜻입니다[2]. 로컬 DB 의 보존 기간이 아닙니다.
 - `ExpirationTime` − `LastModifiedTime` 이 2,555~3,650일 (약 7~10년) 인 경우가 있습니다.
 - 보존 기간을 가정해 "이 날짜 전 기록은 없다" 고 쓰지 않습니다. 실제 행의 날짜 범위를 적습니다.
 
@@ -174,12 +174,12 @@ Windows 11 25H2 에서 `Activity` 표의 열은 다음과 같습니다.
    - `AppId` 의 application 값은 설정·자격 증명 동기화처럼 보이는 이름입니다. "11·12·15 = 시스템 작업" 설명과 맞습니다.
    - `AAD.<GUID>` 폴더 DB 는 `Activity` 와 `ActivityOperation` 이 모두 0행입니다.
 
-   두 DB 의 `CurrentSettings` 에 있는 `ActivityTypes` 목록에도 5 와 6 이 없습니다. 이 목록과 유형 5·6 행이 없는 것이 관계있는지는 알려져 있지 않습니다.
+   두 DB 의 `CurrentSettings` 에 있는 `ActivityTypes` 목록에도 5 와 6 이 없습니다. 이 목록 때문에 유형 5·6 행이 없다고 단정할 수는 없습니다.
 5. **`Payload` 를 모두 JSON 으로 읽습니다.** Windows 11 25H2 에서 `Payload` 는 BLOB 열에 Base64 ASCII 텍스트로 들어 있을 수 있습니다.
    - 유형 15 는 Base64 를 풀면 DER 로 된 CMS EnvelopedData (OID 1.2.840.113549.1.7.3) 입니다.
    - 유형 11·12 는 Base64 를 풀면 `43 42 01 00` 으로 시작하는 이진 데이터입니다.
 
-   이 유형들은 JSON 이 아니고 암호화된 것으로 보입니다. `DataEncryptionKeys` 표와의 관계는 알려져 있지 않습니다.
+   이 유형들은 JSON 이 아니고 암호화된 것으로 보입니다. `DataEncryptionKeys` 표와 관계가 있는지는 표 이름만으로 단정하지 않습니다.
 6. **클립보드 열에 값이 있으면 내용도 있다고 봅니다.** `ClipboardPayload` 에 값이 든 137행이 모두 `[]` 인 예가 있습니다.
 7. **계정 폴더 이름을 규칙대로만 찾습니다.** `L.` 폴더가 없을 수도 있습니다. `ConnectedDevicesPlatform` 아래 폴더를 모두 열어 봅니다.
 

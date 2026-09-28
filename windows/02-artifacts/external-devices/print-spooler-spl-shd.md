@@ -67,7 +67,7 @@ Windows 는 인쇄할 때 먼저 스풀 파일 (spool file) 을 만들고, 차�
 
 - 프린터 키에 있는 값(Windows 11 25H2): `Name`, `Share Name`, `Print Processor`, `Datatype`, `Parameters`, `Description`, `Printer Driver`, `Default DevMode`, `Priority`, `Default Priority`, `StartTime`, `UntilTime`, `Separator File`, `Location`, `Attributes`, `Port`, `SpoolDirectory`, `Status`, `StatusExt`, `ChangeID`, `CreatorSid`, `QueueInstanceId`, `DeviceInterfaceId`, `Security`, `ObjectGUID` 등.
 - 하위 키: `DsDriver`, `DsSpooler`, `PnPData`, `PrinterDriverData`. 일부 프린터에는 `ConfigDriverResources`, `PsaData` 도 있습니다.
-- 값 이름 여럿이 `PRINTER_INFO_2` 구조체 멤버와 이름이 비슷합니다(`Attributes`, `Priority`, `StartTime` 등). 다만 레지스트리 값과 구조체 멤버가 하나씩 대응한다고 밝힌 공개 문서는 없습니다.
+- 값 이름 여럿이 `PRINTER_INFO_2` 구조체 멤버와 이름이 비슷합니다(`Attributes`, `Priority`, `StartTime` 등). 다만 이름이 비슷하다는 것만으로 레지스트리 값과 구조체 멤버가 하나씩 대응한다고 볼 수는 없습니다.
 - 아래 예의 프린터 5개(Windows 11 25H2)는 모두 `Print Processor` 가 `winprint`, `Datatype` 이 `RAW` 입니다.
 - 같은 예에서 프린터별 `SpoolDirectory` 값은 5개 모두 비어 있습니다. 이 값이 비어 있으면 기본 스풀 폴더를 씁니다.
 
@@ -128,7 +128,7 @@ Windows 11 25H2 PC 한 대의 프린터 5개를 예로 들면 아래와 같습�
 
 ### 증명하지 못하는 것
 
-- 프린터를 언제, 누가 추가했는지 알 수 없습니다. 이를 알려 주는 값은 알려진 것이 없습니다. `CreatorSid` 라는 값이 있지만 뜻을 설명한 공개 문서는 없습니다.
+- 프린터를 언제, 누가 추가했는지 알 수 없습니다. `CreatorSid` 라는 값이 있지만 뜻이 정해져 있지 않으므로, 보고서에는 값만 옮기고 프린터를 추가한 사람으로 단정하지 않습니다.
 - 프린터 목록은 인쇄 작업 자체를 보여 주지 않습니다.
 - 스풀 폴더가 비어 있어도 인쇄를 안 했다는 뜻이 아닙니다. 설정이 꺼져 있으면 인쇄가 끝난 작업을 지웁니다.
 - 307 이벤트가 없어도 인쇄를 안 했다는 뜻이 아닙니다. 채널이 꺼져 있을 수 있습니다.
@@ -146,7 +146,7 @@ Windows 11 25H2 PC 한 대의 프린터 5개를 예로 들면 아래와 같습�
 | 프린터 키 `StartTime`·`UntilTime` | 이름이 같은 `PRINTER_INFO_2` 멤버는 프린터 정보의 일부입니다. 인쇄 작업 시각으로 쓰지 않습니다. | 구조체 멤버는 "GMT 0시부터 지난 분" (Microsoft) |
 | SHD 안의 제출 시각 | 형식(SYSTEMTIME 인지)과 기준(UTC 인지 현지 시각인지)은 실제 데이터로 확인합니다. | 실제 데이터로 확인 |
 | 스풀 폴더 파일의 파일시스템 시각 | 스풀 파일도 NTFS 위의 파일입니다. 파일이나 그 MFT 항목이 남아 있으면 시각을 볼 수 있습니다. | UTC ([마스터 파일 테이블](../filesystem/mft.md)) |
-| 프린터 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 공개 자료가 없습니다. 프린터를 추가한 시각으로 쓰지 않습니다. | UTC |
+| 프린터 키 마지막 기록 시각 | 무엇이 바뀔 때 바뀌는지 정해져 있지 않으므로 프린터를 추가한 시각으로 쓰지 않습니다. | UTC |
 | PrintService 이벤트 기록 시각 | [인쇄 이벤트](../event-logs/printservice-307.md)에서 다룹니다. | UTC |
 
 - 인쇄한 때를 정하려면 이벤트 로그와 스풀 폴더의 파일시스템 기록을 함께 봅니다. 프린터 키의 시각 값으로 정하지 않습니다.
@@ -158,9 +158,9 @@ Windows 11 25H2 PC 한 대의 프린터 5개를 예로 들면 아래와 같습�
 3. **다른 스풀 폴더.** `DefaultSpoolDirectory` 와 프린터별 `SpoolDirectory` 를 먼저 읽습니다. `SpoolDirectory` 가 비어 있지 않으면 그 폴더도 봅니다.
 4. **꺼져 있는 이벤트 채널.** PrintService/Operational 은 꺼져 있을 수 있습니다. 이 채널이 기본으로 꺼져 있다는 설명이 있습니다. 켜져 있어도 1MB 남짓한 크기라 오래된 이벤트는 덮어씁니다.
 5. **가상 프린터.** PDF·OneNote 같은 가상 프린터는 종이 대신 파일이나 노트를 만듭니다. 만든 PDF 파일은 [바로가기 파일](../file-folder-usage/lnk.md)과 [최근 문서](../file-folder-usage/recentdocs.md)로 추적합니다.
-6. **스풀 파일 형식을 미리 정하는 실수.** 프린터의 `Datatype` 이 RAW 여도 작업마다 형식이 달라질 수 있는지는 공개 자료가 없습니다. SPL 을 열 때는 형식을 가정하지 말고 첫 바이트부터 확인합니다.
+6. **스풀 파일 형식을 미리 정하는 실수.** 프린터의 `Datatype` 값만으로 작업마다의 형식을 정할 수는 없습니다. SPL 을 열 때는 형식을 가정하지 말고 첫 바이트부터 확인합니다.
 7. **비트 값의 근거.** 이 페이지의 비트 숫자는 .NET 열거형과 Wine 의 `winspool.h` 에서 나왔습니다. .NET 열거형에는 0x40(`LOCAL`) 같은 비트가 없습니다. 도구가 .NET 이름만 보여 주면 헤더 값으로 다시 풉니다.
-8. **지워진 스풀 파일.** 비할당 영역에서 SPL·SHD 만 되살리는 방법은 공개 자료가 없습니다. 일반 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
+8. **지워진 스풀 파일.** 비할당 영역에서 SPL·SHD 를 되살릴 때는 일반 복구 절차를 따릅니다. 절차는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)와 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md)을 봅니다.
 
 ## 직접 분석해 보기
 

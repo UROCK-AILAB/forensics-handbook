@@ -65,7 +65,7 @@ adb 일반 권한 출력에서 볼 필드는 아래와 같습니다. 제조사�
 | `settings secure` | `install_non_market_apps`, `fixed_delete_mode_rule`, `fixed_delete_reminder` |
 | `settings global` | `package_verifier_user_consent`, `verifier_timeout`, `verifier_timeout_samsung` |
 
-`fixed_delete_*` 키의 뜻을 밝힌 공개 자료는 없습니다. `dumpsys package` 에 지워진 패키지 이력을 보여 주는 절이 있는지는 실제 기기의 출력에서 확인합니다.
+`fixed_delete_*` 키는 뜻이 정해져 있지 않으므로, 보고서에는 키 이름과 값만 옮기고 뜻을 단정하지 않습니다. `dumpsys package` 에 지워진 패키지 이력을 보여 주는 절이 있는지는 실제 기기의 출력에서 확인합니다.
 
 ## 분석 흐름
 

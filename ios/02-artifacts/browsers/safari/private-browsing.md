@@ -35,15 +35,15 @@ iOS 17·iPadOS 17 부터는 잠긴 개인 정보 보호 브라우징(Locked Priv
 | `parent` 값 | iOS 16 기기 한 대에서 `parent` 가 12 인 행이 개인 정보 보호 모드 탭이었습니다. 고정값인지는 실제 데이터로 확인합니다 | [3] |
 | `private_browsing` 열 | BrowserState.db `tabs` 에 있는 열입니다 | [4] |
 
-`parent` 의 숫자는 기기마다 다를 수 있어서, 숫자보다 폴더 행의 `title` 을 먼저 보는 편이 안전합니다. 이름이 `privatepinned` 인 폴더는 이름으로 짐작하면 개인 정보 보호 모드의 고정 탭으로 보이지만, 이 뜻을 따로 설명한 공개 자료는 없습니다.
+`parent` 의 숫자는 기기마다 다를 수 있어서, 숫자보다 폴더 행의 `title` 을 먼저 보는 편이 안전합니다. 이름이 `privatepinned` 인 폴더는 이름으로 짐작하면 개인 정보 보호 모드의 고정 탭으로 보이지만, 이름만으로 뜻을 단정할 수는 없습니다.
 
-사파리 설정 plist 에는 생체 인증·암호와 이어진 이름의 키가 있습니다. AppDomain-com.apple.mobilesafari `Library/Preferences/com.apple.mobilesafari.plist` 의 `BiometricAuthenticationIsAvailable`(bool), `BiometricAuthenticationTypeIfAvailable`(int), `PasscodeIsAvailable`(bool) 이고, 잠긴 개인 정보 보호 브라우징 설정과 관계가 있는지 밝힌 공개 자료는 없습니다. 같은 파일의 `WBSPrivacyProxyAvailabilitySubscriberTier`, `WBSPrivacyProxyAvailabilityAccountType`, `WBSPrivacyProxyAvailabilityServiceStatus`, `WBSPrivacyProxyAvailabilityActiveOnDefaultNetwork` 는 이름으로 짐작하면 사설 릴레이와 이어진 키이지만, 개인 정보 보호 브라우징과 직접 관계가 있다는 근거는 없습니다.
+사파리 설정 plist 에는 생체 인증·암호와 이어진 이름의 키가 있습니다. AppDomain-com.apple.mobilesafari `Library/Preferences/com.apple.mobilesafari.plist` 의 `BiometricAuthenticationIsAvailable`(bool), `BiometricAuthenticationTypeIfAvailable`(int), `PasscodeIsAvailable`(bool) 이지만, 이 키들만으로 잠긴 개인 정보 보호 브라우징을 설정했는지 판단할 수는 없습니다. 같은 파일의 `WBSPrivacyProxyAvailabilitySubscriberTier`, `WBSPrivacyProxyAvailabilityAccountType`, `WBSPrivacyProxyAvailabilityServiceStatus`, `WBSPrivacyProxyAvailabilityActiveOnDefaultNetwork` 는 이름으로 짐작하면 사설 릴레이와 이어진 키라서, 개인 정보 보호 브라우징을 판단하는 데 쓰지 않습니다.
 
 ## 증거로서 의미
 
 **증명하는 것.** SafariTabs.db 에서 개인 정보 보호 폴더 아래에 탭 행이 있으면, 수집 시점에 그 URL 의 개인 정보 보호 탭이 사파리에 저장되어 있었다는 사실을 보여 줍니다[2][4]. 사용자가 개인 정보 보호 모드를 썼다는 흔적이 되고, 방문 기록에 없는 URL 을 찾는 길이 되기도 합니다.
 
-**증명하지 못하는 것.** 개인 정보 보호 모드의 방문은 History.db 에 남지 않아서[2] 그 탭에서 몇 페이지를 거쳤는지, 언제 처음 열었는지는 방문 기록으로 알 수 없습니다. 이미 닫은 개인 정보 보호 탭이 어디까지 남는지는 알려지지 않았고, 탭 DB 에 없다고 이 모드를 쓰지 않았다고 말할 수도 없습니다. 잠긴 개인 정보 보호 브라우징의 설정 여부를 plist 키로 판단할 근거도 없습니다.
+**증명하지 못하는 것.** 개인 정보 보호 모드의 방문은 History.db 에 남지 않아서[2] 그 탭에서 몇 페이지를 거쳤는지, 언제 처음 열었는지는 방문 기록으로 알 수 없습니다. 이미 닫은 개인 정보 보호 탭이 남는다고 볼 수 없으므로, 탭 DB 에 없다고 이 모드를 쓰지 않았다고 말할 수도 없습니다. 잠긴 개인 정보 보호 브라우징의 설정 여부도 plist 키로 판단할 수 없습니다.
 
 보고서에는 "수집 시점에 SafariTabs.db 의 개인 정보 보호 탭 묶음에 이 URL 의 탭이 저장되어 있었다" 처럼 씁니다.
 

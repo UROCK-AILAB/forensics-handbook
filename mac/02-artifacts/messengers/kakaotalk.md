@@ -6,13 +6,13 @@ nav_order: 1390
 
 # 카카오톡 맥 (KakaoTalk)
 
-맥 카카오톡의 저장 위치와 대화 DB 구조를 분석한 공개 자료는 없어서, 실제 데이터로 확인해야 합니다. 이 페이지는 분석 대상에서 앱 데이터 폴더를 찾고 파일이 평문 SQLite인지 판별하는 방법을 다룹니다.
+맥 카카오톡의 저장 위치와 대화 DB 구조는 실제 데이터로 확인합니다. 이 페이지는 분석 대상에서 앱 데이터 폴더를 찾고 파일이 평문 SQLite인지 판별하는 방법을 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 메신저 앱은 대화를 이어 보여 주려고 대화 내용과 받은 파일, 로그인 상태 같은 설정을 사용자 폴더 안에 저장합니다. 맥 카카오톡이 어느 폴더에 어떤 이름의 파일로 이것들을 저장하는지, 대화 DB를 암호화하는지, 암호화한다면 어떤 방식인지는 실제 데이터로 확인해야 합니다. 받은 파일과 사진이 모이는 폴더, 로그인 계정이나 자동 로그인을 적는 설정 plist의 경로와 키도 마찬가지입니다.
 
-윈도우판 카카오톡의 대화 파일(`.edb`)은 SQLCipher 계열로 알려져 있지만, 맥판이 같은 방식을 쓰는지는 알려져 있지 않습니다. 윈도우판 이야기를 맥 데이터에 그대로 옮겨 "암호화되어 있다" 고 적지 않습니다.
+윈도우판 카카오톡의 대화 파일(`.edb`)은 SQLCipher 계열로 알려져 있지만, 맥판이 같은 방식을 쓰는지는 파일 첫 16바이트부터 확인합니다. 윈도우판 이야기를 맥 데이터에 그대로 옮겨 "암호화되어 있다" 고 적지 않습니다.
 
 ## 위치와 버전별 차이
 
@@ -24,11 +24,11 @@ nav_order: 1390
 
 앱 번들 ID로 흔히 `com.kakao.KakaoTalkMac` 이 알려져 있지만, 1번에서 실제 값을 직접 읽어 씁니다. 샌드박스 앱은 `~/Library/Containers/` 아래 번들 ID 이름의 폴더 안에 데이터를 두는 경우가 많지만, 카카오톡이 이 구조를 쓰는지는 실제 데이터로 확인합니다. 같은 앱이라도 받은 경로에 따라 저장 위치가 달라지는 예가 [슬랙 (Slack)](slack.md)과 [텔레그램 (Telegram)](telegram.md)에 있으니, 한 곳에서 못 찾았다고 멈추지 않습니다.
 
-macOS 버전과 카카오톡 버전에 따른 차이를 다룬 공개 자료는 없습니다. 분석 대상의 macOS 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)에서, 앱 버전은 1번의 `Info.plist` 에서 확인해 함께 적습니다.
+분석 대상의 macOS 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../system-account/os-version-install-history.md)에서, 앱 버전은 1번의 `Info.plist` 에서 확인해 함께 적습니다.
 
 ## 구조
 
-파일 구조를 밝힌 자료가 없어서, 찾은 파일마다 형식부터 판별합니다. 평문 SQLite 파일은 첫 16바이트가 `SQLite format 3` 과 널 바이트 하나이고, 이 글자가 보이면 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)의 방법대로 표를 엽니다. 첫 16바이트가 이 글자가 아니면 평문 SQLite가 아니라는 사실만 확인한 것이라서, 그 파일이 암호화된 DB인지 다른 형식의 파일인지는 따로 판별해야 합니다.
+찾은 파일마다 형식부터 판별합니다. 평문 SQLite 파일은 첫 16바이트가 `SQLite format 3` 과 널 바이트 하나이고, 이 글자가 보이면 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md)의 방법대로 표를 엽니다. 첫 16바이트가 이 글자가 아니면 평문 SQLite가 아니라는 사실만 확인한 것이라서, 그 파일이 암호화된 DB인지 다른 형식의 파일인지는 따로 판별해야 합니다.
 
 plist로 보이는 파일은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 읽는 법을 보고, LevelDB로 보이는 폴더는 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)를 봅니다.
 
@@ -42,7 +42,7 @@ plist로 보이는 파일은 [속성 목록 파일 (Property List)](../../01-fou
 
 ## 시각 해석
 
-대화 DB 안의 시각 열을 다룬 공개 자료는 없습니다. 확인할 수 있는 시각은 데이터 폴더와 파일의 파일 시스템 시각이고, 읽는 법은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)에 있습니다. 폴더와 파일이 언제 만들어지고 바뀌었는지는 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 더 볼 수 있고, 앱을 언제 실행했는지는 [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md)의 흐름으로 봅니다. 파일 시각이 곧 대화 시각은 아니라서 둘을 섞지 않고 따로 적습니다.
+대화 DB 안의 시각 열은 평문 SQLite로 열린 파일에서 `.schema` 로 표 구조를 보고 확인합니다. 그 밖에 확인할 수 있는 시각은 데이터 폴더와 파일의 파일 시스템 시각이고, 읽는 법은 [APFS 구조 (APFS)](../../01-foundations/disk-volume/apfs/index.md)에 있습니다. 폴더와 파일이 언제 만들어지고 바뀌었는지는 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 더 볼 수 있고, 앱을 언제 실행했는지는 [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md)의 흐름으로 봅니다. 파일 시각이 곧 대화 시각은 아니라서 둘을 섞지 않고 따로 적습니다.
 
 ## 함정과 한계
 
@@ -92,4 +92,4 @@ sqlite3 copy.db '.tables'
 
 ## 참고 문헌
 
-맥 카카오톡의 저장 위치와 DB 구조를 밝힌 공개 자료가 없어, 참고 문헌으로 적을 자료가 없습니다.
+이 페이지에서 인용한 문헌은 없습니다.

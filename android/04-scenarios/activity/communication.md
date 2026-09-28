@@ -67,7 +67,7 @@ nav_order: 1560
 
    `dumpsys usagestats` 에는 알림이 왔다는 사실만 남습니다. 예를 들어 `type=NOTIFICATION_INTERRUPTION ... channelId=CHANNEL_ID_SMS_MMS` 줄에서는 채널 이름으로 문자 알림이 왔다는 것을 알 수 있지만, 상대방과 본문은 이 줄에 없습니다. `dumpsys notification` 에는 지금 떠 있는 알림의 `android.title`·`android.text` 필드가 나옵니다.
 
-6. **통화 녹음이 있는지 봅니다.** `/sdcard` 최상위의 `Recordings` 폴더와 settings system 의 `record_calls_automatically_on_off`, `record_calls_automatically_type`, `record_call_storage_setting_value` 같은 통화 녹음 설정 키를 봅니다. 키 값의 뜻과 삼성 통화 녹음 파일의 이름 규칙은 공개 자료가 없으므로, 녹음 파일을 찾았다면 파일 자체의 메타데이터와 통화 기록 시각을 나란히 놓아 맞춰 봅니다. `dumpsys batterystats` 의 `+audio`·`-audio` 줄은 오디오를 쓴 구간일 뿐, 그것이 통화였는지는 이 줄만으로 알 수 없습니다.
+6. **통화 녹음이 있는지 봅니다.** `/sdcard` 최상위의 `Recordings` 폴더와 settings system 의 `record_calls_automatically_on_off`, `record_calls_automatically_type`, `record_call_storage_setting_value` 같은 통화 녹음 설정 키를 봅니다. 키 값과 녹음 파일 이름만으로 녹음 여부나 시각을 단정하지 않고, 녹음 파일을 찾았다면 파일 자체의 메타데이터와 통화 기록 시각을 나란히 놓아 맞춰 봅니다. `dumpsys batterystats` 의 `+audio`·`-audio` 줄은 오디오를 쓴 구간일 뿐, 그것이 통화였는지는 이 줄만으로 알 수 없습니다.
 
 7. **한 표로 합칩니다.** 통화·문자·메신저·알림을 상대 번호(또는 ID)와 시각 기준으로 한 표에 모읍니다. 이때 `calls.date`·`sms.date`·알림의 `posted_time_ms` 는 밀리초이고 `pdu.date` 는 초라서 단위를 먼저 맞추고, 행마다 출처 파일과 원래 값을 함께 남깁니다. 여러 기록을 한 시간 축에 놓는 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
@@ -101,6 +101,7 @@ nav_order: 1560
 
 - 아티팩트 본문: [통화 기록](../../02-artifacts/communications/call-log.md), [문자](../../02-artifacts/communications/messages/index.md), [연락처](../../02-artifacts/communications/contacts.md), [통화 녹음과 음성 사서함](../../02-artifacts/communications/call-recording-voicemail.md), [알림 기록](../../02-artifacts/app-usage/notification-history.md)
 - 메신저: [카카오톡](../../02-artifacts/messengers/kakaotalk/index.md), [텔레그램](../../02-artifacts/messengers/telegram.md), [왓츠앱](../../02-artifacts/messengers/whatsapp.md), [시그널](../../02-artifacts/messengers/signal.md)
+- 약속과 참석자: [캘린더](../../02-artifacts/communications/calendar.md)
 - 이어지는 시나리오: [지운 대화와 사진 찾기](deleted-content.md), [그 시각에 폰을 쓴 사람이 누구인가](user-attribution.md)
 - 기법: [앱 데이터 분석](../../03-techniques/analysis/app-data-analysis/index.md), [타임라인 작성](../../03-techniques/analysis/timeline/index.md)
 

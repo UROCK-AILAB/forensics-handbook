@@ -21,7 +21,7 @@ iCloud 에 동기화하는 메모는 표준 보호에서 서버 저장 시 암�
 | 무엇 | 위치 | 확인 정도 |
 |---|---|---|
 | 현재 메모 DB | `AppDomainGroup-group.com.apple.notes :: NoteStore.sqlite` | — |
-| 손글씨·그림 관련으로 보이는 DB | `AppDomainGroup-group.com.apple.notes :: Accounts/<UUID>/Paper/Bundles/<UUID>.bundle/Database/data.sqlite` | 용도는 공개 자료 없음 |
+| 손글씨·그림 관련으로 보이는 DB | `AppDomainGroup-group.com.apple.notes :: Accounts/<UUID>/Paper/Bundles/<UUID>.bundle/Database/data.sqlite` | 용도는 표 구조를 열어 보고 판단 |
 | 옛 메모 DB | `HomeDomain :: Library/Notes/notes.sqlite` | 행이 있는지는 실제 데이터로 확인 |
 | 메모 앱 설정 | `HomeDomain :: Library/Preferences/com.apple.mobilenotes.plist` | — |
 | 메모 앱 그룹 설정 | `AppDomainGroup-group.com.apple.notes :: Library/Preferences/group.com.apple.notes.plist` | — |

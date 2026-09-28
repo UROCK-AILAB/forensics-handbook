@@ -91,7 +91,7 @@ local-agent-mode-sessions/
 
 **증명하는 것.** 응용 프로그램 폴더에 앱이 있고 `~/Library/Application Support/Claude/` 가 있으면 이 macOS 사용자 계정에 앱을 설치하고 실행한 흔적이 있다고 쓸 수 있습니다. `local-agent-mode-sessions/` 에 세션이 있으면 그 계정으로 Cowork 세션을 만든 기록이 있다고 쓸 수 있고, 대화 기록에서 요청한 내용, 에이전트가 부른 도구, 쓴 토큰을 읽을 수 있습니다[5]. 메타데이터의 `userSelectedFolders`·`egressAllowedDomains`·`webFetchAllowedUrls` 는 에이전트에 허락한 폴더와 접속 범위를 알려 줍니다[5]. MCP 설정과 `~/Library/Logs/Claude` 의 로그가 있으면 로컬 MCP 서버를 연결했거나 연결하려 한 기록이 있다고 쓸 수 있고, 관리 설정이 있으면 기기에 조직 정책이 놓여 있었다고 쓸 수 있습니다.
 
-**증명하지 못하는 것.** 메타데이터의 `emailAddress` 는 앱에 로그인한 계정을 알려 줄 뿐이고, 그때 키보드 앞에 누가 있었는지는 알려 주지 않습니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)). `egressAllowedDomains` 는 허락한 범위이고 실제로 접속한 기록이 아니라서 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)과 맞춰 봅니다. `result` 줄의 `total_cost_usd` 는 런타임이 계산한 값이고 청구 금액이 아니며, 청구 근거는 Anthropic 콘솔입니다[5]. 일반 채팅 대화가 기기에 남는지는 공개된 분석 자료가 없어서, 대화 내용이 필요하면 [계정 데이터 내보내기](export.md)를 씁니다.
+**증명하지 못하는 것.** 메타데이터의 `emailAddress` 는 앱에 로그인한 계정을 알려 줄 뿐이고, 그때 키보드 앞에 누가 있었는지는 알려 주지 않습니다([그 대화를 한 사람이 누구인가](../../../04-scenarios/attribution/user-attribution.md)). `egressAllowedDomains` 는 허락한 범위이고 실제로 접속한 기록이 아니라서 [AI 서비스 도메인과 네트워크 기록](../../network-enterprise/network-traces.md)과 맞춰 봅니다. `result` 줄의 `total_cost_usd` 는 런타임이 계산한 값이고 청구 금액이 아니며, 청구 근거는 Anthropic 콘솔입니다[5]. 일반 채팅 대화가 기기에 남는지는 앱 데이터 폴더 안 파일을 열어 확인하고, 대화 내용이 필요하면 [계정 데이터 내보내기](export.md)를 씁니다.
 
 ## 시각 해석
 
@@ -99,7 +99,7 @@ local-agent-mode-sessions/
 
 세션 제목을 바꾸면 메타데이터 파일만 바뀌어서, agentsview 는 메타데이터 파일과 대화 기록 파일의 수정 시각 가운데 늦은 쪽을 세션의 수정 시각으로 씁니다[6]. 메타데이터 파일의 수정 시각이 늦다고 그때 대화가 있었다고 보지 않습니다.
 
-업데이트는 앱 안에서 이뤄지고[1] 그때 앱 번들의 파일 시스템 시각이 바뀔 수 있어서, 번들 시각을 처음 설치한 때로 보지 않습니다. 처음 받은 때는 [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/quarantine/index.html)에서, 폴더가 생기고 지워진 순서는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에서 찾습니다. 여러 시각을 한 줄로 맞추는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)을 봅니다. MCP 로그 줄의 시각 형식은 공개 문서에 없어서 값을 보고 판단합니다.
+업데이트는 앱 안에서 이뤄지고[1] 그때 앱 번들의 파일 시스템 시각이 바뀔 수 있어서, 번들 시각을 처음 설치한 때로 보지 않습니다. 처음 받은 때는 [격리 속성과 다운로드 기록](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/quarantine/index.html)에서, 폴더가 생기고 지워진 순서는 [파일 시스템 이벤트](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/filesystem/fsevents/index.html)에서 찾습니다. 여러 시각을 한 줄로 맞추는 방법은 [타임라인 작성](https://urock-ailab.github.io/forensics-handbook/mac/03-techniques/analysis/timeline/index.html)과 [AI 사용 타임라인](../../../03-techniques/analysis/timeline.md)을 봅니다. MCP 로그 줄의 시각 형식은 실제 값을 보고 판단합니다.
 
 ## 함정과 한계
 

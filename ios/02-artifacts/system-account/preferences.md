@@ -31,7 +31,7 @@ iOS 의 시스템과 앱은 설정과 내부 상태를 `Library/Preferences/` �
 
 앱 설정의 예로 `AppDomain-com.apple.mobilesafari :: Library/Preferences/com.apple.mobilesafari.plist` 가 있습니다. 백업의 `HomeDomain :: Library/Preferences/` 는 이름으로 보면 기기 안 경로 `/mobile/Library/Preferences/`[8] 와 같은 자리이지만, 도메인과 기기 안 경로를 짝짓는 규칙은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 확인합니다. 번들 ID 로 앱을 구분하는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다.
 
-iOS 버전마다 어떤 설정 파일이 새로 생기거나 없어지는지 설명한 공개 문서는 없습니다. 이 페이지의 파일 이름과 키 이름은 iOS 27.0 백업 기준이니, 다른 버전 기기에서는 같은 이름이 있는지부터 확인합니다.
+이 페이지의 파일 이름과 키 이름은 iOS 27.0 백업 기준이니, 다른 버전 기기에서는 같은 이름이 있는지부터 확인합니다.
 
 ### 자주 보는 설정 파일
 
@@ -40,7 +40,7 @@ iOS 버전마다 어떤 설정 파일이 새로 생기거나 없어지는지 설
 | 파일 | 키 예 | 이름으로 짐작되는 내용 |
 |---|---|---|
 | `.GlobalPreferences.plist` | `AppleLanguages` (list), `AppleLocale` (str), `AppleKeyboards` (list), `AppleKeyboardsExpanded` (int), `AppleLanguagesSchemaVersion` (int), `AKLastLocale` (str), `AddingEmojiKeybordHandled` (bool), `PKKeychainVersionKey` (int), `com.apple.gms.availability.` 로 시작하는 키 여러 개 | 기기 언어·지역·키보드 |
-| `.GlobalPreferences_m.plist` | `AppleLocale`, `Sig_AppleLocale`, `AppleLanguages`, `Sig_AppleLanguages` | 언어·지역. `_m` 파일과 `Sig_` 키의 뜻은 공개 자료 없음 |
+| `.GlobalPreferences_m.plist` | `AppleLocale`, `Sig_AppleLocale`, `AppleLanguages`, `Sig_AppleLanguages` | 언어·지역. `_m` 파일과 `Sig_` 키의 뜻은 `.GlobalPreferences.plist` 와 값을 나란히 놓고 비교해 확인 |
 | `com.apple.springboard.plist` | `SBShowBatteryPercentage`, `SBEnableAlwaysOn`, `SBReachabilityEnabled`, `SBParentalControlsEnabled`, `SBRecentLocale`, `SBLockScreenWallpapers`, `SBHomeScreenWallpapers` | 홈 화면·잠금 화면 설정 |
 | `com.apple.Preferences.plist` | `VPNConnectivity` (int), `VPNHasRelayConnections` (bool), `CellularSimIsRequired` (bool), `PersonalHotspotDiabled` (bool), `PSCoreSpolightIndexerLastIndexDate` (datetime) | 설정 앱 상태 |
 | `com.apple.ScreenTimeAgent.plist` | `ScreenTimeEnabled` (bool), `SyncEnabled` (bool), `UsageGenesisDate` (datetime), `LastCheckinDate` (datetime), `LastViewedAllActivityDate` (datetime) | 스크린 타임 |
@@ -69,7 +69,7 @@ SysSharedContainerDomain-systemgroup.com.apple.configurationprofiles :: Library/
     MCSettingsEvents.plist  ProfileTruth.plist  PayloadManifest.plist  UserSettings.plist
 ```
 
-`UserConfigurationProfiles` 쪽 파일에는 최상위 키 `restrictedBool`, `restrictedValue`, `intersection`, `union` 이 있고, 두 `Truth.plist` 에는 빈 사전인 `assignedObject` 도 있으며, `UserSettings.plist` 는 키가 없는 빈 파일일 수 있습니다. 이름으로 보면 켜고 끄는 제한, 값으로 거는 제한, 여러 프로파일의 목록을 합치는 방식이 나뉘어 있는 것 같지만, 이를 설명한 공개 자료는 없습니다. `MCProfileEvents.plist` 와 `MCSettingsEvents.plist` 도 이름으로는 프로파일·설정 변경 기록처럼 보이지만, 실제 데이터로 확인해야 합니다. 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서, 이 파일 안의 암호 정책 키는 [암호와 Face ID 설정 흔적](passcode-biometrics.md) 에서 다룹니다.
+`UserConfigurationProfiles` 쪽 파일에는 최상위 키 `restrictedBool`, `restrictedValue`, `intersection`, `union` 이 있고, 두 `Truth.plist` 에는 빈 사전인 `assignedObject` 도 있으며, `UserSettings.plist` 는 키가 없는 빈 파일일 수 있습니다. 이름으로 보면 켜고 끄는 제한, 값으로 거는 제한, 여러 프로파일의 목록을 합치는 방식이 나뉘어 있는 것으로 보입니다. `MCProfileEvents.plist` 와 `MCSettingsEvents.plist` 도 이름으로는 프로파일·설정 변경 기록처럼 보이지만, 실제 데이터로 확인해야 합니다. 프로파일 설치 흔적은 [구성 프로파일과 MDM](../credentials-security/configuration-profiles.md) 에서, 이 파일 안의 암호 정책 키는 [암호와 Face ID 설정 흔적](passcode-biometrics.md) 에서 다룹니다.
 
 ## 구조
 

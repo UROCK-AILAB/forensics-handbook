@@ -84,7 +84,7 @@ nav_order: 2410
 | Splashtop-Splashtop Streamer-Remote Session/Operational | 원격 세션 생성, 파일 전송, 상대 호스트 이름, 파일 이름 | `A file was transferred during the Splashtop remote session (1018449597). App version: 3.5.2.1 File name: mechant.7z From: mechant_host (N/A) To: LABWINDOWS (C:\Users\lab\Desktop)` |
 | Splashtop-Splashtop Streamer-Status/Operational | 서비스 상태 | `Splashtop streamer went online. App version: 3.5.2.1 Server Info: st-v3-univ-srs-win-3521-g3.api.splashtop.com RMM ID: hZCDFPhK75mJ` |
 
-두 로그의 이벤트 ID 번호는 공개 자료에 없어 메시지 문구로 찾습니다.
+두 로그는 이벤트 ID 번호보다 메시지 문구로 찾습니다.
 
 ### 텍스트 로그
 
@@ -170,14 +170,14 @@ Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IP
 
 - Splashtop 전용 이벤트 로그와 Chrome Remote Desktop 이벤트의 시각은 이벤트 레코드 시각입니다. 레코드 시각을 읽는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 - `SPLog.txt` 의 시각에는 연도가 없습니다(예: `Sep  1 11:40:53`). 연도는 파일 시각이나 같은 때의 다른 기록에서 채웁니다.
-- `SPLog.txt`, `FTCLog.txt`, RustDesk 로그의 시각이 UTC 인지는 공개 자료에 없습니다. 같은 파일 전송을 Remote Session 로그와 `FTCLog.txt` 에서 찾아 두 시각의 차이를 잽니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
+- `SPLog.txt`, `FTCLog.txt`, RustDesk 로그의 시각이 UTC 인지 확인하려면 같은 파일 전송을 Remote Session 로그와 `FTCLog.txt` 에서 찾아 두 시각의 차이를 잽니다. PC 의 시간대 설정은 [시간대 설정](../../system-account/time-zone.md)에서 봅니다.
 - Splashtop 공개 예시의 시각은 `[FTC] UploadRequest` 줄이 11:42:12, `FTCLog.txt` 줄이 11:42:14 입니다[1]. 두 파일이 같은 시간대로 적힌 것으로 보입니다.
 
 ## 함정과 한계
 
 - **RustDesk 는 도메인으로 거르기 어렵습니다.** 중계 서버를 직접 둘 수 있습니다.
 - **Splashtop 은 다른 제품에 딸려 설치될 수 있습니다.** Synacktiv 시험에서는 Atera 에 딸려 설치됐습니다[1]. 사용자가 Splashtop 을 따로 설치하지 않았어도 흔적이 있을 수 있습니다.
-- **Splashtop 이벤트 ID 는 공개 자료에 없습니다.** 로그 이름과 메시지 문구로 찾습니다.
+- **Splashtop 이벤트는 ID 보다 로그 이름과 메시지 문구로 찾습니다.**
 - **SPLog.txt 에 연도가 없습니다.** 해를 넘긴 로그는 순서가 헷갈립니다.
 - **Chrome Remote Desktop 이벤트의 원본 이름과 로그 이름은 실제 데이터로 확인합니다.** 특정 로그 하나만 보지 말고 로그 전체에서 "chromoting" 을 찾습니다.
 - **Chrome Remote Desktop 문구는 OS 언어에 따라 다를 수 있습니다.** 문구보다 이벤트 ID 와 원본 이름을 함께 봅니다.
@@ -186,7 +186,7 @@ Windows 에서는 호스트가 여러 프로세스로 돌아서, 호스트가 IP
 
 ### 헥스로 한 번
 
-이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 로그입니다. 도구마다의 이진 구조는 공개된 분석 자료가 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 로그입니다. 도구마다의 이진 구조는 이 페이지에서 헥스로 풀지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 

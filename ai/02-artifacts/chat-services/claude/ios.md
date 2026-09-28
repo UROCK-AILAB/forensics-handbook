@@ -28,7 +28,7 @@ iOS 앱에서는 계정 데이터를 내보낼 수 없고, 내보내기는 웹�
 
 ## 위치와 버전별 차이
 
-앱 데이터는 `/private/var/mobile/Containers/Data/Application/<UUID>/` 아래에 있습니다. 폴더 이름이 UUID 라서 폴더 이름만으로는 어느 폴더가 Claude 앱인지 알 수 없습니다. 각 컨테이너의 `.com.apple.mobile_container_manager.metadata.plist` 에서 `MCMMetadataIdentifier` 값을 읽으면 그 컨테이너의 번들 ID 가 나옵니다[4]. Claude 앱의 번들 ID 를 적어 둔 공개 분석 자료는 없으니, 실제 기기에서 읽은 값을 보고서에 그대로 적습니다.
+앱 데이터는 `/private/var/mobile/Containers/Data/Application/<UUID>/` 아래에 있습니다. 폴더 이름이 UUID 라서 폴더 이름만으로는 어느 폴더가 Claude 앱인지 알 수 없습니다. 각 컨테이너의 `.com.apple.mobile_container_manager.metadata.plist` 에서 `MCMMetadataIdentifier` 값을 읽으면 그 컨테이너의 번들 ID 가 나옵니다[4]. Claude 앱의 번들 ID 는 실제 기기에서 읽은 값을 보고서에 그대로 적습니다.
 
 | 파일 | 컨테이너 안의 경로 | 형식 | 근거 |
 |---|---|---|---|
@@ -90,7 +90,7 @@ iLEAPP 의 `convert_human_ts_to_utc` 는 소수점 앞까지만 잘라 `%Y-%m-%d
 ## 함정과 한계
 
 - 계정 정보 캐시의 경로 `Library/Caches/bootstrap/*.json` 은 다른 앱 컨테이너에도 있을 수 있습니다. 분석기는 `account` 객체가 있는 첫 JSON 을 고르므로[3], 그 파일이 Claude 앱 컨테이너 안에 있는지 번들 ID 로 다시 확인합니다.
-- 분석기는 `cache_*.sqlite` 에 맞는 첫 파일 하나만 읽습니다[3][5]. 파일 이름의 뒷부분이 계정마다 달라지는지는 공개 자료에 없으므로, 파일이 여러 개면 하나씩 직접 엽니다.
+- 분석기는 `cache_*.sqlite` 에 맞는 첫 파일 하나만 읽습니다[3][5]. 파일이 여러 개면 하나씩 직접 엽니다.
 - 분석기의 프로젝트 항목은 `projects` 와 `projectDocuments` 를 내부 조인합니다[3]. 그래서 문서가 없는 프로젝트는 결과에 나오지 않고, 문서가 여러 개면 프로젝트 하나가 여러 행으로 나옵니다. 프로젝트 목록 전체는 `projects` 표를 직접 봅니다.
 - 메시지 본문은 `content` 배열에서 `type` 이 `text` 인 항목만 이어 붙입니다[3]. 다른 종류의 항목은 분석기 결과에 나오지 않으니 원래 JSON 을 함께 봅니다.
 - 캐시 데이터베이스 옆의 `-wal` 파일을 빼고 복사하면 최근 기록이 빠질 수 있습니다.

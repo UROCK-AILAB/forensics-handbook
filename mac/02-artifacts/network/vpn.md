@@ -22,17 +22,17 @@ VPN 은 관리 프로필로 넣을 수도 있고 네트워크 설정에 직접 �
 | 앱별 VPN 페이로드 (`AppLayerVPN`, `AppToAppLayerVPNMapping`) | 설치된 구성 프로필 | VPN 페이로드와 따로 있습니다 [1] |
 | 네트워크 서비스의 `PPP` 사전 | `/Library/Preferences/SystemConfiguration/preferences.plist` | mac_apt 가 뽑습니다 [2] |
 
-`VPNType` 값 가운데 `TransparentProxy` 는 macOS 에서만 쓰고 그 설정 사전은 macOS 14 부터이며, `AlwaysOn` 은 iOS 에서만 씁니다 [1]. macOS 10.15 이후 버전마다 디스크 쪽 저장 방식이 어떻게 달라지는지는 공개 자료가 없습니다.
+`VPNType` 값 가운데 `TransparentProxy` 는 macOS 에서만 쓰고 그 설정 사전은 macOS 14 부터이며, `AlwaysOn` 은 iOS 에서만 씁니다 [1]. macOS 10.15 이후 기기에서는 설정 파일의 위치와 형식을 기기마다 직접 확인하고, 그 기기의 macOS 버전을 함께 적습니다.
 
 ### 실제 기기에서 확인할 것
 
-| 항목 | 상태 |
+| 항목 | 확인하는 방법 |
 |---|---|
-| 네트워크 확장 방식 VPN 설정의 저장 위치(`/Library/Preferences/com.apple.networkextension.plist` 로 알려짐)와 형식 | 공개 자료 없음 |
-| VPN 서비스의 `Interface/Type`, `SubType` 실제 값 | 공개 자료 없음 |
-| VPN 접속·해제가 남는 통합 로그 서브시스템, 옛 `/var/log/ppp.log` | 공개 자료 없음 |
-| VPN 비밀번호·공유 비밀이 키체인에 들어가는지 | 공개 자료 없음 |
-| `netusage.sqlite` 에 VPN 연결이 따로 잡히는지 | 공개 자료 없음 |
+| 네트워크 확장 방식 VPN 설정의 저장 위치(`/Library/Preferences/com.apple.networkextension.plist` 로 알려짐)와 형식 | 파일을 열어 앞머리로 plist 형식을 구분하고 키와 값을 그대로 적음 |
+| VPN 서비스의 `Interface/Type`, `SubType` 실제 값 | `preferences.plist` 의 VPN 서비스 항목에서 값을 그대로 옮겨 적음 |
+| VPN 접속·해제가 남는 통합 로그 서브시스템, 옛 `/var/log/ppp.log` | 시험 기기에서 접속·해제한 시각 전후의 로그를 뽑아 프로세스·서브시스템 이름을 확인 |
+| VPN 비밀번호·공유 비밀이 키체인에 들어가는지 | 시험 기기에서 VPN 을 설정하기 전과 뒤의 키체인 항목을 비교 |
+| `netusage.sqlite` 에 VPN 연결이 따로 잡히는지 | VPN 접속 시각과 `netusage.sqlite` 의 망 연결 항목 시각을 맞춰 봄 |
 
 ## 구조
 
@@ -63,13 +63,13 @@ VPN 은 관리 프로필로 넣을 수도 있고 네트워크 설정에 직접 �
 
 ### preferences.plist 의 PPP 사전
 
-`NetworkServices` 의 서비스 항목 안에 `PPP` 사전이 있으면 mac_apt 가 이를 뽑습니다 [2]. 이 사전 안의 키와, VPN 서비스를 가리키는 `Interface/Type`·`SubType` 값은 알려져 있지 않아서, 실제 파일에서 연 값을 그대로 옮겨 적습니다. 같은 서비스의 `UserDefinedName` 과 `Interface` 사전을 함께 적어 두면 어떤 이름의 서비스인지 설명할 수 있습니다 [2].
+`NetworkServices` 의 서비스 항목 안에 `PPP` 사전이 있으면 mac_apt 가 이를 뽑습니다 [2]. 이 사전 안의 키와, VPN 서비스를 가리키는 `Interface/Type`·`SubType` 값은 실제 파일에서 연 값을 그대로 옮겨 적습니다. 같은 서비스의 `UserDefinedName` 과 `Interface` 사전을 함께 적어 두면 어떤 이름의 서비스인지 설명할 수 있습니다 [2].
 
 ## 증거로서 의미
 
 **증명하는 것.** VPN 페이로드가 설치되어 있으면 이 맥에 그 이름(`UserDefinedName`)과 종류(`VPNType`)의 VPN 설정이 들어갔다는 기록이고, `VPNSubType` 의 번들 ID 는 어느 VPN 제품이나 앱이 연결을 맡도록 설정됐는지 추정하는 근거가 됩니다 [1]. 이 추정은 페이로드 정의에서 끌어낸 해석이라서, 그 번들 ID 의 앱이 실제로 설치되어 있었는지를 [설치한 앱과 영수증 (Applications·Receipts)](../system-account/installed-apps-receipts.md)으로 함께 확인합니다. `preferences.plist` 의 서비스에 `PPP` 사전이 있으면 그 서비스에 PPP 설정이 들어 있었다는 기록입니다 [2].
 
-**증명하지 못하는 것.** 설정이 있다는 사실은 VPN 에 접속했다는 뜻이 아니고, 언제 접속했는지, 어느 서버로 얼마나 주고받았는지도 알려 주지 않습니다. 접속 기록이 남는 로그 위치는 공개 자료가 없습니다. 관리 프로필로 들어온 설정이라면 사용자가 직접 만든 것이 아니라 조직이 배포한 것일 수 있어서, 설정이 있다는 사실로 사용자의 의도를 읽지 않습니다.
+**증명하지 못하는 것.** 설정이 있다는 사실은 VPN 에 접속했다는 뜻이 아니고, 언제 접속했는지, 어느 서버로 얼마나 주고받았는지도 알려 주지 않습니다. 접속했는지는 통합 로그 같은 다른 기록으로 따로 확인합니다. 관리 프로필로 들어온 설정이라면 사용자가 직접 만든 것이 아니라 조직이 배포한 것일 수 있어서, 설정이 있다는 사실로 사용자의 의도를 읽지 않습니다.
 
 VPN 은 조직의 정상 접속 수단이면서 트래픽 출처를 가리는 수단으로도 쓰일 수 있어서, 자료 유출이나 원격 접속을 따질 때 VPN 설정이 있으면 그 무렵 네트워크 기록의 출발 주소를 해석할 때 함께 적습니다. 보고서에는 "이 맥에 `VPNType` 이 `IKEv2` 이고 이름이 이것인 VPN 페이로드가 설치되어 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
@@ -79,9 +79,9 @@ VPN 페이로드 키와 `PPP` 사전에는 알려진 시각 값이 없습니다.
 
 ## 함정과 한계
 
-- **설정과 접속은 다릅니다.** 페이로드나 서비스 항목은 설정이 있었다는 기록일 뿐이고, 접속 기록이 남는 위치는 공개 자료가 없습니다.
+- **설정과 접속은 다릅니다.** 페이로드나 서비스 항목은 설정이 있었다는 기록일 뿐이고, 접속했는지는 통합 로그 같은 다른 기록으로 확인합니다.
 - **두 종류의 설정.** 관리 프로필로 들어온 VPN 과 네트워크 설정에 직접 만든 VPN 은 남는 곳이 달라서, 한쪽만 보면 다른 쪽을 놓칩니다.
-- **네트워크 확장 방식.** 네트워크 확장 제공자 방식 VPN 의 설정이 디스크 어디에 남는지는 공개 자료가 없어서, `preferences.plist` 에 없다고 VPN 설정이 없다고 단정하지 않습니다.
+- **네트워크 확장 방식.** 네트워크 확장 제공자 방식 VPN 의 설정은 `preferences.plist` 밖에 남을 수 있어서, `preferences.plist` 에 없다고 VPN 설정이 없다고 단정하지 않습니다.
 - **앱별 VPN.** `AppLayerVPN`, `AppToAppLayerVPNMapping` 은 VPN 페이로드와 따로 있어서 [1], 프로필을 볼 때 이 두 페이로드도 함께 찾습니다.
 - **비밀 값.** VPN 비밀번호와 공유 비밀이 키체인에 들어가는지는 실제 기기에서 확인하고, 키체인 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에서 다룹니다.
 

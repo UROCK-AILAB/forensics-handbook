@@ -44,9 +44,9 @@ nav_order: 1940
 
 공유 디스크 모드는 분석용 맥이 Finder의 Network 항목에서 Guest로 접속해 파일을 읽는 방식이라서, 블록 단위 물리 이미지를 만들 수 없는 파일 수준 접근으로 보입니다 [2]. 결과가 파일 수준이면 디스크 전체의 해시를 낼 수 없어서, 해시를 남기는 방법이 달라집니다. 그 방법은 [해시와 증거 보관 (Hash·Chain of Custody)](hash-chain-of-custody.md)에 있습니다.
 
-대상 디스크 모드에서 파일볼트 볼륨을 열 때 암호를 묻는지, 내장 디스크가 블록 장치로 보여 블록 이미징이 되는지, T2 맥의 내장 디스크를 이 모드로 붙였을 때 풀린 데이터가 읽히는지, 공유 디스크 모드를 지원하는 최소 macOS 버전이 무엇인지는 공개된 분석 자료가 없습니다. 그래서 이 두 기능을 현장에 쓰기 전에는 같은 기종과 같은 macOS 버전의 시험용 맥으로 결과를 확인하고 [도구 검증 (Tool Validation)](../../reporting/tool-validation.md)에 따라 기록합니다. 암호가 걸린 볼륨을 여는 조건은 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md)와 [암호화된 증거 다루기 (Encrypted Evidence)](../../analysis/encrypted-evidence/index.md)에서 이어 봅니다.
+대상 디스크 모드에서 파일볼트 볼륨을 열 때 암호를 묻는지, 내장 디스크가 블록 장치로 보여 블록 이미징이 되는지, T2 맥의 내장 디스크를 이 모드로 붙였을 때 풀린 데이터가 읽히는지, 공유 디스크 모드를 지원하는 최소 macOS 버전이 무엇인지는 이 두 기능을 현장에 쓰기 전에 같은 기종과 같은 macOS 버전의 시험용 맥으로 확인하고 [도구 검증 (Tool Validation)](../../reporting/tool-validation.md)에 따라 기록합니다. 암호가 걸린 볼륨을 여는 조건은 [파일볼트 (FileVault)](../../../01-foundations/protection/filevault/index.md)와 [암호화된 증거 다루기 (Encrypted Evidence)](../../analysis/encrypted-evidence/index.md)에서 이어 봅니다.
 
-분석용 맥이 대상 디스크를 올리는 동안 원본에 무엇을 쓰는지도 공개된 자료가 없어서, 연결한 시각과 끊은 시각, 열어 본 폴더를 적어 두면, 나중에 그 시간대의 파일 시스템 변화가 조사자의 조작인지 가를 수 있습니다. 파일 시스템 변화 기록은 [파일 시스템 이벤트 (FSEvents)](../../../02-artifacts/filesystem/fsevents/index.md)에서 봅니다.
+분석용 맥이 대상 디스크를 올리는 동안 원본에 기록이 생길 수 있습니다. 연결한 시각과 끊은 시각, 열어 본 폴더를 적어 두면, 나중에 그 시간대의 파일 시스템 변화가 조사자의 조작인지 가를 수 있습니다. 파일 시스템 변화 기록은 [파일 시스템 이벤트 (FSEvents)](../../../02-artifacts/filesystem/fsevents/index.md)에서 봅니다.
 
 ## 결과를 어떻게 해석하나
 

@@ -41,15 +41,15 @@ cdhash·번들 식별자·팀 ID 를 담는 열의 실제 이름과 형은 `.sch
 
 ## 증거로서 의미
 
-**증명하는 것.** `provenance_tracking` 에 행이 있으면 이 맥의 실행 정책 기록에 그 cdhash·번들 식별자·팀 ID 가 올라 있다는 뜻입니다 [1]. 파일의 `com.apple.provenance` 값에서 읽은 정수와 같은 `pk` 행을 찾으면, 디스크의 그 파일과 그 기록이 이어져 있다고 쓸 수 있습니다 [1]. 앱 번들을 지웠더라도 표의 행이 남아 있으면, 한때 이 맥에서 그 번들 식별자·팀 ID 의 코드를 다룬 기록으로 읽을 수 있습니다. 행이 지워지는 조건은 공개 자료에 없습니다.
+**증명하는 것.** `provenance_tracking` 에 행이 있으면 이 맥의 실행 정책 기록에 그 cdhash·번들 식별자·팀 ID 가 올라 있다는 뜻입니다 [1]. 파일의 `com.apple.provenance` 값에서 읽은 정수와 같은 `pk` 행을 찾으면, 디스크의 그 파일과 그 기록이 이어져 있다고 쓸 수 있습니다 [1]. 앱 번들을 지웠더라도 표의 행이 남아 있으면, 한때 이 맥에서 그 번들 식별자·팀 ID 의 코드를 다룬 기록으로 읽을 수 있습니다. 행이 없다는 것만으로 그 코드를 다룬 적이 없다고 보지는 않습니다.
 
-**증명하지 못하는 것.** 행이 생기는 조건(첫 실행인지, 검사만 했는지)이 알려져 있지 않아서, 행 하나를 "앱을 실행했다" 로 바로 옮기지 않습니다. 실행 여부는 [통합 로그의 프로세스 실행 기록 (Process Events)](unified-log-process.md)과 [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md)의 기록으로 따로 확인합니다. 누가 앱을 받았는지, 어디서 받았는지도 이 표에는 없어서 격리 속성과 다운로드 기록으로 채웁니다.
+**증명하지 못하는 것.** 행 하나만으로는 첫 실행인지, 검사만 했는지 알 수 없어서, 행 하나를 "앱을 실행했다" 로 바로 옮기지 않습니다. 실행 여부는 [통합 로그의 프로세스 실행 기록 (Process Events)](unified-log-process.md)과 [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md)의 기록으로 따로 확인합니다. 누가 앱을 받았는지, 어디서 받았는지도 이 표에는 없어서 격리 속성과 다운로드 기록으로 채웁니다.
 
 보고서에는 "이 앱 번들의 `com.apple.provenance` 값이 가리키는 `provenance_tracking` 행에 이 번들 식별자와 팀 ID 가 기록되어 있다" 처럼 파일과 행의 연결만 씁니다.
 
 ## 시각 해석
 
-ExecPolicy 데이터베이스 안의 시각 열과 그 기준을 설명한 공개 자료는 없습니다. 실제 데이터베이스에서 시각처럼 보이는 열을 찾으면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 기준들로 바꿔 보고, 같은 앱의 다른 기록(다운로드 시각, 첫 실행 로그)과 맞는 기준만 씁니다. 판단 시각을 이 데이터베이스만으로 정하지 말고, Gatekeeper 가 남긴 통합 로그 항목과 함께 봅니다. Gatekeeper 로그를 찾는 조건은 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)에서 다룹니다.
+ExecPolicy 데이터베이스 안의 시각 열과 그 기준은 실제 데이터로 확인합니다. 데이터베이스에서 시각처럼 보이는 열을 찾으면 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 기준들로 바꿔 보고, 같은 앱의 다른 기록(다운로드 시각, 첫 실행 로그)과 맞는 기준만 씁니다. 판단 시각을 이 데이터베이스만으로 정하지 말고, Gatekeeper 가 남긴 통합 로그 항목과 함께 봅니다. Gatekeeper 로그를 찾는 조건은 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)에서 다룹니다.
 
 ## 함정과 한계
 
@@ -73,7 +73,7 @@ xx ... xx | 2a 00 00 00 00 00 00 00
 
 ### SQL로 한 번
 
-데이터베이스 사본을 `sqlite3` 같은 공개 도구로 엽니다. `pk` 말고는 열 이름이 알려져 있지 않아서, 먼저 구조를 보고 `SELECT *` 로 행을 봅니다.
+데이터베이스 사본을 `sqlite3` 같은 공개 도구로 엽니다. `pk` 말고 다른 열 이름은 먼저 구조를 보고 확인한 뒤 `SELECT *` 로 행을 봅니다.
 
 ```sql
 .tables

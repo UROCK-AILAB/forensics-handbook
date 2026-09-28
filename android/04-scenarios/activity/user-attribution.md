@@ -38,7 +38,7 @@ nav_order: 1620
 |---|---|---|
 | 사용자 정보 파일과 XML 속성 이름 | 현행 AOSP 기준 [3] | 사용자별 파일 이름이 사용자 ID 를 딴 XML 인지는 실제 기기에서 확인해야 합니다 |
 | `dumpsys user` 필드 | | 주 사용자의 Created 필드가 `<unknown>` 으로 찍힐 수 있습니다 |
-| 삼성 보안 폴더 | 공개 자료 없음 | 보안 폴더가 어떤 사용자 ID 를 쓰는지, 그 안의 앱 사용이 따로 쌓이는지는 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 에서 봅니다 |
+| 삼성 보안 폴더 | 실제 기기에서 사용자 ID 목록을 보고 확인 | 보안 폴더가 어떤 사용자 ID 를 쓰는지, 그 안의 앱 사용이 따로 쌓이는지는 [보안 폴더와 작업 프로필](../../01-foundations/security-model/secure-folder-work-profile.md) 에서 봅니다 |
 
 ## 분석 흐름
 
@@ -47,11 +47,11 @@ nav_order: 1620
    | XML 속성 | 시각 기준 | 언제 바뀌나 |
    |---|---|---|
    | `created` | 실제 시각 | 사용자를 만들 때 |
-   | `lastLoggedIn` | 실제 시각 | 공개 자료 없음 |
-   | `lastLoggedInFingerprint` | 시각 값이 아님 | 공개 자료 없음 |
+   | `lastLoggedIn` | 실제 시각 | 시험 기기에서 로그인·재부팅 전후 값을 비교해 확인 |
+   | `lastLoggedInFingerprint` | 시각 값이 아님 | 시험 기기에서 로그인·재부팅 전후 값을 비교해 확인 |
    | `lastEnteredForeground` | 실제 시각 밀리초 | 사용자가 시작될 때와 사용자 전환 때 그 시각으로 바뀜 |
 
-   소스에는 이 밖에 부팅 후 경과 시간으로 적는 `startRealtime`(사용자가 시작된 때)과 `unlockRealtime`(사용자 잠금이 풀린 때)이 있어, 재부팅하면 기준점이 바뀝니다 [3]. `dumpsys user` 에는 Created, Last logged in, Last logged in fingerprint, Start time, Unlock time, Last entered foreground 필드가 있지만, 이 필드들이 위 속성과 하나씩 대응한다는 공개 자료는 없어 그렇게 단정하지 않습니다. 사건 시각의 활동이 어느 사용자 ID 에 쌓였는지부터 가려내고, 프로필의 활동을 주 사용자의 활동과 합치지 않습니다.
+   소스에는 이 밖에 부팅 후 경과 시간으로 적는 `startRealtime`(사용자가 시작된 때)과 `unlockRealtime`(사용자 잠금이 풀린 때)이 있어, 재부팅하면 기준점이 바뀝니다 [3]. `dumpsys user` 에는 Created, Last logged in, Last logged in fingerprint, Start time, Unlock time, Last entered foreground 필드가 있지만, 이 필드들이 위 속성과 하나씩 대응한다고 단정하지 않고 같은 기기의 XML 값과 나란히 놓아 맞는지 확인합니다. 사건 시각의 활동이 어느 사용자 ID 에 쌓였는지부터 가려내고, 프로필의 활동을 주 사용자의 활동과 합치지 않습니다.
 
 2. **그 사용자 ID 의 사용 구간을 가져옵니다.** [폰 사용 시간 재구성](usage-time.md) 의 흐름대로 화면·잠금·앱 구간을 찾고, 사건 시각이 그 구간 안에 드는지 봅니다. 잠금이 풀린 기록 `KEYGUARD_HIDDEN` 에는 `package` 와 `flags` 필드만 있고, 이 이벤트는 "보통 사용자가 잠금을 풀 때" 생길 뿐이라서 [1] PIN·지문·얼굴 가운데 무엇으로 누가 풀었는지는 이 기록에 없습니다. 어떤 생체 인증으로 풀었는지 따로 남는 기록이 있는지는 실제 기기에서 확인해야 합니다.
 
@@ -65,7 +65,7 @@ nav_order: 1620
 
    `Action_Type` 에는 `action_account_add`, `action_account_remove`, `action_called_account_add`, `action_called_account_remove`, `action_authenticator_remove`, `action_clear_password` 같은 값이 나옵니다. 사건 구간 가까이에 계정이 추가·삭제된 기록이 있으면 그 계정이 누구의 것인지가 사람을 좁히는 단서가 될 수 있지만, 이 부분은 기록이 아니라 해석이라서 보고서에서도 해석으로 나눠 적습니다.
 
-5. **알림과 무선 기록으로 같은 시각을 한 번 더 찍습니다.** `dumpsys notification` 알림 항목에는 `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs`, `seen` 필드와 `posttimeToFirstClickMs`, `posttimeToDismissMs`, `airtimeMs` 가 든 `stats` 줄이 있습니다. `dumpsys wifi` 에는 `what=CMD_SCREEN_STATE_CHANGED screen=...` 줄이, `dumpsys bluetooth_manager` 의 "Enable log:" 에는 `Package [android] requested to [Enable]. Reason is SYSTEM_BOOT` 모양의 줄이 남습니다. 알림 필드 하나하나의 뜻을 밝힌 공개 자료는 없으니, 이 기록들은 usagestats 가 기록한 구간과 같은 시각에 다른 서비스도 화면 변화를 기록했는지 확인하는 데 씁니다. 연결된 블루투스 기기(시계·차량 등)가 사람을 가려내는 단서가 되는지는 사건마다 따로 따집니다.
+5. **알림과 무선 기록으로 같은 시각을 한 번 더 찍습니다.** `dumpsys notification` 알림 항목에는 `mCreationTimeMs`, `mVisibleSinceMs`, `mUpdateTimeMs`, `seen` 필드와 `posttimeToFirstClickMs`, `posttimeToDismissMs`, `airtimeMs` 가 든 `stats` 줄이 있습니다. `dumpsys wifi` 에는 `what=CMD_SCREEN_STATE_CHANGED screen=...` 줄이, `dumpsys bluetooth_manager` 의 "Enable log:" 에는 `Package [android] requested to [Enable]. Reason is SYSTEM_BOOT` 모양의 줄이 남습니다. 알림 필드 하나하나의 뜻은 단정할 수 없으니, 이 기록들은 usagestats 가 기록한 구간과 같은 시각에 다른 서비스도 화면 변화를 기록했는지 확인하는 데 씁니다. 연결된 블루투스 기기(시계·차량 등)가 사람을 가려내는 단서가 되는지는 사건마다 따로 따집니다.
 
 6. **기기 밖 자료와 시각을 맞춥니다.** 기기 안 기록은 사용자 ID 까지만 가리키니, 사람을 특정하려면 CCTV, 다른 기기의 기록, 위치 자료, 진술처럼 기기 밖 자료와 1~5단계의 시각을 맞춥니다. 위치는 [그 시각에 어디 있었나](location.md) 에서, 여러 자료를 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 봅니다.
 

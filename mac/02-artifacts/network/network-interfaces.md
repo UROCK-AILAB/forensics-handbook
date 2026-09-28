@@ -50,7 +50,7 @@ iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConf
 | `SCNetworkInterfaceType` | | |
 | `SCNetworkInterfaceInfo` | 사전 | 안에 `UserDefinedName` |
 
-비고가 빈 키는 값의 뜻과 가능한 값 목록이 알려져 있지 않아서, 실제 데이터로 확인합니다.
+비고가 빈 키는 값의 뜻과 가능한 값 목록을 실제 데이터로 확인합니다.
 
 ### preferences.plist 의 NetworkServices
 
@@ -60,7 +60,7 @@ iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConf
 |---|---|---|
 | `UserDefinedName` | 서비스 이름 | |
 | `Interface` | `DeviceName`, `Hardware`, `Type`, `UserDefinedName` | 이 서비스가 붙은 인터페이스 |
-| `IPv4/ConfigMethod`, `IPv6/ConfigMethod` | 주소를 설정하는 방식 | 값 목록은 공개 자료 없음 |
+| `IPv4/ConfigMethod`, `IPv6/ConfigMethod` | 주소를 설정하는 방식 | 값은 실제 데이터로 확인 |
 | `DNS` | DNS 설정 | [hosts와 DNS 설정 (hosts·DNS)](hosts-dns.md) |
 | `Proxies` | 프록시 설정, 안에 `ExceptionsList` | |
 | `SMB` | `NetBIOSName`, `Workgroup` 등 | [공유 폴더 연결 기록 (SMB·AFP)](network-shares.md) |
@@ -87,7 +87,7 @@ iOS 에서는 `NetworkInterfaces.plist` 가 `/private/var/Preferences/SystemConf
 
 **증명하는 것.** `NetworkInterfaces.plist` 는 이 맥이 알아본 인터페이스와 그 `IOMACAddress` 값을 알려 주고, 네트워크 장비 기록에 남은 MAC 과 이 맥을 잇는 근거가 됩니다 [1]. `preferences.plist` 의 서비스 항목은 어떤 인터페이스에 어떤 주소 설정 방식과 DNS, 프록시가 설정되어 있었는지 알려 줍니다 [1]. DHCP 임대 파일 하나에서 마지막으로 받은 IP, 임대 시작 시각, 공유기 IP 와 MAC, 그때의 와이파이 이름을 함께 볼 수 있어서 [1], 사내 네트워크 기록과 시각·IP 를 맞추는 출발점이 됩니다.
 
-**증명하지 못하는 것.** 새 임대를 받을 때 파일을 덮어쓰는지, 예전 임대가 쌓이는지는 알려지지 않아서 임대 파일을 이 맥의 접속 이력 전체로 읽지 않습니다. 이 파일들은 시스템 전체 설정이라 어느 사용자가 네트워크를 썼는지 알려 주지 않고, 무엇을 주고받았는지도 알려 주지 않습니다. `IOMACAddress` 는 운영체제가 적어 둔 값이고, 특정 시각에 이 맥이 실제로 어떤 MAC 으로 통신했는지는 이 값만으로 단정하지 않습니다. 프록시 설정이 있으면 트래픽을 한곳으로 모으는 설정이 있었다는 기록이지만, 누가 왜 넣었는지는 다른 기록으로 받칩니다.
+**증명하지 못하는 것.** 임대 파일에는 마지막 임대만 남아 있을 수 있어서, 임대 파일을 이 맥의 접속 이력 전체로 읽지 않습니다. 이 파일들은 시스템 전체 설정이라 어느 사용자가 네트워크를 썼는지 알려 주지 않고, 무엇을 주고받았는지도 알려 주지 않습니다. `IOMACAddress` 는 운영체제가 적어 둔 값이고, 특정 시각에 이 맥이 실제로 어떤 MAC 으로 통신했는지는 이 값만으로 단정하지 않습니다. 프록시 설정이 있으면 트래픽을 한곳으로 모으는 설정이 있었다는 기록이지만, 누가 왜 넣었는지는 다른 기록으로 받칩니다.
 
 보고서에는 "`en0` 인터페이스의 DHCP 임대 파일에 이 IP 와 임대 시작 시각, SSID 가 적혀 있다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
@@ -99,11 +99,11 @@ DHCP 임대 파일의 `LeaseStartDate` 는 plist 날짜 형식으로 보이고, 
 
 ## 함정과 한계
 
-- **이력이 쌓이는지 알 수 없는 임대 파일.** 임대 파일에 과거 이력이 쌓이는지 알려지지 않아서, 마지막 임대 한 건만 남았다고 보고 다른 시기는 다른 기록으로 채웁니다.
+- **이력이 쌓이지 않을 수 있는 임대 파일.** 임대 파일에는 마지막 임대 한 건만 남았다고 보고, 다른 시기는 다른 기록으로 채웁니다.
 - **파일 이름에만 있는 정보.** 인터페이스 이름과 MAC 이 파일 이름에 들어 있어서 [1], 파일 내용만 뽑아 두면 어느 인터페이스의 임대인지 잃습니다.
 - **읽지 않는 파일.** `DUID_IA.plist` 는 mac_apt 가 아직 읽지 않아서 [1], 도구 결과에 없다고 파일이 없다는 뜻은 아닙니다.
 - **여러 페이지가 나눠 보는 한 파일.** `preferences.plist` 한 파일에 네트워크 서비스, DNS, SMB, 컴퓨터 이름이 함께 들어 있어서, 한 페이지 관점으로만 보면 다른 키를 놓칩니다.
-- **뜻이 알려지지 않은 키.** `Active`, `IOBuiltin`, `ConfigMethod` 값처럼 뜻을 밝힌 공개 자료가 없는 키는 도구가 설명을 붙여 보여 주더라도 근거를 확인한 뒤에 씁니다.
+- **뜻을 단정할 수 없는 키.** `Active`, `IOBuiltin`, `ConfigMethod` 값처럼 뜻이 정해져 있지 않은 키는 도구가 설명을 붙여 보여 주더라도 근거를 확인한 뒤에 씁니다.
 
 ## 직접 분석해 보기
 

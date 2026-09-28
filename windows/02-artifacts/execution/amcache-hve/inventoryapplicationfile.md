@@ -45,7 +45,7 @@ AmCache 형식은 Windows 버전이 아니라 목록을 채우는 라이브러�
 
 `파일 이름|해시` 의 해시 계산 방식은 공개되지 않았습니다. 서로 다른 두 PC 에서 같은 경로에 있는 다른 버전 파일이 같은 해시를 내므로, 이 해시는 파일 이름과 경로로 정해지는 것으로 보입니다[1]. 해시 길이는 8자리인 경우[1]와 16자리인 경우(Windows 10 21H2)[6]가 있습니다.
 
-`Usn`·`OriginalFileName`·`Description`·`AppxPackageFullName`·`AppxPackageRelativeId` 값도 쓰입니다. Windows 10 21H2 하이브에는 `Usn` 이 있고[6] 공개 파서 AmcacheParser 도 이 값들을 읽습니다[5]. 어느 버전에서 처음 생겼는지는 공개 자료가 없습니다.
+`Usn`·`OriginalFileName`·`Description`·`AppxPackageFullName`·`AppxPackageRelativeId` 값도 쓰입니다. Windows 10 21H2 하이브에는 `Usn` 이 있고[6] 공개 파서 AmcacheParser 도 이 값들을 읽습니다[5]. 분석 대상 하이브에 이 값들이 있는지는 하위 키의 값 목록을 열어 먼저 확인합니다.
 
 Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서에 같은 이름의 인벤토리 이벤트가 있습니다[2]. 다만 Windows 11 하이브의 버전별 차이는 실제 하이브에서 확인해야 합니다.
 
@@ -98,7 +98,7 @@ Windows 11 도 같은 점검 기능을 쓰고 Microsoft 진단 데이터 문서�
 - 실행 횟수와 마지막 실행 시각은 없습니다.
 - 큰 파일의 `FileId` 는 파일 전체의 해시가 아닐 수 있습니다. 계산 범위는 [AmCache 해석 함정](sha1.md) 에서 다룹니다.
 - 항목이 없다고 파일이 없었던 것은 아닙니다. 점검 작업이 돌기 전에 지운 파일은 목록에 들어오지 않을 수 있습니다.
-- 항목이 언제 지워지는지는 공개 자료가 없습니다.
+- 항목이 언제 지워졌는지는 이 키로 알 수 없습니다.
 
 보고서에는 기록으로 확인되는 만큼만 씁니다.
 

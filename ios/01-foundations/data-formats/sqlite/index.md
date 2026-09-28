@@ -20,7 +20,7 @@ SQLite 파일인지는 확장자가 아니라 파일 앞 16바이트로 구분�
 
 ## 한눈에 보기
 
-SQLite 파일 형식은 iOS 와 상관없는 공통 규격입니다. iOS 에 들어 있는 SQLite 의 버전과 컴파일 옵션(secure_delete·auto_vacuum 기본값 등)은 공개된 자료가 없습니다.
+SQLite 파일 형식은 iOS 와 상관없는 공통 규격입니다. iOS 의 DB 는 SQLite 버전이나 secure_delete·auto_vacuum 기본값을 가정하지 않고, 파일 헤더에서 읽을 수 있는 값(마지막으로 파일을 고친 SQLite 버전, auto_vacuum 설정)을 파일마다 확인합니다.
 
 | 파일 | 위치 | iOS 버전 | 알려 주는 것 |
 |---|---|---|---|

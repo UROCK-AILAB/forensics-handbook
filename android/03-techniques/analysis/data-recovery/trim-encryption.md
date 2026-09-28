@@ -39,7 +39,7 @@ Android 내부 저장소는 파일 내용과 파일 시스템 정보를 모두 �
 | 내부 저장소로 쓰는 SD 카드(adoptable) | FBE 가 켜져 있으면 메타데이터 암호화도 항상 켜짐 | [2] |
 | dm-default-key 커널 모듈 사용 | Android 11 이후 | [2] |
 | 파일 이름 암호화에 AES-HCTR2 권장 | Android 14 이후, 암호 가속 명령이 있는 기기 | [1] |
-| 삼성 One UI 별 차이 | 공개 자료 없음 | — |
+| 삼성 One UI 별 차이 | 기기마다 fstab 의 암호화 플래그로 확인 | — |
 
 의무 조건은 출시할 때의 Android 버전을 기준으로 적혀 있어서, 옛 버전으로 출시한 뒤 업데이트한 기기에 어떤 암호화가 걸려 있는지는 기기마다 확인합니다. 메타데이터 암호화는 기본으로 AES-256-XTS 를 쓰고, AES 가속이 없는 기기는 Adiantum 을 씁니다 [2]. 키는 KeyMint(예전 이름 Keymaster)가 보호하고 KeyMint 는 검증 부팅 (Verified Boot) 이 보호하며, 키 블롭은 `/metadata` 파티션(권장 크기 16MB)에 있습니다. fstab 에서는 `keydirectory=/metadata/vold/metadata_encryption` 같은 플래그로 이 자리를 가리킵니다 [2]. 검증 부팅은 [부트로더와 검증 부팅](../../../01-foundations/security-model/verified-boot.md) 페이지에 있습니다.
 

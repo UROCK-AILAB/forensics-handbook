@@ -23,7 +23,7 @@ has_toc: false
 | 위치 | `/var/db/lockdown` [1] | `~/Library/Application Support/MobileSync/Backup/` [2] |
 | 범위 | 맥 전체에 하나 [1] | 사용자 계정마다 따로 [2] |
 | 형태 | 기기마다 `<UDID>.plist` 하나 [4] | 기기 UDID 이름의 폴더 안에 plist 파일 [5]과 `Manifest.db`, 파일 사본 |
-| macOS 버전 | 버전별 차이에 대한 공개 자료 없음 | macOS 10.15 Catalina 이후는 Finder, 10.14 Mojave 이전은 iTunes로 백업하고 관리함 [6]. 위치는 같은 경로 [2] |
+| macOS 버전 | 분석 대상 맥의 실제 파일로 경로와 키를 확인 | macOS 10.15 Catalina 이후는 Finder, 10.14 Mojave 이전은 iTunes로 백업하고 관리함 [6]. 위치는 같은 경로 [2] |
 | 알려 주는 것 | 이 맥과 페어링한 기기의 UDID, 인증서와 키 | 기기 식별값, 마지막 백업 시점, 백업 완료 여부, 설치 앱 목록, 파일 사본 |
 | 알려 주지 않는 것 | 페어링 시각, 연결한 사용자 계정 | 백업을 실행한 사람, 백업 이후의 기기 상태 |
 

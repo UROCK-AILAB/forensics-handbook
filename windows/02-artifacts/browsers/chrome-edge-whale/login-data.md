@@ -141,7 +141,7 @@ Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다
 - `logins_edge_extended`: `id`, `source`, `strength_alert_status`, `password_nickname`
 - `breached`: `url`, `username`, `status`, `last_checked_time`, `hashed_password` 등
 
-`meta` 에도 `edge_breached_table_version`, `logins_edge_extended_table_version` 키가 더 있었습니다. 이 키들의 뜻을 설명한 공개 자료는 없습니다.
+`meta` 에도 `edge_breached_table_version`, `logins_edge_extended_table_version` 키가 더 있었습니다. 이 키들은 값만 옮기고 뜻을 단정하지 않습니다.
 
 ## 증거로서 의미
 
@@ -169,7 +169,7 @@ Edge 151 의 파일에는 Chromium 에 없는 표가 두 개 더 있었습니다
 |---|---|---|
 | `date_created` | 브라우저가 이 항목을 저장한 때 | 옮겨 갑니다 |
 | `date_last_used` | 이 항목으로 폼 제출이 성공한 마지막 때. 처음 값은 `date_created` 입니다 | 옮겨 갑니다 |
-| `date_last_filled` | 사이트에 이 항목을 채워 넣은 마지막 때. 제출 성공과 상관없습니다 | 공개 자료 없음 |
+| `date_last_filled` | 사이트에 이 항목을 채워 넣은 마지막 때. 제출 성공과 상관없습니다 | 시험 기기 두 대를 동기화해 확인 |
 | `date_password_modified` | 비밀번호 값을 마지막으로 바꾼 때. 옛 항목은 비어 있을 수 있습니다 | 옮겨 갑니다 |
 | `date_received` | 공유로 받은 때 | |
 | `stats.update_time` | 닫은 횟수 행을 고친 때 | |

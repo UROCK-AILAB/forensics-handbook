@@ -105,14 +105,14 @@ iOS 이미지에서는 `/private/var/mobile/.DocumentRevisions-V100/db-V1/db.sql
 |---|---|---|
 | `generation_add_time` | 유닉스 시각 (mac_apt `ReadUnixTime`) | UTC 로 출력 (`Generation_Added_UTC`) |
 | `file_last_seen` | 유닉스 시각 (mac_apt `ReadUnixTime`) | UTC 로 출력 (`File_Last_Seen_UTC`) |
-| `CSChunkTable.timeStamp` | 공개 자료 없음 | 실제 데이터로 확인 |
+| `CSChunkTable.timeStamp` | 정해져 있지 않음 | 실제 데이터로 확인 |
 
-두 시각 모두 유닉스 시각이고 UTC 로 읽습니다 [2]. `generation_add_time` 은 열 이름과 mac_apt 출력 이름대로라면 버전이 추가된 시각이지만, `file_last_seen` 이 정확히 어떤 일이 있을 때 바뀌는지는 공개된 설명이 없어서 이름 그대로 "마지막으로 본 시각" 정도로만 적습니다. 값의 단위와 기준 시점은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 확인합니다. `timeStamp` 열은 기준이 알려져 있지 않아서 다른 시각과 섞어 타임라인에 넣지 않습니다.
+두 시각 모두 유닉스 시각이고 UTC 로 읽습니다 [2]. `generation_add_time` 은 열 이름과 mac_apt 출력 이름대로라면 버전이 추가된 시각이지만, `file_last_seen` 이 정확히 어떤 일이 있을 때 바뀌는지는 정해져 있지 않아서 이름 그대로 "마지막으로 본 시각" 정도로만 적습니다. 값의 단위와 기준 시점은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)에서 확인합니다. `timeStamp` 열은 기준이 정해져 있지 않아서 다른 시각과 섞어 타임라인에 넣지 않습니다.
 
 ## 함정과 한계
 
 - **볼륨 하나만 보는 경우.** 폴더는 볼륨마다 있어서 [1], 외장 볼륨이나 데이터 볼륨 쪽을 빼면 버전을 놓칩니다. Catalina 이후 이미지에서는 두 경로를 모두 확인합니다 [2].
-- **숨김 폴더를 빼고 수집하는 경우.** `.DocumentRevisions-V100` 과 그 안의 `.cs` 는 이름이 점으로 시작해서, 숨김 항목을 건너뛰는 수집 방법으로는 빠집니다. 폴더 접근 권한과 SIP 보호 여부는 공개 자료가 없으니, 라이브 수집이라면 읽기에 실패한 항목을 수집 기록에 남깁니다.
+- **숨김 폴더를 빼고 수집하는 경우.** `.DocumentRevisions-V100` 과 그 안의 `.cs` 는 이름이 점으로 시작해서, 숨김 항목을 건너뛰는 수집 방법으로는 빠집니다. 폴더 접근 권한과 SIP 보호 여부는 분석 대상과 같은 macOS 버전의 시험 기기에서 확인하고, 라이브 수집이라면 읽기에 실패한 항목을 수집 기록에 남깁니다.
 - **`file_path` 를 지금 위치로 읽는 경우.** 경로는 기록 당시의 값이고, 파일이 지워지거나 옮겨졌을 수 있습니다. 원본은 inode 와 확장 속성으로 다시 맞춰 봅니다.
 - **썸네일 폴더를 버전으로 세는 경우.** `:QLThumbnailAdditionName` 으로 끝나는 `generation_path` 는 썸네일이라서 [2] 버전 개수에서 뺍니다.
 - **백업에서 되살리려는 경우.** Time Machine 은 Catalina 까지 이 폴더를 백업했지만 제대로 복원하지는 못했습니다 [1]. 백업 속 폴더는 복원하지 말고 파일째 꺼내 분석합니다.

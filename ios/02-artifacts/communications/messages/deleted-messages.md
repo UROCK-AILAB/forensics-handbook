@@ -100,7 +100,7 @@ ORDER BY date;
 
 ## 교차 검증
 
-취소·편집한 메시지의 내용은 [바이옴 (Biome)](../../app-usage/biome/index.md), [알림 기록 (Notifications)](../../app-usage/notifications.md), [KnowledgeC (knowledgeC.db)](../../app-usage/knowledgec/index.md)에서 같은 시간대를 찾아 맞춰 봅니다[1]. 조사 흐름은 [지운 대화와 사진 찾기 (Deleted Content)](../../../04-scenarios/activity/deleted-content.md)와 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)를 따릅니다.
+취소·편집한 메시지의 내용은 [바이옴 (Biome)](../../app-usage/biome/index.md), [알림 기록 (Notifications)](../../app-usage/notifications.md), [KnowledgeC (knowledgeC.db)](../../app-usage/knowledgec/index.md)에서 같은 시간대를 찾아 맞춰 봅니다[1]. 검색용으로 색인에 들어간 메시지 본문은 sms.db 에서 지운 뒤에도 [스포트라이트 검색 색인](../../input-assistant/spotlight.md)에 남을 수 있습니다. 조사 흐름은 [지운 대화와 사진 찾기 (Deleted Content)](../../../04-scenarios/activity/deleted-content.md)와 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)를 따릅니다.
 
 ## 실습
 

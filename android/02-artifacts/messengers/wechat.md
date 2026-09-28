@@ -58,7 +58,7 @@ nav_order: 1020
 | `imgPath` | 이미지 경로 |
 | `status` | 상태 값 |
 
-시험 이미지에서 `type` 이 1 인 행은 텍스트였고, 나머지 값의 행은 `content` 에 XML 문서가 들어 있었습니다[1]. `type` 전체 코드표는 공식 자료가 없습니다[1]. `content` 가 XML 이면 `title`·`des`·`url` 요소에서 제목·설명·링크를 읽고, 시험 이미지 602행 가운데 587행에서 읽을 수 있는 본문이, 461행에서 링크가 나왔습니다[1]. 나머지 15행은 `img` 요소가 든 이미지 행이었습니다[1].
+시험 이미지에서 `type` 이 1 인 행은 텍스트였고, 나머지 값의 행은 `content` 에 XML 문서가 들어 있었습니다[1]. `type` 의 나머지 값은 뜻을 정리한 코드표가 공개돼 있지 않으므로, 행마다 `content` 를 열어 종류를 확인합니다[1]. `content` 가 XML 이면 `title`·`des`·`url` 요소에서 제목·설명·링크를 읽고, 시험 이미지 602행 가운데 587행에서 읽을 수 있는 본문이, 461행에서 링크가 나왔습니다[1]. 나머지 15행은 `img` 요소가 든 이미지 행이었습니다[1].
 
 ### 그 밖의 표
 
@@ -90,7 +90,7 @@ nav_order: 1020
 | `conversationTime` | `rconversation` 표 | 유닉스 밀리초 |
 | `createTime` | `rcontact` 표 | 유닉스 밀리초(값이 있는 행만) |
 
-유닉스 시각은 1970-01-01 UTC 기준이라서, 현지 시각으로 옮길 때는 기기의 [시간대와 시각 설정](../system-account/time-zone.md) 을 함께 확인합니다. `rcontact` 표의 `createTime` 은 값이 비어 있는 행도 있어서, 값이 있는 행만 밀리초로 바꿉니다[1]. `conversationTime` 이 어떤 동작에서 바뀌는지는 공식 설명이 없습니다. 시각 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+유닉스 시각은 1970-01-01 UTC 기준이라서, 현지 시각으로 옮길 때는 기기의 [시간대와 시각 설정](../system-account/time-zone.md) 을 함께 확인합니다. `rcontact` 표의 `createTime` 은 값이 비어 있는 행도 있어서, 값이 있는 행만 밀리초로 바꿉니다[1]. `conversationTime` 이 어떤 동작에서 바뀌는지는 같은 대화방의 메시지 시각과 맞춰 보고 확인합니다. 시각 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 

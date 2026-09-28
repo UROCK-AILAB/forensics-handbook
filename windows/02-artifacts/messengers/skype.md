@@ -39,13 +39,13 @@ Skype 는 2025-05-05 에 종료됐습니다(Microsoft Support). Skype 계정으�
 
 Skype 는 세대마다 저장 방식이 달랐습니다. 세대별로 알려진 것은 아래와 같습니다.
 
-| 세대 | 저장 방식 | 알려진 것 | 공개 자료 없음 |
+| 세대 | 저장 방식 | 알려진 것 | 실제 데이터로 확인할 것 |
 |---|---|---|---|
 | `main.db` 를 쓰는 판 | SQLite | 표와 열 이름 (plaso) | 폴더 경로, `main.db` 를 쓴 마지막 버전 |
 | 크롬 계열 구조의 판 | Local Storage·IndexedDB 를 LevelDB 로 저장 | Skype 는 LevelDB 를 쓰는 앱입니다 (CCL) | 폴더 경로, 대화가 남는 곳 |
 | 스토어 판 | — | — | 패키지 폴더 이름, 안의 DB 이름 |
 
-경로가 알려져 있지 않으므로, 이미지에서는 이름으로 찾습니다. `main.db` 라는 이름의 파일을 모두 찾고, 그 가운데 아래 "구조" 의 표 일곱 개가 모두 있는 파일을 Skype DB 로 봅니다.
+경로는 판마다 실제 데이터로 확인해야 하므로, 이미지에서는 이름으로 찾습니다. `main.db` 라는 이름의 파일을 모두 찾고, 그 가운데 아래 "구조" 의 표 일곱 개가 모두 있는 파일을 Skype DB 로 봅니다.
 
 - 이미지 전체에서 이름으로 찾는 방법은 [마스터 파일 테이블](../filesystem/mft.md) 에서 다룹니다.
 - 크롬 계열 구조는 [크롬 계열 앱 공통 구조](../../01-foundations/app-mail-data/chromium-electron-webview2/index.md) 와 [LevelDB 저장소](../../01-foundations/database-log-formats/leveldb.md) 에서 다룹니다.
@@ -118,7 +118,7 @@ plaso 파서는 아래 일곱 표가 있어야 이 파일을 Skype DB 로 읽습
 | `offer_send_list` | 보내기 대상 목록으로 보입니다 |
 | `starttime`, `accepttime`, `finishtime` | 열 이름으로 보면 전송을 시작한·수락한·끝낸 시각입니다 |
 | `filepath`, `filename`, `filesize` | 파일 경로·이름·크기 |
-| `status` | 전송 상태. 값의 뜻은 공개 자료 없음 |
+| `status` | 전송 상태. 값의 뜻은 정해져 있지 않으므로 보고서에는 값만 옮깁니다 |
 | `id`, `parent_id`, `pk_id` | 식별 정보 |
 
 SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
@@ -209,7 +209,7 @@ SQLite 파일을 읽는 법과 지운 레코드가 남는 곳은 [SQLite 데이�
 
 ## 실습
 
-서비스가 끝나서 새로 시험 데이터를 만들 수 없고, Skype 가 들어간 공개 시험 이미지도 알려진 것이 없습니다. 예전에 만든 시험 이미지나 가상 머신 스냅숏이 있으면 아래 질문으로 풀어 봅니다.
+서비스가 끝나서 새로 시험 데이터를 만들 수 없습니다. 예전에 만든 시험 이미지나 가상 머신 스냅숏이 있으면 아래 질문으로 풀어 봅니다.
 
 1. 이미지에서 `main.db` 라는 이름의 파일은 몇 개입니까? 그 가운데 표 일곱 개가 모두 있는 파일은 몇 개입니까?
 2. `Accounts` 의 `lastused_timestamp` 를 손으로 풀면 언제입니까? 도구의 결과와 같습니까?

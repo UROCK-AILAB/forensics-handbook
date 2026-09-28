@@ -59,7 +59,7 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 
 ### WPD-MTPClassDriver/Operational 로그
 
-`Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그에는 1000~1006 이벤트가 남습니다. 이 로그가 기본으로 켜져 있는지, 어느 Windows 버전부터 있는지는 공개 문서에 나와 있지 않으므로, 분석 대상 PC 에 로그가 있는지부터 봅니다.
+`Microsoft-Windows-WPD-MTPClassDriver/Operational` 로그에는 1000~1006 이벤트가 남습니다. 분석 대상 PC 에서 이 로그가 켜져 있고 기록이 남아 있는지부터 확인합니다.
 
 | ID | 메시지 |
 |---|---|
@@ -73,7 +73,7 @@ SOFTWARE 하이브 `Microsoft\Windows Portable Devices\Devices` 에는 장치마
 
 ### 파일을 옮겼나
 
-MTP 로 복사한 파일 목록이 PC 쪽에 따로 남는다는 공개 자료는 없습니다. 휴대폰 안 폴더를 탐색기로 연 기록이 셸백에 어떤 모양으로 남는지도 정리된 자료가 없으므로, 셸백에서 휴대폰 기기 이름이 든 경로가 있는지 찾아봅니다. 그래서 PC 쪽 흔적은 연결 구간과 그 구간에 연 원본 파일까지만 이을 수 있습니다.
+MTP 로 복사한 파일 목록이 PC 쪽에 따로 남는다고 가정하지 않습니다. 휴대폰 안 폴더를 탐색기로 열었는지는 셸백에서 휴대폰 기기 이름이 든 경로를 찾아 확인합니다. 그래서 PC 쪽 흔적은 연결 구간과 그 구간에 연 원본 파일까지만 이을 수 있습니다.
 
 ## Phone Link
 
@@ -103,9 +103,9 @@ Windows 10 1809·1903·빌드 18932, Your Phone 1.19041.481.0·1.19061.410.0 에
 
 ### 최신 판
 
-Phone Link 패키지 1.26072.255.0 에서는 패키지 폴더에 `LocalCache\Indexed` 가 없을 수 있습니다. 이때 `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json` 과 `Local`·`Roaming` 폴더만 있습니다. 휴대폰과 연동한 적이 없어서인지, 판이 바뀌어 위치가 달라졌는지는 알려져 있지 않습니다.
+Phone Link 패키지 1.26072.255.0 에서는 패키지 폴더에 `LocalCache\Indexed` 가 없을 수 있습니다. 이때 `LocalCache` 에는 `DeviceMetadataStorage.json`, `PlatformEncryptedKeyStorage.json` 과 `Local`·`Roaming` 폴더만 있습니다. 휴대폰과 연동한 적이 없어서인지, 판이 바뀌어 위치가 달라졌는지는 이 폴더 구성만으로 판단할 수 없습니다.
 
-최신 Windows 11 에는 `MicrosoftWindows.CrossDevice` 패키지(1.26072.116.0)도 함께 있을 수 있습니다. 이 패키지가 휴대폰 연동 기록을 어디에 남기는지는 공개된 자료가 없습니다. 그래서 최신 판에 2019년 경로가 그대로 있다고 가정하지 않고, 두 패키지 폴더를 통째로 확보해 둡니다.
+최신 Windows 11 에는 `MicrosoftWindows.CrossDevice` 패키지(1.26072.116.0)도 함께 있을 수 있습니다. 최신 판에 2019년 경로가 그대로 있다고 가정하지 않고, 두 패키지 폴더를 통째로 확보해 둡니다.
 
 ## 분석 흐름
 

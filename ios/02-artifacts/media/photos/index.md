@@ -22,7 +22,7 @@ has_toc: false
 | 나와 공유됨 보관함 | 기기 `/private/var/mobile/Library/Photos/Libraries/Syndication.photoslibrary/database/Photos.sqlite`[2] | — | 메시지 등으로 "나와 공유됨" 에 들어온 사진. iLEAPP 는 Ph25~26 파서로 읽습니다[2] |
 | 앱별 사진 보관함 | 백업 HomeDomain `Library/Preferences/com.apple.assetsd.plist` 의 `PLBackgroundMigrationPaths` 에 `com.apple.GenerativePlayground` 의 `.photoslibrary` 경로가 있습니다 | — | 앱마다 사진 보관함이 따로 있을 수 있다는 단서. 그 파일이 백업의 어느 도메인에 들어가는지는 실제 백업에서 확인합니다 |
 | iCloud 사진 상태 | 백업 CameraRollDomain `Media/PhotoData/CPL/` 의 `syncstatus.plist`, `DownloadCounts.plist`, `metrics.plist`, `mobileCPL.plist`, `cloudphotos-#.#.plist` | — | 이름으로 보면 iCloud 사진 동기화 시각과 개수. 키는 아래 표에 있습니다 |
-| DCIM 번호 | 백업 CameraRollDomain `Media/PhotoData/MISC/DCIM_APPLE.plist` 의 `DCIMLastDirectoryNumber`, `DCIMLastFileNumber` | — | 이름으로 보면 마지막 DCIM 폴더·파일 번호. 값의 뜻은 공개된 자료가 없습니다 |
+| DCIM 번호 | 백업 CameraRollDomain `Media/PhotoData/MISC/DCIM_APPLE.plist` 의 `DCIMLastDirectoryNumber`, `DCIMLastFileNumber` | — | 이름으로 보면 마지막 DCIM 폴더·파일 번호. 실제 DCIM 폴더·파일 이름과 맞춰 봅니다 |
 | 사진 앱 내부 설정 | 백업 CameraRollDomain `Media/PhotoData/private/com.apple.assetsd/appPrivateData.plist`, `Media/PhotoData/private/com.apple.mobileslideshow/appPrivateData.plist`, `Media/PhotoData/Journals/MigrationHistory.plist` | — | 사진 앱과 사진 서비스의 내부 상태 |
 | iCloud 사진 데몬 설정 | 백업 HomeDomain `Library/Preferences/com.apple.cloudphotod.plist` 에 `CPLCloudKitCoordinator-com.apple.photos.cloud` 키 | — | iCloud 사진 연결 설정으로 보이는 값 |
 
@@ -39,7 +39,7 @@ has_toc: false
 | iCloud 공유 링크 | `/private/var/mobile/Media/PhotoData/CMMAssets/<zShare-UUID>/` |
 | 썸네일 | `/private/var/mobile/Media/PhotoData/Thumbnails/V2/` 아래 |
 
-`Media/PhotoData/CPL/` 의 plist 에는 아래 키가 있습니다. 키의 뜻은 공개된 자료가 없어서 이름으로 짐작합니다.
+`Media/PhotoData/CPL/` 의 plist 에는 아래 키가 있습니다. 키의 뜻은 이름으로만 짐작할 수 있습니다.
 
 | 파일 | 키 |
 |---|---|

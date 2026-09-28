@@ -28,7 +28,7 @@ nav_order: 400
 
 bootstat 폴더는 권한이 0700 이고 소유자가 system 이라서 [3], adb 일반 셸로는 읽을 수 없고 루트 권한이나 전체 파일 시스템 추출이 있어야 할 것으로 보입니다. 추출 방식은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 다룹니다. `/data/misc/bootstat`, `/data/misc/recovery`, `/data/system/frp_secret` 이 실제 기기에 그대로 있는지는 직접 확인해야 합니다.
 
-버전과 제조사에 따라 달라지는 부분은 아래와 같습니다. 근거가 특정 버전 태그가 아닌 현행 AOSP 소스라서, 대부분의 항목은 도입 버전이 알려져 있지 않습니다.
+버전과 제조사에 따라 달라지는 부분은 아래와 같습니다. 대부분의 항목은 특정 버전 태그가 아닌 현행 AOSP 소스 기준이라서 도입 버전을 단정할 수 없습니다.
 
 | 항목 | 차이 |
 |---|---|
@@ -37,7 +37,7 @@ bootstat 폴더는 권한이 0700 이고 소유자가 system 이라서 [3], adb 
 | FRP secret 확인 강제 | 기능 플래그로 켜고, 소스에 "Upgrading from Android 14 or lower" 처리가 있어 Android 15 부터의 동작으로 보입니다. [6] |
 | 앱마다 다른 Android ID | Android 8.0(API 26)부터입니다. [5] |
 | `setup_wizard_has_run` (system) | AOSP 에 있는 키지만 기기에 따라 settings system 키 목록에 없을 수 있습니다. |
-| 삼성·구글이 더한 설정 키 | `setup_skipped`, `setup_type`, `smartswitch_*`, `quick_start_*`, `rampart_is_reset_by_at_command` 같은 키가 삼성 기기에 있습니다. 뜻을 설명한 공개 자료는 없습니다. |
+| 삼성·구글이 더한 설정 키 | `setup_skipped`, `setup_type`, `smartswitch_*`, `quick_start_*`, `rampart_is_reset_by_at_command` 같은 키가 삼성 기기에 있습니다. 뜻이 정해져 있지 않아 값만 옮깁니다. |
 
 ## 구조
 
@@ -116,7 +116,7 @@ PersistentDataBlockService 는 persistent 파티션을 읽고 씁니다. 이 데
 
 `boot_count` 설명에는 "초기화 이후" 라는 말이 없어서, 초기화 때 0 부터 다시 세는지는 실제 기기에서 확인합니다. Android ID 의 성질은 [기기 식별자](../../01-foundations/value-decoding/device-identifiers.md) 에서 다룹니다.
 
-삼성 기기에는 이름으로 보면 초기 설정과 관련된 키가 더 있습니다. global 에 `setup_skipped`, `setup_type`, `euicc_factory_reset_timeout_millis`, `lock_reset_profile`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `quick_start_flow_type`, `quick_start_source_manufacturer`, `previous_version_pda` 가 있고, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `rampart_is_reset_by_at_command` 가 있습니다. 이름만 보면 초기 설정 중 다른 기기에서 옮기기나 AT 명령으로 한 초기화를 가리키는 것처럼 읽히지만, 뜻을 설명한 공개 자료는 없습니다.
+삼성 기기에는 이름으로 보면 초기 설정과 관련된 키가 더 있습니다. global 에 `setup_skipped`, `setup_type`, `euicc_factory_reset_timeout_millis`, `lock_reset_profile`, `smartswitch_transfer_completed`, `smartswitch_transfer_start_in_oobe`, `quick_start_flow_type`, `quick_start_source_manufacturer`, `previous_version_pda` 가 있고, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `rampart_is_reset_by_at_command` 가 있습니다. 이름만 보면 초기 설정 중 다른 기기에서 옮기기나 AT 명령으로 한 초기화를 가리키는 것처럼 읽히지만, 이름만으로 뜻을 단정하지 않습니다.
 
 ### adb 로 보이는 필드
 
@@ -149,7 +149,7 @@ dumpsys package
       com.google.android.setupwizard
 ```
 
-주 사용자의 `Created:` 필드가 `<unknown>` 으로 나올 수 있고, 왜 비는지 설명한 공개 자료는 없습니다. 배터리 기록의 `RESET:TIME` 은 배터리 통계를 비운 시각으로 보이지만, 초기화와 같은 뜻인지는 다른 기록과 맞춰 봐야 합니다. 각 출력은 [사용자와 프로필](users-profiles.md), [계정](accounts/index.md), [배터리 사용 기록](../app-usage/batterystats.md), [dumpsys 출력](../logs/dumpsys.md) 에서 자세히 다룹니다.
+주 사용자의 `Created:` 필드가 `<unknown>` 으로 나올 수 있습니다. 배터리 기록의 `RESET:TIME` 은 배터리 통계를 비운 시각으로 보이지만, 초기화와 같은 뜻인지는 다른 기록과 맞춰 봐야 합니다. 각 출력은 [사용자와 프로필](users-profiles.md), [계정](accounts/index.md), [배터리 사용 기록](../app-usage/batterystats.md), [dumpsys 출력](../logs/dumpsys.md) 에서 자세히 다룹니다.
 
 ## 증거로서 의미
 
@@ -207,7 +207,7 @@ adb shell dumpsys user
 adb shell dumpsys account
 ```
 
-bootstat 폴더를 읽는 공개 분석 도구 모듈은 알려진 것이 없어, 위처럼 `stat` 으로 직접 읽습니다.
+bootstat 폴더는 위처럼 `stat` 으로 직접 읽습니다.
 
 ## 교차 검증
 
@@ -218,6 +218,7 @@ bootstat 폴더를 읽는 공개 분석 도구 모듈은 알려진 것이 없어
 | 빌드 정보 | 현재 빌드 ID·빌드 날짜와 `database_creation_buildid`·`build_date` 비교 | [기기 정보와 빌드](device-build.md) |
 | 사용자 정보 | 사용자 생성·첫 로그인 필드 | [사용자와 프로필](users-profiles.md) |
 | 배터리 기록 | `RESET:TIME` 줄 | [배터리 사용 기록](../app-usage/batterystats.md) |
+| 삼성 복구 기록 | `/efs/recovery/history` 에 초기화 뒤에도 남는 앞선 초기화 요청 기록 | [삼성 전원·재부팅·초기화 로그](../samsung/power-reset-logs.md) |
 
 초기화 시점을 좁힐 때는 `factory_reset` 의 수정 시각을 먼저 보고, 설정 데이터베이스 생성 빌드·계정 추가 시각·사용자 설정 완료 값을 그다음에 보며, 마지막으로 여러 기록 가운데 가장 오래된 시각을 모아 맞춰 봅니다. 여러 기록을 한 줄로 엮는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 

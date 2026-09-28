@@ -60,7 +60,7 @@ Google Play 보호 기능(Play Protect)의 분류에서 피싱(Phishing)은 믿�
 
 6. **파일을 받았는지 봅니다.** 링크를 거쳐 받은 파일은 미디어 저장소의 받은 주소, 리퍼러, 파일을 넣은 앱, 추가된 시각으로 찾고, 열 이름과 단위는 [악성 앱은 어디서 들어왔나](initial-access.md) 의 4단계에 있습니다. 받은 파일이 APK 이고 설치까지 이어졌다면 같은 페이지의 흐름으로 설치자와 설치 시각을 읽습니다.
 
-7. **보호 기능 설정을 적어 둡니다.** settings global 키 가운데 `spam_call_enable`, `spam_call_mute_first_ring`, `kt_scam_detection_is_supported`, `do_not_show_scam_detection_badge`, `do_not_show_caller_id_spam_protection_badge`, `sms_short_codes_content_url`, `sms_short_codes_metadata_url` 이 관련 키입니다. 각 키의 뜻을 밝힌 공개 자료는 없고, `kt_` 로 시작하는 키는 이름으로 보면 국내 통신사와 관련됐을 가능성이 있습니다. 삼성 자동 차단(Auto Blocker)의 최대 제한에는 첨부 자동 내려받기와 하이퍼링크·미리보기를 막는 항목이 있고 [3], 기능 전체 설명은 [악성 앱은 어디서 들어왔나](initial-access.md) 에 있습니다.
+7. **보호 기능 설정을 적어 둡니다.** settings global 키 가운데 `spam_call_enable`, `spam_call_mute_first_ring`, `kt_scam_detection_is_supported`, `do_not_show_scam_detection_badge`, `do_not_show_caller_id_spam_protection_badge`, `sms_short_codes_content_url`, `sms_short_codes_metadata_url` 이 관련 키입니다. 각 키의 뜻은 정해져 있지 않으므로 보고서에는 키와 값만 옮깁니다. `kt_` 로 시작하는 키는 이름으로 보면 국내 통신사와 관련됐을 가능성이 있습니다. 삼성 자동 차단(Auto Blocker)의 최대 제한에는 첨부 자동 내려받기와 하이퍼링크·미리보기를 막는 항목이 있고 [3], 기능 전체 설명은 [악성 앱은 어디서 들어왔나](initial-access.md) 에 있습니다.
 
 8. **한 줄로 정리합니다.** 문자를 받은 시각, 링크를 연 시각, 파일을 받은 시각, 설치 시각, 나간 문자의 시각을 한 시간 축에 놓고, 어느 항목이 비어 있는지 함께 남깁니다. 방법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 
@@ -92,6 +92,7 @@ Google Play 보호 기능(Play Protect)의 분류에서 피싱(Phishing)은 믿�
 - 값 해석: [시각 값](../../01-foundations/value-decoding/time-values.md), [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md)
 - 이어지는 시나리오: [악성 앱은 어디서 들어왔나](initial-access.md), [계정 탈취 흔적](account-takeover.md), [누구와 연락을 주고받았나](../activity/communication.md), [웹 사용 행위 재구성](../activity/web-activity.md)
 - 기법: [악성 앱 흔적 분석](../../03-techniques/analysis/malicious-app-triage/index.md), [타임라인 작성](../../03-techniques/analysis/timeline/index.md)
+- 원격 제어 앱을 깔게 한 경우: [원격 제어 앱 (TeamViewer·AnyDesk·AirDroid)](../../02-artifacts/credentials-security/remote-control-apps.md)
 
 ## 참고 문헌
 

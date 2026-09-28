@@ -31,7 +31,7 @@ nav_order: 1230
 | Brave | `~/Library/Application Support/BraveSoftware/Brave-Browser` | [3] |
 | Opera | `~/Library/Application Support/com.operasoftware.Opera` | [3] (확장 경로만 정의에 있음) |
 
-크롬은 채널(Beta·Dev·Canary)마다 폴더가 따로 있어서, 한 사용자가 여러 채널을 썼다면 폴더도 여러 개 남습니다. Edge Dev·Canary, 비발디 (Vivaldi), 웨일 (Whale)의 맥 경로는 공개 자료에 나와 있지 않아 분석 대상에서 직접 찾습니다. 경로를 모르는 Chromium 계열 브라우저는 사용자 홈의 `~/Library/Application Support` 아래에서 `Local State` 파일이 있고 그 하위 폴더에 `History` 파일이 있는 폴더를 찾아 가려낼 수 있습니다.
+크롬은 채널(Beta·Dev·Canary)마다 폴더가 따로 있어서, 한 사용자가 여러 채널을 썼다면 폴더도 여러 개 남습니다. Edge Dev·Canary, 비발디 (Vivaldi), 웨일 (Whale)의 맥 경로는 분석 대상에서 직접 찾습니다. 경로를 모르는 Chromium 계열 브라우저는 사용자 홈의 `~/Library/Application Support` 아래에서 `Local State` 파일이 있고 그 하위 폴더에 `History` 파일이 있는 폴더를 찾아 가려낼 수 있습니다.
 
 이 경로와 파일 형식은 macOS 버전보다 브라우저 버전에 따라 달라집니다. 쿠키 파일 위치나 다운로드 표 구성이 그런 예이고, 그 내용은 각 하위 페이지에서 다룹니다.
 
@@ -82,7 +82,7 @@ nav_order: 1230
 | `Preferences`, `Secure Preferences` | 프로필 설정(JSON) [2] | 이 페이지 |
 | `Local State` | 사용자 데이터 폴더 전체의 설정 [2] | 이 페이지 |
 
-`Preferences` 와 `Secure Preferences` 는 JSON 파일이라 텍스트로 열어 볼 수 있습니다 [2]. 다만 `Local State` 안에서 프로필 목록과 표시 이름·계정 정보를 담는 키, `Preferences` 안에서 로그인 계정과 동기화 상태를 담는 키는 정리된 공개 자료가 없습니다. 특정 키 이름을 근거로 보고서를 쓰기 전에는 분석 대상의 브라우저 버전에서 그 키가 실제로 무엇을 담는지 먼저 확인합니다. 저장 형식 자체는 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
+`Preferences` 와 `Secure Preferences` 는 JSON 파일이라 텍스트로 열어 볼 수 있습니다 [2]. 다만 `Local State` 안에서 프로필 목록과 표시 이름·계정 정보를 담는 키나 `Preferences` 안에서 로그인 계정과 동기화 상태를 담는 키를 근거로 보고서를 쓰기 전에는 분석 대상의 브라우저 버전에서 그 키가 실제로 무엇을 담는지 먼저 확인합니다. 저장 형식 자체는 [SQLite 데이터베이스 (SQLite)](../../../01-foundations/data-formats/sqlite/index.md)에서 다룹니다.
 
 ## 증거로서 의미
 
@@ -98,7 +98,7 @@ nav_order: 1230
 - **채널과 브라우저 여러 개.** Chrome과 Chrome Beta·Canary, Edge, Brave는 폴더가 모두 따로라서 한 사용자에게 사용자 데이터 폴더가 여러 개 있을 수 있습니다.
 - **바꾼 사용자 데이터 폴더.** `--user-data-dir` 로 실행하면 기본 경로 밖에 기록이 쌓입니다 [1]. 파일 이름으로 볼륨 전체를 찾아봅니다.
 - **캐시 위치.** 맥에서는 캐시가 `~/Library/Caches` 쪽에 따로 있어서 [1], 사용자 데이터 폴더만 수집하면 캐시가 빠집니다.
-- **공개되지 않은 경로.** Edge Dev·Canary, 비발디, 웨일의 맥 경로는 공개 자료가 없습니다. 분석 대상에서 찾은 경로는 찾은 대로 기록하고, 공개 자료로 확인되는 경로와 구분해 적습니다.
+- **직접 찾아야 하는 경로.** Edge Dev·Canary, 비발디, 웨일의 맥 경로는 분석 대상에서 찾습니다. 찾은 경로는 찾은 대로 기록하고, 참고 문헌으로 확인되는 경로와 구분해 적습니다.
 
 ## 직접 분석해 보기
 

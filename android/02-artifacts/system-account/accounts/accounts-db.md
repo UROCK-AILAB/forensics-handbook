@@ -23,11 +23,11 @@ nav_order: 330
 |---|---|---|
 | `accounts_de.db` | `/data/system_de/<사용자ID>/accounts_de.db` | 3 |
 | `accounts_ce.db` | `/data/system_ce/<사용자ID>/accounts_ce.db` | 10 |
-| `accounts.db` | 공개 자료 없음 | 9 (Android N 이전 구조) |
+| `accounts.db` | 실제 기기에서 파일 이름으로 찾아 확인 | 9 (Android N 이전 구조) |
 
 파일 이름과 버전 값은 AccountsDb 의 상수(CE_DATABASE_NAME, DE_DATABASE_NAME, PRE_N_DATABASE_NAME 등)입니다 [1]. ALEAPP 는 두 파일을 `*/system_de/*/accounts_de.db*`, `*/system_ce/*/accounts_ce.db*` 패턴으로 찾습니다 [3][4]. 패턴 가운데의 `*` 는 사용자 번호 폴더이고 끝의 `*` 로 `-wal`·`-journal` 같은 딸림 파일까지 함께 잡습니다 [3][4]. 사용자 번호 폴더마다 파일이 따로 있어서 다른 사용자나 프로필의 계정은 그 번호의 폴더에서 찾고, 사용자 구성은 [사용자와 프로필 (Multi-user·users)](../users-profiles.md) 페이지에서 확인합니다.
 
-Android N 이전에는 `accounts.db` 한 파일에 모두 담았습니다 [1]. 상수 이름(PRE_N)으로 짐작하면 두 파일로 나뉜 때는 Android N 이지만 이를 밝힌 문서는 없고, 예전 파일의 경로도 실제 기기로 확인해야 합니다.
+Android N 이전에는 `accounts.db` 한 파일에 모두 담았습니다 [1]. 상수 이름(PRE_N)으로 짐작하면 두 파일로 나뉜 때는 Android N 으로 보이고, 예전 파일의 경로는 실제 기기로 확인합니다.
 
 ## 구조
 
@@ -38,7 +38,7 @@ Android N 이전에는 `accounts.db` 한 파일에 모두 담았습니다 [1]. �
 | `accounts` | `_id` INTEGER PRIMARY KEY, `name` TEXT NOT NULL, `type` TEXT NOT NULL, `previous_name` TEXT, `last_password_entry_time_millis_epoch` INTEGER DEFAULT 0, UNIQUE(name, type) | 계정 목록과 이름을 바꾸기 전의 이름 |
 | `grants` | `accounts_id` INTEGER NOT NULL, `auth_token_type` STRING NOT NULL, `uid` INTEGER NOT NULL, UNIQUE(accounts_id, auth_token_type, uid) | 어떤 앱(uid)에 어떤 토큰 종류를 쓰도록 허락했는지 |
 | `visibility` | `accounts_id` INTEGER NOT NULL, `_package` TEXT NOT NULL, `value` INTEGER, PRIMARY KEY(accounts_id, _package) | 앱(패키지)별로 이 계정을 보여 주는지 |
-| `shared_accounts` | `_id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `type` TEXT NOT NULL, UNIQUE(name, type) | 용도는 공개 자료 없음 |
+| `shared_accounts` | `_id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `type` TEXT NOT NULL, UNIQUE(name, type) | 표 이름만으로 용도를 단정할 수 없음 |
 | `meta` | `key` TEXT PRIMARY KEY NOT NULL, `value` TEXT | 키·값 |
 | `debug_table` | `_id` INTEGER, `action_type` TEXT NOT NULL, `time` DATETIME, `caller_uid` INTEGER NOT NULL, `table_name` TEXT NOT NULL, `primary_key` INTEGER PRIMARY KEY | 계정 변경 기록 |
 

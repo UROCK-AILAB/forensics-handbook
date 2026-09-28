@@ -58,7 +58,7 @@ Windows 10 에서 같은 파일이 생기는지는 실제 기기로 확인해야
 |---|---|---|
 | 11.2307.22.0 | 세션 상태 자동 저장이 들어왔습니다 | Microsoft |
 | 11.2407.9.0·11.2408.12.0·11.2409.9.0 | DFIR Review 원고가 확인한 버전입니다. 원고는 11.2408.12.0 을 기준으로 씁니다. 추가 옵션 블록에 알 수 없는 1바이트 두 개만 있습니다 | ogmini 원고 |
-| README 가 다룬 판 11.2402.22.0 ~ 11.2507.26.0 | 추가 옵션 블록 끝에 서식 (Formatting) 1바이트가 더 있습니다. `settings.dat` 의 RecentFiles·FindString·ReplaceString·RewriteEnabled 값도 README 에만 나옵니다. 이 필드와 값이 들어온 버전은 알려져 있지 않습니다 | ogmini README |
+| README 가 다룬 판 11.2402.22.0 ~ 11.2507.26.0 | 추가 옵션 블록 끝에 서식 (Formatting) 1바이트가 더 있습니다. `settings.dat` 의 RecentFiles·FindString·ReplaceString·RewriteEnabled 값도 README 에만 나옵니다. 이 필드와 값이 있는지는 증거 PC 의 메모장 파일을 직접 풀어 확인합니다 | ogmini README |
 | 11.2607.14.0 (Windows 11 25H2) | 상태 파일의 TypeFlag 가 0x0E(14)입니다. 문서의 10·11 과 다릅니다. 나머지 필드 순서는 문서와 같습니다 |  |
 
 ## 구조
@@ -242,7 +242,7 @@ Windows 10 에서 같은 파일이 생기는지는 실제 기기로 확인해야
 | 상태 파일의 Sequence Number | 저장하지 않은 변경이 있는 탭이면 메모장을 닫을 때마다 | 변경 없는 탭이면 늘지 않습니다 |
 | 파일 시스템 시각 | 파일을 다시 쓸 때 | 아래 참고 |
 
-- Timestamp 는 Win32 FILETIME 형식입니다. 이 값이 UTC 인지 현지 시각인지는 공개 자료에 없으므로, 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다. 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
+- Timestamp 는 Win32 FILETIME 형식입니다. 이 값이 UTC 인지 현지 시각인지는 같은 PC 의 UTC 기록과 맞춰 본 뒤 씁니다. 형식은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 - `.0.bin` 과 `.1.bin` 은 번갈아 갱신됩니다. Sequence Number 가 큰 쪽이 현재 것입니다. 상태 파일과 창 파일 모두 같습니다[1][2].
 
 상태 파일은 탭의 상태에 따라 생기고 지워지는 때가 다릅니다[1][2].
@@ -269,7 +269,7 @@ Windows 10 에서 같은 파일이 생기는지는 실제 기기로 확인해야
 - **남는 공간의 GUID 는 보장되지 않습니다.** 탭을 여러 번 여닫으면 예전 GUID 가 덮이거나 잘립니다.
 - **CRC32 는 손상을 가려내는 값입니다.** 조작을 막지는 못합니다. 누군가 내용을 고치고 CRC32 를 다시 계산하면 CRC32 만으로는 알 수 없습니다.
 - **지우거나 기능을 끌 수 있습니다.** 사용자가 `TabState` 폴더를 지우거나 세션 저장을 끄면 탭 파일이 남지 않습니다. 예전 탭 파일은 볼륨 섀도 복사본에 남아 있을 수 있습니다. 방법은 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 다룹니다.
-- **Windows 10 은 공개된 분석 자료가 없습니다.** 실제 기기로 확인해야 합니다.
+- **Windows 10 에서는 실제 기기로 먼저 확인합니다.** 폴더 위치와 파일 헤더가 위 설명과 같은지 본 뒤 도구 결과를 씁니다.
 
 ## 직접 분석해 보기
 

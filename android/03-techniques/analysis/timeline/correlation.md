@@ -39,7 +39,7 @@ logcat 은 같은 줄을 `-v monotonic` 과 `-v epoch` 로 한 번씩 뽑으면 
 ## 절차
 
 1. **정규화를 먼저 끝냅니다.** 기록마다 시계 종류, 원래 표기, 옮긴 UTC 시각이 한 줄에 있어야 엮을 수 있습니다. 방법은 [시각 정규화](time-normalization.md) 에 있습니다.
-2. **부팅 경계를 찾습니다.** 부팅 기준 값은 부팅마다 0부터 다시 세서 [1], 경계를 모르면 서로 다른 부팅의 값을 한 줄에 섞게 됩니다. `dumpsys bluetooth_manager` 의 `Enable log:` 아래에는 아래 같은 줄이 있습니다. 부팅 무렵 시스템이 블루투스를 켠 기록으로 보이고, 이 시각이 부팅 시각과 얼마나 가까운지는 실제 기기로 확인합니다. `settings global` 에는 `boot_count` 키도 있는데, 이 값으로 부팅 시점을 알 수 있는지 밝힌 공개 자료는 없습니다.
+2. **부팅 경계를 찾습니다.** 부팅 기준 값은 부팅마다 0부터 다시 세서 [1], 경계를 모르면 서로 다른 부팅의 값을 한 줄에 섞게 됩니다. `dumpsys bluetooth_manager` 의 `Enable log:` 아래에는 아래 같은 줄이 있습니다. 부팅 무렵 시스템이 블루투스를 켠 기록으로 보이고, 이 시각이 부팅 시각과 얼마나 가까운지는 실제 기기로 확인합니다. `settings global` 에는 `boot_count` 키도 있는데, 이 값으로 부팅 시점을 알 수 있는지는 시험 기기를 재부팅해 값이 바뀌는지로 확인합니다.
 
    ```
    ##-## ##:##:##.### 	Package [android] requested to [Enable]. 	Reason is SYSTEM_BOOT
@@ -58,7 +58,7 @@ logcat 은 같은 줄을 `-v monotonic` 과 `-v epoch` 로 한 번씩 뽑으면 
 | 사건 | 앱 사용 기록 (`dumpsys usagestats`) | 다른 기록 |
 |---|---|---|
 | 화면 켜짐·꺼짐 | `SCREEN_INTERACTIVE`, `SCREEN_NON_INTERACTIVE` | `dumpsys batterystats` 의 `+screen`·`-screen`, `screenwake=`, `display_state_changed=`, `dumpsys wifi` 의 `CMD_SCREEN_STATE_CHANGED` |
-| 잠금 화면 | `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN` | 공개 자료 없음 |
+| 잠금 화면 | `KEYGUARD_SHOWN`, `KEYGUARD_HIDDEN` | 같은 시각의 다른 기록을 실제 기기에서 찾아 확인 |
 | 알림 | `NOTIFICATION_INTERRUPTION`, `NOTIFICATION_SEEN` | `dumpsys notification` 의 `mCreationTimeMs`, `mUpdateTimeMs` 등 |
 
 알림 쪽은 `dumpsys notification` 의 시각 필드에 `+####` 오프셋이 함께 찍혀서 시간대가 분명하고, 앱 사용 기록 쪽은 원본이 유닉스 밀리초라서 두 기록을 맞추면 서로의 시간대 해석을 검산할 수 있습니다. 각 기록의 뜻은 [배터리 사용 기록 (batterystats)](../../../02-artifacts/app-usage/batterystats.md), [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md), [와이파이 설정과 접속 기록 (WifiConfigStore)](../../../02-artifacts/network/wifi.md) 페이지에 있습니다.

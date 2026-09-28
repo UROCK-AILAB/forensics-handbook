@@ -47,13 +47,13 @@ nav_order: 1050
 | `AppDomain-com.apple.Passbook` | 항목 6개 |
 | `AppDomain-com.apple.PassbookSecureUIService`, `AppDomain-com.apple.PassbookUISceneService`, `AppDomain-com.apple.PassbookUIService` | |
 | `AppDomainPlugin-com.apple.PassKit.*` | `PassKitSpotlightIndexExtension` 등 |
-| `AppDomainPlugin-com.apple.finhealth.FinHealthTransactionInsightsExtension` 등 | 공개 자료 없음 |
+| `AppDomainPlugin-com.apple.finhealth.FinHealthTransactionInsightsExtension` 등 | 도메인 안 파일을 열어 내용을 확인 |
 
 `com.apple.Passbook` 은 이름으로 짐작하면 지갑 앱의 번들 ID 로 보입니다. 도메인 이름을 읽는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md)을 봅니다.
 
 ### 버전별 차이
 
-iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 16.5(1행) 두 기기뿐이고 나머지는 0행이었습니다[1]. 버전·기기·국가에 따라 거래 기록이 아예 남지 않을 수 있습니다. 버전별로 표 구조가 어떻게 바뀌는지는 알려져 있지 않아 실제 데이터로 확인해야 합니다.
+iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 16.5(1행) 두 기기뿐이고 나머지는 0행이었습니다[1]. 버전·기기·국가에 따라 거래 기록이 아예 남지 않을 수 있습니다. 다른 버전의 기기에서는 SQLite 표 구조부터 확인합니다.
 
 ## 구조
 
@@ -70,7 +70,7 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 | `peer_payment_counterpart_handle`, `peer_payment_memo` | 개인 간 송금의 상대와 메모 |
 | `transaction_status`, `transaction_type` | 거래 상태와 종류(번호) |
 
-`amount` 는 iLEAPP 가 10000 으로 나눠 보여 줍니다. 이 나눗수는 제조사 문서에 나온 값이 아니라 알려진 거래와 비교해서 얻은 값입니다[1]. `transaction_status` 와 `transaction_type` 의 번호 뜻은 공개 문서에 없어, 실제 데이터에서 알려진 거래와 맞춰 봐야 합니다.
+`amount` 는 iLEAPP 가 10000 으로 나눠 보여 줍니다. 이 나눗수는 제조사 문서에 나온 값이 아니라 알려진 거래와 비교해서 얻은 값입니다[1]. `transaction_status` 와 `transaction_type` 의 번호 뜻은 실제 데이터에서 알려진 거래와 맞춰 확인합니다.
 
 ### 패스
 
@@ -89,7 +89,7 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 
 ### 설정 파일
 
-로컬 백업의 `HomeDomain` 안 `Library/Preferences/` 에는 아래 파일과 키가 있습니다. 값의 뜻을 설명한 공개 자료는 없습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
+로컬 백업의 `HomeDomain` 안 `Library/Preferences/` 에는 아래 파일과 키가 있고, 키 이름만으로 값의 뜻을 단정하지 않습니다. 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md)에서 다룹니다.
 
 | 파일 | 키 |
 |---|---|
@@ -120,7 +120,7 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 
 `payment_transaction.transaction_date`, `location_date`, `PASS.INGESTED_DATE` 는 Mac 절대 시각(2001-01-01 00:00:00 UTC 부터 센 초)이고 iLEAPP 도 이 기준으로 바꿉니다[1][2]. 값은 UTC 기준이라서 현지 시각으로 옮길 때는 기기 시간대와 거래 위치를 함께 봅니다. `transaction_date` 는 거래 시각이고 `location_date` 는 위치를 잰 시각이라 두 값이 다를 수 있으며, 위치 기반 주장을 할 때는 `location_date` 를 씁니다. 바꾸는 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
-`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되며, 어떤 기준의 시각인지는 알려져 있지 않아 실제 데이터로 확인해야 합니다.
+`com.apple.Wallet.plist` 의 `PKLastProductCacheUpdateTimestampKey` 는 정수로 저장되며, 어떤 기준의 시각인지는 값의 자릿수와 범위를 보고 백업 시각과 앞뒤가 맞는지 확인합니다.
 
 ## 함정과 한계
 
@@ -130,7 +130,7 @@ iLEAPP 시험 표본에서 거래 행이 나온 것은 iOS 18.3.2(10행)와 iOS 
 
 **금액 나눗수는 검증된 규칙이 아닙니다.** `amount` 를 10000 으로 나누는 규칙은 경험으로 얻은 값이라[1], 보고서에 금액을 적기 전에 영수증이나 카드사 자료로 알려진 거래 하나를 맞춰 봅니다.
 
-**지우기.** `PASS.DELETE_PENDING` 열은 이름으로 짐작하면 지우기를 기다리는 패스를 표시하는 것으로 보이며[2], 사용자가 패스를 지운 뒤 어떤 흔적이 얼마나 남는지는 알려져 있지 않아 실제 기기로 확인해야 합니다. SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)를 봅니다.
+**지우기.** `PASS.DELETE_PENDING` 열은 이름으로 짐작하면 지우기를 기다리는 패스를 표시하는 것으로 보이며[2], 사용자가 패스를 지운 뒤 어떤 흔적이 얼마나 남는지는 시험 기기에서 패스를 지워 보고 확인합니다. SQLite 에서 지운 행을 찾는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)를 봅니다.
 
 ## 직접 분석해 보기
 

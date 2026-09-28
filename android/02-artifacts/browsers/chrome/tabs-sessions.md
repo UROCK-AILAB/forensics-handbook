@@ -26,7 +26,7 @@ Chrome for Android 는 열린 탭을 다시 띄우려고 탭마다 상태 파일
 | `0` (TABBED_MODE_DIRECTORY) | 일반 탭 모드 |
 | `custom_tabs` (CUSTOM_TABS_DIRECTORY) | 다른 앱이 Chrome 으로 띄운 맞춤 탭(Custom Tabs) |
 
-파일 형식은 옛 형식(손으로 짠 직렬화)과 FlatBuffer 형식 두 가지가 있고, 옛 형식에서 FlatBuffer 로 옮기는 중에는 한 탭에 두 형식 파일이 함께 있을 수 있습니다. 소스에 "FlatBuffer 로 옮겼지만 옛 파일을 아직 지우지 않은" 상태가 따로 있습니다 [1]. 어느 Chrome 버전부터 FlatBuffer 를 쓰는지는 공개된 자료가 없습니다.
+파일 형식은 옛 형식(손으로 짠 직렬화)과 FlatBuffer 형식 두 가지가 있고, 옛 형식에서 FlatBuffer 로 옮기는 중에는 한 탭에 두 형식 파일이 함께 있을 수 있습니다. 소스에 "FlatBuffer 로 옮겼지만 옛 파일을 아직 지우지 않은" 상태가 따로 있습니다 [1]. 분석하는 기기의 Chrome 이 FlatBuffer 형식을 쓰는지는 탭 폴더에 "flatbufferv1_" 로 시작하는 파일이 있는지로 확인합니다.
 
 ## 구조
 
@@ -66,7 +66,7 @@ Chrome for Android 는 열린 탭을 다시 띄우려고 탭마다 상태 파일
 | 14 | isPinned | boolean |
 | 15 | url | 문자열. 탭의 현재 URL |
 
-읽는 코드는 뒤쪽 필드가 없어 파일 끝(EOFException)을 만나면 기본값으로 넘어가서 [1], 오래된 Chrome 이 쓴 파일에는 뒤쪽 필드가 아예 없을 수 있습니다. tabLaunchTypeAtCreation 의 숫자별 뜻은 공개된 분석 자료가 없습니다.
+읽는 코드는 뒤쪽 필드가 없어 파일 끝(EOFException)을 만나면 기본값으로 넘어가서 [1], 오래된 Chrome 이 쓴 파일에는 뒤쪽 필드가 아예 없을 수 있습니다. tabLaunchTypeAtCreation 은 숫자로만 저장되므로, 숫자별 뜻을 확인하기 전에는 보고서에 숫자 값만 옮기고 탭이 어떻게 열렸는지 단정하지 않습니다.
 
 ## 증거로서 의미
 
@@ -96,7 +96,7 @@ openerAppId 는 링크를 눌러 Chrome 이 열린 경로를 따질 때 단서�
 
 전용 공개 파서가 없어서 헥스 편집기로 직접 보는 방법이 기본입니다. 옛 형식의 암호화하지 않은 "tab" 파일이라면 앞에서부터 timestampMillis, WebContents 상태 길이와 바이트, parentId 순서로 값이 이어지고, 파일 끝 가까이에서 탭의 현재 URL 문자열을 찾을 수 있습니다 [1]. 저장 코드는 Java 의 DataOutputStream 으로 값을 쓰기 때문에 int 는 4바이트, long 은 8바이트를 큰 쪽 먼저(big-endian) 적고, 문자열(writeUTF)은 뒤따르는 바이트 수를 2바이트로 먼저 적은 뒤 수정 UTF-8 로 적습니다 [1][5]. 이 규칙대로 읽더라도 알려진 URL 이 열린 시험용 기기에서 만든 파일로 먼저 한 번 맞춰 보고 분석 대상 기기에 적용합니다. 이렇게 시험 기기로 도구와 방법을 확인하는 절차는 [도구 검증 (Tool Validation)](../../../03-techniques/reporting/tool-validation.md) 페이지를 봅니다.
 
-FlatBuffer 형식 파일("flatbufferv1_" 로 시작)의 스키마는 공개된 분석 자료가 없습니다. 스키마를 확인하기 전에는 파일 안에서 URL 문자열을 검색해 찾는 데까지만 하고, 필드의 뜻은 스키마를 확인한 뒤에 씁니다. 문자열 검색은 [콘텐츠 검색 (Content Search)](../../../03-techniques/analysis/content-search.md) 페이지를 봅니다.
+FlatBuffer 형식 파일("flatbufferv1_" 로 시작)은 스키마를 알아야 필드를 나눠 읽을 수 있습니다. 스키마를 확인하기 전에는 파일 안에서 URL 문자열을 검색해 찾는 데까지만 하고, 필드의 뜻은 스키마를 확인한 뒤에 씁니다. 문자열 검색은 [콘텐츠 검색 (Content Search)](../../../03-techniques/analysis/content-search.md) 페이지를 봅니다.
 
 ## 교차 검증
 

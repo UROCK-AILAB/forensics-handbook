@@ -27,7 +27,7 @@ Windows 앱은 브라우저 없이 ChatGPT 를 쓰는 데스크톱 앱입니다.
 
 스토어로 깐 앱은 사용자 프로필의 `%LOCALAPPDATA%\Packages` 아래 패키지마다 폴더를 하나씩 만들고, 그 안의 `LocalState`, `LocalCache` 같은 하위 폴더에 데이터를 둡니다. 이 구조는 스토어 앱 공통입니다. 앱 안에서 웹 화면을 띄우는 구조라면 [Electron·웹뷰 앱의 저장 구조](../../../01-foundations/storage-model/electron-webview.md)와 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에서 설명하는 폴더가 생기므로, ChatGPT 앱 폴더에 그런 폴더가 있는지 실제 기기에서 봅니다.
 
-ChatGPT 앱의 패키지 폴더 이름은 공개 자료에 없으니, `Packages` 아래 폴더 이름에 ChatGPT 나 OpenAI 가 들어간 것이 있는지 찾습니다. 이름으로 찾지 못해도 앱이 없었다고 단정하지 않고, 설치된 앱 목록 같은 다른 흔적으로 한 번 더 확인합니다.
+ChatGPT 앱의 패키지 폴더를 찾을 때는 `Packages` 아래 폴더 이름에 ChatGPT 나 OpenAI 가 들어간 것이 있는지 봅니다. 이름으로 찾지 못해도 앱이 없었다고 단정하지 않고, 설치된 앱 목록 같은 다른 흔적으로 한 번 더 확인합니다.
 
 ## 보호 방식
 
@@ -47,11 +47,11 @@ ChatGPT 앱의 패키지 폴더 이름은 공개 자료에 없으니, `Packages`
 
 Windows 에는 이름이 비슷한 AI 앱이 여럿 있습니다. Windows 에 들어 있는 Copilot 은 다른 회사 제품이라 [Microsoft Copilot](../copilot/index.md)에서 따로 다루고, 브라우저에서 쓴 ChatGPT 는 [웹 브라우저](web.md)에서 다룹니다. 앱이 공식 스토어 앱이 아니라 제3자가 만든 비공식 클라이언트일 수도 있으니, 설치 경로와 게시자를 먼저 확인합니다.
 
-앱 내부 파일 구조는 공개된 분석 자료가 없습니다. 실물 기기에서 파일을 찾았다면 확인한 OS·앱 버전·날짜를 함께 적어 두고, 다른 버전에도 같다고 넘겨짚지 않습니다.
+앱 내부 파일 구조는 실물 기기에서 파일을 열어 확인합니다. 파일을 찾았다면 확인한 OS·앱 버전·날짜를 함께 적어 두고, 다른 버전에도 같다고 넘겨짚지 않습니다.
 
 ## 직접 분석해 보기
 
-앱 내부 형식을 밝힌 자료가 없어서 헥스 예시는 싣지 않았습니다. 파일 하나를 헥스로 열었을 때 읽을 수 있는 글자가 이어지면 평문이고, 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라는 정도는 가를 수 있습니다. 공개 도구는 파일 형식을 확인한 다음에 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)나 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지에서 고릅니다. 기기에서 모을 항목의 전체 목록은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
+파일 하나를 헥스로 열었을 때 읽을 수 있는 글자가 이어지면 평문이고, 바이트가 고르게 흩어져 있으면 암호화했거나 압축한 것이라는 정도는 가를 수 있습니다. 공개 도구는 파일 형식을 확인한 다음에 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html)나 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지에서 고릅니다. 기기에서 모을 항목의 전체 목록은 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)에 있습니다.
 
 ## 교차 검증
 

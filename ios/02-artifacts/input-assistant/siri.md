@@ -14,7 +14,7 @@ nav_order: 1080
 
 첫째는 설정입니다. 시리를 켰는지, 음성 데이터 공유에 동의했는지, 어떤 목소리와 언어를 쓰는지, iCloud 동기화를 켰는지가 `com.apple.assistant.*` plist 에 남습니다. 둘째는 사용 기록입니다. `siriremembers` DB 는 인텐트를 시각·방향·앱과 함께 담고, iLEAPP 는 그 가운데 메시지·통화·미디어 도메인을 골라 보여 줍니다 [1]. 바이옴의 `Siri.UI` 스트림에는 iLEAPP 시험 데이터 기준으로 시리 화면이 나타날 때와 닫힐 때 기록이 하나씩 남았습니다 [2]. 셋째는 주변 흔적입니다. 시리 지표를 모아 두는 DB, 앱이 시리에 알린 동작·문구 목록, 사파리가 무시한 시리 추천 사이트처럼 이름에 시리가 들어간 자료가 여러 앱과 도메인에 흩어져 있습니다.
 
-`siriremembers` 에 `donated_by_siri` 열이 있다는 점으로 보아, 이 DB 는 시리를 거친 동작뿐 아니라 앱이 시스템에 알린(기부한) 인텐트도 담는 것으로 보입니다 [1]. 이 열의 정확한 뜻은 공개 자료가 없습니다.
+`siriremembers` 에 `donated_by_siri` 열이 있다는 점으로 보아, 이 DB 는 시리를 거친 동작뿐 아니라 앱이 시스템에 알린(기부한) 인텐트도 담는 것으로 보입니다 [1]. 이 열의 정확한 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 
 ## 위치와 버전별 차이
 
@@ -34,7 +34,7 @@ iOS 27.0 에서 만든 암호화하지 않은 로컬 백업에는 `AppDomainGrou
 
 ### 설정 plist
 
-아래 키는 iOS 27.0 백업에 있는 것이고, 괄호 안은 값 종류입니다. 옵트인 상태 숫자가 무엇을 가리키는지, "Linwood" 가 무엇인지 같은 값의 뜻은 공개 자료가 없습니다.
+아래 키는 iOS 27.0 백업에 있는 것이고, 괄호 안은 값 종류입니다. 옵트인 상태 숫자가 무엇을 가리키는지, "Linwood" 가 무엇인지 같은 값의 뜻은 키 이름만으로 단정할 수 없습니다.
 
 | 파일 (`HomeDomain :: Library/Preferences/`) | 주요 키 |
 |---|---|
@@ -62,7 +62,7 @@ iOS 27.0 에서 만든 암호화하지 않은 로컬 백업에는 `AppDomainGrou
 | 필드 | 뜻 (iLEAPP 시험 데이터 기준) |
 |---|---|
 | 2 | 세션 식별자. 한 쌍의 두 기록에서 값이 같음 |
-| 3 | presentation 값. 표본에서 늘 같았고 뜻은 알려지지 않음 |
+| 3 | presentation 값. 표본에서 늘 같았고 뜻은 단정할 수 없음 |
 | 4 | 닫힌 이유. 관찰된 값은 `HardwareButton`, `Punchout`, `Timeout`, `TapOutsideOfContent` |
 | 5 | 1 은 나타남, 0 은 닫힘 |
 | 7 | 관련 ID |
@@ -79,7 +79,7 @@ fileUploads: uploadId, payload, timestampRefId, status, processedAttempts, dateC
 records: batchId, payload, dateCreated
 ```
 
-이름과 열로 짐작하면 지표를 모아 올려 보내기 전에 쌓아 두는 곳으로 보입니다. `payload` 내용과 시각 열의 기준은 공개 자료가 없습니다.
+이름과 열로 짐작하면 지표를 모아 올려 보내기 전에 쌓아 두는 곳으로 보입니다. `payload` 는 값을 열어 형식부터 확인하고, 시각 열의 기준은 값의 자릿수와 범위로 판별합니다.
 
 ### 앱 인텐트 목록과 그 밖의 자리
 
@@ -91,11 +91,11 @@ records: batchId, payload, dateCreated
 
 **증명하는 것**
 
-설정 plist 는 키 이름으로 짐작하면 수집 시점에 시리와 받아쓰기가 켜져 있었는지, 어떤 언어와 목소리를 골랐는지, iCloud 동기화를 켰는지를 보여 줍니다. `Cloud Sync Enabled Modification Date` 는 이름으로 보면 그 설정이 마지막으로 바뀐 때로 읽히지만, 이를 설명한 공개 자료는 없습니다. `siriremembers` 의 `intents` 행은 그 시각에 어떤 앱으로 누구와 메시지·통화·미디어 인텐트가 있었다는 기록이고 [1], `Siri.UI` 의 짝 기록은 시리 화면이 그 시각에 떴다가 어떤 이유로 닫혔다는 기록입니다 [2]. 둘을 같은 시각대에 놓으면 "이 시간대에 시리 화면이 열려 있었고, 같은 무렵 이 앱으로 이 상대에게 보내는 메시지 인텐트가 기록되어 있다" 처럼 쓸 수 있습니다.
+설정 plist 는 키 이름으로 짐작하면 수집 시점에 시리와 받아쓰기가 켜져 있었는지, 어떤 언어와 목소리를 골랐는지, iCloud 동기화를 켰는지를 보여 줍니다. `Cloud Sync Enabled Modification Date` 는 이름으로 보면 그 설정이 마지막으로 바뀐 때로 읽히지만, 이름만으로 단정할 수는 없습니다. `siriremembers` 의 `intents` 행은 그 시각에 어떤 앱으로 누구와 메시지·통화·미디어 인텐트가 있었다는 기록이고 [1], `Siri.UI` 의 짝 기록은 시리 화면이 그 시각에 떴다가 어떤 이유로 닫혔다는 기록입니다 [2]. 둘을 같은 시각대에 놓으면 "이 시간대에 시리 화면이 열려 있었고, 같은 무렵 이 앱으로 이 상대에게 보내는 메시지 인텐트가 기록되어 있다" 처럼 쓸 수 있습니다.
 
 **증명하지 못하는 것**
 
-설정은 켜져 있었다는 사실일 뿐 실제로 썼다는 증거가 아닙니다. `siriremembers` 의 행은 앱이 기부한 인텐트일 수 있어서 `donated_by_siri` 를 보지 않고 "시리로 보냈다" 고 쓸 수 없고, 그 열의 정확한 뜻도 알려지지 않았습니다 [1]. 인텐트 기록은 메시지 본문이나 전송 성공을 보장하지 않으니 [메시지](../communications/messages/index.md) 나 [통화 기록](../communications/call-history.md) 과 맞춰 봐야 합니다. `Siri.UI` 는 화면이 떴다는 기록이라 무엇을 말했는지는 알 수 없습니다 [2]. 누가 말했는지도 이 기록으로 판별할 수 없으며, `MultiUser VoiceIdentification Enabled` 같은 설정 키가 있다고 해서 사용자를 식별했다는 뜻은 아닙니다.
+설정은 켜져 있었다는 사실일 뿐 실제로 썼다는 증거가 아닙니다. `siriremembers` 의 행은 앱이 기부한 인텐트일 수 있어서 `donated_by_siri` 를 보지 않고 "시리로 보냈다" 고 쓸 수 없고, 그 열의 값만으로도 시리를 거쳤다고 단정할 수 없습니다 [1]. 인텐트 기록은 메시지 본문이나 전송 성공을 보장하지 않으니 [메시지](../communications/messages/index.md) 나 [통화 기록](../communications/call-history.md) 과 맞춰 봐야 합니다. `Siri.UI` 는 화면이 떴다는 기록이라 무엇을 말했는지는 알 수 없습니다 [2]. 누가 말했는지도 이 기록으로 판별할 수 없으며, `MultiUser VoiceIdentification Enabled` 같은 설정 키가 있다고 해서 사용자를 식별했다는 뜻은 아닙니다.
 
 ## 시각 해석
 
@@ -105,8 +105,8 @@ records: batchId, payload, dateCreated
 | `intents.duration_seconds` | 초 단위 길이. iLEAPP 가 HH:MM:SS 로 보여 줌 | [1] |
 | `Siri.UI` 기록 시각 | SEGB 기록의 timestamp1, UTC | [2] |
 | plist 의 datetime 값 | 바이너리 plist 날짜 형식(2001-01-01 UTC 기준 초) | plist 명세 |
-| 수집 시각 float 키 | 공개 자료 없음 | — |
-| 지표 DB 의 `dateCreated` 등 | 공개 자료 없음 | — |
+| 수집 시각 float 키 | 값의 자릿수와 범위로 유닉스 시각인지 Mac 절대 시각인지 판별 | — |
+| 지표 DB 의 `dateCreated` 등 | 값의 자릿수와 범위로 기준을 판별 | — |
 
 수집 시각 float 키는 `com.apple.siri.PostSiriEngagement.plist` 의 `PostSiriEngagementMetricsCollectorLastCollectedTime`, `com.apple.lighthouse.siri.IFTranscriptIngestor.plist` 의 `IntelligenceFlow.IFRequestTelemetryLastCollectionEndTime`, `com.apple.siri.cache.manager.plist` 의 `LLMCache.CacheManagerTelemetryLastLogCollectionEndTime`, `com.apple.analyticsagent.plist` 의 `ODDAssistantLLMSiriDigestSyncTime` 입니다. 이 값들은 지표를 모은 때로 보이며 사용자가 시리를 쓴 때와 같다고 볼 근거가 없습니다.
 
@@ -116,7 +116,7 @@ records: batchId, payload, dateCreated
 
 `Siri.UI` 에서 SEGB 상태가 Deleted 인 기록은 iLEAPP 가 시각과 위치만 보고하고, `tombstone` 경로의 파일은 건너뜁니다 [2]. 도구 결과에 시각만 있고 필드가 빈 행이 있으면 지운 기록일 수 있으니, 원본 SEGB 에서 다시 확인합니다. 닫힌 이유 값은 iLEAPP 시험 데이터에서 관찰된 네 가지뿐이라 다른 값이 나올 수 있습니다 [2].
 
-Apple 이 시리·받아쓰기 기록을 기기에 얼마나 두는지, 서버로 무엇을 보내는지, "시리 및 받아쓰기 기록 삭제" 설정이 기기 파일에 어떤 영향을 주는지는 공식 문서에 나와 있지 않습니다. 그래서 기록이 비어 있을 때 사용자가 지웠다고 판단하지 않고, 버전과 수집 방식 차이부터 의심합니다. KnowledgeC 에 시리 관련 스트림이 iOS 몇 버전까지 남았는지, 통합 로그의 어느 서브시스템에 시리 호출이 남는지도 알려져 있지 않아 실제 기기로 확인해야 합니다.
+Apple 이 시리·받아쓰기 기록을 기기에 얼마나 두는지, 서버로 무엇을 보내는지, "시리 및 받아쓰기 기록 삭제" 설정이 기기 파일에 어떤 영향을 주는지는 공식 문서에 나와 있지 않습니다. 그래서 기록이 비어 있을 때 사용자가 지웠다고 판단하지 않고, 버전과 수집 방식 차이부터 의심합니다. KnowledgeC 에 시리 관련 스트림이 iOS 몇 버전까지 남았는지, 통합 로그의 어느 서브시스템에 시리 호출이 남는지는 실제 기기로 확인합니다.
 
 지표 DB 와 `linkd` 목록은 이름에 시리가 들어갈 뿐 사용 기록이라는 근거가 없으니, 보고서에서 "시리를 썼다" 는 근거로 쓰지 않습니다. 사파리의 `ignored_siri_suggested_sites` 는 사파리 기록이라 [사파리](../browsers/safari/index.md) 흐름에서 봅니다.
 
@@ -155,7 +155,7 @@ ORDER BY start_date;
 | 함께 볼 기록 | 확인할 것 |
 |---|---|
 | [메시지](../communications/messages/index.md), [통화 기록](../communications/call-history.md) | `siriremembers` 의 메시지·통화 인텐트와 같은 시각·상대의 실제 기록이 있는지 |
-| [바이옴](../app-usage/biome/index.md), [KnowledgeC](../app-usage/knowledgec/index.md) | 시리 화면이 뜬 시각 무렵 어떤 앱이 앞에 있었는지. `intents.dkevent_uuid` 가 KnowledgeC 이벤트와 이어지는지는 알려지지 않았으니 맞춰 보며 검증 |
+| [바이옴](../app-usage/biome/index.md), [KnowledgeC](../app-usage/knowledgec/index.md) | 시리 화면이 뜬 시각 무렵 어떤 앱이 앞에 있었는지. `intents.dkevent_uuid` 가 KnowledgeC 이벤트와 이어지는지는 두 기록의 값을 맞춰 보며 확인 |
 | [키보드 입력 기록](keyboard.md) | 받아쓰기로 들어온 입력과 타이핑 흔적을 구분 |
 | [연락처](../communications/contacts.md) | 인텐트의 받는 사람·보낸 사람이 누구인지 |
 

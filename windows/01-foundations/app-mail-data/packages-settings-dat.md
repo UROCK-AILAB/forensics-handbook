@@ -105,7 +105,7 @@ Repository 키 아래 값의 예는 아래와 같습니다.
 | `TempState` | TemporaryFolder | 캐시처럼 동작합니다. 시스템 유지 관리 작업이 언제든 지울 수 있고, 사용자가 디스크 정리로 지울 수도 있습니다 |
 | `LocalCache` | LocalCacheFolder | 백업·복원에 들어가지 않는 파일을 둡니다 |
 | `Settings` | LocalSettings·RoamingSettings | 설정 값. 아래 settings.dat 를 봅니다 |
-| `AC`, `AppData`, `SystemAppData` | — | 공개 자료 없음 |
+| `AC`, `AppData`, `SystemAppData` | — | 안의 파일을 열어 확인합니다 |
 
 `Settings` 폴더 안에는 아래 파일이 있습니다.
 

@@ -106,7 +106,7 @@ SD 메모리 카드의 장치 ID 는 `SD\VID_v(2)&OID_o(4)&PID_p(0~5)&REV_n.m` �
 
 이 식별자는 카드 모델을 가리키며, 장치 ID 에는 카드 한 장을 가리키는 시리얼 번호가 없습니다. 인스턴스 ID 에 무엇이 들어가는지는 문서에 없으므로 인스턴스 ID 를 카드 시리얼 번호로 단정하지 않습니다.
 
-카드 위에는 sffdisk.sys 와 sffp_sd.sys 가 올라가고, Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다. 카드 아래 디스크 항목이 어느 열거자에 생기는지는 공개 문서에 나와 있지 않으므로, 같은 ContainerID 를 쓰는 항목을 찾아 잇습니다.
+카드 위에는 sffdisk.sys 와 sffp_sd.sys 가 올라가고, Windows 10 에는 SD 저장 포트 드라이버 sdstor.sys 도 있습니다. 실제로 붙은 드라이버는 Service 값으로 확인합니다. 카드 아래 디스크 항목은 같은 ContainerID 를 쓰는 항목을 찾아 잇습니다.
 
 ### USB 카드 리더
 

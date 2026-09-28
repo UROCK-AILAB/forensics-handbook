@@ -15,7 +15,7 @@ Word 는 `Reading Locations` 키 아래에 문서마다 하위 키를 하나씩 
 
 하위 키 하나가 문서 하나를 가리킵니다. 하위 키마다 `File Path` (문서 경로) 와 `Datetime` 값이 있습니다. 16.0 에는 `Position` 값도 있습니다.
 
-이 기록은 Word 에만 있고, Excel·PowerPoint 아래에는 이 키가 없습니다. Word 로 연 문서가 모두 여기 남지도 않습니다. [최근 파일 목록 (File MRU)](file-mru-place-mru.md) 에 있는 Word 문서 가운데 일부만 Reading Locations 에 남습니다. 어떤 문서가 남고 어떤 문서가 빠지는지는 공개 자료에 없습니다.
+이 기록은 Word 에만 있고, Excel·PowerPoint 아래에는 이 키가 없습니다. Word 로 연 문서가 모두 여기 남지도 않습니다. [최근 파일 목록 (File MRU)](file-mru-place-mru.md) 에 있는 Word 문서 가운데 일부만 Reading Locations 에 남습니다.
 
 ## 위치와 버전별 차이
 
@@ -30,11 +30,11 @@ HKCU\Software\Microsoft\Office\<버전>\Word\Reading Locations\<하위 키>
 | 15.0 (Office 2013) | 이 키가 있습니다. |
 | 16.0 | 키와 세 값 (`File Path`, `Datetime`, `Position`) 이 있습니다. |
 
-15.0 보다 앞선 버전에 이 키가 있는지는 공개 자료에 없습니다.
+15.0 보다 앞선 버전 키가 있으면 그 아래에도 `Word\Reading Locations` 가 있는지 확인합니다.
 
 ## 구조
 
-**하위 키 이름.** `Document 0`, `Document 7` 처럼 `Document <번호>` 형식이며, 중간 번호가 빠질 수 있습니다. 예를 들어 `Document 0`, `Document 7` ~ `Document 14` 로 1~6 번이 빠진 9개가 남기도 합니다. 번호가 빠지는 이유와 하위 키가 몇 개까지 생기는지는 공개 자료에 없습니다.
+**하위 키 이름.** `Document 0`, `Document 7` 처럼 `Document <번호>` 형식이며, 중간 번호가 빠질 수 있습니다. 예를 들어 `Document 0`, `Document 7` ~ `Document 14` 로 1~6 번이 빠진 9개가 남기도 합니다.
 
 **값.** 세 값은 모두 REG_SZ (문자열) 입니다.
 
@@ -42,7 +42,7 @@ HKCU\Software\Microsoft\Office\<버전>\Word\Reading Locations\<하위 키>
 |---|---|---|
 | `File Path` | (문서 경로) | 문서의 경로입니다. |
 | `Datetime` | `2026-07-20T15:30` | 로컬 시각입니다. 초가 없고 분까지만 적습니다. |
-| `Position` | `1143631699 4583`, `1164032630 0` | 공백으로 나뉜 수 두 개입니다. 뜻은 공개 자료에 없습니다. |
+| `Position` | `1143631699 4583`, `1164032630 0` | 공백으로 나뉜 수 두 개입니다. 뜻은 단정하지 않습니다. |
 
 RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16.0 에서 보이는 값입니다.
 
@@ -54,7 +54,7 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 
 **증명하지 못하는 것**
 
-- 문서의 어디까지 읽었는지. `Position` 의 뜻이 알려지지 않았습니다.
+- 문서의 어디까지 읽었는지.
 - 문서를 고쳤는지.
 - `Datetime` 이 연 때인지 닫은 때인지. 어떤 동작 때 이 값을 적는지 공개된 공식 설명이 없습니다.
 - Word 로 연 문서가 모두 여기 남는다는 것. 여기 없다고 열지 않았다고 말할 수 없습니다.
@@ -82,7 +82,7 @@ RegRipper 는 `File Path` 와 `Datetime` 만 보여 줍니다. `Position` 은 16
 
 - **UTC 타임라인에 그대로 넣으면 어긋납니다.** `Datetime` 은 로컬 시각입니다. 시간대가 UTC+9 이면 9시간이 어긋납니다.
 - **분 단위입니다.** 초 단위 기록과 앞뒤를 가릴 때 쓰지 않습니다.
-- **하위 키 번호가 빠집니다.** 빠진 번호를 지운 흔적으로 단정하지 않습니다. 이유가 알려지지 않았습니다.
+- **하위 키 번호가 빠집니다.** 빠진 번호를 지운 흔적으로 단정하지 않습니다.
 - **Word 에만 있습니다.** Excel·PowerPoint 문서는 이 키로 볼 수 없습니다.
 - **`Position` 을 짐작으로 풀지 않습니다.** "몇 페이지까지 읽었다" 같은 문장을 쓰지 않습니다.
 - **도구의 열 이름은 뜻이 아닙니다.** `lastOpen` 을 "마지막으로 연 시각" 으로 옮겨 적지 않습니다. "하위 키의 마지막 쓰기 시각" 이라고 씁니다.

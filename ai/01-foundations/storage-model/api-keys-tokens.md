@@ -38,7 +38,7 @@ AI 도구와 앱은 로그인 토큰과 API 키를 평문 설정 파일, 앱 데
 | Codex CLI 설정에 직접 적은 값 | `config.toml` 의 모델 제공자 `experimental_bearer_token`·`http_headers`, MCP 서버 `env`·`http_headers` | 사용자가 직접 적음 | [6] |
 | Ollama | `C:\Users\<username>\.ollama\id_ed25519.pub`, macOS `~/.ollama/id_ed25519.pub`, Linux `/usr/share/ollama/.ollama/id_ed25519.pub` | 없음 | [4] |
 
-**Claude Code.** Windows·Linux 의 `.credentials.json` 은 따로 암호화하지 않고 사용자 프로필 폴더의 접근 권한을 따릅니다[1][2]. 이 파일은 최상위 키 `claudeAiOauth` 아래에 `accessToken`, `refreshToken`, `expiresAt`, `refreshTokenExpiresAt`, `scopes`, `subscriptionType`, `rateLimitTier` 를 담습니다. 파일 짜임과 헥스 예시는 [Claude Code — Windows](../../02-artifacts/dev-agents/claude-code/windows.md) 에 있습니다. 키체인 항목의 서비스 이름은 공개 문서에 없어서 실제 기기의 키체인 목록에서 확인해야 합니다.
+**Claude Code.** Windows·Linux 의 `.credentials.json` 은 따로 암호화하지 않고 사용자 프로필 폴더의 접근 권한을 따릅니다[1][2]. 이 파일은 최상위 키 `claudeAiOauth` 아래에 `accessToken`, `refreshToken`, `expiresAt`, `refreshTokenExpiresAt`, `scopes`, `subscriptionType`, `rateLimitTier` 를 담습니다. 파일 짜임과 헥스 예시는 [Claude Code — Windows](../../02-artifacts/dev-agents/claude-code/windows.md) 에 있습니다. 키체인 항목의 서비스 이름은 실제 기기의 키체인 목록에서 확인합니다.
 
 Claude Code 는 파일 말고도 인증 정보를 받는 길이 여럿이고, 클라우드 공급자 변수, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_API_KEY`, `apiKeyHelper`, `CLAUDE_CODE_OAUTH_TOKEN`, Anthropic 프로필, `/login` 구독 로그인 순서로 먼저 있는 것을 씁니다[1]. `apiKeyHelper` 는 셸 스크립트를 실행해 키를 받고 기본 5분마다 다시 실행합니다[1]. 설정에 이 키가 있으면 스크립트 파일도 함께 확보합니다.
 
@@ -100,7 +100,7 @@ AnythingLLM 의 키·토큰 필드는 [AnythingLLM](../../02-artifacts/local-ai/
 
 1. 위 위치마다 파일이 있는지와 파일 시스템 시각을 먼저 목록으로 뜹니다. 값을 열지 않고도 있음·없음과 시각만으로 알 수 있는 것이 많습니다.
 2. 파일을 열어야 하면 사본에서 엽니다. 보고서와 작업 메모에는 파일 위치, 키 이름, 값이 있었는지, 만료 시각 같은 정보만 옮기고 토큰 값은 옮기지 않습니다. Msty `key_hint` 처럼 앱이 일부러 남긴 앞뒤 몇 글자는 키를 구별하는 데 쓸 수 있습니다.
-3. 시각 필드의 기준을 확인합니다. Claude Code `expiresAt`·`refreshTokenExpiresAt` 는 단위가 문서에 없어서 자릿수로 초·밀리초를 구분하고 파일 수정 시각과 맞춰 봅니다. Msty `api_keys.created_at` 은 스키마 기본값이 SQLite `CURRENT_TIMESTAMP` 라서 UTC 입니다[8]. Jan `engines` 표의 `date_created`·`date_updated` 도 스키마 기본값이 `CURRENT_TIMESTAMP` 입니다[8]. 이 열을 키를 넣은 시각으로 쓰기 전에 [Jan](../../02-artifacts/local-ai/jan.md) 의 시각 절을 봅니다.
+3. 시각 필드의 기준을 확인합니다. Claude Code `expiresAt`·`refreshTokenExpiresAt` 는 자릿수로 초·밀리초를 구분하고 파일 수정 시각과 맞춰 봅니다. Msty `api_keys.created_at` 은 스키마 기본값이 SQLite `CURRENT_TIMESTAMP` 라서 UTC 입니다[8]. Jan `engines` 표의 `date_created`·`date_updated` 도 스키마 기본값이 `CURRENT_TIMESTAMP` 입니다[8]. 이 열을 키를 넣은 시각으로 쓰기 전에 [Jan](../../02-artifacts/local-ai/jan.md) 의 시각 절을 봅니다.
 4. 파일이 없으면 OS 자격 증명 저장소(Windows 자격 증명 관리자, macOS 키체인), 환경 변수, 옮긴 설정 폴더(`CLAUDE_CONFIG_DIR`, `CODEX_HOME`), 로그 파일을 차례로 봅니다. Codex 는 `config.toml` 의 `cli_auth_credentials_store`·`mcp_oauth_credentials_store` 값으로 어디를 볼지 정합니다.
 
 ## 포렌식에서 중요한 점
@@ -124,7 +124,7 @@ AnythingLLM 의 키·토큰 필드는 [AnythingLLM](../../02-artifacts/local-ai/
 
 **화면에만 나온 토큰도 있습니다.** `claude setup-token` 은 1년짜리 토큰을 출력만 하고 저장하지 않습니다[1]. 이 토큰은 도구 폴더가 아니라 사용자가 옮겨 적은 곳(환경 변수, 스크립트, 설정 파일)에 있을 수 있습니다.
 
-**이름에 "key" 가 들어가도 계정 열쇠가 아닐 수 있습니다.** Claude Code 폴더 `daemon\` 아래에는 `control.key`, `pipe.key` 가 있습니다. 공개 문서에 용도 설명이 없어서, 이름만으로 계정 자격 증명이라고 쓰지 않습니다. 도구도 같은 실수를 합니다. LangurTrace 의 Chatbox 보고 코드는 `settings` 의 키 이름에 `key` 가 들어가고 값이 있으면 모두 API 키 행으로 내보내는데[8], 샘플 `settings` 에는 아바타 이미지를 가리키는 `userAvatarKey`, `defaultAssistantAvatarKey` 도 있습니다[8].
+**이름에 "key" 가 들어가도 계정 열쇠가 아닐 수 있습니다.** Claude Code 폴더 `daemon\` 아래에는 `control.key`, `pipe.key` 가 있습니다. 이름만으로 이 두 파일을 계정 자격 증명이라고 쓰지 않습니다. 도구도 같은 실수를 합니다. LangurTrace 의 Chatbox 보고 코드는 `settings` 의 키 이름에 `key` 가 들어가고 값이 있으면 모두 API 키 행으로 내보내는데[8], 샘플 `settings` 에는 아바타 이미지를 가리키는 `userAvatarKey`, `defaultAssistantAvatarKey` 도 있습니다[8].
 
 **분석 도구의 출력에 키가 평문으로 들어갑니다.** LangurTrace 는 Chatbox 키를 `configuration.csv` 에, GPT4All 키를 `remote_config.csv` 에, Jan 의 `engines` 표를 `api_key` 열까지 엑셀로 옮깁니다[8]. ccfx 는 `.credentials.json` 의 존재·크기·수정 시각만 적지만, `-ac` 옵션으로 만드는 수집 압축본에는 OAuth 토큰이 평문으로 들어갑니다[11]. coding-agent-forensics 는 `auth.json`, `.credentials.json`, API 키가 든 설정 파일을 모으지 말라고 권합니다[12]. 도구 출력도 원본과 같은 수준으로 보관하고, 보고서에 붙이기 전에 값을 가립니다.
 

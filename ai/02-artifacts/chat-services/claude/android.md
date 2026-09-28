@@ -34,7 +34,7 @@ Android 앱에서는 계정 데이터를 내보낼 수 없고, 내보내기는 �
 
 캐시 파일 이름에 계정 UUID 와 조직 UUID 가 들어가서, 한 기기에서 계정을 여럿 썼다면 캐시 파일도 여럿 생깁니다[5]. ALEAPP 경로 패턴은 `*/com.anthropic.claude/databases/acc_*_claude_cache.db*` 로 끝이 `db*` 라서 `-wal`·`-shm` 까지 함께 잡습니다[4].
 
-추출본마다 파일 구성이 다릅니다. Claude 앱 폴더는 있는데 대화 캐시 없이 Firebase Analytics 데이터베이스만 나오는 추출본도 있습니다[6]. 공개된 이런 추출본 두 벌은 모두 `databases/` 에 `google_app_measurement_local.db` 와 `com.google.android.datatransport.events` 만 있고, 계정 정보 파일은 `acc_` 단계 없이 `cache/app_start/org_{조직UUID}/cache.json` 에 있습니다[7]. 이 경로는 ALEAPP 경로 패턴에 걸리지 않으므로, 분석기가 계정 정보를 내놓지 않으면 `cache/app_start/` 아래를 직접 봅니다. 같은 추출본의 `shared_prefs/` 에는 `account_prefs{계정UUID}.xml`, `organization_prefs__{계정UUID}_{조직UUID}.xml`, `user_cookies_{계정UUID}.xml`, `device_id_prefs.xml`, `app_prefs_latest_seen_completed_messages.xml` 같은 이름의 파일이 있습니다[7]. 이 파일들의 내용을 설명한 공개 자료는 없으니 실제 기기에서 열어 확인합니다.
+추출본마다 파일 구성이 다릅니다. Claude 앱 폴더는 있는데 대화 캐시 없이 Firebase Analytics 데이터베이스만 나오는 추출본도 있습니다[6]. 공개된 이런 추출본 두 벌은 모두 `databases/` 에 `google_app_measurement_local.db` 와 `com.google.android.datatransport.events` 만 있고, 계정 정보 파일은 `acc_` 단계 없이 `cache/app_start/org_{조직UUID}/cache.json` 에 있습니다[7]. 이 경로는 ALEAPP 경로 패턴에 걸리지 않으므로, 분석기가 계정 정보를 내놓지 않으면 `cache/app_start/` 아래를 직접 봅니다. 같은 추출본의 `shared_prefs/` 에는 `account_prefs{계정UUID}.xml`, `organization_prefs__{계정UUID}_{조직UUID}.xml`, `user_cookies_{계정UUID}.xml`, `device_id_prefs.xml`, `app_prefs_latest_seen_completed_messages.xml` 같은 이름의 파일이 있습니다[7]. 이 파일들의 내용은 실제 기기에서 열어 확인합니다.
 
 앱 데이터 폴더의 하위 폴더 구성은 [앱 데이터 폴더 구조](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/app-data-layout.html)에서, 기기 암호화 때문에 무엇을 언제 읽을 수 있는지는 [저장 공간 암호화](https://urock-ailab.github.io/forensics-handbook/android/01-foundations/storage/encryption/index.html)에서 다룹니다.
 
@@ -62,7 +62,7 @@ Play 의 데이터 보안 페이지는 앱이 모으는 데이터와 다른 곳�
 | `cachedMessages` | `conversation_uuid`, `message_json` | `created_at`, `sender`, `content[]`(`type`, `text`), `files[0].file_name` | [4] |
 | | `uuid`(메시지 ID) | `uuid`, `parent_message_uuid`, `index`, `updated_at`, `text`, `content[].start_timestamp`, `content[].stop_timestamp`, `content[].citations` | [5] |
 | `cachedProjects` | `project_json` | `created_at`, `updated_at`, `name`, `description`, `creator.full_name`, `is_starred`, `docs_count`, `files_count` | [4] |
-| `chatIdListEntries` | 공개 자료 없음 | 공개 자료 없음 | [5] |
+| `chatIdListEntries` | `PRAGMA table_info` 로 확인 | 실제 행을 열어 확인 | [5] |
 
 `sender` 값은 사용자면 `human`, Claude 면 `assistant` 입니다[4][5]. 메시지 본문은 `content` 배열에서 `type` 이 `text` 인 항목의 `text` 를 이어 붙이면 됩니다[4]. `content` 에는 웹 검색 같은 도구 호출이 `type` 이 `tool_use` 인 항목으로 들어가고, 이 항목에 `name`·`input` 이 있습니다[5]. 대화 안 순서는 `index` 나 `created_at` 으로 정합니다[5]. `is_temporary`·`is_starred` 는 0 이나 1 로 들어 있고, ALEAPP 은 그 밖의 값을 "Unknown" 으로 표시합니다[4]. 메시지의 `conversation_uuid` 는 `cachedConversations` 의 `uuid` 와 이어져, 메시지마다 대화 이름을 붙일 수 있습니다[4].
 

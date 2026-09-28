@@ -19,7 +19,7 @@ nav_order: 1720
 
 ## 위치와 버전별 차이
 
-기록은 다른 통합 로그 메시지와 같은 저장소에 섞여 있고, 로그인만 모아 둔 파일은 따로 없습니다. `logind` 가 macOS 몇 버전부터 있는지, 버전마다 로그인 메시지 문구가 어떻게 달라지는지는 공개 자료가 없습니다. 아래 조건은 적용 버전이 알려져 있지 않아서, 분석 대상의 macOS 버전에서 실제로 걸리는지 먼저 확인하고 씁니다. 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../system-account/os-version-install-history.md)에서 확인합니다.
+기록은 다른 통합 로그 메시지와 같은 저장소에 섞여 있고, 로그인만 모아 둔 파일은 따로 없습니다. `logind` 가 macOS 몇 버전부터 있는지, 버전마다 로그인 메시지 문구가 어떻게 달라지는지는 분석 대상 기기의 로그에서 확인합니다. 아래 조건도 분석 대상의 macOS 버전에서 실제로 걸리는지 먼저 확인하고 씁니다. 버전은 [OS 버전과 설치 기록 (SystemVersion·InstallHistory)](../../system-account/os-version-install-history.md)에서 확인합니다.
 
 ## 구조 — 찾는 조건
 
@@ -43,7 +43,7 @@ subsystem == "com.apple.loginwindow.logging" && eventMessage CONTAINS "performAu
 LaunchItemsInSharedFileListRef | performAutolaunch, launching: /Applications/LuLu.app, shouldHide: 0
 ```
 
-`loginwindow` 가 로그아웃을 시작하거나 마칠 때 남기는 메시지의 정확한 문구는 공개 자료가 없습니다. 로그아웃 시점은 세션 종료 조건으로 먼저 좁히고, 실제 로그에서 문구를 확인한 뒤 보고서에 옮깁니다.
+로그아웃 시점은 세션 종료 조건으로 먼저 좁히고, `loginwindow` 가 로그아웃을 시작하거나 마칠 때 남기는 메시지의 문구는 실제 로그에서 확인한 뒤 보고서에 옮깁니다.
 
 ## 증거로서 의미
 
@@ -59,7 +59,7 @@ LaunchItemsInSharedFileListRef | performAutolaunch, launching: /Applications/LuL
 
 ## 함정과 한계
 
-- **메시지 문구는 실제 로그에서.** 이 페이지의 조건은 프로세스·서브시스템 수준이고, 로그인·로그아웃을 뜻하는 메시지 문구는 공개 자료가 없습니다. 조건에 걸린 메시지를 하나씩 읽고 뜻을 확인합니다.
+- **메시지 문구는 실제 로그에서.** 이 페이지의 조건은 프로세스·서브시스템 수준에서 거르는 데 그칩니다. 로그인·로그아웃을 뜻하는 메시지인지는 조건에 걸린 메시지를 하나씩 읽고 확인합니다.
 - **잠금 해제와 로그인 구분.** 화면 잠금을 푸는 동작도 `loginwindow` 쪽 기록을 남깁니다. 잠금 해제는 [잠금·잠금 해제·잠자기 (Lock·Sleep)](lock-sleep.md)에서 따로 다룹니다.
 - **원격 로그인은 별도.** SSH·화면 공유로 들어온 접속은 다른 프로세스가 기록하고, [원격 로그인 (Remote Login)](remote-login.md)에서 다룹니다.
 ## 직접 분석해 보기

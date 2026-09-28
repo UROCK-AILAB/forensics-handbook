@@ -45,7 +45,7 @@ nav_order: 1650
 | LAST_PREFIX | `last_` |
 | LAST_INSTALL_PATH | `last_install` |
 
-부팅이 끝나면 `handleAftermath()` 가 `/cache/recovery` 안에서 `last_` 로 시작하는 파일과 `last_install` 을 남기고(업데이트 패키지를 남겨 둘 때는 블록 맵·uncrypt 파일도 남김) 나머지를 지웁니다 [1]. 그래서 초기화 뒤에 이 폴더를 수집했다면 `last_` 로 시작하는 파일이 살펴볼 대상입니다. 그 안에 무엇이 어떤 형식으로 적히는지와 복구 모드가 어떤 파티션을 어떻게 지우는지는 공개된 분석 자료가 없어, 수집한 파일을 직접 열어 확인합니다.
+부팅이 끝나면 `handleAftermath()` 가 `/cache/recovery` 안에서 `last_` 로 시작하는 파일과 `last_install` 을 남기고(업데이트 패키지를 남겨 둘 때는 블록 맵·uncrypt 파일도 남김) 나머지를 지웁니다 [1]. 그래서 초기화 뒤에 이 폴더를 수집했다면 `last_` 로 시작하는 파일이 살펴볼 대상입니다. 그 안에 무엇이 어떤 형식으로 적히는지와 복구 모드가 어떤 파티션을 어떻게 지우는지는 수집한 파일을 직접 열어 확인합니다.
 
 ## 볼 아티팩트와 순서
 
@@ -70,12 +70,12 @@ adb 일반 권한 출력에서 초기화와 관련해 볼 필드는 아래와 �
 | `settings secure` | `user_setup_complete`, `rampart_is_reset_by_at_command` |
 | `dumpsys batterystats` | "Battery History" 첫 줄 가까이의 `RESET:TIME:` 줄 |
 
-주 사용자(`isPrimary=true`)의 `Created:` 는 `<unknown>` 으로 나올 수 있고 그 이유는 알려져 있지 않습니다. 그래서 이 필드만으로 초기화 시점을 읽지 않습니다. `boot_count` 가 초기화 이후의 부팅 횟수인지는 실제 기기로 확인해야 합니다. `rampart_is_reset_by_at_command` 와 `lock_reset_profile` 은 삼성이 추가한 키로 보이며, 뜻을 밝힌 공개 자료는 없습니다.
+주 사용자(`isPrimary=true`)의 `Created:` 는 `<unknown>` 으로 나올 수 있어서 이 필드만으로 초기화 시점을 읽지 않습니다. `boot_count` 가 초기화 이후의 부팅 횟수인지는 실제 기기로 확인해야 합니다. `rampart_is_reset_by_at_command` 와 `lock_reset_profile` 은 삼성이 추가한 키로 보이며, 뜻이 정해져 있지 않으므로 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 
 ## 분석 흐름
 
 1. 빌드 정보와 수집 범위를 적어 두고, `/cache/recovery` 를 수집했는지 확인합니다.
-2. `dumpsys user` 의 시각 필드와 `Restrictions:` 필드를 기록합니다. 초기화 제한이 이 필드에 어떤 이름으로 나오는지는 공개 자료가 없으니, 필드 값은 원문 그대로 옮겨 둡니다.
+2. `dumpsys user` 의 시각 필드와 `Restrictions:` 필드를 기록합니다. 초기화 제한이 이 필드에 어떤 이름으로 나오는지 단정하지 않고, 필드 값은 원문 그대로 옮겨 둡니다.
 3. 사용자 설치 앱의 설치 시각을 모아 한 시점에 몰려 있는지 봅니다. 초기화 직후라면 사용자 설치 앱이 적거나 설치 시각이 모두 최근일 것이라는 판단은 해석입니다.
 4. 앱 사용 기록, 사진, 메신저 DB, 와이파이·블루투스 기록 등에서 각각 가장 오래된 시각을 뽑아 한 표에 놓습니다. 여러 기록이 같은 무렵에서 시작하면 그 무렵이 초기화 시점의 단서가 됩니다(해석).
 5. `last_` 로 시작하는 복구 기록 파일이 있으면 내용과 파일 시각을 옮겨 적고, 4단계의 시점과 맞춰 봅니다.
@@ -87,7 +87,7 @@ adb 일반 권한 출력에서 초기화와 관련해 볼 필드는 아래와 �
 
 **`RESET:TIME:` 줄을 초기화로 읽는 경우.** batterystats 의 이 줄은 배터리 통계를 비운 시각이고, 초기화와 별개일 수 있습니다. 자세한 구조는 [배터리 사용 기록](../../../02-artifacts/app-usage/batterystats.md) 에 있습니다.
 
-**`Created:` 가 `<unknown>` 이라서 초기화가 없었다고 보는 경우.** 주 사용자의 이 필드는 `<unknown>` 으로 나올 수 있고 그 이유가 알려져 있지 않으니, 이 필드 값으로 초기화가 있었는지 없었는지 판단하지 않습니다.
+**`Created:` 가 `<unknown>` 이라서 초기화가 없었다고 보는 경우.** 주 사용자의 이 필드는 `<unknown>` 으로 나올 수 있으니, 이 필드 값으로 초기화가 있었는지 없었는지 판단하지 않습니다.
 
 **초기화 사유 속 시각을 실제 시각으로 믿는 경우.** 사유에 붙는 시각은 기기 시스템 시계 기준이라서 [1] 기기 시각을 바꿔 둔 상태였다면 그만큼 어긋납니다.
 
@@ -103,6 +103,7 @@ adb 일반 권한 출력에서 초기화와 관련해 볼 필드는 아래와 �
 
 - 초기화 흔적 아티팩트 설명은 [초기화 흔적 (Factory Reset)](../../../02-artifacts/system-account/factory-reset.md), 사용자 데이터 영역의 암호화 구조는 [저장 공간 암호화](../../../01-foundations/storage/encryption/index.md) 에 있습니다.
 - 초기화 대신 앱이나 자료만 지운 경우는 [앱 지우기](app-removal.md) 와 [메시지·사진 지우기](content-deletion.md) 를 봅니다.
+- 삼성 기기에서 초기화 뒤에도 남는 초기화 요청 기록과 전원·재부팅 사유는 [삼성 전원·재부팅·초기화 로그](../../../02-artifacts/samsung/power-reset-logs.md) 에 있습니다.
 - 이 묶음 전체의 길잡이는 [증거를 없애려 했나](index.md) 입니다.
 - `dumpsys` 출력을 받는 방법과 읽는 법은 [dumpsys 출력](../../../02-artifacts/logs/dumpsys.md) 에 있습니다.
 

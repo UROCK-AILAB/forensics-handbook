@@ -23,10 +23,10 @@ Apple은 백업 디스크 형식으로 APFS와 APFS(암호화)를 권하지만, 
 | 머신 디렉터리 | 한 컴퓨터의 백업을 모두 담는 디렉터리 [1] | 백업 디스크의 루트가 머신 디렉터리 노릇을 함 [1] |
 | 백업 하나의 이름 | 시각 형식, 예: `2011-07-03-123456` [1] | `com.apple.TimeMachine.YYYY-MM-DD-HHMMSS.backup`, 예: `com.apple.TimeMachine.2011-07-03-123456.backup` [1] |
 | 백업 하나의 모습 | 파일·폴더·하드 링크로 짠 디렉터리 [4] | 읽기 전용 합성 스냅숏 (synthetic snapshot) [4] |
-| 진행 중인 백업 | 공개 자료 없음 | 이름에 `.inprogress` 확장자가 붙음 [5] |
+| 진행 중인 백업 | 실제 백업 디스크에서 확인 | 이름에 `.inprogress` 확장자가 붙음 [5] |
 | 백업 사이 변화량 계산 | `tmutil calculatedrift`로 계산 [1] | HFS 전용 명령이라 쓰지 않음 [1] |
 
-OS X 10.11부터 타임 머신이 백업에 복사한 파일의 체크섬을 기록하고 그 전 버전이 복사한 파일은 거슬러 계산하지 않습니다 [1]. 체크섬 값을 어디에 어떤 형식으로 두는지는 실제 데이터로 확인해야 합니다. APFS 백업의 동작은 Big Sur·Monterey [5]와 Sonoma·Sequoia [2] 기준이고, APFS 백업이 어느 버전부터 쓰였는지는 공개 자료로 정해지지 않았습니다.
+OS X 10.11부터 타임 머신이 백업에 복사한 파일의 체크섬을 기록하고 그 전 버전이 복사한 파일은 거슬러 계산하지 않습니다 [1]. 체크섬 값을 어디에 어떤 형식으로 두는지는 실제 데이터로 확인해야 합니다. APFS 백업의 동작은 Big Sur·Monterey [5]와 Sonoma·Sequoia [2] 기준입니다.
 
 로컬 스냅숏은 백업하는 APFS 볼륨에 남는 볼륨 스냅숏이고 [1], 보통 24시간 뒤에 지워집니다 [4]. 이름은 `com.apple.TimeMachine.YYYY-MM-DD-HHMMSS.local` 형식이고(예: `com.apple.TimeMachine.2011-07-03-123456.local`) [1][5], 백업 디스크 쪽 이름과 끝의 `.local` / `.backup`만 다릅니다.
 
@@ -56,7 +56,7 @@ macOS는 백업 저장장치의 스냅숏을 숨은 폴더 `/Volumes/.timemachin
 
 ## 시각 해석
 
-백업 이름과 로컬 스냅숏 이름에 든 `YYYY-MM-DD-HHMMSS`는 백업을 만든 시각이고, `tmutil listlocalsnapshotdates`도 로컬 스냅숏 생성 날짜를 같은 형식으로 보여 줍니다 [1]. 이 시각이 현지 시각인지 UTC인지는 공개 자료로 정해지지 않아서, 같은 백업을 가리키는 로그 기록이나 설정 파일의 날짜와 맞춰 본 뒤에 시간대를 정합니다. 백업 안 파일의 수정 시각은 원래 파일의 값이라서 백업 이름의 시각과 따로 읽고, 두 값을 섞어 "이때 고쳤다" 고 쓰지 않습니다. 맥 시각 값의 여러 형식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
+백업 이름과 로컬 스냅숏 이름에 든 `YYYY-MM-DD-HHMMSS`는 백업을 만든 시각이고, `tmutil listlocalsnapshotdates`도 로컬 스냅숏 생성 날짜를 같은 형식으로 보여 줍니다 [1]. 이 시각이 현지 시각인지 UTC인지는 같은 백업을 가리키는 로그 기록이나 설정 파일의 날짜와 맞춰 본 뒤에 시간대를 정합니다. 백업 안 파일의 수정 시각은 원래 파일의 값이라서 백업 이름의 시각과 따로 읽고, 두 값을 섞어 "이때 고쳤다" 고 쓰지 않습니다. 맥 시각 값의 여러 형식은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 봅니다.
 
 ## 함정과 한계
 

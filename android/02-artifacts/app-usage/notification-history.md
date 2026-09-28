@@ -37,7 +37,7 @@ nav_order: 520
 | 기기 | 내용 |
 |---|---|
 | AOSP | 파일 위치 규칙, 보관 기간, 쓰기 주기, proto 구조(현행 소스 기준) [1][2] |
-| 삼성 One UI | 설정 키 `notification_history_enabled` 가 있음. 삼성의 알림 기록 화면이 AOSP 저장소를 그대로 쓰는지는 공개 자료 없음 |
+| 삼성 One UI | 설정 키 `notification_history_enabled` 가 있음. 삼성의 알림 기록 화면이 AOSP 저장소를 그대로 쓰는지는 `/data/system_ce/` 아래 `notification_history` 폴더가 있는지로 확인 |
 
 이 기능은 Android 11 에서 들어왔고 기본으로 꺼져 있습니다 [4]. 공식 문서에는 이 내용이 없으니, 실제 기기에서는 `notification_history_enabled` 값을 직접 읽어 판단합니다.
 
@@ -79,7 +79,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 ## 시각 해석
 
-`posted_time_ms` 는 알림이 올라온 시각이고 밀리초 단위라서, 1000 으로 나누면 UTC 유닉스 시각이 됩니다 [2][3]. 기록 파일 이름도 밀리초 시각 숫자입니다 [1]. 파일 이름 시각이 파일을 만든 시각인지, 안에 든 알림의 시각과 어떻게 맞물리는지는 알려져 있지 않으니 알림 한 건의 시각은 반드시 `posted_time_ms` 에서 읽습니다. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 을 확인하고, 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`posted_time_ms` 는 알림이 올라온 시각이고 밀리초 단위라서, 1000 으로 나누면 UTC 유닉스 시각이 됩니다 [2][3]. 기록 파일 이름도 밀리초 시각 숫자입니다 [1]. 파일 이름 시각이 안에 든 알림의 시각과 같다고 단정할 수 없으니 알림 한 건의 시각은 반드시 `posted_time_ms` 에서 읽습니다. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 을 확인하고, 값 읽는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
 ## 함정과 한계
 
@@ -89,7 +89,7 @@ AOSP 코드의 상수 두 개가 이 기록의 성격을 정합니다 [1].
 
 셋째, 지워진 기록 파일이나 `.new`·`.bak` 임시 파일에 더 오래된 알림이 남아 있을 수 있습니다. 파일 시스템 수준 복구는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
-넷째, 삼성 One UI 가 AOSP 와 같은 파일을 쓰는지는 공개 문서에 나와 있지 않으니, 삼성 기기에서 파일이 없으면 기능이 꺼져 있었는지와 경로가 다른지를 모두 따집니다.
+넷째, 삼성 One UI 가 AOSP 와 같은 파일을 쓴다고 단정할 수 없으니, 삼성 기기에서 파일이 없으면 기능이 꺼져 있었는지와 경로가 다른지를 모두 따집니다.
 
 ## 라이브 기기에서 보이는 모양 (dumpsys notification)
 

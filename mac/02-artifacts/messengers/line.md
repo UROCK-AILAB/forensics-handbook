@@ -6,17 +6,17 @@ nav_order: 1450
 
 # 라인 (LINE)
 
-맥 라인 앱이 대화를 어디에 어떤 형식으로 남기는지는 설명한 공개 분석 자료는 없습니다. 이 페이지는 후보 위치와, 실제 기기에서 직접 확인하는 순서를 정리합니다.
+맥 라인 앱이 대화를 어디에 어떤 형식으로 남기는지는 실제 기기에서 확인해야 합니다. 이 페이지는 후보 위치와 확인하는 순서를 정리합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-라인은 대화 앱이라 맥에서도 대화·상대·첨부를 로컬에 어떤 식으로든 남길 것으로 보이지만, 대화 DB의 이름, 암호화 여부, 표 구조를 다룬 공개 자료는 없습니다. ForensicArtifacts 의 메신저 정의 파일(`instant_messaging.yaml`)에는 라인 항목이 없습니다 [1]. 공개 수집 정의에 기대는 도구로는 라인 폴더가 수집 대상에서 빠질 수 있어서, 조사 대상에 라인이 있으면 수집 범위를 따로 정합니다.
+라인은 대화 앱이라 맥에서도 대화·상대·첨부를 로컬에 어떤 식으로든 남길 것으로 보이고, 대화 DB의 이름, 암호화 여부, 표 구조는 컨테이너 안의 파일을 열어 확인합니다. ForensicArtifacts 의 메신저 정의 파일(`instant_messaging.yaml`)에는 라인 항목이 없습니다 [1]. 공개 수집 정의에 기대는 도구로는 라인 폴더가 수집 대상에서 빠질 수 있어서, 조사 대상에 라인이 있으면 수집 범위를 따로 정합니다.
 
 알려진 사실이 적어서, 아래 절은 "무엇을 찾아야 하는지"와 "찾은 것을 어떻게 판단하는지"에 맞춰 씁니다. 저장 형식 설명은 기반 구조 페이지로 넘깁니다.
 
 ## 위치와 버전별 차이
 
-아래 값은 공개 자료로 뒷받침되지 않은 후보라서 실제 기기에서 확인해야 합니다.
+아래 값은 후보라서 실제 기기에서 확인해야 합니다.
 
 | 항목 | 후보 값 | 확인 정도 |
 |---|---|---|
@@ -24,11 +24,11 @@ nav_order: 1450
 | 앱 컨테이너 | `~/Library/Containers/jp.naver.line.mac/` | 실제 기기에서 확인 |
 | 대화 DB 이름·형식 | 알려진 후보 없음 | 실제 기기에서 확인 |
 
-후보 번들 ID가 맞는지는 설치된 앱의 `Info.plist` 에서 먼저 확인하고, 방법은 [앱 번들 정보 (Info.plist·Code Signature)](../embedded-metadata/app-bundle.md)와 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)를 따릅니다. 번들 ID를 확인하면 같은 이름의 컨테이너 폴더와 그룹 컨테이너 폴더를 찾아볼 수 있습니다. macOS 10.15 Catalina 이후 맥 버전이나 라인 앱 버전에 따라 위치가 바뀐다는 공개 자료는 없습니다.
+후보 번들 ID가 맞는지는 설치된 앱의 `Info.plist` 에서 먼저 확인하고, 방법은 [앱 번들 정보 (Info.plist·Code Signature)](../embedded-metadata/app-bundle.md)와 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)를 따릅니다. 번들 ID를 확인하면 같은 이름의 컨테이너 폴더와 그룹 컨테이너 폴더를 찾아볼 수 있습니다. macOS 10.15 Catalina 이후 맥 버전이나 라인 앱 버전이 다른 기기에서는 같은 방법으로 위치를 다시 확인합니다.
 
 ## 구조
 
-대화 DB의 구조는 공개 자료가 없어서, 컨테이너 안에서 찾은 파일은 앞부분 바이트로 형식을 가르고, SQLite 이면 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md), 속성 목록이면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md), LevelDB 이면 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)의 방법으로 읽습니다. 어느 형식에도 맞지 않으면 암호화됐거나 압축됐을 수 있으니 [암호화된 증거 다루기 (Encrypted Evidence)](../../03-techniques/analysis/encrypted-evidence/index.md)의 판단 기준을 따릅니다.
+대화 DB의 구조는 실제 파일로 확인합니다. 컨테이너 안에서 찾은 파일은 앞부분 바이트로 형식을 가르고, SQLite 이면 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md), 속성 목록이면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md), LevelDB 이면 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md)의 방법으로 읽습니다. 어느 형식에도 맞지 않으면 암호화됐거나 압축됐을 수 있으니 [암호화된 증거 다루기 (Encrypted Evidence)](../../03-techniques/analysis/encrypted-evidence/index.md)의 판단 기준을 따릅니다.
 
 > 그림 자리: 후보 컨테이너 안에서 찾은 파일을 앞부분 바이트로 SQLite·plist·LevelDB·알 수 없음으로 가르는 판단 흐름도
 
@@ -40,7 +40,7 @@ nav_order: 1450
 
 ## 시각 해석
 
-라인 파일 안의 시각 필드와 기준을 다룬 공개 자료는 없습니다. 읽을 수 있는 파일에서 시각으로 보이는 값을 찾으면 자릿수를 보고 유닉스 시각(초·밀리초)인지 맥 절대 시각인지 가르고, 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다. 현지 시각으로 옮길 때는 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)에서 확인한 시간대를 적용합니다.
+라인 파일 안의 시각 필드와 기준은 실제 파일에서 확인합니다. 읽을 수 있는 파일에서 시각으로 보이는 값을 찾으면 자릿수를 보고 유닉스 시각(초·밀리초)인지 맥 절대 시각인지 가르고, 기준끼리의 관계는 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다. 현지 시각으로 옮길 때는 [시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)에서 확인한 시간대를 적용합니다.
 
 ## 함정과 한계
 

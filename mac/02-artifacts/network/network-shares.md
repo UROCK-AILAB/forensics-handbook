@@ -48,7 +48,7 @@ macOS 27 판 Mac 사용 설명서에는 AFP 가 나오지 않습니다 [2][3]. �
 | 10.12 이하 | `com.apple.sidebarlists.plist` 의 `favoriteservers`(즐겨찾는 서버)와 `systemitems`(볼륨) |
 | 10.15 Catalina 이후 | `com.apple.sharedfilelist/` 아래 `RecentServers`·`FavoriteServers`·`RecentHosts` 목록 파일. 이 목록 파일로 넘어온 정확한 버전은 실제 기기에서 확인 |
 
-`volinfo.database` 는 이전에 연결된 볼륨의 파일 소유권 정보를 담는 파일입니다 [5]. 네트워크 공유도 여기 기록되는지는 실제 기기에서 확인해야 합니다. 서버 암호가 키체인에 저장되는지도 알려져 있지 않아서, 키체인은 교차 검증 대상으로 둡니다.
+`volinfo.database` 는 이전에 연결된 볼륨의 파일 소유권 정보를 담는 파일입니다 [5]. 네트워크 공유도 여기 기록되는지는 실제 기기에서 확인해야 합니다. 서버 암호가 키체인에 저장되는지도 실제 기기에서 확인하고, 키체인은 교차 검증 대상으로 둡니다.
 
 ## 구조
 
@@ -79,7 +79,7 @@ macOS 27 판 Mac 사용 설명서에는 AFP 가 나오지 않습니다 [2][3]. �
 | `encrypt_cipher_map` | SMB 3.1.1 암호화 알고리즘 비트맵 | 15 |
 | `force_sess_encrypt` | 세션 암호화 강제 | no |
 
-각 키가 어느 macOS 판부터 쓰였는지는 공개 자료가 없습니다.
+보고서에는 각 키의 값과 함께 그 기기의 macOS 판을 적습니다.
 
 ### 이 맥이 SMB 서버일 때 (preferences.plist)
 
@@ -102,7 +102,7 @@ macOS 27 판 Mac 사용 설명서에는 AFP 가 나오지 않습니다 [2][3]. �
 - 최근 서버 목록 파일의 확장자는 macOS 판마다 달라서 `.sfl2` 만 찾으면 다른 판의 파일을 놓칩니다.
 - Apple 도움말 [2][3]에 AFP 가 없다고 해서 그 맥에서 AFP 를 쓴 적이 없다고 볼 수는 없고, 옛 목록 파일에는 `afp://` 주소가 남아 있을 수 있습니다.
 - 사용자 `nsmb.conf` 만 보고 결론을 내리면, 같은 키를 다르게 적은 전체 설정 `/etc/nsmb.conf` 가 실제로 이긴 경우를 놓칩니다 [1].
-- `volinfo.database` 에 네트워크 공유가 남는지, 서버 암호가 키체인에 어떤 항목으로 남는지는 공개 자료가 없으니, 거기에 없다고 해서 연결하지 않았다고 볼 수 없습니다.
+- `volinfo.database` 나 키체인에 네트워크 공유 기록이 없다고 해서 연결하지 않았다고 볼 수 없습니다.
 - 사용자가 최근 항목을 지우거나 목록 파일을 지우면 현재 목록에서는 사라집니다. 이때는 스냅숏이나 타임 머신 백업에 예전 목록 파일이 남았는지, FSEvents 에 그 파일이 바뀐 기록이 있는지 확인하고, 방법은 [스냅숏과 백업 비교 (Snapshot·Time Machine Diff)](../../03-techniques/analysis/snapshot-diff.md)와 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)를 따릅니다.
 - 지금 붙어 있는 공유를 라이브에서 볼 때의 수집 순서는 [라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
 
@@ -126,7 +126,7 @@ nfs://  → 6e 66 73 3a 2f 2f
 ftp://  → 66 74 70 3a 2f 2f
 ```
 
-바이트 열이 나오면 그 둘레를 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 순서대로 다시 읽어 URL 필드(0x1003)에 든 값인지 확인합니다. 북마크 안의 URL 문자열 인코딩은 공개 자료가 없으니, 바이트 열을 못 찾았다고 서버 항목이 없다고 단정하지 않고 구조대로 푼 결과와 맞춰 봅니다.
+바이트 열이 나오면 그 둘레를 [파일 참조 데이터 (Alias·Bookmark)](../../01-foundations/value-decoding/alias-bookmark.md)의 순서대로 다시 읽어 URL 필드(0x1003)에 든 값인지 확인합니다. 북마크 안의 URL 문자열이 위 바이트 열과 다른 인코딩으로 들어 있을 수 있으니, 바이트 열을 못 찾았다고 서버 항목이 없다고 단정하지 않고 구조대로 푼 결과와 맞춰 봅니다.
 
 ### 공개 도구로 한 번
 

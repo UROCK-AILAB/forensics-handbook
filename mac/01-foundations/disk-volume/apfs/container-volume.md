@@ -55,7 +55,7 @@ GPT에서 APFS 파티션의 유형 UUID는 `7C3457EF-0000-11AA-AA11-00306543ECAC
 
 104~148번 필드의 뜻과 가상 객체 ID를 실제 블록으로 바꾸는 방법은 [객체와 체크포인트 (Object·Checkpoint)](object-checkpoint.md)에 있습니다.
 
-`nx_newest_mounted_version` 에는 Apple 구현이 이 컨테이너를 마운트한 가장 새 소프트웨어 버전이 aaaaaaa.bbb.ccc.ddd.eee 모양의 고정소수점 10진수로 적힙니다 [1]. 이 값과 macOS 버전 번호의 대응은 공개 자료에 없어서, 값을 macOS 버전으로 바꿔 보고서에 쓰지 않습니다.
+`nx_newest_mounted_version` 에는 Apple 구현이 이 컨테이너를 마운트한 가장 새 소프트웨어 버전이 aaaaaaa.bbb.ccc.ddd.eee 모양의 고정소수점 10진수로 적힙니다 [1]. 이 값만으로는 macOS 버전 번호를 알 수 없어서, 값을 macOS 버전으로 바꿔 보고서에 쓰지 않습니다.
 
 `nx_counters` 의 0번 `NX_CNTR_OBJ_CKSUM_SET` 은 쓸 때 체크섬을 계산한 횟수이고, 1번 `NX_CNTR_OBJ_CKSUM_FAIL` 은 읽을 때 체크섬이 틀린 횟수입니다 [1]. 컨테이너 플래그 `NX_CRYPTO_SW` (0x4)가 켜져 있으면 소프트웨어 암호화를 쓰는 컨테이너입니다 [1].
 

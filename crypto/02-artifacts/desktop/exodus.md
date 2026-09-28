@@ -26,7 +26,7 @@ Exodus 는 계정 가입 없이 쓰는 비수탁형 지갑입니다. 처음 열 
 
 폴더는 숨김 폴더 아래에 있어서 탐색기에서 숨김 항목을 켜야 보입니다[1]. 앱의 개발자 메뉴(Windows·Linux 는 Ctrl+Shift+D, macOS 는 메뉴 막대의 Exodus)에서 Data Folder > Open Data Folder 로 이 폴더를 열 수 있고, Export Zipped Data Folder 를 누르면 데이터 폴더의 zip 사본이 바탕화면에 생깁니다[1]. 그래서 바탕화면의 zip 파일도 데이터 폴더 사본일 수 있으니 함께 수집합니다.
 
-다른 12단어 비밀 키로 복원하거나 다른 Exodus 지갑과 동기화하면 새 지갑이 옛 지갑을 덮어씁니다[1]. 이때 Exodus 는 옛 지갑 자료를 옛 비밀 키까지 포함해 보관합니다[1]. 데스크톱에서는 데이터 폴더의 `Backups\Wallet` 아래에 시각이 붙은 폴더가 하나 이상 생기고, 폴더마다 옛 `exodus.wallet` 폴더가 들어 있습니다[1]. 데스크톱 보관본은 덮어쓴 뒤 90일 동안만 유지됩니다[1]. 폴더 이름의 시각 형식은 공개 문서에 없으므로 실제 데이터에서 폴더 이름과 폴더의 파일 시스템 시각을 함께 봅니다. 모바일 앱은 보관 기간을 영구·1개월·3개월·6개월 가운데 고르는 방식이고[1], 모바일 지갑은 [Android 지갑 앱](../mobile/android-wallets.md)·[iOS 지갑 앱](../mobile/ios-wallets.md)에서 다룹니다.
+다른 12단어 비밀 키로 복원하거나 다른 Exodus 지갑과 동기화하면 새 지갑이 옛 지갑을 덮어씁니다[1]. 이때 Exodus 는 옛 지갑 자료를 옛 비밀 키까지 포함해 보관합니다[1]. 데스크톱에서는 데이터 폴더의 `Backups\Wallet` 아래에 시각이 붙은 폴더가 하나 이상 생기고, 폴더마다 옛 `exodus.wallet` 폴더가 들어 있습니다[1]. 데스크톱 보관본은 덮어쓴 뒤 90일 동안만 유지됩니다[1]. 폴더 이름의 시각 형식은 실제 데이터에서 폴더 이름과 폴더의 파일 시스템 시각을 함께 보고 확인합니다. 모바일 앱은 보관 기간을 영구·1개월·3개월·6개월 가운데 고르는 방식이고[1], 모바일 지갑은 [Android 지갑 앱](../mobile/android-wallets.md)·[iOS 지갑 앱](../mobile/ios-wallets.md)에서 다룹니다.
 
 사용자가 내보내기 메뉴를 쓰면 바탕화면에 `exodus-exports` 폴더가 생기고 그 안에 파일이 쌓입니다. 거래 내역 CSV[13], 주소 목록 CSV[9], xpub·zpub 이 든 `.txt` 파일[10], `exodus-report-SAFE-(날짜+시각).json` 이름의 Safe Report[14]가 여기에 저장됩니다. 주소 목록과 xpub 내보내기는 데스크톱에서만 할 수 있어서, 모바일 사용자가 이 파일을 만들려면 데스크톱과 동기화해야 합니다[9][10].
 
@@ -34,7 +34,7 @@ Exodus 는 계정 가입 없이 쓰는 비수탁형 지갑입니다. 처음 열 
 
 ### 데이터 폴더
 
-공개 문서에는 데이터 폴더 안 파일 목록이 없습니다. Windows 10 에서 Exodus 23 버전대를 시험한 연구에서는 `exodus.wallet` 폴더에 `info.seco`, `seed.seco`, `storage.seco`, `twofactor-secret.seco`, `twofactor.seco` 다섯 파일이 있었고, 내용은 모두 암호화돼 있었습니다[3]. 같은 연구에서 데이터 폴더에는 389바이트의 `Local State` 파일(운영체제가 암호화한 키가 든 파일), 로컬 저장소 폴더의 `LOCK`·`LOG`·`CURRENT` 와 `.db` 파일, `Code Cache`·`Dawn Cache`·`Cache` 폴더도 있었습니다[3]. 이 이름들은 크롬 계열 앱 폴더에서 쓰는 이름과 같으므로, 구조와 읽는 법은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지를 봅니다.
+Windows 10 에서 Exodus 23 버전대를 시험한 연구에서는 `exodus.wallet` 폴더에 `info.seco`, `seed.seco`, `storage.seco`, `twofactor-secret.seco`, `twofactor.seco` 다섯 파일이 있었고, 내용은 모두 암호화돼 있었습니다[3]. 같은 연구에서 데이터 폴더에는 389바이트의 `Local State` 파일(운영체제가 암호화한 키가 든 파일), 로컬 저장소 폴더의 `LOCK`·`LOG`·`CURRENT` 와 `.db` 파일, `Code Cache`·`Dawn Cache`·`Cache` 폴더도 있었습니다[3]. 이 이름들은 크롬 계열 앱 폴더에서 쓰는 이름과 같으므로, 구조와 읽는 법은 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/)와 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html) 페이지를 봅니다.
 
 Linux(Ubuntu)에서 암호 없이 기본 설정으로 시험한 연구에서는 Exodus 데이터 폴더의 파일 143개 가운데 5개, 두 번째 실행 때 161개 가운데 8개에서만 비트코인 관련 문자열 패턴(주로 주소)이 나왔고, 설정은 사람이 읽을 수 없는 이진 형식이었습니다[4]. 같은 조건의 Electrum 폴더는 파일의 절반 정도에서 이런 패턴이 나왔습니다[4]. 그래서 Exodus 폴더는 문자열 검색만으로 주소를 얻기 어렵습니다.
 
@@ -44,7 +44,7 @@ Exodus 는 파일에 암호화 컨테이너를 쓰는 secure-container·seco-fil
 
 체크섬은 메타데이터, 본문 길이, 본문을 이어 붙인 값의 SHA-256 입니다[5]. 파일에서 보면 오프셋 0x100 부터 본문 끝까지를 해시한 값이 오프셋 0xE0~0xFF 의 32바이트와 같아야 합니다. 라이브러리는 이 값이 다르면 "seco checksum does not match" 오류를 내고 파일을 읽지 않으므로[5][6], 체크섬 비교로 파일이 손상됐거나 일부만 쓰였는지를 암호 없이 판별할 수 있습니다.
 
-Exodus 가 앱의 어느 파일에 이 라이브러리를 쓰는지는 공개 문서에 없습니다. seco-keyval 의 사용 예에 `appName: 'exodus'` 가 나오지만 이 값은 예시 코드에 나온 것입니다[7]. 그래서 `.seco` 확장자만 보고 판단하지 말고, 파일 앞 4바이트가 `SECO` 인지와 `appName` 값을 직접 확인합니다.
+Exodus 가 앱의 어느 파일에 이 라이브러리를 쓰는지는 실제 파일로 확인합니다. seco-keyval 의 사용 예에 `appName: 'exodus'` 가 나오지만 이 값은 예시 코드에 나온 것입니다[7]. 그래서 `.seco` 확장자만 보고 판단하지 말고, 파일 앞 4바이트가 `SECO` 인지와 `appName` 값을 직접 확인합니다.
 
 ### 파생 경로와 주소
 
@@ -63,7 +63,7 @@ Exodus 는 12단어 비밀 키에서 주소와 개인 키를 파생하는 계층
 
 ### 내보내기 파일
 
-거래 내역 CSV 는 데스크톱 History 화면의 Export All Transactions·Export Sent·Export Received·Export Swapped, 또는 자산 화면의 Export Transactions 로 만들고, 포트폴리오와 자산을 골라 내보낼 수 있습니다[13]. 거래 내보내기 모듈은 개인 메모(`personalNotesAtom`)와 주문(`ordersAtom`)을 입력으로 받고 CSV 생성은 각 앱이 맡으므로[15], CSV 에 메모나 주문 정보가 함께 들어갈 가능성이 있습니다. 열 이름은 공개 문서에 없으므로 실제 파일의 첫 줄로 확인합니다.
+거래 내역 CSV 는 데스크톱 History 화면의 Export All Transactions·Export Sent·Export Received·Export Swapped, 또는 자산 화면의 Export Transactions 로 만들고, 포트폴리오와 자산을 골라 내보낼 수 있습니다[13]. 거래 내보내기 모듈은 개인 메모(`personalNotesAtom`)와 주문(`ordersAtom`)을 입력으로 받고 CSV 생성은 각 앱이 맡으므로[15], CSV 에 메모나 주문 정보가 함께 들어갈 가능성이 있습니다. 열 이름은 실제 파일의 첫 줄로 확인합니다.
 
 xpub·zpub 파일은 자산 화면의 Export XPub 으로 만들고, 비트코인은 `.txt` 파일에 xpub 과 zpub 이 함께 들어갑니다[10]. Exodus 문서는 xpub 을 Legacy(`1…`) 주소용, zpub 을 SegWit(`bc1q…`)과 Taproot(`bc1p…`) 주소용이라고 설명합니다[10]. 확장 키 접두사를 정리한 SLIP-0132 에서 `zpub` 은 P2WPKH(`m/84'/0'`)용이고 Taproot 용 접두사는 따로 없으며[11], BIP-86 시험 벡터는 Taproot 계정 키(`m/86'/0'/0'`)를 `xpub` 접두사로 표시합니다[12]. 그래서 Exodus 가 내보낸 zpub 을 다른 도구에 넣으면 `bc1q` 주소만 나오고 `bc1p` 주소는 빠질 수 있습니다. Taproot 주소가 필요하면 Safe Report 나 주소 목록 CSV 의 주소를 씁니다.
 
@@ -89,7 +89,7 @@ Exodus 화면과 CSV 에 거래가 없다고 거래가 없었던 것은 아닙�
 
 거래 내역 CSV 의 시각은 UTC 입니다. 내보내는 순간 기기의 현지 시각을 UTC 로 바꿔 적으므로[13], 기기의 시간대 설정이 틀렸다면 UTC 값도 어긋날 수 있습니다. CSV 시각은 블록의 시각과 비교해 확인합니다. 블록 시각의 의미는 [블록 시각과 확정](../../01-foundations/blockchain/block-time.md)에서 다룹니다.
 
-Safe Report 파일 이름에는 만든 날짜와 시각이 들어가지만 형식과 시간대는 공개 문서에 없습니다[14]. `Backups\Wallet` 의 폴더 이름에도 시각이 붙지만 형식이 공개돼 있지 않습니다[1]. 두 경우 모두 실제 파일 이름을 파일 시스템의 생성 시각과 비교해 시간대를 판단합니다. 보관 폴더가 만들어진 시각은 지갑을 덮어쓴 시점에 가깝고, `exodus-exports` 안 파일의 생성 시각은 사용자가 내보내기를 실행한 시점에 가깝습니다. `.seco` 파일의 수정 시각은 앱이 그 파일을 마지막으로 쓴 시점이지만, 무엇을 할 때 어떤 파일을 다시 쓰는지는 공개 문서에 없습니다.
+Safe Report 파일 이름에는 만든 날짜와 시각이 들어가고[14], `Backups\Wallet` 의 폴더 이름에도 시각이 붙습니다[1]. 두 경우 모두 형식과 시간대는 실제 파일 이름을 파일 시스템의 생성 시각과 비교해 판단합니다. 보관 폴더가 만들어진 시각은 지갑을 덮어쓴 시점에 가깝고, `exodus-exports` 안 파일의 생성 시각은 사용자가 내보내기를 실행한 시점에 가깝습니다. `.seco` 파일의 수정 시각은 앱이 그 파일을 마지막으로 쓴 시점이지만, 무엇을 할 때 어떤 파일을 다시 쓰는지는 시험 기기에서 같은 동작을 재현해 확인합니다.
 
 Safe Report 의 버전 이력과 다운로드·복원 날짜[14]는 앱이 기록한 사건 시각이라 파일 시스템 시각과 따로 비교할 수 있습니다. 여러 출처의 시각을 합치는 방법은 [암호화폐 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 

@@ -29,7 +29,7 @@ Chrome 의 내장 AI 는 이와 달리 모델(Gemini Nano)을 기기에 내려�
 | Windows | 레지스트리 `SOFTWARE\Policies\Microsoft\Edge` (필수 정책 경로만 있고 권장 정책 경로는 없음) | `CopilotPageContext` | `REG_DWORD` (예: `0x00000001`) |
 | macOS | 설정 (Preference Key) | `CopilotPageContext` | `<true/>` 형식 |
 
-Windows 관리 템플릿은 `MSEdge.admx` 입니다. 정책을 설정하지 않으면 EU 밖에서는 기본 허용, EU 안에서는 기본 차단이고, 사용자가 Edge 설정에서 켜고 끌 수 있습니다. 사용자가 Edge 설정에서 바꾼 값이 프로필의 `Preferences` 파일에 어떤 키로 남는지는 공개 문서에 없으므로, 시험용 기기에서 설정을 바꾸기 전과 뒤의 파일을 비교해 찾습니다.
+Windows 관리 템플릿은 `MSEdge.admx` 입니다. 정책을 설정하지 않으면 EU 밖에서는 기본 허용, EU 안에서는 기본 차단이고, 사용자가 Edge 설정에서 켜고 끌 수 있습니다. 사용자가 Edge 설정에서 바꾼 값이 프로필의 `Preferences` 파일에 어떤 키로 남는지는 시험용 기기에서 설정을 바꾸기 전과 뒤의 파일을 비교해 찾습니다.
 
 기업 데이터 보호 (EDP) 를 쓰는 Copilot 의 페이지 접근은 이 정책이 아니라 `EdgeEntraCopilotPageContext` 가 정합니다. `CopilotPageContext` 를 끄면 `M365LinksAutoOpenCopilotEnabled` 기능도 함께 꺼집니다. 업무 계정으로 Edge 사이드바에서 쓴 Copilot 은 Purview 감사에서 `AppHost` 값 `Edge` 또는 `Bing` 으로 남고, 이 레코드는 [Microsoft 365 Copilot](m365-copilot.md) 페이지에서 다룹니다.
 
@@ -69,7 +69,7 @@ Chrome 온디바이스 모델은 위 구성요소 폴더가 있는지부터 확�
 
 ## 시각 해석
 
-Windows 의 정책 값에는 값마다 시각이 붙지 않고, 키 단위의 마지막 쓰기 시각(UTC)만 있습니다. 이 시각은 그 키 아래 다른 값이 바뀌어도 바뀌므로, `CopilotPageContext` 가 그 시각에 설정되었다고 단정하지 않습니다. 온디바이스 모델 폴더의 만든 시각·수정 시각은 모델을 내려받거나 갱신한 시점과 가까울 수 있지만, 구성요소 갱신 방식은 공개 문서에 나오지 않아서 참고로만 씁니다. 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+Windows 의 정책 값에는 값마다 시각이 붙지 않고, 키 단위의 마지막 쓰기 시각(UTC)만 있습니다. 이 시각은 그 키 아래 다른 값이 바뀌어도 바뀌므로, `CopilotPageContext` 가 그 시각에 설정되었다고 단정하지 않습니다. 온디바이스 모델 폴더의 만든 시각·수정 시각은 모델을 내려받거나 갱신한 시점과 가까울 수 있지만, 구성요소가 언제 갱신되는지는 이 시각만으로 단정할 수 없으므로 참고로만 씁니다. 여러 출처를 시간순으로 합치는 방법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

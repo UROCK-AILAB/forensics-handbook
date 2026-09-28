@@ -24,7 +24,6 @@ nav_order: 1890
 | 리소스 봉투 버전 1 | macOS 10.9 Mavericks 이전 방식. `Resources` 폴더 파일만 기록 | [2] |
 | 리소스 봉투 버전 2 | macOS 10.9 Mavericks 부터. 사실상 모든 파일, 안에 든 코드의 서명, 심볼릭 링크까지 기록 | [2] |
 | macOS 10.15 Catalina 이후 공증 요구 | [서명·공증·무결성 보호](../../01-foundations/protection/codesign-notarization-sip.md), [격리 속성과 다운로드 기록](../filesystem/quarantine/index.md)에서 다룸 | — |
-| 10.15 이후 버전마다 `Info.plist`·서명 구조가 달라지는 점 | 공개 자료 없음 | — |
 
 이 핸드북이 주로 다루는 macOS 10.15 Catalina 이후에는 리소스 봉투 버전 2가 기준이 되고, 버전 1 서명은 정의상 약한 서명으로 취급하며 리소스 규칙으로 서명을 약하게 만드는 방법도 더는 허용하지 않습니다 [2].
 

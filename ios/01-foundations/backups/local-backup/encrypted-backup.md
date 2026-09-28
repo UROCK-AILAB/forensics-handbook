@@ -40,7 +40,7 @@ iOS 10.2 베타(2016년 11월)로 만든 암호 건 백업부터 아래가 달�
 | Manifest.plist | 새 키 ManifestKey 가 생김. 길이 44바이트, 앞 4바이트는 기기가 달라도 `04 00 00 00` |
 | 백업 키백 머리 | 새 항목 세 개. DPWT(값 1), DPSL(20바이트 솔트), DPIC(반복 횟수 10,000,000) |
 
-DPIC 의 1000만 번은 백업 키백 암호의 PBKDF2 반복 횟수와 같습니다 [3]. 이 형식이 그 뒤로 바뀌었는지 정리한 공개 자료는 없으니, 최신 iOS 백업은 실제 파일로 확인합니다.
+DPIC 의 1000만 번은 백업 키백 암호의 PBKDF2 반복 횟수와 같습니다 [3]. 최신 iOS 백업에서는 이 형식이 그대로인지 실제 파일로 확인합니다.
 
 아래는 ManifestKey 의 모양을 그린 것이고 [2], 특정 기기에서 나온 값이 아닙니다. 뒤쪽 40바이트는 기기마다 다른 값이라 `..` 로 적었습니다.
 
@@ -65,7 +65,7 @@ DPIC 의 1000만 번은 백업 키백 암호의 PBKDF2 반복 횟수와 같습�
 | Manifest.plist 의 ManifestKey | 없음 | 생김(iOS 10.2 베타부터) [2] |
 | Manifest.db | SQLite 로 바로 열림 | 파일 전체가 암호화돼 도메인·경로 목록을 볼 수 없음 [2] |
 
-Manifest.plist 에는 WasPasscodeSet 키도 있습니다. 이름으로 보면 기기 암호 설정 여부를 담는 것으로 보이지만 값의 뜻을 풀이한 공개 자료는 없으니, 기기 암호에 관한 판단은 [암호와 Face ID 설정 흔적](../../../02-artifacts/system-account/passcode-biometrics.md) 의 다른 기록과 맞춰 봅니다. Info.plist·Status.plist 가 암호 건 백업에서도 평문으로 남는지는 실제 파일로 확인합니다.
+Manifest.plist 에는 WasPasscodeSet 키도 있습니다. 이름으로 보면 기기 암호 설정 여부를 담는 것으로 보이지만 이름만으로 단정할 수는 없으니, 기기 암호에 관한 판단은 [암호와 Face ID 설정 흔적](../../../02-artifacts/system-account/passcode-biometrics.md) 의 다른 기록과 맞춰 봅니다. Info.plist·Status.plist 가 암호 건 백업에서도 평문으로 남는지는 실제 파일로 확인합니다.
 
 ### 키체인 백업 파일
 

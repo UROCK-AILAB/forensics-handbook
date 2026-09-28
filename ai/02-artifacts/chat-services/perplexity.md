@@ -20,14 +20,14 @@ Perplexity 는 질문에 검색 결과를 붙여 답하는 AI 검색 서비스�
 
 제공 형태는 웹(perplexity.ai), iOS 앱, Android 앱, Chrome 확장, Comet 브라우저입니다[1]. Comet 은 Chromium 을 바탕으로 만든 브라우저이고, 2025-07 에 일부 사용자에게 먼저 나온 뒤 2025-10 에 누구나 무료로 내려받을 수 있게 됐습니다[1]. Android 용 Assistant 는 2025-01 에, AI 에이전트 "Perplexity Computer" 는 2026-02 에 나왔습니다[1]. 형태마다 흔적이 남는 곳이 달라서 아래처럼 나눠 봅니다.
 
-| 쓰는 형태 | 알려진 로컬 위치 | 먼저 볼 곳 |
+| 쓰는 형태 | 로컬 위치 | 먼저 볼 곳 |
 |---|---|---|
 | Comet 브라우저 (Windows) | `%LOCALAPPDATA%\Perplexity\Comet\UserData`[2] | 프로필 폴더 전체. 세부는 [AI 에이전트 브라우저](../agentic-services/ai-browsers.md) |
-| 웹(perplexity.ai) | 공개된 분석 자료 없음 | 쓰던 브라우저의 방문 기록·캐시·쿠키·사이트 저장소 |
-| Chrome 확장 | 공개된 분석 자료 없음 | Chrome 프로필 안의 확장 폴더와 방문 기록 |
+| 웹(perplexity.ai) | 쓰던 브라우저의 프로필 안. 실제 프로필에서 확인 | 쓰던 브라우저의 방문 기록·캐시·쿠키·사이트 저장소 |
+| Chrome 확장 | Chrome 프로필 안. 실제 프로필에서 확인 | Chrome 프로필 안의 확장 폴더와 방문 기록 |
 | Windows·macOS 데스크톱 앱 | 알려진 제공 형태에 없음[1] | 설치 프로그램 목록과 앱 폴더에서 앱이 있는지부터 봄 |
-| Android 앱 | 공개된 분석 자료 없음 | 앱 데이터 폴더 |
-| iOS 앱 | 공개된 분석 자료 없음 | 백업·전체 추출본의 앱 컨테이너 |
+| Android 앱 | 실제 기기에서 확인 | 앱 데이터 폴더 |
+| iOS 앱 | 실제 기기에서 확인 | 백업·전체 추출본의 앱 컨테이너 |
 
 Comet 의 캐시 폴더 이름 `IndexedDB\https_www.perplexity.ai_0.indexeddb.leveldb` 와 Local Storage 출처 `https://www.perplexity.ai` 는 브라우저가 아니라 사이트 주소를 따라 붙은 이름입니다[2]. 그래서 다른 크롬 계열 브라우저로 웹을 썼다면 그 프로필에 같은 이름의 폴더와 출처가 있는지 먼저 보고, 있으면 안을 열어 Comet 과 같은 짜임인지 확인합니다.
 
@@ -39,7 +39,7 @@ Comet 의 캐시 폴더 이름 `IndexedDB\https_www.perplexity.ai_0.indexeddb.le
 
 Comet 프로필의 Local Storage 키(`pplx-next-auth-session`, `comet-sidecar-threads-by-id`), IndexedDB 캐시의 키 모양과 필드 이름(`query_str`, `markdown_block.answer`, `author_id` 등), 세션 쿠키 위치는 [AI 에이전트 브라우저](../agentic-services/ai-browsers.md)의 Comet 절에 표로 있습니다[2]. 이 페이지에서 더 볼 점은 그 캐시에 에이전트 대화만 있지 않다는 것입니다. 대화마다 붙는 `source` 필드 값이 `entropy` 면 Comet 에이전트 대화, `default` 면 일반 Perplexity 검색, `youtube` 면 위젯에서 시작한 대화이고, AABF 는 이 가운데 에이전트 대화만 결과에 남깁니다[2]. 일반 검색 기록을 찾는 조사라면 AABF 결과만 보지 말고 캐시를 직접 열어 `source` 가 `default` 인 항목까지 봅니다.
 
-웹과 모바일 앱의 저장 구조를 분석한 공개 자료는 없으므로 실제 기기로 확인해야 합니다. 브라우저로 쓴 경우 사이트 데이터는 브라우저가 정한 공통 저장소에 들어가고, 그 형식은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에서 다룹니다. 기기에서 Perplexity 전용으로 보이는 폴더나 파일을 찾았다면, 이름을 추측으로 풀지 말고 앱 버전과 함께 기록한 뒤 안의 내용을 직접 열어 확인합니다.
+웹과 모바일 앱의 저장 구조는 실제 기기로 확인합니다. 브라우저로 쓴 경우 사이트 데이터는 브라우저가 정한 공통 저장소에 들어가고, 그 형식은 [LevelDB 저장소](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/leveldb.html)와 [SQLite 데이터베이스](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/database-log-formats/sqlite/index.html) 페이지에서 다룹니다. 기기에서 Perplexity 전용으로 보이는 폴더나 파일을 찾았다면, 이름을 추측으로 풀지 말고 앱 버전과 함께 기록한 뒤 안의 내용을 직접 열어 확인합니다.
 
 ## 증거로서 의미
 

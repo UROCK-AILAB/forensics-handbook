@@ -200,7 +200,7 @@ NID 에는 항목 종류를 나타내는 값이 들어 있습니다.
 - 파일 안의 날짜·시각 값은 UTC 기준 FILETIME 입니다. 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)을 봅니다.
 - 이 페이지에서 다룬 헤더 필드에는 시각이 없습니다. 메시지와 폴더의 시각은 속성 값으로 들어 있습니다([MAPI 속성](../../../01-foundations/app-mail-data/mapi-property.md)).
 - PST·OST 파일 자체의 NTFS 시각은 파일이 디스크에서 바뀐 시각입니다. 메시지 시각과 따로 봅니다([마스터 파일 테이블](../../filesystem/mft.md)).
-- Outlook 이 언제 파일을 다시 쓰는지는 공개 문서에 나와 있지 않습니다. 그래서 파일 수정 시각을 사용자가 메일을 다룬 시각으로 바로 읽지 않습니다.
+- 파일 수정 시각은 Outlook 이 파일을 다시 쓴 시각입니다. 사용자가 메일을 다룬 시각으로 바로 읽지 않습니다.
 - 현지 시각으로 옮길 때는 [시간대 설정](../../system-account/time-zone.md)을 봅니다.
 
 ## 함정과 한계

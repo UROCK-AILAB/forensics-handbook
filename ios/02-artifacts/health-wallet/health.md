@@ -95,7 +95,7 @@ nav_order: 1040
 | 173 | 헤드폰 음량 |
 | 256 | 손목 온도 |
 
-수면 기록의 `category_samples.value` 가 어떤 값일 때 깨어 있음이고 어떤 값일 때 렘수면인지는 알려져 있지 않아 실제 데이터로 확인해야 합니다.
+수면 기록의 `category_samples.value` 가 어떤 값일 때 깨어 있음이고 어떤 값일 때 렘수면인지는 실제 데이터에서 건강 앱에 보이는 수면 단계와 맞춰 확인합니다.
 
 ### 설정 파일
 
@@ -150,7 +150,7 @@ nav_order: 1040
 
 **번호의 뜻은 버전마다 확인합니다.** `data_type` 번호와 수면 값의 뜻은 iLEAPP 기준이라, iOS 버전마다 같다는 보장이 없습니다. 새 버전 기기에서는 알려진 기록(예: 조사관이 직접 입력한 몸무게)으로 번호를 한 번 맞춰 봅니다.
 
-**지우기·조작.** `com.apple.healthd.plist` 에 `HDDatabasePruningLastAttemptDateKey` 라는 날짜 키가 있지만, 무엇을 지운 시각인지는 알려지지 않았습니다. 사용자가 건강 기록을 지웠을 때 데이터베이스에 남는 흔적도 알려져 있지 않아 실제 기기로 확인해야 하고, SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)를 봅니다.
+**지우기·조작.** `com.apple.healthd.plist` 에 `HDDatabasePruningLastAttemptDateKey` 라는 날짜 키가 있지만, 키 이름만으로 무엇을 지운 시각인지 단정할 수 없습니다. 사용자가 건강 기록을 지웠을 때 데이터베이스에 남는 흔적은 시험 기기에서 기록을 지워 보고 확인하고, SQLite 에서 지운 행을 찾는 일반 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md)와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md)를 봅니다.
 
 ## 직접 분석해 보기
 

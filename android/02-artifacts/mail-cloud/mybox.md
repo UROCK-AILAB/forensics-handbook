@@ -6,17 +6,17 @@ nav_order: 1120
 
 # 네이버 MYBOX (MYBOX)
 
-네이버 MYBOX 는 국내에서 쓰는 클라우드 저장 앱이지만 패키지 이름·DB·캐시 경로·업로드 기록을 다룬 공개 분석 자료가 없어서, 이 페이지는 앱을 직접 조사하는 방법과 그동안 시스템 기록으로 볼 수 있는 것을 정리합니다.
+네이버 MYBOX 는 국내에서 쓰는 클라우드 저장 앱입니다. 이 페이지는 패키지 이름·DB·캐시 경로·업로드 기록을 앱에서 직접 찾는 방법과, 그동안 시스템 기록으로 볼 수 있는 것을 정리합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
-클라우드 저장 앱은 계정의 파일 목록을 기기에 받아 두고, 사용자가 연 파일을 캐시하며, 올린 파일의 기록을 남기는 것이 보통입니다. 구글 드라이브나 원드라이브 앱에는 이런 기록이 있지만 ([구글 드라이브 (Google Drive)](google-drive.md), [삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)](samsung-cloud-onedrive.md)), MYBOX 앱이 무엇을 어디에 남기는지 적은 공개 포렌식 자료는 없습니다.
+클라우드 저장 앱은 계정의 파일 목록을 기기에 받아 두고, 사용자가 연 파일을 캐시하며, 올린 파일의 기록을 남기는 것이 보통입니다. 구글 드라이브나 원드라이브 앱에는 이런 기록이 있지만 ([구글 드라이브 (Google Drive)](google-drive.md), [삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)](samsung-cloud-onedrive.md)), MYBOX 앱이 무엇을 어디에 남기는지는 시험 기기에 앱을 설치해 확인합니다.
 
 공개 도구 ALEAPP 에도 MYBOX 나 네이버 관련 모듈(파일 이름에 naver, ndrive, mybox 가 들어간 모듈)은 없습니다 [1].
 
 ## 위치와 버전별 차이
 
-패키지 이름이 공개 자료에 없어서 경로도 적지 않습니다. 실제 기기에서는 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더와 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 의 앱 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
+실제 기기에서는 [설치된 앱 (packages.xml)](../app-usage/packages/index.md) 기록으로 패키지 이름부터 확정하고, 그 이름으로 [앱 데이터 폴더 구조](../../01-foundations/storage/app-data-layout.md) 페이지에서 설명하는 앱 데이터 폴더와 [공용 저장 공간 (Shared Storage·/sdcard)](../../01-foundations/storage/shared-storage.md) 의 앱 폴더를 찾습니다. 패키지 이름과 UID 를 맞춰 보는 법은 [패키지 이름과 UID](../../01-foundations/value-decoding/package-uid.md) 페이지에 있습니다.
 
 Android 버전이나 One UI 버전에 따른 차이, 앱 버전에 따른 차이도 실제 기기에서 확인합니다.
 
@@ -30,7 +30,7 @@ Android 버전이나 One UI 버전에 따른 차이, 앱 버전에 따른 차이
 
 둘째, 다른 자료나 도구가 MYBOX 의 경로나 표를 보여 주더라도 실제 기기에서 직접 확인하고 쓰고, 도구 출력은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md) 방법으로 원본과 맞춰 봅니다.
 
-셋째, 앱 내부 기록이 없으면 무엇을 올렸는지는 기기보다 계정 쪽 데이터에서 찾아야 할 수 있고, 계정 데이터를 받는 일반 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다. MYBOX 계정 데이터를 내려받는 기능이 있는지는 공개 자료가 없습니다.
+셋째, 앱 내부 기록이 없으면 무엇을 올렸는지는 기기보다 계정 쪽 데이터에서 찾아야 할 수 있고, 계정 데이터를 받는 일반 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다. MYBOX 계정 데이터를 내려받는 기능이 있는지는 서비스의 계정 설정 화면에서 확인합니다.
 
 ## 직접 분석해 보기
 

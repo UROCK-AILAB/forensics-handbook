@@ -86,7 +86,7 @@ URL 레코드는 두 필드로 캐시 파일을 가리킵니다.
 ### IE 10 이후: WebCache 의 열로 잇기
 
 - WebCache DB 의 `Container_#` 표에는 캐시 파일과 관련된 열이 있습니다. Filename, FileExtension, FileSize, CacheId, ResponseHeaders, RequestHeaders 입니다.
-- `Containers` 표에도 Directory 열이 있습니다. 이 열과 실제 캐시 폴더의 관계는 공개된 분석 자료가 없으므로, Filename 열 값으로 실제 폴더를 검색해 맞춰 봅니다.
+- `Containers` 표에도 Directory 열이 있습니다. 이 열과 실제 캐시 폴더의 관계는 Filename 열 값으로 실제 폴더를 검색해 맞춰 봅니다.
 - 쿠키는 `CookieEntryEx_#` 표의 Name, Value, RDomain, Expires, LastModified 같은 열에 들어갑니다.
 - 표와 열 전체는 [웹캐시 DB (WebCacheV01.dat)](webcachev01-dat.md) 에서 다룹니다.
 

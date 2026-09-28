@@ -48,7 +48,7 @@ SafariTabs.db 의 두 BLOB 열 안에는 이진 plist 가 들어 있습니다.
 
 `SessionState` 키 안에는 또 다른 이진 plist 가 들어 있고, 앞 4바이트를 떼어야 plist 로 읽힙니다[2].
 
-사파리 설정 plist 에도 탭과 이어진 이름의 키가 있습니다. 값의 뜻을 밝힌 공개 자료는 없습니다.
+사파리 설정 plist 에도 탭과 이어진 이름의 키가 있지만, 이름만으로 값의 뜻을 단정할 수는 없습니다.
 
 | 위치 | 키 |
 |---|---|
@@ -65,7 +65,7 @@ SafariTabs.db 의 두 BLOB 열 안에는 이진 plist 가 들어 있습니다.
 
 ## 시각 해석
 
-BrowserState.db 의 `last_viewed_time` 은 iOS 18 이하에서 Apple 절대 시각, iOS 26 이상에서 UNIX 시각입니다[1]. iLEAPP 는 버전을 보지 않고 값이 978307200 보다 크면 UNIX 로, 아니면 978307200 을 더해 Apple 절대 시각으로 바꿉니다[1]. `last_modified`, `date_closed`, `LastVisitTime`, `DateLastViewed` 의 기준은 공개 자료에 따로 없어서, 같은 방식으로 자릿수를 본 뒤 결과가 수집 시각보다 앞인지 확인하고 씁니다. 두 기준을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에 있습니다.
+BrowserState.db 의 `last_viewed_time` 은 iOS 18 이하에서 Apple 절대 시각, iOS 26 이상에서 UNIX 시각입니다[1]. iLEAPP 는 버전을 보지 않고 값이 978307200 보다 크면 UNIX 로, 아니면 978307200 을 더해 Apple 절대 시각으로 바꿉니다[1]. `last_modified`, `date_closed`, `LastVisitTime`, `DateLastViewed` 도 같은 방식으로 자릿수를 본 뒤 결과가 수집 시각보다 앞인지 확인하고 씁니다. 두 기준을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에 있습니다.
 
 ## 함정과 한계
 

@@ -28,7 +28,7 @@ XP 에서는 `HKLM\Software\Microsoft\SchedulingAgent` 키를 씁니다. 이 키
 
 - DataVersion, LastTaskRun, LogPath, MaxLogSizeKB, MinutesBeforeIdle, OldName, PriorDataVersion, TasksFolder
 
-이 값들의 뜻은 winreg-kb 에도 비어 있습니다[1]. 다만 TasksFolder 와 LogPath 는 이름으로 보면 작업 폴더와 로그 파일의 위치를 찾는 첫 단서입니다. `.job` 파일의 기본 위치와 XP 작업 로그 파일은 공개 자료에 나와 있지 않습니다. 그래서 XP 시스템에서는 TasksFolder 값을 먼저 읽고, 그 폴더를 봅니다.
+이 값들의 뜻은 정해져 있지 않습니다[1]. 다만 TasksFolder 와 LogPath 는 이름으로 보면 작업 폴더와 로그 파일의 위치를 찾는 첫 단서입니다. `.job` 파일과 XP 작업 로그 파일의 위치는 기본값을 가정하지 않습니다. XP 시스템에서는 TasksFolder·LogPath 값을 먼저 읽고, 그 폴더를 봅니다.
 
 Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree·Tasks)](taskcache-tree-tasks.md)에서 다룹니다.
 
@@ -49,7 +49,7 @@ Vista 이후의 `Schedule` 키는 [작업 캐시 레지스트리 (TaskCache Tree
 
 표에는 Windows 10 값까지 있습니다. 하지만 Vista 이후 시스템에서 `at` 이나 `schtasks /v1` 으로 만든 작업이 `.job` 을 함께 남기는지는 실제 기기로 확인해야 합니다.
 
-`C:\Windows\Tasks` 폴더에 6바이트(`06 00 00 00 02 03`)짜리 `SA.DAT` 파일 하나만 있는 경우가 있습니다. 이 파일의 뜻을 설명한 공개 자료는 없습니다.
+`C:\Windows\Tasks` 폴더에 6바이트(`06 00 00 00 02 03`)짜리 `SA.DAT` 파일 하나만 있는 경우가 있습니다. 이 파일의 뜻은 정해져 있지 않으므로, 보고서에는 파일이 있다는 사실만 적고 뜻을 단정하지 않습니다.
 
 ## 구조
 
@@ -138,7 +138,7 @@ at [\\computername] <time> [/interactive] [/every:date[,...] | /next:date[,...]]
 
 **실행 시간 제한.** 예약한 명령은 기본으로 72시간이 지나면 멈춥니다. `HKLM\SYSTEM\CurrentControlSet\Services\Schedule` 에 REG_DWORD 값 `atTaskMaxHours` 를 넣으면 이 제한을 바꿉니다. 0 은 제한 없음, 1~99 는 시간 수입니다. 오프라인 SYSTEM 하이브에서는 CurrentControlSet 대신 실제로 쓰인 ControlSet 번호 키를 봅니다. 방법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
-**저장 위치.** 예약한 명령은 레지스트리에 저장됩니다[3]. 어느 키인지는 공개 문서에 나와 있지 않습니다.
+**저장 위치.** 예약한 명령은 레지스트리에 저장됩니다[3]. 어느 키인지는 시험 기기에서 `at` 으로 작업을 만들고 바뀐 키를 보고 확인합니다.
 
 **예약 작업 폴더에서 보이는 이름.** `at` 으로 만든 작업은 예약 작업 폴더에 `at3478` 같은 이름으로 보입니다. 그 폴더에서 작업을 고치면 일반 예약 작업으로 바뀝니다. 그러면 `at` 목록에서 사라지고, `at` 용 계정 설정도 적용되지 않습니다.
 
@@ -148,8 +148,6 @@ at [\\computername] <time> [/interactive] [/every:date[,...] | /next:date[,...]]
 The AT command has been deprecated. Please use schtasks.exe instead.
 The binding handle is invalid.
 ```
-
-`at` 이 어느 Windows 버전부터 폐지되었는지는 공개 자료에 나와 있지 않습니다.
 
 ## 증거로서 의미
 
@@ -176,10 +174,10 @@ The binding handle is invalid.
 ## 함정과 한계
 
 - **`.job` 파일의 기본 위치를 가정하지 않습니다.** XP 는 SchedulingAgent 키의 TasksFolder 값부터 봅니다.
-- **Vista 이후에도 `.job` 이 남는지 모릅니다.** 제품 버전 표에 Windows 10 값이 있다는 것만으로 판단하지 않습니다. 실제 기기에서 직접 확인합니다.
+- **Vista 이후에도 `.job` 이 남는다고 가정하지 않습니다.** 제품 버전 표에 Windows 10 값이 있다는 것만으로 판단하지 않습니다. 실제 기기에서 직접 확인합니다.
 - **문자열에 BOM 이 없습니다.** UTF-16 LE 로 키워드를 검색해야 응용 프로그램 이름이 걸립니다.
 - **트리거 오프셋은 트리거 시작점 기준입니다.** 파일 처음부터 세면 날짜와 시각을 잘못 읽습니다. 트리거 위치는 고정 길이 부분의 트리거 오프셋(22)에서 읽습니다.
-- **`at` 작업의 레지스트리 위치는 문서에 없습니다.** 문서 문장 하나로 특정 키를 단정하지 않습니다.
+- **`at` 작업이 저장되는 레지스트리 키를 단정하지 않습니다.** 어느 키인지는 시험 기기에서 재현해 확인합니다.
 - **최근 Windows 에서 `at` 은 돌지 않을 수 있습니다.** Windows 11 25H2 에서는 폐지 메시지와 함께 실패합니다. 최근 시스템에서 `at` 흔적이 나오면 실제로 작업이 만들어졌는지 다른 기록으로 확인합니다.
 
 ## 직접 분석해 보기

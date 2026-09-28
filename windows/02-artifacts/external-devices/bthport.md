@@ -37,7 +37,7 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 
 | Windows | 내용 | 근거 |
 |---|---|---|
-| XP SP3 · Vista · 7 · 8 · 8.1 | RegRipper `bthport` 의 대상 OS 표시에 들어 있습니다. 판마다 값 구성의 차이는 공개 자료가 없습니다. | RegRipper |
+| XP SP3 · Vista · 7 · 8 · 8.1 | RegRipper `bthport` 의 대상 OS 표시에 들어 있습니다. 판마다 값 구성은 실제 하이브에서 확인합니다. | RegRipper |
 | 10 | 같은 플러그인이 2018-07-05 판에서 Windows 10 지원을 더했습니다. | RegRipper |
 | 11 25H2 | 이 페이지의 값 목록과 시각 사례는 이 판 기준입니다. | 사례 PC |
 
@@ -45,19 +45,19 @@ SYSTEM 하이브의 `Services\BTHPORT\Parameters\Devices` 키에는 블루투스
 
 ### 장치 키의 값
 
-사례 PC 의 세 장치에 있는 값입니다. 값마다 뜻을 정한 공개 명세는 없습니다.
+사례 PC 의 세 장치에 있는 값입니다. 뜻을 단정할 수 없는 값은 보고서에 값만 옮깁니다.
 
 | 값 | 있던 장치 | 종류·내용 |
 |---|---|---|
 | `LastSeen`, `LastConnected` | A·B·C | REG_QWORD 8바이트, FILETIME 모양. 기준 시각은 "시각 해석" 절을 봅니다. |
 | `FriendlyName` | A·B·C | 세 장치 모두 `00` 한 바이트(빈 값) |
-| `FingerprintString`, `FingerprintVersion`, `FingerprintTimestamp` | A·B·C | 뜻은 공개 자료 없음 |
-| `LmpVersion`, `LmpSubversion`, `ManufacturerId`, `DibServiceVersion` | A·B·C | 뜻은 공개 자료 없음 |
+| `FingerprintString`, `FingerprintVersion`, `FingerprintTimestamp` | A·B·C | 뜻을 단정하지 않고 값만 옮김 |
+| `LmpVersion`, `LmpSubversion`, `ManufacturerId`, `DibServiceVersion` | A·B·C | 뜻을 단정하지 않고 값만 옮김 |
 | `Name`, `LEName` | A·B | REG_BINARY. ASCII 글자 뒤에 `00` 이 붙습니다. |
 | `VID`, `PID`, `VIDType`, `Version` | A·B | 아래 "VID·PID 맞춰 보기" |
-| `LEAppearance`, `LEAddressType`, `LeContainerId`(16바이트), `LeContainerIDSource`, `LocalEvaldIoCapLE` | A·B | 뜻은 공개 자료 없음 |
+| `LEAppearance`, `LEAddressType`, `LeContainerId`(16바이트), `LeContainerIDSource`, `LocalEvaldIoCapLE` | A·B | 뜻을 단정하지 않고 값만 옮김 |
 | `LMPFeatures`, `HostSupportedFeaturesMap`, `LocalEvaldIoCap` | C | 장치 C 에는 `Name` 이 없습니다. |
-| `COD` | B·C | C 는 2752780(0x2A010C), B 는 0 입니다. 비트 해석은 공개 자료 없음 |
+| `COD` | B·C | C 는 2752780(0x2A010C), B 는 0 입니다. 비트 해석은 단정하지 않음 |
 
 RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 ASCII 가 아닌 이름이 어떤 인코딩으로 들어가는지, 사용자가 붙인 이름이 `FriendlyName` 에 들어가는지는 실제 데이터로 확인해야 합니다.
 
@@ -67,7 +67,7 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 
 `VID`·`PID` 는 10진 DWORD 로 저장되고, 16진으로 바꾸면 `Enum\BTHLEDevice` 하위 키 이름 속 VID·PID 와 맞습니다. 사례 PC 의 장치 A 는 `VID` 13652(0x3554), `PID` 62771(0xF533) 이고, 키 이름에는 `VID&023554_PID&f533_REV&0001` 로 들어 있습니다. 키 이름 속 PID 의 16진 글자는 소문자입니다.
 
-`VID&` 뒤 `02` 는 `VIDType` 값 2 와 같습니다. `VIDType` 2 가 어떤 번호 체계를 뜻하는지는 공개 자료가 없습니다. `REV&` 뒤 네 자리는 `Version` 값이어서, `Version` 1 은 `REV&0001`, 768(0x300) 은 `REV&0300` 입니다.
+`VID&` 뒤 `02` 는 `VIDType` 값 2 와 같습니다. `VIDType` 2 가 어떤 번호 체계를 뜻하는지는 단정할 수 없습니다. `REV&` 뒤 네 자리는 `Version` 값이어서, `Version` 1 은 `REV&0001`, 768(0x300) 은 `REV&0300` 입니다.
 
 ### 장치 속성
 
@@ -76,10 +76,10 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 | 속성 | 속성 키 | 내용 |
 |---|---|---|
 | `DEVPKEY_Bluetooth_LastConnectedTime` | `{2BD67D8B-8BEB-48D5-87E0-6CDA3428040A}` 11 | FILETIME (속성 종류 0x10) |
-| `DEVPKEY_Bluetooth_DeviceAddress` | 공개 자료 없음 | 문자열. 주소 12자리 |
-| `DEVPKEY_Bluetooth_DeviceFlags` | 공개 자료 없음 | UInt32 |
+| `DEVPKEY_Bluetooth_DeviceAddress` | — | 문자열. 주소 12자리 |
+| `DEVPKEY_Bluetooth_DeviceFlags` | — | UInt32 |
 | `DEVPKEY_Device_InstallDate` | `{83DA6326-97A6-4088-9453-A1923F573B29}` 100 | FILETIME |
-| `DEVPKEY_Device_FirstInstallDate` | 같은 GUID, 번호는 공개 자료 없음 | 시각 |
+| `DEVPKEY_Device_FirstInstallDate` | 같은 GUID | 시각 |
 | `DEVPKEY_Device_LastArrivalDate` | `{83DA6326-97A6-4088-9453-A1923F573B29}` 102 | FILETIME |
 
 라이브 PC 에서 `Enum\BTHLE\Dev_<주소>\<인스턴스>\Properties` 키는 관리자 권한으로도 열리지 않습니다. USB 장치는 이런 속성이 `Properties\{GUID}\<번호 16진 4자리>` 에 남으며, 규칙은 [USB 저장장치 흔적](usb-storage-artifacts/index.md)에서 다룹니다. 같은 규칙이라면 블루투스 장치의 `LastConnectedTime` 은 `000B`, `InstallDate` 는 `0064`, `LastArrivalDate` 는 `0066` 에 있을 것입니다. 블루투스 장치의 실제 위치는 하이브 사본에서 확인합니다.
@@ -108,12 +108,12 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 
 | 시각 | 위치 | 사례 PC 의 기준 | 무엇이 바뀔 때 바뀌나 |
 |---|---|---|---|
-| `LastSeen`, `LastConnected` | BTHPORT 장치 키 | 현지 시각(KST) | 규칙은 공개 자료 없음. `LastConnected` 가 페어링 뒤 연결에도 그대로인 사례가 있습니다. |
+| `LastSeen`, `LastConnected` | BTHPORT 장치 키 | 현지 시각(KST) | 규칙은 기기마다 확인합니다. `LastConnected` 가 페어링 뒤 연결에도 그대로인 사례가 있습니다. |
 | `DEVPKEY_Bluetooth_LastConnectedTime` | 장치 속성 | 현지 시각(KST) | 마지막 연결. 조회 1분여 전의 연결이 적힌 사례가 있습니다. |
 | `DEVPKEY_Device_InstallDate` | 장치 속성 | UTC | 페어링 이벤트와 같은 순간 |
 | `DEVPKEY_Device_LastArrivalDate` | 장치 속성 | UTC | 마지막 부팅 직후 (사례에서 18초 뒤) |
 | BTHUSB 이벤트 8 기록 시각 | System 로그 | UTC | 페어링 성공 |
-| `FingerprintTimestamp` | BTHPORT 장치 키 | 공개 자료 없음 | 공개 자료 없음 |
+| `FingerprintTimestamp` | BTHPORT 장치 키 | 같은 기기의 다른 시각과 원시값을 맞춰 확인 | 기기마다 확인 |
 | 장치 키 마지막 기록 시각 | BTHPORT 장치 키 | UTC | 연결 시각으로 쓸 수 있다는 근거가 없습니다. |
 
 ### 현지 시각이라고 본 근거 (사례 PC, 장치 A)
@@ -135,7 +135,7 @@ RegRipper 는 `Name` 을 장치 이름으로 출력합니다[1]. 한글처럼 AS
 2. 같은 주소의 페어링 이벤트 8 과 `InstallDate` 를 찾아 원시값과의 차이를 잽니다.
 3. 차이가 시간대 오프셋과 같으면 현지 시각으로 적힌 값으로 봅니다.
 4. 현지 시각이면 그 PC 의 시간대 설정(`TimeZoneInformation`)으로 UTC 로 바꿉니다. `Bias` 는 부호 있는 값으로 읽습니다. 자세한 내용은 [시간대 설정](../system-account/time-zone.md)에서 다룹니다.
-5. 다른 Windows 판이나 다른 PC 에서도 현지 시각인지는 알려져 있지 않으므로, 기기마다 2~3번을 다시 합니다.
+5. 다른 Windows 판이나 다른 PC 에서는 기기마다 2~3번을 다시 합니다.
 
 ## 함정과 한계
 

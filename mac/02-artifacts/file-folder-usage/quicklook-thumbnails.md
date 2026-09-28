@@ -46,7 +46,7 @@ macOS 12 Monterey 이후 버전의 경로와 형식은 실제 데이터로 확�
 | `files` | `folder`, `file_name`, `fs_id`, `version` (+ rowid) [1][2] |
 | `thumbnails` | `file_id`, `size`, `width`, `height`, `bitspercomponent`, `bitsperpixel`, `bytesperrow`, `bitmapdata_location`, `bitmapdata_length`, `last_hit_date`, `hit_count` [1][2] |
 
-`fs_id` 문자열을 11번째 글자부터 자른 뒤 `.` 로 나누면 두 번째 조각이 inode 입니다 [1]. 한 파일에 크기가 다른 섬네일이 여럿 붙을 수 있어서(예: 64×64 와 164×164) [2], `files` 한 행에 `thumbnails` 여러 행이 이어지기도 합니다. `version` 열의 이진 plist 에 어떤 키가 들어 있는지는 공개 자료가 없고, mac_apt 도 이 BLOB 을 풀지 않고 그대로 넘깁니다 [1]. plist 자체를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
+`fs_id` 문자열을 11번째 글자부터 자른 뒤 `.` 로 나누면 두 번째 조각이 inode 입니다 [1]. 한 파일에 크기가 다른 섬네일이 여럿 붙을 수 있어서(예: 64×64 와 164×164) [2], `files` 한 행에 `thumbnails` 여러 행이 이어지기도 합니다. mac_apt 는 `version` 열의 이진 plist BLOB 을 풀지 않고 그대로 넘기므로 [1], 어떤 키가 들어 있는지는 실제 데이터에서 BLOB 을 꺼내 plist 로 풀어 확인합니다. plist 자체를 읽는 법은 [속성 목록 파일](../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 ### 새 형식 (10.15 이후)
 
@@ -63,7 +63,7 @@ macOS 12 Monterey 이후 버전의 경로와 형식은 실제 데이터로 확�
 | 11 미만 | `bytesperrow`, `bitsperpixel`, `bitspercomponent` 열 [1] |
 | 11 이상 | 그 열 대신 `bitmapFormat` BLOB(키 아카이브 plist). `$objects[1]` 의 `bpr`(한 줄 바이트 수)·`bpp`(픽셀당 비트)·`bpc`(성분당 비트)를 읽음 [1] |
 
-이 값(10, 11)은 DB 스키마 번호이지 macOS 버전이 아니고, 어느 macOS 부터 11 이 되는지는 공개 자료가 없습니다. 새 형식에서 이 밖에 읽을 열은 `fileId`, `version`, `size`, `hit_count`, `last_hit_date`, `width`, `height`, `bitmapdata_location`, `bitmapdata_length` 입니다 [1].
+이 값(10, 11)은 DB 스키마 번호이지 macOS 버전이 아니라서, 실제 DB 의 `preferences` 테이블에서 값을 먼저 확인합니다. 새 형식에서 이 밖에 읽을 열은 `fileId`, `version`, `size`, `hit_count`, `last_hit_date`, `width`, `height`, `bitmapdata_location`, `bitmapdata_length` 입니다 [1].
 
 ### thumbnails.data
 
@@ -87,7 +87,7 @@ macOS 12 Monterey 이후 버전의 경로와 형식은 실제 데이터로 확�
 datetime(last_hit_date + strftime('%s', '2001-01-01 00:00:00'), 'unixepoch')
 ```
 
-맥 절대 시각을 다른 기준과 구분해 읽는 법은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md)에 있습니다. 섬네일을 처음 만든 시각을 담는 열은 알려져 있지 않으므로, `last_hit_date` 를 "섬네일을 만든 시각" 이나 "파일을 연 시각" 으로 읽지 않습니다. 원본 파일의 마지막 수정 시각 [3] 이 어느 열이나 키에 어떤 기준으로 들어 있는지는 실제 데이터로 확인해야 합니다.
+맥 절대 시각을 다른 기준과 구분해 읽는 법은 [맥의 시각 값](../../01-foundations/value-decoding/mac-time-values.md)에 있습니다. 위에 적은 열 가운데 섬네일을 처음 만든 시각을 담는 열은 없으므로, `last_hit_date` 를 "섬네일을 만든 시각" 이나 "파일을 연 시각" 으로 읽지 않습니다. 원본 파일의 마지막 수정 시각 [3] 이 어느 열이나 키에 어떤 기준으로 들어 있는지는 실제 데이터로 확인해야 합니다.
 
 ## 함정과 한계
 
@@ -95,7 +95,7 @@ datetime(last_hit_date + strftime('%s', '2001-01-01 00:00:00'), 'unixepoch')
 
 접근 권한도 버전에 따라 다를 수 있습니다. 2018년 무렵의 macOS 에서는 사용자 권한으로 도는 모든 코드가 이 캐시를 읽을 수 있었습니다 [4]. 10.15 이후 이 폴더에 전체 디스크 접근(TCC)이나 SIP 제한이 걸리는지는 실제 환경에서 확인해야 합니다. `-wal`·`-shm` 파일이 같이 생길 수 있으니, 수집할 때는 캐시 폴더를 통째로 받아 둡니다.
 
-안티포렌식 관점에서 보면, `qlmanage -r cache` 를 실행하면 재부팅 없이 캐시가 비워졌고 `qlmanage -r` 만으로는 캐시가 지워지지 않는 것처럼 보였다는 관찰이 있습니다(2018년 글 당시 macOS 기준) [4]. ss64 사용법에는 `qlmanage -r`("Reset the Quick Look Server and all Quick Look client's generator cache.")만 있고 `cache` 인자는 적혀 있지 않습니다 [5]. 캐시를 비운 흔적이 통합 로그 등에 남는지는 공개 자료가 없습니다. 그래서 캐시가 비어 있다는 사실만으로 누가 일부러 지웠다고 보지 않고 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)의 다른 기록과 함께 판단합니다.
+안티포렌식 관점에서 보면, `qlmanage -r cache` 를 실행하면 재부팅 없이 캐시가 비워졌고 `qlmanage -r` 만으로는 캐시가 지워지지 않는 것처럼 보였다는 관찰이 있습니다(2018년 글 당시 macOS 기준) [4]. ss64 사용법에는 `qlmanage -r`("Reset the Quick Look Server and all Quick Look client's generator cache.")만 있고 `cache` 인자는 적혀 있지 않습니다 [5]. 캐시를 비운 흔적이 통합 로그 등에 남는지는 시험 기기에서 `qlmanage -r cache` 를 실행해 보고 확인합니다. 그래서 캐시가 비어 있다는 사실만으로 누가 일부러 지웠다고 보지 않고 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md)의 다른 기록과 함께 판단합니다.
 
 ## 직접 분석해 보기
 

@@ -8,7 +8,7 @@ nav_order: 1550
 
 맥의 구글 드라이브 데스크톱 앱 (Drive for desktop)은 macOS 12.1부터 파일 공급자 방식으로 파일을 `~/Library/CloudStorage` 에 두고 관리 설정은 `com.google.drivefs.settings` 도메인에 남겨서, 이 맥이 어떤 방식으로 동기화했는지와 조직이 어떤 설정을 걸었는지를 읽을 수 있습니다.
 
-이 페이지는 설정 위치, 관리 키, 동기화 방식을 다룹니다 [1][2]. 계정별 폴더와 동기화 DB, 로그는 공개 분석 자료에 나와 있지 않아 실제 데이터로 확인해야 하고, macOS가 클라우드 저장소 앱에 내주는 동기화 틀은 [파일 공급자 (File Provider)](file-provider.md)에서 다룹니다.
+이 페이지는 설정 위치, 관리 키, 동기화 방식을 다룹니다 [1][2]. 계정별 폴더와 동기화 DB, 로그는 실제 데이터에서 폴더 목록과 표 구조를 열어 확인해야 하고, macOS가 클라우드 저장소 앱에 내주는 동기화 틀은 [파일 공급자 (File Provider)](file-provider.md)에서 다룹니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -37,16 +37,16 @@ nav_order: 1550
 
 두 방식은 Finder 사이드바에서도 자리가 달라서, 파일 공급자 방식은 "Locations" 아래에, 예전 방식은 "Favorites" 아래에 보입니다 [2]. 라이브 대응 때 찍은 화면이나 사용자 진술로 방식을 가릴 때 이 차이를 씁니다.
 
-### 공개 자료가 없는 것
+### 실제 데이터로 확인할 것
 
-| 항목 | 상태 |
+| 항목 | 확인 방법 |
 |---|---|
-| macOS 12.1 이상에서 사용자가 예전 방식을 고를 수 있는지 | 공개 자료 없음, 실제 데이터로 확인 |
-| 예전 방식의 마운트 경로 기본값(`/Volumes/GoogleDrive` 등) | 공개 자료 없음, 실제 데이터로 확인 |
-| `~/Library/CloudStorage/` 아래 폴더 이름 규칙(`GoogleDrive-<계정 이메일>` 등) | 공개 자료 없음, 실제 데이터로 확인 |
-| `~/Library/Application Support/Google/DriveFS/` 아래 계정별 폴더와 DB(`metadata_sqlite_db`, `mirror_sqlite.db` 등), `Logs/` 폴더 | 공개 자료 없음, 실제 데이터로 확인 |
-| macOS 12.1 이상에서 위 DriveFS 폴더에 무엇이 남는지 | 공개 자료 없음, 실제 데이터로 확인 |
-| DB 안의 표·열 이름과 시각 기준 | 공개 자료 없음, 실제 데이터로 확인 |
+| macOS 12.1 이상에서 사용자가 예전 방식을 고를 수 있는지 | 시험 기기에서 재현해 확인 |
+| 예전 방식의 마운트 경로 기본값(`/Volumes/GoogleDrive` 등) | 실제 데이터의 `/Volumes/` 아래에서 확인 |
+| `~/Library/CloudStorage/` 아래 폴더 이름 규칙(`GoogleDrive-<계정 이메일>` 등) | 실제 데이터의 `~/Library/CloudStorage/` 폴더 목록에서 확인 |
+| `~/Library/Application Support/Google/DriveFS/` 아래 계정별 폴더와 DB(`metadata_sqlite_db`, `mirror_sqlite.db` 등), `Logs/` 폴더 | 폴더를 열어 SQLite 파일을 찾고 표 구조를 확인 |
+| macOS 12.1 이상에서 위 DriveFS 폴더에 무엇이 남는지 | macOS 12.1 이상 기기에서 폴더 목록을 확인 |
+| DB 안의 표·열 이름과 시각 기준 | SQLite 표 구조를 보고, 시각 기준은 같은 기기의 다른 기록과 시각을 맞춰 확인 |
 
 ## 구조
 
@@ -57,7 +57,7 @@ nav_order: 1550
 | `DefaultMountPoint` | 경로(`~` 와 환경 변수 허용) | 드라이브를 마운트할 경로입니다. macOS 12.1 이상에는 적용되지 않습니다. |
 | `ContentCachePath` | 경로(APFS·HFS+·NTFS) | 콘텐츠 캐시 위치입니다. macOS 12.1 이상에는 적용되지 않습니다. |
 | `ContentCacheMaxKbytes` | 크기 | 콘텐츠 캐시 크기 상한입니다. macOS 12.1 이상에는 적용되지 않습니다. |
-| `AutoStartOnLogin` | boolean | 로그인 때 앱을 자동으로 실행할지 정합니다. macOS 12.1 이상에서 적용되는지를 다룬 공개 자료는 없습니다. |
+| `AutoStartOnLogin` | boolean | 로그인 때 앱을 자동으로 실행할지 정합니다. macOS 12.1 이상에서 적용되는지는 시험 기기에서 재현해 확인합니다. |
 
 관리 강제 자리의 설정이 plist로 직접 들어갔는지 구성 프로파일로 배포됐는지는 [구성 프로파일 (Configuration Profiles·MDM)](../persistence/configuration-profiles.md)에서 설치된 프로파일과 맞춰 확인합니다.
 
@@ -67,13 +67,13 @@ nav_order: 1550
 
 파일 공급자 방식에서 구글 드라이브 폴더 안팎으로 파일을 끌어 놓으면 복사가 아니라 이동이라서 [2], 어떤 파일이 드라이브 폴더에 있고 원래 자리에서는 사라졌다면 지운 것이 아니라 옮긴 것일 수 있습니다. 유출을 따질 때 "옮겼다" 와 "복사했다" 를 가르는 근거로 씁니다.
 
-**증명하지 못하는 것.** 설정 값만으로 파일이 실제로 올라갔는지, 어느 구글 계정으로 로그인했는지, 언제 동기화했는지는 알 수 없습니다. macOS 12.1 이상에서는 `DefaultMountPoint`, `ContentCachePath`, `ContentCacheMaxKbytes` 가 적용되지 않아서 [1], 값이 들어 있어도 그 경로가 실제로 쓰였다고 말하지 못합니다. 계정과 파일 목록을 담는 DB는 공개된 분석 자료가 없어서, 도구가 그런 파일에 뜻을 붙여 보여 주면 근거를 확인한 뒤에 씁니다.
+**증명하지 못하는 것.** 설정 값만으로 파일이 실제로 올라갔는지, 어느 구글 계정으로 로그인했는지, 언제 동기화했는지는 알 수 없습니다. macOS 12.1 이상에서는 `DefaultMountPoint`, `ContentCachePath`, `ContentCacheMaxKbytes` 가 적용되지 않아서 [1], 값이 들어 있어도 그 경로가 실제로 쓰였다고 말하지 못합니다. 도구가 계정과 파일 목록을 담는 DB에 뜻을 붙여 보여 주면 근거를 확인한 뒤에 씁니다.
 
 보고서에는 "이 맥은 macOS 12.1 이상이었고, 사용자 홈의 `Library/CloudStorage` 아래에 구글 드라이브 폴더로 보이는 폴더와 그 안의 파일 항목이 있다" 처럼 기록이 보여 주는 만큼만 씁니다.
 
 ## 시각 해석
 
-관리 키에는 시각 값이 없습니다. 설정이 언제 들어갔는지는 설정 파일의 수정 시각, [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md), 구성 프로파일 설치 기록으로 좁히고, 파일 수정 시각은 마지막으로 바뀐 때만 알려 준다는 점을 함께 적습니다. DriveFS DB 안의 시각 기준은 공개 자료에 나와 있지 않고, 맥 시각 값을 읽는 일반 규칙은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다.
+관리 키에는 시각 값이 없습니다. 설정이 언제 들어갔는지는 설정 파일의 수정 시각, [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md), 구성 프로파일 설치 기록으로 좁히고, 파일 수정 시각은 마지막으로 바뀐 때만 알려 준다는 점을 함께 적습니다. DriveFS DB 안의 시각 기준은 같은 기기의 다른 기록과 시각을 맞춰 보고 정하고, 맥 시각 값을 읽는 일반 규칙은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다.
 
 ## 함정과 한계
 
@@ -81,13 +81,13 @@ nav_order: 1550
 - **macOS가 정하는 캐시 위치.** 파일 공급자 방식에서는 캐시 위치를 macOS가 정해서 [1], `~/Library/Application Support/Google/DriveFS` 만 보고 캐시가 없다고 판단하지 않습니다.
 - **이동과 복사.** 파일 공급자 방식에서 드라이브 폴더 안팎으로 끌어 놓으면 이동입니다 [2]. 원래 자리에서 사라진 파일을 곧바로 삭제로 적지 않습니다.
 - **폴더 접근 승인.** 데스크탑, 문서, 다운로드, 이동식 볼륨, 사진 보관함에 접근하려면 시스템 설정의 개인 정보 보호 및 보안에서 승인이 필요할 수 있습니다 [2]. 승인 기록은 [개인 정보 보호 권한 (TCC)](../credentials/tcc/index.md)에서 확인합니다.
-- **동기화 흔적.** 계정별 폴더, DB, 로그의 위치와 구조는 공개 분석 자료에 나와 있지 않아 실제 데이터로 확인합니다.
+- **동기화 흔적.** 계정별 폴더, DB, 로그의 위치와 구조는 실제 데이터의 폴더 목록과 SQLite 표 구조로 확인합니다.
 
 ## 직접 분석해 보기
 
 ### 헥스로 한 번
 
-설정 파일을 헥스 편집기로 열어 바이너리 plist인지 XML인지 첫 바이트로 구분하고, 바이너리라면 오프셋 표를 따라 `DefaultMountPoint` 같은 키 문자열이 든 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다루고, 이 파일에 고유한 바이트 구조는 공개 자료에 나와 있지 않아서 헥스 예시를 싣지 않습니다.
+설정 파일을 헥스 편집기로 열어 바이너리 plist인지 XML인지 첫 바이트로 구분하고, 바이너리라면 오프셋 표를 따라 `DefaultMountPoint` 같은 키 문자열이 든 객체를 찾아갑니다. 머리말과 오프셋 표를 읽는 법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 

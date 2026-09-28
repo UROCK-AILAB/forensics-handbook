@@ -32,7 +32,7 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브�
 | Windows 11 24H2·25H2 | Microsoft Learn | 진단 이벤트가 캐시 안의 "application shortcut" 개수를 셉니다 | — |
 
 - 10.0.16299 보다 앞선 판의 하이브에는 이 키가 없습니다[1].
-- 값이 넷으로 늘어난 판이 어느 것인지 밝힌 공개 연구는 없습니다. 분석 대상마다 값 목록을 먼저 확인합니다.
+- 분석 대상마다 값 목록을 먼저 확인합니다.
 - 공개 파서 frnsc-amcache 도 위의 값 네 개를 읽습니다[6].
 - Microsoft 진단 데이터 문서[5]에는 이 값들의 설명이 없습니다. 바로가기 항목이 지금의 인벤토리 캐시에도 있다는 사실만 알 수 있습니다.
 
@@ -56,7 +56,7 @@ Amcache.hve 의 위치와 누가 언제 쓰는지는 [AmCache](index.md) 허브�
 | `ShortcutTargetPath` | REG_SZ | 바로가기가 가리킨 대상 경로 | Securelist |
 | `ShortcutProgramId` | REG_SZ | 연결된 설치 프로그램의 식별자. [설치 프로그램 항목](inventoryapplication.md)의 하위 키 이름과 맞춰 봅니다 | Securelist |
 | `ShortcutAumid` | REG_SZ | 값 이름으로 보면 앱 사용자 모델 ID (AppUserModelID) 입니다. 작업 표시줄이 창과 바로가기를 한 앱으로 묶을 때 쓰는 식별자입니다 | 파서 소스, 관찰 |
-| 이름 없는 기본값 | REG_DWORD | 공개된 설명이 없습니다 | 관찰 (Win11 빌드 26200) |
+| 이름 없는 기본값 | REG_DWORD | 뜻을 단정하지 않고 값만 옮깁니다 | 관찰 (Win11 빌드 26200) |
 
 Windows 11 빌드 26200 에서는 모든 하위 키에 값 다섯 개가 다 있습니다. 다만 `ShortcutTargetPath`·`ShortcutAumid` 는 몇 항목에서, `ShortcutProgramId` 는 절반이 넘는 항목에서 비어 있습니다.
 
@@ -109,14 +109,14 @@ LNK 파일 자체의 구조는 [바로가기 형식](../../../01-foundations/she
 1. **실행 증거로 씁니다.** 이 키는 바로가기가 있었다는 기록이고, 찾은 LNK 파일의 목록일 뿐입니다[1]. 실행을 말하려면 다른 자료와 함께 봐야 합니다[3].
 2. **하위 키 이름으로 경로를 짐작합니다.** 이름은 파일 이름의 앞 16자만 남깁니다. 폴더도 들어 있지 않습니다. 경로는 `ShortcutPath` 에서 읽습니다.
 3. **대소문자로 비교합니다.** 공개 표본에서 사용자별 경로는 `c:\users\…` 처럼 앞부분이 소문자였습니다. 모든 사용자 경로는 `C:\ProgramData\…` 로 대문자였습니다. 다른 기록과 경로를 맞출 때는 대소문자를 가리지 않고 비교합니다.
-4. **`ShortcutProgramId` 짝을 믿고 끝냅니다.** 이 값으로 InventoryApplication 항목을 찾을 수 있다는 설명이 있습니다[3]. 그러나 Windows 11 빌드 26200 에서는 값이 든 항목 어느 것도 InventoryApplication 하위 키 이름과 글자 그대로 맞지 않았습니다. 표기 차이 때문인지, 이미 지운 프로그램 때문인지 밝힌 공개 자료는 없습니다. 짝이 없으면 [설치 프로그램 (Uninstall)](../../system-account/uninstall.md)에서 다시 찾아봅니다.
+4. **`ShortcutProgramId` 짝을 믿고 끝냅니다.** 이 값으로 InventoryApplication 항목을 찾을 수 있다는 설명이 있습니다[3]. 그러나 Windows 11 빌드 26200 에서는 값이 든 항목 어느 것도 InventoryApplication 하위 키 이름과 글자 그대로 맞지 않았습니다. 표기 차이 때문인지, 이미 지운 프로그램 때문인지는 이 값만으로 알 수 없습니다. 짝이 없으면 [설치 프로그램 (Uninstall)](../../system-account/uninstall.md)에서 다시 찾아봅니다.
 5. **검사 범위를 전체로 봅니다.** 이 키에는 검사하는 폴더의 LNK 만 들어옵니다. 검사 폴더는 판마다 다릅니다. 실제 데이터에 나온 경로로 범위를 추정합니다. 최근 문서 폴더의 LNK 는 [바로가기 파일 (LNK)](../../file-folder-usage/lnk.md)에서 따로 봅니다.
 6. **값이 빠진 판을 오류로 봅니다.** 옛 판에는 `ShortcutPath` 하나만 있습니다. 대상 경로가 없다고 해서 하이브가 손상된 것이 아닙니다.
 7. **도구 출력만 봅니다.** 아래 "공개 도구로 한 번" 에서 보듯 도구마다 읽는 값이 다릅니다.
 
 ### 지우기와 조작
 
-- **LNK 파일을 지웁니다.** LNK 를 지운 뒤 다음 검사에서 하위 키가 빠지는지 밝힌 공개 연구는 없습니다. 지금은 없는 LNK 도 이 키에 남아 있을 수 있습니다[4]. LNK 가 지워진 기록은 [$UsnJrnl](../../filesystem/usnjrnl.md)과 [$MFT](../../filesystem/mft.md)에서 찾습니다.
+- **LNK 파일을 지웁니다.** LNK 를 지운 뒤 다음 검사에서 하위 키가 빠지는지는 시험 기기에서 재현해 확인합니다. 지금은 없는 LNK 도 이 키에 남아 있을 수 있습니다[4]. LNK 가 지워진 기록은 [$UsnJrnl](../../filesystem/usnjrnl.md)과 [$MFT](../../filesystem/mft.md)에서 찾습니다.
 - **하위 키나 하이브를 지웁니다.** 지운 키는 하이브 안의 비할당 셀에 남을 수 있습니다([지워진 키·값 복구](../../../01-foundations/database-log-formats/registry-hive/deleted-keys-values.md)). 아직 주 파일에 들어가지 않은 변경은 `.LOG1`·`.LOG2` 에 있습니다([트랜잭션 로그](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)). 옛 하이브는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md)에서 찾습니다.
 - **키 시각을 바꿉니다.** 키 마지막 기록 시각은 따로 바꿀 수 있습니다. 조작 흔적을 가려내는 법은 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다. 같은 무리의 다른 하위 키와 시각이 동떨어진 항목이 있으면 의심해 봅니다.
 - **검사 폴더 밖에 바로가기를 둡니다.** 이 키에는 남지 않습니다. 다른 기록으로 찾아야 합니다.

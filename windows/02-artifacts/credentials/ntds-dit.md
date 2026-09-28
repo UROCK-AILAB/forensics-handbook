@@ -137,7 +137,7 @@ ESE 저장 형식 자체는 [ESE 데이터베이스](../../01-foundations/databa
 - `ntdsutil.exe` 실행이나 볼륨 관리 API 사용.
 - DC 에서의 프로세스 실행·파일 접근·VSS 작업.
 
-- `ntdsutil` IFM (Install From Media) 결과 폴더 구조, DB 복사·마운트 때 응용 프로그램 로그에 남는 ESENT 이벤트, 섀도 복사 관련 이벤트는 공개된 분석 자료가 없어, 탐지 규칙에 넣기 전에 실험 환경에서 확인합니다.
+- `ntdsutil` IFM (Install From Media) 결과 폴더 구조, DB 복사·마운트 때 응용 프로그램 로그에 남는 ESENT 이벤트, 섀도 복사 관련 이벤트는 탐지 규칙에 넣기 전에 실험 환경에서 확인합니다.
 
 ## 실습
 

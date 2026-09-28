@@ -50,7 +50,7 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 | `SPOResourceId` | REG_SZ | `https://<테넌트>-my.sharepoint.com/` 모양 |
 | `TeamSiteSPOResourceId` | REG_SZ | `https://<테넌트>.sharepoint.com/` 모양 |
 | `ServiceEndpointUri` | REG_SZ | `https://<테넌트>-my.sharepoint.com/personal/<사용자>/_api` 모양 |
-| `EdpManaged` | DWORD | 뜻은 공개 자료가 없습니다 |
+| `EdpManaged` | DWORD | 뜻은 단정하지 않고 값만 옮깁니다 |
 | `GrooveTakeoverAttemptedOperations`, `GrooveTakeoverSuccessfulOperations` | DWORD | 예전 동기화 앱(`Groove.exe`)의 동기화를 넘겨받은 흔적으로 보입니다 |
 
 ### 동기화 루트 등록의 회사 계정 값
@@ -83,7 +83,7 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 | 표 | 열 | 쓰임 |
 |---|---|---|
 | `od_ScopeInfo_Records` | `siteID`, `webID`, `listID`, `webURL`, `tenantID`, `remotePath`, `libraryType` | 동기화 중인 SharePoint 라이브러리를 가릅니다 |
-| `od_ClientFolder_Records` | `teamsChannelFolder`, `shortcutsFolder` | Teams 채널 폴더와 바로 가기 폴더 표시로 보입니다. 값의 뜻은 공개 자료가 없습니다 |
+| `od_ClientFolder_Records` | `teamsChannelFolder`, `shortcutsFolder` | Teams 채널 폴더와 바로 가기 폴더 표시로 보입니다. 값의 뜻은 실제 데이터로 확인합니다 |
 | `od_GraphMetadata_Records` | `createdBy`, `modifiedBy` | 만든 사람과 고친 사람을 적는 열로 보입니다. 실제 값은 실제 데이터로 확인합니다 |
 
 ### 조직에 관한 정책
@@ -144,7 +144,7 @@ SharePoint 사이트와 Teams 의 문서 라이브러리도 PC 로 동기화할 
 - **라이브러리 폴더는 OneDrive 폴더 밖에 있을 수 있습니다.** "동기화" 버튼으로 받은 라이브러리는 조직 이름 폴더 아래로 갑니다. OneDrive 폴더만 뒤지면 놓칩니다.
 - **OneDrive 폴더 안의 파일이 사용자 것만은 아닙니다.** "내 파일에 바로 가기 추가" 로 넣은 공유 라이브러리도 OneDrive 폴더 안에 보입니다.
 - **문서의 예시 값을 실제 값으로 읽지 않습니다.** `1111-2222-3333-4444` 와 `Contoso` 는 Microsoft 문서의 예시입니다.
-- **팀 사이트 라이브러리의 값은 공개 자료가 없습니다.** `LibraryType` 등은 실제 데이터에서 직접 봅니다.
+- **팀 사이트 라이브러리의 `LibraryType` 등은 실제 데이터에서 직접 봅니다.**
 - **알려진 폴더를 다른 조직으로 옮긴 PC 는 바탕 화면이 비어 보일 수 있습니다.** 옛 조직 폴더를 함께 찾습니다.
 
 ## 직접 분석해 보기

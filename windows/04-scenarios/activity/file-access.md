@@ -74,7 +74,7 @@ NTFS 는 디스크의 마지막 접근 시각 갱신을 최대 1시간까지 미
 
 **0x80000001 값.** `NtfsDisableLastAccessUpdate` 값이 0x80000001 이면 `fsutil behavior query disablelastaccess` 는 "DisableLastAccess = 1 (User Managed, Last Access Time Updates DISABLED)" 로 보여 줍니다(Windows 11 25H2 기준). 이때 그 볼륨에서는 마지막 접근 시각이 갱신되지 않습니다.
 
-fsutil 문서가 설명하는 값은 0 과 1 두 가지뿐이고[1], 0x80000000 대의 값은 공개 문서에 설명이 없습니다. 분석할 때는 값을 그대로 적고, 뜻은 fsutil 출력이나 다른 자료로 따로 확인합니다.
+fsutil 문서가 설명하는 값은 0 과 1 두 가지뿐입니다[1]. 분석할 때는 값을 그대로 적고, 뜻은 fsutil 출력이나 다른 자료로 따로 확인합니다.
 
 시각 속성마다 무엇이 바뀔 때 바뀌는지는 [NTFS 구조](../../01-foundations/disk-volume/ntfs/index.md) 와 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에서 다룹니다.
 

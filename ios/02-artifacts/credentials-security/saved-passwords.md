@@ -14,7 +14,7 @@ iOS 18·iPadOS 18·macOS Sequoia·visionOS 2 부터 암호 앱이 암호와 패�
 
 암호가 실제로 들어가는 곳은 키체인이고, 키체인의 저장 방식과 접근 규칙은 [키체인](../../01-foundations/storage/keychain.md) 페이지에서 다룹니다. 이 페이지와 직접 이어지는 사실만 보면, Safari 암호는 잠금 해제 중에만(When unlocked) 쓸 수 있는 보호 등급이고, Wi-Fi 암호는 처음 잠금 해제 뒤(After first unlock) 등급입니다 [3]. 암호 앱 항목 전체가 Safari 암호와 같은 등급인지는 실제 데이터로 확인하고, 등급마다 언제 풀리는지는 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 페이지를 봅니다.
 
-유출 암호 검사 (Password Monitoring)는 저장된 암호를 유출로 알려진 암호 목록과 대조하는 기능이고, 대상은 암호 자동 완성 키체인(Password AutoFill keychain)의 암호입니다 [1]. 가장 흔히 유출된 암호는 기기 안의 목록으로 바로 대조해 서버에 묻지 않고, 덜 흔한 암호는 암호 해시의 앞 15비트만 Apple 서버로 보내 타원 곡선 기반의 비공개 교집합(private set intersection) 방식으로 대조합니다 [1]. 유출 위험이 낮은 암호일수록 Apple 과 나누는 정보가 적도록 설계되어 있습니다 [1]. 재사용하거나 약한 암호를 어떻게 판정하는지는 [1]에 없습니다.
+유출 암호 검사 (Password Monitoring)는 저장된 암호를 유출로 알려진 암호 목록과 대조하는 기능이고, 대상은 암호 자동 완성 키체인(Password AutoFill keychain)의 암호입니다 [1]. 가장 흔히 유출된 암호는 기기 안의 목록으로 바로 대조해 서버에 묻지 않고, 덜 흔한 암호는 암호 해시의 앞 15비트만 Apple 서버로 보내 타원 곡선 기반의 비공개 교집합(private set intersection) 방식으로 대조합니다 [1]. 유출 위험이 낮은 암호일수록 Apple 과 나누는 정보가 적도록 설계되어 있습니다 [1].
 
 ## 위치와 버전별 차이
 
@@ -57,7 +57,7 @@ cert (list)
 keys (list)
 ```
 
-키체인 항목 종류(item class)에는 일반 암호 `kSecClassGenericPassword`, 인터넷 암호 `kSecClassInternetPassword`, 인증서 `kSecClassCertificate`, 키 `kSecClassKey`, 인증서와 개인 키를 묶은 신원 `kSecClassIdentity` 가 있습니다 [4]. 목록 이름 `genp`·`inet`·`cert`·`keys` 는 앞의 네 종류와 이름 모양이 같지만, 짧은 이름과 상수를 짝지은 표는 [4]에 없습니다. `keybag-uuid` 는 이름으로 보면 키 가방 (keybag)의 식별자이고, 키 가방은 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 페이지에서 다룹니다. Safari 와 암호 앱의 암호가 `genp` 와 `inet` 가운데 어느 쪽에 들어가는지는 실제 데이터에서 항목을 열어 확인합니다.
+키체인 항목 종류(item class)에는 일반 암호 `kSecClassGenericPassword`, 인터넷 암호 `kSecClassInternetPassword`, 인증서 `kSecClassCertificate`, 키 `kSecClassKey`, 인증서와 개인 키를 묶은 신원 `kSecClassIdentity` 가 있습니다 [4]. 목록 이름 `genp`·`inet`·`cert`·`keys` 는 앞의 네 종류와 이름 모양이 같지만, 이름 모양만으로 짝을 단정하지는 않습니다. `keybag-uuid` 는 이름으로 보면 키 가방 (keybag)의 식별자이고, 키 가방은 [데이터 보호](../../01-foundations/storage/data-protection/index.md) 페이지에서 다룹니다. Safari 와 암호 앱의 암호가 `genp` 와 `inet` 가운데 어느 쪽에 들어가는지는 실제 데이터에서 항목을 열어 확인합니다.
 
 암호화하지 않은 백업에도 `keychain-backup.plist` 가 들어 있습니다. 백업 암호를 걸었는지에 따라 키체인이 어떻게 보호되고 어떤 항목이 백업에 들어가는지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md)과 [키체인](../../01-foundations/storage/keychain.md) 페이지에서 다룹니다.
 
@@ -79,7 +79,7 @@ WBSPrivacyProxyAvailabilityAccountType (int)
 WBSPasswordWarningTopFraudTargetsLastUpdate (datetime)
 ```
 
-키는 설정값과 갱신 시각뿐이고 저장된 암호 목록은 이 plist 에 없습니다. `WBSSecurityRecommendationsBiomeDonationLastDate` 는 이름으로 보면 보안 권장 사항을 [바이옴](../app-usage/biome/index.md)에 넘긴 마지막 시각이고, `shouldShowAppOnboardingView` 는 첫 실행 안내 화면을 띄울지 정하는 값으로 보입니다. 두 키 모두 공개된 정의가 없어 이름으로 짐작한 뜻입니다.
+키는 설정값과 갱신 시각뿐이고 저장된 암호 목록은 이 plist 에 없습니다. `WBSSecurityRecommendationsBiomeDonationLastDate` 는 이름으로 보면 보안 권장 사항을 [바이옴](../app-usage/biome/index.md)에 넘긴 마지막 시각이고, `shouldShowAppOnboardingView` 는 첫 실행 안내 화면을 띄울지 정하는 값으로 보입니다. 두 키 모두 이름으로 짐작한 뜻입니다.
 
 ### 유출 암호 경고로 보이는 키
 
@@ -92,29 +92,29 @@ lastPasswordWarningManagerUpdateHashes (list)
 PasscodeIsAvailable (bool)
 ```
 
-이름으로 보면 유출 암호 경고를 마지막으로 검사한 시각과 새 경고가 생겼는지를 적은 값 같고, 공개된 정의는 없습니다. `com.apple.Safari.PasswordBreachAgent.plist` 에서는 mobilesafari 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate` 하나가, HomeDomain 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate`·`WBSPasswordWarningTopFraudTargetsLastUpdate` 가 있습니다. 이 키들이 앞에서 설명한 유출 암호 검사[1]와 어떻게 이어지는지는 시험 기기로 확인해야 합니다.
+이름으로 보면 유출 암호 경고를 마지막으로 검사한 시각과 새 경고가 생겼는지를 적은 값 같지만, 이름만으로 단정할 수는 없습니다. `com.apple.Safari.PasswordBreachAgent.plist` 에서는 mobilesafari 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate` 하나가, HomeDomain 쪽에 `WBSPasswordBreachConfigurationBagLastUpdate`·`WBSPasswordWarningTopFraudTargetsLastUpdate` 가 있습니다. 이 키들이 앞에서 설명한 유출 암호 검사[1]와 어떻게 이어지는지는 시험 기기로 확인해야 합니다.
 
-### 뜻이 밝혀지지 않은 항목
+### 실제 데이터로 확인할 항목
 
-아래 항목도 같은 백업에 들어 있는 이름입니다. 이름은 암호·자격 증명과 관련되어 보이지만 공개된 정의가 없어, 뜻은 실제 데이터로 확인해야 합니다.
+아래 항목도 같은 백업에 들어 있는 이름입니다. 이름은 암호·자격 증명과 관련되어 보이지만, 뜻은 실제 데이터로 확인해야 합니다.
 
 | 위치 | 키·항목 | 비고 |
 |---|---|---|
 | `AppDomain-com.apple.CredentialSharingService`, `AppDomainPlugin-com.apple.CredentialSharingService.ShareableCredentialsMessagesExtension` | 백업 도메인 | 공유 그룹·암호 공유와 이어지는지는 이름으로 본 짐작 |
-| `AppDomain-com.apple.SubcredentialUIService`, `AppDomainPlugin-com.apple.SubcredentialUIService.SubcredentialInvitationMessagesExtension` | 백업 도메인 | 무엇을 담는지 공개 자료 없음 |
-| `AppDomain-com.apple.AutoFillSuggestions` | 백업 도메인(항목 4개) | 무엇을 담는지 공개 자료 없음 |
+| `AppDomain-com.apple.SubcredentialUIService`, `AppDomainPlugin-com.apple.SubcredentialUIService.SubcredentialInvitationMessagesExtension` | 백업 도메인 | 도메인 안 파일을 열어 형식부터 확인 |
+| `AppDomain-com.apple.AutoFillSuggestions` | 백업 도메인(항목 4개) | 도메인 안 파일을 열어 형식부터 확인 |
 | `HomeDomain :: Library/Preferences/com.apple.WebUI.plist` | `DefaultValueForPasswordAndCreditCardAutoFill` (bool) | 자동 완성 기본값으로 보임 |
 | `HomeDomain :: Library/Preferences/com.apple.onetimepasscodes.plist` | `DeleteVerificationCodes` (bool) | "사용 후 인증 코드 삭제" 설정으로 보임 |
 | `HomeDomain :: Library/BulletinBoard/VersionedSectionInfo.plist` | `sectionInfo` 안의 `com.apple.Passwords` | 알림 설정 항목. 알림 해석은 [알림 기록](../app-usage/notifications.md) |
-| `HomeDomain :: Library/Preferences/com.apple.AppleMediaServices.plist` | `AMSSharedStoreReviewMetrics-com.apple.Passwords: {session-count, session-start-date}` | 앱을 연 횟수로 보임. 공개 자료 없음 |
-| `RootDomain :: Library/Preferences/com.apple.security.cloudkeychainproxy#.keysToRegister.plist` | `AlwaysKeys`, `DSID`, `EnsurePeerRegistration`, `FirstUnlockKeys`, `KeyAccountUUID`, `PendingKeys`, `SyncBackupPeerIDs`, `SyncPeerIDs`, `UnlockedKeys` | 키마다 뜻은 공개 자료 없음. `DSID` 는 계정 식별자일 수 있어 [애플 계정](../system-account/apple-account.md)과 맞춰 봄 |
+| `HomeDomain :: Library/Preferences/com.apple.AppleMediaServices.plist` | `AMSSharedStoreReviewMetrics-com.apple.Passwords: {session-count, session-start-date}` | 앱을 연 횟수로 보임 |
+| `RootDomain :: Library/Preferences/com.apple.security.cloudkeychainproxy#.keysToRegister.plist` | `AlwaysKeys`, `DSID`, `EnsurePeerRegistration`, `FirstUnlockKeys`, `KeyAccountUUID`, `PendingKeys`, `SyncBackupPeerIDs`, `SyncPeerIDs`, `UnlockedKeys` | 키마다 뜻은 이름으로 단정하지 않음. `DSID` 는 계정 식별자일 수 있어 [애플 계정](../system-account/apple-account.md)과 맞춰 봄 |
 | `HomeDomain :: Library/Accounts/Accounts#.sqlite` | `ZCREDENTIALITEM` 표: `Z_PK, Z_ENT, Z_OPT, ZPERSISTENT, ZEXPIRATIONDATE, ZACCOUNTIDENTIFIER, ZSERVICENAME` | 계정 자격 증명 항목의 메타데이터로 보이고, 열 이름에 비밀 값은 없음 |
 
 ## 증거로서 의미
 
 ### 증명하는 것
 
-백업에 암호 앱 도메인과 `com.apple.Passwords.plist` 가 있고 그 안에 갱신 시각 키가 있으면, 그 기기에 암호 앱이 있었고 앱 관련 작업이 한 번 이상 돌았다는 정황이 됩니다. 정상적인 수집 절차로 키체인 항목을 읽을 수 있었다면, 그 계정의 암호나 패스키가 수집 시점의 키체인에 있었다는 근거로 쓸 수 있습니다. 유출 경고로 보이는 키에 시각 값이 있으면 그 시각 무렵에 경고 검사가 돌았다는 정황으로 볼 수 있지만, 키의 뜻이 밝혀지지 않았으니 보고서에는 키 이름과 값만 적습니다.
+백업에 암호 앱 도메인과 `com.apple.Passwords.plist` 가 있고 그 안에 갱신 시각 키가 있으면, 그 기기에 암호 앱이 있었고 앱 관련 작업이 한 번 이상 돌았다는 정황이 됩니다. 정상적인 수집 절차로 키체인 항목을 읽을 수 있었다면, 그 계정의 암호나 패스키가 수집 시점의 키체인에 있었다는 근거로 쓸 수 있습니다. 유출 경고로 보이는 키에 시각 값이 있으면 그 시각 무렵에 경고 검사가 돌았다는 정황으로 볼 수 있지만, 키의 뜻은 이름으로 짐작한 것이니 보고서에는 키 이름과 값만 적습니다.
 
 ### 증명하지 못하는 것
 
@@ -126,13 +126,13 @@ iCloud 키체인이 승인된 기기 모두에 암호를 맞추고 공유 그룹
 
 `com.apple.Passwords.plist`, `com.apple.mobilesafari.plist`, `com.apple.Safari.PasswordBreachAgent.plist` 의 datetime 값이 어떤 기준으로 저장되는지는 실제 데이터로 확인합니다. 이진 plist 의 날짜 형식은 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 페이지를, 기준 시각을 바꾸는 법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
 
-이름에 `LastUpdate`·`LastDate` 가 들어간 키는 이름으로 보면 설정이나 목록을 받아 온 시각이라서, 사용자가 화면을 만진 시각으로 읽지 않습니다. `ZCREDENTIALITEM` 의 `ZEXPIRATIONDATE` 도 기준 시각이 알려져 있지 않으니 값을 바꿀 때 어떤 기준을 가정했는지 보고서에 함께 적습니다.
+이름에 `LastUpdate`·`LastDate` 가 들어간 키는 이름으로 보면 설정이나 목록을 받아 온 시각이라서, 사용자가 화면을 만진 시각으로 읽지 않습니다. `ZCREDENTIALITEM` 의 `ZEXPIRATIONDATE` 는 값을 바꿀 때 어떤 기준 시각을 가정했는지 보고서에 함께 적습니다.
 
 ## 함정과 한계
 
 암호를 걸지 않은 백업에서도 키체인 백업 파일은 보이지만, 파일이 있다는 사실과 안의 항목을 읽을 수 있다는 사실은 별개입니다. 백업 암호를 걸었는지는 Manifest.plist 로 먼저 확인하고, 어떤 항목이 암호 건 백업에만 들어가는지는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 페이지를 따릅니다. 기기에만 묶인(ThisDeviceOnly) 항목은 백업으로 복사될 때 늘 기기 UID 로 보호되어 다른 기기에 복원하면 쓸 수 없고 [3], 동기화 규칙까지 포함한 자세한 내용은 [키체인](../../01-foundations/storage/keychain.md) 페이지에 있습니다. 그래서 백업에서 읽지 못한 항목이 기기에도 없었다고 보지 않습니다.
 
-관리 기기에서는 구성 프로파일의 `allowedSafariPasswordAutoFillDomains` 처럼 암호 자동 완성과 관련되어 보이는 제한 키가 있어서, 자동 완성이 일부 도메인에서만 됐다면 [구성 프로파일과 MDM](configuration-profiles.md) 페이지의 제한 설정도 확인합니다. 이 키의 뜻은 공개된 정의가 없어 실제 데이터로 확인합니다.
+관리 기기에서는 구성 프로파일의 `allowedSafariPasswordAutoFillDomains` 처럼 암호 자동 완성과 관련되어 보이는 제한 키가 있어서, 자동 완성이 일부 도메인에서만 됐다면 [구성 프로파일과 MDM](configuration-profiles.md) 페이지의 제한 설정도 확인합니다. 이 키의 뜻은 실제 데이터로 확인합니다.
 
 암호 앱은 iOS 18 부터 있고 [2], 그 이전 버전 기기에서는 이 페이지의 암호 앱 도메인과 키가 없을 수 있습니다. 반대로 이 페이지의 백업 항목과 키 이름은 iOS 27.0 기준이니, 다른 버전에서 같은 키가 있는지는 실제 기기에서 확인합니다. 이 페이지는 잠금 해제나 암호를 꺼내는 방법을 다루지 않고, 수집 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 따릅니다.
 

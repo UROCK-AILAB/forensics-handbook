@@ -48,13 +48,13 @@ AOSP MediaProvider 의 기본 보관 기간은 아래와 같습니다 [2].
 30일 빼기   1621147340 - 2592000   = 2021-04-16 06:42:20 UTC  ← 휴지통으로 보낸 무렵(기본값 기준 해석)
 ```
 
-MediaStore 의 `DATE_EXPIRES` 열과 파일 이름을 서로 맞춰 보는 방법은 공개된 설명이 없어 이 페이지에서 다루지 않습니다. MediaStore DB 의 구조는 [미디어 저장소 (MediaStore)](../../../02-artifacts/media/mediastore/index.md) 에 있습니다.
+MediaStore DB 의 구조는 [미디어 저장소 (MediaStore)](../../../02-artifacts/media/mediastore/index.md) 에 있습니다.
 
 ## 메시지·연락처
 
 삼성 메시지 앱의 휴지통과 구글 메시지의 삭제 동작이 어디에 얼마 동안 남는지는 이 페이지에서 다루지 않습니다. 앱별 DB 구조는 [문자 (SMS·MMS·RCS)](../../../02-artifacts/communications/messages/index.md) 와 각 메신저 페이지에 있고, SQLite 에서 지운 행을 찾는 법은 [SQLite 데이터베이스](../../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../../03-techniques/analysis/data-recovery/index.md) 에 있습니다.
 
-설정 키 가운데 삭제·휴지통과 관련이 있어 보이는 것은 아래 둘입니다. 둘 다 뜻을 밝힌 공개 자료는 없습니다.
+설정 키 가운데 삭제·휴지통과 관련이 있어 보이는 것은 아래 둘입니다. 둘 다 뜻이 정해져 있지 않으므로, 보고서에는 키와 값만 옮기고 뜻을 단정하지 않습니다.
 
 | 출력 | 키 |
 |---|---|
@@ -105,6 +105,7 @@ MediaStore 의 `DATE_EXPIRES` 열과 파일 이름을 서로 맞춰 보는 방�
 
 - 이 묶음 전체의 길잡이는 [증거를 없애려 했나](index.md) 이고, 앱째 지운 경우는 [앱 지우기](app-removal.md), 기기 전체를 지운 경우는 [초기화](factory-reset.md) 를 봅니다.
 - 만료 시각이 기기 시각에 따라 어긋나는 문제는 [시각 바꾸기](time-change.md) 에 있습니다.
+- 지우지 않고 볼트 앱으로 옮겨 숨긴 경우는 [숨김·볼트·앱 잠금 앱](../../../02-artifacts/credentials-security/vault-apps.md) 을 봅니다.
 - 사진 원본의 촬영 시각·장소는 [이 사진은 언제 어디서 찍었나](../photo-origin.md), 대화 상대는 [누구와 연락을 주고받았나](../communication.md) 에 있습니다.
 
 ## 참고 문헌

@@ -24,7 +24,7 @@ nav_order: 1100
 | 범위 | 시스템 폴더라서 사용자 계정과 관계없이 맥 전체에 하나 [1] |
 | 관리하는 프로세스 | usbmuxd 데몬 [1] |
 
-위 경로는 usbmuxd와 libimobiledevice 소스가 macOS에서 쓰는 값입니다 [1][2]. macOS 버전에 따라 경로나 키가 달라진다는 공개 자료는 없습니다. 윈도우에서는 공용 AppData 아래 `Apple\Lockdown` 폴더가 같은 역할을 합니다 [2].
+위 경로는 usbmuxd와 libimobiledevice 소스가 macOS에서 쓰는 값입니다 [1][2]. 분석 대상 맥에서는 이 경로와 키가 그대로인지 실제 파일로 확인합니다. 윈도우에서는 공용 AppData 아래 `Apple\Lockdown` 폴더가 같은 역할을 합니다 [2].
 
 ## 구조
 
@@ -58,13 +58,13 @@ nav_order: 1100
 
 ## 시각 해석
 
-plist 안에 페어링 시각을 적는 키가 있다는 공개 자료는 없습니다. 파일의 생성·수정 시각으로 첫 페어링이나 다시 페어링한 시점을 어림한다는 설명이 알려져 있지만, 이 방법은 파일 시스템 시각에 기댄 추정이라서 보고서에는 "파일 시각으로 어림한 값" 이라고 적습니다. 파일 시스템 시각을 읽는 방법은 [APFS 구조 (APFS)](../../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
+위 키 목록에는 페어링 시각을 적는 키가 없습니다. 파일의 생성·수정 시각으로 첫 페어링이나 다시 페어링한 시점을 어림한다는 설명이 알려져 있지만, 이 방법은 파일 시스템 시각에 기댄 추정이라서 보고서에는 "파일 시각으로 어림한 값" 이라고 적습니다. 파일 시스템 시각을 읽는 방법은 [APFS 구조 (APFS)](../../../01-foundations/disk-volume/apfs/index.md)와 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
 
 ## 함정과 한계
 
 페어링 기록에는 호스트 개인 키(`HostPrivateKey`, `RootPrivateKey`)가 들어 있어서 [2], 증거로 다룰 때 민감 자료로 취급합니다. 사본을 보관하는 곳과 접근할 수 있는 사람을 제한하고, 보고서나 첨부 자료에 키 값을 그대로 옮기지 않습니다.
 
-기기 쪽에서는 설정 → 일반 → 전송 또는 [기기] 재설정 → 재설정 → 위치 및 개인 정보 보호 재설정으로 신뢰 목록을 지울 수 있습니다 [3]. 이때 맥 쪽 `/var/db/lockdown` 파일도 함께 지워진다는 공개 자료는 없습니다. 그래서 맥에 파일이 남아 있다고 해서 지금도 기기가 이 맥을 신뢰한다고 말하지 않습니다. 반대로 파일이 없다는 사실만으로 페어링한 적이 없다고 말하지도 않는데, 파일이 지워졌을 수 있기 때문입니다. 지운 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)로 찾아봅니다.
+기기 쪽에서는 설정 → 일반 → 전송 또는 [기기] 재설정 → 재설정 → 위치 및 개인 정보 보호 재설정으로 신뢰 목록을 지울 수 있습니다 [3]. 이때 맥 쪽 `/var/db/lockdown` 파일도 함께 지워지는지는 시험 기기에서 신뢰 목록을 지운 뒤 맥의 폴더를 보고 확인합니다. 그래서 맥에 파일이 남아 있다고 해서 지금도 기기가 이 맥을 신뢰한다고 말하지 않습니다. 반대로 파일이 없다는 사실만으로 페어링한 적이 없다고 말하지도 않는데, 파일이 지워졌을 수 있기 때문입니다. 지운 흔적은 [파일 시스템 이벤트 (FSEvents)](../../filesystem/fsevents/index.md)와 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)로 찾아봅니다.
 
 페어링이 USB 연결뿐 아니라 Wi-Fi 동기화에도 쓰인다는 설명이 흔하지만, 기록만으로 연결 방식을 단정하지 않습니다. 라이브 수집에서 파일이 보이지 않으면 권한 때문인지 먼저 확인하고 수집 방법은 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)을 따릅니다.
 

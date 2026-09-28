@@ -13,9 +13,9 @@ GitHub Copilot 은 IDE 마다 로그를 남기는 자리가 다르고, Visual St
 
 ## 무엇을 기록하나 · 왜 생기나
 
-Copilot 로그는 연결 문제나 오류를 풀려고 남기는 기록입니다[1]. 로그 보는 법이 공개된 IDE 는 JetBrains IDE(IntelliJ IDEA, Android Studio, GoLand, PhpStorm, PyCharm, RubyMine, WebStorm, Rider), VS Code, Visual Studio, Xcode, Vim/Neovim 입니다[1]. 로그에 프롬프트·응답 본문이 들어가는지는 공개 자료에 없으므로, VS Code 의 대화 내용은 [Windows](windows.md)에서 다루는 세션 파일에서 찾습니다.
+Copilot 로그는 연결 문제나 오류를 풀려고 남기는 기록입니다[1]. 로그 보는 법이 공개된 IDE 는 JetBrains IDE(IntelliJ IDEA, Android Studio, GoLand, PhpStorm, PyCharm, RubyMine, WebStorm, Rider), VS Code, Visual Studio, Xcode, Vim/Neovim 입니다[1]. 로그에 프롬프트·응답 본문이 들어가는지는 실제 로그를 열어 확인하고, VS Code 의 대화 내용은 [Windows](windows.md)에서 다루는 세션 파일에서 찾습니다.
 
-Visual Studio 는 사정이 다릅니다. Visual Studio Copilot 은 대화를 평소 공유 추적 파일 `*_VSGitHubCopilot_traces.jsonl` 에 담고, 이 파일은 OpenTelemetry 추적(span) 형식이라 span 을 읽어 대화를 다시 짜 맞출 수 있습니다[4]. 그래서 Visual Studio 에서는 이름이 "로그" 인 폴더가 대화 기록의 주된 자리가 됩니다. 이 형식을 설명한 Microsoft 쪽 공개 문서는 없습니다[4].
+Visual Studio 는 사정이 다릅니다. Visual Studio Copilot 은 대화를 평소 공유 추적 파일 `*_VSGitHubCopilot_traces.jsonl` 에 담고, 이 파일은 OpenTelemetry 추적(span) 형식이라 span 을 읽어 대화를 다시 짜 맞출 수 있습니다[4]. 그래서 Visual Studio 에서는 이름이 "로그" 인 폴더가 대화 기록의 주된 자리가 됩니다. Microsoft 는 이 형식을 공개하지 않았습니다[4].
 
 ## 위치와 버전별 차이
 
@@ -24,7 +24,7 @@ Visual Studio 는 사정이 다릅니다. Visual Studio Copilot 은 대화를 �
 | IDE | 여는 법 | 파일·경로 |
 |---|---|---|
 | VS Code | View → Output 에서 "GitHub Copilot" 채널 선택[1] | — |
-| VS Code | 명령 팔레트 `Developer: Open Extension Logs Folder`[1] | 확장 로그 폴더. 공개 문서에 OS 별 경로가 없으므로 VS Code 사용자 데이터 폴더를 통째로 수집합니다 |
+| VS Code | 명령 팔레트 `Developer: Open Extension Logs Folder`[1] | 확장 로그 폴더. 디스크 이미지에서는 VS Code 사용자 데이터 폴더를 통째로 수집합니다 |
 | VS Code | `Developer: Toggle Developer Tools` → Console 탭[1] | Electron 로그 |
 | JetBrains | Help → Show Log in …(Rider 는 Diagnostic Tools 아래)[1] | `idea.log` |
 | Visual Studio | View → Output 에서 "GitHub Copilot" 선택[1] | 추적 파일은 아래 표 |
@@ -42,9 +42,9 @@ VS Code 안에서는 "GitHub Copilot" 과 "GitHub Copilot Chat" 이 로그 설�
 | 같은 추적 파일 | Linux `~/.cache/VSGitHubCopilotLogs/traces/` | agentsview README[4] |
 | 대화 파일(확장자 없음, 이름은 36자 UUID) | 솔루션 폴더의 `.vs\*\copilot-chat\*\sessions\` | agentsview `visualstudio_copilot_provider.go`, `visualstudio_copilot.go`[4] |
 
-추적 파일은 추적 폴더에서 이름이 `.jsonl` 로 끝나고 `_VSGitHubCopilot_traces` 를 담은 파일입니다[4]. 파일 이름은 `20260615T234102_b45c44b2_VSGitHubCopilot_traces.jsonl` 처럼 날짜·시각 모양 글자로 시작합니다[4]. 이 앞부분이 파일을 만든 시각인지, UTC 인지는 공개 문서에 없으니, 같은 파일 안의 span 시각과 비교해 실제 데이터로 확인합니다.
+추적 파일은 추적 폴더에서 이름이 `.jsonl` 로 끝나고 `_VSGitHubCopilot_traces` 를 담은 파일입니다[4]. 파일 이름은 `20260615T234102_b45c44b2_VSGitHubCopilot_traces.jsonl` 처럼 날짜·시각 모양 글자로 시작합니다[4]. 이 앞부분이 파일을 만든 시각인지, UTC 인지는 같은 파일 안의 span 시각과 비교해 실제 데이터로 확인합니다.
 
-Visual Studio 2026 은 솔루션 폴더의 `.vs/*/copilot-chat/*/sessions` 에도 대화 파일을 씁니다[4]. 대화 파일은 이름이 36자 UUID 모양(8-4-4-4-12 자리의 16진수)이고, 내용은 추적 파일과 같은 span 구조입니다[4]. 이 폴더는 사용자 프로필이 아닌 솔루션 폴더 안에 있어서, 사용자 폴더만 수집하면 빠집니다. 수집 범위는 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)를 봅니다. 이 배치가 어느 Visual Studio 판부터인지는 공개 문서에 없으므로, 보고서에는 분석 대상의 Visual Studio 판을 함께 적습니다.
+Visual Studio 2026 은 솔루션 폴더의 `.vs/*/copilot-chat/*/sessions` 에도 대화 파일을 씁니다[4]. 대화 파일은 이름이 36자 UUID 모양(8-4-4-4-12 자리의 16진수)이고, 내용은 추적 파일과 같은 span 구조입니다[4]. 이 폴더는 사용자 프로필이 아닌 솔루션 폴더 안에 있어서, 사용자 폴더만 수집하면 빠집니다. 수집 범위는 [기기에서 AI 흔적 모으기](../../../03-techniques/acquisition/endpoint-triage.md)를 봅니다. 보고서에는 분석 대상의 Visual Studio 판을 함께 적습니다.
 
 ### 사용자가 켜야 생기는 기록
 
@@ -117,15 +117,15 @@ GitHub 가 서버에 보관하는 프롬프트·사용 기록과 조직 요금�
 
 **증명하는 것.** Copilot 로그가 있으면 그 IDE 에 Copilot 확장이나 플러그인이 설치돼 돌았다는 흔적이 됩니다. Visual Studio 추적 파일에 채팅 span 이 있으면, 그 시각에 그 대화 ID 로 어떤 프롬프트가 모델에 갔고 어떤 응답이 돌아왔는지, 입력·출력 토큰이 얼마였는지를 말할 수 있습니다[4]. 도구 실행 span 은 어떤 파일 경로·명령·패치를 인자로 도구가 실행됐고 어떤 결과를 돌려받았는지를 보여 줍니다[4]. `copilot_chat.mode` 와 `copilot_chat.initiator_type` 에는 에이전트 모드였는지, 요청을 누가 시작한 것으로 기록됐는지가 들어 있습니다[4]. 원격 측정 설정 값은 그 계정의 VS Code 가 어느 범위까지 보내도록 설정돼 있었는지를 알려 줍니다[3].
 
-**증명하지 못하는 것.** VS Code·JetBrains 로그에 프롬프트나 응답 본문이 들어간다는 공개 문서는 없으므로, 그 로그만으로 어떤 프롬프트를 보냈는지나 제안을 받아들였는지를 말하지 않습니다. Visual Studio 의 도구 실행 span 도 도구가 돌았다는 기록일 뿐이라서, 그 변경이 지금 파일에 남아 있는지는 파일 자체와 버전 관리 기록으로 따로 확인합니다. 원격 측정 설정이 확장의 자체 원격 측정까지 막았다고 볼 수는 없습니다[3]. 추적 파일에는 자판 앞에 앉은 사람이 누구였는지가 없으므로, 계정·로그인 흔적과 함께 봅니다.
+**증명하지 못하는 것.** VS Code·JetBrains 로그는 연결 문제나 오류를 풀려고 남기는 기록이므로, 로그에 본문이 실제로 들어 있지 않으면 그 로그만으로 어떤 프롬프트를 보냈는지나 제안을 받아들였는지를 말하지 않습니다. Visual Studio 의 도구 실행 span 도 도구가 돌았다는 기록일 뿐이라서, 그 변경이 지금 파일에 남아 있는지는 파일 자체와 버전 관리 기록으로 따로 확인합니다. 원격 측정 설정이 확장의 자체 원격 측정까지 막았다고 볼 수는 없습니다[3]. 추적 파일에는 자판 앞에 앉은 사람이 누구였는지가 없으므로, 계정·로그인 흔적과 함께 봅니다.
 
 보고서 문장은 "피의자가 Copilot 에게 코드를 고치게 했다" 가 아니라 "2026-06-12 19:46:40(UTC) 에 대화 ID 3f2a9c1e-… 의 채팅 span 에 이런 프롬프트가 기록돼 있다" 처럼 기록으로 확인되는 만큼만 씁니다(시각과 ID 는 아래 만든 예시의 값).
 
 ## 시각 해석
 
-Visual Studio span 의 `startTimeUnixNano`·`endTimeUnixNano` 는 1970-01-01 UTC 부터 센 나노초를 10진 문자열로 적은 값입니다[4]. 시작과 끝이 따로 있으므로 요청 하나에 걸린 시간도 알 수 있습니다. 추적 파일 이름 앞부분의 날짜·시각 모양 글자가 무엇을 뜻하는지는 공개 문서에 없으니, 같은 파일 안의 span 시각과 비교해 실제 데이터로 확인합니다. 대화 하나가 여러 파일에 나뉠 수 있으므로, 대화 시각은 파일 수정 시각이 아닌 span 시각으로 잡습니다[4].
+Visual Studio span 의 `startTimeUnixNano`·`endTimeUnixNano` 는 1970-01-01 UTC 부터 센 나노초를 10진 문자열로 적은 값입니다[4]. 시작과 끝이 따로 있으므로 요청 하나에 걸린 시간도 알 수 있습니다. 추적 파일 이름 앞부분의 날짜·시각 모양 글자가 무엇을 뜻하는지는 같은 파일 안의 span 시각과 비교해 실제 데이터로 확인합니다. 대화 하나가 여러 파일에 나뉠 수 있으므로, 대화 시각은 파일 수정 시각이 아닌 span 시각으로 잡습니다[4].
 
-VS Code 로그 줄의 시각 형식과 시간대는 공개 문서에 없으니, 같은 기기의 다른 시각(세션 파일의 `creationDate`·`lastMessageDate` 밀리초 값, [Windows](windows.md) 참고)과 맞춰 봅니다.
+VS Code 로그 줄의 시각 형식과 시간대는 같은 기기의 다른 시각(세션 파일의 `creationDate`·`lastMessageDate` 밀리초 값, [Windows](windows.md) 참고)과 맞춰 보고 확인합니다.
 
 ## 함정과 한계
 
@@ -134,7 +134,7 @@ VS Code 로그 줄의 시각 형식과 시간대는 공개 문서에 없으니, 
 - `gen_ai.tool.call.arguments` 와 `gen_ai.tool.call.result` 에는 파일 경로, 명령, 패치, 파일 내용이 그대로 들어갈 수 있습니다[4]. 소스 코드나 비밀 값이 섞일 수 있으니 보고서에 옮길 때 가립니다. 토큰·키가 남는 자리는 [API 키와 토큰이 남는 곳](../../../01-foundations/storage-model/api-keys-tokens.md)을 봅니다.
 - 추적 폴더에서 파일 하나만 떼어 보면 대화가 중간에 끊겨 보입니다. 폴더를 통째로 수집하고, 대화 ID 로 모든 파일을 검색합니다[4].
 - JSON 문자열 안의 한글은 UTF-8 글자 그대로일 수도 있고 `\uXXXX` 로 적혔을 수도 있으니, 키워드 검색은 두 모양 다 해 봅니다.
-- VS Code 의 출력 창과 명령 팔레트는 VS Code 를 실행해야 쓸 수 있어서, 디스크 이미지에서는 확장 로그 폴더를 파일로 찾아야 합니다. 그 경로는 공개 문서에 없으니 VS Code 사용자 데이터 폴더를 통째로 떠 옵니다.
+- VS Code 의 출력 창과 명령 팔레트는 VS Code 를 실행해야 쓸 수 있어서, 디스크 이미지에서는 확장 로그 폴더를 파일로 찾아야 하므로, VS Code 사용자 데이터 폴더를 통째로 떠 옵니다.
 - trace 수준은 문제를 푼 뒤 Info 로 되돌리게 되어 있어서[1], 수집 시점의 설정이 Info 여도 과거에 trace 로 남긴 로그가 있을 수 있습니다.
 
 ## 직접 분석해 보기

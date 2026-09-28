@@ -44,7 +44,7 @@ remote_lock_setting               fmm_unlock_recovery
 active_unlock_*                   mandatory_biometrics_*
 ```
 
-system 표에는 `screen_off_timeout`, `db_lockscreen_is_smart_lock`, `lockscreen_sounds_enabled`, `lockscreen_wallpaper`, `lockstar_enabled` 가, global 표에는 `lock_sound`, `unlock_sound`, `trusted_sound` 가 있습니다. `lock_screen_owner_info` 와 `lock_pattern_autolock` 은 목록에 없을 수 있습니다. 이 키들 값의 뜻을 설명한 공개 자료는 없습니다. settings 파일의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
+system 표에는 `screen_off_timeout`, `db_lockscreen_is_smart_lock`, `lockscreen_sounds_enabled`, `lockscreen_wallpaper`, `lockstar_enabled` 가, global 표에는 `lock_sound`, `unlock_sound`, `trusted_sound` 가 있습니다. `lock_screen_owner_info` 와 `lock_pattern_autolock` 은 목록에 없을 수 있습니다. 이 키들 값의 뜻은 시험 기기에서 설정을 바꿔 가며 확인합니다. settings 파일의 구조는 [설정 값 (Settings Global·Secure·System)](settings.md) 페이지에 있습니다.
 
 ## 구조
 
@@ -81,11 +81,11 @@ LockPatternUtils 의 자격 증명 종류 상수는 다음과 같습니다 [2].
 | 3 | CREDENTIAL_TYPE_PIN |
 | 4 | CREDENTIAL_TYPE_PASSWORD |
 
-`lockscreen.password_type` 에 들어가는 값이 이 상수인지, 기기 관리 정책(DevicePolicyManager)의 비밀번호 품질 상수인지 밝힌 공개 자료가 없습니다. 그래서 이 키의 숫자를 위 표로 바로 풀지 않습니다.
+`lockscreen.password_type` 에 들어가는 값이 이 상수인지, 기기 관리 정책(DevicePolicyManager)의 비밀번호 품질 상수인지는 단정할 수 없습니다. 그래서 이 키의 숫자를 위 표로 바로 풀지 않습니다.
 
 ### 강한 인증을 요구하는 이유
 
-StrongAuthTracker 는 PIN·패턴·비밀번호 입력을 다시 요구하는 이유를 비트 플래그로 나타냅니다 [2]. 이 값이 파일에 남는지는 알려져 있지 않고, 로그나 덤프에서 이 숫자를 만나면 다음 표로 풉니다.
+StrongAuthTracker 는 PIN·패턴·비밀번호 입력을 다시 요구하는 이유를 비트 플래그로 나타냅니다 [2]. 이 값이 파일에 남는지는 실제 기기에서 확인하고, 로그나 덤프에서 이 숫자를 만나면 다음 표로 풉니다.
 
 | 값 | 이유 |
 |---|---|
@@ -124,13 +124,13 @@ LockSettingsStorage 의 백업 대상에는 잠금 화면 소유자 정보 표�
 
 ## 시각 해석
 
-`locksettings` 표의 열에는 시각이 없어서 잠금을 언제 설정했는지는 이 표로 알 수 없습니다 [1]. settings 의 `biometrics_strong_enroll_timestamp` 는 이름에 시각이 들어 있지만 단위와 기준을 밝힌 공개 자료가 없습니다. usagestats 이벤트의 시각 해석은 usagestats 페이지를, 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
+`locksettings` 표의 열에는 시각이 없어서 잠금을 언제 설정했는지는 이 표로 알 수 없습니다 [1]. settings 의 `biometrics_strong_enroll_timestamp` 는 이름에 시각이 들어 있지만 단위와 기준은 같은 기기의 다른 기록과 시각을 맞춰 보고 확인합니다. usagestats 이벤트의 시각 해석은 usagestats 페이지를, 숫자를 날짜로 바꾸는 법은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
 
 ## 함정과 한계
 
-잠금이 설정되어 있었다고 해서 사건 당시 기기가 잠겨 있었다는 뜻은 아닙니다. 신뢰 에이전트가 켜져 있었다면 잠금 화면이 입력 없이 넘어갔을 수 있고, `trusted_locations_count`, `db_lockscreen_is_smart_lock` 같은 키가 이와 관련돼 보이지만 값의 뜻을 설명한 공개 자료는 없습니다.
+잠금이 설정되어 있었다고 해서 사건 당시 기기가 잠겨 있었다는 뜻은 아닙니다. 신뢰 에이전트가 켜져 있었다면 잠금 화면이 입력 없이 넘어갔을 수 있고, `trusted_locations_count`, `db_lockscreen_is_smart_lock` 같은 키가 이와 관련돼 보이지만 값의 뜻은 단정할 수 없습니다.
 
-자격 증명 종류 값과 `lockscreen.password_type` 값을 섞어 읽기 쉽습니다. 두 값이 같은 체계인지 알려져 있지 않으니 숫자만 보고 "PIN 이었다" 고 쓰지 않습니다.
+자격 증명 종류 값과 `lockscreen.password_type` 값을 섞어 읽기 쉽습니다. 두 값이 같은 체계라고 단정할 수 없으니 숫자만 보고 "PIN 이었다" 고 쓰지 않습니다.
 
 강한 인증을 요구하는 이유에 기기 관리자가 거는 잠금(0x2, 0x10)이 들어 있을 만큼 기기 관리자 앱도 잠금에 관여해서, 잠금을 건 주체가 사용자인지 앱인지는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](../credentials-security/device-admin-accessibility.md) 페이지와 함께 봅니다. 업무 프로필이나 보안 폴더의 잠금은 주 사용자와 따로 있을 수 있어서 [보안 폴더와 작업 프로필 (Secure Folder·Work Profile)](../../01-foundations/security-model/secure-folder-work-profile.md) 페이지를 봅니다.
 

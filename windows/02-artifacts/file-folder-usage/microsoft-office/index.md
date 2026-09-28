@@ -24,7 +24,7 @@ Word·Excel·PowerPoint 같은 오피스 앱은 사용자가 다룬 문서의 �
 - 신뢰 문서 기록이 있다고 매크로를 켰다는 뜻은 아닙니다.
 - 백스테이지 캐시의 파일 목록은 오피스로 연 파일 목록이 아닙니다.
 - 읽던 위치의 시각은 로컬 시각이고, 최근 파일 목록의 시각은 UTC 입니다.
-- 최근 Microsoft 365 의 오피스 문서 캐시는 공개 자료가 설명한 모양과 다를 수 있습니다.
+- 최근 Microsoft 365 의 오피스 문서 캐시는 옛 형식과 파일 구성이 다를 수 있습니다.
 
 ## 한눈에 보기
 
@@ -39,13 +39,13 @@ Word·Excel·PowerPoint 같은 오피스 앱은 사용자가 다룬 문서의 �
 | [읽던 위치 (Reading Locations)](reading-locations.md) | NTUSER.DAT `...\<버전>\Word\Reading Locations\<하위 키>` | 15.0·16.0 | Word 문서 경로와 분 단위 로컬 시각 |
 | [백스테이지 캐시 (BackstageInAppNavCache)](backstageinappnavcache.md) | `AppData\Local\Microsoft\Office\16.0\BackstageInAppNavCache` | 16.0 | [파일] 탭 화면에서 둘러본 폴더의 내용 목록 |
 | [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) | `AppData\Roaming\Microsoft\Word`, `AppData\Local\Microsoft\Office\UnsavedFiles` | Microsoft 365 | 로컬에서 작업한 문서의 백업 사본 |
-| [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) | `AppData\Local\Microsoft\Office\<버전>\OfficeFileCache` | 옛 버전 폴더도 남습니다. 16.0 은 공개 자료와 모양이 다를 수 있습니다. | OneDrive·SharePoint 문서의 로컬 사본 |
+| [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) | `AppData\Local\Microsoft\Office\<버전>\OfficeFileCache` | 옛 버전 폴더도 남습니다. 16.0 은 옛 형식과 파일 구성이 다를 수 있습니다. | OneDrive·SharePoint 문서의 로컬 사본 |
 
 레지스트리 값을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에 있습니다.
 
 ### 오피스 버전 키
 
-경로의 `<버전>` 자리에는 오피스 버전 번호 키가 들어갑니다. 위치는 Windows 버전보다 이 오피스 버전에 따라 달라집니다. Windows 버전에 따른 차이는 알려진 것이 없습니다.
+경로의 `<버전>` 자리에는 오피스 버전 번호 키가 들어갑니다. 위치는 Windows 버전보다 이 오피스 버전에 따라 달라집니다.
 
 | 버전 키 | 내용 |
 |---|---|
@@ -53,7 +53,7 @@ Word·Excel·PowerPoint 같은 오피스 앱은 사용자가 다룬 문서의 �
 | 15.0 | Word 의 신뢰 문서 기록, User MRU, Reading Locations 가 이 키 아래에 남습니다. |
 | 16.0 | Microsoft 365 앱이 씁니다. 버전 키가 16.0 하나만 있을 수 있습니다. |
 
-- 16.0 이 Office 2016·2019·2021·2024·Microsoft 365 를 모두 뜻하는지는 공개 자료에 없습니다.
+- 16.0 키만 보고 Office 2016·2019·2021·2024·Microsoft 365 가운데 어느 제품인지 단정하지 않습니다.
 - 버전 키가 여럿이면 어느 것을 지금 쓰는지 가려내야 합니다. RegRipper 의 msoffice 플러그인은 숫자로 시작하는 하위 키 가운데 `User Settings` 하위 키가 있는 가장 높은 번호를 쓰는 버전으로 봅니다.
 - 옛 버전 키와 옛 버전 폴더에도 기록이 남아 있을 수 있습니다. 가장 높은 번호만 보지 않습니다.
 
@@ -75,7 +75,7 @@ Word·Excel·PowerPoint 같은 오피스 앱은 사용자가 다룬 문서의 �
 3. [읽던 위치 (Reading Locations)](reading-locations.md) — Word 문서의 경로와 분 단위 로컬 시각을 읽습니다. 최근 파일 목록의 UTC 시각과 맞추는 법을 다룹니다.
 4. [백스테이지 캐시 (BackstageInAppNavCache)](backstageinappnavcache.md) — [파일] 탭 화면에서 둘러본 폴더의 내용 목록을 JSON 에서 읽습니다. 연 파일 목록이 아니라는 점과 UTF-16LE 인코딩을 다룹니다.
 5. [자동 복구·저장 안 한 문서 (AutoRecover·UnsavedFiles)](autorecover-unsavedfiles.md) — 로컬에서 작업한 문서의 백업 사본을 찾습니다. 공식 안내의 경로와 실제 모양의 차이를 다룹니다.
-6. [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) — OneDrive·SharePoint 문서의 로컬 캐시에서 문서를 되살립니다. 공개 자료의 형식과 최근 Microsoft 365 의 다른 형식을 다룹니다.
+6. [오피스 문서 캐시 (OfficeFileCache)](officefilecache.md) — OneDrive·SharePoint 문서의 로컬 캐시에서 문서를 되살립니다. 옛 형식과 최근 Microsoft 365 의 다른 형식을 다룹니다.
 
 ## 함께 볼 페이지
 

@@ -67,7 +67,7 @@ ScreenConnect 는 ScreenConnect 가 돌아가는 관리 서버와 조종당하�
 | s | 클라이언트 고유 ID |
 | k | 신원 확인에 쓰는 인코딩된 암호화 키 |
 
-명령줄에 `e=Access&`, `y=Guest&`, `&p=`, `&c=`, `&k=` 가 모두 들어 있으면 ScreenConnect 설치 실행으로 볼 수 있습니다[4]. `c` 의 뜻은 공개 자료에 없습니다.
+명령줄에 `e=Access&`, `y=Guest&`, `&p=`, `&c=`, `&k=` 가 모두 들어 있으면 ScreenConnect 설치 실행으로 볼 수 있습니다[4]. `c` 의 뜻은 정해져 있지 않으므로 값만 옮깁니다.
 
 Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registry Explorer 로 열면 서비스 명령줄 전체를 되살릴 수 있습니다[1]. 하이브와 트랜잭션 로그 구조는 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
@@ -85,7 +85,7 @@ Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registr
 | 파일 전송 | `Transferred files with action 'Transfer': <파일 이름들>` | 0 | 201 |
 | 명령 실행 | `Executed command of length: <길이>` | 0 | 200 |
 
-- 두 자료의 이벤트 ID 가 다릅니다. 버전에 따라 바뀐 것으로 보이며, 어느 버전부터인지는 공개 자료에 없습니다. 그래서 이벤트 ID 보다 메시지 문구로 찾습니다.
+- 두 자료의 이벤트 ID 가 다릅니다. 버전에 따라 바뀐 것으로 보여서 이벤트 ID 보다 메시지 문구로 찾습니다.
 - 명령 실행 이벤트에는 명령 내용이 없고 길이만 남습니다.
 - "Cloud Account Administrator" 는 클라우드판의 기본 관리자 이름으로 보입니다. 자체 서버에서 이 자리에 어떤 이름이 들어가는지는 실제 데이터로 확인합니다.
 
@@ -114,7 +114,7 @@ Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registr
 - 명령 실행 이벤트만으로는 무슨 명령인지 모릅니다. 스크립트 파일, 4688, Sysmon 1 로 내용을 채웁니다.
 - 스크립트 파일이 실행 뒤에도 남는지는 실제 데이터로 확인합니다. 파일이 없으면 [마스터 파일 테이블](../../filesystem/mft.md)과 [USN 변경 저널](../../filesystem/usnjrnl.md)에서 이름과 시각을 찾습니다.
 - 이벤트에 적힌 이름(Cloud Account Administrator 등)은 ScreenConnect 계정 이름입니다. 조작한 사람을 가리키지 않습니다.
-- 서버 쪽 Session.db 의 구조는 공개 자료에 없어, 서버에서 세션 목록을 읽는 법은 이 페이지에서 다루지 않습니다.
+- 서버에서 세션 목록을 읽는 법은 이 페이지에서 다루지 않습니다. 서버 쪽 Session.db 는 파일 헤더와 표 구조부터 확인합니다.
 
 보고서에는 기록으로 확인되는 만큼만 씁니다. 예를 들면 "Application 로그에 원본 `ScreenConnect Client (…)` 의 `Executed command of length` 이벤트가 이 시각에 있다. 이 이벤트에는 명령 내용이 없다. 같은 시각의 4688 에는 ScreenConnect.ClientService.exe 가 띄운 cmd.exe 가 `C:\Windows\Temp\ScreenConnect\` 아래 run.cmd 를 실행한 기록이 있다." 처럼 씁니다.
 
@@ -136,7 +136,7 @@ Sysmon 자료가 망가져 있어도 SYSTEM 하이브와 SYSTEM.LOG1 을 Registr
 
 ### 헥스로 한 번
 
-이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 스크립트입니다. ScreenConnect 만의 이진 구조는 공개된 분석 자료가 없어 헥스 예시를 싣지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
+이 페이지의 흔적은 이벤트 로그, 레지스트리, 텍스트 스크립트입니다. ScreenConnect 만의 이진 구조는 이 페이지에서 헥스로 풀지 않습니다. 이벤트 레코드를 헥스로 따라가는 법은 [이벤트 로그 형식](../../../01-foundations/database-log-formats/evtx-evt-etl/index.md)에서 다룹니다.
 
 ### 공개 도구로 한 번
 

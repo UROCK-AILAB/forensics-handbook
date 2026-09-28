@@ -16,13 +16,13 @@ iOS 는 전화를 걸거나 받을 때마다 통화 기록 데이터베이스 `C
 
 ## 위치와 버전별 차이
 
-기기 안의 경로는 `/private/var/mobile/Library/CallHistoryDB/` 이고, 공개 도구 iLEAPP 는 이 폴더에서 이름이 `CallHistory` 로 시작하는 파일(`CallHistory.storedata`, `CallHistoryTemp.storedata`)과 예전 형식의 `call_history.db` 를 찾습니다 [1]. `CallHistoryTemp.storedata` 의 용도를 밝힌 공개 자료는 없습니다.
+기기 안의 경로는 `/private/var/mobile/Library/CallHistoryDB/` 이고, 공개 도구 iLEAPP 는 이 폴더에서 이름이 `CallHistory` 로 시작하는 파일(`CallHistory.storedata`, `CallHistoryTemp.storedata`)과 예전 형식의 `call_history.db` 를 찾습니다 [1]. `CallHistoryTemp.storedata` 는 이름만으로 용도를 단정할 수 없으니, 두 파일을 모두 열어 표 구조와 행을 비교합니다.
 
 로컬 백업에는 이 파일이 늘 들어가지는 않습니다. 암호화하지 않은 백업에는 `CallHistoryDB` 경로가 없고, 이름에 CallHistory 가 들어간 파일은 설정 파일 `HomeDomain :: Library/Preferences/com.apple.CallHistorySyncHelper.plist` 하나뿐일 수 있습니다. 백업을 암호화해야 들어가는 자료의 범위는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다루고, 통화 기록이 필요하면 수집 방법부터 정해야 합니다. 수집 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 를 봅니다.
 
 | 구분 | 내용 | 출처 |
 |---|---|---|
-| 예전 형식 | `call_history.db` 의 `call` 표. `flags` 값을 풀어 방향을 읽고 시각 기준이 Core Data 시각과 다릅니다. 어느 iOS 까지 이 형식이었는지는 공개 자료가 없습니다 | [1] |
+| 예전 형식 | `call_history.db` 의 `call` 표. `flags` 값을 풀어 방향을 읽고 시각 기준이 Core Data 시각과 다릅니다. 어느 형식인지는 폴더에 든 파일 이름으로 확인 | [1] |
 | 현재 형식 | `CallHistory.storedata` 의 `ZCALLRECORD` 표 (Core Data) | [1][2] |
 | 도구 시험 범위 | iLEAPP 통화 기록 모듈은 iOS 12.4 ~ 18.7.8 표본 15개로 시험되었습니다 | [1] |
 | iOS 26 | `ZAUTOANSWEREDREASON`, `ZCOMMUNICATIONTRUSTSCORE`, `ZORIGINATINGDEVICENAME`, `ZBLOCKEDBYEXTENSIONNAME` 열이 새로 보입니다 | [1] |
@@ -42,18 +42,18 @@ iOS 는 전화를 걸거나 받을 때마다 통화 기록 데이터베이스 `C
 | `ZSERVICE_PROVIDER` | 통화를 처리한 서비스. 다른 회사 앱이면 앱 이름이 들어갑니다 |
 | `ZADDRESS` | 상대 주소(번호) |
 | `ZDISCONNECTED_CAUSE` | 끊긴 사유. iLEAPP 는 0 을 정상 종료, 6 을 거절로 읽습니다 |
-| `ZFACE_TIME_DATA` | FaceTime 관련 데이터. 담긴 내용은 공개 자료 없음 |
+| `ZFACE_TIME_DATA` | FaceTime 관련 데이터. 값이 있으면 원본 바이트를 그대로 보존 |
 | `ZISO_COUNTRY_CODE`, `ZLOCATION` | 국가 코드와 위치 문자열 |
 
 `ZDISCONNECTED_CAUSE` 의 뜻은 iLEAPP 의 해석이고 Apple 문서에는 없는 값입니다. 게다가 WhatsApp 통화에서는 iLEAPP 가 6 을 통화 시간과 방향에 따라 종료·부재중·거절로 나눠 읽고 2 를 거절로 읽을 만큼 앱마다 쓰임이 달라서, 보고서에는 "끊긴 사유 값이 6 으로 기록됨" 처럼 저장된 값을 함께 적는 편이 안전합니다 [1]. iOS 26 에서 새로 보인 열 4개도 iLEAPP 는 저장된 값 그대로만 보여 줍니다 [1].
 
-여럿이 함께한 통화는 `ZCALLRECORD` 한 행으로는 드러나지 않습니다. 이 표에는 그룹 통화를 표시하는 열이 따로 없어서, 참여자 번호를 담은 `ZHANDLE` 표(`Z_PK`, `ZVALUE`)와 연결 표 `Z_2REMOTEPARTICIPANTHANDLES`(열 `Z_2REMOTEPARTICIPANTCALLS`, `Z_4REMOTEPARTICIPANTHANDLES`)를 이어 읽어야 한 통화에 상대가 여러 명이었는지 알 수 있습니다 [2]. 이 구조는 그룹 FaceTime 통화 시험의 결과이고, 시험한 iOS 버전은 알려져 있지 않습니다 [2]. 연결 표 이름의 숫자는 Core Data 가 붙이는 번호라 버전마다 바뀔 수 있으니, 표 이름을 고정해 두지 말고 `sqlite_master` 에서 먼저 찾습니다.
+여럿이 함께한 통화는 `ZCALLRECORD` 한 행으로는 드러나지 않습니다. 이 표에는 그룹 통화를 표시하는 열이 따로 없어서, 참여자 번호를 담은 `ZHANDLE` 표(`Z_PK`, `ZVALUE`)와 연결 표 `Z_2REMOTEPARTICIPANTHANDLES`(열 `Z_2REMOTEPARTICIPANTCALLS`, `Z_4REMOTEPARTICIPANTHANDLES`)를 이어 읽어야 한 통화에 상대가 여러 명이었는지 알 수 있습니다 [2]. 이 구조는 그룹 FaceTime 통화 시험에서 나온 결과라서 [2], 분석 대상 기기에서도 같은 표가 있는지 확인합니다. 연결 표 이름의 숫자는 Core Data 가 붙이는 번호라 버전마다 바뀔 수 있으니, 표 이름을 고정해 두지 말고 `sqlite_master` 에서 먼저 찾습니다.
 
 Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 ### 곁에 있는 설정 파일
 
-암호화하지 않은 백업에는 통화 기록 DB 대신 통화 기능의 설정 파일이 남습니다. 값의 뜻을 밝힌 공개 자료가 없어서 단서로만 씁니다.
+암호화하지 않은 백업에는 통화 기록 DB 대신 통화 기능의 설정 파일이 남습니다. 이름만으로 값의 뜻을 단정할 수 없어서 단서로만 씁니다.
 
 | 파일 (HomeDomain) | 키 |
 |---|---|
@@ -68,7 +68,7 @@ Core Data 가 만드는 SQLite 의 일반 구조는 [SQLite 데이터베이스](
 
 **증명하는 것.** 기록된 시각에 이 기기의 전화 기능이 해당 주소와 통화를 시작했거나 받으려 했다는 사실, 그리고 받았는지·건 것인지·몇 초 동안 이어졌는지를 보여 줍니다 [1]. `ZSERVICE_PROVIDER` 와 `ZCALLTYPE` 으로 이동통신 통화인지, FaceTime 인지, 다른 회사 앱 통화인지 가를 수 있습니다 [1].
 
-**증명하지 못하는 것.** 통화 내용은 남지 않고, 기기를 손에 든 사람이 누구였는지도 알려 주지 않습니다. 사람을 좁히는 방법은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다. 표에 행이 없다고 통화가 없었다고 쓸 수도 없는데, 지운 통화와 보존 기간이 이 DB 에서 어떻게 처리되는지 밝힌 공개 자료가 없기 때문입니다. `ZADDRESS` 는 번호 또는 주소 문자열일 뿐이라서 그 번호가 누구인지는 [연락처](contacts.md) 와 맞춰 봐야 합니다.
+**증명하지 못하는 것.** 통화 내용은 남지 않고, 기기를 손에 든 사람이 누구였는지도 알려 주지 않습니다. 사람을 좁히는 방법은 [그 시각에 폰을 쓴 사람이 누구인가](../../04-scenarios/activity/user-attribution.md) 에서 다룹니다. 지운 통화나 오래된 통화는 행이 없을 수 있어서, 표에 행이 없다고 통화가 없었다고 쓸 수도 없습니다. `ZADDRESS` 는 번호 또는 주소 문자열일 뿐이라서 그 번호가 누구인지는 [연락처](contacts.md) 와 맞춰 봐야 합니다.
 
 보고서 문장은 "피의자가 A 와 통화했다" 가 아니라 "이 기기의 통화 기록에 2026-05-09 06:13:20 UTC, 상대 번호 X, 건 통화, 받음, 통화 시간 N초로 기록된 행이 있다" 처럼 씁니다.
 

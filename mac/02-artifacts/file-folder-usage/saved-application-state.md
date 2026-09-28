@@ -6,7 +6,7 @@ nav_order: 910
 
 # 앱 저장 상태 (Saved Application State)
 
-macOS 앱은 다음에 다시 열 때 창을 되살리려고 앱마다 `.savedState` 폴더에 창 목록과 창 내용을 저장하고, 여기에 창 제목·열려 있던 폴더·열려 있던 파일이 남아서 어떤 앱으로 무엇을 보고 있었는지 알려 줍니다.
+macOS 앱은 다음에 다시 열 때 창을 되살리려고 앱마다 `.savedState` 폴더에 창 목록과 창 내용을 저장하고, 여기에 창 제목·열려 있던 폴더·열려 있던 파일이 남아서 어떤 앱으로 무엇을 보고 있었는지 알려 줍니다. 터미널 앱의 상태에는 창에 찍혀 있던 명령과 출력 글자도 남습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -25,7 +25,7 @@ macOS 앱은 다음에 다시 열 때 창을 되살리려고 앱마다 `.savedSt
 
 두 번째 경로는 샌드박스 앱의 컨테이너 안쪽입니다. 폴더 이름의 번들 ID 로 어느 앱의 상태인지 알 수 있고, 번들 ID 읽는 법은 [번들 ID와 팀 ID (Bundle ID·Team ID)](../../01-foundations/value-decoding/bundle-team-id.md)를 봅니다. `Saved Application State` 안의 항목이 폴더가 아니라 심볼릭 링크일 때가 있고, 이때는 링크가 가리키는 폴더를 따라가서 읽습니다 [1].
 
-버전별 차이를 다룬 공개 자료는 없습니다. Catalina 이후에 키 이름이나 암호화 방식이 바뀌었는지, 창 되살리기 설정이 어느 plist 키에 저장되는지는 실제 데이터로 확인하고, 아래 구조와 다른 모습이 나오면 macOS 버전과 함께 기록합니다.
+Catalina 이후에 키 이름이나 암호화 방식이 바뀌었는지, 창 되살리기 설정이 어느 plist 키에 저장되는지는 실제 데이터로 확인하고, 아래 구조와 다른 모습이 나오면 macOS 버전과 함께 기록합니다.
 
 ## 구조
 
@@ -95,7 +95,7 @@ MS Office 앱은 `NSDockMenu` 의 `Open Recent` 아래에 최근 문서가 들�
 - **창 제목을 파일 이름으로 단정하는 경우.** `NSTitle` 은 창 제목이라서 [1] 문서 이름일 수도, 웹 페이지 제목일 수도, 앱이 붙인 다른 문구일 수도 있습니다.
 - **수정 시각을 창 열린 시각으로 읽는 경우.** "Source Last Modified Date" 는 `windows.plist` 파일 하나의 시각입니다 [1].
 - **키를 잘못 짝짓는 경우.** 레코드마다 창 번호에 맞는 `NSDataKey` 로 풀어야 하고 [1], 다른 창의 키로 풀면 알아볼 수 없는 바이트가 나옵니다.
-- **지우기와 조작.** 사용자가 폴더를 지우거나 창 되살리기를 끄는 설정을 켤 수 있지만 [2], 그 흔적이 어디에 남는지는 공개 자료가 없습니다. 폴더가 비어 있는 정황은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 흐름으로 다른 기록과 함께 판단합니다.
+- **지우기와 조작.** 사용자가 폴더를 지우거나 창 되살리기를 끄는 설정을 켤 수 있습니다 [2]. 폴더가 비어 있는 정황은 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md)의 흐름으로 다른 기록과 함께 판단합니다.
 
 ## 직접 분석해 보기
 
@@ -147,7 +147,38 @@ while pos + 16 <= len(data) and data[pos:pos + 8] == b"NSCR1000":
     pos += length
 ```
 
-풀린 plist 는 NSKeyedArchiver 형식이라서 `$objects` 안에서 `TargetURL` 이나 `NS.relative` 에 해당하는 문자열을 찾아 읽습니다. 본문 끝의 채움 바이트를 어떻게 처리하는지는 공개 자료가 없으니, 복호가 실패하거나 끝부분이 어긋나면 mac_apt 결과와 비교해 봅니다.
+풀린 plist 는 NSKeyedArchiver 형식이라서 `$objects` 안에서 `TargetURL` 이나 `NS.relative` 에 해당하는 문자열을 찾아 읽습니다. 풀린 본문 끝에는 채움 바이트가 붙어 있어서 [4], 위 예시처럼 `rchv` 뒤 길이 값만큼만 plist 로 읽습니다. 복호가 실패하거나 끝부분이 어긋나면 mac_apt 결과와 비교해 봅니다.
+
+## 터미널 저장 상태
+
+터미널 앱의 상태 폴더 `~/Library/Saved Application State/com.apple.Terminal.savedState/` 에는 창 목록뿐 아니라 터미널 창에 찍혀 있던 글자 전체가 남습니다 [3][4]. 셸 기록 파일을 지우거나 `unset HISTFILE` 로 기록을 끈 경우에도 이 화면 내용이 남아 있을 수 있어서 [4], 셸 기록이 비어 있을 때 먼저 찾아볼 곳입니다. 셸 기록 파일 자체는 [터미널 명령 기록 (zsh_history·bash_sessions)](../execution/shell-history.md)에서 다룹니다.
+
+### 무엇이 남나
+
+`windows.plist` 의 `NSTitle` 에는 터미널 창 제목이 들어가는데, 여기에 현재 작업 폴더 이름, 쓰는 셸 이름, 창 크기(예: 80x24)가 함께 보입니다 [4]. `data.data` 는 위 구조대로 레코드마다 창 번호에 맞는 `NSDataKey` 로 풀고, 이름이 `_NSWindow` 인 레코드의 NSKeyedArchiver plist 에서 아래 값을 꺼냅니다 [3][4].
+
+| 키 | 뜻 |
+|---|---|
+| `NSTitle` | 창 제목 [3] |
+| `TTWindowState` › `Window Settings` | 탭마다 사전 하나가 들어간 목록 [3] |
+| `Tab Contents`, `Tab Contents v2` | 탭 화면에 찍혀 있던 글자 [3][4] |
+| `Tab Working Directory URL`, `Tab Working Directory URL String` | 탭의 현재 작업 폴더 [3][4] |
+
+`Tab Contents v2` 의 첫 조각을 풀면 보통 `Last login: … on ttys000` 같은 로그인 안내부터 나오고, 조각을 차례로 이어 붙이면 탭의 화면 내용 전체가 됩니다 [4].
+
+### 증거로서 의미와 시각
+
+**증명하는 것.** 화면 내용에 명령과 출력이 있으면 상태를 저장한 시점에 그 탭에 그 글자가 찍혀 있었다는 기록입니다 [3][4]. 작업 폴더 값은 그 탭이 어느 폴더에 있었는지를 알려 줍니다 [3][4].
+
+**증명하지 못하는 것.** 화면 내용에는 시각이 없어서 [4] 명령마다 언제 쳤는지는 알 수 없습니다. 평소처럼 터미널을 쓰는 동안 덮어써질 수 있어서 늦게 수집하면 사라질 수 있고 [4], 터미널 설정에서 "Restore text when reopening windows" 를 끄면 화면 내용이 저장되지 않습니다 [4]. 그래서 내용이 없다는 사실만으로 명령을 치지 않았다고 말할 수 없습니다.
+
+시각은 폴더와 파일의 파일 시스템 시각만 쓸 수 있습니다. 상태 폴더와 그 안 파일의 생성 시각은 앱을 처음 쓴 때, 수정 시각은 가장 최근에 쓴 때를 가리킵니다 [4].
+
+### 읽는 법
+
+mac_apt 의 TERMINALSTATE 플러그인은 계정마다 `com.apple.Terminal.savedState` 의 두 파일을 풀어 `Title`, `WorkingDir`, `Content`, `User`, `Source` 열로 내놓고, 폴더만 따로 떼어 넣어 돌릴 수도 있습니다 [3].
+
+손으로 풀 때는 위 파이썬 예시로 `_NSWindow` 레코드를 꺼낸 뒤, `$objects` 에서 `Tab Contents v2` 가 가리키는 바이트 조각을 차례로 UTF-8 로 풀어 이어 붙입니다 [4]. mac_apt 는 목록 안의 바이트 값을 모두 이어 붙입니다 [3]. 풀어 낸 글자 사이에 뜻 없는 바이트가 섞여 나오면 조각을 하나씩 따로 풀어 글자 조각만 이어 붙입니다. 레코드 머리의 버전 값은 `1000` 말고 `0006` 인 경우도 있습니다 [4]. mac_apt 는 `NSCR1000` 이 아닌 머리를 만나면 로그에 오류를 남긴 채 계속 읽습니다 [3].
 
 ## 교차 검증
 
@@ -155,6 +186,7 @@ while pos + 16 <= len(data) and data[pos:pos + 8] == b"NSCR1000":
 - [문서 버전 (DocumentRevisions-V100)](document-revisions.md) — 미리보기처럼 버전을 남기는 앱이면 같은 파일의 버전이 언제 추가됐는지
 - [KnowledgeC (knowledgeC.db)](../execution/knowledgec/index.md), [바이옴 (Biome)](../execution/biome/index.md) — 그 앱을 언제 썼는지 시각을 보탤 때
 - [사파리 (Safari)](../browsers/safari/index.md), [크롬·엣지·웨일 (Chromium 계열)](../browsers/chromium/index.md) — 창 제목이 웹 페이지 제목으로 보일 때 방문 기록과 맞춰 볼 때
+- [터미널 명령 기록 (zsh_history·bash_sessions)](../execution/shell-history.md) — 터미널 화면 내용에 보이는 명령이 셸 기록과 세션별 기록에도 있는지
 - [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md) — `windows.plist` 와 `data.data` 가 다시 쓰인 때를 더 촘촘히 볼 때
 - [어떤 앱을 언제 썼나 (App Usage)](../../04-scenarios/activity/app-usage.md), [이 파일을 누가 언제 열었나 (File Access)](../../04-scenarios/activity/file-access.md) — 이 기록을 쓰는 조사 흐름
 
@@ -172,3 +204,5 @@ NIST CFReDS 같은 공개 시험 데이터 가운데 맥 이미지를 골라 아
 
 1. mac_apt `plugins/savedstate.py` (SAVEDSTATE 1.2, Yogesh Khatri) — https://github.com/ydkhatri/mac_apt/blob/master/plugins/savedstate.py
 2. Apple 지원, "Change Desktop & Dock settings on Mac" (Mac 사용 설명서) — https://support.apple.com/guide/mac-help/change-desktop-dock-settings-mchlp1119/mac
+3. mac_apt `plugins/terminalstate.py` (TERMINALSTATE 1.0, Yogesh Khatri) — https://github.com/ydkhatri/mac_apt/blob/master/plugins/terminalstate.py
+4. Philip Pineda, Jai Musunuri, "Saved by the Shell: Reconstructing Command-Line Activity on MacOS", CrowdStrike (2019-10-01) — https://www.crowdstrike.com/en-us/blog/reconstructing-command-line-activity-on-macos/

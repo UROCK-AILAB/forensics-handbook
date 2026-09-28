@@ -27,9 +27,9 @@ Google 디지털 웰빙 앱의 DB 는 앱 데이터 영역의 아래 경로 패�
 | 기기 | 기록하는 쪽 | 내용 |
 |---|---|---|
 | Google 디지털 웰빙 앱이 깔린 기기 | `com.google.android.apps.wellbeing` | DB 경로 패턴과 표 구조 [1] |
-| 삼성 One UI | 공개 자료 없음 | 아래 설명 참고 |
+| 삼성 One UI | 실제 기기에서 확인 | 아래 설명 참고 |
 
-삼성 기기에서는 `dumpsys package` 출력의 "Known Packages" 에서 `Wellbeing:` 항목 값이 `none` 으로 나올 수 있습니다. 시스템이 디지털 웰빙 역할로 지정한 패키지가 없다는 뜻입니다. settings system 키 가운데 `add_info_com_samsung_android_forest#screenTime` 이라는 키도 있는데, 값과 뜻은 공개 문서에 나와 있지 않습니다. 삼성 기기에서 화면 사용 시간 기능이 어떤 앱의 어떤 DB 에 기록하는지도 공개 문서에 나와 있지 않으니, 삼성 기기에서는 Google 경로가 없다고 해서 사용 이벤트 기록이 없다고 결론 내리면 안 됩니다. 설정 키를 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
+삼성 기기에서는 `dumpsys package` 출력의 "Known Packages" 에서 `Wellbeing:` 항목 값이 `none` 으로 나올 수 있습니다. 시스템이 디지털 웰빙 역할로 지정한 패키지가 없다는 뜻입니다. settings system 키 가운데 `add_info_com_samsung_android_forest#screenTime` 이라는 키도 있는데, 이 키의 뜻은 정해져 있지 않으므로 보고서에는 값만 옮기고 뜻을 단정하지 않습니다. 삼성 기기에서는 화면 사용 시간 기능이 어떤 앱의 어떤 DB 에 기록하는지 실제 기기에서 확인해야 하고, Google 경로가 없다고 해서 사용 이벤트 기록이 없다고 결론 내리면 안 됩니다. 설정 키를 읽는 법은 [설정 값](../system-account/settings.md) 페이지에 있습니다.
 
 DB 를 몇 날치 남기는지, 어느 Android 버전부터 이 앱이 있었는지는 실제 기기에서 확인해야 합니다.
 
@@ -76,7 +76,7 @@ ALEAPP 가 풀어 주는 숫자는 이 아홉 개이고, 표에 없는 숫자가
 
 `timestamp` 는 유닉스 에포크 밀리초라서 1000 으로 나누면 UTC 시각이 됩니다 [1]. 현지 시각으로 옮길 때는 [시간대와 시각 설정 (Time Zone)](../system-account/time-zone.md) 에서 기기 시간대를 먼저 확인합니다. 값을 읽는 일반 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 페이지에 있습니다.
 
-기기 시계를 사람이 바꾸면 그 뒤 이벤트의 시스템 시계 시각도 따라 바뀔 수 있습니다. `dumpsys usagestats` 에는 `Time changed. actualSystemTime:... expectedSystemTime:...` 모양의 줄이 있어서 시스템 쪽에서는 시계 변경을 따로 적습니다. 디지털 웰빙 DB 가 시계 변경을 어떻게 처리하는지는 알려져 있지 않으니, 시각 순서가 뒤집힌 구간이 보이면 usagestats 쪽 기록과 맞춰 봅니다.
+기기 시계를 사람이 바꾸면 그 뒤 이벤트의 시스템 시계 시각도 따라 바뀔 수 있습니다. `dumpsys usagestats` 에는 `Time changed. actualSystemTime:... expectedSystemTime:...` 모양의 줄이 있어서 시스템 쪽에서는 시계 변경을 따로 적습니다. 디지털 웰빙 DB 에서 시각 순서가 뒤집힌 구간이 보이면 usagestats 쪽 기록과 맞춰 봅니다.
 
 ## 함정과 한계
 
@@ -84,7 +84,7 @@ ALEAPP 가 풀어 주는 숫자는 이 아홉 개이고, 표에 없는 숫자가
 
 둘째, 삼성 기기처럼 Google 디지털 웰빙이 없는 기기가 있습니다. 이런 기기에서는 디지털 웰빙 역할 패키지가 `none` 으로 나옵니다.
 
-셋째, 보존 기간이 알려져 있지 않으니 가장 오래된 줄의 날짜를 "사용 시작일" 로 읽으면 안 됩니다. 가장 오래된 줄은 "이 DB 에 남은 기록의 시작" 일 뿐입니다.
+셋째, 가장 오래된 줄의 날짜를 "사용 시작일" 로 읽으면 안 됩니다. 가장 오래된 줄은 "이 DB 에 남은 기록의 시작" 일 뿐입니다.
 
 넷째, 사용자가 디지털 웰빙 앱 데이터를 지우거나 앱을 끄면 이 DB 가 비거나 없어질 수 있습니다. 이 경우에도 usagestats 같은 시스템 쪽 기록이 남아 있을 수 있어서, 두 쪽 기록량이 크게 다르면 그 차이 자체를 [증거를 없애려 했나 (Anti-Forensics)](../../04-scenarios/activity/anti-forensics/index.md) 관점에서 살펴봅니다.
 

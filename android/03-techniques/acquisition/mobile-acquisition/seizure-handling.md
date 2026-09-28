@@ -53,7 +53,7 @@ Android 10 이후 기기는 파일 단위 암호화(FBE)를 쓰고, 기본 저�
 
 ## 기기 설정에 남는 흔적
 
-격리와 전원 상태에 관련된 이름의 키와 필드는 아래와 같습니다. 각 값의 뜻을 밝힌 공개 자료가 없으니, 이름만 보고 값을 해석하지 않습니다.
+격리와 전원 상태에 관련된 이름의 키와 필드는 아래와 같습니다. 이름만 보고 값을 해석하지 않습니다.
 
 | 어디서 | 키·필드 이름 |
 |---|---|
@@ -61,7 +61,7 @@ Android 10 이후 기기는 파일 단위 암호화(FBE)를 쓰고, 기본 저�
 | `dumpsys wifi` | `AirplaneModeOn`, `AirplaneModeEnhancementEnabled` 줄 |
 | `dumpsys user` | 사용자마다 `State:`(값 예: `RUNNING_UNLOCKED`), `Start time:`, `Unlock time:`, `Last logged in:` 필드 |
 
-`dumpsys user` 의 필드는 수집할 때 사용자가 잠금 해제 상태로 돌고 있었는지 기록하는 데 참고할 수 있지만, 필드의 정확한 정의를 밝힌 공개 자료는 없습니다. 조사자가 비행기 모드를 켜거나 전원 설정을 건드리면 이런 설정 값에 조사자의 조작도 섞이게 되니, 절차 3에서 남긴 기록과 맞춰 봅니다. 이 값들을 adb 로 읽는 조건은 [ADB로 볼 수 있는 것](adb.md), 설정 값 전반은 [설정 값](../../../02-artifacts/system-account/settings.md), 사용자 정보는 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를 봅니다.
+`dumpsys user` 의 필드는 수집할 때 사용자가 잠금 해제 상태로 돌고 있었는지 기록하는 데 참고할 수 있지만, 필드의 정확한 정의는 단정할 수 없습니다. 조사자가 비행기 모드를 켜거나 전원 설정을 건드리면 이런 설정 값에 조사자의 조작도 섞이게 되니, 절차 3에서 남긴 기록과 맞춰 봅니다. 이 값들을 adb 로 읽는 조건은 [ADB로 볼 수 있는 것](adb.md), 설정 값 전반은 [설정 값](../../../02-artifacts/system-account/settings.md), 사용자 정보는 [사용자와 프로필](../../../02-artifacts/system-account/users-profiles.md) 페이지를 봅니다.
 
 ## 함정과 한계
 

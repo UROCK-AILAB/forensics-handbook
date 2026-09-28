@@ -25,7 +25,7 @@ nav_order: 1270
 | 기본 폴더 (XP) | `C:\Documents and Settings\All Users\Application Data\Microsoft\Search\Data\Applications\Windows\` | 참고 1 |
 | 폴더를 정하는 값 | `HKLM\Software\Microsoft\Windows Search` 키의 `DataDirectory` 값 | 참고 1 |
 
-폴더는 `DataDirectory` 값이 정하므로, 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다. Windows 11 25H2 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 이고, DB 파일은 그 아래 `Applications\Windows\` 에 있습니다. 같은 키에는 `SetupCompletedSuccessfully` 값(예: 1)도 있습니다. 이 값의 뜻을 설명한 공개 자료는 없습니다.
+폴더는 `DataDirectory` 값이 정하므로, 수집할 때는 SOFTWARE 하이브에서 이 값을 먼저 읽습니다. Windows 11 25H2 에서 이 값은 `REG_EXPAND_SZ` 형식의 `%ProgramData%\Microsoft\Search\Data\` 이고, DB 파일은 그 아래 `Applications\Windows\` 에 있습니다. 같은 키에는 `SetupCompletedSuccessfully` 값(예: 1)도 있습니다. 이 값은 이름으로 뜻을 단정하지 않고 값만 옮겨 적습니다.
 
 하이브를 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
 
@@ -39,8 +39,8 @@ nav_order: 1270
 | 11 25H2 | 위와 같은 세 파일 | 첫 16바이트가 `AesGcm1 SQLite3` 일 수 있습니다. 이런 파일은 보통 SQLite 도구로 열리지 않습니다. |  |
 
 - `Windows-usn.db` 는 포렌식 가치가 낮다는 평가가 있습니다(참고 2).
-- libyal 문서는 Windows 10·11 과 `Windows.db` 를 다루지 않습니다. 그래서 Windows 10 이후 열 구성과 바이트 순서는 실제 데이터로 직접 확인합니다.
-- `AesGcm1 SQLite3` 형식이 어느 빌드부터 쓰였는지는 공개 자료가 없습니다.
+- Windows 10 이후 열 구성과 바이트 순서는 실제 데이터로 직접 확인합니다.
+- 빌드와 상관없이 DB 파일의 첫 16바이트를 먼저 보고 `AesGcm1 SQLite3` 형식인지 확인합니다.
 
 ## 구조
 
@@ -130,7 +130,7 @@ Windows 11 25H2 의 `Windows.db`·`Windows-gather.db`·`Windows-usn.db` 가 이 
 | 21~23 | `0x40 0x20 0x20` | 보통 SQLite 와 같은 값입니다. |
 | 24 이후 | 파일마다 무작위처럼 보이는 값 | 평문 SQLite 헤더값이 아닙니다. |
 
-이 파일을 `sqlite3` 로 열면 "file is not a database" 오류가 납니다. 48바이트 예약 공간에 암호 검증값(nonce·tag)이 들어 있는지, 암호 키가 어디에 있는지는 공개된 분석 자료가 없습니다.
+이 파일을 `sqlite3` 로 열면 "file is not a database" 오류가 납니다. 이 형식은 Microsoft 가 공개하지 않아, 48바이트 예약 공간에 암호 검증값(nonce·tag)이 들어 있는지와 암호 키가 어디에 있는지는 알 수 없습니다.
 
 - 보통 SQLite 헤더는 [SQLite 데이터베이스](../../../01-foundations/database-log-formats/sqlite/index.md) 에서 다룹니다.
 

@@ -24,9 +24,9 @@ nav_order: 1790
 |---|---|---|
 | 전원 설정 | `/Library/Preferences/SystemConfiguration/com.apple.PowerManagement.plist` | [1] |
 | 예약 이벤트 | `/Library/Preferences/SystemConfiguration/com.apple.AutoWake.plist` | [1] |
-| 잠자기·깨우기 이력 | `pmset -g log` 로 출력. 디스크의 어느 파일을 읽는지는 공개 자료 없음 | [1] |
+| 잠자기·깨우기 이력 | `pmset -g log` 로 출력. 디스크의 저장 위치는 이미지에서 직접 확인 | [1] |
 
-`pmset -g log` 가 읽는 저장 위치를 밝힌 공개 자료는 없습니다. 예전 ASL 방식의 `/private/var/log/powermanagement/` 폴더일 수도, 통합 로그일 수도, 버전마다 다를 수도 있으니, 이미지에서 이력을 찾을 때는 이 폴더가 있는지부터 보고 안의 파일 형식은 직접 확인합니다. ASL 파일 형식은 [예전 시스템 로그 (ASL·syslog)](../../01-foundations/data-formats/asl-syslog.md)에서 다룹니다.
+`pmset -g log` 가 읽는 저장 위치는 예전 ASL 방식의 `/private/var/log/powermanagement/` 폴더일 수도, 통합 로그일 수도, 버전마다 다를 수도 있습니다. 그래서 이미지에서 이력을 찾을 때는 이 폴더가 있는지부터 보고 안의 파일 형식은 직접 확인합니다. ASL 파일 형식은 [예전 시스템 로그 (ASL·syslog)](../../01-foundations/data-formats/asl-syslog.md)에서 다룹니다.
 
 명령이 들어온 버전은 아래와 같습니다 [1]. 두 항목 모두 Catalina 보다 앞서 들어왔으니 10.15 이후 맥에서는 쓸 수 있습니다. Catalina 부터 Tahoe 까지 출력 형식이나 저장 위치가 바뀌었는지는 실제 기기에서 확인합니다.
 
@@ -57,7 +57,7 @@ nav_order: 1790
 
 ### 디스크에 남는 파일
 
-두 파일 모두 속성 목록 파일이라서 읽는 방법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)과 같습니다. 예약 이벤트 파일 안의 키 이름과 시각 형식을 설명한 공개 자료는 없으니, 실제 파일을 열어 키를 확인한 뒤 해석합니다.
+두 파일 모두 속성 목록 파일이라서 읽는 방법은 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)과 같습니다. 예약 이벤트 파일 안의 키 이름과 시각 형식은 실제 파일을 열어 확인한 뒤 해석합니다.
 
 ## 증거로서 의미
 
@@ -69,13 +69,13 @@ nav_order: 1790
 
 ## 시각 해석
 
-`pmset -g log` 한 줄의 형식과 시각대 표기, 이력의 보존 기간을 설명한 공개 자료는 없습니다. 출력의 시각을 다른 기록과 나란히 놓기 전에 수집한 맥의 시간대를 먼저 확인하고([시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)), 출력에 시간대 표시가 있는지 직접 봅니다. 예약 이벤트 파일의 시각 값도 형식을 확인한 뒤 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방법으로 바꿉니다.
+`pmset -g log` 출력의 한 줄 형식과 이력의 보존 기간은 수집한 맥의 출력을 보고 확인합니다. 출력의 시각을 다른 기록과 나란히 놓기 전에 수집한 맥의 시간대를 먼저 확인하고([시간대와 시계 설정 (Time Zone·NTP)](../system-account/time-zone.md)), 출력에 시간대 표시가 있는지 직접 봅니다. 예약 이벤트 파일의 시각 값도 형식을 확인한 뒤 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../01-foundations/value-decoding/mac-time-values.md)의 방법으로 바꿉니다.
 
 `-g uuid` 가 주는 UUID 는 한 번의 잠자기 주기 안에서 활동을 묶는 값이라서 [1], 같은 UUID 로 묶인 이벤트는 같은 주기에서 일어난 것으로 봅니다. 이 UUID 가 다른 로그에 어떤 모양으로 남는지는 실제 데이터로 확인합니다.
 
 ## 함정과 한계
 
-가장 큰 한계는 이력을 명령 출력으로만 볼 수 있다는 점입니다. 디스크 이미지만 받은 사건이라면 `pmset -g log` 를 돌릴 수 없고, 이력 파일의 위치와 형식도 공개 자료로 알려져 있지 않으니 이미지에서 이력을 찾았다고 보고할 때는 어떤 파일을 어떤 방법으로 읽었는지 함께 적습니다. 라이브 대응을 할 수 있다면 `pmset -g everything` 과 `pmset -g log` 를 먼저 떠 두는 편이 낫습니다([라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)).
+가장 큰 한계는 이력을 명령 출력으로만 볼 수 있다는 점입니다. 디스크 이미지만 받은 사건이라면 `pmset -g log` 를 돌릴 수 없고, 이력 파일의 위치와 형식도 이미지마다 직접 확인해야 하니, 이미지에서 이력을 찾았다고 보고할 때는 어떤 파일을 어떤 방법으로 읽었는지 함께 적습니다. 라이브 대응을 할 수 있다면 `pmset -g everything` 과 `pmset -g log` 를 먼저 떠 두는 편이 낫습니다([라이브 대응 (Live Response)](../../03-techniques/process-acquisition/live-response/index.md)).
 
 `-g history` 는 부트 인자를 켠 맥에서만 나오는 디버깅용 출력이라서 [1], 비어 있어도 이상한 일이 아닙니다. 반대로 이 출력이 채워져 있다면 누군가 디버깅용 부트 인자를 켰다는 뜻이니 그 자체로 확인할 거리입니다.
 

@@ -14,7 +14,7 @@ nav_order: 1450
 
 ## 먼저 확인할 것
 
-**수집 범위**가 가장 큰 갈림길입니다. routined DB 는 표준 백업에 없고 전체 파일 시스템 추출에서만 나옵니다 [2]. 암호를 걸지 않은 로컬 백업에도 routined DB 와 Apple 지도의 `MapsSync_0.0.1` 은 없고, 설정 파일 HomeDomain `Library/Preferences/com.apple.routined.plist` 만 있습니다. 바이옴도 공개 자료는 전체 파일 시스템 추출만 다룹니다 [5]. 로컬 백업만 있다면 아래 "로컬 백업에서 보이는 것" 절의 기록으로 좁혀서 판단합니다.
+**수집 범위**가 가장 큰 갈림길입니다. routined DB 는 표준 백업에 없고 전체 파일 시스템 추출에서만 나옵니다 [2]. 암호를 걸지 않은 로컬 백업에도 routined DB 와 Apple 지도의 `MapsSync_0.0.1` 은 없고, 설정 파일 HomeDomain `Library/Preferences/com.apple.routined.plist` 만 있습니다. 바이옴은 전체 파일 시스템 추출에서 얻고 [5], 로컬 백업에 들어가는지는 실제 백업으로 확인합니다. 로컬 백업만 있다면 아래 "로컬 백업에서 보이는 것" 절의 기록으로 좁혀서 판단합니다.
 
 **설정 상태**도 봅니다. 중요 위치 (Significant Locations) 는 설정의 "개인정보 보호 및 보안 › 위치 서비스 › 시스템 서비스" 에서 켜고 끄며, 최근 간 곳과 얼마나 자주·언제 갔는지, 경로를 기기가 기록하고, 기기 사이 동기화는 종단 간 암호화로 보호합니다 [1]. 사용자가 이 설정을 껐다면 기록이 없는 것이 자연스럽습니다.
 
@@ -23,10 +23,10 @@ nav_order: 1450
 | iOS 버전 | 중심 기록 | 참고할 점 |
 |---|---|---|
 | iOS 15 까지 | routined 의 `Cache.sqlite`·`Local.sqlite`·`Cloud.sqlite` [2][3] | iOS 15 에서도 `Cache.sqlite` 의 `ZRTCLLOCATIONMO` 표에 위치가 남습니다 [3] |
-| iOS 16 | 바이옴이 SEGB v1 형식으로 쓰입니다 [12] | 위치 스트림 이름은 공개 자료 없음 |
+| iOS 16 | 바이옴이 SEGB v1 형식으로 쓰입니다 [12] | 위치 스트림 이름은 실제 기기의 바이옴 폴더에서 확인 |
 | iOS 17 이후 | 바이옴 `Location.Visit` [4] | SEGB v2 형식입니다 [5] |
 | iOS 18 | 바이옴 `App.LocationActivity` (iLEAPP 시험, iOS 18 기기 세 대) [6] | 앱이 기부한 장소 정보입니다 |
-| iOS 27 | 스트림 이름과 routined 표 구조는 공개 자료 없음 | 실제 기기의 폴더와 공개 도구의 해석을 대조합니다 |
+| iOS 27 | 스트림 이름과 routined 표 구조를 실제 기기에서 확인합니다 | 실제 기기의 폴더와 공개 도구의 해석을 대조합니다 |
 
 **시각 기준**은 routined 와 Apple 지도가 Mac 절대 시각이고 [2][7], `App.LocationActivity` 의 만료 시각은 Unix 시각 double 로 읽습니다 [6]. 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을, 현지 시각은 [시간대와 시각 설정](../../02-artifacts/system-account/time-zone.md) 을 따릅니다.
 
@@ -47,14 +47,14 @@ nav_order: 1450
 
 ### 로컬 백업에서 보이는 것
 
-암호를 걸지 않은 로컬 백업에는 아래 파일과 표·열·키가 있습니다. 값의 뜻과 시각 기준을 설명한 공개 자료가 없어서, 이동 경로의 근거로 쓰기 전에 시험 기기로 대조해야 합니다.
+암호를 걸지 않은 로컬 백업에는 아래 파일과 표·열·키가 있습니다. 값의 뜻과 시각 기준은 이동 경로의 근거로 쓰기 전에 시험 기기로 대조해야 합니다.
 
 | 파일 | 표·열·키 이름 | 읽을 때 주의할 점 |
 |---|---|---|
 | RootDomain `Library/Caches/locationd/consolidated.db` | `GeoFence` 표(`FenceIndex`, `BundleId`, `Name`, `Timestamp`, `Distance` 등), `Vertices` 표(`Latitude`, `Longitude`, `FenceForeignKey`) | 지오펜스(구역) 정의로 보이고, 위치 이력인지는 실제 데이터로 확인합니다 |
-| RootDomain `Library/Caches/locationd/clients.plist` | 앱별 항목의 `BundleId`, `Authorization`, `LocationTimeStopped`, `VisitTimeStarted`, `VisitTimeStopped`, `SignificantTimeStarted`, `SignificantTimeStopped` 등 | 앱마다 위치 권한과 사용 시각을 적은 것으로 보이지만 키의 뜻을 설명한 공개 자료는 없습니다 |
-| WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZWIFIDATA` 표(`ZTIMESTAMP`, `ZTIMEAT`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY`, `ZBSSID`, `ZSSID`, `ZRSSI` 등), `ZEVENTSCENE` 표(`ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY`, `ZCOURSE`, `ZSPEED` 등) | 좌표가 언제 채워지는지는 공개 자료가 없고, iLEAPP 의 데이터 사용량 파서도 두 표를 읽지 않습니다 [11] |
-| HomeDomain `Library/Preferences/com.apple.locationaccessstored.plist` | `LastRecordingTime`, `LocationAccessRecordsAge` | 공개 자료 없음 |
+| RootDomain `Library/Caches/locationd/clients.plist` | 앱별 항목의 `BundleId`, `Authorization`, `LocationTimeStopped`, `VisitTimeStarted`, `VisitTimeStopped`, `SignificantTimeStarted`, `SignificantTimeStopped` 등 | 앱마다 위치 권한과 사용 시각을 적은 것으로 보이지만 키의 뜻은 시험 기기로 확인합니다 |
+| WirelessDomain `Library/Databases/DataUsage.sqlite` | `ZWIFIDATA` 표(`ZTIMESTAMP`, `ZTIMEAT`, `ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY`, `ZBSSID`, `ZSSID`, `ZRSSI` 등), `ZEVENTSCENE` 표(`ZLATITUDE`, `ZLONGITUDE`, `ZLOCACCURACY`, `ZCOURSE`, `ZSPEED` 등) | 좌표가 언제 채워지는지는 같은 기기의 다른 위치 기록과 시각을 맞춰 보고 확인합니다. iLEAPP 의 데이터 사용량 파서는 두 표를 읽지 않습니다 [11] |
+| HomeDomain `Library/Preferences/com.apple.locationaccessstored.plist` | `LastRecordingTime`, `LocationAccessRecordsAge` | 값의 뜻과 시각 기준은 시험 기기로 확인 |
 | 캘린더 DB 의 `Location` 표 | `title`, `address`, `latitude`, `longitude` 등 | 일정에 적은 장소이고 실제로 간 곳이 아닙니다. [미리 알림과 캘린더](../../02-artifacts/mail-cloud/reminders-calendar.md) 를 봅니다 |
 
 ## 분석 흐름
@@ -65,11 +65,11 @@ nav_order: 1450
 4. 앱 기록을 붙입니다. `App.LocationActivity` 와 Apple 지도 검색 기록은 사용자가 그 장소를 찾아보거나 앱이 그 장소를 보여 준 흔적이라서, 방문 기록 옆에 "관심을 보인 장소" 로 따로 적습니다. `App.LocationActivity` 는 SEGB 에 쓴 시각(도구 출력의 SEGB Write Timestamp)과 활동 만료 시각이 따로 있고 [6], iLEAPP 는 `local` 폴더만 읽고 `tombstone` 폴더는 건너뜁니다 [6].
 5. Apple 지도 `ZHISTORYITEM` 의 시각을 쓸 때는 버전을 확인합니다. iOS 14 로 올린 기기에서는 `ZCREATETIME` 이 검색 시각이 아니라 업데이트 시각일 수 있습니다 [8].
 6. 사진 위치, 와이파이·블루투스 연결, 통화·메시지 시각을 같은 줄에 올려 [타임라인](../../03-techniques/analysis/timeline/index.md) 을 만들고, 서로 다른 기록이 같은 장소를 가리키는 구간만 결론에 씁니다.
-7. 전체 파일 시스템 추출이 없고 로컬 백업만 있다면, 위 "로컬 백업에서 보이는 것" 표의 기록으로 할 수 있는 말이 좁다는 점을 보고서에 적습니다. 그 표의 열은 뜻이 밝혀지지 않아서 결론의 근거보다는 추가 수집이 필요하다는 근거로 씁니다. 추출 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 고릅니다.
+7. 전체 파일 시스템 추출이 없고 로컬 백업만 있다면, 위 "로컬 백업에서 보이는 것" 표의 기록으로 할 수 있는 말이 좁다는 점을 보고서에 적습니다. 그 표의 열은 뜻을 단정할 수 없어서 결론의 근거보다는 추가 수집이 필요하다는 근거로 씁니다. 추출 방법은 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 고릅니다.
 
 ## 흔한 오판
 
-앱이 보여 준 장소를 "기기가 그곳에 있었다" 로 옮기는 실수가 가장 흔합니다. `App.LocationActivity` 는 앱이 기부한 NSUserActivity 가운데 장소 정보를 담은 것이고 [6], 지도 검색 기록은 검색·길찾기 기록입니다 [7]. 두 기록이 기기의 위치와 같다는 공개 자료는 없어서, 보고서에는 "이 앱이 이 장소 정보를 기록했다" 까지만 씁니다.
+앱이 보여 준 장소를 "기기가 그곳에 있었다" 로 옮기는 실수가 가장 흔합니다. `App.LocationActivity` 는 앱이 기부한 NSUserActivity 가운데 장소 정보를 담은 것이고 [6], 지도 검색 기록은 검색·길찾기 기록입니다 [7]. 두 기록만으로 기기가 그 장소에 있었다고 볼 수는 없어서, 보고서에는 "이 앱이 이 장소 정보를 기록했다" 까지만 씁니다.
 
 사진 위치를 사람의 위치로 적는 일도 조심합니다. 사진 위치는 사진이 찍힌 곳이고, 받은 사진이면 다른 사람이 찍은 곳입니다. 캘린더의 `Location` 표도 일정에 적은 장소일 뿐입니다.
 

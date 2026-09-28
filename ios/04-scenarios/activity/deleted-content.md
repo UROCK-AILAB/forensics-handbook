@@ -20,12 +20,12 @@ nav_order: 1490
 |---|---|---|
 | "최근 삭제된 항목" 이 있는 버전 | iOS 16, iPadOS 16.1 이후입니다 [1] | 문서에 버전 조건이 없습니다 |
 | 되살릴 수 있는 기간 | 지운 지 30~40일 안의 것만 되살릴 수 있습니다 [1] | 30일 동안 남은 뒤 영구 삭제되어 되살릴 수 없습니다 [4] |
-| 본 DB 에 남는 조건 | 두 번째로 지우거나 30일이 차기 전까지 본 DB 안에 남습니다 [2] | 공개 자료 없음 |
+| 본 DB 에 남는 조건 | 두 번째로 지우거나 30일이 차기 전까지 본 DB 안에 남습니다 [2] | 시험 기기에서 사진을 지운 뒤 `Photos.sqlite` 의 `ZASSET` 행이 남는지 확인 |
 | 화면에서 여는 조건 | 해당 없음 | 아이폰·아이패드에서는 Face ID 나 Touch ID 로 열어야 합니다 [4]. 이 잠금이 생긴 버전은 문서에 없습니다 |
 
 **수집 범위**도 확인합니다. iOS 는 SQLite 를 WAL 모드로 돌려서 백업에도 보통 `sms.db-wal` 이 함께 있고, WAL 없이 DB 를 열면 가장 최근 메시지가 빠지는데도 아무 경고가 나오지 않습니다 [3]. 수집한 자료에 `-wal` 파일이 함께 있는지 확인하고, 없다면 그 사실을 기록해 둡니다. WAL 의 동작은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
-**시각 단위**를 미리 알아 둡니다. `sms.db` 의 시각은 Apple 절대 시각 (2001-01-01) 기준이고, 옛 백업은 초 단위지만 대략 iOS 11 부터는 같은 열이 나노초 단위입니다 [3]. 값이 1e12 보다 크면 나노초로 봅니다 [3]. 요즘 날짜를 나노초로 적으면 7e17 안팎이 되니 이 크기로 단위를 판별합니다. `delete_date` 열의 단위는 공개 자료에 없어서 값의 크기를 보고 같은 방식으로 판단하고, 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
+**시각 단위**를 미리 알아 둡니다. `sms.db` 의 시각은 Apple 절대 시각 (2001-01-01) 기준이고, 옛 백업은 초 단위지만 대략 iOS 11 부터는 같은 열이 나노초 단위입니다 [3]. 값이 1e12 보다 크면 나노초로 봅니다 [3]. 요즘 날짜를 나노초로 적으면 7e17 안팎이 되니 이 크기로 단위를 판별합니다. `delete_date` 열의 단위도 값의 크기를 보고 같은 방식으로 판단하고, 변환은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 따릅니다.
 
 ## 볼 아티팩트와 순서
 
@@ -33,15 +33,15 @@ nav_order: 1490
 |---|---|---|---|
 | 1 | 메시지 DB `sms.db` 의 `chat_recoverable_message_join` 표 — 백업의 HomeDomain `Library/SMS/sms.db` | 이 표가 있으면 "최근 삭제된 항목" 저장소를 뜻하고, iOS 16 이후에 있습니다 [3]. 열은 `chat_id`, `message_id`, `delete_date`, `ck_sync_state` 이고, `delete_date` 는 늘 채워지지는 않으니 열이 있는지와 값이 들어 있는지를 따로 확인합니다 [3] | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 2 | `message` 표의 본문 열 | 최근 삭제된 메시지는 본 DB 안에 남아서 [2] 본문 열에서 내용을 찾습니다. `message` 표의 본문 열은 `text`, `attributedBody`, `message_summary_info` 입니다 | [메시지](../../02-artifacts/communications/messages/index.md) |
-| 3 | `recoverable_message_part` 표 | 열은 `chat_id`, `message_id`, `part_index`, `delete_date`, `part_text`, `ck_sync_state` 입니다. 이 표의 쓰임을 설명한 공개 자료가 없어서 `part_text` 에 본문이 남는지는 열 이름만으로 단정하지 않습니다 | [메시지](../../02-artifacts/communications/messages/index.md) |
+| 3 | `recoverable_message_part` 표 | 열은 `chat_id`, `message_id`, `part_index`, `delete_date`, `part_text`, `ck_sync_state` 입니다. `part_text` 에 본문이 남는지는 열 이름만으로 단정하지 않고 실제 값을 확인합니다 | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 4 | 보내기 취소·편집 흔적 — `message` 표의 `date_edited`, `date_retracted`, `message_summary_info` | `date_edited` 가 0 이나 NULL 이면 편집한 적이 없고, `date_retracted` 가 0 이 아니면 보낸 사람이 보내기 취소한 메시지입니다 (둘 다 iOS 16 이후) [3]. `message_summary_info` 는 편집 기록과 취소 정보를 담은 blob 입니다 [3] | [메시지](../../02-artifacts/communications/messages/index.md) |
 | 5 | `sms.db-wal` | 본 DB 에 아직 반영되지 않은 최근 변경 [3] | [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) |
 | 6 | 사진 DB — 백업의 CameraRollDomain `Media/PhotoData/Photos.sqlite` | `ZASSET` 표에 `ZTRASHEDSTATE`, `ZTRASHEDREASON`, `ZCLOUDDELETESTATE`, `ZHIDDEN` 열이 있습니다. 값별 뜻은 실제 데이터로 확인해야 합니다 | [사진 보관함](../../02-artifacts/media/photos/index.md) |
 | 7 | 다른 Apple 앱의 삭제 관련 표 | 아래 문단 참고 | 각 앱 페이지 |
 
-`date_edited`, `date_retracted` 열이 있는지는 실제 데이터에서 직접 확인합니다. `sms.db` 에는 이 밖에 `deleted_messages`(`ROWID`, `guid`), `sync_deleted_messages`, `sync_deleted_chats`, `sync_deleted_attachments`, `unsynced_removed_recoverable_messages` 표와 `chat` 표의 `is_recovered`, `is_deleting_incoming_messages` 열도 있습니다. `deleted_messages` 와 `sync_deleted_*` 표의 쓰임을 설명한 공개 자료가 없고, 열도 `guid` 같은 식별값뿐이라서 이 페이지에서는 내용을 찾는 곳으로 다루지 않습니다. 지운 흔적으로 보는 분석은 [증거를 없애려 했나](anti-forensics/index.md) 에서 다룹니다.
+`date_edited`, `date_retracted` 열이 있는지는 실제 데이터에서 직접 확인합니다. `sms.db` 에는 이 밖에 `deleted_messages`(`ROWID`, `guid`), `sync_deleted_messages`, `sync_deleted_chats`, `sync_deleted_attachments`, `unsynced_removed_recoverable_messages` 표와 `chat` 표의 `is_recovered`, `is_deleting_incoming_messages` 열도 있습니다. `deleted_messages` 와 `sync_deleted_*` 표는 열이 `guid` 같은 식별값뿐이라서 이 페이지에서는 내용을 찾는 곳으로 다루지 않습니다. 지운 흔적으로 보는 분석은 [증거를 없애려 했나](anti-forensics/index.md) 에서 다룹니다.
 
-메시지·사진 말고도 삭제와 관련된 이름의 표·열이 있습니다. 음성 사서함 HomeDomain `Library/Voicemail/voicemail.db` 에는 `voicemail` 표와 같은 열로 된 `deleted` 표가 있고 그 안에 `trashed_date` 열이 있습니다. 캘린더 HomeDomain `Library/Calendar/Calendar.sqlitedb` 의 `ResourceChange` 표에는 `delete_count`, `deleted_summary`, `deleted_start_date` 열이 있습니다. 이 열들의 동작을 설명한 공개 자료는 없고, 앱별 설명은 [음성 사서함과 통화 녹음](../../02-artifacts/communications/voicemail-recording.md), [미리 알림과 캘린더](../../02-artifacts/mail-cloud/reminders-calendar.md), [메모](../../02-artifacts/mail-cloud/notes.md) 에서 다룹니다.
+메시지·사진 말고도 삭제와 관련된 이름의 표·열이 있습니다. 음성 사서함 HomeDomain `Library/Voicemail/voicemail.db` 에는 `voicemail` 표와 같은 열로 된 `deleted` 표가 있고 그 안에 `trashed_date` 열이 있습니다. 캘린더 HomeDomain `Library/Calendar/Calendar.sqlitedb` 의 `ResourceChange` 표에는 `delete_count`, `deleted_summary`, `deleted_start_date` 열이 있습니다. 이 열들의 동작은 시험 기기에서 항목을 지워 보고 값이 바뀌는지로 확인하고, 앱별 설명은 [음성 사서함과 통화 녹음](../../02-artifacts/communications/voicemail-recording.md), [미리 알림과 캘린더](../../02-artifacts/mail-cloud/reminders-calendar.md), [메모](../../02-artifacts/mail-cloud/notes.md) 에서 다룹니다.
 
 ## 분석 흐름
 
@@ -58,7 +58,7 @@ nav_order: 1490
 4. `text` 가 비어 있으면 `attributedBody` 를 봅니다. blob 을 푸는 방법은 [메시지](../../02-artifacts/communications/messages/index.md) 와 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 을 따릅니다.
 5. `recoverable_message_part` 의 `part_text` 에 값이 있는지 확인합니다. 값이 있어도 그것이 지운 메시지의 본문이라고 곧바로 쓰지 않고, 같은 `message_id` 의 다른 기록과 맞는지 먼저 봅니다.
 6. 보내기 취소·편집 메시지를 찾습니다. 두 경우 모두 `message` 표의 `text` 열이 비워지고 [2], 편집한 메시지는 편집할 때마다 시각이 붙은 판 기록을 남기며 그 내용은 `attributedBody` 나 `message_summary_info` 에 있습니다 [2]. `date_edited`·`date_retracted` 로 대상 행을 고른 뒤 이 두 열을 풉니다 [3].
-7. 사진은 `Photos.sqlite` 의 `ZASSET` 에서 `ZTRASHEDSTATE` 값 분포를 보고, 값이 다른 행의 파일이 백업에 남아 있는지 [사진 보관함](../../02-artifacts/media/photos/index.md) 의 경로 규칙으로 찾습니다. 값의 뜻은 공개 문서에 설명돼 있지 않으니 시험 기기에서 사진을 지웠다 되살리며 값이 바뀌는 모습을 먼저 확인합니다.
+7. 사진은 `Photos.sqlite` 의 `ZASSET` 에서 `ZTRASHEDSTATE` 값 분포를 보고, 값이 다른 행의 파일이 백업에 남아 있는지 [사진 보관함](../../02-artifacts/media/photos/index.md) 의 경로 규칙으로 찾습니다. 값의 뜻을 알려면 시험 기기에서 사진을 지웠다 되살리며 값이 바뀌는 모습을 먼저 확인합니다.
 8. "최근 삭제된 항목" 기간이 지난 내용은 SQLite 의 빈 페이지나 WAL 에 조각이 남는지를 살펴야 하는데, 방법과 한계는 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다. 그런 조각을 되살릴 수 있는지는 기기마다 확인합니다.
 9. 찾은 내용과 시각을 [타임라인](../../03-techniques/analysis/timeline/index.md) 에 올리고, 대화 상대 쪽 기록과 맞춰 봅니다. 대화 흐름 분석은 [누구와 연락을 주고받았나](communication.md) 를 봅니다.
 

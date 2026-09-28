@@ -7,7 +7,7 @@ nav_order: 1730
 
 # PC 연결로 (USB·PC)
 
-기기를 PC 에 연결해 자료를 옮겼는지 확인하는 순서를 정리합니다. USB 파일 전송(MTP)으로 PC 가 무엇을 복사해 갔는지 기기에 남는 기록은 공개된 분석 자료가 없습니다. 그래서 이 페이지는 "어떤 PC 와 연결된 적이 있나" 를 보여 주는 기록들을 모아, 연결 시점과 기기 안의 파일 작업을 맞춰 보는 흐름으로 씁니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
+기기를 PC 에 연결해 자료를 옮겼는지 확인하는 순서를 정리합니다. USB 파일 전송(MTP)으로 PC 가 무엇을 복사해 갔는지가 기기에 남는지는 실제 데이터로 확인해야 합니다. 그래서 이 페이지는 "어떤 PC 와 연결된 적이 있나" 를 보여 주는 기록들을 모아, 연결 시점과 기기 안의 파일 작업을 맞춰 보는 흐름으로 씁니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
 
 ## 조사 질문
 
@@ -51,7 +51,7 @@ global 설정 표에는 `adb_enabled`, `adb_wifi_enabled`, `adb_allowed_connecti
 
 Microsoft 의 휴대폰과 연결은 기기 쪽 앱 com.microsoft.appmanager 로 휴대폰을 Windows PC 와 짝짓습니다 [3]. 계정은 `*/com.microsoft.appmanager/files/datastore/ACCOUNT_NAME.preferences_pb` 에 Jetpack DataStore protobuf 로 들어 있고, 키는 "계정이름:종류", 값은 종류와 username 이 든 JSON 입니다 [3]. 이 파일에는 시각이 없고, 지금도 PC 가 연결돼 있다는 뜻도 아닙니다 [3]. 옆 파일 `ACCOUNT_DATA_NAME.preferences_pb` 에는 개인 키나 신원 토큰 같은 자격 증명 성격의 속성 이름이 있어서 ALEAPP 는 값을 보여 주지 않습니다 [3].
 
-이벤트는 `*/com.microsoft.appmanager/databases/eventstore*` 의 `content_access_event` 표에 있고, 열은 `uid`, `start_time`(유닉스 밀리초), `duration`(단위 기록 없음), `content_type`, `access_was_useful` 입니다 [3]. `content_type` 코드의 뜻은 출처가 없고, DB 파일과 WAL 파일의 행이 서로 달라 둘 다 읽어야 합니다 [3]. 같은 eventstore 에 FcmNotificationEvent, agent_service_event 표도 있습니다 [3]. `PhoneAppsDatabase` 의 `phoneAppsTable` 에는 `lastUpdatedTime`(밀리초), `appName`, `appPackageName`, `appVersion`, `favoriteRank`, `id` 가 있고, 같은 DB 의 browserHistoryTable 과 recentAppsTable 은 시험 이미지에서 비어 있었습니다 [3]. Phone Link 로 파일을 실제로 옮겼는지 보여 주는 표는 공개된 분석 자료가 없습니다.
+이벤트는 `*/com.microsoft.appmanager/databases/eventstore*` 의 `content_access_event` 표에 있고, 열은 `uid`, `start_time`(유닉스 밀리초), `duration`(단위 기록 없음), `content_type`, `access_was_useful` 입니다 [3]. `content_type` 코드는 뜻을 단정할 수 없고, DB 파일과 WAL 파일의 행이 서로 달라 둘 다 읽어야 합니다 [3]. 같은 eventstore 에 FcmNotificationEvent, agent_service_event 표도 있습니다 [3]. `PhoneAppsDatabase` 의 `phoneAppsTable` 에는 `lastUpdatedTime`(밀리초), `appName`, `appPackageName`, `appVersion`, `favoriteRank`, `id` 가 있고, 같은 DB 의 browserHistoryTable 과 recentAppsTable 은 시험 이미지에서 비어 있었습니다 [3]. Phone Link 로 파일을 실제로 옮겼는지 보여 주는 표가 있는지는 앱 데이터 폴더의 DB 를 열어 표 구조를 보고 확인합니다.
 
 ## USB 파일 전송과 삼성 기능
 
@@ -71,7 +71,7 @@ logcat 에는 main, system, crash, kernel 버퍼가 있고 줄마다 연도 없�
 
 ## 삼성 내 파일 작업 기록
 
-삼성 내 파일(My Files) 앱은 `*/com.sec.android.app.myfiles/databases/OperationHistory.db*` 의 `operation_history` 표에 파일 작업을 적습니다 [4]. 열은 순서대로 계정, 경로, 작업 날짜, 작업 종류, 항목 수, 폴더 수, 페이지 종류입니다 [4]. 날짜가 어느 시간대로 적힌 값인지는 알려져 있지 않아 다른 기록과 맞춰 봅니다 [4].
+삼성 내 파일(My Files) 앱은 `*/com.sec.android.app.myfiles/databases/OperationHistory.db*` 의 `operation_history` 표에 파일 작업을 적습니다 [4]. 열은 순서대로 계정, 경로, 작업 날짜, 작업 종류, 항목 수, 폴더 수, 페이지 종류입니다 [4]. 날짜가 어느 시간대로 적힌 값인지는 단정할 수 없어 다른 기록과 맞춰 봅니다 [4].
 
 경로는 글자를 바꿔 치는 방식으로 가려져 있습니다. ALEAPP 의 풀이표에는 출처가 없고 Android 10~12 에서만 맞는다고 적혀 있어서 모듈도 이 버전에서만 경로를 풀며, Android 13·14 에서는 `#G$` 로 시작하는 값이 나와 풀지 못합니다 [4]. 경로가 보안 폴더 사용자 폴더(`/user/1xx` 모양, 보통 150)면 그 번호를 사용자로 적습니다 [4]. ALEAPP 시험 이미지(Android 14·15)에서는 0행이었습니다 [4]. 복사·이동 대상이 USB 저장 장치였는지는 실제 데이터로 확인합니다.
 
@@ -89,12 +89,12 @@ ADB 인증 키가 있다는 사실을 "그 PC 로 파일을 빼냈다" 로 읽�
 
 Phone Link 계정 파일을 지금 연결된 상태로 읽지 않습니다. 이 파일에는 시각이 없습니다 [3].
 
-MTP 연결 흔적이 없다는 사실로 PC 연결이 없었다고 결론 내리지 않습니다. 기기가 MTP 복사 목록을 남기는지부터 공개된 분석 자료가 없습니다.
+MTP 연결 흔적이 없다는 사실로 PC 연결이 없었다고 결론 내리지 않습니다. 기기가 MTP 복사 목록을 남기는지부터 실제 데이터로 확인해야 합니다.
 
 ## 보고서 문장 예
 
 - "`adb_temp_keys.xml` 에 이름 주석이 (주석 값)인 공개 키가 있고, 이 키의 `lastConnection` 은 (현지 시각)입니다. 이 기록은 해당 키를 가진 PC 를 USB 디버깅 대상으로 인증해 둔 적이 있다는 뜻이며, 파일을 옮겼는지는 이 기록만으로 알 수 없습니다."
-- "Phone Link 앱의 `content_access_event` 표에 (시각)부터 (시각)까지 이벤트가 (행 수)건 있습니다. `content_type` 코드의 뜻은 공개 자료로 확인되지 않았습니다."
+- "Phone Link 앱의 `content_access_event` 표에 (시각)부터 (시각)까지 이벤트가 (행 수)건 있습니다. `content_type` 코드는 뜻을 단정할 수 없어 값만 적었습니다."
 
 ## 함께 볼 페이지
 

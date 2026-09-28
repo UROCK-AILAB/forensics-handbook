@@ -75,7 +75,7 @@ iOS 12 이후 기기의 파일 자리는 실제 백업 폴더에서 확인합니
 
 기기 안의 백업 설정 파일(`com.apple.MobileBackup.plist`)의 PreflightSizing 아래에는 NetworkDomain 이라는 이름도 나오지만, 같은 백업의 Manifest.db 도메인 목록에는 NetworkDomain 이 없습니다. 설정 파일에 도메인 이름이 있다고 해서 그 도메인이 백업에 들어 있다고 보지 않습니다. 이 설정 파일은 [백업 폴더 구조](structure.md) 에서 다룹니다.
 
-각 도메인이 기기 안의 어느 폴더에 대응하는지 정리한 공개 자료는 없으니, 도메인 안의 위치는 relativePath 로 판단합니다.
+도메인 이름만 보고 기기 안의 폴더를 짐작하지 말고, 도메인 안의 위치는 relativePath 로 판단합니다.
 
 ## 읽는 법
 

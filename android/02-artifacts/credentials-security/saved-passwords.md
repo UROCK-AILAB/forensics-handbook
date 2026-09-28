@@ -12,7 +12,7 @@ nav_order: 1240
 
 Chromium 계열 브라우저는 사용자가 로그인 정보를 저장하면 사이트 주소, 아이디, 비밀번호 입력란 이름과 값, 만든 시각, 마지막으로 쓴 시각을 `logins` 표에 한 줄로 적습니다 [2]. 같은 DB 에는 유출·피싱·약한·재사용 비밀번호 표시를 담는 `insecure_credentials` 표와 로그인에 붙인 메모를 담는 `password_notes` 표도 있어서, 비밀번호 한 건을 두고 브라우저가 경고를 붙였는지, 사용자가 메모를 남겼는지까지 볼 수 있습니다 [2].
 
-Android 쪽에는 이와 따로 자동 완성 서비스 (Autofill Service) 와 자격 증명 제공자 (Credential Provider) 를 고르는 설정이 있고, 이 설정은 settings secure 의 키로 남습니다. Google 비밀번호 관리자와 Samsung Pass 가 실제 비밀번호를 어느 파일에 어떤 모양으로 두는지는 공개 자료가 없습니다. 그래서 이 페이지는 브라우저 DB 구조와 설정 키를 중심으로 씁니다.
+Android 쪽에는 이와 따로 자동 완성 서비스 (Autofill Service) 와 자격 증명 제공자 (Credential Provider) 를 고르는 설정이 있고, 이 설정은 settings secure 의 키로 남습니다. Google 비밀번호 관리자와 Samsung Pass 가 실제 비밀번호를 어느 파일에 어떤 모양으로 두는지는 실제 기기에서 찾아야 하므로, 이 페이지는 브라우저 DB 구조와 설정 키를 중심으로 씁니다.
 
 ## 위치와 버전별 차이
 
@@ -29,7 +29,7 @@ app_webview/Default    WebView
 
 저장하는 쪽마다 알려진 범위가 다릅니다.
 
-| 저장하는 쪽 | 알려진 것 | 공개 자료가 없는 것 |
+| 저장하는 쪽 | 알려진 것 | 실제 기기에서 확인할 것 |
 |---|---|---|
 | Chromium 계열 브라우저 | `Login Data`·`Login Data For Account` 파일 이름, 표와 열 [2] | Android 에서의 전체 경로, `password_value` 가 암호화돼 있는지 |
 | 삼성 인터넷 | ALEAPP 가 찾는 프로필 폴더 `app_sbrowser/Default` [1] | 저장 비밀번호 파일 |
@@ -38,7 +38,7 @@ app_webview/Default    WebView
 
 `dumpsys package` 출력의 Known Packages 목록에는 `Browser:` 항목(예: com.android.chrome)이 있습니다. 이 항목으로 시스템이 브라우저 역할에 어느 패키지를 두었는지 알 수 있지만, 사용자가 다른 브라우저에 비밀번호를 저장했을 가능성까지 지워 주지는 않습니다.
 
-Android 버전이나 One UI 버전에 따른 저장 위치 차이는 공개 자료가 없습니다.
+분석하는 기기의 Android·One UI 버전을 적어 두고, 저장 위치는 그 기기에서 확인합니다.
 
 ### 자동 완성·자격 증명 설정 키
 
@@ -52,7 +52,7 @@ Android 버전이나 One UI 버전에 따른 저장 위치 차이는 공개 자�
 | global | `autofill_compat_mode_allowed_packages`, `autofill_logging_level` |
 | system | `show_password` |
 
-`autofill_service`·`credential_service` 값의 형식은 실제 기기에서 값을 읽어 확인합니다. `fingerprint_webpass`·`fingerprint_used_samsungaccount` 는 이름으로 보면 지문과 웹 로그인·삼성 계정에 관련된 것으로 보이지만, 뜻을 밝힌 공개 자료는 없습니다. `show_password` 는 비밀번호를 입력할 때 글자를 보여 줄지 정하는 설정으로 보이고, 저장된 비밀번호와는 다른 것으로 봐야 합니다. 설정 키를 읽는 법과 저장 파일은 [설정 값](../system-account/settings.md) 페이지에서 다룹니다.
+`autofill_service`·`credential_service` 값의 형식은 실제 기기에서 값을 읽어 확인합니다. `fingerprint_webpass`·`fingerprint_used_samsungaccount` 는 이름으로 보면 지문과 웹 로그인·삼성 계정에 관련된 것으로 보이지만, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다. `show_password` 는 비밀번호를 입력할 때 글자를 보여 줄지 정하는 설정으로 보이고, 저장된 비밀번호와는 다른 것으로 봐야 합니다. 설정 키를 읽는 법과 저장 파일은 [설정 값](../system-account/settings.md) 페이지에서 다룹니다.
 
 ## 구조
 
@@ -141,7 +141,7 @@ adb shell settings list global
 adb shell settings list system
 ```
 
-출력에서 위 표의 키를 찾아 값을 기록하되, 값의 형식은 공개 자료가 없으니 보고서에는 읽은 값을 그대로 옮깁니다.
+출력에서 위 표의 키를 찾아 값을 기록하고, 보고서에는 읽은 값을 그대로 옮깁니다.
 
 ## 교차 검증
 

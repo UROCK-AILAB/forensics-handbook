@@ -35,9 +35,9 @@ nav_order: 1610
 
 | 기록 | 확인된 범위 | 위치·비고 |
 |---|---|---|
-| usagestats 파일 | ALEAPP 시험 자료가 Android 10~16 [3] | 옛 위치 `*/system/usagestats/*`, 현행 위치 `*/system_ce/*/usagestats*` [3]. 두 위치가 갈린 버전을 밝힌 공개 자료는 없습니다 |
+| usagestats 파일 | ALEAPP 시험 자료가 Android 10~16 [3] | 옛 위치 `*/system/usagestats/*`, 현행 위치 `*/system_ce/*/usagestats*` [3]. 두 위치를 모두 찾아봅니다 |
 | usagestats 보관 기간 | 현행 AOSP 기준 [4] | daily 10일, weekly 4주, monthly 6개월, yearly 2년보다 오래된 파일을 지우고, 구간별 파일 수 한도는 100·50·12·10개입니다 |
-| Google 디지털 웰빙 | ALEAPP 시험 자료가 Android 13~16 [2] | `*/com.google.android.apps.wellbeing/databases/app_usage*`. 보관 기간을 밝힌 공개 자료는 없습니다 |
+| Google 디지털 웰빙 | ALEAPP 시험 자료가 Android 13~16 [2] | `*/com.google.android.apps.wellbeing/databases/app_usage*`. 남아 있는 기간은 `events` 표에서 가장 오래된 `timestamp` 로 확인합니다 |
 | 삼성 기기 | | `dumpsys package` 의 Known Packages 에서 "Wellbeing:" 값이 none 일 수 있습니다. 삼성 쪽 사용 시간 앱의 DB 경로와 구조는 실제 기기에서 확인해야 합니다 |
 
 ## 분석 흐름
@@ -54,7 +54,7 @@ nav_order: 1610
 
 6. **누적 통계로 합계를 맞춰 봅니다.** `dumpsys usagestats` 의 "In-memory daily stats" 절에서 앱 줄에는 `totalTimeUsed`, `lastTimeUsed`, `totalTimeVisible`, `lastTimeVisible`, `lastTimeComponentUsed`, `totalTimeFS` 필드가 있습니다. 파일에서는 ALEAPP 로 'Total Time Visible (ms)', 'Last Time Visible', 'App Launch Count' 같은 열을 뽑을 수 있습니다 [3]. 2~4단계에서 찾은 구간의 길이를 더한 값이 이 합계와 크게 어긋나면 빠진 이벤트나 겹친 구간이 있는지 다시 봅니다. `totalTimeFS` 는 포그라운드 서비스가 쓰인 시간의 합계라서 [6] 사람이 화면을 본 시간과 섞지 않습니다.
 
-7. **다른 기록으로 교차 확인합니다.** Google 디지털 웰빙이 있는 기기라면 `app_usage` DB 의 `events` 표(`timestamp`, `package_id`, `type`)와 `packages` 표를 이어 봅니다. `type` 번호는 usagestats 와 같은 체계이고 `timestamp` 는 유닉스 밀리초입니다 [2]. 배터리 기록의 Battery History 줄은 `##-## ##:##:##.### ### (상태 변화)` 모양이고 `+screen`·`-screen`, `screenwake=`, `display_state_changed=`, `brightness=` 같은 표시가 붙습니다. 이 줄에는 연도가 없고 줄 앞 시각의 시계 기준을 밝힌 공개 자료는 없으니, 같은 시각을 가리키는 usagestats 이벤트와 나란히 놓아 어긋남을 재는 데 씁니다.
+7. **다른 기록으로 교차 확인합니다.** Google 디지털 웰빙이 있는 기기라면 `app_usage` DB 의 `events` 표(`timestamp`, `package_id`, `type`)와 `packages` 표를 이어 봅니다. `type` 번호는 usagestats 와 같은 체계이고 `timestamp` 는 유닉스 밀리초입니다 [2]. 배터리 기록의 Battery History 줄은 `##-## ##:##:##.### ### (상태 변화)` 모양이고 `+screen`·`-screen`, `screenwake=`, `display_state_changed=`, `brightness=` 같은 표시가 붙습니다. 이 줄에는 연도가 없고 줄 앞 시각의 시계 기준도 단정할 수 없으니, 같은 시각을 가리키는 usagestats 이벤트와 나란히 놓아 어긋남을 재는 데 씁니다.
 
 8. **구간표로 정리합니다.** 시작·끝 시각(UTC 와 현지 시각), 근거 이벤트, 겹친 층(화면·잠금·앱)을 한 줄에 적고, 어느 층이 비어 있는지도 함께 남깁니다. 여러 기록을 한 시간 축에 놓는 법은 [타임라인 작성](../../03-techniques/analysis/timeline/index.md) 에 있습니다.
 

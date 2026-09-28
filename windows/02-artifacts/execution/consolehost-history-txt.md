@@ -68,7 +68,7 @@ PowerShell 에 함께 들어간 PSReadLine 버전입니다.
 | | `SaveNothing` | 파일에 쓰지 않습니다 |
 | `HistorySavePath` | 파일 경로 | 파일 위치를 바꿉니다 |
 | `HistoryNoDuplicates` | 켬·끔 | 불러올 때만 중복을 숨깁니다. 파일에는 중복 명령이 그대로 들어갑니다 |
-| `MaximumHistoryCount` | 문서에는 기본값이 "None" 으로 적혀 있지만[2], PSReadLine 2.0.0 에서는 4096 입니다 | 파일 줄 수에 영향을 주는지는 공개 자료 없음 |
+| `MaximumHistoryCount` | 문서에는 기본값이 "None" 으로 적혀 있지만[2], PSReadLine 2.0.0 에서는 4096 입니다 | 파일 줄 수에 영향을 주는지는 시험 기기에서 값을 바꿔 명령을 쳐 보고 확인합니다 |
 | `AddToHistoryHandler` | 사용자가 정한 스크립트 | 명령마다 저장할지 정합니다. 반환값은 아래 표에 있습니다 |
 
 - `SaveNothing` 으로 바꿨다가 같은 세션에서 `SaveIncrementally` 로 되돌리면, 그동안 친 명령도 모두 저장됩니다.

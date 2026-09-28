@@ -13,7 +13,7 @@ APFS에서 확장 속성 (extended attribute, xattr)은 파일 시스템 트리 
 
 ## 이 구조를 쓰는 곳
 
-실제 이미지에는 `com.apple.quarantine` 과 `com.apple.metadata:kMDItemWhereFroms` 같은 속성이 붙어 있고 [2], 이 두 값의 해석은 [격리 속성과 다운로드 기록 (Quarantine)](../../../02-artifacts/filesystem/quarantine/index.md)과 [다운로드 출처 속성 (kMDItemWhereFroms)](../../../02-artifacts/filesystem/where-froms.md)에서 다룹니다. 파일 시스템도 이 레코드를 자기 용도로 써서 심볼릭 링크의 대상 경로와 펌링크의 대상을 확장 속성에 적습니다 [1]. 펌링크가 두 볼륨을 잇는 방식은 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../volume-group-firmlinks.md)에 있습니다.
+실제 이미지에는 `com.apple.quarantine` 과 `com.apple.metadata:kMDItemWhereFroms` 같은 속성이 붙어 있고 [2], 이 두 값의 해석은 [격리 속성과 다운로드 기록 (Quarantine)](../../../02-artifacts/filesystem/quarantine/index.md)과 [다운로드 출처 속성 (kMDItemWhereFroms)](../../../02-artifacts/filesystem/where-froms.md)에서 다룹니다. 파일 시스템도 이 레코드를 자기 용도로 써서 심볼릭 링크의 대상 경로와 펌링크의 대상을 확장 속성에 적습니다 [1]. 펌링크가 두 볼륨을 잇는 방식은 [볼륨 그룹과 펌링크 (Volume Group·Firmlinks)](../volume-group-firmlinks.md)에 있습니다. 확장 속성을 저장하지 못하는 볼륨으로 복사하거나 Finder로 zip을 만들 때 속성이 옮겨 가는 `._` 파일과 `__MACOSX` 폴더는 [애플더블 파일 (AppleDouble)](../../../02-artifacts/filesystem/appledouble.md)에서 다룹니다.
 
 투명 압축 파일은 압축 정보를 `com.apple.decmpfs` 속성에 두고 [2][3], 압축 데이터 자체도 이 속성이나 `com.apple.ResourceFork` 속성에 들어갑니다 [2]. 압축 헤더와 방식 번호는 [복제·희소·압축 파일 (Clone·Sparse·Compression)](clone-sparse-compression.md)에서 설명합니다.
 
@@ -56,7 +56,7 @@ ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로
 
 ### 실제 이미지에 나오는 이름
 
-실제 이미지에는 아래 속성 이름이 나옵니다 [2]. 오른쪽 열은 이 핸드북에서 이어 볼 곳이고, 빈칸은 값의 형식을 설명한 공개 자료가 없는 이름입니다.
+실제 이미지에는 아래 속성 이름이 나옵니다 [2]. 오른쪽 열은 이 핸드북에서 이어 볼 곳이고, 빈칸인 이름은 값을 헥스로 직접 보고 형식을 확인합니다.
 
 | 이름 [2] | 이어 볼 곳 |
 |---|---|
@@ -97,7 +97,7 @@ ACL이 붙은 파일은 아이노드 플래그 `INODE_HAS_SECURITY_EA` (0x40)로
 2. 레코드마다 이름을 바이트 그대로 읽고, 값의 `flags` 로 데이터 위치를 확인합니다.
 3. `XATTR_DATA_EMBEDDED` 이면 `xdata_len` 만큼 읽습니다.
 4. `XATTR_DATA_STREAM` 이면 `j_xattr_dstream_t` 의 `xattr_obj_id` 와 `j_dstream_t` 의 `size` 를 적어 두고, 본문은 그 데이터 스트림의 익스텐트를 따라가 `size` 만큼 읽습니다.
-5. 읽은 값은 이름에 맞는 아티팩트 페이지의 방법으로 풉니다. 형식이 알려지지 않은 이름은 원본 바이트를 그대로 보존해 둡니다.
+5. 읽은 값은 이름에 맞는 아티팩트 페이지의 방법으로 풉니다. 이어 볼 곳이 없는 이름은 원본 바이트를 그대로 보존해 둡니다.
 
 ## 포렌식에서 중요한 점
 

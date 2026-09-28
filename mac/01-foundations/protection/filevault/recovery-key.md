@@ -81,7 +81,7 @@ IRK 쪽 키체인 파일은 `/Library/Keychains/FileVaultMaster.keychain` 이고
 | 흔적 | 증명하는 것 | 증명하지 못하는 것 |
 |---|---|---|
 | 볼륨 키백의 PRK UUID 항목 | 이 볼륨에 PRK가 설정돼 있음 [3] | 복구 키의 값, 복구 키를 실제로 쓴 적이 있는지 |
-| `/var/db/FileVaultPRK.dat` | MDM 복구 키 에스크로가 설정됐던 기기임 [4] | 파일 시각이 파일볼트를 켠 시점인지(공개 자료 없음) |
+| `/var/db/FileVaultPRK.dat` | MDM 복구 키 에스크로가 설정됐던 기기임 [4] | 파일 시각이 파일볼트를 켠 시점인지 |
 | `Certificate`·`UseKeychain` 이 든 프로파일 | IRK를 쓰도록 관리한 흔적 [5] | IRK가 실제로 만들어졌는지. `Certificate` 키는 Apple silicon 맥에서 지원하지 않음 [5] |
 | `OutputPath` 가 있는 프로파일 | 복구 키와 컴퓨터 정보를 담은 plist를 그 위치에 두도록 설정했음 [5] | 그 plist 안에 복구 키가 평문으로 들어 있는지, plist 안의 키 이름 |
 
@@ -91,7 +91,7 @@ IRK 쪽 키체인 파일은 `/Library/Keychains/FileVaultMaster.keychain` 이고
 
 ## 함정
 
-복구 키를 바꾸거나 다시 만든 흔적과 복구 키로 잠금을 푼 기록이 어디에 남는지는 공개된 자료가 없습니다. 그래서 PRK 항목이 있다는 사실만으로 "복구 키로 풀었다" 고 쓰지 않습니다. `OutputPath` plist의 기본 경로와 키 이름은 `fdesetup` 명령의 설명서와 실제 데이터로 확인합니다.
+PRK 항목이 있다는 사실만으로 "복구 키로 풀었다" 고 쓰지 않습니다. `OutputPath` plist의 기본 경로와 키 이름은 `fdesetup` 명령의 설명서와 실제 데이터로 확인합니다.
 
 `Certificate` 키로 IRK를 지정한 프로파일이 있어도 Apple silicon 맥에서는 이 키를 지원하지 않으니 [5], 기기 종류를 [컴퓨터 이름과 하드웨어 정보 (Computer Name·Hardware)](../../../02-artifacts/system-account/computer-name-hardware.md)에서 먼저 확인합니다.
 

@@ -37,7 +37,7 @@ HKCU\Software\Microsoft\Office\<버전>\<앱>\Security\Trusted Documents\TrustRe
 
 az4n6 시험에는 Excel·Access·PowerPoint 가 들어 있지 않습니다.
 
-**부모 키의 `LastPurgeTime`.** `Trusted Documents` 키 (TrustRecords 의 부모) 에는 `LastPurgeTime` (REG_DWORD) 값이 있을 수 있습니다. 값은 29812368 같은 수이고, 1970-01-01 부터 센 분으로 풀면 2026-09 가 나옵니다. 이 값의 뜻과 단위를 밝힌 공개 자료는 없습니다.
+**부모 키의 `LastPurgeTime`.** `Trusted Documents` 키 (TrustRecords 의 부모) 에는 `LastPurgeTime` (REG_DWORD) 값이 있을 수 있습니다. 값은 29812368 같은 수이고, 1970-01-01 부터 센 분으로 풀면 2026-09 가 나옵니다. 이 값의 뜻과 단위는 단정하지 않고, 보고서에는 값만 옮깁니다.
 
 ## 구조
 
@@ -59,7 +59,7 @@ Microsoft 365 (16.0.20326) 의 값 데이터는 길이가 24바이트이고, 배
 | 16 | 4 | 32비트 정수. 1970-01-01 UTC 부터 센 분으로 풀면 파일 생성 시각과 같거나 늦은 시각이 나옵니다. 신뢰를 준 시각일 가능성이 있습니다. |
 | 20 | 4 | 매크로를 켜지 않은 기록에서는 `01 00 00 00` 입니다. 매크로를 켜면 `FF FF FF 7F` 가 됩니다. |
 
-오프셋 8~19 의 뜻은 공개된 자료가 없습니다.
+오프셋 8~19 는 뜻을 단정하지 않고, 보고서에는 값만 옮깁니다.
 
 **함께 보는 값.** 같은 `Security` 키의 `VBAWarnings` (REG_DWORD) 는 매크로 설정입니다.
 
@@ -100,7 +100,7 @@ Microsoft 365 (16.0.20326) 의 값 데이터는 길이가 24바이트이고, 배
 |---|---|---|
 | 값 데이터 처음 8바이트 | FILETIME, UTC | 문서를 만든 시각입니다. 로컬 파일은 파일 생성 시각과 초까지 같고, https 기록은 0 입니다. |
 | 오프셋 16 의 4바이트 | 1970-01-01 UTC 부터 센 분 | 신뢰를 준 시각일 가능성이 있습니다. 분 단위라 초가 없습니다. |
-| 부모 키의 `LastPurgeTime` | 분 단위로 보입니다 | 뜻을 밝힌 공개 자료가 없습니다. |
+| 부모 키의 `LastPurgeTime` | 분 단위로 보입니다 | 뜻을 단정하지 않고 값만 적습니다. |
 
 - 처음 8바이트를 "매크로를 켠 시각" 으로 적으면 틀립니다. FILETIME 푸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - 오프셋 8 의 값이 시간대 차이라면, 기록을 남길 때의 시간대를 짐작하는 단서가 됩니다. 이 해석은 공개 명세가 없으므로 [시간대 설정](../../system-account/time-zone.md) 과 맞춰 봅니다.

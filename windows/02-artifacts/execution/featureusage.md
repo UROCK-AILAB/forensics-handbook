@@ -63,7 +63,7 @@ Windows 11 에서 값은 모두 REG_DWORD 횟수이고, 값 이름은 아래 형
 - `*PID` 뒤에 16진수 8자리가 붙은 이름. AppSwitched 에 나옵니다
 - 숫자만으로 된 이름
 
-`*PID…` 이름과 숫자 이름의 뜻은 공개 자료에 없습니다.
+`*PID…` 이름과 숫자 이름은 뜻을 단정하지 않고 이름과 횟수만 옮깁니다.
 
 값 수는 PC 마다 다릅니다. 예를 들어 AppBadgeUpdated 11개, AppLaunch 9개, AppSwitched 61개, ShowJumpView 19개인 경우가 있습니다.
 

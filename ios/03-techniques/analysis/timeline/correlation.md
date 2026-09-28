@@ -45,7 +45,7 @@ nav_order: 1290
 
 ## 함정과 한계
 
-백업에 없는 기록은 엮을 수 없어서, 빈 시간대가 "기기를 쓰지 않았다" 는 뜻이 아니라 "이 수집 범위에 기록이 없다" 는 뜻일 수 있습니다. 바이옴 관련 plist 키(`com.apple.biome.sage.transcript.LastCollectionEndTime`, `AppUsageBiomeStartDate` 등)나 부팅 관련 키(`com.apple.cameracaptured.plist` 의 `boot-time`, `com.apple.contextsync.subscriptions.plist` 의 `lastBootUUID`, `com.apple.Accessibility.Assets.plist` 의 `StoreCurrentBootTime`)는 뜻과 기준점이 알려져 있지 않으므로, 엮는 열쇠로 쓰지 않습니다. `SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd` 의 `Library/analytics.sqlite`, `Library/local.sqlite` 도 내용을 설명한 공개 자료가 없습니다. 각 기록이 시각을 적는 때가 사건이 일어난 순간인지 저장하거나 집계한 순간인지는 기록마다 따로 확인해야 하고, 그것을 확인하지 못한 기록 사이의 몇 초에서 몇 분 차이로 앞뒤를 단정하지 않습니다.
+백업에 없는 기록은 엮을 수 없어서, 빈 시간대가 "기기를 쓰지 않았다" 는 뜻이 아니라 "이 수집 범위에 기록이 없다" 는 뜻일 수 있습니다. 바이옴 관련 plist 키(`com.apple.biome.sage.transcript.LastCollectionEndTime`, `AppUsageBiomeStartDate` 등)나 부팅 관련 키(`com.apple.cameracaptured.plist` 의 `boot-time`, `com.apple.contextsync.subscriptions.plist` 의 `lastBootUUID`, `com.apple.Accessibility.Assets.plist` 의 `StoreCurrentBootTime`)는 뜻과 기준점을 단정할 수 없으므로, 엮는 열쇠로 쓰지 않습니다. `SysSharedContainerDomain-systemgroup.com.apple.mobiletimerd` 의 `Library/analytics.sqlite`, `Library/local.sqlite` 도 표 구조와 값의 뜻을 먼저 확인한 뒤에만 엮는 데 씁니다. 각 기록이 시각을 적는 때가 사건이 일어난 순간인지 저장하거나 집계한 순간인지는 기록마다 따로 확인해야 하고, 그것을 확인하지 못한 기록 사이의 몇 초에서 몇 분 차이로 앞뒤를 단정하지 않습니다.
 
 ## 결과를 어떻게 해석하나
 

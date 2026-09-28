@@ -45,7 +45,7 @@ iCloud 로 방문 기록을 맞추는 설정이면 다른 기기에서 본 페�
 | HomeDomain `Library/Preferences/com.apple.SafariCloudHistoryPushAgent.plist` | `AcknowledgedPushNotifications`(bool) |
 | HomeDomain `Library/Application Support/CloudDocs/session/containers/` | `com.apple.SafariShared.History.plist`, `iCloud.com.apple.mobilesafari.plist`(둘 다 `com.apple.mobilesafari` 아래 `BRContainer*` 키) |
 
-각 키의 뜻을 밝힌 공개 자료는 없고, 이름으로 짐작하면 방문 기록·iCloud 동기화·프로필과 이어진 키로 보입니다. plist 를 읽는 법은 [설정 값 (Preferences)](../../system-account/preferences.md)에 있습니다.
+이름으로 짐작하면 방문 기록·iCloud 동기화·프로필과 이어진 키로 보이지만, 이름만으로 뜻을 단정할 수는 없습니다. plist 를 읽는 법은 [설정 값 (Preferences)](../../system-account/preferences.md)에 있습니다.
 
 ## 증거로서 의미
 
@@ -57,11 +57,11 @@ iCloud 로 방문 기록을 맞추는 설정이면 다른 기기에서 본 페�
 
 ## 시각 해석
 
-`visit_time` 은 방문이 일어난 시각입니다. iLEAPP 는 값이 978307200 보다 크면 UNIX 시각으로, 작으면 Apple 절대 시각(2001-01-01 기준)으로 보고 978307200 을 더해 바꿉니다[1]. 978307200 초는 1970-01-01 과 2001-01-01 사이의 차이입니다[1]. 탭 DB 의 시각은 iOS 18 이하에서 Apple 절대 시각, iOS 26 이상에서 UNIX 시각이지만[5], History.db 가 어느 버전부터 바뀌었는지 밝힌 공개 자료는 없습니다. 그래서 값의 자릿수를 먼저 보고 기준을 고르며, 두 기준을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+`visit_time` 은 방문이 일어난 시각입니다. iLEAPP 는 값이 978307200 보다 크면 UNIX 시각으로, 작으면 Apple 절대 시각(2001-01-01 기준)으로 보고 978307200 을 더해 바꿉니다[1]. 978307200 초는 1970-01-01 과 2001-01-01 사이의 차이입니다[1]. 탭 DB 의 시각은 iOS 18 이하에서 Apple 절대 시각, iOS 26 이상에서 UNIX 시각입니다[5]. History.db 의 값은 자릿수를 먼저 보고 기준을 고릅니다. 두 기준을 읽는 법은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 ## 함정과 한계
 
-- 암호화하지 않은 백업에는 History.db 가 들어가지 않습니다[4]. 이런 백업만 있으면 아래 교차 검증 절의 다른 DB 에서 도메인 흔적을 찾지만, 그 DB 들이 방문 기록을 대신한다는 근거는 없습니다.
+- 암호화하지 않은 백업에는 History.db 가 들어가지 않습니다[4]. 이런 백업만 있으면 아래 교차 검증 절의 다른 DB 에서 도메인 흔적을 찾지만, 그 DB 들로 방문 기록을 대신할 수는 없습니다.
 - 프로필을 쓰는 기기에서는 기본 DB 만 열면 프로필의 방문이 빠집니다[1].
 - 사용자가 사파리에서 기록을 하나씩 지워도 바이옴 SEGB 파일의 같은 기록은 곧바로 지워지지 않았고, "전체 삭제" 를 하면 SEGB 파일 안의 각 protobuf 가 그 자리에서 0x00 으로 덮어 써졌습니다(iOS 16 시험)[6]. 기록을 지운 흔적을 찾을 때는 이 차이를 함께 봅니다.
 - 바이옴 `_DKEvent.Safari.History` 의 시각은 History.db 기록보다 몇 초 늦게 찍혔습니다(iOS 16 시험)[6]. 두 기록을 맞출 때는 이 몇 초 차이를 감안하고, 다른 버전에서는 실제 데이터로 다시 확인합니다.
@@ -89,7 +89,7 @@ ORDER BY v.visit_time;
 
 지금 열려 있거나 닫은 탭은 [탭과 세션 (Tabs)](tabs.md)에서, 저장해 둔 주소는 [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks-reading-list.md)에서 맞춰 봅니다. 바이옴의 사파리 스트림은 [바이옴 (Biome)](../../app-usage/biome/index.md)에서 다룹니다.
 
-암호화하지 않은 백업에도 아래 DB 는 들어갑니다. 모두 AppDomain-com.apple.mobilesafari 아래이고 PerSitePreferences.db 만 AppDomainGroup-group.com.apple.safari 아래에 있으며, 각 열의 시각 기준과 뜻을 밝힌 공개 자료는 없습니다.
+암호화하지 않은 백업에도 아래 DB 는 들어갑니다. 모두 AppDomain-com.apple.mobilesafari 아래이고 PerSitePreferences.db 만 AppDomainGroup-group.com.apple.safari 아래에 있으며, 각 열의 시각 기준과 뜻은 실제 데이터로 확인합니다.
 
 | 파일 | 표(열) |
 |---|---|
@@ -102,7 +102,7 @@ ORDER BY v.visit_time;
 | `Library/Safari/PerSitePreferences.db` | `preference_values`(`id`, `domain`, `preference`, `preference_value`, `timestamp`, `sync_data`, `record_name`), `default_preferences`, `deleted_cloudkit_records` |
 | `Library/WebKit/WebsiteData/Default/.../LocalStorage/localstorage.sqlite` | `ItemTable`(`key`, `value`) |
 
-이 DB 들에서 도메인 이름을 찾으면 그 도메인과 사파리가 어떤 식으로든 닿은 흔적이라고 말할 수 있지만, 방문 시각이나 방문한 URL 까지 알려 준다는 공개 자료는 없습니다. 조사 흐름은 [웹 사용 행위 재구성 (Web Activity)](../../../04-scenarios/activity/web-activity.md)과 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)를 따릅니다.
+이 DB 들에서 도메인 이름을 찾으면 그 도메인과 사파리가 어떤 식으로든 닿은 흔적이라고 말할 수 있지만, 그것만으로 방문 시각이나 방문한 URL 까지 알 수는 없습니다. 조사 흐름은 [웹 사용 행위 재구성 (Web Activity)](../../../04-scenarios/activity/web-activity.md)과 [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)를 따릅니다.
 
 ## 실습
 

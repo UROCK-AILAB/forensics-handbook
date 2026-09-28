@@ -47,7 +47,7 @@ nav_order: 1780
 | `signedState` | 서명 상태입니다 |
 | `signedDate` | 서명 시각입니다 |
 
-아래 필드는 뜻을 설명한 공개 자료가 없어 이름으로 짐작한 뜻만 적습니다. 실제 값을 보고 판단합니다.
+아래 필드는 이름으로 짐작한 뜻만 적습니다. 뜻을 단정하지 말고 실제 값을 보고 판단합니다.
 
 | 필드 | 이름으로 짐작한 뜻 |
 |---|---|
@@ -59,7 +59,7 @@ nav_order: 1780
 
 ### `signedState` 의 이름
 
-서명 상태에는 `SIGNEDSTATE_SYSTEM`, `SIGNEDSTATE_PRIVILEGED`, `SIGNEDSTATE_SIGNED`, `SIGNEDSTATE_NOT_REQUIRED` 같은 이름이 있습니다[1]. 이름마다 어떤 숫자 값인지는 공개 자료가 없습니다.
+서명 상태에는 `SIGNEDSTATE_SYSTEM`, `SIGNEDSTATE_PRIVILEGED`, `SIGNEDSTATE_SIGNED`, `SIGNEDSTATE_NOT_REQUIRED` 같은 이름이 있습니다[1]. `signedState` 에 적힌 숫자가 이 가운데 어느 이름인지는 단정하지 않고 숫자 그대로 옮깁니다.
 
 ### 설치 위치 이름
 
@@ -91,7 +91,7 @@ nav_order: 1780
 - 사용자가 직접 설치했다는 것은 증명하지 못합니다. 내장·시스템 추가 기능도 목록에 오릅니다.
 - `foreignInstall` 은 파이어폭스 밖에서 설치했다는 표시일 뿐입니다. 어느 프로그램이나 사람이 설치했는지는 알려 주지 않습니다.
 - 추가 기능이 언제 실제로 돌았는지, 무엇을 했는지는 알 수 없습니다.
-- 지운 추가 기능이 이 파일에 남는지는 알려져 있지 않습니다. 목록에 없다고 설치한 적이 없다고 단정하지 않습니다.
+- 지운 추가 기능이 이 파일에 남는지는 시험 기기에서 추가 기능을 지워 보고 확인합니다. 목록에 없다고 설치한 적이 없다고 단정하지 않습니다.
 - 키보드 앞의 사람이 누구인지는 알 수 없습니다.
 
 보고서에는 "악성 확장을 설치했다" 대신 "이 프로필의 `extensions.json` 에 `id` X, 판 Y 인 항목이 있다. `foreignInstall` 은 true 이고 `installDate` 는 Z(UTC) 이다. 파일을 쓴 시점에 `active` 는 true 였다" 처럼 씁니다.

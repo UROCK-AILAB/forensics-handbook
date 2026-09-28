@@ -20,7 +20,7 @@ Android 시스템 설정이 어떤 표로 나뉘어 어느 파일에 저장되�
 | secure | 사용자별 | 위치·입력기·잠금 같은 사용자별 값 |
 | system | 사용자별 | 화면 꺼짐 시간 같은 사용자 환경 값 |
 | ssaid | 사용자별 | 앱별 Android ID. 호출한 앱의 UID 문자열이 키 |
-| config | 공개 자료 없음 | 공개 자료 없음. 아래 구조 절의 namespace 태그가 이 표에 쓰임 |
+| config | `settings_config.xml` 이 어느 사용자 폴더에 있는지로 확인 | 아래 구조 절의 namespace 태그가 이 표에 쓰임 |
 
 global 설정은 기기 소유자 아래에 저장하고 나머지 설정은 사용자별 시스템 폴더에 저장합니다. global 표는 사용자 0(USER_SYSTEM) 쪽으로만 읽고 쓰기 때문에 global 은 사용자 0 쪽에만 있고 나머지는 사용자 번호 폴더마다 따로 있습니다 [1]. "내용" 열의 예시는 아래 "조사에 쓸 만한 키" 절의 키 이름입니다.
 
@@ -33,13 +33,13 @@ global 설정은 기기 소유자 아래에 저장하고 나머지 설정은 사
 | 항목 | 내용 | 출처·범위 |
 |---|---|---|
 | 옛 저장 방식 | SQLite 데이터베이스였다가 XML 로 옮김. 소스에 migrateAllLegacySettingsIfNeededLocked(), DROP_DATABASE_ON_MIGRATION = true 가 있음 | [1] |
-| 옛 DB 파일 이름과 옮긴 버전 | 공개 자료 없음 | |
+| 옛 DB 파일 이름과 옮긴 버전 | 옛 버전 기기 이미지의 사용자 시스템 폴더에서 SQLite 파일을 찾아 확인 | |
 | 파일 형식 | 글자 XML 또는 ABX. Xml.resolveSerializer 가 기기 설정에 따라 형식을 고르고, ALEAPP 도 ABX 를 따로 읽음 | [2][3] |
-| ABX 가 기본이 된 버전 | 공개 자료 없음 | |
+| ABX 가 기본이 된 버전 | 버전으로 판단하지 않고 파일 맨 앞 바이트로 글자 XML 인지 ABX 인지 확인 | |
 | 뿌리 태그가 없는 파일 | ALEAPP 가 Android 11 파일에서 따로 처리 | [3] |
 | 키 개수 | 기기마다 다름(예: global 596개, secure 464개, system 582개) | |
 
-삼성 기기에는 AOSP 소문자 키 사이에 대문자로 쓴 키, `SEM_` 으로 시작하는 키, 삼성 기능 이름이 들어간 키가 섞여 있습니다. 예를 들어 global 에 `Phenotype_boot_count`, `Phenotype_flags`, `SPEN_INPUT_MODE_DEX`, `STANDARD_BOLD_FONT`, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `SUPPORT_BG_AD_RESTRICTION_BY_AI`, `rampart_blocked_adb_cmd`, `rampart_blocked_unknown_apps`, system 에 `IsFotaUpgrade`, `PowerbuttonTapping`, `SEM_VIBRATION_NOTIFICATION_INTENSITY` 가 있습니다. 이런 제조사 키는 뜻을 설명한 공개 문서가 없어서 이름만 보고 해석하지 않습니다.
+삼성 기기에는 AOSP 소문자 키 사이에 대문자로 쓴 키, `SEM_` 으로 시작하는 키, 삼성 기능 이름이 들어간 키가 섞여 있습니다. 예를 들어 global 에 `Phenotype_boot_count`, `Phenotype_flags`, `SPEN_INPUT_MODE_DEX`, `STANDARD_BOLD_FONT`, secure 에 `IS_SMARTSWITCH_DATA_PRESENT`, `IS_SMARTSWITCH_RESTORE_IN_PROGRESS`, `SUPPORT_BG_AD_RESTRICTION_BY_AI`, `rampart_blocked_adb_cmd`, `rampart_blocked_unknown_apps`, system 에 `IsFotaUpgrade`, `PowerbuttonTapping`, `SEM_VIBRATION_NOTIFICATION_INTENSITY` 가 있습니다. 이런 제조사 키는 뜻을 단정할 수 없어서 이름만 보고 해석하지 않습니다.
 
 ## 구조
 
@@ -56,7 +56,7 @@ XML 뿌리 태그는 `settings` 이고 설정 하나가 `setting` 태그 하나�
 | `preserve_in_restore` | 복원할 때 값을 보존할지 |
 | `valueBase64`, `defaultValueBase64`, `tagBase64` | 값을 이진으로 적을 때의 Base64 판 |
 
-config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태그도 있습니다 [2]. `package` 속성은 그 값을 마지막으로 쓴 패키지로 흔히 읽지만, 이 뜻을 밝힌 공개 자료는 없습니다.
+config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태그도 있습니다 [2]. `package` 속성은 그 값을 마지막으로 쓴 패키지로 흔히 읽지만, 이 뜻으로 단정하지는 않습니다.
 
 파일은 AtomicFile 로 쓰고, 백업 파일은 이름 끝에 `.fallback` 을 붙입니다. 원본 파일이 깨지면 서비스가 fallback 파일을 다시 읽고 복사해서 원본을 되살립니다 [2]. 앱 패키지 하나가 쓸 수 있는 설정 크기에는 한도(MAX_BYTES_PER_APP_PACKAGE_LIMITED = 40000)가 있고 `android` 패키지는 예외입니다 [2].
 
@@ -64,7 +64,7 @@ config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태�
 
 ## 조사에 쓸 만한 키
 
-다음 키들은 실제 기기의 settings 목록에 나오는 키입니다. 값의 뜻을 설명한 공개 자료가 없어서, 아래 "볼 거리" 는 키 이름에서 짐작한 방향입니다.
+다음 키들은 실제 기기의 settings 목록에 나오는 키입니다. 아래 "볼 거리" 는 키 이름에서 짐작한 방향이고, 값의 뜻은 시험 기기에서 설정을 바꿔 가며 확인합니다.
 
 | 표 | 키 | 볼 거리(이름에서 짐작) |
 |---|---|---|
@@ -89,7 +89,7 @@ config 쪽에는 `namespaceHashes`·`namespaceHash`(namespace, bannedHash) 태�
 | 키와 값 | 파일을 확보한 시점에 그 설정이 그 값이었다는 것 | 사건 당시에도 같은 값이었는지, 언제 바뀌었는지 |
 | 키가 있음 | 그 키에 값이 한 번은 쓰였다는 것 | 사용자가 직접 바꿨는지(시스템·앱도 씀) |
 | 키가 없음 | 확보한 파일에 그 항목이 없다는 것 | 그 기능을 한 번도 쓰지 않았다는 것 |
-| `package` 속성 | 값과 함께 그 패키지 이름이 적혀 있다는 것 | 그 앱이 값을 바꿨다는 것(속성의 뜻이 밝혀지지 않음) |
+| `package` 속성 | 값과 함께 그 패키지 이름이 적혀 있다는 것 | 그 앱이 값을 바꿨다는 것 |
 | `.fallback` 파일 | 백업 파일이 남아 있었다는 것 | 원본과 다른 시점의 값이라는 것 |
 
 보고서에는 "확보한 settings_global.xml 파일에 adb_enabled 키의 값이 N 으로 기록되어 있다" 처럼 파일·키·값만 적고, 값이 무엇을 뜻하는지는 확인한 근거가 있을 때만 덧붙입니다.
@@ -104,7 +104,7 @@ settings 파일은 확보 시점의 값만 담고 변경 이력이 없습니다.
 
 settings 파일에 제어 문자나 이스케이프하지 않은 `&` 가 들어 있어 XML 파싱이 실패하는 경우가 있습니다 [3]. 일반 XML 파서가 오류를 내면 파일이 손상됐다고 단정하지 말고 원문을 헥스로 먼저 봅니다.
 
-AOSP 에 이름이 있는 키라도 기기의 목록에 나오지 않을 수 있고, 그런 키의 예는 시간대·잠금 화면 페이지에 있습니다. 한 번도 값을 쓰지 않은 키가 목록에서 빠지는지는 알려져 있지 않아서, 키가 없다는 사실로 기능 사용 여부를 말하지 않습니다.
+AOSP 에 이름이 있는 키라도 기기의 목록에 나오지 않을 수 있고, 그런 키의 예는 시간대·잠금 화면 페이지에 있습니다. 한 번도 값을 쓰지 않은 키가 목록에서 빠지는지 단정할 수 없어서, 키가 없다는 사실로 기능 사용 여부를 말하지 않습니다.
 
 ## 직접 분석해 보기
 

@@ -39,7 +39,7 @@ nav_order: 460
 | `os_crypt.encrypted_key` | `DPAPI` | 사용자 DPAPI 로 보호합니다 | `v10` |
 | `os_crypt.app_bound_encrypted_key` | `APPB` | 사용자 DPAPI 로 한 번 감싸고, 다시 SYSTEM DPAPI 로 한 번 더 감쌉니다 | `v20` |
 
-키마다 보호 방식과 짝은 표와 같습니다[1]. Chrome 153·Edge 151 에서도 base64 를 풀면 앞 바이트가 각각 `DPAPI`, `APPB` 입니다. `os_crypt.audit_enabled` 키도 있습니다. 이 키의 뜻을 설명한 공개 자료는 없습니다.
+키마다 보호 방식과 짝은 표와 같습니다[1]. Chrome 153·Edge 151 에서도 base64 를 풀면 앞 바이트가 각각 `DPAPI`, `APPB` 입니다. `os_crypt.audit_enabled` 키도 있습니다. 이 키는 뜻을 단정하지 않고 값만 옮깁니다.
 
 - Edge 에는 `os_crypt` 아래 키가 하나 더 있습니다. 이름과 내용은 [프로필 폴더와 계열 브라우저 구분](user-data-profile-local-state.md) 의 구분 단서 표에 있습니다.
 - DPAPI 마스터 키와 블롭 구조는 [DPAPI 구조](../../protection/data-protection-api/index.md) 에서 다룹니다.
@@ -71,7 +71,7 @@ nav_order: 460
 | 쓰는 브라우저 | Chrome, Edge, Brave, Avast Secure Browser |
 | Edge 의 차이 | `IElevatorEdge` 처럼 다른 인터페이스 이름을 씁니다 |
 
-- 값 종류마다 적용 시작 버전은 공개 자료에 따로 나와 있지 않습니다. "Chrome 144+" 라는 표기는 있지만 어느 항목에 걸리는지 분명하지 않습니다[1].
+- "Chrome 144+" 라는 표기는 있지만 어느 항목에 걸리는지 분명하지 않습니다[1]. 값 종류마다 어느 방식이 쓰였는지는 암호문 앞 3바이트로 확인합니다.
 
 ## 읽는 법
 
@@ -131,7 +131,7 @@ base64 규칙으로 셈하면 JSON 텍스트에서도 바로 알아볼 수 있�
 
 암호문 열은 DB 파일 안에 있고, 지운 행이 남는 자리는 [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md) 에서 다룹니다. 지운 행에서 건진 암호문도 앞 3바이트로 방식을 구분한 뒤 같은 키로 풉니다.
 
-`Local State` 의 키가 바뀌면 옛 암호문은 지금 키로 풀리지 않을 수 있어서, 옛 `Local State` 는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾습니다. 키가 바뀌는 때는 공개 자료에 나와 있지 않습니다.
+`Local State` 의 키가 바뀌면 옛 암호문은 지금 키로 풀리지 않을 수 있어서, 옛 `Local State` 는 [섀도 복사본](../../../03-techniques/analysis/volume-shadow-copy-analysis.md) 에서 찾습니다. 키가 바뀌었는지는 옛 `Local State` 와 지금 `Local State` 의 키 값을 비교해 확인합니다.
 
 ### 보고서에 쓸 문장
 

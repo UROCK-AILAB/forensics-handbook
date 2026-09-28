@@ -30,7 +30,7 @@ Tree 쪽 키에는 Id·Index·SD 값이 있습니다. Id 는 Tasks 쪽 키의 GU
 
 하이브 파일을 읽는 법은 [레지스트리 하이브 구조](../../../01-foundations/database-log-formats/registry-hive/index.md)에서 다룹니다.
 
-`Schedule` 키 아래에는 Aliases, CompatibilityAdapter, Configuration, CredWom, Handlers, Handshake, TaskCache 하위 키가 있습니다. DomainJoinDetected, HashingCompleted, MigrationCleanupCompleted 값도 있습니다. 이 값들의 뜻은 공개 자료에 없습니다[2].
+`Schedule` 키 아래에는 Aliases, CompatibilityAdapter, Configuration, CredWom, Handlers, Handshake, TaskCache 하위 키가 있습니다. DomainJoinDetected, HashingCompleted, MigrationCleanupCompleted 값도 있습니다. 이 값들의 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮깁니다[2].
 
 ### TaskCache 하위 키
 
@@ -59,7 +59,7 @@ Tree 아래 키 경로는 Tasks\{GUID} 의 Path 값을 Tree 뒤에 붙인 것입
 | 값 | 뜻 |
 |---|---|
 | Id | Tasks 아래 항목의 GUID |
-| Index | 공개 자료에 뜻이 없습니다 |
+| Index | 뜻이 정해져 있지 않습니다. 아래 "Index 값" 을 봅니다 |
 | SD | 보안 설명자 (Security Descriptor) |
 
 폴더에 해당하는 Tree 키에는 Id 가 없고 SD 값만 있었습니다. 한 PC 에서 이런 키가 142개였습니다.
@@ -72,7 +72,7 @@ O:BAG:SYD:(A;ID;0x1f019f;;;BA)(A;ID;0x1f019f;;;SY)(A;ID;FA;;;BA)(A;;FR;;;SY)
 
 `O:` 뒤는 소유자, `G:` 뒤는 그룹, `D:` 뒤의 괄호들은 접근 허용 항목입니다. `BA` 는 Administrators 그룹, `SY` 는 SYSTEM 계정을 가리키는 약어입니다. SID 표기는 [윈도 식별자 형식](../../../01-foundations/value-decoding/sid-guid-clsid-known-folder-id.md)에서 다룹니다. 작업 키에 SD 값이 없을 때 무슨 일이 생기는지는 [숨긴 예약 작업 찾기 (SD 값 삭제)](sd.md)에서 다룹니다.
 
-**Index 값.** 공식 뜻은 공개 자료에 없습니다. 한 PC 에서는 Index 값과, 같은 GUID 가 들어 있는 하위 키가 이렇게 맞았습니다.
+**Index 값.** 뜻이 정해져 있지 않은 값입니다. 한 PC 에서는 Index 값과, 같은 GUID 가 들어 있는 하위 키가 이렇게 맞았습니다.
 
 | Index | 작업 키 수 | 같은 GUID 가 있던 하위 키 |
 |---|---|---|
@@ -173,7 +173,7 @@ Triggers 값 안의 FILETIME 은 현지 시각으로 보입니다[2].
 |---|---|---|---|
 | DynamicInfo 오프셋 4 | FILETIME | UTC 로 읽을 때 XML 파일 기록 시각과 맞았습니다 | 마지막 등록·갱신 시각으로 보입니다. 확정은 아닙니다 |
 | DynamicInfo 오프셋 12 | FILETIME | UTC | 마지막 실행 시각. 실행한 적 없으면 0 |
-| DynamicInfo 오프셋 28 | FILETIME | 공개 자료 없음 | 뜻 모름 |
+| DynamicInfo 오프셋 28 | FILETIME | 오프셋 12(UTC)와 맞춰 보고 판단 | 뜻 모름 |
 | Triggers 안의 시각 | FILETIME | 현지 시각으로 보임[2] | 트리거에 적은 시각 |
 
 FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](../../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md)에서 다룹니다. 현지 시각 값은 [시간대 설정](../../system-account/time-zone.md)을 보고 바꿉니다.
@@ -194,7 +194,7 @@ FILETIME 을 사람이 읽는 시각으로 바꾸는 법은 [시각 값 형식](
 - **REG_DWORD 표시에 주의합니다.** 값을 문자열로 받는 도구는 REG_DWORD 를 부호 없는 10진수로 보여 줍니다. Schema 같은 값은 원시 바이트로 확인합니다.
 - **옛 시스템의 Hash 는 CRC32 입니다.** KB2305420 이전 시스템에서는 SHA-256 으로 비교하면 맞지 않습니다.
 - **Actions·Triggers 는 공개 명세가 없습니다.** 같은 작업의 XML 과 맞춰 보며 읽습니다.
-- **Index 의 뜻은 확정되지 않았습니다.** Index 를 0 으로 바꾸면 작업이 숨는지도 알려지지 않았습니다.
+- **Index 의 뜻은 확정되지 않았습니다.** Index 를 0 으로 바꾸면 작업이 숨는지는 시험 기기에서 재현해 확인합니다.
 
 ## 직접 분석해 보기
 

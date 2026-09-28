@@ -30,7 +30,7 @@ iLEAPP 의 디스코드 분석기는 아래 위치를 찾습니다[2].
 | `*/Library/Caches/com.hackemist.SDImageCache/default/*` | 캐시된 이미지입니다 |
 | `*/activation_record.plist` | 도구가 함께 읽는 plist 입니다 |
 
-앱 버전별 차이는 공개 자료가 없고, 알려진 iOS 버전은 iOS 15 입니다[1]. 캐시 구조는 앱 업데이트마다 바뀔 수 있어서 위 경로는 "도구가 찾는 위치" 로 보고 실제 기기에서 직접 확인합니다.
+위 경로는 iOS 15 기준입니다[1]. 캐시 구조는 앱 업데이트마다 바뀔 수 있어서 위 경로는 "도구가 찾는 위치" 로 보고 실제 기기에서 직접 확인합니다.
 
 ## 구조
 
@@ -70,7 +70,7 @@ iLEAPP 의 디스코드 분석기는 아래 위치를 찾습니다[2].
 
 iOS 15 시험에서는 지운 메시지를 시험한 도구 어느 것도 되살리지 못했고, 도구 하나는 메시지를 아예 파싱하지 못했습니다[1]. 그래서 도구 하나의 결과만으로 "메시지 없음" 이라고 쓰지 않고 캐시 파일을 직접 열어 확인합니다. 도구끼리 결과를 맞춰 보는 방법은 [도구 검증 (Tool Validation)](../../03-techniques/reporting/tool-validation.md)에 있습니다.
 
-`fsCachedData` 의 한 파일에는 여러 줄의 JSON 이 들어 있고[2], 메시지 수를 셀 때는 같은 `id` 가 여러 줄이나 파일에 겹쳐 있는지 먼저 확인합니다. `Cache.db` 는 내부 구조를 설명한 공개 자료가 없어 실제 파일로 확인해야 합니다[1]. `mmkv.default` 는 MMKV 저장소라서 키와 값을 읽는 방법은 공개되어 있지만[3], 디스코드가 어떤 키를 쓰는지는 실제 파일로 확인해야 합니다. MMKV 형식은 [iOS 지갑 앱](https://urock-ailab.github.io/forensics-handbook/crypto/02-artifacts/mobile/ios-wallets.html) 에서 다룹니다. iLEAPP 의 경로는 파일 시스템 추출 기준이고, 로컬 백업에 이 캐시 파일들이 들어가는지는 공개 자료가 없습니다. 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 먼저 파일이 있는지 확인합니다.
+`fsCachedData` 의 한 파일에는 여러 줄의 JSON 이 들어 있고[2], 메시지 수를 셀 때는 같은 `id` 가 여러 줄이나 파일에 겹쳐 있는지 먼저 확인합니다. `Cache.db` 의 내부 구조는 실제 파일을 열어 확인합니다[1]. `mmkv.default` 는 MMKV 저장소라서 키와 값을 읽는 방법은 공개되어 있지만[3], 디스코드가 어떤 키를 쓰는지는 실제 파일로 확인해야 합니다. MMKV 형식은 [iOS 지갑 앱](https://urock-ailab.github.io/forensics-handbook/crypto/02-artifacts/mobile/ios-wallets.html) 에서 다룹니다. iLEAPP 의 경로는 파일 시스템 추출 기준이라서, 백업만 확보했다면 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../01-foundations/backups/local-backup/index.md)의 `Manifest.db` 에서 이 캐시 파일들이 있는지 먼저 확인합니다.
 
 ## 직접 분석해 보기
 

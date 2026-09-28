@@ -32,7 +32,7 @@ NSDocumentController 에는 Open Recent 메뉴를 다루는 아래 API 가 있�
 | 10.10 이하(그 전후 앱 포함) | `~/Library/Preferences/<번들 ID>.LSSharedFileList.plist` | [1][2][3] |
 | 10.11 이상 | `~/Library/Application Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/<번들 ID>.sfl` | [2] |
 | 10.13 이상 | 같은 폴더의 `<번들 ID>.sfl2` | [2] |
-| `.sfl3` 를 쓰는 버전 | 같은 폴더(mac_apt 가 `.sfl3` 에도 같은 경로를 씀). 파일 이름 규칙은 공개 자료 없음 | [1] |
+| `.sfl3` 를 쓰는 버전 | 같은 폴더(mac_apt 가 `.sfl3` 에도 같은 경로를 씀). 파일 이름 규칙은 실제 폴더에서 확인 | [1] |
 
 `.sfl3` 가 쓰이기 시작한 버전과 폴더 전체의 버전별 변화는 허브 [최근 항목 (Shared File Lists)](index.md)의 표에 모았습니다. 옛 plist 방식은 ForensicArtifacts 정의에도 `*.LSSharedFileList.plist` 라는 이름(MacOSApplicationsRecentItems)으로 올라 있습니다 [3].
 
@@ -69,7 +69,7 @@ Microsoft Office 처럼 자기 방식으로 최근 파일을 따로 기록하는
 
 ## 시각 해석
 
-항목에 "문서를 연 시각" 필드가 있다는 근거는 공개 자료에 없습니다. 북마크 안의 대상 생성 시각·북마크 생성 시각과 목록 파일의 수정 시각을 어떻게 읽는지는 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 앱별 목록은 파일 하나가 앱 하나라서, 목록 파일의 수정 시각을 그 앱의 목록이 마지막으로 바뀐 때로 좁혀 읽을 수 있습니다. 다만 무엇이 바뀌었는지(추가·순서 변경·삭제)는 파일 시각만으로 알 수 없습니다.
+항목의 어느 값도 "문서를 연 시각" 으로 단정할 수 없습니다. 북마크 안의 대상 생성 시각·북마크 생성 시각과 목록 파일의 수정 시각을 어떻게 읽는지는 [파일 형식 (SFL2·SFL3)](sfl-format.md)에 정리했습니다. 앱별 목록은 파일 하나가 앱 하나라서, 목록 파일의 수정 시각을 그 앱의 목록이 마지막으로 바뀐 때로 좁혀 읽을 수 있습니다. 다만 무엇이 바뀌었는지(추가·순서 변경·삭제)는 파일 시각만으로 알 수 없습니다.
 
 ## 함정과 한계
 

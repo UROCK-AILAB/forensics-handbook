@@ -24,9 +24,9 @@ nav_order: 1180
 
 ## 위치와 버전별 차이
 
-탭 스냅샷 목록은 `~/Library/Caches/com.apple.Safari/TabSnapshots/Metadata.db` [3] 와 컨테이너 쪽 `~/Library/Containers/com.apple.Safari/Data/Library/Caches/com.apple.Safari/TabSnapshots/Metadata.db` [1] 두 곳에 있을 수 있습니다. 나머지 파일은 사파리 데이터 폴더에 있지만, `~/Library/Safari/` 와 컨테이너 가운데 파일마다 어느 쪽인지는 알려져 있지 않아서 두 곳을 다 봅니다. 두 폴더 이야기는 허브 [사파리 (Safari)](index.md)에 있습니다.
+탭 스냅샷 목록은 `~/Library/Caches/com.apple.Safari/TabSnapshots/Metadata.db` [3] 와 컨테이너 쪽 `~/Library/Containers/com.apple.Safari/Data/Library/Caches/com.apple.Safari/TabSnapshots/Metadata.db` [1] 두 곳에 있을 수 있습니다. 나머지 파일은 사파리 데이터 폴더에 있지만, `~/Library/Safari/` 와 컨테이너 가운데 어느 쪽에 있는지는 파일마다 달라서 두 곳을 다 봅니다. 두 폴더 이야기는 허브 [사파리 (Safari)](index.md)에 있습니다.
 
-`SafariTabs.db` 는 Safari 17 에서 프로필(여러 프로필)이 들어오면서 쓰이고 [1], 그 밖의 파일이 어느 macOS·사파리 버전부터 쓰였는지는 공개 자료가 없습니다. 분석 대상의 버전에 따라 어떤 파일은 아예 없을 수 있으니, 없는 파일을 "지웠다" 로 읽기 전에 그 버전에서 원래 쓰는 파일인지부터 확인합니다.
+`SafariTabs.db` 는 Safari 17 에서 프로필(여러 프로필)이 들어오면서 쓰입니다 [1]. 분석 대상의 버전에 따라 어떤 파일은 아예 없을 수 있으니, 없는 파일을 "지웠다" 로 읽기 전에 그 버전에서 원래 쓰는 파일인지부터 확인합니다.
 
 ## 구조
 
@@ -40,7 +40,7 @@ nav_order: 1180
 
 ### BrowserState.db
 
-표 `tabs`(열 `id`, `url`, `title`, `uuid`)와 `tab_sessions`(열 `tab_uuid`, `session_data`)를 `tab_sessions.tab_uuid = tabs.uuid` 로 잇습니다 [1]. `session_data` 는 앞 4바이트 뒤에 plist 가 들어 있는 BLOB 이고, 이 plist 의 `SessionHistory` 아래 `SessionHistoryEntries`(항목마다 `SessionHistoryEntryURL`, `SessionHistoryEntryTitle`)에 페이지가 순서대로 있습니다 [1]. 탭 하나마다 뒤로/앞으로 목록이 순서대로 남는 셈입니다. `SessionHistoryCurrentIndex` 라는 키도 있는데, 지금 보던 자리를 뜻하는 것으로 보이며 뜻을 풀어 둔 공개 자료는 없습니다 [1]. 앞 4바이트의 뜻은 알려져 있지 않아서, 직접 뽑을 때는 그 뒤에 plist 머리(바이너리 plist 라면 `bplist`)가 있는지 확인하고 읽습니다.
+표 `tabs`(열 `id`, `url`, `title`, `uuid`)와 `tab_sessions`(열 `tab_uuid`, `session_data`)를 `tab_sessions.tab_uuid = tabs.uuid` 로 잇습니다 [1]. `session_data` 는 앞 4바이트 뒤에 plist 가 들어 있는 BLOB 이고, 이 plist 의 `SessionHistory` 아래 `SessionHistoryEntries`(항목마다 `SessionHistoryEntryURL`, `SessionHistoryEntryTitle`)에 페이지가 순서대로 있습니다 [1]. 탭 하나마다 뒤로/앞으로 목록이 순서대로 남는 셈입니다. `SessionHistoryCurrentIndex` 라는 키도 있는데, 지금 보던 자리를 뜻하는 것으로 보입니다 [1]. 앞 4바이트의 뜻은 알려져 있지 않아서, 직접 뽑을 때는 그 뒤에 plist 머리(바이너리 plist 라면 `bplist`)가 있는지 확인하고 읽습니다.
 
 ### SafariTabs.db
 
@@ -58,7 +58,7 @@ nav_order: 1180
 
 **증명하는 것.** `LastSession.plist` 와 `BrowserState.db` 는 기록을 남긴 시점에 열려 있던 탭과 탭마다의 이동 순서를, `RecentlyClosedTabs.plist` 는 닫은 탭·창과 닫은 시각을 보여 줍니다 [1]. 탭별 뒤로/앞으로 목록은 한 탭 안에서 어떤 순서로 페이지를 옮겨 다녔는지를 보여 줘서, 방문 기록의 시간순 목록에 "어느 탭에서" 라는 축을 더할 수 있습니다. `CloudTabs.db` 는 같은 iCloud 계정에 묶인 다른 기기의 이름과 그 기기에서 열려 있던 탭을 보여 줍니다 [1].
 
-**증명하지 못하는 것.** 탭이 열려 있었다는 기록은 사용자가 그 페이지를 보고 있었다는 뜻이 아닙니다. `CloudTabs.db` 의 탭은 다른 기기에서 열린 것이라서 이 맥에서 방문한 것으로 쓰면 안 되고, `RecordCtime`·`RecordMtime` 이 무엇을 기준으로 한 시각인지(이름으로 보면 레코드 생성·수정 시각)는 공개 자료가 없습니다. iCloud 탭과 탭 그룹은 표준 데이터 보호에서도 종단간 암호화되므로 [4], 이 기기 안의 파일이 다른 기기의 탭을 보여 주는 드문 자료가 될 수 있습니다.
+**증명하지 못하는 것.** 탭이 열려 있었다는 기록은 사용자가 그 페이지를 보고 있었다는 뜻이 아닙니다. `CloudTabs.db` 의 탭은 다른 기기에서 열린 것이라서 이 맥에서 방문한 것으로 쓰면 안 되고, `RecordCtime`·`RecordMtime` 은 이름으로 보면 레코드 생성·수정 시각이지만, 무엇을 기준으로 한 시각인지는 단정할 수 없습니다. iCloud 탭과 탭 그룹은 표준 데이터 보호에서도 종단간 암호화되므로 [4], 이 기기 안의 파일이 다른 기기의 탭을 보여 주는 드문 자료가 될 수 있습니다.
 
 보고서에는 "이 기기의 `CloudTabs.db` 에 'OO' 이라는 이름의 기기에서 이 주소가 열린 탭으로 올라 있다" 처럼 파일과 기기를 함께 밝혀 씁니다.
 
@@ -71,7 +71,7 @@ nav_order: 1180
 | `LastVisitTime` | `LastSession.plist` 탭, `SafariTabs.db` `local_attributes` | 탭의 마지막 방문 시각 [1] |
 | `DateClosed` | `LastSession.plist`, `RecentlyClosedTabs.plist`, `SafariTabs.db` `local_attributes` | 탭·창을 닫은 시각 [1] |
 | `date_closed` | `SafariTabs.db` `bookmarks` 표 | 닫은 시각(열 이름 기준) [1] |
-| `RecordCtime`, `RecordMtime` | `CloudTabs.db` `system_fields` | 공개 자료 없음 [1] |
+| `RecordCtime`, `RecordMtime` | `CloudTabs.db` `system_fields` | 이름으로 보면 레코드 생성·수정 시각. 기준은 단정하지 않음 [1] |
 | `date_created` | `TabSnapshots/Metadata.db` | 스냅샷을 만든 시각(열 이름 기준) [1] |
 
 열마다 저장 형식이 실수인지 plist 날짜인지는 파일을 열어 직접 확인하고, 바꾸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)을 따릅니다.
@@ -80,9 +80,9 @@ nav_order: 1180
 
 **기록 지우기가 탭 쪽도 지웁니다.** 기록 지우기는 열린 페이지의 뒤로/앞으로 목록과 열린 페이지 스냅샷도 지웁니다 [2]. 그래서 `BrowserState.db` 의 뒤로/앞으로 목록이나 스냅샷 목록이 비어 있으면 기록 지우기와 함께 따져 보고, 지우기 대상 전체는 [방문 기록 (History.db)](history.md)에서 봅니다.
 
-**`LastSession.plist` 는 마지막 세션만 보여 줍니다.** 이름과 키 구성으로 보면 마지막 세션의 창과 탭만 담는 파일로 보여서, 그 전에 열려 있던 탭은 다른 파일이나 방문 기록에서 찾습니다. 파일을 언제 새로 쓰는지는 공개 자료가 없습니다.
+**`LastSession.plist` 는 마지막 세션만 보여 줍니다.** 이름과 키 구성으로 보면 마지막 세션의 창과 탭만 담는 파일로 보여서, 그 전에 열려 있던 탭은 다른 파일이나 방문 기록에서 찾습니다. 파일을 언제 새로 쓰는지는 시험 기기에서 사파리를 열고 닫으며 파일 수정 시각을 보고 확인합니다.
 
-**`bookmarks` 표를 북마크로 읽지 않습니다.** `SafariTabs.db` 의 `bookmarks` 표에는 탭과 프로필이 들어 있고, 북마크 자체가 이 표로 옮겨 갔는지는 공개 자료가 없습니다. 북마크는 [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks.md)에서 다룹니다.
+**`bookmarks` 표를 북마크로 읽지 않습니다.** `SafariTabs.db` 의 `bookmarks` 표에는 탭과 프로필이 들어 있습니다. 북마크는 [북마크와 읽기 목록 (Bookmarks·Reading List)](bookmarks.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 

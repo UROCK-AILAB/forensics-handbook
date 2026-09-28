@@ -36,12 +36,12 @@ nav_order: 990
 | `LSQuarantineAgentBundleIdentifier` | `kLSQuarantineAgentBundleIdentifierKey` | 파일을 받은 앱의 번들 ID | AgentBundleID |
 | `LSQuarantineAgentName` | `kLSQuarantineAgentNameKey` | 파일을 받은 앱 이름 | AgentName |
 | `LSQuarantineDataURLString` | `kLSQuarantineDataURLKey` | 실제로 받은 파일의 URL | DataUrl |
-| `LSQuarantineSenderName` | | 공개 자료 없음(아래 참고) | SenderName |
-| `LSQuarantineSenderAddress` | | 공개 자료 없음(아래 참고) | SenderAddress |
+| `LSQuarantineSenderName` | | 아래 참고 | SenderName |
+| `LSQuarantineSenderAddress` | | 아래 참고 | SenderAddress |
 | `LSQuarantineTypeNumber` | `kLSQuarantineTypeKey` | 격리 이유 | TypeNumber |
-| `LSQuarantineOriginTitle` | | 공개 자료 없음 | OriginTitle |
+| `LSQuarantineOriginTitle` | | 실제 데이터로 확인 | OriginTitle |
 | `LSQuarantineOriginURLString` | `kLSQuarantineOriginURLKey` | 파일을 올려 둔 원래 페이지의 URL | OriginUrl |
-| `LSQuarantineOriginAlias` | | 공개 자료 없음 | OriginAlias |
+| `LSQuarantineOriginAlias` | | 실제 데이터로 확인 | OriginAlias |
 
 `LSQuarantineDataURLString` 과 `LSQuarantineOriginURLString` 은 다른 값입니다. 앞쪽은 실제로 받은 파일의 주소이고, 뒤쪽은 그 파일을 올려 둔 원래 페이지의 주소입니다 [3].
 
@@ -58,7 +58,7 @@ nav_order: 990
 | `kLSQuarantineTypeCalendarEventAttachment` | 캘린더 이벤트 첨부 |
 | `kLSQuarantineTypeOtherAttachment` | 그 밖의 첨부 |
 
-DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 …)와 위 상수의 대응은 공개 문서에 없습니다. 숫자만 보고 격리 이유를 적지 않고, 같은 분석 대상 안에서 URL·받은 앱과 함께 보며 판단합니다.
+DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 …)가 위 상수 가운데 어느 것인지는 숫자만으로 단정할 수 없습니다. 숫자만 보고 격리 이유를 적지 않고, 같은 분석 대상 안에서 URL·받은 앱과 함께 보며 판단합니다.
 
 `LSQuarantineSenderName`·`LSQuarantineSenderAddress` 는 이름으로 짐작하면 메일·메시지 첨부를 보낸 사람을 적는 열이지만, 어떤 조건에서 채워지는지는 실제 데이터로 확인해야 합니다.
 
@@ -66,7 +66,7 @@ DB의 `LSQuarantineTypeNumber` 에는 숫자가 들어가는데, 숫자(0, 1, 2 
 
 **증명하는 것.** 이 사용자 계정의 DB에 이 시각, 이 앱이 이 URL의 파일을 받아 격리한 기록이 있다는 점입니다. `LSQuarantineEventIdentifier` 가 파일의 격리 속성 UUID와 같으면 그 파일과 이 다운로드 기록이 같은 이벤트라고 이을 수 있습니다 [1][2]. `LSQuarantineOriginURLString` 이 채워져 있으면 그 파일을 올려 둔 원래 페이지도 알 수 있습니다 [3].
 
-**증명하지 못하는 것.** 받은 파일이 지금도 디스크에 있는지, 사용자가 그 파일을 열거나 실행했는지는 이 DB로 알 수 없습니다. DB가 그 사용자 홈 폴더에 있다는 점은 계정을 알려 주지만, 그 시각에 키보드 앞에 있던 사람까지 알려 주지는 않습니다. 파일을 지웠을 때 행이 남는지, 브라우저 기록을 지울 때 이 DB도 함께 지워지는지는 공개 자료가 없으므로, 행이 없다는 점만으로 받은 적이 없다고 보지 않습니다.
+**증명하지 못하는 것.** 받은 파일이 지금도 디스크에 있는지, 사용자가 그 파일을 열거나 실행했는지는 이 DB로 알 수 없습니다. DB가 그 사용자 홈 폴더에 있다는 점은 계정을 알려 주지만, 그 시각에 키보드 앞에 있던 사람까지 알려 주지는 않습니다. 파일을 지웠을 때 행이 남는지, 브라우저 기록을 지울 때 이 DB도 함께 지워지는지는 시험 기기에서 재현해 확인하고, 행이 없다는 점만으로 받은 적이 없다고 보지 않습니다.
 
 보고서에는 "이 사용자의 격리 이벤트 DB에 이 시각(UTC)에 이 앱이 이 URL의 파일을 받은 기록이 있고, 이 파일의 격리 속성과 UUID가 같다" 처럼 씁니다.
 

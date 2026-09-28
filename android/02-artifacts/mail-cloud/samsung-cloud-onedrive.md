@@ -6,13 +6,13 @@ nav_order: 1110
 
 # 삼성 클라우드와 원드라이브 (Samsung Cloud·OneDrive)
 
-원드라이브 (OneDrive) 앱은 `QTMetadata.db` 의 `items` 표에 클라우드 파일과 폴더의 이름·크기·시각·SHA-1 을 담고 `stream_cache` 표에 기기에 캐시한 사본의 경로를 적어 두어서 [2] 파일 목록과 폴더 경로를 되살릴 수 있습니다. 삼성 클라우드 (Samsung Cloud) 는 앱 쪽 저장 위치를 적은 공개 자료가 없어 실제 기기에서 확인해야 합니다.
+원드라이브 (OneDrive) 앱은 `QTMetadata.db` 의 `items` 표에 클라우드 파일과 폴더의 이름·크기·시각·SHA-1 을 담고 `stream_cache` 표에 기기에 캐시한 사본의 경로를 적어 두어서 [2] 파일 목록과 폴더 경로를 되살릴 수 있습니다. 삼성 클라우드 (Samsung Cloud) 는 앱 쪽 저장 위치를 실제 기기에서 확인해야 합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
 원드라이브 앱은 계정의 클라우드 저장 공간에 있는 파일과 폴더 목록을 기기에 받아 두고, 사용자가 연 파일은 기기에 사본을 캐시해 둡니다. 공개 도구 ALEAPP 의 Microsoft OneDrive 모듈은 이 목록과 캐시 경로를 읽어 폴더 경로가 붙은 파일 목록으로 보여 줍니다 [2].
 
-삼성 클라우드는 갤럭시 기기의 동기화·백업 서비스이지만, 앱 패키지 이름·DB·동기화 기록을 적은 공개 자료는 없습니다. ALEAPP 에도 삼성 클라우드 전용 모듈은 없고 [1], 삼성 이름이 붙은 모듈은 SamsungNotes, SamsungTrash, Samsungwallet, SamsungGalleryHiddenAlbum, samsungMediaProvider, samsungSecureFolderHistoryLog, samsung_honeyboard_clipboard 같은 다른 앱의 것입니다 [1].
+삼성 클라우드는 갤럭시 기기의 동기화·백업 서비스이고, 앱 패키지 이름·DB·동기화 기록은 설치된 앱 기록과 앱 데이터 폴더에서 직접 찾아야 합니다. ALEAPP 에도 삼성 클라우드 전용 모듈은 없고 [1], 삼성 이름이 붙은 모듈은 SamsungNotes, SamsungTrash, Samsungwallet, SamsungGalleryHiddenAlbum, samsungMediaProvider, samsungSecureFolderHistoryLog, samsung_honeyboard_clipboard 같은 다른 앱의 것입니다 [1].
 
 ## 위치와 버전별 차이
 
@@ -39,7 +39,7 @@ nav_order: 1110
 | secure | `wifi_ap_settings_cloud_backup_restoring` |
 | global | `first_launch_samsung_account_menu` |
 
-값의 뜻을 적은 공개 자료는 없습니다. 이 키가 있다는 것만으로 삼성 클라우드를 썼다고 볼 수는 없고, 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
+이 키가 있다는 것만으로 삼성 클라우드를 썼다고 볼 수는 없고, 설정 값을 읽는 법은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지에서 다룹니다.
 
 ## 구조
 
@@ -51,7 +51,7 @@ nav_order: 1110
 |---|---|
 | `_id` | 행 번호. `stream_cache.parentId` 가 이 값을 가리킴 |
 | `resourceId`, `parentRid` | 항목 id 와 상위 폴더 id |
-| `resourceIdAlias` | 공개 자료 없음 |
+| `resourceIdAlias` | 뜻이 정해져 있지 않음. 값만 옮김 |
 | `name`, `extension` | 이름과 확장자 |
 | `itemType` | 종류 |
 | `ownerName` | 주인 이름 |
@@ -89,7 +89,7 @@ nav_order: 1110
 
 ## 함정과 한계
 
-첫째, ALEAPP 모듈에 시험 이미지 목록이 없어서 [2] 이 구조가 어느 판까지 맞는지 알려져 있지 않습니다. 열이 없다는 오류가 나거나 결과가 비면 표 정의부터 다시 읽습니다.
+첫째, ALEAPP 모듈에는 시험 이미지 목록이 없고 [2], 앱 판이 바뀌면 이 구조가 달라질 수 있습니다. 열이 없다는 오류가 나거나 결과가 비면 표 정의부터 다시 읽습니다.
 
 둘째, 폴더 경로를 이어 붙일 때 중간 폴더 행이 빠져 있으면 경로가 끊깁니다. 끊긴 경로를 보고서에 적을 때는 확인한 부분까지만 씁니다.
 
@@ -97,7 +97,7 @@ nav_order: 1110
 
 넷째, 파일을 지우면 `items` 에서 어떻게 빠지는지, 휴지통 항목이 따로 표시되는지는 실제 데이터로 확인해야 합니다. SQLite 에서 지운 행이 남을 수 있는 자리는 [삭제 데이터 복구 (Data Recovery)](../../03-techniques/analysis/data-recovery/index.md) 페이지에서 다룹니다. 계정 쪽 전체 목록과 변경 기록을 받는 절차는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지에서 다룹니다.
 
-다섯째, 삼성 클라우드는 공개 자료가 없어서 시험 기기에 계정을 넣고 동기화를 켠 뒤 무엇이 생기는지 직접 보는 방법밖에 없습니다. 그 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다.
+다섯째, 삼성 클라우드는 시험 기기에 계정을 넣고 동기화를 켠 뒤 무엇이 생기는지 직접 봐서 확인합니다. 그 절차는 [앱 데이터 분석 (App Data Analysis)](../../03-techniques/analysis/app-data-analysis/index.md) 페이지에서 다룹니다.
 
 ## 직접 분석해 보기
 

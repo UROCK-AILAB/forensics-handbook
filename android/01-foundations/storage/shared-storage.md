@@ -77,7 +77,7 @@ Android 16 기기의 `/sdcard` 최상위에는 `Alarms`, `Android`, `Audiobooks`
 
 ### 사용자가 여럿인 기기
 
-공용 저장 공간도 사용자마다 따로 있습니다(`/storage/emulated/<userId>`, `/data/media/<userid>`). 사용자가 둘인 기기의 `dumpsys user` 출력에서는 `UserProperties` 아래 `mMediaSharedWithParent=false` 가 보일 수 있습니다. 필드 이름으로 보면 부모 사용자와 공용 저장 공간을 나눠 쓰지 않는다는 뜻으로 보이지만, 이 필드의 뜻을 설명한 공개 문서는 없습니다. 사용자 목록은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
+공용 저장 공간도 사용자마다 따로 있습니다(`/storage/emulated/<userId>`, `/data/media/<userid>`). 사용자가 둘인 기기의 `dumpsys user` 출력에서는 `UserProperties` 아래 `mMediaSharedWithParent=false` 가 보일 수 있습니다. 필드 이름으로 보면 부모 사용자와 공용 저장 공간을 나눠 쓰지 않는다는 뜻으로 보입니다. 다만 이 필드의 뜻은 정해져 있지 않으므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다. 사용자 목록은 [사용자와 프로필](../../02-artifacts/system-account/users-profiles.md) 페이지에서 다룹니다.
 
 ## 읽는 법
 

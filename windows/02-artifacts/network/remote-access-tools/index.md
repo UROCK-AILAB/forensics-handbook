@@ -20,7 +20,7 @@ has_toc: false
 
 - 도구가 남기는 ID·호스트 이름·IP 는 사람을 가리키지 않습니다. 조작한 사람을 특정하려면 다른 근거가 필요합니다.
 - 전용 로그에 세션 중에 한 일이 모두 남지는 않습니다. 도구마다 무엇이 빠지는지는 하위 페이지에서 다룹니다.
-- 전용 텍스트 로그는 시간대를 밝힌 공개 자료가 없는 것이 많아 실제 데이터로 확인합니다.
+- 전용 텍스트 로그의 시간대는 같은 접속의 이벤트 로그 시각과 맞춰 보고 확인합니다.
 - 설치하지 않고 실행한 경우에는 서비스 설치 기록에 기대지 못합니다.
 
 ## 한눈에 보기
@@ -39,7 +39,7 @@ has_toc: false
 | AnyDesk | `%ProgramData%\AnyDesk\connection_trace.txt`, `ad_svc.trace`, `%AppData%\AnyDesk\ad.trace` | 들어온 접속과 승인 방식, 상대 ID, 외부 IP | [애니데스크](anydesk.md) |
 | ScreenConnect | Application 로그의 `ScreenConnect Client (<16진 문자열>)` 원본 이벤트, `C:\Windows\Temp\ScreenConnect\<버전>\` 의 스크립트 | 세션 시작·끝, 파일 전송, 명령 실행 | [스크린커넥트](screenconnect.md) |
 | Splashtop | 전용 이벤트 로그 두 개, `SPLog.txt`, `FTCLog.txt` | 상대 호스트 이름과 공인 IP, 파일 전송 | [기타 원격 제어 도구](rustdesk-splashtop-chrome-remote-desktop.md) |
-| RustDesk | `%AppData%\RustDesk\log\` 아래 로그 | 이 PC 에서 RustDesk 가 돈 흔적. 로그 형식을 밝힌 공개 자료는 없습니다 | [기타 원격 제어 도구](rustdesk-splashtop-chrome-remote-desktop.md) |
+| RustDesk | `%AppData%\RustDesk\log\` 아래 로그 | 이 PC 에서 RustDesk 가 돈 흔적. 로그 형식은 파일을 열어 확인 | [기타 원격 제어 도구](rustdesk-splashtop-chrome-remote-desktop.md) |
 | Chrome Remote Desktop | 서비스 이름 chromoting, 이벤트 ID 1~6 | 접속·끊김·거부, 상대 IP | [기타 원격 제어 도구](rustdesk-splashtop-chrome-remote-desktop.md) |
 
 ### 여러 도구에 공통으로 남는 흔적

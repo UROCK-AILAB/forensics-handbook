@@ -80,7 +80,7 @@ CREATE TABLE deleted_contacts (
 
 ## 시각 해석
 
-`deleted_contacts` 의 삭제 시각은 제공자가 `Clock.getInstance().currentTimeMillis()` 로 넣는 유닉스 밀리초라서[2] UTC 기준 값입니다. 기기 시계를 기준으로 하므로 기기 시각이 틀려 있었다면 그만큼 어긋납니다. 합쳐진 연락처의 `CONTACT_LAST_UPDATED_TIMESTAMP` 는 단위가 공개 자료에 없으므로 다른 기록과 맞춰 본 뒤에 씁니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 봅니다.
+`deleted_contacts` 의 삭제 시각은 제공자가 `Clock.getInstance().currentTimeMillis()` 로 넣는 유닉스 밀리초라서[2] UTC 기준 값입니다. 기기 시계를 기준으로 하므로 기기 시각이 틀려 있었다면 그만큼 어긋납니다. 합쳐진 연락처의 `CONTACT_LAST_UPDATED_TIMESTAMP` 는 여러 단위로 풀어 보고 같은 기기의 다른 기록과 시각이 맞는 단위를 찾은 뒤에 씁니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 을 봅니다.
 
 ## 함정과 한계
 
@@ -134,7 +134,7 @@ ORDER BY contact_deleted_timestamp;
 | [카카오톡](../messengers/kakaotalk/index.md) | 메신저 친구 목록과 전화번호 |
 | [dumpsys 출력](../logs/dumpsys.md) | 알림마다 적힌 연락처 연관도 |
 
-`dumpsys notification` 출력에는 알림마다 `mContactAffinity` 필드가 있습니다. 이름으로 보면 알림을 보낸 상대가 연락처와 얼마나 가까운지를 나타내는 값으로 보이지만, 계산 방법은 공개 자료에 없습니다. 연락 관계를 정리하는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 에, 증거를 지우려 했는지 보는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
+`dumpsys notification` 출력에는 알림마다 `mContactAffinity` 필드가 있습니다. 이름으로 보면 알림을 보낸 상대가 연락처와 얼마나 가까운지를 나타내는 값으로 보이지만, 계산 방법을 알 수 없는 값이라 보고서에는 값만 옮기고 가까운 정도를 단정하지 않습니다. 연락 관계를 정리하는 흐름은 [누구와 연락을 주고받았나](../../04-scenarios/activity/communication.md) 에, 증거를 지우려 했는지 보는 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에 있습니다.
 
 ## 실습
 

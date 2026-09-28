@@ -50,7 +50,7 @@ nav_order: 670
 | 밝히지 않음 | 세 파일의 역할, `devices.plist` 시각이 현지 시각이라는 점, WAL 을 함께 파싱해야 한다는 점 | [1] |
 | 27.0 | 두 DB 의 표·열 이름, `devices.plist`·`debug.plist` 키 이름 | |
 
-iOS 15 ~ 18 사이에 표·열 이름이 바뀌었는지는 알려져 있지 않아서, 분석 대상의 iOS 버전을 먼저 적고 열 이름을 직접 확인합니다.
+iOS 15 ~ 18 기기에서는 분석 대상의 iOS 버전을 먼저 적고, `PRAGMA table_info` 로 표·열 이름을 직접 확인합니다.
 
 ## 구조
 
@@ -66,7 +66,7 @@ iOS 15 ~ 18 사이에 표·열 이름이 바뀌었는지는 알려져 있지 않
 
 
 
-`Uuid` 로 장치 표와 `CustomProperties` 를 이어 볼 수 있을 것으로 보이지만, 두 표의 관계와 `JSON` 열 내용은 실제 데이터로 확인해야 합니다. `Address` 와 `ResolvedAddress` 가 따로 있어서 두 값이 다를 수 있다는 점만 열 구성으로 알 수 있고, `NameOrigin`·`Tags`·`iCloudIdentifier` 값의 뜻을 설명한 공개 자료는 없습니다. SQLite 파일을 읽는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+`Uuid` 로 장치 표와 `CustomProperties` 를 이어 볼 수 있을 것으로 보이지만, 두 표의 관계와 `JSON` 열 내용은 실제 데이터로 확인해야 합니다. `Address` 와 `ResolvedAddress` 가 따로 있어서 두 값이 다를 수 있다는 점만 열 구성으로 알 수 있고, `NameOrigin`·`Tags`·`iCloudIdentifier` 값의 뜻은 정해져 있지 않으므로 보고서에는 값만 옮기고 뜻을 단정하지 않습니다. SQLite 파일을 읽는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 ### devices.plist
 
@@ -99,7 +99,7 @@ iOS 15 ~ 18 사이에 표·열 이름이 바뀌었는지는 알려져 있지 않
 
 ## 시각 해석
 
-`devices.plist` 의 시각 값은 UTC 가 아니라 기기 현지 시각으로 저장되고 [1], 차량 사례에서 `LastSeenTime` 은 연결이 끊긴 시각이었습니다 [1]. `LastSeenTime` 숫자가 유닉스 시각인지 Mac 절대 시각인지는 공개 자료에 나와 있지 않습니다. 두 DB 의 `LastSeenTime`·`LastConnectionTime` 과 `debug.plist` 의 `BtConnectionTypeStartTimeStamp` 도 기준과 시간대가 알려져 있지 않습니다.
+`devices.plist` 의 시각 값은 UTC 가 아니라 기기 현지 시각으로 저장되고 [1], 차량 사례에서 `LastSeenTime` 은 연결이 끊긴 시각이었습니다 [1]. `LastSeenTime` 숫자가 유닉스 시각인지 Mac 절대 시각인지는 값마다 확인해야 합니다. 두 DB 의 `LastSeenTime`·`LastConnectionTime` 과 `debug.plist` 의 `BtConnectionTypeStartTimeStamp` 도 기준과 시간대를 먼저 확인해야 합니다.
 
 그래서 숫자를 찾으면 자릿수로 기준을 판별해 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 따라 바꾸고, 현지 시각이라면 수집 당시 기기 시간대를 [시간대와 시각 설정](../system-account/time-zone.md) 에서 확인한 뒤 UTC 로 맞춥니다. 시간대를 옮겨 다닌 기기라면 현지 시각 값은 기록한 순간의 시간대를 따로 알아야 해서 해석이 더 어렵습니다. 이름이 `Last` 로 시작하는 열은 가장 최근 값 하나로 보여서, 새 연결이 생기면 이전 값이 남지 않을 수 있습니다.
 
@@ -107,11 +107,11 @@ iOS 15 ~ 18 사이에 표·열 이름이 바뀌었는지는 알려져 있지 않
 
 두 DB 는 WAL 파일도 함께 파싱해야 합니다 [1]. 본체 파일만 복사하면 최근 기록을 놓칠 수 있어서, `-wal`·`-shm` 파일을 같은 폴더에 함께 복사한 뒤 복사본을 엽니다. WAL 의 동작과 지운 행을 되살리는 방법은 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 와 [삭제 데이터 복구](../../03-techniques/analysis/data-recovery/index.md) 에서 다룹니다.
 
-공개 자료가 시험한 iOS 버전을 밝히지 않아서 [1], 다른 버전의 기기에서는 표·열 이름을 직접 확인합니다. `devices.plist` 가 현지 시각이라는 보고를 다른 파일에 그대로 넓혀 쓰지도 않습니다.
+[1] 의 결과는 시험한 iOS 버전이 밝혀져 있지 않으므로, 다른 버전의 기기에서는 표·열 이름을 직접 확인합니다. `devices.plist` 가 현지 시각이라는 보고를 다른 파일에 그대로 넓혀 쓰지도 않습니다.
 
 KnowledgeC·바이옴에 블루투스 연결을 담는 스트림이 있는지, 있다면 이름이 무엇인지는 실제 데이터로 확인해야 합니다. 연결 순간을 더 촘촘하게 보려면 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 을 살펴봅니다.
 
-페어링을 지운 장치가 목록에서 바로 빠지는지, 지운 흔적이 어디에 남는지는 공개된 분석 자료가 없습니다. 장치 목록이 비어 있을 때 지우기를 의심한다면 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 확인합니다.
+페어링을 지운 장치가 목록에서 바로 빠지는지, 지운 흔적이 어디에 남는지는 시험 기기에서 페어링을 지워 보고 확인합니다. 장치 목록이 비어 있을 때 지우기를 의심한다면 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름으로 확인합니다.
 
 ## 직접 분석해 보기
 

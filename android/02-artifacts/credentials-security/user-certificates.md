@@ -34,7 +34,7 @@ CA 가 설치돼 있다고 모든 앱이 그 CA 를 믿지는 않습니다. 앱�
 | Android 6.0 (API 23) 이하 | 시스템 CA 와 사용자 CA (`src="system"`, `src="user"`) |
 | Android 7.0 (API 24) 이상 | 시스템 CA 만 (`<certificates src="system" />`) |
 
-Android 11 부터 CA 를 설정 앱에서만 설치할 수 있고, 사용자 CA 를 설치하면 "네트워크가 모니터링될 수 있음" 알림이 뜬다고 알려져 있습니다. 삼성 One UI 의 인증서 설정 화면 위치와 녹스 쪽 인증서 저장소는 공개 자료가 없습니다.
+Android 11 부터 CA 를 설정 앱에서만 설치할 수 있고, 사용자 CA 를 설치하면 "네트워크가 모니터링될 수 있음" 알림이 뜬다고 알려져 있습니다. 삼성 One UI 기기라면 인증서 설정 화면 위치와 녹스 쪽 인증서 저장소를 실제 기기에서 따로 확인합니다.
 
 ## 구조
 
@@ -72,7 +72,7 @@ user:7651b327.0
 
 ### 기기 관리자·설정 쪽 기록
 
-기기 관리자 정책 파일 `device_policies.xml` 에는 `accepted-ca-certificate`, `owner-installed-ca-cert` 라는 태그 이름이 있습니다 [3]. 관리자 앱이 설치한 CA 와 사용자가 확인한 CA 를 적는 곳으로 보입니다. 파일 자체는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](device-admin-accessibility.md) 페이지에서 다룹니다. settings secure 에는 `config_update_certificate` 키가 있을 수 있지만, 뜻을 밝힌 공개 자료는 없습니다.
+기기 관리자 정책 파일 `device_policies.xml` 에는 `accepted-ca-certificate`, `owner-installed-ca-cert` 라는 태그 이름이 있습니다 [3]. 관리자 앱이 설치한 CA 와 사용자가 확인한 CA 를 적는 곳으로 보입니다. 파일 자체는 [기기 관리자와 접근성 권한 (Device Admin·Accessibility)](device-admin-accessibility.md) 페이지에서 다룹니다. settings secure 에는 `config_update_certificate` 키가 있을 수 있고, 이 키는 값만 옮기고 뜻을 단정하지 않습니다.
 
 VPN·Wi-Fi 에 쓰는 사용자 인증서(클라이언트 인증서와 개인 키)의 설정 쪽 흔적은 [VPN 설정 (VPN)](../network/vpn.md) 과 [와이파이 설정과 접속 기록 (WifiConfigStore)](../network/wifi.md), 키 저장소는 [저장 공간 암호화 (Encryption)](../../01-foundations/storage/encryption/index.md) 페이지에서 봅니다.
 
@@ -84,7 +84,7 @@ VPN·Wi-Fi 에 쓰는 사용자 인증서(클라이언트 인증서와 개인 �
 
 **증명하지 못하는 것**
 
-사용자 CA 가 있다는 사실만으로 통신을 가로챘다고 말할 수 없습니다. API 24 이상을 목표로 하고 `src="user"` 를 따로 두지 않은 앱은 기본적으로 사용자 CA 로 만든 TLS 연결을 받아들이지 않으니 [2], 영향을 받았을 수 있는 앱은 앱마다 설정을 보고 좁혀야 합니다. 누가, 어떤 경로로 CA 를 설치했는지도 인증서 파일에는 나와 있지 않습니다. 회사 관리 앱이 넣은 CA 인지 사용자가 직접 넣은 CA 인지는 `device_policies.xml` 의 관련 태그와 관리자 앱 기록을 함께 봐야 하는데, 그 태그의 정확한 뜻을 밝힌 공개 자료는 없습니다.
+사용자 CA 가 있다는 사실만으로 통신을 가로챘다고 말할 수 없습니다. API 24 이상을 목표로 하고 `src="user"` 를 따로 두지 않은 앱은 기본적으로 사용자 CA 로 만든 TLS 연결을 받아들이지 않으니 [2], 영향을 받았을 수 있는 앱은 앱마다 설정을 보고 좁혀야 합니다. 누가, 어떤 경로로 CA 를 설치했는지도 인증서 파일에는 나와 있지 않습니다. 회사 관리 앱이 넣은 CA 인지 사용자가 직접 넣은 CA 인지는 `device_policies.xml` 의 관련 태그와 관리자 앱 기록을 함께 봐야 합니다. 그 태그의 뜻은 이름으로 짐작한 것이라서, 태그만으로 누가 설치했는지 단정하지 않습니다.
 
 보고서에는 "이 사용자 폴더에 이 주체 이름의 CA 가 추가돼 있고, 이 앱들은 설정상 사용자 CA 를 믿는다" 처럼 기록으로 확인되는 만큼만 씁니다.
 

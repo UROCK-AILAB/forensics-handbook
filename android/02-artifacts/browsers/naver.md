@@ -6,7 +6,7 @@ nav_order: 880
 
 # 네이버 앱 (NAVER)
 
-네이버 앱(패키지 com.nhn.android.search)은 검색과 뉴스, 쇼핑, 결제를 한데 묶은 앱이고, 공개 도구에 전용 파서가 없고 검색어와 방문 기록이 남는 파일을 다룬 공개 자료도 없어서, 분석은 패키지 폴더를 직접 열어 보는 데서 시작합니다 [1][3].
+네이버 앱(패키지 com.nhn.android.search)은 검색과 뉴스, 쇼핑, 결제를 한데 묶은 앱입니다 [3]. 공개 도구 ALEAPP 에는 이 앱을 읽는 전용 파서가 없어서 [1], 검색어와 방문 기록이 남는 파일은 패키지 폴더를 직접 열어 찾습니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -14,7 +14,7 @@ nav_order: 880
 
 필수 접근 권한은 위치, 카메라, 파일 및 미디어, 마이크, 연락처, 전화, 신체활동, 알림(Android 13 이상)입니다 [3]. 전화 권한은 네이버 인증서, 비밀번호 없이 로그인, 네이버페이에서 기기 전화번호를 확인하는 데 쓰고, 신체활동 권한은 만보기 걸음 수에 씁니다 [3]. Play 데이터 보안 항목에는 제3자와 공유할 수 있는 데이터로 "개인 정보, 금융 정보 외 5개", 수집할 수 있는 데이터로 "위치, 개인 정보 외 11개" 가 적혀 있습니다 [3].
 
-이 기능 목록은 어떤 종류의 흔적을 찾아볼지 정하는 데 쓰고, 기기에 그 파일이 있다는 근거로 쓰지 않습니다. 개발사 소개 글에는 저장 경로나 DB 구조가 나오지 않고 이를 다룬 공개 분석 자료도 없습니다. 검색어와 방문 기록이 SQLite 에 남는지 설정 XML 에 남는지, 표와 열 이름이 무엇인지는 실제 기기로 확인해야 합니다. 방문 기록을 남기지 않는 모드 같은 기능이 있는지와 그 흔적도 실제 기기로 확인합니다.
+이 기능 목록은 어떤 종류의 흔적을 찾아볼지 정하는 데 쓰고, 기기에 그 파일이 있다는 근거로 쓰지 않습니다. 검색어와 방문 기록이 SQLite 에 남는지 설정 XML 에 남는지, 표와 열 이름이 무엇인지는 앱 판마다 달라질 수 있어 실제 기기로 확인합니다. 방문 기록을 남기지 않는 모드 같은 기능이 있는지와 그 흔적도 실제 기기로 확인합니다.
 
 ## 위치와 버전별 차이
 
@@ -24,20 +24,20 @@ nav_order: 880
 |---|---|---|
 | 패키지 이름 | com.nhn.android.search | Play 상세 페이지 주소의 id [3] |
 | 공개 도구 전용 파서 | ALEAPP 에 없음 | ALEAPP 모듈 목록 [1] |
-| 검색어·방문 기록 파일 | 공개 자료 없음 | — |
+| 검색어·방문 기록 파일 | 실제 기기로 확인(아래 "구조" 절의 순서) | — |
 | WebView 방문 기록(`app_webview/Default/History`) | 있다면 ALEAPP 가 읽음, 실제로 남는지는 실제 기기로 확인 | ALEAPP chrome.py [2] |
-| 방문 기록을 남기지 않는 모드 | 공개 자료 없음 | — |
+| 방문 기록을 남기지 않는 모드 | 실제 기기로 확인 | — |
 | 네이버 계정 서버 쪽 검색 기록 | 기기 밖 자료라 서버 쪽에서 따로 확보 | — |
 
-WebView 줄은 따로 설명이 필요합니다. ALEAPP 는 `app_webview/Default/History` 를 가진 모든 앱을 Chromium 파서로 읽고 브라우저 이름 열에 그 앱의 패키지 이름을 적습니다 [2]. 네이버 앱 안에서 연 웹 페이지가 WebView 로 열려 이런 파일을 남긴다면 ALEAPP 결과에 com.nhn.android.search 라는 이름으로 나오고, 실제로 그런지는 실제 기기로 확인합니다. WebView 파일의 구조와 읽는 법은 [크롬 (Chrome for Android)](chrome/index.md) 페이지에서 다룹니다.
+ALEAPP 는 `app_webview/Default/History` 를 가진 모든 앱을 Chromium 파서로 읽고 브라우저 이름 열에 그 앱의 패키지 이름을 적습니다 [2]. 네이버 앱 안에서 연 웹 페이지가 WebView 로 열려 이런 파일을 남긴다면 ALEAPP 결과에 com.nhn.android.search 라는 이름으로 나오고, 실제로 그런지는 실제 기기로 확인합니다. WebView 파일의 구조와 읽는 법은 [크롬 (Chrome for Android)](chrome/index.md) 페이지에서 다룹니다.
 
-Android 버전이나 앱 버전에 따라 파일 배치가 어떻게 달라지는지도 공개 자료가 없습니다. 이 앱의 데이터 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
+Android 버전이나 앱 버전에 따라 파일 배치가 달라질 수 있으니, 보고서에는 확인한 앱 버전을 함께 적습니다. 이 앱의 데이터 폴더를 확보하는 방법은 [모바일 증거 확보 (Acquisition)](../../03-techniques/acquisition/mobile-acquisition/index.md) 페이지를 봅니다.
 
-삼성 기기(One UI)의 settings system 에는 `naver_sports_state` 와 `support_nowbar_naver_sports` 같은 키가 있을 수 있습니다. 이 키를 One UI 의 Now Bar 기능이 쓰는지 네이버 앱이 쓰는지, 값이 무엇을 뜻하는지는 공개 자료가 없습니다. 설정 값 전반은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지를 봅니다.
+삼성 기기(One UI)의 settings system 에는 `naver_sports_state` 와 `support_nowbar_naver_sports` 같은 키가 있을 수 있습니다. 키 이름만으로는 One UI 의 Now Bar 기능이 쓰는 키인지 네이버 앱이 쓰는 키인지, 값이 무엇을 뜻하는지 판단할 수 없습니다. 설정 값 전반은 [설정 값 (Settings Global·Secure·System)](../system-account/settings.md) 페이지를 봅니다.
 
 ## 구조
 
-공개된 파일 구조가 없어서 이 절은 찾는 순서만 적습니다.
+파일 구조는 앱 판마다 실제 기기에서 확인하고, 찾는 순서는 다음과 같습니다.
 
 1. 앱 데이터 폴더(com.nhn.android.search 패키지 폴더)를 확보하고, 폴더 배치는 [앱 데이터 폴더 구조 (/data/data·/data/user)](../../01-foundations/storage/app-data-layout.md) 페이지를 참고해 하위 폴더를 차례로 엽니다.
 2. 파일마다 형식을 먼저 구분합니다. SQLite 는 [SQLite 데이터베이스 (SQLite)](../../01-foundations/data-formats/sqlite/index.md), 설정 XML 은 [설정 XML과 SharedPreferences (XML·SharedPreferences)](../../01-foundations/data-formats/shared-preferences.md), 그 밖의 바이너리는 [프로토콜 버퍼 (Protocol Buffers)](../../01-foundations/data-formats/protobuf.md) 와 [LevelDB와 IndexedDB (LevelDB·IndexedDB)](../../01-foundations/data-formats/leveldb-indexeddb.md) 페이지를 봅니다.
@@ -48,25 +48,27 @@ Android 버전이나 앱 버전에 따라 파일 배치가 어떻게 달라지�
 
 ## 증거로서 의미
 
-**증명하는 것.** 네이버 앱 자체의 파일 구조가 알려지지 않았으므로, 이 앱이 설치돼 있었다는 사실과 언제 화면에 떠 있었는지를 시스템 기록으로 확인하는 데까지가 안전합니다. WebView 방문 기록 파일이 있으면 그 파일에 적힌 주소를 그 시각에 네이버 앱 안에서 열었다는 기록으로 읽을 수 있습니다 [2].
+**증명하는 것.** 시험 기기로 뜻을 확인한 파일이 없다면, 이 앱이 설치돼 있었다는 사실과 언제 화면에 떠 있었는지를 시스템 기록으로 확인하는 데까지가 안전합니다. WebView 방문 기록 파일이 있으면 그 파일에 적힌 주소를 그 시각에 네이버 앱 안에서 열었다는 기록으로 읽을 수 있습니다 [2].
 
-**증명하지 못하는 것.** 방문 기록 파일을 찾지 못했다고 해서 네이버 앱으로 검색하지 않았다고 말할 수 없습니다. 검색 기록은 기기 밖 네이버 계정에 따로 남을 수 있고, 계정 쪽 자료는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지의 방법으로 따로 확보해야 합니다. Chrome 이나 삼성 인터넷에서 네이버 웹사이트로 검색했다면 그 기록은 그 브라우저의 파일에서 찾습니다. Play 데이터 보안 항목의 "수집할 수 있는 데이터" 는 개발사가 스스로 밝힌 내용이고, 기기 안에 그 데이터가 파일로 남았다는 근거가 되지 않습니다.
+**증명하지 못하는 것.** 방문 기록 파일이 없다고 해서 네이버 앱으로 검색하지 않았다고 말할 수 없습니다. 검색 기록은 기기 밖 네이버 계정에 따로 남을 수 있고, 계정 쪽 자료는 [클라우드 데이터 (Google Takeout 등)](../../03-techniques/acquisition/cloud-data.md) 페이지의 방법으로 따로 확보해야 합니다. Chrome 이나 삼성 인터넷에서 네이버 웹사이트로 검색했다면 그 기록은 그 브라우저의 파일에서 찾습니다. Play 데이터 보안 항목의 "수집할 수 있는 데이터" 는 개발사가 스스로 밝힌 내용이고, 기기 안에 그 데이터가 파일로 남았다는 근거가 되지 않습니다.
 
 ## 시각 해석
 
-네이버 앱 파일의 시각 형식은 공개 자료가 없습니다. WebView 방문 기록 파일이라면 ALEAPP 가 Chromium 과 같이 1601-01-01 UTC 부터의 마이크로초로 읽습니다 [2]. 그 밖의 파일에서 시각으로 보이는 정수를 만나면 자릿수로 초·밀리초·마이크로초를 짐작하고, 시험 기기에서 알고 있는 시각의 동작을 한 번 해 본 뒤 값과 맞춰 봅니다. 형식별 변환은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
+네이버 앱 파일의 시각 형식은 파일마다 다를 수 있습니다. WebView 방문 기록 파일이라면 ALEAPP 가 Chromium 과 같이 1601-01-01 UTC 부터의 마이크로초로 읽습니다 [2]. 그 밖의 파일에서 시각으로 보이는 정수를 만나면 자릿수로 초·밀리초·마이크로초를 짐작하고, 시험 기기에서 알고 있는 시각의 동작을 한 번 해 본 뒤 값과 맞춰 봅니다. 형식별 변환은 [시각 값 (Unix 밀리초·Chrome 시각·기타)](../../01-foundations/value-decoding/time-values.md) 페이지를 봅니다.
 
 ## 함정과 한계
 
 ALEAPP 모듈 가운데 이름에 "naver" 가 들어간 것은 LINE(jp.naver.line.android)을 읽는 line.py 뿐이라서 [1], 그 결과를 네이버 앱 기록으로 읽으면 안 됩니다. LINE 은 [라인 (LINE)](../messengers/line.md) 페이지에서 다룹니다. 같은 회사의 웹 브라우저인 웨일은 패키지가 다른 별도 앱이고 [그 밖의 브라우저 (웨일·파이어폭스)](other-browsers.md) 페이지에서 다룹니다.
 
-settings system 의 `naver_sports_state` 같은 키 이름은 네이버 앱이 깔려 있다는 근거로 쓰지 않습니다. 이 키를 쓰는 주체가 알려지지 않았습니다.
+settings system 의 `naver_sports_state` 같은 키 이름은 네이버 앱이 깔려 있다는 근거로 쓰지 않습니다. 키 이름만으로는 어느 앱이나 기능이 이 키를 쓰는지 알 수 없습니다.
+
+같은 회사 앱이라도 저장 방식이 같다고 보지 않습니다. 네이버 지도는 주요 DB 를 암호화하고 그 키를 안드로이드 키 저장소 (Android Keystore) 에 보관합니다 [4]. 네이버 앱 폴더에서도 `databases` 안의 파일이 `SQLite format 3\000` 으로 시작하지 않으면 암호화된 DB 일 가능성이 있으니, 범용 도구로 열리지 않는다고 빈 파일로 판단하지 않습니다. 암호화된 SQLite 를 알아보는 법은 [암호화된 SQLite (SQLCipher)](../../01-foundations/data-formats/sqlite/sqlcipher.md) 페이지에 있습니다.
 
 WebView 파일은 ALEAPP 결과에 패키지 이름으로 섞여 나오기 때문에, com.nhn.android.search 행이 보이면 경로에 `app_webview` 가 들어 있는지 확인하고 Chrome 행과 섞지 않습니다 [2].
 
 ## 직접 분석해 보기
 
-**헥스로 한 번.** 구조가 알려진 파일이 없어서 이 앱 전용 헥스 예시는 없습니다. 패키지 폴더에서 파일을 찾으면 첫 몇 바이트로 형식부터 판별하고, 형식별 헥스 읽는 법은 위 "구조" 절에 걸어 둔 기반 구조 페이지를 따릅니다. WebView 방문 기록 파일의 시각 값 헥스 예시는 [삼성 인터넷 (Samsung Internet)](samsung-internet.md) 과 Chrome 페이지에 있습니다.
+**헥스로 한 번.** 패키지 폴더에서 파일을 찾으면 첫 몇 바이트로 형식부터 판별하고, 형식별 헥스 읽는 법은 위 "구조" 절에 걸어 둔 기반 구조 페이지를 따릅니다. WebView 방문 기록 파일의 시각 값 헥스 예시는 [삼성 인터넷 (Samsung Internet)](samsung-internet.md) 과 Chrome 페이지에 있습니다.
 
 **공개 도구로 한 번.** ALEAPP 를 돌린 뒤 Chrome 계열 보고서에서 브라우저 이름이 com.nhn.android.search 인 행이 있는지 봅니다. 행이 있으면 경로 열에서 `app_webview/Default/History` 를 확인하고, 없으면 도구가 이 앱을 읽지 않은 것이지 기록이 없다는 뜻은 아니라서 위 "구조" 절의 순서대로 직접 봅니다.
 
@@ -92,3 +94,4 @@ WebView 파일은 ALEAPP 결과에 패키지 이름으로 섞여 나오기 때�
 1. ALEAPP `scripts/artifacts` 폴더 목록(GitHub API) — https://api.github.com/repos/abrignoni/ALEAPP/contents/scripts/artifacts
 2. ALEAPP `scripts/artifacts/chrome.py` (main) — https://raw.githubusercontent.com/abrignoni/ALEAPP/main/scripts/artifacts/chrome.py
 3. Google Play, "네이버 - NAVER" 상세 페이지(한국어) — https://play.google.com/store/apps/details?id=com.nhn.android.search&hl=ko
+4. 박귀은·강수진·김종성, 「안드로이드 환경에서의 지도 애플리케이션 아티팩트 분석 및 복호화 방안 연구」, 디지털포렌식연구 16(2), 163–184, 2022. DOI 10.22798/KDFS.2022.16.2.163 — https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART002859568

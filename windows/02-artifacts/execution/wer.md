@@ -71,7 +71,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 
 - `AppCrash` 폴더 이름은 `AppCrash_<프로그램 이름>_<16진 40자>_<16진 8자>_<GUID>` 모양이었습니다.
 - 프로그램 이름이 길면 잘려서 `.exe` 가 `.ex` 로 끝났습니다.
-- 폴더 이름 끝의 GUID 는 그 안 `Report.wer` 의 `ReportIdentifier` 와 같았습니다. 가운데 16진 40자와 8자가 무엇의 해시인지는 공개 자료에 없습니다.
+- 폴더 이름 끝의 GUID 는 그 안 `Report.wer` 의 `ReportIdentifier` 와 같았습니다. 가운데 16진 40자와 8자는 무엇의 해시인지 단정할 수 없습니다.
 - `ReportArchive` 폴더 254개에는 모두 `Report.wer` 하나만 있었습니다.
 - 이벤트 1001 이 붙인 파일로 적은 덤프·XML·CSV·TXT 는 `WER\Temp` 에 있었는데, `Temp` 는 비어 있었습니다. 보고서를 보낸 뒤 지운 것으로 보입니다.
 
@@ -86,19 +86,19 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 | | `EventTime`, `UploadTime` | 10진수 FILETIME (UTC) |
 | | `ReportIdentifier` | 보고서 폴더 이름 끝의 GUID 와 같음 |
 | | `IntegratorReportIdentifier` | 이벤트 1000·1001 의 Report Id 와 같음 |
-| | `ReportType`, `ReportStatus`, `Consent`, `IsFatal`, `BootId` | 공개 자료 없음 |
+| | `ReportType`, `ReportStatus`, `Consent`, `IsFatal`, `BootId` | 값만 옮기고 뜻을 단정하지 않음 |
 | 프로그램 | `AppPath` | 실행 파일 전체 경로 |
-| | `TargetAppId` | `W:<16진>!0000<16진 40자>!<프로그램 이름>` 모양. 가운데 값의 뜻은 공개 자료에 없습니다 |
-| | `AppName`, `OriginalFilename`, `TargetAppVer`, `NsAppName`, `ApplicationIdentity`, `AppSessionGuid` | 공개 자료 없음 |
+| | `TargetAppId` | `W:<16진>!0000<16진 40자>!<프로그램 이름>` 모양. 가운데 값의 뜻은 단정할 수 없습니다 |
+| | `AppName`, `OriginalFilename`, `TargetAppVer`, `NsAppName`, `ApplicationIdentity`, `AppSessionGuid` | 값만 옮기고 뜻을 단정하지 않음 |
 | 오류 서명 | `Sig[n].Name`, `Sig[n].Value` | 프로그램 이름·버전·타임스탬프, 오류 모듈 이름·버전, 예외 코드(예: `e0434352`, `c0000409`), 예외 오프셋 |
-| | `DynamicSig[n].Name`, `DynamicSig[n].Value` | 공개 자료 없음 |
+| | `DynamicSig[n].Name`, `DynamicSig[n].Value` | 값만 옮기고 뜻을 단정하지 않음 |
 | 모듈 | `LoadedModule[n]` | 오류 당시 불러온 모듈 경로. 한 보고서에 95개가 있었습니다 |
 | 서버 응답 | `Response.BucketId` | 이벤트 1001 의 Hashed bucket 과 같음 |
-| | `Response.BucketTable`, `Response.LegacyBucketId`, `Response.type` | 공개 자료 없음 |
-| 그 밖 | `Version`, `FeatureStaging`, `Wow64Host`, `TargetAsId`, `EtwNonCollectReason`, `UI[n]`, `State[n].Key/Value`, `OsInfo[n].Key/Value`, `FriendlyEventName`, `ConsentKey`, `NsPartner`, `NsGroup`, `MetadataHash` | 공개 자료 없음 |
+| | `Response.BucketTable`, `Response.LegacyBucketId`, `Response.type` | 값만 옮기고 뜻을 단정하지 않음 |
+| 그 밖 | `Version`, `FeatureStaging`, `Wow64Host`, `TargetAsId`, `EtwNonCollectReason`, `UI[n]`, `State[n].Key/Value`, `OsInfo[n].Key/Value`, `FriendlyEventName`, `ConsentKey`, `NsPartner`, `NsGroup`, `MetadataHash` | 값만 옮기고 뜻을 단정하지 않음 |
 
 - `Sig[n].Name` 은 OS 표시 언어로 적혔습니다. 한국어 PC 에서는 "응용 프로그램 이름", "오류 모듈 이름", "예외 코드", "예외 오프셋" 처럼 나왔습니다.
-- `UploadTime` 이 보고서를 보낸 시각인지는 공개 자료에 없습니다.
+- `UploadTime` 이 보고서를 보낸 시각인지는 같은 사건의 이벤트 1001 시각과 맞춰 봅니다.
 
 ### 이벤트와 보고서를 잇는 값
 
@@ -186,7 +186,7 @@ WER 은 프로그램 오류를 모아 보고하는 Windows 기능입니다. 오�
 - **서명 이름은 OS 언어를 따릅니다.** `Sig[n].Name` 이 한국어로 적힐 수 있습니다. 영어 이름으로 검색하면 놓칩니다. `Sig[n].Value` 를 번호로 읽습니다.
 - **폴더 이름의 프로그램 이름은 잘립니다.** 전체 경로는 `AppPath` 로 봅니다.
 - **붙인 파일은 사라질 수 있습니다.** `ReportArchive` 에 `Report.wer` 만 남는 경우가 있습니다. 덤프 같은 붙인 파일이 없다고 수집을 빠뜨린 것은 아닙니다.
-- **폴더 이름의 16진 값을 파일 해시로 쓰지 않습니다.** 폴더 이름의 16진 40자와 `TargetAppId` 가운데 값이 무엇인지는 공개 자료에 없습니다.
+- **폴더 이름의 16진 값을 파일 해시로 쓰지 않습니다.** 폴더 이름의 16진 40자와 `TargetAppId` 가운데 값은 무엇을 해시한 값인지 단정할 수 없습니다.
 - **PID 는 10진과 16진으로 다르게 적힙니다.** 덤프 이름은 10진, 이벤트 1000 은 16진입니다. 한쪽으로 바꿔 맞춥니다.
 - **설정 값을 원시 바이트로 확인합니다.** REG_DWORD 를 글자로 보여 주는 도구는 부호 없는 10진수로 보여 줍니다. 헷갈리면 원시 바이트를 봅니다.
 - **지우기와 끄기.** 사용자가 보고서 폴더와 덤프를 지울 수 있습니다. `Disabled`, `ExcludedApplications`, `DisableArchive` 로 기록을 막을 수도 있습니다. 설정 키의 값과 마지막 기록 시각을 함께 봅니다. 지운 보고서는 [섀도 복사본 활용](../../03-techniques/analysis/volume-shadow-copy-analysis.md) 과 [마스터 파일 테이블](../filesystem/mft.md) 에서 찾습니다.

@@ -52,9 +52,9 @@ OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-v
 
 ### 파일 자체에 남는 "마지막으로 연 날짜"
 
-파인더의 "마지막으로 열어 본 날짜 (Last opened)"는 확장 속성 `com.apple.lastuseddate` 의 날짜를 보여 줍니다 [3]. 이 속성은 전체 이름이 `com.apple.lastuseddate#PS` 라서 P·S 두 플래그가 붙어 있고, 편집한 파일에서 흔히 보입니다(macOS 15.0, 26.0 Tahoe 기준) [1][2]. P 는 공유할 때 보존하지 않는다(NO_EXPORT)는 뜻이고 S 는 동기화할 수 있다(SYNCABLE)는 뜻입니다 [4]. 값의 이진 형식과 언제 붙고 언제 바뀌는지는 공개된 분석 자료가 없어서, 값을 읽을 때는 파인더에 보이는 날짜와 대조해 확인합니다.
+파인더의 "마지막으로 열어 본 날짜 (Last opened)"는 확장 속성 `com.apple.lastuseddate` 의 날짜를 보여 줍니다 [3]. 이 속성은 전체 이름이 `com.apple.lastuseddate#PS` 라서 P·S 두 플래그가 붙어 있고, 편집한 파일에서 흔히 보입니다(macOS 15.0, 26.0 Tahoe 기준) [1][2]. P 는 공유할 때 보존하지 않는다(NO_EXPORT)는 뜻이고 S 는 동기화할 수 있다(SYNCABLE)는 뜻입니다 [4]. 값의 이진 형식과 언제 붙고 언제 바뀌는지는 단정하지 않고, 값을 읽을 때는 파인더에 보이는 날짜와 대조해 확인합니다.
 
-스포트라이트 속성 `kMDItemLastUsedDate` 는 파일을 마지막으로 쓴 날짜·시각이고, 더블클릭처럼 LaunchServices 가 파일을 열 때마다 자동으로 갱신됩니다 [6]. 두 값이 늘 같은지는 알려져 있지 않아서 실제 데이터에서 서로 대조합니다. mac_apt 가 색인에서 함께 뽑는 `kMDItemUseCount`·`kMDItemUsedDates` 는 Apple 문서에 뜻이 적혀 있지 않습니다 [7].
+스포트라이트 속성 `kMDItemLastUsedDate` 는 파일을 마지막으로 쓴 날짜·시각이고, 더블클릭처럼 LaunchServices 가 파일을 열 때마다 자동으로 갱신됩니다 [6]. 두 값이 늘 같다고 보지 않고 실제 데이터에서 서로 대조합니다. mac_apt 가 색인에서 함께 뽑는 `kMDItemUseCount`·`kMDItemUsedDates` 는 Apple 문서에 뜻이 적혀 있지 않습니다 [7].
 
 확장 속성을 바꾸거나 권한 같은 메타데이터를 바꿔도 파일 데이터는 그대로라서 수정 시각이 바뀌지 않고, 데이터를 바꿀 때만 수정 시각이 바뀝니다 [3]. APFS 접근 시각은 볼륨에 `APFS_FEATURE_STRICTATIME`(0x8)이 켜져 있으면 읽을 때마다 갱신되지만, 꺼져 있으면 접근 시각이 수정 시각보다 이를 때만 갱신됩니다 [5]. 이 플래그가 켜져 있는지는 볼륨마다 확인해야 하므로, 접근 시각 하나로 "열었다"를 단정하지 않습니다.
 
@@ -76,7 +76,7 @@ OS 버전은 [OS 버전과 설치 기록](../../02-artifacts/system-account/os-v
 - **섬네일이 있으면 파일을 열었다고 보는 경우.** 빠른 보기 섬네일은 폴더를 아이콘 보기 등으로 보기만 해도 생길 수 있습니다 [13].
 - **파일 시스템 이벤트에서 "열기"를 찾는 경우.** 파일 시스템 이벤트의 플래그는 Created·Removed·InodeMetaMod·Renamed·Modified 같은 변경만 다루고 읽기는 없으며, 레코드에 시각 필드도 없습니다 [14]. "바꿨다"의 근거로만 씁니다.
 - **수정 시각이 그대로라서 손대지 않았다고 보는 경우.** 확장 속성과 권한을 바꿔도 수정 시각은 그대로입니다 [3].
-- **최근 항목의 순서나 `DateLastSeen` 을 연 시각으로 읽는 경우.** 최근 항목에 연 시각 필드가 있다는 근거는 없고, `CustomItemProperties` 의 `com.apple.LSSharedFileList.DateLastSeen` 은 mac_apt 가 뽑지만 언제 갱신되는지 알려진 자료가 없습니다 [8]. 앱이 `clearRecentDocuments` 로 목록을 비울 수도 있어서 목록에 없다고 열지 않았다고 보지도 않습니다 [10].
+- **최근 항목의 순서나 `DateLastSeen` 을 연 시각으로 읽는 경우.** 최근 항목에 연 시각 필드가 있다는 근거는 없고, `CustomItemProperties` 의 `com.apple.LSSharedFileList.DateLastSeen` 은 mac_apt 가 뽑지만 언제 갱신되는 값인지 정해져 있지 않으므로 연 시각으로 읽지 않습니다 [8]. 앱이 `clearRecentDocuments` 로 목록을 비울 수도 있어서 목록에 없다고 열지 않았다고 보지도 않습니다 [10].
 - **문서 버전이 없으면 열지 않았다고 보는 경우.** 문서 버전은 버전 기능을 지원하는 앱(미리보기·TextEdit·Pages·Numbers 등)이 저장할 때만 생기고, 열기만 하면 생기지 않습니다 [10].
 - **북마크의 사용자 필드를 연 사람으로 단정하는 경우.** 0xc011·0xc012 는 북마크를 만든 사용자이고, 이 값이 파일을 연 사용자와 늘 같다는 근거는 없습니다 [9].
 

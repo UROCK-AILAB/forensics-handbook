@@ -62,7 +62,7 @@ C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{인터페이스 GUID}\{프
 | `sharedKey/keyType` | `networkKey`(WEP)·`passPhrase` |
 | `sharedKey/protected` | 키가 있는 9개 모두 `true` |
 | `sharedKey/keyMaterial` | 키. 아래 "키" 절 |
-| `MacRandomization/enableRandomization`, `randomizationSeed` | 공개 자료 없음 |
+| `MacRandomization/enableRandomization`, `randomizationSeed` | 실제 데이터로 확인 |
 
 - AP 프로필 (`WLANAPProfile`) 에는 `name`, `SSIDConfig`, `MSM/connectivity/maxNumberOfClients`, `security`(`authEncryption`·`transitionMode`·`sharedKey`) 가 있습니다.
 - 프로필 XML 안에는 만든 시각이나 마지막 연결 시각을 적는 요소가 없습니다.

@@ -12,7 +12,7 @@ nav_order: 800
 
 USB 연결은 방향이 둘입니다. 휴대폰을 PC 에 꽂으면 휴대폰이 USB 장치 쪽이 되고, AOSP 에서는 `UsbDeviceManager` 가 이 경우를 맡습니다. 거꾸로 휴대폰에 USB 메모리·키보드 같은 기기를 꽂으면(OTG) 휴대폰이 호스트가 되고, 이때는 `UsbHostManager` 가 맡습니다[1][2]. 두 경우에 남는 흔적이 서로 다르므로 조사 질문이 "PC 에 연결했나" 인지 "휴대폰에 무엇을 꽂았나" 인지부터 나눠 두는 편이 좋습니다.
 
-휴대폰이 장치 쪽일 때는 파일 전송(MTP)·사진 전송(PTP)·USB 테더링(RNDIS·NCM)·MIDI·ADB 같은 USB 기능 가운데 무엇을 켰는지가 시스템 속성과 커널 상태로 바뀌고, 연결 상태는 `DISCONNECTED`, `CONNECTED`, `CONFIGURED` 로 움직입니다[1]. `UsbDeviceManager` 는 이 변화를 "UsbDeviceManager activity" 라는 이름의 기록에 최대 200 줄까지 적습니다. 이 기록은 메모리 안에만 있어서 dump 출력으로만 볼 수 있고, 파일로는 남지 않습니다[1]. PC 연결 시각이 영구히 남는 위치를 밝힌 공개 자료도 없습니다.
+휴대폰이 장치 쪽일 때는 파일 전송(MTP)·사진 전송(PTP)·USB 테더링(RNDIS·NCM)·MIDI·ADB 같은 USB 기능 가운데 무엇을 켰는지가 시스템 속성과 커널 상태로 바뀌고, 연결 상태는 `DISCONNECTED`, `CONNECTED`, `CONFIGURED` 로 움직입니다[1]. `UsbDeviceManager` 는 이 변화를 "UsbDeviceManager activity" 라는 이름의 기록에 최대 200 줄까지 적습니다. 이 기록은 메모리 안에만 있어서 dump 출력으로만 볼 수 있고, 파일로는 남지 않습니다[1].
 
 휴대폰이 호스트일 때는 `UsbHostManager` 가 연결과 분리를 `ConnectionRecord` 로 최대 32 개까지 메모리에 쌓습니다[2]. 이 기록도 파일로 쓰지 않아서 재부팅하면 사라지고, 기기를 꽂을 때 로그캣에 기기 정보가 한 줄 남습니다[2].
 
@@ -35,17 +35,17 @@ USB 연결은 방향이 둘입니다. 휴대폰을 PC 에 꽂으면 휴대폰이
 
 `usb_permissions.xml` 경로의 사용자 ID 폴더는 기기 사용자마다 따로 있으므로, 보안 폴더나 작업 프로필이 있는 기기라면 사용자 폴더를 모두 봅니다. 사용자 번호를 읽는 법은 [사용자와 프로필](../system-account/users-profiles.md) 에 있습니다.
 
-삼성 기기의 Settings 에는 AOSP 에 없는 아래 키도 있습니다. 뜻을 밝힌 공개 자료가 없는 키가 많아 값은 실제 데이터로 확인해야 합니다.
+삼성 기기의 Settings 에는 AOSP 에 없는 아래 키도 있습니다. 키마다 뜻과 값은 실제 데이터로 확인합니다.
 
 | 설정 영역 | 키 이름 | 뜻 |
 |---|---|---|
 | Global | `adb_enabled`, `adb_wifi_enabled` | 이름은 USB 디버깅·무선 디버깅과 맞습니다. 값 형식은 실제 데이터로 확인 |
 | Global | `adb_allowed_connection_time` | AOSP 의 `Settings.Global.ADB_ALLOWED_CONNECTION_TIME`, 곧 ADB 연결 허용 기간 설정입니다[4]. 기본값은 실제 기기에서 확인 |
-| Global | `usb_mass_storage_enabled` | 공개 자료 없음 |
+| Global | `usb_mass_storage_enabled` | 뜻은 실제 데이터로 확인 |
 | Global | `tethered_config_state`, `tether_offload_disabled` | 테더링 쪽 키이고 [테더링과 핫스폿](tethering-hotspot.md) 에서 다룹니다 |
-| Secure | `block_usb_lock`, `usb_audio_automatic_routing_disabled` | 삼성 키로 보입니다. 뜻은 공개 자료 없음 |
-| Secure | `rampart_blocked_adb_cmd`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled` | 삼성 키로 보입니다. 뜻은 공개 자료 없음 |
-| System | `enable_mtp_settings` | 삼성 키로 보입니다. 뜻은 공개 자료 없음 |
+| Secure | `block_usb_lock`, `usb_audio_automatic_routing_disabled` | 삼성 키로 보입니다. 뜻은 실제 데이터로 확인 |
+| Secure | `rampart_blocked_adb_cmd`, `rampart_snapshot_adb_enabled`, `rampart_snapshot_adb_wifi_enabled` | 삼성 키로 보입니다. 뜻은 실제 데이터로 확인 |
+| System | `enable_mtp_settings` | 삼성 키로 보입니다. 뜻은 실제 데이터로 확인 |
 
 설정 값을 읽는 법과 파일 위치는 [설정 값](../system-account/settings.md) 에 모아 두었습니다.
 

@@ -19,7 +19,7 @@ nav_order: 550
 
 기기에서는 `/private/var/mobile/Media/PhotoData/Photos.sqlite` 에 있고[1][3], 로컬 백업에서는 CameraRollDomain 의 `Media/PhotoData/Photos.sqlite` 로 들어 있습니다.
 
-자산 기본 표의 이름은 한 번 바뀌었습니다. 예전 버전은 `ZGENERICASSET` 이고[2], iOS 14·15 는 `ZASSET` 입니다[1]. iOS 에서 바뀐 정확한 버전은 공개된 자료가 없고, macOS 사진 보관함에서는 아래처럼 바뀌었습니다[4].
+자산 기본 표의 이름은 한 번 바뀌었습니다. 예전 버전은 `ZGENERICASSET` 이고[2], iOS 14·15 는 `ZASSET` 입니다[1]. macOS 사진 보관함에서는 아래처럼 바뀌었고[4], iOS 기기에서는 `sqlite_master` 로 두 표 가운데 어느 것이 있는지 먼저 확인합니다.
 
 | 보관함 | 자산 표 이름 | 출처 |
 |---|---|---|
@@ -28,11 +28,11 @@ nav_order: 550
 | iOS 14·15 | `ZASSET` | [1] |
 | iOS 27.0 | `ZASSET` | |
 
-iOS 14.7·15.x 기기를 비교한 시험에서 촬영 정보를 담는 `ZEXTENDEDATTRIBUTES` 는 iOS 15 기기에서만 채워져 있었습니다[1]. 공개 도구 iLEAPP 는 Photos.sqlite 파서를 iOS 11~18 용으로 두고 주로 15~18 을 다룹니다[3]. iOS 27 을 지원하는지는 밝혀져 있지 않아서, 실제 데이터로 결과를 맞춰 봅니다.
+iOS 14.7·15.x 기기를 비교한 시험에서 촬영 정보를 담는 `ZEXTENDEDATTRIBUTES` 는 iOS 15 기기에서만 채워져 있었습니다[1]. 공개 도구 iLEAPP 는 Photos.sqlite 파서를 iOS 11~18 용으로 두고 주로 15~18 을 다룹니다[3]. iOS 27 데이터에서는 도구 결과를 실제 데이터와 맞춰 봅니다.
 
 ## 구조
 
-Photos.sqlite 에는 표가 많고, 자산을 읽을 때 자주 여는 표는 아래와 같습니다(iOS 27.0 기준). 표마다 열 이름은 일부만 적었고, 역할 칸에 "이름으로 보면" 이라고 붙인 표는 역할을 밝힌 공개 자료가 없는 표입니다.
+Photos.sqlite 에는 표가 많고, 자산을 읽을 때 자주 여는 표는 아래와 같습니다(iOS 27.0 기준). 표마다 열 이름은 일부만 적었고, 역할 칸에 "이름으로 보면" 이라고 붙인 표는 표 이름으로 역할을 짐작한 것입니다.
 
 | 표 | 열(일부) | 역할 |
 |---|---|---|
@@ -74,13 +74,13 @@ Photos.sqlite 에는 표가 많고, 자산을 읽을 때 자주 여는 표는 �
 
 **증명하는 것.** `ZASSET` 행이 있으면 수집 시점에 그 자산이 이 보관함에 등록되어 있었다는 사실을 보여 줍니다. `ZSAVEDASSETTYPE` 값으로는 이 기기 카메라로 저장된 자산인지, 공유 앨범·iCloud·나와 공유됨 쪽에서 들어온 자산인지를 구분할 수 있고[1], `ZEXTENDEDATTRIBUTES` 의 카메라 모델·위도·경도는 DB 가 적어 둔 촬영 정보를 보여 줍니다.
 
-**증명하지 못하는 것.** 행이 있다고 원본 파일이 기기나 백업에 있다는 뜻은 아닙니다. `ZINTERNALRESOURCE.ZLOCALAVAILABILITY` 와 `ZCLOUDRESOURCE.ZISLOCALLYAVAILABLE` 이 이름으로 보면 파일이 기기에 있는지와 이어지지만, 값의 뜻은 공개된 자료가 없습니다. 조회 수·공유 수 같은 열로는 누가 봤는지나 누구에게 보냈는지 알 수 없습니다. 공유 날짜 열이 채워져 있어도 공유가 실제로 끝났다는 뜻은 아니고, 공유 흐름이 중간에 끊겨도 흔적이 남을 수 있습니다[5]. `ZLATITUDE`·`ZLONGITUDE` 도 자산에 적힌 위치일 뿐이라서 이 열만으로는 이 기기가 그 자리에 있었는지 알 수 없고, `ZSAVEDASSETTYPE` 으로 자산이 들어온 경로를 먼저 확인합니다.
+**증명하지 못하는 것.** 행이 있다고 원본 파일이 기기나 백업에 있다는 뜻은 아닙니다. `ZINTERNALRESOURCE.ZLOCALAVAILABILITY` 와 `ZCLOUDRESOURCE.ZISLOCALLYAVAILABLE` 이 이름으로 보면 파일이 기기에 있는지와 이어지지만, 파일이 있는지는 기기나 백업에서 파일을 직접 찾아 확인합니다. 조회 수·공유 수 같은 열로는 누가 봤는지나 누구에게 보냈는지 알 수 없습니다. 공유 날짜 열이 채워져 있어도 공유가 실제로 끝났다는 뜻은 아니고, 공유 흐름이 중간에 끊겨도 흔적이 남을 수 있습니다[5]. `ZLATITUDE`·`ZLONGITUDE` 도 자산에 적힌 위치일 뿐이라서 이 열만으로는 이 기기가 그 자리에 있었는지 알 수 없고, `ZSAVEDASSETTYPE` 으로 자산이 들어온 경로를 먼저 확인합니다.
 
 보고서에는 "Photos.sqlite 에 이 기기 카메라로 저장된 자산으로 기록된 사진이 있고, 촬영 정보의 시각은 이렇다" 처럼 DB 가 적어 둔 만큼만 씁니다.
 
 ## 시각 해석
 
-Photos.sqlite 의 날짜 열은 Mac 절대 시각이라서 2001-01-01 00:00:00 UTC 부터 흐른 초로 적혀 있고, `datetime('2001-01-01', 칸 || ' seconds')` 로 바꿉니다[2]. 유닉스 시각이 필요하면 1970-01-01 과 2001-01-01 사이의 978307200 초를 더합니다. 바꾼 값은 UTC 이고[1], 현지 시각으로 옮길 때는 `ZADDITIONALASSETATTRIBUTES.ZTIMEZONEOFFSET` 이나 `ZEXTENDEDATTRIBUTES.ZTIMEZONENAME` 같은 시간대 열을 참고합니다. 이 열들이 어느 시각에 맞춘 값인지는 공개된 자료가 없습니다. 시각 값 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
+Photos.sqlite 의 날짜 열은 Mac 절대 시각이라서 2001-01-01 00:00:00 UTC 부터 흐른 초로 적혀 있고, `datetime('2001-01-01', 칸 || ' seconds')` 로 바꿉니다[2]. 유닉스 시각이 필요하면 1970-01-01 과 2001-01-01 사이의 978307200 초를 더합니다. 바꾼 값은 UTC 이고[1], 현지 시각으로 옮길 때는 `ZADDITIONALASSETATTRIBUTES.ZTIMEZONEOFFSET` 이나 `ZEXTENDEDATTRIBUTES.ZTIMEZONENAME` 같은 시간대 열을 참고합니다. 이 열들이 어느 시각에 맞춘 값인지는 사진 파일의 EXIF 시각과 비교해 확인합니다. 시각 값 전반은 [시각 값 (Mac 절대 시각·Unix·기타)](../../../01-foundations/value-decoding/time-values.md)에서 다룹니다.
 
 열마다 바뀌는 때가 다릅니다. `ZDATECREATED` 와 `ZADDEDDATE` 는[5] 이름으로 보면 만든 시각과 보관함에 추가된 시각으로 보입니다. 최근 삭제로 옮길 때는 `ZMODIFICATIONDATE` 도 갱신됩니다[1]. 그래서 `ZMODIFICATIONDATE` 를 편집 시각으로만 읽으면 안 되고, 편집은 `ZUNMANAGEDADJUSTMENT.ZADJUSTMENTTIMESTAMP` 나 `Adjustments.plist` 의 `adjustmentTimestamp` 와 맞춰 봅니다.
 
@@ -90,7 +90,7 @@ Photos.sqlite 는 WAL 파일과 함께 꺼내야 합니다[1]. 로컬 백업에 
 
 값 해석은 대부분 공개 쿼리와 도구 자료에서 왔고 Apple 이 공개한 명세가 아닙니다. `ZKINDSUBTYPE` 은 옛 스키마 기준이고, `ZSAVEDASSETTYPE` 은 옛 쿼리와 새 자료가 적은 값이 다릅니다[1][2]. 새 버전 데이터에서는 값의 분포를 먼저 세어 보고, 뜻을 모르는 값은 모른다고 적습니다.
 
-`ZMIGRATIONHISTORY` 와 `ACHANGE`·`ATRANSACTION` 은 이름만 보면 DB 이전 기록과 변경 이력처럼 보이지만, 뜻을 밝힌 공개 자료가 없어서 결론의 근거로 쓰지 않습니다.
+`ZMIGRATIONHISTORY` 와 `ACHANGE`·`ATRANSACTION` 은 이름만 보면 DB 이전 기록과 변경 이력처럼 보이지만, 이름만으로 짐작한 뜻이라서 결론의 근거로 쓰지 않습니다.
 
 ## 직접 분석해 보기
 

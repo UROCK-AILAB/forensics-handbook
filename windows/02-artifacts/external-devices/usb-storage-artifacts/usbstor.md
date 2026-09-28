@@ -161,7 +161,7 @@ USBSTOR 의 주요 값에는 시각이 없습니다. 시각은 두 곳에서 얻
 
 키 시각이 무엇에 따라 바뀌는지는 [키 마지막 기록 시각](../../../01-foundations/database-log-formats/registry-hive/last-write-time.md)에서 다룹니다.
 
-2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 한 번만 꽂은 장치에서는 인스턴스 키 시각이 속성의 설치 시각·마지막 연결 시각과 같고, PC 를 다시 켜도 키 시각은 바뀌지 않습니다. 여러 번 꽂은 장치에서 키 시각이 무엇을 따라가는지 설명한 공개 문서는 없습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
+2009년 글(Cowen)은 장치 항목 키의 마지막 기록 시각을 마지막 연결 시각으로 설명했습니다. 한 번만 꽂은 장치에서는 인스턴스 키 시각이 속성의 설치 시각·마지막 연결 시각과 같고, PC 를 다시 켜도 키 시각은 바뀌지 않습니다. 여러 번 꽂은 장치에서는 키 시각이 무엇을 따라가는지 정해져 있지 않습니다. 그래서 연결 시각은 속성 값, [외부 장치 연결 이벤트](../../event-logs/partition-diagnostic-kernel-pnp-driverframeworks.md), [장치 설치 로그](setupapi-dev-log.md)로 정합니다. 키 시각은 이 값들과 맞는지 보는 데만 씁니다.
 - Windows 8.1 이후는 바뀐 내용을 트랜잭션 로그에 먼저 씁니다. 하이브 파일만 보면 최근 연결이 빠질 수 있습니다. → [.LOG1·.LOG2](../../../01-foundations/database-log-formats/registry-hive/log1-log2.md)
 
 ## 함정과 한계

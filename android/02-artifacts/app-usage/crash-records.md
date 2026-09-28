@@ -30,15 +30,15 @@ nav_order: 530
 |---|---|---|
 | DropBox | `/data/system/dropbox` [1] | 3일, 최대 1000개(저사양 램 기기 300개), 용량 한도 있음 [1] |
 | tombstones | `/data/tombstones/` [2] | 개수 한도가 있어 새 충돌이 나면 오래된 파일을 지움 [2] |
-| ANR (예전) | `/data/anr/traces.txt` 한 파일 [3] | 공개 자료 없음 |
-| ANR (새 버전) | `/data/anr/anr_*` 여러 파일 [3] | 공개 자료 없음 |
+| ANR (예전) | `/data/anr/traces.txt` 한 파일 [3] | 파일 수정 시각으로 확인 |
+| ANR (새 버전) | `/data/anr/anr_*` 여러 파일 [3] | 파일 수와 가장 오래된 파일 시각으로 확인 |
 | logcat crash 버퍼 | 메모리 버퍼 | 버퍼 크기만큼 |
 
-DropBox 의 기본 보존 상수는 `DEFAULT_AGE_SECONDS = 3 * 86400`, `DEFAULT_MAX_FILES = 1000` 이고, 용량 한도 `DEFAULT_QUOTA_KB` 는 userdebug 빌드에서 `20 * 1024`, 그 밖에서는 `10 * 1024` 입니다 [1]. tombstone 보관 개수, `.pb` 형식이 들어온 버전, ANR 기록이 한 파일에서 여러 파일로 바뀐 버전은 공개 문서에 나와 있지 않습니다 [3].
+DropBox 의 기본 보존 상수는 `DEFAULT_AGE_SECONDS = 3 * 86400`, `DEFAULT_MAX_FILES = 1000` 이고, 용량 한도 `DEFAULT_QUOTA_KB` 는 userdebug 빌드에서 `20 * 1024`, 그 밖에서는 `10 * 1024` 입니다 [1]. tombstone 보관 개수와 `.pb` 파일이 있는지, ANR 기록이 한 파일인지 여러 파일인지는 기기의 `/data/tombstones/`·`/data/anr/` 파일 목록으로 확인합니다 [3].
 
 세 디렉터리 모두 시스템 영역이라 adb 일반 권한으로 바로 읽기 어렵고, `/data/anr` 를 adb 로 직접 읽을 때도 `adb root` 를 씁니다 [3]. 일반 기기에서는 `adb bugreport` 나 개발자 옵션의 "버그 신고" 로 받습니다 [3]. 버그 리포트 짜임새는 [버그 리포트 (bugreport)](../logs/bugreport.md) 페이지에서 다룹니다. adb 일반 권한으로 `dumpsys dropbox` 를 읽을 수 있는지는 기기에서 확인합니다.
 
-삼성 기기에서 오류 로그를 따로 모으는 위치가 더 있는지는 공개 문서에 나와 있지 않습니다. 삼성 기기에서 보이는 관련 설정 키는 아래와 같습니다.
+삼성 기기에서는 오류 로그를 따로 모으는 위치가 더 있는지 실제 기기에서 확인합니다. 삼성 기기에서 보이는 관련 설정 키는 아래와 같습니다.
 
 | 설정 영역 | 키 이름 |
 |---|---|
@@ -60,7 +60,7 @@ DropBox 의 파일 하나는 항목 하나이고, 이름은 `태그@시각` 에 
 | `.gz` 추가 | 압축한 항목 (예: `.txt.gz`) |
 | `.lost` | 내용이 지워지고 이름만 남은 항목 |
 
-`.lost` 파일은 내용 없이 "이 태그의 항목이 이 시각에 있었다" 는 사실만 남깁니다 [1]. 태그 이름의 전체 목록과 뜻은 공개 문서에 정리돼 있지 않고, 설정 키에는 `data_app_anr`, `data_app_crash`, `data_app_wtf` 같은 태그가 보입니다.
+`.lost` 파일은 내용 없이 "이 태그의 항목이 이 시각에 있었다" 는 사실만 남깁니다 [1]. 기기에 어떤 태그가 있는지는 DropBox 파일 이름으로 확인하고, 설정 키에는 `data_app_anr`, `data_app_crash`, `data_app_wtf` 같은 태그가 보입니다.
 
 ### tombstone 내용
 

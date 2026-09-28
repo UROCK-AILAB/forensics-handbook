@@ -63,7 +63,7 @@ StrongBox 는 KeyMint HAL 을 내장 보안 요소나 통합 보안 영역(iSE)�
 
 ## 함정
 
-기기가 `FEATURE_STRONGBOX_KEYSTORE` 를 지원하는지는 기기마다 따로 확인합니다. 삼성 갤럭시가 StrongBox 를 어떤 하드웨어로 구현하는지는 공개된 분석 자료가 없고, 삼성 고유 보안 구조는 [삼성 녹스](../../security-model/samsung-knox.md) 페이지에 맡깁니다. 키 저장소 폴더 경로는 현행 AOSP 소스 기준이라서, 옛 버전이나 제조사 기기에서는 따로 확인해야 합니다. KeyMint 를 보호하는 검증 부팅은 [부트로더와 검증 부팅](../../security-model/verified-boot.md) 페이지를 봅니다.
+기기가 `FEATURE_STRONGBOX_KEYSTORE` 를 지원하는지는 기기마다 따로 확인합니다. 삼성 고유 보안 구조는 [삼성 녹스](../../security-model/samsung-knox.md) 페이지에서 다룹니다. 키 저장소 폴더 경로는 현행 AOSP 소스 기준이라서, 옛 버전이나 제조사 기기에서는 따로 확인해야 합니다. KeyMint 를 보호하는 검증 부팅은 [부트로더와 검증 부팅](../../security-model/verified-boot.md) 페이지를 봅니다.
 
 ## 참고 문헌
 

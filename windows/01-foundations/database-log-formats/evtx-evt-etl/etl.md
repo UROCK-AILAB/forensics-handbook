@@ -157,7 +157,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 
 - 0x00 `00 00 01 00` 은 리틀 엔디언으로 0x10000, 곧 65,536 입니다. 이 파일의 버퍼 크기입니다.
 - 레지스트리의 BufferSize 0x40 은 KB 단위라 64 × 1,024 = 65,536 입니다. 두 값이 같습니다.
-- 첫 버퍼에서는 0x68 부터 TRACE_LOGFILE_HEADER 가 이어집니다. 0x04 ~ 0x67 은 버퍼 머리 자리이고, 이 구간의 필드 구성을 설명한 공개 자료는 없습니다.
+- 첫 버퍼에서는 0x68 부터 TRACE_LOGFILE_HEADER 가 이어집니다. 0x04 ~ 0x67 은 버퍼 머리 자리이고, 이 구간은 필드의 뜻을 단정하지 않고 값만 옮깁니다.
 - 0x10000 과 0x20000 에서도 같은 4바이트가 나옵니다. 버퍼가 65,536바이트마다 이어집니다.
 - n 번째 버퍼는 (n − 1) × 0x10000 에서 시작합니다.
 
@@ -198,7 +198,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 - Windows 11 25H2 의 Autologger 키 아래에 EventLog-Application·EventLog-Security·EventLog-System 세션 키가 있었고, EventLog-System 키의 값은 OwningChannel=System, LogFileMode=0x98000180, BufferSize=0x40, FlushTimer=1 이었습니다.
 - 0x98000180 을 로그 모드 상수로 풀면 SECURE(0x80)·REAL_TIME(0x100)·INDEPENDENT_SESSION(0x08000000)·NO_PER_PROCESSOR_BUFFERING(0x10000000)·ADDTO_TRIAGE_DUMP(0x80000000) 입니다.
 - 파일 모드 비트가 없어서 이 세션은 `.etl` 파일을 쓰지 않고 이벤트를 실시간으로 넘깁니다.
-- 실시간 소비자가 없을 때 이벤트가 빠지는 예로 이벤트 로그 서비스를 멈췄다 켜는 경우가 있습니다[1]. 다만 EventLog-* 세션을 받는 쪽이 이벤트 로그 서비스라는 것은 공식 문서에 직접 나오지 않습니다.
+- 실시간 소비자가 없을 때 이벤트가 빠지는 예로 이벤트 로그 서비스를 멈췄다 켜는 경우가 있습니다[1]. 다만 EventLog-* 세션을 받는 쪽이 이벤트 로그 서비스라고 단정할 수는 없습니다.
 - 로그를 없애려 한 흔적은 [이벤트 로그 삭제](../../../02-artifacts/event-logs/1102-104.md) 와 [증거를 없애려 했나](../../../04-scenarios/activity/anti-forensics/index.md) 에서 다룹니다.
 
 ## 함정
@@ -208,7 +208,7 @@ LogFileMode 와 MaximumFileSize 는 레지스트리 값과 같았습니다. NetC
 - 문서는 BootTime 을 Global Logger 세션에서만 지원한다고 적습니다[4]. 그러나 Windows 11 25H2 에서는 Global Logger 가 아닌 LwtNetLog 에도 BootTime 이 채워져 있었습니다. 값이 있으면 읽고, 없으면 그 이유를 따로 확인합니다.
 - 레지스트리에 MaxFileSize 가 없다고 제한이 없는 것은 아닙니다. Windows 11 25H2 의 ReFSLog 는 머리에 기본값 100 이 들어 있었습니다.
 - 번호 파일 이름은 문서와 다를 수 있습니다. Windows 11 25H2 에서는 세 자리(`.002`)였습니다. 파일을 찾을 때 자릿수를 정해 두지 않습니다.
-- `RtBackup` 파일이 DisableRealtimePersistence 가 저장한 실시간 이벤트인지는 공식 문서에 나오지 않습니다.
+- `RtBackup` 파일이 DisableRealtimePersistence 가 저장한 실시간 이벤트인지는 시험 기기에서 재현해 확인합니다.
 - Analytic·Debug 채널이 `.etl` 로 저장되는지는 실제 시스템에서 확인해야 합니다.
 
 ## 도구

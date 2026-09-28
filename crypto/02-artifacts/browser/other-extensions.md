@@ -63,13 +63,13 @@ Phantom 의 볼트 형식은 공식 문서로 공개되지 않았습니다. 개�
 {"encryptedKey":{"digest":"sha256","encrypted":"...","iterations":10000,"kdf":"pbkdf2","nonce":"...","salt":"..."},"version":1}
 ```
 
-옛 형식은 `kdf` 가 `pbkdf2` 이고, 새 형식은 `scrypt` 입니다[8]. 두 형식 모두 `encryptedKey` 안에 `digest`·`encrypted`·`iterations`·`kdf`·`nonce`·`salt` 필드가 있고, 바깥에 `version` 이 있습니다. 볼트 안에 든 것은 암호문이라 어떤 계정이 들어 있는지는 이 모양만으로 알 수 없습니다. 값의 인코딩은 공개된 자료가 없습니다. 볼트를 일반적으로 어떻게 읽는지는 [지갑 파일과 암호화](../../01-foundations/wallets/wallet-files.md)에 있습니다.
+옛 형식은 `kdf` 가 `pbkdf2` 이고, 새 형식은 `scrypt` 입니다[8]. 두 형식 모두 `encryptedKey` 안에 `digest`·`encrypted`·`iterations`·`kdf`·`nonce`·`salt` 필드가 있고, 바깥에 `version` 이 있습니다. 볼트 안에 든 것은 암호문이라 어떤 계정이 들어 있는지는 이 모양만으로 알 수 없습니다. 값의 인코딩은 실제 볼트 값을 보고 확인합니다. 볼트를 일반적으로 어떻게 읽는지는 [지갑 파일과 암호화](../../01-foundations/wallets/wallet-files.md)에 있습니다.
 
 Phantom 이 주로 다루는 Solana 의 계정 주소는 32바이트이고, Ed25519 공개 키이거나 프로그램 파생 주소 (PDA, Program Derived Address)입니다[9]. 주소의 문자열 표기는 [주소 형식](../../01-foundations/wallets/address-formats.md)에서 다룹니다.
 
 ### Coinbase Wallet
 
-Coinbase Wallet 확장의 내부 키 이름과 필드는 공식 문서나 공개 분석기로 공개된 것이 없습니다. 그래서 확장 폴더의 LevelDB 를 파서로 열어 키 목록부터 확인하고, 테스트용 프로필에 같은 버전의 확장을 설치해 무엇을 할 때 어떤 키가 바뀌는지 재현해서 뜻을 정합니다.
+Coinbase Wallet 확장의 내부 키 이름과 필드는 확장 폴더의 LevelDB 를 파서로 열어 키 목록부터 확인하고, 테스트용 프로필에 같은 버전의 확장을 설치해 무엇을 할 때 어떤 키가 바뀌는지 재현해서 뜻을 정합니다.
 
 이름이 같은 iOS 앱(번들 ID `org.toshi.distribution`)은 `Documents/default/wallet-rn-v2.sqlite` 와 `Documents/mmkv/CBStore.plaintext` 에 데이터를 두고, iLEAPP 이 이 파일을 읽습니다[10]. 이 파일은 확장과 다른 제품의 저장소입니다. 확장 개발자 이름(Toshi Holdings)과 모바일 번들 ID(`org.toshi`)가 같은 계열이라는 점은 확인되지만, 저장 구조가 같다는 근거는 없습니다. 모바일 앱의 구조는 [iOS 지갑 앱](../mobile/ios-wallets.md)에 있습니다.
 
@@ -83,11 +83,11 @@ Coinbase Wallet 확장의 내부 키 이름과 필드는 공식 문서나 공개
 
 확장 설치 시각은 `Secure Preferences` 의 `extensions.settings` 에 있는 처음 설치 시각과 마지막 업데이트 시각으로 확인합니다. 이 값의 단위와 기준 시점은 Windows 핸드북의 [크롬 계열 브라우저](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/browsers/chrome-edge-whale/)에 있습니다.
 
-MetaMask 는 설치·거래·연결 시각을 밀리초 단위 유닉스 시각으로 저장하지만([MetaMask 거래 기록과 연결한 사이트](metamask/activity.md)), 다른 확장 지갑이 어떤 필드에 어떤 기준으로 시각을 적는지는 공개된 자료가 없습니다. 숫자 값이 시각처럼 보이면 테스트용 프로필에서 알려진 시각에 같은 동작을 해 보고 단위(초·밀리초)와 기준을 확인합니다. LevelDB 파일(`.log`·`.ldb`)의 파일 시스템 시각은 LevelDB 가 파일을 새로 쓰거나 합칠 때 바뀌므로, 지갑을 쓴 시각과 바로 같지 않습니다. 기기 시계가 틀려도 블록 시각은 그대로이므로, 로컬 기록과 블록 시각을 비교하는 방법은 [블록 시각과 확정](../../01-foundations/blockchain/block-time.md)을 따릅니다.
+MetaMask 는 설치·거래·연결 시각을 밀리초 단위 유닉스 시각으로 저장하지만([MetaMask 거래 기록과 연결한 사이트](metamask/activity.md)), 다른 확장 지갑이 어떤 필드에 어떤 기준으로 시각을 적는지는 따로 확인해야 합니다. 숫자 값이 시각처럼 보이면 테스트용 프로필에서 알려진 시각에 같은 동작을 해 보고 단위(초·밀리초)와 기준을 확인합니다. LevelDB 파일(`.log`·`.ldb`)의 파일 시스템 시각은 LevelDB 가 파일을 새로 쓰거나 합칠 때 바뀌므로, 지갑을 쓴 시각과 바로 같지 않습니다. 기기 시계가 틀려도 블록 시각은 그대로이므로, 로컬 기록과 블록 시각을 비교하는 방법은 [블록 시각과 확정](../../01-foundations/blockchain/block-time.md)을 따릅니다.
 
 ## 함정과 한계
 
-- **이름이 같은 다른 제품.** "Coinbase" 라는 이름은 거래소 앱, 지갑 앱, 지갑 확장, Base App 에 모두 쓰입니다. Coinbase 는 Base App(이전 이름 Coinbase Wallet)을 Coinbase 계정에 연결하면 지갑 주소를 수집합니다[11]. 이 수집이 확장에도 해당하는지는 공개된 자료가 없습니다. 보고서에는 무엇을 분석했는지 확장 ID 나 번들 ID 로 적습니다.
+- **이름이 같은 다른 제품.** "Coinbase" 라는 이름은 거래소 앱, 지갑 앱, 지갑 확장, Base App 에 모두 쓰입니다. Coinbase 는 Base App(이전 이름 Coinbase Wallet)을 Coinbase 계정에 연결하면 지갑 주소를 수집합니다[11]. 이 설명은 Base App 에 대한 것이므로, 확장에도 해당한다고 단정하지 않습니다. 보고서에는 무엇을 분석했는지 확장 ID 나 번들 ID 로 적습니다.
 - **스토어별 확장 ID.** 표의 ID 는 Chrome 웹 스토어 것입니다. 다른 스토어에서 받은 같은 지갑은 ID 가 다를 수 있어서, 설치 목록의 이름으로 확인합니다.
 - **Phantom 형식의 근거.** 볼트 모양의 근거는 개인이 공개한 README 하나뿐입니다[8]. 판마다 필드가 다를 수 있으므로 실제 데이터의 필드를 그대로 적습니다.
 - **여러 볼트.** LevelDB 에는 덮어쓴 옛 값이 남을 수 있어서 볼트 모양의 값이 여럿 나올 수 있습니다. 복구 도구가 마지막 레코드를 "Current" 로, 나머지를 "(Likely) Old" 로 붙이는 것은 레코드 순서에 따른 표시일 뿐입니다[3][4].

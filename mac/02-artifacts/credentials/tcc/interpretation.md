@@ -28,7 +28,7 @@ macOS 10.15 이하의 `allowed` 열은 0이면 허용 안 됨, 1이면 허용입
 | 4 | addOnly | 추가만 허용 |
 | 5 | singleBootAllowed | 한 번의 부팅(boot_uuid) 동안만 허용 |
 
-3(limited)과 4(addOnly)가 어느 서비스에서 쓰이는지를 밝힌 공개 문서는 없습니다. 사진 추가 권한으로 보이는 `kTCCServicePhotosAdd`라는 서비스 이름이 있지만 [4], 두 값과의 관계는 알려져 있지 않아 실제 데이터로 확인해야 합니다.
+3(limited)과 4(addOnly)가 어느 서비스에서 쓰이는지는 실제 데이터에서 이 값이 붙은 행의 `service`를 보고 확인합니다. 사진 추가 권한으로 보이는 `kTCCServicePhotosAdd`라는 서비스 이름이 있지만 [4], 두 값과 관계가 있는지도 같은 방법으로 확인합니다.
 
 mac_apt와 APOLLO는 0(거부)과 2(허용)만 이름으로 풀고 나머지 값은 빈칸으로 둡니다 [1][2]. 그래서 도구 출력만 보면 1·3·4·5인 행의 상태가 사라진 것처럼 보이고, 원본 값을 SQL로 따로 확인해야 합니다.
 
@@ -52,7 +52,7 @@ macOS 11 이상의 `auth_reason` 값은 아래와 같습니다 [4]. 오른쪽 �
 | 11 | entitled | 권한 선언(entitlement)에 따름 |
 | 12 | appTypePolicy | 앱 종류 정책 |
 
-최신 macOS에서 12보다 큰 값이 생겼는지는 알려져 있지 않습니다. 표에 없는 값이 나오면 이름을 짐작해 붙이지 말고 숫자 그대로 보고합니다.
+표에 없는 값이 나오면 이름을 짐작해 붙이지 말고 숫자 그대로 보고합니다.
 
 ## 서비스 이름
 
@@ -80,9 +80,9 @@ PPPC 도입 버전은 MDM 프로파일로 그 권한을 다룰 수 있게 된 �
 
 ## client와 나머지 열
 
-`client`는 권한을 받은 앱을 가리킵니다. `client_type`이 0이면 번들 ID, 1이면 절대 경로라는 설명이 널리 퍼져 있지만 이를 뒷받침하는 공개 자료는 없습니다. PPPC 스키마의 `IdentifierType` 값이 `bundleID`와 `path` 두 가지라서 그런 대응이 있을 가능성은 있습니다 [3]. 그래서 `client` 값이 `/`로 시작하는 경로인지, 번들 ID 모양인지를 직접 보고 구분합니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
+`client`는 권한을 받은 앱을 가리킵니다. `client_type`이 0이면 번들 ID, 1이면 절대 경로라는 설명이 널리 퍼져 있지만, 이 대응을 단정하지는 않습니다. PPPC 스키마의 `IdentifierType` 값이 `bundleID`와 `path` 두 가지라서 그런 대응이 있을 가능성은 있습니다 [3]. 그래서 `client` 값이 `/`로 시작하는 경로인지, 번들 ID 모양인지를 직접 보고 구분합니다. 번들 ID를 읽는 법은 [번들 ID와 팀 ID](../../../01-foundations/value-decoding/bundle-team-id.md)에 있습니다.
 
-`indirect_object_identifier`는 AppleEvents 권한에서 이벤트를 받는 쪽 앱을 가리키는 열로 보입니다. PPPC에서 AppleEvents만 받는 프로세스를 적는 `AEReceiverIdentifier`를 따로 두는 것과 맞지만 [3], 열의 뜻 자체를 밝힌 공개 자료는 없습니다.
+`indirect_object_identifier`는 AppleEvents 권한에서 이벤트를 받는 쪽 앱을 가리키는 열로 보입니다. PPPC에서 AppleEvents만 받는 프로세스를 적는 `AEReceiverIdentifier`를 따로 두는 것과 맞습니다 [3].
 
 ## 증거로서 의미
 
@@ -94,7 +94,7 @@ PPPC 도입 버전은 MDM 프로파일로 그 권한을 다룰 수 있게 된 �
 
 도구 출력의 빈칸은 값이 없다는 뜻이 아닐 수 있어서, 앞의 권한 상태 값 절에서 본 것처럼 빈칸이 보이면 원본 값을 확인합니다.
 
-`auth_value`와 `auth_reason`의 이름은 도구 작성자가 소스에 적은 대응이라서, 보고서에는 숫자 값과 함께 "Jamf Aftermath 소스의 대응표에 따르면"처럼 출처를 적습니다. 서비스 목록도 공개 자료에 나온 이름까지라서, 새 macOS에서 처음 보는 `kTCCService` 이름이 나오면 뜻을 짐작하지 말고 이름 그대로 옮깁니다.
+`auth_value`와 `auth_reason`의 이름은 도구 작성자가 소스에 적은 대응이라서, 보고서에는 숫자 값과 함께 "Jamf Aftermath 소스의 대응표에 따르면"처럼 출처를 적습니다. 새 macOS에서 위 목록에 없는 `kTCCService` 이름이 나오면 뜻을 짐작하지 말고 이름 그대로 옮깁니다.
 
 macOS 10.15 이하의 `allowed` 값(1=허용)과 macOS 11 이상의 `auth_value` 값(2=허용)은 숫자가 달라서, 두 구조의 결과를 한 표에 섞을 때는 먼저 이름으로 바꾼 뒤 합칩니다.
 

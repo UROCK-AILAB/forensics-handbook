@@ -8,7 +8,7 @@ nav_order: 2230
 
 드롭박스 PC 앱은 동기화 폴더 위치와 계정 종류를 `info.json` 에 적습니다. 앱의 DB 는 확장자가 `.dbx` 인 파일입니다. 이 파일은 암호화한 SQLite 인데, 암호화하지 않은 것도 있습니다. DB 를 푸는 키는 사용자 레지스트리에 DPAPI 로 보호해 둡니다. 그래서 DB 를 열려면 먼저 DPAPI 를 풀어야 하고, 이때 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 필요합니다. `.dbx` 에 관한 내용은 2017년 앱 기준입니다[1].
 
-> **(구현)** 표시는 한 포렌식 분석 구현이 읽는 파일·표·열 이름입니다. 어느 앱 버전 것인지 알려지지 않은 후보이므로 실제 데이터로 이름을 확인합니다.
+> **(구현)** 표시는 한 포렌식 분석 구현이 읽는 파일·표·열 이름입니다. 어느 앱 버전 것인지 알 수 없는 후보이므로 실제 데이터로 이름을 확인합니다.
 
 ## 무엇을 기록하나 · 왜 생기나
 
@@ -106,7 +106,7 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 
 ### 새 버전 파일 (구현)
 
-구현은 `%LOCALAPPDATA%\Dropbox\instance<N>\sync_history.db` 를 암호화하지 않은 SQLite 로 봅니다. 이 파일에는 표 `sync_history` 가 있고, 열 `local_path`, `file_event_type`, `direction`, `timestamp` 가 있습니다 (구현). `direction` 은 올리기·내려받기 방향으로 보이며, 값 목록은 실제 데이터로 확인합니다. 흔히 거론하는 `aggregation.dbx`, `home.db`, `nucleus.sqlite3` 같은 이름을 분석한 공개 자료는 없으므로 실제 데이터로 확인해야 합니다.
+구현은 `%LOCALAPPDATA%\Dropbox\instance<N>\sync_history.db` 를 암호화하지 않은 SQLite 로 봅니다. 이 파일에는 표 `sync_history` 가 있고, 열 `local_path`, `file_event_type`, `direction`, `timestamp` 가 있습니다 (구현). `direction` 은 올리기·내려받기 방향으로 보이며, 값 목록은 실제 데이터로 확인합니다. 흔히 거론하는 `aggregation.dbx`, `home.db`, `nucleus.sqlite3` 같은 이름도 실제 데이터로 확인합니다.
 
 - SQLite 파일을 읽는 법은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 
@@ -124,7 +124,6 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 ### 증명하지 못하는 것
 
 - `info.json` 키에는 계정 메일과 시각이 없습니다[3]. 어느 메일 계정인지는 다른 기록에서 찾습니다.
-- `host` 값을 드롭박스 서버 쪽 기록과 맞춰 보는 방법은 공개 자료가 없습니다.
 - 동기화 폴더에 파일이 있다고 그 파일을 올렸다고 단정하지 않습니다. 동기화는 앱이 스스로 합니다.
 - 암호화한 DB 를 풀지 못하면 파일 단위 기록은 볼 수 없습니다.
 - 구현이 읽는 표와 열로 무엇을 증명할 수 있는지는 실제 데이터로 이름과 뜻을 확인한 뒤에 판단합니다.
@@ -133,7 +132,7 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 
 - `info.json` 의 키에는 시각이 없습니다.
 - `info.json` 파일의 파일 시스템 시각이 무엇이 바뀔 때 바뀌는지는 실제 기기에서 확인해야 합니다.
-- 구현이 읽는 시각 열(`local_timestamp`, `local_mtime`, `local_ctime`, `date_added`, `timestamp`)은 단위와 시간대가 알려지지 않았습니다.
+- 구현이 읽는 시각 열(`local_timestamp`, `local_mtime`, `local_ctime`, `date_added`, `timestamp`)은 단위와 시간대를 실제 값으로 확인합니다.
 - 값의 자릿수로 단위를 먼저 구분합니다. 방법은 [시각 값 형식](../../01-foundations/value-decoding/filetime-unix-webkit-dos-ole.md) 에 있습니다.
 - `local_mtime`, `local_ctime` 은 이름으로 보면 로컬 파일의 시각입니다. `mtime` 은 수정 시각으로 보이지만, `ctime` 이 만든 시각인지 메타데이터를 바꾼 시각인지는 이름만으로 알 수 없습니다. 같은 파일의 MFT 시각과 맞춰 본 뒤에 뜻을 정합니다.
 
@@ -144,7 +143,7 @@ HKCU\SOFTWARE\Dropbox\ks    값 Client  →  같은 과정  →  instance_db 안
 - **모든 `.dbx` 가 암호화돼 있지는 않습니다.** 파일 앞머리를 먼저 보고 SQLite 인지, base64 인지, 암호화한 파일인지 확인합니다. SQLite 파일 머리 모양은 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에 있습니다.
 - **오프라인에서는 DPAPI 부터 풀어야 합니다.** 사용자 로그인 비밀번호(또는 그 SHA1 해시)나 그 사용자의 DPAPI 마스터 키가 필요합니다[1]. 셋 다 없으면 이 방법으로는 풀지 못합니다. 비밀번호 없이 다루는 방법은 [암호화 증거 다루기](../../03-techniques/analysis/encrypted-evidence/index.md) 에 있습니다.
 - **실행 중인 PC 에서 키를 뽑을 때는 기록을 남깁니다.** decwindbx 에는 이름에 `live` 가 붙은 스크립트가 있습니다. 실행 중인 PC 에서 도구를 돌리면 PC 에 흔적이 남습니다. 절차는 [라이브 응답](../../03-techniques/process-acquisition/live-response/index.md) 을 따릅니다.
-- **클라우드 파일 API 사용 여부는 실제 기기에서 판별합니다.** 드롭박스가 Windows 에서 이 API 로 온라인 전용 파일을 만드는지는 공개 자료가 없습니다. `SyncRootManager` 에 드롭박스 공급자 키가 있는지, 동기화 폴더 파일의 특성이 어떤지 실제 기기에서 확인합니다. 방법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
+- **클라우드 파일 API 사용 여부는 실제 기기에서 판별합니다.** `SyncRootManager` 에 드롭박스 공급자 키가 있는지, 동기화 폴더 파일의 특성이 어떤지 실제 기기에서 확인합니다. 방법은 [클라우드 동기화 공통 구조](cloud-files-api-syncrootmanager.md) 에 있습니다.
 
 ## 직접 분석해 보기
 

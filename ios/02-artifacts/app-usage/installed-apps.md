@@ -52,7 +52,7 @@ nav_order: 410
 | `SysContainerDomain-com.apple.lsd :: com.apple.launchservices.appmarketplaces.plist` | `version` (int), `preferredMarketplaces` (list) |
 | `SysContainerDomain-com.apple.managedappdistributiond :: distributor-preferences-store.plist` | `doNotShowSheetList` (list) |
 
-`InstallDomain` 의 두 plist 값, `lastLaunch` 의 값, `sirisuggestions` 의 두 키, `appmarketplaces` 가 대체 앱 마켓과 관련된 파일인지는 모두 뜻을 밝힌 공개 자료가 없습니다. `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인(항목 5개)도 있고, 안의 파일은 실제 백업에서 확인합니다.
+`InstallDomain` 의 두 plist 값, `lastLaunch` 의 값, `sirisuggestions` 의 두 키, `appmarketplaces` 가 대체 앱 마켓과 관련된 파일인지는 모두 이름만으로 단정할 수 없습니다. `SysSharedContainerDomain-systemgroup.com.apple.mobile.installationhelperlogs` 도메인(항목 5개)도 있고, 안의 파일은 실제 백업에서 확인합니다.
 
 백업의 앱 도메인은 `AppDomain-com.apple.AppStore` 처럼 이름에 번들 ID 가 들어가서 설치 앱 후보를 모을 때 쓸 수 있습니다. 다만 이 목록을 설치 앱 목록과 같다고 보지 말고 `applicationState.db` 와 맞춰 봅니다. 백업 구조는 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 다룹니다.
 
@@ -65,7 +65,7 @@ nav_order: 410
 | `application_identifier_tab` | `id`, `application_identifier` | 번들 ID 를 번호에 연결 |
 | `key_tab` | `id`, `key` | key 번호를 key 이름에 연결 |
 | `kvs` | `id`, `application_identifier`, `key`, `value` | 앱 번호와 key 번호마다 값을 둠. 앱과 데이터 경로를 이음 |
-| `schema` | `version` | 열 하나. 값의 뜻은 공개 자료 없음 |
+| `schema` | `version` | 열 하나. 값의 뜻은 단정하지 않음 |
 
 iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으면 앱 폴더가 있는 설치 앱이고, 없으면 지운 앱이었습니다. 지운 앱 가운데 일부는 `_UninstallDate` key 에 삭제 시각을 담은 이진 plist 를 남겼지만, 모든 앱이 그렇지는 않았습니다[3]. `key_tab` 의 번호는 기기나 버전마다 다를 수 있습니다[3]. 그래서 번호를 외워 쓰지 말고 `key_tab` 과 조인해 key 이름으로 거릅니다. `value` 열에는 이진 plist 가 들어가는 경우가 있어서[3], 값을 풀 때는 [속성 목록 파일](../../01-foundations/data-formats/plist.md) 의 방법을 씁니다.
 
@@ -79,7 +79,7 @@ iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으�
 
 ## 시각 해석
 
-이 페이지의 기록은 대부분 시각이 아니라 상태를 담습니다. `applicationState.db` 에서 설치 시각을 읽는 방법은 공개 자료에 없습니다. 로컬 백업에서 시각 형인 키는 `sirisuggestions` 의 `lastAppInstallDate` (datetime) 와 `DesiredIconState.plist` 의 `metadata`·`creationDate` 정도입니다. 두 키 모두 이름은 설치 시각이나 파일을 만든 시각을 떠올리게 하지만 뜻이 밝혀지지 않아서, 다른 기록과 맞기 전에는 설치 시각으로 쓰지 않습니다.
+이 페이지의 기록은 대부분 시각이 아니라 상태를 담습니다. 로컬 백업에서 시각 형인 키는 `sirisuggestions` 의 `lastAppInstallDate` (datetime) 와 `DesiredIconState.plist` 의 `metadata`·`creationDate` 정도입니다. 두 키 모두 이름은 설치 시각이나 파일을 만든 시각을 떠올리게 하지만 이름만으로 뜻을 단정할 수 없어서, 다른 기록과 맞기 전에는 설치 시각으로 쓰지 않습니다.
 
 설치와 제거 시각은 Mobile Installation 로그[1]와 [바이옴](biome/index.md) 의 설치 기록에서 찾고, 시각 기준은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 확인합니다.
 
@@ -87,11 +87,11 @@ iOS 11.2.1 기기 시험에서는 `kvs` 에 `compatibilityInfo` key 가 있으�
 
 **도구마다 목록이 다릅니다.** iOS 15 이미지 비교에서 Mobile Installation 로그를 읽을 때 어떤 도구는 설치에 성공한 항목만, 어떤 도구는 설치와 제거 항목을 모두, iLEAPP 는 재부팅과 관련된 항목까지 보았습니다[1]. 도구 둘이 다른 앱 목록을 내면 어느 파일의 어느 항목에서 나온 결과인지부터 확인합니다.
 
-**로그 경로와 형식은 따로 확인합니다.** Mobile Installation 로그의 파일 경로와 줄 형식, 보관 기간을 정리한 공개 자료는 없어서 실제 기기에서 확인해야 합니다. 로그를 인용할 때는 실제 기기에서 찾은 경로를 함께 적습니다.
+**로그 경로와 형식은 따로 확인합니다.** Mobile Installation 로그의 파일 경로와 줄 형식, 보관 기간은 실제 기기에서 확인합니다. 로그를 인용할 때는 실제 기기에서 찾은 경로를 함께 적습니다.
 
 **정리한 앱은 목록에서 빠질 수 있습니다.** 정리한 앱은 `applicationState.db` 에서 항목이 지워지고[4], `IconState.plist` 로 정리한 앱과 완전히 설치된 앱을 가릅니다[4]. `applicationState.db` 한 곳만 보고 설치 앱 수를 보고하지 않습니다.
 
-**이름만 보고 해석하지 않습니다.** `SystemAppInstallState.plist` 처럼 이름에 설치 상태가 들어간 파일도 값의 뜻은 알려져 있지 않습니다. Apple 기본 앱의 설치 여부로 옮겨 적기 전에 다른 기록과 맞춰 봅니다.
+**이름만 보고 해석하지 않습니다.** `SystemAppInstallState.plist` 처럼 이름에 설치 상태가 들어간 파일도 값의 뜻은 이름만으로 단정할 수 없습니다. Apple 기본 앱의 설치 여부로 옮겨 적기 전에 다른 기록과 맞춰 봅니다.
 
 **지우기와 조작.** 앱을 지우거나 정리하면 이 페이지의 기록에서는 흔적이 줄어들지만, 번들 ID 는 사용 기록과 구매 기록에 남을 수 있습니다. 그 흐름은 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 에서 봅니다.
 

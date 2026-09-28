@@ -17,7 +17,7 @@ nav_order: 1290
 
 ## 위치와 버전별 차이
 
-메일 데이터는 사용자 홈의 `~/Library/Mail/V<n>/` 아래에 있고, 공개 도구는 `V` 뒤 숫자가 가장 큰 폴더를 현재 저장소로 고릅니다 [3]. 구조가 알려진 폴더 이름은 `V10` 이고, 다른 번호도 스키마가 같으면 같은 방식으로 읽을 수 있습니다 [2]. macOS 버전별로 어느 번호를 쓰는지는 공개 자료가 없어서, 실제 데이터에서 폴더 이름을 직접 보고 [OS 버전과 설치 기록](../../system-account/os-version-install-history.md)과 함께 적어 둡니다.
+메일 데이터는 사용자 홈의 `~/Library/Mail/V<n>/` 아래에 있고, 공개 도구는 `V` 뒤 숫자가 가장 큰 폴더를 현재 저장소로 고릅니다 [3]. 구조가 알려진 폴더 이름은 `V10` 이고, 다른 번호도 스키마가 같으면 같은 방식으로 읽을 수 있습니다 [2]. macOS 버전별로 어느 번호를 쓰는지는 실제 데이터에서 폴더 이름을 직접 보고 확인하고, [OS 버전과 설치 기록](../../system-account/os-version-install-history.md)과 함께 적어 둡니다.
 
 `~/Library/Mail` 은 보호 영역이라서 라이브 시스템에서 직접 읽으려면 전체 디스크 접근 권한 (Full Disk Access)이 필요합니다 [2]. 권한 기록은 [개인 정보 보호 권한 (TCC)](../../credentials/tcc/index.md)에서, 켜진 맥에서 수집하는 순서는 [라이브 대응 (Live Response)](../../../03-techniques/process-acquisition/live-response/index.md)에서 다룹니다.
 
@@ -57,7 +57,7 @@ nav_order: 1290
 
 끝부분은 XML 과 바이너리 속성 목록 가운데 어느 쪽인지 정해져 있지 않고, 파이썬 참고 구현도 두 형식을 모두 읽는 `plistlib.loads` 로 읽습니다 [1]. 끝부분의 형식은 첫 바이트를 보고 판별하고, 형식별 구조는 [속성 목록 파일 (Property List)](../../../01-foundations/data-formats/plist/index.md)을 봅니다.
 
-속성 목록 키 가운데 뜻이 알려진 것은 정수 비트마스크인 `flags` 하나입니다 [1]. 다른 키의 이름과 시각 기준은 공개 자료가 없어 실제 데이터로 확인해야 합니다.
+속성 목록 키 가운데 뜻이 알려진 것은 정수 비트마스크인 `flags` 하나입니다 [1]. 다른 키의 이름과 시각 기준은 실제 데이터로 확인합니다.
 
 ### `flags` 비트
 
@@ -72,7 +72,7 @@ nav_order: 1290
 | 4 | flagged | 깃발 표시 |
 | 5 | recent | 최근 메일 |
 | 6 | draft | 임시 저장 |
-| 7 | initial | (공개 자료 없음) |
+| 7 | initial | (뜻을 단정하지 않고 값만 옮김) |
 | 8 | forwarded | 전달함 |
 | 9 | redirected | 재전송함 |
 | 10–15 | attachment_count | 첨부 개수 (6비트) |
@@ -81,8 +81,8 @@ nav_order: 1290
 | 24 | is_junk | 정크로 표시 |
 | 25 | is_not_junk | 정크 아님으로 표시 |
 | 26–28 | font_size_delta | 글자 크기 조정 (3비트) |
-| 29 | junk_mail_level_recorded | (공개 자료 없음) |
-| 30 | highlight_text_in_toc | (공개 자료 없음) |
+| 29 | junk_mail_level_recorded | (뜻을 단정하지 않고 값만 옮김) |
+| 30 | highlight_text_in_toc | (뜻을 단정하지 않고 값만 옮김) |
 
 MIME 헤더의 `Message-ID` 로 만든 `message:<Message-ID>` 형태의 URL 이 메시지를 가리키는 값으로 쓰입니다 [1].
 
@@ -96,15 +96,15 @@ MIME 헤더의 `Message-ID` 로 만든 `message:<Message-ID>` 형태의 URL 이 
 
 ## 시각 해석
 
-`.emlx` 안에서 뜻이 알려진 시각은 MIME 헤더의 날짜뿐이고, 이 값은 보낸 쪽 기기가 적은 시각입니다. 속성 목록 쪽 시각 키는 공개 자료가 없어서, 받은 시각과 보낸 시각은 [메일 색인 DB](envelope-index.md)의 열과 함께 봅니다. 여러 시각을 하나로 모아 보는 방법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에 있습니다.
+`.emlx` 안에서 뜻이 알려진 시각은 MIME 헤더의 날짜뿐이고, 이 값은 보낸 쪽 기기가 적은 시각입니다. 속성 목록 쪽 시각 키는 뜻을 단정할 수 없어서, 받은 시각과 보낸 시각은 [메일 색인 DB](envelope-index.md)의 열과 함께 봅니다. 여러 시각을 하나로 모아 보는 방법은 [타임라인 작성 (Timeline)](../../../03-techniques/analysis/timeline/index.md)에 있습니다.
 
 ## 함정과 한계
 
 이 구조는 공개 도구가 역분석한 결과이고 Apple 이 문서로 밝힌 API 가 아니라서 [2], 버전이 바뀌면 폴더 규칙이나 속성 목록 내용이 달라질 수 있습니다. 나눔 규칙과 폴더 구조는 공개 도구 하나의 코드에만 나와 있어서, 실제 데이터에서 몇 건을 직접 따라가 맞는지 먼저 봅니다.
 
-`.partial.emlx` 말고 다른 부분 파일 확장자가 있는지, 로컬 메일함(`local://`)이나 Exchange 계정(`ews://`) URL 이 같은 규칙으로 폴더가 되는지는 공개 자료가 없습니다. IMAP 이 아닌 계정은 폴더를 직접 둘러보고 규칙을 확인하고, Exchange 계정은 본문 파일이 없는 것이 흔하다는 점도 함께 적어 둡니다 [3].
+`.partial.emlx` 말고 다른 부분 파일 확장자가 있는지는 메일함 폴더의 확장자 목록을 뽑아 확인합니다. 로컬 메일함(`local://`)이나 Exchange 계정(`ews://`)처럼 IMAP 이 아닌 계정은 폴더를 직접 둘러보고 URL 이 같은 규칙으로 폴더가 되는지 확인하고, Exchange 계정은 본문 파일이 없는 것이 흔하다는 점도 함께 적어 둡니다 [3].
 
-`deleted` 비트가 켜진 파일이 남아 있을 수 있지만, 삭제한 메일이 언제 파일에서 사라지는지는 공개 자료가 없습니다. 파일이 사라진 뒤의 흔적을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
+`deleted` 비트가 켜진 파일이 남아 있을 수 있지만, 삭제한 메일이 언제 파일에서 사라지는지는 시험 기기에서 메일을 지운 뒤 파일 목록을 비교해 확인합니다. 파일이 사라진 뒤의 흔적을 찾는 방법은 [삭제 데이터 복구 (Data Recovery)](../../../03-techniques/analysis/data-recovery/index.md)에서 다룹니다.
 
 ## 직접 분석해 보기
 

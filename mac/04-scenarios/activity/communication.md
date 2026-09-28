@@ -77,7 +77,7 @@ ORDER BY date;
 | `ZISO_COUNTRY_CODE`, `ZLOCATION` | 국가 코드, 위치 |
 | `ZDISCONNECTED_CAUSE` | 끊긴 원인(macOS 10.13 이상) |
 
-시각은 `DATETIME(ZDATE+978307200,'UNIXEPOCH')` 로 바꿉니다 [3]. `ZCALLTYPE`·`ZORIGINATED`·`ZANSWERED` 값이 수신·발신이나 페이스타임 음성·영상을 어떻게 가르는지와, 버전에 따라 `ZADDRESS` 가 평문인지 암호화된 값인지는 공개된 자료가 없습니다. 그래서 이 세 열은 값을 그대로 적고, 값의 뜻은 같은 데이터에서 알고 있는 통화로 맞춰 본 뒤에만 풀어 씁니다.
+시각은 `DATETIME(ZDATE+978307200,'UNIXEPOCH')` 로 바꿉니다 [3]. `ZCALLTYPE`·`ZORIGINATED`·`ZANSWERED` 값이 수신·발신이나 페이스타임 음성·영상을 어떻게 구분하는지는 값만 보고 단정할 수 없고, `ZADDRESS` 는 버전에 따라 평문인지 암호화된 값인지 먼저 확인합니다. 그래서 이 세 열은 값을 그대로 적고, 값의 뜻은 같은 데이터에서 알고 있는 통화로 맞춰 본 뒤에만 풀어 씁니다.
 
 ## 분석 흐름
 

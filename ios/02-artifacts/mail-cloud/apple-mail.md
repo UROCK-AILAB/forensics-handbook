@@ -38,10 +38,10 @@ iCloud 메일은 표준 보호에서도, 고급 데이터 보호(Advanced Data P
 |---|---|---|
 | 12 | `messages`(보낸 사람·제목·받는 사람/참조/숨은 참조), `message_data`(본문 앞 500바이트) | [1] |
 | 13 | `Addresses`, `Subjects`, `Summaries`, `protected_message_data` | [1] |
-| 15 이후 | 공개 자료 없음 | — |
+| 15 이후 | 표 목록을 뽑아 실제 데이터로 확인 | — |
 | 27.0 로컬 백업 | `Envelope Index`·`Protected Index`·`.emlx` 가 들어 있는지 실제 데이터로 확인 | — |
 
-iOS 12 와 13 사이에 `Protected Index` 구조가 바뀌었고 [1], iOS 15 이후 `Envelope Index` 의 표·열 이름이 그대로인지 밝힌 공개 문서는 없습니다. 버전이 다르면 표 목록부터 새로 뽑아 봅니다.
+iOS 12 와 13 사이에 `Protected Index` 구조가 바뀌었고 [1], iOS 15 이후 기기에서는 `Envelope Index` 의 표·열 이름이 그대로인지 표 목록부터 새로 뽑아 확인합니다.
 
 ## 구조
 
@@ -93,7 +93,7 @@ BucketBarConfiguration / BucketSelectionConfiguration: {All Inboxes}
 
 그 밖에 `com.apple.mobilemail.plist` 에는 `MailAccountsOrder`(list)·`MessageAccountsVersion`(int)이, `com.apple.email.maild.plist` 에는 `com.apple.mobilemail.purge.bodies.purge_markers`·`kDefaultsKeyLastVerifiedMessageID`(int)·`kCloudStoreHistoryTokenUserDefaultsKey`(bytes)·`set-initial-vip-flags`(bool)가, `com.apple.icloudmailagent.plist` 에는 `com.apple.icloud.mail.lastRetryTimestamp`·`com.apple.icloud.mail.lastSyncAllTimestamp`(둘 다 float)가 있습니다. 애플 워치로 메일을 보는 설정은 `HomeDomain :: Library/Preferences/com.apple.NanoMail.plist` 에 `kIncludeMailBoxesKey`, `kAccountIdentitiesKey`, `NanoMailDefaultAccountUidKey`, `NanoMailLoadRemoteImages` 같은 키로 남습니다. 워치 연결 흔적 전체는 [애플 워치 연결](../health-wallet/apple-watch.md) 에서 다룹니다.
 
-메일 앱 도메인 안에는 `Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 도 있고, 그 `ObservedDomains` 표에 `registrableDomain`, `lastSeen`, `mostRecentUserInteractionTime` 같은 열이 있습니다. 메일 안의 웹 콘텐츠(원격 이미지 등)를 불러온 기록인지는 알려져 있지 않아서, 보고서에 쓰기 전에 실제 데이터의 값을 보고 판단합니다.
+메일 앱 도메인 안에는 `Library/WebKit/WebsiteData/ResourceLoadStatistics/observations.db` 도 있고, 그 `ObservedDomains` 표에 `registrableDomain`, `lastSeen`, `mostRecentUserInteractionTime` 같은 열이 있습니다. 메일 안의 웹 콘텐츠(원격 이미지 등)를 불러온 기록인지는 보고서에 쓰기 전에 실제 데이터의 값을 보고 판단합니다.
 
 ### 계정 DB
 
@@ -113,13 +113,13 @@ BucketBarConfiguration / BucketSelectionConfiguration: {All Inboxes}
 
 ## 시각 해석
 
-`Envelope Index` 에는 보낸 날짜가 들어 있지만 [1], iOS 15 이후 표의 날짜 열 이름과 기준(Unix 초인지 Mac 절대 시각인지)을 밝힌 공개 문서는 없습니다. 실제 데이터에서 열 값의 자릿수를 보고 여러 기준으로 바꿔 본 뒤, 메일 앱 화면에 보이는 날짜나 알림 기록 같은 다른 시각과 비교해 기준을 정합니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
+`Envelope Index` 에는 보낸 날짜가 들어 있지만 [1], iOS 15 이후 표의 날짜 열 이름과 기준(Unix 초인지 Mac 절대 시각인지)은 실제 데이터로 정합니다. 열 값의 자릿수를 보고 여러 기준으로 바꿔 본 뒤, 메일 앱 화면에 보이는 날짜나 알림 기록 같은 다른 시각과 비교해 기준을 정합니다. 변환 방법은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에 있습니다.
 
-설정 plist 가운데 `LastMailAppLaunchTime`, `LastFullReindexDate`, `com.apple.mail.searchableIndex.lastUpgradeDate` 는 plist 날짜형(datetime)으로 저장됩니다. `lastForegroundedTimestamp`(int)와 `com.apple.icloud.mail.lastSyncAllTimestamp`(float)의 단위와 기준 시점, 계정 DB 의 `ZDATE` 기준은 알려져 있지 않아서 위와 같이 다른 시각과 비교해 정합니다.
+설정 plist 가운데 `LastMailAppLaunchTime`, `LastFullReindexDate`, `com.apple.mail.searchableIndex.lastUpgradeDate` 는 plist 날짜형(datetime)으로 저장됩니다. `lastForegroundedTimestamp`(int)와 `com.apple.icloud.mail.lastSyncAllTimestamp`(float)의 단위와 기준 시점, 계정 DB 의 `ZDATE` 기준도 위와 같이 다른 시각과 비교해 정합니다.
 
 ## 함정과 한계
 
-로컬 백업에 `Envelope Index`·`Protected Index`·`.emlx` 가 들어가는지 밝힌 공개 문서는 없습니다. 메일 본문이 필요한 사건에서는 백업만 보고 "메일 없음" 이라고 결론 내지 말고, 파일 시스템 전체 수집이 가능한지 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 먼저 검토합니다.
+로컬 백업에 `Envelope Index`·`Protected Index`·`.emlx` 가 들어가는지는 실제 백업으로 확인합니다. 메일 본문이 필요한 사건에서는 백업만 보고 "메일 없음" 이라고 결론 내지 말고, 파일 시스템 전체 수집이 가능한지 [모바일 증거 확보](../../03-techniques/acquisition/mobile-acquisition/index.md) 에서 먼저 검토합니다.
 
 `Protected Index` 의 본문은 앞 500바이트뿐이라서 [1], 이 표만 읽고 메일 내용 전체를 다 봤다고 쓰면 안 됩니다. 인코딩된 본문을 디코딩하지 않고 키워드 검색을 하면 Quoted-Printable 로 쪼개진 낱말이나 Base64 로 바뀐 글자를 놓치고, 검색 전략은 [콘텐츠 검색](../../03-techniques/analysis/content-search.md) 에 있습니다.
 

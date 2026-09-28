@@ -50,7 +50,6 @@ StateRepository DB 에는 설치된 패키지, 패키지 안의 앱, 패키지�
 
 버전 차이는 이렇게 정리합니다.
 
-- StateRepository 가 처음 생긴 Windows 버전은 공개 자료에 없습니다.
 - 이 페이지의 표·열 이름은 Windows 11 25H2 기준입니다. 다른 버전의 기기에서는 표 목록부터 확인합니다.
 
 SQLite 파일과 WAL 의 구조는 [SQLite 데이터베이스](../../01-foundations/database-log-formats/sqlite/index.md) 에서, 하이브 파일은 [레지스트리 하이브 구조](../../01-foundations/database-log-formats/registry-hive/index.md) 에서 다룹니다.
@@ -106,7 +105,7 @@ Windows 11 25H2 에서 나온 값의 예는 이렇습니다.
 - PackageUser 에는 IsInbox=1(기본 탑재) 패키지가 129건, IsInbox=0 패키지가 362건 있었습니다.
 - SYSTEM(S-1-5-18) 행은 IsExplicitlyInstalled=0·DeploymentState=1 인 경우가 많았습니다.
 - 로그인 사용자 행은 IsExplicitlyInstalled=1·DeploymentState=2 인 경우가 많았습니다.
-- DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 숫자의 뜻은 공개 자료에 없습니다.
+- DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 숫자는 뜻이 정해져 있지 않으므로, 보고서에는 값만 옮깁니다.
 - PackageIdentity 527행 가운데 134행은 Package 표에 없는 이름이었습니다.
 - 한 앱은 현재 버전 1개 말고도 옛 버전 전체 이름 20개가 PackageIdentity 에 남아 있었습니다.
 - DeploymentHistory 30행은 모두 HResult 가 -2147009278(0x80073D02)이었습니다. 성공 기록 없이 실패 기록만 있었습니다.
@@ -129,7 +128,7 @@ Windows 11 25H2 의 이 DB 에는 AppInstaller, AppInstallerUri, AppxManifest, A
 
 - `Applications\<패키지 전체 이름>` 키에는 `Path` 값이 있습니다. 값은 `C:\Program Files\WindowsApps\<전체 이름>\...\AppxManifest.xml` 이나 `AppxBundleManifest.xml` 경로입니다. 이 키는 126개였습니다(Windows 11 25H2 기준).
 - `Deprovisioned` 아래에는 패키지 계열 이름 키가 있었습니다. 예: `Microsoft.Copilot_8wekyb3d8bbwe`
-- `Deprovisioned` 가 "새 사용자에게 자동으로 설치하지 않도록 뺀 앱" 을 뜻하는지는 공개 자료로 확인되지 않습니다.
+- `Deprovisioned` 아래 키만 보고 "새 사용자에게 자동으로 설치하지 않도록 뺀 앱" 이라고 단정하지 않습니다.
 - 사용자별 키 `HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages\<패키지 전체 이름>` 에는 `PackageRootFolder`, `DisplayName`, `PackageID`, `PackageSid`, `OSMinVersion`, `OSMaxVersionTested`, `CapabilityCount`, `SupportedUsers` 값이 있습니다. 이 키는 221개였습니다(Windows 11 25H2 기준).
 
 아래 두 키도 함께 봅니다[1].
@@ -205,8 +204,8 @@ AppXDeploymentServer/Operational 의 주요 이벤트는 아래와 같습니다.
 ### 증명하지 못하는 것
 
 - 앱을 실행했는지는 알 수 없습니다. 등록은 실행이 아닙니다. 실행 흔적은 [어떤 프로그램을 언제 실행했나](../../04-scenarios/activity/program-execution.md) 에서 다룹니다.
-- 사용자가 스스로 설치했는지 단정하지 못합니다. IsExplicitlyInstalled·DeploymentState 숫자의 뜻은 공개 자료에 없습니다.
-- 앱을 어디서 받았는지 단정하지 못합니다. PackageOrigin·SignatureOrigin 숫자의 뜻은 공개 자료에 없습니다.
+- 사용자가 스스로 설치했는지 단정하지 못합니다. IsExplicitlyInstalled·DeploymentState 숫자는 뜻이 정해져 있지 않습니다.
+- 앱을 어디서 받았는지 단정하지 못합니다. PackageOrigin·SignatureOrigin 숫자는 뜻이 정해져 있지 않습니다.
 - InstallTime 은 내려받은 시각이 아닙니다. Add 완료 시각과 차이가 납니다(Windows 11 25H2 기준 31분).
 - 위 표에는 제거 시각 열이 없습니다. PackageIdentity 에도 시각 열이 없습니다. 이벤트 로그가 남아 있을 때만 이벤트 607 로 제거 작업의 시각을 봅니다.
 - 앱을 완전히 제거하면 Package·PackageUser 행이 곧바로 지워지는지는 실제 데이터로 확인해야 합니다.
@@ -250,7 +249,7 @@ InstallTime 은 Register 완료와 1초 차이였고 Add 완료와는 31분 차�
 1. **-wal·-shm 파일을 같이 떠야 합니다.** `-wal` 파일이 비어 있지 않으면 .srd 파일만 떠서는 최근 변경이 빠집니다.
 2. **서비스가 돌아가도 복사할 수 있습니다.** Windows 11 25H2 에서는 서비스가 켜진 상태에서도 .srd 파일이 복사됩니다.
 3. **설치 시각은 Package 표가 아니라 PackageUser 표에 있습니다.** 같은 패키지에 SYSTEM 행과 사용자 행이 따로 있습니다. 어느 SID 의 행인지 늘 같이 적습니다.
-4. **숫자 열의 뜻은 공개 자료에 없습니다.** DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 는 값만 적고 뜻을 단정하지 않습니다.
+4. **숫자 열은 뜻이 정해져 있지 않습니다.** DeploymentState, PackageOrigin, SignatureOrigin, PackageType, PackageUserStatus 의 Status 는 값만 적고 뜻을 단정하지 않습니다.
 5. **기본 탑재 앱의 InstallTime 은 OS 설치 시각이 아닙니다.** 두 시각이 16시간 어긋나기도 합니다(Windows 11 25H2 기준).
 6. **이벤트 로그는 금방 밀려납니다.** Windows 11 25H2 기준 8일치만 남기도 합니다. 이때도 DeploymentHistory 에는 그보다 오래된 기록이 남아 있을 수 있습니다.
 7. **DeploymentHistory 에 성공 기록이 없을 수 있습니다.** 실패 기록만 남은 경우가 있습니다(Windows 11 25H2 기준). 행이 없다고 설치 작업이 없었던 것은 아닙니다.

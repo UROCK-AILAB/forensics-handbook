@@ -7,7 +7,7 @@ nav_order: 1740
 
 # 근거리 공유로 (Quick Share·Bluetooth)
 
-Quick Share, 블루투스 파일 전송처럼 가까운 기기로 자료를 직접 보냈는지 확인하는 순서를 정리합니다. Quick Share 의 보내고 받은 기록이 남는 앱·DB·표와 블루투스 파일 전송(OPP) 기록 DB 의 구조를 밝힌 공개 분석 자료는 없어 실제 기기에서 확인해야 합니다. 그래서 이 페이지는 "어떤 기기와 짝지었거나 가까이 있었나" 를 보여 주는 기록과 관련 설정 키를 모아, 전송 기록을 찾을 때의 출발점을 잡는 흐름으로 씁니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
+Quick Share, 블루투스 파일 전송처럼 가까운 기기로 자료를 직접 보냈는지 확인하는 순서를 정리합니다. Quick Share 의 보내고 받은 기록이 남는 앱·DB·표와 블루투스 파일 전송(OPP) 기록 DB 의 구조는 실제 기기에서 확인해야 합니다. 그래서 이 페이지는 "어떤 기기와 짝지었거나 가까이 있었나" 를 보여 주는 기록과 관련 설정 키를 모아, 전송 기록을 찾을 때의 출발점을 잡는 흐름으로 씁니다. 유출 경로 전체의 길잡이는 [자료를 밖으로 보냈나 (Data Exfiltration)](index.md) 허브에 있습니다.
 
 ## 조사 질문
 
@@ -42,9 +42,9 @@ Timestamp = 1700000000
 LinkKey = (값 생략)
 ```
 
-`Timestamp` 는 유닉스 초이고 밀리초가 아닙니다 [2]. ALEAPP 는 이 값을 UTC 로 바꿔 "First Connected Timestamp" 로 이름 붙였지만 [2], 처음 연결한 시각인지 마지막으로 갱신한 시각인지는 밝힌 공개 자료가 없어 다른 기록과 맞춰 봅니다. `LinkKey` 는 연결 키 값이라서 보고서에는 값을 옮기지 않고 있는지 없는지만 적습니다. 블루투스 기록의 자세한 구조는 [블루투스 장치 (Bluetooth)](../../../02-artifacts/network/bluetooth.md) 페이지에 있습니다.
+`Timestamp` 는 유닉스 초이고 밀리초가 아닙니다 [2]. ALEAPP 는 이 값을 UTC 로 바꿔 "First Connected Timestamp" 로 이름 붙였지만 [2], 처음 연결한 시각인지 마지막으로 갱신한 시각인지는 단정할 수 없어 다른 기록과 맞춰 봅니다. `LinkKey` 는 연결 키 값이라서 보고서에는 값을 옮기지 않고 있는지 없는지만 적습니다. 블루투스 기록의 자세한 구조는 [블루투스 장치 (Bluetooth)](../../../02-artifacts/network/bluetooth.md) 페이지에 있습니다.
 
-블루투스 파일 전송(OPP) 기록 DB 의 표와 열을 밝힌 공개 분석 자료는 없어 실제 기기에서 확인해야 합니다. 그래서 블루투스 설정 기록으로는 "이 주소의 기기와 짝지었다" 는 데까지만 말하고, 파일을 보냈는지는 전송 기록이나 상대 기기에서 확인합니다.
+블루투스 파일 전송(OPP) 기록 DB 의 표와 열은 실제 기기에서 확인해야 합니다. 그래서 블루투스 설정 기록으로는 "이 주소의 기기와 짝지었다" 는 데까지만 말하고, 파일을 보냈는지는 전송 기록이나 상대 기기에서 확인합니다.
 
 `dumpsys bluetooth_manager` 에는 Bluetooth Status(enabled, state, address, name, time since enabled), 블루투스를 켜 달라고 한 패키지와 이유가 적힌 Enable log, "Ble app registered" 목록, 기능 플래그 목록이 나오고, 출력이 16,690줄에 이르기도 합니다. 삼성 기기에서는 BLE 에 등록한 앱 목록에 com.samsung.android.mcfserver, com.samsung.android.mcfds, com.samsung.android.beaconmanager, com.samsung.android.mdx.kit 가 나올 수 있습니다. 이 출력은 수집 시점의 상태라서 과거의 전송을 보여 주지는 않지만, 블루투스를 언제부터 켜 두었는지와 어떤 앱이 BLE 를 쓰고 있었는지를 적어 둘 수 있습니다.
 
@@ -60,7 +60,7 @@ Quick Share 관련 설정 키는 다음과 같습니다. 누구에게 보이도�
 | secure | `nearby_sharing_component`, `mcf_continuity_nearby_device_state` |
 | system | `quickshare_enabled`, `nearby_scanning_enabled` |
 
-`nearby_sharing_component` 는 이름으로 짐작하면 근거리 공유를 맡은 앱 부품 이름이 들어가는 키로 보이고, 어느 앱인지는 값을 읽어 확인합니다. Quick Share 로 보내고 받은 기록이 남는 앱·DB·표 이름과, Google Nearby Share 와 삼성 Quick Share 가 합쳐진 시기·버전은 공개된 분석 자료가 없습니다. 전송 기록은 [파일 공유 (Quick Share·Nearby Share)](../../../02-artifacts/network/quick-share.md) 페이지에서 다룹니다.
+`nearby_sharing_component` 는 이름으로 짐작하면 근거리 공유를 맡은 앱 부품 이름이 들어가는 키로 보이고, 어느 앱인지는 값을 읽어 확인합니다. Quick Share 로 보내고 받은 기록이 남는 앱·DB·표 이름은 실제 기기의 앱 데이터 폴더에서 확인하고, 그때 설치된 앱 버전도 함께 적어 둡니다. 전송 기록은 [파일 공유 (Quick Share·Nearby Share)](../../../02-artifacts/network/quick-share.md) 페이지에서 다룹니다.
 
 Google Play 서비스에는 Nearby 캐시가 두 가지 있고, 둘 다 LevelDB 입니다 [3]. Fast Pair 캐시는 `*/nearby-fast-pair/nearby_fast_pair_item_cache.db/*` 에 있고, 레코드마다 MAC 주소, 모델 이름, 표시 이름, 처음·마지막으로 본 시각(유닉스 밀리초)이 있을 수 있습니다 [3]. 이 캐시는 이어폰 같은 액세서리 기록이고, 한 행이 곧 짝지었다는 뜻은 아닙니다 [3]. 발견 캐시는 `*/nearby-discovery/nearby_discovery_item_cache.db/*` 에 있고, 필드는 처음·마지막으로 본 시각(밀리초), 항목 ID, MAC 주소, RSSI, 상태입니다 [3]. RSSI 는 dBm 단위의 신호 세기이고 거리가 아니며, 한 행은 "캐시에 있었다" 는 뜻일 뿐 사용자가 그 기기와 무엇을 주고받았다는 뜻은 아닙니다 [3].
 

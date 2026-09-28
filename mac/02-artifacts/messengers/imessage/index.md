@@ -20,10 +20,10 @@ iMessage·RCS·SMS·MMS 메시지가 한 DB에 함께 들어 있어서 [1] 맥 �
 
 | 자료 | 위치 | macOS 버전 | 알려 주는 것 |
 |---|---|---|---|
-| 대화 DB | `~/Library/Messages/chat.db` [2] | 버전별 경로 차이는 공개 자료 없음 | 대화방, 상대 주소, 메시지 본문, 보낸 쪽, 시각, 서비스 이름 |
-| 첨부 파일 | `~/Library/Messages/Attachments/` 아래 하위 폴더 [3] | 공개 자료 없음 | 주고받은 파일 원본과 DB의 첨부 행 |
-| 스티커 | `~/Library/Messages/StickerCache/` 아래 하위 폴더 [3] | 공개 자료 없음 | 스티커 이미지 |
-| 최근 삭제 표 | `chat.db` 안 `chat_recoverable_message_join` [2] | 맥 도입 버전은 공개 자료 없음 | 지운 뒤 30일 안에 되살릴 수 있는 메시지 [4] |
+| 대화 DB | `~/Library/Messages/chat.db` [2] | 대상 맥에서 경로 확인 | 대화방, 상대 주소, 메시지 본문, 보낸 쪽, 시각, 서비스 이름 |
+| 첨부 파일 | `~/Library/Messages/Attachments/` 아래 하위 폴더 [3] | 대상 맥에서 폴더 확인 | 주고받은 파일 원본과 DB의 첨부 행 |
+| 스티커 | `~/Library/Messages/StickerCache/` 아래 하위 폴더 [3] | 대상 맥에서 폴더 확인 | 스티커 이미지 |
+| 최근 삭제 표 | `chat.db` 안 `chat_recoverable_message_join` [2] | 대상 `chat.db` 에 표가 있는지 확인 | 지운 뒤 30일 안에 되살릴 수 있는 메시지 [4] |
 | 편집·보내기 취소 | `chat.db` 안 plist 열 `message_summary_info` [2] | macOS 13 이후, iMessage만 [5] | 편집 전 내용과 보내기 취소 정보 |
 
 iOS 백업에도 같은 형식의 메시지 DB가 들어 있고 [2], 백업 안 파일 이름은 [대화 DB (chat.db)](chat-db.md)에 있습니다.
@@ -41,6 +41,7 @@ iOS 백업에도 같은 형식의 메시지 DB가 들어 있고 [2], 백업 안 
 - [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md) — 메시지 시각을 풀 때
 - [연락처 (Contacts)](../../cloud-apps/contacts.md) — 상대 주소를 사람 이름과 맞춰 볼 때
 - [페이스타임과 통화 기록 (FaceTime·CallHistory)](../facetime-callhistory.md) — 같은 상대와의 통화
+- [알림 센터 DB (Notification Center)](../notification-center.md) — 메시지 알림으로 남은 제목과 본문
 - [아이폰·아이패드 연결 (iOS Devices)](../../external-devices/ios-devices/index.md) — 맥에 남은 iOS 백업
 - [누구와 연락을 주고받았나 (Communication)](../../../04-scenarios/activity/communication.md)
 - [증거를 없애려 했나 (Anti-Forensics)](../../../04-scenarios/activity/anti-forensics/index.md)

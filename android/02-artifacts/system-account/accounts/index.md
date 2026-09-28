@@ -20,12 +20,12 @@ Android 의 계정 목록은 시스템 서비스 AccountManagerService 가 관�
 
 | 위치 | Android 버전 | 알려 주는 것 |
 |---|---|---|
-| `/data/system_de/<사용자ID>/accounts_de.db` | 현행 AOSP 기준(두 파일로 나뉜 시점은 공개 자료 없음) | 계정 이름·종류, 바꾸기 전 이름, 앱별 권한 부여·가시성, 최대 64줄의 변경 기록 |
+| `/data/system_de/<사용자ID>/accounts_de.db` | 현행 AOSP 기준 | 계정 이름·종류, 바꾸기 전 이름, 앱별 권한 부여·가시성, 최대 64줄의 변경 기록 |
 | `/data/system_ce/<사용자ID>/accounts_ce.db` | 현행 AOSP 기준 | 비밀번호·인증 토큰·부가 값(잠금 해제 뒤에 열림) |
-| `accounts.db` | Android N 이전(상수 이름 기준) | 두 파일로 나뉘기 전의 한 파일, 경로는 공개 자료 없음 |
+| `accounts.db` | Android N 이전(상수 이름 기준) | 두 파일로 나뉘기 전의 한 파일, 경로는 실제 기기에서 확인 |
 | `/data/system/sync/` (`accounts.xml`, `status`, `stats`) | 현행 AOSP 기준 | 계정·동기화 대상별 설정과 마지막 동기화 상태 |
 | `dumpsys account` 출력 | Android 16 기준 | 사용자별 계정 목록과 Accounts History |
-| `settings` 의 계정 관련 키 | Android 16 기준 | 구글·삼성 계정, 동의, 기기 이전과 관련된 이름의 키(뜻은 대부분 공개 자료 없음) |
+| `settings` 의 계정 관련 키 | Android 16 기준 | 구글·삼성 계정, 동의, 기기 이전과 관련된 이름의 키(뜻은 실제 기기의 값으로 확인) |
 
 계정 DB 두 파일의 전체 경로는 ALEAPP 가 찾는 경로 패턴과 같고, 자세한 내용은 아래 "계정 DB 구조" 페이지에 있습니다.
 
@@ -33,7 +33,7 @@ Android 의 계정 목록은 시스템 서비스 AccountManagerService 가 관�
 
 1. [계정 DB 구조 (accounts_ce.db·accounts_de.db)](accounts-db.md) — 두 파일의 경로와 표·열, 변경 기록(`debug_table`)의 동작 종류와 64줄 상한, 잠금 해제 때 CE·DE 를 맞추는 과정, 시각 열의 해석, dumpsys 출력 모양, 헥스와 SQL 로 직접 읽는 법을 다룹니다.
 2. [구글 계정 흔적 (Google Account)](google-account.md) — 구글 계정 행을 가려내는 법과 주의점, 모든 계정이 함께 쓰는 동기화 파일(`/data/system/sync/`)의 구조, 구글 관련 설정 키와 패키지를 다룹니다.
-3. [삼성 계정 흔적 (Samsung Account)](samsung-account.md) — 삼성 기기 설정에 남는 삼성 계정·동의·기기 이전 관련 키와, 공개 자료가 없어 실제 기기로 확인해야 하는 삼성 계정 앱 내부 기록의 범위를 다룹니다.
+3. [삼성 계정 흔적 (Samsung Account)](samsung-account.md) — 삼성 기기 설정에 남는 삼성 계정·동의·기기 이전 관련 키와, 실제 기기로 확인해야 하는 삼성 계정 앱 내부 기록의 범위를 다룹니다.
 
 ## 함께 볼 페이지
 

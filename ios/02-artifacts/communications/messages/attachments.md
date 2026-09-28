@@ -27,8 +27,6 @@ MMS 와 iMessage 로 오간 파일은 기기의 `/private/var/mobile/Library/SMS
 
 로컬 백업에서는 sms.db 가 HomeDomain 에 있는 것과 달리 첨부 파일은 MediaDomain 에 있습니다[2]. 백업 파일 ID 는 `SHA1("도메인-상대경로")` 로 구하고[2], 첨부는 `filename` 앞의 `~/` 를 떼고 `MediaDomain-Library/SMS/Attachments/...` 를 넣어 계산합니다[2]. 도메인을 HomeDomain 으로 잘못 넣으면 오류 없이 모든 첨부를 못 찾습니다[2]. 백업 구조 자체는 [로컬 백업 (Finder·Apple 기기 앱·iTunes Backup)](../../../01-foundations/backups/local-backup/index.md)에서 다룹니다.
 
-iOS 버전에 따라 첨부 폴더 구조가 달라진다는 공개 자료는 없습니다.
-
 ## 구조
 
 `attachment` 표에는 열이 26개 있습니다.
@@ -48,10 +46,10 @@ sensitivity_analysis
 | `filename` | 첨부 파일 경로입니다. `~/` 로 시작하는 형식은 위와 같습니다[2] |
 | `transfer_name` | 전송할 때의 파일 이름입니다. `filename` 과 `transfer_name` 둘 중 하나가 빌 수 있습니다[2] |
 | `created_date` | iLEAPP 가 첨부 시각으로 쓰는 열입니다[1] |
-| `uti`, `mime_type`, `total_bytes`, `is_outgoing` | 값 설명을 담은 공개 자료가 없습니다 |
-| `is_sticker`, `sticker_user_info`, `is_commsafety_sensitive`, `sensitivity_analysis` | 값의 뜻을 밝힌 공개 자료가 없습니다 |
+| `uti`, `mime_type`, `total_bytes`, `is_outgoing` | 값은 실제 데이터로 확인합니다 |
+| `is_sticker`, `sticker_user_info`, `is_commsafety_sensitive`, `sensitivity_analysis` | 이름만으로 값의 뜻을 단정하지 않습니다 |
 
-첨부 관련 설정 키는 아래 plist 에 있습니다. 값의 뜻을 밝힌 공개 자료는 없습니다. `DidMakeAllAttachmentsClassC` 의 "ClassC" 는 데이터 보호 등급 C 를 뜻할 가능성이 있고, 데이터 보호 등급 자체는 [데이터 보호 (Data Protection)](../../../01-foundations/storage/data-protection/index.md)에서 다룹니다.
+첨부 관련 설정 키는 아래 plist 에 있습니다. `DidMakeAllAttachmentsClassC` 의 "ClassC" 는 데이터 보호 등급 C 를 뜻할 가능성이 있고, 데이터 보호 등급 자체는 [데이터 보호 (Data Protection)](../../../01-foundations/storage/data-protection/index.md)에서 다룹니다.
 
 | 파일(HomeDomain, `Library/Preferences/`) | 키 |
 |---|---|
@@ -70,7 +68,7 @@ sensitivity_analysis
 
 ## 시각 해석
 
-iLEAPP 는 `attachment.created_date` 를 첨부 시각으로 씁니다[1]. 이 열의 기준과 단위를 밝힌 공개 자료는 없으니, sms.db 의 다른 날짜 열과 같은 방식인지 `message.date` 와 나란히 놓고 비교해 봅니다. 날짜 열을 바꾸는 방법은 [대화 DB 구조 (sms.db)](sms-db.md)의 시각 해석 절에 있습니다.
+iLEAPP 는 `attachment.created_date` 를 첨부 시각으로 씁니다[1]. 이 열의 기준과 단위는 sms.db 의 다른 날짜 열과 같은 방식인지 `message.date` 와 나란히 놓고 비교해 확인합니다. 날짜 열을 바꾸는 방법은 [대화 DB 구조 (sms.db)](sms-db.md)의 시각 해석 절에 있습니다.
 
 ## 함정과 한계
 

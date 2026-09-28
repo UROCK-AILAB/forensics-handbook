@@ -26,7 +26,7 @@ nav_order: 2190
 | 형식 | 암호화하지 않은 SQLite 입니다. 파일이 `SQLite format 3` 으로 시작하고, `journal_mode` 는 `wal` 입니다 |
 | 크기 | 예: 개인 계정 약 8.4MB(파일 9,925행·폴더 1,226행), 회사 계정 약 4.9MB(파일 4,551행·폴더 401행) |
 
-옛 OneDrive 는 같은 정보를 `<UserCid>.dat` 와 `<UserCid>.dat.previous` 에 저장했고 새 버전은 SQLite 로 바꿨습니다. 어느 앱 버전에서 바뀌었는지는 알려져 있지 않으므로, 옛 PC 에서 `.db` 가 없으면 `.dat` 파일을 찾습니다.
+옛 OneDrive 는 같은 정보를 `<UserCid>.dat` 와 `<UserCid>.dat.previous` 에 저장했고 새 버전은 SQLite 로 바꿨습니다. 옛 PC 에서 `.db` 가 없으면 `.dat` 파일을 찾습니다.
 
 계정마다 폴더가 따로 있어서 DB 도 계정마다 하나씩 있습니다. 계정 폴더와 레지스트리 계정 키의 관계는 [계정·설정 레지스트리](accounts-settings.md) 에서 다룹니다.
 
@@ -50,7 +50,7 @@ SQLite 파일과 WAL 을 읽는 법은 [SQLite 데이터베이스](../../../01-f
 | `od_SelectiveSync_Records`, `od_IgnoredItem_Records`, `od_ClientPolicy_Records` | 선택 동기화, 무시한 항목, 정책 |
 | `od_ClientFilePostponedChange_Records`, `od_ClientFolderPostponedChange_Records`, `od_MigrateItemPostponedChange_Records` | 미뤄 둔 변경 |
 | `od_CreateAddedFolderFailures`, `od_ThrottleHistory` | 폴더 생성 실패, 속도 제한 기록 |
-| `odc_Convergence_ScopeInfo_Records`, `odc_convergence_items` | 공개된 설명 없음 |
+| `odc_Convergence_ScopeInfo_Records`, `odc_convergence_items` | 실제 데이터로 확인 |
 | `__oddbm_schema` | 열이 `name`, `value` 두 개인 스키마 정보 표 |
 
 ### od_ClientFile_Records
@@ -65,17 +65,17 @@ SQLite 파일과 WAL 을 읽는 법은 [SQLite 데이터베이스](../../../01-f
 | `lastChange` | 로컬 파일의 수정 시각. Unix 초(UTC)입니다 |
 | `serverLastChange` | 서버 쪽 수정 시각으로 보입니다. 값은 Unix 초 범위입니다 |
 | `diskCreationTime`, `diskLastAccessTime` | 값은 Unix 초 범위입니다. 뜻은 아래 "시각 해석" 에서 다룹니다 |
-| `fileStatus`, `lastKnownPinState` | 파일 상태 값. 뜻은 공개된 설명이 없습니다 |
+| `fileStatus`, `lastKnownPinState` | 파일 상태 값. 뜻은 단정하지 않습니다 |
 | `locallyDeleted`, `serverDeleted` | 로컬·서버 쪽 삭제 표시로 보입니다 |
 | `sharedItem` | 공유 항목 표시 |
 | `localHashDigest`, `localHashAlgorithm` | 로컬 내용 해시(BLOB)와 해시 종류 번호 |
 | `serverHashDigest`, `serverHashAlgorithm` | 서버 쪽 해시(BLOB)와 해시 종류 번호 |
 | `mediaDateTaken`, `mediaWidth`, `mediaHeight`, `mediaDuration` | 사진·영상 정보 |
-| `spoPermissions`, `checkedOutState`, `irmEnabled`, `irmEncrypted` 등 `irm*`, `local…CLP…`·`server…CLP…` | 권한·보호 관련 열. 민감도 레이블 쪽으로 보이지만 공개된 설명은 없습니다 |
+| `spoPermissions`, `checkedOutState`, `irmEnabled`, `irmEncrypted` 등 `irm*`, `local…CLP…`·`server…CLP…` | 권한·보호 관련 열. 민감도 레이블 쪽으로 보이지만 뜻은 단정하지 않습니다 |
 
 값의 예는 이렇습니다.
 
-- `fileStatus` 는 2 와 8 두 값, `lastKnownPinState` 는 NULL 과 0 만 들어 있습니다. 각 값이 자리표시자를 뜻하는지 등은 공개된 설명이 없습니다.
+- `fileStatus` 는 2 와 8 두 값, `lastKnownPinState` 는 NULL 과 0 만 들어 있습니다. 각 값이 자리표시자를 뜻하는지 등은 시험 PC 에서 파일 상태를 바꿔 가며 확인합니다.
 - 개인 계정 DB 에서 `locallyDeleted` 와 `serverDeleted` 는 모두 NULL 입니다.
 - 해시가 비어 있는 행이 개인·회사 계정에 각각 9행 있습니다.
 
@@ -102,7 +102,7 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 
 동기화 범위, 즉 라이브러리 하나가 한 행입니다. 열은 `scopeID`, `scopeType`, `libraryType`, `cid`, `siteID`, `webID`, `listID`, `webURL`, `tenantID`, `remotePath`, `lastKnownFolderPath`, `selectiveSyncEnabled`, `syncTokenData` 등입니다.
 
-두 계정 DB 모두 `scopeType` 3, `libraryType` 2 인 행이 있고, 개인 계정 DB 에만 `scopeType` 7, `libraryType` 3 인 행이 하나 더 있습니다. 이 행이 무엇을 가리키는지는 공개된 설명이 없습니다. SharePoint 라이브러리를 구분하는 데 이 표를 쓰는 법은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
+두 계정 DB 모두 `scopeType` 3, `libraryType` 2 인 행이 있고, 개인 계정 DB 에만 `scopeType` 7, `libraryType` 3 인 행이 하나 더 있습니다. 이 행이 무엇을 가리키는지는 같은 행의 `webURL`·`remotePath` 를 보고 확인합니다. SharePoint 라이브러리를 구분하는 데 이 표를 쓰는 법은 [회사용 OneDrive와 SharePoint 동기화](business-tenant.md) 에서 다룹니다.
 
 ### 활동 기록 성격의 표
 
@@ -113,9 +113,9 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 | `od_GraphMetadata_Records` | `resourceID`, `graphMetadataJSON`, `spoCompositeID`, `createdBy`, `modifiedBy`, `filePolicies`, `fileExtension`, `lastWriteCount` | 내용은 실제 데이터로 확인합니다 |
 | `od_ArchiveData_Records` | `resourceID`, `fileName`, `lastReportedAccessTime`, `lastReportingTime` | 회사 계정 676행, 개인 계정 0행 |
 
-- `od_HydrationData` 는 자리표시자 파일을 언제 처음, 언제 마지막으로 내려받았는지 보여 주는 표로 보입니다. 공식 설명은 없고, 열 이름과 값에서 미루어 본 뜻입니다.
+- `od_HydrationData` 는 자리표시자 파일을 언제 처음, 언제 마지막으로 내려받았는지 보여 주는 표로 보입니다. 열 이름과 값에서 미루어 본 뜻입니다.
 - `od_ServiceOperationHistory` 의 `operationName` 에는 `GetQuotaInfo`, `GetClientPolicy`, `NotificationReceived`, `EnumChanges`, `SyncVerification`, `CreateSubscription`, `DeleteSubscription`, `DownloadBlock`, `InlineUploadBatch`, `UploadBatch`, `GetCanonicalFolderInfo` 같은 값이 들어갑니다.
-- 이 표의 보관 기간은 공개된 자료가 없으므로 실제 데이터에서 가장 이른 시각과 늦은 시각으로 확인합니다. 약 한 달 치만 남은 예가 있습니다.
+- 이 표의 보관 기간은 실제 데이터에서 가장 이른 시각과 늦은 시각으로 확인합니다. 약 한 달 치만 남은 예가 있습니다.
 
 ### 같은 폴더의 SafeDelete.db
 
@@ -126,9 +126,9 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 | `filter_delete_info` | `fileId`, `volumeId`, `notificationTime`, `path`, `process` |
 | `deletes_last_touched_by_sync_engine` | `resourceId`, `notificationTime`, `isKFMOptOut` |
 | `items_moved_to_recycle_bin` | `fileId`, `volumeId`, `itemName`, `resourceId`, `parentResourceId`, `reparentStatus`, `notificationTime` 등 |
-| `unvalidated_deletes_displayed_in_ux`, `placeholder_deletes_info`, `redundant_placeholder_deletes` | 공개된 설명 없음 |
+| `unvalidated_deletes_displayed_in_ux`, `placeholder_deletes_info`, `redundant_placeholder_deletes` | 실제 데이터로 확인 |
 
-`notificationTime` 은 Unix 초입니다. 회사 계정의 `filter_delete_info` 8행의 `process` 열에 서로 다른 프로그램 4개가 적힌 예가 있어, "어떤 프로그램이 어떤 경로를 지웠는지" 가 남을 수 있습니다. 어떤 조건에서 이 표에 행을 쓰는지는 공개된 설명이 없습니다.
+`notificationTime` 은 Unix 초입니다. 회사 계정의 `filter_delete_info` 8행의 `process` 열에 서로 다른 프로그램 4개가 적힌 예가 있어, "어떤 프로그램이 어떤 경로를 지웠는지" 가 남을 수 있습니다. 어떤 조건에서 이 표에 행을 쓰는지는 시험 PC 에서 파일을 지워 보고 확인합니다.
 
 ## 증거로서 의미
 
@@ -146,7 +146,7 @@ Microsoft Graph 에서 `quickXorHash` 는 회사·학교용과 개인용 OneDriv
 - 파일 행이 있다고 그 파일 내용이 PC 에 있었다는 뜻은 아닙니다. 파일 주문형에서는 자리표시자만 있을 수 있습니다. 내용이 있었는지는 파일 시스템에서 따로 확인합니다.
 - 누가 파일을 올렸는지는 이 DB 만으로 알 수 없습니다. `od_GraphMetadata_Records` 의 `createdBy`·`modifiedBy` 에 무엇이 들어가는지는 실제 데이터로 확인합니다.
 - `od_HydrationData` 가 사용자의 직접 열기인지 다른 프로그램의 읽기인지는 알 수 없습니다. 표의 뜻 자체도 짐작입니다.
-- 행이 없다고 동기화하지 않았다는 뜻은 아닙니다. 지운 파일의 행이 언제까지 남는지는 공개된 자료가 없습니다.
+- 행이 없다고 동기화하지 않았다는 뜻은 아닙니다. 지운 파일의 행이 언제까지 남는지는 시험 PC 에서 파일을 지운 뒤 행이 사라지는 때를 보고 확인합니다.
 - `od_ServiceOperationHistory` 에 없는 기간을 "활동이 없었다" 로 읽지 않습니다. 약 한 달 치만 남은 예가 있습니다.
 
 보고서에는 "이 파일을 클라우드에 올렸다" 대신 이렇게 씁니다. "사용자 A 의 회사 계정 동기화 DB 에 파일 X 행이 있다. `lastChange` 는 Y(UTC)이고, QuickXorHash 는 Z 이다."
@@ -158,7 +158,7 @@ DB 의 시각 열은 모두 Unix 초입니다. 1970-01-01 00:00 UTC 부터 센 �
 | 열 | 언제의 시각인가 | 근거 |
 |---|---|---|
 | `lastChange` | 로컬 파일의 수정 시각 | 내용이 PC 에 있는 파일 60개를 실제 파일과 대 보면 두 계정 모두 60/60 같습니다 |
-| `diskCreationTime` | 공개된 설명 없음 | 실제 파일의 만든 시각과 개인 10/60, 회사 21/60 만 같습니다 |
+| `diskCreationTime` | 단정할 수 없음 | 실제 파일의 만든 시각과 개인 10/60, 회사 21/60 만 같습니다 |
 | `serverLastChange`, `diskLastAccessTime`, `mediaDateTaken` | 이름에서 미루어 본 뜻만 있습니다 | Unix 초 범위의 값입니다 |
 | `od_HydrationData` 의 시각 | 처음·마지막 내려받기로 보입니다 | Unix 초입니다 |
 | `od_ServiceOperationHistory.timestamp` | 작업 시각 | Unix 초입니다 |
@@ -173,7 +173,7 @@ DB 의 시각 열은 모두 Unix 초입니다. 1970-01-01 00:00 UTC 부터 센 �
 - **실행 중인 PC 에서 파일 해시를 맞춰 볼 때 조심합니다.** 자리표시자 (placeholder) 파일을 읽으면 내려받기 (hydration) 가 일어납니다. 로컬에 내용이 있는 파일만 읽고, 자리표시자는 건너뜁니다. 자리표시자의 구조는 [클라우드 동기화 공통 구조](../cloud-files-api-syncrootmanager.md) 에서 다룹니다.
 - **해시를 16진 문자열과 base64 로 혼동하지 않습니다.** DB 는 원시 바이트, Graph 는 base64 입니다. 20바이트 해시를 base64 로 바꾸면 28글자가 됩니다.
 - **해시가 없는 행이 있습니다.** 계정마다 9행이 비어 있는 예가 있습니다.
-- **코드 값의 뜻을 짐작으로 채우지 않습니다.** `fileStatus`, `lastKnownPinState`, `scopeType`, `libraryType`, `irm*` 열의 값은 공개된 설명이 없습니다.
+- **코드 값의 뜻을 짐작으로 채우지 않습니다.** `fileStatus`, `lastKnownPinState`, `scopeType`, `libraryType`, `irm*` 열의 값은 뜻을 단정하지 않고 원래 값을 적습니다.
 - **표와 열 이름은 앱 버전을 따릅니다.** 옛 PC 는 `.dat` 형식일 수 있습니다. 새 버전에서 표나 열이 늘거나 바뀔 수 있습니다.
 
 ## 직접 분석해 보기

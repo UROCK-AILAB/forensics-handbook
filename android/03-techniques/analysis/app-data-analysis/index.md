@@ -21,8 +21,8 @@ Android 기기에서 대화·사진·방문 기록 같은 사용자 행위는 �
 | 위치 | Android 버전별 차이 | 알려 주는 것 |
 |---|---|---|
 | `filesDir` (`openFileOutput()` 도 여기에 씀) | Android 10(API 29) 이상에서 앱 전용 내부 저장소가 암호화됨 | 앱의 일반 파일과 DB. 읽는 순서는 [처음 보는 앱 분석 순서](unknown-apps.md) |
-| `cacheDir` | 버전 차이는 공개 자료 없음. 저장 공간이 부족하면 시스템이 지울 수 있음 | 앱이 받아 온 콘텐츠. [캐시와 웹뷰](cache-webview.md) |
-| `getDir(이름, MODE_PRIVATE)` 로 만든 하위 폴더 | 버전 차이는 공개 자료 없음. `ApplicationInfo.dataDir` 가 늘 조상 폴더 | 앱이 따로 나눈 데이터 |
+| `cacheDir` | 저장 공간이 부족하면 시스템이 지울 수 있음 | 앱이 받아 온 콘텐츠. [캐시와 웹뷰](cache-webview.md) |
+| `getDir(이름, MODE_PRIVATE)` 로 만든 하위 폴더 | `ApplicationInfo.dataDir` 가 늘 조상 폴더 | 앱이 따로 나눈 데이터 |
 | `getExternalFilesDir()`, `externalCacheDir` (외부 저장소의 앱 전용 폴더) | Android 4.4(API 19)부터 저장소 권한 없이 쓸 수 있음. Android 11(API 30) 이상에서는 앱이 외부 저장소에 자기 전용 폴더를 직접 만들 수 없음 | 앱이 외부 저장소에 둔 파일 |
 | 다른 앱의 앱 전용 폴더 | Android 10(API 29) 이상을 대상으로 하는 앱은 범위 지정 저장소(scoped storage)가 기본으로 적용되어 접근할 수 없음 | 앱 사이의 격리. [앱 샌드박스와 권한 (Sandbox·Permissions)](../../../01-foundations/security-model/sandbox-permissions.md) |
 | 앱을 지운 뒤 | 내부·외부의 앱 전용 폴더 파일이 지워짐 | 남는 흔적은 [지운 앱이 남긴 흔적](uninstalled-apps.md) |

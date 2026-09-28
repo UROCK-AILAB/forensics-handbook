@@ -49,7 +49,7 @@ nav_order: 430
 | `Last Browser` | 파일 | 브라우저 실행 파일 경로. UTF-16LE 로 적혀 있습니다 |
 | `Default` | 폴더 | 첫 프로필. 프로필 폴더 이름은 보통 `Default` 입니다[1] |
 | `Profile 1` 등 | 폴더 | 두 번째 이후 프로필 |
-| `Guest Profile`·`System Profile` | 폴더 | Chrome 의 User Data 에 있습니다. 쓰임은 공개 자료에 나와 있지 않습니다 |
+| `Guest Profile`·`System Profile` | 폴더 | Chrome 의 User Data 에 있습니다. 쓰임은 안의 파일을 보고 판단합니다 |
 
 프로필 폴더 이름과 사용자가 붙인 표시 이름은 다르고, 표시 이름은 `Local State` 에 있으므로 보고서에는 두 이름을 함께 적습니다.
 
@@ -62,15 +62,15 @@ nav_order: 430
 |---|---|
 | `profile.info_cache` | 프로필 폴더 이름(`Default`, `Profile 1`)을 키로 삼아 프로필마다 정보를 담습니다 |
 | `profile.last_used` | 마지막으로 쓴 프로필의 폴더 이름입니다. Edge 151 의 `Local State` 에는 이 키가 없습니다 |
-| `profile.last_active_profiles` | 목록입니다. 채우는 기준은 공개 자료에 나와 있지 않습니다 |
-| `profile.profiles_order` | 목록입니다. 채우는 기준은 공개 자료에 나와 있지 않습니다 |
+| `profile.last_active_profiles` | 목록입니다. 채우는 기준은 시험 기기에서 재현해 확인합니다 |
+| `profile.profiles_order` | 목록입니다. 채우는 기준은 시험 기기에서 재현해 확인합니다 |
 | `os_crypt.encrypted_key`, `os_crypt.app_bound_encrypted_key`, `os_crypt.audit_enabled` | 쿠키·비밀번호 암호화에 쓰는 키입니다. [쿠키·비밀번호 암호화](dpapi-app-bound-encryption.md) 에서 다룹니다 |
 
 Chrome 의 `info_cache` 에서 프로필 하나에 딸린 필드는 아래와 같습니다.
 
 `name`, `shortcut_name`, `user_name`, `gaia_id`, `gaia_name`, `gaia_given_name`, `hosted_domain`, `is_managed`, `is_ephemeral`, `avatar_icon`, `active_time`
 
-- 필드마다 뜻을 설명한 공식 문서는 없습니다.
+- 필드의 뜻은 이름에서 짐작한 것이므로, 보고서에는 값만 옮기고 뜻을 단정하지 않습니다.
 - `user_name` 과 `gaia_` 로 시작하는 필드는 이름으로 보면 브라우저에 로그인한 계정 정보로 보입니다. 이름에서 짐작한 뜻이므로 다른 기록과 대조합니다.
 - `active_time` 은 소수점이 있는 숫자입니다. 1970-01-01 UTC 부터 센 초로 바꾸면 프로필을 쓴 날과 맞는 날짜(예: 2026-09-23 UTC)가 나오므로 Unix 초로 보입니다.
 
@@ -88,9 +88,9 @@ Chrome 의 `info_cache` 에서 프로필 하나에 딸린 필드는 아래와 �
 | 새 이름 | `Sessions_Encrypted`, `EncryptedBookmarks2` |
 
 - `History` 파일의 첫 16바이트는 `SQLite format 3\0` 입니다. 읽는 법은 [SQLite 데이터베이스](../../database-log-formats/sqlite/index.md) 에서 다룹니다.
-- 쿠키 DB 는 프로필 바로 아래가 아니라 `Network` 폴더 안에 있습니다. 옛 버전은 프로필 바로 아래 `Cookies` 에 두었습니다. 자리를 옮긴 버전은 공개 자료에 나와 있지 않으므로 두 자리를 모두 봅니다.
-- 캐시도 옛 버전은 `Default\Cache` 바로 아래에 두었습니다. `Cache\Cache_Data` 로 옮긴 버전도 공개 자료에 나와 있지 않습니다. 캐시 파일의 형식은 [캐시 형식](blockfile-simple-cache.md) 에서 다룹니다.
-- `Sessions_Encrypted` 와 `EncryptedBookmarks2` 는 뜻과 처음 생긴 버전이 공개 자료에 나와 있지 않습니다.
+- 쿠키 DB 는 프로필 바로 아래가 아니라 `Network` 폴더 안에 있습니다. 옛 버전은 프로필 바로 아래 `Cookies` 에 두었습니다. 버전에 따라 자리가 다르므로 두 자리를 모두 봅니다.
+- 캐시도 옛 버전은 `Default\Cache` 바로 아래에 두었고, 지금은 `Cache\Cache_Data` 에 둡니다. 두 자리를 모두 봅니다. 캐시 파일의 형식은 [캐시 형식](blockfile-simple-cache.md) 에서 다룹니다.
+- `Sessions_Encrypted` 와 `EncryptedBookmarks2` 는 이름만 보고 내용을 단정하지 않고, 파일 앞부분을 열어 형식부터 확인합니다.
 
 ### 계열 브라우저를 구분하는 단서
 
@@ -102,7 +102,7 @@ Chrome 과 Edge 는 폴더 구성이 거의 같아서 폴더 이름만 보고 �
 | `Last Browser` 값 | `C:\Program Files\Google\Chrome\Application\` 아래 실행 파일 경로 | Edge 실행 파일 경로 |
 | `Local State` 최상위 키 | Edge 전용 키 없음 | `edge`, `edge_ci`, `dual_engine`, `smartscreen` 처럼 `edge` 로 시작하거나 Edge 에만 있는 키 |
 | `info_cache` 필드 | 위 목록 | `edge_account_cid`, `edge_account_type`, `edge_account_tenant_id` 같은 `edge_account_*` 필드가 더 있음 |
-| `os_crypt` 키 | `encrypted_key`, `app_bound_encrypted_key`, `audit_enabled` | 여기에 `aster_app_bound_encrypted_key` 가 하나 더 있음. 뜻은 공개 자료에 나와 있지 않습니다 |
+| `os_crypt` 키 | `encrypted_key`, `app_bound_encrypted_key`, `audit_enabled` | 여기에 `aster_app_bound_encrypted_key` 가 하나 더 있음. 뜻은 단정하지 않고 값만 옮깁니다 |
 | `profile.last_used` | 있음 | 없음 |
 
 - Brave·Whale·Opera 에서는 이 단서가 다를 수 있어 실제 기기에서 확인합니다.
@@ -163,8 +163,8 @@ Chrome 153·Edge 151 의 키 이름으로 만든 예시이고, `<…>` 는 값 �
 
 ### 시각
 
-- `active_time` 은 Unix 초로 보입니다. 공식 문서에 설명이 없으므로 다른 시각 기록과 대조합니다.
-- 이 값이 어떤 동작 때 바뀌는지도 공개 자료에 없으므로 보고서에는 "이 프로필에 이 시각 값이 적혀 있다" 까지만 씁니다.
+- `active_time` 은 Unix 초로 보이므로 다른 시각 기록과 대조합니다.
+- 이 값이 어떤 동작 때 바뀌는지는 단정할 수 없으므로 보고서에는 "이 프로필에 이 시각 값이 적혀 있다" 까지만 씁니다.
 - 변환은 [시각 값 형식](../../value-decoding/filetime-unix-webkit-dos-ole.md) 에서 다룹니다.
 
 ### 지운 프로필과 옛 상태
@@ -177,7 +177,7 @@ Chrome 153·Edge 151 의 키 이름으로 만든 예시이고, `<…>` 는 값 �
 - **폴더 이름을 프로필 이름으로 적습니다.** `Profile 1` 은 폴더 이름입니다. 사용자가 붙인 이름은 `Local State` 에 따로 있습니다.
 - **Canary 를 놓칩니다.** Canary 폴더 이름은 `Chrome SxS` 입니다.
 - **`last_used` 만으로 마지막 프로필을 찾습니다.** Edge 151 의 `Local State` 에는 이 키가 없습니다.
-- **`Guest Profile`·`System Profile` 을 사용자 프로필과 같이 셉니다.** 두 폴더의 쓰임은 공개 자료에 나와 있지 않습니다. 안의 파일을 보고 따로 판단합니다.
+- **`Guest Profile`·`System Profile` 을 사용자 프로필과 같이 셉니다.** 두 폴더의 쓰임은 안의 파일을 보고 따로 판단합니다.
 - **폴더 모양으로 브라우저를 구분합니다.** Chrome 과 Edge 는 폴더 구성이 거의 같습니다. Electron·WebView2 앱 폴더에도 `Local State` 가 있습니다. 앱 안에 든 폴더를 브라우저 프로필로 착각하지 않습니다. [Electron·WebView2 앱 데이터 위치](teams-discord-slack.md) 를 봅니다.
 - **쿠키 파일을 한 자리에서만 찾습니다.** 요즘 버전은 `Network\Cookies`, 옛 버전은 프로필 바로 아래 `Cookies` 입니다.
 - **원본 폴더를 브라우저로 엽니다.** `Last Version` 은 마지막으로 실행한 버전을 적는 파일입니다. 다른 버전의 브라우저로 열면 이런 값이 바뀔 수 있습니다. 사본을 만들고 파일 단위로 읽습니다.

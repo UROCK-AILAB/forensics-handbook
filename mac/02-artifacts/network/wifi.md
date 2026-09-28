@@ -31,11 +31,11 @@ Apple 이 공개한 형식 명세가 없어서, 아래 키의 뜻은 키 이름�
 | 없음 | 10.6 Snow Leopard | 옛 형식 |
 | 12 | 10.8 | `RememberedNetworks` 배열 |
 | 14 | 10.9 | `RememberedNetworks` 배열 |
-| 1900, 2100 | 버전 대응 공개 자료 없음 | `KnownNetworks` 사전 |
+| 1900, 2100 | 기기의 macOS 버전으로 확인 | `KnownNetworks` 사전 |
 | 2200 | 10.10 이후 | `KnownNetworks` 사전 |
-| 2500 이상 | 버전 대응 공개 자료 없음 | `KnownNetworks` 사전(SSID 키를 푸는 법이 다름) |
+| 2500 이상 | 기기의 macOS 버전으로 확인 | `KnownNetworks` 사전(SSID 키를 푸는 법이 다름) |
 
-새 형식 파일 `com.apple.wifi.known-networks.plist` 가 처음 생긴 macOS 버전과, 그 뒤에도 `com.apple.airport.preferences.plist` 에 `KnownNetworks` 가 계속 남는지는 공개 자료가 없습니다. 그래서 macOS 10.15 Catalina 이후 기기에서는 두 파일과 백업 파일을 모두 찾아 따로 적습니다. 새 파일의 `LastDiscoveredAt` 키는 macOS 13 에서 보입니다 [1].
+macOS 10.15 Catalina 이후 기기에서는 새 형식 파일 `com.apple.wifi.known-networks.plist`, `com.apple.airport.preferences.plist` 의 `KnownNetworks`, 백업 파일을 모두 찾아 따로 적습니다. 새 파일의 `LastDiscoveredAt` 키는 macOS 13 에서 보입니다 [1].
 
 ## 구조
 
@@ -57,7 +57,7 @@ ChannelHistory  (항목마다 Channel, Timestamp)
 BSSIDHistory    (항목마다 BSSID, Timestamp)
 ```
 
-`BSSIDHistory` 는 접속한 AP 의 MAC 과 시각을 담고, `Version` 1900 에 있습니다 [1]. 나머지 키의 정확한 뜻은 공개 자료가 없어서, 보고서에는 키 이름과 값을 그대로 옮기고 뜻을 덧붙이지 않습니다.
+`BSSIDHistory` 는 접속한 AP 의 MAC 과 시각을 담고, `Version` 1900 에 있습니다 [1]. 나머지 키는 뜻이 정해져 있지 않으므로, 보고서에는 키 이름과 값을 그대로 옮기고 뜻을 덧붙이지 않습니다.
 
 ### com.apple.wifi.known-networks.plist
 
@@ -66,7 +66,7 @@ BSSIDHistory    (항목마다 BSSID, Timestamp)
 | 키 | 형태 | 비고 |
 |---|---|---|
 | `SSID` | 바이트 | UTF-8 로 풀면 망 이름입니다 |
-| `AddReason` | | 값 목록은 공개 자료 없음 |
+| `AddReason` | | 값의 뜻은 실제 데이터로 확인 |
 | `SupportedSecurityTypes` | | 보안 방식 |
 | `SystemMode` | | |
 | `AddedAt` | 시각 | 목록에 들어간 때로 보이는 키 |
@@ -77,13 +77,13 @@ BSSIDHistory    (항목마다 BSSID, Timestamp)
 
 `__OSSpecific__` 사전 안에는 `BSSIDList`(항목마다 `LEAKY_AP_BSSID`), `CollocatedGroup`(문자열 `wifi.ssid.` 뒤에 SSID 16진수), `ChannelHistory`(`Channel`, `Timestamp`), `RoamingProfileType`, `CaptiveProfile/CaptiveNetwork`, `TemporarilyDisabled` 가 있습니다 [1].
 
-`BSSList` 배열은 AP 마다 `BSSID`, `LastAssociatedAt`, `Location` 사전을 담고, `Location` 안에는 `LocationLatitude`, `LocationLongitude`, `LocationTimestamp`, `LocationAccuracy` 가 있습니다 [1]. 어떤 조건에서 좌표가 기록되는지는 공개 자료가 없습니다.
+`BSSList` 배열은 AP 마다 `BSSID`, `LastAssociatedAt`, `Location` 사전을 담고, `Location` 안에는 `LocationLatitude`, `LocationLongitude`, `LocationTimestamp`, `LocationAccuracy` 가 있습니다 [1].
 
 ## 증거로서 의미
 
 **증명하는 것.** 망 항목이 있으면 이 맥이 그 SSID 를 알고 있는 망으로 적어 두었다는 기록이 있다는 뜻이고, `BSSIDHistory` 나 `BSSList` 에 BSSID 가 있으면 그 MAC 주소의 AP 가 이 맥의 기록에 남아 있다는 뜻입니다 [1]. `JoinedByUserAt` 과 `JoinedBySystemAt` 은 키 이름으로 보면 사용자가 직접 고른 접속과 시스템의 자동 접속을 가를 수 있는 한 쌍이지만, 이 구분은 키 이름에서 끌어낸 해석이라서 보고서에는 키 이름을 함께 적습니다. `UpdateHistory` 에서 나온 망은 macOS 업데이트 전부터 이 맥이 알고 있던 망이라는 기록으로 읽습니다 [1].
 
-**증명하지 못하는 것.** SSID 는 누구나 같은 이름으로 만들 수 있어서, 이름만으로 특정 장소의 망이라고 단정하지 않고 BSSID 와 다른 기록으로 받칩니다. 이 파일은 시스템 전체 설정이라 어느 사용자가 붙었는지 알려 주지 않고, 그 망으로 무엇을 주고받았는지도 알려 주지 않습니다. 목록에서 망을 지우는 동작이 파일에 어떻게 남는지는 공개 자료가 없어서, 목록에 없다는 사실만으로 그 망에 붙은 적이 없다고 쓰지 않습니다. `Location` 좌표도 기록되는 조건이 알려지지 않아서, 좌표가 있으면 "이 AP 항목에 이 좌표가 적혀 있다" 까지만 씁니다.
+**증명하지 못하는 것.** SSID 는 누구나 같은 이름으로 만들 수 있어서, 이름만으로 특정 장소의 망이라고 단정하지 않고 BSSID 와 다른 기록으로 받칩니다. 이 파일은 시스템 전체 설정이라 어느 사용자가 붙었는지 알려 주지 않고, 그 망으로 무엇을 주고받았는지도 알려 주지 않습니다. 망은 목록에서 지울 수 있으므로, 목록에 없다는 사실만으로 그 망에 붙은 적이 없다고 쓰지 않습니다. `Location` 좌표가 있어도 "이 AP 항목에 이 좌표가 적혀 있다" 까지만 씁니다.
 
 보고서에는 "이 맥의 알고 있는 망 목록에 SSID 이 값이 있고, `JoinedByUserAt` 값이 이 시각이다" 처럼 기록으로 확인되는 만큼만 씁니다.
 
@@ -101,7 +101,7 @@ mac_apt 는 망의 마지막 연결 시각을 `JoinedByUserAt` 과 `JoinedBySyst
 - **수집 정의에서 빠진 새 파일.** ForensicArtifacts 정의에는 `com.apple.airport.preferences.plist` 만 있고 `com.apple.wifi.known-networks.plist` 는 없어서 [2], 이 정의로 수집 목록을 만들었다면 새 파일이 빠지지 않았는지 확인합니다.
 - **버전마다 다른 SSID 키.** `KnownNetworks` 의 SSID 키는 `Version` 2500 을 기준으로 떼어 낼 글자 수가 달라서 [1], 직접 풀 때 `Version` 을 먼저 봅니다.
 - **업데이트 전 망이 섞인 목록.** `UpdateHistory` 안의 망은 업데이트 전 기록이라서 [1], 현재 목록과 섞어 한 표에 두면 시기를 잘못 읽습니다.
-- **뜻이 알려지지 않은 키.** `Closed`, `AddReason`, `LEAKY_AP_BSSID` 같은 키의 뜻은 공개 자료가 없습니다. 도구가 이런 키에 설명을 붙여 보여 주면 그 근거를 확인한 뒤에 씁니다.
+- **뜻을 단정할 수 없는 키.** `Closed`, `AddReason`, `LEAKY_AP_BSSID` 같은 키는 뜻이 정해져 있지 않아서, 도구가 이런 키에 설명을 붙여 보여 주면 그 근거를 확인한 뒤에 씁니다.
 - **저장된 와이파이 암호.** 암호가 어느 키체인에 들어가는지는 실제 기기에서 확인하고, 키체인 구조는 [키체인 (Keychain)](../../01-foundations/protection/keychain/index.md)에서 다룹니다.
 - **로그 쪽 기록.** 통합 로그의 와이파이 관련 서브시스템 이름과 별도 와이파이 로그 파일은 실제 기기에서 확인해야 합니다.
 

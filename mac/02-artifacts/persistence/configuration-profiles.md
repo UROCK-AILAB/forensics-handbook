@@ -32,7 +32,7 @@ nav_order: 640
 | 10.15 이하 | `profiles` 명령으로 구성 프로파일을 설치할 수 있었던 것으로 보임 (11.0부터 막힘) |
 | 11.0 이후 (`profiles` 도구 8.0 이상) | 명령줄로 구성 프로파일을 설치할 수 없고, 시스템 설정의 프로파일 화면에서 추가해야 함. "startup profiles" 는 더 이상 지원하지 않음 |
 
-이 변화 때문에 macOS 11 이후 새로 설치된 프로파일은 사용자가 화면에서 승인했거나 MDM이 밀어 넣은 것일 가능성이 큽니다 [1]. 다른 설치 경로가 없다는 자료는 없으므로, 보고서에서는 "이 두 경로 가운데 하나" 를 단정하지 않고 해석으로 적습니다.
+이 변화 때문에 macOS 11 이후 새로 설치된 프로파일은 사용자가 화면에서 승인했거나 MDM이 밀어 넣은 것일 가능성이 큽니다 [1]. 다른 설치 경로가 있을 수 있으므로, 보고서에서는 "이 두 경로 가운데 하나" 를 단정하지 않고 해석으로 적습니다.
 
 ## 구조
 
@@ -50,7 +50,7 @@ nav_order: 640
 
 ## 시각 해석
 
-프로파일이 언제 설치되고 언제 지워졌는지를 알려 주는 시각 필드는 공개된 분석 자료가 없습니다. 그래서 시기는 `/Library/Managed Preferences` 아래 파일의 파일 시스템 시각과 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 좁히고, MDM 관련 통합 로그는 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)에서 찾습니다. 프로파일을 설치·제거할 때 남는 로그 문구도 알려진 자료가 없으므로, 찾은 로그를 설치 시각으로 적을 때는 문구의 뜻을 따로 확인합니다.
+프로파일이 언제 설치되고 언제 지워졌는지는 `/Library/Managed Preferences` 아래 파일의 파일 시스템 시각과 [파일 시스템 이벤트 (FSEvents)](../filesystem/fsevents/index.md)로 좁히고, MDM 관련 통합 로그는 [통합 로그에서 찾을 것 (Unified Log Events)](../logs/unified-log-events/index.md)에서 찾습니다. 찾은 로그를 설치 시각으로 적을 때는 시험 기기에서 프로파일을 설치·제거해 보고 문구의 뜻을 따로 확인합니다.
 
 ## 함정과 한계
 
@@ -64,7 +64,7 @@ macOS 11 이후 명령줄 설치가 막혔다는 내용은 man 페이지 정리�
 
 ### 헥스로 한 번
 
-`/Library/Managed Preferences` 아래 파일을 헥스 편집기로 열어 앞머리로 XML plist인지 바이너리 plist인지, 아니면 다른 형식인지부터 구분합니다. 이 폴더의 파일 형식은 공개된 자료가 없으므로, 형식을 구분한 뒤에 plist라면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 순서대로 읽고, 페이로드 식별자 문자열(예: `com.apple.system-extension-policy`)을 검색해 위치를 잡습니다.
+`/Library/Managed Preferences` 아래 파일을 헥스 편집기로 열어 앞머리로 XML plist인지 바이너리 plist인지, 아니면 다른 형식인지부터 구분합니다. 형식을 구분한 뒤에 plist라면 [속성 목록 파일 (Property List)](../../01-foundations/data-formats/plist/index.md)의 순서대로 읽고, 페이로드 식별자 문자열(예: `com.apple.system-extension-policy`)을 검색해 위치를 잡습니다.
 
 ### 공개 도구로 한 번
 

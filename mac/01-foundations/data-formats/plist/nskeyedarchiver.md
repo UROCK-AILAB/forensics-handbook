@@ -49,7 +49,7 @@ NSKeyedArchiver는 객체를 XML이나 바이너리 plist로 바꿔 저장하고
 
 NSDictionary는 키 배열을 `NS.keys` 에, 값 배열을 `NS.objects` 에 uid 배열로 담고, 두 배열에서 같은 순번끼리 짝을 짓습니다 [2]. 디코더는 `NS.key.0`, `NS.object.0`, `NS.key.1` 처럼 번호 붙은 옛 방식 키도 읽습니다 [2]. 배열을 인코딩할 때는 원소마다 uid를 만들어 uid 배열로 넣습니다 [1].
 
-NSArray·NSString·NSDate·NSData 같은 다른 클래스가 어떤 키 이름을 쓰는지, NSDate에 어떤 기준의 시각을 넣는지 밝힌 공개 문서는 없습니다. 이런 클래스는 실제 데이터에서 본 키를 그대로 적고, 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)과 대조해 판단합니다.
+NSArray·NSString·NSDate·NSData 같은 다른 클래스는 실제 데이터에서 본 키를 그대로 적고, NSDate 시각 값의 기준은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../value-decoding/mac-time-values.md)과 대조해 판단합니다.
 
 ## 읽는 법
 

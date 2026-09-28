@@ -29,11 +29,11 @@ DeepL 은 웹, Windows 앱, 모바일 앱으로 글과 문서를 번역하고, W
 
 | 판 | 알려진 내용 | 로컬 저장 위치 |
 |---|---|---|
-| Windows | 무료 설치 파일(exe)을 내려받아 설치. Pro Advanced·Ultimate·Team·Business·Enterprise·Write 구독자는 MSI 설치 파일로 조직 전체에 배포할 수 있음 | 공개 문서에 없음. 실제 기기에서 확인 |
-| macOS | DeepL for Windows 안내 페이지에 Mac 용 앱(DeepL for Mac) 내려받기 링크가 있음 | 공개 문서에 없음. 실제 기기에서 확인 |
-| Android | 앱 이름 "DeepL Translate", 개발사 DeepL SE, 패키지 이름 `com.deepl.mobiletranslator` | 공개 문서에 없음. 실제 기기에서 확인 |
-| iOS | 처리방침의 모바일 앱 설명(저장한 번역·음성 입력)은 적용 기기를 따로 나누지 않음 | 공개 문서에 없음. 실제 기기에서 확인 |
-| 웹(deepl.com) | 처리방침 10.1 절에 쿠키·localStorage 항목을 필수·성능·기능·마케팅으로 나눈 표가 있음 | 브라우저 저장소. 개별 키 이름은 공개 문서에 없음 |
+| Windows | 무료 설치 파일(exe)을 내려받아 설치. Pro Advanced·Ultimate·Team·Business·Enterprise·Write 구독자는 MSI 설치 파일로 조직 전체에 배포할 수 있음 | 실제 기기에서 앱 데이터 폴더를 찾아 확인 |
+| macOS | DeepL for Windows 안내 페이지에 Mac 용 앱(DeepL for Mac) 내려받기 링크가 있음 | 실제 기기에서 앱 데이터 폴더를 찾아 확인 |
+| Android | 앱 이름 "DeepL Translate", 개발사 DeepL SE, 패키지 이름 `com.deepl.mobiletranslator` | 실제 기기에서 앱 데이터 폴더를 찾아 확인 |
+| iOS | 처리방침의 모바일 앱 설명(저장한 번역·음성 입력)은 적용 기기를 따로 나누지 않음 | 실제 기기에서 앱 데이터 폴더를 찾아 확인 |
+| 웹(deepl.com) | 처리방침 10.1 절에 쿠키·localStorage 항목을 필수·성능·기능·마케팅으로 나눈 표가 있음 | 브라우저 저장소. 개별 키 이름은 브라우저 저장소 파일에서 확인 |
 
 Windows 앱에서는 다른 프로그램에서 글을 고르고 Ctrl+C 를 두 번 누르면 바로 번역하고, Ctrl+Shift+C 를 두 번 누르면 자기가 쓴 글을 번역하면서 언어를 고를 수 있습니다. 이 방식이면 원문이 이메일 창이나 문서 편집기 같은 다른 프로그램에서 왔을 수 있어서, 번역한 글의 출처는 DeepL 기록만 보지 말고 그 시간대에 열려 있던 문서와 함께 봅니다.
 
@@ -43,7 +43,7 @@ Android 에서는 패키지 이름으로 앱 데이터 폴더를 찾고, 폴더�
 
 ## 구조
 
-Windows·macOS·Android·iOS 어느 판이든 로컬 파일 형식, DB 표 이름, 열 이름은 공개 문서에 없습니다. Windows 앱을 어떤 틀로 만들었는지도 공개 문서에 없어서, [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)에 맞는 폴더가 나오는지는 기기에서 직접 봐야 합니다. 폴더를 찾으면 아래 순서로 정리합니다.
+Windows·macOS·Android·iOS 어느 판이든 로컬 파일 형식, DB 표 이름, 열 이름은 실제 기기의 앱 데이터 폴더에서 확인합니다. Windows 앱이 [크롬 계열 앱 공통 구조](https://urock-ailab.github.io/forensics-handbook/windows/01-foundations/app-mail-data/chromium-electron-webview2/index.html)를 따르는지도 그 구조에 맞는 폴더가 나오는지 기기에서 직접 보고 판단합니다. 폴더를 찾으면 아래 순서로 정리합니다.
 
 1. 앱 데이터 폴더의 파일 목록과 크기, 시각을 먼저 기록합니다.
 2. 파일 앞머리의 서명으로 형식을 판별하고, SQLite·LevelDB·설정 XML·plist 같은 형식별 페이지로 넘어갑니다.
@@ -59,7 +59,7 @@ Windows·macOS·Android·iOS 어느 판이든 로컬 파일 형식, DB 표 이�
 
 ## 시각 해석
 
-서버는 앱 접속 날짜·시각을 기록하지만[3], 그 기준이 UTC 인지 현지 시각인지는 공개되지 않았습니다. 서비스 회사 자료를 받으면 자료에 적힌 시간대 표기를 먼저 확인합니다. 기기 쪽에서 앱이 저장한 번역에 시각을 남기는지는 공개 문서에 없어서, 실제 기기에서 확인하기 전까지는 파일 시스템 시각만 쓰고 그 시각을 번역 한 건의 시각으로 옮겨 쓰지 않습니다. 여러 기록을 한 줄로 엮는 법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
+서버는 앱 접속 날짜·시각을 기록하지만[3], 그 기준이 UTC 인지 현지 시각인지는 공개되지 않았습니다. 서비스 회사 자료를 받으면 자료에 적힌 시간대 표기를 먼저 확인합니다. 기기 쪽에서 앱이 저장한 번역에 시각을 남기는지는 실제 기기에서 확인하고, 확인하기 전까지는 파일 시스템 시각만 쓰고 그 시각을 번역 한 건의 시각으로 옮겨 쓰지 않습니다. 여러 기록을 한 줄로 엮는 법은 [AI 사용 타임라인](../../03-techniques/analysis/timeline.md)에서 다룹니다.
 
 ## 함정과 한계
 

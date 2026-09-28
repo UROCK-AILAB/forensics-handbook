@@ -57,7 +57,7 @@ MVT 모듈별 경로와 수집 방식은 다음과 같습니다[3].
 
 `com.apple.osanalyticshelper.plist` 의 키는 [sysdiagnose 묶음](../../01-foundations/backups/sysdiagnose.md) 에 정리되어 있습니다. `bbtrace.` 로 시작하는 키는 `CrashReporter.plist` 가 아니라 `WirelessDomain :: Library/Preferences/com.apple.AppleBasebandManager.plist` 아래에 있습니다.
 
-관련 도메인으로는 `SysSharedContainerDomain-systemgroup.com.apple.osanalytics`(항목 3개), `…ReportMemoryException`(항목 3개), `…powerexceptions`(항목 4개), `SysContainerDomain-com.apple.metrickitd`(항목 11개), `AppDomain-com.apple.DiagnosticsReporter`, `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`·`LowMemory`·`Panic`·`HangTracer` 가 있습니다. 이 키와 도메인의 뜻과 내용을 밝힌 공개 자료는 없습니다.
+관련 도메인으로는 `SysSharedContainerDomain-systemgroup.com.apple.osanalytics`(항목 3개), `…ReportMemoryException`(항목 3개), `…powerexceptions`(항목 4개), `SysContainerDomain-com.apple.metrickitd`(항목 11개), `AppDomain-com.apple.DiagnosticsReporter`, `AppDomainPlugin-com.apple.DiagnosticExtensions.CrashLogs`·`LowMemory`·`Panic`·`HangTracer` 가 있습니다. 이 키와 도메인의 뜻은 이름만으로 단정할 수 없으므로, 도메인 안의 파일은 실제 백업에서 열어 내용을 확인합니다.
 
 ## 구조
 
@@ -84,7 +84,7 @@ iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 
 
 **증명하는 것.** 보고서 한 건은 이 번들 ID·버전의 프로세스가 `procLaunch` 에 시작해 `captureTime` 에 충돌했고, 그때 OS 빌드와 기종이 무엇이었는지를 보여 줍니다[2]. `termination` 에는 어떤 프로세스가 끝냈는지가, `parentProc` 에는 부모 프로세스가 남습니다[2]. `crashReporterKey` 가 같은 보고서들은 같은 기기에서 나왔다고 볼 수 있고, 한 기기의 보고서들 사이에서 값이 바뀌면 그 사이에 기기를 지웠을 가능성을 살펴볼 근거가 됩니다[2]. `storeInfo.itemID` 로 앱을 스토어 항목과 이을 수 있습니다[2].
 
-**증명하지 못하는 것.** 충돌 보고서는 사용자가 무엇을 하다가 충돌했는지 알려 주지 않고, 앱이 충돌했다는 사실만으로 악성 행위나 공격이 있었다고 말할 수 없습니다. 보고서가 없다고 그 앱을 쓰지 않았다고 말할 수도 없습니다. 이름에 진단이 들어간 plist 키들은 뜻이 밝혀지지 않아서, 키가 있다는 사실 말고는 증거로 쓰지 않습니다.
+**증명하지 못하는 것.** 충돌 보고서는 사용자가 무엇을 하다가 충돌했는지 알려 주지 않고, 앱이 충돌했다는 사실만으로 악성 행위나 공격이 있었다고 말할 수 없습니다. 보고서가 없다고 그 앱을 쓰지 않았다고 말할 수도 없습니다. 이름에 진단이 들어간 plist 키들은 이름만으로 뜻을 단정할 수 없어서, 키가 있다는 사실 말고는 증거로 쓰지 않습니다.
 
 보고서에는 "앱이 공격을 받았다" 대신 "번들 ID `com.example.app` 버전 이 값의 프로세스가 이 시각에 시작해 이 시각에 이 예외로 종료된 보고서가 있다" 처럼 씁니다.
 
@@ -94,7 +94,7 @@ iOS 15 이후 `.ips` 파일에는 JSON 객체가 두 개 있고, 첫 줄은 IPS 
 
 `uptime` 은 부팅 뒤 흐른 초라서[2], `captureTime` 에서 `uptime` 을 빼면 그 보고서 기준으로 기기를 켠 무렵을 어림할 수 있습니다. 여러 보고서에서 어림한 부팅 시각이 크게 다르면 그 사이에 재부팅이 있었다는 뜻일 수 있고, 재부팅 기록은 [통합 로그에서 찾을 것](../logs/unified-log-events.md) 과 맞춰 봅니다.
 
-백업 plist 의 `ExcResourceDiagInfo_…` 는 `datetime` 형이라 도구가 날짜로 풀어 주지만 무슨 시각인지는 알려져 있지 않고, `analyticsagent.plist` 의 두 키는 `float` 형이라 기준점을 따로 확인해야 합니다. 시각 기준은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
+백업 plist 의 `ExcResourceDiagInfo_…` 는 `datetime` 형이라 도구가 날짜로 풀어 주지만 무슨 시각인지는 단정할 수 없고, `analyticsagent.plist` 의 두 키는 `float` 형이라 기준점을 따로 확인해야 합니다. 시각 기준은 [시각 값](../../01-foundations/value-decoding/time-values.md) 에서 다룹니다.
 
 ## 함정과 한계
 

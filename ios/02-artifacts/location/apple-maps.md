@@ -18,7 +18,7 @@ Apple 지도는 아이폰 기본 지도 앱이고, iOS 14 이후 검색·길찾�
 
 iOS 14 에서는 `var/mobile/Containers/Shared/AppGroup/group.com.apple.Maps/Maps/` 아래에 `MapsSync_0.0.1` 과 `MapsSync_0.0.1_deviceLocalCache.db` 가 있습니다 [2]. 실제 파일 시스템에서 `AppGroup` 아래 폴더가 그룹 ID 이름인지 GUID 이름인지는 실제 기기에서 확인합니다. 앱 그룹 폴더를 찾는 법은 [번들 ID와 앱 그룹](../../01-foundations/value-decoding/bundle-id-app-group.md) 에서 다룹니다. iLEAPP 의 지도 모듈은 경로 패턴 `*/MapsSync_0.0.1*` 로 파일을 찾습니다 [1].
 
-iOS 14 에서는 이 데이터가 맥·윈도우에서 만든 암호화한 iTunes 백업에 들어 있었습니다 [2]. 반면 iOS 27.0 에서 암호화하지 않고 뜬 로컬 백업에는 `MapsSync_0.0.1` 이 없습니다. 이 차이가 백업 암호화 여부 때문인지는 알려져 있지 않아 같은 기기에서 두 가지 백업을 떠 비교해야 하고, 백업 형식은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
+iOS 14 에서는 이 데이터가 맥·윈도우에서 만든 암호화한 iTunes 백업에 들어 있었습니다 [2]. 반면 iOS 27.0 에서 암호화하지 않고 뜬 로컬 백업에는 `MapsSync_0.0.1` 이 없습니다. 이 차이가 백업 암호화 여부 때문인지는 같은 기기에서 두 가지 백업을 떠 비교해 확인하고, 백업 형식은 [로컬 백업](../../01-foundations/backups/local-backup/index.md) 에서 설명합니다.
 
 ### 버전별 기록 위치
 
@@ -42,7 +42,7 @@ iLEAPP 모듈은 iOS 14.3 부터 18 까지의 시험 자료를 적어 두었고,
 | `HomeDomain :: Library/Preferences/com.apple.identityservices.serviceDisablement.plist` | `com.apple.private.alloy.maps`, `com.apple.private.alloy.maps.eta` |
 | `InstallDomain :: Library/MobileInstallation/BackedUpState/BackupSystemAppInstallState.plist` | `com.apple.Maps` |
 
-`mapssyncd` 가 지도 기록을 동기화하는 데몬인지, `alloy.maps.eta` 키가 도착 예정 시간 공유와 관련 있는지는 공개 자료가 없습니다.
+`mapssyncd` 가 지도 기록을 동기화하는 데몬인지, `alloy.maps.eta` 키가 도착 예정 시간 공유와 관련 있는지는 이름만으로 단정하지 않습니다.
 
 ## 구조
 
@@ -61,14 +61,14 @@ iLEAPP 모듈은 iOS 14.3 부터 18 까지의 시험 자료를 적어 두었고,
 | 14 | 검색 좌표 |
 | 16 | 장소 검색 |
 
-표 이름 앞의 `Z` 와 `Z_PK`·`Z_ENT` 열로 보면 Core Data 형식 DB 이고, Core Data 형식 DB 에는 `Z_PRIMARYKEY` 표(`Z_ENT`, `Z_NAME`, `Z_SUPER`, `Z_MAX`)가 있습니다. `Z_ENT` 번호가 모든 버전에서 같은지는 알려져 있지 않아서, 실제 DB 의 `Z_PRIMARYKEY` 에서 번호와 개체 이름을 먼저 맞춰 본 뒤 위 표를 적용합니다. iLEAPP 는 `ZROUTEREQUESTSTORAGE` 를 프로토콜 버퍼로 풀어 길찾기 도착지 주소를 꺼내고, `ZMAPITEMSTORAGE` 도 프로토콜 버퍼로 풀어 주소 요소를 꺼냅니다 [1]. 필드 번호의 뜻은 공개 명세가 없어서, [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 의 읽는 법대로 필드를 풀어 검색어·주소와 맞춰 봅니다. SQLite 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
+표 이름 앞의 `Z` 와 `Z_PK`·`Z_ENT` 열로 보면 Core Data 형식 DB 이고, Core Data 형식 DB 에는 `Z_PRIMARYKEY` 표(`Z_ENT`, `Z_NAME`, `Z_SUPER`, `Z_MAX`)가 있습니다. `Z_ENT` 번호는 버전마다 다를 수 있어서, 실제 DB 의 `Z_PRIMARYKEY` 에서 번호와 개체 이름을 먼저 맞춰 본 뒤 위 표를 적용합니다. iLEAPP 는 `ZROUTEREQUESTSTORAGE` 를 프로토콜 버퍼로 풀어 길찾기 도착지 주소를 꺼내고, `ZMAPITEMSTORAGE` 도 프로토콜 버퍼로 풀어 주소 요소를 꺼냅니다 [1]. 필드 번호의 뜻은 공개 명세가 없어서, [프로토콜 버퍼](../../01-foundations/data-formats/protobuf.md) 의 읽는 법대로 필드를 풀어 검색어·주소와 맞춰 봅니다. SQLite 구조는 [SQLite 데이터베이스](../../01-foundations/data-formats/sqlite/index.md) 에서 다룹니다.
 
 ## 증거로서 의미
 
 **증명하는 것**
 
 - `ZHISTORYITEM` 행은 이 기기의 지도 앱 기록에 그 검색어나 장소, 길찾기 요청이 있다는 사실을 보여 줍니다.
-- `ZMODIFICATIONTIME` 은 이름으로 보면 그 기록이 마지막으로 바뀐 시각이지만, 무엇이 바뀔 때 갱신되는지는 공개 자료가 없습니다.
+- `ZMODIFICATIONTIME` 은 이름으로 보면 그 기록이 마지막으로 바뀐 시각이지만, 무엇이 바뀔 때 갱신되는지는 시험 기기에서 재현해 확인합니다.
 
 **증명하지 못하는 것**
 
@@ -86,9 +86,9 @@ iOS 14 로 업데이트한 기기에서는 `ZCREATETIME` 이 검색한 시각이
 
 ## 함정과 한계
 
-최근 기록만 남아서 [2] 오래된 검색은 기기에 없을 가능성이 큽니다. 함께 있는 `MapsSync_0.0.1_deviceLocalCache.db` [2] 가 무엇을 담는지는 공개 자료가 없고, 확보할 때는 두 파일과 각각의 `-wal` 파일을 함께 가져옵니다.
+최근 기록만 남아서 [2] 오래된 검색은 기기에 없을 가능성이 큽니다. 함께 있는 `MapsSync_0.0.1_deviceLocalCache.db` [2] 가 무엇을 담는지는 표 구조를 열어 확인하고, 확보할 때는 두 파일과 각각의 `-wal` 파일을 함께 가져옵니다.
 
-`Z_ENT` 번호는 iLEAPP 가 쓰는 값이고 [1] 버전마다 같다는 공개 자료가 없어서, 실제 DB 의 `Z_PRIMARYKEY` 로 확인하지 않고 번호만으로 종류를 나누면 잘못 분류할 수 있습니다.
+`Z_ENT` 번호는 iLEAPP 가 쓰는 값이고 [1] 버전마다 다를 수 있어서, 실제 DB 의 `Z_PRIMARYKEY` 로 확인하지 않고 번호만으로 종류를 나누면 잘못 분류할 수 있습니다.
 
 로컬 백업만 있으면 기록 DB 가 없을 수 있습니다. 기록을 지운 흔적을 의심할 때는 [증거를 없애려 했나](../../04-scenarios/activity/anti-forensics/index.md) 의 흐름을 따릅니다.
 
@@ -122,7 +122,7 @@ LEFT JOIN ZMIXINMAPITEM m ON h.ZMAPITEM = m.Z_PK
 ORDER BY h.ZCREATETIME;
 ```
 
-`ZLATITUDE`·`ZLONGITUDE` 와 `ZLATITUDE1`·`ZLONGITUDE1` 이 각각 무엇의 좌표인지는 알려져 있지 않아서, 길찾기 행에서 두 쌍을 지도에 찍어 출발지·도착지와 맞는지 확인한 뒤에 해석합니다. 도구 결과를 직접 확인하는 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
+`ZLATITUDE`·`ZLONGITUDE` 와 `ZLATITUDE1`·`ZLONGITUDE1` 이 각각 무엇의 좌표인지는 길찾기 행에서 두 쌍을 지도에 찍어 출발지·도착지와 맞는지 확인한 뒤에 해석합니다. 도구 결과를 직접 확인하는 방법은 [도구 검증](../../03-techniques/reporting/tool-validation.md) 에서 다룹니다.
 
 ## 교차 검증
 
@@ -135,7 +135,7 @@ ORDER BY h.ZCREATETIME;
 | [시리](../input-assistant/siri.md) | 음성으로 길찾기를 요청한 흔적 |
 | [카카오맵](kakaomap.md) · [네이버 지도](naver-map.md) | 다른 지도 앱으로 같은 장소를 찾았는지 |
 
-캘린더 `Location` 표와 연락처 `MapsData` 열이 지도 앱과 어떻게 이어지는지는 알려져 있지 않아, 지도와 연결되는 흔적 후보로만 봅니다.
+캘린더 `Location` 표와 연락처 `MapsData` 열이 지도 앱과 이어진다고 단정할 수 없어서, 지도와 연결되는 흔적 후보로만 봅니다.
 
 ## 실습
 

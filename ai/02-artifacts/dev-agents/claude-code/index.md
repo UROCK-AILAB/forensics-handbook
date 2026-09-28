@@ -75,7 +75,7 @@ Claude 데스크톱 앱의 데이터 폴더에는 Cowork 세션 메타와 Cowork
 | `local-agent-mode-sessions/…/local_<sessionId>/audit.jsonl` | [6] | Cowork 에이전트 대화 전문과, 에이전트 런타임이 적은 비용·턴 수 |
 | `local-agent-mode-sessions/…/local_<sessionId>/.claude/projects/…/<cliSessionId>.jsonl` | [8] | Claude Code 와 같은 형식의 세션 기록, 그 옆 `subagents/` 의 하위 에이전트 기록 |
 | `local-agent-mode-sessions/<orgUuid>/<accountUuid>/spaces.json` | [6] | Cowork 스페이스 ID 와 이름·폴더·지시문 |
-| `cowork-enabled-cli-ops.json`, `claude_desktop_config.json`, `config.json`, `buddy-tokens.json`, `ant-did` | [6] | claude-forensics 가 수집 사본에 넣는 설정 파일입니다. 각 파일의 용도는 공개 자료에 설명이 없어 실제 파일로 확인해야 합니다 |
+| `cowork-enabled-cli-ops.json`, `claude_desktop_config.json`, `config.json`, `buddy-tokens.json`, `ant-did` | [6] | claude-forensics 가 수집 사본에 넣는 설정 파일입니다. 각 파일의 용도는 실제 파일을 열어 확인합니다 |
 | `vm_bundles/`, `Cache/`, `Code Cache/` | [6] | 큰 캐시 폴더라서 claude-forensics 는 수집 사본에서 뺍니다(`vm_bundles/` 는 12GB 정도) |
 
 데스크톱 앱 자체의 대화 기록과 저장 구조는 [Claude](../../chat-services/claude/index.md)에서 다룹니다.
