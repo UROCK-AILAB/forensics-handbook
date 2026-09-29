@@ -10,6 +10,12 @@ nav_exclude: true
 
 [첫 화면으로 돌아가기](index.md)
 
+## 2026-09-30
+
+- Linux: [VMware ESXi 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/servers/esxi-logs.html) 페이지를 새로 만들었습니다.
+- macOS: [저장 위치와 스트림](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/execution/biome/streams.html)에 메뉴 선택 스트림 (App.MenuItem) 내용을, [보관 기간과 로그 수준](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/unified-log/retention-levels.html)에 통합 로그가 실제로 남는 기간 내용을 추가했습니다.
+- Android: [처음 보는 앱 분석 순서](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/app-data-analysis/unknown-apps.html)에 제3자 SDK 저장소와 HTTP 캐시 확인 내용을 추가했습니다.
+
 ## 2026-09-29
 
 - Windows: [빠른 지원](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/network/remote-access-tools/quick-assist.html), [사용자 접근 로그 (UAL)](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/network/user-access-logging.html), [테일스케일](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/network/tailscale.html) 페이지를 새로 만들고, [프로세스와 DLL 분석](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/memory-forensics/process-analysis.html)에 MemProcFS 포렌식 모드 내용을 추가했습니다.

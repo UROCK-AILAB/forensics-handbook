@@ -83,6 +83,28 @@ v1 기록 헤더의 두 시각은 각각의 뜻이 정해져 있지 않으므로
 
 기록 안의 protobuf 데이터에도 따로 시각 필드가 들어 있는 스트림이 있고, SEGB 기록 시각과 뜻이 다를 수 있습니다. 앱 사용 스트림의 예는 [앱 사용 스트림 (App.InFocus)](app-infocus.md)에서 다룹니다. 맥 절대 시각을 푸는 법은 [맥의 시각 값 (Mac Absolute Time·Unix·HFS)](../../../01-foundations/value-decoding/mac-time-values.md)에 있습니다.
 
+## 메뉴 선택 스트림 (App.MenuItem)
+
+macOS Tahoe 26.x에는 사용자가 고른 메뉴 항목의 글자를 그대로 남기는 `App.MenuItem` 스트림이 있습니다 [7]. 메뉴 글자와 함께 그 시각이 남아서, 사용자가 앱에서 어떤 명령을 언제 골랐는지 차례로 볼 수 있습니다 [7]. Finder의 `Go > Go to Folder…`, TextEdit의 `File > Save…` 같은 앱 메뉴뿐 아니라 Dock에서 고른 `Empty Trash` 도 기록에 나옵니다 [7].
+
+파일은 사용자별 저장소의 아래 자리에 있고, 다른 스트림과 같이 SEGB 파일 안에 protobuf 기록이 들어 있습니다 [7]. SEGB v1인지 v2인지는 위 "구조" 절에 적은 대로 매직 위치를 보고 구분하고, 형식 전체는 [SEGB 형식 (SEGB)](../../../01-foundations/data-formats/segb.md)에서 다룹니다.
+
+```
+~/Library/Biome/streams/restricted/App.MenuItem/local/
+```
+
+mac_apt BIOME 플러그인에는 `App.MenuItem` 을 따로 해석하는 코드가 없지만, `restricted`·`public` 아래 스트림 폴더를 모두 돌기 때문에 이 스트림의 기록도 protobuf를 필드 번호 기준으로 푼 모양으로 출력합니다 [5]. 이때도 Deleted 기록은 빠집니다 [5]. Deleted 기록까지 모두 보려면 `local` 폴더의 파일을 하나씩 `ccl_segb_cli.py` 에 넣습니다 [1][7]. 이 스크립트는 파일 하나만 받고, 기록마다 `Offset`, 기록 시각, 기록 데이터의 헥스 보기를 출력하며, CRC 확인 결과는 상태가 1(Written)인 기록에만 나옵니다 [1]. v2 파일이면 시각이 `Creation Timestamp` 한 줄로, v1 파일이면 `Timestamp1`·`Timestamp2` 두 줄로 나오고, 상태(`State`) 줄은 v2 출력에만 있습니다 [1]. 메뉴 글자는 헥스 보기의 문자 부분에서 읽을 수 있습니다. 기록에 앱 이름이나 번들 ID 같은 다른 필드가 함께 들어 있는지는 실제 데이터의 protobuf를 필드 번호 기준으로 풀어 확인합니다.
+
+기록 시각은 다른 스트림과 같은 맥 절대 시각이고 [1], 시간대를 어떻게 붙일지는 위 "시각 해석" 절을 따릅니다. 이 스트림의 보존 기간은 `local` 폴더에서 가장 오래된 파일 이름과 가장 오래된 기록 시각을 보고 그 기기에서 확인합니다.
+
+| 증명하는 것 | 증명하지 못하는 것 |
+|---|---|
+| 그 시각에 이 계정에서 해당 글자의 메뉴 항목을 골랐다는 기록이 있음 [7] | 메뉴 글자에 파일·폴더 이름이 없는 항목(`Open` 등)의 대상 파일 [7] |
+| 메뉴 글자에 이름이 들어가는 항목(예: `Compress "Report"`)이면 그 대상 이름 [7] | `Save…` 뒤 대화상자에 입력한 파일 이름처럼 메뉴를 고른 뒤에 일어난 일 |
+| 여러 기록의 순서(예: `Compress` → `Move to Trash` → `Empty Trash`) [7] | 명령이 끝까지 성공했는지 |
+
+메뉴 글자만으로는 대상을 알 수 없는 항목이 많아서, 기록 시각 앞뒤의 파일 시스템 기록과 맞춰 대상 파일을 찾습니다 [7]. 키보드 단축키로 같은 명령을 실행해도 이 스트림에 남는지는, 시험용 맥에서 같은 명령을 메뉴와 단축키로 한 번씩 실행한 뒤 기록 수를 비교해 확인합니다. 메뉴 선택 기록이 없다는 사실만으로 그 동작이 없었다고 보고서에 쓰지 않습니다.
+
 ## 함정과 한계
 
 삭제 표시(상태 3)된 기록도 시각은 남아 있지만, 도구마다 이 기록을 다르게 다룹니다. iLEAPP은 Deleted 기록을 시각만 있는 행으로 보고하고 [2], mac_apt는 Deleted 기록을 아예 출력하지 않아서 [5] 같은 파일을 넣어도 도구마다 결과 행 수가 다를 수 있습니다. 행 수가 다르다고 한쪽 도구가 틀렸다고 보기 전에 상태 값을 먼저 확인합니다.
@@ -131,9 +153,10 @@ mac_apt BIOME 플러그인(Yogesh Khatri)은 MACOS·IOS·ARTIFACTONLY 세 모드
 
 ## 참고 문헌
 
-1. ccl-segb (CCL Forensics, Alex Caithness) — README, ccl_segb1.py, ccl_segb2.py, ccl_segb_common.py — https://github.com/cclgroupltd/ccl-segb
+1. ccl-segb (CCL Forensics, Alex Caithness) — README, ccl_segb_cli.py, ccl_segb1.py, ccl_segb2.py, ccl_segb_common.py — https://github.com/cclgroupltd/ccl-segb
 2. iLEAPP — scripts/artifacts/biomeInfocus.py, biomeDKInfocus.py, biomeStreams.py, scripts/ilapfuncs.py — https://github.com/abrignoni/iLEAPP
 3. Mattia Epifani, "84 Streams Later, Part 2: Inside Apple Biome" (2026-07-27) — https://blog.digital-forensics.it/2026/07/84-streams-later-part-2-inside-apple.html
 4. Shai Shapira (Cellebrite), "Understanding and Decoding the Newest iOS SEGB Format" (2023-10-16) — https://cellebrite.com/en/understanding-and-decoding-the-newest-ios-segb-format/
 5. mac_apt (Yogesh Khatri), plugins/biome.py v1.1 — https://github.com/ydkhatri/mac_apt/blob/master/plugins/biome.py
 6. GitHub 코드 검색 "Library/Biome/streams" 결과 목록 — https://github.com/search?q=%22Library%2FBiome%2Fstreams%22&type=code
+7. Chip Riley (Unit 42, Palo Alto Networks), "Tracing Digital Intent: New MacOS Tahoe 26 Artifact Discovered" (2026-06-12) — https://unit42.paloaltonetworks.com/new-macos-artifact-discovered/

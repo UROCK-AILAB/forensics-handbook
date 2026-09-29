@@ -36,6 +36,12 @@ nav_order: 250
 
 약 10.5 MB짜리 tracev3 파일 하나에는 로그가 30만~40만 건, 시스템 전체로는 1,800만~5,000만 건 정도 들어 있습니다 [5]. 폴더마다 어떤 로그가 들어가는지와 며칠치가 남는지는 기기마다 가장 이른 항목의 시각을 보고 확인합니다.
 
+## 실제로 남는 기간
+
+Persist 폴더는 합계 크기에 맞춰 오래된 파일부터 지우지만, fault·error 항목이 든 Special 폴더와 성능 측정용 Signpost 폴더의 항목은 시간이 지나면서 조금씩 지워지다가 결국 없어집니다 [6]. Mac mini M4 Pro 한 대를 주로 낮 시간에 쓴 조건에서 2026년 3월 10일에 폴더마다 가장 오래된 tracev3 파일을 보면, Persist는 3월 7일 16:54, Signpost는 3월 3일 16:41, Special은 2월 9일 19:41에 만든 파일이었습니다 [6]. 이 맥에서 빠짐없는 로그는 최근 3일치였고, 7일보다 오래된 날은 남은 항목이 아주 적었으며 그보다 앞선 날은 날마다 남은 수가 들쭉날쭉했습니다 [6]. Special 파일은 2월 9일에 만들어졌지만 읽어 낼 수 있던 가장 오래된 항목은 2월 11일 부팅 시작 부분이었고, 그 뒤로 2월 24일 아침까지 10일 넘게 항목이 하나도 없었습니다 [6]. 거의 빠짐없는 기간은 Persist 폴더에 로그가 쓰이는 속도에 따라 달라지고, 대부분 5일을 넘기 어려우며 12시간이 안 될 수도 있습니다 [6].
+
+그래서 분석 대상에서 로그가 언제부터 있는지는 폴더마다 따로 확인합니다. 먼저 `/private/var/db/diagnostics/` 아래 Persist·Special·Signpost 폴더에서 가장 오래된 tracev3 파일의 만든 시각을 보고, 파일 안 Catalog 청크의 가장 이른 Firehose 시각 필드로도 맞춰 봅니다(필드 위치는 [tracev3 파일 구조 (tracev3)](tracev3.md)에 있음). 파일을 만든 시각보다 실제로 읽히는 첫 항목이 늦을 수 있어서, 모은 로그 아카이브를 `log show --archive` 에 `--start` 로 그 날짜부터 읽어 첫 항목의 시각과 그 뒤에 비는 구간을 확인합니다 [3]. 보고서에는 Persist 폴더의 가장 오래된 파일 이후처럼 거의 빠짐없는 기간과, Special·Signpost 항목만 드문드문 남은 기간을 나눠 적고, 드문드문 남은 기간에 어떤 로그가 없다고 그 일이 없었다고 판단하지 않습니다 [6].
+
 ## 로그 수준을 바꾼 흔적
 
 서브시스템별 로그 수준은 `log config` 명령으로 바꿀 수 있고, 이 명령은 root 권한이 필요합니다 [3].
@@ -85,3 +91,4 @@ Firehose·Oversize 청크에는 TTL 필드가 있고(필드 배치는 [tracev3 �
 3. SS64, macOS `log` 명령 설명 — https://ss64.com/mac/log.html
 4. Apple Developer, Device Management — SystemLogging 페이로드 — https://developer.apple.com/tutorials/data/documentation/devicemanagement/systemlogging.json
 5. Alexander Holcomb (Mandiant), Reviewing macOS Unified Logs (Google Cloud 블로그, 2022-08-31) — https://cloud.google.com/blog/topics/threat-intelligence/reviewing-macos-unified-logs
+6. Howard Oakley (The Eclectic Light Company), How long does the log keep entries? (2026-03-12) — https://eclecticlight.co/2026/03/12/how-long-does-the-log-keep-entries/

@@ -60,6 +60,25 @@ nav_order: 1380
 
 7. **시스템 기록과 맞춰 봅니다.** 앱 폴더 안의 기록은 앱이 스스로 적은 것이라서, 시스템이 적은 기록과 맞춰 봐야 믿을 수 있습니다. 앱을 언제 썼는지는 [앱 사용 기록 (usagestats)](../../../02-artifacts/app-usage/usagestats/index.md), 알림은 [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md), 통신량은 [데이터 사용량 (netstats)](../../../02-artifacts/network/netstats.md), 오류로 멈춘 기록은 [앱 오류·종료 기록 (DropBox·tombstones·ANR)](../../../02-artifacts/app-usage/crash-records.md), 권한은 [앱 샌드박스와 권한 (Sandbox·Permissions)](../../../01-foundations/security-model/sandbox-permissions.md) 페이지에서 확인합니다. 여러 기록을 한 시간 축에 올리는 방법은 [타임라인 작성 (Timeline)](../timeline/index.md) 에 있습니다.
 
+## 제3자 SDK 저장소와 HTTP 캐시 확인
+
+앱 폴더에는 앱 개발사가 만든 DB 뿐 아니라, 앱에 넣은 분석·마케팅·푸시 알림용 소프트웨어 개발 키트 (Software Development Kit, SDK) 가 따로 만든 파일도 들어 있습니다. SDK 는 여러 앱에 같은 코드로 들어가서, 앱 본체 DB 의 구조를 모르더라도 SDK 코드가 공개돼 있으면 그 코드로 파일 이름과 표 구조를 확인할 수 있습니다. 예를 들어 CleverTap Android SDK 는 DB 이름을 `clevertap` 으로 정해 두고 기본 인스턴스가 아니면 뒤에 `_` 와 CleverTap 계정 ID 를 붙이며 [11], React Native Firebase 는 설정 파일 이름을 `io.invertase.firebase` 로 정해 둡니다 [13]. 그래서 처음 보는 앱이라도 `databases`·`shared_prefs` 폴더에서 SDK 이름으로 시작하는 파일을 먼저 찾고, 서버 응답을 담은 HTTP 캐시 폴더를 함께 봅니다.
+
+맥주 체크인 SNS 앱 Untappd(`com.untappdllc.app`)의 Android 판은 SDK 파일과 HTTP 캐시에 계정 정보, 앱 사용 시각, 위치를 남깁니다 [8]. 이 내용을 읽는 ALEAPP 모듈의 시험 데이터는 이름이 `kp_pixel8pro_a16` 이고 Android 16 기기로 적혀 있습니다 [9]. 앱 버전에 따라 저장 내용이 바뀔 수 있으니, 분석한 앱의 버전을 아래 Superwall 기록의 `$appVersion` 필드로 확인해 함께 적습니다. 경로는 모두 `data/data/com.untappdllc.app/` 아래입니다.
+
+| 저장소 | 경로 | 담긴 내용 | 시각 |
+|---|---|---|---|
+| CleverTap(고객 참여·분석 SDK [10]) | `databases/clevertap*` 의 `userProfiles` 표, `data` 열(JSON) | `Email`, `Name`, `Username`, `Gender`, `dob`, `last_checkin_beer`, `last_checkin_category`, `CountryID`, `Identity` [8][9] | `dob` 는 생년월일을 유닉스 초로 적은 값이고, 사건 시각이 아닙니다 [9] |
+| Superwall(수익화 분석 SDK [8]) | `databases/superwall_database*` 의 `ManagedEventData` 표 | `name` 열이 `app_install`, `app_launch`, `app_open`, `app_close`, `session_start` 인 앱 상태 이벤트와, `device_attributes` 행의 `parameters` JSON 에 든 앱 버전·기기 모델·OS 버전·통신 방식(`$radioType`)·IP 기반 도시·지역·국가·시간대·세션 ID [8][9] | `createdAt` 열, 유닉스 밀리초 [8][9] |
+| React Native Firebase 메시징 | `shared_prefs/io.invertase.firebase.xml` | 메시지 ID 를 키로, 받은 푸시 알림을 JSON 값으로 저장하고(`notification.title`, `notification.body`, `data.pushType`), `all_notification_ids` 키에 ID 목록을 쉼표로 이어 적습니다 [9][14] | ALEAPP 는 키의 `:` 와 `%` 사이 숫자를 유닉스 마이크로초로 읽어 UTC 로 바꿉니다 [9] |
+| HTTP 응답 캐시 | `cache/http-cache` 의 `.0`·`.1` 파일 | `.1` 은 gzip 으로 압축한 JSON 이고 [8], `response` 아래 `checkin`(체크인 ID·평점·코멘트·사용자·장소 이름과 위도·경도·사진 URL), `discover_items`(항목 종류와 위도·경도), `location`·`recent`·`foursquare`(체크인 장소 추천) 필드가 나옵니다 [9] | `.0` 의 `Date:` 응답 헤더(GMT), JSON 속 `created_at`·`recent_date` 는 `Mon, 02 Jun 2025 17:08:15 +0000`(만든 예시) 같은 형식 문자열입니다 [9] |
+
+HTTP 캐시의 JSON 구조는 Untappd 가 공개한 API 문서와 대부분 같아서 [8], 필드 뜻은 그 문서로 확인합니다. `.0` 과 `.1` 이 한 항목을 이루는 캐시 형식과 `.0` 헤더 읽는 법은 [디스코드 (Discord)](../../../02-artifacts/messengers/discord.md) 페이지에 있고, SDK 의 DB 와 설정 파일은 앞의 5단계 표에 있는 형식 페이지대로 읽습니다.
+
+이 기록들은 SDK 가 서버로 보내거나 서버에서 받은 값을 기기에 남긴 것이라서 뜻을 좁게 씁니다. CleverTap 프로필은 앱이 SDK 에 넘긴 계정 정보이고, 본인 확인을 거친 값이라는 뜻은 아닙니다. CleverTap SDK 는 앱 설정에 따라 이름·전화번호·이메일·`Identity` 같은 개인 정보를 암호화하거나 프로필 전체를 암호화해 저장할 수 있어서 [12], 다른 앱에서 이 값이 평문으로 보이지 않아도 기록이 없다고 보지 않습니다. Superwall 의 도시·국가는 IP 주소로 추정한 대략 위치이고, 기기의 GPS 위치가 아닙니다 [9]. CleverTap DB 와 Superwall DB 는 같은 앱을 쓴 기기라도 없을 수 있어서 [8], 없다는 사실만으로 앱을 쓰지 않았다고 보지 않습니다. React Native Firebase 는 알림을 기본 100개까지 두고 새 알림이 오면 오래된 것부터 지워서 [14], 오래된 알림은 [알림 기록 (Notification History)](../../../02-artifacts/app-usage/notification-history.md) 에서 따로 찾고 키에서 얻은 시각도 그 기록과 맞춰 본 뒤 씁니다.
+
+HTTP 캐시의 체크인은 앱이 서버에서 받아 온 응답이라서 다른 사용자의 체크인일 수 있고, `user` 필드로 누구의 기록인지 확인한 뒤 기기 사용자와 연결합니다. `.0` 의 `Date:` 헤더는 서버가 응답에 적은 시각이라서, 사용자가 그 화면을 본 시각과 같다고 단정하지 않습니다. `discover_items` 의 좌표는 추천 항목의 위치이고, 장소 추천 응답의 `location` 필드는 ALEAPP 가 현재 위치로 표시하지만 필드 이름으로 붙인 뜻이라서 [9], [위치 기록](../../../02-artifacts/location/index.md) 과 맞춰 본 뒤 기기 위치로 씁니다.
+
 ## 도구
 
 ALEAPP 의 `scripts/artifacts` 폴더에는 앱별 모듈과 함께 `packageInfo.py`, `packageRestrictions.py`, `packageUserStates.py`, `installSessions.py`, `appops.py`, `runtimePerms.py`, `recentactivity.py`, `usagestats.py` 같은 시스템 모듈이 있습니다 [7]. 처음 보는 앱이라도 이런 시스템 모듈의 결과에서 패키지 이름으로 걸러 보면 앱 전용 모듈 없이 설치·권한·사용 흔적을 모을 수 있습니다. 각 모듈이 어떤 경로를 어떻게 읽는지는 모듈 코드에서 확인합니다. ALEAPP 는 packageInfo 결과를 "Installed Apps" 분류로 묶고, Magisk 미러 경로(`sbin/.magisk/mirror/...`)에 있는 packages.xml 은 중복으로 보고 건너뜁니다 [2].
@@ -93,3 +112,10 @@ packages.xml 의 항목은 그 파일을 확보한 시점에 해당 패키지가
 5. ALEAPP installedappsLibrary.py — abrignoni/ALEAPP, https://raw.githubusercontent.com/abrignoni/ALEAPP/main/scripts/artifacts/installedappsLibrary.py
 6. ALEAPP chrome.py — abrignoni/ALEAPP, https://raw.githubusercontent.com/abrignoni/ALEAPP/main/scripts/artifacts/chrome.py
 7. ALEAPP scripts/artifacts 폴더 목록(GitHub API) — https://api.github.com/repos/abrignoni/ALEAPP/contents/scripts/artifacts
+8. Kevin Pagano, "Pouring Pints - Untappd for Android" (2026-08-31) — https://www.stark4n6.com/2026/08/pouring-pints-untappd-for-android.html
+9. ALEAPP untappd.py — abrignoni/ALEAPP, https://raw.githubusercontent.com/abrignoni/ALEAPP/main/scripts/artifacts/untappd.py
+10. CleverTap Android SDK README — CleverTap/clevertap-android-sdk, https://raw.githubusercontent.com/CleverTap/clevertap-android-sdk/master/README.md
+11. CleverTap DBAdapter.kt — CleverTap/clevertap-android-sdk, https://raw.githubusercontent.com/CleverTap/clevertap-android-sdk/master/clevertap-core/src/main/java/com/clevertap/android/sdk/db/DBAdapter.kt
+12. CleverTap CryptMigrator.kt — CleverTap/clevertap-android-sdk, https://raw.githubusercontent.com/CleverTap/clevertap-android-sdk/master/clevertap-core/src/main/java/com/clevertap/android/sdk/cryption/CryptMigrator.kt
+13. React Native Firebase UniversalFirebasePreferences.java — invertase/react-native-firebase, https://raw.githubusercontent.com/invertase/react-native-firebase/main/packages/app/android/src/main/java/io/invertase/firebase/common/UniversalFirebasePreferences.java
+14. React Native Firebase ReactNativeFirebaseMessagingStoreImpl.java — invertase/react-native-firebase, https://raw.githubusercontent.com/invertase/react-native-firebase/main/packages/messaging/android/src/main/java/io/invertase/firebase/messaging/ReactNativeFirebaseMessagingStoreImpl.java
