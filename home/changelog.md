@@ -12,6 +12,7 @@ nav_exclude: true
 
 ## 2026-09-30
 
+- Windows: Windows 11 26H2 에 맞춰 [사용자 프로필 목록](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/system-account/profilelist.html)에 관리자 보호 내용을, [섀도 복사본 활용](https://urock-ailab.github.io/forensics-handbook/windows/03-techniques/analysis/volume-shadow-copy-analysis.html)에 특정 시점 복원 내용을, [윈도 검색 색인 DB](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/file-folder-usage/windows-search/index.html)에 자주 쓰는 폴더 자동 색인 내용을, [드라이버 항목](https://urock-ailab.github.io/forensics-handbook/windows/02-artifacts/execution/amcache-hve/inventorydriverbinary.html)에 교차 서명 드라이버 신뢰 제거 내용을, [다른 PC 에서 원격 실행했나](https://urock-ailab.github.io/forensics-handbook/windows/04-scenarios/incident/credential-theft-lateral-movement/psexec-wmi-winrm.html)에 WMIC 제거 내용을 추가했습니다.
 - Linux: [VMware ESXi 로그](https://urock-ailab.github.io/forensics-handbook/linux/02-artifacts/servers/esxi-logs.html) 페이지를 새로 만들었습니다.
 - macOS: [저장 위치와 스트림](https://urock-ailab.github.io/forensics-handbook/mac/02-artifacts/execution/biome/streams.html)에 메뉴 선택 스트림 (App.MenuItem) 내용을, [보관 기간과 로그 수준](https://urock-ailab.github.io/forensics-handbook/mac/01-foundations/data-formats/unified-log/retention-levels.html)에 통합 로그가 실제로 남는 기간 내용을 추가했습니다.
 - Android: [처음 보는 앱 분석 순서](https://urock-ailab.github.io/forensics-handbook/android/03-techniques/analysis/app-data-analysis/unknown-apps.html)에 제3자 SDK 저장소와 HTTP 캐시 확인 내용을 추가했습니다.

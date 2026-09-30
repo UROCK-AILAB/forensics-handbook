@@ -27,6 +27,8 @@ nav_order: 3750
 | 감사·Sysmon 설정 | 기본 설정에서도 남는 흔적과, 감사 정책·Sysmon 을 켜야 남는 흔적이 나뉩니다[1][2][3]. [감사 정책과 로그 설정](../../../02-artifacts/event-logs/audit-policy-log-settings.md) 을 봅니다. |
 | 로그 크기 | WMI-Activity·WinRM 운영 로그는 1MB 순환으로 설정돼 있을 수 있습니다(Windows 11 빌드 26200). 그러면 오래된 기록은 밀려나므로 분석 대상 PC 의 로그 크기를 확인합니다. |
 
+WMI 명령줄 도구 (WMIC) 가 PC 에 있는지는 Windows 11 버전과 업데이트에 따라 다릅니다. 23H2·24H2 에서는 WMIC 가 기본으로 꺼져 있지만 선택적 기능 (Feature on Demand) 으로 추가할 수 있었고, 25H2 로 올리면 설치돼 있던 WMIC 가 지워지지만 다시 추가할 수 있었습니다[5]. 24H2·25H2 에서는 2026년 8월 미리 보기 업데이트부터 WMIC 가 빠집니다[5]. 26H1 에서도 빠졌고, 24H2 이상에서는 선택적 기능으로도 받을 수 없습니다[4][5]. 그래서 이 업데이트가 설치된 PC 에 wmic.exe 실행 흔적(프리페치·4688·Sysmon 1)이 있으면 그 파일이 어디서 왔는지 경로와 해시로 확인합니다. 마이크로소프트가 임시 조치로 내놓은 WMIC 패키지 (wmic_dlc.zip) 는 설치 스크립트가 WMIC 파일을 `C:\Windows\System32\wbem` 에 복사하므로[5], 이 경로에 있다고 해서 Windows 에 원래 있던 파일로 보지 않습니다.
+
 ## 볼 아티팩트와 순서
 
 | 순서 | 아티팩트 | 알려 주는 것 | 링크 |
@@ -154,6 +156,7 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 4. **인증 패키지로 도구를 가릅니다.** NTLM·Kerberos 는 도구가 아니라 인증 방식에 따라 달라집니다[1][2][3].
 5. **로그에 없으니 원격 실행도 없었다고 봅니다.** WMI-Activity·WinRM 운영 로그는 1MB 순환일 수 있어 오래된 기록이 밀려납니다.
 6. **WMI-Activity 5861 을 원격 실행으로 봅니다.** 5861 은 영구 이벤트 구독 쪽입니다. [WMI 영구 이벤트 구독](../../../02-artifacts/persistence/wmi-event-subscription.md) 을 봅니다.
+7. **wmic.exe 흔적이 없으니 WMI 를 쓰지 않았다고 봅니다.** WMIC 가 빠진 PC 에서도 WMI 자체는 계속 지원되고, Get-CimInstance·Invoke-CimMethod 같은 PowerShell cmdlet 으로 WMI 를 쓸 수 있습니다[5]. 도착 PC 의 WMI-Activity 운영 로그와 [PowerShell 실행 기록](../../../02-artifacts/event-logs/powershell-event-logs-4103-4104.md) 을 함께 봅니다.
 
 ## 보고서 문장 예
 
@@ -177,3 +180,5 @@ PsExec 처럼 도착 PC 에 서비스를 설치하는 도구는 서비스 설치
 1. JPCERT/CC, Tool Analysis Result Sheet — PsExec — https://jpcertcc.github.io/ToolAnalysisResultSheet/details/PsExec.htm
 2. JPCERT/CC, Tool Analysis Result Sheet — wmic — https://jpcertcc.github.io/ToolAnalysisResultSheet/details/wmic.htm
 3. JPCERT/CC, Tool Analysis Result Sheet — WinRM — https://jpcertcc.github.io/ToolAnalysisResultSheet/details/WinRM.htm
+4. Microsoft Learn, What's new in Windows 11, version 26H2 for IT pros — Features removed in Windows 11, version 26H2 — https://learn.microsoft.com/en-us/windows/whats-new/whats-new-windows-11-version-26h2
+5. Microsoft Support, Windows Management Instrumentation Command-line (WMIC) removal from Windows — https://support.microsoft.com/servicing/os/windows/docs/2025/09/windows-management-instrumentation-command-line-wmic-removal-from-windows

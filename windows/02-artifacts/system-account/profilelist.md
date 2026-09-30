@@ -86,6 +86,55 @@ SID 의 마지막 값(RID)으로 계정 종류를 가릴 수 있는 경우가 �
 3. 그 SID 의 앞부분(21 뒤 숫자 세 개)이 이 PC 의 식별자입니다.
 4. 앞부분이 다른 `S-1-5-21-...` SID 는 도메인 계정일 수 있습니다. 같은 앞부분이 다른 PC 의 기록에도 나오는지 봅니다.
 
+## 관리자 보호 (Administrator protection) 가 켜진 PC
+
+Windows 11 의 관리자 보호 (Administrator protection) 가 켜져 있으면, 관리자 계정으로 로그인해도 평소에는 관리자 권한이 없는 토큰으로 일합니다. 관리자 권한이 필요한 작업마다 사용자가 승인해야 합니다. 승인하면 Windows 가 숨겨진 별도 로컬 계정으로 관리자 토큰을 만들어 요청한 프로세스에만 주고, 이 토큰은 프로세스가 끝나면 없어집니다[3][6]. 이 별도 계정을 시스템 관리 관리자 계정 (System Managed Administrator Account, SMAA) 이라고 부릅니다. SMAA 는 사용자와 SID 가 다르고, 프로필 폴더와 레지스트리 하이브도 따로 있습니다[6]. 그래서 관리자 보호가 켜진 PC 에서는 ProfileList 에 사람이 로그인하는 계정과 짝이 맞지 않는 SID 키가 있는지 확인합니다.
+
+### 켜는 방법과 설정 값
+
+관리자 보호는 기본으로 꺼져 있고, Intune 이나 그룹 정책으로 켭니다[5]. KB5120998(Windows 11 24H2·25H2 업데이트)부터 쓸 수 있고, Windows 365 Cloud PC·Azure Virtual Desktop 세션 호스트·Windows Server 에는 아직 적용되지 않습니다[3]. 설정을 바꾼 뒤 재시작해야 적용됩니다[3][4].
+
+| 설정하는 곳 | 이름 | 값 |
+|---|---|---|
+| 그룹 정책·로컬 보안 정책 (`secpol.msc`) | Computer Configuration > Windows Settings > Security Settings > Local Policies > Security Options 의 "User Account Control: Configure type of Admin Approval Mode" | "Admin Approval Mode with Administrator protection" 이면 켜짐[3] |
+| 구성 서비스 공급자 (Configuration Service Provider, CSP), Intune 사용자 지정 정책·설정 카탈로그로 배포 | `./Device/Vendor/MSFT/Policy/Config/LocalPoliciesSecurityOptions/UserAccountControl_TypeOfAdminApprovalMode` | 1 기존 관리자 승인 모드(기본), 2 관리자 보호[4] |
+| CSP, Intune 사용자 지정 정책·설정 카탈로그로 배포 | `./Device/Vendor/MSFT/Policy/Config/LocalPoliciesSecurityOptions/UserAccountControl_BehaviorOfTheElevationPromptForAdministratorProtection` | 1 보안 데스크톱 (secure desktop) 에서 자격 증명 입력(기본), 2 보안 데스크톱에서 "Allow changes" 선택[4] |
+| Windows 보안 앱 | 계정 보호 (Account protection) 의 Administrator protection 스위치 | Windows 참가자 프로그램 (Windows Insider Program) 미리 보기 기능[3] |
+
+### 권한 상승용 계정 찾기
+
+관리자 권한으로 연 명령 프롬프트에서 `whoami` 를 실행하면 계정 이름이 "ADMIN_" 으로 시작해 보입니다[6]. SMAA 의 SID 와 프로필 폴더는 다음 순서로 확인합니다.
+
+1. 분석 대상과 같은 빌드의 시험 PC 에서 관리자 보호를 켜고 재시작합니다. 관리자 권한 명령 프롬프트에서 `whoami /user` 를 실행해 계정 이름과 SID 를 얻습니다.
+2. 시험 PC 의 ProfileList 에서 그 SID 키를 열고, `ProfileImagePath` 로 프로필 폴더 이름이 어떤 형식인지 봅니다.
+3. 분석 대상의 ProfileList 에서 SAM 의 사람이 로그인하는 계정과 짝이 맞지 않는 `S-1-5-21-...` SID 키를 찾습니다. SMAA 는 로컬 계정이므로 SID 앞부분이 이 PC 의 식별자와 같은지 봅니다.
+4. [사용자 계정 (SAM)](sam.md)에서 그 RID 의 계정 이름이 "ADMIN_" 으로 시작하는지 봅니다.
+5. [로그온·로그오프](../event-logs/logon-events/index.md) 이벤트에서 그 SID 나 이름이 나오는 기록을 찾고, 그 시각에 어느 사용자의 세션이 열려 있었는지 맞춰 봅니다.
+
+### 누가 작업했는지 판단할 때
+
+권한을 올려 실행한 프로그램은 SMAA 로 만든 관리자 토큰으로 돌고, 그래서 그 안에서 `whoami` 를 실행하면 사용자 본인이 아니라 "ADMIN_" 으로 시작하는 이름이 나옵니다[3][6]. 프로세스의 사용자를 적는 기록에 SMAA 가 나오는지는 위 순서로 얻은 SID 로 찾아 확인합니다. SMAA 의 SID 가 나온 기록을 다른 사람의 행동으로 보지 않고, 그 권한 상승을 승인한 사용자에게 이어서 봅니다.
+
+사용자 한 명의 흔적도 두 프로필로 나뉩니다. 권한을 올린 프로그램에서는 HKCU 가 SMAA 의 하이브로 연결되고, 문서·사진·동영상 같은 라이브러리 폴더에 저장한 파일은 기본으로 SMAA 프로필의 같은 폴더로 들어갑니다[6]. 앱 설정도 두 프로필 사이에 옮겨지지 않습니다[3]. 그래서 NTUSER.DAT 에 남는 기록과 라이브러리 폴더는 사용자 프로필과 SMAA 프로필을 둘 다 봅니다.
+
+권한 상승은 매번 사용자가 직접 승인해야 하고 자동으로 올라가지 않습니다[3]. 프롬프트 정책 값이 1 이면 보안 데스크톱에서 자격 증명을 넣어야 하고, 2 이면 "Allow changes" 만 고르면 됩니다[4]. 값이 1 인 PC 에서 권한 상승이 승인됐다면 보안 데스크톱에 유효한 자격 증명이 입력된 것이지만[4], 입력한 사람이 누구인지는 다른 기록으로 확인합니다.
+
+원격 로그온도 달라집니다. 로컬 Administrators 그룹에 든 도메인 사용자는 기본으로 관리자 권한 없이 원격 로그온하고, "User Account Control: Allow remote logon with elevated privileges for domain users in the local Administrators group when Administrator protection is enabled" 정책을 켜야 기존 사용자 계정 컨트롤 (User Account Control, UAC) 처럼 관리자 권한으로 원격 로그온합니다[3]. 정해 둔 도메인 사용자·그룹만 관리자 권한으로 원격 로그온하게 하는 "User Account Control: Allow remote logon with elevated privileges for specified domain users and groups when Administrator protection is enabled" 정책도 있습니다[3].
+
+사용자와 SMAA 를 바로 잇는 기록은 Microsoft-Windows-LUA 공급자(GUID `{93c05d69-51a3-485e-877f-1806a8731346}`)의 Windows 이벤트 추적 (Event Tracing for Windows, ETW) 이벤트입니다[3].
+
+| 이벤트 ID | 뜻 | 적히는 것 |
+|---|---|---|
+| 15031 | 권한 상승 승인 (Elevation Approved) | 권한 상승을 일으킨 사용자의 SID, 앱 이름과 경로, 결과, 작업에 쓴 SMAA, 인증 방법(암호·PIN·Windows Hello)[3] |
+| 15032 | 권한 상승 거부·실패·시간 초과 (Elevation Denied/Fail) | 위와 같음[3] |
+
+이 이벤트는 logman 이나 WPR (Windows Performance Recorder) 로 추적 세션을 시작해 .etl 파일로 받습니다[3]. 미리 켜 둔 추적 세션이 없으면 이 .etl 파일도 없습니다. .etl 을 읽는 법은 [ETW 추적 로그](../../01-foundations/database-log-formats/evtx-evt-etl/etl.md)에서 다룹니다.
+
+| 증명하는 것 | 증명하지 못하는 것 |
+|---|---|
+| ProfileList 의 SID 키가 SMAA 의 것이면, 하이브를 마지막으로 쓴 때 SMAA 프로필이 등록돼 있었습니다 | 관리자 보호가 지금도 켜져 있는지 |
+| 15031 이 있으면 그 시각에 어느 사용자 SID 가 어느 SMAA 로 어떤 앱의 권한을 올렸는지 | 자격 증명을 입력한 사람이 누구인지 |
+
 ## 증거로서 의미
 
 | 증명하는 것 | 증명하지 못하는 것 |
@@ -184,5 +233,9 @@ SID 로 사용자를 이어 그 시각의 사용자를 밝히는 흐름은 [그 
 
 ## 참고 문헌
 
-- keydet89, RegRipper3.0 `profilelist.pl` (`ProfileList\<SID>\ProfileImagePath`) — https://raw.githubusercontent.com/keydet89/RegRipper3.0/master/plugins/profilelist.pl
-- Microsoft Learn, "Security Identifiers" (SID 구조, RID 표, 잘 알려진 SID) — https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-identifiers
+1. keydet89, RegRipper3.0 `profilelist.pl` (`ProfileList\<SID>\ProfileImagePath`) — https://raw.githubusercontent.com/keydet89/RegRipper3.0/master/plugins/profilelist.pl
+2. Microsoft Learn, "Security Identifiers" (SID 구조, RID 표, 잘 알려진 SID) — https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/manage/understand-security-identifiers
+3. Microsoft Learn, "Administrator protection" (동작 방식, KB5120998·지원 범위, 기본 꺼짐, 그룹 정책·CSP·Windows 보안 앱 설정, 재시작, Microsoft-Windows-LUA 이벤트 15031·15032, 원격 로그온 정책) — https://learn.microsoft.com/en-us/windows/security/application-security/application-control/administrator-protection
+4. Microsoft Learn, "LocalPoliciesSecurityOptions Policy CSP" (`UserAccountControl_TypeOfAdminApprovalMode`, `UserAccountControl_BehaviorOfTheElevationPromptForAdministratorProtection` 의 값과 그룹 정책 이름) — https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-localpoliciessecurityoptions
+5. Microsoft Learn, "What's new in Windows 11, version 26H2 for IT pros" (관리자 보호 기본 꺼짐, Intune·그룹 정책으로 켬) — https://learn.microsoft.com/en-us/windows/whats-new/whats-new-windows-11-version-26h2
+6. Nilanjana Ganguly, Andy Sohn, "Enhance your application security with administrator protection", Windows Developer Blog, 2025-05-19 (SMAA 의 별도 SID·프로필·레지스트리 하이브, HKCU 연결, 라이브러리 폴더, `whoami` 의 "ADMIN_") — https://blogs.windows.com/windowsdeveloper/2025/05/19/enhance-your-application-security-with-administrator-protection/

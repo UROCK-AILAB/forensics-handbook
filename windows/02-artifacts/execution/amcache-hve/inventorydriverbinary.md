@@ -261,8 +261,66 @@ AmcacheParser, Registry Explorer 같은 공개 도구로 이 키를 볼 수 있�
 | [실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md) | 파일이 남아 있으면 서명자와 버전 정보 |
 | [해시셋 대조](../../../03-techniques/analysis/hash-set-fuzzy-hash.md) | `DriverId` 의 SHA-1 이 LOLDrivers 같은 공개 취약 드라이버 목록에 있는지 |
 | [코드 주입·숨긴 프로세스 탐지](../../../03-techniques/analysis/memory-forensics/injection-rootkit.md) | 메모리 덤프가 있으면 실제로 올라와 있던 드라이버 |
+| Code Integrity 운영 로그 (3076·3077) | 드라이버 서명 정책에 맞지 않는 드라이버를 로드하려다 감사되거나 막힌 시각과 프로세스. 아래 교차 서명 드라이버 절을 봅니다 |
 
 드라이버를 이용한 지속성과 보안 프로그램 무력화는 [악성코드 지속성 찾기](../../../04-scenarios/incident/persistence.md)와 [보안 프로그램을 끄거나 지웠나](../../../04-scenarios/activity/anti-forensics/defense-evasion.md)에서 흐름으로 다룹니다.
+
+## 교차 서명 드라이버 신뢰 제거와 차단 기록
+
+Windows 11 24H2 이후와 Windows Server 2025 에서는 2026년 4월 Windows 업데이트부터 Windows 커널이 교차 서명 루트 프로그램 (cross-signed root program) 으로 서명한 드라이버를 기본으로 믿지 않습니다. 드라이버 항목의 `DriverSigned` 값만으로는 이 정책에 걸리는 드라이버인지 알 수 없어서, 드라이버 파일의 서명과 Code Integrity 로그의 감사·차단 기록을 함께 봅니다.
+
+### 무엇이 바뀌나
+
+교차 서명 프로그램은 2000년대 초에 생겼고, 제3자 인증 기관이 발급한 코드 서명 인증서로 드라이버 제작사가 직접 서명하는 방식입니다. 이 프로그램은 2021년에 폐지됐고 인증서도 모두 만료됐지만, 커널은 그 뒤에도 이 인증서로 서명한 드라이버를 믿어 왔습니다(Microsoft 블로그).
+
+새 커널 신뢰 정책 (kernel trust policy) 이 적용 모드인 PC 에서는 아래 두 종류의 드라이버만 로드됩니다(Microsoft 지원 문서). 이 정책은 커널 모드 드라이버에만 적용되고, 사용자 모드 프로그램은 영향을 받지 않습니다.
+
+- Windows 하드웨어 호환성 프로그램 (WHCP, Windows Hardware Compatibility Program) 을 거쳐 Microsoft 가 서명한 드라이버
+- 교차 서명 드라이버 가운데 Microsoft 가 관리하는 허용 목록 (allow list) 에 오른 드라이버
+
+| Windows | 적용 |
+|---|---|
+| Windows 11 24H2 · 25H2 · 26H1, Windows Server 2025 | 2026년 4월 Windows 업데이트부터 평가 모드로 배포됩니다(Microsoft 블로그) |
+| Windows 11 26H2 | 새 기능 목록에 이 정책이 들어 있습니다(26H2 새 기능 문서) |
+| 그 뒤의 Windows 11 · Windows Server | 모든 버전이 이 정책을 적용할 예정입니다(Microsoft 블로그) |
+
+### 평가 모드와 적용 모드
+
+정책은 평가 모드 (evaluation mode) 로 시작합니다. 이때는 정책에 걸릴 드라이버도 감사 (audit) 기록만 남기고 로드됩니다. 가동 시간과 재부팅 횟수가 기준을 채울 때까지 정책에 걸리는 드라이버가 없으면 적용 모드 (enforcement mode) 로 넘어가고, 그 뒤로는 정책에 맞지 않는 드라이버가 로드되지 못합니다. 평가 중에 정책에 걸리는 드라이버가 로드되면 가동 시간과 재부팅 횟수가 0 으로 돌아가 평가를 처음부터 다시 합니다. 적용 모드는 재부팅해도 유지되고, Windows 를 초기화하거나 다시 설치하면 평가 모드부터 다시 시작합니다(Microsoft 지원 문서).
+
+재부팅 기준은 Windows 11 이 3번, Windows Server 2025 가 2번이고, 가동 시간 기준은 250시간입니다(Microsoft 지원 문서). 가동 시간 기준은 처음 100시간이었는데 2026년 6월 9일 업데이트(6B)부터 250시간으로 바뀌었습니다(Microsoft 블로그 편집자 주). 26H2 새 기능 문서(2026-09-29 갱신)는 "최소 100시간과 재부팅 3번" 으로 적고 있어 자료끼리 숫자가 다릅니다. 그래서 가동 시간으로 적용 모드로 넘어간 날을 계산하지 않고, 아래 이벤트로 확인합니다.
+
+### 남는 기록
+
+감사와 차단은 `Microsoft-Windows-CodeIntegrity/Operational` 채널에 남습니다. 이벤트 뷰어에서는 응용 프로그램 및 서비스 로그 > Microsoft > Windows > CodeIntegrity > Operational 입니다(Microsoft 지원 문서).
+
+| 이벤트 ID | 뜻 | `Policy ID` 필드의 GUID |
+|---|---|---|
+| 3076 | 감사. 적용 모드였다면 막혔을 드라이버를 평가 모드라서 로드하게 두었습니다 | `{784C4414-79F4-4C32-A6A5-F0FB42A51D0D}` (감사 정책) |
+| 3077 | 차단. 적용 정책에 맞지 않아 드라이버 로드를 막았습니다 | `{8F9CB695-5D48-48D6-A329-7202B44607E3}` (적용 정책) |
+
+이 기능이 남긴 이벤트인지는 `Policy ID` 필드의 GUID 로 확인합니다. 이벤트에는 드라이버 파일 이름(`File Name`), 제품 이름(`ProductName`), 드라이버를 로드하려던 프로세스 이름(`Process Name`) 필드가 있습니다(Microsoft 지원 문서). 그 밖의 필드는 실제 이벤트의 XML 을 열어 확인합니다.
+
+이벤트 시각은 UTC 로 저장됩니다([EVTX 레코드 구조](../../../01-foundations/database-log-formats/evtx-evt-etl/file-header-chunk-record.md)). 이 채널은 최대 크기가 1MB 로 작게 잡혀 있을 수 있어서 오래된 감사 기록은 밀려났을 수 있습니다([로그 크기 기본값](../../event-logs/audit-policy-log-settings.md)).
+
+실행 중인 시스템에서는 관리자 PowerShell 에서 `citool -lp -json` 을 실행하고, 위 두 GUID 정책의 `IsEnforced`·`IsAuthorized` 값으로 지금 평가 모드인지 적용 모드인지 확인합니다(Microsoft 지원 문서).
+
+### 드라이버 항목과 함께 읽기
+
+`DriverSigned` 가 1 이어도 WHCP 서명인지 교차 서명인지는 알 수 없습니다. 드라이버 파일이 남아 있으면 서명자를 확인합니다([실행 파일 메타데이터](../../embedded-metadata/pe-header-version-info-digital-signature.md)). WHCP 드라이버는 Microsoft 소유의 코드 서명 인증서로 서명되고, 교차 서명 드라이버는 제3자 인증 기관이 발급한 인증서로 제작사가 서명합니다(Microsoft 블로그). 교차 서명 드라이버라도 허용 목록에 있으면 로드되므로, 서명만 보고 차단됐다고 쓰지 않고 3076·3077 이 있는지 봅니다.
+
+이벤트의 `File Name` 은 드라이버 항목의 하위 키 경로(1709 이후)나 `DriverName` 과 맞춰 봅니다. 하위 키 경로는 소문자에 `/` 구분자라서 표기를 맞춘 뒤 비교합니다. `Process Name` 으로는 누가 드라이버를 로드하려 했는지 봅니다.
+
+| 함께 있는 기록 | 알 수 있는 것 | 알 수 없는 것 |
+|---|---|---|
+| 드라이버 항목 + 감사 정책 GUID 의 3076 | 그 시각에 이 드라이버를 로드하려 했고, 평가 모드라서 Code Integrity 가 로드를 막지 않았습니다. 이 PC 가 그때 평가 모드였습니다 | 로드된 드라이버가 무엇을 했는지 |
+| 드라이버 항목 + 적용 정책 GUID 의 3077 | 그 시각에 이 드라이버를 로드하려다 막혔습니다. 이 PC 가 그때 적용 모드였습니다 | 적용 모드 전, 평가 모드에서 이 드라이버가 로드된 적이 있는지 |
+| 드라이버 항목만 있고 이벤트는 없음 | 조사 작업이 돌 때 파일이 있었다는 것뿐입니다 | 로드 시도가 없었는지. WHCP·허용 목록 드라이버일 수도, 정책이 없던 업데이트 전일 수도, 로그가 밀려났을 수도 있습니다 |
+
+아래 파일 이름과 시각은 설명을 위해 만든 예시입니다.
+
+- 쓸 수 있는 문장: "`Microsoft-Windows-CodeIntegrity/Operational` 로그에 2026-08-02 09:15:30 UTC 의 3077 이벤트가 있습니다. `Policy ID` 는 `{8F9CB695-5D48-48D6-A329-7202B44607E3}` 이고 `File Name` 은 `sample.sys` 입니다. 같은 이름의 드라이버 항목이 `InventoryDriverBinary` 에 있고 `DriverSigned` 는 1 입니다."
+- 쓰면 안 되는 문장: "sample.sys 는 한 번도 로드되지 않았습니다."
 
 ## 실습
 
@@ -290,3 +348,6 @@ AmcacheParser, Registry Explorer 같은 공개 도구로 이 키를 볼 수 있�
 - Raymond Chen, "Why are the module timestamps in Windows 10 so nonsensical?", The Old New Thing (2018) — https://devblogs.microsoft.com/oldnewthing/20180103-00/?p=97705
 - Kaspersky Securelist, "AmCache artifact: forensic value and a tool for data extraction" — https://securelist.com/amcache-forensic-artifact/117622/
 - Eric Zimmerman, AmcacheParser 소스 `AmcacheNew.cs` — https://github.com/EricZimmerman/AmcacheParser/blob/master/Amcache/AmcacheNew.cs
+- Microsoft 블로그: Peter Waxman, "Advancing Windows driver security: Removing trust for the cross-signed driver program", Windows IT Pro Blog (2026-03-26, 2026-06 편집자 주) — https://techcommunity.microsoft.com/blog/windows-itpro-blog/advancing-windows-driver-security-removing-trust-for-the-cross-signed-driver-pro/4504818
+- Microsoft 지원 문서: "The Windows Driver Policy" — https://support.microsoft.com/en-us/windows/the-windows-driver-policy-ecd2a78c-750c-415d-93f2-e37302ce0443
+- 26H2 새 기능 문서: Microsoft Learn, "What's new in Windows 11, version 26H2 for IT pros" — https://learn.microsoft.com/en-us/windows/whats-new/whats-new-windows-11-version-26h2

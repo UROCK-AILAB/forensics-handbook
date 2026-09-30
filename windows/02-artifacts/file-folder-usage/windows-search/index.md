@@ -49,6 +49,12 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 
 - Windows 11 의 DB 파일은 빌드와 상관없이 첫 16바이트를 먼저 보고, SQLite 형식인지 `AesGcm1 SQLite3` 로 시작하는 형식인지 구분합니다.
 
+#### 자주 쓰는 폴더 자동 색인 (Windows 11 26H2)
+
+Windows 11 26H2 에서는 사용자가 자주 쓰는 폴더를 윈도가 스스로 색인에 넣어, 그 폴더의 파일이 다음 검색부터 결과에 나오게 합니다. 이 동작은 설정 > 개인 정보 및 보안 > 검색 (Settings > Privacy & security > Search) 페이지의 **Automatically find additional relevant locations** 스위치로 켜고 끕니다. 24H2·25H2 에서는 2026년 8월 14일 Release Preview 채널에 나온 빌드 26100.9267·26200.9267 (KB5120998) 에 이 기능이 들어 있는데, 기기마다 차례로 퍼지는 단계적 배포 (gradual rollout) 항목이라 같은 빌드라도 PC 마다 이 기능이 있는지가 다를 수 있습니다.
+
+이 기능이 켜진 PC 에서는 기본 방식 (Classic) 으로 색인해도 문서·사진·음악 폴더와 바탕 화면 밖의 폴더가 색인 DB 에 들어 있을 수 있습니다. 그러니 색인에 파일이 있다는 사실만으로 사용자가 그 폴더를 색인 대상에 넣었다고 쓰지 않고, "이 폴더는 색인 범위에 들어 있었습니다" 까지만 씁니다. 실행 중인 PC 에서는 같은 검색 설정 페이지에서 스위치 상태를 확인하고, **Customize search locations** 에서 **Modify** 를 눌러 보이는 색인 위치 (Indexed locations) 목록을 함께 적어 둡니다. 이미지만 있을 때는 운영체제 빌드와 설치된 업데이트부터 적고, 조사하는 폴더가 색인 범위 규칙에 들어 있는지를 [색인 해석 함정](pitfalls.md) 의 `CrawlScopeManager` 키로 확인합니다. 스위치 상태를 특정 레지스트리 값으로 판단하려면, 같은 빌드의 시험 기기에서 스위치를 끄고 켜며 바뀌는 값을 먼저 비교합니다.
+
 ### 알려 주는 것
 
 | 알고 싶은 것 | 어디에 남나 | 자세히 |
@@ -88,3 +94,5 @@ Windows 11 에서는 파일을 지운 뒤에도 한동안 그 파일의 기록�
 - Microsoft Learn, "Indexing process in Windows Search" — https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview
 - Microsoft Learn, "System.Search.GatherTime" — https://learn.microsoft.com/en-us/windows/win32/properties/props-system-search-gathertime
 - Microsoft Learn, "ISearchCatalogManager::Reset" — https://learn.microsoft.com/en-us/windows/win32/api/searchapi/nf-searchapi-isearchcatalogmanager-reset
+- Microsoft Learn, "What's new in Windows 11, version 26H2 for IT pros" — https://learn.microsoft.com/en-us/windows/whats-new/whats-new-windows-11-version-26h2
+- Microsoft Learn, "Release Preview Build 26100.9267/26200.9267" (2026-08-14) — https://learn.microsoft.com/en-us/windows-insider/release-notes/release-preview-24h2-25h2/build-26100-9267-26200-9267
